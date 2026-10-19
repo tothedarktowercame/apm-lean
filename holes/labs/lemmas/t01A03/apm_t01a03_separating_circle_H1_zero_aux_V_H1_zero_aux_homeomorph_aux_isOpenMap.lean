@@ -957,7 +957,144 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_bije
     (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
       (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ))) :
     Function.Bijective (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) := by
-  sorry
+  classical
+  constructor
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
+    induction x using OnePoint.rec with
+    | infty =>
+        induction y using OnePoint.rec with
+        | infty => rfl
+        | coe q =>
+            cases q with
+            | inl q =>
+                have hq :=
+                  apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+                    (Sum.inl q) hy
+                have hqN : q ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                  simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hq
+                have hn : (φ ⟨q, hqN⟩ : Fin 2 → ℝ) ≠ 0 := by
+                  exact fun h => (φ ⟨q, hqN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                have := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy
+                simp [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at this
+                exact (hn this.symm).elim
+            | inr q =>
+                have hq :=
+                  apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+                    (Sum.inr q) hy
+                have hqN : q ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                  simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hq
+                have hn : (φ ⟨q, hqN⟩ : Fin 2 → ℝ) ≠ 0 := by
+                  exact fun h => (φ ⟨q, hqN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                have := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.2) hxy
+                simp [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at this
+                exact (hn this.symm).elim
+    | coe p =>
+        induction y using OnePoint.rec with
+        | infty =>
+            cases p with
+            | inl p =>
+                have hp := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl p) hx
+                have hpN : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                  simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hp
+                have hn : (φ ⟨p, hpN⟩ : Fin 2 → ℝ) ≠ 0 := fun h =>
+                  (φ ⟨p, hpN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                have he := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy
+                simp [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at he
+                exact (hn he).elim
+            | inr p =>
+                have hp := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inr p) hx
+                have hpN : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                  simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hp
+                have hn : (φ ⟨p, hpN⟩ : Fin 2 → ℝ) ≠ 0 := fun h =>
+                  (φ ⟨p, hpN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                have he := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.2) hxy
+                simp [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at he
+                exact (hn he).elim
+        | coe q =>
+            apply Subtype.ext
+            cases p with
+            | inl p =>
+                cases q with
+                | inl q =>
+                    simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at hxy
+                    have hpN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl p) hx
+                    have hqN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl q) hy
+                    simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum] at hpN hqN
+                    have he := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy
+                    exact congrArg (fun s : apm_t01a03_TwoPuncturedTori =>
+                      (s : OnePoint apm_t01a03_TwoPuncturedTori))
+                        (congrArg Sum.inl (congrArg Subtype.val (φ.injective (Subtype.ext he))))
+                | inr q =>
+                    simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at hxy
+                    have hpN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl p) hx
+                    simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum] at hpN
+                    have hn : (φ ⟨p, hpN⟩ : Fin 2 → ℝ) ≠ 0 := fun h =>
+                      (φ ⟨p, hpN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                    exact (hn (congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy)).elim
+            | inr p =>
+                cases q with
+                | inl q =>
+                    simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at hxy
+                    have hqN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl q) hy
+                    simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum] at hqN
+                    have hn : (φ ⟨q, hqN⟩ : Fin 2 → ℝ) ≠ 0 := fun h =>
+                      (φ ⟨q, hqN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                    exact (hn (congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy).symm).elim
+                | inr q =>
+                    simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at hxy
+                    have hpN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inr p) hx
+                    have hqN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inr q) hy
+                    simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum] at hpN hqN
+                    have he := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.2) hxy
+                    exact congrArg (fun s : apm_t01a03_TwoPuncturedTori =>
+                      (s : OnePoint apm_t01a03_TwoPuncturedTori))
+                        (congrArg Sum.inr (congrArg Subtype.val (φ.injective (Subtype.ext he))))
+  · rintro ⟨⟨a, b⟩, hab⟩
+    rcases hab with hab | hab
+    · rcases hab with ⟨ha, hb0⟩
+      by_cases hzero : a = 0
+      ·
+        refine ⟨⟨(OnePoint.infty : OnePoint apm_t01a03_TwoPuncturedTori), ?_⟩, ?_⟩
+        · simp [apm_t01a03_separating_circle_H1_zero_aux_V]
+        · apply Subtype.ext
+          change (0, 0) = (a, b)
+          exact Prod.ext hzero.symm (Set.mem_singleton_iff.mp hb0).symm
+      · let q : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) :=
+          ⟨a, ha, fun h => hzero (Set.mem_singleton_iff.mp h)⟩
+        let p := (φ.symm q : apm_t01a03_separating_circle_H1_zero_aux_N)
+        have hpV : ((Sum.inl p.1 : apm_t01a03_TwoPuncturedTori) :
+            OnePoint apm_t01a03_TwoPuncturedTori) ∈ apm_t01a03_separating_circle_H1_zero_aux_V := by
+          rintro ⟨z, hz, heq⟩
+          have heq' : z = Sum.inl p.1 := OnePoint.coe_injective heq
+          subst z
+          exact hz (by
+            simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum])
+        refine ⟨⟨(Sum.inl p.1 : apm_t01a03_TwoPuncturedTori), hpV⟩, ?_⟩
+        apply Subtype.ext
+        change ((φ p : Fin 2 → ℝ), 0) = (a, b)
+        exact Prod.ext (by simp [p, q]) (Set.mem_singleton_iff.mp hb0).symm
+    · rcases hab with ⟨ha0, hb⟩
+      by_cases hzero : b = 0
+      ·
+        refine ⟨⟨(OnePoint.infty : OnePoint apm_t01a03_TwoPuncturedTori), ?_⟩, ?_⟩
+        · simp [apm_t01a03_separating_circle_H1_zero_aux_V]
+        · apply Subtype.ext
+          change (0, 0) = (a, b)
+          exact Prod.ext (Set.mem_singleton_iff.mp ha0).symm hzero.symm
+      · let q : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) :=
+          ⟨b, hb, fun h => hzero (Set.mem_singleton_iff.mp h)⟩
+        let p := (φ.symm q : apm_t01a03_separating_circle_H1_zero_aux_N)
+        have hpV : ((Sum.inr p.1 : apm_t01a03_TwoPuncturedTori) :
+            OnePoint apm_t01a03_TwoPuncturedTori) ∈ apm_t01a03_separating_circle_H1_zero_aux_V := by
+          rintro ⟨z, hz, heq⟩
+          have heq' : z = Sum.inr p.1 := OnePoint.coe_injective heq
+          subst z
+          exact hz (by
+            simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum])
+        refine ⟨⟨(Sum.inr p.1 : apm_t01a03_TwoPuncturedTori), hpV⟩, ?_⟩
+        apply Subtype.ext
+        change (0, (φ p : Fin 2 → ℝ)) = (a, b)
+        exact Prod.ext (Set.mem_singleton_iff.mp ha0).symm (by simp [p, q])
 
 /-- The glued map is continuous. At a finite point of `V` it is `φ` on an open
 piece (`OnePoint.isOpenEmbedding_coe`, and `Nsum` is open). At `∞`: a
