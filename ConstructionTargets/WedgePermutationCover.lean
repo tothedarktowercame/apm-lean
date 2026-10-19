@@ -2794,6 +2794,99 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_a
     simp at hz hw
     linarith
 
+/-! Split of `circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections` (lemma-1 PARTIAL, 2026-10-19): `_aux_lift`, `_aux_base`, `_aux_S`
+banked from the seat; `_aux_cont`, `_aux_right`, `_aux_range` queued. -/
+
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+    (r : {w : Circle // w ≠ -circleBase} → Circle) (w : Circle) : Circle :=
+  if h : w ≠ -circleBase then r ⟨w, h⟩ else circleBase
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_base
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)
+    (hre : ∀ w, 0 < (r w : ℂ).re) :
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase := by
+  have hn : circleBase ≠ -circleBase := by
+    intro h
+    have hh := congrArg Subtype.val h
+    norm_num [circleBase] at hh
+  rw [circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift,
+    dif_pos hn]
+  let w : {w : Circle // w ≠ -circleBase} := ⟨circleBase, hn⟩
+  have hm : ((r w : Circle) : ℂ) * r w = 1 := by
+    have h := congrArg Subtype.val (hsq w)
+    simpa [circleWedge_three_cover_two_components_aux_sq, circleBase] using h
+  rcases (mul_self_eq_one_iff.mp hm) with h | h
+  · exact Subtype.ext h
+  · have hp := hre w
+    rw [h] at hp
+    norm_num at hp
+
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase) (b : Bool) :
+    CircleWedge → circleWedge_three_cover_two_components_aux_Double :=
+  Quotient.lift
+    (Sum.elim
+      (fun w ↦ Quotient.mk _ (.inl (if b then
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w
+        else -circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w)))
+      (fun w ↦ Quotient.mk _ (.inr (if b then
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w
+        else -circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w))))
+    (by
+      intro x y h
+      induction h with
+      | rel x y h =>
+          cases h
+          change Quotient.mk _ (Sum.inl (if b then _ else _)) =
+            Quotient.mk _ (Sum.inr (if b then _ else _))
+          cases b <;> simp [hrbase]
+          · exact Quotient.sound (Relation.EqvGen.rel _ _
+              circleWedge_three_cover_two_components_aux_Rel.neg)
+          · exact Quotient.sound (Relation.EqvGen.rel _ _
+              circleWedge_three_cover_two_components_aux_Rel.pos)
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+/-- Each section is continuous on `U` (`U` avoids both `-1`s, where `_aux_lift`
+jumps; its preimage in `Circle ⊕ Circle` is open and saturated). -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_cont
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase) (hr : Continuous r) (b : Bool) :
+    Continuous (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) := by
+  sorry
+
+/-- Each section is a right inverse of `doubleMap` on `U`. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_right
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase)
+    (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)
+    (b : Bool) (u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U) :
+    circleWedge_three_cover_two_components_aux_doubleMap
+      (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) = u := by
+  sorry
+
+/-- The `b`-section over `U` has range exactly the `b`-cross. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_range
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase)
+    (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)
+    (hre : ∀ w, 0 < (r w : ℂ).re)
+    (hroots : ∀ w z, circleWedge_three_cover_two_components_aux_sq z = w.1 → z = r w ∨ z = -r w)
+    (b : Bool) :
+    Set.range (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) =
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b := by
+  sorry
+
 /-- The two local sections over `U`, built from a square-root branch `r`:
 `[inl w] ↦ [inl (±r w)]`, `[inr w] ↦ [inr (±r w)]` (well defined at the wedge point
 since `r 1 = 1`). Continuity: `U`'s preimage in `Circle ⊕ Circle` is open and
@@ -2810,7 +2903,11 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_a
       (∀ b u, circleWedge_three_cover_two_components_aux_doubleMap (s b u) = u) ∧
       (∀ b, Set.range (s b) =
         circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b) := by
-  sorry
+  have hrbase := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_base r hsq hre
+  exact ⟨fun b u ↦ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1,
+    fun b ↦ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_cont r hrbase hr b,
+    fun b u ↦ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_right r hrbase hsq b u,
+    fun b ↦ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_range r hrbase hsq hre hroots b⟩
 
 /-- At the wedge point: `V` = the image of the open arcs `{Re z > 0}` in both
 lobes. Its preimage is two disjoint open "crosses", one through `[inl 1] = [inr 1]`
