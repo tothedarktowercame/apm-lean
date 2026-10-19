@@ -1400,7 +1400,118 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_incl_joined
       apm_t01a03_separating_circle_H1_zero_aux_V)) :
     Joined (Set.inclusion Set.inter_subset_left x : ↥apm_t01a03_separating_circle_H1_zero_aux_U)
       (Set.inclusion Set.inter_subset_left y) → Joined x y := by
-  sorry
+  rintro hxy
+  rcases x with ⟨x, hxU, hxV⟩
+  rcases y with ⟨y, hyU, hyV⟩
+  rcases hxU with ⟨a, rfl⟩
+  rcases hyU with ⟨b, rfl⟩
+  let e : apm_t01a03_TwoPuncturedTori ≃ₜ
+      apm_t01a03_separating_circle_H1_zero_aux_U :=
+    OnePoint.isOpenEmbedding_coe.toHomeomorph
+  have hab : Joined a b := by
+    have hp : Joined (e.symm (Set.inclusion Set.inter_subset_left
+          ⟨↑a, ⟨⟨a, rfl⟩, hxV⟩⟩))
+        (e.symm (Set.inclusion Set.inter_subset_left
+          ⟨↑b, ⟨⟨b, rfl⟩, hyV⟩⟩)) :=
+      ⟨hxy.somePath.map e.symm.continuous⟩
+    have hea : e.symm (Set.inclusion Set.inter_subset_left
+        ⟨↑a, ⟨⟨a, rfl⟩, hxV⟩⟩) = a := by
+      exact OnePoint.isOpenEmbedding_coe.isEmbedding.toHomeomorph_symm_apply a
+    have heb : e.symm (Set.inclusion Set.inter_subset_left
+        ⟨↑b, ⟨⟨b, rfl⟩, hyV⟩⟩) = b := by
+      exact OnePoint.isOpenEmbedding_coe.isEmbedding.toHomeomorph_symm_apply b
+    rwa [hea, heb] at hp
+  have haN : a ∈ apm_t01a03_separating_circle_H1_zero_aux_Nsum := by
+    simpa [apm_t01a03_separating_circle_H1_zero_aux_V] using hxV
+  have hbN : b ∈ apm_t01a03_separating_circle_H1_zero_aux_Nsum := by
+    simpa [apm_t01a03_separating_circle_H1_zero_aux_V] using hyV
+  cases a with
+  | inl a =>
+      cases b with
+      | inl b =>
+          have ha : a ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using haN
+          have hb : b ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hbN
+          let f : apm_t01a03_separating_circle_H1_zero_aux_N →
+              ↥(apm_t01a03_separating_circle_H1_zero_aux_U ∩
+                apm_t01a03_separating_circle_H1_zero_aux_V) := fun z =>
+            ⟨(↑(Sum.inl z.1 : apm_t01a03_TwoPuncturedTori) :
+                OnePoint apm_t01a03_TwoPuncturedTori),
+              ⟨by
+                show ↑(Sum.inl z.1 : apm_t01a03_TwoPuncturedTori) ∈
+                  apm_t01a03_separating_circle_H1_zero_aux_U
+                exact ⟨Sum.inl z.1, rfl⟩, by
+                change ↑(Sum.inl z.1 : apm_t01a03_TwoPuncturedTori) ∉
+                  ((↑) : apm_t01a03_TwoPuncturedTori →
+                    OnePoint apm_t01a03_TwoPuncturedTori) ''
+                    apm_t01a03_separating_circle_H1_zero_aux_Nsumᶜ
+                rintro ⟨q, hq, heq⟩
+                have hqa : q = Sum.inl z.1 := OnePoint.coe_injective heq
+                subst q
+                exact hq (by simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum,
+                  z.2])⟩⟩
+          have hf : Continuous f :=
+            Continuous.subtype_mk
+              (OnePoint.continuous_coe.comp
+                (continuous_inl.comp continuous_subtype_val)) _
+          letI : PathConnectedSpace
+              apm_t01a03_separating_circle_H1_zero_aux_N :=
+            apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected
+          exact ⟨(PathConnectedSpace.somePath ⟨a, ha⟩ ⟨b, hb⟩).map hf⟩
+      | inr b =>
+          have hs : Sum.inl a ∈ Set.range hab.somePath :=
+            ⟨0, hab.somePath.source⟩
+          have hi : Sum.inl a ∈ Set.range
+              (Sum.inl : apm_t01a03_PuncturedTorus →
+                apm_t01a03_TwoPuncturedTori) := ⟨a, rfl⟩
+          have hr := (isPreconnected_range hab.somePath.continuous).subset_isClopen
+            isClopen_range_inl ⟨_, hs, hi⟩
+          rcases hr ⟨1, hab.somePath.target⟩ with ⟨c, hc⟩
+          exact False.elim (Sum.inl_ne_inr hc)
+  | inr a =>
+      cases b with
+      | inl b =>
+          have hs : Sum.inr a ∈ Set.range hab.somePath :=
+            ⟨0, hab.somePath.source⟩
+          have hi : Sum.inr a ∈ Set.range
+              (Sum.inr : apm_t01a03_PuncturedTorus →
+                apm_t01a03_TwoPuncturedTori) := ⟨a, rfl⟩
+          have hr := (isPreconnected_range hab.somePath.continuous).subset_isClopen
+            isClopen_range_inr ⟨_, hs, hi⟩
+          rcases hr ⟨1, hab.somePath.target⟩ with ⟨c, hc⟩
+          exact False.elim (Sum.inr_ne_inl hc)
+      | inr b =>
+          have ha : a ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using haN
+          have hb : b ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hbN
+          let f : apm_t01a03_separating_circle_H1_zero_aux_N →
+              ↥(apm_t01a03_separating_circle_H1_zero_aux_U ∩
+                apm_t01a03_separating_circle_H1_zero_aux_V) := fun z =>
+            ⟨(↑(Sum.inr z.1 : apm_t01a03_TwoPuncturedTori) :
+                OnePoint apm_t01a03_TwoPuncturedTori),
+              ⟨by
+                show ↑(Sum.inr z.1 : apm_t01a03_TwoPuncturedTori) ∈
+                  apm_t01a03_separating_circle_H1_zero_aux_U
+                exact ⟨Sum.inr z.1, rfl⟩, by
+                change ↑(Sum.inr z.1 : apm_t01a03_TwoPuncturedTori) ∉
+                  ((↑) : apm_t01a03_TwoPuncturedTori →
+                    OnePoint apm_t01a03_TwoPuncturedTori) ''
+                    apm_t01a03_separating_circle_H1_zero_aux_Nsumᶜ
+                rintro ⟨q, hq, heq⟩
+                have hqa : q = Sum.inr z.1 := OnePoint.coe_injective heq
+                subst q
+                exact hq (by simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum,
+                  z.2])⟩⟩
+          have hf : Continuous f :=
+            Continuous.subtype_mk
+              (OnePoint.continuous_coe.comp
+                (continuous_inr.comp continuous_subtype_val)) _
+          letI : PathConnectedSpace
+              apm_t01a03_separating_circle_H1_zero_aux_N :=
+            apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected
+          exact ⟨(PathConnectedSpace.somePath ⟨a, ha⟩ ⟨b, hb⟩).map hf⟩
 
 /-- `H₀ (U ∩ V) → H₀ U` is injective: `U ∩ V` is the two punctured squares, each
 path connected, landing in different summands of `U ≅ PT ⊔ PT`. -/
