@@ -1848,7 +1848,187 @@ right circle attached there. -/
 lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_cutC :
     ∃ x : circleWedge_connected_pair_aux_EC,
       ¬ IsPreconnected ({x}ᶜ : Set circleWedge_connected_pair_aux_EC) := by
-  sorry
+  let q : circleWedge_connected_pair_aux_RawC →
+      circleWedge_connected_pair_aux_EC := Quotient.mk _
+  let r₀ : circleWedge_connected_pair_aux_Root :=
+    ⟨circleBase, by
+      apply Subtype.ext
+      exact circleWedge_connected_pair_aux_circleBase_cube⟩
+  let roots : circleWedge_connected_pair_aux_Root →
+      {z : ℂ // z ∈ Polynomial.nthRoots 3 1} := fun r =>
+    ⟨r.1, (Polynomial.mem_nthRoots (by omega)).2 (by
+      have h := congrArg Subtype.val r.2
+      simpa [circleWedge_connected_pair_aux_cube, circleBase] using h)⟩
+  letI : Finite circleWedge_connected_pair_aux_Root :=
+    Finite.of_injective roots (by
+      intro x y h
+      apply Subtype.ext
+      apply Subtype.ext
+      exact congrArg (fun z : {z : ℂ // z ∈ Polynomial.nthRoots 3 1} => z.1) h)
+  let U : Set circleWedge_connected_pair_aux_EC :=
+    {y | ∃ z : Circle, z ≠ circleBase ∧ q (.inr (z, r₀)) = y}
+  let V : Set circleWedge_connected_pair_aux_EC :=
+    {y | ∀ z : Circle, q (.inr (z, r₀)) ≠ y}
+  have hU : IsOpen U := by
+    rw [isOpen_coinduced]
+    have heq : q ⁻¹' U = {a | ∃ z : Circle,
+        z ≠ circleBase ∧ a = .inr (z, r₀)} := by
+      ext a
+      constructor
+      · rintro ⟨z, hz, hq⟩
+        have hr := (Quotient.exact hq).symm
+        rcases (circleWedge_connected_pair_aux_not_homeomorphic_aux_relC_iff
+          a (.inr (z, r₀))).mp hr with h | ⟨r, h | h⟩
+        · exact ⟨z, hz, h⟩
+        · exfalso
+          apply hz
+          exact congrArg Prod.fst (Sum.inr.inj h.2)
+        · cases h.1
+      · rintro ⟨z, hz, rfl⟩
+        exact ⟨z, hz, rfl⟩
+    rw [heq]
+    have hopen : IsOpen ({z : Circle | z ≠ circleBase}) := isOpen_ne
+    have hopenR : IsOpen ({r₀} : Set circleWedge_connected_pair_aux_Root) :=
+      isOpen_discrete _
+    rw [isOpen_sum_iff]
+    constructor
+    · simp
+    · have he : {a : Circle × circleWedge_connected_pair_aux_Root |
+          ∃ z : Circle, z ≠ circleBase ∧ a = (z, r₀)} =
+          ({z : Circle | z ≠ circleBase} ×ˢ
+            ({r₀} : Set circleWedge_connected_pair_aux_Root)) := by
+        ext a
+        constructor
+        · rintro ⟨z, hz, rfl⟩
+          exact ⟨hz, rfl⟩
+        · rintro ⟨hz, hr⟩
+          exact ⟨a.1, hz, Prod.ext rfl hr⟩
+      have hp : Sum.inr ⁻¹' {a | ∃ z : Circle, z ≠ circleBase ∧
+          a = (Sum.inr (z, r₀) : circleWedge_connected_pair_aux_RawC)} =
+          {a : Circle × circleWedge_connected_pair_aux_Root |
+            ∃ z : Circle, z ≠ circleBase ∧ a = (z, r₀)} := by
+        ext a
+        constructor <;> rintro ⟨z, hz, ha⟩
+        · exact ⟨z, hz, Sum.inr.inj ha⟩
+        · exact ⟨z, hz, congrArg Sum.inr ha⟩
+      rw [hp, he]
+      exact hopen.prod hopenR
+  have hV : IsOpen V := by
+    rw [isOpen_coinduced]
+    have heq : q ⁻¹' V = {a | ¬ (a = .inl r₀.1 ∨
+        ∃ z : Circle, a = .inr (z, r₀))} := by
+      ext a
+      simp only [Set.mem_preimage, Set.mem_setOf_eq, V]
+      constructor
+      · intro h ha
+        rcases ha with ha | ⟨z, ha⟩
+        · apply h circleBase
+          rw [ha]
+          exact (Quotient.sound (Relation.EqvGen.rel _ _
+            (circleWedge_connected_pair_aux_RelC.glue r₀))).symm
+        · exact h z (congrArg q ha).symm
+      · intro h z hq
+        apply h
+        have hr := Quotient.exact hq
+        rcases (circleWedge_connected_pair_aux_not_homeomorphic_aux_relC_iff
+          (.inr (z, r₀)) a).mp hr with h' | ⟨r, h' | h'⟩
+        · exact Or.inr ⟨z, h'.symm⟩
+        · cases h'.1
+        · have hre : r₀ = r := congrArg Prod.snd (Sum.inr.inj h'.2)
+          exact Or.inl (h'.1.trans (by rw [hre]))
+    rw [heq]
+    apply isOpen_compl_iff.mpr
+    have he : {a | a = (Sum.inl r₀.1 : circleWedge_connected_pair_aux_RawC) ∨
+        ∃ z : Circle, a = .inr (z, r₀)} =
+        ({Sum.inl r₀.1} ∪ Sum.inr ''
+          (Set.univ ×ˢ ({r₀} : Set circleWedge_connected_pair_aux_Root))) := by
+      ext a
+      rcases a with a | ⟨z, r⟩
+      · simp
+      · constructor
+        · rintro (_ | ⟨w, hw⟩)
+          · contradiction
+          · have hr : r = r₀ := congrArg Prod.snd (Sum.inr.inj hw)
+            exact Or.inr ⟨(z, r₀), ⟨Set.mem_univ _, rfl⟩,
+              congrArg Sum.inr (Prod.ext rfl hr.symm)⟩
+        · rintro (_ | ⟨⟨w, s⟩, ⟨_, hs⟩, hw⟩)
+          · contradiction
+          · rw [Set.mem_singleton_iff] at hs
+            change s = r₀ at hs
+            subst s
+            exact Or.inr ⟨w, hw.symm⟩
+    change IsClosed {a | a = (Sum.inl r₀.1 : circleWedge_connected_pair_aux_RawC) ∨
+      ∃ z : Circle, a = .inr (z, r₀)}
+    rw [he]
+    exact isClosed_singleton.union
+      (isClosedMap_inr _ (isClosed_univ.prod isClosed_singleton))
+  refine ⟨q (.inl r₀.1), ?_⟩
+  rw [isPreconnected_iff_subset_of_disjoint]
+  push_neg
+  refine ⟨U, V, hU, hV, ?_, ?_, ?_⟩
+  · intro y hy
+    by_cases h : ∃ z : Circle, q (.inr (z, r₀)) = y
+    · obtain ⟨z, rfl⟩ := h
+      by_cases hz : z = circleBase
+      · subst z
+        exfalso
+        apply hy
+        exact (Quotient.sound (Relation.EqvGen.rel _ _
+          (circleWedge_connected_pair_aux_RelC.glue r₀))).symm
+      · exact Or.inl ⟨z, hz, rfl⟩
+    · exact Or.inr (by simpa [V] using h)
+  · ext y
+    simp only [Set.mem_inter_iff, Set.mem_empty_iff_false, iff_false]
+    rintro ⟨_, hyU, hyV⟩
+    obtain ⟨z, _, hz⟩ := hyU
+    exact hyV z hz
+  · constructor
+    · intro hsub
+      have hmem : q (.inl (-circleBase)) ∈ ({q (.inl r₀.1)}ᶜ :
+          Set circleWedge_connected_pair_aux_EC) := by
+        intro h
+        have hr := Quotient.exact h
+        rcases (circleWedge_connected_pair_aux_not_homeomorphic_aux_relC_iff
+          (.inl (-circleBase)) (.inl r₀.1)).mp hr with h' | ⟨r, h' | h'⟩
+        · have := congrArg (fun a => a.elim id (fun _ => circleBase)) h'
+          have hc := congrArg Subtype.val this
+          norm_num [r₀, circleBase] at hc
+        · exact Sum.inl_ne_inr h'.2
+        · exact Sum.inl_ne_inr h'.2
+      have hv : q (.inl (-circleBase)) ∈ V := by
+        simp only [V, Set.mem_setOf_eq]
+        intro z hq
+        have hr := Quotient.exact hq
+        rcases (circleWedge_connected_pair_aux_not_homeomorphic_aux_relC_iff
+          (.inr (z, r₀)) (.inl (-circleBase))).mp hr with h' | ⟨r, h' | h'⟩
+        · exact Sum.inr_ne_inl h'
+        · exact Sum.inr_ne_inl h'.1
+        · have hz : z = circleBase := congrArg Prod.fst (Sum.inr.inj h'.2)
+          have hrneg : r.1 = -circleBase := (Sum.inl.inj h'.1).symm
+          have hc := congrArg Subtype.val r.2
+          rw [hrneg] at hc
+          norm_num [circleBase] at hc
+      obtain ⟨z, _, hz⟩ := hsub hmem
+      exact hv z hz
+    · intro hsub
+      have hmem : q (.inr (-circleBase, r₀)) ∈ ({q (.inl r₀.1)}ᶜ :
+          Set circleWedge_connected_pair_aux_EC) := by
+        intro h
+        have hr := Quotient.exact h
+        rcases (circleWedge_connected_pair_aux_not_homeomorphic_aux_relC_iff
+          (.inr (-circleBase, r₀)) (.inl r₀.1)).mp hr with h' | ⟨r, h' | h'⟩
+        · exact Sum.inr_ne_inl h'
+        · exact Sum.inr_ne_inl h'.1
+        · have hc := congrArg Subtype.val
+            (congrArg Prod.fst (Sum.inr.inj h'.2))
+          norm_num [circleBase] at hc
+      have hu : q (.inr (-circleBase, r₀)) ∈ U :=
+        ⟨-circleBase, by
+          intro h
+          have hc := congrArg Subtype.val h
+          norm_num [circleBase] at hc, rfl⟩
+      obtain hv := hsub hmem
+      exact hv (-circleBase) rfl
 -- END SEAT AREA
 
 /-- `ED` has no cut point: the two circles are glued at three points, so
