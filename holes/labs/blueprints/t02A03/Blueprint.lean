@@ -474,7 +474,47 @@ lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_para
 is `1 + re v / 4 > 0`). -/
 lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_mem (x : apm_t02a03_Torus) :
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param x ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus := by
-  sorry
+  have hu : (x.1 : ℂ).re ^ 2 + (x.1 : ℂ).im ^ 2 = 1 := by
+    calc
+      (x.1 : ℂ).re ^ 2 + (x.1 : ℂ).im ^ 2 = Complex.normSq (x.1 : ℂ) := by
+        rw [Complex.normSq_apply]
+        ring
+      _ = ‖(x.1 : ℂ)‖ ^ 2 := Complex.normSq_eq_norm_sq _
+      _ = 1 := by rw [Circle.norm_coe]; norm_num
+  have hv : (x.2 : ℂ).re ^ 2 + (x.2 : ℂ).im ^ 2 = 1 := by
+    calc
+      (x.2 : ℂ).re ^ 2 + (x.2 : ℂ).im ^ 2 = Complex.normSq (x.2 : ℂ) := by
+        rw [Complex.normSq_apply]
+        ring
+      _ = ‖(x.2 : ℂ)‖ ^ 2 := Complex.normSq_eq_norm_sq _
+      _ = 1 := by rw [Circle.norm_coe]; norm_num
+  have hvre : -1 ≤ (x.2 : ℂ).re := by
+    have h := Complex.abs_re_le_norm (x.2 : ℂ)
+    rw [Circle.norm_coe] at h
+    exact (neg_le_of_abs_le h)
+  have hr : 0 ≤ 1 + (x.2 : ℂ).re / 4 := by linarith
+  have hsqrt :
+      Real.sqrt (((1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re) ^ 2 +
+        ((1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).im) ^ 2) =
+        1 + (x.2 : ℂ).re / 4 := by
+    rw [show
+      ((1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re) ^ 2 +
+          ((1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).im) ^ 2 =
+        (1 + (x.2 : ℂ).re / 4) ^ 2 by nlinarith]
+    exact Real.sqrt_sq hr
+  change Metric.infDist _ apm_t02a03_C = (1 / 4 : ℝ)
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist]
+  simp only [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param,
+    PiLp.toLp_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Fin.isValue,
+    Matrix.head_cons, Matrix.tail_cons]
+  rw [show -6 / 5 + (1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re + 6 / 5 =
+    (1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re by ring, hsqrt]
+  change Real.sqrt ((1 + (x.2 : ℂ).re / 4 - 1) ^ 2 +
+    ((x.2 : ℂ).im / 4) ^ 2) = 1 / 4
+  rw [show
+    ((1 + (x.2 : ℂ).re / 4 - 1) ^ 2 + ((x.2 : ℂ).im / 4) ^ 2) =
+      (1 / 4 : ℝ) ^ 2 by nlinarith]
+  norm_num
 
 /-- The parametrisation is injective (the planar radius `1 + re v / 4` is
 positive, so `u` is the planar direction and then `v` is read off). -/
