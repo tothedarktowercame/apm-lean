@@ -241,6 +241,21 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away
   sorry
 
 -- BEGIN SEAT AREA
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_e0_ne_neg :
+    rp2Wedge_regular_four_cover_aux_e0 ≠
+      -rp2Wedge_regular_four_cover_aux_e0 := by
+  intro h
+  have hcoord := congrArg
+    (fun x : Sphere2 ↦ (x : EuclideanSpace ℝ (Fin 3)) 0) h
+  norm_num [rp2Wedge_regular_four_cover_aux_e0,
+    EuclideanSpace.single_apply] at hcoord
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_neg_ne_e0 :
+    -rp2Wedge_regular_four_cover_aux_e0 ≠
+      rp2Wedge_regular_four_cover_aux_e0 := by
+  exact
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_e0_ne_neg.symm
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge
     (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :

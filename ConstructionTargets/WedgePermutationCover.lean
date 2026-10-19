@@ -240,6 +240,68 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away
       ((rp2Wedge_regular_four_cover_aux_p σ τ) ⁻¹' {x}) := by
   sorry
 
+/-! #### Split of `rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge` (lemma-3 PARTIAL, 2026-10-19) -/
+
+/-- Even covering from local sections: if the sheets over an open `U ∋ x` are the
+ranges of continuous sections `s i`, open and pairwise disjoint, and they exhaust
+`f ⁻¹' U`, then `x` is evenly covered with fibre `ι`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
+    {E X ι : Type*} [TopologicalSpace E] [TopologicalSpace X]
+    [TopologicalSpace ι] [DiscreteTopology ι]
+    (f : E → X) (hf : Continuous f) (x : X) (U : Set X) (hxU : x ∈ U) (hU : IsOpen U)
+    (s : ι → U → E) (hs : ∀ i, Continuous (s i)) (hfs : ∀ i u, f (s i u) = u)
+    (hopen : ∀ i, IsOpen (Set.range (s i)))
+    (hcover : ∀ e, f e ∈ U → ∃ i u, s i u = e)
+    (hdisj : ∀ i j u v, s i u = s j v → i = j) :
+    IsEvenlyCovered f x ι := by
+  sorry
+
+/-- The open hemisphere `{y | 0 < y₀}` around `e₀` embeds openly in `RP2`
+(it is disjoint from its antipode, and `antipodalCover` is an open map). -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_hemi :
+    Topology.IsOpenEmbedding
+      (fun y : {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0} ↦
+        antipodalCover y.1) := by
+  sorry
+
+/-- The glued projection is continuous. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_continuous
+    (σ τ : Equiv.Perm (Fin 4)) :
+    Continuous (rp2Wedge_regular_four_cover_aux_p σ τ) := by
+  sorry
+
+/-- Continuity out of an open subset of a wedge is checked on the two lobes
+(`Quotient.mk` restricted to the open preimage is still a quotient map). -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_lobes
+    {A B Y : Type*} [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace Y]
+    (a : A) (b : B) (U : Set (Wedge A B a b)) (hU : IsOpen U) (g : U → Y)
+    (hl : Continuous (fun z : {z : A // (Quotient.mk _ (.inl z) : Wedge A B a b) ∈ U} ↦
+      g ⟨_, z.2⟩))
+    (hr : Continuous (fun z : {z : B // (Quotient.mk _ (.inr z) : Wedge A B a b) ∈ U} ↦
+      g ⟨_, z.2⟩)) :
+    Continuous g := by
+  sorry
+
+/-- The four sheets over the wedge point.  `U` is the image of the hemisphere
+`{y | 0 < y₀}` in both lobes; sheet `i` sends `[inl (antipodalCover y)]` to
+`[inl (y, i)]` and `[inr (antipodalCover y)]` to `[inr (y, i)]` for `y` in the
+hemisphere (these agree at the wedge point by the glue at `e₀`).  Continuity by
+`_aux_lobes` and `_aux_hemi`; the range of sheet `i` is the class of
+`{inl (y, i), inl (-y, σ i), inr (y, i), inr (-y, τ i) | 0 < y₀}`, open in the raw
+sum; disjointness by `_aux_card_aux_invariant` recording the sheet index. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
+    ∃ U : Set (Wedge RP2 RP2 rpBase rpBase),
+      Quotient.mk _ (.inl rpBase) ∈ U ∧ IsOpen U ∧
+      ∃ s : Fin 4 → U → rp2Wedge_regular_four_cover_aux_E σ τ,
+        (∀ i, Continuous (s i)) ∧
+        (∀ i u, rp2Wedge_regular_four_cover_aux_p σ τ (s i u) = u) ∧
+        (∀ i, IsOpen (Set.range (s i))) ∧
+        (∀ e, rp2Wedge_regular_four_cover_aux_p σ τ e ∈ U → ∃ i u, s i u = e) ∧
+        (∀ i j u v, s i u = s j v → i = j) := by
+  sorry
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge
     (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
@@ -247,7 +309,12 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge
       (Quotient.mk _ (.inl rpBase))
       ((rp2Wedge_regular_four_cover_aux_p σ τ) ⁻¹'
         {Quotient.mk _ (.inl rpBase)}) := by
-  sorry
+  obtain ⟨U, hxU, hU, s, hs, hfs, hopen, hcover, hdisj⟩ :=
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections σ τ hσ hτ
+  exact (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
+    (ι := Fin 4) _
+    (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_continuous σ τ)
+    _ U hxU hU s hs hfs hopen hcover hdisj).to_isEvenlyCovered_preimage
 
 theorem rp2Wedge_regular_four_cover_aux_isCoveringMap (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :

@@ -181,3 +181,25 @@ is proved from three leaves:
   `CircleWedge` is connected and `_aux_Double` is connected (image of `inl` is a circle meeting
   the image of `inr` at the glue points); the sum of two nonempty connected spaces has
   exactly two components.
+
+### Split of `rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge` (2026-10-19, lemma-3 PARTIAL)
+
+lemma-3 banked only `e₀ ≠ -e₀`, which is not kept. The leaf itself is now proved from
+the five leaves below via `IsEvenlyCovered.to_isEvenlyCovered_preimage` (fibre `Fin 4`).
+The first four are independent of each other. `_aux_sections` uses `_aux_hemi` and `_aux_lobes`.
+
+- `_aux_of_sections` (general topology): continuous sections `s i : U → E` of `f` over an open
+  `U ∋ x`, with open, pairwise disjoint ranges exhausting `f ⁻¹' U`, give
+  `IsEvenlyCovered f x ι`. The map is `e ↦ (f e, index of the sheet containing e)`; the index is
+  locally constant because the ranges are open; the inverse is `(u, i) ↦ s i u`.
+- `_aux_hemi`: `antipodalCover` restricted to the open hemisphere `{y | 0 < y₀}` is an open
+  embedding (it is injective there, and `antipodalCover` is an open map because the saturation of
+  `V` is `V ∪ -V`).
+- `_aux_continuous`: `p σ τ` is continuous (it lifts the continuous `proj` through the quotient).
+- `_aux_lobes`: continuity out of an open `U` in a wedge is checked on the two lobes
+  (`IsQuotientMap.restrictPreimage_isOpen`, then `Sum` continuity).
+- `_aux_sections`: `U` = the image of the hemisphere in both lobes. Sheet `i` sends
+  `[inl [y]]` to `[inl (y, i)]` and `[inr [y]]` to `[inr (y, i)]` for `y` in the hemisphere; the two
+  agree at the wedge point by the glue at `e₀`. The range of sheet `i` is saturated from
+  `{inl (y, i), inl (-y, σ i), inr (y, i), inr (-y, τ i)}`, which is open in the raw sum.
+  Disjointness comes from `_aux_card_aux_invariant`, with an invariant that records the sheet index.
