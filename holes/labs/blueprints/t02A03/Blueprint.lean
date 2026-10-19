@@ -1027,7 +1027,56 @@ radius about the core centre, `s ≥ 3/4`; take `u = (a + b i)/s` and
 lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_surj (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) :
     ∃ x, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param x = p := by
-  sorry
+  let a : ℝ := p 0 + 6 / 5
+  let b : ℝ := p 1
+  let c : ℝ := p 2
+  let s : ℝ := Real.sqrt (a ^ 2 + b ^ 2)
+  have hs0 : 0 ≤ s := Real.sqrt_nonneg _
+  have hs2 : s ^ 2 = a ^ 2 + b ^ 2 := by
+    dsimp [s]
+    rw [Real.sq_sqrt]
+    positivity
+  have hdist : Real.sqrt ((s - 1) ^ 2 + c ^ 2) = (1 / 4 : ℝ) := by
+    change Metric.infDist p apm_t02a03_C = (1 / 4 : ℝ) at hp
+    calc
+      _ = Metric.infDist p apm_t02a03_C := by
+        symm
+        simpa [a, b, c, s] using
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist p
+      _ = _ := hp
+  have hrad : (s - 1) ^ 2 + c ^ 2 = (1 / 4 : ℝ) ^ 2 := by
+    have := congrArg (fun x : ℝ ↦ x ^ 2) hdist
+    change (Real.sqrt ((s - 1) ^ 2 + c ^ 2)) ^ 2 = (1 / 4 : ℝ) ^ 2 at this
+    rwa [Real.sq_sqrt (by positivity)] at this
+  have hspos : 0 < s := by
+    nlinarith [sq_nonneg (s - 1), sq_nonneg c]
+  let u0 : ℂ := (a / s : ℝ) + (b / s : ℝ) * Complex.I
+  have hu0 : ‖u0‖ = 1 := by
+    rw [Complex.norm_def]
+    simp [Complex.normSq_apply, u0]
+    rw [show a / s * (a / s) + b / s * (b / s) = 1 by
+      field_simp
+      nlinarith [hs2]]
+  let v0 : ℂ := (4 * (s - 1) : ℝ) + (4 * c : ℝ) * Complex.I
+  have hv0 : ‖v0‖ = 1 := by
+    rw [Complex.norm_def]
+    simp [Complex.normSq_apply, v0]
+    rw [show 4 * (s - 1) * (4 * (s - 1)) + 4 * c * (4 * c) = 1 by
+      nlinarith [hrad]]
+  let u : Circle := ⟨u0, by simpa [Submonoid.unitSphere] using hu0⟩
+  let v : Circle := ⟨v0, by simpa [Submonoid.unitSphere] using hv0⟩
+  refine ⟨(u, v), ?_⟩
+  ext i
+  fin_cases i
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param,
+      u, v, u0, v0, a, b, c]
+    field_simp
+    nlinarith
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param,
+      u, v, u0, v0, a, b, c]
+    field_simp
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param,
+      u, v, u0, v0, a, b, c]
 
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph :
     ∃ e : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ≃ₜ
