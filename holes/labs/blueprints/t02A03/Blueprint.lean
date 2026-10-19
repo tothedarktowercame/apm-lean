@@ -460,7 +460,50 @@ noncomputable def apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux
 /-- Leaf: points off the left core are at positive distance from it. -/
 lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_pos (p : apm_t02a03_E3) (hp : p ∉ apm_t02a03_C) :
     0 < Metric.infDist p apm_t02a03_C := by
-  sorry
+  rw [Metric.infDist_nonneg.lt_iff_ne]
+  intro hd
+  rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist] at hd
+  have hrad : (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1) ^ 2 + p 2 ^ 2 = 0 := by
+    have hle := (Real.sqrt_eq_zero').mp hd.symm
+    nlinarith [sq_nonneg (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1),
+      sq_nonneg (p 2)]
+  have hs : Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) = 1 := by
+    nlinarith [sq_nonneg (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1),
+      sq_nonneg (p 2)]
+  have hp2 : p 2 = 0 := by nlinarith [sq_nonneg (p 2)]
+  let z : ℂ := (p 0 + 6 / 5 : ℝ) + p 1 * Complex.I
+  have hz : z ≠ 0 := by
+    intro hz0
+    have hre : p 0 + 6 / 5 = 0 := by
+      have := congrArg Complex.re hz0
+      simpa [z] using this
+    have him : p 1 = 0 := by
+      have := congrArg Complex.im hz0
+      simpa [z] using this
+    simp [hre, him] at hs
+  have hn : ‖z‖ = 1 := by
+    rw [Complex.norm_def]
+    simp [Complex.normSq_apply, z]
+    rw [show (p 0 + 6 / 5) * (p 0 + 6 / 5) + p 1 * p 1 =
+        (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 by ring]
+    have hsq : (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 = 1 := by
+      have hr := Real.sq_sqrt (show 0 ≤ (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 by positivity)
+      nlinarith [congrArg (fun x : ℝ ↦ x ^ 2) hs]
+    rw [hsq]
+  apply hp
+  refine ⟨Complex.arg z, ?_⟩
+  ext i
+  fin_cases i
+  · have hc : Real.cos (Complex.arg z) = p 0 + 6 / 5 := by
+      rw [Complex.cos_arg hz, hn]
+      simp [z]
+    simp [apm_t02a03_leftCore, hc]
+    ring
+  · have hsin : Real.sin (Complex.arg z) = p 1 := by
+      rw [Complex.sin_arg, hn]
+      simp [z]
+    simp [apm_t02a03_leftCore, hsin]
+  · simp [apm_t02a03_leftCore, hp2]
 
 /-- Leaf: the push is continuous on `[0,1] × geometricY`. -/
 lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous_aux_ne
