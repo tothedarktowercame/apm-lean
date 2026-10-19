@@ -1828,6 +1828,45 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
 a.e. zero for `volume.restrict (Icc 0 1)`, its `eLpNorm` is `0`, and `hstep` with one interval
 gives value `0`. For `b ≤ a` both sides are `0` by `_aux_zero`. -/
 -- BEGIN SEAT AREA
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_clip_aux_outside
+    (q : ℝ) (L : ℚ × ℚ → ℝ) (R : ℝ)
+    (hstep : ∀ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      |∑ i ∈ F, c i * L i| ≤ R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal)
+    (a b : ℚ) (hab : a ≤ b) (hout : b ≤ 0 ∨ 1 ≤ a) :
+    L (a, b) = 0 := by
+  have h := hstep {(a, b)} (fun _ ↦ 1)
+  have hne0 : ∀ᵐ x : ℝ ∂volume.restrict (Set.Icc (0 : ℝ) 1), x ≠ 0 := by
+    apply ae_mono Measure.restrict_le_self
+    rw [show {x : ℝ | x ≠ 0} = ({0} : Set ℝ)ᶜ by ext x; simp]
+    exact compl_mem_ae_iff.mpr (MeasureTheory.measure_singleton 0)
+  have hae : (fun x : ℝ ↦ (Set.Ioc (a : ℝ) b).indicator (fun _ ↦ (1 : ℝ)) x)
+      =ᵐ[volume.restrict (Set.Icc (0 : ℝ) 1)] (fun _ ↦ (0 : ℝ)) := by
+    filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Icc, hne0] with x hx hx0
+    simp only [Set.indicator]
+    split_ifs with hxab
+    · rcases hout with hb | ha
+      · have hb' : (b : ℝ) ≤ 0 := Rat.cast_nonpos.mpr hb
+        exfalso
+        apply hx0
+        exact le_antisymm (hxab.2.trans hb') hx.1
+      · have ha' : (1 : ℝ) ≤ a := by
+          simpa using (Rat.cast_le.mpr ha : ((1 : ℚ) : ℝ) ≤ (a : ℝ))
+        exfalso
+        exact (not_lt_of_ge ha') (hxab.1.trans_le hx.2)
+    · rfl
+  have hnorm : eLpNorm (fun x : ℝ ↦ (Set.Ioc (a : ℝ) b).indicator
+      (fun _ ↦ (1 : ℝ)) x) (ENNReal.ofReal q)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)) = 0 := by
+    rw [eLpNorm_congr_ae hae]
+    exact eLpNorm_zero'
+  simp only [Finset.sum_singleton, one_mul] at h
+  rw [hnorm] at h
+  have hz : |L (a, b)| ≤ 0 := by
+    simpa only [ENNReal.toReal_zero, mul_zero] using h
+  exact abs_eq_zero.mp (le_antisymm hz (abs_nonneg _))
+
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_clip
     (q : ℝ) (hq : 1 < q) (L : ℚ × ℚ → ℝ) (R : ℝ)
     (hadd : ∀ a b c : ℚ, a ≤ b → b ≤ c → L (a, c) = L (a, b) + L (b, c))
@@ -1836,7 +1875,41 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
           (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
         (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
     ∀ a b : ℚ, L (a, b) = L (min (max a 0) 1, min (max b 0) 1) := by
-  sorry
+  intro a b
+  have hzero :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_zero
+      q L R hstep
+  have hout :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_clip_aux_outside
+      q L R hstep
+  rcases le_total a b with hab | hba
+  · by_cases hb0 : b ≤ 0
+    · rw [hout a b hab (Or.inl hb0)]
+      have ha0 : a ≤ 0 := hab.trans hb0
+      simp [hb0, ha0, hzero 0 0 le_rfl]
+    · by_cases ha1 : 1 ≤ a
+      · rw [hout a b hab (Or.inr ha1)]
+        have hb1 : 1 ≤ b := ha1.trans hab
+        simp [ha1, hb1, hzero 1 1 le_rfl]
+      · have h0b : 0 ≤ b := le_of_not_ge hb0
+        have ha1' : a ≤ 1 := le_of_not_ge ha1
+        by_cases ha0 : a ≤ 0
+        · by_cases hb1 : b ≤ 1
+          · rw [hadd a 0 b ha0 h0b, hout a 0 ha0 (Or.inl le_rfl)]
+            simp [ha0, h0b, hb1]
+          · have h1b : 1 ≤ b := le_of_not_ge hb1
+            rw [hadd a 0 b ha0 h0b, hadd 0 1 b zero_le_one h1b,
+              hout a 0 ha0 (Or.inl le_rfl), hout 1 b h1b (Or.inr le_rfl)]
+            simp [ha0, h1b]
+        · have h0a : 0 ≤ a := le_of_not_ge ha0
+          by_cases hb1 : b ≤ 1
+          · simp [h0a, ha1', h0b, hb1]
+          · have h1b : 1 ≤ b := le_of_not_ge hb1
+            rw [hadd a 1 b ha1' h1b, hout 1 b h1b (Or.inr le_rfl)]
+            simp [h0a, ha1', h1b]
+  · have hc : min (max b 0) 1 ≤ min (max a 0) 1 :=
+      min_le_min_right 1 (max_le_max_right 0 hba)
+    rw [hzero a b hba, hzero _ _ hc]
 -- END SEAT AREA
 
 /-- Leaf (absolute-continuity bound). For disjoint rational intervals inside `[0,1]`,
