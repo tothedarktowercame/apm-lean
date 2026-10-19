@@ -787,7 +787,53 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_far :
       ∀ x ∈ apm_t01a03_separating_circle_H1_zero_aux_N,
         ε ≤ ‖apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x‖ →
           x ∈ C := by
-  sorry
+  intro ε hε
+  let a : apm_t01a03_Torus → (Fin 2 → ℝ) := fun x i => (3 / Real.pi) *
+    (if i = 0 then Complex.arg (x.1 : ℂ) else Complex.arg (x.2 : ℂ))
+  have ha : ContinuousAt a ((1 : Circle), (1 : Circle)) := by
+    apply continuousAt_pi.mpr
+    intro i
+    apply ContinuousAt.const_mul
+    have harg1 : ContinuousAt Complex.arg (1 : ℂ) :=
+      Complex.continuousAt_arg (by simp [Complex.slitPlane])
+    split
+    · simpa only [Function.comp_apply] using harg1.comp_of_eq
+        (continuous_subtype_val.comp continuous_fst).continuousAt (by simp)
+    · simpa only [Function.comp_apply] using harg1.comp_of_eq
+        (continuous_subtype_val.comp continuous_snd).continuousAt (by simp)
+  have ha0 : a ((1 : Circle), (1 : Circle)) = 0 := by
+    ext i
+    simp [a]
+  have hanorm : ContinuousAt (fun y => ‖a y‖) ((1 : Circle), (1 : Circle)) := ha.norm
+  rw [Metric.continuousAt_iff] at hanorm
+  obtain ⟨δ, hδ, hsmall⟩ := hanorm ε hε
+  let D : Set apm_t01a03_PuncturedTorus :=
+    {x | δ ≤ dist (x.1 : apm_t01a03_Torus) ((1 : Circle), (1 : Circle))}
+  refine ⟨D, ?_, ?_⟩
+  · rw [(Topology.IsEmbedding.subtypeVal).isCompact_iff]
+    have himage : ((↑) : apm_t01a03_PuncturedTorus → apm_t01a03_Torus) '' D =
+        {y | δ ≤ dist y ((1 : Circle), (1 : Circle))} := by
+      ext y
+      constructor
+      · rintro ⟨x, hx, rfl⟩
+        exact hx
+      · intro hy
+        have hne : y ≠ ((1 : Circle), (1 : Circle)) := by
+          intro heq
+          subst y
+          exact (not_le_of_gt hδ) (by simpa using hy)
+        exact ⟨⟨y, hne⟩, hy, rfl⟩
+    rw [himage]
+    exact (isClosed_le continuous_const
+      (continuous_id.dist continuous_const)).isCompact
+  · intro x hx hfar
+    change δ ≤ dist (x.1 : apm_t01a03_Torus) ((1 : Circle), (1 : Circle))
+    by_contra hnot
+    have hs := hsmall (lt_of_not_ge hnot)
+    have hs' : ‖a (x.1 : apm_t01a03_Torus)‖ < ε := by
+      simpa [ha0] using hs
+    apply (not_lt_of_ge hfar)
+    exact hs'
 
 /-- A compact subset of the punctured torus misses a neighbourhood of the puncture:
 its image in the torus is compact, hence closed, and omits `(1,1)`; small angles
