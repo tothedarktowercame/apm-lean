@@ -474,7 +474,117 @@ lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_infDis
     (p : apm_t02a03_E3) (hp : 0 < Metric.infDist p apm_t02a03_C) :
     Metric.infDist (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p) apm_t02a03_C =
       Metric.infDist p apm_t02a03_C + t * max 0 (1 / 4 - Metric.infDist p apm_t02a03_C) := by
-  sorry
+  let d := Metric.infDist p apm_t02a03_C
+  let s := Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2)
+  let e := max 0 (1 / 4 - d)
+  let g := t * e / d
+  have hd : d = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+    simp only [d, s]
+    exact apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist p
+  have hd0 : 0 < d := hp
+  have hs0 : 0 ≤ s := Real.sqrt_nonneg _
+  by_cases he : e = 0
+  · have hg : g = 0 := by simp [g, he]
+    have hgain : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain t p = 0 := by
+      change t * max 0 (1 / 4 - d) / d = 0
+      change t * e / d = 0
+      simp [he]
+    have hmove : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p = p := by
+      ext i
+      fin_cases i <;>
+        simp [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move,
+          hgain]
+    rw [hmove]
+    change d = d + t * e
+    simp [he]
+  · have heq : e = 1 / 4 - d := by
+      dsimp [e]
+      rw [max_eq_right]
+      by_contra h
+      have : 1 / 4 - d ≤ 0 := le_of_not_ge h
+      apply he
+      dsimp [e]
+      exact max_eq_left this
+    have hdlt : d < 1 / 4 := by
+      have hepos : 0 < e := lt_of_le_of_ne (le_max_left _ _) (Ne.symm he)
+      linarith
+    have hs : 1 / 2 < s := by
+      have hsq : (s - 1) ^ 2 < (1 / 4 : ℝ) ^ 2 := by
+        have hd_sq : d ^ 2 = (s - 1) ^ 2 + p 2 ^ 2 := by
+          rw [hd, Real.sq_sqrt]
+          positivity
+        nlinarith [sq_nonneg (p 2)]
+      nlinarith [sq_nonneg (s - 1 / 2)]
+    have hmax : max s (1 / 2) = s := max_eq_left (le_of_lt hs)
+    have hg0 : 0 ≤ g := by positivity
+    have hgs : 0 < 1 + g * (s - 1) / s := by
+      have hgd : g * d = t * e := by
+        dsimp [g]
+        field_simp [ne_of_gt hd0]
+      have hg_le : g * d ≤ e := by nlinarith
+      have habs : |s - 1| ≤ d := by
+        have hd_sq : d ^ 2 = (s - 1) ^ 2 + p 2 ^ 2 := by
+          rw [hd, Real.sq_sqrt]
+          positivity
+        rw [abs_le]
+        constructor <;> nlinarith [sq_nonneg (p 2), sq_nonneg (d + (s - 1)),
+          sq_nonneg (d - (s - 1))]
+      have : g * |s - 1| ≤ e := (mul_le_mul_of_nonneg_left habs hg0).trans hg_le
+      have he_lt : e < s := by rw [heq]; nlinarith
+      rcases le_total 1 s with h | h
+      · exact add_pos_of_pos_of_nonneg zero_lt_one
+          (div_nonneg (mul_nonneg hg0 (sub_nonneg.mpr h)) hs0)
+      · rw [abs_of_nonpos (sub_nonpos.mpr h)] at this
+        have hsmall : g * (1 - s) < s := by nlinarith [lt_of_le_of_lt this he_lt]
+        rw [show 1 + g * (s - 1) / s = (s + g * (s - 1)) / s by
+          field_simp]
+        exact div_pos (by nlinarith) (by linarith)
+    rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist]
+    have hgain_eq : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain t p = g := by
+      rfl
+    simp only [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move,
+      PiLp.toLp_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Fin.isValue,
+      Matrix.head_cons, Matrix.tail_cons]
+    rw [hgain_eq, hmax]
+    change Real.sqrt ((Real.sqrt
+      ((p 0 + g * (s - 1) / s * (p 0 + 6 / 5) + 6 / 5) ^ 2 +
+       (p 1 + g * (s - 1) / s * p 1) ^ 2) - 1) ^ 2 +
+       (p 2 + g * p 2) ^ 2) = d + t * e
+    have hs_sq : s ^ 2 = (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 := by
+      dsimp [s]
+      rw [Real.sq_sqrt]
+      positivity
+    have hradius : Real.sqrt
+        ((p 0 + g * (s - 1) / s * (p 0 + 6 / 5) + 6 / 5) ^ 2 +
+         (p 1 + g * (s - 1) / s * p 1) ^ 2) =
+        s + g * (s - 1) := by
+      rw [show
+        (p 0 + g * (s - 1) / s * (p 0 + 6 / 5) + 6 / 5) ^ 2 +
+          (p 1 + g * (s - 1) / s * p 1) ^ 2 =
+          (1 + g * (s - 1) / s) ^ 2 * s ^ 2 by
+            field_simp
+            nlinarith [hs_sq]]
+      rw [Real.sqrt_mul (sq_nonneg _), Real.sqrt_sq_eq_abs,
+        Real.sqrt_sq_eq_abs, abs_of_nonneg hs0, abs_of_pos hgs]
+      field_simp
+    rw [hradius]
+    have hinside :
+        (s + g * (s - 1) - 1) ^ 2 + (p 2 + g * p 2) ^ 2 =
+          (1 + g) ^ 2 * d ^ 2 := by
+      have hd_sq : d ^ 2 = (s - 1) ^ 2 + p 2 ^ 2 := by
+        rw [hd, Real.sq_sqrt]
+        positivity
+      rw [hd_sq]
+      ring
+    rw [hinside, Real.sqrt_mul (sq_nonneg (1 + g)),
+      Real.sqrt_sq_eq_abs, Real.sqrt_sq_eq_abs,
+      abs_of_nonneg (by positivity : 0 ≤ 1 + g), abs_of_pos hd0]
+    have hgd : g * d = t * e := by
+      dsimp [g]
+      field_simp [ne_of_gt hd0]
+    calc
+      (1 + g) * d = d + g * d := by ring
+      _ = d + t * e := by rw [hgd]
 -- END SEAT AREA
 
 lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_of_gain (t : ℝ) (p : apm_t02a03_E3)
