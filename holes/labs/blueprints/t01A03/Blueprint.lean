@@ -1339,7 +1339,45 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero :
 coordinates it is the open square `(-π/3, π/3)²` minus its centre. -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected :
     PathConnectedSpace apm_t01a03_separating_circle_H1_zero_aux_N := by
-  sorry
+  obtain ⟨φ, _, _⟩ :=
+    apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart
+  let e : (Fin 2 → ℝ) ≃ₜ Metric.ball (0 : Fin 2 → ℝ) 1 :=
+    Homeomorph.unitBall
+  have hrank : 1 < Module.rank ℝ (Fin 2 → ℝ) := by
+    rw [← Module.finrank_eq_rank']
+    norm_num [Module.finrank_fintype_fun_eq_card]
+  have hpc : IsPathConnected (({0}ᶜ : Set (Fin 2 → ℝ))) :=
+    isPathConnected_compl_singleton_of_one_lt_rank hrank 0
+  have himage : (fun x ↦ (e x : Fin 2 → ℝ)) ''
+      ({0}ᶜ : Set (Fin 2 → ℝ)) =
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0}) := by
+    ext y
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      refine ⟨(e x).property, ?_⟩
+      intro h
+      simp only [Set.mem_compl_iff, Set.mem_singleton_iff] at hx
+      rw [Set.mem_singleton_iff] at h
+      apply hx
+      apply e.injective
+      apply Subtype.ext
+      exact h.trans (by simp [e])
+    · intro hy
+      refine ⟨e.symm ⟨y, hy.1⟩, ?_, ?_⟩
+      simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
+      intro h
+      apply hy.2
+      have := congrArg Subtype.val (e.apply_symm_apply ⟨y, hy.1⟩)
+      simpa [h, e] using this.symm
+      exact congrArg Subtype.val (e.apply_symm_apply ⟨y, hy.1⟩)
+  have hpc' : IsPathConnected
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0}) := by
+    rw [← himage]
+    exact hpc.image (e.continuous.subtype_val)
+  haveI : PathConnectedSpace
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) := by
+    exact isPathConnected_iff_pathConnectedSpace.mp hpc'
+  exact φ.symm.surjective.pathConnectedSpace φ.symm.continuous
 
 /-- A map that reflects path-joinedness is injective on integral `H₀`.
 (`H₀ A` is free on the path components of `A`; one route: for each path
