@@ -362,6 +362,151 @@ point less than `1/4` from the deleted left core out to the distance shell.
 Keeping the endpoint and fixed-point assertions explicit makes the purely
 homotopy-theoretic packaging independent of its coordinate construction. -/
 -- BEGIN SEAT AREA
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist
+    (p : apm_t02a03_E3) :
+    Metric.infDist p apm_t02a03_C =
+      Real.sqrt ((Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1) ^ 2 + p 2 ^ 2) := by
+  let a : ℝ := p 0 + 6 / 5
+  let b : ℝ := p 1
+  let s : ℝ := Real.sqrt (a ^ 2 + b ^ 2)
+  have hs0 : 0 ≤ s := Real.sqrt_nonneg _
+  have hs2 : s ^ 2 = a ^ 2 + b ^ 2 := by
+    dsimp [s]
+    rw [Real.sq_sqrt]
+    positivity
+  have lower : Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤
+      Metric.infDist p (Set.range apm_t02a03_leftCore) := by
+    rw [Metric.le_infDist]
+    · rintro q ⟨t, rfl⟩
+      have htrig : Real.sin t ^ 2 + Real.cos t ^ 2 = 1 :=
+        Real.sin_sq_add_cos_sq t
+      have hcs : (a * Real.cos t + b * Real.sin t) ^ 2 ≤ s ^ 2 := by
+        nlinarith [sq_nonneg (a * Real.sin t - b * Real.cos t)]
+      have hdot : a * Real.cos t + b * Real.sin t ≤ s := by
+        nlinarith [sq_nonneg (s - (a * Real.cos t + b * Real.sin t))]
+      rw [show dist p (apm_t02a03_leftCore t) =
+          Real.sqrt ((a - Real.cos t) ^ 2 + (b - Real.sin t) ^ 2 + p 2 ^ 2) by
+        simp [dist_eq_norm, apm_t02a03_leftCore, a, b, EuclideanSpace.norm_eq,
+          Fin.sum_univ_succ]
+        congr 1 <;> ring]
+      exact Real.sqrt_le_sqrt (by nlinarith)
+    · exact ⟨apm_t02a03_leftCore 0, ⟨0, rfl⟩⟩
+  apply le_antisymm
+  · by_cases hz : (a : ℂ) + b * Complex.I = 0
+    · have ha : a = 0 := by
+        have := congrArg Complex.re hz
+        simpa using this
+      have hb : b = 0 := by
+        have := congrArg Complex.im hz
+        simpa using this
+      have hs : s = 0 := by simp [s, ha, hb]
+      have hp0 : p 0 = -6 / 5 := by dsimp [a] at ha; linarith
+      have hp1 : p 1 = 0 := by simpa [b] using hb
+      calc
+        Metric.infDist p (Set.range apm_t02a03_leftCore)
+            ≤ dist p (apm_t02a03_leftCore 0) :=
+              Metric.infDist_le_dist_of_mem ⟨0, rfl⟩
+        _ = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+          simp [dist_eq_norm, apm_t02a03_leftCore, hp0, hp1, hs,
+            EuclideanSpace.norm_eq, Fin.sum_univ_succ]
+    · let z : ℂ := (a : ℂ) + b * Complex.I
+      have hz' : z ≠ 0 := by simpa [z] using hz
+      have hnorm : ‖z‖ = s := by
+        rw [Complex.norm_def]
+        congr 1
+        simp [Complex.normSq_apply, z, s]
+        ring
+      have hc : Real.cos (Complex.arg z) = a / s := by
+        rw [Complex.cos_arg hz', hnorm]
+        simp [z]
+      have hsi : Real.sin (Complex.arg z) = b / s := by
+        rw [Complex.sin_arg, hnorm]
+        simp [z]
+      have hspos : 0 < s := lt_of_le_of_ne hs0 (by
+        intro h
+        apply hz'
+        apply Complex.ext <;> simp [z] at * <;> nlinarith [hs2])
+      calc
+        Metric.infDist p (Set.range apm_t02a03_leftCore)
+            ≤ dist p (apm_t02a03_leftCore (Complex.arg z)) :=
+              Metric.infDist_le_dist_of_mem ⟨_, rfl⟩
+        _ = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+          rw [show dist p (apm_t02a03_leftCore (Complex.arg z)) =
+              Real.sqrt ((a - Real.cos (Complex.arg z)) ^ 2 +
+                (b - Real.sin (Complex.arg z)) ^ 2 + p 2 ^ 2) by
+            simp [dist_eq_norm, apm_t02a03_leftCore, a, b, EuclideanSpace.norm_eq,
+              Fin.sum_univ_succ]
+            congr 1 <;> ring]
+          congr 1
+          rw [hc, hsi]
+          field_simp
+          nlinarith [hs2]
+  · change Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤ _
+    exact lower
+
+/-- Radial push off the left core: at time `t` a point at distance `d < 1/4`
+from `C` moves along its normal ray in the meridian half-plane by the factor
+`1 + gain`, ending at distance `d + t * (1/4 - d)`.  Points at distance
+`≥ 1/4` have `gain = 0`.  The `max s (1/2)` only guards the core axis `s = 0`,
+which is at distance `≥ 1` from `C` and so has `gain = 0` anyway. -/
+noncomputable def apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain (t : ℝ) (p : apm_t02a03_E3) : ℝ :=
+  t * max 0 (1 / 4 - Metric.infDist p apm_t02a03_C) / Metric.infDist p apm_t02a03_C
+
+noncomputable def apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move (t : ℝ) (p : apm_t02a03_E3) : apm_t02a03_E3 :=
+  let g := apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain t p
+  let s := Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2)
+  let k := g * (s - 1) / max s (1 / 2)
+  WithLp.toLp 2 ![p 0 + k * (p 0 + 6 / 5), p 1 + k * p 1, p 2 + g * p 2]
+
+/-- Leaf: points off the left core are at positive distance from it. -/
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_pos (p : apm_t02a03_E3) (hp : p ∉ apm_t02a03_C) :
+    0 < Metric.infDist p apm_t02a03_C := by
+  sorry
+
+/-- Leaf: the push is continuous on `[0,1] × geometricY`. -/
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous :
+    Continuous (fun q : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY =>
+      apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move q.1.1 q.2.1) := by
+  sorry
+
+/-- Leaf: the distance to `C` after the push (use `_aux_infDist`). -/
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_infDist (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
+    (p : apm_t02a03_E3) (hp : 0 < Metric.infDist p apm_t02a03_C) :
+    Metric.infDist (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p) apm_t02a03_C =
+      Metric.infDist p apm_t02a03_C + t * max 0 (1 / 4 - Metric.infDist p apm_t02a03_C) := by
+  sorry
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_of_gain (t : ℝ) (p : apm_t02a03_E3)
+    (h : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain t p = 0) : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p = p := by
+  ext i; fin_cases i <;> simp [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move, h]
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_zero (p : apm_t02a03_E3) : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move 0 p = p :=
+  apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_of_gain 0 p (by simp [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain])
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_far (t : ℝ) (p : apm_t02a03_E3)
+    (hp : (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C) : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p = p :=
+  apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_of_gain t p (by
+    unfold apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain; rw [max_eq_left (by linarith)]; simp)
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_mem (t : Set.Icc (0 : ℝ) 1) (p : apm_t02a03_geometricY) :
+    apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t.1 p.1 ∈ apm_t02a03_W ∧ apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t.1 p.1 ∉ apm_t02a03_C := by
+  have hpos := apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_pos p.1 p.2.2
+  by_cases hfar : (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C
+  · rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_far t.1 p.1 hfar]; exact p.2
+  have hd := apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_infDist t.1 t.2.1 t.2.2 p.1 hpos
+  have hm : max 0 (1 / 4 - Metric.infDist p.1 apm_t02a03_C) =
+      1 / 4 - Metric.infDist p.1 apm_t02a03_C := max_eq_right (by linarith)
+  rw [hm] at hd
+  refine ⟨?_, fun hC => ?_⟩
+  · show Metric.infDist _ apm_t02a03_genusTwoSpine ≤ 1 / 4
+    refine (Metric.infDist_le_infDist_of_subset
+      (Set.subset_union_left : Set.range apm_t02a03_leftCore ⊆ apm_t02a03_genusTwoSpine)
+      (show (Set.range apm_t02a03_leftCore).Nonempty from ⟨_, ⟨0, rfl⟩⟩)).trans ?_
+    change Metric.infDist _ apm_t02a03_C ≤ 1 / 4
+    rw [hd]; nlinarith [t.2.1, t.2.2]
+  · have h0 := Metric.infDist_zero_of_mem hC
+    rw [hd] at h0; nlinarith [t.2.1, t.2.2]
+
 theorem apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation :
     ∃ H : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY,
         apm_t02a03_geometricY),
@@ -370,7 +515,17 @@ theorem apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation :
         apm_t02a03_C) ∧
       (∀ t p, (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C →
         H (t, p) = p) := by
-  sorry
+  refine ⟨⟨fun q => ⟨apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move q.1.1 q.2.1, apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_mem q.1 q.2⟩,
+    (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous).subtype_mk _⟩, ?_, ?_, ?_⟩
+  · intro p; apply Subtype.ext; exact apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_zero p.1
+  · intro p
+    show (1 / 4 : ℝ) ≤ Metric.infDist (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move 1 p.1) apm_t02a03_C
+    by_cases hfar : (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C
+    · rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_far 1 p.1 hfar]; exact hfar
+    rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_infDist 1 zero_le_one le_rfl p.1 (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_pos p.1 p.2.2),
+      max_eq_right (by linarith)]
+    linarith
+  · intro t p hp; apply Subtype.ext; exact apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_far t.1 p.1 hp
 -- END SEAT AREA
 
 theorem apm_t02a03_geometricY_homotopyEquiv_shellY_aux_of_deformation
