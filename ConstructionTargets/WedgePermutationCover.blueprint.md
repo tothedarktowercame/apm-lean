@@ -245,3 +245,22 @@ so its cardinality is `1 + 2`. Leaf:
   inverse puts `z` on the circle named by `left`. The glued points have `z ^ 2 = 1`,
   so `x = circleBase`. lemma-3's attempt is commented out in
   `three_cover_fiber.partial.lean.bak` (notes dir).
+
+### Split of `circleWedge_three_cover_two_components_aux_covering_aux_double` (2026-10-19, lemma-1 PARTIAL)
+
+lemma-1 banked `_aux_rel_iff` (the gluing relation's equivalence closure is
+equality or the swap `inl z ↔ inr z` for `z = ±circleBase`) and `_aux_continuous`
+(`_aux_doubleMap` is continuous, via the quotient map). claude-14 split the
+covering property by point, the same way as `rp2Wedge_regular_four_cover_aux_isCoveringMap`:
+
+- `_aux_away`: for `x ≠ mk (inl circleBase)`, `x` lies in one lobe at `w ≠ 1`.
+  Take an arc `V ∋ w` avoiding `1`; the preimage is the two arcs `±√V` in the
+  same lobe of the double cover, neither containing `±1`, so `_aux_rel_iff` says
+  no gluing happens there and squaring is a homeomorphism on each.
+- `_aux_wedge`: over the wedge point take `V` = image of `{Re z > 0}` in both
+  lobes. The preimage is two open crosses, through `[inl 1] = [inr 1]` and through
+  `[inl (-1)] = [inr (-1)]`, each the wedge of two half-arcs, mapped onto `V`
+  homeomorphically. The rp2 `_aux_wedge_aux_of_sections` helper has the right
+  shape but is itself still `sorry`; do not use it unless it lands first.
+
+lemma-1's attempt is in `covering_aux_double.partial.lean.bak` (notes dir).
