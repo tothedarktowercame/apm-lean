@@ -2891,10 +2891,98 @@ lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_cutC :
 
 /-- `ED` has no cut point: the two circles are glued at three points, so
 removing any one point leaves two arcs that still meet. -/
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_punctured
+    (z : Circle) : IsPreconnected ({z}ᶜ : Set Circle) := by
+  have h : ‖(z : ℂ)‖ = 1 := by
+    simpa [Circle, Metric.mem_sphere] using z.2
+  have hr : Set.range (stereographic h).symm = ({z}ᶜ : Set Circle) := by
+    simpa using range_stereographic_symm h z.2
+  rw [← hr]
+  simpa only [Set.image_univ] using isPreconnected_univ.image _ (by
+    simpa using (stereographic h).symm.continuousOn)
+
+/-- A continuous map from the circle that takes the value `x` at most once is
+preconnected off `x`. -/
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_lobe
+    {X : Type*} [TopologicalSpace X] {f : Circle → X} (hf : Continuous f) (x : X)
+    (hx : ∀ z w, f z = x → f w = x → z = w) :
+    IsPreconnected (f '' {z | f z ≠ x}) := by
+  by_cases h : ∃ w, f w = x
+  · obtain ⟨w, hw⟩ := h
+    have hset : {z | f z ≠ x} = ({w}ᶜ : Set Circle) := by
+      ext z
+      simp only [Set.mem_setOf_eq, Set.mem_compl_iff, Set.mem_singleton_iff]
+      exact ⟨fun hz hzw ↦ hz (hzw ▸ hw), fun hzw hz ↦ hzw (hx z w hz hw)⟩
+    rw [hset]
+    exact (circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_punctured w).image
+      f hf.continuousOn
+  · push_neg at h
+    have hset : {z | f z ≠ x} = Set.univ := Set.eq_univ_of_forall h
+    rw [hset]
+    letI : PreconnectedSpace Circle := Subtype.preconnectedSpace
+      (isPreconnected_sphere (E := ℂ) (by simp) 0 1)
+    exact isPreconnected_univ.image f hf.continuousOn
+
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_inl_inj
+    {z w : Circle}
+    (h : (Quotient.mk (Relation.EqvGen.setoid circleWedge_connected_pair_aux_RelD) (.inl z) :
+        circleWedge_connected_pair_aux_ED) = Quotient.mk _ (.inl w)) : z = w := by
+  rcases (circleWedge_connected_pair_aux_not_homeomorphic_aux_relD_iff _ _).1
+      (Quotient.exact h) with h | ⟨r, h | h⟩
+  · exact Sum.inl_injective h
+  · simp at h
+  · simp at h
+
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_inr_inj
+    {z w : Circle}
+    (h : (Quotient.mk (Relation.EqvGen.setoid circleWedge_connected_pair_aux_RelD) (.inr z) :
+        circleWedge_connected_pair_aux_ED) = Quotient.mk _ (.inr w)) : z = w := by
+  rcases (circleWedge_connected_pair_aux_not_homeomorphic_aux_relD_iff _ _).1
+      (Quotient.exact h) with h | ⟨r, h | h⟩
+  · exact Sum.inr_injective h
+  · simp at h
+  · simp at h
+
+/-- There are at least two cube roots of unity on the circle. -/
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_two_roots :
+    ∃ r s : circleWedge_connected_pair_aux_Root, r ≠ s := by
+  sorry
+
 lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD
     (x : circleWedge_connected_pair_aux_ED) :
     IsPreconnected ({x}ᶜ : Set circleWedge_connected_pair_aux_ED) := by
-  sorry
+  let q : circleWedge_connected_pair_aux_RawD → circleWedge_connected_pair_aux_ED :=
+    Quotient.mk _
+  have hq : Continuous q := continuous_coinduced_rng
+  have hL := circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_lobe
+    (hq.comp continuous_inl) x (fun z w hz hw ↦
+      circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_inl_inj (hz.trans hw.symm))
+  have hR := circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_lobe
+    (hq.comp continuous_inr) x (fun z w hz hw ↦
+      circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_inr_inj (hz.trans hw.symm))
+  have hu : (q ∘ Sum.inl) '' {z | (q ∘ Sum.inl) z ≠ x} ∪
+      (q ∘ Sum.inr) '' {z | (q ∘ Sum.inr) z ≠ x} = {x}ᶜ := by
+    ext y
+    constructor
+    · rintro (⟨z, hz, rfl⟩ | ⟨z, hz, rfl⟩) <;> exact hz
+    · intro hy
+      obtain ⟨a, rfl⟩ := Quotient.mk_surjective y
+      cases a with
+      | inl z => exact Or.inl ⟨z, hy, rfl⟩
+      | inr z => exact Or.inr ⟨z, hy, rfl⟩
+  obtain ⟨r, s, hrs⟩ := circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_two_roots
+  have ht : ∃ t : circleWedge_connected_pair_aux_Root, q (.inl t.1) ≠ x := by
+    by_contra h
+    push_neg at h
+    exact hrs (Subtype.ext
+      (circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_inl_inj
+        ((h r).trans (h s).symm)))
+  obtain ⟨t, ht⟩ := ht
+  have hglue : q (.inl t.1) = q (.inr t.1) :=
+    Quotient.sound (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelD.glue t))
+  rw [← hu]
+  exact IsPreconnected.union' ⟨q (.inl t.1), ⟨t.1, ht, rfl⟩, ⟨t.1, fun h ↦ ht (hglue.trans h), hglue.symm⟩⟩
+    hL hR
 
 /-- `EC` and `ED` are not homeomorphic: `EC` has a cut point and `ED` has
 none, and having a cut point is preserved by homeomorphisms. -/

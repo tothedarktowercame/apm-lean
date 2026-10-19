@@ -2480,6 +2480,16 @@ lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_cutC :
 /-- `ED` has no cut point: the two circles are glued at three points, so
 removing any one point leaves two arcs that still meet. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_punctured
+    (z : Circle) : IsPreconnected ({z}ᶜ : Set Circle) := by
+  have h : ‖(z : ℂ)‖ = 1 := by
+    simpa [Circle, Metric.mem_sphere] using z.2
+  have hr : Set.range (stereographic h).symm = ({z}ᶜ : Set Circle) := by
+    simpa using range_stereographic_symm h z.2
+  rw [← hr]
+  simpa only [Set.image_univ] using isPreconnected_univ.image _ (by
+    simpa using (stereographic h).symm.continuousOn)
+
 lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD
     (x : circleWedge_connected_pair_aux_ED) :
     IsPreconnected ({x}ᶜ : Set circleWedge_connected_pair_aux_ED) := by
