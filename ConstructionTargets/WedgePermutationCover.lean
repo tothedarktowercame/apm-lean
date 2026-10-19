@@ -1668,7 +1668,71 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_au
     (u : Sphere2) (i j : Fin 4) (y y' : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_C u)
     (h : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u i y = rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u j y') :
     i = j := by
-  sorry
+  let f : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4) → Option (Fin 4) :=
+    Sum.elim
+      (fun z ↦ if z.1 = y.1 then some z.2
+        else if z.1 = -y.1 then some (σ z.2) else none)
+      (fun _ ↦ none)
+  have hy0 : y.1 ≠ rp2Wedge_regular_four_cover_aux_e0 := by
+    intro hy
+    apply y.2.2
+    rw [hy, ← rp2Wedge_regular_four_cover_aux_rpBase]
+  have hyn0 : -y.1 ≠ rp2Wedge_regular_four_cover_aux_e0 := by
+    intro hy
+    apply y.2.2
+    calc
+      antipodalCover y.1 = antipodalCover (-y.1) :=
+        (rp2Wedge_regular_four_cover_aux_neg y.1).symm
+      _ = antipodalCover rp2Wedge_regular_four_cover_aux_e0 := congrArg antipodalCover hy
+      _ = rpBase := rp2Wedge_regular_four_cover_aux_rpBase.symm
+  have hyself : -y.1 ≠ y.1 := by
+    intro he
+    have hp := y.2.1
+    have hn := congrArg (fun z : Sphere2 ↦
+      inner ℝ (z : EuclideanSpace ℝ (Fin 3)) u) he
+    change inner ℝ (-((y.1 : Sphere2) : EuclideanSpace ℝ (Fin 3))) u =
+      inner ℝ (y.1 : EuclideanSpace ℝ (Fin 3)) u at hn
+    rw [inner_neg_left] at hn
+    linarith
+  have hf {a b : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4)}
+      (hab : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ) a b) :
+      f a = f b := by
+    induction hab with
+    | rel a b hab =>
+        cases hab with
+        | left x k =>
+            simp only [f, Sum.elim_inl]
+            by_cases hxy : x = y.1
+            · subst x
+              simp [hyself, hσ k]
+            · by_cases hxny : x = -y.1
+              · subst x
+                simp [hyself, hσ k]
+              · have hnxy : -x ≠ y.1 := by
+                  intro he
+                  apply hxny
+                  simpa using congrArg Neg.neg he
+                have hnnxy : -x ≠ -y.1 := by
+                  intro he
+                  apply hxy
+                  simpa using congrArg Neg.neg he
+                simp [hxy, hxny, hnxy, hnnxy]
+        | right x k => simp [f]
+        | glue k => simp [f, Ne.symm hy0, Ne.symm hyn0]
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have he := hf (Quotient.exact h)
+  change f (.inl (y.1, i)) = f (.inl (y'.1, j)) at he
+  simp only [f, Sum.elim_inl, if_pos rfl] at he
+  by_cases hy'y : y'.1 = y.1
+  · simpa [hy'y] using he
+  · by_cases hy'ny : y'.1 = -y.1
+    · have hp := y'.2.1
+      rw [hy'ny, show ((-y.1 : Sphere2) : EuclideanSpace ℝ (Fin 3)) = -y.1 by rfl,
+        inner_neg_left] at hp
+      linarith [y.2.1]
+    · simp [hy'y, hy'ny] at he
 
 /-- The four sheets over a left-lobe point `[inl (antipodalCover u)] ≠` wedge
 point.  `U` is the image under `_aux_lobe_inl` of the image under `_aux_cap u` of
