@@ -158,3 +158,26 @@ are banked with their `EqvGen`-respect lemmas. The assembly is proved from three
   In `ED` each of the six components has a closure that meets two of the points.
   An equivalent count: the number of components of `X \ (valence 4 set)` whose closure
   is homeomorphic to a circle is 3 for `EC` and 0 for `ED`.
+
+### Split of `circleWedge_three_cover_two_components` (2026-10-19, lemma-2 PARTIAL)
+
+Banked: `_aux_sq` (`z ↦ z²` on `Circle`); `_aux_Double`, the quotient of
+`Circle ⊕ Circle` gluing `inl (±circleBase)` to `inr (±circleBase)` (the connected double
+cover for `((12),(12))` restricted to the two moved sheets); its projection `_aux_doubleMap`
+(squaring on each lobe, with `_aux_raw_respects`); `_aux_Total = CircleWedge ⊕ _aux_Double`
+(the fixed sheet plus the double cover) and `_aux_map` (identity on the left). The assembly
+is proved from three leaves:
+
+- `circleWedge_three_cover_two_components_aux_covering`: `_aux_map` is a covering map. The
+  `inl` summand is the identity; for the `inr` summand, away from the wedge point use the
+  chart of `z ↦ z²` on one open lobe; at the wedge point take small arcs around
+  `circleBase` in both lobes, whose preimage in `_aux_Double` is two sheets indexed by
+  `±circleBase`. The two summands are open in the sum, so the evenly covered
+  neighbourhoods combine.
+- `circleWedge_three_cover_two_components_aux_fiber`: every fibre has 3 points: one in
+  `inl`, two in `inr` (the two square roots in the relevant lobe; at the wedge point the
+  classes of `inl (±circleBase)`).
+- `circleWedge_three_cover_two_components_aux_components`: `_aux_Total` has 2 components.
+  `CircleWedge` is connected and `_aux_Double` is connected (image of `inl` is a circle meeting
+  the image of `inr` at the glue points); the sum of two nonempty connected spaces has
+  exactly two components.

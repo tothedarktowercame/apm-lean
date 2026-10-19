@@ -966,9 +966,104 @@ theorem circleWedge_three_cover_three_components : ∃ C : ThreeCover,
 /-- The permutation pair `((12),(12))`: a three-sheeted cover with two
 components. -/
 -- BEGIN SEAT AREA
+def circleWedge_three_cover_two_components_aux_sq (z : Circle) : Circle :=
+  ⟨(z : ℂ) * z, by
+    simpa [Metric.mem_sphere, dist_zero_right, norm_mul] using
+      congrArg (fun r : ℝ ↦ r * r) z.property⟩
+
+inductive circleWedge_three_cover_two_components_aux_Rel :
+    Circle ⊕ Circle → Circle ⊕ Circle → Prop
+  | pos : circleWedge_three_cover_two_components_aux_Rel
+      (.inl circleBase) (.inr circleBase)
+  | neg : circleWedge_three_cover_two_components_aux_Rel
+      (.inl (-circleBase)) (.inr (-circleBase))
+
+def circleWedge_three_cover_two_components_aux_Double : Type :=
+  Quotient (Relation.EqvGen.setoid
+    circleWedge_three_cover_two_components_aux_Rel)
+
+noncomputable instance circleWedge_three_cover_two_components_aux_Double_topology :
+    TopologicalSpace circleWedge_three_cover_two_components_aux_Double :=
+  TopologicalSpace.coinduced (fun z : Circle ⊕ Circle ↦ Quotient.mk _ z)
+    inferInstance
+
+def circleWedge_three_cover_two_components_aux_raw :
+    Circle ⊕ Circle → CircleWedge
+  | .inl z => Quotient.mk _ (.inl
+      (circleWedge_three_cover_two_components_aux_sq z))
+  | .inr z => Quotient.mk _ (.inr
+      (circleWedge_three_cover_two_components_aux_sq z))
+
+lemma circleWedge_three_cover_two_components_aux_raw_respects
+    {x y : Circle ⊕ Circle}
+    (h : Relation.EqvGen circleWedge_three_cover_two_components_aux_Rel x y) :
+    circleWedge_three_cover_two_components_aux_raw x =
+      circleWedge_three_cover_two_components_aux_raw y := by
+  induction h with
+  | rel x y h =>
+      cases h with
+      | pos =>
+          have hs : circleWedge_three_cover_two_components_aux_sq circleBase =
+              circleBase := by
+            apply Subtype.ext
+            simp [circleWedge_three_cover_two_components_aux_sq, circleBase]
+          change Quotient.mk _ (Sum.inl _) = Quotient.mk _ (Sum.inr _)
+          rw [hs]
+          exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base)
+      | neg =>
+          change Quotient.mk _ (Sum.inl _) = Quotient.mk _ (Sum.inr _)
+          have hs : circleWedge_three_cover_two_components_aux_sq (-circleBase) =
+              circleBase := by
+            apply Subtype.ext
+            simp [circleWedge_three_cover_two_components_aux_sq, circleBase]
+          rw [hs]
+          exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def circleWedge_three_cover_two_components_aux_doubleMap :
+    circleWedge_three_cover_two_components_aux_Double → CircleWedge :=
+  Quotient.lift circleWedge_three_cover_two_components_aux_raw
+    (fun _ _ h ↦ circleWedge_three_cover_two_components_aux_raw_respects h)
+
+def circleWedge_three_cover_two_components_aux_Total : Type :=
+  CircleWedge ⊕ circleWedge_three_cover_two_components_aux_Double
+
+noncomputable instance circleWedge_three_cover_two_components_aux_Total_topology :
+    TopologicalSpace circleWedge_three_cover_two_components_aux_Total := by
+  change TopologicalSpace
+    (CircleWedge ⊕ circleWedge_three_cover_two_components_aux_Double)
+  infer_instance
+
+def circleWedge_three_cover_two_components_aux_map :
+    circleWedge_three_cover_two_components_aux_Total → CircleWedge
+  | .inl x => x
+  | .inr x => circleWedge_three_cover_two_components_aux_doubleMap x
+
+lemma circleWedge_three_cover_two_components_aux_covering :
+    IsCoveringMap circleWedge_three_cover_two_components_aux_map := by
+  sorry
+
+lemma circleWedge_three_cover_two_components_aux_fiber (b : CircleWedge) :
+    Nat.card {e : circleWedge_three_cover_two_components_aux_Total //
+      circleWedge_three_cover_two_components_aux_map e = b} = 3 := by
+  sorry
+
+lemma circleWedge_three_cover_two_components_aux_components :
+    Nat.card (ConnectedComponents
+      circleWedge_three_cover_two_components_aux_Total) = 2 := by
+  sorry
+
 theorem circleWedge_three_cover_two_components : ∃ C : ThreeCover,
     Nat.card (@ConnectedComponents C.E C.topology) = 2 := by
-  sorry
+  let C : ThreeCover :=
+    { E := circleWedge_three_cover_two_components_aux_Total
+      topology := inferInstance
+      p := circleWedge_three_cover_two_components_aux_map
+      covering := ⟨circleWedge_three_cover_two_components_aux_covering,
+        circleWedge_three_cover_two_components_aux_fiber⟩ }
+  exact ⟨C, circleWedge_three_cover_two_components_aux_components⟩
 -- END SEAT AREA
 
 /-- The pairs `((123),1)` and `((123),(123))` realize two connected
