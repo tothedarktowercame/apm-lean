@@ -1713,11 +1713,51 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_id :
     isOpen_univ, isOpen_univ, (Homeomorph.prodPUnit _).symm, fun _ ↦ rfl⟩
 
 /-- A disjoint sum of two covering maps over the same base is a covering map. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_open
+    {E₁ E₂ X : Type*} [TopologicalSpace E₁] [TopologicalSpace E₂] [TopologicalSpace X]
+    {f : E₁ → X} {g : E₂ → X} {U : Set X}
+    (hf : IsOpen (f ⁻¹' U)) (hg : IsOpen (g ⁻¹' U)) :
+    IsOpen (Sum.elim f g ⁻¹' U) := by
+  rw [isOpen_sum_iff]
+  exact ⟨hf, hg⟩
+
+/-- A local trivialisation over `U` restricts to one over any `V ⊆ U`. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_shrink
+    {E X I : Type*} [TopologicalSpace E] [TopologicalSpace X] [TopologicalSpace I]
+    {f : E → X} {U V : Set X} (H : f ⁻¹' U ≃ₜ U × I) (hH : ∀ e, (H e).1.1 = f e)
+    (hVU : V ⊆ U) :
+    ∃ H' : f ⁻¹' V ≃ₜ V × I, ∀ e, (H' e).1.1 = f e := by
+  sorry
+
+/-- Two local trivialisations over the same `W` glue to one for `Sum.elim f g`,
+with fibre the disjoint union of the fibres. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_glue
+    {E₁ E₂ X I J : Type*} [TopologicalSpace E₁] [TopologicalSpace E₂] [TopologicalSpace X]
+    [TopologicalSpace I] [TopologicalSpace J] {f : E₁ → X} {g : E₂ → X} {W : Set X}
+    (H₁ : f ⁻¹' W ≃ₜ W × I) (hH₁ : ∀ e, (H₁ e).1.1 = f e)
+    (H₂ : g ⁻¹' W ≃ₜ W × J) (hH₂ : ∀ e, (H₂ e).1.1 = g e) :
+    ∃ H : Sum.elim f g ⁻¹' W ≃ₜ W × (I ⊕ J), ∀ e, (H e).1.1 = Sum.elim f g e := by
+  sorry
+
 lemma circleWedge_three_cover_two_components_aux_covering_aux_sum
     {E₁ E₂ X : Type*} [TopologicalSpace E₁] [TopologicalSpace E₂] [TopologicalSpace X]
     {f : E₁ → X} {g : E₂ → X} (hf : IsCoveringMap f) (hg : IsCoveringMap g) :
     IsCoveringMap (Sum.elim f g) := by
-  sorry
+  intro x
+  obtain ⟨hI, U₁, hxU₁, hU₁, hfU₁, H₁, hH₁⟩ := hf x
+  obtain ⟨hJ, U₂, hxU₂, hU₂, hgU₂, H₂, hH₂⟩ := hg x
+  obtain ⟨K₁, hK₁⟩ := circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_shrink
+    H₁ hH₁ (Set.inter_subset_left : U₁ ∩ U₂ ⊆ U₁)
+  obtain ⟨K₂, hK₂⟩ := circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_shrink
+    H₂ hH₂ (Set.inter_subset_right : U₁ ∩ U₂ ⊆ U₂)
+  obtain ⟨K, hK⟩ := circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_glue
+    K₁ hK₁ K₂ hK₂
+  have hW : IsOpen (U₁ ∩ U₂) := hU₁.inter hU₂
+  have hev : IsEvenlyCovered (Sum.elim f g) x ((f ⁻¹' {x}) ⊕ (g ⁻¹' {x})) :=
+    ⟨inferInstance, U₁ ∩ U₂, ⟨hxU₁, hxU₂⟩, hW,
+      circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_open
+        (hf.continuous.isOpen_preimage _ hW) (hg.continuous.isOpen_preimage _ hW), K, hK⟩
+  exact hev.to_isEvenlyCovered_preimage
 
 lemma circleWedge_three_cover_two_components_aux_covering :
     IsCoveringMap circleWedge_three_cover_two_components_aux_map := by
