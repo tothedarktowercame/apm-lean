@@ -348,9 +348,456 @@ abbrev apm_t02a03_shellY :=
 each point along its normal ray from the nearest core point out to distance
 `1/4`; outside the left tube, fix it.  This is a strong deformation
 retraction of `geometricY` onto `shellY`. -/
+noncomputable def apm_t02a03_geometricY_homotopyEquiv_shellY_aux_inclusion :
+    C(apm_t02a03_shellY, apm_t02a03_geometricY) where
+  toFun p := ⟨p.1, p.2.1, by
+    intro hpC
+    have hz : Metric.infDist p.1 apm_t02a03_C = 0 :=
+      Metric.infDist_zero_of_mem hpC
+    linarith [p.2.2]⟩
+  continuous_toFun := continuous_subtype_val.subtype_mk _
+
+/-- The geometric leaf: a strong deformation which radially pushes every
+point less than `1/4` from the deleted left core out to the distance shell.
+Keeping the endpoint and fixed-point assertions explicit makes the purely
+homotopy-theoretic packaging independent of its coordinate construction. -/
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist
+    (p : apm_t02a03_E3) :
+    Metric.infDist p apm_t02a03_C =
+      Real.sqrt ((Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1) ^ 2 + p 2 ^ 2) := by
+  let a : ℝ := p 0 + 6 / 5
+  let b : ℝ := p 1
+  let s : ℝ := Real.sqrt (a ^ 2 + b ^ 2)
+  have hs0 : 0 ≤ s := Real.sqrt_nonneg _
+  have hs2 : s ^ 2 = a ^ 2 + b ^ 2 := by
+    dsimp [s]
+    rw [Real.sq_sqrt]
+    positivity
+  have lower : Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤
+      Metric.infDist p (Set.range apm_t02a03_leftCore) := by
+    rw [Metric.le_infDist]
+    · rintro q ⟨t, rfl⟩
+      have htrig : Real.sin t ^ 2 + Real.cos t ^ 2 = 1 :=
+        Real.sin_sq_add_cos_sq t
+      have hcs : (a * Real.cos t + b * Real.sin t) ^ 2 ≤ s ^ 2 := by
+        nlinarith [sq_nonneg (a * Real.sin t - b * Real.cos t)]
+      have hdot : a * Real.cos t + b * Real.sin t ≤ s := by
+        nlinarith [sq_nonneg (s - (a * Real.cos t + b * Real.sin t))]
+      rw [show dist p (apm_t02a03_leftCore t) =
+          Real.sqrt ((a - Real.cos t) ^ 2 + (b - Real.sin t) ^ 2 + p 2 ^ 2) by
+        simp [dist_eq_norm, apm_t02a03_leftCore, a, b, EuclideanSpace.norm_eq,
+          Fin.sum_univ_succ]
+        congr 1 <;> ring]
+      exact Real.sqrt_le_sqrt (by nlinarith)
+    · exact ⟨apm_t02a03_leftCore 0, ⟨0, rfl⟩⟩
+  apply le_antisymm
+  · by_cases hz : (a : ℂ) + b * Complex.I = 0
+    · have ha : a = 0 := by
+        have := congrArg Complex.re hz
+        simpa using this
+      have hb : b = 0 := by
+        have := congrArg Complex.im hz
+        simpa using this
+      have hs : s = 0 := by simp [s, ha, hb]
+      have hp0 : p 0 = -6 / 5 := by dsimp [a] at ha; linarith
+      have hp1 : p 1 = 0 := by simpa [b] using hb
+      calc
+        Metric.infDist p (Set.range apm_t02a03_leftCore)
+            ≤ dist p (apm_t02a03_leftCore 0) :=
+              Metric.infDist_le_dist_of_mem ⟨0, rfl⟩
+        _ = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+          simp [dist_eq_norm, apm_t02a03_leftCore, hp0, hp1, hs,
+            EuclideanSpace.norm_eq, Fin.sum_univ_succ]
+    · let z : ℂ := (a : ℂ) + b * Complex.I
+      have hz' : z ≠ 0 := by simpa [z] using hz
+      have hnorm : ‖z‖ = s := by
+        rw [Complex.norm_def]
+        congr 1
+        simp [Complex.normSq_apply, z, s]
+        ring
+      have hc : Real.cos (Complex.arg z) = a / s := by
+        rw [Complex.cos_arg hz', hnorm]
+        simp [z]
+      have hsi : Real.sin (Complex.arg z) = b / s := by
+        rw [Complex.sin_arg, hnorm]
+        simp [z]
+      have hspos : 0 < s := lt_of_le_of_ne hs0 (by
+        intro h
+        apply hz'
+        apply Complex.ext <;> simp [z] at * <;> nlinarith [hs2])
+      calc
+        Metric.infDist p (Set.range apm_t02a03_leftCore)
+            ≤ dist p (apm_t02a03_leftCore (Complex.arg z)) :=
+              Metric.infDist_le_dist_of_mem ⟨_, rfl⟩
+        _ = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+          rw [show dist p (apm_t02a03_leftCore (Complex.arg z)) =
+              Real.sqrt ((a - Real.cos (Complex.arg z)) ^ 2 +
+                (b - Real.sin (Complex.arg z)) ^ 2 + p 2 ^ 2) by
+            simp [dist_eq_norm, apm_t02a03_leftCore, a, b, EuclideanSpace.norm_eq,
+              Fin.sum_univ_succ]
+            congr 1 <;> ring]
+          congr 1
+          rw [hc, hsi]
+          field_simp
+          nlinarith [hs2]
+  · change Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤ _
+    exact lower
+
+/-- Radial push off the left core: at time `t` a point at distance `d < 1/4`
+from `C` moves along its normal ray in the meridian half-plane by the factor
+`1 + gain`, ending at distance `d + t * (1/4 - d)`.  Points at distance
+`≥ 1/4` have `gain = 0`.  The `max s (1/2)` only guards the core axis `s = 0`,
+which is at distance `≥ 1` from `C` and so has `gain = 0` anyway. -/
+noncomputable def apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain (t : ℝ) (p : apm_t02a03_E3) : ℝ :=
+  t * max 0 (1 / 4 - Metric.infDist p apm_t02a03_C) / Metric.infDist p apm_t02a03_C
+
+noncomputable def apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move (t : ℝ) (p : apm_t02a03_E3) : apm_t02a03_E3 :=
+  let g := apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain t p
+  let s := Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2)
+  let k := g * (s - 1) / max s (1 / 2)
+  WithLp.toLp 2 ![p 0 + k * (p 0 + 6 / 5), p 1 + k * p 1, p 2 + g * p 2]
+
+/-- Leaf: points off the left core are at positive distance from it. -/
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_pos (p : apm_t02a03_E3) (hp : p ∉ apm_t02a03_C) :
+    0 < Metric.infDist p apm_t02a03_C := by
+  rw [Metric.infDist_nonneg.lt_iff_ne]
+  intro hd
+  rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist] at hd
+  have hrad : (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1) ^ 2 + p 2 ^ 2 = 0 := by
+    have hle := (Real.sqrt_eq_zero').mp hd.symm
+    nlinarith [sq_nonneg (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1),
+      sq_nonneg (p 2)]
+  have hs : Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) = 1 := by
+    nlinarith [sq_nonneg (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1),
+      sq_nonneg (p 2)]
+  have hp2 : p 2 = 0 := by nlinarith [sq_nonneg (p 2)]
+  let z : ℂ := (p 0 + 6 / 5 : ℝ) + p 1 * Complex.I
+  have hz : z ≠ 0 := by
+    intro hz0
+    have hre : p 0 + 6 / 5 = 0 := by
+      have := congrArg Complex.re hz0
+      simpa [z] using this
+    have him : p 1 = 0 := by
+      have := congrArg Complex.im hz0
+      simpa [z] using this
+    simp [hre, him] at hs
+  have hn : ‖z‖ = 1 := by
+    rw [Complex.norm_def]
+    simp [Complex.normSq_apply, z]
+    rw [show (p 0 + 6 / 5) * (p 0 + 6 / 5) + p 1 * p 1 =
+        (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 by ring]
+    have hsq : (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 = 1 := by
+      have hr := Real.sq_sqrt (show 0 ≤ (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 by positivity)
+      nlinarith [congrArg (fun x : ℝ ↦ x ^ 2) hs]
+    rw [hsq]
+  apply hp
+  refine ⟨Complex.arg z, ?_⟩
+  ext i
+  fin_cases i
+  · have hc : Real.cos (Complex.arg z) = p 0 + 6 / 5 := by
+      rw [Complex.cos_arg hz, hn]
+      simp [z]
+    simp [apm_t02a03_leftCore, hc]
+    ring
+  · have hsin : Real.sin (Complex.arg z) = p 1 := by
+      rw [Complex.sin_arg, hn]
+      simp [z]
+    simp [apm_t02a03_leftCore, hsin]
+  · simp [apm_t02a03_leftCore, hp2]
+
+/-- Leaf: the push is continuous on `[0,1] × geometricY`. -/
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous_aux_ne
+    (p : apm_t02a03_E3) (hp : p ∉ apm_t02a03_C) :
+    Metric.infDist p apm_t02a03_C ≠ 0 := by
+  intro hd
+  rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist] at hd
+  have hrad : (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1) ^ 2 + p 2 ^ 2 = 0 := by
+    have hle := (Real.sqrt_eq_zero').mp hd
+    nlinarith [sq_nonneg (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1),
+      sq_nonneg (p 2)]
+  have hs : Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) = 1 := by
+    nlinarith [sq_nonneg (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1),
+      sq_nonneg (p 2)]
+  have hp2 : p 2 = 0 := by nlinarith [sq_nonneg (p 2)]
+  let z : ℂ := (p 0 + 6 / 5 : ℝ) + p 1 * Complex.I
+  have hz : z ≠ 0 := by
+    intro hz0
+    have hre : p 0 + 6 / 5 = 0 := by
+      have := congrArg Complex.re hz0
+      simpa [z] using this
+    have him : p 1 = 0 := by
+      have := congrArg Complex.im hz0
+      simpa [z] using this
+    simp [hre, him] at hs
+  have hn : ‖z‖ = 1 := by
+    rw [Complex.norm_def]
+    simp [Complex.normSq_apply, z]
+    rw [show (p 0 + 6 / 5) * (p 0 + 6 / 5) + p 1 * p 1 =
+        (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 by ring]
+    have hsq : (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 = 1 := by
+      have hr := Real.sq_sqrt (show 0 ≤ (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 by positivity)
+      nlinarith [congrArg (fun x : ℝ ↦ x ^ 2) hs]
+    rw [hsq]
+  apply hp
+  refine ⟨Complex.arg z, ?_⟩
+  ext i
+  fin_cases i
+  · have hc : Real.cos (Complex.arg z) = p 0 + 6 / 5 := by
+      rw [Complex.cos_arg hz, hn]
+      simp [z]
+    simp [apm_t02a03_leftCore, hc]
+    ring
+  · have hsin : Real.sin (Complex.arg z) = p 1 := by
+      rw [Complex.sin_arg, hn]
+      simp [z]
+    simp [apm_t02a03_leftCore, hsin]
+  · simp [apm_t02a03_leftCore, hp2]
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous :
+    Continuous (fun q : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY =>
+      apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move q.1.1 q.2.1) := by
+  let d : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY → ℝ :=
+    fun q ↦ Metric.infDist q.2.1 apm_t02a03_C
+  have hd : Continuous d :=
+    (Metric.continuous_infDist_pt _).comp
+      (continuous_subtype_val.comp continuous_snd)
+  have hd0 : ∀ q, d q ≠ 0 := fun q ↦
+    apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous_aux_ne
+      q.2.1 q.2.2.2
+  let g : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY → ℝ :=
+    fun q ↦ q.1.1 * max 0 (1 / 4 - d q) / d q
+  have hg : Continuous g := by
+    dsimp [g]
+    exact ((continuous_subtype_val.comp continuous_fst).mul
+      (continuous_const.max (continuous_const.sub hd))).div₀ hd hd0
+  let s : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY → ℝ :=
+    fun q ↦ Real.sqrt ((q.2.1 0 + 6 / 5) ^ 2 + q.2.1 1 ^ 2)
+  have hs : Continuous s := by dsimp [s]; fun_prop
+  have hmax : ∀ q, max (s q) (1 / 2) ≠ 0 := by
+    intro q
+    have : (0 : ℝ) < 1 / 2 := by norm_num
+    exact ne_of_gt (this.trans_le (le_max_right _ _))
+  let k : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY → ℝ :=
+    fun q ↦ g q * (s q - 1) / max (s q) (1 / 2)
+  have hk : Continuous k := by
+    dsimp [k]
+    exact (hg.mul (hs.sub continuous_const)).div₀
+      (hs.max continuous_const) hmax
+  unfold apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move
+  change Continuous (fun q => WithLp.toLp 2
+    ![q.2.1 0 + k q * (q.2.1 0 + 6 / 5),
+      q.2.1 1 + k q * q.2.1 1, q.2.1 2 + g q * q.2.1 2])
+  refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i ↦ ?_)
+  fin_cases i <;> simp <;> fun_prop
+
+/-- Leaf: the distance to `C` after the push (use `_aux_infDist`). -/
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_infDist (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
+    (p : apm_t02a03_E3) (hp : 0 < Metric.infDist p apm_t02a03_C) :
+    Metric.infDist (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p) apm_t02a03_C =
+      Metric.infDist p apm_t02a03_C + t * max 0 (1 / 4 - Metric.infDist p apm_t02a03_C) := by
+  let d := Metric.infDist p apm_t02a03_C
+  let s := Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2)
+  let e := max 0 (1 / 4 - d)
+  let g := t * e / d
+  have hd : d = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+    simp only [d, s]
+    exact apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist p
+  have hd0 : 0 < d := hp
+  have hs0 : 0 ≤ s := Real.sqrt_nonneg _
+  by_cases he : e = 0
+  · have hg : g = 0 := by simp [g, he]
+    have hgain : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain t p = 0 := by
+      change t * max 0 (1 / 4 - d) / d = 0
+      change t * e / d = 0
+      simp [he]
+    have hmove : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p = p := by
+      ext i
+      fin_cases i <;>
+        simp [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move,
+          hgain]
+    rw [hmove]
+    change d = d + t * e
+    simp [he]
+  · have heq : e = 1 / 4 - d := by
+      dsimp [e]
+      rw [max_eq_right]
+      by_contra h
+      have : 1 / 4 - d ≤ 0 := le_of_not_ge h
+      apply he
+      dsimp [e]
+      exact max_eq_left this
+    have hdlt : d < 1 / 4 := by
+      have hepos : 0 < e := lt_of_le_of_ne (le_max_left _ _) (Ne.symm he)
+      linarith
+    have hs : 1 / 2 < s := by
+      have hsq : (s - 1) ^ 2 < (1 / 4 : ℝ) ^ 2 := by
+        have hd_sq : d ^ 2 = (s - 1) ^ 2 + p 2 ^ 2 := by
+          rw [hd, Real.sq_sqrt]
+          positivity
+        nlinarith [sq_nonneg (p 2)]
+      nlinarith [sq_nonneg (s - 1 / 2)]
+    have hmax : max s (1 / 2) = s := max_eq_left (le_of_lt hs)
+    have hg0 : 0 ≤ g := by positivity
+    have hgs : 0 < 1 + g * (s - 1) / s := by
+      have hgd : g * d = t * e := by
+        dsimp [g]
+        field_simp [ne_of_gt hd0]
+      have hg_le : g * d ≤ e := by nlinarith
+      have habs : |s - 1| ≤ d := by
+        have hd_sq : d ^ 2 = (s - 1) ^ 2 + p 2 ^ 2 := by
+          rw [hd, Real.sq_sqrt]
+          positivity
+        rw [abs_le]
+        constructor <;> nlinarith [sq_nonneg (p 2), sq_nonneg (d + (s - 1)),
+          sq_nonneg (d - (s - 1))]
+      have : g * |s - 1| ≤ e := (mul_le_mul_of_nonneg_left habs hg0).trans hg_le
+      have he_lt : e < s := by rw [heq]; nlinarith
+      rcases le_total 1 s with h | h
+      · exact add_pos_of_pos_of_nonneg zero_lt_one
+          (div_nonneg (mul_nonneg hg0 (sub_nonneg.mpr h)) hs0)
+      · rw [abs_of_nonpos (sub_nonpos.mpr h)] at this
+        have hsmall : g * (1 - s) < s := by nlinarith [lt_of_le_of_lt this he_lt]
+        rw [show 1 + g * (s - 1) / s = (s + g * (s - 1)) / s by
+          field_simp]
+        exact div_pos (by nlinarith) (by linarith)
+    rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist]
+    have hgain_eq : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain t p = g := by
+      rfl
+    simp only [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move,
+      PiLp.toLp_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Fin.isValue,
+      Matrix.head_cons, Matrix.tail_cons]
+    rw [hgain_eq, hmax]
+    change Real.sqrt ((Real.sqrt
+      ((p 0 + g * (s - 1) / s * (p 0 + 6 / 5) + 6 / 5) ^ 2 +
+       (p 1 + g * (s - 1) / s * p 1) ^ 2) - 1) ^ 2 +
+       (p 2 + g * p 2) ^ 2) = d + t * e
+    have hs_sq : s ^ 2 = (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 := by
+      dsimp [s]
+      rw [Real.sq_sqrt]
+      positivity
+    have hradius : Real.sqrt
+        ((p 0 + g * (s - 1) / s * (p 0 + 6 / 5) + 6 / 5) ^ 2 +
+         (p 1 + g * (s - 1) / s * p 1) ^ 2) =
+        s + g * (s - 1) := by
+      rw [show
+        (p 0 + g * (s - 1) / s * (p 0 + 6 / 5) + 6 / 5) ^ 2 +
+          (p 1 + g * (s - 1) / s * p 1) ^ 2 =
+          (1 + g * (s - 1) / s) ^ 2 * s ^ 2 by
+            field_simp
+            nlinarith [hs_sq]]
+      rw [Real.sqrt_mul (sq_nonneg _), Real.sqrt_sq_eq_abs,
+        Real.sqrt_sq_eq_abs, abs_of_nonneg hs0, abs_of_pos hgs]
+      field_simp
+    rw [hradius]
+    have hinside :
+        (s + g * (s - 1) - 1) ^ 2 + (p 2 + g * p 2) ^ 2 =
+          (1 + g) ^ 2 * d ^ 2 := by
+      have hd_sq : d ^ 2 = (s - 1) ^ 2 + p 2 ^ 2 := by
+        rw [hd, Real.sq_sqrt]
+        positivity
+      rw [hd_sq]
+      ring
+    rw [hinside, Real.sqrt_mul (sq_nonneg (1 + g)),
+      Real.sqrt_sq_eq_abs, Real.sqrt_sq_eq_abs,
+      abs_of_nonneg (by positivity : 0 ≤ 1 + g), abs_of_pos hd0]
+    have hgd : g * d = t * e := by
+      dsimp [g]
+      field_simp [ne_of_gt hd0]
+    calc
+      (1 + g) * d = d + g * d := by ring
+      _ = d + t * e := by rw [hgd]
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_of_gain (t : ℝ) (p : apm_t02a03_E3)
+    (h : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain t p = 0) : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p = p := by
+  ext i; fin_cases i <;> simp [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move, h]
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_zero (p : apm_t02a03_E3) : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move 0 p = p :=
+  apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_of_gain 0 p (by simp [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain])
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_far (t : ℝ) (p : apm_t02a03_E3)
+    (hp : (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C) : apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t p = p :=
+  apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_of_gain t p (by
+    unfold apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_gain; rw [max_eq_left (by linarith)]; simp)
+
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_mem (t : Set.Icc (0 : ℝ) 1) (p : apm_t02a03_geometricY) :
+    apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t.1 p.1 ∈ apm_t02a03_W ∧ apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move t.1 p.1 ∉ apm_t02a03_C := by
+  have hpos := apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_pos p.1 p.2.2
+  by_cases hfar : (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C
+  · rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_far t.1 p.1 hfar]; exact p.2
+  have hd := apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_infDist t.1 t.2.1 t.2.2 p.1 hpos
+  have hm : max 0 (1 / 4 - Metric.infDist p.1 apm_t02a03_C) =
+      1 / 4 - Metric.infDist p.1 apm_t02a03_C := max_eq_right (by linarith)
+  rw [hm] at hd
+  refine ⟨?_, fun hC => ?_⟩
+  · show Metric.infDist _ apm_t02a03_genusTwoSpine ≤ 1 / 4
+    refine (Metric.infDist_le_infDist_of_subset
+      (Set.subset_union_left : Set.range apm_t02a03_leftCore ⊆ apm_t02a03_genusTwoSpine)
+      (show (Set.range apm_t02a03_leftCore).Nonempty from ⟨_, ⟨0, rfl⟩⟩)).trans ?_
+    change Metric.infDist _ apm_t02a03_C ≤ 1 / 4
+    rw [hd]; nlinarith [t.2.1, t.2.2]
+  · have h0 := Metric.infDist_zero_of_mem hC
+    rw [hd] at h0; nlinarith [t.2.1, t.2.2]
+
+theorem apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation :
+    ∃ H : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY,
+        apm_t02a03_geometricY),
+      (∀ p, H (⟨0, by norm_num⟩, p) = p) ∧
+      (∀ p, (1 / 4 : ℝ) ≤ Metric.infDist (H (⟨1, by norm_num⟩, p)).1
+        apm_t02a03_C) ∧
+      (∀ t p, (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C →
+        H (t, p) = p) := by
+  refine ⟨⟨fun q => ⟨apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move q.1.1 q.2.1, apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_mem q.1 q.2⟩,
+    (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous).subtype_mk _⟩, ?_, ?_, ?_⟩
+  · intro p; apply Subtype.ext; exact apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_zero p.1
+  · intro p
+    show (1 / 4 : ℝ) ≤ Metric.infDist (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move 1 p.1) apm_t02a03_C
+    by_cases hfar : (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C
+    · rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_far 1 p.1 hfar]; exact hfar
+    rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_infDist 1 zero_le_one le_rfl p.1 (apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_pos p.1 p.2.2),
+      max_eq_right (by linarith)]
+    linarith
+  · intro t p hp; apply Subtype.ext; exact apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_far t.1 p.1 hp
+
+theorem apm_t02a03_geometricY_homotopyEquiv_shellY_aux_of_deformation
+    (H : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY,
+      apm_t02a03_geometricY))
+    (hzero : ∀ p, H (⟨0, by norm_num⟩, p) = p)
+    (hone : ∀ p, (1 / 4 : ℝ) ≤ Metric.infDist
+      (H (⟨1, by norm_num⟩, p)).1 apm_t02a03_C)
+    (hfix : ∀ t p, (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C →
+      H (t, p) = p) :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY
+      apm_t02a03_shellY) := by
+  let r : C(apm_t02a03_geometricY, apm_t02a03_shellY) :=
+    { toFun := fun p ↦ ⟨(H (⟨1, by norm_num⟩, p)).1,
+        (H (⟨1, by norm_num⟩, p)).2.1, hone p⟩
+      continuous_toFun := by fun_prop }
+  let i := apm_t02a03_geometricY_homotopyEquiv_shellY_aux_inclusion
+  have hleft : (i.comp r).Homotopic (ContinuousMap.id _) := by
+    symm
+    exact ⟨{
+      toFun := H
+      map_zero_left := hzero
+      map_one_left := fun p ↦ rfl }⟩
+  have hright : (r.comp i).Homotopic (ContinuousMap.id _) := by
+    rw [show r.comp i = ContinuousMap.id _ by
+      apply ContinuousMap.ext
+      intro p
+      apply Subtype.ext
+      dsimp [r, i]
+      exact congrArg Subtype.val (hfix ⟨1, by norm_num⟩ (i p) p.2.2)]
+  exact ⟨{
+    toFun := r
+    invFun := i
+    left_inv := hleft
+    right_inv := hright }⟩
+
 theorem apm_t02a03_geometricY_homotopyEquiv_shellY :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_shellY) := by
-  sorry
+  rcases apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation with
+    ⟨H, hzero, hone, hfix⟩
+  exact apm_t02a03_geometricY_homotopyEquiv_shellY_aux_of_deformation
+    H hzero hone hfix
 
 /-- The point where the auxiliary loop touches the boundary torus of the left
 tube: the outermost point `(1/20,0,0)` of that torus on the `x`-axis. -/
@@ -474,12 +921,105 @@ lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_para
 is `1 + re v / 4 > 0`). -/
 lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_mem (x : apm_t02a03_Torus) :
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param x ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus := by
-  sorry
+  have hu : (x.1 : ℂ).re ^ 2 + (x.1 : ℂ).im ^ 2 = 1 := by
+    calc
+      (x.1 : ℂ).re ^ 2 + (x.1 : ℂ).im ^ 2 = Complex.normSq (x.1 : ℂ) := by
+        rw [Complex.normSq_apply]
+        ring
+      _ = ‖(x.1 : ℂ)‖ ^ 2 := Complex.normSq_eq_norm_sq _
+      _ = 1 := by rw [Circle.norm_coe]; norm_num
+  have hv : (x.2 : ℂ).re ^ 2 + (x.2 : ℂ).im ^ 2 = 1 := by
+    calc
+      (x.2 : ℂ).re ^ 2 + (x.2 : ℂ).im ^ 2 = Complex.normSq (x.2 : ℂ) := by
+        rw [Complex.normSq_apply]
+        ring
+      _ = ‖(x.2 : ℂ)‖ ^ 2 := Complex.normSq_eq_norm_sq _
+      _ = 1 := by rw [Circle.norm_coe]; norm_num
+  have hvre : -1 ≤ (x.2 : ℂ).re := by
+    have h := Complex.abs_re_le_norm (x.2 : ℂ)
+    rw [Circle.norm_coe] at h
+    exact (neg_le_of_abs_le h)
+  have hr : 0 ≤ 1 + (x.2 : ℂ).re / 4 := by linarith
+  have hsqrt :
+      Real.sqrt (((1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re) ^ 2 +
+        ((1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).im) ^ 2) =
+        1 + (x.2 : ℂ).re / 4 := by
+    rw [show
+      ((1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re) ^ 2 +
+          ((1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).im) ^ 2 =
+        (1 + (x.2 : ℂ).re / 4) ^ 2 by nlinarith]
+    exact Real.sqrt_sq hr
+  change Metric.infDist _ apm_t02a03_C = (1 / 4 : ℝ)
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist]
+  simp only [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param,
+    PiLp.toLp_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Fin.isValue,
+    Matrix.head_cons, Matrix.tail_cons]
+  rw [show -6 / 5 + (1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re + 6 / 5 =
+    (1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re by ring, hsqrt]
+  change Real.sqrt ((1 + (x.2 : ℂ).re / 4 - 1) ^ 2 +
+    ((x.2 : ℂ).im / 4) ^ 2) = 1 / 4
+  rw [show
+    ((1 + (x.2 : ℂ).re / 4 - 1) ^ 2 + ((x.2 : ℂ).im / 4) ^ 2) =
+      (1 / 4 : ℝ) ^ 2 by nlinarith]
+  norm_num
 
 /-- The parametrisation is injective (the planar radius `1 + re v / 4` is
 positive, so `u` is the planar direction and then `v` is read off). -/
 lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_injective : Function.Injective apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param := by
-  sorry
+  rintro ⟨u, v⟩ ⟨u', v'⟩ h
+  have hcoord (i : Fin 3) := congrArg (fun p : apm_t02a03_E3 ↦ p i) h
+  have him : (v : ℂ).im = (v' : ℂ).im := by
+    simpa [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param]
+      using hcoord 2
+  have hplan :
+      (1 + (v : ℂ).re / 4 : ℝ) * (u : ℂ) =
+        (1 + (v' : ℂ).re / 4 : ℝ) * (u' : ℂ) := by
+    apply Complex.ext
+    · simpa [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param]
+        using hcoord 0
+    · simpa [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param]
+        using hcoord 1
+  have hvnorm : (v : ℂ).re ^ 2 + (v : ℂ).im ^ 2 = 1 := by
+    calc
+      _ = Complex.normSq (v : ℂ) := by simp [Complex.normSq_apply]; ring
+      _ = ‖(v : ℂ)‖ ^ 2 := (Complex.sq_norm _).symm
+      _ = 1 := by rw [Circle.norm_coe]; norm_num
+  have hvnorm' : (v' : ℂ).re ^ 2 + (v' : ℂ).im ^ 2 = 1 := by
+    calc
+      _ = Complex.normSq (v' : ℂ) := by simp [Complex.normSq_apply]; ring
+      _ = ‖(v' : ℂ)‖ ^ 2 := (Complex.sq_norm _).symm
+      _ = 1 := by rw [Circle.norm_coe]; norm_num
+  have hre : (v : ℂ).re = (v' : ℂ).re := by
+    have hsquares : (v : ℂ).re ^ 2 = (v' : ℂ).re ^ 2 := by
+      rw [him] at hvnorm
+      nlinarith
+    have hle : (v : ℂ).re ≥ -1 := by nlinarith [sq_nonneg ((v : ℂ).im)]
+    have hle' : (v' : ℂ).re ≥ -1 := by nlinarith [sq_nonneg ((v' : ℂ).im)]
+    have hscale : 1 + (v : ℂ).re / 4 = 1 + (v' : ℂ).re / 4 := by
+      have hunorm : Complex.normSq (u : ℂ) = 1 := by
+        rw [Complex.normSq_eq_norm_sq, Circle.norm_coe]
+        norm_num
+      have hunorm' : Complex.normSq (u' : ℂ) = 1 := by
+        rw [Complex.normSq_eq_norm_sq, Circle.norm_coe]
+        norm_num
+      have hn := congrArg Complex.normSq hplan
+      rw [Complex.normSq_mul, Complex.normSq_mul, Complex.normSq_ofReal,
+        Complex.normSq_ofReal, hunorm, hunorm'] at hn
+      nlinarith
+    linarith
+  have hv : v = v' := by
+    apply Subtype.ext
+    apply Complex.ext <;> assumption
+  subst v'
+  have hu : u = u' := by
+    apply Subtype.ext
+    apply (mul_left_cancel₀ (show (1 + (v : ℂ).re / 4 : ℂ) ≠ 0 by
+      have hle : (v : ℂ).re ≥ -1 := by
+        nlinarith [hvnorm]
+      exact_mod_cast (show (1 + (v : ℂ).re / 4 : ℝ) ≠ 0 by linarith)))
+    exact_mod_cast hplan
+  subst u'
+  rfl
 
 /-- Every torus point is parametrised (use `_aux_infDist`: with `s` the planar
 radius about the core centre, `s ≥ 3/4`; take `u = (a + b i)/s` and
@@ -512,12 +1052,86 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph :
   exact Subtype.ext apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param_one.symm
 
 /-- LIBRARY: the loop is a circle, with `q0` (parameter `t = 0`) at `1`. -/
+noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param
+    (z : Circle) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![6 / 5 - 23 / 20 * (z : ℂ).re,
+    23 / 20 * (z : ℂ).im, 0]
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_continuous :
+    Continuous apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param := by
+  unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param
+  refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i ↦ ?_)
+  fin_cases i <;> simp <;> fun_prop
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_mem
+    (z : Circle) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param z ∈
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop := by
+  have hz : (z : ℂ) ≠ 0 := by
+    intro h
+    have := Circle.norm_coe z
+    simp [h] at this
+  refine ⟨Complex.arg (z : ℂ), ?_⟩
+  ext i
+  fin_cases i
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param,
+      Complex.cos_arg hz, Circle.norm_coe]
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param,
+      Complex.sin_arg, Circle.norm_coe]
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param]
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_injective :
+    Function.Injective
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param := by
+  intro z w h
+  apply Subtype.ext
+  apply Complex.ext
+  · have h0 := congrArg (fun x : apm_t02a03_E3 ↦ x 0) h
+    simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param] at h0
+    linarith
+  · have h1 := congrArg (fun x : apm_t02a03_E3 ↦ x 1) h
+    simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param] at h1
+    linarith
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_surjective :
+    Function.Surjective (fun z : Circle ↦
+      (⟨apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param z,
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_mem z⟩ :
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop)) := by
+  rintro ⟨p, hp⟩
+  rcases hp with ⟨t, rfl⟩
+  let z : Circle := Circle.exp t
+  refine ⟨z, Subtype.ext ?_⟩
+  ext i
+  fin_cases i <;>
+    simp [z, Circle.coe_exp, Complex.exp_mul_I,
+      Complex.cos_ofReal_re, Complex.sin_ofReal_re,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param]
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph :
     ∃ e : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop ≃ₜ Circle,
       ∀ h : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0 ∈
           apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop,
         e ⟨_, h⟩ = 1 := by
-  sorry
+  let f : Circle → apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop :=
+    fun z ↦ ⟨apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param z,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_mem z⟩
+  have hf : Continuous f :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_continuous.subtype_mk _
+  have hbij : Function.Bijective f := ⟨fun _ _ h ↦
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_injective
+      (congrArg Subtype.val h),
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_surjective⟩
+  let e0 : Circle ≃ₜ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop :=
+    (show Continuous (Equiv.ofBijective f hbij) from hf).homeoOfEquivCompactToT2
+  refine ⟨e0.symm, fun h ↦ ?_⟩
+  rw [Homeomorph.symm_apply_eq]
+  change ⟨_, h⟩ = f 1
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [e0, f, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0] <;> norm_num
 
 /-- LIBRARY: the loop lies in `W`, at distance at least `1/4` from the left
 core, and meets the left boundary torus exactly at `q0`. -/
@@ -527,7 +1141,85 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_geometry :
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∩
         apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop =
       {apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0} := by
-  sorry
+  let L : ℝ → apm_t02a03_E3 := fun t ↦
+    WithLp.toLp 2 ![6 / 5 - 23 / 20 * Real.cos t,
+      23 / 20 * Real.sin t, 0]
+  have hcoords (t : ℝ) :
+      (L t 0 = 6 / 5 - 23 / 20 * Real.cos t) ∧
+      (L t 1 = 23 / 20 * Real.sin t) ∧ L t 2 = 0 := by
+    simp [L]
+  have hsquare (t : ℝ) :
+      (L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2 =
+        (5 / 4 : ℝ) ^ 2 + (138 / 25) * (1 - Real.cos t) := by
+    rcases hcoords t with ⟨h0, h1, h2⟩
+    rw [h0, h1]
+    nlinarith [Real.sin_sq_add_cos_sq t]
+  have hradius (t : ℝ) :
+      (5 / 4 : ℝ) ≤ Real.sqrt ((L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2) := by
+    rw [← Real.sqrt_sq (by norm_num : (0 : ℝ) ≤ 5 / 4)]
+    apply Real.sqrt_le_sqrt
+    rw [hsquare]
+    have hc : Real.cos t ≤ 1 := Real.cos_le_one t
+    nlinarith
+  have hleft (t : ℝ) :
+      (1 / 4 : ℝ) ≤ Metric.infDist (L t) apm_t02a03_C := by
+    rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist]
+    rw [(hcoords t).2.2]
+    rw [show (0 : ℝ) ^ 2 = 0 by norm_num, add_zero, Real.sqrt_sq_eq_abs]
+    rw [abs_of_nonneg (by linarith [hradius t])]
+    linarith [hradius t]
+  have hright (t : ℝ) : L t ∈ apm_t02a03_W := by
+    unfold apm_t02a03_W
+    have hmem : apm_t02a03_rightCore t ∈ apm_t02a03_genusTwoSpine := by
+      exact Set.mem_union_right _ ⟨t, rfl⟩
+    refine (Metric.infDist_le_dist_of_mem hmem).trans ?_
+    simp [L, apm_t02a03_rightCore, dist_eq_norm, EuclideanSpace.norm_eq,
+      Fin.sum_univ_succ]
+    rw [show (Real.cos t - 23 / 20 * Real.cos t) ^ 2 +
+        (23 / 20 * Real.sin t - Real.sin t) ^ 2 = (3 / 20 : ℝ) ^ 2 by
+      nlinarith [Real.sin_sq_add_cos_sq t]]
+    norm_num
+  constructor
+  · intro p hp
+    rcases hp with ⟨t, rfl⟩
+    exact ⟨hright t, hleft t⟩
+  · ext p
+    constructor
+    · rintro ⟨hpT, hpL⟩
+      rcases hpL with ⟨t, rfl⟩
+      have heq : Metric.infDist (L t) apm_t02a03_C = (1 / 4 : ℝ) := hpT
+      have hrsqrt : Real.sqrt ((L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2) = 5 / 4 := by
+        rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist,
+          (hcoords t).2.2] at heq
+        rw [show (0 : ℝ) ^ 2 = 0 by norm_num, add_zero, Real.sqrt_sq_eq_abs] at heq
+        rw [abs_of_nonneg (by linarith [hradius t])] at heq
+        linarith
+      have hsq : (L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2 = (5 / 4 : ℝ) ^ 2 := by
+        have hnonneg : 0 ≤ (L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2 := by positivity
+        nlinarith [Real.sq_sqrt hnonneg]
+      have hc : Real.cos t = 1 := by
+        rw [hsquare] at hsq
+        nlinarith
+      have hsin : Real.sin t = 0 := by
+        nlinarith [Real.sin_sq_add_cos_sq t]
+      simp only [Set.mem_singleton_iff]
+      ext i
+      fin_cases i <;>
+        simp [L, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0, hc, hsin] <;>
+        norm_num
+    · intro hp
+      simp only [Set.mem_singleton_iff] at hp
+      subst p
+      constructor
+      · change Metric.infDist _ apm_t02a03_C = (1 / 4 : ℝ)
+        rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist]
+        simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0]
+        norm_num
+      · exact ⟨0, by
+          ext i
+          fin_cases i <;>
+            simp [L, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0] <;>
+            norm_num⟩
 
 /-- LIBRARY (pure topology): two subsets of a Hausdorff space, homeomorphic to
 the torus and the circle, meeting in exactly one point that goes to both
@@ -543,7 +1235,134 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_wedge_homeomorph
     (heB : ∀ h : x ∈ B, eB ⟨x, h⟩ = 1) :
     Nonempty ((A ∪ B : Set X) ≃ₜ
       ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge) := by
-  sorry
+  let f : Sum ConstructionTargets.TorusCircleWedgeOpenCover.Torus Circle →
+      (A ∪ B : Set X) := fun z ↦ match z with
+    | .inl a => ⟨eA.symm a, Or.inl (eA.symm a).property⟩
+    | .inr b => ⟨eB.symm b, Or.inr (eB.symm b).property⟩
+  have hxA : x ∈ A := by
+    have : x ∈ A ∩ B := by simpa [hAB]
+    exact this.1
+  have hxB : x ∈ B := by
+    have : x ∈ A ∩ B := by simpa [hAB]
+    exact this.2
+  have hfbase : f (.inl ((1 : Circle), (1 : Circle))) = f (.inr (1 : Circle)) := by
+    apply Subtype.ext
+    simp only [f]
+    have hA : eA.symm ((1 : Circle), (1 : Circle)) = ⟨x, hxA⟩ := by
+      apply eA.injective
+      simp [heA hxA]
+    have hB : eB.symm (1 : Circle) = ⟨x, hxB⟩ := by
+      apply eB.injective
+      simp [heB hxB]
+    exact (congrArg Subtype.val hA).trans (congrArg Subtype.val hB).symm
+  have hfrespect {u v}
+      (huv : Relation.EqvGen
+        (ConstructionTargets.PointWedgeQuotient.Rel
+          ((1 : Circle), (1 : Circle)) (1 : Circle)) u v) : f u = f v := by
+    induction huv with
+    | rel u v huv => cases huv; exact hfbase
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let g : ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge →
+      (A ∪ B : Set X) := Quotient.lift f (fun _ _ h ↦ hfrespect h)
+  have hfcont : Continuous f := by
+    apply continuous_sum_dom.2
+    constructor
+    · exact (eA.symm.continuous.subtype_val).subtype_mk _
+    · exact (eB.symm.continuous.subtype_val).subtype_mk _
+  have hgcont : Continuous g := hfcont.quotient_lift _
+  have hgsurj : Function.Surjective g := by
+    rintro ⟨y, hy⟩
+    rcases hy with hyA | hyB
+    · refine ⟨Quotient.mk _ (.inl (eA ⟨y, hyA⟩)), ?_⟩
+      apply Subtype.ext
+      simp [g, f]
+    · refine ⟨Quotient.mk _ (.inr (eB ⟨y, hyB⟩)), ?_⟩
+      apply Subtype.ext
+      simp [g, f]
+  have hginj : Function.Injective g := by
+    rintro ⟨u⟩ ⟨v⟩ huv
+    apply Quotient.sound
+    cases u with
+    | inl a =>
+      cases v with
+      | inl a' =>
+        change f (.inl a) = f (.inl a') at huv
+        simp only [f] at huv
+        have hval : (eA.symm a : X) = eA.symm a' :=
+          congrArg (fun z : (A ∪ B : Set X) ↦ (z : X)) huv
+        have hsub : eA.symm a = eA.symm a' := Subtype.ext hval
+        have haa : a = a' := eA.symm.injective hsub
+        subst a'
+        exact Relation.EqvGen.refl _
+      | inr b =>
+        change f (.inl a) = f (.inr b) at huv
+        simp only [f] at huv
+        have hmem : (eA.symm a : X) ∈ A ∩ B :=
+          ⟨(eA.symm a).property, by
+            rw [show (eA.symm a : X) = eB.symm b from congrArg Subtype.val huv]
+            exact (eB.symm b).property⟩
+        have hx : (eA.symm a : X) = x := by
+          have : (eA.symm a : X) ∈ ({x} : Set X) := by simpa [hAB] using hmem
+          simpa using this
+        have ha : a = ((1 : Circle), (1 : Circle)) := by
+          calc
+            a = eA (eA.symm a) := (eA.apply_symm_apply a).symm
+            _ = eA ⟨x, hxA⟩ := congrArg eA (Subtype.ext hx)
+            _ = _ := heA hxA
+        have hb : b = (1 : Circle) := by
+          calc
+            b = eB (eB.symm b) := (eB.apply_symm_apply b).symm
+            _ = eB ⟨x, hxB⟩ := congrArg eB (Subtype.ext
+              ((congrArg Subtype.val huv).symm.trans hx))
+            _ = _ := heB hxB
+        subst a
+        subst b
+        exact Relation.EqvGen.rel _ _
+          (ConstructionTargets.PointWedgeQuotient.Rel.base)
+    | inr b =>
+      cases v with
+      | inl a =>
+        change f (.inr b) = f (.inl a) at huv
+        simp only [f] at huv
+        have hmem : (eB.symm b : X) ∈ A ∩ B :=
+          ⟨by
+            rw [show (eB.symm b : X) = eA.symm a from congrArg Subtype.val huv]
+            exact (eA.symm a).property,
+           (eB.symm b).property⟩
+        have hx : (eB.symm b : X) = x := by
+          have : (eB.symm b : X) ∈ ({x} : Set X) := by simpa [hAB] using hmem
+          simpa using this
+        have hb : b = (1 : Circle) := by
+          calc
+            b = eB (eB.symm b) := (eB.apply_symm_apply b).symm
+            _ = eB ⟨x, hxB⟩ := congrArg eB (Subtype.ext hx)
+            _ = _ := heB hxB
+        have ha : a = ((1 : Circle), (1 : Circle)) := by
+          calc
+            a = eA (eA.symm a) := (eA.apply_symm_apply a).symm
+            _ = eA ⟨x, hxA⟩ := congrArg eA (Subtype.ext
+              ((congrArg Subtype.val huv).symm.trans hx))
+            _ = _ := heA hxA
+        subst a
+        subst b
+        exact (Relation.EqvGen.rel _ _
+          (ConstructionTargets.PointWedgeQuotient.Rel.base)).symm
+      | inr b' =>
+        change f (.inr b) = f (.inr b') at huv
+        simp only [f] at huv
+        have hval : (eB.symm b : X) = eB.symm b' :=
+          congrArg (fun z : (A ∪ B : Set X) ↦ (z : X)) huv
+        have hsub : eB.symm b = eB.symm b' := Subtype.ext hval
+        have hbb : b = b' := eB.symm.injective hsub
+        subst b'
+        exact Relation.EqvGen.refl _
+  let eg : ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge ≃
+      (A ∪ B : Set X) := Equiv.ofBijective g ⟨hginj, hgsurj⟩
+  letI : CompactSpace ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge :=
+    Quotient.compactSpace
+  exact ⟨(Continuous.homeoOfEquivCompactToT2 (f := eg) hgcont).symm⟩
 
 /-- The right tube minus the open left tube: the part of `shellY` outside the
 left boundary torus, together with the patch of that torus inside the right
@@ -589,11 +1408,35 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_of_defor
 right tube.  `W` is the union of the two closed tubes (`infDist` to a union
 of two sets is the minimum); a point of the left tube at distance at least
 `1/4` from `C` is at distance exactly `1/4`. -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_cover_aux_infDist_union
+    (p : apm_t02a03_E3) :
+    Metric.infDist p apm_t02a03_genusTwoSpine =
+      min (Metric.infDist p apm_t02a03_C)
+        (Metric.infDist p (Set.range apm_t02a03_rightCore)) := by
+  have hleft : (Set.range apm_t02a03_leftCore).Nonempty :=
+    ⟨apm_t02a03_leftCore 0, ⟨0, rfl⟩⟩
+  have hright : (Set.range apm_t02a03_rightCore).Nonempty :=
+    ⟨apm_t02a03_rightCore 0, ⟨0, rfl⟩⟩
+  simp only [apm_t02a03_genusTwoSpine, apm_t02a03_C, Metric.infDist,
+    Metric.infEDist_union]
+  exact ENNReal.toReal_inf (Metric.infEDist_ne_top hleft)
+    (Metric.infEDist_ne_top hright)
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_cover :
     ∀ p : apm_t02a03_shellY,
       p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∨
         p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
-  sorry
+  intro p
+  have hpW := p.2.1
+  change Metric.infDist p.1 apm_t02a03_genusTwoSpine ≤ (1 / 4 : ℝ) at hpW
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_cover_aux_infDist_union]
+    at hpW
+  rw [min_le_iff] at hpW
+  rcases hpW with hleft | hright
+  · left
+    exact le_antisymm hleft p.2.2
+  · right
+    exact ⟨hright, p.2.2⟩
 
 /-- LIBRARY: the geometric core.  The right tube minus the open left tube
 strong-deformation-retracts onto the patch of the left boundary torus it
