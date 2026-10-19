@@ -354,7 +354,14 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_hemi :
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_continuous
     (σ τ : Equiv.Perm (Fin 4)) :
     Continuous (rp2Wedge_regular_four_cover_aux_p σ τ) := by
-  sorry
+  rw [continuous_coinduced_dom]
+  change Continuous rp2Wedge_regular_four_cover_aux_proj
+  rw [continuous_sum_dom]
+  constructor
+  · exact continuous_coinduced_rng.comp
+      (continuous_inl.comp (continuous_coinduced_rng.comp continuous_fst))
+  · exact continuous_coinduced_rng.comp
+      (continuous_inr.comp (continuous_coinduced_rng.comp continuous_fst))
 
 /-- Continuity out of an open subset of a wedge is checked on the two lobes
 (`Quotient.mk` restricted to the open preimage is still a quotient map). -/
