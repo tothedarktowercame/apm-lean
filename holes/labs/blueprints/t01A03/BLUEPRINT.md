@@ -236,3 +236,17 @@ holes/labs/blueprints/t01A03/Blueprint.lean:191:6: warning: declaration uses `so
 holes/labs/blueprints/t01A03/Blueprint.lean:252:8: warning: declaration uses `sorry`
 'apm_t01a03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
+
+### `_aux_inter_H0_inj` split (2026-10-19, after lemma-3 PARTIAL)
+
+lemma-3 split it four ways along the route "`U ≅ PT ⊔ PT` and `U ∩ V ≅ N ⊔ N`,
+then use H₀ of a disjoint sum". That route needs a homology-of-a-sum API we do not
+have. The replacement assembly (compiled, sorry-free) does not need the sum
+coordinates:
+- `_aux_N_pathConnected` (kept from lemma-3's file): `N` is path connected.
+- `_aux_H0_inj_of_joined`: a general lemma. A map that reflects `Joined` is
+  injective on integral `H₀` (in `HomologicalComplex.homologyMap
+  (singularPostcomposition ℤ f) 0` form, which is `IntegralMV.mvIncl` by
+  definition).
+- `_aux_incl_joined`: `U ∩ V → U` reflects `Joined`. Points joined in `U` lie in
+  the same summand, and there in the same copy of `N`.

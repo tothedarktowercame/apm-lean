@@ -467,14 +467,44 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero :
     e.contractibleSpace
   exact ConstructionTargets.CoefficientContractiblePair.higher_zero ℤ _ 1 one_ne_zero
 
+/-- The punctured square is path connected (lemma-3, round 2). In angle
+coordinates it is the open square `(-π/3, π/3)²` minus its centre. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected :
+    PathConnectedSpace apm_t01a03_separating_circle_H1_zero_aux_N := by
+  sorry
+
+/-- A map that reflects path-joinedness is injective on integral `H₀`.
+(`H₀ A` is free on the path components of `A`; one route: for each path
+component `K` of the target, counting the vertices of a `0`-chain that lie in `K`
+kills boundaries, and these counts separate the vertex classes
+`CoefficientH0.singularVertexH0Class` of distinct source components.) -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B] (f : C(A, B))
+    (hf : ∀ a a' : A, Joined (f a) (f a') → Joined a a') :
+    Function.Injective (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ f) 0).hom := by
+  sorry
+
+/-- The inclusion `U ∩ V → U` reflects path-joinedness: points joined in
+`U ≅ PT ⊔ PT` lie in the same summand, and there in the same punctured square
+`N`, which is path connected
+(`apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_incl_joined
+    (x y : ↥(apm_t01a03_separating_circle_H1_zero_aux_U ∩
+      apm_t01a03_separating_circle_H1_zero_aux_V)) :
+    Joined (Set.inclusion Set.inter_subset_left x : ↥apm_t01a03_separating_circle_H1_zero_aux_U)
+      (Set.inclusion Set.inter_subset_left y) → Joined x y := by
+  sorry
+
 /-- `H₀ (U ∩ V) → H₀ U` is injective: `U ∩ V` is the two punctured squares, each
 path connected, landing in different summands of `U ≅ PT ⊔ PT`. -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj :
     Function.Injective (IntegralMV.mvIncl
       (Set.inter_subset_left : apm_t01a03_separating_circle_H1_zero_aux_U ∩
         apm_t01a03_separating_circle_H1_zero_aux_V ⊆
-          apm_t01a03_separating_circle_H1_zero_aux_U) 0).hom := by
-  sorry
+          apm_t01a03_separating_circle_H1_zero_aux_U) 0).hom :=
+  apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined _
+    apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_incl_joined
 
 /-- Bridge: `coe : PT ⊔ PT → U` is a homeomorphism, and `IntegralMV.HZ 1` is
 `apm_t01a03_H1`, so a surjection `H₁ U → H₁ X` gives one from `H₁ (PT ⊔ PT)`. -/
