@@ -1171,9 +1171,70 @@ structure ThreeCover where
 
 /-- The permutation pair `(1,1)`: the trivial three-sheeted cover, with three
 components. -/
+lemma circleWedge_three_cover_three_components_aux_connected :
+    IsConnected (Set.univ : Set CircleWedge) := by
+  letI : ConnectedSpace Circle := isConnected_iff_connectedSpace.mp
+    (isConnected_sphere (E := ℂ) (by norm_num [Complex.rank_real_complex]) 0 (by norm_num))
+  let l : Circle → CircleWedge := fun x ↦ Quotient.mk _ (.inl x)
+  let r : Circle → CircleWedge := fun x ↦ Quotient.mk _ (.inr x)
+  have hl : IsConnected (Set.range l) :=
+    isConnected_range (continuous_coinduced_rng.comp continuous_inl)
+  have hr : IsConnected (Set.range r) :=
+    isConnected_range (continuous_coinduced_rng.comp continuous_inr)
+  have hcover : Set.range l ∪ Set.range r = Set.univ := by
+    rw [Set.eq_univ_iff_forall]
+    intro z
+    obtain ⟨x, rfl⟩ := Quotient.exists_rep z
+    rcases x with a | b
+    · exact Or.inl ⟨a, rfl⟩
+    · exact Or.inr ⟨b, rfl⟩
+  rw [← hcover]
+  exact hl.union ⟨Quotient.mk _ (.inl circleBase), ⟨circleBase, rfl⟩,
+    circleBase, Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm⟩ hr
+
 theorem circleWedge_three_cover_three_components : ∃ C : ThreeCover,
     Nat.card (@ConnectedComponents C.E C.topology) = 3 := by
-  sorry
+  letI : ConnectedSpace CircleWedge := connectedSpace_iff_univ.mpr
+    circleWedge_three_cover_three_components_aux_connected
+  let p : CircleWedge × Fin 3 → CircleWedge := Prod.fst
+  have hp : IsCoveringMap p := by
+    have h := FiberBundle.isCoveringMap (X := CircleWedge) (F := Fin 3)
+      (E := Bundle.Trivial CircleWedge (Fin 3))
+    simpa [p, Function.comp_def] using
+      h.comp_homeomorph (Bundle.Trivial.homeomorphProd CircleWedge (Fin 3)).symm
+  have hcard (b : CircleWedge) : Nat.card {e : CircleWedge × Fin 3 // p e = b} = 3 := by
+    let e : {x // p x = b} ≃ Fin 3 :=
+      { toFun := fun x ↦ x.1.2
+        invFun := fun i ↦ ⟨(b, i), rfl⟩
+        left_inv := fun x ↦ Subtype.ext (Prod.ext x.2.symm (by rfl))
+        right_inv := fun _ ↦ rfl }
+    simpa using Nat.card_congr e
+  let U : Fin 3 → Set (CircleWedge × Fin 3) := fun i ↦ Prod.snd ⁻¹' {i}
+  have hclopen : ∀ i, IsClopen (U i) := fun i ↦
+    (isClopen_discrete {i}).preimage continuous_snd
+  have hdisj : Pairwise (Function.onFun Disjoint U) := by
+    intro i j hij
+    exact Disjoint.preimage _ (by simpa using Set.disjoint_singleton.2 hij)
+  have hunion : ⋃ i, U i = Set.univ := by
+    ext x
+    simp [U]
+  have hconn : ∀ i, IsConnected (U i) := by
+    intro i
+    rw [show U i = Set.range (fun x : CircleWedge ↦ (x, i)) by
+      ext x
+      constructor
+      · intro hx
+        change x.2 = i at hx
+        exact ⟨x.1, Prod.ext rfl hx.symm⟩
+      · rintro ⟨y, rfl⟩
+        simp [U]]
+    exact isConnected_range (continuous_id.prodMk continuous_const)
+  let e := ConnectedComponents.equivOfIsClopenOfIsConnected hclopen hdisj hunion hconn
+  refine ⟨{ E := CircleWedge × Fin 3
+            topology := inferInstance
+            p := p
+            covering := ⟨hp, hcard⟩ }, ?_⟩
+  simpa using Nat.card_congr e
 
 /-- The permutation pair `((12),(12))`: a three-sheeted cover with two
 components. -/
