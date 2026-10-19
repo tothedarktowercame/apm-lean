@@ -1264,19 +1264,52 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_cont
               exact hk.continuousAt)
           simpa [j] using hh
 
-/-- The glued map is open. An open set of `V` away from `∞` is open in a
-summand, and `φ` carries it onto an open subset of a punctured square, which is
-open in `W`. An open set of `V` containing `∞` contains `V` minus the image of a
-compact `C ⊔ C'` of `PT ⊔ PT`; by `hnear` (applied to each part) there is
-`r > 0` with every point of `W` of norm `< r` in the image, so the image is a
-neighbourhood of `(0, 0)`. -/
+/-- Openness at a finite point. Near `p ∈ Nsum` the glued map is `φ` on one
+summand followed by the embedding of the punctured square into `W`; `Nsum` is
+open in `PT ⊔ PT` (`OnePoint.isOpenEmbedding_coe`), so a neighbourhood of `p`
+in `V` contains the image of a neighbourhood of `p` in its summand's `N`, which
+`φ` (a homeomorphism) carries onto a neighbourhood of `φ p` in the punctured
+square, and that square is open in `W` away from the origin. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap_aux_coe
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (p : apm_t01a03_TwoPuncturedTori)
+    (hp : (p : OnePoint apm_t01a03_TwoPuncturedTori) ∈
+      apm_t01a03_separating_circle_H1_zero_aux_V) :
+    nhds (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ⟨p, hp⟩) ≤
+      Filter.map (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) (nhds ⟨p, hp⟩) := by
+  sorry
+
+/-- Openness at `∞`. A neighbourhood of `∞` in `V` contains `V` minus the image
+of a compact `K ⊆ PT ⊔ PT`; write `K ⊆ inl '' C ∪ inr '' C` with `C` compact
+(the two preimages, union). `hnear C` gives `r > 0` with every `x ∈ N` of
+`‖φ x‖ < r` outside `C`; so every point of `W` of norm `< r` is the image of a
+point of the neighbourhood (the origin is the image of `∞`, and `(q, 0)`,
+`(0, q)` with `q ≠ 0` are images of `φ.symm q` in a summand). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap_aux_infty
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (hnear : ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
+          ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C)
+    (h : (OnePoint.infty : OnePoint apm_t01a03_TwoPuncturedTori) ∈
+      apm_t01a03_separating_circle_H1_zero_aux_V) :
+    nhds (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ⟨OnePoint.infty, h⟩) ≤
+      Filter.map (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) (nhds ⟨OnePoint.infty, h⟩) := by
+  sorry
+
+/-- The glued map is open: it is open at every point (`isOpenMap_iff_nhds_le`),
+at `∞` by `_aux_infty` and at finite points by `_aux_coe`. -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap
     (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
       (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
     (hnear : ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
           ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) :
     IsOpenMap (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) := by
-  sorry
+  rw [isOpenMap_iff_nhds_le]
+  rintro ⟨z, hz⟩
+  induction z using OnePoint.rec with
+  | infty => exact apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap_aux_infty φ hnear hz
+  | coe p => exact apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap_aux_coe φ p hz
 
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph
     (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
