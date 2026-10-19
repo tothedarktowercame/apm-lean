@@ -578,6 +578,62 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_W_contractible :
   left
   exact ⟨Metric.mem_ball_self zero_lt_one, Set.mem_singleton 0⟩
 
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angles_ne_zero
+    (x : apm_t01a03_PuncturedTorus) :
+    (fun i : Fin 2 => if i = 0 then Complex.arg (x.1.1 : ℂ)
+      else Complex.arg (x.1.2 : ℂ)) ≠ 0 := by
+  intro h
+  have h0 : Complex.arg (x.1.1 : ℂ) = 0 := by
+    have := congrFun h (0 : Fin 2)
+    simpa using this
+  have h1 : Complex.arg (x.1.2 : ℂ) = 0 := by
+    have := congrFun h (1 : Fin 2)
+    simpa using this
+  apply x.2
+  apply Prod.ext
+  · exact Circle.injective_arg (by simpa using h0)
+  · exact Circle.injective_arg (by simpa using h1)
+
+/-- The scaled angle coordinates `(3/π)·(arg x₁, arg x₂)` of a point of the punctured
+torus. On `N` they range over the punctured open unit square (sup norm). -/
+noncomputable def apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle
+    (x : apm_t01a03_PuncturedTorus) : Fin 2 → ℝ :=
+  fun i => (3 / Real.pi) *
+    (if i = 0 then Complex.arg (x.1.1 : ℂ) else Complex.arg (x.1.2 : ℂ))
+
+/-- The chart: `N` is homeomorphic to the punctured open unit ball of `Fin 2 → ℝ`
+(sup norm, so the open square `(-1,1)²` minus `0`) by the scaled angles. For
+`z : Circle`, `dist z 1 < 1 ↔ |arg z| < π/3`; the inverse is
+`θ ↦ (Circle.exp (π/3·θ₀), Circle.exp (π/3·θ₁))`; nonvanishing is
+`_aux_angles_ne_zero`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo :
+    ∃ φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+        (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)),
+      ∀ x, (φ x : Fin 2 → ℝ) =
+        apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x.1 := by
+  sorry
+
+/-- Away from the puncture the points of `N` lie in a compact set: for `ε > 0`,
+take the image of the compact `{θ | ε ≤ ‖θ‖ ≤ 1}` under
+`θ ↦ (Circle.exp (π/3·θ₀), Circle.exp (π/3·θ₁))` (it avoids `(1,1)` since
+`0 < ‖θ‖ ≤ 1`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_far :
+    ∀ ε > 0, ∃ C : Set apm_t01a03_PuncturedTorus, IsCompact C ∧
+      ∀ x ∈ apm_t01a03_separating_circle_H1_zero_aux_N,
+        ε ≤ ‖apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x‖ →
+          x ∈ C := by
+  sorry
+
+/-- A compact subset of the punctured torus misses a neighbourhood of the puncture:
+its image in the torus is compact, hence closed, and omits `(1,1)`; small angles
+put a point close to `(1,1)`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_near :
+    ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
+      ∀ x ∈ apm_t01a03_separating_circle_H1_zero_aux_N,
+        ‖apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x‖ < r →
+          x ∉ C := by
+  sorry
+
 /-- A chart from the punctured square `N` onto the punctured open unit square,
 `x ↦ (3/π) • (arg x₁, arg x₂)`. Points far from `0` in the chart lie in a
 compact set of the punctured torus, and every compact set of the punctured
@@ -589,7 +645,14 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart :
           ∀ x, ε ≤ ‖(φ x : Fin 2 → ℝ)‖ → (x : apm_t01a03_PuncturedTorus) ∈ C) ∧
       (∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
           ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) := by
-  sorry
+  obtain ⟨φ, hφ⟩ := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo
+  refine ⟨φ, fun ε hε => ?_, fun C hC => ?_⟩
+  · obtain ⟨C, hC, hmem⟩ :=
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_far ε hε
+    exact ⟨C, hC, fun x hx => hmem x.1 x.2 (by rwa [hφ] at hx)⟩
+  · obtain ⟨r, hr, hnot⟩ :=
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_near C hC
+    exact ⟨r, hr, fun x hx => hnot x.1 x.2 (by rwa [hφ] at hx)⟩
 
 /-- Gluing two copies of a chart at `∞ ↦ 0`: `∞ ↦ 0`, `inl x ↦ (φ x, 0)`,
 `inr x ↦ (0, φ x)`. Continuity at `∞` uses the first compactness clause, and
