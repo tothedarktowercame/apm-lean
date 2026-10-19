@@ -585,8 +585,95 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S
 
 /-- `U` is open: its preimage in `RP2 ⊕ RP2` is the hemisphere image in each lobe
 (the wedge point `rpBase` lies in it on both sides); use `_aux_hemi`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+    {A B : Type*} (a : A) (b : B) (u v : Sum A B) :
+    Relation.EqvGen (WedgeRel a b) u v ↔
+      u = v ∨ ((u = .inl a ∨ u = .inr b) ∧ (v = .inl a ∨ v = .inr b)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel u v h => cases h; exact Or.inr ⟨Or.inl rfl, Or.inr rfl⟩
+    | refl => exact Or.inl rfl
+    | symm u v _ ih =>
+        rcases ih with rfl | ⟨h₁, h₂⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h₂, h₁⟩
+    | trans u v w _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨h₁, h₂⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨_, h₃⟩
+          · exact Or.inr ⟨h₁, h₂⟩
+          · exact Or.inr ⟨h₁, h₃⟩
+  · rintro (rfl | ⟨h₁, h₂⟩)
+    · exact Relation.EqvGen.refl _
+    · have hab : Relation.EqvGen (WedgeRel a b) (.inl a) (.inr b) :=
+        Relation.EqvGen.rel _ _ WedgeRel.base
+      rcases h₁ with rfl | rfl <;> rcases h₂ with rfl | rfl
+      · exact Relation.EqvGen.refl _
+      · exact hab
+      · exact Relation.EqvGen.symm _ _ hab
+      · exact Relation.EqvGen.refl _
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open : IsOpen (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U) := by
-  sorry
+  let H : Type := {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  let f : H → RP2 := fun y ↦ antipodalCover y.1
+  let V : Set RP2 := Set.range f
+  have hV : IsOpen V := by
+    exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_hemi.isOpen_range
+  have hb : rpBase ∈ V := by
+    refine ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+      simp [rp2Wedge_regular_four_cover_aux_e0]⟩, ?_⟩
+    rfl
+  rw [isOpen_coinduced, isOpen_sum_iff]
+  constructor
+  · convert hV using 1
+    ext b
+    constructor
+    · intro hbU
+      obtain ⟨y, hy, h | h⟩ := hbU
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+          rpBase rpBase (.inl b) (.inl (antipodalCover y))).mp he with he | he
+        · cases he
+          exact ⟨⟨y, hy⟩, rfl⟩
+        · rcases he.1 with he | he
+          · cases he
+            exact hb
+          · contradiction
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+          rpBase rpBase (.inl b) (.inr (antipodalCover y))).mp he with he | he
+        · contradiction
+        · rcases he.1 with he | he
+          · cases he
+            exact hb
+          · contradiction
+    · rintro ⟨⟨y, hy⟩, rfl⟩
+      exact ⟨y, hy, Or.inl rfl⟩
+  · convert hV using 1
+    ext b
+    constructor
+    · intro hbU
+      obtain ⟨y, hy, h | h⟩ := hbU
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+          rpBase rpBase (.inr b) (.inl (antipodalCover y))).mp he with he | he
+        · contradiction
+        · rcases he.1 with he | he
+          · contradiction
+          · cases he
+            exact hb
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+          rpBase rpBase (.inr b) (.inr (antipodalCover y))).mp he with he | he
+        · cases he
+          exact ⟨⟨y, hy⟩, rfl⟩
+        · rcases he.1 with he | he
+          · contradiction
+          · cases he
+            exact hb
+    · rintro ⟨⟨y, hy⟩, rfl⟩
+      exact ⟨y, hy, Or.inr rfl⟩
 
 /-- Each sheet is continuous on `U`: check on the two lobes by `_aux_lobes`; on
 each lobe it is `b ↦ [(lift b, i)]`, and on the hemisphere image `lift` is the
