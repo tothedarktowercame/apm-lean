@@ -2113,7 +2113,130 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
       (∀ x, |∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤ C + 1) ∧
       ∀ x ∈ Set.Ioc (0 : ℝ) 1,
         |∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x - h x| ≤ ε := by
-  sorry
+  have huc := (isCompact_Icc : IsCompact (Set.Icc (0 : ℝ) 1)).uniformContinuousOn_of_continuous
+    hh.continuousOn
+  obtain ⟨δ, hδ, hmod⟩ := (Metric.uniformContinuousOn_iff_le.mp huc) ε hε
+  obtain ⟨n, hn⟩ := exists_nat_one_div_lt hδ
+  let N : ℕ := n + 1
+  have hN : 0 < N := by simp [N]
+  have hNr : (0 : ℝ) < N := by exact_mod_cast hN
+  have hmesh : (1 : ℝ) / N < δ := by simpa [N] using hn
+  let φ : ℕ → ℚ × ℚ := fun k ↦ (((k - 1 : ℕ) : ℚ) / N, (k : ℚ) / N)
+  let F : Finset (ℚ × ℚ) := (Finset.Icc 1 N).image φ
+  let c : ℚ × ℚ → ℝ := fun i ↦ h (i.2 : ℝ)
+  refine ⟨F, c, ?_, ?_⟩
+  · intro x
+    by_cases hx : ∃ k ∈ Finset.Icc 1 N, x ∈ Set.Ioc (((k - 1 : ℕ) : ℝ) / N) ((k : ℝ) / N)
+    · obtain ⟨k, hk, hxk⟩ := hx
+      have hsum : ∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x =
+          h ((k : ℝ) / N) := by
+        rw [Finset.sum_eq_single (φ k)]
+        · simp [c, φ, hxk]
+        · intro i hiF hine
+          simp only [F, Finset.mem_image] at hiF
+          obtain ⟨j, hj, rfl⟩ := hiF
+          have hjne : j ≠ k := by intro e; subst j; exact hine rfl
+          have hnot : x ∉ Set.Ioc ((((j - 1 : ℕ) : ℚ) / N : ℚ) : ℝ)
+              ((((j : ℚ) / N : ℚ) : ℝ)) := by
+            intro hxj
+            norm_num [Rat.cast_div] at hxj
+            have hk' : 1 ≤ k ∧ k ≤ N := by simpa using hk
+            have hj' : 1 ≤ j ∧ j ≤ N := by simpa using hj
+            rcases lt_or_gt_of_ne hjne with hjk | hkj
+            · have : (j : ℝ) / N ≤ ((k - 1 : ℕ) : ℝ) / N := by
+                apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg N)
+                norm_num; omega
+              exact (not_lt_of_ge (hxj.2.trans this)) hxk.1
+            · have : (k : ℝ) / N ≤ ((j - 1 : ℕ) : ℝ) / N := by
+                apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg N)
+                norm_num; omega
+              exact (not_lt_of_ge (hxk.2.trans this)) hxj.1
+          change c (φ j) * (Set.Ioc (((((j - 1 : ℕ) : ℚ) / N : ℚ) : ℝ))
+            (((((j : ℚ) / N : ℚ) : ℝ)))).indicator
+            (fun _ ↦ (1 : ℝ)) x = 0
+          rw [Set.indicator_of_notMem hnot]
+          simp
+        · intro hbad
+          exact (hbad (by exact Finset.mem_image.mpr ⟨k, hk, rfl⟩)).elim
+      rw [hsum]
+      exact (hC _).trans (by linarith)
+    · have hz : ∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x = 0 := by
+        apply Finset.sum_eq_zero
+        intro i hi
+        simp only [F, Finset.mem_image] at hi
+        obtain ⟨k, hk, rfl⟩ := hi
+        have hnot : x ∉ Set.Ioc (((k - 1 : ℕ) : ℝ) / N) ((k : ℝ) / N) :=
+          fun hmem ↦ hx ⟨k, hk, hmem⟩
+        simp [φ, hnot]
+      rw [hz, abs_zero]
+      have hC0 : 0 ≤ C := (abs_nonneg (h 0)).trans (hC 0)
+      linarith
+  · intro x hx
+    let k : ℕ := ⌈(N : ℝ) * x⌉₊
+    have hkpos : 0 < k := by
+      rw [Nat.ceil_pos]
+      exact mul_pos hNr hx.1
+    have hkN : k ≤ N := by
+      rw [Nat.ceil_le]
+      nlinarith [hx.2]
+    have hxlo : ((k - 1 : ℕ) : ℝ) / N < x := by
+      have hc : (k : ℝ) < (N : ℝ) * x + 1 :=
+        Nat.ceil_lt_add_one (mul_nonneg hNr.le hx.1.le)
+      rw [Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hkpos))]
+      apply (div_lt_iff₀ hNr).mpr
+      simpa [mul_comm] using ((sub_lt_iff_lt_add).mpr hc)
+    have hxhi : x ≤ (k : ℝ) / N := by
+      have hc : (N : ℝ) * x ≤ k := Nat.le_ceil _
+      apply (le_div_iff₀ (by positivity : (0 : ℝ) < N)).mpr
+      simpa [mul_comm] using hc
+    have hk : k ∈ Finset.Icc 1 N := by simpa using And.intro hkpos hkN
+    have hxk : x ∈ Set.Ioc (((k - 1 : ℕ) : ℝ) / N) ((k : ℝ) / N) := ⟨hxlo, hxhi⟩
+    have hsum : ∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x =
+        h ((k : ℝ) / N) := by
+      rw [Finset.sum_eq_single (φ k)]
+      · simp [c, φ, hxk]
+      · intro i hiF hine
+        simp only [F, Finset.mem_image] at hiF
+        obtain ⟨j, hj, rfl⟩ := hiF
+        have hjne : j ≠ k := by intro e; subst j; exact hine rfl
+        have hnot : x ∉ Set.Ioc ((((j - 1 : ℕ) : ℚ) / N : ℚ) : ℝ)
+            ((((j : ℚ) / N : ℚ) : ℝ)) := by
+          intro hxj
+          norm_num [Rat.cast_div] at hxj
+          rcases lt_or_gt_of_ne hjne with hjk | hkj
+          · have : (j : ℝ) / N ≤ ((k - 1 : ℕ) : ℝ) / N := by
+              apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg N)
+              norm_num; omega
+            exact (not_lt_of_ge (hxj.2.trans this)) hxk.1
+          · have : (k : ℝ) / N ≤ ((j - 1 : ℕ) : ℝ) / N := by
+              apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg N)
+              norm_num; omega
+            exact (not_lt_of_ge (hxk.2.trans this)) hxj.1
+        change c (φ j) * (Set.Ioc (((((j - 1 : ℕ) : ℚ) / N : ℚ) : ℝ))
+          (((((j : ℚ) / N : ℚ) : ℝ)))).indicator
+          (fun _ ↦ (1 : ℝ)) x = 0
+        rw [Set.indicator_of_notMem hnot]
+        simp
+      · intro hbad
+        exact (hbad (by exact Finset.mem_image.mpr ⟨k, hk, rfl⟩)).elim
+    rw [hsum]
+    rw [abs_sub_comm]
+    apply hmod
+    · exact ⟨hx.1.le, hx.2⟩
+    · constructor
+      · positivity
+      · apply (div_le_iff₀ hNr).mpr
+        simpa using (show (k : ℝ) ≤ N by exact_mod_cast hkN)
+    · rw [Real.dist_eq]
+      have hd : |x - (k : ℝ) / N| < (1 : ℝ) / N := by
+        rw [abs_of_nonpos (sub_nonpos.mpr hxhi), neg_sub]
+        have hc : (k : ℝ) < (N : ℝ) * x + 1 :=
+          Nat.ceil_lt_add_one (mul_nonneg hNr.le hx.1.le)
+        calc
+          (k : ℝ) / N - x < ((N : ℝ) * x + 1) / N - x :=
+            sub_lt_sub_right ((div_lt_div_iff_of_pos_right hNr).mpr hc) x
+          _ = 1 / (N : ℝ) := by field_simp; ring
+      exact (hd.trans hmesh).le
 
 /-- `L¹` step approximation, assembled (claude-14, round 2): continuous approximation within
 `δ = 1/(2(n+1))` (`_aux_continuous`), then grid steps uniformly within `δ` (`_aux_grid`). -/
