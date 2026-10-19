@@ -2310,7 +2310,48 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
     (q : ℝ) (hq : 1 < q) (R : ℝ) (hR : 0 ≤ R) (G : ℚ → ℝ)
     (hG : ∀ a b : ℚ, 0 ≤ a → a ≤ b → b ≤ 1 → |G b - G a| ≤ R * ((b : ℝ) - a) ^ (1 / q)) :
     ∃ F : ℝ → ℝ, ContinuousOn F (Set.Icc 0 1) ∧ ∀ a : ℚ, 0 ≤ a → a ≤ 1 → F a = G a := by
-  sorry
+  let c : ℚ → ℚ := fun x ↦ max 0 (min x 1)
+  have hc_mem (x : ℚ) : 0 ≤ c x ∧ c x ≤ 1 := by
+    simp [c]
+  have hc_dist (x y : ℚ) : |(c x : ℝ) - c y| ≤ |(x : ℝ) - y| := by
+    have hp := (LipschitzWith.projIcc (a := (0 : ℝ)) (b := 1) zero_le_one).dist_le_mul x y
+    simpa [c, Set.projIcc, min_comm, Real.dist_eq] using hp
+  let C : NNReal := ⟨R, hR⟩
+  let r : NNReal := ⟨1 / q, by positivity⟩
+  have hdist (x y : ℚ) : dist (G (c x)) (G (c y)) ≤
+      (C : ℝ) * dist x y ^ (r : ℝ) := by
+    wlog hxy : c x ≤ c y generalizing x y
+    · simpa [dist_comm] using this y x (le_of_not_ge hxy)
+    have hbase := hG (c x) (c y) (hc_mem x).1 hxy (hc_mem y).2
+    have hpow : ((c y : ℝ) - c x) ^ (1 / q) ≤ |(y : ℝ) - x| ^ (1 / q) := by
+      apply Real.rpow_le_rpow
+      · exact sub_nonneg.mpr (by exact_mod_cast hxy)
+      · exact (le_abs_self _).trans (by simpa [abs_sub_comm] using hc_dist y x)
+      · exact le_of_lt (one_div_pos.mpr (lt_trans zero_lt_one hq))
+    calc
+      dist (G (c x)) (G (c y)) = |G (c y) - G (c x)| := by rw [Real.dist_eq, abs_sub_comm]
+      _ ≤ R * ((c y : ℝ) - c x) ^ (1 / q) := hbase
+      _ ≤ R * |(y : ℝ) - x| ^ (1 / q) := mul_le_mul_of_nonneg_left hpow hR
+      _ = (C : ℝ) * dist x y ^ (r : ℝ) := by simp [C, r, Rat.dist_eq, abs_sub_comm]
+  have hholder : HolderWith C r (fun x : ℚ ↦ G (c x)) := by
+    intro x y
+    rw [edist_dist]
+    convert ENNReal.ofReal_le_ofReal (hdist x y) using 1
+    rw [eq_comm, ENNReal.ofReal_mul (NNReal.coe_nonneg C), ENNReal.ofReal_coe_nnreal, edist_dist,
+      ENNReal.ofReal_rpow_of_nonneg dist_nonneg (NNReal.coe_nonneg r)]
+  have hr : 0 < r := by
+    change 0 < 1 / q
+    exact one_div_pos.mpr (lt_trans zero_lt_one hq)
+  have hu : UniformContinuous (fun x : ℚ ↦ G (c x)) := hholder.uniformContinuous hr
+  let F : ℝ → ℝ := Rat.isDenseEmbedding_coe_real.isDenseInducing.extend (fun x : ℚ ↦ G (c x))
+  have hFc : Continuous F := by
+    exact (uniformContinuous_uniformly_extend
+      Rat.isUniformEmbedding_coe_real.isUniformInducing Rat.denseRange_cast hu).continuous
+  refine ⟨F, hFc.continuousOn, ?_⟩
+  intro a ha ha1
+  have hca : c a = a := by simp [c, ha, ha1]
+  rw [show F (a : ℝ) = G (c a) from
+    Rat.isDenseEmbedding_coe_real.isDenseInducing.extend_eq hu.continuous a, hca]
 
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_real_family
     (q : ℝ) (hq : 1 < q) (R : ℝ) (hR : 0 ≤ R) (F : ℝ → ℝ) (hF : ContinuousOn F (Set.Icc 0 1))
