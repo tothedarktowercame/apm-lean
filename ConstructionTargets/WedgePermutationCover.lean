@@ -1676,10 +1676,101 @@ lemma circleWedge_connected_pair_aux_covering :
         circleWedge_connected_pair_aux_covering_aux_pD_fiber⟩⟩
 
 /-- Both quotient graphs are connected. -/
+lemma circleWedge_connected_pair_aux_connected_aux_C :
+    PreconnectedSpace circleWedge_connected_pair_aux_EC := by
+  letI : PreconnectedSpace Circle := Subtype.preconnectedSpace
+    (isPreconnected_sphere (E := ℂ) (by simp) 0 1)
+  let q : circleWedge_connected_pair_aux_RawC →
+      circleWedge_connected_pair_aux_EC := Quotient.mk _
+  let L : Set circleWedge_connected_pair_aux_EC :=
+    Set.range (fun z : Circle ↦ q (.inl z))
+  let R (r : circleWedge_connected_pair_aux_Root) :
+      Set circleWedge_connected_pair_aux_EC :=
+    Set.range (fun z : Circle ↦ q (.inr (z, r)))
+  have hq : Continuous q := continuous_coinduced_rng
+  have hL : IsPreconnected L := by
+    exact isPreconnected_range (hq.comp continuous_inl)
+  have hR (r : circleWedge_connected_pair_aux_Root) : IsPreconnected (R r) := by
+    exact isPreconnected_range
+      (hq.comp (continuous_inr.comp (continuous_id.prodMk continuous_const)))
+  have hmeet (r : circleWedge_connected_pair_aux_Root) :
+      (L ∩ R r).Nonempty := by
+    refine ⟨q (.inl r.1), ⟨⟨r.1, rfl⟩, ?_⟩⟩
+    refine ⟨circleBase, ?_⟩
+    exact (Quotient.sound (Relation.EqvGen.rel _ _
+      (circleWedge_connected_pair_aux_RelC.glue r))).symm
+  have hLR (r : circleWedge_connected_pair_aux_Root) :
+      IsPreconnected (L ∪ R r) :=
+    IsPreconnected.union' (hmeet r) hL (hR r)
+  have hinter : (⋂ r : circleWedge_connected_pair_aux_Root, L ∪ R r).Nonempty := by
+    refine ⟨q (.inl circleBase), ?_⟩
+    simp only [mem_iInter, mem_union, L]
+    intro r
+    exact Or.inl ⟨circleBase, rfl⟩
+  have hall : (⋃ r : circleWedge_connected_pair_aux_Root, L ∪ R r) = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro x
+    obtain ⟨a, rfl⟩ := Quotient.mk_surjective x
+    cases a with
+    | inl z =>
+        let r : circleWedge_connected_pair_aux_Root :=
+          ⟨circleBase, by
+            apply Subtype.ext
+            exact circleWedge_connected_pair_aux_circleBase_cube⟩
+        exact mem_iUnion.2 ⟨r, Or.inl ⟨z, rfl⟩⟩
+    | inr zr =>
+        exact mem_iUnion.2 ⟨zr.2, Or.inr ⟨zr.1, rfl⟩⟩
+  rw [preconnectedSpace_iff_univ, ← hall]
+  exact isPreconnected_iUnion hinter hLR
+
+lemma circleWedge_connected_pair_aux_connected_aux_D :
+    PreconnectedSpace circleWedge_connected_pair_aux_ED := by
+  letI : PreconnectedSpace Circle := Subtype.preconnectedSpace
+    (isPreconnected_sphere (E := ℂ) (by simp) 0 1)
+  let q : circleWedge_connected_pair_aux_RawD →
+      circleWedge_connected_pair_aux_ED := Quotient.mk _
+  let L : Set circleWedge_connected_pair_aux_ED :=
+    Set.range (fun z : Circle ↦ q (.inl z))
+  let R : Set circleWedge_connected_pair_aux_ED :=
+    Set.range (fun z : Circle ↦ q (.inr z))
+  have hq : Continuous q := continuous_coinduced_rng
+  have hL : IsPreconnected L :=
+    isPreconnected_range (hq.comp continuous_inl)
+  have hR : IsPreconnected R :=
+    isPreconnected_range (hq.comp continuous_inr)
+  let r : circleWedge_connected_pair_aux_Root :=
+    ⟨circleBase, by
+      apply Subtype.ext
+      exact circleWedge_connected_pair_aux_circleBase_cube⟩
+  have hmeet : (L ∩ R).Nonempty := by
+    refine ⟨q (.inl r.1), ⟨⟨r.1, rfl⟩, ⟨r.1, ?_⟩⟩⟩
+    exact (Quotient.sound (Relation.EqvGen.rel _ _
+      (circleWedge_connected_pair_aux_RelD.glue r))).symm
+  rw [preconnectedSpace_iff_univ]
+  have hu : L ∪ R = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro x
+    obtain ⟨a, rfl⟩ := Quotient.mk_surjective x
+    cases a with
+    | inl z => exact Or.inl ⟨z, rfl⟩
+    | inr z => exact Or.inr ⟨z, rfl⟩
+  rw [← hu]
+  exact IsPreconnected.union' hmeet hL hR
+
 lemma circleWedge_connected_pair_aux_connected :
     Nat.card (ConnectedComponents circleWedge_connected_pair_aux_EC) = 1 ∧
       Nat.card (ConnectedComponents circleWedge_connected_pair_aux_ED) = 1 := by
-  sorry
+  letI := circleWedge_connected_pair_aux_connected_aux_C
+  letI := circleWedge_connected_pair_aux_connected_aux_D
+  constructor
+  · apply Nat.card_eq_one_iff_exists.mpr
+    refine ⟨(Quotient.mk'' (Quotient.mk _ (.inl circleBase)) :
+      ConnectedComponents circleWedge_connected_pair_aux_EC), ?_⟩
+    exact fun y ↦ Subsingleton.elim _ _
+  · apply Nat.card_eq_one_iff_exists.mpr
+    refine ⟨(Quotient.mk'' (Quotient.mk _ (.inl circleBase)) :
+      ConnectedComponents circleWedge_connected_pair_aux_ED), ?_⟩
+    exact fun y ↦ Subsingleton.elim _ _
 
 /-- The first graph has three loop edges after deleting its intrinsic
 valence-four locus, while the second has none. -/
