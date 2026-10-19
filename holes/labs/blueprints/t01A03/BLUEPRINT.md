@@ -190,6 +190,27 @@ shows `δ₀ = 0` from injectivity of `H₀(U∩V) → H₀U`, so `mvJ` is onto 
   `apm_t01a03_H1`; match `mvToX` (a `homologyMap`) with `apm_t01a03_H1map`
   (a functor map) as in `t00J01/Blueprint.lean` near line 1161.
 
+**`_aux_model_free` split (2026-10-19, after lemma-1 returned
+`BLOCKED-ON pointWedgeH1IsoBiprod`, a name that exists nowhere in the tree).**
+Assembly proved in `Blueprint.lean`, with no homotopy and no further
+Mayer–Vietoris. Write T = `OnePoint PT` and X = `OnePoint (PT ⊔ PT)`. The side
+inclusions are iL = `OnePoint.map Sum.inl` and iR = `OnePoint.map Sum.inr`; the
+collapses rL, rR (`_aux_model_free_aux_rL/rR`) send the other side to `∞`. Then
+rL∘iL = id, rL∘iR = const, so (rL_*, rR_*) splits (iL_*, iR_*) and
+`H₁T × H₁T → H₁X` is injective. It is onto: `_aux_model_surj` reaches `H₁X`
+from `H₁(PT ⊔ PT)`, which is spanned by the two summands, and iL∘coe = coe∘inl.
+Four leaves, independent:
+- `_aux_model_free_aux_incl_continuous`: `OnePoint.continuous_map_iff`;
+  `Sum.inl`/`Sum.inr` are closed embeddings, so they are proper.
+- `_aux_model_free_aux_retr_continuous`: point-set, like `_aux_collapse`.
+- `_aux_model_free_aux_torus`: `H₁ T ≅ ℤ²`. Use
+  `OnePoint.equivOfIsEmbeddingOfRangeEq` (T ≃ₜ `Circle × Circle`), then
+  `Circle ≃ₜ BoundaryCircle` and
+  `BoundaryTorusH0Cokernel.boundaryTorus_complete_module_homology`.
+- `_aux_model_free_aux_sum_span`: from
+  `TopologicalSumSingularHomology.sumHomologyIsoBiprod` (stated for
+  `AddCommGrpCat`; transport to `ModuleCat ℤ` as other files do).
+
 Only the two model leaves need algebraic topology. No leaf needs Schoenflies or
 tameness of the embedding. The `surface-curve-collar` boundary named in
 TOPOLOGY-ROUTES is not needed for this problem.
