@@ -5311,7 +5311,38 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux
     (ρ : circleWedge_connected_pair_aux_Root)
     (u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U) :
     circleWedge_connected_pair_aux_pC (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1) = u := by
-  sorry
+  rcases u with ⟨u, hu⟩
+  induction u using Quotient.inductionOn with
+  | _ x =>
+    cases x with
+    | inl w =>
+      have hn : w ≠ -circleBase := by
+        intro h
+        exact hu.1 (congrArg (fun z : Circle ↦
+          (Quotient.mk _ (.inl z) : CircleWedge)) h)
+      have hlift :
+          circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w =
+            r ⟨w, hn⟩ := by
+        simp [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift,
+          hn]
+      have hroot : ((ρ.1 : ℂ) ^ 3) = (circleBase : ℂ) := by
+        exact congrArg Subtype.val ρ.2
+      have hc : circleWedge_connected_pair_aux_cube
+          (ρ.1 * circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w) = w := by
+        apply Subtype.ext
+        change ((ρ.1 : ℂ) *
+          (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w : ℂ)) ^ 3 =
+            (w : ℂ)
+        rw [mul_pow]
+        rw [hlift, hroot]
+        simpa [circleBase] using congrArg Subtype.val (hcube ⟨w, hn⟩)
+      change (Quotient.mk _ (.inl
+        (circleWedge_connected_pair_aux_cube
+          (ρ.1 * circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w))) : CircleWedge) =
+        Quotient.mk _ (.inl w)
+      rw [hc]
+    | inr w =>
+      rfl
 -- END SEAT AREA
 
 /-- The `ρ`-section over `U` has range exactly sheet `ρ`. -/
