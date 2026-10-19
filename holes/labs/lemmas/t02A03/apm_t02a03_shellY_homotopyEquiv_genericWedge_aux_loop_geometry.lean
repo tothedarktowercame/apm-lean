@@ -579,7 +579,85 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_geometry :
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∩
         apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop =
       {apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0} := by
-  sorry
+  let L : ℝ → apm_t02a03_E3 := fun t ↦
+    WithLp.toLp 2 ![6 / 5 - 23 / 20 * Real.cos t,
+      23 / 20 * Real.sin t, 0]
+  have hcoords (t : ℝ) :
+      (L t 0 = 6 / 5 - 23 / 20 * Real.cos t) ∧
+      (L t 1 = 23 / 20 * Real.sin t) ∧ L t 2 = 0 := by
+    simp [L]
+  have hsquare (t : ℝ) :
+      (L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2 =
+        (5 / 4 : ℝ) ^ 2 + (138 / 25) * (1 - Real.cos t) := by
+    rcases hcoords t with ⟨h0, h1, h2⟩
+    rw [h0, h1]
+    nlinarith [Real.sin_sq_add_cos_sq t]
+  have hradius (t : ℝ) :
+      (5 / 4 : ℝ) ≤ Real.sqrt ((L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2) := by
+    rw [← Real.sqrt_sq (by norm_num : (0 : ℝ) ≤ 5 / 4)]
+    apply Real.sqrt_le_sqrt
+    rw [hsquare]
+    have hc : Real.cos t ≤ 1 := Real.cos_le_one t
+    nlinarith
+  have hleft (t : ℝ) :
+      (1 / 4 : ℝ) ≤ Metric.infDist (L t) apm_t02a03_C := by
+    rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist]
+    rw [(hcoords t).2.2]
+    rw [show (0 : ℝ) ^ 2 = 0 by norm_num, add_zero, Real.sqrt_sq_eq_abs]
+    rw [abs_of_nonneg (by linarith [hradius t])]
+    linarith [hradius t]
+  have hright (t : ℝ) : L t ∈ apm_t02a03_W := by
+    unfold apm_t02a03_W
+    have hmem : apm_t02a03_rightCore t ∈ apm_t02a03_genusTwoSpine := by
+      exact Set.mem_union_right _ ⟨t, rfl⟩
+    refine (Metric.infDist_le_dist_of_mem hmem).trans ?_
+    simp [L, apm_t02a03_rightCore, dist_eq_norm, EuclideanSpace.norm_eq,
+      Fin.sum_univ_succ]
+    rw [show (Real.cos t - 23 / 20 * Real.cos t) ^ 2 +
+        (23 / 20 * Real.sin t - Real.sin t) ^ 2 = (3 / 20 : ℝ) ^ 2 by
+      nlinarith [Real.sin_sq_add_cos_sq t]]
+    norm_num
+  constructor
+  · intro p hp
+    rcases hp with ⟨t, rfl⟩
+    exact ⟨hright t, hleft t⟩
+  · ext p
+    constructor
+    · rintro ⟨hpT, hpL⟩
+      rcases hpL with ⟨t, rfl⟩
+      have heq : Metric.infDist (L t) apm_t02a03_C = (1 / 4 : ℝ) := hpT
+      have hrsqrt : Real.sqrt ((L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2) = 5 / 4 := by
+        rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist,
+          (hcoords t).2.2] at heq
+        rw [show (0 : ℝ) ^ 2 = 0 by norm_num, add_zero, Real.sqrt_sq_eq_abs] at heq
+        rw [abs_of_nonneg (by linarith [hradius t])] at heq
+        linarith
+      have hsq : (L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2 = (5 / 4 : ℝ) ^ 2 := by
+        have hnonneg : 0 ≤ (L t 0 + 6 / 5) ^ 2 + (L t 1) ^ 2 := by positivity
+        nlinarith [Real.sq_sqrt hnonneg]
+      have hc : Real.cos t = 1 := by
+        rw [hsquare] at hsq
+        nlinarith
+      have hsin : Real.sin t = 0 := by
+        nlinarith [Real.sin_sq_add_cos_sq t]
+      simp only [Set.mem_singleton_iff]
+      ext i
+      fin_cases i <;>
+        simp [L, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0, hc, hsin] <;>
+        norm_num
+    · intro hp
+      simp only [Set.mem_singleton_iff] at hp
+      subst p
+      constructor
+      · change Metric.infDist _ apm_t02a03_C = (1 / 4 : ℝ)
+        rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist]
+        simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0]
+        norm_num
+      · exact ⟨0, by
+          ext i
+          fin_cases i <;>
+            simp [L, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0] <;>
+            norm_num⟩
 -- END SEAT AREA
 
 /-- LIBRARY (pure topology): two subsets of a Hausdorff space, homeomorphic to
