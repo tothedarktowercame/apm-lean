@@ -1362,7 +1362,53 @@ lemma apm_m93j05_exists_minimizer_minimizing_sequence
       ∀ f, MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
         ∀ k : ℕ, ∀ᶠ n in atTop,
           apm_m93j05_J N p g (s n) ≤ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ) := by
-  sorry
+  classical
+  let A : Set ℝ := {a | ∃ f : ℝ → ℝ,
+    MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+      apm_m93j05_J N p g f = a}
+  have hA : A.Nonempty := by
+    refine ⟨apm_m93j05_J N p g 0, 0, ?_, rfl⟩
+    exact apm_m93j05_exists_minimizer_aux_zero_memLp p
+  by_cases hb : BddBelow A
+  · have hchoice : ∀ n : ℕ, ∃ f : ℝ → ℝ,
+        MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+          apm_m93j05_J N p g f < sInf A + 1 / (n + 1 : ℝ) := by
+      intro n
+      have heps : 0 < 1 / (n + 1 : ℝ) := by positivity
+      obtain ⟨a, haA, ha⟩ := exists_lt_of_csInf_lt hA (lt_add_of_pos_right _ heps)
+      obtain ⟨f, hf, rfl⟩ := haA
+      exact ⟨f, hf, ha⟩
+    choose s hs hJ using hchoice
+    refine ⟨s, hs, ?_⟩
+    intro f hf k
+    filter_upwards [eventually_ge_atTop k] with n hn
+    have hin : apm_m93j05_J N p g f ∈ A := ⟨f, hf, rfl⟩
+    have hinf : sInf A ≤ apm_m93j05_J N p g f := csInf_le hb hin
+    have hden : (k + 1 : ℝ) ≤ n + 1 := by exact_mod_cast Nat.add_le_add_right hn 1
+    have hfrac : 1 / (n + 1 : ℝ) ≤ 1 / (k + 1 : ℝ) := by
+      exact one_div_le_one_div_of_le (by positivity) hden
+    exact (hJ n).le.trans (add_le_add hinf hfrac)
+  · have hchoice : ∀ n : ℕ, ∃ f : ℝ → ℝ,
+        MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+          apm_m93j05_J N p g f < -(n : ℝ) := by
+      intro n
+      have hnlow : -(n : ℝ) ∉ lowerBounds A := by
+        intro hnlow
+        exact hb ⟨-(n : ℝ), hnlow⟩
+      change ¬ (∀ a ∈ A, -(n : ℝ) ≤ a) at hnlow
+      push_neg at hnlow
+      obtain ⟨a, haA, ha⟩ := hnlow
+      obtain ⟨f, hf, rfl⟩ := haA
+      exact ⟨f, hf, ha⟩
+    choose s hs hJ using hchoice
+    refine ⟨s, hs, ?_⟩
+    intro f hf k
+    obtain ⟨m, hm⟩ := exists_nat_gt (-(apm_m93j05_J N p g f + 1 / (k + 1 : ℝ)))
+    filter_upwards [eventually_ge_atTop m] with n hn
+    have hmn : (m : ℝ) ≤ n := by exact_mod_cast hn
+    have hbound : -(n : ℝ) ≤ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ) := by
+      linarith
+    exact (hJ n).le.trans hbound
 -- END SEAT AREA
 
 /-- **LIBRARY-sized leaf.** A coercive minimizing sequence has a weakly convergent subsequence.
