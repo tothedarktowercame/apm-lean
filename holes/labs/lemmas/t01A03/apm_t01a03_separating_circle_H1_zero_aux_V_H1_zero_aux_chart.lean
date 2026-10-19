@@ -569,7 +569,14 @@ def apm_t01a03_separating_circle_H1_zero_aux_W : Set ((Fin 2 → ℝ) × (Fin 2 
 /-- `W` is star-shaped about the origin (`StarConvex.contractibleSpace`). -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_W_contractible :
     ContractibleSpace apm_t01a03_separating_circle_H1_zero_aux_W := by
-  sorry
+  have hball : StarConvex ℝ (0 : Fin 2 → ℝ) (Metric.ball 0 1) :=
+    (convex_ball (0 : Fin 2 → ℝ) 1).starConvex (Metric.mem_ball_self zero_lt_one)
+  have hsingleton : StarConvex ℝ (0 : Fin 2 → ℝ) ({0} : Set (Fin 2 → ℝ)) :=
+    starConvex_singleton 0
+  apply ((hball.prod hsingleton).union (hsingleton.prod hball)).contractibleSpace
+  refine ⟨(0, 0), ?_⟩
+  left
+  exact ⟨Metric.mem_ball_self zero_lt_one, Set.mem_singleton 0⟩
 
 /-- A chart from the punctured square `N` onto the punctured open unit square,
 `x ↦ (3/π) • (arg x₁, arg x₂)`. Points far from `0` in the chart lie in a
