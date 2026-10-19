@@ -3266,12 +3266,81 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber (b : CircleWedge) :
         apply hb
         exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm
 
+/-! #### Split of `circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap` (lemma-1 PARTIAL, 2026-10-19) -/
+
+/-- `pD` is continuous.  (Banked by lemma-1.) -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_continuous :
+    Continuous circleWedge_connected_pair_aux_pD := by
+  apply (show Topology.IsQuotientMap
+      (fun z : circleWedge_connected_pair_aux_RawD ↦
+        (Quotient.mk _ z : circleWedge_connected_pair_aux_ED)) from
+      isQuotientMap_quot_mk).continuous_iff.mpr
+  change Continuous circleWedge_connected_pair_aux_projD
+  rw [continuous_sum_dom]
+  constructor
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projD] using
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp
+          circleWedge_connected_pair_aux_covering_aux_cube_continuous)
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projD] using
+      continuous_coinduced_rng.comp
+        (continuous_inr.comp
+          circleWedge_connected_pair_aux_covering_aux_cube_continuous)
+
+/-- Left lobe away from the wedge point: take an open arc `V` around `z` missing
+`circleBase`.  Its preimage under `cube` in the left summand is three disjoint
+arcs containing no cube root of `circleBase`, so no glue applies there and
+`cube` maps each arc homeomorphically onto `V` (`Circle.isQuotientCoveringMap_npow 3`).
+The proof is the same as
+`circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_left`; use
+`circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_continuous`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_left
+    (z : Circle) (hz : z ≠ circleBase) :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pD (Quotient.mk _ (.inl z))
+      (circleWedge_connected_pair_aux_pD ⁻¹' {Quotient.mk _ (.inl z)}) := by
+  sorry
+
+/-- Right lobe away from the wedge point: the mirror image of `_aux_left`, with
+the right summand of `RawD` (also covered by `cube`) in place of the left. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_right
+    (z : Circle) (hz : z ≠ circleBase) :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pD (Quotient.mk _ (.inr z))
+      (circleWedge_connected_pair_aux_pD ⁻¹' {Quotient.mk _ (.inr z)}) := by
+  sorry
+
+/-- At the wedge point: `V` = image of a small open arc around `circleBase` in
+each lobe.  Sheet `r` is the arc around `r.1` on the left glued at
+`inl r.1 ~ inr r.1` to the arc around `r.1` on the right, each a local section
+of `cube`.  The three sheets are disjoint and open; the section-gluing pattern is
+`rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections`, as for
+`circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pD (Quotient.mk _ (.inl circleBase))
+      (circleWedge_connected_pair_aux_pD ⁻¹' {Quotient.mk _ (.inl circleBase)}) := by
+  sorry
+
 /-- `pD` is a covering map: as for `pC`, but the right lobe is also covered by
 `cube`; at the wedge point sheet `r` is the arc around `r.1` on the left glued
 to the arc around `r.1` on the right. -/
 lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap :
     IsCoveringMap circleWedge_connected_pair_aux_pD := by
-  sorry
+  intro x
+  classical
+  by_cases hx : x = Quotient.mk _ (.inl circleBase)
+  · subst x
+    exact circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge
+  · induction x using Quotient.inductionOn with
+    | _ x =>
+      rcases x with z | z
+      · apply circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_left
+        intro hz
+        subst z
+        exact hx rfl
+      · apply circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_right
+        intro hz
+        subst z
+        apply hx
+        exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm
 
 /-- Fibres of `pD` have three points: the cube roots of `w` in the relevant lobe,
 and over the wedge point the three classes `{inl r.1, inr r.1}`. -/
