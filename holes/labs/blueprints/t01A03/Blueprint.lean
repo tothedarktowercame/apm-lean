@@ -657,6 +657,77 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart :
 /-- Gluing two copies of a chart at `∞ ↦ 0`: `∞ ↦ 0`, `inl x ↦ (φ x, 0)`,
 `inr x ↦ (0, φ x)`. Continuity at `∞` uses the first compactness clause, and
 continuity of the inverse at `0` uses the second. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+    (p : apm_t01a03_TwoPuncturedTori)
+    (hp : (p : OnePoint apm_t01a03_TwoPuncturedTori) ∈
+      apm_t01a03_separating_circle_H1_zero_aux_V) :
+    p ∈ apm_t01a03_separating_circle_H1_zero_aux_Nsum := by
+  by_contra hn
+  exact hp ⟨p, hn, rfl⟩
+
+noncomputable def
+    apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ))) :
+    apm_t01a03_separating_circle_H1_zero_aux_V →
+      apm_t01a03_separating_circle_H1_zero_aux_W := fun ⟨z, hz⟩ => by
+  classical
+  induction z using OnePoint.rec with
+  | infty =>
+      exact ⟨(0, 0), Or.inl ⟨Metric.mem_ball_self zero_lt_one, rfl⟩⟩
+  | coe p =>
+      have hp :=
+        apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem p hz
+      cases p with
+      | inl p =>
+          have hpN : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hp
+          let q := φ ⟨p, hpN⟩
+          exact ⟨((q : Fin 2 → ℝ), 0), Or.inl ⟨q.2.1, rfl⟩⟩
+      | inr p =>
+          have hpN : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hp
+          let q := φ ⟨p, hpN⟩
+          exact ⟨(0, (q : Fin 2 → ℝ)), Or.inr ⟨rfl, q.2.1⟩⟩
+
+/-- The glued map is a bijection `V → W`: `∞` is the only point sent to
+`(0, 0)` (`φ` takes values off `0`), the two summands land in the two different
+squares, and on each summand it is `φ`, which is a bijection onto the punctured
+square. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_bijective
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ))) :
+    Function.Bijective (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) := by
+  sorry
+
+/-- The glued map is continuous. At a finite point of `V` it is `φ` on an open
+piece (`OnePoint.isOpenEmbedding_coe`, and `Nsum` is open). At `∞`: a
+neighbourhood of `(0, 0)` in `W` contains every point of norm `< ε`; by `hfar`,
+the points of either summand with `‖φ x‖ ≥ ε` lie in a compact set `C`, so the
+preimage contains the open set `V \ (inl '' C ∪ inr '' C)`, a neighbourhood of
+`∞` (`OnePoint.isOpen_compl_image_coe`-style). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_continuous
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (hfar : ∀ ε > 0, ∃ C : Set apm_t01a03_PuncturedTorus, IsCompact C ∧
+          ∀ x, ε ≤ ‖(φ x : Fin 2 → ℝ)‖ → (x : apm_t01a03_PuncturedTorus) ∈ C) :
+    Continuous (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) := by
+  sorry
+
+/-- The glued map is open. An open set of `V` away from `∞` is open in a
+summand, and `φ` carries it onto an open subset of a punctured square, which is
+open in `W`. An open set of `V` containing `∞` contains `V` minus the image of a
+compact `C ⊔ C'` of `PT ⊔ PT`; by `hnear` (applied to each part) there is
+`r > 0` with every point of `W` of norm `< r` in the image, so the image is a
+neighbourhood of `(0, 0)`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (hnear : ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
+          ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) :
+    IsOpenMap (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) := by
+  sorry
+
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph
     (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
         (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
@@ -665,8 +736,9 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph
     (hnear : ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
           ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) :
     Nonempty (apm_t01a03_separating_circle_H1_zero_aux_V ≃ₜ
-      apm_t01a03_separating_circle_H1_zero_aux_W) := by
-  sorry
+      apm_t01a03_separating_circle_H1_zero_aux_W) :=
+  ⟨(Equiv.ofBijective _ (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_bijective φ)).toHomeomorphOfContinuousOpen
+    (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_continuous φ hfar) (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap φ hnear)⟩
 
 /-- `H₁ V = 0`: `V` is two open squares wedged at their centres (`∞`), hence
 contractible (`CoefficientContractiblePair.higher_zero`). -/
