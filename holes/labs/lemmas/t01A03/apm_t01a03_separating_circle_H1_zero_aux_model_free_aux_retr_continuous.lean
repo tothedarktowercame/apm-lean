@@ -2118,7 +2118,49 @@ contains `∞`, the whole collapsed side, and a cocompact part of the kept side.
 lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_retr_continuous :
     Continuous apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_rL ∧
       Continuous apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_rR := by
-  sorry
+  constructor
+  · rw [OnePoint.continuous_iff]
+    constructor
+    · rw [Filter.hasBasis_coclosedCompact.tendsto_left_iff]
+      intro s hs
+      rcases OnePoint.hasBasis_nhds_infty.mem_iff.mp hs with
+        ⟨K, ⟨hKclosed, hKcompact⟩, hKs⟩
+      refine ⟨Sum.inl '' K, ?_, ?_⟩
+      · exact ⟨Topology.IsClosedEmbedding.inl.isClosedMap K hKclosed,
+          hKcompact.image continuous_inl⟩
+      · intro x hx
+        apply hKs
+        rcases x with x | x
+        · left
+          refine ⟨x, ?_, rfl⟩
+          intro hxK
+          exact hx ⟨x, hxK, rfl⟩
+        · simpa [apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_rL]
+            using (Set.mem_insert OnePoint.infty
+              ((↑) '' Kᶜ : Set (OnePoint apm_t01a03_PuncturedTorus)))
+    · apply continuous_sum_dom.2
+      exact ⟨OnePoint.continuous_coe, continuous_const⟩
+  · rw [OnePoint.continuous_iff]
+    constructor
+    · rw [Filter.hasBasis_coclosedCompact.tendsto_left_iff]
+      intro s hs
+      rcases OnePoint.hasBasis_nhds_infty.mem_iff.mp hs with
+        ⟨K, ⟨hKclosed, hKcompact⟩, hKs⟩
+      refine ⟨Sum.inr '' K, ?_, ?_⟩
+      · exact ⟨Topology.IsClosedEmbedding.inr.isClosedMap K hKclosed,
+          hKcompact.image continuous_inr⟩
+      · intro x hx
+        apply hKs
+        rcases x with x | x
+        · simpa [apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_rR]
+            using (Set.mem_insert OnePoint.infty
+              ((↑) '' Kᶜ : Set (OnePoint apm_t01a03_PuncturedTorus)))
+        · left
+          refine ⟨x, ?_, rfl⟩
+          intro hxK
+          exact hx ⟨x, hxK, rfl⟩
+    · apply continuous_sum_dom.2
+      exact ⟨continuous_const, OnePoint.continuous_coe⟩
 -- END SEAT AREA
 
 /-- `OnePoint PT` is the torus (`OnePoint.equivOfIsEmbeddingOfRangeEq`), whose
