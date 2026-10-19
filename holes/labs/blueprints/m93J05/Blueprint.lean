@@ -3019,6 +3019,58 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_s
 `Lᵖ` bound and density of rational step functions in `Lᵠ`, gives convergence against every
 `h ∈ Lᵠ([0,1])`. Route: linearity of the integral for finite combinations, then Hölder
 (`integral_mul_le_Lp_mul_Lq`-type bounds) on `h - g`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_extend_aux_pair_sub
+    (p q : ℝ) (hp : 1 < p) (hpq : 1 / p + 1 / q = 1)
+    (f h g : ℝ → ℝ)
+    (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hh : MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    |(∫ x in Set.Icc (0 : ℝ) 1, f x * h x) -
+        (∫ x in Set.Icc (0 : ℝ) 1, f x * g x)| ≤
+      (eLpNorm f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal *
+        (eLpNorm (fun x ↦ h x - g x) (ENNReal.ofReal q)
+          (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hpqR : p.HolderConjugate q :=
+    Real.holderConjugate_iff.mpr ⟨hp, by simpa [div_eq_mul_inv] using hpq⟩
+  have hpqE : (ENNReal.ofReal p).HolderConjugate (ENNReal.ofReal q) := by
+    apply ENNReal.HolderConjugate.of_toReal
+    simpa [ENNReal.toReal_ofReal hpqR.nonneg,
+      ENNReal.toReal_ofReal hpqR.symm.nonneg] using hpqR
+  letI : (ENNReal.ofReal p).HolderTriple (ENNReal.ofReal q) 1 := hpqE
+  have hfh : Integrable (fun x ↦ f x * h x) μ := by
+    simpa only [Pi.mul_apply] using hf.integrable_mul hh
+  have hfg : Integrable (fun x ↦ f x * g x) μ := by
+    simpa only [Pi.mul_apply] using hf.integrable_mul hg
+  have hd : MemLp (fun x ↦ h x - g x) (ENNReal.ofReal q) μ := by
+    simpa only [Pi.sub_apply] using hh.sub hg
+  dsimp [μ] at hfh hfg ⊢
+  rw [← integral_sub hfh hfg]
+  have heq : (fun x ↦ f x * h x - f x * g x) =
+      fun x ↦ f x * (h x - g x) := by funext x; ring
+  rw [heq]
+  calc
+    |∫ x, f x * (h x - g x) ∂μ| ≤ ∫ x, |f x| * |h x - g x| ∂μ := by
+      simpa [abs_mul] using
+        (abs_integral_le_integral_abs (f := fun x ↦ f x * (h x - g x)) (μ := μ))
+    _ ≤ (∫ x, ‖f x‖ ^ p ∂μ) ^ (1 / p) *
+        (∫ x, ‖h x - g x‖ ^ q ∂μ) ^ (1 / q) :=
+      integral_mul_norm_le_Lp_mul_Lq hpqR hf hd
+    _ = (eLpNorm f (ENNReal.ofReal p) μ).toReal *
+        (eLpNorm (fun x ↦ h x - g x) (ENNReal.ofReal q) μ).toReal := by
+      rw [hf.eLpNorm_eq_integral_rpow_norm
+          (ENNReal.ofReal_ne_zero_iff.mpr hpqR.pos) ENNReal.ofReal_ne_top,
+        hd.eLpNorm_eq_integral_rpow_norm
+          (ENNReal.ofReal_ne_zero_iff.mpr hpqR.symm.pos) ENNReal.ofReal_ne_top]
+      simp only [ENNReal.toReal_ofReal hpqR.nonneg,
+        ENNReal.toReal_ofReal hpqR.symm.nonneg]
+      rw [ENNReal.toReal_ofReal (Real.rpow_nonneg
+            (integral_nonneg (fun x ↦ Real.rpow_nonneg (norm_nonneg _) _)) _),
+          ENNReal.toReal_ofReal (Real.rpow_nonneg
+            (integral_nonneg (fun x ↦ Real.rpow_nonneg (norm_nonneg _) _)) _)]
+      simp only [one_div]
+      rfl
+
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_extend
     (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
     (s : ℕ → ℝ → ℝ)
@@ -3041,7 +3093,126 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_e
     ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
       Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1, s n x * h x) atTop
         (nhds (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)) := by
-  sorry
+  intro h hh
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hpqR : p.HolderConjugate q :=
+    Real.holderConjugate_iff.mpr ⟨hp, by simpa [div_eq_mul_inv] using hpq⟩
+  have hind (i : ℚ × ℚ) : MemLp
+      ((Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)))
+        (ENNReal.ofReal q) μ := by
+    apply memLp_indicator_const
+    · exact measurableSet_Ioc
+    · right
+      simp only [μ, Measure.restrict_apply measurableSet_Ioc]
+      exact ((measure_mono Set.inter_subset_right).trans_lt
+        (by simp : volume (Set.Icc (0 : ℝ) 1) < ⊤)).ne
+  have hstep_tendsto (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ) :
+      Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1,
+        s n x * (∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)) atTop
+        (nhds (∫ x in Set.Icc (0 : ℝ) 1,
+          f₀ x * (∑ i ∈ F, c i *
+            (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x))) := by
+    have heq (f : ℝ → ℝ)
+        (hf : MemLp f (ENNReal.ofReal p) μ) :
+        (∫ x in Set.Icc (0 : ℝ) 1, f x * (∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)) =
+          ∑ i ∈ F, c i * ∫ x in Set.Icc (0 : ℝ) 1,
+            f x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x := by
+      change (∫ x, f x * (∑ i ∈ F, c i *
+        (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) ∂μ) = _
+      simp only [Finset.mul_sum]
+      rw [integral_finset_sum]
+      · apply Finset.sum_congr rfl
+        intro i hi
+        rw [← integral_const_mul]
+        apply integral_congr_ae
+        exact Eventually.of_forall (fun x ↦ by ring)
+      · intro i hi
+        have hpqE : (ENNReal.ofReal p).HolderConjugate (ENNReal.ofReal q) := by
+          apply ENNReal.HolderConjugate.of_toReal
+          simpa [ENNReal.toReal_ofReal hpqR.nonneg,
+            ENNReal.toReal_ofReal hpqR.symm.nonneg] using hpqR
+        letI : (ENNReal.ofReal p).HolderTriple (ENNReal.ofReal q) 1 := hpqE
+        simpa only [mul_assoc, mul_left_comm] using
+          (hf.integrable_mul (hind i)).const_mul (c i)
+    rw [show (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1,
+        s n x * (∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)) =
+        fun n ↦ ∑ i ∈ F, c i * ∫ x in Set.Icc (0 : ℝ) 1,
+          s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x from
+      funext (fun n ↦ heq (s n) (hs n)), heq f₀ hf₀]
+    exact tendsto_finset_sum F (fun i _ ↦ tendsto_const_nhds.mul (hstep i))
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  let A := R + (eLpNorm f₀ (ENNReal.ofReal p) μ).toReal + 1
+  have hA : 0 < A := by dsimp [A]; positivity
+  obtain ⟨F, c, happrox⟩ := hdense h hh (ε / (3 * A)) (div_pos hε (by positivity))
+  let g : ℝ → ℝ := fun x ↦ ∑ i ∈ F, c i *
+    (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x
+  have hg : MemLp g (ENNReal.ofReal q) μ := by
+    dsimp [g]
+    exact memLp_finset_sum _ (fun i _ ↦ (hind i).const_mul (c i))
+  have happroxR : (eLpNorm (fun x ↦ h x - g x) (ENNReal.ofReal q) μ).toReal <
+      ε / (3 * A) := by
+    rw [← ENNReal.toReal_ofReal (le_of_lt (div_pos hε (by positivity)))]
+    exact (ENNReal.toReal_lt_toReal (hh.sub hg).eLpNorm_ne_top (by simp)).2
+      (by simpa only [g, μ] using happrox)
+  have ht := hstep_tendsto F c
+  rw [Metric.tendsto_atTop] at ht
+  obtain ⟨N, hN⟩ := ht (ε / 3) (by positivity)
+  refine ⟨N, fun n hn ↦ ?_⟩
+  have hs_err :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_extend_aux_pair_sub
+      p q hp hpq (s n) h g (hs n) hh hg
+  have hf_err :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_extend_aux_pair_sub
+      p q hp hpq f₀ h g hf₀ hh hg
+  have hs_err' : |(∫ x in Set.Icc (0 : ℝ) 1, s n x * h x) -
+      (∫ x in Set.Icc (0 : ℝ) 1, s n x * g x)| < ε / 3 := by
+    calc
+      _ ≤ R * (eLpNorm (fun x ↦ h x - g x) (ENNReal.ofReal q) μ).toReal :=
+        hs_err.trans (mul_le_mul_of_nonneg_right (hbound n) ENNReal.toReal_nonneg)
+      _ ≤ A * (eLpNorm (fun x ↦ h x - g x) (ENNReal.ofReal q) μ).toReal := by
+        apply mul_le_mul_of_nonneg_right _ ENNReal.toReal_nonneg
+        dsimp [A]
+        linarith [ENNReal.toReal_nonneg (a := eLpNorm f₀ (ENNReal.ofReal p) μ)]
+      _ < A * (ε / (3 * A)) := mul_lt_mul_of_pos_left happroxR hA
+      _ = ε / 3 := by field_simp
+  have hf_err' : |(∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x) -
+      (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x)| < ε / 3 := by
+    calc
+      _ ≤ (eLpNorm f₀ (ENNReal.ofReal p) μ).toReal *
+          (eLpNorm (fun x ↦ h x - g x) (ENNReal.ofReal q) μ).toReal := hf_err
+      _ ≤ A * (eLpNorm (fun x ↦ h x - g x) (ENNReal.ofReal q) μ).toReal := by
+        apply mul_le_mul_of_nonneg_right _ ENNReal.toReal_nonneg
+        dsimp [A]
+        linarith [hR]
+      _ < A * (ε / (3 * A)) := mul_lt_mul_of_pos_left happroxR hA
+      _ = ε / 3 := by field_simp
+  have hmid : dist (∫ x in Set.Icc (0 : ℝ) 1, s n x * g x)
+      (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x) < ε / 3 := hN n hn
+  rw [Real.dist_eq] at hmid ⊢
+  show |(∫ x in Set.Icc (0 : ℝ) 1, s n x * h x) -
+        (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)| < ε
+  calc
+    |(∫ x in Set.Icc (0 : ℝ) 1, s n x * h x) -
+        (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)| ≤
+      |(∫ x in Set.Icc (0 : ℝ) 1, s n x * h x) -
+        (∫ x in Set.Icc (0 : ℝ) 1, s n x * g x)| +
+      |(∫ x in Set.Icc (0 : ℝ) 1, s n x * g x) -
+        (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x)| +
+      |(∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x) -
+        (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x)| := by
+          let a := ∫ x in Set.Icc (0 : ℝ) 1, s n x * h x
+          let b := ∫ x in Set.Icc (0 : ℝ) 1, s n x * g x
+          let c₀ := ∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x
+          let d := ∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x
+          change |a - d| ≤ |a - b| + |b - c₀| + |d - c₀|
+          rw [show a - d = (a - b) + (b - c₀) + (c₀ - d) by ring]
+          exact (abs_add_three (a - b) (b - c₀) (c₀ - d)).trans_eq
+            (by rw [abs_sub_comm c₀ d])
+      _ < ε := by linarith
 
 /-- The analytic core: weak sequential compactness of a uniformly bounded `Lᵖ` tail,
 formulated for representatives and only against the concrete `Lᵠ` integral pairing. -/
