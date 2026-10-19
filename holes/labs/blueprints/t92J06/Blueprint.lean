@@ -1,5 +1,6 @@
 import Mathlib
 import ConstructionTargets.WedgePermutationCover
+import ConstructionTargets.CoveringSubgroupCorrespondence
 
 /-!
 # Blueprint for APM t92J06
@@ -112,12 +113,146 @@ structure apm_t92J06_Covering (n : ℕ) where
   covering : @IsCoveringMap E apm_t92J06_X topology _ p
   fiberCard : ∀ x : apm_t92J06_X, Nat.card {e : E // p e = x} = n
 
-/-- LIBRARY: realize the Cayley four-regular tree as an actual simply connected
-covering of the concrete quotient wedge. -/
+/-! ### Simply connected cover (split 2026-10-19)
+
+`ConstructionTargets.CoveringSubgroupCorrespondence.exists_connected_subgroup_cover_of_small`
+at the trivial subgroup gives a path-connected cover with trivial fundamental
+group.  Its hypothesis `SemilocallySimplyConnected` is proved point by point:
+near each point a homotopy `I × X → X` that fixes the point, starts at the
+identity and ends constant on a neighbourhood contracts every loop in that
+neighbourhood.  The homotopy squeezes a small arc of each circle onto its
+centre (`apm_t92J06_squeeze`) and fixes everything outside twice the arc. -/
+
+/-- Angle of `w` measured from `z`, in `(-π, π]`. -/
+def apm_t92J06_relArg (z w : apm_t92J06_S1) : ℝ :=
+  Complex.arg ((w : ℂ) * star (z : ℂ))
+
+/-- `a` clamped to `[-δ, δ]`. -/
+def apm_t92J06_clamp (δ a : ℝ) : ℝ := max (-δ) (min δ a)
+
+/-- Tent profile: `a` on `[-δ, δ]`, falling linearly to `0` at `±2δ`, `0` beyond. -/
+def apm_t92J06_tent (δ a : ℝ) : ℝ :=
+  apm_t92J06_clamp δ a - apm_t92J06_clamp δ (a - apm_t92J06_clamp δ a)
+
+/-- Rotate `w` towards `z` by `s` times the tent of its angle from `z`.  At
+`s = 1` the arc of half-width `δ` around `z` lands on `z`; points at angle at
+least `2δ` from `z` never move. -/
+def apm_t92J06_squeeze (z : apm_t92J06_S1) (δ : ℝ) (s : unitInterval)
+    (w : apm_t92J06_S1) : apm_t92J06_S1 :=
+  ⟨(w : ℂ) * Complex.exp (-(((s : ℝ) * apm_t92J06_tent δ (apm_t92J06_relArg z w) : ℝ) : ℂ)
+      * Complex.I), by
+    have hw : ‖(w : ℂ)‖ = 1 := mem_sphere_zero_iff_norm.mp w.2
+    simp [hw, Complex.norm_exp]⟩
+
+/-- The squeeze is jointly continuous for `0 < δ < π / 2`: the tent vanishes
+near angle `±π`, where `Complex.arg` jumps. -/
+lemma apm_t92J06_squeeze_continuous {δ : ℝ} (hδ : 0 < δ) (hδπ : δ < Real.pi / 2)
+    (z : apm_t92J06_S1) :
+    Continuous fun q : unitInterval × apm_t92J06_S1 ↦ apm_t92J06_squeeze z δ q.1 q.2 := by
+  sorry
+
+/-- Values of the squeeze: identity at time `0`, fixes the centre, collapses
+the `δ`-arc at time `1`, fixes points at angle at least `2δ`. -/
+lemma apm_t92J06_squeeze_values {δ : ℝ} (hδ : 0 < δ) (z : apm_t92J06_S1) :
+    (∀ w, apm_t92J06_squeeze z δ 0 w = w) ∧
+    (∀ s, apm_t92J06_squeeze z δ s z = z) ∧
+    (∀ w, |apm_t92J06_relArg z w| < δ → apm_t92J06_squeeze z δ 1 w = z) ∧
+    (∀ s w, 2 * δ ≤ |apm_t92J06_relArg z w| → apm_t92J06_squeeze z δ s w = w) := by
+  sorry
+
+/-- Homotopies on the two legs agreeing at the base glue to a homotopy on the
+wedge (`unitInterval` is locally compact, so `id × quotient` is a quotient map). -/
+lemma apm_t92J06_wedgeHomotopy {Y : Type*} [TopologicalSpace Y]
+    (f g : C(unitInterval × apm_t92J06_S1, Y))
+    (hbase : ∀ s, f (s, apm_t92J06_circleBase) = g (s, apm_t92J06_circleBase)) :
+    ∃ Φ : C(unitInterval × apm_t92J06_X, Y),
+      (∀ s z, Φ (s, apm_t92J06_inl z) = f (s, z)) ∧
+      (∀ s z, Φ (s, apm_t92J06_inr z) = g (s, z)) := by
+  sorry
+
+/-- A homotopy from the identity that fixes `y` and ends at `y` on `U`
+contracts every loop at `y` inside `U`. -/
+lemma apm_t92J06_loop_trivial_of_contraction {Y : Type*} [TopologicalSpace Y]
+    {y : Y} {U : Set Y} (Φ : C(unitInterval × Y, Y))
+    (h0 : ∀ u, Φ (0, u) = u) (hfix : ∀ s, Φ (s, y) = y)
+    (h1 : ∀ u ∈ U, Φ (1, u) = y) (γ : Path y y) (hγ : range γ ⊆ U) :
+    Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl y) := by
+  sorry
+
+/-- Semilocal simple connectivity at the wedge point: squeeze both legs. -/
+lemma apm_t92J06_slsc_aux_base :
+    ∃ U ∈ nhds (apm_t92J06_inl apm_t92J06_circleBase),
+      ∀ γ : Path (apm_t92J06_inl apm_t92J06_circleBase)
+          (apm_t92J06_inl apm_t92J06_circleBase), range γ ⊆ U →
+        Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl _) := by
+  sorry
+
+/-- Semilocal simple connectivity at a non-base point of the left leg: squeeze
+the left leg around `z` with `2δ` less than the angle to the base, fix the
+right leg. -/
+lemma apm_t92J06_slsc_aux_inl (z : apm_t92J06_S1) (hz : z ≠ apm_t92J06_circleBase) :
+    ∃ U ∈ nhds (apm_t92J06_inl z),
+      ∀ γ : Path (apm_t92J06_inl z) (apm_t92J06_inl z), range γ ⊆ U →
+        Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl _) := by
+  sorry
+
+/-- Semilocal simple connectivity at a non-base point of the right leg. -/
+lemma apm_t92J06_slsc_aux_inr (z : apm_t92J06_S1) (hz : z ≠ apm_t92J06_circleBase) :
+    ∃ U ∈ nhds (apm_t92J06_inr z),
+      ∀ γ : Path (apm_t92J06_inr z) (apm_t92J06_inr z), range γ ⊆ U →
+        Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl _) := by
+  sorry
+
+/-- Assembly: every point is a left-leg point, a right-leg point or the base. -/
+lemma apm_t92J06_slsc :
+    ConstructionTargets.CoveringSubgroupCorrespondence.SemilocallySimplyConnected
+      apm_t92J06_X := by
+  intro x
+  induction x using Quotient.inductionOn with
+  | h q =>
+    rcases q with z | z
+    · by_cases hz : z = apm_t92J06_circleBase
+      · subst hz; exact apm_t92J06_slsc_aux_base
+      · exact apm_t92J06_slsc_aux_inl z hz
+    · by_cases hz : z = apm_t92J06_circleBase
+      · subst hz
+        have h := apm_t92J06_slsc_aux_base
+        rw [apm_t92J06_inl_base_eq_inr_base] at h
+        exact h
+      · exact apm_t92J06_slsc_aux_inr z hz
+
+/-- The wedge is path-connected: each leg is, and they share the base. -/
+lemma apm_t92J06_pathConnected : PathConnectedSpace apm_t92J06_X := by
+  sorry
+
+/-- The unit circle is locally path-connected (for example via `Circle`, or
+the squeeze arcs, which are path-connected and form a neighbourhood basis). -/
+lemma apm_t92J06_S1_locPathConnected : LocPathConnectedSpace apm_t92J06_S1 := by
+  sorry
+
+lemma apm_t92J06_locPathConnected : LocPathConnectedSpace apm_t92J06_X := by
+  haveI := apm_t92J06_S1_locPathConnected
+  show LocPathConnectedSpace (Quotient (Relation.EqvGen.setoid apm_t92J06_wedgeRel))
+  infer_instance
+
+/-- A path-connected space whose fundamental group at one point is trivial is
+simply connected. -/
+lemma apm_t92J06_simplyConnected_of_pi_one_bot {E : Type*} [TopologicalSpace E]
+    [PathConnectedSpace E] (e : E) {G : Type*} [Group G]
+    (h : Nonempty (FundamentalGroup E e ≃* (⊥ : Subgroup G))) :
+    SimplyConnectedSpace E := by
+  sorry
+
+/-- Assembly: the based-path cover at the trivial subgroup. -/
 theorem apm_t92J06_exists_simplyConnected_cover :
     ∃ (E : Type*) (_ : TopologicalSpace E) (p : E → apm_t92J06_X),
       IsCoveringMap p ∧ SimplyConnectedSpace E := by
-  sorry
+  haveI := apm_t92J06_pathConnected
+  haveI := apm_t92J06_locPathConnected
+  obtain ⟨E, t, p, e, hp, hE, -, -, hpi, -⟩ :=
+    ConstructionTargets.CoveringSubgroupCorrespondence.exists_connected_subgroup_cover_of_small.{0, u_1}
+      apm_t92J06_slsc (apm_t92J06_inl apm_t92J06_circleBase) ⊥
+  exact ⟨E, t, p, hp, apm_t92J06_simplyConnected_of_pi_one_bot e hpi⟩
 
 /-- Transport a family of shared circle-wedge covers to this file's wedge. -/
 lemma apm_t92J06_shared_cover_adapter_aux_forward_respects {x y}

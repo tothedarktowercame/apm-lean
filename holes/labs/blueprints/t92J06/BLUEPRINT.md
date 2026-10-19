@@ -19,6 +19,29 @@ existing sorry-free proof for this wedge; `LocPathConnectedOpenCover` and
 `ClassicalLocalPathConnectivity` cover local path-connectedness.  Not yet
 re-blueprinted or dispatched.
 
+**Re-blueprinted 2026-10-19 (claude-14) along that route.**
+`apm_t92J06_exists_simplyConnected_cover` is now an assembly over
+`exists_connected_subgroup_cover_of_small.{0, u_1}` at `⊥`.  Proved
+assemblies: `apm_t92J06_slsc` (case split base / left leg / right leg) and
+`apm_t92J06_locPathConnected` (Mathlib's `Quotient.locPathConnectedSpace`
+once the circle is). Leaves, independent unless noted:
+
+| leaf | content |
+|---|---|
+| `apm_t92J06_squeeze_continuous` | joint continuity; tent vanishes near angle ±π where `arg` jumps (needs `δ < π/2`) |
+| `apm_t92J06_squeeze_values` | time 0 = id; fixes the centre; collapses the `δ`-arc at time 1; fixes angle ≥ `2δ` |
+| `apm_t92J06_wedgeHomotopy` | glue leg homotopies; `unitInterval × quotient` is a quotient map (locally compact factor) |
+| `apm_t92J06_loop_trivial_of_contraction` | `(s,t) ↦ Φ(s, γ t)` is a homotopy rel endpoints from `γ` to `refl` |
+| `apm_t92J06_slsc_aux_base` | uses the four above with centre = base on both legs, `U` = union of the two `δ`-arcs |
+| `apm_t92J06_slsc_aux_inl`, `_inr` | same, one leg, `2δ ≤ |relArg z base|`, other leg fixed |
+| `apm_t92J06_pathConnected` | each leg path-connected, legs share the base |
+| `apm_t92J06_S1_locPathConnected` | the circle is locally path-connected |
+| `apm_t92J06_simplyConnected_of_pi_one_bot` | path-connected + trivial π₁ at one point ⇒ `SimplyConnectedSpace` (`simply_connected_iff_loops_nullhomotopic`) |
+
+The three `slsc_aux` leaves state against the other leaves' statements and
+can run in parallel with them; their proofs use them as given.  Previous
+blueprint kept as `~/notes/packets/lemmas/t92J06-pre-cc-split.bak.lean`.
+
 Checked 2026-10-19 on branch `lemmas` (32509c4ee):
 
 ```text
