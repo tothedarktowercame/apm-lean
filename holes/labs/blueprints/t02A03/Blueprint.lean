@@ -352,14 +352,131 @@ theorem apm_t02a03_geometricY_homotopyEquiv_shellY :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_shellY) := by
   sorry
 
+/-- The point where the auxiliary loop touches the boundary torus of the left
+tube: the outermost point `(1/20,0,0)` of that torus on the `x`-axis. -/
+noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0 : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![1 / 20, 0, 0]
+
+/-- The boundary torus of the left tube. -/
+def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus : Set apm_t02a03_E3 :=
+  {p | Metric.infDist p apm_t02a03_C = (1 / 4 : ℝ)}
+
+/-- A planar circle about the right centre, of radius `23/20`: it stays within
+`3/20` of the right core and touches the left boundary torus only at `q0`. -/
+def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop : Set apm_t02a03_E3 :=
+  Set.range fun t : ℝ =>
+    (WithLp.toLp 2 ![6 / 5 - 23 / 20 * Real.cos t, 23 / 20 * Real.sin t, 0] :
+      apm_t02a03_E3)
+
+/-- LIBRARY: the left boundary torus is a torus, with `q0` at the basepoint
+(parametrise by core angle and normal angle; uses the closed form of the
+distance to the planar circle `C`). -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph :
+    ∃ e : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ≃ₜ
+        ConstructionTargets.TorusCircleWedgeOpenCover.Torus,
+      ∀ h : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0 ∈
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus,
+        e ⟨_, h⟩ = ((1 : Circle), (1 : Circle)) := by
+  sorry
+
+/-- LIBRARY: the loop is a circle, with `q0` (parameter `t = 0`) at `1`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph :
+    ∃ e : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop ≃ₜ Circle,
+      ∀ h : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0 ∈
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop,
+        e ⟨_, h⟩ = 1 := by
+  sorry
+
+/-- LIBRARY: the loop lies in `W`, at distance at least `1/4` from the left
+core, and meets the left boundary torus exactly at `q0`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_geometry :
+    (∀ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop,
+      p ∈ apm_t02a03_W ∧ (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C) ∧
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∩
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop =
+      {apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0} := by
+  sorry
+
+/-- LIBRARY (pure topology): two subsets of a Hausdorff space, homeomorphic to
+the torus and the circle, meeting in exactly one point that goes to both
+basepoints, have union homeomorphic to `GenericWedge`.  Route: the map from
+`Sum torus circle` is continuous, respects the wedge relation, and descends
+to a continuous bijection from the compact wedge onto a Hausdorff space. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_wedge_homeomorph
+    {X : Type*} [TopologicalSpace X] [T2Space X] (A B : Set X) (x : X)
+    (hAB : A ∩ B = {x})
+    (eA : A ≃ₜ ConstructionTargets.TorusCircleWedgeOpenCover.Torus)
+    (eB : B ≃ₜ Circle)
+    (heA : ∀ h : x ∈ A, eA ⟨x, h⟩ = ((1 : Circle), (1 : Circle)))
+    (heB : ∀ h : x ∈ B, eB ⟨x, h⟩ = 1) :
+    Nonempty ((A ∪ B : Set X) ≃ₜ
+      ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge) := by
+  sorry
+
+/-- LIBRARY: `shellY` deformation retracts onto the spine `torus ∪ loop`.
+The torus is fixed; `R \ L°` (right tube minus the open left tube) is pushed
+onto the loop together with the patch of the torus inside the right tube. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction :
+    ∃ r : C(apm_t02a03_shellY, apm_t02a03_shellY),
+      (∀ p, (r p).1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ∧
+      (∀ p, p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop → r p = p) ∧
+      (ContinuousMap.id apm_t02a03_shellY).Homotopic r := by
+  sorry
+
 /-- LIBRARY: the compact shell is the boundary torus of the left tube glued,
 along a disk, to the right tube minus the open left tube, which retracts to
 the right core; so it has the homotopy type of the production torus-circle
-wedge. -/
+wedge.  Assembly: retract onto the spine `torus ∪ loop`, which is
+homeomorphic to `GenericWedge`. -/
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_shellY
       ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge) := by
-  sorry
+  obtain ⟨r, hrZ, hrfix, hr⟩ :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction
+  obtain ⟨hloop, hint⟩ :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_geometry
+  obtain ⟨eT, heT⟩ :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph
+  obtain ⟨eL, heL⟩ :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph
+  obtain ⟨g⟩ :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_wedge_homeomorph
+      _ _ _ hint eT eL heT heL
+  have hCne : apm_t02a03_C.Nonempty := ⟨_, Set.mem_range_self 0⟩
+  have hZ : ∀ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop,
+      p ∈ apm_t02a03_W ∧ (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C := by
+    rintro p (hp | hp)
+    · refine ⟨?_, le_of_eq hp.symm⟩
+      have hsub : apm_t02a03_C ⊆ apm_t02a03_genusTwoSpine := Set.subset_union_left
+      have := Metric.infDist_le_infDist_of_subset (x := p) hsub hCne
+      show Metric.infDist p apm_t02a03_genusTwoSpine ≤ 1 / 4
+      have hp' : Metric.infDist p apm_t02a03_C = 1 / 4 := hp
+      linarith
+    · exact hloop p hp
+  let i : C(↥(apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop), apm_t02a03_shellY) :=
+    ⟨fun z => ⟨z.1, hZ z.1 z.2⟩, continuous_subtype_val.subtype_mk _⟩
+  let ρ : C(apm_t02a03_shellY, ↥(apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop)) :=
+    ⟨fun p => ⟨(r p).1, hrZ p⟩,
+      (continuous_subtype_val.comp r.continuous).subtype_mk _⟩
+  have hir : i.comp ρ = r := ContinuousMap.ext fun p => rfl
+  have hρi : ρ.comp i = ContinuousMap.id _ := by
+    refine ContinuousMap.ext fun z => Subtype.ext ?_
+    show (r (i z)).1 = z.1
+    rw [hrfix (i z) z.2]
+    rfl
+  let e : ContinuousMap.HomotopyEquiv apm_t02a03_shellY
+      ↥(apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) :=
+    { toFun := ρ
+      invFun := i
+      left_inv := by rw [hir]; exact hr.symm
+      right_inv := by rw [hρi] }
+  exact ⟨e.trans g.toHomotopyEquiv⟩
 
 /-- The explicit complement of the left core in the fixed genus-two
 regular-neighborhood model has the homotopy type of the production

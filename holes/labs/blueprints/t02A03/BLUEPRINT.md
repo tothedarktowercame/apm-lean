@@ -80,27 +80,41 @@ and never meets `C`. Package as a `HomotopyEquiv` with the inclusion
 **Expected size.** 150–250 lines; most of it is the closed-form `infDist` to
 the planar circle.
 
-### `apm_t02a03_shellY_homotopyEquiv_genericWedge` — LIBRARY
+### `apm_t02a03_shellY_homotopyEquiv_genericWedge` — proved assembly (split 2026-10-19)
 
-**Statement in words.** `shellY` has the homotopy type of the production
-`TorusCircleWedgeOpenCover.GenericWedge`.
+lemma-2 returned PARTIAL with only the inclusion `shellY → geometricY` (not
+banked: the assembly does not use it). The lemma is now proved from five
+leaves through an explicit spine `Z = torus ∪ loop` inside `shellY`:
 
-**Why true.** `shellY` is the boundary torus `{infDist p C = 1/4}` together with
-`R \ L°` (right tube minus the open left tube). The right core stays at
-distance at least 2/5 from `C`, so it lies in `R \ L°`, which retracts onto it.
-The two pieces meet in the patch of the torus inside `R`, a disk. A torus and
-a circle-homotopic piece glued along a disk give `T² ∨ S¹`.
+* `torus = {p | infDist p C = 1/4}`, the boundary torus of the left tube;
+* `loop`, the planar circle `t ↦ (6/5 - (23/20) cos t, (23/20) sin t, 0)`,
+  within `3/20` of the right core and touching `torus` only at
+  `q0 = (1/20, 0, 0)` (`t = 0`).
 
-**Suggested route.** Avoid closed-cover gluing (Mathlib has no API for it).
-Build an explicit deformation of `shellY` onto an embedded `T² ∪ arc ∪ S¹`
-spine, then compare that compact spine with `GenericWedge` via
-`Continuous.quotient_lift` and `Continuous.homeoOfEquivCompactToT2`. This is
-still the larger piece; `ConstructionTargets.T02A03ClosedPuncturedDiskTorus`
-is imported and may supply the torus model.
+`Z` is a torus and a circle meeting in one point, so it is homeomorphic to
+`GenericWedge` (no arc needed). The assembly corestricts the retraction to
+`Z`, gets `shellY ≃ₕ Z` (one composite is `r ≃ id`, the other is `id` on the
+nose because `r` fixes `Z`), then composes with `Z ≃ₜ GenericWedge`.
 
-**Banked geometry caveat (still applies).** `T02A03GeometricTubeCover` uses
-centers `(±1,0,0)`, not the registered `(±6/5,0,0)`; its tube subtypes have
-different types and cannot supply leaves here.
+Leaves (all LIBRARY, independent):
+
+* `_aux_torus_homeomorph`: `torus ≃ₜ Circle × Circle`, `q0 ↦ (1,1)`. Parametrise
+  by core angle θ and normal angle φ: `c(θ) + (1/4)(cos φ · n(θ) + sin φ · e_z)`.
+  Needs the closed form `infDist p C = sqrt((s-1)² + z²)` for `s ≥ 3/4`
+  (shared with `geometricY_homotopyEquiv_shellY`).
+* `_aux_loop_homeomorph`: `loop ≃ₜ Circle`, `q0 ↦ 1`. Affine image of the unit
+  circle.
+* `_aux_loop_geometry`: `loop ⊆ W`, `1/4 ≤ infDist · C` on `loop`, and
+  `torus ∩ loop = {q0}`. The point of `loop` nearest the left centre is `q0`,
+  at distance `5/4`; every other point is strictly further.
+* `_aux_wedge_homeomorph` (pure topology): in a Hausdorff space, `A ≃ₜ Torus`,
+  `B ≃ₜ Circle`, `A ∩ B = {x}` with `x` at both basepoints give
+  `A ∪ B ≃ₜ GenericWedge`. Lift `Sum A B → A ∪ B` through the quotient and
+  apply `Continuous.homeoOfEquivCompactToT2`.
+* `_aux_retraction`: a self-map `r` of `shellY` with image in `Z`, fixing `Z`,
+  homotopic to `id`. The geometric content: the torus is fixed; `R \ L°`
+  (right tube minus the open left tube) is pushed onto `loop` together with
+  the patch of `torus` inside the right tube. Expected to need a further split.
 
 ### `apm_t02a03_geometricY_homotopyEquiv_genericWedge` — proved assembly
 
@@ -130,8 +144,9 @@ The main theorem uses the already proved first geometric equivalence, the
 single LIBRARY lemma above, and the already proved bridge computations.  It
 contains no `sorry`.
 
-* **Layer 0:** `apm_t02a03_geometricY_homotopyEquiv_shellY` and
-  `apm_t02a03_shellY_homotopyEquiv_genericWedge` (LIBRARY, independent).
+* **Layer 0:** `apm_t02a03_geometricY_homotopyEquiv_shellY` and the five
+  `apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_*` leaves (LIBRARY,
+  independent); the proved assembly `apm_t02a03_shellY_homotopyEquiv_genericWedge`.
 * **Layer 1:** the proved assembly `apm_t02a03_geometricY_homotopyEquiv_genericWedge`,
   and independently the proved generic transport lemma.
 * **Layer 2:** the sorry-free `apm_t02a03_geometricY_homotopyEquiv_wedge`
