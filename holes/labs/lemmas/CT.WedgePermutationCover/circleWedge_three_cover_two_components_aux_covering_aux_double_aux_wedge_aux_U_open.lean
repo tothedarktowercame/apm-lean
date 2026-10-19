@@ -2527,7 +2527,40 @@ so `U` is open. -/
 -- BEGIN SEAT AREA
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U_open :
     IsOpen circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U := by
-  sorry
+  let V : Set Circle := ({-circleBase} : Set Circle)ᶜ
+  let W : Set (Sum Circle Circle) := Sum.inl '' V ∪ Sum.inr '' V
+  have hV : IsOpen V := by
+    have h : IsOpen ((Subtype.val : Circle → ℂ) ⁻¹' ({(-1 : ℂ)} : Set ℂ)ᶜ) :=
+      isClosed_singleton.isOpen_compl.preimage continuous_subtype_val
+    simpa [V, circleBase] using h
+  have hW : IsOpen W := (isOpenMap_inl V hV).union (isOpenMap_inr V hV)
+  have key : ∀ u v : Sum Circle Circle, (Quotient.mk _ u : CircleWedge) = Quotient.mk _ v ↔
+      u = v ∨ ((u = .inl circleBase ∨ u = .inr circleBase) ∧
+        (v = .inl circleBase ∨ v = .inr circleBase)) := fun u v ↦
+    Quotient.eq.trans
+      (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv _ _ u v)
+  have hne : -circleBase ≠ circleBase := by
+    intro h
+    have h1 := congrArg (fun x : Circle ↦ (x : ℂ)) h
+    norm_num [circleBase] at h1
+  have hpre :
+      (fun z : Sum Circle Circle ↦ (Quotient.mk _ z : CircleWedge)) ⁻¹'
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U = W := by
+    ext z
+    rcases z with z | z
+    · show ((Quotient.mk _ (Sum.inl z) : CircleWedge) ≠ Quotient.mk _ (Sum.inl (-circleBase)) ∧
+          (Quotient.mk _ (Sum.inl z) : CircleWedge) ≠ Quotient.mk _ (Sum.inr (-circleBase))) ↔
+          Sum.inl z ∈ W
+      simp [W, V, key, hne]
+    · show ((Quotient.mk _ (Sum.inr z) : CircleWedge) ≠ Quotient.mk _ (Sum.inl (-circleBase)) ∧
+          (Quotient.mk _ (Sum.inr z) : CircleWedge) ≠ Quotient.mk _ (Sum.inr (-circleBase))) ↔
+          Sum.inr z ∈ W
+      simp [W, V, key, hne]
+  apply isQuotientMap_quotient_mk'.isOpen_preimage.mp
+  change IsOpen ((fun z : Sum Circle Circle ↦ (Quotient.mk _ z : CircleWedge)) ⁻¹'
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U)
+  rw [hpre]
+  exact hW
 -- END SEAT AREA
 
 /-- A cross is open: its preimage in `Circle ⊕ Circle` is the half-circle
