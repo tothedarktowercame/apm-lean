@@ -2217,7 +2217,108 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
         Tendsto (fun n ↦ ∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) atTop (nhds (g x))) :
     |∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x| ≤
       R * (eLpNorm g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let s : ℕ → ℝ → ℝ := fun n x ↦ ∑ i ∈ F n, c n i *
+    (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x
+  have hq1 : (1 : ENNReal) ≤ ENNReal.ofReal q := by
+    rw [← ENNReal.ofReal_one]
+    exact ENNReal.ofReal_le_ofReal hq.le
+  have hqtop : ENNReal.ofReal q ≠ ⊤ := ENNReal.ofReal_ne_top
+  have hsmeas : ∀ n, AEStronglyMeasurable (s n) μ := by
+    intro n
+    dsimp only [s]
+    have hm : AEStronglyMeasurable (∑ i ∈ F n, fun x : ℝ ↦ c n i *
+        (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) μ :=
+      Finset.aestronglyMeasurable_sum (F n) fun (i : ℚ × ℚ) hi ↦
+        (Measurable.indicator (measurable_const : Measurable fun _ : ℝ ↦ (1 : ℝ))
+          (measurableSet_Ioc : MeasurableSet (Set.Ioc (i.1 : ℝ) i.2))).aestronglyMeasurable.const_mul (c n i)
+    exact hm.congr (Filter.Eventually.of_forall fun x ↦ by simp)
+  have hD0 : 0 ≤ D := by
+    have := hD 0 0
+    simpa [s] using (abs_nonneg (s 0 0)).trans this
+  have hsLpTop : ∀ n, MemLp (s n) ⊤ μ := by
+    intro n
+    apply memLp_top_of_bound (hsmeas n) D
+    filter_upwards [] with x
+    simpa [Real.norm_eq_abs, s] using hD n x
+  have hsLp : ∀ n, MemLp (s n) (ENNReal.ofReal q) μ := fun n ↦
+    (hsLpTop n).mono_exponent le_top
+  have hgLpTop : MemLp g ⊤ μ := by
+    apply memLp_top_of_bound hg C
+    filter_upwards [] with x
+    simpa [Real.norm_eq_abs] using hC x
+  have hgLp : MemLp g (ENNReal.ofReal q) μ := hgLpTop.mono_exponent le_top
+  have hui : UnifIntegrable s (ENNReal.ofReal q) μ := by
+    apply unifIntegrable_of hq1 hqtop hsmeas
+    intro ε hε
+    let K : NNReal := ⟨D + 1, by linarith⟩
+    refine ⟨K, ?_⟩
+    intro n
+    have hz : {x | K ≤ ‖s n x‖₊} = ∅ := by
+      ext x
+      simp only [Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false]
+      intro hx
+      have hx' : D + 1 ≤ |s n x| := by
+        simpa [K, Real.norm_eq_abs] using hx
+      linarith [hD n x]
+    rw [hz]
+    simp
+  have hLp : Tendsto (fun n ↦ eLpNorm (s n - g) (ENNReal.ofReal q) μ) atTop (nhds 0) :=
+    tendsto_Lp_finite_of_tendsto_ae hq1 hqtop hsmeas hgLp hui hlim
+  have hsnorm : Tendsto (fun n ↦ (eLpNorm (s n) (ENNReal.ofReal q) μ).toReal)
+      atTop (nhds (eLpNorm g (ENNReal.ofReal q) μ).toReal) := by
+    letI : Fact (1 ≤ ENNReal.ofReal q) := ⟨hq1⟩
+    let S : ℕ → Lp ℝ (ENNReal.ofReal q) μ := fun n ↦ (hsLp n).toLp (s n)
+    let G : Lp ℝ (ENNReal.ofReal q) μ := hgLp.toLp g
+    have hSG : Tendsto S atTop (nhds G) := by
+      rw [Lp.tendsto_Lp_iff_tendsto_eLpNorm' S G]
+      apply hLp.congr'
+      filter_upwards [] with n
+      apply eLpNorm_congr_ae
+      exact ((hsLp n).coeFn_toLp.sub hgLp.coeFn_toLp).symm
+    have hn := (continuous_norm.tendsto G).comp hSG
+    change Tendsto (fun n ↦ ‖S n‖) atTop (nhds ‖G‖) at hn
+    simpa only [S, G, Lp.norm_toLp] using hn
+  have hpair : Tendsto (fun n ↦ ∫ x, f₀ x * s n x ∂μ) atTop
+      (nhds (∫ x, f₀ x * g x ∂μ)) := by
+    apply tendsto_integral_of_dominated_convergence (fun x ↦ max D C * |f₀ x|)
+    · intro n
+      exact hf₀.aestronglyMeasurable.mul (hsmeas n)
+    · simpa [Real.norm_eq_abs] using hf₀.norm.const_mul (max D C)
+    · intro n
+      filter_upwards [] with x
+      rw [Real.norm_eq_abs, abs_mul]
+      have hDC : |s n x| ≤ max D C := (hD n x).trans (le_max_left _ _)
+      nlinarith [abs_nonneg (f₀ x)]
+    · filter_upwards [hlim] with x hx
+      exact (tendsto_const_nhds.mul hx)
+  have hineq : ∀ n, |∫ x, f₀ x * s n x ∂μ| ≤
+      R * (eLpNorm (s n) (ENNReal.ofReal q) μ).toReal := by
+    intro n
+    have heq : (∫ x, f₀ x * s n x ∂μ) = ∑ i ∈ F n, c n i *
+        ∫ x, f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x ∂μ := by
+      rw [show (fun x ↦ f₀ x * s n x) = fun x ↦ ∑ i ∈ F n,
+          c n i * (f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) by
+        funext x; simp [s, Finset.mul_sum]; ring]
+      calc
+        (∫ x, ∑ i ∈ F n, c n i * (f₀ x *
+            (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) ∂μ) =
+            ∑ i ∈ F n, ∫ x, c n i * (f₀ x *
+              (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) ∂μ :=
+          integral_finset_sum (F n) (fun i hi ↦
+            (hf₀.mul_bdd
+              (Measurable.aestronglyMeasurable
+                (Measurable.indicator (measurable_const : Measurable fun _ : ℝ ↦ (1 : ℝ))
+                  (measurableSet_Ioc : MeasurableSet (Set.Ioc (i.1 : ℝ) i.2))))
+              (by filter_upwards [] with x
+                  show ‖(Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x‖ ≤ 1
+                  by_cases hx : x ∈ Set.Ioc (i.1 : ℝ) i.2 <;> simp [hx])).const_mul (c n i))
+        _ = _ := by simp_rw [integral_const_mul]
+    rw [heq]
+    simpa [μ, s] using hstep (F n) (c n)
+  have := le_of_tendsto_of_tendsto hpair.abs (hsnorm.const_mul R) (Eventually.of_forall hineq)
+  dsimp only [μ] at this
+  exact this
 
 /-- Leaf (truncation bound). If every bounded test `g` has `|∫ f₀ g| ≤ R ‖g‖_q`, each truncation
 `f_M := max (-M) (min M f₀)` has `∫ |f_M|^p ≤ R^p`. Route: test `g := sign f_M · |f_M|^(p-1)`
