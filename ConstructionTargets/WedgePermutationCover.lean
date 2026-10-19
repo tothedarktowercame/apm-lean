@@ -6160,7 +6160,49 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_mem :
     ∀ e, circleWedge_connected_pair_aux_pC e ∈ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U →
       ∃ ρ, e ∈ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ := by
-  sorry
+  obtain ⟨r, _, hcube, hre, _, hroots⟩ :=
+    circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cbrt
+  intro e he
+  induction e using Quotient.inductionOn with
+  | _ q =>
+    rcases q with z | z
+    · have hn : circleWedge_connected_pair_aux_cube z ≠ -circleBase := by
+        intro h
+        apply he.1
+        change Quotient.mk _ (Sum.inl (circleWedge_connected_pair_aux_cube z)) = _
+        rw [h]
+      let w : {w : Circle // w ≠ -circleBase} :=
+        ⟨circleWedge_connected_pair_aux_cube z, hn⟩
+      obtain ⟨ρ, hz⟩ := hroots w z rfl
+      refine ⟨ρ, ?_⟩
+      change (∃ a : Circle, (1 / 2 : ℝ) < ((a : ℂ) * star (ρ.1 : ℂ)).re ∧
+          (Quotient.mk _ (Sum.inl z) : circleWedge_connected_pair_aux_EC) =
+            Quotient.mk _ (Sum.inl a)) ∨ _
+      apply Or.inl
+      refine ⟨z, ?_, rfl⟩
+      have hunit : (ρ.1 : ℂ) * star (ρ.1 : ℂ) = 1 := by
+        change (ρ.1 : ℂ) * (starRingEnd ℂ) (ρ.1 : ℂ) = 1
+        rw [Complex.mul_conj, Complex.normSq_eq_norm_sq,
+          show ‖(ρ.1 : ℂ)‖ = 1 by simpa using ρ.1.property]
+        norm_num
+      change (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re
+      rw [show (z : ℂ) = (ρ.1 : ℂ) * (r w : ℂ) by
+        exact congrArg Subtype.val hz]
+      convert hre w using 1
+      rw [mul_assoc, show (r w : ℂ) * star (ρ.1 : ℂ) =
+        star (ρ.1 : ℂ) * (r w : ℂ) by ring, ← mul_assoc, hunit, one_mul]
+    · rcases z with ⟨w, ρ⟩
+      have hn : w ≠ -circleBase := by
+        intro h
+        apply he.2
+        change Quotient.mk _ (Sum.inr w) = _
+        rw [h]
+      refine ⟨ρ, ?_⟩
+      change _ ∨ (∃ a : Circle, a ≠ -circleBase ∧
+          (Quotient.mk _ (Sum.inr (w, ρ)) : circleWedge_connected_pair_aux_EC) =
+            Quotient.mk _ (Sum.inr (a, ρ)))
+      apply Or.inr
+      exact ⟨w, hn, rfl⟩
 
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_disjoint :
     ∀ ρ σ : circleWedge_connected_pair_aux_Root, ρ ≠ σ →
