@@ -5768,13 +5768,118 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux
 left, the arcs of half-width `π/3` around distinct cube roots of unity are
 disjoint; on the right, copies are disjoint; `_aux_rel_iff` handles the glued
 points). -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_rel_iff (a b) :
+    Relation.EqvGen circleWedge_connected_pair_aux_RelC a b ↔
+      a = b ∨ ∃ r : circleWedge_connected_pair_aux_Root,
+        (a = .inl r.1 ∧ b = .inr (circleBase, r)) ∨
+        (b = .inl r.1 ∧ a = .inr (circleBase, r)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b h =>
+        cases h with
+        | glue r => exact Or.inr ⟨r, Or.inl ⟨rfl, rfl⟩⟩
+    | refl => exact Or.inl rfl
+    | symm a b _ ih =>
+        rcases ih with rfl | ⟨r, h | h⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨r, Or.inr ⟨h.1, h.2⟩⟩
+        · exact Or.inr ⟨r, Or.inl ⟨h.1, h.2⟩⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨r, h | h⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inl h⟩
+          · simp_all
+          · simp_all
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inr h⟩
+          · simp_all <;> exact Subtype.ext h.1.symm
+          · simp_all
+  · rintro (rfl | ⟨r, h | h⟩)
+    · exact Relation.EqvGen.refl _
+    · exact h.1 ▸ h.2 ▸ Relation.EqvGen.rel _ _
+        (circleWedge_connected_pair_aux_RelC.glue r)
+    · exact h.2 ▸ h.1 ▸ Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelC.glue r))
+
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_arc_unique
+    (a b : Circle) (hc : (a : ℂ) ^ 3 = (b : ℂ) ^ 3)
+    (ha : (1 / 2 : ℝ) < (a : ℂ).re) (hb : (1 / 2 : ℝ) < (b : ℂ).re) : a = b := by
+  have hna : (a : ℂ).re ^ 2 + (a : ℂ).im ^ 2 = 1 := by
+    calc
+      _ = Complex.normSq (a : ℂ) := by rw [Complex.normSq_apply]; ring
+      _ = ‖(a : ℂ)‖ ^ 2 := Complex.normSq_eq_norm_sq _
+      _ = 1 := by rw [show ‖(a : ℂ)‖ = 1 by simpa [Metric.mem_sphere, dist_zero_right] using a.property]; norm_num
+  have hnb : (b : ℂ).re ^ 2 + (b : ℂ).im ^ 2 = 1 := by
+    calc
+      _ = Complex.normSq (b : ℂ) := by rw [Complex.normSq_apply]; ring
+      _ = ‖(b : ℂ)‖ ^ 2 := Complex.normSq_eq_norm_sq _
+      _ = 1 := by rw [show ‖(b : ℂ)‖ = 1 by simpa [Metric.mem_sphere, dist_zero_right] using b.property]; norm_num
+  have hbconj : (b : ℂ) * star (b : ℂ) = 1 := by
+    change (b : ℂ) * (starRingEnd ℂ) (b : ℂ) = 1
+    rw [Complex.mul_conj, Complex.normSq_eq_norm_sq,
+      show ‖(b : ℂ)‖ = 1 by simpa [Metric.mem_sphere, dist_zero_right] using b.property]
+    norm_num
+  let q : ℂ := (a : ℂ) * star (b : ℂ)
+  have hqnorm : q.re ^ 2 + q.im ^ 2 = 1 := by
+    calc
+      _ = Complex.normSq q := by rw [Complex.normSq_apply]; ring
+      _ = ‖q‖ ^ 2 := Complex.normSq_eq_norm_sq _
+      _ = 1 := by simp [q, show ‖(a : ℂ)‖ = 1 by simpa [Metric.mem_sphere, dist_zero_right] using a.property,
+        show ‖(b : ℂ)‖ = 1 by simpa [Metric.mem_sphere, dist_zero_right] using b.property]
+  have hqre : (-1 / 2 : ℝ) < q.re := by
+    have him : (a : ℂ).im * (b : ℂ).im > (-3 / 4 : ℝ) := by
+      nlinarith [sq_nonneg ((a : ℂ).im + (b : ℂ).im)]
+    simp [q, Complex.mul_re]
+    nlinarith
+  have hqpow : q ^ 3 = 1 := by
+    dsimp [q]
+    rw [mul_pow, ← map_pow, hc]
+    rw [Complex.mul_conj, Complex.normSq_eq_norm_sq, norm_pow,
+      show ‖(b : ℂ)‖ = 1 by simpa [Metric.mem_sphere, dist_zero_right] using b.property]
+    norm_num
+  by_contra hab
+  have hqne : q ≠ 1 := by
+    intro hq
+    have : (a : ℂ) = (b : ℂ) := by
+      calc
+        (a : ℂ) = q * (b : ℂ) := by
+          simp only [q]
+          rw [mul_assoc, show star (b : ℂ) * (b : ℂ) = (b : ℂ) * star (b : ℂ) by ring,
+            hbconj, mul_one]
+        _ = (b : ℂ) := by rw [hq]; simp
+    exact hab (Subtype.ext this)
+  have hpoly : q ^ 2 + q + 1 = 0 := by
+    have hf : (q - 1) * (q ^ 2 + q + 1) = 0 := by
+      rw [show (q - 1) * (q ^ 2 + q + 1) = q ^ 3 - 1 by ring, hqpow]
+      simp
+    exact (mul_eq_zero.mp hf).resolve_left (sub_ne_zero.mpr hqne)
+  have hr := congrArg Complex.re hpoly
+  have hi := congrArg Complex.im hpoly
+  simp [Complex.add_re, Complex.add_im, Complex.mul_re, Complex.mul_im, pow_two] at hr hi
+  rcases lt_trichotomy q.re 0 with hn | hz | hp
+  · nlinarith
+  · nlinarith
+  · nlinarith [mul_pos hp hp]
+
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_mem :
+    ∀ e, circleWedge_connected_pair_aux_pC e ∈ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U →
+      ∃ ρ, e ∈ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ := by
+  sorry
+
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_disjoint :
+    ∀ ρ σ : circleWedge_connected_pair_aux_Root, ρ ≠ σ →
+      Disjoint (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ) (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet σ) := by
+  sorry
+
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover :
     (∀ e, circleWedge_connected_pair_aux_pC e ∈
         circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U →
       ∃ ρ, e ∈ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ) ∧
     (∀ ρ σ : circleWedge_connected_pair_aux_Root, ρ ≠ σ →
       Disjoint (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ) (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet σ)) := by
-  sorry
+  exact ⟨circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_mem, circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_disjoint⟩
 
 /-- At the wedge point: `V` = image of a small open arc around `circleBase` in
 each lobe.  Sheet `r` is the arc around `r.1` on the left (a local section of
