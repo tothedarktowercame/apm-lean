@@ -1561,11 +1561,383 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_continu
 small arc `V ∋ w` avoiding `1` in that lobe. Its preimage is the two arcs
 `±√V` in the matching lobe of the double cover, each mapped homeomorphically by
 squaring (`circleWedge_three_cover_two_components_aux_covering_aux_sq`). -/
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL :
+    CircleWedge → Circle :=
+  Quotient.lift (Sum.elim id (fun _ ↦ circleBase)) (by
+    intro a b h
+    induction h with
+    | rel a b h => cases h; rfl
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR :
+    CircleWedge → Circle :=
+  Quotient.lift (Sum.elim (fun _ ↦ circleBase) id) (by
+    intro a b h
+    induction h with
+    | rel a b h => cases h; rfl
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total :
+    circleWedge_three_cover_two_components_aux_Double → Circle :=
+  Quotient.lift (Sum.elim id id) (by
+    intro a b h
+    induction h with
+    | rel a b h => cases h <;> rfl
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL_continuous :
+    Continuous circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL := by
+  apply continuous_coinduced_dom.mpr
+  exact continuous_sum_dom.2 ⟨continuous_id, continuous_const⟩
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR_continuous :
+    Continuous circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR := by
+  apply continuous_coinduced_dom.mpr
+  exact continuous_sum_dom.2 ⟨continuous_const, continuous_id⟩
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total_continuous :
+    Continuous circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total := by
+  apply continuous_coinduced_dom.mpr
+  exact continuous_sum_dom.2 ⟨continuous_id, continuous_id⟩
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_square
+    (e : circleWedge_three_cover_two_components_aux_Double)
+    (he : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL
+        (circleWedge_three_cover_two_components_aux_doubleMap e) ≠ circleBase) :
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL
+        (circleWedge_three_cover_two_components_aux_doubleMap e) =
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total e ^ 2 := by
+  refine Quotient.inductionOn e ?_ he
+  rintro (e | e) he
+  ·
+      change circleWedge_three_cover_two_components_aux_sq e = e ^ 2
+      apply Subtype.ext
+      simp [circleWedge_three_cover_two_components_aux_sq, pow_two]
+  ·
+      exfalso
+      apply he
+      rfl
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_squareR
+    (e : circleWedge_three_cover_two_components_aux_Double)
+    (he : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR
+        (circleWedge_three_cover_two_components_aux_doubleMap e) ≠ circleBase) :
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR
+        (circleWedge_three_cover_two_components_aux_doubleMap e) =
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total e ^ 2 := by
+  refine Quotient.inductionOn e ?_ he
+  rintro (e | e) he
+  ·
+      exfalso
+      apply he
+      rfl
+  ·
+      change circleWedge_three_cover_two_components_aux_sq e = e ^ 2
+      apply Subtype.ext
+      simp [circleWedge_three_cover_two_components_aux_sq, pow_two]
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_left
+    (z : Circle) (hz : z ≠ circleBase) :
+    IsEvenlyCovered circleWedge_three_cover_two_components_aux_doubleMap
+      (Quotient.mk _ (.inl z))
+      (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' {Quotient.mk _ (.inl z)}) := by
+  letI : NeZero (2 : ℕ) := ⟨by norm_num⟩
+  obtain ⟨hd, U, hzU, hU, hpU, H, hH⟩ :=
+    IsQuotientCoveringMap.isCoveringMap _ _
+      (Circle.isQuotientCoveringMap_npow 2) z
+  let V : Set Circle := U \ {circleBase}
+  have hzV : z ∈ V := ⟨hzU, hz⟩
+  have hV : IsOpen V := hU.sdiff isClosed_singleton
+  let UX : Set CircleWedge :=
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL ⁻¹' V
+  have hUX : IsOpen UX := hV.preimage
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL_continuous
+  have hzUX : (Quotient.mk _ (.inl z) : CircleWedge) ∈ UX := hzV
+  let W : Set Circle := (fun w : Circle ↦ w ^ 2) ⁻¹' V
+  have hW : IsOpen W := hV.preimage (by fun_prop)
+  have hopenpre : IsOpen
+      (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' UX) := by
+    exact hUX.preimage
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_continuous
+  have himage (e : circleWedge_three_cover_two_components_aux_Double)
+      (he : e ∈ circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' UX) :
+      circleWedge_three_cover_two_components_aux_doubleMap e = Quotient.mk _ (.inl
+        (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total e ^ 2)) := by
+    induction e using Quotient.inductionOn with
+    | _ e =>
+      rcases e with w | w
+      · change Quotient.mk _ (Sum.inl
+            (circleWedge_three_cover_two_components_aux_sq w)) = _
+        congr 2
+        apply Subtype.ext
+        change (w : ℂ) * w = ((w ^ 2 : Circle) : ℂ)
+        simp [pow_two]
+      · exfalso
+        change circleBase ∈ V at he
+        exact he.2 rfl
+  let I := (fun w : Circle ↦ w ^ 2) ⁻¹' {z}
+  have hWV : W ⊆ (fun w : Circle ↦ w ^ 2) ⁻¹' U := fun w hw ↦ hw.1
+  let HW : W ≃ₜ V × I :=
+    { toFun := fun w =>
+        let y := H ⟨w.1, hWV w.2⟩
+        (⟨y.1.1, ⟨y.1.2, by rw [hH ⟨w.1, hWV w.2⟩]; exact w.2.2⟩⟩, y.2)
+      invFun := fun y => ⟨(H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1, by
+        have hh := hH (H.symm (⟨y.1.1, y.1.2.1⟩, y.2))
+        have hh' : (H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1 ^ 2 = y.1.1 := by
+          simpa using hh.symm
+        constructor
+        · change _ ^ 2 ∈ U
+          have hy : y.1.1 ∈ U := y.1.2.1
+          rw [← hh'] at hy
+          exact hy
+        · change _ ^ 2 ≠ circleBase
+          intro heq
+          exact y.1.2.2 (hh'.symm.trans heq)⟩
+      left_inv := by intro w; apply Subtype.ext; simp
+      right_inv := by intro y; ext <;> simp
+      continuous_toFun := by
+        apply Continuous.prodMk
+        · apply Continuous.subtype_mk
+          simpa only [Function.comp_apply] using
+            (continuous_subtype_val.comp continuous_fst).comp (H.continuous.comp
+              (Continuous.subtype_mk continuous_subtype_val _))
+        · exact continuous_snd.comp (H.continuous.comp
+            (Continuous.subtype_mk continuous_subtype_val _))
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val.comp (H.symm.continuous.comp
+          ((Continuous.subtype_mk (continuous_subtype_val.comp continuous_fst) _).prodMk
+            continuous_snd)) }
+  have hHW (w : W) : (HW w).1.1 = w.1 ^ 2 := hH ⟨w.1, hWV w.2⟩
+  let E : circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' UX ≃ₜ W :=
+    { toFun := fun e =>
+        ⟨circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total e.1,
+          by
+            change _ ^ 2 ∈ V
+            rw [← circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_square e.1]
+            · exact e.2
+            · exact fun h ↦ e.2.2 h⟩
+      invFun := fun w => ⟨Quotient.mk _ (Sum.inl w.1), by
+        change circleWedge_three_cover_two_components_aux_sq w.1 ∈ V
+        have hw : w.1 ^ 2 ∈ V := w.2
+        simpa [circleWedge_three_cover_two_components_aux_sq, pow_two] using hw⟩
+      left_inv := by
+        rintro ⟨e, he⟩
+        apply Subtype.ext
+        induction e using Quotient.inductionOn with
+        | _ e =>
+          rcases e with w | w
+          · rfl
+          · exfalso
+            change circleBase ∈ V at he
+            exact he.2 rfl
+      right_inv := by rintro ⟨w, hw⟩; rfl
+      continuous_toFun := Continuous.subtype_mk
+        (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total_continuous.comp
+          continuous_subtype_val) (fun e => by
+            change _ ^ 2 ∈ V
+            simp only [Function.comp_apply]
+            rw [← circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_square e.1]
+            · exact e.2
+            · exact fun h ↦ e.2.2 h)
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact (continuous_coinduced_rng : Continuous
+          (fun u : Circle ⊕ Circle ↦ (Quotient.mk _ u :
+            circleWedge_three_cover_two_components_aux_Double))).comp
+              (continuous_inl.comp continuous_subtype_val) }
+  let B : UX ≃ₜ V :=
+    { toFun := fun x =>
+        ⟨circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL x.1,
+          x.2⟩
+      invFun := fun v => ⟨Quotient.mk _ (.inl v.1), v.2⟩
+      left_inv := by
+        rintro ⟨x, hx⟩
+        apply Subtype.ext
+        induction x using Quotient.inductionOn with
+        | _ x => rcases x with w | w
+                 · rfl
+                 · exact (hx.2 rfl).elim
+      right_inv := by rintro ⟨v, hv⟩; rfl
+      continuous_toFun := Continuous.subtype_mk
+        (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseL_continuous.comp
+          continuous_subtype_val) _
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact (continuous_coinduced_rng : Continuous
+          (fun u : Circle ⊕ Circle ↦ (Quotient.mk _ u : CircleWedge))).comp
+              (continuous_inl.comp continuous_subtype_val) }
+  refine (show IsEvenlyCovered circleWedge_three_cover_two_components_aux_doubleMap
+      (Quotient.mk _ (.inl z)) I from ?_).to_isEvenlyCovered_preimage
+  refine ⟨hd, UX, hzUX, hUX, hopenpre, ?_, ?_⟩
+  · exact E.trans (HW.trans (.prodCongr B.symm (.refl I)))
+  · intro e
+    change Quotient.mk _ (Sum.inl (HW (E e)).1.1) = _
+    rw [hHW]
+    exact (himage e.1 e.2).symm
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_right
+    (z : Circle) (hz : z ≠ circleBase) :
+    IsEvenlyCovered circleWedge_three_cover_two_components_aux_doubleMap
+      (Quotient.mk _ (.inr z))
+      (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' {Quotient.mk _ (.inr z)}) := by
+  letI : NeZero (2 : ℕ) := ⟨by norm_num⟩
+  obtain ⟨hd, U, hzU, hU, hpU, H, hH⟩ :=
+    IsQuotientCoveringMap.isCoveringMap _ _
+      (Circle.isQuotientCoveringMap_npow 2) z
+  let V : Set Circle := U \ {circleBase}
+  have hzV : z ∈ V := ⟨hzU, hz⟩
+  have hV : IsOpen V := hU.sdiff isClosed_singleton
+  let UX : Set CircleWedge :=
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR ⁻¹' V
+  have hUX : IsOpen UX := hV.preimage
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR_continuous
+  have hzUX : (Quotient.mk _ (.inr z) : CircleWedge) ∈ UX := hzV
+  let W : Set Circle := (fun w : Circle ↦ w ^ 2) ⁻¹' V
+  have hW : IsOpen W := hV.preimage (by fun_prop)
+  have hopenpre : IsOpen
+      (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' UX) :=
+    hUX.preimage
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_continuous
+  have himage (e : circleWedge_three_cover_two_components_aux_Double)
+      (he : e ∈ circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' UX) :
+      circleWedge_three_cover_two_components_aux_doubleMap e = Quotient.mk _ (.inr
+        (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total e ^ 2)) := by
+    induction e using Quotient.inductionOn with
+    | _ e =>
+      rcases e with w | w
+      · exfalso
+        change circleBase ∈ V at he
+        exact he.2 rfl
+      · change Quotient.mk _ (Sum.inr
+            (circleWedge_three_cover_two_components_aux_sq w)) = _
+        congr 2
+        apply Subtype.ext
+        change (w : ℂ) * w = ((w ^ 2 : Circle) : ℂ)
+        simp [pow_two]
+  let I := (fun w : Circle ↦ w ^ 2) ⁻¹' {z}
+  have hWV : W ⊆ (fun w : Circle ↦ w ^ 2) ⁻¹' U := fun w hw ↦ hw.1
+  let HW : W ≃ₜ V × I :=
+    { toFun := fun w =>
+        let y := H ⟨w.1, hWV w.2⟩
+        (⟨y.1.1, ⟨y.1.2, by rw [hH ⟨w.1, hWV w.2⟩]; exact w.2.2⟩⟩, y.2)
+      invFun := fun y => ⟨(H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1, by
+        have hh := hH (H.symm (⟨y.1.1, y.1.2.1⟩, y.2))
+        have hh' : (H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1 ^ 2 = y.1.1 := by
+          simpa using hh.symm
+        constructor
+        · change _ ^ 2 ∈ U
+          have hy : y.1.1 ∈ U := y.1.2.1
+          rw [← hh'] at hy
+          exact hy
+        · change _ ^ 2 ≠ circleBase
+          intro heq
+          exact y.1.2.2 (hh'.symm.trans heq)⟩
+      left_inv := by intro w; apply Subtype.ext; simp
+      right_inv := by intro y; ext <;> simp
+      continuous_toFun := by
+        apply Continuous.prodMk
+        · apply Continuous.subtype_mk
+          simpa only [Function.comp_apply] using
+            (continuous_subtype_val.comp continuous_fst).comp (H.continuous.comp
+              (Continuous.subtype_mk continuous_subtype_val _))
+        · exact continuous_snd.comp (H.continuous.comp
+            (Continuous.subtype_mk continuous_subtype_val _))
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val.comp (H.symm.continuous.comp
+          ((Continuous.subtype_mk (continuous_subtype_val.comp continuous_fst) _).prodMk
+            continuous_snd)) }
+  have hHW (w : W) : (HW w).1.1 = w.1 ^ 2 := hH ⟨w.1, hWV w.2⟩
+  let E : circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' UX ≃ₜ W :=
+    { toFun := fun e =>
+        ⟨circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total e.1,
+          by
+            change _ ^ 2 ∈ V
+            rw [← circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_squareR e.1]
+            · exact e.2
+            · exact fun h ↦ e.2.2 h⟩
+      invFun := fun w => ⟨Quotient.mk _ (Sum.inr w.1), by
+        change circleWedge_three_cover_two_components_aux_sq w.1 ∈ V
+        have hw : w.1 ^ 2 ∈ V := w.2
+        simpa [circleWedge_three_cover_two_components_aux_sq, pow_two] using hw⟩
+      left_inv := by
+        rintro ⟨e, he⟩
+        apply Subtype.ext
+        induction e using Quotient.inductionOn with
+        | _ e =>
+          rcases e with w | w
+          · exfalso
+            change circleBase ∈ V at he
+            exact he.2 rfl
+          · rfl
+      right_inv := by rintro ⟨w, hw⟩; rfl
+      continuous_toFun := Continuous.subtype_mk
+        (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_total_continuous.comp
+          continuous_subtype_val) (fun e => by
+            change _ ^ 2 ∈ V
+            simp only [Function.comp_apply]
+            rw [← circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_squareR e.1]
+            · exact e.2
+            · exact fun h ↦ e.2.2 h)
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact (continuous_coinduced_rng : Continuous
+          (fun u : Circle ⊕ Circle ↦ (Quotient.mk _ u :
+            circleWedge_three_cover_two_components_aux_Double))).comp
+              (continuous_inr.comp continuous_subtype_val) }
+  let B : UX ≃ₜ V :=
+    { toFun := fun x =>
+        ⟨circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR x.1,
+          x.2⟩
+      invFun := fun v => ⟨Quotient.mk _ (.inr v.1), v.2⟩
+      left_inv := by
+        rintro ⟨x, hx⟩
+        apply Subtype.ext
+        induction x using Quotient.inductionOn with
+        | _ x => rcases x with w | w
+                 · exact (hx.2 rfl).elim
+                 · rfl
+      right_inv := by rintro ⟨v, hv⟩; rfl
+      continuous_toFun := Continuous.subtype_mk
+        (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_baseR_continuous.comp
+          continuous_subtype_val) _
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact (continuous_coinduced_rng : Continuous
+          (fun u : Circle ⊕ Circle ↦ (Quotient.mk _ u : CircleWedge))).comp
+              (continuous_inr.comp continuous_subtype_val) }
+  refine (show IsEvenlyCovered circleWedge_three_cover_two_components_aux_doubleMap
+      (Quotient.mk _ (.inr z)) I from ?_).to_isEvenlyCovered_preimage
+  refine ⟨hd, UX, hzUX, hUX, hopenpre, ?_, ?_⟩
+  · exact E.trans (HW.trans (.prodCongr B.symm (.refl I)))
+  · intro e
+    change Quotient.mk _ (Sum.inr (HW (E e)).1.1) = _
+    rw [hHW]
+    exact (himage e.1 e.2).symm
+
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away
     (x : CircleWedge) (hx : x ≠ Quotient.mk _ (.inl circleBase)) :
     IsEvenlyCovered circleWedge_three_cover_two_components_aux_doubleMap x
       (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' {x}) := by
-  sorry
+  induction x using Quotient.inductionOn with
+  | _ x =>
+    rcases x with z | z
+    · apply circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_left
+      intro hz
+      subst z
+      exact hx rfl
+    · apply circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_right
+      intro hz
+      subst z
+      apply hx
+      exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm
 
 /-! #### Split of `circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge` (lemma-1 PARTIAL, 2026-10-19) -/
 
