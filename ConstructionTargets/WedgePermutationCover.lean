@@ -751,12 +751,80 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_cap (u : Sphere
 
 /-- An open subset of the left lobe missing the base point embeds openly in the
 wedge: its preimage in `A ⊕ B` is `inl '' V`, already saturated. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv
+    {A B : Type*} (a : A) (b : B) (u v : Sum A B) :
+    Relation.EqvGen (WedgeRel a b) u v ↔
+      u = v ∨ ((u = .inl a ∨ u = .inr b) ∧ (v = .inl a ∨ v = .inr b)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel u v h => cases h; exact Or.inr ⟨Or.inl rfl, Or.inr rfl⟩
+    | refl => exact Or.inl rfl
+    | symm u v _ ih =>
+        rcases ih with rfl | ⟨h₁, h₂⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h₂, h₁⟩
+    | trans u v w _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨h₁, h₂⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨_, h₃⟩
+          · exact Or.inr ⟨h₁, h₂⟩
+          · exact Or.inr ⟨h₁, h₃⟩
+  · rintro (rfl | ⟨h₁, h₂⟩)
+    · exact Relation.EqvGen.refl _
+    · have hab : Relation.EqvGen (WedgeRel a b) (.inl a) (.inr b) :=
+        Relation.EqvGen.rel _ _ WedgeRel.base
+      rcases h₁ with rfl | rfl <;> rcases h₂ with rfl | rfl
+      · exact Relation.EqvGen.refl _
+      · exact hab
+      · exact Relation.EqvGen.symm _ _ hab
+      · exact Relation.EqvGen.refl _
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl
     {A B : Type*} [TopologicalSpace A] [TopologicalSpace B] (a : A) (b : B)
     (V : Set A) (hV : IsOpen V) (ha : a ∉ V) :
     Topology.IsOpenEmbedding
       (fun z : V ↦ (Quotient.mk _ (.inl z.1) : Wedge A B a b)) := by
-  sorry
+  rw [Topology.isOpenEmbedding_iff_continuous_injective_isOpenMap]
+  refine ⟨continuous_quotient_mk'.comp
+      (continuous_inl.comp continuous_subtype_val), ?_, ?_⟩
+  · intro x y hxy
+    have he := Quotient.exact hxy
+    rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv
+      a b (.inl x.1) (.inl y.1)).mp he with h | ⟨hx, _⟩
+    · exact Subtype.ext (Sum.inl.inj h)
+    · rcases hx with hx | hx
+      · exact (ha ((Sum.inl.inj hx) ▸ x.2)).elim
+      · cases hx
+  · intro S hS
+    let W : Set (Sum A B) := Sum.inl '' (Subtype.val '' S)
+    have hW : IsOpen W := by
+      exact isOpenMap_inl _ (hV.isOpenMap_subtype_val S hS)
+    have hpre :
+        (fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) ⁻¹'
+            ((fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) '' W) = W := by
+      ext z
+      constructor
+      · rintro ⟨w, hw, he⟩
+        rcases hw with ⟨_, ⟨sx, hsx, rfl⟩, rfl⟩
+        have hr := Quotient.exact he
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv
+          a b (.inl sx.1) z).mp hr with hz | ⟨hx, _⟩
+        · exact hz ▸ ⟨sx.1, ⟨sx, hsx, rfl⟩, rfl⟩
+        · rcases hx with hx | hx
+          · exact (ha ((Sum.inl.inj hx) ▸ sx.property)).elim
+          · cases hx
+      · intro hz
+        exact ⟨z, hz, rfl⟩
+    have hopen : IsOpen
+        ((fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) '' W) := by
+      rw [← isQuotientMap_quotient_mk'.isOpen_preimage]
+      change IsOpen
+        ((fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) ⁻¹'
+          ((fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) '' W))
+      rw [hpre]
+      exact hW
+    simpa [W, Set.image_image] using hopen
 
 /-- The same for the right lobe. -/
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr
