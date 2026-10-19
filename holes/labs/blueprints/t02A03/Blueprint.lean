@@ -565,10 +565,35 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux
 point is fixed.  Otherwise `cos θ < 23/25` and the new `s' ≤ 5/4`, so
 `x' = 6/5 - s' cos θ > 1/20`; a point with `x > 1/20` is at planar distance
 `> 5/4` from `(-6/5, 0)`, hence more than `1/4` from `C`. -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_far_aux_of_x
+    (q : apm_t02a03_E3) (hq : (1 / 20 : ℝ) ≤ q 0) :
+    (1 / 4 : ℝ) ≤ Metric.infDist q apm_t02a03_C := by
+  rw [Metric.le_infDist]
+  · rintro z ⟨u, rfl⟩
+    have hx : (1 / 4 : ℝ) ≤ dist (q 0) ((apm_t02a03_leftCore u) 0) := by
+      rw [Real.dist_eq]
+      simp only [apm_t02a03_leftCore, Matrix.cons_val_zero]
+      rw [abs_of_nonneg]
+      · nlinarith [Real.cos_le_one u]
+      · nlinarith [Real.cos_le_one u]
+    exact hx.trans (PiLp.dist_apply_le q (apm_t02a03_leftCore u) 0)
+  · exact ⟨apm_t02a03_leftCore 0, ⟨0, rfl⟩⟩
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_far_aux_move_x
+    (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p = p ∨
+      (1 / 20 : ℝ) ≤
+        (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p) 0 := by
+  sorry
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_far (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
     (1 / 4 : ℝ) ≤ Metric.infDist (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p) apm_t02a03_C := by
-  sorry
+  rcases apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_far_aux_move_x
+      t ht p hp with h | h
+  · simpa [h] using hp.2
+  · exact apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_far_aux_of_x _ h
 
 /-- LIBRARY: `F_t` fixes `torus ∪ loop` in the right piece.  Loop points have
 `s = 23/20`, `z = 0`.  Torus points have `x ≤ 1/20`, so `cos θ ≥ (23/20)/s ≥
