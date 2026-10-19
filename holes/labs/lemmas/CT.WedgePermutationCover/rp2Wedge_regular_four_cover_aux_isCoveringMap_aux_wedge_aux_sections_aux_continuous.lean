@@ -592,9 +592,277 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U
 each lobe it is `b ↦ [(lift b, i)]`, and on the hemisphere image `lift` is the
 inverse of the open embedding `_aux_hemi`. -/
 -- BEGIN SEAT AREA
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+    {A B : Type*} (a : A) (b : B) (u v : Sum A B) :
+    Relation.EqvGen (WedgeRel a b) u v ↔
+      u = v ∨ ((u = .inl a ∨ u = .inr b) ∧ (v = .inl a ∨ v = .inr b)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel u v h => cases h; exact Or.inr ⟨Or.inl rfl, Or.inr rfl⟩
+    | refl => exact Or.inl rfl
+    | symm u v _ ih =>
+        rcases ih with rfl | ⟨h₁, h₂⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h₂, h₁⟩
+    | trans u v w _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨h₁, h₂⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨_, h₃⟩
+          · exact Or.inr ⟨h₁, h₂⟩
+          · exact Or.inr ⟨h₁, h₃⟩
+  · rintro (rfl | ⟨h₁, h₂⟩)
+    · exact Relation.EqvGen.refl _
+    · have hab : Relation.EqvGen (WedgeRel a b) (.inl a) (.inr b) :=
+        Relation.EqvGen.rel _ _ WedgeRel.base
+      rcases h₁ with rfl | rfl <;> rcases h₂ with rfl | rfl
+      · exact Relation.EqvGen.refl _
+      · exact hab
+      · exact Relation.EqvGen.symm _ _ hab
+      · exact Relation.EqvGen.refl _
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_hemi :
+    Topology.IsOpenEmbedding
+      (fun y : {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0} ↦
+        antipodalCover y.1) := by
+  let H : Set Sphere2 := {y | 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  have hH : IsOpen H := by
+    exact isOpen_lt continuous_const
+      ((continuous_apply 0).comp
+        ((PiLp.continuous_ofLp 2 _).comp continuous_subtype_val))
+  rw [Topology.isOpenEmbedding_iff_continuous_injective_isOpenMap]
+  refine ⟨continuous_quot_mk.comp continuous_subtype_val, ?_, ?_⟩
+  · intro x y hxy
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff x.1 y.1).mp hxy with h | h
+    · exact Subtype.ext h.symm
+    · exfalso
+      have hx : 0 < (x.1 : EuclideanSpace ℝ (Fin 3)) 0 := x.2
+      have hy : 0 < (y.1 : EuclideanSpace ℝ (Fin 3)) 0 := y.2
+      rw [h] at hy
+      change 0 < -((x.1 : EuclideanSpace ℝ (Fin 3)) 0) at hy
+      linarith
+  · intro V hV
+    let W : Set Sphere2 := Subtype.val '' V
+    have hW : IsOpen W := hH.isOpenMap_subtype_val V hV
+    let n : Sphere2 → Sphere2 := fun x ↦ -x
+    have hn : Continuous n := continuous_neg
+    have himage : antipodalCover ⁻¹' (antipodalCover '' W) = W ∪ n ⁻¹' W := by
+      ext x
+      constructor
+      · rintro ⟨y, hyW, heq⟩
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff y x).mp heq with h | h
+        · exact Or.inl (h ▸ hyW)
+        · right
+          change -x ∈ W
+          simpa [h] using hyW
+      · rintro (hx | hx)
+        · exact ⟨x, hx, rfl⟩
+        · refine ⟨-x, hx, ?_⟩
+          exact rp2Wedge_regular_four_cover_aux_neg x
+    have hopen_image : IsOpen (antipodalCover '' W) := by
+      apply (isQuotientMap_quot_mk : Topology.IsQuotientMap antipodalCover).isOpen_preimage.mp
+      change IsOpen (antipodalCover ⁻¹' (antipodalCover '' W))
+      rw [himage]
+      exact hW.union (hW.preimage hn)
+    simpa [W, Set.image_image] using hopen_image
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_open :
+    IsOpen rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U := by
+  let H : Type := {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  let f : H → RP2 := fun y ↦ antipodalCover y.1
+  let V : Set RP2 := Set.range f
+  have hV : IsOpen V :=
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_hemi.isOpen_range
+  have hb : rpBase ∈ V := by
+    refine ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+      simp [rp2Wedge_regular_four_cover_aux_e0]⟩, rfl⟩
+  rw [isOpen_coinduced, isOpen_sum_iff]
+  constructor
+  · convert hV using 1
+    ext b
+    constructor
+    · intro hbU
+      obtain ⟨y, hy, h | h⟩ := hbU
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+          rpBase rpBase (.inl b) (.inl (antipodalCover y))).mp he with he | he
+        · cases he; exact ⟨⟨y, hy⟩, rfl⟩
+        · rcases he.1 with he | he
+          · cases he; exact hb
+          · contradiction
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+          rpBase rpBase (.inl b) (.inr (antipodalCover y))).mp he with he | he
+        · contradiction
+        · rcases he.1 with he | he
+          · cases he; exact hb
+          · contradiction
+    · rintro ⟨⟨y, hy⟩, rfl⟩
+      exact ⟨y, hy, Or.inl rfl⟩
+  · convert hV using 1
+    ext b
+    constructor
+    · intro hbU
+      obtain ⟨y, hy, h | h⟩ := hbU
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+          rpBase rpBase (.inr b) (.inl (antipodalCover y))).mp he with he | he
+        · contradiction
+        · rcases he.1 with he | he
+          · contradiction
+          · cases he; exact hb
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+          rpBase rpBase (.inr b) (.inr (antipodalCover y))).mp he with he | he
+        · cases he; exact ⟨⟨y, hy⟩, rfl⟩
+        · rcases he.1 with he | he
+          · contradiction
+          · cases he; exact hb
+    · rintro ⟨⟨y, hy⟩, rfl⟩
+      exact ⟨y, hy, Or.inr rfl⟩
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_lobes
+    {A B Y : Type*} [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace Y]
+    (a : A) (b : B) (U : Set (Wedge A B a b)) (hU : IsOpen U) (g : U → Y)
+    (hl : Continuous (fun z : {z : A // (Quotient.mk _ (.inl z) : Wedge A B a b) ∈ U} ↦
+      g ⟨_, z.2⟩))
+    (hr : Continuous (fun z : {z : B // (Quotient.mk _ (.inr z) : Wedge A B a b) ∈ U} ↦
+      g ⟨_, z.2⟩)) : Continuous g := by
+  let q : A ⊕ B → Wedge A B a b := fun z ↦ Quotient.mk _ z
+  have hq : Topology.IsQuotientMap q := isQuotientMap_quotient_mk'
+  apply (hq.restrictPreimage_isOpen hU).continuous_iff.mpr
+  let qU : {z : A ⊕ B // q z ∈ U} → U := U.restrictPreimage q
+  let eL : {z : A // q (.inl z) ∈ U} → {z : A ⊕ B // q z ∈ U} :=
+    (q ⁻¹' U).restrictPreimage Sum.inl
+  let eR : {z : B // q (.inr z) ∈ U} → {z : A ⊕ B // q z ∈ U} :=
+    (q ⁻¹' U).restrictPreimage Sum.inr
+  have heL : Topology.IsOpenEmbedding eL :=
+    Topology.IsOpenEmbedding.inl.restrictPreimage (q ⁻¹' U)
+  have heR : Topology.IsOpenEmbedding eR :=
+    Topology.IsOpenEmbedding.inr.restrictPreimage (q ⁻¹' U)
+  have hL : ContinuousOn (g ∘ qU) (Set.range eL) := by
+    rw [← Set.image_univ]
+    apply heL.isInducing.continuousOn_image_iff.mpr
+    simpa [q, qU, eL, Function.comp_def] using hl
+  have hR : ContinuousOn (g ∘ qU) (Set.range eR) := by
+    rw [← Set.image_univ]
+    apply heR.isInducing.continuousOn_image_iff.mpr
+    simpa [q, qU, eR, Function.comp_def] using hr
+  rw [← continuousOn_univ]
+  have hc := hL.union_of_isOpen hR heL.isOpen_range heR.isOpen_range
+  apply hc.mono
+  rintro ⟨z, hz⟩ -
+  cases z with
+  | inl x => exact Set.mem_union_left _ ⟨⟨x, hz⟩, rfl⟩
+  | inr x => exact Set.mem_union_right _ ⟨⟨x, hz⟩, rfl⟩
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous (σ τ : Equiv.Perm (Fin 4)) (i : Fin 4) :
     Continuous (fun u : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1) := by
-  sorry
+  let H : Type := {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  let f : H → RP2 := fun y ↦ antipodalCover y.1
+  let V : Set RP2 := Set.range f
+  have he : Topology.IsEmbedding f :=
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_hemi.isEmbedding
+  let e : H ≃ₜ V := he.toHomeomorph
+  have hmemL (z : {z : RP2 //
+      (Quotient.mk _ (.inl z) : Wedge RP2 RP2 rpBase rpBase) ∈
+        rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U}) : z.1 ∈ V := by
+    obtain ⟨y, hy, h | h⟩ := z.2
+    · have hq := Quotient.exact h
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+        rpBase rpBase (.inl z.1) (.inl (antipodalCover y))).mp hq with hq | hq
+      · exact ⟨⟨y, hy⟩, (Sum.inl.inj hq).symm⟩
+      · rcases hq.1 with hq | hq
+        · exact ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+            simp [rp2Wedge_regular_four_cover_aux_e0]⟩, (Sum.inl.inj hq).symm⟩
+        · contradiction
+    · have hq := Quotient.exact h
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+        rpBase rpBase (.inl z.1) (.inr (antipodalCover y))).mp hq with hq | hq
+      · contradiction
+      · rcases hq.1 with hq | hq
+        · exact ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+            simp [rp2Wedge_regular_four_cover_aux_e0]⟩, (Sum.inl.inj hq).symm⟩
+        · contradiction
+  have hmemR (z : {z : RP2 //
+      (Quotient.mk _ (.inr z) : Wedge RP2 RP2 rpBase rpBase) ∈
+        rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U}) : z.1 ∈ V := by
+    obtain ⟨y, hy, h | h⟩ := z.2
+    · have hq := Quotient.exact h
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+        rpBase rpBase (.inr z.1) (.inl (antipodalCover y))).mp hq with hq | hq
+      · contradiction
+      · rcases hq.1 with hq | hq
+        · contradiction
+        · exact ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+            simp [rp2Wedge_regular_four_cover_aux_e0]⟩, (Sum.inr.inj hq).symm⟩
+    · have hq := Quotient.exact h
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+        rpBase rpBase (.inr z.1) (.inr (antipodalCover y))).mp hq with hq | hq
+      · exact ⟨⟨y, hy⟩, (Sum.inr.inj hq).symm⟩
+      · rcases hq.1 with hq | hq
+        · contradiction
+        · exact ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+            simp [rp2Wedge_regular_four_cover_aux_e0]⟩, (Sum.inr.inj hq).symm⟩
+  have hLiftL (z : {z : RP2 //
+      (Quotient.mk _ (.inl z) : Wedge RP2 RP2 rpBase rpBase) ∈
+        rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U}) :
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift z.1 =
+        (e.symm ⟨z.1, hmemL z⟩).1 := by
+    have hz : antipodalCover (e.symm ⟨z.1, hmemL z⟩).1 = z.1 := by
+      exact congrArg Subtype.val (e.apply_symm_apply ⟨z.1, hmemL z⟩)
+    calc
+      _ = rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift
+          (antipodalCover (e.symm ⟨z.1, hmemL z⟩).1) := congrArg _ hz.symm
+      _ = _ := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos
+        _ (e.symm ⟨z.1, hmemL z⟩).2
+  have hLiftR (z : {z : RP2 //
+      (Quotient.mk _ (.inr z) : Wedge RP2 RP2 rpBase rpBase) ∈
+        rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U}) :
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift z.1 =
+        (e.symm ⟨z.1, hmemR z⟩).1 := by
+    have hz : antipodalCover (e.symm ⟨z.1, hmemR z⟩).1 = z.1 := by
+      exact congrArg Subtype.val (e.apply_symm_apply ⟨z.1, hmemR z⟩)
+    calc
+      _ = rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift
+          (antipodalCover (e.symm ⟨z.1, hmemR z⟩).1) := congrArg _ hz.symm
+      _ = _ := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos
+        _ (e.symm ⟨z.1, hmemR z⟩).2
+  apply rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_lobes
+    rpBase rpBase _
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_open
+  · have hy : Continuous (fun z : {z : RP2 //
+        (Quotient.mk _ (.inl z) : Wedge RP2 RP2 rpBase rpBase) ∈
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U} ↦
+        (e.symm ⟨z.1, hmemL z⟩).1) :=
+      continuous_subtype_val.comp (e.symm.continuous.comp
+        (Continuous.subtype_mk continuous_subtype_val _))
+    have hc : Continuous (fun z : {z : RP2 //
+        (Quotient.mk _ (.inl z) : Wedge RP2 RP2 rpBase rpBase) ∈
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U} ↦
+        Quotient.mk (Relation.EqvGen.setoid (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+        (Sum.inl (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift z.1, i))) := by
+      apply continuous_coinduced_rng.comp
+      apply continuous_inl.comp
+      simpa only [hLiftL] using hy.prodMk continuous_const
+    simpa only [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S,
+      Quotient.lift_mk] using hc
+  · have hy : Continuous (fun z : {z : RP2 //
+        (Quotient.mk _ (.inr z) : Wedge RP2 RP2 rpBase rpBase) ∈
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U} ↦
+        (e.symm ⟨z.1, hmemR z⟩).1) :=
+      continuous_subtype_val.comp (e.symm.continuous.comp
+        (Continuous.subtype_mk continuous_subtype_val _))
+    have hc : Continuous (fun z : {z : RP2 //
+        (Quotient.mk _ (.inr z) : Wedge RP2 RP2 rpBase rpBase) ∈
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U} ↦
+        Quotient.mk (Relation.EqvGen.setoid (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+        (Sum.inr (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift z.1, i))) := by
+      apply continuous_coinduced_rng.comp
+      apply continuous_inr.comp
+      simpa only [hLiftR] using hy.prodMk continuous_const
+    simpa only [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S,
+      Quotient.lift_mk] using hc
 -- END SEAT AREA
 
 /-- The range of sheet `i` is open: its preimage in the raw sum is
