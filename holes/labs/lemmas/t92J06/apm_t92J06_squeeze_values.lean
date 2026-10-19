@@ -154,12 +154,92 @@ lemma apm_t92J06_squeeze_continuous {δ : ℝ} (hδ : 0 < δ) (hδπ : δ < Real
 /-- Values of the squeeze: identity at time `0`, fixes the centre, collapses
 the `δ`-arc at time `1`, fixes points at angle at least `2δ`. -/
 -- BEGIN SEAT AREA
+lemma apm_t92J06_squeeze_values_aux_clamp_of_abs_lt {δ a : ℝ}
+    (hδ : 0 < δ) (ha : |a| < δ) : apm_t92J06_clamp δ a = a := by
+  rw [abs_lt] at ha
+  simp [apm_t92J06_clamp, ha.1.le, ha.2.le]
+
+lemma apm_t92J06_squeeze_values_aux_clamp_zero (δ : ℝ) (hδ : 0 < δ) :
+    apm_t92J06_clamp δ 0 = 0 := by
+  simp [apm_t92J06_clamp, hδ.le]
+
+lemma apm_t92J06_squeeze_values_aux_tent_of_abs_lt {δ a : ℝ}
+    (hδ : 0 < δ) (ha : |a| < δ) : apm_t92J06_tent δ a = a := by
+  rw [apm_t92J06_tent, apm_t92J06_squeeze_values_aux_clamp_of_abs_lt hδ ha]
+  simp [apm_t92J06_squeeze_values_aux_clamp_zero δ hδ]
+
+lemma apm_t92J06_squeeze_values_aux_tent_zero (δ : ℝ) (hδ : 0 < δ) :
+    apm_t92J06_tent δ 0 = 0 := by
+  simp [apm_t92J06_tent, apm_t92J06_squeeze_values_aux_clamp_zero δ hδ]
+
+lemma apm_t92J06_squeeze_values_aux_tent_of_two_mul_le_abs {δ a : ℝ}
+    (hδ : 0 < δ) (ha : 2 * δ ≤ |a|) : apm_t92J06_tent δ a = 0 := by
+  rcases le_total 0 a with ha0 | ha0
+  · have hδa : δ ≤ a := by rw [abs_of_nonneg ha0] at ha; linarith
+    have h2δa : 2 * δ ≤ a := by simpa [abs_of_nonneg ha0] using ha
+    have hsub : δ ≤ a - δ := by linarith
+    simp [apm_t92J06_tent, apm_t92J06_clamp, hδ.le, hδa, hsub]
+  · have haδ : a ≤ -δ := by rw [abs_of_nonpos ha0] at ha; linarith
+    have ha2δ : a ≤ -(2 * δ) := by rw [abs_of_nonpos ha0] at ha; linarith
+    have hadd : a + δ ≤ -δ := by linarith
+    simp [apm_t92J06_tent, apm_t92J06_clamp, haδ, hadd]
+
 lemma apm_t92J06_squeeze_values {δ : ℝ} (hδ : 0 < δ) (z : apm_t92J06_S1) :
     (∀ w, apm_t92J06_squeeze z δ 0 w = w) ∧
     (∀ s, apm_t92J06_squeeze z δ s z = z) ∧
     (∀ w, |apm_t92J06_relArg z w| < δ → apm_t92J06_squeeze z δ 1 w = z) ∧
     (∀ s w, 2 * δ ≤ |apm_t92J06_relArg z w| → apm_t92J06_squeeze z δ s w = w) := by
-  sorry
+  have hz_norm : ‖(z : ℂ)‖ = 1 := mem_sphere_zero_iff_norm.mp z.2
+  have hz_ne : (z : ℂ) ≠ 0 := by intro hz; simpa [hz] using hz_norm
+  have hrel_self : apm_t92J06_relArg z z = 0 := by
+    simp [apm_t92J06_relArg, Complex.mul_conj, hz_norm]
+  constructor
+  · intro w
+    apply Subtype.ext
+    simp [apm_t92J06_squeeze]
+  constructor
+  · intro s
+    apply Subtype.ext
+    simp [apm_t92J06_squeeze, hrel_self,
+      apm_t92J06_squeeze_values_aux_tent_zero δ hδ]
+  constructor
+  · intro w hw
+    apply Subtype.ext
+    change (w : ℂ) * Complex.exp (-(((1 : unitInterval) : ℝ) *
+      apm_t92J06_tent δ (apm_t92J06_relArg z w) : ℝ) * Complex.I) = z
+    rw [apm_t92J06_squeeze_values_aux_tent_of_abs_lt hδ hw]
+    norm_num
+    let x : ℂ := (w : ℂ) * star (z : ℂ)
+    have hw_norm : ‖(w : ℂ)‖ = 1 := mem_sphere_zero_iff_norm.mp w.2
+    have hx_norm : ‖x‖ = 1 := by simp [x, hw_norm, hz_norm]
+    have hexp : Complex.exp (Complex.arg x * Complex.I) = x := by
+      simpa [hx_norm] using Complex.norm_mul_exp_arg_mul_I x
+    have hinv : Complex.exp (-((Complex.arg x : ℂ) * Complex.I)) * x = 1 := by
+      calc
+        Complex.exp (-((Complex.arg x : ℂ) * Complex.I)) * x =
+            Complex.exp (-((Complex.arg x : ℂ) * Complex.I)) *
+              Complex.exp (Complex.arg x * Complex.I) := by rw [hexp]
+        _ = 1 := by rw [← Complex.exp_add]; simp
+    rw [show apm_t92J06_relArg z w = Complex.arg x by rfl]
+    have hzz : star (z : ℂ) * (z : ℂ) = 1 := by
+      calc
+        star (z : ℂ) * (z : ℂ) = (Complex.normSq (z : ℂ) : ℂ) :=
+          Complex.normSq_eq_conj_mul_self.symm
+        _ = 1 := by rw [← Complex.norm_mul_self_eq_normSq, hz_norm, one_mul]; norm_num
+    calc
+      (w : ℂ) * Complex.exp (-((Complex.arg x : ℂ) * Complex.I)) =
+          Complex.exp (-((Complex.arg x : ℂ) * Complex.I)) * (w : ℂ) := mul_comm _ _
+      _ = Complex.exp (-((Complex.arg x : ℂ) * Complex.I)) *
+          ((w : ℂ) * (star (z : ℂ) * (z : ℂ))) := by rw [hzz, mul_one]
+      _ =
+          (Complex.exp (-((Complex.arg x : ℂ) * Complex.I)) * x) * (z : ℂ) := by
+            simp only [x]
+            ring
+      _ = z := by rw [hinv, one_mul]
+  · intro s w hw
+    apply Subtype.ext
+    simp [apm_t92J06_squeeze,
+      apm_t92J06_squeeze_values_aux_tent_of_two_mul_le_abs hδ hw]
 -- END SEAT AREA
 
 /-- Homotopies on the two legs agreeing at the base glue to a homotopy on the
