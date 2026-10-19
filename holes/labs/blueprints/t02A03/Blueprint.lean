@@ -871,12 +871,85 @@ lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_c
     simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move,
       hrad] <;> ring
 
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_torus_aux_x
+    (p : apm_t02a03_E3)
+    (hT : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) :
+    p 0 ≤ (1 / 20 : ℝ) := by
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  have hi : Metric.infDist p apm_t02a03_C < 1 / 4 + ε := by
+    rw [hT]
+    linarith
+  have hne : apm_t02a03_C.Nonempty := ⟨apm_t02a03_leftCore 0, ⟨0, rfl⟩⟩
+  rw [Metric.infDist_lt_iff hne] at hi
+  rcases hi with ⟨q, ⟨u, rfl⟩, hq⟩
+  have hc : p 0 - (-6 / 5 + Real.cos u) ≤
+      dist p (apm_t02a03_leftCore u) := by
+    calc
+      p 0 - (-6 / 5 + Real.cos u) ≤
+          |p 0 - (-6 / 5 + Real.cos u)| := le_abs_self _
+      _ = dist (p 0) ((apm_t02a03_leftCore u) 0) := by
+        simp [apm_t02a03_leftCore, Real.dist_eq]
+      _ ≤ dist p (apm_t02a03_leftCore u) := PiLp.dist_apply_le _ _ _
+  have hcos := Real.cos_le_one u
+  nlinarith
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_torus_aux_rad
+    (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p ≤
+      (5 / 4 : ℝ) := by
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  have hi : Metric.infDist p (Set.range apm_t02a03_rightCore) < 1 / 4 + ε :=
+    lt_of_le_of_lt hp.1 (by linarith)
+  have hne : (Set.range apm_t02a03_rightCore).Nonempty :=
+    ⟨apm_t02a03_rightCore 0, ⟨0, rfl⟩⟩
+  rw [Metric.infDist_lt_iff hne] at hi
+  rcases hi with ⟨q, ⟨u, rfl⟩, hq⟩
+  let c : apm_t02a03_E3 := WithLp.toLp 2 ![6 / 5, 0, 0]
+  have hrad : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p ≤
+      dist p c := by
+    rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad]
+    simp [c, dist_eq_norm, EuclideanSpace.norm_eq, Fin.sum_univ_succ]
+    rw [Real.sqrt_le_sqrt_iff]
+    all_goals nlinarith [sq_nonneg (p 0 - 6 / 5), sq_nonneg (p 1), sq_nonneg (p 2)]
+  have hqc : dist (apm_t02a03_rightCore u) c = 1 := by
+    simp [c, apm_t02a03_rightCore, dist_eq_norm, EuclideanSpace.norm_eq,
+      Fin.sum_univ_succ]
+  apply le_of_lt
+  calc
+    _ ≤ dist p c := hrad
+    _ ≤ dist p (apm_t02a03_rightCore u) + dist (apm_t02a03_rightCore u) c := dist_triangle _ _ _
+    _ < 5 / 4 + ε := by rw [hqc]; linarith
+
 lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_torus
     (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
     (hT : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) :
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p = 0 := by
-  sorry
+  have hx :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_torus_aux_x p hT
+  have hs :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_torus_aux_rad p hp
+  have hs0 : 0 < apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p := by
+    by_contra hn
+    have hz : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p = 0 :=
+      le_antisymm (le_of_not_gt hn) (Real.sqrt_nonneg _)
+    have hone :=
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_continuous_aux_dist p hz
+    linarith [hp.1]
+  have hratio : (23 / 25 : ℝ) ≤
+      (6 / 5 - p 0) /
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p := by
+    apply (le_div_iff₀ hs0).2
+    nlinarith
+  unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi
+  have hnonpos : (23 - 25 * ((6 / 5 - p 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p)) / 6 ≤ 0 := by
+    nlinarith
+  rw [max_eq_left hnonpos]
+  norm_num
 
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix (t : ℝ) (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
     (hZ : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) :
