@@ -215,7 +215,20 @@ lemma apm_t92J06_loop_trivial_of_contraction {Y : Type*} [TopologicalSpace Y]
     (h0 : ∀ u, Φ (0, u) = u) (hfix : ∀ s, Φ (s, y) = y)
     (h1 : ∀ u ∈ U, Φ (1, u) = y) (γ : Path y y) (hγ : range γ ⊆ U) :
     Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl y) := by
-  sorry
+  apply Path.Homotopic.Quotient.eq.mpr
+  refine ⟨{
+    toFun := fun q ↦ Φ (q.1, γ q.2)
+    continuous_toFun := Φ.continuous.comp (by fun_prop)
+    map_zero_left := fun t ↦ by
+      change Φ (0, γ t) = γ t
+      exact h0 _
+    map_one_left := fun t ↦ by
+      rw [h1 (γ t) (hγ ⟨t, rfl⟩)]
+      rfl
+    prop' := fun s t ht ↦ by
+      rcases ht with (rfl | rfl)
+      · simpa using hfix s
+      · simpa using hfix s }⟩
 -- END SEAT AREA
 
 /-- Semilocal simple connectivity at the wedge point: squeeze both legs. -/
