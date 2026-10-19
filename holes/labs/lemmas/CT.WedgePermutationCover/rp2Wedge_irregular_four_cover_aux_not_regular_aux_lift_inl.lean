@@ -2884,7 +2884,36 @@ lemma rp2Wedge_irregular_four_cover_aux_not_regular_aux_lift_inl
       Quotient.mk _ (.inl (rp2Wedge_regular_four_cover_aux_e0, m))) :
     h (Quotient.mk _ (.inl (-rp2Wedge_regular_four_cover_aux_e0, k))) =
       Quotient.mk _ (.inl (-rp2Wedge_regular_four_cover_aux_e0, m)) := by
-  sorry
+  let e0 := rp2Wedge_regular_four_cover_aux_e0
+  have hs : IsPathConnected
+      (Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1) := by
+    apply isPathConnected_sphere
+    · rw [← Module.finrank_eq_rank, finrank_euclideanSpace_fin]
+      norm_num
+    · norm_num
+  have hj : Joined e0 (-e0) :=
+    (hs.joinedIn e0 e0.property (-e0) (by simpa using e0.property)).joined_subtype
+  let γ : Path e0 (-e0) := hj.somePath
+  let qk : unitInterval → rp2Wedge_regular_four_cover_aux_E σ τ := fun t ↦
+    Quotient.mk _ (.inl (γ t, k))
+  let qm : unitInterval → rp2Wedge_regular_four_cover_aux_E σ τ := fun t ↦
+    Quotient.mk _ (.inl (γ t, m))
+  have hqk : Continuous qk :=
+    continuous_coinduced_rng.comp (continuous_inl.comp (γ.continuous.prodMk continuous_const))
+  have hqm : Continuous qm :=
+    continuous_coinduced_rng.comp (continuous_inl.comp (γ.continuous.prodMk continuous_const))
+  have hcomp : rp2Wedge_regular_four_cover_aux_p σ τ ∘ (h ∘ qk) =
+      rp2Wedge_regular_four_cover_aux_p σ τ ∘ qm := by
+    funext t
+    simp only [Function.comp_apply]
+    rw [hh]
+    rfl
+  have hstart : (h ∘ qk) (0 : unitInterval) = qm 0 := by
+    simpa [qk, qm, γ, e0] using hkm
+  have heq : h ∘ qk = qm :=
+    hp.eq_of_comp_eq (h.continuous.comp hqk) hqm hcomp 0 hstart
+  have := congrFun heq (1 : unitInterval)
+  simpa [qk, qm, γ, e0] using this
 -- END SEAT AREA
 
 /-- Path lifting in the right copy: as `_aux_lift_inl`, for the `.inr` sheets. -/
