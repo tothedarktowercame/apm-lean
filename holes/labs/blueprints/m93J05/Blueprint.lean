@@ -1936,7 +1936,100 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
     · have hab' : (b : ℝ) ≤ a := by exact_mod_cast hab
       simp [Set.Ioc_eq_empty (not_lt_of_ge hab'), hzero a b hab]
 
-/-- Leaf (dual-norm test). An integrable `f₀` whose pairings with rational step functions are
+/-- Banked (lemma-2, round 2): bounded truncations of an integrable function lie in every
+finite `Lᵠ` of `[0,1]`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_memLp
+    (q M : ℝ) (hq : 1 < q) (hM : 0 ≤ M)
+    (f : ℝ → ℝ) (hf : Integrable f (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    MemLp (fun x ↦ max (-M) (min M (f x))) (ENNReal.ofReal q)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hc : Continuous (fun y : ℝ ↦ max (-M) (min M y)) :=
+    continuous_const.max (continuous_const.min continuous_id)
+  have hmeas : AEStronglyMeasurable (fun x ↦ max (-M) (min M (f x))) μ :=
+    hc.comp_aestronglyMeasurable hf.aestronglyMeasurable
+  have htop : MemLp (fun x ↦ max (-M) (min M (f x))) ⊤ μ := by
+    apply memLp_top_of_bound hmeas M
+    filter_upwards [] with x
+    rw [Real.norm_eq_abs, abs_le]
+    constructor
+    · exact le_max_left _ _
+    · exact max_le (by linarith) (min_le_left _ _)
+  exact htop.mono_exponent le_top
+
+/-- Leaf (step approximation; no `f₀`). A bounded a.e.-strongly-measurable `g` is the a.e. limit
+on `[0,1]` of uniformly bounded rational-interval step functions. Route: approximate `g` in `L¹`
+by continuous functions (`MemLp.exists_hasCompactSupport_eLpNorm_sub_le` or
+`Integrable.exists_continuous...`), clip them to `[-C, C]`, approximate each uniformly on `[0,1]`
+by step functions on the grid `k / N` (uniform continuity), giving `L¹` convergence with bound
+`C + 1`; extract an a.e. convergent subsequence (`TendstoInMeasure.exists_seq_tendsto_ae`). -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx
+    (g : ℝ → ℝ) (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (C : ℝ) (hC : ∀ x, |g x| ≤ C) :
+    ∃ (F : ℕ → Finset (ℚ × ℚ)) (c : ℕ → ℚ × ℚ → ℝ) (D : ℝ),
+      (∀ n x, |∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤ D) ∧
+      ∀ᵐ x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)),
+        Tendsto (fun n ↦ ∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) atTop (nhds (g x)) := by
+  sorry
+
+/-- Leaf (passing to the limit). If uniformly bounded step functions `s n` converge a.e. on
+`[0,1]` to a bounded `g`, the step bound passes to `g`: `|∫ f₀ g| ≤ R ‖g‖_q`. Route: rewrite
+`∑ c i ∫ f₀ 1_(a,b]` as `∫ f₀ (s n)` (`integral_finset_sum`, `integral_mul_left`); dominated
+convergence with bound `D |f₀|` gives `∫ f₀ (s n) → ∫ f₀ g`; on the finite measure the bounded
+a.e. convergence gives `eLpNorm (s n - g) q → 0` (`tendsto_Lp_finite_of_tendsto_ae` /
+`tendstoInMeasure` + uniform integrability), hence `‖s n‖_q → ‖g‖_q`; `le_of_tendsto_of_tendsto'`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_pass_limit
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
+    (f₀ : ℝ → ℝ) (hf₀ : Integrable f₀ (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (R : ℝ) (hR : 0 ≤ R)
+    (hstep : ∀ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      |∑ i ∈ F, c i * ∫ x in Set.Icc (0 : ℝ) 1,
+          f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤
+        R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal)
+    (g : ℝ → ℝ) (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (C : ℝ) (hC : ∀ x, |g x| ≤ C)
+    (F : ℕ → Finset (ℚ × ℚ)) (c : ℕ → ℚ × ℚ → ℝ) (D : ℝ)
+    (hD : ∀ n x, |∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤ D)
+    (hlim : ∀ᵐ x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)),
+        Tendsto (fun n ↦ ∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) atTop (nhds (g x))) :
+    |∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x| ≤
+      R * (eLpNorm g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+  sorry
+
+/-- Leaf (truncation bound). If every bounded test `g` has `|∫ f₀ g| ≤ R ‖g‖_q`, each truncation
+`f_M := max (-M) (min M f₀)` has `∫ |f_M|^p ≤ R^p`. Route: test `g := sign f_M · |f_M|^(p-1)`
+(bounded by `M^(p-1)`); pointwise `f₀ g ≥ |f_M|^p`; `(p-1) q = p` from `hpq`, so
+`‖g‖_q = A^(1/q)` with `A := ∫ |f_M|^p` (finite, `_aux_trunc_memLp`); `A ≤ R A^(1/q)` gives
+`A^(1/p) ≤ R` (case `A = 0` separately), so `A ≤ R^p`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (f₀ : ℝ → ℝ) (hf₀ : Integrable f₀ (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (R : ℝ) (hR : 0 ≤ R)
+    (htest : ∀ g : ℝ → ℝ, AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      ∀ C : ℝ, (∀ x, |g x| ≤ C) →
+        |∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x| ≤
+          R * (eLpNorm g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
+    ∀ M : ℝ, 0 ≤ M →
+      ∫ x in Set.Icc (0 : ℝ) 1, |max (-M) (min M (f₀ x))| ^ p ≤ R ^ p := by
+  sorry
+
+/-- Leaf (monotone limit). If the truncations of a measurable `f₀` have `∫ |f_M|^p ≤ K` for all
+`M ≥ 0`, then `f₀ ∈ Lᵖ([0,1])`. Route: `|f_n|^p ↑ |f₀|^p` pointwise along `M = n`;
+`lintegral_iSup` / `lintegral_tendsto_of_tendsto_of_monotone` bounds `∫⁻ ‖f₀‖ₑ^p` by
+`ENNReal.ofReal K` (each truncation is integrable, so `ofReal_integral_eq_lintegral_ofReal`);
+conclude with `eLpNorm_lt_top` via `eLpNorm_eq_lintegral_rpow_enorm`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_mono
+    (p : ℝ) (hp : 1 < p)
+    (f₀ : ℝ → ℝ) (hf₀ : Integrable f₀ (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (K : ℝ)
+    (hbd : ∀ M : ℝ, 0 ≤ M →
+      ∫ x in Set.Icc (0 : ℝ) 1, |max (-M) (min M (f₀ x))| ^ p ≤ K) :
+    MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  sorry
+
+/-- Assembly (split 2026-10-19 after lemma-2's partial). An integrable `f₀` whose pairings with rational step functions are
 bounded by `R ‖·‖_q` lies in `Lᵖ([0,1])`. Route: for the truncation `f_M := max (-M) (min M f₀)`
 test against the bounded `g_M := sign f_M · |f_M|^(p-1)`, so `‖f_M‖_p^p ≤ ∫ f₀ g_M ≤ R ‖g_M‖_q
 = R ‖f_M‖_p^(p-1)`; reach `g_M` from rational step functions that converge in `Lᵠ` and a.e.
@@ -1953,7 +2046,15 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
           (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
         (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
     MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
-  sorry
+  have htest : ∀ g : ℝ → ℝ, AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      ∀ C : ℝ, (∀ x, |g x| ≤ C) →
+        |∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x| ≤
+          R * (eLpNorm g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+    intro g hg C hC
+    obtain ⟨F, c, D, hD, hlim⟩ := apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx g hg C hC
+    exact apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_pass_limit p q hp hq f₀ hf₀ R hR hstep g hg C hC F c D hD hlim
+  exact apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_mono p hp f₀ hf₀ (R ^ p)
+    (apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound p q hp hq hpq f₀ hf₀ R hR htest)
 
 /-- Leaf (the limit is an `Lᵖ` function). If the interval pairings of a uniformly `Lᵖ`-bounded
 sequence converge for every rational interval, the limits are the pairings of one
