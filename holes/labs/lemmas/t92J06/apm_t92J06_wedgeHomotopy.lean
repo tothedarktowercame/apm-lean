@@ -169,7 +169,44 @@ lemma apm_t92J06_wedgeHomotopy {Y : Type*} [TopologicalSpace Y]
     ∃ Φ : C(unitInterval × apm_t92J06_X, Y),
       (∀ s z, Φ (s, apm_t92J06_inl z) = f (s, z)) ∧
       (∀ s z, Φ (s, apm_t92J06_inr z) = g (s, z)) := by
-  sorry
+  let q : Sum apm_t92J06_S1 apm_t92J06_S1 → apm_t92J06_X :=
+    fun z ↦ Quotient.mk _ z
+  have hq : Topology.IsQuotientMap q := ⟨Quotient.mk_surjective, rfl⟩
+  have hrespect : ∀ (s : unitInterval) {x y},
+      Relation.EqvGen apm_t92J06_wedgeRel x y →
+        Sum.elim (fun z ↦ f (s, z)) (fun z ↦ g (s, z)) x =
+          Sum.elim (fun z ↦ f (s, z)) (fun z ↦ g (s, z)) y := by
+    intro s x y hxy
+    induction hxy with
+    | rel a b hab =>
+        cases hab
+        exact hbase s
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let Φ : C(unitInterval × apm_t92J06_X, Y) :=
+    ⟨fun p ↦ Quotient.lift
+        (fun z ↦ Sum.elim (fun w ↦ f (p.1, w)) (fun w ↦ g (p.1, w)) z)
+        (fun _ _ hxy ↦ hrespect p.1 hxy) p.2,
+      by
+        apply hq.continuous_lift_prod_right
+        have hfg : Continuous
+            (Sum.elim f g : Sum (unitInterval × apm_t92J06_S1)
+              (unitInterval × apm_t92J06_S1) → Y) :=
+          continuous_sum_dom.2 ⟨f.continuous, g.continuous⟩
+        have hc := hfg.comp
+          (Homeomorph.prodSumDistrib :
+            unitInterval × Sum apm_t92J06_S1 apm_t92J06_S1 ≃ₜ
+              Sum (unitInterval × apm_t92J06_S1)
+                (unitInterval × apm_t92J06_S1)).continuous
+        simpa only [q, Quotient.lift_mk] using hc.congr (by
+          rintro ⟨s, z⟩
+          cases z <;> rfl)⟩
+  refine ⟨Φ, ?_, ?_⟩
+  · intro s z
+    rfl
+  · intro s z
+    rfl
 -- END SEAT AREA
 
 /-- A homotopy from the identity that fixes `y` and ends at `y` on `U`
