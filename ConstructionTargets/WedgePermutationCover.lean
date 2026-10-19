@@ -675,7 +675,79 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_cap (u : Sphere
     Topology.IsOpenEmbedding
       (fun y : {y : Sphere2 // 0 < inner ℝ (y : EuclideanSpace ℝ (Fin 3)) u ∧
           antipodalCover y ≠ rpBase} ↦ antipodalCover y.1) := by
-  sorry
+  let C : Set Sphere2 :=
+    {y | 0 < inner ℝ (y : EuclideanSpace ℝ (Fin 3)) u ∧
+      antipodalCover y ≠ rpBase}
+  let f : C → RP2 := fun y ↦ antipodalCover y.1
+  have hC : IsOpen C := by
+    have hi : Continuous (fun y : Sphere2 ↦
+        inner ℝ (y : EuclideanSpace ℝ (Fin 3)) u) :=
+      (continuous_subtype_val.inner continuous_const)
+    have hb : IsOpen {y : Sphere2 | antipodalCover y ≠ rpBase} := by
+      have he : {y : Sphere2 | antipodalCover y ≠ rpBase} =
+          ({rp2Wedge_regular_four_cover_aux_e0,
+            -rp2Wedge_regular_four_cover_aux_e0} : Set Sphere2)ᶜ := by
+        ext y
+        simp only [Set.mem_setOf_eq, Set.mem_compl_iff, Set.mem_insert_iff,
+          Set.mem_singleton_iff]
+        constructor
+        · intro hn hcases
+          apply hn
+          rcases hcases with rfl | rfl
+          · exact rp2Wedge_regular_four_cover_aux_rpBase.symm
+          · exact (rp2Wedge_regular_four_cover_aux_neg
+              rp2Wedge_regular_four_cover_aux_e0).trans
+              rp2Wedge_regular_four_cover_aux_rpBase.symm
+        · intro hn heq
+          apply hn
+          rw [rp2Wedge_regular_four_cover_aux_rpBase] at heq
+          rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+            rp2Wedge_regular_four_cover_aux_e0 y).mp heq.symm with h | h
+          · exact Or.inl h
+          · exact Or.inr h
+      rw [he]
+      exact (Set.toFinite _).isClosed.isOpen_compl
+    exact (isOpen_lt continuous_const hi).inter hb
+  have hneg : Continuous (fun y : Sphere2 ↦ -y) := continuous_neg
+  have hf_cont : Continuous f := continuous_coinduced_rng.comp continuous_subtype_val
+  have hf_inj : Function.Injective f := by
+    intro x y hxy
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff x.1 y.1).mp hxy with h | h
+    · exact Subtype.ext h.symm
+    · exfalso
+      have hx := x.property.1
+      have hy := y.property.1
+      rw [h] at hy
+      change 0 < inner ℝ (-(x.1 : EuclideanSpace ℝ (Fin 3))) u at hy
+      simp only [inner_neg_left] at hy
+      linarith
+  refine Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap hf_cont hf_inj ?_
+  intro S hS
+  obtain ⟨T, hT, rfl⟩ := isOpen_induced_iff.mp hS
+  rw [isOpen_coinduced]
+  have heq : antipodalCover ⁻¹' (f '' (Subtype.val ⁻¹' T)) =
+      (T ∩ C) ∪ (fun y : Sphere2 ↦ -y) ⁻¹' (T ∩ C) := by
+    ext y
+    constructor
+    · rintro ⟨z, hzT, hz⟩
+      have hz' : antipodalCover z.1 = antipodalCover y := by simpa [f] using hz
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff z.1 y).mp hz' with h | h
+      · left
+        simpa [h, C] using And.intro hzT z.property
+      · right
+        have : -y = z.1 := by simpa [h]
+        change -y ∈ T ∩ C
+        simpa [this] using And.intro hzT z.property
+    · intro hy
+      rcases hy with hy | hy
+      · refine ⟨⟨y, hy.2⟩, hy.1, rfl⟩
+      · change -y ∈ T ∩ C at hy
+        refine ⟨⟨-y, hy.2⟩, hy.1, ?_⟩
+        change antipodalCover (-y) = antipodalCover y
+        exact rp2Wedge_regular_four_cover_aux_neg y
+  change IsOpen (antipodalCover ⁻¹' (f '' (Subtype.val ⁻¹' T)))
+  rw [heq]
+  exact (hT.inter hC).union ((hT.inter hC).preimage hneg)
 
 /-- An open subset of the left lobe missing the base point embeds openly in the
 wedge: its preimage in `A ⊕ B` is `inl '' V`, already saturated. -/
