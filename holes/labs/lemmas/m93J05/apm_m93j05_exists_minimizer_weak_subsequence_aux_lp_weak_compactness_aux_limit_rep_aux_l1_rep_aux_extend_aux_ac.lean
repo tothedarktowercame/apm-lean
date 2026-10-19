@@ -2510,7 +2510,76 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
       ∑ i ∈ Finset.range n, |F (v i) - F (u i)| ≤
         R * (∑ i ∈ Finset.range n, (v i - u i)) ^ (1 / q)) :
     AbsolutelyContinuousOnInterval F 0 1 := by
-  sorry
+  rw [absolutelyContinuousOnInterval_iff]
+  intro ε hε
+  by_cases hR0 : R = 0
+  · refine ⟨1, zero_lt_one, ?_⟩
+    intro E hE hlen
+    obtain ⟨hend, hdisj⟩ := hE
+    let u : ℕ → ℝ := fun i ↦ min (E.2 i).1 (E.2 i).2
+    let v : ℕ → ℝ := fun i ↦ max (E.2 i).1 (E.2 i).2
+    have huv : ∀ i ∈ Finset.range E.1, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1 := by
+      intro i hi
+      have hi' := hend i hi
+      simp only [Set.mem_uIcc, Set.uIcc_of_le zero_le_one, Set.mem_Icc] at hi'
+      exact ⟨le_min hi'.1.1 hi'.2.1, min_le_max, max_le hi'.1.2 hi'.2.2⟩
+    have hd : Set.PairwiseDisjoint (↑(Finset.range E.1))
+        (fun i ↦ Set.Ioc (u i) (v i)) := by
+      simpa [u, v, Set.uIoc] using hdisj
+    have hb := hreal E.1 u v huv hd
+    rw [hR0, zero_mul] at hb
+    have hz : ∑ i ∈ Finset.range E.1, dist (F (E.2 i).1) (F (E.2 i).2) =
+        ∑ i ∈ Finset.range E.1, |F (v i) - F (u i)| := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      simp only [u, v, Real.dist_eq]
+      rcases le_total (E.2 i).1 (E.2 i).2 with hij | hij <;>
+        simp [min_eq_left, min_eq_right, max_eq_left, max_eq_right, hij, abs_sub_comm]
+    rw [hz]
+    exact lt_of_le_of_lt hb hε
+  · have hRpos : 0 < R := lt_of_le_of_ne hR (Ne.symm hR0)
+    let δ : ℝ := (ε / R) ^ q
+    have hδ : 0 < δ := Real.rpow_pos_of_pos (div_pos hε hRpos) q
+    refine ⟨δ, hδ, ?_⟩
+    intro E hE hlen
+    obtain ⟨hend, hdisj⟩ := hE
+    let u : ℕ → ℝ := fun i ↦ min (E.2 i).1 (E.2 i).2
+    let v : ℕ → ℝ := fun i ↦ max (E.2 i).1 (E.2 i).2
+    have huv : ∀ i ∈ Finset.range E.1, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1 := by
+      intro i hi
+      have hi' := hend i hi
+      simp only [Set.mem_uIcc, Set.uIcc_of_le zero_le_one, Set.mem_Icc] at hi'
+      exact ⟨le_min hi'.1.1 hi'.2.1, min_le_max, max_le hi'.1.2 hi'.2.2⟩
+    have hd : Set.PairwiseDisjoint (↑(Finset.range E.1))
+        (fun i ↦ Set.Ioc (u i) (v i)) := by
+      simpa [u, v, Set.uIoc] using hdisj
+    have hb := hreal E.1 u v huv hd
+    have hsum : ∑ i ∈ Finset.range E.1, (v i - u i) =
+        ∑ i ∈ Finset.range E.1, dist (E.2 i).1 (E.2 i).2 := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      simp [u, v, Real.dist_eq, max_sub_min_eq_abs, abs_sub_comm]
+    have hleft : ∑ i ∈ Finset.range E.1, dist (F (E.2 i).1) (F (E.2 i).2) =
+        ∑ i ∈ Finset.range E.1, |F (v i) - F (u i)| := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      simp only [u, v, Real.dist_eq]
+      rcases le_total (E.2 i).1 (E.2 i).2 with hij | hij <;>
+        simp [min_eq_left, min_eq_right, max_eq_left, max_eq_right, hij, abs_sub_comm]
+    rw [hleft]
+    refine hb.trans_lt ?_
+    rw [hsum]
+    have hp : 0 < 1 / q := one_div_pos.mpr (lt_trans zero_lt_one hq)
+    have hr := Real.rpow_lt_rpow (Finset.sum_nonneg fun i hi ↦ dist_nonneg)
+      hlen hp
+    have hpow : δ ^ (1 / q) = ε / R := by
+      rw [show δ = (ε / R) ^ q by rfl, ← Real.rpow_mul (le_of_lt (div_pos hε hRpos))]
+      rw [show q * (1 / q) = 1 by field_simp [ne_of_gt (lt_trans zero_lt_one hq)],
+        Real.rpow_one]
+    calc
+      R * (∑ i ∈ Finset.range E.1, dist (E.2 i).1 (E.2 i).2) ^ (1 / q)
+          < R * δ ^ (1 / q) := mul_lt_mul_of_pos_left hr hRpos
+      _ = ε := by rw [hpow]; field_simp [ne_of_gt hRpos]
 -- END SEAT AREA
 
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend
