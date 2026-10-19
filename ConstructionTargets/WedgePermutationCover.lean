@@ -2897,7 +2897,31 @@ lemma rp2Wedge_irregular_four_cover_aux_not_regular_aux_lift_inr
       Quotient.mk _ (.inr (rp2Wedge_regular_four_cover_aux_e0, m))) :
     h (Quotient.mk _ (.inr (-rp2Wedge_regular_four_cover_aux_e0, k))) =
       Quotient.mk _ (.inr (-rp2Wedge_regular_four_cover_aux_e0, m)) := by
-  sorry
+  let e0 := rp2Wedge_regular_four_cover_aux_e0
+  have hs : IsPathConnected (Metric.sphere
+      (0 : EuclideanSpace ℝ (Fin 3)) 1) :=
+    isPathConnected_sphere (by rw [← Module.finrank_eq_rank]; simp) 0 (by norm_num)
+  haveI : PathConnectedSpace Sphere2 := isPathConnected_iff_pathConnectedSpace.mp hs
+  let γ : Path e0 (-e0) := PathConnectedSpace.somePath e0 (-e0)
+  let u : unitInterval → rp2Wedge_regular_four_cover_aux_E σ τ := fun t ↦
+    Quotient.mk _ (.inr (γ t, k))
+  let v : unitInterval → rp2Wedge_regular_four_cover_aux_E σ τ := fun t ↦
+    Quotient.mk _ (.inr (γ t, m))
+  have hu : Continuous u := by
+    exact continuous_coinduced_rng.comp
+      (continuous_inr.comp (γ.continuous.prodMk continuous_const))
+  have hv : Continuous v := by
+    exact continuous_coinduced_rng.comp
+      (continuous_inr.comp (γ.continuous.prodMk continuous_const))
+  have hcomp : rp2Wedge_regular_four_cover_aux_p σ τ ∘ (h ∘ u) =
+      rp2Wedge_regular_four_cover_aux_p σ τ ∘ v := by
+    funext t
+    rw [Function.comp_apply, Function.comp_apply, hh]
+    rfl
+  have huv : h ∘ u = v := hp.eq_of_comp_eq
+    (h.continuous.comp hu) hv hcomp 0 (by simpa [u, v, e0] using hkm)
+  have hend := congrFun huv 1
+  simpa [u, v, e0] using hend
 
 /-- **LIBRARY.** A deck homeomorphism `h` permutes the fibre
 `{[(e₀, i)] | i}` over the wedge point by some `g`, and `g` commutes with `σ`
