@@ -2486,6 +2486,71 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
 (bounded by `M^(p-1)`); pointwise `f₀ g ≥ |f_M|^p`; `(p-1) q = p` from `hpq`, so
 `‖g‖_q = A^(1/q)` with `A := ∫ |f_M|^p` (finite, `_aux_trunc_memLp`); `A ≤ R A^(1/q)` gives
 `A^(1/p) ≤ R` (case `A = 0` separately), so `A ≤ R^p`. -/
+-- Helper (claude-14): the clipped value `t` of `y` satisfies `|t|^p ≤ y · t|t|^(p-2)`, and the
+-- test value `t|t|^(p-2)` has absolute value `|t|^(p-1)`.
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound_aux_pointwise (p : ℝ) (hp : 1 < p) (M y : ℝ) (hM : 0 ≤ M) :
+    |max (-M) (min M y)| ^ p ≤
+        y * (max (-M) (min M y) * |max (-M) (min M y)| ^ (p - 2)) ∧
+      |max (-M) (min M y) * |max (-M) (min M y)| ^ (p - 2)| =
+        |max (-M) (min M y)| ^ (p - 1) := by
+  set t := max (-M) (min M y) with ht
+  have hty : t * t ≤ y * t := by
+    rcases le_total y M with h1 | h1 <;> rcases le_total (-M) y with h2 | h2
+    · rw [ht, min_eq_right h1, max_eq_right h2]
+    · rw [ht, min_eq_right h1, max_eq_left (by linarith)]; nlinarith
+    · rw [ht, min_eq_left h1, max_eq_right (by linarith)]; nlinarith
+    · rw [ht, min_eq_left h1, max_eq_left (by linarith)]; nlinarith
+  rcases eq_or_ne t 0 with h0 | h0
+  · rw [h0]; simp [Real.zero_rpow (by linarith : p ≠ 0), Real.zero_rpow (by linarith : p - 1 ≠ 0)]
+  have ha : 0 < |t| := abs_pos.2 h0
+  have hsplit : |t| ^ p = |t| * |t| * |t| ^ (p - 2) := by
+    rw [mul_assoc, ← Real.rpow_one_add' ha.le (by linarith), ← Real.rpow_one_add' ha.le (by linarith)]
+    ring_nf
+  constructor
+  · rw [hsplit, ← abs_mul, abs_mul_self, ← mul_assoc]
+    exact mul_le_mul_of_nonneg_right hty (Real.rpow_nonneg ha.le _)
+  · rw [abs_mul, abs_of_nonneg (Real.rpow_nonneg ha.le _), ← Real.rpow_one_add' ha.le (by linarith)]
+    ring_nf
+
+-- Helper (claude-14): if `|g| = |h|^(p-1)` with `h` bounded, then `‖g‖_q = (∫ |h|^p)^(1/q)`, as `(p-1) q = p`.
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound_aux_norm (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (h g : ℝ → ℝ) (hh : AEStronglyMeasurable h (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (M : ℝ) (hM : ∀ x, |h x| ≤ M) (hgh : ∀ x, |g x| = |h x| ^ (p - 1)) :
+    (eLpNorm g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal =
+      (∫ x in Set.Icc (0 : ℝ) 1, |h x| ^ p) ^ (1 / q) := by
+  set μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  haveI : IsFiniteMeasure μ := isFiniteMeasure_restrict.2 measure_Icc_lt_top.ne
+  have hq0 : 0 < q := by linarith
+  have hgL : MemLp g (ENNReal.ofReal q) μ := by
+    refine (memLp_top_of_bound hg (M ^ (p - 1)) (Eventually.of_forall fun x ↦ ?_)).mono_exponent le_top
+    rw [Real.norm_eq_abs, hgh]
+    exact Real.rpow_le_rpow (abs_nonneg _) (hM x) (by linarith)
+  have hpq' : (p - 1) * q = p := by
+    field_simp at hpq; nlinarith [hpq]
+  rw [hgL.eLpNorm_eq_integral_rpow_norm (by simpa using hq0) ENNReal.ofReal_ne_top,
+    ENNReal.toReal_ofReal (by positivity), ENNReal.toReal_ofReal hq0.le, one_div]
+  congr 2
+  funext x
+  rw [Real.norm_eq_abs, hgh, ← Real.rpow_mul (abs_nonneg _), hpq']
+
+-- Helper (claude-14): `A ≤ R A^(1/q)` with `A, R ≥ 0` gives `A ≤ R^p`.
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound_aux_scalar (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (A R : ℝ) (hA : 0 ≤ A) (hR : 0 ≤ R) (h : A ≤ R * A ^ (1 / q)) : A ≤ R ^ p := by
+  rcases hA.eq_or_lt with h0 | hpos
+  · rw [← h0]; positivity
+  have h1p : 1 / p = 1 - 1 / q := by linarith
+  have hA' : A ^ (1 / p) ≤ R := by
+    have hq0 : 0 < A ^ (1 / q) := Real.rpow_pos_of_pos hpos _
+    have : A = A ^ (1 / p) * A ^ (1 / q) := by
+      rw [← Real.rpow_add hpos, hpq, Real.rpow_one]
+    nth_rewrite 1 [this] at h
+    exact le_of_mul_le_mul_right h hq0
+  have hp0 : 0 < p := by linarith
+  calc A = (A ^ (1 / p)) ^ p := by
+        rw [← Real.rpow_mul hA, one_div_mul_cancel hp0.ne', Real.rpow_one]
+    _ ≤ R ^ p := Real.rpow_le_rpow (Real.rpow_nonneg hA _) hA' hp0.le
+
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound
     (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
     (f₀ : ℝ → ℝ) (hf₀ : Integrable f₀ (volume.restrict (Set.Icc (0 : ℝ) 1)))
@@ -2496,7 +2561,38 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
           R * (eLpNorm g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
     ∀ M : ℝ, 0 ≤ M →
       ∫ x in Set.Icc (0 : ℝ) 1, |max (-M) (min M (f₀ x))| ^ p ≤ R ^ p := by
-  sorry
+  intro M hM
+  set μ := volume.restrict (Set.Icc (0 : ℝ) 1) with hμ
+  haveI : IsFiniteMeasure μ := isFiniteMeasure_restrict.2 measure_Icc_lt_top.ne
+  set h : ℝ → ℝ := fun x ↦ max (-M) (min M (f₀ x)) with hh
+  set g : ℝ → ℝ := fun x ↦ h x * |h x| ^ (p - 2) with hg
+  have hhb : ∀ x, |h x| ≤ M := fun x ↦ by
+    rw [abs_le]; exact ⟨le_max_left _ _, max_le (by linarith) (min_le_left _ _)⟩
+  have hc : Continuous (fun y : ℝ ↦ max (-M) (min M y)) :=
+    continuous_const.max (continuous_const.min continuous_id)
+  have hhm : AEStronglyMeasurable h μ := hc.comp_aestronglyMeasurable hf₀.aestronglyMeasurable
+  have hgm : AEStronglyMeasurable g μ :=
+    hhm.mul ((hhm.norm.aemeasurable.pow_const (p - 2)).aestronglyMeasurable)
+  have hpt := fun x ↦ apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound_aux_pointwise p hp M (f₀ x) hM
+  have hgh : ∀ x, |g x| = |h x| ^ (p - 1) := fun x ↦ (hpt x).2
+  have hgb : ∀ x, |g x| ≤ M ^ (p - 1) := fun x ↦ by
+    rw [hgh]; exact Real.rpow_le_rpow (abs_nonneg _) (hhb x) (by linarith)
+  have hAint : Integrable (fun x ↦ |h x| ^ p) μ := by
+    refine Integrable.of_bound (C := M ^ p)
+      ((hhm.norm.aemeasurable.pow_const p).aestronglyMeasurable) ?_
+    filter_upwards [] with x
+    rw [Real.norm_eq_abs, abs_of_nonneg (Real.rpow_nonneg (abs_nonneg _) _)]
+    exact Real.rpow_le_rpow (abs_nonneg _) (hhb x) (by linarith)
+  have hfg : Integrable (fun x ↦ f₀ x * g x) μ := by
+    refine hf₀.mul_bdd (c := M ^ (p - 1)) hgm (Eventually.of_forall fun x ↦ ?_)
+    rw [Real.norm_eq_abs]; exact hgb x
+  have hA0 : 0 ≤ ∫ x in Set.Icc (0 : ℝ) 1, |h x| ^ p :=
+    integral_nonneg fun x ↦ Real.rpow_nonneg (abs_nonneg _) _
+  have hle : ∫ x in Set.Icc (0 : ℝ) 1, |h x| ^ p ≤ ∫ x in Set.Icc (0 : ℝ) 1, f₀ x * g x :=
+    integral_mono hAint hfg fun x ↦ (hpt x).1
+  have hT := htest g hgm _ hgb
+  rw [apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound_aux_norm p q hp hq hpq h g hhm hgm M hhb hgh] at hT
+  exact apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_bound_aux_scalar p q hp hq hpq _ R hA0 hR (hle.trans ((le_abs_self _).trans hT))
 
 /-- Leaf (monotone limit). If the truncations of a measurable `f₀` have `∫ |f_M|^p ≤ K` for all
 `M ≥ 0`, then `f₀ ∈ Lᵖ([0,1])`. Route: `|f_n|^p ↑ |f₀|^p` pointwise along `M = n`;
