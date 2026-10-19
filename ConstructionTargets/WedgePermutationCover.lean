@@ -269,7 +269,102 @@ theorem rp2Wedge_regular_four_cover_aux_card_aux_left (σ τ : Equiv.Perm (Fin 4
     (hσ : Function.Involutive σ) (x : Sphere2) (hx : antipodalCover x ≠ rpBase) :
     Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
       Quotient.mk _ (.inl (antipodalCover x))} = 4 := by
-  sorry
+  have hx0 : (x : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+    intro h
+    have := x.property
+    simp [h] at this
+  have hxx : (-x : Sphere2) ≠ x := by
+    intro h
+    apply hx0
+    have h' : -(x : EuclideanSpace ℝ (Fin 3)) = x := congrArg Subtype.val h
+    have htwo : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      rw [two_smul]
+      simpa using
+        (congrArg (fun z ↦ z + (x : EuclideanSpace ℝ (Fin 3))) h').symm
+    exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+  let fL : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = x then z.2 else if z.1 = -x then σ z.2 else 0
+  let fR : Sphere2 × Fin 4 → Fin 4 := fun _ ↦ 0
+  have hL : ∀ y i, fL (-y, σ i) = fL (y, i) := by
+    intro y i
+    simp only [fL]
+    by_cases hy : y = x
+    · subst y
+      simp [hxx, hσ i]
+    by_cases hyn : y = -x
+    · subst y
+      simp [hxx, hσ i]
+    have hny : -y ≠ x := by
+      intro h
+      apply hyn
+      rw [← h]
+      simp
+    have hnyn : -y ≠ -x := by
+      intro h
+      apply hy
+      exact neg_injective h
+    simp [hy, hyn, hny, hnyn]
+  have he0x : rp2Wedge_regular_four_cover_aux_e0 ≠ x := by
+    intro h
+    apply hx
+    rw [← h, ← rp2Wedge_regular_four_cover_aux_rpBase]
+  have he0nx : rp2Wedge_regular_four_cover_aux_e0 ≠ -x := by
+    intro h
+    apply hx
+    exact (calc
+      antipodalCover x = antipodalCover (-x) :=
+        (rp2Wedge_regular_four_cover_aux_neg x).symm
+      _ = antipodalCover rp2Wedge_regular_four_cover_aux_e0 := congrArg _ h.symm
+      _ = rpBase := rp2Wedge_regular_four_cover_aux_rpBase.symm)
+  have hG : ∀ i, fL (rp2Wedge_regular_four_cover_aux_e0, i) =
+      fR (rp2Wedge_regular_four_cover_aux_e0, i) := by
+    intro i
+    simp [fL, fR, he0x, he0nx]
+  let e : Fin 4 → {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl (antipodalCover x))} := fun i ↦
+    ⟨Quotient.mk _ (.inl (x, i)), rfl⟩
+  have einj : Function.Injective e := by
+    intro i j hij
+    have hq : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ)
+        (.inl (x, i)) (.inl (x, j)) := Quotient.exact (congrArg Subtype.val hij)
+    have hi := rp2Wedge_regular_four_cover_aux_card_aux_invariant σ τ fL fR
+      hL (by simp [fR]) hG hq
+    simpa [fL] using hi
+  have esurj : Function.Surjective e := by
+    rintro ⟨z, hz⟩
+    obtain ⟨a, ha⟩ := Quotient.exists_rep z
+    subst z
+    rcases a with ⟨y, i⟩ | ⟨y, i⟩
+    · have hw : Relation.EqvGen (WedgeRel rpBase rpBase)
+          (.inl (antipodalCover y)) (.inl (antipodalCover x)) :=
+        Quotient.exact hz
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+          rpBase rpBase _ _).mp hw with h | h
+      · have hc : antipodalCover y = antipodalCover x := Sum.inl.inj h
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff x y).mp hc.symm with rfl | rfl
+        · exact ⟨i, rfl⟩
+        · refine ⟨σ i, ?_⟩
+          apply Subtype.ext
+          apply Quotient.sound
+          simpa using (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.left (-x) i :
+              rp2Wedge_regular_four_cover_aux_Rel σ τ _ _)))
+      · rcases h with ⟨_, hv⟩
+        rcases hv with hv | hv
+        · exact (hx (Sum.inl.inj hv)).elim
+        · contradiction
+    · have hw : Relation.EqvGen (WedgeRel rpBase rpBase)
+          (.inr (antipodalCover y)) (.inl (antipodalCover x)) :=
+        Quotient.exact hz
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+          rpBase rpBase _ _).mp hw with h | h
+      · contradiction
+      · rcases h with ⟨_, hv⟩
+        rcases hv with hv | hv
+        · exact (hx (Sum.inl.inj hv)).elim
+        · contradiction
+  rw [Nat.card_congr (Equiv.ofBijective e ⟨einj, esurj⟩).symm]
+  simp
 
 /-- Fibre over a non-base point of the right lobe; the mirror image of
 `_aux_card_aux_left` with `τ` in place of `σ`. -/
