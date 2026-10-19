@@ -1386,12 +1386,256 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected 
 component `K` of the target, counting the vertices of a `0`-chain that lie in `K`
 kills boundaries, and these counts separate the vertex classes
 `CoefficientH0.singularVertexH0Class` of distinct source components.) -/
+noncomputable def apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B] (f : C(A, B))
+    (b : B) : Option A := by
+  classical
+  exact if h : ∃ a : A, Joined (f a) b then some (Classical.choose h) else none
+
+set_option maxHeartbeats 800000
+
+noncomputable def apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_vertex
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B] (f : C(A, B))
+    (b : B) : ModuleCat.of ℤ ℤ ⟶
+      ConstructionTargets.CoefficientH0.SingularHomology ℤ 0 (TopCat.of A) :=
+  match apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick f b with
+  | some a => ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ a
+  | none => 0
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick_spec
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B] (f : C(A, B))
+    {b : B} {a : A}
+    (h : apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick f b = some a) :
+    Joined (f a) b := by
+  classical
+  unfold apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick at h
+  split at h <;> simp_all
+  subst a
+  exact Classical.choose_spec ‹∃ a, Joined (f a) b›
+
+noncomputable def apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_chains
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B] (f : C(A, B)) :
+    (ConstructionTargets.CoefficientH0.SingularChains ℤ (TopCat.of B)).X 0 ⟶
+      ConstructionTargets.CoefficientH0.SingularHomology ℤ 0 (TopCat.of A) := by
+  change (∐ fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+    (TopCat.of B) 0 ↦ ModuleCat.of ℤ ℤ) ⟶ _
+  exact Limits.Sigma.desc fun s =>
+    apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_vertex
+      f (ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint s)
+
 lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined
     {A B : Type} [TopologicalSpace A] [TopologicalSpace B] (f : C(A, B))
     (hf : ∀ a a' : A, Joined (f a) (f a') → Joined a a') :
     Function.Injective (HomologicalComplex.homologyMap
       (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ f) 0).hom := by
-  sorry
+  classical
+  open ConstructionTargets.CoefficientH0 in
+    let KA := SingularChains ℤ (TopCat.of A)
+    let KB := SingularChains ℤ (TopCat.of B)
+    let v := apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_vertex f
+    let L := apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_chains f
+    have hv_joined {b b' : B} (hbb' : Joined b b') : v b = v b' := by
+      dsimp [v, apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_vertex]
+      generalize hp : apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick f b = p
+      generalize hq : apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick f b' = q
+      cases p with
+      | none =>
+          cases q with
+          | none => rfl
+          | some a' =>
+              exfalso
+              have ha' : Joined (f a') b' := by
+                exact apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick_spec f hq
+              have hex : ∃ a : A, Joined (f a) b :=
+                ⟨a', ha'.trans hbb'.symm⟩
+              simp [apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick,
+                hex] at hp
+      | some a =>
+          cases q with
+          | none =>
+              exfalso
+              have ha : Joined (f a) b := by
+                exact apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick_spec f hp
+              have hex : ∃ a' : A, Joined (f a') b' :=
+                ⟨a, ha.trans hbb'⟩
+              simp [apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick,
+                hex] at hq
+          | some a' =>
+              apply singularVertexH0Class_eq_of_path ℤ
+              apply (hf a a' ?_).somePath
+              have ha : Joined (f a) b := by
+                exact apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick_spec f hp
+              have ha' : Joined (f a') b' := by
+                exact apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick_spec f hq
+              exact ha.trans (hbb'.trans ha'.symm)
+    have hd : KB.d 1 0 ≫ L = 0 := by
+      apply Limits.Sigma.hom_ext
+      intro s
+      change singularGenerator ℤ (TopCat.of B) 1 s ≫ KB.d 1 0 ≫ L = 0
+      rw [← CategoryTheory.Category.assoc, singularGenerator_boundary ℤ,
+        Fin.sum_univ_two, CategoryTheory.Preadditive.add_comp,
+        CategoryTheory.Preadditive.zsmul_comp]
+      norm_num
+      dsimp [L,
+        apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_chains,
+        singularGenerator]
+      erw [Limits.Sigma.ι_desc]
+      change v _ + -(singularGenerator ℤ (TopCat.of B) 0
+        ((TopCat.toSSet.obj (TopCat.of B)).δ (1 : Fin 2) s) ≫ L) = 0
+      have hsecond : singularGenerator ℤ (TopCat.of B) 0
+          ((TopCat.toSSet.obj (TopCat.of B)).δ (1 : Fin 2) s) ≫ L =
+          v (ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint
+            ((TopCat.toSSet.obj (TopCat.of B)).δ (1 : Fin 2) s)) := by
+        simp [L,
+          apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_chains,
+          singularGenerator]
+        erw [Limits.Sigma.ι_desc]
+      rw [hsecond]
+      rw [← sub_eq_add_neg]
+      rw [sub_eq_zero]
+      change v _ = v _
+      apply hv_joined
+      let τ₁ := ConstructionTargets.SingularSubdivision.continuousMapOfSingularSimplex 1 s
+      have hs : ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+          (TopCat.of B) 1 τ₁ = s := by
+        exact Equiv.symm_apply_apply _ s
+      have hu (u w : stdSimplex ℝ (Fin 1)) : u = w := by
+        ext i
+        fin_cases i
+        exact (stdSimplex.eq_one_of_unique u (0 : Fin 1)).trans
+          (stdSimplex.eq_one_of_unique w (0 : Fin 1)).symm
+      have h0 : ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint
+          ((TopCat.toSSet.obj (TopCat.of B)).δ (0 : Fin 2) s) =
+          τ₁ (ConstructionTargets.SingularSubdivision.standardSimplexVertices 1 1) := by
+        rw [← hs, ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap_face
+          (m := 0) τ₁ 0]
+        simp only [ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint,
+          ConstructionTargets.SingularSubdivision.continuousMapOfSingularSimplex_ofContinuousMap,
+          ContinuousMap.comp_apply]
+        change τ₁ (ConstructionTargets.SingularSubdivision.faceAffine 0 0
+          (ConstructionTargets.SingularSubdivision.standardSimplexVertices 0 0)) = _
+        exact congrArg τ₁ (congrFun
+          (ConstructionTargets.SingularSubdivision.faceAffine_standardSimplexVertices 0 0) 0)
+      have h1 : ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint
+          ((TopCat.toSSet.obj (TopCat.of B)).δ (1 : Fin 2) s) =
+          τ₁ (ConstructionTargets.SingularSubdivision.standardSimplexVertices 1 0) := by
+        rw [← hs, ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap_face
+          (m := 0) τ₁ 1]
+        simp only [ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint,
+          ConstructionTargets.SingularSubdivision.continuousMapOfSingularSimplex_ofContinuousMap,
+          ContinuousMap.comp_apply]
+        change τ₁ (ConstructionTargets.SingularSubdivision.faceAffine 0 1
+          (ConstructionTargets.SingularSubdivision.standardSimplexVertices 0 0)) = _
+        exact congrArg τ₁ (congrFun
+          (ConstructionTargets.SingularSubdivision.faceAffine_standardSimplexVertices 0 1) 0)
+      rw [h0, h1]
+      exact ⟨(PathConnectedSpace.joined
+        (ConstructionTargets.SingularSubdivision.standardSimplexVertices 1 1)
+        (ConstructionTargets.SingularSubdivision.standardSimplexVertices 1 0)).somePath.map
+          τ₁.continuous⟩
+    let c : KB.cycles 0 ⟶ SingularHomology ℤ 0 (TopCat.of A) := KB.iCycles 0 ≫ L
+    have hc : KB.toCycles 1 0 ≫ c = 0 := by
+      dsimp [c]
+      rw [← CategoryTheory.Category.assoc, HomologicalComplex.toCycles_i, hd]
+    let g : SingularHomology ℤ 0 (TopCat.of B) ⟶ SingularHomology ℤ 0 (TopCat.of A) :=
+      (KB.homologyIsCokernel 1 0 (by simp)).desc
+        (CategoryTheory.Limits.CokernelCofork.ofπ c hc)
+    have hπ : KB.homologyπ 0 ≫ g = c := by
+      exact CategoryTheory.Limits.Cofork.IsColimit.π_desc
+        (KB.homologyIsCokernel 1 0 (by simp))
+    have hleft : HomologicalComplex.homologyMap (singularPostcomposition ℤ f) 0 ≫ g = 𝟙 _ := by
+      apply (CategoryTheory.cancel_epi (zeroChainH0Class ℤ (X := A))).1
+      apply Limits.Sigma.hom_ext
+      intro s
+      change singularGenerator ℤ (TopCat.of A) 0 s ≫
+        zeroChainH0Class ℤ ≫ HomologicalComplex.homologyMap
+          (singularPostcomposition ℤ f) 0 ≫ g =
+        singularGenerator ℤ (TopCat.of A) 0 s ≫ zeroChainH0Class ℤ
+      have hstep : singularGenerator ℤ (TopCat.of A) 0 s ≫
+          zeroChainH0Class ℤ ≫ HomologicalComplex.homologyMap
+            (singularPostcomposition ℤ f) 0 ≫ g =
+          singularGenerator ℤ (TopCat.of A) 0 s ≫
+            (singularPostcomposition ℤ f).f 0 ≫ zeroChainH0Class ℤ ≫ g := by
+        simpa only [CategoryTheory.Category.assoc] using congrArg
+          (fun q => singularGenerator ℤ (TopCat.of A) 0 s ≫ q ≫ g)
+          (zeroChainH0Class_naturality ℤ f)
+      rw [hstep]
+      let τ := ConstructionTargets.SingularSubdivision.continuousMapOfSingularSimplex 0 s
+      change singularGenerator ℤ (TopCat.of A) 0 s ≫
+        (singularPostcomposition ℤ f).f 0 ≫ zeroChainH0Class ℤ ≫ g = _
+      change singularGenerator ℤ (TopCat.of A) 0
+        (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+          (TopCat.of A) 0 τ) ≫
+        (singularPostcomposition ℤ f).f 0 ≫ zeroChainH0Class ℤ ≫ g = _
+      have hgen : singularGenerator ℤ (TopCat.of A) 0
+          (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of A) 0 τ) ≫ (singularPostcomposition ℤ f).f 0 =
+          singularGenerator ℤ (TopCat.of B) 0
+            (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+              (TopCat.of B) 0 (f.comp τ)) :=
+        singularGenerator_singularPostcomposition ℤ 0 τ f
+      have hstep2 := congrArg (fun q => q ≫ zeroChainH0Class ℤ ≫ g) hgen
+      simp only [CategoryTheory.Category.assoc] at hstep2
+      rw [hstep2]
+      unfold zeroChainH0Class
+      have hp := congrArg (fun q => singularGenerator ℤ (TopCat.of B) 0
+        (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+          (TopCat.of B) 0 (f.comp τ)) ≫ zeroChainsToCycles ℤ ≫ q) hπ
+      have hp' : (singularGenerator ℤ (TopCat.of B) 0
+          (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of B) 0 (f.comp τ)) ≫ zeroChainsToCycles ℤ ≫
+            KB.homologyπ 0) ≫ g =
+          (singularGenerator ℤ (TopCat.of B) 0
+            (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+              (TopCat.of B) 0 (f.comp τ)) ≫ zeroChainsToCycles ℤ) ≫ c := by
+        simpa only [CategoryTheory.Category.assoc] using hp
+      rw [← CategoryTheory.Category.assoc]
+      change (singularGenerator ℤ (TopCat.of B) 0
+          (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of B) 0 (f.comp τ)) ≫ zeroChainsToCycles ℤ ≫
+            KB.homologyπ 0) ≫ g = _
+      rw [hp']
+      dsimp [c]
+      have hz := congrArg (fun q => singularGenerator ℤ (TopCat.of B) 0
+        (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+          (TopCat.of B) 0 (f.comp τ)) ≫ q ≫ L)
+        (zeroChainsToCycles_i ℤ (X := B))
+      have hz' : ((singularGenerator ℤ (TopCat.of B) 0
+          (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of B) 0 (f.comp τ)) ≫ zeroChainsToCycles ℤ) ≫
+            KB.iCycles 0) ≫ L =
+          singularGenerator ℤ (TopCat.of B) 0
+            (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+              (TopCat.of B) 0 (f.comp τ)) ≫ L := by
+        simpa only [CategoryTheory.Category.assoc, CategoryTheory.Category.id_comp] using hz
+      rw [← CategoryTheory.Category.assoc]
+      rw [hz']
+      change singularGenerator ℤ (TopCat.of B) 0
+          (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of B) 0 (f.comp τ)) ≫ L =
+        singularGenerator ℤ (TopCat.of A) 0 s ≫ zeroChainH0Class ℤ
+      rw [singularGenerator_zeroChainH0Class ℤ]
+      simp [L,
+        apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_chains,
+        singularGenerator]
+      erw [Limits.Sigma.ι_desc]
+      change v (f (ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint s)) = _
+      dsimp [v, apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_vertex,
+        apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_H0_inj_of_joined_aux_pick]
+      have hex : ∃ a : A, Joined (f a)
+          (f (ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint s)) :=
+        ⟨_, Joined.refl _⟩
+      rw [dif_pos hex]
+      apply singularVertexH0Class_eq_of_path ℤ
+      apply (hf _ _ ?_).somePath
+      exact Classical.choose_spec hex
+    intro x y hxy
+    have := congrArg (fun z => g.hom z) hxy
+    have hx := congrArg (fun q : SingularHomology ℤ 0 (TopCat.of A) ⟶
+      SingularHomology ℤ 0 (TopCat.of A) => q x) hleft
+    have hy := congrArg (fun q : SingularHomology ℤ 0 (TopCat.of A) ⟶
+      SingularHomology ℤ 0 (TopCat.of A) => q y) hleft
+    exact hx.symm.trans (this.trans hy)
 
 /-- The inclusion `U ∩ V → U` reflects path-joinedness: points joined in
 `U ≅ PT ⊔ PT` lie in the same summand, and there in the same punctured square
