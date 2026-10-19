@@ -1457,7 +1457,60 @@ lemma apm_m93j05_exists_minimizer_coercive_aux_triangle
           (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal +
         (eLpNorm (apm_m93j05_trunc N f) (ENNReal.ofReal p)
           (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let C : ℝ := |∫ x in Set.Icc (0 : ℝ) 1, f x| +
+    ∑ j ∈ Finset.Icc 1 N,
+      (|apm_m93j05_cosCoeff f j| + |apm_m93j05_sinCoeff f j|)
+  have htrunc : MemLp (apm_m93j05_trunc N f) (ENNReal.ofReal p) μ := by
+    apply MemLp.of_bound (C := C)
+    · exact (apm_m93j05_trunc_split_aux_continuous N f).aestronglyMeasurable
+    · filter_upwards with x
+      rw [Real.norm_eq_abs]
+      unfold apm_m93j05_trunc
+      calc
+        |_ + _| ≤ |∫ z in Set.Icc (0 : ℝ) 1, f z| +
+              |∑ j ∈ Finset.Icc 1 N,
+                (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+                 apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))| :=
+          abs_add_le _ _
+        _ ≤ C := by
+          dsimp [C]
+          apply add_le_add le_rfl
+          calc
+            |∑ j ∈ Finset.Icc 1 N, _| ≤
+                ∑ j ∈ Finset.Icc 1 N,
+                  |apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+                   apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x)| :=
+              Finset.abs_sum_le_sum_abs _ _
+            _ ≤ ∑ j ∈ Finset.Icc 1 N,
+                (|apm_m93j05_cosCoeff f j| + |apm_m93j05_sinCoeff f j|) := by
+              apply Finset.sum_le_sum
+              intro j hj
+              calc
+                |_ + _| ≤ |_| + |_| := abs_add_le _ _
+                _ ≤ |apm_m93j05_cosCoeff f j| + |apm_m93j05_sinCoeff f j| := by
+                  simp only [abs_mul]
+                  exact add_le_add
+                    (mul_le_of_le_one_right (abs_nonneg _) (Real.abs_cos_le_one _))
+                    (mul_le_of_le_one_right (abs_nonneg _) (Real.abs_sin_le_one _))
+  have hrem : MemLp (fun x => f x - apm_m93j05_trunc N f x)
+      (ENNReal.ofReal p) μ := hf.sub htrunc
+  have hp1 : 1 ≤ ENNReal.ofReal p := by
+    rw [ENNReal.one_le_ofReal]
+    linarith
+  have htri := eLpNorm_add_le hrem.aestronglyMeasurable
+    htrunc.aestronglyMeasurable hp1
+  have hid : (fun x => f x - apm_m93j05_trunc N f x) +
+      apm_m93j05_trunc N f = f := by
+    funext x
+    simp
+  rw [hid] at htri
+  have hsumtop : eLpNorm (fun x => f x - apm_m93j05_trunc N f x)
+        (ENNReal.ofReal p) μ +
+      eLpNorm (apm_m93j05_trunc N f) (ENNReal.ofReal p) μ ≠ ⊤ :=
+    ENNReal.add_ne_top.mpr ⟨hrem.eLpNorm_ne_top, htrunc.eLpNorm_ne_top⟩
+  have hreal := (ENNReal.toReal_le_toReal hf.eLpNorm_ne_top hsumtop).2 htri
+  simpa [μ, ENNReal.toReal_add hrem.eLpNorm_ne_top htrunc.eLpNorm_ne_top] using hreal
 -- END SEAT AREA
 
 lemma apm_m93j05_exists_minimizer_coercive_aux_holder
