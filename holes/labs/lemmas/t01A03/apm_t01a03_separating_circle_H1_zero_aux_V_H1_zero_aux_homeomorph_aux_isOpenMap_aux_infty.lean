@@ -1296,7 +1296,107 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOp
       apm_t01a03_separating_circle_H1_zero_aux_V) :
     nhds (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ⟨OnePoint.infty, h⟩) ≤
       Filter.map (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) (nhds ⟨OnePoint.infty, h⟩) := by
-  sorry
+  classical
+  rw [Filter.le_def]
+  intro s hs
+  rw [Filter.mem_map] at hs
+  obtain ⟨u, hu, hus⟩ :=
+    (mem_nhds_subtype
+      apm_t01a03_separating_circle_H1_zero_aux_V ⟨OnePoint.infty, h⟩
+      ((apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) ⁻¹' s)).mp hs
+  obtain ⟨K, ⟨hKclosed, hKcompact⟩, hKu⟩ :=
+    OnePoint.hasBasis_nhds_infty.mem_iff.mp hu
+  let fold : apm_t01a03_TwoPuncturedTori → apm_t01a03_PuncturedTorus :=
+    Sum.elim id id
+  let C : Set apm_t01a03_PuncturedTorus := fold '' K
+  have hfold : Continuous fold := by
+    apply continuous_sum_dom.mpr
+    exact ⟨continuous_id, continuous_id⟩
+  have hCcompact : IsCompact C := hKcompact.image hfold
+  obtain ⟨r, hr, hsmall⟩ := hnear C hCcompact
+  have hzero :
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ
+          ⟨OnePoint.infty, h⟩ ∈ s := by
+    apply hus
+    apply hKu
+    simp
+  refine Metric.mem_nhds_iff.mpr ⟨r, hr, ?_⟩
+  rintro z hz
+  obtain ⟨x, rfl⟩ :=
+    (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_bijective φ).2 z
+  rcases x with ⟨x, hxV⟩
+  induction x using OnePoint.rec with
+  | infty => exact hzero
+  | coe p =>
+      apply hus
+      apply hKu
+      simp only [Set.mem_union, Set.mem_image, Set.mem_compl_iff,
+        Set.mem_singleton_iff]
+      left
+      refine ⟨p, ?_, rfl⟩
+      intro hpK
+      have hpC : fold p ∈ C := ⟨p, hpK, rfl⟩
+      cases p with
+      | inl p =>
+          have hpN :=
+            apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+              (Sum.inl p) hxV
+          have hpN' : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hpN
+          have hnorm : ‖(φ ⟨p, hpN'⟩ : Fin 2 → ℝ)‖ < r := by
+            let zin : apm_t01a03_separating_circle_H1_zero_aux_W :=
+              ⟨((φ ⟨p, hpN'⟩ : Fin 2 → ℝ), 0), Or.inl ⟨(φ ⟨p, hpN'⟩).2.1, rfl⟩⟩
+            let zzero : apm_t01a03_separating_circle_H1_zero_aux_W :=
+              ⟨(0, 0), Or.inl ⟨Metric.mem_ball_self zero_lt_one, rfl⟩⟩
+            have hin :
+                apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ
+                  ⟨((Sum.inl p : apm_t01a03_TwoPuncturedTori) :
+                    OnePoint apm_t01a03_TwoPuncturedTori), hxV⟩ = zin := by
+              apply Subtype.ext
+              unfold apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward
+              dsimp [zin]
+              congr
+            have hzero' :
+                apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ
+                  ⟨OnePoint.infty, h⟩ = zzero := by
+              apply Subtype.ext
+              rfl
+            rw [hin, hzero'] at hz
+            dsimp [zin, zzero] at hz
+            rw [Metric.mem_ball] at hz
+            rw [Subtype.dist_eq] at hz
+            simpa [dist_eq_norm] using hz
+          exact hsmall ⟨p, hpN'⟩ hnorm (by simpa [fold] using hpC)
+      | inr p =>
+          have hpN :=
+            apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+              (Sum.inr p) hxV
+          have hpN' : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hpN
+          have hnorm : ‖(φ ⟨p, hpN'⟩ : Fin 2 → ℝ)‖ < r := by
+            let zin : apm_t01a03_separating_circle_H1_zero_aux_W :=
+              ⟨(0, (φ ⟨p, hpN'⟩ : Fin 2 → ℝ)), Or.inr ⟨rfl, (φ ⟨p, hpN'⟩).2.1⟩⟩
+            let zzero : apm_t01a03_separating_circle_H1_zero_aux_W :=
+              ⟨(0, 0), Or.inl ⟨Metric.mem_ball_self zero_lt_one, rfl⟩⟩
+            have hin :
+                apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ
+                  ⟨((Sum.inr p : apm_t01a03_TwoPuncturedTori) :
+                    OnePoint apm_t01a03_TwoPuncturedTori), hxV⟩ = zin := by
+              apply Subtype.ext
+              unfold apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward
+              dsimp [zin]
+              congr
+            have hzero' :
+                apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ
+                  ⟨OnePoint.infty, h⟩ = zzero := by
+              apply Subtype.ext
+              rfl
+            rw [hin, hzero'] at hz
+            dsimp [zin, zzero] at hz
+            rw [Metric.mem_ball] at hz
+            rw [Subtype.dist_eq] at hz
+            simpa [dist_eq_norm] using hz
+          exact hsmall ⟨p, hpN'⟩ hnorm (by simpa [fold] using hpC)
 -- END SEAT AREA
 
 /-- The glued map is open: it is open at every point (`isOpenMap_iff_nhds_le`),
