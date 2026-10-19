@@ -175,6 +175,13 @@ shows `δ₀ = 0` from injectivity of `H₀(U∩V) → H₀U`, so `mvJ` is onto 
   `OnePoint.isOpen_compl_image_coe`.
 - `_aux_V_H1_zero`: `V` is two open squares wedged at `∞`, hence contractible;
   `CoefficientContractiblePair.higher_zero`.
+  Split 2026-10-19 (lemma-1 PARTIAL, nothing banked; it stalled on continuity
+  of a direct contraction at `∞`). Assembly proved: `V ≃ₜ W` with `W` two open
+  sup-norm unit squares in `(Fin 2 → ℝ)²` meeting at `0`, star-shaped. Leaves,
+  independent: `_aux_W_contractible` (`StarConvex.contractibleSpace`),
+  `_aux_chart` (`N ≃ₜ` punctured unit square by scaled angles, plus two
+  compactness clauses), `_aux_homeomorph` (glue two charts at `∞ ↦ 0`; the
+  chart and its clauses are hypotheses).
 - `_aux_inter_H0_inj`: `U ∩ V` is the two punctured squares, each path
   connected, in different summands of `U`; `TopologicalSumSingularHomology`,
   `CoefficientConnectedH0Map`.

@@ -409,11 +409,63 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_open :
     IsOpen apm_t01a03_separating_circle_H1_zero_aux_V := by
   sorry
 
+/-! #### `_aux_V_H1_zero` by a homeomorphism onto a star-shaped wedge
+
+(split 2026-10-19, after a PARTIAL from lemma-1 that stalled on continuity of a
+direct contraction at `∞`.) `V` is homeomorphic to `W`, two open sup-norm unit
+squares in `(Fin 2 → ℝ) × (Fin 2 → ℝ)` meeting at the origin, with `∞ ↦ 0`.
+`W` is star-shaped about `0`, so `V` is contractible. The chart on `N` is the
+pair of angles scaled by `3/π`: `|z - 1| < 1` on the circle iff `|arg z| < π/3`.
+Continuity at `∞` in both directions is carried by the two compactness clauses
+of the chart, which `_aux_homeomorph` takes as hypotheses. -/
+
+/-- Two open unit squares (sup norm) wedged at the origin. -/
+def apm_t01a03_separating_circle_H1_zero_aux_W : Set ((Fin 2 → ℝ) × (Fin 2 → ℝ)) :=
+  Metric.ball 0 1 ×ˢ {0} ∪ {0} ×ˢ Metric.ball 0 1
+
+/-- `W` is star-shaped about the origin (`StarConvex.contractibleSpace`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_W_contractible :
+    ContractibleSpace apm_t01a03_separating_circle_H1_zero_aux_W := by
+  sorry
+
+/-- A chart from the punctured square `N` onto the punctured open unit square,
+`x ↦ (3/π) • (arg x₁, arg x₂)`. Points far from `0` in the chart lie in a
+compact set of the punctured torus, and every compact set of the punctured
+torus stays away from `0` in the chart. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart :
+    ∃ φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+        (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)),
+      (∀ ε > 0, ∃ C : Set apm_t01a03_PuncturedTorus, IsCompact C ∧
+          ∀ x, ε ≤ ‖(φ x : Fin 2 → ℝ)‖ → (x : apm_t01a03_PuncturedTorus) ∈ C) ∧
+      (∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
+          ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) := by
+  sorry
+
+/-- Gluing two copies of a chart at `∞ ↦ 0`: `∞ ↦ 0`, `inl x ↦ (φ x, 0)`,
+`inr x ↦ (0, φ x)`. Continuity at `∞` uses the first compactness clause, and
+continuity of the inverse at `0` uses the second. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+        (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (hfar : ∀ ε > 0, ∃ C : Set apm_t01a03_PuncturedTorus, IsCompact C ∧
+          ∀ x, ε ≤ ‖(φ x : Fin 2 → ℝ)‖ → (x : apm_t01a03_PuncturedTorus) ∈ C)
+    (hnear : ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
+          ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) :
+    Nonempty (apm_t01a03_separating_circle_H1_zero_aux_V ≃ₜ
+      apm_t01a03_separating_circle_H1_zero_aux_W) := by
+  sorry
+
 /-- `H₁ V = 0`: `V` is two open squares wedged at their centres (`∞`), hence
 contractible (`CoefficientContractiblePair.higher_zero`). -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero :
     Limits.IsZero (IntegralMV.HZ 1 apm_t01a03_separating_circle_H1_zero_aux_V) := by
-  sorry
+  obtain ⟨φ, hfar, hnear⟩ := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart
+  obtain ⟨e⟩ :=
+    apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph φ hfar hnear
+  haveI := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_W_contractible
+  haveI : ContractibleSpace apm_t01a03_separating_circle_H1_zero_aux_V :=
+    e.contractibleSpace
+  exact ConstructionTargets.CoefficientContractiblePair.higher_zero ℤ _ 1 one_ne_zero
 
 /-- `H₀ (U ∩ V) → H₀ U` is injective: `U ∩ V` is the two punctured squares, each
 path connected, landing in different summands of `U ≅ PT ⊔ PT`. -/
