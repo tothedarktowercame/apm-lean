@@ -4717,7 +4717,61 @@ card 3 by `_aux_cube_card`. -/
 lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_wedge :
     Nat.card {e : circleWedge_connected_pair_aux_EC //
       circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inl circleBase)} = 3 := by
-  sorry
+  classical
+  let g : circleWedge_connected_pair_aux_Root →
+      {e : circleWedge_connected_pair_aux_EC //
+        circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inl circleBase)} :=
+    fun r ↦ ⟨Quotient.mk _ (.inl r.1), by
+      change (Quotient.mk _ (Sum.inl (circleWedge_connected_pair_aux_cube r.1)) : CircleWedge) = _
+      exact congrArg (fun w : Circle ↦
+        (Quotient.mk _ (Sum.inl w) : CircleWedge)) r.2⟩
+  have hg : Function.Bijective g := by
+    constructor
+    · intro r s h
+      have hq : Relation.EqvGen circleWedge_connected_pair_aux_RelC
+          (Sum.inl r.1) (Sum.inl s.1) := Quotient.exact (congrArg Subtype.val h)
+      rcases (circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_rel_iff
+        (Sum.inl r.1) (Sum.inl s.1)).mp hq with h | ⟨t, h | h⟩
+      · exact Subtype.ext (Sum.inl.inj h)
+      · cases h.2
+      · cases h.2
+    · rintro ⟨e, he⟩
+      induction e using Quotient.inductionOn with
+      | _ x =>
+        rcases x with z | z
+        · have hw : circleWedge_connected_pair_aux_cube z = circleBase := by
+            have hq : Relation.EqvGen (WedgeRel circleBase circleBase)
+                (.inl (circleWedge_connected_pair_aux_cube z))
+                (.inl circleBase) := Quotient.exact he
+            rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+              circleBase circleBase (.inl (circleWedge_connected_pair_aux_cube z))
+                (.inl circleBase)).mp hq with h | h
+            · exact Sum.inl.inj h
+            · rcases h.1 with h | h
+              · exact Sum.inl.inj h
+              · contradiction
+          refine ⟨⟨z, hw⟩, ?_⟩
+          apply Subtype.ext
+          rfl
+        · have hw : z.1 = circleBase := by
+            have hq : Relation.EqvGen (WedgeRel circleBase circleBase)
+                (.inr z.1) (.inl circleBase) := Quotient.exact he
+            rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+              circleBase circleBase (.inr z.1) (.inl circleBase)).mp hq with h | h
+            · contradiction
+            · rcases h.1 with h | h
+              · contradiction
+              · exact Sum.inr.inj h
+          refine ⟨z.2, ?_⟩
+          apply Subtype.ext
+          change (Quotient.mk _ (Sum.inl z.2.1) : circleWedge_connected_pair_aux_EC) =
+            Quotient.mk _ (Sum.inr z)
+          have hz : z = (circleBase, z.2) := Prod.ext hw rfl
+          rw [hz]
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            (circleWedge_connected_pair_aux_RelC.glue z.2))
+  rw [← circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_cube_card circleBase]
+  exact Nat.card_congr (Equiv.ofBijective g hg).symm
 
 /-- Fibres of `pC` have three points: over `[inl w]` the three cube roots of `w`
 on the left (the right contributes nothing unless `w = circleBase`); over
