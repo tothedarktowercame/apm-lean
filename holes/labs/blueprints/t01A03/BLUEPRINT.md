@@ -50,33 +50,61 @@ does not prove either missing induced-map fact.
 
 ## Lemmas
 
-### `apm_t01a03_circleWedge_pi1_noncommutative` — LIBRARY
+### `apm_t01a03_wedge_homeomorph_finiteWedge_two`
+
+**Statement.** The problem's quotient of `Circle ⊕ Circle` is homeomorphic to
+the banked `FiniteWedge (Fin 2)`, and the left basepoint goes to
+`wedgeCircle 0 1`.
+
+**Route / Mathlib tools.** Use the equivalence
+`Sum Circle Circle ≃ Fin 2 × Circle` (left goes to index `0`, right to index
+`1`) and descend it through the two quotient relations with `Quotient.map`.
+For well-definedness, induct on `Relation.EqvGen`; the only generator on each
+side identifies `(0,1)` and `(1,1)`. Prove the inverse laws by
+`Quotient.inductionOn`. Continuity in both directions follows from
+`Continuous.quotient_lift`, `continuous_coinduced_rng`, and continuity on the
+two summands (`continuous_sum_dom`). The existing comparison theorem
+`ConstructionTargets.PointWedgeQuotient.quotientHomeomorphOfRelIff` is also a
+useful template, though here the prequotient types differ.
+
+**Estimate.** 50–90 lines. **Independent.** Yes.
+
+**Truth check.** Neither quotient is empty. Both identify exactly the two
+circle basepoints and no other points; the explicit basepoint equation rules
+out a hidden basepoint rotation.
+
+### `apm_t01a03_freeGroup_finTwo_noncommutative`
+
+**Statement.** `FreeGroup (Fin 2)` contains two noncommuting elements.
+
+**Route / Mathlib tools.** Take `FreeGroup.of 0` and `FreeGroup.of 1`. A short
+way to separate the products is `FreeGroup.lift` into
+`Equiv.Perm (Fin 3)`, sending the generators to the transpositions `(01)` and
+`(12)`; `decide`/`native_decide` checks that the two permutation products
+differ. Alternatively use the reduced-word API in
+`Mathlib.GroupTheory.FreeGroup.Basic` (`FreeGroup.toWord`) to distinguish the
+two length-two words.
+
+**Estimate.** 15–30 lines (the algebraic leaf is already at the Mathlib
+primitive layer). **Independent.** Yes.
+
+**Truth check.** `Fin 2` has two provably distinct elements; this is not the
+rank-zero or rank-one free group degeneration.
+
+### `apm_t01a03_circleWedge_pi1_noncommutative` — sorry-free assembly
 
 **Statement.** There are two based loop classes in the concrete two-circle
 wedge which do not commute.
 
-**Why true.** Van Kampen identifies its fundamental group with
-`Monoid.Coprod ℤ ℤ`, equivalently `FreeGroup (Fin 2)`. The two free generators
-do not commute (reduce their commutator, or map to a concrete nonabelian group
-with noncommuting chosen generators). The closest sorry-free foundation is
-`ConstructionTargets.PointWedgeVanKampen`. It contains the generic point-wedge
-open cover, span comparison, and free-product reconstruction. Its reviewed
-STOP records say the residual is the normalization of the chosen equivalence's
-counit/component so the two geometric legs become the literal coproduct
-injections. This is the shared `ConstructionTargets.PointWedgeVanKampen`
-program, whose advertised final target is
-`threeCirclesFundamentalGroupEquiv`; the present rank-two specialization is an
-earlier instance of the same program.
+**Why true.** Transport `π₁` across the preceding homeomorphism using
+`PolygonSurfaceHomology.fundamentalGroupEquivOfHomeomorphEq`. The sorry-free
+banked theorem `finiteWedge_finSucc_fundamentalGroup_free 1` identifies the
+target group with `FreeGroup (Fin 2)`. Pull the preceding noncommuting pair
+back through the composite `MulEquiv`; injectivity gives the contradiction if
+their products commute.
 
-**Estimate.** LIBRARY program, 300+ lines at the shared representation
-boundary; the consumer specialization after that theorem should be under 50
-lines.
-
-**Depends on.** No other blueprint lemma.
-
-**Truth check.** By hand, the reduced words `ab` and `ba` in `F₂` differ. The
-one-circle degeneration would be abelian, which is precisely why two distinct
-wedge summands are essential here.
+**Estimate.** Compiled in about 15 lines. **Depends on.** The two conclusions
+above, plus only sorry-free banked work.
 
 ### `apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective`
 
@@ -148,12 +176,15 @@ contains no `sorry`.
 ## Dependency layers
 
 - Layer 1 (parallel):
-  `apm_t01a03_circleWedge_pi1_noncommutative` (LIBRARY),
+  `apm_t01a03_wedge_homeomorph_finiteWedge_two`,
+  `apm_t01a03_freeGroup_finTwo_noncommutative`,
   `apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective`, and
   `apm_t01a03_separating_circle_H1_zero` (LIBRARY). The wedge adapter takes the
-  source noncommutativity conclusion as a hypothesis, so all three lemma bodies
+  source noncommutativity conclusion as a hypothesis, so all four lemma bodies
   are independently assignable.
-- Layer 2: `apm_t01a03`, a sorry-free assembly from those conclusions and the
+- Layer 2: `apm_t01a03_circleWedge_pi1_noncommutative`, a sorry-free assembly
+  of the two new wedge leaves and the banked rank-two van Kampen theorem.
+- Layer 3: `apm_t01a03`, a sorry-free assembly from those conclusions and the
   proved obstruction lemmas.
 
 ## Axiom gate
@@ -167,8 +198,8 @@ systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprin
 Output:
 
 ```text
-holes/labs/blueprints/t01A03/Blueprint.lean:180:8: warning: declaration uses `sorry`
-holes/labs/blueprints/t01A03/Blueprint.lean:188:8: warning: declaration uses `sorry`
-holes/labs/blueprints/t01A03/Blueprint.lean:199:8: warning: declaration uses `sorry`
+holes/labs/blueprints/t01A03/Blueprint.lean:181:6: warning: declaration uses `sorry`
+holes/labs/blueprints/t01A03/Blueprint.lean:191:6: warning: declaration uses `sorry`
+holes/labs/blueprints/t01A03/Blueprint.lean:252:8: warning: declaration uses `sorry`
 'apm_t01a03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```

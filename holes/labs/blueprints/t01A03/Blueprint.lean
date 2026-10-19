@@ -6,6 +6,7 @@ import ConstructionTargets.CircleSingularHomology
 import ConstructionTargets.Surfaces
 import ConstructionTargets.FundamentalGroupProduct
 import ConstructionTargets.PointWedgeVanKampen
+import ConstructionTargets.PolygonCellPiOne
 
 open CategoryTheory Set
 open scoped ContDiff Manifold
@@ -175,12 +176,40 @@ lemma apm_t01a03_noRetraction_circle_of_H1_nontrivial
 
 /-! ## Independent blueprint obligations -/
 
-/-- **LIBRARY (point-wedge van Kampen).** The concrete wedge has two
+/-- The problem's quotient model is the banked finite wedge of two circles,
+with the displayed basepoints matched. -/
+lemma apm_t01a03_wedge_homeomorph_finiteWedge_two :
+    ∃ h : apm_t01a03_Wedge ≃ₜ
+        ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 2),
+      h apm_t01a03_wedgeBase =
+        ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin 2) 1 := by
+  sorry
+
+/-- The two canonical generators of the free group on two letters do not
+commute. -/
+lemma apm_t01a03_freeGroup_finTwo_noncommutative :
+    ∃ a b : FreeGroup (Fin 2), a * b ≠ b * a :=
+  ⟨FreeGroup.of 0, FreeGroup.of 1, by decide⟩
+
+/-- **LIBRARY assembly (point-wedge van Kampen).** The concrete wedge has two
 noncommuting based loop classes. -/
 theorem apm_t01a03_circleWedge_pi1_noncommutative :
     ∃ a b : FundamentalGroup apm_t01a03_Wedge apm_t01a03_wedgeBase,
       a * b ≠ b * a := by
-  sorry
+  obtain ⟨h, hbase⟩ := apm_t01a03_wedge_homeomorph_finiteWedge_two
+  obtain ⟨e, _he⟩ := finiteWedge_finSucc_fundamentalGroup_free 1
+  obtain ⟨a, b, hab⟩ := apm_t01a03_freeGroup_finTwo_noncommutative
+  let hπ :=
+    ConstructionTargets.PolygonSurfaceHomology.fundamentalGroupEquivOfHomeomorphEq
+      h apm_t01a03_wedgeBase
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin 2) 1) hbase
+  let E := hπ.trans e
+  refine ⟨E.symm a, E.symm b, ?_⟩
+  intro hcomm
+  apply hab
+  simpa using congrArg E hcomm
 
 /-- The torus target has abelian fundamental group, so any map from a wedge
 with two noncommuting loops is noninjective. The source fact is an explicit
