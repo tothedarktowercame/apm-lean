@@ -215,3 +215,17 @@ The first four are independent of each other. `_aux_sections` uses `_aux_hemi` a
   agree at the wedge point by the glue at `e₀`. The range of sheet `i` is saturated from
   `{inl (y, i), inl (-y, σ i), inr (y, i), inr (-y, τ i)}`, which is open in the raw sum.
   Disjointness comes from `_aux_card_aux_invariant`, with an invariant that records the sheet index.
+
+### Split of `circleWedge_three_cover_two_components_aux_covering` (2026-10-19, lemma-1 PARTIAL)
+
+lemma-1 banked `_aux_sq` (squaring on `Circle` is a covering map, from
+`Circle.isQuotientCoveringMap_npow 2`). claude-14 proved `_aux_id` (the identity is
+a covering map, one chart over `univ` with fibre `Unit`) and the assembly:
+`_aux_map = Sum.elim id _aux_doubleMap` by cases. Leaves, independent:
+
+- `_aux_covering_aux_double`: the glued double cover `_aux_doubleMap` is a
+  covering map. Away from the base point it is `_aux_sq` on one circle; near the
+  base point use small arcs around `±circleBase` on both circles.
+- `_aux_covering_aux_sum`: a disjoint sum of two covering maps over one base is a
+  covering map (generic; Mathlib has no such lemma). Intersect the two evenly
+  covered neighbourhoods; the sheet type is the sum of the fibres.

@@ -1493,9 +1493,39 @@ def circleWedge_three_cover_two_components_aux_map :
   | .inr x => circleWedge_three_cover_two_components_aux_doubleMap x
 
 -- BEGIN SEAT AREA
+lemma circleWedge_three_cover_two_components_aux_covering_aux_sq :
+    IsCoveringMap circleWedge_three_cover_two_components_aux_sq := by
+  letI : NeZero (2 : ℕ) := ⟨by norm_num⟩
+  have h : IsCoveringMap (fun z : Circle ↦ z ^ (2 : ℕ)) :=
+    (Circle.isQuotientCoveringMap_npow 2).isCoveringMap
+  simpa [circleWedge_three_cover_two_components_aux_sq, pow_two] using h
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double :
+    IsCoveringMap circleWedge_three_cover_two_components_aux_doubleMap := by
+  sorry
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_id :
+    IsCoveringMap (id : CircleWedge → CircleWedge) := by
+  intro x
+  exact IsEvenlyCovered.to_isEvenlyCovered_preimage (I := Unit) ⟨inferInstance, Set.univ, trivial,
+    isOpen_univ, isOpen_univ, (Homeomorph.prodPUnit _).symm, fun _ ↦ rfl⟩
+
+/-- A disjoint sum of two covering maps over the same base is a covering map. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_sum
+    {E₁ E₂ X : Type*} [TopologicalSpace E₁] [TopologicalSpace E₂] [TopologicalSpace X]
+    {f : E₁ → X} {g : E₂ → X} (hf : IsCoveringMap f) (hg : IsCoveringMap g) :
+    IsCoveringMap (Sum.elim f g) := by
+  sorry
+
 lemma circleWedge_three_cover_two_components_aux_covering :
     IsCoveringMap circleWedge_three_cover_two_components_aux_map := by
-  sorry
+  have h := circleWedge_three_cover_two_components_aux_covering_aux_sum
+    circleWedge_three_cover_two_components_aux_covering_aux_id
+    circleWedge_three_cover_two_components_aux_covering_aux_double
+  have he : circleWedge_three_cover_two_components_aux_map =
+      Sum.elim id circleWedge_three_cover_two_components_aux_doubleMap := by
+    funext e; rcases e with x | x <;> rfl
+  rw [he]; exact h
 -- END SEAT AREA
 
 lemma circleWedge_three_cover_two_components_aux_fiber (b : CircleWedge) :
