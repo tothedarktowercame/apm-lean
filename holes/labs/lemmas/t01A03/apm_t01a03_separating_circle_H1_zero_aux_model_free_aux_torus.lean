@@ -8,6 +8,7 @@ import ConstructionTargets.FundamentalGroupProduct
 import ConstructionTargets.PointWedgeVanKampen
 import ConstructionTargets.PolygonCellPiOne
 import ConstructionTargets.IntegralOpenCoverMayerVietoris
+import ConstructionTargets.BoundaryTorusH0Cokernel
 
 open CategoryTheory Set
 open scoped ContDiff Manifold
