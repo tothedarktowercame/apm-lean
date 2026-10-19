@@ -1387,7 +1387,20 @@ theorem circleWedge_connected_pair : ∃ C D : ThreeCover,
 theorem natCard_connectedComponents_eq_of_homeomorph {X Y : Type*}
     [TopologicalSpace X] [TopologicalSpace Y] (h : X ≃ₜ Y) :
     Nat.card (ConnectedComponents X) = Nat.card (ConnectedComponents Y) := by
-  sorry
+  apply Nat.card_congr
+  exact
+    { toFun := h.continuous.connectedComponentsMap
+      invFun := h.symm.continuous.connectedComponentsMap
+      left_inv := by
+        rintro ⟨x⟩
+        change ((h.symm (h x) : X) : ConnectedComponents X) =
+          (x : ConnectedComponents X)
+        simp
+      right_inv := by
+        rintro ⟨y⟩
+        change ((h (h.symm y) : Y) : ConnectedComponents Y) =
+          (y : ConnectedComponents Y)
+        simp }
 -- END SEAT AREA
 
 /-- Assembly of the component-count and loop-edge invariants. -/
