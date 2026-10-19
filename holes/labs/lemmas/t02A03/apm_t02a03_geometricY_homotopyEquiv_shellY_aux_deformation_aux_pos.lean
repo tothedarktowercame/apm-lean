@@ -465,10 +465,89 @@ lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_pos (p : ap
 -- END SEAT AREA
 
 /-- Leaf: the push is continuous on `[0,1] × geometricY`. -/
+lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous_aux_ne
+    (p : apm_t02a03_E3) (hp : p ∉ apm_t02a03_C) :
+    Metric.infDist p apm_t02a03_C ≠ 0 := by
+  intro hd
+  rw [apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_infDist] at hd
+  have hrad : (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1) ^ 2 + p 2 ^ 2 = 0 := by
+    have hle := (Real.sqrt_eq_zero').mp hd
+    nlinarith [sq_nonneg (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1),
+      sq_nonneg (p 2)]
+  have hs : Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) = 1 := by
+    nlinarith [sq_nonneg (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1),
+      sq_nonneg (p 2)]
+  have hp2 : p 2 = 0 := by nlinarith [sq_nonneg (p 2)]
+  let z : ℂ := (p 0 + 6 / 5 : ℝ) + p 1 * Complex.I
+  have hz : z ≠ 0 := by
+    intro hz0
+    have hre : p 0 + 6 / 5 = 0 := by
+      have := congrArg Complex.re hz0
+      simpa [z] using this
+    have him : p 1 = 0 := by
+      have := congrArg Complex.im hz0
+      simpa [z] using this
+    simp [hre, him] at hs
+  have hn : ‖z‖ = 1 := by
+    rw [Complex.norm_def]
+    simp [Complex.normSq_apply, z]
+    rw [show (p 0 + 6 / 5) * (p 0 + 6 / 5) + p 1 * p 1 =
+        (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 by ring]
+    have hsq : (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 = 1 := by
+      have hr := Real.sq_sqrt (show 0 ≤ (p 0 + 6 / 5) ^ 2 + p 1 ^ 2 by positivity)
+      nlinarith [congrArg (fun x : ℝ ↦ x ^ 2) hs]
+    rw [hsq]
+  apply hp
+  refine ⟨Complex.arg z, ?_⟩
+  ext i
+  fin_cases i
+  · have hc : Real.cos (Complex.arg z) = p 0 + 6 / 5 := by
+      rw [Complex.cos_arg hz, hn]
+      simp [z]
+    simp [apm_t02a03_leftCore, hc]
+    ring
+  · have hsin : Real.sin (Complex.arg z) = p 1 := by
+      rw [Complex.sin_arg, hn]
+      simp [z]
+    simp [apm_t02a03_leftCore, hsin]
+  · simp [apm_t02a03_leftCore, hp2]
+
 lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous :
     Continuous (fun q : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY =>
       apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move q.1.1 q.2.1) := by
-  sorry
+  let d : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY → ℝ :=
+    fun q ↦ Metric.infDist q.2.1 apm_t02a03_C
+  have hd : Continuous d :=
+    (Metric.continuous_infDist_pt _).comp
+      (continuous_subtype_val.comp continuous_snd)
+  have hd0 : ∀ q, d q ≠ 0 := fun q ↦
+    apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_continuous_aux_ne
+      q.2.1 q.2.2.2
+  let g : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY → ℝ :=
+    fun q ↦ q.1.1 * max 0 (1 / 4 - d q) / d q
+  have hg : Continuous g := by
+    dsimp [g]
+    exact ((continuous_subtype_val.comp continuous_fst).mul
+      (continuous_const.max (continuous_const.sub hd))).div₀ hd hd0
+  let s : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY → ℝ :=
+    fun q ↦ Real.sqrt ((q.2.1 0 + 6 / 5) ^ 2 + q.2.1 1 ^ 2)
+  have hs : Continuous s := by dsimp [s]; fun_prop
+  have hmax : ∀ q, max (s q) (1 / 2) ≠ 0 := by
+    intro q
+    have : (0 : ℝ) < 1 / 2 := by norm_num
+    exact ne_of_gt (this.trans_le (le_max_right _ _))
+  let k : Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY → ℝ :=
+    fun q ↦ g q * (s q - 1) / max (s q) (1 / 2)
+  have hk : Continuous k := by
+    dsimp [k]
+    exact (hg.mul (hs.sub continuous_const)).div₀
+      (hs.max continuous_const) hmax
+  unfold apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move
+  change Continuous (fun q => WithLp.toLp 2
+    ![q.2.1 0 + k q * (q.2.1 0 + 6 / 5),
+      q.2.1 1 + k q * q.2.1 1, q.2.1 2 + g q * q.2.1 2])
+  refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i ↦ ?_)
+  fin_cases i <;> simp <;> fun_prop
 
 /-- Leaf: the distance to `C` after the push (use `_aux_infDist`). -/
 lemma apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation_aux_move_infDist (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
