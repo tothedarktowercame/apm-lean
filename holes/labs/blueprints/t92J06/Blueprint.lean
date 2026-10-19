@@ -473,7 +473,12 @@ lemma apm_t92J06_pathConnected : PathConnectedSpace apm_t92J06_X := by
 /-- The unit circle is locally path-connected (for example via `Circle`, or
 the squeeze arcs, which are path-connected and form a neighbourhood basis). -/
 lemma apm_t92J06_S1_locPathConnected : LocPathConnectedSpace apm_t92J06_S1 := by
-  sorry
+  change LocPathConnectedSpace Circle
+  let q : ℝ → AddCircle (1 : ℝ) := QuotientAddGroup.mk' _
+  have hq : Topology.IsQuotientMap q :=
+    ⟨QuotientAddGroup.mk'_surjective _, rfl⟩
+  letI : LocPathConnectedSpace (AddCircle (1 : ℝ)) := hq.locPathConnectedSpace
+  exact (AddCircle.homeomorphCircle (T := (1 : ℝ)) one_ne_zero).isQuotientMap.locPathConnectedSpace
 
 lemma apm_t92J06_locPathConnected : LocPathConnectedSpace apm_t92J06_X := by
   haveI := apm_t92J06_S1_locPathConnected
