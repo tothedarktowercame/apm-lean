@@ -47,7 +47,40 @@ theorem coverWitness_homeomorph_base {B B' : Type*}
     [TopologicalSpace B] [TopologicalSpace B'] {n : ℕ} {r : Bool}
     (h : B ≃ₜ B') : Nonempty (CoverWitness B n r) →
       Nonempty (CoverWitness B' n r) := by
-  sorry
+  rintro ⟨w⟩
+  letI : TopologicalSpace w.E := w.topology
+  let p' : w.E → B' := h ∘ w.p
+  have hcover : @IsNfoldCover w.E B' w.topology _ n p' := by
+    refine ⟨w.covering.1.homeomorph_comp h, ?_⟩
+    intro b'
+    let e : {x : w.E // p' x = b'} ≃ {x : w.E // w.p x = h.symm b'} :=
+      { toFun := fun x ↦ ⟨x.1, by
+          apply h.injective
+          simpa [p'] using x.2⟩
+        invFun := fun x ↦ ⟨x.1, by
+          change h (w.p x.1) = b'
+          simpa using congrArg h x.2⟩
+        left_inv := fun x ↦ Subtype.ext rfl
+        right_inv := fun x ↦ Subtype.ext rfl }
+    exact (Nat.card_congr e).trans (w.covering.2 (h.symm b'))
+  have hregular : @IsRegularCover w.E B' w.topology _ p' ↔
+      @IsRegularCover w.E B w.topology _ w.p := by
+    constructor
+    · intro hr x y hxy
+      obtain ⟨k, hk, hkxy⟩ := hr x y (congrArg h hxy)
+      exact ⟨k, fun z ↦ h.injective (hk z), hkxy⟩
+    · intro hr x y hxy
+      obtain ⟨k, hk, hkxy⟩ := hr x y (h.injective hxy)
+      exact ⟨k, fun z ↦ congrArg h (hk z), hkxy⟩
+  refine ⟨{ E := w.E
+            topology := w.topology
+            p := p'
+            covering := hcover
+            connected := w.connected
+            regularity := ?_ }⟩
+  cases r with
+  | false => exact fun hp' ↦ w.regularity (hregular.mp hp')
+  | true => exact hregular.mpr w.regularity
 
 abbrev Sphere2 := Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1
 
