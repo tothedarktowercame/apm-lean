@@ -449,7 +449,26 @@ lemma apm_t92J06_slsc :
 
 /-- The wedge is path-connected: each leg is, and they share the base. -/
 lemma apm_t92J06_pathConnected : PathConnectedSpace apm_t92J06_X := by
-  sorry
+  have h_rank : 1 < Module.rank ℝ ℂ := by
+    rw [show Module.rank ℝ ℂ = 2 from Complex.rank_real_complex]
+    norm_num
+  letI : PathConnectedSpace apm_t92J06_S1 :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere h_rank 0 (by norm_num))
+  let b := apm_t92J06_inl apm_t92J06_circleBase
+  have toBase : ∀ x : apm_t92J06_X, Joined x b := by
+    intro x
+    induction x using Quotient.inductionOn with
+    | h q =>
+      rcases q with z | z
+      · exact ⟨(PathConnectedSpace.joined z apm_t92J06_circleBase).somePath.map
+          apm_t92J06_continuous_inl⟩
+      · have h : Joined (apm_t92J06_inr z)
+            (apm_t92J06_inr apm_t92J06_circleBase) :=
+          ⟨(PathConnectedSpace.joined z apm_t92J06_circleBase).somePath.map
+            apm_t92J06_continuous_inr⟩
+        simpa [b, apm_t92J06_inl_base_eq_inr_base] using h
+  exact ⟨⟨b⟩, fun x y ↦ (toBase x).trans (toBase y).symm⟩
 
 /-- The unit circle is locally path-connected (for example via `Circle`, or
 the squeeze arcs, which are path-connected and form a neighbourhood basis). -/
