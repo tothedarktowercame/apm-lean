@@ -1556,7 +1556,54 @@ lemma apm_m93j05_exists_minimizer_coercive_aux_scalar
     (p : ℝ) (hp : 1 < p) (G C A : ℝ) (hG : 0 ≤ G) (hC : 0 ≤ C) :
     ∃ R : ℝ, 0 ≤ R ∧ ∀ a y : ℝ, 0 ≤ a → 0 ≤ y →
       a ^ p + y ^ 2 - G * (a + C * y) ≤ A → a + C * y ≤ R := by
-  sorry
+  let q : ℝ := p / (p - 1)
+  have hp0 : 0 < p := by linarith
+  have hq0 : 0 < q := by
+    dsimp [q]
+    exact div_pos hp0 (sub_pos.mpr hp)
+  have hpq : p.HolderConjugate q :=
+    Real.holderConjugate_iff_eq_conjExponent hp |>.2 rfl
+  let s : ℝ := (p / 2) ^ (1 / p)
+  have hs0 : 0 < s := by
+    dsimp [s]
+    exact Real.rpow_pos_of_pos (by positivity) _
+  let K : ℝ := (G / s) ^ q / q
+  have hK : 0 ≤ K := by
+    dsimp [K]
+    positivity
+  let B : ℝ := 2 * (A + K + (G * C) ^ 2 / 2)
+  refine ⟨max 0 ((1 + B) + C * (1 + B)), le_max_left _ _, ?_⟩
+  intro a y ha hy hsub
+  have hs_pow : s ^ p = p / 2 := by
+    dsimp [s]
+    rw [← Real.rpow_mul (by positivity), one_div_mul_cancel hp0.ne', Real.rpow_one]
+  have hGa : G * a ≤ a ^ p / 2 + K := by
+    have hyoung := Real.young_inequality_of_nonneg
+      (mul_nonneg ha hs0.le) (div_nonneg hG hs0.le) hpq
+    have hlhs : a * s * (G / s) = G * a := by
+      field_simp
+    rw [hlhs] at hyoung
+    rw [Real.mul_rpow ha hs0.le, hs_pow] at hyoung
+    dsimp [K]
+    have hcoef : a ^ p * (p / 2) / p = a ^ p / 2 := by
+      field_simp
+    rwa [hcoef] at hyoung
+  have hGCy : G * C * y ≤ y ^ 2 / 2 + (G * C) ^ 2 / 2 := by
+    nlinarith [sq_nonneg (y - G * C)]
+  have hab : a ^ p + y ^ 2 ≤ B := by
+    dsimp [B]
+    rw [mul_add]
+    nlinarith
+  have ha_one : a ≤ 1 + a ^ p := by
+    by_cases h : a ≤ 1
+    · exact h.trans (le_add_of_nonneg_right (Real.rpow_nonneg ha p))
+    · have := Real.self_le_rpow_of_one_le (le_of_not_ge h) hp.le
+      linarith
+  have hy_one : y ≤ 1 + y ^ 2 := by nlinarith [sq_nonneg (y - 1)]
+  apply le_max_of_le_right
+  have haB : a ≤ 1 + B := by linarith [Real.rpow_nonneg ha p, sq_nonneg y]
+  have hyB : y ≤ 1 + B := by linarith [Real.rpow_nonneg ha p, sq_nonneg y]
+  exact add_le_add haB (mul_le_mul_of_nonneg_left hyB hC)
 -- END SEAT AREA
 
 lemma apm_m93j05_exists_minimizer_coercive
