@@ -5112,9 +5112,112 @@ def circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_s
 `ρ` minus `-1` on the right, and it is saturated (the only glued point it meets on
 the left is `ρ` itself, whose partner `(1, ρ)` is in copy `ρ`). -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet_open_aux_root_eq
+    {r ρ : circleWedge_connected_pair_aux_Root}
+    (h : (1 / 2 : ℝ) < (((r.1 : Circle) : ℂ) * star ((ρ.1 : Circle) : ℂ)).re) : r = ρ := by
+  let u : ℂ := (r.1 : ℂ) * star (ρ.1 : ℂ)
+  have hr : (r.1 : ℂ) ^ 3 = 1 := by
+    have := congrArg Subtype.val r.2
+    simpa [circleWedge_connected_pair_aux_cube, circleBase] using this
+  have hρ : (ρ.1 : ℂ) ^ 3 = 1 := by
+    have := congrArg Subtype.val ρ.2
+    simpa [circleWedge_connected_pair_aux_cube, circleBase] using this
+  have hu : u ^ 3 = 1 := by
+    dsimp [u]
+    rw [mul_pow, hr]
+    rw [← map_pow]
+    simp [hρ]
+  have hn : Complex.normSq u = 1 := by
+    simp [u, map_mul]
+  have hre : u.re ^ 3 - 3 * u.re * u.im ^ 2 = 1 := by
+    have := congrArg Complex.re hu
+    norm_num [pow_succ, Complex.mul_re, Complex.one_re] at this ⊢
+    nlinarith
+  have hnorm : u.re ^ 2 + u.im ^ 2 = 1 := by
+    simpa [Complex.normSq_apply, pow_two] using hn
+  have hu_re : u.re = 1 := by
+    have hh : (1 / 2 : ℝ) < u.re := h
+    have hf : (u.re - 1) * (2 * u.re + 1) ^ 2 = 0 := by
+      nlinarith
+    rcases mul_eq_zero.mp hf with hf | hf
+    · linarith
+    · have : 0 < 2 * u.re + 1 := by linarith
+      exact (this.ne' (sq_eq_zero_iff.mp hf)).elim
+  have hu_im : u.im = 0 := by nlinarith
+  have hu_one : u = 1 := Complex.ext hu_re hu_im
+  apply Subtype.ext
+  apply Subtype.ext
+  have hmul : (r.1 : ℂ) * star (ρ.1 : ℂ) = 1 := hu_one
+  have hs : star (ρ.1 : ℂ) * (ρ.1 : ℂ) = 1 := by
+    change (starRingEnd ℂ) (ρ.1 : ℂ) * (ρ.1 : ℂ) = 1
+    rw [← Complex.normSq_eq_conj_mul_self]
+    simp
+  calc
+    (r.1 : ℂ) = (r.1 : ℂ) * 1 := by simp
+    _ = (r.1 : ℂ) * (star (ρ.1 : ℂ) * (ρ.1 : ℂ)) := by rw [hs]
+    _ = ((r.1 : ℂ) * star (ρ.1 : ℂ)) * (ρ.1 : ℂ) := by ring
+    _ = (ρ.1 : ℂ) := by rw [hmul]; simp
+
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet_open (ρ : circleWedge_connected_pair_aux_Root) :
     IsOpen (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ) := by
-  sorry
+  let P : circleWedge_connected_pair_aux_RawC → Prop
+    | .inl z => (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re
+    | .inr (w, r) => w ≠ -circleBase ∧ r = ρ
+  have hbase : circleBase ≠ -circleBase := by
+    intro h
+    have h' := congrArg (fun z : Circle => (z : ℂ)) h
+    norm_num [circleBase] at h'
+  have hρarc : (1 / 2 : ℝ) < (((ρ.1 : Circle) : ℂ) * star ((ρ.1 : Circle) : ℂ)).re := by
+    rw [mul_comm]
+    change (1 / 2 : ℝ) < ((starRingEnd ℂ) (ρ.1 : ℂ) * (ρ.1 : ℂ)).re
+    rw [← Complex.normSq_eq_conj_mul_self]
+    norm_num
+  have hinv {a b : circleWedge_connected_pair_aux_RawC}
+      (hab : Relation.EqvGen circleWedge_connected_pair_aux_RelC a b) : P a ↔ P b := by
+    induction hab with
+    | rel a b hab =>
+        cases hab with
+        | glue r =>
+            dsimp [P]
+            constructor
+            · intro hr
+              exact ⟨hbase,
+                circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet_open_aux_root_eq hr⟩
+            · rintro ⟨_, rfl⟩
+              exact hρarc
+    | refl => exact Iff.rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  rw [isOpen_coinduced]
+  have heq : (fun z : circleWedge_connected_pair_aux_RawC ↦
+      (Quotient.mk _ z : circleWedge_connected_pair_aux_EC)) ⁻¹'
+        circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ =
+      {a | P a} := by
+    ext a
+    constructor
+    · rintro (⟨z, hz, he⟩ | ⟨w, hw, he⟩)
+      · apply (hinv (Quotient.exact he)).mpr
+        exact hz
+      · apply (hinv (Quotient.exact he)).mpr
+        exact ⟨hw, rfl⟩
+    · intro ha
+      cases a with
+      | inl z => exact Or.inl ⟨z, ha, rfl⟩
+      | inr wr =>
+          rcases wr with ⟨w, r⟩
+          dsimp [P] at ha
+          rcases ha with ⟨hw, rfl⟩
+          exact Or.inr ⟨w, hw, rfl⟩
+  have hopen : IsOpen {a | P a} := by
+    rw [isOpen_sum_iff]
+    constructor
+    · exact isOpen_lt continuous_const
+        ((Complex.continuous_re.comp
+          (continuous_subtype_val.mul continuous_const)))
+    · have hw : IsOpen ({w : Circle | w ≠ -circleBase}) := isOpen_ne
+      have hr : IsOpen ({ρ} : Set circleWedge_connected_pair_aux_Root) := isOpen_discrete _
+      convert hw.prod hr using 1
+  exact heq.symm ▸ hopen
 -- END SEAT AREA
 
 /-- The section of sheet `ρ`: `[inl w] ↦ [inl (ρ · r w)]`, `[inr w] ↦ [inr (w, ρ)]`
