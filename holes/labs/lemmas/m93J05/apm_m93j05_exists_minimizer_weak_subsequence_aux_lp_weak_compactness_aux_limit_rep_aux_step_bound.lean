@@ -1723,7 +1723,90 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
       |∑ i ∈ F, c i * L i| ≤ R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
           (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
         (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
-  sorry
+  intro F c
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let g : ℝ → ℝ := fun x ↦ ∑ i ∈ F, c i *
+    (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x
+  have hpqR : p.HolderConjugate q :=
+    Real.holderConjugate_iff.mpr ⟨hp, by simpa [div_eq_mul_inv] using hpq⟩
+  have hind (i : ℚ × ℚ) : MemLp
+      ((Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)))
+        (ENNReal.ofReal q) μ := by
+    apply memLp_indicator_const
+    · exact measurableSet_Ioc
+    · right
+      simp only [μ, Measure.restrict_apply measurableSet_Ioc]
+      exact ((measure_mono Set.inter_subset_right).trans_lt
+        (by simp : volume (Set.Icc (0 : ℝ) 1) < ⊤)).ne
+  have hg : MemLp g (ENNReal.ofReal q) μ := by
+    dsimp [g]
+    induction F using Finset.induction_on with
+    | empty => simp
+    | @insert i F hi ih =>
+        simpa only [Finset.sum_insert hi, Pi.add_apply] using
+          ((hind i).const_mul (c i)).add ih
+  have hint (n : ℕ) (i : ℚ × ℚ) : Integrable
+      (fun x ↦ s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) μ := by
+    have hpqE : (ENNReal.ofReal p).HolderConjugate (ENNReal.ofReal q) := by
+      apply ENNReal.HolderConjugate.of_toReal
+      simpa [ENNReal.toReal_ofReal hpqR.nonneg,
+        ENNReal.toReal_ofReal hpqR.symm.nonneg] using hpqR
+    letI : (ENNReal.ofReal p).HolderTriple (ENNReal.ofReal q) 1 := hpqE
+    exact (hs n).integrable_mul (hind i)
+  have heq (n : ℕ) : (∫ x in Set.Icc (0 : ℝ) 1, s n x * g x) =
+      ∑ i ∈ F, c i * ∫ x in Set.Icc (0 : ℝ) 1,
+        s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x := by
+    change (∫ x, s n x * g x ∂μ) =
+      ∑ i ∈ F, c i * ∫ x, s n x *
+        (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x ∂μ
+    simp only [g, Finset.mul_sum]
+    rw [integral_finset_sum]
+    · apply Finset.sum_congr rfl
+      intro i hi
+      rw [← integral_const_mul]
+      apply integral_congr_ae
+      exact Eventually.of_forall (fun x ↦ by ring)
+    · intro i hi
+      simpa only [mul_assoc, mul_left_comm] using (hint n i).const_mul (c i)
+  have ht : Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1, s n x * g x) atTop
+      (nhds (∑ i ∈ F, c i * L i)) := by
+    rw [show (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1, s n x * g x) =
+        fun n ↦ ∑ i ∈ F, c i * ∫ x in Set.Icc (0 : ℝ) 1,
+          s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x from
+      funext heq]
+    exact tendsto_finset_sum F (fun i _ ↦
+      (tendsto_const_nhds.mul (hL i)))
+  have hnorm (n : ℕ) :
+      |(∫ x in Set.Icc (0 : ℝ) 1, s n x * g x)| ≤
+        (eLpNorm (s n) (ENNReal.ofReal p) μ).toReal *
+          (eLpNorm g (ENNReal.ofReal q) μ).toReal := by
+    calc
+      |(∫ x, s n x * g x ∂μ)| ≤ ∫ x, |s n x| * |g x| ∂μ := by
+        simpa [abs_mul] using (abs_integral_le_integral_abs
+          (f := fun x ↦ s n x * g x) ( μ := μ))
+      _ ≤ (∫ x, ‖s n x‖ ^ p ∂μ) ^ (1 / p) *
+          (∫ x, ‖g x‖ ^ q ∂μ) ^ (1 / q) :=
+        integral_mul_norm_le_Lp_mul_Lq hpqR (hs n) hg
+      _ = (eLpNorm (s n) (ENNReal.ofReal p) μ).toReal *
+          (eLpNorm g (ENNReal.ofReal q) μ).toReal := by
+        have hsNorm := (hs n).eLpNorm_eq_integral_rpow_norm
+          (ENNReal.ofReal_ne_zero_iff.mpr hpqR.pos) ENNReal.ofReal_ne_top
+        have hgNorm := hg.eLpNorm_eq_integral_rpow_norm
+          (ENNReal.ofReal_ne_zero_iff.mpr hpqR.symm.pos) ENNReal.ofReal_ne_top
+        rw [hsNorm, hgNorm]
+        simp only [ENNReal.toReal_ofReal hpqR.nonneg,
+          ENNReal.toReal_ofReal hpqR.symm.nonneg]
+        rw [ENNReal.toReal_ofReal (Real.rpow_nonneg
+              (integral_nonneg (fun x ↦ Real.rpow_nonneg (norm_nonneg _) _)) _),
+            ENNReal.toReal_ofReal (Real.rpow_nonneg
+              (integral_nonneg (fun x ↦ Real.rpow_nonneg (norm_nonneg _) _)) _)]
+        simp only [one_div]
+        rfl
+  apply apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_tendsto_abs_le
+    ht
+  intro n
+  exact (hnorm n).trans (mul_le_mul_of_nonneg_right (hbound n)
+    (ENNReal.toReal_nonneg))
 -- END SEAT AREA
 
 /-- Leaf (integrable representative; the analytic core). An interval function on rational
