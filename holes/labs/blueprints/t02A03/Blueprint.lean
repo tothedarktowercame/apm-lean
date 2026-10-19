@@ -505,10 +505,53 @@ noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_au
 
 /-- LIBRARY: `F` is continuous on `[0,1] × right` (there `s ≥ 3/4 > 0`, so the
 divisions by `s` are continuous). -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_continuous_aux_dist
+    (p : apm_t02a03_E3)
+    (hp : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p = 0) :
+    (1 : ℝ) ≤ Metric.infDist p (Set.range apm_t02a03_rightCore) := by
+  rw [Metric.le_infDist]
+  · rintro q ⟨t, rfl⟩
+    simp only [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad,
+      Real.sqrt_eq_zero'] at hp
+    have hx : p 0 = 6 / 5 := by
+      nlinarith [sq_nonneg (p 1)]
+    have hy : p 1 = 0 := by
+      nlinarith [sq_nonneg (p 0 - 6 / 5)]
+    rw [show dist p (apm_t02a03_rightCore t) =
+        Real.sqrt ((Real.cos t) ^ 2 + (Real.sin t) ^ 2 + (p 2) ^ 2) by
+      simp [dist_eq_norm, apm_t02a03_rightCore, hx, hy, EuclideanSpace.norm_eq,
+        Fin.sum_univ_succ]
+      congr 1
+      nlinarith [Real.sin_sq_add_cos_sq t]]
+    rw [Real.one_le_sqrt]
+    nlinarith [Real.sin_sq_add_cos_sq t, sq_nonneg (p 2)]
+  · exact ⟨apm_t02a03_rightCore 0, ⟨0, rfl⟩⟩
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_continuous :
     ContinuousOn (fun q : ℝ × apm_t02a03_E3 => apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move q.1 q.2)
       (Set.Icc (0 : ℝ) 1 ×ˢ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) := by
-  sorry
+  intro q hq
+  have hrad :
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad q.2 ≠ 0 := by
+    intro hz
+    have hone :=
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_continuous_aux_dist
+        q.2 hz
+    exact (not_le_of_gt (by norm_num : (1 / 4 : ℝ) < 1))
+      (hone.trans hq.2.1)
+  have hsqrt : Real.sqrt ((q.2 0 - 6 / 5) ^ 2 + q.2 1 ^ 2) ≠ 0 := by
+    simpa [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad]
+      using hrad
+  have hc (i : Fin 3) : ContinuousAt (fun y : ℝ × apm_t02a03_E3 => y.2 i) q :=
+    ((PiLp.continuous_apply 2 (fun _ : Fin 3 => ℝ) i).comp continuous_snd).continuousAt
+  apply ContinuousAt.continuousWithinAt
+  unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+  apply (PiLp.continuous_toLp 2 _).continuousAt.comp
+  rw [continuousAt_pi]
+  intro i
+  fin_cases i <;> simp <;> fun_prop (disch := aesop)
 
 /-- LIBRARY: `F_t` stays in the closed right tube.  The distance to the right
 core is `√((s - 1)² + z²)`; the new `(s - 1, z)` is a convex combination of the
