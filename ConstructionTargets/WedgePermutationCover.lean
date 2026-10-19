@@ -3344,10 +3344,158 @@ lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap :
 
 /-- Fibres of `pD` have three points: the cube roots of `w` in the relevant lobe,
 and over the wedge point the three classes `{inl r.1, inr r.1}`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_cube_card
+    (y : Circle) :
+    Nat.card {z : Circle // circleWedge_connected_pair_aux_cube z = y} = 3 := by
+  let f : Circle →* Circle := powMonoidHom 3
+  have hs : Function.Surjective f :=
+    (Circle.isQuotientCoveringMap_npow 3).surjective
+  let a : Circle := Function.surjInv hs y
+  have ha : f a = y := Function.surjInv_eq hs y
+  let e : f.ker ≃ rootsOfUnity 3 ℂ :=
+    { toFun := fun z ↦
+        ⟨Units.mk0 (z.1 : ℂ) (by
+            intro hz
+            have hz' := z.1.property
+            simp [Metric.mem_sphere, hz] at hz'), by
+          apply Units.ext
+          exact congrArg Subtype.val z.2⟩
+      invFun := fun z ↦
+        ⟨⟨(z.1 : ℂ), by
+            simpa [Metric.mem_sphere] using
+              Complex.norm_eq_one_of_mem_rootsOfUnity z.2⟩, by
+          apply Subtype.ext
+          exact congrArg Units.val z.2⟩
+      left_inv := fun z ↦ by apply Subtype.ext; rfl
+      right_inv := fun z ↦ by apply Subtype.ext; apply Units.ext; rfl }
+  have hk : Nat.card f.ker = 3 := by
+    rw [Nat.card_congr e, Nat.card_eq_fintype_card]
+    exact Complex.card_rootsOfUnity 3
+  have hc : Nat.card {z : Circle // f z = y} = 3 := by
+    rw [← ha]
+    exact (Nat.card_congr (MonoidHom.fiberEquivKer f a)).trans hk
+  simpa [f, circleWedge_connected_pair_aux_cube] using hc
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_rel
+    (z : Circle) (h : circleWedge_connected_pair_aux_cube z = circleBase) :
+    (Quotient.mk _ (.inr z) : circleWedge_connected_pair_aux_ED) =
+      Quotient.mk _ (.inl z) := by
+  let r : circleWedge_connected_pair_aux_Root := ⟨z, h⟩
+  exact Quotient.sound (Relation.EqvGen.symm _ _
+    (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelD.glue r)))
+
+def circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value :
+    circleWedge_connected_pair_aux_ED → Circle :=
+  Quotient.lift (Sum.elim id id) (by
+    intro a b h
+    induction h with
+    | rel a b h => cases h; rfl
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+def circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_baseValue :
+    CircleWedge → Circle :=
+  Quotient.lift (Sum.elim id id) (by
+    intro a b h
+    induction h with
+    | rel a b h => cases h; rfl
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
 lemma circleWedge_connected_pair_aux_covering_aux_pD_fiber (b : CircleWedge) :
     Nat.card {e : circleWedge_connected_pair_aux_ED //
       circleWedge_connected_pair_aux_pD e = b} = 3 := by
-  sorry
+  obtain ⟨u, rfl⟩ := Quotient.exists_rep b
+  rcases u with x | x
+  · let F := {e : circleWedge_connected_pair_aux_ED //
+        circleWedge_connected_pair_aux_pD e = Quotient.mk _ (.inl x)}
+    let S := {z : Circle // circleWedge_connected_pair_aux_cube z = x}
+    let E : F ≃ S :=
+      { toFun := fun e ↦
+          ⟨circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value e.1, by
+            obtain ⟨v, hv⟩ := Quotient.exists_rep e.1
+            rw [← hv]
+            have he := e.2
+            rw [← hv] at he
+            rcases v with z | z <;>
+              simpa [circleWedge_connected_pair_aux_pD,
+                circleWedge_connected_pair_aux_projD,
+                circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value] using
+                congrArg circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_baseValue he⟩
+        invFun := fun z ↦ ⟨Quotient.mk _ (.inl z.1), by
+          simp [circleWedge_connected_pair_aux_pD,
+            circleWedge_connected_pair_aux_projD, z.2]⟩
+        right_inv := fun z ↦ by apply Subtype.ext; rfl
+        left_inv := fun e ↦ by
+          apply Subtype.ext
+          obtain ⟨v, hv⟩ := Quotient.exists_rep e.1
+          change Quotient.mk _ (Sum.inl
+            (circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value e.1)) = e.1
+          rw [← hv]
+          rcases v with z | z
+          · rfl
+          · change (Quotient.mk _ (Sum.inl z) :
+                circleWedge_connected_pair_aux_ED) = Quotient.mk _ (Sum.inr z)
+            symm
+            exact circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_rel z (by
+              have he := (congrArg circleWedge_connected_pair_aux_pD hv).trans e.2
+              change Quotient.mk _ (Sum.inr (circleWedge_connected_pair_aux_cube z)) =
+                Quotient.mk _ (Sum.inl x) at he
+              rw [Quotient.eq_iff_equiv] at he
+              change Relation.EqvGen (WedgeRel circleBase circleBase) _ _ at he
+              rw [
+                rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+                  circleBase circleBase] at he
+              rcases he with he | ⟨hz, hx⟩
+              · cases he
+              · rcases hz with hz | hz <;> simp_all) }
+    rw [Nat.card_congr E]
+    exact circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_cube_card x
+  · let F := {e : circleWedge_connected_pair_aux_ED //
+        circleWedge_connected_pair_aux_pD e = Quotient.mk _ (.inr x)}
+    let S := {z : Circle // circleWedge_connected_pair_aux_cube z = x}
+    let E : F ≃ S :=
+      { toFun := fun e ↦
+          ⟨circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value e.1, by
+            obtain ⟨v, hv⟩ := Quotient.exists_rep e.1
+            rw [← hv]
+            have he := e.2
+            rw [← hv] at he
+            rcases v with z | z <;>
+              simpa [circleWedge_connected_pair_aux_pD,
+                circleWedge_connected_pair_aux_projD,
+                circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value] using
+                congrArg circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_baseValue he⟩
+        invFun := fun z ↦ ⟨Quotient.mk _ (.inr z.1), by
+          simp [circleWedge_connected_pair_aux_pD,
+            circleWedge_connected_pair_aux_projD, z.2]⟩
+        right_inv := fun z ↦ by apply Subtype.ext; rfl
+        left_inv := fun e ↦ by
+          apply Subtype.ext
+          obtain ⟨v, hv⟩ := Quotient.exists_rep e.1
+          change Quotient.mk _ (Sum.inr
+            (circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value e.1)) = e.1
+          rw [← hv]
+          rcases v with z | z
+          · change (Quotient.mk _ (Sum.inr z) :
+                circleWedge_connected_pair_aux_ED) = Quotient.mk _ (Sum.inl z)
+            exact circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_rel z (by
+              have he := (congrArg circleWedge_connected_pair_aux_pD hv).trans e.2
+              change Quotient.mk _ (Sum.inl (circleWedge_connected_pair_aux_cube z)) =
+                Quotient.mk _ (Sum.inr x) at he
+              rw [Quotient.eq_iff_equiv] at he
+              change Relation.EqvGen (WedgeRel circleBase circleBase) _ _ at he
+              rw [
+                rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+                  circleBase circleBase] at he
+              rcases he with he | ⟨hz, hx⟩
+              · cases he
+              · rcases hz with hz | hz <;> simp_all)
+          · rfl }
+    rw [Nat.card_congr E]
+    exact circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_cube_card x
 
 /-- Local evenly-covered charts for the two quotient graphs. -/
 lemma circleWedge_connected_pair_aux_covering :
