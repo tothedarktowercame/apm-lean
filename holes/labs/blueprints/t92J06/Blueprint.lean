@@ -146,10 +146,106 @@ def apm_t92J06_squeeze (z : apm_t92J06_S1) (δ : ℝ) (s : unitInterval)
 
 /-- The squeeze is jointly continuous for `0 < δ < π / 2`: the tent vanishes
 near angle `±π`, where `Complex.arg` jumps. -/
+lemma apm_t92J06_squeeze_continuous_aux_tent_zero {δ a : ℝ} (hδ : 0 < δ)
+    (ha : 2 * δ ≤ |a|) : apm_t92J06_tent δ a = 0 := by
+  rcases le_total 0 a with ha0 | ha0
+  · rw [abs_of_nonneg ha0] at ha
+    have hδa : δ ≤ a := by linarith
+    have hδsub : δ ≤ a - δ := by linarith
+    simp [apm_t92J06_tent, apm_t92J06_clamp, min_eq_left hδa,
+      max_eq_right (by linarith : -δ ≤ δ), min_eq_left hδsub]
+  · rw [abs_of_nonpos ha0] at ha
+    have haδ : a ≤ -δ := by linarith
+    have hsub : a - -δ ≤ -δ := by linarith
+    have hca : apm_t92J06_clamp δ a = -δ := by
+      unfold apm_t92J06_clamp
+      rw [min_eq_right (by linarith : a ≤ δ), max_eq_left haδ]
+    have hcb : apm_t92J06_clamp δ (a - -δ) = -δ := by
+      unfold apm_t92J06_clamp
+      rw [min_eq_right (by linarith : a - -δ ≤ δ), max_eq_left hsub]
+    rw [apm_t92J06_tent, hca]
+    simp only [hca, hcb, sub_self]
+
+lemma apm_t92J06_squeeze_continuous_aux_tent :
+    Continuous fun a : ℝ ↦ apm_t92J06_tent δ a := by
+  unfold apm_t92J06_tent apm_t92J06_clamp
+  fun_prop
+
 lemma apm_t92J06_squeeze_continuous {δ : ℝ} (hδ : 0 < δ) (hδπ : δ < Real.pi / 2)
     (z : apm_t92J06_S1) :
     Continuous fun q : unitInterval × apm_t92J06_S1 ↦ apm_t92J06_squeeze z δ q.1 q.2 := by
-  sorry
+  rw [continuous_induced_rng]
+  rw [continuous_iff_continuousAt]
+  rintro ⟨s, w⟩
+  let r : ℂ := (w : ℂ) * star (z : ℂ)
+  have hz : (z : ℂ) ≠ 0 := by
+    intro hz0
+    have := congrArg norm hz0
+    simpa [mem_sphere_zero_iff_norm.mp z.2] using this
+  have hw : (w : ℂ) ≠ 0 := by
+    intro hw0
+    have := congrArg norm hw0
+    simpa [mem_sphere_zero_iff_norm.mp w.2] using this
+  have hr : r ≠ 0 := mul_ne_zero hw (star_ne_zero.mpr hz)
+  have hwcont : ContinuousAt (fun q : unitInterval × apm_t92J06_S1 ↦ (q.2 : ℂ)) (s, w) :=
+    continuous_subtype_val.continuousAt.comp continuousAt_snd
+  have hrcont : ContinuousAt
+      (fun q : unitInterval × apm_t92J06_S1 ↦ (q.2 : ℂ) * star (z : ℂ)) (s, w) :=
+    hwcont.mul continuousAt_const
+  by_cases hslit : r ∈ Complex.slitPlane
+  · have harg : ContinuousAt
+        (fun q : unitInterval × apm_t92J06_S1 ↦ apm_t92J06_relArg z q.2) (s, w) := by
+      change ContinuousAt (fun q : unitInterval × apm_t92J06_S1 ↦
+        Complex.arg ((q.2 : ℂ) * star (z : ℂ))) (s, w)
+      have hslit' : (w : ℂ) * star (z : ℂ) ∈ Complex.slitPlane := by simpa [r] using hslit
+      simpa only [Function.comp_apply] using
+        ContinuousAt.comp (f := fun q : unitInterval × apm_t92J06_S1 ↦
+          (q.2 : ℂ) * star (z : ℂ)) (Complex.continuousAt_arg hslit') hrcont
+    unfold apm_t92J06_squeeze
+    exact hwcont.mul (Complex.continuous_exp.continuousAt.comp
+      (((Complex.continuous_ofReal.continuousAt.comp
+        ((continuous_subtype_val.continuousAt.comp continuousAt_fst).mul
+          (apm_t92J06_squeeze_continuous_aux_tent.continuousAt.comp harg))).neg).mul
+            continuousAt_const))
+  · have hrneg : r.re < 0 ∧ r.im = 0 := by
+      apply Complex.arg_eq_pi_iff.mp
+      have hn : ¬(Complex.arg r ≠ Real.pi ∧ r ≠ 0) := by
+        rwa [← Complex.mem_slitPlane_iff_arg]
+      by_contra harg
+      exact hn ⟨harg, hr⟩
+    have hargval : |Complex.arg r| = Real.pi := by
+      rw [Complex.arg_eq_pi_iff.2 hrneg, abs_of_pos Real.pi_pos]
+    have htwo : 2 * δ < Real.pi := by linarith
+    have hang : ContinuousAt
+        (fun q : unitInterval × apm_t92J06_S1 ↦
+          InnerProductGeometry.angle (1 : ℂ) ((q.2 : ℂ) * star (z : ℂ))) (s, w) := by
+      simpa only [Function.comp_apply, r] using
+        ContinuousAt.comp
+          (f := fun q : unitInterval × apm_t92J06_S1 ↦
+            ((1 : ℂ), (q.2 : ℂ) * star (z : ℂ)))
+          (InnerProductGeometry.continuousAt_angle (x := ((1 : ℂ), r)) one_ne_zero hr)
+          (ContinuousAt.prodMk
+            (f := fun _ : unitInterval × apm_t92J06_S1 ↦ (1 : ℂ))
+            (g := fun q ↦ (q.2 : ℂ) * star (z : ℂ)) continuousAt_const hrcont)
+    have hevent : ∀ᶠ q in nhds (s, w), 2 * δ ≤ |apm_t92J06_relArg z q.2| := by
+      have hevent' : ∀ᶠ q in nhds (s, w), 2 * δ <
+          InnerProductGeometry.angle (1 : ℂ) ((q.2 : ℂ) * star (z : ℂ)) :=
+        (hang.eventually_const_lt (by
+          change 2 * δ < InnerProductGeometry.angle (1 : ℂ) r
+          rw [Complex.angle_one_left hr, hargval]
+          exact htwo))
+      filter_upwards [hevent'] with q hq
+      have hqne : (q.2 : ℂ) * star (z : ℂ) ≠ 0 := by
+        exact mul_ne_zero (by
+          intro h
+          have := congrArg norm h
+          simpa [mem_sphere_zero_iff_norm.mp q.2.2] using this) (star_ne_zero.mpr hz)
+      rw [Complex.angle_one_left hqne] at hq
+      simpa [apm_t92J06_relArg] using hq.le
+    apply (hwcont.mul continuousAt_const).congr_of_eventuallyEq
+    filter_upwards [hevent] with q hq
+    change ((q.2 : ℂ) * Complex.exp _ = (q.2 : ℂ) * 1)
+    simp [apm_t92J06_squeeze_continuous_aux_tent_zero hδ hq]
 
 /-- Values of the squeeze: identity at time `0`, fixes the centre, collapses
 the `δ`-arc at time `1`, fixes points at angle at least `2δ`. -/
