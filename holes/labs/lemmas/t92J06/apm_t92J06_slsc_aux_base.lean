@@ -407,12 +407,115 @@ lemma apm_t92J06_loop_trivial_of_contraction {Y : Type*} [TopologicalSpace Y]
 
 /-- Semilocal simple connectivity at the wedge point: squeeze both legs. -/
 -- BEGIN SEAT AREA
+lemma apm_t92J06_slsc_aux_base_arc_open (δ : ℝ) (hδ : 0 < δ)
+    (hδπ : δ < Real.pi) :
+    IsOpen {w : apm_t92J06_S1 | |apm_t92J06_relArg apm_t92J06_circleBase w| < δ} := by
+  let F : apm_t92J06_S1 → ℂ := fun w ↦ (w : ℂ) * star (apm_t92J06_circleBase : ℂ)
+  have hF : Continuous F := continuous_subtype_val.mul continuous_const
+  have heq : {w : apm_t92J06_S1 |
+        |apm_t92J06_relArg apm_t92J06_circleBase w| < δ} =
+      F ⁻¹' (Complex.slitPlane ∩ Complex.arg ⁻¹' Set.Ioo (-δ) δ) := by
+    ext w
+    simp only [Set.mem_setOf_eq, Set.mem_preimage, Set.mem_inter_iff, Set.mem_Ioo,
+      abs_lt, F, apm_t92J06_relArg]
+    constructor
+    · intro hw
+      refine ⟨?_, hw⟩
+      rw [Complex.mem_slitPlane_iff_arg]
+      refine ⟨ne_of_lt ?_, ?_⟩
+      · exact lt_trans hw.2 hδπ
+      · have hw_norm : ‖(w : ℂ)‖ = 1 := mem_sphere_zero_iff_norm.mp w.2
+        norm_num [apm_t92J06_circleBase, hw_norm]
+    · exact fun hw ↦ hw.2
+  rw [heq]
+  apply hF.isOpen_preimage
+  exact Complex.continuousOn_arg.isOpen_inter_preimage Complex.isOpen_slitPlane isOpen_Ioo
+
 lemma apm_t92J06_slsc_aux_base :
     ∃ U ∈ nhds (apm_t92J06_inl apm_t92J06_circleBase),
       ∀ γ : Path (apm_t92J06_inl apm_t92J06_circleBase)
           (apm_t92J06_inl apm_t92J06_circleBase), range γ ⊆ U →
         Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl _) := by
-  sorry
+  let δ : ℝ := Real.pi / 4
+  have hδ : 0 < δ := by dsimp [δ]; positivity
+  have hδπ2 : δ < Real.pi / 2 := by dsimp [δ]; linarith [Real.pi_pos]
+  have hδπ : δ < Real.pi := lt_trans hδπ2 (by linarith [Real.pi_pos])
+  let A : Set apm_t92J06_S1 :=
+    {w | |apm_t92J06_relArg apm_t92J06_circleBase w| < δ}
+  let P : Sum apm_t92J06_S1 apm_t92J06_S1 → Prop := fun x ↦ Sum.elim (· ∈ A) (· ∈ A) x
+  have hP : ∀ x y, Relation.EqvGen apm_t92J06_wedgeRel x y → P x = P y := by
+    intro x y hxy
+    induction hxy with
+    | rel x y h => cases h; rfl
+    | refl x => rfl
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let U : Set apm_t92J06_X := {q | Quotient.lift P hP q}
+  have hAopen : IsOpen A := by
+    exact apm_t92J06_slsc_aux_base_arc_open δ hδ hδπ
+  have hUopen : IsOpen U := by
+    change IsOpen ((fun x : Sum apm_t92J06_S1 apm_t92J06_S1 ↦ Quotient.mk _ x) ⁻¹' U)
+    change IsOpen (Sum.elim (· ∈ A) (· ∈ A) ⁻¹' {p | p})
+    rw [isOpen_sum_iff]
+    simpa using And.intro hAopen hAopen
+  have hbaseA : apm_t92J06_circleBase ∈ A := by
+    change |apm_t92J06_relArg apm_t92J06_circleBase apm_t92J06_circleBase| < δ
+    have hb : apm_t92J06_relArg apm_t92J06_circleBase apm_t92J06_circleBase = 0 := by
+      simp [apm_t92J06_relArg, apm_t92J06_circleBase, Complex.mul_conj]
+    simp [hb, hδ]
+  have hUnhds : U ∈ nhds (apm_t92J06_inl apm_t92J06_circleBase) :=
+    hUopen.mem_nhds (by exact hbaseA)
+  let f : C(unitInterval × apm_t92J06_S1, apm_t92J06_S1) :=
+    ⟨fun q ↦ apm_t92J06_squeeze apm_t92J06_circleBase δ q.1 q.2,
+      apm_t92J06_squeeze_continuous hδ hδπ2 _⟩
+  let il : C(apm_t92J06_S1, apm_t92J06_X) :=
+    ⟨apm_t92J06_inl, apm_t92J06_continuous_inl⟩
+  let ir : C(apm_t92J06_S1, apm_t92J06_X) :=
+    ⟨apm_t92J06_inr, apm_t92J06_continuous_inr⟩
+  obtain ⟨Φ, hΦl, hΦr⟩ := apm_t92J06_wedgeHomotopy
+    (il.comp f) (ir.comp f) (by
+      intro s
+      simp only [ContinuousMap.comp_apply, il, ir, f]
+      change apm_t92J06_inl (apm_t92J06_squeeze _ δ s _) =
+        apm_t92J06_inr (apm_t92J06_squeeze _ δ s _)
+      rw [(apm_t92J06_squeeze_values hδ _).2.1]
+      exact apm_t92J06_inl_base_eq_inr_base)
+  refine ⟨U, hUnhds, ?_⟩
+  intro γ hγ
+  apply apm_t92J06_loop_trivial_of_contraction (U := U) Φ
+  · intro u
+    induction u using Quotient.inductionOn with
+    | h x =>
+      rcases x with z | z
+      · change Φ (0, apm_t92J06_inl z) = apm_t92J06_inl z
+        rw [hΦl]
+        simp only [ContinuousMap.comp_apply, il, f]
+        exact congrArg apm_t92J06_inl ((apm_t92J06_squeeze_values hδ _).1 z)
+      · change Φ (0, apm_t92J06_inr z) = apm_t92J06_inr z
+        rw [hΦr]
+        simp only [ContinuousMap.comp_apply, ir, f]
+        exact congrArg apm_t92J06_inr ((apm_t92J06_squeeze_values hδ _).1 z)
+  · intro s
+    rw [hΦl]
+    simp only [ContinuousMap.comp_apply, il, f]
+    change apm_t92J06_inl (apm_t92J06_squeeze _ δ s _) = _
+    rw [(apm_t92J06_squeeze_values hδ _).2.1]
+  · intro u hu
+    induction u using Quotient.inductionOn with
+    | h x =>
+      rcases x with z | z
+      · change Φ (1, apm_t92J06_inl z) = _
+        rw [hΦl]
+        simp only [ContinuousMap.comp_apply, il, f]
+        exact congrArg apm_t92J06_inl
+          ((apm_t92J06_squeeze_values hδ _).2.2.1 z hu)
+      · change Φ (1, apm_t92J06_inr z) = _
+        rw [hΦr]
+        simp only [ContinuousMap.comp_apply, ir, f]
+        change apm_t92J06_inr (apm_t92J06_squeeze _ δ 1 z) = _
+        rw [(apm_t92J06_squeeze_values hδ _).2.2.1 z hu]
+        exact apm_t92J06_inl_base_eq_inr_base.symm
+  · exact hγ
 -- END SEAT AREA
 
 /-- Semilocal simple connectivity at a non-base point of the left leg: squeeze
