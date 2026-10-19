@@ -3831,7 +3831,95 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_a
     Set.range (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
       circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) =
       circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b := by
-  sorry
+  ext e
+  constructor
+  · rintro ⟨u, rfl⟩
+    rcases u with ⟨q, hq⟩
+    induction q using Quotient.inductionOn with
+    | _ q =>
+      rcases q with w | w
+      · have hw : w ≠ -circleBase := by
+          intro hw
+          subst w
+          exact hq.1 rfl
+        refine ⟨if b then r ⟨w, hw⟩ else -r ⟨w, hw⟩, ?_, ?_⟩
+        · cases b <;> simp [hre]
+        · left
+          simp [circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S,
+            circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift,
+            hw]
+      · have hw : w ≠ -circleBase := by
+          intro hw
+          subst w
+          exact hq.2 rfl
+        refine ⟨if b then r ⟨w, hw⟩ else -r ⟨w, hw⟩, ?_, ?_⟩
+        · cases b <;> simp [hre]
+        · right
+          simp [circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S,
+            circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift,
+            hw]
+  · rintro ⟨z, hz, he⟩
+    have core : ∀ (left : Bool), e = Quotient.mk _ (if left then Sum.inl z else Sum.inr z) →
+        e ∈ Set.range (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) := by
+      intro left he
+      have hzre : (z : ℂ).re ≠ 0 := by
+        intro hzero
+        cases b <;> simp [hzero] at hz
+      have hsqneg : circleWedge_three_cover_two_components_aux_sq z ≠ -circleBase := by
+        intro hs
+        have hs' := congrArg Subtype.val hs
+        have hn : ‖(z : ℂ)‖ = 1 := by
+          simpa [Metric.mem_sphere, dist_zero_right] using z.property
+        have hr := congrArg Complex.re hs'
+        have hn' : Complex.normSq z = 1 := by
+          rw [Complex.normSq_eq_norm_sq, hn]
+          norm_num
+        simp [circleWedge_three_cover_two_components_aux_sq, circleBase,
+          Complex.mul_re] at hr
+        rw [Complex.normSq_apply] at hn'
+        have hp : (z : ℂ).re * (z : ℂ).re = 0 := by linarith
+        exact hzre (mul_self_eq_zero.mp hp)
+      let w : {w : Circle // w ≠ -circleBase} :=
+        ⟨circleWedge_three_cover_two_components_aux_sq z, hsqneg⟩
+      have hroot := hroots w z (by rfl)
+      let q : CircleWedge := Quotient.mk _ (if left then Sum.inl w.1 else Sum.inr w.1)
+      have hbase : -circleBase ≠ circleBase := by
+        intro h
+        have h' := congrArg Subtype.val h
+        norm_num [circleBase] at h'
+      have hne (side target : Bool) :
+          (Quotient.mk _ (if side then Sum.inl w.1 else Sum.inr w.1) : CircleWedge) ≠
+            Quotient.mk _ (if target then Sum.inl (-circleBase) else Sum.inr (-circleBase)) := by
+        intro h
+        rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+          circleBase circleBase _ _).mp (Quotient.exact h) with heq | hglue
+        · cases side <;> cases target <;> simp [w] at heq
+          all_goals exact hsqneg heq
+        · rcases hglue with ⟨hs, ht⟩
+          rcases hs with hs | hs <;> rcases ht with ht | ht <;>
+            cases side <;> cases target <;> simp [w, hbase] at hs ht
+      have hq : q ∈ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U := by
+        exact ⟨by simpa [q] using hne left true, by simpa [q] using hne left false⟩
+      refine ⟨⟨q, hq⟩, ?_⟩
+      rw [he]
+      rcases hroot with hroot | hroot <;> cases left <;> cases b
+      all_goals
+        try
+          rw [hroot] at hz
+          have hp := hre w
+          norm_num at hz
+          linarith
+      all_goals
+        simp only [q, Bool.false_eq_true, if_false, if_true,
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S,
+          Quotient.lift_mk, Sum.elim_inl, Sum.elim_inr]
+        rw [circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift,
+          dif_pos hsqneg]
+        simp [hroot]
+    rcases he with he | he
+    · exact core true (by simpa using he)
+    · exact core false (by simpa using he)
 
 /-- The two local sections over `U`, built from a square-root branch `r`:
 `[inl w] ↦ [inl (±r w)]`, `[inr w] ↦ [inr (±r w)]` (well defined at the wedge point
