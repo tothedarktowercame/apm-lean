@@ -1993,7 +1993,65 @@ lemma circleWedge_three_cover_two_components_aux_fiber (b : CircleWedge) :
 lemma circleWedge_three_cover_two_components_aux_components :
     Nat.card (ConnectedComponents
       circleWedge_three_cover_two_components_aux_Total) = 2 := by
-  sorry
+  letI : ConnectedSpace Circle := isConnected_iff_connectedSpace.mp
+    (isConnected_sphere (E := ℂ) (by norm_num [Complex.rank_real_complex]) 0 (by norm_num))
+  let q : Circle ⊕ Circle →
+      circleWedge_three_cover_two_components_aux_Double := Quotient.mk _
+  let l : Circle → circleWedge_three_cover_two_components_aux_Double :=
+    fun z ↦ q (.inl z)
+  let r : Circle → circleWedge_three_cover_two_components_aux_Double :=
+    fun z ↦ q (.inr z)
+  have hl : IsConnected (Set.range l) :=
+    isConnected_range (continuous_coinduced_rng.comp continuous_inl)
+  have hr : IsConnected (Set.range r) :=
+    isConnected_range (continuous_coinduced_rng.comp continuous_inr)
+  have hinter : (Set.range l ∩ Set.range r).Nonempty := by
+    refine ⟨q (.inl circleBase), ⟨⟨circleBase, rfl⟩, ⟨circleBase, ?_⟩⟩⟩
+    exact (Quotient.sound (Relation.EqvGen.rel _ _
+      circleWedge_three_cover_two_components_aux_Rel.pos)).symm
+  have hcover : Set.range l ∪ Set.range r = Set.univ := by
+    rw [Set.eq_univ_iff_forall]
+    intro z
+    obtain ⟨x, rfl⟩ := Quotient.exists_rep z
+    rcases x with a | b
+    · exact Or.inl ⟨a, rfl⟩
+    · exact Or.inr ⟨b, rfl⟩
+  have hdouble : IsConnected
+      (Set.univ : Set circleWedge_three_cover_two_components_aux_Double) := by
+    rw [← hcover]
+    exact hl.union hinter hr
+  let U : Bool → Set circleWedge_three_cover_two_components_aux_Total
+    | false => Set.range Sum.inl
+    | true => Set.range Sum.inr
+  have hclopen : ∀ b, IsClopen (U b) := by
+    intro b
+    cases b
+    · exact isClopen_range_inl
+    · exact isClopen_range_inr
+  have hdisj : Pairwise (Function.onFun Disjoint U) := by
+    intro b c hbc
+    cases b <;> cases c
+    · exact (hbc rfl).elim
+    · refine Set.disjoint_left.2 ?_
+      rintro _ ⟨x, rfl⟩ ⟨y, h⟩
+      exact Sum.inr_ne_inl h
+    · refine Set.disjoint_left.2 ?_
+      rintro _ ⟨x, rfl⟩ ⟨y, h⟩
+      exact Sum.inl_ne_inr h
+    · exact (hbc rfl).elim
+  have hunion : ⋃ b, U b = Set.univ := by
+    ext z
+    rcases z with z | z <;> simp [U]
+  have hconn : ∀ b, IsConnected (U b) := by
+    intro b
+    cases b
+    · simpa [U] using
+        circleWedge_three_cover_three_components_aux_connected.image Sum.inl
+          continuous_inl.continuousOn
+    · simpa [U] using hdouble.image Sum.inr continuous_inr.continuousOn
+  let e := ConnectedComponents.equivOfIsClopenOfIsConnected
+    hclopen hdisj hunion hconn
+  simpa using Nat.card_congr e
 -- END SEAT AREA
 
 theorem circleWedge_three_cover_two_components : ∃ C : ThreeCover,
