@@ -290,7 +290,104 @@ theorem rp2Wedge_regular_four_cover_aux_card_aux_base (σ τ : Equiv.Perm (Fin 4
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
     Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
       Quotient.mk _ (.inl rpBase)} = 4 := by
-  sorry
+  let e0 := rp2Wedge_regular_four_cover_aux_e0
+  have hne : (-e0 : Sphere2) ≠ e0 := by
+    intro h
+    have hval := congrArg (fun z : Sphere2 ↦ (z : EuclideanSpace ℝ (Fin 3))) h
+    have := congrArg (fun z : EuclideanSpace ℝ (Fin 3) ↦ z 0) hval
+    norm_num [e0, rp2Wedge_regular_four_cover_aux_e0] at this
+  let fL : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = e0 then z.2 else if z.1 = -e0 then σ z.2 else 0
+  let fR : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = e0 then z.2 else if z.1 = -e0 then τ z.2 else 0
+  have hL : ∀ x i, fL (-x, σ i) = fL (x, i) := by
+    intro x i
+    by_cases hx : x = e0
+    · subst x
+      simp [fL, hne, hσ i]
+    · by_cases hx' : x = -e0
+      · subst x
+        simp [fL, hne, hσ i]
+      · have hn₁ : -x ≠ e0 := by
+          intro h
+          apply hx'
+          simpa using congrArg Neg.neg h
+        have hn₂ : -x ≠ -e0 := by
+          intro h
+          apply hx
+          simpa only [neg_inj] using h
+        simp [fL, hx, hx', hn₁, hn₂]
+  have hR : ∀ x i, fR (-x, τ i) = fR (x, i) := by
+    intro x i
+    by_cases hx : x = e0
+    · subst x
+      simp [fR, hne, hτ i]
+    · by_cases hx' : x = -e0
+      · subst x
+        simp [fR, hne, hτ i]
+      · have hn₁ : -x ≠ e0 := by
+          intro h
+          apply hx'
+          simpa using congrArg Neg.neg h
+        have hn₂ : -x ≠ -e0 := by
+          intro h
+          apply hx
+          simpa only [neg_inj] using h
+        simp [fR, hx, hx', hn₁, hn₂]
+  let F : Fin 4 → {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl rpBase)} := fun i ↦
+    ⟨Quotient.mk _ (.inl (e0, i)), rfl⟩
+  have hinj : Function.Injective F := by
+    intro i j hij
+    have hq : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ)
+        (.inl (e0, i)) (.inl (e0, j)) := Quotient.exact (congrArg Subtype.val hij)
+    have hi := rp2Wedge_regular_four_cover_aux_card_aux_invariant σ τ fL fR
+      hL hR (by intro k; simp [e0, fL, fR]) hq
+    simpa [fL] using hi
+  have hsurj : Function.Surjective F := by
+    rintro ⟨q, hq⟩
+    induction q using Quotient.inductionOn with
+    | _ z =>
+      rcases z with z | z <;> rcases z with ⟨x, i⟩
+      · have hw := Quotient.exact hq
+        have hc : antipodalCover x = rpBase := by
+          rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+              rpBase rpBase (.inl (antipodalCover x)) (.inl rpBase)).mp hw with h | h
+          · exact Sum.inl.inj h
+          · rcases h.1 with h | h
+            · exact Sum.inl.inj h
+            · contradiction
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff e0 x).mp hc.symm with rfl | rfl
+        · exact ⟨i, rfl⟩
+        · refine ⟨σ i, ?_⟩
+          apply Subtype.ext
+          apply Quotient.sound
+          simpa [hσ i] using Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ) e0 (σ i))
+      · have hw := Quotient.exact hq
+        have hc : antipodalCover x = rpBase := by
+          rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+              rpBase rpBase (.inr (antipodalCover x)) (.inl rpBase)).mp hw with h | h
+          · contradiction
+          · rcases h.1 with h | h
+            · contradiction
+            · exact Sum.inr.inj h
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff e0 x).mp hc.symm with rfl | rfl
+        · refine ⟨i, ?_⟩
+          apply Subtype.ext
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) i))
+        · refine ⟨τ i, ?_⟩
+          apply Subtype.ext
+          apply Quotient.sound
+          have hg := Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (τ i))
+          have hr := Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ) e0 (τ i))
+          exact Relation.EqvGen.trans _ _ _ hg (by simpa [hτ i] using hr)
+  let E : Fin 4 ≃ {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl rpBase)} := Equiv.ofBijective F ⟨hinj, hsurj⟩
+  simpa using Nat.card_congr E.symm
 -- END SEAT AREA
 
 /-- Every fibre has four points: over a point of the left lobe the fibre is
