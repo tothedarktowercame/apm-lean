@@ -1928,7 +1928,154 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
       Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i : ℝ) (v i)) →
       ∑ i ∈ Finset.range n, |L (u i, v i)| ≤
         R * (∑ i ∈ Finset.range n, ((v i : ℝ) - u i)) ^ (1 / q) := by
-  sorry
+  intro n u v huv hdisj
+  let A : ℕ → Set ℝ := fun i ↦ Set.Ioc (u i : ℝ) (v i)
+  let U : Set ℝ := ⋃ i ∈ Finset.range n, A i
+  let c : ℚ × ℚ → ℝ := fun z ↦ SignType.sign (L z)
+  have hc_bound (z : ℚ × ℚ) : |c z| ≤ 1 := by
+    dsimp [c]
+    cases SignType.sign (L z) <;> norm_num
+  have hleft : ∑ i ∈ Finset.range n, c (u i, v i) * L (u i, v i) =
+      ∑ i ∈ Finset.range n, |L (u i, v i)| := by
+    apply Finset.sum_congr rfl
+    intro i hi
+    simp [c, sign_mul_self]
+  have hpoint : ∀ x : ℝ, ‖∑ i ∈ Finset.range n,
+      c (u i, v i) * (A i).indicator (fun _ ↦ (1 : ℝ)) x‖ ≤
+      ‖U.indicator (fun _ ↦ (1 : ℝ)) x‖ := by
+    intro x
+    by_cases hx : x ∈ U
+    · have hxU := hx
+      simp only [U, Set.mem_iUnion] at hx
+      obtain ⟨i, hi⟩ := hx
+      obtain ⟨hiR, hxi⟩ := hi
+      have hone : ∀ j ∈ Finset.range n, j ≠ i → x ∉ A j := by
+        intro j hj hji hxj
+        exact Set.disjoint_left.mp (hdisj hj hiR hji) hxj hxi
+      rw [Finset.sum_eq_single i]
+      · simp only [Set.indicator_of_mem hxi, mul_one, Set.indicator_of_mem hxU,
+          norm_one]
+        exact hc_bound _
+      · intro j hj hji
+        simp [A, hone j hj hji]
+      · exact fun hi' ↦ (hi' hiR).elim
+    · have hnone : ∀ i ∈ Finset.range n, x ∉ A i := by
+        intro i hi hxi
+        apply hx
+        simp only [U, Set.mem_iUnion]
+        exact ⟨i, hi, hxi⟩
+      have hz : ∑ i ∈ Finset.range n,
+          c (u i, v i) * (A i).indicator (fun _ ↦ (1 : ℝ)) x = 0 := by
+        apply Finset.sum_eq_zero
+        intro i hi
+        simp [Set.indicator, hnone i hi]
+      rw [hz]
+      simp [Set.indicator, hx]
+  have hq0 : ENNReal.ofReal q ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr (lt_trans zero_lt_one hq)
+  have hqtop : ENNReal.ofReal q ≠ ⊤ := ENNReal.ofReal_ne_top
+  have hmeasU : MeasurableSet U := by
+    dsimp [U, A]
+    measurability
+  have hnorm : eLpNorm (fun x ↦ ∑ i ∈ Finset.range n,
+      c (u i, v i) * (A i).indicator (fun _ ↦ (1 : ℝ)) x)
+      (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) ≤
+      (ENNReal.ofReal (∑ i ∈ Finset.range n, ((v i : ℝ) - u i))) ^ (1 / q) := by
+    calc
+      _ ≤ eLpNorm (U.indicator (fun _ ↦ (1 : ℝ))) (ENNReal.ofReal q)
+          (volume.restrict (Set.Icc (0 : ℝ) 1)) := eLpNorm_mono hpoint
+      _ = ((volume.restrict (Set.Icc (0 : ℝ) 1)) U) ^
+          (1 / (ENNReal.ofReal q).toReal) := by
+            rw [eLpNorm_indicator_const hmeasU hq0 hqtop]
+            simp
+      _ = (ENNReal.ofReal (∑ i ∈ Finset.range n,
+          ((v i : ℝ) - u i))) ^ (1 / q) := by
+            rw [measure_biUnion_finset hdisj]
+            · simp only [A, ENNReal.toReal_ofReal (le_trans zero_le_one hq.le)]
+              congr 1
+              rw [ENNReal.ofReal_sum_of_nonneg]
+              · apply Finset.sum_congr rfl
+                intro i hi
+                have hsub : Set.Ioc (u i : ℝ) (v i) ⊆ Set.Icc (0 : ℝ) 1 :=
+                  fun x hx ↦ ⟨
+                    (by have : (0 : ℝ) ≤ (u i : ℝ) := by exact_mod_cast (huv i hi).1
+                        exact this.trans hx.1.le),
+                    (by have : (v i : ℝ) ≤ 1 := by exact_mod_cast (huv i hi).2.2
+                        exact hx.2.trans this)⟩
+                rw [Measure.restrict_apply measurableSet_Ioc, Set.inter_eq_left.mpr hsub,
+                  Real.volume_Ioc]
+              · intro i hi
+                exact sub_nonneg.mpr (by exact_mod_cast (huv i hi).2.1)
+            · intro i hi
+              exact measurableSet_Ioc
+  let T := (Finset.range n).filter (fun i ↦ u i < v i)
+  have hzero :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_zero
+      q L R hstep
+  have hsumT : ∑ i ∈ T, c (u i, v i) * L (u i, v i) =
+      ∑ i ∈ Finset.range n, c (u i, v i) * L (u i, v i) := by
+    simp only [T, Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro i hi
+    simp only [T, Finset.mem_range, Finset.mem_filter] at hi ⊢
+    split_ifs with hlt
+    · rfl
+    · rw [hzero (u i) (v i) (le_of_not_gt hlt), mul_zero]
+  have hfunT : (fun x : ℝ ↦ ∑ i ∈ T,
+      c (u i, v i) * (A i).indicator (fun _ ↦ (1 : ℝ)) x) =
+      (fun x : ℝ ↦ ∑ i ∈ Finset.range n,
+      c (u i, v i) * (A i).indicator (fun _ ↦ (1 : ℝ)) x) := by
+    funext x
+    simp only [T, Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro i hi
+    simp only [T, Finset.mem_range, Finset.mem_filter] at hi ⊢
+    split_ifs with hlt
+    · rfl
+    · have heq : u i = v i :=
+        le_antisymm (huv i (Finset.mem_range.mpr hi)).2.1 (le_of_not_gt hlt)
+      simp [A, heq]
+  have hinj : ∀ i ∈ T, ∀ j ∈ T, (u i, v i) = (u j, v j) → i = j := by
+    intro i hi j hj heq
+    by_contra hij
+    have hiR : i ∈ Finset.range n := (Finset.mem_filter.mp hi).1
+    have hjR : j ∈ Finset.range n := (Finset.mem_filter.mp hj).1
+    have hne_i : u i < v i := (Finset.mem_filter.mp hi).2
+    have xmem : (((u i : ℝ) + v i) / 2) ∈ A i := by
+      dsimp [A]
+      constructor
+      · exact_mod_cast (by linarith : (u i : ℚ) < (u i + v i) / 2)
+      · exact_mod_cast (by linarith : (u i + v i) / 2 ≤ (v i : ℚ))
+    have : A i = A j := by simpa [A] using congrArg (fun z : ℚ × ℚ ↦ Set.Ioc (z.1 : ℝ) z.2) heq
+    have xmemj : (((u i : ℝ) + v i) / 2) ∈ A j := by rw [← this]; exact xmem
+    exact Set.disjoint_left.mp (hdisj hiR hjR hij) xmem xmemj
+  have hs := hstep (Finset.image (fun i ↦ (u i, v i)) T) c
+  have himage : ∑ z ∈ Finset.image (fun i ↦ (u i, v i)) T, c z * L z =
+      ∑ i ∈ T, c (u i, v i) * L (u i, v i) := by
+    rw [Finset.sum_image hinj]
+  have hfunImage : (fun x : ℝ ↦ ∑ z ∈ Finset.image (fun i ↦ (u i, v i)) T,
+      c z * (Set.Ioc (z.1 : ℝ) z.2).indicator (fun _ ↦ (1 : ℝ)) x) =
+      (fun x : ℝ ↦ ∑ i ∈ T, c (u i, v i) *
+        (A i).indicator (fun _ ↦ (1 : ℝ)) x) := by
+    funext x
+    rw [Finset.sum_image hinj]
+  rw [himage, hsumT, hleft] at hs
+  rw [abs_of_nonneg (Finset.sum_nonneg fun _ _ ↦ abs_nonneg _)] at hs
+  have hnormT : eLpNorm (fun x ↦ ∑ i ∈ T,
+      c (u i, v i) * (A i).indicator (fun _ ↦ (1 : ℝ)) x)
+      (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) ≤
+      (ENNReal.ofReal (∑ i ∈ Finset.range n, ((v i : ℝ) - u i))) ^ (1 / q) := by
+    rw [hfunT]
+    exact hnorm
+  have hs' : ∑ i ∈ Finset.range n, |L (u i, v i)| ≤
+      R * ((ENNReal.ofReal (∑ i ∈ Finset.range n,
+        ((v i : ℝ) - u i))) ^ (1 / q)).toReal := by
+    refine hs.trans (mul_le_mul_of_nonneg_left ?_ hR)
+    rw [hfunImage]
+    exact ENNReal.toReal_mono (by finiteness) hnormT
+  have hsum_nonneg : 0 ≤ ∑ i ∈ Finset.range n, ((v i : ℝ) - u i) :=
+    Finset.sum_nonneg fun i hi ↦ sub_nonneg.mpr (by exact_mod_cast (huv i hi).2.1)
+  rw [← ENNReal.toReal_rpow, ENNReal.toReal_ofReal hsum_nonneg] at hs'
+  simpa [one_div] using hs'
 -- END SEAT AREA
 
 /-- Leaf (extension to an absolutely continuous function). From additivity and the
