@@ -827,12 +827,64 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl
     simpa [W, Set.image_image] using hopen
 
 /-- The same for the right lobe. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr_aux_eq
+    {A B : Type*} (a : A) (b x : B) (hx : x ≠ b)
+    {z : Sum A B}
+    (h : Relation.EqvGen (WedgeRel a b) (.inr x) z) :
+    z = .inr x := by
+  have hinv : ∀ {u v : Sum A B},
+      Relation.EqvGen (WedgeRel a b) u v →
+        (u = .inr x ↔ v = .inr x) := by
+    intro u v huv
+    induction huv with
+    | rel u v huv =>
+        cases huv
+        simp [hx, Ne.symm hx]
+    | refl => exact Iff.rfl
+    | symm u v _ ih => exact ih.symm
+    | trans u v w _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  exact (hinv h).mp rfl
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr
     {A B : Type*} [TopologicalSpace A] [TopologicalSpace B] (a : A) (b : B)
     (V : Set B) (hV : IsOpen V) (hb : b ∉ V) :
     Topology.IsOpenEmbedding
       (fun z : V ↦ (Quotient.mk _ (.inr z.1) : Wedge A B a b)) := by
-  sorry
+  rw [Topology.isOpenEmbedding_iff_continuous_injective_isOpenMap]
+  refine ⟨continuous_quot_mk.comp (continuous_inr.comp continuous_subtype_val), ?_, ?_⟩
+  · intro x y hxy
+    have hrel : Relation.EqvGen (WedgeRel a b) (.inr x.1) (.inr y.1) :=
+      Quotient.exact hxy
+    have hx : x.1 ≠ b := fun hxb ↦ hb (hxb ▸ x.2)
+    have heq :=
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr_aux_eq
+        a b x.1 hx hrel
+    exact Subtype.ext (Sum.inr.inj heq.symm)
+  · intro U hU
+    let W : Set B := Subtype.val '' U
+    have hW : IsOpen W := hV.isOpenMap_subtype_val U hU
+    have hpre :
+        (fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) ⁻¹'
+            ((fun z : V ↦ (Quotient.mk _ (.inr z.1) : Wedge A B a b)) '' U) =
+          Sum.inr '' W := by
+      ext z
+      constructor
+      · rintro ⟨u, hu, heq⟩
+        have hrel : Relation.EqvGen (WedgeRel a b) (.inr u.1) z :=
+          Quotient.exact heq
+        have hu_ne : u.1 ≠ b := fun hub ↦ hb (hub ▸ u.2)
+        have hz :=
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr_aux_eq
+            a b u.1 hu_ne hrel
+        exact ⟨u.1, ⟨u, hu, rfl⟩, hz.symm⟩
+      · rintro ⟨w, ⟨u, hu, rfl⟩, rfl⟩
+        exact ⟨u, hu, rfl⟩
+    apply isQuotientMap_quotient_mk'.isOpen_preimage.mp
+    change IsOpen
+      ((fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) ⁻¹'
+        ((fun z : V ↦ (Quotient.mk _ (.inr z.1) : Wedge A B a b)) '' U))
+    rw [hpre]
+    exact isOpenMap_inr W hW
 
 /-- The four sheets over a left-lobe point `[inl (antipodalCover u)] ≠` wedge
 point.  `U` is the image under `_aux_lobe_inl` of the image under `_aux_cap u` of
