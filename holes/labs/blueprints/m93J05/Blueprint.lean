@@ -1972,13 +1972,78 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
   filter_upwards [] with x
   simpa [Real.norm_eq_abs] using hC x
 
-/-- Leaf (`L¹` step approximation). For each `n`, a bounded `g` is within `1/(n+1)` in `L¹([0,1])`
-of a rational-interval step function bounded by `C + 1` everywhere. Route: approximate `g` in
-`L¹` by a continuous function (`MemLp.exists_hasCompactSupport_eLpNorm_sub_le` /
-`Integrable.exists_hasCompactSupport_integral_sub_le`, integrability from `_aux_integrable`),
-clip it to `[-C, C]` (clipping does not increase `|h - g|` since `|g| ≤ C`), then take the
-step function `∑ₖ h(k/N) 1_((k-1)/N, k/N]` on a fine rational grid (uniform continuity on
-`[0,1]`; the intervals are disjoint, so the step function is bounded by `C`). -/
+/-- Banked (lemma-2, round 2): clipping to `[-C, C]` does not increase the distance to a value
+bounded by `C`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps_aux_clip_error
+    {u v C : ℝ} (hC : |v| ≤ C) :
+    |max (-C) (min C u) - v| ≤ |u - v| := by
+  have hCn : 0 ≤ C := (abs_nonneg v).trans hC
+  have hvlo : -C ≤ v := (abs_le.mp hC).1
+  have hvhi : v ≤ C := (abs_le.mp hC).2
+  rcases le_total u (-C) with hu | hu
+  · rw [min_eq_right (hu.trans (neg_le_self hCn)), max_eq_left hu]
+    rw [abs_of_nonpos (sub_nonpos.mpr hvlo), abs_of_nonpos (sub_nonpos.mpr (hu.trans hvlo))]
+    linarith
+  rcases le_total C u with hu' | hu'
+  · rw [min_eq_left hu', max_eq_right (neg_le_self hCn)]
+    rw [abs_of_nonneg (sub_nonneg.mpr hvhi), abs_of_nonneg (sub_nonneg.mpr (hvhi.trans hu'))]
+    linarith
+  · rw [min_eq_right hu', max_eq_right hu]
+
+/-- Banked (lemma-2, round 2): a bounded `g` is within `ε` in `L¹([0,1])` of a continuous
+function bounded by the same `C` (compactly supported approximation, then clipping). -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps_aux_continuous
+    (g : ℝ → ℝ) (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (C ε : ℝ) (hC : ∀ x, |g x| ≤ C) (hε : 0 < ε) :
+    ∃ h : ℝ → ℝ, Continuous h ∧ (∀ x, |h x| ≤ C) ∧
+      ∫ x in Set.Icc (0 : ℝ) 1, |h x - g x| ≤ ε := by
+  have hgi :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_integrable
+      g hg C hC
+  obtain ⟨u, -, hu, huc, -⟩ := hgi.exists_hasCompactSupport_integral_sub_le hε
+  have hCn : 0 ≤ C :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_C_nonneg g C hC
+  let h : ℝ → ℝ := fun x ↦ max (-C) (min C (u x))
+  refine ⟨h, continuous_const.max (continuous_const.min huc), ?_, ?_⟩
+  · intro x
+    rw [abs_le]
+    exact ⟨le_max_left _ _, max_le (by linarith)
+      (min_le_left _ _)⟩
+  · calc
+      ∫ x in Set.Icc (0 : ℝ) 1, |h x - g x| ≤
+          ∫ x in Set.Icc (0 : ℝ) 1, |u x - g x| := by
+            apply MeasureTheory.integral_mono_ae
+            · simpa [Pi.sub_apply, Real.norm_eq_abs, h] using
+                (((continuous_const.max
+                  (continuous_const.min huc)).integrableOn_Icc.sub hgi).norm)
+            · simpa [Pi.sub_apply, Real.norm_eq_abs] using
+                ((huc.integrableOn_Icc.sub hgi).norm)
+            · filter_upwards [] with x
+              simpa [h, abs_sub_comm] using
+                apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps_aux_clip_error
+                  (u := u x) (hC x)
+      _ = ∫ x, |g x - u x| ∂(volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+        apply integral_congr_ae
+        filter_upwards [] with x
+        rw [abs_sub_comm]
+      _ ≤ ε := hu
+
+/-- Leaf (uniform grid steps). A continuous `h` bounded by `C` is uniformly within `ε` on `(0,1]`
+of a rational-interval step function bounded by `C + 1` everywhere. Route: `h` is uniformly
+continuous on `[0,1]` (`CompactIccSpace`, `IsCompact.uniformContinuousOn_of_continuous`); pick
+`N` with modulus `1/N`, take `F = {((k-1)/N, k/N) : k = 1..N}` and `c i = h i.2`. The intervals
+are disjoint, so at each `x` at most one term is nonzero (bound `C ≤ C + 1`), and for
+`x ∈ ((k-1)/N, k/N]` the sum is `h (k/N)` with `|x - k/N| < 1/N`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps_aux_grid
+    (h : ℝ → ℝ) (hh : Continuous h) (C ε : ℝ) (hC : ∀ x, |h x| ≤ C) (hε : 0 < ε) :
+    ∃ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      (∀ x, |∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤ C + 1) ∧
+      ∀ x ∈ Set.Ioc (0 : ℝ) 1,
+        |∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x - h x| ≤ ε := by
+  sorry
+
+/-- `L¹` step approximation, assembled (claude-14, round 2): continuous approximation within
+`δ = 1/(2(n+1))` (`_aux_continuous`), then grid steps uniformly within `δ` (`_aux_grid`). -/
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps
     (g : ℝ → ℝ) (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (C : ℝ) (hC : ∀ x, |g x| ≤ C) :
@@ -1987,7 +2052,42 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
       ∫ x in Set.Icc (0 : ℝ) 1,
         |∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x - g x| ≤
           1 / ((n : ℝ) + 1) := by
-  sorry
+  intro n
+  have hn : (0 : ℝ) < (n : ℝ) + 1 := by positivity
+  set δ : ℝ := 1 / (2 * ((n : ℝ) + 1)) with hδdef
+  have hδ : 0 < δ := by positivity
+  obtain ⟨h, hc, hb, hint⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps_aux_continuous
+      g hg C δ hC hδ
+  obtain ⟨F, c, hF, hu⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps_aux_grid
+      h hc C δ hb hδ
+  refine ⟨F, c, hF, ?_⟩
+  have hgi :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_integrable
+      g hg C hC
+  have hhg : Integrable (fun x ↦ |h x - g x|) (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+    simpa [Pi.sub_apply, Real.norm_eq_abs] using (hc.integrableOn_Icc.sub hgi).norm
+  have hmem : ∀ᵐ x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)), x ∈ Set.Ioc (0 : ℝ) 1 := by
+    rw [← Measure.restrict_congr_set Ioc_ae_eq_Icc]
+    exact ae_restrict_mem measurableSet_Ioc
+  calc
+    ∫ x in Set.Icc (0 : ℝ) 1,
+        |∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x - g x|
+        ≤ ∫ x in Set.Icc (0 : ℝ) 1, (δ + |h x - g x|) := by
+          refine integral_mono_of_nonneg (ae_of_all _ fun x ↦ abs_nonneg _)
+            ((integrable_const δ).add hhg) ?_
+          filter_upwards [hmem] with x hx
+          have := hu x hx
+          have tri := abs_sub_le
+            (∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) (h x) (g x)
+          linarith
+    _ = δ + ∫ x in Set.Icc (0 : ℝ) 1, |h x - g x| := by
+          rw [integral_add (integrable_const δ) hhg]
+          simp
+    _ ≤ δ + δ := by linarith
+    _ = 1 / ((n : ℝ) + 1) := by
+          rw [hδdef]; field_simp; ring
 
 /-- Leaf (a.e. subsequence). Uniformly bounded step functions converging to a bounded `g` in
 `L¹([0,1])` at rate `1/(n+1)` have an a.e. convergent subsequence. Route: `L¹` convergence gives
