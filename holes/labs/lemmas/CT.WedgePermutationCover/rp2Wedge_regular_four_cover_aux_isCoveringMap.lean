@@ -199,10 +199,33 @@ antipode, the preimage is four copies of `V` in one lobe; at the wedge point,
 take `V` = images of small caps around `±e₀` in both lobes, whose preimage is
 four wedges of two caps, one per fibre point `[(e₀, i)]`. -/
 -- BEGIN SEAT AREA
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (x : Wedge RP2 RP2 rpBase rpBase)
+    (hx : x ≠ Quotient.mk _ (.inl rpBase)) :
+    IsEvenlyCovered (rp2Wedge_regular_four_cover_aux_p σ τ) x
+      ((rp2Wedge_regular_four_cover_aux_p σ τ) ⁻¹' {x}) := by
+  sorry
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
+    IsEvenlyCovered (rp2Wedge_regular_four_cover_aux_p σ τ)
+      (Quotient.mk _ (.inl rpBase))
+      ((rp2Wedge_regular_four_cover_aux_p σ τ) ⁻¹'
+        {Quotient.mk _ (.inl rpBase)}) := by
+  sorry
+
 theorem rp2Wedge_regular_four_cover_aux_isCoveringMap (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
     IsCoveringMap (rp2Wedge_regular_four_cover_aux_p σ τ) := by
-  sorry
+  intro x
+  classical
+  by_cases hx : x = Quotient.mk _ (.inl rpBase)
+  · subst x
+    exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge σ τ hσ hτ
+  · exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away σ τ hσ hτ x hx
 -- END SEAT AREA
 
 /-! #### Split of `rp2Wedge_regular_four_cover_aux_card` (lemma-2 PARTIAL, 2026-10-18) -/

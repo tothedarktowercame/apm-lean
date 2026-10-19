@@ -121,3 +121,16 @@ The assembly is proved from these plus one leaf:
   `rp2Wedge_regular_four_cover_aux_cover_eq_iff` to get `v = ±u` in the same lobe, or
   `u, v = ±e₀` in opposite lobes. Normalize with `(-x, j) ∼ (x, σ j)` (left) /
   `(x, τ j)` (right) and the glue at `e₀`, then take `g` from `hC`.
+
+### Split of `rp2Wedge_regular_four_cover_aux_isCoveringMap` (2026-10-19, lemma-2 PARTIAL)
+
+Nothing banked beyond the assembly, which is proved by cases on `x` from two chart
+leaves. Do not use `IsCoveringMapOn.of_openPartialHomeomorph` (needs compact Hausdorff).
+
+- `_aux_isCoveringMap_aux_away`: a point `x ≠ [inl rpBase]` of the wedge has an evenly
+  covered neighbourhood. Work inside one open lobe minus the wedge point; the cover over
+  it is four copies of the double cover `S² → RP²`, so take a chart of `S² → RP²`
+  avoiding `±e₀`.
+- `_aux_isCoveringMap_aux_wedge`: the wedge point is evenly covered. Take the union of
+  small caps around `±e₀` in both lobes; over it the preimage is four sheets indexed by
+  the fibre `i ↦ [inl (e₀, i)]`, glued as in `_aux_card_aux_base`.
