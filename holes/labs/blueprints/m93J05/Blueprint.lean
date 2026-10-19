@@ -1648,6 +1648,123 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_i
       (eLpNorm f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
   sorry
 
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_tendsto_abs_le
+    {u : ℕ → ℝ} {x C : ℝ} (hu : Tendsto u atTop (nhds x))
+    (hC : ∀ n, |u n| ≤ C) : |x| ≤ C := by
+  have habs : Tendsto (fun n ↦ |u n|) atTop (nhds |x|) :=
+    (continuous_abs.tendsto x).comp hu
+  exact le_of_tendsto habs (Eventually.of_forall hC)
+
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_add
+    (p q : ℝ) (hp : 1 < p) (hpq : 1 / p + 1 / q = 1)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (L : ℚ × ℚ → ℝ)
+    (hL : ∀ i : ℚ × ℚ, Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1,
+      s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) atTop (nhds (L i)))
+    (a b c : ℚ) (hab : a ≤ b) (hbc : b ≤ c) :
+    L (a, c) = L (a, b) + L (b, c) := by
+  have hpqR : p.HolderConjugate q := Real.holderConjugate_iff.mpr ⟨hp, by simpa [div_eq_mul_inv] using hpq⟩
+  have hpqE : (ENNReal.ofReal p).HolderConjugate (ENNReal.ofReal q) := by
+    apply ENNReal.HolderConjugate.of_toReal
+    simpa [ENNReal.toReal_ofReal hpqR.nonneg, ENNReal.toReal_ofReal hpqR.symm.nonneg]
+      using hpqR
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hind (u v : ℚ) : MemLp
+      ((Set.Ioc (u : ℝ) v).indicator (fun _ ↦ (1 : ℝ))) (ENNReal.ofReal q) μ := by
+    apply memLp_indicator_const
+    · exact measurableSet_Ioc
+    · right
+      simp only [μ, Measure.restrict_apply measurableSet_Ioc]
+      exact ((measure_mono Set.inter_subset_right).trans_lt
+        (by simp : volume (Set.Icc (0 : ℝ) 1) < ⊤)).ne
+  have hint (n : ℕ) (u v : ℚ) : Integrable
+      (fun x ↦ s n x * (Set.Ioc (u : ℝ) v).indicator (fun _ ↦ (1 : ℝ)) x) μ := by
+    letI : (ENNReal.ofReal p).HolderTriple (ENNReal.ofReal q) 1 := hpqE
+    exact (hs n).integrable_mul (hind u v)
+  have heq (n : ℕ) : (∫ x in Set.Icc (0 : ℝ) 1,
+      s n x * (Set.Ioc (a : ℝ) c).indicator (fun _ ↦ (1 : ℝ)) x) =
+      (∫ x in Set.Icc (0 : ℝ) 1,
+        s n x * (Set.Ioc (a : ℝ) b).indicator (fun _ ↦ (1 : ℝ)) x) +
+      ∫ x in Set.Icc (0 : ℝ) 1,
+        s n x * (Set.Ioc (b : ℝ) c).indicator (fun _ ↦ (1 : ℝ)) x := by
+    rw [← integral_add (hint n a b) (hint n b c)]
+    apply integral_congr_ae
+    apply Filter.Eventually.of_forall
+    intro x
+    have habR : (a : ℝ) ≤ b := by exact_mod_cast hab
+    have hbcR : (b : ℝ) ≤ c := by exact_mod_cast hbc
+    show s n x * _ = s n x * _ + s n x * _
+    rw [← mul_add, ← Set.Ioc_union_Ioc_eq_Ioc habR hbcR,
+      Set.indicator_union_of_disjoint (Set.Ioc_disjoint_Ioc_of_le le_rfl)]
+  apply tendsto_nhds_unique (hL (a, c))
+  convert (hL (a, b)).add (hL (b, c)) using 1
+  exact funext heq
+
+/-- Leaf (step functional). The limits `L` extend linearly to rational step functions, with
+the bound `|Λ g| ≤ R ‖g‖_q`. Route: `∑ c_i ∫ s_n 1_i = ∫ s_n g` (linearity; each product is
+integrable by Hölder), so the left side is the limit of `∫ s_n g`; Hölder bounds each term
+by `R ‖g‖_q`; pass to the limit with `..._aux_limit_rep_aux_tendsto_abs_le`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_step_bound
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (R : ℝ) (hR : 0 ≤ R)
+    (hbound : ∀ n : ℕ,
+      (eLpNorm (s n) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R)
+    (L : ℚ × ℚ → ℝ)
+    (hL : ∀ i : ℚ × ℚ, Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1,
+      s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) atTop (nhds (L i))) :
+    ∀ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      |∑ i ∈ F, c i * L i| ≤ R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+  sorry
+
+/-- Leaf (integrable representative; the analytic core). An interval function on rational
+intervals, additive on adjacent intervals and bounded on step functions by `R ‖·‖_q`, is
+integration against some `f₀ ∈ L¹([0,1])`. Route: `F t := L (0, t)` is uniformly continuous on
+`ℚ ∩ [0,1]` (single-interval bound `R (b - a)^(1/q)`), so extends to a continuous `F`; the step
+bound with signs gives `∑ |F b_k - F a_k| ≤ R (∑ (b_k - a_k))^(1/q)` on disjoint intervals, so
+`F` is absolutely continuous. Either split `F` into monotone continuous parts, take their
+`StieltjesFunction.measure`s (both `≪ volume`) and set `f₀` to the difference of the
+`rnDeriv`s, or use the dyadic averages of `L` as an `L¹`-bounded uniformly integrable
+martingale and its `limitProcess`. Non-dyadic rational endpoints follow by continuity. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (L : ℚ × ℚ → ℝ) (R : ℝ) (hR : 0 ≤ R)
+    (hadd : ∀ a b c : ℚ, a ≤ b → b ≤ c → L (a, c) = L (a, b) + L (b, c))
+    (hstep : ∀ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      |∑ i ∈ F, c i * L i| ≤ R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
+    ∃ f₀, Integrable f₀ (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+      ∀ i : ℚ × ℚ, ∫ x in Set.Icc (0 : ℝ) 1,
+        f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x = L i := by
+  sorry
+
+/-- Leaf (dual-norm test). An integrable `f₀` whose pairings with rational step functions are
+bounded by `R ‖·‖_q` lies in `Lᵖ([0,1])`. Route: for the truncation `f_M := max (-M) (min M f₀)`
+test against the bounded `g_M := sign f_M · |f_M|^(p-1)`, so `‖f_M‖_p^p ≤ ∫ f₀ g_M ≤ R ‖g_M‖_q
+= R ‖f_M‖_p^(p-1)`; reach `g_M` from rational step functions that converge in `Lᵠ` and a.e.
+with a uniform bound (dominated convergence against `f₀ ∈ L¹`); let `M → ∞` (monotone
+convergence). -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (f₀ : ℝ → ℝ) (hf₀ : Integrable f₀ (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (R : ℝ) (hR : 0 ≤ R)
+    (hstep : ∀ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      |∑ i ∈ F, c i * ∫ x in Set.Icc (0 : ℝ) 1,
+          f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤
+        R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
+    MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  sorry
+
 /-- Leaf (the limit is an `Lᵖ` function). If the interval pairings of a uniformly `Lᵖ`-bounded
 sequence converge for every rational interval, the limits are the pairings of one
 `f₀ ∈ Lᵖ([0,1])`. Route: `L` is additive on adjacent intervals with
@@ -1668,7 +1785,17 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
     ∃ f₀, MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
       ∀ i : ℚ × ℚ, ∫ x in Set.Icc (0 : ℝ) 1,
         f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x = L i := by
-  sorry
+  have hstep :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_step_bound
+      p q hp hq hpq s hs R hR hbound L hL
+  obtain ⟨f₀, hf₀, hrep⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep
+      p q hp hq hpq L R hR
+      (apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_add
+        p q hp hpq s hs L hL) hstep
+  refine ⟨f₀, ?_, hrep⟩
+  exact apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp
+    p q hp hq hpq f₀ hf₀ R hR (fun F c ↦ by simpa only [hrep] using hstep F c)
 
 /-- Leaf (density). Finite combinations of indicators of rational intervals are dense in
 `Lᵠ([0,1])` for `1 < q < ∞`. Route: continuous functions are dense

@@ -60,6 +60,10 @@ This lemma is now a sorry-free assembly of four parallel leaves. Mathlib was sea
   - `_aux_limit_rep`: limits of rational-interval pairings of a uniformly bounded sequence are the pairings of some `f₀ ∈ Lᵖ` (signed measure ≪ volume, `rnDeriv`, `Lᵖ` by testing against step functions). Largest leaf; may need a further split.
   - `_aux_step_dense`: rational step functions are dense in `Lᵠ([0,1])`.
   - `_aux_extend`: ε/3 argument from step functions to all of `Lᵠ`, given the density as a hypothesis.
+  - `_aux_limit_rep` (split 2026-10-19 after lemma-3's partial; assembly proved, `_aux_tendsto_abs_le` and `_aux_add` banked, the latter repaired: it did not compile as handed back). Three leaves:
+    - `_aux_step_bound`: `L` extends linearly to rational step functions with `|Λ g| ≤ R ‖g‖_q` (Hölder at each `n`, then the limit).
+    - `_aux_l1_rep`: an additive interval function with that step bound is integration against some `f₀ ∈ L¹` (absolutely continuous `F t = L(0,t)`; Stieltjes measures + `rnDeriv`, or a dyadic martingale's `limitProcess`). The analytic core; may need a further split.
+    - `_aux_memLp`: an integrable `f₀` with step pairings bounded by `R ‖·‖_q` is in `Lᵖ` (test the truncations against `sign f_M |f_M|^(p-1)`).
 
 - `apm_m93j05_exists_minimizer_lsc_closure` (35–70 lines, independent): applies the supplied weak-lsc statement to the extracted subsequence at levels `J(f)+1/(k+1)`, then lets `k→∞`. Use `StrictMono.tendsto_atTop`, `Filter.Eventually.filter_mono`, and `le_of_forall_pos_le_add` (or an Archimedean `k` choice).
 
