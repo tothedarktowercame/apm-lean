@@ -2991,7 +2991,40 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_glue
     (H₁ : f ⁻¹' W ≃ₜ W × I) (hH₁ : ∀ e, (H₁ e).1.1 = f e)
     (H₂ : g ⁻¹' W ≃ₜ W × J) (hH₂ : ∀ e, (H₂ e).1.1 = g e) :
     ∃ H : Sum.elim f g ⁻¹' W ≃ₜ W × (I ⊕ J), ∀ e, (H e).1.1 = Sum.elim f g e := by
-  sorry
+  let e : Sum.elim f g ⁻¹' W ≃ (f ⁻¹' W) ⊕ (g ⁻¹' W) :=
+    { toFun := fun z ↦ match z with
+        | ⟨.inl x, h⟩ => .inl ⟨x, h⟩
+        | ⟨.inr y, h⟩ => .inr ⟨y, h⟩
+      invFun := Sum.elim (fun x ↦ ⟨.inl x.1, x.2⟩) (fun y ↦ ⟨.inr y.1, y.2⟩)
+      left_inv := by rintro ⟨x | y, h⟩ <;> rfl
+      right_inv := by rintro (x | y) <;> rfl }
+  have hec : Continuous e := by
+    rw [continuous_def]
+    intro s hs
+    rw [isOpen_sum_iff] at hs
+    obtain ⟨u, hu, eu⟩ := hs.1
+    obtain ⟨v, hv, ev⟩ := hs.2
+    refine ⟨(Sum.inl '' u) ∪ (Sum.inr '' v),
+      (isOpenMap_inl u hu).union (isOpenMap_inr v hv), ?_⟩
+    ext z
+    rcases z with ⟨x | y, hx⟩
+    · change Sum.inl x ∈ (Sum.inl '' u) ∪ (Sum.inr '' v) ↔
+        (⟨x, hx⟩ : f ⁻¹' W) ∈ Sum.inl ⁻¹' s
+      rw [← eu]; simp
+    · change Sum.inr y ∈ (Sum.inl '' u) ∪ (Sum.inr '' v) ↔
+        (⟨y, hx⟩ : g ⁻¹' W) ∈ Sum.inr ⁻¹' s
+      rw [← ev]; simp
+  have hes : Continuous e.symm :=
+    continuous_sum_dom.2 ⟨(continuous_inl.comp continuous_subtype_val).subtype_mk _,
+      (continuous_inr.comp continuous_subtype_val).subtype_mk _⟩
+  let K : Sum.elim f g ⁻¹' W ≃ₜ (f ⁻¹' W) ⊕ (g ⁻¹' W) :=
+    { e with continuous_toFun := hec, continuous_invFun := hes }
+  let L := Homeomorph.sumCongr H₁ H₂
+  let D : (W × I) ⊕ (W × J) ≃ₜ W × (I ⊕ J) := Homeomorph.prodSumDistrib.symm
+  refine ⟨K.trans (L.trans D), ?_⟩
+  rintro ⟨x | y, h⟩
+  · exact hH₁ ⟨x, h⟩
+  · exact hH₂ ⟨y, h⟩
 
 lemma circleWedge_three_cover_two_components_aux_covering_aux_sum
     {E₁ E₂ X : Type*} [TopologicalSpace E₁] [TopologicalSpace E₂] [TopologicalSpace X]
