@@ -2178,7 +2178,45 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
       ∀ᵐ x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)),
         Tendsto (fun n ↦ ∑ i ∈ F (φ n), c (φ n) i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
           atTop (nhds (g x)) := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let s : ℕ → ℝ → ℝ := fun n x ↦
+    ∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x
+  have hs : ∀ n, AEStronglyMeasurable (s n) μ := by
+    intro n
+    dsimp [s]
+    have hsm := Finset.aestronglyMeasurable_sum (F n) (μ := μ) (f := fun i x ↦
+      c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) (by
+        intro i hi
+        exact (Measurable.stronglyMeasurable
+          (measurable_const.mul
+            (measurable_const.indicator measurableSet_Ioc))).aestronglyMeasurable)
+    convert hsm using 1
+    ext x
+    simp
+  have hsub : ∀ n, Integrable (s n - g) μ := by
+    intro n
+    apply Integrable.of_bound ((hs n).sub hg) (D + C)
+    filter_upwards [] with x
+    rw [Pi.sub_apply, Real.norm_eq_abs]
+    exact (abs_sub _ _).trans (add_le_add (hD n x) (hC x))
+  have hint : Tendsto (fun n ↦ ∫ x, |s n x - g x| ∂μ) atTop (nhds 0) := by
+    apply squeeze_zero'
+    · exact Filter.Eventually.of_forall fun n ↦ integral_nonneg fun x ↦ abs_nonneg _
+    · exact Filter.Eventually.of_forall fun n ↦ by simpa [μ, s] using hL n
+    · simpa using (tendsto_one_div_add_atTop_nhds_zero_nat :
+        Tendsto (fun n : ℕ ↦ (1 : ℝ) / (n + 1)) atTop (nhds 0))
+  have hlp : Tendsto (fun n ↦ eLpNorm (s n - g) 1 μ) atTop (nhds 0) := by
+    have hof : Tendsto (fun n ↦ ENNReal.ofReal (∫ x, |s n x - g x| ∂μ))
+        atTop (nhds (ENNReal.ofReal 0)) := ENNReal.continuous_ofReal.continuousAt.tendsto.comp hint
+    convert hof using 1
+    · funext n
+      rw [eLpNorm_one_eq_lintegral_enorm,
+        ← ofReal_integral_norm_eq_lintegral_enorm (hsub n)]
+      congr 2
+    · simp
+  have hm : TendstoInMeasure μ s atTop g :=
+    tendstoInMeasure_of_tendsto_eLpNorm_of_ne_top (by norm_num) (by norm_num) hs hg hlp
+  simpa [μ, s] using hm.exists_seq_tendsto_ae
 -- END SEAT AREA
 
 /-- Assembly (split 2026-10-19 after lemma-2's partial). A bounded a.e.-strongly-measurable `g`
