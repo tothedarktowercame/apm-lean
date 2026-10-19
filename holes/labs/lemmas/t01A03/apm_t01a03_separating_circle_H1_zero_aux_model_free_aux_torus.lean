@@ -2124,10 +2124,64 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_retr_continuous :
 `H₁` is `ℤ²` (`BoundaryTorusH0Cokernel.boundaryTorus_complete_module_homology`,
 after `Circle ≃ₜ BoundaryCircle`). -/
 -- BEGIN SEAT AREA
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_torus_aux_norm
+    (z : ℂ) : ‖(WithLp.toLp 2 (fun i : Fin 2 => if i = 0 then z.re else z.im) :
+      EuclideanSpace ℝ (Fin 2))‖ = ‖z‖ := by
+  rw [EuclideanSpace.norm_eq, Complex.norm_def]
+  congr 1
+  simp [Fin.sum_univ_two, Real.norm_eq_abs, Complex.normSq_apply, pow_two]
+
 lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_torus :
     Nonempty (apm_t01a03_H1 (OnePoint apm_t01a03_PuncturedTorus) ≅
       ModuleCat.of ℤ (Fin 2 → ℤ)) := by
-  sorry
+  let e₁ : OnePoint apm_t01a03_PuncturedTorus ≃ₜ apm_t01a03_Torus :=
+    OnePoint.equivOfIsEmbeddingOfRangeEq
+      ((1 : Circle), (1 : Circle))
+      (fun x : apm_t01a03_PuncturedTorus => x.1)
+      Topology.IsEmbedding.subtypeVal (by
+        ext x
+        simp [apm_t01a03_PuncturedTorus])
+  let e₂ : apm_t01a03_Torus ≃ₜ
+      ConstructionTargets.SolidTorusGluingOpenCover.BoundaryTorus :=
+    Homeomorph.prodCongr (Homeomorph.refl Circle)
+      { toFun := fun z => ⟨WithLp.toLp 2
+          (fun i : Fin 2 => if i = 0 then (z : ℂ).re else (z : ℂ).im), by
+          rw [Metric.mem_sphere, dist_zero_right,
+            apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_torus_aux_norm]
+          simpa [Submonoid.unitSphere] using z.2⟩
+        invFun := fun x => ⟨(x.1 0 : ℂ) + (x.1 1 : ℂ) * Complex.I, by
+          change (x.1 0 : ℂ) + (x.1 1 : ℂ) * Complex.I ∈ Metric.sphere 0 1
+          rw [Metric.mem_sphere, dist_zero_right]
+          rw [Complex.norm_def]
+          have hx : ‖x.1‖ = 1 := by
+            rw [← dist_zero_right]
+            exact x.2
+          rw [EuclideanSpace.norm_eq x.1] at hx
+          simpa [Complex.normSq_apply, Fin.sum_univ_two, Real.norm_eq_abs,
+            pow_two] using hx⟩
+        left_inv := by
+          intro z
+          apply Subtype.ext
+          apply Complex.ext <;> simp
+        right_inv := by
+          intro x
+          apply Subtype.ext
+          ext i
+          fin_cases i <;> simp
+        continuous_toFun := by
+          apply Continuous.subtype_mk
+          apply (PiLp.continuous_toLp 2 (fun _ : Fin 2 => ℝ)).comp
+          apply continuous_pi
+          intro i
+          fin_cases i <;> simp <;> fun_prop
+        continuous_invFun := by
+          apply Continuous.subtype_mk
+          fun_prop }
+  obtain ⟨h⟩ :=
+    ConstructionTargets.BoundaryTorusH0Cokernel.boundaryTorus_complete_module_homology.2.1
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  exact ⟨F.mapIso (TopCat.isoOfHomeo (e₁.trans e₂)) ≪≫ h⟩
 -- END SEAT AREA
 
 /-- `H₁` of a topological sum is spanned by the two summands
