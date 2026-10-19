@@ -1,5 +1,33 @@
 # Blueprint for t92J06
 
+## Status (2026-10-19)
+
+One lemma is still `sorry`: `apm_t92J06_exists_simplyConnected_cover`
+(the universal cover).  The finite-cover half is sorry-free:
+`apm_t92J06_shared_cover_adapter` is proved (dbcdf7fec) and
+`apm_t92J06_exists_four_threeSheeted_covers` is an assembly over
+`ConstructionTargets.WedgePermutationCover.circleWedge_four_pairwise_nonhomeomorphic`
+(module closed with 0 sorry at 8244d7499).
+
+A shorter route for the remaining lemma now exists, replacing the Cayley-tree
+construction described below.  `ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover`
+(sorry-free) applied to the trivial subgroup `⊥` gives a path-connected cover
+`E` with `FundamentalGroup E e ≃* ⊥`, hence a simply connected cover.  Its
+hypotheses on `apm_t92J06_X` are `PathConnectedSpace`, `LocPathConnectedSpace`,
+`Small.{v}` and `SemilocallySimplyConnected`.  The last is the only one with no
+existing sorry-free proof for this wedge; `LocPathConnectedOpenCover` and
+`ClassicalLocalPathConnectivity` cover local path-connectedness.  Not yet
+re-blueprinted or dispatched.
+
+Checked 2026-10-19 on branch `lemmas` (32509c4ee):
+
+```text
+'apm_t92j06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'apm_t92J06_exists_four_threeSheeted_covers' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+The one `sorry` warning is at `apm_t92J06_exists_simplyConnected_cover`.
+
 ## Triage
 
 Verdict: **true and faithful**.
@@ -81,7 +109,17 @@ obtained by right multiplication by the two generators and their inverses;
 free reduction introduces no cycle.  This is the standard Cayley-tree hand
 construction and maps locally to the four half-edges at the wedge point.
 
-### `apm_t92J06_exists_four_threeSheeted_covers` — LIBRARY
+### `apm_t92J06_shared_cover_adapter`
+
+**Statement.** Transport a family of shared circle-wedge covers, together with
+its pairwise nonhomeomorphism proof, to the consumer's literal quotient type.
+
+**Expected size.** 40--80 lines.  Independent.  The circle and basepoint are
+definitionally the same; quotient induction gives the wedge homeomorphism.
+Use `coverWitness_homeomorph_base` (or directly compose projections with the
+homeomorphism), and copy each `ThreeCover` into `apm_t92J06_Covering`.
+
+### `apm_t92J06_exists_four_threeSheeted_covers` — assembly
 
 **Statement in words.** There are four exact three-sheeted coverings of the
 concrete wedge whose total spaces are pairwise nonhomeomorphic.
@@ -97,9 +135,8 @@ removing them decomposes the space into edge interiors.  Thus a homeomorphism
 would preserve whether an edge has both ends at the same branch point.  The
 third cover has three such loop edges and the fourth has none.
 
-**Expected size.** 700--1400 lines, preferably factored through a reusable
-finite labeled-graph realization library.  This is also a program-sized
-library result.
+**Implementation.** Sorry-free application of the shared
+`circleWedge_four_pairwise_nonhomeomorphic` theorem and the adapter above.
 
 **Dependencies.** Only the definitions and proved quotient-wedge API in the
 file.  Independent of the universal-cover lemma.

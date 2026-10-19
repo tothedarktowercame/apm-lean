@@ -4,6 +4,7 @@ import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.Surfaces
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
+import ConstructionTargets.WedgePermutationCover
 
 /-!
 # APM t00A02: finite coverings of surfaces and a projective-plane wedge
@@ -262,13 +263,187 @@ theorem apm_t00A02_antipodalCover_isCoveringMap :
     isCancelVAdd_iff_eq_zero_of_vadd_eq.mpr hfree
   exact (hq.isAddQuotientCoveringMap_of_properlyDiscontinuousVAdd horbit).isCoveringMap _ _
 
-/-- LIBRARY: construct the regular four-sheeted cover from the two commuting
-fixed-point-free involutions `(12)(34)` and `(13)(24)`. -/
+/-- Transport a shared RP2-wedge witness to this file's wedge at any basepoint. -/
+lemma apm_t00A02_shared_cover_adapter_aux_norm
+    (x y : apm_t00A02_Sphere2) :
+    ‖(x : EuclideanSpace ℝ (Fin 3))‖ = ‖(y : EuclideanSpace ℝ (Fin 3))‖ :=
+  (mem_sphere_zero_iff_norm.mp x.property).trans
+    (mem_sphere_zero_iff_norm.mp y.property).symm
+
+set_option maxHeartbeats 4000000 in
+noncomputable def apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph
+    (x y : apm_t00A02_Sphere2) :
+    apm_t00A02_Sphere2 ≃ₜ apm_t00A02_Sphere2 := by
+  let ρ : EuclideanSpace ℝ (Fin 3) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 3) :=
+    Submodule.reflection ((ℝ ∙ ((x : EuclideanSpace ℝ (Fin 3)) - y))ᗮ)
+  have hρ : ρ (x : EuclideanSpace ℝ (Fin 3)) = y := by
+    apply Submodule.reflection_sub
+    exact (mem_sphere_zero_iff_norm.mp x.property).trans
+      (mem_sphere_zero_iff_norm.mp y.property).symm
+  exact
+    { toFun := fun z ↦ ⟨ρ z, by
+          exact mem_sphere_zero_iff_norm.mpr (ρ.norm_map z |>.trans
+            (mem_sphere_zero_iff_norm.mp z.property))⟩
+      invFun := fun z ↦ ⟨ρ.symm z, by
+          exact mem_sphere_zero_iff_norm.mpr (ρ.symm.norm_map z |>.trans
+            (mem_sphere_zero_iff_norm.mp z.property))⟩
+      left_inv := fun z ↦ Subtype.ext (ρ.symm_apply_apply z)
+      right_inv := fun z ↦ Subtype.ext (ρ.apply_symm_apply z)
+      continuous_toFun := continuous_induced_rng.mpr
+        (ρ.continuous.comp continuous_subtype_val)
+      continuous_invFun := continuous_induced_rng.mpr
+        (ρ.symm.continuous.comp continuous_subtype_val) }
+
+lemma apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph_map
+    (x y : apm_t00A02_Sphere2) :
+    apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y x = y := by
+  apply Subtype.ext
+  dsimp [apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph]
+  exact Submodule.reflection_sub ((mem_sphere_zero_iff_norm.mp x.property).trans
+    (mem_sphere_zero_iff_norm.mp y.property).symm)
+
+noncomputable def apm_t00A02_shared_cover_adapter_aux_rpHomeomorph
+    (x y : apm_t00A02_Sphere2) :
+    ConstructionTargets.WedgePermutationCover.RP2 ≃ₜ apm_t00A02_RP2 where
+  toFun := Quotient.lift
+    (fun z ↦ Quotient.mk _
+      (apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y z)) (by
+      intro a b hab
+      apply Quotient.sound
+      induction hab with
+      | rel a b h =>
+          cases h
+          exact Relation.EqvGen.rel _ _ (by
+            rw [show (apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y) (-a) =
+              -(apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y a) by
+                apply Subtype.ext
+                dsimp [apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph]
+                exact map_neg _ _]
+            exact apm_t00A02_antipodalRel.antipodal
+              (apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y a))
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+  invFun := Quotient.lift
+    (fun z ↦ Quotient.mk _
+      ((apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y).symm z)) (by
+      intro a b hab
+      apply Quotient.sound
+      induction hab with
+      | rel a b h =>
+          cases h
+          exact Relation.EqvGen.rel _ _ (by
+            rw [show (apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y).symm (-a) =
+              -(apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y).symm a by
+                apply Subtype.ext
+                dsimp [apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph]
+                exact map_neg _ _]
+            exact ConstructionTargets.WedgePermutationCover.AntipodalRel.antipodal
+              ((apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y).symm a))
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+  left_inv := by rintro ⟨z⟩; change Quotient.mk _ _ = Quotient.mk _ z; simp
+  right_inv := by rintro ⟨z⟩; change Quotient.mk _ _ = Quotient.mk _ z; simp
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng.comp
+      (apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y).continuous
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng.comp
+      (apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y).symm.continuous
+
+noncomputable def apm_t00A02_shared_cover_adapter_aux_wedgeHomeomorph
+    (r₀ : apm_t00A02_RP2) :
+    ConstructionTargets.WedgePermutationCover.Wedge
+        ConstructionTargets.WedgePermutationCover.RP2
+        ConstructionTargets.WedgePermutationCover.RP2
+        ConstructionTargets.WedgePermutationCover.rpBase
+        ConstructionTargets.WedgePermutationCover.rpBase ≃ₜ
+      apm_t00A02_wedge r₀ := by
+  let y : apm_t00A02_Sphere2 := Classical.choose (Quotient.exists_rep r₀)
+  have hy : apm_t00A02_antipodalCover y = r₀ := Classical.choose_spec (Quotient.exists_rep r₀)
+  let x : apm_t00A02_Sphere2 :=
+    ⟨EuclideanSpace.single 0 1, by simp⟩
+  let e := apm_t00A02_shared_cover_adapter_aux_rpHomeomorph x y
+  have he : e ConstructionTargets.WedgePermutationCover.rpBase = r₀ := by
+      change Quotient.mk _
+        (apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph x y x) = _
+      rw [apm_t00A02_shared_cover_adapter_aux_sphereHomeomorph_map]
+      exact hy
+  exact
+      { toFun := Quotient.lift (fun z ↦ Quotient.mk _ (Sum.map e e z)) (by
+            intro a b hab
+            apply Quotient.sound
+            induction hab with
+            | rel a b h => cases h; exact Relation.EqvGen.rel _ _ (by
+                simpa [he] using (apm_t00A02_wedgeRel.base (r₀ := r₀)))
+            | refl => exact Relation.EqvGen.refl _
+            | symm _ _ _ ih => exact ih.symm
+            | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+        invFun := Quotient.lift (fun z ↦ Quotient.mk _ (Sum.map e.symm e.symm z)) (by
+            intro a b hab
+            apply Quotient.sound
+            induction hab with
+            | rel a b h =>
+                cases h
+                have hes : e.symm r₀ =
+                    ConstructionTargets.WedgePermutationCover.rpBase := by
+                  rw [← he]; simp
+                exact Relation.EqvGen.rel _ _ (by
+                  simpa [hes] using
+                    (ConstructionTargets.WedgePermutationCover.WedgeRel.base
+                      (a := ConstructionTargets.WedgePermutationCover.rpBase)
+                      (b := ConstructionTargets.WedgePermutationCover.rpBase)))
+            | refl => exact Relation.EqvGen.refl _
+            | symm _ _ _ ih => exact ih.symm
+            | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+        left_inv := by
+          rintro ⟨z⟩
+          cases z with
+          | inl v => change Quotient.mk _ (Sum.inl _) = Quotient.mk _ (Sum.inl _); rw [e.symm_apply_apply]
+          | inr v => change Quotient.mk _ (Sum.inr _) = Quotient.mk _ (Sum.inr _); rw [e.symm_apply_apply]
+        right_inv := by
+          rintro ⟨z⟩
+          cases z with
+          | inl v => change Quotient.mk _ (Sum.inl _) = Quotient.mk _ (Sum.inl _); rw [e.apply_symm_apply]
+          | inr v => change Quotient.mk _ (Sum.inr _) = Quotient.mk _ (Sum.inr _); rw [e.apply_symm_apply]
+        continuous_toFun := by
+          apply Continuous.quotient_lift
+          exact continuous_coinduced_rng.comp (e.continuous.sumMap e.continuous)
+        continuous_invFun := by
+          apply Continuous.quotient_lift
+          exact continuous_coinduced_rng.comp
+            (e.symm.continuous.sumMap e.symm.continuous) }
+
+theorem apm_t00A02_shared_cover_adapter
+    (r : Bool) (r₀ : apm_t00A02_RP2) :
+    Nonempty (ConstructionTargets.WedgePermutationCover.CoverWitness
+      (ConstructionTargets.WedgePermutationCover.Wedge
+        ConstructionTargets.WedgePermutationCover.RP2
+        ConstructionTargets.WedgePermutationCover.RP2
+        ConstructionTargets.WedgePermutationCover.rpBase
+        ConstructionTargets.WedgePermutationCover.rpBase) 4 r) →
+    Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r₀) 4 r) := by
+  intro hw
+  obtain ⟨w⟩ := ConstructionTargets.WedgePermutationCover.coverWitness_homeomorph_base
+    (apm_t00A02_shared_cover_adapter_aux_wedgeHomeomorph r₀) hw
+  refine ⟨?_⟩
+  exact { E := w.E
+          topology := w.topology
+          p := w.p
+          covering := w.covering
+          connected := w.connected
+          regularity := w.regularity }
+
+/-- Assembly: the shared regular RP2-wedge cover, moved to this file's wedge. -/
 theorem apm_t00A02_regular_wedge_cover
     (hanti : IsCoveringMap apm_t00A02_antipodalCover)
     (r₀ : apm_t00A02_RP2) :
     Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r₀) 4 true) := by
-  sorry
+  exact apm_t00A02_shared_cover_adapter true r₀
+    ConstructionTargets.WedgePermutationCover.rp2Wedge_regular_four_cover
 
 /-- LIBRARY: construct the irregular four-sheeted cover from involutions
 `(12)` and `(14)(23)`. -/
@@ -276,7 +451,8 @@ theorem apm_t00A02_irregular_wedge_cover
     (hanti : IsCoveringMap apm_t00A02_antipodalCover)
     (r₀ : apm_t00A02_RP2) :
     Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r₀) 4 false) := by
-  sorry
+  exact apm_t00A02_shared_cover_adapter false r₀
+    ConstructionTargets.WedgePermutationCover.rp2Wedge_irregular_four_cover
 
 /-- LIBRARY: finite-cover Euler characteristic plus classification of closed
 orientable surfaces, specialized to degree ten over genus five. -/

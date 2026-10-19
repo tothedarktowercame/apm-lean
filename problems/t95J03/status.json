@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 2,
   "sorry_count_verified": 0,
   "closer_progress": "Fully proved by case analysis on parity and surface classification coordinates. Euler-profile equality and positivity of k force genus one in the orientable case and genus two in the nonorientable case; the profile orientability equation gives exactly the parity condition.",

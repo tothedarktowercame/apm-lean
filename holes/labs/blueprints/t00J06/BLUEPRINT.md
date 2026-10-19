@@ -131,3 +131,22 @@ holes/labs/blueprints/t00J06/Blueprint.lean:46:8: warning: declaration uses `sor
 holes/labs/blueprints/t00J06/Blueprint.lean:59:8: warning: declaration uses `sorry`
 'apm_t00j06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
+# Covering-subgroup split (2026-10-18)
+
+`apm_t00J06_connected_infinite_cover_of_image_index_zero` is now a sorry-free
+assembly from the shared subgroup-cover witness, the shared all-fibres lemma,
+and the shared lifting criterion.  Its range hypothesis is reflexive because
+`apm_t00J06_imageSubgroup f` is definitionally the range of `f_*`.
+
+Local independent adapter leaves:
+
+- `apm_t00J06_surface_semilocallySimplyConnected` (30--60 lines): take a
+  convex coordinate ball in a manifold chart and contract loops by straight
+  lines; use chart source/target openness and convexity.
+- `apm_t00J06_torus_path_and_locallyPathConnected` (10--25 lines): product
+  instances for the two circles (or explicit standard circle paths).
+
+The shared construction gives `PathConnectedSpace X`, which supplies the
+requested `ConnectedSpace X`.  Index zero means infinite index in Mathlib,
+not an empty fibre; monodromy transports the distinguished infinite fibre to
+every base point.

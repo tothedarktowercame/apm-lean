@@ -5,10 +5,12 @@ import ConstructionTargets.SurfaceClassification
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.CoveringMonodromyCosets
 import ConstructionTargets.SuppliedCoverAlgebra
+import ConstructionTargets.CoveringSubgroupCorrespondence
 
 /-! # Blueprint for t96A01: finite-index subgroups of a genus-four surface group -/
 
 open ConstructionTargets.StatementSurfaceModels ConstructionTargets.Surfaces
+open ConstructionTargets.CoveringSubgroupCorrespondence
 
 noncomputable section
 
@@ -36,9 +38,86 @@ theorem t96A01_index_pos
   rw [← hindex]
   exact Nat.pos_of_ne_zero Subgroup.FiniteIndex.index_ne_zero
 
-/-- **LIBRARY (covering-subgroup correspondence).**  A finite-index subgroup
+/- **LIBRARY (covering-subgroup correspondence).**  A finite-index subgroup
 is realized as the fundamental group of a connected cover whose fibre has the
 prescribed cardinality. -/
+/-- Surface charts give semilocally simply connected neighbourhoods.  No
+`IsManifold` regularity is needed: this is a purely topological chart fact. -/
+theorem t96A01_surface_semilocallySimplyConnected
+    (S : Type*) [TopologicalSpace S]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 2)) S] :
+    SemilocallySimplyConnected S := by
+  intro x
+  let e := chartAt (EuclideanSpace ℝ (Fin 2)) x
+  have hxsource : x ∈ e.source := mem_chart_source _ x
+  have hxtarget : e x ∈ e.target := e.map_source hxsource
+  obtain ⟨r, hr, hrsub⟩ := Metric.isOpen_iff.mp e.open_target (e x) hxtarget
+  let B : Set (EuclideanSpace ℝ (Fin 2)) := Metric.ball (e x) r
+  let U : Set S := e.symm '' B
+  have hBsub : B ⊆ e.symm.source := by
+    simpa [B] using hrsub
+  have hU_nhds : U ∈ nhds x := by
+    have hB_nhds : B ∈ nhds (e x) := Metric.ball_mem_nhds _ hr
+    have him := e.symm.image_mem_nhds hxtarget hB_nhds
+    simpa [U, e, e.left_inv hxsource] using him
+  refine ⟨U, hU_nhds, fun γ hγ ↦ ?_⟩
+  let h : B ≃ₜ U := e.symm.homeomorphOfImageSubsetSource hBsub rfl
+  letI : ContractibleSpace B :=
+    (convex_ball (e x) r).contractibleSpace ⟨e x, by simpa [B] using hr⟩
+  letI : ContractibleSpace U := h.symm.contractibleSpace
+  letI : SimplyConnectedSpace U := inferInstance
+  have hxU : x ∈ U := hγ ⟨0, Path.source γ⟩
+  let xU : U := ⟨x, hxU⟩
+  let γU : Path xU xU := {
+    toFun := fun t ↦ (⟨γ t, hγ ⟨t, rfl⟩⟩ : U)
+    continuous_toFun := (Path.continuous γ).subtype_mk _
+    source' := Subtype.ext (Path.source γ)
+    target' := Subtype.ext (Path.target γ)
+  }
+  have hhom : γU.Homotopic (Path.refl xU) :=
+    SimplyConnectedSpace.paths_homotopic _ _
+  let inc : C(U, S) := ⟨Subtype.val, continuous_subtype_val⟩
+  have hmapped := hhom.map inc
+  apply Path.Homotopic.Quotient.eq.mpr
+  simpa [γU] using hmapped
+
+/-- A compact surface is covered by finitely many chart sources, so it is the
+image of a type in `Type`; this lets the cover be built in `Type` although `S`
+lives in an arbitrary universe. -/
+theorem t96A01_surface_small
+    (S : Type*) [TopologicalSpace S]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 2)) S] [CompactSpace S] :
+    Small.{0} S := by
+  classical
+  let U : S → Set S := fun x ↦ (chartAt (EuclideanSpace ℝ (Fin 2)) x).source
+  obtain ⟨t, ht⟩ := isCompact_univ.elim_finite_subcover U
+    (fun x ↦ (chartAt (EuclideanSpace ℝ (Fin 2)) x).open_source) (by
+      intro x _
+      exact Set.mem_iUnion.mpr ⟨x, mem_chart_source _ x⟩)
+  have hchoose : ∀ x : S, ∃ i : S, i ∈ t ∧ x ∈ U i := by
+    intro x
+    obtain ⟨i, hi⟩ := Set.mem_iUnion.mp (ht (Set.mem_univ x))
+    obtain ⟨hit, hx⟩ := Set.mem_iUnion.mp hi
+    exact ⟨i, hit, hx⟩
+  let idx : S → S := fun x ↦ (hchoose x).choose
+  have hidx_mem (x : S) : idx x ∈ t := (hchoose x).choose_spec.1
+  have hxsource (x : S) : x ∈ U (idx x) := (hchoose x).choose_spec.2
+  let f : S → (Shrink.{0} ↥t × EuclideanSpace ℝ (Fin 2)) := fun x ↦
+    ((equivShrink.{0} ↥t) ⟨idx x, hidx_mem x⟩,
+      chartAt (EuclideanSpace ℝ (Fin 2)) (idx x) x)
+  apply small_of_injective (f := f)
+  intro x y hxy
+  have hidx_sub : (⟨idx x, hidx_mem x⟩ : ↥t) = ⟨idx y, hidx_mem y⟩ := by
+    apply (equivShrink.{0} ↥t).injective
+    exact congr_arg Prod.fst hxy
+  have hidx : idx x = idx y := congr_arg Subtype.val hidx_sub
+  have hchart : chartAt (EuclideanSpace ℝ (Fin 2)) (idx x) x =
+      chartAt (EuclideanSpace ℝ (Fin 2)) (idx x) y := by
+    have := congr_arg Prod.snd hxy
+    simpa [f, hidx] using this
+  exact (chartAt (EuclideanSpace ℝ (Fin 2)) (idx x)).injOn
+    (hxsource x) (hidx ▸ hxsource y) hchart
+
 theorem t96A01_finiteIndexSubgroup_connectedCover
     {S : Type*} [TopologicalSpace S]
     [ChartedSpace (EuclideanSpace ℝ (Fin 2)) S]
@@ -50,7 +129,13 @@ theorem t96A01_finiteIndexSubgroup_connectedCover
       IsCoveringMap p ∧ PathConnectedSpace E ∧ p e = s ∧
       Nat.card (p ⁻¹' {s}) = n ∧
       Nonempty (FundamentalGroup E e ≃* H) := by
-  sorry
+  letI : LocPathConnectedSpace S :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 2)) S
+  letI : PathConnectedSpace S := PathConnectedSpace.of_locPathConnectedSpace
+  haveI : Small.{0} S := t96A01_surface_small S
+  obtain ⟨E, topE, p, e, hp, hE, hpe, hcard, hpi⟩ :=
+    connectedCover (t96A01_surface_semilocallySimplyConnected S) s H
+  exact ⟨E, topE, p, e, hp, hE, hpe, hcard.trans hindex, hpi⟩
 
 /-- **LIBRARY (finite-cover Euler characteristic and surface recognition).**
 A connected `n`-sheeted cover of a genus-four surface has genus `3*n+1`.
