@@ -331,7 +331,79 @@ theorem apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective
   exact
     apm_t01a03_typicalWedge_fundamentalGroupMap_not_injective_aux_torus_comm _ _ _
 
-/-- **LIBRARY (surface-curve collar / fundamental class).** An embedded circle
+/-! ### Separating circle, without a collar
+
+Collapse the circle to the point at infinity of the one-point
+compactification of its complement. The complement is two punctured tori, so
+the target is (a copy of) a wedge of two tori, whose `H₁` is `ℤ⁴` and is
+reached from the complement. Hence the collapse map is surjective on `H₁`
+between two copies of `ℤ⁴`, so it is injective, and it kills the circle
+because it sends the circle to one point. No collar or Schoenflies step is
+needed. -/
+
+abbrev apm_t01a03_TwoPuncturedTori :=
+  Sum apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus
+
+/-- Collapsing the circle: `S → OnePoint Y` is continuous, sends the circle to
+`∞`, and is the complement homeomorphism off the circle. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_collapse
+    {S Y : Type} [TopologicalSpace S] [T2Space S] [TopologicalSpace Y]
+    (middle : C(Circle, S))
+    (e : {x : S // x ∉ Set.range middle} ≃ₜ Y) :
+    ∃ ρ : C(S, OnePoint Y), (∀ z, ρ (middle z) = OnePoint.infty) ∧
+      ∀ x : {x : S // x ∉ Set.range middle}, ρ x = ((e x : Y) : OnePoint Y) := by
+  sorry
+
+/-- A constant map induces zero on `H₁`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_const
+    {X Z : Type} [TopologicalSpace X] [TopologicalSpace Z]
+    (f : C(X, Z)) (z : Z) (hf : ∀ x, f x = z) :
+    apm_t01a03_H1map f = 0 := by
+  sorry
+
+/-- A surjective map between two copies of `ℤ⁴` is injective. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_hopf
+    {A B : ModuleCat ℤ} (_eA : A ≅ ModuleCat.of ℤ (Fin 4 → ℤ))
+    (_eB : B ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) (f : A ⟶ B)
+    (hf : Function.Surjective f) : Function.Injective f := by
+  sorry
+
+/-- The model: the one-point compactification of two punctured tori (a wedge
+of two tori) has `H₁ ≅ ℤ⁴`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free :
+    Nonempty (apm_t01a03_H1 (OnePoint apm_t01a03_TwoPuncturedTori) ≅
+      ModuleCat.of ℤ (Fin 4 → ℤ)) := by
+  sorry
+
+/-- The model: `H₁` of the one-point compactification is reached from the
+two punctured tori. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_surj :
+    Function.Surjective (apm_t01a03_H1map
+      (⟨(↑), OnePoint.continuous_coe⟩ :
+        C(apm_t01a03_TwoPuncturedTori, OnePoint apm_t01a03_TwoPuncturedTori))) := by
+  sorry
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_homeo_surj
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (e : X ≃ₜ Y) :
+    Function.Surjective (apm_t01a03_H1map (e : C(X, Y))) := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  have hfun : apm_t01a03_H1map (e.symm : C(Y, X)) ≫ apm_t01a03_H1map (e : C(X, Y)) =
+      𝟙 (apm_t01a03_H1 Y) := by
+    change CategoryStruct.comp (F.map (TopCat.ofHom _)) (F.map (TopCat.ofHom _)) = 𝟙 _
+    rw [← F.map_comp]
+    change F.map (TopCat.ofHom ((e : C(X, Y)).comp (e.symm : C(Y, X)))) = 𝟙 _
+    have : (e : C(X, Y)).comp (e.symm : C(Y, X)) = ContinuousMap.id Y := by
+      ext y
+      simp
+    rw [this]
+    exact F.map_id (TopCat.of Y)
+  intro y
+  refine ⟨apm_t01a03_H1map (e.symm : C(Y, X)) y, ?_⟩
+  have := congrArg (fun q : apm_t01a03_H1 Y ⟶ apm_t01a03_H1 Y ↦ q y) hfun
+  simpa only [CategoryTheory.comp_apply, CategoryTheory.id_apply] using this
+
+/-- **Assembly (sorry-free given the five leaves above).** An embedded circle
 whose complement is two punctured tori represents zero in integral `H₁`. -/
 theorem apm_t01a03_separating_circle_H1_zero
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
@@ -341,7 +413,45 @@ theorem apm_t01a03_separating_circle_H1_zero
     (middle : C(Circle, S))
     (hmiddle : apm_t01a03_IsMiddleCircle middle) :
     apm_t01a03_H1map middle = 0 := by
-  sorry
+  obtain ⟨_hemb, ⟨e⟩⟩ := hmiddle
+  obtain ⟨ρ, hρC, hρU⟩ :=
+    apm_t01a03_separating_circle_H1_zero_aux_collapse middle e
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  let j : C({x : S // x ∉ Set.range middle}, S) := ⟨Subtype.val, continuous_subtype_val⟩
+  let ι : C(apm_t01a03_TwoPuncturedTori, OnePoint apm_t01a03_TwoPuncturedTori) :=
+    ⟨(↑), OnePoint.continuous_coe⟩
+  have hcomm : ρ.comp j = ι.comp (e : C(_, apm_t01a03_TwoPuncturedTori)) := by
+    ext x
+    exact hρU x
+  have hfun : CategoryStruct.comp (apm_t01a03_H1map j) (apm_t01a03_H1map ρ) =
+      CategoryStruct.comp (apm_t01a03_H1map (e : C(_, apm_t01a03_TwoPuncturedTori)))
+        (apm_t01a03_H1map ι) := by
+    change CategoryStruct.comp (F.map (TopCat.ofHom _)) (F.map (TopCat.ofHom _)) =
+      CategoryStruct.comp (F.map (TopCat.ofHom _)) (F.map (TopCat.ofHom _))
+    rw [← F.map_comp, ← F.map_comp]
+    change F.map (TopCat.ofHom (ρ.comp j)) =
+      F.map (TopCat.ofHom (ι.comp (e : C(_, apm_t01a03_TwoPuncturedTori))))
+    rw [hcomm]
+  have hsurj : Function.Surjective (apm_t01a03_H1map ρ) := by
+    intro y
+    obtain ⟨u, rfl⟩ := apm_t01a03_separating_circle_H1_zero_aux_model_surj y
+    obtain ⟨v, rfl⟩ := apm_t01a03_separating_circle_H1_zero_aux_homeo_surj e u
+    refine ⟨apm_t01a03_H1map j v, ?_⟩
+    have := congrArg (fun q ↦ q v) hfun
+    simpa only [CategoryTheory.comp_apply] using this
+  have hinj := apm_t01a03_separating_circle_H1_zero_aux_hopf
+    hgenus.2.1.some apm_t01a03_separating_circle_H1_zero_aux_model_free.some _ hsurj
+  have hzero : apm_t01a03_H1map middle ≫ apm_t01a03_H1map ρ = 0 := by
+    change CategoryStruct.comp (F.map (TopCat.ofHom _)) (F.map (TopCat.ofHom _)) = 0
+    rw [← F.map_comp]
+    exact apm_t01a03_separating_circle_H1_zero_aux_const (ρ.comp middle)
+      OnePoint.infty hρC
+  ext x
+  apply hinj
+  have := congrArg (fun q ↦ q x) hzero
+  simpa only [CategoryTheory.comp_apply, ModuleCat.hom_zero, LinearMap.zero_apply,
+    map_zero] using this
 
 theorem apm_t01a03 :
     ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
