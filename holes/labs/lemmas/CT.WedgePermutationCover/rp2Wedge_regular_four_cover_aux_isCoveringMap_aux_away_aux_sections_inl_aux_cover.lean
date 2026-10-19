@@ -1473,7 +1473,53 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_au
     (u : Sphere2) (e : rp2Wedge_regular_four_cover_aux_E σ τ)
     (he : rp2Wedge_regular_four_cover_aux_p σ τ e ∈ Set.range (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb u)) :
     ∃ i y, rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u i y = e := by
-  sorry
+  induction e using Quotient.inductionOn with
+  | _ z =>
+    obtain ⟨y, hy⟩ := he
+    cases z with
+    | inl z =>
+      rcases z with ⟨x, j⟩
+      have hw : Relation.EqvGen (WedgeRel rpBase rpBase)
+          (.inl (antipodalCover y.1)) (.inl (antipodalCover x)) := by
+        have hq : (Quotient.mk _ (.inl (antipodalCover y.1)) :
+            Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ (.inl (antipodalCover x)) := by
+          simpa [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb,
+            rp2Wedge_regular_four_cover_aux_p, rp2Wedge_regular_four_cover_aux_proj] using hy
+        exact Quotient.exact hq
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv
+          rpBase rpBase _ _).mp hw with hw | hw
+      · have hcover : antipodalCover y.1 = antipodalCover x := Sum.inl.inj hw
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff y.1 x).mp hcover with hx | hx
+        · refine ⟨j, y, ?_⟩
+          apply Quotient.sound
+          subst x
+          exact Relation.EqvGen.refl _
+        · refine ⟨σ j, y, ?_⟩
+          apply Quotient.sound
+          subst x
+          have hr : rp2Wedge_regular_four_cover_aux_Rel σ τ
+              (.inl (y.1, σ j)) (.inl (-y.1, σ (σ j))) :=
+            rp2Wedge_regular_four_cover_aux_Rel.left y.1 (σ j)
+          rw [hσ j] at hr
+          exact Relation.EqvGen.rel _ _ hr
+      · rcases hw.1 with hw | hw
+        · exact (y.2.2 (Sum.inl.inj hw)).elim
+        · cases hw
+    | inr z =>
+      rcases z with ⟨x, j⟩
+      have hw : Relation.EqvGen (WedgeRel rpBase rpBase)
+          (.inl (antipodalCover y.1)) (.inr (antipodalCover x)) := by
+        have hq : (Quotient.mk _ (.inl (antipodalCover y.1)) :
+            Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ (.inr (antipodalCover x)) := by
+          simpa [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb,
+            rp2Wedge_regular_four_cover_aux_p, rp2Wedge_regular_four_cover_aux_proj] using hy
+        exact Quotient.exact hq
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv
+          rpBase rpBase _ _).mp hw with hw | hw
+      · cases hw
+      · rcases hw.1 with hw | hw
+        · exact (y.2.2 (Sum.inl.inj hw)).elim
+        · cases hw
 -- END SEAT AREA
 
 /-- **Leaf.** Distinct sheets do not meet: `(y, i) ∼ (y', j)` in the left lobe
