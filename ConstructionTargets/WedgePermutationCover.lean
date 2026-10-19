@@ -3084,15 +3084,6 @@ lemma circleWedge_connected_pair_aux_covering_aux_cube_continuous :
     Continuous circleWedge_connected_pair_aux_cube := by
   exact Continuous.subtype_mk (continuous_subtype_val.pow 3) _
 
-/-- `pC` is a covering map.  Away from the wedge point: over a left-lobe point
-`[inl w]`, `w ≠ circleBase`, take an open arc around `w` missing `circleBase`;
-its preimage under `cube` is three disjoint arcs, none containing a root, so no
-glue applies and `cube` restricts to a homeomorphism on each (cubing is a
-covering map of the circle).  Over a right-lobe point `[inr w]` the sheets are
-the three copies `{(z, r)}`.  At the wedge point: a neighbourhood that is a small
-arc around `circleBase` in each lobe; sheet `r` is the arc around `r.1` on the
-left glued to the arc around `circleBase` in copy `r` on the right.  Continuity
-uses `_aux_cube_continuous` and the quotient topology on both raw sums. -/
 /-! #### Split of `circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap` (lemma-2 PARTIAL, 2026-10-19) -/
 
 /-- `pC` is continuous.  (Banked by lemma-2.) -/
@@ -3144,6 +3135,15 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge :
       (circleWedge_connected_pair_aux_pC ⁻¹' {Quotient.mk _ (.inl circleBase)}) := by
   sorry
 
+/-- `pC` is a covering map.  Away from the wedge point: over a left-lobe point
+`[inl w]`, `w ≠ circleBase`, take an open arc around `w` missing `circleBase`;
+its preimage under `cube` is three disjoint arcs, none containing a root, so no
+glue applies and `cube` restricts to a homeomorphism on each (cubing is a
+covering map of the circle).  Over a right-lobe point `[inr w]` the sheets are
+the three copies `{(z, r)}`.  At the wedge point: a neighbourhood that is a small
+arc around `circleBase` in each lobe; sheet `r` is the arc around `r.1` on the
+left glued to the arc around `circleBase` in copy `r` on the right.  Continuity
+uses `_aux_cube_continuous` and the quotient topology on both raw sums. -/
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap :
     IsCoveringMap circleWedge_connected_pair_aux_pC := by
   intro x
