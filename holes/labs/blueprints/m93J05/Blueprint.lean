@@ -1416,7 +1416,19 @@ lemma apm_m93j05_exists_minimizer_lsc_closure
     ∃ f₀, MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
       ∀ f, MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
         apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f := by
-  sorry
+  refine ⟨f₀, hf₀, ?_⟩
+  intro f hf
+  have hbound : ∀ k : ℕ,
+      apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ) := by
+    intro k
+    apply hlsc g hg f₀ (fun n ↦ s (φ n)) hf₀ (fun n ↦ hs (φ n)) hweak
+    exact ((hmin f hf k).filter_mono hφ.tendsto_atTop).frequently
+  have ht : Tendsto
+      (fun k : ℕ ↦ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ)) atTop
+      (nhds (apm_m93j05_J N p g f)) := by
+    convert tendsto_const_nhds.add
+      (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)) using 1 <;> simp
+  exact le_of_tendsto_of_tendsto' tendsto_const_nhds ht hbound
 
 theorem apm_m93j05_exists_minimizer
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
