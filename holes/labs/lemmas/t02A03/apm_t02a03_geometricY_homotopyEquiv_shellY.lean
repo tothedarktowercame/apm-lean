@@ -349,9 +349,69 @@ each point along its normal ray from the nearest core point out to distance
 `1/4`; outside the left tube, fix it.  This is a strong deformation
 retraction of `geometricY` onto `shellY`. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t02a03_geometricY_homotopyEquiv_shellY_aux_inclusion :
+    C(apm_t02a03_shellY, apm_t02a03_geometricY) where
+  toFun p := ⟨p.1, p.2.1, by
+    intro hpC
+    have hz : Metric.infDist p.1 apm_t02a03_C = 0 :=
+      Metric.infDist_zero_of_mem hpC
+    linarith [p.2.2]⟩
+  continuous_toFun := continuous_subtype_val.subtype_mk _
+
+/-- The geometric leaf: a strong deformation which radially pushes every
+point less than `1/4` from the deleted left core out to the distance shell.
+Keeping the endpoint and fixed-point assertions explicit makes the purely
+homotopy-theoretic packaging independent of its coordinate construction. -/
+theorem apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation :
+    ∃ H : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY,
+        apm_t02a03_geometricY),
+      (∀ p, H (⟨0, by norm_num⟩, p) = p) ∧
+      (∀ p, (1 / 4 : ℝ) ≤ Metric.infDist (H (⟨1, by norm_num⟩, p)).1
+        apm_t02a03_C) ∧
+      (∀ t p, (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C →
+        H (t, p) = p) := by
+  sorry
+
+theorem apm_t02a03_geometricY_homotopyEquiv_shellY_aux_of_deformation
+    (H : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_geometricY,
+      apm_t02a03_geometricY))
+    (hzero : ∀ p, H (⟨0, by norm_num⟩, p) = p)
+    (hone : ∀ p, (1 / 4 : ℝ) ≤ Metric.infDist
+      (H (⟨1, by norm_num⟩, p)).1 apm_t02a03_C)
+    (hfix : ∀ t p, (1 / 4 : ℝ) ≤ Metric.infDist p.1 apm_t02a03_C →
+      H (t, p) = p) :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY
+      apm_t02a03_shellY) := by
+  let r : C(apm_t02a03_geometricY, apm_t02a03_shellY) :=
+    { toFun := fun p ↦ ⟨(H (⟨1, by norm_num⟩, p)).1,
+        (H (⟨1, by norm_num⟩, p)).2.1, hone p⟩
+      continuous_toFun := by fun_prop }
+  let i := apm_t02a03_geometricY_homotopyEquiv_shellY_aux_inclusion
+  have hleft : (i.comp r).Homotopic (ContinuousMap.id _) := by
+    symm
+    exact ⟨{
+      toFun := H
+      map_zero_left := hzero
+      map_one_left := fun p ↦ rfl }⟩
+  have hright : (r.comp i).Homotopic (ContinuousMap.id _) := by
+    rw [show r.comp i = ContinuousMap.id _ by
+      apply ContinuousMap.ext
+      intro p
+      apply Subtype.ext
+      dsimp [r, i]
+      exact congrArg Subtype.val (hfix ⟨1, by norm_num⟩ (i p) p.2.2)]
+  exact ⟨{
+    toFun := r
+    invFun := i
+    left_inv := hleft
+    right_inv := hright }⟩
+
 theorem apm_t02a03_geometricY_homotopyEquiv_shellY :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_shellY) := by
-  sorry
+  rcases apm_t02a03_geometricY_homotopyEquiv_shellY_aux_deformation with
+    ⟨H, hzero, hone, hfix⟩
+  exact apm_t02a03_geometricY_homotopyEquiv_shellY_aux_of_deformation
+    H hzero hone hfix
 -- END SEAT AREA
 
 /-- The point where the auxiliary loop touches the boundary torus of the left
