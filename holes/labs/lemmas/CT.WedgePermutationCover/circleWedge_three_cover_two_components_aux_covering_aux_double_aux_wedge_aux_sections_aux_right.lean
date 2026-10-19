@@ -3491,7 +3491,46 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_a
     (b : Bool) (u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U) :
     circleWedge_three_cover_two_components_aux_doubleMap
       (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) = u := by
-  sorry
+  rcases u with ⟨u, hu⟩
+  induction u using Quotient.inductionOn with
+  | _ z =>
+      cases z with
+      | inl w =>
+          have hw : w ≠ -circleBase := by
+            intro h
+            subst w
+            exact hu.1 rfl
+          have hs := hsq ⟨w, hw⟩
+          have hsneg : circleWedge_three_cover_two_components_aux_sq (-r ⟨w, hw⟩) = w := by
+            calc
+              circleWedge_three_cover_two_components_aux_sq (-r ⟨w, hw⟩) =
+                  circleWedge_three_cover_two_components_aux_sq (r ⟨w, hw⟩) := by
+                    apply Subtype.ext
+                    simp [circleWedge_three_cover_two_components_aux_sq]
+              _ = w := hs
+          cases b <;>
+            simp [circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S,
+              circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift,
+              circleWedge_three_cover_two_components_aux_doubleMap,
+              circleWedge_three_cover_two_components_aux_raw, hw, hs, hsneg]
+      | inr w =>
+          have hw : w ≠ -circleBase := by
+            intro h
+            subst w
+            exact hu.2 rfl
+          have hs := hsq ⟨w, hw⟩
+          have hsneg : circleWedge_three_cover_two_components_aux_sq (-r ⟨w, hw⟩) = w := by
+            calc
+              circleWedge_three_cover_two_components_aux_sq (-r ⟨w, hw⟩) =
+                  circleWedge_three_cover_two_components_aux_sq (r ⟨w, hw⟩) := by
+                    apply Subtype.ext
+                    simp [circleWedge_three_cover_two_components_aux_sq]
+              _ = w := hs
+          cases b <;>
+            simp [circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S,
+              circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift,
+              circleWedge_three_cover_two_components_aux_doubleMap,
+              circleWedge_three_cover_two_components_aux_raw, hw, hs, hsneg]
 -- END SEAT AREA
 
 /-- The `b`-section over `U` has range exactly the `b`-cross. -/
