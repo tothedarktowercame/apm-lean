@@ -54,6 +54,13 @@ This lemma is now a sorry-free assembly of four parallel leaves. Mathlib was sea
 
 - `apm_m93j05_exists_minimizer_weak_subsequence` (LIBRARY, 150–300 lines, independent because coercivity and minimizing properties are explicit hypotheses): transports the bounded sequence to quotient `Lp`, proves/installs reflexivity for real `Lp` when `1<p<∞`, extracts a weakly convergent subsequence (Eberlein--Šmulian or a separable diagonal argument), and chooses a representative. Candidate Mathlib ingredients are `MemLp.toLp`, `Lp.norm_toLp`, `NormedSpace.Dual`, `WeakDual`, `WeakDual.isCompact_polar`, and separability of `Lp`; the absent reflexivity/sequential-compactness bridge is the point of this leaf.
 
+- `apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness` (split 2026-10-19 after lemma-3's partial; assembly and `_aux_core` assembly proved, `_aux_tail` and `_aux_exponents` banked). The route avoids `(Lᵠ)* = Lᵖ`. Five independent leaves:
+  - `_aux_diagonal`: countably many bounded real sequences have a common convergent subsequence (compact metrizable product, `IsCompact.tendsto_subseq`).
+  - `_aux_indicator_bound`: `|∫_{[0,1]} f·1_(a,b]| ≤ ‖f‖_p` (Hölder; the indicator has `Lᵠ` norm ≤ 1).
+  - `_aux_limit_rep`: limits of rational-interval pairings of a uniformly bounded sequence are the pairings of some `f₀ ∈ Lᵖ` (signed measure ≪ volume, `rnDeriv`, `Lᵖ` by testing against step functions). Largest leaf; may need a further split.
+  - `_aux_step_dense`: rational step functions are dense in `Lᵠ([0,1])`.
+  - `_aux_extend`: ε/3 argument from step functions to all of `Lᵠ`, given the density as a hypothesis.
+
 - `apm_m93j05_exists_minimizer_lsc_closure` (35–70 lines, independent): applies the supplied weak-lsc statement to the extracted subsequence at levels `J(f)+1/(k+1)`, then lets `k→∞`. Use `StrictMono.tendsto_atTop`, `Filter.Eventually.filter_mono`, and `le_of_forall_pos_le_add` (or an Archimedean `k` choice).
 
 All four leaves are true in degenerate cases. `N=0` is the mean/high-frequency split, not an empty projection. The assumptions `1<p,q` exclude endpoint failure of reflexivity and make every `1/(k+1)` positive. Empty admissible sets cannot occur because zero is admissible (`apm_m93j05_exists_minimizer_aux_zero_memLp`). For `g=0`, zero lies in every relevant sublevel and is the eventual minimizer. Weak convergence is stated using exactly the restricted-measure pairing consumed by the proved lower-semicontinuity lemma, so there is no sign or boundary convention mismatch.

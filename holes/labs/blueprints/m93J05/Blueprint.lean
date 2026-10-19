@@ -1571,9 +1571,154 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_eventually_bounded
   norm_num at hn ⊢
   exact hn
 
-/-- **LIBRARY-sized leaf.** A bounded sequence in real `Lp([0,1])`, `1 < p < ∞`, has a weakly
-convergent subsequence, with the limit represented by an `Lp` function. Current Mathlib has
-weak-star compact polar results but no usable `Lp` reflexivity instance. -/
+/-- Weak sequential compactness of a bounded sequence in real `Lp([0,1])`, `1 < p < ∞`, without
+the identification `(Lᵠ)* = Lᵖ`: shift to a uniformly bounded tail, diagonalise over rational
+interval pairings, represent the limit, extend by density (split 2026-10-19 after lemma-3's
+partial). -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_exponents
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1) :
+    0 < p ∧ 0 < q ∧ p ≠ 0 ∧ q ≠ 0 ∧
+      q * (p - 1) = p ∧ p * (q - 1) = q := by
+  have hp0 : 0 < p := lt_trans zero_lt_one hp
+  have hq0 : 0 < q := lt_trans zero_lt_one hq
+  have hpne : p ≠ 0 := ne_of_gt hp0
+  have hqne : q ≠ 0 := ne_of_gt hq0
+  refine ⟨hp0, hq0, hpne, hqne, ?_, ?_⟩
+  · field_simp [hpne, hqne] at hpq
+    nlinarith
+  · field_simp [hpne, hqne] at hpq
+    nlinarith
+
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_tail
+    (p : ℝ) (s : ℕ → ℝ → ℝ)
+    (hbounded : ∃ R : ℝ, 0 ≤ R ∧ ∀ᶠ n in atTop,
+      (eLpNorm (s n) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R) :
+    ∃ R : ℝ, 0 ≤ R ∧ ∃ k : ℕ, ∀ n : ℕ,
+      (eLpNorm (s (k + n)) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R := by
+  obtain ⟨R, hR, h⟩ := hbounded
+  rw [eventually_atTop] at h
+  obtain ⟨k, hk⟩ := h
+  refine ⟨R, hR, k, fun n ↦ hk (k + n) ?_⟩
+  omega
+
+/-- Leaf (diagonal argument). Countably many bounded real sequences have a common convergent
+subsequence. Route: the coordinatewise bounds put `u n` in a product of closed intervals, which
+is compact and metrizable for countable `ι`; use `IsCompact.tendsto_subseq`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_diagonal
+    {ι : Type*} [Countable ι] (u : ℕ → ι → ℝ) (hb : ∀ i, ∃ C : ℝ, ∀ n, |u n i| ≤ C) :
+    ∃ φ : ℕ → ℕ, StrictMono φ ∧ ∃ L : ι → ℝ,
+      ∀ i, Tendsto (fun n ↦ u (φ n) i) atTop (nhds (L i)) := by
+  sorry
+
+/-- Leaf (Hölder). Pairing an `Lᵖ([0,1])` function against the indicator of an interval is
+bounded by its `Lᵖ` norm, since that indicator has `Lᵠ([0,1])` norm at most `1`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_indicator_bound
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (f : ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (a b : ℝ) :
+    |∫ x in Set.Icc (0 : ℝ) 1, f x * (Set.Ioc a b).indicator (fun _ ↦ (1 : ℝ)) x| ≤
+      (eLpNorm f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+  sorry
+
+/-- Leaf (the limit is an `Lᵖ` function). If the interval pairings of a uniformly `Lᵖ`-bounded
+sequence converge for every rational interval, the limits are the pairings of one
+`f₀ ∈ Lᵖ([0,1])`. Route: `L` is additive on adjacent intervals with
+`|L(a,b)| ≤ R (b - a)^(1/q)`; it defines a signed measure `ν ≪ volume` on `[0,1]`; take
+`f₀ := ν.rnDeriv`, and show `f₀ ∈ Lᵖ` by testing against step functions. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (R : ℝ) (hR : 0 ≤ R)
+    (hbound : ∀ n : ℕ,
+      (eLpNorm (s n) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R)
+    (L : ℚ × ℚ → ℝ)
+    (hL : ∀ i : ℚ × ℚ, Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1,
+      s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) atTop (nhds (L i))) :
+    ∃ f₀, MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+      ∀ i : ℚ × ℚ, ∫ x in Set.Icc (0 : ℝ) 1,
+        f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x = L i := by
+  sorry
+
+/-- Leaf (density). Finite combinations of indicators of rational intervals are dense in
+`Lᵠ([0,1])` for `1 < q < ∞`. Route: continuous functions are dense
+(`MemLp.exists_hasCompactSupport_eLpNorm_sub_le` or `Lp.boundedContinuousFunction_dense`), and a
+uniformly continuous function on `[0,1]` is uniformly close to a rational step function. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_step_dense
+    (q : ℝ) (hq : 1 < q)
+    (h : ℝ → ℝ) (hh : MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (ε : ℝ) (hε : 0 < ε) :
+    ∃ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      eLpNorm (fun x ↦ h x - ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) < ENNReal.ofReal ε := by
+  sorry
+
+/-- Leaf (ε/3 argument). Weak convergence against rational interval indicators, plus a uniform
+`Lᵖ` bound and density of rational step functions in `Lᵠ`, gives convergence against every
+`h ∈ Lᵠ([0,1])`. Route: linearity of the integral for finite combinations, then Hölder
+(`integral_mul_le_Lp_mul_Lq`-type bounds) on `h - g`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_extend
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (R : ℝ) (hR : 0 ≤ R)
+    (hbound : ∀ n : ℕ,
+      (eLpNorm (s n) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R)
+    (f₀ : ℝ → ℝ) (hf₀ : MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hstep : ∀ i : ℚ × ℚ, Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1,
+      s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) atTop
+        (nhds (∫ x in Set.Icc (0 : ℝ) 1,
+          f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)))
+    (hdense : ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      ∀ ε : ℝ, 0 < ε → ∃ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+        eLpNorm (fun x ↦ h x - ∑ i ∈ F, c i *
+            (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+          (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) < ENNReal.ofReal ε) :
+    ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1, s n x * h x) atTop
+        (nhds (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)) := by
+  sorry
+
+/-- The analytic core: weak sequential compactness of a uniformly bounded `Lᵖ` tail,
+formulated for representatives and only against the concrete `Lᵠ` integral pairing. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_core
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hbounded : ∃ R : ℝ, 0 ≤ R ∧ ∀ n : ℕ,
+      (eLpNorm (s n) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R) :
+    ∃ f₀, MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+      ∃ φ : ℕ → ℕ, StrictMono φ ∧
+        ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+          Tendsto (fun n ↦ ∫ x in Set.Icc (0 : ℝ) 1, s (φ n) x * h x) atTop
+            (nhds (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)) := by
+  obtain ⟨R, hR, hb⟩ := hbounded
+  obtain ⟨φ, hφ, L, hL⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_diagonal
+      (fun n (i : ℚ × ℚ) ↦ ∫ x in Set.Icc (0 : ℝ) 1,
+        s n x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+      (fun i ↦ ⟨R, fun n ↦ (apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_indicator_bound
+        p q hp hq hpq (s n) (hs n) _ _).trans (hb n)⟩)
+  obtain ⟨f₀, hf₀, hrep⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep
+      p q hp hq hpq (fun n ↦ s (φ n)) (fun n ↦ hs (φ n)) R hR (fun n ↦ hb (φ n)) L hL
+  refine ⟨f₀, hf₀, φ, hφ, ?_⟩
+  exact apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_extend
+    p q hp hq hpq (fun n ↦ s (φ n)) (fun n ↦ hs (φ n)) R hR (fun n ↦ hb (φ n)) f₀ hf₀
+    (fun i ↦ by rw [hrep i]; exact hL i)
+    (fun h hh ε hε ↦
+      apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_step_dense
+        q hq h hh ε hε)
+
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness
     (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
     (s : ℕ → ℝ → ℝ)
@@ -1587,7 +1732,16 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness
         ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
           Tendsto (fun n => ∫ x in Set.Icc (0 : ℝ) 1, s (φ n) x * h x) atTop
             (nhds (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)) := by
-  sorry
+  obtain ⟨R, hR, k, hk⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_tail
+      p s hbounded
+  obtain ⟨f₀, hf₀, φ, hφ, hconv⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_core
+      p q hp hq hpq (fun n ↦ s (k + n)) (fun n ↦ hs (k + n)) ⟨R, hR, hk⟩
+  refine ⟨f₀, hf₀, fun n ↦ k + φ n, ?_, ?_⟩
+  · exact fun a b hab ↦ Nat.add_lt_add_left (hφ hab) k
+  · intro h hh
+    simpa [add_assoc] using hconv h hh
 
 /-- A coercive minimizing sequence has a weakly convergent subsequence
 (eventual boundedness, then `Lp` weak compactness). -/
