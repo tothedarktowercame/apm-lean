@@ -671,7 +671,32 @@ lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_c
     (hs : 0 < apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p) =
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p + t * apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p * (23 / 20 - apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) := by
-  sorry
+  let s := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p
+  let a := t * apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p
+  let k := 1 + a * (23 / 20 / s - 1)
+  have ha :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_fraction
+      t ht p
+  have hs0 : s ≠ 0 := ne_of_gt hs
+  have hks : k * s = s + a * (23 / 20 - s) := by
+    dsimp [k]
+    field_simp [hs0]
+  have hk : 0 < k := by
+    rcases ha with ⟨ha0, ha1⟩
+    have htarget : 0 < (23 / 20 : ℝ) := by norm_num
+    have hratio : 0 < (23 / 20 : ℝ) / s := div_pos htarget hs
+    dsimp [k]
+    nlinarith
+  have hs_sq : (p 0 - 6 / 5) ^ 2 + p 1 ^ 2 = s ^ 2 := by
+    dsimp [s, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad]
+    rw [Real.sq_sqrt]
+    positivity
+  change Real.sqrt
+      (((6 / 5 + k * (p 0 - 6 / 5) - 6 / 5) ^ 2) +
+        (k * p 1) ^ 2) = s + a * (23 / 20 - s)
+  rw [show (6 / 5 + k * (p 0 - 6 / 5) - 6 / 5) ^ 2 + (k * p 1) ^ 2 =
+      (k * s) ^ 2 by nlinarith [sq_nonneg k, hs_sq]]
+  rw [Real.sqrt_sq_eq_abs, abs_of_pos (mul_pos hk hs), hks]
 
 /-- The disk of radius `1/4` is convex and contains `(3/20, 0)`. -/
 lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_convex (s z a : ℝ) (ha : a ∈ Set.Icc (0 : ℝ) 1)
