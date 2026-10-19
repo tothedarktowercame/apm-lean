@@ -1279,7 +1279,131 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOp
       apm_t01a03_separating_circle_H1_zero_aux_V) :
     nhds (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ⟨p, hp⟩) ≤
       Filter.map (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) (nhds ⟨p, hp⟩) := by
-  sorry
+  have hpN :=
+    apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem p hp
+  cases p with
+  | inl p =>
+      have hpN' : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+        simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hpN
+      let j : apm_t01a03_separating_circle_H1_zero_aux_N →
+          apm_t01a03_separating_circle_H1_zero_aux_V := fun x =>
+        ⟨((Sum.inl (x : apm_t01a03_PuncturedTorus) :
+          apm_t01a03_TwoPuncturedTori) : OnePoint apm_t01a03_TwoPuncturedTori), by
+          simpa [apm_t01a03_separating_circle_H1_zero_aux_V] using
+            (show Sum.inl (x : apm_t01a03_PuncturedTorus) ∈
+              apm_t01a03_separating_circle_H1_zero_aux_Nsum from Or.inl ⟨_, x.2, rfl⟩)⟩
+      have hNopen : IsOpen apm_t01a03_separating_circle_H1_zero_aux_N := by
+        exact (isOpen_lt
+          ((continuous_subtype_val.comp continuous_fst).comp continuous_subtype_val |>.dist
+            continuous_const) continuous_const).and
+          (isOpen_lt
+            ((continuous_subtype_val.comp continuous_snd).comp continuous_subtype_val |>.dist
+              continuous_const) continuous_const)
+      have hj : Topology.IsOpenEmbedding j := by
+        have he : Topology.IsOpenEmbedding (fun x : apm_t01a03_separating_circle_H1_zero_aux_N =>
+            ((Sum.inl (x : apm_t01a03_PuncturedTorus) : apm_t01a03_TwoPuncturedTori) :
+              OnePoint apm_t01a03_TwoPuncturedTori)) :=
+          OnePoint.isOpenEmbedding_coe.comp
+            (Topology.IsOpenEmbedding.inl.comp hNopen.isOpenEmbedding_subtypeVal)
+        refine ⟨he.isEmbedding.codRestrict
+            apm_t01a03_separating_circle_H1_zero_aux_V (fun x => (j x).2), ?_⟩
+        exact (he.isOpenMap.codRestrict (fun x => (j x).2)).isOpen_range
+      let k : apm_t01a03_separating_circle_H1_zero_aux_N →
+          apm_t01a03_separating_circle_H1_zero_aux_W := fun x =>
+        ⟨((φ x : Fin 2 → ℝ), 0), Or.inl ⟨(φ x).2.1, rfl⟩⟩
+      have hkemb : Topology.IsEmbedding k := by
+        exact ((isEmbedding_prodMkLeft (0 : Fin 2 → ℝ)).comp
+          (Topology.IsEmbedding.subtypeVal.comp φ.isEmbedding)).codRestrict
+          apm_t01a03_separating_circle_H1_zero_aux_W (fun x => (k x).2)
+      have hkrange : Set.range k =
+          {z : apm_t01a03_separating_circle_H1_zero_aux_W | z.1.1 ≠ 0} := by
+        ext z
+        constructor
+        · rintro ⟨x, rfl⟩
+          exact fun h => (φ x).2.2 (Set.mem_singleton_iff.mpr h)
+        · intro hz
+          rcases z with ⟨⟨a, b⟩, hab⟩
+          rcases hab with ⟨ha, hb⟩ | ⟨ha, hb⟩
+          · have hb' : b = 0 := Set.mem_singleton_iff.mp hb
+            let q : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) :=
+              ⟨a, ha, fun h => hz (Set.mem_singleton_iff.mp h)⟩
+            refine ⟨φ.symm q, ?_⟩
+            apply Subtype.ext
+            exact Prod.ext (congrArg Subtype.val (φ.apply_symm_apply q)) hb'.symm
+          · exact (hz (Set.mem_singleton_iff.mp ha)).elim
+      have hk : Topology.IsOpenEmbedding k := by
+        refine ⟨hkemb, ?_⟩
+        rw [hkrange]
+        exact isOpen_ne.preimage (continuous_fst.comp continuous_subtype_val)
+      have heq :
+          apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ∘ j = k := by
+        funext x
+        apply Subtype.ext
+        rfl
+      have hmap := hk.isOpenMap.nhds_le (⟨p, hpN'⟩)
+      rw [← heq, ← Filter.map_map, hj.map_nhds_eq] at hmap
+      simpa [j] using hmap
+  | inr p =>
+      have hpN' : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+        simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hpN
+      let j : apm_t01a03_separating_circle_H1_zero_aux_N →
+          apm_t01a03_separating_circle_H1_zero_aux_V := fun x =>
+        ⟨((Sum.inr (x : apm_t01a03_PuncturedTorus) : apm_t01a03_TwoPuncturedTori) :
+          OnePoint apm_t01a03_TwoPuncturedTori), by
+          simpa [apm_t01a03_separating_circle_H1_zero_aux_V] using
+            (show Sum.inr (x : apm_t01a03_PuncturedTorus) ∈
+              apm_t01a03_separating_circle_H1_zero_aux_Nsum from Or.inr ⟨_, x.2, rfl⟩)⟩
+      have hNopen : IsOpen apm_t01a03_separating_circle_H1_zero_aux_N := by
+        exact (isOpen_lt
+          ((continuous_subtype_val.comp continuous_fst).comp continuous_subtype_val |>.dist
+            continuous_const) continuous_const).and
+          (isOpen_lt
+            ((continuous_subtype_val.comp continuous_snd).comp continuous_subtype_val |>.dist
+              continuous_const) continuous_const)
+      have hj : Topology.IsOpenEmbedding j := by
+        have he : Topology.IsOpenEmbedding (fun x : apm_t01a03_separating_circle_H1_zero_aux_N =>
+            ((Sum.inr (x : apm_t01a03_PuncturedTorus) : apm_t01a03_TwoPuncturedTori) :
+              OnePoint apm_t01a03_TwoPuncturedTori)) :=
+          OnePoint.isOpenEmbedding_coe.comp
+            (Topology.IsOpenEmbedding.inr.comp hNopen.isOpenEmbedding_subtypeVal)
+        refine ⟨he.isEmbedding.codRestrict
+            apm_t01a03_separating_circle_H1_zero_aux_V (fun x => (j x).2), ?_⟩
+        exact (he.isOpenMap.codRestrict (fun x => (j x).2)).isOpen_range
+      let k : apm_t01a03_separating_circle_H1_zero_aux_N →
+          apm_t01a03_separating_circle_H1_zero_aux_W := fun x =>
+        ⟨(0, (φ x : Fin 2 → ℝ)), Or.inr ⟨rfl, (φ x).2.1⟩⟩
+      have hkemb : Topology.IsEmbedding k := by
+        exact ((isEmbedding_prodMkRight (0 : Fin 2 → ℝ)).comp
+          (Topology.IsEmbedding.subtypeVal.comp φ.isEmbedding)).codRestrict
+          apm_t01a03_separating_circle_H1_zero_aux_W (fun x => (k x).2)
+      have hkrange : Set.range k =
+          {z : apm_t01a03_separating_circle_H1_zero_aux_W | z.1.2 ≠ 0} := by
+        ext z
+        constructor
+        · rintro ⟨x, rfl⟩
+          exact fun h => (φ x).2.2 (Set.mem_singleton_iff.mpr h)
+        · intro hz
+          rcases z with ⟨⟨a, b⟩, hab⟩
+          rcases hab with ⟨ha, hb⟩ | ⟨ha, hb⟩
+          · exact (hz (Set.mem_singleton_iff.mp hb)).elim
+          · have ha' : a = 0 := Set.mem_singleton_iff.mp ha
+            let q : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) :=
+              ⟨b, hb, fun h => hz (Set.mem_singleton_iff.mp h)⟩
+            refine ⟨φ.symm q, ?_⟩
+            apply Subtype.ext
+            exact Prod.ext ha'.symm (congrArg Subtype.val (φ.apply_symm_apply q))
+      have hk : Topology.IsOpenEmbedding k := by
+        refine ⟨hkemb, ?_⟩
+        rw [hkrange]
+        exact isOpen_ne.preimage (continuous_snd.comp continuous_subtype_val)
+      have heq :
+          apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ∘ j = k := by
+        funext x
+        apply Subtype.ext
+        rfl
+      have hmap := hk.isOpenMap.nhds_le (⟨p, hpN'⟩)
+      rw [← heq, ← Filter.map_map, hj.map_nhds_eq] at hmap
+      simpa [j] using hmap
 -- END SEAT AREA
 
 /-- Openness at `∞`. A neighbourhood of `∞` in `V` contains `V` minus the image
