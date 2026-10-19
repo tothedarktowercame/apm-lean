@@ -420,7 +420,13 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_const
     {X Z : Type} [TopologicalSpace X] [TopologicalSpace Z]
     (f : C(X, Z)) (z : Z) (hf : ∀ x, f x = z) :
     apm_t01a03_H1map f = 0 := by
-  sorry
+  have hconst : f = ContinuousMap.const X z := by
+    ext x
+    exact hf x
+  subst f
+  exact
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_const_eq_zero
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero z
 
 /-- A surjective map between two copies of `ℤ⁴` is injective. -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_hopf
