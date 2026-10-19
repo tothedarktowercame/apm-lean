@@ -339,10 +339,32 @@ abbrev apm_t02a03_geometricY :=
   {p : apm_t02a03_E3 // p ∈ apm_t02a03_W ∧ p ∉ apm_t02a03_C}
 
 /-- LIBRARY: the explicit complement of the left core in the fixed genus-two
-regular-neighborhood model has the homotopy type of the torus-circle wedge. -/
+regular-neighborhood model has the homotopy type of the production
+torus-circle wedge.  This is the point-set geometric construction; keeping
+the production quotient as target separates it from the quotient-model
+transport below. -/
+theorem apm_t02a03_geometricY_homotopyEquiv_genericWedge :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY
+      ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge) := by
+  sorry
+
+/-- Transport a geometric equivalence to the production wedge across the
+already compiled homeomorphism with the registered quotient model.  The
+geometric equivalence is an explicit hypothesis so this lemma is independent
+of the admitted geometric construction. -/
+theorem apm_t02a03_transport_genericWedge_homotopyEquiv
+    (h : Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY
+      ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge)) :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_Y) := by
+  rcases h with ⟨e⟩
+  exact ⟨e.trans apm_t02a03_productionHomeomorph.toHomotopyEquiv⟩
+
+/-- The explicit complement of the left core in the fixed genus-two regular
+neighborhood has the homotopy type of the registered torus-circle wedge. -/
 theorem apm_t02a03_geometricY_homotopyEquiv_wedge :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_Y) := by
-  sorry
+  exact apm_t02a03_transport_genericWedge_homotopyEquiv
+    apm_t02a03_geometricY_homotopyEquiv_genericWedge
 
 theorem apm_t02a03 :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_X apm_t02a03_Torus) ∧
