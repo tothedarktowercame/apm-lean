@@ -46,11 +46,19 @@ Other edge cases were checked. At `N = 0`, `Φ` is the mean-value projection and
 
 **Statement.** For each `g∈Lᵠ`, the energy attains its minimum on `Lᵖ`.
 
-**Proof sketch.** Split `f=u+w` with `u=Φf` and `w=(I-Φ)f`. The high-frequency energy `‖w‖ᵖᵖ` controls `w`; on the finite-dimensional range of `Φ`, norm equivalence makes `‖u‖₂²` control `u`. Hölder bounds the linear term. Young inequalities absorb its two components, proving boundedness below and coercivity. Choose a minimizing sequence in quotient `Lp`; reflexivity for `1<p<∞` gives a weakly convergent subsequence, and the preceding weak-lsc lemma gives a minimizer. Finally choose a measurable representative to match the theorem's function-level conclusion.
+This lemma is now a sorry-free assembly of four parallel leaves. Mathlib was searched for `Reflexive`, weak compactness of `Lp`, `WeakDual`, and `WeakDual.isCompact_polar`. Banach--Alaoglu/compact polar infrastructure exists, but there is no usable reflexivity instance or weak sequential compactness theorem for `Lp`. Consequently the direct route is retained, with that genuinely missing bridge isolated and visibly marked LIBRARY-sized rather than hidden inside the existence theorem. The suggested dual finite-dimensional route would replace it by the comparably substantial missing theorem differentiating the dual objective under the integral and deriving all Fourier moment equations; it is not shorter in the present library.
 
-**Estimate.** 200–300 lines.
+- `apm_m93j05_exists_minimizer_coercive` (80–140 lines, independent): every finite `J`-sublevel is bounded in `Lᵖ`. Split `f=Φf+(f-Φf)` using `apm_m93j05_fourier_projection`; use `integral_mul_le_Lp_mul_Lq`, Young's inequality, `apm_m93j05_trunc_parseval`, and finite-dimensional norm equivalence (`FiniteDimensional.proper` / compact unit sphere) for the retained coefficients.
 
-**Dependencies.** `apm_m93j05_fourier_projection` and `apm_m93j05_weak_lowerSemicontinuous`.
+- `apm_m93j05_exists_minimizer_minimizing_sequence` (30–60 lines, independent): constructs a sequence whose tails beat every admissible competitor up to `1/(k+1)`. Use `sInf` (`csInf_le`, `lt_csInf_add_pos`) after obtaining a lower bound from the same scalar Young estimates; choice selects representatives. The statement deliberately avoids asserting convergence to a real infimum.
+
+- `apm_m93j05_exists_minimizer_weak_subsequence` (LIBRARY, 150–300 lines, independent because coercivity and minimizing properties are explicit hypotheses): transports the bounded sequence to quotient `Lp`, proves/installs reflexivity for real `Lp` when `1<p<∞`, extracts a weakly convergent subsequence (Eberlein--Šmulian or a separable diagonal argument), and chooses a representative. Candidate Mathlib ingredients are `MemLp.toLp`, `Lp.norm_toLp`, `NormedSpace.Dual`, `WeakDual`, `WeakDual.isCompact_polar`, and separability of `Lp`; the absent reflexivity/sequential-compactness bridge is the point of this leaf.
+
+- `apm_m93j05_exists_minimizer_lsc_closure` (35–70 lines, independent): applies the supplied weak-lsc statement to the extracted subsequence at levels `J(f)+1/(k+1)`, then lets `k→∞`. Use `StrictMono.tendsto_atTop`, `Filter.Eventually.filter_mono`, and `le_of_forall_pos_le_add` (or an Archimedean `k` choice).
+
+All four leaves are true in degenerate cases. `N=0` is the mean/high-frequency split, not an empty projection. The assumptions `1<p,q` exclude endpoint failure of reflexivity and make every `1/(k+1)` positive. Empty admissible sets cannot occur because zero is admissible (`apm_m93j05_exists_minimizer_aux_zero_memLp`). For `g=0`, zero lies in every relevant sublevel and is the eventual minimizer. Weak convergence is stated using exactly the restricted-measure pairing consumed by the proved lower-semicontinuity lemma, so there is no sign or boundary convention mismatch.
+
+**Dependencies.** The assembly uses these four leaves and the already proved `apm_m93j05_weak_lowerSemicontinuous`; the leaves themselves mention one another only through explicit hypotheses.
 
 **Truth check.** At `p=2`, completing the square gives the expected unique minimizer; with `g=0`, it is zero. Along pure kernel directions the energy grows like `|t|ᵖ`, while along the finite-dimensional range it grows quadratically, confirming coercivity in both summands.
 

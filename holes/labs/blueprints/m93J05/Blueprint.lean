@@ -1330,6 +1330,94 @@ lemma apm_m93j05_exists_minimizer_aux_J_zero (N : ℕ) (p : ℝ) (g : ℝ → �
   simp [apm_m93j05_J, apm_m93j05_exists_minimizer_aux_trunc_zero,
     Real.zero_rpow hp.ne']
 
+/-! ### Split of `apm_m93j05_exists_minimizer`
+
+The first two leaves are direct-method preliminaries.  The third is the one missing functional-
+analytic foundation in Mathlib: weak sequential compactness of bounded sets in `Lᵖ`, transported
+from quotient `Lp` back to representatives.  The fourth is the order-theoretic/lower-semicontinuity
+closure.  Every dependency is an explicit hypothesis, so the four seats are independent. -/
+
+/-- Coercivity of `J`: every finite sublevel is bounded in `Lᵖ`, uniformly in its elements. -/
+lemma apm_m93j05_exists_minimizer_coercive
+    (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
+    (hpq : 1 / p + 1 / q = 1) (g : ℝ → ℝ)
+    (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    ∀ A : ℝ, ∃ R : ℝ, 0 ≤ R ∧ ∀ f,
+      MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      apm_m93j05_J N p g f ≤ A →
+      (eLpNorm f (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R := by
+  sorry
+
+/-- An `Lᵖ` minimizing sequence, expressed without an infimum: at precision `1/(k+1)`, its tail
+beats every admissible competitor up to that error. -/
+lemma apm_m93j05_exists_minimizer_minimizing_sequence
+    (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
+    (hpq : 1 / p + 1 / q = 1) (g : ℝ → ℝ)
+    (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    ∃ s : ℕ → ℝ → ℝ,
+      (∀ n, MemLp (s n) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))) ∧
+      ∀ f, MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+        ∀ k : ℕ, ∀ᶠ n in atTop,
+          apm_m93j05_J N p g (s n) ≤ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ) := by
+  sorry
+
+/-- **LIBRARY-sized leaf.** A coercive minimizing sequence has a weakly convergent subsequence.
+This is the `1 < p < ∞` reflexivity/weak sequential compactness theorem for `Lp`; current Mathlib
+has weak-star compact polar results but no usable `Lp` reflexivity instance. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence
+    (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
+    (hpq : 1 / p + 1 / q = 1) (g : ℝ → ℝ)
+    (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hcoercive : ∀ A : ℝ, ∃ R : ℝ, 0 ≤ R ∧ ∀ f,
+      MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      apm_m93j05_J N p g f ≤ A →
+      (eLpNorm f (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hmin : ∀ f, MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      ∀ k : ℕ, ∀ᶠ n in atTop,
+        apm_m93j05_J N p g (s n) ≤ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ)) :
+    ∃ f₀, MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+      ∃ φ : ℕ → ℕ, StrictMono φ ∧
+        ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+          Tendsto (fun n => ∫ x in Set.Icc (0 : ℝ) 1, s (φ n) x * h x) atTop
+            (nhds (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)) := by
+  sorry
+
+/-- Weak lower semicontinuity turns an approximately minimizing weakly convergent subsequence into
+an actual minimizer.  The analytic inputs are hypotheses, keeping this leaf independent. -/
+lemma apm_m93j05_exists_minimizer_lsc_closure
+    (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
+    (hpq : 1 / p + 1 / q = 1) (g : ℝ → ℝ)
+    (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hlsc : let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+      ∀ g, MemLp g (ENNReal.ofReal q) μ → ∀ (f : ℝ → ℝ) (s : ℕ → ℝ → ℝ),
+        MemLp f (ENNReal.ofReal p) μ → (∀ n, MemLp (s n) (ENNReal.ofReal p) μ) →
+        (∀ h, MemLp h (ENNReal.ofReal q) μ →
+          Tendsto (fun n => ∫ x, s n x * h x ∂μ) atTop
+            (nhds (∫ x, f x * h x ∂μ))) →
+        ∀ r, (∃ᶠ n in atTop, apm_m93j05_J N p g (s n) ≤ r) →
+          apm_m93j05_J N p g f ≤ r)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hmin : ∀ f, MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      ∀ k : ℕ, ∀ᶠ n in atTop,
+        apm_m93j05_J N p g (s n) ≤ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ))
+    (f₀ : ℝ → ℝ)
+    (hf₀ : MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (φ : ℕ → ℕ) (hφ : StrictMono φ)
+    (hweak : ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      Tendsto (fun n => ∫ x in Set.Icc (0 : ℝ) 1, s (φ n) x * h x) atTop
+        (nhds (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x))) :
+    ∃ f₀, MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+      ∀ f, MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+        apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f := by
+  sorry
+
 theorem apm_m93j05_exists_minimizer
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
     (hpq : 1 / p + 1 / q = 1) :
@@ -1338,7 +1426,16 @@ theorem apm_m93j05_exists_minimizer
       ∃ f₀, MemLp f₀ (ENNReal.ofReal p) μ ∧
         ∀ f, MemLp f (ENNReal.ofReal p) μ →
           apm_m93j05_J N p g f₀ ≤ apm_m93j05_J N p g f := by
-  sorry
+  intro μ g hg
+  have hcoercive := apm_m93j05_exists_minimizer_coercive N p q hp hq hpq g hg
+  obtain ⟨s, hs, hmin⟩ :=
+    apm_m93j05_exists_minimizer_minimizing_sequence N p q hp hq hpq g hg
+  obtain ⟨f₀, hf₀, φ, hφ, hweak⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence N p q hp hq hpq g hg
+      hcoercive s hs hmin
+  exact apm_m93j05_exists_minimizer_lsc_closure N p q hp hq hpq g hg
+    (apm_m93j05_weak_lowerSemicontinuous N p q hp hq hpq) s hs hmin
+    f₀ hf₀ φ hφ hweak
 
 lemma apm_m93j05_stationary_at_minimizer_aux_memLp_path
     (p t : ℝ) (f h : ℝ → ℝ) (hf : MemLp f (ENNReal.ofReal p)
