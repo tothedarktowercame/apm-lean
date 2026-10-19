@@ -232,6 +232,35 @@ antipode, the preimage is four copies of `V` in one lobe; at the wedge point,
 take `V` = images of small caps around `±e₀` in both lobes, whose preimage is
 four wedges of two caps, one per fibre point `[(e₀, i)]`. -/
 -- BEGIN SEAT AREA
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_rep
+    (x : Wedge RP2 RP2 rpBase rpBase)
+    (hx : x ≠ Quotient.mk _ (.inl rpBase)) :
+    (∃ u : Sphere2, x = Quotient.mk _ (.inl (antipodalCover u)) ∧
+      antipodalCover u ≠ rpBase) ∨
+    (∃ u : Sphere2, x = Quotient.mk _ (.inr (antipodalCover u)) ∧
+      antipodalCover u ≠ rpBase) := by
+  induction x using Quotient.inductionOn with
+  | _ z =>
+    cases z with
+    | inl q =>
+      induction q using Quotient.inductionOn with
+      | _ u =>
+        left
+        refine ⟨u, rfl, ?_⟩
+        intro hu
+        apply hx
+        exact congrArg (fun q : RP2 ↦ Quotient.mk _ (Sum.inl q : Sum RP2 RP2)) hu
+    | inr q =>
+      induction q using Quotient.inductionOn with
+      | _ u =>
+        right
+        refine ⟨u, rfl, ?_⟩
+        intro hu
+        apply hx
+        exact (congrArg (fun q : RP2 ↦ Quotient.mk _ (Sum.inr q : Sum RP2 RP2)) hu).trans
+          (Quotient.sound (Relation.EqvGen.symm _ _
+            (Relation.EqvGen.rel _ _ WedgeRel.base)))
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away
     (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)

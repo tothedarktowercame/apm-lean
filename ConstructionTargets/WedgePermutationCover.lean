@@ -226,20 +226,6 @@ def rp2Wedge_regular_four_cover_aux_p (σ τ : Equiv.Perm (Fin 4)) :
   Quotient.lift rp2Wedge_regular_four_cover_aux_proj
     (fun _ _ h ↦ rp2Wedge_regular_four_cover_aux_proj_respects σ τ h)
 
-/-- **LIBRARY.** The glued projection is a covering map.  Charts: away from the
-wedge point, over the image `V` of an open set of `Sphere2` disjoint from its
-antipode, the preimage is four copies of `V` in one lobe; at the wedge point,
-take `V` = images of small caps around `±e₀` in both lobes, whose preimage is
-four wedges of two caps, one per fibre point `[(e₀, i)]`. -/
-lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away
-    (σ τ : Equiv.Perm (Fin 4))
-    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
-    (x : Wedge RP2 RP2 rpBase rpBase)
-    (hx : x ≠ Quotient.mk _ (.inl rpBase)) :
-    IsEvenlyCovered (rp2Wedge_regular_four_cover_aux_p σ τ) x
-      ((rp2Wedge_regular_four_cover_aux_p σ τ) ⁻¹' {x}) := by
-  sorry
-
 /-! #### Split of `rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge` (lemma-3 PARTIAL, 2026-10-19) -/
 
 /-- Even covering from local sections: if the sheets over an open `U ∋ x` are the
@@ -301,6 +287,132 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections
         (∀ e, rp2Wedge_regular_four_cover_aux_p σ τ e ∈ U → ∃ i u, s i u = e) ∧
         (∀ i j u v, s i u = s j v → i = j) := by
   sorry
+
+/-! #### Split of `rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away` (lemma-2 PARTIAL, 2026-10-19) -/
+
+/-- Every non-wedge point is the image of a sphere point in one lobe, with
+projective image different from `rpBase`.  (Banked by lemma-2.) -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_rep
+    (x : Wedge RP2 RP2 rpBase rpBase)
+    (hx : x ≠ Quotient.mk _ (.inl rpBase)) :
+    (∃ u : Sphere2, x = Quotient.mk _ (.inl (antipodalCover u)) ∧
+      antipodalCover u ≠ rpBase) ∨
+    (∃ u : Sphere2, x = Quotient.mk _ (.inr (antipodalCover u)) ∧
+      antipodalCover u ≠ rpBase) := by
+  induction x using Quotient.inductionOn with
+  | _ z =>
+    cases z with
+    | inl q =>
+      induction q using Quotient.inductionOn with
+      | _ u =>
+        left
+        refine ⟨u, rfl, ?_⟩
+        intro hu
+        apply hx
+        exact congrArg (fun q : RP2 ↦ Quotient.mk _ (Sum.inl q : Sum RP2 RP2)) hu
+    | inr q =>
+      induction q using Quotient.inductionOn with
+      | _ u =>
+        right
+        refine ⟨u, rfl, ?_⟩
+        intro hu
+        apply hx
+        exact (congrArg (fun q : RP2 ↦ Quotient.mk _ (Sum.inr q : Sum RP2 RP2)) hu).trans
+          (Quotient.sound (Relation.EqvGen.symm _ _
+            (Relation.EqvGen.rel _ _ WedgeRel.base)))
+
+/-- The open cap `{y | 0 < ⟪y, u⟫}` with the two points `±e₀` removed embeds
+openly in `RP2` (it is open, disjoint from its antipode, and `antipodalCover` is
+an open map since the saturation of an open `W` is `W ∪ -W`). -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_cap (u : Sphere2) :
+    Topology.IsOpenEmbedding
+      (fun y : {y : Sphere2 // 0 < inner ℝ (y : EuclideanSpace ℝ (Fin 3)) u ∧
+          antipodalCover y ≠ rpBase} ↦ antipodalCover y.1) := by
+  sorry
+
+/-- An open subset of the left lobe missing the base point embeds openly in the
+wedge: its preimage in `A ⊕ B` is `inl '' V`, already saturated. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl
+    {A B : Type*} [TopologicalSpace A] [TopologicalSpace B] (a : A) (b : B)
+    (V : Set A) (hV : IsOpen V) (ha : a ∉ V) :
+    Topology.IsOpenEmbedding
+      (fun z : V ↦ (Quotient.mk _ (.inl z.1) : Wedge A B a b)) := by
+  sorry
+
+/-- The same for the right lobe. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr
+    {A B : Type*} [TopologicalSpace A] [TopologicalSpace B] (a : A) (b : B)
+    (V : Set B) (hV : IsOpen V) (hb : b ∉ V) :
+    Topology.IsOpenEmbedding
+      (fun z : V ↦ (Quotient.mk _ (.inr z.1) : Wedge A B a b)) := by
+  sorry
+
+/-- The four sheets over a left-lobe point `[inl (antipodalCover u)] ≠` wedge
+point.  `U` is the image under `_aux_lobe_inl` of the image under `_aux_cap u` of
+the cap; sheet `i` sends `[inl (antipodalCover y)]` (`y` in the cap) to
+`[inl (y, i)]`.  Continuity: `U` is homeomorphic to the cap by the two open
+embeddings.  The range of sheet `i` is the class of
+`{inl (y, i), inl (-y, σ i) | y in the cap}` (saturated since `σ` is involutive
+and the cap misses `e₀`, so no glue applies), open in the raw sum; the four
+ranges are disjoint because `(y, i) ∼ (y', j)` with `y, y'` in the cap forces
+`y = y'`, `i = j` (the cap is disjoint from its antipode). -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (u : Sphere2) (hu : antipodalCover u ≠ rpBase) :
+    ∃ U : Set (Wedge RP2 RP2 rpBase rpBase),
+      Quotient.mk _ (.inl (antipodalCover u)) ∈ U ∧ IsOpen U ∧
+      ∃ s : Fin 4 → U → rp2Wedge_regular_four_cover_aux_E σ τ,
+        (∀ i, Continuous (s i)) ∧
+        (∀ i u, rp2Wedge_regular_four_cover_aux_p σ τ (s i u) = u) ∧
+        (∀ i, IsOpen (Set.range (s i))) ∧
+        (∀ e, rp2Wedge_regular_four_cover_aux_p σ τ e ∈ U → ∃ i u, s i u = e) ∧
+        (∀ i j u v, s i u = s j v → i = j) := by
+  sorry
+
+/-- The same over a right-lobe point, with `τ` and `_aux_lobe_inr`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (u : Sphere2) (hu : antipodalCover u ≠ rpBase) :
+    ∃ U : Set (Wedge RP2 RP2 rpBase rpBase),
+      Quotient.mk _ (.inr (antipodalCover u)) ∈ U ∧ IsOpen U ∧
+      ∃ s : Fin 4 → U → rp2Wedge_regular_four_cover_aux_E σ τ,
+        (∀ i, Continuous (s i)) ∧
+        (∀ i u, rp2Wedge_regular_four_cover_aux_p σ τ (s i u) = u) ∧
+        (∀ i, IsOpen (Set.range (s i))) ∧
+        (∀ e, rp2Wedge_regular_four_cover_aux_p σ τ e ∈ U → ∃ i u, s i u = e) ∧
+        (∀ i j u v, s i u = s j v → i = j) := by
+  sorry
+
+/-- **LIBRARY.** The glued projection is a covering map.  Charts: away from the
+wedge point, over the image `V` of an open set of `Sphere2` disjoint from its
+antipode, the preimage is four copies of `V` in one lobe; at the wedge point,
+take `V` = images of small caps around `±e₀` in both lobes, whose preimage is
+four wedges of two caps, one per fibre point `[(e₀, i)]`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (x : Wedge RP2 RP2 rpBase rpBase)
+    (hx : x ≠ Quotient.mk _ (.inl rpBase)) :
+    IsEvenlyCovered (rp2Wedge_regular_four_cover_aux_p σ τ) x
+      ((rp2Wedge_regular_four_cover_aux_p σ τ) ⁻¹' {x}) := by
+  rcases rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_rep x hx with
+    ⟨u, rfl, hu⟩ | ⟨u, rfl, hu⟩
+  · obtain ⟨U, hxU, hU, s, hs, hfs, hopen, hcover, hdisj⟩ :=
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl
+        σ τ hσ hτ u hu
+    exact (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
+      (ι := Fin 4) _
+      (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_continuous σ τ)
+      _ U hxU hU s hs hfs hopen hcover hdisj).to_isEvenlyCovered_preimage
+  · obtain ⟨U, hxU, hU, s, hs, hfs, hopen, hcover, hdisj⟩ :=
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr
+        σ τ hσ hτ u hu
+    exact (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
+      (ι := Fin 4) _
+      (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_continuous σ τ)
+      _ U hxU hU s hs hfs hopen hcover hdisj).to_isEvenlyCovered_preimage
 
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge
     (σ τ : Equiv.Perm (Fin 4))
