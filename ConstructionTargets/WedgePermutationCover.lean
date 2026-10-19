@@ -277,7 +277,98 @@ theorem rp2Wedge_regular_four_cover_aux_card_aux_right (σ τ : Equiv.Perm (Fin 
     (hτ : Function.Involutive τ) (x : Sphere2) (hx : antipodalCover x ≠ rpBase) :
     Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
       Quotient.mk _ (.inr (antipodalCover x))} = 4 := by
-  sorry
+  have hxneg : (-x : Sphere2) ≠ x := by
+    intro h
+    have hx0 : (x : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+      intro hx0
+      have hs := x.property
+      simp [hx0] at hs
+    apply hx0
+    have h' : -(x : EuclideanSpace ℝ (Fin 3)) = x := congrArg Subtype.val h
+    have htwo : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      rw [two_smul]
+      simpa using
+        (congrArg (fun z ↦ z + (x : EuclideanSpace ℝ (Fin 3))) h').symm
+    exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+  have he0x : rp2Wedge_regular_four_cover_aux_e0 ≠ x := by
+    intro h
+    apply hx
+    rw [← h, ← rp2Wedge_regular_four_cover_aux_rpBase]
+  have he0negx : rp2Wedge_regular_four_cover_aux_e0 ≠ -x := by
+    intro h
+    apply hx
+    rw [← rp2Wedge_regular_four_cover_aux_neg x,
+      ← h, ← rp2Wedge_regular_four_cover_aux_rpBase]
+  let F : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = x then z.2 else if z.1 = -x then τ z.2 else 0
+  have hF : ∀ y i, F (-y, τ i) = F (y, i) := by
+    intro y i
+    by_cases hyx : y = x
+    · subst y
+      simp [F, hxneg, hτ i]
+    · by_cases hynx : y = -x
+      · subst y
+        simp [F, hxneg, hτ i]
+      · have hnyx : -y ≠ x := by
+          intro h
+          apply hynx
+          simpa using congrArg Neg.neg h
+        have hnynx : -y ≠ -x := by
+          intro h
+          apply hyx
+          simpa using congrArg Neg.neg h
+        simp [F, hyx, hynx, hnyx, hnynx]
+  let f : Fin 4 → {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inr (antipodalCover x))} := fun i ↦
+    ⟨Quotient.mk _ (.inr (x, i)), rfl⟩
+  have hf_inj : Function.Injective f := by
+    intro i j hij
+    have hq : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ)
+        (.inr (x, i)) (.inr (x, j)) :=
+      Quotient.exact (congrArg Subtype.val hij)
+    have hi := rp2Wedge_regular_four_cover_aux_card_aux_invariant σ τ
+      (fun _ ↦ (0 : Fin 4)) F
+      (by simp) hF (by intro k; simp [F, he0x, he0negx]) hq
+    simpa [F] using hi
+  have hf_surj : Function.Surjective f := by
+    intro e
+    obtain ⟨z, hz⟩ := Quotient.exists_rep e.1
+    rcases z with ⟨y, i⟩ | ⟨y, i⟩
+    · exfalso
+      have hp := e.2
+      rw [← hz] at hp
+      change (Quotient.mk _ (.inl (antipodalCover y)) :
+        Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ (.inr (antipodalCover x)) at hp
+      have hw := (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover y)) (.inr (antipodalCover x))).mp
+        (Quotient.exact hp)
+      rcases hw with h | ⟨_, hr⟩
+      · cases h
+      · rcases hr with h | h
+        · cases h
+        · exact hx (Sum.inr.inj h)
+    · have hp := e.2
+      rw [← hz] at hp
+      change (Quotient.mk _ (.inr (antipodalCover y)) :
+        Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ (.inr (antipodalCover x)) at hp
+      have hw := (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inr (antipodalCover y)) (.inr (antipodalCover x))).mp
+        (Quotient.exact hp)
+      have hc : antipodalCover y = antipodalCover x := by
+        rcases hw with h | ⟨_, hr⟩
+        · exact Sum.inr.inj h
+        · rcases hr with h | h
+          · cases h
+          · exact (hx (Sum.inr.inj h)).elim
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff x y).mp hc.symm with rfl | rfl
+      · exact ⟨i, Subtype.ext hz⟩
+      · refine ⟨τ i, ?_⟩
+        apply Subtype.ext
+        apply (Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.right x (τ i)))).trans
+        simpa [hτ i] using hz
+  rw [Nat.card_congr (Equiv.ofBijective f ⟨hf_inj, hf_surj⟩).symm]
+  simp
 
 /-- Fibre over the wedge point: `i ↦ [inl (e₀, i)]` is a bijection from
 `Fin 4`.  Surjective: a preimage is `[inl (±e₀, j)]` or `[inr (±e₀, j)]`;
