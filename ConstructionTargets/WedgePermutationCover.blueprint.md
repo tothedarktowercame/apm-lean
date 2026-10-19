@@ -134,3 +134,27 @@ leaves. Do not use `IsCoveringMapOn.of_openPartialHomeomorph` (needs compact Hau
 - `_aux_isCoveringMap_aux_wedge`: the wedge point is evenly covered. Take the union of
   small caps around `±e₀` in both lobes; over it the preimage is four sheets indexed by
   the fibre `i ↦ [inl (e₀, i)]`, glued as in `_aux_card_aux_base`.
+
+### Split of `circleWedge_connected_pair` (2026-10-19, lemma-1 PARTIAL)
+
+Banked: the two total spaces as quotients of raw sums, with fibre `Root` = the three
+cube roots of `circleBase` (a subtype, no enumeration chosen). `EC` (the cover for
+`((123), 1)`): one cubed circle on the left, glued at each root `r` to `(circleBase, r)`
+of three identity circles `Circle × Root` on the right. `ED` (the cover for
+`((123), (123))`): two cubed circles glued at the three roots. The projections `pC`, `pD`
+are banked with their `EqvGen`-respect lemmas. The assembly is proved from three leaves:
+
+- `circleWedge_connected_pair_aux_covering`: `pC`, `pD` are 3-fold covers. Away from the
+  wedge point use the chart of `z ↦ z³` (left) or the identity (right) on one open lobe;
+  at the wedge point take small arcs around `circleBase` in both lobes, whose preimage is
+  three sheets indexed by `Root`.
+- `circleWedge_connected_pair_aux_connected`: each quotient has one connected component.
+  The image of `inl` is a connected circle that meets every glued piece (each right
+  circle in `EC`, the right circle in `ED`) at a root, so the union is connected.
+- `circleWedge_connected_pair_aux_not_homeomorphic`: a homeomorphism-invariant
+  separates them. Valence 4 points (no neighbourhood homeomorphic to an interval) are
+  exactly the three glue points in both. Removing them from `EC` leaves six components,
+  three of whose closures meet the valence 4 set in a single point (the right circles).
+  In `ED` each of the six components has a closure that meets two of the points.
+  An equivalent count: the number of components of `X \ (valence 4 set)` whose closure
+  is homeomorphic to a circle is 3 for `EC` and 0 for `ED`.

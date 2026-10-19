@@ -973,11 +973,140 @@ theorem circleWedge_three_cover_two_components : ∃ C : ThreeCover,
 three-sheeted covers whose total spaces are not homeomorphic: deleting the
 topologically intrinsic valence-four locus leaves three loop edges in the
 first graph and none in the second. -/
+lemma circleWedge_connected_pair_aux_circleBase_cube :
+    (circleBase : ℂ) ^ 3 = circleBase := by
+  simp [circleBase]
+
+/-- The three cube roots of the base point, used as the common fibre at which
+the two lifted circles are glued.  Keeping the fibre as a subtype avoids making
+an arbitrary choice of an enumeration of the roots. -/
+abbrev circleWedge_connected_pair_aux_Root :=
+  {z : Circle // (⟨(z : ℂ) ^ 3, by simpa using pow_mem_sphere z.property 3⟩ : Circle) =
+    circleBase}
+
+/-- Cubing on the unit circle. -/
+def circleWedge_connected_pair_aux_cube (z : Circle) : Circle :=
+  ⟨(z : ℂ) ^ 3, by simpa using pow_mem_sphere z.property 3⟩
+
+/-- Raw space for `((123),1)`: one connected threefold lift on the left and
+three identity lifts on the right. -/
+abbrev circleWedge_connected_pair_aux_RawC :=
+  Circle ⊕ (Circle × circleWedge_connected_pair_aux_Root)
+
+inductive circleWedge_connected_pair_aux_RelC :
+    circleWedge_connected_pair_aux_RawC →
+      circleWedge_connected_pair_aux_RawC → Prop
+  | glue (r : circleWedge_connected_pair_aux_Root) :
+      circleWedge_connected_pair_aux_RelC (.inl r.1) (.inr (circleBase, r))
+
+/-- Raw space for `((123),(123))`: connected threefold lifts on both sides. -/
+abbrev circleWedge_connected_pair_aux_RawD := Circle ⊕ Circle
+
+inductive circleWedge_connected_pair_aux_RelD :
+    circleWedge_connected_pair_aux_RawD →
+      circleWedge_connected_pair_aux_RawD → Prop
+  | glue (r : circleWedge_connected_pair_aux_Root) :
+      circleWedge_connected_pair_aux_RelD (.inl r.1) (.inr r.1)
+
+def circleWedge_connected_pair_aux_EC :=
+  Quotient (Relation.EqvGen.setoid circleWedge_connected_pair_aux_RelC)
+
+def circleWedge_connected_pair_aux_ED :=
+  Quotient (Relation.EqvGen.setoid circleWedge_connected_pair_aux_RelD)
+
+noncomputable instance : TopologicalSpace circleWedge_connected_pair_aux_EC :=
+  TopologicalSpace.coinduced (fun z ↦ Quotient.mk _ z) inferInstance
+
+noncomputable instance : TopologicalSpace circleWedge_connected_pair_aux_ED :=
+  TopologicalSpace.coinduced (fun z ↦ Quotient.mk _ z) inferInstance
+
+def circleWedge_connected_pair_aux_projC :
+    circleWedge_connected_pair_aux_RawC → CircleWedge
+  | .inl z => Quotient.mk _ (.inl (circleWedge_connected_pair_aux_cube z))
+  | .inr z => Quotient.mk _ (.inr z.1)
+
+def circleWedge_connected_pair_aux_projD :
+    circleWedge_connected_pair_aux_RawD → CircleWedge
+  | .inl z => Quotient.mk _ (.inl (circleWedge_connected_pair_aux_cube z))
+  | .inr z => Quotient.mk _ (.inr (circleWedge_connected_pair_aux_cube z))
+
+lemma circleWedge_connected_pair_aux_projC_respects {a b}
+    (h : Relation.EqvGen circleWedge_connected_pair_aux_RelC a b) :
+    circleWedge_connected_pair_aux_projC a =
+      circleWedge_connected_pair_aux_projC b := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | glue r =>
+          have hr : circleWedge_connected_pair_aux_cube r.1 = circleBase := r.2
+          apply Quotient.sound
+          rw [hr]
+          apply Relation.EqvGen.rel
+          exact WedgeRel.base
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma circleWedge_connected_pair_aux_projD_respects {a b}
+    (h : Relation.EqvGen circleWedge_connected_pair_aux_RelD a b) :
+    circleWedge_connected_pair_aux_projD a =
+      circleWedge_connected_pair_aux_projD b := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | glue r =>
+          have hr : circleWedge_connected_pair_aux_cube r.1 = circleBase := r.2
+          apply Quotient.sound
+          rw [hr]
+          exact Relation.EqvGen.rel _ _ WedgeRel.base
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def circleWedge_connected_pair_aux_pC :
+    circleWedge_connected_pair_aux_EC → CircleWedge :=
+  Quotient.lift circleWedge_connected_pair_aux_projC
+    (fun _ _ h ↦ circleWedge_connected_pair_aux_projC_respects h)
+
+def circleWedge_connected_pair_aux_pD :
+    circleWedge_connected_pair_aux_ED → CircleWedge :=
+  Quotient.lift circleWedge_connected_pair_aux_projD
+    (fun _ _ h ↦ circleWedge_connected_pair_aux_projD_respects h)
+
+/-- Local evenly-covered charts for the two quotient graphs. -/
+lemma circleWedge_connected_pair_aux_covering :
+    IsNfoldCover 3 circleWedge_connected_pair_aux_pC ∧
+      IsNfoldCover 3 circleWedge_connected_pair_aux_pD := by
+  sorry
+
+/-- Both quotient graphs are connected. -/
+lemma circleWedge_connected_pair_aux_connected :
+    Nat.card (ConnectedComponents circleWedge_connected_pair_aux_EC) = 1 ∧
+      Nat.card (ConnectedComponents circleWedge_connected_pair_aux_ED) = 1 := by
+  sorry
+
+/-- The first graph has three loop edges after deleting its intrinsic
+valence-four locus, while the second has none. -/
+lemma circleWedge_connected_pair_aux_not_homeomorphic :
+    ¬ Nonempty (circleWedge_connected_pair_aux_EC ≃ₜ
+      circleWedge_connected_pair_aux_ED) := by
+  sorry
+
 theorem circleWedge_connected_pair : ∃ C D : ThreeCover,
     Nat.card (@ConnectedComponents C.E C.topology) = 1 ∧
     Nat.card (@ConnectedComponents D.E D.topology) = 1 ∧
     ¬ Nonempty (@Homeomorph C.E D.E C.topology D.topology) := by
-  sorry
+  rcases circleWedge_connected_pair_aux_covering with ⟨hC, hD⟩
+  rcases circleWedge_connected_pair_aux_connected with ⟨hcC, hcD⟩
+  exact ⟨{ E := circleWedge_connected_pair_aux_EC
+           topology := inferInstance
+           p := circleWedge_connected_pair_aux_pC
+           covering := hC },
+    { E := circleWedge_connected_pair_aux_ED
+      topology := inferInstance
+      p := circleWedge_connected_pair_aux_pD
+      covering := hD }, hcC, hcD,
+    circleWedge_connected_pair_aux_not_homeomorphic⟩
 
 /-- Homeomorphic spaces have the same number of connected components. -/
 theorem natCard_connectedComponents_eq_of_homeomorph {X Y : Type*}
