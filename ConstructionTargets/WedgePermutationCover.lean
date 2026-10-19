@@ -373,7 +373,33 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_lobes
     (hr : Continuous (fun z : {z : B // (Quotient.mk _ (.inr z) : Wedge A B a b) ∈ U} ↦
       g ⟨_, z.2⟩)) :
     Continuous g := by
-  sorry
+  let q : A ⊕ B → Wedge A B a b := fun z ↦ Quotient.mk _ z
+  have hq : Topology.IsQuotientMap q := isQuotientMap_quotient_mk'
+  apply (hq.restrictPreimage_isOpen hU).continuous_iff.mpr
+  let qU : {z : A ⊕ B // q z ∈ U} → U := U.restrictPreimage q
+  let eL : {z : A // q (.inl z) ∈ U} → {z : A ⊕ B // q z ∈ U} :=
+    (q ⁻¹' U).restrictPreimage Sum.inl
+  let eR : {z : B // q (.inr z) ∈ U} → {z : A ⊕ B // q z ∈ U} :=
+    (q ⁻¹' U).restrictPreimage Sum.inr
+  have heL : Topology.IsOpenEmbedding eL :=
+    Topology.IsOpenEmbedding.inl.restrictPreimage (q ⁻¹' U)
+  have heR : Topology.IsOpenEmbedding eR :=
+    Topology.IsOpenEmbedding.inr.restrictPreimage (q ⁻¹' U)
+  have hL : ContinuousOn (g ∘ qU) (Set.range eL) := by
+    rw [← Set.image_univ]
+    apply heL.isInducing.continuousOn_image_iff.mpr
+    simpa [q, qU, eL, Function.comp_def] using hl
+  have hR : ContinuousOn (g ∘ qU) (Set.range eR) := by
+    rw [← Set.image_univ]
+    apply heR.isInducing.continuousOn_image_iff.mpr
+    simpa [q, qU, eR, Function.comp_def] using hr
+  rw [← continuousOn_univ]
+  have hc := hL.union_of_isOpen hR heL.isOpen_range heR.isOpen_range
+  apply hc.mono
+  rintro ⟨z, hz⟩ -
+  cases z with
+  | inl x => exact Set.mem_union_left _ ⟨⟨x, hz⟩, rfl⟩
+  | inr x => exact Set.mem_union_right _ ⟨⟨x, hz⟩, rfl⟩
 
 /-- The four sheets over the wedge point.  `U` is the image of the hemisphere
 `{y | 0 < y₀}` in both lobes; sheet `i` sends `[inl (antipodalCover y)]` to
