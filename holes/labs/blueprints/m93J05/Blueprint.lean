@@ -1636,7 +1636,17 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_d
     {ι : Type*} [Countable ι] (u : ℕ → ι → ℝ) (hb : ∀ i, ∃ C : ℝ, ∀ n, |u n i| ≤ C) :
     ∃ φ : ℕ → ℕ, StrictMono φ ∧ ∃ L : ι → ℝ,
       ∀ i, Tendsto (fun n ↦ u (φ n) i) atTop (nhds (L i)) := by
-  sorry
+  let C : ι → ℝ := fun i ↦ Classical.choose (hb i)
+  let K : ι → Set ℝ := fun i ↦ Set.Icc (-C i) (C i)
+  have hC : ∀ i n, |u n i| ≤ C i := fun i ↦ Classical.choose_spec (hb i)
+  have hu : ∀ n, u n ∈ Set.pi Set.univ K := by
+    intro n i hi
+    exact (abs_le.mp (hC i n))
+  have hK : IsCompact (Set.pi Set.univ K) :=
+    isCompact_univ_pi (fun i ↦ isCompact_Icc)
+  obtain ⟨L, hLK, φ, hφ, hlim⟩ := hK.tendsto_subseq hu
+  refine ⟨φ, hφ, L, fun i ↦ ?_⟩
+  exact (continuous_apply i).tendsto L |>.comp hlim
 
 /-- Leaf (Hölder). Pairing an `Lᵖ([0,1])` function against the indicator of an interval is
 bounded by its `Lᵖ` norm, since that indicator has `Lᵠ([0,1])` norm at most `1`. -/
