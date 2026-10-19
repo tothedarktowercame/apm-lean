@@ -1961,7 +1961,64 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
     (F : ℝ → ℝ) (hF : AbsolutelyContinuousOnInterval F 0 1) (a b : ℝ) (hab : a ≤ b) :
     ∫ x in Set.Icc (0 : ℝ) 1, deriv F x * (Set.Ioc a b).indicator (fun _ ↦ (1 : ℝ)) x =
       F (min (max b 0) 1) - F (min (max a 0) 1) := by
-  sorry
+  let a' := min (max a 0) 1
+  let b' := min (max b 0) 1
+  have hab' : a' ≤ b' := by
+    dsimp [a', b']
+    exact min_le_min_right 1 (max_le_max_right 0 hab)
+  have ha'0 : 0 ≤ a' := by
+    exact le_min (le_max_right _ _) zero_le_one
+  have hb'1 : b' ≤ 1 := min_le_right _ _
+  have hsub : Set.Ioc a' b' ⊆ Set.Icc (0 : ℝ) 1 := by
+    rintro x ⟨hax, hxb⟩
+    exact ⟨ha'0.trans hax.le, hxb.trans hb'1⟩
+  have hae : ∀ᵐ x ∂volume.restrict (Set.Icc (0 : ℝ) 1),
+      deriv F x * (Set.Ioc a b).indicator (fun _ ↦ (1 : ℝ)) x =
+        (Set.Ioc a' b').indicator (deriv F) x := by
+    filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Icc,
+      (volume.restrict (Set.Icc (0 : ℝ) 1)).ae_ne 0] with x hxI hx0
+    have hmem : x ∈ Set.Ioc a b ↔ x ∈ Set.Ioc a' b' := by
+      constructor
+      · intro hxab
+        rcases hxI with ⟨hx0le, hx1⟩
+        rcases hxab with ⟨hax, hxb⟩
+        constructor
+        · dsimp [a']
+          exact (min_le_left _ _).trans_lt ((max_lt_iff).2
+            ⟨hax, lt_of_le_of_ne hx0le (Ne.symm hx0)⟩)
+        · dsimp [b']
+          exact le_min ((le_max_iff).2 (Or.inl hxb)) hx1
+      · intro hxab'
+        rcases hxI with ⟨hx0le, hx1⟩
+        rcases hxab' with ⟨hax', hxb'⟩
+        constructor
+        · dsimp [a'] at hax'
+          rcases le_total (max a 0) 1 with ha1 | h1a
+          · rw [min_eq_left ha1] at hax'
+            exact (le_max_left _ _).trans_lt hax'
+          · rw [min_eq_right h1a] at hax'
+            linarith
+        · dsimp [b'] at hxb'
+          have hxmax : x ≤ max b 0 := hxb'.trans (min_le_left _ _)
+          rcases lt_or_eq_of_le hx0le with hx0pos | rfl
+          · rcases le_total b 0 with hb0 | h0b
+            · rw [max_eq_right hb0] at hxmax
+              linarith
+            · rw [max_eq_left h0b] at hxmax
+              exact hxmax
+          · exact (hx0 rfl).elim
+    by_cases hx : x ∈ Set.Ioc a b
+    · simp [Set.indicator_of_mem hx, Set.indicator_of_mem (hmem.mp hx)]
+    · simp [Set.indicator_of_notMem hx, Set.indicator_of_notMem (mt hmem.mpr hx)]
+  rw [MeasureTheory.integral_congr_ae hae]
+  rw [MeasureTheory.integral_indicator measurableSet_Ioc]
+  rw [Measure.restrict_restrict_of_subset hsub]
+  rw [← intervalIntegral.integral_of_le hab']
+  have hFac : AbsolutelyContinuousOnInterval F a' b' := hF.mono (by
+    rw [Set.uIcc_of_le hab', Set.uIcc_of_le zero_le_one]
+    rintro x ⟨hax, hxb⟩
+    exact ⟨ha'0.trans hax, hxb.trans hb'1⟩)
+  exact hFac.integral_deriv_eq_sub
 -- END SEAT AREA
 
 /-- Leaf (integrable representative; the analytic core). An interval function on rational
