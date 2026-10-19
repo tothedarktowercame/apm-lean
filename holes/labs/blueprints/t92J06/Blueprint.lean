@@ -530,7 +530,152 @@ lemma apm_t92J06_slsc_aux_inr (z : apm_t92J06_S1) (hz : z ≠ apm_t92J06_circleB
     ∃ U ∈ nhds (apm_t92J06_inr z),
       ∀ γ : Path (apm_t92J06_inr z) (apm_t92J06_inr z), range γ ⊆ U →
         Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl _) := by
-  sorry
+  have hz_norm : ‖(z : ℂ)‖ = 1 := mem_sphere_zero_iff_norm.mp z.2
+  have hz_ne : (z : ℂ) ≠ 0 := by intro h; simpa [h] using hz_norm
+  let r : ℂ := (apm_t92J06_circleBase : ℂ) * star (z : ℂ)
+  have hr_norm : ‖r‖ = 1 := by simp [r, hz_norm]
+  have hr_ne : r ≠ 0 := by
+    simpa [norm_ne_zero_iff] using (show ‖r‖ ≠ 0 by simp [hr_norm])
+  let a := InnerProductGeometry.angle (1 : ℂ) r
+  have ha : 0 < a := by
+    have ha0 : 0 ≤ a := InnerProductGeometry.angle_nonneg _ _
+    refine lt_of_le_of_ne ha0 ?_
+    intro hae
+    have heq : (1 : ℂ) = r :=
+      InnerProductGeometry.eq_of_angle_eq_zero_of_norm_eq hae.symm (by simp [hr_norm])
+    have hzval : (z : ℂ) = 1 := by
+      have hzz : star (z : ℂ) * (z : ℂ) = 1 := by
+        calc
+          star (z : ℂ) * (z : ℂ) = (Complex.normSq (z : ℂ) : ℂ) :=
+            Complex.normSq_eq_conj_mul_self.symm
+          _ = 1 := by rw [← Complex.norm_mul_self_eq_normSq, hz_norm]; norm_num
+      calc
+        (z : ℂ) = 1 * (z : ℂ) := by simp
+        _ = r * (z : ℂ) := congrArg (fun u : ℂ ↦ u * (z : ℂ)) heq
+        _ = star (z : ℂ) * (z : ℂ) := by
+          dsimp [r, apm_t92J06_circleBase]
+          ring
+        _ = 1 := hzz
+    apply hz
+    apply Subtype.ext
+    simpa [apm_t92J06_circleBase] using hzval
+  let δ : ℝ := min (a / 4) (Real.pi / 4)
+  have hδ : 0 < δ :=
+    lt_min (div_pos ha (by norm_num)) (div_pos Real.pi_pos (by norm_num))
+  have hδπ : δ < Real.pi / 2 := by
+    have h : δ ≤ Real.pi / 4 := min_le_right _ _
+    linarith [Real.pi_pos]
+  have hbase_far : 2 * δ ≤ |apm_t92J06_relArg z apm_t92J06_circleBase| := by
+    have hδa : δ ≤ a / 4 := min_le_left _ _
+    have hargeq : |apm_t92J06_relArg z apm_t92J06_circleBase| = a := by
+      simp only [apm_t92J06_relArg, r, a]
+      exact (Complex.angle_one_left hr_ne).symm
+    rw [hargeq]
+    linarith
+  let A : Set apm_t92J06_S1 := {w | InnerProductGeometry.angle (1 : ℂ)
+    ((w : ℂ) * star (z : ℂ)) < δ}
+  have hAopen : IsOpen A := by
+    apply isOpen_lt
+    · rw [continuous_iff_continuousAt]
+      intro w
+      have hw_ne : (w : ℂ) ≠ 0 := by
+        intro hw
+        have := mem_sphere_zero_iff_norm.mp w.2
+        simp [hw] at this
+      exact ContinuousAt.comp
+        (f := fun w : apm_t92J06_S1 ↦
+          ((1 : ℂ), (w : ℂ) * star (z : ℂ)))
+        (InnerProductGeometry.continuousAt_angle one_ne_zero
+          (mul_ne_zero hw_ne (star_ne_zero.mpr hz_ne)))
+        (ContinuousAt.prodMk continuousAt_const
+          ((continuous_subtype_val.continuousAt).mul continuousAt_const))
+    · exact continuous_const
+  have hzA : z ∈ A := by
+    change InnerProductGeometry.angle (1 : ℂ) ((z : ℂ) * star (z : ℂ)) < δ
+    have hzz : (z : ℂ) * star (z : ℂ) = 1 := by
+      rw [mul_comm]
+      calc
+        star (z : ℂ) * (z : ℂ) = (Complex.normSq (z : ℂ) : ℂ) :=
+          Complex.normSq_eq_conj_mul_self.symm
+        _ = 1 := by rw [← Complex.norm_mul_self_eq_normSq, hz_norm]; norm_num
+    rw [hzz]
+    simpa using hδ
+  have hbA : apm_t92J06_circleBase ∉ A := by
+    intro hb
+    change a < δ at hb
+    have h := min_le_left (a / 4) (Real.pi / 4)
+    dsimp [δ] at hb ⊢
+    linarith
+  let pred0 : Sum apm_t92J06_S1 apm_t92J06_S1 → Prop :=
+    Sum.elim (fun _ ↦ False) (fun w ↦ w ∈ A)
+  have hrespect : ∀ {x y}, Relation.EqvGen apm_t92J06_wedgeRel x y → pred0 x = pred0 y := by
+    intro x y hxy
+    induction hxy with
+    | rel x y h => cases h; exact propext ⟨False.elim, fun h ↦ (hbA h).elim⟩
+    | refl x => rfl
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let pred : apm_t92J06_X → Prop := Quotient.lift pred0 (fun _ _ h ↦ hrespect h)
+  let U : Set apm_t92J06_X := {x | pred x}
+  have hUopen : IsOpen U := by
+    let q : Sum apm_t92J06_S1 apm_t92J06_S1 → apm_t92J06_X := fun x ↦ Quotient.mk _ x
+    have hq : Topology.IsQuotientMap q := ⟨Quotient.mk_surjective, rfl⟩
+    rw [← hq.isOpen_preimage]
+    rw [isOpen_sum_iff]
+    simpa only [q, U, pred, pred0, Quotient.lift_mk, Sum.elim_inl, Sum.elim_inr,
+      Set.mem_setOf_eq, preimage_setOf_eq] using And.intro isOpen_empty hAopen
+  have hzU : apm_t92J06_inr z ∈ U := by simpa [U, pred, pred0] using hzA
+  have hUnhds : U ∈ nhds (apm_t92J06_inr z) := hUopen.mem_nhds hzU
+  let f : C(unitInterval × apm_t92J06_S1, apm_t92J06_X) :=
+    ⟨fun q ↦ apm_t92J06_inl q.2, apm_t92J06_continuous_inl.comp continuous_snd⟩
+  let g : C(unitInterval × apm_t92J06_S1, apm_t92J06_X) :=
+    ⟨fun q ↦ apm_t92J06_inr (apm_t92J06_squeeze z δ q.1 q.2),
+      apm_t92J06_continuous_inr.comp (apm_t92J06_squeeze_continuous hδ hδπ z)⟩
+  have hfg : ∀ s, f (s, apm_t92J06_circleBase) = g (s, apm_t92J06_circleBase) := by
+    intro s
+    change apm_t92J06_inl apm_t92J06_circleBase =
+      apm_t92J06_inr (apm_t92J06_squeeze z δ s apm_t92J06_circleBase)
+    rw [(apm_t92J06_squeeze_values hδ z).2.2.2 s _ hbase_far]
+    exact apm_t92J06_inl_base_eq_inr_base
+  obtain ⟨Φ, hΦl, hΦr⟩ := apm_t92J06_wedgeHomotopy f g hfg
+  refine ⟨U, hUnhds, ?_⟩
+  intro γ hγ
+  apply apm_t92J06_loop_trivial_of_contraction Φ
+  · intro u
+    induction u using Quotient.inductionOn with
+    | h q =>
+      rcases q with w | w
+      · change Φ (0, apm_t92J06_inl w) = apm_t92J06_inl w
+        rw [hΦl]
+        rfl
+      · change Φ (0, apm_t92J06_inr w) = apm_t92J06_inr w
+        rw [hΦr]
+        exact congrArg apm_t92J06_inr ((apm_t92J06_squeeze_values hδ z).1 w)
+  · intro s
+    rw [hΦr]
+    exact congrArg apm_t92J06_inr ((apm_t92J06_squeeze_values hδ z).2.1 s)
+  · intro u hu
+    induction u using Quotient.inductionOn with
+    | h q =>
+      rcases q with w | w
+      · change apm_t92J06_inl w ∈ U at hu
+        exact False.elim (by simpa [U, pred, pred0] using hu)
+      · change apm_t92J06_inr w ∈ U at hu
+        have hwA : w ∈ A := by simpa [U, pred, pred0] using hu
+        have hwarg : |apm_t92J06_relArg z w| < δ := by
+          have hwne : (w : ℂ) * star (z : ℂ) ≠ 0 := by
+            apply mul_ne_zero
+            · simpa [norm_ne_zero_iff] using
+                (show ‖(w : ℂ)‖ ≠ 0 by simp [mem_sphere_zero_iff_norm.mp w.2])
+            · exact star_ne_zero.mpr hz_ne
+          change InnerProductGeometry.angle (1 : ℂ) ((w : ℂ) * star (z : ℂ)) < δ at hwA
+          rw [Complex.angle_one_left hwne] at hwA
+          simpa [A, apm_t92J06_relArg] using hwA
+        change Φ (1, apm_t92J06_inr w) = apm_t92J06_inr z
+        rw [hΦr]
+        exact congrArg apm_t92J06_inr
+          ((apm_t92J06_squeeze_values hδ z).2.2.1 w hwarg)
+  exact hγ
 
 /-- Assembly: every point is a left-leg point, a right-leg point or the base. -/
 lemma apm_t92J06_slsc :
