@@ -4323,6 +4323,129 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_right
       (circleWedge_connected_pair_aux_pC ⁻¹' {Quotient.mk _ (.inr z)}) := by
   sorry
 
+/-! #### Split of `circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge` (lemma-1 PARTIAL, 2026-10-19)
+
+Same shape as the split of
+`circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge`: the
+neighbourhood is that lemma's `_aux_U` (the wedge minus both `-1`s), the sections
+come from a principal cube-root branch `r`, and the sheet over `U` indexed by a
+root `ρ` is the arc around `ρ` on the left glued to copy `ρ` on the right. -/
+
+/-- There are finitely many cube roots of `1` (so `Root` is discrete). -/
+instance circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_finite : Finite circleWedge_connected_pair_aux_Root :=
+  Finite.of_injective (fun r : circleWedge_connected_pair_aux_Root =>
+    (⟨r.1, (Polynomial.mem_nthRoots (by omega)).2 (by
+      have h := congrArg Subtype.val r.2
+      simpa [circleWedge_connected_pair_aux_cube, circleBase] using h)⟩ :
+      {z : ℂ // z ∈ Polynomial.nthRoots 3 (1 : ℂ)})) (by
+    intro x y h
+    apply Subtype.ext
+    apply Subtype.ext
+    exact congrArg (fun z : {z : ℂ // z ∈ Polynomial.nthRoots 3 (1 : ℂ)} => z.1) h)
+
+def circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift (r : {w : Circle // w ≠ -circleBase} → Circle) (w : Circle) : Circle :=
+  if h : w ≠ -circleBase then r ⟨w, h⟩ else circleBase
+
+/-- The principal cube root `w ↦ w ^ (1/3 : ℂ)` on the circle minus `-1`: continuous
+(the slit avoids the branch cut), lands in the open sector `{Re > 1/2}`
+(`arg ∈ (-π/3, π/3)`), fixes `1`, and every cube root of `w` is a cube root of
+unity times it. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cbrt :
+    ∃ r : {w : Circle // w ≠ -circleBase} → Circle, Continuous r ∧
+      (∀ w, circleWedge_connected_pair_aux_cube (r w) = w.1) ∧
+      (∀ w, (1 / 2 : ℝ) < (r w : ℂ).re) ∧
+      circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r circleBase = circleBase ∧
+      (∀ w z, circleWedge_connected_pair_aux_cube z = w.1 →
+        ∃ ρ : circleWedge_connected_pair_aux_Root, z = ρ.1 * r w) := by
+  sorry
+
+/-- Sheet `ρ` over `U`: the open arc `{Re (z ρ̄) > 1/2}` around `ρ` in the left
+circle, glued at `[inl ρ] = [inr (1, ρ)]` to copy `ρ` of the right circle minus `-1`. -/
+def circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet (ρ : circleWedge_connected_pair_aux_Root) :
+    Set circleWedge_connected_pair_aux_EC :=
+  {e | (∃ z : Circle, (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re ∧
+        e = Quotient.mk _ (.inl z)) ∨
+    (∃ w : Circle, w ≠ -circleBase ∧ e = Quotient.mk _ (.inr (w, ρ)))}
+
+/-- Each sheet is open: its preimage in `RawC` is an open arc on the left and copy
+`ρ` minus `-1` on the right, and it is saturated (the only glued point it meets on
+the left is `ρ` itself, whose partner `(1, ρ)` is in copy `ρ`). -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet_open (ρ : circleWedge_connected_pair_aux_Root) :
+    IsOpen (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ) := by
+  sorry
+
+/-- The section of sheet `ρ`: `[inl w] ↦ [inl (ρ · r w)]`, `[inr w] ↦ [inr (w, ρ)]`
+(well defined at the wedge point since `r 1 = 1`). -/
+def circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r circleBase = circleBase)
+    (ρ : circleWedge_connected_pair_aux_Root) :
+    CircleWedge → circleWedge_connected_pair_aux_EC :=
+  Quotient.lift
+    (Sum.elim
+      (fun w ↦ (Quotient.mk _ (.inl (ρ.1 * circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w)) :
+        circleWedge_connected_pair_aux_EC))
+      (fun w ↦ (Quotient.mk _ (.inr (w, ρ)) : circleWedge_connected_pair_aux_EC)))
+    (by
+      intro x y h
+      induction h with
+      | rel x y h =>
+          cases h
+          change (Quotient.mk _ (Sum.inl (ρ.1 * circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r circleBase)) :
+              circleWedge_connected_pair_aux_EC) =
+            Quotient.mk _ (Sum.inr (circleBase, ρ))
+          have h1 : ρ.1 * circleBase = ρ.1 := by
+            apply Subtype.ext
+            simp [circleBase]
+          rw [hrbase, h1]
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            (circleWedge_connected_pair_aux_RelC.glue ρ))
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+/-- Each section is continuous on `U` (`U` avoids both `-1`s, where `_aux_lift`
+jumps; its preimage in `Circle ⊕ Circle` is open and saturated, so the quotient map
+restricts to a quotient map there: `IsQuotientMap.restrictPreimage_isOpen`). -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cont (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r circleBase = circleBase) (hr : Continuous r)
+    (ρ : circleWedge_connected_pair_aux_Root) :
+    Continuous (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+      circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1) := by
+  sorry
+
+/-- Each section is a right inverse of `pC` on `U`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_right (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r circleBase = circleBase)
+    (hcube : ∀ w, circleWedge_connected_pair_aux_cube (r w) = w.1)
+    (ρ : circleWedge_connected_pair_aux_Root)
+    (u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U) :
+    circleWedge_connected_pair_aux_pC (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1) = u := by
+  sorry
+
+/-- The `ρ`-section over `U` has range exactly sheet `ρ`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_range (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r circleBase = circleBase)
+    (hcube : ∀ w, circleWedge_connected_pair_aux_cube (r w) = w.1)
+    (hre : ∀ w, (1 / 2 : ℝ) < (r w : ℂ).re)
+    (hroots : ∀ w z, circleWedge_connected_pair_aux_cube z = w.1 →
+      ∃ ρ : circleWedge_connected_pair_aux_Root, z = ρ.1 * r w)
+    (ρ : circleWedge_connected_pair_aux_Root) :
+    Set.range (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+      circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1) = circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ := by
+  sorry
+
+/-- Combinatorics: the sheets cover `pC ⁻¹' U` and are pairwise disjoint (on the
+left, the arcs of half-width `π/3` around distinct cube roots of unity are
+disjoint; on the right, copies are disjoint; `_aux_rel_iff` handles the glued
+points). -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover :
+    (∀ e, circleWedge_connected_pair_aux_pC e ∈
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U →
+      ∃ ρ, e ∈ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ) ∧
+    (∀ ρ σ : circleWedge_connected_pair_aux_Root, ρ ≠ σ →
+      Disjoint (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ) (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet σ)) := by
+  sorry
+
 /-- At the wedge point: `V` = image of a small open arc around `circleBase` in
 each lobe.  Sheet `r` is the arc around `r.1` on the left (a local section of
 `cube`) glued at `inl r.1 ~ inr (circleBase, r)` to the arc around `circleBase`
@@ -4333,7 +4456,30 @@ in `circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge`. -
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge :
     IsEvenlyCovered circleWedge_connected_pair_aux_pC (Quotient.mk _ (.inl circleBase))
       (circleWedge_connected_pair_aux_pC ⁻¹' {Quotient.mk _ (.inl circleBase)}) := by
-  sorry
+  obtain ⟨r, hr, hcube, hre, hrbase, hroots⟩ := circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cbrt
+  obtain ⟨hcov, hdisj⟩ := circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover
+  have hrange := circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_range r hrbase hcube hre hroots
+  refine (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
+    circleWedge_connected_pair_aux_pC
+    circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_continuous
+    _ _ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cover.1
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U_open
+    (fun ρ u ↦ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1) (fun ρ ↦ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cont r hrbase hr ρ)
+    (fun ρ u ↦ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_right r hrbase hcube ρ u)
+    (fun ρ ↦ by rw [hrange ρ]; exact circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet_open ρ)
+    (fun e he ↦ by
+      obtain ⟨ρ, hρ⟩ := hcov e he
+      rw [← hrange ρ] at hρ
+      obtain ⟨u, hu⟩ := hρ
+      exact ⟨ρ, u, hu⟩)
+    (fun ρ σ u v h ↦ by
+      by_contra hne
+      have h' : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1 = circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase σ v.1 := h
+      have hi : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1 ∈ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ := by
+        rw [← hrange ρ]; exact ⟨u, rfl⟩
+      have hj : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1 ∈ circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet σ := by
+        rw [h', ← hrange σ]; exact ⟨v, rfl⟩
+      exact Set.disjoint_left.mp (hdisj ρ σ hne) hi hj)).to_isEvenlyCovered_preimage
 
 /-- `pC` is a covering map.  Away from the wedge point: over a left-lobe point
 `[inl w]`, `w ≠ circleBase`, take an open arc around `w` missing `circleBase`;
