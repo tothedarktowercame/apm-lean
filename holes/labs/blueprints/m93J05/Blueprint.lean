@@ -1807,6 +1807,88 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
   exact (hnorm n).trans (mul_le_mul_of_nonneg_right (hbound n)
     (ENNReal.toReal_nonneg))
 
+/-- Banked (lemma-1, round 2): an interval with `b ≤ a` is empty, so its value is `0`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_zero
+    (q : ℝ) (L : ℚ × ℚ → ℝ) (R : ℝ)
+    (hstep : ∀ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      |∑ i ∈ F, c i * L i| ≤ R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
+    ∀ a b : ℚ, b ≤ a → L (a, b) = 0 := by
+  intro a b hab
+  have h := hstep {(a, b)} (fun _ ↦ 1)
+  have hab' : (b : ℝ) ≤ (a : ℝ) := by exact_mod_cast hab
+  have hi : Set.Ioc (a : ℝ) (b : ℝ) = ∅ := Set.Ioc_eq_empty (not_lt_of_ge hab')
+  simp [hi] at h
+  exact h
+
+/-- Leaf (clipping). Only the part of an interval inside `[0,1]` counts: with
+`clip t := min (max t 0) 1`, `L (a, b) = L (clip a, clip b)`. Route: by `hadd` cut `(a, b)` at
+`0` and `1`; a piece outside `[0,1]` meets `Icc 0 1` in at most a point, so its indicator is
+a.e. zero for `volume.restrict (Icc 0 1)`, its `eLpNorm` is `0`, and `hstep` with one interval
+gives value `0`. For `b ≤ a` both sides are `0` by `_aux_zero`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_clip
+    (q : ℝ) (hq : 1 < q) (L : ℚ × ℚ → ℝ) (R : ℝ)
+    (hadd : ∀ a b c : ℚ, a ≤ b → b ≤ c → L (a, c) = L (a, b) + L (b, c))
+    (hstep : ∀ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      |∑ i ∈ F, c i * L i| ≤ R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
+    ∀ a b : ℚ, L (a, b) = L (min (max a 0) 1, min (max b 0) 1) := by
+  sorry
+
+/-- Leaf (absolute-continuity bound). For disjoint rational intervals inside `[0,1]`,
+`∑ |L (u i, v i)| ≤ R (∑ (v i - u i))^(1/q)`. Route: `hstep` on the image finset with
+coefficients `c = sign ∘ L`; the indicators are disjoint, so the step function takes values in
+`{-1, 0, 1}` with support of measure `∑ (v i - u i)`, and its `eLpNorm` at `q` is that measure
+to the power `1/q` (`eLpNorm_indicator_const`-style computation after rewriting `|step|` as
+the indicator of the union). Mind that `Finset.image` may merge equal pairs; disjointness of
+nonempty intervals rules that out, and empty ones contribute `0`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_abs_sum
+    (q : ℝ) (hq : 1 < q) (L : ℚ × ℚ → ℝ) (R : ℝ) (hR : 0 ≤ R)
+    (hstep : ∀ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      |∑ i ∈ F, c i * L i| ≤ R * (eLpNorm (fun x ↦ ∑ i ∈ F, c i *
+          (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+        (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal) :
+    ∀ (n : ℕ) (u v : ℕ → ℚ), (∀ i ∈ Finset.range n, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1) →
+      Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i : ℝ) (v i)) →
+      ∑ i ∈ Finset.range n, |L (u i, v i)| ≤
+        R * (∑ i ∈ Finset.range n, ((v i : ℝ) - u i)) ^ (1 / q) := by
+  sorry
+
+/-- Leaf (extension to an absolutely continuous function). From additivity and the
+absolute-continuity bound, `L` is the increment of an absolutely continuous `F` on `[0,1]`.
+Route: `G r := L (0, r)` on `ℚ ∩ [0,1]`; `habs` with one interval gives
+`|G b - G a| ≤ R (b - a)^(1/q)`, so `G` is uniformly continuous and extends (e.g.
+`DenseInducing.extend` / `UniformContinuous` extension on the subtype, or by an explicit
+`limUnder` along rationals) to a continuous `F` on `Icc 0 1`, set constant outside. Passing to
+the limit in `habs` (rational endpoints approximating real ones, keeping disjointness by
+shrinking) gives the ε–δ form `absolutelyContinuousOnInterval_iff` with
+`δ := (ε / (R + 1))^q`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend
+    (q : ℝ) (hq : 1 < q) (L : ℚ × ℚ → ℝ) (R : ℝ) (hR : 0 ≤ R)
+    (hadd : ∀ a b c : ℚ, a ≤ b → b ≤ c → L (a, c) = L (a, b) + L (b, c))
+    (habs : ∀ (n : ℕ) (u v : ℕ → ℚ), (∀ i ∈ Finset.range n, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1) →
+      Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i : ℝ) (v i)) →
+      ∑ i ∈ Finset.range n, |L (u i, v i)| ≤
+        R * (∑ i ∈ Finset.range n, ((v i : ℝ) - u i)) ^ (1 / q)) :
+    ∃ F : ℝ → ℝ, AbsolutelyContinuousOnInterval F 0 1 ∧
+      ∀ a b : ℚ, 0 ≤ a → a ≤ b → b ≤ 1 → L (a, b) = F b - F a := by
+  sorry
+
+/-- Leaf (FTC on a clipped interval). For `F` absolutely continuous on `[0,1]` and `a ≤ b`,
+pairing `deriv F` with the indicator of `Ioc a b` over `[0,1]` gives `F b' - F a'`, where
+`t' := min (max t 0) 1`. Route: on `Icc 0 1` the indicator of `Ioc a b` agrees a.e. (off the
+point `0`) with that of `Ioc a' b'`; then `setIntegral_indicator`, `Ioc a' b' ⊆ Icc 0 1`,
+`intervalIntegral.integral_of_le`, and `AbsolutelyContinuousOnInterval.integral_deriv_eq_sub`
+for `F` on `a'..b'` (restrict with `absolutelyContinuousOnInterval_iff` /
+`AbsolutelyContinuousOnInterval.disjWithin_mono`). -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_ftc
+    (F : ℝ → ℝ) (hF : AbsolutelyContinuousOnInterval F 0 1) (a b : ℝ) (hab : a ≤ b) :
+    ∫ x in Set.Icc (0 : ℝ) 1, deriv F x * (Set.Ioc a b).indicator (fun _ ↦ (1 : ℝ)) x =
+      F (min (max b 0) 1) - F (min (max a 0) 1) := by
+  sorry
+
 /-- Leaf (integrable representative; the analytic core). An interval function on rational
 intervals, additive on adjacent intervals and bounded on step functions by `R ‖·‖_q`, is
 integration against some `f₀ ∈ L¹([0,1])`. Route: `F t := L (0, t)` is uniformly continuous on
@@ -1827,7 +1909,32 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
     ∃ f₀, Integrable f₀ (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
       ∀ i : ℚ × ℚ, ∫ x in Set.Icc (0 : ℝ) 1,
         f₀ x * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x = L i := by
-  sorry
+  have hzero :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_zero
+      q L R hstep
+  have hclip :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_clip
+      q hq L R hadd hstep
+  obtain ⟨F, hF, hFL⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend
+      q hq L R hR hadd
+      (apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_abs_sum
+        q hq L R hR hstep)
+  refine ⟨deriv F, ?_, ?_⟩
+  · have h := hF.intervalIntegrable_deriv
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le zero_le_one] at h
+    exact h
+  · rintro ⟨a, b⟩
+    rcases le_total a b with hab | hab
+    · have hab' : (a : ℝ) ≤ b := by exact_mod_cast hab
+      rw [apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_ftc
+        F hF a b hab', hclip a b,
+        hFL _ _ (le_min (le_max_right _ _) zero_le_one) (min_le_min_right _ (max_le_max_right _ hab))
+          (min_le_right _ _)]
+      push_cast
+      rfl
+    · have hab' : (b : ℝ) ≤ a := by exact_mod_cast hab
+      simp [Set.Ioc_eq_empty (not_lt_of_ge hab'), hzero a b hab]
 
 /-- Leaf (dual-norm test). An integrable `f₀` whose pairings with rational step functions are
 bounded by `R ‖·‖_q` lies in `Lᵖ([0,1])`. Route: for the truncation `f_M := max (-M) (min M f₀)`
