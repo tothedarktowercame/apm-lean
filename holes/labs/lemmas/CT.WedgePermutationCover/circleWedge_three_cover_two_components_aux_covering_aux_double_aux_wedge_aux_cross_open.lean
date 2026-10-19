@@ -2535,7 +2535,48 @@ lie in the same cross). -/
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross_open
     (b : Bool) :
     IsOpen (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b) := by
-  sorry
+  let H : Set Circle :=
+    {z | 0 < ((if b then (1 : ℂ) else -1) * (z : ℂ)).re}
+  have hH : IsOpen H := by
+    exact isOpen_lt continuous_const
+      (Complex.continuous_re.comp
+        (continuous_const.mul continuous_subtype_val))
+  let P : Circle ⊕ Circle → Prop := Sum.elim (· ∈ H) (· ∈ H)
+  have hP {x y : Circle ⊕ Circle}
+      (hxy : Relation.EqvGen circleWedge_three_cover_two_components_aux_Rel x y) :
+      P x ↔ P y := by
+    rcases (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_rel_iff
+      x y).mp hxy with rfl | ⟨z, hz, h⟩
+    · rfl
+    · rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;> rfl
+  have hpre :
+      (fun z : Circle ⊕ Circle ↦
+        (Quotient.mk _ z :
+          circleWedge_three_cover_two_components_aux_Double)) ⁻¹'
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b =
+        Sum.inl '' H ∪ Sum.inr '' H := by
+    ext x
+    constructor
+    · intro hx
+      rcases hx with ⟨z, hz, heq | heq⟩
+      · have hxP : P x := (hP (Quotient.exact heq)).mpr hz
+        rcases x with x | x
+        · exact Or.inl ⟨x, hxP, rfl⟩
+        · exact Or.inr ⟨x, hxP, rfl⟩
+      · have hxP : P x := (hP (Quotient.exact heq)).mpr hz
+        rcases x with x | x
+        · exact Or.inl ⟨x, hxP, rfl⟩
+        · exact Or.inr ⟨x, hxP, rfl⟩
+    · rintro (⟨z, hz, rfl⟩ | ⟨z, hz, rfl⟩)
+      · exact ⟨z, hz, Or.inl rfl⟩
+      · exact ⟨z, hz, Or.inr rfl⟩
+  have hq : Topology.IsQuotientMap
+      (fun z : Circle ⊕ Circle ↦
+        (Quotient.mk _ z : circleWedge_three_cover_two_components_aux_Double)) :=
+    ⟨Quotient.mk_surjective, rfl⟩
+  apply hq.isOpen_preimage.mp
+  rw [hpre]
+  exact (isOpenMap_inl H hH).union (isOpenMap_inr H hH)
 -- END SEAT AREA
 
 /-- Combinatorics: the base point lies in `U`; the crosses cover `doubleMap ⁻¹' U`;
