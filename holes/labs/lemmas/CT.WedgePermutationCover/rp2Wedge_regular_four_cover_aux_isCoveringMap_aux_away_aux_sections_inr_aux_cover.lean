@@ -1836,7 +1836,47 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_au
     ∃ i y,
       rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_aux_sheet
         σ τ u i y = e := by
-  sorry
+  induction e using Quotient.inductionOn with
+  | _ z =>
+    obtain ⟨y, hy⟩ := he
+    cases z with
+    | inl z =>
+      rcases z with ⟨x, j⟩
+      have hw : Relation.EqvGen (WedgeRel rpBase rpBase)
+          (.inr (antipodalCover y.1)) (.inl (antipodalCover x)) := by
+        have hq : (Quotient.mk _ (.inr (antipodalCover y.1)) :
+            Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ (.inl (antipodalCover x)) := by
+          simpa [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_aux_emb,
+            rp2Wedge_regular_four_cover_aux_p, rp2Wedge_regular_four_cover_aux_proj] using hy
+        exact Quotient.exact hq
+      have hw' := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr_aux_eq
+        rpBase rpBase (antipodalCover y.1) y.2.2 hw
+      cases hw'
+    | inr z =>
+      rcases z with ⟨x, j⟩
+      have hw : Relation.EqvGen (WedgeRel rpBase rpBase)
+          (.inr (antipodalCover y.1)) (.inr (antipodalCover x)) := by
+        have hq : (Quotient.mk _ (.inr (antipodalCover y.1)) :
+            Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ (.inr (antipodalCover x)) := by
+          simpa [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_aux_emb,
+            rp2Wedge_regular_four_cover_aux_p, rp2Wedge_regular_four_cover_aux_proj] using hy
+        exact Quotient.exact hq
+      have hw' := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr_aux_eq
+        rpBase rpBase (antipodalCover y.1) y.2.2 hw
+      have hcover : antipodalCover y.1 = antipodalCover x := Sum.inr.inj hw'.symm
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff y.1 x).mp hcover with hx | hx
+      · refine ⟨j, y, ?_⟩
+        apply Quotient.sound
+        subst x
+        exact Relation.EqvGen.refl _
+      · refine ⟨τ j, y, ?_⟩
+        apply Quotient.sound
+        subst x
+        have hr : rp2Wedge_regular_four_cover_aux_Rel σ τ
+            (.inr (y.1, τ j)) (.inr (-y.1, τ (τ j))) :=
+          rp2Wedge_regular_four_cover_aux_Rel.right y.1 (τ j)
+        rw [hτ j] at hr
+        exact Relation.EqvGen.rel _ _ hr
 -- END SEAT AREA
 
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_aux_disjoint
