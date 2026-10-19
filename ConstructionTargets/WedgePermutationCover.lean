@@ -3164,6 +3164,82 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap :
         apply hx
         exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm
 
+/-! #### Split of `circleWedge_connected_pair_aux_covering_aux_pC_fiber` (lemma-3 PARTIAL, 2026-10-19) -/
+
+/-- The quotient relation for `EC`, classified exactly.  (Banked by lemma-3.) -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_rel_iff (a b) :
+    Relation.EqvGen circleWedge_connected_pair_aux_RelC a b ↔
+      a = b ∨ ∃ r : circleWedge_connected_pair_aux_Root,
+        (a = .inl r.1 ∧ b = .inr (circleBase, r)) ∨
+        (b = .inl r.1 ∧ a = .inr (circleBase, r)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b h =>
+        cases h with
+        | glue r => exact Or.inr ⟨r, Or.inl ⟨rfl, rfl⟩⟩
+    | refl => exact Or.inl rfl
+    | symm a b _ ih =>
+        rcases ih with rfl | ⟨r, h | h⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨r, Or.inr ⟨h.1, h.2⟩⟩
+        · exact Or.inr ⟨r, Or.inl ⟨h.1, h.2⟩⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨r, h | h⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inl h⟩
+          · simp_all
+          · simp_all
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inr h⟩
+          · simp_all <;> exact Subtype.ext h.1.symm
+          · simp_all
+  · rintro (rfl | ⟨r, h | h⟩)
+    · exact Relation.EqvGen.refl _
+    · exact h.1 ▸ h.2 ▸ Relation.EqvGen.rel _ _
+        (circleWedge_connected_pair_aux_RelC.glue r)
+    · exact h.2 ▸ h.1 ▸ Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelC.glue r))
+
+/-- Every point of the circle has exactly three cube roots: the fibre of
+`powMonoidHom 3` over `y` is a coset of its kernel, which is `{1, ω, ω²}`.
+Copy `circleWedge_three_cover_two_components_aux_fiber_sq_card` (the squaring
+case, kernel `{1, -1}`) with `Fin 3` in place of `Bool`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_cube_card (y : Circle) :
+    Nat.card {z : Circle // circleWedge_connected_pair_aux_cube z = y} = 3 := by
+  sorry
+
+/-- Fibre over a left-lobe point `[inl w]`, `w ≠ circleBase`: by
+`_aux_rel_iff`, a class mapping there is `[inl z]` with `cube z = w` (a class
+`[inr (u, r)]` maps to the right lobe, which meets the left only at the wedge
+point).  So `z ↦ [inl z]` is a bijection from the cube roots of `w`; conclude
+with `_aux_cube_card`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_left
+    (w : Circle) (hw : w ≠ circleBase) :
+    Nat.card {e : circleWedge_connected_pair_aux_EC //
+      circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inl w)} = 3 := by
+  sorry
+
+/-- Fibre over a right-lobe point `[inr w]`, `w ≠ circleBase`: the classes
+`[inr (w, r)]`, one per root `r`, none glued since `w ≠ circleBase`.  So
+`r ↦ [inr (w, r)]` is a bijection from `circleWedge_connected_pair_aux_Root`,
+which is `{z // cube z = circleBase}` and has card 3 by `_aux_cube_card`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_right
+    (w : Circle) (hw : w ≠ circleBase) :
+    Nat.card {e : circleWedge_connected_pair_aux_EC //
+      circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inr w)} = 3 := by
+  sorry
+
+/-- Fibre over the wedge point: the classes `{inl r.1, inr (circleBase, r)}`,
+one per root `r` (`_aux_rel_iff` says these are the only identifications).
+So `r ↦ [inl r.1]` is a bijection from `circleWedge_connected_pair_aux_Root`,
+card 3 by `_aux_cube_card`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_wedge :
+    Nat.card {e : circleWedge_connected_pair_aux_EC //
+      circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inl circleBase)} = 3 := by
+  sorry
+
 /-- Fibres of `pC` have three points: over `[inl w]` the three cube roots of `w`
 on the left (the right contributes nothing unless `w = circleBase`); over
 `[inr w]`, `w ≠ circleBase`, the three points `(w, r)`; over the wedge point the
@@ -3173,7 +3249,22 @@ bijection with `circleWedge_connected_pair_aux_Root` (or with the cube roots of
 lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber (b : CircleWedge) :
     Nat.card {e : circleWedge_connected_pair_aux_EC //
       circleWedge_connected_pair_aux_pC e = b} = 3 := by
-  sorry
+  classical
+  by_cases hb : b = Quotient.mk _ (.inl circleBase)
+  · subst b
+    exact circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_wedge
+  · induction b using Quotient.inductionOn with
+    | _ b =>
+      rcases b with w | w
+      · apply circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_left
+        intro hw
+        subst w
+        exact hb rfl
+      · apply circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_right
+        intro hw
+        subst w
+        apply hb
+        exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm
 
 /-- `pD` is a covering map: as for `pC`, but the right lobe is also covered by
 `cube`; at the wedge point sheet `r` is the arc around `r.1` on the left glued
