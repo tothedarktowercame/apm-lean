@@ -7,6 +7,7 @@ import ConstructionTargets.Surfaces
 import ConstructionTargets.FundamentalGroupProduct
 import ConstructionTargets.PointWedgeVanKampen
 import ConstructionTargets.PolygonCellPiOne
+import ConstructionTargets.IntegralOpenCoverMayerVietoris
 
 open CategoryTheory Set
 open scoped ContDiff Manifold
@@ -375,13 +376,112 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_model_free :
       ModuleCat.of ℤ (Fin 4 → ℤ)) := by
   sorry
 
+/-! #### `_aux_model_surj` by Mayer–Vietoris
+
+Cover `X = OnePoint (PT ⊔ PT)` by `U = range coe` (a copy of `PT ⊔ PT`) and
+`V = {∞} ∪` two punctured squares around the punctures (a wedge of two open
+squares at `∞`, contractible). `H₁ V = 0`, and `H₀ (U ∩ V) → H₀ U` is injective
+(each punctured square is path connected and lies in its own summand of `U`),
+so the connecting map `H₁ X → H₀ (U ∩ V)` is zero and `H₁ U → H₁ X` is onto. -/
+
+/-- A punctured open square around the puncture `(1, 1)` of the torus. -/
+def apm_t01a03_separating_circle_H1_zero_aux_N : Set apm_t01a03_PuncturedTorus :=
+  {x | dist ((x.1.1 : Circle) : ℂ) 1 < 1 ∧ dist ((x.1.2 : Circle) : ℂ) 1 < 1}
+
+def apm_t01a03_separating_circle_H1_zero_aux_Nsum : Set apm_t01a03_TwoPuncturedTori :=
+  Sum.inl '' apm_t01a03_separating_circle_H1_zero_aux_N ∪
+    Sum.inr '' apm_t01a03_separating_circle_H1_zero_aux_N
+
+/-- The finite part. -/
+def apm_t01a03_separating_circle_H1_zero_aux_U :
+    Set (OnePoint apm_t01a03_TwoPuncturedTori) :=
+  Set.range ((↑) : apm_t01a03_TwoPuncturedTori → OnePoint apm_t01a03_TwoPuncturedTori)
+
+/-- `∞` together with the two punctured squares. -/
+def apm_t01a03_separating_circle_H1_zero_aux_V :
+    Set (OnePoint apm_t01a03_TwoPuncturedTori) :=
+  (((↑) : apm_t01a03_TwoPuncturedTori → OnePoint apm_t01a03_TwoPuncturedTori) ''
+    apm_t01a03_separating_circle_H1_zero_aux_Nsumᶜ)ᶜ
+
+/-- `V` is open: the complement of the two squares is closed in two compact
+tori, so compact (`OnePoint.isOpen_compl_image_coe`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_open :
+    IsOpen apm_t01a03_separating_circle_H1_zero_aux_V := by
+  sorry
+
+/-- `H₁ V = 0`: `V` is two open squares wedged at their centres (`∞`), hence
+contractible (`CoefficientContractiblePair.higher_zero`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero :
+    Limits.IsZero (IntegralMV.HZ 1 apm_t01a03_separating_circle_H1_zero_aux_V) := by
+  sorry
+
+/-- `H₀ (U ∩ V) → H₀ U` is injective: `U ∩ V` is the two punctured squares, each
+path connected, landing in different summands of `U ≅ PT ⊔ PT`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj :
+    Function.Injective (IntegralMV.mvIncl
+      (Set.inter_subset_left : apm_t01a03_separating_circle_H1_zero_aux_U ∩
+        apm_t01a03_separating_circle_H1_zero_aux_V ⊆
+          apm_t01a03_separating_circle_H1_zero_aux_U) 0).hom := by
+  sorry
+
+/-- Bridge: `coe : PT ⊔ PT → U` is a homeomorphism, and `IntegralMV.HZ 1` is
+`apm_t01a03_H1`, so a surjection `H₁ U → H₁ X` gives one from `H₁ (PT ⊔ PT)`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_U_bridge
+    (h : Function.Surjective
+      (IntegralMV.mvToX apm_t01a03_separating_circle_H1_zero_aux_U 1).hom) :
+    Function.Surjective (apm_t01a03_H1map
+      (⟨(↑), OnePoint.continuous_coe⟩ :
+        C(apm_t01a03_TwoPuncturedTori, OnePoint apm_t01a03_TwoPuncturedTori))) := by
+  sorry
+
 /-- The model: `H₁` of the one-point compactification is reached from the
 two punctured tori. -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_model_surj :
     Function.Surjective (apm_t01a03_H1map
       (⟨(↑), OnePoint.continuous_coe⟩ :
         C(apm_t01a03_TwoPuncturedTori, OnePoint apm_t01a03_TwoPuncturedTori))) := by
-  sorry
+  set U := apm_t01a03_separating_circle_H1_zero_aux_U
+  set V := apm_t01a03_separating_circle_H1_zero_aux_V
+  have hU : IsOpen U := OnePoint.isOpen_range_coe
+  have hcov : U ∪ V = Set.univ := by
+    ext p
+    simp only [Set.mem_union, Set.mem_univ, iff_true]
+    induction p using OnePoint.rec with
+    | infty =>
+      right
+      rintro ⟨y, -, hy⟩
+      exact OnePoint.coe_ne_infty y hy
+    | coe y => exact Or.inl ⟨y, rfl⟩
+  obtain ⟨δ, -, h2, h3⟩ := IntegralMV.integralMayerVietoris U V hU
+    apm_t01a03_separating_circle_H1_zero_aux_V_open hcov
+  have hI : Function.Injective (IntegralMV.mvI U V 0).hom := by
+    intro a b hab
+    apply apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj
+    have := congrArg (Limits.biprod.fst :
+      IntegralMV.HZ 0 U ⊞ IntegralMV.HZ 0 V ⟶ _).hom hab
+    simpa [IntegralMV.mvI, ← ModuleCat.comp_apply] using this
+  have hδ : (δ 0).hom = 0 := by
+    rw [← LinearMap.range_eq_bot, h3 0]
+    exact LinearMap.ker_eq_bot.mpr hI
+  have hJ : Function.Surjective (IntegralMV.mvJ U V 1).hom := by
+    rw [← LinearMap.range_eq_top]
+    have := h2 0
+    rw [hδ, LinearMap.ker_zero] at this
+    exact this
+  apply apm_t01a03_separating_circle_H1_zero_aux_U_bridge
+  have hVz := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero
+  have hJ' : IntegralMV.mvJ U V 1 = CategoryStruct.comp
+      (Limits.biprod.fst : IntegralMV.HZ 1 U ⊞ IntegralMV.HZ 1 V ⟶ _)
+      (IntegralMV.mvToX U 1) := by
+    apply Limits.biprod.hom_ext'
+    · simp [IntegralMV.mvJ]
+    · simp only [IntegralMV.mvJ, Limits.biprod.inr_desc, Limits.biprod.inr_fst_assoc,
+        Limits.zero_comp]
+      rw [hVz.eq_of_src (IntegralMV.mvToX V 1) 0, neg_zero]
+  intro y
+  obtain ⟨z, rfl⟩ := hJ y
+  exact ⟨(Limits.biprod.fst : IntegralMV.HZ 1 U ⊞ IntegralMV.HZ 1 V ⟶ _).hom z, by
+    rw [hJ']; rfl⟩
 
 lemma apm_t01a03_separating_circle_H1_zero_aux_homeo_surj
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (e : X ≃ₜ Y) :

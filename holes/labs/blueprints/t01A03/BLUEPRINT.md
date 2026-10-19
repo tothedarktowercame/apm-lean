@@ -164,6 +164,25 @@ The assembly and the homeomorphism-surjectivity helper are proved in
   stated on `OnePoint (Sum PuncturedTorus PuncturedTorus)`; Mayer–Vietoris
   over the point at infinity, see `notes/` in the lemma packets)
 
+**`_aux_model_surj` split (2026-10-19, after a PARTIAL from lemma-1).** It is
+proved in `Blueprint.lean` from `IntegralMV.integralMayerVietoris`
+(`ConstructionTargets/IntegralOpenCoverMayerVietoris.lean`, now imported) on
+the cover `U = range coe`, `V = (coe '' Nsumᶜ)ᶜ`, where `N` is the punctured
+open square `dist x₁ 1 < 1 ∧ dist x₂ 1 < 1` around the puncture. The assembly
+shows `δ₀ = 0` from injectivity of `H₀(U∩V) → H₀U`, so `mvJ` is onto in degree
+1, and `H₁V = 0` reduces `mvJ` to `H₁U → H₁X`. Four leaves:
+- `_aux_V_open`: `Nsumᶜ` is closed in two compact tori, so compact;
+  `OnePoint.isOpen_compl_image_coe`.
+- `_aux_V_H1_zero`: `V` is two open squares wedged at `∞`, hence contractible;
+  `CoefficientContractiblePair.higher_zero`.
+- `_aux_inter_H0_inj`: `U ∩ V` is the two punctured squares, each path
+  connected, in different summands of `U`; `TopologicalSumSingularHomology`,
+  `CoefficientConnectedH0Map`.
+- `_aux_U_bridge`: `coe` is a homeomorphism onto `U`
+  (`OnePoint.isOpenEmbedding_coe`), and `IntegralMV.HZ 1` is definitionally
+  `apm_t01a03_H1`; match `mvToX` (a `homologyMap`) with `apm_t01a03_H1map`
+  (a functor map) as in `t00J01/Blueprint.lean` near line 1161.
+
 Only the two model leaves need algebraic topology. No leaf needs Schoenflies or
 tameness of the embedding. The `surface-curve-collar` boundary named in
 TOPOLOGY-ROUTES is not needed for this problem.
