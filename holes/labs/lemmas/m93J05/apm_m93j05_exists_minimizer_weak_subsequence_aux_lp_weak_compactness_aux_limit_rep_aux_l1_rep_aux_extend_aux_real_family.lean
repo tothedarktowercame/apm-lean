@@ -2354,6 +2354,87 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
     Rat.isDenseEmbedding_coe_real.isDenseInducing.extend_eq hu.continuous a, hca]
 
 -- BEGIN SEAT AREA
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_real_family_aux_approx
+    (a b : ℝ) (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ 1) :
+    ∃ U V : ℕ → ℚ,
+      (∀ k, (0 : ℝ) ≤ U k ∧ (U k : ℝ) ≤ V k ∧ (V k : ℝ) ≤ 1) ∧
+      (∀ k, Set.Ioc (U k : ℝ) (V k) ⊆ Set.Ioc a b) ∧
+      Tendsto (fun k ↦ (U k : ℝ)) atTop (nhds a) ∧
+      Tendsto (fun k ↦ (V k : ℝ)) atTop (nhds b) := by
+  let e : ℕ → ℝ := fun k ↦ 1 / ((k : ℝ) + 1)
+  have hepos (k : ℕ) : 0 < e k := by simp [e]; positivity
+  have he : Tendsto e atTop (nhds 0) := by
+    simpa [e] using (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+  by_cases hlt : a < b
+  · have hu_ex (k : ℕ) : ∃ r : ℚ, a < (r : ℝ) ∧
+        (r : ℝ) < min ((a + b) / 2) (a + e k) := by
+      apply exists_rat_btwn
+      simp only [lt_min_iff]
+      constructor <;> linarith [hepos k]
+    have hv_ex (k : ℕ) : ∃ r : ℚ,
+        max ((a + b) / 2) (b - e k) < (r : ℝ) ∧ (r : ℝ) < b := by
+      apply exists_rat_btwn
+      simp only [max_lt_iff]
+      constructor <;> linarith [hepos k]
+    choose U hU using hu_ex
+    choose V hV using hv_ex
+    have hU' (k : ℕ) := (lt_min_iff.mp (hU k).2)
+    have hV' (k : ℕ) := (max_lt_iff.mp (hV k).1)
+    refine ⟨U, V, ?_, ?_, ?_, ?_⟩
+    · intro k
+      have hUV : (U k : ℝ) ≤ V k := (hU' k).1.le.trans (hV' k).1.le
+      exact ⟨ha.trans (hU k).1.le, hUV, (hV k).2.le.trans hb⟩
+    · intro k x hx
+      exact ⟨(hU k).1.trans hx.1, hx.2.trans (hV k).2.le⟩
+    · have hau : Tendsto (fun k ↦ a + e k) atTop (nhds a) := by
+        simpa only [add_zero] using (tendsto_const_nhds.add he)
+      apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hau
+      filter_upwards [] with k
+      exact (hU k).1.le
+      filter_upwards [] with k
+      exact (hU' k).2.le
+    · have hbl : Tendsto (fun k ↦ b - e k) atTop (nhds b) := by
+        simpa only [sub_zero] using (tendsto_const_nhds.sub he)
+      apply tendsto_of_tendsto_of_tendsto_of_le_of_le' hbl tendsto_const_nhds
+      filter_upwards [] with k
+      exact (hV' k).2.le
+      filter_upwards [] with k
+      exact (hV k).2.le
+  · have hab' : a = b := le_antisymm hab (le_of_not_gt hlt)
+    subst b
+    have hr_ex (k : ℕ) : ∃ r : ℚ,
+        max 0 (a - e k) < (r : ℝ) ∧ (r : ℝ) < min 1 (a + e k) := by
+      apply exists_rat_btwn
+      apply max_lt
+      · apply lt_min <;> linarith [hepos k, (zero_lt_one : (0 : ℝ) < 1)]
+      · apply lt_min <;> linarith [hepos k]
+    choose U hU using hr_ex
+    have hUlo (k : ℕ) := (max_lt_iff.mp (hU k).1)
+    have hUhi (k : ℕ) := (lt_min_iff.mp (hU k).2)
+    refine ⟨U, U, ?_, ?_, ?_, ?_⟩
+    · intro k
+      exact ⟨(hUlo k).1.le, le_rfl, (hUhi k).1.le⟩
+    · intro k
+      simp
+    · have hal : Tendsto (fun k ↦ a - e k) atTop (nhds a) := by
+        simpa only [sub_zero] using (tendsto_const_nhds.sub he)
+      have hau : Tendsto (fun k ↦ a + e k) atTop (nhds a) := by
+        simpa only [add_zero] using (tendsto_const_nhds.add he)
+      apply tendsto_of_tendsto_of_tendsto_of_le_of_le' hal hau
+      filter_upwards [] with k
+      exact (hUlo k).2.le
+      filter_upwards [] with k
+      exact (hUhi k).2.le
+    · have hal : Tendsto (fun k ↦ a - e k) atTop (nhds a) := by
+        simpa only [sub_zero] using (tendsto_const_nhds.sub he)
+      have hau : Tendsto (fun k ↦ a + e k) atTop (nhds a) := by
+        simpa only [add_zero] using (tendsto_const_nhds.add he)
+      apply tendsto_of_tendsto_of_tendsto_of_le_of_le' hal hau
+      filter_upwards [] with k
+      exact (hUlo k).2.le
+      filter_upwards [] with k
+      exact (hUhi k).2.le
+
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_real_family
     (q : ℝ) (hq : 1 < q) (R : ℝ) (hR : 0 ≤ R) (F : ℝ → ℝ) (hF : ContinuousOn F (Set.Icc 0 1))
     (hrat : ∀ (n : ℕ) (u v : ℕ → ℚ), (∀ i ∈ Finset.range n, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1) →
@@ -2364,7 +2445,63 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
       Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i) (v i)) →
       ∑ i ∈ Finset.range n, |F (v i) - F (u i)| ≤
         R * (∑ i ∈ Finset.range n, (v i - u i)) ^ (1 / q) := by
-  sorry
+  intro n u v huv hdisj
+  have happ (i : ↥(Finset.range n)) :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_real_family_aux_approx
+      (u i) (v i) (huv i i.property).1 (huv i i.property).2.1 (huv i i.property).2.2
+  choose U V hUV hsub hU hV using happ
+  let Uk (k i : ℕ) : ℚ := if hi : i < n then U ⟨i, Finset.mem_range.mpr hi⟩ k else 0
+  let Vk (k i : ℕ) : ℚ := if hi : i < n then V ⟨i, Finset.mem_range.mpr hi⟩ k else 0
+  have hrat_k (k : ℕ) := hrat n (Uk k) (Vk k)
+    (by
+      intro i hi
+      change 0 ≤ Uk k i ∧ Uk k i ≤ Vk k i ∧ Vk k i ≤ 1
+      have huik : Uk k i = U ⟨i, hi⟩ k := by simp [Uk, Finset.mem_range.mp hi]
+      have hvik : Vk k i = V ⟨i, hi⟩ k := by simp [Vk, Finset.mem_range.mp hi]
+      rw [huik, hvik]
+      exact_mod_cast hUV ⟨i, hi⟩ k)
+    (by
+      intro i hi j hj hij
+      have hui : Uk k i = U ⟨i, hi⟩ k := by simp [Uk, Finset.mem_range.mp hi]
+      have hvi : Vk k i = V ⟨i, hi⟩ k := by simp [Vk, Finset.mem_range.mp hi]
+      have huj : Uk k j = U ⟨j, hj⟩ k := by simp [Uk, Finset.mem_range.mp hj]
+      have hvj : Vk k j = V ⟨j, hj⟩ k := by simp [Vk, Finset.mem_range.mp hj]
+      change Disjoint (Set.Ioc (Uk k i : ℝ) (Vk k i)) (Set.Ioc (Uk k j : ℝ) (Vk k j))
+      rw [hui, hvi, huj, hvj]
+      exact (hdisj hi hj hij).mono (hsub ⟨i, hi⟩ k) (hsub ⟨j, hj⟩ k))
+  have hleft : Tendsto (fun k ↦ ∑ i ∈ Finset.range n,
+      |F (Vk k i) - F (Uk k i)|) atTop
+      (nhds (∑ i ∈ Finset.range n, |F (v i) - F (u i)|)) := by
+    apply tendsto_finset_sum
+    intro i hi
+    simp only [Uk, Vk, dif_pos (Finset.mem_range.mp hi)]
+    apply Tendsto.abs
+    apply Tendsto.sub
+    · apply (hF (v i) ⟨(huv i hi).1.trans (huv i hi).2.1, (huv i hi).2.2⟩).tendsto.comp
+      exact tendsto_nhdsWithin_iff.2 ⟨hV ⟨i, hi⟩, Eventually.of_forall fun k ↦ by
+        show (V ⟨i, hi⟩ k : ℝ) ∈ Set.Icc 0 1
+        exact ⟨(hUV ⟨i, hi⟩ k).1.trans (hUV ⟨i, hi⟩ k).2.1,
+          (hUV ⟨i, hi⟩ k).2.2⟩⟩
+    · apply (hF (u i) ⟨(huv i hi).1, (huv i hi).2.1.trans (huv i hi).2.2⟩).tendsto.comp
+      exact tendsto_nhdsWithin_iff.2 ⟨hU ⟨i, hi⟩, Eventually.of_forall fun k ↦ by
+        show (U ⟨i, hi⟩ k : ℝ) ∈ Set.Icc 0 1
+        exact ⟨(hUV ⟨i, hi⟩ k).1,
+          (hUV ⟨i, hi⟩ k).2.1.trans (hUV ⟨i, hi⟩ k).2.2⟩⟩
+  have hsum : Tendsto (fun k ↦ ∑ i ∈ Finset.range n,
+      ((Vk k i : ℝ) - Uk k i)) atTop
+      (nhds (∑ i ∈ Finset.range n, (v i - u i))) := by
+    apply tendsto_finset_sum
+    intro i hi
+    simp only [Uk, Vk, dif_pos (Finset.mem_range.mp hi)]
+    exact (hV ⟨i, hi⟩).sub (hU ⟨i, hi⟩)
+  have hbase : 0 ≤ ∑ i ∈ Finset.range n, (v i - u i) :=
+    Finset.sum_nonneg fun i hi ↦ sub_nonneg.mpr (huv i hi).2.1
+  have hright : Tendsto (fun k ↦ R * (∑ i ∈ Finset.range n,
+      ((Vk k i : ℝ) - Uk k i)) ^ (1 / q)) atTop
+      (nhds (R * (∑ i ∈ Finset.range n, (v i - u i)) ^ (1 / q))) := by
+    apply Tendsto.const_mul
+    exact (Real.continuousAt_rpow_const _ _ (Or.inr (by positivity))).tendsto.comp hsum
+  exact le_of_tendsto_of_tendsto hleft hright (Eventually.of_forall hrat_k)
 -- END SEAT AREA
 
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_ac
