@@ -479,7 +479,60 @@ lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_mem 
 /-- The parametrisation is injective (the planar radius `1 + re v / 4` is
 positive, so `u` is the planar direction and then `v` is read off). -/
 lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_injective : Function.Injective apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param := by
-  sorry
+  rintro ⟨u, v⟩ ⟨u', v'⟩ h
+  have hcoord (i : Fin 3) := congrArg (fun p : apm_t02a03_E3 ↦ p i) h
+  have him : (v : ℂ).im = (v' : ℂ).im := by
+    simpa [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param]
+      using hcoord 2
+  have hplan :
+      (1 + (v : ℂ).re / 4 : ℝ) * (u : ℂ) =
+        (1 + (v' : ℂ).re / 4 : ℝ) * (u' : ℂ) := by
+    apply Complex.ext
+    · simpa [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param]
+        using hcoord 0
+    · simpa [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param]
+        using hcoord 1
+  have hvnorm : (v : ℂ).re ^ 2 + (v : ℂ).im ^ 2 = 1 := by
+    calc
+      _ = Complex.normSq (v : ℂ) := by simp [Complex.normSq_apply]; ring
+      _ = ‖(v : ℂ)‖ ^ 2 := (Complex.sq_norm _).symm
+      _ = 1 := by rw [Circle.norm_coe]; norm_num
+  have hvnorm' : (v' : ℂ).re ^ 2 + (v' : ℂ).im ^ 2 = 1 := by
+    calc
+      _ = Complex.normSq (v' : ℂ) := by simp [Complex.normSq_apply]; ring
+      _ = ‖(v' : ℂ)‖ ^ 2 := (Complex.sq_norm _).symm
+      _ = 1 := by rw [Circle.norm_coe]; norm_num
+  have hre : (v : ℂ).re = (v' : ℂ).re := by
+    have hsquares : (v : ℂ).re ^ 2 = (v' : ℂ).re ^ 2 := by
+      rw [him] at hvnorm
+      nlinarith
+    have hle : (v : ℂ).re ≥ -1 := by nlinarith [sq_nonneg ((v : ℂ).im)]
+    have hle' : (v' : ℂ).re ≥ -1 := by nlinarith [sq_nonneg ((v' : ℂ).im)]
+    have hscale : 1 + (v : ℂ).re / 4 = 1 + (v' : ℂ).re / 4 := by
+      have hunorm : Complex.normSq (u : ℂ) = 1 := by
+        rw [Complex.normSq_eq_norm_sq, Circle.norm_coe]
+        norm_num
+      have hunorm' : Complex.normSq (u' : ℂ) = 1 := by
+        rw [Complex.normSq_eq_norm_sq, Circle.norm_coe]
+        norm_num
+      have hn := congrArg Complex.normSq hplan
+      rw [Complex.normSq_mul, Complex.normSq_mul, Complex.normSq_ofReal,
+        Complex.normSq_ofReal, hunorm, hunorm'] at hn
+      nlinarith
+    linarith
+  have hv : v = v' := by
+    apply Subtype.ext
+    apply Complex.ext <;> assumption
+  subst v'
+  have hu : u = u' := by
+    apply Subtype.ext
+    apply (mul_left_cancel₀ (show (1 + (v : ℂ).re / 4 : ℂ) ≠ 0 by
+      have hle : (v : ℂ).re ≥ -1 := by
+        nlinarith [hvnorm]
+      exact_mod_cast (show (1 + (v : ℂ).re / 4 : ℝ) ≠ 0 by linarith)))
+    exact_mod_cast hplan
+  subst u'
+  rfl
 
 /-- Every torus point is parametrised (use `_aux_infDist`: with `s` the planar
 radius about the core centre, `s ≥ 3/4`; take `u = (a + b i)/s` and
