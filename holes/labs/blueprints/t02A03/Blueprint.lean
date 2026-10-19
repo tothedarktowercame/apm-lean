@@ -371,13 +371,143 @@ def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop : Set apm_t02a03_E3 :=
 /-- LIBRARY: the left boundary torus is a torus, with `q0` at the basepoint
 (parametrise by core angle and normal angle; uses the closed form of the
 distance to the planar circle `C`). -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist
+    (p : apm_t02a03_E3) :
+    Metric.infDist p apm_t02a03_C =
+      Real.sqrt ((Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1) ^ 2 + p 2 ^ 2) := by
+  let a : ℝ := p 0 + 6 / 5
+  let b : ℝ := p 1
+  let s : ℝ := Real.sqrt (a ^ 2 + b ^ 2)
+  have hs0 : 0 ≤ s := Real.sqrt_nonneg _
+  have hs2 : s ^ 2 = a ^ 2 + b ^ 2 := by
+    dsimp [s]
+    rw [Real.sq_sqrt]
+    positivity
+  have lower : Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤
+      Metric.infDist p (Set.range apm_t02a03_leftCore) := by
+    rw [Metric.le_infDist]
+    · rintro q ⟨t, rfl⟩
+      have htrig : Real.sin t ^ 2 + Real.cos t ^ 2 = 1 :=
+        Real.sin_sq_add_cos_sq t
+      have hcs : (a * Real.cos t + b * Real.sin t) ^ 2 ≤ s ^ 2 := by
+        nlinarith [sq_nonneg (a * Real.sin t - b * Real.cos t)]
+      have hdot : a * Real.cos t + b * Real.sin t ≤ s := by
+        nlinarith [sq_nonneg (s - (a * Real.cos t + b * Real.sin t))]
+      rw [show dist p (apm_t02a03_leftCore t) =
+          Real.sqrt ((a - Real.cos t) ^ 2 + (b - Real.sin t) ^ 2 + p 2 ^ 2) by
+        simp [dist_eq_norm, apm_t02a03_leftCore, a, b, EuclideanSpace.norm_eq,
+          Fin.sum_univ_succ]
+        congr 1 <;> ring]
+      exact Real.sqrt_le_sqrt (by nlinarith)
+    · exact ⟨apm_t02a03_leftCore 0, ⟨0, rfl⟩⟩
+  apply le_antisymm
+  · by_cases hz : (a : ℂ) + b * Complex.I = 0
+    · have ha : a = 0 := by
+        have := congrArg Complex.re hz
+        simpa using this
+      have hb : b = 0 := by
+        have := congrArg Complex.im hz
+        simpa using this
+      have hs : s = 0 := by simp [s, ha, hb]
+      have hp0 : p 0 = -6 / 5 := by dsimp [a] at ha; linarith
+      have hp1 : p 1 = 0 := by simpa [b] using hb
+      calc
+        Metric.infDist p (Set.range apm_t02a03_leftCore)
+            ≤ dist p (apm_t02a03_leftCore 0) :=
+              Metric.infDist_le_dist_of_mem ⟨0, rfl⟩
+        _ = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+          simp [dist_eq_norm, apm_t02a03_leftCore, hp0, hp1, hs,
+            EuclideanSpace.norm_eq, Fin.sum_univ_succ]
+    · let z : ℂ := (a : ℂ) + b * Complex.I
+      have hz' : z ≠ 0 := by simpa [z] using hz
+      have hnorm : ‖z‖ = s := by
+        rw [Complex.norm_def]
+        congr 1
+        simp [Complex.normSq_apply, z, s]
+        ring
+      have hc : Real.cos (Complex.arg z) = a / s := by
+        rw [Complex.cos_arg hz', hnorm]
+        simp [z]
+      have hsi : Real.sin (Complex.arg z) = b / s := by
+        rw [Complex.sin_arg, hnorm]
+        simp [z]
+      have hspos : 0 < s := lt_of_le_of_ne hs0 (by
+        intro h
+        apply hz'
+        apply Complex.ext <;> simp [z] at * <;> nlinarith [hs2])
+      calc
+        Metric.infDist p (Set.range apm_t02a03_leftCore)
+            ≤ dist p (apm_t02a03_leftCore (Complex.arg z)) :=
+              Metric.infDist_le_dist_of_mem ⟨_, rfl⟩
+        _ = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+          rw [show dist p (apm_t02a03_leftCore (Complex.arg z)) =
+              Real.sqrt ((a - Real.cos (Complex.arg z)) ^ 2 +
+                (b - Real.sin (Complex.arg z)) ^ 2 + p 2 ^ 2) by
+            simp [dist_eq_norm, apm_t02a03_leftCore, a, b, EuclideanSpace.norm_eq,
+              Fin.sum_univ_succ]
+            congr 1 <;> ring]
+          congr 1
+          rw [hc, hsi]
+          field_simp
+          nlinarith [hs2]
+  · change Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤ _
+    exact lower
+
+/-- The standard parametrisation of the left boundary torus: core angle `x.1`,
+normal angle `x.2` (measured from the outward radial direction). -/
+noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param (x : apm_t02a03_Torus) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![-6 / 5 + (1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).re,
+    (1 + (x.2 : ℂ).re / 4) * (x.1 : ℂ).im, (x.2 : ℂ).im / 4]
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param_continuous : Continuous apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param := by
+  unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param
+  refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i ↦ ?_)
+  fin_cases i <;> simp <;> fun_prop
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param_one : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param (1, 1) =
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0 := by
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0] <;> norm_num
+
+/-- The parametrisation lands on the torus (use `_aux_infDist`: the planar radius
+is `1 + re v / 4 > 0`). -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_mem (x : apm_t02a03_Torus) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param x ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus := by
+  sorry
+
+/-- The parametrisation is injective (the planar radius `1 + re v / 4` is
+positive, so `u` is the planar direction and then `v` is read off). -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_injective : Function.Injective apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param := by
+  sorry
+
+/-- Every torus point is parametrised (use `_aux_infDist`: with `s` the planar
+radius about the core centre, `s ≥ 3/4`; take `u = (a + b i)/s` and
+`v = 4((s - 1) + z i)`). -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_surj (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) :
+    ∃ x, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param x = p := by
+  sorry
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph :
     ∃ e : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ≃ₜ
         ConstructionTargets.TorusCircleWedgeOpenCover.Torus,
       ∀ h : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0 ∈
           apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus,
         e ⟨_, h⟩ = ((1 : Circle), (1 : Circle)) := by
-  sorry
+  let f : apm_t02a03_Torus → apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus :=
+    fun x ↦ ⟨apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param x, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_mem x⟩
+  have hf : Continuous f := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param_continuous.subtype_mk _
+  have hbij : Function.Bijective f := by
+    refine ⟨fun x y h ↦ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_injective (congrArg Subtype.val h), ?_⟩
+    rintro ⟨p, hp⟩
+    obtain ⟨x, hx⟩ := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_surj p hp
+    exact ⟨x, Subtype.ext hx⟩
+  let e0 : apm_t02a03_Torus ≃ₜ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus :=
+    (show Continuous (Equiv.ofBijective f hbij) from hf).homeoOfEquivCompactToT2
+  refine ⟨e0.symm, fun h ↦ ?_⟩
+  rw [Homeomorph.symm_apply_eq]
+  exact Subtype.ext apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param_one.symm
 
 /-- LIBRARY: the loop is a circle, with `q0` (parameter `t = 0`) at `1`. -/
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph :
