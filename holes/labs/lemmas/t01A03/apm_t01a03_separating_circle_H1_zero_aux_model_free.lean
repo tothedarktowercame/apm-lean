@@ -353,21 +353,104 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_collapse
     (e : {x : S // x ∉ Set.range middle} ≃ₜ Y) :
     ∃ ρ : C(S, OnePoint Y), (∀ z, ρ (middle z) = OnePoint.infty) ∧
       ∀ x : {x : S // x ∉ Set.range middle}, ρ x = ((e x : Y) : OnePoint Y) := by
-  sorry
+  classical
+  let A : Set S := Set.range middle
+  have hAcompact : IsCompact A := by
+    exact isCompact_range middle.continuous
+  have hAclosed : IsClosed A := hAcompact.isClosed
+  let f : S → OnePoint Y := fun x ↦
+    if hx : x ∈ A then OnePoint.infty else ((e ⟨x, hx⟩ : Y) : OnePoint Y)
+  have hf : Continuous f := by
+    rw [continuous_def]
+    intro V hV
+    by_cases hinf : OnePoint.infty ∈ V
+    · let K : Set Y := (((↑) : Y → OnePoint Y) ⁻¹' V)ᶜ
+      have hKcompact : IsCompact K :=
+        (OnePoint.isOpen_iff_of_mem hinf).mp hV |>.2
+      let g : Y → S := fun y ↦ (e.symm y).1
+      have hg : Continuous g := continuous_subtype_val.comp e.symm.continuous
+      have hclosed : IsClosed (g '' K) :=
+        (hKcompact.image hg).isClosed
+      rw [← isClosed_compl_iff]
+      convert hclosed using 1
+      ext x
+      simp only [Set.mem_compl_iff, Set.mem_preimage, Set.mem_image]
+      constructor
+      · intro hx
+        have hxA : x ∉ A := by
+          intro hxA
+          apply hx
+          simp [f, hxA, hinf]
+        refine ⟨e ⟨x, hxA⟩, ?_, ?_⟩
+        · simpa [K, f, hxA] using hx
+        · simp [g]
+      · rintro ⟨y, hy, rfl⟩
+        have hnotA : g y ∉ A := (e.symm y).2
+        simpa [f, g, hnotA, K] using hy
+    · have hpreopen : IsOpen (((↑) : Y → OnePoint Y) ⁻¹' V) :=
+        (OnePoint.isOpen_iff_of_notMem hinf).mp hV
+      have hsubopen : IsOpen (e ⁻¹' (((↑) : Y → OnePoint Y) ⁻¹' V)) :=
+        hpreopen.preimage e.continuous
+      have hopen_image : IsOpen
+          (((↑) : {x : S // x ∉ A} → S) ''
+            (e ⁻¹' (((↑) : Y → OnePoint Y) ⁻¹' V))) := by
+        exact hAclosed.isOpen_compl.isOpenEmbedding_subtypeVal.isOpenMap _ hsubopen
+      convert hopen_image using 1
+      ext x
+      simp only [Set.mem_preimage, Set.mem_image]
+      constructor
+      · intro hx
+        have hxA : x ∉ A := by
+          intro hxA
+          have : f x = OnePoint.infty := by simp [f, hxA]
+          exact hinf (this ▸ hx)
+        refine ⟨⟨x, hxA⟩, ?_, rfl⟩
+        simpa [f, hxA] using hx
+      · rintro ⟨x, hx, rfl⟩
+        simpa [f, x.2] using hx
+  refine ⟨⟨f, hf⟩, ?_, ?_⟩
+  · intro z
+    simp [f, A]
+  · intro x
+    have hxA : x.1 ∉ A := by simpa [A] using x.2
+    simp [f, hxA]
 
 /-- A constant map induces zero on `H₁`. -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_const
     {X Z : Type} [TopologicalSpace X] [TopologicalSpace Z]
     (f : C(X, Z)) (z : Z) (hf : ∀ x, f x = z) :
     apm_t01a03_H1map f = 0 := by
-  sorry
+  have hconst : f = ContinuousMap.const X z := by
+    ext x
+    exact hf x
+  subst f
+  exact
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_const_eq_zero
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero z
 
 /-- A surjective map between two copies of `ℤ⁴` is injective. -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_hopf
     {A B : ModuleCat ℤ} (_eA : A ≅ ModuleCat.of ℤ (Fin 4 → ℤ))
     (_eB : B ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) (f : A ⟶ B)
     (hf : Function.Surjective f) : Function.Injective f := by
-  sorry
+  let g : (Fin 4 → ℤ) →ₗ[ℤ] (Fin 4 → ℤ) :=
+    (_eA.inv ≫ f ≫ _eB.hom).hom
+  have hg : Function.Surjective g := by
+    intro y
+    obtain ⟨b, hb⟩ :=
+      (ConcreteCategory.bijective_of_isIso _eB.hom).2 y
+    obtain ⟨a, ha⟩ := hf b
+    refine ⟨_eA.hom a, ?_⟩
+    change _eB.hom (f (_eA.inv (_eA.hom a))) = y
+    simpa only [Iso.hom_inv_id_apply, ha, hb]
+  have hgi : Function.Injective g :=
+    Module.End.injective_of_surjective ℤ (Fin 4 → ℤ) hg
+  intro x y hxy
+  apply (ConcreteCategory.bijective_of_isIso _eA.hom).1
+  apply hgi
+  change _eB.hom (f (_eA.inv (_eA.hom x))) =
+    _eB.hom (f (_eA.inv (_eA.hom y)))
+  simpa using congrArg (fun z ↦ _eB.hom z) hxy
 
 /-- The model: the one-point compactification of two punctured tori (a wedge
 of two tori) has `H₁ ≅ ℤ⁴`. -/
@@ -488,7 +571,329 @@ def apm_t01a03_separating_circle_H1_zero_aux_W : Set ((Fin 2 → ℝ) × (Fin 2 
 /-- `W` is star-shaped about the origin (`StarConvex.contractibleSpace`). -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_W_contractible :
     ContractibleSpace apm_t01a03_separating_circle_H1_zero_aux_W := by
-  sorry
+  have hball : StarConvex ℝ (0 : Fin 2 → ℝ) (Metric.ball 0 1) :=
+    (convex_ball (0 : Fin 2 → ℝ) 1).starConvex (Metric.mem_ball_self zero_lt_one)
+  have hsingleton : StarConvex ℝ (0 : Fin 2 → ℝ) ({0} : Set (Fin 2 → ℝ)) :=
+    starConvex_singleton 0
+  apply ((hball.prod hsingleton).union (hsingleton.prod hball)).contractibleSpace
+  refine ⟨(0, 0), ?_⟩
+  left
+  exact ⟨Metric.mem_ball_self zero_lt_one, Set.mem_singleton 0⟩
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angles_ne_zero
+    (x : apm_t01a03_PuncturedTorus) :
+    (fun i : Fin 2 => if i = 0 then Complex.arg (x.1.1 : ℂ)
+      else Complex.arg (x.1.2 : ℂ)) ≠ 0 := by
+  intro h
+  have h0 : Complex.arg (x.1.1 : ℂ) = 0 := by
+    have := congrFun h (0 : Fin 2)
+    simpa using this
+  have h1 : Complex.arg (x.1.2 : ℂ) = 0 := by
+    have := congrFun h (1 : Fin 2)
+    simpa using this
+  apply x.2
+  apply Prod.ext
+  · exact Circle.injective_arg (by simpa using h0)
+  · exact Circle.injective_arg (by simpa using h1)
+
+/-- The scaled angle coordinates `(3/π)·(arg x₁, arg x₂)` of a point of the punctured
+torus. On `N` they range over the punctured open unit square (sup norm). -/
+noncomputable def apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle
+    (x : apm_t01a03_PuncturedTorus) : Fin 2 → ℝ :=
+  fun i => (3 / Real.pi) *
+    (if i = 0 then Complex.arg (x.1.1 : ℂ) else Complex.arg (x.1.2 : ℂ))
+
+/-- The chart: `N` is homeomorphic to the punctured open unit ball of `Fin 2 → ℝ`
+(sup norm, so the open square `(-1,1)²` minus `0`) by the scaled angles. For
+`z : Circle`, `dist z 1 < 1 ↔ |arg z| < π/3`; the inverse is
+`θ ↦ (Circle.exp (π/3·θ₀), Circle.exp (π/3·θ₁))`; nonvanishing is
+`_aux_angles_ne_zero`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_dist
+    (z : Circle) :
+    dist (z : ℂ) 1 < 1 ↔ |Complex.arg (z : ℂ)| < Real.pi / 3 := by
+  have hzarg : |Complex.arg (z : ℂ)| ≤ Real.pi := by
+    rw [abs_le]
+    exact ⟨(Complex.neg_pi_lt_arg _).le, Complex.arg_le_pi _⟩
+  have hsq : ‖(z : ℂ) - 1‖ ^ 2 = 2 * (1 - Real.cos |Complex.arg (z : ℂ)|) := by
+    rw [Complex.sq_norm]
+    rw [Complex.normSq_apply]
+    have hre : (z : ℂ).re = Real.cos (Complex.arg (z : ℂ)) := by
+      rw [Complex.cos_arg z.coe_ne_zero]
+      simp
+    have hcos : Real.cos |Complex.arg (z : ℂ)| =
+        Real.cos (Complex.arg (z : ℂ)) := Real.cos_abs _
+    rw [hcos, ← hre]
+    rw [Complex.sub_re, Complex.sub_im, Complex.one_re, Complex.one_im]
+    have hn := Circle.normSq_coe z
+    rw [Complex.normSq_apply] at hn
+    nlinarith
+  rw [dist_eq_norm]
+  constructor
+  · intro h
+    have hs : ‖(z : ℂ) - 1‖ ^ 2 < 1 := by nlinarith [norm_nonneg ((z : ℂ) - 1)]
+    rw [hsq] at hs
+    have hc : Real.cos (Real.pi / 3) < Real.cos |Complex.arg (z : ℂ)| := by
+      rw [Real.cos_pi_div_three]
+      linarith
+    by_contra hn
+    have hge : Real.pi / 3 ≤ |Complex.arg (z : ℂ)| := le_of_not_gt hn
+    have hle : Real.cos |Complex.arg (z : ℂ)| ≤ Real.cos (Real.pi / 3) :=
+      Real.cos_le_cos_of_nonneg_of_le_pi (by nlinarith [Real.pi_pos]) hzarg hge
+    exact (not_lt_of_ge hle) hc
+  · intro h
+    have hc : Real.cos (Real.pi / 3) < Real.cos |Complex.arg (z : ℂ)| :=
+      Real.cos_lt_cos_of_nonneg_of_le_pi (abs_nonneg _)
+        (by nlinarith [Real.pi_pos]) h
+    rw [Real.cos_pi_div_three] at hc
+    have hs : ‖(z : ℂ) - 1‖ ^ 2 < 1 := by rw [hsq]; nlinarith
+    nlinarith [norm_nonneg ((z : ℂ) - 1)]
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_scale (z : Circle) :
+    dist (z : ℂ) 1 < 1 ↔ |3 / Real.pi * Complex.arg (z : ℂ)| < 1 := by
+  have hp := Real.pi_pos
+  rw [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_dist, abs_mul, abs_of_pos (by positivity : (0 : ℝ) < 3 / Real.pi),
+    div_mul_eq_mul_div, div_lt_one hp]
+  constructor <;> intro h <;> linarith
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp {t : ℝ} (ht : |t| < 1) :
+    Complex.arg ((Circle.exp (Real.pi / 3 * t) : Circle) : ℂ) = Real.pi / 3 * t := by
+  have hp := Real.pi_pos
+  rw [abs_lt] at ht
+  apply Circle.arg_exp <;> nlinarith
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord (θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (i : Fin 2) : |(θ : Fin 2 → ℝ) i| < 1 := by
+  have h := θ.2.1
+  rw [Metric.mem_ball, dist_zero_right, pi_norm_lt_iff zero_lt_one] at h
+  simpa [Real.norm_eq_abs] using h i
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo :
+    ∃ φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+        (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)),
+      ∀ x, (φ x : Fin 2 → ℝ) =
+        apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x.1 := by
+  have hp := Real.pi_pos
+  have hmem : ∀ x : apm_t01a03_separating_circle_H1_zero_aux_N,
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x.1 ∈ (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) := by
+    intro x
+    refine ⟨?_, ?_⟩
+    · rw [Metric.mem_ball, dist_zero_right, pi_norm_lt_iff zero_lt_one]
+      intro i
+      rw [Real.norm_eq_abs]
+      fin_cases i
+      · simpa [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle] using (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_scale _).1 x.2.1
+      · simpa [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle] using (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_scale _).1 x.2.2
+    · intro h
+      rw [Set.mem_singleton_iff] at h
+      apply apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angles_ne_zero x.1
+      funext i
+      have hi := congrFun h i
+      simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle, Pi.zero_apply] at hi ⊢
+      exact (mul_eq_zero.1 hi).resolve_left (by positivity)
+  have hne : ∀ θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)),
+      ((Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 0),
+        Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 1)) : apm_t01a03_Torus) ≠
+        ((1 : Circle), (1 : Circle)) := by
+    intro θ h
+    apply θ.2.2
+    rw [Set.mem_singleton_iff]
+    have hz : ∀ i, (θ : Fin 2 → ℝ) i = 0 := by
+      intro i
+      have key : ∀ j : Fin 2, Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) j) = 1 →
+          (θ : Fin 2 → ℝ) j = 0 := by
+        intro j hj
+        have ha := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ j)
+        rw [hj, Circle.coe_one, Complex.arg_one] at ha
+        exact (mul_eq_zero.1 ha.symm).resolve_left (by positivity)
+      fin_cases i
+      · exact key 0 (congrArg Prod.fst h)
+      · exact key 1 (congrArg Prod.snd h)
+    funext i
+    exact hz i
+  have hN : ∀ θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)),
+      (⟨(Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 0),
+        Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 1)), hne θ⟩ : apm_t01a03_PuncturedTorus) ∈
+        apm_t01a03_separating_circle_H1_zero_aux_N := by
+    intro θ
+    have hc : ∀ j : Fin 2, dist ((Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) j) : Circle) : ℂ) 1 < 1 := by
+      intro j
+      rw [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_scale, apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ j)]
+      have : 3 / Real.pi * (Real.pi / 3 * (θ : Fin 2 → ℝ) j) = (θ : Fin 2 → ℝ) j := by
+        field_simp
+      rw [this]
+      exact apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ j
+    exact ⟨hc 0, hc 1⟩
+  have hcont : ∀ j : Fin 2, ContinuousOn Complex.arg {z : ℂ | dist z 1 < 1} := by
+    intro _ z hz
+    apply ContinuousAt.continuousWithinAt
+    apply Complex.continuousAt_arg
+    have h1 := Complex.mem_slitPlane_of_norm_lt_one (z := z - 1) (by rwa [← dist_eq_norm])
+    simpa using h1
+  refine ⟨{ toFun := fun x => ⟨apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x.1, hmem x⟩
+            invFun := fun θ => ⟨⟨(Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 0),
+              Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 1)), hne θ⟩, hN θ⟩
+            left_inv := ?_
+            right_inv := ?_
+            continuous_toFun := ?_
+            continuous_invFun := ?_ }, fun x => rfl⟩
+  · intro x
+    have e : ∀ a : ℝ, Real.pi / 3 * (3 / Real.pi * a) = a := by
+      intro a; field_simp
+    apply Subtype.ext; apply Subtype.ext
+    apply Prod.ext
+    · simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle, if_true]
+      rw [e, Circle.exp_arg]
+    · simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle, Fin.one_eq_zero_iff, if_false, OfNat.ofNat_ne_one]
+      rw [e, Circle.exp_arg]
+  · intro θ
+    apply Subtype.ext
+    funext i
+    have e : ∀ a : ℝ, 3 / Real.pi * (Real.pi / 3 * a) = a := by
+      intro a; field_simp
+    by_cases hi : i = 0
+    · subst hi
+      show 3 / Real.pi * Complex.arg ((Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 0) : Circle) : ℂ) =
+        (θ : Fin 2 → ℝ) 0
+      rw [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ 0), e]
+    · obtain rfl : i = 1 := by fin_cases i <;> simp_all
+      show 3 / Real.pi * Complex.arg ((Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 1) : Circle) : ℂ) =
+        (θ : Fin 2 → ℝ) 1
+      rw [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ 1), e]
+  · apply Continuous.subtype_mk
+    apply continuous_pi
+    intro i
+    apply continuous_const.mul
+    have c0 : Continuous fun x : apm_t01a03_separating_circle_H1_zero_aux_N =>
+        Complex.arg ((x.1.1.1 : Circle) : ℂ) :=
+      (hcont 0).comp_continuous (by fun_prop) (fun x => x.2.1)
+    have c1 : Continuous fun x : apm_t01a03_separating_circle_H1_zero_aux_N =>
+        Complex.arg ((x.1.1.2 : Circle) : ℂ) :=
+      (hcont 1).comp_continuous (by fun_prop) (fun x => x.2.2)
+    by_cases hi : i = 0
+    · simpa [hi] using c0
+    · simpa [hi] using c1
+  · apply Continuous.subtype_mk
+    have h0 : Continuous fun θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) => Real.pi / 3 * (θ : Fin 2 → ℝ) 0 :=
+      continuous_const.mul ((continuous_apply 0).comp continuous_subtype_val)
+    have h1 : Continuous fun θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) => Real.pi / 3 * (θ : Fin 2 → ℝ) 1 :=
+      continuous_const.mul ((continuous_apply 1).comp continuous_subtype_val)
+    apply Continuous.subtype_mk
+    exact (Circle.exp.continuous.comp h0).prodMk (Circle.exp.continuous.comp h1)
+
+/-- Away from the puncture the points of `N` lie in a compact set: for `ε > 0`,
+take the image of the compact `{θ | ε ≤ ‖θ‖ ≤ 1}` under
+`θ ↦ (Circle.exp (π/3·θ₀), Circle.exp (π/3·θ₁))` (it avoids `(1,1)` since
+`0 < ‖θ‖ ≤ 1`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_far :
+    ∀ ε > 0, ∃ C : Set apm_t01a03_PuncturedTorus, IsCompact C ∧
+      ∀ x ∈ apm_t01a03_separating_circle_H1_zero_aux_N,
+        ε ≤ ‖apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x‖ →
+          x ∈ C := by
+  intro ε hε
+  let a : apm_t01a03_Torus → (Fin 2 → ℝ) := fun x i => (3 / Real.pi) *
+    (if i = 0 then Complex.arg (x.1 : ℂ) else Complex.arg (x.2 : ℂ))
+  have ha : ContinuousAt a ((1 : Circle), (1 : Circle)) := by
+    apply continuousAt_pi.mpr
+    intro i
+    apply ContinuousAt.const_mul
+    have harg1 : ContinuousAt Complex.arg (1 : ℂ) :=
+      Complex.continuousAt_arg (by simp [Complex.slitPlane])
+    split
+    · simpa only [Function.comp_apply] using harg1.comp_of_eq
+        (continuous_subtype_val.comp continuous_fst).continuousAt (by simp)
+    · simpa only [Function.comp_apply] using harg1.comp_of_eq
+        (continuous_subtype_val.comp continuous_snd).continuousAt (by simp)
+  have ha0 : a ((1 : Circle), (1 : Circle)) = 0 := by
+    ext i
+    simp [a]
+  have hanorm : ContinuousAt (fun y => ‖a y‖) ((1 : Circle), (1 : Circle)) := ha.norm
+  rw [Metric.continuousAt_iff] at hanorm
+  obtain ⟨δ, hδ, hsmall⟩ := hanorm ε hε
+  let D : Set apm_t01a03_PuncturedTorus :=
+    {x | δ ≤ dist (x.1 : apm_t01a03_Torus) ((1 : Circle), (1 : Circle))}
+  refine ⟨D, ?_, ?_⟩
+  · rw [(Topology.IsEmbedding.subtypeVal).isCompact_iff]
+    have himage : ((↑) : apm_t01a03_PuncturedTorus → apm_t01a03_Torus) '' D =
+        {y | δ ≤ dist y ((1 : Circle), (1 : Circle))} := by
+      ext y
+      constructor
+      · rintro ⟨x, hx, rfl⟩
+        exact hx
+      · intro hy
+        have hne : y ≠ ((1 : Circle), (1 : Circle)) := by
+          intro heq
+          subst y
+          exact (not_le_of_gt hδ) (by simpa using hy)
+        exact ⟨⟨y, hne⟩, hy, rfl⟩
+    rw [himage]
+    exact (isClosed_le continuous_const
+      (continuous_id.dist continuous_const)).isCompact
+  · intro x hx hfar
+    change δ ≤ dist (x.1 : apm_t01a03_Torus) ((1 : Circle), (1 : Circle))
+    by_contra hnot
+    have hs := hsmall (lt_of_not_ge hnot)
+    have hs' : ‖a (x.1 : apm_t01a03_Torus)‖ < ε := by
+      simpa [ha0] using hs
+    apply (not_lt_of_ge hfar)
+    exact hs'
+
+/-- A compact subset of the punctured torus misses a neighbourhood of the puncture:
+its image in the torus is compact, hence closed, and omits `(1,1)`; small angles
+put a point close to `(1,1)`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_near :
+    ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
+      ∀ x ∈ apm_t01a03_separating_circle_H1_zero_aux_N,
+        ‖apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x‖ < r →
+          x ∉ C := by
+  classical
+  intro C hC
+  let q : apm_t01a03_PuncturedTorus → apm_t01a03_Torus := fun x => x.1
+  let K : Set apm_t01a03_Torus := q '' C
+  have hK : IsCompact K := hC.image (by fun_prop)
+  have hp : ((1 : Circle), (1 : Circle)) ∉ K := by
+    rintro ⟨x, hx, heq⟩
+    exact x.2 heq
+  have hopen : IsOpen (Kᶜ) := hK.isClosed.isOpen_compl
+  let f : (Fin 2 → ℝ) → apm_t01a03_Torus := fun θ =>
+    (Circle.exp (Real.pi / 3 * θ 0), Circle.exp (Real.pi / 3 * θ 1))
+  have hf : Continuous f := by
+    apply Continuous.prodMk <;>
+      exact Circle.exp.continuous.comp
+        (continuous_const.mul (continuous_apply _))
+  have hf0 : f 0 = ((1 : Circle), (1 : Circle)) := by
+    simp [f]
+  have hnhds : f ⁻¹' Kᶜ ∈ nhds (0 : Fin 2 → ℝ) := by
+    apply hf.continuousAt.preimage_mem_nhds
+    rw [hf0]
+    exact hopen.mem_nhds hp
+  obtain ⟨r, hr, hrsub⟩ := Metric.mem_nhds_iff.mp hnhds
+  refine ⟨r, hr, ?_⟩
+  intro x hxN hxsmall hxC
+  have hfx : f
+      (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x) =
+      x.1 := by
+    have e : ∀ a : ℝ, Real.pi / 3 * (3 / Real.pi * a) = a := by
+      intro a
+      field_simp
+    apply Prod.ext
+    · simp only [f,
+        apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle,
+        if_true]
+      rw [e, Circle.exp_arg]
+    · simp only [f,
+        apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle,
+        Fin.one_eq_zero_iff, if_false, OfNat.ofNat_ne_one]
+      rw [e, Circle.exp_arg]
+  have hball :
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x ∈
+        Metric.ball (0 : Fin 2 → ℝ) r := by
+    simpa [dist_zero_right] using hxsmall
+  have hnotK := hrsub hball
+  have hinK : f
+      (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x) ∈ K := by
+    rw [hfx]
+    exact ⟨x, hxC, rfl⟩
+  exact hnotK hinK
 
 /-- A chart from the punctured square `N` onto the punctured open unit square,
 `x ↦ (3/π) • (arg x₁, arg x₂)`. Points far from `0` in the chart lie in a
@@ -501,11 +906,413 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart :
           ∀ x, ε ≤ ‖(φ x : Fin 2 → ℝ)‖ → (x : apm_t01a03_PuncturedTorus) ∈ C) ∧
       (∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
           ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) := by
-  sorry
+  obtain ⟨φ, hφ⟩ := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo
+  refine ⟨φ, fun ε hε => ?_, fun C hC => ?_⟩
+  · obtain ⟨C, hC, hmem⟩ :=
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_far ε hε
+    exact ⟨C, hC, fun x hx => hmem x.1 x.2 (by rwa [hφ] at hx)⟩
+  · obtain ⟨r, hr, hnot⟩ :=
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_near C hC
+    exact ⟨r, hr, fun x hx => hnot x.1 x.2 (by rwa [hφ] at hx)⟩
 
 /-- Gluing two copies of a chart at `∞ ↦ 0`: `∞ ↦ 0`, `inl x ↦ (φ x, 0)`,
 `inr x ↦ (0, φ x)`. Continuity at `∞` uses the first compactness clause, and
 continuity of the inverse at `0` uses the second. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+    (p : apm_t01a03_TwoPuncturedTori)
+    (hp : (p : OnePoint apm_t01a03_TwoPuncturedTori) ∈
+      apm_t01a03_separating_circle_H1_zero_aux_V) :
+    p ∈ apm_t01a03_separating_circle_H1_zero_aux_Nsum := by
+  by_contra hn
+  exact hp ⟨p, hn, rfl⟩
+
+noncomputable def
+    apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ))) :
+    apm_t01a03_separating_circle_H1_zero_aux_V →
+      apm_t01a03_separating_circle_H1_zero_aux_W := fun ⟨z, hz⟩ => by
+  classical
+  induction z using OnePoint.rec with
+  | infty =>
+      exact ⟨(0, 0), Or.inl ⟨Metric.mem_ball_self zero_lt_one, rfl⟩⟩
+  | coe p =>
+      have hp :=
+        apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem p hz
+      cases p with
+      | inl p =>
+          have hpN : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hp
+          let q := φ ⟨p, hpN⟩
+          exact ⟨((q : Fin 2 → ℝ), 0), Or.inl ⟨q.2.1, rfl⟩⟩
+      | inr p =>
+          have hpN : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hp
+          let q := φ ⟨p, hpN⟩
+          exact ⟨(0, (q : Fin 2 → ℝ)), Or.inr ⟨rfl, q.2.1⟩⟩
+
+/-- The glued map is a bijection `V → W`: `∞` is the only point sent to
+`(0, 0)` (`φ` takes values off `0`), the two summands land in the two different
+squares, and on each summand it is `φ`, which is a bijection onto the punctured
+square. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_bijective
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ))) :
+    Function.Bijective (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) := by
+  classical
+  constructor
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
+    induction x using OnePoint.rec with
+    | infty =>
+        induction y using OnePoint.rec with
+        | infty => rfl
+        | coe q =>
+            cases q with
+            | inl q =>
+                have hq :=
+                  apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+                    (Sum.inl q) hy
+                have hqN : q ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                  simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hq
+                have hn : (φ ⟨q, hqN⟩ : Fin 2 → ℝ) ≠ 0 := by
+                  exact fun h => (φ ⟨q, hqN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                have := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy
+                simp [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at this
+                exact (hn this.symm).elim
+            | inr q =>
+                have hq :=
+                  apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+                    (Sum.inr q) hy
+                have hqN : q ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                  simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hq
+                have hn : (φ ⟨q, hqN⟩ : Fin 2 → ℝ) ≠ 0 := by
+                  exact fun h => (φ ⟨q, hqN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                have := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.2) hxy
+                simp [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at this
+                exact (hn this.symm).elim
+    | coe p =>
+        induction y using OnePoint.rec with
+        | infty =>
+            cases p with
+            | inl p =>
+                have hp := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl p) hx
+                have hpN : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                  simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hp
+                have hn : (φ ⟨p, hpN⟩ : Fin 2 → ℝ) ≠ 0 := fun h =>
+                  (φ ⟨p, hpN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                have he := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy
+                simp [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at he
+                exact (hn he).elim
+            | inr p =>
+                have hp := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inr p) hx
+                have hpN : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                  simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hp
+                have hn : (φ ⟨p, hpN⟩ : Fin 2 → ℝ) ≠ 0 := fun h =>
+                  (φ ⟨p, hpN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                have he := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.2) hxy
+                simp [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at he
+                exact (hn he).elim
+        | coe q =>
+            apply Subtype.ext
+            cases p with
+            | inl p =>
+                cases q with
+                | inl q =>
+                    simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at hxy
+                    have hpN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl p) hx
+                    have hqN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl q) hy
+                    simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum] at hpN hqN
+                    have he := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy
+                    exact congrArg (fun s : apm_t01a03_TwoPuncturedTori =>
+                      (s : OnePoint apm_t01a03_TwoPuncturedTori))
+                        (congrArg Sum.inl (congrArg Subtype.val (φ.injective (Subtype.ext he))))
+                | inr q =>
+                    simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at hxy
+                    have hpN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl p) hx
+                    simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum] at hpN
+                    have hn : (φ ⟨p, hpN⟩ : Fin 2 → ℝ) ≠ 0 := fun h =>
+                      (φ ⟨p, hpN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                    exact (hn (congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy)).elim
+            | inr p =>
+                cases q with
+                | inl q =>
+                    simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at hxy
+                    have hqN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inl q) hy
+                    simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum] at hqN
+                    have hn : (φ ⟨q, hqN⟩ : Fin 2 → ℝ) ≠ 0 := fun h =>
+                      (φ ⟨q, hqN⟩).2.2 (Set.mem_singleton_iff.mpr h)
+                    exact (hn (congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.1) hxy).symm).elim
+                | inr q =>
+                    simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward] at hxy
+                    have hpN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inr p) hx
+                    have hqN := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem (Sum.inr q) hy
+                    simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum] at hpN hqN
+                    have he := congrArg (fun z : apm_t01a03_separating_circle_H1_zero_aux_W => z.1.2) hxy
+                    exact congrArg (fun s : apm_t01a03_TwoPuncturedTori =>
+                      (s : OnePoint apm_t01a03_TwoPuncturedTori))
+                        (congrArg Sum.inr (congrArg Subtype.val (φ.injective (Subtype.ext he))))
+  · rintro ⟨⟨a, b⟩, hab⟩
+    rcases hab with hab | hab
+    · rcases hab with ⟨ha, hb0⟩
+      by_cases hzero : a = 0
+      ·
+        refine ⟨⟨(OnePoint.infty : OnePoint apm_t01a03_TwoPuncturedTori), ?_⟩, ?_⟩
+        · simp [apm_t01a03_separating_circle_H1_zero_aux_V]
+        · apply Subtype.ext
+          change (0, 0) = (a, b)
+          exact Prod.ext hzero.symm (Set.mem_singleton_iff.mp hb0).symm
+      · let q : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) :=
+          ⟨a, ha, fun h => hzero (Set.mem_singleton_iff.mp h)⟩
+        let p := (φ.symm q : apm_t01a03_separating_circle_H1_zero_aux_N)
+        have hpV : ((Sum.inl p.1 : apm_t01a03_TwoPuncturedTori) :
+            OnePoint apm_t01a03_TwoPuncturedTori) ∈ apm_t01a03_separating_circle_H1_zero_aux_V := by
+          rintro ⟨z, hz, heq⟩
+          have heq' : z = Sum.inl p.1 := OnePoint.coe_injective heq
+          subst z
+          exact hz (by
+            simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum])
+        refine ⟨⟨(Sum.inl p.1 : apm_t01a03_TwoPuncturedTori), hpV⟩, ?_⟩
+        apply Subtype.ext
+        change ((φ p : Fin 2 → ℝ), 0) = (a, b)
+        exact Prod.ext (by simp [p, q]) (Set.mem_singleton_iff.mp hb0).symm
+    · rcases hab with ⟨ha0, hb⟩
+      by_cases hzero : b = 0
+      ·
+        refine ⟨⟨(OnePoint.infty : OnePoint apm_t01a03_TwoPuncturedTori), ?_⟩, ?_⟩
+        · simp [apm_t01a03_separating_circle_H1_zero_aux_V]
+        · apply Subtype.ext
+          change (0, 0) = (a, b)
+          exact Prod.ext (Set.mem_singleton_iff.mp ha0).symm hzero.symm
+      · let q : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) :=
+          ⟨b, hb, fun h => hzero (Set.mem_singleton_iff.mp h)⟩
+        let p := (φ.symm q : apm_t01a03_separating_circle_H1_zero_aux_N)
+        have hpV : ((Sum.inr p.1 : apm_t01a03_TwoPuncturedTori) :
+            OnePoint apm_t01a03_TwoPuncturedTori) ∈ apm_t01a03_separating_circle_H1_zero_aux_V := by
+          rintro ⟨z, hz, heq⟩
+          have heq' : z = Sum.inr p.1 := OnePoint.coe_injective heq
+          subst z
+          exact hz (by
+            simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum])
+        refine ⟨⟨(Sum.inr p.1 : apm_t01a03_TwoPuncturedTori), hpV⟩, ?_⟩
+        apply Subtype.ext
+        change (0, (φ p : Fin 2 → ℝ)) = (a, b)
+        exact Prod.ext (Set.mem_singleton_iff.mp ha0).symm (by simp [p, q])
+
+/-- The glued map is continuous. At a finite point of `V` it is `φ` on an open
+piece (`OnePoint.isOpenEmbedding_coe`, and `Nsum` is open). At `∞`: a
+neighbourhood of `(0, 0)` in `W` contains every point of norm `< ε`; by `hfar`,
+the points of either summand with `‖φ x‖ ≥ ε` lie in a compact set `C`, so the
+preimage contains the open set `V \ (inl '' C ∪ inr '' C)`, a neighbourhood of
+`∞` (`OnePoint.isOpen_compl_image_coe`-style). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_continuous
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (hfar : ∀ ε > 0, ∃ C : Set apm_t01a03_PuncturedTorus, IsCompact C ∧
+          ∀ x, ε ≤ ‖(φ x : Fin 2 → ℝ)‖ → (x : apm_t01a03_PuncturedTorus) ∈ C) :
+    Continuous (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) := by
+  classical
+  rw [continuous_iff_continuousAt]
+  rintro ⟨z, hz⟩
+  induction z using OnePoint.rec with
+  | infty =>
+      rw [ContinuousAt, tendsto_subtype_rng]
+      intro s hs
+      obtain ⟨ε, hε, hεs⟩ := Metric.mem_nhds_iff.mp hs
+      obtain ⟨C, hC, hfarC⟩ := hfar ε hε
+      let K : Set apm_t01a03_TwoPuncturedTori := Sum.inl '' C ∪ Sum.inr '' C
+      have hK : IsCompact K :=
+        (hC.image continuous_inl).union (hC.image continuous_inr)
+      let O : Set (OnePoint apm_t01a03_TwoPuncturedTori) :=
+        (((↑) : apm_t01a03_TwoPuncturedTori →
+          OnePoint apm_t01a03_TwoPuncturedTori) '' K)ᶜ
+      have hOopen : IsOpen O := by
+        exact OnePoint.isOpen_compl_image_coe.mpr ⟨hK.isClosed, hK⟩
+      have hinfO : OnePoint.infty ∈ O := by
+        simp [O]
+      change (fun x =>
+        (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward
+          φ x : (Fin 2 → ℝ) × (Fin 2 → ℝ))) ⁻¹' s ∈ nhds ⟨OnePoint.infty, hz⟩
+      refine Filter.mem_of_superset
+        ((hOopen.preimage continuous_subtype_val).mem_nhds hinfO) ?_
+      rintro ⟨w, hwV⟩ hwO
+      induction w using OnePoint.rec with
+      | infty =>
+          apply hεs
+          simpa [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward]
+      | coe p =>
+          have hpN :=
+            apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem p hwV
+          cases p with
+          | inl p =>
+              have hpN' : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hpN
+              have hpC : p ∉ C := by
+                intro hpC
+                exact hwO ⟨Sum.inl p, Or.inl ⟨p, hpC, rfl⟩, rfl⟩
+              have hnorm : ‖(φ ⟨p, hpN'⟩ : Fin 2 → ℝ)‖ < ε :=
+                lt_of_not_ge (fun h ↦ hpC (hfarC ⟨p, hpN'⟩ h))
+              apply hεs
+              change dist ((φ ⟨p, hpN'⟩ : Fin 2 → ℝ), 0) (0, 0) < ε
+              simpa [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward,
+                dist_eq_norm] using hnorm
+          | inr p =>
+              have hpN' : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+                simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hpN
+              have hpC : p ∉ C := by
+                intro hpC
+                exact hwO ⟨Sum.inr p, Or.inr ⟨p, hpC, rfl⟩, rfl⟩
+              have hnorm : ‖(φ ⟨p, hpN'⟩ : Fin 2 → ℝ)‖ < ε :=
+                lt_of_not_ge (fun h ↦ hpC (hfarC ⟨p, hpN'⟩ h))
+              apply hεs
+              change dist (0, (φ ⟨p, hpN'⟩ : Fin 2 → ℝ)) (0, 0) < ε
+              simpa [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward,
+                dist_eq_norm] using hnorm
+  | coe p =>
+      cases p with
+      | inl p =>
+          have hpN :=
+            apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+              (Sum.inl p) hz
+          have hpN' : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hpN
+          let j : apm_t01a03_separating_circle_H1_zero_aux_N →
+              apm_t01a03_separating_circle_H1_zero_aux_V := fun x =>
+            ⟨((Sum.inl (x : apm_t01a03_PuncturedTorus) :
+              apm_t01a03_TwoPuncturedTori) :
+                OnePoint apm_t01a03_TwoPuncturedTori), by
+              simpa [apm_t01a03_separating_circle_H1_zero_aux_V] using
+                (show Sum.inl (x : apm_t01a03_PuncturedTorus) ∈
+                    apm_t01a03_separating_circle_H1_zero_aux_Nsum from
+                  Or.inl ⟨_, x.2, rfl⟩)⟩
+          have hNopen : IsOpen apm_t01a03_separating_circle_H1_zero_aux_N := by
+            exact (isOpen_lt
+              ((continuous_subtype_val.comp continuous_fst).comp
+                continuous_subtype_val |>.dist continuous_const) continuous_const).and
+              (isOpen_lt
+                ((continuous_subtype_val.comp continuous_snd).comp
+                  continuous_subtype_val |>.dist continuous_const) continuous_const)
+          have hj : Topology.IsOpenEmbedding j := by
+            have he : Topology.IsOpenEmbedding (fun x : apm_t01a03_separating_circle_H1_zero_aux_N =>
+                ((Sum.inl (x : apm_t01a03_PuncturedTorus) :
+                  apm_t01a03_TwoPuncturedTori) : OnePoint apm_t01a03_TwoPuncturedTori)) :=
+              OnePoint.isOpenEmbedding_coe.comp
+                (Topology.IsOpenEmbedding.inl.comp hNopen.isOpenEmbedding_subtypeVal)
+            refine ⟨he.isEmbedding.codRestrict
+                apm_t01a03_separating_circle_H1_zero_aux_V (fun x => (j x).2), ?_⟩
+            exact (he.isOpenMap.codRestrict (fun x => (j x).2)).isOpen_range
+          let k : apm_t01a03_separating_circle_H1_zero_aux_N →
+              apm_t01a03_separating_circle_H1_zero_aux_W := fun x =>
+            ⟨((φ x : Fin 2 → ℝ), 0), Or.inl ⟨(φ x).2.1, rfl⟩⟩
+          have hk : Continuous k := by
+            dsimp [k]
+            fun_prop
+          have hh := (hj.continuousAt_iff
+            (g := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ)
+            (x := ⟨p, hpN'⟩)).mp (by
+              have heq :
+                  apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ∘ j = k := by
+                funext x
+                apply Subtype.ext
+                rfl
+              rw [heq]
+              exact hk.continuousAt)
+          simpa [j] using hh
+      | inr p =>
+          have hpN :=
+            apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_mem
+              (Sum.inr p) hz
+          have hpN' : p ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hpN
+          let j : apm_t01a03_separating_circle_H1_zero_aux_N →
+              apm_t01a03_separating_circle_H1_zero_aux_V := fun x =>
+            ⟨((Sum.inr (x : apm_t01a03_PuncturedTorus) :
+              apm_t01a03_TwoPuncturedTori) :
+                OnePoint apm_t01a03_TwoPuncturedTori), by
+              simpa [apm_t01a03_separating_circle_H1_zero_aux_V] using
+                (show Sum.inr (x : apm_t01a03_PuncturedTorus) ∈
+                    apm_t01a03_separating_circle_H1_zero_aux_Nsum from
+                  Or.inr ⟨_, x.2, rfl⟩)⟩
+          have hNopen : IsOpen apm_t01a03_separating_circle_H1_zero_aux_N := by
+            exact (isOpen_lt
+              ((continuous_subtype_val.comp continuous_fst).comp
+                continuous_subtype_val |>.dist continuous_const) continuous_const).and
+              (isOpen_lt
+                ((continuous_subtype_val.comp continuous_snd).comp
+                  continuous_subtype_val |>.dist continuous_const) continuous_const)
+          have hj : Topology.IsOpenEmbedding j := by
+            have he : Topology.IsOpenEmbedding (fun x : apm_t01a03_separating_circle_H1_zero_aux_N =>
+                ((Sum.inr (x : apm_t01a03_PuncturedTorus) :
+                  apm_t01a03_TwoPuncturedTori) : OnePoint apm_t01a03_TwoPuncturedTori)) :=
+              OnePoint.isOpenEmbedding_coe.comp
+                (Topology.IsOpenEmbedding.inr.comp hNopen.isOpenEmbedding_subtypeVal)
+            refine ⟨he.isEmbedding.codRestrict
+                apm_t01a03_separating_circle_H1_zero_aux_V (fun x => (j x).2), ?_⟩
+            exact (he.isOpenMap.codRestrict (fun x => (j x).2)).isOpen_range
+          let k : apm_t01a03_separating_circle_H1_zero_aux_N →
+              apm_t01a03_separating_circle_H1_zero_aux_W := fun x =>
+            ⟨(0, (φ x : Fin 2 → ℝ)), Or.inr ⟨rfl, (φ x).2.1⟩⟩
+          have hk : Continuous k := by
+            dsimp [k]
+            fun_prop
+          have hh := (hj.continuousAt_iff
+            (g := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ)
+            (x := ⟨p, hpN'⟩)).mp (by
+              have heq :
+                  apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ∘ j = k := by
+                funext x
+                apply Subtype.ext
+                rfl
+              rw [heq]
+              exact hk.continuousAt)
+          simpa [j] using hh
+
+/-- Openness at a finite point. Near `p ∈ Nsum` the glued map is `φ` on one
+summand followed by the embedding of the punctured square into `W`; `Nsum` is
+open in `PT ⊔ PT` (`OnePoint.isOpenEmbedding_coe`), so a neighbourhood of `p`
+in `V` contains the image of a neighbourhood of `p` in its summand's `N`, which
+`φ` (a homeomorphism) carries onto a neighbourhood of `φ p` in the punctured
+square, and that square is open in `W` away from the origin. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap_aux_coe
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (p : apm_t01a03_TwoPuncturedTori)
+    (hp : (p : OnePoint apm_t01a03_TwoPuncturedTori) ∈
+      apm_t01a03_separating_circle_H1_zero_aux_V) :
+    nhds (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ⟨p, hp⟩) ≤
+      Filter.map (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) (nhds ⟨p, hp⟩) := by
+  sorry
+
+/-- Openness at `∞`. A neighbourhood of `∞` in `V` contains `V` minus the image
+of a compact `K ⊆ PT ⊔ PT`; write `K ⊆ inl '' C ∪ inr '' C` with `C` compact
+(the two preimages, union). `hnear C` gives `r > 0` with every `x ∈ N` of
+`‖φ x‖ < r` outside `C`; so every point of `W` of norm `< r` is the image of a
+point of the neighbourhood (the origin is the image of `∞`, and `(q, 0)`,
+`(0, q)` with `q ≠ 0` are images of `φ.symm q` in a summand). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap_aux_infty
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (hnear : ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
+          ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C)
+    (h : (OnePoint.infty : OnePoint apm_t01a03_TwoPuncturedTori) ∈
+      apm_t01a03_separating_circle_H1_zero_aux_V) :
+    nhds (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ ⟨OnePoint.infty, h⟩) ≤
+      Filter.map (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) (nhds ⟨OnePoint.infty, h⟩) := by
+  sorry
+
+/-- The glued map is open: it is open at every point (`isOpenMap_iff_nhds_le`),
+at `∞` by `_aux_infty` and at finite points by `_aux_coe`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap
+    (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (hnear : ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
+          ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) :
+    IsOpenMap (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_forward φ) := by
+  rw [isOpenMap_iff_nhds_le]
+  rintro ⟨z, hz⟩
+  induction z using OnePoint.rec with
+  | infty => exact apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap_aux_infty φ hnear hz
+  | coe p => exact apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap_aux_coe φ p hz
+
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph
     (φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
         (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
@@ -514,8 +1321,9 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph
     (hnear : ∀ C : Set apm_t01a03_PuncturedTorus, IsCompact C → ∃ r > 0,
           ∀ x, ‖(φ x : Fin 2 → ℝ)‖ < r → (x : apm_t01a03_PuncturedTorus) ∉ C) :
     Nonempty (apm_t01a03_separating_circle_H1_zero_aux_V ≃ₜ
-      apm_t01a03_separating_circle_H1_zero_aux_W) := by
-  sorry
+      apm_t01a03_separating_circle_H1_zero_aux_W) :=
+  ⟨(Equiv.ofBijective _ (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_bijective φ)).toHomeomorphOfContinuousOpen
+    (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_continuous φ hfar) (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_homeomorph_aux_isOpenMap φ hnear)⟩
 
 /-- `H₁ V = 0`: `V` is two open squares wedged at their centres (`∞`), hence
 contractible (`CoefficientContractiblePair.higher_zero`). -/
@@ -533,7 +1341,45 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero :
 coordinates it is the open square `(-π/3, π/3)²` minus its centre. -/
 lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected :
     PathConnectedSpace apm_t01a03_separating_circle_H1_zero_aux_N := by
-  sorry
+  obtain ⟨φ, _, _⟩ :=
+    apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart
+  let e : (Fin 2 → ℝ) ≃ₜ Metric.ball (0 : Fin 2 → ℝ) 1 :=
+    Homeomorph.unitBall
+  have hrank : 1 < Module.rank ℝ (Fin 2 → ℝ) := by
+    rw [← Module.finrank_eq_rank']
+    norm_num [Module.finrank_fintype_fun_eq_card]
+  have hpc : IsPathConnected (({0}ᶜ : Set (Fin 2 → ℝ))) :=
+    isPathConnected_compl_singleton_of_one_lt_rank hrank 0
+  have himage : (fun x ↦ (e x : Fin 2 → ℝ)) ''
+      ({0}ᶜ : Set (Fin 2 → ℝ)) =
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0}) := by
+    ext y
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      refine ⟨(e x).property, ?_⟩
+      intro h
+      simp only [Set.mem_compl_iff, Set.mem_singleton_iff] at hx
+      rw [Set.mem_singleton_iff] at h
+      apply hx
+      apply e.injective
+      apply Subtype.ext
+      exact h.trans (by simp [e])
+    · intro hy
+      refine ⟨e.symm ⟨y, hy.1⟩, ?_, ?_⟩
+      simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
+      intro h
+      apply hy.2
+      have := congrArg Subtype.val (e.apply_symm_apply ⟨y, hy.1⟩)
+      simpa [h, e] using this.symm
+      exact congrArg Subtype.val (e.apply_symm_apply ⟨y, hy.1⟩)
+  have hpc' : IsPathConnected
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0}) := by
+    rw [← himage]
+    exact hpc.image (e.continuous.subtype_val)
+  haveI : PathConnectedSpace
+      (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) := by
+    exact isPathConnected_iff_pathConnectedSpace.mp hpc'
+  exact φ.symm.surjective.pathConnectedSpace φ.symm.continuous
 
 /-- A map that reflects path-joinedness is injective on integral `H₀`.
 (`H₀ A` is free on the path components of `A`; one route: for each path
@@ -556,7 +1402,118 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_incl_joined
       apm_t01a03_separating_circle_H1_zero_aux_V)) :
     Joined (Set.inclusion Set.inter_subset_left x : ↥apm_t01a03_separating_circle_H1_zero_aux_U)
       (Set.inclusion Set.inter_subset_left y) → Joined x y := by
-  sorry
+  rintro hxy
+  rcases x with ⟨x, hxU, hxV⟩
+  rcases y with ⟨y, hyU, hyV⟩
+  rcases hxU with ⟨a, rfl⟩
+  rcases hyU with ⟨b, rfl⟩
+  let e : apm_t01a03_TwoPuncturedTori ≃ₜ
+      apm_t01a03_separating_circle_H1_zero_aux_U :=
+    OnePoint.isOpenEmbedding_coe.toHomeomorph
+  have hab : Joined a b := by
+    have hp : Joined (e.symm (Set.inclusion Set.inter_subset_left
+          ⟨↑a, ⟨⟨a, rfl⟩, hxV⟩⟩))
+        (e.symm (Set.inclusion Set.inter_subset_left
+          ⟨↑b, ⟨⟨b, rfl⟩, hyV⟩⟩)) :=
+      ⟨hxy.somePath.map e.symm.continuous⟩
+    have hea : e.symm (Set.inclusion Set.inter_subset_left
+        ⟨↑a, ⟨⟨a, rfl⟩, hxV⟩⟩) = a := by
+      exact OnePoint.isOpenEmbedding_coe.isEmbedding.toHomeomorph_symm_apply a
+    have heb : e.symm (Set.inclusion Set.inter_subset_left
+        ⟨↑b, ⟨⟨b, rfl⟩, hyV⟩⟩) = b := by
+      exact OnePoint.isOpenEmbedding_coe.isEmbedding.toHomeomorph_symm_apply b
+    rwa [hea, heb] at hp
+  have haN : a ∈ apm_t01a03_separating_circle_H1_zero_aux_Nsum := by
+    simpa [apm_t01a03_separating_circle_H1_zero_aux_V] using hxV
+  have hbN : b ∈ apm_t01a03_separating_circle_H1_zero_aux_Nsum := by
+    simpa [apm_t01a03_separating_circle_H1_zero_aux_V] using hyV
+  cases a with
+  | inl a =>
+      cases b with
+      | inl b =>
+          have ha : a ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using haN
+          have hb : b ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hbN
+          let f : apm_t01a03_separating_circle_H1_zero_aux_N →
+              ↥(apm_t01a03_separating_circle_H1_zero_aux_U ∩
+                apm_t01a03_separating_circle_H1_zero_aux_V) := fun z =>
+            ⟨(↑(Sum.inl z.1 : apm_t01a03_TwoPuncturedTori) :
+                OnePoint apm_t01a03_TwoPuncturedTori),
+              ⟨by
+                show ↑(Sum.inl z.1 : apm_t01a03_TwoPuncturedTori) ∈
+                  apm_t01a03_separating_circle_H1_zero_aux_U
+                exact ⟨Sum.inl z.1, rfl⟩, by
+                change ↑(Sum.inl z.1 : apm_t01a03_TwoPuncturedTori) ∉
+                  ((↑) : apm_t01a03_TwoPuncturedTori →
+                    OnePoint apm_t01a03_TwoPuncturedTori) ''
+                    apm_t01a03_separating_circle_H1_zero_aux_Nsumᶜ
+                rintro ⟨q, hq, heq⟩
+                have hqa : q = Sum.inl z.1 := OnePoint.coe_injective heq
+                subst q
+                exact hq (by simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum,
+                  z.2])⟩⟩
+          have hf : Continuous f :=
+            Continuous.subtype_mk
+              (OnePoint.continuous_coe.comp
+                (continuous_inl.comp continuous_subtype_val)) _
+          letI : PathConnectedSpace
+              apm_t01a03_separating_circle_H1_zero_aux_N :=
+            apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected
+          exact ⟨(PathConnectedSpace.somePath ⟨a, ha⟩ ⟨b, hb⟩).map hf⟩
+      | inr b =>
+          have hs : Sum.inl a ∈ Set.range hab.somePath :=
+            ⟨0, hab.somePath.source⟩
+          have hi : Sum.inl a ∈ Set.range
+              (Sum.inl : apm_t01a03_PuncturedTorus →
+                apm_t01a03_TwoPuncturedTori) := ⟨a, rfl⟩
+          have hr := (isPreconnected_range hab.somePath.continuous).subset_isClopen
+            isClopen_range_inl ⟨_, hs, hi⟩
+          rcases hr ⟨1, hab.somePath.target⟩ with ⟨c, hc⟩
+          exact False.elim (Sum.inl_ne_inr hc)
+  | inr a =>
+      cases b with
+      | inl b =>
+          have hs : Sum.inr a ∈ Set.range hab.somePath :=
+            ⟨0, hab.somePath.source⟩
+          have hi : Sum.inr a ∈ Set.range
+              (Sum.inr : apm_t01a03_PuncturedTorus →
+                apm_t01a03_TwoPuncturedTori) := ⟨a, rfl⟩
+          have hr := (isPreconnected_range hab.somePath.continuous).subset_isClopen
+            isClopen_range_inr ⟨_, hs, hi⟩
+          rcases hr ⟨1, hab.somePath.target⟩ with ⟨c, hc⟩
+          exact False.elim (Sum.inr_ne_inl hc)
+      | inr b =>
+          have ha : a ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using haN
+          have hb : b ∈ apm_t01a03_separating_circle_H1_zero_aux_N := by
+            simpa [apm_t01a03_separating_circle_H1_zero_aux_Nsum] using hbN
+          let f : apm_t01a03_separating_circle_H1_zero_aux_N →
+              ↥(apm_t01a03_separating_circle_H1_zero_aux_U ∩
+                apm_t01a03_separating_circle_H1_zero_aux_V) := fun z =>
+            ⟨(↑(Sum.inr z.1 : apm_t01a03_TwoPuncturedTori) :
+                OnePoint apm_t01a03_TwoPuncturedTori),
+              ⟨by
+                show ↑(Sum.inr z.1 : apm_t01a03_TwoPuncturedTori) ∈
+                  apm_t01a03_separating_circle_H1_zero_aux_U
+                exact ⟨Sum.inr z.1, rfl⟩, by
+                change ↑(Sum.inr z.1 : apm_t01a03_TwoPuncturedTori) ∉
+                  ((↑) : apm_t01a03_TwoPuncturedTori →
+                    OnePoint apm_t01a03_TwoPuncturedTori) ''
+                    apm_t01a03_separating_circle_H1_zero_aux_Nsumᶜ
+                rintro ⟨q, hq, heq⟩
+                have hqa : q = Sum.inr z.1 := OnePoint.coe_injective heq
+                subst q
+                exact hq (by simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum,
+                  z.2])⟩⟩
+          have hf : Continuous f :=
+            Continuous.subtype_mk
+              (OnePoint.continuous_coe.comp
+                (continuous_inr.comp continuous_subtype_val)) _
+          letI : PathConnectedSpace
+              apm_t01a03_separating_circle_H1_zero_aux_N :=
+            apm_t01a03_separating_circle_H1_zero_aux_inter_H0_inj_aux_N_pathConnected
+          exact ⟨(PathConnectedSpace.somePath ⟨a, ha⟩ ⟨b, hb⟩).map hf⟩
 
 /-- `H₀ (U ∩ V) → H₀ U` is injective: `U ∩ V` is the two punctured squares, each
 path connected, landing in different summands of `U ≅ PT ⊔ PT`. -/
