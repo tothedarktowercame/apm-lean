@@ -4294,7 +4294,34 @@ lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_inr_inj
 /-- There are at least two cube roots of unity on the circle. -/
 lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_two_roots :
     ∃ r s : circleWedge_connected_pair_aux_Root, r ≠ s := by
-  sorry
+  let ζ : ℂ := (-1 / 2 : ℂ) + (Real.sqrt 3 / 2 : ℂ) * Complex.I
+  have hsqrt : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hζnorm : ‖ζ‖ = 1 := by
+    rw [Complex.norm_def]
+    have hnormSq : Complex.normSq ζ = 1 := by
+      simp [ζ, Complex.normSq_apply]
+      nlinarith [hsqrt]
+    rw [hnormSq]
+    norm_num
+  let z : Circle := ⟨ζ, by simpa [Metric.mem_sphere, dist_zero_right] using hζnorm⟩
+  have hsqrt3 : (Real.sqrt 3) ^ 3 = 3 * Real.sqrt 3 := by
+    rw [pow_succ, hsqrt]
+  have hζcube : ζ ^ 3 = 1 := by
+    apply Complex.ext <;> simp [ζ, pow_succ] <;>
+      ring_nf <;> nlinarith [hsqrt, hsqrt3]
+  let r : circleWedge_connected_pair_aux_Root := ⟨circleBase, by
+    apply Subtype.ext
+    simp [circleBase]⟩
+  let s : circleWedge_connected_pair_aux_Root := ⟨z, by
+    apply Subtype.ext
+    exact hζcube⟩
+  refine ⟨r, s, ?_⟩
+  intro hrs
+  have hval := congrArg (fun x : circleWedge_connected_pair_aux_Root ↦
+    ((x.1 : Circle) : ℂ)) hrs
+  change (1 : ℂ) = ζ at hval
+  have hre := congrArg Complex.re hval
+  norm_num [ζ] at hre
 
 lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD
     (x : circleWedge_connected_pair_aux_ED) :
