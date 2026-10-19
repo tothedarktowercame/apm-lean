@@ -2085,6 +2085,55 @@ Route: `G r := L (0, r)` on `ℚ ∩ [0,1]`; `habs` with one interval gives
 the limit in `habs` (rational endpoints approximating real ones, keeping disjointness by
 shrinking) gives the ε–δ form `absolutelyContinuousOnInterval_iff` with
 `δ := (ε / (R + 1))^q`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_interval_bound
+    (q : ℝ) (L : ℚ × ℚ → ℝ) (R : ℝ)
+    (habs : ∀ (n : ℕ) (u v : ℕ → ℚ), (∀ i ∈ Finset.range n, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1) →
+      Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i : ℝ) (v i)) →
+      ∑ i ∈ Finset.range n, |L (u i, v i)| ≤
+        R * (∑ i ∈ Finset.range n, ((v i : ℝ) - u i)) ^ (1 / q))
+    (a b : ℚ) (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ 1) :
+    |L (a, b)| ≤ R * ((b : ℝ) - a) ^ (1 / q) := by
+  have h := habs 1 (fun _ ↦ a) (fun _ ↦ b) (by
+    intro i hi
+    exact ⟨ha, hab, hb⟩) (by
+      simp [Set.PairwiseDisjoint])
+  simpa using h
+
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_increment
+    (L : ℚ × ℚ → ℝ)
+    (hadd : ∀ a b c : ℚ, a ≤ b → b ≤ c → L (a, c) = L (a, b) + L (b, c))
+    (a b : ℚ) (ha : 0 ≤ a) (hab : a ≤ b) :
+    L (a, b) = L (0, b) - L (0, a) := by
+  rw [hadd 0 a b ha hab]
+  ring
+
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_holder_extend
+    (q : ℝ) (hq : 1 < q) (R : ℝ) (hR : 0 ≤ R) (G : ℚ → ℝ)
+    (hG : ∀ a b : ℚ, 0 ≤ a → a ≤ b → b ≤ 1 → |G b - G a| ≤ R * ((b : ℝ) - a) ^ (1 / q)) :
+    ∃ F : ℝ → ℝ, ContinuousOn F (Set.Icc 0 1) ∧ ∀ a : ℚ, 0 ≤ a → a ≤ 1 → F a = G a := by
+  sorry
+
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_real_family
+    (q : ℝ) (hq : 1 < q) (R : ℝ) (hR : 0 ≤ R) (F : ℝ → ℝ) (hF : ContinuousOn F (Set.Icc 0 1))
+    (hrat : ∀ (n : ℕ) (u v : ℕ → ℚ), (∀ i ∈ Finset.range n, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1) →
+      Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i : ℝ) (v i)) →
+      ∑ i ∈ Finset.range n, |F (v i) - F (u i)| ≤
+        R * (∑ i ∈ Finset.range n, ((v i : ℝ) - u i)) ^ (1 / q)) :
+    ∀ (n : ℕ) (u v : ℕ → ℝ), (∀ i ∈ Finset.range n, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1) →
+      Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i) (v i)) →
+      ∑ i ∈ Finset.range n, |F (v i) - F (u i)| ≤
+        R * (∑ i ∈ Finset.range n, (v i - u i)) ^ (1 / q) := by
+  sorry
+
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_ac
+    (q : ℝ) (hq : 1 < q) (R : ℝ) (hR : 0 ≤ R) (F : ℝ → ℝ)
+    (hreal : ∀ (n : ℕ) (u v : ℕ → ℝ), (∀ i ∈ Finset.range n, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1) →
+      Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i) (v i)) →
+      ∑ i ∈ Finset.range n, |F (v i) - F (u i)| ≤
+        R * (∑ i ∈ Finset.range n, (v i - u i)) ^ (1 / q)) :
+    AbsolutelyContinuousOnInterval F 0 1 := by
+  sorry
+
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend
     (q : ℝ) (hq : 1 < q) (L : ℚ × ℚ → ℝ) (R : ℝ) (hR : 0 ≤ R)
     (hadd : ∀ a b c : ℚ, a ≤ b → b ≤ c → L (a, c) = L (a, b) + L (b, c))
@@ -2094,7 +2143,27 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
         R * (∑ i ∈ Finset.range n, ((v i : ℝ) - u i)) ^ (1 / q)) :
     ∃ F : ℝ → ℝ, AbsolutelyContinuousOnInterval F 0 1 ∧
       ∀ a b : ℚ, 0 ≤ a → a ≤ b → b ≤ 1 → L (a, b) = F b - F a := by
-  sorry
+  have hinc := apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_increment L hadd
+  obtain ⟨F, hF, hFG⟩ := apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_holder_extend q hq R hR (fun r ↦ L (0, r))
+    (fun a b ha hab hb ↦ by
+      rw [← hinc a b ha hab]
+      exact apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_interval_bound q L R habs a b ha hab hb)
+  have hrat : ∀ (n : ℕ) (u v : ℕ → ℚ), (∀ i ∈ Finset.range n, 0 ≤ u i ∧ u i ≤ v i ∧ v i ≤ 1) →
+      Set.PairwiseDisjoint (↑(Finset.range n)) (fun i ↦ Set.Ioc (u i : ℝ) (v i)) →
+      ∑ i ∈ Finset.range n, |F (v i) - F (u i)| ≤
+        R * (∑ i ∈ Finset.range n, ((v i : ℝ) - u i)) ^ (1 / q) := by
+    intro n u v huv hdisj
+    have hsum : ∑ i ∈ Finset.range n, |F (v i) - F (u i)| =
+        ∑ i ∈ Finset.range n, |L (u i, v i)| := by
+      refine Finset.sum_congr rfl fun i hi ↦ ?_
+      obtain ⟨h0, h1, h2⟩ := huv i hi
+      rw [hFG (v i) (h0.trans h1) h2, hFG (u i) h0 (h1.trans h2), hinc (u i) (v i) h0 h1]
+    rw [hsum]
+    exact habs n u v huv hdisj
+  refine ⟨F, apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_ac q hq R hR F
+    (apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_l1_rep_aux_extend_aux_real_family q hq R hR F hF hrat), ?_⟩
+  intro a b ha hab hb
+  rw [hFG b (ha.trans hab) hb, hFG a ha (hab.trans hb), hinc a b ha hab]
 
 /-- Leaf (FTC on a clipped interval). For `F` absolutely continuous on `[0,1]` and `a ≤ b`,
 pairing `deriv F` with the indicator of `Ioc a b` over `[0,1]` gives `F b' - F a'`, where
