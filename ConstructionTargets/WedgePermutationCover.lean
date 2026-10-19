@@ -605,7 +605,64 @@ meet at `[(e₀, i)]`. -/
 theorem rp2Wedge_regular_four_cover_aux_connected (σ τ : Equiv.Perm (Fin 4))
     (hT : ∀ i j : Fin 4, Relation.ReflTransGen (fun a b ↦ b = σ a ∨ b = τ a) i j) :
     IsConnected (Set.univ : Set (rp2Wedge_regular_four_cover_aux_E σ τ)) := by
-  sorry
+  let q : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4) →
+      rp2Wedge_regular_four_cover_aux_E σ τ := Quotient.mk _
+  let l : Fin 4 → Sphere2 → rp2Wedge_regular_four_cover_aux_E σ τ :=
+    fun i x ↦ q (.inl (x, i))
+  let r : Fin 4 → Sphere2 → rp2Wedge_regular_four_cover_aux_E σ τ :=
+    fun i x ↦ q (.inr (x, i))
+  let U : Fin 4 → Set (rp2Wedge_regular_four_cover_aux_E σ τ) :=
+    fun i ↦ Set.range (l i) ∪ Set.range (r i)
+  letI : ConnectedSpace Sphere2 := isConnected_iff_connectedSpace.mp
+    (isConnected_sphere (E := EuclideanSpace ℝ (Fin 3))
+      (by rw [← Module.finrank_eq_rank']; norm_num [finrank_euclideanSpace_fin]) 0
+      (by norm_num : (0 : ℝ) ≤ 1))
+  have hl (i : Fin 4) : IsConnected (Set.range (l i)) := by
+    apply isConnected_range
+    exact continuous_coinduced_rng.comp
+      (continuous_inl.comp (continuous_id.prodMk continuous_const))
+  have hr (i : Fin 4) : IsConnected (Set.range (r i)) := by
+    apply isConnected_range
+    exact continuous_coinduced_rng.comp
+      (continuous_inr.comp (continuous_id.prodMk continuous_const))
+  have hU (i : Fin 4) : IsConnected (U i) := by
+    apply IsConnected.union
+    · refine ⟨q (.inl (rp2Wedge_regular_four_cover_aux_e0, i)), ?_⟩
+      constructor
+      · exact ⟨_, rfl⟩
+      · refine ⟨rp2Wedge_regular_four_cover_aux_e0, ?_⟩
+        exact (Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) i))).symm
+    · exact hl i
+    · exact hr i
+  have hstep (i j : Fin 4) (h : j = σ i ∨ j = τ i) :
+      (U i ∩ U j).Nonempty := by
+    rcases h with rfl | rfl
+    · refine ⟨l i rp2Wedge_regular_four_cover_aux_e0, ?_, ?_⟩
+      · exact Or.inl ⟨_, rfl⟩
+      · apply Or.inl
+        refine ⟨-rp2Wedge_regular_four_cover_aux_e0, ?_⟩
+        exact (Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+            rp2Wedge_regular_four_cover_aux_e0 i))).symm
+    · refine ⟨r i rp2Wedge_regular_four_cover_aux_e0, ?_, ?_⟩
+      · exact Or.inr ⟨_, rfl⟩
+      · apply Or.inr
+        refine ⟨-rp2Wedge_regular_four_cover_aux_e0, ?_⟩
+        exact (Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+            rp2Wedge_regular_four_cover_aux_e0 i))).symm
+  have hall : IsConnected (⋃ i, U i) :=
+    IsConnected.iUnion_of_reflTransGen hU (fun i j ↦ (hT i j).mono hstep)
+  rw [show (⋃ i, U i) = (Set.univ : Set (rp2Wedge_regular_four_cover_aux_E σ τ)) by
+    apply Set.eq_univ_of_forall
+    intro z
+    induction z using Quotient.inductionOn with
+    | _ z =>
+      rcases z with ⟨x, i⟩ | ⟨x, i⟩
+      · exact Set.mem_iUnion.2 ⟨i, Or.inl ⟨x, rfl⟩⟩
+      · exact Set.mem_iUnion.2 ⟨i, Or.inr ⟨x, rfl⟩⟩] at hall
+  exact hall
 
 /-! #### Split of `rp2Wedge_regular_four_cover_aux_regular` (lemma-3 PARTIAL, 2026-10-19) -/
 
