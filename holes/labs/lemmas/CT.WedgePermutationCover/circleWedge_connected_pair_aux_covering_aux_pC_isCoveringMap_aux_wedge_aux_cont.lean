@@ -5260,7 +5260,49 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux
     (ρ : circleWedge_connected_pair_aux_Root) :
     Continuous (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
       circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1) := by
-  sorry
+  apply circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_cont_aux_lobes
+    circleBase circleBase _
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U_open
+  · have hn (z : {z : Circle //
+        (Quotient.mk _ (.inl z) : CircleWedge) ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U}) :
+        z.1 ≠ -circleBase := by
+      intro h
+      exact z.2.1 (congrArg (fun x : Circle ↦ (Quotient.mk _ (.inl x) : CircleWedge)) h)
+    have hlift : Continuous (fun z : {z : Circle //
+        (Quotient.mk _ (.inl z) : CircleWedge) ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+        circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r z.1) := by
+      have hc : Continuous (fun z : {z : Circle //
+          (Quotient.mk _ (.inl z) : CircleWedge) ∈
+            circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+          r ⟨z.1, hn z⟩) :=
+        hr.comp (Continuous.subtype_mk continuous_subtype_val _)
+      simpa [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift,
+        hn] using hc
+    have hmul : Continuous (fun z : {z : Circle //
+        (Quotient.mk _ (.inl z) : CircleWedge) ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+        ρ.1 * circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r z.1) :=
+      continuous_const.mul hlift
+    have hq := (continuous_coinduced_rng : Continuous
+      (fun u : circleWedge_connected_pair_aux_RawC ↦
+        (Quotient.mk _ u : circleWedge_connected_pair_aux_EC))).comp
+          (continuous_inl.comp hmul)
+    simpa [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S] using hq
+  · have hp : Continuous (fun z : {z : Circle //
+        (Quotient.mk _ (.inr z) : CircleWedge) ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+        (z.1, ρ)) := continuous_subtype_val.prodMk continuous_const
+    have hq : Continuous (fun z : {z : Circle //
+        (Quotient.mk _ (.inr z) : CircleWedge) ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+        (Quotient.mk _ (.inr (z.1, ρ)) : circleWedge_connected_pair_aux_EC)) :=
+      (continuous_coinduced_rng : Continuous
+      (fun u : circleWedge_connected_pair_aux_RawC ↦
+        (Quotient.mk _ u : circleWedge_connected_pair_aux_EC))).comp
+          (continuous_inr.comp hp)
+    simpa [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S] using hq
 -- END SEAT AREA
 
 /-- Each section is a right inverse of `pC` on `U`. -/
