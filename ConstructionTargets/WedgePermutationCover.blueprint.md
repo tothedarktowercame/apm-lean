@@ -107,3 +107,17 @@ point of the wedge, from three leaves:
 - `_aux_card_aux_right`: the mirror, with `τ`.
 - `_aux_card_aux_base`: over the wedge point, `i ↦ [inl (e₀, i)]`; invariant with
   `fL`, `fR` recording `k` at `e₀` and `σ k` / `τ k` at `-e₀`.
+
+### Split of `rp2Wedge_regular_four_cover_aux_regular` (2026-10-19, lemma-3 PARTIAL)
+
+Banked: `rp2Wedge_regular_four_cover_aux_raw` (sheet relabelling `(x, i) ↦ (x, g i)`)
+and `rp2Wedge_regular_four_cover_aux_regular_aux_deck` (a `g` commuting with `σ`, `τ`
+induces a homeomorphism of the glued space acting by `raw g` on representatives).
+The assembly is proved from these plus one leaf:
+
+- `rp2Wedge_regular_four_cover_aux_regular_aux_fibre`: if `proj a = proj b`, some `g`
+  in the centralizer has `[raw g a] = [b]`. Cases on the lobes of `a`, `b`; use
+  `rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff` and
+  `rp2Wedge_regular_four_cover_aux_cover_eq_iff` to get `v = ±u` in the same lobe, or
+  `u, v = ±e₀` in opposite lobes. Normalize with `(-x, j) ∼ (x, σ j)` (left) /
+  `(x, τ j)` (right) and the glue at `e₀`, then take `g` from `hC`.

@@ -616,7 +616,100 @@ theorem rp2Wedge_regular_four_cover_aux_regular (σ τ : Equiv.Perm (Fin 4))
     (hC : ∀ i j : Fin 4, ∃ g : Equiv.Perm (Fin 4),
       g * σ = σ * g ∧ g * τ = τ * g ∧ g i = j) :
     IsRegularCover (rp2Wedge_regular_four_cover_aux_p σ τ) := by
-  sorry
+  intro x y hxy
+  let raw (g : Equiv.Perm (Fin 4)) :
+      (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4) →
+        (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4)
+    | .inl z => .inl (z.1, g z.2)
+    | .inr z => .inr (z.1, g z.2)
+  have raw_cont (g : Equiv.Perm (Fin 4)) : Continuous (raw g) := by
+    apply continuous_sum_dom.mpr
+    constructor
+    · exact continuous_inl.comp (Continuous.prodMk continuous_fst
+        (continuous_of_discreteTopology.comp continuous_snd))
+    · exact continuous_inr.comp (Continuous.prodMk continuous_fst
+        (continuous_of_discreteTopology.comp continuous_snd))
+  have respects (g : Equiv.Perm (Fin 4))
+      (hgσ : g * σ = σ * g) (hgτ : g * τ = τ * g)
+      {a b} (hab : Relation.EqvGen
+        (rp2Wedge_regular_four_cover_aux_Rel σ τ) a b) :
+      Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ) (raw g a) (raw g b) := by
+    induction hab with
+    | rel a b hab =>
+        cases hab with
+        | left z i =>
+            apply Relation.EqvGen.rel
+            have hi := DFunLike.congr_fun hgσ i
+            change g (σ i) = σ (g i) at hi
+            simpa [raw] using
+              (show rp2Wedge_regular_four_cover_aux_Rel σ τ
+                (.inl (z, g i)) (.inl (-z, g (σ i))) by
+                  simpa [hi] using
+                    (rp2Wedge_regular_four_cover_aux_Rel.left
+                      (σ := σ) (τ := τ) z (g i)))
+        | right z i =>
+            apply Relation.EqvGen.rel
+            have hi := DFunLike.congr_fun hgτ i
+            change g (τ i) = τ (g i) at hi
+            simpa [raw] using
+              (show rp2Wedge_regular_four_cover_aux_Rel σ τ
+                (.inr (z, g i)) (.inr (-z, g (τ i))) by
+                  simpa [hi] using
+                    (rp2Wedge_regular_four_cover_aux_Rel.right
+                      (σ := σ) (τ := τ) z (g i)))
+        | glue i =>
+            exact Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (g i))
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  let deck (g : Equiv.Perm (Fin 4))
+      (hgσ : g * σ = σ * g) (hgτ : g * τ = τ * g) :
+      rp2Wedge_regular_four_cover_aux_E σ τ →
+        rp2Wedge_regular_four_cover_aux_E σ τ :=
+    Quotient.lift (fun z => Quotient.mk _ (raw g z))
+      (fun _ _ h => Quotient.sound (respects g hgσ hgτ h))
+  have deck_mk (g) (hgσ) (hgτ) (z) :
+      deck g hgσ hgτ (Quotient.mk _ z) = Quotient.mk _ (raw g z) := rfl
+  have inv_comm (g : Equiv.Perm (Fin 4)) (hgσ : g * σ = σ * g)
+      (hgτ : g * τ = τ * g) :
+      g⁻¹ * σ = σ * g⁻¹ ∧ g⁻¹ * τ = τ * g⁻¹ := by
+    constructor <;> apply Equiv.ext <;> intro i
+    · have hi := DFunLike.congr_fun hgσ (g⁻¹ i)
+      apply g.injective
+      simpa using hi.symm
+    · have hi := DFunLike.congr_fun hgτ (g⁻¹ i)
+      apply g.injective
+      simpa using hi.symm
+  have deck_cont (g) (hgσ) (hgτ) : Continuous (deck g hgσ hgτ) := by
+    apply continuous_coinduced_dom.mpr
+    exact continuous_coinduced_rng.comp (raw_cont g)
+  have make_homeomorph (g : Equiv.Perm (Fin 4))
+      (hgσ : g * σ = σ * g) (hgτ : g * τ = τ * g) :
+      rp2Wedge_regular_four_cover_aux_E σ τ ≃ₜ
+        rp2Wedge_regular_four_cover_aux_E σ τ := by
+    let hi := inv_comm g hgσ hgτ
+    refine
+      { toFun := deck g hgσ hgτ
+        invFun := deck g⁻¹ hi.1 hi.2
+        left_inv := ?_
+        right_inv := ?_
+        continuous_toFun := deck_cont g hgσ hgτ
+        continuous_invFun := deck_cont g⁻¹ hi.1 hi.2 }
+    · intro q
+      induction q using Quotient.inductionOn with
+      | _ z => rcases z with z | z <;> rcases z with ⟨u, i⟩ <;> simp [deck, raw]
+    · intro q
+      induction q using Quotient.inductionOn with
+      | _ z => rcases z with z | z <;> rcases z with ⟨u, i⟩ <;> simp [deck, raw]
+  obtain ⟨a, rfl⟩ := Quotient.exists_rep x
+  obtain ⟨b, rfl⟩ := Quotient.exists_rep y
+  have hp : rp2Wedge_regular_four_cover_aux_proj a =
+      rp2Wedge_regular_four_cover_aux_proj b := hxy
+  rcases a with ⟨u, i⟩ | ⟨u, i⟩ <;> rcases b with ⟨v, j⟩ | ⟨v, j⟩
+  all_goals
+    simp only [rp2Wedge_regular_four_cover_aux_proj] at hp
+  all_goals sorry
 -- END SEAT AREA
 
 /-- The two fixed-point-free involutions `(12)(34)` and `(13)(24)` realize
