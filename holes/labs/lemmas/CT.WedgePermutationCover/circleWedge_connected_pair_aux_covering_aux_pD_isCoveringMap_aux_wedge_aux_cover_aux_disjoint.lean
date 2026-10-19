@@ -6959,12 +6959,81 @@ lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux
   sorry
 
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_disjoint_aux_arc
+    (z : Circle) (ρ σ : circleWedge_connected_pair_aux_Root)
+    (hρ : (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re)
+    (hσ : (1 / 2 : ℝ) < ((z : ℂ) * star (σ.1 : ℂ)).re) : ρ = σ := by
+  let ρc : Circle := ⟨star (ρ.1 : ℂ), by
+    simpa [Metric.mem_sphere, dist_zero_right, norm_star] using ρ.1.property⟩
+  let σc : Circle := ⟨star (σ.1 : ℂ), by
+    simpa [Metric.mem_sphere, dist_zero_right, norm_star] using σ.1.property⟩
+  have hρpow : (ρ.1 : ℂ) ^ 3 = 1 := by
+    simpa [circleWedge_connected_pair_aux_cube, circleBase] using
+      congrArg Subtype.val ρ.2
+  have hσpow : (σ.1 : ℂ) ^ 3 = 1 := by
+    simpa [circleWedge_connected_pair_aux_cube, circleBase] using
+      congrArg Subtype.val σ.2
+  have hρstar : star (ρ.1 : ℂ) ^ 3 = 1 := by
+    calc
+      star (ρ.1 : ℂ) ^ 3 = star ((ρ.1 : ℂ) ^ 3) :=
+        (map_pow (starRingEnd ℂ) (ρ.1 : ℂ) 3).symm
+      _ = 1 := by rw [hρpow]; simp
+  have hσstar : star (σ.1 : ℂ) ^ 3 = 1 := by
+    calc
+      star (σ.1 : ℂ) ^ 3 = star ((σ.1 : ℂ) ^ 3) :=
+        (map_pow (starRingEnd ℂ) (σ.1 : ℂ) 3).symm
+      _ = 1 := by rw [hσpow]; simp
+  have hpows : ((z * ρc : Circle) : ℂ) ^ 3 = ((z * σc : Circle) : ℂ) ^ 3 := by
+    change ((z : ℂ) * star (ρ.1 : ℂ)) ^ 3 =
+      ((z : ℂ) * star (σ.1 : ℂ)) ^ 3
+    rw [mul_pow, mul_pow, hρstar, hσstar]
+  have heq : z * ρc = z * σc :=
+    circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cover_aux_arc_unique
+      _ _ hpows hρ hσ
+  have hz0 : (z : ℂ) ≠ 0 := by
+    intro hz
+    have := z.property
+    simp [hz] at this
+  apply Subtype.ext
+  apply Subtype.ext
+  have hc := congrArg Subtype.val heq
+  change (z : ℂ) * star (ρ.1 : ℂ) = (z : ℂ) * star (σ.1 : ℂ) at hc
+  have hs : star (ρ.1 : ℂ) = star (σ.1 : ℂ) := mul_left_cancel₀ hz0 hc
+  simpa using congrArg star hs
+
 lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_disjoint :
     ∀ ρ σ : circleWedge_connected_pair_aux_Root, ρ ≠ σ →
       Disjoint
         (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ)
         (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet σ) := by
-  sorry
+  intro ρ σ hne
+  rw [Set.disjoint_left]
+  intro e heρ heσ
+  let P : circleWedge_connected_pair_aux_RawD → Prop
+    | .inl z => (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re
+    | .inr z => (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re
+  have hinv {a b : circleWedge_connected_pair_aux_RawD}
+      (h : Relation.EqvGen circleWedge_connected_pair_aux_RelD a b) : P a ↔ P b := by
+    induction h with
+    | rel a b h => cases h; rfl
+    | refl => exact Iff.rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  rcases heρ with ⟨z, hzρ, rfl⟩ | ⟨z, hzρ, rfl⟩
+  · rcases heσ with ⟨w, hwσ, heq⟩ | ⟨w, hwσ, heq⟩
+    · have hinv : (1 / 2 : ℝ) < ((w : ℂ) * star (ρ.1 : ℂ)).re := by
+        exact (hinv (Quotient.exact heq)).mp hzρ
+      exact hne (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_disjoint_aux_arc w ρ σ hinv hwσ)
+    · have hinv : (1 / 2 : ℝ) < ((w : ℂ) * star (ρ.1 : ℂ)).re := by
+        exact (hinv (Quotient.exact heq)).mp hzρ
+      exact hne (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_disjoint_aux_arc w ρ σ hinv hwσ)
+  · rcases heσ with ⟨w, hwσ, heq⟩ | ⟨w, hwσ, heq⟩
+    · have hinv : (1 / 2 : ℝ) < ((w : ℂ) * star (ρ.1 : ℂ)).re := by
+        exact (hinv (Quotient.exact heq)).mp hzρ
+      exact hne (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_disjoint_aux_arc w ρ σ hinv hwσ)
+    · have hinv : (1 / 2 : ℝ) < ((w : ℂ) * star (ρ.1 : ℂ)).re := by
+        exact (hinv (Quotient.exact heq)).mp hzρ
+      exact hne (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_disjoint_aux_arc w ρ σ hinv hwσ)
 -- END SEAT AREA
 
 lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover :
