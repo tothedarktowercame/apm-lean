@@ -606,12 +606,177 @@ noncomputable def apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_a
 `z : Circle`, `dist z 1 < 1 ↔ |arg z| < π/3`; the inverse is
 `θ ↦ (Circle.exp (π/3·θ₀), Circle.exp (π/3·θ₁))`; nonvanishing is
 `_aux_angles_ne_zero`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_dist
+    (z : Circle) :
+    dist (z : ℂ) 1 < 1 ↔ |Complex.arg (z : ℂ)| < Real.pi / 3 := by
+  have hzarg : |Complex.arg (z : ℂ)| ≤ Real.pi := by
+    rw [abs_le]
+    exact ⟨(Complex.neg_pi_lt_arg _).le, Complex.arg_le_pi _⟩
+  have hsq : ‖(z : ℂ) - 1‖ ^ 2 = 2 * (1 - Real.cos |Complex.arg (z : ℂ)|) := by
+    rw [Complex.sq_norm]
+    rw [Complex.normSq_apply]
+    have hre : (z : ℂ).re = Real.cos (Complex.arg (z : ℂ)) := by
+      rw [Complex.cos_arg z.coe_ne_zero]
+      simp
+    have hcos : Real.cos |Complex.arg (z : ℂ)| =
+        Real.cos (Complex.arg (z : ℂ)) := Real.cos_abs _
+    rw [hcos, ← hre]
+    rw [Complex.sub_re, Complex.sub_im, Complex.one_re, Complex.one_im]
+    have hn := Circle.normSq_coe z
+    rw [Complex.normSq_apply] at hn
+    nlinarith
+  rw [dist_eq_norm]
+  constructor
+  · intro h
+    have hs : ‖(z : ℂ) - 1‖ ^ 2 < 1 := by nlinarith [norm_nonneg ((z : ℂ) - 1)]
+    rw [hsq] at hs
+    have hc : Real.cos (Real.pi / 3) < Real.cos |Complex.arg (z : ℂ)| := by
+      rw [Real.cos_pi_div_three]
+      linarith
+    by_contra hn
+    have hge : Real.pi / 3 ≤ |Complex.arg (z : ℂ)| := le_of_not_gt hn
+    have hle : Real.cos |Complex.arg (z : ℂ)| ≤ Real.cos (Real.pi / 3) :=
+      Real.cos_le_cos_of_nonneg_of_le_pi (by nlinarith [Real.pi_pos]) hzarg hge
+    exact (not_lt_of_ge hle) hc
+  · intro h
+    have hc : Real.cos (Real.pi / 3) < Real.cos |Complex.arg (z : ℂ)| :=
+      Real.cos_lt_cos_of_nonneg_of_le_pi (abs_nonneg _)
+        (by nlinarith [Real.pi_pos]) h
+    rw [Real.cos_pi_div_three] at hc
+    have hs : ‖(z : ℂ) - 1‖ ^ 2 < 1 := by rw [hsq]; nlinarith
+    nlinarith [norm_nonneg ((z : ℂ) - 1)]
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_scale (z : Circle) :
+    dist (z : ℂ) 1 < 1 ↔ |3 / Real.pi * Complex.arg (z : ℂ)| < 1 := by
+  have hp := Real.pi_pos
+  rw [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_dist, abs_mul, abs_of_pos (by positivity : (0 : ℝ) < 3 / Real.pi),
+    div_mul_eq_mul_div, div_lt_one hp]
+  constructor <;> intro h <;> linarith
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp {t : ℝ} (ht : |t| < 1) :
+    Complex.arg ((Circle.exp (Real.pi / 3 * t) : Circle) : ℂ) = Real.pi / 3 * t := by
+  have hp := Real.pi_pos
+  rw [abs_lt] at ht
+  apply Circle.arg_exp <;> nlinarith
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord (θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)))
+    (i : Fin 2) : |(θ : Fin 2 → ℝ) i| < 1 := by
+  have h := θ.2.1
+  rw [Metric.mem_ball, dist_zero_right, pi_norm_lt_iff zero_lt_one] at h
+  simpa [Real.norm_eq_abs] using h i
+
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo :
     ∃ φ : apm_t01a03_separating_circle_H1_zero_aux_N ≃ₜ
         (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)),
       ∀ x, (φ x : Fin 2 → ℝ) =
         apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x.1 := by
-  sorry
+  have hp := Real.pi_pos
+  have hmem : ∀ x : apm_t01a03_separating_circle_H1_zero_aux_N,
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x.1 ∈ (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) := by
+    intro x
+    refine ⟨?_, ?_⟩
+    · rw [Metric.mem_ball, dist_zero_right, pi_norm_lt_iff zero_lt_one]
+      intro i
+      rw [Real.norm_eq_abs]
+      fin_cases i
+      · simpa [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle] using (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_scale _).1 x.2.1
+      · simpa [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle] using (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_scale _).1 x.2.2
+    · intro h
+      rw [Set.mem_singleton_iff] at h
+      apply apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angles_ne_zero x.1
+      funext i
+      have hi := congrFun h i
+      simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle, Pi.zero_apply] at hi ⊢
+      exact (mul_eq_zero.1 hi).resolve_left (by positivity)
+  have hne : ∀ θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)),
+      ((Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 0),
+        Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 1)) : apm_t01a03_Torus) ≠
+        ((1 : Circle), (1 : Circle)) := by
+    intro θ h
+    apply θ.2.2
+    rw [Set.mem_singleton_iff]
+    have hz : ∀ i, (θ : Fin 2 → ℝ) i = 0 := by
+      intro i
+      have key : ∀ j : Fin 2, Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) j) = 1 →
+          (θ : Fin 2 → ℝ) j = 0 := by
+        intro j hj
+        have ha := apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ j)
+        rw [hj, Circle.coe_one, Complex.arg_one] at ha
+        exact (mul_eq_zero.1 ha.symm).resolve_left (by positivity)
+      fin_cases i
+      · exact key 0 (congrArg Prod.fst h)
+      · exact key 1 (congrArg Prod.snd h)
+    funext i
+    exact hz i
+  have hN : ∀ θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)),
+      (⟨(Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 0),
+        Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 1)), hne θ⟩ : apm_t01a03_PuncturedTorus) ∈
+        apm_t01a03_separating_circle_H1_zero_aux_N := by
+    intro θ
+    have hc : ∀ j : Fin 2, dist ((Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) j) : Circle) : ℂ) 1 < 1 := by
+      intro j
+      rw [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_scale, apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ j)]
+      have : 3 / Real.pi * (Real.pi / 3 * (θ : Fin 2 → ℝ) j) = (θ : Fin 2 → ℝ) j := by
+        field_simp
+      rw [this]
+      exact apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ j
+    exact ⟨hc 0, hc 1⟩
+  have hcont : ∀ j : Fin 2, ContinuousOn Complex.arg {z : ℂ | dist z 1 < 1} := by
+    intro _ z hz
+    apply ContinuousAt.continuousWithinAt
+    apply Complex.continuousAt_arg
+    have h1 := Complex.mem_slitPlane_of_norm_lt_one (z := z - 1) (by rwa [← dist_eq_norm])
+    simpa using h1
+  refine ⟨{ toFun := fun x => ⟨apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x.1, hmem x⟩
+            invFun := fun θ => ⟨⟨(Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 0),
+              Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 1)), hne θ⟩, hN θ⟩
+            left_inv := ?_
+            right_inv := ?_
+            continuous_toFun := ?_
+            continuous_invFun := ?_ }, fun x => rfl⟩
+  · intro x
+    have e : ∀ a : ℝ, Real.pi / 3 * (3 / Real.pi * a) = a := by
+      intro a; field_simp
+    apply Subtype.ext; apply Subtype.ext
+    apply Prod.ext
+    · simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle, if_true]
+      rw [e, Circle.exp_arg]
+    · simp only [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle, Fin.one_eq_zero_iff, if_false, OfNat.ofNat_ne_one]
+      rw [e, Circle.exp_arg]
+  · intro θ
+    apply Subtype.ext
+    funext i
+    have e : ∀ a : ℝ, 3 / Real.pi * (Real.pi / 3 * a) = a := by
+      intro a; field_simp
+    by_cases hi : i = 0
+    · subst hi
+      show 3 / Real.pi * Complex.arg ((Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 0) : Circle) : ℂ) =
+        (θ : Fin 2 → ℝ) 0
+      rw [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ 0), e]
+    · obtain rfl : i = 1 := by fin_cases i <;> simp_all
+      show 3 / Real.pi * Complex.arg ((Circle.exp (Real.pi / 3 * (θ : Fin 2 → ℝ) 1) : Circle) : ℂ) =
+        (θ : Fin 2 → ℝ) 1
+      rw [apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_arg_exp (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_homeo_aux_coord θ 1), e]
+  · apply Continuous.subtype_mk
+    apply continuous_pi
+    intro i
+    apply continuous_const.mul
+    have c0 : Continuous fun x : apm_t01a03_separating_circle_H1_zero_aux_N =>
+        Complex.arg ((x.1.1.1 : Circle) : ℂ) :=
+      (hcont 0).comp_continuous (by fun_prop) (fun x => x.2.1)
+    have c1 : Continuous fun x : apm_t01a03_separating_circle_H1_zero_aux_N =>
+        Complex.arg ((x.1.1.2 : Circle) : ℂ) :=
+      (hcont 1).comp_continuous (by fun_prop) (fun x => x.2.2)
+    by_cases hi : i = 0
+    · simpa [hi] using c0
+    · simpa [hi] using c1
+  · apply Continuous.subtype_mk
+    have h0 : Continuous fun θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) => Real.pi / 3 * (θ : Fin 2 → ℝ) 0 :=
+      continuous_const.mul ((continuous_apply 0).comp continuous_subtype_val)
+    have h1 : Continuous fun θ : (Metric.ball (0 : Fin 2 → ℝ) 1 \ {0} : Set (Fin 2 → ℝ)) => Real.pi / 3 * (θ : Fin 2 → ℝ) 1 :=
+      continuous_const.mul ((continuous_apply 1).comp continuous_subtype_val)
+    apply Continuous.subtype_mk
+    exact (Circle.exp.continuous.comp h0).prodMk (Circle.exp.continuous.comp h1)
 
 /-- Away from the puncture the points of `N` lie in a compact set: for `ε > 0`,
 take the image of the compact `{θ | ε ≤ ‖θ‖ ≤ 1}` under
