@@ -514,10 +514,67 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux
 core is `√((s - 1)² + z²)`; the new `(s - 1, z)` is a convex combination of the
 old one and `(3/20, 0)`, both in the disk of radius `1/4`. -/
 -- BEGIN SEAT AREA
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_phi_bounds
+    (p : apm_t02a03_E3) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p ∈
+      Set.Icc (0 : ℝ) 1 := by
+  constructor
+  · exact le_min (by norm_num) (le_max_left _ _)
+  · exact min_le_left _ _
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_fraction
+    (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3) :
+    t * apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p ∈
+      Set.Icc (0 : ℝ) 1 := by
+  rcases ht with ⟨ht0, ht1⟩
+  rcases apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_phi_bounds p with
+    ⟨hφ0, hφ1⟩
+  constructor
+  · positivity
+  · nlinarith
+
+/-- LIBRARY: closed form of the distance to the right core circle:
+`√((s - 1)² + z²)` with `s` the planar distance from `(6/5, 0)` (split by
+claude-14 from lemma-3's partial, 2026-10-19). -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq (p : apm_t02a03_E3) :
+    Metric.infDist p (Set.range apm_t02a03_rightCore) =
+      Real.sqrt ((apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1) ^ 2 + p 2 ^ 2) := by
+  sorry
+
+/-- LIBRARY: the move rescales the planar offset by `1 + a (23/20/s - 1) ≥ 0`,
+so the new planar distance is `s + a (23/20 - s)`, `a = t φ`. -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_rad_move (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
+    (hs : 0 < apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p) =
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p + t * apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p * (23 / 20 - apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) := by
+  sorry
+
+/-- The disk of radius `1/4` is convex and contains `(3/20, 0)`. -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_convex (s z a : ℝ) (ha : a ∈ Set.Icc (0 : ℝ) 1)
+    (h : (s - 1) ^ 2 + z ^ 2 ≤ 1 / 16) :
+    (s + a * (23 / 20 - s) - 1) ^ 2 + ((1 - a) * z) ^ 2 ≤ 1 / 16 := by
+  rcases ha with ⟨ha0, ha1⟩
+  have hw : 0 ≤ a * (1 - a) * ((s - 1 - 3 / 20) ^ 2 + z ^ 2) :=
+    mul_nonneg (mul_nonneg ha0 (by linarith)) (by positivity)
+  nlinarith
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
     Metric.infDist (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p) (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ) := by
-  sorry
+  rcases apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_fraction t ht p with ⟨ha0, ha1⟩
+  have hp1 := hp.1
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq] at hp1 ⊢
+  have hsq : (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1) ^ 2 + p 2 ^ 2 ≤ 1 / 16 := by
+    rw [Real.sqrt_le_left (by norm_num)] at hp1
+    linarith
+  have hs : 0 < apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p := by nlinarith [sq_nonneg (p 2)]
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_rad_move t ht p hs]
+  have hz : (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p) 2 =
+      (1 - t * apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p) * p 2 := by
+    simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move]
+  rw [hz, Real.sqrt_le_left (by norm_num)]
+  norm_num only [show ((1 : ℝ) / 4) ^ 2 = 1 / 16 by norm_num]
+  exact apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_convex _ _ _ ⟨ha0, ha1⟩ hsq
 -- END SEAT AREA
 
 /-- LIBRARY: `F_t` stays at least `1/4` from the left core.  If `t φ = 0` the
