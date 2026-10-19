@@ -960,12 +960,68 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_r
 
 /-- The sheets exhaust `p ⁻¹' U`: a representative `inl (x, k)` over `U` has
 `x = y` or `x = -y` with `0 < y₀`; in the second case it is `[inl (y, σ k)]`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_cover_aux_base
+    {u v : RP2 ⊕ RP2}
+    (h : (Quotient.mk _ u : Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ v) :
+    Sum.elim id id u = Sum.elim id id v := by
+  rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+    rpBase rpBase u v).mp (Quotient.exact h) with huv | ⟨hu, hv⟩
+  · simpa [huv]
+  · rcases hu with hu | hu <;> rcases hv with hv | hv <;> simp_all
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_cover (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
     (e : rp2Wedge_regular_four_cover_aux_E σ τ)
     (he : rp2Wedge_regular_four_cover_aux_p σ τ e ∈ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U) :
     ∃ i, ∃ u : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U, rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1 = e := by
-  sorry
+  induction e using Quotient.inductionOn with
+  | _ z =>
+    rcases he with ⟨y, hy, hw | hw⟩
+    · change rp2Wedge_regular_four_cover_aux_proj z = Quotient.mk _ (Sum.inl (antipodalCover y)) at hw
+      cases z with
+      | inl z => exact cover_inl z y hy (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_cover_aux_base hw)
+      | inr z => exact cover_inr z y hy (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_cover_aux_base hw)
+    · change rp2Wedge_regular_four_cover_aux_proj z = Quotient.mk _ (Sum.inr (antipodalCover y)) at hw
+      cases z with
+      | inl z => exact cover_inl z y hy (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_cover_aux_base hw)
+      | inr z => exact cover_inr z y hy (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_cover_aux_base hw)
+  where
+    cover_inl (z : Sphere2 × Fin 4) (y : Sphere2)
+        (hy : 0 < (y : EuclideanSpace ℝ (Fin 3)) 0)
+        (hxy : antipodalCover z.1 = antipodalCover y) :
+        ∃ i, ∃ u : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U,
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1 =
+            Quotient.mk (Relation.EqvGen.setoid (rp2Wedge_regular_four_cover_aux_Rel σ τ)) (Sum.inl z) := by
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff y z.1).mp hxy.symm with hx | hx
+      · refine ⟨z.2, ⟨_, ⟨y, hy, Or.inl rfl⟩⟩, ?_⟩
+        change Quotient.mk _ (Sum.inl (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (antipodalCover y), z.2)) = Quotient.mk _ (Sum.inl z)
+        rw [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos y hy,
+          ← Prod.eta z, hx]
+      · refine ⟨σ z.2, ⟨_, ⟨y, hy, Or.inl rfl⟩⟩, ?_⟩
+        change Quotient.mk _ (Sum.inl (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (antipodalCover y), σ z.2)) = Quotient.mk _ (Sum.inl z)
+        rw [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos y hy]
+        apply Quotient.sound
+        rw [← Prod.eta z, hx]
+        simpa only [hσ z.2] using Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ) y (σ z.2))
+    cover_inr (z : Sphere2 × Fin 4) (y : Sphere2)
+        (hy : 0 < (y : EuclideanSpace ℝ (Fin 3)) 0)
+        (hxy : antipodalCover z.1 = antipodalCover y) :
+        ∃ i, ∃ u : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U,
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1 =
+            Quotient.mk (Relation.EqvGen.setoid (rp2Wedge_regular_four_cover_aux_Rel σ τ)) (Sum.inr z) := by
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff y z.1).mp hxy.symm with hx | hx
+      · refine ⟨z.2, ⟨_, ⟨y, hy, Or.inr rfl⟩⟩, ?_⟩
+        change Quotient.mk _ (Sum.inr (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (antipodalCover y), z.2)) = Quotient.mk _ (Sum.inr z)
+        rw [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos y hy,
+          ← Prod.eta z, hx]
+      · refine ⟨τ z.2, ⟨_, ⟨y, hy, Or.inr rfl⟩⟩, ?_⟩
+        change Quotient.mk _ (Sum.inr (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (antipodalCover y), τ z.2)) = Quotient.mk _ (Sum.inr z)
+        rw [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos y hy]
+        apply Quotient.sound
+        rw [← Prod.eta z, hx]
+        simpa only [hτ z.2] using Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ) y (τ z.2))
 
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections
     (σ τ : Equiv.Perm (Fin 4))
