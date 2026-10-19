@@ -717,7 +717,186 @@ theorem rp2Wedge_regular_four_cover_aux_regular_aux_fibre (σ τ : Equiv.Perm (F
     ∃ g : Equiv.Perm (Fin 4), g * σ = σ * g ∧ g * τ = τ * g ∧
       (Quotient.mk _ (rp2Wedge_regular_four_cover_aux_raw g a) :
         rp2Wedge_regular_four_cover_aux_E σ τ) = Quotient.mk _ b := by
-  sorry
+  rcases a with ⟨u, i⟩ | ⟨u, i⟩ <;>
+    rcases b with ⟨v, j⟩ | ⟨v, j⟩
+  · have hw := Quotient.exact hab
+    have hc : antipodalCover u = antipodalCover v := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover u)) (.inl (antipodalCover v))).mp hw with
+        h | ⟨hu, hv⟩
+      · exact Sum.inl.inj h
+      · rcases hu with hu | hu <;> rcases hv with hv | hv <;>
+          simp_all
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff u v).mp hc with rfl | rfl
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i j
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      simp [rp2Wedge_regular_four_cover_aux_raw, hgi]
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (σ⁻¹ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hj : σ (g i) = j := by simp [hgi]
+      simpa [rp2Wedge_regular_four_cover_aux_raw, hj] using
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ) u (g i)))
+  · have hw := Quotient.exact hab
+    have hu : antipodalCover u = rpBase := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover u)) (.inr (antipodalCover v))).mp hw with
+        h | ⟨hu, hv⟩
+      · cases h
+      · rcases hu with hu | hu
+        · exact Sum.inl.inj hu
+        · cases hu
+    have hv : antipodalCover v = rpBase := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover u)) (.inr (antipodalCover v))).mp hw with
+        h | ⟨hu, hv⟩
+      · cases h
+      · rcases hv with hv | hv
+        · cases hv
+        · exact Sum.inr.inj hv
+    rw [rp2Wedge_regular_four_cover_aux_rpBase] at hu hv
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+      rp2Wedge_regular_four_cover_aux_e0 u).mp hu.symm with rfl | rfl <;>
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+        rp2Wedge_regular_four_cover_aux_e0 v).mp hv.symm with rfl | rfl
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i j
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      simpa [rp2Wedge_regular_four_cover_aux_raw, hgi] using
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) j))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (τ⁻¹ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hj : τ (g i) = j := by simp [hgi]
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (g i)))
+        (by simpa [rp2Wedge_regular_four_cover_aux_raw, hj] using
+          (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+              rp2Wedge_regular_four_cover_aux_e0 (g i))))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (σ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by
+          simpa [rp2Wedge_regular_four_cover_aux_raw, hgi] using
+            (Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+                rp2Wedge_regular_four_cover_aux_e0 j))))
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) j))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (σ (τ⁻¹ j))
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hk : σ⁻¹ (g i) = τ⁻¹ j := by simp [hgi]
+      have hj : τ (σ⁻¹ (g i)) = j := by simp [hk]
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by
+          simpa [rp2Wedge_regular_four_cover_aux_raw] using
+            (Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+                rp2Wedge_regular_four_cover_aux_e0 (σ⁻¹ (g i))))))
+        (Relation.EqvGen.trans _ _ _
+          (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (σ⁻¹ (g i))))
+          (by
+            have hh := Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+                rp2Wedge_regular_four_cover_aux_e0 (σ⁻¹ (g i)))
+            rw [hj] at hh
+            exact hh))
+  · have hab' := hab.symm
+    have hw := Quotient.exact hab'
+    have hu : antipodalCover u = rpBase := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover v)) (.inr (antipodalCover u))).mp hw with
+        h | ⟨hv, hu⟩
+      · cases h
+      · rcases hu with hu | hu
+        · cases hu
+        · exact Sum.inr.inj hu
+    have hv : antipodalCover v = rpBase := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover v)) (.inr (antipodalCover u))).mp hw with
+        h | ⟨hv, hu⟩
+      · cases h
+      · rcases hv with hv | hv
+        · exact Sum.inl.inj hv
+        · cases hv
+    rw [rp2Wedge_regular_four_cover_aux_rpBase] at hu hv
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+      rp2Wedge_regular_four_cover_aux_e0 u).mp hu.symm with rfl | rfl <;>
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+        rp2Wedge_regular_four_cover_aux_e0 v).mp hv.symm with rfl | rfl
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i j
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      exact Relation.EqvGen.symm _ _ (by simpa [rp2Wedge_regular_four_cover_aux_raw, hgi] using
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) j)))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (σ⁻¹ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hj : σ (g i) = j := by simp [hgi]
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by
+          simpa [rp2Wedge_regular_four_cover_aux_raw] using
+            (Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (g i)))))
+        (by
+          have hh := Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+              rp2Wedge_regular_four_cover_aux_e0 (g i))
+          rw [hj] at hh
+          exact hh)
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (τ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by simpa [rp2Wedge_regular_four_cover_aux_raw, hgi] using
+          (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+              rp2Wedge_regular_four_cover_aux_e0 j))))
+        (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) j)))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (τ (σ⁻¹ j))
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hk : τ⁻¹ (g i) = σ⁻¹ j := by simp [hgi]
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by simpa [rp2Wedge_regular_four_cover_aux_raw] using
+          (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+              rp2Wedge_regular_four_cover_aux_e0 (τ⁻¹ (g i))))))
+        (Relation.EqvGen.trans _ _ _
+          (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (τ⁻¹ (g i)))))
+          (by
+            have hh := Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+                rp2Wedge_regular_four_cover_aux_e0 (σ⁻¹ j))
+            rw [hk]
+            simpa using hh))
+  · have hw := Quotient.exact hab
+    have hc : antipodalCover u = antipodalCover v := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inr (antipodalCover u)) (.inr (antipodalCover v))).mp hw with
+        h | ⟨hu, hv⟩
+      · exact Sum.inr.inj h
+      · rcases hu with hu | hu <;> rcases hv with hv | hv <;> simp_all
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff u v).mp hc with rfl | rfl
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i j
+      exact ⟨g, hgσ, hgτ, by simp [rp2Wedge_regular_four_cover_aux_raw, hgi]⟩
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (τ⁻¹ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hj : τ (g i) = j := by simp [hgi]
+      simpa [rp2Wedge_regular_four_cover_aux_raw, hj] using
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ) u (g i)))
 -- END SEAT AREA
 
 /-- If the centralizer of `σ`, `τ` acts transitively on `Fin 4`, the cover is
