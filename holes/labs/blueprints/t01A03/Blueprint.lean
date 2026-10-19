@@ -2111,7 +2111,19 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_incl_continuous :
         apm_t01a03_TwoPuncturedTori)) ∧
       Continuous (OnePoint.map (Sum.inr : apm_t01a03_PuncturedTorus →
         apm_t01a03_TwoPuncturedTori)) := by
-  sorry
+  constructor
+  · rw [OnePoint.continuous_map_iff]
+    refine ⟨continuous_inl, ?_⟩
+    rw [Filter.coclosedCompact_eq_cocompact,
+      Filter.coclosedCompact_eq_cocompact]
+    exact (isProperMap_iff_tendsto_cocompact.mp
+      (Topology.IsClosedEmbedding.inl.isProperMap)).2
+  · rw [OnePoint.continuous_map_iff]
+    refine ⟨continuous_inr, ?_⟩
+    rw [Filter.coclosedCompact_eq_cocompact,
+      Filter.coclosedCompact_eq_cocompact]
+    exact (isProperMap_iff_tendsto_cocompact.mp
+      (Topology.IsClosedEmbedding.inr.isProperMap)).2
 
 /-- The two collapses are continuous: the preimage of a neighbourhood of `∞`
 contains `∞`, the whole collapsed side, and a cocompact part of the kept side. -/
