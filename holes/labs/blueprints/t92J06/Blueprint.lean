@@ -120,6 +120,57 @@ theorem apm_t92J06_exists_simplyConnected_cover :
   sorry
 
 /-- Transport a family of shared circle-wedge covers to this file's wedge. -/
+lemma apm_t92J06_shared_cover_adapter_aux_forward_respects {x y}
+    (h : Relation.EqvGen
+      (ConstructionTargets.WedgePermutationCover.WedgeRel
+        apm_t92J06_circleBase apm_t92J06_circleBase) x y) :
+    (Quotient.mk (Relation.EqvGen.setoid apm_t92J06_wedgeRel) x :
+      apm_t92J06_X) = Quotient.mk _ y := by
+  induction h with
+  | rel x y h =>
+      cases h
+      exact Quotient.sound (Relation.EqvGen.rel _ _ apm_t92J06_wedgeRel.base)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma apm_t92J06_shared_cover_adapter_aux_backward_respects {x y}
+    (h : Relation.EqvGen apm_t92J06_wedgeRel x y) :
+    (Quotient.mk (Relation.EqvGen.setoid
+      (ConstructionTargets.WedgePermutationCover.WedgeRel
+        apm_t92J06_circleBase apm_t92J06_circleBase)) x :
+      ConstructionTargets.WedgePermutationCover.CircleWedge) =
+        Quotient.mk _ y := by
+  induction h with
+  | rel x y h =>
+      cases h
+      exact Quotient.sound (Relation.EqvGen.rel _ _
+        ConstructionTargets.WedgePermutationCover.WedgeRel.base)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+noncomputable def apm_t92J06_shared_cover_adapter_aux_homeomorph :
+    ConstructionTargets.WedgePermutationCover.CircleWedge ≃ₜ apm_t92J06_X where
+  toFun := Quotient.lift (fun x => Quotient.mk _ x)
+    (fun _ _ h => apm_t92J06_shared_cover_adapter_aux_forward_respects h)
+  invFun := Quotient.lift (fun x => Quotient.mk _ x)
+    (fun _ _ h => apm_t92J06_shared_cover_adapter_aux_backward_respects h)
+  left_inv := by
+    intro q
+    induction q using Quotient.inductionOn
+    rfl
+  right_inv := by
+    intro q
+    induction q using Quotient.inductionOn
+    rfl
+  continuous_toFun := by
+    exact continuous_coinduced_rng.quotient_lift
+      (fun _ _ h => apm_t92J06_shared_cover_adapter_aux_forward_respects h)
+  continuous_invFun := by
+    exact continuous_coinduced_rng.quotient_lift
+      (fun _ _ h => apm_t92J06_shared_cover_adapter_aux_backward_respects h)
+
 theorem apm_t92J06_shared_cover_adapter
     (C : Fin 4 → ConstructionTargets.WedgePermutationCover.ThreeCover)
     (hC : Pairwise fun i j ↦ ¬ Nonempty
@@ -127,7 +178,29 @@ theorem apm_t92J06_shared_cover_adapter
     ∃ D : Fin 4 → apm_t92J06_Covering 3,
       Pairwise fun i j ↦ ¬ Nonempty
         (@Homeomorph (D i).E (D j).E (D i).topology (D j).topology) := by
-  sorry
+  let h := apm_t92J06_shared_cover_adapter_aux_homeomorph
+  let D : Fin 4 → apm_t92J06_Covering 3 := fun i => by
+    letI : TopologicalSpace (C i).E := (C i).topology
+    exact
+      { E := (C i).E
+        topology := (C i).topology
+        p := h ∘ (C i).p
+        covering := (C i).covering.1.homeomorph_comp h
+        fiberCard := by
+          intro x
+          change Nat.card {z : (C i).E // h ((C i).p z) = x} = 3
+          let e : {z : (C i).E // h ((C i).p z) = x} ≃
+              {z : (C i).E // (C i).p z = h.symm x} :=
+            Equiv.subtypeEquiv (Equiv.refl _) (by
+              intro z
+              constructor
+              · intro hz
+                simpa using congrArg h.symm hz
+              · intro hz
+                simpa using congrArg h hz)
+          rw [Nat.card_congr e]
+          exact (C i).covering.2 (h.symm x) }
+  exact ⟨D, hC⟩
 
 /-- Assembly: the shared four pairwise nonhomeomorphic covers, transported. -/
 theorem apm_t92J06_exists_four_threeSheeted_covers :
