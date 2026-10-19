@@ -433,7 +433,24 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_hopf
     {A B : ModuleCat ℤ} (_eA : A ≅ ModuleCat.of ℤ (Fin 4 → ℤ))
     (_eB : B ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) (f : A ⟶ B)
     (hf : Function.Surjective f) : Function.Injective f := by
-  sorry
+  let g : (Fin 4 → ℤ) →ₗ[ℤ] (Fin 4 → ℤ) :=
+    (_eA.inv ≫ f ≫ _eB.hom).hom
+  have hg : Function.Surjective g := by
+    intro y
+    obtain ⟨b, hb⟩ :=
+      (ConcreteCategory.bijective_of_isIso _eB.hom).2 y
+    obtain ⟨a, ha⟩ := hf b
+    refine ⟨_eA.hom a, ?_⟩
+    change _eB.hom (f (_eA.inv (_eA.hom a))) = y
+    simpa only [Iso.hom_inv_id_apply, ha, hb]
+  have hgi : Function.Injective g :=
+    Module.End.injective_of_surjective ℤ (Fin 4 → ℤ) hg
+  intro x y hxy
+  apply (ConcreteCategory.bijective_of_isIso _eA.hom).1
+  apply hgi
+  change _eB.hom (f (_eA.inv (_eA.hom x))) =
+    _eB.hom (f (_eA.inv (_eA.hom y)))
+  simpa using congrArg (fun z ↦ _eB.hom z) hxy
 
 /-- The model: the one-point compactification of two punctured tori (a wedge
 of two tori) has `H₁ ≅ ℤ⁴`. -/
