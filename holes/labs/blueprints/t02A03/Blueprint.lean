@@ -468,6 +468,135 @@ strong-deformation-retracts onto the patch of the left boundary torus it
 contains together with the loop.  (It is a solid torus with a disk `D` on its
 boundary; the loop runs parallel to the right core and touches `D` only at
 `q0`.) -/
+abbrev apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X :=
+  apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right
+
+abbrev apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z
+    (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X) : Prop :=
+  p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop
+
+/-- Points of the right piece that are already in the target `D ∪ loop`, or
+lie in the sector `x ≤ 4/5` of the right tube.  The bite (open left tube)
+lies in `x < 1/20`, so the sector contains the whole bite region; in the
+right-tube angle `θ` (`rightCore θ = (6/5 - cos θ, sin θ, 0)`) every tube
+point with `|θ| ≤ 0.82` has `x ≤ 6/5 - (3/4) cos 0.82 < 4/5`. -/
+abbrev apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y
+    (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X) : Prop :=
+  apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p ∨ (p.1 : apm_t02a03_E3) 0 ≤ (4 / 5 : ℝ)
+
+/-- Stage 1, the cutoff collapse.  With `w = (u, z)` the meridian offset and
+`ℓ = (3/20, 0)` the loop's offset, `F_t(θ, w) = (θ, w + t φ(θ) (ℓ - w))`
+where `φ = 1` for `|θ| ≥ 0.82` and `φ = 0` for `|θ| ≤ 0.41`.  The bite lies in
+`|θ| < 0.41` (it needs `s cos θ ≥ 23/20` with `s ≤ 5/4`), so the segments
+avoid it; the meridian disk is convex; `D` and the loop are fixed.  At the
+end every point has either `φ = 1` (it is on the loop) or `|θ| < 0.82` (it is
+in the sector `x ≤ 4/5`). -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff :
+    ∃ m : C(apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X),
+      ∃ F : ContinuousMap.Homotopy (ContinuousMap.id _) m,
+        (∀ t p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p → F (t, p) = p) ∧
+        (∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y (m p)) := by
+  sorry
+
+/-- Stage 2, the sector-ball collapse.  The subspace `Y` is the sector piece
+`Σ = right ∩ {x ≤ 4/5}` (a 3-ball: a fibrewise-convex slab of the tube over
+an interval of angles, with the bite removed as a dent from its boundary)
+together with the rest of the loop.  `Σ` strongly deformation retracts onto
+`Σ ∩ (D ∪ loop)`, the disk `D` with the loop arc through `q0` (a contractible
+subpolyhedron, the arc's ends on the face `x = 4/5`); extend by the identity
+on the rest of the loop, which meets `Σ` only in that arc. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_sector :
+    ∃ H : C(Set.Icc (0 : ℝ) 1 × {p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X // apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p},
+        {p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X // apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p}),
+      (∀ p, H (0, p) = p) ∧
+      (∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z (H (1, p)).1) ∧
+      (∀ t p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p.1 → H (t, p) = p) := by
+  sorry
+
+/-- The two geometric stages promised in the blueprint.  The intermediate
+map is the cutoff collapse: away from the bite it has already collapsed the
+meridian disk to the distinguished loop.  The second homotopy collapses the
+remaining sector ball, relative to the target `D ∪ loop`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_stages :
+    ∃ m e : C(
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X,
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X),
+      ∃ F : ContinuousMap.Homotopy
+          (ContinuousMap.id _) m,
+        ∃ K : ContinuousMap.Homotopy m e,
+          (∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z
+              (e p)) ∧
+          (∀ t p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p →
+              F (t, p) = p) ∧
+          (∀ t p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p →
+              K (t, p) = p) := by
+  obtain ⟨m, F, hF, hm⟩ := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff
+  obtain ⟨H, h0, h1, hfix⟩ := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_sector
+  let j : C(apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X, {p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X // apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p}) :=
+    ⟨fun p => ⟨m p, hm p⟩, (map_continuous m).subtype_mk _⟩
+  have hmZ : ∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p → m p = p := fun p hp => by
+    rw [← F.apply_one p]; exact hF 1 p hp
+  let e : C(apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X) :=
+    ⟨fun p => (H (1, j p)).1,
+      continuous_subtype_val.comp
+        (H.continuous.comp (continuous_const.prodMk j.continuous))⟩
+  let K : ContinuousMap.Homotopy m e :=
+    { toFun := fun x => (H (x.1, j x.2)).1
+      continuous_toFun := continuous_subtype_val.comp
+        (H.continuous.comp (continuous_fst.prodMk (j.continuous.comp continuous_snd)))
+      map_zero_left := fun p => by
+        change (H (0, j p)).1 = m p
+        rw [h0]; rfl
+      map_one_left := fun p => rfl }
+  refine ⟨m, e, F, K, ?_, hF, ?_⟩
+  · intro p
+    exact h1 (j p)
+  · intro t p hp
+    change (H (t, j p)).1 = p
+    have hj : j p = ⟨p, Or.inl hp⟩ := Subtype.ext (hmZ p hp)
+    rw [hj]
+    exact congrArg Subtype.val (hfix t ⟨p, Or.inl hp⟩ hp)
+
+/-- Concatenating the cutoff collapse and the sector-ball collapse preserves
+the relative (strong-deformation-retraction) condition. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_concat
+    (m e : C(
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X))
+    (F : ContinuousMap.Homotopy (ContinuousMap.id _) m)
+    (K : ContinuousMap.Homotopy m e)
+    (he : ∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z
+      (e p))
+    (hF : ∀ t p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p →
+      F (t, p) = p)
+    (hK : ∀ t p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p →
+      K (t, p) = p) :
+    ∃ G : C(Set.Icc (0 : ℝ) 1 ×
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right,
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right),
+      (∀ p, G (⟨0, by norm_num⟩, p) = p) ∧
+      (∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z
+        (G (⟨1, by norm_num⟩, p))) ∧
+      (∀ t p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p →
+        G (t, p) = p) := by
+  let H := F.trans K
+  refine ⟨H.toContinuousMap, H.map_zero_left, ?_, ?_⟩
+  · intro p
+    change apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z
+      (H (⟨1, by norm_num⟩, p))
+    have ht : (⟨1, by norm_num⟩ : Set.Icc (0 : ℝ) 1) = (1 : Set.Icc (0 : ℝ) 1) :=
+      Subtype.ext (by norm_num)
+    rw [ht]
+    simpa only [ContinuousMap.Homotopy.apply_one] using he p
+  · intro t p hp
+    change H (t, p) = p
+    change (F.trans K) (t, p) = p
+    rw [ContinuousMap.Homotopy.trans_apply]
+    split_ifs
+    · exact hF _ p hp
+    · exact hK _ p hp
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core :
     ∃ G : C(Set.Icc (0 : ℝ) 1 ×
         apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right,
@@ -479,7 +608,10 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core :
       (∀ t p, p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
           apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop →
         G (t, p) = p) := by
-  sorry
+  obtain ⟨m, e, F, K, he, hF, hK⟩ :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_stages
+  exact apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_concat
+    m e F K he hF hK
 
 /-- LIBRARY (point-set topology): extend a deformation of the right part that
 fixes the torus patch by the identity on the left boundary torus.  Both pieces

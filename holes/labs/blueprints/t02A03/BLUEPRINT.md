@@ -134,6 +134,26 @@ deformation, now split through `right = {p | infDist p (range rightCore) ≤ 1/4
   note: a θ-cutoff straight-line collapse onto the loop away from the bite, then
   collapse of the remaining sector ball onto `D ∪` loop arc.
 
+### `_aux_retraction_aux_core` — proved assembly (split 2026-10-19)
+
+lemma-2 returned PARTIAL: `_aux_core_aux_concat` (`Homotopy.trans` of two
+stages keeps the rel-`Z` condition) proved, the stages left as one leaf. That
+leaf is now proved from two, through the intermediate subspace
+`Y = Z ∨ x ≤ 4/5` (`Z = torus ∪ loop`; `θ` the right-tube angle, the bite needs
+`s cos θ ≥ 23/20`, so `|θ| < 0.41`, and every tube point with `|θ| ≤ 0.82` has
+`x < 4/5`):
+
+* `_aux_core_aux_cutoff`: a homotopy `F : id ≃ m` of `right` fixing `Z`, with
+  every `m p` in `Y`. The θ-cutoff straight-line collapse onto the loop offset
+  `ℓ = (3/20, 0)`, `φ = 1` for `|θ| ≥ 0.82`, `φ = 0` for `|θ| ≤ 0.41`.
+* `_aux_core_aux_sector`: a strong deformation retraction `H` of the subspace
+  `{p // Y p}` onto `Z`, fixing `Z`. The sector piece is a 3-ball with the bite
+  as a boundary dent; it collapses onto `D ∪` loop arc; identity on the rest of
+  the loop.
+
+The assembly `_aux_core_aux_stages` takes `K(t, p) = H(t, m p)`; `m` fixes `Z`
+because `F` does at `t = 1`.
+
 ### `apm_t02a03_geometricY_homotopyEquiv_genericWedge` — proved assembly
 
 `e.trans f` of the two leaves above.
