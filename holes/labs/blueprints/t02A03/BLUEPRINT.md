@@ -116,6 +116,24 @@ Leaves (all LIBRARY, independent):
   (right tube minus the open left tube) is pushed onto `loop` together with
   the patch of `torus` inside the right tube. Expected to need a further split.
 
+### `_aux_retraction` — proved assembly (split 2026-10-19)
+
+lemma-2 returned PARTIAL with one proved helper, banked as
+`_aux_retraction_aux_of_deformation` (a strong deformation of `shellY` onto
+`torus ∪ loop` gives the required `r`). The remaining gap was the whole
+deformation, now split through `right = {p | infDist p (range rightCore) ≤ 1/4,
+1/4 ≤ infDist p C}` (right tube minus the open left tube):
+
+* `_aux_retraction_aux_cover` (small geometry): every point of `shellY` is on
+  `torus` or in `right` (`infDist` to the two-circle spine is the minimum).
+* `_aux_retraction_aux_glue` (point-set): a deformation `G` of `right` fixing
+  `torus ∪ loop` extends by the identity on `torus` to a deformation `H` of
+  `shellY`; the two pieces are closed and cover by `cover`.
+* `_aux_retraction_aux_core` (the geometric content): `right` strong-deformation-
+  retracts onto `D ∪ loop`, `D = right ∩ torus`. Suggested route in the seat
+  note: a θ-cutoff straight-line collapse onto the loop away from the bite, then
+  collapse of the remaining sector ball onto `D ∪` loop arc.
+
 ### `apm_t02a03_geometricY_homotopyEquiv_genericWedge` — proved assembly
 
 `e.trans f` of the two leaves above.

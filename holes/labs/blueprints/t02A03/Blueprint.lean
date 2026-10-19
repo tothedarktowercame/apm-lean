@@ -413,9 +413,106 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_wedge_homeomorph
       ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge) := by
   sorry
 
-/-- LIBRARY: `shellY` deformation retracts onto the spine `torus ∪ loop`.
-The torus is fixed; `R \ L°` (right tube minus the open left tube) is pushed
-onto the loop together with the patch of the torus inside the right tube. -/
+/-- The right tube minus the open left tube: the part of `shellY` outside the
+left boundary torus, together with the patch of that torus inside the right
+tube. -/
+def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right :
+    Set apm_t02a03_E3 :=
+  {p | Metric.infDist p (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ) ∧
+    (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C}
+
+/-- Packages a strong deformation of `shellY` onto `torus ∪ loop` as the
+required retraction (banked from lemma-2's partial, 2026-10-19). -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_of_deformation
+    (H : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_shellY, apm_t02a03_shellY))
+    (hzero : ∀ p, H (⟨0, by norm_num⟩, p) = p)
+    (hone : ∀ p,
+      (H (⟨1, by norm_num⟩, p)).1 ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop)
+    (hfix : ∀ t p,
+      p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop →
+        H (t, p) = p) :
+    ∃ r : C(apm_t02a03_shellY, apm_t02a03_shellY),
+      (∀ p, (r p).1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ∧
+      (∀ p, p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop → r p = p) ∧
+      (ContinuousMap.id apm_t02a03_shellY).Homotopic r := by
+  let r : C(apm_t02a03_shellY, apm_t02a03_shellY) :=
+    H.comp (ContinuousMap.prodMk (ContinuousMap.const _ ⟨1, by norm_num⟩)
+      (ContinuousMap.id _))
+  refine ⟨r, ?_, ?_, ?_⟩
+  · intro p
+    exact hone p
+  · intro p hp
+    exact hfix ⟨1, by norm_num⟩ p hp
+  · exact ⟨{
+      toFun := H
+      map_zero_left := hzero
+      map_one_left := fun p ↦ rfl }⟩
+
+/-- LIBRARY: every point of `shellY` lies on the left boundary torus or in the
+right tube.  `W` is the union of the two closed tubes (`infDist` to a union
+of two sets is the minimum); a point of the left tube at distance at least
+`1/4` from `C` is at distance exactly `1/4`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_cover :
+    ∀ p : apm_t02a03_shellY,
+      p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∨
+        p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
+  sorry
+
+/-- LIBRARY: the geometric core.  The right tube minus the open left tube
+strong-deformation-retracts onto the patch of the left boundary torus it
+contains together with the loop.  (It is a solid torus with a disk `D` on its
+boundary; the loop runs parallel to the right core and touches `D` only at
+`q0`.) -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core :
+    ∃ G : C(Set.Icc (0 : ℝ) 1 ×
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right,
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right),
+      (∀ p, G (⟨0, by norm_num⟩, p) = p) ∧
+      (∀ p, (G (⟨1, by norm_num⟩, p)).1 ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ∧
+      (∀ t p, p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop →
+        G (t, p) = p) := by
+  sorry
+
+/-- LIBRARY (point-set topology): extend a deformation of the right part that
+fixes the torus patch by the identity on the left boundary torus.  Both pieces
+are closed in `shellY` (`infDist` is continuous), they cover it by `hcover`,
+and on their overlap (which lies in the torus) both formulas give `p`; glue
+with `ContinuousMap.liftCover` or `Continuous.piecewise`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_glue
+    (hcover : ∀ p : apm_t02a03_shellY,
+      p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∨
+        p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (G : C(Set.Icc (0 : ℝ) 1 ×
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right,
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right))
+    (hzero : ∀ p, G (⟨0, by norm_num⟩, p) = p)
+    (hone : ∀ p, (G (⟨1, by norm_num⟩, p)).1 ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop)
+    (hfix : ∀ t p, p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop →
+        G (t, p) = p) :
+    ∃ H : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_shellY, apm_t02a03_shellY),
+      (∀ p, H (⟨0, by norm_num⟩, p) = p) ∧
+      (∀ p, (H (⟨1, by norm_num⟩, p)).1 ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ∧
+      (∀ t p, p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop →
+        H (t, p) = p) := by
+  sorry
+
+/-- `shellY` deformation retracts onto the spine `torus ∪ loop`: glue the
+core deformation of the right part to the identity on the torus (split
+2026-10-19 from lemma-2's partial). -/
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction :
     ∃ r : C(apm_t02a03_shellY, apm_t02a03_shellY),
       (∀ p, (r p).1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
@@ -423,7 +520,13 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction :
       (∀ p, p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
           apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop → r p = p) ∧
       (ContinuousMap.id apm_t02a03_shellY).Homotopic r := by
-  sorry
+  obtain ⟨G, hG0, hG1, hGfix⟩ :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core
+  obtain ⟨H, hH0, hH1, hHfix⟩ :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_glue
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_cover G hG0 hG1 hGfix
+  exact apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_of_deformation
+    H hH0 hH1 hHfix
 
 /-- LIBRARY: the compact shell is the boundary torus of the left tube glued,
 along a disk, to the right tube minus the open left tube, which retracts to
