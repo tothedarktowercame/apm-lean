@@ -467,7 +467,13 @@ lemma apm_t92J06_simplyConnected_of_pi_one_bot {E : Type*} [TopologicalSpace E]
     [PathConnectedSpace E] (e : E) {G : Type*} [Group G]
     (h : Nonempty (FundamentalGroup E e ≃* (⊥ : Subgroup G))) :
     SimplyConnectedSpace E := by
-  sorry
+  rw [simply_connected_iff_loops_nullhomotopic]
+  refine ⟨inferInstance, ?_⟩
+  intro x γ
+  apply Path.Homotopic.Quotient.eq.mp
+  let φ : FundamentalGroup E x ≃* (⊥ : Subgroup G) :=
+    (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected x e).trans h.some
+  exact φ.injective (Subsingleton.elim _ _)
 
 /-- Assembly: the based-path cover at the trivial subgroup. -/
 theorem apm_t92J06_exists_simplyConnected_cover :
