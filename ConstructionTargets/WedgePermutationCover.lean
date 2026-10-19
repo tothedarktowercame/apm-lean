@@ -2515,12 +2515,110 @@ def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux
 
 /-- The principal square root on the circle minus `-1`: continuous, lands in
 `{Re > 0}`, and every square root of `w` is `±` it. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm
+    (w : Circle) : ‖(w : ℂ)‖ = 1 := by
+  simpa [Metric.mem_sphere, dist_zero_right] using w.property
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_sq
+    (w : ℂ) : Complex.sqrt w ^ 2 = w := by
+  exact Complex.cpow_nat_inv_pow w (by norm_num)
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_mem
+    (w : Circle) : Complex.sqrt (w : ℂ) ∈ Metric.sphere (0 : ℂ) 1 := by
+  rw [Metric.mem_sphere, dist_zero_right]
+  have hs := congrArg norm
+    (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_sq
+      (w : ℂ))
+  rw [norm_pow,
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm w]
+    at hs
+  nlinarith [norm_nonneg (Complex.sqrt (w : ℂ))]
+
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt :
     ∃ r : {w : Circle // w ≠ -circleBase} → Circle, Continuous r ∧
       (∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1) ∧
       (∀ w, 0 < (r w : ℂ).re) ∧
       (∀ w z, circleWedge_three_cover_two_components_aux_sq z = w.1 → z = r w ∨ z = -r w) := by
-  sorry
+  let r : {w : Circle // w ≠ -circleBase} → Circle := fun w ↦
+    ⟨Complex.sqrt (w.1 : ℂ),
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_mem w.1⟩
+  refine ⟨r, ?_, ?_, ?_, ?_⟩
+  · apply Continuous.subtype_mk
+    apply continuous_iff_continuousAt.2
+    intro w
+    have hc : 0 ≤ (w.1 : ℂ).re ∨ (w.1 : ℂ).im ≠ 0 := by
+      by_cases hi : (w.1 : ℂ).im = 0
+      · left
+        by_contra hn
+        have hr : (w.1 : ℂ).re < 0 := lt_of_not_ge hn
+        have hw : w.1 = -circleBase := by
+          apply Subtype.ext
+          apply Complex.ext
+          · have hnrm := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm w.1
+            rw [Complex.norm_def, Complex.normSq_apply, hi, mul_zero, add_zero,
+              show (w.1 : ℂ).re * (w.1 : ℂ).re = (w.1 : ℂ).re ^ 2 by ring,
+              Real.sqrt_sq_eq_abs, abs_of_neg hr] at hnrm
+            simp [circleBase]
+            linarith
+          · simpa [circleBase, hi]
+        exact w.2 hw
+      · exact Or.inr hi
+    let g : {w : Circle // w ≠ -circleBase} → ℂ := fun x ↦ x.1.1
+    have hg : Continuous g := continuous_subtype_val.comp continuous_subtype_val
+    change ContinuousAt (Complex.sqrt ∘ g) w
+    have hs : ContinuousAt Complex.sqrt (g w) :=
+      Complex.continuousAt_sqrt (by simpa [g] using hc)
+    exact hs.comp hg.continuousAt
+  · intro w
+    apply Subtype.ext
+    simpa [circleWedge_three_cover_two_components_aux_sq, r, pow_two] using
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_sq
+        (w.1 : ℂ)
+  · intro w
+    change 0 < (Complex.sqrt (w.1 : ℂ)).re
+    rw [Complex.sqrt, Complex.cpow_def]
+    have hw0 : (w.1 : ℂ) ≠ 0 := by
+      intro h
+      have hn := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm w.1
+      simp [h] at hn
+    rw [if_neg hw0, Complex.exp_re]
+    norm_num [Complex.mul_im, Complex.log_im, Complex.inv_re, Complex.inv_im,
+      Complex.normSq_apply]
+    apply mul_pos (Real.exp_pos _)
+    apply Real.cos_pos_of_mem_Ioo
+    constructor
+    · have h := Complex.neg_pi_lt_arg (w.1 : ℂ)
+      norm_num at h ⊢
+      linarith [Real.pi_pos]
+    · have hle := Complex.arg_le_pi (w.1 : ℂ)
+      have hne : (w.1 : ℂ).arg ≠ Real.pi := by
+        intro he
+        have hp := Complex.arg_eq_pi_iff.1 he
+        have hw : w.1 = -circleBase := by
+          apply Subtype.ext
+          apply Complex.ext
+          · have hnrm := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm w.1
+            rw [Complex.norm_def, Complex.normSq_apply, hp.2, mul_zero, add_zero,
+              ← pow_two, Real.sqrt_sq_eq_abs, abs_of_neg hp.1] at hnrm
+            simp [circleBase]
+            linarith
+          · simpa [circleBase, hp.2]
+        exact w.2 hw
+      have hlt : (w.1 : ℂ).arg < Real.pi := lt_of_le_of_ne hle hne
+      norm_num at hlt ⊢
+      linarith [Real.pi_pos]
+  · intro w z hz
+    have hv : (z : ℂ) = (r w : ℂ) ∨ (z : ℂ) = -(r w : ℂ) :=
+      (sq_eq_sq_iff_eq_or_eq_neg).mp (by
+        have hr := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_sq
+          (w.1 : ℂ)
+        have hz' : (z : ℂ) ^ 2 = (w.1 : ℂ) := by
+          simpa [circleWedge_three_cover_two_components_aux_sq, pow_two] using
+            congrArg Subtype.val hz
+        exact hz'.trans hr.symm)
+    rcases hv with hv | hv
+    · exact Or.inl (Subtype.ext hv)
+    · exact Or.inr (Subtype.ext hv)
 
 /-- Points of the wedge are closed (each has a closed preimage in `Circle ⊕ Circle`),
 so `U` is open. -/
