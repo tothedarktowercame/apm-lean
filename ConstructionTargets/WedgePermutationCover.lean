@@ -1772,12 +1772,104 @@ lemma circleWedge_connected_pair_aux_connected :
       ConnectedComponents circleWedge_connected_pair_aux_ED), ?_⟩
     exact fun y ↦ Subsingleton.elim _ _
 
-/-- The first graph has three loop edges after deleting its intrinsic
-valence-four locus, while the second has none. -/
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_relC_iff (a b) :
+    Relation.EqvGen circleWedge_connected_pair_aux_RelC a b ↔
+      a = b ∨ ∃ r : circleWedge_connected_pair_aux_Root,
+        (a = .inl r.1 ∧ b = .inr (circleBase, r)) ∨
+        (b = .inl r.1 ∧ a = .inr (circleBase, r)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b h =>
+        cases h with
+        | glue r => exact Or.inr ⟨r, Or.inl ⟨rfl, rfl⟩⟩
+    | refl => exact Or.inl rfl
+    | symm a b _ ih =>
+        rcases ih with rfl | ⟨r, h | h⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨r, Or.inr ⟨h.1, h.2⟩⟩
+        · exact Or.inr ⟨r, Or.inl ⟨h.1, h.2⟩⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨r, h | h⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inl h⟩
+          · simp_all
+          · simp_all
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inr h⟩
+          · simp_all <;> exact Subtype.ext h.1.symm
+          · simp_all
+  · rintro (rfl | ⟨r, h | h⟩)
+    · exact Relation.EqvGen.refl _
+    · exact h.1 ▸ h.2 ▸ Relation.EqvGen.rel _ _
+        (circleWedge_connected_pair_aux_RelC.glue r)
+    · exact h.2 ▸ h.1 ▸ Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelC.glue r))
+
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_relD_iff (a b) :
+    Relation.EqvGen circleWedge_connected_pair_aux_RelD a b ↔
+      a = b ∨ ∃ r : circleWedge_connected_pair_aux_Root,
+        (a = .inl r.1 ∧ b = .inr r.1) ∨
+        (b = .inl r.1 ∧ a = .inr r.1) := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b h =>
+        cases h with
+        | glue r => exact Or.inr ⟨r, Or.inl ⟨rfl, rfl⟩⟩
+    | refl => exact Or.inl rfl
+    | symm a b _ ih =>
+        rcases ih with rfl | ⟨r, h | h⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨r, Or.inr ⟨h.1, h.2⟩⟩
+        · exact Or.inr ⟨r, Or.inl ⟨h.1, h.2⟩⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨r, h | h⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inl h⟩
+          · simp_all
+          · simp_all
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inr h⟩
+          · simp_all
+          · simp_all
+  · rintro (rfl | ⟨r, h | h⟩)
+    · exact Relation.EqvGen.refl _
+    · exact h.1 ▸ h.2 ▸ Relation.EqvGen.rel _ _
+        (circleWedge_connected_pair_aux_RelD.glue r)
+    · exact h.2 ▸ h.1 ▸ Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelD.glue r))
+
+/-- `EC` has a cut point: removing a glue point detaches the open arc of the
+right circle attached there. -/
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_cutC :
+    ∃ x : circleWedge_connected_pair_aux_EC,
+      ¬ IsPreconnected ({x}ᶜ : Set circleWedge_connected_pair_aux_EC) := by
+  sorry
+
+/-- `ED` has no cut point: the two circles are glued at three points, so
+removing any one point leaves two arcs that still meet. -/
+lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD
+    (x : circleWedge_connected_pair_aux_ED) :
+    IsPreconnected ({x}ᶜ : Set circleWedge_connected_pair_aux_ED) := by
+  sorry
+
+/-- `EC` and `ED` are not homeomorphic: `EC` has a cut point and `ED` has
+none, and having a cut point is preserved by homeomorphisms. -/
 lemma circleWedge_connected_pair_aux_not_homeomorphic :
     ¬ Nonempty (circleWedge_connected_pair_aux_EC ≃ₜ
       circleWedge_connected_pair_aux_ED) := by
-  sorry
+  rintro ⟨h⟩
+  obtain ⟨x, hx⟩ := circleWedge_connected_pair_aux_not_homeomorphic_aux_cutC
+  apply hx
+  have himg : h.symm '' ({h x}ᶜ : Set circleWedge_connected_pair_aux_ED) = {x}ᶜ := by
+    ext y
+    simp [h.image_symm, h.injective.eq_iff]
+  rw [← himg]
+  exact (circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD (h x)).image _
+    h.symm.continuous.continuousOn
 
 theorem circleWedge_connected_pair : ∃ C D : ThreeCover,
     Nat.card (@ConnectedComponents C.E C.topology) = 1 ∧

@@ -159,6 +159,18 @@ are banked with their `EqvGen`-respect lemmas. The assembly is proved from three
   An equivalent count: the number of components of `X \ (valence 4 set)` whose closure
   is homeomorphic to a circle is 3 for `EC` and 0 for `ED`.
 
+### Split of `circleWedge_connected_pair_aux_not_homeomorphic` (2026-10-19, lemma-2 PARTIAL)
+
+Banked: `_aux_relC_iff`, `_aux_relD_iff` (the `EqvGen` closures of the two gluing
+relations, written out: equal, or a root glued to its partner). The assembly uses a
+simpler invariant than the valence-four count above: a cut point (a point `x` with
+`{x}ᶜ` not preconnected). A homeomorphism maps `{x}ᶜ` onto `{h x}ᶜ`, so the assembly
+is proved from two leaves:
+- `_aux_cutC`: some `x : EC` has `{x}ᶜ` not preconnected. Take a glue point `[inl r]`:
+  the right circle `inr (·, r)` minus `circleBase` is clopen in the complement.
+- `_aux_noCutD (x : ED)`: `{x}ᶜ` is preconnected. Each circle minus at most one point
+  is preconnected, and the two pieces still share at least two of the three roots.
+
 ### Split of `circleWedge_three_cover_two_components` (2026-10-19, lemma-2 PARTIAL)
 
 Banked: `_aux_sq` (`z ↦ z²` on `Circle`); `_aux_Double`, the quotient of
