@@ -843,7 +843,55 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_near :
       ∀ x ∈ apm_t01a03_separating_circle_H1_zero_aux_N,
         ‖apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x‖ < r →
           x ∉ C := by
-  sorry
+  classical
+  intro C hC
+  let q : apm_t01a03_PuncturedTorus → apm_t01a03_Torus := fun x => x.1
+  let K : Set apm_t01a03_Torus := q '' C
+  have hK : IsCompact K := hC.image (by fun_prop)
+  have hp : ((1 : Circle), (1 : Circle)) ∉ K := by
+    rintro ⟨x, hx, heq⟩
+    exact x.2 heq
+  have hopen : IsOpen (Kᶜ) := hK.isClosed.isOpen_compl
+  let f : (Fin 2 → ℝ) → apm_t01a03_Torus := fun θ =>
+    (Circle.exp (Real.pi / 3 * θ 0), Circle.exp (Real.pi / 3 * θ 1))
+  have hf : Continuous f := by
+    apply Continuous.prodMk <;>
+      exact Circle.exp.continuous.comp
+        (continuous_const.mul (continuous_apply _))
+  have hf0 : f 0 = ((1 : Circle), (1 : Circle)) := by
+    simp [f]
+  have hnhds : f ⁻¹' Kᶜ ∈ nhds (0 : Fin 2 → ℝ) := by
+    apply hf.continuousAt.preimage_mem_nhds
+    rw [hf0]
+    exact hopen.mem_nhds hp
+  obtain ⟨r, hr, hrsub⟩ := Metric.mem_nhds_iff.mp hnhds
+  refine ⟨r, hr, ?_⟩
+  intro x hxN hxsmall hxC
+  have hfx : f
+      (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x) =
+      x.1 := by
+    have e : ∀ a : ℝ, Real.pi / 3 * (3 / Real.pi * a) = a := by
+      intro a
+      field_simp
+    apply Prod.ext
+    · simp only [f,
+        apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle,
+        if_true]
+      rw [e, Circle.exp_arg]
+    · simp only [f,
+        apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle,
+        Fin.one_eq_zero_iff, if_false, OfNat.ofNat_ne_one]
+      rw [e, Circle.exp_arg]
+  have hball :
+      apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x ∈
+        Metric.ball (0 : Fin 2 → ℝ) r := by
+    simpa [dist_zero_right] using hxsmall
+  have hnotK := hrsub hball
+  have hinK : f
+      (apm_t01a03_separating_circle_H1_zero_aux_V_H1_zero_aux_chart_aux_angle x) ∈ K := by
+    rw [hfx]
+    exact ⟨x, hxC, rfl⟩
+  exact hnotK hinK
 
 /-- A chart from the punctured square `N` onto the punctured open unit square,
 `x ↦ (3/π) • (arg x₁, arg x₂)`. Points far from `0` in the chart lie in a
