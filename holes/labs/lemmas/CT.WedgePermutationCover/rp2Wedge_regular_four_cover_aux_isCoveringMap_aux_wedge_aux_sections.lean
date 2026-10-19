@@ -376,6 +376,210 @@ hemisphere (these agree at the wedge point by the glue at `e₀`).  Continuity b
 `{inl (y, i), inl (-y, σ i), inr (y, i), inr (-y, τ i) | 0 < y₀}`, open in the raw
 sum; disjointness by `_aux_card_aux_invariant` recording the sheet index. -/
 -- BEGIN SEAT AREA
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_invariant
+    {α : Type*} (σ τ : Equiv.Perm (Fin 4))
+    (fL fR : Sphere2 × Fin 4 → α)
+    (hL : ∀ x i, fL (-x, σ i) = fL (x, i))
+    (hR : ∀ x i, fR (-x, τ i) = fR (x, i))
+    (hG : ∀ i, fL (rp2Wedge_regular_four_cover_aux_e0, i) =
+      fR (rp2Wedge_regular_four_cover_aux_e0, i))
+    {a b : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4)}
+    (h : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ) a b) :
+    Sum.elim fL fR a = Sum.elim fL fR b := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | left x i => exact (hL x i).symm
+      | right x i => exact (hR x i).symm
+      | glue i => exact hG i
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- On representatives whose sphere coordinate lies in the positive hemisphere,
+the sheet index is invariant under the entire gluing relation. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_index
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (x y : Sphere2) (i j : Fin 4)
+    (hx : 0 < (x : EuclideanSpace ℝ (Fin 3)) 0)
+    (hy : 0 < (y : EuclideanSpace ℝ (Fin 3)) 0)
+    (sx sy : Bool)
+    (h : Quotient.mk (Relation.EqvGen.setoid
+          (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+          (sx.casesOn (.inl (x, i)) (.inr (x, i))) =
+        Quotient.mk (Relation.EqvGen.setoid
+          (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+          (sy.casesOn (.inl (y, j)) (.inr (y, j)))) :
+    i = j := by
+  let fL : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if 0 < (z.1 : EuclideanSpace ℝ (Fin 3)) 0 then z.2
+    else if (z.1 : EuclideanSpace ℝ (Fin 3)) 0 < 0 then σ z.2 else 0
+  let fR : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if 0 < (z.1 : EuclideanSpace ℝ (Fin 3)) 0 then z.2
+    else if (z.1 : EuclideanSpace ℝ (Fin 3)) 0 < 0 then τ z.2 else 0
+  have hL : ∀ z k, fL (-z, σ k) = fL (z, k) := by
+    intro z k
+    change (if 0 < -((z : EuclideanSpace ℝ (Fin 3)) 0) then σ k
+      else if -((z : EuclideanSpace ℝ (Fin 3)) 0) < 0 then σ (σ k) else 0) =
+      (if 0 < (z : EuclideanSpace ℝ (Fin 3)) 0 then k
+      else if (z : EuclideanSpace ℝ (Fin 3)) 0 < 0 then σ k else 0)
+    by_cases hp : 0 < (z : EuclideanSpace ℝ (Fin 3)) 0
+    · have hn : ¬ (z : EuclideanSpace ℝ (Fin 3)) 0 < 0 := by linarith
+      simp [hp, hn, hσ k]
+    by_cases hn : (z : EuclideanSpace ℝ (Fin 3)) 0 < 0
+    · simp [hp, hn]
+    · have hz : (z : EuclideanSpace ℝ (Fin 3)) 0 = 0 := le_antisymm (le_of_not_gt hp)
+          (le_of_not_gt hn)
+      simp [hz]
+  have hR : ∀ z k, fR (-z, τ k) = fR (z, k) := by
+    intro z k
+    change (if 0 < -((z : EuclideanSpace ℝ (Fin 3)) 0) then τ k
+      else if -((z : EuclideanSpace ℝ (Fin 3)) 0) < 0 then τ (τ k) else 0) =
+      (if 0 < (z : EuclideanSpace ℝ (Fin 3)) 0 then k
+      else if (z : EuclideanSpace ℝ (Fin 3)) 0 < 0 then τ k else 0)
+    by_cases hp : 0 < (z : EuclideanSpace ℝ (Fin 3)) 0
+    · have hn : ¬ (z : EuclideanSpace ℝ (Fin 3)) 0 < 0 := by linarith
+      simp [hp, hn, hτ k]
+    by_cases hn : (z : EuclideanSpace ℝ (Fin 3)) 0 < 0
+    · simp [hp, hn]
+    · have hz : (z : EuclideanSpace ℝ (Fin 3)) 0 = 0 := le_antisymm (le_of_not_gt hp)
+          (le_of_not_gt hn)
+      simp [hz]
+  have he0 : 0 < (rp2Wedge_regular_four_cover_aux_e0 :
+      EuclideanSpace ℝ (Fin 3)) 0 := by
+    simp [rp2Wedge_regular_four_cover_aux_e0]
+  have hG : ∀ k, fL (rp2Wedge_regular_four_cover_aux_e0, k) =
+      fR (rp2Wedge_regular_four_cover_aux_e0, k) := by
+    intro k
+    simp [fL, fR, he0]
+  have hi := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_invariant
+    σ τ fL fR hL hR hG (Quotient.exact h)
+  cases sx <;> cases sy <;> simpa [fL, fR, hx, hy] using hi
+
+/-- A representative of `b` in the closed hemisphere `{y | 0 ≤ y₀}`. -/
+def rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (b : RP2) : Sphere2 :=
+  if 0 ≤ ((rp2Wedge_regular_four_cover_aux_surjective b).choose :
+      EuclideanSpace ℝ (Fin 3)) 0
+  then (rp2Wedge_regular_four_cover_aux_surjective b).choose
+  else -(rp2Wedge_regular_four_cover_aux_surjective b).choose
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_spec (b : RP2) : antipodalCover (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift b) = b := by
+  have h := (rp2Wedge_regular_four_cover_aux_surjective b).choose_spec
+  unfold rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift
+  split_ifs <;> simp [h]
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_nonneg (b : RP2) :
+    0 ≤ (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift b : EuclideanSpace ℝ (Fin 3)) 0 := by
+  unfold rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift
+  split_ifs with hc
+  · exact hc
+  · change 0 ≤ -(((rp2Wedge_regular_four_cover_aux_surjective b).choose :
+      EuclideanSpace ℝ (Fin 3)) 0)
+    linarith
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos (y : Sphere2) (hy : 0 < (y : EuclideanSpace ℝ (Fin 3)) 0) :
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (antipodalCover y) = y := by
+  rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff y
+      (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (antipodalCover y))).mp (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_spec _).symm with h | h
+  · exact h
+  · exfalso
+    have hnn := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_nonneg (antipodalCover y)
+    rw [h] at hnn
+    change 0 ≤ -((y : EuclideanSpace ℝ (Fin 3)) 0) at hnn
+    linarith
+
+/-- Sheet `i` over the whole wedge: `[inl b] ↦ [inl (lift b, i)]`,
+`[inr b] ↦ [inr (lift b, i)]`; well defined by the glue at `e₀`. -/
+def rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S (σ τ : Equiv.Perm (Fin 4)) (i : Fin 4) :
+    Wedge RP2 RP2 rpBase rpBase → rp2Wedge_regular_four_cover_aux_E σ τ :=
+  Quotient.lift
+    (Sum.elim
+      (fun b ↦ Quotient.mk (Relation.EqvGen.setoid (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+        (.inl (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift b, i)))
+      (fun b ↦ Quotient.mk (Relation.EqvGen.setoid (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+        (.inr (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift b, i))))
+    (fun a b h ↦ by
+      have h' : Relation.EqvGen (WedgeRel rpBase rpBase) a b := h
+      clear h
+      induction h' with
+      | rel a b h =>
+        cases h
+        have he : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift rpBase = rp2Wedge_regular_four_cover_aux_e0 :=
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos _ (by simp [rp2Wedge_regular_four_cover_aux_e0])
+        change Quotient.mk _ (Sum.inl (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift rpBase, i)) =
+          Quotient.mk _ (Sum.inr (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift rpBase, i))
+        rw [he]
+        exact Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue i))
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+/-- The image of the open hemisphere `{y | 0 < y₀}` in both lobes. -/
+def rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U : Set (Wedge RP2 RP2 rpBase rpBase) :=
+  {w | ∃ y : Sphere2, 0 < (y : EuclideanSpace ℝ (Fin 3)) 0 ∧
+    (w = Quotient.mk (Relation.EqvGen.setoid (WedgeRel rpBase rpBase))
+        (Sum.inl (antipodalCover y)) ∨
+      w = Quotient.mk (Relation.EqvGen.setoid (WedgeRel rpBase rpBase))
+        (Sum.inr (antipodalCover y)))}
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_p_S (σ τ : Equiv.Perm (Fin 4)) (i : Fin 4)
+    (w : Wedge RP2 RP2 rpBase rpBase) :
+    rp2Wedge_regular_four_cover_aux_p σ τ (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i w) = w := by
+  induction w using Quotient.inductionOn with
+  | _ z =>
+    cases z with
+    | inl b =>
+      change Quotient.mk _ (Sum.inl (antipodalCover (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift b))) = _
+      rw [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_spec]
+    | inr b =>
+      change Quotient.mk _ (Sum.inr (antipodalCover (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift b))) = _
+      rw [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_spec]
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S_mem (σ τ : Equiv.Perm (Fin 4)) (w : Wedge RP2 RP2 rpBase rpBase)
+    (hw : w ∈ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U) :
+    ∃ y : Sphere2, 0 < (y : EuclideanSpace ℝ (Fin 3)) 0 ∧ ∃ sx : Bool, ∀ i,
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i w = Quotient.mk (Relation.EqvGen.setoid
+        (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+        (sx.casesOn (.inl (y, i)) (.inr (y, i))) := by
+  obtain ⟨y, hy, rfl | rfl⟩ := hw
+  · refine ⟨y, hy, false, fun i ↦ ?_⟩
+    change Quotient.mk _ (Sum.inl (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (antipodalCover y), i)) = _
+    rw [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos y hy]
+  · refine ⟨y, hy, true, fun i ↦ ?_⟩
+    change Quotient.mk _ (Sum.inr (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift (antipodalCover y), i)) = _
+    rw [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos y hy]
+
+/-- `U` is open: its preimage in `RP2 ⊕ RP2` is the hemisphere image in each lobe
+(the wedge point `rpBase` lies in it on both sides); use `_aux_hemi`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open : IsOpen (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U) := by
+  sorry
+
+/-- Each sheet is continuous on `U`: check on the two lobes by `_aux_lobes`; on
+each lobe it is `b ↦ [(lift b, i)]`, and on the hemisphere image `lift` is the
+inverse of the open embedding `_aux_hemi`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous (σ τ : Equiv.Perm (Fin 4)) (i : Fin 4) :
+    Continuous (fun u : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1) := by
+  sorry
+
+/-- The range of sheet `i` is open: its preimage in the raw sum is
+`{inl (y, i), inl (-y, σ i), inr (y, i), inr (-y, τ i) | 0 < y₀}` (classify the
+`EqvGen` classes, e.g. via `_aux_index` and `_aux_invariant`). -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_range_open (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) (i : Fin 4) :
+    IsOpen (Set.range (fun u : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1)) := by
+  sorry
+
+/-- The sheets exhaust `p ⁻¹' U`: a representative `inl (x, k)` over `U` has
+`x = y` or `x = -y` with `0 < y₀`; in the second case it is `[inl (y, σ k)]`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_cover (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (e : rp2Wedge_regular_four_cover_aux_E σ τ)
+    (he : rp2Wedge_regular_four_cover_aux_p σ τ e ∈ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U) :
+    ∃ i, ∃ u : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U, rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1 = e := by
+  sorry
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections
     (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
@@ -387,7 +591,17 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections
         (∀ i, IsOpen (Set.range (s i))) ∧
         (∀ e, rp2Wedge_regular_four_cover_aux_p σ τ e ∈ U → ∃ i u, s i u = e) ∧
         (∀ i j u v, s i u = s j v → i = j) := by
-  sorry
+  refine ⟨rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U, ⟨rp2Wedge_regular_four_cover_aux_e0,
+      by simp [rp2Wedge_regular_four_cover_aux_e0], Or.inl rfl⟩, rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open,
+    fun i u ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1, fun i ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous σ τ i,
+    fun i u ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_p_S σ τ i u.1, fun i ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_range_open σ τ hσ hτ i,
+    fun e he ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_cover σ τ hσ hτ e he, ?_⟩
+  intro i j u v h
+  obtain ⟨x, hx, sx, hu⟩ := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S_mem σ τ u.1 u.2
+  obtain ⟨y, hy, sy, hv⟩ := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S_mem σ τ v.1 v.2
+  simp only at h
+  rw [hu, hv] at h
+  exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_index σ τ hσ hτ x y i j hx hy sx sy h
 -- END SEAT AREA
 
 /-! #### Split of `rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away` (lemma-2 PARTIAL, 2026-10-19) -/
