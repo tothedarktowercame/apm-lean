@@ -582,7 +582,89 @@ claude-14 from lemma-3's partial, 2026-10-19). -/
 lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq (p : apm_t02a03_E3) :
     Metric.infDist p (Set.range apm_t02a03_rightCore) =
       Real.sqrt ((apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1) ^ 2 + p 2 ^ 2) := by
-  sorry
+  let a : ℝ := p 0 - 6 / 5
+  let b : ℝ := p 1
+  let s : ℝ := Real.sqrt (a ^ 2 + b ^ 2)
+  have hs0 : 0 ≤ s := Real.sqrt_nonneg _
+  have hs2 : s ^ 2 = a ^ 2 + b ^ 2 := by
+    dsimp [s]
+    rw [Real.sq_sqrt]
+    positivity
+  have lower : Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤
+      Metric.infDist p (Set.range apm_t02a03_rightCore) := by
+    rw [Metric.le_infDist]
+    · rintro q ⟨t, rfl⟩
+      have htrig : Real.sin t ^ 2 + Real.cos t ^ 2 = 1 :=
+        Real.sin_sq_add_cos_sq t
+      have hcs : (a * Real.cos t - b * Real.sin t) ^ 2 ≤ s ^ 2 := by
+        nlinarith [sq_nonneg (a * Real.sin t + b * Real.cos t)]
+      have hdot : -s ≤ a * Real.cos t - b * Real.sin t := by
+        nlinarith [sq_nonneg (s + (a * Real.cos t - b * Real.sin t))]
+      rw [show dist p (apm_t02a03_rightCore t) =
+          Real.sqrt ((a + Real.cos t) ^ 2 + (b - Real.sin t) ^ 2 + p 2 ^ 2) by
+        simp [dist_eq_norm, apm_t02a03_rightCore, a, b, EuclideanSpace.norm_eq,
+          Fin.sum_univ_succ]
+        congr 1 <;> ring]
+      exact Real.sqrt_le_sqrt (by nlinarith)
+    · exact ⟨apm_t02a03_rightCore 0, ⟨0, rfl⟩⟩
+  apply le_antisymm
+  · by_cases hz : (-a : ℂ) + b * Complex.I = 0
+    · have ha : a = 0 := by
+        have := congrArg Complex.re hz
+        simpa using this
+      have hb : b = 0 := by
+        have := congrArg Complex.im hz
+        simpa using this
+      have hs : s = 0 := by simp [s, ha, hb]
+      have hp0 : p 0 = 6 / 5 := by dsimp [a] at ha; linarith
+      have hp1 : p 1 = 0 := by simpa [b] using hb
+      calc
+        Metric.infDist p (Set.range apm_t02a03_rightCore)
+            ≤ dist p (apm_t02a03_rightCore 0) :=
+              Metric.infDist_le_dist_of_mem ⟨0, rfl⟩
+        _ = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+          simp [dist_eq_norm, apm_t02a03_rightCore, hp0, hp1, hs,
+            EuclideanSpace.norm_eq, Fin.sum_univ_succ]
+    · let z : ℂ := (-a : ℂ) + b * Complex.I
+      have hz' : z ≠ 0 := by simpa [z] using hz
+      have hnorm : ‖z‖ = s := by
+        rw [Complex.norm_def]
+        congr 1
+        simp [Complex.normSq_apply, z, s]
+        ring
+      have hc : -Real.cos (Complex.arg z) = a / s := by
+        rw [Complex.cos_arg hz', hnorm]
+        simp [z]
+        ring
+      have hsi : Real.sin (Complex.arg z) = b / s := by
+        rw [Complex.sin_arg, hnorm]
+        simp [z]
+      have hspos : 0 < s := lt_of_le_of_ne hs0 (by
+        intro h
+        apply hz'
+        apply Complex.ext <;> simp [z] at * <;> nlinarith [hs2])
+      calc
+        Metric.infDist p (Set.range apm_t02a03_rightCore)
+            ≤ dist p (apm_t02a03_rightCore (Complex.arg z)) :=
+              Metric.infDist_le_dist_of_mem ⟨_, rfl⟩
+        _ = Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := by
+          rw [show dist p (apm_t02a03_rightCore (Complex.arg z)) =
+              Real.sqrt ((a + Real.cos (Complex.arg z)) ^ 2 +
+                (b - Real.sin (Complex.arg z)) ^ 2 + p 2 ^ 2) by
+            simp [dist_eq_norm, apm_t02a03_rightCore, a, b, EuclideanSpace.norm_eq,
+              Fin.sum_univ_succ]
+            congr 1 <;> ring]
+          congr 1
+          have hc' : Real.cos (Complex.arg z) = -a / s := by
+            calc
+              Real.cos (Complex.arg z) = -(-Real.cos (Complex.arg z)) := by ring
+              _ = -(a / s) := congrArg Neg.neg hc
+              _ = -a / s := by ring
+          rw [hc', hsi]
+          field_simp
+          nlinarith [hs2]
+  · change Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤ _
+    exact lower
 -- END SEAT AREA
 
 /-- LIBRARY: the move rescales the planar offset by `1 + a (23/20/s - 1) ≥ 0`,
