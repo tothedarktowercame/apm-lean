@@ -2393,14 +2393,136 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         rw [← ConcreteCategory.comp_apply, IsIso.hom_inv_id, ConcreteCategory.id_apply]
     _ = 0 := by rw [hc, map_zero]
 
-/-- LIBRARY LEAF (split from `_aux_exists_unit`, 2026-10-20): Hatcher
-Lemma 3.27(a) with `A = M`, for the section `y ↦ loc_y z / m`.  If the
-local degree of `z` has absolute value `|m| ≠ 0` at every point, then
-`z`'s local images are all divisible by `m` through ONE global class.  The
-section `y ↦ loc_y z / m` takes values `±` the local generator and is
-continuous (near `y`, `loc z` comes from `H₃(M, M ∖ B) ≅ ℤ` for a chart
-ball `B`), so the existence half of the compact induction (same cover and
-Mayer--Vietoris steps as `_aux_injective`) gives `μ`. -/
+/-- PROVED (lemma-2, banked from its `_aux_divide` PARTIAL, 2026-10-20): at
+each point the local image of `z` is `m` times a signed normalized local
+generator. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_local
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (z : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of M)).homology 3) (m : ℤ)
+    (hz : ∀ y : M,
+      ((ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 y).hom.hom
+        (ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z)).natAbs =
+        m.natAbs) :
+    ∀ y : M, ∃ e : ℤ, (e = 1 ∨ e = -1) ∧
+      m • (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 y).inv.hom e =
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z := by
+  intro y
+  let N := ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 y
+  have hsign : N.hom.hom
+        (ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z) = m ∨
+      N.hom.hom
+        (ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z) = -m :=
+    Int.natAbs_eq_natAbs_iff.mp (hz y)
+  rcases hsign with hpos | hneg
+  · refine ⟨1, Or.inl rfl, ?_⟩
+    apply (ConcreteCategory.bijective_of_isIso N.hom).1
+    have hinv : N.hom.hom (N.inv.hom (1 : ℤ)) = 1 :=
+      ConcreteCategory.congr_hom N.inv_hom_id 1
+    rw [map_zsmul, hinv, hpos]
+    simp
+  · refine ⟨-1, Or.inr rfl, ?_⟩
+    apply (ConcreteCategory.bijective_of_isIso N.hom).1
+    have hinv : N.hom.hom (N.inv.hom (-1 : ℤ)) = -1 :=
+      ConcreteCategory.congr_hom N.inv_hom_id (-1)
+    rw [map_zsmul, hinv, hneg]
+    simp
+
+/-- `A` admits division by `m` (existence half of Hatcher Lemma 3.27, integer
+coefficients): a class of `H₃(M, M ∖ A)` whose image in `H₃(M, M ∖ y)` is
+divisible by `m` at every `y ∈ A` has the same local images as `m • μ` for one
+class `μ` of `H₃(M, M ∖ A)`.  Split from `_aux_divide` after lemma-2's PARTIAL
+(2026-10-20).  Stated without a section of the orientation cover: the
+divisibility hypothesis replaces it. -/
+def apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good (M : Type) [TopologicalSpace M] (m : ℤ) (A : Set M) : Prop :=
+  ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology 3,
+    (∀ (y : M) (hy : y ∈ A), ∃ g, m • g =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 c) →
+      ∃ μ : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology 3,
+        ∀ (y : M) (hy : y ∈ A), m •
+          HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 μ =
+          HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 c
+
+/-- LIBRARY LEAF (Hatcher 3.27(a), step 1): a compact `A` inside one chart whose
+chart image is convex admits division by `m`.  Route: as in
+`_aux_injective_aux_convex`, `H₃(M, M ∖ A) → H₃(M, M ∖ y)` is an isomorphism
+for each `y ∈ A` (excise `M ∖ U`, transport to `ℝ³`, radial deformation, five
+lemma).  Fix `y ∈ A` with `m • g = r_y c`; put `μ = r_y⁻¹ g`.  Then
+`r_y (m • μ) = r_y c`, so `m • μ = c` and every point follows.  Empty `A`:
+take `μ = 0`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_convex
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (hconv : Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' A)) (m : ℤ) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A := by
+  sorry
+
+/-- LIBRARY LEAF (Hatcher 3.27(a), Mayer--Vietoris step): if closed `A`, `B`
+admit division by `m ≠ 0` and `A ∩ B` is good in the sense of
+`_aux_injective_aux_good`, then `A ∪ B` admits division by `m`.  Route:
+restrict `c` to `H₃(M|A)`, `H₃(M|B)` (the local maps compose,
+`relativeSingularMap_comp`) and divide there: `μ_A`, `μ_B`.  On `A ∩ B` the
+difference `d` of their restrictions has `m • r_y d = 0`, so `r_y d = 0`
+(`H₃(M|y) ≅ ℤ` by `ambientLocalNormalization 1 y`, torsion-free), so `d = 0`
+by `gAB.2`.  Exactness of the relative Mayer--Vietoris sequence at
+`H₃(M|A) ⊕ H₃(M|B)` (`CoefficientSubcomplexRelativeMayerVietoris*`) lifts
+`(μ_A, μ_B)` to `μ ∈ H₃(M|A ∪ B)`, whose local images are those of `μ_A`
+on `A` and of `μ_B` on `B`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (m : ℤ) (hm : m ≠ 0) (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
+    (gA : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A) (gB : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m B)
+    (gAB : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M (A ∩ B)) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m (A ∪ B) := by
+  sorry
+
+/-- LIBRARY LEAF (Hatcher 3.27(a), steps 2--3): every compact subset of one
+chart source admits division by `m ≠ 0`.  Route: the existence counterpart of
+`_aux_injective_aux_inChart` (same excision to the chart target, induction on
+finite unions of convex sets by `_aux_convex`, `_aux_union` and
+`_aux_injective_aux_convex` for the intersections).  General compact `A`:
+`c` comes from `H₃(ℝ³|K)` for `K` a finite union of closed balls inside a
+neighbourhood of `A`, each ball meeting `A`; on such a ball the local images
+of `c` are `m`-divisible at one point of `A`, hence at all its points
+(`H₃(ℝ³|ball) ≅ H₃(ℝ³|y)`).  Divide on `K` and restrict to `A`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_inChart
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (m : ℤ) (hm : m ≠ 0) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A := by
+  sorry
+
+/-- LIBRARY LEAF (Hatcher 3.27(a), step 4): every compact `A ⊆ M` admits
+division by `m ≠ 0`.  Route: the same finite chart cover and induction as
+`_aux_injective_aux_compact`, with `_aux_union`, `_aux_inChart` and
+`_aux_injective_aux_inChart` (for the intersections, which are compact
+subsets of the last chart source). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_compact
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (A : Set M) (hA : IsCompact A) (m : ℤ) (hm : m ≠ 0) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A := by
+  sorry
+
+/-- PROVED from `_aux_local`, `_aux_compact` with `A = M`, `_aux_univ` and
+`_aux_factor`: Hatcher Lemma 3.27(a) with `A = M`.  If the local degree of `z`
+has absolute value `|m| ≠ 0` at every point, then `z`'s local images are all
+divisible by `m` through ONE global class. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2416,7 +2538,21 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (TopCat.of M)).homology 3,
       ∀ y : M, m • ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 μ =
         ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z := by
-  sorry
+  haveI := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ M 3
+  obtain ⟨μ', hμ'⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_compact M Set.univ isCompact_univ m hm
+    (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        (Set.univ : Set M)ᶜ) 3 z) fun y hy => by
+    obtain ⟨e, -, he⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_local M z m hz y
+    refine ⟨_, he.trans ?_⟩
+    rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_factor Set.univ y hy 3, ConcreteCategory.comp_apply]
+  refine ⟨inv (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        (Set.univ : Set M)ᶜ) 3) μ', fun y => ?_⟩
+  rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_factor Set.univ y (Set.mem_univ y) 3, ConcreteCategory.comp_apply,
+    ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply (inv _), IsIso.inv_hom_id,
+    ConcreteCategory.id_apply]
+  exact hμ' y (Set.mem_univ y)
 
 /-- PROVED from `_aux_injective`, `_aux_divide` and `_aux_locallyConstant`:
 the global generator `g` is nonzero, so (injective) its local degree `d` at
