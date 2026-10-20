@@ -9,6 +9,8 @@ import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.SphereHomology
 import ConstructionTargets.MayerVietorisExactnessIsZero
 import ConstructionTargets.ManifoldFundamentalClass
+import ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison
+import ConstructionTargets.CoefficientCompactComplementUnionToRelative
 
 /-!
 # APM t00A01: Connected sums of integral homology 3-spheres
