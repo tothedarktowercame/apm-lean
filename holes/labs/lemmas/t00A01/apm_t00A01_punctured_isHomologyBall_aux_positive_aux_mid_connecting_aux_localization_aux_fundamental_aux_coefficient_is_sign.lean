@@ -2110,6 +2110,49 @@ class whose image at the specified point is a signed normalized local class.
 The stronger simultaneous-for-all-points form is what the usual finite-cover
 Mayer--Vietoris induction proves. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_of_isIso
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) (r : ℤ)
+    (hr : r •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) x =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 hM.2.1.some))
+    [IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3)] :
+    r = 1 ∨ r = -1 := by
+  let f := ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+  let g := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+    (k := 1) x
+  let c := ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+    (TopCat.of M) 3 hM.2.1.some
+  obtain ⟨z, hz⟩ := (ConcreteCategory.bijective_of_isIso f).2 g
+  obtain ⟨s, hs⟩ :=
+    ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates
+      (TopCat.of M) 3 hM.2.1.some z
+  have hsr : (s * r) • g = (1 : ℤ) • g := by
+    calc
+      (s * r) • g = s • (r • g) := mul_zsmul g s r
+      _ = s • f c := congrArg (fun q => s • q) hr
+      _ = f (s • c) := (map_zsmul f.hom s c).symm
+      _ = f z := congrArg f.hom hs
+      _ = g := hz
+      _ = (1 : ℤ) • g := (one_zsmul g).symm
+  have hmul : s * r = 1 :=
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
+      1 x hsr
+  exact Int.eq_one_or_neg_one_of_mul_eq_one (by simpa [mul_comm] using hmul)
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_localization_isIso
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
+  sorry
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2123,7 +2166,12 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
           (TopCat.of M) 3 hM.2.1.some)) :
     r = 1 ∨ r = -1 := by
-  sorry
+  letI :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_localization_isIso
+      M hM x
+  exact
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_of_isIso
+      M hM x r hr
 -- END SEAT AREA
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_assemble
