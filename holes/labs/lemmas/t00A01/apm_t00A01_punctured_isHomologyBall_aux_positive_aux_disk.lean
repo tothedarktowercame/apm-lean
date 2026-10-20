@@ -1741,7 +1741,24 @@ contractible, so it is homotopy equivalent to a point. -/
 -- BEGIN SEAT AREA
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk :
     apm_t00A01_isHomologyBall apm_t00A01_Disk3 := by
-  sorry
+  letI : ContractibleSpace apm_t00A01_Disk3 :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  constructor
+  · let p : apm_t00A01_Disk3 := ⟨0, by simp⟩
+    let q := ConstructionTargets.T02A06SphereH0.singularVertexH0Class p
+    letI : Epi q :=
+      ConstructionTargets.T02A06SphereH0.singularVertexH0Class_epi p
+    letI : Mono q :=
+      ConstructionTargets.T02A06SphereH0.singularVertexH0Class_mono p
+    letI : IsIso q := isIso_of_mono_of_epi q
+    exact ⟨ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of apm_t00A01_Disk3) 0
+        (ModuleCat.of ℤ ℤ) (asIso q).symm⟩
+  · intro k hk
+    exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+        (TopCat.of apm_t00A01_Disk3) k
+        (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+          apm_t00A01_Disk3 k hk)
 -- END SEAT AREA
 
 /-- LEAF (algebra). Mayer--Vietoris for a standard cover of a homology
