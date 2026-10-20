@@ -2150,6 +2150,38 @@ proof with the roles of `inl` and `inr` exchanged: `f` sends `[inr b] ↦ b`,
 Continuity through the open saturated preimage `inl '' C ∪ range inr`
 (`IsQuotientMap.restrictPreimage_isOpen`), times the locally compact
 `unitInterval`. -/
+private lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient_mem
+    {A B : Type} (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (C : Set A) (hiA : ∀ s, iA s ∈ C) {x y : Sum A B}
+    (hxy : Relation.EqvGen (apm_t00A01_glueRel iA iB) x y) :
+    (x ∈ Sum.inl '' C ∪ Set.range Sum.inr) ↔
+      (y ∈ Sum.inl '' C ∪ Set.range Sum.inr) := by
+  induction hxy with
+  | rel x y h =>
+      cases h with
+      | glue s =>
+          constructor <;> intro h
+          · exact Or.inr ⟨iB s, rfl⟩
+          · exact Or.inl ⟨iA s, hiA s, rfl⟩
+  | refl => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+
+private lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient_preimage
+    {A B : Type} (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (C : Set A) (hiA : ∀ s, iA s ∈ C) :
+    (fun z : Sum A B ↦ Quotient.mk
+      (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) z) ⁻¹'
+        apm_t00A01_thickRight iA iB C =
+      Sum.inl '' C ∪ Set.range Sum.inr := by
+  ext z
+  constructor
+  · rintro ⟨w, hw, heq⟩
+    exact (apm_t00A01_collared_standardCover_aux_right_aux_quotient_mem
+      iA iB C hiA (Quotient.exact heq.symm)).mpr hw
+  · intro hz
+    exact ⟨z, hz, rfl⟩
+
 lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
     [TopologicalSpace A] [TopologicalSpace B]
     (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
@@ -2160,7 +2192,6 @@ lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
     (hHC : ∀ p, H p ∈ C) (hHfix : ∀ s t, H (⟨iA s, hiA s⟩, t) = iA s) :
     Nonempty (ContinuousMap.HomotopyEquiv ↥(apm_t00A01_thickRight iA iB C) B) := by
   sorry
-
 /-- ASSEMBLY (from `_aux_left_aux_radial` applied to the first piece, and
 `_aux_right_aux_quotient`). Mirror image of `_aux_left`: the right thickening
 deformation retracts onto the second punctured piece. -/
@@ -2211,6 +2242,31 @@ lemma apm_t00A01_collared_standardCover_aux_inter_aux_collar_coord
   intro y' hy'
   exact hΦ.injective (hy'.1.trans hyx.symm)
 
+/- The quotient-topology core of the overlap argument.  Each of the two open
+collars strongly deformation retracts, relative to its boundary copy, onto the
+same sphere.  After gluing those boundary copies, their union (which is exactly
+the overlap of the two standard thickenings) therefore deformation retracts
+onto that sphere. -/
+lemma apm_t00A01_collared_standardCover_aux_inter_aux_quotient
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (CA : Set A) (CB : Set B) (hCA : IsOpen CA) (hCB : IsOpen CB)
+    (hiA : ∀ s, iA s ∈ CA) (hiB : ∀ s, iB s ∈ CB)
+    (rA : C(↥CA, apm_t00A01_Sphere2)) (HA : C(↥CA × unitInterval, A))
+    (rB : C(↥CB, apm_t00A01_Sphere2)) (HB : C(↥CB × unitInterval, B))
+    (hrA : ∀ s, rA ⟨iA s, hiA s⟩ = s)
+    (hrB : ∀ s, rB ⟨iB s, hiB s⟩ = s)
+    (hHA0 : ∀ x, HA (x, 0) = x.1) (hHB0 : ∀ x, HB (x, 0) = x.1)
+    (hHA1 : ∀ x, HA (x, 1) = iA (rA x))
+    (hHB1 : ∀ x, HB (x, 1) = iB (rB x))
+    (hHACA : ∀ p, HA p ∈ CA) (hHBCB : ∀ p, HB p ∈ CB)
+    (hHAfix : ∀ s t, HA (⟨iA s, hiA s⟩, t) = iA s)
+    (hHBfix : ∀ s t, HB (⟨iB s, hiB s⟩, t) = iB s) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥(apm_t00A01_thickLeft iA iB CB ∩ apm_t00A01_thickRight iA iB CA)
+      apm_t00A01_Sphere2) := by
+  sorry
+
 lemma apm_t00A01_collared_standardCover_aux_inter
     {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
@@ -2227,7 +2283,22 @@ lemma apm_t00A01_collared_standardCover_aux_inter
         apm_t00A01_thickRight (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
           (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₁ Φ₁))
       apm_t00A01_Sphere2) := by
-  sorry
+  obtain ⟨hC₁open, hC₁mem⟩ :=
+    apm_t00A01_collared_standardCover_aux_collar φ₁ hφ₁ Φ₁ hext₁ hopen₁
+  obtain ⟨hC₂open, hC₂mem⟩ :=
+    apm_t00A01_collared_standardCover_aux_collar φ₂ hφ₂ Φ₂ hext₂ hopen₂
+  obtain ⟨r₁, H₁, hr₁, hH₁zero, hH₁one, hH₁C, hH₁fix⟩ :=
+    apm_t00A01_collared_standardCover_aux_left_aux_radial φ₁ hφ₁ Φ₁ hΦ₁ hext₁
+  obtain ⟨r₂, H₂, hr₂, hH₂zero, hH₂one, hH₂C, hH₂fix⟩ :=
+    apm_t00A01_collared_standardCover_aux_left_aux_radial φ₂ hφ₂ Φ₂ hΦ₂ hext₂
+  exact apm_t00A01_collared_standardCover_aux_inter_aux_quotient
+    (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+    (apm_t00A01_boundaryMap φ₂ hφ₂.injective)
+    _ _ hC₁open hC₂open hC₁mem hC₂mem r₁ H₁ r₂ H₂
+    (fun s ↦ hr₁ s (hC₁mem s)) (fun s ↦ hr₂ s (hC₂mem s))
+    hH₁zero hH₂zero hH₁one hH₂one hH₁C hH₂C
+    (fun s t ↦ hH₁fix s (hC₁mem s) t)
+    (fun s t ↦ hH₂fix s (hC₂mem s) t)
 lemma apm_t00A01_collared_standardCover_aux_cover
     (M₁ M₂ : Type) [TopologicalSpace M₁] [TopologicalSpace M₂]
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
