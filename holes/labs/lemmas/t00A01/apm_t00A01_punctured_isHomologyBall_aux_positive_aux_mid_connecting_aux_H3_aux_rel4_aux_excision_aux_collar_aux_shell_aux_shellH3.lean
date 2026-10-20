@@ -2982,7 +2982,133 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
     Limits.IsZero
       ((ConstructionTargets.SingularHomologyConcrete.SingularChains
         (TopCat.of {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖})).homology 3) := by
-  sorry
+  let S := {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖}
+  let U := T02A06.euclideanUnitSphere 3
+  let r : C(S, U) :=
+    { toFun := fun x ↦ ⟨NormedSpace.normalize x.1.1, by
+        have hx0 : x.1.1 ≠ 0 := by
+          intro hx
+          have hmem := x.2
+          change 1 ≤ ‖x.1.1‖ at hmem
+          rw [hx, norm_zero] at hmem
+          norm_num at hmem
+        simpa [U, Metric.mem_sphere, dist_zero_right] using
+          NormedSpace.norm_normalize hx0⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        rw [continuous_iff_continuousAt]
+        intro x
+        have hc : Continuous (fun y : S ↦ ‖y.1.1‖) :=
+          continuous_norm.comp (continuous_subtype_val.comp continuous_subtype_val)
+        have hx0 : ‖x.1.1‖ ≠ 0 := by
+          apply ne_of_gt
+          have hmem := x.2
+          change 1 ≤ ‖x.1.1‖ at hmem
+          linarith
+        exact ((hc.continuousAt.inv₀ hx0).smul
+          (continuous_subtype_val.comp continuous_subtype_val).continuousAt) }
+  let i : C(U, S) :=
+    { toFun := fun x ↦ ⟨⟨x.1, by
+          change dist x.1 0 < 2
+          have hx : ‖x.1‖ = 1 := by
+            simpa [U, Metric.mem_sphere, dist_zero_right] using x.2
+          simpa [dist_zero_right, hx]⟩, by
+            have hx : ‖x.1‖ = 1 := by
+              simpa [U, Metric.mem_sphere, dist_zero_right] using x.2
+            exact hx.ge⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val }
+  let H : ContinuousMap.Homotopy (i.comp r) (ContinuousMap.id S) :=
+    { toFun := fun tx ↦ by
+        let t : ℝ := tx.1
+        let x : EuclideanSpace ℝ (Fin 3) := tx.2.1.1
+        let a : ℝ := (1 - t) * ‖x‖⁻¹ + t
+        refine ⟨⟨a • x, ?_⟩, ?_⟩
+        · rw [Metric.mem_ball, dist_zero_right, norm_smul, Real.norm_eq_abs]
+          have hx0 : 0 < ‖x‖ := by
+            have hmem := tx.2.2
+            change 1 ≤ ‖tx.2.1.1‖ at hmem
+            dsimp [x]
+            linarith
+          have hx2 : ‖x‖ < 2 := by
+            have h := tx.2.1.2
+            change dist x 0 < 2 at h
+            simpa [dist_zero_right] using h
+          have ht0 : 0 ≤ t := tx.1.2.1
+          have ht1 : t ≤ 1 := tx.1.2.2
+          have ha0 : 0 ≤ a := add_nonneg
+            (mul_nonneg (sub_nonneg.mpr ht1) (inv_nonneg.mpr (norm_nonneg x))) ht0
+          rw [abs_of_nonneg ha0]
+          have hxne : ‖x‖ ≠ 0 := hx0.ne'
+          dsimp [a]
+          field_simp
+          nlinarith
+        · change 1 ≤ ‖a • x‖
+          rw [norm_smul, Real.norm_eq_abs]
+          have hx0 : 0 < ‖x‖ := by
+            have hmem := tx.2.2
+            change 1 ≤ ‖tx.2.1.1‖ at hmem
+            dsimp [x]
+            linarith
+          have ht0 : 0 ≤ t := tx.1.2.1
+          have ht1 : t ≤ 1 := tx.1.2.2
+          have ha0 : 0 ≤ a := add_nonneg
+            (mul_nonneg (sub_nonneg.mpr ht1) (inv_nonneg.mpr (norm_nonneg x))) ht0
+          rw [abs_of_nonneg ha0]
+          have hxne : ‖x‖ ≠ 0 := hx0.ne'
+          have hx1 : 1 ≤ ‖x‖ := by
+            have hmem := tx.2.2
+            change 1 ≤ ‖tx.2.1.1‖ at hmem
+            simpa [x] using hmem
+          dsimp [a]
+          field_simp
+          nlinarith
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        apply Continuous.subtype_mk
+        have hn : Continuous (fun tx : unitInterval × S ↦ ‖tx.2.1.1‖) :=
+          continuous_norm.comp
+            (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_snd))
+        have hne : ∀ tx : unitInterval × S, ‖tx.2.1.1‖ ≠ 0 := by
+          intro tx
+          apply ne_of_gt
+          have hmem := tx.2.2
+          change 1 ≤ ‖tx.2.1.1‖ at hmem
+          linarith
+        have ht : Continuous (fun tx : unitInterval × S ↦ (tx.1 : ℝ)) :=
+          continuous_subtype_val.comp continuous_fst
+        have hx : Continuous (fun tx : unitInterval × S ↦ tx.2.1.1) :=
+          continuous_subtype_val.comp (continuous_subtype_val.comp continuous_snd)
+        exact (((continuous_const.sub ht).mul (hn.inv₀ hne)).add ht).smul hx
+      map_zero_left := by
+        intro x
+        apply Subtype.ext
+        apply Subtype.ext
+        simp [i, r, NormedSpace.normalize]
+      map_one_left := by
+        intro x
+        apply Subtype.ext
+        apply Subtype.ext
+        simp }
+  let e : ContinuousMap.HomotopyEquiv U S :=
+    { toFun := i
+      invFun := r
+      left_inv := by
+        rw [show r.comp i = ContinuousMap.id U by
+          apply ContinuousMap.ext
+          intro x
+          apply Subtype.ext
+          exact NormedSpace.normalize_eq_self_of_norm_eq_one (by
+            dsimp [i]
+            have hx : dist x.1 0 = 1 := by
+              exact x.2
+            simpa [dist_zero_right] using hx)]
+      right_inv := ⟨H⟩ }
+  exact (ConstructionTargets.SphereHomology.sphereHomology_isZero_of_gt 2 3
+    (by omega)).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv e.symm 3)
 -- END SEAT AREA
 
 /-- (shell vs puncture, purely Euclidean): the open radius-two ball relative to
