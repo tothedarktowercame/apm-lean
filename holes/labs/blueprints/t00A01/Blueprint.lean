@@ -2280,16 +2280,98 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   exact (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign M hM x).mono fun y hy =>
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_natAbs_eq _ _ hy
 
-/-- LIBRARY LEAF (split from `_aux_exists_unit` after lemma-3's PARTIAL,
-2026-10-20): Hatcher Lemma 3.27(b) with `A = M`.  A class of `H₃(M)` whose
-image in every `H₃(M, M ∖ y)` vanishes is zero.  Route: for compact
-`A ⊆ M`, prove `H_i(M, M ∖ A) = 0` for `i > 3` and that a class of
-`H₃(M, M ∖ A)` (`RelativeSingularChains Aᶜ`) vanishing at every `y ∈ A`
-is zero; induct over a finite chart cover: `A` convex in one chart
-(excision to `ℝ³`), then `A ∪ B` by the relative Mayer--Vietoris sequence
-of `(M, M ∖ A)`, `(M, M ∖ B)`.  Do not go through
-`localizationMap x 3` being an iso: that is the grandparent
-`_aux_mid_connecting_aux_localization` (circular). -/
+/-- `A` is good for `M` (Hatcher Lemma 3.27, integer coefficients):
+`H_i(M, M ∖ A)` vanishes above degree 3, and a class of `H₃(M, M ∖ A)` whose
+image in `H₃(M, M ∖ y)` vanishes for every `y ∈ A` is zero.  Split from
+`_aux_injective` after lemma-1's PARTIAL (2026-10-20), whose leaf `_aux_detect`
+was the contrapositive of `_aux_injective`. -/
+def apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good (M : Type) [TopologicalSpace M] (A : Set M) : Prop :=
+  (∀ i : ℕ, 3 < i → Subsingleton
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i)) ∧
+    ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology 3,
+      (∀ (y : M) (hy : y ∈ A),
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 c = 0) →
+      c = 0
+
+/-- LIBRARY LEAF (Hatcher 3.27, step 1): a compact `A` inside one chart whose
+chart image is convex is good.  Route: excise `M ∖ U` for the chart source `U`
+(`A` is closed, `M ∖ U ⊆ M ∖ A`), transport to `ℝ³` through the chart; there
+`ℝ³ ∖ A ↪ ℝ³ ∖ {y}` is a homotopy equivalence for `y ∈ A` (radial deformation
+onto a large sphere about `y`), so by the five lemma
+`H_i(ℝ³, ℝ³ ∖ A) ≅ H_i(ℝ³, ℝ³ ∖ y)`, which is `0` for `i > 3`
+(`HigherModelLocalHomology`).  Degree 3 detection follows because that map is
+an isomorphism.  The empty set is a (vacuous) instance. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (hconv : Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' A)) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M A := by
+  sorry
+
+/-- LIBRARY LEAF (Hatcher 3.27, Mayer--Vietoris step): if closed `A`, `B` and
+`A ∩ B` are good, so is `A ∪ B`.  Route: the relative Mayer--Vietoris sequence
+of the pairs `(M, M ∖ A)`, `(M, M ∖ B)` (open cover `M ∖ A`, `M ∖ B` of
+`M ∖ (A ∩ B)`; the absolute sequence is
+`CoefficientCompactComplementCoverSequence`, compare with the sequence of `M`
+itself by the five lemma)
+`H_{i+1}(M|A∩B) → H_i(M|A∪B) → H_i(M|A) ⊕ H_i(M|B)`.  For `i > 3` both ends
+vanish; for `i = 3`, `H₄(M|A∩B) = 0` gives injectivity, and the images of a
+class in `H₃(M|A)`, `H₃(M|B)` still vanish at every point (the maps to
+`H₃(M|y)` compose).  No compactness or manifold structure is used. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union
+    (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
+    (gA : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M A) (gB : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M B) (gAB : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M (A ∩ B)) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M (A ∪ B) := by
+  sorry
+
+/-- LIBRARY LEAF (Hatcher 3.27, steps 2--3): every compact subset of one chart
+source is good.  Route: excise to the chart target, an open subset of `ℝ³`.
+A finite union of compact convex sets is good by `_aux_convex` and
+`_aux_union` (intersections of convex sets are convex; induct on the number
+of pieces).  For general compact `A`: represent a class of `H_i(ℝ³|A)` by a
+relative cycle whose boundary avoids a neighbourhood `V` of `A`; cover `A` by
+finitely many closed balls inside `V`, let `K` be their union; the class lifts
+to `H_i(ℝ³|K)` and vanishes there by the convex-union case (Hatcher p. 237). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M A := by
+  sorry
+
+/-- LIBRARY LEAF (Hatcher 3.27, step 4): every compact `A ⊆ M` is good.
+Route: cover `A` by finitely many compact `K_j`, each inside a chart source
+(closed chart balls; `M` is locally compact).  Write `A = A₁ ∪ ⋯ ∪ A_m` with
+`A_j = A ∩ K_j` and induct on `m` using `_aux_union`: `A_m` and
+`(A₁ ∪ ⋯ ∪ A_{m-1}) ∩ A_m` are compact subsets of the chart source of `K_m`,
+so both are good by `_aux_inChart`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_compact
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (A : Set M) (hA : IsCompact A) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M A := by
+  sorry
+
+/-- LIBRARY LEAF: `H_n(M) → H_n(M, ∅)` is an isomorphism (the subcomplex of
+chains in the empty set is zero).  `T02A06SphereShift`'s
+`singularPairProjection_isIso_of_subspace_isZero` is one route. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ (M : Type) [TopologicalSpace M] (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        (Set.univ : Set M)ᶜ) n) := by
+  sorry
+
+/-- PROVED from `_aux_compact` with `A = M`, `_aux_univ` and `_aux_factor`:
+Hatcher Lemma 3.27(b) with `A = M`.  A class of `H₃(M)` whose image in every
+`H₃(M, M ∖ y)` vanishes is zero.  Do not go through `localizationMap x 3` being
+an iso: that is the grandparent `_aux_mid_connecting_aux_localization`
+(circular). -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2299,7 +2381,17 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (TopCat.of M)).homology 3)
     (hz : ∀ y : M, ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z = 0) :
     z = 0 := by
-  sorry
+  set f := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+      (Set.univ : Set M)ᶜ) 3
+  haveI := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ M 3
+  have hc : f z = 0 := by
+    refine (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_compact M Set.univ isCompact_univ).2 _ fun y hy => ?_
+    rw [← ConcreteCategory.comp_apply, ← apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_factor Set.univ y hy 3]
+    exact hz y
+  calc z = inv f (f z) := by
+        rw [← ConcreteCategory.comp_apply, IsIso.hom_inv_id, ConcreteCategory.id_apply]
+    _ = 0 := by rw [hc, map_zero]
 
 /-- LIBRARY LEAF (split from `_aux_exists_unit`, 2026-10-20): Hatcher
 Lemma 3.27(a) with `A = M`, for the section `y ↦ loc_y z / m`.  If the
