@@ -264,6 +264,42 @@ the *reversed* explicit edge product, which is what the boundary loop actually e
 `_aux_relabel`, the reversed product is `∏_{a = g-1 … 0} Y a * X a * (Y a)⁻¹ * (X a)⁻¹`;
 a relabelling `(a, b) ↦ (Fin.rev a, !b)` (composed with letter inversion when
 `s = -1`) carries `surfaceRelator g` to it, up to the allowed conjugate/inverse. -/
+lemma t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev_aux_blocks
+    {G : Type*} [Group G] (g : ℕ) (x : Fin g × Bool → G) :
+    (List.ofFn fun i : Fin (4 * g) =>
+      let c := ConstructionTargets.PolygonSurfacePiOne.orientableCoord g i
+      if ConstructionTargets.PolygonSurfacePiOne.handleSign c.2 then x (c.1, ConstructionTargets.PolygonSurfacePiOne.handleOrbitLabel c.2)
+      else (x (c.1, ConstructionTargets.PolygonSurfacePiOne.handleOrbitLabel c.2))⁻¹).reverse.prod =
+    ((List.ofFn fun a : Fin g =>
+      x (a, false) * x (a, true) * (x (a, false))⁻¹ * (x (a, true))⁻¹).prod)⁻¹ := by
+  rw [List.prod_reverse_noncomm]
+  apply congrArg (fun z => z⁻¹)
+  rw [List.map_ofFn]
+  convert t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_blocks g
+    (fun p => (x p)⁻¹) using 1
+  apply congrArg List.prod
+  apply congrArg List.ofFn
+  funext i
+  simp only [Function.comp_apply]
+  split <;> simp_all
+  all_goals simp only [inv_inv]
+
+lemma t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev_aux_prod
+    {G : Type*} [Group G] {n : ℕ} (f : Fin n → G) :
+    (List.ofFn fun i : Fin n => (f i.rev)⁻¹).prod = (List.ofFn f).prod⁻¹ := by
+  rw [List.prod_inv_reverse]
+  apply congrArg List.prod
+  apply List.ext_getElem
+  · simp
+  · intro i hi₁ hi₂
+    simp only [List.length_reverse, List.length_map, List.length_ofFn] at hi₁ hi₂
+    simp only [List.getElem_reverse, List.getElem_map, List.getElem_ofFn, Fin.rev]
+    simp only [List.length_map, List.length_ofFn]
+    change (f ⟨n - (i + 1), by omega⟩)⁻¹ = (f ⟨n - 1 - i, by omega⟩)⁻¹
+    congr 2
+    apply Fin.ext
+    simp only [Nat.sub_sub, Nat.add_comm]
+
 theorem t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev
     (g : ℕ) (hg : 0 < g) :
     ∃ M : FreeGroup (Fin g × Bool) ≃*
@@ -275,7 +311,68 @@ theorem t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev
           ({(List.ofFn fun i : Fin (standardPairingData true g hg).edgeCount =>
               polygonBoundaryExplicitEdgeClass (standardPairingData true g hg) i).reverse.prod} :
             Set _) := by
-  sorry
+  classical
+  let P := standardPairingData true g hg
+  let e : PairingOrbit P.pair ≃ Fin g × Bool := orientableOrbitEquiv g
+  let r : Fin g × Bool ≃ Fin g × Bool := Fin.revPerm.prodCongr Equiv.boolNot
+  let x : Fin g × Bool → FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+    fun p => finiteWedgeLegFundamentalClassAtBase P (e.symm p)
+  have hlab (i : Fin (4 * g)) :
+      finiteWedgeLegFundamentalClassAtBase P (P.orbit i) = x (orientableOrbitLabel g i) := by
+    have h : e (P.orbit i) = orientableOrbitLabel g i := rfl
+    simp only [x, ← h, Equiv.symm_apply_apply]
+  have hprod (s : ℤ) (hs : circleIntegerLoopOneCoordinate = s) :
+      (List.ofFn fun i : Fin P.edgeCount => polygonBoundaryExplicitEdgeClass P i).reverse.prod =
+        ((List.ofFn fun a : Fin g =>
+          x (a, false) ^ s * x (a, true) ^ s * (x (a, false) ^ s)⁻¹ *
+            (x (a, true) ^ s)⁻¹).prod)⁻¹ := by
+    rw [← t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev_aux_blocks g
+      (fun p => x p ^ s)]
+    change (List.ofFn fun i : Fin (4 * g) => polygonBoundaryExplicitEdgeClass P i).reverse.prod = _
+    congr 2
+    apply congrArg List.ofFn
+    funext i
+    have hsign : P.sign i = handleSign (orientableCoord g i).2 := rfl
+    simp only [polygonBoundaryExplicitEdgeClass,
+      t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_explicit, hs, hlab, hsign]
+    rfl
+  have hleg (Q : ConstructionTargets.PolygonSurfacePiOne.PairingData) (q : PairingOrbit Q.pair) :
+      ConstructionTargets.PolygonCellPiOne.legEquiv Q (FreeGroup.of q) =
+        finiteWedgeLegFundamentalClassAtBase Q q := by
+    change finiteWedgeLegFreeGroupMap Q (FreeGroup.of q) = _
+    simp [finiteWedgeLegFreeGroupMap]
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with hs | hs
+  · refine ⟨FreeGroup.freeGroupCongr (r.trans e.symm), ?_⟩
+    rw [hprod 1 hs]
+    congr 2
+    simp only [surfaceRelator, map_list_prod, List.map_ofFn, Function.comp_def, map_mul,
+      map_inv, zpow_one]
+    simp [FreeGroup.freeGroupCongr_apply, r, x]
+    rw [← t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev_aux_prod
+      (fun a : Fin g => x (a, false) * x (a, true) * (x (a, false))⁻¹ * (x (a, true))⁻¹)]
+    apply congrArg List.prod
+    apply congrArg List.ofFn
+    funext a
+    simp only [mul_inv_rev, inv_inv]
+    rw [hleg, hleg]
+    simp only [x, P, mul_assoc]
+  · refine ⟨(t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_inv _).trans
+      (FreeGroup.freeGroupCongr (r.trans e.symm)), ?_⟩
+    rw [hprod (-1) hs]
+    congr 2
+    simp only [surfaceRelator, map_list_prod, List.map_ofFn, Function.comp_def, map_mul,
+      map_inv, MulEquiv.trans_apply, zpow_neg, zpow_one, inv_inv]
+    simp [t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_inv,
+      FreeGroup.freeGroupCongr_apply, r, x]
+    rw [← t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev_aux_prod
+      (fun a : Fin g => (x (a, false))⁻¹ * (x (a, true))⁻¹ * x (a, false) * x (a, true))]
+    apply congrArg List.prod
+    apply congrArg List.ofFn
+    funext a
+    simp only [mul_inv_rev, inv_inv]
+    rw [hleg, hleg]
+    simp only [x, P, mul_assoc]
 
 open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
 /-- Positive genus: `polygon_piOne_presentation` on the standard orientable data,
