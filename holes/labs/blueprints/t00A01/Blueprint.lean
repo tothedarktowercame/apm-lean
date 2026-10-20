@@ -1579,6 +1579,147 @@ theorem apm_t00A01_punctured_isHomologyBall
 /-- LIBRARY: radial collar coordinates thicken both quotient pieces to an
 open cover, identify their overlap with `S²`, and give continuity of both
 boundary inclusions. -/
+lemma apm_t00A01_collared_standardCover_aux_boundary_continuous
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ) :
+    Continuous (apm_t00A01_boundaryMap φ hφ.injective) := by
+  apply Continuous.subtype_mk
+  exact hφ.continuous.comp (continuous_subtype_val.subtype_mk _)
+
+/-- Points of the punctured manifold lying in the open radius-two collar ball. -/
+def apm_t00A01_collarSet {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M) :
+    Set (apm_t00A01_punctured φ) :=
+  {x | x.1 ∈ Φ '' {y : apm_t00A01_LargeDisk3 | dist y.1 0 < 2}}
+
+/-- The open thickening of the first piece: all of it, plus a collar `C` of
+the second piece. -/
+def apm_t00A01_thickLeft {A B : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) (C : Set B) :
+    Set (apm_t00A01_connectedSum iA iB) :=
+  (fun z : Sum A B ↦ Quotient.mk
+    (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) z) ''
+      (Set.range Sum.inl ∪ Sum.inr '' C)
+
+/-- The open thickening of the second piece: a collar `C` of the first piece,
+plus all of the second. -/
+def apm_t00A01_thickRight {A B : Type}
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) (C : Set A) :
+    Set (apm_t00A01_connectedSum iA iB) :=
+  (fun z : Sum A B ↦ Quotient.mk
+    (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) z) ''
+      (Sum.inl '' C ∪ Set.range Sum.inr)
+
+/-- The collar is open in the punctured manifold and contains the boundary
+sphere (radius one is inside the open radius-two ball). -/
+lemma apm_t00A01_collared_standardCover_aux_collar
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (Φ : apm_t00A01_LargeDisk3 → M)
+    (hext : Φ ∘ apm_t00A01_unitToLarge = φ)
+    (hopen : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    IsOpen (apm_t00A01_collarSet φ Φ) ∧
+      ∀ s, apm_t00A01_boundaryMap φ hφ.injective s ∈ apm_t00A01_collarSet φ Φ := by
+  refine ⟨hopen.preimage continuous_subtype_val, fun s ↦ ?_⟩
+  refine ⟨apm_t00A01_unitToLarge
+    ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩, ?_, ?_⟩
+  · have hs : dist s.1 0 = 1 := by simpa [Metric.mem_sphere, dist_comm] using s.2
+    change dist s.1 0 < 2
+    linarith
+  · exact congrFun hext _
+
+/-- LEAF. Both thickenings are open and together cover the connected sum.
+Proof sketch: the preimage of each under the quotient map is the displayed
+set itself (it is saturated, because every glued pair has its `inr` end
+`iB s ∈ CB`, resp. its `inl` end `iA s ∈ CA`), and that set is open in the
+sum; the union contains every class. -/
+lemma apm_t00A01_collared_standardCover_aux_open {A B : Type}
+    [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (CA : Set A) (CB : Set B) (hCA : IsOpen CA) (hCB : IsOpen CB)
+    (hiA : ∀ s, iA s ∈ CA) (hiB : ∀ s, iB s ∈ CB) :
+    IsOpen (apm_t00A01_thickLeft iA iB CB) ∧
+      IsOpen (apm_t00A01_thickRight iA iB CA) ∧
+      apm_t00A01_thickLeft iA iB CB ∪ apm_t00A01_thickRight iA iB CA = Set.univ := by
+  sorry
+
+/-- LEAF. The left thickening deformation retracts onto the first punctured
+piece: push the second collar `1 ≤ r < 2` radially onto `r = 1`, which is
+glued to the boundary sphere of the first piece. -/
+lemma apm_t00A01_collared_standardCover_aux_left
+    {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
+    (hφ₁ : Topology.IsEmbedding φ₁) (hφ₂ : Topology.IsEmbedding φ₂)
+    (Φ₂ : apm_t00A01_LargeDisk3 → M₂) (hΦ₂ : Topology.IsEmbedding Φ₂)
+    (hext₂ : Φ₂ ∘ apm_t00A01_unitToLarge = φ₂)
+    (hopen₂ : IsOpen (Φ₂ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥(apm_t00A01_thickLeft (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+        (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₂ Φ₂))
+      (apm_t00A01_punctured φ₁)) := by
+  sorry
+
+/-- LEAF. Mirror image of `_aux_left`: the right thickening deformation
+retracts onto the second punctured piece. -/
+lemma apm_t00A01_collared_standardCover_aux_right
+    {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
+    (hφ₁ : Topology.IsEmbedding φ₁) (hφ₂ : Topology.IsEmbedding φ₂)
+    (Φ₁ : apm_t00A01_LargeDisk3 → M₁) (hΦ₁ : Topology.IsEmbedding Φ₁)
+    (hext₁ : Φ₁ ∘ apm_t00A01_unitToLarge = φ₁)
+    (hopen₁ : IsOpen (Φ₁ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥(apm_t00A01_thickRight (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+        (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₁ Φ₁))
+      (apm_t00A01_punctured φ₂)) := by
+  sorry
+
+/-- LEAF. The overlap is the two half-open collars `1 ≤ r < 2` glued along
+`r = 1`, i.e. `S² × (-1, 1)`, which retracts radially onto the glued `S²`
+(at radius one the copies agree by `apm_t00A01_mk_inl_eq_mk_inr`). -/
+lemma apm_t00A01_collared_standardCover_aux_inter
+    {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
+    (hφ₁ : Topology.IsEmbedding φ₁) (hφ₂ : Topology.IsEmbedding φ₂)
+    (Φ₁ : apm_t00A01_LargeDisk3 → M₁) (hΦ₁ : Topology.IsEmbedding Φ₁)
+    (hext₁ : Φ₁ ∘ apm_t00A01_unitToLarge = φ₁)
+    (hopen₁ : IsOpen (Φ₁ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}))
+    (Φ₂ : apm_t00A01_LargeDisk3 → M₂) (hΦ₂ : Topology.IsEmbedding Φ₂)
+    (hext₂ : Φ₂ ∘ apm_t00A01_unitToLarge = φ₂)
+    (hopen₂ : IsOpen (Φ₂ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥(apm_t00A01_thickLeft (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+          (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₂ Φ₂) ∩
+        apm_t00A01_thickRight (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+          (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₁ Φ₁))
+      apm_t00A01_Sphere2) := by
+  sorry
+
+lemma apm_t00A01_collared_standardCover_aux_cover
+    (M₁ M₂ : Type) [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
+    (hφ₁ : Topology.IsEmbedding φ₁) (hφ₂ : Topology.IsEmbedding φ₂)
+    (hcollar₁ : apm_t00A01_HasBallCollar φ₁)
+    (hcollar₂ : apm_t00A01_HasBallCollar φ₂) :
+    apm_t00A01_hasStandardCover
+      (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+        (apm_t00A01_boundaryMap φ₂ hφ₂.injective))
+      (apm_t00A01_punctured φ₁) (apm_t00A01_punctured φ₂) := by
+  obtain ⟨Φ₁, hΦ₁, hext₁, hopen₁⟩ := hcollar₁
+  obtain ⟨Φ₂, hΦ₂, hext₂, hopen₂⟩ := hcollar₂
+  obtain ⟨hC₁, hb₁⟩ :=
+    apm_t00A01_collared_standardCover_aux_collar φ₁ hφ₁ Φ₁ hext₁ hopen₁
+  obtain ⟨hC₂, hb₂⟩ :=
+    apm_t00A01_collared_standardCover_aux_collar φ₂ hφ₂ Φ₂ hext₂ hopen₂
+  obtain ⟨hU, hV, hUV⟩ := apm_t00A01_collared_standardCover_aux_open
+    (apm_t00A01_boundaryMap φ₁ hφ₁.injective) (apm_t00A01_boundaryMap φ₂ hφ₂.injective)
+    _ _ hC₁ hC₂ hb₁ hb₂
+  exact ⟨_, _, hU, hV, hUV,
+    apm_t00A01_collared_standardCover_aux_left φ₁ φ₂ hφ₁ hφ₂ Φ₂ hΦ₂ hext₂ hopen₂,
+    apm_t00A01_collared_standardCover_aux_right φ₁ φ₂ hφ₁ hφ₂ Φ₁ hΦ₁ hext₁ hopen₁,
+    apm_t00A01_collared_standardCover_aux_inter φ₁ φ₂ hφ₁ hφ₂
+      Φ₁ hΦ₁ hext₁ hopen₁ Φ₂ hΦ₂ hext₂ hopen₂⟩
+
 theorem apm_t00A01_collared_standardCover
     (M₁ M₂ : Type) [TopologicalSpace M₁] [TopologicalSpace M₂]
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
@@ -1591,7 +1732,9 @@ theorem apm_t00A01_collared_standardCover
       (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
         (apm_t00A01_boundaryMap φ₂ hφ₂.injective))
       (apm_t00A01_punctured φ₁) (apm_t00A01_punctured φ₂) := by
-  sorry
+  exact ⟨apm_t00A01_collared_standardCover_aux_boundary_continuous φ₁ hφ₁,
+    apm_t00A01_collared_standardCover_aux_boundary_continuous φ₂ hφ₂,
+    apm_t00A01_collared_standardCover_aux_cover M₁ M₂ φ₁ φ₂ hφ₁ hφ₂ hcollar₁ hcollar₂⟩
 
 theorem apm_t00a01
     (M₁ M₂ : Type)
