@@ -1968,13 +1968,44 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mv
      singularHomologyModuleIsZeroOfGroupIsZero (TopCat.of U) k hUg
    exact hUm.of_iso (moduleHomologyIsoOfHomotopyEquiv eUA k).symm
 
-/-- LEAF (the hard part). Degrees 2 and 3. For the cover of `_aux_cover`, the
-Mayer--Vietoris sequence gives `0 → H₃(P) → H₃(M) → H₂(S²) → H₂(P) → 0`, so
-both groups vanish exactly when the connecting map `H₃(M) ≅ ℤ → H₂(S²) ≅ ℤ`
-is an isomorphism: the fundamental class of the closed 3-manifold `M`
-restricts to a generator of the local homology at the removed ball. This
-needs local orientation classes; see
-`ConstructionTargets.LocalHomologyNeighborhoodExcision`. -/
+/-- LEAF (algebra, independent of the manifold argument).  If the degree-two
+connecting map for a standard cover is an isomorphism, exactness and the
+known homology of the union, overlap, and right-hand piece force the
+left-hand piece to vanish in degrees two and three. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_algebra
+    (X A B : Type) [TopologicalSpace X] [TopologicalSpace A] [TopologicalSpace B]
+    (hX : apm_t00A01_isHomology3Sphere X) (hB : apm_t00A01_isHomologyBall B)
+    (hcover : apm_t00A01_hasStandardCover X A B)
+    (hconn : let ⟨U, V, hU, hV, hUV, _⟩ := hcover
+      IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+        U V hU hV hUV 2))
+    (k : ℕ) (hk : k = 2 ∨ k = 3) :
+    Limits.IsZero (apm_t00A01_H k A) := by
+  sorry
+
+/-- LIBRARY LEAF (global fundamental class plus collar comparison).  For the
+specific standard cover supplied by the collar, its Mayer--Vietoris boundary
+`H₃(M) → H₂(U ∩ V)` is an isomorphism.  This is the exact formal boundary
+left by the missing global-to-local fundamental-class theorem and the
+comparison of its localization map with the open-cover connecting map. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (hM : apm_t00A01_isHomology3Sphere M)
+    (hcollar : apm_t00A01_HasBallCollar φ) :
+    let hcover := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover
+      M φ hφ hcollar
+    let ⟨U, V, hU, hV, hUV, _⟩ := hcover
+    IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+      U V hU hV hUV 2) := by
+  sorry
+
+/-- ASSEMBLY.  The only topology used here is the separately stated fact that
+the collar-cover connecting map is invertible; the remaining step is the
+abstract Mayer--Vietoris algebra above. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -1985,7 +2016,13 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid
     (hcollar : apm_t00A01_HasBallCollar φ) (k : ℕ)
     (hk : k = 2 ∨ k = 3) :
     Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
-  sorry
+  let hcover := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover
+    M φ hφ hcollar
+  apply apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_algebra
+    M (apm_t00A01_punctured φ) apm_t00A01_Disk3 hM
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk hcover
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
+      M φ hφ hM hcollar) k hk
 
 /-- ASSEMBLY (from `_aux_cover`, `_aux_disk`, `_aux_mv`, `_aux_mid`). -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive
@@ -2693,7 +2730,51 @@ lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient_aux_cont
     (hR : Continuous fun p : unitInterval × B =>
       F (p.1, ⟨Sum.inr p.2, Or.inr ⟨p.2, rfl⟩⟩)) :
     Continuous F := by
-  sorry
+  let P : Set (Sum A B) :=
+    (@Sum.inl A B) '' C ∪ Set.range (@Sum.inr A B)
+  let jL : C → P := fun a =>
+    ⟨Sum.inl a.1, Or.inl ⟨a.1, a.2, rfl⟩⟩
+  let jR : B → P := fun b =>
+    ⟨Sum.inr b, Or.inr ⟨b, rfl⟩⟩
+  have hjL : Topology.IsOpenEmbedding jL := by
+    apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+    · exact Continuous.subtype_mk
+        ((continuous_inl (X := A) (Y := B)).comp continuous_subtype_val) _
+    · intro a a' h
+      exact Subtype.ext (Sum.inl.inj (congrArg Subtype.val h))
+    · exact ((Topology.IsOpenEmbedding.inl (X := A) (Y := B)).isOpenMap.comp
+          hC.isOpenEmbedding_subtypeVal.isOpenMap).codRestrict _
+  have hjR : Topology.IsOpenEmbedding jR := by
+    apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+    · exact Continuous.subtype_mk (continuous_inr (X := A) (Y := B)) _
+    · intro b b' h
+      exact Sum.inr.inj (congrArg Subtype.val h)
+    · exact (Topology.IsOpenEmbedding.inr (X := A) (Y := B)).isOpenMap.codRestrict _
+  let eL : unitInterval × C → unitInterval × P := fun p => (p.1, jL p.2)
+  let eR : unitInterval × B → unitInterval × P := fun p => (p.1, jR p.2)
+  have heL : Topology.IsOpenEmbedding eL := by
+    exact Topology.IsOpenEmbedding.prodMap Topology.IsOpenEmbedding.id hjL
+  have heR : Topology.IsOpenEmbedding eR := by
+    exact Topology.IsOpenEmbedding.prodMap Topology.IsOpenEmbedding.id hjR
+  have hcL : Continuous (F ∘ eL) := by
+    simpa [Function.comp_def, eL, jL, P] using hL
+  have hcR : Continuous (F ∘ eR) := by
+    simpa [Function.comp_def, eR, jR, P] using hR
+  rw [← continuousOn_univ]
+  have hcover : Set.range eL ∪ Set.range eR = Set.univ := by
+    ext ⟨t, z, hz⟩
+    rcases hz with ⟨a, ha, rfl⟩ | ⟨b, rfl⟩
+    · simp [eL, jL, P, ha]
+    · simp [eR, jR, P]
+  rw [← hcover]
+  have hcLi : ContinuousOn F (eL '' Set.univ) :=
+    heL.isInducing.continuousOn_image_iff.mpr hcL.continuousOn
+  have hcRi : ContinuousOn F (eR '' Set.univ) :=
+    heR.isInducing.continuousOn_image_iff.mpr hcR.continuousOn
+  simpa only [Set.image_univ] using
+    hcLi.union_of_isOpen hcRi
+      (by simpa only [Set.image_univ] using heL.isOpen_range)
+      (by simpa only [Set.image_univ] using heR.isOpen_range)
 
 lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
     [TopologicalSpace A] [TopologicalSpace B]

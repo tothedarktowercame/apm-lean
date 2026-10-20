@@ -2694,7 +2694,51 @@ lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient_aux_cont
     (hR : Continuous fun p : unitInterval × B =>
       F (p.1, ⟨Sum.inr p.2, Or.inr ⟨p.2, rfl⟩⟩)) :
     Continuous F := by
-  sorry
+  let P : Set (Sum A B) :=
+    (@Sum.inl A B) '' C ∪ Set.range (@Sum.inr A B)
+  let jL : C → P := fun a =>
+    ⟨Sum.inl a.1, Or.inl ⟨a.1, a.2, rfl⟩⟩
+  let jR : B → P := fun b =>
+    ⟨Sum.inr b, Or.inr ⟨b, rfl⟩⟩
+  have hjL : Topology.IsOpenEmbedding jL := by
+    apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+    · exact Continuous.subtype_mk
+        ((continuous_inl (X := A) (Y := B)).comp continuous_subtype_val) _
+    · intro a a' h
+      exact Subtype.ext (Sum.inl.inj (congrArg Subtype.val h))
+    · exact ((Topology.IsOpenEmbedding.inl (X := A) (Y := B)).isOpenMap.comp
+          hC.isOpenEmbedding_subtypeVal.isOpenMap).codRestrict _
+  have hjR : Topology.IsOpenEmbedding jR := by
+    apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+    · exact Continuous.subtype_mk (continuous_inr (X := A) (Y := B)) _
+    · intro b b' h
+      exact Sum.inr.inj (congrArg Subtype.val h)
+    · exact (Topology.IsOpenEmbedding.inr (X := A) (Y := B)).isOpenMap.codRestrict _
+  let eL : unitInterval × C → unitInterval × P := fun p => (p.1, jL p.2)
+  let eR : unitInterval × B → unitInterval × P := fun p => (p.1, jR p.2)
+  have heL : Topology.IsOpenEmbedding eL := by
+    exact Topology.IsOpenEmbedding.prodMap Topology.IsOpenEmbedding.id hjL
+  have heR : Topology.IsOpenEmbedding eR := by
+    exact Topology.IsOpenEmbedding.prodMap Topology.IsOpenEmbedding.id hjR
+  have hcL : Continuous (F ∘ eL) := by
+    simpa [Function.comp_def, eL, jL, P] using hL
+  have hcR : Continuous (F ∘ eR) := by
+    simpa [Function.comp_def, eR, jR, P] using hR
+  rw [← continuousOn_univ]
+  have hcover : Set.range eL ∪ Set.range eR = Set.univ := by
+    ext ⟨t, z, hz⟩
+    rcases hz with ⟨a, ha, rfl⟩ | ⟨b, rfl⟩
+    · simp [eL, jL, P, ha]
+    · simp [eR, jR, P]
+  rw [← hcover]
+  have hcLi : ContinuousOn F (eL '' Set.univ) :=
+    heL.isInducing.continuousOn_image_iff.mpr hcL.continuousOn
+  have hcRi : ContinuousOn F (eR '' Set.univ) :=
+    heR.isInducing.continuousOn_image_iff.mpr hcR.continuousOn
+  simpa only [Set.image_univ] using
+    hcLi.union_of_isOpen hcRi
+      (by simpa only [Set.image_univ] using heL.isOpen_range)
+      (by simpa only [Set.image_univ] using heR.isOpen_range)
 -- END SEAT AREA
 
 lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
