@@ -2218,6 +2218,277 @@ homotopy is already built and proved continuous in
 `_aux_H_mapsTo`, `_aux_H_continuousOn`); reuse those pieces rather than
 re-proving continuity. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_radial :
+    ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦
+        if ‖p.2‖ < 1 then
+          (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2)
+        else p.2)
+      (Set.univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 0 < ‖x‖}) := by
+  let s : Set (unitInterval × EuclideanSpace ℝ (Fin 3)) :=
+    Set.univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 0 < ‖x‖}
+  let f : unitInterval × EuclideanSpace ℝ (Fin 3) →
+      EuclideanSpace ℝ (Fin 3) := fun p ↦
+    (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2)
+  let g : unitInterval × EuclideanSpace ℝ (Fin 3) →
+      EuclideanSpace ℝ (Fin 3) := fun p ↦ p.2
+  have ht : Continuous
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ (p.1 : ℝ)) :=
+    continuous_subtype_val.comp continuous_fst
+  have hx : Continuous
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ p.2) :=
+    continuous_snd
+  have hn : Continuous
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖) :=
+    continuous_norm.comp hx
+  have hne : ∀ p ∈ s, ‖p.2‖ ≠ 0 := by
+    intro p hp
+    exact ne_of_gt hp.2
+  have hinv : ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖⁻¹) s :=
+    hn.continuousOn.inv₀ hne
+  have hf : ContinuousOn f s := by
+    exact ((continuous_const.sub ht).continuousOn.smul hx.continuousOn).add
+      (ht.continuousOn.smul (hinv.smul hx.continuousOn))
+  have hg : ContinuousOn g s := hx.continuousOn
+  have hboundary : ∀ p ∈ s ∩ frontier
+      {p : unitInterval × EuclideanSpace ℝ (Fin 3) | ‖p.2‖ < 1},
+      f p = g p := by
+    intro p hp
+    have heq : ‖p.2‖ = 1 :=
+      (frontier_lt_subset_eq hn continuous_const) hp.2
+    simp only [f, g, heq, inv_one, one_smul]
+    rw [← add_smul, sub_add_cancel, one_smul]
+  exact ContinuousOn.if hboundary
+    (hf.mono inter_subset_left) (hg.mono inter_subset_left)
+
+
+/-- Norm of the radial push for `0 < ‖x‖`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_norm (t : unitInterval) (x : EuclideanSpace ℝ (Fin 3))
+    (hx : 0 < ‖x‖) :
+    ‖(1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x)‖ = (1 - (t : ℝ)) * ‖x‖ + (t : ℝ) := by
+  have hx0 : ‖x‖ ≠ 0 := ne_of_gt hx
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have heq :
+      (1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x) =
+        ((1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹) • x := by
+    rw [add_smul, mul_smul]
+  rw [heq, norm_smul, Real.norm_eq_abs]
+  have hi0 : 0 ≤ ‖x‖⁻¹ := inv_nonneg.mpr (norm_nonneg x)
+  have hc0 : 0 ≤ (1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹ :=
+    add_nonneg (sub_nonneg.mpr ht1) (mul_nonneg ht0 hi0)
+  rw [abs_of_nonneg hc0]
+  field_simp
+
+/-- The collar homotopy is continuous on `I × (Φ(ball 0 2) \ {Φ 0})`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_ball
+    {M : Type} [TopologicalSpace M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ) :
+    ContinuousOn
+      (fun p : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
+      (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+        {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ)) := by
+  let S : Set (unitInterval × M) := univ ×ˢ
+    (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+      {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ)
+  let inv : S → apm_t00A01_LargeDisk3 := fun p ↦
+    hΦ.toHomeomorph.symm ⟨p.1.2, by
+      rcases p.2.2.1 with ⟨x, hx, hxp⟩
+      exact ⟨x, hxp⟩⟩
+  have hinv : Continuous inv := by
+    let rangeMap : S → Set.range Φ := fun p ↦ ⟨p.1.2, by
+      rcases p.2.2.1 with ⟨x, hx, hxp⟩
+      exact ⟨x, hxp⟩⟩
+    have hrange : Continuous rangeMap :=
+      Continuous.subtype_mk ((continuous_snd : Continuous (fun p : unitInterval × M ↦ p.2)).comp
+        continuous_subtype_val) _
+    exact hΦ.toHomeomorph.symm.continuous.comp hrange
+  have hinv_eq (p : S) : Φ (inv p) = p.1.2 := by
+    exact congrArg Subtype.val (hΦ.toHomeomorph.apply_symm_apply _)
+  have hinv_lt (p : S) : dist (inv p).1 0 < 2 := by
+    rcases p.2.2.1 with ⟨x, hx, hxp⟩
+    have : inv p = x := hΦ.injective (by rw [hinv_eq p, hxp])
+    simpa [this] using hx
+  have hinv_pos (p : S) : 0 < ‖(inv p).1‖ := by
+    rcases (norm_nonneg (inv p).1).lt_or_eq with h | h
+    · exact h
+    · exfalso
+      apply p.2.2.2
+      have h0 : inv p = ⟨0, by simp [apm_t00A01_LargeDisk3]⟩ :=
+        Subtype.ext (norm_eq_zero.mp h.symm)
+      change p.1.2 = _
+      rw [← hinv_eq p, h0]
+  let Q : S → unitInterval × EuclideanSpace ℝ (Fin 3) := fun p ↦ (p.1.1, (inv p).1)
+  have hQ : Continuous Q := by
+    dsimp [Q]
+    fun_prop
+  have hmaps : MapsTo Q univ (univ ×ˢ {x | 0 < ‖x‖}) := by
+    intro p hp
+    exact ⟨trivial, hinv_pos p⟩
+  have hrad : Continuous (fun p : S ↦
+      if ‖(Q p).2‖ < 1 then (1 - ((Q p).1 : ℝ)) • (Q p).2 +
+        ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2) else (Q p).2) := by
+    rw [← continuousOn_univ]
+    exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_radial.comp hQ.continuousOn hmaps
+  let R : S → apm_t00A01_LargeDisk3 := fun p ↦ ⟨
+    if ‖(Q p).2‖ < 1 then (1 - ((Q p).1 : ℝ)) • (Q p).2 +
+      ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2) else (Q p).2, by
+    change dist _ 0 ≤ 2
+    rw [dist_zero_right]
+    by_cases hlt : ‖(Q p).2‖ < 1
+    · rw [if_pos hlt, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_norm _ _ (hinv_pos p)]
+      have ht0 : 0 ≤ ((Q p).1 : ℝ) := (Q p).1.2.1
+      have ht1 : ((Q p).1 : ℝ) ≤ 1 := (Q p).1.2.2
+      nlinarith [norm_nonneg (Q p).2]
+    · rw [if_neg hlt]
+      exact le_of_lt (by simpa [Q, dist_eq_norm] using hinv_lt p)⟩
+  have hR : Continuous R := by
+    apply Continuous.subtype_mk hrad
+  rw [continuousOn_iff_continuous_restrict]
+  apply Continuous.congr (hΦ.continuous.comp hR)
+  intro p
+  symm
+  change apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1.1 p.1.2 = _
+  rw [← hinv_eq p]
+  unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+  by_cases hlt : ‖(inv p).1‖ < 1
+  · have hex : ∃ x : apm_t00A01_LargeDisk3, Φ x = Φ (inv p) ∧ dist x.1 0 < 1 :=
+      ⟨inv p, rfl, by simpa [dist_eq_norm] using hlt⟩
+    rw [dif_pos hex]
+    have hchoose : hex.choose = inv p := hΦ.injective hex.choose_spec.1
+    simp only [hchoose, Q, hlt, if_pos]
+    have hv : (1 - (p.1.1 : ℝ)) • (hex.choose).1 +
+        (p.1.1 : ℝ) • (‖(hex.choose).1‖⁻¹ • (hex.choose).1) ∈
+        Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 2 := by
+      rw [hchoose]
+      simpa [R, Q, hlt] using (R p).2
+    rw [dif_pos hv]
+    apply congrArg Φ
+    apply Subtype.ext
+    simp [R, Q, hlt]
+  · have hnone : ¬ ∃ x : apm_t00A01_LargeDisk3,
+        Φ x = Φ (inv p) ∧ dist x.1 0 < 1 := by
+      rintro ⟨x, hx, hx1⟩
+      have hxeq : x = inv p := hΦ.injective hx
+      apply hlt
+      simpa [hxeq, dist_eq_norm] using hx1
+    rw [dif_neg hnone]
+    simp [R, Q, hlt]
+
+/-- The collar homotopy is continuous on `I × (M \ {Φ 0})`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_continuousOn
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    ContinuousOn
+      (fun p : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
+      (univ ×ˢ {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ) := by
+  intro p hp
+  have hU : IsOpen ({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M) :=
+    isOpen_compl_singleton
+  by_cases hb : p.2 ∈ Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}
+  · have hA : IsOpen (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+        {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ) : Set (unitInterval × M)) :=
+      isOpen_univ.prod (hΦo.inter hU)
+    exact ((apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_ball Φ hΦ).continuousAt
+      (hA.mem_nhds ⟨trivial, hb, hp.2⟩)).continuousWithinAt
+  · have hB : IsOpen (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1})ᶜ :
+        Set (unitInterval × M)) :=
+      isOpen_univ.prod
+        (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_closed Φ hΦ.continuous 1).isOpen_compl
+    have hpB : p ∈ (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1})ᶜ :
+        Set (unitInterval × M)) := by
+      refine ⟨trivial, ?_⟩
+      rintro ⟨x, hx, hxp⟩
+      refine hb ⟨x, ?_, hxp⟩
+      change dist x.1 0 ≤ 1 at hx
+      change dist x.1 0 < 2
+      linarith
+    have heq : (fun q : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ q.1 q.2) =ᶠ[nhds p] Prod.snd := by
+      filter_upwards [hB.mem_nhds hpB] with q hq
+      apply apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_eq_self
+      rintro ⟨x, hx, hxq⟩
+      refine hq.2 ⟨x, ?_, hxq⟩
+      change dist x.1 0 < 1 at hx
+      change dist x.1 0 ≤ 1
+      exact le_of_lt hx
+    exact (continuous_snd.continuousAt.congr heq.symm).continuousWithinAt
+
+/-- The collar homotopy keeps `M \ {Φ 0}` inside itself, and at time `1`
+lands in the punctured manifold. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_mapsTo
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦ : Function.Injective Φ) (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ) :
+    (∀ t : unitInterval,
+      MapsTo (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ t)
+        {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ
+        {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ) ∧
+    MapsTo (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1)
+      {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ
+      {z | z ∉ φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} := by
+  have hpos (z : M) (hz : z ∈ ({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M))
+      (x : apm_t00A01_LargeDisk3) (hxz : Φ x = z) : 0 < ‖x.1‖ := by
+    rcases (norm_nonneg x.1).lt_or_eq with h | h
+    · exact h
+    · exfalso
+      apply hz
+      have h0 : x = ⟨0, by simp [apm_t00A01_LargeDisk3]⟩ :=
+        Subtype.ext (norm_eq_zero.mp h.symm)
+      rw [← hxz, h0]
+      rfl
+  constructor
+  · intro t z hz
+    unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+    split_ifs with h hv
+    · intro heq
+      have hx0 := hpos z hz h.choose h.choose_spec.1
+      have hx1 : ‖h.choose.1‖ < 1 := by
+        simpa [dist_eq_norm] using h.choose_spec.2
+      have hv0 : (1 - (t : ℝ)) • h.choose.1 +
+          (t : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) = 0 :=
+        congrArg Subtype.val (hΦ heq)
+      have hn := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_norm t _ hx0
+      rw [hv0, norm_zero] at hn
+      have ht0 : 0 ≤ (t : ℝ) := t.2.1
+      have ht1 : (t : ℝ) ≤ 1 := t.2.2
+      nlinarith
+    · exact hz
+    · exact hz
+  · intro z hz
+    unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+    split_ifs with h hv
+    · have hx0 := hpos z hz h.choose h.choose_spec.1
+      rw [apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image φ Φ hΦφ]
+      rintro ⟨y, hy, heq⟩
+      have hxy : y.1 =
+            (1 - (1 : ℝ)) • h.choose.1 +
+              (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) := by
+          exact congrArg Subtype.val (hΦ heq)
+      have hnorm : ‖(1 - (1 : ℝ)) • h.choose.1 +
+              (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1)‖ = 1 := by
+        rw [show (1 : ℝ) - 1 = 0 by norm_num, zero_smul, zero_add, one_smul,
+          norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg (inv_nonneg.mpr (norm_nonneg h.choose.1))]
+        exact inv_mul_cancel₀ (ne_of_gt hx0)
+      have hy' : ‖y.1‖ < 1 := by simpa [dist_eq_norm] using hy
+      rw [hxy, hnorm] at hy'
+      exact lt_irrefl 1 hy'
+    · have hx0 := hpos z hz h.choose h.choose_spec.1
+      exfalso
+      apply hv
+      change ‖(1 - ((1 : unitInterval) : ℝ)) • h.choose.1 +
+          ((1 : unitInterval) : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) - 0‖ ≤ 2
+      rw [sub_zero, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_norm 1 _ hx0]
+      norm_num
+    · rw [apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image φ Φ hΦφ]
+      rintro ⟨x, hx, hxz⟩
+      exact h ⟨x, hxz, hx⟩
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv
     (M : Type) [TopologicalSpace M] [T2Space M]
     (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
@@ -2225,7 +2496,42 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2
     Nonempty (ContinuousMap.HomotopyEquiv (apm_t00A01_punctured phi)
       ↥(ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
         (phi ⟨0, by simp [apm_t00A01_Disk3]⟩))) := by
-  sorry
+  obtain ⟨Φ, hΦ, hΦφ, hΦo⟩ := hcollar
+  have hp0 : phi ⟨0, by simp [apm_t00A01_Disk3]⟩ =
+      Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩ := by
+    rw [← hΦφ]
+    rfl
+  rw [hp0]
+  change Nonempty (ContinuousMap.HomotopyEquiv (apm_t00A01_punctured phi)
+    ↥({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M))
+  obtain ⟨hmap, hmap1⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_mapsTo phi Φ hΦ.injective hΦφ
+  have hcont := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_continuousOn Φ hΦ hΦo
+  have hHc : Continuous (fun p : unitInterval ×
+      ↥({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M) ↦
+      apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1) :=
+    hcont.comp_continuous
+      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+      (fun p ↦ ⟨mem_univ _, p.2.2⟩)
+  let i : C(apm_t00A01_punctured phi,
+      ↥({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M)) :=
+    ⟨fun x ↦ ⟨x.1, fun hx ↦ x.2 ⟨⟨0, by simp [apm_t00A01_Disk3]⟩, by simp,
+      by rw [hp0]; exact hx.symm⟩⟩,
+      Continuous.subtype_mk continuous_subtype_val _⟩
+  let r : C(↥({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M),
+      apm_t00A01_punctured phi) :=
+    ⟨fun z ↦ ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1 z.1, hmap1 z.2⟩,
+      (hHc.comp (continuous_const.prodMk continuous_id)).subtype_mk _⟩
+  let F : ContinuousMap.Homotopy (ContinuousMap.id _) (i.comp r) :=
+    { toFun := fun p ↦ ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1, hmap p.1 p.2.2⟩
+      continuous_toFun := hHc.subtype_mk _
+      map_zero_left := fun z ↦ Subtype.ext (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_zero Φ z.1)
+      map_one_left := fun z ↦ rfl }
+  have hri : r.comp i = ContinuousMap.id _ := by
+    ext z
+    exact apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_one phi Φ hΦφ z.1 z.2
+  exact ⟨{ toFun := i, invFun := r
+           left_inv := by rw [hri]
+           right_inv := ⟨F.symm⟩ }⟩
 -- END SEAT AREA
 
 /-- LIBRARY: collar excision and the pair exact sequence turn invertibility of
