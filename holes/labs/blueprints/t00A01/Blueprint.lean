@@ -2738,7 +2738,120 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A := by
   sorry
 
-/-- LIBRARY LEAF (Hatcher 3.27(a), Mayer--Vietoris step): if closed `A`, `B`
+/-- PROVED (lemma-3, banked from its `_aux_divide_aux_union` PARTIAL,
+2026-10-20): restrict `c` to `A` and to `B` and divide there. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_restrict
+    (M : Type) [TopologicalSpace M] (m : ℤ) (A B : Set M)
+    (gA : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A)
+    (gB : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m B)
+    (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (A ∪ B)ᶜ).homology 3)
+    (hc : ∀ (y : M) (hy : y ∈ A ∪ B), ∃ g, m • g =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+          (ContinuousMap.id M)
+          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (A ∪ B) y hy)) 3 c) :
+    (∃ μA : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology 3,
+      ∀ (y : M) (hy : y ∈ A), m •
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 μA =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3
+          (HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Aᶜ
+              (ContinuousMap.id M)
+              (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left A B hx)) 3 c)) ∧
+    (∃ μB : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Bᶜ).homology 3,
+      ∀ (y : M) (hy : y ∈ B), m •
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Bᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo B y hy)) 3 μB =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Bᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo B y hy)) 3
+          (HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Bᶜ
+              (ContinuousMap.id M)
+              (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right A B hx)) 3 c)) := by
+  constructor
+  · apply gA
+    intro y hy
+    obtain ⟨g, hg⟩ := hc y (Or.inl hy)
+    refine ⟨g, ?_⟩
+    have e := ConstructionTargets.SingularExcision.relativeSingularHomologyMap_comp
+      (A ∪ B)ᶜ Aᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+      (ContinuousMap.id M) (ContinuousMap.id M)
+      (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left A B hx)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (A ∪ B) y (Or.inl hy)) 3
+    exact hg.trans (by
+      simpa only [ConcreteCategory.comp_apply] using
+        (congrArg (fun f => f c) e).symm)
+  · apply gB
+    intro y hy
+    obtain ⟨g, hg⟩ := hc y (Or.inr hy)
+    refine ⟨g, ?_⟩
+    have e := ConstructionTargets.SingularExcision.relativeSingularHomologyMap_comp
+      (A ∪ B)ᶜ Bᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+      (ContinuousMap.id M) (ContinuousMap.id M)
+      (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right A B hx)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo B y hy)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (A ∪ B) y (Or.inr hy)) 3
+    exact hg.trans (by
+      simpa only [ConcreteCategory.comp_apply] using
+        (congrArg (fun f => f c) e).symm)
+
+/-- LIBRARY LEAF: `H₃(M, M ∖ y)` is torsion-free.  Split from `_aux_union` after
+lemma-3's PARTIAL (2026-10-20).  Route: `ambientLocalNormalization 1 y` is an
+isomorphism onto `ℤ` (see `_aux_divide_aux_local`); apply its `hom`, use
+`map_zsmul`, cancel `m ≠ 0` in `ℤ`, and pull back by injectivity. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_torsion
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (y : M) (m : ℤ) (hm : m ≠ 0)
+    (x : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology 3) (h : m • x = 0) : x = 0 := by
+  sorry
+
+/-- LIBRARY LEAF (Hatcher 3.27, relative Mayer--Vietoris, existence half): for
+closed `A`, `B`, classes of `H_n(M, M ∖ A)` and `H_n(M, M ∖ B)` with the same
+image in `H_n(M, M ∖ (A ∩ B))` come from one class of `H_n(M, M ∖ (A ∪ B))`.
+Split from `_aux_union` after lemma-3's PARTIAL (2026-10-20).  Route: exactness
+of the same relative Mayer--Vietoris sequence as `_aux_injective_aux_union_aux_joint`,
+at the middle term `H_n(S, P ∩ Q) → H_n(S, P) ⊕ H_n(S, Q) → H_n(S, P ∪ Q)`
+(`CoefficientSubcomplexRelativeHomologySequence`; transport to the literal
+relative chains with `CoefficientSubcomplexRelativeLiteralComparison` and
+`CoefficientCompactComplementUnionToRelative`).  The sign convention of the
+difference map does not matter here: equality of the two images is the kernel
+condition. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue
+    (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
+    (n : ℕ) (μA : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology n) (μB : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Bᶜ).homology n)
+    (h : HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ (A ∩ B)ᶜ (ContinuousMap.id M) (fun x hx hab => hx hab.1)) n μA =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Bᶜ (A ∩ B)ᶜ (ContinuousMap.id M) (fun x hx hab => hx hab.2)) n μB) :
+    ∃ μ : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (A ∪ B)ᶜ).homology n,
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Aᶜ (ContinuousMap.id M)
+          (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left A B hx)) n μ = μA ∧
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Bᶜ (ContinuousMap.id M)
+          (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right A B hx)) n μ = μB := by
+  sorry
+
+/-- ASSEMBLY from `_aux_union_aux_restrict`, `_aux_torsion`, `_aux_glue` and
+`gAB.2` (Hatcher 3.27(a), Mayer--Vietoris step): if closed `A`, `B`
 admit division by `m ≠ 0` and `A ∩ B` is good in the sense of
 `_aux_injective_aux_good`, then `A ∪ B` admits division by `m`.  Route:
 restrict `c` to `H₃(M|A)`, `H₃(M|B)` (the local maps compose,
