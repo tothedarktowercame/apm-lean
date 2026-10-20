@@ -1263,7 +1263,27 @@ lemma apm_t00A01_punctured_fundamentalGroup_aux_ball_simplyConnected
     {M : Type} [TopologicalSpace M]
     (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ) :
     SimplyConnectedSpace ↥(apm_t00A01_punctured_fundamentalGroup_aux_ball Φ) := by
-  sorry
+  let S : Set apm_t00A01_LargeDisk3 := {x | dist x.1 0 < 2}
+  have himage : ((fun x : apm_t00A01_LargeDisk3 ↦ x.1) '' S) =
+      Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      change dist y.1 0 < 2 at hy
+      simpa [Metric.mem_ball] using hy
+    · intro hx
+      have hx' : dist x 0 < 2 := by
+        simpa [Metric.mem_ball, dist_comm] using hx
+      refine ⟨⟨x, ?_⟩, hx', rfl⟩
+      simpa [Metric.mem_closedBall, dist_comm] using le_of_lt hx'
+  let e : S ≃ₜ Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 :=
+    (Topology.IsEmbedding.subtypeVal.homeomorphImage S).trans (Homeomorph.setCongr himage)
+  letI : ContractibleSpace (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2) :=
+    Metric.contractibleSpace_ball (by norm_num)
+  letI : ContractibleSpace S := e.contractibleSpace
+  letI : ContractibleSpace ↥(apm_t00A01_punctured_fundamentalGroup_aux_ball Φ) :=
+    (hΦ.homeomorphImage S).symm.contractibleSpace
+  exact SimplyConnectedSpace.ofContractible _
 
 /-- LEAF: the enlarged punctured part is path connected (`H₀ M ≅ ℤ` makes `M`
 path connected; a path through the small ball detours around it inside the
