@@ -1729,12 +1729,177 @@ piece by `apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv`;
 `V = Φ(ball 0 2)` (`apm_t00A01_punctured_fundamentalGroup_aux_ball`), which
 is contractible, hence homotopy equivalent to the closed unit disk; and
 `U ∩ V = Φ(1/2 < ‖x‖ < 2)`, which retracts radially onto the unit sphere. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover_aux_shell :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥{x : EuclideanSpace ℝ (Fin 3) | (1 / 2 : ℝ) < ‖x‖ ∧ ‖x‖ < 2}
+      apm_t00A01_Sphere2) := by
+  let E := EuclideanSpace ℝ (Fin 3)
+  let S : Set E := {x | (1 / 2 : ℝ) < ‖x‖ ∧ ‖x‖ < 2}
+  let sphere := Metric.sphere (0 : E) 1
+  let i : C(sphere, S) :=
+    { toFun := fun x => ⟨x.1, by
+        have hx : ‖x.1‖ = 1 := by
+          simpa [Metric.mem_sphere, dist_zero_right] using x.2
+        constructor <;> dsimp [S] <;> rw [hx] <;> norm_num⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk continuous_subtype_val }
+  let r : C(S, sphere) :=
+    { toFun := fun x => ⟨NormedSpace.normalize x.1, by
+        have hx0 : x.1 ≠ 0 := by
+          intro hx
+          have h := x.2.1
+          change (1 / 2 : ℝ) < ‖x.1‖ at h
+          rw [hx, norm_zero] at h
+          norm_num at h
+        dsimp [sphere]
+        rw [Metric.mem_sphere, dist_zero_right]
+        exact NormedSpace.norm_normalize hx0⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        have hn : Continuous (fun x : S => ‖x.1‖) :=
+          continuous_norm.comp continuous_subtype_val
+        exact (hn.inv₀ (fun x => by
+          apply norm_ne_zero_iff.mpr
+          intro hx
+          have h := x.2.1
+          change (1 / 2 : ℝ) < ‖x.1‖ at h
+          rw [hx, norm_zero] at h
+          norm_num at h)).smul continuous_subtype_val }
+  have hri : r.comp i = ContinuousMap.id sphere := by
+    apply ContinuousMap.ext
+    intro x
+    apply Subtype.ext
+    change NormedSpace.normalize x.1 = x.1
+    apply NormedSpace.normalize_eq_self_of_norm_eq_one
+    simpa [Metric.mem_sphere, dist_zero_right] using x.2
+  let H : ContinuousMap.Homotopy (i.comp r) (ContinuousMap.id S) :=
+    { toFun := fun tx => by
+        let t : ℝ := tx.1
+        let x : E := tx.2.1
+        let a : ℝ := (1 - t) / ‖x‖ + t
+        refine ⟨a • x, ?_⟩
+        have ht0 : 0 ≤ t := tx.1.2.1
+        have ht1 : t ≤ 1 := tx.1.2.2
+        have hxlo : (1 / 2 : ℝ) < ‖x‖ := tx.2.2.1
+        have hxhi : ‖x‖ < 2 := tx.2.2.2
+        have hx0 : ‖x‖ ≠ 0 := ne_of_gt (lt_trans (by norm_num) hxlo)
+        have hxpos : 0 < ‖x‖ := lt_trans (by norm_num) hxlo
+        have ha0 : 0 ≤ a := add_nonneg
+          (div_nonneg (sub_nonneg.mpr ht1) hxpos.le) ht0
+        change (1 / 2 : ℝ) < ‖a • x‖ ∧ ‖a • x‖ < 2
+        rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg ha0]
+        dsimp [a]
+        field_simp [hx0]
+        constructor <;> nlinarith
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        have hn : Continuous (fun tx : unitInterval × S => ‖tx.2.1‖) :=
+          continuous_norm.comp (continuous_subtype_val.comp continuous_snd)
+        have hn0 : ∀ tx : unitInterval × S, ‖tx.2.1‖ ≠ 0 := fun tx => by
+          apply norm_ne_zero_iff.mpr
+          intro hx
+          have h := tx.2.2.1
+          change (1 / 2 : ℝ) < ‖tx.2.1‖ at h
+          rw [hx, norm_zero] at h
+          norm_num at h
+        have ht : Continuous (fun tx : unitInterval × S => (tx.1 : ℝ)) :=
+          continuous_subtype_val.comp continuous_fst
+        exact (((continuous_const.sub ht).div hn hn0).add ht).smul
+          (continuous_subtype_val.comp continuous_snd)
+      map_zero_left := fun x => by
+        apply Subtype.ext
+        change ((1 - (0 : ℝ)) / ‖x.1‖ + 0) • x.1 = NormedSpace.normalize x.1
+        simp [NormedSpace.normalize]
+      map_one_left := fun x => by
+        apply Subtype.ext
+        change ((1 - (1 : ℝ)) / ‖x.1‖ + 1) • x.1 = x.1
+        simp }
+  exact ⟨{ toFun := r, invFun := i, left_inv := ⟨H⟩, right_inv := by rw [hri] }⟩
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover
     (M : Type) [TopologicalSpace M] [T2Space M]
     (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
     (hcollar : apm_t00A01_HasBallCollar φ) :
     apm_t00A01_hasStandardCover M (apm_t00A01_punctured φ) apm_t00A01_Disk3 := by
-  sorry
+  obtain ⟨Φ, hΦ, hΦφ, hΦo⟩ := hcollar
+  let U : Set M := (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ
+  let V : Set M := apm_t00A01_punctured_fundamentalGroup_aux_ball Φ
+  have hU : IsOpen U := by
+    haveI : CompactSpace apm_t00A01_LargeDisk3 :=
+      isCompact_iff_compactSpace.mp (isCompact_closedBall _ _)
+    have hK : IsCompact {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1 / 2} :=
+      (isClosed_le (continuous_subtype_val.dist continuous_const) continuous_const).isCompact
+    exact (hK.image hΦ.continuous).isClosed.isOpen_compl
+  have hV : IsOpen V := hΦo
+  have hcover : U ∪ V = Set.univ := by
+    refine Set.eq_univ_of_forall fun x => ?_
+    by_cases hx : x ∈ apm_t00A01_punctured_fundamentalGroup_aux_inner Φ
+    · right
+      obtain ⟨y, hy, rfl⟩ := hx
+      refine ⟨y, ?_, rfl⟩
+      change dist y.1 0 < 2
+      exact lt_of_le_of_lt hy (by norm_num)
+    · exact Or.inl hx
+  refine ⟨U, V, hU, hV, hcover, ?_, ?_, ?_⟩
+  · obtain ⟨e⟩ :=
+      apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv φ Φ hΦ hΦφ hΦo
+    exact ⟨e.symm⟩
+  · let S : Set apm_t00A01_LargeDisk3 := {x | dist x.1 0 < 2}
+    have himage : ((fun x : apm_t00A01_LargeDisk3 ↦ x.1) '' S) =
+        Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 := by
+      ext x
+      constructor
+      · rintro ⟨y, hy, rfl⟩
+        change dist y.1 0 < 2 at hy
+        simpa [Metric.mem_ball] using hy
+      · intro hx
+        have hx' : dist x 0 < 2 := by simpa [Metric.mem_ball, dist_comm] using hx
+        exact ⟨⟨x, by simpa [Metric.mem_closedBall, dist_comm] using le_of_lt hx'⟩,
+          hx', rfl⟩
+    let e : S ≃ₜ Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 :=
+      (Topology.IsEmbedding.subtypeVal.homeomorphImage S).trans (Homeomorph.setCongr himage)
+    letI : ContractibleSpace (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2) :=
+      Metric.contractibleSpace_ball (by norm_num)
+    letI : ContractibleSpace S := e.contractibleSpace
+    letI : ContractibleSpace V := (hΦ.homeomorphImage S).symm.contractibleSpace
+    letI : ContractibleSpace apm_t00A01_Disk3 :=
+      Metric.contractibleSpace_closedBall (by norm_num)
+    exact ContractibleSpace.hequiv V apm_t00A01_Disk3
+  · let E := EuclideanSpace ℝ (Fin 3)
+    let S : Set E := {x | (1 / 2 : ℝ) < ‖x‖ ∧ ‖x‖ < 2}
+    let T : Set M := U ∩ V
+    let f : S → T := fun x => ⟨Φ ⟨x.1, by
+      simpa [Metric.mem_closedBall, dist_zero_right] using le_of_lt x.2.2⟩, by
+        constructor
+        · rintro ⟨y, hy, heq⟩
+          have hxy : y.1 = x.1 := Subtype.ext_iff.mp (hΦ.injective heq)
+          have hy' : ‖y.1‖ ≤ (1 / 2 : ℝ) := by simpa [dist_zero_right] using hy
+          rw [hxy] at hy'
+          exact (not_le_of_gt x.2.1) hy'
+        · refine ⟨⟨x.1, ?_⟩, ?_, rfl⟩
+          · simpa [Metric.mem_closedBall, dist_zero_right] using (le_of_lt x.2.2)
+          · simpa [dist_zero_right] using x.2.2⟩
+    have hf : Topology.IsEmbedding f := by
+      let g : S → apm_t00A01_LargeDisk3 := fun x => ⟨x.1, by
+        simpa [Metric.mem_closedBall, dist_zero_right] using le_of_lt x.2.2⟩
+      have hg : Topology.IsEmbedding g := by
+        apply Topology.IsEmbedding.of_comp (by fun_prop) continuous_subtype_val
+        exact (Topology.IsEmbedding.subtypeVal : Topology.IsEmbedding (fun x : S => x.1))
+      apply Topology.IsEmbedding.of_comp
+        (Continuous.subtype_mk (hΦ.continuous.comp hg.continuous) _) continuous_subtype_val
+      exact hΦ.comp hg
+    have hsurj : Function.Surjective f := by
+      rintro ⟨z, hz⟩
+      rcases hz.2 with ⟨x, hx, rfl⟩
+      have hxlo : (1 / 2 : ℝ) < ‖x.1‖ := by
+        apply lt_of_not_ge
+        intro hle
+        exact hz.1 ⟨x, by simpa [dist_zero_right] using hle, rfl⟩
+      exact ⟨⟨x.1, hxlo, by simpa [dist_zero_right] using hx⟩, rfl⟩
+    let e : S ≃ₜ T := hf.toHomeomorphOfSurjective hsurj
+    obtain ⟨q⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover_aux_shell
+    simpa [T] using (show Nonempty (ContinuousMap.HomotopyEquiv T apm_t00A01_Sphere2)
+      from ⟨e.symm.toHomotopyEquiv.trans q⟩)
 
 /-- LEAF. The closed unit three-disk is a homology ball: it is convex, hence
 contractible, so it is homotopy equivalent to a point. -/
