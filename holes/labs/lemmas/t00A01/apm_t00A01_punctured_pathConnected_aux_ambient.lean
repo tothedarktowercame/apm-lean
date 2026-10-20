@@ -577,7 +577,107 @@ lemma apm_t00A01_punctured_pathConnected_aux_ambient
     [IsManifold apm_t00A01_Model3 ∞ M]
     [BoundarylessManifold apm_t00A01_Model3 M]
     (hM : apm_t00A01_isHomology3Sphere M) : PathConnectedSpace M := by
-  sorry
+  classical
+  letI : LocPathConnectedSpace M :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 3)) M
+  let eMmod := hM.1.some
+  haveI : Nonempty M :=
+    ConstructionTargets.SingularH0Augmentation.nonempty_of_module_singularH0_iso_int eMmod
+  let eM : ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+      (TopCat.of M) ≅ AddCommGrpCat.of ℤ :=
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of M) 0).symm ≪≫
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso eMmod
+  letI : IsIso
+      (ConstructionTargets.SingularH0Augmentation.h0Augmentation (X := M)) :=
+    ConstructionTargets.SingularH0Augmentation.h0Augmentation_isIso_of_iso_int eM
+  let p : M := Classical.choice inferInstance
+  refine ⟨inferInstance, fun x y ↦ ?_⟩
+  suffices h : ∀ z : M, Joined p z by exact (h x).symm.trans (h y)
+  intro z
+  by_contra hz
+  let A : Set M := pathComponent p
+  have hA : IsClopen A := IsClopen.pathComponent p
+  let f : M → Bool := fun w ↦ decide (w ∈ A)
+  have hf : Continuous f := by
+    rw [continuous_bool_rng true]
+    convert hA using 1
+    ext w
+    simp [f]
+  let F : C(M, Bool) := ⟨f, hf⟩
+  have hp : f p = true := by simp [f, A, mem_pathComponent_self]
+  have hz' : f z = false := by
+    simp only [f, decide_eq_false_iff_not]
+    simpa [A, mem_pathComponent_iff] using hz
+  let vp := ConstructionTargets.T02A06SphereH0.singularVertexH0Class p
+  let vz := ConstructionTargets.T02A06SphereH0.singularVertexH0Class z
+  have hv : vp = vz := by
+    apply (cancel_mono
+      (ConstructionTargets.SingularH0Augmentation.h0Augmentation (X := M))).1
+    simpa [vp, vz] using
+      (ConstructionTargets.SingularH0Augmentation.singularVertexH0Class_comp_h0Augmentation p).trans
+        (ConstructionTargets.SingularH0Augmentation.singularVertexH0Class_comp_h0Augmentation z).symm
+  have hbool :
+      ConstructionTargets.T02A06SphereH0.singularVertexH0Class false =
+        ConstructionTargets.T02A06SphereH0.singularVertexH0Class true := by
+    have hnz := ConstructionTargets.T02A06SphereH0.singularVertexH0Class_naturality F z
+    have hnp := ConstructionTargets.T02A06SphereH0.singularVertexH0Class_naturality F p
+    rw [show F z = false by exact hz'] at hnz
+    rw [show F p = true by exact hp] at hnp
+    exact hnz.symm.trans ((congrArg (fun k ↦ k ≫ HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition F) 0) hv.symm).trans hnp)
+  have hι :
+      Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) false =
+        Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) true := by
+    let q := ConstructionTargets.T02A06SphereH0.singularVertexH0Class (X := Unit) ()
+    haveI : Epi q := ConstructionTargets.T02A06SphereH0.singularVertexH0Class_epi ()
+    let iFalse : C(Unit, Bool) := ⟨fun _ ↦ false, continuous_const⟩
+    let iTrue : C(Unit, Bool) := ⟨fun _ ↦ true, continuous_const⟩
+    have hm :
+        HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              iFalse) 0 =
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              iTrue) 0 := by
+      apply (cancel_epi q).1
+      calc
+        q ≫ _ = ConstructionTargets.T02A06SphereH0.singularVertexH0Class false := by
+          simpa [q] using
+            (ConstructionTargets.T02A06SphereH0.singularVertexH0Class_naturality
+              iFalse ())
+        _ = ConstructionTargets.T02A06SphereH0.singularVertexH0Class true := hbool
+        _ = q ≫ _ := by
+          simpa [q] using
+            (ConstructionTargets.T02A06SphereH0.singularVertexH0Class_naturality
+              iTrue ()).symm
+    have hdFalse :=
+      ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
+        AddCommGrpCat (AddCommGrpCat.of ℤ) false
+    have hdTrue :=
+      ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
+        AddCommGrpCat (AddCommGrpCat.of ℤ) true
+    apply (cancel_mono
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).inv).1
+    change Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) false ≫ _ = _
+    rw [← hdFalse, ← hdTrue]
+    have hm' := congrArg (fun k ↦
+      (Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv) ≫ k) hm
+    simpa [iFalse, iTrue,
+      ConstructionTargets.SingularHomologyConcrete.pointInclusion,
+      ConstructionTargets.SingularSubdivision.singularPostcomposition,
+      Category.assoc] using hm'
+  let d : (∐ fun _ : Bool ↦ AddCommGrpCat.of ℤ) ⟶ AddCommGrpCat.of ℤ :=
+    Limits.Sigma.desc (fun b ↦ if b then 0 else 𝟙 _)
+  have hid : (𝟙 (AddCommGrpCat.of ℤ)) = 0 := by
+    have hd := congrArg (fun g ↦ g ≫ d) hι
+    simpa only [d, Limits.Sigma.ι_desc, Bool.false_eq_true, if_false, if_true] using hd
+  have hone : (1 : ℤ) = 0 := by
+    exact ConcreteCategory.congr_hom hid 1
+  exact one_ne_zero hone
 -- END SEAT AREA
 
 /-- LEAF: the collar makes the image of the open unit ball open in `M`. -/
