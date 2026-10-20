@@ -1723,6 +1723,40 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_H0
       (TopCat.of (apm_t00A01_punctured φ)) 0
       (ModuleCat.of ℤ ℤ) (asIso q).symm⟩
 
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (hM : apm_t00A01_isHomology3Sphere M)
+    (hcollar : apm_t00A01_HasBallCollar φ) (k : ℕ)
+    (hk : k = 1 ∨ k = 2) :
+    Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
+  sorry
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_top
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (hM : apm_t00A01_isHomology3Sphere M)
+    (hcollar : apm_t00A01_HasBallCollar φ) :
+    Limits.IsZero (apm_t00A01_H 3 (apm_t00A01_punctured φ)) := by
+  sorry
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_above
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (hM : apm_t00A01_isHomology3Sphere M)
+    (hcollar : apm_t00A01_HasBallCollar φ) (k : ℕ) (hk : 3 < k) :
+    Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
+  sorry
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -1732,8 +1766,18 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive
     (hM : apm_t00A01_isHomology3Sphere M)
     (hcollar : apm_t00A01_HasBallCollar φ) :
     ∀ k : ℕ, k ≠ 0 → Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
-  sorry
-
+  intro k hk
+  rcases Nat.eq_or_lt_of_le (Nat.one_le_iff_ne_zero.mpr hk) with rfl | hk1
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
+      M φ hφ hM hcollar 1 (Or.inl rfl)
+  rcases Nat.eq_or_lt_of_le hk1 with rfl | hk2
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
+      M φ hφ hM hcollar 2 (Or.inr rfl)
+  rcases Nat.eq_or_lt_of_le hk2 with rfl | hk3
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_top
+      M φ hφ hM hcollar
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_above
+      M φ hφ hM hcollar k hk3
 theorem apm_t00A01_punctured_isHomologyBall
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
