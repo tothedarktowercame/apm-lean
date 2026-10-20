@@ -583,6 +583,93 @@ theorem apm_t00A01_punctured_pathConnected
 /-- LIBRARY: van Kampen for a manifold split into the punctured part and the
 open radius-two collar ball. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_fundamentalGroup_aux_of_hequiv
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x : X) (y : Y) (e : ContinuousMap.HomotopyEquiv X Y)
+    (p : Path (e.toFun x) y) :
+    Nonempty (FundamentalGroup X x ≃* FundamentalGroup Y y) := by
+  exact ⟨((FundamentalGroupoidFunctor.equivOfHomotopyEquiv e).fullyFaithfulFunctor.mulEquivEnd
+    (FundamentalGroupoid.mk x)).trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath p)⟩
+
+/-- The closed radius-one-half ball inside the collar. -/
+def apm_t00A01_punctured_fundamentalGroup_aux_inner {M : Type} [TopologicalSpace M]
+    (Φ : apm_t00A01_LargeDisk3 → M) : Set M :=
+  Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1 / 2}
+
+/-- The open radius-two collar ball. -/
+def apm_t00A01_punctured_fundamentalGroup_aux_ball {M : Type} [TopologicalSpace M]
+    (Φ : apm_t00A01_LargeDisk3 → M) : Set M :=
+  Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}
+
+/-- LEAF: the punctured manifold is a deformation retract of the slightly
+enlarged punctured part `M \ Φ(closedBall 0 (1/2))`, by pushing the shell
+`1/2 < ‖x‖ < 1` radially out to the unit sphere inside the collar. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦ : Topology.IsEmbedding Φ) (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ)
+    (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    Nonempty (ContinuousMap.HomotopyEquiv (apm_t00A01_punctured φ)
+      ↥(apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ) := by
+  sorry
+
+/-- LEAF: the open shell `Φ(1/2 < ‖x‖ < 2)` is homeomorphic to a Euclidean
+shell, hence homotopy equivalent to `S²`, hence simply connected
+(`ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected`). -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_shell_simplyConnected
+    {M : Type} [TopologicalSpace M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ) :
+    SimplyConnectedSpace
+      ↥((apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ ∩
+        apm_t00A01_punctured_fundamentalGroup_aux_ball Φ) := by
+  sorry
+
+/-- LEAF: the open collar ball is homeomorphic to a convex open ball, hence
+simply connected. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_ball_simplyConnected
+    {M : Type} [TopologicalSpace M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ) :
+    SimplyConnectedSpace ↥(apm_t00A01_punctured_fundamentalGroup_aux_ball Φ) := by
+  sorry
+
+/-- LEAF: the enlarged punctured part is path connected (`H₀ M ≅ ℤ` makes `M`
+path connected; a path through the small ball detours around it inside the
+collar). -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_pathConnected
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}))
+    (hM : apm_t00A01_isHomology3Sphere M) :
+    PathConnectedSpace ↥(apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ := by
+  sorry
+
+/-- A free product with a trivial factor is the other factor. -/
+noncomputable def apm_t00A01_punctured_fundamentalGroup_aux_coprod_trivial
+    (G H : Type) [Group G] [Group H] [Subsingleton H] :
+    Monoid.Coprod G H ≃* G where
+  toFun := Monoid.Coprod.lift (MonoidHom.id G) 1
+  invFun := Monoid.Coprod.inl
+  left_inv x := by
+    have h : (Monoid.Coprod.inl : G →* Monoid.Coprod G H).comp
+        (Monoid.Coprod.lift (MonoidHom.id G) 1) = MonoidHom.id _ := by
+      apply Monoid.Coprod.hom_ext
+      · ext g; simp
+      · ext h; simp [Subsingleton.elim h 1]
+    exact DFunLike.congr_fun h x
+  right_inv g := by simp
+  map_mul' := map_mul _
+
+lemma apm_t00A01_punctured_fundamentalGroup_aux_subsingleton
+    {X : Type} [TopologicalSpace X] [SimplyConnectedSpace X] (x : X) :
+    Subsingleton (FundamentalGroup X x) :=
+  ⟨fun a b => by
+    unfold FundamentalGroup at a b ⊢
+    exact Subsingleton.elim (α := Path.Homotopic.Quotient x x) a b⟩
+
 theorem apm_t00A01_punctured_fundamentalGroup
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -595,7 +682,66 @@ theorem apm_t00A01_punctured_fundamentalGroup
       (FundamentalGroup (apm_t00A01_punctured φ)
           (apm_t00A01_boundaryMap φ hφ.injective (Classical.choice inferInstance)) ≃*
         FundamentalGroup M m) := by
-  sorry
+  obtain ⟨Φ, hΦ, hΦφ, hΦo⟩ := hcollar
+  let U : Set M := (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ
+  let V : Set M := apm_t00A01_punctured_fundamentalGroup_aux_ball Φ
+  have hU : IsOpen U := by
+    haveI : CompactSpace apm_t00A01_LargeDisk3 :=
+      isCompact_iff_compactSpace.mp (isCompact_closedBall _ _)
+    have hK : IsCompact {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1 / 2} :=
+      (isClosed_le (continuous_subtype_val.dist continuous_const)
+        continuous_const).isCompact
+    exact (hK.image hΦ.continuous).isClosed.isOpen_compl
+  have hV : IsOpen V := hΦo
+  have hcover : U ∪ V = Set.univ := by
+    refine Set.eq_univ_of_forall fun x => ?_
+    by_cases hx : x ∈ apm_t00A01_punctured_fundamentalGroup_aux_inner Φ
+    · right
+      obtain ⟨y, hy, rfl⟩ := hx
+      refine ⟨y, ?_, rfl⟩
+      change dist y.1 0 < 2
+      exact lt_of_le_of_lt (show dist y.1 0 ≤ 1 / 2 from hy) (by norm_num)
+    · exact Or.inl hx
+  let s₀ : apm_t00A01_Sphere2 := Classical.choice inferInstance
+  let p₀ := apm_t00A01_boundaryMap φ hφ.injective s₀
+  have hs₀ : dist s₀.1 0 = 1 := by simpa [Metric.mem_sphere] using s₀.2
+  let d₀ : apm_t00A01_Disk3 :=
+    ⟨s₀.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s₀.2⟩
+  have hp₀ : p₀.val = Φ (apm_t00A01_unitToLarge d₀) := by
+    change φ d₀ = Φ (apm_t00A01_unitToLarge d₀)
+    exact (congrFun hΦφ d₀).symm
+  have hw₀U : p₀.val ∈ U := by
+    rintro ⟨y, hy, hyeq⟩
+    rw [hp₀] at hyeq
+    have : y.1 = s₀.1 := Subtype.ext_iff.mp (hΦ.injective hyeq)
+    change dist y.1 0 ≤ 1 / 2 at hy
+    rw [this, hs₀] at hy
+    norm_num at hy
+  have hw₀V : p₀.val ∈ V := by
+    refine ⟨apm_t00A01_unitToLarge d₀, ?_, hp₀.symm⟩
+    change dist s₀.1 0 < 2
+    rw [hs₀]; norm_num
+  haveI : PathConnectedSpace U :=
+    apm_t00A01_punctured_fundamentalGroup_aux_enlarged_pathConnected M Φ hΦ hΦo hM
+  haveI : SimplyConnectedSpace V :=
+    apm_t00A01_punctured_fundamentalGroup_aux_ball_simplyConnected Φ hΦ
+  haveI : SimplyConnectedSpace (U ∩ V : Set M) :=
+    apm_t00A01_punctured_fundamentalGroup_aux_shell_simplyConnected Φ hΦ
+  haveI : PathConnectedSpace M := by
+    rw [pathConnectedSpace_iff_univ, ← hcover]
+    exact (isPathConnected_iff_pathConnectedSpace.mpr inferInstance).union
+      (isPathConnected_iff_pathConnectedSpace.mpr inferInstance) ⟨p₀.val, hw₀U, hw₀V⟩
+  haveI := apm_t00A01_punctured_fundamentalGroup_aux_subsingleton
+    (⟨p₀.val, hw₀V⟩ : V)
+  let w : (U ∩ V : Set M) := ⟨p₀.val, hw₀U, hw₀V⟩
+  let G := ConstructionTargets.TwoOpenFreeProductMapping.chosenGroupEquivalence
+    hU hV hcover w (⟨p₀.val, hw₀U⟩ : U) (⟨p₀.val, hw₀V⟩ : V)
+  obtain ⟨eA⟩ := apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv φ Φ hΦ hΦφ hΦo
+  obtain ⟨g₁⟩ := apm_t00A01_punctured_fundamentalGroup_aux_of_hequiv p₀
+    (⟨p₀.val, hw₀U⟩ : U) eA (PathConnectedSpace.somePath _ _)
+  exact ⟨g₁.trans (((apm_t00A01_punctured_fundamentalGroup_aux_coprod_trivial _ _).symm.trans
+    G.symm).trans (FundamentalGroup.fundamentalGroupMulEquivOfPath
+      (PathConnectedSpace.somePath p₀.val m)))⟩
 -- END SEAT AREA
 
 /-- LIBRARY: the long exact sequence of the pair, excision in the collar,
