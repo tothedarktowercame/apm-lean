@@ -2433,11 +2433,71 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
 /-- LIBRARY LEAF: `H_n(M) → H_n(M, ∅)` is an isomorphism (the subcomplex of
 chains in the empty set is zero).  `T02A06SphereShift`'s
 `singularPairProjection_isIso_of_subspace_isZero` is one route. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ_aux_chains
+    (M : Type) [TopologicalSpace M] (n : ℕ) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of ↑((Set.univ : Set M)ᶜ))).X n) := by
+  letI : IsEmpty ↑((Set.univ : Set M)ᶜ) :=
+    ⟨fun x ↦ by simpa using x.2⟩
+  letI : IsEmpty (ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of ↑((Set.univ : Set M)ᶜ)) n) :=
+    ⟨fun σ ↦ by
+      let p : SimplexCategory.toTop.obj (SimplexCategory.mk n) :=
+        Classical.choice inferInstance
+      exact isEmptyElim (σ.down.hom p)⟩
+  letI := Classical.decEq
+    (ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of ↑((Set.univ : Set M)ᶜ)) n)
+  have h : IsZero (AddCommGrpCat.of
+      (DirectSum (ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of ↑((Set.univ : Set M)ᶜ)) n)
+        (fun _ ↦ ℤ))) := by
+    apply AddCommGrpCat.isZero_of_subsingleton
+  exact h.of_iso (ConstructionTargets.SingularSubdivision.addCommGrpCoproductIsoDirectSum
+    (ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of ↑((Set.univ : Set M)ᶜ)) n))
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ_aux_homology
+    (M : Type) [TopologicalSpace M] (n : ℕ) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of ↑((Set.univ : Set M)ᶜ))).homology n) := by
+  apply HomologicalComplex.ExactAt.isZero_homology
+  exact ShortComplex.exact_of_isZero_X₂ _
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ_aux_chains M n)
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ (M : Type) [TopologicalSpace M] (n : ℕ) :
     IsIso (HomologicalComplex.homologyMap
       (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
         (Set.univ : Set M)ᶜ) n) := by
-  sorry
+  cases n with
+  | zero =>
+      letI : Mono (HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+            (Set.univ : Set M)ᶜ) 0) :=
+        (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_absolute
+          ((Set.univ : Set M)ᶜ) 0).mono_g
+          ((apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ_aux_homology M 0).eq_of_src _ _)
+      letI : Epi (HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+            (Set.univ : Set M)ᶜ) 0) := by
+        letI : Epi
+            ((ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+              ((Set.univ : Set M)ᶜ)).f 0) := by
+          dsimp [ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection]
+          exact Functor.map_epi
+            (HomologicalComplex.eval AddCommGrpCat (ComplexShape.down ℕ) 0)
+            (cokernel.π
+              (ConstructionTargets.SingularHomologyConcrete.relativeSingularSubcomplex.ι
+                ((Set.univ : Set M)ᶜ)))
+        apply HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+        intro j hj
+        simp at hj
+      exact isIso_of_mono_of_epi _
+  | succ q =>
+      exact ConstructionTargets.T02A06SphereShift.singularPairProjection_isIso_of_subspace_isZero
+        ((Set.univ : Set M)ᶜ) q
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ_aux_homology M (q + 1))
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_univ_aux_homology M q)
 
 /-- PROVED from `_aux_compact` with `A = M`, `_aux_univ` and `_aux_factor`:
 Hatcher Lemma 3.27(b) with `A = M`.  A class of `H₃(M)` whose image in every
