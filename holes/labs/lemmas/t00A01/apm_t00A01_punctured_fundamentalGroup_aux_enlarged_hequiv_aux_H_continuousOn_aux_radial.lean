@@ -996,7 +996,38 @@ lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuous
       (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦
         if ‖p.2‖ < 1 then (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2) else p.2)
       (univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 1 / 2 < ‖x‖}) := by
-  sorry
+  let s : Set (unitInterval × EuclideanSpace ℝ (Fin 3)) :=
+    univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 1 / 2 < ‖x‖}
+  let f : unitInterval × EuclideanSpace ℝ (Fin 3) → EuclideanSpace ℝ (Fin 3) :=
+    fun p ↦ (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2)
+  let g : unitInterval × EuclideanSpace ℝ (Fin 3) → EuclideanSpace ℝ (Fin 3) :=
+    fun p ↦ p.2
+  have ht : Continuous (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ (p.1 : ℝ)) :=
+    continuous_subtype_val.comp continuous_fst
+  have hx : Continuous (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ p.2) :=
+    continuous_snd
+  have hn : Continuous (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖) :=
+    continuous_norm.comp hx
+  have hne : ∀ p ∈ s, ‖p.2‖ ≠ 0 := by
+    intro p hp
+    have hp' : 1 / 2 < ‖p.2‖ := hp.2
+    positivity
+  have hinv : ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖⁻¹) s :=
+    hn.continuousOn.inv₀ hne
+  have hf : ContinuousOn f s := by
+    exact ((continuous_const.sub ht).continuousOn.smul hx.continuousOn).add
+      (ht.continuousOn.smul (hinv.smul hx.continuousOn))
+  have hg : ContinuousOn g s := hx.continuousOn
+  have hboundary : ∀ p ∈ s ∩ frontier
+      {p : unitInterval × EuclideanSpace ℝ (Fin 3) | ‖p.2‖ < 1}, f p = g p := by
+    intro p hp
+    have heq : ‖p.2‖ = 1 :=
+      (frontier_lt_subset_eq hn continuous_const) hp.2
+    simp only [f, g, heq, inv_one, one_smul]
+    rw [← add_smul, sub_add_cancel, one_smul]
+  exact ContinuousOn.if hboundary
+    (hf.mono inter_subset_left) (hg.mono inter_subset_left)
 -- END SEAT AREA
 
 /-- LEAF: the collar homotopy is continuous on `I × (Φ(ball 0 2) \ Φ(closedBall 0 (1/2)))`.
