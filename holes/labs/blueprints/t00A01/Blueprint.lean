@@ -1771,7 +1771,37 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mv
     (hcover : apm_t00A01_hasStandardCover X A B)
     (k : ℕ) (hk : k = 1 ∨ 3 < k) :
     Limits.IsZero (apm_t00A01_H k A) := by
-  sorry
+  open ConstructionTargets.ProductionOpenCoverMayerVietoris in
+   open ConstructionTargets.T00A01MayerVietorisAdapters in
+   open ConstructionTargets.IntegralSingularHomologyComparison in
+   open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.SphereHomology in
+   rcases hcover with ⟨U, V, hU, hV, hUV, ⟨eUA⟩, ⟨eVB⟩, ⟨eIS⟩⟩
+   rcases hX with ⟨-, -, hXz⟩
+   rcases hB with ⟨-, hBz⟩
+   have hk0 : k ≠ 0 := by omega
+   have hk2 : k ≠ 2 := by omega
+   have hk3 : k ≠ 3 := by omega
+   have hIz : Limits.IsZero
+       (SingularHomology k (TopCat.of (U ∩ V : Set X))) :=
+     (groupHomologyIsZeroOfModuleHomologyIsZero
+       (TopCat.of apm_t00A01_Sphere2) k
+       (sphereModuleHomology_isZero_of_ne_zero_top 2 k hk0 hk2)).of_iso
+       (singularHomologyIsoOfHomotopyEquiv eIS k)
+   have hXzg : Limits.IsZero
+       (SingularHomology k (TopCat.of X)) :=
+     groupHomologyIsZeroOfModuleHomologyIsZero (TopCat.of X) k (hXz k hk0 hk3)
+   have hpieces : Limits.IsZero
+       (SingularHomology k (TopCat.of U) ⊞
+        SingularHomology k (TopCat.of V)) :=
+     (productionMayerVietoris_exact_pieces U V hU hV hUV k).isZero_X₂
+       (hIz.eq_of_src _ _) (hXzg.eq_of_tgt _ _)
+   have hUg : Limits.IsZero
+       (SingularHomology k (TopCat.of U)) :=
+     ((Limits.biprod_isZero_iff _ _).mp hpieces).1
+   have hUm : Limits.IsZero (apm_t00A01_H k U) :=
+     singularHomologyModuleIsZeroOfGroupIsZero (TopCat.of U) k hUg
+   exact hUm.of_iso (moduleHomologyIsoOfHomotopyEquiv eUA k).symm
 
 /-- LEAF (the hard part). Degrees 2 and 3. For the cover of `_aux_cover`, the
 Mayer--Vietoris sequence gives `0 → H₃(P) → H₃(M) → H₂(S²) → H₂(P) → 0`, so
