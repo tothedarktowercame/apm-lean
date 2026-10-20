@@ -1882,8 +1882,68 @@ lemma apm_t00A01_collared_standardCover_aux_open {A B : Type}
             right
             exact ⟨Sum.inr b, Or.inr ⟨b, rfl⟩, rfl⟩
 
-/-- LEAF. The left thickening deformation retracts onto the first punctured
-piece: push the second collar `1 ≤ r < 2` radially onto `r = 1`, which is
+/-- Banked by lemma-3: every collar preimage of a punctured point has radius
+at least one. -/
+lemma apm_t00A01_collared_standardCover_aux_left_aux_norm_ge_one
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hext : Φ ∘ apm_t00A01_unitToLarge = φ)
+    (z : apm_t00A01_punctured φ) (x : apm_t00A01_LargeDisk3)
+    (hx : Φ x = z.1) : 1 ≤ ‖x.1‖ := by
+  by_contra hn
+  have hxlt : ‖x.1‖ < 1 := lt_of_not_ge hn
+  apply z.2
+  let y : apm_t00A01_Disk3 := ⟨x.1, by
+    simpa [Metric.mem_closedBall, dist_zero_right] using le_of_lt hxlt⟩
+  refine ⟨y, ?_, ?_⟩
+  · simpa [y, dist_zero_right] using hxlt
+  · rw [← hx]
+    exact (congrFun hext y).symm
+
+/-- LEAF. The open collar strong-deformation-retracts onto the boundary
+sphere, radially. Proof sketch: a collar point is `Φ y` with `1 ≤ ‖y‖ < 2`
+(`_aux_norm_ge_one`); `y` depends continuously on the point because `Φ` is
+an embedding. Take `r = y / ‖y‖` and `H (x, t) = Φ ((1 - t) • y + t • (y / ‖y‖))`;
+the radius stays in `[1, ‖y‖]`, so `H` stays in the collar and off the open
+unit ball, and points with `‖y‖ = 1` (the boundary sphere) are fixed. -/
+lemma apm_t00A01_collared_standardCover_aux_left_aux_radial
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hext : Φ ∘ apm_t00A01_unitToLarge = φ) :
+    ∃ (r : C(↥(apm_t00A01_collarSet φ Φ), apm_t00A01_Sphere2))
+      (H : C(↥(apm_t00A01_collarSet φ Φ) × unitInterval, apm_t00A01_punctured φ)),
+      (∀ s (h : apm_t00A01_boundaryMap φ hφ.injective s ∈ apm_t00A01_collarSet φ Φ),
+        r ⟨_, h⟩ = s) ∧
+      (∀ x, H (x, 0) = x.1) ∧
+      (∀ x, H (x, 1) = apm_t00A01_boundaryMap φ hφ.injective (r x)) ∧
+      (∀ p, H p ∈ apm_t00A01_collarSet φ Φ) ∧
+      (∀ s (h : apm_t00A01_boundaryMap φ hφ.injective s ∈ apm_t00A01_collarSet φ Φ) t,
+        H (⟨_, h⟩, t) = apm_t00A01_boundaryMap φ hφ.injective s) := by
+  sorry
+
+/-- LEAF. Generic quotient step: if an open collar `C ⊇ iB '' univ` of the
+second piece strong-deformation-retracts onto the glued sphere, the left
+thickening is homotopy equivalent to the first piece. Proof sketch: `f` sends
+`[inl a] ↦ a`, `[inr c] ↦ iA (r c)` (well defined by `hr`), `g a = [inl a]`;
+`f ∘ g = id`, and `g ∘ f ≃ id` by `[inl a] ↦ [inl a]`, `[inr c] ↦ [inr H (c, t)]`
+(compatible on glued points by `hHfix`). Continuity: the preimage
+`range inl ∪ inr '' C` is open and saturated, so the restricted quotient map is
+a quotient map (`IsQuotientMap.restrictPreimage_isOpen`); times `unitInterval`
+it stays a quotient map since `unitInterval` is locally compact. -/
+lemma apm_t00A01_collared_standardCover_aux_left_aux_quotient {A B : Type}
+    [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (hiA : Continuous iA) (C : Set B) (hC : IsOpen C) (hiB : ∀ s, iB s ∈ C)
+    (r : C(↥C, apm_t00A01_Sphere2)) (H : C(↥C × unitInterval, B))
+    (hr : ∀ s, r ⟨iB s, hiB s⟩ = s)
+    (hH0 : ∀ x, H (x, 0) = x.1) (hH1 : ∀ x, H (x, 1) = iB (r x))
+    (hHC : ∀ p, H p ∈ C) (hHfix : ∀ s t, H (⟨iB s, hiB s⟩, t) = iB s) :
+    Nonempty (ContinuousMap.HomotopyEquiv ↥(apm_t00A01_thickLeft iA iB C) A) := by
+  sorry
+
+/-- ASSEMBLY (from `_aux_radial`, `_aux_quotient`). The left thickening
+deformation retracts onto the first punctured piece: push the second collar `1 ≤ r < 2` radially onto `r = 1`, which is
 glued to the boundary sphere of the first piece. -/
 lemma apm_t00A01_collared_standardCover_aux_left
     {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
@@ -1896,7 +1956,15 @@ lemma apm_t00A01_collared_standardCover_aux_left
       ↥(apm_t00A01_thickLeft (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
         (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₂ Φ₂))
       (apm_t00A01_punctured φ₁)) := by
-  sorry
+  obtain ⟨hCopen, hCmem⟩ :=
+    apm_t00A01_collared_standardCover_aux_collar φ₂ hφ₂ Φ₂ hext₂ hopen₂
+  obtain ⟨r, H, hr, hH0, hH1, hHC, hHfix⟩ :=
+    apm_t00A01_collared_standardCover_aux_left_aux_radial φ₂ hφ₂ Φ₂ hΦ₂ hext₂
+  exact apm_t00A01_collared_standardCover_aux_left_aux_quotient
+    (apm_t00A01_boundaryMap φ₁ hφ₁.injective) (apm_t00A01_boundaryMap φ₂ hφ₂.injective)
+    (apm_t00A01_collared_standardCover_aux_boundary_continuous φ₁ hφ₁)
+    _ hCopen hCmem r H (fun s ↦ hr s (hCmem s)) hH0 hH1 hHC
+    (fun s t ↦ hHfix s (hCmem s) t)
 
 /-- LEAF. Mirror image of `_aux_left`: the right thickening deformation
 retracts onto the second punctured piece. -/
