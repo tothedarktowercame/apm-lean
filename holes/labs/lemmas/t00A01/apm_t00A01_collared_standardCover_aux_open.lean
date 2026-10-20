@@ -1642,7 +1642,76 @@ lemma apm_t00A01_collared_standardCover_aux_open {A B : Type}
     IsOpen (apm_t00A01_thickLeft iA iB CB) ∧
       IsOpen (apm_t00A01_thickRight iA iB CA) ∧
       apm_t00A01_thickLeft iA iB CB ∪ apm_t00A01_thickRight iA iB CA = Set.univ := by
-  sorry
+  let q : Sum A B → apm_t00A01_connectedSum iA iB := fun z ↦ Quotient.mk _ z
+  let L : Set (Sum A B) := Set.range Sum.inl ∪ Sum.inr '' CB
+  let R : Set (Sum A B) := Sum.inl '' CA ∪ Set.range Sum.inr
+  have hL_invariant {x y : Sum A B}
+      (hxy : Relation.EqvGen (apm_t00A01_glueRel iA iB) x y) :
+      x ∈ L ↔ y ∈ L := by
+    induction hxy with
+    | rel x y h =>
+        cases h with
+        | glue s =>
+            constructor
+            · intro _
+              exact Or.inr ⟨iB s, hiB s, rfl⟩
+            · intro _
+              exact Or.inl ⟨iA s, rfl⟩
+    | refl => exact Iff.rfl
+    | symm x y h ih => exact ih.symm
+    | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+  have hR_invariant {x y : Sum A B}
+      (hxy : Relation.EqvGen (apm_t00A01_glueRel iA iB) x y) :
+      x ∈ R ↔ y ∈ R := by
+    induction hxy with
+    | rel x y h =>
+        cases h with
+        | glue s =>
+            constructor
+            · intro _
+              exact Or.inr ⟨iB s, rfl⟩
+            · intro _
+              exact Or.inl ⟨iA s, hiA s, rfl⟩
+    | refl => exact Iff.rfl
+    | symm x y h ih => exact ih.symm
+    | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+  have hpreL : q ⁻¹' (q '' L) = L := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, hq⟩
+      exact (hL_invariant (Quotient.exact hq)).mp hy
+    · intro hx
+      exact ⟨x, hx, rfl⟩
+  have hpreR : q ⁻¹' (q '' R) = R := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, hq⟩
+      exact (hR_invariant (Quotient.exact hq)).mp hy
+    · intro hx
+      exact ⟨x, hx, rfl⟩
+  have hopenL : IsOpen L :=
+    IsOpen.union isOpen_range_inl (isOpenMap_inr _ hCB)
+  have hopenR : IsOpen R :=
+    IsOpen.union (isOpenMap_inl _ hCA) isOpen_range_inr
+  constructor
+  · change IsOpen (q '' L)
+    rw [isOpen_coinduced]
+    exact hpreL.symm ▸ hopenL
+  constructor
+  · change IsOpen (q '' R)
+    rw [isOpen_coinduced]
+    exact hpreR.symm ▸ hopenR
+  · apply Set.eq_univ_of_forall
+    intro z
+    induction z using Quotient.inductionOn with
+    | _ x =>
+        cases x with
+        | inl a =>
+            left
+            exact ⟨Sum.inl a, Or.inl ⟨a, rfl⟩, rfl⟩
+        | inr b =>
+            right
+            exact ⟨Sum.inr b, Or.inr ⟨b, rfl⟩, rfl⟩
 -- END SEAT AREA
 
 /-- LEAF. The left thickening deformation retracts onto the first punctured
