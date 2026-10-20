@@ -67,17 +67,55 @@ theorem t96A01_orientableSurface_fundamentalGroup_aux_wordClass (P : PairingData
       simpa using hi
 
 open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
-/-- Leaf (geometric subdivision, for the standard orientable data).  The boundary
-loop of the polygon, read in the orbit wedge, is the ordered product of its signed
-edge classes.  `PolygonSurfaceHomology.lean` calls this "the remaining geometric
-subdivision theorem" (docstring of `polygonBoundaryExplicitEdgeProduct`) and has
-consumers taking it as a hypothesis (`polygonBoundaryWedgeLoop_hurewicz_of_eq_explicitEdgeProduct`).
-Compare `t97A01Closure.torusRP2AttachingWord`, which does this for one pairing. -/
+/-- Generic: the cell-attachment word class is the class of the integer-loop
+boundary path (the `hw` step of `_aux_wordClass`). -/
+theorem t96A01_orientableSurface_fundamentalGroup_aux_wordClass_eq (P : PairingData) :
+    ConstructionTargets.PolygonCellPiOne.wordClass P =
+      Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P) := by
+  simp only [ConstructionTargets.PolygonCellPiOne.wordClass,
+    ConstructionTargets.AttachTwoCell.loopClassAt,
+    ConstructionTargets.PolygonCellPiOne.bword,
+    polygonBoundaryIntegerLoopPath,
+    circleIntegerLoopOneClass, FundamentalGroup.map_apply]
+  rw [← Path.Homotopic.Quotient.mk_map]
+  rw [Path.Homotopic.Quotient.mk_cast]
+
+open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
+/-- Geometric subdivision (generic; proved by lemma-1, 2026-10-20).  The integer-loop
+boundary class is the *reversed* ordered product of the signed edge classes: Mathlib's
+`FundamentalGroup` multiplies as composition, so a concatenation `p₁ ⋯ pₙ` has class
+`[pₙ] * ⋯ * [p₁]`.  (The earlier statement, fundamental class = unreversed product,
+is false for the nonabelian wedge group; see `_aux_relabel_rev`.) -/
 theorem t96A01_orientableSurface_fundamentalGroup_aux_subdivision
-    (g : ℕ) (hg : 0 < g) :
-    polygonBoundaryFundamentalClass (standardPairingData true g hg) =
-      polygonBoundaryExplicitEdgeProduct (standardPairingData true g hg) := by
-  sorry
+    (P : PairingData) :
+    (Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P) :
+        FundamentalGroup _ _) =
+      ((List.ofFn fun i : Fin P.edgeCount =>
+        polygonBoundaryExplicitEdgeClass P i).reverse.prod) := by
+  calc
+    _ = Path.Homotopic.Quotient.mk
+        (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+          (polygonBoundaryCanonicalSubdivisionPathAtBase P)) :=
+      Path.Homotopic.Quotient.eq.mpr
+        (polygonBoundaryCanonicalConcat_homotopic P).symm
+    _ = ((List.ofFn fun i : Fin P.edgeCount =>
+          Path.Homotopic.Quotient.mk
+            (polygonBoundaryCanonicalSubdivisionPathAtBase P i)) :
+            List (FundamentalGroup _ _)).reverse.prod :=
+      fundamentalGroup_mk_concat_eq_reverse_list_prod _ _ _
+    _ = _ := by
+      have hf :
+          (fun i : Fin P.edgeCount =>
+            (Path.Homotopic.Quotient.mk
+              (polygonBoundaryCanonicalSubdivisionPathAtBase P i) :
+                FundamentalGroup _ _)) =
+            fun i => polygonBoundaryExplicitEdgeClass P i := by
+        funext i
+        rw [polygonBoundaryCanonicalSubdivisionPathAtBase_eq,
+          polygonBoundarySubdivisionPathAtBase_eq_signedEdge]
+        exact polygonBoundarySignedEdgePathAtBase_mk P i
+      rw [hf]
+      rfl
 
 open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
 /-- Leaf (combinatorial relabelling).  Some isomorphism of free groups carries the
@@ -220,6 +258,25 @@ theorem t96A01_orientableSurface_fundamentalGroup_aux_relabel
     exact congrArg List.prod (congrArg List.ofFn (funext fun a => by
       rw [hleg, hleg]))
 
+/-- Leaf (combinatorial relabelling, reversed order).  Same as `_aux_relabel`, but for
+the *reversed* explicit edge product, which is what the boundary loop actually equals
+(`_aux_subdivision`).  With `X a = x (a,false) ^ s`, `Y a = x (a,true) ^ s` as in
+`_aux_relabel`, the reversed product is `∏_{a = g-1 … 0} Y a * X a * (Y a)⁻¹ * (X a)⁻¹`;
+a relabelling `(a, b) ↦ (Fin.rev a, !b)` (composed with letter inversion when
+`s = -1`) carries `surfaceRelator g` to it, up to the allowed conjugate/inverse. -/
+theorem t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev
+    (g : ℕ) (hg : 0 < g) :
+    ∃ M : FreeGroup (Fin g × Bool) ≃*
+        FreeGroup (PairingOrbit (standardPairingData true g hg).pair),
+      Subgroup.normalClosure
+          ({ConstructionTargets.PolygonCellPiOne.legEquiv
+              (standardPairingData true g hg) (M (surfaceRelator g))} : Set _) =
+        Subgroup.normalClosure
+          ({(List.ofFn fun i : Fin (standardPairingData true g hg).edgeCount =>
+              polygonBoundaryExplicitEdgeClass (standardPairingData true g hg) i).reverse.prod} :
+            Set _) := by
+  sorry
+
 open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
 /-- Positive genus: `polygon_piOne_presentation` on the standard orientable data,
 transported along `standardPairingData_space_homeomorph`. -/
@@ -229,13 +286,14 @@ theorem t96A01_orientableSurface_fundamentalGroup_aux_relator
       (FundamentalGroup (Surface true g) (T96A01SurfaceBase g) ≃*
         OrientableSurfaceGroup g) := by
   let P := standardPairingData true g hg
-  obtain ⟨M, hM⟩ := t96A01_orientableSurface_fundamentalGroup_aux_relabel g hg
+  obtain ⟨M, hM⟩ := t96A01_orientableSurface_fundamentalGroup_aux_relabel_rev g hg
   have hr : Subgroup.normalClosure
         ({ConstructionTargets.PolygonCellPiOne.legEquiv P (M (surfaceRelator g))} :
           Set _) =
       Subgroup.normalClosure {ConstructionTargets.PolygonCellPiOne.wordClass P} := by
-    rw [hM, ← t96A01_orientableSurface_fundamentalGroup_aux_subdivision g hg,
-      t96A01_orientableSurface_fundamentalGroup_aux_wordClass P]
+    rw [hM, ← t96A01_orientableSurface_fundamentalGroup_aux_subdivision P,
+      t96A01_orientableSurface_fundamentalGroup_aux_wordClass_eq P]
+    rfl
   obtain ⟨e⟩ := ConstructionTargets.PolygonCellPiOne.polygon_piOne_presentation
     P M (surfaceRelator g) hr
   let h := standardPairingData_space_homeomorph true g hg
