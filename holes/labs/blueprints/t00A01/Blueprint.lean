@@ -2880,7 +2880,17 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
           {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖}).homology 4)) := by
   sorry
 
-/-- LEAF (shell vs puncture, purely Euclidean): the open radius-two ball relative to
+/-- LEAF (`H₃` of the shell): the shell `1 ≤ ‖x‖ < 2` in the open radius-two ball
+has vanishing `H₃`.  Route: the radial map `x ↦ x/‖x‖` is a deformation retraction onto
+`S²` (`singularHomologyIsoOfHomotopyEquiv`), and `H₃(S²) = 0`
+(`SphereHomology.sphereHomology_isZero_of_gt`). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar_aux_shell_aux_shellH3 :
+    Limits.IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖})).homology 3) := by
+  sorry
+
+/-- (shell vs puncture, purely Euclidean): the open radius-two ball relative to
 the shell `1 ≤ ‖x‖ < 2` and the open unit disk relative to its punctured part have
 isomorphic relative `H₄`.  Routes: rescale by `1/2` onto `euclideanOpenDisk 3`
 (shell ↦ `1/2 ≤ ‖x‖ < 1`), then compare that shell with the punctured disk by the
@@ -2891,7 +2901,30 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
           {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖}).homology 4) ≅
         ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
           (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet 3)).homology 4)) := by
-  sorry
+  open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.T02A06DiskRadialComparison in
+    have hshell : Limits.IsZero ((SingularChains (TopCat.of
+          {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖})).homology 3) :=
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar_aux_shell_aux_shellH3
+    have hamb : Limits.IsZero ((SingularChains (TopCat.of
+        (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2))).homology 4) := by
+      letI : ContractibleSpace (Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2) :=
+        Metric.contractibleSpace_ball (by norm_num)
+      exact contractibleHigherHomology_isZero _ 4 (by omega)
+    have hleft : Limits.IsZero ((RelativeSingularChains
+        {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖}).homology 4) :=
+      (singularPairHomology_exact_relative _ 3).isZero_X₂ (hamb.eq_of_src _ _) (hshell.eq_of_tgt _ _)
+    have hright : Limits.IsZero ((RelativeSingularChains
+        (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet 3)).homology 4) := by
+      have hi : IsIso (HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap (closedDiskBoundarySet 3)
+            (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet 3)
+            (halfDiskMap 3) (halfDiskMap_mapsTo 3)) 4) :=
+        closedDiskPair_to_openDiskPair_homologyMap_isIso 3 4 (by omega)
+      have hz : Limits.IsZero ((RelativeSingularChains (closedDiskBoundarySet 3)).homology 4) :=
+        apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_model
+      exact hz.of_iso (@asIso _ _ _ _ _ hi).symm
+    exact ⟨hleft.isoZero ≪≫ hright.isoZero.symm⟩
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar
     (M : Type) [TopologicalSpace M] [T2Space M]
