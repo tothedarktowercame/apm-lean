@@ -1006,6 +1006,46 @@ There `Φ` restricted to `{‖x‖ < 2}` is a homeomorphism onto the open set
 moving point has norm `(1-t)‖x‖ + t ≤ 1`). Transport the continuity of `G`
 through the homeomorphism. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball_aux_radial :
+    ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦
+        if ‖p.2‖ < 1 then (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2) else p.2)
+      (univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 1 / 2 < ‖x‖}) := by
+  let s : Set (unitInterval × EuclideanSpace ℝ (Fin 3)) :=
+    univ ×ˢ {x | 1 / 2 < ‖x‖}
+  let P : unitInterval × EuclideanSpace ℝ (Fin 3) → Prop := fun p ↦ ‖p.2‖ < 1
+  apply ContinuousOn.if (p := P)
+  · intro p hp
+    have hpcl : p ∈ closure {q | P q} := frontier_subset_closure hp.2
+    have hnle : ¬ ‖p.2‖ < 1 := by
+      have hc : p ∈ closure {q | ¬ P q} := by
+        apply frontier_subset_closure
+        have : p ∈ frontier ({q | P q}ᶜ) := by simpa only [frontier_compl] using hp.2
+        simpa only [Set.mem_compl_iff, Set.mem_setOf_eq] using this
+      have hsub : closure {q | ¬ P q} ⊆ {q | 1 ≤ ‖q.2‖} :=
+        closure_minimal (by intro q hq; exact le_of_not_gt hq)
+          (isClosed_le continuous_const (continuous_norm.comp continuous_snd))
+      exact not_lt_of_ge (hsub hc)
+    have hle : ‖p.2‖ ≤ 1 := by
+      simpa [P] using (show p ∈ {q | ‖q.2‖ ≤ 1} from
+        closure_minimal (by intro q hq; change ‖q.2‖ < 1 at hq; exact le_of_lt hq)
+          (isClosed_le (continuous_norm.comp continuous_snd) continuous_const) hpcl)
+    have heq : ‖p.2‖ = 1 := le_antisymm hle (le_of_not_gt hnle)
+    rw [heq, inv_one, one_smul, ← add_smul]
+    norm_num
+  · have hnorm : ContinuousOn (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖⁻¹)
+        (s ∩ closure {q | P q}) := by
+      apply (continuous_norm.comp continuous_snd).continuousOn.inv₀
+      intro p hp hzero
+      have hp' : 1 / 2 < ‖p.2‖ := by simpa [s] using hp.1.2
+      have : (0 : ℝ) < ‖p.2‖ := lt_of_lt_of_le (by norm_num) (le_of_lt hp')
+      exact (ne_of_gt this) hzero
+    exact (((continuous_const.sub (continuous_subtype_val.comp continuous_fst)).smul
+      continuous_snd).continuousOn.add
+        ((continuous_subtype_val.comp continuous_fst).continuousOn.smul
+          (hnorm.smul continuous_snd.continuousOn)))
+  · exact continuous_snd.continuousOn
+
 lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball
     {M : Type} [TopologicalSpace M]
     (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
@@ -1015,7 +1055,103 @@ lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuous
         apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
       (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
         (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ)) := by
-  sorry
+  let S : Set (unitInterval × M) := univ ×ˢ
+    (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+      (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ)
+  let inv : S → apm_t00A01_LargeDisk3 := fun p ↦
+    hΦ.toHomeomorph.symm ⟨p.1.2, by
+      rcases p.2.2.1 with ⟨x, hx, hxp⟩
+      exact ⟨x, hxp⟩⟩
+  have hinv : Continuous inv := by
+    let rangeMap : S → Set.range Φ := fun p ↦ ⟨p.1.2, by
+      rcases p.2.2.1 with ⟨x, hx, hxp⟩
+      exact ⟨x, hxp⟩⟩
+    have hrange : Continuous rangeMap :=
+      Continuous.subtype_mk ((continuous_snd : Continuous (fun p : unitInterval × M ↦ p.2)).comp
+        continuous_subtype_val) _
+    exact hΦ.toHomeomorph.symm.continuous.comp hrange
+  have hinv_eq (p : S) : Φ (inv p) = p.1.2 := by
+    exact congrArg Subtype.val (hΦ.toHomeomorph.apply_symm_apply _)
+  have hinv_lt (p : S) : dist (inv p).1 0 < 2 := by
+    rcases p.2.2.1 with ⟨x, hx, hxp⟩
+    have : inv p = x := hΦ.injective (by rw [hinv_eq p, hxp])
+    simpa [this] using hx
+  have hinv_half (p : S) : 1 / 2 < ‖(inv p).1‖ := by
+    by_contra hn
+    apply p.2.2.2
+    refine ⟨inv p, ?_, hinv_eq p⟩
+    change dist (inv p).1 0 ≤ 1 / 2
+    simpa [dist_eq_norm] using le_of_not_gt hn
+  let Q : S → unitInterval × EuclideanSpace ℝ (Fin 3) := fun p ↦ (p.1.1, (inv p).1)
+  have hQ : Continuous Q := by
+    dsimp [Q]
+    fun_prop
+  have hmaps : MapsTo Q univ (univ ×ˢ {x | 1 / 2 < ‖x‖}) := by
+    intro p hp
+    exact ⟨trivial, hinv_half p⟩
+  have hrad : Continuous (fun p : S ↦
+      if ‖(Q p).2‖ < 1 then (1 - ((Q p).1 : ℝ)) • (Q p).2 +
+        ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2) else (Q p).2) := by
+    rw [← continuousOn_univ]
+    exact apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball_aux_radial.comp
+      hQ.continuousOn hmaps
+  let R : S → apm_t00A01_LargeDisk3 := fun p ↦ ⟨
+    if ‖(Q p).2‖ < 1 then (1 - ((Q p).1 : ℝ)) • (Q p).2 +
+      ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2) else (Q p).2, by
+    change dist _ 0 ≤ 2
+    rw [dist_zero_right]
+    by_cases hlt : ‖(Q p).2‖ < 1
+    · rw [if_pos hlt]
+      have hnpos : 0 < ‖(Q p).2‖ := by
+        have := hinv_half p
+        simpa [Q] using lt_trans (by norm_num : (0 : ℝ) < 1 / 2) this
+      have hn : ‖(Q p).2‖ ≠ 0 := ne_of_gt hnpos
+      have ht0 : 0 ≤ ((Q p).1 : ℝ) := (Q p).1.2.1
+      have ht1 : ((Q p).1 : ℝ) ≤ 1 := (Q p).1.2.2
+      calc
+        ‖(1 - ((Q p).1 : ℝ)) • (Q p).2 +
+            ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2)‖ ≤
+            ‖(1 - ((Q p).1 : ℝ)) • (Q p).2‖ +
+              ‖((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2)‖ := norm_add_le _ _
+        _ = (1 - ((Q p).1 : ℝ)) * ‖(Q p).2‖ + ((Q p).1 : ℝ) := by
+          rw [norm_smul, norm_smul, norm_smul, Real.norm_eq_abs, Real.norm_eq_abs,
+            abs_of_nonneg ht0, abs_of_nonneg (sub_nonneg.mpr ht1)]
+          simp [abs_inv, abs_of_nonneg (norm_nonneg (Q p).2), hn]
+        _ ≤ 2 := by nlinarith [norm_nonneg (Q p).2]
+    · rw [if_neg hlt]
+      exact le_of_lt (by simpa [Q, dist_eq_norm] using hinv_lt p)⟩
+  have hR : Continuous R := by
+    apply Continuous.subtype_mk hrad
+  rw [continuousOn_iff_continuous_restrict]
+  apply Continuous.congr (hΦ.continuous.comp hR)
+  intro p
+  symm
+  change apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1.1 p.1.2 = _
+  rw [← hinv_eq p]
+  unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+  by_cases hlt : ‖(inv p).1‖ < 1
+  · have hex : ∃ x : apm_t00A01_LargeDisk3, Φ x = Φ (inv p) ∧ dist x.1 0 < 1 :=
+      ⟨inv p, rfl, by simpa [dist_eq_norm] using hlt⟩
+    rw [dif_pos hex]
+    have hchoose : hex.choose = inv p := hΦ.injective hex.choose_spec.1
+    simp only [hchoose, Q, hlt, if_pos]
+    have hv : (1 - (p.1.1 : ℝ)) • (hex.choose).1 +
+        (p.1.1 : ℝ) • (‖(hex.choose).1‖⁻¹ • (hex.choose).1) ∈
+        Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 2 := by
+      rw [hchoose]
+      simpa [R, Q, hlt] using (R p).2
+    rw [dif_pos hv]
+    apply congrArg Φ
+    apply Subtype.ext
+    simp [R, Q, hlt]
+  · have hnone : ¬ ∃ x : apm_t00A01_LargeDisk3,
+        Φ x = Φ (inv p) ∧ dist x.1 0 < 1 := by
+      rintro ⟨x, hx, hx1⟩
+      have hxeq : x = inv p := hΦ.injective hx
+      apply hlt
+      simpa [hxeq, dist_eq_norm] using hx1
+    rw [dif_neg hnone]
+    simp [R, Q, hlt]
 -- END SEAT AREA
 
 /-- The collar homotopy is continuous on `I × U`, `U = M \ Φ(closedBall 0 (1/2))`:
