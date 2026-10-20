@@ -2385,7 +2385,58 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M A := by
   sorry
 
-/-- LIBRARY LEAF (Hatcher 3.27, Mayer--Vietoris step): if closed `A`, `B` and
+/-- PROVED (lemma-2, banked from its `_aux_union` PARTIAL, 2026-10-20):
+complement identities for the Mayer--Vietoris step. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left
+    {M : Type} (A B : Set M) : (A ∪ B)ᶜ ⊆ Aᶜ := by
+  intro x hx hxa
+  exact hx (Or.inl hxa)
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right
+    {M : Type} (A B : Set M) : (A ∪ B)ᶜ ⊆ Bᶜ := by
+  intro x hx hxb
+  exact hx (Or.inr hxb)
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_inter
+    {M : Type} (A B : Set M) : (A ∩ B)ᶜ = Aᶜ ∪ Bᶜ := by
+  ext x
+  simp only [Set.mem_compl_iff, Set.mem_inter_iff, Set.mem_union, not_and_or]
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union
+    {M : Type} (A B : Set M) : (A ∪ B)ᶜ = Aᶜ ∩ Bᶜ := by
+  ext x
+  simp only [Set.mem_compl_iff, Set.mem_union, Set.mem_inter_iff, not_or]
+
+/-- LIBRARY LEAF (Hatcher 3.27, relative Mayer--Vietoris, joint injectivity):
+for closed `A`, `B`, if `H_{n+1}(M, M ∖ (A ∩ B))` vanishes then a class of
+`H_n(M, M ∖ (A ∪ B))` whose images in `H_n(M, M ∖ A)` and `H_n(M, M ∖ B)` both
+vanish is zero.  Split from `_aux_union` after lemma-2's PARTIAL (2026-10-20).
+Route (lemma-2's diagnosis): `CoefficientSubcomplexRelativeHomologySequence`
+for the subcomplexes `P = range (M ∖ A)`, `Q = range (M ∖ B)` of the singular
+simplicial set of `M` is exact at the intersection term
+`H_{n+1}(S, P ∪ Q) → H_n(S, P ∩ Q) → H_n(S, P) ⊕ H_n(S, Q)`.  Transport it
+to the literal relative chains: `P ∩ Q` is `range ((A ∪ B)ᶜ)`
+(`CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap`),
+`P`, `Q` are `range Aᶜ`, `range Bᶜ` (`rangeRelativeCokernelMap`); `P ∪ Q` is
+the `{Aᶜ, Bᶜ}`-small chains of `(A ∩ B)ᶜ`, whose relative homology agrees with
+`H_{n+1}(M, M ∖ (A ∩ B))` because `Aᶜ`, `Bᶜ` are open (small chains, as in
+`CoefficientCompactComplementUnionComparison`, plus the five lemma).  Check that
+the transported piece maps are `relativeSingularMap` of the identity, and pass
+from `ModuleCat ℤ` to the `AddCommGrpCat` complexes here. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_joint
+    (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
+    (n : ℕ) (h : Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (A ∩ B)ᶜ).homology (n + 1)))
+    (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (A ∪ B)ᶜ).homology n)
+    (hcA : HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Aᶜ (ContinuousMap.id M)
+        (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left A B hx)) n c = 0)
+    (hcB : HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Bᶜ (ContinuousMap.id M)
+        (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right A B hx)) n c = 0) :
+    c = 0 := by
+  sorry
+
+/-- PROVED from `_aux_union_aux_joint` (Hatcher 3.27, Mayer--Vietoris step): if closed `A`, `B` and
 `A ∩ B` are good, so is `A ∪ B`.  Route: the relative Mayer--Vietoris sequence
 of the pairs `(M, M ∖ A)`, `(M, M ∖ B)` (open cover `M ∖ A`, `M ∖ B` of
 `M ∖ (A ∩ B)`; the absolute sequence is
@@ -2399,7 +2450,30 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
     (gA : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M A) (gB : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M B) (gAB : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M (A ∩ B)) :
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M (A ∪ B) := by
-  sorry
+  refine ⟨fun i hi => ?_, fun c hc => ?_⟩
+  · have key : ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (A ∪ B)ᶜ).homology i, c = 0 := fun c =>
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_joint M A B hA hB i (gAB.1 (i + 1) (by omega)) c
+        (@Subsingleton.elim _ (gA.1 i hi) _ _) (@Subsingleton.elim _ (gB.1 i hi) _ _)
+    exact ⟨fun c d => (key c).trans (key d).symm⟩
+  · refine apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_joint M A B hA hB 3 (gAB.1 4 (by norm_num)) c ?_ ?_
+    · refine gA.2 _ fun y hy => ?_
+      have e := ConstructionTargets.SingularExcision.relativeSingularHomologyMap_comp
+        (A ∪ B)ᶜ Aᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M) (ContinuousMap.id M)
+        (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left A B hx) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (A ∪ B) y (Or.inl hy)) 3
+      have := congrArg (fun f => f c) e
+      simp only [ConcreteCategory.comp_apply] at this
+      rw [this]; exact hc y (Or.inl hy)
+    · refine gB.2 _ fun y hy => ?_
+      have e := ConstructionTargets.SingularExcision.relativeSingularHomologyMap_comp
+        (A ∪ B)ᶜ Bᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M) (ContinuousMap.id M)
+        (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right A B hx) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo B y hy)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (A ∪ B) y (Or.inr hy)) 3
+      have := congrArg (fun f => f c) e
+      simp only [ConcreteCategory.comp_apply] at this
+      rw [this]; exact hc y (Or.inr hy)
 
 /-- LIBRARY LEAF (Hatcher 3.27, steps 2--3): every compact subset of one chart
 source is good.  Route: excise to the chart target, an open subset of `ℝ³`.
