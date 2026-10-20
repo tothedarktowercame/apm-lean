@@ -2219,8 +2219,29 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   exact ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
     e A B hAB 3
 
-/-- LIBRARY LEAF (split from `_aux_ball` after lemma-1's PARTIAL, 2026-10-20):
-moving a puncture inside a closed ball of `ℝ³`.  For `u` in the open ball
+/-- LIBRARY LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL,
+2026-10-20): the convex model in `ℝ³`.  For compact convex `K ⊆ ℝ³` and
+`u ∈ K`, the identity induces an isomorphism
+`H_(n+1)(ℝ³, ℝ³ ∖ K) → H_(n+1)(ℝ³, ℝ³ ∖ u)`.  Route: pick `R` with
+`K ⊆ ball u R`.  For `p ∉ K` the ray from `u` through `p` meets `K` in an
+interval containing `u` (convexity), so the straight-line homotopy from `p` to
+`u + R • (p - u) / ‖p - u‖` stays outside `K`; the same formula deformation
+retracts `ℝ³ ∖ u` onto that sphere.  Hence `ℝ³ ∖ K ↪ ℝ³ ∖ u` is a homotopy
+equivalence; `ℝ³` is contractible; the five lemma on the long exact sequences
+of the two pairs gives the iso.  `_ball_aux_model` is the case
+`K = closedBall c r`, `n = 2`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model
+    (K : Set (EuclideanSpace ℝ (Fin 3))) (hK : IsCompact K) (hconv : Convex ℝ K)
+    (u : EuclideanSpace ℝ (Fin 3)) (hu : u ∈ K) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
+        (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu)) (n + 1)) := by
+  sorry
+
+/-- PROVED from `_convex_aux_inj_aux_model` (claude-14, 2026-10-20; split from
+`_aux_ball` after lemma-1's PARTIAL): moving a puncture inside a closed ball of `ℝ³`.  For `u` in the open ball
 `ball c r`, the identity induces an isomorphism
 `H₃(ℝ³, ℝ³ ∖ closedBall c r) → H₃(ℝ³, ℝ³ ∖ u)`.  Route: `ℝ³ ∖ closedBall c r`
 and `ℝ³ ∖ u` both deformation retract radially (about `u`) onto the sphere of
@@ -2235,7 +2256,8 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
         (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
           (Metric.closedBall c r) u (Metric.mem_closedBall.2 hu.le))) 3) := by
-  sorry
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model (Metric.closedBall c r) (isCompact_closedBall c r)
+    (convex_closedBall c r) u (Metric.mem_closedBall.2 hu.le) 2
 
 /-- LIBRARY LEAF (split from `_aux_ball` after lemma-1's PARTIAL, 2026-10-20):
 reduction of `_aux_ball` to the model.  Let `e` be the chart at `x` and
@@ -2403,26 +2425,54 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology i) := by
   sorry
 
-/-- LIBRARY LEAF (Hatcher 3.27, step 1, the comparison): for compact `A` in one
-chart with convex chart image and `y ∈ A`, the localization
-`H_i(M, M ∖ A) → H_i(M, M ∖ y)` is injective (it is an isomorphism).  Split
-from `_aux_convex` after lemma-1's PARTIAL (2026-10-20), which named the
-missing convex-pair excision theorem.  Route: excise `M ∖ U` for the chart
-source `U` (`A` is closed, `M ∖ U ⊆ M ∖ A`) and transport to `ℝ³` through the
-chart; there `ℝ³ ∖ A ↪ ℝ³ ∖ {y}` is a homotopy equivalence (radial
-deformation from `y`, using convexity of the image of `A`), so the five lemma
-on the two pair sequences gives `H_i(ℝ³, ℝ³ ∖ A) ≅ H_i(ℝ³, ℝ³ ∖ y)`. -/
+/-- LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL, 2026-10-20):
+reduction to the convex model.  For compact `A` in the chart at `x` with
+convex chart image and `y ∈ A`, the localization
+`H_i(M, M ∖ A) → H_i(M, M ∖ y)` is an isomorphism for `i > 0`.  Route, as in
+`_ball_aux_reduce`: both pairs excise `M ∖ e.source` (`_aux_excision`; `A` is
+compact, hence closed); the chart `e.source ≃ₜ e.target` transports the excised
+pairs (`_aux_chart`); the inclusion `e.target ↪ ℝ³` excises `ℝ³ ∖ e.target`
+(`e '' A` is compact inside the open `e.target`); the resulting map is
+`_convex_aux_inj_aux_model` with `K = e '' A`, `u = e y`.  The squares commute
+by `relativeSingularMap_comp`.  `_aux_excision` and `_aux_chart` are stated in
+degree 3; the ConstructionTargets theorems they call
+(`relativeExcisionMap_homologyMap_isIso_succ`,
+`relativeSingularMap_homeomorphPair_isIso`) take any degree `n + 1`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (hconv : Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' A))
+    (y : M) (hy : y ∈ A) (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i) := by
+  sorry
+
+/-- PROVED from `_convex_aux_inj_aux_isIso` (lemma-1, job 177, 2026-10-20):
+for compact `A` in one chart with convex chart image and `y ∈ A`, the
+localization `H_i(M, M ∖ A) → H_i(M, M ∖ y)` is injective for `i > 0`. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj
     (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     (x : M) (A : Set M) (hA : IsCompact A)
     (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
     (hconv : Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' A))
-    (y : M) (hy : y ∈ A) (i : ℕ) (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i)
+    (y : M) (hy : y ∈ A) (i : ℕ) (hi : 0 < i) (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i)
     (hc : HomologicalComplex.homologyMap
       (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y) (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i c = 0) :
     c = 0 := by
-  sorry
+  letI := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso
+    M x A hA hsub hconv y hy i hi
+  exact (AddCommGrpCat.mono_iff_injective (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i)).1 inferInstance
+    (hc.trans (map_zero _).symm)
 
 /-- PROVED from `_aux_convex_aux_point`, `_aux_convex_aux_inj` (Hatcher 3.27, step 1): a compact `A` inside one chart whose
 chart image is convex is good.  Route: excise `M ∖ U` for the chart source `U`
@@ -2443,10 +2493,10 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_empty M
   refine ⟨fun i hi => ?_, fun c hc => ?_⟩
   · have key : ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i, c = 0 := fun c =>
-      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj M x A hA hsub hconv y hy i c
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj M x A hA hsub hconv y hy i (by omega) c
         (@Subsingleton.elim _ (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_point M y i hi) _ _)
     exact ⟨fun c d => (key c).trans (key d).symm⟩
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj M x A hA hsub hconv y hy 3 c (hc y hy)
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj M x A hA hsub hconv y hy 3 (by norm_num) c (hc y hy)
 
 /-- PROVED (lemma-2, banked from its `_aux_union` PARTIAL, 2026-10-20):
 complement identities for the Mayer--Vietoris step. -/
