@@ -683,7 +683,48 @@ lemma apm_t00A01_punctured_pathConnected_aux_inner_open
     {M : Type} [TopologicalSpace M]
     (φ : apm_t00A01_Disk3 → M) (hcollar : apm_t00A01_HasBallCollar φ) :
     IsOpen (φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}) := by
-  sorry
+  rcases hcollar with ⟨Φ, hΦ, hΦφ, hΦo⟩
+  let S₁ : Set apm_t00A01_LargeDisk3 := {x | dist x.1 0 < 1}
+  let S₂ : Set apm_t00A01_LargeDisk3 := {x | dist x.1 0 < 2}
+  have hS₁ : IsOpen S₁ := by
+    have hd : Continuous (fun x : apm_t00A01_LargeDisk3 ↦ dist x.1 0) :=
+      continuous_subtype_val.dist
+        (continuous_const : Continuous (fun _ : apm_t00A01_LargeDisk3 ↦
+          (0 : EuclideanSpace ℝ (Fin 3))))
+    exact isOpen_lt hd continuous_const
+  obtain ⟨W, hW, hWpre⟩ := hΦ.isInducing.isOpen_iff.mp hS₁
+  have himage : Φ '' S₁ = W ∩ Φ '' S₂ := by
+    ext z
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      have hxW : Φ x ∈ W := by
+        have : x ∈ Φ ⁻¹' W := hWpre.symm ▸ hx
+        exact this
+      exact ⟨hxW, x, by dsimp [S₁, S₂] at hx ⊢; linarith, rfl⟩
+    · rintro ⟨hzW, x, hx₂, rfl⟩
+      refine ⟨x, ?_, rfl⟩
+      have : x ∈ Φ ⁻¹' W := hzW
+      exact hWpre ▸ this
+  have hinner :
+      φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1} = Φ '' S₁ := by
+    ext z
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      refine ⟨apm_t00A01_unitToLarge y, ?_, ?_⟩
+      · exact hy
+      · exact congrFun hΦφ y
+    · rintro ⟨x, hx, rfl⟩
+      have hx' : dist x.1 0 < 1 := by exact hx
+      let y : apm_t00A01_Disk3 :=
+        ⟨x.1, by
+          rw [Metric.mem_closedBall]
+          exact le_of_lt hx'⟩
+      refine ⟨y, hx', ?_⟩
+      have heq : apm_t00A01_unitToLarge y = x := Subtype.ext rfl
+      rw [← heq]
+      exact (congrFun hΦφ y).symm
+  rw [hinner, himage]
+  exact hW.inter hΦo
 
 /-- LEAF: first entrance into a closed set. In a path-connected space, a point
 outside an open set `O` contained in a nonempty closed set `K` is joined,
