@@ -2871,7 +2871,11 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     (y : M) (m : ℤ) (hm : m ≠ 0)
     (x : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology 3) (h : m • x = 0) : x = 0 := by
-  sorry
+  let e := ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 y
+  apply (ConcreteCategory.bijective_of_isIso e.hom).1
+  have he : m • e.hom.hom x = 0 := by
+    rw [← map_zsmul, h, map_zero]
+  simpa using (eq_zero_or_eq_zero_of_smul_eq_zero he).resolve_left hm
 
 /-- LIBRARY LEAF (Hatcher 3.27, relative Mayer--Vietoris, existence half): for
 closed `A`, `B`, classes of `H_n(M, M ∖ A)` and `H_n(M, M ∖ B)` with the same
