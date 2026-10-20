@@ -2971,7 +2971,61 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
             (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})ᶜ)).homology 4) ≅
         ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
           {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖}).homology 4)) := by
-  sorry
+  let U : Set apm_t00A01_LargeDisk3 := {x | dist x.1 0 < 2}
+  let e₀ : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 ≃ₜ U := {
+    toFun := fun (x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2) =>
+      (⟨⟨x.1, by
+        change dist x.1 0 ≤ 2
+        exact le_of_lt x.2⟩, x.2⟩ :
+        {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})
+    invFun := fun (x : {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}) =>
+      (⟨x.1.1, x.2⟩ : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2)
+    left_inv := fun _ => rfl
+    right_inv := fun _ => rfl
+    continuous_toFun := by fun_prop
+    continuous_invFun := by fun_prop }
+  have himage : Φ '' U = ((Φ '' U)ᶜ)ᶜ := by simp
+  let e : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 ≃ₜ
+      ↥(((Φ '' U)ᶜ)ᶜ : Set M) :=
+    e₀.trans ((hΦ.homeomorphImage U).trans (Homeomorph.setCongr himage))
+  have he_apply (x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2) :
+      (e x).1 = Φ ⟨x.1, by
+        change dist x.1 0 ≤ 2
+        exact le_of_lt x.2⟩ := rfl
+  have hpair (x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2) :
+      x ∈ {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖} ↔
+        e x ∈ ConstructionTargets.SingularExcision.excisedSubspace
+          {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}
+          (Φ '' U)ᶜ := by
+    change 1 ≤ ‖x.1‖ ↔ (e x).1 ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}
+    rw [he_apply]
+    constructor
+    · intro hx
+      rintro ⟨y, hy, heq⟩
+      have heq' : (⟨x.1, by
+          change dist x.1 0 ≤ 2
+          exact le_of_lt x.2⟩ : apm_t00A01_LargeDisk3) =
+          apm_t00A01_unitToLarge y := by
+        apply hΦ.injective
+        exact heq.symm.trans (congrFun hΦphi y).symm
+      have hxy : x.1 = y.1 := congrArg Subtype.val heq'
+      change dist y.1 0 < 1 at hy
+      have : ‖y.1‖ < 1 := by simpa [dist_eq_norm] using hy
+      apply (not_lt_of_ge hx)
+      simpa [hxy] using this
+    · intro hx
+      by_contra hn
+      have hlt : ‖x.1‖ < 1 := lt_of_not_ge hn
+      let y : apm_t00A01_Disk3 := ⟨x.1, by
+        simpa [Metric.mem_closedBall, dist_eq_norm] using le_of_lt hlt⟩
+      apply hx
+      refine ⟨y, ?_, ?_⟩
+      · change dist y.1 0 < 1
+        simpa [y, dist_eq_norm] using hlt
+      · rw [← congrFun hΦphi y]
+        rfl
+  exact ⟨(ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularHomologyIsoOfHomeomorphPair
+    e _ _ hpair 4).symm⟩
 
 /-- LEAF (`H₃` of the shell): the shell `1 ≤ ‖x‖ < 2` in the open radius-two ball
 has vanishing `H₃`.  Route: the radial map `x ↦ x/‖x‖` is a deformation retraction onto
