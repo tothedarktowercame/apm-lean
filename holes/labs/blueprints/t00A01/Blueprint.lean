@@ -2753,7 +2753,15 @@ the `{Aᶜ, Bᶜ}`-small chains of `(A ∩ B)ᶜ`, whose relative homology agree
 `H_{n+1}(M, M ∖ (A ∩ B))` because `Aᶜ`, `Bᶜ` are open (small chains, as in
 `CoefficientCompactComplementUnionComparison`, plus the five lemma).  Check that
 the transported piece maps are `relativeSingularMap` of the identity, and pass
-from `ModuleCat ℤ` to the `AddCommGrpCat` complexes here. -/
+from `ModuleCat ℤ` to the `AddCommGrpCat` complexes here.
+Ingredients already in this file (lemma-1's BLOCKED-ON, job 192, named a module
+`IntegralRelativeSingularHomologyComparison` that does not exist; 2026-10-20):
+exactness is `_aux_divide_aux_union_aux_glue_aux_exact_degree` (with `S = Aᶜ`,
+`T = Bᶜ`); the `ModuleCat ℤ` → `AddCommGrpCat` relative comparison is
+`ManifoldFundamentalClass.integralRelativeHomologyComparison`; the piece maps are
+identified with `relativeSingularMap` by `_aux_divide_aux_union_aux_glue_aux_sq_inter`;
+`h` reaches the union term through `CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso`
+(`Aᶜ`, `Bᶜ` open).  `Aᶜ ∩ Bᶜ` vs `(A ∪ B)ᶜ`: generalise to sets equal to them and `subst`. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_joint
     (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
     (n : ℕ) (h : Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (A ∩ B)ᶜ).homology (n + 1)))
