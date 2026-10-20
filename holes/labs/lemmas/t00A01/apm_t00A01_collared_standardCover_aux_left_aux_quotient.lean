@@ -2149,7 +2149,25 @@ lemma apm_t00A01_collared_standardCover_aux_quotient_continuous {A B Z : Type}
       F (p.1, ⟨Quotient.mk (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) p.2.1,
         (Set.ext_iff.mp hsat p.2.1).mpr p.2.2⟩)) :
     Continuous F := by
-  sorry
+  let q : Sum A B → apm_t00A01_connectedSum iA iB := fun z ↦ Quotient.mk _ z
+  have hq : Topology.IsQuotientMap q := ⟨Quotient.mk_surjective, rfl⟩
+  have hS : IsOpen S := by
+    rw [← hq.isOpen_preimage]
+    change IsOpen ((fun z : Sum A B ↦ Quotient.mk
+      (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) z) ⁻¹' S)
+    rw [hsat]
+    exact hP
+  have hqS : Topology.IsQuotientMap (S.restrictPreimage q) :=
+    hq.restrictPreimage_isOpen hS
+  let e : ↥P ≃ₜ ↥(q ⁻¹' S) := Homeomorph.setCongr hsat.symm
+  have he : Topology.IsQuotientMap e := e.isQuotientMap
+  have hcomp : S.restrictPreimage q ∘ e = fun x : ↥P ↦
+      (⟨Quotient.mk (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) x.1,
+        (Set.ext_iff.mp hsat x.1).mpr x.2⟩ : ↥S) := by
+    funext x
+    rfl
+  apply (hqS.comp he).continuous_lift_prod_right
+  simpa only [hcomp] using hF
 
 /-- LEAF. Generic quotient step: if an open collar `C ⊇ iB '' univ` of the
 second piece strong-deformation-retracts onto the glued sphere, the left
