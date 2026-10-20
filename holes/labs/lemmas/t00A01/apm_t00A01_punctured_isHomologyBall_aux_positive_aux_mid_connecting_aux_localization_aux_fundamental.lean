@@ -2110,6 +2110,48 @@ class whose image at the specified point is a signed normalized local class.
 The stronger simultaneous-for-all-points form is what the usual finite-cover
 Mayer--Vietoris induction proves. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) (r : ℤ)
+    (hr : r •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) x =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 hM.2.1.some)) :
+    r = 1 ∨ r = -1 := by
+  sorry
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_assemble
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) (r : ℤ)
+    (hr : r •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) x =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 hM.2.1.some))
+    (hsign : r = 1 ∨ r = -1) :
+    ∃ μ : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of M)).homology 3,
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3 μ =
+          ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) x ∨
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3 μ =
+          -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) x := by
+  refine ⟨ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+    (TopCat.of M) 3 hM.2.1.some, ?_⟩
+  rcases hsign with rfl | rfl
+  · left
+    simpa using hr.symm
+  · right
+    simpa using hr.symm
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2124,7 +2166,14 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3 μ =
           -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
             (k := 1) x := by
-  sorry
+  obtain ⟨r, hr⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_coeff
+      M hM x
+  exact
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_assemble
+      M hM x r hr
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign
+          M hM x r hr)
 -- END SEAT AREA
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_target_generates
