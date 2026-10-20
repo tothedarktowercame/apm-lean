@@ -1984,6 +1984,29 @@ lemma apm_t00A01_collared_standardCover_aux_right
 /-- LEAF. The overlap is the two half-open collars `1 ≤ r < 2` glued along
 `r = 1`, i.e. `S² × (-1, 1)`, which retracts radially onto the glued `S²`
 (at radius one the copies agree by `apm_t00A01_mk_inl_eq_mk_inr`). -/
+lemma apm_t00A01_collared_standardCover_aux_inter_aux_collar_coord
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦ : Topology.IsEmbedding Φ)
+    (hext : Φ ∘ apm_t00A01_unitToLarge = φ)
+    (x : apm_t00A01_punctured φ) (hx : x ∈ apm_t00A01_collarSet φ Φ) :
+    ∃! y : apm_t00A01_LargeDisk3,
+      Φ y = x.1 ∧ 1 ≤ dist y.1 0 ∧ dist y.1 0 < 2 := by
+  rcases hx with ⟨y, hy2, hyx⟩
+  have hy1 : 1 ≤ dist y.1 0 := by
+    by_contra h
+    have hylt : dist y.1 0 < 1 := lt_of_not_ge h
+    apply x.2
+    let z : apm_t00A01_Disk3 :=
+      ⟨y.1, by simpa [Metric.mem_closedBall] using le_of_lt hylt⟩
+    refine ⟨z, ?_, ?_⟩
+    · exact hylt
+    · rw [← congrFun hext z]
+      exact (congrArg Φ (Subtype.ext rfl)).trans hyx
+  refine ⟨y, ⟨hyx, hy1, hy2⟩, ?_⟩
+  intro y' hy'
+  exact hΦ.injective (hy'.1.trans hyx.symm)
+
 lemma apm_t00A01_collared_standardCover_aux_inter
     {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
@@ -2001,7 +2024,6 @@ lemma apm_t00A01_collared_standardCover_aux_inter
           (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₁ Φ₁))
       apm_t00A01_Sphere2) := by
   sorry
-
 lemma apm_t00A01_collared_standardCover_aux_cover
     (M₁ M₂ : Type) [TopologicalSpace M₁] [TopologicalSpace M₂]
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
