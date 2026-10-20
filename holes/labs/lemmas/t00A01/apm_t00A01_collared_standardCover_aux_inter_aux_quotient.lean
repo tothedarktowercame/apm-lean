@@ -3377,7 +3377,6 @@ lemma apm_t00A01_collared_standardCover_aux_inter_aux_quotient
     rw [heq]
 
 -- END SEAT AREA
-  sorry
 
 
 lemma apm_t00A01_collared_standardCover_aux_inter
