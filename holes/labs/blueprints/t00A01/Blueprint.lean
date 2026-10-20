@@ -2741,6 +2741,72 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
 of the punctured open 3-disk pair. Route (seat's note): take `Z` the complement of
 `Φ(int B₂)` for the collar `Φ`; identify the excised pair through collar
 coordinates, including the set-membership equivalence. -/
+-- BANKED (lemma-1): the complement `Z` of the open collar ball is closed and lies
+-- in the interior of the complement of the open unit ball.
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar_aux_Z
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦphi : Φ ∘ apm_t00A01_unitToLarge = phi)
+    (hO : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    IsClosed (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})ᶜ ∧
+      (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})ᶜ ⊆
+        interior {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} := by
+  refine ⟨hO.isClosed_compl, ?_⟩
+  have hcompact : IsCompact (Set.range phi) := by
+    rw [← Set.image_univ]
+    exact isCompact_univ.image hphi.continuous
+  have hopen : IsOpen (Set.range phi)ᶜ := hcompact.isClosed.isOpen_compl
+  have hsubset : (Set.range phi)ᶜ ⊆
+      {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} := by
+    intro z hz
+    rintro ⟨y, hy, heq⟩
+    exact hz ⟨y, heq⟩
+  intro z hz
+  apply interior_maximal hsubset hopen
+  intro hzrange
+  rcases hzrange with ⟨y, rfl⟩
+  apply hz
+  refine ⟨apm_t00A01_unitToLarge y, ?_, ?_⟩
+  · change dist y.1 0 < 2
+    have hy : dist y.1 0 ≤ 1 := Metric.mem_closedBall.mp y.2
+    linarith
+  · exact congrFun hΦphi y
+
+/-- LEAF (collar coordinates): `Φ` restricts to a homeomorphism of pairs from the
+open radius-two ball, relative to the shell `1 ≤ ‖x‖ < 2`, onto the excised pair
+`(Φ(ball 0 2), Φ(ball 0 2) ∖ φ(ball 0 1))`; hence their relative `H₄` agree.
+Expected route: build the homeomorphism from `hΦ` and `hO`, check the pair
+condition from `hΦphi`, and apply
+`ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularHomologyIsoOfHomeomorphPair`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar_aux_coords
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M)
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦphi : Φ ∘ apm_t00A01_unitToLarge = phi)
+    (hO : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    Nonempty
+      (((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.SingularExcision.excisedSubspace
+            {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}
+            (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})ᶜ)).homology 4) ≅
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖}).homology 4)) := by
+  sorry
+
+/-- LEAF (shell vs puncture, purely Euclidean): the open radius-two ball relative to
+the shell `1 ≤ ‖x‖ < 2` and the open unit disk relative to its punctured part have
+isomorphic relative `H₄`.  Routes: rescale by `1/2` onto `euclideanOpenDisk 3`
+(shell ↦ `1/2 ≤ ‖x‖ < 1`), then compare that shell with the punctured disk by the
+radial deformation retraction and the five lemma on the two long exact sequences. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar_aux_shell :
+    Nonempty
+      (((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          {x : Metric.ball (0 : EuclideanSpace ℝ (Fin 3)) 2 | 1 ≤ ‖x.1‖}).homology 4) ≅
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet 3)).homology 4)) := by
+  sorry
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar
     (M : Type) [TopologicalSpace M] [T2Space M]
     (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
@@ -2753,7 +2819,16 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
               {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} Z)).homology 4) ≅
           ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
             (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet 3)).homology 4)) := by
-  sorry
+  obtain ⟨Φ, hΦ, hΦphi, hO⟩ := hcollar
+  obtain ⟨hZ, hZsub⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar_aux_Z
+      M phi hphi Φ hΦphi hO
+  obtain ⟨e₁⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar_aux_coords
+      M phi Φ hΦ hΦphi hO
+  obtain ⟨e₂⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar_aux_shell
+  exact ⟨_, hZ, hZsub, ⟨e₁ ≪≫ e₂⟩⟩
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision
     (M : Type) [TopologicalSpace M] [T2Space M]
