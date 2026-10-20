@@ -2932,6 +2932,20 @@ collars strongly deformation retracts, relative to its boundary copy, onto the
 same sphere.  After gluing those boundary copies, their union (which is exactly
 the overlap of the two standard thickenings) therefore deformation retracts
 onto that sphere. -/
+lemma apm_t00A01_collared_standardCover_aux_inter_aux_quotient_aux_saturated
+    {A B : Type} (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (CA : Set A) (CB : Set B) (hiA : ∀ s, iA s ∈ CA) (hiB : ∀ s, iB s ∈ CB)
+    {x y : Sum A B} (hxy : Relation.EqvGen (apm_t00A01_glueRel iA iB) x y) :
+    (x ∈ Sum.inl '' CA ∪ Sum.inr '' CB) ↔
+      (y ∈ Sum.inl '' CA ∪ Sum.inr '' CB) := by
+  induction hxy with
+  | rel x y h =>
+      cases h with
+      | glue s => simp [hiA s, hiB s]
+  | refl => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+
 lemma apm_t00A01_collared_standardCover_aux_inter_aux_quotient
     {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
     (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
@@ -2950,7 +2964,9 @@ lemma apm_t00A01_collared_standardCover_aux_inter_aux_quotient
     Nonempty (ContinuousMap.HomotopyEquiv
       ↥(apm_t00A01_thickLeft iA iB CB ∩ apm_t00A01_thickRight iA iB CA)
       apm_t00A01_Sphere2) := by
+
   sorry
+
 
 lemma apm_t00A01_collared_standardCover_aux_inter
     {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
