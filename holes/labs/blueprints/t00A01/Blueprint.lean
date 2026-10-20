@@ -2166,10 +2166,57 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   exact (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign M hM x).mono fun y hy =>
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_natAbs_eq _ _ hy
 
-/-- LIBRARY LEAF (Hatcher Lemma 3.27 / Theorem 3.26, the global core): the
-global generator of `H₃(M) ≅ ℤ` has local degree `±1` at some point.  This
-is where the compact Mayer--Vietoris induction over a finite chart cover is
-needed; local constancy and connectedness then spread it to every point. -/
+/-- LIBRARY LEAF (split from `_aux_exists_unit` after lemma-3's PARTIAL,
+2026-10-20): Hatcher Lemma 3.27(b) with `A = M`.  A class of `H₃(M)` whose
+image in every `H₃(M, M ∖ y)` vanishes is zero.  Route: for compact
+`A ⊆ M`, prove `H_i(M, M ∖ A) = 0` for `i > 3` and that a class of
+`H₃(M, M ∖ A)` (`RelativeSingularChains Aᶜ`) vanishing at every `y ∈ A`
+is zero; induct over a finite chart cover: `A` convex in one chart
+(excision to `ℝ³`), then `A ∪ B` by the relative Mayer--Vietoris sequence
+of `(M, M ∖ A)`, `(M, M ∖ B)`.  Do not go through
+`localizationMap x 3` being an iso: that is the grandparent
+`_aux_mid_connecting_aux_localization` (circular). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (z : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of M)).homology 3)
+    (hz : ∀ y : M, ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z = 0) :
+    z = 0 := by
+  sorry
+
+/-- LIBRARY LEAF (split from `_aux_exists_unit`, 2026-10-20): Hatcher
+Lemma 3.27(a) with `A = M`, for the section `y ↦ loc_y z / m`.  If the
+local degree of `z` has absolute value `|m| ≠ 0` at every point, then
+`z`'s local images are all divisible by `m` through ONE global class.  The
+section `y ↦ loc_y z / m` takes values `±` the local generator and is
+continuous (near `y`, `loc z` comes from `H₃(M, M ∖ B) ≅ ℤ` for a chart
+ball `B`), so the existence half of the compact induction (same cover and
+Mayer--Vietoris steps as `_aux_injective`) gives `μ`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (z : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of M)).homology 3) (m : ℤ) (hm : m ≠ 0)
+    (hz : ∀ y : M,
+      ((ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 y).hom.hom
+        (ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z)).natAbs =
+        m.natAbs) :
+    ∃ μ : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of M)).homology 3,
+      ∀ y : M, m • ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 μ =
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3 z := by
+  sorry
+
+/-- PROVED from `_aux_injective`, `_aux_divide` and `_aux_locallyConstant`:
+the global generator `g` is nonzero, so (injective) its local degree `d` at
+some `x` is nonzero; `|deg|` is constant (connected), so (divide)
+`d • μ` and `g` have the same local images, hence (injective) `g = d • μ`;
+`g` generates `H₃(M) ≅ ℤ`, so `d = ±1`. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2177,7 +2224,53 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [BoundarylessManifold apm_t00A01_Model3 M]
     (hM : apm_t00A01_isHomology3Sphere M) :
     ∃ y : M, (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y).natAbs = 1 := by
-  sorry
+  letI : PathConnectedSpace M := apm_t00A01_punctured_pathConnected_aux_ambient M hM
+  set g := ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+    (TopCat.of M) 3 hM.2.1.some with hgdef
+  -- `φ : H₃(M) → ℤ` sends `g` to `1`.
+  let φ : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of M)).homology 3 →+ ℤ :=
+    hM.2.1.some.hom.hom.toAddMonoidHom.comp
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of M) 3).inv.hom
+  have hφg : φ g = 1 := by
+    change hM.2.1.some.hom.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of M) 3).inv.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of M) 3).hom.hom (hM.2.1.some.inv.hom 1))) = 1
+    have hc := ConcreteCategory.congr_hom
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of M) 3).hom_inv_id (hM.2.1.some.inv.hom 1)
+    change (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of M) 3).inv.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of M) 3).hom.hom (hM.2.1.some.inv.hom 1)) = hM.2.1.some.inv.hom 1 at hc
+    rw [hc]
+    exact ConcreteCategory.congr_hom hM.2.1.some.inv_hom_id (1 : ℤ)
+  have hg0 : g ≠ 0 := by
+    intro h; rw [h, map_zero] at hφg; exact zero_ne_one hφg
+  obtain ⟨x, hx⟩ : ∃ x : M,
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3 g ≠ 0 := by
+    by_contra h; push_neg at h
+    exact hg0 (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective M g h)
+  set d := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x with hd
+  have hd0 : d ≠ 0 := by
+    intro h0; apply hx
+    apply (ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 x).hom).1
+    rw [map_zero]; exact h0
+  have hall : ∀ y : M, (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y).natAbs = d.natAbs := fun y =>
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant M hM).apply_eq_of_isPreconnected
+      isPreconnected_univ (Set.mem_univ y) (Set.mem_univ x)
+  obtain ⟨μ, hμ⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide M g d hd0 hall
+  have hgμ : d • μ - g = 0 := by
+    apply apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective M
+    intro y
+    rw [map_sub, map_zsmul, hμ y, sub_self]
+  have h1 : d * φ μ = 1 := by
+    rw [← hφg, ← smul_eq_mul, ← map_zsmul, sub_eq_zero.mp hgμ]
+  exact ⟨x, by rcases Int.eq_one_or_neg_one_of_mul_eq_one h1 with h | h <;> simp [← hd, h]⟩
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
