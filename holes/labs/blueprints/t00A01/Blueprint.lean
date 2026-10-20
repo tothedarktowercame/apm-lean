@@ -1966,8 +1966,28 @@ lemma apm_t00A01_collared_standardCover_aux_left
     _ hCopen hCmem r H (fun s ↦ hr s (hCmem s)) hH0 hH1 hHC
     (fun s t ↦ hHfix s (hCmem s) t)
 
-/-- LEAF. Mirror image of `_aux_left`: the right thickening deformation
-retracts onto the second punctured piece. -/
+/-- LEAF. Mirror image of `_aux_left_aux_quotient`: if an open collar
+`C ⊇ iA '' univ` of the first piece strong-deformation-retracts onto the glued
+sphere, the right thickening is homotopy equivalent to the second piece. Same
+proof with the roles of `inl` and `inr` exchanged: `f` sends `[inr b] ↦ b`,
+`[inl c] ↦ iB (r c)`, `g b = [inr b]`; the homotopy moves `[inl c]` along `H`.
+Continuity through the open saturated preimage `inl '' C ∪ range inr`
+(`IsQuotientMap.restrictPreimage_isOpen`), times the locally compact
+`unitInterval`. -/
+lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
+    [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (hiB : Continuous iB) (C : Set A) (hC : IsOpen C) (hiA : ∀ s, iA s ∈ C)
+    (r : C(↥C, apm_t00A01_Sphere2)) (H : C(↥C × unitInterval, A))
+    (hr : ∀ s, r ⟨iA s, hiA s⟩ = s)
+    (hH0 : ∀ x, H (x, 0) = x.1) (hH1 : ∀ x, H (x, 1) = iA (r x))
+    (hHC : ∀ p, H p ∈ C) (hHfix : ∀ s t, H (⟨iA s, hiA s⟩, t) = iA s) :
+    Nonempty (ContinuousMap.HomotopyEquiv ↥(apm_t00A01_thickRight iA iB C) B) := by
+  sorry
+
+/-- ASSEMBLY (from `_aux_left_aux_radial` applied to the first piece, and
+`_aux_right_aux_quotient`). Mirror image of `_aux_left`: the right thickening
+deformation retracts onto the second punctured piece. -/
 lemma apm_t00A01_collared_standardCover_aux_right
     {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
@@ -1979,7 +1999,15 @@ lemma apm_t00A01_collared_standardCover_aux_right
       ↥(apm_t00A01_thickRight (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
         (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₁ Φ₁))
       (apm_t00A01_punctured φ₂)) := by
-  sorry
+  obtain ⟨hCopen, hCmem⟩ :=
+    apm_t00A01_collared_standardCover_aux_collar φ₁ hφ₁ Φ₁ hext₁ hopen₁
+  obtain ⟨r, H, hr, hH0, hH1, hHC, hHfix⟩ :=
+    apm_t00A01_collared_standardCover_aux_left_aux_radial φ₁ hφ₁ Φ₁ hΦ₁ hext₁
+  exact apm_t00A01_collared_standardCover_aux_right_aux_quotient
+    (apm_t00A01_boundaryMap φ₁ hφ₁.injective) (apm_t00A01_boundaryMap φ₂ hφ₂.injective)
+    (apm_t00A01_collared_standardCover_aux_boundary_continuous φ₂ hφ₂)
+    _ hCopen hCmem r H (fun s ↦ hr s (hCmem s)) hH0 hH1 hHC
+    (fun s t ↦ hHfix s (hCmem s) t)
 
 /-- LEAF. The overlap is the two half-open collars `1 ≤ r < 2` glued along
 `r = 1`, i.e. `S² × (-1, 1)`, which retracts radially onto the glued `S²`
