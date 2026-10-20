@@ -1964,7 +1964,137 @@ lemma apm_t00A01_collared_standardCover_aux_left_aux_radial
       (∀ p, H p ∈ apm_t00A01_collarSet φ Φ) ∧
       (∀ s (h : apm_t00A01_boundaryMap φ hφ.injective s ∈ apm_t00A01_collarSet φ Φ) t,
         H (⟨_, h⟩, t) = apm_t00A01_boundaryMap φ hφ.injective s) := by
-  sorry
+  classical
+  let C := apm_t00A01_collarSet φ Φ
+  let j : C → Set.range Φ := fun x ↦
+    ⟨x.1.1, by
+      rcases x.2 with ⟨y, hy, hxy⟩
+      exact ⟨y, hxy⟩⟩
+  let c : C → apm_t00A01_LargeDisk3 := fun x ↦ hΦ.toHomeomorph.symm (j x)
+  have hj : Continuous j := by
+    exact Continuous.subtype_mk (continuous_subtype_val.comp continuous_subtype_val) _
+  have hc : Continuous c := hΦ.toHomeomorph.symm.continuous.comp hj
+  have hc_image (x : C) : Φ (c x) = x.1.1 := by
+    exact congrArg Subtype.val (hΦ.toHomeomorph.apply_symm_apply (j x))
+  have hc_norm (x : C) : 1 ≤ ‖(c x).1‖ :=
+    apm_t00A01_collared_standardCover_aux_left_aux_norm_ge_one φ Φ hext x.1 (c x)
+      (hc_image x)
+  have hc_ne (x : C) : ‖(c x).1‖ ≠ 0 := ne_of_gt (lt_of_lt_of_le zero_lt_one (hc_norm x))
+  let rv : C → EuclideanSpace ℝ (Fin 3) := fun x ↦ (‖(c x).1‖)⁻¹ • (c x).1
+  have hrv_norm (x : C) : ‖rv x‖ = 1 := by
+    simp [rv, norm_smul, Real.norm_of_nonneg (norm_nonneg _), hc_ne x]
+  let r : C( C, apm_t00A01_Sphere2) :=
+    ⟨fun x ↦ ⟨rv x, by simpa [Metric.mem_sphere, dist_zero_right] using hrv_norm x⟩, by
+      apply Continuous.subtype_mk
+      exact ((continuous_norm.comp
+        (continuous_subtype_val.comp hc)).inv₀ (fun x ↦ hc_ne x)).smul
+          (continuous_subtype_val.comp hc)⟩
+  let v : C × unitInterval → EuclideanSpace ℝ (Fin 3) := fun p ↦
+    ((1 - (p.2 : ℝ)) + (p.2 : ℝ) * (‖(c p.1).1‖)⁻¹) • (c p.1).1
+  have hv_norm (p : C × unitInterval) :
+      ‖v p‖ = (1 - (p.2 : ℝ)) * ‖(c p.1).1‖ + (p.2 : ℝ) := by
+    have hn : 0 < ‖(c p.1).1‖ := lt_of_lt_of_le zero_lt_one (hc_norm p.1)
+    have ht0 : 0 ≤ (p.2 : ℝ) := p.2.2.1
+    have ht1 : (p.2 : ℝ) ≤ 1 := p.2.2.2
+    have hinv : 0 < (‖(c p.1).1‖)⁻¹ := inv_pos.mpr hn
+    have ha : 0 ≤ (1 - (p.2 : ℝ)) + (p.2 : ℝ) * (‖(c p.1).1‖)⁻¹ := by
+      have hprod : 0 ≤ (p.2 : ℝ) * (‖(c p.1).1‖)⁻¹ :=
+        mul_nonneg ht0 hinv.le
+      linarith
+    simp only [v, norm_smul, Real.norm_eq_abs]
+    rw [abs_of_nonneg ha]
+    field_simp
+  have hv_ge (p : C × unitInterval) : 1 ≤ ‖v p‖ := by
+    rw [hv_norm]
+    nlinarith [hc_norm p.1, p.2.2.1, p.2.2.2]
+  have hv_le (p : C × unitInterval) : ‖v p‖ ≤ 2 := by
+    rw [hv_norm]
+    have hn2 : ‖(c p.1).1‖ ≤ 2 := by
+      have hh := (c p.1).2
+      change dist (c p.1).1 0 ≤ 2 at hh
+      simpa [dist_zero_right] using hh
+    nlinarith [p.2.2.1, p.2.2.2]
+  let w : C × unitInterval → apm_t00A01_LargeDisk3 := fun p ↦
+    ⟨v p, by simpa [Metric.mem_closedBall, dist_zero_right] using hv_le p⟩
+  have hw_cont : Continuous w := by
+    apply Continuous.subtype_mk
+    exact (((continuous_const.sub
+      (continuous_subtype_val.comp continuous_snd)).add
+        ((continuous_subtype_val.comp continuous_snd).mul
+          ((continuous_norm.comp
+            (continuous_subtype_val.comp (hc.comp continuous_fst))).inv₀
+              (fun p ↦ hc_ne p.1)))).smul
+        (continuous_subtype_val.comp (hc.comp continuous_fst)))
+  have hw_punctured (p : C × unitInterval) :
+      Φ (w p) ∉ φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1} := by
+    rintro ⟨y, hy, heq⟩
+    have heq' : w p = apm_t00A01_unitToLarge y := by
+      apply hΦ.injective
+      exact heq.symm.trans (congrFun hext y).symm
+    have : ‖v p‖ < 1 := by
+      have hv : v p = y.1 := congrArg Subtype.val heq'
+      rw [hv]
+      simpa [dist_zero_right] using hy
+    exact (not_lt_of_ge (hv_ge p)) this
+  let H : C(C × unitInterval, apm_t00A01_punctured φ) :=
+    ⟨fun p ↦ ⟨Φ (w p), hw_punctured p⟩,
+      Continuous.subtype_mk (hΦ.continuous.comp hw_cont) _⟩
+  refine ⟨r, H, ?_, ?_, ?_, ?_, ?_⟩
+  · intro s hs
+    apply Subtype.ext
+    change rv ⟨apm_t00A01_boundaryMap φ hφ.injective s, hs⟩ = s.1
+    have hc_eq : c ⟨apm_t00A01_boundaryMap φ hφ.injective s, hs⟩ =
+        apm_t00A01_unitToLarge
+          ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩ := by
+      apply hΦ.injective
+      rw [hc_image]
+      exact (congrFun hext _).symm
+    have hs_norm : ‖s.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using s.2
+    simp [rv, hc_eq, apm_t00A01_unitToLarge, hs_norm]
+  · intro x
+    apply Subtype.ext
+    change Φ (w (x, 0)) = x.1.1
+    rw [show w (x, 0) = c x by
+      apply Subtype.ext
+      simp [w, v]]
+    exact hc_image x
+  · intro x
+    apply Subtype.ext
+    change Φ (w (x, 1)) = φ _
+    rw [show w (x, 1) = apm_t00A01_unitToLarge
+        ⟨rv x, by simpa [Metric.mem_closedBall, dist_zero_right] using (hrv_norm x).le⟩ by
+      apply Subtype.ext
+      change v (x, 1) = rv x
+      simp [v, rv]]
+    exact congrFun hext _
+  · intro p
+    change Φ (w p) ∈ Φ '' {y : apm_t00A01_LargeDisk3 | dist y.1 0 < 2}
+    refine ⟨w p, ?_, rfl⟩
+    have hc_lt : ‖(c p.1).1‖ < 2 := by
+      rcases p.1.2 with ⟨y, hy, hyeq⟩
+      have : c p.1 = y := hΦ.injective ((hc_image p.1).trans hyeq.symm)
+      simpa [this, dist_zero_right] using hy
+    have hvlt : ‖v p‖ < 2 := by
+      rw [hv_norm]
+      have hprod : 0 ≤ (p.2 : ℝ) * (‖(c p.1).1‖ - 1) :=
+        mul_nonneg p.2.2.1 (sub_nonneg.mpr (hc_norm p.1))
+      nlinarith
+    simpa [w, dist_zero_right] using hvlt
+  · intro s hs t
+    apply Subtype.ext
+    change Φ (w (⟨_, hs⟩, t)) = φ _
+    have hc_eq : c ⟨apm_t00A01_boundaryMap φ hφ.injective s, hs⟩ =
+        apm_t00A01_unitToLarge
+          ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩ := by
+      apply hΦ.injective
+      rw [hc_image]
+      exact (congrFun hext _).symm
+    have hs_norm : ‖s.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using s.2
+    rw [show w (⟨_, hs⟩, t) = apm_t00A01_unitToLarge
+        ⟨s.1, by simpa [Metric.mem_closedBall, dist_zero_right] using hs_norm.le⟩ by
+      apply Subtype.ext
+      simp [w, v, hc_eq, apm_t00A01_unitToLarge, hs_norm]]
+    exact congrFun hext _
 
 /-- LEAF. Generic quotient step: if an open collar `C ⊇ iB '' univ` of the
 second piece strong-deformation-retracts onto the glued sphere, the left
