@@ -3102,6 +3102,7 @@ lemma apm_t00A01_collared_standardCover_aux_inter_aux_quotient
     (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
     (CA : Set A) (CB : Set B) (hCA : IsOpen CA) (hCB : IsOpen CB)
     (hiA : ∀ s, iA s ∈ CA) (hiB : ∀ s, iB s ∈ CB)
+    (hiAc : Continuous iA)
     (rA : C(↥CA, apm_t00A01_Sphere2)) (HA : C(↥CA × unitInterval, A))
     (rB : C(↥CB, apm_t00A01_Sphere2)) (HB : C(↥CB × unitInterval, B))
     (hrA : ∀ s, rA ⟨iA s, hiA s⟩ = s)
@@ -3146,7 +3147,8 @@ lemma apm_t00A01_collared_standardCover_aux_inter
   exact apm_t00A01_collared_standardCover_aux_inter_aux_quotient
     (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
     (apm_t00A01_boundaryMap φ₂ hφ₂.injective)
-    _ _ hC₁open hC₂open hC₁mem hC₂mem r₁ H₁ r₂ H₂
+    _ _ hC₁open hC₂open hC₁mem hC₂mem
+    (apm_t00A01_collared_standardCover_aux_boundary_continuous φ₁ hφ₁) r₁ H₁ r₂ H₂
     (fun s ↦ hr₁ s (hC₁mem s)) (fun s ↦ hr₂ s (hC₂mem s))
     hH₁zero hH₂zero hH₁one hH₂one hH₁C hH₂C
     (fun s t ↦ hH₁fix s (hC₁mem s) t)
