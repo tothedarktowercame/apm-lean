@@ -2129,15 +2129,100 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   · exact congrArg Int.natAbs h
   · rw [h, Int.natAbs_neg]
 
-/-- LIBRARY LEAF (split from `_aux_locallyConstant` after lemma-3's PARTIAL,
-2026-10-20): near each `x`, the local degree at `y` is `±` the local degree
-at `x`.  Plan: take a chart ball `B ∋ x`; for every `z ∈ B`,
-`H₃(M) → H₃(M, M ∖ B) ≅ H₃(M, M ∖ z)` (`neighborhoodInclusion_Hsucc_isIso`,
-`localizationMap_naturality`), so `localizationMap x` and `localizationMap y`
-factor through the same group `H₃(M, M ∖ B)`.  The chart normalizations at `x`
-and `y` then differ by a unit `±1`.  The library has the chart-transition units
-(`integralOverlapTransitionUnit_eq_one_or_neg_one`), but not this transport
-with the deleted point varying inside one chart neighbourhood. -/
+/-- PROVED: two identifications of one group with `ℤ` differ by a unit `±1`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_units
+    {G : AddCommGrpCat} (f g : G ≅ AddCommGrpCat.of ℤ) (a : G) :
+    f.hom.hom a = g.hom.hom a ∨ f.hom.hom a = -g.hom.hom a := by
+  let e : AddCommGrpCat.of ℤ ≅ AddCommGrpCat.of ℤ := g.symm ≪≫ f
+  have hmul : ∀ (h : AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of ℤ) (n : ℤ),
+      h.hom n = n * h.hom 1 := fun h n => by
+    have := h.hom.map_zsmul 1 n
+    simpa [smul_eq_mul] using this
+  have h1 : e.inv.hom (e.hom.hom 1) = 1 := ConcreteCategory.congr_hom e.hom_inv_id 1
+  rw [hmul e.inv] at h1
+  have hu : IsUnit (e.hom.hom 1) := ⟨⟨_, _, h1, by rw [mul_comm]; exact h1⟩, rfl⟩
+  have hf : f.hom.hom a = e.hom.hom (g.hom.hom a) := by
+    have : g.inv.hom (g.hom.hom a) = a := ConcreteCategory.congr_hom g.hom_inv_id a
+    change f.hom.hom a = f.hom.hom (g.inv.hom (g.hom.hom a))
+    rw [this]
+  rw [hf, hmul e.hom]
+  rcases Int.isUnit_iff.1 hu with h | h
+  · left; rw [h, mul_one]
+  · right; rw [h, mul_neg_one]
+
+/-- PROVED: the identity of `M` sends `M ∖ K` into `M ∖ z` when `z ∈ K`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+    {M : Type} [TopologicalSpace M] (K : Set M) (z : M) (hz : z ∈ K) :
+    Set.MapsTo (ContinuousMap.id M) Kᶜ
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) :=
+  fun y hy hyz => hy (by
+    have hyz' : y = z := hyz
+    exact hyz' ▸ hz)
+
+/-- PROVED: for `z ∈ K`, localization at `z` factors through `H_n(M, M ∖ K)`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_factor
+    {M : Type} [TopologicalSpace M] (K : Set M) (z : M) (hz : z ∈ K) (n : ℕ) :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap z n =
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ) n ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+              K z hz)) n := by
+  have h := ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality Kᶜ
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) (ContinuousMap.id M)
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+      K z hz)
+  have hid : (TopCat.ofHom (ContinuousMap.id M) : TopCat.of M ⟶ TopCat.of M) = 𝟙 _ := rfl
+  have hab : ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap
+      (ContinuousMap.id M) = 𝟙 _ := by
+    simp [ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap, hid]
+  have h' : ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap (ContinuousMap.id M) ≫
+      ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) =
+    ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ ≫
+      ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          K z hz) := h
+  rw [hab, Category.id_comp] at h'
+  show HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)) n = _
+  rw [h', HomologicalComplex.homologyMap_comp]
+
+/-- LIBRARY LEAF (split from `_aux_eventually_sign` after lemma-2's PARTIAL,
+2026-10-20; that partial's own leaf restated `_aux_locallyConstant`, so it was
+not queued).  Near `x` there is a set `K` (take the chart image of a closed
+ball of radius `r` about the chart point of `x`) such that, for every `z` near
+`x`, `z ∈ K` and the map `H₃(M, M ∖ K) → H₃(M, M ∖ z)` induced by the identity
+is an isomorphism.  Plan: excise `M ∖ U` for the chart domain `U`
+(`relativeExcisionMap_homologyMap_isIso_succ`, as in
+`neighborhoodInclusion_Hsucc_isIso`), transport to the model through the chart,
+and in `ℝ³` use that `ℝ³ ∖ closedBall ↪ ℝ³ ∖ {u}` is a homotopy equivalence for
+`‖u‖ < r` (both retract radially onto a large sphere) with the five lemma on the
+long exact sequences of the pairs.  No degree, generator or homology-sphere
+hypothesis is involved.  Do NOT take `K = M`: that makes the statement the
+orientability of `M`, which is what this chain is proving. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M] (x : M) :
+    ∃ K : Set M, ∀ᶠ z in nhds x, ∃ hz : z ∈ K,
+      IsIso (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+          (ContinuousMap.id M)
+          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+            K z hz)) 3) := by
+  sorry
+
+/-- PROVED from `_aux_ball`, `_aux_factor` and `_aux_units`: near each `x`, the
+local degree at `y` is `±` the local degree at `x`.  Both localizations factor
+through `H₃(M, M ∖ K)`; composing each iso `H₃(M, M ∖ K) ≅ H₃(M, M ∖ z)` with
+the chart normalization gives two identifications of `H₃(M, M ∖ K)` with `ℤ`,
+which differ by `±1`. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2146,7 +2231,36 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
     ∀ᶠ y in nhds x, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y = apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x ∨
       apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y = -apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x := by
-  sorry
+  obtain ⟨K, hK⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball M x
+  obtain ⟨hxK, hxI⟩ := hK.self_of_nhds
+  let c := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ) 3
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+      (TopCat.of M) 3 hM.2.1.some)
+  have key : ∀ (w : M) (hw : w ∈ K) [IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint w)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          K w hw)) 3)],
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM w =
+        (asIso (HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint w)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+              K w hw)) 3) ≪≫
+          ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 w).hom.hom c := by
+    intro w hw _
+    unfold apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree
+    rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_factor
+      K w hw 3]
+    rfl
+  refine hK.mono fun z hz => ?_
+  obtain ⟨hzK, hzI⟩ := hz
+  rw [key z hzK, key x hxK]
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_units _ _ c
 
 /-- PROVED from `_aux_eventually_sign` (orientation double cover is locally trivial): the absolute
 local degree `|deg_y|` is locally constant in `y`.  Near `y`, a chart ball `B`
