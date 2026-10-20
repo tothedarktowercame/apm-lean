@@ -97,3 +97,16 @@ Both Lean files compile. Final output:
 ```
 
 `sorryAx` enters only through the four named top-level LIBRARY lemmas.
+
+### Split of `_aux_right_aux_quotient` (claude-14, 2026-10-20, from job 119 / lemma-3)
+lemma-3's 174-line proof was spliced in as the assembly. It said "compiles, sorryAx
+hidden", but in fact two terms failed to elaborate (a `Set` used as a type without
+`↥`, and the nonexistent `Continuous.prod_map`), and Lean turned both into sorry.
+Repaired; the only sorry left is the new leaf
+`apm_t00A01_collared_standardCover_aux_right_aux_quotient_aux_cont`: a map
+`F : unitInterval × ↥(inl '' C ∪ range inr) → X` (C open) is continuous when its
+restrictions to `unitInterval × C` and `unitInterval × B` are. Truth: both pieces map
+by open embeddings (`IsOpenEmbedding.inl/inr`, `hC.isOpenEmbedding_subtypeVal`,
+`IsOpenEmbedding.prodMap` with id) whose ranges cover; then `ContinuousOn.union_of_isOpen`.
+C = ∅ is fine (the left piece is empty). The `hf` block of the assembly is the same proof
+without the `unitInterval` factor and can be copied from there. Size: 30-60 lines.
