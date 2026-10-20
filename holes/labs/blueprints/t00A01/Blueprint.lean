@@ -567,6 +567,34 @@ puncture consequences used by the informal proof for each piece, together
 with the standard two-piece cover of the quotient.
 -/
 
+/-- LEAF: a closed homology three-sphere is path connected. `H₀ M ≅ ℤ`
+leaves room for one path component only, and the path components of a
+manifold are open because a manifold is locally path connected. -/
+lemma apm_t00A01_punctured_pathConnected_aux_ambient
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) : PathConnectedSpace M := by
+  sorry
+
+/-- LEAF: the collar makes the image of the open unit ball open in `M`. -/
+lemma apm_t00A01_punctured_pathConnected_aux_inner_open
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (hcollar : apm_t00A01_HasBallCollar φ) :
+    IsOpen (φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}) := by
+  sorry
+
+/-- LEAF: first entrance into a closed set. In a path-connected space, a point
+outside an open set `O` contained in a nonempty closed set `K` is joined,
+without entering `O`, to a point of `K \ O`. -/
+lemma apm_t00A01_punctured_pathConnected_aux_first_entry
+    {X : Type} [TopologicalSpace X] [PathConnectedSpace X]
+    {O K : Set X} (hO : IsOpen O) (hK : IsClosed K) (hOK : O ⊆ K)
+    {x k : X} (hx : x ∉ O) (hk : k ∈ K) :
+    ∃ z ∈ K \ O, JoinedIn Oᶜ x z := by
+  sorry
+
 /-- LIBRARY: deleting the interior of a collared ball from a connected
 homology three-manifold leaves a path-connected space. -/
 theorem apm_t00A01_punctured_pathConnected
@@ -578,7 +606,39 @@ theorem apm_t00A01_punctured_pathConnected
     (hM : apm_t00A01_isHomology3Sphere M)
     (hcollar : apm_t00A01_HasBallCollar φ) :
     PathConnectedSpace (apm_t00A01_punctured φ) := by
-  sorry
+  classical
+  let O : Set M := φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}
+  have hO : IsOpen O := apm_t00A01_punctured_pathConnected_aux_inner_open φ hcollar
+  have hK : IsClosed (Set.range φ) := (isCompact_range hφ.continuous).isClosed
+  have hOK : O ⊆ Set.range φ := Set.image_subset_range _ _
+  haveI := apm_t00A01_punctured_pathConnected_aux_ambient M hM
+  let b : apm_t00A01_Sphere2 → M := fun s ↦ (apm_t00A01_boundaryMap φ hφ.injective s).1
+  have hb : Continuous b :=
+    hφ.continuous.comp (Continuous.subtype_mk (continuous_subtype_val) _)
+  haveI : PathConnectedSpace apm_t00A01_Sphere2 :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (by
+        rw [← Module.finrank_eq_rank']
+        simp) 0 (by norm_num))
+  have hS : IsPathConnected (Set.range b) := isPathConnected_range hb
+  have hSO : Set.range b ⊆ Oᶜ := by
+    rintro _ ⟨s, rfl⟩
+    exact (apm_t00A01_boundaryMap φ hφ.injective s).2
+  have hKO : Set.range φ \ O ⊆ Set.range b := by
+    rintro _ ⟨⟨y, rfl⟩, hy⟩
+    have hy1 : ¬ dist y.1 0 < 1 := fun h ↦ hy ⟨y, h, rfl⟩
+    have hy2 : dist y.1 0 ≤ 1 := y.2
+    have hs : y.1 ∈ apm_t00A01_Sphere2 := by
+      simpa [Metric.mem_sphere] using le_antisymm hy2 (not_lt.mp hy1)
+    exact ⟨⟨y.1, hs⟩, rfl⟩
+  have hP : IsPathConnected Oᶜ := by
+    obtain ⟨s0, hs0⟩ := hS.nonempty
+    refine ⟨s0, hSO hs0, fun {x} hx ↦ ?_⟩
+    obtain ⟨z, hz, hxz⟩ :=
+      apm_t00A01_punctured_pathConnected_aux_first_entry hO hK hOK hx
+        (Set.mem_range_self (f := φ) ⟨0, by simp⟩)
+    exact (hxz.trans ((hS.joinedIn _ (hKO hz) _ hs0).mono hSO)).symm
+  exact isPathConnected_iff_pathConnectedSpace.mp hP
 
 /-- LIBRARY: van Kampen for a manifold split into the punctured part and the
 open radius-two collar ball. -/
