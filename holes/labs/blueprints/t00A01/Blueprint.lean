@@ -2217,7 +2217,237 @@ lemma apm_t00A01_collared_standardCover_aux_left_aux_quotient {A B : Type}
     (hH0 : ∀ x, H (x, 0) = x.1) (hH1 : ∀ x, H (x, 1) = iB (r x))
     (hHC : ∀ p, H p ∈ C) (hHfix : ∀ s t, H (⟨iB s, hiB s⟩, t) = iB s) :
     Nonempty (ContinuousMap.HomotopyEquiv ↥(apm_t00A01_thickLeft iA iB C) A) := by
-  sorry
+  classical
+  let q : Sum A B → apm_t00A01_connectedSum iA iB := fun z => Quotient.mk _ z
+  let U := apm_t00A01_thickLeft iA iB C
+  have hU : IsOpen U :=
+    (apm_t00A01_collared_standardCover_aux_open iA iB Set.univ C
+      isOpen_univ hC (fun _ => Set.mem_univ _) hiB).1
+  have hpre : q ⁻¹' U = Set.range Sum.inl ∪ Sum.inr '' C := by
+    apply Set.Subset.antisymm
+    · rintro z ⟨w, hw, heq⟩
+      have hinv {x y : Sum A B}
+          (hxy : Relation.EqvGen (apm_t00A01_glueRel iA iB) x y) :
+          (x ∈ Set.range Sum.inl ∪ Sum.inr '' C) ↔
+            y ∈ Set.range Sum.inl ∪ Sum.inr '' C := by
+        induction hxy with
+        | rel x y h =>
+            cases h with
+            | glue s => simp [hiB s]
+        | refl => rfl
+        | symm x y h ih => exact ih.symm
+        | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+      have hrel : Relation.EqvGen (apm_t00A01_glueRel iA iB) z w :=
+        (Quotient.exact heq).symm
+      exact (hinv hrel).2 hw
+    · intro z hz
+      exact ⟨z, hz, rfl⟩
+  let s0 : apm_t00A01_Sphere2 :=
+    ⟨(EuclideanSpace.single 0 1 : EuclideanSpace ℝ (Fin 3)), by
+      simp [Metric.mem_sphere, dist_zero_right]⟩
+  let rb : B → apm_t00A01_Sphere2 := fun b =>
+    if hb : b ∈ C then r ⟨b, hb⟩ else s0
+  have hrb (s : apm_t00A01_Sphere2) : rb (iB s) = s := by
+    simp [rb, hiB s, hr s]
+  let f0 : apm_t00A01_connectedSum iA iB → A :=
+    Quotient.lift (Sum.elim id (fun b => iA (rb b))) (by
+      intro x y hxy
+      induction hxy with
+      | rel x y h =>
+          cases h with
+          | glue s => simp [hrb s]
+      | refl => rfl
+      | symm x y h ih => exact ih.symm
+      | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz)
+  let f : U → A := fun x => f0 x.1
+  have hf : Continuous f := by
+    have hq : Topology.IsQuotientMap q := isQuotientMap_quotient_mk'
+    apply (hq.restrictPreimage_isOpen hU).continuous_iff.mpr
+    let e : (Set.range Sum.inl ∪ Sum.inr '' C : Set (Sum A B)) ≃ₜ q ⁻¹' U :=
+      Homeomorph.setCongr hpre.symm
+    have hn : Continuous (fun z : (Set.range Sum.inl ∪ Sum.inr '' C : Set (Sum A B)) =>
+        f ((U.restrictPreimage q) (e z))) := by
+      let eL : A → (Set.range Sum.inl ∪ Sum.inr '' C : Set (Sum A B)) :=
+        fun a => ⟨(@Sum.inl A B) a, Or.inl ⟨a, rfl⟩⟩
+      let eR : C → (Set.range Sum.inl ∪ Sum.inr '' C : Set (Sum A B)) :=
+        fun b => ⟨(@Sum.inr A B) b.1, Or.inr ⟨b.1, b.2, rfl⟩⟩
+      have heL : Topology.IsOpenEmbedding eL := by
+        apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+        · apply Continuous.subtype_mk
+          exact continuous_inl
+        · intro a a' h
+          exact Sum.inl.inj (congrArg Subtype.val h)
+        · exact (Topology.IsOpenEmbedding.inl (X := A) (Y := B)).isOpenMap.codRestrict _
+      have heR : Topology.IsOpenEmbedding eR := by
+        apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+        · apply Continuous.subtype_mk
+          exact continuous_inr.comp continuous_subtype_val
+        · intro b b' h
+          exact Subtype.ext (Sum.inr.inj (congrArg Subtype.val h))
+        · exact ((Topology.IsOpenEmbedding.inr (X := A) (Y := B)).isOpenMap.comp
+            hC.isOpenEmbedding_subtypeVal.isOpenMap).codRestrict _
+      have hcL : Continuous ((fun z => f ((U.restrictPreimage q) (e z))) ∘ eL) := by
+        change Continuous (fun a : A => a)
+        exact continuous_id
+      have hcR : Continuous ((fun z => f ((U.restrictPreimage q) (e z))) ∘ eR) := by
+        rw [show ((fun z => f ((U.restrictPreimage q) (e z))) ∘ eR) =
+            fun b : C => iA (r b) by
+          funext b
+          change iA (if hb : b.1 ∈ C then r ⟨b.1, hb⟩ else s0) = iA (r b)
+          simp [b.2]]
+        exact hiA.comp r.continuous
+      rw [← continuousOn_univ]
+      have hcover : Set.range eL ∪ Set.range eR = Set.univ := by
+        ext ⟨z, hz⟩
+        cases z with
+        | inl a => simp [eL]
+        | inr b =>
+            rcases hz with ⟨_, h⟩ | ⟨b', hb', h⟩
+            · cases h
+            · have : b = b' := Sum.inr.inj h.symm
+              subst b'
+              simp [eR, hb']
+      rw [← hcover]
+      have hcLi : ContinuousOn (fun z => f ((U.restrictPreimage q) (e z)))
+          (eL '' Set.univ) := heL.isInducing.continuousOn_image_iff.mpr hcL.continuousOn
+      have hcRi : ContinuousOn (fun z => f ((U.restrictPreimage q) (e z)))
+          (eR '' Set.univ) := heR.isInducing.continuousOn_image_iff.mpr hcR.continuousOn
+      have hoL : IsOpen (eL '' Set.univ) := by
+        simpa only [Set.image_univ] using heL.isOpen_range
+      have hoR : IsOpen (eR '' Set.univ) := by
+        simpa only [Set.image_univ] using heR.isOpen_range
+      simpa only [Set.image_univ] using hcLi.union_of_isOpen hcRi hoL hoR
+    rw [show f ∘ U.restrictPreimage q =
+        (fun z => f ((U.restrictPreimage q) (e z))) ∘ e.symm by
+      funext x
+      rfl]
+    exact hn.comp e.symm.continuous
+  let g : A → U := fun a => ⟨q (.inl a), ⟨.inl a, Or.inl ⟨a, rfl⟩, rfl⟩⟩
+  have hg : Continuous g := by
+    exact Continuous.subtype_mk
+      (continuous_coinduced_rng.comp continuous_inl) _
+  let Kraw : unitInterval × apm_t00A01_connectedSum iA iB →
+      apm_t00A01_connectedSum iA iB := fun p =>
+    Quotient.lift (Sum.elim (fun a => q (.inl a))
+      (fun b => q (.inr (if hb : b ∈ C then H (⟨b, hb⟩, p.1) else b)))) (by
+        intro x y hxy
+        change (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)).r x y at hxy
+        change Relation.EqvGen (apm_t00A01_glueRel iA iB) x y at hxy
+        induction hxy with
+        | rel x y h =>
+            cases h with
+            | glue s =>
+                simp [hiB s, hHfix s p.1, q]
+                exact apm_t00A01_mk_inl_eq_mk_inr iA iB s
+        | refl => rfl
+        | symm x y h ih => exact ih.symm
+        | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz) p.2
+  let K : unitInterval × U → U := fun p => ⟨Kraw (p.1, p.2.1), by
+    rcases p.2.2 with ⟨z, hz, heq⟩
+    rcases hz with ⟨a, rfl⟩ | ⟨b, hb, rfl⟩
+    · exact ⟨Sum.inl a, Or.inl ⟨a, rfl⟩, by rw [← heq]; simp [Kraw, q]⟩
+    · exact ⟨Sum.inr (H (⟨b, hb⟩, p.1)),
+        Or.inr ⟨_, hHC (⟨b, hb⟩, p.1), rfl⟩, by rw [← heq]; simp [Kraw, q, hb]⟩⟩
+  have hK : Continuous K := by
+    let P : Set (Sum A B) := Set.range Sum.inl ∪ Sum.inr '' C
+    have hP : IsOpen P :=
+      (Topology.IsOpenEmbedding.inl (X := A) (Y := B)).isOpen_range.union
+        ((Topology.IsOpenEmbedding.inr (X := A) (Y := B)).isOpenMap C hC)
+    apply apm_t00A01_collared_standardCover_aux_quotient_continuous
+      iA iB U P hP hpre K
+    let jL : A → P := fun a => ⟨Sum.inl a, Or.inl ⟨a, rfl⟩⟩
+    let jR : C → P := fun b => ⟨Sum.inr b.1, Or.inr ⟨b.1, b.2, rfl⟩⟩
+    have hjL : Topology.IsOpenEmbedding jL := by
+      apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+      · apply Continuous.subtype_mk
+        exact continuous_inl
+      · intro a a' h
+        exact Sum.inl.inj (congrArg Subtype.val h)
+      · exact (Topology.IsOpenEmbedding.inl (X := A) (Y := B)).isOpenMap.codRestrict _
+    have hjR : Topology.IsOpenEmbedding jR := by
+      apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+      · apply Continuous.subtype_mk
+        exact continuous_inr.comp continuous_subtype_val
+      · intro b b' h
+        exact Subtype.ext (Sum.inr.inj (congrArg Subtype.val h))
+      · exact ((Topology.IsOpenEmbedding.inr (X := A) (Y := B)).isOpenMap.comp
+          hC.isOpenEmbedding_subtypeVal.isOpenMap).codRestrict _
+    let eL : unitInterval × A → unitInterval × P := fun p => (p.1, jL p.2)
+    let eR : unitInterval × C → unitInterval × P := fun p => (p.1, jR p.2)
+    have heL : Topology.IsOpenEmbedding eL := by
+      exact Topology.IsOpenEmbedding.prodMap Topology.IsOpenEmbedding.id hjL
+    have heR : Topology.IsOpenEmbedding eR := by
+      exact Topology.IsOpenEmbedding.prodMap Topology.IsOpenEmbedding.id hjR
+    let L := fun p : unitInterval × P =>
+      K (p.1, ⟨q p.2.1, (Set.ext_iff.mp hpre p.2.1).mpr p.2.2⟩)
+    have hcL : Continuous (L ∘ eL) := by
+      apply Continuous.subtype_mk
+      change Continuous (fun p : unitInterval × A => q (Sum.inl p.2))
+      exact continuous_coinduced_rng.comp (continuous_inl.comp continuous_snd)
+    have hcR : Continuous (L ∘ eR) := by
+      apply Continuous.subtype_mk
+      simpa [Function.comp_def, L, eR, jR, K, Kraw, q] using
+        continuous_coinduced_rng.comp (continuous_inr.comp
+          (H.continuous.comp (continuous_snd.prodMk continuous_fst)))
+    rw [show (fun p : unitInterval × P =>
+      K (p.1, ⟨Quotient.mk _ p.2.1, (Set.ext_iff.mp hpre p.2.1).mpr p.2.2⟩)) = L by
+        rfl]
+    rw [← continuousOn_univ]
+    have hcover : Set.range eL ∪ Set.range eR = Set.univ := by
+      ext ⟨t, z, hz⟩
+      rcases hz with ⟨a, rfl⟩ | ⟨b, hb, rfl⟩
+      · simp [eL, jL]
+      · simp [eR, jR, hb]
+    rw [← hcover]
+    have hcLi : ContinuousOn L (eL '' Set.univ) :=
+      heL.isInducing.continuousOn_image_iff.mpr hcL.continuousOn
+    have hcRi : ContinuousOn L (eR '' Set.univ) :=
+      heR.isInducing.continuousOn_image_iff.mpr hcR.continuousOn
+    have hoL : IsOpen (eL '' Set.univ) := by
+      simpa only [Set.image_univ] using heL.isOpen_range
+    have hoR : IsOpen (eR '' Set.univ) := by
+      simpa only [Set.image_univ] using heR.isOpen_range
+    simpa only [Set.image_univ] using hcLi.union_of_isOpen hcRi hoL hoR
+  let F : C(U, A) := ⟨f, hf⟩
+  let G : C(A, U) := ⟨g, hg⟩
+  refine ⟨{ toFun := F, invFun := G, left_inv := ?_, right_inv := ?_ }⟩
+  · apply ContinuousMap.Homotopic.symm
+    exact ⟨{
+      toFun := fun p => K (p.1, p.2)
+      continuous_toFun := hK
+      map_zero_left := by
+        intro x
+        rcases x.2 with ⟨z, hz, heq⟩
+        apply Subtype.ext
+        simp only [Prod.fst, Prod.snd]
+        change Kraw (0, x.1) = x.1
+        rw [← heq]
+        rcases hz with ⟨a, rfl⟩ | ⟨b, hb, rfl⟩
+        · simp [Kraw, q]
+        · simp [Kraw, q, hb, hH0]
+      map_one_left := by
+        intro x
+        rcases x.2 with ⟨z, hz, heq⟩
+        apply Subtype.ext
+        simp only [Prod.fst, Prod.snd]
+        change Kraw (1, x.1) = (G.comp F x).1
+        rw [← heq]
+        rcases hz with ⟨a, rfl⟩ | ⟨b, hb, rfl⟩
+        · have fx : f x = a := by
+            change f0 x.1 = a
+            rw [← heq]
+            rfl
+          simp [Kraw, G, F, g, q, fx]
+        · have fx : f x = iA (r ⟨b, hb⟩) := by
+            change f0 x.1 = iA (r ⟨b, hb⟩)
+            rw [← heq]
+            simp [f0, rb, hb]
+          simp [Kraw, G, F, g, q, hb, hH1, fx]
+          exact (apm_t00A01_mk_inl_eq_mk_inr iA iB (r ⟨b, hb⟩)).symm }⟩
+  · have heq : F.comp G = ContinuousMap.id A := by
+      ext a
+      rfl
+    rw [heq]
 
 /-- ASSEMBLY (from `_aux_radial`, `_aux_quotient`). The left thickening
 deformation retracts onto the first punctured piece: push the second collar `1 ≤ r < 2` radially onto `r = 1`, which is
