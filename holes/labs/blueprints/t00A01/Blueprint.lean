@@ -2123,7 +2123,32 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   rw [mul_one] at h
   exact h
 
-/-- LIBRARY LEAF (orientation double cover is locally trivial): the absolute
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_natAbs_eq
+    (a b : ℤ) (h : a = b ∨ a = -b) : a.natAbs = b.natAbs := by
+  rcases h with h | h
+  · exact congrArg Int.natAbs h
+  · rw [h, Int.natAbs_neg]
+
+/-- LIBRARY LEAF (split from `_aux_locallyConstant` after lemma-3's PARTIAL,
+2026-10-20): near each `x`, the local degree at `y` is `±` the local degree
+at `x`.  Plan: take a chart ball `B ∋ x`; for every `z ∈ B`,
+`H₃(M) → H₃(M, M ∖ B) ≅ H₃(M, M ∖ z)` (`neighborhoodInclusion_Hsucc_isIso`,
+`localizationMap_naturality`), so `localizationMap x` and `localizationMap y`
+factor through the same group `H₃(M, M ∖ B)`.  The chart normalizations at `x`
+and `y` then differ by a unit `±1`.  The library has the chart-transition units
+(`integralOverlapTransitionUnit_eq_one_or_neg_one`), but not this transport
+with the deleted point varying inside one chart neighbourhood. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    ∀ᶠ y in nhds x, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y = apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x ∨
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y = -apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x := by
+  sorry
+
+/-- PROVED from `_aux_eventually_sign` (orientation double cover is locally trivial): the absolute
 local degree `|deg_y|` is locally constant in `y`.  Near `y`, a chart ball `B`
 gives `H₃(M) → H₃(M, M ∖ B) ≅ H₃(M, M ∖ z)` for every `z ∈ B`
 (`neighborhoodInclusion_Hsucc_isIso`, `localizationMap_naturality`), and the
@@ -2137,7 +2162,9 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [BoundarylessManifold apm_t00A01_Model3 M]
     (hM : apm_t00A01_isHomology3Sphere M) :
     IsLocallyConstant (fun y : M => (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y).natAbs) := by
-  sorry
+  refine (IsLocallyConstant.iff_eventually_eq _).2 fun x => ?_
+  exact (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign M hM x).mono fun y hy =>
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_natAbs_eq _ _ hy
 
 /-- LIBRARY LEAF (Hatcher Lemma 3.27 / Theorem 3.26, the global core): the
 global generator of `H₃(M) ≅ ℤ` has local degree `±1` at some point.  This
