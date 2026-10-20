@@ -2219,8 +2219,58 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   exact ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
     e A B hAB 3
 
-/-- LIBRARY LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL,
-2026-10-20): the convex model in `ℝ³`.  For compact convex `K ⊆ ℝ³` and
+/-- LEAF (split from `_convex_aux_inj_aux_model` after lemma-1's PARTIAL,
+job 181, 2026-10-20): radial deformation.  For compact convex `K ⊆ ℝ³` and
+`u ∈ K`, the inclusion `ℝ³ ∖ K ↪ ℝ³ ∖ u` is a homotopy equivalence.  Route:
+pick `R` with `K ⊆ ball u R` (`_aux_bounding_ball`) and let
+`ρ p = u + R • (p - u) / ‖p - u‖`.  For `p ∉ K` the segment from `p` to `ρ p`
+avoids `K`: the ray from `u` through `p` meets `K` in an interval containing
+`u` (convexity) and `p` lies beyond it.  So `ρ : ℝ³ ∖ u → ℝ³ ∖ K` is a homotopy
+inverse of the inclusion: on both sides the straight-line homotopy to `ρ`
+stays in the complement. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_hequiv
+    (K : Set (EuclideanSpace ℝ (Fin 3))) (hK : IsCompact K) (hconv : Convex ℝ K)
+    (u : EuclideanSpace ℝ (Fin 3)) (hu : u ∈ K) :
+    ∃ e : ContinuousMap.HomotopyEquiv (Kᶜ : Set (EuclideanSpace ℝ (Fin 3)))
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u),
+      ∀ x, ((e.toFun x : EuclideanSpace ℝ (Fin 3))) = (x : EuclideanSpace ℝ (Fin 3)) := by
+  sorry
+
+/-- PROVED (lemma-1, job 181, 2026-10-20). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_bounding_ball
+    (K : Set (EuclideanSpace ℝ (Fin 3))) (hK : IsCompact K)
+    (u : EuclideanSpace ℝ (Fin 3)) :
+    ∃ R : ℝ, 1 < R ∧ K ⊆ Metric.ball u R := by
+  exact hK.isBounded.subset_ball_lt 1 u
+
+/-- PROVED from `_aux_hequiv` (claude-14, 2026-10-20): the inclusion of
+complements induces isomorphisms on singular homology in every degree. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_sub
+    (K : Set (EuclideanSpace ℝ (Fin 3))) (hK : IsCompact K) (hconv : Convex ℝ K)
+    (u : EuclideanSpace ℝ (Fin 3)) (hu : u ∈ K) (i : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+        (ConstructionTargets.SingularExcision.subspaceMap Kᶜ
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
+          (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu))) i) := by
+  obtain ⟨e, he⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_hequiv K hK hconv u hu
+  have hmap : ConstructionTargets.SingularExcision.subspaceMap Kᶜ
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
+      (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu) = TopCat.ofHom e.toFun := by
+    apply ConcreteCategory.hom_ext
+    intro x
+    apply Subtype.ext
+    exact (he x).symm
+  change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat i).obj
+    (AddCommGrpCat.of ℤ)).map _)
+  rw [hmap, ← ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv_hom e i]
+  infer_instance
+
+/-- PROVED from `_aux_model_aux_hequiv` (claude-14, 2026-10-20; split from
+`_convex_aux_inj` after lemma-1's PARTIAL): the convex model in `ℝ³`.  For compact convex `K ⊆ ℝ³` and
 `u ∈ K`, the identity induces an isomorphism
 `H_(n+1)(ℝ³, ℝ³ ∖ K) → H_(n+1)(ℝ³, ℝ³ ∖ u)`.  Route: pick `R` with
 `K ⊆ ball u R`.  For `p ∉ K` the ray from `u` through `p` meets `K` in an
@@ -2238,7 +2288,23 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
         (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
         (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu)) (n + 1)) := by
-  sorry
+  have hamb : ∀ j, IsIso (HomologicalComplex.homologyMap
+      (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom (ContinuousMap.id (EuclideanSpace ℝ (Fin 3))))) j) := by
+    intro j
+    change IsIso (HomologicalComplex.homologyMap
+      (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map (𝟙 (TopCat.of (EuclideanSpace ℝ (Fin 3))))) j)
+    rw [CategoryTheory.Functor.map_id, HomologicalComplex.homologyMap_id]
+    infer_instance
+  apply ConstructionTargets.SingularExcision.relativeSingularMap_homologyMap_isIso
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_sub K hK hconv u hu (n + 1)
+  · exact hamb (n + 1)
+  · intro j _
+    exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_sub K hK hconv u hu j
+  · intro j _
+    exact hamb j
 
 /-- PROVED from `_convex_aux_inj_aux_model` (claude-14, 2026-10-20; split from
 `_aux_ball` after lemma-1's PARTIAL): moving a puncture inside a closed ball of `ℝ³`.  For `u` in the open ball
