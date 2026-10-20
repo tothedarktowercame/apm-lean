@@ -2092,24 +2092,19 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     (ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
         1 hM.2.1.some x)
 
-/-- Hatcher Lemma 3.27(b), specialized to the compact set `M`: a global
-top-dimensional class which vanishes in every local homology group vanishes.
-This is the injectivity half of the missing compact Mayer--Vietoris induction. -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_injective
-    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
-    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
-    [IsManifold apm_t00A01_Model3 ∞ M]
-    [BoundarylessManifold apm_t00A01_Model3 M]
-    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
-    Function.Injective
-      (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
-  sorry
+/-- The local degree of the global generator at `y`: its image in
+`H₃(M, M ∖ y)`, read through the chart normalization of that group as `ℤ`. -/
+noncomputable def apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (hM : apm_t00A01_isHomology3Sphere M) (y : M) : ℤ :=
+  (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 y).hom.hom
+    (ConstructionTargets.ManifoldFundamentalClass.localizationMap y 3
+      (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 hM.2.1.some))
 
-/-- Hatcher Lemma 3.27(a): a compact connected manifold has a fundamental
-class whose image at the specified point is a signed normalized local class.
-The stronger simultaneous-for-all-points form is what the usual finite-cover
-Mayer--Vietoris induction proves. -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_of_isIso
+/-- PROVED: the coefficient `r` of `hr` is the local degree at `x`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree_spec
     (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     (hM : apm_t00A01_isHomology3Sphere M) (x : M) (r : ℤ)
@@ -2118,38 +2113,43 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
           (k := 1) x =
       ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
         (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
-          (TopCat.of M) 3 hM.2.1.some))
-    [IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3)] :
-    r = 1 ∨ r = -1 := by
-  let f := ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
-  let g := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
-    (k := 1) x
-  let c := ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
-    (TopCat.of M) 3 hM.2.1.some
-  obtain ⟨z, hz⟩ := (ConcreteCategory.bijective_of_isIso f).2 g
-  obtain ⟨s, hs⟩ :=
-    ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates
-      (TopCat.of M) 3 hM.2.1.some z
-  have hsr : (s * r) • g = (1 : ℤ) • g := by
-    calc
-      (s * r) • g = s • (r • g) := mul_zsmul g s r
-      _ = s • f c := congrArg (fun q => s • q) hr
-      _ = f (s • c) := (map_zsmul f.hom s c).symm
-      _ = f z := congrArg f.hom hs
-      _ = g := hz
-      _ = (1 : ℤ) • g := (one_zsmul g).symm
-  have hmul : s * r = 1 :=
-    ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
-      1 x hsr
-  exact Int.eq_one_or_neg_one_of_mul_eq_one (by simpa [mul_comm] using hmul)
+          (TopCat.of M) 3 hM.2.1.some)) :
+    r = apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x := by
+  have h := congrArg
+    (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 x).hom.hom hr
+  rw [map_zsmul,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator] at h
+  change r * (1 : ℤ) = _ at h
+  rw [mul_one] at h
+  exact h
 
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_localization_isIso
+/-- LIBRARY LEAF (orientation double cover is locally trivial): the absolute
+local degree `|deg_y|` is locally constant in `y`.  Near `y`, a chart ball `B`
+gives `H₃(M) → H₃(M, M ∖ B) ≅ H₃(M, M ∖ z)` for every `z ∈ B`
+(`neighborhoodInclusion_Hsucc_isIso`, `localizationMap_naturality`), and the
+chart normalizations at `y` and `z` differ by a transition unit `±1`
+(`integralOverlapTransitionUnit_eq_one_or_neg_one`). True for every closed
+3-manifold, orientable or not. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     [IsManifold apm_t00A01_Model3 ∞ M]
     [BoundarylessManifold apm_t00A01_Model3 M]
-    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
-    IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
+    (hM : apm_t00A01_isHomology3Sphere M) :
+    IsLocallyConstant (fun y : M => (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y).natAbs) := by
+  sorry
+
+/-- LIBRARY LEAF (Hatcher Lemma 3.27 / Theorem 3.26, the global core): the
+global generator of `H₃(M) ≅ ℤ` has local degree `±1` at some point.  This
+is where the compact Mayer--Vietoris induction over a finite chart cover is
+needed; local constancy and connectedness then spread it to every point. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) :
+    ∃ y : M, (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y).natAbs = 1 := by
   sorry
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign
@@ -2165,12 +2165,13 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
           (TopCat.of M) 3 hM.2.1.some)) :
     r = 1 ∨ r = -1 := by
-  letI :=
-    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_localization_isIso
-      M hM x
-  exact
-    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_of_isIso
-      M hM x r hr
+  letI : PathConnectedSpace M := apm_t00A01_punctured_pathConnected_aux_ambient M hM
+  obtain ⟨y, hy⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit M hM
+  have hxy := (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant M hM).apply_eq_of_isPreconnected
+    isPreconnected_univ (Set.mem_univ x) (Set.mem_univ y)
+  have hx : (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x).natAbs = 1 := hxy.trans hy
+  rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree_spec M hM x r hr]
+  exact Int.natAbs_eq_iff.mp hx
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_assemble
     (M : Type) [TopologicalSpace M] [T2Space M]
@@ -2221,6 +2222,64 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
       M hM x r hr
         (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign
           M hM x r hr)
+
+/-- PROVED (lemma-2, job 156): localization at `x` is an isomorphism once
+the global generator maps to `± ambientLocalGenerator x`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_injective_aux_of_sign
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (e : apm_t00A01_H 3 M ≅ ModuleCat.of ℤ ℤ) (x : M) (s : ℤ)
+    (hs : s = 1 ∨ s = -1)
+    (hmap : ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 e) =
+      s • ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) x) :
+    IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
+  apply (CategoryTheory.ConcreteCategory.isIso_iff_bijective _).2
+  constructor
+  · intro a b hab
+    obtain ⟨m, rfl⟩ :=
+      ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates
+        (TopCat.of M) 3 e a
+    obtain ⟨n, rfl⟩ :=
+      ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates
+        (TopCat.of M) 3 e b
+    simp only [map_zsmul, hmap, smul_smul] at hab
+    have hmn : m = n := by
+      apply ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
+        1 x
+      rcases hs with rfl | rfl
+      · simpa [mul_comm] using hab
+      · simpa [mul_comm] using hab
+    rw [hmn]
+  · intro z
+    obtain ⟨n, rfl⟩ :=
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates
+        (k := 1) x z
+    rcases hs with rfl | rfl
+    · refine ⟨n • ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 e, ?_⟩
+      simp [hmap]
+    · refine ⟨(-n) • ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 e, ?_⟩
+      simp [hmap]
+
+/-- PROVED from `_aux_fundamental`'s sign leaf: localization at `x` is
+injective (indeed an isomorphism). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_injective
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    Function.Injective
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
+  obtain ⟨r, hr⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_coeff M hM x
+  letI := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_injective_aux_of_sign M hM.2.1.some x r
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign M hM x r hr) hr.symm
+  exact (ConcreteCategory.bijective_of_isIso
+    (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3)).1
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_target_generates
     (M : Type) [TopologicalSpace M] [T2Space M]
