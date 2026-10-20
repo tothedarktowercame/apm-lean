@@ -1975,13 +1975,63 @@ left-hand piece to vanish in degrees two and three. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_algebra
     (X A B : Type) [TopologicalSpace X] [TopologicalSpace A] [TopologicalSpace B]
     (hX : apm_t00A01_isHomology3Sphere X) (hB : apm_t00A01_isHomologyBall B)
-    (hcover : apm_t00A01_hasStandardCover X A B)
-    (hconn : let ⟨U, V, hU, hV, hUV, _⟩ := hcover
-      IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V) (hUV : U ∪ V = Set.univ)
+    (eUA : ContinuousMap.HomotopyEquiv U A)
+    (eVB : ContinuousMap.HomotopyEquiv V B)
+    (eIS : ContinuousMap.HomotopyEquiv (U ∩ V : Set X) apm_t00A01_Sphere2)
+    (hconn : IsIso
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
         U V hU hV hUV 2))
     (k : ℕ) (hk : k = 2 ∨ k = 3) :
     Limits.IsZero (apm_t00A01_H k A) := by
-  sorry
+  open ConstructionTargets.ProductionOpenCoverMayerVietoris in
+   open ConstructionTargets.T00A01MayerVietorisAdapters in
+   open ConstructionTargets.IntegralSingularHomologyComparison in
+   open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.SphereHomology in
+   open ConstructionTargets.MayerVietorisExactnessIsZero in
+   rcases hX with ⟨-, -, hXz⟩
+   rcases hB with ⟨-, hBz⟩
+   haveI : IsIso (productionConnecting U V hU hV hUV 2) := hconn
+   have hI3 : Limits.IsZero (SingularHomology 3 (TopCat.of (U ∩ V : Set X))) :=
+     (groupHomologyIsZeroOfModuleHomologyIsZero
+       (TopCat.of apm_t00A01_Sphere2) 3
+       (sphereModuleHomology_isZero_of_ne_zero_top 2 3 (by omega) (by omega))).of_iso
+       (singularHomologyIsoOfHomotopyEquiv eIS 3)
+   have hV3 : Limits.IsZero (SingularHomology 3 (TopCat.of V)) :=
+     (groupHomologyIsZeroOfModuleHomologyIsZero
+       (TopCat.of B) 3 (hBz 3 (by omega))).of_iso
+       (singularHomologyIsoOfHomotopyEquiv eVB 3)
+   have hV2 : Limits.IsZero (SingularHomology 2 (TopCat.of V)) :=
+     (groupHomologyIsZeroOfModuleHomologyIsZero
+       (TopCat.of B) 2 (hBz 2 (by omega))).of_iso
+       (singularHomologyIsoOfHomotopyEquiv eVB 2)
+   have hX2 : Limits.IsZero (SingularHomology 2 (TopCat.of X)) :=
+     groupHomologyIsZeroOfModuleHomologyIsZero (TopCat.of X) 2
+       (hXz 2 (by omega) (by omega))
+   have finish (n : ℕ) (hU : Limits.IsZero (SingularHomology n (TopCat.of U))) :
+       Limits.IsZero (apm_t00A01_H n A) :=
+     (singularHomologyModuleIsZeroOfGroupIsZero (TopCat.of U) n hU).of_iso
+       (moduleHomologyIsoOfHomotopyEquiv eUA n).symm
+   rcases hk with rfl | rfl
+   · have hinter : productionIntersectionArrow U V 2 = 0 := by
+       exact (productionMayerVietoris_exact_intersection U V hU hV hUV 2).epi_f_iff.mp
+         (by infer_instance)
+     have hreassembly : productionReassemblyArrow U V 2 = 0 :=
+       hX2.eq_of_tgt _ _
+     have hpieces := (productionMayerVietoris_exact_pieces U V hU hV hUV 2).isZero_X₂
+       hinter hreassembly
+     exact finish 2 ((Limits.biprod_isZero_iff _ _).mp hpieces).1
+   · have hpieces : Limits.IsZero
+         (SingularHomology 3 (TopCat.of U) ⊞ SingularHomology 3 (TopCat.of V)) := by
+       apply isZero_middle_of_two_exact_of_isZero_left_of_mono_right
+         (productionIntersectionArrow U V 3)
+         (productionReassemblyArrow U V 3)
+         (productionConnecting U V hU hV hUV 2)
+         _ _
+         (productionMayerVietoris_exact_pieces U V hU hV hUV 3)
+         (productionMayerVietoris_exact_union U V hU hV hUV 2) hI3
+     exact finish 3 ((Limits.biprod_isZero_iff _ _).mp hpieces).1
 
 /-- LIBRARY LEAF (global fundamental class plus collar comparison).  For the
 specific standard cover supplied by the collar, its Mayer--Vietoris boundary
@@ -1995,10 +2045,11 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
     [BoundarylessManifold apm_t00A01_Model3 M]
     (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
     (hM : apm_t00A01_isHomology3Sphere M)
-    (hcollar : apm_t00A01_HasBallCollar φ) :
-    let hcover := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover
-      M φ hφ hcollar
-    let ⟨U, V, hU, hV, hUV, _⟩ := hcover
+    (hcollar : apm_t00A01_HasBallCollar φ)
+    (U V : Set M) (hU : IsOpen U) (hV : IsOpen V) (hUV : U ∪ V = Set.univ)
+    (eUA : ContinuousMap.HomotopyEquiv U (apm_t00A01_punctured φ))
+    (eVB : ContinuousMap.HomotopyEquiv V apm_t00A01_Disk3)
+    (eIS : ContinuousMap.HomotopyEquiv (U ∩ V : Set M) apm_t00A01_Sphere2) :
     IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
       U V hU hV hUV 2) := by
   sorry
@@ -2018,11 +2069,13 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid
     Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
   let hcover := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover
     M φ hφ hcollar
+  rcases hcover with ⟨U, V, hU, hV, hUV, ⟨eUA⟩, ⟨eVB⟩, ⟨eIS⟩⟩
+  have hconn := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
+    M φ hφ hM hcollar U V hU hV hUV eUA eVB eIS
   apply apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_algebra
     M (apm_t00A01_punctured φ) apm_t00A01_Disk3 hM
-    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk hcover
-    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
-      M φ hφ hM hcollar) k hk
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk
+    U V hU hV hUV eUA eVB eIS hconn k hk
 
 /-- ASSEMBLY (from `_aux_cover`, `_aux_disk`, `_aux_mv`, `_aux_mid`). -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive

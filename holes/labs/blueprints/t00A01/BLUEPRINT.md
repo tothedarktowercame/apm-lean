@@ -61,6 +61,57 @@ assembly for this collar. Estimate: 300+ lines. Dependencies: none.
 Truth checks: the exact sequence yields `H₀ = ℤ` and zero in positive degrees;
 degrees 2 and 3 are precisely where the local-generator isomorphism is needed.
 
+#### Split of `apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid`
+
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_algebra` is an
+independent, sorry-free categorical leaf (about 55 proof lines).  Its inputs
+are an arbitrary standard-cover presentation and the single assertion that
+`productionConnecting U V hU hV hUV 2` is an isomorphism.  In degree three it
+uses
+`MayerVietorisExactnessIsZero.isZero_middle_of_two_exact_of_isZero_left_of_mono_right`,
+`productionMayerVietoris_exact_pieces`, and
+`productionMayerVietoris_exact_union`; in degree two it cancels the epi
+connecting map in `productionConnecting_comp_intersection` and uses
+`productionMayerVietoris_exact_intersection`.  The homotopy transports use
+`singularHomologyIsoOfHomotopyEquiv` and
+`moduleHomologyIsoOfHomotopyEquiv`.  Truth check: for `S³` this is the usual
+`0 → 0 → ℤ → ℤ → 0`; for the Poincaré sphere the same calculation is
+unchanged because only integral homology enters.  The overlap cannot be empty:
+its supplied homotopy equivalence to `S²` makes its `H₂` nonzero, while the
+isomorphism hypothesis also rules out the zero connecting map.
+
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting` is the
+remaining **LIBRARY** leaf (estimated 350–700 lines with the missing
+foundation).  It states exactly what the algebra consumes, for explicit
+cover witnesses: the production Mayer--Vietoris map
+`H₃(M) → H₂(U ∩ V)` is an isomorphism.  The intended proof factors it, up to
+the collar/excision sign, as
+`H₃(M) → H₃(M,M\\{φ 0}) ≅ H₃(M,P) ≅ H₃(D,D\\int D) ≅ H₂(S²)`.
+Use `ChartPairRelativeHomologyTransport`,
+`HigherChartLocalGenerator`, `CoefficientManifoldLocalComparison`, and
+`LocalHomologyNeighborhoodExcision.neighborhoodInclusion_chain_eq` for the
+comparison squares, then the relative connecting naturality API to identify
+the final map with `productionConnecting`.  The global input is Hatcher
+Lemma 3.27/Theorem 3.26: induct over compact subsets covered by coordinate
+balls to show that a normalized top-dimensional global class restricts to a
+local generator at every point; compactness gives a finite subcover and
+connectedness propagates the sign.  Since `H₃(M;ℤ) ≅ ℤ`, this restriction is
+an isomorphism.  Truth checks: on `S³` it is degree `±1` according to collar
+orientation; on a Poincaré homology sphere it is likewise `±1`, not the order
+of the fundamental group.  Reversing the collar changes only the sign and
+therefore not `IsIso`; boundarylessness is essential.
+
+Important infrastructure gap: despite its general-sounding name, the current
+proved theorem
+`LocalHomologyNeighborhoodExcision.neighborhoodInclusion_H1_isIso` is fixed
+to relative degree `1`.  There is presently no all-degree neighborhood
+excision theorem in that module, nor a general closed-manifold fundamental
+class localization theorem.  Consequently splitting the LIBRARY leaf into
+separate, compilable pair-comparison leaves would require first adding those
+foundations; pretending they exist would merely move the entire argument into
+an overloaded hypothesis.  The `_aux_mid` assembly itself is sorry-free and
+depends only on the two leaves above.
+
 ### `apm_t00A01_collared_standardCover` — LIBRARY
 
 Construct two open collar-thickenings in the quotient, prove they cover,
