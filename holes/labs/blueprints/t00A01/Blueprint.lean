@@ -2087,6 +2087,54 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
   sorry
 
+/-- PROVED (lemma-2, job 138): for a homology 3-sphere `M`, if localization at
+`x` is an iso in degree 3 then `H₂(M ∖ {x}) = 0`. The pair sequence of
+`(M, M ∖ {x})` makes the connecting map out of `H₃(M, M ∖ {x})` zero, so
+`H₂(M ∖ {x}) → H₂(M) = 0` is injective. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_deleted
+    (M : Type) [TopologicalSpace M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M)
+    (hloc : IsIso
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3)) :
+    Limits.IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+        (TopCat.of (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint x))) := by
+  have hM2 : Limits.IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2 (TopCat.of M)) :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.groupHomologyIsZeroOfModuleHomologyIsZero
+      (TopCat.of M) 2
+      (hM.2.2 2 (by omega) (by omega))
+  letI : IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := hloc
+  have hconnecting : ConstructionTargets.SingularHomologyConcrete.singularPairConnecting
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint x) 2 = 0 := by
+    apply (cancel_epi
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3)).mp
+    exact
+      ((ConstructionTargets.SingularHomologyConcrete.singularPairShortComplex_shortExact
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint x)).comp_δ
+          (2 + 1) 2 rfl)
+  exact (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_subspace
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint x) 2).isZero_X₂
+    hconnecting (hM2.eq_of_tgt _ _)
+
+/-- LEAF (split from `_aux_H2`, 2026-10-20): the punctured piece
+`M ∖ φ(int B)` is homotopy equivalent to `M ∖ {φ 0}`. Route: take the radius-2
+collar `Φ` from `hcollar` and push `M ∖ {φ 0}` radially out of the open unit
+ball (`z ↦ (1-t) z + t z/‖z‖` in collar coordinates, identity elsewhere), with
+the inclusion `M ∖ φ(int B) ⊆ M ∖ {φ 0}` as the other map. The same radial
+homotopy is already built and proved continuous in
+`apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv` (`_aux_H`,
+`_aux_H_mapsTo`, `_aux_H_continuousOn`); reuse those pieces rather than
+re-proving continuity. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (hcollar : apm_t00A01_HasBallCollar phi) :
+    Nonempty (ContinuousMap.HomotopyEquiv (apm_t00A01_punctured phi)
+      ↥(ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+        (phi ⟨0, by simp [apm_t00A01_Disk3]⟩))) := by
+  sorry
+
 /-- LIBRARY: collar excision and the pair exact sequence turn invertibility of
 localization at the centre into vanishing of degree two of the complement.
 The homology-sphere hypothesis is needed: the pair sequence only makes
@@ -2099,7 +2147,21 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2
     (hloc : IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap
       (phi ⟨0, by simp [apm_t00A01_Disk3]⟩) 3)) :
     Limits.IsZero (apm_t00A01_H 2 (apm_t00A01_punctured phi)) := by
-  sorry
+  let x : apm_t00A01_Disk3 := ⟨0, by simp [apm_t00A01_Disk3]⟩
+  have hdeleted :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_deleted
+      M hM (phi x) (by simpa [x] using hloc)
+  obtain ⟨e⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv
+      M phi hphi hcollar
+  have hgroup : Limits.IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+        (TopCat.of (apm_t00A01_punctured phi))) :=
+    hdeleted.of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv e 2)
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      (TopCat.of (apm_t00A01_punctured phi)) 2 hgroup
 
 /-- Pair-sequence algebra (banked from lemma-3, job 140): if `H₄(X,A) = 0`
 and `H₃(X) → H₃(X,A)` is invertible, then `H₃(A) = 0`. -/
