@@ -1,6 +1,8 @@
 import Mathlib
 import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.PolygonSurfacePiOne
+import ConstructionTargets.PolygonSurfaceHomology
+import ConstructionTargets.PolygonCellPiOne
 import ConstructionTargets.SurfaceClassification
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.CoveringMonodromyCosets
@@ -22,13 +24,176 @@ abbrev T96A01SurfaceBase (g : ℕ) : Surface true g :=
 
 /-! ## Independent library interfaces -/
 
+open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
+/-- Leaf (generic; copy of the `hn` step in `t91A02_polygon_pi1_wedge_quotient`,
+holes/labs/blueprints/t91A02/Blueprint.lean).  The cell-attachment boundary class
+`wordClass P` and the polygon boundary class have the same normal closure:
+`wordClass P` is the integer-loop class, which is the fundamental class to the
+power `circleIntegerLoopOneCoordinate = ±1`. -/
+theorem t96A01_orientableSurface_fundamentalGroup_aux_wordClass (P : PairingData) :
+    Subgroup.normalClosure
+        ({ConstructionTargets.PolygonCellPiOne.wordClass P} : Set _) =
+      Subgroup.normalClosure ({polygonBoundaryFundamentalClass P} : Set _) := by
+  classical
+  have hw : ConstructionTargets.PolygonCellPiOne.wordClass P =
+      Path.Homotopic.Quotient.mk
+        (polygonBoundaryIntegerLoopPath P) := by
+    simp only [ConstructionTargets.PolygonCellPiOne.wordClass,
+      ConstructionTargets.AttachTwoCell.loopClassAt,
+      ConstructionTargets.PolygonCellPiOne.bword,
+      polygonBoundaryIntegerLoopPath,
+      circleIntegerLoopOneClass, FundamentalGroup.map_apply]
+    rw [← Path.Homotopic.Quotient.mk_map]
+    rw [Path.Homotopic.Quotient.mk_cast]
+  rw [hw, polygonBoundaryIntegerLoopClass_eq_fundamental_zpow_coordinate]
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · rw [h]
+    simp
+  · rw [h]
+    simp only [zpow_neg, zpow_one]
+    apply le_antisymm
+    · apply Subgroup.normalClosure_le_normal
+      intro y hy
+      rcases hy with rfl
+      exact Subgroup.inv_mem _
+        (Subgroup.subset_normalClosure (Set.mem_singleton _))
+    · apply Subgroup.normalClosure_le_normal
+      intro y hy
+      rcases hy with rfl
+      have hi := Subgroup.inv_mem
+        (Subgroup.normalClosure
+          ({(polygonBoundaryFundamentalClass P)⁻¹} : Set _))
+        (Subgroup.subset_normalClosure (Set.mem_singleton _))
+      simpa using hi
+
+open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
+/-- Leaf (geometric subdivision, for the standard orientable data).  The boundary
+loop of the polygon, read in the orbit wedge, is the ordered product of its signed
+edge classes.  `PolygonSurfaceHomology.lean` calls this "the remaining geometric
+subdivision theorem" (docstring of `polygonBoundaryExplicitEdgeProduct`) and has
+consumers taking it as a hypothesis (`polygonBoundaryWedgeLoop_hurewicz_of_eq_explicitEdgeProduct`).
+Compare `t97A01Closure.torusRP2AttachingWord`, which does this for one pairing. -/
+theorem t96A01_orientableSurface_fundamentalGroup_aux_subdivision
+    (g : ℕ) (hg : 0 < g) :
+    polygonBoundaryFundamentalClass (standardPairingData true g hg) =
+      polygonBoundaryExplicitEdgeProduct (standardPairingData true g hg) := by
+  sorry
+
+open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
+/-- Leaf (combinatorial relabelling).  Some isomorphism of free groups carries the
+standard commutator word `surfaceRelator g` to a word whose leg class normally
+generates the same subgroup as the explicit edge product of
+`orientableStandardPairingData` (read off how that data labels its `4g` edges;
+a conjugate, cyclic rotation, or inverse of the relator is fine). -/
+theorem t96A01_orientableSurface_fundamentalGroup_aux_relabel
+    (g : ℕ) (hg : 0 < g) :
+    ∃ M : FreeGroup (Fin g × Bool) ≃*
+        FreeGroup (PairingOrbit (standardPairingData true g hg).pair),
+      Subgroup.normalClosure
+          ({ConstructionTargets.PolygonCellPiOne.legEquiv
+              (standardPairingData true g hg) (M (surfaceRelator g))} : Set _) =
+        Subgroup.normalClosure
+          ({polygonBoundaryExplicitEdgeProduct (standardPairingData true g hg)} :
+            Set _) := by
+  sorry
+
+open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
+/-- Positive genus: `polygon_piOne_presentation` on the standard orientable data,
+transported along `standardPairingData_space_homeomorph`. -/
+theorem t96A01_orientableSurface_fundamentalGroup_aux_relator
+    (g : ℕ) (hg : 0 < g) :
+    Nonempty
+      (FundamentalGroup (Surface true g) (T96A01SurfaceBase g) ≃*
+        OrientableSurfaceGroup g) := by
+  let P := standardPairingData true g hg
+  obtain ⟨M, hM⟩ := t96A01_orientableSurface_fundamentalGroup_aux_relabel g hg
+  have hr : Subgroup.normalClosure
+        ({ConstructionTargets.PolygonCellPiOne.legEquiv P (M (surfaceRelator g))} :
+          Set _) =
+      Subgroup.normalClosure {ConstructionTargets.PolygonCellPiOne.wordClass P} := by
+    rw [hM, ← t96A01_orientableSurface_fundamentalGroup_aux_subdivision g hg,
+      t96A01_orientableSurface_fundamentalGroup_aux_wordClass P]
+  obtain ⟨e⟩ := ConstructionTargets.PolygonCellPiOne.polygon_piOne_presentation
+    P M (surfaceRelator g) hr
+  let h := standardPairingData_space_homeomorph true g hg
+  haveI : PathConnectedSpace (Surface true g) :=
+    h.surjective.pathConnectedSpace h.continuous
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+      (T96A01SurfaceBase g) (h P.center)).trans
+    (((fundamentalGroupEquivOfHomeomorphEq h P.center (h P.center) rfl).symm.trans e))⟩
+
+theorem t96A01_orientableSurface_fundamentalGroup_aux_homeomorph_of_fibres
+    {Z X Y : Type*} [TopologicalSpace Z] [TopologicalSpace X]
+    [TopologicalSpace Y] {p : Z → X} {q : Z → Y}
+    (hp : Topology.IsQuotientMap p) (hq : Topology.IsQuotientMap q)
+    (h : ∀ x y, p x = p y ↔ q x = q y) : Nonempty (X ≃ₜ Y) := by
+  let p' : C(Z, X) := ⟨p, hp.continuous⟩
+  let q' : C(Z, Y) := ⟨q, hq.continuous⟩
+  have hker : Setoid.ker p' = Setoid.ker q' :=
+    Setoid.ext fun x y ↦ h x y
+  have e₁ := Topology.IsQuotientMap.homeomorph (f := p') hp
+  have e₂ := Topology.IsQuotientMap.homeomorph (f := q') hq
+  rw [hker] at e₁
+  exact ⟨e₁.symm.trans e₂⟩
+
+theorem t96A01_orientableSurface_fundamentalGroup_aux_zero
+    (x : Surface true 0) :
+    Subsingleton (FundamentalGroup (Surface true 0) x) := by
+  have hrel (a b : ConstructionTargets.Surfaces.Disk) :
+      Relation.EqvGen (ConstructionTargets.Surfaces.SurfaceRel true 0) a b ↔
+        a = b := by
+    constructor
+    · intro h
+      induction h with
+      | rel a b hab =>
+          simp [ConstructionTargets.Surfaces.SurfaceRel] at hab
+      | refl a => rfl
+      | symm a b _ ih => exact ih.symm
+      | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+    · rintro rfl
+      exact Relation.EqvGen.refl _
+  have he : Nonempty
+      (ConstructionTargets.Surfaces.Disk ≃ₜ Surface true 0) :=
+    t96A01_orientableSurface_fundamentalGroup_aux_homeomorph_of_fibres
+      (p := id) (q := ConstructionTargets.Surfaces.surfaceQuotient true 0)
+      Topology.IsQuotientMap.id
+      ⟨ConstructionTargets.Surfaces.surjective_surfaceQuotient true 0, rfl⟩
+      (fun a b => by
+        change a = b ↔ Quotient.mk _ a = Quotient.mk _ b
+        rw [Quotient.eq]
+        change a = b ↔ Relation.EqvGen
+          (ConstructionTargets.Surfaces.SurfaceRel true 0) a b
+        exact (hrel a b).symm)
+  letI : ContractibleSpace ConstructionTargets.Surfaces.Disk :=
+    Convex.contractibleSpace (convex_closedBall (0 : ℂ) 1)
+      ⟨0, Metric.mem_closedBall_self zero_le_one⟩
+  let e := Classical.choice he
+  letI : ContractibleSpace (Surface true 0) := e.symm.contractibleSpace
+  letI : SimplyConnectedSpace (Surface true 0) :=
+    SimplyConnectedSpace.ofContractible _
+  change Subsingleton (Path.Homotopic.Quotient x x)
+  infer_instance
+
 /-- **LIBRARY (polygon-surface fundamental group).**  The standard orientable
 genus-`g` polygon quotient has the usual one-relator surface group. -/
 theorem t96A01_orientableSurface_fundamentalGroup (g : ℕ) :
     Nonempty
       (FundamentalGroup (Surface true g) (T96A01SurfaceBase g) ≃*
         OrientableSurfaceGroup g) := by
-  sorry
+  rcases Nat.eq_zero_or_pos g with rfl | hg
+  · letI := t96A01_orientableSurface_fundamentalGroup_aux_zero
+      (T96A01SurfaceBase 0)
+    letI : Unique
+        (FundamentalGroup (Surface true 0) (T96A01SurfaceBase 0)) :=
+      ⟨⟨1⟩, fun x ↦ Subsingleton.elim x 1⟩
+    letI : Unique (FreeGroup (Fin 0 × Bool)) := inferInstance
+    letI : Subsingleton (OrientableSurfaceGroup 0) :=
+      ⟨fun x y ↦ Quotient.inductionOn₂ x y
+        (fun a b ↦ congrArg (QuotientGroup.mk' _) (Subsingleton.elim a b))⟩
+    letI : Unique (OrientableSurfaceGroup 0) :=
+      ⟨⟨1⟩, fun x ↦ Subsingleton.elim x 1⟩
+    exact ⟨MulEquiv.ofUnique⟩
+  · exact t96A01_orientableSurface_fundamentalGroup_aux_relator g hg
 
 /-- Finite index rules out Mathlib's `index = 0` sentinel. -/
 theorem t96A01_index_pos
