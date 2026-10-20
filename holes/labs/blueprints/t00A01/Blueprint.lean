@@ -661,7 +661,137 @@ def apm_t00A01_punctured_fundamentalGroup_aux_ball {M : Type} [TopologicalSpace 
     (Φ : apm_t00A01_LargeDisk3 → M) : Set M :=
   Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}
 
-/-- LEAF: the punctured manifold is a deformation retract of the slightly
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ) :
+    φ '' {x : apm_t00A01_Disk3 | dist x.1 0 < 1} =
+      Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 1} := by
+  ext z
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨apm_t00A01_unitToLarge x, ?_, ?_⟩
+    · exact hx
+    · exact congrFun hΦφ x
+  · rintro ⟨x, hx, rfl⟩
+    have hxclosed : dist x.1 0 ≤ 1 := le_of_lt hx
+    let y : apm_t00A01_Disk3 :=
+      ⟨x.1, by simpa [Metric.mem_closedBall, dist_comm] using hxclosed⟩
+    refine ⟨y, ?_, ?_⟩
+    · exact hx
+    · have hu : apm_t00A01_unitToLarge y = x := Subtype.ext rfl
+      simpa [Function.comp_apply, hu] using (congrFun hΦφ y).symm
+
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_inner_subset
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ) :
+    apm_t00A01_punctured_fundamentalGroup_aux_inner Φ ⊆
+      φ '' {x : apm_t00A01_Disk3 | dist x.1 0 < 1} := by
+  rw [apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image
+    φ Φ hΦφ]
+  rintro z ⟨x, hx, rfl⟩
+  refine ⟨x, ?_, rfl⟩
+  change dist x.1 0 ≤ 1 / 2 at hx
+  show dist x.1 0 < 1
+  exact lt_of_le_of_lt hx (by norm_num)
+
+def apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_inclusion
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ) :
+    apm_t00A01_punctured φ →
+      ↥(apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ :=
+  fun x ↦ ⟨x.1, fun hx ↦ x.2
+    (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_inner_subset
+      φ Φ hΦφ hx)⟩
+
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_inclusion_continuous
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ) :
+    Continuous
+      (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_inclusion
+        φ Φ hΦφ) := by
+  exact Continuous.subtype_mk continuous_subtype_val _
+
+/-- The radial collar homotopy on `M`: a point `Φ x` with `‖x‖ < 1` moves along
+the segment from `x` to `x / ‖x‖`; every other point stays put. At `t = 1` it is
+the radial retraction of `M \ Φ(closedBall 0 (1/2))` onto the punctured manifold. -/
+noncomputable def apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+    {M : Type} (Φ : apm_t00A01_LargeDisk3 → M) (t : unitInterval) (z : M) : M := by
+  classical
+  exact if h : ∃ x : apm_t00A01_LargeDisk3, Φ x = z ∧ dist x.1 0 < 1 then
+    (if hv : (1 - (t : ℝ)) • h.choose.1 + (t : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) ∈
+        Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 2 then
+      Φ ⟨_, hv⟩ else z)
+  else z
+
+/-- LEAF: the collar homotopy is continuous on `I × U`, where
+`U = M \ Φ(closedBall 0 (1/2))`. Glue two pieces. On the open set
+`Φ(ball 0 2) ∩ U` it is `Φ ∘ G ∘ Φ⁻¹` (transport through the embedding `Φ`),
+where `G t x` is `(1-t)•x + t•(x/‖x‖)` for `‖x‖ < 1` and `x` for `‖x‖ ≥ 1`;
+`G` is continuous on `1/2 < ‖x‖ < 2` because the two formulas agree at
+`‖x‖ = 1`. On the closed set `M \ Φ(ball 0 1)` (closed because `Φ(ball 0 1)`
+is open: `Φ` restricted to the open set `Φ(ball 0 2)` is an open embedding) it
+is the identity. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    ContinuousOn
+      (fun p : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
+      (univ ×ˢ (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ) := by
+  sorry
+
+/-- LEAF: the collar homotopy keeps `U = M \ Φ(closedBall 0 (1/2))` inside `U`,
+and at time `1` lands in the punctured manifold. For `z = Φ x ∈ U` with
+`‖x‖ < 1` one has `‖x‖ > 1/2`, and the moving point has norm
+`(1-t)‖x‖ + t ∈ (1/2, 1]`, equal to `1` at `t = 1`; injectivity of `Φ` and
+`φ '' {‖y‖ < 1} = Φ '' {‖x‖ < 1}`
+(`apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image`) finish. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_mapsTo
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦ : Function.Injective Φ) (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ) :
+    (∀ t : unitInterval,
+      MapsTo (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ t)
+        (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ
+        (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ) ∧
+    MapsTo (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1)
+      (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ
+      {z | z ∉ φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} := by
+  sorry
+
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_zero
+    {M : Type} (Φ : apm_t00A01_LargeDisk3 → M) (z : M) :
+    apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 0 z = z := by
+  classical
+  unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+  split_ifs with h hv
+  · have hx := h.choose_spec.1
+    convert hx using 2
+    apply Subtype.ext
+    simp
+  · rfl
+  · rfl
+
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_one
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ) (z : M)
+    (hz : z ∉ φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}) :
+    apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1 z = z := by
+  classical
+  unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+  rw [dif_neg]
+  rintro ⟨x, hxz, hx⟩
+  rw [apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image
+    φ Φ hΦφ] at hz
+  exact hz ⟨x, hx, hxz⟩
+
+/-- The punctured manifold is a deformation retract of the slightly
 enlarged punctured part `M \ Φ(closedBall 0 (1/2))`, by pushing the shell
 `1/2 < ‖x‖ < 1` radially out to the unit sphere inside the collar. -/
 lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv
@@ -671,7 +801,43 @@ lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv
     (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
     Nonempty (ContinuousMap.HomotopyEquiv (apm_t00A01_punctured φ)
       ↥(apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ) := by
-  sorry
+  obtain ⟨hmap, hmap1⟩ :=
+    apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_mapsTo
+      φ Φ hΦ.injective hΦφ
+  have hcont :=
+    apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn
+      Φ hΦ hΦo
+  have hHc : Continuous (fun p : unitInterval ×
+      ↥(apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ ↦
+      apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1) :=
+    hcont.comp_continuous
+      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+      (fun p ↦ ⟨mem_univ _, p.2.2⟩)
+  let i : C(apm_t00A01_punctured φ,
+      ↥(apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ) :=
+    ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_inclusion φ Φ hΦφ,
+      apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_inclusion_continuous
+        φ Φ hΦφ⟩
+  let r : C(↥(apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ,
+      apm_t00A01_punctured φ) :=
+    ⟨fun z ↦ ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1 z.1,
+      hmap1 z.2⟩,
+      (hHc.comp (continuous_const.prodMk continuous_id)).subtype_mk _⟩
+  let F : ContinuousMap.Homotopy (ContinuousMap.id _) (i.comp r) :=
+    { toFun := fun p ↦
+        ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1,
+          hmap p.1 p.2.2⟩
+      continuous_toFun := hHc.subtype_mk _
+      map_zero_left := fun z ↦ Subtype.ext
+        (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_zero Φ z.1)
+      map_one_left := fun z ↦ rfl }
+  have hri : r.comp i = ContinuousMap.id _ := by
+    ext z
+    exact apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_one
+      φ Φ hΦφ z.1 z.2
+  exact ⟨{ toFun := i, invFun := r
+           left_inv := by rw [hri]
+           right_inv := ⟨F.symm⟩ }⟩
 
 /-- LEAF: the open shell `Φ(1/2 < ‖x‖ < 2)` is homeomorphic to a Euclidean
 shell, hence homotopy equivalent to `S²`, hence simply connected
