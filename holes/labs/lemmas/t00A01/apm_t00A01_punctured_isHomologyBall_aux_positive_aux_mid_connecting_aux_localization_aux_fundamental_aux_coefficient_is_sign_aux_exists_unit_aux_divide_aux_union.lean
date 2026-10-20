@@ -9,6 +9,8 @@ import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.SphereHomology
 import ConstructionTargets.MayerVietorisExactnessIsZero
 import ConstructionTargets.ManifoldFundamentalClass
+import ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison
+import ConstructionTargets.CoefficientCompactComplementUnionToRelative
 
 /-!
 # APM t00A01: Connected sums of integral homology 3-spheres
@@ -2217,8 +2219,29 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   exact ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
     e A B hAB 3
 
-/-- LIBRARY LEAF (split from `_aux_ball` after lemma-1's PARTIAL, 2026-10-20):
-moving a puncture inside a closed ball of `ℝ³`.  For `u` in the open ball
+/-- LIBRARY LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL,
+2026-10-20): the convex model in `ℝ³`.  For compact convex `K ⊆ ℝ³` and
+`u ∈ K`, the identity induces an isomorphism
+`H_(n+1)(ℝ³, ℝ³ ∖ K) → H_(n+1)(ℝ³, ℝ³ ∖ u)`.  Route: pick `R` with
+`K ⊆ ball u R`.  For `p ∉ K` the ray from `u` through `p` meets `K` in an
+interval containing `u` (convexity), so the straight-line homotopy from `p` to
+`u + R • (p - u) / ‖p - u‖` stays outside `K`; the same formula deformation
+retracts `ℝ³ ∖ u` onto that sphere.  Hence `ℝ³ ∖ K ↪ ℝ³ ∖ u` is a homotopy
+equivalence; `ℝ³` is contractible; the five lemma on the long exact sequences
+of the two pairs gives the iso.  `_ball_aux_model` is the case
+`K = closedBall c r`, `n = 2`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model
+    (K : Set (EuclideanSpace ℝ (Fin 3))) (hK : IsCompact K) (hconv : Convex ℝ K)
+    (u : EuclideanSpace ℝ (Fin 3)) (hu : u ∈ K) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
+        (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu)) (n + 1)) := by
+  sorry
+
+/-- PROVED from `_convex_aux_inj_aux_model` (claude-14, 2026-10-20; split from
+`_aux_ball` after lemma-1's PARTIAL): moving a puncture inside a closed ball of `ℝ³`.  For `u` in the open ball
 `ball c r`, the identity induces an isomorphism
 `H₃(ℝ³, ℝ³ ∖ closedBall c r) → H₃(ℝ³, ℝ³ ∖ u)`.  Route: `ℝ³ ∖ closedBall c r`
 and `ℝ³ ∖ u` both deformation retract radially (about `u`) onto the sphere of
@@ -2233,7 +2256,8 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
         (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
           (Metric.closedBall c r) u (Metric.mem_closedBall.2 hu.le))) 3) := by
-  sorry
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model (Metric.closedBall c r) (isCompact_closedBall c r)
+    (convex_closedBall c r) u (Metric.mem_closedBall.2 hu.le) 2
 
 /-- LIBRARY LEAF (split from `_aux_ball` after lemma-1's PARTIAL, 2026-10-20):
 reduction of `_aux_ball` to the model.  Let `e` be the chart at `x` and
@@ -2368,7 +2392,89 @@ def apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_loca
             (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 c = 0) →
       c = 0
 
-/-- LIBRARY LEAF (Hatcher 3.27, step 1): a compact `A` inside one chart whose
+/-- PROVED (lemma-1, banked from its `_aux_convex` PARTIAL, 2026-10-20): the
+empty set is good (last line fixed by claude-14). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_empty
+    (M : Type) [TopologicalSpace M] :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M ∅ := by
+  constructor
+  · intro i hi
+    have hz :=
+      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero M i
+    simpa using (AddCommGrpCat.isZero_iff_subsingleton.mp hz)
+  · intro c hc
+    have hz :=
+      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero M 3
+    have hz' : IsZero
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (∅ : Set M)ᶜ).homology 3) := by
+      simpa using hz
+    exact @Subsingleton.elim _ (AddCommGrpCat.isZero_iff_subsingleton.mp hz') c 0
+
+/-- LIBRARY LEAF (Hatcher 3.27, point case of the vanishing): in a 3-manifold,
+`H_i(M, M ∖ y) = 0` for `i > 3`.  Split from `_aux_convex` after lemma-1's
+PARTIAL (2026-10-20).  Route: excise `M ∖ U` for a chart ball `U` about `y`
+(`HigherChartLocalGenerator.ambientChartMap_Hn_isIso` does this transport for
+the top degree; the same excision works in every degree), then
+`H_i(D, D ∖ 0) ≅ H_{i-1}(D ∖ 0)` for `i ≥ 2` by the pair sequence of the
+contractible disk, and `D ∖ 0 ≃ S²` has no homology above degree 2
+(`SphereHomology`). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_point
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (y : M) (i : ℕ) (hi : 3 < i) :
+    Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology i) := by
+  sorry
+
+/-- LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL, 2026-10-20):
+reduction to the convex model.  For compact `A` in the chart at `x` with
+convex chart image and `y ∈ A`, the localization
+`H_i(M, M ∖ A) → H_i(M, M ∖ y)` is an isomorphism for `i > 0`.  Route, as in
+`_ball_aux_reduce`: both pairs excise `M ∖ e.source` (`_aux_excision`; `A` is
+compact, hence closed); the chart `e.source ≃ₜ e.target` transports the excised
+pairs (`_aux_chart`); the inclusion `e.target ↪ ℝ³` excises `ℝ³ ∖ e.target`
+(`e '' A` is compact inside the open `e.target`); the resulting map is
+`_convex_aux_inj_aux_model` with `K = e '' A`, `u = e y`.  The squares commute
+by `relativeSingularMap_comp`.  `_aux_excision` and `_aux_chart` are stated in
+degree 3; the ConstructionTargets theorems they call
+(`relativeExcisionMap_homologyMap_isIso_succ`,
+`relativeSingularMap_homeomorphPair_isIso`) take any degree `n + 1`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (hconv : Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' A))
+    (y : M) (hy : y ∈ A) (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i) := by
+  sorry
+
+/-- PROVED from `_convex_aux_inj_aux_isIso` (lemma-1, job 177, 2026-10-20):
+for compact `A` in one chart with convex chart image and `y ∈ A`, the
+localization `H_i(M, M ∖ A) → H_i(M, M ∖ y)` is injective for `i > 0`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (hconv : Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' A))
+    (y : M) (hy : y ∈ A) (i : ℕ) (hi : 0 < i) (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i)
+    (hc : HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y) (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i c = 0) :
+    c = 0 := by
+  letI := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso
+    M x A hA hsub hconv y hy i hi
+  exact (AddCommGrpCat.mono_iff_injective (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i)).1 inferInstance
+    (hc.trans (map_zero _).symm)
+
+/-- PROVED from `_aux_convex_aux_point`, `_aux_convex_aux_inj` (Hatcher 3.27, step 1): a compact `A` inside one chart whose
 chart image is convex is good.  Route: excise `M ∖ U` for the chart source `U`
 (`A` is closed, `M ∖ U ⊆ M ∖ A`), transport to `ℝ³` through the chart; there
 `ℝ³ ∖ A ↪ ℝ³ ∖ {y}` is a homotopy equivalence for `y ∈ A` (radial deformation
@@ -2383,7 +2489,14 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
     (hconv : Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' A)) :
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M A := by
-  sorry
+  rcases A.eq_empty_or_nonempty with rfl | ⟨y, hy⟩
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_empty M
+  refine ⟨fun i hi => ?_, fun c hc => ?_⟩
+  · have key : ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i, c = 0 := fun c =>
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj M x A hA hsub hconv y hy i (by omega) c
+        (@Subsingleton.elim _ (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_point M y i hi) _ _)
+    exact ⟨fun c d => (key c).trans (key d).symm⟩
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj M x A hA hsub hconv y hy 3 (by norm_num) c (hc y hy)
 
 /-- PROVED (lemma-2, banked from its `_aux_union` PARTIAL, 2026-10-20):
 complement identities for the Mayer--Vietoris step. -/
@@ -2675,7 +2788,124 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A := by
   sorry
 
-/-- LIBRARY LEAF (Hatcher 3.27(a), Mayer--Vietoris step): if closed `A`, `B`
+/-- PROVED (lemma-3, banked from its `_aux_divide_aux_union` PARTIAL,
+2026-10-20): restrict `c` to `A` and to `B` and divide there. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_restrict
+    (M : Type) [TopologicalSpace M] (m : ℤ) (A B : Set M)
+    (gA : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A)
+    (gB : apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m B)
+    (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (A ∪ B)ᶜ).homology 3)
+    (hc : ∀ (y : M) (hy : y ∈ A ∪ B), ∃ g, m • g =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+          (ContinuousMap.id M)
+          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (A ∪ B) y hy)) 3 c) :
+    (∃ μA : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology 3,
+      ∀ (y : M) (hy : y ∈ A), m •
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 μA =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3
+          (HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Aᶜ
+              (ContinuousMap.id M)
+              (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left A B hx)) 3 c)) ∧
+    (∃ μB : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Bᶜ).homology 3,
+      ∀ (y : M) (hy : y ∈ B), m •
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Bᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo B y hy)) 3 μB =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Bᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo B y hy)) 3
+          (HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Bᶜ
+              (ContinuousMap.id M)
+              (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right A B hx)) 3 c)) := by
+  constructor
+  · apply gA
+    intro y hy
+    obtain ⟨g, hg⟩ := hc y (Or.inl hy)
+    refine ⟨g, ?_⟩
+    have e := ConstructionTargets.SingularExcision.relativeSingularHomologyMap_comp
+      (A ∪ B)ᶜ Aᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+      (ContinuousMap.id M) (ContinuousMap.id M)
+      (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left A B hx)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (A ∪ B) y (Or.inl hy)) 3
+    exact hg.trans (by
+      simpa only [ConcreteCategory.comp_apply] using
+        (congrArg (fun f => f c) e).symm)
+  · apply gB
+    intro y hy
+    obtain ⟨g, hg⟩ := hc y (Or.inr hy)
+    refine ⟨g, ?_⟩
+    have e := ConstructionTargets.SingularExcision.relativeSingularHomologyMap_comp
+      (A ∪ B)ᶜ Bᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+      (ContinuousMap.id M) (ContinuousMap.id M)
+      (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right A B hx)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo B y hy)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (A ∪ B) y (Or.inr hy)) 3
+    exact hg.trans (by
+      simpa only [ConcreteCategory.comp_apply] using
+        (congrArg (fun f => f c) e).symm)
+
+/-- LIBRARY LEAF: `H₃(M, M ∖ y)` is torsion-free.  Split from `_aux_union` after
+lemma-3's PARTIAL (2026-10-20).  Route: `ambientLocalNormalization 1 y` is an
+isomorphism onto `ℤ` (see `_aux_divide_aux_local`); apply its `hom`, use
+`map_zsmul`, cancel `m ≠ 0` in `ℤ`, and pull back by injectivity. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_torsion
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (y : M) (m : ℤ) (hm : m ≠ 0)
+    (x : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology 3) (h : m • x = 0) : x = 0 := by
+  let e := ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 y
+  apply (ConcreteCategory.bijective_of_isIso e.hom).1
+  have he : m • e.hom.hom x = 0 := by
+    rw [← map_zsmul, h, map_zero]
+  simpa using (eq_zero_or_eq_zero_of_smul_eq_zero he).resolve_left hm
+
+/-- LIBRARY LEAF (Hatcher 3.27, relative Mayer--Vietoris, existence half): for
+closed `A`, `B`, classes of `H_n(M, M ∖ A)` and `H_n(M, M ∖ B)` with the same
+image in `H_n(M, M ∖ (A ∩ B))` come from one class of `H_n(M, M ∖ (A ∪ B))`.
+Split from `_aux_union` after lemma-3's PARTIAL (2026-10-20).  Route: exactness
+of the same relative Mayer--Vietoris sequence as `_aux_injective_aux_union_aux_joint`,
+at the middle term `H_n(S, P ∩ Q) → H_n(S, P) ⊕ H_n(S, Q) → H_n(S, P ∪ Q)`
+(`CoefficientSubcomplexRelativeHomologySequence`; transport to the literal
+relative chains with `CoefficientSubcomplexRelativeLiteralComparison` and
+`CoefficientCompactComplementUnionToRelative`).  The sign convention of the
+difference map does not matter here: equality of the two images is the kernel
+condition. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue
+    (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
+    (n : ℕ) (μA : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology n) (μB : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Bᶜ).homology n)
+    (h : HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ (A ∩ B)ᶜ (ContinuousMap.id M) (fun x hx hab => hx hab.1)) n μA =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Bᶜ (A ∩ B)ᶜ (ContinuousMap.id M) (fun x hx hab => hx hab.2)) n μB) :
+    ∃ μ : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (A ∪ B)ᶜ).homology n,
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Aᶜ (ContinuousMap.id M)
+          (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_left A B hx)) n μ = μA ∧
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap (A ∪ B)ᶜ Bᶜ (ContinuousMap.id M)
+          (fun x hx => apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_compl_union_right A B hx)) n μ = μB := by
+  sorry
+
+/-- ASSEMBLY from `_aux_union_aux_restrict`, `_aux_torsion`, `_aux_glue` and
+`gAB.2` (Hatcher 3.27(a), Mayer--Vietoris step): if closed `A`, `B`
 admit division by `m ≠ 0` and `A ∩ B` is good in the sense of
 `_aux_injective_aux_good`, then `A ∪ B` admits division by `m`.  Route:
 restrict `c` to `H₃(M|A)`, `H₃(M|B)` (the local maps compose,
