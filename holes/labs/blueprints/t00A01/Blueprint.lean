@@ -835,6 +835,96 @@ where `G t x` is `(1-t)•x + t•(x/‖x‖)` for `‖x‖ < 1` and `x` for `�
 `‖x‖ = 1`. On the closed set `M \ Φ(ball 0 1)` (closed because `Φ(ball 0 1)`
 is open: `Φ` restricted to the open set `Φ(ball 0 2)` is an open embedding) it
 is the identity. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_open
+    {M : Type} [TopologicalSpace M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 1}) := by
+  let s : Set apm_t00A01_LargeDisk3 := {x | dist x.1 0 < 1}
+  let u : Set apm_t00A01_LargeDisk3 := {x | dist x.1 0 < 2}
+  have hs : IsOpen s := by
+    have hd : Continuous (fun x : apm_t00A01_LargeDisk3 => dist x.1 0) :=
+      continuous_subtype_val.dist (continuous_const : Continuous (fun _ : apm_t00A01_LargeDisk3 =>
+        (0 : EuclideanSpace ℝ (Fin 3))))
+    exact isOpen_lt hd continuous_const
+  obtain ⟨v, hv, hvpre⟩ := hΦ.isInducing.isOpen_iff.mp hs
+  have hsu : s ⊆ u := by
+    intro x hx
+    change dist x.1 0 < 1 at hx
+    change dist x.1 0 < 2
+    linarith
+  have himage : Φ '' s = v ∩ Φ '' u := by
+    ext z
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      have hvx : Φ x ∈ v := by
+        have : x ∈ Φ ⁻¹' v := by simpa [hvpre] using hx
+        exact this
+      exact ⟨hvx, ⟨x, hsu hx, rfl⟩⟩
+    · rintro ⟨hzv, x, hxu, rfl⟩
+      refine ⟨x, ?_, rfl⟩
+      have : x ∈ Φ ⁻¹' v := hzv
+      simpa [hvpre] using this
+  rw [himage]
+  exact hv.inter hΦo
+
+/-- `Φ` of a closed sub-ball `{‖x‖ ≤ r}` is closed in `M`: the sub-ball is
+compact, and `M` is Hausdorff. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_closed
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Continuous Φ) (r : ℝ) :
+    IsClosed (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ r}) := by
+  haveI : CompactSpace apm_t00A01_LargeDisk3 :=
+    isCompact_iff_compactSpace.mp (isCompact_closedBall _ _)
+  have hc : IsClosed {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ r} :=
+    isClosed_le (continuous_subtype_val.dist continuous_const) continuous_const
+  exact (hc.isCompact.image hΦ).isClosed
+
+/-- Off `Φ(ball 0 1)` the collar homotopy is the identity. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_eq_self
+    {M : Type} (Φ : apm_t00A01_LargeDisk3 → M) (t : unitInterval) (z : M)
+    (hz : z ∉ Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 1}) :
+    apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ t z = z := by
+  unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+  rw [dif_neg]
+  rintro ⟨x, hx, hx1⟩
+  exact hz ⟨x, hx1, hx⟩
+
+/-- LEAF: the radial deformation of Euclidean space, `x ↦ (1-t)•x + t•(x/‖x‖)`
+for `‖x‖ < 1` and `x ↦ x` otherwise, is jointly continuous away from the
+radius-one-half ball. Use `ContinuousOn.if`: each formula is continuous on
+`‖x‖ > 1/2` (the first because `‖x‖ ≠ 0`), and on the frontier `‖x‖ = 1` of
+`{‖x‖ < 1}` the two formulas agree. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_radial :
+    ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦
+        if ‖p.2‖ < 1 then (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2) else p.2)
+      (univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 1 / 2 < ‖x‖}) := by
+  sorry
+
+/-- LEAF: the collar homotopy is continuous on `I × (Φ(ball 0 2) \ Φ(closedBall 0 (1/2)))`.
+There `Φ` restricted to `{‖x‖ < 2}` is a homeomorphism onto the open set
+`Φ(ball 0 2)` (`hΦ` is an embedding), and for `z = Φ x` the homotopy is
+`Φ (G t x)` with `G` the radial map of
+`apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_radial`
+(the `closedBall 0 2` test in the definition always holds: for `‖x‖ < 1` the
+moving point has norm `(1-t)‖x‖ + t ≤ 1`). Transport the continuity of `G`
+through the homeomorphism. -/
+lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball
+    {M : Type} [TopologicalSpace M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    ContinuousOn
+      (fun p : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
+      (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+        (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ)) := by
+  sorry
+
+/-- The collar homotopy is continuous on `I × U`, `U = M \ Φ(closedBall 0 (1/2))`:
+near a point of `Φ(ball 0 2)` use the `_aux_ball` leaf on that open set; any other
+point lies in the open set `M \ Φ(closedBall 0 1)`, where the homotopy is the
+identity. -/
 lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn
     {M : Type} [TopologicalSpace M] [T2Space M]
     (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
@@ -843,7 +933,40 @@ lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuous
       (fun p : unitInterval × M ↦
         apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
       (univ ×ˢ (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ) := by
-  sorry
+  intro p hp
+  have hU : IsOpen (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ :=
+    (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_closed
+      Φ hΦ.continuous (1 / 2)).isOpen_compl
+  by_cases hb : p.2 ∈ Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}
+  · have hA : IsOpen (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+        (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ) : Set (unitInterval × M)) :=
+      isOpen_univ.prod (hΦo.inter hU)
+    exact ((apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball
+      Φ hΦ hΦo).continuousAt (hA.mem_nhds ⟨trivial, hb, hp.2⟩)).continuousWithinAt
+  · have hB : IsOpen (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1})ᶜ :
+        Set (unitInterval × M)) :=
+      isOpen_univ.prod
+        (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_closed
+          Φ hΦ.continuous 1).isOpen_compl
+    have hpB : p ∈ (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1})ᶜ :
+        Set (unitInterval × M)) := by
+      refine ⟨trivial, ?_⟩
+      rintro ⟨x, hx, hxp⟩
+      refine hb ⟨x, ?_, hxp⟩
+      change dist x.1 0 ≤ 1 at hx
+      change dist x.1 0 < 2
+      linarith
+    have heq : (fun q : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ q.1 q.2)
+          =ᶠ[nhds p] Prod.snd := by
+      filter_upwards [hB.mem_nhds hpB] with q hq
+      apply apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_eq_self
+      rintro ⟨x, hx, hxq⟩
+      refine hq.2 ⟨x, ?_, hxq⟩
+      change dist x.1 0 < 1 at hx
+      change dist x.1 0 ≤ 1
+      exact le_of_lt hx
+    exact (continuous_snd.continuousAt.congr heq.symm).continuousWithinAt
 
 /-- LEAF: the collar homotopy keeps `U = M \ Φ(closedBall 0 (1/2))` inside `U`,
 and at time `1` lands in the punctured manifold. For `z = Φ x ∈ U` with
