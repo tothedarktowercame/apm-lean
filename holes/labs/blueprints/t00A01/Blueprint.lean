@@ -2943,6 +2943,30 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     rw [← map_zsmul, h, map_zero]
   simpa using (eq_zero_or_eq_zero_of_smul_eq_zero he).resolve_left hm
 
+/-- PROVED (lemma-3, banked from its `_aux_glue` PARTIAL, job 187, 2026-10-20):
+middle exactness of the coefficient-subcomplex relative Mayer--Vietoris sequence for
+the subspaces `Aᶜ`, `Bᶜ`.  `_aux_glue` still has to transport it to the literal
+relative chains (`relativeSingularMap`). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_exact
+    (M : Type) [TopologicalSpace M] (A B : Set M) (n : ℕ) :
+    (ShortComplex.mk
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToPiecesRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ)) (n + 1))
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.piecesToUnionRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ)) (n + 1))
+      (by
+        rw [← HomologicalComplex.homologyMap_comp,
+          ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.relative_arrows_zero,
+          HomologicalComplex.homologyMap_zero])).Exact := by
+  exact
+    ConstructionTargets.CoefficientSubcomplexRelativeHomologySequence.exact_intersection_pieces_union
+      ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ) n
+
 /-- LIBRARY LEAF (Hatcher 3.27, relative Mayer--Vietoris, existence half): for
 closed `A`, `B`, classes of `H_n(M, M ∖ A)` and `H_n(M, M ∖ B)` with the same
 image in `H_n(M, M ∖ (A ∩ B))` come from one class of `H_n(M, M ∖ (A ∪ B))`.
@@ -2953,7 +2977,10 @@ at the middle term `H_n(S, P ∩ Q) → H_n(S, P) ⊕ H_n(S, Q) → H_n(S, P ∪
 relative chains with `CoefficientSubcomplexRelativeLiteralComparison` and
 `CoefficientCompactComplementUnionToRelative`).  The sign convention of the
 difference map does not matter here: equality of the two images is the kernel
-condition. -/
+condition.  Remaining after lemma-3's PARTIAL (job 187): `_aux_glue_aux_exact` gives
+exactness for `intersectionToPiecesRelative`/`piecesToUnionRelative`; transport it
+through the ModuleCat/AddCommGrpCat and literal-relative-chain comparison maps, proving
+by naturality that they identify the two arrows with the `relativeSingularMap`s. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue
     (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
     (n : ℕ) (μA : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology n) (μB : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Bᶜ).homology n)
