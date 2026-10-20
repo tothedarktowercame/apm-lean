@@ -2148,6 +2148,38 @@ proof with the roles of `inl` and `inr` exchanged: `f` sends `[inr b] ↦ b`,
 Continuity through the open saturated preimage `inl '' C ∪ range inr`
 (`IsQuotientMap.restrictPreimage_isOpen`), times the locally compact
 `unitInterval`. -/
+private lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient_mem
+    {A B : Type} (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (C : Set A) (hiA : ∀ s, iA s ∈ C) {x y : Sum A B}
+    (hxy : Relation.EqvGen (apm_t00A01_glueRel iA iB) x y) :
+    (x ∈ Sum.inl '' C ∪ Set.range Sum.inr) ↔
+      (y ∈ Sum.inl '' C ∪ Set.range Sum.inr) := by
+  induction hxy with
+  | rel x y h =>
+      cases h with
+      | glue s =>
+          constructor <;> intro h
+          · exact Or.inr ⟨iB s, rfl⟩
+          · exact Or.inl ⟨iA s, hiA s, rfl⟩
+  | refl => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+
+private lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient_preimage
+    {A B : Type} (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (C : Set A) (hiA : ∀ s, iA s ∈ C) :
+    (fun z : Sum A B ↦ Quotient.mk
+      (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) z) ⁻¹'
+        apm_t00A01_thickRight iA iB C =
+      Sum.inl '' C ∪ Set.range Sum.inr := by
+  ext z
+  constructor
+  · rintro ⟨w, hw, heq⟩
+    exact (apm_t00A01_collared_standardCover_aux_right_aux_quotient_mem
+      iA iB C hiA (Quotient.exact heq.symm)).mpr hw
+  · intro hz
+    exact ⟨z, hz, rfl⟩
+
 lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
     [TopologicalSpace A] [TopologicalSpace B]
     (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
@@ -2158,7 +2190,6 @@ lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
     (hHC : ∀ p, H p ∈ C) (hHfix : ∀ s t, H (⟨iA s, hiA s⟩, t) = iA s) :
     Nonempty (ContinuousMap.HomotopyEquiv ↥(apm_t00A01_thickRight iA iB C) B) := by
   sorry
-
 /-- ASSEMBLY (from `_aux_left_aux_radial` applied to the first piece, and
 `_aux_right_aux_quotient`). Mirror image of `_aux_left`: the right thickening
 deformation retracts onto the second punctured piece. -/
