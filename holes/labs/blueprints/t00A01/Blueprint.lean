@@ -985,7 +985,96 @@ lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_mapsTo
     MapsTo (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1)
       (apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ
       {z | z ∉ φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} := by
-  sorry
+  classical
+  have radial_bounds (t : unitInterval) (x : EuclideanSpace ℝ (Fin 3))
+      (hx : 1 / 2 < ‖x‖) (hx1 : ‖x‖ < 1) :
+      1 / 2 < ‖(1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x)‖ ∧
+        ‖(1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x)‖ ≤ 1 := by
+    have hx0 : ‖x‖ ≠ 0 := ne_of_gt (lt_trans (by norm_num) hx)
+    have ht0 : 0 ≤ (t : ℝ) := t.2.1
+    have ht1 : (t : ℝ) ≤ 1 := t.2.2
+    have heq :
+        (1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x) =
+          ((1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹) • x := by
+      rw [add_smul, mul_smul]
+    rw [heq, norm_smul, Real.norm_eq_abs]
+    have hi0 : 0 ≤ ‖x‖⁻¹ := inv_nonneg.mpr (norm_nonneg x)
+    have hc0 : 0 ≤ (1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹ :=
+      add_nonneg (sub_nonneg.mpr ht1) (mul_nonneg ht0 hi0)
+    rw [abs_of_nonneg hc0]
+    have hcalc :
+        ((1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹) * ‖x‖ =
+          (1 - (t : ℝ)) * ‖x‖ + (t : ℝ) := by
+      field_simp
+    rw [hcalc]
+    constructor <;> nlinarith
+  constructor
+  · intro t z hz
+    unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+    split_ifs with h hv
+    · rintro ⟨y, hy, heq⟩
+      have hxhalf : 1 / 2 < ‖h.choose.1‖ := by
+        by_contra hn
+        apply hz
+        refine ⟨h.choose, ?_, h.choose_spec.1⟩
+        simpa [dist_eq_norm] using (not_lt.mp hn)
+      have hx1 : ‖h.choose.1‖ < 1 := by
+        simpa [dist_eq_norm] using h.choose_spec.2
+      have hb := (radial_bounds t h.choose.1 hxhalf hx1).1
+      have hy' : ‖y.1‖ ≤ 1 / 2 := by
+        simpa [dist_eq_norm] using hy
+      have hxy : y.1 =
+          (1 - (t : ℝ)) • h.choose.1 +
+            (t : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) := by
+        exact congrArg Subtype.val (hΦ heq)
+      rw [hxy] at hy'
+      linarith
+    · exact hz
+    · exact hz
+  · intro z hz
+    unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+    split_ifs with h hv
+    · have hxhalf : 1 / 2 < ‖h.choose.1‖ := by
+        by_contra hn
+        apply hz
+        refine ⟨h.choose, ?_, h.choose_spec.1⟩
+        simpa [dist_eq_norm] using (not_lt.mp hn)
+      have hx1 : ‖h.choose.1‖ < 1 := by
+        simpa [dist_eq_norm] using h.choose_spec.2
+      rw [apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image
+          φ Φ hΦφ]
+      rintro ⟨y, hy, heq⟩
+      have hxy : y.1 =
+            (1 - (1 : ℝ)) • h.choose.1 +
+              (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) := by
+          exact congrArg Subtype.val (hΦ heq)
+      have hnorm : ‖(1 - (1 : ℝ)) • h.choose.1 +
+              (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1)‖ = 1 := by
+        rw [show (1 : ℝ) - 1 = 0 by norm_num, zero_smul, zero_add, one_smul,
+          norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg (inv_nonneg.mpr (norm_nonneg h.choose.1))]
+        exact inv_mul_cancel₀ (ne_of_gt (lt_trans (by norm_num) hxhalf))
+      have hy' : ‖y.1‖ < 1 := by simpa [dist_eq_norm] using hy
+      rw [hxy, hnorm] at hy'
+      exact (lt_irrefl 1 hy')
+    · have hxhalf : 1 / 2 < ‖h.choose.1‖ := by
+        by_contra hn
+        apply hz
+        refine ⟨h.choose, ?_, h.choose_spec.1⟩
+        simpa [dist_eq_norm] using (not_lt.mp hn)
+      exfalso
+      apply hv
+      change ‖(1 - (1 : ℝ)) • h.choose.1 +
+            (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) - 0‖ ≤ 2
+      rw [show (1 : ℝ) - 1 = 0 by norm_num, zero_smul, zero_add, one_smul,
+        sub_zero, norm_smul, Real.norm_eq_abs,
+        abs_of_nonneg (inv_nonneg.mpr (norm_nonneg h.choose.1))]
+      rw [inv_mul_cancel₀ (ne_of_gt (lt_trans (by norm_num) hxhalf))]
+      norm_num
+    · rw [apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image
+          φ Φ hΦφ]
+      rintro ⟨x, hx, hxz⟩
+      exact h ⟨x, hxz, hx⟩
 
 lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_zero
     {M : Type} (Φ : apm_t00A01_LargeDisk3 → M) (z : M) :
