@@ -2936,7 +2936,125 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
     IsIso (HomologicalComplex.homologyMap
       (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
         {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}) 3) := by
-  sorry
+  obtain ⟨Φ, hΦ, hΦφ, hΦo⟩ := hcollar
+  have hp0 : phi ⟨0, by simp [apm_t00A01_Disk3]⟩ =
+      Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩ := by
+    rw [← hΦφ]
+    rfl
+  let x : M := Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩
+  let A : Set M := {z | z ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}
+  let B : Set M := ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint x
+  let f : C(M, M) := ContinuousMap.id M
+  have hf : Set.MapsTo f A B := by
+    intro z hz
+    change z ≠ x
+    intro hzx
+    apply hz
+    refine ⟨⟨0, by simp [apm_t00A01_Disk3]⟩, by simp, ?_⟩
+    exact hp0.trans (by simpa [x] using hzx.symm)
+  obtain ⟨hmap, hmap1⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_mapsTo
+      phi Φ hΦ.injective hΦφ
+  have hcont :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_continuousOn
+      Φ hΦ hΦo
+  have hHc : Continuous (fun p : unitInterval × ↑B ↦
+      apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1) :=
+    hcont.comp_continuous
+      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+      (fun p ↦ ⟨mem_univ _, p.2.2⟩)
+  let i : C(apm_t00A01_punctured phi, ↑B) :=
+    ⟨fun z ↦ ⟨z.1, fun hz ↦ z.2 ⟨⟨0, by simp [apm_t00A01_Disk3]⟩, by simp,
+      by rw [hp0]; exact hz.symm⟩⟩,
+      Continuous.subtype_mk continuous_subtype_val _⟩
+  let rinv : C(↑B, apm_t00A01_punctured phi) :=
+    ⟨fun z ↦ ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1 z.1,
+        hmap1 z.2⟩,
+      (hHc.comp (continuous_const.prodMk continuous_id)).subtype_mk _⟩
+  let F : ContinuousMap.Homotopy (ContinuousMap.id _) (i.comp rinv) :=
+    { toFun := fun p ↦
+        ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1,
+          hmap p.1 p.2.2⟩
+      continuous_toFun := hHc.subtype_mk _
+      map_zero_left := fun z ↦ Subtype.ext
+        (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_zero Φ z.1)
+      map_one_left := fun z ↦ rfl }
+  have hri : rinv.comp i = ContinuousMap.id _ := by
+    ext z
+    exact apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_one
+      phi Φ hΦφ z.1 z.2
+  let e : ContinuousMap.HomotopyEquiv (apm_t00A01_punctured phi) ↑B :=
+    { toFun := i
+      invFun := rinv
+      left_inv := by rw [hri]
+      right_inv := ⟨F.symm⟩ }
+  have he : TopCat.ofHom e.toFun =
+      ConstructionTargets.SingularExcision.subspaceMap A B f hf := by
+    ext z
+    rfl
+  have hsub (n : ℕ) : IsIso (HomologicalComplex.homologyMap
+      (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularExcision.subspaceMap A B f hf)) n) := by
+    rw [← he]
+    change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+      (AddCommGrpCat.of ℤ)).map (TopCat.ofHom e.toFun))
+    rw [← ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv_hom e n]
+    infer_instance
+  let r := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap A B f hf) 3
+  have hr : IsIso r := by
+    apply ConstructionTargets.SingularExcision.relativeSingularMap_homologyMap_isIso A B f hf 3
+    · exact hsub 3
+    · change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 3).obj
+          (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f))
+      change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 3).obj
+          (AddCommGrpCat.of ℤ)).map (𝟙 (TopCat.of M)))
+      infer_instance
+    · intro j hj
+      exact hsub j
+    · intro j hj
+      change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat j).obj
+          (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f))
+      change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat j).obj
+          (AddCommGrpCat.of ℤ)).map (𝟙 (TopCat.of M)))
+      infer_instance
+  letI : IsIso r := hr
+  let qA := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection A) 3
+  let qB := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection B) 3
+  have hqB : IsIso qB := by
+    change IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      (Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩) 3)
+    exact hp0 ▸ hloc
+  letI : IsIso qB := hqB
+  let a := ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+    (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f)
+  have hnat := congrArg
+      (fun k ↦ HomologicalComplex.homologyMap k 3)
+      (ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality A B f hf)
+  haveI : IsIso (HomologicalComplex.homologyMap
+      (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f)) 3) := by
+    change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 3).obj
+      (AddCommGrpCat.of ℤ)).map (𝟙 (TopCat.of M)))
+    infer_instance
+  simp only [HomologicalComplex.homologyMap_comp] at hnat
+  haveI : IsIso (qA ≫ r) := by
+    dsimp [qA, r]
+    rw [← hnat]
+    change IsIso (HomologicalComplex.homologyMap a 3 ≫ qB)
+    have ha : IsIso (HomologicalComplex.homologyMap a 3) := by
+      dsimp [a]
+      change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 3).obj
+        (AddCommGrpCat.of ℤ)).map (𝟙 (TopCat.of M)))
+      infer_instance
+    letI : IsIso (HomologicalComplex.homologyMap a 3) := ha
+    infer_instance
+  have : IsIso qA := IsIso.of_isIso_comp_right qA r
+  dsimp [qA, A] at this
+  exact this
 
 /-- LIBRARY: the same collar/pair comparison in the adjacent degree gives
 vanishing of degree three of the punctured manifold. Assembled from `_aux_les`, `_aux_rel4`, `_aux_proj`. -/
