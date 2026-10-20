@@ -2056,6 +2056,26 @@ specific standard cover supplied by the collar, its Mayer--Vietoris boundary
 left by the missing global-to-local fundamental-class theorem and the
 comparison of its localization map with the open-cover connecting map. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_source
+    (M : Type) [TopologicalSpace M]
+    (hM : apm_t00A01_isHomology3Sphere M) :
+    Nonempty ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of M)).homology 3 ≅ AddCommGrpCat.of ℤ) := by
+  open ConstructionTargets.IntegralSingularHomologyComparison in
+    rcases hM.2.1 with ⟨e⟩
+    exact ⟨(singularHomologyComparison (TopCat.of M) 3).symm ≪≫
+      (forgetIntModules.mapIso e)⟩
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_target
+    {M : Type} [TopologicalSpace M] (U V : Set M)
+    (eIS : ContinuousMap.HomotopyEquiv (U ∩ V : Set M) apm_t00A01_Sphere2) :
+    Nonempty ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of (U ∩ V : Set M))).homology 2 ≅ AddCommGrpCat.of ℤ) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.SphereHomology in
+    exact ⟨singularHomologyIsoOfHomotopyEquiv eIS 2 ≪≫
+      sphereTopHomologyIsoInt 2 (by omega)⟩
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]

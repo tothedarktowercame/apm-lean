@@ -8,6 +8,7 @@ import ConstructionTargets.ProductionOpenCoverMayerVietoris
 import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.SphereHomology
 import ConstructionTargets.MayerVietorisExactnessIsZero
+import ConstructionTargets.ManifoldFundamentalClass
 
 /-!
 # APM t00A01: Connected sums of integral homology 3-spheres
@@ -2055,6 +2056,62 @@ specific standard cover supplied by the collar, its Mayer--Vietoris boundary
 `H₃(M) → H₂(U ∩ V)` is an isomorphism.  This is the exact formal boundary
 left by the missing global-to-local fundamental-class theorem and the
 comparison of its localization map with the open-cover connecting map. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_source
+    (M : Type) [TopologicalSpace M]
+    (hM : apm_t00A01_isHomology3Sphere M) :
+    Nonempty ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of M)).homology 3 ≅ AddCommGrpCat.of ℤ) := by
+  open ConstructionTargets.IntegralSingularHomologyComparison in
+    rcases hM.2.1 with ⟨e⟩
+    exact ⟨(singularHomologyComparison (TopCat.of M) 3).symm ≪≫
+      (forgetIntModules.mapIso e)⟩
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_target
+    {M : Type} [TopologicalSpace M] (U V : Set M)
+    (eIS : ContinuousMap.HomotopyEquiv (U ∩ V : Set M) apm_t00A01_Sphere2) :
+    Nonempty ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of (U ∩ V : Set M))).homology 2 ≅ AddCommGrpCat.of ℤ) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.SphereHomology in
+    exact ⟨singularHomologyIsoOfHomotopyEquiv eIS 2 ≪≫
+      sphereTopHomologyIsoInt 2 (by omega)⟩
+
+/-- LIBRARY: the top-dimensional global class of a closed connected
+three-manifold restricts to a generator of local homology at every point. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
+  sorry
+
+/-- LIBRARY: collar excision and the pair exact sequence turn invertibility of
+localization at the centre into vanishing of degree two of the complement.
+The homology-sphere hypothesis is needed: the pair sequence only makes
+`H₂(M ∖ x) → H₂(M)` injective (false without it for `S² × S¹`). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (hM : apm_t00A01_isHomology3Sphere M)
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (hcollar : apm_t00A01_HasBallCollar phi)
+    (hloc : IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      (phi ⟨0, by simp [apm_t00A01_Disk3]⟩) 3)) :
+    Limits.IsZero (apm_t00A01_H 2 (apm_t00A01_punctured phi)) := by
+  sorry
+
+/-- LIBRARY: the same collar/pair comparison in the adjacent degree gives
+vanishing of degree three of the punctured manifold. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (hcollar : apm_t00A01_HasBallCollar phi)
+    (hloc : IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      (phi ⟨0, by simp [apm_t00A01_Disk3]⟩) 3)) :
+    Limits.IsZero (apm_t00A01_H 3 (apm_t00A01_punctured phi)) := by
+  sorry
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2068,8 +2125,38 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
     (eVB : ContinuousMap.HomotopyEquiv V apm_t00A01_Disk3)
     (eIS : ContinuousMap.HomotopyEquiv (U ∩ V : Set M) apm_t00A01_Sphere2) :
     IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
-      U V hU hV hUV 2) := by
-  sorry
+      U V hU hV hUV 2) :=
+  open ConstructionTargets.T00A01MayerVietorisAdapters
+    ConstructionTargets.SingularHomologyConcrete in by
+  let x : apm_t00A01_Disk3 := ⟨0, by simp [apm_t00A01_Disk3]⟩
+  have hloc :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization
+      M hM (φ x)
+  have hA2 :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2
+      M hM φ hφ hcollar (by simpa [x] using hloc)
+  have hA3 :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
+      M φ hφ hcollar (by simpa [x] using hloc)
+  have hU2 : Limits.IsZero (SingularHomology 2 (TopCat.of U)) :=
+    (groupHomologyIsZeroOfModuleHomologyIsZero
+      (TopCat.of (apm_t00A01_punctured φ)) 2 hA2).of_iso
+      (singularHomologyIsoOfHomotopyEquiv eUA 2)
+  have hU3 : Limits.IsZero (SingularHomology 3 (TopCat.of U)) :=
+    (groupHomologyIsZeroOfModuleHomologyIsZero
+      (TopCat.of (apm_t00A01_punctured φ)) 3 hA3).of_iso
+      (singularHomologyIsoOfHomotopyEquiv eUA 3)
+  have hD := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk
+  have hV2 : Limits.IsZero (SingularHomology 2 (TopCat.of V)) :=
+    (groupHomologyIsZeroOfModuleHomologyIsZero
+      (TopCat.of apm_t00A01_Disk3) 2 (hD.2 2 (by omega))).of_iso
+      (singularHomologyIsoOfHomotopyEquiv eVB 2)
+  have hV3 : Limits.IsZero (SingularHomology 3 (TopCat.of V)) :=
+    (groupHomologyIsZeroOfModuleHomologyIsZero
+      (TopCat.of apm_t00A01_Disk3) 3 (hD.2 3 (by omega))).of_iso
+      (singularHomologyIsoOfHomotopyEquiv eVB 3)
+  exact productionConnecting_isIso_of_pieces_isZero
+    U V hU hV hUV 2 hU3 hV3 hU2 hV2
 
 /-- ASSEMBLY.  The only topology used here is the separately stated fact that
 the collar-cover connecting map is invertible; the remaining step is the

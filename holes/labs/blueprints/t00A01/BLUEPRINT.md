@@ -80,37 +80,53 @@ unchanged because only integral homology enters.  The overlap cannot be empty:
 its supplied homotopy equivalence to `S²` makes its `H₂` nonzero, while the
 isomorphism hypothesis also rules out the zero connecting map.
 
-`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting` is the
-remaining **LIBRARY** leaf (estimated 350–700 lines with the missing
-foundation).  It states exactly what the algebra consumes, for explicit
-cover witnesses: the production Mayer--Vietoris map
-`H₃(M) → H₂(U ∩ V)` is an isomorphism.  The intended proof factors it, up to
-the collar/excision sign, as
-`H₃(M) → H₃(M,M\\{φ 0}) ≅ H₃(M,P) ≅ H₃(D,D\\int D) ≅ H₂(S²)`.
-Use `ChartPairRelativeHomologyTransport`,
-`HigherChartLocalGenerator`, `CoefficientManifoldLocalComparison`, and
-`LocalHomologyNeighborhoodExcision.neighborhoodInclusion_chain_eq` for the
-comparison squares, then the relative connecting naturality API to identify
-the final map with `productionConnecting`.  The global input is Hatcher
-Lemma 3.27/Theorem 3.26: induct over compact subsets covered by coordinate
-balls to show that a normalized top-dimensional global class restricts to a
-local generator at every point; compactness gives a finite subcover and
-connectedness propagates the sign.  Since `H₃(M;ℤ) ≅ ℤ`, this restriction is
-an isomorphism.  Truth checks: on `S³` it is degree `±1` according to collar
-orientation; on a Poincaré homology sphere it is likewise `±1`, not the order
-of the fundamental group.  Reversing the collar changes only the sign and
-therefore not `IsIso`; boundarylessness is essential.
+The connecting-map boundary is now split without trying to compare an
+*arbitrary* supplied cover directly to collar coordinates.  Such a comparison
+is not determined at chain level by the three homotopy equivalences.  Instead,
+the collar argument first proves `H₂` and `H₃` of the punctured piece vanish;
+then `productionConnecting_isIso_of_pieces_isZero` proves the result for every
+supplied cover.  The final `_aux_mid_connecting` lemma is a sorry-free assembly.
 
-Important infrastructure gap: despite its general-sounding name, the current
-proved theorem
-`LocalHomologyNeighborhoodExcision.neighborhoodInclusion_H1_isIso` is fixed
-to relative degree `1`.  There is presently no all-degree neighborhood
-excision theorem in that module, nor a general closed-manifold fundamental
-class localization theorem.  Consequently splitting the LIBRARY leaf into
-separate, compilable pair-comparison leaves would require first adding those
-foundations; pretending they exist would merely move the entire argument into
-an overloaded hypothesis.  The `_aux_mid` assembly itself is sorry-free and
-depends only on the two leaves above.
+* `_aux_mid_connecting_aux_source` (proved, about 8 lines) transports the
+  assumed `H₃(M) ≅ ℤ` through `singularHomologyComparison`.  Independent.
+* `_aux_mid_connecting_aux_target` (proved, about 8 lines) transports
+  `H₂(S²) ≅ ℤ` through `singularHomologyIsoOfHomotopyEquiv`. Independent.
+  These two are useful normalization facts but the vanishing-based assembly
+  does not need to choose generators.
+* `_aux_mid_connecting_aux_localization` is **LIBRARY** (estimated 180–350
+  lines): for every `x : M`, `localizationMap x 3` is an isomorphism.  This is
+  Hatcher Lemma 3.27/Theorem 3.26.  Obtain connectedness from the `H₀(M) ≅ ℤ`
+  component of `hM`; propagate a chart-local generator along connected chart
+  overlaps using `localizationMap_naturality`,
+  `localizationMap_groupGlobalGenerator_transport`,
+  `localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator`, and
+  transition-unit local constancy; compactness supplies a finite chart cover.
+  `isIso_of_map_globalGenerator_eq_globalGenerator` closes the algebra. This
+  remains the genuinely large missing global fundamental-class theorem.
+* `_aux_mid_connecting_aux_H2` is **LIBRARY** (estimated 80–150 lines), and is
+  independent given its explicit `IsIso (localizationMap (φ 0) 3)` hypothesis.
+  Compare the deleted-point pair to the open radius-two collar with
+  `ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso`, transport the
+  collar pair with `ChartPairRelativeHomologyTransport`, and use
+  `singularPairHomology_exact_relative`/`singularPairHomology_exact_absolute`
+  plus contractibility of the ball to force `H₂` of the complement to zero.
+  The leaf takes `hM`: surjectivity of localization only makes
+  `H₂(M ∖ x) → H₂(M)` injective, so `H₂(M) = 0` is needed (without it the
+  statement fails for `S² × S¹`; claude-14 added `hM` at review, 2026-10-20).
+* `_aux_mid_connecting_aux_H3` is **LIBRARY** (estimated 80–150 lines), parallel
+  to the `H2` leaf under the same explicit localization hypothesis.  Use the
+  adjacent portion of the same pair exact sequence; `H₄(M, M ∖ x) = 0` comes
+  from excision to the collar ball (no homology-sphere hypothesis needed),
+  and invertibility of localization controls the
+  `H₃` kernel.
+
+The all-positive-degree excision infrastructure is available after importing
+`ConstructionTargets.ManifoldFundamentalClass`:
+`neighborhoodInclusion_Hsucc_isIso` supersedes the old degree-one-only note.
+Truth checks: for `S³`, localization and the eventual connecting map have degree
+`±1`; for a Poincaré homology sphere they again have degree `±1`, not
+`|π₁|`.  Reversing collar orientation changes the sign only.  Empty overlap is
+excluded by `eIS`, since it would contradict the nonzero `H₂(S²)` target.
 
 ### `apm_t00A01_collared_standardCover` — LIBRARY
 
