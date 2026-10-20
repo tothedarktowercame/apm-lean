@@ -1723,7 +1723,47 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_H0
       (TopCat.of (apm_t00A01_punctured φ)) 0
       (ModuleCat.of ℤ ℤ) (asIso q).symm⟩
 
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
+/-- LEAF (geometry). `M` has a standard cover by the punctured piece and a
+disk: `U = M \ Φ(closedBall 0 (1/2))`, homotopy equivalent to the punctured
+piece by `apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv`;
+`V = Φ(ball 0 2)` (`apm_t00A01_punctured_fundamentalGroup_aux_ball`), which
+is contractible, hence homotopy equivalent to the closed unit disk; and
+`U ∩ V = Φ(1/2 < ‖x‖ < 2)`, which retracts radially onto the unit sphere. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (hcollar : apm_t00A01_HasBallCollar φ) :
+    apm_t00A01_hasStandardCover M (apm_t00A01_punctured φ) apm_t00A01_Disk3 := by
+  sorry
+
+/-- LEAF. The closed unit three-disk is a homology ball: it is convex, hence
+contractible, so it is homotopy equivalent to a point. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk :
+    apm_t00A01_isHomologyBall apm_t00A01_Disk3 := by
+  sorry
+
+/-- LEAF (algebra). Mayer--Vietoris for a standard cover of a homology
+3-sphere `X` by `A` and a homology ball `B`, overlapping in `S²`. In degree
+`k = 1` and in degrees `k > 3` both `Hₖ(S²)` and `Hₖ(X)` vanish, so exactness
+of `Hₖ(U ∩ V) → Hₖ(U) ⊕ Hₖ(V) → Hₖ(X)` forces `Hₖ(U) = 0`, and `U ≃ A`.
+The same Mayer--Vietoris interfaces as in
+`apm_t00A01_bridge_connectedSum_isHomology3Sphere` apply. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mv
+    (X A B : Type) [TopologicalSpace X] [TopologicalSpace A] [TopologicalSpace B]
+    (hX : apm_t00A01_isHomology3Sphere X) (hB : apm_t00A01_isHomologyBall B)
+    (hcover : apm_t00A01_hasStandardCover X A B)
+    (k : ℕ) (hk : k = 1 ∨ 3 < k) :
+    Limits.IsZero (apm_t00A01_H k A) := by
+  sorry
+
+/-- LEAF (the hard part). Degrees 2 and 3. For the cover of `_aux_cover`, the
+Mayer--Vietoris sequence gives `0 → H₃(P) → H₃(M) → H₂(S²) → H₂(P) → 0`, so
+both groups vanish exactly when the connecting map `H₃(M) ≅ ℤ → H₂(S²) ≅ ℤ`
+is an isomorphism: the fundamental class of the closed 3-manifold `M`
+restricts to a generator of the local homology at the removed ball. This
+needs local orientation classes; see
+`ConstructionTargets.LocalHomologyNeighborhoodExcision`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     [IsManifold apm_t00A01_Model3 ∞ M]
@@ -1731,32 +1771,11 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
     (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
     (hM : apm_t00A01_isHomology3Sphere M)
     (hcollar : apm_t00A01_HasBallCollar φ) (k : ℕ)
-    (hk : k = 1 ∨ k = 2) :
+    (hk : k = 2 ∨ k = 3) :
     Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
   sorry
 
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_top
-    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
-    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
-    [IsManifold apm_t00A01_Model3 ∞ M]
-    [BoundarylessManifold apm_t00A01_Model3 M]
-    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
-    (hM : apm_t00A01_isHomology3Sphere M)
-    (hcollar : apm_t00A01_HasBallCollar φ) :
-    Limits.IsZero (apm_t00A01_H 3 (apm_t00A01_punctured φ)) := by
-  sorry
-
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_above
-    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
-    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
-    [IsManifold apm_t00A01_Model3 ∞ M]
-    [BoundarylessManifold apm_t00A01_Model3 M]
-    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
-    (hM : apm_t00A01_isHomology3Sphere M)
-    (hcollar : apm_t00A01_HasBallCollar φ) (k : ℕ) (hk : 3 < k) :
-    Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
-  sorry
-
+/-- ASSEMBLY (from `_aux_cover`, `_aux_disk`, `_aux_mv`, `_aux_mid`). -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -1767,17 +1786,14 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive
     (hcollar : apm_t00A01_HasBallCollar φ) :
     ∀ k : ℕ, k ≠ 0 → Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
   intro k hk
-  rcases Nat.eq_or_lt_of_le (Nat.one_le_iff_ne_zero.mpr hk) with rfl | hk1
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
-      M φ hφ hM hcollar 1 (Or.inl rfl)
-  rcases Nat.eq_or_lt_of_le hk1 with rfl | hk2
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
-      M φ hφ hM hcollar 2 (Or.inr rfl)
-  rcases Nat.eq_or_lt_of_le hk2 with rfl | hk3
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_top
-      M φ hφ hM hcollar
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_above
-      M φ hφ hM hcollar k hk3
+  have hcov := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover M φ hφ hcollar
+  have hD := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk
+  by_cases hmid : k = 2 ∨ k = 3
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid
+      M φ hφ hM hcollar k hmid
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mv
+      M _ _ hM hD hcov k (by omega)
+
 theorem apm_t00A01_punctured_isHomologyBall
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -1964,7 +1980,137 @@ lemma apm_t00A01_collared_standardCover_aux_left_aux_radial
       (∀ p, H p ∈ apm_t00A01_collarSet φ Φ) ∧
       (∀ s (h : apm_t00A01_boundaryMap φ hφ.injective s ∈ apm_t00A01_collarSet φ Φ) t,
         H (⟨_, h⟩, t) = apm_t00A01_boundaryMap φ hφ.injective s) := by
-  sorry
+  classical
+  let C := apm_t00A01_collarSet φ Φ
+  let j : C → Set.range Φ := fun x ↦
+    ⟨x.1.1, by
+      rcases x.2 with ⟨y, hy, hxy⟩
+      exact ⟨y, hxy⟩⟩
+  let c : C → apm_t00A01_LargeDisk3 := fun x ↦ hΦ.toHomeomorph.symm (j x)
+  have hj : Continuous j := by
+    exact Continuous.subtype_mk (continuous_subtype_val.comp continuous_subtype_val) _
+  have hc : Continuous c := hΦ.toHomeomorph.symm.continuous.comp hj
+  have hc_image (x : C) : Φ (c x) = x.1.1 := by
+    exact congrArg Subtype.val (hΦ.toHomeomorph.apply_symm_apply (j x))
+  have hc_norm (x : C) : 1 ≤ ‖(c x).1‖ :=
+    apm_t00A01_collared_standardCover_aux_left_aux_norm_ge_one φ Φ hext x.1 (c x)
+      (hc_image x)
+  have hc_ne (x : C) : ‖(c x).1‖ ≠ 0 := ne_of_gt (lt_of_lt_of_le zero_lt_one (hc_norm x))
+  let rv : C → EuclideanSpace ℝ (Fin 3) := fun x ↦ (‖(c x).1‖)⁻¹ • (c x).1
+  have hrv_norm (x : C) : ‖rv x‖ = 1 := by
+    simp [rv, norm_smul, Real.norm_of_nonneg (norm_nonneg _), hc_ne x]
+  let r : C( C, apm_t00A01_Sphere2) :=
+    ⟨fun x ↦ ⟨rv x, by simpa [Metric.mem_sphere, dist_zero_right] using hrv_norm x⟩, by
+      apply Continuous.subtype_mk
+      exact ((continuous_norm.comp
+        (continuous_subtype_val.comp hc)).inv₀ (fun x ↦ hc_ne x)).smul
+          (continuous_subtype_val.comp hc)⟩
+  let v : C × unitInterval → EuclideanSpace ℝ (Fin 3) := fun p ↦
+    ((1 - (p.2 : ℝ)) + (p.2 : ℝ) * (‖(c p.1).1‖)⁻¹) • (c p.1).1
+  have hv_norm (p : C × unitInterval) :
+      ‖v p‖ = (1 - (p.2 : ℝ)) * ‖(c p.1).1‖ + (p.2 : ℝ) := by
+    have hn : 0 < ‖(c p.1).1‖ := lt_of_lt_of_le zero_lt_one (hc_norm p.1)
+    have ht0 : 0 ≤ (p.2 : ℝ) := p.2.2.1
+    have ht1 : (p.2 : ℝ) ≤ 1 := p.2.2.2
+    have hinv : 0 < (‖(c p.1).1‖)⁻¹ := inv_pos.mpr hn
+    have ha : 0 ≤ (1 - (p.2 : ℝ)) + (p.2 : ℝ) * (‖(c p.1).1‖)⁻¹ := by
+      have hprod : 0 ≤ (p.2 : ℝ) * (‖(c p.1).1‖)⁻¹ :=
+        mul_nonneg ht0 hinv.le
+      linarith
+    simp only [v, norm_smul, Real.norm_eq_abs]
+    rw [abs_of_nonneg ha]
+    field_simp
+  have hv_ge (p : C × unitInterval) : 1 ≤ ‖v p‖ := by
+    rw [hv_norm]
+    nlinarith [hc_norm p.1, p.2.2.1, p.2.2.2]
+  have hv_le (p : C × unitInterval) : ‖v p‖ ≤ 2 := by
+    rw [hv_norm]
+    have hn2 : ‖(c p.1).1‖ ≤ 2 := by
+      have hh := (c p.1).2
+      change dist (c p.1).1 0 ≤ 2 at hh
+      simpa [dist_zero_right] using hh
+    nlinarith [p.2.2.1, p.2.2.2]
+  let w : C × unitInterval → apm_t00A01_LargeDisk3 := fun p ↦
+    ⟨v p, by simpa [Metric.mem_closedBall, dist_zero_right] using hv_le p⟩
+  have hw_cont : Continuous w := by
+    apply Continuous.subtype_mk
+    exact (((continuous_const.sub
+      (continuous_subtype_val.comp continuous_snd)).add
+        ((continuous_subtype_val.comp continuous_snd).mul
+          ((continuous_norm.comp
+            (continuous_subtype_val.comp (hc.comp continuous_fst))).inv₀
+              (fun p ↦ hc_ne p.1)))).smul
+        (continuous_subtype_val.comp (hc.comp continuous_fst)))
+  have hw_punctured (p : C × unitInterval) :
+      Φ (w p) ∉ φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1} := by
+    rintro ⟨y, hy, heq⟩
+    have heq' : w p = apm_t00A01_unitToLarge y := by
+      apply hΦ.injective
+      exact heq.symm.trans (congrFun hext y).symm
+    have : ‖v p‖ < 1 := by
+      have hv : v p = y.1 := congrArg Subtype.val heq'
+      rw [hv]
+      simpa [dist_zero_right] using hy
+    exact (not_lt_of_ge (hv_ge p)) this
+  let H : C(C × unitInterval, apm_t00A01_punctured φ) :=
+    ⟨fun p ↦ ⟨Φ (w p), hw_punctured p⟩,
+      Continuous.subtype_mk (hΦ.continuous.comp hw_cont) _⟩
+  refine ⟨r, H, ?_, ?_, ?_, ?_, ?_⟩
+  · intro s hs
+    apply Subtype.ext
+    change rv ⟨apm_t00A01_boundaryMap φ hφ.injective s, hs⟩ = s.1
+    have hc_eq : c ⟨apm_t00A01_boundaryMap φ hφ.injective s, hs⟩ =
+        apm_t00A01_unitToLarge
+          ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩ := by
+      apply hΦ.injective
+      rw [hc_image]
+      exact (congrFun hext _).symm
+    have hs_norm : ‖s.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using s.2
+    simp [rv, hc_eq, apm_t00A01_unitToLarge, hs_norm]
+  · intro x
+    apply Subtype.ext
+    change Φ (w (x, 0)) = x.1.1
+    rw [show w (x, 0) = c x by
+      apply Subtype.ext
+      simp [w, v]]
+    exact hc_image x
+  · intro x
+    apply Subtype.ext
+    change Φ (w (x, 1)) = φ _
+    rw [show w (x, 1) = apm_t00A01_unitToLarge
+        ⟨rv x, by simpa [Metric.mem_closedBall, dist_zero_right] using (hrv_norm x).le⟩ by
+      apply Subtype.ext
+      change v (x, 1) = rv x
+      simp [v, rv]]
+    exact congrFun hext _
+  · intro p
+    change Φ (w p) ∈ Φ '' {y : apm_t00A01_LargeDisk3 | dist y.1 0 < 2}
+    refine ⟨w p, ?_, rfl⟩
+    have hc_lt : ‖(c p.1).1‖ < 2 := by
+      rcases p.1.2 with ⟨y, hy, hyeq⟩
+      have : c p.1 = y := hΦ.injective ((hc_image p.1).trans hyeq.symm)
+      simpa [this, dist_zero_right] using hy
+    have hvlt : ‖v p‖ < 2 := by
+      rw [hv_norm]
+      have hprod : 0 ≤ (p.2 : ℝ) * (‖(c p.1).1‖ - 1) :=
+        mul_nonneg p.2.2.1 (sub_nonneg.mpr (hc_norm p.1))
+      nlinarith
+    simpa [w, dist_zero_right] using hvlt
+  · intro s hs t
+    apply Subtype.ext
+    change Φ (w (⟨_, hs⟩, t)) = φ _
+    have hc_eq : c ⟨apm_t00A01_boundaryMap φ hφ.injective s, hs⟩ =
+        apm_t00A01_unitToLarge
+          ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩ := by
+      apply hΦ.injective
+      rw [hc_image]
+      exact (congrFun hext _).symm
+    have hs_norm : ‖s.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using s.2
+    rw [show w (⟨_, hs⟩, t) = apm_t00A01_unitToLarge
+        ⟨s.1, by simpa [Metric.mem_closedBall, dist_zero_right] using hs_norm.le⟩ by
+      apply Subtype.ext
+      simp [w, v, hc_eq, apm_t00A01_unitToLarge, hs_norm]]
+    exact congrFun hext _
 
 /-- LEAF. Generic quotient step: if an open collar `C ⊇ iB '' univ` of the
 second piece strong-deformation-retracts onto the glued sphere, the left
@@ -2018,6 +2164,38 @@ proof with the roles of `inl` and `inr` exchanged: `f` sends `[inr b] ↦ b`,
 Continuity through the open saturated preimage `inl '' C ∪ range inr`
 (`IsQuotientMap.restrictPreimage_isOpen`), times the locally compact
 `unitInterval`. -/
+private lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient_mem
+    {A B : Type} (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (C : Set A) (hiA : ∀ s, iA s ∈ C) {x y : Sum A B}
+    (hxy : Relation.EqvGen (apm_t00A01_glueRel iA iB) x y) :
+    (x ∈ Sum.inl '' C ∪ Set.range Sum.inr) ↔
+      (y ∈ Sum.inl '' C ∪ Set.range Sum.inr) := by
+  induction hxy with
+  | rel x y h =>
+      cases h with
+      | glue s =>
+          constructor <;> intro h
+          · exact Or.inr ⟨iB s, rfl⟩
+          · exact Or.inl ⟨iA s, hiA s, rfl⟩
+  | refl => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+
+private lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient_preimage
+    {A B : Type} (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (C : Set A) (hiA : ∀ s, iA s ∈ C) :
+    (fun z : Sum A B ↦ Quotient.mk
+      (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) z) ⁻¹'
+        apm_t00A01_thickRight iA iB C =
+      Sum.inl '' C ∪ Set.range Sum.inr := by
+  ext z
+  constructor
+  · rintro ⟨w, hw, heq⟩
+    exact (apm_t00A01_collared_standardCover_aux_right_aux_quotient_mem
+      iA iB C hiA (Quotient.exact heq.symm)).mpr hw
+  · intro hz
+    exact ⟨z, hz, rfl⟩
+
 -- BEGIN SEAT AREA
 lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
     [TopologicalSpace A] [TopologicalSpace B]
@@ -2030,7 +2208,6 @@ lemma apm_t00A01_collared_standardCover_aux_right_aux_quotient {A B : Type}
     Nonempty (ContinuousMap.HomotopyEquiv ↥(apm_t00A01_thickRight iA iB C) B) := by
   sorry
 -- END SEAT AREA
-
 /-- ASSEMBLY (from `_aux_left_aux_radial` applied to the first piece, and
 `_aux_right_aux_quotient`). Mirror image of `_aux_left`: the right thickening
 deformation retracts onto the second punctured piece. -/
@@ -2081,6 +2258,31 @@ lemma apm_t00A01_collared_standardCover_aux_inter_aux_collar_coord
   intro y' hy'
   exact hΦ.injective (hy'.1.trans hyx.symm)
 
+/- The quotient-topology core of the overlap argument.  Each of the two open
+collars strongly deformation retracts, relative to its boundary copy, onto the
+same sphere.  After gluing those boundary copies, their union (which is exactly
+the overlap of the two standard thickenings) therefore deformation retracts
+onto that sphere. -/
+lemma apm_t00A01_collared_standardCover_aux_inter_aux_quotient
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (CA : Set A) (CB : Set B) (hCA : IsOpen CA) (hCB : IsOpen CB)
+    (hiA : ∀ s, iA s ∈ CA) (hiB : ∀ s, iB s ∈ CB)
+    (rA : C(↥CA, apm_t00A01_Sphere2)) (HA : C(↥CA × unitInterval, A))
+    (rB : C(↥CB, apm_t00A01_Sphere2)) (HB : C(↥CB × unitInterval, B))
+    (hrA : ∀ s, rA ⟨iA s, hiA s⟩ = s)
+    (hrB : ∀ s, rB ⟨iB s, hiB s⟩ = s)
+    (hHA0 : ∀ x, HA (x, 0) = x.1) (hHB0 : ∀ x, HB (x, 0) = x.1)
+    (hHA1 : ∀ x, HA (x, 1) = iA (rA x))
+    (hHB1 : ∀ x, HB (x, 1) = iB (rB x))
+    (hHACA : ∀ p, HA p ∈ CA) (hHBCB : ∀ p, HB p ∈ CB)
+    (hHAfix : ∀ s t, HA (⟨iA s, hiA s⟩, t) = iA s)
+    (hHBfix : ∀ s t, HB (⟨iB s, hiB s⟩, t) = iB s) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥(apm_t00A01_thickLeft iA iB CB ∩ apm_t00A01_thickRight iA iB CA)
+      apm_t00A01_Sphere2) := by
+  sorry
+
 lemma apm_t00A01_collared_standardCover_aux_inter
     {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
@@ -2097,7 +2299,22 @@ lemma apm_t00A01_collared_standardCover_aux_inter
         apm_t00A01_thickRight (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
           (apm_t00A01_boundaryMap φ₂ hφ₂.injective) (apm_t00A01_collarSet φ₁ Φ₁))
       apm_t00A01_Sphere2) := by
-  sorry
+  obtain ⟨hC₁open, hC₁mem⟩ :=
+    apm_t00A01_collared_standardCover_aux_collar φ₁ hφ₁ Φ₁ hext₁ hopen₁
+  obtain ⟨hC₂open, hC₂mem⟩ :=
+    apm_t00A01_collared_standardCover_aux_collar φ₂ hφ₂ Φ₂ hext₂ hopen₂
+  obtain ⟨r₁, H₁, hr₁, hH₁zero, hH₁one, hH₁C, hH₁fix⟩ :=
+    apm_t00A01_collared_standardCover_aux_left_aux_radial φ₁ hφ₁ Φ₁ hΦ₁ hext₁
+  obtain ⟨r₂, H₂, hr₂, hH₂zero, hH₂one, hH₂C, hH₂fix⟩ :=
+    apm_t00A01_collared_standardCover_aux_left_aux_radial φ₂ hφ₂ Φ₂ hΦ₂ hext₂
+  exact apm_t00A01_collared_standardCover_aux_inter_aux_quotient
+    (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+    (apm_t00A01_boundaryMap φ₂ hφ₂.injective)
+    _ _ hC₁open hC₂open hC₁mem hC₂mem r₁ H₁ r₂ H₂
+    (fun s ↦ hr₁ s (hC₁mem s)) (fun s ↦ hr₂ s (hC₂mem s))
+    hH₁zero hH₂zero hH₁one hH₂one hH₁C hH₂C
+    (fun s t ↦ hH₁fix s (hC₁mem s) t)
+    (fun s t ↦ hH₂fix s (hC₂mem s) t)
 lemma apm_t00A01_collared_standardCover_aux_cover
     (M₁ M₂ : Type) [TopologicalSpace M₁] [TopologicalSpace M₂]
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
