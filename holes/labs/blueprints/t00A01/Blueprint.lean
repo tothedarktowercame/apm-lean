@@ -1723,7 +1723,47 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_H0
       (TopCat.of (apm_t00A01_punctured φ)) 0
       (ModuleCat.of ℤ ℤ) (asIso q).symm⟩
 
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
+/-- LEAF (geometry). `M` has a standard cover by the punctured piece and a
+disk: `U = M \ Φ(closedBall 0 (1/2))`, homotopy equivalent to the punctured
+piece by `apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv`;
+`V = Φ(ball 0 2)` (`apm_t00A01_punctured_fundamentalGroup_aux_ball`), which
+is contractible, hence homotopy equivalent to the closed unit disk; and
+`U ∩ V = Φ(1/2 < ‖x‖ < 2)`, which retracts radially onto the unit sphere. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (hcollar : apm_t00A01_HasBallCollar φ) :
+    apm_t00A01_hasStandardCover M (apm_t00A01_punctured φ) apm_t00A01_Disk3 := by
+  sorry
+
+/-- LEAF. The closed unit three-disk is a homology ball: it is convex, hence
+contractible, so it is homotopy equivalent to a point. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk :
+    apm_t00A01_isHomologyBall apm_t00A01_Disk3 := by
+  sorry
+
+/-- LEAF (algebra). Mayer--Vietoris for a standard cover of a homology
+3-sphere `X` by `A` and a homology ball `B`, overlapping in `S²`. In degree
+`k = 1` and in degrees `k > 3` both `Hₖ(S²)` and `Hₖ(X)` vanish, so exactness
+of `Hₖ(U ∩ V) → Hₖ(U) ⊕ Hₖ(V) → Hₖ(X)` forces `Hₖ(U) = 0`, and `U ≃ A`.
+The same Mayer--Vietoris interfaces as in
+`apm_t00A01_bridge_connectedSum_isHomology3Sphere` apply. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mv
+    (X A B : Type) [TopologicalSpace X] [TopologicalSpace A] [TopologicalSpace B]
+    (hX : apm_t00A01_isHomology3Sphere X) (hB : apm_t00A01_isHomologyBall B)
+    (hcover : apm_t00A01_hasStandardCover X A B)
+    (k : ℕ) (hk : k = 1 ∨ 3 < k) :
+    Limits.IsZero (apm_t00A01_H k A) := by
+  sorry
+
+/-- LEAF (the hard part). Degrees 2 and 3. For the cover of `_aux_cover`, the
+Mayer--Vietoris sequence gives `0 → H₃(P) → H₃(M) → H₂(S²) → H₂(P) → 0`, so
+both groups vanish exactly when the connecting map `H₃(M) ≅ ℤ → H₂(S²) ≅ ℤ`
+is an isomorphism: the fundamental class of the closed 3-manifold `M`
+restricts to a generator of the local homology at the removed ball. This
+needs local orientation classes; see
+`ConstructionTargets.LocalHomologyNeighborhoodExcision`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     [IsManifold apm_t00A01_Model3 ∞ M]
@@ -1731,32 +1771,11 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
     (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
     (hM : apm_t00A01_isHomology3Sphere M)
     (hcollar : apm_t00A01_HasBallCollar φ) (k : ℕ)
-    (hk : k = 1 ∨ k = 2) :
+    (hk : k = 2 ∨ k = 3) :
     Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
   sorry
 
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_top
-    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
-    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
-    [IsManifold apm_t00A01_Model3 ∞ M]
-    [BoundarylessManifold apm_t00A01_Model3 M]
-    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
-    (hM : apm_t00A01_isHomology3Sphere M)
-    (hcollar : apm_t00A01_HasBallCollar φ) :
-    Limits.IsZero (apm_t00A01_H 3 (apm_t00A01_punctured φ)) := by
-  sorry
-
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_above
-    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
-    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
-    [IsManifold apm_t00A01_Model3 ∞ M]
-    [BoundarylessManifold apm_t00A01_Model3 M]
-    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
-    (hM : apm_t00A01_isHomology3Sphere M)
-    (hcollar : apm_t00A01_HasBallCollar φ) (k : ℕ) (hk : 3 < k) :
-    Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
-  sorry
-
+/-- ASSEMBLY (from `_aux_cover`, `_aux_disk`, `_aux_mv`, `_aux_mid`). -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -1767,17 +1786,14 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive
     (hcollar : apm_t00A01_HasBallCollar φ) :
     ∀ k : ℕ, k ≠ 0 → Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
   intro k hk
-  rcases Nat.eq_or_lt_of_le (Nat.one_le_iff_ne_zero.mpr hk) with rfl | hk1
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
-      M φ hφ hM hcollar 1 (Or.inl rfl)
-  rcases Nat.eq_or_lt_of_le hk1 with rfl | hk2
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_low
-      M φ hφ hM hcollar 2 (Or.inr rfl)
-  rcases Nat.eq_or_lt_of_le hk2 with rfl | hk3
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_top
-      M φ hφ hM hcollar
-  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_above
-      M φ hφ hM hcollar k hk3
+  have hcov := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_cover M φ hφ hcollar
+  have hD := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_disk
+  by_cases hmid : k = 2 ∨ k = 3
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid
+      M φ hφ hM hcollar k hmid
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mv
+      M _ _ hM hD hcov k (by omega)
+
 theorem apm_t00A01_punctured_isHomologyBall
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
