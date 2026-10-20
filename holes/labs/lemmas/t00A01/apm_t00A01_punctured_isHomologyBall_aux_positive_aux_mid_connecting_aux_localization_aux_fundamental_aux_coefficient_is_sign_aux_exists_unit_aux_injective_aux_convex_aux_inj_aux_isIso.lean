@@ -2219,8 +2219,160 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   exact ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
     e A B hAB 3
 
-/-- LIBRARY LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL,
-2026-10-20): the convex model in `ℝ³`.  For compact convex `K ⊆ ℝ³` and
+/-- LEAF (split from `_convex_aux_inj_aux_model` after lemma-1's PARTIAL,
+job 181, 2026-10-20): radial deformation.  For compact convex `K ⊆ ℝ³` and
+`u ∈ K`, the inclusion `ℝ³ ∖ K ↪ ℝ³ ∖ u` is a homotopy equivalence.  Route:
+pick `R` with `K ⊆ ball u R` (`_aux_bounding_ball`) and let
+`ρ p = u + R • (p - u) / ‖p - u‖`.  For `p ∉ K` the segment from `p` to `ρ p`
+avoids `K`: the ray from `u` through `p` meets `K` in an interval containing
+`u` (convexity) and `p` lies beyond it.  So `ρ : ℝ³ ∖ u → ℝ³ ∖ K` is a homotopy
+inverse of the inclusion: on both sides the straight-line homotopy to `ρ`
+stays in the complement. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_hequiv
+    (K : Set (EuclideanSpace ℝ (Fin 3))) (hK : IsCompact K) (hconv : Convex ℝ K)
+    (u : EuclideanSpace ℝ (Fin 3)) (hu : u ∈ K) :
+    ∃ e : ContinuousMap.HomotopyEquiv (Kᶜ : Set (EuclideanSpace ℝ (Fin 3)))
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u),
+      ∀ x, ((e.toFun x : EuclideanSpace ℝ (Fin 3))) = (x : EuclideanSpace ℝ (Fin 3)) := by
+  obtain ⟨R, hR, hKR⟩ := hK.isBounded.subset_ball_lt 1 u
+  let j : C((Kᶜ : Set (EuclideanSpace ℝ (Fin 3))),
+      ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u) :=
+    { toFun := fun x => ⟨x.1, by
+        intro hx
+        apply x.2
+        have : x.1 = u := by
+          simpa [ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint] using hx
+        simpa [this] using hu⟩
+      continuous_toFun := by fun_prop }
+  let ρ : C(ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u,
+      (Kᶜ : Set (EuclideanSpace ℝ (Fin 3)))) :=
+    { toFun := fun x => ⟨u + (1 + R / ‖x.1 - u‖) • (x.1 - u), by
+        intro hxK
+        have hxne : x.1 - u ≠ 0 := sub_ne_zero.mpr (by
+          intro hxu
+          exact x.2 (by simpa [ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint,
+            hxu]))
+        have hn : 0 < ‖x.1 - u‖ := norm_pos_iff.mpr hxne
+        have ha : 0 ≤ 1 + R / ‖x.1 - u‖ := by positivity
+        have hdist : dist (u + (1 + R / ‖x.1 - u‖) • (x.1 - u)) u =
+            ‖x.1 - u‖ + R := by
+          rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs,
+            abs_of_nonneg ha]
+          field_simp
+        have hb := hKR hxK
+        rw [Metric.mem_ball, hdist] at hb
+        linarith⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        have hv : Continuous (fun x : ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u =>
+            x.1 - u) := continuous_subtype_val.sub continuous_const
+        have hn : Continuous (fun x : ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u =>
+            ‖x.1 - u‖) := continuous_norm.comp hv
+        have hn0 : ∀ x : ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u,
+            ‖x.1 - u‖ ≠ 0 := fun x => norm_ne_zero_iff.mpr (sub_ne_zero.mpr (by
+              intro hxu
+              exact x.2 (by simpa [ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint,
+                hxu])))
+        exact continuous_const.add
+          ((continuous_const.add (continuous_const.div hn hn0)).smul hv) }
+  let Hout : ContinuousMap.Homotopy (j.comp ρ) (ContinuousMap.id _) :=
+    { toFun := fun tx => ⟨(1 - (tx.1 : ℝ)) • ((j.comp ρ) tx.2).1 +
+          (tx.1 : ℝ) • tx.2.1, by
+        intro heq
+        have hxne : tx.2.1 ≠ u := by
+          intro hx
+          exact tx.2.2 (by simpa [ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint, hx])
+        have hvne : tx.2.1 - u ≠ 0 := sub_ne_zero.mpr hxne
+        have hn : 0 < ‖tx.2.1 - u‖ := norm_pos_iff.mpr hvne
+        have hcoef : 0 < (1 - (tx.1 : ℝ)) * (1 + R / ‖tx.2.1 - u‖) + (tx.1 : ℝ) := by
+          have ht0 := tx.1.2.1
+          have ht1 := tx.1.2.2
+          have : 0 < R := lt_trans (by norm_num) hR
+          have hq : 0 ≤ R / ‖tx.2.1 - u‖ := by positivity
+          nlinarith
+        apply hvne
+        have hzero : ((1 - (tx.1 : ℝ)) * (1 + R / ‖tx.2.1 - u‖) +
+            (tx.1 : ℝ)) • (tx.2.1 - u) = 0 := by
+          calc
+            _ = (1 - (tx.1 : ℝ)) • ((j.comp ρ) tx.2).1 +
+                (tx.1 : ℝ) • tx.2.1 - u := by dsimp [j, ρ]; module
+            _ = 0 := sub_eq_zero.mpr heq
+        exact (smul_eq_zero.mp hzero).resolve_left hcoef.ne'⟩
+      continuous_toFun := by fun_prop
+      map_zero_left := by intro x; apply Subtype.ext; simp [j, ρ]
+      map_one_left := by intro x; apply Subtype.ext; simp }
+  let Hin : ContinuousMap.Homotopy (ρ.comp j) (ContinuousMap.id _) :=
+    { toFun := fun tx => ⟨(1 - (tx.1 : ℝ)) • ((ρ.comp j) tx.2).1 +
+          (tx.1 : ℝ) • tx.2.1, by
+        intro hz
+        have ht0 : 0 ≤ (tx.1 : ℝ) := tx.1.2.1
+        have ht1 : (tx.1 : ℝ) ≤ 1 := tx.1.2.2
+        have hvne : tx.2.1 - u ≠ 0 := sub_ne_zero.mpr (by
+          intro hxu
+          exact tx.2.2 (by simpa [hxu] using hu))
+        have hn : 0 < ‖tx.2.1 - u‖ := norm_pos_iff.mpr hvne
+        let c : ℝ := (1 - (tx.1 : ℝ)) * (1 + R / ‖tx.2.1 - u‖) + (tx.1 : ℝ)
+        have hc : 1 ≤ c := by
+          dsimp [c]
+          have hRp : 0 ≤ R / ‖tx.2.1 - u‖ := by positivity
+          nlinarith
+        have hc0 : 0 < c := lt_of_lt_of_le zero_lt_one hc
+        have hzform : (1 - (tx.1 : ℝ)) • ((ρ.comp j) tx.2).1 +
+              (tx.1 : ℝ) • tx.2.1 = u + c • (tx.2.1 - u) := by
+          dsimp [c, ρ, j]
+          module
+        have hp : tx.2.1 = (1 - c⁻¹) • u + c⁻¹ •
+            ((1 - (tx.1 : ℝ)) • ((ρ.comp j) tx.2).1 +
+              (tx.1 : ℝ) • tx.2.1) := by
+          rw [hzform]
+          rw [smul_add, smul_smul, inv_mul_cancel₀ hc0.ne', one_smul]
+          module
+        have hc_inv : 0 ≤ c⁻¹ := inv_nonneg.mpr hc0.le
+        have hc_sub : 0 ≤ 1 - c⁻¹ := sub_nonneg.mpr ((inv_le_one₀ hc0).2 hc)
+        have hmem := hconv hu hz hc_sub hc_inv (by ring)
+        exact tx.2.2 (hp.symm ▸ hmem)⟩
+      continuous_toFun := by fun_prop
+      map_zero_left := by intro x; apply Subtype.ext; simp [ρ, j]
+      map_one_left := by intro x; apply Subtype.ext; simp }
+  refine ⟨{ toFun := j, invFun := ρ, left_inv := ⟨Hin⟩, right_inv := ⟨Hout⟩ }, ?_⟩
+  intro x
+  rfl
+
+/-- PROVED (lemma-1, job 181, 2026-10-20). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_bounding_ball
+    (K : Set (EuclideanSpace ℝ (Fin 3))) (hK : IsCompact K)
+    (u : EuclideanSpace ℝ (Fin 3)) :
+    ∃ R : ℝ, 1 < R ∧ K ⊆ Metric.ball u R := by
+  exact hK.isBounded.subset_ball_lt 1 u
+
+/-- PROVED from `_aux_hequiv` (claude-14, 2026-10-20): the inclusion of
+complements induces isomorphisms on singular homology in every degree. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_sub
+    (K : Set (EuclideanSpace ℝ (Fin 3))) (hK : IsCompact K) (hconv : Convex ℝ K)
+    (u : EuclideanSpace ℝ (Fin 3)) (hu : u ∈ K) (i : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+        (ConstructionTargets.SingularExcision.subspaceMap Kᶜ
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
+          (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu))) i) := by
+  obtain ⟨e, he⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_hequiv K hK hconv u hu
+  have hmap : ConstructionTargets.SingularExcision.subspaceMap Kᶜ
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
+      (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu) = TopCat.ofHom e.toFun := by
+    apply ConcreteCategory.hom_ext
+    intro x
+    apply Subtype.ext
+    exact (he x).symm
+  change IsIso (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat i).obj
+    (AddCommGrpCat.of ℤ)).map _)
+  rw [hmap, ← ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv_hom e i]
+  infer_instance
+
+/-- PROVED from `_aux_model_aux_hequiv` (claude-14, 2026-10-20; split from
+`_convex_aux_inj` after lemma-1's PARTIAL): the convex model in `ℝ³`.  For compact convex `K ⊆ ℝ³` and
 `u ∈ K`, the identity induces an isomorphism
 `H_(n+1)(ℝ³, ℝ³ ∖ K) → H_(n+1)(ℝ³, ℝ³ ∖ u)`.  Route: pick `R` with
 `K ⊆ ball u R`.  For `p ∉ K` the ray from `u` through `p` meets `K` in an
@@ -2238,7 +2390,23 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
         (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
         (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu)) (n + 1)) := by
-  sorry
+  have hamb : ∀ j, IsIso (HomologicalComplex.homologyMap
+      (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom (ContinuousMap.id (EuclideanSpace ℝ (Fin 3))))) j) := by
+    intro j
+    change IsIso (HomologicalComplex.homologyMap
+      (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map (𝟙 (TopCat.of (EuclideanSpace ℝ (Fin 3))))) j)
+    rw [CategoryTheory.Functor.map_id, HomologicalComplex.homologyMap_id]
+    infer_instance
+  apply ConstructionTargets.SingularExcision.relativeSingularMap_homologyMap_isIso
+  · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_sub K hK hconv u hu (n + 1)
+  · exact hamb (n + 1)
+  · intro j _
+    exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model_aux_sub K hK hconv u hu j
+  · intro j _
+    exact hamb j
 
 /-- PROVED from `_convex_aux_inj_aux_model` (claude-14, 2026-10-20; split from
 `_aux_ball` after lemma-1's PARTIAL): moving a puncture inside a closed ball of `ℝ³`.  For `u` in the open ball
@@ -2423,7 +2591,55 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     (y : M) (i : ℕ) (hi : 3 < i) :
     Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology i) := by
-  sorry
+  open ConstructionTargets.SingularHomologyConcrete
+    ConstructionTargets.SingularExcision
+    ConstructionTargets.LocalHomologyNeighborhoodExcision
+    ConstructionTargets.T02A06HemisphereExcision
+    ConstructionTargets.T02A06DiskRadialComparison
+    ConstructionTargets.SphereHomology
+    ConstructionTargets.ChartPairRelativeHomologyTransport
+    ConstructionTargets.HigherChartLocalGenerator in
+  have hmodel : Limits.IsZero
+      ((RelativeSingularChains (P 1)).homology i) := by
+    have hamb : Limits.IsZero
+        ((SingularChains (TopCat.of (D 1))).homology i) := by
+      letI : ContractibleSpace (D 1) := Metric.contractibleSpace_ball (by norm_num)
+      exact contractibleHigherHomology_isZero _ i (by omega)
+    have hpunct : Limits.IsZero
+        ((SingularChains (TopCat.of (P 1))).homology (i - 1)) := by
+      exact (sphereHomology_isZero_of_gt 2 (i - 1) (by omega)).of_iso
+        (singularHomologyIsoOfHomotopyEquiv
+          (sphereHomotopyEquivPuncturedOpenDisk 3) (i - 1)).symm
+    have hi' : i - 1 + 1 = i := by omega
+    rw [← hi'] at hamb
+    have hz := (singularPairHomology_exact_relative (P 1) (i - 1)).isZero_X₂
+      (hamb.eq_of_src _ _) (hpunct.eq_of_tgt _ _)
+    simpa [hi'] using hz
+  let f := HomologicalComplex.homologyMap
+    (relativeSingularMap (P 1) (deletedPoint y)
+      (ambientChartMap (k := 1) y) (ambientChartMap_mapsTo (k := 1) y)) i
+  have hf : IsIso f := by
+    letI := relativeSingularMap_homeomorphPair_isIso (modelChart (k := 1) y) (P 1)
+      (neighborhoodDeletedPoint (chartNeighborhood (k := 1) y) y)
+      (modelChart_deletedPoint_iff (k := 1) y) i
+    have hn : IsIso (HomologicalComplex.homologyMap
+        (relativeSingularMap
+          (neighborhoodDeletedPoint (chartNeighborhood (k := 1) y) y)
+          (deletedPoint y) (neighborhoodInclusion (chartNeighborhood (k := 1) y))
+          (neighborhoodInclusion_mapsTo (chartNeighborhood (k := 1) y) y)) i) := by
+      have hn' := neighborhoodInclusion_Hn_isIso (i - 2)
+        (chartNeighborhood (k := 1) y) y (chartNeighborhood_open (k := 1) y)
+        (mem_chartNeighborhood (k := 1) y)
+      rw [show i - 2 + 2 = i by omega] at hn'
+      exact hn'
+    letI := hn
+    change IsIso (HomologicalComplex.homologyMap
+      (relativeSingularMap (P 1) (deletedPoint y)
+        (ambientChartMap (k := 1) y) (ambientChartMap_mapsTo (k := 1) y)) i)
+    rw [ambientChartMap_chain_eq (k := 1), HomologicalComplex.homologyMap_comp]
+    infer_instance
+  letI := hf
+  exact AddCommGrpCat.isZero_iff_subsingleton.mp (hmodel.of_iso (asIso f).symm)
 
 /-- LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL, 2026-10-20):
 reduction to the convex model.  For compact `A` in the chart at `x` with
@@ -2873,7 +3089,35 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     (y : M) (m : ℤ) (hm : m ≠ 0)
     (x : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology 3) (h : m • x = 0) : x = 0 := by
-  sorry
+  let e := ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 y
+  apply (ConcreteCategory.bijective_of_isIso e.hom).1
+  have he : m • e.hom.hom x = 0 := by
+    rw [← map_zsmul, h, map_zero]
+  simpa using (eq_zero_or_eq_zero_of_smul_eq_zero he).resolve_left hm
+
+/-- PROVED (lemma-3, banked from its `_aux_glue` PARTIAL, job 187, 2026-10-20):
+middle exactness of the coefficient-subcomplex relative Mayer--Vietoris sequence for
+the subspaces `Aᶜ`, `Bᶜ`.  `_aux_glue` still has to transport it to the literal
+relative chains (`relativeSingularMap`). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_exact
+    (M : Type) [TopologicalSpace M] (A B : Set M) (n : ℕ) :
+    (ShortComplex.mk
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToPiecesRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ)) (n + 1))
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.piecesToUnionRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ)) (n + 1))
+      (by
+        rw [← HomologicalComplex.homologyMap_comp,
+          ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.relative_arrows_zero,
+          HomologicalComplex.homologyMap_zero])).Exact := by
+  exact
+    ConstructionTargets.CoefficientSubcomplexRelativeHomologySequence.exact_intersection_pieces_union
+      ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ) n
 
 /-- LIBRARY LEAF (Hatcher 3.27, relative Mayer--Vietoris, existence half): for
 closed `A`, `B`, classes of `H_n(M, M ∖ A)` and `H_n(M, M ∖ B)` with the same
@@ -2885,7 +3129,10 @@ at the middle term `H_n(S, P ∩ Q) → H_n(S, P) ⊕ H_n(S, Q) → H_n(S, P ∪
 relative chains with `CoefficientSubcomplexRelativeLiteralComparison` and
 `CoefficientCompactComplementUnionToRelative`).  The sign convention of the
 difference map does not matter here: equality of the two images is the kernel
-condition. -/
+condition.  Remaining after lemma-3's PARTIAL (job 187): `_aux_glue_aux_exact` gives
+exactness for `intersectionToPiecesRelative`/`piecesToUnionRelative`; transport it
+through the ModuleCat/AddCommGrpCat and literal-relative-chain comparison maps, proving
+by naturality that they identify the two arrows with the `relativeSingularMap`s. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue
     (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
     (n : ℕ) (μA : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology n) (μB : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Bᶜ).homology n)
