@@ -2112,6 +2112,28 @@ lemma apm_t00A01_collared_standardCover_aux_left_aux_radial
       simp [w, v, hc_eq, apm_t00A01_unitToLarge, hs_norm]]
     exact congrFun hext _
 
+/-- LEAF. Continuity through the gluing quotient, with a time parameter. If
+`P` is an open set of representatives and `S` the corresponding (saturated)
+set of glued points, a map out of `unitInterval × S` is continuous as soon as
+its pullback to `unitInterval × P` is. Proof: the quotient map restricted to
+`P → S` is a quotient map (`Topology.IsQuotientMap.restrictPreimage_isOpen`,
+after `Homeomorph.setCongr hsat`), and `unitInterval` is locally compact, so
+`Topology.IsQuotientMap.continuous_lift_prod_right` applies. The time-free
+case follows by precomposing with `fun x ↦ (0, x)`. Used for the left, right
+and overlap quotient steps. -/
+lemma apm_t00A01_collared_standardCover_aux_quotient_continuous {A B Z : Type}
+    [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace Z]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B)
+    (S : Set (apm_t00A01_connectedSum iA iB)) (P : Set (Sum A B)) (hP : IsOpen P)
+    (hsat : (fun z : Sum A B ↦
+      Quotient.mk (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) z) ⁻¹' S = P)
+    (F : unitInterval × ↥S → Z)
+    (hF : Continuous fun p : unitInterval × ↥P ↦
+      F (p.1, ⟨Quotient.mk (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) p.2.1,
+        (Set.ext_iff.mp hsat p.2.1).mpr p.2.2⟩)) :
+    Continuous F := by
+  sorry
+
 /-- LEAF. Generic quotient step: if an open collar `C ⊇ iB '' univ` of the
 second piece strong-deformation-retracts onto the glued sphere, the left
 thickening is homotopy equivalent to the first piece. Proof sketch: `f` sends
