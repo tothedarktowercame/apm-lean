@@ -2078,6 +2078,70 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_ta
 
 /-- LIBRARY: the top-dimensional global class of a closed connected
 three-manifold restricts to a generator of local homology at every point. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_coeff
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    ∃ r : ℤ, r •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) x =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 hM.2.1.some) := by
+  simpa using
+    (ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
+        1 hM.2.1.some x)
+
+/-- Hatcher Lemma 3.27(b), specialized to the compact set `M`: a global
+top-dimensional class which vanishes in every local homology group vanishes.
+This is the injectivity half of the missing compact Mayer--Vietoris induction. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_injective
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    Function.Injective
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
+  sorry
+
+/-- Hatcher Lemma 3.27(a): a compact connected manifold has a fundamental
+class whose image at the specified point is a signed normalized local class.
+The stronger simultaneous-for-all-points form is what the usual finite-cover
+Mayer--Vietoris induction proves. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    ∃ μ : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of M)).homology 3,
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3 μ =
+          ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) x ∨
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3 μ =
+          -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) x := by
+  sorry
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_target_generates
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M] (x : M) :
+    ∀ z : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint x)).homology 3,
+      ∃ r : ℤ, r •
+          ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) x = z := by
+  intro z
+  let e := ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 x
+  refine ⟨e.hom.hom z, ?_⟩
+  apply (ConcreteCategory.bijective_of_isIso e.hom).1
+  rw [map_zsmul,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator]
+  change e.hom.hom z • (1 : ℤ) = e.hom.hom z
+  rw [smul_eq_mul, mul_one]
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2085,7 +2149,34 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [BoundarylessManifold apm_t00A01_Model3 M]
     (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
     IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
-  sorry
+  let f := ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+  have hinj :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_injective
+      M hM x
+  obtain ⟨μ, hμ | hμ⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental
+      M hM x
+  · have hsurj : Function.Surjective f := by
+      intro z
+      obtain ⟨r, rfl⟩ :=
+        apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_target_generates
+          M x z
+      refine ⟨r • μ, ?_⟩
+      simpa only [f, map_zsmul, hμ]
+    letI := ConcreteCategory.mono_of_injective f hinj
+    letI := ConcreteCategory.epi_of_surjective f hsurj
+    exact isIso_of_mono_of_epi f
+  · have hsurj : Function.Surjective f := by
+      intro z
+      obtain ⟨r, rfl⟩ :=
+        apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_target_generates
+          M x z
+      refine ⟨(-r) • μ, ?_⟩
+      simp only [f]
+      rw [map_zsmul, hμ, smul_neg, neg_smul, neg_neg]
+    letI := ConcreteCategory.mono_of_injective f hinj
+    letI := ConcreteCategory.epi_of_surjective f hsurj
+    exact isIso_of_mono_of_epi f
 
 /-- PROVED (lemma-2, job 138): for a homology 3-sphere `M`, if localization at
 `x` is an iso in degree 3 then `H₂(M ∖ {x}) = 0`. The pair sequence of
