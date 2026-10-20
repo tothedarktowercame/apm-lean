@@ -1600,7 +1600,24 @@ lemma apm_t00A01_punctured_fundamentalGroup_aux_enlarged_pathConnected
     (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}))
     (hM : apm_t00A01_isHomology3Sphere M) :
     PathConnectedSpace ↥(apm_t00A01_punctured_fundamentalGroup_aux_inner Φ)ᶜ := by
-  sorry
+  let φ : apm_t00A01_Disk3 → M := Φ ∘ apm_t00A01_unitToLarge
+  have hu : Topology.IsEmbedding apm_t00A01_unitToLarge := by
+    apply Topology.IsEmbedding.of_comp
+      (Continuous.subtype_mk continuous_subtype_val _) continuous_subtype_val
+    exact (Topology.IsEmbedding.subtypeVal :
+      Topology.IsEmbedding (fun x : apm_t00A01_Disk3 ↦ x.1))
+  have hφ : Topology.IsEmbedding φ := hΦ.comp hu
+  have hcollar : apm_t00A01_HasBallCollar φ := ⟨Φ, hΦ, rfl, hΦo⟩
+  letI : PathConnectedSpace (apm_t00A01_punctured φ) :=
+    apm_t00A01_punctured_pathConnected M φ hφ hM hcollar
+  obtain ⟨e⟩ := apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv
+    φ Φ hΦ rfl hΦo
+  obtain ⟨H⟩ := e.right_inv
+  refine ⟨⟨e (Classical.choice (inferInstance : Nonempty (apm_t00A01_punctured φ)))⟩, ?_⟩
+  intro x y
+  let p : Path (e.invFun x) (e.invFun y) :=
+    PathConnectedSpace.somePath (e.invFun x) (e.invFun y)
+  exact ⟨(H.evalAt x).symm.trans ((p.map e.continuous).trans (H.evalAt y))⟩
 
 /-- A free product with a trivial factor is the other factor. -/
 noncomputable def apm_t00A01_punctured_fundamentalGroup_aux_coprod_trivial
