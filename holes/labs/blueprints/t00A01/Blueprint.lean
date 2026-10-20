@@ -2101,16 +2101,74 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2
     Limits.IsZero (apm_t00A01_H 2 (apm_t00A01_punctured phi)) := by
   sorry
 
+/-- Pair-sequence algebra (banked from lemma-3, job 140): if `H₄(X,A) = 0`
+and `H₃(X) → H₃(X,A)` is invertible, then `H₃(A) = 0`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_les
+    {X : Type} [TopologicalSpace X] (A : Set X)
+    (hrel4 : Limits.IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology 4))
+    (hloc : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection A) 3)) :
+    Limits.IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 3 (TopCat.of A)) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+    letI : IsIso (HomologicalComplex.homologyMap
+        (relativeSingularProjection A) 3) := hloc
+    have hiMono : Mono (HomologicalComplex.homologyMap
+        (singularSubspaceMap A) 3) :=
+      (singularPairHomology_exact_subspace A 3).mono_g (hrel4.eq_of_src _ _)
+    have hi : HomologicalComplex.homologyMap (singularSubspaceMap A) 3 = 0 :=
+      (singularPairHomology_exact_absolute A 3).mono_g_iff.mp (by infer_instance)
+    exact @Limits.IsZero.of_mono_eq_zero AddCommGrpCat _ _ _ _
+      (HomologicalComplex.homologyMap (singularSubspaceMap A) 3) hiMono hi
+
+/-- LIBRARY (excision across the collar): `H₄(M, M ∖ int B) = 0`.
+Excise `M ∖ Φ(open radius-2 ball)`, which is closed and lies in the interior of
+the complement (`φ(B)` is compact, so closed in the Hausdorff `M`); what is
+left is the pair (open radius-2 ball, radius-2 ball minus the open unit ball),
+whose relative homology vanishes above degree 3. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (hcollar : apm_t00A01_HasBallCollar phi) :
+    Limits.IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}).homology 4) := by
+  sorry
+
+/-- LIBRARY (comparison with local homology at the centre): the pair projection
+`H₃(M) → H₃(M, M ∖ int B)` is invertible when localization at `phi 0` is.
+Route: the identity is a map of pairs `(M, M ∖ int B) → (M, M ∖ {phi 0})`;
+`M ∖ int B ↪ M ∖ {phi 0}` is a homotopy equivalence (radial deformation of
+`phi(B ∖ 0)` onto the boundary sphere, glued with the identity along the closed
+cover), so `SingularExcision.relativeSingularMap_homologyMap_isIso` makes the
+relative map invertible, and `relativeSingularMap_projection_naturality`
+factors `localizationMap (phi 0) 3` through the projection. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_proj
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (hcollar : apm_t00A01_HasBallCollar phi)
+    (hloc : IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      (phi ⟨0, by simp [apm_t00A01_Disk3]⟩) 3)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}) 3) := by
+  sorry
+
 /-- LIBRARY: the same collar/pair comparison in the adjacent degree gives
-vanishing of degree three of the punctured manifold. -/
+vanishing of degree three of the punctured manifold. Assembled from `_aux_les`, `_aux_rel4`, `_aux_proj`. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
     (M : Type) [TopologicalSpace M] [T2Space M]
     (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
     (hcollar : apm_t00A01_HasBallCollar phi)
     (hloc : IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap
       (phi ⟨0, by simp [apm_t00A01_Disk3]⟩) 3)) :
-    Limits.IsZero (apm_t00A01_H 3 (apm_t00A01_punctured phi)) := by
-  sorry
+    Limits.IsZero (apm_t00A01_H 3 (apm_t00A01_punctured phi)) :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+    _ 3
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_les _
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4 M phi hphi hcollar)
+      (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_proj M phi hphi hcollar hloc))
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
