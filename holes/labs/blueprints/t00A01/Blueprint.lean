@@ -2280,6 +2280,37 @@ Excise `M ∖ Φ(open radius-2 ball)`, which is closed and lies in the interior 
 the complement (`φ(B)` is compact, so closed in the Hausdorff `M`); what is
 left is the pair (open radius-2 ball, radius-2 ball minus the open unit ball),
 whose relative homology vanishes above degree 3. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_model :
+    Limits.IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet 3)).homology 4) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.T02A06DiskRadialComparison in
+    have hamb : Limits.IsZero
+        ((SingularChains (TopCat.of (T02A06.euclideanClosedDisk 3))).homology 4) := by
+      letI : ContractibleSpace (T02A06.euclideanClosedDisk 3) :=
+        Metric.contractibleSpace_closedBall (by norm_num)
+      exact contractibleHigherHomology_isZero _ 4 (by omega)
+    have hbdry : Limits.IsZero
+        ((SingularChains (TopCat.of (closedDiskBoundarySet 3))).homology 3) := by
+      exact (ConstructionTargets.SphereHomology.sphereHomology_isZero_of_gt 2 3
+        (by omega)).of_iso
+          (singularHomologyIsoOfHomotopyEquiv
+            (closedDiskBoundaryHomeomorph 3).toHomotopyEquiv 3)
+    exact (singularPairHomology_exact_relative (closedDiskBoundarySet 3) 3).isZero_X₂
+      (hamb.eq_of_src _ _) (hbdry.eq_of_tgt _ _)
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (hcollar : apm_t00A01_HasBallCollar phi) :
+    Nonempty
+      (((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}).homology 4) ≅
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet 3)).homology 4)) := by
+  sorry
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4
     (M : Type) [TopologicalSpace M] [T2Space M]
     (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
@@ -2287,8 +2318,10 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
     Limits.IsZero
       ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
         {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}).homology 4) := by
-  sorry
-
+  rcases apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision
+    M phi hphi hcollar with ⟨e⟩
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_model.of_iso
+    e
 /-- LIBRARY (comparison with local homology at the centre): the pair projection
 `H₃(M) → H₃(M, M ∖ int B)` is invertible when localization at `phi 0` is.
 Route: the identity is a map of pairs `(M, M ∖ int B) → (M, M ∖ {phi 0})`;
