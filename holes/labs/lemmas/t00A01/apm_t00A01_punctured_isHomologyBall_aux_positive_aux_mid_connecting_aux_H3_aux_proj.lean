@@ -2078,6 +2078,70 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_ta
 
 /-- LIBRARY: the top-dimensional global class of a closed connected
 three-manifold restricts to a generator of local homology at every point. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_coeff
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    ∃ r : ℤ, r •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) x =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of M) 3 hM.2.1.some) := by
+  simpa using
+    (ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
+        1 hM.2.1.some x)
+
+/-- Hatcher Lemma 3.27(b), specialized to the compact set `M`: a global
+top-dimensional class which vanishes in every local homology group vanishes.
+This is the injectivity half of the missing compact Mayer--Vietoris induction. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_injective
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    Function.Injective
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
+  sorry
+
+/-- Hatcher Lemma 3.27(a): a compact connected manifold has a fundamental
+class whose image at the specified point is a signed normalized local class.
+The stronger simultaneous-for-all-points form is what the usual finite-cover
+Mayer--Vietoris induction proves. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    ∃ μ : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of M)).homology 3,
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3 μ =
+          ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) x ∨
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3 μ =
+          -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) x := by
+  sorry
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_target_generates
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M] (x : M) :
+    ∀ z : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint x)).homology 3,
+      ∃ r : ℤ, r •
+          ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) x = z := by
+  intro z
+  let e := ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 x
+  refine ⟨e.hom.hom z, ?_⟩
+  apply (ConcreteCategory.bijective_of_isIso e.hom).1
+  rw [map_zsmul,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator]
+  change e.hom.hom z • (1 : ℤ) = e.hom.hom z
+  rw [smul_eq_mul, mul_one]
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2085,7 +2149,34 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [BoundarylessManifold apm_t00A01_Model3 M]
     (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
     IsIso (ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3) := by
-  sorry
+  let f := ConstructionTargets.ManifoldFundamentalClass.localizationMap x 3
+  have hinj :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_injective
+      M hM x
+  obtain ⟨μ, hμ | hμ⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental
+      M hM x
+  · have hsurj : Function.Surjective f := by
+      intro z
+      obtain ⟨r, rfl⟩ :=
+        apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_target_generates
+          M x z
+      refine ⟨r • μ, ?_⟩
+      simpa only [f, map_zsmul, hμ]
+    letI := ConcreteCategory.mono_of_injective f hinj
+    letI := ConcreteCategory.epi_of_surjective f hsurj
+    exact isIso_of_mono_of_epi f
+  · have hsurj : Function.Surjective f := by
+      intro z
+      obtain ⟨r, rfl⟩ :=
+        apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_target_generates
+          M x z
+      refine ⟨(-r) • μ, ?_⟩
+      simp only [f]
+      rw [map_zsmul, hμ, smul_neg, neg_smul, neg_neg]
+    letI := ConcreteCategory.mono_of_injective f hinj
+    letI := ConcreteCategory.epi_of_surjective f hsurj
+    exact isIso_of_mono_of_epi f
 
 /-- PROVED (lemma-2, job 138): for a homology 3-sphere `M`, if localization at
 `x` is an iso in degree 3 then `H₂(M ∖ {x}) = 0`. The pair sequence of
@@ -2126,6 +2217,277 @@ homotopy is already built and proved continuous in
 `apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv` (`_aux_H`,
 `_aux_H_mapsTo`, `_aux_H_continuousOn`); reuse those pieces rather than
 re-proving continuity. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_radial :
+    ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦
+        if ‖p.2‖ < 1 then
+          (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2)
+        else p.2)
+      (Set.univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 0 < ‖x‖}) := by
+  let s : Set (unitInterval × EuclideanSpace ℝ (Fin 3)) :=
+    Set.univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 0 < ‖x‖}
+  let f : unitInterval × EuclideanSpace ℝ (Fin 3) →
+      EuclideanSpace ℝ (Fin 3) := fun p ↦
+    (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2)
+  let g : unitInterval × EuclideanSpace ℝ (Fin 3) →
+      EuclideanSpace ℝ (Fin 3) := fun p ↦ p.2
+  have ht : Continuous
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ (p.1 : ℝ)) :=
+    continuous_subtype_val.comp continuous_fst
+  have hx : Continuous
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ p.2) :=
+    continuous_snd
+  have hn : Continuous
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖) :=
+    continuous_norm.comp hx
+  have hne : ∀ p ∈ s, ‖p.2‖ ≠ 0 := by
+    intro p hp
+    exact ne_of_gt hp.2
+  have hinv : ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖⁻¹) s :=
+    hn.continuousOn.inv₀ hne
+  have hf : ContinuousOn f s := by
+    exact ((continuous_const.sub ht).continuousOn.smul hx.continuousOn).add
+      (ht.continuousOn.smul (hinv.smul hx.continuousOn))
+  have hg : ContinuousOn g s := hx.continuousOn
+  have hboundary : ∀ p ∈ s ∩ frontier
+      {p : unitInterval × EuclideanSpace ℝ (Fin 3) | ‖p.2‖ < 1},
+      f p = g p := by
+    intro p hp
+    have heq : ‖p.2‖ = 1 :=
+      (frontier_lt_subset_eq hn continuous_const) hp.2
+    simp only [f, g, heq, inv_one, one_smul]
+    rw [← add_smul, sub_add_cancel, one_smul]
+  exact ContinuousOn.if hboundary
+    (hf.mono inter_subset_left) (hg.mono inter_subset_left)
+
+
+/-- Norm of the radial push for `0 < ‖x‖`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_norm (t : unitInterval) (x : EuclideanSpace ℝ (Fin 3))
+    (hx : 0 < ‖x‖) :
+    ‖(1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x)‖ = (1 - (t : ℝ)) * ‖x‖ + (t : ℝ) := by
+  have hx0 : ‖x‖ ≠ 0 := ne_of_gt hx
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have heq :
+      (1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x) =
+        ((1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹) • x := by
+    rw [add_smul, mul_smul]
+  rw [heq, norm_smul, Real.norm_eq_abs]
+  have hi0 : 0 ≤ ‖x‖⁻¹ := inv_nonneg.mpr (norm_nonneg x)
+  have hc0 : 0 ≤ (1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹ :=
+    add_nonneg (sub_nonneg.mpr ht1) (mul_nonneg ht0 hi0)
+  rw [abs_of_nonneg hc0]
+  field_simp
+
+/-- The collar homotopy is continuous on `I × (Φ(ball 0 2) \ {Φ 0})`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_ball
+    {M : Type} [TopologicalSpace M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ) :
+    ContinuousOn
+      (fun p : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
+      (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+        {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ)) := by
+  let S : Set (unitInterval × M) := univ ×ˢ
+    (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+      {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ)
+  let inv : S → apm_t00A01_LargeDisk3 := fun p ↦
+    hΦ.toHomeomorph.symm ⟨p.1.2, by
+      rcases p.2.2.1 with ⟨x, hx, hxp⟩
+      exact ⟨x, hxp⟩⟩
+  have hinv : Continuous inv := by
+    let rangeMap : S → Set.range Φ := fun p ↦ ⟨p.1.2, by
+      rcases p.2.2.1 with ⟨x, hx, hxp⟩
+      exact ⟨x, hxp⟩⟩
+    have hrange : Continuous rangeMap :=
+      Continuous.subtype_mk ((continuous_snd : Continuous (fun p : unitInterval × M ↦ p.2)).comp
+        continuous_subtype_val) _
+    exact hΦ.toHomeomorph.symm.continuous.comp hrange
+  have hinv_eq (p : S) : Φ (inv p) = p.1.2 := by
+    exact congrArg Subtype.val (hΦ.toHomeomorph.apply_symm_apply _)
+  have hinv_lt (p : S) : dist (inv p).1 0 < 2 := by
+    rcases p.2.2.1 with ⟨x, hx, hxp⟩
+    have : inv p = x := hΦ.injective (by rw [hinv_eq p, hxp])
+    simpa [this] using hx
+  have hinv_pos (p : S) : 0 < ‖(inv p).1‖ := by
+    rcases (norm_nonneg (inv p).1).lt_or_eq with h | h
+    · exact h
+    · exfalso
+      apply p.2.2.2
+      have h0 : inv p = ⟨0, by simp [apm_t00A01_LargeDisk3]⟩ :=
+        Subtype.ext (norm_eq_zero.mp h.symm)
+      change p.1.2 = _
+      rw [← hinv_eq p, h0]
+  let Q : S → unitInterval × EuclideanSpace ℝ (Fin 3) := fun p ↦ (p.1.1, (inv p).1)
+  have hQ : Continuous Q := by
+    dsimp [Q]
+    fun_prop
+  have hmaps : MapsTo Q univ (univ ×ˢ {x | 0 < ‖x‖}) := by
+    intro p hp
+    exact ⟨trivial, hinv_pos p⟩
+  have hrad : Continuous (fun p : S ↦
+      if ‖(Q p).2‖ < 1 then (1 - ((Q p).1 : ℝ)) • (Q p).2 +
+        ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2) else (Q p).2) := by
+    rw [← continuousOn_univ]
+    exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_radial.comp hQ.continuousOn hmaps
+  let R : S → apm_t00A01_LargeDisk3 := fun p ↦ ⟨
+    if ‖(Q p).2‖ < 1 then (1 - ((Q p).1 : ℝ)) • (Q p).2 +
+      ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2) else (Q p).2, by
+    change dist _ 0 ≤ 2
+    rw [dist_zero_right]
+    by_cases hlt : ‖(Q p).2‖ < 1
+    · rw [if_pos hlt, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_norm _ _ (hinv_pos p)]
+      have ht0 : 0 ≤ ((Q p).1 : ℝ) := (Q p).1.2.1
+      have ht1 : ((Q p).1 : ℝ) ≤ 1 := (Q p).1.2.2
+      nlinarith [norm_nonneg (Q p).2]
+    · rw [if_neg hlt]
+      exact le_of_lt (by simpa [Q, dist_eq_norm] using hinv_lt p)⟩
+  have hR : Continuous R := by
+    apply Continuous.subtype_mk hrad
+  rw [continuousOn_iff_continuous_restrict]
+  apply Continuous.congr (hΦ.continuous.comp hR)
+  intro p
+  symm
+  change apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1.1 p.1.2 = _
+  rw [← hinv_eq p]
+  unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+  by_cases hlt : ‖(inv p).1‖ < 1
+  · have hex : ∃ x : apm_t00A01_LargeDisk3, Φ x = Φ (inv p) ∧ dist x.1 0 < 1 :=
+      ⟨inv p, rfl, by simpa [dist_eq_norm] using hlt⟩
+    rw [dif_pos hex]
+    have hchoose : hex.choose = inv p := hΦ.injective hex.choose_spec.1
+    simp only [hchoose, Q, hlt, if_pos]
+    have hv : (1 - (p.1.1 : ℝ)) • (hex.choose).1 +
+        (p.1.1 : ℝ) • (‖(hex.choose).1‖⁻¹ • (hex.choose).1) ∈
+        Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 2 := by
+      rw [hchoose]
+      simpa [R, Q, hlt] using (R p).2
+    rw [dif_pos hv]
+    apply congrArg Φ
+    apply Subtype.ext
+    simp [R, Q, hlt]
+  · have hnone : ¬ ∃ x : apm_t00A01_LargeDisk3,
+        Φ x = Φ (inv p) ∧ dist x.1 0 < 1 := by
+      rintro ⟨x, hx, hx1⟩
+      have hxeq : x = inv p := hΦ.injective hx
+      apply hlt
+      simpa [hxeq, dist_eq_norm] using hx1
+    rw [dif_neg hnone]
+    simp [R, Q, hlt]
+
+/-- The collar homotopy is continuous on `I × (M \ {Φ 0})`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_continuousOn
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    (Φ : apm_t00A01_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2})) :
+    ContinuousOn
+      (fun p : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
+      (univ ×ˢ {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ) := by
+  intro p hp
+  have hU : IsOpen ({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M) :=
+    isOpen_compl_singleton
+  by_cases hb : p.2 ∈ Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2}
+  · have hA : IsOpen (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 < 2} ∩
+        {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ) : Set (unitInterval × M)) :=
+      isOpen_univ.prod (hΦo.inter hU)
+    exact ((apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_ball Φ hΦ).continuousAt
+      (hA.mem_nhds ⟨trivial, hb, hp.2⟩)).continuousWithinAt
+  · have hB : IsOpen (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1})ᶜ :
+        Set (unitInterval × M)) :=
+      isOpen_univ.prod
+        (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_closed Φ hΦ.continuous 1).isOpen_compl
+    have hpB : p ∈ (univ ×ˢ (Φ '' {x : apm_t00A01_LargeDisk3 | dist x.1 0 ≤ 1})ᶜ :
+        Set (unitInterval × M)) := by
+      refine ⟨trivial, ?_⟩
+      rintro ⟨x, hx, hxp⟩
+      refine hb ⟨x, ?_, hxp⟩
+      change dist x.1 0 ≤ 1 at hx
+      change dist x.1 0 < 2
+      linarith
+    have heq : (fun q : unitInterval × M ↦
+        apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ q.1 q.2) =ᶠ[nhds p] Prod.snd := by
+      filter_upwards [hB.mem_nhds hpB] with q hq
+      apply apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_continuousOn_aux_eq_self
+      rintro ⟨x, hx, hxq⟩
+      refine hq.2 ⟨x, ?_, hxq⟩
+      change dist x.1 0 < 1 at hx
+      change dist x.1 0 ≤ 1
+      exact le_of_lt hx
+    exact (continuous_snd.continuousAt.congr heq.symm).continuousWithinAt
+
+/-- The collar homotopy keeps `M \ {Φ 0}` inside itself, and at time `1`
+lands in the punctured manifold. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_mapsTo
+    {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (Φ : apm_t00A01_LargeDisk3 → M)
+    (hΦ : Function.Injective Φ) (hΦφ : Φ ∘ apm_t00A01_unitToLarge = φ) :
+    (∀ t : unitInterval,
+      MapsTo (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ t)
+        {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ
+        {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ) ∧
+    MapsTo (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1)
+      {Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ
+      {z | z ∉ φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} := by
+  have hpos (z : M) (hz : z ∈ ({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M))
+      (x : apm_t00A01_LargeDisk3) (hxz : Φ x = z) : 0 < ‖x.1‖ := by
+    rcases (norm_nonneg x.1).lt_or_eq with h | h
+    · exact h
+    · exfalso
+      apply hz
+      have h0 : x = ⟨0, by simp [apm_t00A01_LargeDisk3]⟩ :=
+        Subtype.ext (norm_eq_zero.mp h.symm)
+      rw [← hxz, h0]
+      rfl
+  constructor
+  · intro t z hz
+    unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+    split_ifs with h hv
+    · intro heq
+      have hx0 := hpos z hz h.choose h.choose_spec.1
+      have hx1 : ‖h.choose.1‖ < 1 := by
+        simpa [dist_eq_norm] using h.choose_spec.2
+      have hv0 : (1 - (t : ℝ)) • h.choose.1 +
+          (t : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) = 0 :=
+        congrArg Subtype.val (hΦ heq)
+      have hn := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_norm t _ hx0
+      rw [hv0, norm_zero] at hn
+      have ht0 : 0 ≤ (t : ℝ) := t.2.1
+      have ht1 : (t : ℝ) ≤ 1 := t.2.2
+      nlinarith
+    · exact hz
+    · exact hz
+  · intro z hz
+    unfold apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H
+    split_ifs with h hv
+    · have hx0 := hpos z hz h.choose h.choose_spec.1
+      rw [apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image φ Φ hΦφ]
+      rintro ⟨y, hy, heq⟩
+      have hxy : y.1 =
+            (1 - (1 : ℝ)) • h.choose.1 +
+              (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) := by
+          exact congrArg Subtype.val (hΦ heq)
+      have hnorm : ‖(1 - (1 : ℝ)) • h.choose.1 +
+              (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1)‖ = 1 := by
+        rw [show (1 : ℝ) - 1 = 0 by norm_num, zero_smul, zero_add, one_smul,
+          norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg (inv_nonneg.mpr (norm_nonneg h.choose.1))]
+        exact inv_mul_cancel₀ (ne_of_gt hx0)
+      have hy' : ‖y.1‖ < 1 := by simpa [dist_eq_norm] using hy
+      rw [hxy, hnorm] at hy'
+      exact lt_irrefl 1 hy'
+    · have hx0 := hpos z hz h.choose h.choose_spec.1
+      exfalso
+      apply hv
+      change ‖(1 - ((1 : unitInterval) : ℝ)) • h.choose.1 +
+          ((1 : unitInterval) : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) - 0‖ ≤ 2
+      rw [sub_zero, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_norm 1 _ hx0]
+      norm_num
+    · rw [apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_image φ Φ hΦφ]
+      rintro ⟨x, hx, hxz⟩
+      exact h ⟨x, hxz, hx⟩
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv
     (M : Type) [TopologicalSpace M] [T2Space M]
     (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
@@ -2133,7 +2495,42 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2
     Nonempty (ContinuousMap.HomotopyEquiv (apm_t00A01_punctured phi)
       ↥(ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
         (phi ⟨0, by simp [apm_t00A01_Disk3]⟩))) := by
-  sorry
+  obtain ⟨Φ, hΦ, hΦφ, hΦo⟩ := hcollar
+  have hp0 : phi ⟨0, by simp [apm_t00A01_Disk3]⟩ =
+      Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩ := by
+    rw [← hΦφ]
+    rfl
+  rw [hp0]
+  change Nonempty (ContinuousMap.HomotopyEquiv (apm_t00A01_punctured phi)
+    ↥({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M))
+  obtain ⟨hmap, hmap1⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_mapsTo phi Φ hΦ.injective hΦφ
+  have hcont := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H2_aux_hequiv_aux_continuousOn Φ hΦ hΦo
+  have hHc : Continuous (fun p : unitInterval ×
+      ↥({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M) ↦
+      apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1) :=
+    hcont.comp_continuous
+      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+      (fun p ↦ ⟨mem_univ _, p.2.2⟩)
+  let i : C(apm_t00A01_punctured phi,
+      ↥({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M)) :=
+    ⟨fun x ↦ ⟨x.1, fun hx ↦ x.2 ⟨⟨0, by simp [apm_t00A01_Disk3]⟩, by simp,
+      by rw [hp0]; exact hx.symm⟩⟩,
+      Continuous.subtype_mk continuous_subtype_val _⟩
+  let r : C(↥({Φ ⟨0, by simp [apm_t00A01_LargeDisk3]⟩}ᶜ : Set M),
+      apm_t00A01_punctured phi) :=
+    ⟨fun z ↦ ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ 1 z.1, hmap1 z.2⟩,
+      (hHc.comp (continuous_const.prodMk continuous_id)).subtype_mk _⟩
+  let F : ContinuousMap.Homotopy (ContinuousMap.id _) (i.comp r) :=
+    { toFun := fun p ↦ ⟨apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1, hmap p.1 p.2.2⟩
+      continuous_toFun := hHc.subtype_mk _
+      map_zero_left := fun z ↦ Subtype.ext (apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_zero Φ z.1)
+      map_one_left := fun z ↦ rfl }
+  have hri : r.comp i = ContinuousMap.id _ := by
+    ext z
+    exact apm_t00A01_punctured_fundamentalGroup_aux_enlarged_hequiv_aux_H_one phi Φ hΦφ z.1 z.2
+  exact ⟨{ toFun := i, invFun := r
+           left_inv := by rw [hri]
+           right_inv := ⟨F.symm⟩ }⟩
 
 /-- LIBRARY: collar excision and the pair exact sequence turn invertibility of
 localization at the centre into vanishing of degree two of the complement.
@@ -2189,6 +2586,37 @@ Excise `M ∖ Φ(open radius-2 ball)`, which is closed and lies in the interior 
 the complement (`φ(B)` is compact, so closed in the Hausdorff `M`); what is
 left is the pair (open radius-2 ball, radius-2 ball minus the open unit ball),
 whose relative homology vanishes above degree 3. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_model :
+    Limits.IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet 3)).homology 4) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.T02A06DiskRadialComparison in
+    have hamb : Limits.IsZero
+        ((SingularChains (TopCat.of (T02A06.euclideanClosedDisk 3))).homology 4) := by
+      letI : ContractibleSpace (T02A06.euclideanClosedDisk 3) :=
+        Metric.contractibleSpace_closedBall (by norm_num)
+      exact contractibleHigherHomology_isZero _ 4 (by omega)
+    have hbdry : Limits.IsZero
+        ((SingularChains (TopCat.of (closedDiskBoundarySet 3))).homology 3) := by
+      exact (ConstructionTargets.SphereHomology.sphereHomology_isZero_of_gt 2 3
+        (by omega)).of_iso
+          (singularHomologyIsoOfHomotopyEquiv
+            (closedDiskBoundaryHomeomorph 3).toHomotopyEquiv 3)
+    exact (singularPairHomology_exact_relative (closedDiskBoundarySet 3) 3).isZero_X₂
+      (hamb.eq_of_src _ _) (hbdry.eq_of_tgt _ _)
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (hcollar : apm_t00A01_HasBallCollar phi) :
+    Nonempty
+      (((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}).homology 4) ≅
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet 3)).homology 4)) := by
+  sorry
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4
     (M : Type) [TopologicalSpace M] [T2Space M]
     (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
@@ -2196,8 +2624,10 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
     Limits.IsZero
       ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
         {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}).homology 4) := by
-  sorry
-
+  rcases apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision
+    M phi hphi hcollar with ⟨e⟩
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_model.of_iso
+    e
 /-- LIBRARY (comparison with local homology at the centre): the pair projection
 `H₃(M) → H₃(M, M ∖ int B)` is invertible when localization at `phi 0` is.
 Route: the identity is a map of pairs `(M, M ∖ int B) → (M, M ∖ {phi 0})`;
