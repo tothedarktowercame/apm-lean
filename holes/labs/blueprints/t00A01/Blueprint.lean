@@ -2655,6 +2655,58 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
     exact (singularPairHomology_exact_relative (closedDiskBoundarySet 3) 3).isZero_X₂
       (hamb.eq_of_src _ _) (hbdry.eq_of_tgt _ _)
 
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_general
+    {X : Type} [TopologicalSpace X] (A Z : Set X)
+    (hZclosed : IsClosed Z) (hZ : Z ⊆ interior A) :
+    Nonempty
+      (((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology 4) ≅
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.SingularExcision.excisedSubspace A Z)).homology 4)) := by
+  open ConstructionTargets.SingularExcision in
+    have hi : IsIso (HomologicalComplex.homologyMap
+        (relativeExcisionMap A Z) 4) := by
+      simpa using relativeExcisionMap_homologyMap_isIso_succ A Z hZclosed hZ 3
+    exact ⟨(@asIso _ _ _ _
+      (HomologicalComplex.homologyMap (relativeExcisionMap A Z) 4) hi).symm⟩
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_radial :
+    Nonempty
+      (((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet 3)).homology 4) ≅
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet 3)).homology 4)) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+   open ConstructionTargets.SingularExcision in
+    open ConstructionTargets.T02A06HemisphereExcision in
+    open ConstructionTargets.T02A06DiskRadialComparison in
+      have hi : IsIso (HomologicalComplex.homologyMap
+          (relativeSingularMap (closedDiskBoundarySet 3) (puncturedOpenDiskSet 3)
+            (halfDiskMap 3) (halfDiskMap_mapsTo 3)) 4) :=
+        closedDiskPair_to_openDiskPair_homologyMap_isIso 3 4 (by omega)
+      exact ⟨(@asIso _ _ _ _
+        (HomologicalComplex.homologyMap
+          (relativeSingularMap (closedDiskBoundarySet 3) (puncturedOpenDiskSet 3)
+            (halfDiskMap 3) (halfDiskMap_mapsTo 3)) 4) hi).symm⟩
+
+/-- LIBRARY (collar coordinates): a closed set `Z` inside the interior of
+`M ∖ φ(int B)` whose excision leaves a pair with the degree-four relative homology
+of the punctured open 3-disk pair. Route (seat's note): take `Z` the complement of
+`Φ(int B₂)` for the collar `Φ`; identify the excised pair through collar
+coordinates, including the set-membership equivalence. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
+    (hcollar : apm_t00A01_HasBallCollar phi) :
+    ∃ Z : Set M, IsClosed Z ∧
+      Z ⊆ interior {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} ∧
+      Nonempty
+        (((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+            (ConstructionTargets.SingularExcision.excisedSubspace
+              {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}} Z)).homology 4) ≅
+          ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+            (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet 3)).homology 4)) := by
+  sorry
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision
     (M : Type) [TopologicalSpace M] [T2Space M]
     (phi : apm_t00A01_Disk3 → M) (hphi : Topology.IsEmbedding phi)
@@ -2664,7 +2716,15 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3
           {x : M | x ∉ phi '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}).homology 4) ≅
         ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
           (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet 3)).homology 4)) := by
-  sorry
+  obtain ⟨Z, hZc, hZ, ⟨e⟩⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_collar
+      M phi hphi hcollar
+  obtain ⟨g⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_general
+      _ Z hZc hZ
+  obtain ⟨r⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4_aux_excision_aux_radial
+  exact ⟨g ≪≫ e ≪≫ r⟩
 
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_H3_aux_rel4
     (M : Type) [TopologicalSpace M] [T2Space M]
