@@ -1566,6 +1566,39 @@ theorem apm_t00A01_punctured_fundamentalGroup
 and the local orientation class make the punctured homology sphere a homology
 ball. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_isHomologyBall_aux_H0
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (hM : apm_t00A01_isHomology3Sphere M)
+    (hcollar : apm_t00A01_HasBallCollar φ) :
+    Nonempty (apm_t00A01_H 0 (apm_t00A01_punctured φ) ≅ ModuleCat.of ℤ ℤ) := by
+  letI : PathConnectedSpace (apm_t00A01_punctured φ) :=
+    apm_t00A01_punctured_pathConnected M φ hφ hM hcollar
+  let p : apm_t00A01_punctured φ := Classical.choice inferInstance
+  let q := ConstructionTargets.T02A06SphereH0.singularVertexH0Class p
+  letI : Epi q :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_epi p
+  letI : Mono q :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_mono p
+  letI : IsIso q := isIso_of_mono_of_epi q
+  exact ⟨ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of (apm_t00A01_punctured φ)) 0
+      (ModuleCat.of ℤ ℤ) (asIso q).symm⟩
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Topology.IsEmbedding φ)
+    (hM : apm_t00A01_isHomology3Sphere M)
+    (hcollar : apm_t00A01_HasBallCollar φ) :
+    ∀ k : ℕ, k ≠ 0 → Limits.IsZero (apm_t00A01_H k (apm_t00A01_punctured φ)) := by
+  sorry
+
 theorem apm_t00A01_punctured_isHomologyBall
     (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
     [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -1575,7 +1608,8 @@ theorem apm_t00A01_punctured_isHomologyBall
     (hM : apm_t00A01_isHomology3Sphere M)
     (hcollar : apm_t00A01_HasBallCollar φ) :
     apm_t00A01_isHomologyBall (apm_t00A01_punctured φ) := by
-  sorry
+  exact ⟨apm_t00A01_punctured_isHomologyBall_aux_H0 M φ hφ hM hcollar,
+    apm_t00A01_punctured_isHomologyBall_aux_positive M φ hφ hM hcollar⟩
 -- END SEAT AREA
 
 /-- LIBRARY: radial collar coordinates thicken both quotient pieces to an
