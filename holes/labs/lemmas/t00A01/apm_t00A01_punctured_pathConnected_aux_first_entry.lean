@@ -694,7 +694,61 @@ lemma apm_t00A01_punctured_pathConnected_aux_first_entry
     {O K : Set X} (hO : IsOpen O) (hK : IsClosed K) (hOK : O ⊆ K)
     {x k : X} (hx : x ∉ O) (hk : k ∈ K) :
     ∃ z ∈ K \ O, JoinedIn Oᶜ x z := by
-  sorry
+  classical
+  by_cases hxK : x ∈ K
+  · exact ⟨x, ⟨hxK, hx⟩, JoinedIn.refl hx⟩
+  let γ : Path x k := PathConnectedSpace.somePath x k
+  let S : Set ℝ := {t | t ∈ Set.Icc 0 1 ∧ γ.extend t ∈ K}
+  have hS_closed : IsClosed S := by
+    exact isClosed_Icc.inter (hK.preimage γ.continuous_extend)
+  have hS_ne : S.Nonempty := by
+    refine ⟨1, ⟨Set.right_mem_Icc.2 zero_le_one, ?_⟩⟩
+    simpa [γ] using hk
+  have hS_bdd : BddBelow S := ⟨0, fun _ ht ↦ ht.1.1⟩
+  let t₀ : ℝ := sInf S
+  have ht₀S : t₀ ∈ S := hS_closed.csInf_mem hS_ne hS_bdd
+  have ht₀_nonneg : 0 ≤ t₀ := ht₀S.1.1
+  have ht₀_le_one : t₀ ≤ 1 := ht₀S.1.2
+  have ht₀_pos : 0 < t₀ := by
+    refine lt_of_le_of_ne ht₀_nonneg (Ne.symm ?_)
+    intro ht
+    apply hxK
+    have : γ.extend 0 ∈ K := by simpa [ht] using ht₀S.2
+    simpa [γ] using this
+  have hleast : ∀ s ∈ S, t₀ ≤ s := (isGLB_csInf hS_ne hS_bdd).1
+  have ht₀_notO : γ.extend t₀ ∉ O := by
+    intro htO
+    have hopen : IsOpen (γ.extend ⁻¹' O) := hO.preimage γ.continuous_extend
+    rcases Metric.isOpen_iff.1 hopen t₀ htO with ⟨ε, hε, hball⟩
+    let s := t₀ - min (t₀ / 2) (ε / 2)
+    have hmin_pos : 0 < min (t₀ / 2) (ε / 2) :=
+      lt_min (half_pos ht₀_pos) (half_pos hε)
+    have hs0 : 0 ≤ s := by
+      dsimp [s]
+      have : min (t₀ / 2) (ε / 2) ≤ t₀ / 2 := min_le_left _ _
+      linarith
+    have hslt : s < t₀ := by simp [s, hmin_pos]
+    have hs1 : s ≤ 1 := hslt.le.trans ht₀_le_one
+    have hsO : γ.extend s ∈ O := by
+      apply hball
+      rw [Metric.mem_ball, Real.dist_eq]
+      dsimp [s]
+      rw [sub_sub_cancel_left, abs_neg, abs_of_nonneg (le_of_lt hmin_pos)]
+      exact lt_of_le_of_lt (min_le_right _ _) (half_lt_self hε)
+    exact (not_lt_of_ge (hleast s ⟨⟨hs0, hs1⟩, hOK hsO⟩)) hslt
+  refine ⟨γ.extend t₀, ⟨ht₀S.2, ht₀_notO⟩, ?_⟩
+  refine ⟨(γ.truncateOfLE ht₀_nonneg).cast (by simp [γ]) rfl, ?_⟩
+  intro u
+  change γ.extend (min (max (u : ℝ) 0) t₀) ∈ Oᶜ
+  intro huO
+  let s := min (max (u : ℝ) 0) t₀
+  have hs0 : 0 ≤ s := by simp [s, ht₀_nonneg]
+  have hst : s ≤ t₀ := min_le_right _ _
+  have hs1 : s ≤ 1 := hst.trans ht₀_le_one
+  by_cases hst' : s = t₀
+  · exact ht₀_notO (by simpa [s, hst'] using huO)
+  · have hslt : s < t₀ := lt_of_le_of_ne hst hst'
+    exact (not_lt_of_ge (hleast s ⟨⟨hs0, hs1⟩, hOK (by simpa [s] using huO)⟩)) hslt
 -- END SEAT AREA
 
 /-- LIBRARY: deleting the interior of a collared ball from a connected
