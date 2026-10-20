@@ -86,6 +86,81 @@ generates the same subgroup as the explicit edge product of
 `orientableStandardPairingData` (read off how that data labels its `4g` edges;
 a conjugate, cyclic rotation, or inverse of the relator is fine). -/
 -- BEGIN SEAT AREA
+noncomputable def t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_inv
+    (A : Type*) : FreeGroup A ≃* FreeGroup A where
+  toFun := FreeGroup.lift fun a => (FreeGroup.of a)⁻¹
+  invFun := FreeGroup.lift fun a => (FreeGroup.of a)⁻¹
+  map_mul' := map_mul _
+  left_inv x := by
+    induction x using FreeGroup.induction_on with
+    | C1 => simp
+    | of a => simp
+    | inv_of a h => simp
+    | mul x y hx hy => simp only [map_mul, hx, hy]
+  right_inv x := by
+    induction x using FreeGroup.induction_on with
+    | C1 => simp
+    | of a => simp
+    | inv_of a h => simp
+    | mul x y hx hy => simp only [map_mul, hx, hy]
+
+open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology
+
+def t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_castHom
+    {X : Type*} [TopologicalSpace X] {x y : X} (h : x = y) :
+    FundamentalGroup X y →* FundamentalGroup X x where
+  toFun q := Path.Homotopic.Quotient.cast q h h
+  map_one' := by subst y; rfl
+  map_mul' a b := by
+    subst y
+    induction a using Quotient.inductionOn with
+    | _ a => induction b using Quotient.inductionOn with | _ b => rfl
+
+lemma t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_explicit
+    (P : ConstructionTargets.PolygonSurfacePiOne.PairingData)
+    (l : ConstructionTargets.PolygonSurfacePiOne.PairingOrbit P.pair) :
+    ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase P l =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeLegFundamentalClassAtBase P l ^
+        ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneCoordinate := by
+  simp only [ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase,
+    ConstructionTargets.PolygonSurfaceHomology.finiteWedgeLegFundamentalClassAtBase,
+    ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClass_eq_positive_zpow]
+  exact map_zpow
+    (t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_castHom
+      (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+        (P.orbit ⟨0, P.edgeCount_pos⟩) l)) _ _
+
+lemma t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_blocks
+    {G : Type*} [Group G] (g : ℕ) (x : Fin g × Bool → G) :
+    (List.ofFn fun i : Fin (4 * g) =>
+      let c := ConstructionTargets.PolygonSurfacePiOne.orientableCoord g i
+      if ConstructionTargets.PolygonSurfacePiOne.handleSign c.2 then x (c.1, ConstructionTargets.PolygonSurfacePiOne.handleOrbitLabel c.2)
+      else (x (c.1, ConstructionTargets.PolygonSurfacePiOne.handleOrbitLabel c.2))⁻¹).prod =
+    (List.ofFn fun a : Fin g =>
+      (x (a, false))⁻¹ * (x (a, true))⁻¹ * x (a, false) * x (a, true)).prod := by
+  rw [List.ofFn_mul']
+  simp only [List.prod_flatten, List.map_ofFn]
+  apply congrArg List.prod
+  apply List.ofFn_inj.mpr
+  apply funext
+  intro i
+  change (List.ofFn fun j : Fin 4 =>
+    let c := ConstructionTargets.PolygonSurfacePiOne.orientableCoord g
+      ⟨4 * i + j, by omega⟩
+    if ConstructionTargets.PolygonSurfacePiOne.handleSign c.2 then
+      x (c.1, ConstructionTargets.PolygonSurfacePiOne.handleOrbitLabel c.2)
+    else (x (c.1, ConstructionTargets.PolygonSurfacePiOne.handleOrbitLabel c.2))⁻¹).prod = _
+  have hc (j : Fin 4) :
+      ConstructionTargets.PolygonSurfacePiOne.orientableCoord g
+        ⟨4 * (i : ℕ) + (j : ℕ), by omega⟩ = (i, j) := by
+    apply Prod.ext <;> apply Fin.ext <;>
+      simp [ConstructionTargets.PolygonSurfacePiOne.orientableCoord,
+        Fin.divNat, Fin.modNat] <;> omega
+  simp only [hc]
+  simp [ConstructionTargets.PolygonSurfacePiOne.handleSign,
+    ConstructionTargets.PolygonSurfacePiOne.handleOrbitLabel, Fin.modNat,
+    Nat.add_comm, mul_assoc, hc]
+
 theorem t96A01_orientableSurface_fundamentalGroup_aux_relabel
     (g : ℕ) (hg : 0 < g) :
     ∃ M : FreeGroup (Fin g × Bool) ≃*
@@ -96,7 +171,55 @@ theorem t96A01_orientableSurface_fundamentalGroup_aux_relabel
         Subgroup.normalClosure
           ({polygonBoundaryExplicitEdgeProduct (standardPairingData true g hg)} :
             Set _) := by
-  sorry
+  classical
+  let P := standardPairingData true g hg
+  let e : PairingOrbit P.pair ≃ Fin g × Bool := orientableOrbitEquiv g
+  let x : Fin g × Bool → FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+    fun p => finiteWedgeLegFundamentalClassAtBase P (e.symm p)
+  have hlab (i : Fin (4 * g)) :
+      finiteWedgeLegFundamentalClassAtBase P (P.orbit i) = x (orientableOrbitLabel g i) := by
+    have h : e (P.orbit i) = orientableOrbitLabel g i := rfl
+    simp only [x, ← h, Equiv.symm_apply_apply]
+  have hprod (s : ℤ) (hs : circleIntegerLoopOneCoordinate = s) :
+      polygonBoundaryExplicitEdgeProduct P =
+        (List.ofFn fun a : Fin g =>
+          (x (a, false) ^ s)⁻¹ * (x (a, true) ^ s)⁻¹ * x (a, false) ^ s *
+            x (a, true) ^ s).prod := by
+    rw [← t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_blocks g
+      (fun p => x p ^ s)]
+    change (List.ofFn fun i : Fin (4 * g) => polygonBoundaryExplicitEdgeClass P i).prod = _
+    apply congrArg List.prod
+    apply congrArg List.ofFn
+    funext i
+    have hsign : P.sign i = handleSign (orientableCoord g i).2 := rfl
+    simp only [polygonBoundaryExplicitEdgeClass,
+      t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_explicit, hs, hlab, hsign]
+    rfl
+  have hleg (Q : ConstructionTargets.PolygonSurfacePiOne.PairingData) (q : PairingOrbit Q.pair) :
+      ConstructionTargets.PolygonCellPiOne.legEquiv Q (FreeGroup.of q) =
+        finiteWedgeLegFundamentalClassAtBase Q q := by
+    change finiteWedgeLegFreeGroupMap Q (FreeGroup.of q) = _
+    simp [finiteWedgeLegFreeGroupMap]
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with hs | hs
+  · refine ⟨(t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_inv _).trans
+      (FreeGroup.freeGroupCongr e.symm), ?_⟩
+    rw [hprod 1 hs]
+    congr 2
+    simp only [surfaceRelator, map_list_prod, List.map_ofFn, Function.comp_def, map_mul,
+      map_inv, MulEquiv.trans_apply, zpow_one]
+    simp [t96A01_orientableSurface_fundamentalGroup_aux_relabel_aux_inv,
+      FreeGroup.freeGroupCongr_apply, x]
+    exact congrArg List.prod (congrArg List.ofFn (funext fun a => by
+      rw [hleg, hleg]))
+  · refine ⟨FreeGroup.freeGroupCongr e.symm, ?_⟩
+    rw [hprod (-1) hs]
+    congr 2
+    simp only [surfaceRelator, map_list_prod, List.map_ofFn, Function.comp_def, map_mul,
+      map_inv, zpow_neg, zpow_one, inv_inv]
+    simp [FreeGroup.freeGroupCongr_apply, x]
+    exact congrArg List.prod (congrArg List.ofFn (funext fun a => by
+      rw [hleg, hleg]))
 -- END SEAT AREA
 
 open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
