@@ -38050,6 +38050,18 @@
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792621389907-1703-6e98897c",
+     :commands
+     ["git rev-parse/diff-tree/diff --check 6ec2e1758"
+      "lake env lean ConstructionTargets/t94A06Closure.lean"
+      "lake env lean problems/t94A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and rg placeholders on recorded blobs"],
+     :finding
+     "PASS: 6ec2e1758 adds only scoped t94A06Closure; fixture hash c66ef6...38e4 matches. Fresh detached gates pass; registry 170/170; closure placeholders 0; standard axioms. Translation sign is correct (normalPart f=-s), negation preserves volume, and surjective normal derivative plus z-axis tangent spans E3. This is new compiled progress after c46223f40; remaining corners Morse-Sard is listed. Main retains exactly its pre-existing sorry."},
     :commit "02cbdc9ab",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
@@ -38058,7 +38070,7 @@
      "c5bbb3c509493fa4eb8dddf2d270342bfbf06d2d4f135e3bd828ce667e87d020"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -38076,7 +38088,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the regular-value-to-transversality adapter; Morse-Sard remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smoothness of the normal part; chartwise Morse-Sard remains.",
    :id :program-2026-10-13-close-t94a06,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -38092,7 +38104,11 @@
     {:job 2,
      :commit "6ec2e1758",
      :reason
-     "Banked the regular-value-to-transversality adapter; Morse-Sard remains."}]}
+     "Banked the regular-value-to-transversality adapter; Morse-Sard remains."}
+    {:job 3,
+     :commit "02cbdc9ab",
+     :reason
+     "Banked smoothness of the normal part; chartwise Morse-Sard remains."}]}
   {:consumer :t01J04,
    :stop-count 0,
    :phase :implementation,
@@ -49708,7 +49724,7 @@
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a06_normalPart_contMDiff",
@@ -49718,7 +49734,9 @@
     :reported-by [:program-2026-10-13-close-t94a06],
     :type "the normal coordinate projection of f is ContMDiff",
     :area "parametric-transversality-sard",
-    :proved-in :program-2026-10-13-close-t94a06},
+    :proved-in :program-2026-10-13-close-t94a06,
+    :banked-by :program-2026-10-13-close-t94a06,
+    :banked-commit "02cbdc9ab"},
    :id :lemma-apm-t94a06-normalpart-contmdiff,
    :kind :lemma,
    :depends-on [],
