@@ -38015,10 +38015,10 @@
    :program true,
    :other-consumers []}
   {:consumer :t94A06,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:residual
-    "Move proved adapters into Closure, then prove the Morse-Sard normal-part lemma.",
+    "Prove manifold-with-corners Morse-Sard, then replace Main's sole sorry with the banked adapter.",
     :evidence
     {:placeholder-delta {:t94A06 [1 1]},
      :statement-hashes {:registry "170/170"}},
@@ -38026,56 +38026,40 @@
     :warnings
     ["Main retains its existing sorry; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "apm_t94a06_ae_regularValue_normalPart",
+    [{:name "apm_t94a06_transverse_ae_of_regularValues",
+      :type
+      "translate normal-part regular values to AE transversality",
+      :status :proved,
+      :consumers [:t94A06],
+      :depends-on ["apm_t94a06_ae_regularValue_normalPart"],
+      :area "parametric-transversality-sard"}
+     {:name "apm_t94a06_ae_regularValue_normalPart",
       :type
       "AE regular values for the normal part on a finite-dimensional manifold with corners",
       :status :not-started,
       :consumers [:t94A06],
       :depends-on [],
-      :area "parametric-transversality-sard"}
-     {:name "apm_t94a06_transverse_ae_of_regularValues",
-      :type
-      "translate normal-part regular values to AE transversality",
-      :status :not-started,
-      :consumers [:t94A06],
-      :depends-on ["apm_t94a06_ae_regularValue_normalPart"],
       :area "parametric-transversality-sard"}],
     :disposition :stop,
-    :axioms [],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Reviewed blueprint copied and committed; implementation starts next job.",
+    "Banked the regular-value-to-transversality adapter; Morse-Sard remains.",
     :commands
-    [{:cmd
-      "cmp -s holes/labs/blueprints/t94A06/BLUEPRINT.md ConstructionTargets/t94A06Closure.blueprint.md",
+    [{:cmd "lake env lean ConstructionTargets/t94A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792614902570-1507-19f607df",
-     :commands
-     ["git show --stat/--format=fuller c46223f40f5df12e744c4fc811f03ee02e83c0c5"
-      "git show c46223f40:ConstructionTargets/t94A06Closure.blueprint.md | sha256sum"
-      "cmp recorded blueprint copies"
-      "git diff --check c46223f40^ c46223f40"
-      "lake env lean holes/labs/blueprints/t94A06/Blueprint.lean"
-      "lake env lean problems/t94A06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "rg placeholder counts at c46223f40"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit c46223f40 changes only the scoped blueprint; SHA-256 matches 6c83cb7a6a265ae8533f7af0548fa79b29b10ca756c8fdb7f08ab69a44136117 and it exactly copies the source plan. The finite-dimensional repair excludes the stated Hilbert-manifold counterexample. The normal-part Sard reduction is mathematically valid for a second-countable finite-dimensional manifold with corners, and the compiled adapter correctly pulls good values through negation and combines the two lifted normal directions with the z-axis direction. All final hypotheses have a dependency path. Blueprint/Main compile, registry is 170/170, and placeholder counts remain 1/1, exactly the listed Morse-Sard library obligation; the adapter proof is already compiled in Blueprint. This is genuine blueprint progress with remaining milestones listed."},
-    :commit "c46223f40f5df12e744c4fc811f03ee02e83c0c5",
-    :changed-paths ["ConstructionTargets/t94A06Closure.blueprint.md"],
+    :commit "6ec2e1758",
+    :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
-    {:path "ConstructionTargets/t94A06Closure.blueprint.md",
+    {:path "ConstructionTargets/t94A06Closure.lean",
      :sha256
-     "6c83cb7a6a265ae8533f7af0548fa79b29b10ca756c8fdb7f08ab69a44136117"},
+     "c66ef63701684af142e20b80537e3412beebab381d27b678590c6c659f9838e4"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -49652,7 +49636,8 @@
    {:name "apm_t94a06_transverse_ae_of_regularValues",
     :reported-by [:program-2026-10-13-close-t94a06],
     :type "translate normal-part regular values to AE transversality",
-    :area "parametric-transversality-sard"},
+    :area "parametric-transversality-sard",
+    :proved-in :program-2026-10-13-close-t94a06},
    :id :lemma-apm-t94a06-transverse-ae-of-regularvalues,
    :kind :lemma,
    :depends-on [:lemma-apm-t94a06-ae-regularvalue-normalpart],
