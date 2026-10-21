@@ -1293,6 +1293,13 @@ noncomputable def t99J05_cp_successor_unionRangeHomologyIso (n k : ℕ) :
 
 #print axioms t99J05_cp_successor_unionRangeHomologyIso
 
+/-- The literal target of the transported union term is the whole successor. -/
+theorem t99J05_cp_successor_patch_union_eq_univ (n : ℕ) :
+    cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n = Set.univ :=
+  (cpSuccessor_openCover n).2.2
+
+#print axioms t99J05_cp_successor_patch_union_eq_univ
+
 /-- The range-to-literal homology isomorphism commutes with inclusion into
 ambient singular homology. -/
 theorem t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
