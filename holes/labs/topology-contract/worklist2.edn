@@ -89109,6 +89109,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder/axiom scan", :exit 0}
      {:cmd "git show --check 7735a973a", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792584646083-737-1b631293",
+     :commands
+     ["git show/check/hash 7735a973a"
+      "exact-source build WedgePermutationCover+CoveringSubgroupCorrespondence"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "statement-registry check/fingerprint t92J06"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed completion 7735a973a by claude-14; scope exactly Main+status. Fixture d4cc0818... matches; registry 170/0; frozen t92J06 digest c57f3fb7...; Main placeholders 1->0. Exact historical imports rebuild and Main compiles; final axioms only propext, Classical.choice, Quot.sound. Trivial-subgroup cover plus trivial pi1 correctly yields SimplyConnectedSpace. The four concrete 3-sheeted covers are transported by an explicit quotient-wedge homeomorphism; covering maps, fibers, and pairwise nonhomeomorphism have correct directions. All three recorded obligations are proved and no milestones remain."},
     :commit "7735a973a",
     :commits ["3cfa60e86" "7735a973a"],
     :changed-paths
@@ -89119,7 +89131,7 @@
      "d4cc0818454aea081b219e10bca8b87974056280e290781d3c4700840c4b359e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90632,7 +90644,7 @@
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t92J06_exists_simplyConnected_cover",
@@ -90642,7 +90654,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "simply connected cover of the two-circle wedge",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "7735a973a"},
    :id :lemma-apm-t92j06-exists-simplyconnected-cover,
    :kind :lemma,
    :depends-on
@@ -90651,7 +90665,7 @@
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t92J06_exists_four_threeSheeted_covers",
@@ -90661,7 +90675,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "four nonhomeomorphic three-sheet covers",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "7735a973a"},
    :id :lemma-apm-t92j06-exists-four-threesheeted-covers,
    :kind :lemma,
    :depends-on
@@ -90995,7 +91011,7 @@
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoLoopGraphCoverData_realization",
@@ -91005,7 +91021,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "realize data as cover",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "7735a973a"},
    :id :lemma-twoloopgraphcoverdata-realization,
    :kind :lemma,
    :depends-on
