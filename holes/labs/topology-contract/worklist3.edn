@@ -36751,6 +36751,19 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792596139270-1027-70f5c067",
+     :commands
+     ["git show/diff-tree c0d54d5e01"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check c0d54d5e01^ c0d54d5e01"],
+     :finding
+     "PASS: new commit c0d54d5e01 changes only scoped Closure; fixture/blob SHA matches 3128620a.... For k above overlap top degree, the existing isZero theorem is correctly converted to Subsingleton; the zero module is made finite-dimensional via the injective zero map into ℚ, then the degreewise exact-segment adapter yields finite successor H(k+1). Degree shifts and representation boundaries match the transported LES. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Milestone is proved and patch transports/top-even cases remain listed."},
     :commit "c0d54d5e01",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36759,7 +36772,7 @@
      "3128620a21f9a6eb77fc47d26db8813b2b2c80d9c7dbc392f0e8774553650327"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36777,7 +36790,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked degreewise successor finite-dimensionality; successor remains partial.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor finite-dimensionality above the overlap top; patch transports and top/even cases remain.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36960,7 +36973,11 @@
     {:job 5,
      :commit "9127373cf3",
      :reason
-     "Banked degreewise successor finite-dimensionality; successor remains partial."}]}
+     "Banked degreewise successor finite-dimensionality; successor remains partial."}
+    {:job 6,
+     :commit "c0d54d5e01",
+     :reason
+     "Banked successor finite-dimensionality above the overlap top; patch transports and top/even cases remain."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49012,7 +49029,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_finiteDimensional_of_overlap_gt",
@@ -49024,7 +49041,9 @@
     :type
     "above overlap top, finite patches imply finite successor H(k+1)",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "c0d54d5e01"},
    :id :lemma-t99j05-cp-successor-finitedimensional-of-overlap-gt,
    :kind :lemma,
    :depends-on
