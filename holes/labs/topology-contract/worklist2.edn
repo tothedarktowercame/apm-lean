@@ -89380,15 +89380,16 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
-    :residual "realize monodromy models; compute model invariants",
+    :residual
+    "realize Boolean monodromy models; compute model invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "twoArcMonodromy_nontrivial_classification",
-      :type "nontrivial two-arc actions reduce to two models",
+    [{:name "finTwoPerm_bool_normalForm",
+      :type "Perm(Fin 2) has Boolean id/swap normal form",
       :status :proved,
       :consumers [:t97A03],
       :depends-on [],
@@ -89397,7 +89398,9 @@
       :type "connected double-cover classification",
       :status :partial,
       :consumers [:t97A03],
-      :depends-on ["twoArcMonodromy_nontrivial_classification"],
+      :depends-on
+      ["finTwoPerm_bool_normalForm"
+       "twoArcMonodromy_nontrivial_classification"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
       :type "model homology and fundamental group",
@@ -89407,39 +89410,29 @@
       :area "quotient-space-mayer-vietoris"}],
     :statement-hashes {:registry "170/0"},
     :disposition :stop,
-    :axioms ["propext" "Quot.sound"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked finite two-arc monodromy classification.",
+    :reason "Banked two-point permutation normal form.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "closure placeholder scan", :exit 0}
-     {:cmd "git show --check ab476b082", :exit 0}],
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "git show --check 859cba71a", :exit 0}],
     :diagnostic-history
-    [{:cmd "build", :exit 1, :correction "explicit Or.inl"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792585776263-752-0bf129ab",
-     :commands
-     ["git show/check/hash ab476b082"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "statement-registry check/fingerprint t97A03"
-      "placeholder/axiom/orientation inspection"],
-     :finding
-     "PASS: reviewed ab476b082 by topo-6, new after blueprint 52b499d52; scope only new t97A03Closure. Fixture 31093efc... matches; registry 170/0; frozen t97A03 digest abf8282b...; placeholders closure/Main 0/3. Fresh detached closure build and Main compile pass. Boolean monodromy classification is exhaustive: connectedness removes (false,false), one-swap cases normalize to (true,false) by arc exchange, and (true,true) selects the second model; precise witnesses are retained. Axioms only propext, Quot.sound. STOP is valid new sorry-free progress and lists geometric realization/full classification and model invariants."},
-    :commit "ab476b082",
+    [{:cmd "build", :exit 1, :correction "fin_cases syntax"}
+     {:cmd "build", :exit 1, :correction "Fin.val coercions"}
+     {:cmd "scan", :exit 1, :correction "Python quoting"}],
+    :commit "859cba71a",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "31093efcdd7abe92bb982d1b7c2beaaba1aeea56f1a2d33194134462f0a58acf"},
+     "e74881e2c97018865f4183e9d15e762d715cbf6c139467ae04ec7c1d644c8aa7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98390,7 +98383,9 @@
     :area "covering-classification-explicit"},
    :id :lemma-apm-t97a03-classify-connected-double-cover,
    :kind :lemma,
-   :depends-on [:lemma-twoarcmonodromy-nontrivial-classification],
+   :depends-on
+   [:lemma-twoarcmonodromy-nontrivial-classification
+    :lemma-fintwoperm-bool-normalform],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -99930,6 +99925,23 @@
     :banked-by :program-2026-10-13-close-t97a03,
     :banked-commit "ab476b082"},
    :id :lemma-twoarcmonodromy-nontrivial-classification,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finTwoPerm_bool_normalForm",
+    :type "Perm(Fin 2) has Boolean id/swap normal form"},
+   :lemma
+   {:name "finTwoPerm_bool_normalForm",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "Perm(Fin 2) has Boolean id/swap normal form",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-fintwoperm-bool-normalform,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
