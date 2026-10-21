@@ -36755,6 +36755,20 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792618317783-1604-ef2a5ab2",
+     :commands
+     ["git show --stat/--format=fuller ff74eb5dc15fa11067b98c0a3dfb6a20538651e2"
+      "git show ff74eb5dc:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check ff74eb5dc^ ff74eb5dc"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show ff74eb5dc:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit ff74eb5dc changes only scoped Closure; fixture SHA-256 matches 50b38d6c0563c2910745f94927789409b76c452b9a7b7672028a8d4069ff46b0. The range 0..2n is correct. In the induction step the two new indices are 2n+1, whose odd term vanishes, and 2n+2, whose even sign and Betti number are both one; all earlier indices satisfy both old and new bounds. Thus the sum increases exactly by one, with correct rational signs and coercions. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; homotopy transport and C4 assembly remain listed."},
     :commit "ff74eb5dc15fa11067b98c0a3dfb6a20538651e2",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36763,7 +36777,7 @@
      "50b38d6c0563c2910745f94927789409b76c452b9a7b7672028a8d4069ff46b0"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36781,7 +36795,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the CP rational Betti profile; finite trace and homotopy transport remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the alternating CP Betti sum; homotopy transport and C4 assembly remain.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37027,7 +37041,11 @@
     {:job 3,
      :commit "24455ff5dbeadd8457545ce60fe847b135aa6f8a",
      :reason
-     "Banked the CP rational Betti profile; finite trace and homotopy transport remain."}]}
+     "Banked the CP rational Betti profile; finite trace and homotopy transport remain."}
+    {:job 4,
+     :commit "ff74eb5dc15fa11067b98c0a3dfb6a20538651e2",
+     :reason
+     "Banked the alternating CP Betti sum; homotopy transport and C4 assembly remain."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49670,7 +49688,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_alternating_betti_sum",
@@ -49680,7 +49698,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "alternating rational Betti sum of CP n equals n+1",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ff74eb5dc15fa11067b98c0a3dfb6a20538651e2"},
    :id :lemma-t99j05-cp-alternating-betti-sum,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-homology-finrank],
