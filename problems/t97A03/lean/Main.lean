@@ -130,6 +130,39 @@ noncomputable def apm_t97A03_baseSphereReturn (A B : Circle) :
   rw [(apm_t97A03_baseSphereReturn A B).target,
     ← apm_t97A03_baseCircle_B]
 
+/-- A literal circle-summand path between the two marked points.  The second,
+complementary arc will be obtained from a cut-circle normal form rather than
+by reusing this path or its reverse. -/
+noncomputable def apm_t97A03_circleArc (A B : Circle) : Path A B :=
+  letI : PathConnectedSpace Circle :=
+    isPathConnected_iff_pathConnectedSpace.mp (by
+      simpa [Circle] using
+        (isPathConnected_sphere (E := ℂ) (by
+          rw [Complex.rank_real_complex]
+          norm_num) 0 (by norm_num)))
+  PathConnectedSpace.somePath A B
+
+/-- The chosen literal circle arc mapped into the adjunction quotient. -/
+noncomputable def apm_t97A03_baseCircleArc (A B : Circle) :
+    Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B B) :=
+  (apm_t97A03_circleArc A B).map (apm_t97A03_continuous_baseCircle A B)
+
+/-- A genuine based loop in the frozen base: traverse the literal circle
+summand from `A` to `B`, then return through the literal sphere summand. -/
+noncomputable def apm_t97A03_firstLiteralLoop (A B : Circle) :
+    Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B A) :=
+  (apm_t97A03_baseCircleArc A B).trans
+    ((apm_t97A03_baseSphereReturn A B).cast
+      (apm_t97A03_baseCircle_A A B) (apm_t97A03_baseCircle_B A B)).symm
+
+@[simp] lemma apm_t97A03_firstLiteralLoop_zero (A B : Circle) :
+    apm_t97A03_firstLiteralLoop A B 0 = apm_t97A03_baseCircle A B A :=
+  (apm_t97A03_firstLiteralLoop A B).source
+
+@[simp] lemma apm_t97A03_firstLiteralLoop_one (A B : Circle) :
+    apm_t97A03_firstLiteralLoop A B 1 = apm_t97A03_baseCircle A B A :=
+  (apm_t97A03_firstLiteralLoop A B).target
+
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
   exact mem_sphere_zero_iff_norm.mpr (by norm_num)⟩
