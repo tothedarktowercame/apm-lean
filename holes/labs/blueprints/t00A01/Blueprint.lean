@@ -2643,19 +2643,108 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   letI := hf
   exact AddCommGrpCat.isZero_iff_subsingleton.mp (hmodel.of_iso (asIso f).symm)
 
-/-- LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL, 2026-10-20):
-reduction to the convex model.  For compact `A` in the chart at `x` with
-convex chart image and `y ∈ A`, the localization
-`H_i(M, M ∖ A) → H_i(M, M ∖ y)` is an isomorphism for `i > 0`.  Route, as in
-`_ball_aux_reduce`: both pairs excise `M ∖ e.source` (`_aux_excision`; `A` is
-compact, hence closed); the chart `e.source ≃ₜ e.target` transports the excised
-pairs (`_aux_chart`); the inclusion `e.target ↪ ℝ³` excises `ℝ³ ∖ e.target`
-(`e '' A` is compact inside the open `e.target`); the resulting map is
-`_convex_aux_inj_aux_model` with `K = e '' A`, `u = e y`.  The squares commute
-by `relativeSingularMap_comp`.  `_aux_excision` and `_aux_chart` are stated in
-degree 3; the ConstructionTargets theorems they call
-(`relativeExcisionMap_homologyMap_isIso_succ`,
-`relativeSingularMap_homeomorphPair_isIso`) take any degree `n + 1`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_excision
+    {X : Type} [TopologicalSpace X] (K U : Set X)
+    (hU : IsOpen U) (hKU : Uᶜ ⊆ interior Kᶜ) (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeExcisionMap Kᶜ Uᶜ) i) := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hi)
+  exact ConstructionTargets.SingularExcision.relativeExcisionMap_homologyMap_isIso_succ
+    Kᶜ Uᶜ hU.isClosed_compl hKU n
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_chart
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (A : Set X) (B : Set Y)
+    (hAB : ∀ x, x ∈ A ↔ e x ∈ B) (i : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A B
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap e)
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+          e A B hAB)) i) := by
+  exact ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
+    e A B hAB i
+
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): localization can be computed in an open subspace.  For open
+`U ⊆ X` and closed `B ⊆ A ⊆ U`, the identity `H_i(X, X ∖ A) → H_i(X, X ∖ B)` is an
+isomorphism iff the identity `H_i(U, U ∖ A) → H_i(U, U ∖ B)` is.  Route: the inclusion
+`U ↪ X` gives a commuting square (`relativeSingularMap_comp`, both composites are the
+inclusion); its two vertical maps are excisions of `X ∖ U` (`_aux_excision`, after the
+identification `U ≃ₜ (Uᶜ)ᶜ` as in `neighborhoodInclusion_chain_eq`), so both are
+isomorphisms for `i > 0`, and two-out-of-three gives the iff. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_restrict
+    {X : Type} [TopologicalSpace X] (U : Set X) (hU : IsOpen U)
+    (A B : Set X) (hA : IsClosed A) (hB : IsClosed B) (hAU : A ⊆ U) (hBA : B ⊆ A)
+    (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ Bᶜ
+        (ContinuousMap.id X) (fun _ hx hb => hx (hBA hb))) i) ↔
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : U | u.1 ∉ A} {u : U | u.1 ∉ B}
+        (ContinuousMap.id U) (fun _ hx hb => hx (hBA hb))) i) := by
+  sorry
+
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): localization is invariant under homeomorphism.  If
+`e : X ≃ₜ Y` carries `A` to `A'` and `B` to `B'`, the identity
+`H_i(X, A) → H_i(X, B)` is an isomorphism iff `H_i(Y, A') → H_i(Y, B')` is.
+Route: the square with horizontal maps the pair homeomorphisms
+(`_aux_chart`, isomorphisms in every degree) commutes by `relativeSingularMap_comp`
+(both composites are `e`); two-out-of-three. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_homeo
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (e : X ≃ₜ Y)
+    (A B : Set X) (A' B' : Set Y)
+    (hA : ∀ x, x ∈ A ↔ e x ∈ A') (hB : ∀ x, x ∈ B ↔ e x ∈ B')
+    (hAB : Set.MapsTo (ContinuousMap.id X) A B)
+    (hAB' : Set.MapsTo (ContinuousMap.id Y) A' B') (i : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A B
+        (ContinuousMap.id X) hAB) i) ↔
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A' B'
+        (ContinuousMap.id Y) hAB') i) := by
+  sorry
+
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): the chart reduction shared by `_inj_aux_isIso` and
+`_ball_aux_reduce`.  For compact `K` in the chart source of `e = chartAt x` and
+`z ∈ K`, if `H_i(ℝ³, ℝ³ ∖ e '' K) → H_i(ℝ³, ℝ³ ∖ e z)` is an isomorphism, so is
+`H_i(M, M ∖ K) → H_i(M, M ∖ z)`.  Route: `_aux_restrict` with `U = e.source`
+(`K` compact in a Hausdorff space, hence closed; points are closed); `_aux_homeo`
+along `e.toHomeomorphSourceTarget`, whose membership conditions are
+`u ∈ K ↔ e u ∈ e '' K` (`e` injective on the source) and `u = z ↔ e u = e z`;
+`_aux_restrict` again in `ℝ³` with `U = e.target` (`e '' K` compact). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_reduce
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (K : Set M) (hK : IsCompact K)
+    (hsub : K ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (z : M) (hz : z ∈ K) (i : ℕ) (hi : 0 < i)
+    (hmodel : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' K)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+          (chartAt (EuclideanSpace ℝ (Fin 3)) x z))
+        (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' K) (chartAt (EuclideanSpace ℝ (Fin 3)) x z)
+          (Set.mem_image_of_mem _ hz))) i)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K z hz)) i) := by
+  sorry
+
+/-- PROVED from `_inj_aux_isIso_aux_reduce` and `_convex_aux_inj_aux_model`
+(claude-14, split after lemma-1's PARTIAL, job 200, 2026-10-21; first split from
+`_convex_aux_inj` after lemma-1's PARTIAL, 2026-10-20): reduction to the convex model.
+For compact `A` in the chart at `x` with convex chart image and `y ∈ A`, the
+localization `H_i(M, M ∖ A) → H_i(M, M ∖ y)` is an isomorphism for `i > 0`.
+Banked by lemma-1 (job 200), above: `_aux_excision` (positive-degree excision) and
+`_aux_chart` (pair homeomorphisms, every degree), wrappers of
+`relativeExcisionMap_homologyMap_isIso_succ` and
+`relativeSingularMap_homeomorphPair_isIso` for `_aux_restrict` and `_aux_homeo`. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso
     (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2668,7 +2757,11 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
         (ContinuousMap.id M)
         (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i) := by
-  sorry
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hi)
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_reduce M x A hA hsub y hy (n + 1) hi
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model _ (hA.image_of_continuousOn
+        ((chartAt (EuclideanSpace ℝ (Fin 3)) x).continuousOn.mono hsub))
+      hconv _ (Set.mem_image_of_mem _ hy) n)
 
 /-- PROVED from `_convex_aux_inj_aux_isIso` (lemma-1, job 177, 2026-10-20):
 for compact `A` in one chart with convex chart image and `y ∈ A`, the
