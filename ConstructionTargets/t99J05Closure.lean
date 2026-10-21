@@ -2178,6 +2178,54 @@ theorem t99J05_cp_successor_subsingleton_above
 
 #print axioms t99J05_cp_successor_subsingleton_above
 
+/-- Odd homology of the lower patch vanishes by the induction datum. -/
+theorem t99J05_cp_successor_lowerPatch_subsingleton_odd
+    (n k : ℕ) (h : ComplexProjectiveRationalHomologyData n) (hk : Odd k) :
+    Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) k) := by
+  letI : Subsingleton (Homology (CP n) k) := h.vanishesOdd k hk
+  exact (t99J05_cp_successor_lowerPatch_homologyIso n k).symm.toLinearEquiv.injective.subsingleton
+
+/-- Successor homology vanishes in every odd degree strictly above one. -/
+theorem t99J05_cp_successor_subsingleton_odd_gt_one
+    (n k : ℕ) (h : ComplexProjectiveRationalHomologyData n)
+    (hk : Odd k) (hk1 : 1 < k) :
+    Subsingleton (Homology (CP (n + 1)) k) := by
+  obtain ⟨j, hkj⟩ := hk
+  by_cases hktop : 2 * (n + 1) < k
+  · exact t99J05_cp_successor_subsingleton_above n k h hktop
+  rw [show k = (k - 1) + 1 by omega]
+  let L : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+      Set (CP (n + 1))) ((k - 1) + 1)
+  let T : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+      Set (CP (n + 1))) ((k - 1) + 1)
+  let P : ModuleCat ℚ := L ⊞ T
+  let S := t99J05_cp_successor_mayerVietoris_ambientTransport n (k - 1)
+  have hk' : Odd ((k - 1) + 1) := ⟨j, by omega⟩
+  letI : Subsingleton L :=
+    t99J05_cp_successor_lowerPatch_subsingleton_odd n ((k - 1) + 1) h hk'
+  letI : Subsingleton T :=
+    t99J05_cp_successor_topPatch_subsingleton_positive n ((k - 1) + 1) (by omega)
+  letI : Subsingleton S.X₁ := by
+    apply ModuleCat.subsingleton_of_isZero
+    change CategoryTheory.Limits.IsZero P
+    rw [CategoryTheory.Limits.biprod_isZero_iff]
+    exact ⟨ModuleCat.isZero_of_subsingleton _, ModuleCat.isZero_of_subsingleton _⟩
+  letI : Subsingleton S.X₃ := by
+    change Subsingleton
+      (Homology (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n :
+        Set (CP (n + 1))) (k - 1))
+    exact t99J05_cp_successor_overlap_subsingleton_of_pos_of_lt n (k - 1)
+      (by omega) (by omega)
+  exact t99J05_subsingleton_middle_of_exact S.f S.g
+    (t99J05_cp_successor_mayerVietoris_exact_ambient_transport n (k - 1)).moduleCat_range_eq_ker
+
+#print axioms t99J05_cp_successor_lowerPatch_subsingleton_odd
+#print axioms t99J05_cp_successor_subsingleton_odd_gt_one
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
