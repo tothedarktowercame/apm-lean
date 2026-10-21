@@ -119559,66 +119559,50 @@
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
-   {:consumer :t98A06,
-    :placeholder-delta {:source-before 1, :source-after 1},
+   {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Build derivative coordinates and local lifts; then compact flow and Main.",
+    "Prove corrected family smooth in charts and package local lifts; then compact flow and Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked artifacts"],
+    :warnings ["Main sorry" "untracked artifacts preserved"],
     :missing-theorems
-    [{:name "exists_nhds_isInvertible_comp_rightInverse",
-      :type "stable invertibility neighborhood",
+    [{:name "exists_nhds_corrected_rightInverse",
+      :type "stable neighborhood with exact corrected right inverses",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on ["eventually_isInvertible_comp_rightInverse"],
+      :depends-on ["exists_nhds_isInvertible_comp_rightInverse"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
       :depends-on
-      ["exists_nhds_isInvertible_comp_rightInverse"
+      ["exists_nhds_corrected_rightInverse"
        "hasLocalSmoothLift_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "44160271fda9ae65152290faf7ded509526cbd18248e6c1c478440072d27f3df",
+     "d09bcce292a71a5d3ad8f5c07327ba296db5c1629f16f9c21be2aa4bd73a6036",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked stable-neighborhood extraction.",
+    :reason "Banked local corrected right inverses.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hashes; git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :finding "replaced invalid neighborhood glyph with nhds"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792593092147-941-3a22e2f6",
-     :commands
-     ["git show/diff 35498f49"
-      "lake env lean ConstructionTargets/t98A06Closure.lean"
-      "lake env lean problems/t98A06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 35498f49 changes only t98A06Closure.lean (+15), adding a compiled stable-neighborhood extraction after prior history. Fixture 9838452b, source 44399e71, implementation 44160271, registry 170/170, and placeholders closure=0/Main=1 reproduce. Representation and orientation are exact: U is the predicate that A(x) o R is invertible; the prior eventual theorem proves U is a neighborhood, and membership is returned unchanged. E m endomorphism boundaries align. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; derivative coordinates/local lifts, compact flow, and final assembly remain listed."},
-    :commit "35498f49aa1dd1b4aa5db5452f9fc44c4bdba684",
+     {:cmd "sha256sum fixture/source/implementation; git diff --check",
+      :exit 0}],
+    :commit "af279cbc8a4f389ff18c75801333afae26adf6ff",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119626,7 +119610,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -120064,7 +120048,8 @@
     :lemma-mfderiv-eq-of-trivialization-coordinates
     :lemma-haslocalsmoothlift-of-trivialization-coordinates
     :lemma-eventually-isinvertible-comp-rightinverse
-    :lemma-exists-nhds-isinvertible-comp-rightinverse],
+    :lemma-exists-nhds-isinvertible-comp-rightinverse
+    :lemma-exists-nhds-corrected-rightinverse],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -122652,6 +122637,23 @@
    :id :lemma-circlebasechartmeasure-apply-eq-zero,
    :kind :lemma,
    :depends-on [:lemma-circlebasechartmeasure-apply],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_nhds_corrected_rightInverse",
+    :type "stable neighborhood with exact corrected right inverses"},
+   :lemma
+   {:name "exists_nhds_corrected_rightInverse",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "stable neighborhood with exact corrected right inverses",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-exists-nhds-corrected-rightinverse,
+   :kind :lemma,
+   :depends-on [:lemma-exists-nhds-isinvertible-comp-rightinverse],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
