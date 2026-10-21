@@ -2663,6 +2663,57 @@ theorem t99J05_cp_alternating_betti_sum (n : ℕ) :
 
 #print axioms t99J05_cp_alternating_betti_sum
 
+open CategoryTheory CategoryTheory.MonoidalCategory
+
+/-- Convert a topological cylinder homotopy into the simplicial homotopy used
+by the singular-chain homotopy-invariance theorem. -/
+private noncomputable def t99J05_induced_eq_of_homotopic_sset
+    {X Y : TopCat} {f g : X ⟶ Y} (h : X ⊗ TopCat.I ⟶ Y)
+    (h₀ : TopCat.ι₀ ≫ h = f) (h₁ : TopCat.ι₁ ≫ h = g) :
+    SSet.Homotopy (TopCat.toSSet.map f) (TopCat.toSSet.map g) where
+  h := (TopCat.toSSet.obj X ◁ SSet.stdSimplex.toSSetObjI) ≫
+    Functor.LaxMonoidal.μ TopCat.toSSet X TopCat.I ≫ TopCat.toSSet.map h
+  h₀ := by
+    change _ = TopCat.toSSet.map f
+    simp only [SSet.stdSimplex.ι₀_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, h₀]
+  h₁ := by
+    change _ = TopCat.toSSet.map g
+    simp only [SSet.stdSimplex.ι₁_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, h₁]
+  rel := by
+    ext m x
+    exact x.1.property.elim
+
+/-- Homotopic continuous maps induce equal maps on rational singular homology
+in every degree. -/
+theorem t99J05_induced_eq_of_homotopic
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopic f g) (k : ℕ) :
+    induced f k = induced g k := by
+  rcases H with ⟨H⟩
+  let h : TopCat.of X ⊗ TopCat.I ⟶ TopCat.of Y :=
+    TopCat.ofHom ⟨fun p ↦ H (TopCat.I.homeomorph p.2, p.1),
+      H.continuous.comp
+        ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+  have h₀ : TopCat.ι₀ ≫ h = TopCat.ofHom f := by
+    ext x
+    change H (0, x) = f x
+    simp
+  have h₁ : TopCat.ι₁ ≫ h = TopCat.ofHom g := by
+    ext x
+    change H (1, x) = g x
+    simp
+  simpa [AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using
+    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
+      (C := ModuleCat ℚ) (R := ModuleCat.of ℚ ℚ)
+      (f := TopCat.toSSet.map (TopCat.ofHom f))
+      (g := TopCat.toSSet.map (TopCat.ofHom g))
+      (t99J05_induced_eq_of_homotopic_sset h h₀ h₁).toSimplicialObjectHomotopy k
+
+#print axioms t99J05_induced_eq_of_homotopic
+
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
 #print axioms cp_zero_subsingleton
 #print axioms cpZeroHomologyDataOfSubsingletonData
