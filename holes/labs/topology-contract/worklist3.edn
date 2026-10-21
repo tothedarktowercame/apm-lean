@@ -36758,6 +36758,19 @@
     [{:cmd "closure compile",
       :exit 1,
       :note "Fixed explicit Set and local IsIso; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792583630656-713-18e486b8",
+     :commands
+     ["git show/diff-tree f5f2385cf"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check f5f2385cf^ f5f2385cf"],
+     :finding
+     "PASS: new commit f5f2385cf changes only scoped Closure; fixture/blob SHA matches 7d39666f.... The new theorem is the exact set-level boundary needed for transport: the two literal successor patches have union Set.univ, directly projected from the established open-cover package; statement direction is correct and introduces no representation coercion. Closure and Main compile; registry 170/170; compiler reports only propext/Classical.choice/Quot.sound and no sorryAx. Union-term iso and cover equality are listed proved; equality transport remains partial."},
     :commit "f5f2385cf",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36766,7 +36779,7 @@
      "7d39666f93ec9cbb65966676e90d0a4fc3098d3c21c6d5e3830dd792a7c53730"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36784,7 +36797,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the specialized union-range homology isomorphism; exactness transport to literal CP remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed union-term iso and patch-union equality; equality transport remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36935,7 +36948,11 @@
     {:job 6,
      :commit "99fc0a0c3e42f00b459a0d54795eb58fd4b4046f",
      :reason
-     "Committed the specialized union-range homology isomorphism; exactness transport to literal CP remains."}]}
+     "Committed the specialized union-range homology isomorphism; exactness transport to literal CP remains."}
+    {:job 7,
+     :commit "f5f2385cf",
+     :reason
+     "Committed union-term iso and patch-union equality; equality transport remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48610,7 +48627,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_unionRangeHomologyIso",
@@ -48620,7 +48637,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "union MV term ≅ literal-union homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "f5f2385cf"},
    :id :lemma-t99j05-cp-successor-unionrangehomologyiso,
    :kind :lemma,
    :depends-on
@@ -48628,7 +48647,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_patch_union_eq_univ",
@@ -48638,7 +48657,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "successor patches cover CP(n+1)",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "f5f2385cf"},
    :id :lemma-t99j05-cp-successor-patch-union-eq-univ,
    :kind :lemma,
    :depends-on [],
