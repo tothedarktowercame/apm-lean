@@ -119196,6 +119196,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792608920845-1348-00b52fc8",
+     :commands
+     ["git show/diff 88263036"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 88263036 changes only t00J02Closure.lean (+25), adding a compiled regular-value selector after prior history 836e08af. Fixture afb497a6, source 0b3b4888, implementation ba7b9576; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the preceding theorem makes the image of the non-surjective mfderiv locus nu-null; NeZero nu ensures a value outside it, so every point of that fiber has surjective mfderiv. The predicate passed to the selector is exactly surjectivity of the manifold derivative of g, with no chart representation leak. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; constructing one Circle measure with all chart transports, signed counts, and final assembly remain listed."},
     :commit "882630364cb2fec87f25b26d2c7806ddf21849b9",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked global critical-value nullity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked regular-value selector.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119572,7 +119584,10 @@
      :reason "Banked critical witness."}
     {:job 6,
      :commit "836e08afe8e05bb21554ee228dbe7bcff5a8ec37",
-     :reason "Banked global critical-value nullity."}]}
+     :reason "Banked global critical-value nullity."}
+    {:job 7,
+     :commit "882630364cb2fec87f25b26d2c7806ddf21849b9",
+     :reason "Banked regular-value selector."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122822,7 +122837,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_mfderiv_surjective_fiber_of_targetCharts",
@@ -122832,7 +122847,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "null transport selects regular fiber",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "882630364cb2fec87f25b26d2c7806ddf21849b9"},
    :id :lemma-exists-mfderiv-surjective-fiber-of-targetcharts,
    :kind :lemma,
    :depends-on
