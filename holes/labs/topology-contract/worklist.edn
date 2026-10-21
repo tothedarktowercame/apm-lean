@@ -119152,22 +119152,22 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Build finite chart cover; then signed counts and Main.",
+    :residual
+    "Convert cover to Fin-indexed witnesses; then signed counts and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
-    [{:name "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope",
-      :type "coordinate-null envelope implies chart-measure nullity",
+    [{:name "exists_finset_chartAt_source_cover",
+      :type
+      "compact charted target has finite canonical chart-source cover",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["circleCoordinateNull_exists_measurableSuperset"
-       "circleBaseChartMeasure_apply_eq_zero"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119176,39 +119176,28 @@
       :depends-on
       ["badSet_measure_zero_of_finite_targetChart_witnesses"
        "circleHaarMeasure_ne_zero"
-       "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope"],
+       "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope"
+       "exists_finset_chartAt_source_cover"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "4cf1fc0c16bf501088fc263c7697a4c8cac5b7bbb63e74741e4b27ce1d3364fa",
+     "a056d618f3a2842df4bd0d536a2dfc734f08d6867222af012394e64599546a18",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked chart-envelope nullity.",
+    :reason "Banked finite canonical chart cover.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes; placeholders; git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792604834599-1239-fd707d1a",
-     :commands
-     ["git show/diff 67307853"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 67307853 changes only t00J02Closure.lean (+15), adding compiled chart-envelope nullity after prior history e9e4bb32. Fixture afb497a6, source 0b3b4888, implementation 4cf1fc0c; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the restricted coordinate pullback is a subset of t, mu t=0 makes that pullback null by measure_mono_null, and the prior evaluation bridge makes the transported Circle measure of measurable s zero. Coordinate and Circle measures are not conflated. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; finite chart cover, signed counts, and final assembly remain listed."},
-    :commit "673078539cb25bb042114854da15ca296050ca3c",
+    :commit "9db44d712583e4e4f868cac72ad341fb8f166f09",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119216,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119869,7 +119858,8 @@
     :lemma-circlebasechartmeasure-apply
     :lemma-circlebasechartmeasure-apply-eq-zero
     :lemma-circlecoordinatenull-exists-measurablesuperset
-    :lemma-circlebasechartmeasure-eq-zero-of-coordinateenvelope],
+    :lemma-circlebasechartmeasure-eq-zero-of-coordinateenvelope
+    :lemma-exists-finset-chartat-source-cover],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122732,6 +122722,25 @@
    :depends-on
    [:lemma-circlecoordinatenull-exists-measurablesuperset
     :lemma-circlebasechartmeasure-apply-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_finset_chartAt_source_cover",
+    :type
+    "compact charted target has finite canonical chart-source cover"},
+   :lemma
+   {:name "exists_finset_chartAt_source_cover",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "compact charted target has finite canonical chart-source cover",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-finset-chartat-source-cover,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
