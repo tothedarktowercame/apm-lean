@@ -2419,6 +2419,28 @@ theorem connectedSum_mayerVietoris_middle
 
 /-- **LIBRARY (B9c).** Mayer--Vietoris above the manifold dimension. -/
 -- BEGIN SEAT AREA
+lemma connectedSum_mayerVietoris_above_aux_empty
+    (X : Type) [TopologicalSpace X] [IsEmpty X] (k : ℕ) : IsZero (H k X) := by
+  apply ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+  apply HomologicalComplex.ExactAt.isZero_homology
+  apply ShortComplex.exact_of_isZero_X₂
+  letI := Classical.decEq
+    (ConstructionTargets.SingularSubdivision.SingularSimplex (TopCat.of X) k)
+  have hempty : IsEmpty
+      (ConstructionTargets.SingularSubdivision.SingularSimplex (TopCat.of X) k) :=
+    ⟨fun σ ↦ by
+      let p : (SimplexCategory.toTop.obj (SimplexCategory.mk k)) :=
+        Classical.choice inferInstance
+      exact isEmptyElim (σ.down.hom p)⟩
+  letI := hempty
+  have hz : IsZero (AddCommGrpCat.of
+      (DirectSum (ConstructionTargets.SingularSubdivision.SingularSimplex
+        (TopCat.of X) k) (fun _ ↦ ℤ))) := by
+    apply AddCommGrpCat.isZero_of_subsingleton
+  exact hz.of_iso
+    (ConstructionTargets.SingularSubdivision.addCommGrpCoproductIsoDirectSum
+      (ConstructionTargets.SingularSubdivision.SingularSimplex (TopCat.of X) k))
+
 theorem connectedSum_mayerVietoris_above
     (n : ℕ) (X₁ X₂ : Type) [TopologicalSpace X₁] [TopologicalSpace X₂]
     (c₁ : BallCollar n X₁) (c₂ : BallCollar n X₂)
@@ -2426,7 +2448,65 @@ theorem connectedSum_mayerVietoris_above
     (h₂ : ∀ k, n ≤ k → IsZero (H k c₂.Punctured))
     (hcover : HasStandardCover c₁ c₂) :
     ∀ k, n < k → IsZero (H k (ConnectedSum c₁ c₂)) := by
-  sorry
+  intro k hnk
+  rcases hcover with ⟨U, V, hU, hV, hUV, e₁, e₂, e₀, he₁, he₂⟩
+  have hUk : IsZero (H k U) :=
+    (h₁ k hnk.le).of_iso
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        e₁ k)
+  have hVk : IsZero (H k V) :=
+    (h₂ k hnk.le).of_iso
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        e₂ k)
+  have hUg : IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology k (TopCat.of U)) :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.groupHomologyIsZeroOfModuleHomologyIsZero
+      (TopCat.of U) k hUk
+  have hVg : IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology k (TopCat.of V)) :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.groupHomologyIsZeroOfModuleHomologyIsZero
+      (TopCat.of V) k hVk
+  have hpieces : IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology k (TopCat.of U) ⊞
+        ConstructionTargets.SingularHomologyConcrete.SingularHomology k (TopCat.of V)) :=
+    (biprod_isZero_iff _ _).mpr ⟨hUg, hVg⟩
+  have hkpred : k - 1 + 1 = k := by omega
+  have hImod : IsZero (H (k - 1) (U ∩ V : Set (ConnectedSum c₁ c₂))) := by
+    apply IsZero.of_iso
+      (e := ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        e₀ (k - 1))
+    by_cases hn0 : n = 0
+    · subst n
+      have hsphere : IsEmpty (Sphere 0) := ⟨fun s ↦ by
+        have hs0 : s.1 = 0 := Subsingleton.elim _ _
+        have hs := s.2
+        rw [hs0, Metric.mem_sphere, dist_self] at hs
+        norm_num at hs⟩
+      letI : IsEmpty (Sphere 0) := hsphere
+      exact connectedSum_mayerVietoris_above_aux_empty (Sphere 0) (k - 1)
+    · have hdim : n - 1 + 1 = n := by omega
+      rw [← hdim]
+      exact ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top
+          (n - 1) (k - 1) (by omega) (by omega)
+  have hIg : IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology (k - 1)
+        (TopCat.of (U ∩ V : Set (ConnectedSum c₁ c₂)))) :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.groupHomologyIsZeroOfModuleHomologyIsZero
+      (TopCat.of (U ∩ V : Set (ConnectedSum c₁ c₂))) (k - 1) hImod
+  have hepi : Epi
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        U V (k - 1 + 1)) :=
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+      U V hU hV hUV (k - 1)).epi_f_iff.mpr (hIg.eq_of_tgt _ _)
+  rw [hkpred] at hepi
+  have hXg : IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+        (TopCat.of (ConnectedSum c₁ c₂))) := by
+    rw [IsZero.iff_id_eq_zero]
+    apply hepi.left_cancellation
+    exact hpieces.eq_of_src _ _
+  exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+    (TopCat.of (ConnectedSum c₁ c₂)) k hXg
 -- END SEAT AREA
 
 /-- **LIBRARY (B10).** The top connecting map supplies the single top class. -/
