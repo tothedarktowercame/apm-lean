@@ -75,9 +75,43 @@ theorem twoArcMonodromy_model_exists
   · exact ⟨.oneCircle, Or.inl ⟨rfl, h⟩⟩
   · exact ⟨.twoCircle, Or.inr ⟨rfl, h⟩⟩
 
+/-- Simultaneously replace the two lifted-arc permutations by Boolean
+monodromies, transport the connectedness condition, and select the resulting
+model.  The remaining classification work is therefore purely the geometric
+realization of this normal form. -/
+theorem twoArcPermMonodromy_model_exists
+    (first second : Equiv.Perm (Fin 2))
+    (hconnected : first ≠ Equiv.refl (Fin 2) ∨
+      second ≠ Equiv.refl (Fin 2)) :
+    ∃ firstSwaps secondSwaps model,
+      first = (if firstSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+      second = (if secondSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+      ((model = DoubleCoverModel.oneCircle ∧
+          ∃ swapArcs : Bool,
+            (if swapArcs then (secondSwaps, firstSwaps)
+              else (firstSwaps, secondSwaps)) = (true, false)) ∨
+        (model = DoubleCoverModel.twoCircle ∧
+          firstSwaps = true ∧ secondSwaps = true)) := by
+  rcases finTwoPerm_bool_normalForm first with ⟨firstSwaps, hfirst⟩
+  rcases finTwoPerm_bool_normalForm second with ⟨secondSwaps, hsecond⟩
+  have hbool : firstSwaps = true ∨ secondSwaps = true := by
+    rcases hconnected with h | h
+    · left
+      cases firstSwaps
+      · exact False.elim (h hfirst)
+      · rfl
+    · right
+      cases secondSwaps
+      · exact False.elim (h hsecond)
+      · rfl
+  rcases twoArcMonodromy_model_exists firstSwaps secondSwaps hbool with
+    ⟨model, hmodel⟩
+  exact ⟨firstSwaps, secondSwaps, model, hfirst, hsecond, hmodel⟩
+
 #print axioms twoArcMonodromy_nontrivial_classification
 #print axioms twoArcMonodromy_model_exists
 #print axioms finTwoPerm_eq_id_or_swap
 #print axioms finTwoPerm_bool_normalForm
+#print axioms twoArcPermMonodromy_model_exists
 
 end ConstructionTargets.t97A03Closure
