@@ -2210,6 +2210,82 @@ below `n - 1` the overlap (a sphere) has no homology, and in degree `n - 1`
 the two components are the collar boundary maps up to the cover homotopies,
 which vanish by `hboundary₁`, `hboundary₂`. -/
 -- BEGIN SEAT AREA
+lemma connectedSum_mayerVietoris_middle_aux_inter_zero_aux_cover_map_zero
+    {n k : ℕ} {M X : Type} [TopologicalSpace M] [TopologicalSpace X]
+    (c : BallCollar n M) (U I : Set X)
+    (eU : ContinuousMap.HomotopyEquiv U c.Punctured)
+    (eI : ContinuousMap.HomotopyEquiv I (Sphere n))
+    (inc : C(I, U))
+    (hh : ContinuousMap.Homotopic (eU.toFun.comp (inc.comp eI.invFun))
+      ⟨c.boundaryMap, c.continuous_boundaryMap⟩)
+    (hb : boundaryHomologyMap c k = 0) :
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition inc) k = 0 := by
+  let G := (AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+    (AddCommGrpCat.of ℤ)
+  have hbG : G.map (TopCat.ofHom
+      ⟨c.boundaryMap, c.continuous_boundaryMap⟩) = 0 := by
+    open ConstructionTargets.IntegralSingularHomologyComparison in
+      have hn := singularHomologyComparison_naturality
+        (TopCat.ofHom ⟨c.boundaryMap, c.continuous_boundaryMap⟩) k
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom
+        ⟨c.boundaryMap, c.continuous_boundaryMap⟩) = 0 at hb
+    open ConstructionTargets.IntegralSingularHomologyComparison in
+      rw [hb, forgetIntModules.map_zero, zero_comp] at hn
+    rw [← cancel_epi
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere n)) k).hom]
+    simpa only [Category.assoc, Iso.hom_inv_id_assoc] using hn.symm
+  rcases hh with ⟨K⟩
+  have heq := ConstructionTargets.SingularHomologyConcrete.singularHomology_map_eq_of_topCatHomotopy
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder K)
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero K)
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one K) k
+  have hcomp : G.map (TopCat.ofHom eI.invFun) ≫
+      G.map (TopCat.ofHom inc) ≫ G.map (TopCat.ofHom eU.toFun) = 0 := by
+    rw [← Category.assoc, ← G.map_comp, ← G.map_comp]
+    change G.map (TopCat.ofHom (eU.toFun.comp (inc.comp eI.invFun))) = 0
+    exact heq.trans hbG
+  have homEq {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+      {f g : C(A, B)} (h : ContinuousMap.Homotopic f g) :
+      G.map (TopCat.ofHom f) = G.map (TopCat.ofHom g) := by
+    rcases h with ⟨L⟩
+    exact ConstructionTargets.SingularHomologyConcrete.singularHomology_map_eq_of_topCatHomotopy
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder L)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero L)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one L) k
+  haveI : IsIso (G.map (TopCat.ofHom eI.invFun)) := by
+    refine ⟨⟨G.map (TopCat.ofHom eI.toFun), ?_, ?_⟩⟩
+    · rw [← G.map_comp]
+      change G.map (TopCat.ofHom (eI.toFun.comp eI.invFun)) = _
+      rw [homEq eI.right_inv]
+      change G.map (𝟙 _) = _
+      rw [G.map_id]
+    · rw [← G.map_comp]
+      change G.map (TopCat.ofHom (eI.invFun.comp eI.toFun)) = _
+      rw [homEq eI.left_inv]
+      change G.map (𝟙 _) = _
+      rw [G.map_id]
+  haveI : IsIso (G.map (TopCat.ofHom eU.toFun)) := by
+    refine ⟨⟨G.map (TopCat.ofHom eU.invFun), ?_, ?_⟩⟩
+    · rw [← G.map_comp]
+      change G.map (TopCat.ofHom (eU.invFun.comp eU.toFun)) = _
+      rw [homEq eU.left_inv]
+      change G.map (𝟙 _) = _
+      rw [G.map_id]
+    · rw [← G.map_comp]
+      change G.map (TopCat.ofHom (eU.toFun.comp eU.invFun)) = _
+      rw [homEq eU.right_inv]
+      change G.map (𝟙 _) = _
+      rw [G.map_id]
+  have hm : G.map (TopCat.ofHom inc) = 0 := by
+    rw [← cancel_epi (G.map (TopCat.ofHom eI.invFun)),
+      ← cancel_mono (G.map (TopCat.ofHom eU.toFun))]
+    simpa only [zero_comp, comp_zero] using hcomp
+  simpa [ConstructionTargets.SingularSubdivision.singularHomologyFunctor_map_eq_singularPostcomposition]
+    using hm
+
 lemma connectedSum_mayerVietoris_middle_aux_inter_zero
     (n : ℕ) (hn : 2 ≤ n) {X₁ X₂ : Type}
     [TopologicalSpace X₁] [TopologicalSpace X₂]
@@ -2229,7 +2305,32 @@ lemma connectedSum_mayerVietoris_middle_aux_inter_zero
     (k : ℕ) (hk0 : 0 < k) (hkn : k < n) :
     ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
       U V k = 0 := by
-  sorry
+  by_cases hktop : k = n - 1
+  · subst k
+    let i₁ : C((U ∩ V : Set (ConnectedSum c₁ c₂)), U) :=
+      ContinuousMap.inclusion Set.inter_subset_left
+    let i₂ : C((U ∩ V : Set (ConnectedSum c₁ c₂)), V) :=
+      ContinuousMap.inclusion Set.inter_subset_right
+    have hi₁ := connectedSum_mayerVietoris_middle_aux_inter_zero_aux_cover_map_zero
+      c₁ U (U ∩ V) e₁ e₀ i₁ he₁ hboundary₁
+    have hi₂ := connectedSum_mayerVietoris_middle_aux_inter_zero_aux_cover_map_zero
+      c₂ V (U ∩ V) e₂ e₀ i₂ he₂ hboundary₂
+    unfold ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+    change biprod.lift
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition i₁) (n - 1))
+      (-HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition i₂) (n - 1)) = 0
+    rw [hi₁, hi₂, neg_zero]
+    apply biprod.hom_ext <;> simp
+  · have hm : IsZero (H k (U ∩ V : Set (ConnectedSum c₁ c₂))) :=
+      connectedSum_mayerVietoris_middle_aux_overlap_module_zero
+        (U ∩ V) e₀ (Nat.ne_of_gt hk0) hktop (by omega)
+    have hg : IsZero (ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+        (TopCat.of (U ∩ V : Set (ConnectedSum c₁ c₂)))) :=
+      ConstructionTargets.T00A01MayerVietorisAdapters.groupHomologyIsZeroOfModuleHomologyIsZero
+        (TopCat.of (U ∩ V : Set (ConnectedSum c₁ c₂))) k hm
+    exact hg.eq_of_src _ _
 -- END SEAT AREA
 
 /-- In the middle degrees the Mayer--Vietoris reassembly map is onto: for
