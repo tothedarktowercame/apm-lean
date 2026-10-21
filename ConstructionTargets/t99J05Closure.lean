@@ -1637,6 +1637,42 @@ theorem t99J05_cp_successor_mayerVietoris_union_transport (n k : ℕ) :
 
 #print axioms t99J05_cp_successor_mayerVietoris_union_transport
 
+/-- The adjacent long-exact-sequence segment, transported so exactness is
+asserted at homology of the literal projective successor. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_ambientTransport
+    (n k : ℕ) : CategoryTheory.ShortComplex (ModuleCat ℚ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex
+    (CategoryTheory.ShortComplex.mk
+      (HomologicalComplex.homologyMap
+        (t99J05_cp_successor_mayerVietorisShortComplex n).g (k + 1))
+      (t99J05_cp_successor_mayerVietorisConnecting n k)
+      ((t99J05_cp_successor_subcomplexMayerVietoris_shortExact n).comp_δ
+        (k + 1) k rfl))
+    ((t99J05_rationalHomologyBiprodIso
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorLowerPatch n) : SSet))
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorTopPatch n) : SSet)) (k + 1)).trans
+      (biprod.mapIso
+        (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) (k + 1))
+        (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) (k + 1))))
+    (t99J05_cp_successor_unionRangeToSuccessorHomologyIso n (k + 1))
+    ((ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+      ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k).symm.trans
+        (t99J05_ambientSubspaceRangeHomologyIso
+          (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n) k))
+
+/-- Exactness at successor homology in the fully transported adjacent segment. -/
+theorem t99J05_cp_successor_mayerVietoris_exact_ambient_transport
+    (n k : ℕ) :
+    (t99J05_cp_successor_mayerVietoris_ambientTransport n k).Exact := by
+  apply ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+  exact t99J05_cp_successor_mayerVietoris_exact_ambient n k
+
+#print axioms t99J05_cp_successor_mayerVietoris_exact_ambient_transport
+
 /-- The separately named transported arrow is exactly the first arrow of the
 transported short complex whose exactness was established above. -/
 theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
