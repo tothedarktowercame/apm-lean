@@ -2714,6 +2714,57 @@ theorem t99J05_induced_eq_of_homotopic
 
 #print axioms t99J05_induced_eq_of_homotopic
 
+/-- The rational Lefschetz number of a self-map of `CP n` homotopic to the
+identity, and the rational Euler characteristic of `CP n`, are both `n+1`. -/
+theorem t99J05_lefschetz_euler (n : ℕ)
+    (f : ContinuousMap (CP n) (CP n))
+    (hhom : ContinuousMap.Homotopic f (ContinuousMap.id (CP n))) :
+    HasLefschetzNumber f ((n : ℚ) + 1) ∧
+      HasEulerCharacteristic (CP n) ((n : ℚ) + 1) := by
+  let hprofile := t99J05_cp_homology n
+  have hid (k : ℕ) : (induced f k).hom = LinearMap.id := by
+    have h := t99J05_induced_eq_of_homotopic hhom k
+    unfold induced at h
+    rw [TopCat.ofHom_id, CategoryTheory.Functor.map_id] at h
+    exact congrArg ModuleCat.Hom.hom h
+  have hvalue :
+      (∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ)^k * LinearMap.trace ℚ (Homology (CP n) k)
+          (induced (ContinuousMap.id (CP n)) k).hom) = (n : ℚ) + 1 := by
+    rw [← t99J05_cp_alternating_betti_sum n]
+    apply Finset.sum_congr rfl
+    intro k hk
+    letI : FiniteDimensional ℚ (Homology (CP n) k) :=
+      hprofile.finiteDimensional k
+    unfold induced
+    rw [TopCat.ofHom_id, CategoryTheory.Functor.map_id]
+    change (-1 : ℚ) ^ k *
+      (LinearMap.trace ℚ (Homology (CP n) k) LinearMap.id) = _
+    rw [LinearMap.trace_id, t99J05_cp_homology_finrank]
+    norm_num
+  have hvanish : ∀ k, 2 * n < k → Subsingleton (Homology (CP n) k) :=
+    hprofile.vanishesAbove
+  constructor
+  · refine ⟨hprofile.finiteDimensional, 2 * n, hvanish, ?_⟩
+    rw [show (∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ) ^ k * LinearMap.trace ℚ (Homology (CP n) k)
+          (induced f k).hom) =
+      ∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ) ^ k * LinearMap.trace ℚ (Homology (CP n) k)
+          (induced (ContinuousMap.id (CP n)) k).hom by
+      apply Finset.sum_congr rfl
+      intro k hk
+      rw [hid]
+      have hi : (induced (ContinuousMap.id (CP n)) k).hom = LinearMap.id := by
+        unfold induced
+        rw [TopCat.ofHom_id, CategoryTheory.Functor.map_id]
+        rfl
+      rw [hi]]
+    exact hvalue
+  · exact ⟨hprofile.finiteDimensional, 2 * n, hvanish, hvalue⟩
+
+#print axioms t99J05_lefschetz_euler
+
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
 #print axioms cp_zero_subsingleton
 #print axioms cpZeroHomologyDataOfSubsingletonData
