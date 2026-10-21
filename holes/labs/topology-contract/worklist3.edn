@@ -36755,6 +36755,19 @@
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :correction "made biproduct and X3 instances explicit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792595811293-1020-91ba34f8",
+     :commands
+     ["git show/diff-tree 9127373cf3"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 9127373cf3^ 9127373cf3"],
+     :finding
+     "PASS: new commit 9127373cf3 changes only scoped Closure; fixture/blob SHA matches f2b70d46.... The theorem correctly identifies the transported segment objects: X1 is the biproduct of literal lower/top patch H(k+1), X2 is successor H(k+1), and X3 is overlap H(k). Patch finite-dimensionality transfers through the biproduct/product linear equivalence; overlap finite/subsingleton instances and transported exactness feed the proved adapter. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Milestone is proved and top/even cases remain listed."},
     :commit "9127373cf3",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36763,7 +36776,7 @@
      "f2b70d461cb35f887fe337c882724e4fd2cef1a846684228492d05f457f6d7e3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36781,7 +36794,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed direct ShortComplex exactness adapter; degreewise CP application remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked degreewise successor finite-dimensionality; successor remains partial.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36960,7 +36973,11 @@
     {:job 4,
      :commit "80ae0c0962",
      :reason
-     "Committed direct ShortComplex exactness adapter; degreewise CP application remains."}]}
+     "Committed direct ShortComplex exactness adapter; degreewise CP application remains."}
+    {:job 5,
+     :commit "9127373cf3",
+     :reason
+     "Banked degreewise successor finite-dimensionality; successor remains partial."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48985,7 +49002,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -48999,7 +49016,9 @@
     :type
     "finite patches and zero overlap imply finite successor H(k+1)",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "9127373cf3"},
    :id
    :lemma-t99j05-cp-successor-finitedimensional-of-overlap-subsingleton,
    :kind :lemma,
