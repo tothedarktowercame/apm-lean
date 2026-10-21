@@ -119152,7 +119152,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
@@ -119205,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119602,6 +119602,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792602746804-1173-e35c4ef7",
+     :commands
+     ["git show/diff af279cbc"
+      "lake env lean ConstructionTargets/t98A06Closure.lean"
+      "lake env lean problems/t98A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: af279cbc changes only t98A06Closure.lean (+18), adding a compiled exact corrected-right-inverse neighborhood after prior history 35498f49. Fixture 9838452b, source 44399e71, implementation d09bcce2; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: A(x):E n->E m, R:E m->E n, and Q(x)=R o (A(x)oR)^-1:E m->E n; associativity plus self_comp_inverse gives A(x)oQ(x)=id on the invertible neighborhood. No smoothness of Q is claimed yet. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; corrected-family smoothness, local lifts, compact flow, and final assembly remain listed."},
     :commit "af279cbc8a4f389ff18c75801333afae26adf6ff",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119610,7 +119622,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119628,7 +119640,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked stable-neighborhood extraction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked local corrected right inverses.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119668,7 +119680,10 @@
      "Banked neighborhood stability of a fixed derivative right inverse."}
     {:job 2,
      :commit "35498f49aa1dd1b4aa5db5452f9fc44c4bdba684",
-     :reason "Banked stable-neighborhood extraction."}]}
+     :reason "Banked stable-neighborhood extraction."}
+    {:job 3,
+     :commit "af279cbc8a4f389ff18c75801333afae26adf6ff",
+     :reason "Banked local corrected right inverses."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -122621,7 +122636,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleBaseChartMeasure_apply_eq_zero",
@@ -122633,14 +122648,16 @@
     :type
     "measurable circle-set nullity from restricted coordinate pullback",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-circlebasechartmeasure-apply-eq-zero,
    :kind :lemma,
    :depends-on [:lemma-circlebasechartmeasure-apply],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_nhds_corrected_rightInverse",
@@ -122650,7 +122667,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "stable neighborhood with exact corrected right inverses",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "af279cbc8a4f389ff18c75801333afae26adf6ff"},
    :id :lemma-exists-nhds-corrected-rightinverse,
    :kind :lemma,
    :depends-on [:lemma-exists-nhds-isinvertible-comp-rightinverse],
