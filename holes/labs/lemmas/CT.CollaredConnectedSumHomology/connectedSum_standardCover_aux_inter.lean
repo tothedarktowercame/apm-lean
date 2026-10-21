@@ -383,12 +383,248 @@ theorem connectedSum_standardCover_aux_open {n : ℕ} {M₁ M₂ : Type}
             right
             exact ⟨Sum.inr b, Or.inr ⟨b, rfl⟩, rfl⟩
 
-/-- LEAF. The left thickening deformation retracts onto the first punctured
-summand (push the collar of the second summand radially onto its boundary
-sphere, then across the gluing), and this equivalence sends the glued sphere
-to the first collar boundary up to homotopy.  The hypothesis on `g` pins it
-down as the inclusion of the glued sphere.  Dimension-3 analogue (without
-the compatibility clause): `apm_t00A01_collared_standardCover_aux_left`. -/
+/-- Points of a collar's punctured manifold whose underlying collar point is
+a large-collar point with radius under two: the open collar `1 ≤ ‖y‖ < 2`. -/
+abbrev connectedSum_standardCover_aux_collar {n : ℕ} {M : Type}
+    [TopologicalSpace M] (c : BallCollar n M) : Set c.Punctured :=
+  {x : c.Punctured | x.1 ∈ c.radialTwo}
+
+/-- A large-collar coordinate of a punctured point has norm at least one.
+(Proved by lemma-2.) -/
+lemma connectedSum_standardCover_aux_left_aux_norm_ge_one
+    {n : ℕ} {M : Type} [TopologicalSpace M] (c : BallCollar n M)
+    (z : c.Punctured) (x : Disk n 2) (hx : c.largeMap x = z.1) :
+    1 ≤ ‖x.1‖ := by
+  by_contra hn
+  have hxlt : ‖x.1‖ < 1 := lt_of_not_ge hn
+  apply z.2
+  let y : Disk n 1 := ⟨x.1, by
+    simpa [Metric.mem_closedBall, dist_zero_right] using le_of_lt hxlt⟩
+  refine ⟨y, ?_, ?_⟩
+  · simpa [y, dist_zero_right] using hxlt
+  · rw [← hx]
+    exact (congrFun c.compatible y).symm
+
+/-- LEAF. The open collar strong-deformation-retracts onto the boundary
+sphere, radially.  Sketch: a collar point is `largeMap y` with `1 ≤ ‖y‖ < 2`
+(`_aux_left_aux_norm_ge_one`); `y` depends continuously on the point because
+`largeMap` is an embedding (`largeEmbedding.toHomeomorph.symm` on its range).
+Take `r = y / ‖y‖` and `H (x, t) = largeMap ((1 - t) • y + t • (y / ‖y‖))`;
+the radius stays in `[1, ‖y‖]`, so `H` stays in the collar and off the open
+unit ball, and points with `‖y‖ = 1` (the boundary sphere) are fixed.  For
+`n = 0` the collar is empty.  Proved dimension-3 analogue, to port:
+`apm_t00A01_collared_standardCover_aux_left_aux_radial` in
+`holes/labs/blueprints/t00A01/Blueprint.lean`. -/
+theorem connectedSum_standardCover_aux_radial {n : ℕ} {M : Type}
+    [TopologicalSpace M] (c : BallCollar n M) :
+    ∃ (r : C(↥(connectedSum_standardCover_aux_collar c), Sphere n))
+      (H : C(↥(connectedSum_standardCover_aux_collar c) × unitInterval,
+        c.Punctured)),
+      (∀ s (h : c.boundaryMap s ∈ connectedSum_standardCover_aux_collar c),
+        r ⟨_, h⟩ = s) ∧
+      (∀ x, H (x, 0) = x.1) ∧
+      (∀ x, H (x, 1) = c.boundaryMap (r x)) ∧
+      (∀ p, H p ∈ connectedSum_standardCover_aux_collar c) ∧
+      (∀ s (h : c.boundaryMap s ∈ connectedSum_standardCover_aux_collar c) t,
+        H (⟨_, h⟩, t) = c.boundaryMap s) := by
+  classical
+  let C := connectedSum_standardCover_aux_collar c
+  let j : C → Set.range c.largeMap := fun x ↦
+    ⟨x.1.1, by
+      rcases x.2 with ⟨y, hy, hxy⟩
+      exact ⟨y, hxy⟩⟩
+  let d : C → Disk n 2 := fun x ↦ c.largeEmbedding.toHomeomorph.symm (j x)
+  have hj : Continuous j := by
+    exact Continuous.subtype_mk (continuous_subtype_val.comp continuous_subtype_val) _
+  have hd : Continuous d := c.largeEmbedding.toHomeomorph.symm.continuous.comp hj
+  have hd_image (x : C) : c.largeMap (d x) = x.1.1 := by
+    exact congrArg Subtype.val (c.largeEmbedding.toHomeomorph.apply_symm_apply (j x))
+  have hd_norm (x : C) : 1 ≤ ‖(d x).1‖ :=
+    connectedSum_standardCover_aux_left_aux_norm_ge_one c x.1 (d x) (hd_image x)
+  have hd_ne (x : C) : ‖(d x).1‖ ≠ 0 :=
+    ne_of_gt (lt_of_lt_of_le zero_lt_one (hd_norm x))
+  let rv : C → E n := fun x ↦ (‖(d x).1‖)⁻¹ • (d x).1
+  have hrv_norm (x : C) : ‖rv x‖ = 1 := by
+    simp [rv, norm_smul, Real.norm_of_nonneg (norm_nonneg _), hd_ne x]
+  let r : C(C, Sphere n) :=
+    ⟨fun x ↦ ⟨rv x, by simpa [Metric.mem_sphere, dist_zero_right] using hrv_norm x⟩, by
+      apply Continuous.subtype_mk
+      exact ((continuous_norm.comp
+        (continuous_subtype_val.comp hd)).inv₀ (fun x ↦ hd_ne x)).smul
+          (continuous_subtype_val.comp hd)⟩
+  let v : C × unitInterval → E n := fun p ↦
+    ((1 - (p.2 : ℝ)) + (p.2 : ℝ) * (‖(d p.1).1‖)⁻¹) • (d p.1).1
+  have hv_norm (p : C × unitInterval) :
+      ‖v p‖ = (1 - (p.2 : ℝ)) * ‖(d p.1).1‖ + (p.2 : ℝ) := by
+    have hn : 0 < ‖(d p.1).1‖ := lt_of_lt_of_le zero_lt_one (hd_norm p.1)
+    have ht0 : 0 ≤ (p.2 : ℝ) := p.2.2.1
+    have ht1 : (p.2 : ℝ) ≤ 1 := p.2.2.2
+    have hinv : 0 < (‖(d p.1).1‖)⁻¹ := inv_pos.mpr hn
+    have ha : 0 ≤ (1 - (p.2 : ℝ)) + (p.2 : ℝ) * (‖(d p.1).1‖)⁻¹ := by
+      have hprod : 0 ≤ (p.2 : ℝ) * (‖(d p.1).1‖)⁻¹ := mul_nonneg ht0 hinv.le
+      linarith
+    simp only [v, norm_smul, Real.norm_eq_abs]
+    rw [abs_of_nonneg ha]
+    field_simp
+  have hv_ge (p : C × unitInterval) : 1 ≤ ‖v p‖ := by
+    rw [hv_norm]
+    nlinarith [hd_norm p.1, p.2.2.1, p.2.2.2]
+  have hv_le (p : C × unitInterval) : ‖v p‖ ≤ 2 := by
+    rw [hv_norm]
+    have hn2 : ‖(d p.1).1‖ ≤ 2 := by
+      have hh := (d p.1).2
+      change dist (d p.1).1 0 ≤ 2 at hh
+      simpa [dist_zero_right] using hh
+    nlinarith [p.2.2.1, p.2.2.2]
+  let w : C × unitInterval → Disk n 2 := fun p ↦
+    ⟨v p, by simpa [Metric.mem_closedBall, dist_zero_right] using hv_le p⟩
+  have hw_cont : Continuous w := by
+    apply Continuous.subtype_mk
+    exact (((continuous_const.sub
+      (continuous_subtype_val.comp continuous_snd)).add
+        ((continuous_subtype_val.comp continuous_snd).mul
+          ((continuous_norm.comp
+            (continuous_subtype_val.comp (hd.comp continuous_fst))).inv₀
+              (fun p ↦ hd_ne p.1)))).smul
+        (continuous_subtype_val.comp (hd.comp continuous_fst)))
+  have hw_punctured (p : C × unitInterval) :
+      c.largeMap (w p) ∉ c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1} := by
+    rintro ⟨y, hy, heq⟩
+    have heq' : w p = unitToLarge n y := by
+      apply c.largeEmbedding.injective
+      exact heq.symm.trans (congrFun c.compatible y).symm
+    have : ‖v p‖ < 1 := by
+      have hv : v p = y.1 := congrArg Subtype.val heq'
+      rw [hv]
+      simpa [dist_zero_right] using hy
+    exact (not_lt_of_ge (hv_ge p)) this
+  let H : C(C × unitInterval, c.Punctured) :=
+    ⟨fun p ↦ ⟨c.largeMap (w p), hw_punctured p⟩,
+      Continuous.subtype_mk (c.largeEmbedding.continuous.comp hw_cont) _⟩
+  refine ⟨r, H, ?_, ?_, ?_, ?_, ?_⟩
+  · intro s hs
+    apply Subtype.ext
+    change rv ⟨c.boundaryMap s, hs⟩ = s.1
+    have hd_eq : d ⟨c.boundaryMap s, hs⟩ = unitToLarge n
+          ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩ := by
+      apply c.largeEmbedding.injective
+      rw [hd_image]
+      exact (congrFun c.compatible _).symm
+    have hs_norm : ‖s.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using s.2
+    simp [rv, hd_eq, unitToLarge, hs_norm]
+  · intro x
+    apply Subtype.ext
+    change c.largeMap (w (x, 0)) = x.1.1
+    rw [show w (x, 0) = d x by
+      apply Subtype.ext
+      simp [w, v]]
+    exact hd_image x
+  · intro x
+    apply Subtype.ext
+    change c.largeMap (w (x, 1)) = c.smallMap _
+    rw [show w (x, 1) = unitToLarge n
+        ⟨rv x, by simpa [Metric.mem_closedBall, dist_zero_right] using (hrv_norm x).le⟩ by
+      apply Subtype.ext
+      change v (x, 1) = rv x
+      simp [v, rv]]
+    exact congrFun c.compatible _
+  · intro p
+    change c.largeMap (w p) ∈ c.largeMap '' {y : Disk n 2 | dist y.1 0 < 2}
+    refine ⟨w p, ?_, rfl⟩
+    have hd_lt : ‖(d p.1).1‖ < 2 := by
+      rcases p.1.2 with ⟨y, hy, hyeq⟩
+      have : d p.1 = y := c.largeEmbedding.injective ((hd_image p.1).trans hyeq.symm)
+      change dist y.1 0 < 2 at hy
+      simpa [this, dist_zero_right] using hy
+    have hvlt : ‖v p‖ < 2 := by
+      rw [hv_norm]
+      have hprod : 0 ≤ (p.2 : ℝ) * (‖(d p.1).1‖ - 1) :=
+        mul_nonneg p.2.2.1 (sub_nonneg.mpr (hd_norm p.1))
+      nlinarith
+    simpa [w, dist_zero_right] using hvlt
+  · intro s hs t
+    apply Subtype.ext
+    change c.largeMap (w (⟨_, hs⟩, t)) = c.smallMap _
+    have hd_eq : d ⟨c.boundaryMap s, hs⟩ = unitToLarge n
+          ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩ := by
+      apply c.largeEmbedding.injective
+      rw [hd_image]
+      exact (congrFun c.compatible _).symm
+    have hs_norm : ‖s.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using s.2
+    rw [show w (⟨_, hs⟩, t) = unitToLarge n
+        ⟨s.1, by simpa [Metric.mem_closedBall, dist_zero_right] using hs_norm.le⟩ by
+      apply Subtype.ext
+      simp [w, v, hd_eq, unitToLarge, hs_norm]]
+    exact congrFun c.compatible _
+
+/-- LEAF. Quotient step for the left thickening: a radial retraction of the
+second collar gives a homotopy equivalence from `thickLeft` to the first
+punctured summand that sends each `[inl a]` to `a`.  Sketch: `f [inl a] = a`,
+`f [inr x] = c₁.boundaryMap (r x)` (well defined by `hr` and
+`GlueRel.boundary`), `g a = [inl a]`; `f ∘ g = id` exactly, and `g ∘ f ≃ id`
+by `[inl a] ↦ [inl a]`, `[inr x] ↦ [inr H (x, t)]` (compatible on glued points
+by `hHfix`).  Continuity: the preimage of `thickLeft` is open and saturated
+(`_aux_open`), so the restricted quotient map is a quotient map
+(`IsQuotientMap.restrictPreimage_isOpen`), and stays one after `× unitInterval`
+(locally compact).  Proved dimension-3 analogue, to port:
+`apm_t00A01_collared_standardCover_aux_left_aux_quotient`; the extra clause
+`e₁.toFun [inl a] = a` holds by definition of `f`. -/
+theorem connectedSum_standardCover_aux_left_aux_quotient {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo)
+    (r : C(↥(connectedSum_standardCover_aux_collar c₂), Sphere n))
+    (H : C(↥(connectedSum_standardCover_aux_collar c₂) × unitInterval,
+      c₂.Punctured))
+    (hr : ∀ s (h : c₂.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₂),
+      r ⟨_, h⟩ = s)
+    (hH0 : ∀ x, H (x, 0) = x.1)
+    (hH1 : ∀ x, H (x, 1) = c₂.boundaryMap (r x))
+    (hHC : ∀ p, H p ∈ connectedSum_standardCover_aux_collar c₂)
+    (hHfix : ∀ s (h : c₂.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₂) t,
+      H (⟨_, h⟩, t) = c₂.boundaryMap s) :
+    ∃ e₁ : ContinuousMap.HomotopyEquiv
+        ↥(connectedSum_standardCover_aux_thickLeft c₁ c₂) c₁.Punctured,
+      ∀ a (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inl a) ∈
+          connectedSum_standardCover_aux_thickLeft c₁ c₂),
+        e₁.toFun ⟨_, h⟩ = a := by
+  sorry
+
+/-- LEAF. Mirror of `_aux_left_aux_quotient`: a radial retraction of the
+first collar gives a homotopy equivalence from `thickRight` to the second
+punctured summand that sends each `[inr b]` to `b`.  Sketch: `f [inr b] = b`,
+`f [inl x] = c₂.boundaryMap (r x)` (well defined: `[inl c₁.boundaryMap s] =
+[inr c₂.boundaryMap s]` and `hr`), `g b = [inr b]`; `f ∘ g = id`, and
+`g ∘ f ≃ id` by `[inl x] ↦ [inl H (x, t)]`, `[inr b] ↦ [inr b]`; at `t = 1`,
+`[inl c₁.boundaryMap (r x)] = [inr c₂.boundaryMap (r x)]`.  Continuity as in
+`_aux_left_aux_quotient`.  Dimension-3 analogue: the mirror lemma after
+`apm_t00A01_collared_standardCover_aux_left_aux_quotient`. -/
+theorem connectedSum_standardCover_aux_right_aux_quotient {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo)
+    (r : C(↥(connectedSum_standardCover_aux_collar c₁), Sphere n))
+    (H : C(↥(connectedSum_standardCover_aux_collar c₁) × unitInterval,
+      c₁.Punctured))
+    (hr : ∀ s (h : c₁.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₁),
+      r ⟨_, h⟩ = s)
+    (hH0 : ∀ x, H (x, 0) = x.1)
+    (hH1 : ∀ x, H (x, 1) = c₁.boundaryMap (r x))
+    (hHC : ∀ p, H p ∈ connectedSum_standardCover_aux_collar c₁)
+    (hHfix : ∀ s (h : c₁.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₁) t,
+      H (⟨_, h⟩, t) = c₁.boundaryMap s) :
+    ∃ e₂ : ContinuousMap.HomotopyEquiv
+        ↥(connectedSum_standardCover_aux_thickRight c₁ c₂) c₂.Punctured,
+      ∀ b (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inr b) ∈
+          connectedSum_standardCover_aux_thickRight c₁ c₂),
+        e₂.toFun ⟨_, h⟩ = b := by
+  sorry
+
+/-- ASSEMBLY (from `_aux_radial` on the second collar and
+`_aux_left_aux_quotient`). The left thickening deformation retracts onto the
+first punctured summand, and this equivalence sends the glued sphere to the
+first collar boundary: it fixes `[inl a] ↦ a`, so the composite is equal to
+`c₁.boundaryMap`. -/
 theorem connectedSum_standardCover_aux_left {n : ℕ} {M₁ M₂ : Type}
     [TopologicalSpace M₁] [TopologicalSpace M₂]
     (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
@@ -400,12 +636,25 @@ theorem connectedSum_standardCover_aux_left {n : ℕ} {M₁ M₂ : Type}
           (Sum.inl (c₁.boundaryMap s))) →
         ContinuousMap.Homotopic (e₁.toFun.comp g)
           ⟨c₁.boundaryMap, c₁.continuous_boundaryMap⟩ := by
-  sorry
+  obtain ⟨r, H, hr, hH0, hH1, hHC, hHfix⟩ := connectedSum_standardCover_aux_radial c₂
+  obtain ⟨e₁, he₁⟩ := connectedSum_standardCover_aux_left_aux_quotient c₁ c₂
+    hopen₁ hopen₂ r H hr hH0 hH1 hHC hHfix
+  refine ⟨e₁, fun g hg ↦ ?_⟩
+  have hcomp : e₁.toFun.comp g = ⟨c₁.boundaryMap, c₁.continuous_boundaryMap⟩ := by
+    ext1 s
+    have key : ∀ z : ↥(connectedSum_standardCover_aux_thickLeft c₁ c₂),
+        z.1 = Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))
+          (Sum.inl (c₁.boundaryMap s)) → e₁.toFun z = c₁.boundaryMap s := by
+      rintro ⟨z, hz⟩ hzs
+      subst hzs
+      exact he₁ _ hz
+    exact key (g s) (hg s)
+  rw [hcomp]
 
-/-- LEAF. The right thickening retracts onto the second punctured summand,
-compatibly with the glued sphere (which equals the `inr` image of the second
-collar boundary, by `GlueRel.boundary`).  Dimension-3 analogue:
-`apm_t00A01_collared_standardCover_aux_right`. -/
+/-- ASSEMBLY (from `_aux_radial` on the first collar and
+`_aux_right_aux_quotient`). The right thickening retracts onto the second
+punctured summand, compatibly with the glued sphere, which equals the `inr`
+image of the second collar boundary by `GlueRel.boundary`. -/
 theorem connectedSum_standardCover_aux_right {n : ℕ} {M₁ M₂ : Type}
     [TopologicalSpace M₁] [TopologicalSpace M₂]
     (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
@@ -417,7 +666,25 @@ theorem connectedSum_standardCover_aux_right {n : ℕ} {M₁ M₂ : Type}
           (Sum.inl (c₁.boundaryMap s))) →
         ContinuousMap.Homotopic (e₂.toFun.comp g)
           ⟨c₂.boundaryMap, c₂.continuous_boundaryMap⟩ := by
-  sorry
+  obtain ⟨r, H, hr, hH0, hH1, hHC, hHfix⟩ := connectedSum_standardCover_aux_radial c₁
+  obtain ⟨e₂, he₂⟩ := connectedSum_standardCover_aux_right_aux_quotient c₁ c₂
+    hopen₁ hopen₂ r H hr hH0 hH1 hHC hHfix
+  refine ⟨e₂, fun g hg ↦ ?_⟩
+  have hcomp : e₂.toFun.comp g = ⟨c₂.boundaryMap, c₂.continuous_boundaryMap⟩ := by
+    ext1 s
+    have hglue : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))
+        (Sum.inl (c₁.boundaryMap s)) =
+        Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))
+          (Sum.inr (c₂.boundaryMap s)) :=
+      Quotient.sound (Relation.EqvGen.rel _ _ (GlueRel.boundary s))
+    have key : ∀ z : ↥(connectedSum_standardCover_aux_thickRight c₁ c₂),
+        z.1 = Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))
+          (Sum.inr (c₂.boundaryMap s)) → e₂.toFun z = c₂.boundaryMap s := by
+      rintro ⟨z, hz⟩ hzs
+      subst hzs
+      exact he₂ _ hz
+    exact key (g s) ((hg s).trans hglue)
+  rw [hcomp]
 
 /-- LEAF. The overlap of the two thickenings is the union of the two open
 collars glued along the sphere, an open annulus `S^{n-1} × (0, 2)` in radial
