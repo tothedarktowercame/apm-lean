@@ -89380,22 +89380,20 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "transport cover connectedness to arc action; realize model; compute invariants",
+    "cover-to-action/model realization; cellular-to-singular and pi1 transport",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "twoArcActionConnected_iff_nontrivial",
-      :type
-      "two-arc action connected iff one Fin2 monodromy is nonidentity",
+    [{:name "modelCellular_zero_boundary_data",
+      :type "C1=Z^3 and C2=Z^2 have zero cellular boundaries",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on
-      ["twoArcPermMonodromy_model_exists_of_actionConnected"],
-      :area "covering-classification-explicit"}
+      :depends-on [],
+      :area "quotient-space-mayer-vietoris"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "connected double-cover classification",
       :status :partial,
@@ -89404,43 +89402,30 @@
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
       :type "model homology and fundamental group",
-      :status :not-started,
+      :status :partial,
       :consumers [:t97A03],
-      :depends-on [],
+      :depends-on ["modelCellular_zero_boundary_data"],
       :area "quotient-space-mayer-vietoris"}],
     :statement-hashes {:registry "170/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked exact two-arc connectedness criterion.",
+    :reason "Banked model cellular boundary calculation.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder scan", :exit 0}
-     {:cmd "git show --check a2adaa449", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792589615169-854-262c5d0e",
-     :commands
-     ["git show/diff-tree a2adaa449"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint; sha256sum; placeholder scan"],
-     :finding
-     "PASS: topo-6 commit a2adaa449 changes only t97A03Closure after history commit dde766e34; fixture SHA b56238d3... matches. Connectedness criterion is correct: a nonidentity Fin 2 generator is swap and forces every nonempty forward-invariant set to be universal; converse follows from reachability and excludes two identities. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP with compiled sorry-free progress; cover-to-action transport, model realization, and invariants remain listed."},
-    :commit "a2adaa449",
+     {:cmd "git show --check 949070b9a", :exit 0}],
+    :commit "949070b9a",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "b56238d3c86bae3f9221f13ab54e23f3e03042c8e550f477a8ed4e13eb6f8848"},
+     "8452877f7179d34d7e44f2d73d644cc4759b75d3908759704dc36b9061cc8d0f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98428,7 +98413,7 @@
     :area "quotient-space-mayer-vietoris"},
    :id :lemma-apm-t97a03-invariants-of-model,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-modelcellular-zero-boundary-data],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -100058,4 +100043,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-twoarcpermmonodromy-model-exists-of-actionconnected],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "modelCellular_zero_boundary_data",
+    :type "C1=Z^3 and C2=Z^2 have zero cellular boundaries"},
+   :lemma
+   {:name "modelCellular_zero_boundary_data",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "C1=Z^3 and C2=Z^2 have zero cellular boundaries",
+    :area "quotient-space-mayer-vietoris",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-modelcellular-zero-boundary-data,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
