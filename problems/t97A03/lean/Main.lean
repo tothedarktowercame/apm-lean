@@ -618,6 +618,16 @@ def apm_t97A03_twoGeneratorWord {G : Type*} [Group G]
     (first second : G) (w : List (Fin 2 × ℤ)) : G :=
   (w.map fun q ↦ (if q.1 = 0 then first else second) ^ q.2).prod
 
+lemma apm_t97A03_twoGeneratorWord_map {G H : Type*} [Group G] [Group H]
+    (f : G →* H) (first second : G) (w : List (Fin 2 × ℤ)) :
+    f (apm_t97A03_twoGeneratorWord first second w) =
+      apm_t97A03_twoGeneratorWord (f first) (f second) w := by
+  simp only [apm_t97A03_twoGeneratorWord, map_list_prod, List.map_map]
+  apply congrArg List.prod
+  apply List.map_congr_left
+  rintro ⟨i, z⟩ hi
+  fin_cases i <;> simp [map_zpow]
+
 /-- Exact algebraic contract for the pending geometric comparison.  Once an
 equivalence identifies the literal base fundamental group with the finite
 two-circle wedge, every literal loop is a signed word in the inverse images
@@ -663,6 +673,77 @@ theorem apm_t97A03_signed_generation_of_piOneEquiv
     rintro ⟨i, z⟩ hi
     fin_cases i <;> simp [map_zpow]
   simpa [List.map_map, Function.comp_def] using hword.trans hw
+
+/-- A cut-circle pi1 equivalence aligned with the two literal cut generators
+turns the abstract wedge normal form into a word in those exact generators. -/
+theorem apm_t97A03_cutCircle_signed_generation_of_aligned_piOneEquiv
+    (A B : Circle)
+    (e : FundamentalGroup (apm_t97A03_CutCircle A B)
+          (apm_t97A03_cutCircleMap A B A) ≃*
+        FundamentalGroup
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (Fin 2))
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin 2) 1))
+    (hfirst : e (apm_t97A03_firstCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (hsecond : e (apm_t97A03_secondCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (g : FundamentalGroup (apm_t97A03_CutCircle A B)
+      (apm_t97A03_cutCircleMap A B A)) :
+    ∃ w : List (Fin 2 × ℤ),
+      apm_t97A03_twoGeneratorWord
+        (apm_t97A03_firstCutCircleGenerator A B)
+        (apm_t97A03_secondCutCircleGenerator A B) w = g := by
+  rcases apm_t97A03_signed_generation_of_piOneEquiv e g with ⟨w, hw⟩
+  have hf : e.symm
+      (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass) =
+      apm_t97A03_firstCutCircleGenerator A B := by
+    rw [← hfirst, e.symm_apply_apply]
+  have hs : e.symm
+      (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass) =
+      apm_t97A03_secondCutCircleGenerator A B := by
+    rw [← hsecond, e.symm_apply_apply]
+  exact ⟨w, by simpa [hf, hs] using hw⟩
+
+/-- Injectivity of the literal collapse, together with the aligned cut-circle
+normal form, reduces every literal pi1 class to a signed word in the two
+actual literal loops. -/
+theorem apm_t97A03_literal_signed_generation_of_collapse_injective
+    (A B : Circle)
+    (e : FundamentalGroup (apm_t97A03_CutCircle A B)
+          (apm_t97A03_cutCircleMap A B A) ≃*
+        FundamentalGroup
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (Fin 2))
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin 2) 1))
+    (hfirst : e (apm_t97A03_firstCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (hsecond : e (apm_t97A03_secondCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (hinj : Function.Injective (apm_t97A03_collapsePiOneHom A B))
+    (g : FundamentalGroup (apm_t97A03_BaseSpace A B)
+      (apm_t97A03_baseCircle A B A)) :
+    ∃ w : List (Fin 2 × ℤ),
+      apm_t97A03_twoGeneratorWord
+        (FundamentalGroup.fromPath
+          (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B)))
+        (FundamentalGroup.fromPath
+          (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B))) w = g := by
+  rcases apm_t97A03_cutCircle_signed_generation_of_aligned_piOneEquiv
+      A B e hfirst hsecond (apm_t97A03_collapsePiOneHom A B g) with ⟨w, hw⟩
+  refine ⟨w, hinj ?_⟩
+  rw [apm_t97A03_twoGeneratorWord_map,
+    apm_t97A03_collapsePiOneHom_firstLiteralLoop,
+    apm_t97A03_collapsePiOneHom_secondLiteralLoop]
+  exact hw
 
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
