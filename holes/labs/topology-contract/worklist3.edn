@@ -36758,6 +36758,19 @@
       :exit 1,
       :correction
       "17ef03cbb qualifies category names and discharges exactness goals"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792591396699-898-563da43e",
+     :commands
+     ["git show/numstat 17ef03cbb"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 17ef03cbb^ 17ef03cbb"],
+     :finding
+     "PASS: 17ef03cbb actually adds 36 lines to scoped Closure (ledger changed-paths [] is stale); fixture/blob SHA matches 09537732.... The adjacent LES segment is oriented patches H(k+1) → successor H(k+1) → overlap H(k), with each representation transported by the established patch, union-successor, and intersection isos. Zero is inherited from comp_delta, and exactness follows by the standard transport theorem. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Exactness milestone is proved and dimension extraction remains listed."},
     :commit "17ef03cbb",
     :changed-paths [],
     :fixture
@@ -36766,7 +36779,7 @@
      "095377320dd976e896af3bb6f3519a21f249c10306fc948efa1be7fcd99d56c5"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36784,7 +36797,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed Mayer-Vietoris exactness transported to literal CP successor homology; the dimension step remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Stale review: current descendant 17ef03cbb compiles; exactness is sorry-free. Dimension extraction remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36947,7 +36960,11 @@
     {:job 9,
      :commit "ac2a9e4c5",
      :reason
-     "Committed Mayer-Vietoris exactness transported to literal CP successor homology; the dimension step remains."}]}
+     "Committed Mayer-Vietoris exactness transported to literal CP successor homology; the dimension step remains."}
+    {:job 1,
+     :commit "17ef03cbb",
+     :reason
+     "Stale review: current descendant 17ef03cbb compiles; exactness is sorry-free. Dimension extraction remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
