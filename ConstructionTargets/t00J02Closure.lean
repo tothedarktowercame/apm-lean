@@ -3750,6 +3750,36 @@ theorem topHomologyMap_eq_zero_of_diskBounded_canonicalSums
   topHomologyMap_eq_zero_of_diskBounded_chartSums f c hc eS hessential
     hdisks y hy e orientationSign (regularFiberLocalDegree e f y) hcomponent htop
 
+/-- Disk boundedness supplies the exact zero-degree lifts, so an equality
+between the canonical component sums and those lift degrees already proves
+the canonical component equations.  This removes the lifts from the next
+stage of the transverse calculation. -/
+theorem canonicalComponentSums_eq_zero_of_diskBounded_comparison
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k =
+      exactLiftComponentDegree
+        (occupiedRegularFiber_exactZeroDegreeLifts
+          f c hc eS hessential hdisks y hy) k) :
+    ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = 0 :=
+  canonicalComponentLocalDegreeSum_eq_zero_of_comparison hy e
+    (occupiedRegularFiber_exactZeroDegreeLifts
+      f c hc eS hessential hdisks y hy) hcomparison
+
 /-- Canonical zero sums on genuine occupied components annihilate every
 orientation-weighted signed sum over the literal regular fiber. -/
 theorem canonicalRegularFiberSignedSum_eq_zero_of_componentSums
@@ -3807,6 +3837,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_canonicalSums
+#print axioms ConstructionTargets.T00J02Closure.canonicalComponentSums_eq_zero_of_diskBounded_comparison
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberSignedSum_eq_zero_of_componentSums
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
