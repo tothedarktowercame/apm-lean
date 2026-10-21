@@ -186,7 +186,12 @@ rank-two free group. -/
 theorem twoRankOneFreeProduct :
     Nonempty (Monoid.Coprod (FreeGroup (Fin 1)) (FreeGroup (Fin 1)) ≃*
       FreeGroup (Fin 2)) := by
-  sorry
+  exact ⟨
+    (ConstructionTargets.PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum
+        (Fin 1) (Fin 1)).trans
+      (MulEquiv.ofBijective (FreeGroup.map finSumFinEquiv)
+        ⟨FreeGroup.map_injective finSumFinEquiv.injective,
+          FreeGroup.map_surjective finSumFinEquiv.surjective⟩)⟩
 
 /-- **LEAF (P6).** Transport a based fundamental-group computation across
 a homeomorphism, allowing the basepoint to move to its inverse image. -/
