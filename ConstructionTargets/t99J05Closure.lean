@@ -1300,6 +1300,39 @@ theorem t99J05_cp_successor_patch_union_eq_univ (n : ℕ) :
 
 #print axioms t99J05_cp_successor_patch_union_eq_univ
 
+/-- The literal patch union is homeomorphic to the ambient successor space. -/
+noncomputable def t99J05_cp_successor_patchUnionHomeomorph (n : ℕ) :
+    ((cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n : Set (CP (n + 1)))) ≃ₜ
+      CP (n + 1) :=
+  (Homeomorph.setCongr (t99J05_cp_successor_patch_union_eq_univ n)).trans
+    (Homeomorph.Set.univ (CP (n + 1)))
+
+/-- Homology transport from the literal patch union to the successor. -/
+noncomputable def t99J05_cp_successor_patchUnionHomologyIso (n k : ℕ) :
+    Homology ((cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n :
+      Set (CP (n + 1)))) k ≅ Homology (CP (n + 1)) k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ))).mapIso
+      (TopCat.isoOfHomeo (t99J05_cp_successor_patchUnionHomeomorph n))
+
+#print axioms t99J05_cp_successor_patchUnionHomologyIso
+
+/-- The union object in the transported Mayer--Vietoris complex is identified
+degreewise with rational homology of the literal projective successor. -/
+noncomputable def t99J05_cp_successor_unionRangeToSuccessorHomologyIso
+    (n k : ℕ) :
+    ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+      ((ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorLowerPatch n) ⊔
+        ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorTopPatch n) :
+        (TopCat.toSSet.obj (TopCat.of (CP (n + 1)))).Subcomplex) : SSet)).homology k ≅
+      Homology (CP (n + 1)) k :=
+  t99J05_cp_successor_unionRangeHomologyIso n k ≪≫
+    t99J05_cp_successor_patchUnionHomologyIso n k
+
+#print axioms t99J05_cp_successor_unionRangeToSuccessorHomologyIso
+
 /-- The range-to-literal homology isomorphism commutes with inclusion into
 ambient singular homology. -/
 theorem t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
