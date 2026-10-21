@@ -89421,6 +89421,18 @@
      {:cmd "git show --check d7c9a7fc3", :exit 0}],
     :diagnostic-history
     [{:cmd "build", :exit 1, :correction "relation orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792588011361-815-2453eef9",
+     :commands
+     ["git show/diff-tree d7c9a7fc3"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit d7c9a7fc3 changes only t97A03Closure and follows history commit 24ff67fb4; fixture SHA 1cdf624a... matches. Reachability proof has correct EqvGen orientation: under identity monodromies every generating edge is equality, contradicting 0≠1; adapter then invokes the prior normalized model selector. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP: compiled sorry-free progress committed; cover-connectedness bridge, realization, and invariants remain listed."},
     :commit "d7c9a7fc3",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89429,7 +89441,7 @@
      "1cdf624a408eabe6f72a378af9e14b9086687ff5182e507e01aeb18f360dbcf2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89447,7 +89459,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked two-arc permutation model selection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked lifted-arc reachability bridge.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89467,7 +89479,10 @@
      :reason "Banked two-point permutation normal form."}
     {:job 4,
      :commit "24ff67fb4",
-     :reason "Banked two-arc permutation model selection."}]}
+     :reason "Banked two-arc permutation model selection."}
+    {:job 5,
+     :commit "d7c9a7fc3",
+     :reason "Banked lifted-arc reachability bridge."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -99977,7 +99992,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcPermMonodromy_model_exists_of_reachable",
@@ -99987,7 +100002,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "fiber-label reachability selects a normalized cover model",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "d7c9a7fc3"},
    :id :lemma-twoarcpermmonodromy-model-exists-of-reachable,
    :kind :lemma,
    :depends-on [:lemma-twoarcpermmonodromy-model-exists],
