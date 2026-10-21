@@ -4,6 +4,7 @@ import ConstructionTargets.DiskBoundedPreimageDuality
 import ConstructionTargets.SardGenuineSmoothManifoldVector
 import ConstructionTargets.IncidenceParameterProjection
 import Mathlib.Analysis.Calculus.Implicit
+import Mathlib.MeasureTheory.Measure.Haar.Basic
 
 /-!
 # Local fundamental-class coordinates for t00J02
@@ -1568,6 +1569,39 @@ theorem circleIncidenceProjection_critical_iff_fixedTargetChartCritical
   · exact hp
 
 #print axioms circleIncidenceProjection_critical_iff_fixedTargetChartCritical
+
+/-- The whole circle, packaged as the positive compact used to normalize its
+Haar measure.  This fixes a concrete nonzero target measure for the Sard
+selection step instead of leaving the measure as an abstract parameter. -/
+noncomputable def circlePositiveCompact : TopologicalSpace.PositiveCompacts Circle :=
+  ⟨⟨Set.univ, isCompact_univ⟩, by simp⟩
+
+/-- The Borel measurable structure used by the normalized circle measure. -/
+local instance circleMeasurableSpace : MeasurableSpace Circle :=
+  borel Circle
+local instance circleBorelSpace : BorelSpace Circle := ⟨rfl⟩
+
+/-- The normalized Haar measure on the circle. -/
+noncomputable def circleHaarMeasure : MeasureTheory.Measure Circle :=
+  MeasureTheory.Measure.haarMeasure circlePositiveCompact
+
+/-- The chosen circle measure is a Haar measure. -/
+theorem circleHaarMeasure_isHaarMeasure :
+    MeasureTheory.Measure.IsHaarMeasure circleHaarMeasure := by
+  dsimp [circleHaarMeasure]
+  infer_instance
+
+/-- In particular, the normalized circle measure is nonzero, as required by
+the regular-value selection interface. -/
+theorem circleHaarMeasure_ne_zero : circleHaarMeasure ≠ 0 := by
+  intro hzero
+  have hself : circleHaarMeasure (circlePositiveCompact : Set Circle) = 1 := by
+    exact MeasureTheory.Measure.haarMeasure_self (K₀ := circlePositiveCompact)
+  rw [hzero] at hself
+  simpa using hself
+
+#print axioms circleHaarMeasure_isHaarMeasure
+#print axioms circleHaarMeasure_ne_zero
 
 /-- The open part of the source on which a fixed target chart is valid. -/
 def targetChartDomain
