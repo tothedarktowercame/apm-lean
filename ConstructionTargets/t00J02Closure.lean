@@ -2031,6 +2031,33 @@ theorem badSet_measure_zero_of_finite_targetChart_witnesses
 
 #print axioms badSet_measure_zero_of_finite_targetChart_witnesses
 
+/-- The global critical-value set of a smooth map into a compact charted
+target is null when coordinate-null sets transport through every target
+chart. -/
+theorem globalCriticalValues_measure_zero_of_targetCharts
+    {E F M N : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+    [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M] [SecondCountableTopology M]
+    [TopologicalSpace N] [ChartedSpace F N] [CompactSpace N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N] [MeasurableSpace N]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure]
+    (nu : MeasureTheory.Measure N) (g : M → N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) ∞ g)
+    (htransport : ∀ y s, mu s = 0 → nu ((chartAt F y).symm '' s) = 0) :
+    nu (g '' {x | ¬ Function.Surjective
+      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) g x)}) = 0 := by
+  obtain ⟨n, y, hcover⟩ := exists_fin_chartAt_source_cover (F := F) (N := N)
+  apply badSet_measure_zero_of_finite_targetChart_witnesses mu nu g hg y _
+    (fun i ↦ htransport (y i))
+  intro z hz
+  exact finite_targetChart_witness_of_globalCriticalValue g hg y hcover z hz
+
+#print axioms globalCriticalValues_measure_zero_of_targetCharts
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
