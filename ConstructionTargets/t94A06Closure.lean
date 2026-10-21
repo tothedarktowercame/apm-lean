@@ -59,6 +59,26 @@ def apm_t94a06_transverse_ae_of_regularValues_aux_proj :
       (ContinuousLinearMap.proj (R := ℝ) (Fin.castSucc i)).comp
         (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 ↦ ℝ)).toContinuousLinearMap))
 
+/-- The normal-coordinate map inherits smoothness from the ambient map.  This
+is the input to the chartwise Morse--Sard argument. -/
+theorem apm_t94a06_normalPart_contMDiff
+    {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup H] [NormedSpace ℝ H] [TopologicalSpace X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    [IsManifold I ∞ X] (f : X → apm_t94a06_E3)
+    (hf : ContMDiff I (modelWithCornersSelf ℝ apm_t94a06_E3) ∞ f) :
+    ContMDiff I (modelWithCornersSelf ℝ apm_t94a06_E2) ∞
+      (apm_t94a06_normalPart f) := by
+  have hproj : apm_t94a06_normalPart f =
+      apm_t94a06_transverse_ae_of_regularValues_aux_proj ∘ f := by
+    funext z
+    ext i
+    fin_cases i <;> rfl
+  rw [hproj]
+  exact apm_t94a06_transverse_ae_of_regularValues_aux_proj.contMDiff.comp hf
+
+#print axioms apm_t94a06_normalPart_contMDiff
+
 set_option backward.isDefEq.respectTransparency false in
 theorem apm_t94a06_transverse_ae_of_regularValues
     {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
