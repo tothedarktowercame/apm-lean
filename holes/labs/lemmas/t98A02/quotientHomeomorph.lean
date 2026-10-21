@@ -71,7 +71,87 @@ theorem quotientHomeomorph {X₁ X₂ : Type}
     (c₁ : BallCollar 4 X₁) (c₂ : BallCollar 4 X₂)
     (hc₁ : c₁.smallMap = φ₁) (hc₂ : c₂.smallMap = φ₂) :
     Nonempty (T98A02ConnectedSum φ₁ φ₂ ≃ₜ ConnectedSum c₁ c₂) := by
-  sorry
+  subst φ₁
+  subst φ₂
+  let p₁ : T98A02Punctured X₁ c₁.smallMap → c₁.Punctured := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let p₂ : T98A02Punctured X₂ c₂.smallMap → c₂.Punctured := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let q₁ : c₁.Punctured → T98A02Punctured X₁ c₁.smallMap := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let q₂ : c₂.Punctured → T98A02Punctured X₂ c₂.smallMap := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let f : Sum (T98A02Punctured X₁ c₁.smallMap)
+      (T98A02Punctured X₂ c₂.smallMap) → Sum c₁.Punctured c₂.Punctured
+    | Sum.inl x => Sum.inl (p₁ x)
+    | Sum.inr x => Sum.inr (p₂ x)
+  let g : Sum c₁.Punctured c₂.Punctured →
+      Sum (T98A02Punctured X₁ c₁.smallMap)
+        (T98A02Punctured X₂ c₂.smallMap)
+    | Sum.inl x => Sum.inl (q₁ x)
+    | Sum.inr x => Sum.inr (q₂ x)
+  have hfg (x) : g (f x) = x := by
+    cases x <;> simp [f, g, p₁, p₂, q₁, q₂]
+  have hgf (x) : f (g x) = x := by
+    cases x <;> simp [f, g, p₁, p₂, q₁, q₂]
+  have hfrel {x y} (h : T98A02GlueRel c₁.smallMap c₂.smallMap x y) :
+      Relation.EqvGen (GlueRel c₁ c₂) (f x) (f y) := by
+    cases h with
+    | boundary s h₁ h₂ =>
+      apply Relation.EqvGen.rel
+      exact GlueRel.boundary s
+  have hgrel {x y} (h : GlueRel c₁ c₂ x y) :
+      Relation.EqvGen (T98A02GlueRel c₁.smallMap c₂.smallMap) (g x) (g y) := by
+    cases h with
+    | boundary s =>
+      apply Relation.EqvGen.rel
+      apply T98A02GlueRel.boundary s
+  let F : T98A02ConnectedSum c₁.smallMap c₂.smallMap → ConnectedSum c₁ c₂ :=
+    Quotient.map' f (fun _ _ h => by
+      change Relation.EqvGen (GlueRel c₁ c₂) _ _
+      induction h with
+      | rel _ _ h => exact hfrel h
+      | refl x => exact (Relation.EqvGen.refl (f x) :
+          Relation.EqvGen (GlueRel c₁ c₂) (f x) (f x))
+      | symm _ _ _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ =>
+        exact Relation.EqvGen.trans (f x) (f y) (f z) ih₁ ih₂)
+  let G : ConnectedSum c₁ c₂ → T98A02ConnectedSum c₁.smallMap c₂.smallMap :=
+    Quotient.map' g (fun _ _ h => by
+      change Relation.EqvGen (T98A02GlueRel c₁.smallMap c₂.smallMap) _ _
+      induction h with
+      | rel _ _ h => exact hgrel h
+      | refl x => exact (Relation.EqvGen.refl (g x) :
+          Relation.EqvGen (T98A02GlueRel c₁.smallMap c₂.smallMap) (g x) (g x))
+      | symm _ _ _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ =>
+        exact Relation.EqvGen.trans (g x) (g y) (g z) ih₁ ih₂)
+  have hFG (x) : G (F x) = x := by
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      have hh := congrArg
+        (Quotient.mk (Relation.EqvGen.setoid (T98A02GlueRel c₁.smallMap c₂.smallMap))) (hfg x)
+      simpa [F, G] using hh
+  have hGF (x) : F (G x) = x := by
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      have hh := congrArg (Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))) (hgf x)
+      simpa [F, G] using hh
+  have hfcont : Continuous f := by
+    rw [continuous_sum_dom]
+    constructor
+    · exact continuous_inl.comp (continuous_subtype_val.subtype_mk _)
+    · exact continuous_inr.comp (continuous_subtype_val.subtype_mk _)
+  have hgcont : Continuous g := by
+    rw [continuous_sum_dom]
+    constructor
+    · exact continuous_inl.comp (continuous_subtype_val.subtype_mk _)
+    · exact continuous_inr.comp (continuous_subtype_val.subtype_mk _)
+  refine ⟨{ toEquiv := ⟨F, G, hFG, hGF⟩, continuous_toFun := ?_, continuous_invFun := ?_ }⟩
+  · rw [continuous_coinduced_dom]
+    exact continuous_coinduced_rng.comp hfcont
+  · rw [continuous_coinduced_dom]
+    exact continuous_coinduced_rng.comp hgcont
 -- END SEAT AREA
 
 /-- **LIBRARY (B12b).** Homology invariance transports the complete table
