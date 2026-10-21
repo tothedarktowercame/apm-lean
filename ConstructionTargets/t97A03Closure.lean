@@ -298,6 +298,46 @@ theorem twoArcActionConnected_conjugate
     twoArcActionConnected_iff_nontrivial,
     conjugate_ne_refl_iff, conjugate_ne_refl_iff]
 
+/-! ## From lifted fiber transports to the two-arc action -/
+
+/-- Express a self-equivalence of an actual two-point fiber in a chosen
+`Fin 2` coordinate. -/
+def labeledFiberMonodromy {F : Type} (label : F ≃ Fin 2)
+    (transport : Equiv.Perm F) : Equiv.Perm (Fin 2) :=
+  label.symm.trans (transport.trans label)
+
+/-- Passing from an actual fiber transport to its labeled permutation
+preserves precisely whether the transport is the identity. -/
+theorem labeledFiberMonodromy_ne_refl_iff
+    {F : Type} (label : F ≃ Fin 2) (transport : Equiv.Perm F) :
+    labeledFiberMonodromy label transport ≠ Equiv.refl (Fin 2) ↔
+      transport ≠ Equiv.refl F := by
+  constructor
+  · intro h htransport
+    apply h
+    subst transport
+    ext x
+    simp [labeledFiberMonodromy]
+  · intro h hlabeled
+    apply h
+    ext x
+    have hx := congrArg
+      (fun f : Equiv.Perm (Fin 2) ↦ f (label x)) hlabeled
+    have hxl : label (transport x) = label x := by
+      simpa [labeledFiberMonodromy] using hx
+    exact label.injective hxl
+
+/-- Two lifted self-transports of a cardinal-two fiber give a connected
+two-arc action exactly when at least one transport is nonidentity. -/
+theorem labeledTwoTransport_actionConnected_iff
+    {F : Type} (label : F ≃ Fin 2) (first second : Equiv.Perm F) :
+    TwoArcActionConnected (labeledFiberMonodromy label first)
+        (labeledFiberMonodromy label second) ↔
+      first ≠ Equiv.refl F ∨ second ≠ Equiv.refl F := by
+  rw [twoArcActionConnected_iff_nontrivial,
+    labeledFiberMonodromy_ne_refl_iff,
+    labeledFiberMonodromy_ne_refl_iff]
+
 #print axioms twoArcMonodromy_nontrivial_classification
 #print axioms twoArcMonodromy_model_exists
 #print axioms finTwoPerm_eq_id_or_swap
@@ -312,5 +352,7 @@ theorem twoArcActionConnected_conjugate
 #print axioms fiber_equiv_fin_two
 #print axioms conjugate_ne_refl_iff
 #print axioms twoArcActionConnected_conjugate
+#print axioms labeledFiberMonodromy_ne_refl_iff
+#print axioms labeledTwoTransport_actionConnected_iff
 
 end ConstructionTargets.t97A03Closure
