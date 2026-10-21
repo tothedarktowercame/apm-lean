@@ -36757,6 +36757,20 @@
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :correction "used range-kernel equalities"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792605178882-1247-bac5f893",
+     :commands
+     ["git show --stat/--format=fuller 68ae20da241a966a5ead04ca6c05a23c0337333b"
+      "git show 68ae20da24:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check 68ae20da24^ 68ae20da24"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 68ae20da24:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit 68ae20da24 changes only scoped Closure; fixture SHA-256 matches fd4887edb8a263c02567411fde181d48e8848825970ed7d6b732599ba6716bc3. The algebra is correctly oriented: W subsingleton makes range(f)=bottom, so adjacent exactness gives ker(g)=bottom and injectivity; Z subsingleton makes ker(h)=top, so exactness gives range(g)=top and surjectivity. The lemma uses only its stated hypotheses and faithfully captures the adjacent-segment step. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This is genuine program progress; top specialization and surviving-even equivalences remain listed."},
     :commit "68ae20da241a966a5ead04ca6c05a23c0337333b",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36765,7 +36779,7 @@
      "fd4887edb8a263c02567411fde181d48e8848825970ed7d6b732599ba6716bc3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36783,7 +36797,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal overlap exactness transport; top connecting-map isomorphism remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact-segment bijectivity; top specialization remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36990,7 +37004,11 @@
     {:job 2,
      :commit "a9f3db8a96e38cae0b7478797ffa46cba2a801dc",
      :reason
-     "Banked literal overlap exactness transport; top connecting-map isomorphism remains."}]}
+     "Banked literal overlap exactness transport; top connecting-map isomorphism remains."}
+    {:job 3,
+     :commit "68ae20da241a966a5ead04ca6c05a23c0337333b",
+     :reason
+     "Banked exact-segment bijectivity; top specialization remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49299,7 +49317,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_bijective_of_adjacent_exact_of_subsingleton",
@@ -49309,7 +49327,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "zero outer terms make the middle map bijective",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "68ae20da241a966a5ead04ca6c05a23c0337333b"},
    :id :lemma-t99j05-bijective-of-adjacent-exact-of-subsingleton,
    :kind :lemma,
    :depends-on [],
