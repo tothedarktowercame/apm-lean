@@ -89428,6 +89428,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "git show --check b05db820d", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792591443224-899-f8dd38ed",
+     :commands
+     ["git show/diff-tree b05db820d"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit b05db820d changes only t97A03Closure, removes the rejected zero-map facade, and adds real progress after accepted history a2adaa449. Fiber-cardinality 2 correctly implies surjectivity and yields a Fin 2 equivalence for each actual fiber, providing the coordinate needed for monodromy. Fixture SHA c7046c88... matches; build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid STOP; lifted monodromy, model homeomorphisms, and invariants remain listed."},
     :commit "b05db820d",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89436,7 +89448,7 @@
      "c7046c8812689eaac8f91fb7e2d41b0ffa9e9997e18aa8a033f966cb4229744f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89454,7 +89466,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact two-arc connectedness criterion.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Removed rejected zero-map facade; banked cardinal-two fiber coordinates.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89483,7 +89495,11 @@
      :reason "Banked connected two-arc action bridge."}
     {:job 7,
      :commit "a2adaa449",
-     :reason "Banked exact two-arc connectedness criterion."}]}
+     :reason "Banked exact two-arc connectedness criterion."}
+    {:job 9,
+     :commit "b05db820d",
+     :reason
+     "Removed rejected zero-map facade; banked cardinal-two fiber coordinates."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100058,7 +100074,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "modelCellular_zero_boundary_data",
@@ -100068,14 +100084,16 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "C1=Z^3 and C2=Z^2 have zero cellular boundaries",
     :area "quotient-space-mayer-vietoris",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "b05db820d"},
    :id :lemma-modelcellular-zero-boundary-data,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surjective_of_fiber_card_two",
@@ -100085,14 +100103,16 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "cardinality-two fibers imply surjectivity",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "b05db820d"},
    :id :lemma-surjective-of-fiber-card-two,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "fiber_equiv_fin_two",
@@ -100102,7 +100122,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "cardinality-two fiber has Fin 2 coordinate",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "b05db820d"},
    :id :lemma-fiber-equiv-fin-two,
    :kind :lemma,
    :depends-on [],
