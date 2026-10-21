@@ -119152,21 +119152,22 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Transport measurable envelopes through charts and build finite cover; then signed counts and Main.",
+    :residual "Build finite chart cover; then signed counts and Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked artifacts preserved"],
+    :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
-    [{:name "circleCoordinateNull_exists_measurableSuperset",
-      :type "coordinate-null set has measurable null envelope",
+    [{:name "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope",
+      :type "coordinate-null envelope implies chart-measure nullity",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["circleBaseChartMeasure_apply_eq_zero"],
+      :depends-on
+      ["circleCoordinateNull_exists_measurableSuperset"
+       "circleBaseChartMeasure_apply_eq_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119175,40 +119176,27 @@
       :depends-on
       ["badSet_measure_zero_of_finite_targetChart_witnesses"
        "circleHaarMeasure_ne_zero"
-       "circleCoordinateNull_exists_measurableSuperset"],
+       "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "59896b12737ab97c4efa23ab0573014a5d30363ad80322b395f8eeffe3a282fc",
+     "4cf1fc0c16bf501088fc263c7697a4c8cac5b7bbb63e74741e4b27ce1d3364fa",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked measurable coordinate-null envelopes.",
+    :reason "Banked chart-envelope nullity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256sum fixture/source/implementation; git diff --check",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792604179530-1211-c9641e9c",
-     :commands
-     ["git show/diff e9e4bb32"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: e9e4bb32 changes only t00J02Closure.lean (+10), adding a compiled measurable null-envelope theorem beyond program history; its exact tree also contains the preceding compiled transported-chart nullity. Fixture afb497a6, source 0b3b4888, implementation 59896b12; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: mu s=0 yields measurable t with s subset t and mu t=0 via exists_measurable_superset_of_null, without changing the coordinate-space representation. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; chart-envelope transport, finite cover, signed counts, and final assembly remain listed."},
-    :commit "e9e4bb320f1357fcafd37a3e9017c751fe8acd37",
+     {:cmd "hashes; placeholders; git diff --check", :exit 0}],
+    :commit "673078539cb25bb042114854da15ca296050ca3c",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119216,7 +119204,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119865,7 +119853,8 @@
     :lemma-circlechartinverseextension-measurable
     :lemma-circlebasechartmeasure-apply
     :lemma-circlebasechartmeasure-apply-eq-zero
-    :lemma-circlecoordinatenull-exists-measurablesuperset],
+    :lemma-circlecoordinatenull-exists-measurablesuperset
+    :lemma-circlebasechartmeasure-eq-zero-of-coordinateenvelope],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122707,6 +122696,25 @@
    :id :lemma-circlecoordinatenull-exists-measurablesuperset,
    :kind :lemma,
    :depends-on [:lemma-circlebasechartmeasure-apply-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope",
+    :type "coordinate-null envelope implies chart-measure nullity"},
+   :lemma
+   {:name "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "coordinate-null envelope implies chart-measure nullity",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-circlebasechartmeasure-eq-zero-of-coordinateenvelope,
+   :kind :lemma,
+   :depends-on
+   [:lemma-circlecoordinatenull-exists-measurablesuperset
+    :lemma-circlebasechartmeasure-apply-eq-zero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
