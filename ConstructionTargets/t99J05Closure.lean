@@ -2604,6 +2604,33 @@ noncomputable def t99J05_cp_homology
 
 #print axioms t99J05_cp_homology
 
+/-- The assembled homology data gives the numerical rational Betti profile:
+one generator in the even degrees through `2n`, and zero otherwise. -/
+theorem t99J05_cp_homology_finrank (n k : ℕ) :
+    Module.finrank ℚ (Homology (CP n) k) =
+      if Even k ∧ k ≤ 2 * n then 1 else 0 := by
+  let h := t99J05_cp_homology n
+  letI : FiniteDimensional ℚ (Homology (CP n) k) := h.finiteDimensional k
+  by_cases hk : k ≤ 2 * n
+  · by_cases he : Even k
+    · obtain ⟨i, hi⟩ := he
+      let j : Fin (n + 1) := ⟨i, by omega⟩
+      have hdeg : k = 2 * j.val := by
+        change k = 2 * i
+        omega
+      rw [if_pos ⟨⟨i, hi⟩, hk⟩, hdeg]
+      simpa using LinearEquiv.finrank_eq (h.evenEquiv j)
+    · letI : Subsingleton (Homology (CP n) k) :=
+        h.vanishesOdd k (Nat.not_even_iff_odd.mp he)
+      rw [Module.finrank_zero_of_subsingleton]
+      simp [he]
+  · letI : Subsingleton (Homology (CP n) k) :=
+      h.vanishesAbove k (by omega)
+    rw [Module.finrank_zero_of_subsingleton]
+    simp [hk]
+
+#print axioms t99J05_cp_homology_finrank
+
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
 #print axioms cp_zero_subsingleton
 #print axioms cpZeroHomologyDataOfSubsingletonData
