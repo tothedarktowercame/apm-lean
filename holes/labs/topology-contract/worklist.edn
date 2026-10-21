@@ -119201,6 +119201,18 @@
     [{:cmd "closure compile x4",
       :exit 1,
       :correction "fixed model/measure args"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792600426221-1127-80fa8c9f",
+     :commands
+     ["git show/diff 7c03a51a"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 7c03a51a changes only t00J02Closure.lean (+32), adding compiled circle-chart null-set transport after prior history 715311c4. Fixture afb497a6, source 0b3b4888, implementation 672e5c62; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: z-chart inverse followed by y-chart is smooth on s under the stated target/source hypotheses, so its image of a Haar-null coordinate set is Haar-null. Domain/codomain are both EuclideanSpace R (Fin 1), and chart overlap boundaries are explicit. The theorem uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; base-chart witnesses and H2 assembly remain listed."},
     :commit "7c03a51a2392ec7cf706d88afa9edab3d83de5ce",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119209,7 +119221,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119227,7 +119239,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nonzero Circle Haar measure.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked circle-chart null transitions.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119550,7 +119562,10 @@
      :reason "Banked pointwise finite-chart witness endpoint."}
     {:job 6,
      :commit "715311c4db9d26e8d2eb910f6a24f3d091154827",
-     :reason "Banked nonzero Circle Haar measure."}]}
+     :reason "Banked nonzero Circle Haar measure."}
+    {:job 7,
+     :commit "7c03a51a2392ec7cf706d88afa9edab3d83de5ce",
+     :reason "Banked circle-chart null transitions."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122571,7 +122586,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleChartTransition_image_null",
@@ -122581,7 +122596,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "circle-chart transitions preserve null sets",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "7c03a51a2392ec7cf706d88afa9edab3d83de5ce"},
    :id :lemma-circlecharttransition-image-null,
    :kind :lemma,
    :depends-on [],
