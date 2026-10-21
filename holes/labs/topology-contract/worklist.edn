@@ -119152,46 +119152,40 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Install incidence manifold structure, identify projection mfderiv with kernel projection, apply Sard; prove signed-count identities and assemble Main.",
+    "Identify projection derivative critical locus, apply Sard, signed counts, Main.",
     :outcome :stop,
-    :warnings
-    ["Main registered sorry" "unrelated review artifacts preserved"],
+    :warnings ["Main sorry" "unrelated artifacts preserved"],
     :missing-theorems
-    [{:name "incidenceKernelProjectionCriticalValues_eq_image",
-      :type
-      "kernel critical values equal the image of the critical locus on the incidence subtype",
+    [{:name "circleIncidenceProjection_contMDiff",
+      :type "incidence manifold and smooth projection",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["badCircleParameters_eq_incidenceKernelProjectionCriticalValues"],
+      :depends-on ["incidenceKernelProjectionCriticalValues_eq_image"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["incidenceKernelProjectionCriticalValues_eq_image"
-       "CanonicalRegularFiberDegreeCalculations.ofComponentComparison"],
+      :depends-on ["circleIncidenceProjection_contMDiff"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "c2c974c2d0b5d15ca65e2c74d089ded368bd943103f9b24cb0c71da83e15e3be",
+     "4a8c95c3da39540a853e6209146622220aa946b2573c4f4546acc036f0c94b6b",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason
-    "Banked incidence subtype, projection, critical locus, and exact critical-value image.",
+    :reason "Banked incidence atlas and smooth projection.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119199,7 +119193,11 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
-    :commit "cf4b9e2da64e13a50a98430d2689e01506d45df0",
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
+      :exit 1,
+      :finding "built dependency; corrected model"}],
+    :commit "7afd377638124b2c57e685a59c483d10b38363fd",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119207,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119783,7 +119781,8 @@
     :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badset-measure-zero
     :lemma-badcircleparameters-measure-zero-of-subset-nullcriticalset
     :lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues
-    :lemma-incidencekernelprojectioncriticalvalues-eq-image],
+    :lemma-incidencekernelprojectioncriticalvalues-eq-image
+    :lemma-circleincidenceprojection-contmdiff],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122189,6 +122188,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-surjective-continuouslinearmap-has-rightinverse],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleIncidenceProjection_contMDiff",
+    :type "incidence manifold and smooth projection"},
+   :lemma
+   {:name "circleIncidenceProjection_contMDiff",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "incidence manifold and smooth projection",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-circleincidenceprojection-contmdiff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-incidencekernelprojectioncriticalvalues-eq-image],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
