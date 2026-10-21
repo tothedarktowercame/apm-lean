@@ -119152,22 +119152,20 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Connect Fin cover to critical witnesses; then signed counts and Main.",
+    :residual "Apply bridge to nullity; then signed counts and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
-    [{:name "exists_fin_chartAt_source_cover",
-      :type
-      "compact charted target has Fin-indexed canonical chart-source cover",
+    [{:name "finite_targetChart_witness_of_globalCriticalValue",
+      :type "global critical value has chart witness",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["exists_finset_chartAt_source_cover"],
+      :depends-on ["exists_fin_chartAt_source_cover"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119177,39 +119175,29 @@
       ["badSet_measure_zero_of_finite_targetChart_witnesses"
        "circleHaarMeasure_ne_zero"
        "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope"
-       "exists_fin_chartAt_source_cover"],
+       "finite_targetChart_witness_of_globalCriticalValue"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ba8f8a91f11449c7786a0f2379962d173ed9926803f0e2382cb4910c9c612bad",
+     "05ba7ee14817f148ea767ea2db9b82329c4e57e602a9b611204002ba6f8302ec",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked Fin-indexed chart cover.",
+    :reason "Banked critical witness.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hashes; placeholders; git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792606867058-1290-52af0323",
-     :commands
-     ["git show/diff 5725057f"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 5725057f changes only t00J02Closure.lean (+20), adding a compiled Fin-indexed canonical chart cover after prior history 9db44d71. Fixture afb497a6, source 0b3b4888, implementation ba8f8a91; registry 170/170; placeholders closure=0/Main=1. Orientation and representation are exact: the prior Finset cover is enumerated through Fintype.equivFin on its membership subtype, and every covered z is transported to the corresponding Fin index with the same chart source. Empty and duplicate-free finite cases are handled by the subtype equivalence. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; connecting the cover to critical witnesses, signed counts, and final assembly remain listed."},
-    :commit "5725057f8703d9e00f44927e9233205fa5f8f1e2",
+     {:cmd "hashes/diff", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Closure compile", :exit 1, :correction "added ∞≠0"}],
+    :commit "abd47c094f526414d4bca1c7e620e04f5cc655c3",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119217,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119878,7 +119866,8 @@
     :lemma-circlecoordinatenull-exists-measurablesuperset
     :lemma-circlebasechartmeasure-eq-zero-of-coordinateenvelope
     :lemma-exists-finset-chartat-source-cover
-    :lemma-exists-fin-chartat-source-cover],
+    :lemma-exists-fin-chartat-source-cover
+    :lemma-finite-targetchart-witness-of-globalcriticalvalue],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122783,6 +122772,23 @@
    :id :lemma-exists-fin-chartat-source-cover,
    :kind :lemma,
    :depends-on [:lemma-exists-finset-chartat-source-cover],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finite_targetChart_witness_of_globalCriticalValue",
+    :type "global critical value has chart witness"},
+   :lemma
+   {:name "finite_targetChart_witness_of_globalCriticalValue",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "global critical value has chart witness",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-finite-targetchart-witness-of-globalcriticalvalue,
+   :kind :lemma,
+   :depends-on [:lemma-exists-fin-chartat-source-cover],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
