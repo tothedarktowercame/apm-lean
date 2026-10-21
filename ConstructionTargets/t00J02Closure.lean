@@ -1144,6 +1144,34 @@ theorem exists_regularValue_of_criticalValues_measure_zero
   by_contra hcritical
   exact hy ⟨x, hcritical, hx⟩
 
+/-- A Sard nullity statement for the bad circle parameters supplies the
+regular fiber value, already packaged with the local injectivity needed by
+the finite-fiber and signed-count constructions. -/
+theorem exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [MeasurableSpace Circle]
+    (mu : MeasureTheory.Measure Circle) [NeZero mu]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (hnull : mu ((fun z : Circle ↦ z) '' {z | ¬ ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v}) = 0) :
+    ∃ y ∈ Set.range c, LocallyInjectiveAlongFiber f y := by
+  obtain ⟨z, hz⟩ := exists_regularValue_of_criticalValues_measure_zero
+    (fun z : Circle ↦ z)
+    (fun z ↦ ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v) mu hnull
+  exact exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts
+    f c hf htrans ⟨z, fun x hx ↦ hz z rfl x hx⟩
+
+#print axioms exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
