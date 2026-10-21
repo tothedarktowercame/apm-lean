@@ -4493,15 +4493,46 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     simp [ConcreteCategory.comp_apply] at eμ ec
     rw [← eμ, hμB', hμB y hy, ec]
 
-/-- LIBRARY LEAF (Hatcher 3.27(a), steps 2--3): every compact subset of one
-chart source admits division by `m ≠ 0`.  Route: the existence counterpart of
-`_aux_injective_aux_inChart` (same excision to the chart target, induction on
-finite unions of convex sets by `_aux_convex`, `_aux_union` and
-`_aux_injective_aux_convex` for the intersections).  General compact `A`:
-`c` comes from `H₃(ℝ³|K)` for `K` a finite union of closed balls inside a
-neighbourhood of `A`, each ball meeting `A`; on such a ball the local images
-of `c` are `m`-divisible at one point of `A`, hence at all its points
-(`H₃(ℝ³|ball) ≅ H₃(ℝ³|y)`).  Divide on `K` and restrict to `A`. -/
+/-- PROVED from `_aux_convex`, `_aux_union`, `_aux_injective_aux_inChart_aux_finite`
+(claude-14, split of lemma-1's PARTIAL, 2026-10-21; lemma-1 banked the
+two-set case): a finite union of compact sets in one chart source, each with
+convex chart image, admits division by `m ≠ 0`.  `Finset.induction_on`; the
+intersection `K a ∩ ⋃ j ∈ s, K j = ⋃ j ∈ s, (K a ∩ K j)` is injective-good. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_inChart_aux_finite
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) {ι : Type} (K : ι → Set M) (hK : ∀ j, IsCompact (K j))
+    (hsub : ∀ j, K j ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (hconv : ∀ j, Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' K j))
+    (m : ℤ) (hm : m ≠ 0) (s : Finset ι) :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m (⋃ j ∈ s, K j) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+    simp only [Finset.notMem_empty, Set.iUnion_of_empty, Set.iUnion_empty]
+    exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_convex M x ∅ isCompact_empty (Set.empty_subset _)
+      (by rw [Set.image_empty]; exact convex_empty) m
+  | insert a s ha ih =>
+    rw [Finset.set_biUnion_insert]
+    apply apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union M m hm _ _ (hK a).isClosed
+      (s.isCompact_biUnion fun j _ => hK j).isClosed
+    · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_convex M x (K a) (hK a) (hsub a) (hconv a) m
+    · exact ih
+    · rw [Set.inter_iUnion₂]
+      exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_finite M x (fun j => K a ∩ K j)
+        (fun j => (hK a).inter (hK j)) (fun j y hy => hsub a hy.1)
+        (fun j => by
+          rw [(chartAt (EuclideanSpace ℝ (Fin 3)) x).injOn.image_inter (hsub a) (hsub j)]
+          exact (hconv a).inter (hconv j)) s
+
+/-- PROVED from `_aux_injective_aux_inChart_aux_lift`, `_aux_injective_aux_inChart_aux_cover`,
+`_aux_inChart_aux_finite`, `_aux_injective_aux_convex_aux_inj_aux_isIso`
+(Hatcher 3.27(a), step 3; claude-14's split of lemma-1's PARTIAL,
+2026-10-21): every compact subset of one chart source admits division by
+`m ≠ 0`.  Lift `c` to `d` in `H₃(M|L)`, `L` a finite union of convex chart
+balls `K a` each meeting `A` at some `b`.  On `K a`, `H₃(M|K a) ≅ H₃(M|b)`, so
+the image of `d` in `H₃(M|K a)` is `m • (inv f_b g_b)`, and `d` is
+`m`-divisible at every point of `L`.  Divide on `L` and restrict to `A`. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_inChart
     (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -4509,7 +4540,53 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
     (m : ℤ) (hm : m ≠ 0) :
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A := by
-  sorry
+  intro c hc
+  obtain ⟨V, hV, hAV, hlift⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift M A 3 c
+  obtain ⟨s, K, hKc, hKs, hKconv, hKV, hKA, hcov⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_cover M x A hA hsub V hV hAV
+  have gL := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_inChart_aux_finite M x K hKc hKs hKconv m hm s
+  have hAL : Set.MapsTo (ContinuousMap.id M) (⋃ a ∈ s, K a)ᶜ Aᶜ :=
+    fun z hz => Set.compl_subset_compl.mpr hcov hz
+  obtain ⟨d, hd⟩ := hlift (⋃ a ∈ s, K a) hcov (Set.iUnion₂_subset fun a _ => hKV a)
+  obtain ⟨μL, hμL⟩ := gL d (by
+    intro y hy
+    obtain ⟨a, ha, hya⟩ := Set.mem_iUnion₂.mp hy
+    obtain ⟨b, hbK, hbA⟩ := hKA a ha
+    have hKL : K a ⊆ ⋃ a ∈ s, K a := Set.subset_biUnion_of_mem ha
+    have hLK : Set.MapsTo (ContinuousMap.id M) (⋃ a ∈ s, K a)ᶜ (K a)ᶜ :=
+      fun z hz => Set.compl_subset_compl.mpr hKL hz
+    let fb := HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap (K a)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint b)
+        (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (K a) b hbK)) 3
+    letI : IsIso fb := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso
+      M x (K a) (hKc a) (hKs a) (hKconv a) b hbK 3 (by norm_num)
+    obtain ⟨g, hg⟩ := hc b hbA
+    have hfb : fb (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap _ _ (ContinuousMap.id M) hLK) 3 d) =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint b)
+            (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A b hbA)) 3 c := by
+      rw [← hd]
+      simp only [fb]
+      rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_comp M _ _ _ hLK _ (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ b (hKL hbK)),
+        apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_comp M _ _ _ hAL _ (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ b (hKL hbK))]
+    have hdK : m • inv fb g = HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap _ _ (ContinuousMap.id M) hLK) 3 d := by
+      apply (ConcreteCategory.bijective_of_isIso fb).1
+      rw [map_zsmul, ← ConcreteCategory.comp_apply, IsIso.inv_hom_id,
+        ConcreteCategory.id_apply, hg, hfb]
+    refine ⟨HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap (K a)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (K a) y hya)) 3 (inv fb g), ?_⟩
+    rw [← map_zsmul, hdK, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_comp M _ _ _ hLK _ (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ y hy)])
+  refine ⟨HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap _ _ (ContinuousMap.id M) hAL) 3 μL,
+    fun y hy => ?_⟩
+  rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_comp M _ _ _ hAL _ (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ y (hcov hy)), hμL y (hcov hy), ← hd,
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_comp M _ _ _ hAL _ (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ y (hcov hy))]
 
 /-- LIBRARY LEAF (Hatcher 3.27(a), step 4): every compact `A ⊆ M` admits
 division by `m ≠ 0`.  Route: the same finite chart cover and induction as
