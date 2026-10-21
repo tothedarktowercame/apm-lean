@@ -1688,6 +1688,27 @@ theorem t99J05_finiteDimensional_middle_of_exact_of_surjective
 
 #print axioms t99J05_finiteDimensional_middle_of_exact_of_surjective
 
+/-- A linear map into a zero module is automatically surjective. -/
+theorem t99J05_surjective_of_subsingleton
+    {X Y : ModuleCat ℚ} [Subsingleton Y] (f : X ⟶ Y) :
+    Function.Surjective f.hom := by
+  intro y
+  refine ⟨0, ?_⟩
+  exact Subsingleton.elim _ _
+
+/-- Finite-dimensionality of the middle term of an exact segment when the
+right-hand term vanishes. -/
+theorem t99J05_finiteDimensional_middle_of_exact_of_subsingleton
+    {X Y Z : ModuleCat ℚ} (f : X ⟶ Y) (g : Y ⟶ Z)
+    (hfun : Function.Exact f.hom g.hom)
+    [FiniteDimensional ℚ X] [FiniteDimensional ℚ Z] [Subsingleton Z] :
+    FiniteDimensional ℚ Y :=
+  t99J05_finiteDimensional_middle_of_exact_of_surjective f g hfun
+    (t99J05_surjective_of_subsingleton g)
+
+#print axioms t99J05_surjective_of_subsingleton
+#print axioms t99J05_finiteDimensional_middle_of_exact_of_subsingleton
+
 /-- The separately named transported arrow is exactly the first arrow of the
 transported short complex whose exactness was established above. -/
 theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
