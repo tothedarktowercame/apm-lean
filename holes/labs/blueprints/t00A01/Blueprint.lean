@@ -2410,239 +2410,6 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
   · intro j _
     exact hamb j
 
-/-- PROVED from `_convex_aux_inj_aux_model` (claude-14, 2026-10-20; split from
-`_aux_ball` after lemma-1's PARTIAL): moving a puncture inside a closed ball of `ℝ³`.  For `u` in the open ball
-`ball c r`, the identity induces an isomorphism
-`H₃(ℝ³, ℝ³ ∖ closedBall c r) → H₃(ℝ³, ℝ³ ∖ u)`.  Route: `ℝ³ ∖ closedBall c r`
-and `ℝ³ ∖ u` both deformation retract radially (about `u`) onto the sphere of
-radius `R = r + 1` about `u`, so the inclusion `ℝ³ ∖ closedBall c r ↪ ℝ³ ∖ u`
-is a homotopy equivalence; `ℝ³` is contractible; the five lemma on the long
-exact sequences of the two pairs gives the iso in degree 3. -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_model
-    (c u : EuclideanSpace ℝ (Fin 3)) (r : ℝ) (hu : dist u c < r) :
-    IsIso (HomologicalComplex.homologyMap
-      (ConstructionTargets.SingularExcision.relativeSingularMap (Metric.closedBall c r)ᶜ
-        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
-        (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
-        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
-          (Metric.closedBall c r) u (Metric.mem_closedBall.2 hu.le))) 3) := by
-  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model (Metric.closedBall c r) (isCompact_closedBall c r)
-    (convex_closedBall c r) u (Metric.mem_closedBall.2 hu.le) 2
-
-/-- LIBRARY LEAF (split from `_aux_ball` after lemma-1's PARTIAL, 2026-10-20):
-reduction of `_aux_ball` to the model.  Let `e` be the chart at `x` and
-`closedBall (e x) r ⊆ e.target`; put `K = e.source ∩ e ⁻¹' closedBall (e x) r`
-(`= e.symm '' closedBall`, compact, so closed in `M`).  For `z` in the chart
-source with `e z ∈ ball (e x) r`, the identity induces an isomorphism
-`H₃(M, M ∖ K) → H₃(M, M ∖ z)`.  Route: both pairs excise `M ∖ e.source`
-(`_aux_excision`, as in `neighborhoodInclusion_Hsucc_isIso`); the chart
-`e.source ≃ₜ e.target` transports the excised pairs (`_aux_chart`); the
-inclusion `e.target ↪ ℝ³` excises `ℝ³ ∖ e.target` (`_aux_excision` again,
-`closedBall ⊆ e.target`); the resulting map is `_aux_model` with `c = e x`,
-`u = e z`.  The squares commute by naturality of `relativeSingularMap`
-(`relativeSingularMap_comp`). -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_reduce
-    (M : Type) [TopologicalSpace M] [T2Space M]
-    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M] (x : M) (r : ℝ)
-    (hr : Metric.closedBall (chartAt (EuclideanSpace ℝ (Fin 3)) x x) r ⊆
-      (chartAt (EuclideanSpace ℝ (Fin 3)) x).target)
-    (z : M) (hz : z ∈ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
-    (hzr : dist (chartAt (EuclideanSpace ℝ (Fin 3)) x z) (chartAt (EuclideanSpace ℝ (Fin 3)) x x) < r) :
-    IsIso (HomologicalComplex.homologyMap
-      (ConstructionTargets.SingularExcision.relativeSingularMap ((chartAt (EuclideanSpace ℝ (Fin 3)) x).source ∩
-          chartAt (EuclideanSpace ℝ (Fin 3)) x ⁻¹' Metric.closedBall (chartAt (EuclideanSpace ℝ (Fin 3)) x x) r)ᶜ
-        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
-        (ContinuousMap.id M)
-        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
-          ((chartAt (EuclideanSpace ℝ (Fin 3)) x).source ∩
-          chartAt (EuclideanSpace ℝ (Fin 3)) x ⁻¹' Metric.closedBall (chartAt (EuclideanSpace ℝ (Fin 3)) x x) r) z ⟨hz, Metric.mem_closedBall.2 hzr.le⟩)) 3) := by
-  sorry
-
-/-- PROVED from `_aux_reduce` (split after lemma-1's PARTIAL, 2026-10-20).
-Near `x` there is a set `K`, the chart preimage of a closed ball about the
-chart point of `x` lying in the chart target, such that, for every `z` near
-`x`, `z ∈ K` and the map `H₃(M, M ∖ K) → H₃(M, M ∖ z)` induced by the identity
-is an isomorphism.  `K` is not `M`: that would make the statement the
-orientability of `M`, which is what this chain is proving. -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball
-    (M : Type) [TopologicalSpace M] [T2Space M]
-    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M] (x : M) :
-    ∃ K : Set M, ∀ᶠ z in nhds x, ∃ hz : z ∈ K,
-      IsIso (HomologicalComplex.homologyMap
-        (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
-          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
-          (ContinuousMap.id M)
-          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
-            K z hz)) 3) := by
-  set e := chartAt (EuclideanSpace ℝ (Fin 3)) x
-  obtain ⟨r, hr0, hr⟩ := Metric.nhds_basis_closedBall.mem_iff.1
-    (e.open_target.mem_nhds (mem_chart_target (EuclideanSpace ℝ (Fin 3)) x))
-  refine ⟨e.source ∩ e ⁻¹' Metric.closedBall (e x) r, ?_⟩
-  have hev : ∀ᶠ z in nhds x, z ∈ e.source ∩ e ⁻¹' Metric.ball (e x) r :=
-    (e.continuousOn.isOpen_inter_preimage e.open_source Metric.isOpen_ball).mem_nhds
-      ⟨mem_chart_source (EuclideanSpace ℝ (Fin 3)) x, Metric.mem_ball_self hr0⟩
-  filter_upwards [hev] with z hz
-  exact ⟨⟨hz.1, Metric.ball_subset_closedBall hz.2⟩, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_reduce M x r hr z hz.1 hz.2⟩
-
-/-- PROVED from `_aux_ball`, `_aux_factor` and `_aux_units`: near each `x`, the
-local degree at `y` is `±` the local degree at `x`.  Both localizations factor
-through `H₃(M, M ∖ K)`; composing each iso `H₃(M, M ∖ K) ≅ H₃(M, M ∖ z)` with
-the chart normalization gives two identifications of `H₃(M, M ∖ K)` with `ℤ`,
-which differ by `±1`. -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign
-    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
-    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
-    [IsManifold apm_t00A01_Model3 ∞ M]
-    [BoundarylessManifold apm_t00A01_Model3 M]
-    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
-    ∀ᶠ y in nhds x, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y = apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x ∨
-      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y = -apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x := by
-  obtain ⟨K, hK⟩ :=
-    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball M x
-  obtain ⟨hxK, hxI⟩ := hK.self_of_nhds
-  let c := HomologicalComplex.homologyMap
-    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ) 3
-    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
-      (TopCat.of M) 3 hM.2.1.some)
-  have key : ∀ (w : M) (hw : w ∈ K) [IsIso (HomologicalComplex.homologyMap
-      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
-        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint w)
-        (ContinuousMap.id M)
-        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
-          K w hw)) 3)],
-      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM w =
-        (asIso (HomologicalComplex.homologyMap
-          (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
-            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint w)
-            (ContinuousMap.id M)
-            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
-              K w hw)) 3) ≪≫
-          ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 w).hom.hom c := by
-    intro w hw _
-    unfold apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree
-    rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_factor
-      K w hw 3]
-    rfl
-  refine hK.mono fun z hz => ?_
-  obtain ⟨hzK, hzI⟩ := hz
-  rw [key z hzK, key x hxK]
-  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_units _ _ c
-
-/-- PROVED from `_aux_eventually_sign` (orientation double cover is locally trivial): the absolute
-local degree `|deg_y|` is locally constant in `y`.  Near `y`, a chart ball `B`
-gives `H₃(M) → H₃(M, M ∖ B) ≅ H₃(M, M ∖ z)` for every `z ∈ B`
-(`neighborhoodInclusion_Hsucc_isIso`, `localizationMap_naturality`), and the
-chart normalizations at `y` and `z` differ by a transition unit `±1`
-(`integralOverlapTransitionUnit_eq_one_or_neg_one`). True for every closed
-3-manifold, orientable or not. -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant
-    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
-    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
-    [IsManifold apm_t00A01_Model3 ∞ M]
-    [BoundarylessManifold apm_t00A01_Model3 M]
-    (hM : apm_t00A01_isHomology3Sphere M) :
-    IsLocallyConstant (fun y : M => (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y).natAbs) := by
-  refine (IsLocallyConstant.iff_eventually_eq _).2 fun x => ?_
-  exact (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign M hM x).mono fun y hy =>
-    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_natAbs_eq _ _ hy
-
-/-- `A` is good for `M` (Hatcher Lemma 3.27, integer coefficients):
-`H_i(M, M ∖ A)` vanishes above degree 3, and a class of `H₃(M, M ∖ A)` whose
-image in `H₃(M, M ∖ y)` vanishes for every `y ∈ A` is zero.  Split from
-`_aux_injective` after lemma-1's PARTIAL (2026-10-20), whose leaf `_aux_detect`
-was the contrapositive of `_aux_injective`. -/
-def apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good (M : Type) [TopologicalSpace M] (A : Set M) : Prop :=
-  (∀ i : ℕ, 3 < i → Subsingleton
-      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i)) ∧
-    ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology 3,
-      (∀ (y : M) (hy : y ∈ A),
-        HomologicalComplex.homologyMap
-          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
-            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
-            (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 c = 0) →
-      c = 0
-
-/-- PROVED (lemma-1, banked from its `_aux_convex` PARTIAL, 2026-10-20): the
-empty set is good (last line fixed by claude-14). -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_empty
-    (M : Type) [TopologicalSpace M] :
-    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M ∅ := by
-  constructor
-  · intro i hi
-    have hz :=
-      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero M i
-    simpa using (AddCommGrpCat.isZero_iff_subsingleton.mp hz)
-  · intro c hc
-    have hz :=
-      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero M 3
-    have hz' : IsZero
-        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (∅ : Set M)ᶜ).homology 3) := by
-      simpa using hz
-    exact @Subsingleton.elim _ (AddCommGrpCat.isZero_iff_subsingleton.mp hz') c 0
-
-/-- LIBRARY LEAF (Hatcher 3.27, point case of the vanishing): in a 3-manifold,
-`H_i(M, M ∖ y) = 0` for `i > 3`.  Split from `_aux_convex` after lemma-1's
-PARTIAL (2026-10-20).  Route: excise `M ∖ U` for a chart ball `U` about `y`
-(`HigherChartLocalGenerator.ambientChartMap_Hn_isIso` does this transport for
-the top degree; the same excision works in every degree), then
-`H_i(D, D ∖ 0) ≅ H_{i-1}(D ∖ 0)` for `i ≥ 2` by the pair sequence of the
-contractible disk, and `D ∖ 0 ≃ S²` has no homology above degree 2
-(`SphereHomology`). -/
-lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_point
-    (M : Type) [TopologicalSpace M] [T2Space M]
-    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
-    (y : M) (i : ℕ) (hi : 3 < i) :
-    Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology i) := by
-  open ConstructionTargets.SingularHomologyConcrete
-    ConstructionTargets.SingularExcision
-    ConstructionTargets.LocalHomologyNeighborhoodExcision
-    ConstructionTargets.T02A06HemisphereExcision
-    ConstructionTargets.T02A06DiskRadialComparison
-    ConstructionTargets.SphereHomology
-    ConstructionTargets.ChartPairRelativeHomologyTransport
-    ConstructionTargets.HigherChartLocalGenerator in
-  have hmodel : Limits.IsZero
-      ((RelativeSingularChains (P 1)).homology i) := by
-    have hamb : Limits.IsZero
-        ((SingularChains (TopCat.of (D 1))).homology i) := by
-      letI : ContractibleSpace (D 1) := Metric.contractibleSpace_ball (by norm_num)
-      exact contractibleHigherHomology_isZero _ i (by omega)
-    have hpunct : Limits.IsZero
-        ((SingularChains (TopCat.of (P 1))).homology (i - 1)) := by
-      exact (sphereHomology_isZero_of_gt 2 (i - 1) (by omega)).of_iso
-        (singularHomologyIsoOfHomotopyEquiv
-          (sphereHomotopyEquivPuncturedOpenDisk 3) (i - 1)).symm
-    have hi' : i - 1 + 1 = i := by omega
-    rw [← hi'] at hamb
-    have hz := (singularPairHomology_exact_relative (P 1) (i - 1)).isZero_X₂
-      (hamb.eq_of_src _ _) (hpunct.eq_of_tgt _ _)
-    simpa [hi'] using hz
-  let f := HomologicalComplex.homologyMap
-    (relativeSingularMap (P 1) (deletedPoint y)
-      (ambientChartMap (k := 1) y) (ambientChartMap_mapsTo (k := 1) y)) i
-  have hf : IsIso f := by
-    letI := relativeSingularMap_homeomorphPair_isIso (modelChart (k := 1) y) (P 1)
-      (neighborhoodDeletedPoint (chartNeighborhood (k := 1) y) y)
-      (modelChart_deletedPoint_iff (k := 1) y) i
-    have hn : IsIso (HomologicalComplex.homologyMap
-        (relativeSingularMap
-          (neighborhoodDeletedPoint (chartNeighborhood (k := 1) y) y)
-          (deletedPoint y) (neighborhoodInclusion (chartNeighborhood (k := 1) y))
-          (neighborhoodInclusion_mapsTo (chartNeighborhood (k := 1) y) y)) i) := by
-      have hn' := neighborhoodInclusion_Hn_isIso (i - 2)
-        (chartNeighborhood (k := 1) y) y (chartNeighborhood_open (k := 1) y)
-        (mem_chartNeighborhood (k := 1) y)
-      rw [show i - 2 + 2 = i by omega] at hn'
-      exact hn'
-    letI := hn
-    change IsIso (HomologicalComplex.homologyMap
-      (relativeSingularMap (P 1) (deletedPoint y)
-        (ambientChartMap (k := 1) y) (ambientChartMap_mapsTo (k := 1) y)) i)
-    rw [ambientChartMap_chain_eq (k := 1), HomologicalComplex.homologyMap_comp]
-    infer_instance
-  letI := hf
-  exact AddCommGrpCat.isZero_iff_subsingleton.mp (hmodel.of_iso (asIso f).symm)
-
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_excision
     {X : Type} [TopologicalSpace X] (K U : Set X)
     (hU : IsOpen U) (hKU : Uᶜ ⊆ interior Kᶜ) (i : ℕ) (hi : 0 < i) :
@@ -2965,6 +2732,261 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
       have heq : a = z := by simpa using ha
       rw [heq]
       exact hz) i hi).mpr hsource
+
+/-- PROVED from `_convex_aux_inj_aux_model` (claude-14, 2026-10-20; split from
+`_aux_ball` after lemma-1's PARTIAL): moving a puncture inside a closed ball of `ℝ³`.  For `u` in the open ball
+`ball c r`, the identity induces an isomorphism
+`H₃(ℝ³, ℝ³ ∖ closedBall c r) → H₃(ℝ³, ℝ³ ∖ u)`.  Route: `ℝ³ ∖ closedBall c r`
+and `ℝ³ ∖ u` both deformation retract radially (about `u`) onto the sphere of
+radius `R = r + 1` about `u`, so the inclusion `ℝ³ ∖ closedBall c r ↪ ℝ³ ∖ u`
+is a homotopy equivalence; `ℝ³` is contractible; the five lemma on the long
+exact sequences of the two pairs gives the iso in degree 3. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_model
+    (c u : EuclideanSpace ℝ (Fin 3)) (r : ℝ) (hu : dist u c < r) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap (Metric.closedBall c r)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
+        (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          (Metric.closedBall c r) u (Metric.mem_closedBall.2 hu.le))) 3) := by
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model (Metric.closedBall c r) (isCompact_closedBall c r)
+    (convex_closedBall c r) u (Metric.mem_closedBall.2 hu.le) 2
+
+/-- PROVED from `_inj_aux_isIso_aux_reduce` and `_aux_model` (claude-14, 2026-10-21;
+split from `_aux_ball` after lemma-1's PARTIAL, 2026-10-20; the `_isIso` chart
+leaves were moved above this lemma so it can use `_isIso_aux_reduce`):
+reduction of `_aux_ball` to the model.  Let `e` be the chart at `x` and
+`closedBall (e x) r ⊆ e.target`; put `K = e.source ∩ e ⁻¹' closedBall (e x) r`
+(`= e.symm '' closedBall`, compact, so closed in `M`).  For `z` in the chart
+source with `e z ∈ ball (e x) r`, the identity induces an isomorphism
+`H₃(M, M ∖ K) → H₃(M, M ∖ z)`.  Route: both pairs excise `M ∖ e.source`
+(`_aux_excision`, as in `neighborhoodInclusion_Hsucc_isIso`); the chart
+`e.source ≃ₜ e.target` transports the excised pairs (`_aux_chart`); the
+inclusion `e.target ↪ ℝ³` excises `ℝ³ ∖ e.target` (`_aux_excision` again,
+`closedBall ⊆ e.target`); the resulting map is `_aux_model` with `c = e x`,
+`u = e z`.  The squares commute by naturality of `relativeSingularMap`
+(`relativeSingularMap_comp`). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_reduce
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M] (x : M) (r : ℝ)
+    (hr : Metric.closedBall (chartAt (EuclideanSpace ℝ (Fin 3)) x x) r ⊆
+      (chartAt (EuclideanSpace ℝ (Fin 3)) x).target)
+    (z : M) (hz : z ∈ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (hzr : dist (chartAt (EuclideanSpace ℝ (Fin 3)) x z) (chartAt (EuclideanSpace ℝ (Fin 3)) x x) < r) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap ((chartAt (EuclideanSpace ℝ (Fin 3)) x).source ∩
+          chartAt (EuclideanSpace ℝ (Fin 3)) x ⁻¹' Metric.closedBall (chartAt (EuclideanSpace ℝ (Fin 3)) x x) r)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          ((chartAt (EuclideanSpace ℝ (Fin 3)) x).source ∩
+          chartAt (EuclideanSpace ℝ (Fin 3)) x ⁻¹' Metric.closedBall (chartAt (EuclideanSpace ℝ (Fin 3)) x x) r) z ⟨hz, Metric.mem_closedBall.2 hzr.le⟩)) 3) := by
+  set e := chartAt (EuclideanSpace ℝ (Fin 3)) x
+  have hK : e.source ∩ e ⁻¹' Metric.closedBall (e x) r = e.symm '' Metric.closedBall (e x) r :=
+    (e.symm_image_eq_source_inter_preimage hr).symm
+  have himg : e '' (e.source ∩ e ⁻¹' Metric.closedBall (e x) r) = Metric.closedBall (e x) r := by
+    rw [hK]
+    exact e.toPartialEquiv.image_symm_image_of_subset_target hr
+  have hcpt : IsCompact (e.source ∩ e ⁻¹' Metric.closedBall (e x) r) := by
+    rw [hK]
+    exact (isCompact_closedBall _ _).image_of_continuousOn (e.continuousOn_symm.mono hr)
+  have hmodel := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_model (e x) (e z) r hzr
+  have key : ∀ (S : Set (EuclideanSpace ℝ (Fin 3))) (hS : S = Metric.closedBall (e x) r)
+      (h : e z ∈ S), IsIso (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Sᶜ
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint (e z))
+          (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo S (e z) h)) 3) := by
+    rintro S rfl h
+    exact hmodel
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_reduce M x _ hcpt
+    Set.inter_subset_left z ⟨hz, Metric.mem_closedBall.2 hzr.le⟩ 3 (by norm_num)
+    (key _ himg (Set.mem_image_of_mem _ ⟨hz, Metric.mem_closedBall.2 hzr.le⟩))
+
+/-- PROVED from `_aux_reduce` (split after lemma-1's PARTIAL, 2026-10-20).
+Near `x` there is a set `K`, the chart preimage of a closed ball about the
+chart point of `x` lying in the chart target, such that, for every `z` near
+`x`, `z ∈ K` and the map `H₃(M, M ∖ K) → H₃(M, M ∖ z)` induced by the identity
+is an isomorphism.  `K` is not `M`: that would make the statement the
+orientability of `M`, which is what this chain is proving. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M] (x : M) :
+    ∃ K : Set M, ∀ᶠ z in nhds x, ∃ hz : z ∈ K,
+      IsIso (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+          (ContinuousMap.id M)
+          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+            K z hz)) 3) := by
+  set e := chartAt (EuclideanSpace ℝ (Fin 3)) x
+  obtain ⟨r, hr0, hr⟩ := Metric.nhds_basis_closedBall.mem_iff.1
+    (e.open_target.mem_nhds (mem_chart_target (EuclideanSpace ℝ (Fin 3)) x))
+  refine ⟨e.source ∩ e ⁻¹' Metric.closedBall (e x) r, ?_⟩
+  have hev : ∀ᶠ z in nhds x, z ∈ e.source ∩ e ⁻¹' Metric.ball (e x) r :=
+    (e.continuousOn.isOpen_inter_preimage e.open_source Metric.isOpen_ball).mem_nhds
+      ⟨mem_chart_source (EuclideanSpace ℝ (Fin 3)) x, Metric.mem_ball_self hr0⟩
+  filter_upwards [hev] with z hz
+  exact ⟨⟨hz.1, Metric.ball_subset_closedBall hz.2⟩, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_reduce M x r hr z hz.1 hz.2⟩
+
+/-- PROVED from `_aux_ball`, `_aux_factor` and `_aux_units`: near each `x`, the
+local degree at `y` is `±` the local degree at `x`.  Both localizations factor
+through `H₃(M, M ∖ K)`; composing each iso `H₃(M, M ∖ K) ≅ H₃(M, M ∖ z)` with
+the chart normalization gives two identifications of `H₃(M, M ∖ K)` with `ℤ`,
+which differ by `±1`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) (x : M) :
+    ∀ᶠ y in nhds x, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y = apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x ∨
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y = -apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM x := by
+  obtain ⟨K, hK⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball M x
+  obtain ⟨hxK, hxI⟩ := hK.self_of_nhds
+  let c := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ) 3
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+      (TopCat.of M) 3 hM.2.1.some)
+  have key : ∀ (w : M) (hw : w ∈ K) [IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint w)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          K w hw)) 3)],
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM w =
+        (asIso (HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint w)
+            (ContinuousMap.id M)
+            (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+              K w hw)) 3) ≪≫
+          ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization 1 w).hom.hom c := by
+    intro w hw _
+    unfold apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree
+    rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_factor
+      K w hw 3]
+    rfl
+  refine hK.mono fun z hz => ?_
+  obtain ⟨hzK, hzI⟩ := hz
+  rw [key z hzK, key x hxK]
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_units _ _ c
+
+/-- PROVED from `_aux_eventually_sign` (orientation double cover is locally trivial): the absolute
+local degree `|deg_y|` is locally constant in `y`.  Near `y`, a chart ball `B`
+gives `H₃(M) → H₃(M, M ∖ B) ≅ H₃(M, M ∖ z)` for every `z ∈ B`
+(`neighborhoodInclusion_Hsucc_isIso`, `localizationMap_naturality`), and the
+chart normalizations at `y` and `z` differ by a transition unit `±1`
+(`integralOverlapTransitionUnit_eq_one_or_neg_one`). True for every closed
+3-manifold, orientable or not. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant
+    (M : Type) [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    [IsManifold apm_t00A01_Model3 ∞ M]
+    [BoundarylessManifold apm_t00A01_Model3 M]
+    (hM : apm_t00A01_isHomology3Sphere M) :
+    IsLocallyConstant (fun y : M => (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_degree M hM y).natAbs) := by
+  refine (IsLocallyConstant.iff_eventually_eq _).2 fun x => ?_
+  exact (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign M hM x).mono fun y hy =>
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_natAbs_eq _ _ hy
+
+/-- `A` is good for `M` (Hatcher Lemma 3.27, integer coefficients):
+`H_i(M, M ∖ A)` vanishes above degree 3, and a class of `H₃(M, M ∖ A)` whose
+image in `H₃(M, M ∖ y)` vanishes for every `y ∈ A` is zero.  Split from
+`_aux_injective` after lemma-1's PARTIAL (2026-10-20), whose leaf `_aux_detect`
+was the contrapositive of `_aux_injective`. -/
+def apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good (M : Type) [TopologicalSpace M] (A : Set M) : Prop :=
+  (∀ i : ℕ, 3 < i → Subsingleton
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i)) ∧
+    ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology 3,
+      (∀ (y : M) (hy : y ∈ A),
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M) (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3 c = 0) →
+      c = 0
+
+/-- PROVED (lemma-1, banked from its `_aux_convex` PARTIAL, 2026-10-20): the
+empty set is good (last line fixed by claude-14). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_empty
+    (M : Type) [TopologicalSpace M] :
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M ∅ := by
+  constructor
+  · intro i hi
+    have hz :=
+      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero M i
+    simpa using (AddCommGrpCat.isZero_iff_subsingleton.mp hz)
+  · intro c hc
+    have hz :=
+      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero M 3
+    have hz' : IsZero
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (∅ : Set M)ᶜ).homology 3) := by
+      simpa using hz
+    exact @Subsingleton.elim _ (AddCommGrpCat.isZero_iff_subsingleton.mp hz') c 0
+
+/-- LIBRARY LEAF (Hatcher 3.27, point case of the vanishing): in a 3-manifold,
+`H_i(M, M ∖ y) = 0` for `i > 3`.  Split from `_aux_convex` after lemma-1's
+PARTIAL (2026-10-20).  Route: excise `M ∖ U` for a chart ball `U` about `y`
+(`HigherChartLocalGenerator.ambientChartMap_Hn_isIso` does this transport for
+the top degree; the same excision works in every degree), then
+`H_i(D, D ∖ 0) ≅ H_{i-1}(D ∖ 0)` for `i ≥ 2` by the pair sequence of the
+contractible disk, and `D ∖ 0 ≃ S²` has no homology above degree 2
+(`SphereHomology`). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_point
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (y : M) (i : ℕ) (hi : 3 < i) :
+    Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology i) := by
+  open ConstructionTargets.SingularHomologyConcrete
+    ConstructionTargets.SingularExcision
+    ConstructionTargets.LocalHomologyNeighborhoodExcision
+    ConstructionTargets.T02A06HemisphereExcision
+    ConstructionTargets.T02A06DiskRadialComparison
+    ConstructionTargets.SphereHomology
+    ConstructionTargets.ChartPairRelativeHomologyTransport
+    ConstructionTargets.HigherChartLocalGenerator in
+  have hmodel : Limits.IsZero
+      ((RelativeSingularChains (P 1)).homology i) := by
+    have hamb : Limits.IsZero
+        ((SingularChains (TopCat.of (D 1))).homology i) := by
+      letI : ContractibleSpace (D 1) := Metric.contractibleSpace_ball (by norm_num)
+      exact contractibleHigherHomology_isZero _ i (by omega)
+    have hpunct : Limits.IsZero
+        ((SingularChains (TopCat.of (P 1))).homology (i - 1)) := by
+      exact (sphereHomology_isZero_of_gt 2 (i - 1) (by omega)).of_iso
+        (singularHomologyIsoOfHomotopyEquiv
+          (sphereHomotopyEquivPuncturedOpenDisk 3) (i - 1)).symm
+    have hi' : i - 1 + 1 = i := by omega
+    rw [← hi'] at hamb
+    have hz := (singularPairHomology_exact_relative (P 1) (i - 1)).isZero_X₂
+      (hamb.eq_of_src _ _) (hpunct.eq_of_tgt _ _)
+    simpa [hi'] using hz
+  let f := HomologicalComplex.homologyMap
+    (relativeSingularMap (P 1) (deletedPoint y)
+      (ambientChartMap (k := 1) y) (ambientChartMap_mapsTo (k := 1) y)) i
+  have hf : IsIso f := by
+    letI := relativeSingularMap_homeomorphPair_isIso (modelChart (k := 1) y) (P 1)
+      (neighborhoodDeletedPoint (chartNeighborhood (k := 1) y) y)
+      (modelChart_deletedPoint_iff (k := 1) y) i
+    have hn : IsIso (HomologicalComplex.homologyMap
+        (relativeSingularMap
+          (neighborhoodDeletedPoint (chartNeighborhood (k := 1) y) y)
+          (deletedPoint y) (neighborhoodInclusion (chartNeighborhood (k := 1) y))
+          (neighborhoodInclusion_mapsTo (chartNeighborhood (k := 1) y) y)) i) := by
+      have hn' := neighborhoodInclusion_Hn_isIso (i - 2)
+        (chartNeighborhood (k := 1) y) y (chartNeighborhood_open (k := 1) y)
+        (mem_chartNeighborhood (k := 1) y)
+      rw [show i - 2 + 2 = i by omega] at hn'
+      exact hn'
+    letI := hn
+    change IsIso (HomologicalComplex.homologyMap
+      (relativeSingularMap (P 1) (deletedPoint y)
+        (ambientChartMap (k := 1) y) (ambientChartMap_mapsTo (k := 1) y)) i)
+    rw [ambientChartMap_chain_eq (k := 1), HomologicalComplex.homologyMap_comp]
+    infer_instance
+  letI := hf
+  exact AddCommGrpCat.isZero_iff_subsingleton.mp (hmodel.of_iso (asIso f).symm)
 
 /-- PROVED from `_inj_aux_isIso_aux_reduce` and `_convex_aux_inj_aux_model`
 (claude-14, split after lemma-1's PARTIAL, job 200, 2026-10-21; first split from
