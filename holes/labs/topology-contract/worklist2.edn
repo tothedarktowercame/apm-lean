@@ -89425,6 +89425,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan; git show --check; sha256sum", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792597431279-1062-b7f85ab6",
+     :commands
+     ["git show/diff-tree 921d40caa"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit 921d40caa changes only t97A03Closure after history 0450e4bee; fixture SHA 2e75e0dd... matches. An actual upstairs path is projected and Mathlib monodromy_map correctly proves endpoint transport, yielding genuine transitivity under PathConnectedSpace Y without conflating it with the frozen ConnectedSpace hypothesis. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; path-connected upgrade, reduction to chosen loops, quotient realization, and invariants remain listed."},
     :commit "921d40caa",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89433,7 +89445,7 @@
      "2e75e0dd28848bf310ce58037bc0057f1f825c6431714f926165e1f75e2793f0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89451,7 +89463,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked moved-lift endpoint bridge to normalized cover-model selection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked monodromy transitivity from paths in the total space.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89504,7 +89516,11 @@
     {:job 5,
      :commit "0450e4bee",
      :reason
-     "Banked moved-lift endpoint bridge to normalized cover-model selection."}]}
+     "Banked moved-lift endpoint bridge to normalized cover-model selection."}
+    {:job 6,
+     :commit "921d40caa",
+     :reason
+     "Banked monodromy transitivity from paths in the total space."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100281,7 +100297,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coveringMonodromy_transitive_of_pathConnected",
@@ -100293,7 +100309,9 @@
     :type
     "paths upstairs make covering monodromy transitive on endpoints",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "921d40caa"},
    :id :lemma-coveringmonodromy-transitive-of-pathconnected,
    :kind :lemma,
    :depends-on [],
