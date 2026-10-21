@@ -119196,6 +119196,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792568992818-439-fdd4bbe9",
+     :commands
+     ["git show/diff 55bc1b25"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 55bc1b25 changes only t00J02Closure.lean (+29), adding a compiled Sard/calculation composition after prior history. Fixture afb497a6, source 0b3b4888, implementation 6c808577, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is forward: bad-parameter nullity yields the selected locally-injective circle fiber, then the dependent canonical-calculation endpoint yields homologyMap 2 f=0; the generated Fintype stays internal and representations align. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; deriving nullity/calculations from disk-bounded transversality and final assembly remain listed."},
     :commit "55bc1b25da390ad904b06486bf4ada4301660343",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked selected-fiber calculation endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Sard/calculation composition.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119483,7 +119495,10 @@
      :reason "Banked Sard bad-parameter fiber adapter."}
     {:job 3,
      :commit "2688e7549169afc4744087ac56d9b26885e2d115",
-     :reason "Banked selected-fiber calculation endpoint."}]}
+     :reason "Banked selected-fiber calculation endpoint."}
+    {:job 4,
+     :commit "55bc1b25da390ad904b06486bf4ada4301660343",
+     :reason "Banked Sard/calculation composition."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -121936,7 +121951,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -121950,7 +121965,9 @@
     :type
     "Sard-null bad parameters plus canonical calculations imply H2 map zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "55bc1b25da390ad904b06486bf4ada4301660343"},
    :id
    :lemma-tophomologymap-eq-zero-of-badparameters-measure-zero-calculations,
    :kind :lemma,
