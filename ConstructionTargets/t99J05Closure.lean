@@ -2226,6 +2226,68 @@ theorem t99J05_cp_successor_subsingleton_odd_gt_one
 #print axioms t99J05_cp_successor_lowerPatch_subsingleton_odd
 #print axioms t99J05_cp_successor_subsingleton_odd_gt_one
 
+/-- A continuous map out of a path-connected space is injective on rational
+zeroth homology. -/
+theorem t99J05_h0_map_injective
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] (f : C(X, Y)) :
+    Function.Injective
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℚ f) 0).hom := by
+  intro a b hab
+  apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+    (ConstructionTargets.CoefficientH0.h0Iso ℚ
+      (Classical.choice (inferInstance : Nonempty X))).hom).1
+  change (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom a =
+    (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom b
+  apply_fun (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom at hab
+  have hn := ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ f
+  have hna := congrArg (fun g => g.hom a) hn
+  have hnb := congrArg (fun g => g.hom b) hn
+  simp only [CategoryTheory.comp_apply] at hna hnb
+  exact hna.symm.trans (hab.trans hnb)
+
+/-- The degree-zero overlap-to-patches arrow is injective. -/
+theorem t99J05_cp_successor_literalOverlapToPieces_zero_injective (n : ℕ) :
+    Function.Injective (t99J05_cp_successor_literalOverlapToPieces n 0).hom := by
+  let O := ({p : CP (n + 1) |
+    p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} : Set (CP (n + 1)))
+  let L := ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} : Set (CP (n + 1)))
+  letI : PathConnectedSpace O := by
+    letI : PathConnectedSpace
+        ({z : AffineCoordinates (Fin.last (n + 1)) | z ≠ 0} :
+          Set (AffineCoordinates (Fin.last (n + 1)))) :=
+      isPathConnected_iff_pathConnectedSpace.mp
+        (t99J05_puncturedAffine_isPathConnected n)
+    let e := t99J05_cp_successor_overlap_homeomorph_puncturedAffine n
+    exact e.symm.surjective.pathConnectedSpace e.symm.continuous
+  let f : C(O, L) :=
+    ⟨fun p => ⟨p.1, p.2.1⟩, continuous_subtype_val.subtype_mk _⟩
+  have hincl := t99J05_h0_map_injective f
+  change Function.Injective
+    (HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_left : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorLowerPatch n)))) 0).hom at hincl
+  intro a b hab
+  apply hincl
+  have hc := congrArg (fun z => (biprod.fst :
+    Homology L 0 ⊞ Homology
+      ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) 0 ⟶
+        Homology L 0).hom z) hab
+  change
+    (CategoryTheory.CategoryStruct.comp
+      (t99J05_cp_successor_literalOverlapToPieces n 0) biprod.fst).hom a =
+      (CategoryTheory.CategoryStruct.comp
+        (t99J05_cp_successor_literalOverlapToPieces n 0) biprod.fst).hom b at hc
+  rw [t99J05_cp_successor_literalOverlapToPieces_fst] at hc
+  exact hc
+
+#print axioms t99J05_h0_map_injective
+#print axioms t99J05_cp_successor_literalOverlapToPieces_zero_injective
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
@@ -2421,6 +2483,57 @@ theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_literal
         ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k
 
 #print axioms t99J05_cp_successor_mayerVietoris_f_transport_eq_literal
+
+/-- The remaining degree-one successor homology vanishes: exactness embeds it
+in overlap H0, while the overlap-to-patches H0 arrow is injective. -/
+theorem t99J05_cp_successor_subsingleton_one
+    (n : ℕ) (h : ComplexProjectiveRationalHomologyData n) :
+    Subsingleton (Homology (CP (n + 1)) 1) := by
+  let S := t99J05_cp_successor_mayerVietoris_ambientTransport n 0
+  let T := t99J05_cp_successor_mayerVietoris_overlapTransport n 0
+  let L : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+      Set (CP (n + 1))) 1
+  let U : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+      Set (CP (n + 1))) 1
+  let P : ModuleCat ℚ := L ⊞ U
+  letI : Subsingleton L :=
+    t99J05_cp_successor_lowerPatch_subsingleton_odd n 1 h (by norm_num)
+  letI : Subsingleton U :=
+    t99J05_cp_successor_topPatch_subsingleton_positive n 1 (by omega)
+  letI : Subsingleton S.X₁ := by
+    apply ModuleCat.subsingleton_of_isZero
+    change CategoryTheory.Limits.IsZero P
+    rw [CategoryTheory.Limits.biprod_isZero_iff]
+    exact ⟨ModuleCat.isZero_of_subsingleton _, ModuleCat.isZero_of_subsingleton _⟩
+  have hS := t99J05_cp_successor_mayerVietoris_exact_ambient_transport n 0
+  have hconn : Function.Injective S.g.hom := by
+    rw [← LinearMap.ker_eq_bot, ← hS.moduleCat_range_eq_ker]
+    apply LinearMap.range_eq_bot.mpr
+    ext x
+    rw [Subsingleton.elim x 0]
+    simp
+  have hT := t99J05_cp_successor_mayerVietoris_exact_overlap_transport n 0
+  have hTg : Function.Injective T.g.hom := by
+    change Function.Injective (t99J05_cp_successor_mayerVietoris_f_transport n 0).hom
+    rw [t99J05_cp_successor_mayerVietoris_f_transport_eq_literal]
+    exact t99J05_cp_successor_literalOverlapToPieces_zero_injective n
+  have hrange : LinearMap.range S.g.hom = ⊥ := by
+    rw [show S.g = T.f by rfl]
+    have hTex := hT.moduleCat_range_eq_ker
+    change LinearMap.range T.f.hom = LinearMap.ker T.g.hom at hTex
+    exact hTex.trans (LinearMap.ker_eq_bot.mpr hTg)
+  have hgzero : S.g.hom = 0 := LinearMap.range_eq_bot.mp hrange
+  change Subsingleton S.X₂
+  constructor
+  intro a b
+  apply hconn
+  have ha : S.g.hom a = 0 := by rw [hgzero]; rfl
+  have hb : S.g.hom b = 0 := by rw [hgzero]; rfl
+  exact ha.trans hb.symm
+
+#print axioms t99J05_cp_successor_subsingleton_one
 
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
