@@ -119152,64 +119152,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
-   {:placeholder-delta {:source-before 1, :source-after 1},
+   {:consumer :t00J02,
+    :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Apply vector Sard on chart domains; Haar transport, signed counts, Main.",
+    "Transport chart nullity through circle charts/Haar; aggregate, signed counts, Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "unrelated artifacts preserved"],
+    :warnings
+    ["Main sorry" "unrelated untracked review artifacts preserved"],
     :missing-theorems
-    [{:name "targetChartCoordinate_contMDiff",
-      :type "chart coordinate smooth on open source subtype",
+    [{:name "targetChartCoordinate_criticalImage_null",
+      :type "chart-coordinate critical image null",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["circleIncidenceProjection_critical_iff_targetChartCritical"],
+      :depends-on ["targetChartCoordinate_contMDiff"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["targetChartCoordinate_contMDiff"],
+      :depends-on ["targetChartCoordinate_criticalImage_null"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "f3c28a95161a4a54c2f856053d761b8c27717c479464295db9ffdfdb886bc02f",
+     "34327e68c671dd10fd5b56baf5316edfeaadbceca04f0d51cbf3585a3a1f803e",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked smooth target-chart domain.",
+    :reason "Banked chart-domain Sard nullity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hashes; git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :finding "qualified Opens; fixed instances"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792588007168-814-318fc51a",
-     :commands
-     ["git show/diff fa36b4dd"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: fa36b4dd changes only t00J02Closure.lean (+33), adding a compiled open target-chart domain and smooth coordinate representative after prior history. Fixture afb497a6, source 0b3b4888, implementation f3c28a95, registry 170/170, and placeholders closure=0/Main=1 reproduce. Boundaries are faithful: the domain is g^-1(chart source), open by continuity; subtype inclusion and g are smooth; membership supplies the chart-domain condition, yielding global smoothness on the subtype. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; vector Sard/Haar transport, signed counts, and final assembly remain listed."},
-    :commit "fa36b4ddea5cfedb609639fe4a358255c16bd685",
+     {:cmd "sha256sum fixture/source/implementation; git diff --check",
+      :exit 0}],
+    :commit "08e744c97125d61a604b97f93afcbd9430bd3dd5",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119217,7 +119203,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119813,7 +119799,8 @@
     :lemma-circleincidenceprojection-critical-iff-kernelcritical
     :lemma-circleincidence-secondcountabletopology
     :lemma-circleincidenceprojection-critical-iff-targetchartcritical
-    :lemma-targetchartcoordinate-contmdiff],
+    :lemma-targetchartcoordinate-contmdiff
+    :lemma-targetchartcoordinate-criticalimage-null],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122319,6 +122306,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-circleincidenceprojection-critical-iff-targetchartcritical],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "targetChartCoordinate_criticalImage_null",
+    :type "chart-coordinate critical image null"},
+   :lemma
+   {:name "targetChartCoordinate_criticalImage_null",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart-coordinate critical image null",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-targetchartcoordinate-criticalimage-null,
+   :kind :lemma,
+   :depends-on [:lemma-targetchartcoordinate-contmdiff],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
