@@ -342,6 +342,65 @@ noncomputable def punctured_topHomology_zero_aux_inclusion (n : ℕ) (M : Type)
     (ModuleCat.of ℤ ℤ)).map
       (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
 
+/-- The complement of the radius-two collar is closed and lies in the interior
+of the punctured manifold: the excision hypothesis for the pair
+`(M, Punctured)`.  (Banked by lemma-3, job 579.) -/
+lemma punctured_topHomology_zero_aux_mono_aux_excision_set
+    {n : ℕ} {M : Type} [TopologicalSpace M] [T2Space M]
+    (c : BallCollar n M) (hopen : IsOpen c.radialTwo) :
+    IsClosed c.radialTwoᶜ ∧ c.radialTwoᶜ ⊆
+      interior (Set.range (fun x : c.Punctured ↦ x.1)) := by
+  refine ⟨hopen.isClosed_compl, ?_⟩
+  have hcompact : IsCompact (Set.range c.smallMap) := by
+    rw [← Set.image_univ]
+    exact isCompact_univ.image c.smallEmbedding.continuous
+  have hrangeOpen : IsOpen (Set.range c.smallMap)ᶜ := hcompact.isClosed.isOpen_compl
+  have hrangeSub : (Set.range c.smallMap)ᶜ ⊆
+      Set.range (fun x : c.Punctured ↦ x.1) := by
+    intro z hz
+    refine ⟨⟨z, ?_⟩, rfl⟩
+    rintro ⟨y, hy, heq⟩
+    exact hz ⟨y, heq⟩
+  intro z hz
+  apply interior_maximal hrangeSub hrangeOpen
+  intro hzrange
+  rcases hzrange with ⟨y, rfl⟩
+  apply hz
+  refine ⟨unitToLarge n y, ?_, c.largeMap_unitToLarge y⟩
+  change dist y.1 0 < 2
+  have hy : dist y.1 0 ≤ 1 := Metric.mem_closedBall.mp y.2
+  linarith
+
+/-- LEAF. The relative group of `(M, Punctured)` one above top degree
+vanishes.  Sketch: excise `Z = c.radialTwoᶜ`
+(`SingularExcision.relativeExcisionMap_homologyMap_isIso_succ`, hypotheses
+from `_aux_excision_set`), reducing to the pair (open radius-two ball, ball
+minus the open unit ball), carried by `largeMap` (an embedding); that pair's
+long exact sequence (`SingularHomologyConcrete.singularPairHomology_exact_*`)
+with the ball contractible gives `H_{n+1} ≅ H̃_n` of a space homotopy
+equivalent to `Sphere n` (an `(n-1)`-sphere), which is zero since `n ≥ 2`. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero (n : ℕ) (hn : 2 ≤ n)
+    (M : Type) [TopologicalSpace M] [T2Space M] (c : BallCollar n M)
+    (hopen : IsOpen c.radialTwo) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology (n + 1)) := by
+  sorry
+
+/-- LEAF. If the relative group of `(M, Punctured)` in degree `n + 1`
+vanishes, the degree-`n` inclusion map is injective.  Sketch: exactness of
+the pair sequence at `H_n(Punctured)`
+(`SingularHomologyConcrete.singularPairHomology_exact_subspace`), then
+transport from the concrete `AddCommGrpCat` homology to `H` (module-valued
+`singularHomologyFunctor`) with the `IntegralSingularHomologyComparison` /
+`T00A01MayerVietorisAdapters` isos.  `↥(c.smallMap '' _)ᶜ` is `c.Punctured`
+by definition. -/
+lemma punctured_topHomology_zero_aux_mono_aux_of_relative_zero (n : ℕ)
+    (M : Type) [TopologicalSpace M] (c : BallCollar n M)
+    (hrel : IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology (n + 1))) :
+    Mono (punctured_topHomology_zero_aux_inclusion n M c) := by
+  sorry
+
 /-- The top-homology map of the puncture inclusion is injective.  This is the
 relative-homology/excision input: the relative group immediately above top
 degree vanishes. -/
@@ -351,6 +410,63 @@ theorem punctured_topHomology_zero_aux_mono (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
     (hopen : IsOpen c.radialTwo) :
     Mono (punctured_topHomology_zero_aux_inclusion n M c) := by
+  exact punctured_topHomology_zero_aux_mono_aux_of_relative_zero n M c
+    (punctured_topHomology_zero_aux_mono_aux_relative_zero n hn M c hopen)
+
+/-- The puncture inclusion misses the collar center.  (Banked by lemma-1,
+job 588.) -/
+theorem punctured_topHomology_zero_aux_map_eq_zero_aux_avoids_center
+    (n : ℕ) (M : Type) [TopologicalSpace M] (c : BallCollar n M) :
+    Set.MapsTo (fun z : c.Punctured ↦ z.1) Set.univ
+      (LocalHomologyNeighborhoodExcision.deletedPoint
+        (c.smallMap (0 : Disk n 1))) := by
+  intro z _ hz
+  apply z.2
+  refine ⟨0, ?_, hz.symm⟩
+  change dist (0 : E n) 0 < 1
+  simp
+
+/-- LEAF (local fundamental class). On a closed connected `n`-manifold whose
+top integral homology is `ℤ`, localizing at a point is injective in degree
+`n`: `H_n M → H_n(M, M - x)`.  Sketch (Hatcher 3.26): `ManifoldFundamentalClass`
+has the ingredients: `localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator`
+writes the localized global generator as `r • ambientLocalGenerator x`,
+`ambientLocalGenerator_zsmul_injective` makes `r ↦ r • _` injective, so it
+remains to show `r ≠ 0` (a generator localizing to zero would make `H_n M`
+vanish, by local constancy of the localized class along the connected `M`
+and compactness).  Group-homology form, to match `localizationMap`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono
+    (n : ℕ) (hn : 2 ≤ n)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M]
+    (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ)) (x : M) :
+    Mono (ManifoldFundamentalClass.localizationMap x n) := by
+  sorry
+
+/-- LEAF. The puncture inclusion followed by localization at the collar
+center is zero: it factors through the self-relative homology of
+`(M - x, M - x)`, which vanishes
+(`SingularHomologyConcrete.selfRelativeSingularHomology_isZero`), using
+`_aux_avoids_center` and `relativeSingularMap` naturality. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localize_zero
+    (n : ℕ) (M : Type) [TopologicalSpace M] (c : BallCollar n M) :
+    HomologicalComplex.homologyMap
+        (ManifoldFundamentalClass.absoluteSingularMap
+          ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩) n ≫
+      ManifoldFundamentalClass.localizationMap (c.smallMap (0 : Disk n 1)) n = 0 := by
+  sorry
+
+/-- LEAF (representation transport). If the puncture inclusion is zero on
+concrete `AddCommGrpCat` singular homology, it is zero on `H` (module-valued
+`singularHomologyFunctor`).  Sketch: the comparison isos of
+`IntegralSingularHomologyComparison` are natural in the space. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_of_group_zero
+    (n : ℕ) (M : Type) [TopologicalSpace M] (c : BallCollar n M)
+    (h0 : HomologicalComplex.homologyMap
+        (ManifoldFundamentalClass.absoluteSingularMap
+          ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩) n = 0) :
+    punctured_topHomology_zero_aux_inclusion n M c = 0 := by
   sorry
 
 /-- A top-dimensional cycle supported away from a nonempty collared ball has
@@ -363,7 +479,12 @@ theorem punctured_topHomology_zero_aux_map_eq_zero (n : ℕ) (hn : 2 ≤ n)
     (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
     (hopen : IsOpen c.radialTwo) :
     punctured_topHomology_zero_aux_inclusion n M c = 0 := by
-  sorry
+  letI := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono
+    n hn M htop (c.smallMap (0 : Disk n 1))
+  apply punctured_topHomology_zero_aux_map_eq_zero_aux_of_group_zero n M c
+  rw [← cancel_mono (ManifoldFundamentalClass.localizationMap
+    (c.smallMap (0 : Disk n 1)) n), zero_comp]
+  exact punctured_topHomology_zero_aux_map_eq_zero_aux_localize_zero n M c
 
 theorem punctured_topHomology_zero_aux_of_mono_eq_zero
     {X Y : ModuleCat ℤ} (f : X ⟶ Y) [Mono f] (hf : f = 0) : IsZero X := by
