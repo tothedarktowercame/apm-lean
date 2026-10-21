@@ -119199,6 +119199,18 @@
     [{:cmd "closure compile",
       :exit 1,
       :correction "measurable pullback"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792601717018-1149-680b37af",
+     :commands
+     ["git show/diff 3ef1754c"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 3ef1754c changes only t00J02Closure.lean (+15), adding compiled chart-measure evaluation after prior history. Fixture afb497a6, source 0b3b4888, implementation 890c0362; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: evaluating map of the target-restricted coordinate measure on measurable s yields mu of the measurable inverse image intersected with that chart target, via map_apply then restrict_apply. The totalized inverse is used only through its proved measurability. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; chart nullity, finite cover, and H2 assembly remain listed."},
     :commit "3ef1754c67af889cac8995c023f7305eb18f2555",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119207,7 +119219,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119225,7 +119237,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inverse-chart measures.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-measure evaluation.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119554,7 +119566,10 @@
      :reason "Banked circle-chart null transitions."}
     {:job 8,
      :commit "e832048147448a6485a792b3b667c6f3bc772a89",
-     :reason "Banked inverse-chart measures."}]}
+     :reason "Banked inverse-chart measures."}
+    {:job 9,
+     :commit "3ef1754c67af889cac8995c023f7305eb18f2555",
+     :reason "Banked chart-measure evaluation."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122615,7 +122630,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleBaseChartMeasure_apply",
@@ -122625,7 +122640,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart measure evaluation",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "3ef1754c67af889cac8995c023f7305eb18f2555"},
    :id :lemma-circlebasechartmeasure-apply,
    :kind :lemma,
    :depends-on [:lemma-circlechartinverseextension-measurable],
