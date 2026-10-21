@@ -1921,6 +1921,53 @@ theorem targetChartCoordinate_ambientCriticalImage_null
 
 #print axioms targetChartCoordinate_ambientCriticalImage_null
 
+/-- One fixed nonempty target chart contains a value regular at every point
+of its fiber: the chart-coordinate critical image is null, whereas the open
+chart target has positive additive Haar measure. -/
+theorem exists_mfderiv_surjective_fiber_of_fixedTargetChart
+    {E F M N : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M] [SecondCountableTopology M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure]
+    (g : M → N) (y : N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) ∞ g) :
+    ∃ z, ∀ x, g x = z → Function.Surjective
+      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) g x) := by
+  let bad : Set F := ((chartAt F y) ∘ g) ''
+    {x | x ∈ targetChartDomain (F := F) g y hg.continuous ∧
+      ¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+          ((chartAt F y) ∘ g) x)}
+  have hbad : mu bad = 0 := targetChartCoordinate_ambientCriticalImage_null mu g y hg
+  have htarget : mu (chartAt F y).target ≠ 0 :=
+    (chartAt F y).open_target.measure_ne_zero mu
+      ⟨chartAt F y y, mem_chart_target F y⟩
+  have hnsub : ¬ (chartAt F y).target ⊆ bad := by
+    intro hsub
+    exact htarget (MeasureTheory.measure_mono_null hsub hbad)
+  rcases Set.not_subset.mp hnsub with ⟨v, hvtarget, hvbad⟩
+  refine ⟨(chartAt F y).symm v, fun x hx ↦ ?_⟩
+  have hxsource : g x ∈ (chartAt F y).source := by
+    rw [hx]
+    exact (chartAt F y).map_target hvtarget
+  by_contra hcrit
+  apply hvbad
+  refine ⟨x, ⟨hxsource, ?_⟩, ?_⟩
+  · intro hs
+    exact hcrit ((mfderiv_targetChart_comp_surjective_iff_of_mem_source
+      g x y (hg.mdifferentiableAt (by simp)) hxsource).mpr hs)
+  · change chartAt F y (g x) = v
+    rw [hx, (chartAt F y).right_inv hvtarget]
+
+#print axioms exists_mfderiv_surjective_fiber_of_fixedTargetChart
+
 /-- Nullity transports from a fixed target chart back to the manifold whenever
 the chart inverse preserves null sets. -/
 theorem targetChart_ambientCriticalImage_null
