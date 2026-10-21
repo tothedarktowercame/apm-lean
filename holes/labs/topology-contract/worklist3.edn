@@ -36750,6 +36750,20 @@
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :correction "normalized predecessor degree"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792608646231-1339-80fabc95",
+     :commands
+     ["git show --stat/--format=fuller ba4639f5fa10a19d83be8ad9589efba6d735fe2d"
+      "git show ba4639f5f:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check ba4639f5f^ ba4639f5f"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show ba4639f5f:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit ba4639f5f changes only scoped Closure; fixture SHA-256 matches 92c2070ead0f87c773c791ceac672d37381a53b209caa3f0907a31e59c402c50. For 0<i≤n, overlap degrees 2i and 2i-1 are positive and below sphere top 2n+1; their vanishing makes the shared patch-to-successor arrow bijective via adjacent exact segments. The final equivalence has the correct direction: lower patch L -> L⊞0 -> successor, using the biproduct/product boundary explicitly. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; degree-zero, odd/above-top cases, even assembly, and successor data remain listed."},
     :commit "ba4639f5fa10a19d83be8ad9589efba6d735fe2d",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36758,7 +36772,7 @@
      "92c2070ead0f87c773c791ceac672d37381a53b209caa3f0907a31e59c402c50"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36776,7 +36790,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked top connecting equivalence; surviving-even cases remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked positive-even successor equivalence; assembly remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36994,7 +37008,11 @@
     {:job 5,
      :commit "2d4d05243a238a7d69fb82a2d011c0a1e829a1cd",
      :reason
-     "Banked top connecting equivalence; surviving-even cases remain."}]}
+     "Banked top connecting equivalence; surviving-even cases remain."}
+    {:job 6,
+     :commit "ba4639f5fa10a19d83be8ad9589efba6d735fe2d",
+     :reason
+     "Banked positive-even successor equivalence; assembly remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49388,7 +49406,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_middle_even_iso",
@@ -49398,7 +49416,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "old positive even groups survive",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ba4639f5fa10a19d83be8ad9589efba6d735fe2d"},
    :id :lemma-t99j05-cp-successor-middle-even-iso,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-top-connecting-iso],
