@@ -88678,7 +88678,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88738,7 +88738,7 @@
      "c19f762404d8a4feaead58a7eebd91c307534eb330a7fe12322b2e2eebebe19b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -89109,6 +89109,18 @@
     [{:cmd "initial Main compile",
       :exit 1,
       :correction "built missing imports"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792575790661-532-ad7de8ab",
+     :commands
+     ["git show/check/hash 3cfa60e86"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check/fingerprint t92J06"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed 3cfa60e86 by topo-6, new after history be6ab5926; patch scope only t92J06Closure (+16). Fixture f19c58b9... matches; registry 170/0; frozen t92J06 digest c57f3fb7...; closure/Main placeholders 0/0. Fresh detached build and Main compile pass. For interior parameters, projection equality correctly yields t=u, then lifted-edge injectivity yields v=w; reverse direction is reflexive. Axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists trivializations, tree cover, and four finite-cover milestones."},
     :commit "3cfa60e86",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -89117,7 +89129,7 @@
      "f19c58b9d4e2391b8798e8df7b560fc0d097c3dd54bc1eb6a582008d23e1fc63"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89135,7 +89147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked base-edge chart openness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked open-edge coordinates; next: trivializations.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -89203,7 +89215,10 @@
      :reason "Banked exact interior-circle image."}
     {:job 5,
      :commit "be6ab5926",
-     :reason "Banked base-edge chart openness."}]}
+     :reason "Banked base-edge chart openness."}
+    {:job 6,
+     :commit "3cfa60e86",
+     :reason "Banked open-edge coordinates; next: trivializations."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -99663,7 +99678,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryGraphH1Comparison_range",
@@ -99673,14 +99688,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "cycle+onto imply range=ker",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozenboundarygraphh1comparison-range,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "edgePoint_eq_iff_of_interior",
@@ -99690,7 +99707,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "open-edge coordinates",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "3cfa60e86"},
    :id :lemma-edgepoint-eq-iff-of-interior,
    :kind :lemma,
    :depends-on [],
