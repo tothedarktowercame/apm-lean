@@ -293,7 +293,95 @@ theorem connectedSum_standardCover_aux_open {n : ℕ} {M₁ M₂ : Type}
       IsOpen (connectedSum_standardCover_aux_thickRight c₁ c₂) ∧
       connectedSum_standardCover_aux_thickLeft c₁ c₂ ∪
         connectedSum_standardCover_aux_thickRight c₁ c₂ = Set.univ := by
-  sorry
+  let CA : Set c₁.Punctured := {x | x.1 ∈ c₁.radialTwo}
+  let CB : Set c₂.Punctured := {x | x.1 ∈ c₂.radialTwo}
+  let q : Sum c₁.Punctured c₂.Punctured → ConnectedSum c₁ c₂ :=
+    fun z ↦ Quotient.mk _ z
+  let L : Set (Sum c₁.Punctured c₂.Punctured) :=
+    Set.range Sum.inl ∪ Sum.inr '' CB
+  let R : Set (Sum c₁.Punctured c₂.Punctured) :=
+    Sum.inl '' CA ∪ Set.range Sum.inr
+  have hCA : IsOpen CA := hopen₁.preimage continuous_subtype_val
+  have hCB : IsOpen CB := hopen₂.preimage continuous_subtype_val
+  have hiA : ∀ s, c₁.boundaryMap s ∈ CA := by
+    intro s
+    refine ⟨unitToLarge n (sphereToDisk n s), ?_, c₁.largeMap_unitToLarge _⟩
+    have hs : dist s.1 0 = 1 := by
+      simpa [Metric.mem_sphere, dist_comm] using s.2
+    change dist s.1 0 < 2
+    linarith
+  have hiB : ∀ s, c₂.boundaryMap s ∈ CB := by
+    intro s
+    refine ⟨unitToLarge n (sphereToDisk n s), ?_, c₂.largeMap_unitToLarge _⟩
+    have hs : dist s.1 0 = 1 := by
+      simpa [Metric.mem_sphere, dist_comm] using s.2
+    change dist s.1 0 < 2
+    linarith
+  have hL_invariant {x y : Sum c₁.Punctured c₂.Punctured}
+      (hxy : Relation.EqvGen (GlueRel c₁ c₂) x y) : x ∈ L ↔ y ∈ L := by
+    induction hxy with
+    | rel x y h =>
+        cases h with
+        | boundary s =>
+            constructor
+            · intro _
+              exact Or.inr ⟨c₂.boundaryMap s, hiB s, rfl⟩
+            · intro _
+              exact Or.inl ⟨c₁.boundaryMap s, rfl⟩
+    | refl => exact Iff.rfl
+    | symm x y h ih => exact ih.symm
+    | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+  have hR_invariant {x y : Sum c₁.Punctured c₂.Punctured}
+      (hxy : Relation.EqvGen (GlueRel c₁ c₂) x y) : x ∈ R ↔ y ∈ R := by
+    induction hxy with
+    | rel x y h =>
+        cases h with
+        | boundary s =>
+            constructor
+            · intro _
+              exact Or.inr ⟨c₂.boundaryMap s, rfl⟩
+            · intro _
+              exact Or.inl ⟨c₁.boundaryMap s, hiA s, rfl⟩
+    | refl => exact Iff.rfl
+    | symm x y h ih => exact ih.symm
+    | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+  have hpreL : q ⁻¹' (q '' L) = L := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, hq⟩
+      exact (hL_invariant (Quotient.exact hq)).mp hy
+    · intro hx
+      exact ⟨x, hx, rfl⟩
+  have hpreR : q ⁻¹' (q '' R) = R := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, hq⟩
+      exact (hR_invariant (Quotient.exact hq)).mp hy
+    · intro hx
+      exact ⟨x, hx, rfl⟩
+  have hopenL : IsOpen L :=
+    IsOpen.union isOpen_range_inl (isOpenMap_inr _ hCB)
+  have hopenR : IsOpen R :=
+    IsOpen.union (isOpenMap_inl _ hCA) isOpen_range_inr
+  constructor
+  · change IsOpen (q '' L)
+    rw [isOpen_coinduced]
+    exact hpreL.symm ▸ hopenL
+  constructor
+  · change IsOpen (q '' R)
+    rw [isOpen_coinduced]
+    exact hpreR.symm ▸ hopenR
+  · apply Set.eq_univ_of_forall
+    intro z
+    induction z using Quotient.inductionOn with
+    | _ x =>
+        cases x with
+        | inl a =>
+            left
+            exact ⟨Sum.inl a, Or.inl ⟨a, rfl⟩, rfl⟩
+        | inr b =>
+            right
+            exact ⟨Sum.inr b, Or.inr ⟨b, rfl⟩, rfl⟩
 
 /-- LEAF. The left thickening deformation retracts onto the first punctured
 summand (push the collar of the second summand radially onto its boundary
