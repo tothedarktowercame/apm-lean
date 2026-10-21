@@ -119509,50 +119509,58 @@
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct smooth coordinate family near each point; compact flow; Main.",
+    "Construct the derivative coordinate family, shrink to the stable neighborhood, obtain local lifts; then compact flow and Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated files preserved"],
+    :warnings
+    ["Main registered sorry" "unrelated review artifacts preserved"],
     :missing-theorems
-    [{:name "hasLocalSmoothLift_of_trivialization_coordinates",
+    [{:name "eventually_isInvertible_comp_rightInverse",
       :type
-      "neighborhood coordinate solutions give HasLocalSmoothLift",
+      "a continuous derivative family composed with a base-point right inverse is invertible near that point",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on
-      ["contMDiffOn_tangentSection_of_trivialization_coordinates"
-       "mfderiv_eq_of_trivialization_coordinates"],
+      :depends-on ["surjective_continuousLinearMap_has_rightInverse"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
-      :depends-on ["hasLocalSmoothLift_of_trivialization_coordinates"],
+      :depends-on
+      ["eventually_isInvertible_comp_rightInverse"
+       "hasLocalSmoothLift_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "2605b987d43d37bad81d18d0a200a5475888fe7770789477706acca0d91a1fd2",
+     "7bbe1d13708d7c1f9ffc19f05405507e98497a5248514578ea7a8017b87f43e7",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
-     :registry "166/166"},
+     :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked coordinate-data to local-lift adapter.",
+    :reason
+    "Banked neighborhood stability of a fixed derivative right inverse.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/count/diff", :exit 0}],
-    :commit "4d563097dbc497cd2d18a08fc83afb3f30f4663e",
+     {:cmd "sha256sum fixture/source/implementation; git diff --check",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
+      :exit 1,
+      :finding
+      "Corrected invertible-range set conversion and parenthesized nhds term."}],
+    :commit "2ac121e46daf3ce8f574ab259350106e2eba6499",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119560,7 +119568,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119970,7 +119978,8 @@
     :lemma-contdiff-lift-of-comp-isinvertible
     :lemma-contmdiffon-tangentsection-of-trivialization-coordinates
     :lemma-mfderiv-eq-of-trivialization-coordinates
-    :lemma-haslocalsmoothlift-of-trivialization-coordinates],
+    :lemma-haslocalsmoothlift-of-trivialization-coordinates
+    :lemma-eventually-isinvertible-comp-rightinverse],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -122140,6 +122149,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "eventually_isInvertible_comp_rightInverse",
+    :type
+    "a continuous derivative family composed with a base-point right inverse is invertible near that point"},
+   :lemma
+   {:name "eventually_isInvertible_comp_rightInverse",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type
+    "a continuous derivative family composed with a base-point right inverse is invertible near that point",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-eventually-isinvertible-comp-rightinverse,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surjective-continuouslinearmap-has-rightinverse],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
