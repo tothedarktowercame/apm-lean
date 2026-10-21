@@ -119152,44 +119152,43 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:consumer :t00J02,
     :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove circle-chart inverse null preservation and finite bad-set cover; then signed counts and Main.",
+    "Supply circle-chart null transport and finite cover; then signed counts and Main.",
     :outcome :stop,
-    :warnings
-    ["Main registered sorry" "untracked review artifacts preserved"],
+    :warnings ["Main sorry" "untracked artifacts preserved"],
     :missing-theorems
-    [{:name "measure_zero_of_subset_finite_chartCriticalPieces",
-      :type "finite null chart cover makes bad set null",
+    [{:name "badSet_measure_zero_of_finite_targetCharts",
+      :type "finite chart cover nullity",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["finite_chartCriticalPieces_measure_zero"],
+      :depends-on
+      ["targetChart_ambientCriticalImage_null"
+       "measure_zero_of_subset_finite_chartCriticalPieces"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["measure_zero_of_subset_finite_chartCriticalPieces"],
+      :depends-on ["badSet_measure_zero_of_finite_targetCharts"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "b407ec340d9b16ad9b2d87bc70ae5c25d8d001c0d81bd3c24da7bb3558745224",
+     "89d08440dd22ed37727e3d3db4aeb1fd31f90dee91dfafd20822500edc29a11a",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason
-    "Banked nullity of a bad set covered by finite chart-critical pieces.",
+    :reason "Banked finite-chart bad-set nullity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119197,19 +119196,7 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792595499901-1009-415f9359",
-     :commands
-     ["git show/diff 73bc6fad"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 73bc6fad changes only t00J02Closure.lean (+11), adding compiled finite-cover nullity after prior history bc7a1ec9. Fixture afb497a6, source 0b3b4888, implementation b407ec34; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: bad subset of the finite union and nullity of that union yield mu bad = 0 by measure_mono_null. The Set/Measure and Fin-index boundaries remain unchanged. The new theorem and its dependency use only propext, Classical.choice, Quot.sound. Main retains its registered sorry; H2 assembly remains partial and listed."},
-    :commit "73bc6fad0fc33b46744eeb62a705c0421a0aa57e",
+    :commit "1afe14c6987902efba96a050a478d6e0b4a3614b",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119217,7 +119204,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119838,7 +119825,8 @@
     :lemma-targetchartcoordinate-ambientcriticalimage-null
     :lemma-targetchart-ambientcriticalimage-null
     :lemma-finite-chartcriticalpieces-measure-zero
-    :lemma-measure-zero-of-subset-finite-chartcriticalpieces],
+    :lemma-measure-zero-of-subset-finite-chartcriticalpieces
+    :lemma-badset-measure-zero-of-finite-targetcharts],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122504,6 +122492,25 @@
    :id :lemma-measure-zero-of-subset-finite-chartcriticalpieces,
    :kind :lemma,
    :depends-on [:lemma-finite-chartcriticalpieces-measure-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "badSet_measure_zero_of_finite_targetCharts",
+    :type "finite chart cover nullity"},
+   :lemma
+   {:name "badSet_measure_zero_of_finite_targetCharts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "finite chart cover nullity",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-badset-measure-zero-of-finite-targetcharts,
+   :kind :lemma,
+   :depends-on
+   [:lemma-targetchart-ambientcriticalimage-null
+    :lemma-measure-zero-of-subset-finite-chartcriticalpieces],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
