@@ -411,6 +411,40 @@ noncomputable def apm_t97A03_secondCutCircleLoop (A B : Circle) :
       (apm_t97A03_continuous_cutCircleMap A B)).cast rfl
     (apm_t97A03_cutCircleMap_A_eq_B A B)
 
+/-- The first genuine loop after normalizing the marked pair. -/
+noncomputable def apm_t97A03_normalizedFirstCutCircleLoop (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1)
+      (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) :=
+  ((apm_t97A03_normalizedCircleArc A B).map
+      (apm_t97A03_continuous_cutCircleMap 1 (A⁻¹ * B))).cast rfl
+    (apm_t97A03_cutCircleMap_A_eq_B 1 (A⁻¹ * B))
+
+/-- The complementary genuine loop after the same normalization. -/
+noncomputable def apm_t97A03_normalizedSecondCutCircleLoop (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1)
+      (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) :=
+  ((apm_t97A03_normalizedComplementaryCircleArc A B).map
+      (apm_t97A03_continuous_cutCircleMap 1 (A⁻¹ * B))).cast rfl
+    (apm_t97A03_cutCircleMap_A_eq_B 1 (A⁻¹ * B))
+
+/-- Normalization sends the first original based loop pointwise to its
+normalized based-loop representative. -/
+lemma apm_t97A03_normalize_firstCutCircleLoop
+    (A B : Circle) (t : unitInterval) :
+    apm_t97A03_normalizeCutCircle A B
+        (apm_t97A03_firstCutCircleLoop A B t) =
+      apm_t97A03_normalizedFirstCutCircleLoop A B t := by
+  rfl
+
+/-- Normalization sends the complementary original based loop pointwise to
+the complementary normalized representative. -/
+lemma apm_t97A03_normalize_secondCutCircleLoop
+    (A B : Circle) (t : unitInterval) :
+    apm_t97A03_normalizeCutCircle A B
+        (apm_t97A03_secondCutCircleLoop A B t) =
+      apm_t97A03_normalizedSecondCutCircleLoop A B t := by
+  rfl
+
 /-- The homomorphism on based fundamental groups induced by the literal
 sphere-collapse map. -/
 noncomputable def apm_t97A03_collapsePiOneHom (A B : Circle) :
