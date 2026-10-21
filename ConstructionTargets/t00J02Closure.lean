@@ -1348,9 +1348,72 @@ theorem circleIncidenceProjection_contMDiff
       (circleIncidenceProjection (f := f) (c := c)) := by
   exact ConstructionTargets.IncidenceParameterProjection.smooth f c hf hc htrans
 
+/-- Surjectivity of the actual manifold derivative of the incidence
+projection is equivalent to surjectivity of the second-coordinate map on the
+linear incidence kernel. -/
+theorem circleIncidenceProjection_surjective_iff_kernel_snd
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (p : CircleIncidence f c) :
+    letI := circleIncidenceAtlas f c hf hc htrans
+    Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1)
+          (circleIncidenceProjection (f := f) (c := c)) p) ↔
+      Function.Surjective
+        (fun w : LinearMap.ker (LinearMap.coprod
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f p.1.1).toLinearMap
+          (-(mfderiv (𝓡 1) SurfaceModelWithCorners c p.1.2).toLinearMap)) ↦ w.1.2) := by
+  letI := circleIncidenceAtlas f c hf hc htrans
+  rw [show circleIncidenceProjection (f := f) (c := c) =
+    ConstructionTargets.IncidenceParameterProjection.projection f c from rfl]
+  rw [ConstructionTargets.IncidenceParameterProjection.regularity_iff
+    f c hf hc htrans p]
+  constructor
+  · intro hsurj
+    apply (surjective_incidenceKernel_snd_iff_direction_lifts _ _).mpr
+    intro v
+    exact hsurj _
+  · intro hkernel
+    apply transverse_mfderiv_surjective_of_circleDirection_lifts
+      f c p.1.1 p.1.2 (htrans p.1.1 p.1.2 p.2)
+    exact (surjective_incidenceKernel_snd_iff_direction_lifts _ _).mp hkernel
+
+/-- The geometric critical locus of the smooth incidence projection is
+exactly the previously defined kernel-model critical locus. -/
+theorem circleIncidenceProjection_critical_iff_kernelCritical
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (p : CircleIncidence f c) :
+    letI := circleIncidenceAtlas f c hf hc htrans
+    (¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1)
+          (circleIncidenceProjection (f := f) (c := c)) p)) ↔
+      p ∈ circleIncidenceKernelCritical f c := by
+  change (¬ Function.Surjective _) ↔ (¬ Function.Surjective _)
+  exact not_congr
+    (circleIncidenceProjection_surjective_iff_kernel_snd f c hf hc htrans p)
+
 #print axioms circleIncidenceAtlas
 #print axioms circleIncidence_isManifold
 #print axioms circleIncidenceProjection_contMDiff
+#print axioms circleIncidenceProjection_surjective_iff_kernel_snd
+#print axioms circleIncidenceProjection_critical_iff_kernelCritical
 
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
