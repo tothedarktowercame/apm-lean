@@ -119,6 +119,21 @@ theorem eventually_isInvertible_comp_rightInverse
 
 #print axioms eventually_isInvertible_comp_rightInverse
 
+/-- The stable-invertibility filter statement can be chosen as an actual
+neighborhood on which the fixed right inverse remains correctable. -/
+theorem exists_nhds_isInvertible_comp_rightInverse
+    {Z : Type} [TopologicalSpace Z] {n m : ℕ}
+    (A : Z → E n →L[ℝ] E m) (x₀ : Z) (R : E m →L[ℝ] E n)
+    (hA : ContinuousAt A x₀)
+    (hAR : (A x₀).comp R = ContinuousLinearMap.id ℝ (E m)) :
+    ∃ U ∈ nhds x₀, ∀ x ∈ U, ((A x).comp R).IsInvertible := by
+  let U : Set Z := {x | ((A x).comp R).IsInvertible}
+  have hU : U ∈ nhds x₀ :=
+    eventually_isInvertible_comp_rightInverse A x₀ R hA hAR
+  exact ⟨U, hU, fun _ hx ↦ hx⟩
+
+#print axioms exists_nhds_isInvertible_comp_rightInverse
+
 /-- Applying the smoothly varying right inverse to a smooth target-coordinate
 vector gives the source-coordinate lift used in a submersion chart. -/
 theorem contDiff_lift_of_comp_isInvertible
