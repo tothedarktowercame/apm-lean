@@ -414,6 +414,17 @@ lemma punctured_fundamentalGroup_three_aux_cover (M : Type)
   sorry
 
 -- BEGIN SEAT AREA
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (x : X) (hxU : x ∈ U) (hxV : x ∈ V)
+    [PathConnectedSpace U] [SimplyConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    Function.Bijective
+      (FundamentalGroup.map
+        (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨x, hxU⟩) := by
+  sorry
+
 lemma punctured_fundamentalGroup_three_aux_van_kampen
     {X : Type} [TopologicalSpace X] [PathConnectedSpace X]
     (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
@@ -421,7 +432,12 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen
     (y : X) [PathConnectedSpace U] [SimplyConnectedSpace V]
     [SimplyConnectedSpace (U ∩ V : Set X)] :
     Nonempty (FundamentalGroup U ⟨x, hxU⟩ ≃* FundamentalGroup X y) := by
-  sorry
+  let i : C(U, X) := ⟨((↑) : U → X), continuous_subtype_val⟩
+  have hi : Function.Bijective (FundamentalGroup.map i ⟨x, hxU⟩) :=
+    punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective
+      U V hU hV hcover x hxU hxV
+  exact ⟨(MulEquiv.ofBijective (FundamentalGroup.map i ⟨x, hxU⟩) hi).trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected x y)⟩
 -- END SEAT AREA
 
 theorem punctured_fundamentalGroup_three (M : Type)
