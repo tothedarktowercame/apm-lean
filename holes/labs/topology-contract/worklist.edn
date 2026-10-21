@@ -119197,6 +119197,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes; placeholders; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792605828167-1267-9fb4806f",
+     :commands
+     ["git show/diff 9db44d71"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 9db44d71 changes only t00J02Closure.lean (+16), adding a compiled finite canonical chart-source cover after prior history 67307853. Fixture afb497a6, source 0b3b4888, implementation a056d618; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: each z lies in the source of chartAt F z, these sources are open, and compactness of univ extracts a Finset-indexed subcover. The result stays in N with model F and introduces no chart-coordinate conversion. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; converting the cover to Fin witnesses, signed counts, and final assembly remain listed."},
     :commit "9db44d712583e4e4f868cac72ad341fb8f166f09",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-envelope nullity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite canonical chart cover.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119561,7 +119573,10 @@
      :reason "Banked measurable coordinate-null envelopes."}
     {:job 2,
      :commit "673078539cb25bb042114854da15ca296050ca3c",
-     :reason "Banked chart-envelope nullity."}]}
+     :reason "Banked chart-envelope nullity."}
+    {:job 3,
+     :commit "9db44d712583e4e4f868cac72ad341fb8f166f09",
+     :reason "Banked finite canonical chart cover."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122725,7 +122740,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_finset_chartAt_source_cover",
@@ -122737,7 +122752,9 @@
     :type
     "compact charted target has finite canonical chart-source cover",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "9db44d712583e4e4f868cac72ad341fb8f166f09"},
    :id :lemma-exists-finset-chartat-source-cover,
    :kind :lemma,
    :depends-on [],
