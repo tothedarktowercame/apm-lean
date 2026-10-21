@@ -89382,27 +89382,26 @@
   {:consumer :t97A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope. Commit 331574e06 adds only a conjunction wrapper around already-banked conditional adapters: it assumes the geometric cut decoder, cut signed generation, and literal signed generation, then pairs their existing consequences. It proves none of the listed geometric obligations and therefore commits no substantive progress beyond the last program-history entry. Repair by constructing the decoder and proving signed generation for the two genuine complementary arcs of the literal quotient (then derive alignment/collapse injectivity), rather than introducing another facade that takes those facts as hypotheses. Exact-revision build and registry pass; fixture/frozen hashes and 0/3 placeholder counts are unchanged, so the defect is the representation boundary, not compilation.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Normalized arcs/decoder/generation; covers; invariants.",
+    :residual "Normalized decoder/generation; covers; invariants.",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "apm_t97A03_cutCircleNormalizeHomeomorph",
-      :type "CutCircle A B homeomorphic to CutCircle 1 (A⁻¹*B)",
+    [{:name "apm_t97A03_normalizedCircleArcs_ne",
+      :type "literal arcs normalize pointwise and remain distinct",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on [],
+      :depends-on ["apm_t97A03_cutCircleNormalizeHomeomorph"],
       :area "covering-classification-explicit"}
      {:name "t97A03_literal_loops_generated_by_complementary_arcs",
-      :type "normalized arc decomposition, decoder, generation",
+      :type "normalized decomposition, decoder, generation",
       :status :partial,
       :consumers [:t97A03],
-      :depends-on ["apm_t97A03_cutCircleNormalizeHomeomorph"],
+      :depends-on ["apm_t97A03_normalizedCircleArcs_ne"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "covers",
@@ -89421,18 +89420,18 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Removed facade; banked cut normalization.",
+    :reason "Banked normalized literal arcs and quotient alignment.",
     :commands
-    [{:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
+      :exit 0}
+     {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "scans", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean problems/t97A03/lean/Main.lean",
+    [{:cmd "Lean draft",
       :exit 1,
-      :correction "expose quotient reps"}
-     {:cmd "lake env lean problems/t97A03/lean/Main.lean",
-      :exit 1,
-      :correction "group congruence"}],
-    :commit "77b7d29ef",
+      :correction "explicit cancellation"}],
+    :commit "dd831745d",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
@@ -89440,7 +89439,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -100642,7 +100641,8 @@
     :lemma-apm-t97a03-collapsepionehom-injective-of-literal-surjective-cut-injective
     :lemma-apm-t97a03-collapsepionehom-injective-of-literal-signed-generation
     :lemma-apm-t97a03-cut-alignment-and-collapse-injective-of-geometric-data
-    :lemma-apm-t97a03-cutcirclenormalizehomeomorph],
+    :lemma-apm-t97a03-cutcirclenormalizehomeomorph
+    :lemma-apm-t97a03-normalizedcirclearcs-ne],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -101286,4 +101286,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-n3presentedparitycharacter-surjective-index-two],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A03_normalizedCircleArcs_ne",
+    :type "literal arcs normalize pointwise and remain distinct"},
+   :lemma
+   {:name "apm_t97A03_normalizedCircleArcs_ne",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "literal arcs normalize pointwise and remain distinct",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-apm-t97a03-normalizedcirclearcs-ne,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t97a03-cutcirclenormalizehomeomorph],
    :other-consumers []}]}
