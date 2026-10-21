@@ -1154,7 +1154,131 @@ theorem connectedSum_standardCover_aux_right_aux_quotient_aux_homotopy {n : ℕ}
         f ⟨_, h⟩ = c₂.boundaryMap (r x)) :
     ContinuousMap.Homotopic ((connectedSum_standardCover_aux_right_aux_quotient_aux_incl c₁ c₂).comp f)
       (ContinuousMap.id _) := by
-  sorry
+  classical
+  let C := connectedSum_standardCover_aux_collar c₁
+  let U := connectedSum_standardCover_aux_thickRight c₁ c₂
+  let q : Sum c₁.Punctured c₂.Punctured → ConnectedSum c₁ c₂ :=
+    fun z => Quotient.mk _ z
+  have hiA (s : Sphere n) : c₁.boundaryMap s ∈ C := by
+    refine ⟨unitToLarge n (sphereToDisk n s), ?_, c₁.largeMap_unitToLarge _⟩
+    have hs : dist s.1 0 = 1 := by
+      simpa [Metric.mem_sphere, dist_comm] using s.2
+    change dist s.1 0 < 2
+    linarith
+  have hpre : q ⁻¹' U = Sum.inl '' C ∪ Set.range Sum.inr :=
+    connectedSum_standardCover_aux_right_aux_quotient_aux_preimage c₁ c₂ hiA
+  let P : Set (Sum c₁.Punctured c₂.Punctured) :=
+    Sum.inl '' C ∪ Set.range Sum.inr
+  have hP : IsOpen P := by
+    exact ((Topology.IsOpenEmbedding.inl (X := c₁.Punctured)
+      (Y := c₂.Punctured)).isOpenMap _
+        (hopen₁.preimage continuous_subtype_val)).union
+      (by simpa only [Set.image_univ] using
+        ((Topology.IsOpenEmbedding.inr (X := c₁.Punctured)
+          (Y := c₂.Punctured)).isOpenMap _ isOpen_univ))
+  have hglue (s : Sphere n) :
+      q (.inl (c₁.boundaryMap s)) = q (.inr (c₂.boundaryMap s)) :=
+    Quotient.sound (Relation.EqvGen.rel _ _ (GlueRel.boundary s))
+  let Kraw : unitInterval × ConnectedSum c₁ c₂ → ConnectedSum c₁ c₂ := fun p =>
+    Quotient.lift (Sum.elim
+      (fun a => q (.inl (if ha : a ∈ C then
+        H (⟨a, ha⟩, unitInterval.symm p.1) else a)))
+      (fun b => q (.inr b))) (by
+        intro x y hxy
+        change Relation.EqvGen (GlueRel c₁ c₂) x y at hxy
+        induction hxy with
+        | rel x y h =>
+            cases h with
+            | boundary s =>
+                simp only [Sum.elim_inl, Sum.elim_inr]
+                rw [dif_pos (hiA s), hHfix s]
+                exact hglue s
+        | refl => rfl
+        | symm x y h ih => exact ih.symm
+        | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz) p.2
+  have Kraw_inl (t : unitInterval) (a : c₁.Punctured) (ha : a ∈ C) :
+      Kraw (t, q (.inl a)) =
+        q (.inl (H (⟨a, ha⟩, unitInterval.symm t))) := by
+    simp [Kraw, q, ha]
+  have Kraw_inr (t : unitInterval) (b : c₂.Punctured) :
+      Kraw (t, q (.inr b)) = q (.inr b) := by
+    simp [Kraw, q]
+  let K : unitInterval × U → U := fun p => ⟨Kraw (p.1, p.2.1), by
+    rcases p.2.2 with ⟨z, hz, heq⟩
+    rcases hz with ⟨a, ha, rfl⟩ | ⟨b, rfl⟩
+    · exact ⟨Sum.inl (H (⟨a, ha⟩, unitInterval.symm p.1)),
+        Or.inl ⟨_, hHC _, rfl⟩, by
+          rw [← heq]
+          exact (Kraw_inl p.1 a ha).symm⟩
+    · exact ⟨Sum.inr b, Or.inr ⟨b, rfl⟩, by
+          rw [← heq]
+          exact (Kraw_inr p.1 b).symm⟩⟩
+  have hK : Continuous K := by
+    apply connectedSum_standardCover_aux_left_aux_quotient_aux_continuous
+      (GlueRel c₁ c₂) U P hP hpre K
+    apply connectedSum_standardCover_aux_right_aux_quotient_aux_cont C
+      (hopen₁.preimage continuous_subtype_val)
+    · have he : (fun p : unitInterval × ↥C =>
+          K (p.1, ⟨q (Sum.inl p.2.1),
+            (Set.ext_iff.mp hpre (Sum.inl p.2.1)).mpr
+              (Or.inl ⟨p.2.1, p.2.2, rfl⟩)⟩)) =
+          fun p => (⟨q (Sum.inl (H (p.2, unitInterval.symm p.1))), by
+            exact ⟨Sum.inl (H (p.2, unitInterval.symm p.1)),
+              Or.inl ⟨_, hHC _, rfl⟩, rfl⟩⟩ : U) := by
+          funext p
+          apply Subtype.ext
+          exact Kraw_inl p.1 p.2 p.2.2
+      rw [he]
+      exact Continuous.subtype_mk
+        (continuous_coinduced_rng.comp (continuous_inl.comp
+          (H.continuous.comp (continuous_snd.prodMk
+            (unitInterval.continuous_symm.comp continuous_fst))))) _
+    · have he : (fun p : unitInterval × c₂.Punctured =>
+          K (p.1, ⟨q (Sum.inr p.2),
+            (Set.ext_iff.mp hpre (Sum.inr p.2)).mpr
+              (Or.inr ⟨p.2, rfl⟩)⟩)) =
+          fun p => (⟨q (Sum.inr p.2),
+            ⟨Sum.inr p.2, Or.inr ⟨p.2, rfl⟩, rfl⟩⟩ : U) := by
+          funext p
+          apply Subtype.ext
+          exact Kraw_inr p.1 p.2
+      rw [he]
+      exact Continuous.subtype_mk
+        (continuous_coinduced_rng.comp (continuous_inr.comp continuous_snd)) _
+  exact ⟨{
+    toFun := K
+    continuous_toFun := hK
+    map_zero_left := by
+      intro x
+      apply Subtype.ext
+      rcases x.2 with ⟨z, hz, heq⟩
+      rcases hz with ⟨a, ha, rfl⟩ | ⟨b, rfl⟩
+      · have hx : x = ⟨q (.inl a), by
+            exact ⟨Sum.inl a, Or.inl ⟨a, ha, rfl⟩, rfl⟩⟩ :=
+          Subtype.ext heq.symm
+        subst x
+        change Kraw (0, q (.inl a)) = q (.inr (f _))
+        rw [hfo ⟨a, ha⟩]
+        rw [Kraw_inl, unitInterval.symm_zero, hH1]
+        exact hglue (r ⟨a, ha⟩)
+      · have hx : x = ⟨q (.inr b), by
+            exact ⟨Sum.inr b, Or.inr ⟨b, rfl⟩, rfl⟩⟩ :=
+          Subtype.ext heq.symm
+        subst x
+        change Kraw (0, q (.inr b)) = q (.inr (f _))
+        rw [hfk b]
+        exact Kraw_inr 0 b
+    map_one_left := by
+      intro x
+      apply Subtype.ext
+      rcases x.2 with ⟨z, hz, heq⟩
+      rcases hz with ⟨a, ha, rfl⟩ | ⟨b, rfl⟩
+      · change Kraw (1, x.1) = x.1
+        rw [← heq]
+        rw [Kraw_inl (ha := show a ∈ C from ha), unitInterval.symm_one, hH0]
+      · change Kraw (1, x.1) = x.1
+        rw [← heq]
+        exact Kraw_inr 1 b }⟩
 
 /-- ASSEMBLY (from `_aux_left_aux_quotient_aux_forward` and `_aux_homotopy`). Quotient step for the left thickening: a radial retraction of the
 second collar gives a homotopy equivalence from `thickLeft` to the first
