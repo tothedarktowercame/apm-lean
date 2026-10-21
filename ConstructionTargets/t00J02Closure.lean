@@ -1760,6 +1760,33 @@ theorem measure_zero_of_subset_finite_chartCriticalPieces
 
 #print axioms measure_zero_of_subset_finite_chartCriticalPieces
 
+/-- Finite target charts reduce global bad-set nullity to chartwise transport
+and a geometric cover by their ambient critical images. -/
+theorem badSet_measure_zero_of_finite_targetCharts
+    {E F M N : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+    [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M] [SecondCountableTopology M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N] [MeasurableSpace N]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure]
+    (nu : MeasureTheory.Measure N) (g : M → N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) ∞ g)
+    {n : ℕ} (y : Fin n → N) (bad : Set N)
+    (htransport : ∀ i s, mu s = 0 → nu ((chartAt F (y i)).symm '' s) = 0)
+    (hcover : bad ⊆ ⋃ i, g '' {x | x ∈ targetChartDomain (F := F) g (y i)
+      hg.continuous ∧ ¬ Function.Surjective (mfderiv (modelWithCornersSelf ℝ E)
+        (modelWithCornersSelf ℝ F) ((chartAt F (y i)) ∘ g) x)}) :
+    nu bad = 0 := by
+  apply measure_zero_of_subset_finite_chartCriticalPieces nu bad _ hcover
+  intro i
+  exact targetChart_ambientCriticalImage_null mu nu g (y i) hg (htransport i)
+
+#print axioms badSet_measure_zero_of_finite_targetCharts
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
