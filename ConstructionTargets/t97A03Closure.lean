@@ -467,6 +467,33 @@ theorem coveringMonodromy_transitive_of_connected
   letI : LocPathConnectedSpace Y := IsCoveringMap.locPathConnectedSpace hp
   exact coveringMonodromy_transitive_of_connected_locPath p hp a b
 
+/-- In a connected two-sheeted covering of a locally path-connected base,
+the two distinct points over any basepoint are related by monodromy.  The
+endpoint equalities expose the remaining cast needed to package this as a
+literal based loop. -/
+theorem exists_distinct_fiber_points_related_by_monodromy
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [LocPathConnectedSpace X] [ConnectedSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p)
+    (hdegree : ∀ x : X, Nat.card (p ⁻¹' ({x} : Set X)) = 2) (x : X) :
+    ∃ a b : Y, p a = x ∧ p b = x ∧ a ≠ b ∧
+      ∃ γ : Path.Homotopic.Quotient (p a) (p b),
+        hp.monodromy γ (⟨a, rfl⟩ : p ⁻¹' ({p a} : Set X)) =
+          (⟨b, rfl⟩ : p ⁻¹' ({p b} : Set X)) := by
+  obtain ⟨label⟩ := fiber_equiv_fin_two p hdegree x
+  let a : p ⁻¹' ({x} : Set X) := label.symm 0
+  let b : p ⁻¹' ({x} : Set X) := label.symm 1
+  have ha : p a.1 = x := a.2
+  have hb : p b.1 = x := b.2
+  have hab : a ≠ b := by
+    intro h
+    have := congrArg label h
+    simpa [a, b] using this
+  refine ⟨a.1, b.1, ha, hb, ?_, ?_⟩
+  · intro h
+    exact hab (Subtype.ext h)
+  · exact coveringMonodromy_transitive_of_connected p hp a.1 b.1
+
 /-- Transport along the constant path is the identity equivalence of the
 literal fiber. -/
 theorem coveringPathFiberEquiv_refl
@@ -583,6 +610,7 @@ theorem twoArcModel_exists_of_covering_loops
 #print axioms IsLocalHomeomorph.locPathConnectedSpace
 #print axioms IsCoveringMap.locPathConnectedSpace
 #print axioms coveringMonodromy_transitive_of_connected
+#print axioms exists_distinct_fiber_points_related_by_monodromy
 #print axioms coveringPathFiberEquiv_refl
 #print axioms coveringPathFiberEquiv_trans
 #print axioms twoArcModel_exists_of_covering_loops
