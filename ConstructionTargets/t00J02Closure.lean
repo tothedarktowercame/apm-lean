@@ -3368,6 +3368,35 @@ theorem topHomologyMap_eq_zero_of_exists_locallyInjective_calculations
 
 #print axioms topHomologyMap_eq_zero_of_exists_locallyInjective_calculations
 
+/-- Incidence-projection regularity supplies the selected locally injective
+fiber, so canonical component and signed-count calculations alone imply H₂
+vanishing. -/
+theorem topHomologyMap_eq_zero_of_incidenceProjection_calculations
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S] [IsManifold SurfaceModelWithCorners ∞ S]
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1)))
+    [mu.IsAddHaarMeasure]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (hcalculations : ∀ y (hy : y ∈ Set.range c)
+      (hlocal : LocallyInjectiveAlongFiber f y),
+      letI := regularFiberFintype_of_locallyInjectiveAlongFiber f y hlocal
+      CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) :
+    homologyMap 2 f = 0 :=
+  topHomologyMap_eq_zero_of_exists_locallyInjective_calculations f c e
+    (exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection
+      mu f c hf hc htrans) hcalculations
+
+#print axioms topHomologyMap_eq_zero_of_incidenceProjection_calculations
+
 /-- Direct composition of Sard nullity on the circle parameter with the
 canonical signed-count calculation interface. -/
 theorem topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations
