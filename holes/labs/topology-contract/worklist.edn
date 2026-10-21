@@ -119202,6 +119202,18 @@
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 1,
       :finding "Added explicit dependent f,c,y parameters."}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792576135536-540-66b1fce6",
+     :commands
+     ["git show/diff 4ffbf7019"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 4ffbf7019 changes only t00J02Closure.lean (+27), adding a compiled canonical calculation-bundle constructor after prior history. Fixture afb497a6, source 0b3b4888, implementation 83551a6a, registry 170/170, and placeholders closure=0/Main=1 reproduce. The structure boundary is faithful: the comparison bridge supplies component_sum_eq_zero, and the supplied signed-count formula supplies topDegree_eq; all indices share f,c,y,hy. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; deriving comparison/global identity/Sard nullity and final assembly remain listed."},
     :commit "4ffbf7019",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119210,7 +119222,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119228,7 +119240,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical component-sum vanishing bridge.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical calculation bundle constructor.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119495,7 +119507,10 @@
      :reason "Banked Sard/calculation composition."}
     {:job 5,
      :commit "fe0dca6b8d4504603e251a9775756617b64e6cf7",
-     :reason "Banked canonical component-sum vanishing bridge."}]}
+     :reason "Banked canonical component-sum vanishing bridge."}
+    {:job 6,
+     :commit "4ffbf7019",
+     :reason "Banked canonical calculation bundle constructor."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -121996,7 +122011,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -122010,7 +122025,9 @@
     :type
     "exact-lift component comparison plus top signed-count identity constructs canonical calculations",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "4ffbf7019"},
    :id
    :lemma-canonicalregularfiberdegreecalculations-ofcomponentcomparison,
    :kind :lemma,
