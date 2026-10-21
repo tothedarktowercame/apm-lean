@@ -88678,17 +88678,17 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "map; homology; normalization",
+    :residual "map/range/injective; homology; normalization",
     :outcome :stop,
     :warnings ["lint"],
     :missing-theorems
-    [{:name "frozenBoundaryGraphH1CycleComparison_of_data",
-      :type "D",
+    [{:name "frozenBoundaryGraphH1Cycle_of_range",
+      :type "range=ker implies cycle",
       :status :proved,
       :consumers [:t94J09],
       :depends-on [],
@@ -88697,7 +88697,7 @@
       :type "C",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenBoundaryGraphH1CycleComparison_of_data"],
+      :depends-on ["frozenBoundaryGraphH1Cycle_of_range"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "T",
@@ -88721,39 +88721,24 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked H1 data wrapper.",
+    :reason
+    "Banked cycle-from-range; construct comparison map, injectivity, exact range.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 0}
-     {:cmd "git show --check 66dc03a75", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial Main compile",
-      :exit 1,
-      :correction "built missing PolygonMoves olean"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792569345351-447-6a3a7b4f",
-     :commands
-     ["git show/check/hash 66dc03a75"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "placeholder/axiom/orientation inspection"],
-     :finding
-     "PASS: reviewed 66dc03a75 by topo-6, new after history 8e89154c4; patch scope only t94J09Closure (+16). Fixture dc7576cb... matches; STATEMENTS digest 731cfbf6... unchanged; registry 170/0; closure/Main placeholders 0/0. Fresh detached closure build and Main compile pass. New wrapper faithfully maps underlying integral H1 via a cycle/injective/exact-range map into Fin 7 coordinates, yielding the correctly oriented H1 ~= Fin 6 linear equivalence; axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists map/comparison/homology/normalization milestones."},
-    :commit "66dc03a75",
+     {:cmd "git show --check ec84da6a0", :exit 0}],
+    :commit "ec84da6a0",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "dc7576cbc0dee6d243028210ee39ae91b65b752a3667818d257778980dbe9b1a"},
+     "ac77088c01d6e180644b96d8a2fc980772152115ab43a9245b5026a5331ce916"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98722,7 +98707,8 @@
     :lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison
     :lemma-frozengeneratormvreassemblylinear-comp-coordinates
     :lemma-frozengeneratorcanonicalmoduleh1equivconcrete
-    :lemma-frozenboundarygraphh1cyclecomparison-of-data],
+    :lemma-frozenboundarygraphh1cyclecomparison-of-data
+    :lemma-frozenboundarygraphh1cycle-of-range],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -99635,6 +99621,23 @@
     :banked-by :program-2026-10-13-close-t94j09,
     :banked-commit "66dc03a75"},
    :id :lemma-frozenboundarygraphh1cyclecomparison-of-data,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphH1Cycle_of_range",
+    :type "range=ker implies cycle"},
+   :lemma
+   {:name "frozenBoundaryGraphH1Cycle_of_range",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "range=ker implies cycle",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenboundarygraphh1cycle-of-range,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
