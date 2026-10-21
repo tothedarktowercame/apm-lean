@@ -89382,29 +89382,29 @@
   {:consumer :t97A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "upgrade connected cover to path connected; reduce projected paths to two chosen loops; realize quotient homeomorphism; compute invariants",
+    "prove local path-connectedness from covering charts; reduce paths to chosen loops; realize quotient homeomorphism; compute invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "coveringMonodromy_transitive_of_pathConnected",
+    [{:name "coveringMonodromy_transitive_of_connected_locPath",
       :type
-      "paths upstairs make covering monodromy transitive on endpoints",
+      "connected locally path-connected total space has endpoint-transitive monodromy",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on [],
+      :depends-on ["coveringMonodromy_transitive_of_pathConnected"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "connected double-cover classification",
       :status :partial,
       :consumers [:t97A03],
       :depends-on
-      ["coveringMonodromy_transitive_of_pathConnected"
+      ["coveringMonodromy_transitive_of_connected_locPath"
        "twoArcModel_exists_of_moved_covering_loop"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
@@ -89418,34 +89418,22 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked monodromy transitivity from paths in the total space.",
+    "Banked connected locally-path-connected cover to monodromy transitivity.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan; git show --check; sha256sum", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792597431279-1062-b7f85ab6",
-     :commands
-     ["git show/diff-tree 921d40caa"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint; sha256sum; placeholder scan"],
-     :finding
-     "PASS: topo-6 commit 921d40caa changes only t97A03Closure after history 0450e4bee; fixture SHA 2e75e0dd... matches. An actual upstairs path is projected and Mathlib monodromy_map correctly proves endpoint transport, yielding genuine transitivity under PathConnectedSpace Y without conflating it with the frozen ConnectedSpace hypothesis. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; path-connected upgrade, reduction to chosen loops, quotient realization, and invariants remain listed."},
-    :commit "921d40caa",
+    :commit "cc53ce30c",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "2e75e0dd28848bf310ce58037bc0057f1f825c6431714f926165e1f75e2793f0"},
+     "d1425880eaf5cf127a17688c2a92c9a2e2611d981ea4b400dcb578055ac5a1a3"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98453,7 +98441,8 @@
     :lemma-twoarcmodel-exists-of-fiber-transports
     :lemma-twoarcmodel-exists-of-covering-loops
     :lemma-twoarcmodel-exists-of-moved-covering-loop
-    :lemma-coveringmonodromy-transitive-of-pathconnected],
+    :lemma-coveringmonodromy-transitive-of-pathconnected
+    :lemma-coveringmonodromy-transitive-of-connected-locpath],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -100315,4 +100304,23 @@
    :id :lemma-coveringmonodromy-transitive-of-pathconnected,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "coveringMonodromy_transitive_of_connected_locPath",
+    :type
+    "connected locally path-connected total space has endpoint-transitive monodromy"},
+   :lemma
+   {:name "coveringMonodromy_transitive_of_connected_locPath",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type
+    "connected locally path-connected total space has endpoint-transitive monodromy",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-coveringmonodromy-transitive-of-connected-locpath,
+   :kind :lemma,
+   :depends-on [:lemma-coveringmonodromy-transitive-of-pathconnected],
    :other-consumers []}]}
