@@ -119152,65 +119152,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Specialize nullity to Circle, select a regular value, then signed counts and Main.",
+    "Construct one nonzero Circle measure transporting all chart-null sets; then signed counts and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
-    [{:name "globalCriticalValues_measure_zero_of_targetCharts",
-      :type
-      "global critical values are null from finite target charts",
+    [{:name "exists_mfderiv_surjective_fiber_of_targetCharts",
+      :type "null transport selects regular fiber",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["badSet_measure_zero_of_finite_targetChart_witnesses"
-       "finite_targetChart_witness_of_globalCriticalValue"],
+      ["globalCriticalValues_measure_zero_of_targetCharts"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["globalCriticalValues_measure_zero_of_targetCharts"
-       "circleHaarMeasure_ne_zero"
+      ["exists_mfderiv_surjective_fiber_of_targetCharts"
+       "circleChartTransition_image_null"
        "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "692935828c6faae148867a49b0b611d5ab15c04cb37a8348b22ec8b618d16eb1",
+     "ba7b95765e1216d95ba0b98900aafc45b50204ee0f3bd1d416298a52ef36f373",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked global critical-value nullity.",
+    :reason "Banked regular-value selector.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hashes/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792608333886-1330-092f3365",
-     :commands
-     ["git show/diff 836e08af"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 836e08af changes only t00J02Closure.lean (+27), adding compiled global critical-value nullity after prior history abd47c09. Fixture afb497a6, source 0b3b4888, implementation 69293582; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: compactness supplies the finite target-chart cover; each global critical value obtains a chart-critical witness; chart-coordinate mu-nullity is transported to nu-nullity, and finite aggregation proves the image of the global non-surjective locus is nu-null. F/M/N and mu/nu roles remain distinct. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; Circle specialization, regular-value selection, signed counts, and final assembly remain listed."},
-    :commit "836e08afe8e05bb21554ee228dbe7bcff5a8ec37",
+     {:cmd "hashes/diff", :exit 0}],
+    :commit "882630364cb2fec87f25b26d2c7806ddf21849b9",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119218,7 +119204,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119887,7 +119873,8 @@
     :lemma-exists-finset-chartat-source-cover
     :lemma-exists-fin-chartat-source-cover
     :lemma-finite-targetchart-witness-of-globalcriticalvalue
-    :lemma-globalcriticalvalues-measure-zero-of-targetcharts],
+    :lemma-globalcriticalvalues-measure-zero-of-targetcharts
+    :lemma-exists-mfderiv-surjective-fiber-of-targetcharts],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122832,6 +122819,24 @@
    :depends-on
    [:lemma-badset-measure-zero-of-finite-targetchart-witnesses
     :lemma-finite-targetchart-witness-of-globalcriticalvalue],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_mfderiv_surjective_fiber_of_targetCharts",
+    :type "null transport selects regular fiber"},
+   :lemma
+   {:name "exists_mfderiv_surjective_fiber_of_targetCharts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "null transport selects regular fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-mfderiv-surjective-fiber-of-targetcharts,
+   :kind :lemma,
+   :depends-on
+   [:lemma-globalcriticalvalues-measure-zero-of-targetcharts],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
