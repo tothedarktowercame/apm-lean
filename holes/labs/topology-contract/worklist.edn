@@ -119197,6 +119197,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes; placeholders; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792606867058-1290-52af0323",
+     :commands
+     ["git show/diff 5725057f"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 5725057f changes only t00J02Closure.lean (+20), adding a compiled Fin-indexed canonical chart cover after prior history 9db44d71. Fixture afb497a6, source 0b3b4888, implementation ba8f8a91; registry 170/170; placeholders closure=0/Main=1. Orientation and representation are exact: the prior Finset cover is enumerated through Fintype.equivFin on its membership subtype, and every covered z is transported to the corresponding Fin index with the same chart source. Empty and duplicate-free finite cases are handled by the subtype equivalence. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; connecting the cover to critical witnesses, signed counts, and final assembly remain listed."},
     :commit "5725057f8703d9e00f44927e9233205fa5f8f1e2",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite canonical chart cover.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Fin-indexed chart cover.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119564,7 +119576,10 @@
      :reason "Banked chart-envelope nullity."}
     {:job 3,
      :commit "9db44d712583e4e4f868cac72ad341fb8f166f09",
-     :reason "Banked finite canonical chart cover."}]}
+     :reason "Banked finite canonical chart cover."}
+    {:job 4,
+     :commit "5725057f8703d9e00f44927e9233205fa5f8f1e2",
+     :reason "Banked Fin-indexed chart cover."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122750,7 +122765,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_fin_chartAt_source_cover",
@@ -122762,7 +122777,9 @@
     :type
     "compact charted target has Fin-indexed canonical chart-source cover",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "5725057f8703d9e00f44927e9233205fa5f8f1e2"},
    :id :lemma-exists-fin-chartat-source-cover,
    :kind :lemma,
    :depends-on [:lemma-exists-finset-chartat-source-cover],
