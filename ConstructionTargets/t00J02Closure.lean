@@ -3849,6 +3849,36 @@ theorem surfaceTopDegree_eq_zero_of_diskBounded_comparison
     (canonicalComponentSums_eq_zero_of_diskBounded_comparison
       f c hc eS hessential hdisks y hy e hcomparison) htop
 
+/-- Final top-homology assembly from the two geometric regular-fiber
+identities: component comparison and the signed top-degree formula. -/
+theorem topHomologyMap_eq_zero_of_diskBounded_degreeFormula
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k =
+      exactLiftComponentDegree
+        (occupiedRegularFiber_exactZeroDegreeLifts
+          f c hc eS hessential hdisks y hy) k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x) :
+    homologyMap 2 f = 0 :=
+  surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero e f
+    (surfaceTopDegree_eq_zero_of_diskBounded_comparison
+      f c hc eS hessential hdisks y hy e orientationSign hcomparison htop)
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3872,6 +3902,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberSignedSum_eq_zero_of_componentSums
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_diskBounded_comparison
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_degreeFormula
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
