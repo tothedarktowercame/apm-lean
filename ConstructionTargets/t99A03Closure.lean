@@ -54,6 +54,30 @@ theorem n3ParityCharacter_generator_ne_one :
     n3ParityCharacter (FreeGroup.of (0 : Fin 3)) ≠ 1 := by
   simp [n3ParityCharacter, n3ParityGenerator]
 
+/-- The standard one-relator presentation of the genus-three nonorientable
+surface group. -/
+abbrev N3PresentedGroup :=
+  PresentedGroup ({n3CrosscapRelator} : Set (FreeGroup (Fin 3)))
+
+/-- The parity character genuinely descends through the crosscap relator;
+this is the index-two algebraic datum used by the future cover realization. -/
+def n3PresentedParityCharacter :
+    N3PresentedGroup →* Multiplicative (ZMod 2) :=
+  PresentedGroup.toGroup (f := n3ParityGenerator) (by
+    intro r hr
+    rw [Set.mem_singleton_iff] at hr
+    subst r
+    simpa [n3ParityCharacter] using n3ParityCharacter_crosscapRelator)
+
+@[simp] theorem n3PresentedParityCharacter_generator (i : Fin 3) :
+    n3PresentedParityCharacter (PresentedGroup.of i) = n3ParityGenerator i := by
+  simp [n3PresentedParityCharacter]
+
+/-- Descent has not collapsed the selected sheet-changing generator. -/
+theorem n3PresentedParityCharacter_generator_ne_one :
+    n3PresentedParityCharacter (PresentedGroup.of (0 : Fin 3)) ≠ 1 := by
+  simp [n3ParityGenerator]
+
 /-- A nonidentity deck transformation of a connected covering has no fixed
 point, by uniqueness of lifts against the identity map. -/
 theorem deckTransformation_fixedPointFree
@@ -86,5 +110,6 @@ theorem exists_fixedPointFree_selfMap_of_deckData
 #print axioms exists_fixedPointFree_selfMap_of_deckData
 #print axioms n3ParityCharacter_crosscapRelator
 #print axioms n3ParityCharacter_generator_ne_one
+#print axioms n3PresentedParityCharacter_generator_ne_one
 
 end ConstructionTargets.t99A03Closure
