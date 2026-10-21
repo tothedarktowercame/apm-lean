@@ -36711,25 +36711,25 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Extract vanishing, finite dimension, and even generators from transported LES.",
+    "Prove degreewise surjectivity/vanishing, then even generator equivalences.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name
-      "t99J05_cp_successor_mayerVietoris_exact_ambient_transport",
-      :type "exactness at literal CP successor homology",
+    [{:name "t99J05_finiteDimensional_middle_of_exact_of_surjective",
+      :type
+      "exact X→Y→Z, finite X/Z and surjective g imply finite-dimensional Y",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_union_transport"],
+      ["t99J05_cp_successor_mayerVietoris_exact_ambient_transport"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
@@ -36737,49 +36737,34 @@
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_mayerVietoris_exact_ambient_transport"
-       "t99J05_cp_successor_overlap_rational_topHomology"],
+       "t99J05_cp_successor_overlap_rational_topHomology"
+       "t99J05_finiteDimensional_middle_of_exact_of_surjective"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Stale review: current descendant 17ef03cbb compiles; exactness is sorry-free. Dimension extraction remains.",
+    "Committed finite-dimensional exact-segment extraction; degreewise MV specialization remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd "rg -n sorryAx ConstructionTargets/t99J05Closure.lean",
-      :exit 1,
-      :expected-exit 1}],
+     {:cmd "git diff --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "review of obsolete 627186991",
+    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :correction
-      "17ef03cbb qualifies category names and discharges exactness goals"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792591396699-898-563da43e",
-     :commands
-     ["git show/numstat 17ef03cbb"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check 17ef03cbb^ 17ef03cbb"],
-     :finding
-     "PASS: 17ef03cbb actually adds 36 lines to scoped Closure (ledger changed-paths [] is stale); fixture/blob SHA matches 09537732.... The adjacent LES segment is oriented patches H(k+1) → successor H(k+1) → overlap H(k), with each representation transported by the established patch, union-successor, and intersection isos. Zero is inherited from comp_delta, and exactness follows by the standard transport theorem. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Exactness milestone is proved and dimension extraction remains listed."},
-    :commit "17ef03cbb",
-    :changed-paths [],
+      "reversed exactness equality and fixed explicit ModuleCat endpoints"}],
+    :commit "9ec870229a",
+    :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "095377320dd976e896af3bb6f3519a21f249c10306fc948efa1be7fcd99d56c5"},
+     "3b1a32f79f2852462d8f8424b9ffe757f5098ec200b03906cb317e0a2577b203"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48807,7 +48792,8 @@
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-union-transport
     :lemma-t99j05-cp-successor-overlap-rational-tophomology
-    :lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport],
+    :lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport
+    :lemma-t99j05-finitedimensional-middle-of-exact-of-surjective],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -48894,6 +48880,26 @@
    :id :lemma-apm-t96j05-regular-radius-level,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_finiteDimensional_middle_of_exact_of_surjective",
+    :type
+    "exact X→Y→Z, finite X/Z and surjective g imply finite-dimensional Y"},
+   :lemma
+   {:name "t99J05_finiteDimensional_middle_of_exact_of_surjective",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "exact X→Y→Z, finite X/Z and surjective g imply finite-dimensional Y",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-finitedimensional-middle-of-exact-of-surjective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
