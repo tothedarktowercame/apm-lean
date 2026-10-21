@@ -36752,6 +36752,19 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792594741760-996-2c403e7a",
+     :commands
+     ["git show/diff-tree 80ae0c0962"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 80ae0c0962^ 80ae0c0962"],
+     :finding
+     "PASS: new commit 80ae0c0962 changes only scoped Closure; fixture/blob SHA matches 00f0f6be.... The adapter faithfully converts ShortComplex.Exact to Function.Exact: LinearMap.exact_iff requires range f = ker g, while moduleCat_range_eq_ker supplies the reverse equality, hence .symm is correctly oriented. It then invokes the proved finite-middle lemma with the same three objects. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Adapter milestone is proved and degreewise CP application remains listed."},
     :commit "80ae0c0962",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36760,7 +36773,7 @@
      "00f0f6be107cdd063a87822f7378a39279f978baf71178c99da31a24ae2d4400"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36778,7 +36791,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed finite extraction when the right term vanishes; degreewise use remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed direct ShortComplex exactness adapter; degreewise CP application remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36953,7 +36966,11 @@
     {:job 3,
      :commit "2ebc848f92",
      :reason
-     "Committed finite extraction when the right term vanishes; degreewise use remains."}]}
+     "Committed finite extraction when the right term vanishes; degreewise use remains."}
+    {:job 4,
+     :commit "80ae0c0962",
+     :reason
+     "Committed direct ShortComplex exactness adapter; degreewise CP application remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48952,7 +48969,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -48966,7 +48983,9 @@
     :type
     "exact ModuleCat short complex with finite left and zero right has finite middle",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "80ae0c0962"},
    :id
    :lemma-t99j05-shortcomplex-finitedimensional-middle-of-subsingleton,
    :kind :lemma,
