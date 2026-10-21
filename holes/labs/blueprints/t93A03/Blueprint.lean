@@ -1,5 +1,6 @@
 import Mathlib
 import ConstructionTargets.PointWedgeVanKampen
+import ConstructionTargets.CollaredConnectedSumHomology
 
 /-! # Blueprint for the repaired APM t93A03 statement. -/
 
@@ -47,6 +48,71 @@ noncomputable instance
     TopologicalSpace (T93A03ConnectedSum φ₁ φ₂) :=
   TopologicalSpace.coinduced (fun z ↦ Quotient.mk _ z) inferInstance
 
+namespace T93A03PiOne
+
+open ConstructionTargets.CollaredConnectedSumHomology
+
+/-- A concrete basepoint on the gluing two-sphere. -/
+def sphereBasepoint : Sphere 3 :=
+  ⟨EuclideanSpace.single 0 1, by
+    simp [Metric.mem_sphere, EuclideanSpace.norm_eq, Fin.sum_univ_succ]⟩
+
+/-- **LEAF (P1).** The frozen quotient presentation is the generic
+collared connected sum built from the same small maps. -/
+theorem quotientHomeomorph
+    (φ₁ φ₂ : T93A03Disk → T93A03Summand)
+    (c₁ c₂ : BallCollar 3 T93A03Summand)
+    (hc₁ : c₁.smallMap = φ₁) (hc₂ : c₂.smallMap = φ₂) :
+    Nonempty (T93A03ConnectedSum φ₁ φ₂ ≃ₜ ConnectedSum c₁ c₂) := by
+  sorry
+
+/-- **LEAF (P2).** The product `S¹ × S²`, viewed as a three-manifold
+through an `E 1 × E 2 ≃ E 3` model change, has an open, path-connected
+collared puncture. -/
+theorem puncturedGeometry (c : BallCollar 3 T93A03Summand) :
+    IsOpen c.radialTwo ∧ PathConnectedSpace c.Punctured := by
+  sorry
+
+/-- **LEAF (P3).** A collared puncture of `S¹ × S²` has the
+rank-one free fundamental group, at the boundary basepoint. -/
+theorem puncturedPiOne (c : BallCollar 3 T93A03Summand)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    Nonempty (FundamentalGroup c.Punctured (c.boundaryMap sphereBasepoint) ≃*
+      FreeGroup (Fin 1)) := by
+  sorry
+
+/-- **LIBRARY (P4).** Based van Kampen for the standard connected-sum cover.
+This is the generic two-open free-product boundary missing from the existing
+fundamental-groupoid pseudopushout API. -/
+theorem standardCoverPiOneFreeProduct
+    (c₁ c₂ : BallCollar 3 T93A03Summand)
+    (hcover : HasStandardCover c₁ c₂)
+    (e₁ : FundamentalGroup c₁.Punctured (c₁.boundaryMap sphereBasepoint) ≃*
+      FreeGroup (Fin 1))
+    (e₂ : FundamentalGroup c₂.Punctured (c₂.boundaryMap sphereBasepoint) ≃*
+      FreeGroup (Fin 1)) :
+    ∃ x : ConnectedSum c₁ c₂,
+      Nonempty (FundamentalGroup (ConnectedSum c₁ c₂) x ≃*
+        Monoid.Coprod (FreeGroup (Fin 1)) (FreeGroup (Fin 1))) := by
+  sorry
+
+/-- **LEAF (P5).** The free product of two rank-one free groups is the
+rank-two free group. -/
+theorem twoRankOneFreeProduct :
+    Nonempty (Monoid.Coprod (FreeGroup (Fin 1)) (FreeGroup (Fin 1)) ≃*
+      FreeGroup (Fin 2)) := by
+  sorry
+
+/-- **LEAF (P6).** Transport a based fundamental-group computation across
+a homeomorphism, allowing the basepoint to move to its inverse image. -/
+theorem transportPiOne {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (y : Y) (G : Type*) [Group G]
+    (h : Nonempty (FundamentalGroup Y y ≃* G)) :
+    Nonempty (FundamentalGroup X (e.symm y) ≃* G) := by
+  sorry
+
+end T93A03PiOne
+
 /-- **LIBRARY.** Van Kampen for the concrete collared connected sum, including
 the punctured-summand comparisons and the two circle computations. -/
 theorem t93A03_collaredConnectedSum_piOne
@@ -61,7 +127,34 @@ theorem t93A03_collaredConnectedSum_piOne
     ∃ x : T93A03ConnectedSum φ₁ φ₂,
       Nonempty (FundamentalGroup (T93A03ConnectedSum φ₁ φ₂) x ≃*
         FreeGroup (Fin 2)) := by
-  sorry
+  open ConstructionTargets.CollaredConnectedSumHomology in
+    rcases hcollar₁ with ⟨ψ₁, hψ₁, hcompat₁⟩
+    rcases hcollar₂ with ⟨ψ₂, hψ₂, hcompat₂⟩
+    let c₁ : BallCollar 3 T93A03Summand :=
+      { smallMap := φ₁
+        largeMap := ψ₁
+        smallEmbedding := hφ₁
+        largeEmbedding := hψ₁
+        compatible := funext hcompat₁ }
+    let c₂ : BallCollar 3 T93A03Summand :=
+      { smallMap := φ₂
+        largeMap := ψ₂
+        smallEmbedding := hφ₂
+        largeEmbedding := hψ₂
+        compatible := funext hcompat₂ }
+    obtain ⟨hopen₁, hpath₁⟩ := T93A03PiOne.puncturedGeometry c₁
+    obtain ⟨hopen₂, hpath₂⟩ := T93A03PiOne.puncturedGeometry c₂
+    letI := hpath₁
+    letI := hpath₂
+    let hcover := BallCollar.connectedSum_standardCover c₁ c₂ hopen₁ hopen₂
+    obtain ⟨e₁⟩ := T93A03PiOne.puncturedPiOne c₁ hopen₁ hpath₁
+    obtain ⟨e₂⟩ := T93A03PiOne.puncturedPiOne c₂ hopen₂ hpath₂
+    obtain ⟨y, ⟨evk⟩⟩ :=
+      T93A03PiOne.standardCoverPiOneFreeProduct c₁ c₂ hcover e₁ e₂
+    obtain ⟨ealg⟩ := T93A03PiOne.twoRankOneFreeProduct
+    obtain ⟨eq⟩ := T93A03PiOne.quotientHomeomorph φ₁ φ₂ c₁ c₂ rfl rfl
+    refine ⟨eq.symm y, ?_⟩
+    exact T93A03PiOne.transportPiOne eq y (FreeGroup (Fin 2)) ⟨evk.trans ealg⟩
 
 /-- A fundamental-group equivalence with a nontrivial free group obstructs
 simple connectivity. -/

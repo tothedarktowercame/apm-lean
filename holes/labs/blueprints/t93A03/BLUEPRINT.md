@@ -52,52 +52,98 @@ definitions are `T93A03CollarBall` (the radius-two ball) and
 `t93A03DiskInCollarBall` (the literal radius-one inclusion).  No definition
 packages a fundamental-group or non-simple-connectivity conclusion.
 
-The blueprint imports the sorry-free
-`ConstructionTargets.PointWedgeVanKampen` foundation.  That module supplies
-the generic point-wedge van Kampen infrastructure already built by the
-topology program; it does not yet supply the connected-sum collar comparison
-needed here.
+The blueprint imports `ConstructionTargets.CollaredConnectedSumHomology` and
+uses its `BallCollar`, `ConnectedSum`, `HasStandardCover`, and
+`BallCollar.connectedSum_standardCover` interfaces.  It also retains
+`ConstructionTargets.PointWedgeVanKampen`, whose generic groupoid machinery
+is the closest existing foundation for the one remaining van Kampen leaf.
 
 ## Lemmas
 
-### `t93A03_collaredConnectedSum_piOne` — LIBRARY
+### `T93A03PiOne.quotientHomeomorph` (P1) — leaf
 
-**Statement.** Given two embedded three-balls in `S¹ × S²`, each extending to
-an embedded radius-two ball, the concrete glued quotient has a basepoint at
-which its fundamental group is multiplicatively equivalent to
-`FreeGroup (Fin 2)`.
+The frozen quotient is homeomorphic to `ConnectedSum c₁ c₂` when the
+collars' small maps are `φ₁,φ₂`.  Estimate: 40–80 lines.  Follow
+`T98A02Adapter.quotientHomeomorph` and
+`PointWedgeQuotient.quotientHomeomorphOfRelIff`.  The relation orientation is
+identical (left boundary to right boundary); `dist u 0 = ‖u‖` reconciles the
+puncture predicates.  Independent of P2–P6.
 
-**Why true.** Use each radius-two extension to construct an open collar cover
-of the quotient.  The left and right pieces deformation-retract to the two
-punctured summands and their intersection retracts to `S²`.  Removing the
-collared ball does not change `π₁(S¹ × S²)`, and the product projection plus
-the simple connectivity of `S²` computes each piece's group as `ℤ`.  The
-intersection is simply connected.  Van Kampen therefore gives the free
-product `ℤ * ℤ`, identified with `FreeGroup (Fin 2)`.
+### `T93A03PiOne.puncturedGeometry` (P2) — leaf
 
-The closest sorry-free foundation is
-`ConstructionTargets.PointWedgeVanKampen`: it contains the generic two-open
-fundamental-groupoid/free-product machinery and the circle-coordinate work.
-What is missing is the collared connected-sum open cover, its three deformation
-equivalences, and the punctured-`S¹ × S²` comparison.  This is a genuine
-300+ line library program (the fundamental-group analogue of
-`program-2026-10-13-collared-connected-sum-homology`), so it is stated once
-rather than split into adapters that would conceal their shared geometric
-dependency.
+Every three-ball collar in `S¹ × S²` has open radius-two image and
+path-connected puncture.  Estimate: 80–150 lines.  Build the usual product
+manifold using `ChartedSpace.prod` and `IsManifold.prod`, then change its model
+from `ModelProd (E 1) (E 3)`/the sphere model to `E 3` along the coordinate
+continuous linear equivalence; apply
+`BallCollar.largeInterior_isOpen` and
+`BallCollar.punctured_pathConnected 3 (by omega)`.  This model-change is the
+risky implementation point: Mathlib has product charts, but no searched
+one-line `ChartedSpace.comp` declaration, so the atlas transport may occupy
+most of the estimate.  Independent of P1 and P3–P6.
 
-**Estimate.** 600–1,200 lines across a reusable collared connected-sum module;
-under 100 lines for this specialization after that module exists.
+### `T93A03PiOne.puncturedPiOne` (P3) — leaf
 
-**Dependencies.** None among the blueprint lemmas.  External dependency:
-`ConstructionTargets.PointWedgeVanKampen` plus the missing collared connected-
-sum comparison program.
+At the explicit boundary point, the puncture has fundamental group
+`FreeGroup (Fin 1)`.  Estimate: 90–150 lines.  Apply
+`BallCollar.punctured_fundamentalGroup_three`, then compute the product group:
+the circle factor uses
+`CircleUniversalCover.circleFundamentalGroupMulEquivInt`; the sphere factor is
+trivial using `SimplyConnectedOpenCover.simplyConnectedSpace_sphere_of_pole`;
+finish with `PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne` and
+`FundamentalGroup.fundamentalGroupMulEquivOfPathConnected` for basepoint
+changes.  It takes P2's conclusions explicitly, so it can be proved in
+parallel and does not acquire P2's sorry axiom.
 
-**Truth check.** For standard coordinate balls, the hand van Kampen
-calculation is `π₁ = ℤ *_{1} ℤ = F₂`.  The overlap contributes no relation
-because `π₁(S²) = 1`.  A single summand already contributes a nontrivial
-generator, and the two inclusions give the two distinct free generators.  The
-collar hypotheses explicitly eliminate the only geometric degeneracy found in
-triage (wild embedded balls without usable exterior neighborhoods).
+### `T93A03PiOne.standardCoverPiOneFreeProduct` (P4) — LIBRARY
+
+For a `HasStandardCover`, if both puncture groups at the boundary basepoint
+are rank one free, the connected sum has group their free product.  Estimate:
+120–150 lines.  This is the only genuinely generic van Kampen boundary.
+Start from
+`TwoOpenFundamentalGroupoidPseudopushout.twoOpenFundamentalGroupoidPseudopushoutEquivalence`,
+use the three homotopy equivalences stored in `HasStandardCover`, trivialize
+the overlap with
+`SimplyConnectedOpenCover.simplyConnectedSpace_sphere_of_pole`, and extract
+the automorphism group via
+`PointWedgeVanKampen.fundamentalGroupMulEquivOfSingleObjEquivalence`.
+The cover inclusions are already homotopic to the two boundary maps, so the
+basepoint transports are explicit rather than silently identified.
+Independent of P1, P2, P5, and P6; P3's two conclusions are explicit
+hypotheses.  This leaf remains marked LIBRARY because no ready-made based
+two-open free-product theorem was found.
+
+### `T93A03PiOne.twoRankOneFreeProduct` (P5) — leaf
+
+`FreeGroup (Fin 1) * FreeGroup (Fin 1) ≃ FreeGroup (Fin 2)`.  Estimate:
+20–40 lines.  Use
+`PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum (Fin 1) (Fin 1)`, then
+transport generators along the standard equivalence
+`Fin 1 ⊕ Fin 1 ≃ Fin 2` with `FreeGroup.map_injective` and
+`FreeGroup.map_surjective`.  Independent of every other leaf.
+
+### `T93A03PiOne.transportPiOne` (P6) — leaf
+
+A homeomorphism transports a based fundamental-group equivalence to its
+inverse-image basepoint.  Estimate: 20–40 lines.  Use `FundamentalGroup.map`
+for the two continuous maps (or the already proved
+`BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph`).
+Independent of every other leaf.
+
+### `t93A03_collaredConnectedSum_piOne` — assembled, no `sorry`
+
+The proof constructs the two `BallCollar`s from the supplied witnesses, uses
+P2, calls `BallCollar.connectedSum_standardCover`, uses P3 and P4, composes
+with P5, and transports through P1 using P6.  No leaf conclusion is obtained
+by invoking another sorry'd leaf except through an explicit hypothesis.
+
+Truth checks: `sphereBasepoint` is the first coordinate vector, so the sphere
+and overlap are nonempty.  In dimension three the overlap is `S²`, exactly
+the simply connected sphere needed by B6 and van Kampen.  For coordinate
+balls the computation is `ℤ * ℤ = F₂`; the overlap contributes no relation.
+Neither an empty set nor a dimension-zero case occurs (`Fin 3` and `Fin 2`
+are inhabited).  P1 preserves the specified orientation of the quotient
+relation, while equivalence closure makes no extra orientation assumption.
 
 ### `t93A03_not_simplyConnected_of_piOne_equiv` — proved
 
@@ -120,24 +166,22 @@ identity.  Thus there is no empty-generator edge case.
 
 ## Dependency layers
 
-- Layer 1, parallel: the LIBRARY program
-  `t93A03_collaredConnectedSum_piOne`; the already completed generic
-  obstruction lemma `t93A03_not_simplyConnected_of_piOne_equiv`.
-- Layer 2, already compiled: `apm_t93a03` extracts the equivalence from Layer
-  1 and applies the Layer-1 obstruction lemma.
+- Parallel leaves: P1, P2, P4, P5, P6, and the already proved obstruction.
+- P3 is also independently provable because P2's facts are parameters.
+- Assembly: the original registered LIBRARY theorem, now sorry-free.
+- Final: `apm_t93a03`, unchanged, applies the obstruction.
 
-There are two top-level blueprint lemmas: one LIBRARY lemma with `sorry` and
-one fully proved lemma.  The repaired main theorem contains no `sorry`.  I am
-convinced both statements are true; the uncertainty is implementation size of
-the reusable collar/open-cover comparison, not mathematical validity.
+All six new leaves state claims consumed by the assembly; none is a marker or
+vacuous restatement.  P4 is the sole generic LIBRARY gap.  P1–P3 are geometric
+adapters/specializations, and P5–P6 are small algebraic/functorial leaves.
 
 ## Compile and axiom gate
 
 Commands:
 
 ```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t93A03/RevisedMain.lean
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t93A03/Blueprint.lean
+lake build ConstructionTargets.CollaredConnectedSumHomology
+flock /tmp/apm-lean-compile.lock systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t93A03/Blueprint.lean
 ```
 
 Both exit successfully.  Output of `#print axioms apm_t93a03`:
@@ -146,4 +190,7 @@ Both exit successfully.  Output of `#print axioms apm_t93a03`:
 'apm_t93a03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-`sorryAx` enters only through `t93A03_collaredConnectedSum_piOne`.
+`sorryAx` enters through the six named leaves consumed by the sorry-free
+assembly (and through the imported foundation leaves B2, B3, B6, and B7 when
+their implementations land).  The registered theorem and all pre-existing
+definitions/statements remain byte-identical.
