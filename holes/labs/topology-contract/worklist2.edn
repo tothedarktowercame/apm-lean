@@ -89431,6 +89431,18 @@
      {:cmd "first placeholder one-liner",
       :exit 1,
       :correction "fixed Python syntax"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792595496875-1008-799666c3",
+     :commands
+     ["git show/diff-tree dcfa23365"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit dcfa23365 changes only t97A03Closure after history ff8497481; fixture SHA 839d2c9f... matches. Fiber transport coherence is correctly oriented: refl gives identity and transport of gamma.trans delta equals transport gamma followed by transport delta, directly from covering monodromy laws. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP with compiled sorry-free progress; connectedness-to-nontriviality, quotient realization, and invariants remain listed."},
     :commit "dcfa23365",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89439,7 +89451,7 @@
      "839d2c9f9fb84d8b8e57ee0c0b6ab8867a161814fd7a5a69e48793dfb7e21c0e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89457,7 +89469,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked covering-path fiber equivalences and loop-model selection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked identity/composition coherence for covering fiber transport.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89502,7 +89514,11 @@
     {:job 3,
      :commit "ff8497481",
      :reason
-     "Banked covering-path fiber equivalences and loop-model selection."}]}
+     "Banked covering-path fiber equivalences and loop-model selection."}
+    {:job 4,
+     :commit "dcfa23365",
+     :reason
+     "Banked identity/composition coherence for covering fiber transport."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100237,7 +100253,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coveringPathFiberEquiv_trans",
@@ -100247,7 +100263,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "covering fiber transport preserves path concatenation",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "dcfa23365"},
    :id :lemma-coveringpathfiberequiv-trans,
    :kind :lemma,
    :depends-on [],
