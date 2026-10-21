@@ -1,6 +1,7 @@
 import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.CollaredConnectedSumHomology
 
 /-!
 # Blueprint for APM t98A02
@@ -57,6 +58,42 @@ abbrev t98A02H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
 
+namespace T98A02Adapter
+
+open ConstructionTargets.CollaredConnectedSumHomology
+
+/-- **LIBRARY (B12a).** The frozen quotient presentation agrees with the
+generic collared connected-sum quotient. -/
+theorem quotientHomeomorph {X₁ X₂ : Type}
+    [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
+    (c₁ : BallCollar 4 X₁) (c₂ : BallCollar 4 X₂)
+    (hc₁ : c₁.smallMap = φ₁) (hc₂ : c₂.smallMap = φ₂) :
+    Nonempty (T98A02ConnectedSum φ₁ φ₂ ≃ₜ ConnectedSum c₁ c₂) := by
+  sorry
+
+/-- **LIBRARY (B12b).** Homology invariance transports the complete table
+across the quotient homeomorphism. -/
+theorem transportHomology {X₁ X₂ : Type}
+    [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
+    (c₁ : BallCollar 4 X₁) (c₂ : BallCollar 4 X₂)
+    (e : T98A02ConnectedSum φ₁ φ₂ ≃ₜ ConnectedSum c₁ c₂)
+    (h : Nonempty (H 0 (ConnectedSum c₁ c₂) ≅ ModuleCat.of ℤ ℤ) ∧
+      (∀ k, 0 < k → k < 4 → Nonempty (H k (ConnectedSum c₁ c₂) ≅
+        ModuleCat.of ℤ ((H k X₁) × (H k X₂)))) ∧
+      Nonempty (H 4 (ConnectedSum c₁ c₂) ≅ ModuleCat.of ℤ ℤ) ∧
+      (∀ k, 4 < k → Limits.IsZero (H k (ConnectedSum c₁ c₂)))) :
+    let Y := T98A02ConnectedSum φ₁ φ₂
+    Nonempty (t98A02H 0 Y ≅ ModuleCat.of ℤ ℤ) ∧
+    (∀ k, 1 ≤ k → k ≤ 3 → Nonempty (t98A02H k Y ≅
+      ModuleCat.of ℤ ((t98A02H k X₁) × (t98A02H k X₂)))) ∧
+    Nonempty (t98A02H 4 Y ≅ ModuleCat.of ℤ ℤ) ∧
+    (∀ k, 5 ≤ k → Limits.IsZero (t98A02H k Y)) := by
+  sorry
+
+end T98A02Adapter
+
 /-- **LIBRARY boundary.** Integral singular homology of a collared connected
 sum of closed connected four-manifolds.  A proof requires the production
 open-cover Mayer--Vietoris sequence, comparison with `t98A02H`, punctured
@@ -86,7 +123,21 @@ theorem t98A02_collaredConnectedSum_homology :
           ModuleCat.of ℤ ((t98A02H k X₁) × (t98A02H k X₂)))) ∧
       Nonempty (t98A02H 4 Y ≅ ModuleCat.of ℤ ℤ) ∧
       (∀ k : ℕ, 5 ≤ k → Limits.IsZero (t98A02H k Y)) := by
-  sorry
+  intro X₁ X₂ _ _ _ _ _ _ _ _ _ _ _ _ φ₁ φ₂ hφ₁ hφ₂
+    hcollar₁ hcollar₂ htop₁ htop₂ habove₁ habove₂
+  rcases hcollar₁ with ⟨ψ₁, hψ₁, hcompat₁⟩
+  rcases hcollar₂ with ⟨ψ₂, hψ₂, hcompat₂⟩
+  let c₁ : ConstructionTargets.CollaredConnectedSumHomology.BallCollar 4 X₁ :=
+    { smallMap := φ₁, largeMap := ψ₁, smallEmbedding := hφ₁,
+      largeEmbedding := hψ₁, compatible := funext hcompat₁ }
+  let c₂ : ConstructionTargets.CollaredConnectedSumHomology.BallCollar 4 X₂ :=
+    { smallMap := φ₂, largeMap := ψ₂, smallEmbedding := hφ₂,
+      largeEmbedding := hψ₂, compatible := funext hcompat₂ }
+  have hgeneric := ConstructionTargets.CollaredConnectedSumHomology.connectedSum_homology
+    4 (by norm_num) X₁ X₂ c₁ c₂ htop₁ htop₂
+    (fun k hk => habove₁ k (by omega)) (fun k hk => habove₂ k (by omega))
+  let e := Classical.choice (T98A02Adapter.quotientHomeomorph φ₁ φ₂ c₁ c₂ rfl rfl)
+  exact T98A02Adapter.transportHomology φ₁ φ₂ c₁ c₂ e hgeneric
 
 theorem apm_t98a02 :
     ∀ (X₁ X₂ : Type)
