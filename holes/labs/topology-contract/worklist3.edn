@@ -36758,6 +36758,20 @@
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :correction "exposed Fin bounds"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792610290558-1385-809252bd",
+     :commands
+     ["git show --stat/--format=fuller 6b718247b51f7cd90c1d4252675a554ee835f4a5"
+      "git show 6b718247b:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check 6b718247b^ 6b718247b"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 6b718247b:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit 6b718247b changes only scoped Closure; fixture SHA-256 matches a448bda7167ddb3709f28a25f2771409f1d31c4be5b8961c8af9fb4924331d48. The i=0 branch uses the correctly oriented H0 equivalence. The i=n+1 branch composes successor top -> overlap top -> Q with degree normalization. For 0<i<n+1, the direction is successor -> lower patch -> CP n -> Q, and the Fin bound is valid. Thus all even cases and representation boundaries are faithful. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; odd/above-top vanishing and successor-data assembly remain listed."},
     :commit "6b718247b51f7cd90c1d4252675a554ee835f4a5",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36766,7 +36780,7 @@
      "a448bda7167ddb3709f28a25f2771409f1d31c4be5b8961c8af9fb4924331d48"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36784,7 +36798,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked positive-even successor equivalence; assembly remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked all successor even equivalences; vanishing assembly remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37006,7 +37020,11 @@
     {:job 6,
      :commit "ba4639f5fa10a19d83be8ad9589efba6d735fe2d",
      :reason
-     "Banked positive-even successor equivalence; assembly remains."}]}
+     "Banked positive-even successor equivalence; assembly remains."}
+    {:job 7,
+     :commit "6b718247b51f7cd90c1d4252675a554ee835f4a5",
+     :reason
+     "Banked all successor even equivalences; vanishing assembly remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49420,7 +49438,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_zero_equiv",
@@ -49430,14 +49448,16 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "successor H0 equals Q",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "6b718247b51f7cd90c1d4252675a554ee835f4a5"},
    :id :lemma-t99j05-cp-successor-zero-equiv,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_even_equiv",
@@ -49447,7 +49467,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "all successor even groups equal Q",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "6b718247b51f7cd90c1d4252675a554ee835f4a5"},
    :id :lemma-t99j05-cp-successor-even-equiv,
    :kind :lemma,
    :depends-on
