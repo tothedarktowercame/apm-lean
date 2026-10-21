@@ -36754,6 +36754,19 @@
     [{:cmd "closure attempts",
       :exit 1,
       :note "Corrected universe/reassociation."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792581652712-669-1e479c53",
+     :commands
+     ["git show/diff-tree fa86dcf4"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-aware placeholder census"],
+     :finding
+     "PASS: post-history commit fa86dcf4 changes only scoped Closure; fixture/blob SHA matches b506c035.... The iso-cancellation lemma is correctly oriented (e.inv ≫ g = f from e.hom ≫ f = g). The MV theorem proves equality to the literal signed arrow by biproduct extensionality, cancelling the intersection comparison separately against left/right naturality; representation changes remain explicit. Closure and Main compile; registry 170/170; both contain 0 code placeholders/axiom declarations; apm_t99j05 uses only propext/Classical.choice/Quot.sound. Proved milestone and remaining union transport are listed."},
     :commit "fa86dcf4e9e4ae54d7482c593dda1bc400aaf203",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36762,7 +36775,7 @@
      "b506c035305a8db31a234f1fb1e2c49d96c8232f187992272ee73607076c0b81"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36780,7 +36793,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed biproduct transport identity; literal-arrow proof reduces to cancelling the intersection comparison iso against naturality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal signed-arrow comparison; union transport remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36923,7 +36936,11 @@
     {:job 4,
      :commit "35cae1fc8612fc7c14d4a68ea605968c7c891ffb",
      :reason
-     "Committed biproduct transport identity; literal-arrow proof reduces to cancelling the intersection comparison iso against naturality."}]}
+     "Committed biproduct transport identity; literal-arrow proof reduces to cancelling the intersection comparison iso against naturality."}
+    {:job 5,
+     :commit "fa86dcf4e9e4ae54d7482c593dda1bc400aaf203",
+     :reason
+     "Committed literal signed-arrow comparison; union transport remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48321,7 +48338,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
@@ -48331,7 +48348,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "transported arrow equals signed literal arrow",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "fa86dcf4e9e4ae54d7482c593dda1bc400aaf203"},
    :id :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal,
    :kind :lemma,
    :depends-on
