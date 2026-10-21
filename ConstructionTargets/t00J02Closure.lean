@@ -2100,6 +2100,32 @@ structure CanonicalRegularFiberDegreeCalculations
     orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
       regularFiberLocalDegree e f y x
 
+/-- Construct the canonical calculation package directly from the geometric
+component comparison with disk-bounded lifts and the global signed-count
+formula.  The zero component sums are supplied by the exact lift degrees. -/
+def CanonicalRegularFiberDegreeCalculations.ofComponentComparison
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = exactLiftComponentDegree lifts k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x) :
+    CanonicalRegularFiberDegreeCalculations
+      (f := f) (c := c) (y := y) hy e :=
+  { orientationSign := orientationSign
+    component_sum_eq_zero :=
+      canonicalComponentLocalDegreeSum_eq_zero_of_comparison
+        (f := f) (c := c) (y := y) hy e lifts hcomparison
+    topDegree_eq := htop }
+
 /-- Regrouping the regular fiber by occupied components turns the two
 canonical calculations into vanishing of the integer top degree. -/
 theorem CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
@@ -2400,6 +2426,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.ofCanonicalLocalDegrees
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_canonicalComponentSums
+#print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLifts
