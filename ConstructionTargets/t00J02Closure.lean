@@ -1172,6 +1172,30 @@ theorem exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_z
 
 #print axioms exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero
 
+/-- Sard is normally stated as nullity of the bad parameter set itself.
+This adapter removes the artificial identity-image representation used by
+the generic critical-value selector. -/
+theorem exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [MeasurableSpace Circle]
+    (mu : MeasureTheory.Measure Circle) [NeZero mu]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (hnull : mu {z | ¬ ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v} = 0) :
+    ∃ y ∈ Set.range c, LocallyInjectiveAlongFiber f y := by
+  apply exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero
+    mu f c hf htrans
+  simpa only [Set.image_id'] using hnull
+
+#print axioms exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
