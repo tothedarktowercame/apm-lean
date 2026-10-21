@@ -3545,7 +3545,77 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ Aᶜ (ContinuousMap.id M)
           (fun y hy => Set.compl_subset_compl.mpr hAK hy)) i d =
         (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homologyπ i y := by
-  sorry
+  let CK := ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Kᶜ
+  let CA := ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ
+  let pK := ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ
+  let F := ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ Aᶜ
+    (ContinuousMap.id M) (fun y hy => Set.compl_subset_compl.mpr hAK hy)
+  have hpd : pK.f (i - 1)
+      ((ConstructionTargets.SingularHomologyConcrete.SingularChains (TopCat.of M)).d i (i - 1) z) = 0 := by
+    obtain ⟨w, hw⟩ := hz
+    rw [← hw]
+    change (pK.f (i - 1))
+      ((ConstructionTargets.SingularHomologyConcrete.relativeSingularSubcomplex.ι Kᶜ).f
+        (i - 1) w) = 0
+    rw [← ConcreteCategory.comp_apply]
+    exact ConcreteCategory.congr_hom
+      (congrArg (fun f => f.f (i - 1))
+        (cokernel.condition
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularSubcomplex.ι Kᶜ))) w
+  have hcycle : CK.d i (i - 1) (pK.f i z) = 0 := by
+    have hc := ConcreteCategory.congr_hom (pK.comm i (i - 1)) z
+    simpa only [ConcreteCategory.comp_apply, hpd] using hc
+  let xhom : AddCommGrpCat.of ℤ ⟶ CK.X i :=
+    AddCommGrpCat.ofHom (zmultiplesHom _ (pK.f i z))
+  have xhomd : xhom ≫ CK.d i (i - 1) = 0 := by
+    apply ConcreteCategory.hom_ext
+    intro n
+    change CK.d i (i - 1) (n • pK.f i z) = 0
+    rw [map_zsmul, hcycle, smul_zero]
+  have hnext : (ComplexShape.down ℕ).next i = i - 1 := by
+    cases i with
+    | zero => exact ChainComplex.next_nat_zero
+    | succ i => simpa only [Nat.succ_eq_add_one, Nat.add_sub_cancel] using
+        ChainComplex.next_nat_succ i
+  let yhom : AddCommGrpCat.of ℤ ⟶ CK.cycles i :=
+    CK.liftCycles xhom (i - 1) hnext xhomd
+  let yK : CK.cycles i := yhom (1 : ℤ)
+  have hyKi : CK.iCycles i yK = pK.f i z := by
+    have hc := ConcreteCategory.congr_hom
+      (CK.liftCycles_i xhom (i - 1) hnext xhomd) (1 : ℤ)
+    change CK.iCycles i yK = xhom (1 : ℤ) at hc
+    rw [hc]
+    change (1 : ℤ) • pK.f i z = pK.f i z
+    exact one_zsmul _
+  refine ⟨CK.homologyπ i yK, ?_⟩
+  have hyK : HomologicalComplex.cyclesMap F i yK = y := by
+    apply (AddCommGrpCat.mono_iff_injective (CA.iCycles i)).mp inferInstance
+    have hci := ConcreteCategory.congr_hom (HomologicalComplex.cyclesMap_i F i) yK
+    simp only [ConcreteCategory.comp_apply] at hci
+    rw [hci, hyKi, hy]
+    have hn := ConcreteCategory.congr_hom
+      (congrArg (fun f => f.f i)
+        (ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality
+          Kᶜ Aᶜ (ContinuousMap.id M)
+            (fun y hy => Set.compl_subset_compl.mpr hAK hy))) z
+    have hid :
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (ContinuousMap.id M))).f i z = z := by
+      change (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map (𝟙 (TopCat.of M))).f i z = z
+      have he := congrArg (fun q => q.f i)
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).map_id (TopCat.of M))
+      exact ConcreteCategory.congr_hom he z
+    change (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Aᶜ).f i
+      ((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (ContinuousMap.id M))).f i z) =
+      F.f i (pK.f i z) at hn
+    rw [hid] at hn
+    exact hn.symm
+  have hn := ConcreteCategory.congr_hom
+    (HomologicalComplex.homologyπ_naturality F i) yK
+  simpa only [ConcreteCategory.comp_apply, hyK] using hn
 -- END SEAT AREA
 
 /-- LIBRARY LEAF (Hatcher p. 237, chain level; split from `_aux_inChart`
