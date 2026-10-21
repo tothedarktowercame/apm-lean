@@ -1775,6 +1775,26 @@ theorem regularFiberSignedSum_eq_of_localizationCoefficients
   rw [regularFiberLocalDegree_eq_of_localization_eq e f y x
     (coefficient x) (hcoefficient x)]
 
+/-- A comparison between the canonical local fundamental-class degrees and
+the exact disk-bounded component lifts immediately gives the componentwise
+zero calculation required by the final regular-fiber package. -/
+theorem canonicalComponentLocalDegreeSum_eq_zero_of_comparison
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = exactLiftComponentDegree lifts k) :
+    ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = 0 := by
+  intro k
+  exact (hcomparison k).trans (exactLiftComponentDegree_eq_zero lifts k)
+
 /-- Package the two remaining geometric identities after fixing the pointwise
 local degrees to the coefficients supplied by local fundamental classes. -/
 def regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
@@ -2369,6 +2389,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_localization_eq
 #print axioms ConstructionTargets.T00J02Closure.componentLocalDegreeSum_eq_of_localizationCoefficients
 #print axioms ConstructionTargets.T00J02Closure.regularFiberSignedSum_eq_of_localizationCoefficients
+#print axioms ConstructionTargets.T00J02Closure.canonicalComponentLocalDegreeSum_eq_zero_of_comparison
 #print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_localFundamentalClassComparisons
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberLocalizedComponentFormula.toComparison
