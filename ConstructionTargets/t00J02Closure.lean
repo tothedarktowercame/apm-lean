@@ -1532,6 +1532,33 @@ theorem targetChartCoordinate_contMDiff
 #print axioms targetChartDomain
 #print axioms targetChartCoordinate_contMDiff
 
+/-- Vector-valued Sard applied on one open target-chart domain. -/
+theorem targetChartCoordinate_criticalImage_null
+    {E F M N : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M]
+    [SecondCountableTopology M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure]
+    (g : M → N) (y : N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) ∞ g) :
+    mu ((fun x : targetChartDomain (F := F) g y hg.continuous ↦
+          chartAt F y (g x)) ''
+        {x | ¬ Function.Surjective
+          (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+            (fun q : targetChartDomain (F := F) g y hg.continuous ↦
+              chartAt F y (g q)) x)}) = 0 := by
+  exact T93A04ManifoldWork.null_critical mu _
+    (targetChartCoordinate_contMDiff g y hg)
+
+#print axioms targetChartCoordinate_criticalImage_null
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
