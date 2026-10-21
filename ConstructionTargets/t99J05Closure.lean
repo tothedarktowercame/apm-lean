@@ -2120,6 +2120,64 @@ noncomputable def t99J05_cp_successor_even_equiv
 
 #print axioms t99J05_cp_successor_even_equiv
 
+/-- In an exact segment, zero outer terms force the middle term to vanish. -/
+theorem t99J05_subsingleton_middle_of_exact
+    {X Y Z : ModuleCat ℚ} (f : X ⟶ Y) (g : Y ⟶ Z)
+    (hex : LinearMap.range f.hom = LinearMap.ker g.hom)
+    [Subsingleton X] [Subsingleton Z] : Subsingleton Y := by
+  constructor
+  intro y₁ y₂
+  have hy : y₁ - y₂ ∈ LinearMap.ker g.hom := by
+    change g.hom (y₁ - y₂) = 0
+    exact Subsingleton.elim _ _
+  rw [← hex] at hy
+  obtain ⟨x, hx⟩ := hy
+  have hfx : f.hom x = 0 := by
+    rw [Subsingleton.elim x 0]
+    exact map_zero f.hom
+  rw [hfx] at hx
+  exact sub_eq_zero.mp hx.symm
+
+#print axioms t99J05_subsingleton_middle_of_exact
+
+/-- Successor homology vanishes above its new top degree. -/
+theorem t99J05_cp_successor_subsingleton_above
+    (n k : ℕ) (h : ComplexProjectiveRationalHomologyData n)
+    (hk : 2 * (n + 1) < k) :
+    Subsingleton (Homology (CP (n + 1)) k) := by
+  rw [show k = (k - 1) + 1 by omega]
+  let L : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+      Set (CP (n + 1))) ((k - 1) + 1)
+  let T : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+      Set (CP (n + 1))) ((k - 1) + 1)
+  let P : ModuleCat ℚ := L ⊞ T
+  let S := t99J05_cp_successor_mayerVietoris_ambientTransport n (k - 1)
+  letI : Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) ((k - 1) + 1)) :=
+    t99J05_cp_successor_lowerPatch_subsingleton_above n ((k - 1) + 1) h (by omega)
+  letI : Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) ((k - 1) + 1)) :=
+    t99J05_cp_successor_topPatch_subsingleton_positive n ((k - 1) + 1) (by omega)
+  letI : Subsingleton S.X₁ := by
+    apply ModuleCat.subsingleton_of_isZero
+    change CategoryTheory.Limits.IsZero P
+    rw [CategoryTheory.Limits.biprod_isZero_iff]
+    exact ⟨ModuleCat.isZero_of_subsingleton _, ModuleCat.isZero_of_subsingleton _⟩
+  letI : Subsingleton S.X₃ := by
+    change Subsingleton
+      (Homology (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n :
+        Set (CP (n + 1))) (k - 1))
+    exact ModuleCat.isZero_iff_subsingleton.mp
+      (t99J05_cp_successor_overlap_homology_isZero_of_gt n (k - 1) (by omega))
+  exact t99J05_subsingleton_middle_of_exact S.f S.g
+    (t99J05_cp_successor_mayerVietoris_exact_ambient_transport n (k - 1)).moduleCat_range_eq_ker
+
+#print axioms t99J05_cp_successor_subsingleton_above
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
