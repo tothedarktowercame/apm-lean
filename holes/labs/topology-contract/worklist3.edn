@@ -36759,6 +36759,20 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792605908788-1268-c25f71d8",
+     :commands
+     ["git show --stat/--format=fuller 339f84603debacc6e611c3d9bdd3fa039fc15daa"
+      "git show 339f84603:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check 339f84603^ 339f84603"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 339f84603:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit 339f84603 changes only scoped Closure; fixture SHA-256 matches 49cb299a7f267677b08f7a43f21dea2eeab4214a9f5de827b4157a7afead7db2. Lower-patch vanishing is transported in the correct direction: the stored iso is CP n -> lower patch, so its inverse injects the patch homology into the subsingleton CP homology. Positive top-patch vanishing correctly installs contractibility and applies higher_zero for k≠0. Representation boundaries and degree inequalities are faithful. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This is genuine program progress; the top connecting equivalence and surviving-even equivalences remain listed."},
     :commit "339f84603debacc6e611c3d9bdd3fa039fc15daa",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36767,7 +36781,7 @@
      "49cb299a7f267677b08f7a43f21dea2eeab4214a9f5de827b4157a7afead7db2"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36785,7 +36799,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact-segment bijectivity; top specialization remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked patch vanishings; top specialization remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36996,7 +37010,10 @@
     {:job 3,
      :commit "68ae20da241a966a5ead04ca6c05a23c0337333b",
      :reason
-     "Banked exact-segment bijectivity; top specialization remains."}]}
+     "Banked exact-segment bijectivity; top specialization remains."}
+    {:job 4,
+     :commit "339f84603debacc6e611c3d9bdd3fa039fc15daa",
+     :reason "Banked patch vanishings; top specialization remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49326,7 +49343,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_lowerPatch_subsingleton_above",
@@ -49336,14 +49353,16 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "lower patch vanishes above 2n",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "339f84603debacc6e611c3d9bdd3fa039fc15daa"},
    :id :lemma-t99j05-cp-successor-lowerpatch-subsingleton-above,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_topPatch_subsingleton_positive",
@@ -49353,7 +49372,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "positive top-patch homology vanishes",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "339f84603debacc6e611c3d9bdd3fa039fc15daa"},
    :id :lemma-t99j05-cp-successor-toppatch-subsingleton-positive,
    :kind :lemma,
    :depends-on [],
