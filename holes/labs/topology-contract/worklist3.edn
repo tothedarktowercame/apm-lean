@@ -36757,6 +36757,19 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792594046689-978-f2ac5873",
+     :commands
+     ["git show/diff-tree 2ebc848f92"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 2ebc848f92^ 2ebc848f92"],
+     :finding
+     "PASS: new commit 2ebc848f92 changes only scoped Closure; fixture/blob SHA matches 3ba4951d.... A map into a subsingleton module is correctly proved surjective using preimage 0; the exact-segment corollary faithfully supplies that surjectivity to the prior finite-middle theorem. Directions and ModuleCat-to-function boundary are explicit, and all hypotheses are used. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Both extraction milestones are proved and degreewise use remains listed."},
     :commit "2ebc848f92",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36765,7 +36778,7 @@
      "3ba4951de15094f41ed52d64198111cf6cccfea9f6b6af935da21b0fe748c947"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36783,7 +36796,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed finite-dimensional exact-segment extraction; degreewise MV specialization remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed finite extraction when the right term vanishes; degreewise use remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36954,7 +36967,11 @@
     {:job 2,
      :commit "9ec870229a",
      :reason
-     "Committed finite-dimensional exact-segment extraction; degreewise MV specialization remains."}]}
+     "Committed finite-dimensional exact-segment extraction; degreewise MV specialization remains."}
+    {:job 3,
+     :commit "2ebc848f92",
+     :reason
+     "Committed finite extraction when the right term vanishes; degreewise use remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48911,7 +48928,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_surjective_of_subsingleton",
@@ -48921,14 +48938,16 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "map into zero module is surjective",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "2ebc848f92"},
    :id :lemma-t99j05-surjective-of-subsingleton,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_finiteDimensional_middle_of_exact_of_subsingleton",
@@ -48940,7 +48959,9 @@
     :type
     "exact segment with finite outer terms and zero right has finite middle",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "2ebc848f92"},
    :id :lemma-t99j05-finitedimensional-middle-of-exact-of-subsingleton,
    :kind :lemma,
    :depends-on
