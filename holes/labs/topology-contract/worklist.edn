@@ -119152,60 +119152,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct zero chart component sums and signed chart top-degree identity from transverse data; replace false Producer in Main.",
+    "Prove canonical component sums and signed top-degree identity from transverse data; replace false Producer in Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked review dirs preserved"],
     :missing-theorems
-    [{:name "topHomologyMap_eq_zero_of_diskBounded_chartSums",
+    [{:name "topHomologyMap_eq_zero_of_diskBounded_canonicalSums",
       :type
-      "disk data plus zero chart sums and chart identity imply H2 zero",
+      "disk data plus zero component sums and signed top-degree identity imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["topHomologyMap_eq_zero_of_exactLiftComparison"],
+      :depends-on ["topHomologyMap_eq_zero_of_diskBounded_chartSums"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["topHomologyMap_eq_zero_of_diskBounded_chartSums"],
+      :depends-on
+      ["topHomologyMap_eq_zero_of_diskBounded_canonicalSums"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "0de01f4f1af44c431b5e7953ac600f8f0843842bcaad3b4830d82f4ff5488444",
+     "ec19209695597e31fd3b976d180d70bf65ce112a771723868fd44ac411f2d371",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked disk-bounded chart-sum H2 endpoint.",
+    :reason "Banked canonical disk-bounded H2 endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792621002763-1691-92fbcd19",
-     :commands
-     ["git show/diff --check 0cf80217c"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: 0cf80217c changes only t00J02Closure.lean (+33), adding a compiled, sorry-free disk-bounded chart-sum H2 endpoint beyond history e9f45ab04. Fixture afb497a6, source 0b3b4888, implementation 0de01f4f; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: disk boundedness builds exact zero-degree lifts; each assumed zero chart sum is converted to equality with the corresponding zero lift degree, and the exact-lift comparison endpoint yields homologyMap 2 f = 0 from the signed top-degree identity. Fiber subtype, occupied components, and coefficient signs stay aligned. Axioms are propext, Classical.choice, Quot.sound. Residual milestones are constructing chart sums/top-degree identity from transverse data and replacing the false Producer path in Main."},
-    :commit "0cf80217c592b5e6c404d724eddb1d002aeb2f33",
+     {:cmd
+      "git diff --check; sha256sum fixtures/sources; placeholder count",
+      :exit 0}],
+    :commit "e564f99f6997b6e07de5174038a54d75563dd04b",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119213,7 +119204,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119941,7 +119932,8 @@
     :lemma-tophomologymap-eq-zero-of-chartcomponentsums
     :lemma-chartcomponentsums-eq-zero-of-exactliftcomparison
     :lemma-tophomologymap-eq-zero-of-exactliftcomparison
-    :lemma-tophomologymap-eq-zero-of-diskbounded-chartsums],
+    :lemma-tophomologymap-eq-zero-of-diskbounded-chartsums
+    :lemma-tophomologymap-eq-zero-of-diskbounded-canonicalsums],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123275,6 +123267,26 @@
    :id :lemma-tophomologymap-eq-zero-of-diskbounded-chartsums,
    :kind :lemma,
    :depends-on [:lemma-tophomologymap-eq-zero-of-exactliftcomparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_diskBounded_canonicalSums",
+    :type
+    "disk data plus zero component sums and signed top-degree identity imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_diskBounded_canonicalSums",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "disk data plus zero component sums and signed top-degree identity imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-tophomologymap-eq-zero-of-diskbounded-canonicalsums,
+   :kind :lemma,
+   :depends-on
+   [:lemma-tophomologymap-eq-zero-of-diskbounded-chartsums],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
