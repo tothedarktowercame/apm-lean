@@ -685,6 +685,49 @@ theorem apm_t97A03_cutGeneratorFreeGroupMap_injective_of_decoder
   (apm_t97A03_cutGeneratorFreeGroupMap_leftInverse_of_decoder
     A B decode hfirst hsecond).injective
 
+/-- Free-group evaluation on the two actual literal loops in the uncollapsed
+base quotient. -/
+noncomputable def apm_t97A03_literalGeneratorFreeGroupMap (A B : Circle) :
+    FreeGroup (Fin 2) →*
+      FundamentalGroup (apm_t97A03_BaseSpace A B)
+        (apm_t97A03_baseCircle A B A) :=
+  FreeGroup.lift (fun i => if i = 0 then
+    FundamentalGroup.fromPath
+      (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B)) else
+    FundamentalGroup.fromPath
+      (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B)))
+
+/-- Collapse intertwines the two concrete free evaluations generator by
+generator; this is the representation-level square needed for injectivity. -/
+theorem apm_t97A03_collapse_comp_literalGeneratorFreeGroupMap (A B : Circle) :
+    (apm_t97A03_collapsePiOneHom A B).comp
+        (apm_t97A03_literalGeneratorFreeGroupMap A B) =
+      apm_t97A03_cutGeneratorFreeGroupMap A B := by
+  apply FreeGroup.ext_hom
+  intro i
+  fin_cases i
+  · simp [apm_t97A03_literalGeneratorFreeGroupMap,
+      apm_t97A03_collapsePiOneHom_firstLiteralLoop]
+  · simp [apm_t97A03_literalGeneratorFreeGroupMap,
+      apm_t97A03_collapsePiOneHom_secondLiteralLoop]
+
+/-- If the two literal loops generate the source and the corresponding cut
+generators are free, the actual collapse map is injective. -/
+theorem apm_t97A03_collapsePiOneHom_injective_of_literal_surjective_cut_injective
+    (A B : Circle)
+    (hliteral : Function.Surjective
+      (apm_t97A03_literalGeneratorFreeGroupMap A B))
+    (hcut : Function.Injective
+      (apm_t97A03_cutGeneratorFreeGroupMap A B)) :
+    Function.Injective (apm_t97A03_collapsePiOneHom A B) := by
+  intro x y hxy
+  rcases hliteral x with ⟨u, rfl⟩
+  rcases hliteral y with ⟨v, rfl⟩
+  apply congrArg (apm_t97A03_literalGeneratorFreeGroupMap A B)
+  apply hcut
+  simpa only [← apm_t97A03_collapse_comp_literalGeneratorFreeGroupMap A B,
+    MonoidHom.comp_apply] using hxy
+
 /-- The free-group element spelling a signed word in the two cut arcs. -/
 def apm_t97A03_cutFreeGroupWord (w : List (Fin 2 × ℤ)) : FreeGroup (Fin 2) :=
   (w.map fun q => FreeGroup.of q.1 ^ q.2).prod
