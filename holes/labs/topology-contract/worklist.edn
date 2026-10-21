@@ -119152,41 +119152,41 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Circle-target Sard via charts/Haar; signed counts and Main.",
+    :residual "Chartwise Sard/Haar transport; signed counts and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "unrelated artifacts preserved"],
     :missing-theorems
-    [{:name "circleIncidence_secondCountableTopology",
-      :type "incidence source second countable",
+    [{:name
+      "circleIncidenceProjection_critical_iff_targetChartCritical",
+      :type "critical iff chart-critical",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["circleIncidenceProjection_critical_iff_kernelCritical"],
+      :depends-on ["circleIncidence_secondCountableTopology"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["circleIncidence_secondCountableTopology"],
+      :depends-on
+      ["circleIncidenceProjection_critical_iff_targetChartCritical"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "4a1a4795577bb01c6779bfa4d5069a2d29c4652db4391dbf92d42bf922a677b3",
+     "84c9f7c4961779785ce71064a2316abf866f5d7fb1e11505690706e4788f4032",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked incidence second countability.",
+    :reason "Banked target-chart criticality.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119196,20 +119196,8 @@
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding "made instances explicit"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792584638555-736-4abf1103",
-     :commands
-     ["git show/diff a7ba5153"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: a7ba5153 changes only t00J02Closure.lean (+14), adding compiled incidence-source second countability after prior history. Fixture afb497a6, source 0b3b4888, implementation 4a1a4795, registry 170/170, and placeholders closure=0/Main=1 reproduce. Representation is faithful: compact charted S and Circle are sigma-compact, hence second countable; their product is second countable, and the incidence equation subtype inherits it. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; circle-target Sard/Haar, signed counts, and final assembly remain listed."},
-    :commit "a7ba515386e77d1400fe973aee3ec9b35d5e1808",
+      :finding "added instances/mdiff arg"}],
+    :commit "932a98dabfa902dc0c96aed10de7c86961fcb067",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119217,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119805,7 +119793,8 @@
     :lemma-incidencekernelprojectioncriticalvalues-eq-image
     :lemma-circleincidenceprojection-contmdiff
     :lemma-circleincidenceprojection-critical-iff-kernelcritical
-    :lemma-circleincidence-secondcountabletopology],
+    :lemma-circleincidence-secondcountabletopology
+    :lemma-circleincidenceprojection-critical-iff-targetchartcritical],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122270,6 +122259,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-circleincidenceprojection-critical-iff-kernelcritical],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "circleIncidenceProjection_critical_iff_targetChartCritical",
+    :type "critical iff chart-critical"},
+   :lemma
+   {:name "circleIncidenceProjection_critical_iff_targetChartCritical",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "critical iff chart-critical",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-circleincidenceprojection-critical-iff-targetchartcritical,
+   :kind :lemma,
+   :depends-on [:lemma-circleincidence-secondcountabletopology],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
