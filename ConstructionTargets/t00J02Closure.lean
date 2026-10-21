@@ -1730,6 +1730,26 @@ theorem exists_finset_chartAt_source_cover
 
 #print axioms exists_finset_chartAt_source_cover
 
+/-- The finite canonical chart cover can be enumerated in the `Fin` shape
+used by finite chartwise Sard arguments. -/
+theorem exists_fin_chartAt_source_cover
+    {F N : Type} [TopologicalSpace F] [TopologicalSpace N]
+    [ChartedSpace F N] [CompactSpace N] :
+    ∃ n : ℕ, ∃ y : Fin n → N, (Set.univ : Set N) ⊆
+      ⋃ i, (chartAt F (y i)).source := by
+  obtain ⟨t, ht⟩ := exists_finset_chartAt_source_cover (F := F) (N := N)
+  let e := (Fintype.equivFin {x // x ∈ t}).symm
+  refine ⟨Fintype.card {x // x ∈ t}, fun i ↦ (e i).1, ?_⟩
+  intro z hz
+  rcases Set.mem_iUnion.mp (ht hz) with ⟨w, hw⟩
+  rcases Set.mem_iUnion.mp hw with ⟨hwt, hzw⟩
+  let q : {x // x ∈ t} := ⟨w, hwt⟩
+  let i := Fintype.equivFin {x // x ∈ t} q
+  refine Set.mem_iUnion.mpr ⟨i, ?_⟩
+  simpa [e, i, q] using hzw
+
+#print axioms exists_fin_chartAt_source_cover
+
 #print axioms circleChartInverseExtension_measurable
 
 /-- The open part of the source on which a fixed target chart is valid. -/
