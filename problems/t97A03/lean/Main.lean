@@ -732,6 +732,62 @@ theorem apm_t97A03_collapsePiOneHom_injective_of_literal_surjective_cut_injectiv
 def apm_t97A03_cutFreeGroupWord (w : List (Fin 2 × ℤ)) : FreeGroup (Fin 2) :=
   (w.map fun q => FreeGroup.of q.1 ^ q.2).prod
 
+/-- The explicit free word evaluates to the corresponding signed word in the
+two actual literal loops. -/
+lemma apm_t97A03_literalGeneratorFreeGroupMap_word (A B : Circle)
+    (w : List (Fin 2 × ℤ)) :
+    apm_t97A03_literalGeneratorFreeGroupMap A B
+        (apm_t97A03_cutFreeGroupWord w) =
+      apm_t97A03_twoGeneratorWord
+        (FundamentalGroup.fromPath
+          (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B)))
+        (FundamentalGroup.fromPath
+          (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B))) w := by
+  simp only [apm_t97A03_cutFreeGroupWord, apm_t97A03_twoGeneratorWord,
+    map_list_prod, List.map_map]
+  apply congrArg List.prod
+  apply List.map_congr_left
+  rintro ⟨i, z⟩ hi
+  fin_cases i <;> simp [apm_t97A03_literalGeneratorFreeGroupMap, map_zpow]
+
+/-- Signed generation by the two literal quotient loops gives surjectivity of
+their concrete free-group evaluation. -/
+theorem apm_t97A03_literalGeneratorFreeGroupMap_surjective_of_signed_generation
+    (A B : Circle)
+    (hgenerated : ∀ g : FundamentalGroup (apm_t97A03_BaseSpace A B)
+        (apm_t97A03_baseCircle A B A),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (FundamentalGroup.fromPath
+            (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B)))
+          (FundamentalGroup.fromPath
+            (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B))) w = g) :
+    Function.Surjective (apm_t97A03_literalGeneratorFreeGroupMap A B) := by
+  intro g
+  rcases hgenerated g with ⟨w, hw⟩
+  exact ⟨apm_t97A03_cutFreeGroupWord w,
+    (apm_t97A03_literalGeneratorFreeGroupMap_word A B w).trans hw⟩
+
+/-- Literal signed generation and cut freeness discharge the injectivity of
+the concrete collapse map. -/
+theorem apm_t97A03_collapsePiOneHom_injective_of_literal_signed_generation
+    (A B : Circle)
+    (hgenerated : ∀ g : FundamentalGroup (apm_t97A03_BaseSpace A B)
+        (apm_t97A03_baseCircle A B A),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (FundamentalGroup.fromPath
+            (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B)))
+          (FundamentalGroup.fromPath
+            (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B))) w = g)
+    (hcut : Function.Injective (apm_t97A03_cutGeneratorFreeGroupMap A B)) :
+    Function.Injective (apm_t97A03_collapsePiOneHom A B) :=
+  apm_t97A03_collapsePiOneHom_injective_of_literal_surjective_cut_injective
+    A B
+    (apm_t97A03_literalGeneratorFreeGroupMap_surjective_of_signed_generation
+      A B hgenerated)
+    hcut
+
 /-- Evaluation of the explicit free word is exactly the corresponding signed
 word in the two geometric cut generators. -/
 lemma apm_t97A03_cutGeneratorFreeGroupMap_word (A B : Circle)
