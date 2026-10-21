@@ -97,6 +97,28 @@ theorem contDiff_rightInverse_of_comp_isInvertible
 
 #print axioms contDiff_rightInverse_of_comp_isInvertible
 
+/-- A fixed right inverse at one point continues to make the varying
+derivative composite invertible on a neighborhood of that point. -/
+theorem eventually_isInvertible_comp_rightInverse
+    {Z : Type} [TopologicalSpace Z] {n m : ℕ}
+    (A : Z → E n →L[ℝ] E m) (x₀ : Z) (R : E m →L[ℝ] E n)
+    (hA : ContinuousAt A x₀)
+    (hAR : (A x₀).comp R = ContinuousLinearMap.id ℝ (E m)) :
+    ∀ᶠ x in 𝓝 x₀, ((A x).comp R).IsInvertible := by
+  have hB : ContinuousAt (fun x ↦ (A x).comp R) x₀ :=
+    hA.clm_comp continuousAt_const
+  have hopen : {L : E m →L[ℝ] E m | L.IsInvertible} ∈
+      𝓝 (ContinuousLinearMap.id ℝ (E m)) := by
+    refine Filter.mem_of_superset
+      (by simpa using (ContinuousLinearEquiv.nhds
+        (ContinuousLinearEquiv.refl ℝ (E m)))) ?_
+    rintro L ⟨e, rfl⟩
+    exact ⟨e, rfl⟩
+  rw [← hAR] at hopen
+  exact hB.eventually hopen
+
+#print axioms eventually_isInvertible_comp_rightInverse
+
 /-- Applying the smoothly varying right inverse to a smooth target-coordinate
 vector gives the source-coordinate lift used in a submersion chart. -/
 theorem contDiff_lift_of_comp_isInvertible
