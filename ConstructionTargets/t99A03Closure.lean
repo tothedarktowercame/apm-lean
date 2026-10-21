@@ -111,6 +111,54 @@ noncomputable def n3PresentedParityKernelQuotientEquiv :
         (QuotientGroup.mk g) = n3PresentedParityCharacter g := by
   rfl
 
+/-- The concrete two-sheet monodromy action obtained from the descended
+parity character by left translation on the two-element sheet type. -/
+def n3PresentedParitySheetAction :
+    N3PresentedGroup →* Equiv.Perm (Multiplicative (ZMod 2)) :=
+  (MulAction.toPermHom (Multiplicative (ZMod 2))
+    (Multiplicative (ZMod 2))).comp n3PresentedParityCharacter
+
+@[simp] theorem n3PresentedParitySheetAction_apply
+    (g : N3PresentedGroup) (x : Multiplicative (ZMod 2)) :
+    n3PresentedParitySheetAction g x = n3PresentedParityCharacter g * x :=
+  rfl
+
+/-- The first crosscap generator genuinely exchanges the two sheets. -/
+theorem n3PresentedParitySheetAction_generator_moves_one :
+    n3PresentedParitySheetAction (PresentedGroup.of (0 : Fin 3)) 1 ≠ 1 := by
+  simpa using n3PresentedParityCharacter_generator_ne_one
+
+/-- The parity monodromy is transitive on the actual two-element sheet
+fiber, the algebraic connectedness criterion needed by cover realization. -/
+theorem n3PresentedParitySheetAction_transitive
+    (x y : Multiplicative (ZMod 2)) :
+    ∃ g : N3PresentedGroup, n3PresentedParitySheetAction g x = y := by
+  rcases n3PresentedParityCharacter_surjective (y * x⁻¹) with ⟨g, hg⟩
+  refine ⟨g, ?_⟩
+  simp [hg]
+
+/-- The sheet action has exactly the parity kernel, so the realized cover
+will have the already-computed index two rather than a facade action. -/
+theorem n3PresentedParitySheetAction_ker :
+    n3PresentedParitySheetAction.ker = n3PresentedParityCharacter.ker := by
+  ext g
+  change MulAction.toPerm (n3PresentedParityCharacter g) = 1 ↔
+    n3PresentedParityCharacter g = 1
+  constructor
+  · intro h
+    exact (MulAction.toPerm_injective
+      (α := Multiplicative (ZMod 2))
+      (β := Multiplicative (ZMod 2))) (by
+        calc
+          MulAction.toPerm (n3PresentedParityCharacter g) = 1 := h
+          _ = MulAction.toPerm (1 : Multiplicative (ZMod 2)) :=
+            (MulAction.toPermHom (Multiplicative (ZMod 2))
+              (Multiplicative (ZMod 2))).map_one.symm)
+  · intro h
+    rw [h]
+    exact (MulAction.toPermHom (Multiplicative (ZMod 2))
+      (Multiplicative (ZMod 2))).map_one
+
 /-- A nonidentity deck transformation of a connected covering has no fixed
 point, by uniqueness of lifts against the identity map. -/
 theorem deckTransformation_fixedPointFree
@@ -144,5 +192,7 @@ theorem exists_fixedPointFree_selfMap_of_deckData
 #print axioms n3ParityCharacter_crosscapRelator
 #print axioms n3ParityCharacter_generator_ne_one
 #print axioms n3PresentedParityCharacter_generator_ne_one
+#print axioms n3PresentedParitySheetAction_transitive
+#print axioms n3PresentedParitySheetAction_ker
 
 end ConstructionTargets.t99A03Closure
