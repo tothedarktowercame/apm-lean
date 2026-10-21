@@ -3691,6 +3691,38 @@ theorem topHomologyMap_eq_zero_of_exactLiftComparison
     (chartComponentSums_eq_zero_of_exactLiftComparison lifts coefficient
       hcomparison) htop
 
+/-- Disk boundedness supplies the exact lifts internally, so zero chart
+component sums and the signed chart top-degree identity suffice for `H₂`
+vanishing without exposing any producer interface. -/
+theorem topHomologyMap_eq_zero_of_diskBounded_chartSums
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k = 0)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        coefficient x) :
+    homologyMap 2 f = 0 := by
+  let lifts := occupiedRegularFiber_exactZeroDegreeLifts
+    f c hc eS hessential hdisks y hy
+  apply topHomologyMap_eq_zero_of_exactLiftComparison e lifts orientationSign
+    coefficient
+  · intro k
+    exact (hcomponent k).trans (exactLiftComponentDegree_eq_zero lifts k).symm
+  · exact htop
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3728,6 +3760,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_chartComponentSums
 #print axioms ConstructionTargets.T00J02Closure.chartComponentSums_eq_zero_of_exactLiftComparison
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exactLiftComparison
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_chartSums
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
