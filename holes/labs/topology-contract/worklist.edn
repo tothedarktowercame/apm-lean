@@ -119152,63 +119152,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Derive canonical calculations from transverse disk-bounded hypotheses; assemble Main.",
+    "Derive Sard nullity and canonical calculations from transverse disk-bounded hypotheses; assemble Main.",
     :outcome :stop,
     :warnings ["Main registered sorry" "unrelated edits preserved"],
     :missing-theorems
     [{:name
-      "topHomologyMap_eq_zero_of_exists_locallyInjective_calculations",
+      "topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations",
       :type
-      "selected locally-injective circle fiber plus canonical calculations implies H2 map zero",
+      "Sard-null bad parameters plus canonical calculations imply H2 map zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero"],
+      ["topHomologyMap_eq_zero_of_exists_locallyInjective_calculations"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["topHomologyMap_eq_zero_of_exists_locallyInjective_calculations"],
+      ["topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "9511b21aa3d796c0bc077bb4ac8f15a9820f96bccee45a2a2a22741004a5a836",
+     "6c808577777197e6b4d67e4effe8e74089e43b422b5d7e3b013f0087956c39b0",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked selected-fiber calculation endpoint.",
+    :reason "Banked Sard/calculation composition.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture; git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792568234023-422-98d38ec8",
-     :commands
-     ["git show/diff 2688e754"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 2688e754 changes only t00J02Closure.lean (+24), adding a compiled selected-fiber calculation endpoint after prior history. Fixture afb497a6, source 0b3b4888, implementation 9511b21a, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation and dependent boundary are sound: one selected locally-injective fiber generates its Fintype, the same representation builds the canonical witness, and its calculations yield homologyMap 2 f=0. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; deriving canonical calculations and final assembly remain listed."},
-    :commit "2688e7549169afc4744087ac56d9b26885e2d115",
+    :commit "55bc1b25da390ad904b06486bf4ada4301660343",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119216,7 +119204,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119742,7 +119730,8 @@
     :lemma-implicittoopenpartialhomeomorph-image-zerofiber
     :lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph
     :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero
-    :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations],
+    :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations
+    :lemma-tophomologymap-eq-zero-of-badparameters-measure-zero-calculations],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121944,6 +121933,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations",
+    :type
+    "Sard-null bad parameters plus canonical calculations imply H2 map zero"},
+   :lemma
+   {:name
+    "topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "Sard-null bad parameters plus canonical calculations imply H2 map zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-tophomologymap-eq-zero-of-badparameters-measure-zero-calculations,
+   :kind :lemma,
+   :depends-on
+   [:lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
