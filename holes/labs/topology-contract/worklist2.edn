@@ -89430,6 +89430,18 @@
       :correction "kept endpoint equalities"}
      {:cmd "cast build", :exit 1, :correction "equal-endpoint form"}
      {:cmd "scan", :exit 1, :correction "quoting"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792600127317-1112-b60cb0a9",
+     :commands
+     ["git show/diff-tree 272d6fda5"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit 272d6fda5 changes only t97A03Closure after history 20c603ccc; fixture SHA 7768f8d1... matches. Degree two supplies two distinct literal fiber points over x, and connected-cover transitivity supplies a projected path carrying one endpoint to the other; endpoint equalities and the remaining dependent cast are exposed, not hidden. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; loop cast/generator reduction, quotient realization, and invariants remain listed."},
     :commit "272d6fda5",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89438,7 +89450,7 @@
      "7768f8d198bb55a95fe0a4569ca778f4e248b266ccb40a0fdfb45f5c2efbfec8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89456,7 +89468,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked covering-chart local path-connectedness and connected-cover monodromy transitivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked distinct fiber endpoints related by cover monodromy.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89521,7 +89533,11 @@
     {:job 8,
      :commit "20c603ccc",
      :reason
-     "Banked covering-chart local path-connectedness and connected-cover monodromy transitivity."}]}
+     "Banked covering-chart local path-connectedness and connected-cover monodromy transitivity."}
+    {:job 9,
+     :commit "272d6fda5",
+     :reason
+     "Banked distinct fiber endpoints related by cover monodromy."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100362,7 +100378,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_distinct_fiber_points_related_by_monodromy",
@@ -100372,7 +100388,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "distinct fiber endpoints related by monodromy",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "272d6fda5"},
    :id :lemma-exists-distinct-fiber-points-related-by-monodromy,
    :kind :lemma,
    :depends-on [:lemma-iscoveringmap-locpathconnectedspace],
