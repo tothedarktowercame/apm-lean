@@ -89431,6 +89431,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792611798963-1430-3fe8a294",
+     :commands
+     ["git show/diff dbdbea39e"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: dbdbea39e follows 19e20fd28 and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom progress defines the literal circle quotient identifying A,B and a continuous, relation-respecting collapse of the sphere summand to it. It does not assert the pending pi1 equivalence or loop alignment; those, model realization, and invariants remain listed."},
     :commit "dbdbea39e",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89439,7 +89451,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89457,7 +89469,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed generation transfer across the required pi1 equivalence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the continuous literal sphere-collapse map.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89552,7 +89564,10 @@
     {:job 1,
      :commit "19e20fd28",
      :reason
-     "Banked signed generation transfer across the required pi1 equivalence."}]}
+     "Banked signed generation transfer across the required pi1 equivalence."}
+    {:job 2,
+     :commit "dbdbea39e",
+     :reason "Banked the continuous literal sphere-collapse map."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100770,7 +100785,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_continuous_collapseToCutCircle",
@@ -100780,7 +100795,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "continuous map collapsing the sphere and identifying A,B",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "dbdbea39e"},
    :id :lemma-apm-t97a03-continuous-collapsetocutcircle,
    :kind :lemma,
    :depends-on [],
