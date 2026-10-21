@@ -119152,21 +119152,21 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Prove transverse comparison and top-degree formula; assemble H2 and Main.",
+    :residual "Prove comparison and fiber formula; assemble H2/Main.",
     :outcome :stop,
     :warnings ["Main sorry" "review dirs"],
     :missing-theorems
-    [{:name "canonicalComponentSums_eq_zero_of_diskBounded_comparison",
-      :type "comparison gives zero sums",
+    [{:name "surfaceTopDegree_eq_zero_of_diskBounded_comparison",
+      :type "comparison+formula give degree zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["occupiedRegularFiber_exactZeroDegreeLifts"],
+      :depends-on
+      ["canonicalComponentSums_eq_zero_of_diskBounded_comparison"],
       :area "oriented-surface-degree"}
      {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
       :type "derive comparison",
@@ -119176,7 +119176,7 @@
       ["canonicalComponentSums_eq_zero_of_diskBounded_comparison"],
       :area "oriented-surface-degree"}
      {:name "regularFiber_surfaceTopDegree_eq_signedSum",
-      :type "top degree fiber formula",
+      :type "top-degree fiber formula",
       :status :partial,
       :consumers [:t00J02],
       :depends-on ["regularFiberLocalDegree_localization_eq"],
@@ -119185,32 +119185,20 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "d57a417896cab232f977e3f88d6c77f3775fc9b8f8e1e1032649ca964e9336bc",
+     "96a5bdf91ae38d336d0a185ca77c817fa5eecfe69a1bed22f0274835578adf7c",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked disk-bounded canonical sums.",
+    :reason "Banked top-degree vanishing.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "Main compile; registry; diff; hashes; placeholders",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792625101279-1796-36d3222c",
-     :commands
-     ["git show/diff --check 11cac6eb0"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: 11cac6eb0 changes only t00J02Closure.lean (+31), adding compiled, sorry-free disk-bounded canonical-sum vanishing beyond history fe7396763. Fixture afb497a6, source 0b3b4888, implementation d57a4178; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: disk boundedness supplies exact zero-degree lifts; the assumed equality of each canonical component sum with its lift degree feeds the established comparison theorem and yields each sum equal to zero. Fiber subtype, occupied-component indices, canonical local degrees, and lift degrees remain aligned. Axioms are propext, Classical.choice, Quot.sound. Residual milestones derive the transverse comparison and top-degree fiber formula, then assemble H2/Main."},
-    :commit "11cac6eb07d8de9d4ceec86403e416c2637ceb60",
+    :commit "0440d8b897513fcbc1def1ea25e4fe6dd96d1b93",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119218,7 +119206,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -123416,6 +123404,24 @@
    :id :lemma-canonicalcomponentsums-eq-zero-of-diskbounded-comparison,
    :kind :lemma,
    :depends-on [:lemma-occupiedregularfiber-exactzerodegreelifts],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surfaceTopDegree_eq_zero_of_diskBounded_comparison",
+    :type "comparison+formula give degree zero"},
+   :lemma
+   {:name "surfaceTopDegree_eq_zero_of_diskBounded_comparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "comparison+formula give degree zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-surfacetopdegree-eq-zero-of-diskbounded-comparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalcomponentsums-eq-zero-of-diskbounded-comparison],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
