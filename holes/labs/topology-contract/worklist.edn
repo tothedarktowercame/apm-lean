@@ -119197,6 +119197,18 @@
      {:cmd
       "sha256sum scoped files; git diff --check; placeholder count",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792615671310-1521-58ebdcec",
+     :commands
+     ["git show/diff --check d1960352c"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: d1960352c changes only t00J02Closure.lean (+32), adding a compiled, sorry-free disk-bounded H2 endpoint beyond history d4165736d. Fixture afb497a6, source 0b3b4888, implementation d0ee0248; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: disk boundedness plus essentiality construct canonical regular-fiber calculations; topHomologyMap_eq_zero_withoutLifts then yields homologyMap 2 f = 0. Occupied-component indices, local degrees, orientation signs, and surface top degree cross no reversed coercion boundary. Axioms are propext, Classical.choice, Quot.sound. Evidence lists component comparison, signed top-degree formula, and H2/Main assembly as residual milestones."},
     :commit "d1960352c07acd136e6e6281186298b7886d8a6a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked disk-bounded constructor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked disk-bounded H2 endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119591,7 +119603,10 @@
      :reason "Banked incidence H2 adapter."}
     {:job 3,
      :commit "d4165736d13292e321bccd17017027a6adb94f1b",
-     :reason "Banked disk-bounded constructor."}]}
+     :reason "Banked disk-bounded constructor."}
+    {:job 4,
+     :commit "d1960352c07acd136e6e6281186298b7886d8a6a",
+     :reason "Banked disk-bounded H2 endpoint."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123060,7 +123075,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_diskBounded_comparison",
@@ -123070,7 +123085,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "disk-bounded comparisons imply H2 map zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "d1960352c07acd136e6e6281186298b7886d8a6a"},
    :id :lemma-tophomologymap-eq-zero-of-diskbounded-comparison,
    :kind :lemma,
    :depends-on
