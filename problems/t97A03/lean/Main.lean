@@ -162,6 +162,22 @@ lemma apm_t97A03_continuous_collapseToCutCircle (A B : Circle) :
   apply continuous_sum_dom.mpr
   exact ⟨apm_t97A03_continuous_cutCircleMap A B, continuous_const⟩
 
+/-- The collapse reaches every point of the cut-circle quotient through the
+literal circle summand. -/
+lemma apm_t97A03_surjective_collapseToCutCircle (A B : Circle) :
+    Function.Surjective (apm_t97A03_collapseToCutCircle A B) := by
+  intro z
+  refine Quotient.inductionOn z ?_
+  intro w
+  exact ⟨apm_t97A03_baseCircle A B w, rfl⟩
+
+/-- The two marked endpoints are the same point in the cut-circle quotient. -/
+lemma apm_t97A03_cutCircleMap_A_eq_B (A B : Circle) :
+    apm_t97A03_cutCircleMap A B A = apm_t97A03_cutCircleMap A B B := by
+  exact Quotient.sound
+    (Relation.EqvGen.rel _ _
+      (apm_t97A03_CutCircleRel.glue (A := A) (B := B)))
+
 /-- A fixed path in the literal sphere summand from the north attachment to
 the south attachment. -/
 noncomputable def apm_t97A03_sphereReturn :
@@ -253,6 +269,22 @@ lemma apm_t97A03_collapse_baseComplementaryCircleArc
       apm_t97A03_cutCircleMap A B
         (apm_t97A03_complementaryCircleArc A B t) := by
   rfl
+
+/-- The first actual complementary arc, closed at the identified cut point. -/
+noncomputable def apm_t97A03_firstCutCircleLoop (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap A B A)
+      (apm_t97A03_cutCircleMap A B A) :=
+  ((apm_t97A03_circleArc A B).map
+      (apm_t97A03_continuous_cutCircleMap A B)).cast rfl
+    (apm_t97A03_cutCircleMap_A_eq_B A B)
+
+/-- The second actual complementary arc, closed at the same cut point. -/
+noncomputable def apm_t97A03_secondCutCircleLoop (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap A B A)
+      (apm_t97A03_cutCircleMap A B A) :=
+  ((apm_t97A03_complementaryCircleArc A B).map
+      (apm_t97A03_continuous_cutCircleMap A B)).cast rfl
+    (apm_t97A03_cutCircleMap_A_eq_B A B)
 
 /-- A genuine based loop in the frozen base: traverse the literal circle
 summand from `A` to `B`, then return through the literal sphere summand. -/
