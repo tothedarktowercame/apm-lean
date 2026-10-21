@@ -1739,6 +1739,16 @@ theorem targetChart_ambientCriticalImage_null
 
 #print axioms targetChart_ambientCriticalImage_null
 
+/-- A finite family of chartwise null critical-value pieces has null union. -/
+theorem finite_chartCriticalPieces_measure_zero
+    {α : Type} [MeasurableSpace α] {n : ℕ}
+    (mu : MeasureTheory.Measure α) (s : Fin n → Set α)
+    (hs : ∀ i, mu (s i) = 0) :
+    mu (⋃ i, s i) = 0 := by
+  exact MeasureTheory.measure_iUnion_null hs
+
+#print axioms finite_chartCriticalPieces_measure_zero
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
