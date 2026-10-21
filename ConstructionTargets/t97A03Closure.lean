@@ -338,6 +338,38 @@ theorem labeledTwoTransport_actionConnected_iff
     labeledFiberMonodromy_ne_refl_iff,
     labeledFiberMonodromy_ne_refl_iff]
 
+/-- A cardinal-two actual fiber together with two transports, one of them
+nonidentity, canonically reaches the normalized discrete model selector after
+choosing a fiber coordinate. -/
+theorem twoArcModel_exists_of_fiber_transports
+    {X Y : Type} (p : Y → X)
+    (hdegree : ∀ x : X, Nat.card (p ⁻¹' ({x} : Set X)) = 2)
+    (x : X)
+    (first second : Equiv.Perm (p ⁻¹' ({x} : Set X)))
+    (hconnected : first ≠ Equiv.refl _ ∨ second ≠ Equiv.refl _) :
+    ∃ label : (p ⁻¹' ({x} : Set X)) ≃ Fin 2,
+      ∃ firstSwaps secondSwaps model,
+        labeledFiberMonodromy label first =
+          (if firstSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+        labeledFiberMonodromy label second =
+          (if secondSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+        ((model = DoubleCoverModel.oneCircle ∧
+            ∃ swapArcs : Bool,
+              (if swapArcs then (secondSwaps, firstSwaps)
+                else (firstSwaps, secondSwaps)) = (true, false)) ∨
+          (model = DoubleCoverModel.twoCircle ∧
+            firstSwaps = true ∧ secondSwaps = true)) := by
+  rcases fiber_equiv_fin_two p hdegree x with ⟨label⟩
+  have haction : TwoArcActionConnected
+      (labeledFiberMonodromy label first)
+      (labeledFiberMonodromy label second) :=
+    (labeledTwoTransport_actionConnected_iff label first second).2 hconnected
+  rcases twoArcPermMonodromy_model_exists_of_actionConnected
+      (labeledFiberMonodromy label first)
+      (labeledFiberMonodromy label second) haction with
+    ⟨firstSwaps, secondSwaps, model, hfirst, hsecond, hmodel⟩
+  exact ⟨label, firstSwaps, secondSwaps, model, hfirst, hsecond, hmodel⟩
+
 #print axioms twoArcMonodromy_nontrivial_classification
 #print axioms twoArcMonodromy_model_exists
 #print axioms finTwoPerm_eq_id_or_swap
@@ -354,5 +386,6 @@ theorem labeledTwoTransport_actionConnected_iff
 #print axioms twoArcActionConnected_conjugate
 #print axioms labeledFiberMonodromy_ne_refl_iff
 #print axioms labeledTwoTransport_actionConnected_iff
+#print axioms twoArcModel_exists_of_fiber_transports
 
 end ConstructionTargets.t97A03Closure
