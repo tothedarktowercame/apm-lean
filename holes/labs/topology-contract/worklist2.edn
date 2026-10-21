@@ -88733,6 +88733,18 @@
     [{:cmd "initial Main compile",
       :exit 1,
       :correction "built missing PolygonMoves olean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792569345351-447-6a3a7b4f",
+     :commands
+     ["git show/check/hash 66dc03a75"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed 66dc03a75 by topo-6, new after history 8e89154c4; patch scope only t94J09Closure (+16). Fixture dc7576cb... matches; STATEMENTS digest 731cfbf6... unchanged; registry 170/0; closure/Main placeholders 0/0. Fresh detached closure build and Main compile pass. New wrapper faithfully maps underlying integral H1 via a cycle/injective/exact-range map into Fin 7 coordinates, yielding the correctly oriented H1 ~= Fin 6 linear equivalence; axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists map/comparison/homology/normalization milestones."},
     :commit "66dc03a75",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88741,7 +88753,7 @@
      "dc7576cbc0dee6d243028210ee39ae91b65b752a3667818d257778980dbe9b1a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88759,7 +88771,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked generator H0.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H1 data wrapper.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89050,7 +89062,8 @@
     {:job 3, :commit "5a281c492", :reason "Banked high."}
     {:job 4, :commit "e08b2f9c2", :reason "Banked named high."}
     {:job 5, :commit "ec34d6c66", :reason "Banked vanishing tail."}
-    {:job 6, :commit "8e89154c4", :reason "Banked generator H0."}]}
+    {:job 6, :commit "8e89154c4", :reason "Banked generator H0."}
+    {:job 7, :commit "66dc03a75", :reason "Banked H1 data wrapper."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99609,7 +99622,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryGraphH1CycleComparison_of_data", :type "D"},
@@ -99618,7 +99631,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "D",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "66dc03a75"},
    :id :lemma-frozenboundarygraphh1cyclecomparison-of-data,
    :kind :lemma,
    :depends-on [],
