@@ -1677,6 +1677,18 @@ theorem circleBaseChartMeasure_apply
 
 #print axioms circleBaseChartMeasure_apply
 
+/-- A measurable circle set is null for the transported chart measure as soon
+as its restricted coordinate pullback is null. -/
+theorem circleBaseChartMeasure_apply_eq_zero
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1))) (y : Circle)
+    (s : Set Circle) (hs : MeasurableSet s)
+    (hnull : mu ((circleChartInverseExtension y) ⁻¹' s ∩
+      (chartAt (EuclideanSpace ℝ (Fin 1)) y).target) = 0) :
+    circleBaseChartMeasure mu y s = 0 := by
+  rw [circleBaseChartMeasure_apply mu y s hs, hnull]
+
+#print axioms circleBaseChartMeasure_apply_eq_zero
+
 #print axioms circleChartInverseExtension_measurable
 
 /-- The open part of the source on which a fixed target chart is valid. -/
