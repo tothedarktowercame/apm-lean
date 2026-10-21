@@ -88732,6 +88732,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 0}
      {:cmd "git show --check 0ba305bf8", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792574820883-510-11ffb5e7",
+     :commands
+     ["git show/check/hash 0ba305bf8"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed 0ba305bf8 by topo-6, new after ec84da6a0; patch scope only t94J09Closure (+24). Fixture b05293bf... matches; STATEMENTS digest 731cfbf6... unchanged; registry 170/0; closure/Main placeholders 0/0. Fresh detached build and Main compile pass. The adapter correctly derives injectivity from l.comp c=id and cycles from range c=ker boundary, yielding the correctly oriented underlying-H1 ~= Fin 6 equivalence; axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists map/left-inverse/range, homology, normalization milestones."},
     :commit "0ba305bf8",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88740,7 +88752,7 @@
      "b05293bfe7c7d7bbeaee1784718c5494c46e511b7bceefd9efaadfcbb6b2cd6d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88758,7 +88770,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cycle-from-range; construct comparison map, injectivity, exact range.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked split exact-range adapter; construct map, left inverse, range.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89054,7 +89066,11 @@
     {:job 8,
      :commit "ec84da6a0",
      :reason
-     "Banked cycle-from-range; construct comparison map, injectivity, exact range."}]}
+     "Banked cycle-from-range; construct comparison map, injectivity, exact range."}
+    {:job 9,
+     :commit "0ba305bf8",
+     :reason
+     "Banked split exact-range adapter; construct map, left inverse, range."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99652,7 +99668,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryGraphH1CycleComparison_of_leftInverse_range",
@@ -99662,7 +99678,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "split+range imply H1 iso",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0ba305bf8"},
    :id
    :lemma-frozenboundarygraphh1cyclecomparison-of-leftinverse-range,
    :kind :lemma,
