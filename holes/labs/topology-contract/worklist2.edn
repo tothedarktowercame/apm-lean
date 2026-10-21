@@ -89380,37 +89380,31 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "construct lifted-arc monodromy and model homeomorphisms; compute model invariants",
+    "construct lifted-arc transports and model homeomorphisms; compute invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "surjective_of_fiber_card_two",
-      :type "cardinality-two fibers imply surjectivity",
+    [{:name "twoArcActionConnected_conjugate",
+      :type "fiber relabeling preserves action connectedness",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on [],
-      :area "covering-classification-explicit"}
-     {:name "fiber_equiv_fin_two",
-      :type "cardinality-two fiber has Fin 2 coordinate",
-      :status :proved,
-      :consumers [:t97A03],
-      :depends-on [],
+      :depends-on ["twoArcActionConnected_iff_nontrivial"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "connected double-cover classification",
       :status :partial,
       :consumers [:t97A03],
       :depends-on
-      ["fiber_equiv_fin_two" "twoArcActionConnected_iff_nontrivial"],
+      ["fiber_equiv_fin_two" "twoArcActionConnected_conjugate"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
-      :type "model homology and fundamental group",
+      :type "model homology and pi1",
       :status :not-started,
       :consumers [:t97A03],
       :depends-on [],
@@ -89420,35 +89414,27 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Removed rejected zero-map facade; banked cardinal-two fiber coordinates.",
+    "Banked fiber-relabeling invariance of lifted-arc connectedness.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "git show --check b05db820d", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792591443224-899-f8dd38ed",
-     :commands
-     ["git show/diff-tree b05db820d"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint; sha256sum; placeholder scan"],
-     :finding
-     "PASS: topo-6 commit b05db820d changes only t97A03Closure, removes the rejected zero-map facade, and adds real progress after accepted history a2adaa449. Fiber-cardinality 2 correctly implies surjectivity and yields a Fin 2 equivalence for each actual fiber, providing the coordinate needed for monodromy. Fixture SHA c7046c88... matches; build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid STOP; lifted monodromy, model homeomorphisms, and invariants remain listed."},
-    :commit "b05db820d",
+     {:cmd "git show --check 38dbbca0a", :exit 0}],
+    :diagnostic-history
+    [{:cmd "build",
+      :exit 1,
+      :correction "fixed conjugation cancellation"}],
+    :commit "38dbbca0a",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "c7046c8812689eaac8f91fb7e2d41b0ffa9e9997e18aa8a033f966cb4229744f"},
+     "8d3335bb20a55f37703913665a83930a6cbb26e0e7e84fde5859766cfc4e39b7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98425,7 +98411,8 @@
     :lemma-twoarcpermmonodromy-model-exists-of-reachable
     :lemma-twoarcpermmonodromy-model-exists-of-actionconnected
     :lemma-twoarcactionconnected-iff-nontrivial
-    :lemma-fiber-equiv-fin-two],
+    :lemma-fiber-equiv-fin-two
+    :lemma-twoarcactionconnected-conjugate],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -100128,4 +100115,21 @@
    :id :lemma-fiber-equiv-fin-two,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoArcActionConnected_conjugate",
+    :type "fiber relabeling preserves action connectedness"},
+   :lemma
+   {:name "twoArcActionConnected_conjugate",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "fiber relabeling preserves action connectedness",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-twoarcactionconnected-conjugate,
+   :kind :lemma,
+   :depends-on [:lemma-twoarcactionconnected-iff-nontrivial],
    :other-consumers []}]}
