@@ -36756,6 +36756,19 @@
       :exit 1,
       :correction
       "reversed exactness equality and fixed explicit ModuleCat endpoints"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792593051622-939-c448ea4e",
+     :commands
+     ["git show/diff-tree 9ec870229a"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 9ec870229a^ 9ec870229a"],
+     :finding
+     "PASS: new commit 9ec870229a changes only scoped Closure; fixture/blob SHA matches 3b1a32f7.... The algebraic lemma is true with the stated orientation: exact X→Y→Z and surjective Y→Z, with X and Z finite-dimensional, make Y module-finite via Module.Finite.of_exact, hence finite-dimensional over ℚ. All hypotheses feed the standard theorem and no representation boundary is hidden. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Milestone is proved and degreewise MV specialization remains listed."},
     :commit "9ec870229a",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36764,7 +36777,7 @@
      "3b1a32f79f2852462d8f8424b9ffe757f5098ec200b03906cb317e0a2577b203"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36782,7 +36795,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Stale review: current descendant 17ef03cbb compiles; exactness is sorry-free. Dimension extraction remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed finite-dimensional exact-segment extraction; degreewise MV specialization remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36949,7 +36962,11 @@
     {:job 1,
      :commit "17ef03cbb",
      :reason
-     "Stale review: current descendant 17ef03cbb compiles; exactness is sorry-free. Dimension extraction remains."}]}
+     "Stale review: current descendant 17ef03cbb compiles; exactness is sorry-free. Dimension extraction remains."}
+    {:job 2,
+     :commit "9ec870229a",
+     :reason
+     "Committed finite-dimensional exact-segment extraction; degreewise MV specialization remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48883,7 +48900,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_finiteDimensional_middle_of_exact_of_surjective",
@@ -48895,7 +48912,9 @@
     :type
     "exact X→Y→Z, finite X/Z and surjective g imply finite-dimensional Y",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "9ec870229a"},
    :id :lemma-t99j05-finitedimensional-middle-of-exact-of-surjective,
    :kind :lemma,
    :depends-on
