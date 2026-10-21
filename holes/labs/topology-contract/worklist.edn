@@ -119196,6 +119196,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792589603160-853-cb0dbff7",
+     :commands
+     ["git show/diff dc9da46c"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: dc9da46c changes only t00J02Closure.lean (+70), adding compiled fixed-target-chart surjectivity and criticality bridges after prior history. Fixture afb497a6, source 0b3b4888, implementation 67194c28, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is correct: chart-source membership makes the fixed chart derivative injective and surjective, so postcomposition preserves and reflects surjectivity; not_congr yields the incidence critical equivalence. Representations align on the fixed chart domain. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; subtype derivative/Haar transport, aggregation, signed counts, and final assembly remain listed."},
     :commit "dc9da46ce7dab15c306f3d1421a1162d799d46f6",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-domain Sard nullity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked fixed-chart criticality.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119520,7 +119532,10 @@
      :reason "Banked smooth target-chart domain."}
     {:job 6,
      :commit "08e744c97125d61a604b97f93afcbd9430bd3dd5",
-     :reason "Banked chart-domain Sard nullity."}]}
+     :reason "Banked chart-domain Sard nullity."}
+    {:job 7,
+     :commit "dc9da46ce7dab15c306f3d1421a1162d799d46f6",
+     :reason "Banked fixed-chart criticality."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122333,7 +122348,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -122347,7 +122362,9 @@
     :type
     "incidence critical iff fixed-chart critical on chart source",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "dc9da46ce7dab15c306f3d1421a1162d799d46f6"},
    :id
    :lemma-circleincidenceprojection-critical-iff-fixedtargetchartcritical,
    :kind :lemma,
