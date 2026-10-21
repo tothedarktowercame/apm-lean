@@ -36711,66 +36711,55 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Use transported exactness and overlap groups to prove the CP successor homology step.",
+    "Extract vanishing, finite dimension, and even generators from the transported long exact sequence.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_union_transport",
-      :type "transport MV exactness to CP successor",
+    [{:name
+      "t99J05_cp_successor_mayerVietoris_exact_ambient_transport",
+      :type "exactness at literal CP successor homology",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_unionRangeToSuccessorHomologyIso"],
+      ["t99J05_cp_successor_mayerVietoris_union_transport"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n homology data implies CP(n+1) homology data",
-      :status :not-started,
+      :status :partial,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_mayerVietoris_union_transport"
+       "t99J05_cp_successor_mayerVietoris_exact_ambient_transport"
        "t99J05_cp_successor_overlap_rational_topHomology"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed Mayer-Vietoris exactness transported to literal CP successor homology; the dimension step remains.",
+    "Committed the adjacent MV segment and exactness at literal successor homology; dimension extraction remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792585775089-751-1cf6fce0",
-     :commands
-     ["git show/diff-tree ac2a9e4c5"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check ac2a9e4c5^ ac2a9e4c5"],
-     :finding
-     "PASS: new commit ac2a9e4c5 changes only scoped Closure; fixture/blob SHA matches a28d1ae2.... The ShortComplex transports the intersection, biproduct-patch, and union terms through the previously proved isomorphisms in the correct directions; its zero proof comes from the original complex, and exactness follows from the standard transport theorem applied to established MV exactness. Representation boundaries are explicit. Closure and Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Exactness milestone is proved and successor homology remains listed."},
-    :commit "ac2a9e4c5",
+    :commit "17ef03cbb",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "a28d1ae25ad750c58538435b83af352932f02746b592b2ceafe1320af1e3c566"},
+     "095377320dd976e896af3bb6f3519a21f249c10306fc948efa1be7fcd99d56c5"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48725,7 +48714,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-union-transport
-    :lemma-t99j05-cp-successor-overlap-rational-tophomology],
+    :lemma-t99j05-cp-successor-overlap-rational-tophomology
+    :lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -48741,6 +48731,25 @@
    :id :lemma-t99j05-cp-successor-overlap-rational-tophomology,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_ambient_transport",
+    :type "exactness at literal CP successor homology"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_ambient_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "exactness at literal CP successor homology",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id
+   :lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-union-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
