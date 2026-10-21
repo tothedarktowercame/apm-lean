@@ -250,12 +250,113 @@ theorem punctured_fundamentalGroup_three (M : Type)
   sorry
 
 /-- **LIBRARY (B7).** The connected-sum quotient's standard open cover. -/
+theorem connectedSum_standardCover_aux_collar_open
+    {n : ℕ} {M : Type} [TopologicalSpace M] (c : BallCollar n M)
+    (hopen : IsOpen c.radialTwo) :
+    IsOpen {x : c.Punctured | x.1 ∈ c.radialTwo} ∧
+      ∀ s, c.boundaryMap s ∈ {x : c.Punctured | x.1 ∈ c.radialTwo} := by
+  refine ⟨hopen.preimage continuous_subtype_val, fun s ↦ ?_⟩
+  refine ⟨unitToLarge n (sphereToDisk n s), ?_, c.largeMap_unitToLarge _⟩
+  have hs : dist s.1 0 = 1 := by
+    simpa [Metric.mem_sphere, dist_comm] using s.2
+  change dist s.1 0 < 2
+  linarith
+
+/-- The open thickening of the first piece: all of it, plus the open collar
+`radialTwo` of the second piece.  (Reference: the proved dimension-3 analogue
+`apm_t00A01_thickLeft` in `holes/labs/blueprints/t00A01/Blueprint.lean`.) -/
+def connectedSum_standardCover_aux_thickLeft {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂) :
+    Set (ConnectedSum c₁ c₂) :=
+  (fun z ↦ Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) z) ''
+    (Set.range Sum.inl ∪ Sum.inr '' {x : c₂.Punctured | x.1 ∈ c₂.radialTwo})
+
+/-- The open thickening of the second piece: the open collar of the first
+piece, plus all of the second. -/
+def connectedSum_standardCover_aux_thickRight {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂) :
+    Set (ConnectedSum c₁ c₂) :=
+  (fun z ↦ Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) z) ''
+    (Sum.inl '' {x : c₁.Punctured | x.1 ∈ c₁.radialTwo} ∪ Set.range Sum.inr)
+
+/-- LEAF. Both thickenings are open and cover the connected sum.  Sketch: each
+is saturated for the gluing relation, and its preimage in each summand is
+either everything or the open collar (`_aux_collar_open`).  Dimension-3
+analogue: `apm_t00A01_collared_standardCover_aux_open`. -/
+theorem connectedSum_standardCover_aux_open {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo) :
+    IsOpen (connectedSum_standardCover_aux_thickLeft c₁ c₂) ∧
+      IsOpen (connectedSum_standardCover_aux_thickRight c₁ c₂) ∧
+      connectedSum_standardCover_aux_thickLeft c₁ c₂ ∪
+        connectedSum_standardCover_aux_thickRight c₁ c₂ = Set.univ := by
+  sorry
+
+/-- LEAF. The left thickening deformation retracts onto the first punctured
+summand (push the collar of the second summand radially onto its boundary
+sphere, then across the gluing), and this equivalence sends the glued sphere
+to the first collar boundary up to homotopy.  The hypothesis on `g` pins it
+down as the inclusion of the glued sphere.  Dimension-3 analogue (without
+the compatibility clause): `apm_t00A01_collared_standardCover_aux_left`. -/
+theorem connectedSum_standardCover_aux_left {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo) :
+    ∃ e₁ : ContinuousMap.HomotopyEquiv
+        ↥(connectedSum_standardCover_aux_thickLeft c₁ c₂) c₁.Punctured,
+      ∀ g : C(Sphere n, ↥(connectedSum_standardCover_aux_thickLeft c₁ c₂)),
+        (∀ s, (g s).1 = Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))
+          (Sum.inl (c₁.boundaryMap s))) →
+        ContinuousMap.Homotopic (e₁.toFun.comp g)
+          ⟨c₁.boundaryMap, c₁.continuous_boundaryMap⟩ := by
+  sorry
+
+/-- LEAF. The right thickening retracts onto the second punctured summand,
+compatibly with the glued sphere (which equals the `inr` image of the second
+collar boundary, by `GlueRel.boundary`).  Dimension-3 analogue:
+`apm_t00A01_collared_standardCover_aux_right`. -/
+theorem connectedSum_standardCover_aux_right {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo) :
+    ∃ e₂ : ContinuousMap.HomotopyEquiv
+        ↥(connectedSum_standardCover_aux_thickRight c₁ c₂) c₂.Punctured,
+      ∀ g : C(Sphere n, ↥(connectedSum_standardCover_aux_thickRight c₁ c₂)),
+        (∀ s, (g s).1 = Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))
+          (Sum.inl (c₁.boundaryMap s))) →
+        ContinuousMap.Homotopic (e₂.toFun.comp g)
+          ⟨c₂.boundaryMap, c₂.continuous_boundaryMap⟩ := by
+  sorry
+
+/-- LEAF. The overlap of the two thickenings is the union of the two open
+collars glued along the sphere, an open annulus `S^{n-1} × (0, 2)` in radial
+coordinates; it retracts onto the glued sphere, whose inclusion is the
+inverse.  Dimension-3 analogue: `apm_t00A01_collared_standardCover_aux_inter`. -/
+theorem connectedSum_standardCover_aux_inter {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo) :
+    ∃ e₀ : ContinuousMap.HomotopyEquiv
+        ↥(connectedSum_standardCover_aux_thickLeft c₁ c₂ ∩
+          connectedSum_standardCover_aux_thickRight c₁ c₂) (Sphere n),
+      ∀ s, (e₀.invFun s).1 = Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))
+        (Sum.inl (c₁.boundaryMap s)) := by
+  sorry
+
 theorem connectedSum_standardCover {n : ℕ} {M₁ M₂ : Type}
     [TopologicalSpace M₁] [TopologicalSpace M₂]
     (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
     (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo) :
     HasStandardCover c₁ c₂ := by
-  sorry
+  obtain ⟨hU, hV, hUV⟩ := connectedSum_standardCover_aux_open c₁ c₂ hopen₁ hopen₂
+  obtain ⟨e₁, he₁⟩ := connectedSum_standardCover_aux_left c₁ c₂ hopen₁ hopen₂
+  obtain ⟨e₂, he₂⟩ := connectedSum_standardCover_aux_right c₁ c₂ hopen₁ hopen₂
+  obtain ⟨e₀, he₀⟩ := connectedSum_standardCover_aux_inter c₁ c₂ hopen₁ hopen₂
+  exact ⟨_, _, hU, hV, hUV, e₁, e₂, e₀,
+    he₁ _ fun s ↦ he₀ s, he₂ _ fun s ↦ he₀ s⟩
 
 end BallCollar
 
