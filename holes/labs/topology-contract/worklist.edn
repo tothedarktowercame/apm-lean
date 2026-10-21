@@ -119152,39 +119152,38 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove Sard nullity of incidence-projection critical values and component/global signed-count identities; assemble Main.",
+    "Install incidence manifold structure, identify projection mfderiv with kernel projection, apply Sard; prove signed-count identities and assemble Main.",
     :outcome :stop,
     :warnings
     ["Main registered sorry" "unrelated review artifacts preserved"],
     :missing-theorems
-    [{:name
-      "badCircleParameters_eq_incidenceKernelProjectionCriticalValues",
+    [{:name "incidenceKernelProjectionCriticalValues_eq_image",
       :type
-      "bad derivative-lift parameters equal critical values of incidence-kernel second projection",
+      "kernel critical values equal the image of the critical locus on the incidence subtype",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["surjective_incidenceKernel_snd_iff_direction_lifts"],
+      ["badCircleParameters_eq_incidenceKernelProjectionCriticalValues"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["badCircleParameters_eq_incidenceKernelProjectionCriticalValues"
+      ["incidenceKernelProjectionCriticalValues_eq_image"
        "CanonicalRegularFiberDegreeCalculations.ofComponentComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "4c3c7c4672df24432b21b7da0fc5fef29162d50a83592f74cda80099b45749a1",
+     "c2c974c2d0b5d15ca65e2c74d089ded368bd943103f9b24cb0c71da83e15e3be",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
@@ -119192,7 +119191,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
     :reason
-    "Banked exact identification of bad parameters with incidence-projection critical values.",
+    "Banked incidence subtype, projection, critical locus, and exact critical-value image.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119200,24 +119199,7 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
-      :exit 1,
-      :finding
-      "Replaced rewrite under negation with explicit iff directions."}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792580663181-641-77d6ee1f",
-     :commands
-     ["git show/diff 4bf01a60"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 4bf01a60 changes only t00J02Closure.lean (+34), adding a compiled identification of bad parameters with incidence-kernel projection critical values after prior history. Fixture afb497a6, source 0b3b4888, implementation 4c3c7c46, registry 170/170, and placeholders closure=0/Main=1 reproduce. Both set-inclusion directions are correct; ker(coprod A (-B)) encodes A u=B v, and surjectivity of its second projection is exactly the all-directions lift condition. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; Sard nullity, signed-count identities, and final assembly remain listed."},
-    :commit "4bf01a6030b0968ab9d037ae617f61aa0cf84b25",
+    :commit "cf4b9e2da64e13a50a98430d2689e01506d45df0",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119225,7 +119207,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119776,7 +119758,8 @@
     :lemma-canonicalregularfiberdegreecalculations-ofcomponentcomparison
     :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badset-measure-zero
     :lemma-badcircleparameters-measure-zero-of-subset-nullcriticalset
-    :lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues],
+    :lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues
+    :lemma-incidencekernelprojectioncriticalvalues-eq-image],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122137,6 +122120,26 @@
    :id :lemma-surjective-incidencekernel-snd-iff-direction-lifts,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "incidenceKernelProjectionCriticalValues_eq_image",
+    :type
+    "kernel critical values equal the image of the critical locus on the incidence subtype"},
+   :lemma
+   {:name "incidenceKernelProjectionCriticalValues_eq_image",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "kernel critical values equal the image of the critical locus on the incidence subtype",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-incidencekernelprojectioncriticalvalues-eq-image,
+   :kind :lemma,
+   :depends-on
+   [:lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
