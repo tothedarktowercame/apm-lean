@@ -1659,6 +1659,42 @@ theorem targetChartCoordinate_criticalImage_null
 
 #print axioms targetChartCoordinate_criticalImage_null
 
+/-- Ambient critical points lying over a fixed target chart have null
+coordinate image. -/
+theorem targetChartCoordinate_ambientCriticalImage_null
+    {E F M N : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M]
+    [SecondCountableTopology M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure]
+    (g : M → N) (y : N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) ∞ g) :
+    mu (((chartAt F y) ∘ g) ''
+      {x | x ∈ targetChartDomain (F := F) g y hg.continuous ∧
+        ¬ Function.Surjective
+          (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+            ((chartAt F y) ∘ g) x)}) = 0 := by
+  apply measure_mono_null (Set.image_mono ?_)
+    (targetChartCoordinate_criticalImage_null mu g y hg)
+  rintro x ⟨hx, hcrit⟩
+  let q : targetChartDomain (F := F) g y hg.continuous := ⟨x, hx⟩
+  refine ⟨q, ?_⟩
+  have hc : MDifferentiableAt (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) ((chartAt F y) ∘ g) x :=
+    (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) y).mdifferentiableAt hx |>.comp x
+      hg.mdifferentiableAt
+  exact mfderiv_openSubtype_not_surjective
+    (targetChartDomain (F := F) g y hg.continuous) ((chartAt F y) ∘ g) q hc hcrit
+
+#print axioms targetChartCoordinate_ambientCriticalImage_null
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
