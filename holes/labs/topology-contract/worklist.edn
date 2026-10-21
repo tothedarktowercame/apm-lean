@@ -119205,6 +119205,18 @@
       :exit 1,
       :finding
       "Replaced rewrite under negation with explicit iff directions."}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792580663181-641-77d6ee1f",
+     :commands
+     ["git show/diff 4bf01a60"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 4bf01a60 changes only t00J02Closure.lean (+34), adding a compiled identification of bad parameters with incidence-kernel projection critical values after prior history. Fixture afb497a6, source 0b3b4888, implementation 4c3c7c46, registry 170/170, and placeholders closure=0/Main=1 reproduce. Both set-inclusion directions are correct; ker(coprod A (-B)) encodes A u=B v, and surjectivity of its second projection is exactly the all-directions lift condition. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; Sard nullity, signed-count identities, and final assembly remain listed."},
     :commit "4bf01a6030b0968ab9d037ae617f61aa0cf84b25",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119213,7 +119225,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119231,7 +119243,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nullity transport from a null critical superset.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact identification of bad parameters with incidence-projection critical values.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119507,8 +119519,11 @@
      :reason "Banked direct bad-parameter nullity adapter."}
     {:job 8,
      :commit "367f0e9ab2bd9b6fd5035c45dd8956982b720d3c",
+     :reason "Banked nullity transport from a null critical superset."}
+    {:job 9,
+     :commit "4bf01a6030b0968ab9d037ae617f61aa0cf84b25",
      :reason
-     "Banked nullity transport from a null critical superset."}]}
+     "Banked exact identification of bad parameters with incidence-projection critical values."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122085,7 +122100,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -122099,7 +122114,9 @@
     :type
     "bad derivative-lift parameters equal critical values of incidence-kernel second projection",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "4bf01a6030b0968ab9d037ae617f61aa0cf84b25"},
    :id
    :lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues,
    :kind :lemma,
@@ -122108,13 +122125,15 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surjective_incidenceKernel_snd_iff_direction_lifts"},
    :lemma
    {:name "surjective_incidenceKernel_snd_iff_direction_lifts",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-surjective-incidencekernel-snd-iff-direction-lifts,
    :kind :lemma,
    :depends-on [],
