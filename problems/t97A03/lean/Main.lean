@@ -179,6 +179,83 @@ lemma apm_t97A03_cutCircleMap_A_eq_B (A B : Circle) :
     (Relation.EqvGen.rel _ _
       (apm_t97A03_CutCircleRel.glue (A := A) (B := B)))
 
+/-- Rotate the literal cut-circle quotient so that its first marked point is
+one.  This is an actual quotient map, not an abstract pi1 coordinate choice. -/
+def apm_t97A03_normalizeCutCircle (A B : Circle) :
+    apm_t97A03_CutCircle A B →
+      apm_t97A03_CutCircle 1 (A⁻¹ * B) :=
+  Quotient.lift
+    (fun z => apm_t97A03_cutCircleMap 1 (A⁻¹ * B) (A⁻¹ * z))
+    (by
+      intro x y hxy
+      exact Relation.EqvGen.rec
+        (fun _ _ h => by
+          cases h
+          simpa using Quotient.sound
+            (Relation.EqvGen.rel _ _
+              (apm_t97A03_CutCircleRel.glue
+                (A := (1 : Circle)) (B := A⁻¹ * B))))
+        (fun _ => rfl)
+        (fun _ _ _ ih => ih.symm)
+        (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂)
+        hxy)
+
+/-- Undo the normalization rotation on the literal quotient. -/
+def apm_t97A03_denormalizeCutCircle (A B : Circle) :
+    apm_t97A03_CutCircle 1 (A⁻¹ * B) →
+      apm_t97A03_CutCircle A B :=
+  Quotient.lift
+    (fun z => apm_t97A03_cutCircleMap A B (A * z))
+    (by
+      intro x y hxy
+      exact Relation.EqvGen.rec
+        (fun _ _ h => by
+          cases h
+          simpa using Quotient.sound
+            (Relation.EqvGen.rel _ _
+              (apm_t97A03_CutCircleRel.glue (A := A) (B := B))))
+        (fun _ => rfl)
+        (fun _ _ _ ih => ih.symm)
+        (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂)
+        hxy)
+
+lemma apm_t97A03_continuous_normalizeCutCircle (A B : Circle) :
+    Continuous (apm_t97A03_normalizeCutCircle A B) := by
+  apply continuous_coinduced_dom.mpr
+  exact (apm_t97A03_continuous_cutCircleMap 1 (A⁻¹ * B)).comp
+    (continuous_const.mul continuous_id)
+
+lemma apm_t97A03_continuous_denormalizeCutCircle (A B : Circle) :
+    Continuous (apm_t97A03_denormalizeCutCircle A B) := by
+  apply continuous_coinduced_dom.mpr
+  exact (apm_t97A03_continuous_cutCircleMap A B).comp
+    (continuous_const.mul continuous_id)
+
+/-- Identifying arbitrary marked points is geometrically equivalent to
+identifying one with their relative displacement. -/
+noncomputable def apm_t97A03_cutCircleNormalizeHomeomorph (A B : Circle) :
+    apm_t97A03_CutCircle A B ≃ₜ apm_t97A03_CutCircle 1 (A⁻¹ * B) where
+  toFun := apm_t97A03_normalizeCutCircle A B
+  invFun := apm_t97A03_denormalizeCutCircle A B
+  left_inv := by
+    intro x
+    refine Quotient.inductionOn x ?_
+    intro z
+    change apm_t97A03_cutCircleMap A B (A * (A⁻¹ * z)) =
+      apm_t97A03_cutCircleMap A B z
+    congr 1
+    simp
+  right_inv := by
+    intro x
+    refine Quotient.inductionOn x ?_
+    intro z
+    change apm_t97A03_cutCircleMap 1 (A⁻¹ * B) (A⁻¹ * (A * z)) =
+      apm_t97A03_cutCircleMap 1 (A⁻¹ * B) z
+    congr 1
+    simp
+  continuous_toFun := apm_t97A03_continuous_normalizeCutCircle A B
+  continuous_invFun := apm_t97A03_continuous_denormalizeCutCircle A B
+
 /-- A fixed path in the literal sphere summand from the north attachment to
 the south attachment. -/
 noncomputable def apm_t97A03_sphereReturn :
@@ -931,52 +1008,6 @@ theorem apm_t97A03_exists_aligned_cut_piOneEquiv_of_decoder_and_generated
   exact apm_t97A03_exists_aligned_cut_piOneEquiv_of_free_and_generated A B
     (apm_t97A03_cutGeneratorFreeGroupMap_injective_of_decoder
       A B decode hfirst hsecond) hgenerated
-
-/-- The exact remaining geometric data simultaneously give the aligned cut
-coordinates and injectivity of the literal collapse map. -/
-theorem apm_t97A03_cut_alignment_and_collapse_injective_of_geometric_data
-    (A B : Circle)
-    (decode : FundamentalGroup (apm_t97A03_CutCircle A B)
-        (apm_t97A03_cutCircleMap A B A) →* FreeGroup (Fin 2))
-    (hfirst : decode (apm_t97A03_firstCutCircleGenerator A B) =
-      FreeGroup.of (0 : Fin 2))
-    (hsecond : decode (apm_t97A03_secondCutCircleGenerator A B) =
-      FreeGroup.of (1 : Fin 2))
-    (hcutGenerated : ∀ g : FundamentalGroup (apm_t97A03_CutCircle A B)
-        (apm_t97A03_cutCircleMap A B A),
-      ∃ w : List (Fin 2 × ℤ),
-        apm_t97A03_twoGeneratorWord
-          (apm_t97A03_firstCutCircleGenerator A B)
-          (apm_t97A03_secondCutCircleGenerator A B) w = g)
-    (hliteralGenerated : ∀ g : FundamentalGroup (apm_t97A03_BaseSpace A B)
-        (apm_t97A03_baseCircle A B A),
-      ∃ w : List (Fin 2 × ℤ),
-        apm_t97A03_twoGeneratorWord
-          (FundamentalGroup.fromPath
-            (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B)))
-          (FundamentalGroup.fromPath
-            (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B))) w = g) :
-    (∃ e : FundamentalGroup (apm_t97A03_CutCircle A B)
-          (apm_t97A03_cutCircleMap A B A) ≃*
-        FundamentalGroup
-          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
-            (Fin 2))
-          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
-            (0 : Fin 2) 1),
-      e (apm_t97A03_firstCutCircleGenerator A B) =
-          ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
-            1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass ∧
-        e (apm_t97A03_secondCutCircleGenerator A B) =
-          ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
-            1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass) ∧
-      Function.Injective (apm_t97A03_collapsePiOneHom A B) := by
-  let hcut : Function.Injective (apm_t97A03_cutGeneratorFreeGroupMap A B) :=
-    apm_t97A03_cutGeneratorFreeGroupMap_injective_of_decoder
-      A B decode hfirst hsecond
-  exact ⟨apm_t97A03_exists_aligned_cut_piOneEquiv_of_free_and_generated
-      A B hcut hcutGenerated,
-    apm_t97A03_collapsePiOneHom_injective_of_literal_signed_generation
-      A B hliteralGenerated hcut⟩
 
 /-- Exact algebraic contract for the pending geometric comparison.  Once an
 equivalence identifies the literal base fundamental group with the finite
