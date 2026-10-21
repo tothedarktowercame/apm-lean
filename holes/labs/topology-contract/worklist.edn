@@ -119152,21 +119152,22 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Prove comparison and fiber formula; assemble H2/Main.",
+    :residual
+    "Only the transverse comparison and fiber formula remain before Main.",
     :outcome :stop,
     :warnings ["Main sorry" "review dirs"],
     :missing-theorems
-    [{:name "surfaceTopDegree_eq_zero_of_diskBounded_comparison",
-      :type "comparison+formula give degree zero",
+    [{:name "topHomologyMap_eq_zero_of_diskBounded_degreeFormula",
+      :type "comparison+fiber formula imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalComponentSums_eq_zero_of_diskBounded_comparison"],
+      ["surfaceTopDegree_eq_zero_of_diskBounded_comparison"],
       :area "oriented-surface-degree"}
      {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
       :type "derive comparison",
@@ -119185,32 +119186,20 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "96a5bdf91ae38d336d0a185ca77c817fa5eecfe69a1bed22f0274835578adf7c",
+     "018430a19f7ebc5be16a6384dc3d1fed5fe4da9b7be20b13e0a233fcdf47967b",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked top-degree vanishing.",
+    :reason "Banked disk-bounded H2 assembly.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "Main compile; registry; diff; hashes; placeholders",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792625953205-1815-2f953cbd",
-     :commands
-     ["git show/diff --check 0440d8b89"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: 0440d8b89 changes only t00J02Closure.lean (+32), adding compiled, sorry-free disk-bounded top-degree vanishing beyond history 11cac6eb0. Fixture afb497a6, source 0b3b4888, implementation 96a5bdf9; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: disk-bounded comparison yields zero canonical component sums; composing those with the assumed regular-fiber top-degree formula yields surfaceTopDegree e f = 0. Fiber subtype, occupied-component indices, exact-lift degrees, canonical local degrees, and signs remain aligned. Axioms are propext, Classical.choice, Quot.sound. Residual milestones prove the transverse comparison and fiber formula, then assemble H2/Main."},
-    :commit "0440d8b897513fcbc1def1ea25e4fe6dd96d1b93",
+    :commit "a763d5d49af5ca6a55d3a081f2175b81a2dadc11",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119218,7 +119207,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -123439,6 +123428,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-canonicalcomponentsums-eq-zero-of-diskbounded-comparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_diskBounded_degreeFormula",
+    :type "comparison+fiber formula imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_diskBounded_degreeFormula",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "comparison+fiber formula imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-tophomologymap-eq-zero-of-diskbounded-degreeformula,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surfacetopdegree-eq-zero-of-diskbounded-comparison],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
