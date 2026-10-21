@@ -102,6 +102,34 @@ lemma apm_t97A03_base_south_eq (A B : Circle) :
       apm_t97A03_baseSphere A B apm_t97A03_south := by
   exact apm_t97A03_base_south_eq A B
 
+/-- A fixed path in the literal sphere summand from the north attachment to
+the south attachment. -/
+noncomputable def apm_t97A03_sphereReturn :
+    Path apm_t97A03_north apm_t97A03_south := by
+  letI : PathConnectedSpace apm_t97A03_S2 :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (E := apm_t97A03_R3)
+        (by rw [← Module.finrank_eq_rank]; norm_num [apm_t97A03_R3])
+        0 (by norm_num))
+  exact PathConnectedSpace.somePath _ _
+
+/-- The actual return path in the base quotient, obtained from the sphere
+summand rather than from an abstract loop selector. -/
+noncomputable def apm_t97A03_baseSphereReturn (A B : Circle) :
+    Path (apm_t97A03_baseSphere A B apm_t97A03_north)
+      (apm_t97A03_baseSphere A B apm_t97A03_south) :=
+  apm_t97A03_sphereReturn.map (apm_t97A03_continuous_baseSphere A B)
+
+@[simp] lemma apm_t97A03_baseSphereReturn_zero (A B : Circle) :
+    apm_t97A03_baseSphereReturn A B 0 = apm_t97A03_baseCircle A B A := by
+  rw [(apm_t97A03_baseSphereReturn A B).source,
+    ← apm_t97A03_baseCircle_A]
+
+@[simp] lemma apm_t97A03_baseSphereReturn_one (A B : Circle) :
+    apm_t97A03_baseSphereReturn A B 1 = apm_t97A03_baseCircle A B B := by
+  rw [(apm_t97A03_baseSphereReturn A B).target,
+    ← apm_t97A03_baseCircle_B]
+
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
   exact mem_sphere_zero_iff_norm.mpr (by norm_num)⟩
