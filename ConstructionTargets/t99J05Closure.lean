@@ -1771,6 +1771,31 @@ theorem t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton
 
 #print axioms t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton
 
+/-- Above the overlap's top degree, its existing sphere vanishing theorem
+supplies both zero and finite-dimensional instances to the degreewise
+Mayer--Vietoris extraction. -/
+theorem t99J05_cp_successor_finiteDimensional_of_overlap_gt
+    (n k : ℕ) (hk : 2 * n + 1 < k)
+    [FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) (k + 1))]
+    [FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) (k + 1))] :
+    FiniteDimensional ℚ (Homology (CP (n + 1)) (k + 1)) := by
+  let O := Homology ({p : CP (n + 1) |
+    p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+    Set (CP (n + 1))) k
+  letI : Subsingleton O :=
+    ModuleCat.isZero_iff_subsingleton.mp
+      (t99J05_cp_successor_overlap_homology_isZero_of_gt n k hk)
+  letI : FiniteDimensional ℚ O :=
+    FiniteDimensional.of_injective (0 : O →ₗ[ℚ] ℚ)
+      (Function.injective_of_subsingleton _)
+  exact t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton n k
+
+#print axioms t99J05_cp_successor_finiteDimensional_of_overlap_gt
+
 /-- The separately named transported arrow is exactly the first arrow of the
 transported short complex whose exactness was established above. -/
 theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
