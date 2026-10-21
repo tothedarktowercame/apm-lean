@@ -2320,6 +2320,23 @@ theorem frozenBoundaryGraphH1CycleComparison_of_leftInverse_range
     exact hx.symm.trans ((congrArg l hxy).trans hy)
   · exact hrange
 
+/-- Cycle-valuedness and surjectivity onto every graph cycle identify the
+comparison range with the graph-boundary kernel. -/
+theorem frozenBoundaryGraphH1Comparison_range
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 7 → ℤ))
+    (hcycle : ∀ x, frozenGraphBoundary (c x) = 0)
+    (honto : ∀ z : LinearMap.ker frozenGraphBoundary,
+      ∃ x, c x = z.1) :
+    LinearMap.range c = LinearMap.ker frozenGraphBoundary := by
+  apply le_antisymm
+  · rintro _ ⟨x, rfl⟩
+    exact hcycle x
+  · intro z hz
+    rcases honto ⟨z, hz⟩ with ⟨x, hx⟩
+    exact ⟨x, hx⟩
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3445,6 +3462,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphH1CycleComparison_of_data
 #print axioms frozenBoundaryGraphH1Cycle_of_range
 #print axioms frozenBoundaryGraphH1CycleComparison_of_leftInverse_range
+#print axioms frozenBoundaryGraphH1Comparison_range
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
