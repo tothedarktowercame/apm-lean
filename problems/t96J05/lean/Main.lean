@@ -35,15 +35,38 @@ def apm_t96j05_IsEmbeddedSmoothRadialLevel {m n : ℕ}
       ContMDiff (apm_t96j05_I k) (apm_t96j05_I n) ∞
         (fun x : apm_t96j05_radialLevel X r ↦ x.1.1)
 
+/-- Internal closure package retaining the level's ambient dimension bound
+and its inhabitance until the final public result is assembled. -/
+structure apm_t96j05_BoundedRadialLevel {m n : ℕ}
+    (X : Set (apm_t96j05_E n)) (r : ℝ) : Prop where
+  positive : 0 < r
+  nonempty : Nonempty (apm_t96j05_radialLevel X r)
+  bounded : ∃ k : ℕ, k ≤ m ∧ k ≤ n ∧
+    ∃ charts : ChartedSpace (apm_t96j05_E k)
+        (apm_t96j05_radialLevel X r),
+      letI := charts
+      IsManifold (apm_t96j05_I k) ∞
+          (apm_t96j05_radialLevel X r) ∧
+        ContMDiff (apm_t96j05_I k) (apm_t96j05_I n) ∞
+          (fun x : apm_t96j05_radialLevel X r ↦ x.1.1)
+
+theorem apm_t96j05_BoundedRadialLevel.forget {m n : ℕ}
+    {X : Set (apm_t96j05_E n)} {r : ℝ}
+    (h : apm_t96j05_BoundedRadialLevel (m := m) X r) :
+    Nonempty (apm_t96j05_radialLevel X r) ∧
+      apm_t96j05_IsEmbeddedSmoothRadialLevel (m := m) X r := by
+  rcases h.bounded with ⟨k, hkm, -, hk⟩
+  exact ⟨h.nonempty, k, hkm, hk⟩
+
 /-- The constant-radius branch: the radial level is all of `X`, so its
 existing atlas and smooth ambient inclusion transport to the literal subtype. -/
 theorem apm_t96j05_constant_radius_level
     {m n : ℕ} {X : Set (apm_t96j05_E n)}
+    (hmn : m ≤ n)
     (hX : apm_t96j05_IsEmbeddedSmoothSubmanifold (m := m) X)
     {r : ℝ} (hr : 0 < r) (hall : ∀ x : X, ‖x.1‖ = r) :
     Nonempty X →
-      Nonempty (apm_t96j05_radialLevel X r) ∧
-      apm_t96j05_IsEmbeddedSmoothRadialLevel (m := m) X r := by
+      apm_t96j05_BoundedRadialLevel (m := m) X r := by
   intro hne
   rcases hX with ⟨charts, hman, hinc⟩
   letI : ChartedSpace (apm_t96j05_E m) X := charts
@@ -63,8 +86,7 @@ theorem apm_t96j05_constant_radius_level
       (apm_t96j05_radialLevel X r) := by
     change ChartedSpace (apm_t96j05_E m) U
     infer_instance
-  refine ⟨hlevel, m, le_rfl, ?_⟩
-  refine ⟨chartsU, ?_, ?_⟩
+  refine ⟨hr, hlevel, m, le_rfl, hmn, chartsU, ?_, ?_⟩
   · change IsManifold (apm_t96j05_I m) ∞ U
     infer_instance
   change ContMDiff (apm_t96j05_I m) (apm_t96j05_I n) ∞
@@ -236,6 +258,7 @@ theorem apm_t96j05_regular_radius_level
     {m n : ℕ} {X : Set (apm_t96j05_E n)}
     [ChartedSpace (apm_t96j05_E m) X]
     [IsManifold (apm_t96j05_I m) ∞ X]
+    (hmn : m ≤ n)
     (hinc : ContMDiff (apm_t96j05_I m) (apm_t96j05_I n) ∞
       (fun x : X ↦ x.1))
     {r : ℝ} (hr : 0 < r)
@@ -246,7 +269,7 @@ theorem apm_t96j05_regular_radius_level
       Function.Surjective
         (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ)
           (fun y : X => ‖y.1‖ ^ 2) x)) :
-    apm_t96j05_IsEmbeddedSmoothRadialLevel (m := m) X r := by
+    apm_t96j05_BoundedRadialLevel (m := m) X r := by
   let f : X → ℝ := fun x => ‖x.1‖ ^ 2
   let P : X → Prop := fun x => f x = r ^ 2
   let Q : X → Prop := fun x => ‖x.1‖ = r
@@ -264,9 +287,11 @@ theorem apm_t96j05_regular_radius_level
         (E := apm_t96j05_E m) (F := ℝ)) (Subtype Q) :=
     ConstructionTargets.PredicateSubtypeAtlasTransport.chartedSpace
       hPQ fiberAtlas
-  refine ⟨Module.finrank ℝ (apm_t96j05_E m) - Module.finrank ℝ ℝ, ?_,
+  refine ⟨hr, hlevel,
+    Module.finrank ℝ (apm_t96j05_E m) - Module.finrank ℝ ℝ, ?_, ?_,
     radialAtlas, ?_⟩
   · simp
+  · simpa using (Nat.sub_le m 1).trans hmn
   · letI := radialAtlas
     constructor
     · apply ConstructionTargets.PredicateSubtypeAtlasTransport.isManifold
@@ -301,7 +326,6 @@ theorem apm_t96j05
     ∃ r : ℝ, 0 < r ∧
       Nonempty (apm_t96j05_radialLevel X r) ∧
       apm_t96j05_IsEmbeddedSmoothRadialLevel (m := m) X r := by
-  have _ := hmn
   rcases hX with ⟨charts, hman, hinc⟩
   letI : ChartedSpace (apm_t96j05_E m) X := charts
   letI : IsManifold (apm_t96j05_I m) ∞ X := hman
@@ -309,14 +333,14 @@ theorem apm_t96j05
   by_cases hc : ∃ r : ℝ, 0 < r ∧ ∀ x : X, ‖x.1‖ = r
   · rcases hc with ⟨r, hr, hall⟩
     refine ⟨r, hr, ?_⟩
-    exact apm_t96j05_constant_radius_level
-      ⟨charts, hman, hinc⟩ hr hall inferInstance
+    exact (apm_t96j05_constant_radius_level hmn
+      ⟨charts, hman, hinc⟩ hr hall inferInstance).forget
   · have hsm : ContMDiff (apm_t96j05_I m) 𝓘(ℝ, ℝ) ∞
         (fun x : X => ‖x.1‖ ^ 2) := by
       exact (contDiff_norm_sq ℝ).contMDiff.comp hinc
     rcases apm_t96j05_exists_regular_radius hm hXconn hsm hc with
       ⟨r, hr, hlevel, hreg⟩
-    exact ⟨r, hr, hlevel,
-      apm_t96j05_regular_radius_level hinc hr hlevel hsm hreg⟩
+    exact ⟨r, hr, (apm_t96j05_regular_radius_level
+      hmn hinc hr hlevel hsm hreg).forget⟩
 
 #print axioms apm_t96j05
