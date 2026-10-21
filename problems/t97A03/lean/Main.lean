@@ -4,6 +4,7 @@ import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.t97A03Closure
 import ConstructionTargets.PolygonSurfaceHomology
+import ConstructionTargets.PolygonCellPiOne
 
 /-!
 # APM t97A03
@@ -612,6 +613,77 @@ theorem apm_t97A03_twoCircleWedge_exists_signedGeneratorWord
   exact
     ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFin_exists_generatorWord
       1 g
+
+/-- The concrete free-group evaluation map determined by the two geometric
+arcs of the cut-circle quotient.  Proving this map bijective is now the exact
+remaining van Kampen calculation for the cut representation. -/
+noncomputable def apm_t97A03_cutGeneratorFreeGroupMap (A B : Circle) :
+    FreeGroup (Fin 2) →*
+      FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A) :=
+  FreeGroup.lift (fun i => if i = 0 then
+    apm_t97A03_firstCutCircleGenerator A B else
+    apm_t97A03_secondCutCircleGenerator A B)
+
+@[simp] lemma apm_t97A03_cutGeneratorFreeGroupMap_zero (A B : Circle) :
+    apm_t97A03_cutGeneratorFreeGroupMap A B (FreeGroup.of (0 : Fin 2)) =
+      apm_t97A03_firstCutCircleGenerator A B := by
+  simp [apm_t97A03_cutGeneratorFreeGroupMap]
+
+@[simp] lemma apm_t97A03_cutGeneratorFreeGroupMap_one (A B : Circle) :
+    apm_t97A03_cutGeneratorFreeGroupMap A B (FreeGroup.of (1 : Fin 2)) =
+      apm_t97A03_secondCutCircleGenerator A B := by
+  simp [apm_t97A03_cutGeneratorFreeGroupMap]
+
+/-- Bijectivity of the explicit cut-generator evaluation map produces the
+required cut-to-standard-wedge equivalence with both generator alignments,
+so no arbitrary abstract equivalence may be substituted at this boundary. -/
+theorem apm_t97A03_exists_aligned_cut_piOneEquiv_of_generator_bijective
+    (A B : Circle)
+    (hbij : Function.Bijective (apm_t97A03_cutGeneratorFreeGroupMap A B)) :
+    ∃ e : FundamentalGroup (apm_t97A03_CutCircle A B)
+          (apm_t97A03_cutCircleMap A B A) ≃*
+        FundamentalGroup
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (Fin 2))
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin 2) 1),
+      e (apm_t97A03_firstCutCircleGenerator A B) =
+          ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+            1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass ∧
+        e (apm_t97A03_secondCutCircleGenerator A B) =
+          ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+            1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass := by
+  let cutFree : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A) ≃* FreeGroup (Fin 2) :=
+    (MulEquiv.ofBijective (apm_t97A03_cutGeneratorFreeGroupMap A B) hbij).symm
+  let freeWedge : FreeGroup (Fin 2) ≃*
+      FundamentalGroup
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (Fin 2))
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin 2) 1) :=
+    MulEquiv.ofBijective
+      (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegFreeGroupMap 1)
+      ⟨ConstructionTargets.PolygonCellPiOne.finiteWedgeFinLegFreeGroupMap_injective 1,
+        ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegFreeGroupMap_surjective 1⟩
+  refine ⟨cutFree.trans freeWedge, ?_, ?_⟩
+  · have hz : cutFree (apm_t97A03_firstCutCircleGenerator A B) =
+        FreeGroup.of (0 : Fin 2) := by
+      apply cutFree.symm.injective
+      simp [cutFree]
+    change freeWedge (cutFree (apm_t97A03_firstCutCircleGenerator A B)) = _
+    rw [hz]
+    simp [freeWedge,
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegFreeGroupMap]
+  · have ho : cutFree (apm_t97A03_secondCutCircleGenerator A B) =
+        FreeGroup.of (1 : Fin 2) := by
+      apply cutFree.symm.injective
+      simp [cutFree]
+    change freeWedge (cutFree (apm_t97A03_secondCutCircleGenerator A B)) = _
+    rw [ho]
+    simp [freeWedge,
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegFreeGroupMap]
 
 /-- Evaluate an integer-exponent word in two distinguished elements. -/
 def apm_t97A03_twoGeneratorWord {G : Type*} [Group G]
