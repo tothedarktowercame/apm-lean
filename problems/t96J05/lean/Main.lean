@@ -55,8 +55,11 @@ theorem apm_t96j05_BoundedRadialLevel.forget {m n : ℕ}
     (h : apm_t96j05_BoundedRadialLevel (m := m) X r) :
     Nonempty (apm_t96j05_radialLevel X r) ∧
       apm_t96j05_IsEmbeddedSmoothRadialLevel (m := m) X r := by
-  rcases h.bounded with ⟨k, hkm, -, hk⟩
-  exact ⟨h.nonempty, k, hkm, hk⟩
+  rcases h.bounded with ⟨k, hkm, hkn, hk⟩
+  refine ⟨h.nonempty, min k n, (min_le_left k n).trans hkm, ?_⟩
+  have hmin : min k n = k := min_eq_left hkn
+  rw [hmin]
+  exact hk
 
 /-- The constant-radius branch: the radial level is all of `X`, so its
 existing atlas and smooth ambient inclusion transport to the literal subtype. -/
