@@ -89382,7 +89382,7 @@
   {:consumer :t97A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
@@ -89442,7 +89442,7 @@
      "5b506c2aab8a9f958669379f2f41b07bcaddfd4b2c938b5fd4a4d509b5f5ce4b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89709,6 +89709,18 @@
       :exit 1,
       :correction "explicit characteristic"}
      {:cmd "cast build", :exit 1, :correction "used CharP lemma"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792603058214-1179-3d0651a1",
+     :commands
+     ["git show/diff-tree 3971f9e6a"
+      "lake -Kjobs=1 build ConstructionTargets.t99A03Closure"
+      "lake env lean problems/t99A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit 3971f9e6a changes only t99A03Closure after history f1371897c; fixture SHA d6972386... matches. The explicit FreeGroup character sends only the first N3 crosscap generator to nonzero ZMod 2, kills the a^2 b^2 c^2 relator, and is proved nontrivial; quotient descent and cover realization are not overclaimed. Build/Main/registry pass (170/0); frozen digest 6b0e5d09... unchanged; placeholders closure/Main=0/1; standard axioms only. Valid program STOP; N4 cover realization and wedge Lefschetz steps remain listed."},
     :commit "3971f9e6a",
     :changed-paths ["ConstructionTargets/t99A03Closure.lean"],
     :fixture
@@ -89717,7 +89729,7 @@
      "d697238648aab4b74e7508ef0925e88a0d64bcec5fa005231ed9aa8ae291797f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99A03/lean/Main.lean"
     "problems/t99A03/status.json"
@@ -89735,7 +89747,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the literal-model deck-transformation adapter.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the N3 parity character.",
    :id :program-2026-10-13-close-t99a03,
    :kind :final-adapter,
    :campaign-priority 39,
@@ -89750,7 +89762,10 @@
      "Blueprint written; independent review required before formalization."}
     {:job 2,
      :commit "f1371897c",
-     :reason "Banked the literal-model deck-transformation adapter."}]}
+     :reason "Banked the literal-model deck-transformation adapter."}
+    {:job 3,
+     :commit "3971f9e6a",
+     :reason "Banked the N3 parity character."}]}
   {:consumer :t95J03,
    :stop-count 0,
    :phase :implementation,
@@ -100381,7 +100396,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "monodromy_cast_refl_val",
@@ -100391,14 +100406,16 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "casted constant preserves point",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A03Closure.lean"]},
    :id :lemma-monodromy-cast-refl-val,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_moved_covering_loop_over_connected",
@@ -100408,7 +100425,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "connected double cover has moved loop",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A03Closure.lean"]},
    :id :lemma-exists-moved-covering-loop-over-connected,
    :kind :lemma,
    :depends-on
@@ -100417,7 +100436,7 @@
    :other-consumers []}
   {:consumer :t99A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "n3ParityCharacter_crosscapRelator",
@@ -100427,7 +100446,9 @@
     :reported-by [:program-2026-10-13-close-t99a03],
     :type "parity kills relator; nontrivial",
     :area "polygon-covering-classification",
-    :proved-in :program-2026-10-13-close-t99a03},
+    :proved-in :program-2026-10-13-close-t99a03,
+    :banked-by :program-2026-10-13-close-t99a03,
+    :banked-commit "3971f9e6a"},
    :id :lemma-n3paritycharacter-crosscaprelator,
    :kind :lemma,
    :depends-on [],
