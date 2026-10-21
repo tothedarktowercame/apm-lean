@@ -36711,7 +36711,7 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
@@ -36765,7 +36765,7 @@
      "279717f76455057c2ec51c18d528a51ac2f797a21298a067c4b481f2a48ac73a"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -38024,6 +38024,21 @@
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792614902570-1507-19f607df",
+     :commands
+     ["git show --stat/--format=fuller c46223f40f5df12e744c4fc811f03ee02e83c0c5"
+      "git show c46223f40:ConstructionTargets/t94A06Closure.blueprint.md | sha256sum"
+      "cmp recorded blueprint copies"
+      "git diff --check c46223f40^ c46223f40"
+      "lake env lean holes/labs/blueprints/t94A06/Blueprint.lean"
+      "lake env lean problems/t94A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "rg placeholder counts at c46223f40"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit c46223f40 changes only the scoped blueprint; SHA-256 matches 6c83cb7a6a265ae8533f7af0548fa79b29b10ca756c8fdb7f08ab69a44136117 and it exactly copies the source plan. The finite-dimensional repair excludes the stated Hilbert-manifold counterexample. The normal-part Sard reduction is mathematically valid for a second-countable finite-dimensional manifold with corners, and the compiled adapter correctly pulls good values through negation and combines the two lifted normal directions with the z-axis direction. All final hypotheses have a dependency path. Blueprint/Main compile, registry is 170/170, and placeholder counts remain 1/1, exactly the listed Morse-Sard library obligation; the adapter proof is already compiled in Blueprint. This is genuine blueprint progress with remaining milestones listed."},
     :commit "c46223f40f5df12e744c4fc811f03ee02e83c0c5",
     :changed-paths ["ConstructionTargets/t94A06Closure.blueprint.md"],
     :fixture
@@ -38032,7 +38047,7 @@
      "6c83cb7a6a265ae8533f7af0548fa79b29b10ca756c8fdb7f08ab69a44136117"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -38050,14 +38065,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A06Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t94A06/BLUEPRINT.md's plan into ConstructionTargets/t94A06Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reviewed blueprint copied and committed; implementation starts next job.",
    :id :program-2026-10-13-close-t94a06,
    :kind :final-adapter,
    :campaign-priority 36,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "c46223f40f5df12e744c4fc811f03ee02e83c0c5",
+     :reason
+     "Reviewed blueprint copied and committed; implementation starts next job."}]}
   {:consumer :t01J04,
    :stop-count 0,
    :phase :implementation,
@@ -49555,7 +49575,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_subsingleton_one",
@@ -49565,7 +49585,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "successor first homology vanishes",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id :lemma-t99j05-cp-successor-subsingleton-one,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-subsingleton-odd-gt-one],
