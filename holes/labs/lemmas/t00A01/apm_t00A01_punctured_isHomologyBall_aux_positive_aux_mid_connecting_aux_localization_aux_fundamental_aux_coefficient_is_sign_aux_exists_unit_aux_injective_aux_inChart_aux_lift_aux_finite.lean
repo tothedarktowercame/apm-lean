@@ -3513,6 +3513,113 @@ ranges in `Aᶜ`, and apply `_aux_lift_aux_support`.  For `K ⊆ V` each of thos
 simplices factors through `Kᶜ`, so the chain is in the image of
 `singularSubspaceMap Kᶜ`. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_finite_aux_chain
+    (M : Type) [TopologicalSpace M] [T2Space M] (A : Set M) (j : ℕ)
+    (c : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of ↥(Aᶜ))).X j) :
+    ∃ V : Set M, IsOpen V ∧ A ⊆ V ∧ ∀ (K : Set M), A ⊆ K → K ⊆ V →
+      ∃ d : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of ↥(Kᶜ))).X j,
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Kᶜ).f j d =
+          (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Aᶜ).f j c := by
+  classical
+  let a := ConstructionTargets.SingularSubdivision.productionChainFinsupp j c
+  let F : ConstructionTargets.SingularSubdivision.SingularSimplex (TopCat.of ↥(Aᶜ)) j →
+      C(stdSimplex ℝ (Fin (j + 1)), M) := fun s ↦
+    (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion Aᶜ).hom.comp
+      (ConstructionTargets.SingularSubdivision.continuousMapOfSingularSimplex j s)
+  obtain ⟨V, hVo, hAV, hV⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_support
+      M (stdSimplex ℝ (Fin (j + 1))) A (a.support.image F) (by
+        intro f hf
+        rcases Finset.mem_image.mp hf with ⟨s, hs, rfl⟩
+        intro y hy
+        rcases hy with ⟨t, rfl⟩
+        exact (ConstructionTargets.SingularSubdivision.continuousMapOfSingularSimplex j s t).2)
+  refine ⟨V, hVo, hAV, ?_⟩
+  intro K hAK hKV
+  have hsK : ∀ s ∈ a.support, Set.range (F s) ⊆ Kᶜ := by
+    intro s hs
+    exact hV K hKV (F s) (Finset.mem_image.mpr ⟨s, hs, rfl⟩)
+  let lift (s : ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of ↥(Aᶜ)) j) (hs : s ∈ a.support) :
+      C(stdSimplex ℝ (Fin (j + 1)), ↥(Kᶜ)) :=
+    ⟨fun t ↦ ⟨F s t, hsK s hs ⟨t, rfl⟩⟩,
+      (F s).continuous.subtype_mk _⟩
+  let d : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of ↥(Kᶜ))).X j :=
+    ∑ s : a.support,
+      (ConstructionTargets.SingularSubdivision.singularGenerator (TopCat.of ↥(Kᶜ)) j
+        (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+          (TopCat.of ↥(Kᶜ)) j (lift s s.property))) (a s)
+  refine ⟨d, ?_⟩
+  simp only [d, map_sum]
+  have hgen : ∀ s : a.support,
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Kᶜ).f j
+          ((ConstructionTargets.SingularSubdivision.singularGenerator (TopCat.of ↥(Kᶜ)) j
+            (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+              (TopCat.of ↥(Kᶜ)) j
+              (lift s s.property))) (a s)) =
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Aᶜ).f j
+          ((ConstructionTargets.SingularSubdivision.singularGenerator (TopCat.of ↥(Aᶜ)) j s) (a s)) := by
+    intro s
+    have hK := congrArg (fun q ↦ q (a s))
+      (ConstructionTargets.SingularSubdivision.singularGenerator_singularPostcomposition j
+        (lift s s.property)
+        (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion Kᶜ).hom)
+    have hA := congrArg (fun q ↦ q (a s))
+      (ConstructionTargets.SingularSubdivision.singularGenerator_singularPostcomposition j
+        (ConstructionTargets.SingularSubdivision.continuousMapOfSingularSimplex j s)
+        (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion Aᶜ).hom)
+    exact hK.trans hA.symm
+  simp_rw [hgen]
+  have he := congrArg (fun f ↦ f (1 : ℤ))
+    (ConstructionTargets.SingularSubdivision.finiteProductionChainRealize_productionChainFinsupp
+      j c)
+  simp only [ConstructionTargets.SingularSubdivision.finiteProductionChainRealize,
+    Finsupp.sum, a, AddCommGrpCat.asHom, map_sum] at he
+  have he' : (∑ s ∈ a.support,
+      (ConstructionTargets.SingularSubdivision.singularGenerator
+        (TopCat.of ↥(Aᶜ)) j s) (a s)) = c := by
+    have happ : ((∑ s ∈ a.support, (a s) •
+        ConstructionTargets.SingularSubdivision.singularGenerator
+          (TopCat.of ↥(Aᶜ)) j s) :
+        AddCommGrpCat.of ℤ ⟶
+          (ConstructionTargets.SingularHomologyConcrete.SingularChains
+            (TopCat.of ↥(Aᶜ))).X j) (1 : ℤ) =
+      ∑ s ∈ a.support,
+        (ConstructionTargets.SingularSubdivision.singularGenerator
+          (TopCat.of ↥(Aᶜ)) j s) (a s) := by
+      induction a.support using Finset.induction_on with
+      | empty => simp
+      | @insert s S hs ih =>
+          simp only [Finset.sum_insert, hs, not_false_eq_true]
+          change (a s) •
+              (ConstructionTargets.SingularSubdivision.singularGenerator
+                (TopCat.of ↥(Aᶜ)) j s) (1 : ℤ) +
+              (∑ t ∈ S, (a t) •
+                ConstructionTargets.SingularSubdivision.singularGenerator
+                  (TopCat.of ↥(Aᶜ)) j t) (1 : ℤ) =
+            (ConstructionTargets.SingularSubdivision.singularGenerator
+              (TopCat.of ↥(Aᶜ)) j s) (a s) +
+              ∑ t ∈ S, (ConstructionTargets.SingularSubdivision.singularGenerator
+                (TopCat.of ↥(Aᶜ)) j t) (a t)
+          rw [ih]
+          congr 1
+          rw [← map_zsmul]
+          simp
+    calc
+      _ = (∑ s ∈ a.support, (a s) •
+          ConstructionTargets.SingularSubdivision.singularGenerator
+            (TopCat.of ↥(Aᶜ)) j s) (1 : ℤ) := happ.symm
+      _ = c := by simpa [a, AddCommGrpCat.asHom] using he
+  rw [← map_sum]
+  apply congrArg
+    (fun z ↦ (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Aᶜ).f j z)
+  simpa only [Finset.attach_eq_univ] using
+    (Finset.sum_attach a.support (fun s ↦
+      (ConstructionTargets.SingularSubdivision.singularGenerator
+        (TopCat.of ↥(Aᶜ)) j s) (a s))).trans he'
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_finite
     (M : Type) [TopologicalSpace M] [T2Space M] (A : Set M) (j : ℕ)
     (x : (ConstructionTargets.SingularHomologyConcrete.SingularChains (TopCat.of M)).X j)
@@ -3521,7 +3628,30 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     ∃ V : Set M, IsOpen V ∧ A ⊆ V ∧ ∀ (K : Set M), A ⊆ K → K ⊆ V →
       x ∈ Set.range
         ((ConstructionTargets.SingularHomologyConcrete.relativeSingularSubcomplex.ι Kᶜ).f j) := by
-  sorry
+  rcases hx with ⟨q, rfl⟩
+  obtain ⟨c, hc⟩ := (AddCommGrpCat.epi_iff_surjective
+    ((CategoryTheory.Limits.factorThruImage
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Aᶜ)).f j)).mp
+      inferInstance q
+  obtain ⟨V, hVo, hAV, hV⟩ :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_finite_aux_chain
+      M A j c
+  refine ⟨V, hVo, hAV, ?_⟩
+  intro K hAK hKV
+  obtain ⟨d, hd⟩ := hV K hAK hKV
+  refine ⟨(CategoryTheory.Limits.factorThruImage
+    (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Kᶜ)).f j d, ?_⟩
+  dsimp [ConstructionTargets.SingularHomologyConcrete.relativeSingularSubcomplex.ι]
+  have eK := congrArg (fun f => f d) (congrArg (fun f => f.f j)
+    (CategoryTheory.Limits.image.fac
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Kᶜ)))
+  have eA := congrArg (fun f => f c) (congrArg (fun f => f.f j)
+    (CategoryTheory.Limits.image.fac
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Aᶜ)))
+  simpa only [ConcreteCategory.comp_apply] using
+    eK.trans (hd.trans (eA.symm.trans (congrArg
+      (fun z => (CategoryTheory.Limits.image.ι
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap Aᶜ)).f j z) hc)))
 -- END SEAT AREA
 
 /-- LIBRARY LEAF (chain level; claude-14's split of lemma-3's PARTIAL on
