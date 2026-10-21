@@ -36755,6 +36755,19 @@
     [{:cmd "closure literal-arrow attempt",
       :exit 1,
       :note "Reduced to intersection-iso cancellation; removed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792580674841-643-05be1f03",
+     :commands
+     ["git show/diff-tree 35cae1fc"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 35cae1fc^ 35cae1fc"],
+     :finding
+     "PASS: new post-history commit 35cae1fc changes only scoped Closure; fixture/blob SHA matches ddce7fca.... The new theorem has the correct representation direction: homologyMap of a chain-level biproduct lift, followed by the canonical homology biproduct comparison, equals the lift of component homology maps; proof uses the additive functor preservation theorem only. Closure and Main compile, apm_t99j05 uses only propext/Classical.choice/Quot.sound, registry 170/170, and fresh code census finds 0 placeholders/axiom declarations (ledger 1->1 is stale). Proved milestone and remaining partial transport theorem are listed."},
     :commit "35cae1fc8612fc7c14d4a68ea605968c7c891ffb",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36763,7 +36776,7 @@
      "ddce7fcade4f680f95d72dac93aec69ed1ce0b84319c2bd0dcfb28a2e98a0cd9"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36781,7 +36794,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact-arrow identity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed biproduct transport identity; literal-arrow proof reduces to cancelling the intersection comparison iso against naturality.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36920,7 +36933,11 @@
      "Committed clean transported exactness; invalid arrow equality removed."}
     {:job 3,
      :commit "7edd97c7b7",
-     :reason "Committed exact-arrow identity."}]}
+     :reason "Committed exact-arrow identity."}
+    {:job 4,
+     :commit "35cae1fc8612fc7c14d4a68ea605968c7c891ffb",
+     :reason
+     "Committed biproduct transport identity; literal-arrow proof reduces to cancelling the intersection comparison iso against naturality."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48543,7 +48560,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -48556,7 +48573,9 @@
     :type
     "homology of a biproduct lift commutes with the canonical comparison",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "35cae1fc8612fc7c14d4a68ea605968c7c891ffb"},
    :id
    :lemma-t99j05-homologymap-lift-comp-rationalhomologybiprodiso-hom,
    :kind :lemma,
