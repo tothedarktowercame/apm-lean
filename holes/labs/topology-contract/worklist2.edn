@@ -89424,6 +89424,18 @@
     [{:cmd "build", :exit 1, :correction "fin_cases syntax"}
      {:cmd "build", :exit 1, :correction "Fin.val coercions"}
      {:cmd "scan", :exit 1, :correction "Python quoting"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792586498381-773-58856129",
+     :commands
+     ["git show/check/hash 859cba71a"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "statement-registry check/fingerprint t97A03"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed 859cba71a by topo-6, new after ab476b082; patch scope only t97A03Closure (+34). Fixture e74881e2... matches; registry 170/0; frozen t97A03 digest abf8282b...; closure/Main placeholders 0/3. Fresh detached build and Main compile pass. Exhausting e(0) and using permutation injectivity forces e(1), proving every Perm(Fin2) is exactly id or swap; the Boolean packaging has the correct orientation. Axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists Boolean-model realization/full cover classification and model invariants."},
     :commit "859cba71a",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89432,7 +89444,7 @@
      "e74881e2c97018865f4183e9d15e762d715cbf6c139467ae04ec7c1d644c8aa7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89450,7 +89462,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite two-arc monodromy classification.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked two-point permutation normal form.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89464,7 +89476,10 @@
      :reason "Blueprint written; review required."}
     {:job 2,
      :commit "ab476b082",
-     :reason "Banked finite two-arc monodromy classification."}]}
+     :reason "Banked finite two-arc monodromy classification."}
+    {:job 3,
+     :commit "859cba71a",
+     :reason "Banked two-point permutation normal form."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -99930,7 +99945,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finTwoPerm_bool_normalForm",
@@ -99940,7 +99955,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "Perm(Fin 2) has Boolean id/swap normal form",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "859cba71a"},
    :id :lemma-fintwoperm-bool-normalform,
    :kind :lemma,
    :depends-on [],
