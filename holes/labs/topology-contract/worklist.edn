@@ -119195,6 +119195,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792588870719-838-097dfb7b",
+     :commands
+     ["git show/diff 08e744c9"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 08e744c9 changes only t00J02Closure.lean (+27), adding compiled chart-domain Sard nullity after prior history. Fixture afb497a6, source 0b3b4888, implementation 34327e68, registry 170/170, and placeholders closure=0/Main=1 reproduce. The Sard boundary is exact: it is applied to the previously proved smooth restricted chart-coordinate map; the critical set uses that same map derivative, and its image is measured in finite-dimensional F with additive Haar measure. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; circle-chart/Haar transport, aggregation, signed counts, and final assembly remain listed."},
     :commit "08e744c97125d61a604b97f93afcbd9430bd3dd5",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119203,7 +119215,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119221,7 +119233,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smooth target-chart domain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-domain Sard nullity.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119516,7 +119528,10 @@
      :reason "Banked target-chart criticality."}
     {:job 5,
      :commit "fa36b4ddea5cfedb609639fe4a358255c16bd685",
-     :reason "Banked smooth target-chart domain."}]}
+     :reason "Banked smooth target-chart domain."}
+    {:job 6,
+     :commit "08e744c97125d61a604b97f93afcbd9430bd3dd5",
+     :reason "Banked chart-domain Sard nullity."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122309,7 +122324,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "targetChartCoordinate_criticalImage_null",
@@ -122319,7 +122334,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart-coordinate critical image null",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "08e744c97125d61a604b97f93afcbd9430bd3dd5"},
    :id :lemma-targetchartcoordinate-criticalimage-null,
    :kind :lemma,
    :depends-on [:lemma-targetchartcoordinate-contmdiff],
