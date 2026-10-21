@@ -627,6 +627,48 @@ theorem twoArcTransport_nontrivial_of_generated
   rcases hgenerated with ⟨word, rfl⟩
   exact hne (twoArcTransportWord_eq_refl first second hfirst hsecond word)
 
+/-- Every permutation of a two-point fiber is its own inverse. -/
+theorem finTwoPerm_symm_eq_self (e : Equiv.Perm (Fin 2)) : e.symm = e := by
+  rcases finTwoPerm_eq_id_or_swap e with rfl | rfl <;> rfl
+
+/-- Evaluation of a signed word in the two fixed arc transports.  The first
+bit chooses the arc and the second records inverse orientation. -/
+def twoArcSignedTransportWord (first second : Equiv.Perm (Fin 2)) :
+    List (Bool × Bool) → Equiv.Perm (Fin 2)
+  | [] => Equiv.refl (Fin 2)
+  | (arc, inverse) :: word =>
+      (if inverse then (if arc then first else second).symm
+        else (if arc then first else second)).trans
+          (twoArcSignedTransportWord first second word)
+
+/-- On a two-point fiber, erase inverse markers from a signed arc word. -/
+theorem twoArcSignedTransportWord_eq_unsigned
+    (first second : Equiv.Perm (Fin 2)) : ∀ word,
+    twoArcSignedTransportWord first second word =
+      twoArcTransportWord first second (word.map Prod.fst) := by
+  intro word
+  induction word with
+  | nil => rfl
+  | cons head word ih =>
+      rcases head with ⟨arc, inverse⟩
+      cases arc <;> cases inverse <;>
+        simp [twoArcSignedTransportWord, twoArcTransportWord, ih,
+          finTwoPerm_symm_eq_self]
+
+/-- A nontrivial signed loop word on a two-point fiber forces one of the two
+fixed complementary-arc transports to be nonidentity. -/
+theorem twoArcTransport_nontrivial_of_signed_generated
+    (first second transport : Equiv.Perm (Fin 2))
+    (hgenerated : ∃ word, transport =
+      twoArcSignedTransportWord first second word)
+    (hne : transport ≠ Equiv.refl (Fin 2)) :
+    first ≠ Equiv.refl (Fin 2) ∨ second ≠ Equiv.refl (Fin 2) := by
+  rcases hgenerated with ⟨word, hword⟩
+  apply twoArcTransport_nontrivial_of_generated first second transport
+  · exact ⟨word.map Prod.fst,
+      hword.trans (twoArcSignedTransportWord_eq_unsigned first second word)⟩
+  · exact hne
+
 /-- Two loop classes in the base now supply the actual fiber transports used
 by the normalized model selector. -/
 theorem twoArcModel_exists_of_covering_loops
@@ -685,5 +727,8 @@ theorem twoArcModel_exists_of_covering_loops
 #print axioms twoArcModel_exists_of_moved_covering_loop
 #print axioms twoArcTransportWord_eq_refl
 #print axioms twoArcTransport_nontrivial_of_generated
+#print axioms finTwoPerm_symm_eq_self
+#print axioms twoArcSignedTransportWord_eq_unsigned
+#print axioms twoArcTransport_nontrivial_of_signed_generated
 
 end ConstructionTargets.t97A03Closure
