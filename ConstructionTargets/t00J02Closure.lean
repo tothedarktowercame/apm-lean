@@ -1999,6 +1999,40 @@ theorem exists_circleIncidenceProjection_surjective_fiber
 
 #print axioms exists_circleIncidenceProjection_surjective_fiber
 
+/-- A regular fiber of the geometric incidence projection gives the literal
+circle-direction lifts used by the local-injectivity endpoint. -/
+theorem exists_circleDirection_lifts_of_incidenceProjection
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S] [CompactSpace S]
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1)))
+    [mu.IsAddHaarMeasure]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    ∃ z, ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v := by
+  letI := circleIncidenceAtlas f c hf hc htrans
+  obtain ⟨z, hz⟩ := exists_circleIncidenceProjection_surjective_fiber
+    mu f c hf hc htrans
+  refine ⟨z, fun x hx ↦ ?_⟩
+  let p : CircleIncidence f c := ⟨(x, z), hx⟩
+  have hp : Function.Surjective
+      (mfderiv (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1)
+        (circleIncidenceProjection (f := f) (c := c)) p) := hz p rfl
+  have hkernel := (circleIncidenceProjection_surjective_iff_kernel_snd
+    f c hf hc htrans p).mp hp
+  exact direction_lifts_of_surjective_incidenceKernel_snd
+    (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+    (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap hkernel
+
+#print axioms exists_circleDirection_lifts_of_incidenceProjection
+
 /-- Nullity transports from a fixed target chart back to the manifold whenever
 the chart inverse preserves null sets. -/
 theorem targetChart_ambientCriticalImage_null
