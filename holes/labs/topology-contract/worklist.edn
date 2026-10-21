@@ -119152,63 +119152,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove canonical component sums and signed top-degree identity from transverse data; replace false Producer in Main.",
+    "Derive canonical component sums and identify surfaceTopDegree with the fiber signed sum; replace false Producer in Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked review dirs preserved"],
     :missing-theorems
-    [{:name "topHomologyMap_eq_zero_of_diskBounded_canonicalSums",
+    [{:name "canonicalRegularFiberSignedSum_eq_zero_of_componentSums",
       :type
-      "disk data plus zero component sums and signed top-degree identity imply H2 zero",
+      "canonical component zero sums imply every orientation-weighted fiber sum is zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["topHomologyMap_eq_zero_of_diskBounded_chartSums"],
+      :depends-on
+      ["topHomologyMap_eq_zero_of_diskBounded_canonicalSums"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["topHomologyMap_eq_zero_of_diskBounded_canonicalSums"],
+      ["canonicalRegularFiberSignedSum_eq_zero_of_componentSums"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ec19209695597e31fd3b976d180d70bf65ce112a771723868fd44ac411f2d371",
+     "16a200aaede1cd24111b10e4728b0c124d35c87e5f2e6c29a927e84d7a2f088a",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked canonical disk-bounded H2 endpoint.",
+    :reason "Banked canonical signed-sum vanishing.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd
-      "git diff --check; sha256sum fixtures/sources; placeholder count",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792621698884-1714-80a9f4d5",
-     :commands
-     ["git show/diff --check e564f99f6"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: e564f99f6 changes only t00J02Closure.lean (+28), adding a compiled, sorry-free canonical disk-bounded H2 endpoint beyond history 0cf80217c. Fixture afb497a6, source 0b3b4888, implementation ec192096; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: it specializes the verified disk-bounded chart-sum endpoint with coefficient equal to regularFiberLocalDegree, preserving zero component sums and the signed surfaceTopDegree identity to conclude homologyMap 2 f = 0. Fiber subtype, occupied components, local degrees, and signs remain definitionally aligned. Axioms are propext, Classical.choice, Quot.sound. Residual milestones are proving canonical sums/top-degree identity from transverse data and replacing the false Producer in Main."},
-    :commit "e564f99f6997b6e07de5174038a54d75563dd04b",
+     {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
+    :commit "916e73e73e3d29f39d5ffc7cc5451392b80b8861",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119216,7 +119203,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119948,7 +119935,8 @@
     :lemma-chartcomponentsums-eq-zero-of-exactliftcomparison
     :lemma-tophomologymap-eq-zero-of-exactliftcomparison
     :lemma-tophomologymap-eq-zero-of-diskbounded-chartsums
-    :lemma-tophomologymap-eq-zero-of-diskbounded-canonicalsums],
+    :lemma-tophomologymap-eq-zero-of-diskbounded-canonicalsums
+    :lemma-canonicalregularfibersignedsum-eq-zero-of-componentsums],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123304,6 +123292,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-tophomologymap-eq-zero-of-diskbounded-chartsums],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "canonicalRegularFiberSignedSum_eq_zero_of_componentSums",
+    :type
+    "canonical component zero sums imply every orientation-weighted fiber sum is zero"},
+   :lemma
+   {:name "canonicalRegularFiberSignedSum_eq_zero_of_componentSums",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "canonical component zero sums imply every orientation-weighted fiber sum is zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-canonicalregularfibersignedsum-eq-zero-of-componentsums,
+   :kind :lemma,
+   :depends-on
+   [:lemma-tophomologymap-eq-zero-of-diskbounded-canonicalsums],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
