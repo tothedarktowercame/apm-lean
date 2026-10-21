@@ -37351,6 +37351,18 @@
      {:cmd
       "git show --check --stat 1708a2ca1536ec42e3529747088cf0f2e6ea869c",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792578858091-616-2d407147",
+     :commands
+     ["git show --check --stat 1708a2ca"
+      "sha256sum + git-show hash problems/t96A06/lean/Main.lean"
+      "lake env lean problems/t96A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 1708a2ca^ 1708a2ca"],
+     :finding
+     "PASS: fixture hash reproduced exactly (1176b69d...); commit changes only scoped Closure. Unit-to-Bool coordinate transport has the required direction and composes preserved point inclusion, comparison naturality, coordinate identifications, and coproduct iso without crossing representations implicitly; Bool H0 comparison follows pointwise. Main compiles with apm_t96a06 sorry-free and only propext/Classical.choice/Quot.sound; registry 170/170; no axiom declarations or code placeholders. Both milestones are listed proved; program is complete."},
     :commit "1708a2ca1536ec42e3529747088cf0f2e6ea869c",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
@@ -37359,7 +37371,7 @@
      "1176b69d436fc84d7df7abe66a29e04cc28cfa1893853d6b255f113060529afb"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -48521,7 +48533,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_chosenCoproduct_coordinate_transport",
@@ -48533,7 +48545,9 @@
     :type
     "Unit injection identifies the two chosen coproduct composites",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "1708a2ca1536ec42e3529747088cf0f2e6ea869c"},
    :id :lemma-t96a06-unith0-chosencoproduct-coordinate-transport,
    :kind :lemma,
    :depends-on
