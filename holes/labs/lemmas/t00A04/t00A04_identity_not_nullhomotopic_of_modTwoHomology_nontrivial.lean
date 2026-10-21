@@ -294,7 +294,57 @@ theorem t00A04_identity_not_nullhomotopic_of_modTwoHomology_nontrivial
     (X : Type u) [TopologicalSpace X] (n : ℕ) (hn : n ≠ 0)
     [Nontrivial (t00A04_ModTwoHomology n X)] :
     ¬ ContinuousMap.Nullhomotopic (ContinuousMap.id X) := by
-  sorry
+  intro hnull
+  let F := ((AlgebraicTopology.singularHomologyFunctor
+    (ModuleCat.{u} (ZMod 2)) n).obj
+      (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2))))
+  rcases hnull with ⟨y, ⟨H⟩⟩
+  let cyl : CategoryTheory.MonoidalCategoryStruct.tensorObj (TopCat.of X) TopCat.I ⟶
+      TopCat.of X :=
+    TopCat.ofHom ⟨fun p ↦ H (TopCat.I.homeomorph p.2, p.1),
+      H.continuous.comp
+        ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+  have hcyl0 : TopCat.ι₀ ≫ cyl = TopCat.ofHom (ContinuousMap.id X) := by
+    ext x
+    change H (0, x) = x
+    simp
+  have hcyl1 : TopCat.ι₁ ≫ cyl = TopCat.ofHom (ContinuousMap.const X y) := by
+    ext x
+    change H (1, x) = y
+    simp
+  have heq := ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_topCatHomotopy
+      (ModuleCat.{u} (ZMod 2))
+      (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2))) cyl hcyl0 hcyl1 n
+  let U := ULift.{u} Unit
+  let p : C(X, U) := ContinuousMap.const X (ULift.up ())
+  let q : C(U, X) := ContinuousMap.const U y
+  have hfactor : ContinuousMap.const X y = q.comp p := by
+    ext
+    rfl
+  have hzero : CategoryTheory.Limits.IsZero (F.obj (TopCat.of U)) :=
+    AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+      (ModuleCat.{u} (ZMod 2)) n
+      (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2))) (TopCat.of U) hn
+  set_option maxHeartbeats 1000000 in
+   have hconst : F.map (TopCat.ofHom (ContinuousMap.const X y)) = 0 := by
+    rw [hfactor]
+    change F.map (TopCat.ofHom p ≫ TopCat.ofHom q) = 0
+    rw [F.map_comp]
+    have hq : F.map (TopCat.ofHom q) = 0 := hzero.eq_of_src _ _
+    rw [hq]
+    simp
+  have hz : F.map (TopCat.ofHom (ContinuousMap.id X)) = 0 := heq.trans hconst
+  have hidzero : 𝟙 (F.obj (TopCat.of X)) = 0 := by
+    simpa [F] using hz
+  have hsub : Subsingleton (t00A04_ModTwoHomology n X) := by
+    constructor
+    intro a b
+    have ha := congrArg (fun f ↦ f a) hidzero
+    have hb := congrArg (fun f ↦ f b) hidzero
+    have ha0 : a = 0 := by simpa using ha
+    have hb0 : b = 0 := by simpa using hb
+    exact ha0.trans hb0.symm
+  exact not_subsingleton_iff_nontrivial.mpr inferInstance hsub
 -- END SEAT AREA
 
 /-- Positive-dimensional compact boundaryless manifolds are not
