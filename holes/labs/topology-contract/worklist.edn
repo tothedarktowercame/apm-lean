@@ -119194,6 +119194,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792619314293-1639-d89f6106",
+     :commands
+     ["git show/diff --check e9f45ab04"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: e9f45ab04 changes only t00J02Closure.lean (+18), adding compiled, sorry-free exact-lift chart-sum vanishing beyond history 1c4ee3675. Fixture afb497a6, source 0b3b4888, implementation 19b4fc00; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: each chart component sum equals its exact-lift component degree, which the established zero-degree lemma sends to zero. Fiber subtype, occupied-component index, lift family, and integer coefficient representations are unchanged. Axioms are propext, Classical.choice, Quot.sound. Evidence lists constructing the chart-to-exact-lift comparison and chart top-degree identity, then replacing the false Producer path in Main."},
     :commit "e9f45ab047bf88ab8309778f4af98439f13e8006",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119202,7 +119214,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119220,7 +119232,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-component H2 endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact-lift chart-component zero sums.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119603,7 +119615,10 @@
      :reason "Banked chart-component top-degree vanishing."}
     {:job 8,
      :commit "1c4ee36758090d688044ffb6a9937a7ce04b54f9",
-     :reason "Banked chart-component H2 endpoint."}]}
+     :reason "Banked chart-component H2 endpoint."}
+    {:job 9,
+     :commit "e9f45ab047bf88ab8309778f4af98439f13e8006",
+     :reason "Banked exact-lift chart-component zero sums."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123180,7 +123195,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "chartComponentSums_eq_zero_of_exactLiftComparison",
@@ -123190,7 +123205,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "exact-lift comparison forces chart component sums zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "e9f45ab047bf88ab8309778f4af98439f13e8006"},
    :id :lemma-chartcomponentsums-eq-zero-of-exactliftcomparison,
    :kind :lemma,
    :depends-on [:lemma-exactliftcomponentdegree-eq-zero],
