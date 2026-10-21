@@ -36749,6 +36749,20 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792616593370-1551-6ae6540e",
+     :commands
+     ["git show --stat/--format=fuller 4c82128c53f04c84b3a34ff1255ddbdc810b1f68"
+      "git show 4c82128c5:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check 4c82128c5^ 4c82128c5"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 4c82128c5:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit 4c82128c5 changes only scoped Closure; fixture SHA-256 matches 588878f6bc54c522a753c3e624d59a78562cb7ca629e22c792ee65e5e63c2864. The global definition faithfully instantiates the generic induction with the literal CP0 datum and the proved CP n -> CP(n+1) successor datum; the successor/add-one normalization is already discharged by the induction adapter. No representation reversal or dropped hypothesis occurs. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine program progress; the finite Lefschetz trace and Euler calculation remain listed."},
     :commit "4c82128c53f04c84b3a34ff1255ddbdc810b1f68",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36757,7 +36771,7 @@
      "588878f6bc54c522a753c3e624d59a78562cb7ca629e22c792ee65e5e63c2864"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36775,7 +36789,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor rational-homology data; global C3 assembly remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked global CP rational-homology data; Lefschetz/Euler calculation remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37013,7 +37027,11 @@
     {:job 1,
      :commit "e6aacdba1105b87bdd55fa7cd1c5e3ec2b511d16",
      :reason
-     "Banked successor rational-homology data; global C3 assembly remains."}]}
+     "Banked successor rational-homology data; global C3 assembly remains."}
+    {:job 2,
+     :commit "4c82128c53f04c84b3a34ff1255ddbdc810b1f68",
+     :reason
+     "Banked global CP rational-homology data; Lefschetz/Euler calculation remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -37221,7 +37239,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_homology",
@@ -37233,7 +37251,9 @@
     :type
     "H_k(CP n; Q)=Q in even degrees <=2n and 0 otherwise, with finiteness/vanishing",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "4c82128c53f04c84b3a34ff1255ddbdc810b1f68"},
    :id :lemma-t99j05-cp-homology,
    :kind :lemma,
    :depends-on
