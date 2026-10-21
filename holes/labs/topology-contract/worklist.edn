@@ -119194,6 +119194,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792618621435-1619-2918a96b",
+     :commands
+     ["git show/diff --check 1c4ee3675"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: 1c4ee3675 changes only t00J02Closure.lean (+21), adding a compiled, sorry-free chart-component H2 endpoint beyond history 4f6a4bf9d. Fixture afb497a6, source 0b3b4888, implementation 5bdb9ebc; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: zero component coefficient sums plus the signed chart top-degree identity first yield surfaceTopDegree e f = 0, then the established surface-top-degree bridge yields homologyMap 2 f = 0. Fiber subtype, occupied-component indexing, and integer coefficients remain unchanged across the composition. Axioms are propext, Classical.choice, Quot.sound. Evidence lists constructing chart sums/top-degree identity from transverse disk data and replacing the false Producer path in Main."},
     :commit "1c4ee36758090d688044ffb6a9937a7ce04b54f9",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119202,7 +119214,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119220,7 +119232,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-component top-degree vanishing.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-component H2 endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119600,7 +119612,10 @@
      :reason "Banked canonical signed top-degree transport."}
     {:job 7,
      :commit "4f6a4bf9d722e7c759cf57e491cb7aa8baeb4311",
-     :reason "Banked chart-component top-degree vanishing."}]}
+     :reason "Banked chart-component top-degree vanishing."}
+    {:job 8,
+     :commit "1c4ee36758090d688044ffb6a9937a7ce04b54f9",
+     :reason "Banked chart-component H2 endpoint."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123155,7 +123170,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_chartComponentSums",
@@ -123165,7 +123180,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart component sums imply H2 map zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1c4ee36758090d688044ffb6a9937a7ce04b54f9"},
    :id :lemma-tophomologymap-eq-zero-of-chartcomponentsums,
    :kind :lemma,
    :depends-on
