@@ -89431,6 +89431,19 @@
      {:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792623102545-1751-d8f28675",
+     :commands
+     ["git show/diff 3c25c3213"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t97A03 --rev 3c25c3213"
+      "sha256sum + placeholder/#print axioms scans"],
+     :finding
+     "PASS: exact commit changes only in-scope Main.lean. Fixture SHA 581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f; registry 170/0; frozen digest abf8282be594bd45bebca6dc29d8b578f4371872506f062166ee2d225b6ca0a4. Fresh exact-revision build/Lean pass; closure/Main placeholders 0/3. Explicit free words are proved to evaluate to signed words in the two genuine literal quotient loops; signed generation therefore yields surjectivity and, with cut freeness, concrete collapse injectivity. Orientations and representation boundary are correct; axioms are standard only. This is new compiled progress; geometric generation/decoder, covers, and invariants remain listed."},
     :commit "3c25c3213",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89439,7 +89452,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89457,7 +89470,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal-collapse injectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal signed-generation adapter.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89598,7 +89611,10 @@
      :reason "Banked cut decoder adapter."}
     {:job 7,
      :commit "45b5314b9",
-     :reason "Banked literal-collapse injectivity."}]}
+     :reason "Banked literal-collapse injectivity."}
+    {:job 8,
+     :commit "3c25c3213",
+     :reason "Banked literal signed-generation adapter."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -101189,7 +101205,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -101203,7 +101219,9 @@
     :type
     "literal signed generation and cut freeness imply collapse injectivity",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "3c25c3213"},
    :id
    :lemma-apm-t97a03-collapsepionehom-injective-of-literal-signed-generation,
    :kind :lemma,
