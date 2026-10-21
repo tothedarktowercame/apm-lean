@@ -401,6 +401,20 @@ theorem coveringMonodromy_transitive_of_pathConnected
   let δq : Path.Homotopic.Quotient a b := Quotient.mk'' δ
   exact ⟨δq.map ⟨p, hp.continuous⟩, hp.monodromy_map δq⟩
 
+/-- The form used by the supplied connected cover: once local path
+connectedness of its total space is established from covering charts,
+connectedness upgrades to path connectedness and hence to transitive
+monodromy on endpoints. -/
+theorem coveringMonodromy_transitive_of_connected_locPath
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [ConnectedSpace Y] [LocPathConnectedSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p) (a b : Y) :
+    ∃ γ : Path.Homotopic.Quotient (p a) (p b),
+      hp.monodromy γ (⟨a, rfl⟩ : p ⁻¹' ({p a} : Set X)) =
+        (⟨b, rfl⟩ : p ⁻¹' ({p b} : Set X)) := by
+  letI : PathConnectedSpace Y := PathConnectedSpace.of_locPathConnectedSpace
+  exact coveringMonodromy_transitive_of_pathConnected p hp a b
+
 /-- Transport along the constant path is the identity equivalence of the
 literal fiber. -/
 theorem coveringPathFiberEquiv_refl
@@ -513,6 +527,7 @@ theorem twoArcModel_exists_of_covering_loops
 #print axioms twoArcModel_exists_of_fiber_transports
 #print axioms coveringPathFiberEquiv_apply
 #print axioms coveringMonodromy_transitive_of_pathConnected
+#print axioms coveringMonodromy_transitive_of_connected_locPath
 #print axioms coveringPathFiberEquiv_refl
 #print axioms coveringPathFiberEquiv_trans
 #print axioms twoArcModel_exists_of_covering_loops
