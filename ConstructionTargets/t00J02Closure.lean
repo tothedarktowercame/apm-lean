@@ -1714,6 +1714,22 @@ theorem circleBaseChartMeasure_eq_zero_of_coordinateEnvelope
 
 #print axioms circleBaseChartMeasure_eq_zero_of_coordinateEnvelope
 
+/-- A compact charted target is covered by finitely many canonical chart
+sources. -/
+theorem exists_finset_chartAt_source_cover
+    {F N : Type} [TopologicalSpace F] [TopologicalSpace N]
+    [ChartedSpace F N] [CompactSpace N] :
+    ∃ t : Finset N, (Set.univ : Set N) ⊆
+      ⋃ y ∈ t, (chartAt F y).source := by
+  apply isCompact_univ.elim_finite_subcover
+      (fun y : N ↦ (chartAt F y).source)
+  · intro y
+    exact (chartAt F y).open_source
+  · intro z hz
+    exact Set.mem_iUnion.mpr ⟨z, mem_chart_source F z⟩
+
+#print axioms exists_finset_chartAt_source_cover
+
 #print axioms circleChartInverseExtension_measurable
 
 /-- The open part of the source on which a fixed target chart is valid. -/
