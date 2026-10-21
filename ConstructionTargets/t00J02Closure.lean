@@ -1787,6 +1787,35 @@ theorem badSet_measure_zero_of_finite_targetCharts
 
 #print axioms badSet_measure_zero_of_finite_targetCharts
 
+/-- Pointwise finite-chart witnesses supply the geometric cover required by
+`badSet_measure_zero_of_finite_targetCharts`. -/
+theorem badSet_measure_zero_of_finite_targetChart_witnesses
+    {E F M N : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+    [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M] [SecondCountableTopology M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N] [MeasurableSpace N]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure]
+    (nu : MeasureTheory.Measure N) (g : M → N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) ∞ g)
+    {n : ℕ} (y : Fin n → N) (bad : Set N)
+    (htransport : ∀ i s, mu s = 0 → nu ((chartAt F (y i)).symm '' s) = 0)
+    (hwitness : ∀ z ∈ bad, ∃ i, z ∈ g '' {x |
+      x ∈ targetChartDomain (F := F) g (y i) hg.continuous ∧
+        ¬ Function.Surjective (mfderiv (modelWithCornersSelf ℝ E)
+          (modelWithCornersSelf ℝ F) ((chartAt F (y i)) ∘ g) x)}) :
+    nu bad = 0 := by
+  apply badSet_measure_zero_of_finite_targetCharts mu nu g hg y bad htransport
+  intro z hz
+  rcases hwitness z hz with ⟨i, hi⟩
+  exact Set.mem_iUnion.mpr ⟨i, hi⟩
+
+#print axioms badSet_measure_zero_of_finite_targetChart_witnesses
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
