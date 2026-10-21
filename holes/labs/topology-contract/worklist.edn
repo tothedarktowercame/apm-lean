@@ -119152,7 +119152,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
@@ -119205,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119633,6 +119633,18 @@
     [{:cmd "closure compile",
       :exit 1,
       :correction "used hA.continuous.continuousAt"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792611854380-1432-d909aea3",
+     :commands
+     ["git show/diff 12a34ded"
+      "lake env lean ConstructionTargets/t98A06Closure.lean"
+      "lake env lean problems/t98A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 12a34ded changes only t98A06Closure.lean (+30), adding compiled smooth exact corrected right inverses after prior history af279cbc. Fixture 9838452b, source 44399e71, implementation e1b1c0ef; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: B(x)=A(x)oR is smoothly varying and invertible on U; smoothness of inversion and continuous-linear composition gives Q(x)=R o B(x)^-1 smooth on U, while associativity and B(x)oB(x)^-1=id prove A(x)oQ(x)=id. E m/E n directions align. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; applying Q to target coordinates, packaging local lifts, compact flow, and final assembly remain listed."},
     :commit "12a34ded994229caea7bd246e3acc5255d2ba041",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119641,7 +119653,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119659,7 +119671,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked local corrected right inverses.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smooth corrected inverses.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119702,7 +119714,10 @@
      :reason "Banked stable-neighborhood extraction."}
     {:job 3,
      :commit "af279cbc8a4f389ff18c75801333afae26adf6ff",
-     :reason "Banked local corrected right inverses."}]}
+     :reason "Banked local corrected right inverses."}
+    {:job 4,
+     :commit "12a34ded994229caea7bd246e3acc5255d2ba041",
+     :reason "Banked smooth corrected inverses."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -122906,7 +122921,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_circleDirection_lifts_of_incidenceProjection",
@@ -122916,7 +122931,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "regular incidence fiber gives direction lifts",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-exists-circledirection-lifts-of-incidenceprojection,
    :kind :lemma,
    :depends-on
@@ -122926,20 +122943,22 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleIncidenceProjection_surjective_iff_kernel_snd"},
    :lemma
    {:name "circleIncidenceProjection_surjective_iff_kernel_snd",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-circleincidenceprojection-surjective-iff-kernel-snd,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_nhds_contDiffOn_corrected_rightInverse",
@@ -122949,7 +122968,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "smooth exact corrected inverses on a neighborhood",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "12a34ded994229caea7bd246e3acc5255d2ba041"},
    :id :lemma-exists-nhds-contdiffon-corrected-rightinverse,
    :kind :lemma,
    :depends-on
