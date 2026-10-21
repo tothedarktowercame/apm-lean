@@ -119152,61 +119152,52 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Apply manifold Sard to the projection; transport nullity to bad parameters; signed counts and Main.",
+    "Circle-target Sard via charts/Haar; signed counts and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "unrelated artifacts preserved"],
     :missing-theorems
-    [{:name "circleIncidenceProjection_critical_iff_kernelCritical",
-      :type "projection derivative critical iff kernel critical",
+    [{:name "circleIncidence_secondCountableTopology",
+      :type "incidence source second countable",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["circleIncidenceProjection_contMDiff"],
+      :depends-on
+      ["circleIncidenceProjection_critical_iff_kernelCritical"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["circleIncidenceProjection_critical_iff_kernelCritical"],
+      :depends-on ["circleIncidence_secondCountableTopology"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "0606ff9fbe09f62dfe8042d49fd1fbde2e0f4e8216247f2a75e673afafc4ff8d",
+     "4a1a4795577bb01c6779bfa4d5069a2d29c4652db4391dbf92d42bf922a677b3",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked exact geometric/kernel critical-locus bridge.",
+    :reason "Banked incidence second countability.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256sum fixture/source/implementation; git diff --check",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792583701710-715-54e5833e",
-     :commands
-     ["git show/diff 23fece72"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 23fece72 changes only t00J02Closure.lean (+63), adding compiled projection/kernel regularity and critical-locus bridges after prior history. Fixture afb497a6, source 0b3b4888, implementation 0606ff9f, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientations are correct: projection regularity reduces to surjective df; surjective df gives all circle-direction lifts, and transversality plus lifts recovers surjective df. Negation exactly identifies the kernel critical locus. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; manifold Sard/nullity transport, signed counts, and final assembly remain listed."},
-    :commit "23fece7210aadec35e7aa173c102cc16cf65ac6a",
+     {:cmd "hashes; git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :finding "made instances explicit"}],
+    :commit "a7ba515386e77d1400fe973aee3ec9b35d5e1808",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119214,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119798,7 +119789,8 @@
     :lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues
     :lemma-incidencekernelprojectioncriticalvalues-eq-image
     :lemma-circleincidenceprojection-contmdiff
-    :lemma-circleincidenceprojection-critical-iff-kernelcritical],
+    :lemma-circleincidenceprojection-critical-iff-kernelcritical
+    :lemma-circleincidence-secondcountabletopology],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122243,6 +122235,24 @@
    :id :lemma-circleincidenceprojection-critical-iff-kernelcritical,
    :kind :lemma,
    :depends-on [:lemma-circleincidenceprojection-contmdiff],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleIncidence_secondCountableTopology",
+    :type "incidence source second countable"},
+   :lemma
+   {:name "circleIncidence_secondCountableTopology",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "incidence source second countable",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-circleincidence-secondcountabletopology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-circleincidenceprojection-critical-iff-kernelcritical],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
