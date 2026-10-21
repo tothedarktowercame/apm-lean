@@ -2515,6 +2515,41 @@ theorem frozenBoundaryGraphH1CycleComparison_of_coordinate_kernel_basis
   · exact LinearMap.ker_eq_bot.mp hker
   · exact hbasis
 
+/-- Six geometric homology classes whose coordinate values are the standard
+basis generate the inverse map internally; no preassembled inverse is needed. -/
+theorem frozenBoundaryGraphH1CycleComparison_of_coordinate_generators
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 6 → ℤ))
+    (g : Fin 6 →
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hzero : ∀ x, c x = 0 → x = 0)
+    (hgen : ∀ i : Fin 6, c (g i) = Pi.single i 1) :
+    Nonempty
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) := by
+  let r : (Fin 6 → ℤ) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) :=
+    LinearMap.lsum ℤ (fun _ : Fin 6 ↦ ℤ) ℤ
+      (fun i ↦ LinearMap.smulRight (LinearMap.id : ℤ →ₗ[ℤ] ℤ) (g i))
+  apply frozenBoundaryGraphH1CycleComparison_of_coordinate_kernel_basis c r
+  · apply le_antisymm
+    · intro x hx
+      rw [Submodule.mem_bot]
+      exact hzero x (LinearMap.mem_ker.mp hx)
+    · exact bot_le
+  · intro i
+    change c (r (Pi.single i 1)) = Pi.single i 1
+    rw [show r (Pi.single i 1) = g i by
+      change (LinearMap.lsum ℤ (fun _ : Fin 6 ↦ ℤ) ℤ
+        (fun j ↦ LinearMap.smulRight (LinearMap.id : ℤ →ₗ[ℤ] ℤ) (g j)))
+          (Pi.single i 1) = g i
+      rw [LinearMap.lsum_piSingle]
+      simp]
+    exact hgen i
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3802,5 +3837,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt
 #print axioms frozenGeneratorMVConnecting_comp_H0_eq_production
 #print axioms frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production
+#print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_generators
 
 end ConstructionTargets.t94J09Closure
