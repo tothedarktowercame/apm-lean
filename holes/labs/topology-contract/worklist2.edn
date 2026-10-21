@@ -89420,6 +89420,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "git show --check a2adaa449", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792589615169-854-262c5d0e",
+     :commands
+     ["git show/diff-tree a2adaa449"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit a2adaa449 changes only t97A03Closure after history commit dde766e34; fixture SHA b56238d3... matches. Connectedness criterion is correct: a nonidentity Fin 2 generator is swap and forces every nonempty forward-invariant set to be universal; converse follows from reachability and excludes two identities. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP with compiled sorry-free progress; cover-to-action transport, model realization, and invariants remain listed."},
     :commit "a2adaa449",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89428,7 +89440,7 @@
      "b56238d3c86bae3f9221f13ab54e23f3e03042c8e550f477a8ed4e13eb6f8848"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89446,7 +89458,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked connected two-arc action bridge.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact two-arc connectedness criterion.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89472,7 +89484,10 @@
      :reason "Banked lifted-arc reachability bridge."}
     {:job 6,
      :commit "dde766e34",
-     :reason "Banked connected two-arc action bridge."}]}
+     :reason "Banked connected two-arc action bridge."}
+    {:job 7,
+     :commit "a2adaa449",
+     :reason "Banked exact two-arc connectedness criterion."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100024,7 +100039,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcActionConnected_iff_nontrivial",
@@ -100036,7 +100051,9 @@
     :type
     "two-arc action connected iff one Fin2 monodromy is nonidentity",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "a2adaa449"},
    :id :lemma-twoarcactionconnected-iff-nontrivial,
    :kind :lemma,
    :depends-on
