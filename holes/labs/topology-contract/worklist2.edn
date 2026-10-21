@@ -89380,7 +89380,9 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
@@ -89434,7 +89436,7 @@
      "8d3335bb20a55f37703913665a83930a6cbb26e0e7e84fde5859766cfc4e39b7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89456,7 +89458,7 @@
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
    :other-consumers [],
@@ -89662,6 +89664,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "git show --check f1371897c", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792592364606-921-50067f29",
+     :commands
+     ["git show/diff-tree f1371897c"
+      "lake -Kjobs=1 build ConstructionTargets.t99A03Closure"
+      "lake env lean problems/t99A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit f1371897c adds only t99A03Closure after blueprint history 35323aaba; fixture SHA 1582a546... matches. For actual connected covering/deck data on literal N4 and N3 models, lift uniqueness correctly shows a nonidentity deck homeomorphism is fixed-point-free, and coercion supplies the frozen continuous self-map witness. Build/Main/registry pass (170/0); frozen digest 6b0e5d09...; placeholders closure/Main=0/1; standard axioms only. Valid program STOP with compiled sorry-free progress; N4 cover construction and wedge Lefschetz steps remain listed."},
     :commit "f1371897c",
     :changed-paths ["ConstructionTargets/t99A03Closure.lean"],
     :fixture
@@ -89670,7 +89684,7 @@
      "1582a546995b86a944e3c63b8c16a80d7adab394eb49abd613b6b161aca36124"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99A03/lean/Main.lean"
     "problems/t99A03/status.json"
@@ -89688,7 +89702,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review required before formalization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the literal-model deck-transformation adapter.",
    :id :program-2026-10-13-close-t99a03,
    :kind :final-adapter,
    :campaign-priority 39,
@@ -89700,7 +89714,10 @@
    [{:job 1,
      :commit "35323aaba",
      :reason
-     "Blueprint written; independent review required before formalization."}]}
+     "Blueprint written; independent review required before formalization."}
+    {:job 2,
+     :commit "f1371897c",
+     :reason "Banked the literal-model deck-transformation adapter."}]}
   {:consumer :t95J03,
    :stop-count 0,
    :phase :implementation,
@@ -100104,7 +100121,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcActionConnected_conjugate",
@@ -100114,14 +100131,16 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "fiber relabeling preserves action connectedness",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A03Closure.lean"]},
    :id :lemma-twoarcactionconnected-conjugate,
    :kind :lemma,
    :depends-on [:lemma-twoarcactionconnected-iff-nontrivial],
    :other-consumers []}
   {:consumer :t99A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_fixedPointFree_selfMap_of_deckData",
@@ -100131,7 +100150,9 @@
     :reported-by [:program-2026-10-13-close-t99a03],
     :type "N4 deck data yields required fixed-point-free self-map",
     :area "polygon-covering-classification",
-    :proved-in :program-2026-10-13-close-t99a03},
+    :proved-in :program-2026-10-13-close-t99a03,
+    :banked-by :program-2026-10-13-close-t99a03,
+    :banked-commit "f1371897c"},
    :id :lemma-exists-fixedpointfree-selfmap-of-deckdata,
    :kind :lemma,
    :depends-on [],
