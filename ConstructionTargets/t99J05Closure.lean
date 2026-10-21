@@ -2535,6 +2535,27 @@ theorem t99J05_cp_successor_subsingleton_one
 
 #print axioms t99J05_cp_successor_subsingleton_one
 
+/-- Assemble the degreewise successor calculations into the rational homology
+datum required by the projective-space induction. -/
+noncomputable def t99J05_cp_successor_rational_homology
+    (n : ℕ) (h : ComplexProjectiveRationalHomologyData n) :
+    ComplexProjectiveRationalHomologyData (n + 1) where
+  finiteDimensional k :=
+    t99J05_cp_successor_finiteDimensional n k h
+  vanishesAbove k hk :=
+    t99J05_cp_successor_subsingleton_above n k h hk
+  vanishesOdd k hk := by
+    by_cases hk1 : k = 1
+    · subst k
+      exact t99J05_cp_successor_subsingleton_one n h
+    · obtain ⟨j, hj⟩ := hk
+      exact t99J05_cp_successor_subsingleton_odd_gt_one n k h ⟨j, hj⟩
+          (by omega)
+  evenEquiv i :=
+    t99J05_cp_successor_even_equiv n h i
+
+#print axioms t99J05_cp_successor_rational_homology
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
