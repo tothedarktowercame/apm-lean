@@ -89431,6 +89431,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792612476116-1446-44b756d9",
+     :commands
+     ["git show/diff c9c3d41b1"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: c9c3d41b1 follows dbdbea39e and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom path formulas show the collapse sends the sphere return to the wedge point and both literal arcs through the cut-circle projection. The pi1 equivalence/alignment theorem, model realization, and invariants remain listed."},
     :commit "c9c3d41b1",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89439,7 +89451,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89457,7 +89469,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the continuous literal sphere-collapse map.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked collapse formulas for both arcs and sphere return.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89555,7 +89567,11 @@
      "Banked signed generation transfer across the required pi1 equivalence."}
     {:job 2,
      :commit "dbdbea39e",
-     :reason "Banked the continuous literal sphere-collapse map."}]}
+     :reason "Banked the continuous literal sphere-collapse map."}
+    {:job 3,
+     :commit "c9c3d41b1",
+     :reason
+     "Banked collapse formulas for both arcs and sphere return."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100793,7 +100809,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_collapse_literal_path_pieces",
@@ -100803,7 +100819,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "collapse maps sphere return and both arcs exactly",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "c9c3d41b1"},
    :id :lemma-apm-t97a03-collapse-literal-path-pieces,
    :kind :lemma,
    :depends-on [:lemma-apm-t97a03-continuous-collapsetocutcircle],
