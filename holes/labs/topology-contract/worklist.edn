@@ -119152,45 +119152,47 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove bad-set inclusion/Sard nullity and component/global signed-count identities; assemble Main.",
+    "Prove Sard nullity of incidence-projection critical values and component/global signed-count identities; assemble Main.",
     :outcome :stop,
     :warnings
     ["Main registered sorry" "unrelated review artifacts preserved"],
     :missing-theorems
     [{:name
-      "badCircleParameters_measure_zero_of_subset_nullCriticalSet",
+      "badCircleParameters_eq_incidenceKernelProjectionCriticalValues",
       :type
-      "bad derivative-lift parameters are null when contained in a null critical set",
+      "bad derivative-lift parameters equal critical values of incidence-kernel second projection",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on
+      ["surjective_incidenceKernel_snd_iff_direction_lifts"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["badCircleParameters_measure_zero_of_subset_nullCriticalSet"
+      ["badCircleParameters_eq_incidenceKernelProjectionCriticalValues"
        "CanonicalRegularFiberDegreeCalculations.ofComponentComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "d9e587b028db2dd23d43f3c18f302db1a6e5a00719da0e725a8ee68c223d6cd4",
+     "4c3c7c4672df24432b21b7da0fc5fef29162d50a83592f74cda80099b45749a1",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked nullity transport from a null critical superset.",
+    :reason
+    "Banked exact identification of bad parameters with incidence-projection critical values.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119201,20 +119203,9 @@
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 1,
-      :finding "Qualified MeasureTheory.measure_mono_null."}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792578565642-607-41da06ba",
-     :commands
-     ["git show/diff 367f0e9a"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 367f0e9a changes only t00J02Closure.lean (+18), adding a compiled bad-parameter nullity transport after prior history. Fixture afb497a6, source 0b3b4888, implementation d9e587b0, registry 170/170, and placeholders closure=0/Main=1 reproduce. Set orientation is correct: the exact bad-parameter predicate is a subset of the null critical set, so measure_mono_null yields its nullity; the predicate representation is identical at premise and conclusion. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; proving inclusion/Sard nullity, signed-count identities, and final assembly remain listed."},
-    :commit "367f0e9ab2bd9b6fd5035c45dd8956982b720d3c",
+      :finding
+      "Replaced rewrite under negation with explicit iff directions."}],
+    :commit "4bf01a6030b0968ab9d037ae617f61aa0cf84b25",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119222,7 +119213,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119769,7 +119760,8 @@
     :lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison
     :lemma-canonicalregularfiberdegreecalculations-ofcomponentcomparison
     :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badset-measure-zero
-    :lemma-badcircleparameters-measure-zero-of-subset-nullcriticalset],
+    :lemma-badcircleparameters-measure-zero-of-subset-nullcriticalset
+    :lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122088,6 +122080,42 @@
     :banked-commit "367f0e9ab2bd9b6fd5035c45dd8956982b720d3c"},
    :id
    :lemma-badcircleparameters-measure-zero-of-subset-nullcriticalset,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "badCircleParameters_eq_incidenceKernelProjectionCriticalValues",
+    :type
+    "bad derivative-lift parameters equal critical values of incidence-kernel second projection"},
+   :lemma
+   {:name
+    "badCircleParameters_eq_incidenceKernelProjectionCriticalValues",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "bad derivative-lift parameters equal critical values of incidence-kernel second projection",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-badcircleparameters-eq-incidencekernelprojectioncriticalvalues,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surjective-incidencekernel-snd-iff-direction-lifts],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surjective_incidenceKernel_snd_iff_direction_lifts"},
+   :lemma
+   {:name "surjective_incidenceKernel_snd_iff_direction_lifts",
+    :reported-by []},
+   :id :lemma-surjective-incidencekernel-snd-iff-direction-lifts,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
