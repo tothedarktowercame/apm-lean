@@ -9,6 +9,46 @@ the actions of the two complementary circle arcs on a two-element fiber.
 
 namespace ConstructionTargets.t97A03Closure
 
+/-- Local homeomorphisms pull local path-connectedness back from their
+target.  Covering maps are local homeomorphisms, so this supplies the missing
+local hypothesis needed to upgrade a connected total space to path connected. -/
+theorem IsLocalHomeomorph.locPathConnectedSpace
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [LocPathConnectedSpace X] {f : Y → X} (hf : IsLocalHomeomorph f) :
+    LocPathConnectedSpace Y := by
+  rw [locPathConnectedSpace_iff_pathComponentIn_mem_nhds]
+  intro y u hu hyu
+  obtain ⟨e, hye, rfl⟩ := hf y
+  letI : LocPathConnectedSpace e.target := e.open_target.locPathConnectedSpace
+  letI : LocPathConnectedSpace e.source :=
+    e.toHomeomorphSourceTarget.isOpenEmbedding.locPathConnectedSpace
+  let v : Set e.source := Subtype.val ⁻¹' u
+  have hyv : (⟨y, hye⟩ : e.source) ∈ v := hyu
+  let c : Set e.source := pathComponentIn v ⟨y, hye⟩
+  have hcopen : IsOpen c := (hu.preimage continuous_subtype_val).pathComponentIn _
+  have hcpath : IsPathConnected c := isPathConnected_pathComponentIn hyv
+  have hyc : (⟨y, hye⟩ : e.source) ∈ c := mem_pathComponentIn_self hyv
+  have himage_open : IsOpen (Subtype.val '' c) :=
+    e.open_source.isOpenMap_subtype_val c hcopen
+  have himage_mem : Subtype.val '' c ∈ nhds y :=
+    himage_open.mem_nhds ⟨⟨y, hye⟩, hyc, rfl⟩
+  apply Filter.mem_of_superset himage_mem
+  have himage_path : IsPathConnected (Subtype.val '' c) :=
+    hcpath.image continuous_subtype_val
+  exact himage_path.subset_pathComponentIn
+    ⟨⟨y, hye⟩, hyc, rfl⟩
+    (by
+      rintro _ ⟨z, hzc, rfl⟩
+      simpa [v] using pathComponentIn_subset hzc)
+
+/-- A covering over a locally path-connected base has locally path-connected
+total space, obtained directly from its covering charts. -/
+theorem IsCoveringMap.locPathConnectedSpace
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [LocPathConnectedSpace X] {p : Y → X} (hp : IsCoveringMap p) :
+    LocPathConnectedSpace Y :=
+  IsLocalHomeomorph.locPathConnectedSpace hp.isLocalHomeomorph
+
 /-- The two homeomorphism types that remain after quotienting the nontrivial
 two-arc monodromy patterns by interchange of the complementary arcs. -/
 inductive DoubleCoverModel
@@ -415,6 +455,18 @@ theorem coveringMonodromy_transitive_of_connected_locPath
   letI : PathConnectedSpace Y := PathConnectedSpace.of_locPathConnectedSpace
   exact coveringMonodromy_transitive_of_pathConnected p hp a b
 
+/-- Connected coverings of a locally path-connected base have endpoint-
+transitive monodromy; the covering charts supply the local hypothesis. -/
+theorem coveringMonodromy_transitive_of_connected
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [LocPathConnectedSpace X] [ConnectedSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p) (a b : Y) :
+    ∃ γ : Path.Homotopic.Quotient (p a) (p b),
+      hp.monodromy γ (⟨a, rfl⟩ : p ⁻¹' ({p a} : Set X)) =
+        (⟨b, rfl⟩ : p ⁻¹' ({p b} : Set X)) := by
+  letI : LocPathConnectedSpace Y := IsCoveringMap.locPathConnectedSpace hp
+  exact coveringMonodromy_transitive_of_connected_locPath p hp a b
+
 /-- Transport along the constant path is the identity equivalence of the
 literal fiber. -/
 theorem coveringPathFiberEquiv_refl
@@ -528,6 +580,9 @@ theorem twoArcModel_exists_of_covering_loops
 #print axioms coveringPathFiberEquiv_apply
 #print axioms coveringMonodromy_transitive_of_pathConnected
 #print axioms coveringMonodromy_transitive_of_connected_locPath
+#print axioms IsLocalHomeomorph.locPathConnectedSpace
+#print axioms IsCoveringMap.locPathConnectedSpace
+#print axioms coveringMonodromy_transitive_of_connected
 #print axioms coveringPathFiberEquiv_refl
 #print axioms coveringPathFiberEquiv_trans
 #print axioms twoArcModel_exists_of_covering_loops
