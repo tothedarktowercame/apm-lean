@@ -5041,7 +5041,38 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     (A : Set M) (hA : IsCompact A) (m : ℤ) (hm : m ≠ 0) :
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A := by
-  sorry
+  classical
+  let U : M → Set M := fun x => (chartAt (EuclideanSpace ℝ (Fin 3)) x).source
+  have hUopen : ∀ x, IsOpen (U x) := fun x => (chartAt (EuclideanSpace ℝ (Fin 3)) x).open_source
+  have hAcov : A ⊆ ⋃ x, U x := by
+    intro y hy
+    exact Set.mem_iUnion.2 ⟨y, mem_chart_source (EuclideanSpace ℝ (Fin 3)) y⟩
+  obtain ⟨s, hs⟩ := hA.elim_finite_subcover U hUopen hAcov
+  obtain ⟨K, hKcompact, hKsub, hAK⟩ := hA.finite_compact_cover s U
+    (fun x _ => hUopen x) hs
+  have key : ∀ (t : Finset M),
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good
+        M m (⋃ x ∈ t, K x) := by
+    intro t
+    induction t using Finset.induction_on with
+    | empty =>
+        simp only [Finset.notMem_empty, Set.iUnion_of_empty, Set.iUnion_empty]
+        intro c hc
+        exact ⟨0, fun y hy => (hy.elim)⟩
+    | @insert x t hxt ih =>
+        rw [Finset.set_biUnion_insert]
+        have hLt : IsCompact (⋃ y ∈ t, K y) :=
+          t.isCompact_biUnion (fun y _ => hKcompact y)
+        apply apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union
+          M m hm (K x) (⋃ y ∈ t, K y) (hKcompact x).isClosed hLt.isClosed
+        · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_inChart
+            M x (K x) (hKcompact x) (hKsub x) m hm
+        · exact ih
+        · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart
+            M x (K x ∩ ⋃ y ∈ t, K y) ((hKcompact x).inter hLt)
+              (Set.inter_subset_left.trans (hKsub x))
+  rw [hAK]
+  exact key s
 
 /-- PROVED from `_aux_local`, `_aux_compact` with `A = M`, `_aux_univ` and
 `_aux_factor`: Hatcher Lemma 3.27(a) with `A = M`.  If the local degree of `z`
