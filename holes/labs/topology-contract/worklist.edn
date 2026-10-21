@@ -119152,63 +119152,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove bad-parameter nullity from incidence chart; supply canonical calculations; assemble Main.",
+    "Derive canonical calculations from transverse disk-bounded hypotheses; assemble Main.",
     :outcome :stop,
     :warnings ["Main registered sorry" "unrelated edits preserved"],
     :missing-theorems
     [{:name
-      "exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero",
+      "topHomologyMap_eq_zero_of_exists_locallyInjective_calculations",
       :type
-      "Sard-null bad parameters give locally injective circle fiber",
+      "selected locally-injective circle fiber plus canonical calculations implies H2 map zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["implicitToOpenPartialHomeomorph_zeroFiberHomeomorph"],
+      ["exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero"],
+      ["topHomologyMap_eq_zero_of_exists_locallyInjective_calculations"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "5c1fa6253feca451dfc9c6c3bb2eb062d8f55bfea3af3a3d487534be8d954a02",
+     "9511b21aa3d796c0bc077bb4ac8f15a9820f96bccee45a2a2a22741004a5a836",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked Sard bad-parameter fiber adapter.",
+    :reason "Banked selected-fiber calculation endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture; git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792567637614-412-20500f4c",
-     :commands
-     ["git show/diff 5f38c06a"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 5f38c06a changes only t00J02Closure.lean (+28), adding a new compiled bad-parameter-nullity adapter after prior history. Fixture afb497a6, source 0b3b4888, implementation 5c1fa625, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is correct: identity-image nullity selects z outside the bad set, then y=c z; derivative lift quantifiers match the local-injectivity consumer without representation coercion. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; incidence-chart nullity, calculations, and final assembly are listed residual milestones."},
-    :commit "5f38c06aa2de10069a1effb15cc27da907f353e7",
+    :commit "2688e7549169afc4744087ac56d9b26885e2d115",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119216,7 +119204,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119738,7 +119726,8 @@
     :lemma-implicittoopenpartialhomeomorph-mem-zeroslice-iff
     :lemma-implicittoopenpartialhomeomorph-image-zerofiber
     :lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph
-    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero],
+    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero
+    :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121915,6 +121904,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "topHomologyMap_eq_zero_of_exists_locallyInjective_calculations",
+    :type
+    "selected locally-injective circle fiber plus canonical calculations implies H2 map zero"},
+   :lemma
+   {:name
+    "topHomologyMap_eq_zero_of_exists_locallyInjective_calculations",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "selected locally-injective circle fiber plus canonical calculations implies H2 map zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
