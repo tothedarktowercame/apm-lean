@@ -119199,6 +119199,18 @@
     :diagnostic-history
     [{:cmd "compile#1", :exit 1, :correction "qualified type"}
      {:cmd "compile#2", :exit 1, :correction "added BorelSpace"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792598844011-1091-40249c31",
+     :commands
+     ["git show/diff 715311c4"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 715311c4 changes only t00J02Closure.lean (+34), adding a compiled normalized Circle Haar measure and nonzeroness after prior history 8822022b. Fixture afb497a6, source 0b3b4888, implementation bc7ac567; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: univ is packaged as a positive compact, haarMeasure_self gives mass 1, contradicting a zero measure. The local measurable structure is precisely borel Circle, matching the Haar construction without changing the Circle topology. Both new theorems use only propext, Classical.choice, Quot.sound. Main retains its registered sorry; chart transport/H2 assembly remain listed."},
     :commit "715311c4db9d26e8d2eb910f6a24f3d091154827",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119207,7 +119219,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119225,7 +119237,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked pointwise finite-chart witness endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nonzero Circle Haar measure.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119545,7 +119557,10 @@
      :reason "Banked finite-chart bad-set nullity."}
     {:job 5,
      :commit "8822022b96f0795912b4b040ccd2e2e1f0cc2439",
-     :reason "Banked pointwise finite-chart witness endpoint."}]}
+     :reason "Banked pointwise finite-chart witness endpoint."}
+    {:job 6,
+     :commit "715311c4db9d26e8d2eb910f6a24f3d091154827",
+     :reason "Banked nonzero Circle Haar measure."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122546,7 +122561,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleHaarMeasure_ne_zero",
@@ -122556,7 +122571,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "Circle Haar measure nonzero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "715311c4db9d26e8d2eb910f6a24f3d091154827"},
    :id :lemma-circlehaarmeasure-ne-zero,
    :kind :lemma,
    :depends-on [],
