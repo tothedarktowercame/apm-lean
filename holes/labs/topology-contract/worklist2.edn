@@ -89419,6 +89419,18 @@
      {:cmd "git show --check ab476b082", :exit 0}],
     :diagnostic-history
     [{:cmd "build", :exit 1, :correction "explicit Or.inl"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792585776263-752-0bf129ab",
+     :commands
+     ["git show/check/hash ab476b082"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "statement-registry check/fingerprint t97A03"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed ab476b082 by topo-6, new after blueprint 52b499d52; scope only new t97A03Closure. Fixture 31093efc... matches; registry 170/0; frozen t97A03 digest abf8282b...; placeholders closure/Main 0/3. Fresh detached closure build and Main compile pass. Boolean monodromy classification is exhaustive: connectedness removes (false,false), one-swap cases normalize to (true,false) by arc exchange, and (true,true) selects the second model; precise witnesses are retained. Axioms only propext, Quot.sound. STOP is valid new sorry-free progress and lists geometric realization/full classification and model invariants."},
     :commit "ab476b082",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89427,7 +89439,7 @@
      "31093efcdd7abe92bb982d1b7c2beaaba1aeea56f1a2d33194134462f0a58acf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89445,7 +89457,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; review required.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite two-arc monodromy classification.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89456,7 +89468,10 @@
    :program-history
    [{:job 1,
      :commit "52b499d52",
-     :reason "Blueprint written; review required."}]}
+     :reason "Blueprint written; review required."}
+    {:job 2,
+     :commit "ab476b082",
+     :reason "Banked finite two-arc monodromy classification."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -99901,7 +99916,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcMonodromy_nontrivial_classification",
@@ -99911,7 +99926,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "nontrivial two-arc actions reduce to two models",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "ab476b082"},
    :id :lemma-twoarcmonodromy-nontrivial-classification,
    :kind :lemma,
    :depends-on [],
