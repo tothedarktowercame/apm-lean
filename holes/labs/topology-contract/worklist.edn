@@ -119197,6 +119197,18 @@
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 1,
       :finding "built dependency; corrected model"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792582866397-695-8b8fdd6b",
+     :commands
+     ["git show/diff 7afd3776"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 7afd3776 changes only t00J02Closure.lean (+63), importing the banked incidence projection and adding a compiled normalized atlas, manifold instance, and smooth projection after prior history. Fixture afb497a6, source 0b3b4888, implementation 4a8c95c3, registry 170/170, and placeholders closure=0/Main=1 reproduce. Boundaries are faithful: the subtype is f x=c z, normalized dimension is 2+1-2=1, and projection is its circle coordinate; smoothness follows from smooth inclusion then snd. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; critical-locus/Sard, signed counts, and final assembly remain listed."},
     :commit "7afd377638124b2c57e685a59c483d10b38363fd",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact identification of bad parameters with incidence-projection critical values.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence atlas and smooth projection.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119503,7 +119515,10 @@
     {:job 9,
      :commit "4bf01a6030b0968ab9d037ae617f61aa0cf84b25",
      :reason
-     "Banked exact identification of bad parameters with incidence-projection critical values."}]}
+     "Banked exact identification of bad parameters with incidence-projection critical values."}
+    {:job 1,
+     :commit "7afd377638124b2c57e685a59c483d10b38363fd",
+     :reason "Banked incidence atlas and smooth projection."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122191,7 +122206,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleIncidenceProjection_contMDiff",
@@ -122201,7 +122216,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "incidence manifold and smooth projection",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "7afd377638124b2c57e685a59c483d10b38363fd"},
    :id :lemma-circleincidenceprojection-contmdiff,
    :kind :lemma,
    :depends-on
