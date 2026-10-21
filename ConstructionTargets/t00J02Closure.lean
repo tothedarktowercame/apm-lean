@@ -796,6 +796,24 @@ theorem implicitToOpenPartialHomeomorph_image_zeroFiber
 
 #print axioms implicitToOpenPartialHomeomorph_image_zeroFiber
 
+/-- The implicit chart restricts to a homeomorphism from its local zero fiber
+onto the corresponding vertical zero slice.  Packaging the two subspaces here
+keeps the later regular-fiber argument independent of the ambient chart. -/
+noncomputable def implicitToOpenPartialHomeomorph_zeroFiberHomeomorph
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    let e := implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA
+    {y : E // y ∈ e.source ∩ {y | f y = 0}} ≃ₜ
+      {z : F × A.ker // z ∈
+        e.target ∩ (({0} : Set F) ×ˢ (Set.univ : Set A.ker))} := by
+  let e := implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA
+  exact e.homeomorphOfImageSubsetSource Set.inter_subset_left
+    (implicitToOpenPartialHomeomorph_image_zeroFiber hf hA)
+
+#print axioms implicitToOpenPartialHomeomorph_zeroFiberHomeomorph
+
 /-- The banked chart-smoothness, strict-derivative, and split-surjection steps
 assemble into an implicit local chart for the incidence equation. -/
 noncomputable def incidenceImplicitToOpenPartialHomeomorph
