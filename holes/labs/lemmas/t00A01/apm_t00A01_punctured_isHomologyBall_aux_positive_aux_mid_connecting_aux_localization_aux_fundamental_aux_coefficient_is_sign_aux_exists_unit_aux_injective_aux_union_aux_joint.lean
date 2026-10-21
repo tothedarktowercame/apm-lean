@@ -11,6 +11,8 @@ import ConstructionTargets.MayerVietorisExactnessIsZero
 import ConstructionTargets.ManifoldFundamentalClass
 import ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison
 import ConstructionTargets.CoefficientCompactComplementUnionToRelative
+import ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare
+import ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso
 
 /-!
 # APM t00A01: Connected sums of integral homology 3-spheres
@@ -2591,21 +2593,158 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     (y : M) (i : ℕ) (hi : 3 < i) :
     Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology i) := by
+  open ConstructionTargets.SingularHomologyConcrete
+    ConstructionTargets.SingularExcision
+    ConstructionTargets.LocalHomologyNeighborhoodExcision
+    ConstructionTargets.T02A06HemisphereExcision
+    ConstructionTargets.T02A06DiskRadialComparison
+    ConstructionTargets.SphereHomology
+    ConstructionTargets.ChartPairRelativeHomologyTransport
+    ConstructionTargets.HigherChartLocalGenerator in
+  have hmodel : Limits.IsZero
+      ((RelativeSingularChains (P 1)).homology i) := by
+    have hamb : Limits.IsZero
+        ((SingularChains (TopCat.of (D 1))).homology i) := by
+      letI : ContractibleSpace (D 1) := Metric.contractibleSpace_ball (by norm_num)
+      exact contractibleHigherHomology_isZero _ i (by omega)
+    have hpunct : Limits.IsZero
+        ((SingularChains (TopCat.of (P 1))).homology (i - 1)) := by
+      exact (sphereHomology_isZero_of_gt 2 (i - 1) (by omega)).of_iso
+        (singularHomologyIsoOfHomotopyEquiv
+          (sphereHomotopyEquivPuncturedOpenDisk 3) (i - 1)).symm
+    have hi' : i - 1 + 1 = i := by omega
+    rw [← hi'] at hamb
+    have hz := (singularPairHomology_exact_relative (P 1) (i - 1)).isZero_X₂
+      (hamb.eq_of_src _ _) (hpunct.eq_of_tgt _ _)
+    simpa [hi'] using hz
+  let f := HomologicalComplex.homologyMap
+    (relativeSingularMap (P 1) (deletedPoint y)
+      (ambientChartMap (k := 1) y) (ambientChartMap_mapsTo (k := 1) y)) i
+  have hf : IsIso f := by
+    letI := relativeSingularMap_homeomorphPair_isIso (modelChart (k := 1) y) (P 1)
+      (neighborhoodDeletedPoint (chartNeighborhood (k := 1) y) y)
+      (modelChart_deletedPoint_iff (k := 1) y) i
+    have hn : IsIso (HomologicalComplex.homologyMap
+        (relativeSingularMap
+          (neighborhoodDeletedPoint (chartNeighborhood (k := 1) y) y)
+          (deletedPoint y) (neighborhoodInclusion (chartNeighborhood (k := 1) y))
+          (neighborhoodInclusion_mapsTo (chartNeighborhood (k := 1) y) y)) i) := by
+      have hn' := neighborhoodInclusion_Hn_isIso (i - 2)
+        (chartNeighborhood (k := 1) y) y (chartNeighborhood_open (k := 1) y)
+        (mem_chartNeighborhood (k := 1) y)
+      rw [show i - 2 + 2 = i by omega] at hn'
+      exact hn'
+    letI := hn
+    change IsIso (HomologicalComplex.homologyMap
+      (relativeSingularMap (P 1) (deletedPoint y)
+        (ambientChartMap (k := 1) y) (ambientChartMap_mapsTo (k := 1) y)) i)
+    rw [ambientChartMap_chain_eq (k := 1), HomologicalComplex.homologyMap_comp]
+    infer_instance
+  letI := hf
+  exact AddCommGrpCat.isZero_iff_subsingleton.mp (hmodel.of_iso (asIso f).symm)
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_excision
+    {X : Type} [TopologicalSpace X] (K U : Set X)
+    (hU : IsOpen U) (hKU : Uᶜ ⊆ interior Kᶜ) (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeExcisionMap Kᶜ Uᶜ) i) := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hi)
+  exact ConstructionTargets.SingularExcision.relativeExcisionMap_homologyMap_isIso_succ
+    Kᶜ Uᶜ hU.isClosed_compl hKU n
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_chart
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (A : Set X) (B : Set Y)
+    (hAB : ∀ x, x ∈ A ↔ e x ∈ B) (i : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A B
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap e)
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+          e A B hAB)) i) := by
+  exact ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
+    e A B hAB i
+
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): localization can be computed in an open subspace.  For open
+`U ⊆ X` and closed `B ⊆ A ⊆ U`, the identity `H_i(X, X ∖ A) → H_i(X, X ∖ B)` is an
+isomorphism iff the identity `H_i(U, U ∖ A) → H_i(U, U ∖ B)` is.  Route: the inclusion
+`U ↪ X` gives a commuting square (`relativeSingularMap_comp`, both composites are the
+inclusion); its two vertical maps are excisions of `X ∖ U` (`_aux_excision`, after the
+identification `U ≃ₜ (Uᶜ)ᶜ` as in `neighborhoodInclusion_chain_eq`), so both are
+isomorphisms for `i > 0`, and two-out-of-three gives the iff. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_restrict
+    {X : Type} [TopologicalSpace X] (U : Set X) (hU : IsOpen U)
+    (A B : Set X) (hA : IsClosed A) (hB : IsClosed B) (hAU : A ⊆ U) (hBA : B ⊆ A)
+    (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ Bᶜ
+        (ContinuousMap.id X) (fun _ hx hb => hx (hBA hb))) i) ↔
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : U | u.1 ∉ A} {u : U | u.1 ∉ B}
+        (ContinuousMap.id U) (fun _ hx hb => hx (hBA hb))) i) := by
   sorry
 
-/-- LEAF (split from `_convex_aux_inj` after lemma-1's PARTIAL, 2026-10-20):
-reduction to the convex model.  For compact `A` in the chart at `x` with
-convex chart image and `y ∈ A`, the localization
-`H_i(M, M ∖ A) → H_i(M, M ∖ y)` is an isomorphism for `i > 0`.  Route, as in
-`_ball_aux_reduce`: both pairs excise `M ∖ e.source` (`_aux_excision`; `A` is
-compact, hence closed); the chart `e.source ≃ₜ e.target` transports the excised
-pairs (`_aux_chart`); the inclusion `e.target ↪ ℝ³` excises `ℝ³ ∖ e.target`
-(`e '' A` is compact inside the open `e.target`); the resulting map is
-`_convex_aux_inj_aux_model` with `K = e '' A`, `u = e y`.  The squares commute
-by `relativeSingularMap_comp`.  `_aux_excision` and `_aux_chart` are stated in
-degree 3; the ConstructionTargets theorems they call
-(`relativeExcisionMap_homologyMap_isIso_succ`,
-`relativeSingularMap_homeomorphPair_isIso`) take any degree `n + 1`. -/
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): localization is invariant under homeomorphism.  If
+`e : X ≃ₜ Y` carries `A` to `A'` and `B` to `B'`, the identity
+`H_i(X, A) → H_i(X, B)` is an isomorphism iff `H_i(Y, A') → H_i(Y, B')` is.
+Route: the square with horizontal maps the pair homeomorphisms
+(`_aux_chart`, isomorphisms in every degree) commutes by `relativeSingularMap_comp`
+(both composites are `e`); two-out-of-three. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_homeo
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (e : X ≃ₜ Y)
+    (A B : Set X) (A' B' : Set Y)
+    (hA : ∀ x, x ∈ A ↔ e x ∈ A') (hB : ∀ x, x ∈ B ↔ e x ∈ B')
+    (hAB : Set.MapsTo (ContinuousMap.id X) A B)
+    (hAB' : Set.MapsTo (ContinuousMap.id Y) A' B') (i : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A B
+        (ContinuousMap.id X) hAB) i) ↔
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A' B'
+        (ContinuousMap.id Y) hAB') i) := by
+  sorry
+
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): the chart reduction shared by `_inj_aux_isIso` and
+`_ball_aux_reduce`.  For compact `K` in the chart source of `e = chartAt x` and
+`z ∈ K`, if `H_i(ℝ³, ℝ³ ∖ e '' K) → H_i(ℝ³, ℝ³ ∖ e z)` is an isomorphism, so is
+`H_i(M, M ∖ K) → H_i(M, M ∖ z)`.  Route: `_aux_restrict` with `U = e.source`
+(`K` compact in a Hausdorff space, hence closed; points are closed); `_aux_homeo`
+along `e.toHomeomorphSourceTarget`, whose membership conditions are
+`u ∈ K ↔ e u ∈ e '' K` (`e` injective on the source) and `u = z ↔ e u = e z`;
+`_aux_restrict` again in `ℝ³` with `U = e.target` (`e '' K` compact). -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_reduce
+    (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x : M) (K : Set M) (hK : IsCompact K)
+    (hsub : K ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (z : M) (hz : z ∈ K) (i : ℕ) (hi : 0 < i)
+    (hmodel : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' K)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+          (chartAt (EuclideanSpace ℝ (Fin 3)) x z))
+        (ContinuousMap.id (EuclideanSpace ℝ (Fin 3)))
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' K) (chartAt (EuclideanSpace ℝ (Fin 3)) x z)
+          (Set.mem_image_of_mem _ hz))) i)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K z hz)) i) := by
+  sorry
+
+/-- PROVED from `_inj_aux_isIso_aux_reduce` and `_convex_aux_inj_aux_model`
+(claude-14, split after lemma-1's PARTIAL, job 200, 2026-10-21; first split from
+`_convex_aux_inj` after lemma-1's PARTIAL, 2026-10-20): reduction to the convex model.
+For compact `A` in the chart at `x` with convex chart image and `y ∈ A`, the
+localization `H_i(M, M ∖ A) → H_i(M, M ∖ y)` is an isomorphism for `i > 0`.
+Banked by lemma-1 (job 200), above: `_aux_excision` (positive-degree excision) and
+`_aux_chart` (pair homeomorphisms, every degree), wrappers of
+`relativeExcisionMap_homologyMap_isIso_succ` and
+`relativeSingularMap_homeomorphPair_isIso` for `_aux_restrict` and `_aux_homeo`. -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso
     (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -2618,7 +2757,11 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
         (ContinuousMap.id M)
         (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i) := by
-  sorry
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hi)
+  exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_reduce M x A hA hsub y hy (n + 1) hi
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model _ (hA.image_of_continuousOn
+        ((chartAt (EuclideanSpace ℝ (Fin 3)) x).continuousOn.mono hsub))
+      hconv _ (Set.mem_image_of_mem _ hy) n)
 
 /-- PROVED from `_convex_aux_inj_aux_isIso` (lemma-1, job 177, 2026-10-20):
 for compact `A` in one chart with convex chart image and `y ∈ A`, the
@@ -2703,7 +2846,15 @@ the `{Aᶜ, Bᶜ}`-small chains of `(A ∩ B)ᶜ`, whose relative homology agree
 `H_{n+1}(M, M ∖ (A ∩ B))` because `Aᶜ`, `Bᶜ` are open (small chains, as in
 `CoefficientCompactComplementUnionComparison`, plus the five lemma).  Check that
 the transported piece maps are `relativeSingularMap` of the identity, and pass
-from `ModuleCat ℤ` to the `AddCommGrpCat` complexes here. -/
+from `ModuleCat ℤ` to the `AddCommGrpCat` complexes here.
+Ingredients already in this file (lemma-1's BLOCKED-ON, job 192, named a module
+`IntegralRelativeSingularHomologyComparison` that does not exist; 2026-10-20):
+exactness is `_aux_divide_aux_union_aux_glue_aux_exact_degree` (with `S = Aᶜ`,
+`T = Bᶜ`); the `ModuleCat ℤ` → `AddCommGrpCat` relative comparison is
+`ManifoldFundamentalClass.integralRelativeHomologyComparison`; the piece maps are
+identified with `relativeSingularMap` by `_aux_divide_aux_union_aux_glue_aux_sq_inter`;
+`h` reaches the union term through `CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso`
+(`Aᶜ`, `Bᶜ` open).  `Aᶜ ∩ Bᶜ` vs `(A ∪ B)ᶜ`: generalise to sets equal to them and `subst`. -/
 -- BEGIN SEAT AREA
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union_aux_joint
     (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
@@ -3071,6 +3222,350 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
       ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
         (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ) n
 
+/-- PROVED (lemma-3, banked from its third `_aux_glue` PARTIAL, job 189, 2026-10-20):
+`_aux_glue_aux_exact` at every degree `n`, `0` included, from `homology_exact₂` of the
+degreewise short exact sequence. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_exact_degree
+    (M : Type) [TopologicalSpace M] (A B : Set M) (n : ℕ) :
+    (ShortComplex.mk
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToPiecesRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ)) n)
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.piecesToUnionRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ)) n)
+      (by
+        rw [← HomologicalComplex.homologyMap_comp,
+          ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.relative_arrows_zero,
+          HomologicalComplex.homologyMap_zero])).Exact := by
+  exact
+    (ConstructionTargets.CoefficientSubcomplexRelativeDegreewiseExact.shortComplex_shortExact
+      ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ)).homology_exact₂ n
+
+/-- LIBRARY LEAF (split by claude-14 from `_aux_glue` after lemma-3's third PARTIAL,
+job 189, 2026-10-20): naturality of the comparison isomorphisms for the intersection
+arrows.  Write `Φ_S` for `forget (rangeRelativeIso ℤ S n).hom ≫
+integralRelativeHomologyComparison S n` (range-subcomplex relative homology →
+literal `H_n(M, S)`), and `Φ_∩` for the same through `intersectionRelativeIso`.
+Then `intersectionToLeftRelative` / `…ToRightRelative` become the
+`relativeSingularMap`s `(M, S ∩ T) → (M, S)` / `(M, S ∩ T) → (M, T)`.  Route: every
+map is a `cokernel.map` of chain maps induced by inclusions; check the square on
+chains after `cokernel.π` (epi), using `ambientSubspaceRangeChainsIso_hom_comp_subspaceMap`,
+`integralRelativeChainsComparison`'s definition and
+`coefficientRelativeProjection_mapHomologyIso_naturality` for the forgetful step. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_comparison
+    (M : Type) [TopologicalSpace M] (A : Set M) (n : ℕ) :
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison A n).hom =
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport A n).hom := by
+  have ht :
+      (ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport A).hom =
+        𝟙 _ := by
+    apply (cancel_epi (cokernel.π
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).map
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A)))).1
+    rw [ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport_projection]
+    rfl
+  have hc :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison A).hom =
+        (ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport A).hom := by
+    unfold ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison
+    unfold ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport
+    dsimp
+    rw [ht]
+    exact Category.assoc _ _ _
+  unfold ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison
+  unfold ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+  dsimp
+  rw [hc]
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_left_chain
+    (M : Type) [TopologicalSpace M] (S T : Set M) :
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative
+        ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange T) ≫
+      ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ S =
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap ℤ S T ≫
+      ConstructionTargets.CoefficientRadialPair.pairMap ℤ (S ∩ T) S (ContinuousMap.id M)
+        (fun _ hx => hx.1) := by
+  apply (cancel_epi (cokernel.π
+    (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionAmbient
+      ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange T)))).1
+  rw [← Category.assoc,
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.intersectionToLeftRelative_projection]
+  have hrange :
+      cokernel.π (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftAmbient
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)) ≫
+        ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ S =
+      cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ S) := by
+    exact cokernel.π_desc _ _ _
+  rw [hrange]
+  have hinter :
+      cokernel.π
+          (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionAmbient ℤ
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange T)) ≫
+        ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap ℤ S T =
+      cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ (S ∩ T)) := by
+    exact (cokernel.π_desc _ _ _).trans (Category.id_comp _)
+  rw [← Category.assoc, hinter]
+  have hproj := ConstructionTargets.CoefficientRadialPair.projection ℤ (S ∩ T) S
+    (ContinuousMap.id M) (fun _ hx => hx.1)
+  rw [ConstructionTargets.CoefficientPairNaturality.absolute_id, Category.id_comp] at hproj
+  exact hproj.symm
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_right_chain
+    (M : Type) [TopologicalSpace M] (S T : Set M) :
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative
+        ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange T) ≫
+      ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ T =
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap ℤ S T ≫
+      ConstructionTargets.CoefficientRadialPair.pairMap ℤ (S ∩ T) T (ContinuousMap.id M)
+        (fun _ hx => hx.2) := by
+  apply (cancel_epi (cokernel.π
+    (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionAmbient
+      ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange T)))).1
+  rw [← Category.assoc,
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.intersectionToRightRelative_projection]
+  have hrange :
+      cokernel.π (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightAmbient
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange T)) ≫
+        ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ T =
+      cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ T) := by
+    exact cokernel.π_desc _ _ _
+  rw [hrange]
+  have hinter :
+      cokernel.π
+          (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionAmbient ℤ
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange T)) ≫
+        ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap ℤ S T =
+      cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ (S ∩ T)) := by
+    exact (cokernel.π_desc _ _ _).trans (Category.id_comp _)
+  rw [← Category.assoc, hinter]
+  have hproj := ConstructionTargets.CoefficientRadialPair.projection ℤ (S ∩ T) T
+    (ContinuousMap.id M) (fun _ hx => hx.2)
+  rw [ConstructionTargets.CoefficientPairNaturality.absolute_id, Category.id_comp] at hproj
+  exact hproj.symm
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter
+    (M : Type) [TopologicalSpace M] (S T : Set M) (n : ℕ) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange T)) n) ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso ℤ S n).hom ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison S n).hom =
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.intersectionRelativeIso ℤ S T n).hom ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison (S ∩ T) n).hom) ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap (S ∩ T) S (ContinuousMap.id M)
+          (fun _ hx => hx.1)) n ∧
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange T)) n) ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso ℤ T n).hom ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison T n).hom =
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.intersectionRelativeIso ℤ S T n).hom ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison (S ∩ T) n).hom) ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap (S ∩ T) T (ContinuousMap.id M)
+          (fun _ hx => hx.2)) n := by
+  have hleft := congrArg (fun f => HomologicalComplex.homologyMap f n)
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_left_chain M S T)
+  have hleft' := congrArg
+    (fun f => ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map f) hleft
+  simp only [HomologicalComplex.homologyMap_comp, Functor.map_comp] at hleft'
+  have hright := congrArg (fun f => HomologicalComplex.homologyMap f n)
+    (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_right_chain M S T)
+  have hright' := congrArg
+    (fun f => ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map f) hright
+  simp only [HomologicalComplex.homologyMap_comp, Functor.map_comp] at hright'
+  have hS :
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso ℤ S n).hom =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ S) n := rfl
+  have hT :
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso ℤ T n).hom =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ T) n := rfl
+  have hI :
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.intersectionRelativeIso ℤ S T n).hom =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap ℤ S T) n := rfl
+  constructor
+  · rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_comparison M S n,
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_comparison M (S ∩ T) n]
+    rw [hS, hI]
+    rw [← Category.assoc]
+    rw [hleft']
+    rw [Category.assoc]
+    rw [ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_pairMap_naturality]
+    rw [← Category.assoc]
+  · rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_comparison M T n,
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_inter_aux_comparison M (S ∩ T) n]
+    rw [hT, hI]
+    rw [← Category.assoc]
+    refine (congrArg (fun q => q ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport T n).hom)
+        hright').trans ?_
+    rw [Category.assoc]
+    rw [ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_pairMap_naturality]
+    rw [← Category.assoc]
+
+/-- LIBRARY LEAF (split by claude-14 from `_aux_glue` after lemma-3's third PARTIAL,
+job 189, 2026-10-20): the same naturality for the union arrows, with
+`relativeComparisonIso ℤ S T hS hT n` (generated union `P S ⊔ P T` → literal `S ∪ T`,
+needs `S`, `T` open) on the target.  `leftToUnionRelative` / `rightToUnionRelative`
+become the `relativeSingularMap`s `(M, S) → (M, S ∪ T)` / `(M, T) → (M, S ∪ T)`.  Route as
+for `_aux_sq_inter`; `relativeComparisonIso_hom` unfolds the target iso to a
+`cokernel.map`. -/
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_transport
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport A).hom = 𝟙 _ := by
+  apply (cancel_epi (cokernel.π _)).1
+  simp [ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport]
+  exact (Category.comp_id _).symm
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_comparison_eq
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison A n =
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport A n := by
+  have hc : ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison A =
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport A := by
+    ext1
+    simp [ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison,
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_transport]
+    exact (Category.id_comp _).symm
+  simp only [ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison,
+    ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport, hc]
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_left_chain
+    (M : Type) [TopologicalSpace M] (S T : Set M) :
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftToUnionRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange T) ≫
+      cokernel.map
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGeneratedAmbientInclusion ℤ S T)
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ (S ∪ T))
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGeneratedToProduction ℤ S T)
+        (𝟙 _)
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGenerated_relative_square ℤ S T) =
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ S ≫
+      ConstructionTargets.CoefficientRadialPair.pairMap ℤ S (S ∪ T)
+        (ContinuousMap.id M) (fun _ hx => Or.inl hx) := by
+  have hid : ConstructionTargets.CoefficientRadialPair.absoluteMap ℤ (ContinuousMap.id M) = 𝟙 _ := by
+    change (ConstructionTargets.CoefficientRadialPair.chains ℤ).map
+      (TopCat.toSSet.map (𝟙 (TopCat.of M))) = _
+    simp only [CategoryTheory.Functor.map_id]
+  apply (cancel_epi (cokernel.π _)).1
+  simp only [ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftToUnionRelative,
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap,
+    ConstructionTargets.CoefficientRadialPair.pairMap, cokernel.map, cokernel.π_desc_assoc,
+    Category.id_comp]
+  erw [cokernel.π_desc, cokernel.π_desc_assoc, cokernel.π_desc]
+  rw [hid]
+  exact (Category.id_comp _).symm
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_right_chain
+    (M : Type) [TopologicalSpace M] (S T : Set M) :
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightToUnionRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange T) ≫
+      cokernel.map
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGeneratedAmbientInclusion ℤ S T)
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ (S ∪ T))
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGeneratedToProduction ℤ S T)
+        (𝟙 _)
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGenerated_relative_square ℤ S T) =
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ T ≫
+      ConstructionTargets.CoefficientRadialPair.pairMap ℤ T (S ∪ T)
+        (ContinuousMap.id M) (fun _ hx => Or.inr hx) := by
+  have hid : ConstructionTargets.CoefficientRadialPair.absoluteMap ℤ (ContinuousMap.id M) = 𝟙 _ := by
+    change (ConstructionTargets.CoefficientRadialPair.chains ℤ).map
+      (TopCat.toSSet.map (𝟙 (TopCat.of M))) = _
+    simp only [CategoryTheory.Functor.map_id]
+  apply (cancel_epi (cokernel.π _)).1
+  simp only [ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightToUnionRelative,
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap,
+    ConstructionTargets.CoefficientRadialPair.pairMap, cokernel.map, cokernel.π_desc_assoc,
+    Category.id_comp]
+  erw [cokernel.π_desc, cokernel.π_desc_assoc, cokernel.π_desc]
+  rw [hid]
+  exact (Category.id_comp _).symm
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_naturality
+    {X : Type} [TopologicalSpace X] (A B : Set X)
+    (f : C(X, X)) (hf : Set.MapsTo f A B) (n : ℕ) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap ℤ A B f hf) n) ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison B n).hom =
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison A n).hom ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap A B f hf) n := by
+  rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_comparison_eq, apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_comparison_eq]
+  exact ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_pairMap_naturality A B f hf n
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union
+    (M : Type) [TopologicalSpace M] (S T : Set M) (hS : IsOpen S) (hT : IsOpen T) (n : ℕ) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftToUnionRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange T)) n) ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso ℤ S T hS hT n).hom ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison (S ∪ T) n).hom =
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso ℤ S n).hom ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison S n).hom) ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap S (S ∪ T) (ContinuousMap.id M)
+          (fun _ hx => Or.inl hx)) n ∧
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightToUnionRelative
+          ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange S)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange T)) n) ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso ℤ S T hS hT n).hom ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison (S ∪ T) n).hom =
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso ℤ T n).hom ≫
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison T n).hom) ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap T (S ∪ T) (ContinuousMap.id M)
+          (fun _ hx => Or.inr hx)) n := by
+  constructor
+  · rw [ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso_hom]
+    rw [← Category.assoc, ← Functor.map_comp]
+    erw [← HomologicalComplex.homologyMap_comp]
+    rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_left_chain]
+    erw [HomologicalComplex.homologyMap_comp]
+    erw [Functor.map_comp]
+    have h := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_naturality S (S ∪ T) (ContinuousMap.id M)
+      (fun _ hx => Or.inl hx) n
+    exact (congrArg (fun q =>
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ S) n) ≫ q)
+      h).trans (Category.assoc _ _ _).symm
+  · rw [ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso_hom]
+    rw [← Category.assoc, ← Functor.map_comp]
+    erw [← HomologicalComplex.homologyMap_comp]
+    rw [apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_right_chain]
+    erw [HomologicalComplex.homologyMap_comp]
+    erw [Functor.map_comp]
+    have h := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue_aux_sq_union_aux_naturality T (S ∪ T) (ContinuousMap.id M)
+      (fun _ hx => Or.inr hx) n
+    exact (congrArg (fun q =>
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap ℤ T) n) ≫ q)
+      h).trans (Category.assoc _ _ _).symm
+
 /-- LIBRARY LEAF (Hatcher 3.27, relative Mayer--Vietoris, existence half): for
 closed `A`, `B`, classes of `H_n(M, M ∖ A)` and `H_n(M, M ∖ B)` with the same
 image in `H_n(M, M ∖ (A ∩ B))` come from one class of `H_n(M, M ∖ (A ∪ B))`.
@@ -3081,10 +3576,15 @@ at the middle term `H_n(S, P ∩ Q) → H_n(S, P) ⊕ H_n(S, Q) → H_n(S, P ∪
 relative chains with `CoefficientSubcomplexRelativeLiteralComparison` and
 `CoefficientCompactComplementUnionToRelative`).  The sign convention of the
 difference map does not matter here: equality of the two images is the kernel
-condition.  Remaining after lemma-3's PARTIAL (job 187): `_aux_glue_aux_exact` gives
-exactness for `intersectionToPiecesRelative`/`piecesToUnionRelative`; transport it
-through the ModuleCat/AddCommGrpCat and literal-relative-chain comparison maps, proving
-by naturality that they identify the two arrows with the `relativeSingularMap`s. -/
+condition.  ASSEMBLY (claude-14's split after lemma-3's third PARTIAL, job 189):
+apply `_aux_glue_aux_exact_degree` and transport through `_aux_glue_aux_sq_inter`,
+`_aux_glue_aux_sq_union` with `S = Aᶜ`, `T = Bᶜ` (open by `hA.isOpen_compl`,
+`hB.isOpen_compl`).  The squares are stated for `S ∩ T`, `S ∪ T`, while this lemma has
+`(A ∪ B)ᶜ`, `(A ∩ B)ᶜ`: first prove the version for arbitrary sets `Z`, `W` with
+`Z = Aᶜ ∩ Bᶜ`, `W = Aᶜ ∪ Bᶜ` and arbitrary `MapsTo` proofs, `subst`, then specialise
+(`Set.compl_union`, `Set.compl_inter`).  The middle term is the homology of the
+biproduct complex `cokernel (leftAmbient) ⊞ cokernel (rightAmbient)`; take its two
+components with `biprod.fst`/`biprod.snd` (both commute with `homologyMap`). -/
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_union_aux_glue
     (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
     (n : ℕ) (μA : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology n) (μB : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Bᶜ).homology n)
