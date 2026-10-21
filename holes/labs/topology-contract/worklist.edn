@@ -119152,30 +119152,30 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Apply fixed-chart regular value to incidence projection; assemble signed counts and Main.",
+    :residual "Next: direction lifts, signed counts, Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked artifacts"],
+    :warnings ["Main sorry" "untracked"],
     :missing-theorems
-    [{:name "exists_mfderiv_surjective_fiber_of_fixedTargetChart",
-      :type "one target chart contains a regular value",
+    [{:name "exists_circleIncidenceProjection_surjective_fiber",
+      :type "incidence projection regular fiber",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["targetChartCoordinate_ambientCriticalImage_null"
-       "mfderiv_targetChart_comp_surjective_iff_of_mem_source"],
+      ["exists_mfderiv_surjective_fiber_of_fixedTargetChart"
+       "circleIncidenceProjection_contMDiff"
+       "circleIncidence_secondCountableTopology"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_mfderiv_surjective_fiber_of_fixedTargetChart"
+      ["exists_circleIncidenceProjection_surjective_fiber"
        "regularFiberSignedCount_eq_zero_of_comparison"
        "topHomologyMap_eq_zero_of_regularValue_signedCount"],
       :area "oriented-surface-degree"}],
@@ -119183,33 +119183,22 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "d17cdb6bd2ca4216b8339fdfb11b829c036513bdca5da8e1c86a5d509debbfea",
+     "f2b3a6abeff9815e7584cd916a0596862afd8b64b6dbd2a20468b24aab08d95d",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked fixed-chart regular value.",
+    :reason "Banked incidence regular fiber.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hashes/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792609590671-1364-6fe1c805",
-     :commands
-     ["git show/diff 1ef447dd"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 1ef447dd changes only t00J02Closure.lean (+47), adding a compiled fixed-target-chart regular-value theorem after prior history 88263036. Fixture afb497a6, source 0b3b4888, implementation d17cdb6b; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the nonempty open chart target has nonzero Haar measure while the chart-critical image is null, so a coordinate v outside it exists. Its chart inverse z is regular: any non-surjective mfderiv at a point over z would, via the chart derivative iff, put v in the excluded image. Chart right-inverse/source conditions are explicit. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; incidence specialization, signed counts, and final assembly remain listed."},
-    :commit "1ef447dd9b8c48b78d6c356c32180fa3ae68c999",
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "compile", :exit 1, :correction "notation"}],
+    :commit "469ee924ae6838ba2d7bfbbf6168f99ed48165cb",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119217,7 +119206,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119894,7 +119883,8 @@
     :lemma-finite-targetchart-witness-of-globalcriticalvalue
     :lemma-globalcriticalvalues-measure-zero-of-targetcharts
     :lemma-exists-mfderiv-surjective-fiber-of-targetcharts
-    :lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart],
+    :lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart
+    :lemma-exists-circleincidenceprojection-surjective-fiber],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122895,6 +122885,26 @@
    :id :lemma-mfderiv-targetchart-comp-surjective-iff-of-mem-source,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_circleIncidenceProjection_surjective_fiber",
+    :type "incidence projection regular fiber"},
+   :lemma
+   {:name "exists_circleIncidenceProjection_surjective_fiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "incidence projection regular fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-circleincidenceprojection-surjective-fiber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart
+    :lemma-circleincidenceprojection-contmdiff
+    :lemma-circleincidence-secondcountabletopology],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
