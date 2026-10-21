@@ -37348,6 +37348,17 @@
       :exit 1,
       :note
       "Candidate coordinate transport reduced to categorical reassociation; reverted."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792569321188-446-4bcadb3c",
+     :commands
+     ["git show --check --stat 16ed5cef3d"
+      "commit-blob hash equality; lake env lean ConstructionTargets/t96A06Closure.lean"
+      "statement-registry.py check at 16ed5cef3d: 168/168"
+      "comment-stripped placeholder/axiom census"],
+     :finding
+     "PASS: 16ed5cef3d changes only scoped Closure and adds a correctly oriented whiskered Bool point-inclusion naturality theorem, proved from the prior naturality equality. Exact blob compiles; new milestone has no sorry/admit/axiom and reports only propext, Classical.choice, Quot.sound. Closure placeholders 0; Main retains assigned 1. Fixture /tmp/t96a06_sphere3_h3_check.lean is absent, so ledger SHA 5cf165... cannot be independently rehashed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -37356,7 +37367,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37374,7 +37385,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed whiskered Bool naturality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Exact representation boundary: the banked Unit inverse comparison and Bool naturality have incompatible categorical parenthesizations under the chosen coproduct prefix; direct rewrites do not expose the shared subcomposite. No scoped change retained.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37429,7 +37440,11 @@
      ".lake/packages is a real directory, not the required authority symlink; workspace policy forbids Lake verification or transfer/deck-sum implementation pending lifecycle repair."}
     {:job 2,
      :commit "16ed5cef3d",
-     :reason "Committed whiskered Bool naturality."}]}
+     :reason "Committed whiskered Bool naturality."}
+    {:job 3,
+     :commit nil,
+     :reason
+     "Exact representation boundary: the banked Unit inverse comparison and Bool naturality have incompatible categorical parenthesizations under the chosen coproduct prefix; direct rewrites do not expose the shared subcomposite. No scoped change retained."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
