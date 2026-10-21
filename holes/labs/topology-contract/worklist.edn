@@ -119152,19 +119152,19 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:consumer :t00J02,
     :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Transport chart nullity through circle charts/Haar; aggregate, signed counts, Main.",
+    "Transport nullity through circle charts/Haar; aggregate, signed counts, Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked review artifacts preserved"],
+    :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
     [{:name "targetChartCoordinate_ambientCriticalImage_null",
-      :type "fixed-chart ambient critical image null",
+      :type "chart ambient critical image null",
       :status :proved,
       :consumers [:t00J02],
       :depends-on ["mfderiv_openSubtype_not_surjective"],
@@ -119179,28 +119179,25 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "59974b040ed00212c48e7b35ea69773b91b792014524081b79fbcb97d3aaf9b6",
+     "2e791c7eb48e75f8f6beeeb3e0daab6bcb81334d750c3d75c1b67500317108d0",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked fixed-chart ambient critical-image nullity.",
+    :reason "Repaired chartwise ambient critical-image nullity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256sum fixture/source/implementation; git diff --check",
-      :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "topo-3",
-     :job "invoke-1792591700784-907-d143ee7c",
-     :finding
-     "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only"},
-    :commit "917e36c955a2ecb7ee78ffa9d415691c1408fdbf",
+     {:cmd "hashes; git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile before repair",
+      :exit 1,
+      :finding "cross-domain image_mono; pipe masked exit"}],
+    :commit "dda999317a56ee48fe8643aa766c1854d4d4fbde",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119208,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
