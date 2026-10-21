@@ -2631,6 +2631,38 @@ theorem t99J05_cp_homology_finrank (n k : ℕ) :
 
 #print axioms t99J05_cp_homology_finrank
 
+/-- The alternating sum of the rational Betti profile of `CP n` is `n+1`. -/
+theorem t99J05_cp_alternating_betti_sum (n : ℕ) :
+    (∑ k ∈ Finset.range (2 * n + 1),
+      (-1 : ℚ)^k * (if Even k ∧ k ≤ 2 * n then 1 else 0)) =
+        (n : ℚ) + 1 := by
+  induction n with
+  | zero => norm_num [Even]
+  | succ n ih =>
+    rw [show 2 * (n + 1) + 1 = (2 * n + 1) + 2 by omega]
+    rw [Finset.sum_range_succ, Finset.sum_range_succ]
+    have he : Even (2 * n + 2) := by exact ⟨n + 1, by omega⟩
+    have ho : ¬ Even (2 * n + 1) := by
+      rw [Nat.not_even_iff_odd]
+      exact ⟨n, by omega⟩
+    simp only [ho, false_and, if_false, mul_zero, add_zero, he, true_and]
+    rw [show (∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ) ^ k * (if Even k ∧ k ≤ 2 * (n + 1) then 1 else 0)) =
+      ∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ) ^ k * (if Even k ∧ k ≤ 2 * n then 1 else 0) by
+      apply Finset.sum_congr rfl
+      intro k hk
+      have hklt : k < 2 * n + 1 := Finset.mem_range.mp hk
+      have hkbound : k ≤ 2 * n := by omega
+      have hkbound' : k ≤ 2 * (n + 1) := by omega
+      by_cases hke : Even k <;> simp [hke, hkbound, hkbound']]
+    rw [ih]
+    rw [if_pos (by omega)]
+    rw [Even.neg_one_pow he]
+    norm_num
+
+#print axioms t99J05_cp_alternating_betti_sum
+
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
 #print axioms cp_zero_subsingleton
 #print axioms cpZeroHomologyDataOfSubsingletonData
