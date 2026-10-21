@@ -2033,6 +2033,28 @@ theorem exists_circleDirection_lifts_of_incidenceProjection
 
 #print axioms exists_circleDirection_lifts_of_incidenceProjection
 
+/-- The regular incidence fiber, transported through direction lifts, is the
+local-injectivity witness required by the canonical regular-fiber package. -/
+theorem exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S] [CompactSpace S]
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1)))
+    [mu.IsAddHaarMeasure]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    ∃ y ∈ Set.range c, LocallyInjectiveAlongFiber f y := by
+  apply exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts
+    f c hf htrans
+  exact exists_circleDirection_lifts_of_incidenceProjection mu f c hf hc htrans
+
+#print axioms exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection
+
 /-- Nullity transports from a fixed target chart back to the manifold whenever
 the chart inverse preserves null sets. -/
 theorem targetChart_ambientCriticalImage_null
