@@ -89381,6 +89381,8 @@
    :other-consumers []}
   {:consumer :t97A03,
    :stop-count 8,
+   :review-finding
+   "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -89417,6 +89419,12 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 949070b9a", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1792590763361-873-bb684d51",
+     :finding
+     "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f...."},
     :commit "949070b9a",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89425,7 +89433,7 @@
      "8452877f7179d34d7e44f2d73d644cc4759b75d3908759704dc36b9061cc8d0f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89447,7 +89455,7 @@
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
    :other-consumers [],
