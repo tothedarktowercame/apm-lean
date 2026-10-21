@@ -1681,17 +1681,28 @@ theorem targetChartCoordinate_ambientCriticalImage_null
         ¬ Function.Surjective
           (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
             ((chartAt F y) ∘ g) x)}) = 0 := by
-  apply measure_mono_null (Set.image_mono ?_)
+  have hsubset :
+      ((chartAt F y) ∘ g) ''
+          {x | x ∈ targetChartDomain (F := F) g y hg.continuous ∧
+            ¬ Function.Surjective
+              (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+                ((chartAt F y) ∘ g) x)} ⊆
+        (fun q : targetChartDomain (F := F) g y hg.continuous ↦ chartAt F y (g q)) ''
+          {q | ¬ Function.Surjective
+            (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+              (fun r : targetChartDomain (F := F) g y hg.continuous ↦
+                chartAt F y (g r)) q)} := by
+    rintro z ⟨x, ⟨hx, hcrit⟩, rfl⟩
+    let q : targetChartDomain (F := F) g y hg.continuous := ⟨x, hx⟩
+    have hc : MDifferentiableAt (modelWithCornersSelf ℝ E)
+        (modelWithCornersSelf ℝ F) ((chartAt F y) ∘ g) x :=
+      (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) y).mdifferentiableAt hx |>.comp x
+        (hg.mdifferentiableAt (by simp))
+    refine ⟨q, ?_, rfl⟩
+    exact mfderiv_openSubtype_not_surjective
+      (targetChartDomain (F := F) g y hg.continuous) ((chartAt F y) ∘ g) q hc hcrit
+  exact MeasureTheory.measure_mono_null hsubset
     (targetChartCoordinate_criticalImage_null mu g y hg)
-  rintro x ⟨hx, hcrit⟩
-  let q : targetChartDomain (F := F) g y hg.continuous := ⟨x, hx⟩
-  refine ⟨q, ?_⟩
-  have hc : MDifferentiableAt (modelWithCornersSelf ℝ E)
-      (modelWithCornersSelf ℝ F) ((chartAt F y) ∘ g) x :=
-    (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) y).mdifferentiableAt hx |>.comp x
-      hg.mdifferentiableAt
-  exact mfderiv_openSubtype_not_surjective
-    (targetChartDomain (F := F) g y hg.continuous) ((chartAt F y) ∘ g) q hc hcrit
 
 #print axioms targetChartCoordinate_ambientCriticalImage_null
 
