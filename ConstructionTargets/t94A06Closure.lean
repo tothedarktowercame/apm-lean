@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.SardFiniteOrderRankLocusLocalAggregation
 
 open MeasureTheory
 open scoped ContDiff Manifold
@@ -88,6 +89,26 @@ def apm_t94a06_criticalValues
     (g : X → apm_t94a06_E2) : Set apm_t94a06_E2 :=
   g '' {x | ¬ Function.Surjective
     (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2) g x)}
+
+/-- Pointwise null critical images on open neighborhoods aggregate over a
+second-countable manifold.  This is the countable-chart step of Sard. -/
+theorem apm_t94a06_criticalValues_null_of_pointwise_open
+    {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup H] [NormedSpace ℝ H] [TopologicalSpace X]
+    [SecondCountableTopology X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    (g : X → apm_t94a06_E2)
+    (hlocal : ∀ x, ¬ Function.Surjective
+        (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2) g x) →
+      ∃ U : Set X, IsOpen U ∧ x ∈ U ∧
+        volume (g '' ({z | ¬ Function.Surjective
+          (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2) g z)} ∩ U)) = 0) :
+    volume (apm_t94a06_criticalValues I g) = 0 := by
+  apply SardFiniteOrderRankLocusLocalAggregationProbe.measure_image_zero_of_rankLocus_pointwise_open
+  intro x hx
+  exact hlocal x hx
+
+#print axioms apm_t94a06_criticalValues_null_of_pointwise_open
 
 /-- Nullity of the critical-value image is exactly the measure-theoretic
 input needed to obtain almost-everywhere regular values. -/
