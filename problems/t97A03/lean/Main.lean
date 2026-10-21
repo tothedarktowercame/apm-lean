@@ -650,6 +650,41 @@ noncomputable def apm_t97A03_cutGeneratorFreeGroupMap (A B : Circle) :
       apm_t97A03_secondCutCircleGenerator A B := by
   simp [apm_t97A03_cutGeneratorFreeGroupMap]
 
+/-- A decoder with the correct values on the two genuine cut arcs is a left
+inverse to their free-group evaluation map. -/
+theorem apm_t97A03_cutGeneratorFreeGroupMap_leftInverse_of_decoder
+    (A B : Circle)
+    (decode : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A) →* FreeGroup (Fin 2))
+    (hfirst : decode (apm_t97A03_firstCutCircleGenerator A B) =
+      FreeGroup.of (0 : Fin 2))
+    (hsecond : decode (apm_t97A03_secondCutCircleGenerator A B) =
+      FreeGroup.of (1 : Fin 2)) :
+    Function.LeftInverse decode (apm_t97A03_cutGeneratorFreeGroupMap A B) := by
+  have hcomp : decode.comp (apm_t97A03_cutGeneratorFreeGroupMap A B) =
+      MonoidHom.id (FreeGroup (Fin 2)) := by
+    apply FreeGroup.ext_hom
+    intro i
+    fin_cases i <;> simp [hfirst, hsecond]
+  intro x
+  change (decode.comp (apm_t97A03_cutGeneratorFreeGroupMap A B)) x = x
+  rw [hcomp]
+  rfl
+
+/-- Thus the geometric decoder equations prove freeness of the two concrete
+cut generators, rather than merely postulating injectivity. -/
+theorem apm_t97A03_cutGeneratorFreeGroupMap_injective_of_decoder
+    (A B : Circle)
+    (decode : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A) →* FreeGroup (Fin 2))
+    (hfirst : decode (apm_t97A03_firstCutCircleGenerator A B) =
+      FreeGroup.of (0 : Fin 2))
+    (hsecond : decode (apm_t97A03_secondCutCircleGenerator A B) =
+      FreeGroup.of (1 : Fin 2)) :
+    Function.Injective (apm_t97A03_cutGeneratorFreeGroupMap A B) :=
+  (apm_t97A03_cutGeneratorFreeGroupMap_leftInverse_of_decoder
+    A B decode hfirst hsecond).injective
+
 /-- The free-group element spelling a signed word in the two cut arcs. -/
 def apm_t97A03_cutFreeGroupWord (w : List (Fin 2 × ℤ)) : FreeGroup (Fin 2) :=
   (w.map fun q => FreeGroup.of q.1 ^ q.2).prod
