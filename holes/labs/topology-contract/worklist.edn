@@ -119197,6 +119197,18 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "qualified Opens; fixed instances"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792588007168-814-318fc51a",
+     :commands
+     ["git show/diff fa36b4dd"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: fa36b4dd changes only t00J02Closure.lean (+33), adding a compiled open target-chart domain and smooth coordinate representative after prior history. Fixture afb497a6, source 0b3b4888, implementation f3c28a95, registry 170/170, and placeholders closure=0/Main=1 reproduce. Boundaries are faithful: the domain is g^-1(chart source), open by continuity; subtype inclusion and g are smooth; membership supplies the chart-domain condition, yielding global smoothness on the subtype. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; vector Sard/Haar transport, signed counts, and final assembly remain listed."},
     :commit "fa36b4ddea5cfedb609639fe4a358255c16bd685",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked target-chart criticality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smooth target-chart domain.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119515,7 +119527,10 @@
      :reason "Banked incidence second countability."}
     {:job 4,
      :commit "932a98dabfa902dc0c96aed10de7c86961fcb067",
-     :reason "Banked target-chart criticality."}]}
+     :reason "Banked target-chart criticality."}
+    {:job 5,
+     :commit "fa36b4ddea5cfedb609639fe4a358255c16bd685",
+     :reason "Banked smooth target-chart domain."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122287,7 +122302,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "targetChartCoordinate_contMDiff",
@@ -122297,7 +122312,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart coordinate smooth on open source subtype",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "fa36b4ddea5cfedb609639fe4a358255c16bd685"},
    :id :lemma-targetchartcoordinate-contmdiff,
    :kind :lemma,
    :depends-on
