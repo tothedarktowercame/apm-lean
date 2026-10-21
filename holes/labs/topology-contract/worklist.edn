@@ -119152,62 +119152,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Connect subtype chart to Sard regular fiber, calculations, then Main.",
+    "Prove bad-parameter nullity from incidence chart; supply canonical calculations; assemble Main.",
     :outcome :stop,
-    :warnings
-    ["Main retains registered sorry" "unrelated edits preserved"],
+    :warnings ["Main registered sorry" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "implicitToOpenPartialHomeomorph_zeroFiberHomeomorph",
+    [{:name
+      "exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero",
       :type
-      "local zero-fiber subtype homeomorphic to vertical zero slice",
+      "Sard-null bad parameters give locally injective circle fiber",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["implicitToOpenPartialHomeomorph_image_zeroFiber"],
+      :depends-on
+      ["implicitToOpenPartialHomeomorph_zeroFiberHomeomorph"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["implicitToOpenPartialHomeomorph_zeroFiberHomeomorph"],
+      ["exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "d4ba0bea1d952d9cd77e42b845b35819890f07d6e2e10a7cf5c5b46017a0e505",
+     "5c1fa6253feca451dfc9c6c3bb2eb062d8f55bfea3af3a3d487534be8d954a02",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked zero-fiber subtype homeomorphism.",
+    :reason "Banked Sard bad-parameter fiber adapter.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture; git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792566480150-380-214e9182",
-     :commands
-     ["git show/diff ab0c3d3a"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: ab0c3d3a changes only t00J02Closure.lean (+18), adding a compiled zero-fiber subtype homeomorphism since prior history. Fixture afb497a6, source 0b3b4888, implementation d4ba0bea, registry 170/170, and placeholder count 1->1 reproduce. The map/restriction orientation follows image_zeroFiber exactly; subtype representations agree at both boundaries. New theorem is sorry-free with propext, Classical.choice, Quot.sound only. Main retains its registered sorry and listed Sard/calculation milestones remain."},
-    :commit "ab0c3d3a1124c51aed333c1ecd67c3b39f2f04d8",
+    :commit "5f38c06aa2de10069a1effb15cc27da907f353e7",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119215,7 +119204,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119733,7 +119722,8 @@
     :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse-fst
     :lemma-implicittoopenpartialhomeomorph-mem-zeroslice-iff
     :lemma-implicittoopenpartialhomeomorph-image-zerofiber
-    :lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph],
+    :lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph
+    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121885,6 +121875,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-implicittoopenpartialhomeomorph-image-zerofiber],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero",
+    :type
+    "Sard-null bad parameters give locally injective circle fiber"},
+   :lemma
+   {:name
+    "exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "Sard-null bad parameters give locally injective circle fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
