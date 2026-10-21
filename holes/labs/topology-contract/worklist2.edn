@@ -89430,6 +89430,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792608609469-1338-24388c41",
+     :commands
+     ["git show/diff c8211b4fa"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: c8211b4fa follows 808a49ca9 and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom progress defines transport along both literal quotient loops and conditionally normalizes their actual permutation pair. It asserts neither loop generation nor cover-model homeomorphisms; those and invariants remain listed, so no facade boundary is crossed."},
     :commit "c8211b4fa",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89438,7 +89450,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89456,7 +89468,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked complementary loops.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Bound classifier to literal transports.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89541,7 +89553,10 @@
     {:job 6, :commit "12037e606", :reason "Banked first literal loop."}
     {:job 7,
      :commit "808a49ca9",
-     :reason "Banked complementary loops."}]}
+     :reason "Banked complementary loops."}
+    {:job 8,
+     :commit "c8211b4fa",
+     :reason "Bound classifier to literal transports."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100643,7 +100658,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A03_literal_transport_model_selector",
@@ -100653,7 +100668,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "fixed-loop transports select normalized model when moved",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "c8211b4fa"},
    :id :lemma-t97a03-literal-transport-model-selector,
    :kind :lemma,
    :depends-on [:lemma-t97a03-two-literal-complementary-loops],
