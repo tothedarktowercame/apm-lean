@@ -325,6 +325,31 @@ lemma apm_t97A03_collapsePiOneHom_apply (A B : Circle)
           (q.map (apm_t97A03_continuous_collapseToCutCircle A B))) := by
   rfl
 
+/-- The collapsed sphere-return segment, rebased at the identified cut point. -/
+noncomputable def apm_t97A03_collapsedSphereReturnLoop (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap A B A)
+      (apm_t97A03_cutCircleMap A B A) :=
+  ((((apm_t97A03_baseSphereReturn A B).cast
+      (apm_t97A03_baseCircle_A A B)
+      (apm_t97A03_baseCircle_B A B)).symm).map
+        (apm_t97A03_continuous_collapseToCutCircle A B)).cast
+    (apm_t97A03_cutCircleMap_A_eq_B A B) rfl
+
+/-- The literal sphere return contributes the identity after collapse, not a
+synthetic second generator. -/
+lemma apm_t97A03_collapsedSphereReturnLoop_eq_refl (A B : Circle) :
+    apm_t97A03_collapsedSphereReturnLoop A B =
+      Path.refl (apm_t97A03_cutCircleMap A B A) := by
+  ext t
+  rfl
+
+lemma apm_t97A03_collapsedSphereReturnClass_eq_one (A B : Circle) :
+    FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk
+          (apm_t97A03_collapsedSphereReturnLoop A B)) = 1 := by
+  rw [apm_t97A03_collapsedSphereReturnLoop_eq_refl]
+  rfl
+
 /-- A genuine based loop in the frozen base: traverse the literal circle
 summand from `A` to `B`, then return through the literal sphere summand. -/
 noncomputable def apm_t97A03_firstLiteralLoop (A B : Circle) :
