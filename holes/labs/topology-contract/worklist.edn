@@ -119196,6 +119196,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792596453383-1034-a8bbc5ca",
+     :commands
+     ["git show/diff 1afe14c6"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 1afe14c6 changes only t00J02Closure.lean (+27), adding compiled finite-target-chart bad-set nullity after prior history 73bc6fad. Fixture afb497a6, source 0b3b4888, implementation 89d08440; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: each ambient chart-critical image is nu-null by the transport lemma, their Fin-indexed union is null, and the stated cover makes bad null. M/N, F-chart, mu/nu, image, and derivative representation boundaries align. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; H2 assembly remains partial and listed."},
     :commit "1afe14c6987902efba96a050a478d6e0b4a3614b",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nullity of a bad set covered by finite chart-critical pieces.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite-chart bad-set nullity.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119536,7 +119548,10 @@
     {:job 3,
      :commit "73bc6fad0fc33b46744eeb62a705c0421a0aa57e",
      :reason
-     "Banked nullity of a bad set covered by finite chart-critical pieces."}]}
+     "Banked nullity of a bad set covered by finite chart-critical pieces."}
+    {:job 4,
+     :commit "1afe14c6987902efba96a050a478d6e0b4a3614b",
+     :reason "Banked finite-chart bad-set nullity."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122495,7 +122510,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "badSet_measure_zero_of_finite_targetCharts",
@@ -122505,7 +122520,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "finite chart cover nullity",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1afe14c6987902efba96a050a478d6e0b4a3614b"},
    :id :lemma-badset-measure-zero-of-finite-targetcharts,
    :kind :lemma,
    :depends-on
