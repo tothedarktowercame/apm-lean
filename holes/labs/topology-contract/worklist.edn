@@ -119152,64 +119152,53 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Apply bridge to nullity; then signed counts and Main.",
+    :residual
+    "Specialize nullity to Circle, select a regular value, then signed counts and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
-    [{:name "finite_targetChart_witness_of_globalCriticalValue",
-      :type "global critical value has chart witness",
+    [{:name "globalCriticalValues_measure_zero_of_targetCharts",
+      :type
+      "global critical values are null from finite target charts",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["exists_fin_chartAt_source_cover"],
+      :depends-on
+      ["badSet_measure_zero_of_finite_targetChart_witnesses"
+       "finite_targetChart_witness_of_globalCriticalValue"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["badSet_measure_zero_of_finite_targetChart_witnesses"
+      ["globalCriticalValues_measure_zero_of_targetCharts"
        "circleHaarMeasure_ne_zero"
-       "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope"
-       "finite_targetChart_witness_of_globalCriticalValue"],
+       "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "05ba7ee14817f148ea767ea2db9b82329c4e57e602a9b611204002ba6f8302ec",
+     "692935828c6faae148867a49b0b611d5ab15c04cb37a8348b22ec8b618d16eb1",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked critical witness.",
+    :reason "Banked global critical-value nullity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hashes/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "Closure compile", :exit 1, :correction "added ∞≠0"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792607639343-1310-32c285b4",
-     :commands
-     ["git show/diff abd47c09"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: abd47c09 changes only t00J02Closure.lean (+32), adding a compiled global-critical-value to finite-chart witness bridge after prior history 5725057f. Fixture afb497a6, source 0b3b4888, implementation 05ba7ee1; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the Fin cover selects a chart containing g(x); surjectivity of the chart-composed mfderiv would imply surjectivity of mfderiv g via the established iff, contradicting global criticality. Thus the same x witnesses chart criticality within targetChartDomain. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; applying this bridge to nullity, signed counts, and final assembly remain listed."},
-    :commit "abd47c094f526414d4bca1c7e620e04f5cc655c3",
+     {:cmd "hashes/placeholders/diff", :exit 0}],
+    :commit "836e08afe8e05bb21554ee228dbe7bcff5a8ec37",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119217,7 +119206,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119882,7 +119871,8 @@
     :lemma-circlebasechartmeasure-eq-zero-of-coordinateenvelope
     :lemma-exists-finset-chartat-source-cover
     :lemma-exists-fin-chartat-source-cover
-    :lemma-finite-targetchart-witness-of-globalcriticalvalue],
+    :lemma-finite-targetchart-witness-of-globalcriticalvalue
+    :lemma-globalcriticalvalues-measure-zero-of-targetcharts],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122806,6 +122796,25 @@
    :id :lemma-finite-targetchart-witness-of-globalcriticalvalue,
    :kind :lemma,
    :depends-on [:lemma-exists-fin-chartat-source-cover],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "globalCriticalValues_measure_zero_of_targetCharts",
+    :type "global critical values are null from finite target charts"},
+   :lemma
+   {:name "globalCriticalValues_measure_zero_of_targetCharts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "global critical values are null from finite target charts",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-globalcriticalvalues-measure-zero-of-targetcharts,
+   :kind :lemma,
+   :depends-on
+   [:lemma-badset-measure-zero-of-finite-targetchart-witnesses
+    :lemma-finite-targetchart-witness-of-globalcriticalvalue],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
