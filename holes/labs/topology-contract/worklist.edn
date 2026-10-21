@@ -119152,19 +119152,19 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:consumer :t00J02,
     :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove chart-null transport, instantiate witnesses, then signed counts and Main.",
+    "Build base-chart transport and witnesses; then signed counts and Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "review artifacts preserved"],
+    :warnings ["Main sorry" "artifacts preserved"],
     :missing-theorems
-    [{:name "circleHaarMeasure_ne_zero",
-      :type "Circle Haar measure nonzero",
+    [{:name "circleChartTransition_image_null",
+      :type "circle-chart transitions preserve null sets",
       :status :proved,
       :consumers [:t00J02],
       :depends-on [],
@@ -119175,20 +119175,21 @@
       :consumers [:t00J02],
       :depends-on
       ["badSet_measure_zero_of_finite_targetChart_witnesses"
-       "circleHaarMeasure_ne_zero"],
+       "circleHaarMeasure_ne_zero"
+       "circleChartTransition_image_null"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "bc7ac5675abefa9c420540eed9335f294967022f1c7ac984ce21f6188490166d",
+     "672e5c62ba7ffd2e12e433b2f6745fcbd1627297c0ca914a3b5fcf4cf5a143ca",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked nonzero Circle Haar measure.",
+    :reason "Banked circle-chart null transitions.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119197,21 +119198,10 @@
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "compile#1", :exit 1, :correction "qualified type"}
-     {:cmd "compile#2", :exit 1, :correction "added BorelSpace"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792598844011-1091-40249c31",
-     :commands
-     ["git show/diff 715311c4"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 715311c4 changes only t00J02Closure.lean (+34), adding a compiled normalized Circle Haar measure and nonzeroness after prior history 8822022b. Fixture afb497a6, source 0b3b4888, implementation bc7ac567; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: univ is packaged as a positive compact, haarMeasure_self gives mass 1, contradicting a zero measure. The local measurable structure is precisely borel Circle, matching the Haar construction without changing the Circle topology. Both new theorems use only propext, Classical.choice, Quot.sound. Main retains its registered sorry; chart transport/H2 assembly remain listed."},
-    :commit "715311c4db9d26e8d2eb910f6a24f3d091154827",
+    [{:cmd "closure compile x4",
+      :exit 1,
+      :correction "fixed model/measure args"}],
+    :commit "7c03a51a2392ec7cf706d88afa9edab3d83de5ce",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119219,7 +119209,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119852,7 +119842,8 @@
     :lemma-measure-zero-of-subset-finite-chartcriticalpieces
     :lemma-badset-measure-zero-of-finite-targetcharts
     :lemma-badset-measure-zero-of-finite-targetchart-witnesses
-    :lemma-circlehaarmeasure-ne-zero],
+    :lemma-circlehaarmeasure-ne-zero
+    :lemma-circlecharttransition-image-null],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122575,6 +122566,23 @@
     :banked-by :program-2026-10-13-close-t00j02,
     :banked-commit "715311c4db9d26e8d2eb910f6a24f3d091154827"},
    :id :lemma-circlehaarmeasure-ne-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleChartTransition_image_null",
+    :type "circle-chart transitions preserve null sets"},
+   :lemma
+   {:name "circleChartTransition_image_null",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "circle-chart transitions preserve null sets",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-circlecharttransition-image-null,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
