@@ -119152,63 +119152,49 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct zero chart component sums and chart top-degree identity from transverse disk data; assemble H2/Main.",
+    "Construct chart component sums and top-degree identity from transverse disk data; replace false Producer path in Main.",
     :outcome :stop,
     :warnings ["Main sorry" "unrelated dirt preserved"],
     :missing-theorems
-    [{:name "surfaceTopDegree_eq_zero_of_chartComponentSums",
-      :type "zero chart component sums force top degree zero",
+    [{:name "topHomologyMap_eq_zero_of_chartComponentSums",
+      :type "chart component sums imply H2 map zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["pointSignedCount_eq_groupedComponentSignedCount"
-       "groupedComponentSignedCount_eq_zero"],
+      ["surfaceTopDegree_eq_zero_of_chartComponentSums"
+       "surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["surfaceTopDegree_eq_zero_of_chartComponentSums"
-       "canonicalComponentComparison_of_chartComponentSumsEqZero"],
+      :depends-on ["topHomologyMap_eq_zero_of_chartComponentSums"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "7b6fdbb208455d6dd76c50b31791bbd81ac15e3c507dc25ee2c87f51bb666f06",
+     "5bdb9ebcb704e645c2f6227bbe6b907697399365e13a812f5a70b00eb6deb80f",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked chart-component top-degree vanishing.",
+    :reason "Banked chart-component H2 endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792617625364-1582-03677661",
-     :commands
-     ["git show/diff --check 4f6a4bf9d"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: 4f6a4bf9d changes only t00J02Closure.lean (+22), adding compiled, sorry-free chart-component top-degree vanishing beyond history 47c1a11f3. Fixture afb497a6, source 0b3b4888, implementation 7b6fdbb2; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: the chart top-degree identity rewrites to the point signed count, regrouping by occupied component preserves signs and coefficients, and zero component sums force the grouped count to zero. Fiber subtype, occupied-component indices, and integer coefficient representations remain aligned. Axioms are propext, Classical.choice, Quot.sound. Evidence lists constructing chart component sums/top-degree identity and H2/Main assembly as residual milestones."},
-    :commit "4f6a4bf9d722e7c759cf57e491cb7aa8baeb4311",
+    :commit "1c4ee36758090d688044ffb6a9937a7ce04b54f9",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119216,7 +119202,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119933,7 +119919,8 @@
     :lemma-tophomologymap-eq-zero-of-diskbounded-comparison
     :lemma-canonicalcomponentcomparison-of-chartcomponentsumseqzero
     :lemma-canonicaltopdegreeformula-of-chartsignedsum
-    :lemma-surfacetopdegree-eq-zero-of-chartcomponentsums],
+    :lemma-surfacetopdegree-eq-zero-of-chartcomponentsums
+    :lemma-tophomologymap-eq-zero-of-chartcomponentsums],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123165,6 +123152,25 @@
    :depends-on
    [:lemma-pointsignedcount-eq-groupedcomponentsignedcount
     :lemma-groupedcomponentsignedcount-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_chartComponentSums",
+    :type "chart component sums imply H2 map zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_chartComponentSums",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart component sums imply H2 map zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-tophomologymap-eq-zero-of-chartcomponentsums,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surfacetopdegree-eq-zero-of-chartcomponentsums
+    :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
