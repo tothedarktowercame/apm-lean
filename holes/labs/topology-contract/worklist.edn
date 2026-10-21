@@ -119152,64 +119152,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Instantiate canonical finite-fiber calculations and signed count; then H2/Main.",
+    :residual "Build canonical calculations; then H2/Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked"],
     :missing-theorems
     [{:name
-      "exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection",
-      :type "regular incidence fiber gives local injectivity",
+      "topHomologyMap_eq_zero_of_incidenceProjection_calculations",
+      :type "incidence calculations imply H2 map zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["exists_circleDirection_lifts_of_incidenceProjection"
-       "exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts"],
+      ["exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection"
+       "topHomologyMap_eq_zero_of_exists_locallyInjective_calculations"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection"
-       "regularFiberSignedCount_eq_zero_of_comparison"
-       "topHomologyMap_eq_zero_of_regularValue_signedCount"],
+      ["topHomologyMap_eq_zero_of_incidenceProjection_calculations"
+       "regularFiberSignedCount_eq_zero_of_comparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "c2946c70cf31cec779ebabee2bbfe80e64a31ac6b2ca3ab575aa53e8fb6d7040",
+     "e9bf0b2d6e379350357ccd588af1df329cf60bf2229e0770f40e1c6ea0f5707c",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked local injectivity.",
+    :reason "Banked incidence H2 adapter.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792612527371-1448-b09469d3",
-     :commands
-     ["git show/diff 22f4b77d"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 22f4b77d changes only t00J02Closure.lean (+22), adding a compiled incidence local-injectivity endpoint beyond program history; its exact tree also contains the preceding compiled direction-lift bridge. Fixture afb497a6, source 0b3b4888, implementation c2946c70; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the incidence regular fiber supplies literal circle-direction lifts, and the established direction-lifts endpoint returns y in range c with LocallyInjectiveAlongFiber f y. Surface and Circle tangent models remain aligned through the prior bridge. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; canonical finite-fiber calculations, signed count, H2, and final assembly remain listed."},
-    :commit "22f4b77d7b0bd06718e31633b351dda3aba9b65d",
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "sha256sum scoped files; git diff --check", :exit 0}],
+    :commit "73b3f7e84e0034071d9de3b5868de8574c36d71a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119217,7 +119204,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119910,7 +119897,8 @@
     :lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart
     :lemma-exists-circleincidenceprojection-surjective-fiber
     :lemma-exists-circledirection-lifts-of-incidenceprojection
-    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-incidenceprojection],
+    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-incidenceprojection
+    :lemma-tophomologymap-eq-zero-of-incidenceprojection-calculations],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123016,6 +123004,27 @@
    :depends-on
    [:lemma-exists-circledirection-lifts-of-incidenceprojection
     :lemma-exists-circlevalue-locallyinjectivealongfiber-of-direction-lifts],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "topHomologyMap_eq_zero_of_incidenceProjection_calculations",
+    :type "incidence calculations imply H2 map zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_incidenceProjection_calculations",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "incidence calculations imply H2 map zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-tophomologymap-eq-zero-of-incidenceprojection-calculations,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-circlevalue-locallyinjectivealongfiber-of-incidenceprojection
+    :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
