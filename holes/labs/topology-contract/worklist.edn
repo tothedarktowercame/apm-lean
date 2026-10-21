@@ -119152,7 +119152,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
@@ -119202,7 +119202,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119652,6 +119652,18 @@
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792620369769-1669-c483d485",
+     :commands
+     ["git show/diff --check 922873b7d"
+      "detached: lake env lean ConstructionTargets/t98A06Closure.lean"
+      "detached: lake env lean problems/t98A06/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: 922873b7d changes only t98A06Closure.lean (+18), adding a compiled, sorry-free corrected coordinate-lift theorem beyond history 12a34ded9. Fixture 9838452b matches the recorded repaired hash; source 44399e71, implementation d46f8ed8; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: the smoothly varying corrected right inverse Q is applied to smooth b; hQ.clm_apply proves smoothness, while A x composed with Q x = id gives A x (Q x (b x)) = b x. The E m/E n continuous-linear-map boundary is preserved. Axioms are propext, Classical.choice, Quot.sound. Evidence lists tangent-chart transport, packaging local lifts, then flow/Main as residual milestones."},
     :commit "922873b7df5222448c770f60fb79118288af2e49",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119660,7 +119672,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119678,7 +119690,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smooth corrected inverses.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked neighborhoodwise corrected coordinate lifts.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119724,7 +119736,10 @@
      :reason "Banked local corrected right inverses."}
     {:job 4,
      :commit "12a34ded994229caea7bd246e3acc5255d2ba041",
-     :reason "Banked smooth corrected inverses."}]}
+     :reason "Banked smooth corrected inverses."}
+    {:job 5,
+     :commit "922873b7df5222448c770f60fb79118288af2e49",
+     :reason "Banked neighborhoodwise corrected coordinate lifts."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -123187,7 +123202,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_exactLiftComparison",
@@ -123197,7 +123212,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "exact-lift comparison and chart identity imply H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-tophomologymap-eq-zero-of-exactliftcomparison,
    :kind :lemma,
    :depends-on
@@ -123206,7 +123223,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_nhds_contDiffOn_corrected_lift",
@@ -123216,7 +123233,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "smooth exact coordinate lift on stable neighborhood",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "922873b7df5222448c770f60fb79118288af2e49"},
    :id :lemma-exists-nhds-contdiffon-corrected-lift,
    :kind :lemma,
    :depends-on [:lemma-exists-nhds-contdiffon-corrected-rightinverse],
