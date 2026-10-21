@@ -89428,6 +89428,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792615670955-1520-d5620cea",
+     :commands
+     ["git show/diff e45d77243"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: e45d77243 follows 5e7192525 and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom progress proves both actual collapsed arc loops and their pi1 classes equal the fixed cut-circle generators. Full concatenated-loop alignment/pi1 equivalence, model realization, and invariants remain listed."},
     :commit "e45d77243",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89436,7 +89448,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89454,7 +89466,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the collapsed sphere-return identity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact alignment of both collapsed arcs.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89565,7 +89577,10 @@
      :reason "Banked the collapse pi1 generator interface."}
     {:job 6,
      :commit "5e7192525",
-     :reason "Banked the collapsed sphere-return identity."}]}
+     :reason "Banked the collapsed sphere-return identity."}
+    {:job 7,
+     :commit "e45d77243",
+     :reason "Banked exact alignment of both collapsed arcs."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100883,7 +100898,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_collapsedArcClasses_eq_generators",
@@ -100893,7 +100908,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "both collapsed literal arcs equal fixed generators",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "e45d77243"},
    :id :lemma-apm-t97a03-collapsedarcclasses-eq-generators,
    :kind :lemma,
    :depends-on [:lemma-apm-t97a03-collapsedspherereturnclass-eq-one],
