@@ -265,6 +265,39 @@ theorem fiber_equiv_fin_two
   exact ⟨Fintype.equivOfCardEq
     (by simpa [Nat.card_eq_fintype_card] using hdegree x)⟩
 
+/-! ## Independence of the chosen fiber coordinate -/
+
+/-- Relabeling a two-point fiber conjugates its monodromy, and conjugation
+preserves whether that monodromy is nontrivial. -/
+theorem conjugate_ne_refl_iff
+    (label monodromy : Equiv.Perm (Fin 2)) :
+    label.symm.trans (monodromy.trans label) ≠ Equiv.refl (Fin 2) ↔
+      monodromy ≠ Equiv.refl (Fin 2) := by
+  constructor
+  · intro h hmono
+    apply h
+    subst monodromy
+    ext x
+    simp
+  · intro h hconj
+    apply h
+    ext x
+    have hx := congrArg (fun f : Equiv.Perm (Fin 2) ↦ f (label x)) hconj
+    have hxl : label (monodromy x) = label x := by simpa using hx
+    exact congrArg Fin.val (label.injective hxl)
+
+/-- Connectedness of the lifted two-arc action is independent of the chosen
+`Fin 2` coordinate on the fiber. -/
+theorem twoArcActionConnected_conjugate
+    (label first second : Equiv.Perm (Fin 2)) :
+    TwoArcActionConnected
+        (label.symm.trans (first.trans label))
+        (label.symm.trans (second.trans label)) ↔
+      TwoArcActionConnected first second := by
+  rw [twoArcActionConnected_iff_nontrivial,
+    twoArcActionConnected_iff_nontrivial,
+    conjugate_ne_refl_iff, conjugate_ne_refl_iff]
+
 #print axioms twoArcMonodromy_nontrivial_classification
 #print axioms twoArcMonodromy_model_exists
 #print axioms finTwoPerm_eq_id_or_swap
@@ -277,5 +310,7 @@ theorem fiber_equiv_fin_two
 #print axioms twoArcPermMonodromy_model_exists_of_actionConnected
 #print axioms surjective_of_fiber_card_two
 #print axioms fiber_equiv_fin_two
+#print axioms conjugate_ne_refl_iff
+#print axioms twoArcActionConnected_conjugate
 
 end ConstructionTargets.t97A03Closure
