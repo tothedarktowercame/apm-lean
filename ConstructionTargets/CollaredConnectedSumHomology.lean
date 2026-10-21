@@ -353,6 +353,38 @@ theorem boundary_homology_zero (n : ℕ) (hn : 2 ≤ n) (M : Type)
   sorry
 
 /-- **LIBRARY (B5).** Integral homology of a collared puncture. -/
+lemma punctured_homology_aux_H0 {n : ℕ} {M : Type} [TopologicalSpace M]
+    (c : BallCollar n M) [PathConnectedSpace c.Punctured] :
+    Nonempty (H 0 c.Punctured ≅ ModuleCat.of ℤ ℤ) := by
+  let p : c.Punctured := Classical.choice inferInstance
+  let q := ConstructionTargets.T02A06SphereH0.singularVertexH0Class p
+  letI : Epi q :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_epi p
+  letI : Mono q :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_mono p
+  letI : IsIso q := isIso_of_mono_of_epi q
+  exact ⟨ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of c.Punctured) 0 (ModuleCat.of ℤ ℤ) (asIso q).symm⟩
+
+lemma punctured_homology_aux_middle (n : ℕ) (hn : 2 ≤ n) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    ∀ k, 0 < k → k < n → Nonempty (H k c.Punctured ≅ H k M) := by
+  sorry
+
+lemma punctured_homology_aux_above (n : ℕ) (hn : 2 ≤ n) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (habove : ∀ k, n < k → IsZero (H k M))
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured)
+    (htopzero : IsZero (H n c.Punctured)) :
+    ∀ k, n ≤ k → IsZero (H k c.Punctured) := by
+  sorry
+
 theorem punctured_homology (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E n) M]
@@ -364,7 +396,10 @@ theorem punctured_homology (n : ℕ) (hn : 2 ≤ n) (M : Type)
     Nonempty (H 0 c.Punctured ≅ ModuleCat.of ℤ ℤ) ∧
       (∀ k, 0 < k → k < n → Nonempty (H k c.Punctured ≅ H k M)) ∧
       (∀ k, n ≤ k → IsZero (H k c.Punctured)) := by
-  sorry
+  letI : PathConnectedSpace c.Punctured := hpath
+  exact ⟨punctured_homology_aux_H0 c,
+    punctured_homology_aux_middle n hn M c htop hopen hpath,
+    punctured_homology_aux_above n hn M c habove hopen hpath htopzero⟩
 
 /-- **LIBRARY (B6).** The fundamental group is unchanged by puncturing a
 three-manifold along a collared ball. -/
