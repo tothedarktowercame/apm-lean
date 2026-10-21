@@ -1902,6 +1902,32 @@ theorem t99J05_cp_successor_topPatch_finiteDimensional (n k : ℕ) :
 #print axioms t99J05_cp_successor_topPatch_contractible
 #print axioms t99J05_cp_successor_topPatch_finiteDimensional
 
+/-- The lower patch vanishes above the old projective top degree. -/
+theorem t99J05_cp_successor_lowerPatch_subsingleton_above
+    (n k : ℕ) (h : ComplexProjectiveRationalHomologyData n)
+    (hk : 2 * n < k) :
+    Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) k) := by
+  letI : Subsingleton (Homology (CP n) k) := h.vanishesAbove k hk
+  exact (t99J05_cp_successor_lowerPatch_homologyIso n k).symm.toLinearEquiv.injective.subsingleton
+
+/-- Positive-degree homology of the contractible top patch vanishes. -/
+theorem t99J05_cp_successor_topPatch_subsingleton_positive
+    (n k : ℕ) (hk : 0 < k) :
+    Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) k) := by
+  letI : ContractibleSpace
+      ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) :=
+    t99J05_cp_successor_topPatch_contractible n
+  exact ModuleCat.isZero_iff_subsingleton.mp
+    (ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ _ k
+      (Nat.ne_of_gt hk))
+
+#print axioms t99J05_cp_successor_lowerPatch_subsingleton_above
+#print axioms t99J05_cp_successor_topPatch_subsingleton_positive
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
