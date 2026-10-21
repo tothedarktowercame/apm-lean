@@ -2283,6 +2283,19 @@ theorem frozenBoundaryGraphH1CycleComparison_of_data
           (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) :=
   ⟨frozenGraphH1CoordinatesOfCycleComparison c hcycle hinj hrange⟩
 
+/-- Exact range identification already implies that every comparison value
+is a graph cycle, so the eventual geometric construction need not establish
+the cycle condition separately. -/
+theorem frozenBoundaryGraphH1Cycle_of_range
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 7 → ℤ))
+    (hrange : LinearMap.range c = LinearMap.ker frozenGraphBoundary) :
+    ∀ x, frozenGraphBoundary (c x) = 0 := by
+  intro x
+  rw [← LinearMap.mem_ker, ← hrange]
+  exact LinearMap.mem_range_self c x
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3406,6 +3419,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphCycleInclusion_range
 #print axioms frozenGraphH1CoordinatesOfCycleComparison
 #print axioms frozenBoundaryGraphH1CycleComparison_of_data
+#print axioms frozenBoundaryGraphH1Cycle_of_range
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
