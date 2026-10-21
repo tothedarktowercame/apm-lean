@@ -119152,45 +119152,45 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Derive component comparison, global signed-count identity, and Sard nullity from transverse disk-bounded hypotheses; assemble Main.",
+    "Prove bad-set nullity and component/global signed-count identities from transverse disk-bounded geometry; assemble Main.",
     :outcome :stop,
     :warnings ["Main registered sorry" "unrelated edits preserved"],
     :missing-theorems
     [{:name
-      "CanonicalRegularFiberDegreeCalculations.ofComponentComparison",
+      "exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero",
       :type
-      "exact-lift component comparison plus top signed-count identity constructs canonical calculations",
+      "direct bad-parameter-set nullity selects a locally injective circle fiber",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalComponentLocalDegreeSum_eq_zero_of_comparison"],
+      ["exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["CanonicalRegularFiberDegreeCalculations.ofComponentComparison"
-       "topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations"],
+      ["exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero"
+       "CanonicalRegularFiberDegreeCalculations.ofComponentComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "83551a6a963e06ba328aab4222820c9a86d6ff148243c64414b8fc825a97d389",
+     "a6f3bc5bcc0e0ad33ce4dfcf93fe6044d8c572c52abdaa09e9234a787aead638",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked canonical calculation bundle constructor.",
+    :reason "Banked direct bad-parameter nullity adapter.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119201,20 +119201,8 @@
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 1,
-      :finding "Added explicit dependent f,c,y parameters."}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792576135536-540-66b1fce6",
-     :commands
-     ["git show/diff 4ffbf7019"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 4ffbf7019 changes only t00J02Closure.lean (+27), adding a compiled canonical calculation-bundle constructor after prior history. Fixture afb497a6, source 0b3b4888, implementation 83551a6a, registry 170/170, and placeholders closure=0/Main=1 reproduce. The structure boundary is faithful: the comparison bridge supplies component_sum_eq_zero, and the supplied signed-count formula supplies topDegree_eq; all indices share f,c,y,hy. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; deriving comparison/global identity/Sard nullity and final assembly remain listed."},
-    :commit "4ffbf7019",
+      :finding "Corrected Unicode circle-model notation."}],
+    :commit "235a7aaf3",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119222,7 +119210,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119760,7 +119748,8 @@
     :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations
     :lemma-tophomologymap-eq-zero-of-badparameters-measure-zero-calculations
     :lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison
-    :lemma-canonicalregularfiberdegreecalculations-ofcomponentcomparison],
+    :lemma-canonicalregularfiberdegreecalculations-ofcomponentcomparison
+    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badset-measure-zero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122033,6 +122022,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero",
+    :type
+    "direct bad-parameter-set nullity selects a locally injective circle fiber"},
+   :lemma
+   {:name
+    "exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "direct bad-parameter-set nullity selects a locally injective circle fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badset-measure-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
