@@ -1172,6 +1172,48 @@ noncomputable def t99J05_cp_successor_overlap_rational_topHomology (n : ℕ) :
   t99J05_cp_successor_overlap_topIso_of_unitSphere n
     (t99J05_affineUnitSphere_topHomologyIso n)
 
+/-- The successor overlap is finite-dimensional in every degree: degree zero
+and the sphere top degree are one-dimensional, and all other degrees vanish. -/
+theorem t99J05_cp_successor_overlap_finiteDimensional (n k : ℕ) :
+    FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) k) := by
+  by_cases hk0 : k = 0
+  · subst k
+    exact (t99J05_cp_successor_overlap_rational_H0 n).symm.toLinearEquiv.finiteDimensional
+  rcases lt_trichotomy k (2 * n + 1) with hlt | heq | hgt
+  · have hzEuclidean :
+        IsZero (Homology (T02A06.euclideanUnitSphere (2 * n + 2)) k) :=
+      t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
+        (2 * n + 2) k (Nat.pos_of_ne_zero hk0) (by omega)
+    have hzAffine : IsZero
+        (Homology (Metric.sphere
+          (0 : AffineCoordinates (Fin.last (n + 1))) 1) k) :=
+      hzEuclidean.of_iso
+        (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+          (t99J05_affineUnitSphereHomotopyEquivEuclidean n) k)
+    letI : Subsingleton
+        (Homology ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) k) :=
+      ModuleCat.isZero_iff_subsingleton.mp
+        (hzAffine.of_iso (t99J05_cp_successor_overlap_homologyIso_unitSphere n k))
+    exact FiniteDimensional.of_injective (0 : _ →ₗ[ℚ] ℚ)
+      (Function.injective_of_subsingleton _)
+  · subst k
+    exact (t99J05_cp_successor_overlap_rational_topHomology n).symm.toLinearEquiv.finiteDimensional
+  · letI : Subsingleton
+        (Homology ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) k) :=
+      ModuleCat.isZero_iff_subsingleton.mp
+        (t99J05_cp_successor_overlap_homology_isZero_of_gt n k hgt)
+    exact FiniteDimensional.of_injective (0 : _ →ₗ[ℚ] ℚ)
+      (Function.injective_of_subsingleton _)
+
+#print axioms t99J05_cp_successor_overlap_finiteDimensional
+
 /-- The rational chain-level Mayer--Vietoris sequence for the two literal
 projective patches is short exact before transport from small simplices. -/
 theorem t99J05_cp_successor_subcomplexMayerVietoris_shortExact (n : ℕ) :
