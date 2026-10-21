@@ -36711,25 +36711,31 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Prove degreewise surjectivity/vanishing, then even generator equivalences.",
+    "Apply to overlap-vanishing degrees; prove top/even cases.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_finiteDimensional_middle_of_exact_of_surjective",
+    [{:name "t99J05_surjective_of_subsingleton",
+      :type "map into zero module is surjective",
+      :status :proved,
+      :consumers [:t99J05],
+      :depends-on [],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_finiteDimensional_middle_of_exact_of_subsingleton",
       :type
-      "exact X→Y→Z, finite X/Z and surjective g imply finite-dimensional Y",
+      "exact segment with finite outer terms and zero right has finite middle",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_exact_ambient_transport"],
+      ["t99J05_finiteDimensional_middle_of_exact_of_surjective"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
@@ -36738,46 +36744,28 @@
       :depends-on
       ["t99J05_cp_successor_mayerVietoris_exact_ambient_transport"
        "t99J05_cp_successor_overlap_rational_topHomology"
-       "t99J05_finiteDimensional_middle_of_exact_of_surjective"],
+       "t99J05_finiteDimensional_middle_of_exact_of_subsingleton"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed finite-dimensional exact-segment extraction; degreewise MV specialization remains.",
+    "Committed finite extraction when the right term vanishes; degreewise use remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
-      :exit 1,
-      :correction
-      "reversed exactness equality and fixed explicit ModuleCat endpoints"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792593051622-939-c448ea4e",
-     :commands
-     ["git show/diff-tree 9ec870229a"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check 9ec870229a^ 9ec870229a"],
-     :finding
-     "PASS: new commit 9ec870229a changes only scoped Closure; fixture/blob SHA matches 3b1a32f7.... The algebraic lemma is true with the stated orientation: exact X→Y→Z and surjective Y→Z, with X and Z finite-dimensional, make Y module-finite via Module.Finite.of_exact, hence finite-dimensional over ℚ. All hypotheses feed the standard theorem and no representation boundary is hidden. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Milestone is proved and degreewise MV specialization remains listed."},
-    :commit "9ec870229a",
+    :commit "2ebc848f92",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "3b1a32f79f2852462d8f8424b9ffe757f5098ec200b03906cb317e0a2577b203"},
+     "3ba4951de15094f41ed52d64198111cf6cccfea9f6b6af935da21b0fe748c947"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48810,7 +48798,8 @@
    [:lemma-t99j05-cp-successor-mayervietoris-union-transport
     :lemma-t99j05-cp-successor-overlap-rational-tophomology
     :lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport
-    :lemma-t99j05-finitedimensional-middle-of-exact-of-surjective],
+    :lemma-t99j05-finitedimensional-middle-of-exact-of-surjective
+    :lemma-t99j05-finitedimensional-middle-of-exact-of-subsingleton],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -48919,6 +48908,43 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_surjective_of_subsingleton",
+    :type "map into zero module is surjective"},
+   :lemma
+   {:name "t99J05_surjective_of_subsingleton",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "map into zero module is surjective",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-surjective-of-subsingleton,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_finiteDimensional_middle_of_exact_of_subsingleton",
+    :type
+    "exact segment with finite outer terms and zero right has finite middle"},
+   :lemma
+   {:name "t99J05_finiteDimensional_middle_of_exact_of_subsingleton",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "exact segment with finite outer terms and zero right has finite middle",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-finitedimensional-middle-of-exact-of-subsingleton,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-finitedimensional-middle-of-exact-of-surjective],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
