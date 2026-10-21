@@ -88678,19 +88678,18 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "coordinate map zero kernel+six basis preimages; homology; normalization",
+    :residual "generators; homology; normalization",
     :outcome :stop,
     :warnings ["lint"],
     :missing-theorems
     [{:name
-      "frozenBoundaryGraphH1CycleComparison_of_coordinate_kernel_basis",
-      :type "zero kernel+basis preimages imply H1 iso",
+      "frozenBoundaryGraphH1CycleComparison_of_coordinate_generators",
+      :type "G",
       :status :proved,
       :consumers [:t94J09],
       :depends-on [],
@@ -88700,7 +88699,7 @@
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryGraphH1CycleComparison_of_coordinate_kernel_basis"],
+      ["frozenBoundaryGraphH1CycleComparison_of_coordinate_generators"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "T",
@@ -88724,35 +88723,26 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked kernel-basis adapter.",
+    :reason "Banked generator adapter.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "closure placeholder scan", :exit 0}
-     {:cmd "git show --check 152916486", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792582063863-684-e0bfc872",
-     :commands
-     ["git show/check/hash 152916486"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "statement-registry check/fingerprint t94J09"
-      "placeholder/axiom/orientation inspection"],
-     :finding
-     "PASS: reviewed 152916486 by topo-6, new after 8d6fcccd8; patch scope only t94J09Closure (+19). Fixture fa159b3d... matches; registry 170/0; frozen t94J09 digest 52b4778c...; closure/Main placeholders 0/0. Fresh detached build and Main compile pass. The exactness-style condition ker c=bot correctly yields injectivity via ker_eq_bot; six basis preimages then yield the correctly oriented underlying-H1 ~= Fin6 equivalence. Axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists coordinate kernel/basis proofs, homology, normalization milestones."},
-    :commit "152916486",
+     {:cmd "closure placeholder scan", :exit 0}],
+    :diagnostic-history
+    [{:cmd "build", :exit 1, :correction "ker"}
+     {:cmd "build", :exit 1, :correction "sum"}
+     {:cmd "build", :exit 1, :correction "lsum"}],
+    :commit "45e772734",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "fa159b3d3ffa7bcc80c89f0311d015729857e185b46bfe12d5fc63eb0e65a774"},
+     "bc510ae4704d8f0b6d81a9c0ec5267a7e6b03bcb0d34ac3b210abc383ab7dc3a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98762,7 +98752,8 @@
     :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-twosidedinverse
     :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-basis
     :lemma-frozenboundarygraphh1cyclecomparison-of-injective-coordinate-basis
-    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-kernel-basis],
+    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-kernel-basis
+    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-generators],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -99900,6 +99891,26 @@
     :banked-commit "152916486"},
    :id
    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-kernel-basis,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "frozenBoundaryGraphH1CycleComparison_of_coordinate_generators",
+    :type "G"},
+   :lemma
+   {:name
+    "frozenBoundaryGraphH1CycleComparison_of_coordinate_generators",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "G",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id
+   :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-generators,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}

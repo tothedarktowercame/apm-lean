@@ -1281,12 +1281,15 @@ noncomputable def t99J05_cp_successor_unionRangeHomologyIso (n k : ℕ) :
         ConstructionTargets.SingularExcision.ambientSubspaceRange
           (cpSuccessorTopPatch n) :
         (TopCat.toSSet.obj (TopCat.of (CP (n + 1)))).Subcomplex) : SSet)).homology k ≅
-      Homology (cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n) k :=
-  (CategoryTheory.asIso (HomologicalComplex.homologyMap
-    (ConstructionTargets.CoefficientSubspaceUnionRangeInclusion.unionRangeChainsInclusion
-      ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n)) k)).trans
-    (t99J05_ambientSubspaceRangeHomologyIso
-      (cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n) k)
+      Homology ((cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n :
+        Set (CP (n + 1)))) k := by
+  letI := t99J05_cp_successor_unionRange_homologyMap_isIso n k
+  exact
+    (CategoryTheory.asIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientSubspaceUnionRangeInclusion.unionRangeChainsInclusion
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n)) k)).trans
+      (t99J05_ambientSubspaceRangeHomologyIso
+        (cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n) k)
 
 #print axioms t99J05_cp_successor_unionRangeHomologyIso
 
