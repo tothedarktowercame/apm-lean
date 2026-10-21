@@ -89432,6 +89432,18 @@
      {:cmd "scans", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "import/unfold"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792619675885-1649-01f02631",
+     :commands
+     ["git show/diff dba518d7c"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: dba518d7c follows its latest program-history parent and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom progress defines the exact free-group map from the two geometric cut generators and derives an aligned wedge-pi1 equivalence conditional on its bijectivity. Cut-map bijectivity, collapse injectivity, covers, and invariants remain listed."},
     :commit "dba518d7c",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89440,7 +89452,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89458,7 +89470,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked aligned literal pi1 equivalence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cut-generator alignment.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89584,7 +89596,10 @@
      :reason "Banked collapse pi1 surjectivity."}
     {:job 2,
      :commit "d2523edb8",
-     :reason "Banked aligned literal pi1 equivalence."}]}
+     :reason "Banked aligned literal pi1 equivalence."}
+    {:job 3,
+     :commit "dba518d7c",
+     :reason "Banked cut-generator alignment."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -101059,7 +101074,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -101071,7 +101086,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "aligned cut pi1 from generator bijectivity",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "dba518d7c"},
    :id
    :lemma-apm-t97a03-exists-aligned-cut-pioneequiv-of-generator-bijective,
    :kind :lemma,
