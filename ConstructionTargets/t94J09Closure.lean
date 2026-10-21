@@ -2496,6 +2496,25 @@ theorem frozenBoundaryGraphH1CycleComparison_of_injective_coordinate_basis
   have hy := LinearMap.congr_fun hright y
   simpa using hy
 
+/-- Kernel triviality is the submodule form of injectivity naturally exposed
+by exactness calculations for the geometric coordinate map. -/
+theorem frozenBoundaryGraphH1CycleComparison_of_coordinate_kernel_basis
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 6 → ℤ))
+    (r : (Fin 6 → ℤ) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hker : LinearMap.ker c = ⊥)
+    (hbasis : ∀ i : Fin 6,
+      c (r (Pi.single i 1)) = Pi.single i 1) :
+    Nonempty
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) := by
+  apply frozenBoundaryGraphH1CycleComparison_of_injective_coordinate_basis c r
+  · exact LinearMap.ker_eq_bot.mp hker
+  · exact hbasis
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3628,6 +3647,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse
 #print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_basis
 #print axioms frozenBoundaryGraphH1CycleComparison_of_injective_coordinate_basis
+#print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_kernel_basis
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
