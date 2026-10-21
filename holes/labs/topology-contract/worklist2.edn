@@ -89430,6 +89430,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check; sha256sum; placeholder scan", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792606138561-1278-65442185",
+     :commands
+     ["git show/diff-tree 2c744cae1"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit 2c744cae1 changes only in-scope Main after history fa61e72e7; closure fixture SHA 581ffddb... matches. It exposes literal quotient circle/sphere inclusions, proves both continuous, gives exhaustive quotient elimination, and proves actual north/south gluing equalities—real infrastructure for complementary paths, not a surrogate. Main/closure/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; path construction/generation, cover realization, and invariants remain listed."},
     :commit "2c744cae1",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89438,7 +89450,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89456,7 +89468,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed arc-word normalization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal base quotient interface.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89531,7 +89543,10 @@
      :reason "Replaced facade with generator reduction."}
     {:job 3,
      :commit "fa61e72e7",
-     :reason "Banked signed arc-word normalization."}]}
+     :reason "Banked signed arc-word normalization."}
+    {:job 4,
+     :commit "2c744cae1",
+     :reason "Banked literal base quotient interface."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100553,7 +100568,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A03_literal_base_summand_interface",
@@ -100563,7 +100578,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "continuous quotient inclusions, gluing, elimination",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "2c744cae1"},
    :id :lemma-t97a03-literal-base-summand-interface,
    :kind :lemma,
    :depends-on [],
