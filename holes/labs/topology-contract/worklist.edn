@@ -119196,6 +119196,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792567637614-412-20500f4c",
+     :commands
+     ["git show/diff 5f38c06a"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 5f38c06a changes only t00J02Closure.lean (+28), adding a new compiled bad-parameter-nullity adapter after prior history. Fixture afb497a6, source 0b3b4888, implementation 5c1fa625, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is correct: identity-image nullity selects z outside the bad set, then y=c z; derivative lift quantifiers match the local-injectivity consumer without representation coercion. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; incidence-chart nullity, calculations, and final assembly are listed residual milestones."},
     :commit "5f38c06aa2de10069a1effb15cc27da907f353e7",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked zero-fiber subtype homeomorphism.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Sard bad-parameter fiber adapter.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119477,7 +119489,10 @@
      :reason "Banked implicit-chart zero slice."}
     {:job 1,
      :commit "ab0c3d3a1124c51aed333c1ecd67c3b39f2f04d8",
-     :reason "Banked zero-fiber subtype homeomorphism."}]}
+     :reason "Banked zero-fiber subtype homeomorphism."}
+    {:job 2,
+     :commit "5f38c06aa2de10069a1effb15cc27da907f353e7",
+     :reason "Banked Sard bad-parameter fiber adapter."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -121878,7 +121893,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -121892,7 +121907,9 @@
     :type
     "Sard-null bad parameters give locally injective circle fiber",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "5f38c06aa2de10069a1effb15cc27da907f353e7"},
    :id
    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero,
    :kind :lemma,
