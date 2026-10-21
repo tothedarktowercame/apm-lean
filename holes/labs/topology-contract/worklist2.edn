@@ -89734,25 +89734,25 @@
    :program true,
    :other-consumers []}
   {:consumer :t99A03,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
-    :residual "Realize/identify N4 cover; Lefschetz steps; Main.",
+    :residual "N4 realization; Lefschetz; Main.",
     :outcome :stop,
     :warnings ["Main:1 sorry"],
     :missing-theorems
-    [{:name "n3PresentedParityCharacter_surjective_index_two",
+    [{:name "n3PresentedParitySheetAction_transitive",
       :type
-      "surjective character, index-two kernel and quotient equivalence",
+      "transitive concrete 2-sheet action with exact parity kernel",
       :status :proved,
       :consumers [:t99A03],
-      :depends-on ["n3PresentedParityCharacter_generator_ne_one"],
+      :depends-on ["n3PresentedParityCharacter_surjective_index_two"],
       :area "polygon-covering-classification"}
      {:name "t99A03_exists_N4_deck_involution",
-      :type "N4 cover and deck map",
+      :type "realize action as N4 cover/deck map",
       :status :partial,
       :consumers [:t99A03],
-      :depends-on ["n3PresentedParityCharacter_surjective_index_two"],
+      :depends-on ["n3PresentedParitySheetAction_transitive"],
       :area "polygon-covering-classification"}
      {:name "t99A03_wedge_lefschetz_number",
       :type "wedge Lefschetz number 1",
@@ -89770,7 +89770,8 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked surjective parity and index-two kernel.",
+    :reason
+    "Banked concrete transitive parity action and exact kernel.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t99A03Closure",
       :exit 0}
@@ -89778,30 +89779,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
     :diagnostic-history
-    [{:cmd "draft ZMod cases",
+    [{:cmd "lake env lean ConstructionTargets/t99A03Closure.lean",
       :exit 1,
-      :correction "used interval_cases"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792617929218-1593-cbadac7c",
-     :commands
-     ["git show/diff 92b059e6a"
-      "lake -Kjobs=1 build ConstructionTargets.t99A03Closure"
-      "lake env lean problems/t99A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint/hash/placeholder/axiom audits"],
-     :finding
-     "PASS: 92b059e6a follows 99c6c3b77 and changes only the scoped closure fixture. Fixture ea8e6b95..., frozen digest 6b0e5d09..., registry 170/0, placeholders closure/Main 0/1; gates compile. New sorry-free standard-axiom progress proves the descended parity character surjective, its kernel index two, and its quotient canonically equivalent to the two-element group. N4 cover realization, Lefschetz steps, and Main remain listed."},
-    :commit "92b059e6a",
+      :correction "fixed action identity typing"}],
+    :commit "6c0054f9f",
     :changed-paths ["ConstructionTargets/t99A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99A03Closure.lean",
      :sha256
-     "ea8e6b95d65b57aa3fcc0a22007a16460da898df27d60a808958aad660ec589e"},
+     "6eb7bf933de91f07ca29e8357d6f2c73a5d0534a8effcb22f15933780318a7a6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99A03/lean/Main.lean"
     "problems/t99A03/status.json"
@@ -93547,7 +93536,8 @@
    :depends-on
    [:lemma-n3paritycharacter-crosscaprelator
     :lemma-n3presentedparitycharacter-generator-ne-one
-    :lemma-n3presentedparitycharacter-surjective-index-two],
+    :lemma-n3presentedparitycharacter-surjective-index-two
+    :lemma-n3presentedparitysheetaction-transitive],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -101257,4 +101247,24 @@
    :id :lemma-apm-t97a03-cutcirclenormalizehomeomorph,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "n3PresentedParitySheetAction_transitive",
+    :type
+    "transitive concrete 2-sheet action with exact parity kernel"},
+   :lemma
+   {:name "n3PresentedParitySheetAction_transitive",
+    :reported-by [:program-2026-10-13-close-t99a03],
+    :type
+    "transitive concrete 2-sheet action with exact parity kernel",
+    :area "polygon-covering-classification",
+    :proved-in :program-2026-10-13-close-t99a03},
+   :id :lemma-n3presentedparitysheetaction-transitive,
+   :kind :lemma,
+   :depends-on
+   [:lemma-n3presentedparitycharacter-surjective-index-two],
    :other-consumers []}]}
