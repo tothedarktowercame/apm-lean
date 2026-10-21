@@ -119202,6 +119202,18 @@
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 1,
       :finding "Corrected Unicode circle-model notation."}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792577573594-577-133d9be7",
+     :commands
+     ["git show/diff 235a7aaf3"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 235a7aaf3 changes only t00J02Closure.lean (+24), adding a compiled direct bad-set nullity adapter after prior history. Fixture afb497a6, source 0b3b4888, implementation a6f3bc5b, registry 170/170, and placeholders closure=0/Main=1 reproduce. Representation and orientation are exact: Set.image_id converts direct bad-set nullity to the prior selector premise without changing the predicate or derivative equation, yielding the locally-injective circle fiber. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; proving nullity and signed-count identities from geometry plus final assembly remain listed."},
     :commit "235a7aaf3",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119210,7 +119222,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119228,7 +119240,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical calculation bundle constructor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked direct bad-parameter nullity adapter.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119498,7 +119510,10 @@
      :reason "Banked canonical component-sum vanishing bridge."}
     {:job 6,
      :commit "4ffbf7019",
-     :reason "Banked canonical calculation bundle constructor."}]}
+     :reason "Banked canonical calculation bundle constructor."}
+    {:job 7,
+     :commit "235a7aaf3",
+     :reason "Banked direct bad-parameter nullity adapter."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122025,7 +122040,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -122039,7 +122054,9 @@
     :type
     "direct bad-parameter-set nullity selects a locally injective circle fiber",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "235a7aaf3"},
    :id
    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badset-measure-zero,
    :kind :lemma,
