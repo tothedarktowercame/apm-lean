@@ -36741,6 +36741,18 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792619982202-1659-fba9b25b",
+     :commands
+     ["git rev-parse/diff-tree/diff --check 94be7d201"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and rg placeholders on recorded blob"],
+     :finding
+     "PASS: recorded commit 94be7d201 changes only t99J05Closure; fixture hash 00d20b...10eb matches. Fresh detached-commit gates pass; registry 170/170, placeholders 0, standard axioms only. Cylinder orientation is f@0,g@1 and TopCat-to-SSet-to-rational-singular-homology boundaries align. This is compiled new progress after ff74eb5dc; C4 assembly remains listed."},
     :commit "b09f91e08",
     :commits ["94be7d201" "b09f91e08"],
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
@@ -36750,7 +36762,7 @@
      "51a826e355560debd7199f73959362418155f03dc0eafafa9df7f3005bea6bb1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -37254,7 +37266,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_lefschetz_euler",
@@ -37266,7 +37278,9 @@
     :type
     "f homotopic to id on CP n has Lefschetz number and Euler characteristic n+1",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "b09f91e08"},
    :id :lemma-t99j05-lefschetz-euler,
    :kind :lemma,
    :depends-on
