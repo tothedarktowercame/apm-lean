@@ -557,7 +557,247 @@ theorem connectedSum_standardCover_aux_radial {n : ℕ} {M : Type}
       simp [w, v, hd_eq, unitToLarge, hs_norm]]
     exact congrFun c.compatible _
 
-/-- LEAF. Quotient step for the left thickening: a radial retraction of the
+/-- Banked from lemma-2 (round 2 partial). -/
+lemma connectedSum_standardCover_aux_left_aux_quotient_aux_continuous
+    {A B Z : Type} [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace Z]
+    (R : Sum A B → Sum A B → Prop)
+    (S : Set (Quotient (Relation.EqvGen.setoid R))) (P : Set (Sum A B))
+    (hP : IsOpen P)
+    (hsat : (fun z : Sum A B ↦ Quotient.mk (Relation.EqvGen.setoid R) z) ⁻¹' S = P)
+    (F : unitInterval × ↥S → Z)
+    (hF : Continuous fun p : unitInterval × ↥P ↦
+      F (p.1, ⟨Quotient.mk (Relation.EqvGen.setoid R) p.2.1,
+        (Set.ext_iff.mp hsat p.2.1).mpr p.2.2⟩)) : Continuous F := by
+  let q : Sum A B → Quotient (Relation.EqvGen.setoid R) := fun z ↦ Quotient.mk _ z
+  have hq : Topology.IsQuotientMap q := ⟨Quotient.mk_surjective, rfl⟩
+  have hS : IsOpen S := by
+    rw [← hq.isOpen_preimage]
+    change IsOpen ((fun z : Sum A B ↦ Quotient.mk (Relation.EqvGen.setoid R) z) ⁻¹' S)
+    rw [hsat]
+    exact hP
+  have hqS : Topology.IsQuotientMap (S.restrictPreimage q) :=
+    hq.restrictPreimage_isOpen hS
+  let e : ↥P ≃ₜ ↥(q ⁻¹' S) := Homeomorph.setCongr hsat.symm
+  have he : Topology.IsQuotientMap e := e.isQuotientMap
+  have hcomp : S.restrictPreimage q ∘ e = fun x : ↥P ↦
+      (⟨Quotient.mk (Relation.EqvGen.setoid R) x.1,
+        (Set.ext_iff.mp hsat x.1).mpr x.2⟩ : ↥S) := by
+    funext x
+    rfl
+  apply (hqS.comp he).continuous_lift_prod_right
+  simpa only [hcomp] using hF
+
+/-- Banked from lemma-1 (round 2 partial). -/
+lemma connectedSum_standardCover_aux_right_aux_quotient_aux_mem
+    {n : ℕ} {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (C : Set c₁.Punctured) (hiA : ∀ s, c₁.boundaryMap s ∈ C)
+    {x y : Sum c₁.Punctured c₂.Punctured}
+    (hxy : Relation.EqvGen (GlueRel c₁ c₂) x y) :
+    (x ∈ Sum.inl '' C ∪ Set.range Sum.inr) ↔
+      (y ∈ Sum.inl '' C ∪ Set.range Sum.inr) := by
+  induction hxy with
+  | rel x y h =>
+      cases h with
+      | boundary s =>
+          constructor
+          · exact fun _ => Or.inr ⟨c₂.boundaryMap s, rfl⟩
+          · exact fun _ => Or.inl ⟨c₁.boundaryMap s, hiA s, rfl⟩
+  | refl => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+
+lemma connectedSum_standardCover_aux_right_aux_quotient_aux_preimage
+    {n : ℕ} {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hiA : ∀ s, c₁.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₁) :
+    (fun z => Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) z) ⁻¹'
+        connectedSum_standardCover_aux_thickRight c₁ c₂ =
+      Sum.inl '' connectedSum_standardCover_aux_collar c₁ ∪ Set.range Sum.inr := by
+  ext z
+  constructor
+  · rintro ⟨w, hw, heq⟩
+    exact (connectedSum_standardCover_aux_right_aux_quotient_aux_mem
+      c₁ c₂ (connectedSum_standardCover_aux_collar c₁) hiA
+        (Quotient.exact heq.symm)).mpr hw
+  · intro hz
+    exact ⟨z, hz, rfl⟩
+
+lemma connectedSum_standardCover_aux_right_aux_quotient_aux_cont
+    {A B X : Type} [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace X]
+    (C : Set A) (hC : IsOpen C)
+    (F : unitInterval × ↥((@Sum.inl A B) '' C ∪ Set.range (@Sum.inr A B)) → X)
+    (hL : Continuous fun p : unitInterval × ↥C =>
+      F (p.1, ⟨Sum.inl p.2.1, Or.inl ⟨p.2.1, p.2.2, rfl⟩⟩))
+    (hR : Continuous fun p : unitInterval × B =>
+      F (p.1, ⟨Sum.inr p.2, Or.inr ⟨p.2, rfl⟩⟩)) : Continuous F := by
+  let P : Set (Sum A B) := (@Sum.inl A B) '' C ∪ Set.range (@Sum.inr A B)
+  let jL : C → P := fun a => ⟨Sum.inl a.1, Or.inl ⟨a.1, a.2, rfl⟩⟩
+  let jR : B → P := fun b => ⟨Sum.inr b, Or.inr ⟨b, rfl⟩⟩
+  have hjL : Topology.IsOpenEmbedding jL := by
+    apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+    · exact Continuous.subtype_mk
+        ((continuous_inl (X := A) (Y := B)).comp continuous_subtype_val) _
+    · intro a a' h; exact Subtype.ext (Sum.inl.inj (congrArg Subtype.val h))
+    · exact ((Topology.IsOpenEmbedding.inl (X := A) (Y := B)).isOpenMap.comp
+          hC.isOpenEmbedding_subtypeVal.isOpenMap).codRestrict _
+  have hjR : Topology.IsOpenEmbedding jR := by
+    apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+    · exact Continuous.subtype_mk (continuous_inr (X := A) (Y := B)) _
+    · intro b b' h; exact Sum.inr.inj (congrArg Subtype.val h)
+    · exact (Topology.IsOpenEmbedding.inr (X := A) (Y := B)).isOpenMap.codRestrict _
+  let eL : unitInterval × C → unitInterval × P := fun p => (p.1, jL p.2)
+  let eR : unitInterval × B → unitInterval × P := fun p => (p.1, jR p.2)
+  have heL : Topology.IsOpenEmbedding eL :=
+    Topology.IsOpenEmbedding.prodMap Topology.IsOpenEmbedding.id hjL
+  have heR : Topology.IsOpenEmbedding eR :=
+    Topology.IsOpenEmbedding.prodMap Topology.IsOpenEmbedding.id hjR
+  have hcL : Continuous (F ∘ eL) := by simpa [Function.comp_def, eL, jL, P] using hL
+  have hcR : Continuous (F ∘ eR) := by simpa [Function.comp_def, eR, jR, P] using hR
+  rw [← continuousOn_univ]
+  have hcover : Set.range eL ∪ Set.range eR = Set.univ := by
+    ext ⟨t, z, hz⟩
+    rcases hz with ⟨a, ha, rfl⟩ | ⟨b, rfl⟩
+    · simp [eL, jL, P, ha]
+    · simp [eR, jR, P]
+  rw [← hcover]
+  have hcLi : ContinuousOn F (eL '' Set.univ) :=
+    heL.isInducing.continuousOn_image_iff.mpr hcL.continuousOn
+  have hcRi : ContinuousOn F (eR '' Set.univ) :=
+    heR.isInducing.continuousOn_image_iff.mpr hcR.continuousOn
+  simpa only [Set.image_univ] using hcLi.union_of_isOpen hcRi
+    (by simpa only [Set.image_univ] using heL.isOpen_range)
+    (by simpa only [Set.image_univ] using heR.isOpen_range)
+
+/-- The inclusion of the kept summand into the left thickening. -/
+def connectedSum_standardCover_aux_left_aux_quotient_aux_incl {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂) :
+    C(c₁.Punctured, ↥(connectedSum_standardCover_aux_thickLeft c₁ c₂)) :=
+  ⟨fun a ↦ ⟨Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inl a), ⟨Sum.inl a, Or.inl ⟨a, rfl⟩, rfl⟩⟩,
+    (continuous_coinduced_rng.comp continuous_inl).subtype_mk _⟩
+
+/-- LEAF. The forward map of the quotient step: a continuous map from the
+thickening to the kept summand that is the identity on the kept summand and
+`c₁.boundaryMap ∘ r` on the other summand's collar.  Sketch: it is well
+defined because glued points `[inl c₁.boundaryMap s] = [inr c₂.boundaryMap s]`
+go to `c₁.boundaryMap s` both ways (`hr`).  Continuity: the preimage of the
+thickening in the sum is open and saturated, so the restricted quotient map is
+a quotient map (`IsQuotientMap.restrictPreimage_isOpen`).  Do NOT use a
+default point of the sphere or of the target (`EuclideanSpace.single 0 1`
+needs `0 : Fin n` and fails for `n = 0`): define the map on the subtype, by
+lifting along the restricted quotient map or by choosing a representative in
+the saturated preimage (`Classical.choose` of the image membership). -/
+theorem connectedSum_standardCover_aux_left_aux_quotient_aux_forward {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo)
+    (r : C(↥(connectedSum_standardCover_aux_collar c₂), Sphere n))
+    (hr : ∀ s (h : c₂.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₂),
+      r ⟨_, h⟩ = s) :
+    ∃ f : C(↥(connectedSum_standardCover_aux_thickLeft c₁ c₂), c₁.Punctured),
+      (∀ a (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inl a) ∈ connectedSum_standardCover_aux_thickLeft c₁ c₂),
+        f ⟨_, h⟩ = a) ∧
+      (∀ x (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inr x.1) ∈ connectedSum_standardCover_aux_thickLeft c₁ c₂),
+        f ⟨_, h⟩ = c₁.boundaryMap (r x)) := by
+  sorry
+
+/-- LEAF. The backward homotopy of the quotient step: inclusion after the
+forward map is homotopic to the identity of the thickening.  Sketch: the
+homotopy is `[inl a] ↦ [inl a]`, `[inr x] ↦ [inr H (x, t)]`; it is well
+defined on glued points by `hHfix`, starts at the identity by `hH0`, and ends
+at `incl ∘ f` by `hH1` and `GlueRel.boundary`.  Continuity on
+`unitInterval × thickening` via the banked helper
+`connectedSum_standardCover_aux_left_aux_quotient_aux_continuous` (quotient
+map times the locally compact `unitInterval`). -/
+theorem connectedSum_standardCover_aux_left_aux_quotient_aux_homotopy {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo)
+    (r : C(↥(connectedSum_standardCover_aux_collar c₂), Sphere n))
+    (H : C(↥(connectedSum_standardCover_aux_collar c₂) × unitInterval,
+      c₂.Punctured))
+    (hr : ∀ s (h : c₂.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₂),
+      r ⟨_, h⟩ = s)
+    (hH0 : ∀ x, H (x, 0) = x.1)
+    (hH1 : ∀ x, H (x, 1) = c₂.boundaryMap (r x))
+    (hHC : ∀ p, H p ∈ connectedSum_standardCover_aux_collar c₂)
+    (hHfix : ∀ s (h : c₂.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₂) t,
+      H (⟨_, h⟩, t) = c₂.boundaryMap s)
+    (f : C(↥(connectedSum_standardCover_aux_thickLeft c₁ c₂), c₁.Punctured))
+    (hfk : ∀ a (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inl a) ∈ connectedSum_standardCover_aux_thickLeft c₁ c₂),
+        f ⟨_, h⟩ = a)
+    (hfo : ∀ x (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inr x.1) ∈ connectedSum_standardCover_aux_thickLeft c₁ c₂),
+        f ⟨_, h⟩ = c₁.boundaryMap (r x)) :
+    ContinuousMap.Homotopic ((connectedSum_standardCover_aux_left_aux_quotient_aux_incl c₁ c₂).comp f)
+      (ContinuousMap.id _) := by
+  sorry
+
+/-- The inclusion of the kept summand into the right thickening. -/
+def connectedSum_standardCover_aux_right_aux_quotient_aux_incl {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂) :
+    C(c₂.Punctured, ↥(connectedSum_standardCover_aux_thickRight c₁ c₂)) :=
+  ⟨fun a ↦ ⟨Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inr a), ⟨Sum.inr a, Or.inr ⟨a, rfl⟩, rfl⟩⟩,
+    (continuous_coinduced_rng.comp continuous_inr).subtype_mk _⟩
+
+/-- LEAF. The forward map of the quotient step: a continuous map from the
+thickening to the kept summand that is the identity on the kept summand and
+`c₂.boundaryMap ∘ r` on the other summand's collar.  Sketch: it is well
+defined because glued points `[inl c₁.boundaryMap s] = [inr c₂.boundaryMap s]`
+go to `c₂.boundaryMap s` both ways (`hr`).  Continuity: the preimage of the
+thickening in the sum is open and saturated, so the restricted quotient map is
+a quotient map (`IsQuotientMap.restrictPreimage_isOpen`).  Do NOT use a
+default point of the sphere or of the target (`EuclideanSpace.single 0 1`
+needs `0 : Fin n` and fails for `n = 0`): define the map on the subtype, by
+lifting along the restricted quotient map or by choosing a representative in
+the saturated preimage (`Classical.choose` of the image membership). -/
+theorem connectedSum_standardCover_aux_right_aux_quotient_aux_forward {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo)
+    (r : C(↥(connectedSum_standardCover_aux_collar c₁), Sphere n))
+    (hr : ∀ s (h : c₁.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₁),
+      r ⟨_, h⟩ = s) :
+    ∃ f : C(↥(connectedSum_standardCover_aux_thickRight c₁ c₂), c₂.Punctured),
+      (∀ a (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inr a) ∈ connectedSum_standardCover_aux_thickRight c₁ c₂),
+        f ⟨_, h⟩ = a) ∧
+      (∀ x (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inl x.1) ∈ connectedSum_standardCover_aux_thickRight c₁ c₂),
+        f ⟨_, h⟩ = c₂.boundaryMap (r x)) := by
+  sorry
+
+/-- LEAF. The backward homotopy of the quotient step: inclusion after the
+forward map is homotopic to the identity of the thickening.  Sketch: the
+homotopy is `[inr a] ↦ [inr a]`, `[inl x] ↦ [inl H (x, t)]`; it is well
+defined on glued points by `hHfix`, starts at the identity by `hH0`, and ends
+at `incl ∘ f` by `hH1` and `GlueRel.boundary`.  Continuity on
+`unitInterval × thickening` via the banked helper
+`connectedSum_standardCover_aux_left_aux_quotient_aux_continuous` (quotient
+map times the locally compact `unitInterval`). -/
+theorem connectedSum_standardCover_aux_right_aux_quotient_aux_homotopy {n : ℕ} {M₁ M₂ : Type}
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hopen₁ : IsOpen c₁.radialTwo) (hopen₂ : IsOpen c₂.radialTwo)
+    (r : C(↥(connectedSum_standardCover_aux_collar c₁), Sphere n))
+    (H : C(↥(connectedSum_standardCover_aux_collar c₁) × unitInterval,
+      c₁.Punctured))
+    (hr : ∀ s (h : c₁.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₁),
+      r ⟨_, h⟩ = s)
+    (hH0 : ∀ x, H (x, 0) = x.1)
+    (hH1 : ∀ x, H (x, 1) = c₁.boundaryMap (r x))
+    (hHC : ∀ p, H p ∈ connectedSum_standardCover_aux_collar c₁)
+    (hHfix : ∀ s (h : c₁.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₁) t,
+      H (⟨_, h⟩, t) = c₁.boundaryMap s)
+    (f : C(↥(connectedSum_standardCover_aux_thickRight c₁ c₂), c₂.Punctured))
+    (hfk : ∀ a (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inr a) ∈ connectedSum_standardCover_aux_thickRight c₁ c₂),
+        f ⟨_, h⟩ = a)
+    (hfo : ∀ x (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inl x.1) ∈ connectedSum_standardCover_aux_thickRight c₁ c₂),
+        f ⟨_, h⟩ = c₂.boundaryMap (r x)) :
+    ContinuousMap.Homotopic ((connectedSum_standardCover_aux_right_aux_quotient_aux_incl c₁ c₂).comp f)
+      (ContinuousMap.id _) := by
+  sorry
+
+/-- ASSEMBLY (from `_aux_left_aux_quotient_aux_forward` and `_aux_homotopy`). Quotient step for the left thickening: a radial retraction of the
 second collar gives a homotopy equivalence from `thickLeft` to the first
 punctured summand that sends each `[inl a]` to `a`.  Sketch: `f [inl a] = a`,
 `f [inr x] = c₁.boundaryMap (r x)` (well defined by `hr` and
@@ -588,9 +828,15 @@ theorem connectedSum_standardCover_aux_left_aux_quotient {n : ℕ} {M₁ M₂ : 
       ∀ a (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inl a) ∈
           connectedSum_standardCover_aux_thickLeft c₁ c₂),
         e₁.toFun ⟨_, h⟩ = a := by
-  sorry
+  obtain ⟨f, hfk, hfo⟩ := connectedSum_standardCover_aux_left_aux_quotient_aux_forward c₁ c₂ hopen₁ hopen₂ r hr
+  have hright : f.comp (connectedSum_standardCover_aux_left_aux_quotient_aux_incl c₁ c₂) = ContinuousMap.id _ := by
+    ext1 a
+    exact hfk a _
+  exact ⟨⟨f, connectedSum_standardCover_aux_left_aux_quotient_aux_incl c₁ c₂,
+      connectedSum_standardCover_aux_left_aux_quotient_aux_homotopy c₁ c₂ hopen₁ hopen₂ r H hr hH0 hH1 hHC hHfix f hfk hfo,
+      by rw [hright]⟩, hfk⟩
 
-/-- LEAF. Mirror of `_aux_left_aux_quotient`: a radial retraction of the
+/-- ASSEMBLY (from `_aux_right_aux_quotient_aux_forward` and `_aux_homotopy`). Mirror of `_aux_left_aux_quotient`: a radial retraction of the
 first collar gives a homotopy equivalence from `thickRight` to the second
 punctured summand that sends each `[inr b]` to `b`.  Sketch: `f [inr b] = b`,
 `f [inl x] = c₂.boundaryMap (r x)` (well defined: `[inl c₁.boundaryMap s] =
@@ -618,7 +864,13 @@ theorem connectedSum_standardCover_aux_right_aux_quotient {n : ℕ} {M₁ M₂ :
       ∀ b (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inr b) ∈
           connectedSum_standardCover_aux_thickRight c₁ c₂),
         e₂.toFun ⟨_, h⟩ = b := by
-  sorry
+  obtain ⟨f, hfk, hfo⟩ := connectedSum_standardCover_aux_right_aux_quotient_aux_forward c₁ c₂ hopen₁ hopen₂ r hr
+  have hright : f.comp (connectedSum_standardCover_aux_right_aux_quotient_aux_incl c₁ c₂) = ContinuousMap.id _ := by
+    ext1 a
+    exact hfk a _
+  exact ⟨⟨f, connectedSum_standardCover_aux_right_aux_quotient_aux_incl c₁ c₂,
+      connectedSum_standardCover_aux_right_aux_quotient_aux_homotopy c₁ c₂ hopen₁ hopen₂ r H hr hH0 hH1 hHC hHfix f hfk hfo,
+      by rw [hright]⟩, hfk⟩
 
 /-- ASSEMBLY (from `_aux_radial` on the second collar and
 `_aux_left_aux_quotient`). The left thickening deformation retracts onto the
