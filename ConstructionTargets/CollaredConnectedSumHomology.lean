@@ -368,6 +368,60 @@ theorem punctured_homology (n : ℕ) (hn : 2 ≤ n) (M : Type)
 
 /-- **LIBRARY (B6).** The fundamental group is unchanged by puncturing a
 three-manifold along a collared ball. -/
+lemma punctured_fundamentalGroup_three_aux_of_hequiv
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x : X) (y : Y) (e : ContinuousMap.HomotopyEquiv X Y)
+    (p : Path (e.toFun x) y) :
+    Nonempty (FundamentalGroup X x ≃* FundamentalGroup Y y) := by
+  exact ⟨((FundamentalGroupoidFunctor.equivOfHomotopyEquiv e).fullyFaithfulFunctor.mulEquivEnd
+    (FundamentalGroupoid.mk x)).trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath p)⟩
+
+noncomputable def punctured_fundamentalGroup_three_aux_coprod_trivial
+    (G H : Type) [Group G] [Group H] [Subsingleton H] :
+    Monoid.Coprod G H ≃* G where
+  toFun := Monoid.Coprod.lift (MonoidHom.id G) 1
+  invFun := Monoid.Coprod.inl
+  left_inv x := by
+    have h : (Monoid.Coprod.inl : G →* Monoid.Coprod G H).comp
+        (Monoid.Coprod.lift (MonoidHom.id G) 1) = MonoidHom.id _ := by
+      apply Monoid.Coprod.hom_ext
+      · ext g; simp
+      · ext h; simp [Subsingleton.elim h 1]
+    exact DFunLike.congr_fun h x
+  right_inv g := by simp
+  map_mul' := map_mul _
+
+lemma punctured_fundamentalGroup_three_aux_subsingleton
+    {X : Type} [TopologicalSpace X] [SimplyConnectedSpace X] (x : X) :
+    Subsingleton (FundamentalGroup X x) :=
+  ⟨fun a b => by
+    unfold FundamentalGroup at a b ⊢
+    exact Subsingleton.elim (α := Path.Homotopic.Quotient x x) a b⟩
+
+lemma punctured_fundamentalGroup_three_aux_cover (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M] [PathConnectedSpace M]
+    [ChartedSpace (E 3) M] [IsManifold (I 3) (⊤ : ℕ∞) M]
+    (c : BallCollar 3 M) (s : Sphere 3)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    ∃ (U V : Set M) (hU : IsOpen U) (hV : IsOpen V),
+      U ∪ V = Set.univ ∧
+      ∃ (hu : (c.boundaryMap s).1 ∈ U) (hv : (c.boundaryMap s).1 ∈ V),
+        PathConnectedSpace U ∧ SimplyConnectedSpace V ∧
+        SimplyConnectedSpace (U ∩ V : Set M) ∧
+        ∃ e : ContinuousMap.HomotopyEquiv c.Punctured U,
+          Joined (e.toFun (c.boundaryMap s)) ⟨c.boundaryMap s, hu⟩ := by
+  sorry
+
+lemma punctured_fundamentalGroup_three_aux_van_kampen
+    {X : Type} [TopologicalSpace X] [PathConnectedSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (x : X) (hxU : x ∈ U) (hxV : x ∈ V)
+    (y : X) [PathConnectedSpace U] [SimplyConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    Nonempty (FundamentalGroup U ⟨x, hxU⟩ ≃* FundamentalGroup X y) := by
+  sorry
+
 theorem punctured_fundamentalGroup_three (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M] [PathConnectedSpace M]
     [ChartedSpace (E 3) M] [IsManifold (I 3) (⊤ : ℕ∞) M]
@@ -375,7 +429,18 @@ theorem punctured_fundamentalGroup_three (M : Type)
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     Nonempty (FundamentalGroup c.Punctured (c.boundaryMap s) ≃*
       FundamentalGroup M m) := by
-  sorry
+  obtain ⟨U, V, hU, hV, hcover, hu, hv, hpcU, hscV, hscUV, e, pe⟩ :=
+    punctured_fundamentalGroup_three_aux_cover M c s hopen hpath
+  letI : PathConnectedSpace U := hpcU
+  letI : SimplyConnectedSpace V := hscV
+  letI : SimplyConnectedSpace (U ∩ V : Set M) := hscUV
+  let u : U := ⟨c.boundaryMap s, hu⟩
+  obtain ⟨pe⟩ := pe
+  obtain ⟨g₁⟩ := punctured_fundamentalGroup_three_aux_of_hequiv
+    (c.boundaryMap s) u e pe
+  obtain ⟨g₂⟩ := punctured_fundamentalGroup_three_aux_van_kampen
+    U V hU hV hcover (c.boundaryMap s) hu hv m
+  exact ⟨g₁.trans g₂⟩
 
 /-- **LIBRARY (B7).** The connected-sum quotient's standard open cover. -/
 theorem connectedSum_standardCover_aux_collar_open
