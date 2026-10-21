@@ -286,6 +286,45 @@ noncomputable def apm_t97A03_secondCutCircleLoop (A B : Circle) :
       (apm_t97A03_continuous_cutCircleMap A B)).cast rfl
     (apm_t97A03_cutCircleMap_A_eq_B A B)
 
+/-- The homomorphism on based fundamental groups induced by the literal
+sphere-collapse map. -/
+noncomputable def apm_t97A03_collapsePiOneHom (A B : Circle) :
+    FundamentalGroup (apm_t97A03_BaseSpace A B)
+        (apm_t97A03_baseCircle A B A) →*
+      FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A) :=
+  FundamentalGroup.map
+    ⟨apm_t97A03_collapseToCutCircle A B,
+      apm_t97A03_continuous_collapseToCutCircle A B⟩
+    (apm_t97A03_baseCircle A B A)
+
+/-- The first fixed cut-circle generator as an actual fundamental-group
+element. -/
+noncomputable def apm_t97A03_firstCutCircleGenerator (A B : Circle) :
+    FundamentalGroup (apm_t97A03_CutCircle A B)
+      (apm_t97A03_cutCircleMap A B A) :=
+  FundamentalGroup.fromPath
+    (Path.Homotopic.Quotient.mk (apm_t97A03_firstCutCircleLoop A B))
+
+/-- The complementary fixed cut-circle generator. -/
+noncomputable def apm_t97A03_secondCutCircleGenerator (A B : Circle) :
+    FundamentalGroup (apm_t97A03_CutCircle A B)
+      (apm_t97A03_cutCircleMap A B A) :=
+  FundamentalGroup.fromPath
+    (Path.Homotopic.Quotient.mk (apm_t97A03_secondCutCircleLoop A B))
+
+/-- On a represented loop, the induced homomorphism is represented by its
+literal image under collapse. -/
+lemma apm_t97A03_collapsePiOneHom_apply (A B : Circle)
+    (q : Path (apm_t97A03_baseCircle A B A)
+      (apm_t97A03_baseCircle A B A)) :
+    apm_t97A03_collapsePiOneHom A B
+        (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk q)) =
+      FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk
+          (q.map (apm_t97A03_continuous_collapseToCutCircle A B))) := by
+  rfl
+
 /-- A genuine based loop in the frozen base: traverse the literal circle
 summand from `A` to `B`, then return through the literal sphere summand. -/
 noncomputable def apm_t97A03_firstLiteralLoop (A B : Circle) :
