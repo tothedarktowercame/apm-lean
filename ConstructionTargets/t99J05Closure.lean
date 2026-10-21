@@ -1744,6 +1744,44 @@ theorem t99J05_cp_successor_lowerPatch_finiteDimensional
 #print axioms t99J05_cp_successor_lowerPatch_homologyIso
 #print axioms t99J05_cp_successor_lowerPatch_finiteDimensional
 
+/-- The last-coordinate affine patch is contractible, via the exact full-target
+chart already constructed for the fixed quotient model. -/
+theorem t99J05_cp_successor_topPatch_contractible (n : ℕ) :
+    ContractibleSpace
+      ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) := by
+  obtain ⟨e, hsource, htarget, _⟩ :=
+    t99J05_affineChartConstruction_all (n + 1) (Fin.last (n + 1))
+  let h : ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+      Set (CP (n + 1))) ≃ₜ AffineCoordinates (Fin.last (n + 1)) :=
+    (Homeomorph.setCongr (by simpa [cpSuccessorTopPatch] using hsource.symm)).trans
+      (e.toHomeomorphSourceTarget.trans
+        ((Homeomorph.setCongr htarget).trans (Homeomorph.Set.univ _)))
+  exact h.contractibleSpace
+
+/-- Rational homology of the contractible top affine patch is
+finite-dimensional in every degree. -/
+theorem t99J05_cp_successor_topPatch_finiteDimensional (n k : ℕ) :
+    FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) k) := by
+  let X := ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+    Set (CP (n + 1)))
+  letI : ContractibleSpace X := t99J05_cp_successor_topPatch_contractible n
+  letI : Nonempty X :=
+    ⟨(Classical.choice (ContractibleSpace.hequiv_unit X)).invFun ()⟩
+  by_cases hk : k = 0
+  · subst k
+    exact (ConstructionTargets.CoefficientH0.h0Iso ℚ
+      (Classical.choice inferInstance)).toLinearEquiv.symm.finiteDimensional
+  · letI : Subsingleton (Homology X k) :=
+      ModuleCat.isZero_iff_subsingleton.mp
+        (ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ X k hk)
+    exact FiniteDimensional.of_injective (0 : Homology X k →ₗ[ℚ] ℚ)
+      (Function.injective_of_subsingleton _)
+
+#print axioms t99J05_cp_successor_topPatch_contractible
+#print axioms t99J05_cp_successor_topPatch_finiteDimensional
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
