@@ -36711,38 +36711,43 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Compose the union-range iso with the open-cover equality, then derive the CP successor homology step.",
+    "Transport across patch-union=univ; derive successor homology.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
-    :warnings
-    ["Existing lints/Main sorry; unrelated artifacts preserved."],
+    :warnings ["Existing lints; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_unionRange_homologyMap_isIso",
-      :type
-      "union-range inclusion induces a homology isomorphism for successor patches",
+    [{:name "t99J05_cp_successor_unionRangeHomologyIso",
+      :type "union MV term ≅ literal-union homology",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_mayerVietoris_f_transport_eq_literal"],
+      :depends-on ["t99J05_cp_successor_unionRange_homologyMap_isIso"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_patch_union_eq_univ",
+      :type "successor patches cover CP(n+1)",
+      :status :proved,
+      :consumers [:t99J05],
+      :depends-on [],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_mayerVietoris_union_transport",
-      :type "transport union exactness to literal CP successor",
+      :type "transport exactness to CP successor",
       :status :partial,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_unionRange_homologyMap_isIso"],
+      :depends-on
+      ["t99J05_cp_successor_unionRangeHomologyIso"
+       "t99J05_cp_successor_patch_union_eq_univ"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the specialized union-range homology isomorphism; exactness transport to literal CP remains.",
+    "Committed union-term iso and patch-union equality; equality transport remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36750,31 +36755,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial union compile",
+    [{:cmd "closure compile",
       :exit 1,
-      :note "Qualified CategoryTheory.IsIso."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792582365925-690-33c130ff",
-     :commands
-     ["git show/diff-tree 99fc0a0c"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check 99fc0a0c^ 99fc0a0c"],
-     :finding
-     "PASS: new post-history commit 99fc0a0c changes only scoped Closure; fixture/blob SHA matches 3f2cd50f.... The milestone faithfully specializes the union-range homology equivalence to the two literal open CP-successor patches, with both openness hypotheses supplied and the correct map orientation (union-range chains inclusion induces an iso). Closure and Main compile; registry 170/170; no code placeholders/axiom declarations; apm_t99j05 uses only propext/Classical.choice/Quot.sound. Proved union-range milestone and remaining partial literal-union transport are listed."},
-    :commit "99fc0a0c3e42f00b459a0d54795eb58fd4b4046f",
+      :note "Fixed explicit Set and local IsIso; rerun passed."}],
+    :commit "f5f2385cf",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "3f2cd50fec313d2ccf662af152f87b7c0873038a39fc6e4d09429826fd46ade1"},
+     "7d39666f93ec9cbb65966676e90d0a4fc3098d3c21c6d5e3830dd792a7c53730"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48338,7 +48330,9 @@
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport
     :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal
-    :lemma-t99j05-cp-successor-unionrange-homologymap-isiso],
+    :lemma-t99j05-cp-successor-unionrange-homologymap-isiso
+    :lemma-t99j05-cp-successor-unionrangehomologyiso
+    :lemma-t99j05-cp-successor-patch-union-eq-univ],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -48613,6 +48607,41 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_unionRangeHomologyIso",
+    :type "union MV term ≅ literal-union homology"},
+   :lemma
+   {:name "t99J05_cp_successor_unionRangeHomologyIso",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "union MV term ≅ literal-union homology",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-unionrangehomologyiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-unionrange-homologymap-isiso],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_patch_union_eq_univ",
+    :type "successor patches cover CP(n+1)"},
+   :lemma
+   {:name "t99J05_cp_successor_patch_union_eq_univ",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "successor patches cover CP(n+1)",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-patch-union-eq-univ,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
