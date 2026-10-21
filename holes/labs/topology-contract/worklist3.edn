@@ -36758,6 +36758,20 @@
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :correction "built biproduct zero object"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792607913344-1318-8ce4cc03",
+     :commands
+     ["git show --stat/--format=fuller 2d4d05243a238a7d69fb82a2d011c0a1e829a1cd"
+      "git show 2d4d05243:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check 2d4d05243^ 2d4d05243"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 2d4d05243:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit 2d4d05243 changes only scoped Closure; fixture SHA-256 matches ba7117b85b169cc126cc09ebe8d46be19ad796ec389c35210329cb389362e332. Degrees and orientations are correct: the shared connecting map is S.g=T.f from successor H(2n+2) to overlap H(2n+1); patch biproducts vanish on both outer sides, and adjacent exactness makes it bijective. LinearEquiv.ofBijective then yields the stated CP-successor-to-literal-overlap equivalence. Representation boundaries are definitionally aligned. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; surviving-even equivalences and successor assembly remain listed."},
     :commit "2d4d05243a238a7d69fb82a2d011c0a1e829a1cd",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36766,7 +36780,7 @@
      "ba7117b85b169cc126cc09ebe8d46be19ad796ec389c35210329cb389362e332"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36784,7 +36798,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked patch vanishings; top specialization remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked top connecting equivalence; surviving-even cases remain.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36998,7 +37012,11 @@
      "Banked exact-segment bijectivity; top specialization remains."}
     {:job 4,
      :commit "339f84603debacc6e611c3d9bdd3fa039fc15daa",
-     :reason "Banked patch vanishings; top specialization remains."}]}
+     :reason "Banked patch vanishings; top specialization remains."}
+    {:job 5,
+     :commit "2d4d05243a238a7d69fb82a2d011c0a1e829a1cd",
+     :reason
+     "Banked top connecting equivalence; surviving-even cases remain."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49289,7 +49307,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_top_connecting_iso",
@@ -49299,7 +49317,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "successor top homology is overlap top homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "2d4d05243a238a7d69fb82a2d011c0a1e829a1cd"},
    :id :lemma-t99j05-cp-successor-top-connecting-iso,
    :kind :lemma,
    :depends-on
@@ -49368,7 +49388,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_top_connecting_bijective",
@@ -49378,7 +49398,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "top connecting map bijective",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "2d4d05243a238a7d69fb82a2d011c0a1e829a1cd"},
    :id :lemma-t99j05-cp-successor-top-connecting-bijective,
    :kind :lemma,
    :depends-on
