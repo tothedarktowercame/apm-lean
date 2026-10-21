@@ -2818,7 +2818,58 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     IsIso (HomologicalComplex.homologyMap
       (ConstructionTargets.SingularExcision.relativeSingularMap A' B'
         (ContinuousMap.id Y) hAB') i) := by
-  sorry
+  let e' := ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap e
+  let fX := ConstructionTargets.SingularExcision.relativeSingularMap A B
+    (ContinuousMap.id X) hAB
+  let fY := ConstructionTargets.SingularExcision.relativeSingularMap A' B'
+    (ContinuousMap.id Y) hAB'
+  let uA := ConstructionTargets.SingularExcision.relativeSingularMap A A' e'
+    (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+      e A A' hA)
+  let uB := ConstructionTargets.SingularExcision.relativeSingularMap B B' e'
+    (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+      e B B' hB)
+  have heAB : Set.MapsTo e' A B' := fun x hx =>
+    (hB x).1 (hAB hx)
+  have hsquare : HomologicalComplex.homologyMap fX i ≫
+        HomologicalComplex.homologyMap uB i =
+      HomologicalComplex.homologyMap uA i ≫
+        HomologicalComplex.homologyMap fY i := by
+    rw [← HomologicalComplex.homologyMap_comp,
+      ← HomologicalComplex.homologyMap_comp]
+    dsimp [fX, fY, uA, uB, e']
+    rw [ConstructionTargets.SingularExcision.relativeSingularMap_comp
+        A B B' (ContinuousMap.id X) e' hAB
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+          e B B' hB) heAB,
+      ConstructionTargets.SingularExcision.relativeSingularMap_comp
+        A A' B' e' (ContinuousMap.id Y)
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+          e A A' hA) hAB' heAB]
+    rfl
+  letI : IsIso (HomologicalComplex.homologyMap uA i) :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_chart
+      e A A' hA i
+  letI : IsIso (HomologicalComplex.homologyMap uB i) :=
+    apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_chart
+      e B B' hB i
+  constructor
+  · intro hf
+    letI : IsIso (HomologicalComplex.homologyMap fX i) := hf
+    haveI : IsIso (HomologicalComplex.homologyMap uA i ≫
+        HomologicalComplex.homologyMap fY i) := by
+      rw [← hsquare]
+      infer_instance
+    exact IsIso.of_isIso_comp_left (HomologicalComplex.homologyMap uA i)
+      (HomologicalComplex.homologyMap fY i)
+  · intro hf
+    letI : IsIso (HomologicalComplex.homologyMap fY i) := hf
+    haveI : IsIso (HomologicalComplex.homologyMap fX i ≫
+        HomologicalComplex.homologyMap uB i) := by
+      rw [hsquare]
+      infer_instance
+    exact IsIso.of_isIso_comp_right (HomologicalComplex.homologyMap fX i)
+      (HomologicalComplex.homologyMap uB i)
 
 /-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
 job 200, 2026-10-21): the chart reduction shared by `_inj_aux_isIso` and
