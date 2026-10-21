@@ -1689,6 +1689,16 @@ theorem circleBaseChartMeasure_apply_eq_zero
 
 #print axioms circleBaseChartMeasure_apply_eq_zero
 
+/-- Every coordinate-null set admits a measurable null envelope.  This removes
+the measurability gap between Sard critical images and chart-measure evaluation. -/
+theorem circleCoordinateNull_exists_measurableSuperset
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1)))
+    (s : Set (EuclideanSpace ℝ (Fin 1))) (hnull : mu s = 0) :
+    ∃ t, s ⊆ t ∧ MeasurableSet t ∧ mu t = 0 := by
+  exact MeasureTheory.exists_measurable_superset_of_null hnull
+
+#print axioms circleCoordinateNull_exists_measurableSuperset
+
 #print axioms circleChartInverseExtension_measurable
 
 /-- The open part of the source on which a fixed target chart is valid. -/
