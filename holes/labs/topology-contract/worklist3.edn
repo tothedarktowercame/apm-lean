@@ -36711,7 +36711,7 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
@@ -36766,7 +36766,7 @@
      "682fb92bb28e63d27bc49aefca23c9325d5fc309621e12a5986ec9d9446f0d1b"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -37543,6 +37543,20 @@
       :exit 1,
       :correction
       "used rw to transport dependent atlas along min equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792602482170-1165-b731475e",
+     :commands
+     ["git show --stat/--format=fuller 957192353e78e6857c45e7b2339649d9b245922e"
+      "git show 957192353e:problems/t96J05/lean/Main.lean | sha256sum"
+      "git diff --check 957192353e^ 957192353e"
+      "lake env lean problems/t96J05/lean/Main.lean"
+      "lake env lean holes/labs/blueprints/t96J05/Blueprint.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 957192353e:problems/t96J05/lean/Main.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit 957192353e changes only scoped Main; fixture SHA-256 matches 585d804cb0b689c64cf3b3808b4b1f595f851e7e4c0bab6a0f62935c8c019501. The repair retains the hmn-derived k≤n fact in the public existential witness min k n; hkn proves min k n=k and transports the atlas/manifold package, rather than being discarded. hlevel remains the returned Nonempty proof. Node orientations and subtype/model boundaries are sound; every final hypothesis reaches a branch result. Main and blueprint compile, registry is 170/170, Main has zero placeholders, and apm_t96j05 uses standard axioms only."},
     :commit "957192353e",
     :commits ["1db229e3cb" "86e7cdd227" "957192353e"],
     :changed-paths ["problems/t96J05/lean/Main.lean"],
@@ -37551,7 +37565,7 @@
      :sha256
      "585d804cb0b689c64cf3b3808b4b1f595f851e7e4c0bab6a0f62935c8c019501"}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t96J05/lean/Main.lean"
     "problems/t96J05/status.json"
@@ -48862,7 +48876,7 @@
    :other-consumers []}
   {:consumer :t96J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t96j05_constant_radius_level",
@@ -48872,14 +48886,16 @@
     :reported-by [:program-2026-10-13-close-t96j05],
     :type "positive constant radius gives an embedded level",
     :area "sard-regular-values",
-    :proved-in :program-2026-10-13-close-t96j05},
+    :proved-in :program-2026-10-13-close-t96j05,
+    :banked-by :program-2026-10-13-close-t96j05,
+    :banked-commit "957192353e"},
    :id :lemma-apm-t96j05-constant-radius-level,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t96j05_exists_regular_radius",
@@ -48891,14 +48907,16 @@
     :type
     "nonconstant squared radius has an attained positive regular value",
     :area "sard-regular-values",
-    :proved-in :program-2026-10-13-close-t96j05},
+    :proved-in :program-2026-10-13-close-t96j05,
+    :banked-by :program-2026-10-13-close-t96j05,
+    :banked-commit "957192353e"},
    :id :lemma-apm-t96j05-exists-regular-radius,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t96j05_regular_radius_level",
@@ -48908,7 +48926,9 @@
     :reported-by [:program-2026-10-13-close-t96j05],
     :type "positive regular radius gives an embedded level",
     :area "sard-regular-values",
-    :proved-in :program-2026-10-13-close-t96j05},
+    :proved-in :program-2026-10-13-close-t96j05,
+    :banked-by :program-2026-10-13-close-t96j05,
+    :banked-commit "957192353e"},
    :id :lemma-apm-t96j05-regular-radius-level,
    :kind :lemma,
    :depends-on [],
@@ -49152,7 +49172,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_shortComplex_finiteDimensional_middle",
@@ -49162,14 +49182,16 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "finite outer terms imply finite exact middle",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id :lemma-t99j05-shortcomplex-finitedimensional-middle,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_finiteDimensional_positive",
@@ -49179,7 +49201,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "finite successor homology in positive degrees",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id :lemma-t99j05-cp-successor-finitedimensional-positive,
    :kind :lemma,
    :depends-on
