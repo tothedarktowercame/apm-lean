@@ -1381,6 +1381,17 @@ theorem t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom
 
 #print axioms t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom
 
+/-- Cancel an isomorphism comparison on the source of a commuting triangle. -/
+theorem t99J05_iso_inv_comp_of_hom_comp_eq
+    {C : Type*} [CategoryTheory.Category C] {X Y Z : C}
+    (e : X ≅ Y) (f : Y ⟶ Z) (g : X ⟶ Z)
+    (h : CategoryTheory.CategoryStruct.comp e.hom f = g) :
+    CategoryTheory.CategoryStruct.comp e.inv g = f := by
+  rw [← h, ← CategoryTheory.Category.assoc, e.inv_hom_id,
+    CategoryTheory.Category.id_comp]
+
+#print axioms t99J05_iso_inv_comp_of_hom_comp_eq
+
 /-- The literal overlap-to-patches arrow, with the Mayer--Vietoris sign on
 the top-patch component. -/
 noncomputable def t99J05_cp_successor_literalOverlapToPieces (n k : ℕ) :
@@ -1522,6 +1533,53 @@ theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
   rfl
 
 #print axioms t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
+
+/-- Transporting the first Mayer--Vietoris arrow through the range and
+biproduct comparisons gives the literal signed overlap-to-pieces arrow. -/
+theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_literal
+    (n k : ℕ) :
+    t99J05_cp_successor_mayerVietoris_f_transport n k =
+      t99J05_cp_successor_literalOverlapToPieces n k := by
+  apply biprod.hom_ext
+  · simp [t99J05_cp_successor_mayerVietoris_f_transport,
+      t99J05_cp_successor_literalOverlapToPieces,
+      t99J05_cp_successor_mayerVietorisShortComplex,
+      ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex,
+      t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom_assoc,
+      CategoryTheory.Category.assoc]
+    rw [← CategoryTheory.Category.assoc]
+    change CategoryTheory.CategoryStruct.comp
+      (ConstructionTargets.CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k).inv _ = _
+    apply t99J05_iso_inv_comp_of_hom_comp_eq
+      (e := ConstructionTargets.CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k)
+    simpa [ConstructionTargets.CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso_hom,
+      t99J05_ambientSubspaceRangeHomologyIso,
+      HomologicalComplex.homologyMap_comp] using
+      ConstructionTargets.CoefficientIntersectionRangeNaturality.homology_square_left
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k
+  · simp [t99J05_cp_successor_mayerVietoris_f_transport,
+      t99J05_cp_successor_literalOverlapToPieces,
+      t99J05_cp_successor_mayerVietorisShortComplex,
+      ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex,
+      t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom_assoc,
+      CategoryTheory.Category.assoc]
+    congr 1
+    rw [← CategoryTheory.Category.assoc]
+    change CategoryTheory.CategoryStruct.comp
+      (ConstructionTargets.CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k).inv _ = _
+    apply t99J05_iso_inv_comp_of_hom_comp_eq
+      (e := ConstructionTargets.CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k)
+    simpa [ConstructionTargets.CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso_hom,
+      t99J05_ambientSubspaceRangeHomologyIso,
+      HomologicalComplex.homologyMap_comp] using
+      ConstructionTargets.CoefficientIntersectionRangeNaturality.homology_square_right
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k
+
+#print axioms t99J05_cp_successor_mayerVietoris_f_transport_eq_literal
 
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
