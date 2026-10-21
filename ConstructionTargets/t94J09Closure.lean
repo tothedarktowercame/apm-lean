@@ -2462,6 +2462,40 @@ theorem frozenBoundaryGraphH1CycleComparison_of_coordinate_basis
     _ = n • Pi.single i 1 := congrArg (fun x ↦ n • x) (hbasis i)
     _ = Pi.single i n := hsingle.symm
 
+/-- An injective geometric coordinate map is an equivalence as soon as the
+six standard coordinate vectors have explicit preimages. -/
+theorem frozenBoundaryGraphH1CycleComparison_of_injective_coordinate_basis
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 6 → ℤ))
+    (r : (Fin 6 → ℤ) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hinj : Function.Injective c)
+    (hbasis : ∀ i : Fin 6,
+      c (r (Pi.single i 1)) = Pi.single i 1) :
+    Nonempty
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) := by
+  refine ⟨LinearEquiv.ofBijective c ⟨hinj, ?_⟩⟩
+  have hright : c.comp r = LinearMap.id := by
+    apply LinearMap.pi_ext
+    intro i n
+    rw [LinearMap.comp_apply, LinearMap.id_apply]
+    have hsingle : Pi.single i n =
+        n • (Pi.single i (1 : ℤ) : Fin 6 → ℤ) := by
+      ext j
+      simp [Pi.single_apply]
+    calc
+      c (r (Pi.single i n)) = c (r (n • Pi.single i 1)) := by rw [hsingle]
+      _ = n • c (r (Pi.single i 1)) := by rw [map_smul, map_smul]
+      _ = n • Pi.single i 1 := congrArg (fun x ↦ n • x) (hbasis i)
+      _ = Pi.single i n := hsingle.symm
+  intro y
+  refine ⟨r y, ?_⟩
+  have hy := LinearMap.congr_fun hright y
+  simpa using hy
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3593,6 +3627,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphH1CycleComparison_of_kernel_twoSidedInverse
 #print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse
 #print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_basis
+#print axioms frozenBoundaryGraphH1CycleComparison_of_injective_coordinate_basis
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
