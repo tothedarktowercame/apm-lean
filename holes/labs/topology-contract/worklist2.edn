@@ -88678,19 +88678,17 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "coordinate map/inverse identities; homology; normalization",
+    :residual "maps/bases; homology; normalize",
     :outcome :stop,
     :warnings ["lint"],
     :missing-theorems
-    [{:name
-      "frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse",
-      :type "coordinate map+inverse imply H1 iso",
+    [{:name "frozenBoundaryGraphH1CycleComparison_of_coordinate_basis",
+      :type "basis checks imply H1 iso",
       :status :proved,
       :consumers [:t94J09],
       :depends-on [],
@@ -88700,7 +88698,7 @@
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse"],
+      ["frozenBoundaryGraphH1CycleComparison_of_coordinate_basis"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "T",
@@ -88724,35 +88722,26 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked coordinate inverse H1 adapter.",
+    :reason "Banked basis.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 0}
-     {:cmd "git show --check 989a6ed18", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792578505797-606-16cc262f",
-     :commands
-     ["git show/check/hash 989a6ed18"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "statement-registry check/fingerprint t94J09"
-      "placeholder/axiom/orientation inspection"],
-     :finding
-     "PASS: reviewed 989a6ed18 by topo-6, new after e83da611a; patch scope only t94J09Closure (+25). Fixture 1a7181e8... matches; registry 170/0; frozen t94J09 digest 52b4778c...; closure/Main placeholders 0/0. Fresh detached build and Main compile pass. For coordinate map c and inverse r, r.comp c=id correctly proves injectivity and c.comp r=id proves surjectivity, yielding the correctly oriented underlying-H1 ~= Fin6 equivalence. Axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists coordinate map/inverse identities, homology, normalization milestones."},
-    :commit "989a6ed18",
+     {:cmd "git show --check 9248aabf8", :exit 0}],
+    :diagnostic-history
+    [{:cmd "build", :exit 1, :correction "rw"}
+     {:cmd "build", :exit 1, :correction "smul"}],
+    :commit "9248aabf8",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "1a7181e8d2b4e0542083238cc943229b1a7112c736ca5a7c1c801baee1080930"},
+     "fe2650bd4c444f52f718ed70f3c923b9e8cbf90e584bf565a24619cf0762c662"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98752,7 +98741,8 @@
     :lemma-frozenboundarygraphh1cyclecomparison-of-leftinverse-onto
     :lemma-frozenboundarygraphh1cyclecomparison-of-kernel-leftinverse-onto
     :lemma-frozenboundarygraphh1cyclecomparison-of-kernel-twosidedinverse
-    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-twosidedinverse],
+    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-twosidedinverse
+    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-basis],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -99827,6 +99817,23 @@
     :banked-commit "989a6ed18"},
    :id
    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-twosidedinverse,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphH1CycleComparison_of_coordinate_basis",
+    :type "basis checks imply H1 iso"},
+   :lemma
+   {:name "frozenBoundaryGraphH1CycleComparison_of_coordinate_basis",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "basis checks imply H1 iso",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-basis,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
