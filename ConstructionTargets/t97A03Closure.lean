@@ -370,6 +370,48 @@ theorem twoArcModel_exists_of_fiber_transports
     ⟨firstSwaps, secondSwaps, model, hfirst, hsecond, hmodel⟩
   exact ⟨label, firstSwaps, secondSwaps, model, hfirst, hsecond, hmodel⟩
 
+/-! ## Covering-path transport on actual fibers -/
+
+/-- Path lifting for a covering map, upgraded from Mathlib's bijective
+monodromy function to an equivalence between the literal endpoint fibers. -/
+noncomputable def coveringPathFiberEquiv
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p) {x y : X}
+    (γ : Path.Homotopic.Quotient x y) :
+    (p ⁻¹' ({x} : Set X)) ≃ (p ⁻¹' ({y} : Set X)) :=
+  Equiv.ofBijective (hp.monodromy γ) (hp.monodromy_bijective γ)
+
+@[simp] theorem coveringPathFiberEquiv_apply
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p) {x y : X}
+    (γ : Path.Homotopic.Quotient x y) (e : p ⁻¹' ({x} : Set X)) :
+    coveringPathFiberEquiv p hp γ e = hp.monodromy γ e := rfl
+
+/-- Two loop classes in the base now supply the actual fiber transports used
+by the normalized model selector. -/
+theorem twoArcModel_exists_of_covering_loops
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p)
+    (hdegree : ∀ x : X, Nat.card (p ⁻¹' ({x} : Set X)) = 2)
+    (x : X) (firstLoop secondLoop : Path.Homotopic.Quotient x x)
+    (hconnected : coveringPathFiberEquiv p hp firstLoop ≠ Equiv.refl _ ∨
+      coveringPathFiberEquiv p hp secondLoop ≠ Equiv.refl _) :
+    ∃ label : (p ⁻¹' ({x} : Set X)) ≃ Fin 2,
+      ∃ firstSwaps secondSwaps model,
+        labeledFiberMonodromy label (coveringPathFiberEquiv p hp firstLoop) =
+          (if firstSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+        labeledFiberMonodromy label (coveringPathFiberEquiv p hp secondLoop) =
+          (if secondSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+        ((model = DoubleCoverModel.oneCircle ∧
+            ∃ swapArcs : Bool,
+              (if swapArcs then (secondSwaps, firstSwaps)
+                else (firstSwaps, secondSwaps)) = (true, false)) ∨
+          (model = DoubleCoverModel.twoCircle ∧
+            firstSwaps = true ∧ secondSwaps = true)) :=
+  twoArcModel_exists_of_fiber_transports p hdegree x
+    (coveringPathFiberEquiv p hp firstLoop)
+    (coveringPathFiberEquiv p hp secondLoop) hconnected
+
 #print axioms twoArcMonodromy_nontrivial_classification
 #print axioms twoArcMonodromy_model_exists
 #print axioms finTwoPerm_eq_id_or_swap
@@ -387,5 +429,7 @@ theorem twoArcModel_exists_of_fiber_transports
 #print axioms labeledFiberMonodromy_ne_refl_iff
 #print axioms labeledTwoTransport_actionConnected_iff
 #print axioms twoArcModel_exists_of_fiber_transports
+#print axioms coveringPathFiberEquiv_apply
+#print axioms twoArcModel_exists_of_covering_loops
 
 end ConstructionTargets.t97A03Closure
