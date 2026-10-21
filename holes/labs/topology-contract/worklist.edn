@@ -119195,6 +119195,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792566480150-380-214e9182",
+     :commands
+     ["git show/diff ab0c3d3a"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: ab0c3d3a changes only t00J02Closure.lean (+18), adding a compiled zero-fiber subtype homeomorphism since prior history. Fixture afb497a6, source 0b3b4888, implementation d4ba0bea, registry 170/170, and placeholder count 1->1 reproduce. The map/restriction orientation follows image_zeroFiber exactly; subtype representations agree at both boundaries. New theorem is sorry-free with propext, Classical.choice, Quot.sound only. Main retains its registered sorry and listed Sard/calculation milestones remain."},
     :commit "ab0c3d3a1124c51aed333c1ecd67c3b39f2f04d8",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119203,7 +119215,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119221,7 +119233,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked implicit-chart zero slice.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked zero-fiber subtype homeomorphism.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119473,9 +119485,14 @@
      :reason "Banked implicit-chart level coordinate."}
     {:job 9,
      :commit "0ae2a206d297fc5cb71205ee0d00a2b99e70db2d",
-     :reason "Banked implicit-chart zero slice."}]}
+     :reason "Banked implicit-chart zero slice."}
+    {:job 1,
+     :commit "ab0c3d3a1124c51aed333c1ecd67c3b39f2f04d8",
+     :reason "Banked zero-fiber subtype homeomorphism."}]}
   {:consumer :t98A06,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
@@ -119526,7 +119543,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119548,7 +119565,7 @@
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -121808,7 +121825,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "implicitToOpenPartialHomeomorph_image_zeroFiber",
@@ -121818,7 +121835,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart maps source zero fiber exactly to target zero slice",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "ab0c3d3a1124c51aed333c1ecd67c3b39f2f04d8"},
    :id :lemma-implicittoopenpartialhomeomorph-image-zerofiber,
    :kind :lemma,
    :depends-on
@@ -121826,7 +121845,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "hasLocalSmoothLift_of_trivialization_coordinates",
@@ -121836,7 +121855,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "neighborhood coordinate solutions give HasLocalSmoothLift",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t98A06Closure.lean"]},
    :id :lemma-haslocalsmoothlift-of-trivialization-coordinates,
    :kind :lemma,
    :depends-on
@@ -121845,7 +121866,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "implicitToOpenPartialHomeomorph_zeroFiberHomeomorph",
@@ -121857,7 +121878,9 @@
     :type
     "local zero-fiber subtype homeomorphic to vertical zero slice",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "ab0c3d3a1124c51aed333c1ecd67c3b39f2f04d8"},
    :id :lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph,
    :kind :lemma,
    :depends-on
