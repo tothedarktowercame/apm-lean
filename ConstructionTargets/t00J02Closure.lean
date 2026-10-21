@@ -1214,6 +1214,40 @@ theorem badCircleParameters_measure_zero_of_subset_nullCriticalSet
 
 #print axioms badCircleParameters_measure_zero_of_subset_nullCriticalSet
 
+/-- The derivative-lift bad parameters are exactly the critical values of the
+second-coordinate projection on the linearized incidence kernels. -/
+theorem badCircleParameters_eq_incidenceKernelProjectionCriticalValues
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S) :
+    {z | ¬ ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v} =
+    {z | ∃ x, f x = c z ∧ ¬ Function.Surjective
+      (fun w : LinearMap.ker (LinearMap.coprod
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+          (-(mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap)) ↦ w.1.2)} := by
+  ext z
+  simp only [Set.mem_setOf_eq]
+  constructor
+  · intro hbad
+    push_neg at hbad
+    obtain ⟨x, hx, hlift⟩ := hbad
+    refine ⟨x, hx, ?_⟩
+    intro hsurj
+    have hall := (surjective_incidenceKernel_snd_iff_direction_lifts
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+      (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap).mp hsurj
+    obtain ⟨v, hv⟩ := hlift
+    obtain ⟨u, hu⟩ := hall v
+    exact hv u hu
+  · rintro ⟨x, hx, hcritical⟩ hlift
+    apply hcritical
+    exact (surjective_incidenceKernel_snd_iff_direction_lifts
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+      (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap).mpr (hlift x hx)
+
+#print axioms badCircleParameters_eq_incidenceKernelProjectionCriticalValues
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
