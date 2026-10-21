@@ -36756,6 +36756,19 @@
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :correction "derived Nonempty from contractibility"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792597389802-1061-15e8c997",
+     :commands
+     ["git show --stat/--format=fuller a3f2f7efa668fcf93c9c4964c785fc7282f4e3e1"
+      "git hash-object ConstructionTargets/t99J05Closure.lean; git rev-parse a3f2f7efa668fcf93c9c4964c785fc7282f4e3e1:ConstructionTargets/t99J05Closure.lean"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check a3f2f7efa668fcf93c9c4964c785fc7282f4e3e1^ a3f2f7efa668fcf93c9c4964c785fc7282f4e3e1"],
+     :finding
+     "PASS: commit a3f2f7efa6 changes only scoped Closure; fixture/blob SHA matches 9546ea50ee9f94201bb1db72c5f184cf8a55a877f3fcca3d563e113aa7878c9d. The literal top patch is correctly transported through set equality and the full affine chart to affine coordinates, hence contractible. H0 is finite via the canonical H0 iso; positive-degree homology is zero/subsingleton, hence finite via an injective zero map. Representation boundaries and orientations are sound. Closure/Main compile; registry 170/170; no placeholders; standard axioms only. Both milestones are proved and remaining top/even cases are listed."},
     :commit "a3f2f7efa6",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36764,7 +36777,7 @@
      "9546ea50ee9f94201bb1db72c5f184cf8a55a877f3fcca3d563e113aa7878c9d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36782,7 +36795,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked lower-patch homology transport and finite-dimensionality; top affine patch and top/even cases remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked top-patch contractibility and finite homology; top/even cases remain.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36973,7 +36986,11 @@
     {:job 7,
      :commit "e1f9c08906",
      :reason
-     "Banked lower-patch homology transport and finite-dimensionality; top affine patch and top/even cases remain."}]}
+     "Banked lower-patch homology transport and finite-dimensionality; top affine patch and top/even cases remain."}
+    {:job 8,
+     :commit "a3f2f7efa6",
+     :reason
+     "Banked top-patch contractibility and finite homology; top/even cases remain."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49089,7 +49106,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_topPatch_contractible",
@@ -49099,14 +49116,16 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "top patch contractible",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "a3f2f7efa6"},
    :id :lemma-t99j05-cp-successor-toppatch-contractible,
    :kind :lemma,
    :depends-on [:lemma-t99j05-affinechartconstruction-all],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_topPatch_finiteDimensional",
@@ -49116,7 +49135,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "top-patch homology finite",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "a3f2f7efa6"},
    :id :lemma-t99j05-cp-successor-toppatch-finitedimensional,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-toppatch-contractible],
