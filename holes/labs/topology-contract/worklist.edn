@@ -119152,30 +119152,31 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Next: direction lifts, signed counts, Main.",
+    :residual
+    "Package local injectivity and signed-count data; assemble H2 and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked"],
     :missing-theorems
-    [{:name "exists_circleIncidenceProjection_surjective_fiber",
-      :type "incidence projection regular fiber",
+    [{:name "exists_circleDirection_lifts_of_incidenceProjection",
+      :type "regular incidence fiber gives direction lifts",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["exists_mfderiv_surjective_fiber_of_fixedTargetChart"
-       "circleIncidenceProjection_contMDiff"
-       "circleIncidence_secondCountableTopology"],
+      ["exists_circleIncidenceProjection_surjective_fiber"
+       "circleIncidenceProjection_surjective_iff_kernel_snd"
+       "direction_lifts_of_surjective_incidenceKernel_snd"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_circleIncidenceProjection_surjective_fiber"
+      ["exists_circleDirection_lifts_of_incidenceProjection"
        "regularFiberSignedCount_eq_zero_of_comparison"
        "topHomologyMap_eq_zero_of_regularValue_signedCount"],
       :area "oriented-surface-degree"}],
@@ -119183,34 +119184,20 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "f2b3a6abeff9815e7584cd916a0596862afd8b64b6dbd2a20468b24aab08d95d",
+     "97dcb91c321862433509b1326cd1c1b6ff1340d4b753183f502c2d99bc28282a",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked incidence regular fiber.",
+    :reason "Banked incidence direction lifts.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "compile", :exit 1, :correction "notation"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792610607422-1398-5e30fe53",
-     :commands
-     ["git show/diff 469ee924"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 469ee924 changes only t00J02Closure.lean (+31), adding a compiled incidence-projection regular-fiber selector after prior history 1ef447dd. Fixture afb497a6, source 0b3b4888, implementation f2b3a6ab; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the transverse incidence atlas supplies the source manifold and its second-countability, the established projection smoothness discharges the map hypothesis, and the fixed chart at 1 selects z with surjective incidence-projection mfderiv along its entire fiber. CircleIncidenceModel is the source model and R1 the Circle target model throughout. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; direction lifts, signed counts, and final assembly remain listed."},
-    :commit "469ee924ae6838ba2d7bfbbf6168f99ed48165cb",
+    :commit "4998b6eb88fe90be2c0117a4f543aab5bdcb6bd5",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119218,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119899,7 +119886,8 @@
     :lemma-globalcriticalvalues-measure-zero-of-targetcharts
     :lemma-exists-mfderiv-surjective-fiber-of-targetcharts
     :lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart
-    :lemma-exists-circleincidenceprojection-surjective-fiber],
+    :lemma-exists-circleincidenceprojection-surjective-fiber
+    :lemma-exists-circledirection-lifts-of-incidenceprojection],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122922,6 +122910,39 @@
    [:lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart
     :lemma-circleincidenceprojection-contmdiff
     :lemma-circleincidence-secondcountabletopology],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_circleDirection_lifts_of_incidenceProjection",
+    :type "regular incidence fiber gives direction lifts"},
+   :lemma
+   {:name "exists_circleDirection_lifts_of_incidenceProjection",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "regular incidence fiber gives direction lifts",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-circledirection-lifts-of-incidenceprojection,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-circleincidenceprojection-surjective-fiber
+    :lemma-circleincidenceprojection-surjective-iff-kernel-snd
+    :lemma-direction-lifts-of-surjective-incidencekernel-snd],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleIncidenceProjection_surjective_iff_kernel_snd"},
+   :lemma
+   {:name "circleIncidenceProjection_surjective_iff_kernel_snd",
+    :reported-by []},
+   :id :lemma-circleincidenceprojection-surjective-iff-kernel-snd,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
