@@ -36711,12 +36711,12 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Extract vanishing, finite dimension, and even generators from the transported long exact sequence.",
+    "Extract vanishing, finite dimension, and even generators from transported LES.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
@@ -36732,34 +36732,41 @@
       ["t99J05_cp_successor_mayerVietoris_union_transport"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
-      :type "CP n homology data implies CP(n+1) homology data",
+      :type "CP n data implies CP(n+1) data",
       :status :partial,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_union_transport"
-       "t99J05_cp_successor_mayerVietoris_exact_ambient_transport"
+      ["t99J05_cp_successor_mayerVietoris_exact_ambient_transport"
        "t99J05_cp_successor_overlap_rational_topHomology"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the adjacent MV segment and exactness at literal successor homology; dimension extraction remains.",
+    "Stale review: current descendant 17ef03cbb compiles; exactness is sorry-free. Dimension extraction remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check", :exit 0}],
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "rg -n sorryAx ConstructionTargets/t99J05Closure.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "review of obsolete 627186991",
+      :exit 1,
+      :correction
+      "17ef03cbb qualifies category names and discharges exactness goals"}],
     :commit "17ef03cbb",
-    :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
+    :changed-paths [],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
      "095377320dd976e896af3bb6f3519a21f249c10306fc948efa1be7fcd99d56c5"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
