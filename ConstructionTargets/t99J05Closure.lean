@@ -2076,6 +2076,50 @@ noncomputable def t99J05_cp_successor_middle_even_iso
 
 #print axioms t99J05_cp_successor_middle_even_iso
 
+/-- Degree-zero homology of every projective successor is canonically
+one-dimensional. -/
+noncomputable def t99J05_cp_successor_zero_equiv (n : ℕ) :
+    Homology (CP (n + 1)) 0 ≃ₗ[ℚ] ℚ := by
+  letI : PathConnectedSpace (NonzeroVectors ℂ (n + 1)) := by
+    apply isPathConnected_iff_pathConnectedSpace.mp
+    change IsPathConnected ({0}ᶜ : Set (Fin (n + 2) → ℂ))
+    apply isPathConnected_compl_singleton_of_one_lt_rank
+    rw [← Module.finrank_eq_rank']
+    norm_cast
+    rw [Module.finrank_pi_fintype]
+    simp
+    omega
+  letI : PathConnectedSpace (CP (n + 1)) :=
+    (surjective_quotientMap ℂ (n + 1)).pathConnectedSpace
+      (continuous_quotientMap ℂ (n + 1))
+  let p : CP (n + 1) := chartInverse (Fin.last (n + 1))
+    (0 : AffineCoordinates (Fin.last (n + 1)))
+  exact (ConstructionTargets.CoefficientH0.h0Iso ℚ p).toLinearEquiv
+
+#print axioms t99J05_cp_successor_zero_equiv
+
+/-- All successor even groups, including degree zero and the new top degree,
+are one-dimensional. -/
+noncomputable def t99J05_cp_successor_even_equiv
+    (n : ℕ) (h : ComplexProjectiveRationalHomologyData n)
+    (i : Fin (n + 2)) : Homology (CP (n + 1)) (2 * i.val) ≃ₗ[ℚ] ℚ := by
+  have hibound := i.isLt
+  by_cases hi0 : i.val = 0
+  · rw [hi0]
+    exact t99J05_cp_successor_zero_equiv n
+  by_cases hitop : i.val = n + 1
+  · rw [hitop]
+    convert (t99J05_cp_successor_top_connecting_iso n h).trans
+      (t99J05_cp_successor_overlap_rational_topHomology n).toLinearEquiv using 1 <;>
+      omega
+  · have hipos : 0 < i.val := Nat.pos_of_ne_zero hi0
+    let j : Fin (n + 1) := ⟨i.val, by omega⟩
+    exact (t99J05_cp_successor_middle_even_iso n j hipos).symm.trans
+      ((t99J05_cp_successor_lowerPatch_homologyIso n (2 * j.val)).symm.toLinearEquiv.trans
+        (h.evenEquiv j))
+
+#print axioms t99J05_cp_successor_even_equiv
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
