@@ -24,6 +24,36 @@ abbrev FourProjectivePlanesWedge := Wedge twoWedgePoint twoWedgePoint
 abbrev FourProjectivePlanesConnectedSum := Surface false 4
 abbrev ThreeProjectivePlanesConnectedSum := Surface false 3
 
+/-- The mod-two character used to select the connected double cover of the
+three-crosscap presentation.  It is nonzero on the first crosscap and zero
+on the other two. -/
+def n3ParityGenerator : Fin 3 → Multiplicative (ZMod 2) :=
+  fun i ↦ if i = 0 then Multiplicative.ofAdd 1 else 1
+
+def n3ParityCharacter : FreeGroup (Fin 3) →* Multiplicative (ZMod 2) :=
+  FreeGroup.lift n3ParityGenerator
+
+/-- The standard relator `a²b²c²` for the nonorientable genus-three
+polygon presentation. -/
+def n3CrosscapRelator : FreeGroup (Fin 3) :=
+  FreeGroup.of 0 ^ 2 * FreeGroup.of 1 ^ 2 * FreeGroup.of 2 ^ 2
+
+/-- The parity character kills the actual crosscap relator, so it is ready
+to descend through the standard `N₃` presentation. -/
+theorem n3ParityCharacter_crosscapRelator :
+    n3ParityCharacter n3CrosscapRelator = 1 := by
+  simp [n3ParityCharacter, n3CrosscapRelator, n3ParityGenerator]
+  change Multiplicative.ofAdd ((1 : ZMod 2) + 1) = Multiplicative.ofAdd 0
+  apply congrArg Multiplicative.ofAdd
+  change (2 : ZMod 2) = 0
+  exact CharP.cast_eq_zero (ZMod 2) 2
+
+/-- The character is genuinely nontrivial, witnessed by the first crosscap
+generator. -/
+theorem n3ParityCharacter_generator_ne_one :
+    n3ParityCharacter (FreeGroup.of (0 : Fin 3)) ≠ 1 := by
+  simp [n3ParityCharacter, n3ParityGenerator]
+
 /-- A nonidentity deck transformation of a connected covering has no fixed
 point, by uniqueness of lifts against the identity map. -/
 theorem deckTransformation_fixedPointFree
@@ -54,5 +84,7 @@ theorem exists_fixedPointFree_selfMap_of_deckData
 
 #print axioms deckTransformation_fixedPointFree
 #print axioms exists_fixedPointFree_selfMap_of_deckData
+#print axioms n3ParityCharacter_crosscapRelator
+#print axioms n3ParityCharacter_generator_ne_one
 
 end ConstructionTargets.t99A03Closure
