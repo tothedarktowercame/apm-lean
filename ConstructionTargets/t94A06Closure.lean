@@ -130,6 +130,36 @@ theorem apm_t94a06_ae_regularValue_of_criticalValues_null
 
 #print axioms apm_t94a06_ae_regularValue_of_criticalValues_null
 
+/-- Once the local chartwise Sard estimate is available, the banked
+countable aggregation and null-set conversion give the exact library
+obligation used by the final transversality proof. -/
+theorem apm_t94a06_ae_regularValue_normalPart_of_local
+    {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E]
+    [NormedAddCommGroup H] [NormedSpace ℝ H] [TopologicalSpace X]
+    [SecondCountableTopology X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    [IsManifold I ∞ X] (f : X → apm_t94a06_E3)
+    (_hf : ContMDiff I (modelWithCornersSelf ℝ apm_t94a06_E3) ∞ f)
+    (hlocal : ∀ x, ¬ Function.Surjective
+        (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2)
+          (apm_t94a06_normalPart f) x) →
+      ∃ U : Set X, IsOpen U ∧ x ∈ U ∧
+        volume (apm_t94a06_normalPart f ''
+          ({z | ¬ Function.Surjective
+            (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2)
+              (apm_t94a06_normalPart f) z)} ∩ U)) = 0) :
+    ∀ᵐ y : apm_t94a06_E2,
+      ∀ x : X, apm_t94a06_normalPart f x = y →
+        Function.Surjective
+          (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2)
+            (apm_t94a06_normalPart f) x) := by
+  apply apm_t94a06_ae_regularValue_of_criticalValues_null
+  exact apm_t94a06_criticalValues_null_of_pointwise_open I
+    (apm_t94a06_normalPart f) hlocal
+
+#print axioms apm_t94a06_ae_regularValue_normalPart_of_local
+
 set_option backward.isDefEq.respectTransparency false in
 theorem apm_t94a06_transverse_ae_of_regularValues
     {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
