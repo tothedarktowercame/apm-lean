@@ -3651,6 +3651,23 @@ theorem topHomologyMap_eq_zero_of_chartComponentSums
     (surfaceTopDegree_eq_zero_of_chartComponentSums e orientationSign
       coefficient hcomponent htop)
 
+/-- Chart component sums vanish as soon as they are identified with the
+degrees of the exact zero-degree lifts supplied by disk boundedness. -/
+theorem chartComponentSums_eq_zero_of_exactLiftComparison
+    {S : Type} [TopologicalSpace S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k =
+        exactLiftComponentDegree lifts k) :
+    ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k = 0 := by
+  intro k
+  exact (hcomparison k).trans (exactLiftComponentDegree_eq_zero lifts k)
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3686,6 +3703,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.canonicalTopDegreeFormula_of_chartSignedSum
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_chartComponentSums
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_chartComponentSums
+#print axioms ConstructionTargets.T00J02Closure.chartComponentSums_eq_zero_of_exactLiftComparison
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
