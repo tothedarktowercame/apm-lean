@@ -1499,6 +1499,39 @@ theorem circleIncidenceProjection_critical_iff_targetChartCritical
 
 #print axioms circleIncidenceProjection_critical_iff_targetChartCritical
 
+/-- The open part of the source on which a fixed target chart is valid. -/
+def targetChartDomain
+    {F M N : Type} [TopologicalSpace F] [TopologicalSpace M] [TopologicalSpace N]
+    [ChartedSpace F N] (g : M → N) (y : N) (hg : Continuous g) :
+    TopologicalSpace.Opens M :=
+  ⟨g ⁻¹' (chartAt F y).source, (chartAt F y).open_source.preimage hg⟩
+
+/-- On its target-chart domain, a smooth manifold-valued map has a globally
+smooth vector-valued coordinate representative. -/
+theorem targetChartCoordinate_contMDiff
+    {E F M N : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N]
+    (g : M → N) (y : N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) ∞ g) :
+    ContMDiff (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) ∞
+      (fun x : targetChartDomain (F := F) g y hg.continuous ↦ chartAt F y (g x)) := by
+  have hsub : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ E) ∞
+      (Subtype.val : targetChartDomain (F := F) g y hg.continuous → M) :=
+    contMDiff_subtype_val
+  have hcomp := hg.comp hsub
+  simpa only [Function.comp_def] using
+    (contMDiffOn_chart (I := modelWithCornersSelf ℝ F) (x := y)).comp_contMDiff
+      hcomp (fun x ↦ x.2)
+
+#print axioms targetChartDomain
+#print axioms targetChartCoordinate_contMDiff
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
