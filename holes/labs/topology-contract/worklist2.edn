@@ -89428,6 +89428,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792614842017-1505-4a454bf2",
+     :commands
+     ["git show/diff 5e7192525"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: 5e7192525 follows 202537020 and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom progress rebases the actual collapsed sphere return, proves it pointwise reflexive, and proves its pi1 class is one. Literal-loop alignment/pi1 equivalence, model realization, and invariants remain listed."},
     :commit "5e7192525",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89436,7 +89448,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89454,7 +89466,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the collapse pi1 generator interface.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the collapsed sphere-return identity.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89562,7 +89574,10 @@
      :reason "Banked the cut-circle quotient loop interface."}
     {:job 5,
      :commit "202537020",
-     :reason "Banked the collapse pi1 generator interface."}]}
+     :reason "Banked the collapse pi1 generator interface."}
+    {:job 6,
+     :commit "5e7192525",
+     :reason "Banked the collapsed sphere-return identity."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100860,7 +100875,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_collapsedSphereReturnClass_eq_one",
@@ -100870,7 +100885,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "collapsed sphere return is the pi1 identity",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "5e7192525"},
    :id :lemma-apm-t97a03-collapsedspherereturnclass-eq-one,
    :kind :lemma,
    :depends-on [:lemma-apm-t97a03-collapse-pione-generator-interface],
