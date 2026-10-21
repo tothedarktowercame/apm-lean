@@ -710,6 +710,49 @@ theorem apm_t97A03_cutCircle_signed_generation_of_aligned_piOneEquiv
     rw [← hsecond, e.symm_apply_apply]
   exact ⟨w, by simpa [hf, hs] using hw⟩
 
+/-- Generation by the two fixed cut classes makes the literal collapse
+surjective on pi1, because both generators have the compiled literal lifts. -/
+theorem apm_t97A03_collapsePiOneHom_surjective_of_cut_generation
+    (A B : Circle)
+    (hgenerated : ∀ g : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (apm_t97A03_firstCutCircleGenerator A B)
+          (apm_t97A03_secondCutCircleGenerator A B) w = g) :
+    Function.Surjective (apm_t97A03_collapsePiOneHom A B) := by
+  intro g
+  rcases hgenerated g with ⟨w, hw⟩
+  refine ⟨apm_t97A03_twoGeneratorWord
+    (FundamentalGroup.fromPath
+      (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B)))
+    (FundamentalGroup.fromPath
+      (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B))) w, ?_⟩
+  rw [apm_t97A03_twoGeneratorWord_map,
+    apm_t97A03_collapsePiOneHom_firstLiteralLoop,
+    apm_t97A03_collapsePiOneHom_secondLiteralLoop]
+  exact hw
+
+theorem apm_t97A03_collapsePiOneHom_surjective_of_aligned_piOneEquiv
+    (A B : Circle)
+    (e : FundamentalGroup (apm_t97A03_CutCircle A B)
+          (apm_t97A03_cutCircleMap A B A) ≃*
+        FundamentalGroup
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (Fin 2))
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin 2) 1))
+    (hfirst : e (apm_t97A03_firstCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (hsecond : e (apm_t97A03_secondCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass) :
+    Function.Surjective (apm_t97A03_collapsePiOneHom A B) := by
+  apply apm_t97A03_collapsePiOneHom_surjective_of_cut_generation
+  exact apm_t97A03_cutCircle_signed_generation_of_aligned_piOneEquiv
+    A B e hfirst hsecond
+
 /-- Injectivity of the literal collapse, together with the aligned cut-circle
 normal form, reduces every literal pi1 class to a signed word in the two
 actual literal loops. -/
