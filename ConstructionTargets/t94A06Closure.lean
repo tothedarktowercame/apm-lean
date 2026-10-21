@@ -79,6 +79,36 @@ theorem apm_t94a06_normalPart_contMDiff
 
 #print axioms apm_t94a06_normalPart_contMDiff
 
+/-- Critical values, expressed directly using the manifold derivative.  This
+is the set whose nullity is supplied by the chartwise Morse--Sard argument. -/
+def apm_t94a06_criticalValues
+    {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup H] [NormedSpace ℝ H] [TopologicalSpace X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    (g : X → apm_t94a06_E2) : Set apm_t94a06_E2 :=
+  g '' {x | ¬ Function.Surjective
+    (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2) g x)}
+
+/-- Nullity of the critical-value image is exactly the measure-theoretic
+input needed to obtain almost-everywhere regular values. -/
+theorem apm_t94a06_ae_regularValue_of_criticalValues_null
+    {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup H] [NormedSpace ℝ H] [TopologicalSpace X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    (g : X → apm_t94a06_E2)
+    (hnull : volume (apm_t94a06_criticalValues I g) = 0) :
+    ∀ᵐ y : apm_t94a06_E2, ∀ x : X, g x = y →
+      Function.Surjective
+        (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2) g x) := by
+  rw [ae_iff]
+  apply measure_mono_null ?_ hnull
+  intro y hy
+  simp only [Set.mem_setOf_eq, not_forall] at hy
+  obtain ⟨x, hxy, hcritical⟩ := hy
+  exact ⟨x, hcritical, hxy⟩
+
+#print axioms apm_t94a06_ae_regularValue_of_criticalValues_null
+
 set_option backward.isDefEq.respectTransparency false in
 theorem apm_t94a06_transverse_ae_of_regularValues
     {E H X : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
