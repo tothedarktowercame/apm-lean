@@ -36711,72 +36711,55 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Install degreewise patch/overlap instances; prove top/even generators.",
+    "Transport lower-patch CP n and top-patch affine homology; prove top/even generators.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name
-      "t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton",
+    [{:name "t99J05_cp_successor_finiteDimensional_of_overlap_gt",
       :type
-      "finite patches and zero overlap imply finite successor H(k+1)",
+      "above overlap top, finite patches imply finite successor H(k+1)",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_exact_ambient_transport"
-       "t99J05_shortComplex_finiteDimensional_middle_of_subsingleton"],
+      ["t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton"
+       "t99J05_cp_successor_overlap_homology_isZero_of_gt"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
       :status :partial,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton"],
+      ["t99J05_cp_successor_finiteDimensional_of_overlap_gt"
+       "t99J05_cp_successor_overlap_rational_topHomology"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked degreewise successor finite-dimensionality; successor remains partial.",
+    "Banked successor finite-dimensionality above the overlap top; patch transports and top/even cases remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
-      :exit 1,
-      :correction "made biproduct and X3 instances explicit"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792595811293-1020-91ba34f8",
-     :commands
-     ["git show/diff-tree 9127373cf3"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check 9127373cf3^ 9127373cf3"],
-     :finding
-     "PASS: new commit 9127373cf3 changes only scoped Closure; fixture/blob SHA matches f2b70d46.... The theorem correctly identifies the transported segment objects: X1 is the biproduct of literal lower/top patch H(k+1), X2 is successor H(k+1), and X3 is overlap H(k). Patch finite-dimensionality transfers through the biproduct/product linear equivalence; overlap finite/subsingleton instances and transported exactness feed the proved adapter. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Milestone is proved and top/even cases remain listed."},
-    :commit "9127373cf3",
+    :commit "c0d54d5e01",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "f2b70d461cb35f887fe337c882724e4fd2cef1a846684228492d05f457f6d7e3"},
+     "3128620a21f9a6eb77fc47d26db8813b2b2c80d9c7dbc392f0e8774553650327"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48824,7 +48807,8 @@
     :lemma-t99j05-finitedimensional-middle-of-exact-of-surjective
     :lemma-t99j05-finitedimensional-middle-of-exact-of-subsingleton
     :lemma-t99j05-shortcomplex-finitedimensional-middle-of-subsingleton
-    :lemma-t99j05-cp-successor-finitedimensional-of-overlap-subsingleton],
+    :lemma-t99j05-cp-successor-finitedimensional-of-overlap-subsingleton
+    :lemma-t99j05-cp-successor-finitedimensional-of-overlap-gt],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -49025,6 +49009,27 @@
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport
     :lemma-t99j05-shortcomplex-finitedimensional-middle-of-subsingleton],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_finiteDimensional_of_overlap_gt",
+    :type
+    "above overlap top, finite patches imply finite successor H(k+1)"},
+   :lemma
+   {:name "t99J05_cp_successor_finiteDimensional_of_overlap_gt",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "above overlap top, finite patches imply finite successor H(k+1)",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-finitedimensional-of-overlap-gt,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-finitedimensional-of-overlap-subsingleton
+    :lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
