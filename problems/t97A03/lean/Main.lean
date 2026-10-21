@@ -932,6 +932,52 @@ theorem apm_t97A03_exists_aligned_cut_piOneEquiv_of_decoder_and_generated
     (apm_t97A03_cutGeneratorFreeGroupMap_injective_of_decoder
       A B decode hfirst hsecond) hgenerated
 
+/-- The exact remaining geometric data simultaneously give the aligned cut
+coordinates and injectivity of the literal collapse map. -/
+theorem apm_t97A03_cut_alignment_and_collapse_injective_of_geometric_data
+    (A B : Circle)
+    (decode : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A) →* FreeGroup (Fin 2))
+    (hfirst : decode (apm_t97A03_firstCutCircleGenerator A B) =
+      FreeGroup.of (0 : Fin 2))
+    (hsecond : decode (apm_t97A03_secondCutCircleGenerator A B) =
+      FreeGroup.of (1 : Fin 2))
+    (hcutGenerated : ∀ g : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (apm_t97A03_firstCutCircleGenerator A B)
+          (apm_t97A03_secondCutCircleGenerator A B) w = g)
+    (hliteralGenerated : ∀ g : FundamentalGroup (apm_t97A03_BaseSpace A B)
+        (apm_t97A03_baseCircle A B A),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (FundamentalGroup.fromPath
+            (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B)))
+          (FundamentalGroup.fromPath
+            (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B))) w = g) :
+    (∃ e : FundamentalGroup (apm_t97A03_CutCircle A B)
+          (apm_t97A03_cutCircleMap A B A) ≃*
+        FundamentalGroup
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (Fin 2))
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin 2) 1),
+      e (apm_t97A03_firstCutCircleGenerator A B) =
+          ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+            1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass ∧
+        e (apm_t97A03_secondCutCircleGenerator A B) =
+          ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+            1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass) ∧
+      Function.Injective (apm_t97A03_collapsePiOneHom A B) := by
+  let hcut : Function.Injective (apm_t97A03_cutGeneratorFreeGroupMap A B) :=
+    apm_t97A03_cutGeneratorFreeGroupMap_injective_of_decoder
+      A B decode hfirst hsecond
+  exact ⟨apm_t97A03_exists_aligned_cut_piOneEquiv_of_free_and_generated
+      A B hcut hcutGenerated,
+    apm_t97A03_collapsePiOneHom_injective_of_literal_signed_generation
+      A B hliteralGenerated hcut⟩
+
 /-- Exact algebraic contract for the pending geometric comparison.  Once an
 equivalence identifies the literal base fundamental group with the finite
 two-circle wedge, every literal loop is a signed word in the inverse images
