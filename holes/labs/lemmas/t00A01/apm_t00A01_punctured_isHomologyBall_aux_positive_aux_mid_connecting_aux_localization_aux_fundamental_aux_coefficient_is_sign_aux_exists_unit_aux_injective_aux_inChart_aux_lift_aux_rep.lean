@@ -3491,6 +3491,25 @@ Route: `homologyπ` is epi, hence surjective in `AddCommGrpCat`; `iCycles y`
 lifts along the degreewise-surjective `cokernel.π`; `π (∂z) = d (iCycles y) = 0`,
 and the kernel of `cokernel.π` in degree `i - 1` is the range of `ι`. -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_rep_aux_homology
+    (M : Type) [TopologicalSpace M] (A : Set M) (i : ℕ)
+    (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i) :
+    ∃ y, (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homologyπ i y = c := by
+  exact (AddCommGrpCat.epi_iff_surjective _).mp inferInstance c
+
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_rep_aux_projection
+    (M : Type) [TopologicalSpace M] (A : Set M) (i : ℕ)
+    (y : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).cycles i) :
+    ∃ z, (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Aᶜ).f i z =
+      (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).iCycles i y := by
+  let Q := ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Aᶜ
+  letI : Epi Q := by
+    change Epi (cokernel.π
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularSubcomplex.ι Aᶜ))
+    dsimp only [cokernel.π]
+    infer_instance
+  exact (AddCommGrpCat.epi_iff_surjective _).mp inferInstance _
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_rep
     (M : Type) [TopologicalSpace M] (A : Set M) (i : ℕ)
     (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i) :
@@ -3501,7 +3520,28 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Aᶜ).f i z ∧
       (ConstructionTargets.SingularHomologyConcrete.SingularChains (TopCat.of M)).d i (i - 1) z ∈
         Set.range ((ConstructionTargets.SingularHomologyConcrete.relativeSingularSubcomplex.ι Aᶜ).f (i - 1)) := by
-  sorry
+  open ConstructionTargets.SingularHomologyConcrete in
+  obtain ⟨y, hy⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_rep_aux_homology M A i c
+  obtain ⟨z, hz⟩ := apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_lift_aux_rep_aux_projection M A i y
+  refine ⟨z, y, hy, hz.symm, ?_⟩
+  have hzero : (relativeSingularProjection Aᶜ).f (i - 1)
+      ((SingularChains (TopCat.of M)).d i (i - 1) z) = 0 := by
+    have h1 := congrArg (fun g => g z) (congrArg ConcreteCategory.hom
+      ((relativeSingularProjection Aᶜ).comm i (i - 1)))
+    simp only [ConcreteCategory.comp_apply] at h1
+    rw [← h1, hz]
+    have h2 := congrArg (fun g => g y) (congrArg ConcreteCategory.hom
+      ((RelativeSingularChains Aᶜ).iCycles_d i (i - 1)))
+    simpa only [ConcreteCategory.comp_apply] using h2
+  have hex := (HomologicalComplex.exact_iff_degreewise_exact _).mp
+    (singularPairShortComplex_shortExact Aᶜ).exact (i - 1)
+  obtain ⟨w, hw⟩ := (ShortComplex.ab_exact_iff _).mp hex _ hzero
+  refine ⟨(factorThruImage (singularSubspaceMap Aᶜ)).f (i - 1) w, ?_⟩
+  rw [← hw]
+  change ((factorThruImage (singularSubspaceMap Aᶜ)).f (i - 1) ≫
+    (relativeSingularSubcomplex.ι Aᶜ).f (i - 1)) w = (singularSubspaceMap Aᶜ).f (i - 1) w
+  rw [← HomologicalComplex.comp_f]
+  simp only [relativeSingularSubcomplex.ι, image.fac]
 -- END SEAT AREA
 
 /-- LIBRARY LEAF (chain level; claude-14's split of lemma-3's PARTIAL on
