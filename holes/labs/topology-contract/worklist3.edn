@@ -36711,7 +36711,7 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
@@ -36759,7 +36759,7 @@
      "095377320dd976e896af3bb6f3519a21f249c10306fc948efa1be7fcd99d56c5"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36781,7 +36781,7 @@
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37500,6 +37500,19 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792590765935-874-b5a98261",
+     :commands
+     ["git show/diff-tree 1db229e3cb"
+      "sha256sum fixture and git blob"
+      "lake env lean holes/labs/blueprints/t96J05/Blueprint.lean"
+      "lake env lean problems/t96J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 1db229e3cb^ 1db229e3cb"],
+     :finding
+     "PASS: repaired blueprint commit changes only the scoped blueprint; fixture/blob SHA matches 863100ad.... Its mathematics is sound: the private strengthened package records Nonempty and both k≤m and k≤n; C1 uses hmn at k=m, C3 uses hlevel and derives m-1≤n from hmn, and C4 forgets only after those genuine fields are constructed. Thus all frozen final hypotheses have descendants without changing the registered interface. C1/C2/C3 remain independent and C4 uses all three. Source Blueprint/Main compile standard-only; registry 170/170. The source lint is acknowledged and is precisely what the closure design removes."},
     :commit "1db229e3cb",
     :changed-paths ["ConstructionTargets/t96J05Closure.blueprint.md"],
     :fixture
@@ -37508,7 +37521,7 @@
      "863100adb19f8051df8ab03cb1ca4c689633e124582742d9ec0889fcb6f2baed"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96J05/lean/Main.lean"
     "problems/t96J05/status.json"
@@ -37526,14 +37539,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96J05Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t96J05/BLUEPRINT.md's plan into ConstructionTargets/t96J05Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint repaired: C1/C3 now return a strengthened package carrying nonempty level and k≤n; implementation continues.",
    :id :program-2026-10-13-close-t96j05,
    :kind :final-adapter,
    :campaign-priority 35,
    :fail-count 1,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 2,
+     :commit "1db229e3cb",
+     :reason
+     "Blueprint repaired: C1/C3 now return a strengthened package carrying nonempty level and k≤n; implementation continues."}]}
   {:consumer :t95J06,
    :stop-count 0,
    :phase :implementation,
@@ -48784,7 +48802,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_exact_ambient_transport",
@@ -48794,7 +48812,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "exactness at literal CP successor homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id
    :lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport,
    :kind :lemma,
