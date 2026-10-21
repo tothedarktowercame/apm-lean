@@ -1721,6 +1721,29 @@ theorem t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
 
 #print axioms t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
 
+/-- The lower successor patch has the same rational homology as `CP n`, via
+the previously constructed deformation-retract equivalence. -/
+noncomputable def t99J05_cp_successor_lowerPatch_homologyIso
+    (n k : ℕ) :
+    Homology (CP n) k ≅
+      Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) k :=
+  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+    (t99J05_cp_successor_lowerPatch_deformationRetract n) k
+
+/-- Finite-dimensionality from the induction datum transports to the literal
+lower successor patch in every degree. -/
+theorem t99J05_cp_successor_lowerPatch_finiteDimensional
+    (n k : ℕ) (h : ComplexProjectiveRationalHomologyData n) :
+    FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) k) := by
+  letI : FiniteDimensional ℚ (Homology (CP n) k) := h.finiteDimensional k
+  exact (t99J05_cp_successor_lowerPatch_homologyIso n k).toLinearEquiv.finiteDimensional
+
+#print axioms t99J05_cp_successor_lowerPatch_homologyIso
+#print axioms t99J05_cp_successor_lowerPatch_finiteDimensional
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
