@@ -119152,42 +119152,43 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:consumer :t00J02,
     :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct circle chart transports and pointwise chart witnesses; then signed counts and Main.",
+    "Prove chart-null transport, instantiate witnesses, then signed counts and Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked artifacts preserved"],
+    :warnings ["Main sorry" "review artifacts preserved"],
     :missing-theorems
-    [{:name "badSet_measure_zero_of_finite_targetChart_witnesses",
-      :type "pointwise finite chart witnesses imply nullity",
+    [{:name "circleHaarMeasure_ne_zero",
+      :type "Circle Haar measure nonzero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["badSet_measure_zero_of_finite_targetCharts"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["badSet_measure_zero_of_finite_targetChart_witnesses"],
+      ["badSet_measure_zero_of_finite_targetChart_witnesses"
+       "circleHaarMeasure_ne_zero"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "c94f3fc74bfa61312388dc7f1335322ac42ec70f05fa3575fcdcd53ae5bdb04b",
+     "bc7ac5675abefa9c420540eed9335f294967022f1c7ac984ce21f6188490166d",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked pointwise finite-chart witness endpoint.",
+    :reason "Banked nonzero Circle Haar measure.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119195,19 +119196,10 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792597834136-1073-babb8c4e",
-     :commands
-     ["git show/diff 8822022b"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 8822022b changes only t00J02Closure.lean (+29), adding compiled pointwise finite-chart witness nullity after prior history 1afe14c6. Fixture afb497a6, source 0b3b4888, implementation c94f3fc7; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: each z in bad yields an indexed critical-image witness, Set.mem_iUnion forms the cover required by the prior finite-chart theorem, and nullity follows. M/N, chart, image, derivative, and mu/nu boundaries are unchanged. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; H2 assembly remains partial and listed."},
-    :commit "8822022b96f0795912b4b040ccd2e2e1f0cc2439",
+    :diagnostic-history
+    [{:cmd "compile#1", :exit 1, :correction "qualified type"}
+     {:cmd "compile#2", :exit 1, :correction "added BorelSpace"}],
+    :commit "715311c4db9d26e8d2eb910f6a24f3d091154827",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119215,7 +119207,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119844,7 +119836,8 @@
     :lemma-finite-chartcriticalpieces-measure-zero
     :lemma-measure-zero-of-subset-finite-chartcriticalpieces
     :lemma-badset-measure-zero-of-finite-targetcharts
-    :lemma-badset-measure-zero-of-finite-targetchart-witnesses],
+    :lemma-badset-measure-zero-of-finite-targetchart-witnesses
+    :lemma-circlehaarmeasure-ne-zero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122550,6 +122543,23 @@
    :id :lemma-badset-measure-zero-of-finite-targetchart-witnesses,
    :kind :lemma,
    :depends-on [:lemma-badset-measure-zero-of-finite-targetcharts],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleHaarMeasure_ne_zero",
+    :type "Circle Haar measure nonzero"},
+   :lemma
+   {:name "circleHaarMeasure_ne_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "Circle Haar measure nonzero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-circlehaarmeasure-ne-zero,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
