@@ -119198,6 +119198,18 @@
       :exit 0}
      {:cmd "Main compile; registry; diff; hashes; placeholders",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792625101279-1796-36d3222c",
+     :commands
+     ["git show/diff --check 11cac6eb0"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: 11cac6eb0 changes only t00J02Closure.lean (+31), adding compiled, sorry-free disk-bounded canonical-sum vanishing beyond history fe7396763. Fixture afb497a6, source 0b3b4888, implementation d57a4178; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: disk boundedness supplies exact zero-degree lifts; the assumed equality of each canonical component sum with its lift degree feeds the established comparison theorem and yields each sum equal to zero. Fiber subtype, occupied-component indices, canonical local degrees, and lift degrees remain aligned. Axioms are propext, Classical.choice, Quot.sound. Residual milestones derive the transverse comparison and top-degree fiber formula, then assemble H2/Main."},
     :commit "11cac6eb07d8de9d4ceec86403e416c2637ceb60",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119206,7 +119218,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119224,7 +119236,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical top-degree vanishing.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked disk-bounded canonical sums.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119622,7 +119634,10 @@
      :reason "Banked canonical signed-sum vanishing."}
     {:job 4,
      :commit "fe7396763a54bedb319f5ac9593c282b0665d6cb",
-     :reason "Banked canonical top-degree vanishing."}]}
+     :reason "Banked canonical top-degree vanishing."}
+    {:job 6,
+     :commit "11cac6eb07d8de9d4ceec86403e416c2637ceb60",
+     :reason "Banked disk-bounded canonical sums."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123385,7 +123400,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "canonicalComponentSums_eq_zero_of_diskBounded_comparison",
@@ -123395,7 +123410,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "comparison gives zero sums",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "11cac6eb07d8de9d4ceec86403e416c2637ceb60"},
    :id :lemma-canonicalcomponentsums-eq-zero-of-diskbounded-comparison,
    :kind :lemma,
    :depends-on [:lemma-occupiedregularfiber-exactzerodegreelifts],
