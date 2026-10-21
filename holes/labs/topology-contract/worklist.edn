@@ -119152,63 +119152,56 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Derive Sard nullity and canonical calculations from transverse disk-bounded hypotheses; assemble Main.",
+    "Derive canonical component comparison, global signed-count formula, and Sard nullity from transverse disk-bounded hypotheses; assemble Main.",
     :outcome :stop,
     :warnings ["Main registered sorry" "unrelated edits preserved"],
     :missing-theorems
-    [{:name
-      "topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations",
+    [{:name "canonicalComponentLocalDegreeSum_eq_zero_of_comparison",
       :type
-      "Sard-null bad parameters plus canonical calculations imply H2 map zero",
+      "canonical component-to-exact-lift comparison implies every canonical component sum is zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["topHomologyMap_eq_zero_of_exists_locallyInjective_calculations"],
+      :depends-on ["exactLiftComponentDegree_eq_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations"],
+      ["canonicalComponentLocalDegreeSum_eq_zero_of_comparison"
+       "topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "6c808577777197e6b4d67e4effe8e74089e43b422b5d7e3b013f0087956c39b0",
+     "22e6530cdfd6e1218bb6c0de88a71ff0b1a36c98babef0220b6d9e58c00db580",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked Sard/calculation composition.",
+    :reason "Banked canonical component-sum vanishing bridge.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256sum fixture; git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792568992818-439-fdd4bbe9",
-     :commands
-     ["git show/diff 55bc1b25"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 55bc1b25 changes only t00J02Closure.lean (+29), adding a compiled Sard/calculation composition after prior history. Fixture afb497a6, source 0b3b4888, implementation 6c808577, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is forward: bad-parameter nullity yields the selected locally-injective circle fiber, then the dependent canonical-calculation endpoint yields homologyMap 2 f=0; the generated Fintype stays internal and representations align. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; deriving nullity/calculations from disk-bounded transversality and final assembly remain listed."},
-    :commit "55bc1b25da390ad904b06486bf4ada4301660343",
+     {:cmd "sha256sum fixture/source/implementation; git diff --check",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
+      :exit 1,
+      :finding
+      "Moved theorem after regularFiberLocalDegree definition."}],
+    :commit "fe0dca6b8d4504603e251a9775756617b64e6cf7",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119216,7 +119209,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119746,7 +119739,8 @@
     :lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph
     :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero
     :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations
-    :lemma-tophomologymap-eq-zero-of-badparameters-measure-zero-calculations],
+    :lemma-tophomologymap-eq-zero-of-badparameters-measure-zero-calculations
+    :lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121973,6 +121967,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "canonicalComponentLocalDegreeSum_eq_zero_of_comparison",
+    :type
+    "canonical component-to-exact-lift comparison implies every canonical component sum is zero"},
+   :lemma
+   {:name "canonicalComponentLocalDegreeSum_eq_zero_of_comparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "canonical component-to-exact-lift comparison implies every canonical component sum is zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison,
+   :kind :lemma,
+   :depends-on [:lemma-exactliftcomponentdegree-eq-zero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
