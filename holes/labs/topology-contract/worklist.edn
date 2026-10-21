@@ -119195,6 +119195,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792623426417-1759-91b5b017",
+     :commands
+     ["git show/diff --check fe7396763"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: fe7396763 changes only t00J02Closure.lean (+20), adding compiled, sorry-free canonical top-degree vanishing beyond history 916e73e73. Fixture afb497a6, source 0b3b4888, implementation 41a91d6e; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: the assumed surfaceTopDegree-to-fiber-signed-sum equality is composed with the established vanishing of that signed sum, yielding surfaceTopDegree e f = 0. Fiber subtype, occupied-component indices, orientation signs, and canonical local degrees remain aligned. Axioms are propext, Classical.choice, Quot.sound. Residual milestones prove canonical component sums and the top-degree fiber formula from transverse data, then replace the false Producer in Main."},
     :commit "fe7396763a54bedb319f5ac9593c282b0665d6cb",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119203,7 +119215,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119221,7 +119233,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical signed-sum vanishing.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical top-degree vanishing.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119616,7 +119628,10 @@
      :reason "Banked canonical disk-bounded H2 endpoint."}
     {:job 3,
      :commit "916e73e73e3d29f39d5ffc7cc5451392b80b8861",
-     :reason "Banked canonical signed-sum vanishing."}]}
+     :reason "Banked canonical signed-sum vanishing."}
+    {:job 4,
+     :commit "fe7396763a54bedb319f5ac9593c282b0665d6cb",
+     :reason "Banked canonical top-degree vanishing."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123321,7 +123336,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surfaceTopDegree_eq_zero_of_canonicalComponentSums",
@@ -123333,7 +123348,9 @@
     :type
     "canonical component sums and fiber formula imply zero top degree",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "fe7396763a54bedb319f5ac9593c282b0665d6cb"},
    :id :lemma-surfacetopdegree-eq-zero-of-canonicalcomponentsums,
    :kind :lemma,
    :depends-on
