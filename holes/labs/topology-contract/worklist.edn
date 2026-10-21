@@ -119197,6 +119197,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792595499901-1009-415f9359",
+     :commands
+     ["git show/diff 73bc6fad"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 73bc6fad changes only t00J02Closure.lean (+11), adding compiled finite-cover nullity after prior history bc7a1ec9. Fixture afb497a6, source 0b3b4888, implementation b407ec34; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: bad subset of the finite union and nullity of that union yield mu bad = 0 by measure_mono_null. The Set/Measure and Fin-index boundaries remain unchanged. The new theorem and its dependency use only propext, Classical.choice, Quot.sound. Main retains its registered sorry; H2 assembly remains partial and listed."},
     :commit "73bc6fad0fc33b46744eeb62a705c0421a0aa57e",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite chartwise null-union aggregation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nullity of a bad set covered by finite chart-critical pieces.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119533,7 +119545,11 @@
      :reason "Banked chart-inverse nullity transport."}
     {:job 2,
      :commit "bc7a1ec995254a20bb762227bb61dad4258c7175",
-     :reason "Banked finite chartwise null-union aggregation."}]}
+     :reason "Banked finite chartwise null-union aggregation."}
+    {:job 3,
+     :commit "73bc6fad0fc33b46744eeb62a705c0421a0aa57e",
+     :reason
+     "Banked nullity of a bad set covered by finite chart-critical pieces."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122472,7 +122488,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "measure_zero_of_subset_finite_chartCriticalPieces",
@@ -122482,7 +122498,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "finite null chart cover makes bad set null",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "73bc6fad0fc33b46744eeb62a705c0421a0aa57e"},
    :id :lemma-measure-zero-of-subset-finite-chartcriticalpieces,
    :kind :lemma,
    :depends-on [:lemma-finite-chartcriticalpieces-measure-zero],
