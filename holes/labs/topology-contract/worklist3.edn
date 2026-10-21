@@ -36711,71 +36711,62 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Assemble successor finite-dimensionality, then top/even homology equivalences.",
+    "Prove successor H0 finiteness and top/even equivalences.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
-    :warnings
-    ["Existing lints and unrelated untracked review artifacts preserved."],
+    :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_overlap_finiteDimensional",
-      :type
-      "successor overlap homology is finite-dimensional in every degree",
+    [{:name "t99J05_shortComplex_finiteDimensional_middle",
+      :type "finite outer terms imply finite exact middle",
+      :status :proved,
+      :consumers [:t99J05],
+      :depends-on [],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_finiteDimensional_positive",
+      :type "finite successor homology in positive degrees",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_overlap_rational_H0"
-       "t99J05_cp_successor_overlap_rational_topHomology"],
+      ["t99J05_shortComplex_finiteDimensional_middle"
+       "t99J05_cp_successor_overlap_finiteDimensional"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
       :status :partial,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_overlap_finiteDimensional"
-       "t99J05_cp_successor_lowerPatch_finiteDimensional"
-       "t99J05_cp_successor_topPatch_finiteDimensional"],
+      :depends-on ["t99J05_cp_successor_finiteDimensional_positive"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked all-degree overlap finite-dimensionality; successor exact-sequence top/even equivalences remain.",
+    "Banked positive-degree successor finiteness; H0 and top/even cases remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792598097941-1083-27e97db0",
-     :commands
-     ["git show --stat/--format=fuller 471bcbc269c52df17fd68df7a4b4f8f0b898b78b"
-      "git diff --check 471bcbc269^ 471bcbc269"
-      "git show 471bcbc269:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "rg -n \\b(sorry|admit|axiom)\\b ConstructionTargets/t99J05Closure.lean"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Recorded commit 471bcbc269 changes only the scoped closure file; its SHA-256 is the recorded 8398d3360483f65f31f3966ef901cd2fd0c01bf9971becb235d3f732a3a6c28b. The overlap proof splits k into 0, below top, top, and above top with correct sphere dimension 2n+1; H0/top equivalences have the needed orientation, while vanishing transports across the affine and overlap isomorphisms before finite-dimensionality follows from subsingletons. Closure/Main compile, registry is 170/170, placeholder delta remains 0, and only standard axioms occur. This is new compiled program progress; remaining successor top/even equivalences are listed."},
-    :commit "471bcbc269",
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
+      :exit 1,
+      :correction "fixed range and biproduct typing"}],
+    :commit "ae3e162d68",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "8398d3360483f65f31f3966ef901cd2fd0c01bf9971becb235d3f732a3a6c28b"},
+     "682fb92bb28e63d27bc49aefca23c9325d5fc309621e12a5986ec9d9446f0d1b"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48843,7 +48834,8 @@
     :lemma-t99j05-cp-successor-finitedimensional-of-overlap-gt
     :lemma-t99j05-cp-successor-lowerpatch-finitedimensional
     :lemma-t99j05-cp-successor-toppatch-finitedimensional
-    :lemma-t99j05-cp-successor-overlap-finitedimensional],
+    :lemma-t99j05-cp-successor-overlap-finitedimensional
+    :lemma-t99j05-cp-successor-finitedimensional-positive],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -49167,6 +49159,42 @@
    :depends-on
    [:lemma-t99j05-cp-successor-overlap-rational-h0
     :lemma-t99j05-cp-successor-overlap-rational-tophomology],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_shortComplex_finiteDimensional_middle",
+    :type "finite outer terms imply finite exact middle"},
+   :lemma
+   {:name "t99J05_shortComplex_finiteDimensional_middle",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "finite outer terms imply finite exact middle",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-shortcomplex-finitedimensional-middle,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_finiteDimensional_positive",
+    :type "finite successor homology in positive degrees"},
+   :lemma
+   {:name "t99J05_cp_successor_finiteDimensional_positive",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "finite successor homology in positive degrees",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-finitedimensional-positive,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-shortcomplex-finitedimensional-middle
+    :lemma-t99j05-cp-successor-overlap-finitedimensional],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
