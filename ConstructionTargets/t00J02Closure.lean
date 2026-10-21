@@ -1429,6 +1429,76 @@ theorem circleIncidence_secondCountableTopology
 #print axioms circleIncidenceProjection_critical_iff_kernelCritical
 #print axioms circleIncidence_secondCountableTopology
 
+/-- Passing a manifold-valued map through the target chart centered at its
+value preserves surjectivity of the manifold derivative. -/
+theorem mfderiv_targetChart_comp_surjective_iff
+    {E F M N : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N]
+    (g : M → N) (x : M)
+    (hg : MDifferentiableAt (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) g x) :
+    Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) g x) ↔
+      Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+          ((chartAt F (g x)) ∘ g) x) := by
+  have hc : MDifferentiableAt (modelWithCornersSelf ℝ F)
+      (modelWithCornersSelf ℝ F) (chartAt F (g x)) (g x) :=
+    (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) (g x)).mdifferentiableAt
+      (mem_chart_source F (g x))
+  rw [mfderiv_comp x hc hg]
+  constructor
+  · intro hs
+    exact (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) (g x)).mfderiv_surjective
+      (mem_chart_source F (g x)) |>.comp hs
+  · intro hs
+    intro v
+    obtain ⟨u, hu⟩ := hs
+      ((mfderiv (modelWithCornersSelf ℝ F) (modelWithCornersSelf ℝ F)
+        (chartAt F (g x)) (g x)) v)
+    refine ⟨u, ?_⟩
+    exact (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) (g x)).mfderiv_injective
+      (mem_chart_source F (g x)) hu
+
+#print axioms mfderiv_targetChart_comp_surjective_iff
+
+/-- For the incidence projection, geometric criticality is unchanged after
+passing to the Euclidean chart of the circle at the projected value. -/
+theorem circleIncidenceProjection_critical_iff_targetChartCritical
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (p : CircleIncidence f c) :
+    letI := circleIncidenceAtlas f c hf hc htrans
+    (¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1)
+          (circleIncidenceProjection (f := f) (c := c)) p)) ↔
+      ¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1)
+          ((chartAt (EuclideanSpace ℝ (Fin 1))
+              (circleIncidenceProjection (f := f) (c := c) p)) ∘
+            circleIncidenceProjection (f := f) (c := c)) p) := by
+  letI := circleIncidenceAtlas f c hf hc htrans
+  letI : IsManifold (modelWithCornersSelf ℝ CircleIncidenceModel) ∞
+      (CircleIncidence f c) := circleIncidence_isManifold f c hf hc htrans
+  apply not_congr
+  apply mfderiv_targetChart_comp_surjective_iff
+  exact (circleIncidenceProjection_contMDiff f c hf hc htrans).mdifferentiableAt (by simp)
+
+#print axioms circleIncidenceProjection_critical_iff_targetChartCritical
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
