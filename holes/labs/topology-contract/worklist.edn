@@ -119152,30 +119152,35 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove canonical component sums and top-degree fiber formula from transverse data; replace false Producer in Main.",
+    "Prove identities; assemble H2 nullity; replace false Producer.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked review dirs preserved"],
+    :warnings ["Main sorry" "review dirs"],
     :missing-theorems
-    [{:name "surfaceTopDegree_eq_zero_of_canonicalComponentSums",
-      :type
-      "canonical component sums and fiber formula imply zero top degree",
-      :status :proved,
+    [{:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
+      :type "zero canonical component sums",
+      :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["canonicalRegularFiberSignedSum_eq_zero_of_componentSums"],
+      :depends-on ["occupiedRegularFiber_exactZeroDegreeLifts"],
+      :area "oriented-surface-degree"}
+     {:name "regularFiber_surfaceTopDegree_eq_signedSum",
+      :type "top degree equals signed fiber sum",
+      :status :partial,
+      :consumers [:t00J02],
+      :depends-on ["regularFiberLocalDegree_localization_eq"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["surfaceTopDegree_eq_zero_of_canonicalComponentSums"],
+      ["transverseDiskBounded_canonicalComponentSums_eq_zero"
+       "regularFiber_surfaceTopDegree_eq_signedSum"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
@@ -119188,34 +119193,21 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked canonical top-degree vanishing.",
+    :reason "Geometric identities remain; no facade added.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
-     {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792623426417-1759-91b5b017",
-     :commands
-     ["git show/diff --check fe7396763"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: fe7396763 changes only t00J02Closure.lean (+20), adding compiled, sorry-free canonical top-degree vanishing beyond history 916e73e73. Fixture afb497a6, source 0b3b4888, implementation 41a91d6e; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: the assumed surfaceTopDegree-to-fiber-signed-sum equality is composed with the established vanishing of that signed sum, yielding surfaceTopDegree e f = 0. Fiber subtype, occupied-component indices, orientation signs, and canonical local degrees remain aligned. Axioms are propext, Classical.choice, Quot.sound. Residual milestones prove canonical component sums and the top-degree fiber formula from transverse data, then replace the false Producer in Main."},
+     {:cmd "Main compile; registry; hashes; placeholders; diff-check",
+      :exit 0}],
     :commit "fe7396763a54bedb319f5ac9593c282b0665d6cb",
-    :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
+    :changed-paths [],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
      :sha256
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119955,7 +119947,9 @@
     :lemma-tophomologymap-eq-zero-of-diskbounded-chartsums
     :lemma-tophomologymap-eq-zero-of-diskbounded-canonicalsums
     :lemma-canonicalregularfibersignedsum-eq-zero-of-componentsums
-    :lemma-surfacetopdegree-eq-zero-of-canonicalcomponentsums],
+    :lemma-surfacetopdegree-eq-zero-of-canonicalcomponentsums
+    :lemma-transversediskbounded-canonicalcomponentsums-eq-zero
+    :lemma-regularfiber-surfacetopdegree-eq-signedsum],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123355,6 +123349,38 @@
    :kind :lemma,
    :depends-on
    [:lemma-canonicalregularfibersignedsum-eq-zero-of-componentsums],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "transverseDiskBounded_canonicalComponentSums_eq_zero",
+    :type "zero canonical component sums"},
+   :lemma
+   {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "zero canonical component sums",
+    :area "oriented-surface-degree"},
+   :id :lemma-transversediskbounded-canonicalcomponentsums-eq-zero,
+   :kind :lemma,
+   :depends-on [:lemma-occupiedregularfiber-exactzerodegreelifts],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiber_surfaceTopDegree_eq_signedSum",
+    :type "top degree equals signed fiber sum"},
+   :lemma
+   {:name "regularFiber_surfaceTopDegree_eq_signedSum",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "top degree equals signed fiber sum",
+    :area "oriented-surface-degree"},
+   :id :lemma-regularfiber-surfacetopdegree-eq-signedsum,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
