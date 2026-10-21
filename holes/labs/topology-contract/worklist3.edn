@@ -36753,6 +36753,20 @@
       :exit 1,
       :correction
       "normalized Even witness and corrected homology-data field names"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792617337297-1573-3c25d68d",
+     :commands
+     ["git show --stat/--format=fuller 24455ff5dbeadd8457545ce60fe847b135aa6f8a"
+      "git show 24455ff5d:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check 24455ff5d^ 24455ff5d"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 24455ff5d:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit 24455ff5d changes only scoped Closure; fixture SHA-256 matches b9f4413762f4e8cfae4042d09f075abae5a89801bf9b114b1eb0875a46c6ea83. The Betti case split is exhaustive and correctly oriented: even k≤2n yields a valid i<n+1 and transports the stored equivalence to finrank 1; non-even degrees use odd vanishing; degrees above 2n use above-top vanishing, each giving finrank 0. No representation boundary or hypothesis is lost. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; the alternating Betti sum, homotopy invariance, and C4 assembly remain listed."},
     :commit "24455ff5dbeadd8457545ce60fe847b135aa6f8a",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36761,7 +36775,7 @@
      "b9f4413762f4e8cfae4042d09f075abae5a89801bf9b114b1eb0875a46c6ea83"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36779,7 +36793,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked global CP rational-homology data; Lefschetz/Euler calculation remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the CP rational Betti profile; finite trace and homotopy transport remain.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37021,7 +37035,11 @@
     {:job 2,
      :commit "4c82128c53f04c84b3a34ff1255ddbdc810b1f68",
      :reason
-     "Banked global CP rational-homology data; Lefschetz/Euler calculation remains."}]}
+     "Banked global CP rational-homology data; Lefschetz/Euler calculation remains."}
+    {:job 3,
+     :commit "24455ff5dbeadd8457545ce60fe847b135aa6f8a",
+     :reason
+     "Banked the CP rational Betti profile; finite trace and homotopy transport remain."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49641,7 +49659,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_homology_finrank",
@@ -49653,7 +49671,9 @@
     :type
     "CP n has rational rank one exactly in even degrees at most 2n",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "24455ff5dbeadd8457545ce60fe847b135aa6f8a"},
    :id :lemma-t99j05-cp-homology-finrank,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-homology],
