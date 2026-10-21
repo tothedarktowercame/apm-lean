@@ -89382,21 +89382,21 @@
   {:consumer :t97A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "derive nontrivial chosen loop monodromy from connectedness; realize literal quotient homeomorphism; compute invariants",
+    "derive nontrivial loop monodromy from connectedness; realize quotient homeomorphism; compute invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "twoArcModel_exists_of_covering_loops",
-      :type "covering loop monodromies select normalized model",
+    [{:name "coveringPathFiberEquiv_trans",
+      :type "covering fiber transport preserves path concatenation",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on ["twoArcModel_exists_of_fiber_transports"],
+      :depends-on [],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "connected double-cover classification",
@@ -89415,35 +89415,31 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked covering-path fiber equivalences and loop-model selection.",
+    "Banked identity/composition coherence for covering fiber transport.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder scan", :exit 0}
-     {:cmd "git show --check ff8497481", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792594000857-977-c4ef83ba",
-     :commands
-     ["git show/diff-tree ff8497481"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint; sha256sum; placeholder scan"],
-     :finding
-     "PASS: topo-6 commit ff8497481 changes only t97A03Closure after history 56a69c3d6; fixture SHA c18590c7... matches. Covering monodromy bijectivity is correctly upgraded to literal fiber equivalences, and two loop transports feed the normalized model selector with correct endpoint/orientation types. Nontriviality from connectedness remains explicit residual, so no facade overclaim. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; realization and invariants remain listed."},
-    :commit "ff8497481",
+     {:cmd
+      "comment-stripped placeholder scan; git show --check; sha256sum",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial coherence build",
+      :exit 1,
+      :correction "used Equiv.ext"}
+     {:cmd "first placeholder one-liner",
+      :exit 1,
+      :correction "fixed Python syntax"}],
+    :commit "dcfa23365",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "c18590c7a5363b7ddf141e72db87b65efba33f7df3c54f685ef87f687d509ffd"},
+     "839d2c9f9fb84d8b8e57ee0c0b6ab8867a161814fd7a5a69e48793dfb7e21c0e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -100238,4 +100234,21 @@
    :id :lemma-twoarcmodel-exists-of-covering-loops,
    :kind :lemma,
    :depends-on [:lemma-twoarcmodel-exists-of-fiber-transports],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "coveringPathFiberEquiv_trans",
+    :type "covering fiber transport preserves path concatenation"},
+   :lemma
+   {:name "coveringPathFiberEquiv_trans",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "covering fiber transport preserves path concatenation",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-coveringpathfiberequiv-trans,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
