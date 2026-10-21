@@ -1360,6 +1360,27 @@ theorem t99J05_rationalHomologyBiprodIso_hom
 
 #print axioms t99J05_rationalHomologyBiprodIso_hom
 
+/-- The homology biproduct comparison carries a chain-level lift to the lift
+of the induced homology maps. -/
+@[reassoc]
+theorem t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom
+    {M K L : ChainComplex (ModuleCat ℚ) ℕ} (f : M ⟶ K) (g : M ⟶ L) (k : ℕ) :
+    CategoryTheory.CategoryStruct.comp
+        (HomologicalComplex.homologyMap (biprod.lift f g) k)
+        (t99J05_rationalHomologyBiprodIso K L k).hom =
+      biprod.lift (HomologicalComplex.homologyMap f k)
+        (HomologicalComplex.homologyMap g k) := by
+  let F := HomologicalComplex.homologyFunctor (ModuleCat ℚ)
+    (ComplexShape.down ℕ) k
+  letI : F.Additive := inferInstance
+  letI : PreservesFiniteBiproducts F :=
+    CategoryTheory.Functor.preservesFiniteBiproductsOfAdditive F
+  letI : PreservesBinaryBiproducts F :=
+    preservesBinaryBiproducts_of_preservesBiproducts F
+  exact biprod.map_lift_mapBiprod F K L f g
+
+#print axioms t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom
+
 /-- The literal overlap-to-patches arrow, with the Mayer--Vietoris sign on
 the top-patch component. -/
 noncomputable def t99J05_cp_successor_literalOverlapToPieces (n k : ℕ) :
