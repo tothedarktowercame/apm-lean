@@ -36758,6 +36758,20 @@
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :correction "added quotient connectedness; fixed rank proof"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792603570283-1191-3377c793",
+     :commands
+     ["git show --stat/--format=fuller 8ed8dda658aea8ec36b787a60435bafcd6ababa1"
+      "git show 8ed8dda658:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check 8ed8dda658^ 8ed8dda658"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 8ed8dda658:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit 8ed8dda658 changes only scoped Closure; fixture SHA-256 matches f0f4ddd560ef289a10cea27d800b4e09837f05401066cc56214b8ed476791821. Degree zero correctly obtains path-connectedness of nonzero vectors (complex rank n+2>1), transports it through the continuous surjective quotient, and applies the canonical H0 equivalence. The successor theorem splits k=0 versus k+1 with correct orientation and delegates positive degrees to compiled Mayer-Vietoris finiteness. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine program progress; top and surviving-even equivalences remain listed."},
     :commit "8ed8dda658aea8ec36b787a60435bafcd6ababa1",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36766,7 +36780,7 @@
      "f0f4ddd560ef289a10cea27d800b4e09837f05401066cc56214b8ed476791821"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36784,7 +36798,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked all-degree overlap finite-dimensionality; successor exact-sequence top/even equivalences remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked all-degree successor finiteness; top/even equivalences remain.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36983,7 +36997,11 @@
     {:job 9,
      :commit "471bcbc269",
      :reason
-     "Banked all-degree overlap finite-dimensionality; successor exact-sequence top/even equivalences remain."}]}
+     "Banked all-degree overlap finite-dimensionality; successor exact-sequence top/even equivalences remain."}
+    {:job 1,
+     :commit "8ed8dda658aea8ec36b787a60435bafcd6ababa1",
+     :reason
+     "Banked all-degree successor finiteness; top/even equivalences remain."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49213,7 +49231,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_finiteDimensional_zero",
@@ -49223,14 +49241,16 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "successor H0 finite",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "8ed8dda658aea8ec36b787a60435bafcd6ababa1"},
    :id :lemma-t99j05-cp-successor-finitedimensional-zero,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_finiteDimensional",
@@ -49240,7 +49260,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "all-degree successor finiteness",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "8ed8dda658aea8ec36b787a60435bafcd6ababa1"},
    :id :lemma-t99j05-cp-successor-finitedimensional,
    :kind :lemma,
    :depends-on
