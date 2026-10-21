@@ -614,6 +614,21 @@ theorem apm_t97A03_twoCircleWedge_exists_signedGeneratorWord
     ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFin_exists_generatorWord
       1 g
 
+/-- Evaluate an integer-exponent word in two distinguished elements. -/
+def apm_t97A03_twoGeneratorWord {G : Type*} [Group G]
+    (first second : G) (w : List (Fin 2 × ℤ)) : G :=
+  (w.map fun q ↦ (if q.1 = 0 then first else second) ^ q.2).prod
+
+lemma apm_t97A03_twoGeneratorWord_map {G H : Type*} [Group G] [Group H]
+    (f : G →* H) (first second : G) (w : List (Fin 2 × ℤ)) :
+    f (apm_t97A03_twoGeneratorWord first second w) =
+      apm_t97A03_twoGeneratorWord (f first) (f second) w := by
+  simp only [apm_t97A03_twoGeneratorWord, map_list_prod, List.map_map]
+  apply congrArg List.prod
+  apply List.map_congr_left
+  rintro ⟨i, z⟩ hi
+  fin_cases i <;> simp [map_zpow]
+
 /-- The concrete free-group evaluation map determined by the two geometric
 arcs of the cut-circle quotient.  Proving this map bijective is now the exact
 remaining van Kampen calculation for the cut representation. -/
@@ -634,6 +649,42 @@ noncomputable def apm_t97A03_cutGeneratorFreeGroupMap (A B : Circle) :
     apm_t97A03_cutGeneratorFreeGroupMap A B (FreeGroup.of (1 : Fin 2)) =
       apm_t97A03_secondCutCircleGenerator A B := by
   simp [apm_t97A03_cutGeneratorFreeGroupMap]
+
+/-- The free-group element spelling a signed word in the two cut arcs. -/
+def apm_t97A03_cutFreeGroupWord (w : List (Fin 2 × ℤ)) : FreeGroup (Fin 2) :=
+  (w.map fun q => FreeGroup.of q.1 ^ q.2).prod
+
+/-- Evaluation of the explicit free word is exactly the corresponding signed
+word in the two geometric cut generators. -/
+lemma apm_t97A03_cutGeneratorFreeGroupMap_word (A B : Circle)
+    (w : List (Fin 2 × ℤ)) :
+    apm_t97A03_cutGeneratorFreeGroupMap A B
+        (apm_t97A03_cutFreeGroupWord w) =
+      apm_t97A03_twoGeneratorWord
+        (apm_t97A03_firstCutCircleGenerator A B)
+        (apm_t97A03_secondCutCircleGenerator A B) w := by
+  simp only [apm_t97A03_cutFreeGroupWord, apm_t97A03_twoGeneratorWord,
+    map_list_prod, List.map_map]
+  apply congrArg List.prod
+  apply List.map_congr_left
+  rintro ⟨i, z⟩ hi
+  fin_cases i <;> simp [map_zpow]
+
+/-- Signed-word generation by the two concrete cut arcs is precisely enough
+for surjectivity of their free-group evaluation map. -/
+theorem apm_t97A03_cutGeneratorFreeGroupMap_surjective_of_signed_generation
+    (A B : Circle)
+    (hgenerated : ∀ g : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (apm_t97A03_firstCutCircleGenerator A B)
+          (apm_t97A03_secondCutCircleGenerator A B) w = g) :
+    Function.Surjective (apm_t97A03_cutGeneratorFreeGroupMap A B) := by
+  intro g
+  rcases hgenerated g with ⟨w, hw⟩
+  exact ⟨apm_t97A03_cutFreeGroupWord w,
+    (apm_t97A03_cutGeneratorFreeGroupMap_word A B w).trans hw⟩
 
 /-- Bijectivity of the explicit cut-generator evaluation map produces the
 required cut-to-standard-wedge equivalence with both generator alignments,
@@ -685,20 +736,34 @@ theorem apm_t97A03_exists_aligned_cut_piOneEquiv_of_generator_bijective
     simp [freeWedge,
       ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegFreeGroupMap]
 
-/-- Evaluate an integer-exponent word in two distinguished elements. -/
-def apm_t97A03_twoGeneratorWord {G : Type*} [Group G]
-    (first second : G) (w : List (Fin 2 × ℤ)) : G :=
-  (w.map fun q ↦ (if q.1 = 0 then first else second) ^ q.2).prod
-
-lemma apm_t97A03_twoGeneratorWord_map {G H : Type*} [Group G] [Group H]
-    (f : G →* H) (first second : G) (w : List (Fin 2 × ℤ)) :
-    f (apm_t97A03_twoGeneratorWord first second w) =
-      apm_t97A03_twoGeneratorWord (f first) (f second) w := by
-  simp only [apm_t97A03_twoGeneratorWord, map_list_prod, List.map_map]
-  apply congrArg List.prod
-  apply List.map_congr_left
-  rintro ⟨i, z⟩ hi
-  fin_cases i <;> simp [map_zpow]
+/-- The remaining cut-circle calculation can therefore be stated without an
+opaque bijectivity hypothesis: freeness plus geometric signed generation. -/
+theorem apm_t97A03_exists_aligned_cut_piOneEquiv_of_free_and_generated
+    (A B : Circle)
+    (hinj : Function.Injective (apm_t97A03_cutGeneratorFreeGroupMap A B))
+    (hgenerated : ∀ g : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (apm_t97A03_firstCutCircleGenerator A B)
+          (apm_t97A03_secondCutCircleGenerator A B) w = g) :
+    ∃ e : FundamentalGroup (apm_t97A03_CutCircle A B)
+          (apm_t97A03_cutCircleMap A B A) ≃*
+        FundamentalGroup
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (Fin 2))
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin 2) 1),
+      e (apm_t97A03_firstCutCircleGenerator A B) =
+          ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+            1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass ∧
+        e (apm_t97A03_secondCutCircleGenerator A B) =
+          ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+            1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass := by
+  apply apm_t97A03_exists_aligned_cut_piOneEquiv_of_generator_bijective
+  exact ⟨hinj,
+    apm_t97A03_cutGeneratorFreeGroupMap_surjective_of_signed_generation
+      A B hgenerated⟩
 
 /-- Exact algebraic contract for the pending geometric comparison.  Once an
 equivalence identifies the literal base fundamental group with the finite
