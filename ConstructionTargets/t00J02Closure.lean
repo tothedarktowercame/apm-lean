@@ -3769,6 +3769,25 @@ theorem canonicalRegularFiberSignedSum_eq_zero_of_componentSums
     (occupiedRegularFiberComponentIndex f c y hy)
     (regularFiberLocalDegree e f y) orientationSign hcomponent
 
+/-- The canonical component equations and the regular-value top-degree
+identity force the integer top-degree coordinate itself to vanish. -/
+theorem surfaceTopDegree_eq_zero_of_canonicalComponentSums
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = 0)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x) :
+    surfaceTopDegree e f = 0 :=
+  htop.trans (canonicalRegularFiberSignedSum_eq_zero_of_componentSums
+    hy e orientationSign hcomponent)
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3789,6 +3808,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_canonicalSums
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberSignedSum_eq_zero_of_componentSums
+#print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
