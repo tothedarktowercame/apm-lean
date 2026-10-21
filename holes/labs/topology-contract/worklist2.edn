@@ -88732,6 +88732,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 0}
      {:cmd "git show --check 989a6ed18", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792578505797-606-16cc262f",
+     :commands
+     ["git show/check/hash 989a6ed18"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "statement-registry check/fingerprint t94J09"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed 989a6ed18 by topo-6, new after e83da611a; patch scope only t94J09Closure (+25). Fixture 1a7181e8... matches; registry 170/0; frozen t94J09 digest 52b4778c...; closure/Main placeholders 0/0. Fresh detached build and Main compile pass. For coordinate map c and inverse r, r.comp c=id correctly proves injectivity and c.comp r=id proves surjectivity, yielding the correctly oriented underlying-H1 ~= Fin6 equivalence. Axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists coordinate map/inverse identities, homology, normalization milestones."},
     :commit "989a6ed18",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88740,7 +88752,7 @@
      "1a7181e8d2b4e0542083238cc943229b1a7112c736ca5a7c1c801baee1080930"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88758,7 +88770,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked kernel comparison from two-sided inverses.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked coordinate inverse H1 adapter.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89068,7 +89080,10 @@
      :reason "Banked kernel-valued split/onto H1 adapter."}
     {:job 3,
      :commit "e83da611a",
-     :reason "Banked kernel comparison from two-sided inverses."}]}
+     :reason "Banked kernel comparison from two-sided inverses."}
+    {:job 4,
+     :commit "989a6ed18",
+     :reason "Banked coordinate inverse H1 adapter."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99795,7 +99810,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -99807,7 +99822,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "coordinate map+inverse imply H1 iso",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "989a6ed18"},
    :id
    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-twosidedinverse,
    :kind :lemma,
