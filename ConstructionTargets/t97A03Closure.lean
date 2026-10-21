@@ -233,32 +233,37 @@ theorem twoArcPermMonodromy_model_exists_of_actionConnected
   twoArcPermMonodromy_model_exists_of_reachable first second
     (twoArc_reachable_of_actionConnected first second hconnected)
 
-/-! ## Algebraic cellular data for the two literal models -/
+/-! ## Fiber coordinates supplied by the degree-two hypothesis -/
 
-/-- The degree-one cellular boundary after choosing the one-vertex model. -/
-def modelBoundaryOne : (Fin 3 → ℤ) →ₗ[ℤ] ℤ := 0
+/-- A map all of whose fibers have cardinality two is surjective. -/
+theorem surjective_of_fiber_card_two
+    {X Y : Type} (p : Y → X)
+    (hdegree : ∀ x : X, Nat.card (p ⁻¹' ({x} : Set X)) = 2) :
+    Function.Surjective p := by
+  intro x
+  by_contra hx
+  push_neg at hx
+  have hempty : p ⁻¹' ({x} : Set X) = ∅ := by
+    ext y
+    simp [hx y]
+  have h := hdegree x
+  rw [hempty] at h
+  simp at h
 
-/-- The two lifted sphere cells attach with zero cellular boundary. -/
-def modelBoundaryTwo : (Fin 2 → ℤ) →ₗ[ℤ] (Fin 3 → ℤ) := 0
-
-/-- All one-chains are cycles in the model cellular presentation. -/
-theorem modelBoundaryOne_ker : LinearMap.ker modelBoundaryOne = ⊤ := by
-  simp [modelBoundaryOne]
-
-/-- The two-cells impose no degree-one cellular relations. -/
-theorem modelBoundaryTwo_range : LinearMap.range modelBoundaryTwo = ⊥ := by
-  simp [modelBoundaryTwo]
-
-/-- All two-chains are cycles, giving the two independent sphere classes. -/
-theorem modelBoundaryTwo_ker : LinearMap.ker modelBoundaryTwo = ⊤ := by
-  simp [modelBoundaryTwo]
-
-/-- Package the cellular calculation used by both quotient models. -/
-theorem modelCellular_zero_boundary_data :
-    LinearMap.ker modelBoundaryOne = ⊤ ∧
-    LinearMap.range modelBoundaryTwo = ⊥ ∧
-    LinearMap.ker modelBoundaryTwo = ⊤ :=
-  ⟨modelBoundaryOne_ker, modelBoundaryTwo_range, modelBoundaryTwo_ker⟩
+/-- The degree-two hypothesis supplies an actual `Fin 2` coordinate on each
+fiber, the input needed to turn lifted arcs into permutations. -/
+theorem fiber_equiv_fin_two
+    {X Y : Type} (p : Y → X)
+    (hdegree : ∀ x : X, Nat.card (p ⁻¹' ({x} : Set X)) = 2)
+    (x : X) :
+    Nonempty ((p ⁻¹' ({x} : Set X)) ≃ Fin 2) := by
+  have hcard0 : Nat.card (p ⁻¹' ({x} : Set X)) ≠ 0 := by
+    rw [hdegree x]
+    norm_num
+  letI : Finite (p ⁻¹' ({x} : Set X)) := Nat.finite_of_card_ne_zero hcard0
+  letI := Fintype.ofFinite (p ⁻¹' ({x} : Set X))
+  exact ⟨Fintype.equivOfCardEq
+    (by simpa [Nat.card_eq_fintype_card] using hdegree x)⟩
 
 #print axioms twoArcMonodromy_nontrivial_classification
 #print axioms twoArcMonodromy_model_exists
@@ -270,6 +275,7 @@ theorem modelCellular_zero_boundary_data :
 #print axioms twoArc_reachable_of_actionConnected
 #print axioms twoArcActionConnected_iff_nontrivial
 #print axioms twoArcPermMonodromy_model_exists_of_actionConnected
-#print axioms modelCellular_zero_boundary_data
+#print axioms surjective_of_fiber_card_two
+#print axioms fiber_equiv_fin_two
 
 end ConstructionTargets.t97A03Closure
