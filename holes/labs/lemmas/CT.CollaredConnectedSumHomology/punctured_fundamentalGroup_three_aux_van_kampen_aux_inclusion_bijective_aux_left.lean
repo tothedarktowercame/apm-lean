@@ -643,6 +643,125 @@ lemma punctured_fundamentalGroup_three_aux_subsingleton
     unfold FundamentalGroup at a b ⊢
     exact Subsingleton.elim (α := Path.Homotopic.Quotient x x) a b⟩
 
+def punctured_fundamentalGroup_three_aux_cover_aux_inner
+    {M : Type} [TopologicalSpace M] (c : BallCollar 3 M) : Set M :=
+  c.largeMap '' {x : Disk 3 2 | dist x.1 0 ≤ 1 / 2}
+
+def punctured_fundamentalGroup_three_aux_cover_aux_U
+    {M : Type} [TopologicalSpace M] (c : BallCollar 3 M) : Set M :=
+  (punctured_fundamentalGroup_three_aux_cover_aux_inner c)ᶜ
+
+def punctured_fundamentalGroup_three_aux_cover_aux_V
+    {M : Type} [TopologicalSpace M] (c : BallCollar 3 M) : Set M :=
+  c.radialTwo
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_U_open
+    {M : Type} [TopologicalSpace M] [T2Space M] (c : BallCollar 3 M) :
+    IsOpen (punctured_fundamentalGroup_three_aux_cover_aux_U c) := by
+  haveI : CompactSpace (Disk 3 2) :=
+    isCompact_iff_compactSpace.mp (isCompact_closedBall _ _)
+  have hK : IsCompact {x : Disk 3 2 | dist x.1 0 ≤ 1 / 2} :=
+    (isClosed_le (continuous_subtype_val.dist continuous_const)
+      continuous_const).isCompact
+  exact (hK.image c.largeEmbedding.continuous).isClosed.isOpen_compl
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_union
+    {M : Type} [TopologicalSpace M] (c : BallCollar 3 M) :
+    punctured_fundamentalGroup_three_aux_cover_aux_U c ∪
+      punctured_fundamentalGroup_three_aux_cover_aux_V c = Set.univ := by
+  refine Set.eq_univ_of_forall fun x ↦ ?_
+  by_cases hx : x ∈ punctured_fundamentalGroup_three_aux_cover_aux_inner c
+  · right
+    obtain ⟨y, hy, rfl⟩ := hx
+    refine ⟨y, ?_, rfl⟩
+    change dist y.1 0 < 2
+    exact lt_of_le_of_lt (show dist y.1 0 ≤ 1 / 2 from hy) (by norm_num)
+  · exact Or.inl hx
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_boundary_mem
+    {M : Type} [TopologicalSpace M] (c : BallCollar 3 M) (s : Sphere 3) :
+    (c.boundaryMap s).1 ∈ punctured_fundamentalGroup_three_aux_cover_aux_U c ∩
+      punctured_fundamentalGroup_three_aux_cover_aux_V c := by
+  have hs : dist s.1 0 = 1 := by
+    simpa [Metric.mem_sphere, dist_comm] using s.2
+  constructor
+  · rintro ⟨y, hy, heq⟩
+    have heq' : c.largeMap y = c.largeMap
+        (unitToLarge 3 (sphereToDisk 3 s)) := by
+      rw [c.largeMap_unitToLarge]
+      exact heq
+    have hy' : y = unitToLarge 3 (sphereToDisk 3 s) :=
+      c.largeEmbedding.injective heq'
+    subst y
+    change dist s.1 0 ≤ 1 / 2 at hy
+    rw [hs] at hy
+    norm_num at hy
+  · refine ⟨unitToLarge 3 (sphereToDisk 3 s), ?_, ?_⟩
+    · change dist s.1 0 < 2
+      rw [hs]
+      norm_num
+    · exact c.largeMap_unitToLarge (sphereToDisk 3 s)
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E 3) M]
+    [IsManifold (I 3) (⊤ : ℕ∞) M]
+    (c : BallCollar 3 M) (s : Sphere 3)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    PathConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_U c) := by
+  sorry
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_V_simplyConnected
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E 3) M]
+    [IsManifold (I 3) (⊤ : ℕ∞) M]
+    (c : BallCollar 3 M) (s : Sphere 3)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    SimplyConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_V c) := by
+  sorry
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E 3) M]
+    [IsManifold (I 3) (⊤ : ℕ∞) M]
+    (c : BallCollar 3 M) (s : Sphere 3)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    SimplyConnectedSpace
+      (punctured_fundamentalGroup_three_aux_cover_aux_U c ∩ punctured_fundamentalGroup_three_aux_cover_aux_V c : Set M) := by
+  sorry
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E 3) M]
+    [IsManifold (I 3) (⊤ : ℕ∞) M]
+    (c : BallCollar 3 M) (s : Sphere 3)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    ∃ e : ContinuousMap.HomotopyEquiv c.Punctured (punctured_fundamentalGroup_three_aux_cover_aux_U c),
+      Joined (e.toFun (c.boundaryMap s))
+        ⟨c.boundaryMap s, (punctured_fundamentalGroup_three_aux_cover_aux_boundary_mem c s).1⟩ := by
+  sorry
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_geometry
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E 3) M]
+    [IsManifold (I 3) (⊤ : ℕ∞) M]
+    (c : BallCollar 3 M) (s : Sphere 3)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    PathConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_U c) ∧
+      SimplyConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_V c) ∧
+      SimplyConnectedSpace
+        (punctured_fundamentalGroup_three_aux_cover_aux_U c ∩
+          punctured_fundamentalGroup_three_aux_cover_aux_V c : Set M) ∧
+      ∃ e : ContinuousMap.HomotopyEquiv c.Punctured
+          (punctured_fundamentalGroup_three_aux_cover_aux_U c),
+        Joined (e.toFun (c.boundaryMap s))
+          ⟨c.boundaryMap s,
+            (punctured_fundamentalGroup_three_aux_cover_aux_boundary_mem c s).1⟩ := by
+  exact ⟨punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected M c s hopen hpath,
+    punctured_fundamentalGroup_three_aux_cover_aux_V_simplyConnected M c s hopen hpath,
+    punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected M c s hopen hpath,
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv M c s hopen hpath⟩
+
 lemma punctured_fundamentalGroup_three_aux_cover (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M] [PathConnectedSpace M]
     [ChartedSpace (E 3) M] [IsManifold (I 3) (⊤ : ℕ∞) M]
@@ -655,7 +774,17 @@ lemma punctured_fundamentalGroup_three_aux_cover (M : Type)
         SimplyConnectedSpace (U ∩ V : Set M) ∧
         ∃ e : ContinuousMap.HomotopyEquiv c.Punctured U,
           Joined (e.toFun (c.boundaryMap s)) ⟨c.boundaryMap s, hu⟩ := by
-  sorry
+  let U := punctured_fundamentalGroup_three_aux_cover_aux_U c
+  let V := punctured_fundamentalGroup_three_aux_cover_aux_V c
+  have hU : IsOpen U := punctured_fundamentalGroup_three_aux_cover_aux_U_open c
+  have hV : IsOpen V := hopen
+  have hcover : U ∪ V = Set.univ :=
+    punctured_fundamentalGroup_three_aux_cover_aux_union c
+  have hb := punctured_fundamentalGroup_three_aux_cover_aux_boundary_mem c s
+  obtain ⟨hpcU, hscV, hscUV, e, he⟩ :=
+    punctured_fundamentalGroup_three_aux_cover_aux_geometry
+      M c s hopen hpath
+  exact ⟨U, V, hU, hV, hcover, hb.1, hb.2, hpcU, hscV, hscUV, e, he⟩
 
 -- BEGIN SEAT AREA
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
