@@ -104,6 +104,64 @@ lemma apm_t97A03_base_south_eq (A B : Circle) :
       apm_t97A03_baseSphere A B apm_t97A03_south := by
   exact apm_t97A03_base_south_eq A B
 
+/-- The circle quotient obtained by identifying the two attachment points.
+For distinct points this is the literal two-circle graph underlying the base. -/
+inductive apm_t97A03_CutCircleRel (A B : Circle) : Circle → Circle → Prop
+  | glue : apm_t97A03_CutCircleRel A B A B
+
+def apm_t97A03_CutCircle (A B : Circle) :=
+  Quotient (Relation.EqvGen.setoid (apm_t97A03_CutCircleRel A B))
+
+noncomputable instance (A B : Circle) :
+    TopologicalSpace (apm_t97A03_CutCircle A B) :=
+  TopologicalSpace.coinduced (fun z : Circle ↦ Quotient.mk _ z) inferInstance
+
+def apm_t97A03_cutCircleMap (A B : Circle) (z : Circle) :
+    apm_t97A03_CutCircle A B := Quotient.mk _ z
+
+lemma apm_t97A03_continuous_cutCircleMap (A B : Circle) :
+    Continuous (apm_t97A03_cutCircleMap A B) := continuous_coinduced_rng
+
+/-- Collapse the sphere summand of the literal base to its north attachment,
+leaving the circle summand as the quotient identifying `A` and `B`. -/
+def apm_t97A03_collapseToCutCircle (A B : Circle) :
+    apm_t97A03_BaseSpace A B → apm_t97A03_CutCircle A B :=
+  Quotient.lift
+    (fun x : Sum Circle apm_t97A03_S2 ↦
+      match x with
+      | Sum.inl z => apm_t97A03_cutCircleMap A B z
+      | Sum.inr _ => apm_t97A03_cutCircleMap A B A)
+    (by
+      intro x y hxy
+      exact Relation.EqvGen.rec
+        (fun _ _ h => by
+          cases h with
+          | north => rfl
+          | south =>
+              exact Quotient.sound
+                (Relation.EqvGen.symm _ _
+                  (Relation.EqvGen.rel _ _
+                    (apm_t97A03_CutCircleRel.glue (A := A) (B := B)))))
+        (fun _ => rfl)
+        (fun _ _ _ ih => ih.symm)
+        (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂)
+        hxy)
+
+@[simp] lemma apm_t97A03_collapseToCutCircle_circle (A B z : Circle) :
+    apm_t97A03_collapseToCutCircle A B (apm_t97A03_baseCircle A B z) =
+      apm_t97A03_cutCircleMap A B z := rfl
+
+@[simp] lemma apm_t97A03_collapseToCutCircle_sphere
+    (A B : Circle) (z : apm_t97A03_S2) :
+    apm_t97A03_collapseToCutCircle A B (apm_t97A03_baseSphere A B z) =
+      apm_t97A03_cutCircleMap A B A := rfl
+
+lemma apm_t97A03_continuous_collapseToCutCircle (A B : Circle) :
+    Continuous (apm_t97A03_collapseToCutCircle A B) := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  exact ⟨apm_t97A03_continuous_cutCircleMap A B, continuous_const⟩
+
 /-- A fixed path in the literal sphere summand from the north attachment to
 the south attachment. -/
 noncomputable def apm_t97A03_sphereReturn :
