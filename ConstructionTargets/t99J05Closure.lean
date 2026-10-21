@@ -1721,6 +1721,56 @@ theorem t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
 
 #print axioms t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
 
+/-- Degreewise finite-dimensionality of successor homology in every degree
+whose overlap term vanishes.  The two patch terms are the left object of the
+transported adjacent Mayer--Vietoris segment. -/
+theorem t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton
+    (n k : ℕ)
+    [FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) (k + 1))]
+    [FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) (k + 1))]
+    [FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) k)]
+    [Subsingleton
+      (Homology ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) k)] :
+    FiniteDimensional ℚ (Homology (CP (n + 1)) (k + 1)) := by
+  let L : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+      Set (CP (n + 1))) (k + 1)
+  let T : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+      Set (CP (n + 1))) (k + 1)
+  let P : ModuleCat ℚ := L ⊞ T
+  let S := t99J05_cp_successor_mayerVietoris_ambientTransport n k
+  letI : FiniteDimensional ℚ S.X₁ := by
+    change FiniteDimensional ℚ P
+    exact LinearEquiv.finiteDimensional
+      (ModuleCat.biprodIsoProd L T).symm.toLinearEquiv
+  letI : FiniteDimensional ℚ S.X₃ := by
+    change FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) k)
+    infer_instance
+  letI : Subsingleton S.X₃ := by
+    change Subsingleton
+      (Homology ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) k)
+    infer_instance
+  exact t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
+    S
+    (t99J05_cp_successor_mayerVietoris_exact_ambient_transport n k)
+
+#print axioms t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton
+
 /-- The separately named transported arrow is exactly the first arrow of the
 transported short complex whose exactness was established above. -/
 theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
