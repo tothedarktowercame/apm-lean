@@ -36711,38 +36711,40 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Assemble finite-dimensionality, above-top/odd vanishings, and even equivalences into successor data.",
+    "Assemble the CP0 datum and successor constructor into C3, then prove the Lefschetz/Euler trace formula.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_subsingleton_one",
-      :type "successor first homology vanishes",
+    [{:name "t99J05_cp_successor_rational_homology",
+      :type "successor rational homology data",
       :status :proved,
-      :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_subsingleton_odd_gt_one"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_rational_homology",
-      :type "successor homology data",
-      :status :partial,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_subsingleton_one"
        "t99J05_cp_successor_even_equiv"
        "t99J05_cp_successor_subsingleton_above"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_homology",
+      :type "rational homology data for every CP n",
+      :status :partial,
+      :consumers [:t99J05],
+      :depends-on
+      ["t99J05_cp_successor_rational_homology"
+       "t99J05_cp_zero_rational_homology"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked successor H1 vanishing; successor-data assembly remains.",
+    "Banked successor rational-homology data; global C3 assembly remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36752,20 +36754,16 @@
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
-      :correction
-      "qualified category API and aligned H0 map representation"}
-     {:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
-      :exit 1,
-      :correction "used exactness equality directly"}],
-    :commit "e3706761a7b6db25ea8f7549c93b812ed1fa8e3d",
+      :correction "derived k>1 from odd witness after splitting k=1"}],
+    :commit "e6aacdba1105b87bdd55fa7cd1c5e3ec2b511d16",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "279717f76455057c2ec51c18d528a51ac2f797a21298a067c4b481f2a48ac73a"},
+     "e32772eee326d5711fbb2eadf58f8f21b75b18157b94d51b4c8fb17859f9790e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -37240,7 +37238,9 @@
    :id :lemma-t99j05-cp-homology,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t99j05closure-complexprojectiverationalhomologydata],
+   [:lemma-constructiontargets-t99j05closure-complexprojectiverationalhomologydata
+    :lemma-t99j05-cp-successor-rational-homology
+    :lemma-t99j05-cp-zero-rational-homology],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -48918,7 +48918,8 @@
    {:name "t99J05_cp_successor_rational_homology",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "CP n homology data implies CP(n+1) homology data",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-successor-rational-homology,
    :kind :lemma,
    :depends-on
