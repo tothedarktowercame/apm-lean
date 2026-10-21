@@ -1993,6 +1993,89 @@ noncomputable def t99J05_cp_successor_top_connecting_iso
 
 #print axioms t99J05_cp_successor_top_connecting_iso
 
+/-- Positive overlap homology below the sphere top degree vanishes. -/
+theorem t99J05_cp_successor_overlap_subsingleton_of_pos_of_lt
+    (n k : ℕ) (hk0 : 0 < k) (hktop : k < 2 * n + 1) :
+    Subsingleton
+      (Homology (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n :
+        Set (CP (n + 1))) k) := by
+  have hzEuclidean :
+      CategoryTheory.Limits.IsZero
+        (Homology (T02A06.euclideanUnitSphere (2 * n + 2)) k) :=
+    t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
+      (2 * n + 2) k hk0 (by omega)
+  have hzAffine : CategoryTheory.Limits.IsZero
+      (Homology (Metric.sphere
+        (0 : AffineCoordinates (Fin.last (n + 1))) 1) k) :=
+    hzEuclidean.of_iso
+      (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+        (t99J05_affineUnitSphereHomotopyEquivEuclidean n) k)
+  exact ModuleCat.isZero_iff_subsingleton.mp
+    (hzAffine.of_iso (t99J05_cp_successor_overlap_homologyIso_unitSphere n k))
+
+#print axioms t99J05_cp_successor_overlap_subsingleton_of_pos_of_lt
+
+/-- In every old positive even degree, the patch-to-successor map is
+bijective: the two neighboring overlap groups vanish. -/
+theorem t99J05_cp_successor_middle_even_bijective
+    (n : ℕ) (i : Fin (n + 1)) (hi : 0 < i.val) :
+    Function.Bijective
+      (t99J05_cp_successor_mayerVietoris_unionTransport n (2 * i.val)).g.hom := by
+  have hitop := i.isLt
+  rw [show 2 * i.val = (2 * i.val - 1) + 1 by omega]
+  let S := t99J05_cp_successor_mayerVietoris_unionTransport n
+    ((2 * i.val - 1) + 1)
+  let T := t99J05_cp_successor_mayerVietoris_ambientTransport n (2 * i.val - 1)
+  letI : Subsingleton S.X₁ := by
+    change Subsingleton
+      (Homology (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n :
+        Set (CP (n + 1))) ((2 * i.val - 1) + 1))
+    exact t99J05_cp_successor_overlap_subsingleton_of_pos_of_lt
+      n ((2 * i.val - 1) + 1) (by omega) (by omega)
+  letI : Subsingleton T.X₃ := by
+    change Subsingleton
+      (Homology (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n :
+        Set (CP (n + 1))) (2 * i.val - 1))
+    exact t99J05_cp_successor_overlap_subsingleton_of_pos_of_lt
+      n (2 * i.val - 1) (by omega) (by omega)
+  have hS := t99J05_cp_successor_mayerVietoris_union_transport n
+    ((2 * i.val - 1) + 1)
+  have hT := t99J05_cp_successor_mayerVietoris_exact_ambient_transport
+    n (2 * i.val - 1)
+  have hshared : S.g = T.f := by
+    rfl
+  apply t99J05_bijective_of_adjacent_exact_of_subsingleton S.f S.g T.g
+  · exact hS.moduleCat_range_eq_ker
+  · rw [hshared]
+    exact hT.moduleCat_range_eq_ker
+
+#print axioms t99J05_cp_successor_middle_even_bijective
+
+/-- The old positive even homology groups survive unchanged in the successor. -/
+noncomputable def t99J05_cp_successor_middle_even_iso
+    (n : ℕ) (i : Fin (n + 1)) (hi : 0 < i.val) :
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) (2 * i.val) ≃ₗ[ℚ]
+      Homology (CP (n + 1)) (2 * i.val) := by
+  let L : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+      Set (CP (n + 1))) (2 * i.val)
+  let T : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+      Set (CP (n + 1))) (2 * i.val)
+  letI : Subsingleton T :=
+    t99J05_cp_successor_topPatch_subsingleton_positive n (2 * i.val) (by omega)
+  letI : Unique T :=
+    { default := 0
+      uniq := fun x => Subsingleton.elim x 0 }
+  exact ((ModuleCat.biprodIsoProd L T).toLinearEquiv.trans
+      (LinearEquiv.prodUnique (R := ℚ) (M := L) (M₂ := T))).symm.trans
+    (LinearEquiv.ofBijective
+      (t99J05_cp_successor_mayerVietoris_unionTransport n (2 * i.val)).g.hom
+      (t99J05_cp_successor_middle_even_bijective n i hi))
+
+#print axioms t99J05_cp_successor_middle_even_iso
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
