@@ -38061,6 +38061,19 @@
     [{:cmd "closure draft compile",
       :exit 1,
       :correction "Removed unavailable rewrite."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792625538945-1806-0e90a83f",
+     :commands
+     ["git show/diff 9ecb61c45"
+      "git diff --check 9ecb61c45^ 9ecb61c45"
+      "lake env lean ConstructionTargets/t94A06Closure.lean"
+      "lake env lean problems/t94A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and rg placeholders on recorded blobs"],
+     :finding
+     "PASS: 9ecb61c45 changes only scoped t94A06Closure; fixture hash 27df31...dbdd matches. Fresh detached gates pass; registry 170/170; closure placeholders 0; standard axioms. The bad-value set is correctly included in the image of nonsurjective mfderiv points, with equality orientation g x=y matching image membership. New compiled adapter follows 02cbdc9ab; chartwise critical-image nullity and aggregation remain listed. Main retains one pre-existing sorry."},
     :commit "9ecb61c45",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
@@ -38069,7 +38082,7 @@
      "27df31976b9e0681918b7f610ff69f78572b7f060019d66a225752955cf6dbdd"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -38087,7 +38100,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smoothness of the normal part; chartwise Morse-Sard remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked null-critical-values adapter; chartwise Sard remains.",
    :id :program-2026-10-13-close-t94a06,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -38107,7 +38120,11 @@
     {:job 3,
      :commit "02cbdc9ab",
      :reason
-     "Banked smoothness of the normal part; chartwise Morse-Sard remains."}]}
+     "Banked smoothness of the normal part; chartwise Morse-Sard remains."}
+    {:job 4,
+     :commit "9ecb61c45",
+     :reason
+     "Banked null-critical-values adapter; chartwise Sard remains."}]}
   {:consumer :t01J04,
    :stop-count 0,
    :phase :implementation,
@@ -49745,7 +49762,7 @@
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a06_ae_regularValue_of_criticalValues_null",
@@ -49755,7 +49772,9 @@
     :reported-by [:program-2026-10-13-close-t94a06],
     :type "null critical-value image implies AE regular values",
     :area "parametric-transversality-sard",
-    :proved-in :program-2026-10-13-close-t94a06},
+    :proved-in :program-2026-10-13-close-t94a06,
+    :banked-by :program-2026-10-13-close-t94a06,
+    :banked-commit "9ecb61c45"},
    :id :lemma-apm-t94a06-ae-regularvalue-of-criticalvalues-null,
    :kind :lemma,
    :depends-on [],
