@@ -119610,66 +119610,49 @@
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Apply smooth corrected inverses to target coordinates; package local lifts, then flow/Main.",
+    "Transport corrected coordinate lifts through tangent charts; package local lifts, then flow/Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked"],
+    :warnings ["Main sorry" "untracked review dirs preserved"],
     :missing-theorems
-    [{:name "exists_nhds_contDiffOn_corrected_rightInverse",
-      :type "smooth exact corrected inverses on a neighborhood",
+    [{:name "exists_nhds_contDiffOn_corrected_lift",
+      :type "smooth exact coordinate lift on stable neighborhood",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on
-      ["exists_nhds_corrected_rightInverse"
-       "contDiff_rightInverse_of_comp_isInvertible"],
+      :depends-on ["exists_nhds_contDiffOn_corrected_rightInverse"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
       :depends-on
-      ["exists_nhds_contDiffOn_corrected_rightInverse"
+      ["exists_nhds_contDiffOn_corrected_lift"
        "hasLocalSmoothLift_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "e1b1c0ef349db33e841819e72c1bb18cf6d505745998b0a7964098e5af85d8bd",
+     "d46f8ed842b125217322a7815a41f265c338275b590cd5cc829a58846be38391",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked smooth corrected inverses.",
+    :reason "Banked neighborhoodwise corrected coordinate lifts.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :correction "used hA.continuous.continuousAt"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792611854380-1432-d909aea3",
-     :commands
-     ["git show/diff 12a34ded"
-      "lake env lean ConstructionTargets/t98A06Closure.lean"
-      "lake env lean problems/t98A06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 12a34ded changes only t98A06Closure.lean (+30), adding compiled smooth exact corrected right inverses after prior history af279cbc. Fixture 9838452b, source 44399e71, implementation e1b1c0ef; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: B(x)=A(x)oR is smoothly varying and invertible on U; smoothness of inversion and continuous-linear composition gives Q(x)=R o B(x)^-1 smooth on U, while associativity and B(x)oB(x)^-1=id prove A(x)oQ(x)=id. E m/E n directions align. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; applying Q to target coordinates, packaging local lifts, compact flow, and final assembly remain listed."},
-    :commit "12a34ded994229caea7bd246e3acc5255d2ba041",
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
+    :commit "922873b7df5222448c770f60fb79118288af2e49",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119677,7 +119660,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -120143,7 +120126,8 @@
     :lemma-eventually-isinvertible-comp-rightinverse
     :lemma-exists-nhds-isinvertible-comp-rightinverse
     :lemma-exists-nhds-corrected-rightinverse
-    :lemma-exists-nhds-contdiffon-corrected-rightinverse],
+    :lemma-exists-nhds-contdiffon-corrected-rightinverse
+    :lemma-exists-nhds-contdiffon-corrected-lift],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -123219,6 +123203,23 @@
    :depends-on
    [:lemma-chartcomponentsums-eq-zero-of-exactliftcomparison
     :lemma-tophomologymap-eq-zero-of-chartcomponentsums],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_nhds_contDiffOn_corrected_lift",
+    :type "smooth exact coordinate lift on stable neighborhood"},
+   :lemma
+   {:name "exists_nhds_contDiffOn_corrected_lift",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "smooth exact coordinate lift on stable neighborhood",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-exists-nhds-contdiffon-corrected-lift,
+   :kind :lemma,
+   :depends-on [:lemma-exists-nhds-contdiffon-corrected-rightinverse],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
