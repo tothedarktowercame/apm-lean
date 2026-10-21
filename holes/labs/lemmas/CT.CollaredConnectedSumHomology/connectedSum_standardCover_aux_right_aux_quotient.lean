@@ -427,7 +427,135 @@ theorem connectedSum_standardCover_aux_radial {n : ℕ} {M : Type}
       (∀ p, H p ∈ connectedSum_standardCover_aux_collar c) ∧
       (∀ s (h : c.boundaryMap s ∈ connectedSum_standardCover_aux_collar c) t,
         H (⟨_, h⟩, t) = c.boundaryMap s) := by
-  sorry
+  classical
+  let C := connectedSum_standardCover_aux_collar c
+  let j : C → Set.range c.largeMap := fun x ↦
+    ⟨x.1.1, by
+      rcases x.2 with ⟨y, hy, hxy⟩
+      exact ⟨y, hxy⟩⟩
+  let d : C → Disk n 2 := fun x ↦ c.largeEmbedding.toHomeomorph.symm (j x)
+  have hj : Continuous j := by
+    exact Continuous.subtype_mk (continuous_subtype_val.comp continuous_subtype_val) _
+  have hd : Continuous d := c.largeEmbedding.toHomeomorph.symm.continuous.comp hj
+  have hd_image (x : C) : c.largeMap (d x) = x.1.1 := by
+    exact congrArg Subtype.val (c.largeEmbedding.toHomeomorph.apply_symm_apply (j x))
+  have hd_norm (x : C) : 1 ≤ ‖(d x).1‖ :=
+    connectedSum_standardCover_aux_left_aux_norm_ge_one c x.1 (d x) (hd_image x)
+  have hd_ne (x : C) : ‖(d x).1‖ ≠ 0 :=
+    ne_of_gt (lt_of_lt_of_le zero_lt_one (hd_norm x))
+  let rv : C → E n := fun x ↦ (‖(d x).1‖)⁻¹ • (d x).1
+  have hrv_norm (x : C) : ‖rv x‖ = 1 := by
+    simp [rv, norm_smul, Real.norm_of_nonneg (norm_nonneg _), hd_ne x]
+  let r : C(C, Sphere n) :=
+    ⟨fun x ↦ ⟨rv x, by simpa [Metric.mem_sphere, dist_zero_right] using hrv_norm x⟩, by
+      apply Continuous.subtype_mk
+      exact ((continuous_norm.comp
+        (continuous_subtype_val.comp hd)).inv₀ (fun x ↦ hd_ne x)).smul
+          (continuous_subtype_val.comp hd)⟩
+  let v : C × unitInterval → E n := fun p ↦
+    ((1 - (p.2 : ℝ)) + (p.2 : ℝ) * (‖(d p.1).1‖)⁻¹) • (d p.1).1
+  have hv_norm (p : C × unitInterval) :
+      ‖v p‖ = (1 - (p.2 : ℝ)) * ‖(d p.1).1‖ + (p.2 : ℝ) := by
+    have hn : 0 < ‖(d p.1).1‖ := lt_of_lt_of_le zero_lt_one (hd_norm p.1)
+    have ht0 : 0 ≤ (p.2 : ℝ) := p.2.2.1
+    have ht1 : (p.2 : ℝ) ≤ 1 := p.2.2.2
+    have hinv : 0 < (‖(d p.1).1‖)⁻¹ := inv_pos.mpr hn
+    have ha : 0 ≤ (1 - (p.2 : ℝ)) + (p.2 : ℝ) * (‖(d p.1).1‖)⁻¹ := by
+      have hprod : 0 ≤ (p.2 : ℝ) * (‖(d p.1).1‖)⁻¹ := mul_nonneg ht0 hinv.le
+      linarith
+    simp only [v, norm_smul, Real.norm_eq_abs]
+    rw [abs_of_nonneg ha]
+    field_simp
+  have hv_ge (p : C × unitInterval) : 1 ≤ ‖v p‖ := by
+    rw [hv_norm]
+    nlinarith [hd_norm p.1, p.2.2.1, p.2.2.2]
+  have hv_le (p : C × unitInterval) : ‖v p‖ ≤ 2 := by
+    rw [hv_norm]
+    have hn2 : ‖(d p.1).1‖ ≤ 2 := by
+      have hh := (d p.1).2
+      change dist (d p.1).1 0 ≤ 2 at hh
+      simpa [dist_zero_right] using hh
+    nlinarith [p.2.2.1, p.2.2.2]
+  let w : C × unitInterval → Disk n 2 := fun p ↦
+    ⟨v p, by simpa [Metric.mem_closedBall, dist_zero_right] using hv_le p⟩
+  have hw_cont : Continuous w := by
+    apply Continuous.subtype_mk
+    exact (((continuous_const.sub
+      (continuous_subtype_val.comp continuous_snd)).add
+        ((continuous_subtype_val.comp continuous_snd).mul
+          ((continuous_norm.comp
+            (continuous_subtype_val.comp (hd.comp continuous_fst))).inv₀
+              (fun p ↦ hd_ne p.1)))).smul
+        (continuous_subtype_val.comp (hd.comp continuous_fst)))
+  have hw_punctured (p : C × unitInterval) :
+      c.largeMap (w p) ∉ c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1} := by
+    rintro ⟨y, hy, heq⟩
+    have heq' : w p = unitToLarge n y := by
+      apply c.largeEmbedding.injective
+      exact heq.symm.trans (congrFun c.compatible y).symm
+    have : ‖v p‖ < 1 := by
+      have hv : v p = y.1 := congrArg Subtype.val heq'
+      rw [hv]
+      simpa [dist_zero_right] using hy
+    exact (not_lt_of_ge (hv_ge p)) this
+  let H : C(C × unitInterval, c.Punctured) :=
+    ⟨fun p ↦ ⟨c.largeMap (w p), hw_punctured p⟩,
+      Continuous.subtype_mk (c.largeEmbedding.continuous.comp hw_cont) _⟩
+  refine ⟨r, H, ?_, ?_, ?_, ?_, ?_⟩
+  · intro s hs
+    apply Subtype.ext
+    change rv ⟨c.boundaryMap s, hs⟩ = s.1
+    have hd_eq : d ⟨c.boundaryMap s, hs⟩ = unitToLarge n
+          ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩ := by
+      apply c.largeEmbedding.injective
+      rw [hd_image]
+      exact (congrFun c.compatible _).symm
+    have hs_norm : ‖s.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using s.2
+    simp [rv, hd_eq, unitToLarge, hs_norm]
+  · intro x
+    apply Subtype.ext
+    change c.largeMap (w (x, 0)) = x.1.1
+    rw [show w (x, 0) = d x by
+      apply Subtype.ext
+      simp [w, v]]
+    exact hd_image x
+  · intro x
+    apply Subtype.ext
+    change c.largeMap (w (x, 1)) = c.smallMap _
+    rw [show w (x, 1) = unitToLarge n
+        ⟨rv x, by simpa [Metric.mem_closedBall, dist_zero_right] using (hrv_norm x).le⟩ by
+      apply Subtype.ext
+      change v (x, 1) = rv x
+      simp [v, rv]]
+    exact congrFun c.compatible _
+  · intro p
+    change c.largeMap (w p) ∈ c.largeMap '' {y : Disk n 2 | dist y.1 0 < 2}
+    refine ⟨w p, ?_, rfl⟩
+    have hd_lt : ‖(d p.1).1‖ < 2 := by
+      rcases p.1.2 with ⟨y, hy, hyeq⟩
+      have : d p.1 = y := c.largeEmbedding.injective ((hd_image p.1).trans hyeq.symm)
+      change dist y.1 0 < 2 at hy
+      simpa [this, dist_zero_right] using hy
+    have hvlt : ‖v p‖ < 2 := by
+      rw [hv_norm]
+      have hprod : 0 ≤ (p.2 : ℝ) * (‖(d p.1).1‖ - 1) :=
+        mul_nonneg p.2.2.1 (sub_nonneg.mpr (hd_norm p.1))
+      nlinarith
+    simpa [w, dist_zero_right] using hvlt
+  · intro s hs t
+    apply Subtype.ext
+    change c.largeMap (w (⟨_, hs⟩, t)) = c.smallMap _
+    have hd_eq : d ⟨c.boundaryMap s, hs⟩ = unitToLarge n
+          ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩ := by
+      apply c.largeEmbedding.injective
+      rw [hd_image]
+      exact (congrFun c.compatible _).symm
+    have hs_norm : ‖s.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using s.2
+    rw [show w (⟨_, hs⟩, t) = unitToLarge n
+        ⟨s.1, by simpa [Metric.mem_closedBall, dist_zero_right] using hs_norm.le⟩ by
+      apply Subtype.ext
+      simp [w, v, hd_eq, unitToLarge, hs_norm]]
+    exact congrFun c.compatible _
 
 /-- LEAF. Quotient step for the left thickening: a radial retraction of the
 second collar gives a homotopy equivalence from `thickLeft` to the first
