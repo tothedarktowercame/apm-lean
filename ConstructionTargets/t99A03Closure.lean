@@ -78,6 +78,39 @@ theorem n3PresentedParityCharacter_generator_ne_one :
     n3PresentedParityCharacter (PresentedGroup.of (0 : Fin 3)) ≠ 1 := by
   simp [n3ParityGenerator]
 
+/-- The descended parity character reaches both sheets. -/
+theorem n3PresentedParityCharacter_surjective :
+    Function.Surjective n3PresentedParityCharacter := by
+  intro y
+  rcases y with ⟨y⟩
+  interval_cases y
+  · refine ⟨1, ?_⟩
+    rfl
+  · refine ⟨PresentedGroup.of (0 : Fin 3), ?_⟩
+    rfl
+
+/-- Hence the parity kernel is an index-two normal subgroup. -/
+theorem n3PresentedParityCharacter_ker_index :
+    n3PresentedParityCharacter.ker.index = 2 := by
+  rw [Subgroup.index_ker]
+  have hrange : n3PresentedParityCharacter.range = ⊤ :=
+    MonoidHom.range_eq_top.mpr n3PresentedParityCharacter_surjective
+  rw [hrange]
+  norm_num [Nat.card_eq_fintype_card]
+
+/-- The sheet quotient carried by the parity kernel is literally the
+two-element deck group. -/
+noncomputable def n3PresentedParityKernelQuotientEquiv :
+    (N3PresentedGroup ⧸ n3PresentedParityCharacter.ker) ≃*
+      Multiplicative (ZMod 2) :=
+  QuotientGroup.quotientKerEquivOfSurjective
+    n3PresentedParityCharacter n3PresentedParityCharacter_surjective
+
+@[simp] theorem n3PresentedParityKernelQuotientEquiv_mk (g : N3PresentedGroup) :
+    n3PresentedParityKernelQuotientEquiv
+        (QuotientGroup.mk g) = n3PresentedParityCharacter g := by
+  rfl
+
 /-- A nonidentity deck transformation of a connected covering has no fixed
 point, by uniqueness of lifts against the identity map. -/
 theorem deckTransformation_fixedPointFree
