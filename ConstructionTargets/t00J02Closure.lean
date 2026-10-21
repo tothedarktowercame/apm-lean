@@ -2277,6 +2277,35 @@ theorem topHomologyMap_eq_zero_of_exists_locallyInjective_calculations
 
 #print axioms topHomologyMap_eq_zero_of_exists_locallyInjective_calculations
 
+/-- Direct composition of Sard nullity on the circle parameter with the
+canonical signed-count calculation interface. -/
+theorem topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S] [MeasurableSpace Circle]
+    (mu : MeasureTheory.Measure Circle) [NeZero mu]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (hnull : mu ((fun z : Circle ↦ z) '' {z | ¬ ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v}) = 0)
+    (hcalculations : ∀ y (hy : y ∈ Set.range c)
+      (hlocal : LocallyInjectiveAlongFiber f y),
+      letI := regularFiberFintype_of_locallyInjectiveAlongFiber f y hlocal
+      CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) :
+    homologyMap 2 f = 0 :=
+  topHomologyMap_eq_zero_of_exists_locallyInjective_calculations f c e
+    (exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero
+      mu f c hf htrans hnull) hcalculations
+
+#print axioms topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations
+
 /-- The integrated regular-fiber witness is sufficient for top-homology
 vanishing; no additional component-lift choice is needed at this stage. -/
 theorem CanonicalRegularFiberWitness.topHomologyMap_eq_zero
