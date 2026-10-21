@@ -119152,22 +119152,22 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:consumer :t00J02,
     :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Build base-chart transport and witnesses; then signed counts and Main.",
+    "Prove chart-map nullity, finite cover, signed counts, Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "artifacts preserved"],
+    :warnings ["Main sorry" "artifacts"],
     :missing-theorems
-    [{:name "circleChartTransition_image_null",
-      :type "circle-chart transitions preserve null sets",
+    [{:name "circleChartInverseExtension_measurable",
+      :type "inverse chart extension measurable",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on ["circleChartTransition_image_null"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119176,20 +119176,20 @@
       :depends-on
       ["badSet_measure_zero_of_finite_targetChart_witnesses"
        "circleHaarMeasure_ne_zero"
-       "circleChartTransition_image_null"],
+       "circleChartInverseExtension_measurable"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "672e5c62ba7ffd2e12e433b2f6745fcbd1627297c0ca914a3b5fcf4cf5a143ca",
+     "da31099559c14ca776061087ebfa413b32cac720d05d72c1073f524560b457c7",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked circle-chart null transitions.",
+    :reason "Banked inverse-chart measures.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119198,22 +119198,10 @@
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "closure compile x4",
+    [{:cmd "closure compile",
       :exit 1,
-      :correction "fixed model/measure args"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792600426221-1127-80fa8c9f",
-     :commands
-     ["git show/diff 7c03a51a"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 7c03a51a changes only t00J02Closure.lean (+32), adding compiled circle-chart null-set transport after prior history 715311c4. Fixture afb497a6, source 0b3b4888, implementation 672e5c62; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: z-chart inverse followed by y-chart is smooth on s under the stated target/source hypotheses, so its image of a Haar-null coordinate set is Haar-null. Domain/codomain are both EuclideanSpace R (Fin 1), and chart overlap boundaries are explicit. The theorem uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; base-chart witnesses and H2 assembly remain listed."},
-    :commit "7c03a51a2392ec7cf706d88afa9edab3d83de5ce",
+      :correction "classical unfold"}],
+    :commit "e832048147448a6485a792b3b667c6f3bc772a89",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119221,7 +119209,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119858,7 +119846,8 @@
     :lemma-badset-measure-zero-of-finite-targetcharts
     :lemma-badset-measure-zero-of-finite-targetchart-witnesses
     :lemma-circlehaarmeasure-ne-zero
-    :lemma-circlecharttransition-image-null],
+    :lemma-circlecharttransition-image-null
+    :lemma-circlechartinverseextension-measurable],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122602,6 +122591,23 @@
    :id :lemma-circlecharttransition-image-null,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleChartInverseExtension_measurable",
+    :type "inverse chart extension measurable"},
+   :lemma
+   {:name "circleChartInverseExtension_measurable",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "inverse chart extension measurable",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-circlechartinverseextension-measurable,
+   :kind :lemma,
+   :depends-on [:lemma-circlecharttransition-image-null],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
