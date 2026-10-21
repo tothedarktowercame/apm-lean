@@ -119197,6 +119197,18 @@
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792612527371-1448-b09469d3",
+     :commands
+     ["git show/diff 22f4b77d"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 22f4b77d changes only t00J02Closure.lean (+22), adding a compiled incidence local-injectivity endpoint beyond program history; its exact tree also contains the preceding compiled direction-lift bridge. Fixture afb497a6, source 0b3b4888, implementation c2946c70; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the incidence regular fiber supplies literal circle-direction lifts, and the established direction-lifts endpoint returns y in range c with LocallyInjectiveAlongFiber f y. Surface and Circle tangent models remain aligned through the prior bridge. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; canonical finite-fiber calculations, signed count, H2, and final assembly remain listed."},
     :commit "22f4b77d7b0bd06718e31633b351dda3aba9b65d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence regular fiber.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked local injectivity.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119582,7 +119594,10 @@
      :reason "Banked fixed-chart regular value."}
     {:job 9,
      :commit "469ee924ae6838ba2d7bfbbf6168f99ed48165cb",
-     :reason "Banked incidence regular fiber."}]}
+     :reason "Banked incidence regular fiber."}
+    {:job 1,
+     :commit "22f4b77d7b0bd06718e31633b351dda3aba9b65d",
+     :reason "Banked local injectivity."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122980,7 +122995,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -122992,7 +123007,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "regular incidence fiber gives local injectivity",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "22f4b77d7b0bd06718e31633b351dda3aba9b65d"},
    :id
    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-incidenceprojection,
    :kind :lemma,
