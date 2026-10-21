@@ -2593,6 +2593,17 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
   | succ n ih =>
       simpa only [Nat.succ_eq_add_one] using hstep n ih
 
+/-- Rational singular-homology data for every finite-dimensional complex
+projective space, assembled from the literal `CP 0` computation and the
+Mayer--Vietoris successor step. -/
+noncomputable def t99J05_cp_homology
+    (n : ℕ) : ComplexProjectiveRationalHomologyData n :=
+  complexProjectiveRationalHomologyData_of_zero_of_step
+    t99J05_cp_zero_rational_homology
+    t99J05_cp_successor_rational_homology n
+
+#print axioms t99J05_cp_homology
+
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
 #print axioms cp_zero_subsingleton
 #print axioms cpZeroHomologyDataOfSubsingletonData
