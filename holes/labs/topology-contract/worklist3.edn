@@ -36749,6 +36749,19 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792585775089-751-1cf6fce0",
+     :commands
+     ["git show/diff-tree ac2a9e4c5"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check ac2a9e4c5^ ac2a9e4c5"],
+     :finding
+     "PASS: new commit ac2a9e4c5 changes only scoped Closure; fixture/blob SHA matches a28d1ae2.... The ShortComplex transports the intersection, biproduct-patch, and union terms through the previously proved isomorphisms in the correct directions; its zero proof comes from the original complex, and exactness follows from the standard transport theorem applied to established MV exactness. Representation boundaries are explicit. Closure and Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Exactness milestone is proved and successor homology remains listed."},
     :commit "ac2a9e4c5",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36757,7 +36770,7 @@
      "a28d1ae25ad750c58538435b83af352932f02746b592b2ceafe1320af1e3c566"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36775,7 +36788,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal-union and composite successor homology isomorphisms; exactness transport remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed Mayer-Vietoris exactness transported to literal CP successor homology; the dimension step remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36934,7 +36947,11 @@
     {:job 8,
      :commit "b35782c01",
      :reason
-     "Committed literal-union and composite successor homology isomorphisms; exactness transport remains."}]}
+     "Committed literal-union and composite successor homology isomorphisms; exactness transport remains."}
+    {:job 9,
+     :commit "ac2a9e4c5",
+     :reason
+     "Committed Mayer-Vietoris exactness transported to literal CP successor homology; the dimension step remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48314,7 +48331,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_union_transport",
@@ -48324,7 +48341,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "transport MV union term to literal CP successor",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ac2a9e4c5"},
    :id :lemma-t99j05-cp-successor-mayervietoris-union-transport,
    :kind :lemma,
    :depends-on
@@ -48710,13 +48729,15 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_overlap_rational_topHomology"},
    :lemma
    {:name "t99J05_cp_successor_overlap_rational_topHomology",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id :lemma-t99j05-cp-successor-overlap-rational-tophomology,
    :kind :lemma,
    :depends-on [],
