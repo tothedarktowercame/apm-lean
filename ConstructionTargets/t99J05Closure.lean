@@ -1709,6 +1709,18 @@ theorem t99J05_finiteDimensional_middle_of_exact_of_subsingleton
 #print axioms t99J05_surjective_of_subsingleton
 #print axioms t99J05_finiteDimensional_middle_of_exact_of_subsingleton
 
+/-- The categorical `ShortComplex.Exact` form of the vanishing-term finite
+extraction, ready for direct use on transported Mayer--Vietoris segments. -/
+theorem t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
+    (S : CategoryTheory.ShortComplex (ModuleCat ℚ)) (hS : S.Exact)
+    [FiniteDimensional ℚ S.X₁] [FiniteDimensional ℚ S.X₃]
+    [Subsingleton S.X₃] : FiniteDimensional ℚ S.X₂ := by
+  apply t99J05_finiteDimensional_middle_of_exact_of_subsingleton S.f S.g
+  rw [LinearMap.exact_iff]
+  exact hS.moduleCat_range_eq_ker.symm
+
+#print axioms t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
+
 /-- The separately named transported arrow is exactly the first arrow of the
 transported short complex whose exactness was established above. -/
 theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
