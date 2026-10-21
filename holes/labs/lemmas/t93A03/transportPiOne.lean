@@ -106,11 +106,40 @@ theorem twoRankOneFreeProduct :
 /-- **LEAF (P6).** Transport a based fundamental-group computation across
 a homeomorphism, allowing the basepoint to move to its inverse image. -/
 -- BEGIN SEAT AREA
+def transportPiOne_aux_homeomorph {X Y : Type*}
+    [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
 theorem transportPiOne {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
     (e : X ≃ₜ Y) (y : Y) (G : Type*) [Group G]
     (h : Nonempty (FundamentalGroup Y y ≃* G)) :
     Nonempty (FundamentalGroup X (e.symm y) ≃* G) := by
-  sorry
+  obtain ⟨h⟩ := h
+  exact ⟨(transportPiOne_aux_homeomorph e.symm y).symm.trans h⟩
 -- END SEAT AREA
 
 end T93A03PiOne
