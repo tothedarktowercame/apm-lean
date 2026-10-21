@@ -2357,6 +2357,30 @@ theorem frozenBoundaryGraphH1CycleComparison_of_leftInverse_onto
   apply frozenBoundaryGraphH1CycleComparison_of_leftInverse_range c l hleft
   exact frozenBoundaryGraphH1Comparison_range c hcycle honto
 
+/-- If the geometric comparison is constructed directly with codomain the
+graph-cycle kernel, cycle-valuedness is structural.  A left inverse and
+surjectivity then give the required six-coordinate H1 comparison. -/
+theorem frozenBoundaryGraphH1CycleComparison_of_kernel_leftInverse_onto
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ]
+        LinearMap.ker frozenGraphBoundary)
+    (l : LinearMap.ker frozenGraphBoundary →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hleft : l.comp c = LinearMap.id)
+    (honto : Function.Surjective c) :
+    Nonempty
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) := by
+  refine ⟨(LinearEquiv.ofBijective c ⟨?_, honto⟩).trans
+    frozenGraphBoundaryKernelEquiv⟩
+  intro x y hxy
+  have hx := LinearMap.congr_fun hleft x
+  have hy := LinearMap.congr_fun hleft y
+  rw [LinearMap.comp_apply, LinearMap.id_apply] at hx hy
+  exact hx.symm.trans ((congrArg l hxy).trans hy)
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3484,6 +3508,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphH1CycleComparison_of_leftInverse_range
 #print axioms frozenBoundaryGraphH1Comparison_range
 #print axioms frozenBoundaryGraphH1CycleComparison_of_leftInverse_onto
+#print axioms frozenBoundaryGraphH1CycleComparison_of_kernel_leftInverse_onto
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
