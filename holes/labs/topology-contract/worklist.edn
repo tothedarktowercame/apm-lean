@@ -119202,6 +119202,18 @@
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 1,
       :finding "Qualified MeasureTheory.measure_mono_null."}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792578565642-607-41da06ba",
+     :commands
+     ["git show/diff 367f0e9a"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 367f0e9a changes only t00J02Closure.lean (+18), adding a compiled bad-parameter nullity transport after prior history. Fixture afb497a6, source 0b3b4888, implementation d9e587b0, registry 170/170, and placeholders closure=0/Main=1 reproduce. Set orientation is correct: the exact bad-parameter predicate is a subset of the null critical set, so measure_mono_null yields its nullity; the predicate representation is identical at premise and conclusion. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; proving inclusion/Sard nullity, signed-count identities, and final assembly remain listed."},
     :commit "367f0e9ab2bd9b6fd5035c45dd8956982b720d3c",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119210,7 +119222,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119228,7 +119240,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked direct bad-parameter nullity adapter.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nullity transport from a null critical superset.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119501,7 +119513,11 @@
      :reason "Banked canonical calculation bundle constructor."}
     {:job 7,
      :commit "235a7aaf3",
-     :reason "Banked direct bad-parameter nullity adapter."}]}
+     :reason "Banked direct bad-parameter nullity adapter."}
+    {:job 8,
+     :commit "367f0e9ab2bd9b6fd5035c45dd8956982b720d3c",
+     :reason
+     "Banked nullity transport from a null critical superset."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122054,7 +122070,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -122067,7 +122083,9 @@
     :type
     "bad derivative-lift parameters are null when contained in a null critical set",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "367f0e9ab2bd9b6fd5035c45dd8956982b720d3c"},
    :id
    :lemma-badcircleparameters-measure-zero-of-subset-nullcriticalset,
    :kind :lemma,
