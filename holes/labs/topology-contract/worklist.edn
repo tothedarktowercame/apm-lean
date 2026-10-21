@@ -119152,45 +119152,45 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove bad-set nullity and component/global signed-count identities from transverse disk-bounded geometry; assemble Main.",
+    "Prove bad-set inclusion/Sard nullity and component/global signed-count identities; assemble Main.",
     :outcome :stop,
-    :warnings ["Main registered sorry" "unrelated edits preserved"],
+    :warnings
+    ["Main registered sorry" "unrelated review artifacts preserved"],
     :missing-theorems
     [{:name
-      "exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero",
+      "badCircleParameters_measure_zero_of_subset_nullCriticalSet",
       :type
-      "direct bad-parameter-set nullity selects a locally injective circle fiber",
+      "bad derivative-lift parameters are null when contained in a null critical set",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["exists_circleValue_locallyInjectiveAlongFiber_of_badParameters_measure_zero"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero"
+      ["badCircleParameters_measure_zero_of_subset_nullCriticalSet"
        "CanonicalRegularFiberDegreeCalculations.ofComponentComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "a6f3bc5bcc0e0ad33ce4dfcf93fe6044d8c572c52abdaa09e9234a787aead638",
+     "d9e587b028db2dd23d43f3c18f302db1a6e5a00719da0e725a8ee68c223d6cd4",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked direct bad-parameter nullity adapter.",
+    :reason "Banked nullity transport from a null critical superset.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119201,20 +119201,8 @@
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 1,
-      :finding "Corrected Unicode circle-model notation."}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792577573594-577-133d9be7",
-     :commands
-     ["git show/diff 235a7aaf3"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 235a7aaf3 changes only t00J02Closure.lean (+24), adding a compiled direct bad-set nullity adapter after prior history. Fixture afb497a6, source 0b3b4888, implementation a6f3bc5b, registry 170/170, and placeholders closure=0/Main=1 reproduce. Representation and orientation are exact: Set.image_id converts direct bad-set nullity to the prior selector premise without changing the predicate or derivative equation, yielding the locally-injective circle fiber. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; proving nullity and signed-count identities from geometry plus final assembly remain listed."},
-    :commit "235a7aaf3",
+      :finding "Qualified MeasureTheory.measure_mono_null."}],
+    :commit "367f0e9ab2bd9b6fd5035c45dd8956982b720d3c",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119222,7 +119210,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119764,7 +119752,8 @@
     :lemma-tophomologymap-eq-zero-of-badparameters-measure-zero-calculations
     :lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison
     :lemma-canonicalregularfiberdegreecalculations-ofcomponentcomparison
-    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badset-measure-zero],
+    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badset-measure-zero
+    :lemma-badcircleparameters-measure-zero-of-subset-nullcriticalset],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122062,6 +122051,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "badCircleParameters_measure_zero_of_subset_nullCriticalSet",
+    :type
+    "bad derivative-lift parameters are null when contained in a null critical set"},
+   :lemma
+   {:name "badCircleParameters_measure_zero_of_subset_nullCriticalSet",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "bad derivative-lift parameters are null when contained in a null critical set",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-badcircleparameters-measure-zero-of-subset-nullcriticalset,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
