@@ -1576,6 +1576,36 @@ def targetChartDomain
     TopologicalSpace.Opens M :=
   ⟨g ⁻¹' (chartAt F y).source, (chartAt F y).open_source.preimage hg⟩
 
+/-- Restriction to an open source subtype does not change derivative
+surjectivity at the represented point. -/
+theorem mfderiv_openSubtype_not_surjective
+    {E F M : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    (U : TopologicalSpace.Opens M) (g : M → F) (x : U)
+    (hg : MDifferentiableAt (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) g x.1) :
+    (¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) g x.1)) →
+      ¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+          (fun q : U ↦ g q) x) := by
+  have hval : MDifferentiableAt (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ E) (Subtype.val : U → M) x :=
+    (contMDiff_subtype_val (I := modelWithCornersSelf ℝ E) (n := ∞)).mdifferentiableAt
+      (by simp)
+  rw [show (fun q : U ↦ g q) = g ∘ (Subtype.val : U → M) by rfl,
+    mfderiv_comp x hg hval]
+  intro hn hs
+  apply hn
+  intro v
+  obtain ⟨u, hu⟩ := hs v
+  exact ⟨mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E)
+    (Subtype.val : U → M) x u, hu⟩
+
+#print axioms mfderiv_openSubtype_not_surjective
+
 /-- On its target-chart domain, a smooth manifold-valued map has a globally
 smooth vector-valued coordinate representative. -/
 theorem targetChartCoordinate_contMDiff
