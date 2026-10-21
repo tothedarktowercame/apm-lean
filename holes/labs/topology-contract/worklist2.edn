@@ -89423,6 +89423,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan; git show --check; sha256sum", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792596774529-1045-6f153276",
+     :commands
+     ["git show/diff-tree 0450e4bee"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit 0450e4bee changes only t97A03Closure after history dcfa23365; fixture SHA 77c63d2c... matches. For arbitrary fiber permutations, nonidentity iff some point moves is proved with correct directions; a moved endpoint under either literal covering-loop transport then supplies exactly the selector disjunction. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; deriving a moved lift from connectedness, quotient realization, and invariants remain listed."},
     :commit "0450e4bee",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89431,7 +89443,7 @@
      "77c63d2c811213c5820ea57745d9e101f33479312b51cd7b6ccbdadc63aab0fc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89449,7 +89461,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked identity/composition coherence for covering fiber transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked moved-lift endpoint bridge to normalized cover-model selection.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89498,7 +89510,11 @@
     {:job 4,
      :commit "dcfa23365",
      :reason
-     "Banked identity/composition coherence for covering fiber transport."}]}
+     "Banked identity/composition coherence for covering fiber transport."}
+    {:job 5,
+     :commit "0450e4bee",
+     :reason
+     "Banked moved-lift endpoint bridge to normalized cover-model selection."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100253,7 +100269,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcModel_exists_of_moved_covering_loop",
@@ -100265,7 +100281,9 @@
     :type
     "a moved endpoint under either covering loop selects a normalized model",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "0450e4bee"},
    :id :lemma-twoarcmodel-exists-of-moved-covering-loop,
    :kind :lemma,
    :depends-on [:lemma-twoarcmodel-exists-of-covering-loops],
