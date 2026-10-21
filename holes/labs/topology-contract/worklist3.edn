@@ -36711,43 +36711,43 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Prove successor H0 finiteness and top/even equivalences.",
+    "Prove successor top and surviving-even homology equivalences.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_shortComplex_finiteDimensional_middle",
-      :type "finite outer terms imply finite exact middle",
+    [{:name "t99J05_cp_successor_finiteDimensional_zero",
+      :type "successor H0 finite",
       :status :proved,
       :consumers [:t99J05],
       :depends-on [],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_finiteDimensional_positive",
-      :type "finite successor homology in positive degrees",
+     {:name "t99J05_cp_successor_finiteDimensional",
+      :type "all-degree successor finiteness",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_shortComplex_finiteDimensional_middle"
-       "t99J05_cp_successor_overlap_finiteDimensional"],
+      ["t99J05_cp_successor_finiteDimensional_positive"
+       "t99J05_cp_successor_finiteDimensional_zero"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
       :status :partial,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_finiteDimensional_positive"],
+      :depends-on ["t99J05_cp_successor_finiteDimensional"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked positive-degree successor finiteness; H0 and top/even cases remain.",
+    "Banked all-degree successor finiteness; top/even equivalences remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36757,16 +36757,16 @@
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
-      :correction "fixed range and biproduct typing"}],
-    :commit "ae3e162d68",
+      :correction "added quotient connectedness; fixed rank proof"}],
+    :commit "8ed8dda658aea8ec36b787a60435bafcd6ababa1",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "682fb92bb28e63d27bc49aefca23c9325d5fc309621e12a5986ec9d9446f0d1b"},
+     "f0f4ddd560ef289a10cea27d800b4e09837f05401066cc56214b8ed476791821"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48836,7 +48836,8 @@
     :lemma-t99j05-cp-successor-lowerpatch-finitedimensional
     :lemma-t99j05-cp-successor-toppatch-finitedimensional
     :lemma-t99j05-cp-successor-overlap-finitedimensional
-    :lemma-t99j05-cp-successor-finitedimensional-positive],
+    :lemma-t99j05-cp-successor-finitedimensional-positive
+    :lemma-t99j05-cp-successor-finitedimensional],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -49209,6 +49210,42 @@
    :depends-on
    [:lemma-t99j05-shortcomplex-finitedimensional-middle
     :lemma-t99j05-cp-successor-overlap-finitedimensional],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_finiteDimensional_zero",
+    :type "successor H0 finite"},
+   :lemma
+   {:name "t99J05_cp_successor_finiteDimensional_zero",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "successor H0 finite",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-finitedimensional-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_finiteDimensional",
+    :type "all-degree successor finiteness"},
+   :lemma
+   {:name "t99J05_cp_successor_finiteDimensional",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "all-degree successor finiteness",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-finitedimensional,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-finitedimensional-positive
+    :lemma-t99j05-cp-successor-finitedimensional-zero],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
