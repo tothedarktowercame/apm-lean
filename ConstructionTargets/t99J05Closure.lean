@@ -1952,6 +1952,38 @@ theorem t99J05_cp_successor_finiteDimensional_positive
 
 #print axioms t99J05_cp_successor_finiteDimensional_positive
 
+/-- Degree-zero rational homology of the projective successor is
+one-dimensional, by its canonical path-connected-space `H₀` comparison. -/
+theorem t99J05_cp_successor_finiteDimensional_zero (n : ℕ) :
+    FiniteDimensional ℚ (Homology (CP (n + 1)) 0) := by
+  letI : PathConnectedSpace (NonzeroVectors ℂ (n + 1)) := by
+    apply isPathConnected_iff_pathConnectedSpace.mp
+    change IsPathConnected ({0}ᶜ : Set (Fin (n + 2) → ℂ))
+    apply isPathConnected_compl_singleton_of_one_lt_rank
+    rw [← Module.finrank_eq_rank']
+    norm_cast
+    rw [Module.finrank_pi_fintype]
+    simp
+    omega
+  letI : PathConnectedSpace (CP (n + 1)) :=
+    (surjective_quotientMap ℂ (n + 1)).pathConnectedSpace
+      (continuous_quotientMap ℂ (n + 1))
+  let p : CP (n + 1) := chartInverse (Fin.last (n + 1))
+    (0 : AffineCoordinates (Fin.last (n + 1)))
+  exact (ConstructionTargets.CoefficientH0.h0Iso ℚ p).toLinearEquiv.symm.finiteDimensional
+
+/-- All-degree finite-dimensionality for the successor, combining the
+canonical degree-zero calculation with Mayer--Vietoris in positive degrees. -/
+theorem t99J05_cp_successor_finiteDimensional
+    (n k : ℕ) (h : ComplexProjectiveRationalHomologyData n) :
+    FiniteDimensional ℚ (Homology (CP (n + 1)) k) := by
+  rcases k with _ | k
+  · exact t99J05_cp_successor_finiteDimensional_zero n
+  · exact t99J05_cp_successor_finiteDimensional_positive n k h
+
+#print axioms t99J05_cp_successor_finiteDimensional_zero
+#print axioms t99J05_cp_successor_finiteDimensional
+
 /-- The separately named transported arrow is exactly the first arrow of the
 transported short complex whose exactness was established above. -/
 theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
