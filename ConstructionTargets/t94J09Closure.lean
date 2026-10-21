@@ -2296,6 +2296,30 @@ theorem frozenBoundaryGraphH1Cycle_of_range
   rw [← LinearMap.mem_ker, ← hrange]
   exact LinearMap.mem_range_self c x
 
+/-- A left inverse supplies injectivity, while exact range supplies the cycle
+condition; together these are the complete algebraic interface needed by the
+boundary-graph H1 comparison. -/
+theorem frozenBoundaryGraphH1CycleComparison_of_leftInverse_range
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 7 → ℤ))
+    (l : (Fin 7 → ℤ) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hleft : l.comp c = LinearMap.id)
+    (hrange : LinearMap.range c = LinearMap.ker frozenGraphBoundary) :
+    Nonempty
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) := by
+  apply frozenBoundaryGraphH1CycleComparison_of_data c
+      (frozenBoundaryGraphH1Cycle_of_range c hrange)
+  · intro x y hxy
+    have hx := LinearMap.congr_fun hleft x
+    have hy := LinearMap.congr_fun hleft y
+    rw [LinearMap.comp_apply, LinearMap.id_apply] at hx hy
+    exact hx.symm.trans ((congrArg l hxy).trans hy)
+  · exact hrange
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3420,6 +3444,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphH1CoordinatesOfCycleComparison
 #print axioms frozenBoundaryGraphH1CycleComparison_of_data
 #print axioms frozenBoundaryGraphH1Cycle_of_range
+#print axioms frozenBoundaryGraphH1CycleComparison_of_leftInverse_range
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
