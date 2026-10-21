@@ -134,24 +134,55 @@ noncomputable def apm_t97A03_baseSphereReturn (A B : Circle) :
 complementary arc will be obtained from a cut-circle normal form rather than
 by reusing this path or its reverse. -/
 noncomputable def apm_t97A03_circleArc (A B : Circle) : Path A B :=
-  letI : PathConnectedSpace Circle :=
-    isPathConnected_iff_pathConnectedSpace.mp (by
-      simpa [Circle] using
-        (isPathConnected_sphere (E := ℂ) (by
-          rw [Complex.rank_real_complex]
-          norm_num) 0 (by norm_num)))
-  PathConnectedSpace.somePath A B
+  Path.ofLine (f := fun t : ℝ ↦
+      Circle.exp ((1 - t) * Complex.arg A + t * Complex.arg B))
+    (by fun_prop) (by simp) (by simp)
+
+/-- The opposite lifted interval from `A` to `B`.  Its endpoint differs in
+the real lift by one full turn, so this is the complementary circle arc and
+not a second choice of an arbitrary path. -/
+noncomputable def apm_t97A03_complementaryCircleArc (A B : Circle) : Path A B :=
+  Path.ofLine (f := fun t : ℝ ↦
+      Circle.exp ((1 - t) * Complex.arg A +
+        t * (Complex.arg B + 2 * Real.pi)))
+    (by fun_prop) (by simp) (by simp)
+
+lemma apm_t97A03_circleArcs_ne (A B : Circle) :
+    apm_t97A03_circleArc A B ≠ apm_t97A03_complementaryCircleArc A B := by
+  intro h
+  have hm := congrArg (fun p : Path A B ↦ p ⟨(1 / 2 : ℝ), by norm_num⟩) h
+  simp [apm_t97A03_circleArc, apm_t97A03_complementaryCircleArc,
+    Path.ofLine] at hm
+  rw [show (2 : ℝ)⁻¹ * (Complex.arg B + 2 * Real.pi) =
+      2⁻¹ * Complex.arg B + Real.pi by ring, Circle.exp_add] at hm
+  have hpi : (1 : Circle) = Circle.exp Real.pi := by
+    apply mul_left_cancel (a := Circle.exp (2⁻¹ * Complex.arg B))
+    simpa using hm
+  exact Circle.exp_pi_ne_one hpi.symm
 
 /-- The chosen literal circle arc mapped into the adjunction quotient. -/
 noncomputable def apm_t97A03_baseCircleArc (A B : Circle) :
     Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B B) :=
   (apm_t97A03_circleArc A B).map (apm_t97A03_continuous_baseCircle A B)
 
+noncomputable def apm_t97A03_baseComplementaryCircleArc (A B : Circle) :
+    Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B B) :=
+  (apm_t97A03_complementaryCircleArc A B).map
+    (apm_t97A03_continuous_baseCircle A B)
+
 /-- A genuine based loop in the frozen base: traverse the literal circle
 summand from `A` to `B`, then return through the literal sphere summand. -/
 noncomputable def apm_t97A03_firstLiteralLoop (A B : Circle) :
     Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B A) :=
   (apm_t97A03_baseCircleArc A B).trans
+    ((apm_t97A03_baseSphereReturn A B).cast
+      (apm_t97A03_baseCircle_A A B) (apm_t97A03_baseCircle_B A B)).symm
+
+/-- The based loop obtained from the genuinely complementary lifted circle
+arc and the same literal sphere return. -/
+noncomputable def apm_t97A03_secondLiteralLoop (A B : Circle) :
+    Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B A) :=
+  (apm_t97A03_baseComplementaryCircleArc A B).trans
     ((apm_t97A03_baseSphereReturn A B).cast
       (apm_t97A03_baseCircle_A A B) (apm_t97A03_baseCircle_B A B)).symm
 
@@ -162,6 +193,14 @@ noncomputable def apm_t97A03_firstLiteralLoop (A B : Circle) :
 @[simp] lemma apm_t97A03_firstLiteralLoop_one (A B : Circle) :
     apm_t97A03_firstLiteralLoop A B 1 = apm_t97A03_baseCircle A B A :=
   (apm_t97A03_firstLiteralLoop A B).target
+
+@[simp] lemma apm_t97A03_secondLiteralLoop_zero (A B : Circle) :
+    apm_t97A03_secondLiteralLoop A B 0 = apm_t97A03_baseCircle A B A :=
+  (apm_t97A03_secondLiteralLoop A B).source
+
+@[simp] lemma apm_t97A03_secondLiteralLoop_one (A B : Circle) :
+    apm_t97A03_secondLiteralLoop A B 1 = apm_t97A03_baseCircle A B A :=
+  (apm_t97A03_secondLiteralLoop A B).target
 
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
