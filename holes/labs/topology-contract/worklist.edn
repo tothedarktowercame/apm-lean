@@ -119152,63 +119152,52 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct one nonzero Circle measure transporting all chart-null sets; then signed counts and Main.",
+    "Apply fixed-chart regular value to incidence projection; assemble signed counts and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
-    [{:name "exists_mfderiv_surjective_fiber_of_targetCharts",
-      :type "null transport selects regular fiber",
+    [{:name "exists_mfderiv_surjective_fiber_of_fixedTargetChart",
+      :type "one target chart contains a regular value",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["globalCriticalValues_measure_zero_of_targetCharts"],
+      ["targetChartCoordinate_ambientCriticalImage_null"
+       "mfderiv_targetChart_comp_surjective_iff_of_mem_source"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_mfderiv_surjective_fiber_of_targetCharts"
-       "circleChartTransition_image_null"
-       "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope"],
+      ["exists_mfderiv_surjective_fiber_of_fixedTargetChart"
+       "regularFiberSignedCount_eq_zero_of_comparison"
+       "topHomologyMap_eq_zero_of_regularValue_signedCount"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ba7b95765e1216d95ba0b98900aafc45b50204ee0f3bd1d416298a52ef36f373",
+     "d17cdb6bd2ca4216b8339fdfb11b829c036513bdca5da8e1c86a5d509debbfea",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked regular-value selector.",
+    :reason "Banked fixed-chart regular value.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792608920845-1348-00b52fc8",
-     :commands
-     ["git show/diff 88263036"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 88263036 changes only t00J02Closure.lean (+25), adding a compiled regular-value selector after prior history 836e08af. Fixture afb497a6, source 0b3b4888, implementation ba7b9576; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the preceding theorem makes the image of the non-surjective mfderiv locus nu-null; NeZero nu ensures a value outside it, so every point of that fiber has surjective mfderiv. The predicate passed to the selector is exactly surjectivity of the manifold derivative of g, with no chart representation leak. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; constructing one Circle measure with all chart transports, signed counts, and final assembly remain listed."},
-    :commit "882630364cb2fec87f25b26d2c7806ddf21849b9",
+    :commit "1ef447dd9b8c48b78d6c356c32180fa3ae68c999",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119216,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119889,7 +119878,8 @@
     :lemma-exists-fin-chartat-source-cover
     :lemma-finite-targetchart-witness-of-globalcriticalvalue
     :lemma-globalcriticalvalues-measure-zero-of-targetcharts
-    :lemma-exists-mfderiv-surjective-fiber-of-targetcharts],
+    :lemma-exists-mfderiv-surjective-fiber-of-targetcharts
+    :lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122854,6 +122844,38 @@
    :kind :lemma,
    :depends-on
    [:lemma-globalcriticalvalues-measure-zero-of-targetcharts],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_mfderiv_surjective_fiber_of_fixedTargetChart",
+    :type "one target chart contains a regular value"},
+   :lemma
+   {:name "exists_mfderiv_surjective_fiber_of_fixedTargetChart",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "one target chart contains a regular value",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart,
+   :kind :lemma,
+   :depends-on
+   [:lemma-targetchartcoordinate-ambientcriticalimage-null
+    :lemma-mfderiv-targetchart-comp-surjective-iff-of-mem-source],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "mfderiv_targetChart_comp_surjective_iff_of_mem_source"},
+   :lemma
+   {:name "mfderiv_targetChart_comp_surjective_iff_of_mem_source",
+    :reported-by []},
+   :id :lemma-mfderiv-targetchart-comp-surjective-iff-of-mem-source,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
