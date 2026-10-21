@@ -1751,6 +1751,27 @@ theorem t99J05_cp_successor_mayerVietoris_exact_overlap_transport
 
 #print axioms t99J05_cp_successor_mayerVietoris_exact_overlap_transport
 
+/-- Two adjacent exact segments with zero outer terms make their common
+middle arrow bijective. -/
+theorem t99J05_bijective_of_adjacent_exact_of_subsingleton
+    {W X Y Z : ModuleCat ℚ} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z)
+    (hfg : LinearMap.range f.hom = LinearMap.ker g.hom)
+    (hgh : LinearMap.range g.hom = LinearMap.ker h.hom)
+    [Subsingleton W] [Subsingleton Z] : Function.Bijective g.hom := by
+  constructor
+  · rw [← LinearMap.ker_eq_bot]
+    rw [← hfg]
+    apply LinearMap.range_eq_bot.mpr
+    ext x
+    rw [Subsingleton.elim x 0]
+    simp
+  · rw [← LinearMap.range_eq_top, hgh]
+    apply LinearMap.ker_eq_top.mpr
+    ext x
+    exact Subsingleton.elim _ _
+
+#print axioms t99J05_bijective_of_adjacent_exact_of_subsingleton
+
 /-- A finite-dimensional extraction lemma for the surjective end of an exact
 three-term segment.  This is the algebraic step used degreewise after the
 Mayer--Vietoris outer terms have been identified. -/
