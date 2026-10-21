@@ -36711,76 +36711,58 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Prove successor top and surviving-even homology equivalences.",
+    "Use adjacent exact segments and vanishing outer terms to prove the top connecting map bijective, then surviving-even equivalences.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_finiteDimensional_zero",
-      :type "successor H0 finite",
+    [{:name
+      "t99J05_cp_successor_mayerVietoris_exact_overlap_transport",
+      :type "literal overlap MV segment is exact",
       :status :proved,
       :consumers [:t99J05],
       :depends-on [],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_finiteDimensional",
-      :type "all-degree successor finiteness",
-      :status :proved,
+     {:name "t99J05_cp_successor_top_connecting_iso",
+      :type "successor top homology is overlap top homology",
+      :status :not-started,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_finiteDimensional_positive"
-       "t99J05_cp_successor_finiteDimensional_zero"],
+      ["t99J05_cp_successor_mayerVietoris_exact_overlap_transport"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
       :status :partial,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_finiteDimensional"],
+      :depends-on ["t99J05_cp_successor_top_connecting_iso"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked all-degree successor finiteness; top/even equivalences remain.",
+    "Banked literal overlap exactness transport; top connecting-map isomorphism remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
-      :exit 1,
-      :correction "added quotient connectedness; fixed rank proof"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792603570283-1191-3377c793",
-     :commands
-     ["git show --stat/--format=fuller 8ed8dda658aea8ec36b787a60435bafcd6ababa1"
-      "git show 8ed8dda658:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "git diff --check 8ed8dda658^ 8ed8dda658"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show 8ed8dda658:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit 8ed8dda658 changes only scoped Closure; fixture SHA-256 matches f0f4ddd560ef289a10cea27d800b4e09837f05401066cc56214b8ed476791821. Degree zero correctly obtains path-connectedness of nonzero vectors (complex rank n+2>1), transports it through the continuous surjective quotient, and applies the canonical H0 equivalence. The successor theorem splits k=0 versus k+1 with correct orientation and delegates positive degrees to compiled Mayer-Vietoris finiteness. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine program progress; top and surviving-even equivalences remain listed."},
-    :commit "8ed8dda658aea8ec36b787a60435bafcd6ababa1",
+    :commit "a9f3db8a96e38cae0b7478797ffa46cba2a801dc",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "f0f4ddd560ef289a10cea27d800b4e09837f05401066cc56214b8ed476791821"},
+     "d7c910334a6c64ec5ba74c19e4199e6172ba9f89d7832e9d782fe78636587e29"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48855,7 +48837,8 @@
     :lemma-t99j05-cp-successor-toppatch-finitedimensional
     :lemma-t99j05-cp-successor-overlap-finitedimensional
     :lemma-t99j05-cp-successor-finitedimensional-positive
-    :lemma-t99j05-cp-successor-finitedimensional],
+    :lemma-t99j05-cp-successor-finitedimensional
+    :lemma-t99j05-cp-successor-top-connecting-iso],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -49268,6 +49251,41 @@
    :depends-on
    [:lemma-t99j05-cp-successor-finitedimensional-positive
     :lemma-t99j05-cp-successor-finitedimensional-zero],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_overlap_transport",
+    :type "literal overlap MV segment is exact"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_overlap_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "literal overlap MV segment is exact",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id
+   :lemma-t99j05-cp-successor-mayervietoris-exact-overlap-transport,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_top_connecting_iso",
+    :type "successor top homology is overlap top homology"},
+   :lemma
+   {:name "t99J05_cp_successor_top_connecting_iso",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "successor top homology is overlap top homology",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-top-connecting-iso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-overlap-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
