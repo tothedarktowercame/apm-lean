@@ -2432,6 +2432,36 @@ theorem frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse
     have hy := LinearMap.congr_fun hright y
     simpa using hy
 
+/-- For the concrete six-coordinate construction, the right-inverse identity
+only needs to be checked on the six standard coordinate vectors. -/
+theorem frozenBoundaryGraphH1CycleComparison_of_coordinate_basis
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 6 → ℤ))
+    (r : (Fin 6 → ℤ) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hleft : r.comp c = LinearMap.id)
+    (hbasis : ∀ i : Fin 6,
+      c (r (Pi.single i 1)) = Pi.single i 1) :
+    Nonempty
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) := by
+  apply frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse c r hleft
+  apply LinearMap.pi_ext
+  intro i n
+  rw [LinearMap.comp_apply, LinearMap.id_apply]
+  change c (r (Pi.single i n)) = Pi.single i n
+  have hsingle : Pi.single i n =
+      n • (Pi.single i (1 : ℤ) : Fin 6 → ℤ) := by
+    ext j
+    simp [Pi.single_apply]
+  calc
+    c (r (Pi.single i n)) = c (r (n • Pi.single i 1)) := by rw [hsingle]
+    _ = n • c (r (Pi.single i 1)) := by rw [map_smul, map_smul]
+    _ = n • Pi.single i 1 := congrArg (fun x ↦ n • x) (hbasis i)
+    _ = Pi.single i n := hsingle.symm
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3562,6 +3592,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphH1CycleComparison_of_kernel_leftInverse_onto
 #print axioms frozenBoundaryGraphH1CycleComparison_of_kernel_twoSidedInverse
 #print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse
+#print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_basis
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
