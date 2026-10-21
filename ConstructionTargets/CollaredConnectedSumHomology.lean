@@ -4,6 +4,7 @@ import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.IntegralOpenCoverMayerVietoris
 import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.ManifoldFundamentalClass
+import ConstructionTargets.TwoOpenFreeProductMapping
 
 /-! # Collared connected sums
 
