@@ -1248,6 +1248,47 @@ theorem badCircleParameters_eq_incidenceKernelProjectionCriticalValues
 
 #print axioms badCircleParameters_eq_incidenceKernelProjectionCriticalValues
 
+/-- The actual incidence source whose projection to the circle is used in the
+parametric Sard argument. -/
+abbrev CircleIncidence
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S) :=
+  {p : S × Circle // f p.1 = c p.2}
+
+/-- Projection from the incidence source to its circle parameter. -/
+def circleIncidenceProjection
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    {f : S → S} {c : Circle → S} : CircleIncidence f c → Circle :=
+  fun p ↦ p.1.2
+
+/-- The kernel-model critical locus for the incidence projection. -/
+def circleIncidenceKernelCritical
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S) : Set (CircleIncidence f c) :=
+  {p | ¬ Function.Surjective
+    (fun w : LinearMap.ker (LinearMap.coprod
+        (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f p.1.1).toLinearMap
+        (-(mfderiv (𝓡 1) SurfaceModelWithCorners c p.1.2).toLinearMap)) ↦ w.1.2)}
+
+/-- The existential critical-value description is literally the image of the
+kernel-model critical locus on the incidence subtype. -/
+theorem incidenceKernelProjectionCriticalValues_eq_image
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S) :
+    {z | ∃ x, f x = c z ∧ ¬ Function.Surjective
+      (fun w : LinearMap.ker (LinearMap.coprod
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+          (-(mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap)) ↦ w.1.2)} =
+      circleIncidenceProjection '' circleIncidenceKernelCritical f c := by
+  ext z
+  constructor
+  · rintro ⟨x, hx, hcritical⟩
+    exact ⟨⟨(x, z), hx⟩, hcritical, rfl⟩
+  · rintro ⟨p, hcritical, rfl⟩
+    exact ⟨p.1.1, p.2, hcritical⟩
+
+#print axioms incidenceKernelProjectionCriticalValues_eq_image
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
