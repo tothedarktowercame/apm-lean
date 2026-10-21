@@ -404,6 +404,26 @@ lemma punctured_homology_aux_H0 {n : ℕ} {M : Type} [TopologicalSpace M]
     (TopCat.of c.Punctured) 0 (ModuleCat.of ℤ ℤ) (asIso q).symm⟩
 
 -- BEGIN SEAT AREA
+noncomputable def punctured_homology_aux_middle_aux_inclusion
+    {n k : ℕ} {M : Type} [TopologicalSpace M] (c : BallCollar n M) :
+    H k c.Punctured ⟶ H k M :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).map
+      (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
+
+/-- Excision for the collared open ball: below the manifold dimension, the
+puncture inclusion induces an isomorphism on integral singular homology. -/
+lemma punctured_homology_aux_middle_aux_inclusion_isIso
+    (n : ℕ) (hn : 2 ≤ n) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured)
+    (k : ℕ) (hk0 : 0 < k) (hkn : k < n) :
+    IsIso (punctured_homology_aux_middle_aux_inclusion (k := k) c) := by
+  sorry
+
 lemma punctured_homology_aux_middle (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E n) M]
@@ -411,7 +431,11 @@ lemma punctured_homology_aux_middle (n : ℕ) (hn : 2 ≤ n) (M : Type)
     (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     ∀ k, 0 < k → k < n → Nonempty (H k c.Punctured ≅ H k M) := by
-  sorry
+  intro k hk0 hkn
+  letI : IsIso (punctured_homology_aux_middle_aux_inclusion (k := k) c) :=
+    punctured_homology_aux_middle_aux_inclusion_isIso
+      n hn M c htop hopen hpath k hk0 hkn
+  exact ⟨asIso (punctured_homology_aux_middle_aux_inclusion (k := k) c)⟩
 -- END SEAT AREA
 
 lemma punctured_homology_aux_above (n : ℕ) (hn : 2 ≤ n) (M : Type)
