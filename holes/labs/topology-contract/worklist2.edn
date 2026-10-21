@@ -89380,19 +89380,24 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Review blueprint; copy proved scaffold; build the two library milestones.",
+    :residual "realize monodromy models; compute model invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "apm_t97A03_classify_connected_double_cover",
-      :type "connected double-cover classification",
-      :status :not-started,
+    [{:name "twoArcMonodromy_nontrivial_classification",
+      :type "nontrivial two-arc actions reduce to two models",
+      :status :proved,
       :consumers [:t97A03],
       :depends-on [],
+      :area "covering-classification-explicit"}
+     {:name "apm_t97A03_classify_connected_double_cover",
+      :type "connected double-cover classification",
+      :status :partial,
+      :consumers [:t97A03],
+      :depends-on ["twoArcMonodromy_nontrivial_classification"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
       :type "model homology and fundamental group",
@@ -89400,44 +89405,29 @@
       :consumers [:t97A03],
       :depends-on [],
       :area "quotient-space-mayer-vietoris"}],
-    :statement-hashes {:registry "168/0"},
+    :statement-hashes {:registry "170/0"},
     :disposition :stop,
-    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :axioms ["propext" "Quot.sound"],
     :author "topo-6",
-    :reason "Blueprint written; review required.",
+    :reason "Banked finite two-arc monodromy classification.",
     :commands
-    [{:cmd "blueprint milestone scan", :exit 0}
+    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
+      :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd
-      "git diff --check -- ConstructionTargets/t97A03Closure.blueprint.md",
-      :exit 0}
-     {:cmd "git show --check 52b499d52", :exit 0}],
+     {:cmd "closure placeholder scan", :exit 0}
+     {:cmd "git show --check ab476b082", :exit 0}],
     :diagnostic-history
-    [{:cmd "git show --check ac08ca7bc",
-      :exit 2,
-      :correction "removed trailing blank and amended"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792156268104-15477-8b92ee11",
-     :commands
-     ["git show/check 52b499d52"
-      "fixture/scope checks"
-      "lake env lean holes/labs/blueprints/t97A03/Blueprint.lean"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS blueprint mathematics: 52b499d52 changes only the scoped blueprint and fixture hash matches; source blueprint/Main compile; registry 168/0. Nonzero double-cover monodromies give two model types; both lifted CW models have V=4,E=6,two zero-boundary 2-cells, yielding H ranks 1,3,2 and pi1=F3. Nodes are independent, types faithful, and all final hypotheses are used."},
-    :commit "52b499d52",
-    :changed-paths ["ConstructionTargets/t97A03Closure.blueprint.md"],
+    [{:cmd "build", :exit 1, :correction "explicit Or.inl"}],
+    :commit "ab476b082",
+    :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
-    {:path "ConstructionTargets/t97A03Closure.blueprint.md",
+    {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "4c5064b47def6470d103f7595130fbe7fa28509aa1e9062046df25906996b2cd"},
+     "31093efcdd7abe92bb982d1b7c2beaaba1aeea56f1a2d33194134462f0a58acf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98385,7 +98375,7 @@
     :area "covering-classification-explicit"},
    :id :lemma-apm-t97a03-classify-connected-double-cover,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-twoarcmonodromy-nontrivial-classification],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -99906,6 +99896,23 @@
     :banked-commit "45e772734"},
    :id
    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-generators,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoArcMonodromy_nontrivial_classification",
+    :type "nontrivial two-arc actions reduce to two models"},
+   :lemma
+   {:name "twoArcMonodromy_nontrivial_classification",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "nontrivial two-arc actions reduce to two models",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-twoarcmonodromy-nontrivial-classification,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
