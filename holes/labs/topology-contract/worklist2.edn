@@ -89382,28 +89382,35 @@
   {:consumer :t97A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "cast path to loop; reduce to chosen arcs; realize quotient equivalence; derive invariants",
+    :residual "chosen-loop detection; quotient model; invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "exists_distinct_fiber_points_related_by_monodromy",
-      :type "distinct fiber endpoints related by monodromy",
+    [{:name "monodromy_cast_refl_val",
+      :type "casted constant preserves point",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on ["IsCoveringMap.locPathConnectedSpace"],
+      :depends-on [],
       :area "covering-classification-explicit"}
-     {:name "apm_t97A03_classify_connected_double_cover",
-      :type "connected double-cover classification",
-      :status :partial,
+     {:name "exists_moved_covering_loop_over_connected",
+      :type "connected double cover has moved loop",
+      :status :proved,
       :consumers [:t97A03],
       :depends-on
       ["exists_distinct_fiber_points_related_by_monodromy"
+       "monodromy_cast_refl_val"],
+      :area "covering-classification-explicit"}
+     {:name "apm_t97A03_classify_connected_double_cover",
+      :type "double-cover classification",
+      :status :partial,
+      :consumers [:t97A03],
+      :depends-on
+      ["exists_moved_covering_loop_over_connected"
        "twoArcModel_exists_of_moved_covering_loop"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
@@ -89416,8 +89423,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked distinct fiber endpoints related by cover monodromy.",
+    :reason "Banked moved loop for connected double covers.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
@@ -89425,32 +89431,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans; git show --check; sha256sum", :exit 0}],
     :diagnostic-history
-    [{:cmd "loop build",
+    [{:cmd "dependent elimination",
       :exit 1,
-      :correction "kept endpoint equalities"}
-     {:cmd "cast build", :exit 1, :correction "equal-endpoint form"}
-     {:cmd "scan", :exit 1, :correction "quoting"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792600127317-1112-b60cb0a9",
-     :commands
-     ["git show/diff-tree 272d6fda5"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint; sha256sum; placeholder scan"],
-     :finding
-     "PASS: topo-6 commit 272d6fda5 changes only t97A03Closure after history 20c603ccc; fixture SHA 7768f8d1... matches. Degree two supplies two distinct literal fiber points over x, and connected-cover transitivity supplies a projected path carrying one endpoint to the other; endpoint equalities and the remaining dependent cast are exposed, not hidden. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; loop cast/generator reduction, quotient realization, and invariants remain listed."},
-    :commit "272d6fda5",
+      :correction "casted return path"}],
+    :commit "9055cd1a7",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "7768f8d198bb55a95fe0a4569ca778f4e248b266ccb40a0fdfb45f5c2efbfec8"},
+     "5b506c2aab8a9f958669379f2f41b07bcaddfd4b2c938b5fd4a4d509b5f5ce4b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98473,7 +98465,8 @@
     :lemma-coveringmonodromy-transitive-of-pathconnected
     :lemma-coveringmonodromy-transitive-of-connected-locpath
     :lemma-iscoveringmap-locpathconnectedspace
-    :lemma-exists-distinct-fiber-points-related-by-monodromy],
+    :lemma-exists-distinct-fiber-points-related-by-monodromy
+    :lemma-exists-moved-covering-loop-over-connected],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -100394,4 +100387,40 @@
    :id :lemma-exists-distinct-fiber-points-related-by-monodromy,
    :kind :lemma,
    :depends-on [:lemma-iscoveringmap-locpathconnectedspace],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "monodromy_cast_refl_val",
+    :type "casted constant preserves point"},
+   :lemma
+   {:name "monodromy_cast_refl_val",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "casted constant preserves point",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-monodromy-cast-refl-val,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_moved_covering_loop_over_connected",
+    :type "connected double cover has moved loop"},
+   :lemma
+   {:name "exists_moved_covering_loop_over_connected",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "connected double cover has moved loop",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-exists-moved-covering-loop-over-connected,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-distinct-fiber-points-related-by-monodromy
+    :lemma-monodromy-cast-refl-val],
    :other-consumers []}]}
