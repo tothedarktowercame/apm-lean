@@ -37504,7 +37504,7 @@
    "Blueprint mathematics defect remains: hmn has no mathematical effect on the frozen conclusion. Both branches store hmn only in BoundedRadialLevel.bounded as k ≤ n, but BoundedRadialLevel.forget pattern-matches that field as _ and discards it before producing the registered result. This is precisely a facade dependency, not genuine hypothesis use. Repair by making hmn support a fact actually retained in the registered conclusion/proof path, rather than adding and dropping an internal field. hlevel is genuinely retained as Nonempty. Recorded commit 86e7cdd227 has exact scope/hash; Main and blueprint compile, registry is 170/170, placeholders are zero, and axioms are standard-only.",
    :evidence
    {:residual
-    "None; apm_t96j05 compiles sorry-free with genuine hmn/hlevel use.",
+    "None; public witness min k n retains and uses the hmn-derived bound.",
     :evidence
     {:placeholder-delta {:t96J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
@@ -37539,27 +37539,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t96J05Closure.lean",
+    [{:cmd "lake env lean problems/t96J05/lean/Main.lean",
       :exit 1,
-      :correction "fixture is not importable; implemented in Main"}
-     {:cmd "lake env lean problems/t96J05/lean/Main.lean",
-      :exit 1,
-      :correction "made witness package Prop-valued"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792600125943-1111-28f9b02a",
-     :finding
-     "Blueprint mathematics defect remains: hmn has no mathematical effect on the frozen conclusion. Both branches store hmn only in BoundedRadialLevel.bounded as k ≤ n, but BoundedRadialLevel.forget pattern-matches that field as _ and discards it before producing the registered result. This is precisely a facade dependency, not genuine hypothesis use. Repair by making hmn support a fact actually retained in the registered conclusion/proof path, rather than adding and dropping an internal field. hlevel is genuinely retained as Nonempty. Recorded commit 86e7cdd227 has exact scope/hash; Main and blueprint compile, registry is 170/170, placeholders are zero, and axioms are standard-only."},
-    :commit "86e7cdd227",
-    :commits ["1db229e3cb" "86e7cdd227"],
+      :correction
+      "used rw to transport dependent atlas along min equality"}],
+    :commit "957192353e",
+    :commits ["1db229e3cb" "86e7cdd227" "957192353e"],
     :changed-paths ["problems/t96J05/lean/Main.lean"],
     :fixture
     {:path "problems/t96J05/lean/Main.lean",
      :sha256
-     "7a2ff3eac6fdcd7286195918b39a82f63ea2848c65a9d0373f2a0cbfd5cc54a5"}},
+     "585d804cb0b689c64cf3b3808b4b1f595f851e7e4c0bab6a0f62935c8c019501"}},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96J05/lean/Main.lean"
     "problems/t96J05/status.json"
