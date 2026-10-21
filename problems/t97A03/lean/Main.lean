@@ -788,6 +788,69 @@ theorem apm_t97A03_literal_signed_generation_of_collapse_injective
     apm_t97A03_collapsePiOneHom_secondLiteralLoop]
   exact hw
 
+/-- An injective collapse, together with an aligned computation of the cut
+circle fundamental group, identifies the literal base fundamental group with
+the fixed two-circle wedge group. -/
+noncomputable def apm_t97A03_literalPiOneEquiv_of_collapse_injective
+    (A B : Circle)
+    (e : FundamentalGroup (apm_t97A03_CutCircle A B)
+          (apm_t97A03_cutCircleMap A B A) ≃*
+        FundamentalGroup
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (Fin 2))
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin 2) 1))
+    (hfirst : e (apm_t97A03_firstCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (hsecond : e (apm_t97A03_secondCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (hinj : Function.Injective (apm_t97A03_collapsePiOneHom A B)) :
+    FundamentalGroup (apm_t97A03_BaseSpace A B)
+        (apm_t97A03_baseCircle A B A) ≃*
+      FundamentalGroup
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (Fin 2))
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin 2) 1) :=
+  (MulEquiv.ofBijective (apm_t97A03_collapsePiOneHom A B)
+    ⟨hinj, apm_t97A03_collapsePiOneHom_surjective_of_aligned_piOneEquiv
+      A B e hfirst hsecond⟩).trans e
+
+/-- The resulting equivalence is genuinely aligned with the two literal arc
+loops, rather than with a synthetic moved loop and a constant loop. -/
+theorem apm_t97A03_literalPiOneEquiv_literalLoops
+    (A B : Circle)
+    (e : FundamentalGroup (apm_t97A03_CutCircle A B)
+          (apm_t97A03_cutCircleMap A B A) ≃*
+        FundamentalGroup
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (Fin 2))
+          (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin 2) 1))
+    (hfirst : e (apm_t97A03_firstCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (hsecond : e (apm_t97A03_secondCutCircleGenerator A B) =
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    (hinj : Function.Injective (apm_t97A03_collapsePiOneHom A B)) :
+    let E := apm_t97A03_literalPiOneEquiv_of_collapse_injective
+      A B e hfirst hsecond hinj
+    E (FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk (apm_t97A03_firstLiteralLoop A B))) =
+        ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+          1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass ∧
+      E (FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk (apm_t97A03_secondLiteralLoop A B))) =
+        ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+          1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass := by
+  dsimp [apm_t97A03_literalPiOneEquiv_of_collapse_injective]
+  constructor
+  · rw [apm_t97A03_collapsePiOneHom_firstLiteralLoop, hfirst]
+  · rw [apm_t97A03_collapsePiOneHom_secondLiteralLoop, hsecond]
+
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
   exact mem_sphere_zero_iff_norm.mpr (by norm_num)⟩
