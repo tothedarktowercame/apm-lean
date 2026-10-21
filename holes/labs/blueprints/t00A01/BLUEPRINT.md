@@ -61,6 +61,73 @@ assembly for this collar. Estimate: 300+ lines. Dependencies: none.
 Truth checks: the exact sequence yields `H₀ = ℤ` and zero in positive degrees;
 degrees 2 and 3 are precisely where the local-generator isomorphism is needed.
 
+#### Split of `apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid`
+
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_algebra` is an
+independent, sorry-free categorical leaf (about 55 proof lines).  Its inputs
+are an arbitrary standard-cover presentation and the single assertion that
+`productionConnecting U V hU hV hUV 2` is an isomorphism.  In degree three it
+uses
+`MayerVietorisExactnessIsZero.isZero_middle_of_two_exact_of_isZero_left_of_mono_right`,
+`productionMayerVietoris_exact_pieces`, and
+`productionMayerVietoris_exact_union`; in degree two it cancels the epi
+connecting map in `productionConnecting_comp_intersection` and uses
+`productionMayerVietoris_exact_intersection`.  The homotopy transports use
+`singularHomologyIsoOfHomotopyEquiv` and
+`moduleHomologyIsoOfHomotopyEquiv`.  Truth check: for `S³` this is the usual
+`0 → 0 → ℤ → ℤ → 0`; for the Poincaré sphere the same calculation is
+unchanged because only integral homology enters.  The overlap cannot be empty:
+its supplied homotopy equivalence to `S²` makes its `H₂` nonzero, while the
+isomorphism hypothesis also rules out the zero connecting map.
+
+The connecting-map boundary is now split without trying to compare an
+*arbitrary* supplied cover directly to collar coordinates.  Such a comparison
+is not determined at chain level by the three homotopy equivalences.  Instead,
+the collar argument first proves `H₂` and `H₃` of the punctured piece vanish;
+then `productionConnecting_isIso_of_pieces_isZero` proves the result for every
+supplied cover.  The final `_aux_mid_connecting` lemma is a sorry-free assembly.
+
+* `_aux_mid_connecting_aux_source` (proved, about 8 lines) transports the
+  assumed `H₃(M) ≅ ℤ` through `singularHomologyComparison`.  Independent.
+* `_aux_mid_connecting_aux_target` (proved, about 8 lines) transports
+  `H₂(S²) ≅ ℤ` through `singularHomologyIsoOfHomotopyEquiv`. Independent.
+  These two are useful normalization facts but the vanishing-based assembly
+  does not need to choose generators.
+* `_aux_mid_connecting_aux_localization` is **LIBRARY** (estimated 180–350
+  lines): for every `x : M`, `localizationMap x 3` is an isomorphism.  This is
+  Hatcher Lemma 3.27/Theorem 3.26.  Obtain connectedness from the `H₀(M) ≅ ℤ`
+  component of `hM`; propagate a chart-local generator along connected chart
+  overlaps using `localizationMap_naturality`,
+  `localizationMap_groupGlobalGenerator_transport`,
+  `localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator`, and
+  transition-unit local constancy; compactness supplies a finite chart cover.
+  `isIso_of_map_globalGenerator_eq_globalGenerator` closes the algebra. This
+  remains the genuinely large missing global fundamental-class theorem.
+* `_aux_mid_connecting_aux_H2` is **LIBRARY** (estimated 80–150 lines), and is
+  independent given its explicit `IsIso (localizationMap (φ 0) 3)` hypothesis.
+  Compare the deleted-point pair to the open radius-two collar with
+  `ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso`, transport the
+  collar pair with `ChartPairRelativeHomologyTransport`, and use
+  `singularPairHomology_exact_relative`/`singularPairHomology_exact_absolute`
+  plus contractibility of the ball to force `H₂` of the complement to zero.
+  The leaf takes `hM`: surjectivity of localization only makes
+  `H₂(M ∖ x) → H₂(M)` injective, so `H₂(M) = 0` is needed (without it the
+  statement fails for `S² × S¹`; claude-14 added `hM` at review, 2026-10-20).
+* `_aux_mid_connecting_aux_H3` is **LIBRARY** (estimated 80–150 lines), parallel
+  to the `H2` leaf under the same explicit localization hypothesis.  Use the
+  adjacent portion of the same pair exact sequence; `H₄(M, M ∖ x) = 0` comes
+  from excision to the collar ball (no homology-sphere hypothesis needed),
+  and invertibility of localization controls the
+  `H₃` kernel.
+
+The all-positive-degree excision infrastructure is available after importing
+`ConstructionTargets.ManifoldFundamentalClass`:
+`neighborhoodInclusion_Hsucc_isIso` supersedes the old degree-one-only note.
+Truth checks: for `S³`, localization and the eventual connecting map have degree
+`±1`; for a Poincaré homology sphere they again have degree `±1`, not
+`|π₁|`.  Reversing collar orientation changes the sign only.  Empty overlap is
+excluded by `eIS`, since it would contradict the nonzero `H₂(S²)` target.
+
 ### `apm_t00A01_collared_standardCover` — LIBRARY
 
 Construct two open collar-thickenings in the quotient, prove they cover,
@@ -97,3 +164,16 @@ Both Lean files compile. Final output:
 ```
 
 `sorryAx` enters only through the four named top-level LIBRARY lemmas.
+
+### Split of `_aux_right_aux_quotient` (claude-14, 2026-10-20, from job 119 / lemma-3)
+lemma-3's 174-line proof was spliced in as the assembly. It said "compiles, sorryAx
+hidden", but in fact two terms failed to elaborate (a `Set` used as a type without
+`↥`, and the nonexistent `Continuous.prod_map`), and Lean turned both into sorry.
+Repaired; the only sorry left is the new leaf
+`apm_t00A01_collared_standardCover_aux_right_aux_quotient_aux_cont`: a map
+`F : unitInterval × ↥(inl '' C ∪ range inr) → X` (C open) is continuous when its
+restrictions to `unitInterval × C` and `unitInterval × B` are. Truth: both pieces map
+by open embeddings (`IsOpenEmbedding.inl/inr`, `hC.isOpenEmbedding_subtypeVal`,
+`IsOpenEmbedding.prodMap` with id) whose ranges cover; then `ContinuousOn.union_of_isOpen`.
+C = ∅ is fine (the left piece is empty). The `hf` block of the assembly is the same proof
+without the `unitInterval` factor and can be copied from there. Size: 30-60 lines.
