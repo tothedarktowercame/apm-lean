@@ -119152,7 +119152,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
@@ -119205,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119227,7 +119227,7 @@
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -119578,6 +119578,18 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "replaced invalid neighborhood glyph with nhds"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792593092147-941-3a22e2f6",
+     :commands
+     ["git show/diff 35498f49"
+      "lake env lean ConstructionTargets/t98A06Closure.lean"
+      "lake env lean problems/t98A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 35498f49 changes only t98A06Closure.lean (+15), adding a compiled stable-neighborhood extraction after prior history. Fixture 9838452b, source 44399e71, implementation 44160271, registry 170/170, and placeholders closure=0/Main=1 reproduce. Representation and orientation are exact: U is the predicate that A(x) o R is invertible; the prior eventual theorem proves U is a neighborhood, and membership is returned unchanged. E m endomorphism boundaries align. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; derivative coordinates/local lifts, compact flow, and final assembly remain listed."},
     :commit "35498f49aa1dd1b4aa5db5452f9fc44c4bdba684",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119586,7 +119598,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119604,7 +119616,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked neighborhood stability of a fixed derivative right inverse.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked stable-neighborhood extraction.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119641,7 +119653,10 @@
     {:job 1,
      :commit "2ac121e46daf3ce8f574ab259350106e2eba6499",
      :reason
-     "Banked neighborhood stability of a fixed derivative right inverse."}]}
+     "Banked neighborhood stability of a fixed derivative right inverse."}
+    {:job 2,
+     :commit "35498f49aa1dd1b4aa5db5452f9fc44c4bdba684",
+     :reason "Banked stable-neighborhood extraction."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -122371,7 +122386,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "targetChartCoordinate_ambientCriticalImage_null",
@@ -122381,14 +122396,16 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "fixed-chart ambient critical image null",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-targetchartcoordinate-ambientcriticalimage-null,
    :kind :lemma,
    :depends-on [:lemma-mfderiv-opensubtype-not-surjective],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_nhds_isInvertible_comp_rightInverse",
@@ -122398,7 +122415,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "stable invertibility neighborhood",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "35498f49aa1dd1b4aa5db5452f9fc44c4bdba684"},
    :id :lemma-exists-nhds-isinvertible-comp-rightinverse,
    :kind :lemma,
    :depends-on [:lemma-eventually-isinvertible-comp-rightinverse],
