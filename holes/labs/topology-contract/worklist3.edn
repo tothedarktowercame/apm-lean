@@ -36711,31 +36711,30 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Use adjacent exact segments and vanishing outer terms to prove the top connecting map bijective, then surviving-even equivalences.",
+    "Apply patch vanishings to get the top equivalence, then surviving-even equivalences.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name
-      "t99J05_cp_successor_mayerVietoris_exact_overlap_transport",
-      :type "literal overlap MV segment is exact",
+    [{:name "t99J05_bijective_of_adjacent_exact_of_subsingleton",
+      :type "zero outer terms make the middle map bijective",
       :status :proved,
       :consumers [:t99J05],
       :depends-on [],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_top_connecting_iso",
-      :type "successor top homology is overlap top homology",
-      :status :not-started,
+      :type "successor top equals overlap top",
+      :status :partial,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_exact_overlap_transport"],
+      ["t99J05_bijective_of_adjacent_exact_of_subsingleton"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
@@ -36747,36 +36746,26 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked literal overlap exactness transport; top connecting-map isomorphism remains.",
+    "Banked exact-segment bijectivity; top specialization remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792604541075-1232-aaefd938",
-     :commands
-     ["git show --stat/--format=fuller a9f3db8a96e38cae0b7478797ffa46cba2a801dc"
-      "git show a9f3db8a96:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "git diff --check a9f3db8a96^ a9f3db8a96"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show a9f3db8a96:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit a9f3db8a96 changes only scoped Closure; fixture SHA-256 matches d7c910334a6c64ec5ba74c19e4199e6172ba9f89d7832e9d782fe78636587e29. The adjacent MV segment is oriented union H(k+1) -> overlap Hk -> patch biproduct Hk. Its three isomorphisms correctly transport union range to literal CP, intersection range to the literal overlap, and range biproduct to literal patches; exactness then follows invariantly under the short-complex iso. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine program progress; connecting-map bijectivity and surviving-even equivalences remain listed."},
-    :commit "a9f3db8a96e38cae0b7478797ffa46cba2a801dc",
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
+      :exit 1,
+      :correction "used range-kernel equalities"}],
+    :commit "68ae20da241a966a5ead04ca6c05a23c0337333b",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "d7c910334a6c64ec5ba74c19e4199e6172ba9f89d7832e9d782fe78636587e29"},
+     "fd4887edb8a263c02567411fde181d48e8848825970ed7d6b732599ba6716bc3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -49305,7 +49294,25 @@
    :id :lemma-t99j05-cp-successor-top-connecting-iso,
    :kind :lemma,
    :depends-on
-   [:lemma-t99j05-cp-successor-mayervietoris-exact-overlap-transport],
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-overlap-transport
+    :lemma-t99j05-bijective-of-adjacent-exact-of-subsingleton],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_bijective_of_adjacent_exact_of_subsingleton",
+    :type "zero outer terms make the middle map bijective"},
+   :lemma
+   {:name "t99J05_bijective_of_adjacent_exact_of_subsingleton",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "zero outer terms make the middle map bijective",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-bijective-of-adjacent-exact-of-subsingleton,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
