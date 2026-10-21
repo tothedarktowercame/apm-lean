@@ -36711,37 +36711,38 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Prove successor H1 vanishing, then construct successor data.",
+    "Assemble finite-dimensionality, above-top/odd vanishings, and even equivalences into successor data.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_subsingleton_odd_gt_one",
-      :type "successor odd homology above degree one vanishes",
+    [{:name "t99J05_cp_successor_subsingleton_one",
+      :type "successor first homology vanishes",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_subsingleton_above"],
+      :depends-on ["t99J05_cp_successor_subsingleton_odd_gt_one"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "successor homology data",
       :status :partial,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_subsingleton_odd_gt_one"
-       "t99J05_cp_successor_even_equiv"],
+      ["t99J05_cp_successor_subsingleton_one"
+       "t99J05_cp_successor_even_equiv"
+       "t99J05_cp_successor_subsingleton_above"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked odd vanishing above degree one; H1 and successor assembly remain.",
+    "Banked successor H1 vanishing; successor-data assembly remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36751,34 +36752,20 @@
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
-      :correction "exposed odd witness for arithmetic bounds"}
+      :correction
+      "qualified category API and aligned H0 map representation"}
      {:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
-      :correction
-      "retained degree variable after witness extraction"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792612477384-1447-1154bebf",
-     :commands
-     ["git show --stat/--format=fuller 4ec70c7d7117c2781762180557c34b7f54a38ea8"
-      "git show 4ec70c7d7:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "git diff --check 4ec70c7d7^ 4ec70c7d7"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show 4ec70c7d7:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit 4ec70c7d7 changes only scoped Closure; fixture SHA-256 matches 4ff37e7426994468371d4b241aeebbb40c1e2f1c97392a369e7b36d6dca487a0. Lower-patch odd vanishing transports through the inverse CP-to-patch equivalence correctly. For odd k>1, above-top degrees use the prior theorem; otherwise patch degree k vanishes and overlap degree k-1 is positive and below 2n+1, so ambient exactness kills successor Hk. The k=(k-1)+1 normalization and representation boundaries are sound. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; H1 and successor-data assembly remain listed."},
-    :commit "4ec70c7d7117c2781762180557c34b7f54a38ea8",
+      :correction "used exactness equality directly"}],
+    :commit "e3706761a7b6db25ea8f7549c93b812ed1fa8e3d",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "4ff37e7426994468371d4b241aeebbb40c1e2f1c97392a369e7b36d6dca487a0"},
+     "279717f76455057c2ec51c18d528a51ac2f797a21298a067c4b481f2a48ac73a"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48889,7 +48876,8 @@
     :lemma-t99j05-cp-successor-middle-even-iso
     :lemma-t99j05-cp-successor-even-equiv
     :lemma-t99j05-cp-successor-subsingleton-above
-    :lemma-t99j05-cp-successor-subsingleton-odd-gt-one],
+    :lemma-t99j05-cp-successor-subsingleton-odd-gt-one
+    :lemma-t99j05-cp-successor-subsingleton-one],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -49521,6 +49509,23 @@
    :id :lemma-t99j05-cp-successor-subsingleton-odd-gt-one,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-subsingleton-above],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_subsingleton_one",
+    :type "successor first homology vanishes"},
+   :lemma
+   {:name "t99J05_cp_successor_subsingleton_one",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "successor first homology vanishes",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-subsingleton-one,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-successor-subsingleton-odd-gt-one],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
