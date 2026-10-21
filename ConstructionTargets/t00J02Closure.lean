@@ -1409,11 +1409,25 @@ theorem circleIncidenceProjection_critical_iff_kernelCritical
   exact not_congr
     (circleIncidenceProjection_surjective_iff_kernel_snd f c hf hc htrans p)
 
+/-- Compactness of the ambient surface supplies the second-countability
+hypothesis needed by manifold Sard for the incidence source. -/
+theorem circleIncidence_secondCountableTopology
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [CompactSpace S] (f : S → S) (c : Circle → S) :
+    SecondCountableTopology (CircleIncidence f c) := by
+  letI : SecondCountableTopology S :=
+    ChartedSpace.secondCountable_of_sigmaCompact SurfaceModel S
+  letI : SecondCountableTopology Circle :=
+    ChartedSpace.secondCountable_of_sigmaCompact (EuclideanSpace ℝ (Fin 1)) Circle
+  letI : SecondCountableTopology (S × Circle) := inferInstance
+  exact Topology.IsInducing.subtypeVal.secondCountableTopology
+
 #print axioms circleIncidenceAtlas
 #print axioms circleIncidence_isManifold
 #print axioms circleIncidenceProjection_contMDiff
 #print axioms circleIncidenceProjection_surjective_iff_kernel_snd
 #print axioms circleIncidenceProjection_critical_iff_kernelCritical
+#print axioms circleIncidence_secondCountableTopology
 
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
