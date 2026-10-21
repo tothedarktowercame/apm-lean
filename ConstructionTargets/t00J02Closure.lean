@@ -1759,6 +1759,38 @@ def targetChartDomain
     TopologicalSpace.Opens M :=
   ⟨g ⁻¹' (chartAt F y).source, (chartAt F y).open_source.preimage hg⟩
 
+/-- A finite target-chart cover turns every global critical value into one of
+the chartwise critical-value witnesses used by the Sard aggregation step. -/
+theorem finite_targetChart_witness_of_globalCriticalValue
+    {E F M N : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N]
+    (g : M → N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) ∞ g)
+    {n : ℕ} (y : Fin n → N)
+    (hcover : (Set.univ : Set N) ⊆ ⋃ i, (chartAt F (y i)).source)
+    (z : N)
+    (hz : z ∈ g '' {x | ¬ Function.Surjective
+      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) g x)}) :
+    ∃ i, z ∈ g '' {x |
+      x ∈ targetChartDomain (F := F) g (y i) hg.continuous ∧
+        ¬ Function.Surjective
+          (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+            ((chartAt F (y i)) ∘ g) x)} := by
+  rcases hz with ⟨x, hx, rfl⟩
+  rcases Set.mem_iUnion.mp (hcover (Set.mem_univ (g x))) with ⟨i, hi⟩
+  refine ⟨i, x, ⟨hi, ?_⟩, rfl⟩
+  intro hs
+  exact hx ((mfderiv_targetChart_comp_surjective_iff_of_mem_source
+    g x (y i) (hg.mdifferentiableAt (by simp)) hi).mpr hs)
+
+#print axioms finite_targetChart_witness_of_globalCriticalValue
+
 /-- Restriction to an open source subtype does not change derivative
 surjectivity at the represented point. -/
 theorem mfderiv_openSubtype_not_surjective
