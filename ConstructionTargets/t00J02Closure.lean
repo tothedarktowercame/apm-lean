@@ -2058,6 +2058,31 @@ theorem globalCriticalValues_measure_zero_of_targetCharts
 
 #print axioms globalCriticalValues_measure_zero_of_targetCharts
 
+/-- Finite target-chart Sard nullity selects a value that is regular at every
+point of its fiber. -/
+theorem exists_mfderiv_surjective_fiber_of_targetCharts
+    {E F M N : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+    [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M] [SecondCountableTopology M]
+    [TopologicalSpace N] [ChartedSpace F N] [CompactSpace N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N] [MeasurableSpace N]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure]
+    (nu : MeasureTheory.Measure N) [NeZero nu] (g : M → N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) ∞ g)
+    (htransport : ∀ y s, mu s = 0 → nu ((chartAt F y).symm '' s) = 0) :
+    ∃ y, ∀ x, g x = y → Function.Surjective
+      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) g x) := by
+  apply exists_regularValue_of_criticalValues_measure_zero g
+    (fun x ↦ Function.Surjective
+      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) g x)) nu
+  exact globalCriticalValues_measure_zero_of_targetCharts mu nu g hg htransport
+
+#print axioms exists_mfderiv_surjective_fiber_of_targetCharts
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
