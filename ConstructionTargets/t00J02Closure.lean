@@ -1196,6 +1196,24 @@ theorem exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero
 
 #print axioms exists_circleValue_locallyInjectiveAlongFiber_of_badSet_measure_zero
 
+/-- A Sard null set containing every parameter where the required derivative
+lift fails also makes the bad circle-parameter set null. -/
+theorem badCircleParameters_measure_zero_of_subset_nullCriticalSet
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [MeasurableSpace Circle]
+    (mu : MeasureTheory.Measure Circle)
+    (f : S → S) (c : Circle → S) (critical : Set Circle)
+    (hsubset : {z | ¬ ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v} ⊆ critical)
+    (hcritical : mu critical = 0) :
+    mu {z | ¬ ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v} = 0 :=
+  MeasureTheory.measure_mono_null hsubset hcritical
+
+#print axioms badCircleParameters_measure_zero_of_subset_nullCriticalSet
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
