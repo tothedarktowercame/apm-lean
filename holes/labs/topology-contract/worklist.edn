@@ -119193,6 +119193,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792593702978-963-455be009",
+     :commands
+     ["git show/diff 71255f23"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 71255f23 changes only t00J02Closure.lean (+33), adding compiled inverse-chart nullity transport after prior history; its exact tree also repairs the prior compile/sorryAx defect. Fixture afb497a6, source 0b3b4888, implementation 360af14f, registry 170/170, and placeholders closure=0/Main=1 reproduce. Both repaired ambient-coordinate nullity and new transport have standard axioms only. Inclusion is correct via chart.symm(chart(g x))=g x on the chart source; htransport then transfers nullity to N. Main retains its registered sorry; inverse-chart nullity, finite aggregation, signed counts, and final assembly remain listed."},
     :commit "71255f23654349f357bcbd8b39f5f0918e229035",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119201,7 +119213,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119219,7 +119231,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked open-subtype criticality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-inverse nullity transport.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119523,7 +119535,10 @@
      :reason "Banked fixed-chart criticality."}
     {:job 8,
      :commit "1d2dd4c8802a0d2a17055a2c258554c3bc355953",
-     :reason "Banked open-subtype criticality."}]}
+     :reason "Banked open-subtype criticality."}
+    {:job 1,
+     :commit "71255f23654349f357bcbd8b39f5f0918e229035",
+     :reason "Banked chart-inverse nullity transport."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122421,7 +122436,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "targetChart_ambientCriticalImage_null",
@@ -122431,7 +122446,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart-inverse transport of ambient critical nullity",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "71255f23654349f357bcbd8b39f5f0918e229035"},
    :id :lemma-targetchart-ambientcriticalimage-null,
    :kind :lemma,
    :depends-on
