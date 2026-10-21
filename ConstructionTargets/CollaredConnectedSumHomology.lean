@@ -657,6 +657,19 @@ lemma punctured_fundamentalGroup_three_aux_cover (M : Type)
           Joined (e.toFun (c.boundaryMap s)) ⟨c.boundaryMap s, hu⟩ := by
   sorry
 
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)]
+    (g : FundamentalGroup U ⟨w.1, w.2.1⟩) :
+    TwoOpenFreeProductMapping.groupEquivalence hU hV hcover w
+        (FundamentalGroup.map
+          (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) =
+      Monoid.Coprod.inl g := by
+  sorry
+
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective
     {X : Type} [TopologicalSpace X]
     (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
