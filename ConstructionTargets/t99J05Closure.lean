@@ -1928,6 +1928,71 @@ theorem t99J05_cp_successor_topPatch_subsingleton_positive
 #print axioms t99J05_cp_successor_lowerPatch_subsingleton_above
 #print axioms t99J05_cp_successor_topPatch_subsingleton_positive
 
+/-- At the new top degree, the transported Mayer--Vietoris connecting map is
+bijective because both adjacent patch terms vanish. -/
+theorem t99J05_cp_successor_top_connecting_bijective
+    (n : ℕ) (h : ComplexProjectiveRationalHomologyData n) :
+    Function.Bijective
+      (t99J05_cp_successor_mayerVietoris_ambientTransport n (2 * n + 1)).g.hom := by
+  let S := t99J05_cp_successor_mayerVietoris_ambientTransport n (2 * n + 1)
+  let T := t99J05_cp_successor_mayerVietoris_overlapTransport n (2 * n + 1)
+  letI : Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) (2 * n + 2)) :=
+    t99J05_cp_successor_lowerPatch_subsingleton_above n (2 * n + 2) h (by omega)
+  letI : Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) (2 * n + 2)) :=
+    t99J05_cp_successor_topPatch_subsingleton_positive n (2 * n + 2) (by omega)
+  letI : Subsingleton S.X₁ := by
+    apply ModuleCat.subsingleton_of_isZero
+    change CategoryTheory.Limits.IsZero
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+          Set (CP (n + 1))) (2 * n + 2) ⊞
+        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) (2 * n + 2))
+    rw [CategoryTheory.Limits.biprod_isZero_iff]
+    exact ⟨ModuleCat.isZero_of_subsingleton _, ModuleCat.isZero_of_subsingleton _⟩
+  letI : Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+        Set (CP (n + 1))) (2 * n + 1)) :=
+    t99J05_cp_successor_lowerPatch_subsingleton_above n (2 * n + 1) h (by omega)
+  letI : Subsingleton
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) (2 * n + 1)) :=
+    t99J05_cp_successor_topPatch_subsingleton_positive n (2 * n + 1) (by omega)
+  letI : Subsingleton T.X₃ := by
+    apply ModuleCat.subsingleton_of_isZero
+    change CategoryTheory.Limits.IsZero
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+          Set (CP (n + 1))) (2 * n + 1) ⊞
+        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) (2 * n + 1))
+    rw [CategoryTheory.Limits.biprod_isZero_iff]
+    exact ⟨ModuleCat.isZero_of_subsingleton _, ModuleCat.isZero_of_subsingleton _⟩
+  have hS := t99J05_cp_successor_mayerVietoris_exact_ambient_transport n (2 * n + 1)
+  have hT := t99J05_cp_successor_mayerVietoris_exact_overlap_transport n (2 * n + 1)
+  have hshared : S.g = T.f := by rfl
+  apply t99J05_bijective_of_adjacent_exact_of_subsingleton S.f S.g T.g
+  · exact hS.moduleCat_range_eq_ker
+  · rw [hshared]
+    exact hT.moduleCat_range_eq_ker
+
+#print axioms t99J05_cp_successor_top_connecting_bijective
+
+/-- The top connecting morphism identifies successor top homology with the
+top homology of the affine overlap. -/
+noncomputable def t99J05_cp_successor_top_connecting_iso
+    (n : ℕ) (h : ComplexProjectiveRationalHomologyData n) :
+    Homology (CP (n + 1)) (2 * n + 2) ≃ₗ[ℚ]
+      Homology (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n :
+        Set (CP (n + 1))) (2 * n + 1) :=
+  LinearEquiv.ofBijective
+    (t99J05_cp_successor_mayerVietoris_ambientTransport n (2 * n + 1)).g.hom
+    (t99J05_cp_successor_top_connecting_bijective n h)
+
+#print axioms t99J05_cp_successor_top_connecting_iso
+
 /-- Degreewise finite-dimensionality of successor homology in every degree
 whose overlap term vanishes.  The two patch terms are the left object of the
 transported adjacent Mayer--Vietoris segment. -/
