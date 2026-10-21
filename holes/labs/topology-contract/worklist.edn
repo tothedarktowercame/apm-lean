@@ -119198,6 +119198,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
     :diagnostic-history
     [{:cmd "compile", :exit 1, :correction "notation"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792610607422-1398-5e30fe53",
+     :commands
+     ["git show/diff 469ee924"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 469ee924 changes only t00J02Closure.lean (+31), adding a compiled incidence-projection regular-fiber selector after prior history 1ef447dd. Fixture afb497a6, source 0b3b4888, implementation f2b3a6ab; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the transverse incidence atlas supplies the source manifold and its second-countability, the established projection smoothness discharges the map hypothesis, and the fixed chart at 1 selects z with surjective incidence-projection mfderiv along its entire fiber. CircleIncidenceModel is the source model and R1 the Circle target model throughout. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; direction lifts, signed counts, and final assembly remain listed."},
     :commit "469ee924ae6838ba2d7bfbbf6168f99ed48165cb",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119206,7 +119218,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119224,7 +119236,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked fixed-chart regular value.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence regular fiber.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119580,7 +119592,10 @@
      :reason "Banked regular-value selector."}
     {:job 8,
      :commit "1ef447dd9b8c48b78d6c356c32180fa3ae68c999",
-     :reason "Banked fixed-chart regular value."}]}
+     :reason "Banked fixed-chart regular value."}
+    {:job 9,
+     :commit "469ee924ae6838ba2d7bfbbf6168f99ed48165cb",
+     :reason "Banked incidence regular fiber."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122888,7 +122903,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_circleIncidenceProjection_surjective_fiber",
@@ -122898,7 +122913,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "incidence projection regular fiber",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "469ee924ae6838ba2d7bfbbf6168f99ed48165cb"},
    :id :lemma-exists-circleincidenceprojection-surjective-fiber,
    :kind :lemma,
    :depends-on
