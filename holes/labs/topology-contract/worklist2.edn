@@ -89425,6 +89425,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan; git show --check; sha256sum", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792598073972-1082-1377d57f",
+     :commands
+     ["git show/diff-tree cc53ce30c"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit cc53ce30c changes only t97A03Closure after history 921d40caa; fixture SHA d1425880... matches. Connected plus locally path-connected total space is correctly upgraded to PathConnectedSpace, then prior monodromy transitivity applies; local path-connectedness is not fabricated and remains residual. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; proving local path-connectedness from charts, loop reduction, quotient realization, and invariants remain listed."},
     :commit "cc53ce30c",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89433,7 +89445,7 @@
      "d1425880eaf5cf127a17688c2a92c9a2e2611d981ea4b400dcb578055ac5a1a3"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89451,7 +89463,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked monodromy transitivity from paths in the total space.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked connected locally-path-connected cover to monodromy transitivity.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89508,7 +89520,11 @@
     {:job 6,
      :commit "921d40caa",
      :reason
-     "Banked monodromy transitivity from paths in the total space."}]}
+     "Banked monodromy transitivity from paths in the total space."}
+    {:job 7,
+     :commit "cc53ce30c",
+     :reason
+     "Banked connected locally-path-connected cover to monodromy transitivity."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100307,7 +100323,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coveringMonodromy_transitive_of_connected_locPath",
@@ -100319,7 +100335,9 @@
     :type
     "connected locally path-connected total space has endpoint-transitive monodromy",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "cc53ce30c"},
    :id :lemma-coveringmonodromy-transitive-of-connected-locpath,
    :kind :lemma,
    :depends-on [:lemma-coveringmonodromy-transitive-of-pathconnected],
