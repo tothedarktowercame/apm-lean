@@ -89434,6 +89434,18 @@
     [{:cmd "distinctness",
       :exit 1,
       :correction "cancelled midpoint phase"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792607894698-1316-77abd7f8",
+     :commands
+     ["git show/diff 808a49ca9"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: 808a49ca9 follows 12037e606 and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. It adds explicit angle-lift circle paths, proves them distinct, and constructs the second literal quotient loop, all sorry-free with standard axioms. The +2pi path is not always an embedded complementary subarc, but no such formal claim or generation theorem is asserted; signed generation and both frozen bridges remain listed."},
     :commit "808a49ca9",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89442,7 +89454,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89460,7 +89472,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked first literal loop.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked complementary loops.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89542,9 +89554,10 @@
     {:job 5,
      :commit "604d9d4b6",
      :reason "Banked literal sphere return."}
-    {:job 6,
-     :commit "12037e606",
-     :reason "Banked first literal loop."}]}
+    {:job 6, :commit "12037e606", :reason "Banked first literal loop."}
+    {:job 7,
+     :commit "808a49ca9",
+     :reason "Banked complementary loops."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100626,7 +100639,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A03_two_literal_complementary_loops",
@@ -100636,7 +100649,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "distinct arcs closed through sphere",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "808a49ca9"},
    :id :lemma-t97a03-two-literal-complementary-loops,
    :kind :lemma,
    :depends-on [:lemma-t97a03-first-literal-loop],
