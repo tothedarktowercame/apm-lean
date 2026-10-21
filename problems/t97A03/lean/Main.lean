@@ -3,6 +3,7 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.t97A03Closure
+import ConstructionTargets.PolygonSurfaceHomology
 
 /-!
 # APM t97A03
@@ -299,6 +300,24 @@ theorem apm_t97A03_literal_transport_moved_of_generated
   · exact Or.inr
       ((ConstructionTargets.t97A03Closure.fiberTransport_ne_refl_iff_exists_moved
         _).1 hsecond)
+
+/-- The shared polygon-surface foundation already proves the exact signed-word
+normal form needed on the target of the geometric comparison: every based
+loop in the two-circle wedge is a word in its two fixed positive leg loops.
+This specialization prevents the literal-base comparison from rebuilding a
+second, problem-local van Kampen calculation. -/
+theorem apm_t97A03_twoCircleWedge_exists_signedGeneratorWord
+    (g : FundamentalGroup
+      (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (Fin 2))
+      (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin 2) 1)) :
+    ∃ w : ConstructionTargets.PolygonSurfaceHomology.FiniteWedgeFinGeneratorWord 1,
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinGeneratorWordValue
+          1 w = g := by
+  exact
+    ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFin_exists_generatorWord
+      1 g
 
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
