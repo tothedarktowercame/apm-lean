@@ -3691,7 +3691,41 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     (hconv : ∀ j, Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' K j))
     (s : Finset ι) :
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M (⋃ j ∈ s, K j) := by
-  sorry
+  classical
+  induction s using Finset.induction_on generalizing K with
+  | empty =>
+      simpa using
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_empty M)
+  | @insert a s ha ih =>
+      have gKa :=
+        apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex
+          M x (K a) (hK a) (hsub a) (hconv a)
+      have gL := ih K hK hsub hconv
+      have hKi : ∀ j, IsCompact (K a ∩ K j) := fun j => (hK a).inter (hK j)
+      have hKis : ∀ j, K a ∩ K j ⊆
+          (chartAt (EuclideanSpace ℝ (Fin 3)) x).source := fun j =>
+        (Set.inter_subset_left.trans (hsub a))
+      have hKic : ∀ j, Convex ℝ
+          ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' (K a ∩ K j)) := by
+        intro j
+        rw [(chartAt (EuclideanSpace ℝ (Fin 3)) x).injOn.image_inter
+          (hsub a) (hsub j)]
+        exact (hconv a).inter (hconv j)
+      have gI := ih (fun j => K a ∩ K j) hKi hKis hKic
+      have hLcompact : IsCompact (⋃ j ∈ s, K j) :=
+        s.isCompact_biUnion (fun j _ => hK j)
+      have hIeq : K a ∩ (⋃ j ∈ s, K j) = ⋃ j ∈ s, (K a ∩ K j) := by
+        ext y
+        simp only [Set.mem_inter_iff, Set.mem_iUnion, exists_prop]
+        aesop
+      have hUeq : (⋃ j ∈ insert a s, K j) = K a ∪ (⋃ j ∈ s, K j) := by
+        ext y
+        simp [ha]
+      rw [hUeq]
+      apply apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union
+        M (K a) (⋃ j ∈ s, K j) (hK a).isClosed hLcompact.isClosed gKa gL
+      rw [hIeq]
+      exact gI
 
 /-- PROVED from `_aux_inChart_aux_lift`, `_aux_inChart_aux_cover`,
 `_aux_inChart_aux_finite`, `_aux_convex_aux_inj` (Hatcher 3.27, step 3;
