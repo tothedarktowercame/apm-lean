@@ -335,13 +335,50 @@ theorem punctured_pathConnected (n : ℕ) (hn : 2 ≤ n) (M : Type)
 
 /-- **LIBRARY (B4a).** A punctured closed manifold has no top homology. -/
 -- BEGIN SEAT AREA
+noncomputable def punctured_topHomology_zero_aux_inclusion (n : ℕ) (M : Type)
+    [TopologicalSpace M] (c : BallCollar n M) :
+    H n c.Punctured ⟶ H n M :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+    (ModuleCat.of ℤ ℤ)).map
+      (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
+
+/-- The top-homology map of the puncture inclusion is injective.  This is the
+relative-homology/excision input: the relative group immediately above top
+degree vanishes. -/
+theorem punctured_topHomology_zero_aux_mono (n : ℕ) (hn : 2 ≤ n) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (hopen : IsOpen c.radialTwo) :
+    Mono (punctured_topHomology_zero_aux_inclusion n M c) := by
+  sorry
+
+/-- A top-dimensional cycle supported away from a nonempty collared ball has
+zero image in the top homology of the connected closed manifold.  This is the
+local-fundamental-class input. -/
+theorem punctured_topHomology_zero_aux_map_eq_zero (n : ℕ) (hn : 2 ≤ n)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
+    (hopen : IsOpen c.radialTwo) :
+    punctured_topHomology_zero_aux_inclusion n M c = 0 := by
+  sorry
+
+theorem punctured_topHomology_zero_aux_of_mono_eq_zero
+    {X Y : ModuleCat ℤ} (f : X ⟶ Y) [Mono f] (hf : f = 0) : IsZero X := by
+  exact IsZero.of_mono_eq_zero f hf
+
 theorem punctured_topHomology_zero (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E n) M]
     [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
     (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
     (hopen : IsOpen c.radialTwo) : IsZero (H n c.Punctured) := by
-  sorry
+  letI := punctured_topHomology_zero_aux_mono n hn M c hopen
+  exact punctured_topHomology_zero_aux_of_mono_eq_zero
+    (punctured_topHomology_zero_aux_inclusion n M c)
+    (punctured_topHomology_zero_aux_map_eq_zero n hn M c htop hopen)
 -- END SEAT AREA
 
 /-- **LIBRARY (B4b).** The local fundamental class makes the boundary sphere
