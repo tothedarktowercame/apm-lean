@@ -2286,6 +2286,67 @@ lemma connectedSum_mayerVietoris_middle_aux_inter_zero
 /-- In the middle degrees the Mayer--Vietoris reassembly map is onto: for
 `2 ≤ k` the overlap has no `H (k - 1)`; for `k = 1` the overlap is nonempty, so
 its `H 0` injects into `H 0 U ⊞ H 0 V`. -/
+lemma connectedSum_mayerVietoris_middle_aux_epi_aux_inter_mono_zero
+    (n : ℕ) (hn : 2 ≤ n) {X : Type} [TopologicalSpace X]
+    (U V : Set X)
+    (e₀ : ContinuousMap.HomotopyEquiv ↥(U ∩ V) (Sphere n)) :
+    Mono (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+      U V 0) := by
+  let eSmod : H 0 (Sphere n) ≅ ModuleCat.of ℤ ℤ := by
+    have hdim : n - 1 + 1 = n := by omega
+    rw [← hdim]
+    exact ConstructionTargets.SphereHomology.sphereModuleH0IsoInt
+      (n - 1) (by omega)
+  let eImod : H 0 (U ∩ V : Set X) ≅ ModuleCat.of ℤ ℤ :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e₀ 0 ≪≫ eSmod
+  let eI : ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+      (TopCat.of (U ∩ V : Set X)) ≅
+      AddCommGrpCat.of ℤ :=
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (U ∩ V : Set X)) 0).symm ≪≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso eImod
+  letI : Nonempty (U ∩ V : Set X) :=
+    ConstructionTargets.SingularH0Augmentation.nonempty_of_singularH0_iso_int eI
+  let fi : C((U ∩ V : Set X), U) :=
+    ⟨fun x ↦ ⟨x.1, Set.inter_subset_left x.2⟩,
+      continuous_subtype_val.subtype_mk _⟩
+  let imap := HomologicalComplex.homologyMap
+    (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map (TopCat.toSSet.map
+        (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+          (X := X) (A := U ∩ V) (B := U) Set.inter_subset_left))) 0
+  have himap : Mono imap := by
+    rw [show imap = HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition fi) 0 from
+        ConstructionTargets.SingularExcision.topologicalSubspaceInclusion_homologyMap
+          _ 0]
+    have haugIso : IsIso
+        (ConstructionTargets.SingularH0Augmentation.h0Augmentation
+          (X := (U ∩ V : Set X))) :=
+      ConstructionTargets.SingularH0Augmentation.h0Augmentation_isIso_of_iso_int eI
+    letI : IsIso
+        (ConstructionTargets.SingularH0Augmentation.h0Augmentation
+          (X := (U ∩ V : Set X))) := haugIso
+    have haugMono : Mono
+        (ConstructionTargets.SingularH0Augmentation.h0Augmentation
+          (X := (U ∩ V : Set X))) := inferInstance
+    have hnat :=
+      ConstructionTargets.SingularH0Augmentation.h0Augmentation_naturality fi
+    constructor
+    intro Z g h heq
+    apply (cancel_mono
+      (ConstructionTargets.SingularH0Augmentation.h0Augmentation
+        (X := (U ∩ V : Set X)))).1
+    rw [← hnat]
+    exact congrArg
+      (fun q ↦ q ≫
+        ConstructionTargets.SingularH0Augmentation.h0Augmentation (X := U)) heq
+  letI : Mono imap := himap
+  unfold ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+  change Mono (biprod.lift imap _)
+  apply ConstructionTargets.MayerVietorisExactnessIsZero.mono_signedBiprodLift_of_mono_left
+
 lemma connectedSum_mayerVietoris_middle_aux_epi
     (n : ℕ) (hn : 2 ≤ n) {X : Type} [TopologicalSpace X]
     (U V : Set X) (hU : IsOpen U) (hV : IsOpen V) (hUV : U ∪ V = Set.univ)
@@ -2293,7 +2354,27 @@ lemma connectedSum_mayerVietoris_middle_aux_epi
     (k : ℕ) (hk0 : 0 < k) (hkn : k < n) :
     Epi (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
       U V k) := by
-  sorry
+  have hk : k - 1 + 1 = k := by omega
+  rw [← hk]
+  apply (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+    U V hU hV hUV (k - 1)).epi_f_iff.mpr
+  by_cases hk1 : k = 1
+  · subst k
+    have hm : Mono
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+          U V 0) :=
+      connectedSum_mayerVietoris_middle_aux_epi_aux_inter_mono_zero n hn U V e₀
+    exact (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_intersection
+      U V hU hV hUV 0).mono_g_iff.mp hm
+  · have hzero : IsZero (H (k - 1) (U ∩ V : Set X)) :=
+      connectedSum_mayerVietoris_middle_aux_overlap_module_zero
+        (I := U ∩ V) e₀ (by omega) (by omega) (by omega)
+    have hgroup : IsZero
+        (ConstructionTargets.SingularHomologyConcrete.SingularHomology
+          (k - 1) (TopCat.of (U ∩ V : Set X))) :=
+      ConstructionTargets.T00A01MayerVietorisAdapters.groupHomologyIsZeroOfModuleHomologyIsZero
+        (TopCat.of (U ∩ V : Set X)) (k - 1) hzero
+    exact hgroup.eq_of_tgt _ _
 
 /-- An isomorphic reassembly map, transported to integral module homology. -/
 lemma connectedSum_mayerVietoris_middle_aux_assemble
