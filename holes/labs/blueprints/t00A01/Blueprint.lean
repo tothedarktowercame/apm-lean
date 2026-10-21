@@ -4024,7 +4024,49 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
     (A : Set M) (hA : IsCompact A) :
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M A := by
-  sorry
+  classical
+  letI := ChartedSpace.locallyCompactSpace (EuclideanSpace ℝ (Fin 3)) M
+  choose K hK using fun x : M =>
+    (isCompact_isClosed_basis_nhds x).mem_iff.mp
+      (chart_source_mem_nhds (EuclideanSpace ℝ (Fin 3)) x)
+  have hKn (x : M) : K x ∈ nhds x := (hK x).1.1
+  have hKc (x : M) : IsCompact (K x) := (hK x).1.2.1
+  have hKcl (x : M) : IsClosed (K x) := (hK x).1.2.2
+  have hKs (x : M) : K x ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source :=
+    (hK x).2
+  obtain ⟨s, hs⟩ := hA.elim_finite_subcover (fun x : M => interior (K x))
+    (fun _ => isOpen_interior) (fun x _ => Set.mem_iUnion.mpr
+      ⟨x, mem_interior_iff_mem_nhds.mpr (hKn x)⟩)
+  have hfinite : ∀ t : Finset M,
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_good M
+        (⋃ x ∈ t, A ∩ K x) := by
+    intro t
+    induction t using Finset.induction_on with
+    | empty =>
+        simpa using
+          (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_empty M)
+    | @insert x t hxt ih =>
+        rw [Finset.set_biUnion_insert]
+        apply apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union
+        · exact (hA.inter_right (hKcl x)).isClosed
+        · exact isClosed_biUnion_finset fun y _ => (hA.inter_right (hKcl y)).isClosed
+        · exact apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart
+            M x (A ∩ K x) (hA.inter_right (hKcl x))
+            (fun _ hz => hKs x hz.2)
+        · exact ih
+        · apply apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart
+          · exact (hA.inter_right (hKcl x)).inter_right
+              (t.finite_toSet.isCompact_biUnion fun y _ => hA.inter_right (hKcl y)).isClosed
+          · intro _ hz
+            exact hKs x hz.1.2
+  have hEq : (⋃ x ∈ s, A ∩ K x) = A := by
+    apply Set.Subset.antisymm
+    · exact Set.iUnion₂_subset fun x _ => inter_subset_left
+    · intro x hx
+      obtain ⟨y, hyS, hxy⟩ := Set.mem_iUnion₂.mp (hs hx)
+      exact Set.mem_iUnion₂.mpr ⟨y, hyS, hx, interior_subset hxy⟩
+  rw [← hEq]
+  exact hfinite s
 
 /-- LIBRARY LEAF: `H_n(M) → H_n(M, ∅)` is an isomorphism (the subcomplex of
 chains in the empty set is zero).  `T02A06SphereShift`'s
