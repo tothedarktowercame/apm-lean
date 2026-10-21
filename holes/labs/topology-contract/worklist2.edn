@@ -89433,6 +89433,19 @@
     [{:cmd "lake env lean problems/t97A03/lean/Main.lean",
       :exit 1,
       :correction "use hom equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792622362697-1733-110f132d",
+     :commands
+     ["git show/diff 45b5314b9"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t97A03 --rev 45b5314b9"
+      "sha256sum + placeholder/#print axioms scans"],
+     :finding
+     "PASS: commit changes only in-scope Main.lean. Fixture SHA 581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f; registry 170/0; frozen digest abf8282be594bd45bebca6dc29d8b578f4371872506f062166ee2d225b6ca0a4. Fresh exact-revision build/Lean pass; closure/Main placeholders 0/3. The new literal free-group evaluation maps the two genuine quotient loops, the proved commuting square has the correct collapse orientation, and literal surjectivity plus cut injectivity correctly yields injectivity of the concrete collapse map. Axioms are standard only. This is new compiled progress; geometric decoder/generation, cover classification, and invariants remain listed."},
     :commit "45b5314b9",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89441,7 +89454,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89459,7 +89472,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cut decoder adapter.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal-collapse injectivity.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89597,7 +89610,10 @@
      :reason "Banked cut freeness from a geometric decoder."}
     {:job 6,
      :commit "c411fc44f",
-     :reason "Banked cut decoder adapter."}]}
+     :reason "Banked cut decoder adapter."}
+    {:job 7,
+     :commit "45b5314b9",
+     :reason "Banked literal-collapse injectivity."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -101164,7 +101180,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -101176,7 +101192,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "collapse injectivity",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "45b5314b9"},
    :id
    :lemma-apm-t97a03-collapsepionehom-injective-of-literal-surjective-cut-injective,
    :kind :lemma,
