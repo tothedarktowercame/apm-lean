@@ -37457,6 +37457,8 @@
      "Exact representation boundary: the banked Unit inverse comparison and Bool naturality have incompatible categorical parenthesizations under the chosen coproduct prefix; direct rewrites do not expose the shared subcomposite. No scoped change retained."}]}
   {:consumer :t96J05,
    :stop-count 1,
+   :review-finding
+   "Blueprint mathematics defect: hypotheses are not used as claimed. In apm_t96j05, hmn : m ≤ n reaches no milestone or conclusion; `have _ := hmn` is only a dummy binding. In apm_t96j05_regular_radius_level, hlevel : Nonempty (radialLevel X r) is entirely unused (Lean reports it). This violates the blueprint requirement that every node use its stated hypotheses and every final hypothesis be used somewhere. Repair the blueprint by giving a genuine mathematical use/dependency for hmn and hlevel, or make the node statements accurately minimal where the frozen registered statement permits it. Recorded scope/hash and compile/registry gates otherwise reproduce.",
    :evidence
    {:residual
     "Move compiled C1/C3 and assembly into Closure; audit and bank the C2 Sard proof.",
@@ -37497,6 +37499,12 @@
      {:cmd "lake env lean problems/t96J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1792586779413-780-9aaa605c",
+     :finding
+     "Blueprint mathematics defect: hypotheses are not used as claimed. In apm_t96j05, hmn : m ≤ n reaches no milestone or conclusion; `have _ := hmn` is only a dummy binding. In apm_t96j05_regular_radius_level, hlevel : Nonempty (radialLevel X r) is entirely unused (Lean reports it). This violates the blueprint requirement that every node use its stated hypotheses and every final hypothesis be used somewhere. Repair the blueprint by giving a genuine mathematical use/dependency for hmn and hlevel, or make the node statements accurately minimal where the frozen registered statement permits it. Recorded scope/hash and compile/registry gates otherwise reproduce."},
     :commit "a047cd36f",
     :changed-paths ["ConstructionTargets/t96J05Closure.blueprint.md"],
     :fixture
@@ -37505,7 +37513,7 @@
      "f19ddb9743925ee6336eba62785850f29c44d70331d4c1474d63bc42c53d899f"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t96J05/lean/Main.lean"
     "problems/t96J05/status.json"
@@ -37527,7 +37535,7 @@
    :id :program-2026-10-13-close-t96j05,
    :kind :final-adapter,
    :campaign-priority 35,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers []}
