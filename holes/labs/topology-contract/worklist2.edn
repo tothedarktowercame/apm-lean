@@ -88707,6 +88707,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder/axiom scan", :exit 0}
      {:cmd "git show --check dfe3073a0", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792583962716-726-a79592d1",
+     :commands
+     ["git show/check/hash dfe3073a0"
+      "exact-source lake build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "statement-registry check/fingerprint t94J09"
+      "placeholder scan and direct #print axioms apm_t94j09"],
+     :finding
+     "PASS: reviewed completion dfe3073a0 by claude-14; scope exactly Main+status. Fixture 762d1453... matches; registry 170/0; frozen digest 52b4778c...; placeholders Main 1->0, closure 0. Exact historical closure rebuild and Main compile pass. Polygon relation bridge, six verified moves, crosscap/N6 bridge, and homeomorphism composition have correct directions. Homology maps PolygonSurface -> banked N6 via e.symm, yielding H0, H1=(Fin5->Z)xZMod2, and high-degree vanishing in the registered orientation. Final theorem axioms only propext, Classical.choice, Quot.sound; both frozen library obligations are proved and no milestones remain."},
     :commit "dfe3073a0",
     :commits ["45e772734" "dfe3073a0"],
     :changed-paths
@@ -88717,7 +88729,7 @@
      "762d1453a9f593f9032e9211a4a9691439bbd5523f23afc55036e55172bf1ed7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94548,7 +94560,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94J09_polygon_normalization",
@@ -94558,14 +94570,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "literal polygon quotient homeomorphic to N6",
     :area "polygon-cut-and-paste",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "dfe3073a0"},
    :id :lemma-apm-t94j09-polygon-normalization,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94J09_polygon_homology",
@@ -94575,7 +94589,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "literal quotient integral homology",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "dfe3073a0"},
    :id :lemma-apm-t94j09-polygon-homology,
    :kind :lemma,
    :depends-on
