@@ -89380,60 +89380,63 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "cover-to-action/model realization; cellular-to-singular and pi1 transport",
+    "construct lifted-arc monodromy and model homeomorphisms; compute model invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "modelCellular_zero_boundary_data",
-      :type "C1=Z^3 and C2=Z^2 have zero cellular boundaries",
+    [{:name "surjective_of_fiber_card_two",
+      :type "cardinality-two fibers imply surjectivity",
       :status :proved,
       :consumers [:t97A03],
       :depends-on [],
-      :area "quotient-space-mayer-vietoris"}
+      :area "covering-classification-explicit"}
+     {:name "fiber_equiv_fin_two",
+      :type "cardinality-two fiber has Fin 2 coordinate",
+      :status :proved,
+      :consumers [:t97A03],
+      :depends-on [],
+      :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "connected double-cover classification",
       :status :partial,
       :consumers [:t97A03],
-      :depends-on ["twoArcActionConnected_iff_nontrivial"],
+      :depends-on
+      ["fiber_equiv_fin_two" "twoArcActionConnected_iff_nontrivial"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
       :type "model homology and fundamental group",
-      :status :partial,
+      :status :not-started,
       :consumers [:t97A03],
-      :depends-on ["modelCellular_zero_boundary_data"],
+      :depends-on [],
       :area "quotient-space-mayer-vietoris"}],
     :statement-hashes {:registry "170/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked model cellular boundary calculation.",
+    :reason
+    "Removed rejected zero-map facade; banked cardinal-two fiber coordinates.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 949070b9a", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1792590763361-873-bb684d51",
-     :finding
-     "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f...."},
-    :commit "949070b9a",
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "git show --check b05db820d", :exit 0}],
+    :commit "b05db820d",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "8452877f7179d34d7e44f2d73d644cc4759b75d3908759704dc36b9061cc8d0f"},
+     "c7046c8812689eaac8f91fb7e2d41b0ffa9e9997e18aa8a033f966cb4229744f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98405,7 +98408,8 @@
     :lemma-twoarcpermmonodromy-model-exists
     :lemma-twoarcpermmonodromy-model-exists-of-reachable
     :lemma-twoarcpermmonodromy-model-exists-of-actionconnected
-    :lemma-twoarcactionconnected-iff-nontrivial],
+    :lemma-twoarcactionconnected-iff-nontrivial
+    :lemma-fiber-equiv-fin-two],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -100066,6 +100070,40 @@
     :area "quotient-space-mayer-vietoris",
     :proved-in :program-2026-10-13-close-t97a03},
    :id :lemma-modelcellular-zero-boundary-data,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surjective_of_fiber_card_two",
+    :type "cardinality-two fibers imply surjectivity"},
+   :lemma
+   {:name "surjective_of_fiber_card_two",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "cardinality-two fibers imply surjectivity",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-surjective-of-fiber-card-two,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "fiber_equiv_fin_two",
+    :type "cardinality-two fiber has Fin 2 coordinate"},
+   :lemma
+   {:name "fiber_equiv_fin_two",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "cardinality-two fiber has Fin 2 coordinate",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-fiber-equiv-fin-two,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
