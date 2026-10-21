@@ -36711,68 +36711,59 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Transport lower-patch CP n and top-patch affine homology; prove top/even generators.",
+    "Prove top affine-patch homology transport, then successor top/even generators.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_finiteDimensional_of_overlap_gt",
-      :type
-      "above overlap top, finite patches imply finite successor H(k+1)",
+    [{:name "t99J05_cp_successor_lowerPatch_homologyIso",
+      :type "lower successor patch homology is CP n homology",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton"
-       "t99J05_cp_successor_overlap_homology_isZero_of_gt"],
+      ["t99J05_cp_successor_lowerPatch_deformationRetract"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_lowerPatch_finiteDimensional",
+      :type "CP n data gives finite lower-patch homology",
+      :status :proved,
+      :consumers [:t99J05],
+      :depends-on ["t99J05_cp_successor_lowerPatch_homologyIso"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
       :status :partial,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_finiteDimensional_of_overlap_gt"
+      ["t99J05_cp_successor_lowerPatch_finiteDimensional"
        "t99J05_cp_successor_overlap_rational_topHomology"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked successor finite-dimensionality above the overlap top; patch transports and top/even cases remain.",
+    "Banked lower-patch homology transport and finite-dimensionality; top affine patch and top/even cases remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792596139270-1027-70f5c067",
-     :commands
-     ["git show/diff-tree c0d54d5e01"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check c0d54d5e01^ c0d54d5e01"],
-     :finding
-     "PASS: new commit c0d54d5e01 changes only scoped Closure; fixture/blob SHA matches 3128620a.... For k above overlap top degree, the existing isZero theorem is correctly converted to Subsingleton; the zero module is made finite-dimensional via the injective zero map into ℚ, then the degreewise exact-segment adapter yields finite successor H(k+1). Degree shifts and representation boundaries match the transported LES. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Milestone is proved and patch transports/top-even cases remain listed."},
-    :commit "c0d54d5e01",
+    :commit "e1f9c08906",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "3128620a21f9a6eb77fc47d26db8813b2b2c80d9c7dbc392f0e8774553650327"},
+     "528c6afa83fc72b1a46b761006d67e1bccf7a6f7f8fa688734e4f6d39ba2a5c2"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48825,7 +48816,8 @@
     :lemma-t99j05-finitedimensional-middle-of-exact-of-subsingleton
     :lemma-t99j05-shortcomplex-finitedimensional-middle-of-subsingleton
     :lemma-t99j05-cp-successor-finitedimensional-of-overlap-subsingleton
-    :lemma-t99j05-cp-successor-finitedimensional-of-overlap-gt],
+    :lemma-t99j05-cp-successor-finitedimensional-of-overlap-gt
+    :lemma-t99j05-cp-successor-lowerpatch-finitedimensional],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -49049,6 +49041,41 @@
    :depends-on
    [:lemma-t99j05-cp-successor-finitedimensional-of-overlap-subsingleton
     :lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_lowerPatch_homologyIso",
+    :type "lower successor patch homology is CP n homology"},
+   :lemma
+   {:name "t99J05_cp_successor_lowerPatch_homologyIso",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "lower successor patch homology is CP n homology",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-lowerpatch-homologyiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-lowerpatch-deformationretract],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_lowerPatch_finiteDimensional",
+    :type "CP n data gives finite lower-patch homology"},
+   :lemma
+   {:name "t99J05_cp_successor_lowerPatch_finiteDimensional",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "CP n data gives finite lower-patch homology",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-lowerpatch-finitedimensional,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-successor-lowerpatch-homologyiso],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
