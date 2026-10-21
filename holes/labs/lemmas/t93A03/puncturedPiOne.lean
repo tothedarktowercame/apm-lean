@@ -64,7 +64,92 @@ theorem quotientHomeomorph
     (c₁ c₂ : BallCollar 3 T93A03Summand)
     (hc₁ : c₁.smallMap = φ₁) (hc₂ : c₂.smallMap = φ₂) :
     Nonempty (T93A03ConnectedSum φ₁ φ₂ ≃ₜ ConnectedSum c₁ c₂) := by
-  sorry
+  subst φ₁
+  subst φ₂
+  let p₁ : T93A03Punctured c₁.smallMap → c₁.Punctured := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let p₂ : T93A03Punctured c₂.smallMap → c₂.Punctured := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let q₁ : c₁.Punctured → T93A03Punctured c₁.smallMap := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let q₂ : c₂.Punctured → T93A03Punctured c₂.smallMap := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let f : Sum (T93A03Punctured c₁.smallMap) (T93A03Punctured c₂.smallMap) →
+      Sum c₁.Punctured c₂.Punctured
+    | Sum.inl x => Sum.inl (p₁ x)
+    | Sum.inr x => Sum.inr (p₂ x)
+  let g : Sum c₁.Punctured c₂.Punctured →
+      Sum (T93A03Punctured c₁.smallMap) (T93A03Punctured c₂.smallMap)
+    | Sum.inl x => Sum.inl (q₁ x)
+    | Sum.inr x => Sum.inr (q₂ x)
+  have hfg (x) : g (f x) = x := by
+    cases x <;> simp [f, g, p₁, p₂, q₁, q₂]
+  have hgf (x) : f (g x) = x := by
+    cases x <;> simp [f, g, p₁, p₂, q₁, q₂]
+  have hfrel {x y} (h : T93A03ConnectedSumRel c₁.smallMap c₂.smallMap x y) :
+      Relation.EqvGen (GlueRel c₁ c₂) (f x) (f y) := by
+    cases h with
+    | boundary s h₁ h₂ =>
+      apply Relation.EqvGen.rel
+      exact GlueRel.boundary s
+  have hgrel {x y} (h : GlueRel c₁ c₂ x y) :
+      Relation.EqvGen (T93A03ConnectedSumRel c₁.smallMap c₂.smallMap) (g x) (g y) := by
+    cases h with
+    | boundary s =>
+      apply Relation.EqvGen.rel
+      apply T93A03ConnectedSumRel.boundary s
+  let F : T93A03ConnectedSum c₁.smallMap c₂.smallMap → ConnectedSum c₁ c₂ :=
+    Quotient.map' f (fun _ _ h => by
+      change Relation.EqvGen (GlueRel c₁ c₂) _ _
+      induction h with
+      | rel _ _ h => exact hfrel h
+      | refl x => exact (Relation.EqvGen.refl (f x) :
+          Relation.EqvGen (GlueRel c₁ c₂) (f x) (f x))
+      | symm _ _ _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ =>
+        exact Relation.EqvGen.trans (f x) (f y) (f z) ih₁ ih₂)
+  let G : ConnectedSum c₁ c₂ → T93A03ConnectedSum c₁.smallMap c₂.smallMap :=
+    Quotient.map' g (fun _ _ h => by
+      change Relation.EqvGen (T93A03ConnectedSumRel c₁.smallMap c₂.smallMap) _ _
+      induction h with
+      | rel _ _ h => exact hgrel h
+      | refl x => exact (Relation.EqvGen.refl (g x) :
+          Relation.EqvGen (T93A03ConnectedSumRel c₁.smallMap c₂.smallMap) (g x) (g x))
+      | symm _ _ _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ =>
+        exact Relation.EqvGen.trans (g x) (g y) (g z) ih₁ ih₂)
+  have hFG (x) : G (F x) = x := by
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      have hh := congrArg
+        (Quotient.mk (Relation.EqvGen.setoid
+          (T93A03ConnectedSumRel c₁.smallMap c₂.smallMap))) (hfg x)
+      simpa [F, G] using hh
+  have hGF (x) : F (G x) = x := by
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      have hh := congrArg (Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))) (hgf x)
+      simpa [F, G] using hh
+  have hfcont : Continuous f := by
+    rw [continuous_sum_dom]
+    constructor
+    · exact continuous_inl.comp (continuous_subtype_val.subtype_mk _)
+    · exact continuous_inr.comp (continuous_subtype_val.subtype_mk _)
+  have hgcont : Continuous g := by
+    rw [continuous_sum_dom]
+    constructor
+    · exact continuous_inl.comp (continuous_subtype_val.subtype_mk _)
+    · exact continuous_inr.comp (continuous_subtype_val.subtype_mk _)
+  let E : T93A03ConnectedSum c₁.smallMap c₂.smallMap ≃ ConnectedSum c₁ c₂ :=
+    { toFun := F
+      invFun := G
+      left_inv := hFG
+      right_inv := hGF }
+  refine ⟨{ toEquiv := E, continuous_toFun := ?_, continuous_invFun := ?_ }⟩
+  · rw [continuous_coinduced_dom]
+    exact continuous_coinduced_rng.comp hfcont
+  · rw [continuous_coinduced_dom]
+    exact continuous_coinduced_rng.comp hgcont
 
 /-- **LEAF (P2).** The product `S¹ × S²`, viewed as a three-manifold
 through an `E 1 × E 2 ≃ E 3` model change, has an open, path-connected
@@ -103,15 +188,49 @@ rank-two free group. -/
 theorem twoRankOneFreeProduct :
     Nonempty (Monoid.Coprod (FreeGroup (Fin 1)) (FreeGroup (Fin 1)) ≃*
       FreeGroup (Fin 2)) := by
-  sorry
+  exact ⟨
+    (ConstructionTargets.PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum
+        (Fin 1) (Fin 1)).trans
+      (MulEquiv.ofBijective (FreeGroup.map finSumFinEquiv)
+        ⟨FreeGroup.map_injective finSumFinEquiv.injective,
+          FreeGroup.map_surjective finSumFinEquiv.surjective⟩)⟩
 
 /-- **LEAF (P6).** Transport a based fundamental-group computation across
 a homeomorphism, allowing the basepoint to move to its inverse image. -/
+def transportPiOne_aux_homeomorph {X Y : Type*}
+    [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
 theorem transportPiOne {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
     (e : X ≃ₜ Y) (y : Y) (G : Type*) [Group G]
     (h : Nonempty (FundamentalGroup Y y ≃* G)) :
     Nonempty (FundamentalGroup X (e.symm y) ≃* G) := by
-  sorry
+  obtain ⟨h⟩ := h
+  exact ⟨(transportPiOne_aux_homeomorph e.symm y).symm.trans h⟩
 
 end T93A03PiOne
 
