@@ -494,6 +494,40 @@ theorem exists_distinct_fiber_points_related_by_monodromy
     exact hab (Subtype.ext h)
   · exact coveringMonodromy_transitive_of_connected p hp a.1 b.1
 
+/-- Casting a constant path along an endpoint equality changes only the fiber
+type: its covering monodromy preserves the underlying total-space point. -/
+theorem monodromy_cast_refl_val
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p) {x y : X} (h : x = y)
+    (e : p ⁻¹' ({y} : Set X)) :
+    (hp.monodromy ((Path.Homotopic.Quotient.refl y).cast rfl h) e).1 = e.1 := by
+  change hp.liftPath _ e.1 _ 1 = e.1
+  exact DFunLike.congr_fun (hp.liftPath_const e.2.symm) 1
+
+/-- Connected degree-two covering monodromy supplies a genuinely nontrivial
+loop at a point lying over the requested basepoint. -/
+theorem exists_moved_covering_loop_over_connected
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [LocPathConnectedSpace X] [ConnectedSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p)
+    (hdegree : ∀ x : X, Nat.card (p ⁻¹' ({x} : Set X)) = 2) (x : X) :
+    ∃ a : Y, p a = x ∧ ∃ γ : Path.Homotopic.Quotient (p a) (p a),
+      hp.monodromy γ (⟨a, rfl⟩ : p ⁻¹' ({p a} : Set X)) ≠ ⟨a, rfl⟩ := by
+  obtain ⟨a, b, ha, hb, hab, γ, hγ⟩ :=
+    exists_distinct_fiber_points_related_by_monodromy p hp hdegree x
+  have hba : p b = p a := hb.trans ha.symm
+  let δ : Path.Homotopic.Quotient (p b) (p a) :=
+    (Path.Homotopic.Quotient.refl (p b)).cast rfl hba.symm
+  refine ⟨a, ha, γ.trans δ, ?_⟩
+  intro heq
+  have ht := hp.monodromy_trans_apply γ δ
+    (⟨a, rfl⟩ : p ⁻¹' ({p a} : Set X))
+  rw [hγ] at ht
+  apply hab
+  have hδ : (hp.monodromy δ (⟨b, rfl⟩ : p ⁻¹' ({p b} : Set X))).1 = b :=
+    monodromy_cast_refl_val p hp hba.symm ⟨b, rfl⟩
+  exact (congrArg Subtype.val (ht.symm.trans heq)).symm.trans hδ
+
 /-- Transport along the constant path is the identity equivalence of the
 literal fiber. -/
 theorem coveringPathFiberEquiv_refl
@@ -611,6 +645,8 @@ theorem twoArcModel_exists_of_covering_loops
 #print axioms IsCoveringMap.locPathConnectedSpace
 #print axioms coveringMonodromy_transitive_of_connected
 #print axioms exists_distinct_fiber_points_related_by_monodromy
+#print axioms monodromy_cast_refl_val
+#print axioms exists_moved_covering_loop_over_connected
 #print axioms coveringPathFiberEquiv_refl
 #print axioms coveringPathFiberEquiv_trans
 #print axioms twoArcModel_exists_of_covering_loops
