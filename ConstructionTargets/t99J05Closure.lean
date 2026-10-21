@@ -1763,6 +1763,27 @@ theorem t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
 
 #print axioms t99J05_shortComplex_finiteDimensional_middle_of_subsingleton
 
+/-- In an exact three-term segment, finite-dimensional outer terms force the
+middle term to be finite-dimensional; surjectivity is recovered by restricting
+the second arrow to its range. -/
+theorem t99J05_shortComplex_finiteDimensional_middle
+    (S : CategoryTheory.ShortComplex (ModuleCat ℚ)) (hS : S.Exact)
+    [FiniteDimensional ℚ S.X₁] [FiniteDimensional ℚ S.X₃] :
+    FiniteDimensional ℚ S.X₂ := by
+  letI : FiniteDimensional ℚ (LinearMap.range S.g.hom) := inferInstance
+  let g' : S.X₂ ⟶ ModuleCat.of ℚ (LinearMap.range S.g.hom) :=
+    ModuleCat.ofHom S.g.hom.rangeRestrict
+  apply t99J05_finiteDimensional_middle_of_exact_of_surjective
+    S.f g'
+  · rw [LinearMap.exact_iff]
+    change LinearMap.ker S.g.hom.rangeRestrict = LinearMap.range S.f.hom
+    rw [LinearMap.ker_rangeRestrict]
+    exact hS.moduleCat_range_eq_ker.symm
+  · change Function.Surjective S.g.hom.rangeRestrict
+    exact S.g.hom.surjective_rangeRestrict
+
+#print axioms t99J05_shortComplex_finiteDimensional_middle
+
 /-- The lower successor patch has the same rational homology as `CP n`, via
 the previously constructed deformation-retract equivalence. -/
 noncomputable def t99J05_cp_successor_lowerPatch_homologyIso
@@ -1898,6 +1919,38 @@ theorem t99J05_cp_successor_finiteDimensional_of_overlap_gt
   exact t99J05_cp_successor_finiteDimensional_of_overlap_subsingleton n k
 
 #print axioms t99J05_cp_successor_finiteDimensional_of_overlap_gt
+
+/-- The Mayer--Vietoris segment and the three already-computed patch terms
+give finite-dimensional successor homology in every positive degree. -/
+theorem t99J05_cp_successor_finiteDimensional_positive
+    (n k : ℕ) (h : ComplexProjectiveRationalHomologyData n) :
+    FiniteDimensional ℚ (Homology (CP (n + 1)) (k + 1)) := by
+  let L : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} :
+      Set (CP (n + 1))) (k + 1)
+  let T : ModuleCat ℚ :=
+    Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} :
+      Set (CP (n + 1))) (k + 1)
+  let P : ModuleCat ℚ := L ⊞ T
+  let S := t99J05_cp_successor_mayerVietoris_ambientTransport n k
+  letI : FiniteDimensional ℚ L :=
+    t99J05_cp_successor_lowerPatch_finiteDimensional n (k + 1) h
+  letI : FiniteDimensional ℚ T :=
+    t99J05_cp_successor_topPatch_finiteDimensional n (k + 1)
+  letI : FiniteDimensional ℚ S.X₁ := by
+    change FiniteDimensional ℚ P
+    exact LinearEquiv.finiteDimensional
+      (ModuleCat.biprodIsoProd L T).symm.toLinearEquiv
+  letI : FiniteDimensional ℚ S.X₃ := by
+    change FiniteDimensional ℚ
+      (Homology ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) k)
+    exact t99J05_cp_successor_overlap_finiteDimensional n k
+  exact t99J05_shortComplex_finiteDimensional_middle S
+    (t99J05_cp_successor_mayerVietoris_exact_ambient_transport n k)
+
+#print axioms t99J05_cp_successor_finiteDimensional_positive
 
 /-- The separately named transported arrow is exactly the first arrow of the
 transported short complex whose exactness was established above. -/
