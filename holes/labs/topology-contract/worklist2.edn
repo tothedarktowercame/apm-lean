@@ -89422,6 +89422,18 @@
      {:cmd "git show --check dde766e34", :exit 0}],
     :diagnostic-history
     [{:cmd "build", :exit 1, :correction "unfold orbit membership"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792588926486-839-6dc37f53",
+     :commands
+     ["git show/diff-tree dde766e34"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit dde766e34 changes only t97A03Closure after history commit d7c9a7fc3; fixture SHA 64fc5f7f... matches. EqvGen orbit of 0 is nonempty and forward-invariant, so action-connectedness correctly yields reachability of 1 and feeds the prior model selector; topological cover-to-action transport remains explicit residual. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP with new compiled sorry-free progress; realization and invariants also remain listed."},
     :commit "dde766e34",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89430,7 +89442,7 @@
      "64fc5f7f48886402c5425094a78172ccd86693e386629fc571c672264589186a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89448,7 +89460,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked lifted-arc reachability bridge.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked connected two-arc action bridge.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89471,7 +89483,10 @@
      :reason "Banked two-arc permutation model selection."}
     {:job 5,
      :commit "d7c9a7fc3",
-     :reason "Banked lifted-arc reachability bridge."}]}
+     :reason "Banked lifted-arc reachability bridge."}
+    {:job 6,
+     :commit "dde766e34",
+     :reason "Banked connected two-arc action bridge."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100001,7 +100016,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcPermMonodromy_model_exists_of_actionConnected",
@@ -100013,7 +100028,9 @@
     :type
     "connected invariant-subset action selects normalized cover model",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "dde766e34"},
    :id :lemma-twoarcpermmonodromy-model-exists-of-actionconnected,
    :kind :lemma,
    :depends-on [:lemma-twoarcpermmonodromy-model-exists-of-reachable],
