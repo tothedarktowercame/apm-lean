@@ -89431,6 +89431,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792618323747-1605-d2121e59",
+     :commands
+     ["git show/diff b405ed5e9"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: b405ed5e9 follows its latest program-history parent and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom progress proves collapse-pi1 surjectivity from fixed-generator generation, then from an explicitly aligned cut-circle pi1 equivalence. It does not assume injectivity or construct the alignment; those, cover realization, and invariants remain listed."},
     :commit "b405ed5e9",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89439,7 +89451,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89457,7 +89469,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact literal-loop images under collapse pi1.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked collapse pi1 surjectivity.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89577,7 +89589,10 @@
      :reason "Banked collapsed arc-return classes."}
     {:job 9,
      :commit "ff6c4ecc7",
-     :reason "Banked exact literal-loop images under collapse pi1."}]}
+     :reason "Banked exact literal-loop images under collapse pi1."}
+    {:job 1,
+     :commit "b405ed5e9",
+     :reason "Banked collapse pi1 surjectivity."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100965,7 +100980,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -100976,7 +100991,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "generation from injective collapse and aligned cut pi1",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "b405ed5e9"},
    :id
    :lemma-apm-t97a03-literal-signed-generation-of-collapse-injective,
    :kind :lemma,
@@ -101005,7 +101022,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -101017,7 +101034,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "collapse pi1 surjectivity",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "b405ed5e9"},
    :id
    :lemma-apm-t97a03-collapsepionehom-surjective-of-aligned-pioneequiv,
    :kind :lemma,
