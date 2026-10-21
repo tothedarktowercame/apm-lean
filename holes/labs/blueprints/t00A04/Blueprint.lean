@@ -1,6 +1,46 @@
 import Mathlib
+import ConstructionTargets.SingularHomologyHomotopy
+import ConstructionTargets.CoefficientRadialPair
+import ConstructionTargets.CoefficientCompactComplementTransportedExactness
 
 open scoped ContDiff Manifold
+open CategoryTheory
+
+universe u
+
+/-- Mod-2 singular homology, with an `ULift` coefficient module so that the
+construction remains available for spaces in an arbitrary universe. -/
+abbrev t00A04_ModTwoHomology (n : ℕ) (X : Type u) [TopologicalSpace X] :=
+  (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat.{u} (ZMod 2)) n).obj
+      (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj (TopCat.of X) : Type u)
+
+/-- Relative mod-2 singular homology `H_n(X, X \ A)`, for the Type-0
+coefficient-relative API used by the compact-complement Mayer--Vietoris code. -/
+abbrev t00A04_ModTwoLocalHomology (X : Type) [TopologicalSpace X]
+    (A : Set X) (n : ℕ) :=
+  ((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) Aᶜ).homology n : Type)
+
+/-- Restriction from support in `A` to local homology at `x ∈ A`. -/
+noncomputable def t00A04_modTwo_pointRestriction
+    (X : Type) [TopologicalSpace X] (A : Set X) (x : X) (hx : x ∈ A) (n : ℕ) :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Aᶜ ({x} : Set X)ᶜ
+      (ContinuousMap.id X) (by
+        intro y hy
+        simpa only [Set.mem_compl_iff, Set.mem_singleton_iff, ne_eq] using
+          fun (hxy : y = x) ↦ hy (hxy ▸ hx))) n
+
+/-- The usable conclusion of Hatcher 3.27 for a compact support `A`. -/
+structure t00A04_HatcherConclusion
+    (X : Type) [TopologicalSpace X] (d : ℕ) (A : Set X) : Prop where
+  vanish_above : ∀ i, d < i → Subsingleton (t00A04_ModTwoLocalHomology X A i)
+  exists_everywhere_nonzero : ∃ c : t00A04_ModTwoLocalHomology X A d,
+    ∀ (x : X) (hx : x ∈ A), t00A04_modTwo_pointRestriction X A x hx d c ≠ 0
+  eq_zero_iff_pointwise : ∀ c : t00A04_ModTwoLocalHomology X A d,
+    c = 0 ↔ ∀ (x : X) (hx : x ∈ A),
+      t00A04_modTwo_pointRestriction X A x hx d c = 0
 
 /-! # APM t00A04 — a retract inclusion is not null-homotopic -/
 
@@ -72,8 +112,192 @@ theorem t00A04_nontrivial_not_subsingleton
     (X : Type*) [Nontrivial X] : ¬ Subsingleton X := by
   exact not_subsingleton_iff_nontrivial.mpr inferInstance
 
+/-- **LIBRARY (invariance of domain).**  A finite-dimensional self-model has
+no manifold boundary: its model map has open range. -/
+theorem t00A04_boundarylessManifold_of_finiteDimensional_selfModel
+    (E X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X] :
+    BoundarylessManifold I X := by
+  sorry
+
+/-- **LIBRARY F1.** Hatcher 3.27 for a compact convex subset of the
+finite-dimensional Euclidean model. -/
+theorem t00A04_hatcherConclusion_compact_convex_euclidean
+    (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (hA : IsCompact A) (hconv : Convex ℝ A) :
+    t00A04_HatcherConclusion (EuclideanSpace ℝ (Fin d)) d A := by
+  sorry
+
+/-- **LIBRARY F2.** The relative compact-complement Mayer--Vietoris union
+step in Hatcher 3.27.  Its three inputs are explicit so seats are independent. -/
+theorem t00A04_hatcherConclusion_union
+    (X : Type) [TopologicalSpace X] [T2Space X] (d : ℕ)
+    (A B : Set X) (hA : IsCompact A) (hB : IsCompact B)
+    (hAi : t00A04_HatcherConclusion X d A)
+    (hBi : t00A04_HatcherConclusion X d B)
+    (hABi : t00A04_HatcherConclusion X d (A ∩ B))
+    (hloc : ∀ x : X, ∀ a b : t00A04_ModTwoLocalHomology X {x} d,
+      a ≠ 0 → b ≠ 0 → a = b) :
+    t00A04_HatcherConclusion X d (A ∪ B) := by
+  sorry
+
+/-- **LIBRARY.** Top local mod-2 homology of a boundaryless manifold has a
+unique nonzero element. -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero
+    (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [ChartedSpace E X]
+    [IsManifold I ∞ X] [BoundarylessManifold I X] :
+    ∀ x : X, ∀ a b : t00A04_ModTwoLocalHomology X {x} (Module.finrank ℝ E),
+      a ≠ 0 → b ≠ 0 → a = b := by
+  sorry
+
+/-- Euclidean specialization of local uniqueness, with the degree written as
+`d` so finite-union seats avoid dependent rewriting of `finrank`. -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_euclidean (d : ℕ) :
+    ∀ x : EuclideanSpace ℝ (Fin d),
+      ∀ a b : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {x} d,
+        a ≠ 0 → b ≠ 0 → a = b := by
+  sorry
+
+/-- **F2e.** Finite unions of compact convex Euclidean sets satisfy Hatcher's
+conclusion.  F1 and F2 are passed in explicitly. -/
+theorem t00A04_hatcherConclusion_finite_union_convex_euclidean
+    (d : ℕ)
+    (hconv : ∀ A : Set (EuclideanSpace ℝ (Fin d)), IsCompact A → Convex ℝ A →
+      t00A04_HatcherConclusion (EuclideanSpace ℝ (Fin d)) d A)
+    (hunion : ∀ (A B : Set (EuclideanSpace ℝ (Fin d))), IsCompact A → IsCompact B →
+      t00A04_HatcherConclusion _ d A → t00A04_HatcherConclusion _ d B →
+      t00A04_HatcherConclusion _ d (A ∩ B) →
+      t00A04_HatcherConclusion _ d (A ∪ B))
+    (s : Finset (Set (EuclideanSpace ℝ (Fin d))))
+    (hs : ∀ A ∈ s, IsCompact A ∧ Convex ℝ A) :
+    t00A04_HatcherConclusion _ d (⋃ A ∈ s, A) := by
+  sorry
+
+/-- **LIBRARY F3e.** Hatcher's relative-cycle argument extends the Euclidean
+result from finite unions of compact convex sets to every compact set. -/
+theorem t00A04_hatcherConclusion_compact_euclidean
+    (d : ℕ)
+    (hfinite : ∀ (s : Finset (Set (EuclideanSpace ℝ (Fin d)))),
+      (∀ A ∈ s, IsCompact A ∧ Convex ℝ A) →
+      t00A04_HatcherConclusion _ d (⋃ A ∈ s, A))
+    (A : Set (EuclideanSpace ℝ (Fin d))) (hA : IsCompact A) :
+    t00A04_HatcherConclusion _ d A := by
+  sorry
+
+/-- **LIBRARY (chart transport).** The all-compact Euclidean result transported
+to an arbitrary compact subset contained in one chart source. -/
+theorem t00A04_hatcherConclusion_compact_in_chart
+    (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [ChartedSpace E X]
+    [IsManifold I ∞ X] [BoundarylessManifold I X]
+    (heuclid : ∀ (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d))), IsCompact A →
+      t00A04_HatcherConclusion _ d A)
+    (A : Set X) (hA : IsCompact A)
+    (hchart : ∃ x : X, A ⊆ (extChartAt I x).source) :
+    t00A04_HatcherConclusion X (Module.finrank ℝ E) A := by
+  sorry
+
+/-- **LIBRARY F3.** Finite chart induction.  Arbitrary compact single-chart
+sets, the union step, and local uniqueness are explicit hypotheses. -/
+theorem t00A04_hatcherConclusion_compact_manifold
+    (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [ChartedSpace E X]
+    [IsManifold I ∞ X] [BoundarylessManifold I X]
+    (hlocal : ∀ (A : Set X), IsCompact A →
+      (∃ x : X, A ⊆ (extChartAt I x).source) →
+      t00A04_HatcherConclusion X (Module.finrank ℝ E) A)
+    (hunion : ∀ (A B : Set X), IsCompact A → IsCompact B →
+      t00A04_HatcherConclusion X (Module.finrank ℝ E) A →
+      t00A04_HatcherConclusion X (Module.finrank ℝ E) B →
+      t00A04_HatcherConclusion X (Module.finrank ℝ E) (A ∩ B) →
+      (∀ x : X, ∀ a b : t00A04_ModTwoLocalHomology X {x} (Module.finrank ℝ E),
+        a ≠ 0 → b ≠ 0 → a = b) →
+      t00A04_HatcherConclusion X (Module.finrank ℝ E) (A ∪ B))
+    (hloc : ∀ x : X, ∀ a b : t00A04_ModTwoLocalHomology X {x} (Module.finrank ℝ E),
+      a ≠ 0 → b ≠ 0 → a = b)
+    (A : Set X) (hA : IsCompact A) :
+    t00A04_HatcherConclusion X (Module.finrank ℝ E) A := by
+  sorry
+
+/-- **LIBRARY F4.** At support `A = X`, a nonzero relative fundamental class
+is a nonzero absolute top-homology class. -/
+theorem t00A04_top_homology_nontrivial_of_hatcherConclusion_univ
+    (X : Type) [TopologicalSpace X] [Nonempty X] (d : ℕ)
+    (h : t00A04_HatcherConclusion X d Set.univ) :
+    Nontrivial (t00A04_ModTwoHomology d X) := by
+  sorry
+
+/-- The Type-0 fundamental-class assembly from chart transport, union, finite
+induction, and evaluation. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_Type
+    (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X]
+    [ChartedSpace E X] [IsManifold I ∞ X] [BoundarylessManifold I X] :
+    Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E) X) := by
+  apply t00A04_top_homology_nontrivial_of_hatcherConclusion_univ X
+    (Module.finrank ℝ E)
+  apply t00A04_hatcherConclusion_compact_manifold E X I
+      (fun A hA hchart ↦ t00A04_hatcherConclusion_compact_in_chart E X I
+        (fun d B hB ↦ t00A04_hatcherConclusion_compact_euclidean d
+          (fun s hs ↦ t00A04_hatcherConclusion_finite_union_convex_euclidean d
+            (t00A04_hatcherConclusion_compact_convex_euclidean d)
+            (fun C D hC hD hCi hDi hCDi ↦ t00A04_hatcherConclusion_union _ d
+              C D hC hD hCi hDi hCDi
+              (t00A04_modTwoLocalHomology_unique_nonzero_euclidean d)) s hs)
+          B hB) A hA hchart)
+      (fun A B hA hB hAi hBi hABi ↦
+        t00A04_hatcherConclusion_union X (Module.finrank ℝ E)
+          A B hA hB hAi hBi hABi)
+      (t00A04_modTwoLocalHomology_unique_nonzero E X I) Set.univ isCompact_univ
+
+/-- **LIBRARY (universe bridge).** Transport the Type-0 fundamental-class
+theorem across a small homeomorphic model of an arbitrary-universe compact
+finite-dimensional manifold. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial
+    (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X]
+    [ChartedSpace E X] [IsManifold I ∞ X] [BoundarylessManifold I X]
+    (hType : ∀ (E₀ X₀ : Type) [NormedAddCommGroup E₀] [NormedSpace ℝ E₀]
+      [FiniteDimensional ℝ E₀] (I₀ : ModelWithCorners ℝ E₀ E₀)
+      [TopologicalSpace X₀] [T2Space X₀] [CompactSpace X₀] [Nonempty X₀]
+      [ChartedSpace E₀ X₀] [IsManifold I₀ ∞ X₀] [BoundarylessManifold I₀ X₀],
+      Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E₀) X₀)) :
+    Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E) X) := by
+  sorry
+
+/-- The blueprint's real-parameter notion of null-homotopy restricts to the
+unit interval and hence gives Mathlib's standard `ContinuousMap` notion. -/
+theorem t00A04_nullhomotopic_to_continuousMap
+    (X : Type*) [TopologicalSpace X]
+    (hnull : apm_t00a04_NullHomotopic (fun x : X => x)) :
+    ContinuousMap.Nullhomotopic (ContinuousMap.id X) := by
+  rcases hnull with ⟨y, H, hH, hH0, hH1⟩
+  refine ⟨y, ⟨⟨⟨fun p ↦ H (p.2, p.1), ?_⟩, ?_, ?_⟩⟩⟩
+  · exact hH.comp
+      (continuous_snd.prodMk (continuous_subtype_val.comp continuous_fst))
+  · intro x
+    simpa using hH0 x
+  · intro x
+    simpa using hH1 x
+
+/-- Nonzero positive-degree mod-2 homology obstructs a null-homotopy of the
+identity.  All manifold and fundamental-class input has been removed. -/
+theorem t00A04_identity_not_nullhomotopic_of_modTwoHomology_nontrivial
+    (X : Type u) [TopologicalSpace X] (n : ℕ) (hn : n ≠ 0)
+    [Nontrivial (t00A04_ModTwoHomology n X)] :
+    ¬ ContinuousMap.Nullhomotopic (ContinuousMap.id X) := by
+  sorry
+
 /-- Positive-dimensional compact boundaryless manifolds are not
-null-homotopic.  This is the remaining global fundamental-class input. -/
+null-homotopic.  This is a sorry-free assembly of the fundamental-class and
+homotopy-invariance leaves. -/
 theorem t00A04_positive_dimensional_manifold_identity_not_nullhomotopic
     (E X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -81,7 +305,16 @@ theorem t00A04_positive_dimensional_manifold_identity_not_nullhomotopic
     [ChartedSpace E X] [IsManifold I ∞ X]
     (hdim : 0 < Module.finrank ℝ E) :
     ¬ apm_t00a04_NullHomotopic (fun x : X => x) := by
-  sorry
+  intro hnull
+  letI : BoundarylessManifold I X :=
+    t00A04_boundarylessManifold_of_finiteDimensional_selfModel E X I
+  letI : Nontrivial
+      (t00A04_ModTwoHomology (Module.finrank ℝ E) X) :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial E X I
+      t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_Type
+  exact (t00A04_identity_not_nullhomotopic_of_modTwoHomology_nontrivial X
+      (Module.finrank ℝ E) (Nat.ne_of_gt hdim))
+    (t00A04_nullhomotopic_to_continuousMap X hnull)
 
 /-- A nontrivial compact manifold without boundary cannot have its identity
 map homotopic to a constant.  This theorem only assembles the independent
