@@ -3668,6 +3668,29 @@ theorem chartComponentSums_eq_zero_of_exactLiftComparison
   intro k
   exact (hcomparison k).trans (exactLiftComponentDegree_eq_zero lifts k)
 
+/-- The exact-lift comparison and the chart top-degree identity together
+give the required vanishing of the induced map on top homology. -/
+theorem topHomologyMap_eq_zero_of_exactLiftComparison
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k =
+        exactLiftComponentDegree lifts k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        coefficient x) :
+    homologyMap 2 f = 0 :=
+  topHomologyMap_eq_zero_of_chartComponentSums e orientationSign coefficient
+    (chartComponentSums_eq_zero_of_exactLiftComparison lifts coefficient
+      hcomparison) htop
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3704,6 +3727,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_chartComponentSums
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_chartComponentSums
 #print axioms ConstructionTargets.T00J02Closure.chartComponentSums_eq_zero_of_exactLiftComparison
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exactLiftComparison
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
