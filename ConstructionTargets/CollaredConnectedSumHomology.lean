@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.IntegralOpenCoverMayerVietoris
+import ConstructionTargets.T00A01MayerVietorisAdapters
 
 /-! # Collared connected sums
 
