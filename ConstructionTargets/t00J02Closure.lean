@@ -1706,6 +1706,39 @@ theorem targetChartCoordinate_ambientCriticalImage_null
 
 #print axioms targetChartCoordinate_ambientCriticalImage_null
 
+/-- Nullity transports from a fixed target chart back to the manifold whenever
+the chart inverse preserves null sets. -/
+theorem targetChart_ambientCriticalImage_null
+    {E F M N : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M]
+    [SecondCountableTopology M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N]
+    [MeasurableSpace N]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure]
+    (nu : MeasureTheory.Measure N)
+    (g : M → N) (y : N)
+    (hg : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) ∞ g)
+    (htransport : ∀ s : Set F, mu s = 0 →
+      nu ((chartAt F y).symm '' s) = 0) :
+    nu (g '' {x | x ∈ targetChartDomain (F := F) g y hg.continuous ∧
+      ¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+          ((chartAt F y) ∘ g) x)}) = 0 := by
+  apply MeasureTheory.measure_mono_null ?_
+    (htransport _ (targetChartCoordinate_ambientCriticalImage_null mu g y hg))
+  rintro z ⟨x, ⟨hx, hcrit⟩, rfl⟩
+  refine ⟨chartAt F y (g x), ⟨x, ⟨hx, hcrit⟩, rfl⟩, ?_⟩
+  exact (chartAt F y).left_inv hx
+
+#print axioms targetChart_ambientCriticalImage_null
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
