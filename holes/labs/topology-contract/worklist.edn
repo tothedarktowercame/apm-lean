@@ -119194,6 +119194,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792583701710-715-54e5833e",
+     :commands
+     ["git show/diff 23fece72"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 23fece72 changes only t00J02Closure.lean (+63), adding compiled projection/kernel regularity and critical-locus bridges after prior history. Fixture afb497a6, source 0b3b4888, implementation 0606ff9f, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientations are correct: projection regularity reduces to surjective df; surjective df gives all circle-direction lifts, and transversality plus lifts recovers surjective df. Negation exactly identifies the kernel critical locus. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; manifold Sard/nullity transport, signed counts, and final assembly remain listed."},
     :commit "23fece7210aadec35e7aa173c102cc16cf65ac6a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119202,7 +119214,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119220,7 +119232,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence atlas and smooth projection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact geometric/kernel critical-locus bridge.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119503,7 +119515,10 @@
      "Banked exact identification of bad parameters with incidence-projection critical values."}
     {:job 1,
      :commit "7afd377638124b2c57e685a59c483d10b38363fd",
-     :reason "Banked incidence atlas and smooth projection."}]}
+     :reason "Banked incidence atlas and smooth projection."}
+    {:job 2,
+     :commit "23fece7210aadec35e7aa173c102cc16cf65ac6a",
+     :reason "Banked exact geometric/kernel critical-locus bridge."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122212,7 +122227,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleIncidenceProjection_critical_iff_kernelCritical",
@@ -122222,7 +122237,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "projection derivative critical iff kernel critical",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "23fece7210aadec35e7aa173c102cc16cf65ac6a"},
    :id :lemma-circleincidenceprojection-critical-iff-kernelcritical,
    :kind :lemma,
    :depends-on [:lemma-circleincidenceprojection-contmdiff],
