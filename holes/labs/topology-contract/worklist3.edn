@@ -36711,35 +36711,43 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Assemble degree zero, odd/above-top vanishing, even equivalences, and successor data.",
+    "Prove odd and above-top vanishing, then construct successor data.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_middle_even_iso",
-      :type "old positive even groups survive",
+    [{:name "t99J05_cp_successor_zero_equiv",
+      :type "successor H0 equals Q",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_top_connecting_iso"],
+      :depends-on [],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_even_equiv",
+      :type "all successor even groups equal Q",
+      :status :proved,
+      :consumers [:t99J05],
+      :depends-on
+      ["t99J05_cp_successor_middle_even_iso"
+       "t99J05_cp_successor_top_connecting_iso"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "successor homology data",
       :status :partial,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_middle_even_iso"],
+      :depends-on ["t99J05_cp_successor_even_equiv"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked positive-even successor equivalence; assembly remains.",
+    "Banked all successor even equivalences; vanishing assembly remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36749,30 +36757,16 @@
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
-      :correction "normalized predecessor degree"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792608646231-1339-80fabc95",
-     :commands
-     ["git show --stat/--format=fuller ba4639f5fa10a19d83be8ad9589efba6d735fe2d"
-      "git show ba4639f5f:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "git diff --check ba4639f5f^ ba4639f5f"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show ba4639f5f:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit ba4639f5f changes only scoped Closure; fixture SHA-256 matches 92c2070ead0f87c773c791ceac672d37381a53b209caa3f0907a31e59c402c50. For 0<i≤n, overlap degrees 2i and 2i-1 are positive and below sphere top 2n+1; their vanishing makes the shared patch-to-successor arrow bijective via adjacent exact segments. The final equivalence has the correct direction: lower patch L -> L⊞0 -> successor, using the biproduct/product boundary explicitly. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; degree-zero, odd/above-top cases, even assembly, and successor data remain listed."},
-    :commit "ba4639f5fa10a19d83be8ad9589efba6d735fe2d",
+      :correction "exposed Fin bounds"}],
+    :commit "6b718247b51f7cd90c1d4252675a554ee835f4a5",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "92c2070ead0f87c773c791ceac672d37381a53b209caa3f0907a31e59c402c50"},
+     "a448bda7167ddb3709f28a25f2771409f1d31c4be5b8961c8af9fb4924331d48"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48868,7 +48862,8 @@
     :lemma-t99j05-cp-successor-finitedimensional-positive
     :lemma-t99j05-cp-successor-finitedimensional
     :lemma-t99j05-cp-successor-top-connecting-iso
-    :lemma-t99j05-cp-successor-middle-even-iso],
+    :lemma-t99j05-cp-successor-middle-even-iso
+    :lemma-t99j05-cp-successor-even-equiv],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -49422,6 +49417,42 @@
    :id :lemma-t99j05-cp-successor-middle-even-iso,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-top-connecting-iso],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_zero_equiv",
+    :type "successor H0 equals Q"},
+   :lemma
+   {:name "t99J05_cp_successor_zero_equiv",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "successor H0 equals Q",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-zero-equiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_even_equiv",
+    :type "all successor even groups equal Q"},
+   :lemma
+   {:name "t99J05_cp_successor_even_equiv",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "all successor even groups equal Q",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-even-equiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-middle-even-iso
+    :lemma-t99j05-cp-successor-top-connecting-iso],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
