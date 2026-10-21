@@ -119152,51 +119152,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Package zero-fiber subtype chart; Sard; calculations; Main.",
+    "Connect subtype chart to Sard regular fiber, calculations, then Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "lint" "unrelated edits preserved"],
+    :warnings
+    ["Main retains registered sorry" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "implicitToOpenPartialHomeomorph_image_zeroFiber",
+    [{:name "implicitToOpenPartialHomeomorph_zeroFiberHomeomorph",
       :type
-      "chart maps source zero fiber exactly to target zero slice",
+      "local zero-fiber subtype homeomorphic to vertical zero slice",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["implicitToOpenPartialHomeomorph_mem_zeroSlice_iff"],
+      :depends-on ["implicitToOpenPartialHomeomorph_image_zeroFiber"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["implicitToOpenPartialHomeomorph_image_zeroFiber"],
+      :depends-on
+      ["implicitToOpenPartialHomeomorph_zeroFiberHomeomorph"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "4284495a9582c9d40a0178f6910227c41065d5ee5eab2a7c7079062e130e2f66",
+     "d4ba0bea1d952d9cd77e42b845b35819890f07d6e2e10a7cf5c5b46017a0e505",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
-     :registry "166/166"},
+     :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked exact zero-fiber image under implicit chart.",
+    :reason "Banked zero-fiber subtype homeomorphism.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/count/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :finding "used right_inv API"}],
-    :commit "859e63363d8410fe225161d29077060c3b5f8c61",
+     {:cmd "sha256sum fixture; git diff --check", :exit 0}],
+    :commit "ab0c3d3a1124c51aed333c1ecd67c3b39f2f04d8",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119204,7 +119203,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119716,7 +119715,8 @@
     :lemma-incidenceimplicittoopenpartialhomeomorph
     :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse-fst
     :lemma-implicittoopenpartialhomeomorph-mem-zeroslice-iff
-    :lemma-implicittoopenpartialhomeomorph-image-zerofiber],
+    :lemma-implicittoopenpartialhomeomorph-image-zerofiber
+    :lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121842,6 +121842,26 @@
    :depends-on
    [:lemma-contmdiffon-tangentsection-of-trivialization-coordinates
     :lemma-mfderiv-eq-of-trivialization-coordinates],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "implicitToOpenPartialHomeomorph_zeroFiberHomeomorph",
+    :type
+    "local zero-fiber subtype homeomorphic to vertical zero slice"},
+   :lemma
+   {:name "implicitToOpenPartialHomeomorph_zeroFiberHomeomorph",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "local zero-fiber subtype homeomorphic to vertical zero slice",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-implicittoopenpartialhomeomorph-zerofiberhomeomorph,
+   :kind :lemma,
+   :depends-on
+   [:lemma-implicittoopenpartialhomeomorph-image-zerofiber],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
