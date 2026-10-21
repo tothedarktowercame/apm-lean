@@ -89432,6 +89432,18 @@
     [{:cmd "word build",
       :exit 1,
       :correction "subst before induction"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792604129579-1208-872a2f6a",
+     :commands
+     ["git show/diff-tree cfce425b4"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit cfce425b4 changes only t97A03Closure after accepted history 272d6fda5, removes the rejected synthetic selector, and matches fixture SHA bff3a8f7.... Word evaluation has consistent composition; if both fixed arc transports are identity every generated word is identity, so a generated nontrivial transport forces a true generator nontrivial. Literal arc generation remains explicit. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid repaired program STOP; geometric generation, realization, and invariants remain listed."},
     :commit "cfce425b4",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89440,7 +89452,7 @@
      "bff3a8f702b02518e677828d2444d03f1eda099e3df20a41a3ebf1680e87088b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89458,7 +89470,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked distinct fiber endpoints related by cover monodromy.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Replaced facade with generator reduction.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89527,7 +89539,10 @@
     {:job 9,
      :commit "272d6fda5",
      :reason
-     "Banked distinct fiber endpoints related by cover monodromy."}]}
+     "Banked distinct fiber endpoints related by cover monodromy."}
+    {:job 2,
+     :commit "cfce425b4",
+     :reason "Replaced facade with generator reduction."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100455,7 +100470,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcModel_exists_of_connected_double_cover",
@@ -100465,7 +100480,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "connected double cover yields normalized loop data",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "cfce425b4"},
    :id :lemma-twoarcmodel-exists-of-connected-double-cover,
    :kind :lemma,
    :depends-on
@@ -100490,7 +100507,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcTransport_nontrivial_of_generated",
@@ -100500,7 +100517,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "nontrivial word forces nontrivial generator",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "cfce425b4"},
    :id :lemma-twoarctransport-nontrivial-of-generated,
    :kind :lemma,
    :depends-on [],
