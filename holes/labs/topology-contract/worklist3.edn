@@ -36755,6 +36755,19 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792596762615-1044-b204a0ac",
+     :commands
+     ["git show/diff-tree e1f9c08906"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check e1f9c08906^ e1f9c08906"],
+     :finding
+     "PASS: new commit e1f9c08906 changes only scoped Closure; fixture/blob SHA matches 528c6afa.... The homology iso has the correct direction CP n → lower successor patch, matching the previously compiled homotopy equivalence. Finite-dimensionality is transported through that iso from the induction datum in every degree; no space/subtype representation is conflated. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Lower-patch transport milestones are proved and top-patch/top-even cases remain listed."},
     :commit "e1f9c08906",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36763,7 +36776,7 @@
      "528c6afa83fc72b1a46b761006d67e1bccf7a6f7f8fa688734e4f6d39ba2a5c2"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36781,7 +36794,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor finite-dimensionality above the overlap top; patch transports and top/even cases remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked lower-patch homology transport and finite-dimensionality; top affine patch and top/even cases remain.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36968,7 +36981,11 @@
     {:job 6,
      :commit "c0d54d5e01",
      :reason
-     "Banked successor finite-dimensionality above the overlap top; patch transports and top/even cases remain."}]}
+     "Banked successor finite-dimensionality above the overlap top; patch transports and top/even cases remain."}
+    {:job 7,
+     :commit "e1f9c08906",
+     :reason
+     "Banked lower-patch homology transport and finite-dimensionality; top affine patch and top/even cases remain."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49044,7 +49061,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_lowerPatch_homologyIso",
@@ -49054,7 +49071,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "lower successor patch homology is CP n homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "e1f9c08906"},
    :id :lemma-t99j05-cp-successor-lowerpatch-homologyiso,
    :kind :lemma,
    :depends-on
@@ -49062,7 +49081,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_lowerPatch_finiteDimensional",
@@ -49072,7 +49091,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "CP n data gives finite lower-patch homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "e1f9c08906"},
    :id :lemma-t99j05-cp-successor-lowerpatch-finitedimensional,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-lowerpatch-homologyiso],
