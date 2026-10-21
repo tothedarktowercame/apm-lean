@@ -134,6 +134,24 @@ theorem exists_nhds_isInvertible_comp_rightInverse
 
 #print axioms exists_nhds_isInvertible_comp_rightInverse
 
+/-- On the stable neighborhood, correcting the fixed right inverse by the
+inverse composite gives an exact pointwise right inverse. -/
+theorem exists_nhds_corrected_rightInverse
+    {Z : Type} [TopologicalSpace Z] {n m : ℕ}
+    (A : Z → E n →L[ℝ] E m) (x₀ : Z) (R : E m →L[ℝ] E n)
+    (hA : ContinuousAt A x₀)
+    (hAR : (A x₀).comp R = ContinuousLinearMap.id ℝ (E m)) :
+    ∃ U ∈ nhds x₀, ∃ Q : Z → E m →L[ℝ] E n,
+      ∀ x ∈ U, (A x).comp (Q x) = ContinuousLinearMap.id ℝ (E m) := by
+  obtain ⟨U, hU, hinv⟩ :=
+    exists_nhds_isInvertible_comp_rightInverse A x₀ R hA hAR
+  refine ⟨U, hU, fun x ↦ R.comp (ContinuousLinearMap.inverse ((A x).comp R)), ?_⟩
+  intro x hx
+  rw [← ContinuousLinearMap.comp_assoc]
+  exact (hinv x hx).self_comp_inverse
+
+#print axioms exists_nhds_corrected_rightInverse
+
 /-- Applying the smoothly varying right inverse to a smooth target-coordinate
 vector gives the source-coordinate lift used in a submersion chart. -/
 theorem contDiff_lift_of_comp_isInvertible
