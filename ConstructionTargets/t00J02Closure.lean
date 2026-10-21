@@ -3397,6 +3397,41 @@ theorem topHomologyMap_eq_zero_of_incidenceProjection_calculations
 
 #print axioms topHomologyMap_eq_zero_of_incidenceProjection_calculations
 
+/-- Disk boundedness and essentiality canonically supply the zero-degree
+component lifts, so the remaining geometric obligations are exactly the
+component-localization comparison and the global top-degree formula. -/
+noncomputable def canonicalRegularFiberDegreeCalculations_of_diskBounded
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k =
+      exactLiftComponentDegree
+        (occupiedRegularFiber_exactZeroDegreeLifts
+          f c hc eS hessential hdisks y hy) k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x) :
+    CanonicalRegularFiberDegreeCalculations
+      (f := f) (c := c) (y := y) hy e :=
+  CanonicalRegularFiberDegreeCalculations.ofComponentComparison hy e
+    (occupiedRegularFiber_exactZeroDegreeLifts
+      f c hc eS hessential hdisks y hy)
+    orientationSign hcomparison htop
+
+#print axioms canonicalRegularFiberDegreeCalculations_of_diskBounded
+
 /-- Direct composition of Sard nullity on the circle parameter with the
 canonical signed-count calculation interface. -/
 theorem topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations
