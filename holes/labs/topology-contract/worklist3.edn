@@ -38015,62 +38015,61 @@
    :program true,
    :other-consumers []}
   {:consumer :t94A06,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:residual
-    "Prove chartwise critical-image nullity and countable chart aggregation; then assemble Main.",
+    "Prove chartwise critical-image nullity and aggregate charts; assemble Main.",
     :evidence
     {:placeholder-delta {:t94A06 [1 1]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings
-    ["Main retains its existing sorry; unrelated artifacts preserved."],
+    ["Main retains one sorry; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "apm_t94a06_normalPart_contMDiff",
-      :type "the normal coordinate projection of f is ContMDiff",
+    [{:name "apm_t94a06_ae_regularValue_of_criticalValues_null",
+      :type "null critical-value image implies AE regular values",
       :status :proved,
       :consumers [:t94A06],
       :depends-on [],
       :area "parametric-transversality-sard"}
-     {:name "apm_t94a06_ae_regularValue_normalPart",
-      :type
-      "AE regular values for the normal part on a finite-dimensional manifold with corners",
-      :status :partial,
+     {:name "apm_t94a06_normalPart_criticalValues_null",
+      :type "normal-part critical values have volume zero",
+      :status :not-started,
       :consumers [:t94A06],
       :depends-on ["apm_t94a06_normalPart_contMDiff"],
+      :area "parametric-transversality-sard"}
+     {:name "apm_t94a06_ae_regularValue_normalPart",
+      :type "AE regular values for normal part",
+      :status :partial,
+      :consumers [:t94A06],
+      :depends-on
+      ["apm_t94a06_normalPart_criticalValues_null"
+       "apm_t94a06_ae_regularValue_of_criticalValues_null"],
       :area "parametric-transversality-sard"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked smoothness of the normal part; chartwise Morse-Sard remains.",
+    "Banked null-critical-values adapter; chartwise Sard remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792621389907-1703-6e98897c",
-     :commands
-     ["git rev-parse/diff-tree/diff --check 6ec2e1758"
-      "lake env lean ConstructionTargets/t94A06Closure.lean"
-      "lake env lean problems/t94A06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and rg placeholders on recorded blobs"],
-     :finding
-     "PASS: 6ec2e1758 adds only scoped t94A06Closure; fixture hash c66ef6...38e4 matches. Fresh detached gates pass; registry 170/170; closure placeholders 0; standard axioms. Translation sign is correct (normalPart f=-s), negation preserves volume, and surjective normal derivative plus z-axis tangent spans E3. This is new compiled progress after c46223f40; remaining corners Morse-Sard is listed. Main retains exactly its pre-existing sorry."},
-    :commit "02cbdc9ab",
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure draft compile",
+      :exit 1,
+      :correction "Removed unavailable rewrite."}],
+    :commit "9ecb61c45",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A06Closure.lean",
      :sha256
-     "c5bbb3c509493fa4eb8dddf2d270342bfbf06d2d4f135e3bd828ce667e87d020"},
+     "27df31976b9e0681918b7f610ff69f78572b7f060019d66a225752955cf6dbdd"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -49642,7 +49641,10 @@
     :area "parametric-transversality-sard"},
    :id :lemma-apm-t94a06-ae-regularvalue-normalpart,
    :kind :lemma,
-   :depends-on [:lemma-apm-t94a06-normalpart-contmdiff],
+   :depends-on
+   [:lemma-apm-t94a06-normalpart-contmdiff
+    :lemma-apm-t94a06-normalpart-criticalvalues-null
+    :lemma-apm-t94a06-ae-regularvalue-of-criticalvalues-null],
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
@@ -49740,6 +49742,39 @@
    :id :lemma-apm-t94a06-normalpart-contmdiff,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_ae_regularValue_of_criticalValues_null",
+    :type "null critical-value image implies AE regular values"},
+   :lemma
+   {:name "apm_t94a06_ae_regularValue_of_criticalValues_null",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type "null critical-value image implies AE regular values",
+    :area "parametric-transversality-sard",
+    :proved-in :program-2026-10-13-close-t94a06},
+   :id :lemma-apm-t94a06-ae-regularvalue-of-criticalvalues-null,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_normalPart_criticalValues_null",
+    :type "normal-part critical values have volume zero"},
+   :lemma
+   {:name "apm_t94a06_normalPart_criticalValues_null",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type "normal-part critical values have volume zero",
+    :area "parametric-transversality-sard"},
+   :id :lemma-apm-t94a06-normalpart-criticalvalues-null,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t94a06-normalpart-contmdiff],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
