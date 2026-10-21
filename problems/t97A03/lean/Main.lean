@@ -319,6 +319,57 @@ theorem apm_t97A03_twoCircleWedge_exists_signedGeneratorWord
     ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFin_exists_generatorWord
       1 g
 
+/-- Evaluate an integer-exponent word in two distinguished elements. -/
+def apm_t97A03_twoGeneratorWord {G : Type*} [Group G]
+    (first second : G) (w : List (Fin 2 × ℤ)) : G :=
+  (w.map fun q ↦ (if q.1 = 0 then first else second) ^ q.2).prod
+
+/-- Exact algebraic contract for the pending geometric comparison.  Once an
+equivalence identifies the literal base fundamental group with the finite
+two-circle wedge, every literal loop is a signed word in the inverse images
+of the two genuine wedge-leg generators. -/
+theorem apm_t97A03_signed_generation_of_piOneEquiv
+    {G : Type*} [Group G]
+    (e : G ≃*
+      FundamentalGroup
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (Fin 2))
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin 2) 1)) (g : G) :
+    ∃ w : List (Fin 2 × ℤ),
+      apm_t97A03_twoGeneratorWord
+        (e.symm (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+          1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass))
+        (e.symm (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+          1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass))
+        w = g := by
+  rcases apm_t97A03_twoCircleWedge_exists_signedGeneratorWord (e g) with ⟨w, hw⟩
+  refine ⟨w, e.injective ?_⟩
+  change e ((w.map fun q ↦
+    (if q.1 = 0 then
+      e.symm (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+    else
+      e.symm (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+        1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)) ^ q.2).prod) = e g
+  rw [map_list_prod]
+  have hword :
+      (w.map fun q ↦ e
+        ((if q.1 = 0 then
+          e.symm (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+            1 0 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)
+        else
+          e.symm (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap
+            1 1 ConstructionTargets.PolygonSurfaceHomology.circlePositiveFundamentalClass)) ^ q.2)).prod =
+        ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinGeneratorWordValue
+          1 w := by
+    rw [ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinGeneratorWordValue]
+    apply congrArg List.prod
+    apply List.map_congr_left
+    rintro ⟨i, z⟩ hi
+    fin_cases i <;> simp [map_zpow]
+  simpa [List.map_map, Function.comp_def] using hword.trans hw
+
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
   exact mem_sphere_zero_iff_norm.mpr (by norm_num)⟩
