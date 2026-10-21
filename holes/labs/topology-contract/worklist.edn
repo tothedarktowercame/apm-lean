@@ -119198,6 +119198,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792608333886-1330-092f3365",
+     :commands
+     ["git show/diff 836e08af"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 836e08af changes only t00J02Closure.lean (+27), adding compiled global critical-value nullity after prior history abd47c09. Fixture afb497a6, source 0b3b4888, implementation 69293582; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: compactness supplies the finite target-chart cover; each global critical value obtains a chart-critical witness; chart-coordinate mu-nullity is transported to nu-nullity, and finite aggregation proves the image of the global non-surjective locus is nu-null. F/M/N and mu/nu roles remain distinct. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; Circle specialization, regular-value selection, signed counts, and final assembly remain listed."},
     :commit "836e08afe8e05bb21554ee228dbe7bcff5a8ec37",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119206,7 +119218,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119224,7 +119236,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked critical witness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked global critical-value nullity.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119571,7 +119583,10 @@
      :reason "Banked Fin-indexed chart cover."}
     {:job 5,
      :commit "abd47c094f526414d4bca1c7e620e04f5cc655c3",
-     :reason "Banked critical witness."}]}
+     :reason "Banked critical witness."}
+    {:job 6,
+     :commit "836e08afe8e05bb21554ee228dbe7bcff5a8ec37",
+     :reason "Banked global critical-value nullity."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122799,7 +122814,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "globalCriticalValues_measure_zero_of_targetCharts",
@@ -122809,7 +122824,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "global critical values are null from finite target charts",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "836e08afe8e05bb21554ee228dbe7bcff5a8ec37"},
    :id :lemma-globalcriticalvalues-measure-zero-of-targetcharts,
    :kind :lemma,
    :depends-on
