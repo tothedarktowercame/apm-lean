@@ -1603,6 +1603,38 @@ theorem circleHaarMeasure_ne_zero : circleHaarMeasure ≠ 0 := by
 #print axioms circleHaarMeasure_isHaarMeasure
 #print axioms circleHaarMeasure_ne_zero
 
+/-- On the overlap of two circle charts, the coordinate change carries a
+coordinate-null set to a coordinate-null set.  This is the compatibility
+needed to assemble the chartwise Sard conclusions using one null class. -/
+theorem circleChartTransition_image_null
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1)))
+    [MeasureTheory.Measure.IsAddHaarMeasure mu]
+    (y z : Circle) (s : Set (EuclideanSpace ℝ (Fin 1)))
+    (hsz : s ⊆ (chartAt (EuclideanSpace ℝ (Fin 1)) z).target)
+    (hsy : ∀ x ∈ s,
+      (chartAt (EuclideanSpace ℝ (Fin 1)) z).symm x ∈
+        (chartAt (EuclideanSpace ℝ (Fin 1)) y).source)
+    (hnull : mu s = 0) :
+    mu (((chartAt (EuclideanSpace ℝ (Fin 1)) y) ∘
+      (chartAt (EuclideanSpace ℝ (Fin 1)) z).symm) '' s) = 0 := by
+  have hz :=
+    (contMDiffOn_chart_symm
+      (I := modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 1)))
+      (n := ∞) (x := z)).mono hsz
+  have htrans :=
+    (contMDiffOn_chart
+      (I := modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 1)))
+      (n := ∞) (x := y)).comp hz hsy
+  have hdiff : ContDiffOn ℝ ∞
+      ((chartAt (EuclideanSpace ℝ (Fin 1)) y) ∘
+        (chartAt (EuclideanSpace ℝ (Fin 1)) z).symm) s := by
+    rw [← contMDiffOn_iff_contDiffOn]
+    exact htrans
+  exact MeasureTheory.addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero
+    mu (hdiff.differentiableOn (by simp)) hnull
+
+#print axioms circleChartTransition_image_null
+
 /-- The open part of the source on which a fixed target chart is valid. -/
 def targetChartDomain
     {F M N : Type} [TopologicalSpace F] [TopologicalSpace M] [TopologicalSpace N]
