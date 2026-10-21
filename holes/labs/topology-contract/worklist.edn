@@ -119152,31 +119152,31 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Package local injectivity and signed-count data; assemble H2 and Main.",
+    "Instantiate canonical finite-fiber calculations and signed count; then H2/Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked"],
     :missing-theorems
-    [{:name "exists_circleDirection_lifts_of_incidenceProjection",
-      :type "regular incidence fiber gives direction lifts",
+    [{:name
+      "exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection",
+      :type "regular incidence fiber gives local injectivity",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["exists_circleIncidenceProjection_surjective_fiber"
-       "circleIncidenceProjection_surjective_iff_kernel_snd"
-       "direction_lifts_of_surjective_incidenceKernel_snd"],
+      ["exists_circleDirection_lifts_of_incidenceProjection"
+       "exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_circleDirection_lifts_of_incidenceProjection"
+      ["exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection"
        "regularFiberSignedCount_eq_zero_of_comparison"
        "topHomologyMap_eq_zero_of_regularValue_signedCount"],
       :area "oriented-surface-degree"}],
@@ -119184,20 +119184,20 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "97dcb91c321862433509b1326cd1c1b6ff1340d4b753183f502c2d99bc28282a",
+     "c2946c70cf31cec779ebabee2bbfe80e64a31ac6b2ca3ab575aa53e8fb6d7040",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked incidence direction lifts.",
+    :reason "Banked local injectivity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :commit "4998b6eb88fe90be2c0117a4f543aab5bdcb6bd5",
+    :commit "22f4b77d7b0bd06718e31633b351dda3aba9b65d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119205,7 +119205,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119894,7 +119894,8 @@
     :lemma-exists-mfderiv-surjective-fiber-of-targetcharts
     :lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart
     :lemma-exists-circleincidenceprojection-surjective-fiber
-    :lemma-exists-circledirection-lifts-of-incidenceprojection],
+    :lemma-exists-circledirection-lifts-of-incidenceprojection
+    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-incidenceprojection],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122976,6 +122977,28 @@
    :depends-on
    [:lemma-exists-nhds-corrected-rightinverse
     :lemma-contdiff-rightinverse-of-comp-isinvertible],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection",
+    :type "regular incidence fiber gives local injectivity"},
+   :lemma
+   {:name
+    "exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "regular incidence fiber gives local injectivity",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-exists-circlevalue-locallyinjectivealongfiber-of-incidenceprojection,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-circledirection-lifts-of-incidenceprojection
+    :lemma-exists-circlevalue-locallyinjectivealongfiber-of-direction-lifts],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
