@@ -119195,6 +119195,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792617019851-1564-2f3dec64",
+     :commands
+     ["git show/diff --check 47c1a11f3"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: 47c1a11f3 changes only t00J02Closure.lean (+27), adding a compiled, sorry-free signed top-degree transport beyond history 5766778b4. Fixture afb497a6, source 0b3b4888, implementation e944bc5a; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: the hypothesis gives top degree as the signed coefficient sum; the localization theorem gives signed regular-fiber degrees equal to that coefficient sum, so symmetry transports to the required formula. Occupied-component indexing, signs, coefficients, and local degrees remain aligned. Axioms are propext, Classical.choice, Quot.sound. Evidence lists zero chart component sums, chart signed top-degree calculation, and H2/Main assembly as residual milestones."},
     :commit "47c1a11f36811ec2e5d10036054e939e85f26601",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119203,7 +119215,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119221,7 +119233,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical component comparison transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical signed top-degree transport.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119595,7 +119607,10 @@
      :reason "Banked disk-bounded H2 endpoint."}
     {:job 5,
      :commit "5766778b4e3b09ea76cde889a899e85901dc5bfa",
-     :reason "Banked canonical component comparison transport."}]}
+     :reason "Banked canonical component comparison transport."}
+    {:job 6,
+     :commit "47c1a11f36811ec2e5d10036054e939e85f26601",
+     :reason "Banked canonical signed top-degree transport."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123107,7 +123122,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "canonicalTopDegreeFormula_of_chartSignedSum",
@@ -123117,7 +123132,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart signed sum implies canonical top-degree formula",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "47c1a11f36811ec2e5d10036054e939e85f26601"},
    :id :lemma-canonicaltopdegreeformula-of-chartsignedsum,
    :kind :lemma,
    :depends-on
