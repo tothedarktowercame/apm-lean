@@ -596,36 +596,36 @@ theorem twoArcModel_exists_of_moved_covering_loop
   · exact Or.inl ((fiberTransport_ne_refl_iff_exists_moved _).2 hfirst)
   · exact Or.inr ((fiberTransport_ne_refl_iff_exists_moved _).2 hsecond)
 
-/-- A connected degree-two cover supplies its own nontrivial loop, which can
-be used as one of the two arc generators (with the constant loop as the
-other).  Thus the literal covering monodromy reaches the normalized model
-selector without any separately assumed loop data. -/
-theorem twoArcModel_exists_of_connected_double_cover
-    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
-    [LocPathConnectedSpace X] [ConnectedSpace Y]
-    (p : Y → X) (hp : IsCoveringMap p)
-    (hdegree : ∀ x : X, Nat.card (p ⁻¹' ({x} : Set X)) = 2) (x : X) :
-    ∃ a : Y, p a = x ∧ ∃ firstLoop : Path.Homotopic.Quotient (p a) (p a),
-      ∃ label : (p ⁻¹' ({p a} : Set X)) ≃ Fin 2,
-        ∃ firstSwaps secondSwaps model,
-          labeledFiberMonodromy label
-              (coveringPathFiberEquiv p hp firstLoop) =
-            (if firstSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
-          labeledFiberMonodromy label
-              (coveringPathFiberEquiv p hp (.refl (p a))) =
-            (if secondSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
-          ((model = DoubleCoverModel.oneCircle ∧
-              ∃ swapArcs : Bool,
-                (if swapArcs then (secondSwaps, firstSwaps)
-                  else (firstSwaps, secondSwaps)) = (true, false)) ∨
-            (model = DoubleCoverModel.twoCircle ∧
-              firstSwaps = true ∧ secondSwaps = true)) := by
-  obtain ⟨a, ha, firstLoop, hmoved⟩ :=
-    exists_moved_covering_loop_over_connected p hp hdegree x
-  refine ⟨a, ha, firstLoop, ?_⟩
-  apply twoArcModel_exists_of_moved_covering_loop p hp hdegree (p a)
-    firstLoop (.refl (p a))
-  exact Or.inl ⟨⟨a, rfl⟩, hmoved⟩
+/-- Evaluation of a word in the two fixed complementary-arc transports. -/
+def twoArcTransportWord {F : Type} (first second : Equiv.Perm F) :
+    List Bool → Equiv.Perm F
+  | [] => Equiv.refl F
+  | b :: word =>
+      (if b then first else second).trans (twoArcTransportWord first second word)
+
+theorem twoArcTransportWord_eq_refl
+    {F : Type} (first second : Equiv.Perm F)
+    (hfirst : first = Equiv.refl F) (hsecond : second = Equiv.refl F) :
+    ∀ word, twoArcTransportWord first second word = Equiv.refl F := by
+  subst first
+  subst second
+  intro word
+  induction word with
+  | nil => rfl
+  | cons b word ih => cases b <;> simp [twoArcTransportWord, ih]
+
+/-- If a nontrivial transport is a word in the two fixed arc transports,
+then at least one of those actual arc transports is nonidentity. -/
+theorem twoArcTransport_nontrivial_of_generated
+    {F : Type} (first second transport : Equiv.Perm F)
+    (hgenerated : ∃ word, transport = twoArcTransportWord first second word)
+    (hne : transport ≠ Equiv.refl F) :
+    first ≠ Equiv.refl F ∨ second ≠ Equiv.refl F := by
+  by_contra h
+  push_neg at h
+  rcases h with ⟨hfirst, hsecond⟩
+  rcases hgenerated with ⟨word, rfl⟩
+  exact hne (twoArcTransportWord_eq_refl first second hfirst hsecond word)
 
 /-- Two loop classes in the base now supply the actual fiber transports used
 by the normalized model selector. -/
@@ -683,6 +683,7 @@ theorem twoArcModel_exists_of_covering_loops
 #print axioms twoArcModel_exists_of_covering_loops
 #print axioms fiberTransport_ne_refl_iff_exists_moved
 #print axioms twoArcModel_exists_of_moved_covering_loop
-#print axioms twoArcModel_exists_of_connected_double_cover
+#print axioms twoArcTransportWord_eq_refl
+#print axioms twoArcTransport_nontrivial_of_generated
 
 end ConstructionTargets.t97A03Closure
