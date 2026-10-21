@@ -119197,6 +119197,18 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "added instances/mdiff arg"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792586833151-782-3a5bbb79",
+     :commands
+     ["git show/diff 932a98da"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 932a98da changes only t00J02Closure.lean (+70), adding compiled target-chart surjectivity and criticality bridges after prior history. Fixture afb497a6, source 0b3b4888, implementation 84c9f7c4, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is correct: the target chart derivative is surjective and injective at the center, so postcomposition preserves and reflects surjectivity; not_congr preserves the critical predicate. Circle/model representations align. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; chartwise Sard/Haar, signed counts, and final assembly remain listed."},
     :commit "932a98dabfa902dc0c96aed10de7c86961fcb067",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence second countability.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked target-chart criticality.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119512,7 +119524,10 @@
      :reason "Banked exact geometric/kernel critical-locus bridge."}
     {:job 3,
      :commit "a7ba515386e77d1400fe973aee3ec9b35d5e1808",
-     :reason "Banked incidence second countability."}]}
+     :reason "Banked incidence second countability."}
+    {:job 4,
+     :commit "932a98dabfa902dc0c96aed10de7c86961fcb067",
+     :reason "Banked target-chart criticality."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122262,7 +122277,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -122273,7 +122288,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "critical iff chart-critical",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "932a98dabfa902dc0c96aed10de7c86961fcb067"},
    :id
    :lemma-circleincidenceprojection-critical-iff-targetchartcritical,
    :kind :lemma,
