@@ -3492,6 +3492,26 @@ ball (`chart (chart.symm p) = p` on the target), and it is a neighbourhood of
 `IsCompact.elim_nhds_subcover` gives the finite `s ⊆ A`.  For `a ∉ A` take
 `K a = ∅`.  (`_divide_aux_inChart` needs the same cover.) -/
 -- BEGIN SEAT AREA
+lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_cover_aux_radius
+    (M : Type) [TopologicalSpace M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
+    (x a : M) (ha : a ∈ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
+    (V : Set M) (hV : IsOpen V) (haV : a ∈ V) :
+    ∃ r : ℝ, 0 < r ∧
+      Metric.closedBall ((chartAt (EuclideanSpace ℝ (Fin 3)) x) a) r ⊆
+        (chartAt (EuclideanSpace ℝ (Fin 3)) x).target ∩
+          (chartAt (EuclideanSpace ℝ (Fin 3)) x).symm ⁻¹'
+            ((chartAt (EuclideanSpace ℝ (Fin 3)) x).source ∩ V) := by
+  let e := chartAt (EuclideanSpace ℝ (Fin 3)) x
+  have hW : IsOpen (e.target ∩ e.symm ⁻¹' (e.source ∩ V)) :=
+    e.isOpen_inter_preimage_symm (e.open_source.inter hV)
+  have hea : e a ∈ e.target ∩ e.symm ⁻¹' (e.source ∩ V) := by
+    refine ⟨e.mapsTo ha, ?_⟩
+    simpa [e.left_inv ha] using And.intro ha haV
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hW (e a) hea
+  refine ⟨ε / 2, half_pos hε, ?_⟩
+  exact (Metric.closedBall_subset_ball (half_lt_self hε)).trans hball
+
 lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_cover
     (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M]
@@ -3502,7 +3522,65 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
       (∀ a, IsCompact (K a)) ∧ (∀ a, K a ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source) ∧
       (∀ a, Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' K a)) ∧ (∀ a, K a ⊆ V) ∧
       (∀ a ∈ s, (K a ∩ A).Nonempty) ∧ A ⊆ ⋃ a ∈ s, K a := by
-  sorry
+  classical
+  let e := chartAt (EuclideanSpace ℝ (Fin 3)) x
+  have hex : ∀ a : M, ∃ r : ℝ, a ∈ A → 0 < r ∧
+      Metric.closedBall (e a) r ⊆ e.target ∩ e.symm ⁻¹' (e.source ∩ V) := by
+    intro a
+    by_cases ha : a ∈ A
+    · obtain ⟨r, hr, hball⟩ :=
+        apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart_aux_cover_aux_radius
+          M x a (hsub ha) V hV (hAV ha)
+      exact ⟨r, fun _ => ⟨hr, hball⟩⟩
+    · exact ⟨1, fun h => (ha h).elim⟩
+  choose r hr using hex
+  let K : M → Set M := fun a => if a ∈ A then e.symm '' Metric.closedBall (e a) (r a) else ∅
+  have hnhds : ∀ a ∈ A, K a ∈ nhds a := by
+    intro a ha
+    rw [show K a = e.source ∩ e ⁻¹' Metric.closedBall (e a) (r a) by
+      simp only [K, if_pos ha]
+      exact e.symm_image_eq_source_inter_preimage (fun z hz => (hr a ha).2 hz |>.1)]
+    exact Filter.inter_mem (e.open_source.mem_nhds (hsub ha))
+      (e.continuousAt (hsub ha) (Metric.closedBall_mem_nhds _ (hr a ha).1))
+  obtain ⟨s, hsA, hcov⟩ := hA.elim_nhds_subcover K hnhds
+  refine ⟨s, K, ?_, ?_, ?_, ?_, ?_, hcov⟩
+  · intro a
+    by_cases ha : a ∈ A
+    · simp only [K, if_pos ha]
+      exact (isCompact_closedBall _ _).image_of_continuousOn
+        (e.continuousOn_symm.mono (fun z hz => (hr a ha).2 hz |>.1))
+    · simp [K, ha]
+  · intro a
+    by_cases ha : a ∈ A
+    · simp only [K, if_pos ha]
+      rintro z ⟨y, hy, rfl⟩
+      exact e.symm_mapsTo ((hr a ha).2 hy).1
+    · simp [K, ha]
+  · intro a
+    by_cases ha : a ∈ A
+    · simp only [K, if_pos ha]
+      change Convex ℝ (e '' (e.symm '' Metric.closedBall (e a) (r a)))
+      rw [show (e : M → EuclideanSpace ℝ (Fin 3)) =
+        (e.toPartialEquiv : M → EuclideanSpace ℝ (Fin 3)) from rfl]
+      rw [show (e.symm : EuclideanSpace ℝ (Fin 3) → M) =
+        (e.toPartialEquiv.symm : EuclideanSpace ℝ (Fin 3) → M) from rfl]
+      have heq := e.toPartialEquiv.image_symm_image_of_subset_target
+        (fun z hz => (hr a ha).2 hz |>.1)
+      exact Eq.mpr (congrArg (Convex ℝ) heq) (convex_closedBall _ _)
+    · simp only [K, if_neg ha, Set.image_empty]
+      exact convex_empty
+  · intro a
+    by_cases ha : a ∈ A
+    · simp only [K, if_pos ha]
+      rintro z ⟨y, hy, rfl⟩
+      exact ((hr a ha).2 hy).2.2
+    · simp [K, ha]
+  · intro a has
+    have ha := hsA a has
+    refine ⟨a, ?_, ha⟩
+    simp only [K, if_pos ha]
+    refine ⟨e a, Metric.mem_closedBall_self (le_of_lt (hr a ha).1), ?_⟩
+    exact e.left_inv (hsub ha)
 -- END SEAT AREA
 
 /-- LIBRARY LEAF (Hatcher 3.27, step 2; split from `_aux_inChart` after
