@@ -9,6 +9,7 @@ import ConstructionTargets.CoefficientSubcomplexMayerVietoris
 import ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility
 import ConstructionTargets.CoefficientIntersectionRangeComparison
 import ConstructionTargets.CoefficientIntersectionRangeNaturality
+import ConstructionTargets.CoefficientSubspaceUnionRangeHomologyEquivalence
 import ConstructionTargets.HomologyBiprodIso
 import ConstructionTargets.ProductionOpenCoverMayerVietoris
 import Mathlib.Analysis.InnerProductSpace.PiL2
@@ -1238,6 +1239,19 @@ noncomputable def t99J05_cp_successor_mayerVietoris_exact_ambient (n k : ℕ) :=
       (cpSuccessorLowerPatch n))
     (ConstructionTargets.SingularExcision.ambientSubspaceRange
       (cpSuccessorTopPatch n)) k
+
+/-- The union term of the successor Mayer--Vietoris sequence computes the
+homology of the literal union of the two open projective patches. -/
+theorem t99J05_cp_successor_unionRange_homologyMap_isIso (n k : ℕ) :
+    CategoryTheory.IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientSubspaceUnionRangeInclusion.unionRangeChainsInclusion
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n)) k) := by
+  exact
+    ConstructionTargets.CoefficientSubspaceUnionRangeHomologyEquivalence.unionRange_homologyMap_isIso
+      ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n)
+      (cpSuccessorLowerPatch_isOpen n) (cpSuccessorTopPatch_isOpen n) k
+
+#print axioms t99J05_cp_successor_unionRange_homologyMap_isIso
 
 /-- Rational chains on an ambient subspace range are canonically the literal
 singular chains of that subspace. -/
