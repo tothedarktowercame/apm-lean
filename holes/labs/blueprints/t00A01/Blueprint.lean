@@ -2899,7 +2899,72 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
         (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
         (ContinuousMap.id M)
         (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K z hz)) i) := by
-  sorry
+  let e := chartAt (EuclideanSpace ℝ (Fin 3)) x
+  have hzsub : z ∈ e.source := hsub hz
+  have hKclosed : IsClosed K := hK.isClosed
+  have himgCompact : IsCompact (e '' K) :=
+    hK.image_of_continuousOn (e.continuousOn.mono hsub)
+  have himgClosed : IsClosed (e '' K) := himgCompact.isClosed
+  have htarget : e '' K ⊆ e.target := by
+    rintro _ ⟨w, hw, rfl⟩
+    exact e.map_source (hsub hw)
+  have hmodelTarget : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : e.target | u.1 ∉ e '' K}
+        {u : e.target | u.1 ∉ ({e z} : Set (EuclideanSpace ℝ (Fin 3)))}
+        (ContinuousMap.id e.target) (fun u hu huz => hu (by
+          have heq : u.1 = e z := by simpa using huz
+          rw [heq]
+          exact Set.mem_image_of_mem e hz))) i) := by
+    exact (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_restrict
+      e.target e.open_target (e '' K) ({e z} : Set (EuclideanSpace ℝ (Fin 3)))
+      himgClosed isClosed_singleton htarget (by
+        intro a ha
+        rcases ha with rfl
+        exact Set.mem_image_of_mem e hz) i hi).mp hmodel
+  have hsource : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : e.source | u.1 ∉ K} {u : e.source | u.1 ∉ ({z} : Set M)}
+        (ContinuousMap.id e.source) (fun u hu huz => hu (by
+          have heq : u.1 = z := by simpa using huz
+          rw [heq]
+          exact hz))) i) := by
+    exact (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_homeo
+      e.toHomeomorphSourceTarget
+      {u : e.source | u.1 ∉ K} {u : e.source | u.1 ∉ ({z} : Set M)}
+      {u : e.target | u.1 ∉ e '' K}
+      {u : e.target | u.1 ∉ ({e z} : Set (EuclideanSpace ℝ (Fin 3)))}
+      (by
+        intro u
+        constructor
+        · intro hu himg
+          obtain ⟨w, hw, hew⟩ := himg
+          have hwu : w = u.1 := e.injOn (hsub hw) u.property hew
+          exact hu (hwu ▸ hw)
+        · intro hu hw
+          exact hu ⟨u, hw, rfl⟩)
+      (by
+        intro u
+        simp only [Set.mem_setOf_eq, Set.mem_singleton_iff]
+        apply not_congr
+        constructor
+        · exact congrArg e
+        · exact e.injOn u.property hzsub)
+      (fun u hu huz => hu (by
+        have heq : u.1 = z := by simpa using huz
+        rw [heq]
+        exact hz))
+      (fun u hu huz => hu (by
+        have heq : u.1 = e z := by simpa using huz
+        rw [heq]
+        exact Set.mem_image_of_mem e hz)) i).mpr hmodelTarget
+  exact (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_restrict
+    e.source e.open_source K ({z} : Set M) hKclosed isClosed_singleton hsub
+    (by
+      intro a ha
+      have heq : a = z := by simpa using ha
+      rw [heq]
+      exact hz) i hi).mpr hsource
 
 /-- PROVED from `_inj_aux_isIso_aux_reduce` and `_convex_aux_inj_aux_model`
 (claude-14, split after lemma-1's PARTIAL, job 200, 2026-10-21; first split from
