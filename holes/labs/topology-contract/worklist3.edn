@@ -36711,31 +36711,26 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Apply to overlap-vanishing degrees; prove top/even cases.",
+    "Install patch/overlap instances by degree; prove top/even cases.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_surjective_of_subsingleton",
-      :type "map into zero module is surjective",
-      :status :proved,
-      :consumers [:t99J05],
-      :depends-on [],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_finiteDimensional_middle_of_exact_of_subsingleton",
+    [{:name
+      "t99J05_shortComplex_finiteDimensional_middle_of_subsingleton",
       :type
-      "exact segment with finite outer terms and zero right has finite middle",
+      "exact ModuleCat short complex with finite left and zero right has finite middle",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_finiteDimensional_middle_of_exact_of_surjective"],
+      ["t99J05_finiteDimensional_middle_of_exact_of_subsingleton"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
@@ -36744,41 +36739,28 @@
       :depends-on
       ["t99J05_cp_successor_mayerVietoris_exact_ambient_transport"
        "t99J05_cp_successor_overlap_rational_topHomology"
-       "t99J05_finiteDimensional_middle_of_exact_of_subsingleton"],
+       "t99J05_shortComplex_finiteDimensional_middle_of_subsingleton"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed finite extraction when the right term vanishes; degreewise use remains.",
+    "Committed direct ShortComplex exactness adapter; degreewise CP application remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792594046689-978-f2ac5873",
-     :commands
-     ["git show/diff-tree 2ebc848f92"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check 2ebc848f92^ 2ebc848f92"],
-     :finding
-     "PASS: new commit 2ebc848f92 changes only scoped Closure; fixture/blob SHA matches 3ba4951d.... A map into a subsingleton module is correctly proved surjective using preimage 0; the exact-segment corollary faithfully supplies that surjectivity to the prior finite-middle theorem. Directions and ModuleCat-to-function boundary are explicit, and all hypotheses are used. Closure/Main compile; registry 170/170; no sorryAx/new axioms; standard axioms only. Both extraction milestones are proved and degreewise use remains listed."},
-    :commit "2ebc848f92",
+    :commit "80ae0c0962",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "3ba4951de15094f41ed52d64198111cf6cccfea9f6b6af935da21b0fe748c947"},
+     "00f0f6be107cdd063a87822f7378a39279f978baf71178c99da31a24ae2d4400"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48816,7 +48798,8 @@
     :lemma-t99j05-cp-successor-overlap-rational-tophomology
     :lemma-t99j05-cp-successor-mayervietoris-exact-ambient-transport
     :lemma-t99j05-finitedimensional-middle-of-exact-of-surjective
-    :lemma-t99j05-finitedimensional-middle-of-exact-of-subsingleton],
+    :lemma-t99j05-finitedimensional-middle-of-exact-of-subsingleton
+    :lemma-t99j05-shortcomplex-finitedimensional-middle-of-subsingleton],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -48966,6 +48949,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-finitedimensional-middle-of-exact-of-surjective],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_shortComplex_finiteDimensional_middle_of_subsingleton",
+    :type
+    "exact ModuleCat short complex with finite left and zero right has finite middle"},
+   :lemma
+   {:name
+    "t99J05_shortComplex_finiteDimensional_middle_of_subsingleton",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "exact ModuleCat short complex with finite left and zero right has finite middle",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id
+   :lemma-t99j05-shortcomplex-finitedimensional-middle-of-subsingleton,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-finitedimensional-middle-of-exact-of-subsingleton],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
