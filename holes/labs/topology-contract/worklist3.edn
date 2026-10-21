@@ -37319,55 +37319,47 @@
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:residual
-    "Prove a left-whiskered/reassociated transport lemma joining the Unit inverse comparison to Bool naturality; then close Bool and circle.",
+    "None; apm_t96a06 compiles sorry-free with standard axioms.",
     :evidence
-    {:placeholder-delta {:t96A06 [1 1]},
+    {:placeholder-delta {:t96A06 [0 0]},
      :statement-hashes {:registry "170/170"}},
-    :outcome :stop,
-    :warnings ["Existing lints; Main one sorry."],
+    :outcome :done-unreviewed,
+    :warnings ["Unrelated dirty t94J09/review artifacts preserved."],
     :missing-theorems
     [{:name "t96A06_unitH0_chosenCoproduct_coordinate_transport",
       :type
       "Unit injection identifies the two chosen coproduct composites",
-      :status :not-started,
+      :status :proved,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_unitH0_integralComparison_inverse_pointInclusion"
        "t96A06_boolH0_comparison_pointInclusion_naturality_with_tail"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_boolH0_integralComparison",
+      :type
+      "Bool H0 integral comparison from transported Unit coordinates",
+      :status :proved,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_unitH0_chosenCoproduct_coordinate_transport"],
       :area "rp-rational-homology"}],
-    :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Exact representation boundary: the banked Unit inverse comparison and Bool naturality have incompatible categorical parenthesizations under the chosen coproduct prefix; direct rewrites do not expose the shared subcomposite. No scoped change retained.",
     :commands
-    [{:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
-      :exit 1,
-      :note
-      "Candidate coordinate transport reduced to categorical reassociation; reverted."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792569321188-446-4bcadb3c",
-     :commands
-     ["git show --check --stat 16ed5cef3d"
-      "commit-blob hash equality; lake env lean ConstructionTargets/t96A06Closure.lean"
-      "statement-registry.py check at 16ed5cef3d: 168/168"
-      "comment-stripped placeholder/axiom census"],
-     :finding
-     "PASS: 16ed5cef3d changes only scoped Closure and adds a correctly oriented whiskered Bool point-inclusion naturality theorem, proved from the prior naturality equality. Exact blob compiles; new milestone has no sorry/admit/axiom and reports only propext, Classical.choice, Quot.sound. Closure placeholders 0; Main retains assigned 1. Fixture /tmp/t96a06_sphere3_h3_check.lean is absent, so ledger SHA 5cf165... cannot be independently rehashed."},
-    :commit nil,
-    :changed-paths [],
+    [{:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git show --check --stat 1708a2ca1536ec42e3529747088cf0f2e6ea869c",
+      :exit 0}],
+    :commit "1708a2ca1536ec42e3529747088cf0f2e6ea869c",
+    :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
-    {:path "/tmp/t96a06_sphere3_h3_check.lean",
+    {:path "problems/t96A06/lean/Main.lean",
      :sha256
-     "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
+     "1176b69d436fc84d7df7abe66a29e04cc28cfa1893853d6b255f113060529afb"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46573,7 +46565,8 @@
     :lemma-t96a06-boolh0-preserved-pointinclusion
     :lemma-t96a06-boolh0-comparison-pointinclusion-naturality-concrete
     :lemma-t96a06-unith0-integralcomparison-inverse
-    :lemma-t96a06-unith0-preserved-pointinclusion],
+    :lemma-t96a06-unith0-preserved-pointinclusion
+    :lemma-t96a06-unith0-chosencoproduct-coordinate-transport],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -48539,7 +48532,8 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "Unit injection identifies the two chosen coproduct composites",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-unith0-chosencoproduct-coordinate-transport,
    :kind :lemma,
    :depends-on
