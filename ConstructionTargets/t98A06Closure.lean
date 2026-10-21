@@ -182,6 +182,24 @@ theorem exists_nhds_contDiffOn_corrected_rightInverse
 
 #print axioms exists_nhds_contDiffOn_corrected_rightInverse
 
+/-- On the stable neighborhood, applying the smooth corrected right inverse
+to a smooth target-coordinate vector gives a smooth exact coordinate lift. -/
+theorem exists_nhds_contDiffOn_corrected_lift
+    {Z : Type} [NormedAddCommGroup Z] [NormedSpace ℝ Z] {n m : ℕ}
+    (A : Z → E n →L[ℝ] E m) (b : Z → E m) (x₀ : Z)
+    (R : E m →L[ℝ] E n)
+    (hA : ContDiff ℝ ∞ A) (hb : ContDiff ℝ ∞ b)
+    (hAR : (A x₀).comp R = ContinuousLinearMap.id ℝ (E m)) :
+    ∃ U ∈ nhds x₀, ∃ w : Z → E n,
+      ContDiffOn ℝ ∞ w U ∧ ∀ x ∈ U, A x (w x) = b x := by
+  obtain ⟨U, hU, Q, hQ, hAQ⟩ :=
+    exists_nhds_contDiffOn_corrected_rightInverse A x₀ R hA hAR
+  refine ⟨U, hU, fun x ↦ Q x (b x), hQ.clm_apply hb.contDiffOn, ?_⟩
+  intro x hx
+  exact DFunLike.congr_fun (hAQ x hx) (b x)
+
+#print axioms exists_nhds_contDiffOn_corrected_lift
+
 /-- Applying the smoothly varying right inverse to a smooth target-coordinate
 vector gives the source-coordinate lift used in a submersion chart. -/
 theorem contDiff_lift_of_comp_isInvertible
