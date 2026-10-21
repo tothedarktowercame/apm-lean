@@ -89380,27 +89380,28 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "realize Boolean monodromy models; compute model invariants",
+    "realize selected monodromy model geometrically; compute invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "finTwoPerm_bool_normalForm",
-      :type "Perm(Fin 2) has Boolean id/swap normal form",
+    [{:name "twoArcPermMonodromy_model_exists",
+      :type
+      "two nontrivial Fin2 arc permutations select a Boolean cover model",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on [],
+      :depends-on
+      ["finTwoPerm_bool_normalForm"
+       "twoArcMonodromy_nontrivial_classification"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "connected double-cover classification",
       :status :partial,
       :consumers [:t97A03],
-      :depends-on
-      ["finTwoPerm_bool_normalForm"
-       "twoArcMonodromy_nontrivial_classification"],
+      :depends-on ["twoArcPermMonodromy_model_exists"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
       :type "model homology and fundamental group",
@@ -89412,39 +89413,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked two-point permutation normal form.",
+    :reason "Banked two-arc permutation model selection.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "git show --check 859cba71a", :exit 0}],
-    :diagnostic-history
-    [{:cmd "build", :exit 1, :correction "fin_cases syntax"}
-     {:cmd "build", :exit 1, :correction "Fin.val coercions"}
-     {:cmd "scan", :exit 1, :correction "Python quoting"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792586498381-773-58856129",
-     :commands
-     ["git show/check/hash 859cba71a"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "statement-registry check/fingerprint t97A03"
-      "placeholder/axiom/orientation inspection"],
-     :finding
-     "PASS: reviewed 859cba71a by topo-6, new after ab476b082; patch scope only t97A03Closure (+34). Fixture e74881e2... matches; registry 170/0; frozen t97A03 digest abf8282b...; closure/Main placeholders 0/3. Fresh detached build and Main compile pass. Exhausting e(0) and using permutation injectivity forces e(1), proving every Perm(Fin2) is exactly id or swap; the Boolean packaging has the correct orientation. Axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists Boolean-model realization/full cover classification and model invariants."},
-    :commit "859cba71a",
+     {:cmd "git show --check 24ff67fb4", :exit 0}],
+    :commit "24ff67fb4",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "e74881e2c97018865f4183e9d15e762d715cbf6c139467ae04ec7c1d644c8aa7"},
+     "3305a8933075f3411d8efd289181fba60babe1474db5b860235710cc1f7bfaca"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98400,7 +98385,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-twoarcmonodromy-nontrivial-classification
-    :lemma-fintwoperm-bool-normalform],
+    :lemma-fintwoperm-bool-normalform
+    :lemma-twoarcpermmonodromy-model-exists],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -99961,4 +99947,25 @@
    :id :lemma-fintwoperm-bool-normalform,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoArcPermMonodromy_model_exists",
+    :type
+    "two nontrivial Fin2 arc permutations select a Boolean cover model"},
+   :lemma
+   {:name "twoArcPermMonodromy_model_exists",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type
+    "two nontrivial Fin2 arc permutations select a Boolean cover model",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-twoarcpermmonodromy-model-exists,
+   :kind :lemma,
+   :depends-on
+   [:lemma-fintwoperm-bool-normalform
+    :lemma-twoarcmonodromy-nontrivial-classification],
    :other-consumers []}]}
