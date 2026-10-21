@@ -244,6 +244,62 @@ theorem apm_t97A03_literal_transports_select_model
   exact ConstructionTargets.t97A03Closure.twoArcModel_exists_of_moved_covering_loop
     p hp hdegree _ _ _ hmoved
 
+/-- The exact algebraic consequence required from geometric generation: a
+moved loop whose labeled transport is a signed word in the two fixed literal
+loop transports forces one of those actual transports to be nonidentity. -/
+theorem apm_t97A03_literal_transport_nontrivial_of_generated
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (label : (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) ≃ Fin 2)
+    (transport : Equiv.Perm
+      (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)))
+    (hgenerated : ∃ word,
+      ConstructionTargets.t97A03Closure.labeledFiberMonodromy label transport =
+        ConstructionTargets.t97A03Closure.twoArcSignedTransportWord
+          (ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+            (apm_t97A03_firstLiteralTransport p hp))
+          (ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+            (apm_t97A03_secondLiteralTransport p hp)) word)
+    (hne : transport ≠ Equiv.refl _) :
+    apm_t97A03_firstLiteralTransport p hp ≠ Equiv.refl _ ∨
+      apm_t97A03_secondLiteralTransport p hp ≠ Equiv.refl _ := by
+  have htransport :=
+    (ConstructionTargets.t97A03Closure.labeledFiberMonodromy_ne_refl_iff
+      label transport).2 hne
+  rcases ConstructionTargets.t97A03Closure.twoArcTransport_nontrivial_of_signed_generated
+      _ _ _ hgenerated htransport with hfirst | hsecond
+  · exact Or.inl
+      ((ConstructionTargets.t97A03Closure.labeledFiberMonodromy_ne_refl_iff
+        label _).1 hfirst)
+  · exact Or.inr
+      ((ConstructionTargets.t97A03Closure.labeledFiberMonodromy_ne_refl_iff
+        label _).1 hsecond)
+
+theorem apm_t97A03_literal_transport_moved_of_generated
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (label : (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) ≃ Fin 2)
+    (transport : Equiv.Perm
+      (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)))
+    (hgenerated : ∃ word,
+      ConstructionTargets.t97A03Closure.labeledFiberMonodromy label transport =
+        ConstructionTargets.t97A03Closure.twoArcSignedTransportWord
+          (ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+            (apm_t97A03_firstLiteralTransport p hp))
+          (ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+            (apm_t97A03_secondLiteralTransport p hp)) word)
+    (hne : transport ≠ Equiv.refl _) :
+    (∃ e, apm_t97A03_firstLiteralTransport p hp e ≠ e) ∨
+      ∃ e, apm_t97A03_secondLiteralTransport p hp e ≠ e := by
+  rcases apm_t97A03_literal_transport_nontrivial_of_generated
+      p hp label transport hgenerated hne with hfirst | hsecond
+  · exact Or.inl
+      ((ConstructionTargets.t97A03Closure.fiberTransport_ne_refl_iff_exists_moved
+        _).1 hfirst)
+  · exact Or.inr
+      ((ConstructionTargets.t97A03Closure.fiberTransport_ne_refl_iff_exists_moved
+        _).1 hsecond)
+
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
   exact mem_sphere_zero_iff_norm.mpr (by norm_num)⟩
