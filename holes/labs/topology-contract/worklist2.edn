@@ -89428,6 +89428,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792605510070-1257-f9c61c52",
+     :commands
+     ["git show/diff-tree fa61e72e7"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit fa61e72e7 changes only t97A03Closure after history cfce425b4; fixture SHA 581ffddb... matches. Every Fin 2 permutation is self-inverse, so signed arc words correctly normalize to unsigned words; a nontrivial signed word therefore forces one fixed arc transport nonidentity. Actual geometric signed generation remains explicit, avoiding the prior facade. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; literal arcs/generation, model realization, and invariants remain listed."},
     :commit "fa61e72e7",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89436,7 +89448,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89454,7 +89466,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Replaced facade with generator reduction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed arc-word normalization.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89526,7 +89538,10 @@
      "Banked distinct fiber endpoints related by cover monodromy."}
     {:job 2,
      :commit "cfce425b4",
-     :reason "Replaced facade with generator reduction."}]}
+     :reason "Replaced facade with generator reduction."}
+    {:job 3,
+     :commit "fa61e72e7",
+     :reason "Banked signed arc-word normalization."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100528,7 +100543,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcTransport_nontrivial_of_signed_generated",
@@ -100538,7 +100553,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "nontrivial signed word forces nontrivial arc transport",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "fa61e72e7"},
    :id :lemma-twoarctransport-nontrivial-of-signed-generated,
    :kind :lemma,
    :depends-on [:lemma-twoarctransport-nontrivial-of-generated],
