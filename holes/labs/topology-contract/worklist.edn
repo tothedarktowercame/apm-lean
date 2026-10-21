@@ -119152,65 +119152,49 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:consumer :t00J02,
     :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Chart-image inclusion; Haar transport/aggregation, signed counts, Main.",
+    "Transport chart nullity through circle charts/Haar; aggregate, signed counts, Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked artifacts"],
+    :warnings ["Main sorry" "untracked review artifacts preserved"],
     :missing-theorems
-    [{:name "mfderiv_openSubtype_not_surjective",
-      :type "ambient critical implies subtype critical",
+    [{:name "targetChartCoordinate_ambientCriticalImage_null",
+      :type "fixed-chart ambient critical image null",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["circleIncidenceProjection_critical_iff_fixedTargetChartCritical"],
+      :depends-on ["mfderiv_openSubtype_not_surjective"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["mfderiv_openSubtype_not_surjective"],
+      :depends-on ["targetChartCoordinate_ambientCriticalImage_null"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "b3443c73ae9b57480ecdcedd86744bcb2608b66c0e92049f409ab9b1c32569b6",
+     "59974b040ed00212c48e7b35ea69773b91b792014524081b79fbcb97d3aaf9b6",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked open-subtype criticality.",
+    :reason "Banked fixed-chart ambient critical-image nullity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hashes; git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :finding "replaced false iff with needed implication"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792591063326-887-e53b4f7f",
-     :commands
-     ["git show/diff 1d2dd4c8"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 1d2dd4c8 changes only t00J02Closure.lean (+30), adding a compiled open-subtype criticality implication after prior history. Fixture afb497a6, source 0b3b4888, implementation b3443c73, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is correct and deliberately one-way: restricted derivative = dg o d(val); its surjectivity implies surjective dg, so ambient nonsurjectivity implies subtype nonsurjectivity. No false converse is claimed, and representations align at x.val. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; chart-image inclusion/Haar aggregation, signed counts, and final assembly remain listed."},
-    :commit "1d2dd4c8802a0d2a17055a2c258554c3bc355953",
+     {:cmd "sha256sum fixture/source/implementation; git diff --check",
+      :exit 0}],
+    :commit "917e36c955a2ecb7ee78ffa9d415691c1408fdbf",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119218,7 +119202,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119826,7 +119810,8 @@
     :lemma-targetchartcoordinate-contmdiff
     :lemma-targetchartcoordinate-criticalimage-null
     :lemma-circleincidenceprojection-critical-iff-fixedtargetchartcritical
-    :lemma-mfderiv-opensubtype-not-surjective],
+    :lemma-mfderiv-opensubtype-not-surjective
+    :lemma-targetchartcoordinate-ambientcriticalimage-null],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122395,6 +122380,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-circleincidenceprojection-critical-iff-fixedtargetchartcritical],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "targetChartCoordinate_ambientCriticalImage_null",
+    :type "fixed-chart ambient critical image null"},
+   :lemma
+   {:name "targetChartCoordinate_ambientCriticalImage_null",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "fixed-chart ambient critical image null",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-targetchartcoordinate-ambientcriticalimage-null,
+   :kind :lemma,
+   :depends-on [:lemma-mfderiv-opensubtype-not-surjective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
