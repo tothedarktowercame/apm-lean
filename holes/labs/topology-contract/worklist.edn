@@ -119152,60 +119152,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:consumer :t00J02,
     :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove circle chart inverse preserves nullity; finite-chart aggregate, signed counts, Main.",
+    "Prove circle-chart inverse null preservation; cover bad set, signed counts, Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked artifacts"],
+    :warnings
+    ["Main registered sorry" "untracked review artifacts preserved"],
     :missing-theorems
-    [{:name "targetChart_ambientCriticalImage_null",
-      :type "chart-inverse transport of ambient critical nullity",
+    [{:name "finite_chartCriticalPieces_measure_zero",
+      :type "finite chartwise null union",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["targetChartCoordinate_ambientCriticalImage_null"],
+      :depends-on ["targetChart_ambientCriticalImage_null"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["targetChart_ambientCriticalImage_null"],
+      :depends-on ["finite_chartCriticalPieces_measure_zero"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "360af14f1ada3b740106dbb53f0df4c10e8f8de3b1dac2f1486ddb18569eee2d",
+     "432a0e7d294862fa9cf06a7afbec64cbcedc22a93be8d383ed037569129979f2",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked chart-inverse nullity transport.",
+    :reason "Banked finite chartwise null-union aggregation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hashes; git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792593702978-963-455be009",
-     :commands
-     ["git show/diff 71255f23"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 71255f23 changes only t00J02Closure.lean (+33), adding compiled inverse-chart nullity transport after prior history; its exact tree also repairs the prior compile/sorryAx defect. Fixture afb497a6, source 0b3b4888, implementation 360af14f, registry 170/170, and placeholders closure=0/Main=1 reproduce. Both repaired ambient-coordinate nullity and new transport have standard axioms only. Inclusion is correct via chart.symm(chart(g x))=g x on the chart source; htransport then transfers nullity to N. Main retains its registered sorry; inverse-chart nullity, finite aggregation, signed counts, and final assembly remain listed."},
-    :commit "71255f23654349f357bcbd8b39f5f0918e229035",
+     {:cmd "sha256sum fixture/source/implementation; git diff --check",
+      :exit 0}],
+    :commit "bc7a1ec995254a20bb762227bb61dad4258c7175",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119213,7 +119203,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119825,7 +119815,8 @@
     :lemma-circleincidenceprojection-critical-iff-fixedtargetchartcritical
     :lemma-mfderiv-opensubtype-not-surjective
     :lemma-targetchartcoordinate-ambientcriticalimage-null
-    :lemma-targetchart-ambientcriticalimage-null],
+    :lemma-targetchart-ambientcriticalimage-null
+    :lemma-finite-chartcriticalpieces-measure-zero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122453,6 +122444,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-targetchartcoordinate-ambientcriticalimage-null],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finite_chartCriticalPieces_measure_zero",
+    :type "finite chartwise null union"},
+   :lemma
+   {:name "finite_chartCriticalPieces_measure_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "finite chartwise null union",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-finite-chartcriticalpieces-measure-zero,
+   :kind :lemma,
+   :depends-on [:lemma-targetchart-ambientcriticalimage-null],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
