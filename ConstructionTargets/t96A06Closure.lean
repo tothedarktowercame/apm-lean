@@ -3617,6 +3617,57 @@ theorem t96A06_unitH0_integralComparison_apply
 
 #print axioms t96A06_unitH0_integralComparison_apply
 
+/-- The selected Bool coproduct coordinate is the transport of the unique
+Unit coordinate through point-inclusion naturality. -/
+theorem t96A06_unitH0_chosenCoproduct_coordinate_transport (b : Bool) :
+    t96A06_boolH0PointComparison b := by
+  unfold t96A06_boolH0PointComparison
+  simp only [t96A06_boolH0ComparisonLhs, t96A06_boolH0ComparisonRhs,
+    Functor.mapIso_inv]
+  slice_lhs 1 3 => rw [t96A06_boolH0_preserved_pointInclusion]
+  slice_lhs 1 3 =>
+    rw [← Functor.map_comp,
+      ← t96A06_boolH0_module_pointInclusion_coordinates,
+      Functor.map_comp, Functor.map_comp]
+  slice_lhs 1 2 => rw [← t96A06_unitH0_preserved_pointInclusion]
+  slice_lhs 4 8 =>
+    exact (by simpa only [Category.assoc] using
+      t96A06_boolH0_comparison_pointInclusion_naturality_with_tail b)
+  slice_lhs 2 6 =>
+    exact (by simpa only [Category.assoc, Functor.mapIso_inv] using (congrArg
+      (fun f => f ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv)
+      (t96A06_unitH0_integralComparison_inverse_pointInclusion b)))
+  slice_lhs 1 4 =>
+    exact (by simpa only [Category.assoc] using (congrArg (fun f => f ≫
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv)
+      (t96A06_boolH0_additive_pointInclusion_coordinates b)))
+  slice_lhs 2 4 => rw [Iso.inv_hom_id_assoc]
+  slice_rhs 3 5 =>
+    rw [← Functor.map_comp, Iso.inv_hom_id]
+  slice_rhs 3 4 =>
+    exact ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_id _
+  simp
+
+#print axioms t96A06_unitH0_chosenCoproduct_coordinate_transport
+
+/-- The integral degree-zero comparison on the two-point boundary follows
+from the transported Unit coordinate on each summand. -/
+theorem t96A06_boolH0_integralComparison :
+    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  apply t96A06_boolH0_integralComparison_of_points
+  exact t96A06_unitH0_chosenCoproduct_coordinate_transport
+
+#print axioms t96A06_boolH0_integralComparison
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
