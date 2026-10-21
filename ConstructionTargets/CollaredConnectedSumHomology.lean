@@ -815,6 +815,81 @@ default point of the sphere or of the target (`EuclideanSpace.single 0 1`
 needs `0 : Fin n` and fails for `n = 0`): define the map on the subtype, by
 lifting along the restricted quotient map or by choosing a representative in
 the saturated preimage (`Classical.choose` of the image membership). -/
+lemma connectedSum_standardCover_aux_left_aux_quotient_aux_forward_aux_mem
+    {n : ℕ} {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (C : Set c₂.Punctured) (hiB : ∀ s, c₂.boundaryMap s ∈ C)
+    {x y : Sum c₁.Punctured c₂.Punctured}
+    (hxy : Relation.EqvGen (GlueRel c₁ c₂) x y) :
+    (x ∈ Set.range Sum.inl ∪ Sum.inr '' C) ↔
+      (y ∈ Set.range Sum.inl ∪ Sum.inr '' C) := by
+  induction hxy with
+  | rel x y h =>
+      cases h with
+      | boundary s =>
+          constructor
+          · exact fun _ => Or.inr ⟨c₂.boundaryMap s, hiB s, rfl⟩
+          · exact fun _ => Or.inl ⟨c₁.boundaryMap s, rfl⟩
+  | refl => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+
+lemma connectedSum_standardCover_aux_left_aux_quotient_aux_forward_aux_preimage
+    {n : ℕ} {M₁ M₂ : Type} [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
+    (hiB : ∀ s, c₂.boundaryMap s ∈ connectedSum_standardCover_aux_collar c₂) :
+    (fun z => Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) z) ⁻¹'
+        connectedSum_standardCover_aux_thickLeft c₁ c₂ =
+      Set.range Sum.inl ∪ Sum.inr '' connectedSum_standardCover_aux_collar c₂ := by
+  ext z
+  constructor
+  · rintro ⟨w, hw, heq⟩
+    exact (connectedSum_standardCover_aux_left_aux_quotient_aux_forward_aux_mem
+      c₁ c₂ (connectedSum_standardCover_aux_collar c₂) hiB
+        (Quotient.exact heq.symm)).mpr hw
+  · intro hz
+    exact ⟨z, hz, rfl⟩
+
+lemma connectedSum_standardCover_aux_left_aux_quotient_aux_forward_aux_cont
+    {A B X : Type} [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace X]
+    (C : Set B) (hC : IsOpen C)
+    (F : ↥(Set.range (@Sum.inl A B) ∪ (@Sum.inr A B) '' C) → X)
+    (hL : Continuous fun a : A =>
+      F ⟨Sum.inl a, Or.inl ⟨a, rfl⟩⟩)
+    (hR : Continuous fun b : C =>
+      F ⟨Sum.inr b.1, Or.inr ⟨b.1, b.2, rfl⟩⟩) : Continuous F := by
+  let P : Set (Sum A B) := Set.range (@Sum.inl A B) ∪ (@Sum.inr A B) '' C
+  let jL : A → P := fun a => ⟨Sum.inl a, Or.inl ⟨a, rfl⟩⟩
+  let jR : C → P := fun b => ⟨Sum.inr b.1, Or.inr ⟨b.1, b.2, rfl⟩⟩
+  have hjL : Topology.IsOpenEmbedding jL := by
+    apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+    · exact Continuous.subtype_mk (continuous_inl (X := A) (Y := B)) _
+    · intro a a' h; exact Sum.inl.inj (congrArg Subtype.val h)
+    · exact (Topology.IsOpenEmbedding.inl (X := A) (Y := B)).isOpenMap.codRestrict _
+  have hjR : Topology.IsOpenEmbedding jR := by
+    apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+    · exact Continuous.subtype_mk
+        ((continuous_inr (X := A) (Y := B)).comp continuous_subtype_val) _
+    · intro b b' h; exact Subtype.ext (Sum.inr.inj (congrArg Subtype.val h))
+    · exact ((Topology.IsOpenEmbedding.inr (X := A) (Y := B)).isOpenMap.comp
+          hC.isOpenEmbedding_subtypeVal.isOpenMap).codRestrict _
+  have hcL : Continuous (F ∘ jL) := by simpa [Function.comp_def, jL, P] using hL
+  have hcR : Continuous (F ∘ jR) := by simpa [Function.comp_def, jR, P] using hR
+  rw [← continuousOn_univ]
+  have hcover : Set.range jL ∪ Set.range jR = Set.univ := by
+    ext ⟨z, hz⟩
+    rcases hz with ⟨a, rfl⟩ | ⟨b, hb, rfl⟩
+    · simp [jL, P]
+    · simp [jR, P, hb]
+  rw [← hcover]
+  have hcLi : ContinuousOn F (jL '' Set.univ) :=
+    hjL.isInducing.continuousOn_image_iff.mpr hcL.continuousOn
+  have hcRi : ContinuousOn F (jR '' Set.univ) :=
+    hjR.isInducing.continuousOn_image_iff.mpr hcR.continuousOn
+  simpa only [Set.image_univ] using hcLi.union_of_isOpen hcRi
+    (by simpa only [Set.image_univ] using hjL.isOpen_range)
+    (by simpa only [Set.image_univ] using hjR.isOpen_range)
+
 theorem connectedSum_standardCover_aux_left_aux_quotient_aux_forward {n : ℕ} {M₁ M₂ : Type}
     [TopologicalSpace M₁] [TopologicalSpace M₂]
     (c₁ : BallCollar n M₁) (c₂ : BallCollar n M₂)
@@ -827,7 +902,79 @@ theorem connectedSum_standardCover_aux_left_aux_quotient_aux_forward {n : ℕ} {
         f ⟨_, h⟩ = a) ∧
       (∀ x (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inr x.1) ∈ connectedSum_standardCover_aux_thickLeft c₁ c₂),
         f ⟨_, h⟩ = c₁.boundaryMap (r x)) := by
-  sorry
+  classical
+  let C := connectedSum_standardCover_aux_collar c₂
+  let U := connectedSum_standardCover_aux_thickLeft c₁ c₂
+  let q : Sum c₁.Punctured c₂.Punctured → ConnectedSum c₁ c₂ :=
+    fun z => Quotient.mk _ z
+  have hiB (s : Sphere n) : c₂.boundaryMap s ∈ C := by
+    refine ⟨unitToLarge n (sphereToDisk n s), ?_, c₂.largeMap_unitToLarge _⟩
+    have hs : dist s.1 0 = 1 := by
+      simpa [Metric.mem_sphere, dist_comm] using s.2
+    change dist s.1 0 < 2
+    linarith
+  have hpre : q ⁻¹' U = Set.range Sum.inl ∪ Sum.inr '' C :=
+    connectedSum_standardCover_aux_left_aux_quotient_aux_forward_aux_preimage c₁ c₂ hiB
+  let P : Set (Sum c₁.Punctured c₂.Punctured) := Set.range Sum.inl ∪ Sum.inr '' C
+  let e : P ≃ₜ ↥(q ⁻¹' U) := Homeomorph.setCongr hpre.symm
+  let qP : C(P, U) :=
+    ⟨fun z => ⟨q z.1, (Set.ext_iff.mp hpre z.1).mpr z.2⟩,
+      Continuous.subtype_mk
+        ((continuous_coinduced_rng.comp continuous_subtype_val)) _⟩
+  have hU : IsOpen U :=
+    (connectedSum_standardCover_aux_open c₁ c₂ hopen₁ hopen₂).1
+  have hq : Topology.IsQuotientMap q := ⟨Quotient.mk_surjective, rfl⟩
+  have hqP : Topology.IsQuotientMap qP := by
+    have hres := hq.restrictPreimage_isOpen hU
+    have he : Topology.IsQuotientMap e := e.isQuotientMap
+    exact hres.comp he
+  let F : P → c₁.Punctured := fun z => match hz : z.1 with
+    | Sum.inl a => a
+    | Sum.inr b => c₁.boundaryMap (r ⟨b, by
+        rcases z.2 with ⟨a, ha⟩ | ⟨b', hb', heq⟩
+        · simp [hz] at ha
+        · have hbb : b' = b := Sum.inr.inj (heq.trans hz)
+          exact hbb ▸ hb'⟩)
+  have hF : Continuous F := by
+    apply connectedSum_standardCover_aux_left_aux_quotient_aux_forward_aux_cont C
+      (hopen₂.preimage continuous_subtype_val)
+    · simpa [F, P] using (continuous_id : Continuous (id : c₁.Punctured → c₁.Punctured))
+    · simpa [F, P] using c₁.continuous_boundaryMap.comp r.continuous
+  have hfac : Function.FactorsThrough F qP := by
+    intro x y hxy
+    have hrel : Relation.EqvGen (GlueRel c₁ c₂) x.1 y.1 :=
+      Quotient.exact (congrArg Subtype.val hxy)
+    have hrelF {a b : Sum c₁.Punctured c₂.Punctured} (ha : a ∈ P) (hb : b ∈ P)
+        (hab : Relation.EqvGen (GlueRel c₁ c₂) a b) :
+        F ⟨a, ha⟩ = F ⟨b, hb⟩ := by
+      induction hab with
+      | rel a b h =>
+          cases h with
+          | boundary s =>
+              change c₁.boundaryMap s = c₁.boundaryMap (r ⟨c₂.boundaryMap s, _⟩)
+              rw [hr s]
+      | refl => rfl
+      | symm a b h ih => exact ih hb ha |>.symm
+      | trans a b d hab hbd ihab ihbd =>
+          have hm : b ∈ P :=
+            (connectedSum_standardCover_aux_left_aux_quotient_aux_forward_aux_mem
+              c₁ c₂ C hiB hab).mp ha
+          exact (ihab ha hm).trans (ihbd hm hb)
+    exact hrelF x.2 y.2 hrel
+  let f : C(U, c₁.Punctured) := hqP.lift ⟨F, hF⟩ hfac
+  refine ⟨f, ?_, ?_⟩
+  · intro a ha
+    let hp : P := ⟨Sum.inl a, Or.inl ⟨a, rfl⟩⟩
+    have heq : f (qP hp) = F hp := by
+      change (hqP.lift ⟨F, hF⟩ hfac) (qP hp) = F hp
+      exact DFunLike.congr_fun (hqP.lift_comp ⟨F, hF⟩ hfac) hp
+    simpa [qP, F, P, hp] using heq
+  · intro x hx
+    let hp : P := ⟨Sum.inr x.1, Or.inr ⟨x.1, x.2, rfl⟩⟩
+    have heq : f (qP hp) = F hp := by
+      change (hqP.lift ⟨F, hF⟩ hfac) (qP hp) = F hp
+      exact DFunLike.congr_fun (hqP.lift_comp ⟨F, hF⟩ hfac) hp
+    simpa [qP, F, P, hp] using heq
 
 /-- LEAF. The backward homotopy of the quotient step: inclusion after the
 forward map is homotopic to the identity of the thickening.  Sketch: the
