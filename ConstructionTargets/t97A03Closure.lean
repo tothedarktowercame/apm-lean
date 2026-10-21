@@ -412,6 +412,49 @@ theorem coveringPathFiberEquiv_trans
   intro e
   exact hp.monodromy_trans_apply γ δ e
 
+/-- A fiber self-transport is nontrivial exactly when it moves an actual
+point of the fiber.  This exposes the concrete endpoint witness produced by
+path lifting to the finite model selector. -/
+theorem fiberTransport_ne_refl_iff_exists_moved
+    {F : Type} (transport : Equiv.Perm F) :
+    transport ≠ Equiv.refl F ↔ ∃ e : F, transport e ≠ e := by
+  constructor
+  · contrapose!
+    intro h
+    ext e
+    exact h e
+  · rintro ⟨e, he⟩ h
+    apply he
+    simp [h]
+
+/-- If one of two lifted loops moves a literal fiber point, their covering
+monodromies select one of the two normalized double-cover models. -/
+theorem twoArcModel_exists_of_moved_covering_loop
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p)
+    (hdegree : ∀ x : X, Nat.card (p ⁻¹' ({x} : Set X)) = 2)
+    (x : X) (firstLoop secondLoop : Path.Homotopic.Quotient x x)
+    (hmoved : (∃ e, coveringPathFiberEquiv p hp firstLoop e ≠ e) ∨
+      ∃ e, coveringPathFiberEquiv p hp secondLoop e ≠ e) :
+    ∃ label : (p ⁻¹' ({x} : Set X)) ≃ Fin 2,
+      ∃ firstSwaps secondSwaps model,
+        labeledFiberMonodromy label (coveringPathFiberEquiv p hp firstLoop) =
+          (if firstSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+        labeledFiberMonodromy label (coveringPathFiberEquiv p hp secondLoop) =
+          (if secondSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+        ((model = DoubleCoverModel.oneCircle ∧
+            ∃ swapArcs : Bool,
+              (if swapArcs then (secondSwaps, firstSwaps)
+                else (firstSwaps, secondSwaps)) = (true, false)) ∨
+          (model = DoubleCoverModel.twoCircle ∧
+            firstSwaps = true ∧ secondSwaps = true)) := by
+  apply twoArcModel_exists_of_fiber_transports p hdegree x
+    (coveringPathFiberEquiv p hp firstLoop)
+    (coveringPathFiberEquiv p hp secondLoop)
+  rcases hmoved with hfirst | hsecond
+  · exact Or.inl ((fiberTransport_ne_refl_iff_exists_moved _).2 hfirst)
+  · exact Or.inr ((fiberTransport_ne_refl_iff_exists_moved _).2 hsecond)
+
 /-- Two loop classes in the base now supply the actual fiber transports used
 by the normalized model selector. -/
 theorem twoArcModel_exists_of_covering_loops
@@ -458,5 +501,7 @@ theorem twoArcModel_exists_of_covering_loops
 #print axioms coveringPathFiberEquiv_refl
 #print axioms coveringPathFiberEquiv_trans
 #print axioms twoArcModel_exists_of_covering_loops
+#print axioms fiberTransport_ne_refl_iff_exists_moved
+#print axioms twoArcModel_exists_of_moved_covering_loop
 
 end ConstructionTargets.t97A03Closure
