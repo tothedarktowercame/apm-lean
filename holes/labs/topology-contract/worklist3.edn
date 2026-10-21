@@ -37456,34 +37456,35 @@
      :reason
      "Exact representation boundary: the banked Unit inverse comparison and Bool naturality have incompatible categorical parenthesizations under the chosen coproduct prefix; direct rewrites do not expose the shared subcomposite. No scoped change retained."}]}
   {:consumer :t96J05,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint mathematics defect: hypotheses are not used as claimed. In apm_t96j05, hmn : m ≤ n reaches no milestone or conclusion; `have _ := hmn` is only a dummy binding. In apm_t96j05_regular_radius_level, hlevel : Nonempty (radialLevel X r) is entirely unused (Lean reports it). This violates the blueprint requirement that every node use its stated hypotheses and every final hypothesis be used somewhere. Repair the blueprint by giving a genuine mathematical use/dependency for hmn and hlevel, or make the node statements accurately minimal where the frozen registered statement permits it. Recorded scope/hash and compile/registry gates otherwise reproduce.",
    :evidence
    {:residual
-    "Move compiled C1/C3 and assembly into Closure; audit and bank the C2 Sard proof.",
+    "Implement strengthened package/forgetful lemma, move C1/C3, then audit C2 Sard proof.",
     :evidence
     {:placeholder-delta {:t96J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings
-    ["Existing lints; source blueprint and Main compile with standard axioms."],
+    ["Read-only source still lints unused hr/hlevel; repaired closure design consumes hlevel and hmn through BoundedRadialLevel."],
     :missing-theorems
     [{:name "apm_t96j05_constant_radius_level",
-      :type "positive constant radius gives an embedded level",
+      :type "constant radius yields bounded embedded level package",
       :status :not-started,
       :consumers [:t96J05],
       :depends-on [],
       :area "sard-regular-values"}
      {:name "apm_t96j05_exists_regular_radius",
       :type
-      "nonconstant squared radius has an attained positive regular value",
+      "nonconstant squared radius has attained positive regular value",
       :status :not-started,
       :consumers [:t96J05],
       :depends-on [],
       :area "sard-regular-values"}
      {:name "apm_t96j05_regular_radius_level",
-      :type "positive regular radius gives an embedded level",
+      :type
+      "positive regular radius yields bounded embedded level package",
       :status :not-started,
       :consumers [:t96J05],
       :depends-on [],
@@ -37492,28 +37493,22 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Blueprint written and committed; implementation continues at C1-C3.",
+    "Blueprint repaired: C1/C3 now return a strengthened package carrying nonempty level and k≤n; implementation continues.",
     :commands
-    [{:cmd "lake env lean holes/labs/blueprints/t96J05/Blueprint.lean",
+    [{:cmd "lake env lean problems/t96J05/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean holes/labs/blueprints/t96J05/Blueprint.lean",
       :exit 0}
-     {:cmd "lake env lean problems/t96J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792586779413-780-9aaa605c",
-     :finding
-     "Blueprint mathematics defect: hypotheses are not used as claimed. In apm_t96j05, hmn : m ≤ n reaches no milestone or conclusion; `have _ := hmn` is only a dummy binding. In apm_t96j05_regular_radius_level, hlevel : Nonempty (radialLevel X r) is entirely unused (Lean reports it). This violates the blueprint requirement that every node use its stated hypotheses and every final hypothesis be used somewhere. Repair the blueprint by giving a genuine mathematical use/dependency for hmn and hlevel, or make the node statements accurately minimal where the frozen registered statement permits it. Recorded scope/hash and compile/registry gates otherwise reproduce."},
-    :commit "a047cd36f",
+    :commit "1db229e3cb",
     :changed-paths ["ConstructionTargets/t96J05Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t96J05Closure.blueprint.md",
      :sha256
-     "f19ddb9743925ee6336eba62785850f29c44d70331d4c1474d63bc42c53d899f"},
+     "863100adb19f8051df8ab03cb1ca4c689633e124582742d9ec0889fcb6f2baed"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96J05/lean/Main.lean"
     "problems/t96J05/status.json"
