@@ -36756,6 +36756,19 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792584475592-729-63e23efa",
+     :commands
+     ["git show/diff-tree b35782c01"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check b35782c01^ b35782c01"],
+     :finding
+     "PASS: new commit b35782c01 changes only scoped Closure; fixture/blob SHA matches 52ad6777.... The representation chain is faithful and correctly oriented: set equality gives patch-union ≃ₜ univ ≃ₜ CP(n+1), singular homology maps that homeomorphism to an iso from literal-union homology to successor homology, then composes after the union-range iso. Closure and Main compile; registry 170/170; no sorryAx/new axioms; apm_t99j05 uses only propext/Classical.choice/Quot.sound. Both iso milestones are listed proved; exactness conjugation remains partial."},
     :commit "b35782c01",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36764,7 +36777,7 @@
      "52ad6777797840f09cc02809e252bba60d0c72c466a08068b3c8e53ecc98d300"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36782,7 +36795,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed union-term iso and patch-union equality; equality transport remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal-union and composite successor homology isomorphisms; exactness transport remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36937,7 +36950,11 @@
     {:job 7,
      :commit "f5f2385cf",
      :reason
-     "Committed union-term iso and patch-union equality; equality transport remains."}]}
+     "Committed union-term iso and patch-union equality; equality transport remains."}
+    {:job 8,
+     :commit "b35782c01",
+     :reason
+     "Committed literal-union and composite successor homology isomorphisms; exactness transport remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48652,7 +48669,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_patchUnionHomologyIso",
@@ -48664,14 +48681,16 @@
     :type
     "literal patch-union homology isomorphic to CP successor homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "b35782c01"},
    :id :lemma-t99j05-cp-successor-patchunionhomologyiso,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-patch-union-eq-univ],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_unionRangeToSuccessorHomologyIso",
@@ -48681,7 +48700,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "MV union term isomorphic to CP successor homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "b35782c01"},
    :id :lemma-t99j05-cp-successor-unionrangetosuccessorhomologyiso,
    :kind :lemma,
    :depends-on
