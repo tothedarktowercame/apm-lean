@@ -855,6 +855,22 @@ theorem edgePoint_injective_of_interior (i : Fin 2) (t : UnitInterval)
     Option.some.injEq, Prod.mk.injEq] at hc
   exact hc.2.1
 
+/-- On an open lifted edge, the realization remembers both the sheet label
+and the interval parameter.  This is the coordinate uniqueness needed to
+turn an edge chart into a product trivialization. -/
+theorem edgePoint_eq_iff_of_interior (i : Fin 2) (v w : V)
+    (t u : UnitInterval) (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1)
+    (hu : u.1 ∈ Set.Ioo (0 : ℝ) 1) :
+    D.edgePoint i v t = D.edgePoint i w u ↔ v = w ∧ t = u := by
+  constructor
+  · intro h
+    have htu := (D.projection_edgePoint_eq_of_interior i i v w t u ht hu
+      (congrArg D.projection h)).2
+    subst u
+    exact ⟨D.edgePoint_injective_of_interior i t ht h, rfl⟩
+  · rintro ⟨rfl, rfl⟩
+    rfl
+
 /-- Every point above an interior base-edge point has a unique graph-vertex
 coordinate.  This is the exact interior-fiber classification used by the
 edge charts of the realization. -/
@@ -1033,6 +1049,7 @@ theorem projection_fiberCard [Finite V] (x : X) :
 #print axioms wedge_preimage_baseEdgeChart
 #print axioms baseEdgeChart_isOpen
 #print axioms projection_preimage_baseEdgeChart
+#print axioms edgePoint_eq_iff_of_interior
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
