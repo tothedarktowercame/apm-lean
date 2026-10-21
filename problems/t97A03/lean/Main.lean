@@ -46,6 +46,36 @@ noncomputable instance (A B : Circle) :
   TopologicalSpace.coinduced (fun x : Sum Circle apm_t97A03_S2 ↦
     Quotient.mk _ x) inferInstance
 
+/-- The literal circle summand in the base adjunction quotient. -/
+def apm_t97A03_baseCircle (A B : Circle) (z : Circle) :
+    apm_t97A03_BaseSpace A B :=
+  Quotient.mk _ (.inl z)
+
+/-- The literal sphere summand in the base adjunction quotient. -/
+def apm_t97A03_baseSphere (A B : Circle) (z : apm_t97A03_S2) :
+    apm_t97A03_BaseSpace A B :=
+  Quotient.mk _ (.inr z)
+
+lemma apm_t97A03_continuous_baseCircle (A B : Circle) :
+    Continuous (apm_t97A03_baseCircle A B) := by
+  exact continuous_coinduced_rng.comp continuous_inl
+
+lemma apm_t97A03_continuous_baseSphere (A B : Circle) :
+    Continuous (apm_t97A03_baseSphere A B) := by
+  exact continuous_coinduced_rng.comp continuous_inr
+
+/-- Every point of the literal base is represented by one of its two
+summands.  This is the elimination interface used when comparing the
+adjunction quotient with the two-circle wedge normal form. -/
+lemma apm_t97A03_baseCircle_or_baseSphere (A B : Circle)
+    (x : apm_t97A03_BaseSpace A B) :
+    (∃ z : Circle, x = apm_t97A03_baseCircle A B z) ∨
+      ∃ z : apm_t97A03_S2, x = apm_t97A03_baseSphere A B z := by
+  refine Quotient.inductionOn x ?_
+  rintro (z | z)
+  · exact Or.inl ⟨z, rfl⟩
+  · exact Or.inr ⟨z, rfl⟩
+
 /-- The first marked circle point is attached to the north pole in the base. -/
 lemma apm_t97A03_base_north_eq (A B : Circle) :
     (Quotient.mk _ (.inl A) : apm_t97A03_BaseSpace A B) =
@@ -61,6 +91,16 @@ lemma apm_t97A03_base_south_eq (A B : Circle) :
   exact Quotient.sound
     (Relation.EqvGen.rel _ _
       (apm_t97A03_BaseRel.south (A := A) (B := B)))
+
+@[simp] lemma apm_t97A03_baseCircle_A (A B : Circle) :
+    apm_t97A03_baseCircle A B A =
+      apm_t97A03_baseSphere A B apm_t97A03_north := by
+  exact apm_t97A03_base_north_eq A B
+
+@[simp] lemma apm_t97A03_baseCircle_B (A B : Circle) :
+    apm_t97A03_baseCircle A B B =
+      apm_t97A03_baseSphere A B apm_t97A03_south := by
+  exact apm_t97A03_base_south_eq A B
 
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
