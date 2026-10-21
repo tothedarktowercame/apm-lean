@@ -3060,7 +3060,23 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
     (n : ℕ) (h : Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (A ∩ B)ᶜ).homology (n + 1))) :
     Subsingleton ((cokernel (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.unionAmbient ℤ (ConstructionTargets.SingularExcision.ambientSubspaceRange Aᶜ) (ConstructionTargets.SingularExcision.ambientSubspaceRange Bᶜ))).homology (n + 1)) := by
-  sorry
+  have hopenA : IsOpen Aᶜ := hA.isOpen_compl
+  have hopenB : IsOpen Bᶜ := hB.isOpen_compl
+  have hrel : Subsingleton
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (Aᶜ ∪ Bᶜ)).homology (n + 1)) := by
+    simpa only [Set.compl_inter] using h
+  constructor
+  intro x y
+  let e := ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso
+        ℤ Aᶜ Bᶜ hopenA hopenB (n + 1)) ≪≫
+    ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison
+      (Aᶜ ∪ Bᶜ) (n + 1)
+  have hm : e.hom x = e.hom y :=
+    @Subsingleton.elim _ hrel _ _
+  have hxy := congrArg (fun z => e.inv z) hm
+  simpa only [Iso.hom_inv_id_apply] using hxy
 -- END SEAT AREA
 
 /-- LIBRARY LEAF (split by claude-14 from `_union_aux_joint` after lemma-1's PARTIAL,
