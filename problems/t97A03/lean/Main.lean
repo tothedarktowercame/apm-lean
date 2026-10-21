@@ -408,6 +408,28 @@ noncomputable def apm_t97A03_secondLiteralLoop (A B : Circle) :
     ((apm_t97A03_baseSphereReturn A B).cast
       (apm_t97A03_baseCircle_A A B) (apm_t97A03_baseCircle_B A B)).symm
 
+lemma apm_t97A03_collapse_firstLiteralLoop_path (A B : Circle) :
+    (apm_t97A03_firstLiteralLoop A B).map
+        (apm_t97A03_continuous_collapseToCutCircle A B) =
+      (apm_t97A03_collapsedFirstArcLoop A B).trans
+        (apm_t97A03_collapsedSphereReturnLoop A B) := by
+  rw [apm_t97A03_firstLiteralLoop, Path.map_trans]
+  unfold apm_t97A03_collapsedFirstArcLoop
+  unfold apm_t97A03_collapsedSphereReturnLoop
+  rw [← Path.cast_trans]
+  rfl
+
+lemma apm_t97A03_collapse_secondLiteralLoop_path (A B : Circle) :
+    (apm_t97A03_secondLiteralLoop A B).map
+        (apm_t97A03_continuous_collapseToCutCircle A B) =
+      (apm_t97A03_collapsedSecondArcLoop A B).trans
+        (apm_t97A03_collapsedSphereReturnLoop A B) := by
+  rw [apm_t97A03_secondLiteralLoop, Path.map_trans]
+  unfold apm_t97A03_collapsedSecondArcLoop
+  unfold apm_t97A03_collapsedSphereReturnLoop
+  rw [← Path.cast_trans]
+  rfl
+
 /-- The first fixed arc followed by the actual collapsed sphere return is the
 first quotient generator. -/
 lemma apm_t97A03_collapsedFirstLiteralClass_eq_generator (A B : Circle) :
@@ -435,6 +457,30 @@ lemma apm_t97A03_collapsedSecondLiteralClass_eq_generator (A B : Circle) :
     (Quotient.sound ⟨Path.Homotopy.transRefl
       (apm_t97A03_collapsedSecondArcLoop A B)⟩)).trans
         (apm_t97A03_collapsedSecondArcClass_eq_generator A B)
+
+/-- The induced map sends the first literal base loop to the first fixed
+generator of the cut-circle quotient. -/
+lemma apm_t97A03_collapsePiOneHom_firstLiteralLoop (A B : Circle) :
+    apm_t97A03_collapsePiOneHom A B
+        (FundamentalGroup.fromPath
+          (Path.Homotopic.Quotient.mk
+            (apm_t97A03_firstLiteralLoop A B))) =
+      apm_t97A03_firstCutCircleGenerator A B := by
+  rw [apm_t97A03_collapsePiOneHom_apply,
+    apm_t97A03_collapse_firstLiteralLoop_path]
+  exact apm_t97A03_collapsedFirstLiteralClass_eq_generator A B
+
+/-- The induced map sends the complementary literal base loop to the second
+fixed generator of the cut-circle quotient. -/
+lemma apm_t97A03_collapsePiOneHom_secondLiteralLoop (A B : Circle) :
+    apm_t97A03_collapsePiOneHom A B
+        (FundamentalGroup.fromPath
+          (Path.Homotopic.Quotient.mk
+            (apm_t97A03_secondLiteralLoop A B))) =
+      apm_t97A03_secondCutCircleGenerator A B := by
+  rw [apm_t97A03_collapsePiOneHom_apply,
+    apm_t97A03_collapse_secondLiteralLoop_path]
+  exact apm_t97A03_collapsedSecondLiteralClass_eq_generator A B
 
 @[simp] lemma apm_t97A03_firstLiteralLoop_zero (A B : Circle) :
     apm_t97A03_firstLiteralLoop A B 0 = apm_t97A03_baseCircle A B A :=
