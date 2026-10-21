@@ -1715,6 +1715,42 @@ theorem t99J05_cp_successor_mayerVietoris_exact_ambient_transport
 
 #print axioms t99J05_cp_successor_mayerVietoris_exact_ambient_transport
 
+/-- The next adjacent segment, transported so exactness is asserted at the
+literal overlap homology term. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_overlapTransport
+    (n k : ℕ) : CategoryTheory.ShortComplex (ModuleCat ℚ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex
+    (CategoryTheory.ShortComplex.mk
+      (t99J05_cp_successor_mayerVietorisConnecting n k)
+      (HomologicalComplex.homologyMap
+        (t99J05_cp_successor_mayerVietorisShortComplex n).f k)
+      ((t99J05_cp_successor_subcomplexMayerVietoris_shortExact n).δ_comp
+        (k + 1) k rfl))
+    (t99J05_cp_successor_unionRangeToSuccessorHomologyIso n (k + 1))
+    ((ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+      ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k).symm.trans
+        (t99J05_ambientSubspaceRangeHomologyIso
+          (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n) k))
+    ((t99J05_rationalHomologyBiprodIso
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorLowerPatch n) : SSet))
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorTopPatch n) : SSet)) k).trans
+      (biprod.mapIso
+        (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) k)
+        (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) k)))
+
+/-- Exactness at the literal overlap term survives transport. -/
+theorem t99J05_cp_successor_mayerVietoris_exact_overlap_transport
+    (n k : ℕ) :
+    (t99J05_cp_successor_mayerVietoris_overlapTransport n k).Exact := by
+  apply ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+  exact t99J05_cp_successor_mayerVietoris_exact_overlap n k
+
+#print axioms t99J05_cp_successor_mayerVietoris_exact_overlap_transport
+
 /-- A finite-dimensional extraction lemma for the surjective end of an exact
 three-term segment.  This is the algebraic step used degreewise after the
 Mayer--Vietoris outer terms have been identified. -/
