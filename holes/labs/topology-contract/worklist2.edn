@@ -85946,7 +85946,7 @@
    :other-consumers [:t96A01 :t99J01 :t97A03 :t00A02 :t93J03]}
   {:consumer :t94J04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -85960,7 +85960,10 @@
     [:owner :program-2026-10-12-covering-subgroup-correspondence],
     :type
     "Realize a (finite-index) subgroup of pi1 as the fundamental group of a connected cover with index-many sheets",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/CoveringSubgroupCorrespondence.lean"]},
    :id :lemma-subgroup-cover-correspondence,
    :kind :lemma,
    :depends-on [:lemma-blueprint-b1-b11],
@@ -85982,7 +85985,7 @@
    :other-consumers []}
   {:consumer :t94J04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -85994,7 +85997,10 @@
     :reported-by
     [:program-2026-10-12-covering-subgroup-correspondence],
     :type "local triviality of small based loops",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/CoveringSubgroupCorrespondence.lean"]},
    :id
    :lemma-constructiontargets-coveringsubgroupcorrespondence-semilocallysimplyconnected,
    :kind :lemma,
@@ -88723,6 +88729,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 1, :expected-exit 1}
      {:cmd "git show --check 8e89154c4", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792562923038-345-482f998f",
+     :commands
+     ["git show/check/hash 8e89154c4"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed 8e89154c4 by topo-6, descendant of prior ec34d6c66; commit scope only t94J09Closure (+32). Fixture SHA-256 094dbd39... matches; STATEMENTS.json unchanged; registry 168/0; placeholders closure 0->0, Main 1. Fresh detached build and Main compile pass. New path-connected instance and H0 iso have correct Z->H0 reversal/ModuleCat boundary and only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists H1/comparison/homology/normalization milestones."},
     :commit "8e89154c4",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88731,7 +88749,7 @@
      "094dbd39e1206621deee34ab567b00449e7f158d817cbf1cb5dbb6001337bce5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88749,7 +88767,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked vanishing tail.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked generator H0.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89039,7 +89057,8 @@
     {:job 2, :commit "9648aabec", :reason "Banked high homology."}
     {:job 3, :commit "5a281c492", :reason "Banked high."}
     {:job 4, :commit "e08b2f9c2", :reason "Banked named high."}
-    {:job 5, :commit "ec34d6c66", :reason "Banked vanishing tail."}]}
+    {:job 5, :commit "ec34d6c66", :reason "Banked vanishing tail."}
+    {:job 6, :commit "8e89154c4", :reason "Banked generator H0."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99580,7 +99599,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "frozenGeneratorH0IsoInt", :type "H0"},
    :lemma
@@ -99588,7 +99607,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "H0",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8e89154c4"},
    :id :lemma-frozengeneratorh0isoint,
    :kind :lemma,
    :depends-on [],
