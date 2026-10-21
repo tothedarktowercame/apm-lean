@@ -89661,72 +89661,63 @@
    :program true,
    :other-consumers []}
   {:consumer :t99A03,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "construct N4 double cover; prove wedge Lefschetz number and fixed-point implication; assemble Main",
+    "Descend to N3; realize cover; identify N4; prove Lefschetz steps; assemble Main.",
     :outcome :stop,
     :warnings ["Main:1 sorry"],
     :missing-theorems
-    [{:name "exists_fixedPointFree_selfMap_of_deckData",
-      :type "N4 deck data yields required fixed-point-free self-map",
+    [{:name "n3ParityCharacter_crosscapRelator",
+      :type "parity kills relator; nontrivial",
       :status :proved,
       :consumers [:t99A03],
       :depends-on [],
       :area "polygon-covering-classification"}
+     {:name "t99A03_exists_N4_deck_involution",
+      :type "N4→N3 double cover/deck map",
+      :status :partial,
+      :consumers [:t99A03],
+      :depends-on ["n3ParityCharacter_crosscapRelator"],
+      :area "polygon-covering-classification"}
      {:name "t99A03_wedge_lefschetz_number",
-      :type "four-RP2-wedge self-maps have Lefschetz number 1",
+      :type "wedge Lefschetz number 1",
       :status :not-started,
       :consumers [:t99A03],
       :depends-on [],
       :area "rp-rational-homology"}
      {:name "t99A03_wedge_fixed_point_of_lefschetz",
-      :type "Lefschetz 1 implies wedge fixed point",
+      :type "Lefschetz fixed point",
       :status :not-started,
       :consumers [:t99A03],
-      :depends-on [],
-      :area "lefschetz-fixed-point-theorem"}
-     {:name "t99A03_exists_N4_deck_involution",
-      :type
-      "connected double cover N4 to N3 with nonidentity deck involution",
-      :status :not-started,
-      :consumers [:t99A03],
-      :depends-on [],
-      :area "polygon-covering-classification"}],
+      :depends-on ["t99A03_wedge_lefschetz_number"],
+      :area "lefschetz-fixed-point-theorem"}],
     :statement-hashes {:registry "170/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked the literal-model deck-transformation adapter.",
+    :reason "Banked the N3 parity character.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t99A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t99A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder scan", :exit 0}
-     {:cmd "git show --check f1371897c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792592364606-921-50067f29",
-     :commands
-     ["git show/diff-tree f1371897c"
-      "lake -Kjobs=1 build ConstructionTargets.t99A03Closure"
-      "lake env lean problems/t99A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint; sha256sum; placeholder scan"],
-     :finding
-     "PASS: topo-6 commit f1371897c adds only t99A03Closure after blueprint history 35323aaba; fixture SHA 1582a546... matches. For actual connected covering/deck data on literal N4 and N3 models, lift uniqueness correctly shows a nonidentity deck homeomorphism is fixed-point-free, and coercion supplies the frozen continuous self-map witness. Build/Main/registry pass (170/0); frozen digest 6b0e5d09...; placeholders closure/Main=0/1; standard axioms only. Valid program STOP with compiled sorry-free progress; N4 cover construction and wedge Lefschetz steps remain listed."},
-    :commit "f1371897c",
+     {:cmd "git show --check; sha256sum; placeholder scan", :exit 0}],
+    :diagnostic-history
+    [{:cmd "relator build",
+      :exit 1,
+      :correction "explicit characteristic"}
+     {:cmd "cast build", :exit 1, :correction "used CharP lemma"}],
+    :commit "3971f9e6a",
     :changed-paths ["ConstructionTargets/t99A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99A03Closure.lean",
      :sha256
-     "1582a546995b86a944e3c63b8c16a80d7adab394eb49abd613b6b161aca36124"},
+     "d697238648aab4b74e7508ef0925e88a0d64bcec5fa005231ed9aa8ae291797f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99A03/lean/Main.lean"
     "problems/t99A03/status.json"
@@ -93442,7 +93433,7 @@
     :area "lefschetz-fixed-point-theorem"},
    :id :lemma-t99a03-wedge-fixed-point-of-lefschetz,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-t99a03-wedge-lefschetz-number],
    :other-consumers []}
   {:consumer :t99A03,
    :phase :lemma,
@@ -93460,7 +93451,7 @@
     :area "polygon-covering-classification"},
    :id :lemma-t99a03-exists-n4-deck-involution,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-n3paritycharacter-crosscaprelator],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -100423,4 +100414,21 @@
    :depends-on
    [:lemma-exists-distinct-fiber-points-related-by-monodromy
     :lemma-monodromy-cast-refl-val],
+   :other-consumers []}
+  {:consumer :t99A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "n3ParityCharacter_crosscapRelator",
+    :type "parity kills relator; nontrivial"},
+   :lemma
+   {:name "n3ParityCharacter_crosscapRelator",
+    :reported-by [:program-2026-10-13-close-t99a03],
+    :type "parity kills relator; nontrivial",
+    :area "polygon-covering-classification",
+    :proved-in :program-2026-10-13-close-t99a03},
+   :id :lemma-n3paritycharacter-crosscaprelator,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
