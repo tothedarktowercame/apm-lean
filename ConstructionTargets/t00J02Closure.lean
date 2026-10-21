@@ -2253,6 +2253,30 @@ noncomputable def canonicalRegularFiberWitness_of_locallyInjective
     (isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber f y hlocal)
     calculations
 
+/-- Selection of a locally injective circle fiber and canonical calculations
+at every such selected fiber is the complete interface needed for top-homology
+vanishing.  This keeps the Sard selection and signed-count calculation stages
+separate while preserving their dependent finite-fiber instance. -/
+theorem topHomologyMap_eq_zero_of_exists_locallyInjective_calculations
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (hselect : ∃ y ∈ Set.range c, LocallyInjectiveAlongFiber f y)
+    (hcalculations : ∀ y (hy : y ∈ Set.range c)
+      (hlocal : LocallyInjectiveAlongFiber f y),
+      letI := regularFiberFintype_of_locallyInjectiveAlongFiber f y hlocal
+      CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) :
+    homologyMap 2 f = 0 := by
+  obtain ⟨y, hy, hlocal⟩ := hselect
+  let witness := canonicalRegularFiberWitness_of_locallyInjective
+    f c e y hy hlocal (hcalculations y hy hlocal)
+  letI := witness.choice.fiberFintype
+  exact witness.calculations.topHomologyMap_eq_zero_withoutLifts
+
+#print axioms topHomologyMap_eq_zero_of_exists_locallyInjective_calculations
+
 /-- The integrated regular-fiber witness is sufficient for top-homology
 vanishing; no additional component-lift choice is needed at this stage. -/
 theorem CanonicalRegularFiberWitness.topHomologyMap_eq_zero
