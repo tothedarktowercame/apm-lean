@@ -119196,6 +119196,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes; placeholders; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792604834599-1239-fd707d1a",
+     :commands
+     ["git show/diff 67307853"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 67307853 changes only t00J02Closure.lean (+15), adding compiled chart-envelope nullity after prior history e9e4bb32. Fixture afb497a6, source 0b3b4888, implementation 4cf1fc0c; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the restricted coordinate pullback is a subset of t, mu t=0 makes that pullback null by measure_mono_null, and the prior evaluation bridge makes the transported Circle measure of measurable s zero. Coordinate and Circle measures are not conflated. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; finite chart cover, signed counts, and final assembly remain listed."},
     :commit "673078539cb25bb042114854da15ca296050ca3c",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked measurable coordinate-null envelopes.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-envelope nullity.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119557,7 +119569,10 @@
      :reason "Banked chart-measure evaluation."}
     {:job 1,
      :commit "e9e4bb320f1357fcafd37a3e9017c751fe8acd37",
-     :reason "Banked measurable coordinate-null envelopes."}]}
+     :reason "Banked measurable coordinate-null envelopes."}
+    {:job 2,
+     :commit "673078539cb25bb042114854da15ca296050ca3c",
+     :reason "Banked chart-envelope nullity."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122699,7 +122714,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleBaseChartMeasure_eq_zero_of_coordinateEnvelope",
@@ -122709,7 +122724,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "coordinate-null envelope implies chart-measure nullity",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "673078539cb25bb042114854da15ca296050ca3c"},
    :id :lemma-circlebasechartmeasure-eq-zero-of-coordinateenvelope,
    :kind :lemma,
    :depends-on
