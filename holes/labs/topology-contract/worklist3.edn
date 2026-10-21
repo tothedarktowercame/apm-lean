@@ -25515,7 +25515,7 @@
    :other-consumers [:t96A01]}
   {:consumer :t94J04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -25528,7 +25528,10 @@
     :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
     :type
     "Realize a finite-index surface subgroup as the fundamental group of its connected finite cover.",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/CoveringSubgroupCorrespondence.lean"]},
    :id :lemma-subgroup-cover-correspondence,
    :kind :lemma,
    :depends-on [:lemma-surface-group-presentation],
@@ -37356,6 +37359,18 @@
       :exit 1,
       :note
       "Isolated chosen-coproduct mismatch from the valid naturality tail."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792562916787-344-0c132c66",
+     :commands
+     ["lake env lean <commit>/ConstructionTargets/t96A06Closure.lean"
+      "lake env lean <commit>/problems/t96A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check @ 16ed5cef3d => 168/168"
+      "git diff --check 16ed5cef3d^ 16ed5cef3d"
+      "comment-stripped placeholder census"],
+     :finding
+     "PASS: commit 16ed5cef3d adds a compiled, sorry-free theorem (Bool point-inclusion naturality whiskered by the coordinate iso and coproduct tail), correctly oriented and derived from the prior naturality theorem; only scoped Closure changed; axioms are propext/Classical.choice/Quot.sound; Main retains its assigned one sorry, Closure has zero placeholders; registered statements 168/168. Recorded /tmp fixture is absent, so its claimed hash cannot be independently rehashed."},
     :commit "16ed5cef3d",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
@@ -37364,7 +37379,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37382,7 +37397,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. This is the canonical /home/joe/code/apm-lean checkout: its real .lake/packages directory is the package authority. The symlink requirement applies only to APM frame worktrees. Proceed with the transfer/deck-sum proof of t96A06_rp3_antipodal_H3, then higher-degree vanishing, degree four, invariants, and Main.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed whiskered Bool naturality.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37434,7 +37449,10 @@
     {:job 4,
      :commit nil,
      :reason
-     ".lake/packages is a real directory, not the required authority symlink; workspace policy forbids Lake verification or transfer/deck-sum implementation pending lifecycle repair."}]}
+     ".lake/packages is a real directory, not the required authority symlink; workspace policy forbids Lake verification or transfer/deck-sum implementation pending lifecycle repair."}
+    {:job 2,
+     :commit "16ed5cef3d",
+     :reason "Committed whiskered Bool naturality."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -41176,7 +41194,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialSphereLift_projection",
@@ -41186,7 +41204,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "S3 lift projects to polynomialDescent",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-polynomialspherelift-projection,
    :kind :lemma,
    :depends-on [:lemma-t96a06-rp3-rational-homology],
@@ -41248,7 +41268,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialDescent_degree_four_of_sphere",
@@ -41258,7 +41278,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "sphere degree 4 implies RP3 degree 4",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-polynomialdescent-degree-four-of-sphere,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialspherelift-projection],
@@ -41334,7 +41356,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialSphereLift_pairSign_invariant",
@@ -41344,7 +41366,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "lift invariant under both pair-sign maps",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-polynomialspherelift-pairsign-invariant,
    :kind :lemma,
    :depends-on
@@ -41353,7 +41377,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialSphereLift_pairSign_action",
@@ -41365,7 +41389,9 @@
     :type
     "pair flips are commuting involutions with antipodal product",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-polynomialspherelift-pairsign-action,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialspherelift-pairsign-invariant],
@@ -41391,7 +41417,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialSphereLift_pairSign_free",
@@ -41401,14 +41427,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "pair flips have no fixed points off coordinate circles",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-polynomialspherelift-pairsign-free,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialspherelift-pairsign-action],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialSphereLift_four_distinct",
@@ -41420,14 +41448,16 @@
     :type
     "four pair-sign translates are pairwise distinct at regular points",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-polynomialspherelift-four-distinct,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialspherelift-pairsign-free],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialSphereLift_orbit_subset_fiber",
@@ -41437,7 +41467,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "four sign translates lie in the lift fiber",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-polynomialspherelift-orbit-subset-fiber,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialspherelift-four-distinct],
@@ -43252,7 +43284,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereLift_pairSignDeckHomeomorphisms",
@@ -43264,7 +43296,9 @@
     :type
     "both generating pair-sign deck transports are sphere self-homeomorphisms",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-polynomialspherelift-pairsigndeckhomeomorphisms,
    :kind :lemma,
    :depends-on
@@ -43272,7 +43306,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereLift_pairSign_localHomology_naturality",
@@ -43284,7 +43318,9 @@
     :type
     "pair-sign homeomorphisms transport the base local fundamental class to every regular-fiber point",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-polynomialspherelift-pairsign-localhomology-naturality,
    :kind :lemma,
    :depends-on
@@ -48009,7 +48045,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_mapHomologyIso_inv_eq_rightData",
@@ -48019,7 +48055,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "homology inverse normal form",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-unith0-maphomologyiso-inv-eq-rightdata,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-mappedrighthomology-triangle],
@@ -48438,7 +48476,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_integralComparison_inverse_pointInclusion",
@@ -48448,7 +48486,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "Unit inverse comparison after Unit-to-Bool inclusion",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id :lemma-t96a06-unith0-integralcomparison-inverse-pointinclusion,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-integralcomparison-inverse],
@@ -48473,7 +48513,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -48485,7 +48525,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "Bool point naturality with coordinate tail",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "16ed5cef3d"},
    :id
    :lemma-t96a06-boolh0-comparison-pointinclusion-naturality-with-tail,
    :kind :lemma,
