@@ -88731,6 +88731,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 0}
      {:cmd "git show --check 11f8860cd", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792577290065-564-4946adda",
+     :commands
+     ["git show/check/hash 11f8860cd"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "statement-registry check/fingerprint t94J09"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed 11f8860cd by topo-6, new after 31d4b7006; patch scope only t94J09Closure (+24). Fixture 532968e9... matches; registry 170/0; frozen t94J09 digest 52b4778c...; closure/Main placeholders 0/0. Fresh detached build and Main compile pass. Kernel-valued comparison structurally enforces cycles; left inverse gives injectivity, surjectivity gives bijectivity, then composition with the kernel equivalence has the correct H1-to-Fin6 orientation. Axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists kernel map/split/onto, homology, normalization milestones."},
     :commit "11f8860cd",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88739,7 +88751,7 @@
      "532968e92bb1b5f7a17a2a40762df3f1542f912dec2d9c069c8e283d1dffe342"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88757,7 +88769,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked split-cycle-onto H1 adapter; construct concrete map, split and onto.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked kernel-valued split/onto H1 adapter.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89061,7 +89073,10 @@
     {:job 1,
      :commit "31d4b7006",
      :reason
-     "Banked split-cycle-onto H1 adapter; construct concrete map, split and onto."}]}
+     "Banked split-cycle-onto H1 adapter; construct concrete map, split and onto."}
+    {:job 2,
+     :commit "11f8860cd",
+     :reason "Banked kernel-valued split/onto H1 adapter."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99742,7 +99757,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -99754,7 +99769,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "kernel map+split+onto imply H1 iso",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "11f8860cd"},
    :id
    :lemma-frozenboundarygraphh1cyclecomparison-of-kernel-leftinverse-onto,
    :kind :lemma,
