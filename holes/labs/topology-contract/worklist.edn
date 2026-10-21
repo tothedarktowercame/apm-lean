@@ -119195,6 +119195,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792597834136-1073-babb8c4e",
+     :commands
+     ["git show/diff 8822022b"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 8822022b changes only t00J02Closure.lean (+29), adding compiled pointwise finite-chart witness nullity after prior history 1afe14c6. Fixture afb497a6, source 0b3b4888, implementation c94f3fc7; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: each z in bad yields an indexed critical-image witness, Set.mem_iUnion forms the cover required by the prior finite-chart theorem, and nullity follows. M/N, chart, image, derivative, and mu/nu boundaries are unchanged. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; H2 assembly remains partial and listed."},
     :commit "8822022b96f0795912b4b040ccd2e2e1f0cc2439",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119203,7 +119215,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119221,7 +119233,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite-chart bad-set nullity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked pointwise finite-chart witness endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119538,7 +119550,10 @@
      "Banked nullity of a bad set covered by finite chart-critical pieces."}
     {:job 4,
      :commit "1afe14c6987902efba96a050a478d6e0b4a3614b",
-     :reason "Banked finite-chart bad-set nullity."}]}
+     :reason "Banked finite-chart bad-set nullity."}
+    {:job 5,
+     :commit "8822022b96f0795912b4b040ccd2e2e1f0cc2439",
+     :reason "Banked pointwise finite-chart witness endpoint."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122519,7 +122534,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "badSet_measure_zero_of_finite_targetChart_witnesses",
@@ -122529,7 +122544,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "pointwise finite chart witnesses imply nullity",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8822022b96f0795912b4b040ccd2e2e1f0cc2439"},
    :id :lemma-badset-measure-zero-of-finite-targetchart-witnesses,
    :kind :lemma,
    :depends-on [:lemma-badset-measure-zero-of-finite-targetcharts],
