@@ -119199,6 +119199,18 @@
       :exit 0}
      {:cmd "Main compile; registry; diff; hashes; placeholders",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792626847990-1846-4009d74c",
+     :commands
+     ["git show/diff --check a763d5d49"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: a763d5d49 changes only t00J02Closure.lean (+31), adding compiled, sorry-free disk-bounded H2 assembly beyond history 0440d8b89. Fixture afb497a6, source 0b3b4888, implementation 018430a1; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: disk-bounded comparison plus the regular-fiber top-degree formula yields surfaceTopDegree e f = 0, then the established surface-top-homology bridge yields homologyMap 2 f = 0. Fiber subtype, occupied components, exact-lift degrees, canonical local degrees, and signs remain aligned. Axioms are propext, Classical.choice, Quot.sound. Evidence lists only the transverse comparison and fiber formula before Main."},
     :commit "a763d5d49af5ca6a55d3a081f2175b81a2dadc11",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119207,7 +119219,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119225,7 +119237,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked top-degree vanishing.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked disk-bounded H2 assembly.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119629,7 +119641,10 @@
      :reason "Banked disk-bounded canonical sums."}
     {:job 7,
      :commit "0440d8b897513fcbc1def1ea25e4fe6dd96d1b93",
-     :reason "Banked top-degree vanishing."}]}
+     :reason "Banked top-degree vanishing."}
+    {:job 8,
+     :commit "a763d5d49af5ca6a55d3a081f2175b81a2dadc11",
+     :reason "Banked disk-bounded H2 assembly."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123431,7 +123446,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_diskBounded_degreeFormula",
@@ -123441,7 +123456,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "comparison+fiber formula imply H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "a763d5d49af5ca6a55d3a081f2175b81a2dadc11"},
    :id :lemma-tophomologymap-eq-zero-of-diskbounded-degreeformula,
    :kind :lemma,
    :depends-on
