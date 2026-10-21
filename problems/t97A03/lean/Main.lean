@@ -408,6 +408,34 @@ noncomputable def apm_t97A03_secondLiteralLoop (A B : Circle) :
     ((apm_t97A03_baseSphereReturn A B).cast
       (apm_t97A03_baseCircle_A A B) (apm_t97A03_baseCircle_B A B)).symm
 
+/-- The first fixed arc followed by the actual collapsed sphere return is the
+first quotient generator. -/
+lemma apm_t97A03_collapsedFirstLiteralClass_eq_generator (A B : Circle) :
+    FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk
+          ((apm_t97A03_collapsedFirstArcLoop A B).trans
+            (apm_t97A03_collapsedSphereReturnLoop A B))) =
+      apm_t97A03_firstCutCircleGenerator A B := by
+  rw [apm_t97A03_collapsedSphereReturnLoop_eq_refl]
+  exact (congrArg FundamentalGroup.fromPath
+    (Quotient.sound ⟨Path.Homotopy.transRefl
+      (apm_t97A03_collapsedFirstArcLoop A B)⟩)).trans
+        (apm_t97A03_collapsedFirstArcClass_eq_generator A B)
+
+/-- The complementary fixed arc followed by the same actual collapsed return
+is the second quotient generator. -/
+lemma apm_t97A03_collapsedSecondLiteralClass_eq_generator (A B : Circle) :
+    FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk
+          ((apm_t97A03_collapsedSecondArcLoop A B).trans
+            (apm_t97A03_collapsedSphereReturnLoop A B))) =
+      apm_t97A03_secondCutCircleGenerator A B := by
+  rw [apm_t97A03_collapsedSphereReturnLoop_eq_refl]
+  exact (congrArg FundamentalGroup.fromPath
+    (Quotient.sound ⟨Path.Homotopy.transRefl
+      (apm_t97A03_collapsedSecondArcLoop A B)⟩)).trans
+        (apm_t97A03_collapsedSecondArcClass_eq_generator A B)
+
 @[simp] lemma apm_t97A03_firstLiteralLoop_zero (A B : Circle) :
     apm_t97A03_firstLiteralLoop A B 0 = apm_t97A03_baseCircle A B A :=
   (apm_t97A03_firstLiteralLoop A B).source
