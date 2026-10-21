@@ -413,6 +413,25 @@ lemma punctured_homology_aux_middle (n : ℕ) (hn : 2 ≤ n) (M : Type)
   sorry
 
 -- BEGIN SEAT AREA
+noncomputable def punctured_homology_aux_above_aux_inclusion
+    {n k : ℕ} {M : Type} [TopologicalSpace M] (c : BallCollar n M) :
+    H k c.Punctured ⟶ H k M :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).map
+      (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
+
+/-- Collar excision in degrees strictly above the manifold dimension: removing
+the collared open ball does not change integral homology in these degrees. -/
+lemma punctured_homology_aux_above_aux_inclusion_isIso
+    (n : ℕ) (hn : 2 ≤ n) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured)
+    (k : ℕ) (hnk : n < k) :
+    IsIso (punctured_homology_aux_above_aux_inclusion (k := k) c) := by
+  sorry
+
 lemma punctured_homology_aux_above (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E n) M]
@@ -421,7 +440,14 @@ lemma punctured_homology_aux_above (n : ℕ) (hn : 2 ≤ n) (M : Type)
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured)
     (htopzero : IsZero (H n c.Punctured)) :
     ∀ k, n ≤ k → IsZero (H k c.Punctured) := by
-  sorry
+  intro k hnk
+  rcases hnk.eq_or_lt with rfl | hnk
+  · exact htopzero
+  · letI : IsIso (punctured_homology_aux_above_aux_inclusion (k := k) c) :=
+      punctured_homology_aux_above_aux_inclusion_isIso
+        n hn M c hopen hpath k hnk
+    exact IsZero.of_iso (habove k hnk) (asIso
+      (punctured_homology_aux_above_aux_inclusion (k := k) c))
 -- END SEAT AREA
 
 theorem punctured_homology (n : ℕ) (hn : 2 ≤ n) (M : Type)
