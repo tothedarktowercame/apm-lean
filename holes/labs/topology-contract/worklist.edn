@@ -119531,70 +119531,54 @@
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
-   {:placeholder-delta {:source-before 1, :source-after 1},
+   {:consumer :t98A06,
+    :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct the derivative coordinate family, shrink to the stable neighborhood, obtain local lifts; then compact flow and Main.",
+    "Build derivative coordinates and local lifts; then compact flow and Main.",
     :outcome :stop,
-    :warnings
-    ["Main registered sorry" "unrelated review artifacts preserved"],
+    :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
-    [{:name "eventually_isInvertible_comp_rightInverse",
-      :type
-      "a continuous derivative family composed with a base-point right inverse is invertible near that point",
+    [{:name "exists_nhds_isInvertible_comp_rightInverse",
+      :type "stable invertibility neighborhood",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on ["surjective_continuousLinearMap_has_rightInverse"],
+      :depends-on ["eventually_isInvertible_comp_rightInverse"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
       :depends-on
-      ["eventually_isInvertible_comp_rightInverse"
+      ["exists_nhds_isInvertible_comp_rightInverse"
        "hasLocalSmoothLift_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "7bbe1d13708d7c1f9ffc19f05405507e98497a5248514578ea7a8017b87f43e7",
+     "44160271fda9ae65152290faf7ded509526cbd18248e6c1c478440072d27f3df",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason
-    "Banked neighborhood stability of a fixed derivative right inverse.",
+    :reason "Banked stable-neighborhood extraction.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256sum fixture/source/implementation; git diff --check",
-      :exit 0}],
+     {:cmd "hashes; git diff --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
+    [{:cmd "closure compile",
       :exit 1,
-      :finding
-      "Corrected invertible-range set conversion and parenthesized nhds term."}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792581709510-671-e78b03ac",
-     :commands
-     ["git show/diff 2ac121e4"
-      "lake env lean ConstructionTargets/t98A06Closure.lean"
-      "lake env lean problems/t98A06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: 2ac121e4 changes only t98A06Closure.lean (+22), adding compiled neighborhood stability of a fixed derivative right inverse after prior history. Corrected fixture 9838452b, source 44399e71, implementation 7bbe1d13, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is correct: continuity of A(x)∘R and openness of invertibles at id, with A(x0)∘R=id, yields eventual invertibility. E m endomorphism boundaries align. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; derivative-family/local-lift, compact-flow, and final assembly milestones are listed."},
-    :commit "2ac121e46daf3ce8f574ab259350106e2eba6499",
+      :finding "replaced invalid neighborhood glyph with nhds"}],
+    :commit "35498f49aa1dd1b4aa5db5452f9fc44c4bdba684",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119602,7 +119586,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -120026,7 +120010,8 @@
     :lemma-contmdiffon-tangentsection-of-trivialization-coordinates
     :lemma-mfderiv-eq-of-trivialization-coordinates
     :lemma-haslocalsmoothlift-of-trivialization-coordinates
-    :lemma-eventually-isinvertible-comp-rightinverse],
+    :lemma-eventually-isinvertible-comp-rightinverse
+    :lemma-exists-nhds-isinvertible-comp-rightinverse],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -122400,6 +122385,23 @@
    :id :lemma-targetchartcoordinate-ambientcriticalimage-null,
    :kind :lemma,
    :depends-on [:lemma-mfderiv-opensubtype-not-surjective],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_nhds_isInvertible_comp_rightInverse",
+    :type "stable invertibility neighborhood"},
+   :lemma
+   {:name "exists_nhds_isInvertible_comp_rightInverse",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "stable invertibility neighborhood",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-exists-nhds-isinvertible-comp-rightinverse,
+   :kind :lemma,
+   :depends-on [:lemma-eventually-isinvertible-comp-rightinverse],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
