@@ -119196,6 +119196,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792617625364-1582-03677661",
+     :commands
+     ["git show/diff --check 4f6a4bf9d"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: 4f6a4bf9d changes only t00J02Closure.lean (+22), adding compiled, sorry-free chart-component top-degree vanishing beyond history 47c1a11f3. Fixture afb497a6, source 0b3b4888, implementation 7b6fdbb2; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: the chart top-degree identity rewrites to the point signed count, regrouping by occupied component preserves signs and coefficients, and zero component sums force the grouped count to zero. Fiber subtype, occupied-component indices, and integer coefficient representations remain aligned. Axioms are propext, Classical.choice, Quot.sound. Evidence lists constructing chart component sums/top-degree identity and H2/Main assembly as residual milestones."},
     :commit "4f6a4bf9d722e7c759cf57e491cb7aa8baeb4311",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical signed top-degree transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-component top-degree vanishing.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119599,7 +119611,10 @@
      :reason "Banked canonical component comparison transport."}
     {:job 6,
      :commit "47c1a11f36811ec2e5d10036054e939e85f26601",
-     :reason "Banked canonical signed top-degree transport."}]}
+     :reason "Banked canonical signed top-degree transport."}
+    {:job 7,
+     :commit "4f6a4bf9d722e7c759cf57e491cb7aa8baeb4311",
+     :reason "Banked chart-component top-degree vanishing."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123132,7 +123147,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surfaceTopDegree_eq_zero_of_chartComponentSums",
@@ -123142,7 +123157,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "zero chart component sums force top degree zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "4f6a4bf9d722e7c759cf57e491cb7aa8baeb4311"},
    :id :lemma-surfacetopdegree-eq-zero-of-chartcomponentsums,
    :kind :lemma,
    :depends-on
