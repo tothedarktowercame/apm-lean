@@ -119152,43 +119152,45 @@
   {:consumer :t00J02,
    :owner-reopen
    "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Derive canonical component comparison, global signed-count formula, and Sard nullity from transverse disk-bounded hypotheses; assemble Main.",
+    "Derive component comparison, global signed-count identity, and Sard nullity from transverse disk-bounded hypotheses; assemble Main.",
     :outcome :stop,
     :warnings ["Main registered sorry" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "canonicalComponentLocalDegreeSum_eq_zero_of_comparison",
+    [{:name
+      "CanonicalRegularFiberDegreeCalculations.ofComponentComparison",
       :type
-      "canonical component-to-exact-lift comparison implies every canonical component sum is zero",
+      "exact-lift component comparison plus top signed-count identity constructs canonical calculations",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["exactLiftComponentDegree_eq_zero"],
+      :depends-on
+      ["canonicalComponentLocalDegreeSum_eq_zero_of_comparison"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalComponentLocalDegreeSum_eq_zero_of_comparison"
+      ["CanonicalRegularFiberDegreeCalculations.ofComponentComparison"
        "topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "22e6530cdfd6e1218bb6c0de88a71ff0b1a36c98babef0220b6d9e58c00db580",
+     "83551a6a963e06ba328aab4222820c9a86d6ff148243c64414b8fc825a97d389",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked canonical component-sum vanishing bridge.",
+    :reason "Banked canonical calculation bundle constructor.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119199,21 +119201,8 @@
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 1,
-      :finding
-      "Moved theorem after regularFiberLocalDegree definition."}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792570603194-481-798e507b",
-     :commands
-     ["git show/diff fe0dca6b"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"
-      "lake env lean problems/t00J02/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum/rg/git diff --check"],
-     :finding
-     "PASS program STOP: fe0dca6b changes only t00J02Closure.lean (+21), adding a compiled canonical component-sum vanishing bridge after prior history. Fixture afb497a6, source 0b3b4888, implementation 22e6530c, registry 170/170, and placeholders closure=0/Main=1 reproduce. Equality orientation is correct: canonical component sum = exact-lift degree, then exactLiftComponentDegree_eq_zero gives zero. Occupied-component indices and lift representations share f,c,y,hy throughout. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; global signed-count/Sard derivation and final assembly remain listed."},
-    :commit "fe0dca6b8d4504603e251a9775756617b64e6cf7",
+      :finding "Added explicit dependent f,c,y parameters."}],
+    :commit "4ffbf7019",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119221,7 +119210,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119755,7 +119744,8 @@
     :lemma-exists-circlevalue-locallyinjectivealongfiber-of-badparameters-measure-zero
     :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations
     :lemma-tophomologymap-eq-zero-of-badparameters-measure-zero-calculations
-    :lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison],
+    :lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison
+    :lemma-canonicalregularfiberdegreecalculations-ofcomponentcomparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122003,6 +121993,29 @@
    :id :lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison,
    :kind :lemma,
    :depends-on [:lemma-exactliftcomponentdegree-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "CanonicalRegularFiberDegreeCalculations.ofComponentComparison",
+    :type
+    "exact-lift component comparison plus top signed-count identity constructs canonical calculations"},
+   :lemma
+   {:name
+    "CanonicalRegularFiberDegreeCalculations.ofComponentComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "exact-lift component comparison plus top signed-count identity constructs canonical calculations",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-canonicalregularfiberdegreecalculations-ofcomponentcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalcomponentlocaldegreesum-eq-zero-of-comparison],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
