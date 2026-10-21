@@ -1532,6 +1532,65 @@ theorem connectedSum_mayerVietoris_above
 
 /-- **LIBRARY (B10).** The top connecting map supplies the single top class. -/
 -- BEGIN SEAT AREA
+noncomputable def connectedSum_topConnecting_iso_aux_cylinder
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (K : ContinuousMap.Homotopy f g) :=
+  TopCat.ofHom ⟨fun p : X × TopCat.I ↦ K (TopCat.I.homeomorph p.2, p.1),
+    K.continuous.comp
+      ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+
+lemma connectedSum_topConnecting_iso_aux_map_eq
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (K : ContinuousMap.Homotopic f g) (k : ℕ) :
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f) =
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom g) := by
+  rcases K with ⟨K⟩
+  apply ConstructionTargets.CoefficientContractiblePair.singularHomology_map_eq_of_topCatHomotopy
+    (R := ℤ)
+    (connectedSum_topConnecting_iso_aux_cylinder K) _ _ k
+  · ext x
+    change K (0, x) = f x
+    simp
+  · ext x
+    change K (1, x) = g x
+    simp
+
+lemma connectedSum_topConnecting_iso_aux_inclusion_zero
+    {n : ℕ} {X X' : Type} [TopologicalSpace X] [TopologicalSpace X']
+    {I A : Set X} (eI : ContinuousMap.HomotopyEquiv I (Sphere n))
+    (c : BallCollar n X') (eU : ContinuousMap.HomotopyEquiv A c.Punctured)
+    (hsub : I ⊆ A)
+    (h : ContinuousMap.Homotopic
+      (eU.toFun.comp ((ContinuousMap.inclusion hsub).comp eI.invFun))
+      ⟨c.boundaryMap, c.continuous_boundaryMap⟩)
+    (k : ℕ) (hz : boundaryHomologyMap c k = 0) :
+    IntegralMV.mvIncl hsub k = 0 := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)
+  have hI : IsIso (F.map (TopCat.ofHom eI.invFun)) := by
+    change IsIso
+      (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+        ℤ eI.symm k).hom
+    infer_instance
+  have hU : IsIso (F.map (TopCat.ofHom eU.toFun)) := by
+    change IsIso
+      (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+        ℤ eU k).hom
+    infer_instance
+  let i : C(I, A) := ContinuousMap.inclusion hsub
+  have hcomp : F.map (TopCat.ofHom eI.invFun) ≫ F.map (TopCat.ofHom i) ≫
+      F.map (TopCat.ofHom eU.toFun) = 0 := by
+    rw [← F.map_comp, ← F.map_comp]
+    change F.map (TopCat.ofHom
+      (eU.toFun.comp ((ContinuousMap.inclusion hsub).comp eI.invFun))) = 0
+    rw [connectedSum_topConnecting_iso_aux_map_eq h k]
+    exact hz
+  apply (cancel_epi (F.map (TopCat.ofHom eI.invFun))).1
+  apply (cancel_mono (F.map (TopCat.ofHom eU.toFun))).1
+  simpa [IntegralMV.mvIncl, i, Category.assoc] using hcomp
+
 theorem connectedSum_topConnecting_iso
     (n : ℕ) (hn : 2 ≤ n) (X₁ X₂ : Type)
     [TopologicalSpace X₁] [TopologicalSpace X₂]
@@ -1541,7 +1600,42 @@ theorem connectedSum_topConnecting_iso
     (hboundary₂ : boundaryHomologyMap c₂ (n - 1) = 0)
     (hcover : HasStandardCover c₁ c₂) :
     Nonempty (H n (ConnectedSum c₁ c₂) ≅ ModuleCat.of ℤ ℤ) := by
-  sorry
+  rcases hcover with ⟨U, V, hU, hV, hUV, e₁, e₂, e₀, he₁, he₂⟩
+  obtain ⟨δ, -, hex₂, hex₃⟩ := IntegralMV.integralMayerVietoris U V hU hV hUV
+  have hUn : IsZero (H n U) := hz₁.of_iso
+    (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e₁ n)
+  have hVn : IsZero (H n V) := hz₂.of_iso
+    (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e₂ n)
+  have hJsrc : IsZero (Limits.biprod (H n U) (H n V)) :=
+    (biprod_isZero_iff _ _).mpr ⟨hUn, hVn⟩
+  have hleft := connectedSum_topConnecting_iso_aux_inclusion_zero e₀ c₁ e₁
+    Set.inter_subset_left he₁ (n - 1) hboundary₁
+  have hright := connectedSum_topConnecting_iso_aux_inclusion_zero e₀ c₂ e₂
+    Set.inter_subset_right he₂ (n - 1) hboundary₂
+  have hIzero : IntegralMV.mvI U V (n - 1) = 0 := by
+    rw [IntegralMV.mvI, hleft, hright]
+    apply biprod.hom_ext <;> simp
+  have hdim : n - 1 + 1 = n := by omega
+  have hd_inj : Function.Injective (δ (n - 1)).hom := by
+    rw [← LinearMap.ker_eq_bot, ← hex₂ (n - 1), LinearMap.range_eq_bot]
+    rw [hdim]
+    exact congrArg ModuleCat.Hom.hom (hJsrc.eq_of_src _ 0)
+  have hd_surj : Function.Surjective (δ (n - 1)).hom := by
+    rw [← LinearMap.range_eq_top, hex₃ (n - 1), LinearMap.ker_eq_top]
+    exact congrArg ModuleCat.Hom.hom hIzero
+  let eS : H (n - 1) (Sphere n) ≅ ModuleCat.of ℤ ℤ := by
+    rw [← hdim]
+    exact ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt
+      (n - 1) (by omega)
+  let eI : H (n - 1) (U ∩ V : Set (ConnectedSum c₁ c₂)) ≅
+      ModuleCat.of ℤ ℤ :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e₀ (n - 1) ≪≫ eS
+  letI : IsIso (δ (n - 1)) := by
+    rw [ConcreteCategory.isIso_iff_bijective]
+    exact ⟨hd_inj, hd_surj⟩
+  have eTop := asIso (δ (n - 1)) ≪≫ eI
+  exact ⟨by simpa only [hdim] using eTop⟩
 -- END SEAT AREA
 
 /-- Integral homology of a collared connected sum. -/
