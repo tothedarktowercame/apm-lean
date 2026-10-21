@@ -1673,6 +1673,21 @@ theorem t99J05_cp_successor_mayerVietoris_exact_ambient_transport
 
 #print axioms t99J05_cp_successor_mayerVietoris_exact_ambient_transport
 
+/-- A finite-dimensional extraction lemma for the surjective end of an exact
+three-term segment.  This is the algebraic step used degreewise after the
+Mayer--Vietoris outer terms have been identified. -/
+theorem t99J05_finiteDimensional_middle_of_exact_of_surjective
+    {X Y Z : ModuleCat ℚ} (f : X ⟶ Y) (g : Y ⟶ Z)
+    (hfun : Function.Exact f.hom g.hom)
+    [FiniteDimensional ℚ X] [FiniteDimensional ℚ Z]
+    (hg : Function.Surjective g.hom) : FiniteDimensional ℚ Y := by
+  letI : Module.Finite ℚ Y := Module.Finite.of_exact
+    (R := ℚ) (M := X) (N := Y) (P := Z)
+    (f := f.hom) (g := g.hom) hfun hg
+  exact inferInstance
+
+#print axioms t99J05_finiteDimensional_middle_of_exact_of_surjective
+
 /-- The separately named transported arrow is exactly the first arrow of the
 transported short complex whose exactness was established above. -/
 theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
