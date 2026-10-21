@@ -119151,8 +119151,8 @@
    :other-consumers []}
   {:consumer :t00J02,
    :owner-reopen
-   "claude-14 2026-10-21 (Joe: restart the loops around the needed library materials): continue the transversality / signed-preimage stages. The top-homology (fundamental class) input is being split by seat lemma-1 under t00A04; take it as a hypothesis, do not build it here.",
-   :stop-count 10,
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
@@ -119207,7 +119207,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119560,6 +119560,18 @@
       :exit 1,
       :finding
       "Corrected invertible-range set conversion and parenthesized nhds term."}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792581709510-671-e78b03ac",
+     :commands
+     ["git show/diff 2ac121e4"
+      "lake env lean ConstructionTargets/t98A06Closure.lean"
+      "lake env lean problems/t98A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 2ac121e4 changes only t98A06Closure.lean (+22), adding compiled neighborhood stability of a fixed derivative right inverse after prior history. Corrected fixture 9838452b, source 44399e71, implementation 7bbe1d13, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation is correct: continuity of A(x)∘R and openness of invertibles at id, with A(x0)∘R=id, yields eventual invertibility. E m endomorphism boundaries align. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; derivative-family/local-lift, compact-flow, and final assembly milestones are listed."},
     :commit "2ac121e46daf3ce8f574ab259350106e2eba6499",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119568,7 +119580,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119586,7 +119598,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked mfderiv coordinate-solver bridge.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked neighborhood stability of a fixed derivative right inverse.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119619,7 +119631,11 @@
      "Banked tangent-section chart transport; fixture hash repaired."}
     {:job 9,
      :commit "b3e77418954664b338e485426d52f1c5ffde1e2c",
-     :reason "Banked mfderiv coordinate-solver bridge."}]}
+     :reason "Banked mfderiv coordinate-solver bridge."}
+    {:job 1,
+     :commit "2ac121e46daf3ce8f574ab259350106e2eba6499",
+     :reason
+     "Banked neighborhood stability of a fixed derivative right inverse."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -122132,7 +122148,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "incidenceKernelProjectionCriticalValues_eq_image",
@@ -122144,7 +122160,9 @@
     :type
     "kernel critical values equal the image of the critical locus on the incidence subtype",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-incidencekernelprojectioncriticalvalues-eq-image,
    :kind :lemma,
    :depends-on
@@ -122152,7 +122170,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "eventually_isInvertible_comp_rightInverse",
@@ -122164,7 +122182,9 @@
     :type
     "a continuous derivative family composed with a base-point right inverse is invertible near that point",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "2ac121e46daf3ce8f574ab259350106e2eba6499"},
    :id :lemma-eventually-isinvertible-comp-rightinverse,
    :kind :lemma,
    :depends-on
