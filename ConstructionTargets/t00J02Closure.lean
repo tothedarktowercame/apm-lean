@@ -2,6 +2,7 @@ import ConstructionTargets.ManifoldFundamentalClass
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.DiskBoundedPreimageDuality
 import ConstructionTargets.SardGenuineSmoothManifoldVector
+import ConstructionTargets.IncidenceParameterProjection
 import Mathlib.Analysis.Calculus.Implicit
 
 /-!
@@ -1288,6 +1289,68 @@ theorem incidenceKernelProjectionCriticalValues_eq_image
     exact ⟨p.1.1, p.2, hcritical⟩
 
 #print axioms incidenceKernelProjectionCriticalValues_eq_image
+
+/-- The one-dimensional Euclidean model supplied by the regular-fiber atlas
+for the transverse surface--circle incidence space. -/
+abbrev CircleIncidenceModel :=
+  ConstructionTargets.ManifoldTargetIncidenceGlobalAtlas.Space
+    (E := SurfaceModel) (G := EuclideanSpace ℝ (Fin 1)) (F := SurfaceModel)
+
+/-- The chosen regular-fiber atlas on the actual circle-incidence subtype. -/
+@[reducible] noncomputable def circleIncidenceAtlas
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    ChartedSpace CircleIncidenceModel (CircleIncidence f c) :=
+  ConstructionTargets.ManifoldTargetIncidenceGlobalAtlas.normalizedAtlas
+    f c hf hc htrans
+
+/-- The chosen incidence atlas is a smooth one-dimensional manifold atlas. -/
+theorem circleIncidence_isManifold
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    letI := circleIncidenceAtlas f c hf hc htrans
+    IsManifold (modelWithCornersSelf ℝ CircleIncidenceModel) ∞
+      (CircleIncidence f c) :=
+  ConstructionTargets.ManifoldTargetIncidenceGlobalAtlas.normalized_isManifold
+    f c hf hc htrans
+
+/-- The circle-coordinate projection is smooth in the chosen incidence
+atlas, providing the map to which Sard will be applied. -/
+theorem circleIncidenceProjection_contMDiff
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    letI := circleIncidenceAtlas f c hf hc htrans
+    ContMDiff (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1) ∞
+      (circleIncidenceProjection (f := f) (c := c)) := by
+  exact ConstructionTargets.IncidenceParameterProjection.smooth f c hf hc htrans
+
+#print axioms circleIncidenceAtlas
+#print axioms circleIncidence_isManifold
+#print axioms circleIncidenceProjection_contMDiff
 
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
