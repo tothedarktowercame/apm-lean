@@ -89380,26 +89380,27 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "derive label reachability from cover connectedness; realize model; compute invariants",
+    "derive action-connectedness from cover connectedness; realize model; compute invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "twoArcPermMonodromy_model_exists_of_reachable",
+    [{:name "twoArcPermMonodromy_model_exists_of_actionConnected",
       :type
-      "fiber-label reachability selects a normalized cover model",
+      "connected invariant-subset action selects normalized cover model",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on ["twoArcPermMonodromy_model_exists"],
+      :depends-on ["twoArcPermMonodromy_model_exists_of_reachable"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "connected double-cover classification",
       :status :partial,
       :consumers [:t97A03],
-      :depends-on ["twoArcPermMonodromy_model_exists_of_reachable"],
+      :depends-on
+      ["twoArcPermMonodromy_model_exists_of_actionConnected"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
       :type "model homology and fundamental group",
@@ -89411,37 +89412,25 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked lifted-arc reachability bridge.",
+    :reason "Banked connected two-arc action bridge.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "git show --check d7c9a7fc3", :exit 0}],
+     {:cmd "git show --check dde766e34", :exit 0}],
     :diagnostic-history
-    [{:cmd "build", :exit 1, :correction "relation orientation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792588011361-815-2453eef9",
-     :commands
-     ["git show/diff-tree d7c9a7fc3"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "statement fingerprint; sha256sum; placeholder scan"],
-     :finding
-     "PASS: topo-6 commit d7c9a7fc3 changes only t97A03Closure and follows history commit 24ff67fb4; fixture SHA 1cdf624a... matches. Reachability proof has correct EqvGen orientation: under identity monodromies every generating edge is equality, contradicting 0≠1; adapter then invokes the prior normalized model selector. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP: compiled sorry-free progress committed; cover-connectedness bridge, realization, and invariants remain listed."},
-    :commit "d7c9a7fc3",
+    [{:cmd "build", :exit 1, :correction "unfold orbit membership"}],
+    :commit "dde766e34",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "1cdf624a408eabe6f72a378af9e14b9086687ff5182e507e01aeb18f360dbcf2"},
+     "64fc5f7f48886402c5425094a78172ccd86693e386629fc571c672264589186a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98405,7 +98394,8 @@
    [:lemma-twoarcmonodromy-nontrivial-classification
     :lemma-fintwoperm-bool-normalform
     :lemma-twoarcpermmonodromy-model-exists
-    :lemma-twoarcpermmonodromy-model-exists-of-reachable],
+    :lemma-twoarcpermmonodromy-model-exists-of-reachable
+    :lemma-twoarcpermmonodromy-model-exists-of-actionconnected],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -100008,4 +99998,23 @@
    :id :lemma-twoarcpermmonodromy-model-exists-of-reachable,
    :kind :lemma,
    :depends-on [:lemma-twoarcpermmonodromy-model-exists],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoArcPermMonodromy_model_exists_of_actionConnected",
+    :type
+    "connected invariant-subset action selects normalized cover model"},
+   :lemma
+   {:name "twoArcPermMonodromy_model_exists_of_actionConnected",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type
+    "connected invariant-subset action selects normalized cover model",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-twoarcpermmonodromy-model-exists-of-actionconnected,
+   :kind :lemma,
+   :depends-on [:lemma-twoarcpermmonodromy-model-exists-of-reachable],
    :other-consumers []}]}
