@@ -1968,6 +1968,37 @@ theorem exists_mfderiv_surjective_fiber_of_fixedTargetChart
 
 #print axioms exists_mfderiv_surjective_fiber_of_fixedTargetChart
 
+/-- The fixed-chart regular-value selector specialized to the transverse
+surface--circle incidence projection. -/
+theorem exists_circleIncidenceProjection_surjective_fiber
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S] [CompactSpace S]
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1)))
+    [mu.IsAddHaarMeasure]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    letI := circleIncidenceAtlas f c hf hc htrans
+    ∃ z, ∀ p, circleIncidenceProjection (f := f) (c := c) p = z →
+      Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1)
+          (circleIncidenceProjection (f := f) (c := c)) p) := by
+  letI := circleIncidenceAtlas f c hf hc htrans
+  letI : IsManifold (modelWithCornersSelf ℝ CircleIncidenceModel) ∞
+      (CircleIncidence f c) := circleIncidence_isManifold f c hf hc htrans
+  letI : SecondCountableTopology (CircleIncidence f c) :=
+    circleIncidence_secondCountableTopology f c
+  exact exists_mfderiv_surjective_fiber_of_fixedTargetChart mu
+    (circleIncidenceProjection (f := f) (c := c)) (1 : Circle)
+    (circleIncidenceProjection_contMDiff f c hf hc htrans)
+
+#print axioms exists_circleIncidenceProjection_surjective_fiber
+
 /-- Nullity transports from a fixed target chart back to the manifold whenever
 the chart inverse preserves null sets. -/
 theorem targetChart_ambientCriticalImage_null
