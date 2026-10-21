@@ -38051,6 +38051,19 @@
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792620671375-1680-10b7a3e6",
+     :commands
+     ["git show/diff 6ec2e1758"
+      "git diff --check 6ec2e1758^ 6ec2e1758"
+      "lake env lean ConstructionTargets/t94A06Closure.lean"
+      "lake env lean problems/t94A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and rg placeholders on recorded blobs"],
+     :finding
+     "PASS: commit 6ec2e1758 adds only scoped t94A06Closure; fixture hash c66ef6...38e4 matches. Fresh detached gates pass; registry 170/170; closure has 0 placeholders and standard axioms. Translation sign is correct: family normal part vanishes exactly when normalPart f=-s; negation preserves volume. Surjective normal derivative plus z-axis tangent spans E3. New compiled adapter follows c46223f40; remaining manifold-with-corners Morse-Sard is listed. Main pre-existing sole sorry is unchanged."},
     :commit "6ec2e1758",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
@@ -38059,7 +38072,7 @@
      "c66ef63701684af142e20b80537e3412beebab381d27b678590c6c659f9838e4"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -38077,7 +38090,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reviewed blueprint copied and committed; implementation starts next job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the regular-value-to-transversality adapter; Morse-Sard remains.",
    :id :program-2026-10-13-close-t94a06,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -38089,7 +38102,11 @@
    [{:job 1,
      :commit "c46223f40f5df12e744c4fc811f03ee02e83c0c5",
      :reason
-     "Reviewed blueprint copied and committed; implementation starts next job."}]}
+     "Reviewed blueprint copied and committed; implementation starts next job."}
+    {:job 2,
+     :commit "6ec2e1758",
+     :reason
+     "Banked the regular-value-to-transversality adapter; Morse-Sard remains."}]}
   {:consumer :t01J04,
    :stop-count 0,
    :phase :implementation,
@@ -49627,7 +49644,7 @@
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a06_transverse_ae_of_regularValues",
@@ -49637,7 +49654,9 @@
     :reported-by [:program-2026-10-13-close-t94a06],
     :type "translate normal-part regular values to AE transversality",
     :area "parametric-transversality-sard",
-    :proved-in :program-2026-10-13-close-t94a06},
+    :proved-in :program-2026-10-13-close-t94a06,
+    :banked-by :program-2026-10-13-close-t94a06,
+    :banked-commit "6ec2e1758"},
    :id :lemma-apm-t94a06-transverse-ae-of-regularvalues,
    :kind :lemma,
    :depends-on [:lemma-apm-t94a06-ae-regularvalue-normalpart],
