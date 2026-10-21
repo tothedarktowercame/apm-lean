@@ -119196,6 +119196,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792604179530-1211-c9641e9c",
+     :commands
+     ["git show/diff e9e4bb32"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: e9e4bb32 changes only t00J02Closure.lean (+10), adding a compiled measurable null-envelope theorem beyond program history; its exact tree also contains the preceding compiled transported-chart nullity. Fixture afb497a6, source 0b3b4888, implementation 59896b12; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: mu s=0 yields measurable t with s subset t and mu t=0 via exists_measurable_superset_of_null, without changing the coordinate-space representation. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; chart-envelope transport, finite cover, signed counts, and final assembly remain listed."},
     :commit "e9e4bb320f1357fcafd37a3e9017c751fe8acd37",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-measure evaluation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked measurable coordinate-null envelopes.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119554,7 +119566,10 @@
      :reason "Banked inverse-chart measures."}
     {:job 9,
      :commit "3ef1754c67af889cac8995c023f7305eb18f2555",
-     :reason "Banked chart-measure evaluation."}]}
+     :reason "Banked chart-measure evaluation."}
+    {:job 1,
+     :commit "e9e4bb320f1357fcafd37a3e9017c751fe8acd37",
+     :reason "Banked measurable coordinate-null envelopes."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122676,7 +122691,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleCoordinateNull_exists_measurableSuperset",
@@ -122686,7 +122701,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "coordinate-null set has measurable null envelope",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "e9e4bb320f1357fcafd37a3e9017c751fe8acd37"},
    :id :lemma-circlecoordinatenull-exists-measurablesuperset,
    :kind :lemma,
    :depends-on [:lemma-circlebasechartmeasure-apply-eq-zero],
