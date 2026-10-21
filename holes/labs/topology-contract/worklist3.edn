@@ -36711,73 +36711,57 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Assemble degreewise finiteness; prove successor top/even equivalences.",
+    "Assemble successor finite-dimensionality, then top/even homology equivalences.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
-    :warnings ["Existing lints; unrelated artifacts preserved."],
+    :warnings
+    ["Existing lints and unrelated untracked review artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_topPatch_contractible",
-      :type "top patch contractible",
+    [{:name "t99J05_cp_successor_overlap_finiteDimensional",
+      :type
+      "successor overlap homology is finite-dimensional in every degree",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_affineChartConstruction_all"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_topPatch_finiteDimensional",
-      :type "top-patch homology finite",
-      :status :proved,
-      :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_topPatch_contractible"],
+      :depends-on
+      ["t99J05_cp_successor_overlap_rational_H0"
+       "t99J05_cp_successor_overlap_rational_topHomology"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "CP n data implies CP(n+1) data",
       :status :partial,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_topPatch_finiteDimensional"],
+      :depends-on
+      ["t99J05_cp_successor_overlap_finiteDimensional"
+       "t99J05_cp_successor_lowerPatch_finiteDimensional"
+       "t99J05_cp_successor_topPatch_finiteDimensional"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked top-patch contractibility and finite homology; top/even cases remain.",
+    "Banked all-degree overlap finite-dimensionality; successor exact-sequence top/even equivalences remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
-      :exit 1,
-      :correction "derived Nonempty from contractibility"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792597389802-1061-15e8c997",
-     :commands
-     ["git show --stat/--format=fuller a3f2f7efa668fcf93c9c4964c785fc7282f4e3e1"
-      "git hash-object ConstructionTargets/t99J05Closure.lean; git rev-parse a3f2f7efa668fcf93c9c4964c785fc7282f4e3e1:ConstructionTargets/t99J05Closure.lean"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check a3f2f7efa668fcf93c9c4964c785fc7282f4e3e1^ a3f2f7efa668fcf93c9c4964c785fc7282f4e3e1"],
-     :finding
-     "PASS: commit a3f2f7efa6 changes only scoped Closure; fixture/blob SHA matches 9546ea50ee9f94201bb1db72c5f184cf8a55a877f3fcca3d563e113aa7878c9d. The literal top patch is correctly transported through set equality and the full affine chart to affine coordinates, hence contractible. H0 is finite via the canonical H0 iso; positive-degree homology is zero/subsingleton, hence finite via an injective zero map. Representation boundaries and orientations are sound. Closure/Main compile; registry 170/170; no placeholders; standard axioms only. Both milestones are proved and remaining top/even cases are listed."},
-    :commit "a3f2f7efa6",
+    :commit "471bcbc269",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "9546ea50ee9f94201bb1db72c5f184cf8a55a877f3fcca3d563e113aa7878c9d"},
+     "8398d3360483f65f31f3966ef901cd2fd0c01bf9971becb235d3f732a3a6c28b"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48840,7 +48824,8 @@
     :lemma-t99j05-cp-successor-finitedimensional-of-overlap-subsingleton
     :lemma-t99j05-cp-successor-finitedimensional-of-overlap-gt
     :lemma-t99j05-cp-successor-lowerpatch-finitedimensional
-    :lemma-t99j05-cp-successor-toppatch-finitedimensional],
+    :lemma-t99j05-cp-successor-toppatch-finitedimensional
+    :lemma-t99j05-cp-successor-overlap-finitedimensional],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -49141,6 +49126,27 @@
    :id :lemma-t99j05-cp-successor-toppatch-finitedimensional,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-toppatch-contractible],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_overlap_finiteDimensional",
+    :type
+    "successor overlap homology is finite-dimensional in every degree"},
+   :lemma
+   {:name "t99J05_cp_successor_overlap_finiteDimensional",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "successor overlap homology is finite-dimensional in every degree",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-overlap-finitedimensional,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-rational-h0
+    :lemma-t99j05-cp-successor-overlap-rational-tophomology],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
