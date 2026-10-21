@@ -1699,6 +1699,21 @@ theorem circleCoordinateNull_exists_measurableSuperset
 
 #print axioms circleCoordinateNull_exists_measurableSuperset
 
+/-- A measurable coordinate-null envelope transports to nullity for the
+associated circle chart measure. -/
+theorem circleBaseChartMeasure_eq_zero_of_coordinateEnvelope
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1))) (y : Circle)
+    (s : Set Circle) (t : Set (EuclideanSpace ℝ (Fin 1)))
+    (hs : MeasurableSet s)
+    (hsub : (circleChartInverseExtension y) ⁻¹' s ∩
+      (chartAt (EuclideanSpace ℝ (Fin 1)) y).target ⊆ t)
+    (ht : mu t = 0) :
+    circleBaseChartMeasure mu y s = 0 := by
+  apply circleBaseChartMeasure_apply_eq_zero mu y s hs
+  exact MeasureTheory.measure_mono_null hsub ht
+
+#print axioms circleBaseChartMeasure_eq_zero_of_coordinateEnvelope
+
 #print axioms circleChartInverseExtension_measurable
 
 /-- The open part of the source on which a fixed target chart is valid. -/
