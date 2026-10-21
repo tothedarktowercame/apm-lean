@@ -36711,37 +36711,31 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Build the top connecting equivalence, then surviving-even equivalences.",
+    "Prove surviving-even equivalences and assemble successor data.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_lowerPatch_subsingleton_above",
-      :type "lower patch vanishes above 2n",
+    [{:name "t99J05_cp_successor_top_connecting_bijective",
+      :type "top connecting map bijective",
       :status :proved,
-      :consumers [:t99J05],
-      :depends-on [],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_topPatch_subsingleton_positive",
-      :type "positive top-patch homology vanishes",
-      :status :proved,
-      :consumers [:t99J05],
-      :depends-on [],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_top_connecting_iso",
-      :type "successor top equals overlap top",
-      :status :partial,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_lowerPatch_subsingleton_above"
        "t99J05_cp_successor_topPatch_subsingleton_positive"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_top_connecting_iso",
+      :type "successor top equals overlap top",
+      :status :proved,
+      :consumers [:t99J05],
+      :depends-on ["t99J05_cp_successor_top_connecting_bijective"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_rational_homology",
       :type "successor homology data",
@@ -36752,36 +36746,27 @@
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Banked patch vanishings; top specialization remains.",
+    :reason
+    "Banked top connecting equivalence; surviving-even cases remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792605908788-1268-c25f71d8",
-     :commands
-     ["git show --stat/--format=fuller 339f84603debacc6e611c3d9bdd3fa039fc15daa"
-      "git show 339f84603:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "git diff --check 339f84603^ 339f84603"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show 339f84603:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit 339f84603 changes only scoped Closure; fixture SHA-256 matches 49cb299a7f267677b08f7a43f21dea2eeab4214a9f5de827b4157a7afead7db2. Lower-patch vanishing is transported in the correct direction: the stored iso is CP n -> lower patch, so its inverse injects the patch homology into the subsingleton CP homology. Positive top-patch vanishing correctly installs contractibility and applies higher_zero for k≠0. Representation boundaries and degree inequalities are faithful. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This is genuine program progress; the top connecting equivalence and surviving-even equivalences remain listed."},
-    :commit "339f84603debacc6e611c3d9bdd3fa039fc15daa",
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
+      :exit 1,
+      :correction "built biproduct zero object"}],
+    :commit "2d4d05243a238a7d69fb82a2d011c0a1e829a1cd",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "49cb299a7f267677b08f7a43f21dea2eeab4214a9f5de827b4157a7afead7db2"},
+     "ba7117b85b169cc126cc09ebe8d46be19ad796ec389c35210329cb389362e332"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -49313,14 +49298,16 @@
    {:name "t99J05_cp_successor_top_connecting_iso",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "successor top homology is overlap top homology",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-successor-top-connecting-iso,
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-exact-overlap-transport
     :lemma-t99j05-bijective-of-adjacent-exact-of-subsingleton
     :lemma-t99j05-cp-successor-lowerpatch-subsingleton-above
-    :lemma-t99j05-cp-successor-toppatch-subsingleton-positive],
+    :lemma-t99j05-cp-successor-toppatch-subsingleton-positive
+    :lemma-t99j05-cp-successor-top-connecting-bijective],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -49378,6 +49365,25 @@
    :id :lemma-t99j05-cp-successor-toppatch-subsingleton-positive,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_top_connecting_bijective",
+    :type "top connecting map bijective"},
+   :lemma
+   {:name "t99J05_cp_successor_top_connecting_bijective",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "top connecting map bijective",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-top-connecting-bijective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-lowerpatch-subsingleton-above
+    :lemma-t99j05-cp-successor-toppatch-subsingleton-positive],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
