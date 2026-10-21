@@ -89428,6 +89428,18 @@
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792613537288-1467-0880e090",
+     :commands
+     ["git show/diff 6c877deef"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: 6c877deef follows c9c3d41b1 and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom progress proves the literal collapse surjective, proves A=B in the cut quotient, and closes both explicit paths as based cut-circle loops. It does not assert pi1 generation/equivalence; that, model realization, and invariants remain listed."},
     :commit "6c877deef",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89436,7 +89448,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89454,7 +89466,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked collapse formulas for both arcs and sphere return.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the cut-circle quotient loop interface.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89556,7 +89568,10 @@
     {:job 3,
      :commit "c9c3d41b1",
      :reason
-     "Banked collapse formulas for both arcs and sphere return."}]}
+     "Banked collapse formulas for both arcs and sphere return."}
+    {:job 4,
+     :commit "6c877deef",
+     :reason "Banked the cut-circle quotient loop interface."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100814,7 +100829,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_cutCircle_quotient_loop_interface",
@@ -100824,7 +100839,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "surjective collapse and two based arc loops",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "6c877deef"},
    :id :lemma-apm-t97a03-cutcircle-quotient-loop-interface,
    :kind :lemma,
    :depends-on [:lemma-apm-t97a03-collapse-literal-path-pieces],
