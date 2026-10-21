@@ -350,6 +350,48 @@ lemma apm_t97A03_collapsedSphereReturnClass_eq_one (A B : Circle) :
   rw [apm_t97A03_collapsedSphereReturnLoop_eq_refl]
   rfl
 
+/-- The collapsed first literal circle arc, rebased at the cut point. -/
+noncomputable def apm_t97A03_collapsedFirstArcLoop (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap A B A)
+      (apm_t97A03_cutCircleMap A B A) :=
+  ((apm_t97A03_baseCircleArc A B).map
+      (apm_t97A03_continuous_collapseToCutCircle A B)).cast rfl
+    (apm_t97A03_cutCircleMap_A_eq_B A B)
+
+/-- The collapsed complementary literal arc, rebased at the cut point. -/
+noncomputable def apm_t97A03_collapsedSecondArcLoop (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap A B A)
+      (apm_t97A03_cutCircleMap A B A) :=
+  ((apm_t97A03_baseComplementaryCircleArc A B).map
+      (apm_t97A03_continuous_collapseToCutCircle A B)).cast rfl
+    (apm_t97A03_cutCircleMap_A_eq_B A B)
+
+lemma apm_t97A03_collapsedFirstArcLoop_eq (A B : Circle) :
+    apm_t97A03_collapsedFirstArcLoop A B =
+      apm_t97A03_firstCutCircleLoop A B := by
+  rfl
+
+lemma apm_t97A03_collapsedSecondArcLoop_eq (A B : Circle) :
+    apm_t97A03_collapsedSecondArcLoop A B =
+      apm_t97A03_secondCutCircleLoop A B := by
+  rfl
+
+lemma apm_t97A03_collapsedFirstArcClass_eq_generator (A B : Circle) :
+    FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk
+          (apm_t97A03_collapsedFirstArcLoop A B)) =
+      apm_t97A03_firstCutCircleGenerator A B := by
+  rw [apm_t97A03_collapsedFirstArcLoop_eq]
+  rfl
+
+lemma apm_t97A03_collapsedSecondArcClass_eq_generator (A B : Circle) :
+    FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk
+          (apm_t97A03_collapsedSecondArcLoop A B)) =
+      apm_t97A03_secondCutCircleGenerator A B := by
+  rw [apm_t97A03_collapsedSecondArcLoop_eq]
+  rfl
+
 /-- A genuine based loop in the frozen base: traverse the literal circle
 summand from `A` to `B`, then return through the literal sphere summand. -/
 noncomputable def apm_t97A03_firstLiteralLoop (A B : Circle) :
