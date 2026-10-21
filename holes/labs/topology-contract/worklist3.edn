@@ -37456,9 +37456,56 @@
      :reason
      "Exact representation boundary: the banked Unit inverse comparison and Bool naturality have incompatible categorical parenthesizations under the chosen coproduct prefix; direct rewrites do not expose the shared subcomposite. No scoped change retained."}]}
   {:consumer :t96J05,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Move compiled C1/C3 and assembly into Closure; audit and bank the C2 Sard proof.",
+    :evidence
+    {:placeholder-delta {:t96J05 [0 0]},
+     :statement-hashes {:registry "170/170"}},
+    :outcome :stop,
+    :warnings
+    ["Existing lints; source blueprint and Main compile with standard axioms."],
+    :missing-theorems
+    [{:name "apm_t96j05_constant_radius_level",
+      :type "positive constant radius gives an embedded level",
+      :status :not-started,
+      :consumers [:t96J05],
+      :depends-on [],
+      :area "sard-regular-values"}
+     {:name "apm_t96j05_exists_regular_radius",
+      :type
+      "nonconstant squared radius has an attained positive regular value",
+      :status :not-started,
+      :consumers [:t96J05],
+      :depends-on [],
+      :area "sard-regular-values"}
+     {:name "apm_t96j05_regular_radius_level",
+      :type "positive regular radius gives an embedded level",
+      :status :not-started,
+      :consumers [:t96J05],
+      :depends-on [],
+      :area "sard-regular-values"}],
+    :disposition :stop,
+    :axioms [propext Classical.choice Quot.sound],
+    :author :topo-10,
+    :reason
+    "Blueprint written and committed; implementation continues at C1-C3.",
+    :commands
+    [{:cmd "lake env lean holes/labs/blueprints/t96J05/Blueprint.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t96J05/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "a047cd36f",
+    :changed-paths ["ConstructionTargets/t96J05Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t96J05Closure.blueprint.md",
+     :sha256
+     "f19ddb9743925ee6336eba62785850f29c44d70331d4c1474d63bc42c53d899f"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96J05/lean/Main.lean"
     "problems/t96J05/status.json"
@@ -48750,6 +48797,56 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-union-transport],
+   :other-consumers []}
+  {:consumer :t96J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t96j05_constant_radius_level",
+    :type "positive constant radius gives an embedded level"},
+   :lemma
+   {:name "apm_t96j05_constant_radius_level",
+    :reported-by [:program-2026-10-13-close-t96j05],
+    :type "positive constant radius gives an embedded level",
+    :area "sard-regular-values"},
+   :id :lemma-apm-t96j05-constant-radius-level,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t96j05_exists_regular_radius",
+    :type
+    "nonconstant squared radius has an attained positive regular value"},
+   :lemma
+   {:name "apm_t96j05_exists_regular_radius",
+    :reported-by [:program-2026-10-13-close-t96j05],
+    :type
+    "nonconstant squared radius has an attained positive regular value",
+    :area "sard-regular-values"},
+   :id :lemma-apm-t96j05-exists-regular-radius,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t96j05_regular_radius_level",
+    :type "positive regular radius gives an embedded level"},
+   :lemma
+   {:name "apm_t96j05_regular_radius_level",
+    :reported-by [:program-2026-10-13-close-t96j05],
+    :type "positive regular radius gives an embedded level",
+    :area "sard-regular-values"},
+   :id :lemma-apm-t96j05-regular-radius-level,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
