@@ -3750,6 +3750,25 @@ theorem topHomologyMap_eq_zero_of_diskBounded_canonicalSums
   topHomologyMap_eq_zero_of_diskBounded_chartSums f c hc eS hessential
     hdisks y hy e orientationSign (regularFiberLocalDegree e f y) hcomponent htop
 
+/-- Canonical zero sums on genuine occupied components annihilate every
+orientation-weighted signed sum over the literal regular fiber. -/
+theorem canonicalRegularFiberSignedSum_eq_zero_of_componentSums
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = 0) :
+    (∑ x, orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+      regularFiberLocalDegree e f y x) = 0 := by
+  rw [pointSignedCount_eq_groupedComponentSignedCount]
+  exact groupedComponentSignedCount_eq_zero
+    (occupiedRegularFiberComponentIndex f c y hy)
+    (regularFiberLocalDegree e f y) orientationSign hcomponent
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3769,6 +3788,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_canonicalSums
+#print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberSignedSum_eq_zero_of_componentSums
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
