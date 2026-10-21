@@ -1662,6 +1662,21 @@ noncomputable def circleBaseChartMeasure
   MeasureTheory.Measure.map (circleChartInverseExtension y)
     (mu.restrict (chartAt (EuclideanSpace ℝ (Fin 1)) y).target)
 
+/-- Evaluation of the transported chart measure on a Borel set.  This is the
+exact bridge from circle nullity back to the restricted coordinate measure. -/
+theorem circleBaseChartMeasure_apply
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1))) (y : Circle)
+    (s : Set Circle) (hs : MeasurableSet s) :
+    circleBaseChartMeasure mu y s =
+      mu ((circleChartInverseExtension y) ⁻¹' s ∩
+        (chartAt (EuclideanSpace ℝ (Fin 1)) y).target) := by
+  rw [circleBaseChartMeasure,
+    MeasureTheory.Measure.map_apply (circleChartInverseExtension_measurable y) hs,
+    MeasureTheory.Measure.restrict_apply]
+  exact (circleChartInverseExtension_measurable y) hs
+
+#print axioms circleBaseChartMeasure_apply
+
 #print axioms circleChartInverseExtension_measurable
 
 /-- The open part of the source on which a fixed target chart is valid. -/
