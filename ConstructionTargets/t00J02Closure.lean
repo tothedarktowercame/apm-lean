@@ -1635,6 +1635,35 @@ theorem circleChartTransition_image_null
 
 #print axioms circleChartTransition_image_null
 
+/-- A total measurable representative of a circle chart inverse.  Outside
+the chart target it is pinned to the chart centre; restricting the source
+measure to the target therefore recovers the genuine inverse exactly. -/
+noncomputable def circleChartInverseExtension (y : Circle) :
+    EuclideanSpace ℝ (Fin 1) → Circle := by
+  classical
+  exact (chartAt (EuclideanSpace ℝ (Fin 1)) y).target.piecewise
+    (chartAt (EuclideanSpace ℝ (Fin 1)) y).symm (fun _ ↦ y)
+
+/-- The totalized inverse chart is Borel measurable, so coordinate measure
+restricted to a chart target can be pushed forward to the circle. -/
+theorem circleChartInverseExtension_measurable (y : Circle) :
+    Measurable (circleChartInverseExtension y) := by
+  classical
+  unfold circleChartInverseExtension
+  apply ContinuousOn.measurable_piecewise
+  · exact (chartAt (EuclideanSpace ℝ (Fin 1)) y).continuousOn_symm
+  · exact continuous_const.continuousOn
+  · exact (chartAt (EuclideanSpace ℝ (Fin 1)) y).open_target.measurableSet
+
+/-- Coordinate Haar measure transported through one circle chart. -/
+noncomputable def circleBaseChartMeasure
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1))) (y : Circle) :
+    MeasureTheory.Measure Circle :=
+  MeasureTheory.Measure.map (circleChartInverseExtension y)
+    (mu.restrict (chartAt (EuclideanSpace ℝ (Fin 1)) y).target)
+
+#print axioms circleChartInverseExtension_measurable
+
 /-- The open part of the source on which a fixed target chart is valid. -/
 def targetChartDomain
     {F M N : Type} [TopologicalSpace F] [TopologicalSpace M] [TopologicalSpace N]
