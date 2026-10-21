@@ -1749,6 +1749,17 @@ theorem finite_chartCriticalPieces_measure_zero
 
 #print axioms finite_chartCriticalPieces_measure_zero
 
+/-- A bad-parameter set covered by finitely many null chart-critical pieces is null. -/
+theorem measure_zero_of_subset_finite_chartCriticalPieces
+    {α : Type} [MeasurableSpace α] {n : ℕ}
+    (mu : MeasureTheory.Measure α) (bad : Set α) (s : Fin n → Set α)
+    (hsub : bad ⊆ ⋃ i, s i) (hs : ∀ i, mu (s i) = 0) :
+    mu bad = 0 := by
+  exact MeasureTheory.measure_mono_null hsub
+    (finite_chartCriticalPieces_measure_zero mu s hs)
+
+#print axioms measure_zero_of_subset_finite_chartCriticalPieces
+
 /-- Sard nullity for a smooth map from a second-countable manifold to a
 finite-dimensional real vector space produces a value regular at every point
 of its fiber. -/
