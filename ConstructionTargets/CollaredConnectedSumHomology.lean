@@ -1038,7 +1038,92 @@ theorem connectedSum_standardCover_aux_right_aux_quotient_aux_forward {n : ℕ} 
         f ⟨_, h⟩ = a) ∧
       (∀ x (h : Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) (Sum.inl x.1) ∈ connectedSum_standardCover_aux_thickRight c₁ c₂),
         f ⟨_, h⟩ = c₂.boundaryMap (r x)) := by
-  sorry
+  classical
+  let C := connectedSum_standardCover_aux_collar c₁
+  let U := connectedSum_standardCover_aux_thickRight c₁ c₂
+  let q : Sum c₁.Punctured c₂.Punctured → ConnectedSum c₁ c₂ :=
+    fun z => Quotient.mk _ z
+  let P : Set (Sum c₁.Punctured c₂.Punctured) :=
+    Sum.inl '' C ∪ Set.range Sum.inr
+  have hiA : ∀ s, c₁.boundaryMap s ∈ C :=
+    (connectedSum_standardCover_aux_collar_open c₁ hopen₁).2
+  have hC : IsOpen C :=
+    (connectedSum_standardCover_aux_collar_open c₁ hopen₁).1
+  have hpre : q ⁻¹' U = P := by
+    simpa [q, U, P, C] using
+      connectedSum_standardCover_aux_right_aux_quotient_aux_preimage c₁ c₂ hiA
+  have hP : IsOpen P := by
+    exact ((Topology.IsOpenEmbedding.inl (X := c₁.Punctured)
+      (Y := c₂.Punctured)).isOpenMap _ hC).union
+      (by simpa only [Set.image_univ] using
+        ((Topology.IsOpenEmbedding.inr (X := c₁.Punctured)
+          (Y := c₂.Punctured)).isOpenMap _ isOpen_univ))
+  have inl_mem (a : c₁.Punctured) (ha : Sum.inl a ∈ P) : a ∈ C := by
+    rcases ha with h | h
+    · rcases h with ⟨a', ha', heq⟩
+      exact (Sum.inl.inj heq) ▸ ha'
+    · rcases h with ⟨b, h⟩
+      cases h
+  let k : P → c₂.Punctured := fun z =>
+    (match x : z.1 with
+      | Sum.inl a => fun hx => c₂.boundaryMap (r ⟨a, inl_mem a (x ▸ hx)⟩)
+      | Sum.inr b => fun _ => b) z.2
+  have hk_rel {x y : Sum c₁.Punctured c₂.Punctured}
+      (hx : x ∈ P) (hy : y ∈ P)
+      (he : Relation.EqvGen (GlueRel c₁ c₂) x y) :
+      k ⟨x, hx⟩ = k ⟨y, hy⟩ := by
+    induction he with
+    | rel x y h =>
+        cases h with
+        | boundary s =>
+            change c₂.boundaryMap (r ⟨c₁.boundaryMap s, _⟩) = c₂.boundaryMap s
+            rw [hr s]
+    | refl => rfl
+    | symm x y h ih => exact ih hy hx |>.symm
+    | trans x y z hxy hyz ihxy ihyz =>
+        have hy' : y ∈ P :=
+          (connectedSum_standardCover_aux_right_aux_quotient_aux_mem
+            c₁ c₂ C hiA hxy).mp hx
+        exact (ihxy hx hy').trans (ihyz hy' hy)
+  have hk_eq (z w : P) (hzw : q z.1 = q w.1) : k z = k w := by
+    have he : Relation.EqvGen (GlueRel c₁ c₂) z.1 w.1 := Quotient.exact hzw
+    exact hk_rel z.2 w.2 he
+  let rep : U → P := fun x => ⟨Classical.choose x.2,
+    (Classical.choose_spec x.2).1⟩
+  let f : U → c₂.Punctured := fun x => k (rep x)
+  have hfq (z : P) : f ⟨q z.1, (Set.ext_iff.mp hpre z.1).mpr z.2⟩ = k z := by
+    apply hk_eq
+    exact (Classical.choose_spec
+      ((⟨q z.1, (Set.ext_iff.mp hpre z.1).mpr z.2⟩ : U).2)).2
+  have hk : Continuous k := by
+    have hprod : Continuous (fun p : unitInterval × P => k p.2) := by
+      apply connectedSum_standardCover_aux_right_aux_quotient_aux_cont C hC
+      · convert (c₂.continuous_boundaryMap.comp
+          (r.continuous.comp continuous_snd)) using 1
+      · convert (continuous_snd : Continuous (fun p : unitInterval × c₂.Punctured => p.2)) using 1
+    exact hprod.comp ((continuous_const.prodMk continuous_id) :
+      Continuous (fun z : P => ((0 : unitInterval), z)))
+  have hU : IsOpen U := by
+    exact (connectedSum_standardCover_aux_open c₁ c₂ hopen₁ hopen₂).2.1
+  have hf : Continuous f := by
+    have hq : Topology.IsQuotientMap q := isQuotientMap_quotient_mk'
+    apply (hq.restrictPreimage_isOpen hU).continuous_iff.mpr
+    let e : P ≃ₜ q ⁻¹' U := Homeomorph.setCongr hpre.symm
+    have heq : f ∘ U.restrictPreimage q = k ∘ e.symm := by
+      funext z
+      simpa [Function.comp_def, e] using hfq (e.symm z)
+    have hc := hk.comp e.symm.continuous
+    rw [heq]
+    exact hc
+  refine ⟨⟨f, hf⟩, ?_, ?_⟩
+  · intro a h
+    have hz : (⟨Sum.inr a, Or.inr ⟨a, rfl⟩⟩ : P) =
+        ⟨Sum.inr a, Or.inr ⟨a, rfl⟩⟩ := rfl
+    simpa [f, k] using hfq (⟨Sum.inr a, Or.inr ⟨a, rfl⟩⟩ : P)
+  · intro x h
+    have hx : x.1 ∈ C := x.2
+    simpa [f, k] using hfq
+      (⟨Sum.inl x.1, Or.inl ⟨x.1, hx, rfl⟩⟩ : P)
 
 /-- LEAF. The backward homotopy of the quotient step: inclusion after the
 forward map is homotopic to the identity of the thickening.  Sketch: the
