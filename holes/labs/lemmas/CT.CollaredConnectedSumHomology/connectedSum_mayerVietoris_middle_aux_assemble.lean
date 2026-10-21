@@ -2303,7 +2303,30 @@ lemma connectedSum_mayerVietoris_middle_aux_assemble
       U V k)]
     {A B : ModuleCat ℤ} (eu : H k U ≅ A) (ev : H k V ≅ B) :
     Nonempty (H k X ≅ ModuleCat.of ℤ (A × B)) := by
-  sorry
+  let F := ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+  letI : F.Additive := inferInstance
+  letI : PreservesFiniteBiproducts F :=
+    Functor.preservesFiniteBiproductsOfAdditive F
+  letI : PreservesBinaryBiproducts F :=
+    preservesBinaryBiproducts_of_preservesBiproducts F
+  let cU := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of U) k
+  let cV := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of V) k
+  let cX := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of X) k
+  let eP := asIso
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V k)
+  let eAB : H k U ⊞ H k V ≅ ModuleCat.of ℤ (A × B) :=
+    ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso
+      (F.mapBiprod (H k U) (H k V) ≪≫
+        biprod.mapIso (F.mapIso eu) (F.mapIso ev) ≪≫
+        AddCommGrpCat.biprodIsoProd (F.obj A) (F.obj B))
+  refine ⟨ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso ?_ ≪≫
+    eAB⟩
+  exact cX ≪≫ eP.symm ≪≫
+    (biprod.mapIso cU.symm cV.symm) ≪≫
+    (F.mapBiprod (H k U) (H k V)).symm
 -- END SEAT AREA
 
 theorem connectedSum_mayerVietoris_middle
