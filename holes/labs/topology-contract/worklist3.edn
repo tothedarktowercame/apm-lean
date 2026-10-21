@@ -36711,40 +36711,39 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Cancel intersection comparison iso in both projections; transport union.",
+    "Transport union and derive the CP successor homology step.",
     :evidence
-    {:placeholder-delta {:t99J05 [1 1]},
+    {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings
     ["Existing lints/Main sorry; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name
-      "t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom",
-      :type
-      "homology of a biproduct lift commutes with the canonical comparison",
-      :status :proved,
-      :consumers [:t99J05],
-      :depends-on [],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
+    [{:name "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
       :type "transported arrow is literal signed arrow",
-      :status :partial,
+      :status :proved,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom"
        "t99J05_cp_successor_literalOverlapToPieces_components"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_mayerVietoris_union_transport",
+      :type "transport union exactness to CP successor",
+      :status :not-started,
+      :consumers [:t99J05],
+      :depends-on
+      ["t99J05_cp_successor_mayerVietoris_f_transport_eq_literal"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed biproduct transport identity; literal-arrow proof reduces to cancelling the intersection comparison iso against naturality.",
+    "Committed literal signed-arrow comparison; union transport remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36752,31 +36751,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "closure literal-arrow attempt",
+    [{:cmd "closure attempts",
       :exit 1,
-      :note "Reduced to intersection-iso cancellation; removed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792580674841-643-05be1f03",
-     :commands
-     ["git show/diff-tree 35cae1fc"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check 35cae1fc^ 35cae1fc"],
-     :finding
-     "PASS: new post-history commit 35cae1fc changes only scoped Closure; fixture/blob SHA matches ddce7fca.... The new theorem has the correct representation direction: homologyMap of a chain-level biproduct lift, followed by the canonical homology biproduct comparison, equals the lift of component homology maps; proof uses the additive functor preservation theorem only. Closure and Main compile, apm_t99j05 uses only propext/Classical.choice/Quot.sound, registry 170/170, and fresh code census finds 0 placeholders/axiom declarations (ledger 1->1 is stale). Proved milestone and remaining partial transport theorem are listed."},
-    :commit "35cae1fc8612fc7c14d4a68ea605968c7c891ffb",
+      :note "Corrected universe/reassociation."}],
+    :commit "fa86dcf4e9e4ae54d7482c593dda1bc400aaf203",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "ddce7fcade4f680f95d72dac93aec69ed1ce0b84319c2bd0dcfb28a2e98a0cd9"},
+     "b506c035305a8db31a234f1fb1e2c49d96c8232f187992272ee73607076c0b81"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48330,7 +48316,8 @@
    :id :lemma-t99j05-cp-successor-mayervietoris-union-transport,
    :kind :lemma,
    :depends-on
-   [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport],
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport
+    :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -48343,7 +48330,8 @@
    {:name "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "transported arrow equals signed literal arrow",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal,
    :kind :lemma,
    :depends-on
