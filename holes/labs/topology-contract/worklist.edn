@@ -119152,52 +119152,48 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:consumer :t00J02,
     :placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Transport nullity through circle charts/Haar; aggregate, signed counts, Main.",
+    "Prove circle chart inverse preserves nullity; finite-chart aggregate, signed counts, Main.",
     :outcome :stop,
     :warnings ["Main sorry" "untracked artifacts"],
     :missing-theorems
-    [{:name "targetChartCoordinate_ambientCriticalImage_null",
-      :type "chart ambient critical image null",
+    [{:name "targetChart_ambientCriticalImage_null",
+      :type "chart-inverse transport of ambient critical nullity",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["mfderiv_openSubtype_not_surjective"],
+      :depends-on ["targetChartCoordinate_ambientCriticalImage_null"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["targetChartCoordinate_ambientCriticalImage_null"],
+      :depends-on ["targetChart_ambientCriticalImage_null"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "2e791c7eb48e75f8f6beeeb3e0daab6bcb81334d750c3d75c1b67500317108d0",
+     "360af14f1ada3b740106dbb53f0df4c10e8f8de3b1dac2f1486ddb18569eee2d",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Repaired chartwise ambient critical-image nullity.",
+    :reason "Banked chart-inverse nullity transport.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes; git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile before repair",
-      :exit 1,
-      :finding "cross-domain image_mono; pipe masked exit"}],
-    :commit "dda999317a56ee48fe8643aa766c1854d4d4fbde",
+    :commit "71255f23654349f357bcbd8b39f5f0918e229035",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119205,7 +119201,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119813,7 +119809,8 @@
     :lemma-targetchartcoordinate-criticalimage-null
     :lemma-circleincidenceprojection-critical-iff-fixedtargetchartcritical
     :lemma-mfderiv-opensubtype-not-surjective
-    :lemma-targetchartcoordinate-ambientcriticalimage-null],
+    :lemma-targetchartcoordinate-ambientcriticalimage-null
+    :lemma-targetchart-ambientcriticalimage-null],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -122421,6 +122418,24 @@
    :id :lemma-exists-nhds-isinvertible-comp-rightinverse,
    :kind :lemma,
    :depends-on [:lemma-eventually-isinvertible-comp-rightinverse],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "targetChart_ambientCriticalImage_null",
+    :type "chart-inverse transport of ambient critical nullity"},
+   :lemma
+   {:name "targetChart_ambientCriticalImage_null",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart-inverse transport of ambient critical nullity",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-targetchart-ambientcriticalimage-null,
+   :kind :lemma,
+   :depends-on
+   [:lemma-targetchartcoordinate-ambientcriticalimage-null],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
