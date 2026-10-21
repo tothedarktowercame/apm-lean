@@ -89434,6 +89434,18 @@
     [{:cmd "path draft",
       :exit 1,
       :correction "fixed namespace/rank/endpoints"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792606475254-1285-78129ba1",
+     :commands
+     ["git show/diff 604d9d4b6"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: commit 604d9d4b6 is after 2c744cae1 and changes only Main.lean; fixture hash 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3. It adds compiled sorry-free literal S2 north-to-south path and its quotient image with correct A/B endpoints; standard axioms only. This is new representation-faithful program progress; both remaining bridges are listed."},
     :commit "604d9d4b6",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89442,7 +89454,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89460,7 +89472,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal base quotient interface.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal sphere return.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89538,7 +89550,10 @@
      :reason "Banked signed arc-word normalization."}
     {:job 4,
      :commit "2c744cae1",
-     :reason "Banked literal base quotient interface."}]}
+     :reason "Banked literal base quotient interface."}
+    {:job 5,
+     :commit "604d9d4b6",
+     :reason "Banked literal sphere return."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100580,7 +100595,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97A03_literal_sphere_return_path",
@@ -100590,7 +100605,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "literal quotient path A to B",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "604d9d4b6"},
    :id :lemma-t97a03-literal-sphere-return-path,
    :kind :lemma,
    :depends-on [:lemma-t97a03-literal-base-summand-interface],
