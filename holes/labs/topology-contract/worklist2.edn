@@ -89382,28 +89382,28 @@
   {:consumer :t97A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Replace the zero-map facade with a compiled theorem deriving the cellular boundary operators from the literal OneCircleCover/TwoCircleCover models (or their proved CW/singular chain equivalences), then prove those derived operators vanish. As committed, modelBoundaryOne and modelBoundaryTwo are defined as 0 and modelCellular_zero_boundary_data is tautological; nothing connects them to either model, so this is not new progress toward the frozen homology theorem despite passing build/registry and matching fixture SHA 8452877f....",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "construct topological lifted-arc transports and quotient-model homeomorphisms; compute invariants",
+    "construct lifted transports from the cover and realize selected quotient homeomorphism; compute invariants",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "labeledTwoTransport_actionConnected_iff",
+    [{:name "twoArcModel_exists_of_fiber_transports",
       :type
-      "labeled lifted transports give connected action iff one is nonidentity",
+      "nontrivial actual fiber transports select normalized model",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on ["twoArcActionConnected_iff_nontrivial"],
+      :depends-on ["labeledTwoTransport_actionConnected_iff"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "connected double-cover classification",
       :status :partial,
       :consumers [:t97A03],
-      :depends-on ["labeledTwoTransport_actionConnected_iff"],
+      :depends-on ["twoArcModel_exists_of_fiber_transports"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_invariants_of_model",
       :type "model homology and pi1",
@@ -89415,35 +89415,24 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked actual-fiber transport to labeled two-arc action.",
+    :reason
+    "Banked normalized model selection from actual cardinal-two fiber transports.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "git show --check 160a38138", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792592781548-932-f18ce995",
-     :commands
-     ["git show/diff-tree 160a38138"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint; sha256sum; placeholder scan"],
-     :finding
-     "PASS: topo-6 commit 160a38138 changes only t97A03Closure after history b05db820d; fixture SHA fd220f0b... matches. Labeled monodromy correctly conjugates actual fiber transports through F equiv Fin 2, preserves nonidentity in both directions, and transfers the established two-arc action criterion with correct orientation. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP with compiled sorry-free progress; topological transports, quotient-model homeomorphisms, and invariants remain listed."},
-    :commit "160a38138",
+     {:cmd "git show --check 56a69c3d6", :exit 0}],
+    :commit "56a69c3d6",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
      :sha256
-     "fd220f0bde7da6aed072e370f43f85d2370a2eb4a504c17e37576caeab010a4b"},
+     "64b32a71672619aa7988d2030470f8253a146a12f108dd211b2405b9e52230d6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -98427,7 +98416,8 @@
     :lemma-twoarcactionconnected-iff-nontrivial
     :lemma-fiber-equiv-fin-two
     :lemma-twoarcactionconnected-conjugate
-    :lemma-labeledtwotransport-actionconnected-iff],
+    :lemma-labeledtwotransport-actionconnected-iff
+    :lemma-twoarcmodel-exists-of-fiber-transports],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -100189,4 +100179,22 @@
    :id :lemma-labeledtwotransport-actionconnected-iff,
    :kind :lemma,
    :depends-on [:lemma-twoarcactionconnected-iff-nontrivial],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoArcModel_exists_of_fiber_transports",
+    :type
+    "nontrivial actual fiber transports select normalized model"},
+   :lemma
+   {:name "twoArcModel_exists_of_fiber_transports",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "nontrivial actual fiber transports select normalized model",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-twoarcmodel-exists-of-fiber-transports,
+   :kind :lemma,
+   :depends-on [:lemma-labeledtwotransport-actionconnected-iff],
    :other-consumers []}]}
