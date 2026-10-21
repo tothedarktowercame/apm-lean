@@ -198,12 +198,139 @@ theorem largeInterior_isOpen (n : ℕ) (M : Type)
 /-- **LIBRARY (B3).** Removing the open ball of a collar does not disconnect
 a connected manifold of dimension at least two. -/
 -- BEGIN SEAT AREA
+lemma punctured_pathConnected_aux_first_entry
+    {X : Type} [TopologicalSpace X] [PathConnectedSpace X]
+    {O K : Set X} (hO : IsOpen O) (hK : IsClosed K) (hOK : O ⊆ K)
+    {x k : X} (hx : x ∉ O) (hk : k ∈ K) :
+    ∃ z ∈ K \ O, JoinedIn Oᶜ x z := by
+  classical
+  by_cases hxK : x ∈ K
+  · exact ⟨x, ⟨hxK, hx⟩, JoinedIn.refl hx⟩
+  let γ : Path x k := PathConnectedSpace.somePath x k
+  let S : Set ℝ := {t | t ∈ Set.Icc 0 1 ∧ γ.extend t ∈ K}
+  have hS_closed : IsClosed S :=
+    isClosed_Icc.inter (hK.preimage γ.continuous_extend)
+  have hS_ne : S.Nonempty := by
+    refine ⟨1, ⟨Set.right_mem_Icc.2 zero_le_one, ?_⟩⟩
+    simpa [γ] using hk
+  have hS_bdd : BddBelow S := ⟨0, fun _ ht ↦ ht.1.1⟩
+  let t₀ : ℝ := sInf S
+  have ht₀S : t₀ ∈ S := hS_closed.csInf_mem hS_ne hS_bdd
+  have ht₀_nonneg : 0 ≤ t₀ := ht₀S.1.1
+  have ht₀_le_one : t₀ ≤ 1 := ht₀S.1.2
+  have ht₀_pos : 0 < t₀ := by
+    refine lt_of_le_of_ne ht₀_nonneg (Ne.symm ?_)
+    intro ht
+    apply hxK
+    have : γ.extend 0 ∈ K := by simpa [ht] using ht₀S.2
+    simpa [γ] using this
+  have hleast : ∀ s ∈ S, t₀ ≤ s := (isGLB_csInf hS_ne hS_bdd).1
+  have ht₀_notO : γ.extend t₀ ∉ O := by
+    intro htO
+    have hopen : IsOpen (γ.extend ⁻¹' O) := hO.preimage γ.continuous_extend
+    rcases Metric.isOpen_iff.1 hopen t₀ htO with ⟨ε, hε, hball⟩
+    let s := t₀ - min (t₀ / 2) (ε / 2)
+    have hmin_pos : 0 < min (t₀ / 2) (ε / 2) :=
+      lt_min (half_pos ht₀_pos) (half_pos hε)
+    have hs0 : 0 ≤ s := by
+      dsimp [s]
+      have := min_le_left (t₀ / 2) (ε / 2)
+      linarith
+    have hslt : s < t₀ := by simp [s, hmin_pos]
+    have hs1 : s ≤ 1 := hslt.le.trans ht₀_le_one
+    have hsO : γ.extend s ∈ O := by
+      apply hball
+      rw [Metric.mem_ball, Real.dist_eq]
+      dsimp [s]
+      rw [sub_sub_cancel_left, abs_neg, abs_of_nonneg (le_of_lt hmin_pos)]
+      exact lt_of_le_of_lt (min_le_right _ _) (half_lt_self hε)
+    exact (not_lt_of_ge (hleast s ⟨⟨hs0, hs1⟩, hOK hsO⟩)) hslt
+  refine ⟨γ.extend t₀, ⟨ht₀S.2, ht₀_notO⟩, ?_⟩
+  refine ⟨(γ.truncateOfLE ht₀_nonneg).cast (by simp [γ]) rfl, ?_⟩
+  intro u
+  change γ.extend (min (max (u : ℝ) 0) t₀) ∈ Oᶜ
+  intro huO
+  let s := min (max (u : ℝ) 0) t₀
+  have hs0 : 0 ≤ s := by simp [s, ht₀_nonneg]
+  have hst : s ≤ t₀ := min_le_right _ _
+  have hs1 : s ≤ 1 := hst.trans ht₀_le_one
+  by_cases hst' : s = t₀
+  · exact ht₀_notO (by simpa [s, hst'] using huO)
+  · have hslt : s < t₀ := lt_of_le_of_ne hst hst'
+    exact (not_lt_of_ge
+      (hleast s ⟨⟨hs0, hs1⟩, hOK (by simpa [s] using huO)⟩)) hslt
+
 theorem punctured_pathConnected (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [PathConnectedSpace M]
     [ChartedSpace (E n) M] [IsManifold (I n) (⊤ : ℕ∞) M]
     (c : BallCollar n M) (hopen : IsOpen c.radialTwo) :
     PathConnectedSpace c.Punctured := by
-  sorry
+  classical
+  let O : Set M := c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1}
+  have hO : IsOpen O := by
+    let S₁ : Set (Disk n 2) := {x | dist x.1 0 < 1}
+    let S₂ : Set (Disk n 2) := {x | dist x.1 0 < 2}
+    have hS₁ : IsOpen S₁ := radialRegion_isOpen 1
+    obtain ⟨W, hW, hWpre⟩ := c.largeEmbedding.isInducing.isOpen_iff.mp hS₁
+    have himage : c.largeMap '' S₁ = W ∩ c.largeMap '' S₂ := by
+      ext z
+      constructor
+      · rintro ⟨x, hx, rfl⟩
+        have hxW : c.largeMap x ∈ W := by
+          have : x ∈ c.largeMap ⁻¹' W := hWpre.symm ▸ hx
+          exact this
+        exact ⟨hxW, x, by dsimp [S₁, S₂] at hx ⊢; linarith, rfl⟩
+      · rintro ⟨hzW, x, hx₂, rfl⟩
+        refine ⟨x, ?_, rfl⟩
+        have : x ∈ c.largeMap ⁻¹' W := hzW
+        exact hWpre ▸ this
+    have hunit : O = c.radialUnit := by
+      ext z
+      constructor
+      · rintro ⟨y, hy, rfl⟩
+        exact ⟨unitToLarge n y, hy, c.largeMap_unitToLarge y⟩
+      · rintro ⟨x, hx, rfl⟩
+        let y : Disk n 1 := ⟨x.1, by
+          rw [Metric.mem_closedBall]
+          exact le_of_lt hx⟩
+        refine ⟨y, hx, ?_⟩
+        have hxy : unitToLarge n y = x := Subtype.ext rfl
+        rw [← hxy]
+        exact (c.largeMap_unitToLarge y).symm
+    rw [hunit]
+    change IsOpen (c.largeMap '' S₁)
+    rw [himage]
+    exact hW.inter hopen
+  have hK : IsClosed (Set.range c.smallMap) :=
+    (isCompact_range c.smallEmbedding.continuous).isClosed
+  have hOK : O ⊆ Set.range c.smallMap := Set.image_subset_range _ _
+  let b : Sphere n → M := fun s ↦ (c.boundaryMap s).1
+  have hb : Continuous b := c.continuous_boundaryMap.subtype_val
+  haveI : PathConnectedSpace (Sphere n) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (by
+        rw [← Module.finrank_eq_rank']
+        simpa using (show 1 < n by omega)) 0 (by norm_num))
+  have hS : IsPathConnected (Set.range b) := isPathConnected_range hb
+  have hSO : Set.range b ⊆ Oᶜ := by
+    rintro _ ⟨s, rfl⟩
+    exact (c.boundaryMap s).2
+  have hKO : Set.range c.smallMap \ O ⊆ Set.range b := by
+    rintro _ ⟨⟨y, rfl⟩, hy⟩
+    have hy1 : ¬ dist y.1 0 < 1 := fun h ↦ hy ⟨y, h, rfl⟩
+    have hy2 : dist y.1 0 ≤ 1 := by
+      exact Metric.mem_closedBall.mp y.2
+    have hs : y.1 ∈ Sphere n := by
+      simpa [Metric.mem_sphere] using le_antisymm hy2 (not_lt.mp hy1)
+    exact ⟨⟨y.1, hs⟩, rfl⟩
+  have hP : IsPathConnected Oᶜ := by
+    obtain ⟨s0, hs0⟩ := hS.nonempty
+    refine ⟨s0, hSO hs0, fun {x} hx ↦ ?_⟩
+    obtain ⟨z, hz, hxz⟩ :=
+      punctured_pathConnected_aux_first_entry hO hK hOK hx
+        (Set.mem_range_self (f := c.smallMap) ⟨0, by simp⟩)
+    exact (hxz.trans ((hS.joinedIn _ (hKO hz) _ hs0).mono hSO)).symm
+  exact isPathConnected_iff_pathConnectedSpace.mp hP
 -- END SEAT AREA
 
 /-- **LIBRARY (B4a).** A punctured closed manifold has no top homology. -/
