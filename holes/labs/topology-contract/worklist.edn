@@ -119196,6 +119196,18 @@
      {:cmd
       "git diff --check; sha256sum fixtures/sources; placeholder count",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792621698884-1714-80a9f4d5",
+     :commands
+     ["git show/diff --check e564f99f6"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: e564f99f6 changes only t00J02Closure.lean (+28), adding a compiled, sorry-free canonical disk-bounded H2 endpoint beyond history 0cf80217c. Fixture afb497a6, source 0b3b4888, implementation ec192096; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: it specializes the verified disk-bounded chart-sum endpoint with coefficient equal to regularFiberLocalDegree, preserving zero component sums and the signed surfaceTopDegree identity to conclude homologyMap 2 f = 0. Fiber subtype, occupied components, local degrees, and signs remain definitionally aligned. Axioms are propext, Classical.choice, Quot.sound. Residual milestones are proving canonical sums/top-degree identity from transverse data and replacing the false Producer in Main."},
     :commit "e564f99f6997b6e07de5174038a54d75563dd04b",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked disk-bounded chart-sum H2 endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical disk-bounded H2 endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119611,7 +119623,10 @@
      :reason "Banked exact-lift chart-component zero sums."}
     {:job 1,
      :commit "0cf80217c592b5e6c404d724eddb1d002aeb2f33",
-     :reason "Banked disk-bounded chart-sum H2 endpoint."}]}
+     :reason "Banked disk-bounded chart-sum H2 endpoint."}
+    {:job 2,
+     :commit "e564f99f6997b6e07de5174038a54d75563dd04b",
+     :reason "Banked canonical disk-bounded H2 endpoint."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123270,7 +123285,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_diskBounded_canonicalSums",
@@ -123282,7 +123297,9 @@
     :type
     "disk data plus zero component sums and signed top-degree identity imply H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "e564f99f6997b6e07de5174038a54d75563dd04b"},
    :id :lemma-tophomologymap-eq-zero-of-diskbounded-canonicalsums,
    :kind :lemma,
    :depends-on
