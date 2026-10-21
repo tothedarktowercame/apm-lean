@@ -89431,6 +89431,19 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792622006273-1722-53c86c7a",
+     :commands
+     ["git show/diff c411fc44f"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t97A03 --rev c411fc44f"
+      "sha256sum + placeholder/#print axioms scans"],
+     :finding
+     "PASS: exact commit changes only in-scope Main.lean. Fixture SHA 581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f; registry 170/0; frozen digest abf8282be594bd45bebca6dc29d8b578f4371872506f062166ee2d225b6ca0a4. Fresh exact-revision build and Lean pass; closure/Main placeholders 0/3. New theorem correctly composes decoder-derived injectivity with signed-generation surjectivity to produce the aligned literal cut pi1 equivalence; orientations match both concrete cut arcs and axioms are standard only. This is compiled progress beyond prior history; remaining geometric decoder/generation, collapse injectivity, cover classification, and invariants are listed."},
     :commit "c411fc44f",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89439,7 +89452,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89457,7 +89470,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cut freeness from a geometric decoder.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cut decoder adapter.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89592,7 +89605,10 @@
      :reason "Banked explicit cut-word surjectivity."}
     {:job 5,
      :commit "8d478ed47",
-     :reason "Banked cut freeness from a geometric decoder."}]}
+     :reason "Banked cut freeness from a geometric decoder."}
+    {:job 6,
+     :commit "c411fc44f",
+     :reason "Banked cut decoder adapter."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -101135,7 +101151,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -101147,7 +101163,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "decoder plus arc generation gives aligned cut pi1",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "c411fc44f"},
    :id
    :lemma-apm-t97a03-exists-aligned-cut-pioneequiv-of-decoder-and-generated,
    :kind :lemma,
