@@ -2157,6 +2157,65 @@ theorem connectedSum_mayerVietoris_zero
       (TopCat.of (ConnectedSum c₁ c₂)) 0 (ModuleCat.of ℤ ℤ) eX⟩
 
 /-- **LIBRARY (B9b).** Mayer--Vietoris in the strict middle degrees. -/
+lemma connectedSum_mayerVietoris_middle_aux_overlap_module_zero
+    {n k : ℕ} {X : Type} [TopologicalSpace X]
+    (I : Set X) (e : ContinuousMap.HomotopyEquiv I (Sphere n))
+    (hk0 : k ≠ 0) (hktop : k ≠ n - 1) (hn : 1 ≤ n) :
+    IsZero (H k I) := by
+  have hdim : n - 1 + 1 = n := by omega
+  have hs : IsZero (H k (Sphere n)) := by
+    rw [← hdim]
+    exact ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top
+      (n - 1) k hk0 hktop
+  exact hs.of_iso
+    (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e k)
+
+/-- In the middle degrees the Mayer--Vietoris map out of the overlap vanishes:
+below `n - 1` the overlap (a sphere) has no homology, and in degree `n - 1`
+the two components are the collar boundary maps up to the cover homotopies,
+which vanish by `hboundary₁`, `hboundary₂`. -/
+lemma connectedSum_mayerVietoris_middle_aux_inter_zero
+    (n : ℕ) (hn : 2 ≤ n) {X₁ X₂ : Type}
+    [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (c₁ : BallCollar n X₁) (c₂ : BallCollar n X₂)
+    (hboundary₁ : boundaryHomologyMap c₁ (n - 1) = 0)
+    (hboundary₂ : boundaryHomologyMap c₂ (n - 1) = 0)
+    (U V : Set (ConnectedSum c₁ c₂))
+    (e₁ : ContinuousMap.HomotopyEquiv U c₁.Punctured)
+    (e₂ : ContinuousMap.HomotopyEquiv V c₂.Punctured)
+    (e₀ : ContinuousMap.HomotopyEquiv ↥(U ∩ V) (Sphere n))
+    (he₁ : ContinuousMap.Homotopic
+      (e₁.toFun.comp ((ContinuousMap.inclusion Set.inter_subset_left).comp e₀.invFun))
+      ⟨c₁.boundaryMap, c₁.continuous_boundaryMap⟩)
+    (he₂ : ContinuousMap.Homotopic
+      (e₂.toFun.comp ((ContinuousMap.inclusion Set.inter_subset_right).comp e₀.invFun))
+      ⟨c₂.boundaryMap, c₂.continuous_boundaryMap⟩)
+    (k : ℕ) (hk0 : 0 < k) (hkn : k < n) :
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+      U V k = 0 := by
+  sorry
+
+/-- In the middle degrees the Mayer--Vietoris reassembly map is onto: for
+`2 ≤ k` the overlap has no `H (k - 1)`; for `k = 1` the overlap is nonempty, so
+its `H 0` injects into `H 0 U ⊞ H 0 V`. -/
+lemma connectedSum_mayerVietoris_middle_aux_epi
+    (n : ℕ) (hn : 2 ≤ n) {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V) (hUV : U ∪ V = Set.univ)
+    (e₀ : ContinuousMap.HomotopyEquiv ↥(U ∩ V) (Sphere n))
+    (k : ℕ) (hk0 : 0 < k) (hkn : k < n) :
+    Epi (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V k) := by
+  sorry
+
+/-- An isomorphic reassembly map, transported to integral module homology. -/
+lemma connectedSum_mayerVietoris_middle_aux_assemble
+    {X : Type} [TopologicalSpace X] (U V : Set X) (k : ℕ)
+    [IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V k)]
+    {A B : ModuleCat ℤ} (eu : H k U ≅ A) (ev : H k V ≅ B) :
+    Nonempty (H k X ≅ ModuleCat.of ℤ (A × B)) := by
+  sorry
+
 theorem connectedSum_mayerVietoris_middle
     (n : ℕ) (hn : 2 ≤ n) (X₁ X₂ : Type)
     [TopologicalSpace X₁] [TopologicalSpace X₂]
@@ -2172,7 +2231,22 @@ theorem connectedSum_mayerVietoris_middle
     (hcover : HasStandardCover c₁ c₂) :
     ∀ k, 0 < k → k < n → Nonempty (H k (ConnectedSum c₁ c₂) ≅
       ModuleCat.of ℤ ((H k X₁) × (H k X₂))) := by
-  sorry
+  intro k hk0 hkn
+  rcases hcover with ⟨U, V, hU, hV, hUV, e₁, e₂, e₀, he₁, he₂⟩
+  haveI : Mono (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V k) :=
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+      U V hU hV hUV k).mono_g_iff.mpr
+      (connectedSum_mayerVietoris_middle_aux_inter_zero n hn c₁ c₂ hboundary₁ hboundary₂
+        U V e₁ e₂ e₀ he₁ he₂ k hk0 hkn)
+  haveI := connectedSum_mayerVietoris_middle_aux_epi n hn U V hU hV hUV e₀ k hk0 hkn
+  haveI : IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V k) := isIso_of_mono_of_epi _
+  exact connectedSum_mayerVietoris_middle_aux_assemble U V k
+    ((ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e₁ k).trans
+      (Classical.choice (hpunct₁.1 k hk0 hkn)))
+    ((ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e₂ k).trans
+      (Classical.choice (hpunct₂.1 k hk0 hkn)))
 
 /-- **LIBRARY (B9c).** Mayer--Vietoris above the manifold dimension. -/
 theorem connectedSum_mayerVietoris_above
