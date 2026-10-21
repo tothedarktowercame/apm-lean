@@ -36753,6 +36753,20 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792598097941-1083-27e97db0",
+     :commands
+     ["git show --stat/--format=fuller 471bcbc269c52df17fd68df7a4b4f8f0b898b78b"
+      "git diff --check 471bcbc269^ 471bcbc269"
+      "git show 471bcbc269:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "rg -n \\b(sorry|admit|axiom)\\b ConstructionTargets/t99J05Closure.lean"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Recorded commit 471bcbc269 changes only the scoped closure file; its SHA-256 is the recorded 8398d3360483f65f31f3966ef901cd2fd0c01bf9971becb235d3f732a3a6c28b. The overlap proof splits k into 0, below top, top, and above top with correct sphere dimension 2n+1; H0/top equivalences have the needed orientation, while vanishing transports across the affine and overlap isomorphisms before finite-dimensionality follows from subsingletons. Closure/Main compile, registry is 170/170, placeholder delta remains 0, and only standard axioms occur. This is new compiled program progress; remaining successor top/even equivalences are listed."},
     :commit "471bcbc269",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36761,7 +36775,7 @@
      "8398d3360483f65f31f3966ef901cd2fd0c01bf9971becb235d3f732a3a6c28b"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36779,7 +36793,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked top-patch contractibility and finite homology; top/even cases remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked all-degree overlap finite-dimensionality; successor exact-sequence top/even equivalences remain.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36974,7 +36988,11 @@
     {:job 8,
      :commit "a3f2f7efa6",
      :reason
-     "Banked top-patch contractibility and finite homology; top/even cases remain."}]}
+     "Banked top-patch contractibility and finite homology; top/even cases remain."}
+    {:job 9,
+     :commit "471bcbc269",
+     :reason
+     "Banked all-degree overlap finite-dimensionality; successor exact-sequence top/even equivalences remain."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49129,7 +49147,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_overlap_finiteDimensional",
@@ -49141,7 +49159,9 @@
     :type
     "successor overlap homology is finite-dimensional in every degree",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "471bcbc269"},
    :id :lemma-t99j05-cp-successor-overlap-finitedimensional,
    :kind :lemma,
    :depends-on
