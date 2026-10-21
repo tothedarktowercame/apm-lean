@@ -152,6 +152,36 @@ theorem exists_nhds_corrected_rightInverse
 
 #print axioms exists_nhds_corrected_rightInverse
 
+/-- The corrected right inverses vary smoothly on the neighborhood where the
+fixed derivative composite remains invertible. -/
+theorem exists_nhds_contDiffOn_corrected_rightInverse
+    {Z : Type} [NormedAddCommGroup Z] [NormedSpace ℝ Z] {n m : ℕ}
+    (A : Z → E n →L[ℝ] E m) (x₀ : Z) (R : E m →L[ℝ] E n)
+    (hA : ContDiff ℝ ∞ A)
+    (hAR : (A x₀).comp R = ContinuousLinearMap.id ℝ (E m)) :
+    ∃ U ∈ nhds x₀, ∃ Q : Z → E m →L[ℝ] E n,
+      ContDiffOn ℝ ∞ Q U ∧
+        ∀ x ∈ U, (A x).comp (Q x) = ContinuousLinearMap.id ℝ (E m) := by
+  obtain ⟨U, hU, hinv⟩ :=
+    exists_nhds_isInvertible_comp_rightInverse A x₀ R hA.continuous.continuousAt hAR
+  let B : Z → E m →L[ℝ] E m := fun x ↦ (A x).comp R
+  let Q : Z → E m →L[ℝ] E n :=
+    fun x ↦ R.comp (ContinuousLinearMap.inverse (B x))
+  refine ⟨U, hU, Q, ?_, ?_⟩
+  · intro x hx
+    have hB : ContDiffAt ℝ ∞ B x :=
+      hA.contDiffAt.clm_comp contDiffAt_const
+    have hi : ContDiffAt ℝ ∞ ContinuousLinearMap.inverse (B x) :=
+      (hinv x hx).contDiffAt_map_inverse
+    exact (contDiffAt_const.clm_comp (hi.comp x hB)).contDiffWithinAt
+  · intro x hx
+    change (A x).comp (R.comp (ContinuousLinearMap.inverse (B x))) = _
+    rw [← ContinuousLinearMap.comp_assoc]
+    change (B x).comp (ContinuousLinearMap.inverse (B x)) = _
+    exact (hinv x hx).self_comp_inverse
+
+#print axioms exists_nhds_contDiffOn_corrected_rightInverse
+
 /-- Applying the smoothly varying right inverse to a smooth target-coordinate
 vector gives the source-coordinate lift used in a submersion chart. -/
 theorem contDiff_lift_of_comp_isInvertible
