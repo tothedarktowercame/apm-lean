@@ -2,6 +2,7 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.t97A03Closure
 
 /-!
 # APM t97A03
@@ -201,6 +202,47 @@ noncomputable def apm_t97A03_secondLiteralLoop (A B : Circle) :
 @[simp] lemma apm_t97A03_secondLiteralLoop_one (A B : Circle) :
     apm_t97A03_secondLiteralLoop A B 1 = apm_t97A03_baseCircle A B A :=
   (apm_t97A03_secondLiteralLoop A B).target
+
+/-- Fiber transport along the first fixed literal quotient loop. -/
+noncomputable def apm_t97A03_firstLiteralTransport
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p) :
+    Equiv.Perm (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) :=
+  ConstructionTargets.t97A03Closure.coveringPathFiberEquiv p hp
+    (Quotient.mk'' (apm_t97A03_firstLiteralLoop A B))
+
+/-- Fiber transport along the second fixed literal quotient loop. -/
+noncomputable def apm_t97A03_secondLiteralTransport
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p) :
+    Equiv.Perm (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) :=
+  ConstructionTargets.t97A03Closure.coveringPathFiberEquiv p hp
+    (Quotient.mk'' (apm_t97A03_secondLiteralLoop A B))
+
+/-- Once literal-loop generation supplies a moved endpoint, the existing
+finite classifier applies to precisely the two geometric arc transports. -/
+theorem apm_t97A03_literal_transports_select_model
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (hmoved : (∃ e, apm_t97A03_firstLiteralTransport p hp e ≠ e) ∨
+      ∃ e, apm_t97A03_secondLiteralTransport p hp e ≠ e) :
+    ∃ label : (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) ≃ Fin 2,
+      ∃ firstSwaps secondSwaps model,
+        ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+            (apm_t97A03_firstLiteralTransport p hp) =
+          (if firstSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+        ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+            (apm_t97A03_secondLiteralTransport p hp) =
+          (if secondSwaps then Equiv.swap 0 1 else Equiv.refl (Fin 2)) ∧
+        ((model = ConstructionTargets.t97A03Closure.DoubleCoverModel.oneCircle ∧
+            ∃ swapArcs : Bool,
+              (if swapArcs then (secondSwaps, firstSwaps)
+                else (firstSwaps, secondSwaps)) = (true, false)) ∨
+          (model = ConstructionTargets.t97A03Closure.DoubleCoverModel.twoCircle ∧
+            firstSwaps = true ∧ secondSwaps = true)) := by
+  exact ConstructionTargets.t97A03Closure.twoArcModel_exists_of_moved_covering_loop
+    p hp hdegree _ _ _ hmoved
 
 def apm_t97A03_circleOne : Circle := ⟨1, by simp⟩
 def apm_t97A03_circleNegOne : Circle := ⟨-1, by
