@@ -91,7 +91,21 @@ theorem transportHomology {X₁ X₂ : Type}
       ModuleCat.of ℤ ((t98A02H k X₁) × (t98A02H k X₂)))) ∧
     Nonempty (t98A02H 4 Y ≅ ModuleCat.of ℤ ℤ) ∧
     (∀ k, 5 ≤ k → Limits.IsZero (t98A02H k Y)) := by
-  sorry
+  dsimp
+  rcases h with ⟨hzero, hmiddle, htop, habove⟩
+  let F (k : ℕ) :=
+    (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)
+  have he (k : ℕ) : t98A02H k (T98A02ConnectedSum φ₁ φ₂) ≅
+      H k (ConnectedSum c₁ c₂) :=
+    (F k).mapIso (TopCat.isoOfHomeo e)
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact hzero.map fun i ↦ he 0 ≪≫ i
+  · intro k hk₁ hk₃
+    exact (hmiddle k (by omega) (by omega)).map fun i ↦ he k ≪≫ i
+  · exact htop.map fun i ↦ he 4 ≪≫ i
+  · intro k hk
+    exact Limits.IsZero.of_iso (habove k (by omega)) (he k)
 -- END SEAT AREA
 
 end T98A02Adapter
