@@ -322,6 +322,53 @@ lemma apm_t97A03_circleArcs_ne (A B : Circle) :
     simpa using hm
   exact Circle.exp_pi_ne_one hpi.symm
 
+/-- Rotation by `A⁻¹` sends the first genuine complementary arc to an arc
+from the normalized point `1` to the relative marked point `A⁻¹ * B`. -/
+noncomputable def apm_t97A03_normalizedCircleArc (A B : Circle) :
+    Path (1 : Circle) (A⁻¹ * B) :=
+  ((apm_t97A03_circleArc A B).map
+    (continuous_const.mul continuous_id)).cast (by simp) rfl
+
+/-- The other genuine complementary arc in the same normalized coordinates. -/
+noncomputable def apm_t97A03_normalizedComplementaryCircleArc (A B : Circle) :
+    Path (1 : Circle) (A⁻¹ * B) :=
+  ((apm_t97A03_complementaryCircleArc A B).map
+    (continuous_const.mul continuous_id)).cast (by simp) rfl
+
+/-- Normalization preserves the fact that the two literal arcs are genuinely
+different; it does not replace one of them by a constant path. -/
+lemma apm_t97A03_normalizedCircleArcs_ne (A B : Circle) :
+    apm_t97A03_normalizedCircleArc A B ≠
+      apm_t97A03_normalizedComplementaryCircleArc A B := by
+  intro h
+  apply apm_t97A03_circleArcs_ne A B
+  ext t
+  have ht := congrArg (fun p : Path (1 : Circle) (A⁻¹ * B) ↦ p t) h
+  change A⁻¹ * apm_t97A03_circleArc A B t =
+    A⁻¹ * apm_t97A03_complementaryCircleArc A B t at ht
+  have ht' := congrArg (fun z : Circle ↦ A * z) ht
+  simpa [mul_assoc] using ht'
+
+/-- The quotient normalization carries the first literal arc pointwise to
+its normalized representative. -/
+lemma apm_t97A03_normalize_firstArc (A B : Circle) (t : unitInterval) :
+    apm_t97A03_normalizeCutCircle A B
+        (apm_t97A03_cutCircleMap A B (apm_t97A03_circleArc A B t)) =
+      apm_t97A03_cutCircleMap 1 (A⁻¹ * B)
+        (apm_t97A03_normalizedCircleArc A B t) := by
+  rfl
+
+/-- The same literal quotient map carries the complementary arc pointwise;
+both normalized generators therefore come from the actual gluing circle. -/
+lemma apm_t97A03_normalize_complementaryArc
+    (A B : Circle) (t : unitInterval) :
+    apm_t97A03_normalizeCutCircle A B
+        (apm_t97A03_cutCircleMap A B
+          (apm_t97A03_complementaryCircleArc A B t)) =
+      apm_t97A03_cutCircleMap 1 (A⁻¹ * B)
+        (apm_t97A03_normalizedComplementaryCircleArc A B t) := by
+  rfl
+
 /-- The chosen literal circle arc mapped into the adjunction quotient. -/
 noncomputable def apm_t97A03_baseCircleArc (A B : Circle) :
     Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B B) :=
