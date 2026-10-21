@@ -119197,6 +119197,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hashes/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792609590671-1364-6fe1c805",
+     :commands
+     ["git show/diff 1ef447dd"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 1ef447dd changes only t00J02Closure.lean (+47), adding a compiled fixed-target-chart regular-value theorem after prior history 88263036. Fixture afb497a6, source 0b3b4888, implementation d17cdb6b; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the nonempty open chart target has nonzero Haar measure while the chart-critical image is null, so a coordinate v outside it exists. Its chart inverse z is regular: any non-surjective mfderiv at a point over z would, via the chart derivative iff, put v in the excluded image. Chart right-inverse/source conditions are explicit. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; incidence specialization, signed counts, and final assembly remain listed."},
     :commit "1ef447dd9b8c48b78d6c356c32180fa3ae68c999",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked regular-value selector.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked fixed-chart regular value.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119576,7 +119588,10 @@
      :reason "Banked global critical-value nullity."}
     {:job 7,
      :commit "882630364cb2fec87f25b26d2c7806ddf21849b9",
-     :reason "Banked regular-value selector."}]}
+     :reason "Banked regular-value selector."}
+    {:job 8,
+     :commit "1ef447dd9b8c48b78d6c356c32180fa3ae68c999",
+     :reason "Banked fixed-chart regular value."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122847,7 +122862,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_mfderiv_surjective_fiber_of_fixedTargetChart",
@@ -122857,7 +122872,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "one target chart contains a regular value",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1ef447dd9b8c48b78d6c356c32180fa3ae68c999"},
    :id :lemma-exists-mfderiv-surjective-fiber-of-fixedtargetchart,
    :kind :lemma,
    :depends-on
@@ -122866,13 +122883,15 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "mfderiv_targetChart_comp_surjective_iff_of_mem_source"},
    :lemma
    {:name "mfderiv_targetChart_comp_surjective_iff_of_mem_source",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-mfderiv-targetchart-comp-surjective-iff-of-mem-source,
    :kind :lemma,
    :depends-on [],
