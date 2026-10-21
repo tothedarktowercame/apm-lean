@@ -119152,68 +119152,61 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove identities; assemble H2 nullity; replace false Producer.",
+    "Prove transverse comparison and top-degree formula; assemble H2 and Main.",
     :outcome :stop,
     :warnings ["Main sorry" "review dirs"],
     :missing-theorems
-    [{:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
-      :type "zero canonical component sums",
-      :status :partial,
+    [{:name "canonicalComponentSums_eq_zero_of_diskBounded_comparison",
+      :type "comparison gives zero sums",
+      :status :proved,
       :consumers [:t00J02],
       :depends-on ["occupiedRegularFiber_exactZeroDegreeLifts"],
       :area "oriented-surface-degree"}
-     {:name "regularFiber_surfaceTopDegree_eq_signedSum",
-      :type "top degree equals signed fiber sum",
-      :status :partial,
-      :consumers [:t00J02],
-      :depends-on ["regularFiberLocalDegree_localization_eq"],
-      :area "oriented-surface-degree"}
-     {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
-      :type "H2 map zero",
+     {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
+      :type "derive comparison",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["transverseDiskBounded_canonicalComponentSums_eq_zero"
-       "regularFiber_surfaceTopDegree_eq_signedSum"],
+      ["canonicalComponentSums_eq_zero_of_diskBounded_comparison"],
+      :area "oriented-surface-degree"}
+     {:name "regularFiber_surfaceTopDegree_eq_signedSum",
+      :type "top degree fiber formula",
+      :status :partial,
+      :consumers [:t00J02],
+      :depends-on ["regularFiberLocalDegree_localization_eq"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "41a91d6e9b11b348fe277f27cca9512d343ffd1523c277b7aa44ddb4d346d942",
+     "d57a417896cab232f977e3f88d6c77f3775fc9b8f8e1e1032649ca964e9336bc",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Geometric identities remain; no facade added.",
+    :reason "Banked disk-bounded canonical sums.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
-     {:cmd "Main compile; registry; hashes; placeholders; diff-check",
+     {:cmd "Main compile; registry; diff; hashes; placeholders",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "topo-3",
-     :job "invoke-1792624206248-1777-9349ec23",
-     :finding
-     "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty"},
-    :commit "fe7396763a54bedb319f5ac9593c282b0665d6cb",
-    :changed-paths [],
+    :commit "11cac6eb07d8de9d4ceec86403e416c2637ceb60",
+    :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
      :sha256
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -123370,7 +123363,9 @@
     :area "oriented-surface-degree"},
    :id :lemma-transversediskbounded-canonicalcomponentsums-eq-zero,
    :kind :lemma,
-   :depends-on [:lemma-occupiedregularfiber-exactzerodegreelifts],
+   :depends-on
+   [:lemma-occupiedregularfiber-exactzerodegreelifts
+    :lemma-canonicalcomponentsums-eq-zero-of-diskbounded-comparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123387,6 +123382,23 @@
    :id :lemma-regularfiber-surfacetopdegree-eq-signedsum,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "canonicalComponentSums_eq_zero_of_diskBounded_comparison",
+    :type "comparison gives zero sums"},
+   :lemma
+   {:name "canonicalComponentSums_eq_zero_of_diskBounded_comparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "comparison gives zero sums",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-canonicalcomponentsums-eq-zero-of-diskbounded-comparison,
+   :kind :lemma,
+   :depends-on [:lemma-occupiedregularfiber-exactzerodegreelifts],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
