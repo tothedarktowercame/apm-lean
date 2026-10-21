@@ -88732,6 +88732,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 0}
      {:cmd "git show --check 152916486", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792582063863-684-e0bfc872",
+     :commands
+     ["git show/check/hash 152916486"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "statement-registry check/fingerprint t94J09"
+      "placeholder/axiom/orientation inspection"],
+     :finding
+     "PASS: reviewed 152916486 by topo-6, new after 8d6fcccd8; patch scope only t94J09Closure (+19). Fixture fa159b3d... matches; registry 170/0; frozen t94J09 digest 52b4778c...; closure/Main placeholders 0/0. Fresh detached build and Main compile pass. The exactness-style condition ker c=bot correctly yields injectivity via ker_eq_bot; six basis preimages then yield the correctly oriented underlying-H1 ~= Fin6 equivalence. Axioms only propext, Classical.choice, Quot.sound. STOP is valid new sorry-free progress and lists coordinate kernel/basis proofs, homology, normalization milestones."},
     :commit "152916486",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88740,7 +88752,7 @@
      "fa159b3d3ffa7bcc80c89f0311d015729857e185b46bfe12d5fc63eb0e65a774"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88758,7 +88770,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked injective-basis adapter.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked kernel-basis adapter.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89075,7 +89087,10 @@
     {:job 5, :commit "9248aabf8", :reason "Banked basis."}
     {:job 6,
      :commit "8d6fcccd8",
-     :reason "Banked injective-basis adapter."}]}
+     :reason "Banked injective-basis adapter."}
+    {:job 7,
+     :commit "152916486",
+     :reason "Banked kernel-basis adapter."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99868,7 +99883,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -99880,7 +99895,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "zero kernel+basis preimages imply H1 iso",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "152916486"},
    :id
    :lemma-frozenboundarygraphh1cyclecomparison-of-coordinate-kernel-basis,
    :kind :lemma,
