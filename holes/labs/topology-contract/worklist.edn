@@ -119152,61 +119152,49 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct chart-to-exact-lift comparison and chart top-degree identity; replace false Producer path in Main.",
+    "Construct chart-to-exact-lift equality and chart top-degree identity; replace false Producer in Main.",
     :outcome :stop,
     :warnings ["Main sorry" "unrelated dirt preserved"],
     :missing-theorems
-    [{:name "chartComponentSums_eq_zero_of_exactLiftComparison",
-      :type "exact-lift comparison forces chart component sums zero",
+    [{:name "topHomologyMap_eq_zero_of_exactLiftComparison",
+      :type "exact-lift comparison and chart identity imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["exactLiftComponentDegree_eq_zero"],
+      :depends-on
+      ["chartComponentSums_eq_zero_of_exactLiftComparison"
+       "topHomologyMap_eq_zero_of_chartComponentSums"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["chartComponentSums_eq_zero_of_exactLiftComparison"
-       "topHomologyMap_eq_zero_of_chartComponentSums"],
+      :depends-on ["topHomologyMap_eq_zero_of_exactLiftComparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "19b4fc00dd4a0e97162f61b785fa4a6d1a62319d5be5aea9465ee8305e87f8c7",
+     "ffa0d053e3e20477adb1caa2e86efa26c66dc6406c3cf834a3186ebed8a0e475",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked exact-lift chart-component zero sums.",
+    :reason "Banked exact-lift H2 endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792619314293-1639-d89f6106",
-     :commands
-     ["git show/diff --check e9f45ab04"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: e9f45ab04 changes only t00J02Closure.lean (+18), adding compiled, sorry-free exact-lift chart-sum vanishing beyond history 1c4ee3675. Fixture afb497a6, source 0b3b4888, implementation 19b4fc00; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: each chart component sum equals its exact-lift component degree, which the established zero-degree lemma sends to zero. Fiber subtype, occupied-component index, lift family, and integer coefficient representations are unchanged. Axioms are propext, Classical.choice, Quot.sound. Evidence lists constructing the chart-to-exact-lift comparison and chart top-degree identity, then replacing the false Producer path in Main."},
-    :commit "e9f45ab047bf88ab8309778f4af98439f13e8006",
+    :commit "9a915247d9e30db6515849f106b5f1025fa8ce24",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119214,7 +119202,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119939,7 +119927,8 @@
     :lemma-canonicaltopdegreeformula-of-chartsignedsum
     :lemma-surfacetopdegree-eq-zero-of-chartcomponentsums
     :lemma-tophomologymap-eq-zero-of-chartcomponentsums
-    :lemma-chartcomponentsums-eq-zero-of-exactliftcomparison],
+    :lemma-chartcomponentsums-eq-zero-of-exactliftcomparison
+    :lemma-tophomologymap-eq-zero-of-exactliftcomparison],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123211,6 +123200,25 @@
    :id :lemma-chartcomponentsums-eq-zero-of-exactliftcomparison,
    :kind :lemma,
    :depends-on [:lemma-exactliftcomponentdegree-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_exactLiftComparison",
+    :type "exact-lift comparison and chart identity imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_exactLiftComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "exact-lift comparison and chart identity imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-tophomologymap-eq-zero-of-exactliftcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-chartcomponentsums-eq-zero-of-exactliftcomparison
+    :lemma-tophomologymap-eq-zero-of-chartcomponentsums],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
