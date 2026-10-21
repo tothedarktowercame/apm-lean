@@ -89421,6 +89421,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "git show --check 24ff67fb4", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792587097104-793-80b1009e",
+     :commands
+     ["git show/diff-tree 24ff67fb4"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t97A03 --rev 24ff67fb4"
+      "sha256sum + rg placeholder counts"],
+     :finding
+     "PASS: topo-6 commit 24ff67fb4 changes only t97A03Closure; fixture SHA 3305a893... matches. New theorem correctly normalizes both Fin 2 permutations, transports nontriviality, and selects the prior Boolean model with orientations preserved. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; axioms standard only. Valid program STOP with new compiled sorry-free progress after history job 3; geometry realization and invariants remain listed."},
     :commit "24ff67fb4",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89429,7 +89442,7 @@
      "3305a8933075f3411d8efd289181fba60babe1474db5b860235710cc1f7bfaca"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89447,7 +89460,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked two-point permutation normal form.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked two-arc permutation model selection.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89464,7 +89477,10 @@
      :reason "Banked finite two-arc monodromy classification."}
     {:job 3,
      :commit "859cba71a",
-     :reason "Banked two-point permutation normal form."}]}
+     :reason "Banked two-point permutation normal form."}
+    {:job 4,
+     :commit "24ff67fb4",
+     :reason "Banked two-arc permutation model selection."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -99950,7 +99966,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcPermMonodromy_model_exists",
@@ -99962,7 +99978,9 @@
     :type
     "two nontrivial Fin2 arc permutations select a Boolean cover model",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "24ff67fb4"},
    :id :lemma-twoarcpermmonodromy-model-exists,
    :kind :lemma,
    :depends-on
