@@ -89429,6 +89429,18 @@
      {:cmd "scans", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "quotient homotopy"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792616313120-1541-91cadfb8",
+     :commands
+     ["git show/diff 267526391"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint/hash/placeholder/axiom audits"],
+     :finding
+     "PASS: 267526391 follows e45d77243 and changes only Main.lean. Fixture 581ffddb..., frozen digest abf8282b..., registry 170/0, placeholders closure/Main 0/3; gates compile. New sorry-free standard-axiom progress composes each actual collapsed arc with the collapsed return and proves its class equals the corresponding cut generator via transRefl. Induced full-loop alignment/pi1 equivalence, model realization, and invariants remain listed."},
     :commit "267526391",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89437,7 +89449,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89455,7 +89467,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact alignment of both collapsed arcs.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked collapsed arc-return classes.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89569,7 +89581,10 @@
      :reason "Banked the collapsed sphere-return identity."}
     {:job 7,
      :commit "e45d77243",
-     :reason "Banked exact alignment of both collapsed arcs."}]}
+     :reason "Banked exact alignment of both collapsed arcs."}
+    {:job 8,
+     :commit "267526391",
+     :reason "Banked collapsed arc-return classes."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100907,7 +100922,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_collapsedLiteralClasses_eq_generators",
@@ -100917,7 +100932,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "arc-return classes",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "267526391"},
    :id :lemma-apm-t97a03-collapsedliteralclasses-eq-generators,
    :kind :lemma,
    :depends-on [:lemma-apm-t97a03-collapsedarcclasses-eq-generators],
