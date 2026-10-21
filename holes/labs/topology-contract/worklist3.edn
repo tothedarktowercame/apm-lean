@@ -36749,6 +36749,20 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792618976164-1631-b6c10051",
+     :commands
+     ["git show/diff 94be7d201"
+      "sha256sum recorded blob"
+      "git diff --check 94be7d201^ 94be7d201"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "rg placeholder count"],
+     :finding
+     "PASS: commit 94be7d201 changes only t99J05Closure; blob hash matches 00d20b...10eb. Fresh detached-commit gates pass; registry 170/170, placeholders 0, axioms standard. Cylinder endpoints orient f at 0 and g at 1; TopCat->SSet->singular-homology representation chain matches induced. Compiled homotopy-invariance milestone is new since history; C4/Lefschetz-Euler assembly remains."},
     :commit "94be7d201",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36757,7 +36771,7 @@
      "00d20b64042a169b98d6a24d8422ab29822c23a1313f5d3720875e0348c610eb"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36775,7 +36789,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the alternating CP Betti sum; homotopy transport and C4 assembly remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked homotopy invariance of rational singular homology; C4 assembly remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37025,7 +37039,11 @@
     {:job 4,
      :commit "ff74eb5dc15fa11067b98c0a3dfb6a20538651e2",
      :reason
-     "Banked the alternating CP Betti sum; homotopy transport and C4 assembly remain."}]}
+     "Banked the alternating CP Betti sum; homotopy transport and C4 assembly remain."}
+    {:job 5,
+     :commit "94be7d201",
+     :reason
+     "Banked homotopy invariance of rational singular homology; C4 assembly remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49687,7 +49705,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_induced_eq_of_homotopic",
@@ -49697,7 +49715,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "homotopic maps induce equal rational homology maps",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "94be7d201"},
    :id :lemma-t99j05-induced-eq-of-homotopic,
    :kind :lemma,
    :depends-on [],
