@@ -1103,7 +1103,48 @@ theorem connectedSum_mayerVietoris_zero
     (hzero₂ : Nonempty (H 0 c₂.Punctured ≅ ModuleCat.of ℤ ℤ))
     (hcover : HasStandardCover c₁ c₂) :
     Nonempty (H 0 (ConnectedSum c₁ c₂) ≅ ModuleCat.of ℤ ℤ) := by
-  sorry
+  rcases hcover with ⟨U, V, hU, hV, hUV, e₁, e₂, e₀, he₁, he₂⟩
+  let p₁ := Classical.choice hzero₁
+  let p₂ := Classical.choice hzero₂
+  let eUmod : H 0 U ≅ ModuleCat.of ℤ ℤ :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e₁ 0 ≪≫ p₁
+  let eVmod : H 0 V ≅ ModuleCat.of ℤ ℤ :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e₂ 0 ≪≫ p₂
+  let eSmod : H 0 (Sphere n) ≅ ModuleCat.of ℤ ℤ :=
+    by
+      have hdim : n - 1 + 1 = n := by omega
+      rw [← hdim]
+      exact ConstructionTargets.SphereHomology.sphereModuleH0IsoInt
+        (n - 1) (by omega)
+  let eImod : H 0 (U ∩ V : Set (ConnectedSum c₁ c₂)) ≅
+      ModuleCat.of ℤ ℤ :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e₀ 0 ≪≫ eSmod
+  letI : Nonempty U :=
+    ConstructionTargets.SingularH0Augmentation.nonempty_of_module_singularH0_iso_int eUmod
+  letI : Nonempty V :=
+    ConstructionTargets.SingularH0Augmentation.nonempty_of_module_singularH0_iso_int eVmod
+  letI : Nonempty (U ∩ V : Set (ConnectedSum c₁ c₂)) :=
+    ConstructionTargets.SingularH0Augmentation.nonempty_of_module_singularH0_iso_int eImod
+  let eU :=
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of U) 0).symm ≪≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso eUmod
+  let eV :=
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of V) 0).symm ≪≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso eVmod
+  let eI :=
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (U ∩ V : Set (ConnectedSum c₁ c₂))) 0).symm ≪≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso eImod
+  let eX :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.openCoverH0IsoOfCoordinates
+      U V hU hV hUV eI eU eV
+  exact ⟨ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of (ConnectedSum c₁ c₂)) 0 (ModuleCat.of ℤ ℤ) eX⟩
 
 /-- **LIBRARY (B9b).** Mayer--Vietoris in the strict middle degrees. -/
 theorem connectedSum_mayerVietoris_middle
