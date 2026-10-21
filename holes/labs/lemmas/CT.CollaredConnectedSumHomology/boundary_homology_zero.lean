@@ -355,6 +355,38 @@ theorem boundary_homology_zero (n : ℕ) (hn : 2 ≤ n) (M : Type)
 -- END SEAT AREA
 
 /-- **LIBRARY (B5).** Integral homology of a collared puncture. -/
+lemma punctured_homology_aux_H0 {n : ℕ} {M : Type} [TopologicalSpace M]
+    (c : BallCollar n M) [PathConnectedSpace c.Punctured] :
+    Nonempty (H 0 c.Punctured ≅ ModuleCat.of ℤ ℤ) := by
+  let p : c.Punctured := Classical.choice inferInstance
+  let q := ConstructionTargets.T02A06SphereH0.singularVertexH0Class p
+  letI : Epi q :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_epi p
+  letI : Mono q :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_mono p
+  letI : IsIso q := isIso_of_mono_of_epi q
+  exact ⟨ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of c.Punctured) 0 (ModuleCat.of ℤ ℤ) (asIso q).symm⟩
+
+lemma punctured_homology_aux_middle (n : ℕ) (hn : 2 ≤ n) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    ∀ k, 0 < k → k < n → Nonempty (H k c.Punctured ≅ H k M) := by
+  sorry
+
+lemma punctured_homology_aux_above (n : ℕ) (hn : 2 ≤ n) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (habove : ∀ k, n < k → IsZero (H k M))
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured)
+    (htopzero : IsZero (H n c.Punctured)) :
+    ∀ k, n ≤ k → IsZero (H k c.Punctured) := by
+  sorry
+
 theorem punctured_homology (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E n) M]
@@ -366,10 +398,67 @@ theorem punctured_homology (n : ℕ) (hn : 2 ≤ n) (M : Type)
     Nonempty (H 0 c.Punctured ≅ ModuleCat.of ℤ ℤ) ∧
       (∀ k, 0 < k → k < n → Nonempty (H k c.Punctured ≅ H k M)) ∧
       (∀ k, n ≤ k → IsZero (H k c.Punctured)) := by
-  sorry
+  letI : PathConnectedSpace c.Punctured := hpath
+  exact ⟨punctured_homology_aux_H0 c,
+    punctured_homology_aux_middle n hn M c htop hopen hpath,
+    punctured_homology_aux_above n hn M c habove hopen hpath htopzero⟩
 
 /-- **LIBRARY (B6).** The fundamental group is unchanged by puncturing a
 three-manifold along a collared ball. -/
+lemma punctured_fundamentalGroup_three_aux_of_hequiv
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x : X) (y : Y) (e : ContinuousMap.HomotopyEquiv X Y)
+    (p : Path (e.toFun x) y) :
+    Nonempty (FundamentalGroup X x ≃* FundamentalGroup Y y) := by
+  exact ⟨((FundamentalGroupoidFunctor.equivOfHomotopyEquiv e).fullyFaithfulFunctor.mulEquivEnd
+    (FundamentalGroupoid.mk x)).trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath p)⟩
+
+noncomputable def punctured_fundamentalGroup_three_aux_coprod_trivial
+    (G H : Type) [Group G] [Group H] [Subsingleton H] :
+    Monoid.Coprod G H ≃* G where
+  toFun := Monoid.Coprod.lift (MonoidHom.id G) 1
+  invFun := Monoid.Coprod.inl
+  left_inv x := by
+    have h : (Monoid.Coprod.inl : G →* Monoid.Coprod G H).comp
+        (Monoid.Coprod.lift (MonoidHom.id G) 1) = MonoidHom.id _ := by
+      apply Monoid.Coprod.hom_ext
+      · ext g; simp
+      · ext h; simp [Subsingleton.elim h 1]
+    exact DFunLike.congr_fun h x
+  right_inv g := by simp
+  map_mul' := map_mul _
+
+lemma punctured_fundamentalGroup_three_aux_subsingleton
+    {X : Type} [TopologicalSpace X] [SimplyConnectedSpace X] (x : X) :
+    Subsingleton (FundamentalGroup X x) :=
+  ⟨fun a b => by
+    unfold FundamentalGroup at a b ⊢
+    exact Subsingleton.elim (α := Path.Homotopic.Quotient x x) a b⟩
+
+lemma punctured_fundamentalGroup_three_aux_cover (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M] [PathConnectedSpace M]
+    [ChartedSpace (E 3) M] [IsManifold (I 3) (⊤ : ℕ∞) M]
+    (c : BallCollar 3 M) (s : Sphere 3)
+    (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
+    ∃ (U V : Set M) (hU : IsOpen U) (hV : IsOpen V),
+      U ∪ V = Set.univ ∧
+      ∃ (hu : (c.boundaryMap s).1 ∈ U) (hv : (c.boundaryMap s).1 ∈ V),
+        PathConnectedSpace U ∧ SimplyConnectedSpace V ∧
+        SimplyConnectedSpace (U ∩ V : Set M) ∧
+        ∃ e : ContinuousMap.HomotopyEquiv c.Punctured U,
+          Joined (e.toFun (c.boundaryMap s)) ⟨c.boundaryMap s, hu⟩ := by
+  sorry
+
+lemma punctured_fundamentalGroup_three_aux_van_kampen
+    {X : Type} [TopologicalSpace X] [PathConnectedSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (x : X) (hxU : x ∈ U) (hxV : x ∈ V)
+    (y : X) [PathConnectedSpace U] [SimplyConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    Nonempty (FundamentalGroup U ⟨x, hxU⟩ ≃* FundamentalGroup X y) := by
+  sorry
+
 theorem punctured_fundamentalGroup_three (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M] [PathConnectedSpace M]
     [ChartedSpace (E 3) M] [IsManifold (I 3) (⊤ : ℕ∞) M]
@@ -377,7 +466,18 @@ theorem punctured_fundamentalGroup_three (M : Type)
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     Nonempty (FundamentalGroup c.Punctured (c.boundaryMap s) ≃*
       FundamentalGroup M m) := by
-  sorry
+  obtain ⟨U, V, hU, hV, hcover, hu, hv, hpcU, hscV, hscUV, e, pe⟩ :=
+    punctured_fundamentalGroup_three_aux_cover M c s hopen hpath
+  letI : PathConnectedSpace U := hpcU
+  letI : SimplyConnectedSpace V := hscV
+  letI : SimplyConnectedSpace (U ∩ V : Set M) := hscUV
+  let u : U := ⟨c.boundaryMap s, hu⟩
+  obtain ⟨pe⟩ := pe
+  obtain ⟨g₁⟩ := punctured_fundamentalGroup_three_aux_of_hequiv
+    (c.boundaryMap s) u e pe
+  obtain ⟨g₂⟩ := punctured_fundamentalGroup_three_aux_van_kampen
+    U V hU hV hcover (c.boundaryMap s) hu hv m
+  exact ⟨g₁.trans g₂⟩
 
 /-- **LIBRARY (B7).** The connected-sum quotient's standard open cover. -/
 theorem connectedSum_standardCover_aux_collar_open
@@ -2094,6 +2194,65 @@ theorem connectedSum_mayerVietoris_zero
       (TopCat.of (ConnectedSum c₁ c₂)) 0 (ModuleCat.of ℤ ℤ) eX⟩
 
 /-- **LIBRARY (B9b).** Mayer--Vietoris in the strict middle degrees. -/
+lemma connectedSum_mayerVietoris_middle_aux_overlap_module_zero
+    {n k : ℕ} {X : Type} [TopologicalSpace X]
+    (I : Set X) (e : ContinuousMap.HomotopyEquiv I (Sphere n))
+    (hk0 : k ≠ 0) (hktop : k ≠ n - 1) (hn : 1 ≤ n) :
+    IsZero (H k I) := by
+  have hdim : n - 1 + 1 = n := by omega
+  have hs : IsZero (H k (Sphere n)) := by
+    rw [← hdim]
+    exact ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top
+      (n - 1) k hk0 hktop
+  exact hs.of_iso
+    (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e k)
+
+/-- In the middle degrees the Mayer--Vietoris map out of the overlap vanishes:
+below `n - 1` the overlap (a sphere) has no homology, and in degree `n - 1`
+the two components are the collar boundary maps up to the cover homotopies,
+which vanish by `hboundary₁`, `hboundary₂`. -/
+lemma connectedSum_mayerVietoris_middle_aux_inter_zero
+    (n : ℕ) (hn : 2 ≤ n) {X₁ X₂ : Type}
+    [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (c₁ : BallCollar n X₁) (c₂ : BallCollar n X₂)
+    (hboundary₁ : boundaryHomologyMap c₁ (n - 1) = 0)
+    (hboundary₂ : boundaryHomologyMap c₂ (n - 1) = 0)
+    (U V : Set (ConnectedSum c₁ c₂))
+    (e₁ : ContinuousMap.HomotopyEquiv U c₁.Punctured)
+    (e₂ : ContinuousMap.HomotopyEquiv V c₂.Punctured)
+    (e₀ : ContinuousMap.HomotopyEquiv ↥(U ∩ V) (Sphere n))
+    (he₁ : ContinuousMap.Homotopic
+      (e₁.toFun.comp ((ContinuousMap.inclusion Set.inter_subset_left).comp e₀.invFun))
+      ⟨c₁.boundaryMap, c₁.continuous_boundaryMap⟩)
+    (he₂ : ContinuousMap.Homotopic
+      (e₂.toFun.comp ((ContinuousMap.inclusion Set.inter_subset_right).comp e₀.invFun))
+      ⟨c₂.boundaryMap, c₂.continuous_boundaryMap⟩)
+    (k : ℕ) (hk0 : 0 < k) (hkn : k < n) :
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+      U V k = 0 := by
+  sorry
+
+/-- In the middle degrees the Mayer--Vietoris reassembly map is onto: for
+`2 ≤ k` the overlap has no `H (k - 1)`; for `k = 1` the overlap is nonempty, so
+its `H 0` injects into `H 0 U ⊞ H 0 V`. -/
+lemma connectedSum_mayerVietoris_middle_aux_epi
+    (n : ℕ) (hn : 2 ≤ n) {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V) (hUV : U ∪ V = Set.univ)
+    (e₀ : ContinuousMap.HomotopyEquiv ↥(U ∩ V) (Sphere n))
+    (k : ℕ) (hk0 : 0 < k) (hkn : k < n) :
+    Epi (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V k) := by
+  sorry
+
+/-- An isomorphic reassembly map, transported to integral module homology. -/
+lemma connectedSum_mayerVietoris_middle_aux_assemble
+    {X : Type} [TopologicalSpace X] (U V : Set X) (k : ℕ)
+    [IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V k)]
+    {A B : ModuleCat ℤ} (eu : H k U ≅ A) (ev : H k V ≅ B) :
+    Nonempty (H k X ≅ ModuleCat.of ℤ (A × B)) := by
+  sorry
+
 theorem connectedSum_mayerVietoris_middle
     (n : ℕ) (hn : 2 ≤ n) (X₁ X₂ : Type)
     [TopologicalSpace X₁] [TopologicalSpace X₂]
@@ -2109,7 +2268,22 @@ theorem connectedSum_mayerVietoris_middle
     (hcover : HasStandardCover c₁ c₂) :
     ∀ k, 0 < k → k < n → Nonempty (H k (ConnectedSum c₁ c₂) ≅
       ModuleCat.of ℤ ((H k X₁) × (H k X₂))) := by
-  sorry
+  intro k hk0 hkn
+  rcases hcover with ⟨U, V, hU, hV, hUV, e₁, e₂, e₀, he₁, he₂⟩
+  haveI : Mono (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V k) :=
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+      U V hU hV hUV k).mono_g_iff.mpr
+      (connectedSum_mayerVietoris_middle_aux_inter_zero n hn c₁ c₂ hboundary₁ hboundary₂
+        U V e₁ e₂ e₀ he₁ he₂ k hk0 hkn)
+  haveI := connectedSum_mayerVietoris_middle_aux_epi n hn U V hU hV hUV e₀ k hk0 hkn
+  haveI : IsIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V k) := isIso_of_mono_of_epi _
+  exact connectedSum_mayerVietoris_middle_aux_assemble U V k
+    ((ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e₁ k).trans
+      (Classical.choice (hpunct₁.1 k hk0 hkn)))
+    ((ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e₂ k).trans
+      (Classical.choice (hpunct₂.1 k hk0 hkn)))
 
 /-- **LIBRARY (B9c).** Mayer--Vietoris above the manifold dimension. -/
 theorem connectedSum_mayerVietoris_above
@@ -2122,6 +2296,65 @@ theorem connectedSum_mayerVietoris_above
   sorry
 
 /-- **LIBRARY (B10).** The top connecting map supplies the single top class. -/
+noncomputable def connectedSum_topConnecting_iso_aux_cylinder
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (K : ContinuousMap.Homotopy f g) :=
+  TopCat.ofHom ⟨fun p : X × TopCat.I ↦ K (TopCat.I.homeomorph p.2, p.1),
+    K.continuous.comp
+      ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+
+lemma connectedSum_topConnecting_iso_aux_map_eq
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (K : ContinuousMap.Homotopic f g) (k : ℕ) :
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f) =
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom g) := by
+  rcases K with ⟨K⟩
+  apply ConstructionTargets.CoefficientContractiblePair.singularHomology_map_eq_of_topCatHomotopy
+    (R := ℤ)
+    (connectedSum_topConnecting_iso_aux_cylinder K) _ _ k
+  · ext x
+    change K (0, x) = f x
+    simp
+  · ext x
+    change K (1, x) = g x
+    simp
+
+lemma connectedSum_topConnecting_iso_aux_inclusion_zero
+    {n : ℕ} {X X' : Type} [TopologicalSpace X] [TopologicalSpace X']
+    {I A : Set X} (eI : ContinuousMap.HomotopyEquiv I (Sphere n))
+    (c : BallCollar n X') (eU : ContinuousMap.HomotopyEquiv A c.Punctured)
+    (hsub : I ⊆ A)
+    (h : ContinuousMap.Homotopic
+      (eU.toFun.comp ((ContinuousMap.inclusion hsub).comp eI.invFun))
+      ⟨c.boundaryMap, c.continuous_boundaryMap⟩)
+    (k : ℕ) (hz : boundaryHomologyMap c k = 0) :
+    IntegralMV.mvIncl hsub k = 0 := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)
+  have hI : IsIso (F.map (TopCat.ofHom eI.invFun)) := by
+    change IsIso
+      (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+        ℤ eI.symm k).hom
+    infer_instance
+  have hU : IsIso (F.map (TopCat.ofHom eU.toFun)) := by
+    change IsIso
+      (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+        ℤ eU k).hom
+    infer_instance
+  let i : C(I, A) := ContinuousMap.inclusion hsub
+  have hcomp : F.map (TopCat.ofHom eI.invFun) ≫ F.map (TopCat.ofHom i) ≫
+      F.map (TopCat.ofHom eU.toFun) = 0 := by
+    rw [← F.map_comp, ← F.map_comp]
+    change F.map (TopCat.ofHom
+      (eU.toFun.comp ((ContinuousMap.inclusion hsub).comp eI.invFun))) = 0
+    rw [connectedSum_topConnecting_iso_aux_map_eq h k]
+    exact hz
+  apply (cancel_epi (F.map (TopCat.ofHom eI.invFun))).1
+  apply (cancel_mono (F.map (TopCat.ofHom eU.toFun))).1
+  simpa [IntegralMV.mvIncl, i, Category.assoc] using hcomp
+
 theorem connectedSum_topConnecting_iso
     (n : ℕ) (hn : 2 ≤ n) (X₁ X₂ : Type)
     [TopologicalSpace X₁] [TopologicalSpace X₂]
@@ -2131,7 +2364,42 @@ theorem connectedSum_topConnecting_iso
     (hboundary₂ : boundaryHomologyMap c₂ (n - 1) = 0)
     (hcover : HasStandardCover c₁ c₂) :
     Nonempty (H n (ConnectedSum c₁ c₂) ≅ ModuleCat.of ℤ ℤ) := by
-  sorry
+  rcases hcover with ⟨U, V, hU, hV, hUV, e₁, e₂, e₀, he₁, he₂⟩
+  obtain ⟨δ, -, hex₂, hex₃⟩ := IntegralMV.integralMayerVietoris U V hU hV hUV
+  have hUn : IsZero (H n U) := hz₁.of_iso
+    (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e₁ n)
+  have hVn : IsZero (H n V) := hz₂.of_iso
+    (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e₂ n)
+  have hJsrc : IsZero (Limits.biprod (H n U) (H n V)) :=
+    (biprod_isZero_iff _ _).mpr ⟨hUn, hVn⟩
+  have hleft := connectedSum_topConnecting_iso_aux_inclusion_zero e₀ c₁ e₁
+    Set.inter_subset_left he₁ (n - 1) hboundary₁
+  have hright := connectedSum_topConnecting_iso_aux_inclusion_zero e₀ c₂ e₂
+    Set.inter_subset_right he₂ (n - 1) hboundary₂
+  have hIzero : IntegralMV.mvI U V (n - 1) = 0 := by
+    rw [IntegralMV.mvI, hleft, hright]
+    apply biprod.hom_ext <;> simp
+  have hdim : n - 1 + 1 = n := by omega
+  have hd_inj : Function.Injective (δ (n - 1)).hom := by
+    rw [← LinearMap.ker_eq_bot, ← hex₂ (n - 1), LinearMap.range_eq_bot]
+    rw [hdim]
+    exact congrArg ModuleCat.Hom.hom (hJsrc.eq_of_src _ 0)
+  have hd_surj : Function.Surjective (δ (n - 1)).hom := by
+    rw [← LinearMap.range_eq_top, hex₃ (n - 1), LinearMap.ker_eq_top]
+    exact congrArg ModuleCat.Hom.hom hIzero
+  let eS : H (n - 1) (Sphere n) ≅ ModuleCat.of ℤ ℤ := by
+    rw [← hdim]
+    exact ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt
+      (n - 1) (by omega)
+  let eI : H (n - 1) (U ∩ V : Set (ConnectedSum c₁ c₂)) ≅
+      ModuleCat.of ℤ ℤ :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      e₀ (n - 1) ≪≫ eS
+  letI : IsIso (δ (n - 1)) := by
+    rw [ConcreteCategory.isIso_iff_bijective]
+    exact ⟨hd_inj, hd_surj⟩
+  have eTop := asIso (δ (n - 1)) ≪≫ eI
+  exact ⟨by simpa only [hdim] using eTop⟩
 
 /-- Integral homology of a collared connected sum. -/
 theorem connectedSum_homology
