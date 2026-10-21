@@ -36711,71 +36711,59 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Prove the alternating Betti sum, homotopy invariance of induced maps, and assemble C4.",
+    "Transport induced homology maps across the supplied homotopy, then assemble C4.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_homology_finrank",
-      :type
-      "CP n has rational rank one exactly in even degrees at most 2n",
+    [{:name "t99J05_cp_alternating_betti_sum",
+      :type "alternating rational Betti sum of CP n equals n+1",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_homology"],
+      :depends-on ["t99J05_cp_homology_finrank"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_induced_eq_of_homotopic",
+      :type "homotopic maps induce equal rational homology maps",
+      :status :not-started,
+      :consumers [:t99J05],
+      :depends-on [],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_lefschetz_euler",
       :type
-      "identity-homotopic self-map has Lefschetz number and Euler characteristic n+1",
+      "identity-homotopic self-map has Lefschetz and Euler value n+1",
       :status :partial,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_homology_finrank"],
+      :depends-on
+      ["t99J05_cp_alternating_betti_sum"
+       "t99J05_induced_eq_of_homotopic"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked the CP rational Betti profile; finite trace and homotopy transport remain.",
+    "Banked the alternating CP Betti sum; homotopy transport and C4 assembly remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
-      :exit 1,
-      :correction
-      "normalized Even witness and corrected homology-data field names"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792617337297-1573-3c25d68d",
-     :commands
-     ["git show --stat/--format=fuller 24455ff5dbeadd8457545ce60fe847b135aa6f8a"
-      "git show 24455ff5d:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "git diff --check 24455ff5d^ 24455ff5d"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show 24455ff5d:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit 24455ff5d changes only scoped Closure; fixture SHA-256 matches b9f4413762f4e8cfae4042d09f075abae5a89801bf9b114b1eb0875a46c6ea83. The Betti case split is exhaustive and correctly oriented: even k≤2n yields a valid i<n+1 and transports the stored equivalence to finrank 1; non-even degrees use odd vanishing; degrees above 2n use above-top vanishing, each giving finrank 0. No representation boundary or hypothesis is lost. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; the alternating Betti sum, homotopy invariance, and C4 assembly remain listed."},
-    :commit "24455ff5dbeadd8457545ce60fe847b135aa6f8a",
+    :commit "ff74eb5dc15fa11067b98c0a3dfb6a20538651e2",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "b9f4413762f4e8cfae4042d09f075abae5a89801bf9b114b1eb0875a46c6ea83"},
+     "50b38d6c0563c2910745f94927789409b76c452b9a7b7672028a8d4069ff46b0"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -37290,7 +37278,9 @@
     :lemma-t99j05-cp0-homology
     :lemma-t99j05-cp-homology-step
     :lemma-t99j05-subsingleton-rational-homology
-    :lemma-t99j05-cp-homology-finrank],
+    :lemma-t99j05-cp-homology-finrank
+    :lemma-t99j05-cp-alternating-betti-sum
+    :lemma-t99j05-induced-eq-of-homotopic],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -49677,6 +49667,39 @@
    :id :lemma-t99j05-cp-homology-finrank,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-homology],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_alternating_betti_sum",
+    :type "alternating rational Betti sum of CP n equals n+1"},
+   :lemma
+   {:name "t99J05_cp_alternating_betti_sum",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "alternating rational Betti sum of CP n equals n+1",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-alternating-betti-sum,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-homology-finrank],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_induced_eq_of_homotopic",
+    :type "homotopic maps induce equal rational homology maps"},
+   :lemma
+   {:name "t99J05_induced_eq_of_homotopic",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "homotopic maps induce equal rational homology maps",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-induced-eq-of-homotopic,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
