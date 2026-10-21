@@ -119195,6 +119195,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/source/implementation; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792594802693-997-c3b270d2",
+     :commands
+     ["git show/diff bc7a1ec9"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum; rg; git diff --check"],
+     :finding
+     "PASS program STOP: bc7a1ec9 changes only t00J02Closure.lean (+10), adding compiled finite chartwise null-union aggregation after prior history. Fixture afb497a6, source 0b3b4888, implementation 432a0e7d; registry 170/170; placeholders closure=0, Main=1. Orientation is exact: null indexed pieces imply their union is null via measure_iUnion_null; Fin n supplies the finite/countable index with no representation boundary change. Both inspected milestones use only propext, Classical.choice, Quot.sound. Main compiles with its registered remaining sorry."},
     :commit "bc7a1ec995254a20bb762227bb61dad4258c7175",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119203,7 +119215,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119221,7 +119233,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-inverse nullity transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite chartwise null-union aggregation.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119528,7 +119540,10 @@
      :reason "Banked open-subtype criticality."}
     {:job 1,
      :commit "71255f23654349f357bcbd8b39f5f0918e229035",
-     :reason "Banked chart-inverse nullity transport."}]}
+     :reason "Banked chart-inverse nullity transport."}
+    {:job 2,
+     :commit "bc7a1ec995254a20bb762227bb61dad4258c7175",
+     :reason "Banked finite chartwise null-union aggregation."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122447,7 +122462,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finite_chartCriticalPieces_measure_zero",
@@ -122457,7 +122472,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "finite chartwise null union",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "bc7a1ec995254a20bb762227bb61dad4258c7175"},
    :id :lemma-finite-chartcriticalpieces-measure-zero,
    :kind :lemma,
    :depends-on [:lemma-targetchart-ambientcriticalimage-null],
