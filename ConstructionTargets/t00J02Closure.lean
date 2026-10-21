@@ -3584,6 +3584,32 @@ theorem canonicalComponentComparison_of_chartComponentSumsEqZero
     _ = exactLiftComponentDegree lifts k :=
       (exactLiftComponentDegree_eq_zero lifts k).symm
 
+/-- A chart-level signed top-degree calculation transports exactly to the
+canonical local fundamental-class degrees. -/
+theorem canonicalTopDegreeFormula_of_chartSignedSum
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hcoefficient : ∀ x, coefficient x •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e))
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        coefficient x) :
+    surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x := by
+  exact htop.trans
+    (regularFiberSignedSum_eq_of_localizationCoefficients e f y
+      (occupiedRegularFiberComponentIndex f c y hy) orientationSign
+      coefficient hcoefficient).symm
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3616,6 +3642,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalComponentComparison_of_chartComponentSumsEqZero
+#print axioms ConstructionTargets.T00J02Closure.canonicalTopDegreeFormula_of_chartSignedSum
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
