@@ -3610,6 +3610,27 @@ theorem canonicalTopDegreeFormula_of_chartSignedSum
       (occupiedRegularFiberComponentIndex f c y hy) orientationSign
       coefficient hcoefficient).symm
 
+/-- If every occupied-component chart sum vanishes, a chart-level signed
+top-degree formula forces the surface top degree itself to vanish. -/
+theorem surfaceTopDegree_eq_zero_of_chartComponentSums
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k = 0)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        coefficient x) :
+    surfaceTopDegree e f = 0 := by
+  rw [htop, pointSignedCount_eq_groupedComponentSignedCount]
+  exact groupedComponentSignedCount_eq_zero
+    (occupiedRegularFiberComponentIndex f c y hy) coefficient
+    orientationSign hcomponent
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3643,6 +3664,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalComponentComparison_of_chartComponentSumsEqZero
 #print axioms ConstructionTargets.T00J02Closure.canonicalTopDegreeFormula_of_chartSignedSum
+#print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_chartComponentSums
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
