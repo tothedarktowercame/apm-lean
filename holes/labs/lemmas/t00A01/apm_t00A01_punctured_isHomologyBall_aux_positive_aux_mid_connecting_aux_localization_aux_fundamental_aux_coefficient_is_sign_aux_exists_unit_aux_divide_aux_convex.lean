@@ -3466,7 +3466,28 @@ lemma apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_lo
     (hsub : A ⊆ (chartAt (EuclideanSpace ℝ (Fin 3)) x).source)
     (hconv : Convex ℝ ((chartAt (EuclideanSpace ℝ (Fin 3)) x) '' A)) (m : ℤ) :
     apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_divide_aux_good M m A := by
-  sorry
+  intro c hc
+  by_cases hAe : A = ∅
+  · refine ⟨0, ?_⟩
+    intro y hy
+    simpa [hAe] using hy
+  · obtain ⟨y, hy⟩ := Set.nonempty_iff_ne_empty.mpr hAe
+    let f := HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M)
+        (apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) 3
+    letI : IsIso f :=
+      apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso
+        M x A hA hsub hconv y hy 3 (by norm_num)
+    obtain ⟨g, hg⟩ := hc y hy
+    refine ⟨inv f g, ?_⟩
+    have hdiv : m • inv f g = c := by
+      apply (ConcreteCategory.bijective_of_isIso f).1
+      rw [map_zsmul, ← ConcreteCategory.comp_apply, IsIso.inv_hom_id,
+        ConcreteCategory.id_apply, hg]
+    intro y' hy'
+    rw [← map_zsmul, hdiv]
 -- END SEAT AREA
 
 /-- PROVED (lemma-3, banked from its `_aux_divide_aux_union` PARTIAL,
