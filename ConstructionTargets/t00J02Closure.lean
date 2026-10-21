@@ -1467,6 +1467,42 @@ theorem mfderiv_targetChart_comp_surjective_iff
 
 #print axioms mfderiv_targetChart_comp_surjective_iff
 
+/-- A fixed target chart preserves derivative surjectivity at every point
+whose image lies in that chart's source. -/
+theorem mfderiv_targetChart_comp_surjective_iff_of_mem_source
+    {E F M N : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M]
+    [IsManifold (modelWithCornersSelf ℝ F) ∞ N]
+    (g : M → N) (x : M) (y : N)
+    (hg : MDifferentiableAt (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ F) g x)
+    (hxy : g x ∈ (chartAt F y).source) :
+    Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) g x) ↔
+      Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F)
+          ((chartAt F y) ∘ g) x) := by
+  have hc : MDifferentiableAt (modelWithCornersSelf ℝ F)
+      (modelWithCornersSelf ℝ F) (chartAt F y) (g x) :=
+    (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) y).mdifferentiableAt hxy
+  rw [mfderiv_comp x hc hg]
+  constructor
+  · intro hs
+    exact (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) y).mfderiv_surjective
+      hxy |>.comp hs
+  · intro hs v
+    obtain ⟨u, hu⟩ := hs
+      ((mfderiv (modelWithCornersSelf ℝ F) (modelWithCornersSelf ℝ F)
+        (chartAt F y) (g x)) v)
+    exact ⟨u, (mdifferentiable_chart (I := modelWithCornersSelf ℝ F) y).mfderiv_injective
+      hxy hu⟩
+
+#print axioms mfderiv_targetChart_comp_surjective_iff_of_mem_source
+
 /-- For the incidence projection, geometric criticality is unchanged after
 passing to the Euclidean chart of the circle at the projected value. -/
 theorem circleIncidenceProjection_critical_iff_targetChartCritical
@@ -1498,6 +1534,40 @@ theorem circleIncidenceProjection_critical_iff_targetChartCritical
   exact (circleIncidenceProjection_contMDiff f c hf hc htrans).mdifferentiableAt (by simp)
 
 #print axioms circleIncidenceProjection_critical_iff_targetChartCritical
+
+/-- On the source of any fixed circle chart, incidence-projection
+criticality is exactly criticality of that fixed coordinate map. -/
+theorem circleIncidenceProjection_critical_iff_fixedTargetChartCritical
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (y : Circle) (p : CircleIncidence f c)
+    (hp : circleIncidenceProjection (f := f) (c := c) p ∈
+      (chartAt (EuclideanSpace ℝ (Fin 1)) y).source) :
+    letI := circleIncidenceAtlas f c hf hc htrans
+    (¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1)
+          (circleIncidenceProjection (f := f) (c := c)) p)) ↔
+      ¬ Function.Surjective
+        (mfderiv (modelWithCornersSelf ℝ CircleIncidenceModel) (𝓡 1)
+          ((chartAt (EuclideanSpace ℝ (Fin 1)) y) ∘
+            circleIncidenceProjection (f := f) (c := c)) p) := by
+  letI := circleIncidenceAtlas f c hf hc htrans
+  letI : IsManifold (modelWithCornersSelf ℝ CircleIncidenceModel) ∞
+      (CircleIncidence f c) := circleIncidence_isManifold f c hf hc htrans
+  apply not_congr
+  apply mfderiv_targetChart_comp_surjective_iff_of_mem_source
+  · exact (circleIncidenceProjection_contMDiff f c hf hc htrans).mdifferentiableAt (by simp)
+  · exact hp
+
+#print axioms circleIncidenceProjection_critical_iff_fixedTargetChartCritical
 
 /-- The open part of the source on which a fixed target chart is valid. -/
 def targetChartDomain
