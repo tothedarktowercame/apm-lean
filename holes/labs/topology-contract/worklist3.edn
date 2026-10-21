@@ -36754,6 +36754,20 @@
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792604541075-1232-aaefd938",
+     :commands
+     ["git show --stat/--format=fuller a9f3db8a96e38cae0b7478797ffa46cba2a801dc"
+      "git show a9f3db8a96:ConstructionTargets/t99J05Closure.lean | sha256sum"
+      "git diff --check a9f3db8a96^ a9f3db8a96"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show a9f3db8a96:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
+     :finding
+     "PASS: reviewer codex-11 is independent of author topo-10. Commit a9f3db8a96 changes only scoped Closure; fixture SHA-256 matches d7c910334a6c64ec5ba74c19e4199e6172ba9f89d7832e9d782fe78636587e29. The adjacent MV segment is oriented union H(k+1) -> overlap Hk -> patch biproduct Hk. Its three isomorphisms correctly transport union range to literal CP, intersection range to the literal overlap, and range biproduct to literal patches; exactness then follows invariantly under the short-complex iso. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine program progress; connecting-map bijectivity and surviving-even equivalences remain listed."},
     :commit "a9f3db8a96e38cae0b7478797ffa46cba2a801dc",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36762,7 +36776,7 @@
      "d7c910334a6c64ec5ba74c19e4199e6172ba9f89d7832e9d782fe78636587e29"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36780,7 +36794,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked all-degree successor finiteness; top/even equivalences remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal overlap exactness transport; top connecting-map isomorphism remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36983,7 +36997,11 @@
     {:job 1,
      :commit "8ed8dda658aea8ec36b787a60435bafcd6ababa1",
      :reason
-     "Banked all-degree successor finiteness; top/even equivalences remain."}]}
+     "Banked all-degree successor finiteness; top/even equivalences remain."}
+    {:job 2,
+     :commit "a9f3db8a96e38cae0b7478797ffa46cba2a801dc",
+     :reason
+     "Banked literal overlap exactness transport; top connecting-map isomorphism remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -49254,7 +49272,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_exact_overlap_transport",
@@ -49264,7 +49282,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "literal overlap MV segment is exact",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "a9f3db8a96e38cae0b7478797ffa46cba2a801dc"},
    :id
    :lemma-t99j05-cp-successor-mayervietoris-exact-overlap-transport,
    :kind :lemma,
