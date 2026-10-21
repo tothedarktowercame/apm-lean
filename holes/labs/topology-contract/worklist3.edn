@@ -37987,9 +37987,52 @@
    :program true,
    :other-consumers []}
   {:consumer :t94A06,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Move proved adapters into Closure, then prove the Morse-Sard normal-part lemma.",
+    :evidence
+    {:placeholder-delta {:t94A06 [1 1]},
+     :statement-hashes {:registry "170/170"}},
+    :outcome :stop,
+    :warnings
+    ["Main retains its existing sorry; unrelated artifacts preserved."],
+    :missing-theorems
+    [{:name "apm_t94a06_ae_regularValue_normalPart",
+      :type
+      "AE regular values for the normal part on a finite-dimensional manifold with corners",
+      :status :not-started,
+      :consumers [:t94A06],
+      :depends-on [],
+      :area "parametric-transversality-sard"}
+     {:name "apm_t94a06_transverse_ae_of_regularValues",
+      :type
+      "translate normal-part regular values to AE transversality",
+      :status :not-started,
+      :consumers [:t94A06],
+      :depends-on ["apm_t94a06_ae_regularValue_normalPart"],
+      :area "parametric-transversality-sard"}],
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Reviewed blueprint copied and committed; implementation starts next job.",
+    :commands
+    [{:cmd
+      "cmp -s holes/labs/blueprints/t94A06/BLUEPRINT.md ConstructionTargets/t94A06Closure.blueprint.md",
+      :exit 0}
+     {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "c46223f40f5df12e744c4fc811f03ee02e83c0c5",
+    :changed-paths ["ConstructionTargets/t94A06Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t94A06Closure.blueprint.md",
+     :sha256
+     "6c83cb7a6a265ae8533f7af0548fa79b29b10ca756c8fdb7f08ab69a44136117"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -49526,6 +49569,40 @@
    :id :lemma-t99j05-cp-successor-subsingleton-one,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-subsingleton-odd-gt-one],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_ae_regularValue_normalPart",
+    :type
+    "AE regular values for the normal part on a finite-dimensional manifold with corners"},
+   :lemma
+   {:name "apm_t94a06_ae_regularValue_normalPart",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type
+    "AE regular values for the normal part on a finite-dimensional manifold with corners",
+    :area "parametric-transversality-sard"},
+   :id :lemma-apm-t94a06-ae-regularvalue-normalpart,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_transverse_ae_of_regularValues",
+    :type "translate normal-part regular values to AE transversality"},
+   :lemma
+   {:name "apm_t94a06_transverse_ae_of_regularValues",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type "translate normal-part regular values to AE transversality",
+    :area "parametric-transversality-sard"},
+   :id :lemma-apm-t94a06-transverse-ae-of-regularvalues,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t94a06-ae-regularvalue-normalpart],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
