@@ -89060,77 +89060,64 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Edge/vertex trivializations; tree and finite covers.",
+    :residual "Trivializations; tree and finite covers.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "baseEdgeChart_isOpen",
-      :type "openness",
+    [{:name "edgePoint_eq_iff_of_interior",
+      :type "open-edge coordinates",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["intervalCircle_image_interior"],
+      :depends-on [],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
       :type "trivializations",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on
-      ["baseEdgeChart_isOpen" "projection_preimage_baseEdgeChart"],
+      :depends-on ["edgePoint_eq_iff_of_interior"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_simplyConnected_cover",
-      :type "tree",
+      :type "tree cover",
       :status :not-started,
       :consumers [:t92J06],
       :depends-on ["twoLoopGraphCoverData_realization"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_four_threeSheeted_covers",
-      :type "covers",
+      :type "four covers",
       :status :not-started,
       :consumers [:t92J06],
       :depends-on ["twoLoopGraphCoverData_realization"],
       :area "graph-covering-realization"}],
-    :statement-hashes {:registry "168/0"},
+    :statement-hashes {:registry "170/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked base-edge chart openness.",
+    :reason "Banked open-edge coordinates; next: trivializations.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "comment-stripped closure placeholder scan", :exit 0}
-     {:cmd "git show --check be6ab5926", :exit 0}],
+     {:cmd "closure placeholder scan", :exit 0}
+     {:cmd "git show --check 3cfa60e86", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial closure compile",
+    [{:cmd "initial Main compile",
       :exit 1,
-      :correction "fixed quotient topology and image cases"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792206012105-16088-cccd90f7",
-     :commands
-     ["hash/scope/comment-stripped placeholders"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t92J06Closure.lean (axioms)"],
-     :finding
-     "PASS: reviewed be6ab5926 (author topo-6), new after 17be3cf5f. Fixture 11f79713... and frozen Main 85f64495... match; only closure changed; placeholders 0/1; registry 168/0 and pinned digest c57f3fb7... match. The raw preimage proof handles matching branches by injectivity and cross branches by endpoint identification; punctured circle summands are open and descend through the declared quotient topology to baseEdgeChart. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual edge/vertex trivialization, tree, and finite-cover milestones are listed."},
-    :commit "be6ab5926",
+      :correction "built missing imports"}],
+    :commit "3cfa60e86",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "11f79713433fea3c11a6e73c0c2ad72941f80af053328a31544bfdc0cd35ecac"},
+     "f19c58b9d4e2391b8798e8df7b560fc0d097c3dd54bc1eb6a582008d23e1fc63"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -91034,7 +91021,8 @@
     :lemma-mem-edgechart-iff
     :lemma-projection-preimage-baseedgechart
     :lemma-intervalcircle-image-interior
-    :lemma-baseedgechart-isopen],
+    :lemma-baseedgechart-isopen
+    :lemma-edgepoint-eq-iff-of-interior],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -99687,6 +99675,23 @@
     :area "polygon-surface-homology",
     :proved-in :program-2026-10-13-close-t94j09},
    :id :lemma-frozenboundarygraphh1comparison-range,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "edgePoint_eq_iff_of_interior",
+    :type "open-edge coordinates"},
+   :lemma
+   {:name "edgePoint_eq_iff_of_interior",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "open-edge coordinates",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-edgepoint-eq-iff-of-interior,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
