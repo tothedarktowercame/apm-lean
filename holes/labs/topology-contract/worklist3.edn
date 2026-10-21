@@ -37504,67 +37504,56 @@
    "Blueprint mathematics defect: hypotheses are not used as claimed. In apm_t96j05, hmn : m ≤ n reaches no milestone or conclusion; `have _ := hmn` is only a dummy binding. In apm_t96j05_regular_radius_level, hlevel : Nonempty (radialLevel X r) is entirely unused (Lean reports it). This violates the blueprint requirement that every node use its stated hypotheses and every final hypothesis be used somewhere. Repair the blueprint by giving a genuine mathematical use/dependency for hmn and hlevel, or make the node statements accurately minimal where the frozen registered statement permits it. Recorded scope/hash and compile/registry gates otherwise reproduce.",
    :evidence
    {:residual
-    "Implement strengthened package/forgetful lemma, move C1/C3, then audit C2 Sard proof.",
+    "None; apm_t96j05 compiles sorry-free with genuine hmn/hlevel use.",
     :evidence
     {:placeholder-delta {:t96J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
-    :outcome :stop,
-    :warnings
-    ["Read-only source still lints unused hr/hlevel; repaired closure design consumes hlevel and hmn through BoundedRadialLevel."],
+    :outcome :done-unreviewed,
+    :warnings ["Unrelated t00/review artifacts preserved."],
     :missing-theorems
     [{:name "apm_t96j05_constant_radius_level",
-      :type "constant radius yields bounded embedded level package",
-      :status :not-started,
+      :type "constant radius yields bounded embedded level",
+      :status :proved,
       :consumers [:t96J05],
       :depends-on [],
       :area "sard-regular-values"}
      {:name "apm_t96j05_exists_regular_radius",
       :type
       "nonconstant squared radius has attained positive regular value",
-      :status :not-started,
+      :status :proved,
       :consumers [:t96J05],
       :depends-on [],
       :area "sard-regular-values"}
      {:name "apm_t96j05_regular_radius_level",
-      :type
-      "positive regular radius yields bounded embedded level package",
-      :status :not-started,
+      :type "regular radius yields bounded embedded level",
+      :status :proved,
       :consumers [:t96J05],
       :depends-on [],
       :area "sard-regular-values"}],
-    :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Blueprint repaired: C1/C3 now return a strengthened package carrying nonempty level and k≤n; implementation continues.",
     :commands
     [{:cmd "lake env lean problems/t96J05/lean/Main.lean", :exit 0}
      {:cmd "lake env lean holes/labs/blueprints/t96J05/Blueprint.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792590765935-874-b5a98261",
-     :commands
-     ["git show/diff-tree 1db229e3cb"
-      "sha256sum fixture and git blob"
-      "lake env lean holes/labs/blueprints/t96J05/Blueprint.lean"
-      "lake env lean problems/t96J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git diff --check 1db229e3cb^ 1db229e3cb"],
-     :finding
-     "PASS: repaired blueprint commit changes only the scoped blueprint; fixture/blob SHA matches 863100ad.... Its mathematics is sound: the private strengthened package records Nonempty and both k≤m and k≤n; C1 uses hmn at k=m, C3 uses hlevel and derives m-1≤n from hmn, and C4 forgets only after those genuine fields are constructed. Thus all frozen final hypotheses have descendants without changing the registered interface. C1/C2/C3 remain independent and C4 uses all three. Source Blueprint/Main compile standard-only; registry 170/170. The source lint is acknowledged and is precisely what the closure design removes."},
-    :commit "1db229e3cb",
-    :changed-paths ["ConstructionTargets/t96J05Closure.blueprint.md"],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t96J05Closure.lean",
+      :exit 1,
+      :correction "fixture is not importable; implemented in Main"}
+     {:cmd "lake env lean problems/t96J05/lean/Main.lean",
+      :exit 1,
+      :correction "made witness package Prop-valued"}],
+    :commit "86e7cdd227",
+    :commits ["1db229e3cb" "86e7cdd227"],
+    :changed-paths ["problems/t96J05/lean/Main.lean"],
     :fixture
-    {:path "ConstructionTargets/t96J05Closure.blueprint.md",
+    {:path "problems/t96J05/lean/Main.lean",
      :sha256
-     "863100adb19f8051df8ab03cb1ca4c689633e124582742d9ec0889fcb6f2baed"},
-    :seat :topo-10},
+     "7a2ff3eac6fdcd7286195918b39a82f63ea2848c65a9d0373f2a0cbfd5cc54a5"}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96J05/lean/Main.lean"
     "problems/t96J05/status.json"
@@ -48884,7 +48873,8 @@
    {:name "apm_t96j05_constant_radius_level",
     :reported-by [:program-2026-10-13-close-t96j05],
     :type "positive constant radius gives an embedded level",
-    :area "sard-regular-values"},
+    :area "sard-regular-values",
+    :proved-in :program-2026-10-13-close-t96j05},
    :id :lemma-apm-t96j05-constant-radius-level,
    :kind :lemma,
    :depends-on [],
@@ -48902,7 +48892,8 @@
     :reported-by [:program-2026-10-13-close-t96j05],
     :type
     "nonconstant squared radius has an attained positive regular value",
-    :area "sard-regular-values"},
+    :area "sard-regular-values",
+    :proved-in :program-2026-10-13-close-t96j05},
    :id :lemma-apm-t96j05-exists-regular-radius,
    :kind :lemma,
    :depends-on [],
@@ -48918,7 +48909,8 @@
    {:name "apm_t96j05_regular_radius_level",
     :reported-by [:program-2026-10-13-close-t96j05],
     :type "positive regular radius gives an embedded level",
-    :area "sard-regular-values"},
+    :area "sard-regular-values",
+    :proved-in :program-2026-10-13-close-t96j05},
    :id :lemma-apm-t96j05-regular-radius-level,
    :kind :lemma,
    :depends-on [],
