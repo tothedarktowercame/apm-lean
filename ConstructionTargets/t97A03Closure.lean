@@ -387,6 +387,31 @@ noncomputable def coveringPathFiberEquiv
     (γ : Path.Homotopic.Quotient x y) (e : p ⁻¹' ({x} : Set X)) :
     coveringPathFiberEquiv p hp γ e = hp.monodromy γ e := rfl
 
+/-- Transport along the constant path is the identity equivalence of the
+literal fiber. -/
+theorem coveringPathFiberEquiv_refl
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p) (x : X) :
+    coveringPathFiberEquiv p hp (.refl x) =
+      Equiv.refl (p ⁻¹' ({x} : Set X)) := by
+  apply Equiv.ext
+  intro e
+  exact congrFun hp.monodromy_refl e
+
+/-- Fiber transport respects concatenation, with the same source-to-target
+orientation as path concatenation. -/
+theorem coveringPathFiberEquiv_trans
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (p : Y → X) (hp : IsCoveringMap p) {x y z : X}
+    (γ : Path.Homotopic.Quotient x y)
+    (δ : Path.Homotopic.Quotient y z) :
+    coveringPathFiberEquiv p hp (γ.trans δ) =
+      (coveringPathFiberEquiv p hp γ).trans
+        (coveringPathFiberEquiv p hp δ) := by
+  apply Equiv.ext
+  intro e
+  exact hp.monodromy_trans_apply γ δ e
+
 /-- Two loop classes in the base now supply the actual fiber transports used
 by the normalized model selector. -/
 theorem twoArcModel_exists_of_covering_loops
@@ -430,6 +455,8 @@ theorem twoArcModel_exists_of_covering_loops
 #print axioms labeledTwoTransport_actionConnected_iff
 #print axioms twoArcModel_exists_of_fiber_transports
 #print axioms coveringPathFiberEquiv_apply
+#print axioms coveringPathFiberEquiv_refl
+#print axioms coveringPathFiberEquiv_trans
 #print axioms twoArcModel_exists_of_covering_loops
 
 end ConstructionTargets.t97A03Closure
