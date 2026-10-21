@@ -163,6 +163,42 @@ theorem t00A04_modTwoLocalHomology_unique_nonzero_euclidean (d : ℕ) :
 
 /-- **F2e.** Finite unions of compact convex Euclidean sets satisfy Hatcher's
 conclusion.  F1 and F2 are passed in explicitly. -/
+theorem t00A04_hatcherConclusion_finite_union_convex_euclidean_aux
+    (d : ℕ)
+    (hconv : ∀ A : Set (EuclideanSpace ℝ (Fin d)), IsCompact A → Convex ℝ A →
+      t00A04_HatcherConclusion (EuclideanSpace ℝ (Fin d)) d A)
+    (hunion : ∀ (A B : Set (EuclideanSpace ℝ (Fin d))), IsCompact A → IsCompact B →
+      t00A04_HatcherConclusion _ d A → t00A04_HatcherConclusion _ d B →
+      t00A04_HatcherConclusion _ d (A ∩ B) →
+      t00A04_HatcherConclusion _ d (A ∪ B))
+    {α : Type*} (s : Finset α)
+    (f : α → Set (EuclideanSpace ℝ (Fin d)))
+    (hs : ∀ a ∈ s, IsCompact (f a) ∧ Convex ℝ (f a)) :
+    t00A04_HatcherConclusion _ d (⋃ a ∈ s, f a) := by
+  classical
+  induction s using Finset.induction_on generalizing f with
+  | empty =>
+      simpa using hconv (∅ : Set (EuclideanSpace ℝ (Fin d)))
+        isCompact_empty convex_empty
+  | @insert a s ha ih =>
+      have has : IsCompact (f a) ∧ Convex ℝ (f a) := hs a (Finset.mem_insert_self a s)
+      have htail : ∀ b ∈ s, IsCompact (f b) ∧ Convex ℝ (f b) := by
+        intro b hb
+        exact hs b (Finset.mem_insert_of_mem hb)
+      have htailConclusion := ih f htail
+      have htailCompact : IsCompact (⋃ b ∈ s, f b) := by
+        exact Set.Finite.isCompact_biUnion (s.finite_toSet) (fun b hb ↦ (htail b hb).1)
+      have hinter : ∀ b ∈ s,
+          IsCompact (f a ∩ f b) ∧ Convex ℝ (f a ∩ f b) := by
+        intro b hb
+        exact ⟨has.1.inter_right (htail b hb).1.isClosed,
+          has.2.inter (htail b hb).2⟩
+      have hinterConclusion := ih (fun b ↦ f a ∩ f b) hinter
+      have hu := hunion (f a) (⋃ b ∈ s, f b) has.1 htailCompact
+        (hconv (f a) has.1 has.2) htailConclusion
+      rw [Set.inter_iUnion₂] at hu
+      exact (by simpa [ha] using hu hinterConclusion)
+
 theorem t00A04_hatcherConclusion_finite_union_convex_euclidean
     (d : ℕ)
     (hconv : ∀ A : Set (EuclideanSpace ℝ (Fin d)), IsCompact A → Convex ℝ A →
@@ -174,7 +210,8 @@ theorem t00A04_hatcherConclusion_finite_union_convex_euclidean
     (s : Finset (Set (EuclideanSpace ℝ (Fin d))))
     (hs : ∀ A ∈ s, IsCompact A ∧ Convex ℝ A) :
     t00A04_HatcherConclusion _ d (⋃ A ∈ s, A) := by
-  sorry
+  exact t00A04_hatcherConclusion_finite_union_convex_euclidean_aux
+    d hconv hunion s id (by simpa using hs)
 
 /-- **LIBRARY F3e.** Hatcher's relative-cycle argument extends the Euclidean
 result from finite unions of compact convex sets to every compact set. -/
