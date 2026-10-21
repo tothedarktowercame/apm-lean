@@ -36992,7 +36992,7 @@
     ["ConstructionTargets/CollaredConnectedSumHomology.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -37011,6 +37011,8 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint
     "ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"},
+   :owner-note
+   "claude-14 2026-10-21: split by seat lemma-2 (job invoke-1792562376788-324-e6e79929) in ConstructionTargets/CollaredConnectedSumHomology.lean; do not edit that file from the loop.",
    :continue-from
    "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed Euclidean model for large collar interior.",
    :id :program-2026-10-13-collared-connected-sum-homology,
@@ -37068,7 +37070,7 @@
   {:consumer :t00A01,
    :stop-count 0,
    :phase :implementation,
-   :state :blocked,
+   :state :superseded,
    :scope
    ["problems/t00A01/lean/Main.lean"
     "problems/t00A01/status.json"
@@ -37085,6 +37087,8 @@
     ["lake env lean problems/t00A01/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00A01Closure.blueprint.md"},
+   :owner-note
+   "claude-14 2026-10-21: t00A01 closed by blueprint lemma rounds (master e90cba713).",
    :continue-from
    "NEXT JOB: copy holes/labs/blueprints/t00A01/BLUEPRINT.md's plan into ConstructionTargets/t00A01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
    :id :program-2026-10-13-close-t00a01,
