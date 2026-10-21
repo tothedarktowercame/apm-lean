@@ -2407,6 +2407,31 @@ theorem frozenBoundaryGraphH1CycleComparison_of_kernel_twoSidedInverse
   rw [LinearMap.comp_apply] at hz
   exact hz.trans (frozenGraphBoundaryKernelEquiv.symm_apply_apply z)
 
+/-- At the final geometric interface it suffices to construct the six winding
+coordinates and an inverse, with the two composition identities. -/
+theorem frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 6 → ℤ))
+    (r : (Fin 6 → ℤ) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hleft : r.comp c = LinearMap.id)
+    (hright : c.comp r = LinearMap.id) :
+    Nonempty
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) := by
+  refine ⟨LinearEquiv.ofBijective c ⟨?_, ?_⟩⟩
+  · intro x y hxy
+    have hx := LinearMap.congr_fun hleft x
+    have hy := LinearMap.congr_fun hleft y
+    rw [LinearMap.comp_apply, LinearMap.id_apply] at hx hy
+    exact hx.symm.trans ((congrArg r hxy).trans hy)
+  · intro y
+    refine ⟨r y, ?_⟩
+    have hy := LinearMap.congr_fun hright y
+    simpa using hy
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3536,6 +3561,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphH1CycleComparison_of_leftInverse_onto
 #print axioms frozenBoundaryGraphH1CycleComparison_of_kernel_leftInverse_onto
 #print axioms frozenBoundaryGraphH1CycleComparison_of_kernel_twoSidedInverse
+#print axioms frozenBoundaryGraphH1CycleComparison_of_coordinate_twoSidedInverse
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
