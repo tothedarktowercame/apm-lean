@@ -36711,73 +36711,53 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Assemble the CP0 datum and successor constructor into C3, then prove the Lefschetz/Euler trace formula.",
+    "Use C3 homology data and homotopy invariance to prove the finite trace sum and Euler formula.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_rational_homology",
-      :type "successor rational homology data",
-      :status :proved,
-      :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_subsingleton_one"
-       "t99J05_cp_successor_even_equiv"
-       "t99J05_cp_successor_subsingleton_above"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_homology",
+    [{:name "t99J05_cp_homology",
       :type "rational homology data for every CP n",
-      :status :partial,
+      :status :proved,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_rational_homology"
        "t99J05_cp_zero_rational_homology"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_lefschetz_euler",
+      :type
+      "identity-homotopic self-map has Lefschetz number and Euler characteristic n+1",
+      :status :partial,
+      :consumers [:t99J05],
+      :depends-on ["t99J05_cp_homology"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked successor rational-homology data; global C3 assembly remains.",
+    "Banked global CP rational-homology data; Lefschetz/Euler calculation remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
-      :exit 1,
-      :correction "derived k>1 from odd witness after splitting k=1"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792615933704-1530-4f98402e",
-     :commands
-     ["git show --stat/--format=fuller e6aacdba1105b87bdd55fa7cd1c5e3ec2b511d16"
-      "git show e6aacdba1:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "git diff --check e6aacdba1^ e6aacdba1"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show e6aacdba1:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit e6aacdba1 changes only scoped Closure; fixture SHA-256 matches e32772eee326d5711fbb2eadf58f8f21b75b18157b94d51b4c8fb17859f9790e. The banked H1 boundary is sound: zero patch H1 makes the connecting map injective, while injectivity of overlap H0 -> patch H0 plus adjacent exactness makes its range zero, forcing successor H1 to vanish. The assembled datum dispatches finiteness, above-top vanishing, k=1 versus odd k>1, and every even equivalence with correct orientations and bounds. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine progress; CP0/global induction assembly and Lefschetz-Euler remain listed."},
-    :commit "e6aacdba1105b87bdd55fa7cd1c5e3ec2b511d16",
+    :commit "4c82128c53f04c84b3a34ff1255ddbdc810b1f68",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "e32772eee326d5711fbb2eadf58f8f21b75b18157b94d51b4c8fb17859f9790e"},
+     "588878f6bc54c522a753c3e624d59a78562cb7ca629e22c792ee65e5e63c2864"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -37252,7 +37232,8 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type
     "H_k(CP n; Q)=Q in even degrees <=2n and 0 otherwise, with finiteness/vanishing",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-homology,
    :kind :lemma,
    :depends-on
