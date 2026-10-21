@@ -119201,6 +119201,18 @@
     [{:cmd "closure compile",
       :exit 1,
       :correction "classical unfold"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792600944281-1135-e9a76e64",
+     :commands
+     ["git show/diff e8320481"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: e8320481 changes only t00J02Closure.lean (+29), adding a compiled measurable totalized circle-chart inverse and its pushed-forward measure after prior history 7c03a51a. Fixture afb497a6, source 0b3b4888, implementation da310995; registry 170/170; placeholders closure=0/Main=1. The representation boundary is faithful: on the measurable open chart target the extension is the genuine inverse; outside it is constant, making a measurable total map, while the source measure is restricted to the target before Measure.map. The proved theorem uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; chart-map nullity, finite cover, and H2 assembly remain listed."},
     :commit "e832048147448a6485a792b3b667c6f3bc772a89",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119209,7 +119221,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119227,7 +119239,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked circle-chart null transitions.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inverse-chart measures.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119553,7 +119565,10 @@
      :reason "Banked nonzero Circle Haar measure."}
     {:job 7,
      :commit "7c03a51a2392ec7cf706d88afa9edab3d83de5ce",
-     :reason "Banked circle-chart null transitions."}]}
+     :reason "Banked circle-chart null transitions."}
+    {:job 8,
+     :commit "e832048147448a6485a792b3b667c6f3bc772a89",
+     :reason "Banked inverse-chart measures."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122594,7 +122609,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleChartInverseExtension_measurable",
@@ -122604,7 +122619,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "inverse chart extension measurable",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "e832048147448a6485a792b3b667c6f3bc772a89"},
    :id :lemma-circlechartinverseextension-measurable,
    :kind :lemma,
    :depends-on [:lemma-circlecharttransition-image-null],
