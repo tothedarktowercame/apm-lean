@@ -38015,10 +38015,10 @@
    :program true,
    :other-consumers []}
   {:consumer :t94A06,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:residual
-    "Prove local chart critical-image nullity; assemble Main.",
+    "Prove the single local chart critical-image nullity theorem; assemble Main.",
     :evidence
     {:placeholder-delta {:t94A06 [1 1]},
      :statement-hashes {:registry "170/170"}},
@@ -38026,11 +38026,14 @@
     :warnings
     ["Main retains one sorry; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "apm_t94a06_criticalValues_null_of_pointwise_open",
-      :type "local null images imply global nullity",
+    [{:name "apm_t94a06_ae_regularValue_normalPart_of_local",
+      :type
+      "local chart nullity implies exact AE regular-value conclusion",
       :status :proved,
       :consumers [:t94A06],
-      :depends-on [],
+      :depends-on
+      ["apm_t94a06_criticalValues_null_of_pointwise_open"
+       "apm_t94a06_ae_regularValue_of_criticalValues_null"],
       :area "parametric-transversality-sard"}
      {:name "apm_t94a06_normalPart_localCriticalImage_null",
       :type "local chart critical-image nullity",
@@ -38044,44 +38047,28 @@
       :consumers [:t94A06],
       :depends-on
       ["apm_t94a06_normalPart_localCriticalImage_null"
-       "apm_t94a06_criticalValues_null_of_pointwise_open"],
+       "apm_t94a06_ae_regularValue_normalPart_of_local"],
       :area "parametric-transversality-sard"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Banked chart aggregation; local Sard remains.",
+    :reason
+    "Banked exact local-Sard-to-AE adapter; local chart theorem remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft compile",
-      :exit 1,
-      :correction "Joined qualified name."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792626233317-1825-99ec0692",
-     :commands
-     ["git show/diff 033a5fa2b"
-      "git diff-tree/diff --check 033a5fa2b"
-      "lake env lean ConstructionTargets/t94A06Closure.lean"
-      "lake env lean problems/t94A06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and rg placeholders on recorded blobs"],
-     :finding
-     "PASS: 033a5fa2b changes only scoped t94A06Closure; fixture hash 568ff5...1104 matches. Fresh detached gates pass; registry 170/170; closure placeholders 0; standard axioms. The adapter faithfully instantiates the second-countable local-null-image aggregation theorem with the nonsurjective-mfderiv locus; intersection and image orientations match exactly. New compiled progress follows 9ecb61c45; local chart Sard and Main assembly remain listed. Main retains one pre-existing sorry."},
-    :commit "033a5fa2b",
+    :commit "5b8fe1e2e",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A06Closure.lean",
      :sha256
-     "568ff570f37c3cc70df365d3839ba346aa7830b63657e0038ede3cf9d2521104"},
+     "cf4235c978a6c14c90071ada37b239eb6060fb697524b246e419a274d5191a07"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -49665,7 +49652,8 @@
     :lemma-apm-t94a06-normalpart-criticalvalues-null
     :lemma-apm-t94a06-ae-regularvalue-of-criticalvalues-null
     :lemma-apm-t94a06-normalpart-localcriticalimage-null
-    :lemma-apm-t94a06-criticalvalues-null-of-pointwise-open],
+    :lemma-apm-t94a06-criticalvalues-null-of-pointwise-open
+    :lemma-apm-t94a06-ae-regularvalue-normalpart-of-local],
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
@@ -49833,6 +49821,27 @@
    :id :lemma-apm-t94a06-normalpart-localcriticalimage-null,
    :kind :lemma,
    :depends-on [:lemma-apm-t94a06-normalpart-contmdiff],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_ae_regularValue_normalPart_of_local",
+    :type
+    "local chart nullity implies exact AE regular-value conclusion"},
+   :lemma
+   {:name "apm_t94a06_ae_regularValue_normalPart_of_local",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type
+    "local chart nullity implies exact AE regular-value conclusion",
+    :area "parametric-transversality-sard",
+    :proved-in :program-2026-10-13-close-t94a06},
+   :id :lemma-apm-t94a06-ae-regularvalue-normalpart-of-local,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t94a06-criticalvalues-null-of-pointwise-open
+    :lemma-apm-t94a06-ae-regularvalue-of-criticalvalues-null],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
