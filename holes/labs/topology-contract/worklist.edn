@@ -119196,6 +119196,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture; git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792568234023-422-98d38ec8",
+     :commands
+     ["git show/diff 2688e754"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: 2688e754 changes only t00J02Closure.lean (+24), adding a compiled selected-fiber calculation endpoint after prior history. Fixture afb497a6, source 0b3b4888, implementation 9511b21a, registry 170/170, and placeholders closure=0/Main=1 reproduce. Orientation and dependent boundary are sound: one selected locally-injective fiber generates its Fintype, the same representation builds the canonical witness, and its calculations yield homologyMap 2 f=0. Axioms are propext, Classical.choice, Quot.sound only. Main retains its registered sorry; deriving canonical calculations and final assembly remain listed."},
     :commit "2688e7549169afc4744087ac56d9b26885e2d115",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119204,7 +119216,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119222,7 +119234,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Sard bad-parameter fiber adapter.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked selected-fiber calculation endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119480,7 +119492,10 @@
      :reason "Banked zero-fiber subtype homeomorphism."}
     {:job 2,
      :commit "5f38c06aa2de10069a1effb15cc27da907f353e7",
-     :reason "Banked Sard bad-parameter fiber adapter."}]}
+     :reason "Banked Sard bad-parameter fiber adapter."}
+    {:job 3,
+     :commit "2688e7549169afc4744087ac56d9b26885e2d115",
+     :reason "Banked selected-fiber calculation endpoint."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -121907,7 +121922,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -121921,7 +121936,9 @@
     :type
     "selected locally-injective circle fiber plus canonical calculations implies H2 map zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "2688e7549169afc4744087ac56d9b26885e2d115"},
    :id
    :lemma-tophomologymap-eq-zero-of-exists-locallyinjective-calculations,
    :kind :lemma,
