@@ -36711,67 +36711,57 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Use C3 homology data and homotopy invariance to prove the finite trace sum and Euler formula.",
+    "Prove the alternating Betti sum, homotopy invariance of induced maps, and assemble C4.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Existing lints/artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_homology",
-      :type "rational homology data for every CP n",
+    [{:name "t99J05_cp_homology_finrank",
+      :type
+      "CP n has rational rank one exactly in even degrees at most 2n",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_rational_homology"
-       "t99J05_cp_zero_rational_homology"],
+      :depends-on ["t99J05_cp_homology"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_lefschetz_euler",
       :type
       "identity-homotopic self-map has Lefschetz number and Euler characteristic n+1",
       :status :partial,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_homology"],
+      :depends-on ["t99J05_cp_homology_finrank"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Banked global CP rational-homology data; Lefschetz/Euler calculation remains.",
+    "Banked the CP rational Betti profile; finite trace and homotopy transport remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792616593370-1551-6ae6540e",
-     :commands
-     ["git show --stat/--format=fuller 4c82128c53f04c84b3a34ff1255ddbdc810b1f68"
-      "git show 4c82128c5:ConstructionTargets/t99J05Closure.lean | sha256sum"
-      "git diff --check 4c82128c5^ 4c82128c5"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show 4c82128c5:ConstructionTargets/t99J05Closure.lean | rg -c \\b(sorry|admit)\\b"],
-     :finding
-     "PASS: reviewer codex-11 is independent of author topo-10. Commit 4c82128c5 changes only scoped Closure; fixture SHA-256 matches 588878f6bc54c522a753c3e624d59a78562cb7ca629e22c792ee65e5e63c2864. The global definition faithfully instantiates the generic induction with the literal CP0 datum and the proved CP n -> CP(n+1) successor datum; the successor/add-one normalization is already discharged by the induction adapter. No representation reversal or dropped hypothesis occurs. Closure/Main compile, registry is 170/170, placeholder delta is zero, and only standard axioms occur. This banks genuine program progress; the finite Lefschetz trace and Euler calculation remain listed."},
-    :commit "4c82128c53f04c84b3a34ff1255ddbdc810b1f68",
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
+      :exit 1,
+      :correction
+      "normalized Even witness and corrected homology-data field names"}],
+    :commit "24455ff5dbeadd8457545ce60fe847b135aa6f8a",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "588878f6bc54c522a753c3e624d59a78562cb7ca629e22c792ee65e5e63c2864"},
+     "b9f4413762f4e8cfae4042d09f075abae5a89801bf9b114b1eb0875a46c6ea83"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -37281,7 +37271,8 @@
    [:lemma-t99j05-cp-homology
     :lemma-t99j05-cp0-homology
     :lemma-t99j05-cp-homology-step
-    :lemma-t99j05-subsingleton-rational-homology],
+    :lemma-t99j05-subsingleton-rational-homology
+    :lemma-t99j05-cp-homology-finrank],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -49647,6 +49638,25 @@
    :id :lemma-apm-t94a06-transverse-ae-of-regularvalues,
    :kind :lemma,
    :depends-on [:lemma-apm-t94a06-ae-regularvalue-normalpart],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_homology_finrank",
+    :type
+    "CP n has rational rank one exactly in even degrees at most 2n"},
+   :lemma
+   {:name "t99J05_cp_homology_finrank",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "CP n has rational rank one exactly in even degrees at most 2n",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-homology-finrank,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-homology],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
