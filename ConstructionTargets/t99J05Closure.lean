@@ -1272,6 +1272,24 @@ noncomputable def t99J05_ambientSubspaceRangeHomologyIso
       Homology A k :=
   ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ A k
 
+/-- Degreewise transport from the union term of the successor
+Mayer--Vietoris complex to homology of the literal union of its patches. -/
+noncomputable def t99J05_cp_successor_unionRangeHomologyIso (n k : ℕ) :
+    ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+      ((ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorLowerPatch n) ⊔
+        ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorTopPatch n) :
+        (TopCat.toSSet.obj (TopCat.of (CP (n + 1)))).Subcomplex) : SSet)).homology k ≅
+      Homology (cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n) k :=
+  (CategoryTheory.asIso (HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientSubspaceUnionRangeInclusion.unionRangeChainsInclusion
+      ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n)) k)).trans
+    (t99J05_ambientSubspaceRangeHomologyIso
+      (cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n) k)
+
+#print axioms t99J05_cp_successor_unionRangeHomologyIso
+
 /-- The range-to-literal homology isomorphism commutes with inclusion into
 ambient singular homology. -/
 theorem t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
