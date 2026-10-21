@@ -89423,6 +89423,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "git show --check ff8497481", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792594000857-977-c4ef83ba",
+     :commands
+     ["git show/diff-tree ff8497481"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit ff8497481 changes only t97A03Closure after history 56a69c3d6; fixture SHA c18590c7... matches. Covering monodromy bijectivity is correctly upgraded to literal fiber equivalences, and two loop transports feed the normalized model selector with correct endpoint/orientation types. Nontriviality from connectedness remains explicit residual, so no facade overclaim. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; realization and invariants remain listed."},
     :commit "ff8497481",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89431,7 +89443,7 @@
      "c18590c7a5363b7ddf141e72db87b65efba33f7df3c54f685ef87f687d509ffd"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89449,7 +89461,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized model selection from actual cardinal-two fiber transports.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked covering-path fiber equivalences and loop-model selection.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89490,7 +89502,11 @@
     {:job 2,
      :commit "56a69c3d6",
      :reason
-     "Banked normalized model selection from actual cardinal-two fiber transports."}]}
+     "Banked normalized model selection from actual cardinal-two fiber transports."}
+    {:job 3,
+     :commit "ff8497481",
+     :reason
+     "Banked covering-path fiber equivalences and loop-model selection."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100206,7 +100222,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcModel_exists_of_covering_loops",
@@ -100216,7 +100232,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "covering loop monodromies select normalized model",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "ff8497481"},
    :id :lemma-twoarcmodel-exists-of-covering-loops,
    :kind :lemma,
    :depends-on [:lemma-twoarcmodel-exists-of-fiber-transports],
