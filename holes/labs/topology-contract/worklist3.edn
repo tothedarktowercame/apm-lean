@@ -36753,6 +36753,19 @@
     [{:cmd "initial union compile",
       :exit 1,
       :note "Qualified CategoryTheory.IsIso."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792582365925-690-33c130ff",
+     :commands
+     ["git show/diff-tree 99fc0a0c"
+      "sha256sum fixture and git blob"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git diff --check 99fc0a0c^ 99fc0a0c"],
+     :finding
+     "PASS: new post-history commit 99fc0a0c changes only scoped Closure; fixture/blob SHA matches 3f2cd50f.... The milestone faithfully specializes the union-range homology equivalence to the two literal open CP-successor patches, with both openness hypotheses supplied and the correct map orientation (union-range chains inclusion induces an iso). Closure and Main compile; registry 170/170; no code placeholders/axiom declarations; apm_t99j05 uses only propext/Classical.choice/Quot.sound. Proved union-range milestone and remaining partial literal-union transport are listed."},
     :commit "99fc0a0c3e42f00b459a0d54795eb58fd4b4046f",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36761,7 +36774,7 @@
      "3f2cd50fec313d2ccf662af152f87b7c0873038a39fc6e4d09429826fd46ade1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36779,7 +36792,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal signed-arrow comparison; union transport remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the specialized union-range homology isomorphism; exactness transport to literal CP remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36926,7 +36939,11 @@
     {:job 5,
      :commit "fa86dcf4e9e4ae54d7482c593dda1bc400aaf203",
      :reason
-     "Committed literal signed-arrow comparison; union transport remains."}]}
+     "Committed literal signed-arrow comparison; union transport remains."}
+    {:job 6,
+     :commit "99fc0a0c3e42f00b459a0d54795eb58fd4b4046f",
+     :reason
+     "Committed the specialized union-range homology isomorphism; exactness transport to literal CP remains."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -48577,7 +48594,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_unionRange_homologyMap_isIso",
@@ -48589,7 +48606,9 @@
     :type
     "union-range inclusion induces a homology isomorphism for successor patches",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "99fc0a0c3e42f00b459a0d54795eb58fd4b4046f"},
    :id :lemma-t99j05-cp-successor-unionrange-homologymap-isiso,
    :kind :lemma,
    :depends-on
