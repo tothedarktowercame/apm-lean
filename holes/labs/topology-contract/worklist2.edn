@@ -89424,6 +89424,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "git show --check 56a69c3d6", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792593381295-952-55f04221",
+     :commands
+     ["git show/diff-tree 56a69c3d6"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint; sha256sum; placeholder scan"],
+     :finding
+     "PASS: topo-6 commit 56a69c3d6 changes only t97A03Closure after history 160a38138; fixture SHA 64b32a71... matches. From an actual cardinal-two fiber and nontrivial transports, it chooses a Fin 2 label, transfers action-connectedness, and invokes the normalized model selector with correct orientations; it does not overclaim topological realization. Build/Main/registry pass (170/0); frozen digest abf8282b... unchanged; placeholders closure/Main=0/3; standard axioms only. Valid program STOP; constructing transports, quotient homeomorphisms, and invariants remain listed."},
     :commit "56a69c3d6",
     :changed-paths ["ConstructionTargets/t97A03Closure.lean"],
     :fixture
@@ -89432,7 +89444,7 @@
      "64b32a71672619aa7988d2030470f8253a146a12f108dd211b2405b9e52230d6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89450,7 +89462,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked actual-fiber transport to labeled two-arc action.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized model selection from actual cardinal-two fiber transports.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89487,7 +89499,11 @@
     {:job 1,
      :commit "160a38138",
      :reason
-     "Banked actual-fiber transport to labeled two-arc action."}]}
+     "Banked actual-fiber transport to labeled two-arc action."}
+    {:job 2,
+     :commit "56a69c3d6",
+     :reason
+     "Banked normalized model selection from actual cardinal-two fiber transports."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -100182,7 +100198,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "twoArcModel_exists_of_fiber_transports",
@@ -100193,7 +100209,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "nontrivial actual fiber transports select normalized model",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "56a69c3d6"},
    :id :lemma-twoarcmodel-exists-of-fiber-transports,
    :kind :lemma,
    :depends-on [:lemma-labeledtwotransport-actionconnected-iff],
