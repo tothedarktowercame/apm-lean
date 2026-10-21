@@ -119152,49 +119152,48 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "recorded commit 917e36c9 fails lake env lean ConstructionTargets/t00J02Closure.lean at line 1686 with No goals to be solved, and targetChartCoordinate_ambientCriticalImage_null reports sorryAx; repair the proof so the exact commit compiles and the milestone is sorry-free with standard axioms only",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct chart-to-exact-lift equality and chart top-degree identity; replace false Producer in Main.",
+    "Construct zero chart component sums and signed chart top-degree identity from transverse data; replace false Producer in Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "unrelated dirt preserved"],
+    :warnings ["Main sorry" "untracked review dirs preserved"],
     :missing-theorems
-    [{:name "topHomologyMap_eq_zero_of_exactLiftComparison",
-      :type "exact-lift comparison and chart identity imply H2 zero",
+    [{:name "topHomologyMap_eq_zero_of_diskBounded_chartSums",
+      :type
+      "disk data plus zero chart sums and chart identity imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["chartComponentSums_eq_zero_of_exactLiftComparison"
-       "topHomologyMap_eq_zero_of_chartComponentSums"],
+      :depends-on ["topHomologyMap_eq_zero_of_exactLiftComparison"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["topHomologyMap_eq_zero_of_exactLiftComparison"],
+      :depends-on ["topHomologyMap_eq_zero_of_diskBounded_chartSums"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ffa0d053e3e20477adb1caa2e86efa26c66dc6406c3cf834a3186ebed8a0e475",
+     "0de01f4f1af44c431b5e7953ac600f8f0843842bcaad3b4830d82f4ff5488444",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked exact-lift H2 endpoint.",
+    :reason "Banked disk-bounded chart-sum H2 endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
-    :commit "9a915247d9e30db6515849f106b5f1025fa8ce24",
+    :commit "0cf80217c592b5e6c404d724eddb1d002aeb2f33",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119202,7 +119201,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119926,7 +119925,8 @@
     :lemma-surfacetopdegree-eq-zero-of-chartcomponentsums
     :lemma-tophomologymap-eq-zero-of-chartcomponentsums
     :lemma-chartcomponentsums-eq-zero-of-exactliftcomparison
-    :lemma-tophomologymap-eq-zero-of-exactliftcomparison],
+    :lemma-tophomologymap-eq-zero-of-exactliftcomparison
+    :lemma-tophomologymap-eq-zero-of-diskbounded-chartsums],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123239,6 +123239,25 @@
    :id :lemma-exists-nhds-contdiffon-corrected-lift,
    :kind :lemma,
    :depends-on [:lemma-exists-nhds-contdiffon-corrected-rightinverse],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_diskBounded_chartSums",
+    :type
+    "disk data plus zero chart sums and chart identity imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_diskBounded_chartSums",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "disk data plus zero chart sums and chart identity imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-tophomologymap-eq-zero-of-diskbounded-chartsums,
+   :kind :lemma,
+   :depends-on [:lemma-tophomologymap-eq-zero-of-exactliftcomparison],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
