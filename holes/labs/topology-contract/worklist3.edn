@@ -36711,12 +36711,12 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:residual
-    "Transport union and derive the CP successor homology step.",
+    "Compose the union-range iso with the open-cover equality, then derive the CP successor homology step.",
     :evidence
     {:placeholder-delta {:t99J05 [0 0]},
      :statement-hashes {:registry "170/170"}},
@@ -36724,26 +36724,25 @@
     :warnings
     ["Existing lints/Main sorry; unrelated artifacts preserved."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
-      :type "transported arrow is literal signed arrow",
+    [{:name "t99J05_cp_successor_unionRange_homologyMap_isIso",
+      :type
+      "union-range inclusion induces a homology isomorphism for successor patches",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_homologyMap_lift_comp_rationalHomologyBiprodIso_hom"
-       "t99J05_cp_successor_literalOverlapToPieces_components"],
+      ["t99J05_cp_successor_mayerVietoris_f_transport_eq_literal"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_mayerVietoris_union_transport",
-      :type "transport union exactness to CP successor",
-      :status :not-started,
+      :type "transport union exactness to literal CP successor",
+      :status :partial,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_mayerVietoris_f_transport_eq_literal"],
+      :depends-on ["t99J05_cp_successor_unionRange_homologyMap_isIso"],
       :area "rational-homology-lefschetz"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed literal signed-arrow comparison; union transport remains.",
+    "Committed the specialized union-range homology isomorphism; exactness transport to literal CP remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36751,31 +36750,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "closure attempts",
+    [{:cmd "initial union compile",
       :exit 1,
-      :note "Corrected universe/reassociation."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792581652712-669-1e479c53",
-     :commands
-     ["git show/diff-tree fa86dcf4"
-      "sha256sum fixture and git blob"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "comment-aware placeholder census"],
-     :finding
-     "PASS: post-history commit fa86dcf4 changes only scoped Closure; fixture/blob SHA matches b506c035.... The iso-cancellation lemma is correctly oriented (e.inv ≫ g = f from e.hom ≫ f = g). The MV theorem proves equality to the literal signed arrow by biproduct extensionality, cancelling the intersection comparison separately against left/right naturality; representation changes remain explicit. Closure and Main compile; registry 170/170; both contain 0 code placeholders/axiom declarations; apm_t99j05 uses only propext/Classical.choice/Quot.sound. Proved milestone and remaining union transport are listed."},
-    :commit "fa86dcf4e9e4ae54d7482c593dda1bc400aaf203",
+      :note "Qualified CategoryTheory.IsIso."}],
+    :commit "99fc0a0c3e42f00b459a0d54795eb58fd4b4046f",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99J05Closure.lean",
      :sha256
-     "b506c035305a8db31a234f1fb1e2c49d96c8232f187992272ee73607076c0b81"},
+     "3f2cd50fec313d2ccf662af152f87b7c0873038a39fc6e4d09429826fd46ade1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48334,7 +48320,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport
-    :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal],
+    :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal
+    :lemma-t99j05-cp-successor-unionrange-homologymap-isiso],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -48587,6 +48574,26 @@
    :lemma-t99j05-homologymap-lift-comp-rationalhomologybiprodiso-hom,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_unionRange_homologyMap_isIso",
+    :type
+    "union-range inclusion induces a homology isomorphism for successor patches"},
+   :lemma
+   {:name "t99J05_cp_successor_unionRange_homologyMap_isIso",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "union-range inclusion induces a homology isomorphism for successor patches",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-unionrange-homologymap-isiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
