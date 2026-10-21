@@ -180,6 +180,14 @@ noncomputable def apm_t97A03_baseSphereReturn (A B : Circle) :
       (apm_t97A03_baseSphere A B apm_t97A03_south) :=
   apm_t97A03_sphereReturn.map (apm_t97A03_continuous_baseSphere A B)
 
+/-- The sphere return is sent pointwise to the wedge point by the literal
+collapse map. -/
+lemma apm_t97A03_collapse_baseSphereReturn (A B : Circle) (t : unitInterval) :
+    apm_t97A03_collapseToCutCircle A B
+        (apm_t97A03_baseSphereReturn A B t) =
+      apm_t97A03_cutCircleMap A B A := by
+  rfl
+
 @[simp] lemma apm_t97A03_baseSphereReturn_zero (A B : Circle) :
     apm_t97A03_baseSphereReturn A B 0 = apm_t97A03_baseCircle A B A := by
   rw [(apm_t97A03_baseSphereReturn A B).source,
@@ -229,6 +237,22 @@ noncomputable def apm_t97A03_baseComplementaryCircleArc (A B : Circle) :
     Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B B) :=
   (apm_t97A03_complementaryCircleArc A B).map
     (apm_t97A03_continuous_baseCircle A B)
+
+/-- On the first literal arc, collapse is exactly the quotient projection of
+the original circle arc. -/
+lemma apm_t97A03_collapse_baseCircleArc (A B : Circle) (t : unitInterval) :
+    apm_t97A03_collapseToCutCircle A B (apm_t97A03_baseCircleArc A B t) =
+      apm_t97A03_cutCircleMap A B (apm_t97A03_circleArc A B t) := by
+  rfl
+
+/-- The same exact comparison holds for the genuinely complementary arc. -/
+lemma apm_t97A03_collapse_baseComplementaryCircleArc
+    (A B : Circle) (t : unitInterval) :
+    apm_t97A03_collapseToCutCircle A B
+        (apm_t97A03_baseComplementaryCircleArc A B t) =
+      apm_t97A03_cutCircleMap A B
+        (apm_t97A03_complementaryCircleArc A B t) := by
+  rfl
 
 /-- A genuine based loop in the frozen base: traverse the literal circle
 summand from `A` to `B`, then return through the literal sphere summand. -/
