@@ -233,6 +233,33 @@ theorem twoArcPermMonodromy_model_exists_of_actionConnected
   twoArcPermMonodromy_model_exists_of_reachable first second
     (twoArc_reachable_of_actionConnected first second hconnected)
 
+/-! ## Algebraic cellular data for the two literal models -/
+
+/-- The degree-one cellular boundary after choosing the one-vertex model. -/
+def modelBoundaryOne : (Fin 3 → ℤ) →ₗ[ℤ] ℤ := 0
+
+/-- The two lifted sphere cells attach with zero cellular boundary. -/
+def modelBoundaryTwo : (Fin 2 → ℤ) →ₗ[ℤ] (Fin 3 → ℤ) := 0
+
+/-- All one-chains are cycles in the model cellular presentation. -/
+theorem modelBoundaryOne_ker : LinearMap.ker modelBoundaryOne = ⊤ := by
+  simp [modelBoundaryOne]
+
+/-- The two-cells impose no degree-one cellular relations. -/
+theorem modelBoundaryTwo_range : LinearMap.range modelBoundaryTwo = ⊥ := by
+  simp [modelBoundaryTwo]
+
+/-- All two-chains are cycles, giving the two independent sphere classes. -/
+theorem modelBoundaryTwo_ker : LinearMap.ker modelBoundaryTwo = ⊤ := by
+  simp [modelBoundaryTwo]
+
+/-- Package the cellular calculation used by both quotient models. -/
+theorem modelCellular_zero_boundary_data :
+    LinearMap.ker modelBoundaryOne = ⊤ ∧
+    LinearMap.range modelBoundaryTwo = ⊥ ∧
+    LinearMap.ker modelBoundaryTwo = ⊤ :=
+  ⟨modelBoundaryOne_ker, modelBoundaryTwo_range, modelBoundaryTwo_ker⟩
+
 #print axioms twoArcMonodromy_nontrivial_classification
 #print axioms twoArcMonodromy_model_exists
 #print axioms finTwoPerm_eq_id_or_swap
@@ -243,5 +270,6 @@ theorem twoArcPermMonodromy_model_exists_of_actionConnected
 #print axioms twoArc_reachable_of_actionConnected
 #print axioms twoArcActionConnected_iff_nontrivial
 #print axioms twoArcPermMonodromy_model_exists_of_actionConnected
+#print axioms modelCellular_zero_boundary_data
 
 end ConstructionTargets.t97A03Closure
