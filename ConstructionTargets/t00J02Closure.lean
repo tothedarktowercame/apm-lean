@@ -3432,6 +3432,38 @@ noncomputable def canonicalRegularFiberDegreeCalculations_of_diskBounded
 
 #print axioms canonicalRegularFiberDegreeCalculations_of_diskBounded
 
+/-- The direct disk-bounded endpoint: once the component-localization
+comparison and global top-degree formula are known at a finite fiber, the
+canonical disk lifts force the induced map on top homology to vanish. -/
+theorem topHomologyMap_eq_zero_of_diskBounded_comparison
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k =
+      exactLiftComponentDegree
+        (occupiedRegularFiber_exactZeroDegreeLifts
+          f c hc eS hessential hdisks y hy) k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        regularFiberLocalDegree e f y x) :
+    homologyMap 2 f = 0 :=
+  (canonicalRegularFiberDegreeCalculations_of_diskBounded
+    f c hc eS hessential hdisks y hy e orientationSign hcomparison htop).topHomologyMap_eq_zero_withoutLifts
+
+#print axioms topHomologyMap_eq_zero_of_diskBounded_comparison
+
 /-- Direct composition of Sard nullity on the circle parameter with the
 canonical signed-count calculation interface. -/
 theorem topHomologyMap_eq_zero_of_badParameters_measure_zero_calculations
