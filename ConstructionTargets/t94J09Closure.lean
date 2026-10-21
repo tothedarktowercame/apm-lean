@@ -2381,6 +2381,32 @@ theorem frozenBoundaryGraphH1CycleComparison_of_kernel_leftInverse_onto
   rw [LinearMap.comp_apply, LinearMap.id_apply] at hx hy
   exact hx.symm.trans ((congrArg l hxy).trans hy)
 
+/-- A right inverse from the six explicit cycle coordinates discharges
+surjectivity of a kernel-valued comparison.  Thus the remaining geometric
+construction may give concrete left and right inverse formulas. -/
+theorem frozenBoundaryGraphH1CycleComparison_of_kernel_twoSidedInverse
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ]
+        LinearMap.ker frozenGraphBoundary)
+    (l : LinearMap.ker frozenGraphBoundary →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (r : (Fin 6 → ℤ) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hleft : l.comp c = LinearMap.id)
+    (hright : c.comp r = frozenGraphBoundaryKernelEquiv.symm.toLinearMap) :
+    Nonempty
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) := by
+  apply frozenBoundaryGraphH1CycleComparison_of_kernel_leftInverse_onto c l hleft
+  intro z
+  refine ⟨r (frozenGraphBoundaryKernelEquiv z), ?_⟩
+  have hz := LinearMap.congr_fun hright (frozenGraphBoundaryKernelEquiv z)
+  rw [LinearMap.comp_apply] at hz
+  exact hz.trans (frozenGraphBoundaryKernelEquiv.symm_apply_apply z)
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -3509,6 +3535,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphH1Comparison_range
 #print axioms frozenBoundaryGraphH1CycleComparison_of_leftInverse_onto
 #print axioms frozenBoundaryGraphH1CycleComparison_of_kernel_leftInverse_onto
+#print axioms frozenBoundaryGraphH1CycleComparison_of_kernel_twoSidedInverse
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
