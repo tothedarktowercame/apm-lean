@@ -119197,6 +119197,18 @@
      {:cmd "hashes/diff", :exit 0}],
     :diagnostic-history
     [{:cmd "Closure compile", :exit 1, :correction "added ∞≠0"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792607639343-1310-32c285b4",
+     :commands
+     ["git show/diff abd47c09"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"
+      "lake env lean problems/t00J02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum/rg/git diff --check"],
+     :finding
+     "PASS program STOP: abd47c09 changes only t00J02Closure.lean (+32), adding a compiled global-critical-value to finite-chart witness bridge after prior history 5725057f. Fixture afb497a6, source 0b3b4888, implementation 05ba7ee1; registry 170/170; placeholders closure=0/Main=1. Orientation and boundaries are exact: the Fin cover selects a chart containing g(x); surjectivity of the chart-composed mfderiv would imply surjectivity of mfderiv g via the established iff, contradicting global criticality. Thus the same x witnesses chart criticality within targetChartDomain. The milestone uses only propext, Classical.choice, Quot.sound. Main retains its registered sorry; applying this bridge to nullity, signed counts, and final assembly remain listed."},
     :commit "abd47c094f526414d4bca1c7e620e04f5cc655c3",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119205,7 +119217,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119223,7 +119235,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Fin-indexed chart cover.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked critical witness.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119567,7 +119579,10 @@
      :reason "Banked finite canonical chart cover."}
     {:job 4,
      :commit "5725057f8703d9e00f44927e9233205fa5f8f1e2",
-     :reason "Banked Fin-indexed chart cover."}]}
+     :reason "Banked Fin-indexed chart cover."}
+    {:job 5,
+     :commit "abd47c094f526414d4bca1c7e620e04f5cc655c3",
+     :reason "Banked critical witness."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -122775,7 +122790,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finite_targetChart_witness_of_globalCriticalValue",
@@ -122785,7 +122800,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "global critical value has chart witness",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "abd47c094f526414d4bca1c7e620e04f5cc655c3"},
    :id :lemma-finite-targetchart-witness-of-globalcriticalvalue,
    :kind :lemma,
    :depends-on [:lemma-exists-fin-chartat-source-cover],
