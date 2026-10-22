@@ -89430,6 +89430,19 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/sorry scans", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792633646152-2034-0b75e945",
+     :commands
+     ["git show/diff 0e3225e1f"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t97A03 --rev 0e3225e1f"
+      "sha256sum + placeholder/#print axioms scans"],
+     :finding
+     "PASS: exact commit changes only in-scope Main.lean. Fixture SHA 581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f; registry 170/0; frozen digest abf8282be594bd45bebca6dc29d8b578f4371872506f062166ee2d225b6ca0a4. Fresh exact-revision build/Lean pass; closure/Main placeholders 0/3. FreeGroup induction correctly gives every element an explicit signed-list spelling, and the concrete normalized word-evaluation lemma proves both directions between genuine-arc signed generation and evaluator surjectivity. Orientations are correct and only standard axioms occur. This is new compiled algebraic progress; geometric evaluator bijectivity, covers, and invariants remain listed."},
     :commit "0e3225e1f",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89438,7 +89451,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89456,7 +89469,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked bijectivity equivalence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized generation equivalence.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89627,7 +89640,10 @@
      :reason "Banked normalized free-word square."}
     {:job 9,
      :commit "e6fcb52bf",
-     :reason "Banked bijectivity equivalence."}]}
+     :reason "Banked bijectivity equivalence."}
+    {:job 1,
+     :commit "0e3225e1f",
+     :reason "Banked normalized generation equivalence."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -101513,7 +101529,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_normalizedCutGeneratorFreeGroupMap_word",
@@ -101523,7 +101539,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "explicit words evaluate in genuine normalized arcs",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "0e3225e1f"},
    :id :lemma-apm-t97a03-normalizedcutgeneratorfreegroupmap-word,
    :kind :lemma,
    :depends-on
@@ -101552,7 +101570,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_normalized_signed_generation_iff_surjective",
@@ -101564,7 +101582,9 @@
     :type
     "signed generation iff concrete evaluator surjective; explicit free-word spelling proved",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "0e3225e1f"},
    :id :lemma-apm-t97a03-normalized-signed-generation-iff-surjective,
    :kind :lemma,
    :depends-on
