@@ -144,6 +144,46 @@ theorem t00A04_hatcherConclusion_union
 
 /-- **LIBRARY.** Top local mod-2 homology of a boundaryless manifold has a
 unique nonzero element. -/
+/- The purely algebraic last step.  Stating the two-element description
+explicitly keeps the geometric leaves below independent of any choice of a
+distinguished generator. -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_of_eq_zero_or_eq
+    {M : Type*} [Zero M]
+    (g : M) (hspan : ∀ z : M, z = 0 ∨ z = g) :
+    ∀ a b : M, a ≠ 0 → b ≠ 0 → a = b := by
+  intro a b ha hb
+  rcases hspan a with ha0 | hag
+  · exact (ha ha0).elim
+  rcases hspan b with hb0 | hbg
+  · exact (hb hb0).elim
+  exact hag.trans hbg.symm
+
+/- Euclidean local calculation.  This is the missing coefficient analogue of
+the integral disk computations currently available in ConstructionTargets:
+excision to an open disk, radial comparison with its boundary sphere, and the
+coefficient long exact sequence identify the group with `ZMod 2`. -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean (d : ℕ) :
+    ∀ x : EuclideanSpace ℝ (Fin d),
+      ∀ a b : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {x} d,
+        a ≠ 0 → b ≠ 0 → a = b := by
+  sorry
+
+/- Chart excision and transport.  The chart around `x` first identifies its
+local pair with an open subset of `E`; a linear homeomorphism
+`E ≃ₗ EuclideanSpace ℝ (Fin (finrank ℝ E))` transports the pair, and a
+second excision identifies it with the ambient Euclidean local pair. -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_chart
+    (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [ChartedSpace E X]
+    [IsManifold I ∞ X] [BoundarylessManifold I X]
+    (heuclidean : ∀ (d : ℕ) (x : EuclideanSpace ℝ (Fin d)),
+      ∀ a b : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {x} d,
+        a ≠ 0 → b ≠ 0 → a = b) :
+    ∀ x : X, ∀ a b : t00A04_ModTwoLocalHomology X {x} (Module.finrank ℝ E),
+      a ≠ 0 → b ≠ 0 → a = b := by
+  sorry
+
 theorem t00A04_modTwoLocalHomology_unique_nonzero
     (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -151,8 +191,8 @@ theorem t00A04_modTwoLocalHomology_unique_nonzero
     [IsManifold I ∞ X] [BoundarylessManifold I X] :
     ∀ x : X, ∀ a b : t00A04_ModTwoLocalHomology X {x} (Module.finrank ℝ E),
       a ≠ 0 → b ≠ 0 → a = b := by
-  sorry
-
+  exact t00A04_modTwoLocalHomology_unique_nonzero_aux_chart E X I
+    t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean
 /-- Euclidean specialization of local uniqueness, with the degree written as
 `d` so finite-union seats avoid dependent rewriting of `finrank`. -/
 theorem t00A04_modTwoLocalHomology_unique_nonzero_euclidean (d : ℕ) :
