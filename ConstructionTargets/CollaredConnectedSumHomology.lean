@@ -7384,6 +7384,87 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
   erw [punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_trans_counit_app, h2, h1, Category.comp_id]
   rfl
 
+/-- Descent seam (split after job 2537): on a morphism included from the `U` piece, the
+two-open descent functor is that piece's functor conjugated by the datum's object
+equalities.  This is `pieceRestrictionIso` naturality. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_descent
+    {X : Type} [TopologicalSpace X] {U V : Set X} {C : Type} [Category C]
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (D : @FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum X _ U V C _)
+    {a z : FundamentalGroupoid (FundamentalGroupoidTwoOpenDescent.CoverPiece U V true)}
+    (f : a ⟶ z) :
+    (TwoOpenDescentFunctor.twoOpenDescentFunctor hU hV hcover D).map
+        ((FundamentalGroupoid.map (TwoOpenDescentRestriction.coverPieceInclusion true)).map f) =
+      eqToHom (D.obj_eq true a).symm ≫ (D.functor true).map f ≫
+        eqToHom (D.obj_eq true z) := by
+  change (TwoOpenDescentRestriction.restrictedAmbientFunctor hU hV hcover D true).map f = _
+  exact (NatIso.naturality_1
+    (TwoOpenDescentRestriction.pieceRestrictionIso hU hV hcover D true) f).symm
+
+/-- Strictification seam (split after job 2537): the strictified `U`-piece functor is the
+pseudococone's left leg conjugated by `strictifiedObjectIso` (an `eqToIso` on `U`). -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_strict
+    {X : Type} [TopologicalSpace X] {U V : Set X} {C : Type} [Category C]
+    (hcover : U ∪ V = Set.univ)
+    (P : TwoOpenFundamentalGroupoidSpan.PseudoFunctorCocone (X := X) (U := U) (V := V) (C := C))
+    {a z : FundamentalGroupoid (FundamentalGroupoidTwoOpenDescent.CoverPiece U V true)}
+    (f : a ⟶ z) :
+    ((TwoOpenPseudoCoconeStrictification.strictifiedDescentDatum hcover P).functor true).map f =
+      (TwoOpenFundamentalGroupoidSpan.strictifiedObjectIso hcover P true a).inv ≫
+        P.left.map f ≫
+        (TwoOpenFundamentalGroupoidSpan.strictifiedObjectIso hcover P true z).hom := rfl
+
+/-- The pseudococone that `mapping.inverse` produces from `𝟭` before the descent layer. -/
+def punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_pseudo
+    {X : Type} [TopologicalSpace X] {U V : Set X}
+    [PathConnectedSpace U] [PathConnectedSpace V] [SimplyConnectedSpace (U ∩ V : Set X)]
+    (w : (U ∩ V : Set X)) :
+    TwoOpenFundamentalGroupoidSpan.PseudoFunctorCocone (X := X) (U := U) (V := V)
+      (C := GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w) :=
+  (((TwoOpenFreeProductMapping.pseudoSpanEquivalence (U := U) (V := V)
+      (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)).trans
+    (TwoOpenPointSpanComparison.comparison U V w
+      (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w))).trans
+    ((FreeProductPointSpanRepresentations.freeProductPointSpanEquivalence
+        (C := GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)
+        (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)
+        (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)).trans
+      (FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence
+        (C := GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)
+        (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)
+        (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)))).inverse.obj (𝟭 _)
+
+/-- `inverseIdentityFunctor` is the descent functor of the strictified `_aux_pseudo`. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_unfold
+    {X : Type} [TopologicalSpace X] {U V : Set X}
+    [PathConnectedSpace U] [PathConnectedSpace V] [SimplyConnectedSpace (U ∩ V : Set X)]
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X)) :
+    TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w =
+      TwoOpenDescentFunctor.twoOpenDescentFunctor hU hV hcover
+        (TwoOpenPseudoCoconeStrictification.strictifiedDescentDatum hcover
+          (punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_pseudo w)) := rfl
+
+/-- Remaining leaf (split after job 2537).  The left leg of `_aux_pseudo` sends `g` to
+`inl g`.  The descent and strictification layers are already removed (`_aux_descent`,
+`_aux_strict`, `_aux_unfold`); what is left is, from the inside out,
+`representationSingleObjEquivalence.inverse.obj 𝟭`, `fromRepresentationFunctor`,
+`TwoOpenPointSpanComparison.comparison.inverse`, `pseudoSpanEquivalence.inverse` (identity
+on legs).  The comparison inverse should make the left leg
+`(leftEquivalence U V w).functor ⋙ _`, i.e. `connectorSingleObjEquivalence (leftConnectors w)`
+at the base point `w`, followed by `inl`. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_leg
+    {X : Type} [TopologicalSpace X] {U V : Set X}
+    [PathConnectedSpace U] [PathConnectedSpace V] [SimplyConnectedSpace (U ∩ V : Set X)]
+    (w : (U ∩ V : Set X)) (g : FundamentalGroup U ⟨w.1, w.2.1⟩) :
+    (punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_pseudo (U := U) (V := V) w).left.map
+        (show (⟨⟨w.1, w.2.1⟩⟩ : FundamentalGroupoid
+            (FundamentalGroupoidTwoOpenDescent.CoverPiece U V true)) ⟶ ⟨⟨w.1, w.2.1⟩⟩ from g) =
+      (Monoid.Coprod.inl g : Monoid.Coprod
+        (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)
+        (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)) := by
+  sorry
+
 /-- Left leg of the reconstructed source equivalence (re-routed 2026-10-22).  The
 previous proof went through `mapping.functor` and its counit, which needed
 `_forward_inl_aux_connector`; that connector compares against
@@ -7407,7 +7488,17 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
         (FundamentalGroup.map
           (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) =
       Monoid.Coprod.inl g := by
-  sorry
+  change (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+    hU hV hcover w).map _ = _
+  rw [punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_unfold hU hV hcover w]
+  have h := punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_descent hU hV hcover
+    (TwoOpenPseudoCoconeStrictification.strictifiedDescentDatum hcover (punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_pseudo w))
+    (show (⟨⟨w.1, w.2.1⟩⟩ : FundamentalGroupoid
+        (FundamentalGroupoidTwoOpenDescent.CoverPiece U V true)) ⟶ ⟨⟨w.1, w.2.1⟩⟩ from g)
+  rw [punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_strict] at h
+  refine h.trans ?_
+  rw [punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_leg]
+  rfl
 
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
     {X : Type} [TopologicalSpace X]
