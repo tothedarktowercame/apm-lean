@@ -3999,6 +3999,46 @@ theorem regularFiber_surfaceTopDegree_eq_signedSum
   htop.trans (regularFiberSignedSum_eq_of_localizationCoefficients
     e f y component orientationSign coefficient hlocalization).symm
 
+/-- Exact end-to-end consumer for transverse chart data: the two chart
+identities produce canonical component vanishing and the canonical top-degree
+formula, hence disk boundedness kills the integral top-homology map. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hlocalization : ∀ x, coefficient x •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e))
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k =
+      exactLiftComponentDegree
+        (occupiedRegularFiber_exactZeroDegreeLifts
+          f c hc eS hessential hdisks y hy) k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        coefficient x) :
+    homologyMap 2 f = 0 :=
+  topHomologyMap_eq_zero_of_diskBounded_canonicalSums
+    f c hc eS hessential hdisks y hy e orientationSign
+    (transverseDiskBounded_canonicalComponentSums_eq_zero
+      f c hc eS hessential hdisks y hy e coefficient hlocalization hcomparison)
+    (regularFiber_surfaceTopDegree_eq_signedSum e f y
+      (occupiedRegularFiberComponentIndex f c y hy) orientationSign
+      coefficient hlocalization htop)
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -4028,6 +4068,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_underlying_eq
 #print axioms ConstructionTargets.T00J02Closure.regularFiberSignedSum_eq_of_fiberEquiv
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_surfaceTopDegree_eq_signedSum
+#print axioms ConstructionTargets.T00J02Closure.t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
