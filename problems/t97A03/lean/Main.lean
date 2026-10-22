@@ -994,6 +994,40 @@ theorem apm_t97A03_normalize_comp_cutGeneratorFreeGroupMap (A B : Circle) :
       apm_t97A03_normalizedCutGeneratorFreeGroupMap,
       apm_t97A03_cutCircleNormalizePiOneHom_second]
 
+/-- The normalized free-word calculation is exactly equivalent to the
+original one, because the vertical geometric normalization is bijective. -/
+theorem apm_t97A03_cutGenerator_bijective_iff_normalized (A B : Circle) :
+    Function.Bijective (apm_t97A03_cutGeneratorFreeGroupMap A B) ↔
+      Function.Bijective
+        (apm_t97A03_normalizedCutGeneratorFreeGroupMap A B) := by
+  let n := apm_t97A03_cutCircleNormalizePiOneHom A B
+  have hn := apm_t97A03_cutCircleNormalizePiOneHom_bijective A B
+  have hs : n.comp (apm_t97A03_cutGeneratorFreeGroupMap A B) =
+      apm_t97A03_normalizedCutGeneratorFreeGroupMap A B :=
+    apm_t97A03_normalize_comp_cutGeneratorFreeGroupMap A B
+  constructor
+  · rintro ⟨hi, hsurr⟩
+    constructor
+    · intro x y hxy
+      apply hi
+      apply hn.1
+      simpa only [← hs, MonoidHom.comp_apply] using hxy
+    · intro y
+      rcases hn.2 y with ⟨g, rfl⟩
+      rcases hsurr g with ⟨x, rfl⟩
+      refine ⟨x, ?_⟩
+      rw [← hs]
+      rfl
+  · rintro ⟨hi, hsurr⟩
+    constructor
+    · intro x y hxy
+      apply hi
+      simpa only [← hs, MonoidHom.comp_apply, hxy]
+    · intro g
+      rcases hsurr (n g) with ⟨x, hx⟩
+      refine ⟨x, hn.1 ?_⟩
+      simpa only [← hs, MonoidHom.comp_apply] using hx
+
 @[simp] lemma apm_t97A03_cutGeneratorFreeGroupMap_zero (A B : Circle) :
     apm_t97A03_cutGeneratorFreeGroupMap A B (FreeGroup.of (0 : Fin 2)) =
       apm_t97A03_firstCutCircleGenerator A B := by
