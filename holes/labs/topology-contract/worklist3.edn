@@ -38015,73 +38015,61 @@
    :program true,
    :other-consumers []}
   {:consumer :t94A06,
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:residual
-    "Prove the single local chart critical-image nullity theorem; assemble Main.",
+    "Prove corners Sard on range I; chart transport and Main remain.",
     :evidence
     {:placeholder-delta {:t94A06 [1 1]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
-    :warnings
-    ["Main retains one sorry; unrelated artifacts preserved."],
+    :warnings ["Main retains one sorry; unrelated files preserved."],
     :missing-theorems
-    [{:name "apm_t94a06_ae_regularValue_normalPart_of_local",
-      :type
-      "local chart nullity implies exact AE regular-value conclusion",
+    [{:name "apm_t94a06_ConvexDomainSard",
+      :type "Prop interface for Sard on range I using fderivWithin",
       :status :proved,
       :consumers [:t94A06],
-      :depends-on
-      ["apm_t94a06_criticalValues_null_of_pointwise_open"
-       "apm_t94a06_ae_regularValue_of_criticalValues_null"],
+      :depends-on [],
+      :area "parametric-transversality-sard"}
+     {:name "apm_t94a06_convexDomainSard",
+      :type "proof of apm_t94a06_ConvexDomainSard",
+      :status :not-started,
+      :consumers [:t94A06],
+      :depends-on [],
       :area "parametric-transversality-sard"}
      {:name "apm_t94a06_normalPart_localCriticalImage_null",
       :type "local chart critical-image nullity",
-      :status :not-started,
+      :status :partial,
       :consumers [:t94A06],
-      :depends-on ["apm_t94a06_normalPart_contMDiff"],
+      :depends-on
+      ["apm_t94a06_convexDomainSard"
+       "apm_t94a06_normalPart_contMDiff"],
       :area "parametric-transversality-sard"}
      {:name "apm_t94a06_ae_regularValue_normalPart",
       :type "AE regular values for normal part",
       :status :partial,
       :consumers [:t94A06],
-      :depends-on
-      ["apm_t94a06_normalPart_localCriticalImage_null"
-       "apm_t94a06_ae_regularValue_normalPart_of_local"],
+      :depends-on ["apm_t94a06_normalPart_localCriticalImage_null"],
       :area "parametric-transversality-sard"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Banked exact local-Sard-to-AE adapter; local chart theorem remains.",
+    :reason "Typed corners-Sard boundary; proof remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792631254245-1933-f9812a4c",
-     :commands
-     ["git show/diff 5b8fe1e2e"
-      "git diff-tree/diff --check 5b8fe1e2e"
-      "lake env lean ConstructionTargets/t94A06Closure.lean"
-      "lake env lean problems/t94A06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and rg placeholders on recorded blobs"],
-     :finding
-     "PASS: 5b8fe1e2e changes only scoped t94A06Closure; fixture hash cf4235...1a07 matches. Fresh detached gates pass; registry 170/170; closure placeholders 0; standard axioms. The adapter correctly composes local null-image aggregation with null-critical-values-to-AE conversion; mfderiv locus, intersection, image, and equality orientations agree. New compiled progress follows 033a5fa2b; the single local chart Sard theorem and Main assembly remain listed. Main retains one pre-existing sorry."},
-    :commit "5b8fe1e2e",
+    :commit "68f3eb8d3",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A06Closure.lean",
      :sha256
-     "cf4235c978a6c14c90071ada37b239eb6060fb697524b246e419a274d5191a07"},
+     "7dfeaf949f514dbebf4cb4cc3f985b3bdf6be845081871f5fc018a744de6de49"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -49837,7 +49825,9 @@
     :area "parametric-transversality-sard"},
    :id :lemma-apm-t94a06-normalpart-localcriticalimage-null,
    :kind :lemma,
-   :depends-on [:lemma-apm-t94a06-normalpart-contmdiff],
+   :depends-on
+   [:lemma-apm-t94a06-normalpart-contmdiff
+    :lemma-apm-t94a06-convexdomainsard-ed86f3644ec0],
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
@@ -49861,6 +49851,39 @@
    :depends-on
    [:lemma-apm-t94a06-criticalvalues-null-of-pointwise-open
     :lemma-apm-t94a06-ae-regularvalue-of-criticalvalues-null],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_ConvexDomainSard",
+    :type "Prop interface for Sard on range I using fderivWithin"},
+   :lemma
+   {:name "apm_t94a06_ConvexDomainSard",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type "Prop interface for Sard on range I using fderivWithin",
+    :area "parametric-transversality-sard",
+    :proved-in :program-2026-10-13-close-t94a06},
+   :id :lemma-apm-t94a06-convexdomainsard,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_convexDomainSard",
+    :type "proof of apm_t94a06_ConvexDomainSard"},
+   :lemma
+   {:name "apm_t94a06_convexDomainSard",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type "proof of apm_t94a06_ConvexDomainSard",
+    :area "parametric-transversality-sard"},
+   :id :lemma-apm-t94a06-convexdomainsard-ed86f3644ec0,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
