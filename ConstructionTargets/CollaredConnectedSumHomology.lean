@@ -1011,6 +1011,15 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective k x hrs
   exact (mul_right_cancel₀ hq0 hrsq)
 
+/-- LEAF (2026-10-22, claude-14): the localization coefficient of the global
+generator is nonzero.  Not blocked on `_localization_mono` (that lemma is
+assembled from this one).  Template: t00A01 proves the dimension-3 case
+sorry-free as `r = 1 ∨ r = -1`, in `problems/t00A01/lean/Main.lean`,
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign`
+(with its `_aux_degree`, `_aux_degree_spec`, `_aux_locallyConstant` and
+`_aux_exists_unit` lemmas): the coefficient's `natAbs` is locally constant,
+hence constant on connected `M`, and equals 1 at some point by compactness.
+Generalize that proof from `Fin 3` / `k := 1` to `k + 2`; ±1 gives `q ≠ 0`. -/
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero
     (k : ℕ)
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
