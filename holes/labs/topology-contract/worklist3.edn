@@ -38062,6 +38062,19 @@
     [{:cmd "draft compile",
       :exit 1,
       :correction "Unfolded membership before rewrite."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792633720879-2036-b9efca15",
+     :commands
+     ["git show/diff 7314feef4"
+      "git diff-tree/diff --check 7314feef4"
+      "lake env lean ConstructionTargets/t94A06Closure.lean"
+      "lake env lean problems/t94A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and rg placeholders on recorded blobs"],
+     :finding
+     "PASS: 7314feef4 changes only scoped t94A06Closure; fixture hash ad6321...ddb8a matches. Fresh detached gates pass; registry 170/170; closure placeholders 0; standard axioms. EqOn is oriented Q=q, derivative equality transports nonsurjectivity from within to ambient, and measure_mono_null correctly transfers global Sard nullity to the relative critical image. New proved progress follows afa515558; Whitney extension, chart transport, and Main remain listed. Main retains one pre-existing sorry."},
     :commit "7314feef4",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
@@ -38070,7 +38083,7 @@
      "ad63217fb1d29524bd06b1f746792a1c54910e06713c05c24fae31fd6faddb8a"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -38088,7 +38101,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved interior Sard; frontier extension remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked extension-to-Sard reduction; Whitney extension remains.",
    :id :program-2026-10-13-close-t94a06,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -38122,7 +38135,11 @@
      "Banked exact local-Sard-to-AE adapter; local chart theorem remains."}
     {:job 8,
      :commit "afa515558",
-     :reason "Proved interior Sard; frontier extension remains."}]}
+     :reason "Proved interior Sard; frontier extension remains."}
+    {:job 9,
+     :commit "7314feef4",
+     :reason
+     "Banked extension-to-Sard reduction; Whitney extension remains."}]}
   {:consumer :t01J04,
    :stop-count 0,
    :phase :implementation,
@@ -49931,7 +49948,7 @@
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a06_criticalImage_null_of_smoothExtension",
@@ -49941,7 +49958,9 @@
     :reported-by [:program-2026-10-13-close-t94a06],
     :type "extension implies relative Sard",
     :area "parametric-transversality-sard",
-    :proved-in :program-2026-10-13-close-t94a06},
+    :proved-in :program-2026-10-13-close-t94a06,
+    :banked-by :program-2026-10-13-close-t94a06,
+    :banked-commit "7314feef4"},
    :id :lemma-apm-t94a06-criticalimage-null-of-smoothextension,
    :kind :lemma,
    :depends-on [],
