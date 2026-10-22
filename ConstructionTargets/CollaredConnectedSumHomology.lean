@@ -2102,13 +2102,31 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
       simp only [ConcreteCategory.comp_apply] at this
       rw [this]; exact hc y (Or.inr hy)
 
+/-- LEAF (split by claude-14, 2026-10-22, after lemma-1's BLOCKED-ON on
+`_aux_inChart`, job 2352; Hatcher 3.27, step 1): a compact `A` inside one chart
+whose chart image is convex is good.  Template: t00A01's sorry-free
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex`
+(through `_aux_convex_aux_point` and `_aux_convex_aux_inj`, with its
+`_aux_inj_aux_model` (radial deformation `ℝⁿ ∖ K ≃ₕ ℝⁿ ∖ u`) and `_aux_inj_aux_isIso`
+(excision + chart transport) helpers).  Generalize `Fin 3` to `k + 2`; the model
+computation `H_i(ℝⁿ, ℝⁿ ∖ y) = 0` for `i > n` (t00A01 uses `HigherModelLocalHomology`
+at `ℝ³`) is the part that changes.  The empty case is `_aux_convex_aux_empty`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (E (k + 2)) x).source)
+    (hconv : Convex ℝ ((chartAt (E (k + 2)) x) '' A)) :
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M A := by
+  sorry
+
 /-- LEAF (split by claude-14, 2026-10-22, after lemma-3's PARTIAL on
 `_exists_unit_aux_injective`; Hatcher 3.27, steps 1-3): every compact subset of
 one chart source is good.  Template: t00A01's sorry-free
 `apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart`
-(through `_aux_inChart_aux_{lift,cover,finite}` and `_aux_convex`, whose model
-step uses `HigherModelLocalHomology` for `ℝ³`).  Generalize `Fin 3` to
-`k + 2`; the model computation `H_i(ℝⁿ, ℝⁿ ∖ y)` is the part that changes. -/
+(through `_aux_inChart_aux_{lift,cover,finite}` and `_aux_convex`).  CCSH's
+`_aux_convex` is the leaf above (claude-14, 2026-10-22): use it as the convex
+base case.  Generalize `Fin 3` to `k + 2`. -/
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart
     (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (E (k + 2)) M]
