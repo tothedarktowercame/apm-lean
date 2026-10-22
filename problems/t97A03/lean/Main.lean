@@ -967,6 +967,33 @@ noncomputable def apm_t97A03_cutGeneratorFreeGroupMap (A B : Circle) :
     apm_t97A03_firstCutCircleGenerator A B else
     apm_t97A03_secondCutCircleGenerator A B)
 
+/-- Free-word evaluation on the two genuine arcs of the normalized literal
+cut quotient. -/
+noncomputable def apm_t97A03_normalizedCutGeneratorFreeGroupMap
+    (A B : Circle) :
+    FreeGroup (Fin 2) →*
+      FundamentalGroup (apm_t97A03_CutCircle 1 (A⁻¹ * B))
+        (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) :=
+  FreeGroup.lift (fun i => if i = 0 then
+    apm_t97A03_normalizedFirstCutCircleGenerator A B else
+    apm_t97A03_normalizedSecondCutCircleGenerator A B)
+
+/-- The geometric normalization square commutes on every free word, not only
+on the two generators. -/
+theorem apm_t97A03_normalize_comp_cutGeneratorFreeGroupMap (A B : Circle) :
+    (apm_t97A03_cutCircleNormalizePiOneHom A B).comp
+        (apm_t97A03_cutGeneratorFreeGroupMap A B) =
+      apm_t97A03_normalizedCutGeneratorFreeGroupMap A B := by
+  apply FreeGroup.ext_hom
+  intro i
+  fin_cases i
+  · simp [apm_t97A03_cutGeneratorFreeGroupMap,
+      apm_t97A03_normalizedCutGeneratorFreeGroupMap,
+      apm_t97A03_cutCircleNormalizePiOneHom_first]
+  · simp [apm_t97A03_cutGeneratorFreeGroupMap,
+      apm_t97A03_normalizedCutGeneratorFreeGroupMap,
+      apm_t97A03_cutCircleNormalizePiOneHom_second]
+
 @[simp] lemma apm_t97A03_cutGeneratorFreeGroupMap_zero (A B : Circle) :
     apm_t97A03_cutGeneratorFreeGroupMap A B (FreeGroup.of (0 : Fin 2)) =
       apm_t97A03_firstCutCircleGenerator A B := by
