@@ -89758,25 +89758,26 @@
    :program true,
    :other-consumers []}
   {:consumer :t99A03,
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
-    :residual "N4 realization; Lefschetz; Main.",
+    :residual "N4 polygon-cover realization; Lefschetz; Main.",
     :outcome :stop,
     :warnings ["Main:1 sorry"],
     :missing-theorems
-    [{:name "n3PresentedParitySheetAction_transitive",
+    [{:name "n3PresentedParitySheetAction_generator_free_involution",
       :type
-      "transitive concrete 2-sheet action with exact parity kernel",
+      "selected generator is fixed-point-free involution on two sheets",
       :status :proved,
       :consumers [:t99A03],
-      :depends-on ["n3PresentedParityCharacter_surjective_index_two"],
+      :depends-on ["n3PresentedParitySheetAction_transitive"],
       :area "polygon-covering-classification"}
      {:name "t99A03_exists_N4_deck_involution",
       :type "realize action as N4 cover/deck map",
       :status :partial,
       :consumers [:t99A03],
-      :depends-on ["n3PresentedParitySheetAction_transitive"],
+      :depends-on
+      ["n3PresentedParitySheetAction_generator_free_involution"],
       :area "polygon-covering-classification"}
      {:name "t99A03_wedge_lefschetz_number",
       :type "wedge Lefschetz number 1",
@@ -89794,40 +89795,26 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked concrete transitive parity action and exact kernel.",
+    :reason "Banked concrete free sheet involution.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t99A03Closure",
       :exit 0}
      {:cmd "lake env lean problems/t99A03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "scans", :exit 0}],
+     {:cmd "hash/diff/sorry scans", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t99A03Closure.lean",
+    [{:cmd "Lean draft",
       :exit 1,
-      :correction "fixed action identity typing"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792624799369-1788-0460625a",
-     :commands
-     ["git show/diff 6c0054f9f"
-      "lake -Kjobs=1 build ConstructionTargets.t99A03Closure"
-      "lake env lean problems/t99A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "python3 scripts/statement-registry.py fingerprint t99A03 --rev 6c0054f9f"
-      "sha256sum + placeholder/axiom scans"],
-     :finding
-     "PASS: exact commit changes only in-scope t99A03Closure. Fixture SHA 6eb7bf933de91f07ca29e8357d6f2c73a5d0534a8effcb22f15933780318a7a6; registry 170/0; frozen digest 6b0e5d09fbaaf3cde9106337a8520de98da8ddd3fb3d0364ec6d96831a9dfe49. Fresh exact-revision build/Lean pass; closure/Main placeholders 0/1. The action is the concrete left-regular action induced by the descended N3 parity character on Multiplicative (ZMod 2); surjectivity correctly gives transitivity, and faithfulness gives kernel exactly the parity kernel. Generator orientation and two-sheet representation boundary are correct; only standard axioms occur. This is new compiled progress; N4 realization, Lefschetz, and Main remain listed."},
-    :commit "6c0054f9f",
+      :correction "used characteristic-two addition"}],
+    :commit "50936aa88",
     :changed-paths ["ConstructionTargets/t99A03Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t99A03Closure.lean",
      :sha256
-     "6eb7bf933de91f07ca29e8357d6f2c73a5d0534a8effcb22f15933780318a7a6"},
+     "ab377585e7a30b2043767284a8f6e4b2e16af6fd16268cea3221a79da67e8a7a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99A03/lean/Main.lean"
     "problems/t99A03/status.json"
@@ -93578,7 +93565,8 @@
    [:lemma-n3paritycharacter-crosscaprelator
     :lemma-n3presentedparitycharacter-generator-ne-one
     :lemma-n3presentedparitycharacter-surjective-index-two
-    :lemma-n3presentedparitysheetaction-transitive],
+    :lemma-n3presentedparitysheetaction-transitive
+    :lemma-n3presentedparitysheetaction-generator-free-involution],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -101522,4 +101510,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-apm-t97a03-cutgenerator-bijective-iff-normalized],
+   :other-consumers []}
+  {:consumer :t99A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "n3PresentedParitySheetAction_generator_free_involution",
+    :type
+    "selected generator is fixed-point-free involution on two sheets"},
+   :lemma
+   {:name "n3PresentedParitySheetAction_generator_free_involution",
+    :reported-by [:program-2026-10-13-close-t99a03],
+    :type
+    "selected generator is fixed-point-free involution on two sheets",
+    :area "polygon-covering-classification",
+    :proved-in :program-2026-10-13-close-t99a03},
+   :id :lemma-n3presentedparitysheetaction-generator-free-involution,
+   :kind :lemma,
+   :depends-on [:lemma-n3presentedparitysheetaction-transitive],
    :other-consumers []}]}
