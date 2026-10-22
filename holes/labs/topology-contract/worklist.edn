@@ -119638,61 +119638,53 @@
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Transport corrected coordinate lifts through tangent charts; package local lifts, then flow/Main.",
+    "Transport through tangent charts; package local lifts; flow/Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "untracked review dirs preserved"],
+    :warnings ["Main sorry" "review dirs"],
     :missing-theorems
-    [{:name "exists_nhds_contDiffOn_corrected_lift",
-      :type "smooth exact coordinate lift on stable neighborhood",
+    [{:name "exists_nhds_contDiffOn_corrected_lift_subset",
+      :type "corrected lift inside prescribed neighborhood",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on ["exists_nhds_contDiffOn_corrected_rightInverse"],
+      :depends-on ["exists_nhds_contDiffOn_corrected_lift"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
       :depends-on
-      ["exists_nhds_contDiffOn_corrected_lift"
+      ["exists_nhds_contDiffOn_corrected_lift_subset"
        "hasLocalSmoothLift_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "d46f8ed842b125217322a7815a41f265c338275b590cd5cc829a58846be38391",
+     "6b7ade56c3f9370e7c7c64d8bbb318447fb1ba2ab1851a446966beabae12e1d9",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked neighborhoodwise corrected coordinate lifts.",
+    :reason "Banked chart-neighborhood restriction.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check; hashes; placeholder count", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792620369769-1669-c483d485",
-     :commands
-     ["git show/diff --check 922873b7d"
-      "detached: lake env lean ConstructionTargets/t98A06Closure.lean"
-      "detached: lake env lean problems/t98A06/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: 922873b7d changes only t98A06Closure.lean (+18), adding a compiled, sorry-free corrected coordinate-lift theorem beyond history 12a34ded9. Fixture 9838452b matches the recorded repaired hash; source 44399e71, implementation d46f8ed8; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: the smoothly varying corrected right inverse Q is applied to smooth b; hQ.clm_apply proves smoothness, while A x composed with Q x = id gives A x (Q x (b x)) = b x. The E m/E n continuous-linear-map boundary is preserved. Axioms are propext, Classical.choice, Quot.sound. Evidence lists tangent-chart transport, packaging local lifts, then flow/Main as residual milestones."},
-    :commit "922873b7df5222448c770f60fb79118288af2e49",
+     {:cmd "diff; hashes; placeholders", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial closure compile",
+      :exit 1,
+      :finding "replaced invalid hU.inter with Filter.inter_mem"}],
+    :commit "7487f3b07291dd21106a86421eee7d656fa091c3",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119700,7 +119692,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -120176,7 +120168,8 @@
     :lemma-exists-nhds-isinvertible-comp-rightinverse
     :lemma-exists-nhds-corrected-rightinverse
     :lemma-exists-nhds-contdiffon-corrected-rightinverse
-    :lemma-exists-nhds-contdiffon-corrected-lift],
+    :lemma-exists-nhds-contdiffon-corrected-lift
+    :lemma-exists-nhds-contdiffon-corrected-lift-subset],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -123489,6 +123482,23 @@
    :id :lemma-regularfiberlocaldegree-eq-of-underlying-eq,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-eq-of-same-point],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_nhds_contDiffOn_corrected_lift_subset",
+    :type "corrected lift inside prescribed neighborhood"},
+   :lemma
+   {:name "exists_nhds_contDiffOn_corrected_lift_subset",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "corrected lift inside prescribed neighborhood",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-exists-nhds-contdiffon-corrected-lift-subset,
+   :kind :lemma,
+   :depends-on [:lemma-exists-nhds-contdiffon-corrected-lift],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
