@@ -3278,6 +3278,46 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
     h1, Category.id_comp, Category.comp_id]
   rfl
 
+/-- Connector for `_forward_inl` (split after job 2313, lemma-2 PARTIAL).  The seat
+reduced `_forward_inl` to this by unfolding `toRepresentation_action_inl` and the span
+comparison.  What is left: transport `g` through the inverse of `leftEquivalence`, include
+along `coverPieceInclusion true`, and apply `inverseIdentityFunctor`; the result agrees with
+`inverseIdentityFunctor` applied to `FundamentalGroup.map` of the subtype inclusion at `w`.
+The seat's diagnosis: the difference is `Functor.asEquivalence`'s chosen preimage
+isomorphism (`leftEquivalence.inverse.obj star` is not definitionally `w`), so expect to
+conjugate by the unit/counit component at `star` and show it acts trivially, rather than
+to close by `rfl`/`simp`. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_forward_inl_aux_connector
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)]
+    (g : FundamentalGroup U ⟨w.1, w.2.1⟩) :
+    (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w).map
+        (X := (FundamentalGroupoid.map
+          (TwoOpenDescentRestriction.coverPieceInclusion
+            (X := X) (U := U) (V := V) true)).obj
+          ((TwoOpenPointSpanComparison.leftEquivalence U V w).inverse.obj
+            (SingleObj.star _)))
+        (Y := (FundamentalGroupoid.map
+          (TwoOpenDescentRestriction.coverPieceInclusion
+            (X := X) (U := U) (V := V) true)).obj
+          ((TwoOpenPointSpanComparison.leftEquivalence U V w).inverse.obj
+            (SingleObj.star _)))
+        ((FundamentalGroupoid.map
+          (TwoOpenDescentRestriction.coverPieceInclusion
+            (X := X) (U := U) (V := V) true)).map
+          ((TwoOpenPointSpanComparison.leftEquivalence U V w).inverse.map
+            (X := SingleObj.star _) (Y := SingleObj.star _) g)) =
+      (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w).map
+        (X := FundamentalGroupoid.mk w.1) (Y := FundamentalGroupoid.mk w.1)
+        (FundamentalGroup.map
+          (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) := by
+  sorry
+
 /-- Forward left leg: the mapping equivalence's forward functor, applied to
 the inverse image of the identity, sends `Monoid.Coprod.inl g` to the image of
 the left-cover loop `g` under that inverse image.  Route: unfold the five
@@ -3305,7 +3345,20 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
         hU hV hcover w).map
         (FundamentalGroup.map
           (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) := by
-  sorry
+  change (FreeProductPointSpanRepresentations.toRepresentationObj _ _ _).action
+      (Monoid.Coprod.inl g) = _
+  rw [FreeProductPointSpanRepresentations.toRepresentation_action_inl]
+  simp [TwoOpenPointSpanComparison.comparison,
+    GenericSpanPseudoCoconeTransport.pseudoCoconeEquivalenceOfSpanEquivalences,
+    GenericSpanPseudoCoconeTransport.transportFunctor,
+    GenericSpanPseudoCoconeTransport.transportObj,
+    TwoOpenFreeProductMapping.pseudoSpanEquivalence,
+    TwoOpenFreeProductMapping.pseudoToSpanFunctor,
+    TwoOpenFreeProductMapping.pseudoToSpanObj]
+  exact
+    punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_forward_inl_aux_connector
+      U V hU hV hcover w g
+
 
 /-- The counit of the five-step mapping equivalence, at the inverse image of the
 identity, has identity component at the single object.  Route: the counit of
