@@ -197,24 +197,262 @@ connectedness of the disk). -/
 theorem largeInterior_isOpen_aux_euclidean_aux_noRetraction (n : ℕ) :
     ¬ ∃ r : Disk (n + 1) 1 → Sphere (n + 1),
       Continuous r ∧ ∀ s, r (sphereToDisk (n + 1) s) = s := by
-  sorry
+  rintro ⟨r, hr, hri⟩
+  by_cases hn : n = 0
+  · subst n
+    letI : ContractibleSpace (Disk 1 1) :=
+      Metric.contractibleSpace_closedBall (by norm_num)
+    let pneg : Sphere 1 :=
+      ⟨EuclideanSpace.single 0 (-1), by simp [Sphere]⟩
+    let ppos : Sphere 1 :=
+      ⟨EuclideanSpace.single 0 1, by simp [Sphere]⟩
+    let f : Disk 1 1 → ℝ := fun x ↦ (r x).1 0
+    have hf : Continuous f :=
+      ((PiLp.continuous_apply 2 (fun _ : Fin 1 => ℝ) 0).comp
+        continuous_subtype_val).comp hr
+    have hfneg : f (sphereToDisk 1 pneg) = -1 := by
+      change (r (sphereToDisk 1 pneg)).1 0 = -1
+      rw [show r (sphereToDisk 1 pneg) = pneg from hri pneg]
+      simp [pneg]
+    have hfpos : f (sphereToDisk 1 ppos) = 1 := by
+      change (r (sphereToDisk 1 ppos)).1 0 = 1
+      rw [show r (sphereToDisk 1 ppos) = ppos from hri ppos]
+      simp [ppos]
+    have hz : (0 : ℝ) ∈ Set.range f := by
+      apply intermediate_value_univ (sphereToDisk 1 pneg) (sphereToDisk 1 ppos) hf
+      rw [hfneg, hfpos]
+      norm_num
+    obtain ⟨x, hx⟩ := hz
+    have hvec : (r x).1 = 0 := by
+      ext i
+      fin_cases i
+      exact hx
+    have hs := (r x).2
+    rw [Metric.mem_sphere, hvec, dist_self] at hs
+    norm_num at hs
+  · let i : C(Sphere (n + 1), Disk (n + 1) 1) :=
+      ⟨sphereToDisk (n + 1), continuous_sphereToDisk (n + 1)⟩
+    let rc : C(Disk (n + 1) 1, Sphere (n + 1)) := ⟨r, hr⟩
+    have hsplit : rc.comp i = ContinuousMap.id (Sphere (n + 1)) := by
+      apply ContinuousMap.ext
+      intro s
+      exact hri s
+    have hsphere :
+        ¬ IsZero (H n (Sphere (n + 1))) := by
+      intro h
+      have hz : IsZero (ModuleCat.of ℤ ℤ) :=
+        h.of_iso
+          (ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt n
+            (Nat.pos_of_ne_zero hn)).symm
+      have hid : 𝟙 (ModuleCat.of ℤ ℤ) = 0 := (IsZero.iff_id_eq_zero _).mp hz
+      have hone := ConcreteCategory.congr_hom hid (1 : ℤ)
+      norm_num at hone
+    have hdiskGroup : IsZero
+        (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of (Disk (n + 1) 1))) := by
+      letI : ContractibleSpace (Disk (n + 1) 1) :=
+        Metric.contractibleSpace_closedBall (by norm_num)
+      exact ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+        (Disk (n + 1) 1) n hn
+    have hdisk : IsZero
+        (H n (Disk (n + 1) 1)) :=
+      ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+        _ _ hdiskGroup
+    let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+      (ModuleCat.of ℤ ℤ)
+    have hi : F.map (TopCat.ofHom i) = 0 := hdisk.eq_of_tgt _ _
+    apply hsphere
+    rw [IsZero.iff_id_eq_zero]
+    have hsplit' :
+        F.map (TopCat.ofHom i) ≫ F.map (TopCat.ofHom rc) = 𝟙 _ := by
+      rw [← F.map_comp]
+      have hTop : TopCat.ofHom i ≫ TopCat.ofHom rc = 𝟙 (TopCat.of (Sphere (n + 1))) := by
+        change TopCat.ofHom (rc.comp i) = TopCat.ofHom (ContinuousMap.id _)
+        exact congrArg TopCat.ofHom hsplit
+      rw [hTop, F.map_id]
+    rw [← hsplit', hi, zero_comp]
 
 /-- **LIBRARY (B2b).** Brouwer's fixed-point theorem for the closed unit disk,
 from no retraction (B2a, taken as `hNR`) by the ray construction. -/
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d
+    {n : ℕ} (g : Disk n 1 → Disk n 1) (x : Disk n 1) : E n := x.1 - (g x).1
+
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_A
+    {n : ℕ} (g : Disk n 1 → Disk n 1) (x : Disk n 1) : ℝ :=
+  ‖largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d g x‖ ^ 2
+
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_B
+    {n : ℕ} (g : Disk n 1 → Disk n 1) (x : Disk n 1) : ℝ :=
+  @inner ℝ (E n) _ x.1 (largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d g x)
+
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C
+    {n : ℕ} (x : Disk n 1) : ℝ := 1 - ‖x.1‖ ^ 2
+
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_t
+    {n : ℕ} (g : Disk n 1 → Disk n 1) (x : Disk n 1) : ℝ :=
+  let A := largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_A g x
+  let B := largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_B g x
+  let C := largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C x
+  (-B + Real.sqrt (B ^ 2 + A * C)) / A
+
 theorem largeInterior_isOpen_aux_euclidean_aux_brouwer (n : ℕ)
     (hNR : ∀ m : ℕ, ¬ ∃ r : Disk (m + 1) 1 → Sphere (m + 1),
       Continuous r ∧ ∀ s, r (sphereToDisk (m + 1) s) = s)
     {g : Disk n 1 → Disk n 1} (hg : Continuous g) : ∃ x, g x = x := by
-  sorry
+  by_contra hfix
+  push_neg at hfix
+  cases n with
+  | zero =>
+      have hx : (⟨0, by simp [Disk]⟩ : Disk 0 1) = g ⟨0, by simp [Disk]⟩ := by
+        apply Subtype.ext
+        ext i
+        exact Fin.elim0 i
+      exact hfix _ hx.symm
+  | succ m =>
+      apply hNR m
+      let d : Disk (m + 1) 1 → E (m + 1) :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d g
+      let A : Disk (m + 1) 1 → ℝ :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_A g
+      let B : Disk (m + 1) 1 → ℝ :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_B g
+      let C : Disk (m + 1) 1 → ℝ :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C
+      let t : Disk (m + 1) 1 → ℝ :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_t g
+      have hd : Continuous d := by
+        exact continuous_subtype_val.sub
+          (continuous_subtype_val.comp hg)
+      have hA : Continuous A := by
+        exact (continuous_norm.comp hd).pow 2
+      have hB : Continuous B := by
+        exact continuous_inner.comp
+          (continuous_subtype_val.prodMk hd)
+      have hC : Continuous C := by
+        exact continuous_const.sub ((continuous_norm.comp continuous_subtype_val).pow 2)
+      have hApos (x : Disk (m + 1) 1) : 0 < A x := by
+        rw [show A x = ‖d x‖ ^ 2 by rfl]
+        exact sq_pos_of_pos (norm_pos_iff.mpr (by
+          intro hd0
+          apply hfix x
+          apply Subtype.ext
+          change (g x).1 = x.1
+          dsimp [d, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d] at hd0
+          exact sub_eq_zero.mp hd0 |>.symm))
+      have hCnonneg (x : Disk (m + 1) 1) : 0 ≤ C x := by
+        dsimp [C, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C]
+        have hx : ‖x.1‖ ≤ 1 := by
+          simpa only [Metric.mem_closedBall, dist_zero_right] using x.2
+        nlinarith [norm_nonneg x.1]
+      have hdisc (x : Disk (m + 1) 1) : 0 ≤ B x ^ 2 + A x * C x :=
+        add_nonneg (sq_nonneg _) (mul_nonneg (hApos x).le (hCnonneg x))
+      have ht : Continuous t := by
+        change Continuous (fun x =>
+          (-B x + Real.sqrt (B x ^ 2 + A x * C x)) / A x)
+        exact (hB.neg.add (Real.continuous_sqrt.comp
+          ((hB.pow 2).add (hA.mul hC)))).div hA (fun x => ne_of_gt (hApos x))
+      have hquad (x : Disk (m + 1) 1) :
+          A x * (t x) ^ 2 + 2 * B x * t x = C x := by
+        have hs := Real.sq_sqrt (hdisc x)
+        have hAn : A x ≠ 0 := ne_of_gt (hApos x)
+        change A x * ((-B x + Real.sqrt (B x ^ 2 + A x * C x)) / A x) ^ 2 +
+          2 * B x * ((-B x + Real.sqrt (B x ^ 2 + A x * C x)) / A x) = C x
+        rw [div_pow]
+        field_simp [hAn]
+        nlinarith [hs]
+      have hrnorm (x : Disk (m + 1) 1) : ‖x.1 + t x • d x‖ = 1 := by
+        have hi : @inner ℝ (E (m + 1)) _ (d x) (d x) = A x := by
+          simp [A, d, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_A,
+            real_inner_self_eq_norm_sq]
+        have hib : @inner ℝ (E (m + 1)) _ x.1 (d x) = B x := rfl
+        have hxnorm : ‖x.1‖ ^ 2 = 1 - C x := by
+          simp [C, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C]
+        have hs : ‖x.1 + t x • d x‖ ^ 2 = 1 := by
+          rw [← real_inner_self_eq_norm_sq]
+          simp only [inner_add_left, inner_add_right, real_inner_smul_left,
+            inner_smul_right, hi, hib, real_inner_comm]
+          rw [real_inner_self_eq_norm_sq, hxnorm]
+          nlinarith [hquad x]
+        nlinarith [norm_nonneg (x.1 + t x • d x)]
+      let r : Disk (m + 1) 1 → Sphere (m + 1) := fun x =>
+        ⟨x.1 + t x • d x, by
+          rw [Metric.mem_sphere, dist_zero_right, hrnorm]⟩
+      refine ⟨r, ?_, ?_⟩
+      · apply Continuous.subtype_mk
+        exact continuous_subtype_val.add (ht.smul hd)
+      · intro s
+        apply Subtype.ext
+        change (sphereToDisk (m + 1) s).1 +
+            t (sphereToDisk (m + 1) s) • d (sphereToDisk (m + 1) s) = s.1
+        have hC0 : C (sphereToDisk (m + 1) s) = 0 := by
+          dsimp [C, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C]
+          have hs : ‖s.1‖ = 1 := by
+            simpa [Metric.mem_sphere, dist_zero_right] using s.2
+          change 1 - ‖s.1‖ ^ 2 = 0
+          rw [hs]
+          norm_num
+        have hBnonneg : 0 ≤ B (sphereToDisk (m + 1) s) := by
+          dsimp [B, d, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_B,
+            largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d]
+          have hs : ‖s.1‖ = 1 := by
+            simpa [Metric.mem_sphere, dist_zero_right] using s.2
+          have hg' : ‖(g (sphereToDisk (m + 1) s)).1‖ ≤ 1 := by
+            simpa only [Metric.mem_closedBall, dist_zero_right] using
+              (g (sphereToDisk (m + 1) s)).2
+          simp only [sphereToDisk]
+          rw [inner_sub_right, real_inner_self_eq_norm_sq, hs]
+          exact sub_nonneg.mpr ((real_inner_le_norm _ _).trans (by simpa [hs] using hg'))
+        have ht0 : t (sphereToDisk (m + 1) s) = 0 := by
+          change (-B (sphereToDisk (m + 1) s) +
+            Real.sqrt (B (sphereToDisk (m + 1) s) ^ 2 +
+              A (sphereToDisk (m + 1) s) * C (sphereToDisk (m + 1) s))) /
+                A (sphereToDisk (m + 1) s) = 0
+          rw [hC0, mul_zero, add_zero, Real.sqrt_sq_eq_abs, abs_of_nonneg hBnonneg]
+          simp
+        rw [ht0]
+        simp [sphereToDisk]
 
 /-- **LIBRARY (B2c).** A continuous injection of the closed unit disk into
 `E n` sends the centre to an interior point of its image (Tao's argument:
 Tietze-extend the inverse and apply Brouwer, B2b, taken as `hB`). -/
-theorem largeInterior_isOpen_aux_euclidean_aux_interior (n : ℕ)
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_stability
+    (n : ℕ)
+    (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
+    {f : Disk n 1 → E n} (hf : Continuous f)
+    {Gtilde : E n → E n} (hGtilde : Continuous Gtilde)
+    (hclose : ∀ x : Disk n 1, ‖x.1 - Gtilde (f x)‖ ≤ 1) :
+    ∃ y ∈ Set.range f, Gtilde y = 0 := by
+  let g : Disk n 1 → Disk n 1 := fun x =>
+    ⟨x.1 - Gtilde (f x), by
+      simpa [Metric.mem_closedBall, dist_zero_right] using hclose x⟩
+  have hg : Continuous g := by
+    apply Continuous.subtype_mk
+    exact continuous_subtype_val.sub
+      (hGtilde.comp (hf.comp continuous_id))
+  obtain ⟨x, hx⟩ := hB hg
+  refine ⟨f x, ⟨x, rfl⟩, ?_⟩
+  have hxval : x.1 - Gtilde (f x) = x.1 := congrArg Subtype.val hx
+  exact sub_eq_self.mp hxval
+
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive
+    (n : ℕ) (hn : 0 < n)
     (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
     {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
     f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f) := by
   sorry
+
+theorem largeInterior_isOpen_aux_euclidean_aux_interior (n : ℕ)
+    (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
+    {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
+    f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f) := by
+  by_cases hn : n = 0
+  · subst n
+    have hrange : Set.range f = Set.univ :=
+      (Set.range_nonempty f).eq_univ
+    rw [hrange, interior_univ]
+    exact Set.mem_univ _
+  · exact largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive
+      n (Nat.pos_of_ne_zero hn) hB hf hinj
 
 /-- **LIBRARY (B2d).** Euclidean invariance of domain, from B2c (taken as `hI`) by rescaling
 closed balls inside `U`. -/
@@ -223,7 +461,59 @@ theorem largeInterior_isOpen_aux_euclidean_aux_open (n : ℕ)
       f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f))
     {U : Set (E n)} (hU : IsOpen U) {g : U → E n} (hg : Continuous g)
     (hinj : Function.Injective g) : IsOpenMap g := by
-  sorry
+  intro V hV
+  rw [isOpen_iff_mem_nhds]
+  rintro z ⟨x, hxV, rfl⟩
+  have hW : IsOpen ((Subtype.val : U → E n) '' V) :=
+    hU.isOpenEmbedding_subtypeVal.isOpenMap V hV
+  have hxW : x.1 ∈ (Subtype.val : U → E n) '' V := ⟨x, hxV, rfl⟩
+  obtain ⟨r, hr, hrsub⟩ :=
+    Metric.nhds_basis_closedBall.mem_iff.mp (hW.mem_nhds hxW)
+  let q : Disk n 1 → U := fun y => ⟨x.1 + r • y.1, by
+    rcases hrsub (show x.1 + r • y.1 ∈ Metric.closedBall x.1 r by
+      rw [Metric.mem_closedBall, dist_eq_norm]
+      simp only [add_sub_cancel_left, norm_smul, Real.norm_eq_abs, abs_of_pos hr]
+      exact mul_le_of_le_one_right hr.le (by
+        have hy := y.2
+        rw [Metric.mem_closedBall, dist_zero_right] at hy
+        exact hy)) with ⟨w, hw, heq⟩
+    simpa only [heq] using w.2⟩
+  let f : Disk n 1 → E n := fun y => g (q y)
+  have hf : Continuous f := by
+    apply hg.comp
+    apply Continuous.subtype_mk
+    exact continuous_const.add (continuous_const.smul continuous_subtype_val)
+  have hfinj : Function.Injective f := by
+    intro a b hab
+    have huv : x.1 + r • a.1 = x.1 + r • b.1 :=
+      congrArg Subtype.val (hinj hab)
+    apply Subtype.ext
+    have hrs : r • a.1 = r • b.1 := add_left_cancel huv
+    have := congrArg (fun z : E n => r⁻¹ • z) hrs
+    simpa [hr.ne'] using this
+  have hcenter := hI hf hfinj
+  have hfrange : Set.range f ⊆ g '' V := by
+    rintro _ ⟨y, rfl⟩
+    refine ⟨q y, ?_, rfl⟩
+    rcases hrsub (show x.1 + r • y.1 ∈ Metric.closedBall x.1 r by
+      rw [Metric.mem_closedBall, dist_eq_norm]
+      simp only [add_sub_cancel_left, norm_smul, Real.norm_eq_abs, abs_of_pos hr]
+      exact mul_le_of_le_one_right hr.le (by
+        have hy := y.2
+        rw [Metric.mem_closedBall, dist_zero_right] at hy
+        exact hy)) with ⟨w, hw, heq⟩
+    have hwq : w = q y := by
+      apply Subtype.ext
+      exact heq
+    exact hwq ▸ hw
+  have hq0 : q ⟨0, Metric.mem_closedBall_self zero_le_one⟩ = x := by
+    apply Subtype.ext
+    simp [q]
+  have hcenter' : g x ∈ interior (Set.range f) := by
+    simpa only [f, hq0] using hcenter
+  have hmem : g x ∈ interior (g '' V) :=
+    interior_mono hfrange hcenter'
+  exact Filter.mem_of_superset (isOpen_interior.mem_nhds hmem) interior_subset
 
 /-- **LIBRARY (B2e).** Reduction of manifold invariance of domain to the
 Euclidean case through charts (the model `I d` has no boundary, so chart
@@ -235,7 +525,58 @@ theorem largeInterior_isOpen_aux_euclidean_aux_chart
       Function.Injective g → IsOpenMap g)
     {f : LargeInterior (n := d) → X} (hf : Continuous f)
     (hinj : Function.Injective f) : IsOpenMap f := by
-  sorry
+  let q : LargeInterior (n := d) → E d := fun x => x.1.1
+  have hq : IsOpenEmbedding q := by
+    exact Metric.isOpen_ball.isOpenEmbedding_subtypeVal.comp
+      largeInteriorHomeomorphBall.isOpenEmbedding
+  intro s hs
+  apply isOpen_iff_forall_mem_open.mpr
+  rintro y ⟨x, hx, rfl⟩
+  let c := chartAt (E d) (f x)
+  let A : Set (LargeInterior (n := d)) := s ∩ f ⁻¹' c.source
+  have hA : IsOpen A := hs.inter (c.open_source.preimage hf)
+  have hxA : x ∈ A := ⟨hx, mem_chart_source (E d) (f x)⟩
+  let U : Set (E d) := q '' A
+  have hU : IsOpen U := hq.isOpenMap A hA
+  let e : A ≃ₜ U :=
+    (Equiv.Set.image q A hq.injective).toHomeomorphOfIsInducing
+      ((hq.restrict (fun z (hz : z ∈ A) =>
+        show q z ∈ U from ⟨z, hz, rfl⟩) hA).isInducing)
+  let g : U → E d := fun z => c (f (e.symm z).1)
+  have hg : Continuous g := by
+    apply c.continuousOn.comp_continuous
+      (hf.comp (continuous_subtype_val.comp e.symm.continuous))
+    intro z
+    exact (e.symm z).2.2
+  have hginj : Function.Injective g := by
+    intro z w hzw
+    have hc : f (e.symm z).1 = f (e.symm w).1 :=
+      c.injOn (e.symm z).2.2 (e.symm w).2.2 hzw
+    exact e.symm.injective (Subtype.ext (hinj hc))
+  have hopen_g : IsOpenMap g := hE hU hg hginj
+  let T : Set (E d) := g '' (e '' {z : A | z.1 ∈ s})
+  have heall : e '' {z : A | z.1 ∈ s} = Set.univ := by
+    ext z
+    simp only [Set.mem_image, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    exact ⟨e.symm z, (e.symm z).2.1, e.apply_symm_apply z⟩
+  have hT : IsOpen T := hopen_g _ (by rw [heall]; exact isOpen_univ)
+  have hTtarget : T ⊆ c.target := by
+    rintro z ⟨u, hu, rfl⟩
+    exact c.map_source (e.symm u).2.2
+  refine ⟨c.symm '' T, ?_, c.isOpen_image_symm_of_subset_target hT hTtarget, ?_⟩
+  · rintro z ⟨u, huT, huz⟩
+    obtain ⟨v, hv, rfl⟩ := huT
+    refine ⟨(e.symm v).1, (e.symm v).2.1, ?_⟩
+    rw [← huz]
+    change f (e.symm v).1 = c.symm (c (f (e.symm v).1))
+    exact (c.left_inv (e.symm v).2.2).symm
+  · refine ⟨g (e ⟨x, hxA⟩), ?_, ?_⟩
+    · refine ⟨e ⟨x, hxA⟩, ?_, rfl⟩
+      rw [heall]
+      trivial
+    · change c.symm (c (f (e.symm (e ⟨x, hxA⟩)).1)) = f x
+      rw [e.symm_apply_apply]
+      exact c.left_inv (mem_chart_source (E d) (f x))
 
 /-- **LIBRARY (B2).** Invariance of domain for the interior of a collared ball. -/
 theorem largeInterior_isOpen_aux_euclidean
@@ -433,7 +774,69 @@ lemma punctured_topHomology_zero_aux_mono_aux_excision_set
   have hy : dist y.1 0 ≤ 1 := Metric.mem_closedBall.mp y.2
   linarith
 
-/-- LEAF. The excised pair: removing `Z = c.radialTwoᶜ` from
+/-- The closed annulus `1 ≤ ‖x‖` inside the open radius-two Euclidean ball. -/
+def punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus
+    (n : ℕ) : Set (Metric.ball (0 : E n) 2) :=
+  {x | 1 ≤ dist x.1 0}
+
+/-- LEAF. A homeomorphism of pairs carries vanishing relative homology. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_iso
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (A : Set X) (B : Set Y) (hAB : e '' A = B) (k : ℕ)
+    (hB : IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      B).homology k)) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      A).homology k) := by
+  sorry
+
+/-- LEAF. `largeMap` carries the excised pair onto the Euclidean
+(radius-two ball, annulus) pair. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart
+    (n : ℕ) (M : Type) [TopologicalSpace M] (c : BallCollar n M) :
+    ∃ e : ↥(c.radialTwoᶜᶜ) ≃ₜ Metric.ball (0 : E n) 2,
+      e '' ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ c.radialTwoᶜ =
+        punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n := by
+  sorry
+
+/-- LEAF. Radial projection is a homotopy equivalence from the annulus to the
+unit sphere. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv
+    (n : ℕ) (hn : 1 ≤ n) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥(punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)
+      (Sphere n)) := by
+  sorry
+
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus_homology
+    (n : ℕ) (hn : 1 ≤ n) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains (TopCat.of
+      ↥(punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n))).homology n) := by
+  obtain ⟨e⟩ := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv n hn
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  have hS : IsZero (ConstructionTargets.SphereHomology.GroupHomology m (m + 1)) :=
+    ConstructionTargets.SphereHomology.sphereHomology_isZero_of_gt m (m + 1) (by omega)
+  exact hS.of_iso
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv e (m + 1))
+
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_model
+    (n : ℕ) (hn : 1 ≤ n) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)).homology
+        (n + 1)) := by
+  let A := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n
+  haveI : ContractibleSpace (Metric.ball (0 : E n) 2) :=
+    (convex_ball (0 : E n) 2).contractibleSpace ⟨0, by simp⟩
+  have hX : IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of (Metric.ball (0 : E n) 2))).homology (n + 1)) :=
+    ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      _ (n + 1) (by omega)
+  have hA := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus_homology
+    n hn
+  have hex := ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_relative A n
+  exact hex.isZero_X₂ (hX.eq_of_src _ _) (hA.eq_of_tgt _ _)
+
+/-- The excised pair: removing `Z = c.radialTwoᶜ` from
 `(M, M minus the small open ball)` leaves (open radius-two ball, ball minus
 the open unit ball), whose degree-`(n + 1)` relative homology vanishes.
 Sketch: carry the pair by `largeMap` to the Euclidean radius-two ball and
@@ -449,7 +852,9 @@ lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local (n : ℕ) 
         (ConstructionTargets.SingularExcision.excisedSubspace
           (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
           c.radialTwoᶜ)).homology (n + 1)) := by
-  sorry
+  obtain ⟨e, he⟩ := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart n M c
+  exact punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_iso e _ _ he
+    (n + 1) (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_model n (by omega))
 
 /-- Excision step (proved, lemma-2 job 2128): the relative group of
 `(M, M minus the small open ball)` is that of the excised pair. -/
@@ -586,6 +991,38 @@ localized generator is `r • ambientLocalGenerator x`, and
 generator localizing to zero at one point localizes to zero everywhere (local
 constancy along the connected `M`), and then compactness forces it to vanish
 in `H_n M`, contradicting `H_n M ≅ ℤ`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_of_coefficient
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (x : M) (q : ℤ)
+    (hq : q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x =
+      ManifoldFundamentalClass.localizationMap x (k + 2)
+        (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e))
+    (hq0 : q ≠ 0) :
+    Function.Injective (fun r : ℤ ↦ r •
+      ManifoldFundamentalClass.localizationMap x (k + 2)
+        (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e)) := by
+  intro r s hrs
+  rw [← hq] at hrs
+  change r • (q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) =
+    s • (q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) at hrs
+  rw [smul_smul, smul_smul] at hrs
+  have hrsq : r * q = s * q :=
+    ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective k x hrs
+  exact (mul_right_cancel₀ hq0 hrsq)
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero
+    (k : ℕ)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E (k + 2)) M]
+    [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (x : M) (q : ℤ)
+    (hq : q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x =
+      ManifoldFundamentalClass.localizationMap x (k + 2)
+        (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e)) :
+    q ≠ 0 := by
+  sorry
+
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective
     (n : ℕ) (hn : 2 ≤ n)
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -595,7 +1032,17 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     Function.Injective (fun r : ℤ ↦ r •
       ManifoldFundamentalClass.localizationMap x n
         (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) n e)) := by
-  sorry
+  obtain ⟨k, rfl⟩ : ∃ k, n = k + 2 := by
+    refine ⟨n - 2, ?_⟩
+    omega
+  obtain ⟨q, hq⟩ :=
+    ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
+      k e x
+  exact
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_of_coefficient
+      k e x q hq
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero
+          k M e x q hq)
 
 /-- LEAF (local fundamental class). On a closed connected `n`-manifold whose
 top integral homology is `ℤ`, localizing at a point is injective in degree
@@ -834,7 +1281,34 @@ lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_transport
       (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap
         (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ) k)) :
     IsIso (punctured_homology_aux_above_aux_inclusion (k := k) c) := by
-  sorry
+  let A : Set M := (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+  let i : TopCat.of A ⟶ TopCat.of M :=
+    ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A
+  let F := ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+  let eA := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of A) k
+  let eM := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of M) k
+  letI : IsIso eA.hom := eA.isIso_hom
+  letI : IsIso eM.hom := eM.isIso_hom
+  have hg : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) := by
+    dsimp [A]
+    exact hgroup
+  have hnat : F.map (punctured_homology_aux_above_aux_inclusion (k := k) c) ≫ eM.hom =
+      eA.hom ≫ HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k := by
+    exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      i k
+  haveI hright : IsIso (eA.hom ≫ HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) :=
+    IsIso.comp_isIso' eA.isIso_hom hg
+  haveI : IsIso (F.map (punctured_homology_aux_above_aux_inclusion (k := k) c) ≫
+      eM.hom) := hnat ▸ hright
+  haveI : IsIso (F.map (punctured_homology_aux_above_aux_inclusion (k := k) c)) :=
+    IsIso.of_isIso_comp_right _ eM.hom
+  exact isIso_of_reflects_iso
+    (punctured_homology_aux_above_aux_inclusion (k := k) c) F
 
 /-- Collar excision in degrees strictly above the manifold dimension: removing
 the collared open ball does not change integral homology in these degrees. -/
