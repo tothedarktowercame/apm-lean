@@ -89429,6 +89429,19 @@
      {:cmd "hash/diff/placeholder scans", :exit 0}],
     :diagnostic-history
     [{:cmd "Lean draft", :exit 1, :correction "used mapOfEq"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792629181325-1892-a09420b2",
+     :commands
+     ["git show/diff 220f00de9"
+      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t97A03 --rev 220f00de9"
+      "sha256sum + placeholder/#print axioms scans"],
+     :finding
+     "PASS: exact commit changes only in-scope Main.lean. Fixture SHA 581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f; registry 170/0; frozen digest abf8282be594bd45bebca6dc29d8b578f4371872506f062166ee2d225b6ca0a4. Fresh exact-revision build/Lean pass; closure/Main placeholders 0/3. FundamentalGroup.mapOfEq is applied in the correct original-to-normalized direction using the proved basepoint equality, and its values on both genuine cut generators are proved to be the corresponding first/complementary normalized classes. No selector facade appears; axioms are standard only. This is new compiled geometric progress; decoder/generation, covers, and invariants remain listed."},
     :commit "220f00de9",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
@@ -89437,7 +89450,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89455,7 +89468,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized pi1 generator classes.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cut pi1 normalization.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -89611,7 +89624,10 @@
      :reason "Banked typed normalized generator paths."}
     {:job 4,
      :commit "78df66063",
-     :reason "Banked normalized pi1 generator classes."}]}
+     :reason "Banked normalized pi1 generator classes."}
+    {:job 5,
+     :commit "220f00de9",
+     :reason "Banked cut pi1 normalization."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -101387,7 +101403,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A03_cutCircleNormalizePiOneHom_first",
@@ -101397,7 +101413,9 @@
     :reported-by [:program-2026-10-13-close-t97a03],
     :type "normalization maps both genuine generators",
     :area "covering-classification-explicit",
-    :proved-in :program-2026-10-13-close-t97a03},
+    :proved-in :program-2026-10-13-close-t97a03,
+    :banked-by :program-2026-10-13-close-t97a03,
+    :banked-commit "220f00de9"},
    :id :lemma-apm-t97a03-cutcirclenormalizepionehom-first,
    :kind :lemma,
    :depends-on [:lemma-apm-t97a03-normalizedimagefirstgenerator-eq],
