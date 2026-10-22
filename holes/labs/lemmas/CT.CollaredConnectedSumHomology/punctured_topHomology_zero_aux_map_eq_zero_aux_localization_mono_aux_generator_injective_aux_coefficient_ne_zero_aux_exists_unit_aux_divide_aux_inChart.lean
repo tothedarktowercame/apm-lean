@@ -4171,6 +4171,75 @@ and `_aux_injective_aux_convex_aux_inj_aux_isIso` helpers).  Those helpers are t
 machinery of CCSH's `_aux_injective_aux_inChart` (a separate leaf); reuse them once
 it lands.  Generalize `Fin 3` to `k + 2`. -/
 -- BEGIN SEAT AREA
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart_aux_isIso
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (E (k + 2)) x).source)
+    (hconv : Convex ℝ ((chartAt (E (k + 2)) x) '' A))
+    (y : M) (hy : y ∈ A) (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M)
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i) := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hi)
+  exact punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce k M x A hA hsub y hy (n + 1) hi
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model k _ (hA.image_of_continuousOn
+      ((chartAt (E (k + 2)) x).continuousOn.mono hsub)) hconv _ (Set.mem_image_of_mem _ hy) n)
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart_aux_convex
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (E (k + 2)) x).source)
+    (hconv : Convex ℝ ((chartAt (E (k + 2)) x) '' A)) (m : ℤ) :
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_good k M m A := by
+  intro c hc
+  rcases A.eq_empty_or_nonempty with rfl | ⟨y, hy⟩
+  · exact ⟨0, by simp⟩
+  obtain ⟨g, hg⟩ := hc y hy
+  let f := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+      (ContinuousMap.id M)
+      (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) (k + 2)
+  letI : IsIso f := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart_aux_isIso k M x A hA hsub hconv y hy (k + 2) (by omega)
+  obtain ⟨μ, hμ⟩ := (ConcreteCategory.bijective_of_isIso f).2 g
+  refine ⟨μ, fun z hz => ?_⟩
+  have heq : m • μ = c := by
+    apply (ConcreteCategory.bijective_of_isIso f).1
+    change f (m • μ) = f c
+    rw [map_zsmul, hμ, hg]
+  rw [← map_zsmul, heq]
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart_aux_finite
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (x : M) {ι : Type} (K : ι → Set M) (hK : ∀ j, IsCompact (K j))
+    (hsub : ∀ j, K j ⊆ (chartAt (E (k + 2)) x).source)
+    (hconv : ∀ j, Convex ℝ ((chartAt (E (k + 2)) x) '' K j))
+    (m : ℤ) (hm : m ≠ 0) (s : Finset ι) :
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_good k M m (⋃ j ∈ s, K j) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+    simp only [Finset.notMem_empty, Set.iUnion_of_empty, Set.iUnion_empty]
+    exact punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart_aux_convex k M x ∅ isCompact_empty (Set.empty_subset _)
+      (by rw [Set.image_empty]; exact convex_empty) m
+  | insert a s ha ih =>
+    rw [Finset.set_biUnion_insert]
+    apply punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_union k M m hm _ _ (hK a).isClosed
+      (s.isCompact_biUnion fun j _ => hK j).isClosed
+    · exact punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart_aux_convex k M x (K a) (hK a) (hsub a) (hconv a) m
+    · exact ih
+    · rw [Set.inter_iUnion₂]
+      exact punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart_aux_finite k M x (fun j => K a ∩ K j)
+        (fun j => (hK a).inter (hK j)) (fun j y hy => hsub a hy.1)
+        (fun j => by
+          rw [(chartAt (E (k + 2)) x).injOn.image_inter (hsub a) (hsub j)]
+          exact (hconv a).inter (hconv j)) s
+
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart
     (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (E (k + 2)) M]
@@ -4178,7 +4247,52 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     (hsub : A ⊆ (chartAt (E (k + 2)) x).source)
     (m : ℤ) (hm : m ≠ 0) :
     punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_good k M m A := by
-  sorry
+  intro c hc
+  obtain ⟨V, hV, hAV, hlift⟩ := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart_aux_lift k M A (k + 2) c
+  obtain ⟨s, K, hKc, hKs, hKconv, hKV, hKA, hcov⟩ :=
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart_aux_cover k M x A hA hsub V hV hAV
+  have gL := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart_aux_finite k M x K hKc hKs hKconv m hm s
+  have hAL : Set.MapsTo (ContinuousMap.id M) (⋃ a ∈ s, K a)ᶜ Aᶜ :=
+    fun z hz => Set.compl_subset_compl.mpr hcov hz
+  obtain ⟨d, hd⟩ := hlift (⋃ a ∈ s, K a) hcov (Set.iUnion₂_subset fun a _ => hKV a)
+  obtain ⟨μL, hμL⟩ := gL d (by
+    intro y hy
+    obtain ⟨a, ha, hya⟩ := Set.mem_iUnion₂.mp hy
+    obtain ⟨b, hbK, hbA⟩ := hKA a ha
+    have hKL : K a ⊆ ⋃ a ∈ s, K a := Set.subset_biUnion_of_mem ha
+    have hLK : Set.MapsTo (ContinuousMap.id M) (⋃ a ∈ s, K a)ᶜ (K a)ᶜ :=
+      fun z hz => Set.compl_subset_compl.mpr hKL hz
+    let fb := HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap (K a)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint b)
+        (ContinuousMap.id M) (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (K a) b hbK)) (k + 2)
+    letI : IsIso fb := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_inChart_aux_isIso k M x (K a) (hKc a) (hKs a) (hKconv a) b hbK (k + 2) (by omega)
+    obtain ⟨g, hg⟩ := hc b hbA
+    have hfb : fb (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap _ _ (ContinuousMap.id M) hLK) (k + 2) d) =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint b)
+            (ContinuousMap.id M) (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A b hbA)) (k + 2) c := by
+      rw [← hd]
+      simp only [fb]
+      rw [punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart_aux_comp k M _ _ _ hLK _ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ b (hKL hbK)),
+        punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart_aux_comp k M _ _ _ hAL _ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ b (hKL hbK))]
+    have hdK : m • inv fb g = HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap _ _ (ContinuousMap.id M) hLK) (k + 2) d := by
+      apply (ConcreteCategory.bijective_of_isIso fb).1
+      rw [map_zsmul, ← ConcreteCategory.comp_apply, IsIso.inv_hom_id,
+        ConcreteCategory.id_apply, hg, hfb]
+    refine ⟨HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap (K a)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+        (ContinuousMap.id M) (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo (K a) y hya)) (k + 2) (inv fb g), ?_⟩
+    rw [← map_zsmul, hdK, punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart_aux_comp k M _ _ _ hLK _ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ y hy)])
+  refine ⟨HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap _ _ (ContinuousMap.id M) hAL) (k + 2) μL,
+    fun y hy => ?_⟩
+  rw [punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart_aux_comp k M _ _ _ hAL _ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ y (hcov hy)), hμL y (hcov hy), ← hd,
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart_aux_comp k M _ _ _ hAL _ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo _ y (hcov hy))]
 -- END SEAT AREA
 
 /-- LIBRARY LEAF (Hatcher 3.27(a), step 4): every compact `A ⊆ M` admits
