@@ -119152,20 +119152,20 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Prove comparison and fiber formula; assemble Main.",
+    :residual "Prove comparison/formula; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorry" "review dirs"],
     :missing-theorems
-    [{:name "regularFiberLocalDegree_eq_of_same_point",
-      :type "fiber-subtype invariance",
+    [{:name "regularFiberLocalDegree_eq_of_underlying_eq",
+      :type "fiber representative transport",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on ["regularFiberLocalDegree_eq_of_same_point"],
       :area "oriented-surface-degree"}
      {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
       :type "transverse comparison",
@@ -119184,33 +119184,21 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "d7e214eface44d4dffea8f0c98ca03e53b8b1e86fe7e580aeafbe771cfa45c56",
+     "7d594dcd3270466588d4d41a218512e6cfe31fa36373d958495fc46f15e17df3",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked fiber-subtype alignment.",
+    :reason "Banked fiber transport.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff; hashes; placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792627657992-1863-599cbcdb",
-     :commands
-     ["git show/diff --check 69615b1f1"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: 69615b1f1 changes only t00J02Closure.lean (+14), adding compiled, sorry-free regular-fiber subtype alignment beyond history a763d5d49. Fixture afb497a6, source 0b3b4888, implementation d7e214ef; registry 170/170; placeholders closure=0/Main=1. The representation boundary is exact: regularFiberLocalDegree is definitionally a function of the underlying surface point, so two fiber subtype witnesses for the same x have equal local degrees even across maps and target values; the rfl orientation is correct. Axioms are propext, Classical.choice, Quot.sound. Residual milestones are the transverse comparison, fiber formula, and Main assembly."},
-    :commit "69615b1f10dc0284e7e01a868a195e498745069e",
+    :commit "531015989b82e26af9d64960ba8f76a7156ca1f6",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119218,7 +119206,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -123484,6 +123472,23 @@
    :id :lemma-regularfiberlocaldegree-eq-of-same-point,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberLocalDegree_eq_of_underlying_eq",
+    :type "fiber representative transport"},
+   :lemma
+   {:name "regularFiberLocalDegree_eq_of_underlying_eq",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "fiber representative transport",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiberlocaldegree-eq-of-underlying-eq,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-eq-of-same-point],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
