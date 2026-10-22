@@ -38016,6 +38016,8 @@
    :other-consumers []}
   {:consumer :t94A06,
    :stop-count 7,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:residual
     "Prove corners Sard on range I; chart transport and Main remain.",
@@ -38061,6 +38063,12 @@
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1792631729311-1957-4c89f33c",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit "68f3eb8d3",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
@@ -38069,7 +38077,7 @@
      "7dfeaf949f514dbebf4cb4cc3f985b3bdf6be845081871f5fc018a744de6de49"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -38091,7 +38099,7 @@
    :id :program-2026-10-13-close-t94a06,
    :kind :final-adapter,
    :campaign-priority 36,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
