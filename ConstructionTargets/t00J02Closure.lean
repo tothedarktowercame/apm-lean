@@ -3910,6 +3910,36 @@ theorem regularFiberLocalDegree_eq_of_underlying_eq
       subst p'
       exact regularFiberLocalDegree_eq_of_same_point e f g y z p hp hp'
 
+/-- Reindex the canonical signed local-degree sum across an equivalence of
+fiber presentations that preserves underlying points and component labels. -/
+theorem regularFiberSignedSum_eq_of_fiberEquiv
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S] {κ : Type*}
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (f g : C(S, S)) (y z : S)
+    [Fintype {p : S // f p = y}] [Fintype {p : S // g p = z}]
+    (equiv : {p : S // f p = y} ≃ {p : S // g p = z})
+    (componentF : {p : S // f p = y} → κ)
+    (componentG : {p : S // g p = z} → κ) (orientationSign : κ → ℤ)
+    (hpoint : ∀ x : {p : S // f p = y}, (x : S) = (equiv x : S))
+    (hcomponent : ∀ x : {p : S // f p = y},
+      componentG (equiv x) = componentF x) :
+    (∑ x : {p : S // f p = y},
+        orientationSign (componentF x) * regularFiberLocalDegree e f y x) =
+      ∑ x : {p : S // g p = z},
+        orientationSign (componentG x) * regularFiberLocalDegree e g z x := by
+  calc
+    _ = ∑ x : {p : S // f p = y}, orientationSign (componentG (equiv x)) *
+        regularFiberLocalDegree e g z (equiv x) := by
+      apply Fintype.sum_congr
+      intro x
+      rw [hcomponent x]
+      congr 1
+      exact regularFiberLocalDegree_eq_of_underlying_eq e f g y z x (equiv x)
+        (hpoint x)
+    _ = _ := Equiv.sum_comp equiv (fun x =>
+      orientationSign (componentG x) * regularFiberLocalDegree e g z x)
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3936,6 +3966,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_degreeFormula
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_same_point
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_underlying_eq
+#print axioms ConstructionTargets.T00J02Closure.regularFiberSignedSum_eq_of_fiberEquiv
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
