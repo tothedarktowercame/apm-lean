@@ -119152,7 +119152,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
@@ -119206,7 +119206,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119228,7 +119228,7 @@
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -119684,6 +119684,18 @@
     [{:cmd "initial closure compile",
       :exit 1,
       :finding "replaced invalid hU.inter with Filter.inter_mem"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792629166857-1891-11440c73",
+     :commands
+     ["git show/diff --check 7487f3b07"
+      "detached: lake env lean ConstructionTargets/t98A06Closure.lean"
+      "detached: lake env lean problems/t98A06/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "detached: sha256sum/rg placeholders"],
+     :finding
+     "PASS program STOP: 7487f3b07 changes only t98A06Closure.lean (+21), adding compiled, sorry-free corrected-lift neighborhood restriction beyond history 922873b7d. Fixture 9838452b matches the repaired recorded hash; source 44399e71, implementation 6b7ade56; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: intersecting the solved neighborhood U with prescribed V remains a neighborhood, lies in V, preserves ContDiffOn by restriction, and preserves A x (w x) = b x via the left projection. Set/filter and E n/E m boundaries are correct. Axioms are propext, Classical.choice, Quot.sound. Residual milestones are tangent-chart transport, packaging local lifts, then flow/Main."},
     :commit "7487f3b07291dd21106a86421eee7d656fa091c3",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119692,7 +119704,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119710,7 +119722,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked neighborhoodwise corrected coordinate lifts.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-neighborhood restriction.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119759,7 +119771,10 @@
      :reason "Banked smooth corrected inverses."}
     {:job 5,
      :commit "922873b7df5222448c770f60fb79118288af2e49",
-     :reason "Banked neighborhoodwise corrected coordinate lifts."}]}
+     :reason "Banked neighborhoodwise corrected coordinate lifts."}
+    {:job 6,
+     :commit "7487f3b07291dd21106a86421eee7d656fa091c3",
+     :reason "Banked chart-neighborhood restriction."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -123468,7 +123483,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiberLocalDegree_eq_of_underlying_eq",
@@ -123478,14 +123493,16 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "fiber representative transport",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-regularfiberlocaldegree-eq-of-underlying-eq,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-eq-of-same-point],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_nhds_contDiffOn_corrected_lift_subset",
@@ -123495,7 +123512,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "corrected lift inside prescribed neighborhood",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "7487f3b07291dd21106a86421eee7d656fa091c3"},
    :id :lemma-exists-nhds-contdiffon-corrected-lift-subset,
    :kind :lemma,
    :depends-on [:lemma-exists-nhds-contdiffon-corrected-lift],
