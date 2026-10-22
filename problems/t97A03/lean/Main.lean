@@ -1120,6 +1120,21 @@ theorem apm_t97A03_collapsePiOneHom_injective_of_literal_surjective_cut_injectiv
 def apm_t97A03_cutFreeGroupWord (w : List (Fin 2 × ℤ)) : FreeGroup (Fin 2) :=
   (w.map fun q => FreeGroup.of q.1 ^ q.2).prod
 
+/-- Every element of the free group has an explicit signed-list spelling in
+the same format used by the two geometric arc calculations. -/
+theorem apm_t97A03_exists_cutFreeGroupWord (x : FreeGroup (Fin 2)) :
+    ∃ w : List (Fin 2 × ℤ), apm_t97A03_cutFreeGroupWord w = x := by
+  induction x using FreeGroup.induction_on with
+  | C1 => exact ⟨[], by simp [apm_t97A03_cutFreeGroupWord]⟩
+  | of i => exact ⟨[(i, 1)], by simp [apm_t97A03_cutFreeGroupWord]⟩
+  | inv_of i hi =>
+      exact ⟨[(i, -1)], by simp [apm_t97A03_cutFreeGroupWord]⟩
+  | mul x y hx hy =>
+      rcases hx with ⟨wx, rfl⟩
+      rcases hy with ⟨wy, rfl⟩
+      exact ⟨wx ++ wy, by simp [apm_t97A03_cutFreeGroupWord,
+        List.map_append, List.prod_append]⟩
+
 /-- The explicit free word evaluates to the corresponding signed word in the
 two actual literal loops. -/
 lemma apm_t97A03_literalGeneratorFreeGroupMap_word (A B : Circle)
@@ -1209,6 +1224,29 @@ lemma apm_t97A03_normalizedCutGeneratorFreeGroupMap_word
   rintro ⟨i, z⟩ hi
   fin_cases i <;>
     simp [apm_t97A03_normalizedCutGeneratorFreeGroupMap, map_zpow]
+
+/-- Surjectivity of the concrete normalized evaluation is exactly signed
+generation by the two genuine complementary arcs; the reverse direction uses
+the explicit free-group spelling above. -/
+theorem apm_t97A03_normalized_signed_generation_iff_surjective (A B : Circle) :
+    (∀ g : FundamentalGroup
+        (apm_t97A03_CutCircle 1 (A⁻¹ * B))
+        (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (apm_t97A03_normalizedFirstCutCircleGenerator A B)
+          (apm_t97A03_normalizedSecondCutCircleGenerator A B) w = g) ↔
+      Function.Surjective
+        (apm_t97A03_normalizedCutGeneratorFreeGroupMap A B) := by
+  constructor
+  · intro h g
+    rcases h g with ⟨w, hw⟩
+    exact ⟨apm_t97A03_cutFreeGroupWord w,
+      (apm_t97A03_normalizedCutGeneratorFreeGroupMap_word A B w).trans hw⟩
+  · intro h g
+    rcases h g with ⟨x, rfl⟩
+    rcases apm_t97A03_exists_cutFreeGroupWord x with ⟨w, rfl⟩
+    exact ⟨w, (apm_t97A03_normalizedCutGeneratorFreeGroupMap_word A B w).symm⟩
 
 /-- Signed-word generation by the two concrete cut arcs is precisely enough
 for surjectivity of their free-group evaluation map. -/
