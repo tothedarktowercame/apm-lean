@@ -1450,7 +1450,74 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_s
     Nonempty (ContinuousMap.HomotopyEquiv
       punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell
       (Metric.sphere (0 : E 3) 1)) := by
-  sorry
+  let S := punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell
+  let f : S → Metric.sphere (0 : E 3) 1 := fun x ↦
+    ⟨(‖(x : E 3)‖)⁻¹ • (x : E 3), by
+      rw [Metric.mem_sphere, dist_zero_right, norm_smul, Real.norm_eq_abs,
+        abs_inv, abs_of_nonneg (norm_nonneg _), inv_mul_cancel₀]
+      exact ne_of_gt (lt_trans (by norm_num) x.2.1)⟩
+  let g : Metric.sphere (0 : E 3) 1 → S := fun x ↦
+    ⟨(x : E 3), by
+      have hx : ‖(x : E 3)‖ = 1 := by
+        simpa [Metric.mem_sphere, dist_zero_right] using x.2
+      change 1 / 2 < ‖(x : E 3)‖ ∧ ‖(x : E 3)‖ < 2
+      simpa [hx] using (show (1 / 2 : ℝ) < 1 ∧ (1 : ℝ) < 2 by norm_num)⟩
+  have hf : Continuous f := by
+    apply Continuous.subtype_mk
+    exact ((continuous_norm.comp continuous_subtype_val).inv₀ (fun x ↦
+      ne_of_gt (lt_trans (by norm_num) x.2.1))).smul continuous_subtype_val
+  have hg : Continuous g := by
+    exact continuous_subtype_val.subtype_mk _
+  refine ⟨{
+    toFun := ⟨f, hf⟩
+    invFun := ⟨g, hg⟩
+    left_inv := ?_
+    right_inv := ?_ }⟩
+  · let gf : C(S, S) := (⟨g, hg⟩ : C(Metric.sphere (0 : E 3) 1, S)).comp ⟨f, hf⟩
+    have H : ContinuousMap.Homotopy (ContinuousMap.id S) gf := by
+      refine {
+      toFun := fun z ↦ ⟨((1 - (z.1 : ℝ)) + (z.1 : ℝ) * (‖(z.2 : E 3)‖)⁻¹) •
+        (z.2 : E 3), ?_⟩
+      continuous_toFun := ?_
+      map_zero_left := ?_
+      map_one_left := ?_ }
+      · have hr : 1 / 2 < ‖(z.2 : E 3)‖ := z.2.2.1
+        have hr2 : ‖(z.2 : E 3)‖ < 2 := z.2.2.2
+        have ht0 : 0 ≤ (z.1 : ℝ) := z.1.2.1
+        have ht1 : (z.1 : ℝ) ≤ 1 := z.1.2.2
+        have hr0 : 0 < ‖(z.2 : E 3)‖ := lt_trans (by norm_num) hr
+        have hinv : 0 ≤ (‖(z.2 : E 3)‖)⁻¹ := inv_nonneg.2 hr0.le
+        have ha : 0 ≤ (1 - (z.1 : ℝ)) + (z.1 : ℝ) * (‖(z.2 : E 3)‖)⁻¹ := by nlinarith
+        change 1 / 2 < ‖((1 - (z.1 : ℝ) + (z.1 : ℝ) * ‖(z.2 : E 3)‖⁻¹) •
+          (z.2 : E 3))‖ ∧ _
+        rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg ha]
+        constructor <;> field_simp <;> nlinarith
+      · apply Continuous.subtype_mk
+        have hn : Continuous (fun z : unitInterval × S ↦ ‖(z.2 : E 3)‖) :=
+          continuous_norm.comp (continuous_subtype_val.comp continuous_snd)
+        have hi : Continuous (fun z : unitInterval × S ↦ (‖(z.2 : E 3)‖)⁻¹) :=
+          hn.inv₀ (fun z ↦ ne_of_gt (lt_trans (by norm_num) z.2.2.1))
+        have hs : Continuous (fun z : unitInterval × S ↦
+            (1 - (z.1 : ℝ)) + (z.1 : ℝ) * (‖(z.2 : E 3)‖)⁻¹) := by
+          fun_prop
+        exact hs.smul (continuous_subtype_val.comp continuous_snd)
+      · intro x
+        apply Subtype.ext
+        simp
+      · intro x
+        apply Subtype.ext
+        simp [gf, f, g, inv_smul_smul₀]
+    exact ⟨H.symm⟩
+  · have hcomp : (⟨f, hf⟩ : C(S, Metric.sphere (0 : E 3) 1)).comp
+        (⟨g, hg⟩ : C(Metric.sphere (0 : E 3) 1, S)) =
+        ContinuousMap.id _ := by
+      apply ContinuousMap.ext
+      intro x
+      apply Subtype.ext
+      have hx : ‖(x : E 3)‖ = 1 := by
+        simpa [Metric.mem_sphere, dist_zero_right] using x.2
+      simp [f, g, hx]
+    rw [hcomp]
 -- END SEAT AREA
 
 /-- The unit sphere in `E 3` is simply connected. -/
