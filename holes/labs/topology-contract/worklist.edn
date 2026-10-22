@@ -119199,6 +119199,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hashes/placeholders", :exit 0}],
     :diagnostic-history [{:exits [1 1 1], :note "inference fixed"}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792630457588-1913-13fa3207",
+     :commands
+     ["git show/diff --check 7ba7d71b6"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "sha256sum; placeholder count"],
+     :finding
+     "PASS program STOP: 7ba7d71b6 changes only t00J02Closure.lean (+31), adding a compiled sorry-free regular-fiber signed-sum transport beyond history 69615b1f1. Blueprint/fixture afb497a6, Main 0b3b4888, closure 40913f85; registry 170/170; placeholders closure=0, Main=1 expected. Orientation is correct: Equiv.sum_comp reindexes fibers; hcomponent preserves labels/signs; hpoint plus underlying-point transport preserves local degrees. Fiber-subtype and finite-sum boundaries align. Standard axioms only: propext, Classical.choice, Quot.sound. Residual milestones remain transverse comparison, fiber formula, Main."},
     :commit "7ba7d71b6a26a2302348b78968783aa103723841",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119207,7 +119219,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119225,7 +119237,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked fiber-subtype alignment.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked sum transport.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119635,7 +119647,10 @@
      :reason "Banked disk-bounded H2 assembly."}
     {:job 9,
      :commit "69615b1f10dc0284e7e01a868a195e498745069e",
-     :reason "Banked fiber-subtype alignment."}]}
+     :reason "Banked fiber-subtype alignment."}
+    {:job 1,
+     :commit "7ba7d71b6a26a2302348b78968783aa103723841",
+     :reason "Banked sum transport."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123522,7 +123537,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiberSignedSum_eq_of_fiberEquiv",
@@ -123532,7 +123547,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "signed-sum transport",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "7ba7d71b6a26a2302348b78968783aa103723841"},
    :id :lemma-regularfibersignedsum-eq-of-fiberequiv,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-eq-of-underlying-eq],
