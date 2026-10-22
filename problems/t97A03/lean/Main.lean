@@ -930,6 +930,32 @@ lemma apm_t97A03_twoGeneratorWord_map {G H : Type*} [Group G] [Group H]
   rintro ⟨i, z⟩ hi
   fin_cases i <;> simp [map_zpow]
 
+/-- Signed generation for the normalized literal quotient transports back
+to the original marked quotient through the geometric rotation. -/
+theorem apm_t97A03_cutCircle_signed_generation_of_normalized
+    (A B : Circle)
+    (hnormalized : ∀ g : FundamentalGroup
+        (apm_t97A03_CutCircle 1 (A⁻¹ * B))
+        (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (apm_t97A03_normalizedFirstCutCircleGenerator A B)
+          (apm_t97A03_normalizedSecondCutCircleGenerator A B) w = g) :
+    ∀ g : FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A),
+      ∃ w : List (Fin 2 × ℤ),
+        apm_t97A03_twoGeneratorWord
+          (apm_t97A03_firstCutCircleGenerator A B)
+          (apm_t97A03_secondCutCircleGenerator A B) w = g := by
+  intro g
+  rcases hnormalized (apm_t97A03_cutCircleNormalizePiOneHom A B g) with
+    ⟨w, hw⟩
+  refine ⟨w, (apm_t97A03_cutCircleNormalizePiOneHom_bijective A B).1 ?_⟩
+  rw [apm_t97A03_twoGeneratorWord_map,
+    apm_t97A03_cutCircleNormalizePiOneHom_first,
+    apm_t97A03_cutCircleNormalizePiOneHom_second]
+  exact hw
+
 /-- The concrete free-group evaluation map determined by the two geometric
 arcs of the cut-circle quotient.  Proving this map bijective is now the exact
 remaining van Kampen calculation for the cut representation. -/
