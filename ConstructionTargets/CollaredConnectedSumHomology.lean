@@ -445,6 +445,56 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_tietze
   refine ⟨G, G.continuous, fun x ↦ ?_⟩
   exact DFunLike.congr_fun hG x
 
+/-- Perturbation, step 1: a point outside `range f` arbitrarily close to `f 0`. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_nearby_complement
+    (n : ℕ) {f : Disk n 1 → E n}
+    (hnot : f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∉ interior (Set.range f))
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ c : E n, dist c (f ⟨0, Metric.mem_closedBall_self zero_le_one⟩) < ε ∧
+      c ∉ Set.range f := by
+  by_contra h
+  push_neg at h
+  apply hnot
+  rw [mem_interior_iff_mem_nhds]
+  filter_upwards [Metric.ball_mem_nhds
+    (f ⟨0, Metric.mem_closedBall_self zero_le_one⟩) hε] with c hc
+  exact h c (by simpa [dist_comm] using hc)
+
+/-- Perturbation, radial push: `Φ y = c + max (ε / ‖y - c‖) 1 • (y - c)` fixes points at
+distance `≥ ε` from `c` and sends the rest of `{c}ᶜ` onto `sphere c ε`. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_push
+    (n : ℕ) (c : E n) {ε : ℝ} (hε : 0 < ε) :
+    ∃ Φ : E n → E n, ContinuousOn Φ {c}ᶜ ∧ (∀ y, ε ≤ ‖y - c‖ → Φ y = y) ∧
+      ∀ y, y ≠ c → ‖y - c‖ < ε → Φ y ∈ Metric.sphere c ε := by
+  sorry
+
+/-- Perturbation, approximation: a continuous self-map of `E n` is uniformly within `η` of a
+`C¹` map on any compact set (mollify with a `ContDiffBump`, or Stone–Weierstrass). -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_smooth_approx
+    (n : ℕ) {G : E n → E n} (hG : Continuous G)
+    {T : Set (E n)} (hT : IsCompact T) {η : ℝ} (hη : 0 < η) :
+    ∃ P : E n → E n, ContDiff ℝ 1 P ∧ ∀ y ∈ T, ‖P y - G y‖ < η := by
+  sorry
+
+/-- Perturbation, avoidance: for `0 < n` the `C¹` image of `sphere c ε` is Haar-null
+(`Measure.addHaar_sphere`, `MeasureTheory.addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero`),
+so some `v` with `‖v‖ < η` is not a value of `P` on the sphere. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_avoid_sphere
+    (n : ℕ) (hn : 0 < n) {P : E n → E n} (hP : ContDiff ℝ 1 P)
+    (c : E n) {ε : ℝ} (hε : 0 < ε) {η : ℝ} (hη : 0 < η) :
+    ∃ v : E n, ‖v‖ < η ∧ ∀ y ∈ Metric.sphere c ε, P y ≠ v := by
+  sorry
+
+/-- A continuous map with no zero on a compact set is bounded away from zero there. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_lower_bound
+    (n : ℕ) {G : E n → E n} (hG : Continuous G)
+    {S : Set (E n)} (hS : IsCompact S) (h0 : ∀ y ∈ S, G y ≠ 0) :
+    ∃ m : ℝ, 0 < m ∧ ∀ y ∈ S, m ≤ ‖G y‖ := by
+  rcases S.eq_empty_or_nonempty with rfl | hne
+  · exact ⟨1, one_pos, by simp⟩
+  · obtain ⟨y₀, hy₀, hmin⟩ := hS.exists_isMinOn hne hG.norm.continuousOn
+    exact ⟨‖G y₀‖, norm_pos_iff.mpr (h0 y₀ hy₀), fun y hy => hmin hy⟩
+
 /-- Perturbation step of B2c (Tao's argument).  If `f 0` is not interior to the
 image, pick `c ∉ range f` within `ε` of `f 0`; push the part of the image inside
 `ball c ε` radially onto `sphere c ε`, and replace `Gtilde` by a `C¹` approximation
@@ -460,7 +510,89 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
     (hGf : ∀ x : Disk n 1, Gtilde (f x) = x.1)
     (hnot : f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∉ interior (Set.range f)) :
     ∃ K : Disk n 1 → E n, Continuous K ∧ (∀ x, K x ≠ 0) ∧ ∀ x, ‖x.1 - K x‖ ≤ 1 := by
-  sorry
+  set x₀ : Disk n 1 := ⟨0, Metric.mem_closedBall_self zero_le_one⟩ with hx₀
+  set y₀ := f x₀ with hy₀
+  have hG0 : Gtilde y₀ = 0 := hGf x₀
+  obtain ⟨δ, hδ, hδG⟩ := Metric.continuous_iff.mp hGtilde y₀ (1 / 4) (by norm_num)
+  set ε := δ / 3 with hεdef
+  have hε : 0 < ε := by positivity
+  obtain ⟨c, hcy, hc⟩ := largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_nearby_complement n hnot hε
+  have hfc : ∀ x, f x ≠ c := fun x h => hc ⟨x, h⟩
+  -- `Gtilde` is within `1/4` of `0` on `closedBall c ε`.
+  have hnear : ∀ y, ‖y - c‖ ≤ ε → ‖Gtilde y‖ < 1 / 4 := by
+    intro y hy
+    have h := hδG y (by
+      calc dist y y₀ ≤ dist y c + dist c y₀ := dist_triangle _ _ _
+        _ < δ := by rw [dist_eq_norm]; linarith)
+    simpa [hG0, dist_eq_norm] using h
+  obtain ⟨Φ, hΦc, hΦfar, hΦnear⟩ := largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_push n c hε
+  set S : Set (E n) := Set.range f ∩ {y | ε ≤ ‖y - c‖} with hSdef
+  have hS : IsCompact S :=
+    (isCompact_range hf).inter_right
+      (isClosed_le continuous_const (continuous_id.sub continuous_const).norm)
+  have hS0 : ∀ y ∈ S, Gtilde y ≠ 0 := by
+    rintro y ⟨⟨x, rfl⟩, hy⟩ h
+    rw [hGf] at h
+    have hx : x = x₀ := Subtype.ext h
+    subst hx
+    have : ‖y₀ - c‖ < ε := by rw [← dist_eq_norm, dist_comm]; exact hcy
+    exact absurd hy (not_le.mpr this)
+  obtain ⟨m, hm, hmG⟩ := largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_lower_bound n hGtilde hS hS0
+  set η := min m (1 / 4) with hηdef
+  have hη : 0 < η := lt_min hm (by norm_num)
+  obtain ⟨Q, hQ, hQG⟩ := largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_smooth_approx n hGtilde
+    (hS.union (isCompact_sphere c ε)) (half_pos hη)
+  obtain ⟨v, hv, hQv⟩ := largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_avoid_sphere n hn hQ c hε (half_pos hη)
+  have hΦf : Continuous fun x => Φ (f x) :=
+    hΦc.comp_continuous hf (fun x => hfc x)
+  -- Where the pushed image lands.
+  have hland : ∀ x, (ε ≤ ‖f x - c‖ ∧ Φ (f x) = f x ∧ Φ (f x) ∈ S) ∨
+      (‖f x - c‖ < ε ∧ Φ (f x) ∈ Metric.sphere c ε) := by
+    intro x
+    by_cases h : ε ≤ ‖f x - c‖
+    · exact Or.inl ⟨h, hΦfar _ h, by rw [hΦfar _ h]; exact ⟨⟨x, rfl⟩, h⟩⟩
+    · exact Or.inr ⟨not_le.mp h, hΦnear _ (hfc x) (not_le.mp h)⟩
+  refine ⟨fun x => Q (Φ (f x)) - v, (hQ.continuous.comp hΦf).sub continuous_const,
+    ?_, ?_⟩
+  · intro x hK
+    have hKv : Q (Φ (f x)) = v := sub_eq_zero.mp hK
+    rcases hland x with ⟨_, _, hS'⟩ | ⟨_, hsph⟩
+    · have h1 := hQG _ (Or.inl hS')
+      have h2 := hmG _ hS'
+      rw [hKv] at h1
+      have : ‖Gtilde (Φ (f x))‖ ≤ ‖v - Gtilde (Φ (f x))‖ + ‖v‖ := by
+        calc ‖Gtilde (Φ (f x))‖ = ‖v - (v - Gtilde (Φ (f x)))‖ := by abel_nf
+          _ ≤ ‖v‖ + ‖v - Gtilde (Φ (f x))‖ := norm_sub_le _ _
+          _ = _ := add_comm _ _
+      have : η ≤ m := min_le_left _ _
+      linarith
+    · exact hQv _ hsph hKv
+  · intro x
+    have hx : x.1 = Gtilde (f x) := (hGf x).symm
+    have hmem : Φ (f x) ∈ S ∪ Metric.sphere c ε := by
+      rcases hland x with ⟨_, _, h⟩ | ⟨_, h⟩
+      · exact Or.inl h
+      · exact Or.inr h
+    have hQ1 := hQG _ hmem
+    have hη4 : η ≤ 1 / 4 := min_le_right _ _
+    have hdiff : ‖Gtilde (f x) - Gtilde (Φ (f x))‖ ≤ 1 / 2 := by
+      rcases hland x with ⟨_, hΦ, _⟩ | ⟨hlt, hsph⟩
+      · rw [hΦ, sub_self, norm_zero]; norm_num
+      · have ha := hnear (f x) hlt.le
+        have hb := hnear (Φ (f x)) (by
+          rw [Metric.mem_sphere, dist_eq_norm] at hsph; exact hsph.le)
+        calc ‖Gtilde (f x) - Gtilde (Φ (f x))‖
+            ≤ ‖Gtilde (f x)‖ + ‖Gtilde (Φ (f x))‖ := norm_sub_le _ _
+          _ ≤ 1 / 2 := by linarith
+    rw [hx]
+    calc ‖Gtilde (f x) - (Q (Φ (f x)) - v)‖
+        = ‖(Gtilde (f x) - Gtilde (Φ (f x))) + (Gtilde (Φ (f x)) - Q (Φ (f x))) + v‖ := by
+          congr 1; abel
+      _ ≤ ‖Gtilde (f x) - Gtilde (Φ (f x))‖ + ‖Gtilde (Φ (f x)) - Q (Φ (f x))‖ + ‖v‖ :=
+          norm_add₃_le
+      _ ≤ 1 := by
+          have := norm_sub_rev (Gtilde (Φ (f x))) (Q (Φ (f x)))
+          linarith
 
 theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive
     (n : ℕ) (hn : 0 < n)
