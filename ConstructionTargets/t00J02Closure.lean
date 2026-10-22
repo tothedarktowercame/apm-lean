@@ -3780,6 +3780,43 @@ theorem canonicalComponentSums_eq_zero_of_diskBounded_comparison
     (occupiedRegularFiber_exactZeroDegreeLifts
       f c hc eS hessential hdisks y hy) hcomparison
 
+/-- Transverse chart coefficients give the canonical disk-bounded component
+equations once their pointwise localization and component lift comparison
+have been verified.  This keeps the two representation changes explicit. -/
+theorem transverseDiskBounded_canonicalComponentSums_eq_zero
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {Q : Type} [AddCommGroup Q] [Module ℤ Q] [Module.IsTorsionFree ℤ Q]
+    (f : C(S, S)) (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (eS : (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of S)) ≅
+        ModuleCat.of ℤ Q)
+    (hessential : homologyMap 1 c ≠ 0)
+    (hdisks : ConstructionTargets.DiskBoundaryHomology.ComponentsBoundByDisks
+      (f ⁻¹' Set.range c))
+    (y : S) (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hlocalization : ∀ x, coefficient x •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e))
+    (hcomparison : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k =
+      exactLiftComponentDegree
+        (occupiedRegularFiber_exactZeroDegreeLifts
+          f c hc eS hessential hdisks y hy) k) :
+    ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy)
+        (regularFiberLocalDegree e f y) k = 0 := by
+  apply canonicalComponentSums_eq_zero_of_diskBounded_comparison
+    f c hc eS hessential hdisks y hy e
+  intro k
+  exact (componentLocalDegreeSum_eq_of_localizationCoefficients e f y
+    (occupiedRegularFiberComponentIndex f c y hy) coefficient
+    hlocalization k).trans (hcomparison k)
+
 /-- Canonical zero sums on genuine occupied components annihilate every
 orientation-weighted signed sum over the literal regular fiber. -/
 theorem canonicalRegularFiberSignedSum_eq_zero_of_componentSums
@@ -3960,6 +3997,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_canonicalSums
 #print axioms ConstructionTargets.T00J02Closure.canonicalComponentSums_eq_zero_of_diskBounded_comparison
+#print axioms ConstructionTargets.T00J02Closure.transverseDiskBounded_canonicalComponentSums_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberSignedSum_eq_zero_of_componentSums
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_diskBounded_comparison
