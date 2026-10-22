@@ -2125,6 +2125,35 @@ lemma punctured_fundamentalGroup_three_aux_cover (M : Type)
       M c s hopen hpath
   exact ⟨U, V, hU, hV, hcover, hb.1, hb.2, hpcU, hscV, hscUV, e, he⟩
 
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_groupEquivalence_apply
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)]
+    (z : FundamentalGroup X w.1) :
+    TwoOpenFreeProductMapping.groupEquivalence hU hV hcover w z =
+      (TwoOpenFreeProductMapping.sourceEquivalence hU hV hcover w).functor.map z := by
+  have h1 : ∀ (h : (TwoOpenFreeProductMapping.sourceEquivalence hU hV hcover w).functor.obj
+      (FundamentalGroupoid.mk w.val) = SingleObj.star _), eqToHom h = 𝟙 _ := fun h => rfl
+  unfold TwoOpenFreeProductMapping.groupEquivalence
+  erw [MulEquiv.trans_apply, MulEquiv.trans_apply, Iso.conj_apply, eqToIso.hom, eqToIso.inv,
+    h1, Category.id_comp, Category.comp_id]
+  rfl
+
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)]
+    (g : FundamentalGroup U ⟨w.1, w.2.1⟩) :
+    (TwoOpenFreeProductMapping.sourceEquivalence hU hV hcover w).functor.map
+        (FundamentalGroup.map
+          (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) =
+      Monoid.Coprod.inl g := by
+  sorry
+
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
     {X : Type} [TopologicalSpace X]
     (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
@@ -2136,7 +2165,9 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
         (FundamentalGroup.map
           (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) =
       Monoid.Coprod.inl g := by
-  sorry
+  rw [punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_groupEquivalence_apply]
+  exact punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left
+    U V hU hV hcover w g
 
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective
     {X : Type} [TopologicalSpace X]
