@@ -1192,6 +1192,24 @@ lemma apm_t97A03_cutGeneratorFreeGroupMap_word (A B : Circle)
   rintro ⟨i, z⟩ hi
   fin_cases i <;> simp [map_zpow]
 
+/-- The explicit list word evaluates to the corresponding signed word in the
+two genuine normalized arc classes.  This is the computational half of the
+pending normalized generation theorem, with no abstract generator selector. -/
+lemma apm_t97A03_normalizedCutGeneratorFreeGroupMap_word
+    (A B : Circle) (w : List (Fin 2 × ℤ)) :
+    apm_t97A03_normalizedCutGeneratorFreeGroupMap A B
+        (apm_t97A03_cutFreeGroupWord w) =
+      apm_t97A03_twoGeneratorWord
+        (apm_t97A03_normalizedFirstCutCircleGenerator A B)
+        (apm_t97A03_normalizedSecondCutCircleGenerator A B) w := by
+  simp only [apm_t97A03_cutFreeGroupWord, apm_t97A03_twoGeneratorWord,
+    map_list_prod, List.map_map]
+  apply congrArg List.prod
+  apply List.map_congr_left
+  rintro ⟨i, z⟩ hi
+  fin_cases i <;>
+    simp [apm_t97A03_normalizedCutGeneratorFreeGroupMap, map_zpow]
+
 /-- Signed-word generation by the two concrete cut arcs is precisely enough
 for surjectivity of their free-group evaluation map. -/
 theorem apm_t97A03_cutGeneratorFreeGroupMap_surjective_of_signed_generation
