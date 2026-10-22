@@ -217,10 +217,50 @@ the empty subspace has the absolute chains as its cokernel
 (`CoefficientRelativeSmall.subspaceMap` from the empty space is zero), then
 `CoefficientH0.h0Iso` for the path-connected point. -/
 -- BEGIN SEAT AREA
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero_aux_emptyMap
+    (R X : Type) [CommRing R] [TopologicalSpace X] :
+    ConstructionTargets.CoefficientRelativeSmall.subspaceMap R (∅ : Set X) = 0 := by
+  apply HomologicalComplex.Hom.ext
+  funext n
+  apply CategoryTheory.Limits.Sigma.hom_ext
+  intro s
+  exact isEmptyElim
+    ((TopCat.toSSetObjEquiv (TopCat.of (∅ : Set X))
+      (Opposite.op (SimplexCategory.mk n)) s)
+      (Classical.choice inferInstance))
+
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero_aux_emptyRelativeH0
+    (X : Type) [TopologicalSpace X] [PathConnectedSpace X] (p : X)
+    (A : Set X) (hA : A = ∅) :
+    ∃ e : ((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) A).homology 0 : Type) ≃ ZMod 2,
+      e 0 = 0 := by
+  subst A
+  let ciso : ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) (∅ : Set X) ≅
+      ConstructionTargets.CoefficientH0.SingularChains (ZMod 2) (TopCat.of X) :=
+    CategoryTheory.Limits.cokernelIsoOfEq
+      (t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero_aux_emptyMap
+        (ZMod 2) X) ≪≫
+      CategoryTheory.Limits.cokernelZeroIsoTarget
+  letI : IsIso ciso.hom := inferInstance
+  let hiso := asIso (HomologicalComplex.homologyMap ciso.hom 0)
+  let e := (hiso ≪≫
+    ConstructionTargets.CoefficientH0.h0Iso (ZMod 2) p).toLinearEquiv
+  exact ⟨e.toEquiv, map_zero e⟩
+
 theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero :
     ∃ e : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin 0)) {0} 0 ≃ ZMod 2,
       e 0 = 0 := by
-  sorry
+  let X := EuclideanSpace ℝ (Fin 0)
+  have hpoint : ({0} : Set X) = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro x
+    exact Set.mem_singleton_iff.mpr (Subsingleton.elim x 0)
+  have hempty : ({0} : Set X)ᶜ = ∅ := by simp [hpoint]
+  exact
+    t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero_aux_emptyRelativeH0
+      X (0 : X) ({0} : Set X)ᶜ hempty
 -- END SEAT AREA
 
 /- Dimension 1.  `ℝ¹` is contractible, so
