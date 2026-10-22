@@ -7561,6 +7561,22 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
     U V hU hV hcover w g
 
 -- BEGIN SEAT AREA
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_inl
+    {G H : Type*} [Group G] [Group H] [Subsingleton H] :
+    Function.Bijective (Monoid.Coprod.inl : G → Monoid.Coprod G H) := by
+  constructor
+  · exact Monoid.Coprod.inl_injective
+  · intro z
+    induction z using Monoid.Coprod.induction_on with
+    | inl g => exact ⟨g, rfl⟩
+    | inr h =>
+        refine ⟨1, ?_⟩
+        rw [map_one, Subsingleton.elim h 1, map_one]
+    | mul a b ha hb =>
+        obtain ⟨g, rfl⟩ := ha
+        obtain ⟨g', rfl⟩ := hb
+        exact ⟨g * g', map_mul _ _ _⟩
+
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective
     {X : Type} [TopologicalSpace X]
     (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
@@ -7570,7 +7586,31 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective
     Function.Bijective
       (FundamentalGroup.map
         (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨x, hxU⟩) := by
-  sorry
+  let w : (U ∩ V : Set X) := ⟨x, hxU, hxV⟩
+  let e := TwoOpenFreeProductMapping.groupEquivalence hU hV hcover w
+  letI : Subsingleton (FundamentalGroup V ⟨x, hxV⟩) :=
+    ⟨fun a b ↦ by
+      change Path.Homotopic.Quotient _ _ at a b
+      exact Subsingleton.elim a b⟩
+  have hinl : Function.Bijective
+      (Monoid.Coprod.inl : FundamentalGroup U ⟨x, hxU⟩ →
+        Monoid.Coprod (FundamentalGroup U ⟨x, hxU⟩)
+          (FundamentalGroup V ⟨x, hxV⟩)) :=
+    punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_inl
+  constructor
+  · intro a b hab
+    apply hinl.1
+    rw [← punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
+      U V hU hV hcover w a]
+    rw [← punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
+      U V hU hV hcover w b]
+    exact congrArg e hab
+  · intro y
+    obtain ⟨g, hg⟩ := hinl.2 (e y)
+    refine ⟨g, e.injective ?_⟩
+    rw [punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
+      U V hU hV hcover w g]
+    exact hg
 -- END SEAT AREA
 
 lemma punctured_fundamentalGroup_three_aux_van_kampen
