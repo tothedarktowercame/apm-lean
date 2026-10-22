@@ -581,6 +581,40 @@ theorem apm_t97A03_cutCircleNormalizePiOneHom_second (A B : Circle) :
     FundamentalGroup.mapOfEq_apply]
   exact apm_t97A03_normalizedImageSecondGenerator_eq A B
 
+lemma apm_t97A03_denormalize_cutCircleBasepoint (A B : Circle) :
+    apm_t97A03_denormalizeCutCircle A B
+        (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) =
+      apm_t97A03_cutCircleMap A B A := by
+  change apm_t97A03_cutCircleMap A B (A * 1) = _
+  simp
+
+/-- The inverse geometric transport on based fundamental groups. -/
+noncomputable def apm_t97A03_cutCircleDenormalizePiOneHom (A B : Circle) :
+    FundamentalGroup (apm_t97A03_CutCircle 1 (A⁻¹ * B))
+        (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) →*
+      FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A) :=
+  FundamentalGroup.mapOfEq
+    ⟨apm_t97A03_denormalizeCutCircle A B,
+      apm_t97A03_continuous_denormalizeCutCircle A B⟩
+    (apm_t97A03_denormalize_cutCircleBasepoint A B)
+
+/-- The two literal quotient rotations induce mutually inverse maps on pi1. -/
+theorem apm_t97A03_cutCircleNormalizePiOneHom_bijective (A B : Circle) :
+    Function.Bijective (apm_t97A03_cutCircleNormalizePiOneHom A B) := by
+  let e := ConstructionTargets.PolygonSurfaceHomology.fundamentalGroupEquivOfHomeomorphEq
+    (apm_t97A03_cutCircleNormalizeHomeomorph A B)
+    (apm_t97A03_cutCircleMap A B A)
+    (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1)
+    (apm_t97A03_normalize_cutCircleBasepoint A B)
+  have he : (e : FundamentalGroup (apm_t97A03_CutCircle A B)
+      (apm_t97A03_cutCircleMap A B A) →
+      FundamentalGroup (apm_t97A03_CutCircle 1 (A⁻¹ * B))
+        (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1)) =
+      apm_t97A03_cutCircleNormalizePiOneHom A B := rfl
+  rw [← he]
+  exact e.bijective
+
 /-- On a represented loop, the induced homomorphism is represented by its
 literal image under collapse. -/
 lemma apm_t97A03_collapsePiOneHom_apply (A B : Circle)
