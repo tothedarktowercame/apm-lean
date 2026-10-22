@@ -4999,7 +4999,122 @@ lemma boundary_homology_zero_aux_projection_epi_aux_localization
         (ContinuousMap.id M)
         (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
           _ (c.smallMap 0) ⟨0, by simp, rfl⟩)) (m + 1)) := by
-  sorry
+  subst hnm
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+  have hs := boundary_homology_zero_aux_projection_epi_aux_localization_aux_sets c hopen
+  have hclosed : IsClosed (Set.range c.smallMap) := hs.2.1
+  have hpK : c.smallMap 0 ∈ c.smallMap '' {y : Disk (k + 1 + 1) 1 | dist y.1 0 < 1} :=
+    hs.2.2.2
+  have hrange : Set.range c.smallMap ⊆ c.radialTwo := by
+    rintro _ ⟨y, rfl⟩
+    refine ⟨unitToLarge (k + 1 + 1) y, ?_, c.largeMap_unitToLarge y⟩
+    have hy := Metric.mem_closedBall.mp y.2
+    change dist y.1 0 < 2
+    linarith
+  have hM_K : c.radialTwoᶜ ⊆
+      interior (c.smallMap '' {y : Disk (k + 1 + 1) 1 | dist y.1 0 < 1})ᶜ := by
+    intro x hx
+    apply interior_mono (Set.compl_subset_compl.mpr (Set.image_subset_range _ _))
+    rw [hclosed.isOpen_compl.interior_eq]
+    exact fun h => hx (hrange h)
+  have hM_p : c.radialTwoᶜ ⊆ interior ({c.smallMap 0} : Set M)ᶜ := by
+    intro x hx
+    rw [isClosed_singleton.isOpen_compl.interior_eq]
+    rintro rfl
+    exact hx (hrange ⟨0, rfl⟩)
+  refine (boundary_homology_zero_aux_projection_epi_aux_localization_aux_restrict
+    c.radialTwo hopen _ {c.smallMap 0} hM_K hM_p (by rintro x rfl; exact hpK)
+    (k + 1 + 1) (by omega)).mpr ?_
+  let er : LargeInterior (n := k + 1 + 1) ≃ₜ ↥c.radialTwo :=
+    (c.largeInteriorMap_isEmbedding.toHomeomorph).trans
+      (Homeomorph.setCongr c.range_largeInteriorMap)
+  let e : ↥c.radialTwo ≃ₜ Metric.ball (0 : E (k + 1 + 1)) 2 :=
+    er.symm.trans (largeInteriorHomeomorphBall (n := k + 1 + 1))
+  have heval (x : ↥c.radialTwo) :
+      c.largeMap ⟨(e x).1, Metric.mem_closedBall.mpr (e x).2.le⟩ = x.1 := by
+    change (er (er.symm x)).1 = x.1
+    exact congrArg Subtype.val (er.apply_symm_apply x)
+  have hA : ∀ x : ↥c.radialTwo,
+      x ∈ {u : ↥c.radialTwo | u.1 ∉ c.smallMap '' {y : Disk (k + 1 + 1) 1 | dist y.1 0 < 1}} ↔
+      e x ∈ {u : Metric.ball (0 : E (k + 1 + 1)) 2 | u.1 ∉ Metric.ball (0 : E (k + 1 + 1)) 1} := by
+    intro x
+    change x.1 ∉ _ ↔ (e x).1 ∉ Metric.ball (0 : E (k + 1 + 1)) 1
+    apply not_congr
+    rw [Metric.mem_ball]
+    constructor
+    · rintro ⟨y, hy, hyeq⟩
+      have hz : unitToLarge (k + 1 + 1) y =
+          ⟨(e x).1, Metric.mem_closedBall.mpr (e x).2.le⟩ := by
+        apply c.largeEmbedding.injective
+        rw [c.largeMap_unitToLarge y, heval x]
+        exact hyeq
+      have : (y : E (k + 1 + 1)) = (e x).1 := congrArg Subtype.val hz
+      rw [← this]
+      exact hy
+    · intro h
+      let y : Disk (k + 1 + 1) 1 := ⟨(e x).1, Metric.mem_closedBall.mpr h.le⟩
+      refine ⟨y, h, ?_⟩
+      rw [← c.largeMap_unitToLarge y]
+      exact heval x
+  have hB : ∀ x : ↥c.radialTwo,
+      x ∈ {u : ↥c.radialTwo | u.1 ∉ ({c.smallMap 0} : Set M)} ↔
+      e x ∈ {u : Metric.ball (0 : E (k + 1 + 1)) 2 | u.1 ∉ ({0} : Set (E (k + 1 + 1)))} := by
+    intro x
+    change x.1 ∉ ({c.smallMap 0} : Set M) ↔ (e x).1 ∉ ({0} : Set (E (k + 1 + 1)))
+    apply not_congr
+    rw [Set.mem_singleton_iff, Set.mem_singleton_iff]
+    constructor
+    · intro hxp
+      have hz := c.largeEmbedding.injective (show c.largeMap
+          ⟨(e x).1, Metric.mem_closedBall.mpr (e x).2.le⟩ =
+          c.largeMap (unitToLarge (k + 1 + 1) (0 : Disk (k + 1 + 1) 1)) by
+        rw [heval x, hxp, c.largeMap_unitToLarge])
+      exact congrArg Subtype.val hz
+    · intro hz
+      rw [← heval x, ← c.largeMap_unitToLarge (0 : Disk (k + 1 + 1) 1)]
+      congr 1
+      exact Subtype.ext hz
+  have hAB : Set.MapsTo (ContinuousMap.id ↥c.radialTwo)
+      {u : ↥c.radialTwo | u.1 ∉ c.smallMap '' {y : Disk (k + 1 + 1) 1 | dist y.1 0 < 1}}
+      {u : ↥c.radialTwo | u.1 ∉ ({c.smallMap 0} : Set M)} := by
+    intro x hx hxp
+    apply hx
+    have : x.1 = c.smallMap 0 := Set.mem_singleton_iff.mp hxp
+    rw [this]
+    exact hpK
+  have hAB' : Set.MapsTo (ContinuousMap.id (Metric.ball (0 : E (k + 1 + 1)) 2))
+      {u : Metric.ball (0 : E (k + 1 + 1)) 2 | u.1 ∉ Metric.ball (0 : E (k + 1 + 1)) 1}
+      {u : Metric.ball (0 : E (k + 1 + 1)) 2 | u.1 ∉ ({0} : Set (E (k + 1 + 1)))} := by
+    intro x hx hx0
+    apply hx
+    have : x.1 = 0 := Set.mem_singleton_iff.mp hx0
+    rw [this]
+    exact Metric.mem_ball_self one_pos
+  refine (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_homeo
+    e _ _ _ _ hA hB hAB hAB' (k + 1 + 1)).mpr ?_
+  have hEU_A : (Metric.ball (0 : E (k + 1 + 1)) 2)ᶜ ⊆
+      interior (Metric.ball (0 : E (k + 1 + 1)) 1)ᶜ := by
+    intro x hx
+    apply interior_mono (Set.compl_subset_compl.mpr Metric.ball_subset_closedBall)
+    rw [Metric.isClosed_closedBall.isOpen_compl.interior_eq]
+    intro hx1
+    apply hx
+    rw [Metric.mem_ball]
+    have := Metric.mem_closedBall.mp hx1
+    linarith
+  have hEU_B : (Metric.ball (0 : E (k + 1 + 1)) 2)ᶜ ⊆
+      interior ({0} : Set (E (k + 1 + 1)))ᶜ := by
+    intro x hx
+    rw [isClosed_singleton.isOpen_compl.interior_eq]
+    rintro rfl
+    exact hx (Metric.mem_ball_self two_pos)
+  refine (boundary_homology_zero_aux_projection_epi_aux_localization_aux_restrict
+    (Metric.ball (0 : E (k + 1 + 1)) 2) Metric.isOpen_ball
+    (Metric.ball (0 : E (k + 1 + 1)) 1) {0} hEU_A hEU_B
+    (by rintro x rfl; exact Metric.mem_ball_self one_pos) (k + 1 + 1) (by omega)).mp ?_
+  exact boundary_homology_zero_aux_projection_epi_aux_localization_aux_model
+    k (Metric.ball 0 1) Metric.isBounded_ball (convex_ball 0 1) 0
+    (Metric.mem_ball_self one_pos) (k + 1)
 -- END SEAT AREA
 
 /-- LEAF. `H_(m+1) M → H_(m+1)(M, M ∖ open unit ball)` is onto. `1 ≤ m`
