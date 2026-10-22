@@ -788,7 +788,20 @@ lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_i
       B).homology k)) :
     IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
       A).homology k) := by
-  sorry
+  have hpair : ∀ x, x ∈ A ↔ e x ∈ B := by
+    intro x
+    constructor
+    · intro hx
+      rw [← hAB]
+      exact ⟨x, hx, rfl⟩
+    · intro hx
+      rw [← hAB] at hx
+      obtain ⟨y, hy, hye⟩ := hx
+      have hyx : y = x := e.injective hye
+      exact hyx ▸ hy
+  exact hB.of_iso
+    (ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularHomologyIsoOfHomeomorphPair
+      e A B hpair k)
 -- END SEAT AREA
 
 /-- LEAF. `largeMap` carries the excised pair onto the Euclidean
