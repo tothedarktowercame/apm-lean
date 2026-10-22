@@ -1470,6 +1470,50 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
   · right
     rw [h, mul_neg_one]
 
+/-- PROVED: the identity of `M` sends `M ∖ K` into `M ∖ z` when `z ∈ K`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+    {M : Type} [TopologicalSpace M] (K : Set M) (z : M) (hz : z ∈ K) :
+    Set.MapsTo (ContinuousMap.id M) Kᶜ
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) :=
+  fun y hy hyz => hy (by
+    have hyz' : y = z := hyz
+    exact hyz' ▸ hz)
+
+/-- PROVED: for `z ∈ K`, localization at `z` factors through `H_n(M, M ∖ K)`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_factor
+    {M : Type} [TopologicalSpace M] (K : Set M) (z : M) (hz : z ∈ K) (n : ℕ) :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap z n =
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ) n ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+            (ContinuousMap.id M)
+            (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+              K z hz)) n := by
+  have h := ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality Kᶜ
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) (ContinuousMap.id M)
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+      K z hz)
+  have hid : (TopCat.ofHom (ContinuousMap.id M) : TopCat.of M ⟶ TopCat.of M) = 𝟙 _ := rfl
+  have hab : ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap
+      (ContinuousMap.id M) = 𝟙 _ := by
+    simp [ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap, hid]
+  have h' : ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap (ContinuousMap.id M) ≫
+      ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) =
+    ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ ≫
+      ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) (ContinuousMap.id M)
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          K z hz) := h
+  rw [hab, Category.id_comp] at h'
+  show HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)) n = _
+  rw [h', HomologicalComplex.homologyMap_comp]
+
+
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign
     (k : ℕ)
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -1572,8 +1616,198 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
   exact ⟨x, by
     rcases Int.eq_one_or_neg_one_of_mul_eq_one h1 with h | h <;> simp [← hd, h]⟩
 
-/-- LEAF (split by claude-14, 2026-10-22, from lemma-3's PARTIAL on
-`_exists_unit`): Hatcher Lemma 3.27(b) with `A = M`.  A class of `H_(k+2)(M)`
+/-- `A` is good for `M` (Hatcher Lemma 3.27, integer coefficients):
+`H_i(M, M ∖ A)` vanishes above degree `k + 2`, and a class of `H_(k+2)(M, M ∖ A)` whose
+image in `H_(k+2)(M, M ∖ y)` vanishes for every `y ∈ A` is zero.  Ported from t00A01's dimension-3
+`_aux_good` (claude-14, 2026-10-22). -/
+def punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good (k : ℕ) (M : Type) [TopologicalSpace M] (A : Set M) : Prop :=
+  (∀ i : ℕ, k + 2 < i → Subsingleton
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i)) ∧
+    ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology (k + 2),
+      (∀ (y : M) (hy : y ∈ A),
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+            (ContinuousMap.id M) (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) (k + 2) c = 0) →
+      c = 0
+
+/-- PROVED (lemma-1, banked from its `_aux_convex` PARTIAL, 2026-10-20): the
+empty set is good (last line fixed by claude-14). -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_empty
+    (k : ℕ) (M : Type) [TopologicalSpace M] :
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M ∅ := by
+  constructor
+  · intro i hi
+    have hz :=
+      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero M i
+    simpa using (AddCommGrpCat.isZero_iff_subsingleton.mp hz)
+  · intro c hc
+    have hz :=
+      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero M (k + 2)
+    have hz' : IsZero
+        ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (∅ : Set M)ᶜ).homology (k + 2)) := by
+      simpa using hz
+    exact @Subsingleton.elim _ (AddCommGrpCat.isZero_iff_subsingleton.mp hz') c 0
+
+/-- PROVED (ported verbatim from t00A01 by claude-14, 2026-10-22): `H_n(M) → H_n(M, ∅)` is an isomorphism (the subcomplex of
+chains in the empty set is zero).  `T02A06SphereShift`'s
+`singularPairProjection_isIso_of_subspace_isZero` is one route. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_univ_aux_chains
+    (M : Type) [TopologicalSpace M] (n : ℕ) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of ↑((Set.univ : Set M)ᶜ))).X n) := by
+  letI : IsEmpty ↑((Set.univ : Set M)ᶜ) :=
+    ⟨fun x ↦ by simpa using x.2⟩
+  letI : IsEmpty (ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of ↑((Set.univ : Set M)ᶜ)) n) :=
+    ⟨fun σ ↦ by
+      let p : SimplexCategory.toTop.obj (SimplexCategory.mk n) :=
+        Classical.choice inferInstance
+      exact isEmptyElim (σ.down.hom p)⟩
+  letI := Classical.decEq
+    (ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of ↑((Set.univ : Set M)ᶜ)) n)
+  have h : IsZero (AddCommGrpCat.of
+      (DirectSum (ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of ↑((Set.univ : Set M)ᶜ)) n)
+        (fun _ ↦ ℤ))) := by
+    apply AddCommGrpCat.isZero_of_subsingleton
+  exact h.of_iso (ConstructionTargets.SingularSubdivision.addCommGrpCoproductIsoDirectSum
+    (ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of ↑((Set.univ : Set M)ᶜ)) n))
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_univ_aux_homology
+    (M : Type) [TopologicalSpace M] (n : ℕ) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of ↑((Set.univ : Set M)ᶜ))).homology n) := by
+  apply HomologicalComplex.ExactAt.isZero_homology
+  exact ShortComplex.exact_of_isZero_X₂ _
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_univ_aux_chains M n)
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_univ (M : Type) [TopologicalSpace M] (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        (Set.univ : Set M)ᶜ) n) := by
+  cases n with
+  | zero =>
+      letI : Mono (HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+            (Set.univ : Set M)ᶜ) 0) :=
+        (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_absolute
+          ((Set.univ : Set M)ᶜ) 0).mono_g
+          ((punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_univ_aux_homology M 0).eq_of_src _ _)
+      letI : Epi (HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+            (Set.univ : Set M)ᶜ) 0) := by
+        letI : Epi
+            ((ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+              ((Set.univ : Set M)ᶜ)).f 0) := by
+          dsimp [ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection]
+          exact Functor.map_epi
+            (HomologicalComplex.eval AddCommGrpCat (ComplexShape.down ℕ) 0)
+            (cokernel.π
+              (ConstructionTargets.SingularHomologyConcrete.relativeSingularSubcomplex.ι
+                ((Set.univ : Set M)ᶜ)))
+        apply HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+        intro j hj
+        simp at hj
+      exact isIso_of_mono_of_epi _
+  | succ q =>
+      exact ConstructionTargets.T02A06SphereShift.singularPairProjection_isIso_of_subspace_isZero
+        ((Set.univ : Set M)ᶜ) q
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_univ_aux_homology M (q + 1))
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_univ_aux_homology M q)
+
+/-- LEAF (split by claude-14, 2026-10-22, after lemma-3's PARTIAL on
+`_exists_unit_aux_injective`; Hatcher 3.27, Mayer--Vietoris step): if closed
+`A`, `B` and `A ∩ B` are good, so is `A ∪ B`.  Template: t00A01's sorry-free
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_union`
+with its `_aux_joint` and `_aux_compl_*` pieces.  No manifold structure is
+used; the only dimension in the template is the degree, so replace `3` by
+`k + 2` and `4` by `k + 3`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_union
+    (k : ℕ) (M : Type) [TopologicalSpace M] (A B : Set M) (hA : IsClosed A) (hB : IsClosed B)
+    (gA : punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M A)
+    (gB : punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M B)
+    (gAB : punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M (A ∩ B)) :
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M (A ∪ B) := by
+  sorry
+
+/-- LEAF (split by claude-14, 2026-10-22, after lemma-3's PARTIAL on
+`_exists_unit_aux_injective`; Hatcher 3.27, steps 1-3): every compact subset of
+one chart source is good.  Template: t00A01's sorry-free
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_inChart`
+(through `_aux_inChart_aux_{lift,cover,finite}` and `_aux_convex`, whose model
+step uses `HigherModelLocalHomology` for `ℝ³`).  Generalize `Fin 3` to
+`k + 2`; the model computation `H_i(ℝⁿ, ℝⁿ ∖ y)` is the part that changes. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (E (k + 2)) x).source) :
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M A := by
+  sorry
+
+/-- PROVED from `_aux_union`, `_aux_inChart` and `_aux_convex_aux_empty` (Hatcher 3.27,
+step 4; ported from t00A01 by claude-14, 2026-10-22): every compact `A ⊆ M` is good.
+Route: cover `A` by finitely many compact `K_j`, each inside a chart source
+(closed chart balls; `M` is locally compact).  Write `A = A₁ ∪ ⋯ ∪ A_m` with
+`A_j = A ∩ K_j` and induct on `m` using `_aux_union`: `A_m` and
+`(A₁ ∪ ⋯ ∪ A_{m-1}) ∩ A_m` are compact subsets of the chart source of `K_m`,
+so both are good by `_aux_inChart`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_compact
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (A : Set M) (hA : IsCompact A) :
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M A := by
+  classical
+  letI := ChartedSpace.locallyCompactSpace (E (k + 2)) M
+  choose K hK using fun x : M =>
+    (isCompact_isClosed_basis_nhds x).mem_iff.mp
+      (chart_source_mem_nhds (E (k + 2)) x)
+  have hKn (x : M) : K x ∈ nhds x := (hK x).1.1
+  have hKc (x : M) : IsCompact (K x) := (hK x).1.2.1
+  have hKcl (x : M) : IsClosed (K x) := (hK x).1.2.2
+  have hKs (x : M) : K x ⊆ (chartAt (E (k + 2)) x).source :=
+    (hK x).2
+  obtain ⟨s, hs⟩ := hA.elim_finite_subcover (fun x : M => interior (K x))
+    (fun _ => isOpen_interior) (fun x _ => Set.mem_iUnion.mpr
+      ⟨x, mem_interior_iff_mem_nhds.mpr (hKn x)⟩)
+  have hfinite : ∀ t : Finset M,
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M
+        (⋃ x ∈ t, A ∩ K x) := by
+    intro t
+    induction t using Finset.induction_on with
+    | empty =>
+        simpa using
+          (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_empty k M)
+    | @insert x t hxt ih =>
+        rw [Finset.set_biUnion_insert]
+        apply punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_union
+        · exact (hA.inter_right (hKcl x)).isClosed
+        · exact isClosed_biUnion_finset fun y _ => (hA.inter_right (hKcl y)).isClosed
+        · exact punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart
+            k M x (A ∩ K x) (hA.inter_right (hKcl x))
+            (fun _ hz => hKs x hz.2)
+        · exact ih
+        · apply punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_inChart
+          · exact (hA.inter_right (hKcl x)).inter_right
+              (t.finite_toSet.isCompact_biUnion fun y _ => hA.inter_right (hKcl y)).isClosed
+          · intro _ hz
+            exact hKs x hz.1.2
+  have hEq : (⋃ x ∈ s, A ∩ K x) = A := by
+    apply Set.Subset.antisymm
+    · exact Set.iUnion₂_subset fun x _ => inter_subset_left
+    · intro x hx
+      obtain ⟨y, hyS, hxy⟩ := Set.mem_iUnion₂.mp (hs hx)
+      exact Set.mem_iUnion₂.mpr ⟨y, hyS, hx, interior_subset hxy⟩
+  rw [← hEq]
+  exact hfinite s
+
+
+/-- PROVED from `_aux_compact` with `A = M`, `_aux_univ` and `_aux_factor`
+(claude-14, 2026-10-22, ported from t00A01).  Was a LEAF split by claude-14 from lemma-3's PARTIAL on
+`_exists_unit`: Hatcher Lemma 3.27(b) with `A = M`.  A class of `H_(k+2)(M)`
 whose image in every `H_(k+2)(M, M ∖ y)` vanishes is zero.  Template: t00A01's
 sorry-free dimension-3 `apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective` (through its `_aux_compact` with
 `A = M`, `_aux_univ`, `_aux_factor`); generalize `Fin 3` to `k + 2`.  Second
@@ -1588,7 +1822,17 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     (z : (SingularHomologyConcrete.SingularChains (TopCat.of M)).homology (k + 2))
     (hz : ∀ y : M, ManifoldFundamentalClass.localizationMap y (k + 2) z = 0) :
     z = 0 := by
-  sorry
+  set f := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+      (Set.univ : Set M)ᶜ) (k + 2)
+  haveI := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_univ M (k + 2)
+  have hc : f z = 0 := by
+    refine (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_compact k M Set.univ isCompact_univ).2 _ fun y hy => ?_
+    rw [← ConcreteCategory.comp_apply, ← punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_factor Set.univ y hy (k + 2)]
+    exact hz y
+  calc z = inv f (f z) := by
+        rw [← ConcreteCategory.comp_apply, IsIso.hom_inv_id, ConcreteCategory.id_apply]
+    _ = 0 := by rw [hc, map_zero]
 
 /-- LEAF (split by claude-14, 2026-10-22, from lemma-3's PARTIAL on
 `_exists_unit`): Hatcher Lemma 3.27(a) with `A = M`.  If the local degree of
