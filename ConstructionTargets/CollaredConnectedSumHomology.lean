@@ -4727,7 +4727,28 @@ lemma boundary_homology_zero_aux_transport
       (ManifoldFundamentalClass.absoluteSingularMap
         ⟨c.boundaryMap, c.continuous_boundaryMap⟩) m = 0) :
     boundaryHomologyMap c m = 0 := by
-  sorry
+  unfold boundaryHomologyMap
+  apply ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_injective
+  apply (cancel_mono
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of c.Punctured) m).hom).1
+  rw [CategoryTheory.Functor.map_zero, zero_comp]
+  calc
+    _ = (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere n)) m).hom ≫
+        ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat m).obj
+          (AddCommGrpCat.of ℤ)).map
+            (TopCat.ofHom
+              ⟨c.boundaryMap, c.continuous_boundaryMap⟩) :=
+      ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+          (TopCat.ofHom
+            ⟨c.boundaryMap, c.continuous_boundaryMap⟩) m
+    _ = 0 := by
+      rw [show ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat m).obj
+          (AddCommGrpCat.of ℤ)).map
+            (TopCat.ofHom
+              ⟨c.boundaryMap, c.continuous_boundaryMap⟩) = 0 from h0,
+        comp_zero]
 
 theorem boundary_homology_zero (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
