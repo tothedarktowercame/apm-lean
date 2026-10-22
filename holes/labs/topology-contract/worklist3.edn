@@ -38061,6 +38061,19 @@
     [{:cmd "draft compile",
       :exit 1,
       :correction "Replaced unavailable Subset.refl."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792633101501-2008-f63972d4",
+     :commands
+     ["git show/diff afa515558"
+      "git diff-tree/diff --check afa515558"
+      "lake env lean ConstructionTargets/t94A06Closure.lean"
+      "lake env lean problems/t94A06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and rg placeholders on recorded blobs"],
+     :finding
+     "PASS: afa515558 changes only scoped t94A06Closure; fixture hash 97df13...207b matches. Fresh detached gates pass; registry 170/170; closure placeholders 0; standard axioms. The theorem correctly restricts the banked open-domain Sard result to interior(range I); ContDiffOn is weakened along interior_subset and the image/intersection orientation simplifies exactly. This is proved progress after the failed interface-only milestone; frontier extension, corners assembly, and Main remain listed. Main retains one pre-existing sorry."},
     :commit "afa515558",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
@@ -38069,7 +38082,7 @@
      "97df134ece620ca8ca71ad6e44942f66e7f36fd40f3ca826663b6f160aaa207b"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -38087,7 +38100,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact local-Sard-to-AE adapter; local chart theorem remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved interior Sard; frontier extension remains.",
    :id :program-2026-10-13-close-t94a06,
    :kind :final-adapter,
    :campaign-priority 36,
@@ -38118,7 +38131,10 @@
     {:job 6,
      :commit "5b8fe1e2e",
      :reason
-     "Banked exact local-Sard-to-AE adapter; local chart theorem remains."}]}
+     "Banked exact local-Sard-to-AE adapter; local chart theorem remains."}
+    {:job 8,
+     :commit "afa515558",
+     :reason "Proved interior Sard; frontier extension remains."}]}
   {:consumer :t01J04,
    :stop-count 0,
    :phase :implementation,
@@ -49854,7 +49870,7 @@
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a06_ConvexDomainSard",
@@ -49864,7 +49880,9 @@
     :reported-by [:program-2026-10-13-close-t94a06],
     :type "Prop interface for Sard on range I using fderivWithin",
     :area "parametric-transversality-sard",
-    :proved-in :program-2026-10-13-close-t94a06},
+    :proved-in :program-2026-10-13-close-t94a06,
+    :banked-by :program-2026-10-13-close-t94a06,
+    :banked-commit "afa515558"},
    :id :lemma-apm-t94a06-convexdomainsard,
    :kind :lemma,
    :depends-on [],
@@ -49889,7 +49907,7 @@
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t94a06_interiorCriticalImage_null",
@@ -49899,7 +49917,9 @@
     :reported-by [:program-2026-10-13-close-t94a06],
     :type "Sard nullity on interior(range I)",
     :area "parametric-transversality-sard",
-    :proved-in :program-2026-10-13-close-t94a06},
+    :proved-in :program-2026-10-13-close-t94a06,
+    :banked-by :program-2026-10-13-close-t94a06,
+    :banked-commit "afa515558"},
    :id :lemma-apm-t94a06-interiorcriticalimage-null,
    :kind :lemma,
    :depends-on [],
