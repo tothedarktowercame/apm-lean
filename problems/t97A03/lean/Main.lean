@@ -512,6 +512,41 @@ noncomputable def apm_t97A03_secondCutCircleGenerator (A B : Circle) :
   FundamentalGroup.fromPath
     (Path.Homotopic.Quotient.mk (apm_t97A03_secondCutCircleLoop A B))
 
+/-- The first normalized class is represented by the genuine normalized
+arc-built loop, not by a selected abstract element. -/
+noncomputable def apm_t97A03_normalizedFirstCutCircleGenerator
+    (A B : Circle) :
+    FundamentalGroup (apm_t97A03_CutCircle 1 (A⁻¹ * B))
+      (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) :=
+  FundamentalGroup.fromPath
+    (Path.Homotopic.Quotient.mk
+      (apm_t97A03_normalizedFirstCutCircleLoop A B))
+
+/-- The complementary normalized class retains the second literal arc. -/
+noncomputable def apm_t97A03_normalizedSecondCutCircleGenerator
+    (A B : Circle) :
+    FundamentalGroup (apm_t97A03_CutCircle 1 (A⁻¹ * B))
+      (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) :=
+  FundamentalGroup.fromPath
+    (Path.Homotopic.Quotient.mk
+      (apm_t97A03_normalizedSecondCutCircleLoop A B))
+
+theorem apm_t97A03_normalizedImageFirstGenerator_eq (A B : Circle) :
+    FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk
+          (apm_t97A03_normalizedImageFirstCutCircleLoop A B)) =
+      apm_t97A03_normalizedFirstCutCircleGenerator A B := by
+  rw [apm_t97A03_normalizedImageFirstCutCircleLoop_eq]
+  rfl
+
+theorem apm_t97A03_normalizedImageSecondGenerator_eq (A B : Circle) :
+    FundamentalGroup.fromPath
+        (Path.Homotopic.Quotient.mk
+          (apm_t97A03_normalizedImageSecondCutCircleLoop A B)) =
+      apm_t97A03_normalizedSecondCutCircleGenerator A B := by
+  rw [apm_t97A03_normalizedImageSecondCutCircleLoop_eq]
+  rfl
+
 /-- On a represented loop, the induced homomorphism is represented by its
 literal image under collapse. -/
 lemma apm_t97A03_collapsePiOneHom_apply (A B : Circle)
