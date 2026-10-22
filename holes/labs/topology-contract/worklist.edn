@@ -119195,6 +119195,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "diff/hashes/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792633315876-2017-f53d10d1",
+     :commands
+     ["git show/diff --check e3ad7c360"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "sha256sum; placeholder count"],
+     :finding
+     "PASS program STOP: e3ad7c360 changes only t00J02Closure.lean (+41), adding a compiled sorry-free chart-data H2 endpoint beyond history 757e75fc5. Fixture afb497a6, Main 0b3b4888, closure 51d4d133; registry 170/170; placeholders closure=0/Main=1 expected. The proof correctly derives canonical component vanishing from localization/comparison, derives the canonical top-degree formula from the same coefficient data, then supplies both to the disk-bounded canonical-sums endpoint. Fiber subtype, occupied-component index, coefficients, and orientation signs align exactly. Axioms: propext, Classical.choice, Quot.sound. Residual: construct chart data and assemble Main."},
     :commit "e3ad7c360c033f802bbd8c372e54fca8e410e416",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119203,7 +119215,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119221,7 +119233,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical fiber formula.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart-data endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119640,7 +119652,10 @@
      :reason "Banked transverse comparison."}
     {:job 3,
      :commit "757e75fc5fcbc7ba9258ece8478e1290bc899223",
-     :reason "Banked canonical fiber formula."}]}
+     :reason "Banked canonical fiber formula."}
+    {:job 4,
+     :commit "e3ad7c360c033f802bbd8c372e54fca8e410e416",
+     :reason "Banked chart-data endpoint."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123556,7 +123571,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -123568,7 +123583,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart data implies H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "e3ad7c360c033f802bbd8c372e54fca8e410e416"},
    :id
    :lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero-of-chartdata,
    :kind :lemma,
