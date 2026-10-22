@@ -1530,6 +1530,34 @@ to `E (k + 2)`; reuse this file's chart / excision lemmas from the
 `_exists_unit_aux_injective_aux_convex` and `_inChart` subtrees where they
 already cover dimension `k + 2`. -/
 -- BEGIN SEAT AREA
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_model
+    (k : ℕ) (c u : E (k + 2)) (r : ℝ) (hu : dist u c < r) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap (Metric.closedBall c r)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u)
+        (ContinuousMap.id (E (k + 2)))
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          (Metric.closedBall c r) u (Metric.mem_closedBall.2 hu.le))) (k + 2)) := by
+  sorry
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_reduce
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M] (x : M) (r : ℝ)
+    (hr : Metric.closedBall (chartAt (E (k + 2)) x x) r ⊆
+      (chartAt (E (k + 2)) x).target)
+    (z : M) (hz : z ∈ (chartAt (E (k + 2)) x).source)
+    (hzr : dist (chartAt (E (k + 2)) x z) (chartAt (E (k + 2)) x x) < r) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap ((chartAt (E (k + 2)) x).source ∩
+          chartAt (E (k + 2)) x ⁻¹' Metric.closedBall (chartAt (E (k + 2)) x x) r)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+        (ContinuousMap.id M)
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          ((chartAt (E (k + 2)) x).source ∩
+          chartAt (E (k + 2)) x ⁻¹' Metric.closedBall (chartAt (E (k + 2)) x x) r) z
+          ⟨hz, Metric.mem_closedBall.2 hzr.le⟩)) (k + 2)) := by
+  sorry
+
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_ball
     (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (E (k + 2)) M] (x : M) :
@@ -1540,7 +1568,17 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
           (ContinuousMap.id M)
           (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
             K z hz)) (k + 2)) := by
-  sorry
+  set e := chartAt (E (k + 2)) x
+  obtain ⟨r, hr0, hr⟩ := Metric.nhds_basis_closedBall.mem_iff.1
+    (e.open_target.mem_nhds (mem_chart_target (E (k + 2)) x))
+  refine ⟨e.source ∩ e ⁻¹' Metric.closedBall (e x) r, ?_⟩
+  have hev : ∀ᶠ z in nhds x, z ∈ e.source ∩ e ⁻¹' Metric.ball (e x) r :=
+    (e.continuousOn.isOpen_inter_preimage e.open_source Metric.isOpen_ball).mem_nhds
+      ⟨mem_chart_source (E (k + 2)) x, Metric.mem_ball_self hr0⟩
+  filter_upwards [hev] with z hz
+  exact ⟨⟨hz.1, Metric.ball_subset_closedBall hz.2⟩,
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_ball_aux_reduce
+      k M x r hr z hz.1 hz.2⟩
 -- END SEAT AREA
 
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign
