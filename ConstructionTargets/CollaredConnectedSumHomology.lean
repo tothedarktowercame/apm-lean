@@ -7463,7 +7463,52 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
       (Monoid.Coprod.inl g : Monoid.Coprod
         (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)
         (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)) := by
-  sorry
+  rcases w with ⟨x, hxU, hxV⟩
+  dsimp [punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_pseudo,
+    Equivalence.trans, TwoOpenFreeProductMapping.pseudoSpanEquivalence,
+    TwoOpenFreeProductMapping.spanToPseudoFunctor,
+    TwoOpenFreeProductMapping.spanToPseudoObj,
+    TwoOpenPointSpanComparison.comparison,
+    GenericSpanPseudoCoconeTransport.pseudoCoconeEquivalenceOfSpanEquivalences,
+    GenericSpanPseudoCoconeTransport.reverseTransportFunctor,
+    GenericSpanPseudoCoconeTransport.reverseTransportObj,
+    FreeProductPointSpanRepresentations.freeProductPointSpanEquivalence,
+    FreeProductPointSpanRepresentations.fromRepresentationFunctor,
+    FreeProductPointSpanRepresentations.fromRepresentationObj,
+    FreeProductPointSpanRepresentations.restrictedLeftFunctor,
+    FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence,
+    FreeProductRepresentationSingleObjEquivalence.functorToRepresentation,
+    FreeProductRepresentationSingleObjEquivalence.functorToRepresentationObj,
+    FreeProductRepresentationSingleObjEquivalence.extractedAction,
+    TwoOpenPointSpanComparison.leftEquivalence,
+    ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence,
+    ConnectedGroupoidSingleObjEquivalence.normalFormFunctor,
+    ConnectedGroupoidVertexReconstruction.ConnectorSystem.normalForm]
+  have h := TwoOpenLegCompatibleConnectorSystems.leftConnectors_connector_base
+    (⟨x, hxU, hxV⟩ : (U ∩ V : Set X))
+  have hc :
+      ((TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).connector
+        (TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).base).hom ≫ g ≫
+      ((TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).connector
+        (TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).base).inv = g := by
+    let gb : End (TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).base := g
+    change ((TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).connector
+      (TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).base).hom ≫ gb ≫
+      ((TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).connector
+      (TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).base).inv = gb
+    rw [h]
+    simp
+  change (Monoid.Coprod.inl
+    (((TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).connector
+      (TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).base).hom ≫ g ≫
+    ((TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).connector
+      (TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).base).inv) :
+      Monoid.Coprod
+        (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors ⟨x, hxU, hxV⟩).base)
+        (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors ⟨x, hxU, hxV⟩).base)) =
+    Monoid.Coprod.inl g
+  rw [hc]
+  rfl
 
 /-- Left leg of the reconstructed source equivalence (re-routed 2026-10-22).  The
 previous proof went through `mapping.functor` and its counit, which needed
