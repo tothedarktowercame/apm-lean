@@ -466,7 +466,32 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
     (n : ℕ) (c : E n) {ε : ℝ} (hε : 0 < ε) :
     ∃ Φ : E n → E n, ContinuousOn Φ {c}ᶜ ∧ (∀ y, ε ≤ ‖y - c‖ → Φ y = y) ∧
       ∀ y, y ≠ c → ‖y - c‖ < ε → Φ y ∈ Metric.sphere c ε := by
-  sorry
+  let Φ : E n → E n := fun y ↦
+    c + max (ε / ‖y - c‖) 1 • (y - c)
+  refine ⟨Φ, ?_, ?_, ?_⟩
+  · intro y hy
+    have hyc : y ≠ c := by simpa using hy
+    have hyn : ‖y - c‖ ≠ 0 := by
+      simpa [norm_eq_zero, sub_eq_zero] using hyc
+    have hn : ContinuousAt (fun z : E n ↦ ‖z - c‖) y :=
+      (continuous_norm.comp (continuous_id.sub continuous_const)).continuousAt
+    have hq : ContinuousAt (fun z : E n ↦ ε / ‖z - c‖) y :=
+      continuousAt_const.div hn hyn
+    exact (continuousAt_const.add
+      ((hq.max continuousAt_const).smul
+        (continuous_id.sub continuous_const).continuousAt)).continuousWithinAt
+  · intro y hy
+    have hyn : 0 < ‖y - c‖ := lt_of_lt_of_le hε hy
+    have hdiv : ε / ‖y - c‖ ≤ 1 := (div_le_one hyn).2 hy
+    dsimp [Φ]
+    rw [max_eq_right hdiv, one_smul, add_sub_cancel]
+  · intro y hyc hy
+    have hyn : 0 < ‖y - c‖ := norm_pos_iff.mpr (sub_ne_zero.mpr hyc)
+    have hdiv : 1 ≤ ε / ‖y - c‖ := (le_div_iff₀ hyn).2 (by simpa using hy.le)
+    rw [Metric.mem_sphere, dist_eq_norm]
+    dsimp [Φ]
+    rw [add_sub_cancel_left, max_eq_left hdiv, norm_smul, Real.norm_eq_abs,
+      abs_of_pos (div_pos hε hyn), div_mul_cancel₀ ε (ne_of_gt hyn)]
 
 /-- Perturbation, approximation: a continuous self-map of `E n` is uniformly within `η` of a
 `C¹` map on any compact set (mollify with a `ContDiffBump`, or Stone–Weierstrass). -/
@@ -474,7 +499,15 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
     (n : ℕ) {G : E n → E n} (hG : Continuous G)
     {T : Set (E n)} (hT : IsCompact T) {η : ℝ} (hη : 0 < η) :
     ∃ P : E n → E n, ContDiff ℝ 1 P ∧ ∀ y ∈ T, ‖P y - G y‖ < η := by
-  sorry
+  let g : C(E n, E n) := ⟨G, hG⟩
+  have hg := ContinuousMap.dense_setOf_contDiff (E := E n) (F := E n) g
+  rw [mem_closure_iff_nhds_basis
+    (nhds_basis_uniformity
+      (Filter.HasBasis.compactConvergenceUniformity (α := E n)
+        (β := E n) Metric.uniformity_basis_dist))] at hg
+  simp only [Prod.forall, mem_setOf_eq, and_imp] at hg
+  obtain ⟨P, hP, hPT⟩ := hg T η hT hη
+  exact ⟨P, hP.of_le (by norm_num), fun y hy ↦ by simpa [dist_eq_norm] using hPT y hy⟩
 
 /-- Perturbation, avoidance: for `0 < n` the `C¹` image of `sphere c ε` is Haar-null
 (`Measure.addHaar_sphere`, `MeasureTheory.addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero`),
@@ -1387,6 +1420,50 @@ chart ball around `x`, `H(M, M - ball) → H(M, M - y)` is an isomorphism for
 every `y` in the ball, and two normalizations of one group as `ℤ` differ by
 `±1`).  Generalize from `Fin 3` / `k := 1` to `k + 2`.  Do not reduce this to
 `_localization_mono` or `_coefficient_ne_zero`: both are assembled from it. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_natAbs_eq
+    (a b : ℤ) (h : a = b ∨ a = -b) : a.natAbs = b.natAbs := by
+  rcases h with h | h
+  · exact congrArg Int.natAbs h
+  · rw [h, Int.natAbs_neg]
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_units
+    {G : AddCommGrpCat} (f g : G ≅ AddCommGrpCat.of ℤ) (a : G) :
+    f.hom.hom a = g.hom.hom a ∨ f.hom.hom a = -g.hom.hom a := by
+  let u : AddCommGrpCat.of ℤ ≅ AddCommGrpCat.of ℤ := g.symm ≪≫ f
+  have hmul : ∀ (h : AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of ℤ) (n : ℤ),
+      h.hom n = n * h.hom 1 := fun h n => by
+    have h' := h.hom.map_zsmul 1 n
+    simpa [smul_eq_mul] using h'
+  have h1 : u.inv.hom (u.hom.hom 1) = 1 :=
+    ConcreteCategory.congr_hom u.hom_inv_id 1
+  rw [hmul u.inv] at h1
+  have hu : IsUnit (u.hom.hom 1) :=
+    ⟨⟨_, _, h1, by rw [mul_comm]; exact h1⟩, rfl⟩
+  have hf : f.hom.hom a = u.hom.hom (g.hom.hom a) := by
+    have ha : g.inv.hom (g.hom.hom a) = a :=
+      ConcreteCategory.congr_hom g.hom_inv_id a
+    change f.hom.hom a = f.hom.hom (g.inv.hom (g.hom.hom a))
+    rw [ha]
+  rw [hf, hmul u.hom]
+  rcases Int.isUnit_iff.1 hu with h | h
+  · left
+    rw [h, mul_one]
+  · right
+    rw [h, mul_neg_one]
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign
+    (k : ℕ)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E (k + 2)) M]
+    [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (x : M) :
+    ∀ᶠ y in nhds x,
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y =
+        punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e x ∨
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y =
+        -punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e x := by
+  sorry
+
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant
     (k : ℕ)
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -1394,7 +1471,11 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
     (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) :
     IsLocallyConstant (fun y : M ↦ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y).natAbs) := by
-  sorry
+  refine (IsLocallyConstant.iff_eventually_eq _).2 fun x => ?_
+  exact
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign
+      k M e x).mono fun y hy =>
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_natAbs_eq _ _ hy
 
 /-- LEAF (claude-14, 2026-10-22): some point has local degree `±1`.  Template:
 t00A01's sorry-free dimension-3
@@ -3205,6 +3286,46 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
     h1, Category.id_comp, Category.comp_id]
   rfl
 
+/-- Connector for `_forward_inl` (split after job 2313, lemma-2 PARTIAL).  The seat
+reduced `_forward_inl` to this by unfolding `toRepresentation_action_inl` and the span
+comparison.  What is left: transport `g` through the inverse of `leftEquivalence`, include
+along `coverPieceInclusion true`, and apply `inverseIdentityFunctor`; the result agrees with
+`inverseIdentityFunctor` applied to `FundamentalGroup.map` of the subtype inclusion at `w`.
+The seat's diagnosis: the difference is `Functor.asEquivalence`'s chosen preimage
+isomorphism (`leftEquivalence.inverse.obj star` is not definitionally `w`), so expect to
+conjugate by the unit/counit component at `star` and show it acts trivially, rather than
+to close by `rfl`/`simp`. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_forward_inl_aux_connector
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)]
+    (g : FundamentalGroup U ⟨w.1, w.2.1⟩) :
+    (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w).map
+        (X := (FundamentalGroupoid.map
+          (TwoOpenDescentRestriction.coverPieceInclusion
+            (X := X) (U := U) (V := V) true)).obj
+          ((TwoOpenPointSpanComparison.leftEquivalence U V w).inverse.obj
+            (SingleObj.star _)))
+        (Y := (FundamentalGroupoid.map
+          (TwoOpenDescentRestriction.coverPieceInclusion
+            (X := X) (U := U) (V := V) true)).obj
+          ((TwoOpenPointSpanComparison.leftEquivalence U V w).inverse.obj
+            (SingleObj.star _)))
+        ((FundamentalGroupoid.map
+          (TwoOpenDescentRestriction.coverPieceInclusion
+            (X := X) (U := U) (V := V) true)).map
+          ((TwoOpenPointSpanComparison.leftEquivalence U V w).inverse.map
+            (X := SingleObj.star _) (Y := SingleObj.star _) g)) =
+      (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w).map
+        (X := FundamentalGroupoid.mk w.1) (Y := FundamentalGroupoid.mk w.1)
+        (FundamentalGroup.map
+          (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) := by
+  sorry
+
 /-- Forward left leg: the mapping equivalence's forward functor, applied to
 the inverse image of the identity, sends `Monoid.Coprod.inl g` to the image of
 the left-cover loop `g` under that inverse image.  Route: unfold the five
@@ -3232,7 +3353,20 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
         hU hV hcover w).map
         (FundamentalGroup.map
           (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) := by
-  sorry
+  change (FreeProductPointSpanRepresentations.toRepresentationObj _ _ _).action
+      (Monoid.Coprod.inl g) = _
+  rw [FreeProductPointSpanRepresentations.toRepresentation_action_inl]
+  simp [TwoOpenPointSpanComparison.comparison,
+    GenericSpanPseudoCoconeTransport.pseudoCoconeEquivalenceOfSpanEquivalences,
+    GenericSpanPseudoCoconeTransport.transportFunctor,
+    GenericSpanPseudoCoconeTransport.transportObj,
+    TwoOpenFreeProductMapping.pseudoSpanEquivalence,
+    TwoOpenFreeProductMapping.pseudoToSpanFunctor,
+    TwoOpenFreeProductMapping.pseudoToSpanObj]
+  exact
+    punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_forward_inl_aux_connector
+      U V hU hV hcover w g
+
 
 /-- The counit of the five-step mapping equivalence, at the inverse image of the
 identity, has identity component at the single object.  Route: the counit of
