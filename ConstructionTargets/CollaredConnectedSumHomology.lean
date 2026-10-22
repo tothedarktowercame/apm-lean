@@ -844,7 +844,55 @@ lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart
       e '' ConstructionTargets.SingularExcision.excisedSubspace
           (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ c.radialTwoᶜ =
         punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n := by
-  sorry
+  let er : LargeInterior (n := n) ≃ₜ ↥c.radialTwo :=
+    (c.largeInteriorMap_isEmbedding.toHomeomorph).trans
+      (Homeomorph.setCongr c.range_largeInteriorMap)
+  let e : ↥(c.radialTwoᶜᶜ) ≃ₜ Metric.ball (0 : E n) 2 :=
+    (Homeomorph.setCongr (compl_compl c.radialTwo)).trans
+      (er.symm.trans (largeInteriorHomeomorphBall (n := n)))
+  refine ⟨e, ?_⟩
+  ext x
+  constructor
+  · rintro ⟨z, hz, rfl⟩
+    change 1 ≤ dist _ 0
+    by_contra hlt
+    have hlt' : dist ((e z : Metric.ball (0 : E n) 2) : E n) 0 < 1 :=
+      lt_of_not_ge hlt
+    apply hz
+    let y : Disk n 1 := ⟨(e z).1, Metric.mem_closedBall.mpr hlt'.le⟩
+    refine ⟨y, hlt', ?_⟩
+    let z' : ↥c.radialTwo := (Homeomorph.setCongr (compl_compl c.radialTwo)) z
+    let w : LargeInterior (n := n) := er.symm z'
+    have hw : er w = z' := er.apply_symm_apply z'
+    have hez : c.largeMap ⟨(e z).1, Metric.mem_closedBall.mpr (e z).2.le⟩ = z.1 := by
+      change c.largeMap w.1 = z.1
+      simpa [er, z'] using congrArg Subtype.val hw
+    change c.smallMap y = z.1
+    rw [← c.largeMap_unitToLarge y]
+    convert hez using 1
+  · intro hx
+    change 1 ≤ dist x.1 0 at hx
+    let z : ↥(c.radialTwoᶜᶜ) :=
+      ⟨c.largeMap ⟨x.1, Metric.mem_closedBall.mpr x.2.le⟩, by
+        simp only [compl_compl]
+        exact ⟨⟨x.1, Metric.mem_closedBall.mpr x.2.le⟩, x.2, rfl⟩⟩
+    refine ⟨z, ?_, ?_⟩
+    · change z.1 ∈ (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+      rintro ⟨y, hy, heq⟩
+      have heq' : unitToLarge n y = ⟨x.1, Metric.mem_closedBall.mpr x.2.le⟩ :=
+        c.largeEmbedding.injective ((c.largeMap_unitToLarge y).trans heq)
+      have hxy : y.1 = x.1 := congrArg Subtype.val heq'
+      exact (not_lt_of_ge hx) (by simpa [hxy] using hy)
+    · apply Subtype.ext
+      let w : LargeInterior (n := n) :=
+        ⟨⟨x.1, Metric.mem_closedBall.mpr x.2.le⟩, x.2⟩
+      let z' : ↥c.radialTwo := (Homeomorph.setCongr (compl_compl c.radialTwo)) z
+      have hz' : z' = er w := by
+        apply Subtype.ext
+        rfl
+      change (er.symm z').1.1 = x.1
+      rw [hz']
+      simp [w]
 
 /-- LEAF. Radial projection is a homotopy equivalence from the annulus to the
 unit sphere. -/
