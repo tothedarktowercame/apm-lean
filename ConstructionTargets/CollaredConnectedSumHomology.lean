@@ -499,7 +499,15 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
     (n : ℕ) {G : E n → E n} (hG : Continuous G)
     {T : Set (E n)} (hT : IsCompact T) {η : ℝ} (hη : 0 < η) :
     ∃ P : E n → E n, ContDiff ℝ 1 P ∧ ∀ y ∈ T, ‖P y - G y‖ < η := by
-  sorry
+  let g : C(E n, E n) := ⟨G, hG⟩
+  have hg := ContinuousMap.dense_setOf_contDiff (E := E n) (F := E n) g
+  rw [mem_closure_iff_nhds_basis
+    (nhds_basis_uniformity
+      (Filter.HasBasis.compactConvergenceUniformity (α := E n)
+        (β := E n) Metric.uniformity_basis_dist))] at hg
+  simp only [Prod.forall, mem_setOf_eq, and_imp] at hg
+  obtain ⟨P, hP, hPT⟩ := hg T η hT hη
+  exact ⟨P, hP.of_le (by norm_num), fun y hy ↦ by simpa [dist_eq_norm] using hPT y hy⟩
 
 /-- Perturbation, avoidance: for `0 < n` the `C¹` image of `sphere c ε` is Haar-null
 (`Measure.addHaar_sphere`, `MeasureTheory.addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero`),
