@@ -1442,7 +1442,46 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_h
     Nonempty ((punctured_fundamentalGroup_three_aux_cover_aux_U c ∩
         punctured_fundamentalGroup_three_aux_cover_aux_V c : Set M) ≃ₜ
       punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell) := by
-  sorry
+  let S : Set (Disk 3 2) := {x | 1 / 2 < ‖x.1‖ ∧ ‖x.1‖ < 2}
+  let g₀ : punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell →
+      Disk 3 2 := fun x ↦ ⟨x.1, by
+        simpa only [Metric.mem_closedBall, dist_zero_right] using x.2.2.le⟩
+  have hg₀ : Topology.IsEmbedding g₀ :=
+    Topology.IsEmbedding.subtypeVal.codRestrict _ _
+  let g : punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell → S :=
+    fun x ↦ ⟨g₀ x, by
+      change 1 / 2 < ‖x.1‖ ∧ ‖x.1‖ < 2
+      exact x.2⟩
+  have hg : Topology.IsEmbedding g := hg₀.codRestrict _ _
+  have hgsurj : Function.Surjective g := by
+    rintro ⟨x, hx⟩
+    refine ⟨⟨x.1, by simpa [S,
+      punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell] using hx⟩, ?_⟩
+    apply Subtype.ext
+    rfl
+  let e₀ := hg.toHomeomorphOfSurjective hgsurj
+  have himage : c.largeMap '' S =
+      punctured_fundamentalGroup_three_aux_cover_aux_U c ∩
+        punctured_fundamentalGroup_three_aux_cover_aux_V c := by
+    ext y
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      change 1 / 2 < ‖x.1‖ ∧ ‖x.1‖ < 2 at hx
+      refine ⟨?_, ⟨x, ?_, rfl⟩⟩
+      · rintro ⟨z, hz, heq⟩
+        have hzx : z = x := c.largeEmbedding.injective heq
+        subst z
+        exact (not_le_of_gt hx.1) (by simpa only [dist_zero_right] using hz)
+      · change dist x.1 0 < 2
+        simpa only [dist_zero_right] using hx.2
+    · rintro ⟨hyU, ⟨x, hx, rfl⟩⟩
+      change dist x.1 0 < 2 at hx
+      refine ⟨x, ⟨?_, by simpa only [dist_zero_right] using hx⟩, rfl⟩
+      by_contra hhalf
+      apply hyU
+      exact ⟨x, by simpa only [dist_zero_right] using le_of_not_gt hhalf, rfl⟩
+  exact ⟨(e₀.trans ((c.largeEmbedding.homeomorphImage S).trans
+    (Homeomorph.setCongr himage))).symm⟩
 -- END SEAT AREA
 
 /-- Radial projection `x ↦ x / ‖x‖` is a homotopy equivalence from the shell to the
