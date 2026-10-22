@@ -5199,7 +5199,66 @@ lemma boundary_homology_zero_aux_projection_epi
     Epi (HomologicalComplex.homologyMap
       (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
         ((c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ)) (m + 1)) := by
-  sorry
+  subst n
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+  let p : M := c.smallMap 0
+  let K : Set M := c.smallMap '' {y : Disk (k + 1 + 1) 1 | dist y.1 0 < 1}
+  let f := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ) (k + 1 + 1)
+  let g := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint p)
+      (ContinuousMap.id M)
+      (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+        K p ⟨0, by simp [K, p], rfl⟩)) (k + 1 + 1)
+  letI : IsIso g := boundary_homology_zero_aux_projection_epi_aux_localization
+    (k + 1 + 1) (k + 1) rfl (by omega) M c hopen
+  obtain ⟨e⟩ := htop
+  let z := ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 1 + 1) e
+  let d := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree
+    k M e p
+  have hdabs : d.natAbs = 1 :=
+    boundary_homology_zero_aux_projection_epi_aux_degree_unit k M e p
+  have hd : d = 1 ∨ d = -1 := by omega
+  have hlocal : Function.Surjective (ManifoldFundamentalClass.localizationMap p (k + 1 + 1)) := by
+    intro y
+    let q : ℤ := (ManifoldFundamentalClass.ambientLocalNormalization k p).hom.hom y
+    refine ⟨(q * d) • z, ?_⟩
+    apply (ConcreteCategory.bijective_of_isIso
+      (ManifoldFundamentalClass.ambientLocalNormalization k p).hom).1
+    rw [map_zsmul, map_zsmul]
+    change (q * d) • ((ManifoldFundamentalClass.ambientLocalNormalization k p).hom.hom
+      (ManifoldFundamentalClass.localizationMap p (k + 1 + 1) z)) = _
+    change (q * d) • d = q
+    rcases hd with h | h <;> rw [h] <;> simp
+  apply ConcreteCategory.epi_of_surjective
+  intro y
+  obtain ⟨z', hz'⟩ := hlocal (g y)
+  refine ⟨z', ?_⟩
+  apply (ConcreteCategory.bijective_of_isIso g).1
+  rw [← hz']
+  change g (f z') = ManifoldFundamentalClass.localizationMap p (k + 1 + 1) z'
+  have hchain := ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality
+    Kᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint p)
+    (ContinuousMap.id M)
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+      K p ⟨0, by simp [K, p], rfl⟩)
+  change (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map (𝟙 (TopCat.of M))) ≫
+      ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint p) =
+    ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ ≫
+      ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint p)
+        (ContinuousMap.id M)
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          K p ⟨0, by simp [K, p], rfl⟩) at hchain
+  rw [CategoryTheory.Functor.map_id, Category.id_comp] at hchain
+  have hhom := congrArg (fun q => HomologicalComplex.homologyMap q (k + 1 + 1)) hchain
+  have hh := (ConcreteCategory.congr_hom hhom z').symm
+  simpa [HomologicalComplex.homologyMap_comp, ConcreteCategory.comp_apply,
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap,
+    ConcreteCategory.id_apply, f, g] using hh
 -- END SEAT AREA
 
 lemma boundary_homology_zero_aux_transport
