@@ -89382,27 +89382,28 @@
   {:consumer :t97A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope. Commit 331574e06 adds only a conjunction wrapper around already-banked conditional adapters: it assumes the geometric cut decoder, cut signed generation, and literal signed generation, then pairs their existing consequences. It proves none of the listed geometric obligations and therefore commits no substantive progress beyond the last program-history entry. Repair by constructing the decoder and proving signed generation for the two genuine complementary arcs of the literal quotient (then derive alignment/collapse injectivity), rather than introducing another facade that takes those facts as hypotheses. Exact-revision build and registry pass; fixture/frozen hashes and 0/3 placeholder counts are unchanged, so the defect is the representation boundary, not compilation.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Decoder/generation; covers; invariants.",
+    :residual
+    "Geometric normalized decoder/generation; covers; invariants.",
     :outcome :stop,
     :warnings ["Main:3 sorry"],
     :missing-theorems
-    [{:name "apm_t97A03_cutGenerator_bijective_iff_normalized",
-      :type "evaluation bijectivity equivalence",
+    [{:name "apm_t97A03_normalizedCutGeneratorFreeGroupMap_word",
+      :type "explicit words evaluate in genuine normalized arcs",
       :status :proved,
       :consumers [:t97A03],
-      :depends-on
-      ["apm_t97A03_normalize_comp_cutGeneratorFreeGroupMap"],
+      :depends-on ["apm_t97A03_cutGenerator_bijective_iff_normalized"],
       :area "covering-classification-explicit"}
      {:name "t97A03_literal_loops_generated_by_complementary_arcs",
       :type "normalized decoder/generation",
       :status :partial,
       :consumers [:t97A03],
-      :depends-on ["apm_t97A03_cutGenerator_bijective_iff_normalized"],
+      :depends-on
+      ["apm_t97A03_normalizedCutGeneratorFreeGroupMap_word"],
       :area "covering-classification-explicit"}
      {:name "apm_t97A03_classify_connected_double_cover",
       :type "covers",
@@ -89421,29 +89422,14 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked bijectivity equivalence.",
+    :reason "Banked normalized signed-word evaluation.",
     :commands
     [{:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
      {:cmd "lake -Kjobs=1 build ConstructionTargets.t97A03Closure",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/sorry scans", :exit 0}],
-    :diagnostic-history
-    [{:cmd "Lean draft", :exit 1, :correction "exposed local map"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792631744388-1958-afed0fca",
-     :commands
-     ["git show/diff e6fcb52bf"
-      "lake -Kjobs=1 build ConstructionTargets.t97A03Closure"
-      "lake env lean problems/t97A03/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "python3 scripts/statement-registry.py fingerprint t97A03 --rev e6fcb52bf"
-      "sha256sum + placeholder/#print axioms scans"],
-     :finding
-     "PASS: exact commit changes only in-scope Main.lean. Fixture SHA 581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f; registry 170/0; frozen digest abf8282be594bd45bebca6dc29d8b578f4371872506f062166ee2d225b6ca0a4. Fresh exact-revision build/Lean pass; closure/Main placeholders 0/3. Injectivity and surjectivity are transferred in both directions across the concrete bijective normalization hom and its proved commuting square, so evaluation bijectivity is faithfully reduced to the normalized quotient. Orientations are correct and only standard axioms occur. This is new compiled reduction progress; normalized decoder/generation, covers, and invariants remain listed."},
-    :commit "e6fcb52bf",
+    :commit "5d047ce00",
     :changed-paths ["problems/t97A03/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97A03Closure.lean",
@@ -89451,7 +89437,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -100689,7 +100675,8 @@
     :lemma-apm-t97a03-cutcirclenormalizepionehom-bijective
     :lemma-apm-t97a03-cutcircle-signed-generation-of-normalized
     :lemma-apm-t97a03-normalize-comp-cutgeneratorfreegroupmap
-    :lemma-apm-t97a03-cutgenerator-bijective-iff-normalized],
+    :lemma-apm-t97a03-cutgenerator-bijective-iff-normalized
+    :lemma-apm-t97a03-normalizedcutgeneratorfreegroupmap-word],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -101517,4 +101504,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-apm-t97a03-normalize-comp-cutgeneratorfreegroupmap],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A03_normalizedCutGeneratorFreeGroupMap_word",
+    :type "explicit words evaluate in genuine normalized arcs"},
+   :lemma
+   {:name "apm_t97A03_normalizedCutGeneratorFreeGroupMap_word",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "explicit words evaluate in genuine normalized arcs",
+    :area "covering-classification-explicit",
+    :proved-in :program-2026-10-13-close-t97a03},
+   :id :lemma-apm-t97a03-normalizedcutgeneratorfreegroupmap-word,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t97a03-cutgenerator-bijective-iff-normalized],
    :other-consumers []}]}
