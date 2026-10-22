@@ -275,11 +275,143 @@ theorem largeInterior_isOpen_aux_euclidean_aux_noRetraction (n : ℕ) :
 /-- **LIBRARY (B2b).** Brouwer's fixed-point theorem for the closed unit disk,
 from no retraction (B2a, taken as `hNR`) by the ray construction. -/
 -- BEGIN SEAT AREA
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d
+    {n : ℕ} (g : Disk n 1 → Disk n 1) (x : Disk n 1) : E n := x.1 - (g x).1
+
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_A
+    {n : ℕ} (g : Disk n 1 → Disk n 1) (x : Disk n 1) : ℝ :=
+  ‖largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d g x‖ ^ 2
+
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_B
+    {n : ℕ} (g : Disk n 1 → Disk n 1) (x : Disk n 1) : ℝ :=
+  @inner ℝ (E n) _ x.1 (largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d g x)
+
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C
+    {n : ℕ} (x : Disk n 1) : ℝ := 1 - ‖x.1‖ ^ 2
+
+private noncomputable def largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_t
+    {n : ℕ} (g : Disk n 1 → Disk n 1) (x : Disk n 1) : ℝ :=
+  let A := largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_A g x
+  let B := largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_B g x
+  let C := largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C x
+  (-B + Real.sqrt (B ^ 2 + A * C)) / A
+
 theorem largeInterior_isOpen_aux_euclidean_aux_brouwer (n : ℕ)
     (hNR : ∀ m : ℕ, ¬ ∃ r : Disk (m + 1) 1 → Sphere (m + 1),
       Continuous r ∧ ∀ s, r (sphereToDisk (m + 1) s) = s)
     {g : Disk n 1 → Disk n 1} (hg : Continuous g) : ∃ x, g x = x := by
-  sorry
+  by_contra hfix
+  push_neg at hfix
+  cases n with
+  | zero =>
+      have hx : (⟨0, by simp [Disk]⟩ : Disk 0 1) = g ⟨0, by simp [Disk]⟩ := by
+        apply Subtype.ext
+        ext i
+        exact Fin.elim0 i
+      exact hfix _ hx.symm
+  | succ m =>
+      apply hNR m
+      let d : Disk (m + 1) 1 → E (m + 1) :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d g
+      let A : Disk (m + 1) 1 → ℝ :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_A g
+      let B : Disk (m + 1) 1 → ℝ :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_B g
+      let C : Disk (m + 1) 1 → ℝ :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C
+      let t : Disk (m + 1) 1 → ℝ :=
+        largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_t g
+      have hd : Continuous d := by
+        exact continuous_subtype_val.sub
+          (continuous_subtype_val.comp hg)
+      have hA : Continuous A := by
+        exact (continuous_norm.comp hd).pow 2
+      have hB : Continuous B := by
+        exact continuous_inner.comp
+          (continuous_subtype_val.prodMk hd)
+      have hC : Continuous C := by
+        exact continuous_const.sub ((continuous_norm.comp continuous_subtype_val).pow 2)
+      have hApos (x : Disk (m + 1) 1) : 0 < A x := by
+        rw [show A x = ‖d x‖ ^ 2 by rfl]
+        exact sq_pos_of_pos (norm_pos_iff.mpr (by
+          intro hd0
+          apply hfix x
+          apply Subtype.ext
+          change (g x).1 = x.1
+          dsimp [d, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d] at hd0
+          exact sub_eq_zero.mp hd0 |>.symm))
+      have hCnonneg (x : Disk (m + 1) 1) : 0 ≤ C x := by
+        dsimp [C, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C]
+        have hx : ‖x.1‖ ≤ 1 := by
+          simpa only [Metric.mem_closedBall, dist_zero_right] using x.2
+        nlinarith [norm_nonneg x.1]
+      have hdisc (x : Disk (m + 1) 1) : 0 ≤ B x ^ 2 + A x * C x :=
+        add_nonneg (sq_nonneg _) (mul_nonneg (hApos x).le (hCnonneg x))
+      have ht : Continuous t := by
+        change Continuous (fun x =>
+          (-B x + Real.sqrt (B x ^ 2 + A x * C x)) / A x)
+        exact (hB.neg.add (Real.continuous_sqrt.comp
+          ((hB.pow 2).add (hA.mul hC)))).div hA (fun x => ne_of_gt (hApos x))
+      have hquad (x : Disk (m + 1) 1) :
+          A x * (t x) ^ 2 + 2 * B x * t x = C x := by
+        have hs := Real.sq_sqrt (hdisc x)
+        have hAn : A x ≠ 0 := ne_of_gt (hApos x)
+        change A x * ((-B x + Real.sqrt (B x ^ 2 + A x * C x)) / A x) ^ 2 +
+          2 * B x * ((-B x + Real.sqrt (B x ^ 2 + A x * C x)) / A x) = C x
+        rw [div_pow]
+        field_simp [hAn]
+        nlinarith [hs]
+      have hrnorm (x : Disk (m + 1) 1) : ‖x.1 + t x • d x‖ = 1 := by
+        have hi : @inner ℝ (E (m + 1)) _ (d x) (d x) = A x := by
+          simp [A, d, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_A,
+            real_inner_self_eq_norm_sq]
+        have hib : @inner ℝ (E (m + 1)) _ x.1 (d x) = B x := rfl
+        have hxnorm : ‖x.1‖ ^ 2 = 1 - C x := by
+          simp [C, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C]
+        have hs : ‖x.1 + t x • d x‖ ^ 2 = 1 := by
+          rw [← real_inner_self_eq_norm_sq]
+          simp only [inner_add_left, inner_add_right, real_inner_smul_left,
+            inner_smul_right, hi, hib, real_inner_comm]
+          rw [real_inner_self_eq_norm_sq, hxnorm]
+          nlinarith [hquad x]
+        nlinarith [norm_nonneg (x.1 + t x • d x)]
+      let r : Disk (m + 1) 1 → Sphere (m + 1) := fun x =>
+        ⟨x.1 + t x • d x, by
+          rw [Metric.mem_sphere, dist_zero_right, hrnorm]⟩
+      refine ⟨r, ?_, ?_⟩
+      · apply Continuous.subtype_mk
+        exact continuous_subtype_val.add (ht.smul hd)
+      · intro s
+        apply Subtype.ext
+        change (sphereToDisk (m + 1) s).1 +
+            t (sphereToDisk (m + 1) s) • d (sphereToDisk (m + 1) s) = s.1
+        have hC0 : C (sphereToDisk (m + 1) s) = 0 := by
+          dsimp [C, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_C]
+          have hs : ‖s.1‖ = 1 := by
+            simpa [Metric.mem_sphere, dist_zero_right] using s.2
+          change 1 - ‖s.1‖ ^ 2 = 0
+          rw [hs]
+          norm_num
+        have hBnonneg : 0 ≤ B (sphereToDisk (m + 1) s) := by
+          dsimp [B, d, largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_B,
+            largeInterior_isOpen_aux_euclidean_aux_brouwer_aux_d]
+          have hs : ‖s.1‖ = 1 := by
+            simpa [Metric.mem_sphere, dist_zero_right] using s.2
+          have hg' : ‖(g (sphereToDisk (m + 1) s)).1‖ ≤ 1 := by
+            simpa only [Metric.mem_closedBall, dist_zero_right] using
+              (g (sphereToDisk (m + 1) s)).2
+          simp only [sphereToDisk]
+          rw [inner_sub_right, real_inner_self_eq_norm_sq, hs]
+          exact sub_nonneg.mpr ((real_inner_le_norm _ _).trans (by simpa [hs] using hg'))
+        have ht0 : t (sphereToDisk (m + 1) s) = 0 := by
+          change (-B (sphereToDisk (m + 1) s) +
+            Real.sqrt (B (sphereToDisk (m + 1) s) ^ 2 +
+              A (sphereToDisk (m + 1) s) * C (sphereToDisk (m + 1) s))) /
+                A (sphereToDisk (m + 1) s) = 0
+          rw [hC0, mul_zero, add_zero, Real.sqrt_sq_eq_abs, abs_of_nonneg hBnonneg]
+          simp
+        rw [ht0]
+        simp [sphereToDisk]
 -- END SEAT AREA
 
 /-- **LIBRARY (B2c).** A continuous injection of the closed unit disk into
