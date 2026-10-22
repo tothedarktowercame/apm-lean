@@ -128,6 +128,21 @@ theorem n3PresentedParitySheetAction_generator_moves_one :
     n3PresentedParitySheetAction (PresentedGroup.of (0 : Fin 3)) 1 ≠ 1 := by
   simpa using n3PresentedParityCharacter_generator_ne_one
 
+/-- The selected crosscap generator acts as the concrete free involution on
+the two sheets.  This is the deck permutation that the polygon-cover
+realization must realize, rather than merely an abstract nontrivial action. -/
+theorem n3PresentedParitySheetAction_generator_free_involution :
+    let σ := n3PresentedParitySheetAction (PresentedGroup.of (0 : Fin 3))
+    σ * σ = 1 ∧ ∀ x : Multiplicative (ZMod 2), σ x ≠ x := by
+  dsimp
+  constructor
+  · ext x
+    simp [n3PresentedParitySheetAction_apply, n3ParityGenerator]
+    rw [← add_assoc, show (1 : ZMod 2) + 1 = 0 by decide, zero_add]
+  · rintro ⟨x⟩
+    interval_cases x <;>
+      simp [n3ParityGenerator]
+
 /-- The parity monodromy is transitive on the actual two-element sheet
 fiber, the algebraic connectedness criterion needed by cover realization. -/
 theorem n3PresentedParitySheetAction_transitive
@@ -192,6 +207,7 @@ theorem exists_fixedPointFree_selfMap_of_deckData
 #print axioms n3ParityCharacter_crosscapRelator
 #print axioms n3ParityCharacter_generator_ne_one
 #print axioms n3PresentedParityCharacter_generator_ne_one
+#print axioms n3PresentedParitySheetAction_generator_free_involution
 #print axioms n3PresentedParitySheetAction_transitive
 #print axioms n3PresentedParitySheetAction_ker
 
