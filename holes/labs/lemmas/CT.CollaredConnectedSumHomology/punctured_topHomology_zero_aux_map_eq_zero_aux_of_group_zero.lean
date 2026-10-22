@@ -566,7 +566,28 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_of_group_zero
         (ManifoldFundamentalClass.absoluteSingularMap
           ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩) n = 0) :
     punctured_topHomology_zero_aux_inclusion n M c = 0 := by
-  sorry
+  unfold punctured_topHomology_zero_aux_inclusion
+  apply ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_injective
+  apply (cancel_mono
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of M) n).hom).1
+  rw [CategoryTheory.Functor.map_zero, zero_comp]
+  calc
+    _ = (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of c.Punctured) n).hom ≫
+        ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+          (AddCommGrpCat.of ℤ)).map
+            (TopCat.ofHom
+              ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩) :=
+      ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+          (TopCat.ofHom
+            ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩) n
+    _ = 0 := by
+      rw [show ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+          (AddCommGrpCat.of ℤ)).map
+            (TopCat.ofHom
+              ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩) = 0 from h0,
+        comp_zero]
 -- END SEAT AREA
 
 /-- A top-dimensional cycle supported away from a nonempty collared ball has
