@@ -80,6 +80,18 @@ theorem apm_t94a06_normalPart_contMDiff
 
 #print axioms apm_t94a06_normalPart_contMDiff
 
+/-- The exact convex-domain Morse--Sard interface needed in a chart of a
+manifold with corners.  Unlike open-domain Sard, its derivative is taken
+within the model range, including its frontier. -/
+def apm_t94a06_ConvexDomainSard : Prop :=
+  ∀ (E H : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (I : ModelWithCorners ℝ E H) (q : E → apm_t94a06_E2),
+    ContDiffOn ℝ ∞ q (Set.range I) →
+      volume (q '' {x | x ∈ Set.range I ∧
+        ¬ Function.Surjective
+          (fderivWithin ℝ q (Set.range I) x)}) = 0
+
 /-- Critical values, expressed directly using the manifold derivative.  This
 is the set whose nullity is supplied by the chartwise Morse--Sard argument. -/
 def apm_t94a06_criticalValues
