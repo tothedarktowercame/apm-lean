@@ -5668,6 +5668,12 @@ stopped: unfolding reaches the descent counit composed with `invFunIdAssoc`, and
 normalisation is through `TwoOpenPseudoCoconeStrictification.twoOpenDescentPseudoCoconeEquivalence`.
 Split from `punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span` after job 2367. -/
 -- BEGIN SEAT AREA
+private lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_descent_aux_eqToHom
+    (G : Type) [Group G] {a b : SingleObj G} (h : a = b) :
+    (eqToHom h : a ⟶ b) = (1 : G) := by
+  subst b
+  rfl
+
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_descent
     {X : Type} [TopologicalSpace X]
     (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
@@ -5690,7 +5696,36 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
           (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))).inverse.obj
           (Functor.id (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w))))))))).app
       (SingleObj.star (Monoid.Coprod (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))) = 𝟙 _ := by
-  sorry
+  dsimp [TwoOpenFundamentalGroupoidPseudopushout.twoOpenFundamentalGroupoidPseudopushoutEquivalence,
+    TwoOpenPseudoCoconeStrictification.twoOpenDescentPseudoCoconeEquivalence,
+    TwoOpenDescentCategory.twoOpenDescentEquivalence,
+    TwoOpenDescentCategory.descentReconstructionIso,
+    TwoOpenDescentCategory.descentReconstructionAppIso,
+    TwoOpenDescentCategory.descentReconstructionHom,
+    TwoOpenDescentRestriction.pieceRestrictionIso,
+    TwoOpenDescentRestriction.restrictionAppIso,
+    TwoOpenFundamentalGroupoidSpan.descentToPseudoCoconeFunctor,
+    TwoOpenFundamentalGroupoidSpan.descentPseudoCoconeMap,
+    CategoryTheory.Equivalence.mk,
+    TwoOpenFreeProductMapping.pseudoSpanEquivalence,
+    TwoOpenFreeProductMapping.pseudoToSpanFunctor,
+    TwoOpenFreeProductMapping.pseudoToSpanMap,
+    TwoOpenPointSpanComparison.comparison,
+    GenericSpanPseudoCoconeTransport.pseudoCoconeEquivalenceOfSpanEquivalences,
+    GenericSpanPseudoCoconeTransport.transportFunctor,
+    GenericSpanPseudoCoconeTransport.transportMap,
+    FreeProductPointSpanRepresentations.toRepresentationFunctor,
+    FreeProductPointSpanRepresentations.toRepresentationMap,
+    FreeProductRepresentationSingleObjEquivalence.representationToFunctor,
+    FreeProductRepresentationSingleObjEquivalence.representationToFunctorMap,
+    FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence,
+    TwoOpenPseudoCoconeStrictification.pseudoCoconeStrictificationNatIso,
+    TwoOpenPseudoCoconeStrictification.pseudoCoconeStrictificationIso,
+    TwoOpenPseudoCoconeStrictification.pseudoCoconeStrictificationInv,
+    TwoOpenFundamentalGroupoidSpan.pieceStrictificationIso,
+    TwoOpenFundamentalGroupoidSpan.strictifiedObjectIso,
+    TwoOpenFundamentalGroupoidSpan.pseudoPieceFunctor]
+  rfl
 -- END SEAT AREA
 
 /-- Span side: the counit of the first three factors of `mapping` (descent/pseudopushout,
