@@ -832,7 +832,18 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_V_simplyConnected
     (c : BallCollar 3 M) (s : Sphere 3)
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     SimplyConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_V c) := by
-  sorry
+  letI : ContractibleSpace (Metric.ball (0 : E 3) 2) :=
+    Metric.contractibleSpace_ball (by norm_num)
+  letI : ContractibleSpace (LargeInterior (n := 3)) :=
+    (largeInteriorHomeomorphBall (n := 3)).contractibleSpace
+  let e : LargeInterior (n := 3) ≃ₜ
+      punctured_fundamentalGroup_three_aux_cover_aux_V c :=
+    c.largeInteriorMap_isEmbedding.toHomeomorph.trans
+      (Homeomorph.setCongr c.range_largeInteriorMap)
+  letI : ContractibleSpace
+      (punctured_fundamentalGroup_three_aux_cover_aux_V c) :=
+    e.symm.contractibleSpace
+  exact SimplyConnectedSpace.ofContractible _
 -- END SEAT AREA
 
 lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected
