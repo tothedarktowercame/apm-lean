@@ -702,6 +702,62 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_boundary_mem
       norm_num
     · exact c.largeMap_unitToLarge (sphereToDisk 3 s)
 
+lemma punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected_aux_annulus :
+    IsPathConnected {x : Disk 3 2 | 1 / 2 < dist x.1 0} := by
+  let S : Set (E 3 × ℝ) := Metric.sphere 0 1 ×ˢ Set.Ioc (1 / 2) 2
+  have hsphere : IsPathConnected (Metric.sphere (0 : E 3) 1) := by
+    apply isPathConnected_sphere
+    · norm_num [← Module.finrank_eq_rank, finrank_euclideanSpace_fin]
+    · norm_num
+  have hinter : IsPathConnected (Set.Ioc (1 / 2 : ℝ) 2) := by
+    exact (convex_Ioc _ _).isPathConnected (by norm_num)
+  haveI : PathConnectedSpace (Metric.sphere (0 : E 3) 1) :=
+    isPathConnected_iff_pathConnectedSpace.mp hsphere
+  haveI : PathConnectedSpace (Set.Ioc (1 / 2 : ℝ) 2) :=
+    isPathConnected_iff_pathConnectedSpace.mp hinter
+  let f : (Metric.sphere (0 : E 3) 1) × (Set.Ioc (1 / 2 : ℝ) 2) → Disk 3 2 :=
+    fun p ↦ ⟨p.2.1 • p.1.1, by
+      rw [Metric.mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs,
+        abs_of_nonneg (le_trans (by norm_num) p.2.2.1.le)]
+      have hs : ‖p.1.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using p.1.2
+      rw [hs, mul_one]
+      exact p.2.2.2⟩
+  have hf : Continuous f := by
+    apply Continuous.subtype_mk
+    exact (continuous_subtype_val.comp continuous_snd).smul
+      (continuous_subtype_val.comp continuous_fst)
+  have himage : Set.range f = {x : Disk 3 2 | 1 / 2 < dist x.1 0} := by
+    ext x
+    constructor
+    · rintro ⟨p, rfl⟩
+      change 1 / 2 < dist (p.2.1 • p.1.1) 0
+      rw [dist_zero_right, norm_smul, Real.norm_eq_abs,
+        abs_of_nonneg (le_trans (by norm_num) p.2.2.1.le)]
+      have hs : ‖p.1.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using p.1.2
+      simpa [hs] using p.2.2.1
+    · intro hx
+      have hrpos : 0 < ‖x.1‖ :=
+        lt_trans (show (0 : ℝ) < 1 / 2 by norm_num) (by simpa [dist_zero_right] using hx)
+      let u : Metric.sphere (0 : E 3) 1 := ⟨(‖x.1‖⁻¹) • x.1, by
+        rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm,
+          inv_mul_cancel₀ hrpos.ne']⟩
+      let r : Set.Ioc (1 / 2 : ℝ) 2 := ⟨‖x.1‖, by
+        constructor
+        · simpa [dist_zero_right] using hx
+        · simpa only [Metric.mem_closedBall, dist_zero_right] using x.2⟩
+      refine ⟨(u, r), Subtype.ext ?_⟩
+      dsimp [f, u, r]
+      rw [smul_smul, mul_inv_cancel₀ hrpos.ne', one_smul]
+  rw [← himage]
+  letI : PathConnectedSpace
+      ((Metric.sphere (0 : E 3) 1) × (Set.Ioc (1 / 2 : ℝ) 2)) :=
+    { nonempty := Nonempty.map2 (fun x y ↦ (x, y))
+        hsphere.nonempty.to_subtype hinter.nonempty.to_subtype
+      joined := fun x y ↦
+        ⟨(PathConnectedSpace.somePath x.1 y.1).prod
+          (PathConnectedSpace.somePath x.2 y.2)⟩ }
+  exact isPathConnected_range hf
+
 lemma punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E 3) M]
@@ -709,7 +765,64 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected
     (c : BallCollar 3 M) (s : Sphere 3)
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     PathConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_U c) := by
-  sorry
+  let P : Set M := Set.range ((↑) : c.Punctured → M)
+  let A : Set M := c.largeMap '' {x : Disk 3 2 | 1 / 2 < dist x.1 0}
+  have hP : IsPathConnected P := by
+    exact isPathConnected_range continuous_subtype_val
+  have hA : IsPathConnected A := by
+    exact punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected_aux_annulus.image
+      c.largeEmbedding.continuous
+  have hPA : (P ∩ A).Nonempty := by
+    refine ⟨(c.boundaryMap s).1, ⟨⟨c.boundaryMap s, rfl⟩, ?_⟩⟩
+    refine ⟨unitToLarge 3 (sphereToDisk 3 s), ?_,
+      c.largeMap_unitToLarge (sphereToDisk 3 s)⟩
+    have hs : dist s.1 0 = 1 := by
+      simpa [Metric.mem_sphere, dist_comm] using s.2
+    change 1 / 2 < dist s.1 0
+    rw [hs]
+    norm_num
+  have heq : P ∪ A = punctured_fundamentalGroup_three_aux_cover_aux_U c := by
+    ext x
+    constructor
+    · rintro (hxP | hxA)
+      · rcases hxP with ⟨z, rfl⟩
+        intro hz
+        rcases hz with ⟨y, hy, heq⟩
+        apply z.2
+        let w : Disk 3 1 := ⟨y.1, by
+          rw [Metric.mem_closedBall]
+          exact le_trans hy (by norm_num)⟩
+        refine ⟨w, ?_, ?_⟩
+        · change dist y.1 0 < 1
+          exact lt_of_le_of_lt hy (by norm_num)
+        · have hyw : unitToLarge 3 w = y := Subtype.ext rfl
+          rw [← heq, ← hyw]
+          exact (c.largeMap_unitToLarge w).symm
+      · rcases hxA with ⟨y, hy, rfl⟩
+        intro hz
+        rcases hz with ⟨z, hz, heq⟩
+        have : z = y := c.largeEmbedding.injective heq
+        subst z
+        change dist y.1 0 ≤ 1 / 2 at hz
+        change 1 / 2 < dist y.1 0 at hy
+        exact (not_lt_of_ge hz) hy
+    · intro hx
+      by_cases hunit : x ∈ c.radialUnit
+      · right
+        rcases hunit with ⟨y, hy, rfl⟩
+        refine ⟨y, ?_, rfl⟩
+        by_contra hhalf
+        apply hx
+        refine ⟨y, ?_, rfl⟩
+        change ¬ 1 / 2 < dist y.1 0 at hhalf
+        exact le_of_not_gt hhalf
+      · left
+        refine ⟨⟨x, ?_⟩, rfl⟩
+        rintro ⟨y, hy, rfl⟩
+        apply hunit
+        exact ⟨unitToLarge 3 y, hy, c.largeMap_unitToLarge y⟩
+  rw [← isPathConnected_iff_pathConnectedSpace, ← heq]
+  exact hP.union hA hPA
 
 -- BEGIN SEAT AREA
 lemma punctured_fundamentalGroup_three_aux_cover_aux_V_simplyConnected
