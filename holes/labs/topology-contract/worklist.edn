@@ -119195,6 +119195,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792632685919-1990-9415e373",
+     :commands
+     ["git show/diff --check 757e75fc5"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "sha256sum; placeholder count"],
+     :finding
+     "PASS program STOP: 757e75fc5 changes only t00J02Closure.lean (+23), adding a compiled sorry-free regular-fiber top-degree formula beyond history f98a24843. Fixture afb497a6, Main 0b3b4888, closure 7365797a; registry 170/170; placeholders closure=0/Main=1 expected. Orientation is correct: the prior localization theorem gives canonical signed sum = coefficient sum, so its symmetry composes with htop (top degree = coefficient sum) to obtain top degree = canonical signed sum. Fiber subtype, component index, generator, and finite-sum representations remain identical. Axioms: propext, Classical.choice, Quot.sound. Residual: instantiate chart data and assemble Main."},
     :commit "757e75fc5fcbc7ba9258ece8478e1290bc899223",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119203,7 +119215,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119221,7 +119233,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transverse comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical fiber formula.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119637,7 +119649,10 @@
      :reason "Banked sum transport."}
     {:job 2,
      :commit "f98a248430b44343507110990838a78db9df605a",
-     :reason "Banked transverse comparison."}]}
+     :reason "Banked transverse comparison."}
+    {:job 3,
+     :commit "757e75fc5fcbc7ba9258ece8478e1290bc899223",
+     :reason "Banked canonical fiber formula."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123396,7 +123411,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiber_surfaceTopDegree_eq_signedSum",
@@ -123406,7 +123421,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "top degree equals signed fiber sum",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "757e75fc5fcbc7ba9258ece8478e1290bc899223"},
    :id :lemma-regularfiber-surfacetopdegree-eq-signedsum,
    :kind :lemma,
    :depends-on
