@@ -4761,13 +4761,79 @@ lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_pair
 /-- The excised ball/annulus pair has no relative homology above dimension
 `n`.  This is the geometric input needed in two adjacent degrees. -/
 -- BEGIN SEAT AREA
+lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero_aux_model
+    (n j : ℕ) (hn : 1 ≤ n) (hnj : n < j) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)).homology
+        j) := by
+  let A := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n
+  haveI : ContractibleSpace (Metric.ball (0 : E n) 2) :=
+    (convex_ball (0 : E n) 2).contractibleSpace ⟨0, by simp⟩
+  have hX : IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of (Metric.ball (0 : E n) 2))).homology j) :=
+    ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      _ j (by omega)
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  obtain ⟨e⟩ :=
+    punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv
+      (m + 1) (by omega)
+  have hA : IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of ↑A)).homology (j - 1)) :=
+    (ConstructionTargets.SphereHomology.sphereHomology_isZero_of_gt
+      m (j - 1) (by omega)).of_iso
+        (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          e (j - 1))
+  have hex :=
+    ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_relative
+      A (j - 1)
+  have hj : j - 1 + 1 = j := by omega
+  rw [← hj] at hX
+  have hz := hex.isZero_X₂ (hX.eq_of_src _ _) (hA.eq_of_tgt _ _)
+  simpa only [hj] using hz
+
 lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero
     (n : ℕ) (hn : 2 ≤ n) (M : Type) [TopologicalSpace M] [T2Space M]
     (c : BallCollar n M) (hopen : IsOpen c.radialTwo)
     (j : ℕ) (hnj : n < j) :
     IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
       (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology j) := by
-  sorry
+  have hlocal : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+          c.radialTwoᶜ)).homology j) := by
+    obtain ⟨e, he⟩ :=
+      punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart n M c
+    exact
+      punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_iso
+        e _ _ he j
+        (punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero_aux_model
+          n j (by omega) hnj)
+  have hj : j - 1 + 1 = j := by omega
+  letI : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeExcisionMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+        c.radialTwoᶜ) j) := by
+    rcases punctured_topHomology_zero_aux_mono_aux_excision_set c hopen with
+      ⟨hclosed, hsub⟩
+    have hrange : Set.range (fun x : c.Punctured ↦ x.1) =
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ := by
+      ext x
+      constructor
+      · rintro ⟨y, rfl⟩
+        exact y.2
+      · intro hx
+        exact ⟨⟨x, hx⟩, rfl⟩
+    rw [hrange] at hsub
+    have hi :=
+      ConstructionTargets.SingularExcision.relativeExcisionMap_homologyMap_isIso_succ
+        _ _ hclosed hsub (j - 1)
+    rw [hj] at hi
+    exact hi
+  exact hlocal.of_iso (asIso (HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeExcisionMap
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+      c.radialTwoᶜ) j)).symm
 -- END SEAT AREA
 
 /-- Naturality of the integral comparison transports the concrete inclusion
