@@ -283,11 +283,44 @@ theorem largeInterior_isOpen_aux_euclidean_aux_brouwer (n : ℕ)
 /-- **LIBRARY (B2c).** A continuous injection of the closed unit disk into
 `E n` sends the centre to an interior point of its image (Tao's argument:
 Tietze-extend the inverse and apply Brouwer, B2b, taken as `hB`). -/
-theorem largeInterior_isOpen_aux_euclidean_aux_interior (n : ℕ)
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_stability
+    (n : ℕ)
+    (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
+    {f : Disk n 1 → E n} (hf : Continuous f)
+    {Gtilde : E n → E n} (hGtilde : Continuous Gtilde)
+    (hclose : ∀ x : Disk n 1, ‖x.1 - Gtilde (f x)‖ ≤ 1) :
+    ∃ y ∈ Set.range f, Gtilde y = 0 := by
+  let g : Disk n 1 → Disk n 1 := fun x =>
+    ⟨x.1 - Gtilde (f x), by
+      simpa [Metric.mem_closedBall, dist_zero_right] using hclose x⟩
+  have hg : Continuous g := by
+    apply Continuous.subtype_mk
+    exact continuous_subtype_val.sub
+      (hGtilde.comp (hf.comp continuous_id))
+  obtain ⟨x, hx⟩ := hB hg
+  refine ⟨f x, ⟨x, rfl⟩, ?_⟩
+  have hxval : x.1 - Gtilde (f x) = x.1 := congrArg Subtype.val hx
+  exact sub_eq_self.mp hxval
+
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive
+    (n : ℕ) (hn : 0 < n)
     (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
     {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
     f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f) := by
   sorry
+
+theorem largeInterior_isOpen_aux_euclidean_aux_interior (n : ℕ)
+    (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
+    {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
+    f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f) := by
+  by_cases hn : n = 0
+  · subst n
+    have hrange : Set.range f = Set.univ :=
+      (Set.range_nonempty f).eq_univ
+    rw [hrange, interior_univ]
+    exact Set.mem_univ _
+  · exact largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive
+      n (Nat.pos_of_ne_zero hn) hB hf hinj
 
 /-- **LIBRARY (B2d).** Euclidean invariance of domain, from B2c (taken as `hI`) by rescaling
 closed balls inside `U`. -/
