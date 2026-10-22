@@ -3892,6 +3892,24 @@ theorem regularFiberLocalDegree_eq_of_same_point
       regularFiberLocalDegree e g z ⟨x, hgx⟩ :=
   rfl
 
+/-- Canonical local degrees transport across arbitrary fiber-subtype
+representatives whose underlying surface points agree. -/
+theorem regularFiberLocalDegree_eq_of_underlying_eq
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (f g : C(S, S)) (y z : S)
+    (x : {p : S // f p = y}) (x' : {p : S // g p = z})
+    (h : (x : S) = (x' : S)) :
+    regularFiberLocalDegree e f y x = regularFiberLocalDegree e g z x' := by
+  cases x with
+  | mk p hp =>
+    cases x' with
+    | mk p' hp' =>
+      change p = p' at h
+      subst p'
+      exact regularFiberLocalDegree_eq_of_same_point e f g y z p hp hp'
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3917,6 +3935,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_diskBounded_comparison
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_degreeFormula
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_same_point
+#print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_underlying_eq
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
