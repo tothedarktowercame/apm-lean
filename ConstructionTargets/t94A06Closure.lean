@@ -110,6 +110,42 @@ theorem apm_t94a06_interiorCriticalImage_null
 
 #print axioms apm_t94a06_interiorCriticalImage_null
 
+/-- If a smooth extension agrees with a map on its domain and realizes the
+within derivative there, every relative critical value is an ambient critical
+value of the extension.  This is the set-theoretic reduction used after the
+Whitney extension step. -/
+theorem apm_t94a06_withinCriticalImage_subset_extensionCriticalImage
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    {s : Set E} {q Q : E → apm_t94a06_E2}
+    (hEq : Set.EqOn Q q s)
+    (hDeriv : ∀ x ∈ s, fderiv ℝ Q x = fderivWithin ℝ q s x) :
+    q '' {x | x ∈ s ∧
+      ¬ Function.Surjective (fderivWithin ℝ q s x)} ⊆
+      Q '' {x | ¬ Function.Surjective (fderiv ℝ Q x)} := by
+  rintro y ⟨x, hx, rfl⟩
+  refine ⟨x, ?_, hEq hx.1⟩
+  change ¬ Function.Surjective (fderiv ℝ Q x)
+  rw [hDeriv x hx.1]
+  exact hx.2
+
+#print axioms apm_t94a06_withinCriticalImage_subset_extensionCriticalImage
+
+/-- The full relative Sard conclusion follows from a smooth extension whose
+first derivative agrees with the within derivative on the original domain. -/
+theorem apm_t94a06_criticalImage_null_of_smoothExtension
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    {s : Set E} (q Q : E → apm_t94a06_E2)
+    (hQ : ContDiff ℝ ∞ Q) (hEq : Set.EqOn Q q s)
+    (hDeriv : ∀ x ∈ s, fderiv ℝ Q x = fderivWithin ℝ q s x) :
+    volume (q '' {x | x ∈ s ∧
+      ¬ Function.Surjective (fderivWithin ℝ q s x)}) = 0 := by
+  apply measure_mono_null
+    (apm_t94a06_withinCriticalImage_subset_extensionCriticalImage hEq hDeriv)
+  exact SardGenuineSmoothEuclideanProbe.critical_image_null volume Q hQ
+
+#print axioms apm_t94a06_criticalImage_null_of_smoothExtension
+
 /-- Critical values, expressed directly using the manifold derivative.  This
 is the set whose nullity is supplied by the chartwise Morse--Sard argument. -/
 def apm_t94a06_criticalValues
