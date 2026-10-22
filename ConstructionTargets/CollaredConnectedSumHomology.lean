@@ -1215,15 +1215,71 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective k x hrs
   exact (mul_right_cancel₀ hq0 hrsq)
 
-/-- LEAF (2026-10-22, claude-14): the localization coefficient of the global
-generator is nonzero.  Not blocked on `_localization_mono` (that lemma is
-assembled from this one).  Template: t00A01 proves the dimension-3 case
-sorry-free as `r = 1 ∨ r = -1`, in `problems/t00A01/lean/Main.lean`,
-`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign`
-(with its `_aux_degree`, `_aux_degree_spec`, `_aux_locallyConstant` and
-`_aux_exists_unit` lemmas): the coefficient's `natAbs` is locally constant,
-hence constant on connected `M`, and equals 1 at some point by compactness.
-Generalize that proof from `Fin 3` / `k := 1` to `k + 2`; ±1 gives `q ≠ 0`. -/
+/-- The local degree of the global generator at `y`: its image in
+`H_(k+2)(M, M - y)`, read as an integer through `ambientLocalNormalization`.
+(Split by claude-14 from `_coefficient_ne_zero` after lemma-2's PARTIAL, job
+2299, 2026-10-22, following t00A01's dimension-3
+`..._fundamental_aux_coefficient_is_sign_aux_degree`.) -/
+noncomputable def punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (y : M) : ℤ :=
+  (ManifoldFundamentalClass.ambientLocalNormalization k y).hom.hom
+    (ManifoldFundamentalClass.localizationMap y (k + 2)
+      (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e))
+
+/-- The coefficient `q` of `hq` is the local degree at `x`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree_spec
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (x : M) (q : ℤ)
+    (hq : q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x =
+      ManifoldFundamentalClass.localizationMap x (k + 2)
+        (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e)) :
+    q = punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e x := by
+  have h := congrArg
+    (ManifoldFundamentalClass.ambientLocalNormalization k x).hom.hom hq
+  rw [map_zsmul, ManifoldFundamentalClass.ambientLocalNormalization_generator] at h
+  change q * (1 : ℤ) = _ at h
+  rw [mul_one] at h
+  exact h
+
+/-- LEAF (claude-14, 2026-10-22): the absolute local degree is locally
+constant.  Template: t00A01's sorry-free dimension-3
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_locallyConstant`
+in `problems/t00A01/lean/Main.lean` (via its `_aux_eventually_sign`: on a
+chart ball around `x`, `H(M, M - ball) → H(M, M - y)` is an isomorphism for
+every `y` in the ball, and two normalizations of one group as `ℤ` differ by
+`±1`).  Generalize from `Fin 3` / `k := 1` to `k + 2`.  Do not reduce this to
+`_localization_mono` or `_coefficient_ne_zero`: both are assembled from it. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant
+    (k : ℕ)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E (k + 2)) M]
+    [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) :
+    IsLocallyConstant (fun y : M ↦ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y).natAbs) := by
+  sorry
+
+/-- LEAF (claude-14, 2026-10-22): some point has local degree `±1`.  Template:
+t00A01's sorry-free dimension-3
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit`
+(Hatcher 3.27 for compact `M`, through its `_aux_injective` and
+`_aux_divide`).  Generalize from `Fin 3` / `k := 1` to `k + 2`.  Do not reduce
+this to `_localization_mono` or `_coefficient_ne_zero`: both are assembled
+from it. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit
+    (k : ℕ)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E (k + 2)) M]
+    [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) :
+    ∃ y : M, (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y).natAbs = 1 := by
+  sorry
+
+/-- The localization coefficient of the global generator is nonzero: its
+absolute value is the absolute local degree, which is locally constant, so
+constant on connected `M`, and `1` somewhere. -/
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero
     (k : ℕ)
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -1234,7 +1290,14 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
       ManifoldFundamentalClass.localizationMap x (k + 2)
         (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e)) :
     q ≠ 0 := by
-  sorry
+  obtain ⟨y, hy⟩ := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit k M e
+  have hxy := (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant k M e).apply_eq_of_isPreconnected
+    isPreconnected_univ (Set.mem_univ x) (Set.mem_univ y)
+  rw [punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree_spec k e x q hq]
+  intro h0
+  rw [h0] at hxy
+  simp at hxy
+  omega
 
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective
     (n : ℕ) (hn : 2 ≤ n)
