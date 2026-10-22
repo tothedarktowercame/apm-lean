@@ -200,6 +200,27 @@ theorem exists_nhds_contDiffOn_corrected_lift
 
 #print axioms exists_nhds_contDiffOn_corrected_lift
 
+/-- The corrected coordinate lift may be shrunk into any prescribed
+neighborhood, as required to place it simultaneously inside the source and
+target tangent-trivialization domains. -/
+theorem exists_nhds_contDiffOn_corrected_lift_subset
+    {Z : Type} [NormedAddCommGroup Z] [NormedSpace ℝ Z] {n m : ℕ}
+    (A : Z → E n →L[ℝ] E m) (b : Z → E m) (x₀ : Z)
+    (R : E m →L[ℝ] E n) (V : Set Z)
+    (hA : ContDiff ℝ ∞ A) (hb : ContDiff ℝ ∞ b)
+    (hAR : (A x₀).comp R = ContinuousLinearMap.id ℝ (E m))
+    (hV : V ∈ nhds x₀) :
+    ∃ U ∈ nhds x₀, U ⊆ V ∧ ∃ w : Z → E n,
+      ContDiffOn ℝ ∞ w U ∧ ∀ x ∈ U, A x (w x) = b x := by
+  obtain ⟨U, hU, w, hw, hsolve⟩ :=
+    exists_nhds_contDiffOn_corrected_lift A b x₀ R hA hb hAR
+  refine ⟨U ∩ V, Filter.inter_mem hU hV, Set.inter_subset_right, w,
+    hw.mono Set.inter_subset_left, ?_⟩
+  intro x hx
+  exact hsolve x hx.1
+
+#print axioms exists_nhds_contDiffOn_corrected_lift_subset
+
 /-- Applying the smoothly varying right inverse to a smooth target-coordinate
 vector gives the source-coordinate lift used in a submersion chart. -/
 theorem contDiff_lift_of_comp_isInvertible
