@@ -192,11 +192,21 @@ def HasStandardCover {n : ℕ} {M₁ M₂ : Type}
 namespace BallCollar
 
 /-- **LIBRARY (B2).** Invariance of domain for the interior of a collared ball. -/
+theorem largeInterior_isOpen_aux_euclidean
+    (d : ℕ) (X : Type) [TopologicalSpace X] [ChartedSpace (E d) X]
+    [IsManifold (I d) (⊤ : ℕ∞) X]
+    {f : LargeInterior (n := d) → X} (hf : Continuous f)
+    (hinj : Function.Injective f) : IsOpenMap f := by
+  sorry
+
 theorem largeInterior_isOpen (n : ℕ) (M : Type)
     [TopologicalSpace M] [ChartedSpace (E n) M]
     [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M) :
     IsOpen c.radialTwo := by
-  sorry
+  apply c.largeInterior_isOpen_of_isOpenMap
+  exact largeInterior_isOpen_aux_euclidean n M
+    c.largeInteriorMap_isEmbedding.continuous
+    c.largeInteriorMap_isEmbedding.injective
 
 /-- **LIBRARY (B3).** Removing the open ball of a collar does not disconnect
 a connected manifold of dimension at least two. -/
@@ -371,6 +381,58 @@ lemma punctured_topHomology_zero_aux_mono_aux_excision_set
   have hy : dist y.1 0 ≤ 1 := Metric.mem_closedBall.mp y.2
   linarith
 
+/-- LEAF. The excised pair: removing `Z = c.radialTwoᶜ` from
+`(M, M minus the small open ball)` leaves (open radius-two ball, ball minus
+the open unit ball), whose degree-`(n + 1)` relative homology vanishes.
+Sketch: carry the pair by `largeMap` to the Euclidean radius-two ball and
+annulus; the pair's long exact sequence
+(`SingularHomologyConcrete.singularPairHomology_exact_*`) with the ball
+contractible gives `H_{n+1} ≅ H̃_n` of a space homotopy equivalent to
+`Sphere n` (an `(n-1)`-sphere), zero since `n ≥ 2`. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local (n : ℕ) (hn : 2 ≤ n)
+    (M : Type) [TopologicalSpace M] [T2Space M] (c : BallCollar n M)
+    (hopen : IsOpen c.radialTwo) :
+    IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+          c.radialTwoᶜ)).homology (n + 1)) := by
+  sorry
+
+/-- Excision step (proved, lemma-2 job 2128): the relative group of
+`(M, M minus the small open ball)` is that of the excised pair. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_of_excised
+    (n : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    (c : BallCollar n M) (hopen : IsOpen c.radialTwo)
+    (hlocal : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+          c.radialTwoᶜ)).homology (n + 1))) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology (n + 1)) := by
+  letI : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeExcisionMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+        c.radialTwoᶜ) (n + 1)) := by
+    rcases punctured_topHomology_zero_aux_mono_aux_excision_set c hopen with
+      ⟨hclosed, hsub⟩
+    have hrange : Set.range (fun x : c.Punctured ↦ x.1) =
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ := by
+      ext x
+      constructor
+      · rintro ⟨y, rfl⟩
+        exact y.2
+      · intro hx
+        exact ⟨⟨x, hx⟩, rfl⟩
+    rw [hrange] at hsub
+    exact ConstructionTargets.SingularExcision.relativeExcisionMap_homologyMap_isIso_succ
+      _ _ hclosed hsub n
+  exact hlocal.of_iso (asIso (HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeExcisionMap
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+      c.radialTwoᶜ) (n + 1))).symm
+
 /-- LEAF. The relative group of `(M, Punctured)` one above top degree
 vanishes.  Sketch: excise `Z = c.radialTwoᶜ`
 (`SingularExcision.relativeExcisionMap_homologyMap_isIso_succ`, hypotheses
@@ -384,7 +446,8 @@ lemma punctured_topHomology_zero_aux_mono_aux_relative_zero (n : ℕ) (hn : 2 �
     (hopen : IsOpen c.radialTwo) :
     IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
       (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology (n + 1)) := by
-  sorry
+  exact punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_of_excised n M c hopen
+    (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local n hn M c hopen)
 
 /-- LEAF. If the relative group of `(M, Punctured)` in degree `n + 1`
 vanishes, the degree-`n` inclusion map is injective.  Sketch: exactness of
@@ -426,6 +489,28 @@ theorem punctured_topHomology_zero_aux_map_eq_zero_aux_avoids_center
   change dist (0 : E n) 0 < 1
   simp
 
+/-- LEAF (split by claude-14 from `_localization_mono` after lemma-1's PARTIAL,
+job 2134, 2026-10-22): the localized global generator has infinite order in
+`H_n(M, M - x)`.  This is the nonvanishing of the fundamental class at a point
+(Hatcher 3.26); `_localization_mono` follows from it because `H_n M` is
+generated by `groupGlobalGenerator`.  Route: by
+`localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator` the
+localized generator is `r • ambientLocalGenerator x`, and
+`ambientLocalGenerator_zsmul_injective` reduces the claim to `r ≠ 0`; a
+generator localizing to zero at one point localizes to zero everywhere (local
+constancy along the connected `M`), and then compactness forces it to vanish
+in `H_n M`, contradicting `H_n M ≅ ℤ`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective
+    (n : ℕ) (hn : 2 ≤ n)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M]
+    (e : H n M ≅ ModuleCat.of ℤ ℤ) (x : M) :
+    Function.Injective (fun r : ℤ ↦ r •
+      ManifoldFundamentalClass.localizationMap x n
+        (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) n e)) := by
+  sorry
+
 /-- LEAF (local fundamental class). On a closed connected `n`-manifold whose
 top integral homology is `ℤ`, localizing at a point is injective in degree
 `n`: `H_n M → H_n(M, M - x)`.  Sketch (Hatcher 3.26): `ManifoldFundamentalClass`
@@ -442,7 +527,20 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono
     [IsManifold (I n) (⊤ : ℕ∞) M]
     (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ)) (x : M) :
     Mono (ManifoldFundamentalClass.localizationMap x n) := by
-  sorry
+  rcases htop with ⟨e⟩
+  apply CategoryTheory.ConcreteCategory.mono_of_injective
+  intro a b hab
+  obtain ⟨r, rfl⟩ :=
+    ManifoldFundamentalClass.groupGlobalGenerator_generates
+      (TopCat.of M) n e a
+  obtain ⟨s, rfl⟩ :=
+    ManifoldFundamentalClass.groupGlobalGenerator_generates
+      (TopCat.of M) n e b
+  simp only [map_zsmul] at hab
+  have hrs : r = s :=
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective
+      n hn M e x hab
+  rw [hrs]
 
 /-- LEAF. The puncture inclusion followed by localization at the collar
 center is zero: it factors through the self-relative homology of
@@ -455,7 +553,29 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localize_zero
         (ManifoldFundamentalClass.absoluteSingularMap
           ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩) n ≫
       ManifoldFundamentalClass.localizationMap (c.smallMap (0 : Disk n 1)) n = 0 := by
-  sorry
+  let f : C(c.Punctured, M) :=
+    ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩
+  let x : M := c.smallMap (0 : Disk n 1)
+  have hf : Set.MapsTo f Set.univ
+      (LocalHomologyNeighborhoodExcision.deletedPoint x) :=
+    punctured_topHomology_zero_aux_map_eq_zero_aux_avoids_center n M c
+  have hnaturality := ManifoldFundamentalClass.absoluteSingularMap_relativeProjection_naturality
+    (Set.univ : Set c.Punctured)
+    (LocalHomologyNeighborhoodExcision.deletedPoint x) f hf
+  have hhom := congrArg (fun q => HomologicalComplex.homologyMap q n) hnaturality
+  simp only [HomologicalComplex.homologyMap_comp] at hhom
+  change HomologicalComplex.homologyMap
+      (ManifoldFundamentalClass.absoluteSingularMap f) n ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+            (LocalHomologyNeighborhoodExcision.deletedPoint x)) n = 0
+  rw [hhom]
+  rw [(ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero
+    c.Punctured n).eq_of_tgt
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+          (Set.univ : Set c.Punctured)) n) 0,
+    zero_comp]
 
 /-- LEAF (representation transport). If the puncture inclusion is zero on
 concrete `AddCommGrpCat` singular homology, it is zero on `H` (module-valued
@@ -565,6 +685,50 @@ noncomputable def punctured_homology_aux_above_aux_inclusion
     (ModuleCat.of ℤ ℤ)).map
       (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
 
+lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_pair
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ)
+    (hk1 : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology
+        (k + 1)))
+    (hk : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology k)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+    exact ConstructionTargets.T00A01MayerVietorisAdapters.isIso_middle_of_two_exact_of_isZero_ends
+      (singularPairConnecting A k)
+      (HomologicalComplex.homologyMap (singularSubspaceMap A) k)
+      (HomologicalComplex.homologyMap (relativeSingularProjection A) k)
+      ((singularPairShortComplex_shortExact A).δ_comp (k + 1) k rfl)
+      (by
+        rw [← HomologicalComplex.homologyMap_comp]
+        change HomologicalComplex.homologyMap
+          ((singularPairShortComplex A).f ≫ (singularPairShortComplex A).g) k = 0
+        rw [(singularPairShortComplex A).zero,
+          HomologicalComplex.homologyMap_zero])
+      (singularPairHomology_exact_subspace A k)
+      (singularPairHomology_exact_absolute A k) hk1 hk
+
+/-- The excised ball/annulus pair has no relative homology above dimension
+`n`.  This is the geometric input needed in two adjacent degrees. -/
+lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero
+    (n : ℕ) (hn : 2 ≤ n) (M : Type) [TopologicalSpace M] [T2Space M]
+    (c : BallCollar n M) (hopen : IsOpen c.radialTwo)
+    (j : ℕ) (hnj : n < j) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology j) := by
+  sorry
+
+/-- Naturality of the integral comparison transports the concrete inclusion
+isomorphism to the `ModuleCat ℤ` singular-homology functor. -/
+lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_transport
+    {n k : ℕ} {M : Type} [TopologicalSpace M] (c : BallCollar n M)
+    (hgroup : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ) k)) :
+    IsIso (punctured_homology_aux_above_aux_inclusion (k := k) c) := by
+  sorry
+
 /-- Collar excision in degrees strictly above the manifold dimension: removing
 the collared open ball does not change integral homology in these degrees. -/
 lemma punctured_homology_aux_above_aux_inclusion_isIso
@@ -575,7 +739,13 @@ lemma punctured_homology_aux_above_aux_inclusion_isIso
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured)
     (k : ℕ) (hnk : n < k) :
     IsIso (punctured_homology_aux_above_aux_inclusion (k := k) c) := by
-  sorry
+  have hk := punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero
+    n hn M c hopen k hnk
+  have hk1 := punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero
+    n hn M c hopen (k + 1) (lt_trans hnk (Nat.lt_succ_self k))
+  exact punctured_homology_aux_above_aux_inclusion_isIso_aux_transport c
+    (punctured_homology_aux_above_aux_inclusion_isIso_aux_pair
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ k hk1 hk)
 
 lemma punctured_homology_aux_above (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -702,6 +872,62 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_boundary_mem
       norm_num
     · exact c.largeMap_unitToLarge (sphereToDisk 3 s)
 
+lemma punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected_aux_annulus :
+    IsPathConnected {x : Disk 3 2 | 1 / 2 < dist x.1 0} := by
+  let S : Set (E 3 × ℝ) := Metric.sphere 0 1 ×ˢ Set.Ioc (1 / 2) 2
+  have hsphere : IsPathConnected (Metric.sphere (0 : E 3) 1) := by
+    apply isPathConnected_sphere
+    · norm_num [← Module.finrank_eq_rank, finrank_euclideanSpace_fin]
+    · norm_num
+  have hinter : IsPathConnected (Set.Ioc (1 / 2 : ℝ) 2) := by
+    exact (convex_Ioc _ _).isPathConnected (by norm_num)
+  haveI : PathConnectedSpace (Metric.sphere (0 : E 3) 1) :=
+    isPathConnected_iff_pathConnectedSpace.mp hsphere
+  haveI : PathConnectedSpace (Set.Ioc (1 / 2 : ℝ) 2) :=
+    isPathConnected_iff_pathConnectedSpace.mp hinter
+  let f : (Metric.sphere (0 : E 3) 1) × (Set.Ioc (1 / 2 : ℝ) 2) → Disk 3 2 :=
+    fun p ↦ ⟨p.2.1 • p.1.1, by
+      rw [Metric.mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs,
+        abs_of_nonneg (le_trans (by norm_num) p.2.2.1.le)]
+      have hs : ‖p.1.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using p.1.2
+      rw [hs, mul_one]
+      exact p.2.2.2⟩
+  have hf : Continuous f := by
+    apply Continuous.subtype_mk
+    exact (continuous_subtype_val.comp continuous_snd).smul
+      (continuous_subtype_val.comp continuous_fst)
+  have himage : Set.range f = {x : Disk 3 2 | 1 / 2 < dist x.1 0} := by
+    ext x
+    constructor
+    · rintro ⟨p, rfl⟩
+      change 1 / 2 < dist (p.2.1 • p.1.1) 0
+      rw [dist_zero_right, norm_smul, Real.norm_eq_abs,
+        abs_of_nonneg (le_trans (by norm_num) p.2.2.1.le)]
+      have hs : ‖p.1.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using p.1.2
+      simpa [hs] using p.2.2.1
+    · intro hx
+      have hrpos : 0 < ‖x.1‖ :=
+        lt_trans (show (0 : ℝ) < 1 / 2 by norm_num) (by simpa [dist_zero_right] using hx)
+      let u : Metric.sphere (0 : E 3) 1 := ⟨(‖x.1‖⁻¹) • x.1, by
+        rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv, norm_norm,
+          inv_mul_cancel₀ hrpos.ne']⟩
+      let r : Set.Ioc (1 / 2 : ℝ) 2 := ⟨‖x.1‖, by
+        constructor
+        · simpa [dist_zero_right] using hx
+        · simpa only [Metric.mem_closedBall, dist_zero_right] using x.2⟩
+      refine ⟨(u, r), Subtype.ext ?_⟩
+      dsimp [f, u, r]
+      rw [smul_smul, mul_inv_cancel₀ hrpos.ne', one_smul]
+  rw [← himage]
+  letI : PathConnectedSpace
+      ((Metric.sphere (0 : E 3) 1) × (Set.Ioc (1 / 2 : ℝ) 2)) :=
+    { nonempty := Nonempty.map2 (fun x y ↦ (x, y))
+        hsphere.nonempty.to_subtype hinter.nonempty.to_subtype
+      joined := fun x y ↦
+        ⟨(PathConnectedSpace.somePath x.1 y.1).prod
+          (PathConnectedSpace.somePath x.2 y.2)⟩ }
+  exact isPathConnected_range hf
+
 lemma punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E 3) M]
@@ -709,7 +935,64 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected
     (c : BallCollar 3 M) (s : Sphere 3)
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     PathConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_U c) := by
-  sorry
+  let P : Set M := Set.range ((↑) : c.Punctured → M)
+  let A : Set M := c.largeMap '' {x : Disk 3 2 | 1 / 2 < dist x.1 0}
+  have hP : IsPathConnected P := by
+    exact isPathConnected_range continuous_subtype_val
+  have hA : IsPathConnected A := by
+    exact punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected_aux_annulus.image
+      c.largeEmbedding.continuous
+  have hPA : (P ∩ A).Nonempty := by
+    refine ⟨(c.boundaryMap s).1, ⟨⟨c.boundaryMap s, rfl⟩, ?_⟩⟩
+    refine ⟨unitToLarge 3 (sphereToDisk 3 s), ?_,
+      c.largeMap_unitToLarge (sphereToDisk 3 s)⟩
+    have hs : dist s.1 0 = 1 := by
+      simpa [Metric.mem_sphere, dist_comm] using s.2
+    change 1 / 2 < dist s.1 0
+    rw [hs]
+    norm_num
+  have heq : P ∪ A = punctured_fundamentalGroup_three_aux_cover_aux_U c := by
+    ext x
+    constructor
+    · rintro (hxP | hxA)
+      · rcases hxP with ⟨z, rfl⟩
+        intro hz
+        rcases hz with ⟨y, hy, heq⟩
+        apply z.2
+        let w : Disk 3 1 := ⟨y.1, by
+          rw [Metric.mem_closedBall]
+          exact le_trans hy (by norm_num)⟩
+        refine ⟨w, ?_, ?_⟩
+        · change dist y.1 0 < 1
+          exact lt_of_le_of_lt hy (by norm_num)
+        · have hyw : unitToLarge 3 w = y := Subtype.ext rfl
+          rw [← heq, ← hyw]
+          exact (c.largeMap_unitToLarge w).symm
+      · rcases hxA with ⟨y, hy, rfl⟩
+        intro hz
+        rcases hz with ⟨z, hz, heq⟩
+        have : z = y := c.largeEmbedding.injective heq
+        subst z
+        change dist y.1 0 ≤ 1 / 2 at hz
+        change 1 / 2 < dist y.1 0 at hy
+        exact (not_lt_of_ge hz) hy
+    · intro hx
+      by_cases hunit : x ∈ c.radialUnit
+      · right
+        rcases hunit with ⟨y, hy, rfl⟩
+        refine ⟨y, ?_, rfl⟩
+        by_contra hhalf
+        apply hx
+        refine ⟨y, ?_, rfl⟩
+        change ¬ 1 / 2 < dist y.1 0 at hhalf
+        exact le_of_not_gt hhalf
+      · left
+        refine ⟨⟨x, ?_⟩, rfl⟩
+        rintro ⟨y, hy, rfl⟩
+        apply hunit
+        exact ⟨unitToLarge 3 y, hy, c.largeMap_unitToLarge y⟩
+  rw [← isPathConnected_iff_pathConnectedSpace, ← heq]
+  exact hP.union hA hPA
 
 lemma punctured_fundamentalGroup_three_aux_cover_aux_V_simplyConnected
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -718,7 +1001,435 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_V_simplyConnected
     (c : BallCollar 3 M) (s : Sphere 3)
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     SimplyConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_V c) := by
+  letI : ContractibleSpace (Metric.ball (0 : E 3) 2) :=
+    Metric.contractibleSpace_ball (by norm_num)
+  letI : ContractibleSpace (LargeInterior (n := 3)) :=
+    (largeInteriorHomeomorphBall (n := 3)).contractibleSpace
+  let e : LargeInterior (n := 3) ≃ₜ
+      punctured_fundamentalGroup_three_aux_cover_aux_V c :=
+    c.largeInteriorMap_isEmbedding.toHomeomorph.trans
+      (Homeomorph.setCongr c.range_largeInteriorMap)
+  letI : ContractibleSpace
+      (punctured_fundamentalGroup_three_aux_cover_aux_V c) :=
+    e.symm.contractibleSpace
+  exact SimplyConnectedSpace.ofContractible _
+
+section punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_sphere
+open Set
+
+variable {X : Type*} [TopologicalSpace X]
+
+open scoped unitInterval
+
+/-- Select one of two sets without putting the selection proof into the type of
+points or paths. -/
+def punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart (U V : Set X) (side : Bool) : Set X :=
+  if side then U else V
+
+/-- Two paths with the same endpoints that remain in a simply connected set
+are homotopic in the ambient space. -/
+theorem IsSimplyConnected.punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_pathsHomotopic_of_mem {s : Set X}
+    (hs : IsSimplyConnected s) {x y : X} (p q : Path x y)
+    (hp : ∀ t, p t ∈ s) (hq : ∀ t, q t ∈ s) :
+    Path.Homotopic p q := by
+  let xs : s := ⟨x, p.source ▸ hp 0⟩
+  let ys : s := ⟨y, p.target ▸ hp 1⟩
+  let ps : Path xs ys :=
+    { toFun := fun t ↦ ⟨p t, hp t⟩
+      continuous_toFun := p.continuous.subtype_mk _
+      source' := by apply Subtype.ext; exact p.source
+      target' := by apply Subtype.ext; exact p.target }
+  let qs : Path xs ys :=
+    { toFun := fun t ↦ ⟨q t, hq t⟩
+      continuous_toFun := q.continuous.subtype_mk _
+      source' := by apply Subtype.ext; exact q.source
+      target' := by apply Subtype.ext; exact q.target }
+  have hsub : Path.Homotopic ps qs := by
+    letI : SimplyConnectedSpace s := hs
+    exact SimplyConnectedSpace.paths_homotopic ps qs
+  simpa [ps, qs] using hsub.map
+    (⟨Subtype.val, continuous_subtype_val⟩ : C(s, X))
+
+/-- A vertex lying in two incident charts can be connected to a fixed overlap
+point by a path lying in the intersection of those charts.  The chart-label
+case split is confined to the proof of this existential; its result has a
+uniform, non-dependent type. -/
+theorem exists_path_mem_punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart_inter {U V : Set X}
+    (hU : IsSimplyConnected U) (hV : IsSimplyConnected V)
+    (hUV : IsPathConnected (U ∩ V)) {c x : X} (hc : c ∈ U ∩ V)
+    (i j : Bool) (hxi : x ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V i) (hxj : x ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V j) :
+    ∃ p : Path x c, ∀ t, p t ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V i ∩ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V j := by
+  cases i <;> cases j
+  · have hxV : x ∈ V := by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using hxi
+    have h := hV.isPathConnected.joinedIn x hxV c hc.2
+    exact ⟨h.somePath, fun t ↦ by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using
+      (⟨h.somePath_mem t, h.somePath_mem t⟩ : h.somePath t ∈ V ∩ V)⟩
+  · have hxV : x ∈ V := by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using hxi
+    have hxU : x ∈ U := by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using hxj
+    have hxUV : x ∈ U ∩ V := ⟨hxU, hxV⟩
+    have h := hUV.joinedIn x hxUV c hc
+    exact ⟨h.somePath, fun t ↦ by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart, and_comm] using h.somePath_mem t⟩
+  · have hxU : x ∈ U := by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using hxi
+    have hxV : x ∈ V := by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using hxj
+    have hxUV : x ∈ U ∩ V := ⟨hxU, hxV⟩
+    have h := hUV.joinedIn x hxUV c hc
+    exact ⟨h.somePath, fun t ↦ by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using h.somePath_mem t⟩
+  · have hxU : x ∈ U := by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using hxi
+    have h := hU.isPathConnected.joinedIn x hxU c hc.1
+    exact ⟨h.somePath, fun t ↦ by simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart] using
+      (⟨h.somePath_mem t, h.somePath_mem t⟩ : h.somePath t ∈ U ∩ U)⟩
+
+/-- Uniformly choose the interior-vertex connectors after proving their
+existence.  Neither the connector type nor its range certificate branches on
+the adjacent chart labels. -/
+theorem exists_punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart_connectors {U V : Set X}
+    (hU : IsSimplyConnected U) (hV : IsSimplyConnected V)
+    (hUV : IsPathConnected (U ∩ V)) {c : X} (hc : c ∈ U ∩ V)
+    (vertex : ℕ → X) (side : ℕ → Bool)
+    (hleft : ∀ k, vertex (k + 1) ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k))
+    (hright : ∀ k, vertex (k + 1) ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side (k + 1))) :
+    ∃ conn : ∀ k, Path (vertex (k + 1)) c,
+      ∀ k t, conn k t ∈
+        punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k) ∩ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side (k + 1)) := by
+  choose conn hconn using fun k ↦
+    exists_path_mem_punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart_inter hU hV hUV hc
+      (side k) (side (k + 1)) (hleft k) (hright k)
+  exact ⟨conn, hconn⟩
+
+/-- Connector edges telescope after passing to path-homotopy classes. -/
+theorem Path.Homotopic.punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_concat_connector_telescope {n : ℕ}
+    (point : Fin (n + 1) → X) (c : X)
+    (conn : (k : Fin (n + 1)) → Path (point k) c) :
+    Path.Homotopic
+      (Path.concat point fun k ↦
+        (conn k.castSucc).trans (conn k.succ).symm)
+      ((conn 0).trans (conn (Fin.last n)).symm) := by
+  induction n with
+  | zero =>
+      simpa [Path.concat_zero] using
+        (⟨Path.Homotopy.reflTransSymm (conn 0)⟩ :
+          Path.Homotopic (Path.refl _) ((conn 0).trans (conn 0).symm))
+  | succ n ih =>
+      rw [Path.concat_succ]
+      simp_rw [Fin.succ_castSucc]
+      refine (Path.Homotopic.hcomp
+        (ih (point ∘ Fin.castSucc) (fun k ↦ conn k.castSucc))
+        (Path.Homotopic.refl _)).trans ?_
+      let a := conn 0
+      let b := conn (Fin.last n).castSucc
+      let d := conn (Fin.last (n + 1))
+      have hinner : Path.Homotopic (b.symm.trans (b.trans d.symm)) d.symm :=
+        (Path.Homotopic.trans_assoc b.symm b d.symm).symm.trans <|
+          (Path.Homotopic.hcomp (Path.Homotopic.symm_trans b)
+            (Path.Homotopic.refl d.symm)).trans
+              (Path.Homotopic.refl_trans d.symm)
+      exact (Path.Homotopic.trans_assoc a b.symm (b.trans d.symm)).trans <|
+        Path.Homotopic.hcomp (Path.Homotopic.refl a) hinner
+
+/-- Choose all connectors for a positive-length cyclic subdivision at once.
+The endpoint identification is part of the existential result, so no
+chart-dependent path type escapes the construction. -/
+theorem exists_cyclic_punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart_connectors {U V : Set X}
+    (hU : IsSimplyConnected U) (hV : IsSimplyConnected V)
+    (hUV : IsPathConnected (U ∩ V)) {c : X} (hc : c ∈ U ∩ V)
+    {n : ℕ} (point : Fin (n + 2) → X) (side : Fin (n + 1) → Bool)
+    (hpiece : ∀ k, point k.castSucc ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k) ∧
+      point k.succ ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k))
+    (hcycle : point 0 = point (Fin.last (n + 1))) :
+    ∃ conn : (k : Fin (n + 2)) → Path (point k) c,
+      (∀ k t, conn k.castSucc t ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k) ∧
+        conn k.succ t ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k)) ∧
+      Path.Homotopic (conn 0)
+        ((conn (Fin.last (n + 1))).cast hcycle rfl) := by
+  have hxFirst : point 0 ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side 0) := (hpiece 0).1
+  have hxLast : point 0 ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side (Fin.last n)) := by
+    rw [hcycle]
+    exact (hpiece (Fin.last n)).2
+  obtain ⟨boundary, hboundary⟩ :=
+    exists_path_mem_punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart_inter hU hV hUV hc
+      (side 0) (side (Fin.last n)) hxFirst hxLast
+  have hinter : ∀ k : Fin n, ∃ p : Path (point k.succ.castSucc) c,
+      ∀ t, p t ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k.castSucc) ∩
+        punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k.succ) := by
+    intro k
+    apply exists_path_mem_punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart_inter hU hV hUV hc
+    · simpa only [Fin.succ_castSucc] using (hpiece k.castSucc).2
+    · exact (hpiece k.succ).1
+  choose interior hinter_mem using hinter
+  let boundaryLast : Path (point (Fin.last (n + 1))) c :=
+    boundary.cast hcycle.symm rfl
+  let conn : (k : Fin (n + 2)) → Path (point k) c :=
+    Fin.cases boundary fun i ↦
+      Fin.lastCases boundaryLast (fun k ↦ interior k) i
+  have conn_last : conn (Fin.last n).succ = boundaryLast := by
+    simp only [conn, Fin.cases_succ, Fin.lastCases_last]
+  refine ⟨conn, ?_, ?_⟩
+  · intro k t
+    constructor
+    · refine Fin.cases ?_ (fun j ↦ ?_) k
+      · simpa [conn] using (hboundary t).1
+      · rw [← Fin.succ_castSucc]
+        simpa [conn] using (hinter_mem j t).2
+    · refine Fin.lastCases ?_ (fun j ↦ ?_) k
+      · rw [conn_last]
+        simpa [boundaryLast, Path.cast_coe] using (hboundary t).2
+      · rw [Fin.succ_castSucc]
+        simpa [conn] using (hinter_mem j t).1
+  · have hzero : conn 0 = boundary := by rfl
+    have hlast : (conn (Fin.last (n + 1))).cast hcycle rfl = boundary := by
+      apply Path.ext
+      simpa only [← Fin.succ_last, conn_last, boundaryLast, Path.cast_coe]
+    rw [hzero, hlast]
+
+/-- Finite, positive-length wrapper around Mathlib's `ℕ`-indexed subdivision
+of the unit interval.  Cover labels are chosen before restricting the
+subdivision to `Fin`, avoiding dependent reindexing. -/
+theorem punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_exists_fin_Icc_subset_open_cover_unitInterval {ι : Type*}
+    {cover : ι → Set unitInterval} (hopen : ∀ i, IsOpen (cover i))
+    (hcover : (Set.univ : Set unitInterval) ⊆ ⋃ i, cover i) :
+    ∃ n : ℕ, ∃ t : Fin (n + 2) → unitInterval,
+      ∃ side : Fin (n + 1) → ι,
+        t 0 = 0 ∧ t (Fin.last (n + 1)) = 1 ∧
+          Monotone t ∧ ∀ k, Set.Icc (t k.castSucc) (t k.succ) ⊆ cover (side k) := by
+  obtain ⟨u, hu0, humono, ⟨m, hm⟩, hsub⟩ :=
+    exists_monotone_Icc_subset_open_cover_unitInterval hopen hcover
+  choose label hlabel using hsub
+  refine ⟨m, fun k ↦ u k.val, fun k ↦ label k.val, ?_, ?_, ?_, ?_⟩
+  · exact hu0
+  · exact hm (m + 1) (Nat.le_succ m)
+  · intro i j hij
+    exact humono (by exact_mod_cast hij)
+  · intro k
+    simpa only [Fin.val_castSucc, Fin.val_succ] using hlabel k.val
+
+/-- A space covered by two open simply connected sets with path-connected
+overlap is simply connected. -/
+theorem punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_simplyConnectedSpace_of_union_eq_univ {U V : Set X}
+    (hUopen : IsOpen U) (hVopen : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (hU : IsSimplyConnected U) (hV : IsSimplyConnected V)
+    (hUV : IsPathConnected (U ∩ V)) : SimplyConnectedSpace X := by
+  rw [simply_connected_iff_loops_nullhomotopic]
+  constructor
+  · rw [pathConnectedSpace_iff_univ, ← hcover]
+    exact hU.isPathConnected.union hV.isPathConnected hUV.nonempty
+  · intro x p
+    obtain ⟨c, hc⟩ := hUV.nonempty
+    let cover : Bool → Set unitInterval := fun b ↦
+      if b then p ⁻¹' U else p ⁻¹' V
+    have cover_open : ∀ b, IsOpen (cover b) := by
+      intro b
+      cases b <;> simp [cover, hUopen, hVopen, IsOpen.preimage p.continuous]
+    have cover_all : (Set.univ : Set unitInterval) ⊆ ⋃ b, cover b := by
+      intro t _
+      have hpt : p t ∈ U ∪ V := by rw [hcover]; trivial
+      rcases hpt with htU | htV
+      · exact Set.mem_iUnion.mpr ⟨true, by simpa [cover] using htU⟩
+      · exact Set.mem_iUnion.mpr ⟨false, by simpa [cover] using htV⟩
+    obtain ⟨n, t, side, ht0, ht1, htmono, hsub⟩ :=
+      punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_exists_fin_Icc_subset_open_cover_unitInterval cover_open cover_all
+    let point : Fin (n + 2) → X := fun k ↦ p (t k)
+    have hpiece : ∀ k, point k.castSucc ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k) ∧
+        point k.succ ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k) := by
+      intro k
+      have hle : t k.castSucc ≤ t k.succ := htmono k.castSucc_le_succ
+      have hl := hsub k ⟨le_rfl, hle⟩
+      have hr := hsub k ⟨hle, le_rfl⟩
+      cases hside : side k <;>
+        simp [cover, hside] at hl hr <;>
+        simpa [point, punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart, hside] using And.intro hl hr
+    have hcycle : point 0 = point (Fin.last (n + 1)) := by
+      simp only [point, ht0, ht1, p.source, p.target]
+    obtain ⟨conn, hconn, hconnCycle⟩ :=
+      exists_cyclic_punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart_connectors hU hV hUV hc point side hpiece hcycle
+    let piece : (k : Fin (n + 1)) →
+        Path (point k.castSucc) (point k.succ) := fun k ↦
+      p.subpath (t k.castSucc) (t k.succ)
+    have piece_mem (k : Fin (n + 1)) (s : unitInterval) :
+        piece k s ∈ punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k) := by
+      have hs : piece k s ∈ Set.range (piece k) := Set.mem_range_self s
+      simp only [piece] at hs
+      rw [Path.range_subpath_of_le p _ _ (htmono k.castSucc_le_succ)] at hs
+      rcases hs with ⟨r, hr, hrs⟩
+      have hm := hsub k hr
+      rw [← hrs]
+      cases hside : side k <;> simpa [cover, punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart, hside] using hm
+    have replacement_mem (k : Fin (n + 1)) (s : unitInterval) :
+        ((conn k.castSucc).trans (conn k.succ).symm) s ∈
+          punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart U V (side k) := by
+      rw [Path.trans_apply]
+      split_ifs
+      · exact (hconn k _).1
+      · exact (hconn k _).2
+    have hreplace (k : Fin (n + 1)) : Path.Homotopic (piece k)
+        ((conn k.castSucc).trans (conn k.succ).symm) := by
+      cases hside : side k
+      · apply IsSimplyConnected.punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_pathsHomotopic_of_mem hV
+        · intro s; simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart, hside] using piece_mem k s
+        · intro s; simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart, hside] using replacement_mem k s
+      · apply IsSimplyConnected.punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_pathsHomotopic_of_mem hU
+        · intro s; simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart, hside] using piece_mem k s
+        · intro s; simpa [punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_twoChart, hside] using replacement_mem k s
+    have hconcat := Path.Homotopic.concat_hcomp point piece
+      (fun k ↦ (conn k.castSucc).trans (conn k.succ).symm) hreplace
+    have htelescope := Path.Homotopic.punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_concat_connector_telescope point c conn
+    have hparts := Path.Homotopic.concat_subpath p t
+    have hx0 : point 0 = x := by simp [point, ht0, p.source]
+    have hxlast : point (Fin.last (n + 1)) = x := by simp [point, ht1, p.target]
+    let pCast : Path (point 0) (point (Fin.last (n + 1))) :=
+      p.cast hx0 hxlast
+    have hparts' : Path.Homotopic (Path.concat point piece) pCast := by
+      have hend : p.subpath (t 0) (t (Fin.last (n + 1))) = pCast := by
+        ext s
+        simp [Path.subpath, ht0, ht1, pCast, Path.cast_coe]
+      simpa [point, piece] using hparts.trans (hend ▸ Path.Homotopic.refl pCast)
+    let cycleRefl : Path (point 0) (point (Fin.last (n + 1))) :=
+      (Path.refl (point 0)).cast rfl hcycle.symm
+    have htail : Path.Homotopic
+        ((conn 0).trans (conn (Fin.last (n + 1))).symm) cycleRefl := by
+      let last := conn (Fin.last (n + 1))
+      have hcastTrans : (last.cast hcycle rfl).trans last.symm =
+          (last.trans last.symm).cast hcycle rfl := by
+        apply Path.ext
+        simp [Path.trans_apply, Path.cast_coe]
+      have hcastRefl : (Path.refl (point (Fin.last (n + 1)))).cast hcycle rfl =
+          cycleRefl := by
+        apply Path.ext
+        exact funext fun _ ↦ hcycle.symm
+      refine (Path.Homotopic.hcomp hconnCycle (Path.Homotopic.refl last.symm)).trans ?_
+      rw [hcastTrans]
+      exact (Path.Homotopic.pathCast (Path.Homotopic.trans_symm last) hcycle rfl).trans <|
+        hcastRefl ▸ Path.Homotopic.refl cycleRefl
+    have hall := hparts'.symm.trans (hconcat.trans (htelescope.trans htail))
+    have hall' := Path.Homotopic.pathCast hall hx0.symm hxlast.symm
+    have hpCast : pCast.cast hx0.symm hxlast.symm = p := by
+      apply Path.ext
+      simp [pCast, Path.cast_coe]
+    have hrefl : cycleRefl.cast hx0.symm hxlast.symm = Path.refl x := by
+      apply Path.ext
+      exact funext fun _ ↦ hx0
+    rw [hpCast, hrefl] at hall'
+    exact hall'
+
+/-- A unit sphere is simply connected once the orthogonal complement of one
+unit pole has real rank greater than one. -/
+theorem punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_simplyConnectedSpace_sphere_of_pole
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (v : E) (hv : ‖v‖ = 1)
+    (hrank : 1 < Module.rank ℝ (ℝ ∙ v)ᗮ) :
+    SimplyConnectedSpace (Metric.sphere (0 : E) 1) := by
+  let north : Metric.sphere (0 : E) 1 := ⟨v, by simpa [mem_sphere_zero_iff_norm]⟩
+  let south : Metric.sphere (0 : E) 1 := -north
+  let eN := stereographic hv
+  let eS := stereographic (show ‖-v‖ = 1 by simpa using hv)
+  have hsouth : eN south = 0 := by simpa [north, south, eN] using stereographic_apply_neg north
+  have hnorth : eS north = 0 := by simpa [north, south, eS] using stereographic_neg_apply north
+  have hNsimple : IsSimplyConnected eN.source := by
+    let e := eN.toHomeomorphSourceTarget
+    let et : eN.target ≃ₜ (ℝ ∙ v)ᗮ :=
+      (Homeomorph.setCongr (by simp [eN])).trans (Homeomorph.Set.univ _)
+    letI : SimplyConnectedSpace eN.target :=
+      et.toHomotopyEquiv.simplyConnectedSpace
+    exact e.toHomotopyEquiv.simplyConnectedSpace
+  have hSsimple : IsSimplyConnected eS.source := by
+    let e := eS.toHomeomorphSourceTarget
+    let et : eS.target ≃ₜ (ℝ ∙ (-v))ᗮ :=
+      (Homeomorph.setCongr (by simp [eS])).trans (Homeomorph.Set.univ _)
+    letI : SimplyConnectedSpace eS.target :=
+      et.toHomotopyEquiv.simplyConnectedSpace
+    exact e.toHomotopyEquiv.simplyConnectedSpace
+  have hopenN : IsOpen eN.source := eN.open_source
+  have hopenS : IsOpen eS.source := eS.open_source
+  have hns : north ≠ south := by
+    intro h
+    have hvneg : v = -v := congrArg Subtype.val h
+    have hv0 : v = 0 := by
+      have htwo : (2 : ℝ) • v = 0 := by
+        calc
+          (2 : ℝ) • v = v + v := two_smul ℝ v
+          _ = -v + v := congrArg (fun z ↦ z + v) hvneg
+          _ = 0 := neg_add_cancel v
+      exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+    rw [hv0, norm_zero] at hv
+    norm_num at hv
+  have hcover : eN.source ∪ eS.source = Set.univ := by
+    change (stereographic hv).source ∪
+      (stereographic (show ‖-v‖ = 1 by simpa using hv)).source = Set.univ
+    rw [stereographic_source, stereographic_source]
+    ext x
+    simp only [Set.mem_union, Set.mem_compl_iff, Set.mem_singleton_iff,
+      Set.mem_univ, iff_true]
+    by_cases hx : x = north
+    · exact Or.inr fun hxs ↦ hns (hx.symm.trans hxs)
+    · exact Or.inl hx
+  have hoverlap : IsPathConnected (eN.source ∩ eS.source) := by
+    have hpunct : IsPathConnected ({0}ᶜ : Set (ℝ ∙ v)ᗮ) :=
+      isPathConnected_compl_singleton_of_one_lt_rank hrank 0
+    have himage := hpunct.image'
+      (eN.symm.continuousOn.mono (by intro; simp [eN]))
+    have hset : eN.symm '' ({0}ᶜ : Set (ℝ ∙ v)ᗮ) = eN.source ∩ eS.source := by
+      ext x
+      constructor
+      · rintro ⟨y, hy, rfl⟩
+        refine ⟨eN.symm.map_source (by simp [eN]), ?_⟩
+        simp only [eS, stereographic_source, Set.mem_compl_iff,
+          Set.mem_singleton_iff]
+        intro h
+        apply hy
+        calc
+          y = eN (eN.symm y) := (eN.right_inv (by simp [eN])).symm
+          _ = eN south := congrArg eN h
+          _ = 0 := hsouth
+      · rintro ⟨hxN, hxS⟩
+        refine ⟨eN x, ?_, eN.left_inv hxN⟩
+        intro hz
+        apply hxS
+        have hsouthN : south ∈ eN.source := by simpa [eN] using hns.symm
+        calc
+          x = eN.symm (eN x) := (eN.left_inv hxN).symm
+          _ = eN.symm 0 := congrArg eN.symm hz
+          _ = eN.symm (eN south) := congrArg eN.symm hsouth.symm
+          _ = south := eN.left_inv hsouthN
+    rw [← hset]
+    exact himage
+  exact punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_simplyConnectedSpace_of_union_eq_univ hopenN hopenS hcover
+    hNsimple hSsimple hoverlap
+
+end punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_sphere
+
+/-- The open radial shell `1/2 < ‖x‖ < 2` in `E 3`; the collar carries it onto `U ∩ V`. -/
+def punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell : Set (E 3) :=
+  {x | 1 / 2 < ‖x‖ ∧ ‖x‖ < 2}
+
+/-- `U ∩ V` is the `largeMap`-image of the shell `1/2 < ‖x‖ < 2` of `Disk 3 2`, and
+`largeMap` is an embedding, so `U ∩ V` is homeomorphic to the shell. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_homeomorph
+    {M : Type} [TopologicalSpace M] (c : BallCollar 3 M) :
+    Nonempty ((punctured_fundamentalGroup_three_aux_cover_aux_U c ∩
+        punctured_fundamentalGroup_three_aux_cover_aux_V c : Set M) ≃ₜ
+      punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell) := by
   sorry
+
+/-- Radial projection `x ↦ x / ‖x‖` is a homotopy equivalence from the shell to the
+unit sphere (inverse: inclusion; homotopy: straight-line rescaling of the radius). -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell_hequiv :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell
+      (Metric.sphere (0 : E 3) 1)) := by
+  sorry
+
+/-- The unit sphere in `E 3` is simply connected. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_sphere :
+    SimplyConnectedSpace (Metric.sphere (0 : E 3) 1) := by
+  have hv : ‖(EuclideanSpace.single (0 : Fin 3) (1 : ℝ) : E 3)‖ = 1 := by simp
+  have hv0 : (EuclideanSpace.single (0 : Fin 3) (1 : ℝ) : E 3) ≠ 0 := by
+    intro h
+    rw [h, norm_zero] at hv
+    exact zero_ne_one hv
+  haveI : Fact (Module.finrank ℝ (E 3) = 2 + 1) := ⟨by simp⟩
+  have hfin := Submodule.finrank_orthogonal_span_singleton (𝕜 := ℝ) (n := 2) hv0
+  refine punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_simplyConnectedSpace_sphere_of_pole _ hv ?_
+  rw [← Module.finrank_eq_rank, hfin]
+  norm_num
 
 lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -728,7 +1439,596 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     SimplyConnectedSpace
       (punctured_fundamentalGroup_three_aux_cover_aux_U c ∩ punctured_fundamentalGroup_three_aux_cover_aux_V c : Set M) := by
-  sorry
+  obtain ⟨h⟩ := punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_homeomorph c
+  obtain ⟨e⟩ := punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell_hequiv
+  haveI := punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_sphere
+  haveI : SimplyConnectedSpace
+      punctured_fundamentalGroup_three_aux_cover_aux_inter_simplyConnected_aux_shell :=
+    e.simplyConnectedSpace
+  exact h.toHomotopyEquiv.simplyConnectedSpace
+
+abbrev punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 :=
+  Disk 3 1
+
+abbrev punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 :=
+  Disk 3 2
+
+def punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge :
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 →
+      punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 :=
+  unitToLarge 3
+
+abbrev punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_punctured
+    {M : Type} [TopologicalSpace M]
+    (φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 → M) :=
+  {x : M // x ∉ φ '' {y | dist y.1 0 < 1}}
+
+def punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner
+    {M : Type} [TopologicalSpace M]
+    (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M) :
+    Set M :=
+  Φ '' {x | dist x.1 0 ≤ 1 / 2}
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_image
+    {M : Type} [TopologicalSpace M]
+    (φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 → M) (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M)
+    (hΦφ : Φ ∘ punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge = φ) :
+    φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 | dist x.1 0 < 1} =
+      Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 1} := by
+  ext z
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge x, ?_, ?_⟩
+    · exact hx
+    · exact congrFun hΦφ x
+  · rintro ⟨x, hx, rfl⟩
+    have hxclosed : dist x.1 0 ≤ 1 := le_of_lt hx
+    let y : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 :=
+      ⟨x.1, by simpa [Metric.mem_closedBall, dist_comm] using hxclosed⟩
+    refine ⟨y, ?_, ?_⟩
+    · exact hx
+    · have hu : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge y = x := Subtype.ext rfl
+      simpa [Function.comp_apply, hu] using (congrFun hΦφ y).symm
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_inner_subset
+    {M : Type} [TopologicalSpace M]
+    (φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 → M) (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M)
+    (hΦφ : Φ ∘ punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge = φ) :
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ ⊆
+      φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 | dist x.1 0 < 1} := by
+  rw [punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_image
+    φ Φ hΦφ]
+  rintro z ⟨x, hx, rfl⟩
+  refine ⟨x, ?_, rfl⟩
+  change dist x.1 0 ≤ 1 / 2 at hx
+  show dist x.1 0 < 1
+  exact lt_of_le_of_lt hx (by norm_num)
+
+def punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_inclusion
+    {M : Type} [TopologicalSpace M]
+    (φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 → M) (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M)
+    (hΦφ : Φ ∘ punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge = φ) :
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_punctured φ →
+      ↥(punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ :=
+  fun x ↦ ⟨x.1, fun hx ↦ x.2
+    (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_inner_subset
+      φ Φ hΦφ hx)⟩
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_inclusion_continuous
+    {M : Type} [TopologicalSpace M]
+    (φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 → M) (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M)
+    (hΦφ : Φ ∘ punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge = φ) :
+    Continuous
+      (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_inclusion
+        φ Φ hΦφ) := by
+  exact Continuous.subtype_mk continuous_subtype_val _
+
+/-- The radial collar homotopy on `M`: a point `Φ x` with `‖x‖ < 1` moves along
+the segment from `x` to `x / ‖x‖`; every other point stays put. At `t = 1` it is
+the radial retraction of `M \ Φ(closedBall 0 (1/2))` onto the punctured manifold. -/
+noncomputable def punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H
+    {M : Type} (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M) (t : unitInterval) (z : M) : M := by
+  classical
+  exact if h : ∃ x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3, Φ x = z ∧ dist x.1 0 < 1 then
+    (if hv : (1 - (t : ℝ)) • h.choose.1 + (t : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) ∈
+        Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 2 then
+      Φ ⟨_, hv⟩ else z)
+  else z
+
+/-- LEAF: the collar homotopy is continuous on `I × U`, where
+`U = M \ Φ(closedBall 0 (1/2))`. Glue two pieces. On the open set
+`Φ(ball 0 2) ∩ U` it is `Φ ∘ G ∘ Φ⁻¹` (transport through the embedding `Φ`),
+where `G t x` is `(1-t)•x + t•(x/‖x‖)` for `‖x‖ < 1` and `x` for `‖x‖ ≥ 1`;
+`G` is continuous on `1/2 < ‖x‖ < 2` because the two formulas agree at
+`‖x‖ = 1`. On the closed set `M \ Φ(ball 0 1)` (closed because `Φ(ball 0 1)`
+is open: `Φ` restricted to the open set `Φ(ball 0 2)` is an open embedding) it
+is the identity. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_open
+    {M : Type} [TopologicalSpace M]
+    (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 2})) :
+    IsOpen (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 1}) := by
+  let s : Set punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 := {x | dist x.1 0 < 1}
+  let u : Set punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 := {x | dist x.1 0 < 2}
+  have hs : IsOpen s := by
+    have hd : Continuous (fun x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 => dist x.1 0) :=
+      continuous_subtype_val.dist (continuous_const : Continuous (fun _ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 =>
+        (0 : EuclideanSpace ℝ (Fin 3))))
+    exact isOpen_lt hd continuous_const
+  obtain ⟨v, hv, hvpre⟩ := hΦ.isInducing.isOpen_iff.mp hs
+  have hsu : s ⊆ u := by
+    intro x hx
+    change dist x.1 0 < 1 at hx
+    change dist x.1 0 < 2
+    linarith
+  have himage : Φ '' s = v ∩ Φ '' u := by
+    ext z
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      have hvx : Φ x ∈ v := by
+        have : x ∈ Φ ⁻¹' v := by simpa [hvpre] using hx
+        exact this
+      exact ⟨hvx, ⟨x, hsu hx, rfl⟩⟩
+    · rintro ⟨hzv, x, hxu, rfl⟩
+      refine ⟨x, ?_, rfl⟩
+      have : x ∈ Φ ⁻¹' v := hzv
+      simpa [hvpre] using this
+  rw [himage]
+  exact hv.inter hΦo
+
+/-- `Φ` of a closed sub-ball `{‖x‖ ≤ r}` is closed in `M`: the sub-ball is
+compact, and `M` is Hausdorff. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_closed
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M) (hΦ : Continuous Φ) (r : ℝ) :
+    IsClosed (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 ≤ r}) := by
+  haveI : CompactSpace punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 :=
+    isCompact_iff_compactSpace.mp (isCompact_closedBall _ _)
+  have hc : IsClosed {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 ≤ r} :=
+    isClosed_le (continuous_subtype_val.dist continuous_const) continuous_const
+  exact (hc.isCompact.image hΦ).isClosed
+
+/-- Off `Φ(ball 0 1)` the collar homotopy is the identity. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_eq_self
+    {M : Type} (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M) (t : unitInterval) (z : M)
+    (hz : z ∉ Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 1}) :
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ t z = z := by
+  unfold punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H
+  rw [dif_neg]
+  rintro ⟨x, hx, hx1⟩
+  exact hz ⟨x, hx1, hx⟩
+
+/-- LEAF: the radial deformation of Euclidean space, `x ↦ (1-t)•x + t•(x/‖x‖)`
+for `‖x‖ < 1` and `x ↦ x` otherwise, is jointly continuous away from the
+radius-one-half ball. Use `ContinuousOn.if`: each formula is continuous on
+`‖x‖ > 1/2` (the first because `‖x‖ ≠ 0`), and on the frontier `‖x‖ = 1` of
+`{‖x‖ < 1}` the two formulas agree. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_radial :
+    ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦
+        if ‖p.2‖ < 1 then (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2) else p.2)
+      (univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 1 / 2 < ‖x‖}) := by
+  let s : Set (unitInterval × EuclideanSpace ℝ (Fin 3)) :=
+    univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 1 / 2 < ‖x‖}
+  let f : unitInterval × EuclideanSpace ℝ (Fin 3) → EuclideanSpace ℝ (Fin 3) :=
+    fun p ↦ (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2)
+  let g : unitInterval × EuclideanSpace ℝ (Fin 3) → EuclideanSpace ℝ (Fin 3) :=
+    fun p ↦ p.2
+  have ht : Continuous (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ (p.1 : ℝ)) :=
+    continuous_subtype_val.comp continuous_fst
+  have hx : Continuous (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ p.2) :=
+    continuous_snd
+  have hn : Continuous (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖) :=
+    continuous_norm.comp hx
+  have hne : ∀ p ∈ s, ‖p.2‖ ≠ 0 := by
+    intro p hp
+    have hp' : 1 / 2 < ‖p.2‖ := hp.2
+    positivity
+  have hinv : ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖⁻¹) s :=
+    hn.continuousOn.inv₀ hne
+  have hf : ContinuousOn f s := by
+    exact ((continuous_const.sub ht).continuousOn.smul hx.continuousOn).add
+      (ht.continuousOn.smul (hinv.smul hx.continuousOn))
+  have hg : ContinuousOn g s := hx.continuousOn
+  have hboundary : ∀ p ∈ s ∩ frontier
+      {p : unitInterval × EuclideanSpace ℝ (Fin 3) | ‖p.2‖ < 1}, f p = g p := by
+    intro p hp
+    have heq : ‖p.2‖ = 1 :=
+      (frontier_lt_subset_eq hn continuous_const) hp.2
+    simp only [f, g, heq, inv_one, one_smul]
+    rw [← add_smul, sub_add_cancel, one_smul]
+  exact ContinuousOn.if hboundary
+    (hf.mono inter_subset_left) (hg.mono inter_subset_left)
+
+/-- LEAF: the collar homotopy is continuous on `I × (Φ(ball 0 2) \ Φ(closedBall 0 (1/2)))`.
+There `Φ` restricted to `{‖x‖ < 2}` is a homeomorphism onto the open set
+`Φ(ball 0 2)` (`hΦ` is an embedding), and for `z = Φ x` the homotopy is
+`Φ (G t x)` with `G` the radial map of
+`punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_radial`
+(the `closedBall 0 2` test in the definition always holds: for `‖x‖ < 1` the
+moving point has norm `(1-t)‖x‖ + t ≤ 1`). Transport the continuity of `G`
+through the homeomorphism. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball_aux_radial :
+    ContinuousOn
+      (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦
+        if ‖p.2‖ < 1 then (1 - (p.1 : ℝ)) • p.2 + (p.1 : ℝ) • (‖p.2‖⁻¹ • p.2) else p.2)
+      (univ ×ˢ {x : EuclideanSpace ℝ (Fin 3) | 1 / 2 < ‖x‖}) := by
+  let s : Set (unitInterval × EuclideanSpace ℝ (Fin 3)) :=
+    univ ×ˢ {x | 1 / 2 < ‖x‖}
+  let P : unitInterval × EuclideanSpace ℝ (Fin 3) → Prop := fun p ↦ ‖p.2‖ < 1
+  apply ContinuousOn.if (p := P)
+  · intro p hp
+    have hpcl : p ∈ closure {q | P q} := frontier_subset_closure hp.2
+    have hnle : ¬ ‖p.2‖ < 1 := by
+      have hc : p ∈ closure {q | ¬ P q} := by
+        apply frontier_subset_closure
+        have : p ∈ frontier ({q | P q}ᶜ) := by simpa only [frontier_compl] using hp.2
+        simpa only [Set.mem_compl_iff, Set.mem_setOf_eq] using this
+      have hsub : closure {q | ¬ P q} ⊆ {q | 1 ≤ ‖q.2‖} :=
+        closure_minimal (by intro q hq; exact le_of_not_gt hq)
+          (isClosed_le continuous_const (continuous_norm.comp continuous_snd))
+      exact not_lt_of_ge (hsub hc)
+    have hle : ‖p.2‖ ≤ 1 := by
+      simpa [P] using (show p ∈ {q | ‖q.2‖ ≤ 1} from
+        closure_minimal (by intro q hq; change ‖q.2‖ < 1 at hq; exact le_of_lt hq)
+          (isClosed_le (continuous_norm.comp continuous_snd) continuous_const) hpcl)
+    have heq : ‖p.2‖ = 1 := le_antisymm hle (le_of_not_gt hnle)
+    rw [heq, inv_one, one_smul, ← add_smul]
+    norm_num
+  · have hnorm : ContinuousOn (fun p : unitInterval × EuclideanSpace ℝ (Fin 3) ↦ ‖p.2‖⁻¹)
+        (s ∩ closure {q | P q}) := by
+      apply (continuous_norm.comp continuous_snd).continuousOn.inv₀
+      intro p hp hzero
+      have hp' : 1 / 2 < ‖p.2‖ := by simpa [s] using hp.1.2
+      have : (0 : ℝ) < ‖p.2‖ := lt_of_lt_of_le (by norm_num) (le_of_lt hp')
+      exact (ne_of_gt this) hzero
+    exact (((continuous_const.sub (continuous_subtype_val.comp continuous_fst)).smul
+      continuous_snd).continuousOn.add
+        ((continuous_subtype_val.comp continuous_fst).continuousOn.smul
+          (hnorm.smul continuous_snd.continuousOn)))
+  · exact continuous_snd.continuousOn
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball
+    {M : Type} [TopologicalSpace M]
+    (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 2})) :
+    ContinuousOn
+      (fun p : unitInterval × M ↦
+        punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
+      (univ ×ˢ (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 2} ∩
+        (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ)) := by
+  let S : Set (unitInterval × M) := univ ×ˢ
+    (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 2} ∩
+      (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ)
+  let inv : S → punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 := fun p ↦
+    hΦ.toHomeomorph.symm ⟨p.1.2, by
+      rcases p.2.2.1 with ⟨x, hx, hxp⟩
+      exact ⟨x, hxp⟩⟩
+  have hinv : Continuous inv := by
+    let rangeMap : S → Set.range Φ := fun p ↦ ⟨p.1.2, by
+      rcases p.2.2.1 with ⟨x, hx, hxp⟩
+      exact ⟨x, hxp⟩⟩
+    have hrange : Continuous rangeMap :=
+      Continuous.subtype_mk ((continuous_snd : Continuous (fun p : unitInterval × M ↦ p.2)).comp
+        continuous_subtype_val) _
+    exact hΦ.toHomeomorph.symm.continuous.comp hrange
+  have hinv_eq (p : S) : Φ (inv p) = p.1.2 := by
+    exact congrArg Subtype.val (hΦ.toHomeomorph.apply_symm_apply _)
+  have hinv_lt (p : S) : dist (inv p).1 0 < 2 := by
+    rcases p.2.2.1 with ⟨x, hx, hxp⟩
+    have : inv p = x := hΦ.injective (by rw [hinv_eq p, hxp])
+    simpa [this] using hx
+  have hinv_half (p : S) : 1 / 2 < ‖(inv p).1‖ := by
+    by_contra hn
+    apply p.2.2.2
+    refine ⟨inv p, ?_, hinv_eq p⟩
+    change dist (inv p).1 0 ≤ 1 / 2
+    simpa [dist_eq_norm] using le_of_not_gt hn
+  let Q : S → unitInterval × EuclideanSpace ℝ (Fin 3) := fun p ↦ (p.1.1, (inv p).1)
+  have hQ : Continuous Q := by
+    dsimp [Q]
+    fun_prop
+  have hmaps : MapsTo Q univ (univ ×ˢ {x | 1 / 2 < ‖x‖}) := by
+    intro p hp
+    exact ⟨trivial, hinv_half p⟩
+  have hrad : Continuous (fun p : S ↦
+      if ‖(Q p).2‖ < 1 then (1 - ((Q p).1 : ℝ)) • (Q p).2 +
+        ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2) else (Q p).2) := by
+    rw [← continuousOn_univ]
+    exact punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball_aux_radial.comp
+      hQ.continuousOn hmaps
+  let R : S → punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 := fun p ↦ ⟨
+    if ‖(Q p).2‖ < 1 then (1 - ((Q p).1 : ℝ)) • (Q p).2 +
+      ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2) else (Q p).2, by
+    change dist _ 0 ≤ 2
+    rw [dist_zero_right]
+    by_cases hlt : ‖(Q p).2‖ < 1
+    · rw [if_pos hlt]
+      have hnpos : 0 < ‖(Q p).2‖ := by
+        have := hinv_half p
+        simpa [Q] using lt_trans (by norm_num : (0 : ℝ) < 1 / 2) this
+      have hn : ‖(Q p).2‖ ≠ 0 := ne_of_gt hnpos
+      have ht0 : 0 ≤ ((Q p).1 : ℝ) := (Q p).1.2.1
+      have ht1 : ((Q p).1 : ℝ) ≤ 1 := (Q p).1.2.2
+      calc
+        ‖(1 - ((Q p).1 : ℝ)) • (Q p).2 +
+            ((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2)‖ ≤
+            ‖(1 - ((Q p).1 : ℝ)) • (Q p).2‖ +
+              ‖((Q p).1 : ℝ) • (‖(Q p).2‖⁻¹ • (Q p).2)‖ := norm_add_le _ _
+        _ = (1 - ((Q p).1 : ℝ)) * ‖(Q p).2‖ + ((Q p).1 : ℝ) := by
+          rw [norm_smul, norm_smul, norm_smul, Real.norm_eq_abs, Real.norm_eq_abs,
+            abs_of_nonneg ht0, abs_of_nonneg (sub_nonneg.mpr ht1)]
+          simp [abs_inv, abs_of_nonneg (norm_nonneg (Q p).2), hn]
+        _ ≤ 2 := by nlinarith [norm_nonneg (Q p).2]
+    · rw [if_neg hlt]
+      exact le_of_lt (by simpa [Q, dist_eq_norm] using hinv_lt p)⟩
+  have hR : Continuous R := by
+    apply Continuous.subtype_mk hrad
+  rw [continuousOn_iff_continuous_restrict]
+  apply Continuous.congr (hΦ.continuous.comp hR)
+  intro p
+  symm
+  change punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ p.1.1 p.1.2 = _
+  rw [← hinv_eq p]
+  unfold punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H
+  by_cases hlt : ‖(inv p).1‖ < 1
+  · have hex : ∃ x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3, Φ x = Φ (inv p) ∧ dist x.1 0 < 1 :=
+      ⟨inv p, rfl, by simpa [dist_eq_norm] using hlt⟩
+    rw [dif_pos hex]
+    have hchoose : hex.choose = inv p := hΦ.injective hex.choose_spec.1
+    simp only [hchoose, Q, hlt, if_pos]
+    have hv : (1 - (p.1.1 : ℝ)) • (hex.choose).1 +
+        (p.1.1 : ℝ) • (‖(hex.choose).1‖⁻¹ • (hex.choose).1) ∈
+        Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 2 := by
+      rw [hchoose]
+      simpa [R, Q, hlt] using (R p).2
+    rw [dif_pos hv]
+    apply congrArg Φ
+    apply Subtype.ext
+    simp [R, Q, hlt]
+  · have hnone : ¬ ∃ x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3,
+        Φ x = Φ (inv p) ∧ dist x.1 0 < 1 := by
+      rintro ⟨x, hx, hx1⟩
+      have hxeq : x = inv p := hΦ.injective hx
+      apply hlt
+      simpa [hxeq, dist_eq_norm] using hx1
+    rw [dif_neg hnone]
+    simp [R, Q, hlt]
+
+/-- The collar homotopy is continuous on `I × U`, `U = M \ Φ(closedBall 0 (1/2))`:
+near a point of `Φ(ball 0 2)` use the `_aux_ball` leaf on that open set; any other
+point lies in the open set `M \ Φ(closedBall 0 1)`, where the homotopy is the
+identity. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M) (hΦ : Topology.IsEmbedding Φ)
+    (hΦo : IsOpen (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 2})) :
+    ContinuousOn
+      (fun p : unitInterval × M ↦
+        punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ p.1 p.2)
+      (univ ×ˢ (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ) := by
+  intro p hp
+  have hU : IsOpen (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ :=
+    (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_closed
+      Φ hΦ.continuous (1 / 2)).isOpen_compl
+  by_cases hb : p.2 ∈ Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 2}
+  · have hA : IsOpen (univ ×ˢ (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 2} ∩
+        (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ) : Set (unitInterval × M)) :=
+      isOpen_univ.prod (hΦo.inter hU)
+    exact ((punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_ball
+      Φ hΦ hΦo).continuousAt (hA.mem_nhds ⟨trivial, hb, hp.2⟩)).continuousWithinAt
+  · have hB : IsOpen (univ ×ˢ (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 ≤ 1})ᶜ :
+        Set (unitInterval × M)) :=
+      isOpen_univ.prod
+        (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_closed
+          Φ hΦ.continuous 1).isOpen_compl
+    have hpB : p ∈ (univ ×ˢ (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 ≤ 1})ᶜ :
+        Set (unitInterval × M)) := by
+      refine ⟨trivial, ?_⟩
+      rintro ⟨x, hx, hxp⟩
+      refine hb ⟨x, ?_, hxp⟩
+      change dist x.1 0 ≤ 1 at hx
+      change dist x.1 0 < 2
+      linarith
+    have heq : (fun q : unitInterval × M ↦
+        punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ q.1 q.2)
+          =ᶠ[nhds p] Prod.snd := by
+      filter_upwards [hB.mem_nhds hpB] with q hq
+      apply punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn_aux_eq_self
+      rintro ⟨x, hx, hxq⟩
+      refine hq.2 ⟨x, ?_, hxq⟩
+      change dist x.1 0 < 1 at hx
+      change dist x.1 0 ≤ 1
+      exact le_of_lt hx
+    exact (continuous_snd.continuousAt.congr heq.symm).continuousWithinAt
+
+/-- LEAF: the collar homotopy keeps `U = M \ Φ(closedBall 0 (1/2))` inside `U`,
+and at time `1` lands in the punctured manifold. For `z = Φ x ∈ U` with
+`‖x‖ < 1` one has `‖x‖ > 1/2`, and the moving point has norm
+`(1-t)‖x‖ + t ∈ (1/2, 1]`, equal to `1` at `t = 1`; injectivity of `Φ` and
+`φ '' {‖y‖ < 1} = Φ '' {‖x‖ < 1}`
+(`punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_image`) finish. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_mapsTo
+    {M : Type} [TopologicalSpace M]
+    (φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 → M) (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M)
+    (hΦ : Function.Injective Φ) (hΦφ : Φ ∘ punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge = φ) :
+    (∀ t : unitInterval,
+      MapsTo (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ t)
+        (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ
+        (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ) ∧
+    MapsTo (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ 1)
+      (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ
+      {z | z ∉ φ '' {y : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 | dist y.1 0 < 1}} := by
+  classical
+  have radial_bounds (t : unitInterval) (x : EuclideanSpace ℝ (Fin 3))
+      (hx : 1 / 2 < ‖x‖) (hx1 : ‖x‖ < 1) :
+      1 / 2 < ‖(1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x)‖ ∧
+        ‖(1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x)‖ ≤ 1 := by
+    have hx0 : ‖x‖ ≠ 0 := ne_of_gt (lt_trans (by norm_num) hx)
+    have ht0 : 0 ≤ (t : ℝ) := t.2.1
+    have ht1 : (t : ℝ) ≤ 1 := t.2.2
+    have heq :
+        (1 - (t : ℝ)) • x + (t : ℝ) • (‖x‖⁻¹ • x) =
+          ((1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹) • x := by
+      rw [add_smul, mul_smul]
+    rw [heq, norm_smul, Real.norm_eq_abs]
+    have hi0 : 0 ≤ ‖x‖⁻¹ := inv_nonneg.mpr (norm_nonneg x)
+    have hc0 : 0 ≤ (1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹ :=
+      add_nonneg (sub_nonneg.mpr ht1) (mul_nonneg ht0 hi0)
+    rw [abs_of_nonneg hc0]
+    have hcalc :
+        ((1 - (t : ℝ)) + (t : ℝ) * ‖x‖⁻¹) * ‖x‖ =
+          (1 - (t : ℝ)) * ‖x‖ + (t : ℝ) := by
+      field_simp
+    rw [hcalc]
+    constructor <;> nlinarith
+  constructor
+  · intro t z hz
+    unfold punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H
+    split_ifs with h hv
+    · rintro ⟨y, hy, heq⟩
+      have hxhalf : 1 / 2 < ‖h.choose.1‖ := by
+        by_contra hn
+        apply hz
+        refine ⟨h.choose, ?_, h.choose_spec.1⟩
+        simpa [dist_eq_norm] using (not_lt.mp hn)
+      have hx1 : ‖h.choose.1‖ < 1 := by
+        simpa [dist_eq_norm] using h.choose_spec.2
+      have hb := (radial_bounds t h.choose.1 hxhalf hx1).1
+      have hy' : ‖y.1‖ ≤ 1 / 2 := by
+        simpa [dist_eq_norm] using hy
+      have hxy : y.1 =
+          (1 - (t : ℝ)) • h.choose.1 +
+            (t : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) := by
+        exact congrArg Subtype.val (hΦ heq)
+      rw [hxy] at hy'
+      linarith
+    · exact hz
+    · exact hz
+  · intro z hz
+    unfold punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H
+    split_ifs with h hv
+    · have hxhalf : 1 / 2 < ‖h.choose.1‖ := by
+        by_contra hn
+        apply hz
+        refine ⟨h.choose, ?_, h.choose_spec.1⟩
+        simpa [dist_eq_norm] using (not_lt.mp hn)
+      have hx1 : ‖h.choose.1‖ < 1 := by
+        simpa [dist_eq_norm] using h.choose_spec.2
+      rw [punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_image
+          φ Φ hΦφ]
+      rintro ⟨y, hy, heq⟩
+      have hxy : y.1 =
+            (1 - (1 : ℝ)) • h.choose.1 +
+              (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) := by
+          exact congrArg Subtype.val (hΦ heq)
+      have hnorm : ‖(1 - (1 : ℝ)) • h.choose.1 +
+              (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1)‖ = 1 := by
+        rw [show (1 : ℝ) - 1 = 0 by norm_num, zero_smul, zero_add, one_smul,
+          norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg (inv_nonneg.mpr (norm_nonneg h.choose.1))]
+        exact inv_mul_cancel₀ (ne_of_gt (lt_trans (by norm_num) hxhalf))
+      have hy' : ‖y.1‖ < 1 := by simpa [dist_eq_norm] using hy
+      rw [hxy, hnorm] at hy'
+      exact (lt_irrefl 1 hy')
+    · have hxhalf : 1 / 2 < ‖h.choose.1‖ := by
+        by_contra hn
+        apply hz
+        refine ⟨h.choose, ?_, h.choose_spec.1⟩
+        simpa [dist_eq_norm] using (not_lt.mp hn)
+      exfalso
+      apply hv
+      change ‖(1 - (1 : ℝ)) • h.choose.1 +
+            (1 : ℝ) • (‖h.choose.1‖⁻¹ • h.choose.1) - 0‖ ≤ 2
+      rw [show (1 : ℝ) - 1 = 0 by norm_num, zero_smul, zero_add, one_smul,
+        sub_zero, norm_smul, Real.norm_eq_abs,
+        abs_of_nonneg (inv_nonneg.mpr (norm_nonneg h.choose.1))]
+      rw [inv_mul_cancel₀ (ne_of_gt (lt_trans (by norm_num) hxhalf))]
+      norm_num
+    · rw [punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_image
+          φ Φ hΦφ]
+      rintro ⟨x, hx, hxz⟩
+      exact h ⟨x, hxz, hx⟩
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_zero
+    {M : Type} (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M) (z : M) :
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ 0 z = z := by
+  classical
+  unfold punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H
+  split_ifs with h hv
+  · have hx := h.choose_spec.1
+    convert hx using 2
+    apply Subtype.ext
+    simp
+  · rfl
+  · rfl
+
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_one
+    {M : Type} [TopologicalSpace M]
+    (φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 → M) (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M)
+    (hΦφ : Φ ∘ punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge = φ) (z : M)
+    (hz : z ∉ φ '' {y : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 | dist y.1 0 < 1}) :
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ 1 z = z := by
+  classical
+  unfold punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H
+  rw [dif_neg]
+  rintro ⟨x, hxz, hx⟩
+  rw [punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_image
+    φ Φ hΦφ] at hz
+  exact hz ⟨x, hx, hxz⟩
+
+/-- The punctured manifold is a deformation retract of the slightly
+enlarged punctured part `M \ Φ(closedBall 0 (1/2))`, by pushing the shell
+`1/2 < ‖x‖ < 1` radially out to the unit sphere inside the collar. -/
+lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    (φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_Disk3 → M) (Φ : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 → M)
+    (hΦ : Topology.IsEmbedding Φ) (hΦφ : Φ ∘ punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_unitToLarge = φ)
+    (hΦo : IsOpen (Φ '' {x : punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_LargeDisk3 | dist x.1 0 < 2})) :
+    Nonempty (ContinuousMap.HomotopyEquiv (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_punctured φ)
+      ↥(punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ) := by
+  obtain ⟨hmap, hmap1⟩ :=
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_mapsTo
+      φ Φ hΦ.injective hΦφ
+  have hcont :=
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_continuousOn
+      Φ hΦ hΦo
+  have hHc : Continuous (fun p : unitInterval ×
+      ↥(punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ ↦
+      punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1) :=
+    hcont.comp_continuous
+      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+      (fun p ↦ ⟨mem_univ _, p.2.2⟩)
+  let i : C(punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_punctured φ,
+      ↥(punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ) :=
+    ⟨punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_inclusion φ Φ hΦφ,
+      punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_inclusion_continuous
+        φ Φ hΦφ⟩
+  let r : C(↥(punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_inner Φ)ᶜ,
+      punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_punctured φ) :=
+    ⟨fun z ↦ ⟨punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ 1 z.1,
+      hmap1 z.2⟩,
+      (hHc.comp (continuous_const.prodMk continuous_id)).subtype_mk _⟩
+  let F : ContinuousMap.Homotopy (ContinuousMap.id _) (i.comp r) :=
+    { toFun := fun p ↦
+        ⟨punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H Φ p.1 p.2.1,
+          hmap p.1 p.2.2⟩
+      continuous_toFun := hHc.subtype_mk _
+      map_zero_left := fun z ↦ Subtype.ext
+        (punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_zero Φ z.1)
+      map_one_left := fun z ↦ rfl }
+  have hri : r.comp i = ContinuousMap.id _ := by
+    ext z
+    exact punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv_aux_H_one
+      φ Φ hΦφ z.1 z.2
+  exact ⟨{ toFun := i, invFun := r
+           left_inv := by rw [hri]
+           right_inv := ⟨F.symm⟩ }⟩
+
+/-- LEAF: the open shell `Φ(1/2 < ‖x‖ < 2)` is homeomorphic to a Euclidean
+shell, hence homotopy equivalent to `S²`, hence simply connected
+(`ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected`). -/
 
 lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -739,7 +2039,12 @@ lemma punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv
     ∃ e : ContinuousMap.HomotopyEquiv c.Punctured (punctured_fundamentalGroup_three_aux_cover_aux_U c),
       Joined (e.toFun (c.boundaryMap s))
         ⟨c.boundaryMap s, (punctured_fundamentalGroup_three_aux_cover_aux_boundary_mem c s).1⟩ := by
-  sorry
+  obtain ⟨e⟩ :=
+    punctured_fundamentalGroup_three_aux_cover_aux_homotopyEquiv_aux_enlarged_hequiv
+      c.smallMap c.largeMap c.largeEmbedding c.compatible hopen
+  letI : PathConnectedSpace (punctured_fundamentalGroup_three_aux_cover_aux_U c) :=
+    punctured_fundamentalGroup_three_aux_cover_aux_U_pathConnected M c s hopen hpath
+  exact ⟨e, PathConnectedSpace.joined _ _⟩
 
 lemma punctured_fundamentalGroup_three_aux_cover_aux_geometry
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
