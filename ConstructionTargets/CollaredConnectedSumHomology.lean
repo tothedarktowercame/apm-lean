@@ -434,12 +434,45 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_stability
   have hxval : x.1 - Gtilde (f x) = x.1 := congrArg Subtype.val hx
   exact sub_eq_self.mp hxval
 
+/-- Tietze step of B2c: a continuous injection of the compact disk is a closed
+embedding, so its inverse on the image extends to a continuous self-map of `E n`. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_tietze
+    (n : ℕ) {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
+    ∃ Gtilde : E n → E n, Continuous Gtilde ∧ ∀ x : Disk n 1, Gtilde (f x) = x.1 := by
+  sorry
+
+/-- Perturbation step of B2c (Tao's argument).  If `f 0` is not interior to the
+image, pick `c ∉ range f` within `ε` of `f 0`; push the part of the image inside
+`ball c ε` radially onto `sphere c ε`, and replace `Gtilde` by a `C¹` approximation
+`P` that has no zero on `range f \ ball c ε` (where `Gtilde` is bounded away from 0)
+and none on `sphere c ε` (its image of that null set is null, by
+`MeasureTheory.addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero`;
+subtract a small constant outside it).  `K = P ∘ push ∘ f` is then zero-free and
+within `1` of the identity. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
+    (n : ℕ) (hn : 0 < n)
+    {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f)
+    {Gtilde : E n → E n} (hGtilde : Continuous Gtilde)
+    (hGf : ∀ x : Disk n 1, Gtilde (f x) = x.1)
+    (hnot : f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∉ interior (Set.range f)) :
+    ∃ K : Disk n 1 → E n, Continuous K ∧ (∀ x, K x ≠ 0) ∧ ∀ x, ‖x.1 - K x‖ ≤ 1 := by
+  sorry
+
 theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive
     (n : ℕ) (hn : 0 < n)
     (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
     {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
     f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f) := by
-  sorry
+  by_contra hnot
+  obtain ⟨Gtilde, hGtilde, hGf⟩ :=
+    largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_tietze n hf hinj
+  obtain ⟨K, hK, hK0, hKc⟩ :=
+    largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
+      n hn hf hinj hGtilde hGf hnot
+  obtain ⟨y, ⟨x, rfl⟩, hy⟩ :=
+    largeInterior_isOpen_aux_euclidean_aux_interior_aux_stability n hB hK continuous_id
+      (fun x => by simpa using hKc x)
+  exact hK0 x hy
 
 theorem largeInterior_isOpen_aux_euclidean_aux_interior (n : ℕ)
     (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
