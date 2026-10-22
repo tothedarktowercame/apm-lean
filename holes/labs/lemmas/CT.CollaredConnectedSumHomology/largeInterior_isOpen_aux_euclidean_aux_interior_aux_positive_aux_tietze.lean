@@ -441,7 +441,10 @@ embedding, so its inverse on the image extends to a continuous self-map of `E n`
 theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_tietze
     (n : ℕ) {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
     ∃ Gtilde : E n → E n, Continuous Gtilde ∧ ∀ x : Disk n 1, Gtilde (f x) = x.1 := by
-  sorry
+  let v : C(Disk n 1, E n) := ⟨fun x ↦ x.1, continuous_subtype_val⟩
+  obtain ⟨G, hG⟩ := v.exists_extension (hf.isClosedEmbedding hinj)
+  refine ⟨G, G.continuous, fun x ↦ ?_⟩
+  exact DFunLike.congr_fun hG x
 -- END SEAT AREA
 
 /-- Perturbation step of B2c (Tao's argument).  If `f 0` is not interior to the
