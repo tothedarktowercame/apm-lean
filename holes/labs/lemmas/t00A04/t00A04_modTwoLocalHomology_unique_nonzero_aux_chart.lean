@@ -2,6 +2,8 @@ import Mathlib
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.CoefficientRadialPair
 import ConstructionTargets.CoefficientCompactComplementTransportedExactness
+import ConstructionTargets.CoefficientModelLocal
+import ConstructionTargets.CoefficientManifoldLocalComparison
 
 open scoped ContDiff Manifold
 open CategoryTheory
@@ -162,11 +164,88 @@ theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_of_eq_zero_or_eq
 the integral disk computations currently available in ConstructionTargets:
 excision to an open disk, radial comparison with its boundary sphere, and the
 coefficient long exact sequence identify the group with `ZMod 2`. -/
+/- Algebraic step banked by lemma-3 (job invoke-1792640026768-2203): a group
+identified with `ZMod 2` by a zero-preserving equivalence has at most one
+nonzero element. -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_of_equiv
+    {M : Type*} [Zero M] (e : M ≃ ZMod 2) (e0 : e 0 = 0) :
+    ∀ a b : M, a ≠ 0 → b ≠ 0 → a = b := by
+  intro a b ha hb
+  apply e.injective
+  have hea : e a ≠ 0 := by
+    intro h
+    apply ha
+    apply e.injective
+    simpa only [e0] using h
+  have heb : e b ≠ 0 := by
+    intro h
+    apply hb
+    apply e.injective
+    simpa only [e0] using h
+  have hone (z : ZMod 2) (hz : z ≠ 0) : z = 1 := by
+    fin_cases z
+    · exact (hz rfl).elim
+    · rfl
+  exact (hone (e a) hea).trans (hone (e b) heb).symm
+
+/- Translation `y ↦ y - x` moves the local pair at `x` to the local pair at
+the origin (`CoefficientManifoldLocalComparison.translationIso`). -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_translate (d : ℕ)
+    (h0 : ∀ a b : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {0} d,
+      a ≠ 0 → b ≠ 0 → a = b) :
+    ∀ x : EuclideanSpace ℝ (Fin d),
+      ∀ a b : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {x} d,
+        a ≠ 0 → b ≠ 0 → a = b := by
+  intro x a b ha hb
+  let i := (ConstructionTargets.CoefficientManifoldLocalComparison.translationIso
+    (ZMod 2) x d).toLinearEquiv
+  apply i.injective
+  exact h0 (i a) (i b) ((map_ne_zero_iff i i.injective).mpr ha)
+    ((map_ne_zero_iff i i.injective).mpr hb)
+
+/- Dimension `m + 2` at the origin: `CoefficientModelLocal.localIso`
+(connecting map, radial retraction to the sphere, sphere normalization). -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_high (m : ℕ) :
+    ∃ e : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin (m+2))) {0} (m+2) ≃ ZMod 2,
+      e 0 = 0 := by
+  let i := ConstructionTargets.CoefficientModelLocal.localIso (ZMod 2) m
+  exact ⟨i.toLinearEquiv.toEquiv, map_zero i.toLinearEquiv⟩
+
+/- Dimension 0.  `EuclideanSpace ℝ (Fin 0)` is a point, so `{0}ᶜ = ∅` and the
+relative group is absolute `H₀` of a point.  Route: the relative complex of
+the empty subspace has the absolute chains as its cokernel
+(`CoefficientRelativeSmall.subspaceMap` from the empty space is zero), then
+`CoefficientH0.h0Iso` for the path-connected point. -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero :
+    ∃ e : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin 0)) {0} 0 ≃ ZMod 2,
+      e 0 = 0 := by
+  sorry
+
+/- Dimension 1.  `ℝ¹` is contractible, so
+`CoefficientContractiblePair.contractibleH1KernelIso` identifies `H₁(ℝ¹, ℝ¹ \ 0)`
+with the kernel of `H₀(ℝ¹ \ 0) → H₀(ℝ¹)`.  The two open half-lines are
+path-connected and cover `ℝ¹ \ 0` (`CoefficientSmallH0.h0Iso` for an open
+cover, as in `intervalCover`), so the map is `(ZMod 2)² → ZMod 2`, sum of
+coordinates, with kernel spanned by `(1, 1)`.  Compare
+`CoefficientSphereShift.sphereH1KernelIso` for the same pattern one dimension
+up. -/
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one :
+    ∃ e : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin 1)) {0} 1 ≃ ZMod 2,
+      e 0 = 0 := by
+  sorry
+
 theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean (d : ℕ) :
     ∀ x : EuclideanSpace ℝ (Fin d),
       ∀ a b : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {x} d,
         a ≠ 0 → b ≠ 0 → a = b := by
-  sorry
+  apply t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_translate d
+  obtain ⟨e, e0⟩ : ∃ e : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {0} d ≃
+      ZMod 2, e 0 = 0 := by
+    rcases d with _ | _ | m
+    · exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero
+    · exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one
+    · exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_high m
+  exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_of_equiv e e0
 
 /- Chart excision and transport.  The chart around `x` first identifies its
 local pair with an open subset of `E`; a linear homeomorphism
@@ -201,7 +280,7 @@ theorem t00A04_modTwoLocalHomology_unique_nonzero_euclidean (d : ℕ) :
     ∀ x : EuclideanSpace ℝ (Fin d),
       ∀ a b : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {x} d,
         a ≠ 0 → b ≠ 0 → a = b := by
-  sorry
+  exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean d
 
 /-- **F2e.** Finite unions of compact convex Euclidean sets satisfy Hatcher's
 conclusion.  F1 and F2 are passed in explicitly. -/
