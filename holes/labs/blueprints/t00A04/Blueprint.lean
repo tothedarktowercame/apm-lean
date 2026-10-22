@@ -269,10 +269,48 @@ cover, as in `intervalCover`), so the map is `(ZMod 2)² → ZMod 2`, sum of
 coordinates, with kernel spanned by `(1, 1)`.  Compare
 `CoefficientSphereShift.sphereH1KernelIso` for the same pattern one dimension
 up. -/
+noncomputable def t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_punctureIso :
+    ConstructionTargets.CoefficientContractiblePair.H (ZMod 2) 0
+        (TopCat.of (ConstructionTargets.CoefficientModelLocal.puncture 1)) ≅
+      ModuleCat.of (ZMod 2) (Bool → ZMod 2) :=
+  ConstructionTargets.CoefficientModelLocal.radialIso (ZMod 2) 1 0 ≪≫
+    (ConstructionTargets.CoefficientRadialPair.F (ZMod 2) 0).mapIso
+      (TopCat.isoOfHomeo
+        (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 1)).symm ≪≫
+    ConstructionTargets.CoefficientSphereEndpoints.boundaryIso (ZMod 2)
+
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_diskIso_hom :
+    (ConstructionTargets.CoefficientSphereEndpoints.diskIso (ZMod 2)).hom =
+      ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2) := by
+  sorry
+
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_coordinates :
+    (t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_punctureIso).hom ≫
+        ConstructionTargets.CoefficientCodiagonalKernel.sumMap (ZMod 2) =
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2)
+          (ConstructionTargets.CoefficientModelLocal.puncture 1)) 0 ≫
+        (ConstructionTargets.CoefficientH0.h0Iso (ZMod 2)
+          (0 : EuclideanSpace ℝ (Fin 1))).hom := by
+  sorry
+
 theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one :
     ∃ e : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin 1)) {0} 1 ≃ ZMod 2,
       e 0 = 0 := by
-  sorry
+  let i :=
+    ConstructionTargets.CoefficientContractiblePair.contractibleH1KernelIso
+        (ZMod 2) (ConstructionTargets.CoefficientModelLocal.puncture 1) ≪≫
+      CategoryTheory.Limits.kernel.mapIso
+        (f := HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2)
+            (ConstructionTargets.CoefficientModelLocal.puncture 1)) 0)
+        (ConstructionTargets.CoefficientCodiagonalKernel.sumMap (ZMod 2))
+        t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_punctureIso
+        (ConstructionTargets.CoefficientH0.h0Iso (ZMod 2)
+          (0 : EuclideanSpace ℝ (Fin 1)))
+        t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_coordinates.symm ≪≫
+      ConstructionTargets.CoefficientCodiagonalKernel.kernelIso (ZMod 2)
+  exact ⟨i.toLinearEquiv.toEquiv, map_zero i.toLinearEquiv⟩
 
 theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean (d : ℕ) :
     ∀ x : EuclideanSpace ℝ (Fin d),
