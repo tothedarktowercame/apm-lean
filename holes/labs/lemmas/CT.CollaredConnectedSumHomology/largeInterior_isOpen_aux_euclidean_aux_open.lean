@@ -224,7 +224,59 @@ theorem largeInterior_isOpen_aux_euclidean_aux_open (n : ℕ)
       f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f))
     {U : Set (E n)} (hU : IsOpen U) {g : U → E n} (hg : Continuous g)
     (hinj : Function.Injective g) : IsOpenMap g := by
-  sorry
+  intro V hV
+  rw [isOpen_iff_mem_nhds]
+  rintro z ⟨x, hxV, rfl⟩
+  have hW : IsOpen ((Subtype.val : U → E n) '' V) :=
+    hU.isOpenEmbedding_subtypeVal.isOpenMap V hV
+  have hxW : x.1 ∈ (Subtype.val : U → E n) '' V := ⟨x, hxV, rfl⟩
+  obtain ⟨r, hr, hrsub⟩ :=
+    Metric.nhds_basis_closedBall.mem_iff.mp (hW.mem_nhds hxW)
+  let q : Disk n 1 → U := fun y => ⟨x.1 + r • y.1, by
+    rcases hrsub (show x.1 + r • y.1 ∈ Metric.closedBall x.1 r by
+      rw [Metric.mem_closedBall, dist_eq_norm]
+      simp only [add_sub_cancel_left, norm_smul, Real.norm_eq_abs, abs_of_pos hr]
+      exact mul_le_of_le_one_right hr.le (by
+        have hy := y.2
+        rw [Metric.mem_closedBall, dist_zero_right] at hy
+        exact hy)) with ⟨w, hw, heq⟩
+    simpa only [heq] using w.2⟩
+  let f : Disk n 1 → E n := fun y => g (q y)
+  have hf : Continuous f := by
+    apply hg.comp
+    apply Continuous.subtype_mk
+    exact continuous_const.add (continuous_const.smul continuous_subtype_val)
+  have hfinj : Function.Injective f := by
+    intro a b hab
+    have huv : x.1 + r • a.1 = x.1 + r • b.1 :=
+      congrArg Subtype.val (hinj hab)
+    apply Subtype.ext
+    have hrs : r • a.1 = r • b.1 := add_left_cancel huv
+    have := congrArg (fun z : E n => r⁻¹ • z) hrs
+    simpa [hr.ne'] using this
+  have hcenter := hI hf hfinj
+  have hfrange : Set.range f ⊆ g '' V := by
+    rintro _ ⟨y, rfl⟩
+    refine ⟨q y, ?_, rfl⟩
+    rcases hrsub (show x.1 + r • y.1 ∈ Metric.closedBall x.1 r by
+      rw [Metric.mem_closedBall, dist_eq_norm]
+      simp only [add_sub_cancel_left, norm_smul, Real.norm_eq_abs, abs_of_pos hr]
+      exact mul_le_of_le_one_right hr.le (by
+        have hy := y.2
+        rw [Metric.mem_closedBall, dist_zero_right] at hy
+        exact hy)) with ⟨w, hw, heq⟩
+    have hwq : w = q y := by
+      apply Subtype.ext
+      exact heq
+    exact hwq ▸ hw
+  have hq0 : q ⟨0, Metric.mem_closedBall_self zero_le_one⟩ = x := by
+    apply Subtype.ext
+    simp [q]
+  have hcenter' : g x ∈ interior (Set.range f) := by
+    simpa only [f, hq0] using hcenter
+  have hmem : g x ∈ interior (g '' V) :=
+    interior_mono hfrange hcenter'
+  exact Filter.mem_of_superset (isOpen_interior.mem_nhds hmem) interior_subset
 -- END SEAT AREA
 
 /-- **LIBRARY (B2e).** Reduction of manifold invariance of domain to the
