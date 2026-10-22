@@ -285,15 +285,91 @@ theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_a
   sorry
 
 -- BEGIN SEAT AREA
+theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_coordinates_aux_disk :
+    (ConstructionTargets.CoefficientSphereEndpoints.diskIso (ZMod 2)).hom =
+      ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2) := by
+  letI : ContractibleSpace ConstructionTargets.CoefficientSphereEndpoints.disk :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  let p : ConstructionTargets.CoefficientSphereEndpoints.disk :=
+    Classical.choice inferInstance
+  have hf : Function.Injective
+      (ConstructionTargets.CoefficientSphereEndpoints.diskIso (ZMod 2)).hom.hom :=
+    (ConstructionTargets.CoefficientSphereEndpoints.diskIso (ZMod 2)).toLinearEquiv.injective
+  have hg : Function.Injective
+      (ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2)
+        (X := ConstructionTargets.CoefficientSphereEndpoints.disk)).hom := by
+    change Function.Injective
+      (ConstructionTargets.CoefficientH0.h0Iso (ZMod 2) p).hom.hom
+    exact (ConstructionTargets.CoefficientH0.h0Iso (ZMod 2) p).toLinearEquiv.injective
+  apply ModuleCat.hom_ext
+  apply LinearMap.ext
+  intro x
+  generalize hfx :
+      (ConstructionTargets.CoefficientSphereEndpoints.diskIso (ZMod 2)).hom.hom x = y
+  generalize hgx :
+      (ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2)).hom x = z
+  fin_cases y <;> fin_cases z
+  · rfl
+  · exfalso
+    have hx : x = 0 := hf (hfx.trans (map_zero _).symm)
+    have ht := congrArg
+      (ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2)).hom hx
+    rw [map_zero, hgx] at ht
+    exact one_ne_zero ht
+  · exfalso
+    have hx : x = 0 := hg (hgx.trans (map_zero _).symm)
+    have ht := congrArg
+      (ConstructionTargets.CoefficientSphereEndpoints.diskIso (ZMod 2)).hom.hom hx
+    rw [map_zero, hfx] at ht
+    exact one_ne_zero ht
+  · rfl
+
 theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_coordinates :
     (t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_punctureIso).hom ≫
         ConstructionTargets.CoefficientCodiagonalKernel.sumMap (ZMod 2) =
       HomologicalComplex.homologyMap
           (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2)
           (ConstructionTargets.CoefficientModelLocal.puncture 1)) 0 ≫
-        (ConstructionTargets.CoefficientH0.h0Iso (ZMod 2)
+          (ConstructionTargets.CoefficientH0.h0Iso (ZMod 2)
           (0 : EuclideanSpace ℝ (Fin 1))).hom := by
-  sorry
+  dsimp [t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_punctureIso]
+  simp only [Category.assoc]
+  rw [← ConstructionTargets.CoefficientSphereEndpoints.inclusion_coordinates]
+  rw [t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_coordinates_aux_disk]
+  change _ = HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2)
+        (ConstructionTargets.CoefficientModelLocal.puncture 1)) 0 ≫
+      ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2)
+  have hinc := ConstructionTargets.CoefficientH0.h0Augmentation_naturality (ZMod 2)
+    (⟨Subtype.val, continuous_subtype_val⟩ : C(
+      ConstructionTargets.CoefficientSphereEndpoints.boundary,
+      ConstructionTargets.CoefficientSphereEndpoints.disk))
+  change ConstructionTargets.CoefficientSphereEndpoints.inclusion (ZMod 2) ≫
+      ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2) = _ at hinc
+  rw [hinc]
+  let fhome : C(T02A06.euclideanUnitSphere 1,
+      ConstructionTargets.CoefficientSphereEndpoints.boundary) :=
+    ⟨(ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 1).symm,
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 1).symm.continuous⟩
+  have hhome := ConstructionTargets.CoefficientH0.h0Augmentation_naturality (ZMod 2) fhome
+  change (ConstructionTargets.CoefficientRadialPair.F (ZMod 2) 0).map
+      (TopCat.ofHom fhome) ≫
+      ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2) = _ at hhome
+  have hfhome : TopCat.ofHom fhome = TopCat.ofHom
+      (↑(ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 1).symm) := by
+    ext x
+    rfl
+  rw [hfhome] at hhome
+  rw [hhome]
+  have hrad := ConstructionTargets.CoefficientH0.h0Augmentation_naturality (ZMod 2)
+    (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize
+      (EuclideanSpace ℝ (Fin 1)))
+  change (ConstructionTargets.CoefficientModelLocal.radialIso (ZMod 2) 1 0).hom ≫
+      ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2) = _ at hrad
+  exact hrad.trans (ConstructionTargets.CoefficientH0.h0Augmentation_naturality (ZMod 2)
+    (⟨Subtype.val, continuous_subtype_val⟩ : C(
+      ConstructionTargets.CoefficientModelLocal.puncture 1,
+      EuclideanSpace ℝ (Fin 1)))).symm
 -- END SEAT AREA
 
 theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one :
