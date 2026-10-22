@@ -547,6 +547,40 @@ theorem apm_t97A03_normalizedImageSecondGenerator_eq (A B : Circle) :
   rw [apm_t97A03_normalizedImageSecondCutCircleLoop_eq]
   rfl
 
+/-- The geometric normalization homeomorphism transports the based
+fundamental group at the literal cut point. -/
+noncomputable def apm_t97A03_cutCircleNormalizePiOneHom (A B : Circle) :
+    FundamentalGroup (apm_t97A03_CutCircle A B)
+        (apm_t97A03_cutCircleMap A B A) →*
+      FundamentalGroup (apm_t97A03_CutCircle 1 (A⁻¹ * B))
+        (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) :=
+  FundamentalGroup.mapOfEq
+    ⟨apm_t97A03_normalizeCutCircle A B,
+      apm_t97A03_continuous_normalizeCutCircle A B⟩
+    (apm_t97A03_normalize_cutCircleBasepoint A B)
+
+/-- Normalization carries the first genuine cut generator to the first
+normalized arc class. -/
+theorem apm_t97A03_cutCircleNormalizePiOneHom_first (A B : Circle) :
+    apm_t97A03_cutCircleNormalizePiOneHom A B
+        (apm_t97A03_firstCutCircleGenerator A B) =
+      apm_t97A03_normalizedFirstCutCircleGenerator A B := by
+  simp only [apm_t97A03_cutCircleNormalizePiOneHom,
+    apm_t97A03_firstCutCircleGenerator,
+    FundamentalGroup.mapOfEq_apply]
+  exact apm_t97A03_normalizedImageFirstGenerator_eq A B
+
+/-- Normalization carries the complementary genuine cut generator to the
+complementary normalized arc class. -/
+theorem apm_t97A03_cutCircleNormalizePiOneHom_second (A B : Circle) :
+    apm_t97A03_cutCircleNormalizePiOneHom A B
+        (apm_t97A03_secondCutCircleGenerator A B) =
+      apm_t97A03_normalizedSecondCutCircleGenerator A B := by
+  simp only [apm_t97A03_cutCircleNormalizePiOneHom,
+    apm_t97A03_secondCutCircleGenerator,
+    FundamentalGroup.mapOfEq_apply]
+  exact apm_t97A03_normalizedImageSecondGenerator_eq A B
+
 /-- On a represented loop, the induced homomorphism is represented by its
 literal image under collapse. -/
 lemma apm_t97A03_collapsePiOneHom_apply (A B : Circle)
