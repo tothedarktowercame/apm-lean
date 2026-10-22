@@ -2102,7 +2102,122 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
       simp only [ConcreteCategory.comp_apply] at this
       rw [this]; exact hc y (Or.inr hy)
 
-/-- LEAF (split by claude-14, 2026-10-22, after lemma-1's BLOCKED-ON on
+/-- PROVED (lemma-1, banked from its `_aux_convex` PARTIAL, job 2363, 2026-10-22):
+in a `(k+2)`-manifold, `H_i(M, M ∖ y) = 0` for `i > k + 2`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_point
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (y : M) (i : ℕ) (hi : k + 2 < i) :
+    Subsingleton ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology i) := by
+  open ConstructionTargets.SingularHomologyConcrete
+    ConstructionTargets.SingularExcision
+    ConstructionTargets.LocalHomologyNeighborhoodExcision
+    ConstructionTargets.T02A06HemisphereExcision
+    ConstructionTargets.T02A06DiskRadialComparison
+    ConstructionTargets.SphereHomology
+    ConstructionTargets.ChartPairRelativeHomologyTransport
+    ConstructionTargets.HigherChartLocalGenerator in
+  have hmodel : Limits.IsZero ((RelativeSingularChains (P k)).homology i) := by
+    have hamb : Limits.IsZero
+        ((SingularChains (TopCat.of (D k))).homology i) := by
+      letI : ContractibleSpace (D k) := Metric.contractibleSpace_ball (by norm_num)
+      exact contractibleHigherHomology_isZero _ i (by omega)
+    have hpunct : Limits.IsZero
+        ((SingularChains (TopCat.of (P k))).homology (i - 1)) := by
+      exact (sphereHomology_isZero_of_gt (k + 1) (i - 1) (by omega)).of_iso
+        (singularHomologyIsoOfHomotopyEquiv
+          (sphereHomotopyEquivPuncturedOpenDisk (k + 2)) (i - 1)).symm
+    have hi' : i - 1 + 1 = i := by omega
+    rw [← hi'] at hamb
+    have hz := (singularPairHomology_exact_relative (P k) (i - 1)).isZero_X₂
+      (hamb.eq_of_src _ _) (hpunct.eq_of_tgt _ _)
+    simpa [hi'] using hz
+  let f := HomologicalComplex.homologyMap
+    (relativeSingularMap (P k) (deletedPoint y)
+      (ambientChartMap (k := k) y) (ambientChartMap_mapsTo (k := k) y)) i
+  have hf : IsIso f := by
+    letI := relativeSingularMap_homeomorphPair_isIso (modelChart (k := k) y) (P k)
+      (neighborhoodDeletedPoint (chartNeighborhood (k := k) y) y)
+      (modelChart_deletedPoint_iff (k := k) y) i
+    have hn : IsIso (HomologicalComplex.homologyMap
+        (relativeSingularMap
+          (neighborhoodDeletedPoint (chartNeighborhood (k := k) y) y)
+          (deletedPoint y) (neighborhoodInclusion (chartNeighborhood (k := k) y))
+          (neighborhoodInclusion_mapsTo (chartNeighborhood (k := k) y) y)) i) := by
+      have hn' := ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
+        (chartNeighborhood (k := k) y) y (chartNeighborhood_open (k := k) y)
+        (mem_chartNeighborhood (k := k) y) (i - 1)
+      rw [show i - 1 + 1 = i by omega] at hn'
+      exact hn'
+    letI := hn
+    change IsIso (HomologicalComplex.homologyMap
+      (relativeSingularMap (P k) (deletedPoint y)
+        (ambientChartMap (k := k) y) (ambientChartMap_mapsTo (k := k) y)) i)
+    rw [ambientChartMap_chain_eq (k := k), HomologicalComplex.homologyMap_comp]
+    infer_instance
+  letI := hf
+  exact AddCommGrpCat.isZero_iff_subsingleton.mp (hmodel.of_iso (asIso f).symm)
+
+/-- LEAF (split by claude-14 from `_aux_convex` after lemma-1's PARTIAL, job 2363,
+2026-10-22): the convex model in `ℝ^(k+2)`.  For compact convex `K` and `u ∈ K`,
+the identity induces an isomorphism `H_(n+1)(ℝⁿ, ℝⁿ ∖ K) → H_(n+1)(ℝⁿ, ℝⁿ ∖ u)`.
+Template: t00A01's sorry-free `apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model` (with its helpers
+`_aux_model_aux_hequiv`, `_aux_model_aux_bounding_ball`, `_aux_model_aux_sub`):
+radial deformation shows `ℝⁿ ∖ K ↪ ℝⁿ ∖ u` is a homotopy equivalence, then the
+five lemma (`relativeSingularMap_homologyMap_isIso`).  Generalize `Fin 3` to
+`k + 2`; nothing in that route uses the dimension. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model
+    (k : ℕ) (K : Set (E (k + 2))) (hK : IsCompact K) (hconv : Convex ℝ K)
+    (u : E (k + 2)) (hu : u ∈ K) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint u) (ContinuousMap.id (E (k + 2)))
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K u hu)) (n + 1)) := by
+  sorry
+
+/-- LEAF (split by claude-14 from `_aux_convex` after lemma-1's PARTIAL, job 2363,
+2026-10-22): the chart reduction.  For compact `K` in the chart source of
+`e = chartAt x` and `z ∈ K`, if `H_i(ℝⁿ, ℝⁿ ∖ e '' K) → H_i(ℝⁿ, ℝⁿ ∖ e z)` is an
+isomorphism, so is `H_i(M, M ∖ K) → H_i(M, M ∖ z)`.  Template: t00A01's sorry-free
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_isIso_aux_reduce` (with `_aux_isIso_aux_restrict` (excision of
+the complement of an open `U ⊇ K`), `_aux_isIso_aux_homeo`, `_aux_isIso_aux_excision`,
+`_aux_isIso_aux_chart`).  Generalize `Fin 3` to `k + 2`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (x : M) (K : Set M) (hK : IsCompact K)
+    (hsub : K ⊆ (chartAt (E (k + 2)) x).source)
+    (z : M) (hz : z ∈ K) (i : ℕ) (hi : 0 < i)
+    (hmodel : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap ((chartAt (E (k + 2)) x) '' K)ᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint ((chartAt (E (k + 2)) x) z))
+        (ContinuousMap.id (E (k + 2)))
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo ((chartAt (E (k + 2)) x) '' K) ((chartAt (E (k + 2)) x) z) (Set.mem_image_of_mem _ hz))) i)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) (ContinuousMap.id M) (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K z hz)) i) := by
+  sorry
+
+/-- PROVED from `_aux_inj_aux_model`, `_aux_inj_aux_reduce` (claude-14, 2026-10-22):
+for compact `A` in one chart with convex chart image and `y ∈ A`, the
+localization `H_i(M, M ∖ A) → H_i(M, M ∖ y)` is injective for `i > 0`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (x : M) (A : Set M) (hA : IsCompact A)
+    (hsub : A ⊆ (chartAt (E (k + 2)) x).source)
+    (hconv : Convex ℝ ((chartAt (E (k + 2)) x) '' A))
+    (y : M) (hy : y ∈ A) (i : ℕ) (hi : 0 < i) (c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i)
+    (hc : HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y) (ContinuousMap.id M) (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) i c = 0) :
+    c = 0 := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hi)
+  letI := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce k M x A hA hsub y hy (n + 1) hi
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_model k _ (hA.image_of_continuousOn
+        ((chartAt (E (k + 2)) x).continuousOn.mono hsub)) hconv _ (Set.mem_image_of_mem _ hy) n)
+  exact (AddCommGrpCat.mono_iff_injective (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y) (ContinuousMap.id M) (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo A y hy)) (n + 1))).1 inferInstance
+    (hc.trans (map_zero _).symm)
+
+/-- PROVED from `_aux_convex_aux_point`, `_aux_convex_aux_inj` (claude-14, 2026-10-22); was LEAF (split by claude-14, after lemma-1's BLOCKED-ON on
 `_aux_inChart`, job 2352; Hatcher 3.27, step 1): a compact `A` inside one chart
 whose chart image is convex is good.  Template: t00A01's sorry-free
 `apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign_aux_exists_unit_aux_injective_aux_convex`
@@ -2118,7 +2233,14 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     (hsub : A ⊆ (chartAt (E (k + 2)) x).source)
     (hconv : Convex ℝ ((chartAt (E (k + 2)) x) '' A)) :
     punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_good k M A := by
-  sorry
+  rcases A.eq_empty_or_nonempty with rfl | ⟨y, hy⟩
+  · exact punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_empty k M
+  refine ⟨fun i hi => ?_, fun c hc => ?_⟩
+  · have key : ∀ c : (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology i, c = 0 := fun c =>
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj k M x A hA hsub hconv y hy i (by omega) c
+        (@Subsingleton.elim _ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_point k M y i hi) _ _)
+    exact ⟨fun c d => (key c).trans (key d).symm⟩
+  · exact punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj k M x A hA hsub hconv y hy (k + 2) (by omega) c (hc y hy)
 
 /-- LEAF (split by claude-14, 2026-10-22, after lemma-3's PARTIAL on
 `_exists_unit_aux_injective`; Hatcher 3.27, steps 1-3): every compact subset of
