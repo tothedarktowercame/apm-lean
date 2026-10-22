@@ -445,6 +445,46 @@ lemma apm_t97A03_normalize_secondCutCircleLoop
       apm_t97A03_normalizedSecondCutCircleLoop A B t := by
   rfl
 
+lemma apm_t97A03_normalize_cutCircleBasepoint (A B : Circle) :
+    apm_t97A03_normalizeCutCircle A B
+        (apm_t97A03_cutCircleMap A B A) =
+      apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1 := by
+  change apm_t97A03_cutCircleMap 1 (A⁻¹ * B) (A⁻¹ * A) = _
+  congr 1
+  simp
+
+/-- The typed based-path image of the first generator under normalization. -/
+noncomputable def apm_t97A03_normalizedImageFirstCutCircleLoop
+    (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1)
+      (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) :=
+  ((apm_t97A03_firstCutCircleLoop A B).map
+    (apm_t97A03_continuous_normalizeCutCircle A B)).cast
+      (apm_t97A03_normalize_cutCircleBasepoint A B).symm
+      (apm_t97A03_normalize_cutCircleBasepoint A B).symm
+
+/-- The typed based-path image of the complementary generator. -/
+noncomputable def apm_t97A03_normalizedImageSecondCutCircleLoop
+    (A B : Circle) :
+    Path (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1)
+      (apm_t97A03_cutCircleMap 1 (A⁻¹ * B) 1) :=
+  ((apm_t97A03_secondCutCircleLoop A B).map
+    (apm_t97A03_continuous_normalizeCutCircle A B)).cast
+      (apm_t97A03_normalize_cutCircleBasepoint A B).symm
+      (apm_t97A03_normalize_cutCircleBasepoint A B).symm
+
+theorem apm_t97A03_normalizedImageFirstCutCircleLoop_eq (A B : Circle) :
+    apm_t97A03_normalizedImageFirstCutCircleLoop A B =
+      apm_t97A03_normalizedFirstCutCircleLoop A B := by
+  ext t
+  rfl
+
+theorem apm_t97A03_normalizedImageSecondCutCircleLoop_eq (A B : Circle) :
+    apm_t97A03_normalizedImageSecondCutCircleLoop A B =
+      apm_t97A03_normalizedSecondCutCircleLoop A B := by
+  ext t
+  rfl
+
 /-- The homomorphism on based fundamental groups induced by the literal
 sphere-collapse map. -/
 noncomputable def apm_t97A03_collapsePiOneHom (A B : Circle) :
