@@ -853,7 +853,116 @@ lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv
     Nonempty (ContinuousMap.HomotopyEquiv
       ↥(punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)
       (Sphere n)) := by
-  sorry
+  let A := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n
+  let f : A → Sphere n := fun x ↦
+    ⟨(‖(x.1.1 : E n)‖)⁻¹ • (x.1.1 : E n), by
+      have hx : 1 ≤ ‖(x.1.1 : E n)‖ := by
+        simpa [A,
+          punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus,
+          dist_zero_right] using x.2
+      rw [Metric.mem_sphere, dist_zero_right, norm_smul, Real.norm_eq_abs,
+        abs_inv, abs_of_nonneg (norm_nonneg _), inv_mul_cancel₀]
+      exact ne_of_gt (lt_of_lt_of_le (show (0 : ℝ) < 1 by norm_num) hx)⟩
+  let g : Sphere n → A := fun x ↦
+    ⟨⟨(x : E n), by
+        rw [Metric.mem_ball, dist_zero_right]
+        simpa [Metric.mem_sphere, dist_zero_right] using x.2⟩, by
+      change 1 ≤ dist (x : E n) 0
+      simpa [Metric.mem_sphere] using x.2.le⟩
+  have hf : Continuous f := by
+    apply Continuous.subtype_mk
+    exact ((continuous_norm.comp
+      (continuous_subtype_val.comp continuous_subtype_val)).inv₀ (fun x ↦ by
+        have hx : 1 ≤ ‖(x.1.1 : E n)‖ := by
+          simpa [A,
+            punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus,
+            dist_zero_right] using x.2
+        exact ne_of_gt (lt_of_lt_of_le (show (0 : ℝ) < 1 by norm_num) hx))).smul
+      (continuous_subtype_val.comp continuous_subtype_val)
+  have hg : Continuous g := by
+    exact (continuous_subtype_val.subtype_mk _).subtype_mk _
+  refine ⟨{
+    toFun := ⟨f, hf⟩
+    invFun := ⟨g, hg⟩
+    left_inv := ?_
+    right_inv := ?_ }⟩
+  · let gf : C(A, A) := (⟨g, hg⟩ : C(Sphere n, A)).comp ⟨f, hf⟩
+    have H : ContinuousMap.Homotopy (ContinuousMap.id A) gf := by
+      refine {
+        toFun := fun z ↦
+          ⟨⟨((1 - (z.1 : ℝ)) + (z.1 : ℝ) * (‖(z.2.1.1 : E n)‖)⁻¹) •
+              (z.2.1.1 : E n), ?_⟩, ?_⟩
+        continuous_toFun := ?_
+        map_zero_left := ?_
+        map_one_left := ?_ }
+      · have hr : 1 ≤ ‖(z.2.1.1 : E n)‖ := by
+          simpa [A,
+            punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus,
+            dist_zero_right] using z.2.2
+        have hr2 : ‖(z.2.1.1 : E n)‖ < 2 := by
+          simpa only [Metric.mem_ball, dist_zero_right] using z.2.1.2
+        have ht0 : 0 ≤ (z.1 : ℝ) := z.1.2.1
+        have ht1 : (z.1 : ℝ) ≤ 1 := z.1.2.2
+        have hr0 : 0 < ‖(z.2.1.1 : E n)‖ := lt_of_lt_of_le (by norm_num) hr
+        have hinv : 0 ≤ (‖(z.2.1.1 : E n)‖)⁻¹ := inv_nonneg.2 hr0.le
+        have ha : 0 ≤ (1 - (z.1 : ℝ)) +
+            (z.1 : ℝ) * (‖(z.2.1.1 : E n)‖)⁻¹ := by nlinarith
+        rw [Metric.mem_ball, dist_zero_right, norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg ha]
+        field_simp
+        nlinarith
+      · change 1 ≤ dist (((1 - (z.1 : ℝ)) +
+            (z.1 : ℝ) * (‖(z.2.1.1 : E n)‖)⁻¹) • (z.2.1.1 : E n)) 0
+        rw [dist_zero_right, norm_smul, Real.norm_eq_abs]
+        have hr : 1 ≤ ‖(z.2.1.1 : E n)‖ := by
+          simpa [A,
+            punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus,
+            dist_zero_right] using z.2.2
+        have ht0 : 0 ≤ (z.1 : ℝ) := z.1.2.1
+        have ht1 : (z.1 : ℝ) ≤ 1 := z.1.2.2
+        have hr0 : 0 < ‖(z.2.1.1 : E n)‖ := lt_of_lt_of_le (by norm_num) hr
+        have hinv : 0 ≤ (‖(z.2.1.1 : E n)‖)⁻¹ := inv_nonneg.2 hr0.le
+        have ha : 0 ≤ (1 - (z.1 : ℝ)) +
+            (z.1 : ℝ) * (‖(z.2.1.1 : E n)‖)⁻¹ := by nlinarith
+        rw [abs_of_nonneg ha]
+        field_simp
+        nlinarith
+      · apply Continuous.subtype_mk
+        apply Continuous.subtype_mk
+        have hr : Continuous (fun z : unitInterval × A ↦ ‖(z.2.1.1 : E n)‖) :=
+          continuous_norm.comp
+            (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_snd))
+        have hi : Continuous (fun z : unitInterval × A ↦
+            (‖(z.2.1.1 : E n)‖)⁻¹) :=
+          hr.inv₀ (fun z ↦ by
+            have hz : 1 ≤ ‖(z.2.1.1 : E n)‖ := by
+              simpa [A,
+                punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus,
+                dist_zero_right] using z.2.2
+            exact ne_of_gt (lt_of_lt_of_le (show (0 : ℝ) < 1 by norm_num) hz))
+        have hs : Continuous (fun z : unitInterval × A ↦
+            (1 - (z.1 : ℝ)) + (z.1 : ℝ) * (‖(z.2.1.1 : E n)‖)⁻¹) := by
+          fun_prop
+        exact hs.smul
+          (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_snd))
+      · intro x
+        apply Subtype.ext
+        apply Subtype.ext
+        simp
+      · intro x
+        apply Subtype.ext
+        apply Subtype.ext
+        simp [gf, f, g, inv_smul_smul₀]
+    exact ⟨H.symm⟩
+  · have hcomp : (⟨f, hf⟩ : C(A, Sphere n)).comp
+        (⟨g, hg⟩ : C(Sphere n, A)) = ContinuousMap.id _ := by
+      apply ContinuousMap.ext
+      intro x
+      apply Subtype.ext
+      have hx : ‖(x : E n)‖ = 1 := by
+        simpa [Metric.mem_sphere, dist_zero_right] using x.2
+      simp [f, g, hx]
+    rw [hcomp]
 -- END SEAT AREA
 
 lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus_homology
