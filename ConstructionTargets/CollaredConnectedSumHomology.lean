@@ -1387,6 +1387,50 @@ chart ball around `x`, `H(M, M - ball) → H(M, M - y)` is an isomorphism for
 every `y` in the ball, and two normalizations of one group as `ℤ` differ by
 `±1`).  Generalize from `Fin 3` / `k := 1` to `k + 2`.  Do not reduce this to
 `_localization_mono` or `_coefficient_ne_zero`: both are assembled from it. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_natAbs_eq
+    (a b : ℤ) (h : a = b ∨ a = -b) : a.natAbs = b.natAbs := by
+  rcases h with h | h
+  · exact congrArg Int.natAbs h
+  · rw [h, Int.natAbs_neg]
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_units
+    {G : AddCommGrpCat} (f g : G ≅ AddCommGrpCat.of ℤ) (a : G) :
+    f.hom.hom a = g.hom.hom a ∨ f.hom.hom a = -g.hom.hom a := by
+  let u : AddCommGrpCat.of ℤ ≅ AddCommGrpCat.of ℤ := g.symm ≪≫ f
+  have hmul : ∀ (h : AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of ℤ) (n : ℤ),
+      h.hom n = n * h.hom 1 := fun h n => by
+    have h' := h.hom.map_zsmul 1 n
+    simpa [smul_eq_mul] using h'
+  have h1 : u.inv.hom (u.hom.hom 1) = 1 :=
+    ConcreteCategory.congr_hom u.hom_inv_id 1
+  rw [hmul u.inv] at h1
+  have hu : IsUnit (u.hom.hom 1) :=
+    ⟨⟨_, _, h1, by rw [mul_comm]; exact h1⟩, rfl⟩
+  have hf : f.hom.hom a = u.hom.hom (g.hom.hom a) := by
+    have ha : g.inv.hom (g.hom.hom a) = a :=
+      ConcreteCategory.congr_hom g.hom_inv_id a
+    change f.hom.hom a = f.hom.hom (g.inv.hom (g.hom.hom a))
+    rw [ha]
+  rw [hf, hmul u.hom]
+  rcases Int.isUnit_iff.1 hu with h | h
+  · left
+    rw [h, mul_one]
+  · right
+    rw [h, mul_neg_one]
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign
+    (k : ℕ)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E (k + 2)) M]
+    [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (x : M) :
+    ∀ᶠ y in nhds x,
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y =
+        punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e x ∨
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y =
+        -punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e x := by
+  sorry
+
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant
     (k : ℕ)
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -1394,7 +1438,11 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
     (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) :
     IsLocallyConstant (fun y : M ↦ (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y).natAbs) := by
-  sorry
+  refine (IsLocallyConstant.iff_eventually_eq _).2 fun x => ?_
+  exact
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign
+      k M e x).mono fun y hy =>
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_natAbs_eq _ _ hy
 
 /-- LEAF (claude-14, 2026-10-22): some point has local degree `±1`.  Template:
 t00A01's sorry-free dimension-3
