@@ -77,6 +77,33 @@ def rightConnectors [PathConnectedSpace V] [SimplyConnectedSpace (U ∩ V : Set 
           ((overlapConnectors w).connector (FundamentalGroupoid.mk z))
     · exact pathConnector ⟨w.1, w.2.2⟩ Z
 
+/-- At the base, the left connector is the identity (the overlap is simply connected). -/
+theorem leftConnectors_connector_base [PathConnectedSpace U]
+    [SimplyConnectedSpace (U ∩ V : Set X)] (w : (U ∩ V : Set X)) :
+    (leftConnectors w).connector (leftConnectors w).base = Iso.refl _ := by
+  have h : ∀ f : (FundamentalGroupoid.mk w : FundamentalGroupoid (U ∩ V : Set X)) ⟶
+      FundamentalGroupoid.mk w, f = 𝟙 _ := fun f => (inferInstance : Subsingleton (Path.Homotopic.Quotient w w)).elim _ _
+  ext
+  simp only [leftConnectors, Iso.refl_hom]
+  rw [dif_pos w.2.2]
+  change (overlapFundamentalGroupoidMap (X := X) (U := U) (V := V) true).map
+    (pathConnector w (FundamentalGroupoid.mk w)).hom = _
+  rw [h (pathConnector w _).hom]
+  exact CategoryTheory.Functor.map_id _ _
+
+/-- At the base, the right connector is the identity. -/
+theorem rightConnectors_connector_base [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] (w : (U ∩ V : Set X)) :
+    (rightConnectors w).connector (rightConnectors w).base = Iso.refl _ := by
+  have h : ∀ f : (FundamentalGroupoid.mk w : FundamentalGroupoid (U ∩ V : Set X)) ⟶
+      FundamentalGroupoid.mk w, f = 𝟙 _ := fun f => (inferInstance : Subsingleton (Path.Homotopic.Quotient w w)).elim _ _
+  ext
+  simp only [rightConnectors, Iso.refl_hom]
+  rw [dif_pos w.2.1]
+  change (overlapFundamentalGroupoidMap (X := X) (U := U) (V := V) false).map
+    (pathConnector w (FundamentalGroupoid.mk w)).hom = _
+  rw [h (pathConnector w _).hom]
+  exact CategoryTheory.Functor.map_id _ _
 theorem existsTwoOpenLegCompatibleConnectorSystems
     (X : Type) [TopologicalSpace X] (U V : Set X)
     (hU : PathConnectedSpace U) (hV : PathConnectedSpace V)

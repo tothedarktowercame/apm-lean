@@ -11,28 +11,21 @@ open ConstructionTargets.ConnectedGroupoidSingleObjEquivalence
 universe u v
 variable {G : Type u} [Groupoid.{v} G]
 
-theorem connectorSingleObjEquivalence_counit_base_eq_chosenIso
+/-- The counit at the single object is the connector at the base (no chosen
+isomorphism since `connectorSingleObjEquivalence` has an explicit inverse). -/
+theorem connectorSingleObjEquivalence_counit_base_eq_connector
     (S : ConnectorSystem G) :
     (connectorSingleObjEquivalence S).counitIso.hom.app
-      (SingleObj.star (End S.base)) =
-        ((normalFormFunctor S).objObjPreimageIso
-          (SingleObj.star (End S.base))).hom := rfl
+      (SingleObj.star (End S.base)) = ((S.connector S.base).hom : End S.base) := rfl
 
-/-- The requested identity is exactly a normalization of the isomorphism
-chosen from the `Nonempty` witness in `EssSurj.mem_essImage`.  The existing
-`Functor.asEquivalence` API supplies no such normalization. -/
-theorem connectorSingleObjEquivalence_counit_base_identity_iff
-    (S : ConnectorSystem G) :
-    ((connectorSingleObjEquivalence S).counitIso.hom.app
-      (SingleObj.star (End S.base)) = 𝟙 _) ↔
-      ((normalFormFunctor S).objObjPreimageIso
-        (SingleObj.star (End S.base))).hom = 𝟙 _ := by
-  rw [connectorSingleObjEquivalence_counit_base_eq_chosenIso]
-  constructor <;> intro h <;>
-    simpa [connectorSingleObjEquivalence, Functor.asEquivalence,
-      Functor.inv] using h
+theorem connectorSingleObjEquivalence_counit_base_identity_of_connector
+    (S : ConnectorSystem G) (h : S.connector S.base = Iso.refl _) :
+    (connectorSingleObjEquivalence S).counitIso.hom.app
+      (SingleObj.star (End S.base)) = 𝟙 _ := by
+  rw [connectorSingleObjEquivalence_counit_base_eq_connector, h]
+  rfl
 
-#print axioms connectorSingleObjEquivalence_counit_base_eq_chosenIso
-#print axioms connectorSingleObjEquivalence_counit_base_identity_iff
+#print axioms connectorSingleObjEquivalence_counit_base_eq_connector
+#print axioms connectorSingleObjEquivalence_counit_base_identity_of_connector
 
 end ConstructionTargets.ConnectorSingleObjectCounitBaseIdentity

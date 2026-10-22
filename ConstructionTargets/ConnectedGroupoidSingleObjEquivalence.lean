@@ -52,9 +52,42 @@ instance normalFormFunctor_isEquivalence (S : ConnectorSystem G) :
     (normalFormFunctor S).IsEquivalence :=
   Functor.IsEquivalence.mk
 
+/-- The base inclusion: the single object goes to the chosen base and a vertex-group
+element is itself. -/
+def baseInclusionFunctor (S : ConnectorSystem G) :
+    SingleObj (End S.base) ⥤ G where
+  obj _ := S.base
+  map f := f
+  map_id _ := rfl
+  map_comp _ _ := rfl
+
+/-- The equivalence with explicit inverse `baseInclusionFunctor`; the unit is given by
+the connectors and the counit at the single object is the connector at the base.
+No component is chosen (this replaced `Functor.asEquivalence`, whose counit came from
+`Classical.choice`, after job 2346). -/
 def connectorSingleObjEquivalence (S : ConnectorSystem G) :
-    G ≌ SingleObj (End S.base) :=
-  (normalFormFunctor S).asEquivalence
+    G ≌ SingleObj (End S.base) where
+  functor := normalFormFunctor S
+  inverse := baseInclusionFunctor S
+  unitIso := NatIso.ofComponents (fun X => (S.connector X).symm) (by
+    intro X Y f
+    change f ≫ (S.connector Y).inv =
+      (S.connector X).inv ≫ ((S.connector X).hom ≫ f ≫ (S.connector Y).inv)
+    simp)
+  counitIso := NatIso.ofComponents
+    (fun _ =>
+      { hom := (S.connector S.base).hom
+        inv := (S.connector S.base).inv
+        hom_inv_id := (S.connector S.base).hom_inv_id
+        inv_hom_id := (S.connector S.base).inv_hom_id }) (by
+    intro X Y f
+    change ((S.connector S.base).hom ≫ f ≫ (S.connector S.base).inv) ≫
+        (S.connector S.base).hom = (S.connector S.base).hom ≫ f
+    simp [Category.assoc])
+  functor_unitIso_comp X := by
+    change ((S.connector X).hom ≫ (S.connector X).inv ≫ (S.connector S.base).inv) ≫
+        (S.connector S.base).hom = 𝟙 S.base
+    simp
 
 @[simp] theorem connectorSingleObjEquivalence_functor_obj
     (S : ConnectorSystem G) (X : G) :
@@ -64,6 +97,19 @@ def connectorSingleObjEquivalence (S : ConnectorSystem G) :
 @[simp] theorem connectorSingleObjEquivalence_functor_map
     (S : ConnectorSystem G) {X Y : G} (f : X ⟶ Y) :
     (connectorSingleObjEquivalence S).functor.map f = S.normalForm f := rfl
+
+@[simp] theorem connectorSingleObjEquivalence_inverse_obj
+    (S : ConnectorSystem G) (x : SingleObj (End S.base)) :
+    (connectorSingleObjEquivalence S).inverse.obj x = S.base := rfl
+
+@[simp] theorem connectorSingleObjEquivalence_inverse_map
+    (S : ConnectorSystem G) {x y : SingleObj (End S.base)} (f : x ⟶ y) :
+    (connectorSingleObjEquivalence S).inverse.map f = (f : End S.base) := rfl
+
+theorem connectorSingleObjEquivalence_counit_hom_app
+    (S : ConnectorSystem G) (x : SingleObj (End S.base)) :
+    (connectorSingleObjEquivalence S).counitIso.hom.app x =
+      ((S.connector S.base).hom : End S.base) := rfl
 
 def inducedVertexHom (F : G ⥤ H) (SG : ConnectorSystem G)
     (SH : ConnectorSystem H) (hbase : F.obj SG.base = SH.base) :
