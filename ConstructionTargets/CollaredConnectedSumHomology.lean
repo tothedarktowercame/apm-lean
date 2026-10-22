@@ -575,6 +575,50 @@ noncomputable def punctured_homology_aux_above_aux_inclusion
     (ModuleCat.of ℤ ℤ)).map
       (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
 
+lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_pair
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ)
+    (hk1 : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology
+        (k + 1)))
+    (hk : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology k)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+    exact ConstructionTargets.T00A01MayerVietorisAdapters.isIso_middle_of_two_exact_of_isZero_ends
+      (singularPairConnecting A k)
+      (HomologicalComplex.homologyMap (singularSubspaceMap A) k)
+      (HomologicalComplex.homologyMap (relativeSingularProjection A) k)
+      ((singularPairShortComplex_shortExact A).δ_comp (k + 1) k rfl)
+      (by
+        rw [← HomologicalComplex.homologyMap_comp]
+        change HomologicalComplex.homologyMap
+          ((singularPairShortComplex A).f ≫ (singularPairShortComplex A).g) k = 0
+        rw [(singularPairShortComplex A).zero,
+          HomologicalComplex.homologyMap_zero])
+      (singularPairHomology_exact_subspace A k)
+      (singularPairHomology_exact_absolute A k) hk1 hk
+
+/-- The excised ball/annulus pair has no relative homology above dimension
+`n`.  This is the geometric input needed in two adjacent degrees. -/
+lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero
+    (n : ℕ) (hn : 2 ≤ n) (M : Type) [TopologicalSpace M] [T2Space M]
+    (c : BallCollar n M) (hopen : IsOpen c.radialTwo)
+    (j : ℕ) (hnj : n < j) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology j) := by
+  sorry
+
+/-- Naturality of the integral comparison transports the concrete inclusion
+isomorphism to the `ModuleCat ℤ` singular-homology functor. -/
+lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_transport
+    {n k : ℕ} {M : Type} [TopologicalSpace M] (c : BallCollar n M)
+    (hgroup : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ) k)) :
+    IsIso (punctured_homology_aux_above_aux_inclusion (k := k) c) := by
+  sorry
+
 /-- Collar excision in degrees strictly above the manifold dimension: removing
 the collared open ball does not change integral homology in these degrees. -/
 lemma punctured_homology_aux_above_aux_inclusion_isIso
@@ -585,7 +629,13 @@ lemma punctured_homology_aux_above_aux_inclusion_isIso
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured)
     (k : ℕ) (hnk : n < k) :
     IsIso (punctured_homology_aux_above_aux_inclusion (k := k) c) := by
-  sorry
+  have hk := punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero
+    n hn M c hopen k hnk
+  have hk1 := punctured_homology_aux_above_aux_inclusion_isIso_aux_relative_zero
+    n hn M c hopen (k + 1) (lt_trans hnk (Nat.lt_succ_self k))
+  exact punctured_homology_aux_above_aux_inclusion_isIso_aux_transport c
+    (punctured_homology_aux_above_aux_inclusion_isIso_aux_pair
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ k hk1 hk)
 
 lemma punctured_homology_aux_above (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
