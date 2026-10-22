@@ -5599,6 +5599,98 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
       (SingleObj.star (Monoid.Coprod (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))) = 𝟙 _ := by
   rfl
 
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_left
+    {X : Type} [TopologicalSpace X] (U V : Set X) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    (TwoOpenPointSpanComparison.leftEquivalence U V w).counitIso.hom.app
+      (SingleObj.star (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)) = 𝟙 _ := by
+  change ((ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence
+    (TwoOpenLegCompatibleConnectorSystems.leftConnectors w)).counitIso.hom.app _) = _
+  change ((TwoOpenLegCompatibleConnectorSystems.leftConnectors w).connector
+    (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base).hom = _
+  rw [TwoOpenLegCompatibleConnectorSystems.leftConnectors_connector_base]
+  rfl
+
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_right
+    {X : Type} [TopologicalSpace X] (U V : Set X) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    (TwoOpenPointSpanComparison.rightEquivalence U V w).counitIso.hom.app
+      (SingleObj.star (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)) = 𝟙 _ := by
+  change ((ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence
+    (TwoOpenLegCompatibleConnectorSystems.rightConnectors w)).counitIso.hom.app _) = _
+  change ((TwoOpenLegCompatibleConnectorSystems.rightConnectors w).connector
+    (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base).hom = _
+  rw [TwoOpenLegCompatibleConnectorSystems.rightConnectors_connector_base]
+  rfl
+
+/-- Component of the counit of a threefold `Equivalence.trans`. -/
+private lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_trans3 {A B C D : Type*} [Category A] [Category B] [Category C] [Category D]
+    (P : A ≌ B) (S : B ≌ C) (Cmp : C ≌ D) (Y : D) :
+    ((P.trans S).trans Cmp).counitIso.hom.app Y =
+      Cmp.functor.map (S.functor.map (P.counitIso.hom.app (S.inverse.obj (Cmp.inverse.obj Y))) ≫
+        S.counitIso.hom.app (Cmp.inverse.obj Y)) ≫ Cmp.counitIso.hom.app Y := by
+  simp
+/-- Point-span comparison factor of the span counit: the counit of
+`TwoOpenPointSpanComparison.comparison` at the inverse image of the identity, sent through the
+free-product equivalence, has identity component at the single object.  Route: the comparison is
+`pseudoCoconeEquivalenceOfSpanEquivalences` built from `leftEquivalence`/`rightEquivalence`, whose
+counit components at the base objects are identities (`_aux_span_aux_left`, `_aux_span_aux_right`,
+banked by job 2367), and `pointComparison`, whose components are `Iso.refl`.
+Split from `punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span` after job 2367. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_comparison
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    (((FreeProductPointSpanRepresentations.freeProductPointSpanEquivalence
+          (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)).trans
+        (FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence
+          (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))).functor.map
+      ((TwoOpenPointSpanComparison.comparison U V w (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)).counitIso.hom.app
+        (((FreeProductPointSpanRepresentations.freeProductPointSpanEquivalence
+          (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)).trans
+        (FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence
+          (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))).inverse.obj
+          (Functor.id (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w))))).app
+      (SingleObj.star (Monoid.Coprod (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))) = 𝟙 _ := by
+  change (((TwoOpenPointSpanComparison.leftEquivalence U V w).congrLeft).counitIso.hom.app _).app _ = _
+  have h := punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_left U V w
+  simp only [Equivalence.congrLeft] at *
+  simp [h]
+  erw [CategoryTheory.Functor.map_id]
+  rfl
+/-- Descent factor of the span counit: the counit of the pseudopushout (descent)
+equivalence, transported through `pseudoSpanEquivalence`, the point-span comparison and the
+free-product equivalence, has identity component at the single object.  This is where job 2367
+stopped: unfolding reaches the descent counit composed with `invFunIdAssoc`, and the remaining
+normalisation is through `TwoOpenPseudoCoconeStrictification.twoOpenDescentPseudoCoconeEquivalence`.
+Split from `punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span` after job 2367. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_descent
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    (((FreeProductPointSpanRepresentations.freeProductPointSpanEquivalence
+          (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)).trans
+        (FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence
+          (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))).functor.map
+      ((TwoOpenPointSpanComparison.comparison U V w (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)).functor.map
+        ((TwoOpenFreeProductMapping.pseudoSpanEquivalence (U := U) (V := V) (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)).functor.map
+          ((TwoOpenFundamentalGroupoidPseudopushout.twoOpenFundamentalGroupoidPseudopushoutEquivalence
+            (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) hU hV hcover).counitIso.hom.app
+            ((TwoOpenFreeProductMapping.pseudoSpanEquivalence (U := U) (V := V) (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)).inverse.obj
+              ((TwoOpenPointSpanComparison.comparison U V w (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)).inverse.obj
+                (((FreeProductPointSpanRepresentations.freeProductPointSpanEquivalence
+          (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)).trans
+        (FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence
+          (C := (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))).inverse.obj
+          (Functor.id (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w))))))))).app
+      (SingleObj.star (Monoid.Coprod (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))) = 𝟙 _ := by
+  sorry
+
 /-- Span side: the counit of the first three factors of `mapping` (descent/pseudopushout,
 `TwoOpenFreeProductMapping.pseudoSpanEquivalence`, point-span comparison), at the free-product inverse image of the
 identity, is sent by the free-product functor to an identity component at the single object.
@@ -5623,7 +5715,13 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
           (C := GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w) (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))).inverse.obj
           (Functor.id (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w))))).app
       (SingleObj.star (Monoid.Coprod (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base) (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))) = 𝟙 _ := by
-  sorry
+  have hc := punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_comparison U V w
+  have hd := punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_descent U V hU hV hcover w
+  rw [punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity_aux_span_aux_trans3]
+  erw [Functor.map_comp, Functor.map_comp, NatTrans.comp_app, NatTrans.comp_app]
+  erw [hd, hc]
+  simp
+  rfl
 
 /-- The counit of the five-step mapping equivalence, at the inverse image of the
 identity, has identity component at the single object.  Route: the counit of
