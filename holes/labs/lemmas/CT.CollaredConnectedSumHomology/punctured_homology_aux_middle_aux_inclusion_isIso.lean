@@ -5341,6 +5341,184 @@ noncomputable def punctured_homology_aux_middle_aux_inclusion
 /-- Excision for the collared open ball: below the manifold dimension, the
 puncture inclusion induces an isomorphism on integral singular homology. -/
 -- BEGIN SEAT AREA
+lemma punctured_homology_aux_middle_aux_inclusion_isIso_aux_pair
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ)
+    (hk1 : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology
+        (k + 1)))
+    (hk : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology k)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) := by
+  open ConstructionTargets.SingularHomologyConcrete in
+    exact ConstructionTargets.T00A01MayerVietorisAdapters.isIso_middle_of_two_exact_of_isZero_ends
+      (singularPairConnecting A k)
+      (HomologicalComplex.homologyMap (singularSubspaceMap A) k)
+      (HomologicalComplex.homologyMap (relativeSingularProjection A) k)
+      ((singularPairShortComplex_shortExact A).δ_comp (k + 1) k rfl)
+      (by
+        rw [← HomologicalComplex.homologyMap_comp]
+        change HomologicalComplex.homologyMap
+          ((singularPairShortComplex A).f ≫ (singularPairShortComplex A).g) k = 0
+        rw [(singularPairShortComplex A).zero,
+          HomologicalComplex.homologyMap_zero])
+      (singularPairHomology_exact_subspace A k)
+      (singularPairHomology_exact_absolute A k) hk1 hk
+
+lemma punctured_homology_aux_middle_aux_inclusion_isIso_aux_model
+    (n j : ℕ) (hn : 2 ≤ n) (hj0 : 0 < j) (hjn : j < n) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)).homology
+        j) := by
+  let A := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n
+  letI : ContractibleSpace (Metric.ball (0 : E n) 2) :=
+    (convex_ball (0 : E n) 2).contractibleSpace ⟨0, by simp⟩
+  have hX : IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of (Metric.ball (0 : E n) 2))).homology j) :=
+    ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      _ j (by omega)
+  by_cases hj : j = 1
+  · subst j
+    have hmono : Mono (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) 0) := by
+      letI : PathConnectedSpace (Metric.ball (0 : E n) 2) := inferInstance
+      letI : PathConnectedSpace (Sphere n) := isPathConnected_iff_pathConnectedSpace.mp
+        (isPathConnected_sphere (by
+          rw [← Module.finrank_eq_rank', finrank_euclideanSpace_fin]
+          exact_mod_cast (by omega : 1 < n)) 0 (by norm_num))
+      letI : PathConnectedSpace A := by
+        obtain ⟨e⟩ := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv
+          n (by omega)
+        refine ⟨⟨e.symm (PathConnectedSpace.nonempty (X := Sphere n)).some⟩, ?_⟩
+        intro x y
+        let middle : Path (e.symm (e x)) (e.symm (e y)) :=
+          (PathConnectedSpace.somePath (e x) (e y)).map e.symm.continuous
+        exact ⟨(e.left_inv.some.evalAt x).symm.trans
+          (middle.trans (e.left_inv.some.evalAt y))⟩
+      exact ConstructionTargets.T02A06SphereH0.pathConnectedSubspace_homologyMap_mono_zero A
+    have hex := ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_relative A 0
+    have hc : ConstructionTargets.SingularHomologyConcrete.singularPairConnecting A 0 = 0 := by
+      apply (cancel_mono (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) 0)).1
+      rw [zero_comp]
+      exact (ConstructionTargets.SingularHomologyConcrete.singularPairShortComplex_shortExact A).δ_comp 1 0 rfl
+    exact hex.isZero_X₂ (hX.eq_of_src _ _) hc
+  · have hjm : 0 < j - 1 := by omega
+    obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+    obtain ⟨e⟩ := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv
+      (m + 1) (by omega)
+    have hA : IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+        (TopCat.of ↑A)).homology (j - 1)) :=
+      (ConstructionTargets.SphereHomology.spherePositiveHomology_isZero_of_lt
+        m (j - 1) hjm (by omega)).of_iso
+          (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+            e (j - 1))
+    have hj' : j - 1 + 1 = j := by omega
+    rw [← hj'] at hX
+    have hz := (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_relative
+      A (j - 1)).isZero_X₂ (hX.eq_of_src _ _) (hA.eq_of_tgt _ _)
+    simpa only [hj'] using hz
+
+lemma punctured_homology_aux_middle_aux_inclusion_isIso_aux_relative_zero
+    (n : ℕ) (hn : 2 ≤ n) (M : Type) [TopologicalSpace M] [T2Space M]
+    (c : BallCollar n M) (hopen : IsOpen c.radialTwo)
+    (j : ℕ) (hj0 : 0 < j) (hjn : j < n) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology j) := by
+  have hlocal : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+          c.radialTwoᶜ)).homology j) := by
+    obtain ⟨e, he⟩ :=
+      punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart n M c
+    exact punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_iso
+      e _ _ he j
+      (punctured_homology_aux_middle_aux_inclusion_isIso_aux_model n j hn hj0 hjn)
+  have hj' : j - 1 + 1 = j := by omega
+  letI : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeExcisionMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ c.radialTwoᶜ) j) := by
+    rcases punctured_topHomology_zero_aux_mono_aux_excision_set c hopen with ⟨hclosed, hsub⟩
+    have hrange : Set.range (fun x : c.Punctured ↦ x.1) =
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ := by
+      ext x
+      constructor
+      · rintro ⟨y, rfl⟩; exact y.2
+      · intro hx; exact ⟨⟨x, hx⟩, rfl⟩
+    rw [hrange] at hsub
+    have hi := ConstructionTargets.SingularExcision.relativeExcisionMap_homologyMap_isIso_succ
+      _ _ hclosed hsub (j - 1)
+    rw [hj'] at hi
+    exact hi
+  exact hlocal.of_iso (asIso (HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeExcisionMap
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ c.radialTwoᶜ) j)).symm
+
+lemma punctured_homology_aux_middle_aux_inclusion_isIso_aux_transport
+    {n k : ℕ} {M : Type} [TopologicalSpace M] (c : BallCollar n M)
+    (hgroup : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ) k)) :
+    IsIso (punctured_homology_aux_middle_aux_inclusion (k := k) c) := by
+  let A : Set M := (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+  let i : TopCat.of A ⟶ TopCat.of M :=
+    ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A
+  let F := ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+  let eA := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of A) k
+  let eM := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of M) k
+  letI : IsIso eA.hom := eA.isIso_hom
+  letI : IsIso eM.hom := eM.isIso_hom
+  have hg : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) := by
+    dsimp [A]; exact hgroup
+  have hnat : F.map (punctured_homology_aux_middle_aux_inclusion (k := k) c) ≫ eM.hom =
+      eA.hom ≫ HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality i k
+  haveI hright : IsIso (eA.hom ≫ HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) :=
+    IsIso.comp_isIso' eA.isIso_hom hg
+  haveI : IsIso (F.map (punctured_homology_aux_middle_aux_inclusion (k := k) c) ≫ eM.hom) :=
+    hnat ▸ hright
+  haveI : IsIso (F.map (punctured_homology_aux_middle_aux_inclusion (k := k) c)) :=
+    IsIso.of_isIso_comp_right _ eM.hom
+  exact isIso_of_reflects_iso _ F
+
+lemma punctured_homology_aux_middle_aux_inclusion_isIso_aux_top_adjacent
+    (n m : ℕ) (hnm : n = m + 1) (hm1 : 1 ≤ m) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
+    (hopen : IsOpen c.radialTwo)
+    (hm : IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology m)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ) m) := by
+  subst hnm
+  let A : Set M := (c.smallMap '' {y : Disk (m + 1) 1 | dist y.1 0 < 1})ᶜ
+  letI : Epi (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection A) (m + 1)) :=
+    boundary_homology_zero_aux_projection_epi (m + 1) m rfl hm1 M c htop hopen
+  have hnzero : ConstructionTargets.SingularHomologyConcrete.singularPairConnecting A m = 0 := by
+    rw [← cancel_epi (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection A) (m + 1)),
+      comp_zero]
+    exact (ConstructionTargets.SingularHomologyConcrete.singularPairShortComplex_shortExact A).comp_δ
+      (m + 1) m rfl
+  letI : Mono (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) m) :=
+    (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_subspace A m).mono_g hnzero
+  letI : Epi (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) m) :=
+    (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_absolute A m).epi_f
+      (hm.eq_of_tgt _ _)
+  exact isIso_of_mono_of_epi _
+
 lemma punctured_homology_aux_middle_aux_inclusion_isIso
     (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -5350,7 +5528,16 @@ lemma punctured_homology_aux_middle_aux_inclusion_isIso
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured)
     (k : ℕ) (hk0 : 0 < k) (hkn : k < n) :
     IsIso (punctured_homology_aux_middle_aux_inclusion (k := k) c) := by
-  sorry
+  have hk := punctured_homology_aux_middle_aux_inclusion_isIso_aux_relative_zero
+    n hn M c hopen k hk0 hkn
+  apply punctured_homology_aux_middle_aux_inclusion_isIso_aux_transport c
+  by_cases htopdeg : k + 1 = n
+  · exact punctured_homology_aux_middle_aux_inclusion_isIso_aux_top_adjacent
+      n k htopdeg.symm hk0 M c htop hopen hk
+  · have hk1 := punctured_homology_aux_middle_aux_inclusion_isIso_aux_relative_zero
+      n hn M c hopen (k + 1) (by omega) (by omega)
+    exact punctured_homology_aux_middle_aux_inclusion_isIso_aux_pair
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ k hk1 hk
 -- END SEAT AREA
 
 lemma punctured_homology_aux_middle (n : ℕ) (hn : 2 ≤ n) (M : Type)
