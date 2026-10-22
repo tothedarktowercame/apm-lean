@@ -192,11 +192,21 @@ def HasStandardCover {n : ℕ} {M₁ M₂ : Type}
 namespace BallCollar
 
 /-- **LIBRARY (B2).** Invariance of domain for the interior of a collared ball. -/
+theorem largeInterior_isOpen_aux_euclidean
+    (d : ℕ) (X : Type) [TopologicalSpace X] [ChartedSpace (E d) X]
+    [IsManifold (I d) (⊤ : ℕ∞) X]
+    {f : LargeInterior (n := d) → X} (hf : Continuous f)
+    (hinj : Function.Injective f) : IsOpenMap f := by
+  sorry
+
 theorem largeInterior_isOpen (n : ℕ) (M : Type)
     [TopologicalSpace M] [ChartedSpace (E n) M]
     [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M) :
     IsOpen c.radialTwo := by
-  sorry
+  apply c.largeInterior_isOpen_of_isOpenMap
+  exact largeInterior_isOpen_aux_euclidean n M
+    c.largeInteriorMap_isEmbedding.continuous
+    c.largeInteriorMap_isEmbedding.injective
 
 /-- **LIBRARY (B3).** Removing the open ball of a collar does not disconnect
 a connected manifold of dimension at least two. -/
