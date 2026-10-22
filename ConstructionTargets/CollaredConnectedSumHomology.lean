@@ -4686,8 +4686,30 @@ lemma boundary_homology_zero_aux_connecting_factorization
             ⟨c.boundaryMap, c.continuous_boundaryMap⟩) m := by
   sorry
 
+/-- PROVED (claude-14, 2026-10-22), for `_projection_epi`: on a closed connected
+`(k + 2)`-manifold with top homology `ℤ`, the global generator localizes to
+`±` the local generator at every point (absolute local degree `1` everywhere),
+from `_exists_unit` and `_locallyConstant` as in `_coefficient_ne_zero`. This is
+blueprint node B4 (`closedManifold_topClass_localGenerator`). -/
+lemma boundary_homology_zero_aux_projection_epi_aux_degree_unit
+    (k : ℕ)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E (k + 2)) M]
+    [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (x : M) :
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e x).natAbs = 1 := by
+  obtain ⟨y, hy⟩ := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit k M e
+  have hxy := (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant k M e).apply_eq_of_isPreconnected
+    isPreconnected_univ (Set.mem_univ x) (Set.mem_univ y)
+  exact hxy.trans hy
+
+/-- LEAF. `H_(m+1) M → H_(m+1)(M, M ∖ open unit ball)` is onto. `1 ≤ m`
+(dimension at least 2) is supplied by `boundary_homology_zero`; the dimension-1
+case is not needed. Use `_aux_degree_unit` (the generator localizes to `±` the
+local generator at the collar center) with excision of the closed ball to the
+point. -/
 lemma boundary_homology_zero_aux_projection_epi
-    (n m : ℕ) (hnm : n = m + 1) (M : Type)
+    (n m : ℕ) (hnm : n = m + 1) (hm : 1 ≤ m) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E n) M]
     [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
@@ -4722,7 +4744,7 @@ theorem boundary_homology_zero (n : ℕ) (hn : 2 ≤ n) (M : Type)
   letI : Epi (HomologicalComplex.homologyMap
       (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection A)
         (m + 1)) :=
-    boundary_homology_zero_aux_projection_epi (m + 1) m rfl M c htop hopen
+    boundary_homology_zero_aux_projection_epi (m + 1) m rfl (by omega) M c htop hopen
   have hconnecting :
       ConstructionTargets.SingularHomologyConcrete.singularPairConnecting A m = 0 :=
     (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_relative
