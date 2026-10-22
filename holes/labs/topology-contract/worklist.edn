@@ -119152,62 +119152,49 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Construct chart data; Main.",
+    :residual "Construct canonical comparison and signed sum; Main.",
     :outcome :stop,
-    :warnings ["Main sorry; review dirs"],
+    :warnings ["Main sorry" "review dirs"],
     :missing-theorems
     [{:name
-      "t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData",
-      :type "chart data implies H2 zero",
+      "t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_canonicalData",
+      :type "canonical comparison and signed sum imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["transverseDiskBounded_canonicalComponentSums_eq_zero"
-       "regularFiber_surfaceTopDegree_eq_signedSum"],
+      ["t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
-      :type "construct transverse chart data; blueprint boundary",
+      :type "construct canonical comparison and signed sum",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData"],
+      ["t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_canonicalData"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "51d4d133c44abf38b87b843f8429dd10ad33d75d88cddd7e77a4e3be4e54a15a",
+     "db948c9f64c24dfa7662ef38aeb650885dc5c94c79a174468471189d92f9703a",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked chart-data endpoint.",
+    :reason "Banked canonical-data endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "diff/hashes/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792633315876-2017-f53d10d1",
-     :commands
-     ["git show/diff --check e3ad7c360"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "sha256sum; placeholder count"],
-     :finding
-     "PASS program STOP: e3ad7c360 changes only t00J02Closure.lean (+41), adding a compiled sorry-free chart-data H2 endpoint beyond history 757e75fc5. Fixture afb497a6, Main 0b3b4888, closure 51d4d133; registry 170/170; placeholders closure=0/Main=1 expected. The proof correctly derives canonical component vanishing from localization/comparison, derives the canonical top-degree formula from the same coefficient data, then supplies both to the disk-bounded canonical-sums endpoint. Fiber subtype, occupied-component index, coefficients, and orientation signs align exactly. Axioms: propext, Classical.choice, Quot.sound. Residual: construct chart data and assemble Main."},
-    :commit "e3ad7c360c033f802bbd8c372e54fca8e410e416",
+     {:cmd "git diff --check; hashes; placeholders", :exit 0}],
+    :commit "f54e9c9ff9c317e622d10940bdc5216f8ca75e08",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119215,7 +119202,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119989,7 +119976,8 @@
     :lemma-surfacetopdegree-eq-zero-of-canonicalcomponentsums
     :lemma-transversediskbounded-canonicalcomponentsums-eq-zero
     :lemma-regularfiber-surfacetopdegree-eq-signedsum
-    :lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero-of-chartdata],
+    :lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero-of-chartdata
+    :lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero-of-canonicaldata],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123592,6 +123580,27 @@
    :depends-on
    [:lemma-transversediskbounded-canonicalcomponentsums-eq-zero
     :lemma-regularfiber-surfacetopdegree-eq-signedsum],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_canonicalData",
+    :type "canonical comparison and signed sum imply H2 zero"},
+   :lemma
+   {:name
+    "t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_canonicalData",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "canonical comparison and signed sum imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero-of-canonicaldata,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero-of-chartdata],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
