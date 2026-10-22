@@ -876,7 +876,34 @@ lemma punctured_homology_aux_above_aux_inclusion_isIso_aux_transport
       (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap
         (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ) k)) :
     IsIso (punctured_homology_aux_above_aux_inclusion (k := k) c) := by
-  sorry
+  let A : Set M := (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+  let i : TopCat.of A ⟶ TopCat.of M :=
+    ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A
+  let F := ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+  let eA := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of A) k
+  let eM := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of M) k
+  letI : IsIso eA.hom := eA.isIso_hom
+  letI : IsIso eM.hom := eM.isIso_hom
+  have hg : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) := by
+    dsimp [A]
+    exact hgroup
+  have hnat : F.map (punctured_homology_aux_above_aux_inclusion (k := k) c) ≫ eM.hom =
+      eA.hom ≫ HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k := by
+    exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      i k
+  haveI hright : IsIso (eA.hom ≫ HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) k) :=
+    IsIso.comp_isIso' eA.isIso_hom hg
+  haveI : IsIso (F.map (punctured_homology_aux_above_aux_inclusion (k := k) c) ≫
+      eM.hom) := hnat ▸ hright
+  haveI : IsIso (F.map (punctured_homology_aux_above_aux_inclusion (k := k) c)) :=
+    IsIso.of_isIso_comp_right _ eM.hom
+  exact isIso_of_reflects_iso
+    (punctured_homology_aux_above_aux_inclusion (k := k) c) F
 
 /-- Collar excision in degrees strictly above the manifold dimension: removing
 the collared open ball does not change integral homology in these degrees. -/
