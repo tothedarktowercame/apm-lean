@@ -5,6 +5,7 @@ import ConstructionTargets.IntegralOpenCoverMayerVietoris
 import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.ManifoldFundamentalClass
 import ConstructionTargets.TwoOpenFreeProductMapping
+import ConstructionTargets.TwoOpenFreeProductMappingCounitComponentIdentity
 
 /-! # Collared connected sums
 
@@ -434,12 +435,45 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_stability
   have hxval : x.1 - Gtilde (f x) = x.1 := congrArg Subtype.val hx
   exact sub_eq_self.mp hxval
 
+/-- Tietze step of B2c: a continuous injection of the compact disk is a closed
+embedding, so its inverse on the image extends to a continuous self-map of `E n`. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_tietze
+    (n : ℕ) {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
+    ∃ Gtilde : E n → E n, Continuous Gtilde ∧ ∀ x : Disk n 1, Gtilde (f x) = x.1 := by
+  sorry
+
+/-- Perturbation step of B2c (Tao's argument).  If `f 0` is not interior to the
+image, pick `c ∉ range f` within `ε` of `f 0`; push the part of the image inside
+`ball c ε` radially onto `sphere c ε`, and replace `Gtilde` by a `C¹` approximation
+`P` that has no zero on `range f \ ball c ε` (where `Gtilde` is bounded away from 0)
+and none on `sphere c ε` (its image of that null set is null, by
+`MeasureTheory.addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero`;
+subtract a small constant outside it).  `K = P ∘ push ∘ f` is then zero-free and
+within `1` of the identity. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
+    (n : ℕ) (hn : 0 < n)
+    {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f)
+    {Gtilde : E n → E n} (hGtilde : Continuous Gtilde)
+    (hGf : ∀ x : Disk n 1, Gtilde (f x) = x.1)
+    (hnot : f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∉ interior (Set.range f)) :
+    ∃ K : Disk n 1 → E n, Continuous K ∧ (∀ x, K x ≠ 0) ∧ ∀ x, ‖x.1 - K x‖ ≤ 1 := by
+  sorry
+
 theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive
     (n : ℕ) (hn : 0 < n)
     (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
     {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
     f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f) := by
-  sorry
+  by_contra hnot
+  obtain ⟨Gtilde, hGtilde, hGf⟩ :=
+    largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_tietze n hf hinj
+  obtain ⟨K, hK, hK0, hKc⟩ :=
+    largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
+      n hn hf hinj hGtilde hGf hnot
+  obtain ⟨y, ⟨x, rfl⟩, hy⟩ :=
+    largeInterior_isOpen_aux_euclidean_aux_interior_aux_stability n hB hK continuous_id
+      (fun x => by simpa using hKc x)
+  exact hK0 x hy
 
 theorem largeInterior_isOpen_aux_euclidean_aux_interior (n : ℕ)
     (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
@@ -774,7 +808,82 @@ lemma punctured_topHomology_zero_aux_mono_aux_excision_set
   have hy : dist y.1 0 ≤ 1 := Metric.mem_closedBall.mp y.2
   linarith
 
-/-- LEAF. The excised pair: removing `Z = c.radialTwoᶜ` from
+/-- The closed annulus `1 ≤ ‖x‖` inside the open radius-two Euclidean ball. -/
+def punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus
+    (n : ℕ) : Set (Metric.ball (0 : E n) 2) :=
+  {x | 1 ≤ dist x.1 0}
+
+/-- LEAF. A homeomorphism of pairs carries vanishing relative homology. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_iso
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (A : Set X) (B : Set Y) (hAB : e '' A = B) (k : ℕ)
+    (hB : IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      B).homology k)) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      A).homology k) := by
+  have hpair : ∀ x, x ∈ A ↔ e x ∈ B := by
+    intro x
+    constructor
+    · intro hx
+      rw [← hAB]
+      exact ⟨x, hx, rfl⟩
+    · intro hx
+      rw [← hAB] at hx
+      obtain ⟨y, hy, hye⟩ := hx
+      have hyx : y = x := e.injective hye
+      exact hyx ▸ hy
+  exact hB.of_iso
+    (ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularHomologyIsoOfHomeomorphPair
+      e A B hpair k)
+
+/-- LEAF. `largeMap` carries the excised pair onto the Euclidean
+(radius-two ball, annulus) pair. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart
+    (n : ℕ) (M : Type) [TopologicalSpace M] (c : BallCollar n M) :
+    ∃ e : ↥(c.radialTwoᶜᶜ) ≃ₜ Metric.ball (0 : E n) 2,
+      e '' ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ c.radialTwoᶜ =
+        punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n := by
+  sorry
+
+/-- LEAF. Radial projection is a homotopy equivalence from the annulus to the
+unit sphere. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv
+    (n : ℕ) (hn : 1 ≤ n) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥(punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)
+      (Sphere n)) := by
+  sorry
+
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus_homology
+    (n : ℕ) (hn : 1 ≤ n) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains (TopCat.of
+      ↥(punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n))).homology n) := by
+  obtain ⟨e⟩ := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv n hn
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  have hS : IsZero (ConstructionTargets.SphereHomology.GroupHomology m (m + 1)) :=
+    ConstructionTargets.SphereHomology.sphereHomology_isZero_of_gt m (m + 1) (by omega)
+  exact hS.of_iso
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv e (m + 1))
+
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_model
+    (n : ℕ) (hn : 1 ≤ n) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)).homology
+        (n + 1)) := by
+  let A := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n
+  haveI : ContractibleSpace (Metric.ball (0 : E n) 2) :=
+    (convex_ball (0 : E n) 2).contractibleSpace ⟨0, by simp⟩
+  have hX : IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of (Metric.ball (0 : E n) 2))).homology (n + 1)) :=
+    ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      _ (n + 1) (by omega)
+  have hA := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus_homology
+    n hn
+  have hex := ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_relative A n
+  exact hex.isZero_X₂ (hX.eq_of_src _ _) (hA.eq_of_tgt _ _)
+
+/-- The excised pair: removing `Z = c.radialTwoᶜ` from
 `(M, M minus the small open ball)` leaves (open radius-two ball, ball minus
 the open unit ball), whose degree-`(n + 1)` relative homology vanishes.
 Sketch: carry the pair by `largeMap` to the Euclidean radius-two ball and
@@ -790,7 +899,9 @@ lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local (n : ℕ) 
         (ConstructionTargets.SingularExcision.excisedSubspace
           (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
           c.radialTwoᶜ)).homology (n + 1)) := by
-  sorry
+  obtain ⟨e, he⟩ := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart n M c
+  exact punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_iso e _ _ he
+    (n + 1) (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_model n (by omega))
 
 /-- Excision step (proved, lemma-2 job 2128): the relative group of
 `(M, M minus the small open ball)` is that of the excised pair. -/
@@ -947,6 +1058,15 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective k x hrs
   exact (mul_right_cancel₀ hq0 hrsq)
 
+/-- LEAF (2026-10-22, claude-14): the localization coefficient of the global
+generator is nonzero.  Not blocked on `_localization_mono` (that lemma is
+assembled from this one).  Template: t00A01 proves the dimension-3 case
+sorry-free as `r = 1 ∨ r = -1`, in `problems/t00A01/lean/Main.lean`,
+`apm_t00A01_punctured_isHomologyBall_aux_positive_aux_mid_connecting_aux_localization_aux_fundamental_aux_coefficient_is_sign`
+(with its `_aux_degree`, `_aux_degree_spec`, `_aux_locallyConstant` and
+`_aux_exists_unit` lemmas): the coefficient's `natAbs` is locally constant,
+hence constant on connected `M`, and equals 1 at some point by compactness.
+Generalize that proof from `Fin 3` / `k := 1` to `k + 2`; ±1 gives `q ≠ 0`. -/
 -- BEGIN SEAT AREA
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero
     (k : ℕ)
@@ -2732,6 +2852,55 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
     h1, Category.id_comp, Category.comp_id]
   rfl
 
+/-- Forward left leg: the mapping equivalence's forward functor, applied to
+the inverse image of the identity, sends `Monoid.Coprod.inl g` to the image of
+the left-cover loop `g` under that inverse image.  Route: unfold the five
+equivalences in `TwoOpenFreeProductMapping.mapping`; the pseudopushout forward
+functor is literal restriction along `coverPieceInclusion true`
+(`pseudopushoutEquivalence_functor_obj_left`, rfl), and the point-span
+comparison at the base point uses the connector at `w` itself.  Split from
+`punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left` after job 2282. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_forward_inl
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)]
+    (g : FundamentalGroup U ⟨w.1, w.2.1⟩) :
+    ((TwoOpenFreeProductMapping.mapping
+        (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)
+        hU hV hcover w).functor.obj
+      (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w)).map (X := SingleObj.star _) (Y := SingleObj.star _)
+        (Monoid.Coprod.inl g : Monoid.Coprod
+          (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)
+          (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)) =
+      (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w).map
+        (FundamentalGroup.map
+          (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) := by
+  sorry
+
+/-- The counit of the five-step mapping equivalence, at the inverse image of the
+identity, has identity component at the single object.  Route: the counit of
+`Equivalence.trans` is built from the counits of the factors; `pseudoSpanEquivalence`
+has `Iso.refl` counit, so the components to compute come from the descent
+equivalence, the point-span comparison and the two free-product equivalences
+(named in `TwoOpenFreeProductMappingCompositeCounitIdentity.compositeCounitComponent`).
+Split from `punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left` after job 2282. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityCounit
+        hU hV hcover w).hom.app
+      (SingleObj.star (Monoid.Coprod
+        (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)
+        (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))) = 𝟙 _ := by
+  sorry
+
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left
     {X : Type} [TopologicalSpace X]
     (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
@@ -2743,7 +2912,11 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
         (FundamentalGroup.map
           (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) =
       Monoid.Coprod.inl g := by
-  sorry
+  change (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+      hU hV hcover w).map _ = _
+  rw [← punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_forward_inl]
+  exact TwoOpenFreeProductMappingCounitComponentIdentity.inverseIdentity_map_eq_of_counit_component_identity
+    hU hV hcover w (punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity U V hU hV hcover w) _
 
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
     {X : Type} [TopologicalSpace X]
