@@ -119152,61 +119152,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Prove fiber formula; assemble Main.",
+    :residual "Instantiate chart data; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorry; review dirs"],
     :missing-theorems
-    [{:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
-      :type
-      "chart localization plus component-lift comparison implies canonical zero sums",
+    [{:name "regularFiber_surfaceTopDegree_eq_signedSum",
+      :type "chart signed sum equals canonical fiber formula",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalComponentSums_eq_zero_of_diskBounded_comparison"
-       "componentLocalDegreeSum_eq_of_localizationCoefficients"],
+      ["regularFiberLocalDegree_localization_eq"
+       "regularFiberSignedSum_eq_of_localizationCoefficients"],
       :area "oriented-surface-degree"}
-     {:name "regularFiber_surfaceTopDegree_eq_signedSum",
-      :type "fiber formula",
+     {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
+      :type "blueprint library boundary",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["regularFiberLocalDegree_localization_eq"],
+      :depends-on
+      ["transverseDiskBounded_canonicalComponentSums_eq_zero"
+       "regularFiber_surfaceTopDegree_eq_signedSum"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "6e3010ee51fbf60d4f95b5b7f210ac0eca7e650fa9901c669a49a8000b3bde7a",
+     "7365797afcf8a140e01c53ac3f0aa084200159d5579dc4d3f4e066d5b97e6f9d",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked transverse comparison.",
+    :reason "Banked canonical fiber formula.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792631111090-1931-fb334a98",
-     :commands
-     ["git show/diff --check f98a24843"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "sha256sum; placeholder count"],
-     :finding
-     "PASS program STOP: f98a24843 changes only t00J02Closure.lean (+38), adding compiled sorry-free transverse disk-bounded component comparison beyond history 7ba7d71b6. Fixture afb497a6, Main 0b3b4888, closure 6e3010ee; registry 170/170; placeholders closure=0/Main=1 expected. Direction is correct: localization identifies coefficient component sums with canonical local-degree sums, then hcomparison identifies them with exact-lift degrees; the existing disk-bounded bridge yields zero canonical sums. Fiber subtype, occupied-component index, and localization-generator boundaries align. Standard axioms only. Residual: fiber formula and Main."},
-    :commit "f98a248430b44343507110990838a78db9df605a",
+    :commit "757e75fc5fcbc7ba9258ece8478e1290bc899223",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119214,7 +119203,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -123416,10 +123405,13 @@
    {:name "regularFiber_surfaceTopDegree_eq_signedSum",
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "top degree equals signed fiber sum",
-    :area "oriented-surface-degree"},
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
    :id :lemma-regularfiber-surfacetopdegree-eq-signedsum,
    :kind :lemma,
-   :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
+   :depends-on
+   [:lemma-regularfiberlocaldegree-localization-eq
+    :lemma-regularfibersignedsum-eq-of-localizationcoefficients],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
