@@ -381,6 +381,58 @@ lemma punctured_topHomology_zero_aux_mono_aux_excision_set
   have hy : dist y.1 0 ≤ 1 := Metric.mem_closedBall.mp y.2
   linarith
 
+/-- LEAF. The excised pair: removing `Z = c.radialTwoᶜ` from
+`(M, M minus the small open ball)` leaves (open radius-two ball, ball minus
+the open unit ball), whose degree-`(n + 1)` relative homology vanishes.
+Sketch: carry the pair by `largeMap` to the Euclidean radius-two ball and
+annulus; the pair's long exact sequence
+(`SingularHomologyConcrete.singularPairHomology_exact_*`) with the ball
+contractible gives `H_{n+1} ≅ H̃_n` of a space homotopy equivalent to
+`Sphere n` (an `(n-1)`-sphere), zero since `n ≥ 2`. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local (n : ℕ) (hn : 2 ≤ n)
+    (M : Type) [TopologicalSpace M] [T2Space M] (c : BallCollar n M)
+    (hopen : IsOpen c.radialTwo) :
+    IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+          c.radialTwoᶜ)).homology (n + 1)) := by
+  sorry
+
+/-- Excision step (proved, lemma-2 job 2128): the relative group of
+`(M, M minus the small open ball)` is that of the excised pair. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_of_excised
+    (n : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    (c : BallCollar n M) (hopen : IsOpen c.radialTwo)
+    (hlocal : IsZero
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+          c.radialTwoᶜ)).homology (n + 1))) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology (n + 1)) := by
+  letI : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeExcisionMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+        c.radialTwoᶜ) (n + 1)) := by
+    rcases punctured_topHomology_zero_aux_mono_aux_excision_set c hopen with
+      ⟨hclosed, hsub⟩
+    have hrange : Set.range (fun x : c.Punctured ↦ x.1) =
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ := by
+      ext x
+      constructor
+      · rintro ⟨y, rfl⟩
+        exact y.2
+      · intro hx
+        exact ⟨⟨x, hx⟩, rfl⟩
+    rw [hrange] at hsub
+    exact ConstructionTargets.SingularExcision.relativeExcisionMap_homologyMap_isIso_succ
+      _ _ hclosed hsub n
+  exact hlocal.of_iso (asIso (HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeExcisionMap
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+      c.radialTwoᶜ) (n + 1))).symm
+
 /-- LEAF. The relative group of `(M, Punctured)` one above top degree
 vanishes.  Sketch: excise `Z = c.radialTwoᶜ`
 (`SingularExcision.relativeExcisionMap_homologyMap_isIso_succ`, hypotheses
@@ -394,7 +446,8 @@ lemma punctured_topHomology_zero_aux_mono_aux_relative_zero (n : ℕ) (hn : 2 �
     (hopen : IsOpen c.radialTwo) :
     IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
       (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology (n + 1)) := by
-  sorry
+  exact punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_of_excised n M c hopen
+    (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local n hn M c hopen)
 
 /-- LEAF. If the relative group of `(M, Punctured)` in degree `n + 1`
 vanishes, the degree-`n` inclusion map is injective.  Sketch: exactness of
