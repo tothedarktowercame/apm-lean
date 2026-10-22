@@ -1,5 +1,6 @@
 import Mathlib
 import ConstructionTargets.SardFiniteOrderRankLocusLocalAggregation
+import ConstructionTargets.SardGenuineSmoothEuclidean
 
 open MeasureTheory
 open scoped ContDiff Manifold
@@ -91,6 +92,23 @@ def apm_t94a06_ConvexDomainSard : Prop :=
       volume (q '' {x | x ∈ Set.range I ∧
         ¬ Function.Surjective
           (fderivWithin ℝ q (Set.range I) x)}) = 0
+
+/-- The interior part of convex-domain Sard follows directly from the banked
+open-domain theorem; only extension across the model frontier remains. -/
+theorem apm_t94a06_interiorCriticalImage_null
+    {E H : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (I : ModelWithCorners ℝ E H) (q : E → apm_t94a06_E2)
+    (hq : ContDiffOn ℝ ∞ q (Set.range I)) :
+    volume (q '' {x | x ∈ interior (Set.range I) ∧
+      ¬ Function.Surjective (fderiv ℝ q x)}) = 0 := by
+  have h := SardGenuineSmoothEuclideanProbe.open_domain_critical_image_null
+    volume q (interior (Set.range I)) (interior (Set.range I))
+    isOpen_interior (fun _ hx ↦ hx) (hq.mono interior_subset)
+  simpa [Set.ext_iff, and_left_comm, and_comm, and_assoc] using h
+
+#print axioms apm_t94a06_interiorCriticalImage_null
 
 /-- Critical values, expressed directly using the manifold derivative.  This
 is the set whose nullity is supplied by the chartwise Morse--Sard argument. -/
