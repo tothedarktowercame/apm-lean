@@ -197,7 +197,80 @@ connectedness of the disk). -/
 theorem largeInterior_isOpen_aux_euclidean_aux_noRetraction (n : ℕ) :
     ¬ ∃ r : Disk (n + 1) 1 → Sphere (n + 1),
       Continuous r ∧ ∀ s, r (sphereToDisk (n + 1) s) = s := by
-  sorry
+  rintro ⟨r, hr, hri⟩
+  by_cases hn : n = 0
+  · subst n
+    letI : ContractibleSpace (Disk 1 1) :=
+      Metric.contractibleSpace_closedBall (by norm_num)
+    let pneg : Sphere 1 :=
+      ⟨EuclideanSpace.single 0 (-1), by simp [Sphere]⟩
+    let ppos : Sphere 1 :=
+      ⟨EuclideanSpace.single 0 1, by simp [Sphere]⟩
+    let f : Disk 1 1 → ℝ := fun x ↦ (r x).1 0
+    have hf : Continuous f :=
+      ((PiLp.continuous_apply 2 (fun _ : Fin 1 => ℝ) 0).comp
+        continuous_subtype_val).comp hr
+    have hfneg : f (sphereToDisk 1 pneg) = -1 := by
+      change (r (sphereToDisk 1 pneg)).1 0 = -1
+      rw [show r (sphereToDisk 1 pneg) = pneg from hri pneg]
+      simp [pneg]
+    have hfpos : f (sphereToDisk 1 ppos) = 1 := by
+      change (r (sphereToDisk 1 ppos)).1 0 = 1
+      rw [show r (sphereToDisk 1 ppos) = ppos from hri ppos]
+      simp [ppos]
+    have hz : (0 : ℝ) ∈ Set.range f := by
+      apply intermediate_value_univ (sphereToDisk 1 pneg) (sphereToDisk 1 ppos) hf
+      rw [hfneg, hfpos]
+      norm_num
+    obtain ⟨x, hx⟩ := hz
+    have hvec : (r x).1 = 0 := by
+      ext i
+      fin_cases i
+      exact hx
+    have hs := (r x).2
+    rw [Metric.mem_sphere, hvec, dist_self] at hs
+    norm_num at hs
+  · let i : C(Sphere (n + 1), Disk (n + 1) 1) :=
+      ⟨sphereToDisk (n + 1), continuous_sphereToDisk (n + 1)⟩
+    let rc : C(Disk (n + 1) 1, Sphere (n + 1)) := ⟨r, hr⟩
+    have hsplit : rc.comp i = ContinuousMap.id (Sphere (n + 1)) := by
+      apply ContinuousMap.ext
+      intro s
+      exact hri s
+    have hsphere :
+        ¬ IsZero (H n (Sphere (n + 1))) := by
+      intro h
+      have hz : IsZero (ModuleCat.of ℤ ℤ) :=
+        h.of_iso
+          (ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt n
+            (Nat.pos_of_ne_zero hn)).symm
+      have hid : 𝟙 (ModuleCat.of ℤ ℤ) = 0 := (IsZero.iff_id_eq_zero _).mp hz
+      have hone := ConcreteCategory.congr_hom hid (1 : ℤ)
+      norm_num at hone
+    have hdiskGroup : IsZero
+        (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat n).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of (Disk (n + 1) 1))) := by
+      letI : ContractibleSpace (Disk (n + 1) 1) :=
+        Metric.contractibleSpace_closedBall (by norm_num)
+      exact ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+        (Disk (n + 1) 1) n hn
+    have hdisk : IsZero
+        (H n (Disk (n + 1) 1)) :=
+      ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+        _ _ hdiskGroup
+    let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+      (ModuleCat.of ℤ ℤ)
+    have hi : F.map (TopCat.ofHom i) = 0 := hdisk.eq_of_tgt _ _
+    apply hsphere
+    rw [IsZero.iff_id_eq_zero]
+    have hsplit' :
+        F.map (TopCat.ofHom i) ≫ F.map (TopCat.ofHom rc) = 𝟙 _ := by
+      rw [← F.map_comp]
+      have hTop : TopCat.ofHom i ≫ TopCat.ofHom rc = 𝟙 (TopCat.of (Sphere (n + 1))) := by
+        change TopCat.ofHom (rc.comp i) = TopCat.ofHom (ContinuousMap.id _)
+        exact congrArg TopCat.ofHom hsplit
+      rw [hTop, F.map_id]
+    rw [← hsplit', hi, zero_comp]
 
 /-- **LIBRARY (B2b).** Brouwer's fixed-point theorem for the closed unit disk,
 from no retraction (B2a, taken as `hNR`) by the ray construction. -/
