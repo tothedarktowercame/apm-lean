@@ -586,6 +586,38 @@ localized generator is `r • ambientLocalGenerator x`, and
 generator localizing to zero at one point localizes to zero everywhere (local
 constancy along the connected `M`), and then compactness forces it to vanish
 in `H_n M`, contradicting `H_n M ≅ ℤ`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_of_coefficient
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (x : M) (q : ℤ)
+    (hq : q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x =
+      ManifoldFundamentalClass.localizationMap x (k + 2)
+        (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e))
+    (hq0 : q ≠ 0) :
+    Function.Injective (fun r : ℤ ↦ r •
+      ManifoldFundamentalClass.localizationMap x (k + 2)
+        (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e)) := by
+  intro r s hrs
+  rw [← hq] at hrs
+  change r • (q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) =
+    s • (q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) at hrs
+  rw [smul_smul, smul_smul] at hrs
+  have hrsq : r * q = s * q :=
+    ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective k x hrs
+  exact (mul_right_cancel₀ hq0 hrsq)
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero
+    (k : ℕ)
+    (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E (k + 2)) M]
+    [IsManifold (I (k + 2)) (⊤ : ℕ∞) M]
+    (e : H (k + 2) M ≅ ModuleCat.of ℤ ℤ) (x : M) (q : ℤ)
+    (hq : q • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x =
+      ManifoldFundamentalClass.localizationMap x (k + 2)
+        (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e)) :
+    q ≠ 0 := by
+  sorry
+
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective
     (n : ℕ) (hn : 2 ≤ n)
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -595,7 +627,17 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     Function.Injective (fun r : ℤ ↦ r •
       ManifoldFundamentalClass.localizationMap x n
         (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) n e)) := by
-  sorry
+  obtain ⟨k, rfl⟩ : ∃ k, n = k + 2 := by
+    refine ⟨n - 2, ?_⟩
+    omega
+  obtain ⟨q, hq⟩ :=
+    ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
+      k e x
+  exact
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_of_coefficient
+      k e x q hq
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero
+          k M e x q hq)
 
 /-- LEAF (local fundamental class). On a closed connected `n`-manifold whose
 top integral homology is `ℤ`, localizing at a point is injective in degree
