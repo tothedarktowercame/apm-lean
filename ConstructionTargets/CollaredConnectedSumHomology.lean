@@ -1519,6 +1519,28 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
   rw [h', HomologicalComplex.homologyMap_comp]
 
 
+/-- LEAF (claude-14, 2026-10-22, split from `_eventually_sign` after lemma-2's
+BLOCKED, job 2326): around each `x` there is a set `K` (a closed chart ball)
+such that for every `z` near `x`, `z ∈ K` and `H_{k+2}(M, M ∖ K) → H_{k+2}(M, M ∖ z)`
+is an isomorphism.  Template: t00A01's sorry-free dimension-3
+`apm_t00A01_..._coefficient_is_sign_aux_locallyConstant_aux_eventually_sign_aux_ball`
+and its subtree (`_aux_ball_aux_excision`, `_aux_chart`, `_aux_model`,
+`_aux_reduce`) in `problems/t00A01/lean/Main.lean`.  Generalize from `Fin 3`
+to `E (k + 2)`; reuse this file's chart / excision lemmas from the
+`_exists_unit_aux_injective_aux_convex` and `_inChart` subtrees where they
+already cover dimension `k + 2`. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_ball
+    (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (E (k + 2)) M] (x : M) :
+    ∃ K : Set M, ∀ᶠ z in nhds x, ∃ hz : z ∈ K,
+      IsIso (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+          (ContinuousMap.id M)
+          (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+            K z hz)) (k + 2)) := by
+  sorry
+
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign
     (k : ℕ)
     (M : Type) [TopologicalSpace M] [T2Space M] [CompactSpace M]
@@ -1530,7 +1552,34 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
         punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e x ∨
       punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e y =
         -punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e x := by
-  sorry
+  obtain ⟨K, hK⟩ := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_ball k M x
+  obtain ⟨hxK, hxI⟩ := hK.self_of_nhds
+  let c := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Kᶜ) (k + 2)
+    (ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of M) (k + 2) e)
+  have key : ∀ (w : M) (hw : w ∈ K) [IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint w)
+        (ContinuousMap.id M)
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          K w hw)) (k + 2))],
+      punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree k M e w =
+        (asIso (HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint w)
+            (ContinuousMap.id M)
+            (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+              K w hw)) (k + 2)) ≪≫
+          ManifoldFundamentalClass.ambientLocalNormalization k w).hom.hom c := by
+    intro w hw _
+    unfold punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree
+    rw [punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_factor
+      K w hw (k + 2)]
+    rfl
+  refine hK.mono fun z hz => ?_
+  obtain ⟨hzK, hzI⟩ := hz
+  rw [key z hzK, key x hxK]
+  exact punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_units _ _ c
 
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant
     (k : ℕ)
