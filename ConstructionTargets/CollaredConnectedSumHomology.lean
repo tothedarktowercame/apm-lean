@@ -191,13 +191,65 @@ def HasStandardCover {n : ℕ} {M₁ M₂ : Type}
 
 namespace BallCollar
 
+/-- **LIBRARY (B2a).** No retraction of the closed unit disk onto its boundary
+sphere, from the sphere homology in `SphereHomology` (for `n + 1 = 1`, from
+connectedness of the disk). -/
+theorem largeInterior_isOpen_aux_euclidean_aux_noRetraction (n : ℕ) :
+    ¬ ∃ r : Disk (n + 1) 1 → Sphere (n + 1),
+      Continuous r ∧ ∀ s, r (sphereToDisk (n + 1) s) = s := by
+  sorry
+
+/-- **LIBRARY (B2b).** Brouwer's fixed-point theorem for the closed unit disk,
+from no retraction (B2a, taken as `hNR`) by the ray construction. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_brouwer (n : ℕ)
+    (hNR : ∀ m : ℕ, ¬ ∃ r : Disk (m + 1) 1 → Sphere (m + 1),
+      Continuous r ∧ ∀ s, r (sphereToDisk (m + 1) s) = s)
+    {g : Disk n 1 → Disk n 1} (hg : Continuous g) : ∃ x, g x = x := by
+  sorry
+
+/-- **LIBRARY (B2c).** A continuous injection of the closed unit disk into
+`E n` sends the centre to an interior point of its image (Tao's argument:
+Tietze-extend the inverse and apply Brouwer, B2b, taken as `hB`). -/
+theorem largeInterior_isOpen_aux_euclidean_aux_interior (n : ℕ)
+    (hB : ∀ {g : Disk n 1 → Disk n 1}, Continuous g → ∃ x, g x = x)
+    {f : Disk n 1 → E n} (hf : Continuous f) (hinj : Function.Injective f) :
+    f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f) := by
+  sorry
+
+/-- **LIBRARY (B2d).** Euclidean invariance of domain, from B2c (taken as `hI`) by rescaling
+closed balls inside `U`. -/
+theorem largeInterior_isOpen_aux_euclidean_aux_open (n : ℕ)
+    (hI : ∀ {f : Disk n 1 → E n}, Continuous f → Function.Injective f →
+      f ⟨0, Metric.mem_closedBall_self zero_le_one⟩ ∈ interior (Set.range f))
+    {U : Set (E n)} (hU : IsOpen U) {g : U → E n} (hg : Continuous g)
+    (hinj : Function.Injective g) : IsOpenMap g := by
+  sorry
+
+/-- **LIBRARY (B2e).** Reduction of manifold invariance of domain to the
+Euclidean case through charts (the model `I d` has no boundary, so chart
+targets are open in `E d`). -/
+theorem largeInterior_isOpen_aux_euclidean_aux_chart
+    (d : ℕ) (X : Type) [TopologicalSpace X] [ChartedSpace (E d) X]
+    [IsManifold (I d) (⊤ : ℕ∞) X]
+    (hE : ∀ {U : Set (E d)}, IsOpen U → ∀ {g : U → E d}, Continuous g →
+      Function.Injective g → IsOpenMap g)
+    {f : LargeInterior (n := d) → X} (hf : Continuous f)
+    (hinj : Function.Injective f) : IsOpenMap f := by
+  sorry
+
 /-- **LIBRARY (B2).** Invariance of domain for the interior of a collared ball. -/
 theorem largeInterior_isOpen_aux_euclidean
     (d : ℕ) (X : Type) [TopologicalSpace X] [ChartedSpace (E d) X]
     [IsManifold (I d) (⊤ : ℕ∞) X]
     {f : LargeInterior (n := d) → X} (hf : Continuous f)
-    (hinj : Function.Injective f) : IsOpenMap f := by
-  sorry
+    (hinj : Function.Injective f) : IsOpenMap f :=
+  largeInterior_isOpen_aux_euclidean_aux_chart d X
+    (fun hU _ hg hinj => largeInterior_isOpen_aux_euclidean_aux_open d
+      (fun hf' hinj' => largeInterior_isOpen_aux_euclidean_aux_interior d
+        (fun hg' => largeInterior_isOpen_aux_euclidean_aux_brouwer d
+          largeInterior_isOpen_aux_euclidean_aux_noRetraction hg') hf' hinj')
+      hU hg hinj)
+    hf hinj
 
 theorem largeInterior_isOpen (n : ℕ) (M : Type)
     [TopologicalSpace M] [ChartedSpace (E n) M]
