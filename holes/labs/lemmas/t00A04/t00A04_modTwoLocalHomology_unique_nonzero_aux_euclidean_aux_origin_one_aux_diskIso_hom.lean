@@ -283,7 +283,37 @@ noncomputable def t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_or
 theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_diskIso_hom :
     (ConstructionTargets.CoefficientSphereEndpoints.diskIso (ZMod 2)).hom =
       ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2) := by
-  sorry
+  letI : ContractibleSpace ConstructionTargets.CoefficientSphereEndpoints.disk :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  let p : ConstructionTargets.CoefficientSphereEndpoints.disk :=
+    Classical.choice inferInstance
+  letI : IsIso
+      (ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2)
+        (X := ConstructionTargets.CoefficientSphereEndpoints.disk)) := by
+    change IsIso (ConstructionTargets.CoefficientH0.h0Iso (ZMod 2) p).hom
+    infer_instance
+  apply ModuleCat.hom_ext
+  apply LinearMap.ext
+  intro x
+  by_cases hx : x = 0
+  · subst x
+    simp
+  have hd : (ConstructionTargets.CoefficientSphereEndpoints.diskIso
+      (ZMod 2)).hom.hom x ≠ 0 := by
+    exact (map_ne_zero_iff _
+      (ConcreteCategory.bijective_of_isIso
+        (ConstructionTargets.CoefficientSphereEndpoints.diskIso
+          (ZMod 2)).hom).1).mpr hx
+  have ha : (ConstructionTargets.CoefficientH0.h0Augmentation
+      (ZMod 2)).hom x ≠ 0 := by
+    exact (map_ne_zero_iff _
+      (ConcreteCategory.bijective_of_isIso
+        (ConstructionTargets.CoefficientH0.h0Augmentation (ZMod 2))).1).mpr hx
+  have hone (w : ZMod 2) (hw : w ≠ 0) : w = 1 := by
+    fin_cases w
+    · exact (hw rfl).elim
+    · rfl
+  exact (hone _ hd).trans (hone _ ha).symm
 -- END SEAT AREA
 
 theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one_aux_coordinates :
