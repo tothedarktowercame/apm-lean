@@ -4703,11 +4703,33 @@ lemma boundary_homology_zero_aux_projection_epi_aux_degree_unit
     isPreconnected_univ (Set.mem_univ x) (Set.mem_univ y)
   exact hxy.trans hy
 
+/-- LEAF (split by claude-14 after lemma-3's BLOCKED-ON, job
+invoke-1792655893377-2421-966f0eda, 2026-10-22), for `_projection_epi`: with
+`U` the collar's open unit ball and `p = c.smallMap 0` its center, the
+localization `H_(m+1)(M, M ∖ U) → H_(m+1)(M, M ∖ p)` is an isomorphism. The
+chart-ball lemmas (`_convex_aux_inj`, `_eventually_sign_aux_ball`) need a compact
+set with convex chart image, and `U` is neither. Suggested route, no charts: the
+inclusion `M ∖ U ⊆ M ∖ p` is a homotopy equivalence, by pushing the punctured
+closed disk radially onto its boundary sphere through `c.smallMap` and fixing
+`M ∖ U`. The two pieces are closed in `M ∖ p` (the disk image is compact, and
+`U` is open from `hopen`). -/
+lemma boundary_homology_zero_aux_projection_epi_aux_localization
+    (n m : ℕ) (hnm : n = m + 1) (M : Type) [TopologicalSpace M] [T2Space M]
+    (c : BallCollar n M) (hopen : IsOpen c.radialTwo) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint (c.smallMap 0))
+        (ContinuousMap.id M)
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo
+          _ (c.smallMap 0) ⟨0, by simp, rfl⟩)) (m + 1)) := by
+  sorry
+
 /-- LEAF. `H_(m+1) M → H_(m+1)(M, M ∖ open unit ball)` is onto. `1 ≤ m`
 (dimension at least 2) is supplied by `boundary_homology_zero`; the dimension-1
 case is not needed. Use `_aux_degree_unit` (the generator localizes to `±` the
-local generator at the collar center) with excision of the closed ball to the
-point. -/
+local generator at the collar center), then transfer epi back along
+`_aux_localization` (an isomorphism `H_(m+1)(M, M ∖ U) → H_(m+1)(M, M ∖ p)`). -/
 lemma boundary_homology_zero_aux_projection_epi
     (n m : ℕ) (hnm : n = m + 1) (hm : 1 ≤ m) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
