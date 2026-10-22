@@ -410,7 +410,41 @@ lemma punctured_topHomology_zero_aux_mono_aux_of_relative_zero (n : ℕ)
     (hrel : IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
       (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ).homology (n + 1))) :
     Mono (punctured_topHomology_zero_aux_inclusion n M c) := by
-  sorry
+  let A : Set M := (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+  let i : TopCat.of A ⟶ TopCat.of M :=
+    ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A
+  letI hg : Mono (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) n) :=
+    (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_subspace
+      A n).mono_g (hrel.eq_of_src _ _)
+  let F := ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+  let eA := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of A) n
+  let eM := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of M) n
+  letI : IsIso eA.hom := eA.isIso_hom
+  letI : IsIso eM.hom := eM.isIso_hom
+  letI : Mono eA.hom := inferInstance
+  letI : Mono eM.hom := inferInstance
+  letI hcomp : Mono (eA.hom ≫ HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) n) :=
+    ⟨fun u v huv ↦ by
+      apply (cancel_mono eA.hom).1
+      apply hg.right_cancellation
+      simpa only [Category.assoc] using huv⟩
+  have hnat : F.map (punctured_topHomology_zero_aux_inclusion n M c) ≫ eM.hom =
+      eA.hom ≫ HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularHomologyConcrete.singularSubspaceMap A) n := by
+    exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      i n
+  haveI : Mono (F.map (punctured_topHomology_zero_aux_inclusion n M c) ≫ eM.hom) :=
+    hnat ▸ hcomp
+  haveI : Mono (F.map (punctured_topHomology_zero_aux_inclusion n M c)) :=
+    mono_of_mono_fac (f := eM.hom)
+      (h := F.map (punctured_topHomology_zero_aux_inclusion n M c) ≫ eM.hom) rfl
+  exact F.mono_of_mono_map
+    (show Mono (F.map (punctured_topHomology_zero_aux_inclusion n M c)) from
+      inferInstance)
 -- END SEAT AREA
 
 /-- The top-homology map of the puncture inclusion is injective.  This is the
