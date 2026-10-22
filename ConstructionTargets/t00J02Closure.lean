@@ -3879,6 +3879,19 @@ theorem topHomologyMap_eq_zero_of_diskBounded_degreeFormula
     (surfaceTopDegree_eq_zero_of_diskBounded_comparison
       f c hc eS hessential hdisks y hy e orientationSign hcomparison htop)
 
+/-- The canonical local degree depends only on the underlying surface point,
+not on which map fiber presents that point.  This is the exact subtype
+alignment needed when transverse-component coordinates are compared with the
+regular fiber used by the top-degree formula. -/
+theorem regularFiberLocalDegree_eq_of_same_point
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (f g : C(S, S)) (y z x : S) (hfx : f x = y) (hgx : g x = z) :
+    regularFiberLocalDegree e f y ⟨x, hfx⟩ =
+      regularFiberLocalDegree e g z ⟨x, hgx⟩ :=
+  rfl
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -3903,6 +3916,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_canonicalComponentSums
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_zero_of_diskBounded_comparison
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_diskBounded_degreeFormula
+#print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_same_point
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
