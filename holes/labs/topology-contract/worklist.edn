@@ -119152,27 +119152,23 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Two lemmas; Main.",
+    :residual "Prove fiber formula; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorry; review dirs"],
     :missing-theorems
-    [{:name "regularFiberSignedSum_eq_of_fiberEquiv",
-      :type "signed-sum transport",
+    [{:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
+      :type
+      "chart localization plus component-lift comparison implies canonical zero sums",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["regularFiberLocalDegree_eq_of_underlying_eq"],
-      :area "oriented-surface-degree"}
-     {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
-      :type "transverse comparison",
-      :status :partial,
-      :consumers [:t00J02],
       :depends-on
-      ["canonicalComponentSums_eq_zero_of_diskBounded_comparison"],
+      ["canonicalComponentSums_eq_zero_of_diskBounded_comparison"
+       "componentLocalDegreeSum_eq_of_localizationCoefficients"],
       :area "oriented-surface-degree"}
      {:name "regularFiber_surfaceTopDegree_eq_signedSum",
       :type "fiber formula",
@@ -119184,34 +119180,21 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "40913f85d658400318f5df4d006724382f390272c35f5b08253a505c8d587932",
+     "6e3010ee51fbf60d4f95b5b7f210ac0eca7e650fa9901c669a49a8000b3bde7a",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked sum transport.",
+    :reason "Banked transverse comparison.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "diff/hashes/placeholders", :exit 0}],
-    :diagnostic-history [{:exits [1 1 1], :note "inference fixed"}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792630457588-1913-13fa3207",
-     :commands
-     ["git show/diff --check 7ba7d71b6"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "sha256sum; placeholder count"],
-     :finding
-     "PASS program STOP: 7ba7d71b6 changes only t00J02Closure.lean (+31), adding a compiled sorry-free regular-fiber signed-sum transport beyond history 69615b1f1. Blueprint/fixture afb497a6, Main 0b3b4888, closure 40913f85; registry 170/170; placeholders closure=0, Main=1 expected. Orientation is correct: Equiv.sum_comp reindexes fibers; hcomponent preserves labels/signs; hpoint plus underlying-point transport preserves local degrees. Fiber-subtype and finite-sum boundaries align. Standard axioms only: propext, Classical.choice, Quot.sound. Residual milestones remain transverse comparison, fiber formula, Main."},
-    :commit "7ba7d71b6a26a2302348b78968783aa103723841",
+     {:cmd "git diff --check; hashes; placeholders", :exit 0}],
+    :commit "f98a248430b44343507110990838a78db9df605a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119219,7 +119202,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -123396,12 +123379,14 @@
    {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "zero canonical component sums",
-    :area "oriented-surface-degree"},
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
    :id :lemma-transversediskbounded-canonicalcomponentsums-eq-zero,
    :kind :lemma,
    :depends-on
    [:lemma-occupiedregularfiber-exactzerodegreelifts
-    :lemma-canonicalcomponentsums-eq-zero-of-diskbounded-comparison],
+    :lemma-canonicalcomponentsums-eq-zero-of-diskbounded-comparison
+    :lemma-componentlocaldegreesum-eq-of-localizationcoefficients],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
