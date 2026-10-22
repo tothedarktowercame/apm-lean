@@ -519,7 +519,29 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localize_zero
         (ManifoldFundamentalClass.absoluteSingularMap
           ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩) n ≫
       ManifoldFundamentalClass.localizationMap (c.smallMap (0 : Disk n 1)) n = 0 := by
-  sorry
+  let f : C(c.Punctured, M) :=
+    ⟨fun z : c.Punctured ↦ z.1, continuous_subtype_val⟩
+  let x : M := c.smallMap (0 : Disk n 1)
+  have hf : Set.MapsTo f Set.univ
+      (LocalHomologyNeighborhoodExcision.deletedPoint x) :=
+    punctured_topHomology_zero_aux_map_eq_zero_aux_avoids_center n M c
+  have hnaturality := ManifoldFundamentalClass.absoluteSingularMap_relativeProjection_naturality
+    (Set.univ : Set c.Punctured)
+    (LocalHomologyNeighborhoodExcision.deletedPoint x) f hf
+  have hhom := congrArg (fun q => HomologicalComplex.homologyMap q n) hnaturality
+  simp only [HomologicalComplex.homologyMap_comp] at hhom
+  change HomologicalComplex.homologyMap
+      (ManifoldFundamentalClass.absoluteSingularMap f) n ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+            (LocalHomologyNeighborhoodExcision.deletedPoint x)) n = 0
+  rw [hhom]
+  rw [(ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero
+    c.Punctured n).eq_of_tgt
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+          (Set.univ : Set c.Punctured)) n) 0,
+    zero_comp]
 -- END SEAT AREA
 
 /-- LEAF (representation transport). If the puncture inclusion is zero on
