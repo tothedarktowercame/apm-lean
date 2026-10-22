@@ -119152,20 +119152,20 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Prove comparison/formula; assemble Main.",
+    :residual "Two lemmas; Main.",
     :outcome :stop,
-    :warnings ["Main sorry" "review dirs"],
+    :warnings ["Main sorry; review dirs"],
     :missing-theorems
-    [{:name "regularFiberLocalDegree_eq_of_underlying_eq",
-      :type "fiber representative transport",
+    [{:name "regularFiberSignedSum_eq_of_fiberEquiv",
+      :type "signed-sum transport",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["regularFiberLocalDegree_eq_of_same_point"],
+      :depends-on ["regularFiberLocalDegree_eq_of_underlying_eq"],
       :area "oriented-surface-degree"}
      {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
       :type "transverse comparison",
@@ -119184,21 +119184,22 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "7d594dcd3270466588d4d41a218512e6cfe31fa36373d958495fc46f15e17df3",
+     "40913f85d658400318f5df4d006724382f390272c35f5b08253a505c8d587932",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked fiber transport.",
+    :reason "Banked sum transport.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "diff; hashes; placeholders", :exit 0}],
-    :commit "531015989b82e26af9d64960ba8f76a7156ca1f6",
+     {:cmd "diff/hashes/placeholders", :exit 0}],
+    :diagnostic-history [{:exits [1 1 1], :note "inference fixed"}],
+    :commit "7ba7d71b6a26a2302348b78968783aa103723841",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119206,7 +119207,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -123518,6 +123519,23 @@
    :id :lemma-exists-nhds-contdiffon-corrected-lift-subset,
    :kind :lemma,
    :depends-on [:lemma-exists-nhds-contdiffon-corrected-lift],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberSignedSum_eq_of_fiberEquiv",
+    :type "signed-sum transport"},
+   :lemma
+   {:name "regularFiberSignedSum_eq_of_fiberEquiv",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "signed-sum transport",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfibersignedsum-eq-of-fiberequiv,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-eq-of-underlying-eq],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
