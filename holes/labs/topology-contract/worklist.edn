@@ -119194,6 +119194,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check; hashes; placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "topo-3",
+     :job "invoke-1792631111090-1931-fb334a98",
+     :commands
+     ["git show/diff --check f98a24843"
+      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
+      "detached: lake env lean problems/t00J02/lean/Main.lean"
+      "detached: python3 scripts/statement-registry.py check"
+      "sha256sum; placeholder count"],
+     :finding
+     "PASS program STOP: f98a24843 changes only t00J02Closure.lean (+38), adding compiled sorry-free transverse disk-bounded component comparison beyond history 7ba7d71b6. Fixture afb497a6, Main 0b3b4888, closure 6e3010ee; registry 170/170; placeholders closure=0/Main=1 expected. Direction is correct: localization identifies coefficient component sums with canonical local-degree sums, then hcomparison identifies them with exact-lift degrees; the existing disk-bounded bridge yields zero canonical sums. Fiber subtype, occupied-component index, and localization-generator boundaries align. Standard axioms only. Residual: fiber formula and Main."},
     :commit "f98a248430b44343507110990838a78db9df605a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119202,7 +119214,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119220,7 +119232,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked sum transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transverse comparison.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119633,7 +119645,10 @@
      :reason "Banked fiber-subtype alignment."}
     {:job 1,
      :commit "7ba7d71b6a26a2302348b78968783aa103723841",
-     :reason "Banked sum transport."}]}
+     :reason "Banked sum transport."}
+    {:job 2,
+     :commit "f98a248430b44343507110990838a78db9df605a",
+     :reason "Banked transverse comparison."}]}
   {:consumer :t98A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -123370,7 +123385,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "transverseDiskBounded_canonicalComponentSums_eq_zero",
@@ -123380,7 +123395,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "zero canonical component sums",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "f98a248430b44343507110990838a78db9df605a"},
    :id :lemma-transversediskbounded-canonicalcomponentsums-eq-zero,
    :kind :lemma,
    :depends-on
