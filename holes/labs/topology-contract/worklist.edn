@@ -119152,32 +119152,30 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Only the transverse comparison and fiber formula remain before Main.",
+    :residual "Prove comparison and fiber formula; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorry" "review dirs"],
     :missing-theorems
-    [{:name "topHomologyMap_eq_zero_of_diskBounded_degreeFormula",
-      :type "comparison+fiber formula imply H2 zero",
+    [{:name "regularFiberLocalDegree_eq_of_same_point",
+      :type "fiber-subtype invariance",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["surfaceTopDegree_eq_zero_of_diskBounded_comparison"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "transverseDiskBounded_canonicalComponentSums_eq_zero",
-      :type "derive comparison",
+      :type "transverse comparison",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
       ["canonicalComponentSums_eq_zero_of_diskBounded_comparison"],
       :area "oriented-surface-degree"}
      {:name "regularFiber_surfaceTopDegree_eq_signedSum",
-      :type "top-degree fiber formula",
+      :type "fiber formula",
       :status :partial,
       :consumers [:t00J02],
       :depends-on ["regularFiberLocalDegree_localization_eq"],
@@ -119186,32 +119184,21 @@
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "018430a19f7ebc5be16a6384dc3d1fed5fe4da9b7be20b13e0a233fcdf47967b",
+     "d7e214eface44d4dffea8f0c98ca03e53b8b1e86fe7e580aeafbe771cfa45c56",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked disk-bounded H2 assembly.",
+    :reason "Banked fiber-subtype alignment.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
-     {:cmd "Main compile; registry; diff; hashes; placeholders",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792626847990-1846-4009d74c",
-     :commands
-     ["git show/diff --check a763d5d49"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "detached: sha256sum/rg placeholders"],
-     :finding
-     "PASS program STOP: a763d5d49 changes only t00J02Closure.lean (+31), adding compiled, sorry-free disk-bounded H2 assembly beyond history 0440d8b89. Fixture afb497a6, source 0b3b4888, implementation 018430a1; registry 170/170; placeholders closure=0/Main=1. Orientation is exact: disk-bounded comparison plus the regular-fiber top-degree formula yields surfaceTopDegree e f = 0, then the established surface-top-homology bridge yields homologyMap 2 f = 0. Fiber subtype, occupied components, exact-lift degrees, canonical local degrees, and signs remain aligned. Axioms are propext, Classical.choice, Quot.sound. Evidence lists only the transverse comparison and fiber formula before Main."},
-    :commit "a763d5d49af5ca6a55d3a081f2175b81a2dadc11",
+     {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "diff; hashes; placeholders", :exit 0}],
+    :commit "69615b1f10dc0284e7e01a868a195e498745069e",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119219,7 +119206,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -123463,6 +123450,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-surfacetopdegree-eq-zero-of-diskbounded-comparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberLocalDegree_eq_of_same_point",
+    :type "fiber-subtype invariance"},
+   :lemma
+   {:name "regularFiberLocalDegree_eq_of_same_point",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "fiber-subtype invariance",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiberlocaldegree-eq-of-same-point,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
