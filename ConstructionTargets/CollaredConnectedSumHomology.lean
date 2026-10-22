@@ -5,6 +5,7 @@ import ConstructionTargets.IntegralOpenCoverMayerVietoris
 import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.ManifoldFundamentalClass
 import ConstructionTargets.TwoOpenFreeProductMapping
+import ConstructionTargets.TwoOpenFreeProductMappingCounitComponentIdentity
 
 /-! # Collared connected sums
 
@@ -2849,6 +2850,55 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
     h1, Category.id_comp, Category.comp_id]
   rfl
 
+/-- Forward left leg: the mapping equivalence's forward functor, applied to
+the inverse image of the identity, sends `Monoid.Coprod.inl g` to the image of
+the left-cover loop `g` under that inverse image.  Route: unfold the five
+equivalences in `TwoOpenFreeProductMapping.mapping`; the pseudopushout forward
+functor is literal restriction along `coverPieceInclusion true`
+(`pseudopushoutEquivalence_functor_obj_left`, rfl), and the point-span
+comparison at the base point uses the connector at `w` itself.  Split from
+`punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left` after job 2282. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_forward_inl
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)]
+    (g : FundamentalGroup U ⟨w.1, w.2.1⟩) :
+    ((TwoOpenFreeProductMapping.mapping
+        (GenericTargetNaturalSourceReconstructionLegCoordinates.FreeProductTarget w)
+        hU hV hcover w).functor.obj
+      (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w)).map (X := SingleObj.star _) (Y := SingleObj.star _)
+        (Monoid.Coprod.inl g : Monoid.Coprod
+          (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)
+          (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base)) =
+      (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+        hU hV hcover w).map
+        (FundamentalGroup.map
+          (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) := by
+  sorry
+
+/-- The counit of the five-step mapping equivalence, at the inverse image of the
+identity, has identity component at the single object.  Route: the counit of
+`Equivalence.trans` is built from the counits of the factors; `pseudoSpanEquivalence`
+has `Iso.refl` counit, so the components to compute come from the descent
+equivalence, the point-span comparison and the two free-product equivalences
+(named in `TwoOpenFreeProductMappingCompositeCounitIdentity.compositeCounitComponent`).
+Split from `punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left` after job 2282. -/
+lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity
+    {X : Type} [TopologicalSpace X]
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (hcover : U ∪ V = Set.univ) (w : (U ∩ V : Set X))
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [SimplyConnectedSpace (U ∩ V : Set X)] :
+    (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityCounit
+        hU hV hcover w).hom.app
+      (SingleObj.star (Monoid.Coprod
+        (End (TwoOpenLegCompatibleConnectorSystems.leftConnectors w).base)
+        (End (TwoOpenLegCompatibleConnectorSystems.rightConnectors w).base))) = 𝟙 _ := by
+  sorry
+
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left
     {X : Type} [TopologicalSpace X]
     (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
@@ -2860,7 +2910,11 @@ lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_au
         (FundamentalGroup.map
           (⟨((↑) : U → X), continuous_subtype_val⟩ : C(U, X)) ⟨w.1, w.2.1⟩ g) =
       Monoid.Coprod.inl g := by
-  sorry
+  change (TwoOpenFreeProductMappingInverseIdentityLegCoordinates.inverseIdentityFunctor
+      hU hV hcover w).map _ = _
+  rw [← punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_forward_inl]
+  exact TwoOpenFreeProductMappingCounitComponentIdentity.inverseIdentity_map_eq_of_counit_component_identity
+    hU hV hcover w (punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left_aux_sourceFunctor_left_aux_counit_identity U V hU hV hcover w) _
 
 lemma punctured_fundamentalGroup_three_aux_van_kampen_aux_inclusion_bijective_aux_left
     {X : Type} [TopologicalSpace X]
