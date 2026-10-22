@@ -38015,69 +38015,61 @@
    :program true,
    :other-consumers []}
   {:consumer :t94A06,
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:residual
-    "Prove corners Sard on range I; chart transport and Main remain.",
+    "Prove frontier extension; finish corners Sard, chart transport, and Main.",
     :evidence
     {:placeholder-delta {:t94A06 [1 1]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
     :warnings ["Main retains one sorry; unrelated files preserved."],
     :missing-theorems
-    [{:name "apm_t94a06_ConvexDomainSard",
-      :type "Prop interface for Sard on range I using fderivWithin",
+    [{:name "apm_t94a06_interiorCriticalImage_null",
+      :type "Sard nullity on interior(range I)",
       :status :proved,
       :consumers [:t94A06],
       :depends-on [],
       :area "parametric-transversality-sard"}
-     {:name "apm_t94a06_convexDomainSard",
-      :type "proof of apm_t94a06_ConvexDomainSard",
+     {:name "apm_t94a06_convexDomain_frontierExtension",
+      :type "smooth extension across frontier preserving derivative",
       :status :not-started,
       :consumers [:t94A06],
       :depends-on [],
       :area "parametric-transversality-sard"}
-     {:name "apm_t94a06_normalPart_localCriticalImage_null",
-      :type "local chart critical-image nullity",
+     {:name "apm_t94a06_convexDomainSard",
+      :type "corners Sard interface",
       :status :partial,
       :consumers [:t94A06],
       :depends-on
-      ["apm_t94a06_convexDomainSard"
-       "apm_t94a06_normalPart_contMDiff"],
-      :area "parametric-transversality-sard"}
-     {:name "apm_t94a06_ae_regularValue_normalPart",
-      :type "AE regular values for normal part",
-      :status :partial,
-      :consumers [:t94A06],
-      :depends-on ["apm_t94a06_normalPart_localCriticalImage_null"],
+      ["apm_t94a06_interiorCriticalImage_null"
+       "apm_t94a06_convexDomain_frontierExtension"],
       :area "parametric-transversality-sard"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Typed corners-Sard boundary; proof remains.",
+    :reason "Proved interior Sard; frontier extension remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t94A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792631729311-1957-4c89f33c",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
-    :commit "68f3eb8d3",
+    :diagnostic-history
+    [{:cmd "draft compile",
+      :exit 1,
+      :correction "Replaced unavailable Subset.refl."}],
+    :commit "afa515558",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A06Closure.lean",
      :sha256
-     "7dfeaf949f514dbebf4cb4cc3f985b3bdf6be845081871f5fc018a744de6de49"},
+     "97df134ece620ca8ca71ad6e44942f66e7f36fd40f3ca826663b6f160aaa207b"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -49890,6 +49882,41 @@
     :type "proof of apm_t94a06_ConvexDomainSard",
     :area "parametric-transversality-sard"},
    :id :lemma-apm-t94a06-convexdomainsard-ed86f3644ec0,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t94a06-interiorcriticalimage-null
+    :lemma-apm-t94a06-convexdomain-frontierextension],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_interiorCriticalImage_null",
+    :type "Sard nullity on interior(range I)"},
+   :lemma
+   {:name "apm_t94a06_interiorCriticalImage_null",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type "Sard nullity on interior(range I)",
+    :area "parametric-transversality-sard",
+    :proved-in :program-2026-10-13-close-t94a06},
+   :id :lemma-apm-t94a06-interiorcriticalimage-null,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_convexDomain_frontierExtension",
+    :type "smooth extension across frontier preserving derivative"},
+   :lemma
+   {:name "apm_t94a06_convexDomain_frontierExtension",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type "smooth extension across frontier preserving derivative",
+    :area "parametric-transversality-sard"},
+   :id :lemma-apm-t94a06-convexdomain-frontierextension,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
