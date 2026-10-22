@@ -4672,13 +4672,68 @@ theorem punctured_topHomology_zero (n : ℕ) (hn : 2 ≤ n) (M : Type)
 
 /-- **LIBRARY (B4b).** The local fundamental class makes the boundary sphere
 null in top-minus-one homology of the punctured manifold. -/
+lemma boundary_homology_zero_aux_connecting_factorization
+    (n m : ℕ) (hnm : n = m + 1) (hm : 1 ≤ m) (M : Type) [TopologicalSpace M]
+    (c : BallCollar n M) :
+    let A : Set M :=
+      (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+    ∃ j : (ConstructionTargets.SingularHomologyConcrete.SingularChains
+          (TopCat.of (Sphere n))).homology m ⟶
+        (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains A).homology (m + 1),
+      j ≫ ConstructionTargets.SingularHomologyConcrete.singularPairConnecting A m =
+        HomologicalComplex.homologyMap
+          (ManifoldFundamentalClass.absoluteSingularMap
+            ⟨c.boundaryMap, c.continuous_boundaryMap⟩) m := by
+  sorry
+
+lemma boundary_homology_zero_aux_projection_epi
+    (n m : ℕ) (hnm : n = m + 1) (M : Type)
+    [TopologicalSpace M] [T2Space M] [CompactSpace M]
+    [PathConnectedSpace M] [ChartedSpace (E n) M]
+    [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
+    (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
+    (hopen : IsOpen c.radialTwo) :
+    Epi (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+        ((c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ)) (m + 1)) := by
+  sorry
+
+lemma boundary_homology_zero_aux_transport
+    (n m : ℕ) (hnm : n = m + 1) (M : Type) [TopologicalSpace M]
+    (c : BallCollar n M)
+    (h0 : HomologicalComplex.homologyMap
+      (ManifoldFundamentalClass.absoluteSingularMap
+        ⟨c.boundaryMap, c.continuous_boundaryMap⟩) m = 0) :
+    boundaryHomologyMap c m = 0 := by
+  sorry
+
 theorem boundary_homology_zero (n : ℕ) (hn : 2 ≤ n) (M : Type)
     [TopologicalSpace M] [T2Space M] [CompactSpace M]
     [PathConnectedSpace M] [ChartedSpace (E n) M]
     [IsManifold (I n) (⊤ : ℕ∞) M] (c : BallCollar n M)
     (htop : Nonempty (H n M ≅ ModuleCat.of ℤ ℤ))
     (hopen : IsOpen c.radialTwo) : boundaryHomologyMap c (n - 1) = 0 := by
-  sorry
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := by
+    exact ⟨n - 1, by omega⟩
+  have hm : m + 1 - 1 = m := by omega
+  rw [hm]
+  let A : Set M :=
+    (c.smallMap '' {y : Disk (m + 1) 1 | dist y.1 0 < 1})ᶜ
+  letI : Epi (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection A)
+        (m + 1)) :=
+    boundary_homology_zero_aux_projection_epi (m + 1) m rfl M c htop hopen
+  have hconnecting :
+      ConstructionTargets.SingularHomologyConcrete.singularPairConnecting A m = 0 :=
+    (ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_relative
+      A m).epi_f_iff.mp inferInstance
+  obtain ⟨j, hj⟩ :=
+    boundary_homology_zero_aux_connecting_factorization (m + 1) m rfl (by omega) M c
+  apply boundary_homology_zero_aux_transport (m + 1) m rfl M c
+  calc
+    _ = j ≫ ConstructionTargets.SingularHomologyConcrete.singularPairConnecting A m :=
+      hj.symm
+    _ = 0 := by rw [hconnecting, comp_zero]
 
 /-- **LIBRARY (B5).** Integral homology of a collared puncture. -/
 lemma punctured_homology_aux_H0 {n : ℕ} {M : Type} [TopologicalSpace M]
