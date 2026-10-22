@@ -89382,7 +89382,7 @@
   {:consumer :t97A03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope. Commit 331574e06 adds only a conjunction wrapper around already-banked conditional adapters: it assumes the geometric cut decoder, cut signed generation, and literal signed generation, then pairs their existing consequences. It proves none of the listed geometric obligations and therefore commits no substantive progress beyond the last program-history entry. Repair by constructing the decoder and proving signed generation for the two genuine complementary arcs of the literal quotient (then derive alignment/collapse injectivity), rather than introducing another facade that takes those facts as hypotheses. Exact-revision build and registry pass; fixture/frozen hashes and 0/3 placeholder counts are unchanged, so the defect is the representation boundary, not compilation.",
    :evidence
@@ -89437,7 +89437,7 @@
      "581ffddbc615fe9f0f1c2cc77ffdcccc377bcab9be497b5079b561ea694aef7f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89806,6 +89806,19 @@
     [{:cmd "Lean draft",
       :exit 1,
       :correction "used characteristic-two addition"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792632375777-1980-f05cfb66",
+     :commands
+     ["git show/diff 50936aa88"
+      "lake -Kjobs=1 build ConstructionTargets.t99A03Closure"
+      "lake env lean problems/t99A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t99A03 --rev 50936aa88"
+      "sha256sum + placeholder/axiom scans"],
+     :finding
+     "PASS: exact commit changes only in-scope t99A03Closure. Fixture SHA ab377585e7a30b2043767284a8f6e4b2e16af6fd16268cea3221a79da67e8a7a; registry 170/0; frozen digest 6b0e5d09fbaaf3cde9106337a8520de98da8ddd3fb3d0364ec6d96831a9dfe49. Fresh exact-revision build/Lean pass; closure/Main placeholders 0/1. The selected genuine crosscap generator acts through the concrete parity sheet action; characteristic-two addition correctly proves its permutation squares to identity, and exhaustive ZMod 2 cases prove it fixes no sheet. Orientation and representation boundary are faithful, with standard axioms only. This is new compiled progress; N4 polygon-cover realization, Lefschetz, and Main remain listed."},
     :commit "50936aa88",
     :changed-paths ["ConstructionTargets/t99A03Closure.lean"],
     :fixture
@@ -89814,7 +89827,7 @@
      "ab377585e7a30b2043767284a8f6e4b2e16af6fd16268cea3221a79da67e8a7a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99A03/lean/Main.lean"
     "problems/t99A03/status.json"
@@ -89832,7 +89845,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99A03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked concrete transitive parity action and exact kernel.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked concrete free sheet involution.",
    :id :program-2026-10-13-close-t99a03,
    :kind :final-adapter,
    :campaign-priority 39,
@@ -89860,7 +89873,10 @@
     {:job 6,
      :commit "6c0054f9f",
      :reason
-     "Banked concrete transitive parity action and exact kernel."}]}
+     "Banked concrete transitive parity action and exact kernel."}
+    {:job 7,
+     :commit "50936aa88",
+     :reason "Banked concrete free sheet involution."}]}
   {:consumer :t95J03,
    :stop-count 0,
    :phase :implementation,
@@ -101513,7 +101529,7 @@
    :other-consumers []}
   {:consumer :t99A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "n3PresentedParitySheetAction_generator_free_involution",
@@ -101525,7 +101541,9 @@
     :type
     "selected generator is fixed-point-free involution on two sheets",
     :area "polygon-covering-classification",
-    :proved-in :program-2026-10-13-close-t99a03},
+    :proved-in :program-2026-10-13-close-t99a03,
+    :banked-by :program-2026-10-13-close-t99a03,
+    :banked-commit "50936aa88"},
    :id :lemma-n3presentedparitysheetaction-generator-free-involution,
    :kind :lemma,
    :depends-on [:lemma-n3presentedparitysheetaction-transitive],
