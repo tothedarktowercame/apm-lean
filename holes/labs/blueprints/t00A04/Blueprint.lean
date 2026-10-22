@@ -261,7 +261,15 @@ theorem t00A04_modTwoLocalHomology_unique_nonzero_aux_chart
         a ≠ 0 → b ≠ 0 → a = b) :
     ∀ x : X, ∀ a b : t00A04_ModTwoLocalHomology X {x} (Module.finrank ℝ E),
       a ≠ 0 → b ≠ 0 → a = b := by
-  sorry
+  intro x a b ha hb
+  let e := ConstructionTargets.CoefficientManifoldLocalComparison.allComparison
+    (ZMod 2) (Module.finrank ℝ E) rfl x (Module.finrank ℝ E)
+  have hinj : Function.Injective e.hom.hom :=
+    (ConcreteCategory.bijective_of_isIso e.hom).1
+  apply hinj
+  exact heuclidean (Module.finrank ℝ E) 0 (e.hom.hom a) (e.hom.hom b)
+    ((map_ne_zero_iff e.hom.hom hinj).mpr ha)
+    ((map_ne_zero_iff e.hom.hom hinj).mpr hb)
 
 theorem t00A04_modTwoLocalHomology_unique_nonzero
     (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
