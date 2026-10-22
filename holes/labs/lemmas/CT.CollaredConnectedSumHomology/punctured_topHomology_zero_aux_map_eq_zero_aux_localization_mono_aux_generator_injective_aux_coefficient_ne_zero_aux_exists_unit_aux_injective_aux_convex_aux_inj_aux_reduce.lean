@@ -2183,6 +2183,243 @@ isomorphism, so is `H_i(M, M ∖ K) → H_i(M, M ∖ z)`.  Template: t00A01's so
 the complement of an open `U ⊇ K`), `_aux_isIso_aux_homeo`, `_aux_isIso_aux_excision`,
 `_aux_isIso_aux_chart`).  Generalize `Fin 3` to `k + 2`. -/
 -- BEGIN SEAT AREA
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_excision
+    {X : Type} [TopologicalSpace X] (K U : Set X)
+    (hU : IsOpen U) (hKU : Uᶜ ⊆ interior Kᶜ) (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeExcisionMap Kᶜ Uᶜ) i) := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hi)
+  exact ConstructionTargets.SingularExcision.relativeExcisionMap_homologyMap_isIso_succ
+    Kᶜ Uᶜ hU.isClosed_compl hKU n
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_chart
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (A : Set X) (B : Set Y)
+    (hAB : ∀ x, x ∈ A ↔ e x ∈ B) (i : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A B
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap e)
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+          e A B hAB)) i) := by
+  exact ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
+    e A B hAB i
+
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): localization can be computed in an open subspace.  For open
+`U ⊆ X` and closed `B ⊆ A ⊆ U`, the identity `H_i(X, X ∖ A) → H_i(X, X ∖ B)` is an
+isomorphism iff the identity `H_i(U, U ∖ A) → H_i(U, U ∖ B)` is.  Route: the inclusion
+`U ↪ X` gives a commuting square (`relativeSingularMap_comp`, both composites are the
+inclusion); its two vertical maps are excisions of `X ∖ U` (`_aux_excision`, after the
+identification `U ≃ₜ (Uᶜ)ᶜ` as in `neighborhoodInclusion_chain_eq`), so both are
+isomorphisms for `i > 0`, and two-out-of-three gives the iff. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_pair
+    {X : Type} [TopologicalSpace X] (U K : Set X) (u : U) :
+    u ∈ {v : U | v.1 ∉ K} ↔
+      ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodExcisionHomeomorph U u ∈
+        ConstructionTargets.SingularExcision.excisedSubspace Kᶜ Uᶜ := by
+  rfl
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_chain
+    {X : Type} [TopologicalSpace X] (U K : Set X) :
+    ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : U | u.1 ∉ K} Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion U)
+        (fun _ h => h) =
+      ConstructionTargets.SingularExcision.relativeSingularMap
+          {u : U | u.1 ∉ K}
+          (ConstructionTargets.SingularExcision.excisedSubspace Kᶜ Uᶜ)
+          (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap
+            (ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodExcisionHomeomorph U))
+          (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+            _ _ _
+            (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_pair U K)) ≫
+        ConstructionTargets.SingularExcision.relativeExcisionMap Kᶜ Uᶜ := by
+  let e := ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodExcisionHomeomorph U)
+  have he := ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodExcisionHomeomorph U)
+    {u : U | u.1 ∉ K} (ConstructionTargets.SingularExcision.excisedSubspace Kᶜ Uᶜ)
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_pair U K)
+  have hf := ConstructionTargets.SingularExcision.excisionInclusion_mapsTo Kᶜ Uᶜ
+  have hcomp : (ConstructionTargets.SingularExcision.excisionInclusion Uᶜ).comp e =
+      ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion U := by
+    ext u
+    rfl
+  have h := ConstructionTargets.SingularExcision.relativeSingularMap_comp
+    {u : U | u.1 ∉ K}
+    (ConstructionTargets.SingularExcision.excisedSubspace Kᶜ Uᶜ) Kᶜ
+    e (ConstructionTargets.SingularExcision.excisionInclusion Uᶜ) he hf (hf.comp he)
+  simpa only [hcomp] using h.symm
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_inclusion
+    {X : Type} [TopologicalSpace X] (U : Set X) (hU : IsOpen U)
+    (K : Set X) (hK : IsClosed K) (hKU : K ⊆ U) (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : U | u.1 ∉ K} Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion U)
+        (fun _ h => h)) i) := by
+  have hZ : Uᶜ ⊆ interior Kᶜ := by
+    rw [hK.isOpen_compl.interior_eq]
+    intro x hx hxK
+    exact hx (hKU hxK)
+  letI := punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_excision
+    K U hU hZ i hi
+  letI := ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodExcisionHomeomorph U)
+    {u : U | u.1 ∉ K} (ConstructionTargets.SingularExcision.excisedSubspace Kᶜ Uᶜ)
+    (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_pair U K) i
+  rw [punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_chain,
+    HomologicalComplex.homologyMap_comp]
+  infer_instance
+
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict
+    {X : Type} [TopologicalSpace X] (U : Set X) (hU : IsOpen U)
+    (A B : Set X) (hA : IsClosed A) (hB : IsClosed B) (hAU : A ⊆ U) (hBA : B ⊆ A)
+    (i : ℕ) (hi : 0 < i) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ Bᶜ
+        (ContinuousMap.id X) (fun _ hx hb => hx (hBA hb))) i) ↔
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : U | u.1 ∉ A} {u : U | u.1 ∉ B}
+        (ContinuousMap.id U) (fun _ hx hb => hx (hBA hb))) i) := by
+  let jA := ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion U
+  let jB := ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion U
+  let fU := ConstructionTargets.SingularExcision.relativeSingularMap
+    {u : U | u.1 ∉ A} {u : U | u.1 ∉ B} (ContinuousMap.id U)
+    (fun _ hx hb => hx (hBA hb))
+  let fX := ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ Bᶜ
+    (ContinuousMap.id X) (fun _ hx hb => hx (hBA hb))
+  let vA := ConstructionTargets.SingularExcision.relativeSingularMap
+    {u : U | u.1 ∉ A} Aᶜ jA (fun _ h => h)
+  let vB := ConstructionTargets.SingularExcision.relativeSingularMap
+    {u : U | u.1 ∉ B} Bᶜ jB (fun _ h => h)
+  have hsquare : HomologicalComplex.homologyMap fU i ≫
+        HomologicalComplex.homologyMap vB i =
+      HomologicalComplex.homologyMap vA i ≫
+        HomologicalComplex.homologyMap fX i := by
+    rw [← HomologicalComplex.homologyMap_comp,
+      ← HomologicalComplex.homologyMap_comp]
+    dsimp [fU, fX, vA, vB, jA, jB]
+    have hleft := ConstructionTargets.SingularExcision.relativeSingularMap_comp
+      {u : U | u.1 ∉ A} {u : U | u.1 ∉ B} Bᶜ
+      (ContinuousMap.id U)
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion U)
+      (fun _ hx hb => hx (hBA hb)) (fun _ h => h)
+      (fun _ hx hb => hx (hBA hb))
+    have hright := ConstructionTargets.SingularExcision.relativeSingularMap_comp
+      {u : U | u.1 ∉ A} Aᶜ Bᶜ
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion U)
+      (ContinuousMap.id X) (fun _ h => h) (fun _ hx hb => hx (hBA hb))
+      (fun _ hx hb => hx (hBA hb))
+    rw [hleft, hright]
+    rfl
+  letI : IsIso (HomologicalComplex.homologyMap vA i) :=
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_inclusion
+      U hU A hA hAU i hi
+  letI : IsIso (HomologicalComplex.homologyMap vB i) :=
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict_aux_inclusion
+      U hU B hB (hBA.trans hAU) i hi
+  constructor
+  · intro hf
+    letI : IsIso (HomologicalComplex.homologyMap fX i) := hf
+    haveI : IsIso (HomologicalComplex.homologyMap fU i ≫
+        HomologicalComplex.homologyMap vB i) := by
+      rw [hsquare]
+      infer_instance
+    exact IsIso.of_isIso_comp_right (HomologicalComplex.homologyMap fU i)
+      (HomologicalComplex.homologyMap vB i)
+  · intro hf
+    letI : IsIso (HomologicalComplex.homologyMap fU i) := hf
+    haveI : IsIso (HomologicalComplex.homologyMap vA i ≫
+        HomologicalComplex.homologyMap fX i) := by
+      rw [← hsquare]
+      infer_instance
+    exact IsIso.of_isIso_comp_left (HomologicalComplex.homologyMap vA i)
+      (HomologicalComplex.homologyMap fX i)
+
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): localization is invariant under homeomorphism.  If
+`e : X ≃ₜ Y` carries `A` to `A'` and `B` to `B'`, the identity
+`H_i(X, A) → H_i(X, B)` is an isomorphism iff `H_i(Y, A') → H_i(Y, B')` is.
+Route: the square with horizontal maps the pair homeomorphisms
+(`_aux_chart`, isomorphisms in every degree) commutes by `relativeSingularMap_comp`
+(both composites are `e`); two-out-of-three. -/
+lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_homeo
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (e : X ≃ₜ Y)
+    (A B : Set X) (A' B' : Set Y)
+    (hA : ∀ x, x ∈ A ↔ e x ∈ A') (hB : ∀ x, x ∈ B ↔ e x ∈ B')
+    (hAB : Set.MapsTo (ContinuousMap.id X) A B)
+    (hAB' : Set.MapsTo (ContinuousMap.id Y) A' B') (i : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A B
+        (ContinuousMap.id X) hAB) i) ↔
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap A' B'
+        (ContinuousMap.id Y) hAB') i) := by
+  let e' := ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap e
+  let fX := ConstructionTargets.SingularExcision.relativeSingularMap A B
+    (ContinuousMap.id X) hAB
+  let fY := ConstructionTargets.SingularExcision.relativeSingularMap A' B'
+    (ContinuousMap.id Y) hAB'
+  let uA := ConstructionTargets.SingularExcision.relativeSingularMap A A' e'
+    (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+      e A A' hA)
+  let uB := ConstructionTargets.SingularExcision.relativeSingularMap B B' e'
+    (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+      e B B' hB)
+  have heAB : Set.MapsTo e' A B' := fun x hx =>
+    (hB x).1 (hAB hx)
+  have hsquare : HomologicalComplex.homologyMap fX i ≫
+        HomologicalComplex.homologyMap uB i =
+      HomologicalComplex.homologyMap uA i ≫
+        HomologicalComplex.homologyMap fY i := by
+    rw [← HomologicalComplex.homologyMap_comp,
+      ← HomologicalComplex.homologyMap_comp]
+    dsimp [fX, fY, uA, uB, e']
+    rw [ConstructionTargets.SingularExcision.relativeSingularMap_comp
+        A B B' (ContinuousMap.id X) e' hAB
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+          e B B' hB) heAB,
+      ConstructionTargets.SingularExcision.relativeSingularMap_comp
+        A A' B' e' (ContinuousMap.id Y)
+        (ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo
+          e A A' hA) hAB' heAB]
+    rfl
+  letI : IsIso (HomologicalComplex.homologyMap uA i) :=
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_chart
+      e A A' hA i
+  letI : IsIso (HomologicalComplex.homologyMap uB i) :=
+    punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_chart
+      e B B' hB i
+  constructor
+  · intro hf
+    letI : IsIso (HomologicalComplex.homologyMap fX i) := hf
+    haveI : IsIso (HomologicalComplex.homologyMap uA i ≫
+        HomologicalComplex.homologyMap fY i) := by
+      rw [← hsquare]
+      infer_instance
+    exact IsIso.of_isIso_comp_left (HomologicalComplex.homologyMap uA i)
+      (HomologicalComplex.homologyMap fY i)
+  · intro hf
+    letI : IsIso (HomologicalComplex.homologyMap fY i) := hf
+    haveI : IsIso (HomologicalComplex.homologyMap fX i ≫
+        HomologicalComplex.homologyMap uB i) := by
+      rw [hsquare]
+      infer_instance
+    exact IsIso.of_isIso_comp_right (HomologicalComplex.homologyMap fX i)
+      (HomologicalComplex.homologyMap uB i)
+
+/-- LIBRARY LEAF (split by claude-14 from `_inj_aux_isIso` after lemma-1's PARTIAL,
+job 200, 2026-10-21): the chart reduction shared by `_inj_aux_isIso` and
+`_ball_aux_reduce`.  For compact `K` in the chart source of `e = chartAt x` and
+`z ∈ K`, if `H_i(ℝ³, ℝ³ ∖ e '' K) → H_i(ℝ³, ℝ³ ∖ e z)` is an isomorphism, so is
+`H_i(M, M ∖ K) → H_i(M, M ∖ z)`.  Route: `_aux_restrict` with `U = e.source`
+(`K` compact in a Hausdorff space, hence closed; points are closed); `_aux_homeo`
+along `e.toHomeomorphSourceTarget`, whose membership conditions are
+`u ∈ K ↔ e u ∈ e '' K` (`e` injective on the source) and `u = z ↔ e u = e z`;
+`_aux_restrict` again in `ℝ³` with `U = e.target` (`e '' K` compact). -/
 lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce
     (k : ℕ) (M : Type) [TopologicalSpace M] [T2Space M]
     [ChartedSpace (E (k + 2)) M]
@@ -2190,12 +2427,84 @@ lemma punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_gener
     (hsub : K ⊆ (chartAt (E (k + 2)) x).source)
     (z : M) (hz : z ∈ K) (i : ℕ) (hi : 0 < i)
     (hmodel : IsIso (HomologicalComplex.homologyMap
-      (ConstructionTargets.SingularExcision.relativeSingularMap ((chartAt (E (k + 2)) x) '' K)ᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint ((chartAt (E (k + 2)) x) z))
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        ((chartAt (E (k + 2)) x) '' K)ᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+          ((chartAt (E (k + 2)) x) z))
         (ContinuousMap.id (E (k + 2)))
-        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo ((chartAt (E (k + 2)) x) '' K) ((chartAt (E (k + 2)) x) z) (Set.mem_image_of_mem _ hz))) i)) :
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo ((chartAt (E (k + 2)) x) '' K) ((chartAt (E (k + 2)) x) z)
+          (Set.mem_image_of_mem _ hz))) i)) :
     IsIso (HomologicalComplex.homologyMap
-      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) (ContinuousMap.id M) (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K z hz)) i) := by
-  sorry
+      (ConstructionTargets.SingularExcision.relativeSingularMap Kᶜ
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+        (ContinuousMap.id M)
+        (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_mapsTo K z hz)) i) := by
+  let e := chartAt (E (k + 2)) x
+  have hzsub : z ∈ e.source := hsub hz
+  have hKclosed : IsClosed K := hK.isClosed
+  have himgCompact : IsCompact (e '' K) :=
+    hK.image_of_continuousOn (e.continuousOn.mono hsub)
+  have himgClosed : IsClosed (e '' K) := himgCompact.isClosed
+  have htarget : e '' K ⊆ e.target := by
+    rintro _ ⟨w, hw, rfl⟩
+    exact e.map_source (hsub hw)
+  have hmodelTarget : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : e.target | u.1 ∉ e '' K}
+        {u : e.target | u.1 ∉ ({e z} : Set (E (k + 2)))}
+        (ContinuousMap.id e.target) (fun u hu huz => hu (by
+          have heq : u.1 = e z := by simpa using huz
+          rw [heq]
+          exact Set.mem_image_of_mem e hz))) i) := by
+    exact (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict
+      e.target e.open_target (e '' K) ({e z} : Set (E (k + 2)))
+      himgClosed isClosed_singleton htarget (by
+        intro a ha
+        rcases ha with rfl
+        exact Set.mem_image_of_mem e hz) i hi).mp hmodel
+  have hsource : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularExcision.relativeSingularMap
+        {u : e.source | u.1 ∉ K} {u : e.source | u.1 ∉ ({z} : Set M)}
+        (ContinuousMap.id e.source) (fun u hu huz => hu (by
+          have heq : u.1 = z := by simpa using huz
+          rw [heq]
+          exact hz))) i) := by
+    exact (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_homeo
+      e.toHomeomorphSourceTarget
+      {u : e.source | u.1 ∉ K} {u : e.source | u.1 ∉ ({z} : Set M)}
+      {u : e.target | u.1 ∉ e '' K}
+      {u : e.target | u.1 ∉ ({e z} : Set (E (k + 2)))}
+      (by
+        intro u
+        constructor
+        · intro hu himg
+          obtain ⟨w, hw, hew⟩ := himg
+          have hwu : w = u.1 := e.injOn (hsub hw) u.property hew
+          exact hu (hwu ▸ hw)
+        · intro hu hw
+          exact hu ⟨u, hw, rfl⟩)
+      (by
+        intro u
+        simp only [Set.mem_setOf_eq, Set.mem_singleton_iff]
+        apply not_congr
+        constructor
+        · exact congrArg e
+        · exact e.injOn u.property hzsub)
+      (fun u hu huz => hu (by
+        have heq : u.1 = z := by simpa using huz
+        rw [heq]
+        exact hz))
+      (fun u hu huz => hu (by
+        have heq : u.1 = e z := by simpa using huz
+        rw [heq]
+        exact Set.mem_image_of_mem e hz)) i).mpr hmodelTarget
+  exact (punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_convex_aux_inj_aux_reduce_aux_restrict
+    e.source e.open_source K ({z} : Set M) hKclosed isClosed_singleton hsub
+    (by
+      intro a ha
+      have heq : a = z := by simpa using ha
+      rw [heq]
+      exact hz) i hi).mpr hsource
 -- END SEAT AREA
 
 /-- PROVED from `_aux_inj_aux_model`, `_aux_inj_aux_reduce` (claude-14, 2026-10-22):
