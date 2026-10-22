@@ -774,7 +774,69 @@ lemma punctured_topHomology_zero_aux_mono_aux_excision_set
   have hy : dist y.1 0 ≤ 1 := Metric.mem_closedBall.mp y.2
   linarith
 
-/-- LEAF. The excised pair: removing `Z = c.radialTwoᶜ` from
+/-- The closed annulus `1 ≤ ‖x‖` inside the open radius-two Euclidean ball. -/
+def punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus
+    (n : ℕ) : Set (Metric.ball (0 : E n) 2) :=
+  {x | 1 ≤ dist x.1 0}
+
+/-- LEAF. A homeomorphism of pairs carries vanishing relative homology. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_iso
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (A : Set X) (B : Set Y) (hAB : e '' A = B) (k : ℕ)
+    (hB : IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      B).homology k)) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      A).homology k) := by
+  sorry
+
+/-- LEAF. `largeMap` carries the excised pair onto the Euclidean
+(radius-two ball, annulus) pair. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart
+    (n : ℕ) (M : Type) [TopologicalSpace M] (c : BallCollar n M) :
+    ∃ e : ↥(c.radialTwoᶜᶜ) ≃ₜ Metric.ball (0 : E n) 2,
+      e '' ConstructionTargets.SingularExcision.excisedSubspace
+          (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ c.radialTwoᶜ =
+        punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n := by
+  sorry
+
+/-- LEAF. Radial projection is a homotopy equivalence from the annulus to the
+unit sphere. -/
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv
+    (n : ℕ) (hn : 1 ≤ n) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      ↥(punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)
+      (Sphere n)) := by
+  sorry
+
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus_homology
+    (n : ℕ) (hn : 1 ≤ n) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains (TopCat.of
+      ↥(punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n))).homology n) := by
+  obtain ⟨e⟩ := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_hequiv n hn
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  have hS : IsZero (ConstructionTargets.SphereHomology.GroupHomology m (m + 1)) :=
+    ConstructionTargets.SphereHomology.sphereHomology_isZero_of_gt m (m + 1) (by omega)
+  exact hS.of_iso
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv e (m + 1))
+
+lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_model
+    (n : ℕ) (hn : 1 ≤ n) :
+    IsZero ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+      (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n)).homology
+        (n + 1)) := by
+  let A := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus n
+  haveI : ContractibleSpace (Metric.ball (0 : E n) 2) :=
+    (convex_ball (0 : E n) 2).contractibleSpace ⟨0, by simp⟩
+  have hX : IsZero ((ConstructionTargets.SingularHomologyConcrete.SingularChains
+      (TopCat.of (Metric.ball (0 : E n) 2))).homology (n + 1)) :=
+    ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      _ (n + 1) (by omega)
+  have hA := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_annulus_homology
+    n hn
+  have hex := ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_relative A n
+  exact hex.isZero_X₂ (hX.eq_of_src _ _) (hA.eq_of_tgt _ _)
+
+/-- The excised pair: removing `Z = c.radialTwoᶜ` from
 `(M, M minus the small open ball)` leaves (open radius-two ball, ball minus
 the open unit ball), whose degree-`(n + 1)` relative homology vanishes.
 Sketch: carry the pair by `largeMap` to the Euclidean radius-two ball and
@@ -790,7 +852,9 @@ lemma punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local (n : ℕ) 
         (ConstructionTargets.SingularExcision.excisedSubspace
           (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
           c.radialTwoᶜ)).homology (n + 1)) := by
-  sorry
+  obtain ⟨e, he⟩ := punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_chart n M c
+  exact punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_pair_iso e _ _ he
+    (n + 1) (punctured_topHomology_zero_aux_mono_aux_relative_zero_aux_local_aux_model n (by omega))
 
 /-- Excision step (proved, lemma-2 job 2128): the relative group of
 `(M, M minus the small open ball)` is that of the excised pair. -/
