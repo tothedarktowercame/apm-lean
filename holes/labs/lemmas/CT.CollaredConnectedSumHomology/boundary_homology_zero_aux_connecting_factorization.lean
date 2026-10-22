@@ -4685,7 +4685,75 @@ lemma boundary_homology_zero_aux_connecting_factorization
         HomologicalComplex.homologyMap
           (ManifoldFundamentalClass.absoluteSingularMap
             ⟨c.boundaryMap, c.continuous_boundaryMap⟩) m := by
-  sorry
+  let A : Set M :=
+    (c.smallMap '' {y : Disk n 1 | dist y.1 0 < 1})ᶜ
+  let B : Set (Disk n 1) := {y | dist y.1 0 < 1}ᶜ
+  let f : C(Disk n 1, M) := ⟨c.smallMap, c.smallEmbedding.continuous⟩
+  have hf : Set.MapsTo f B A := by
+    intro x hx
+    simp only [A, B, Set.mem_compl_iff, Set.mem_image]
+    rintro ⟨y, hy, hxy⟩
+    have hxeq : x = y := c.smallEmbedding.injective hxy.symm
+    subst y
+    exact hx hy
+  have hg (s : Sphere n) : sphereToDisk n s ∈ B := by
+    simp only [B, Set.mem_compl_iff, Set.mem_setOf_eq]
+    have hs : dist s.1 0 = 1 := by
+      simpa [Metric.mem_sphere, dist_comm] using s.2
+    simpa [sphereToDisk, hs]
+  let g : C(Sphere n, B) :=
+    ⟨fun s => ⟨sphereToDisk n s, hg s⟩,
+      (continuous_sphereToDisk n).subtype_mk (fun s => hg s)⟩
+  letI : ContractibleSpace (Disk n 1) :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  let e := ConstructionTargets.T02A06DiskPairShift.singularPairConnectingIsoOfAbsoluteIsZero
+    B m
+      (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+        (TopCat.of (Disk n 1)) (m + 1) (by omega))
+      (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+        (TopCat.of (Disk n 1)) m (by omega))
+  let gs := HomologicalComplex.homologyMap
+    (ManifoldFundamentalClass.absoluteSingularMap g) m
+  let bs := HomologicalComplex.homologyMap
+    (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map
+        (ConstructionTargets.SingularExcision.subspaceMap B A f hf)) m
+  let rf := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap B A f hf) (m + 1)
+  refine ⟨gs ≫ e.inv ≫ rf, ?_⟩
+  change (gs ≫ e.inv ≫ rf) ≫
+      ConstructionTargets.SingularHomologyConcrete.singularPairConnecting A m = _
+  rw [Category.assoc, Category.assoc]
+  rw [← ConstructionTargets.RelativeSingularConnectingNaturality.singularPairConnecting_naturality
+    B A f hf m]
+  have he : e.inv ≫
+      ConstructionTargets.SingularHomologyConcrete.singularPairConnecting B m = 𝟙 _ :=
+    e.inv_hom_id
+  have hc : gs ≫ e.inv ≫
+      ConstructionTargets.SingularHomologyConcrete.singularPairConnecting B m ≫ bs =
+      gs ≫ bs := by
+    simpa only [Category.assoc, Category.comp_id] using
+      congrArg (fun k => gs ≫ k ≫ bs) he
+  rw [hc]
+  change HomologicalComplex.homologyMap
+      (ManifoldFundamentalClass.absoluteSingularMap g) m ≫
+      HomologicalComplex.homologyMap
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).map
+            (ConstructionTargets.SingularExcision.subspaceMap B A f hf)) m = _
+  rw [← HomologicalComplex.homologyMap_comp]
+  congr 1
+  change ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map (TopCat.ofHom g) ≫
+      ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularExcision.subspaceMap B A f hf) = _
+  rw [← Functor.map_comp]
+  apply congrArg (fun k : TopCat.of (Sphere n) ⟶ TopCat.of A =>
+    ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map k)
+  ext s
+  rfl
 -- END SEAT AREA
 
 lemma boundary_homology_zero_aux_projection_epi
