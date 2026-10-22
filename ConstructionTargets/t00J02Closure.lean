@@ -3977,6 +3977,28 @@ theorem regularFiberSignedSum_eq_of_fiberEquiv
     _ = _ := Equiv.sum_comp equiv (fun x =>
       orientationSign (componentG x) * regularFiberLocalDegree e g z x)
 
+/-- A global signed-sum calculation in chart coefficients is exactly the
+surface top-degree formula in canonical regular-fiber local degrees. -/
+theorem regularFiber_surfaceTopDegree_eq_signedSum
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S] {κ : Type*}
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (y : S) [Fintype {x : S // f x = y}]
+    (component : {x : S // f x = y} → κ)
+    (orientationSign : κ → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hlocalization : ∀ x, coefficient x •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e))
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (component x) * coefficient x) :
+    surfaceTopDegree e f = ∑ x,
+      orientationSign (component x) * regularFiberLocalDegree e f y x :=
+  htop.trans (regularFiberSignedSum_eq_of_localizationCoefficients
+    e f y component orientationSign coefficient hlocalization).symm
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -4005,6 +4027,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_same_point
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalDegree_eq_of_underlying_eq
 #print axioms ConstructionTargets.T00J02Closure.regularFiberSignedSum_eq_of_fiberEquiv
+#print axioms ConstructionTargets.T00J02Closure.regularFiber_surfaceTopDegree_eq_signedSum
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.ofComponentComparison
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
