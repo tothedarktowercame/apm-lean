@@ -516,7 +516,26 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
     (n : ℕ) (hn : 0 < n) {P : E n → E n} (hP : ContDiff ℝ 1 P)
     (c : E n) {ε : ℝ} (hε : 0 < ε) {η : ℝ} (hη : 0 < η) :
     ∃ v : E n, ‖v‖ < η ∧ ∀ y ∈ Metric.sphere c ε, P y ≠ v := by
-  sorry
+  letI : NeZero n := ⟨Nat.ne_of_gt hn⟩
+  have himage : MeasureTheory.volume (P '' Metric.sphere c ε) = 0 :=
+    MeasureTheory.addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero
+      MeasureTheory.volume
+      hP.differentiable_one.differentiableOn
+      (MeasureTheory.Measure.addHaar_sphere MeasureTheory.volume c ε)
+  have hball : 0 < MeasureTheory.volume (Metric.ball (0 : E n) η) :=
+    Metric.measure_ball_pos MeasureTheory.volume 0 hη
+  have hnsub : ¬ Metric.ball (0 : E n) η ⊆ P '' Metric.sphere c ε := by
+    intro hsub
+    have hle : MeasureTheory.volume (Metric.ball (0 : E n) η) ≤
+        MeasureTheory.volume (P '' Metric.sphere c ε) :=
+      MeasureTheory.measure_mono hsub
+    rw [himage] at hle
+    exact (not_lt_of_ge hle) hball
+  obtain ⟨v, hv, hnv⟩ := Set.not_subset.mp hnsub
+  refine ⟨v, ?_, ?_⟩
+  · simpa [Metric.mem_ball, dist_eq_norm] using hv
+  · intro y hy heq
+    exact hnv ⟨y, hy, heq⟩
 
 /-- A continuous map with no zero on a compact set is bounded away from zero there. -/
 theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb_aux_lower_bound
