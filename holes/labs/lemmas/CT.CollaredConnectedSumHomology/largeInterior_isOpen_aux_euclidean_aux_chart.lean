@@ -236,7 +236,58 @@ theorem largeInterior_isOpen_aux_euclidean_aux_chart
       Function.Injective g → IsOpenMap g)
     {f : LargeInterior (n := d) → X} (hf : Continuous f)
     (hinj : Function.Injective f) : IsOpenMap f := by
-  sorry
+  let q : LargeInterior (n := d) → E d := fun x => x.1.1
+  have hq : IsOpenEmbedding q := by
+    exact Metric.isOpen_ball.isOpenEmbedding_subtypeVal.comp
+      largeInteriorHomeomorphBall.isOpenEmbedding
+  intro s hs
+  apply isOpen_iff_forall_mem_open.mpr
+  rintro y ⟨x, hx, rfl⟩
+  let c := chartAt (E d) (f x)
+  let A : Set (LargeInterior (n := d)) := s ∩ f ⁻¹' c.source
+  have hA : IsOpen A := hs.inter (c.open_source.preimage hf)
+  have hxA : x ∈ A := ⟨hx, mem_chart_source (E d) (f x)⟩
+  let U : Set (E d) := q '' A
+  have hU : IsOpen U := hq.isOpenMap A hA
+  let e : A ≃ₜ U :=
+    (Equiv.Set.image q A hq.injective).toHomeomorphOfIsInducing
+      ((hq.restrict (fun z (hz : z ∈ A) =>
+        show q z ∈ U from ⟨z, hz, rfl⟩) hA).isInducing)
+  let g : U → E d := fun z => c (f (e.symm z).1)
+  have hg : Continuous g := by
+    apply c.continuousOn.comp_continuous
+      (hf.comp (continuous_subtype_val.comp e.symm.continuous))
+    intro z
+    exact (e.symm z).2.2
+  have hginj : Function.Injective g := by
+    intro z w hzw
+    have hc : f (e.symm z).1 = f (e.symm w).1 :=
+      c.injOn (e.symm z).2.2 (e.symm w).2.2 hzw
+    exact e.symm.injective (Subtype.ext (hinj hc))
+  have hopen_g : IsOpenMap g := hE hU hg hginj
+  let T : Set (E d) := g '' (e '' {z : A | z.1 ∈ s})
+  have heall : e '' {z : A | z.1 ∈ s} = Set.univ := by
+    ext z
+    simp only [Set.mem_image, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    exact ⟨e.symm z, (e.symm z).2.1, e.apply_symm_apply z⟩
+  have hT : IsOpen T := hopen_g _ (by rw [heall]; exact isOpen_univ)
+  have hTtarget : T ⊆ c.target := by
+    rintro z ⟨u, hu, rfl⟩
+    exact c.map_source (e.symm u).2.2
+  refine ⟨c.symm '' T, ?_, c.isOpen_image_symm_of_subset_target hT hTtarget, ?_⟩
+  · rintro z ⟨u, huT, huz⟩
+    obtain ⟨v, hv, rfl⟩ := huT
+    refine ⟨(e.symm v).1, (e.symm v).2.1, ?_⟩
+    rw [← huz]
+    change f (e.symm v).1 = c.symm (c (f (e.symm v).1))
+    exact (c.left_inv (e.symm v).2.2).symm
+  · refine ⟨g (e ⟨x, hxA⟩), ?_, ?_⟩
+    · refine ⟨e ⟨x, hxA⟩, ?_, rfl⟩
+      rw [heall]
+      trivial
+    · change c.symm (c (f (e.symm (e ⟨x, hxA⟩)).1)) = f x
+      rw [e.symm_apply_apply]
+      exact c.left_inv (mem_chart_source (E d) (f x))
 -- END SEAT AREA
 
 /-- **LIBRARY (B2).** Invariance of domain for the interior of a collared ball. -/
