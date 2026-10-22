@@ -38015,42 +38015,43 @@
    :program true,
    :other-consumers []}
   {:consumer :t94A06,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:residual
-    "Prove frontier extension; finish corners Sard, chart transport, and Main.",
+    "Build Whitney extension; specialize reduction, transport charts, assemble Main.",
     :evidence
     {:placeholder-delta {:t94A06 [1 1]},
      :statement-hashes {:registry "170/170"}},
     :outcome :stop,
-    :warnings ["Main retains one sorry; unrelated files preserved."],
+    :warnings ["Main retains one sorry."],
     :missing-theorems
-    [{:name "apm_t94a06_interiorCriticalImage_null",
-      :type "Sard nullity on interior(range I)",
+    [{:name "apm_t94a06_criticalImage_null_of_smoothExtension",
+      :type "extension implies relative Sard",
       :status :proved,
       :consumers [:t94A06],
       :depends-on [],
       :area "parametric-transversality-sard"}
      {:name "apm_t94a06_convexDomain_frontierExtension",
-      :type "smooth extension across frontier preserving derivative",
+      :type "smooth frontier extension preserving derivative",
       :status :not-started,
       :consumers [:t94A06],
       :depends-on [],
       :area "parametric-transversality-sard"}
      {:name "apm_t94a06_convexDomainSard",
-      :type "corners Sard interface",
+      :type "corners Sard",
       :status :partial,
       :consumers [:t94A06],
       :depends-on
-      ["apm_t94a06_interiorCriticalImage_null"
-       "apm_t94a06_convexDomain_frontierExtension"],
+      ["apm_t94a06_convexDomain_frontierExtension"
+       "apm_t94a06_criticalImage_null_of_smoothExtension"],
       :area "parametric-transversality-sard"}],
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Proved interior Sard; frontier extension remains.",
+    :reason
+    "Banked extension-to-Sard reduction; Whitney extension remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t94A06Closure.lean",
       :exit 0}
@@ -38060,29 +38061,16 @@
     :diagnostic-history
     [{:cmd "draft compile",
       :exit 1,
-      :correction "Replaced unavailable Subset.refl."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792633101501-2008-f63972d4",
-     :commands
-     ["git show/diff afa515558"
-      "git diff-tree/diff --check afa515558"
-      "lake env lean ConstructionTargets/t94A06Closure.lean"
-      "lake env lean problems/t94A06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and rg placeholders on recorded blobs"],
-     :finding
-     "PASS: afa515558 changes only scoped t94A06Closure; fixture hash 97df13...207b matches. Fresh detached gates pass; registry 170/170; closure placeholders 0; standard axioms. The theorem correctly restricts the banked open-domain Sard result to interior(range I); ContDiffOn is weakened along interior_subset and the image/intersection orientation simplifies exactly. This is proved progress after the failed interface-only milestone; frontier extension, corners assembly, and Main remain listed. Main retains one pre-existing sorry."},
-    :commit "afa515558",
+      :correction "Unfolded membership before rewrite."}],
+    :commit "7314feef4",
     :changed-paths ["ConstructionTargets/t94A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94A06Closure.lean",
      :sha256
-     "97df134ece620ca8ca71ad6e44942f66e7f36fd40f3ca826663b6f160aaa207b"},
+     "ad63217fb1d29524bd06b1f746792a1c54910e06713c05c24fae31fd6faddb8a"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A06/lean/Main.lean"
     "problems/t94A06/status.json"
@@ -49903,7 +49891,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-apm-t94a06-interiorcriticalimage-null
-    :lemma-apm-t94a06-convexdomain-frontierextension],
+    :lemma-apm-t94a06-convexdomain-frontierextension
+    :lemma-apm-t94a06-criticalimage-null-of-smoothextension],
    :other-consumers []}
   {:consumer :t94A06,
    :phase :lemma,
@@ -49937,6 +49926,23 @@
     :type "smooth extension across frontier preserving derivative",
     :area "parametric-transversality-sard"},
    :id :lemma-apm-t94a06-convexdomain-frontierextension,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a06_criticalImage_null_of_smoothExtension",
+    :type "extension implies relative Sard"},
+   :lemma
+   {:name "apm_t94a06_criticalImage_null_of_smoothExtension",
+    :reported-by [:program-2026-10-13-close-t94a06],
+    :type "extension implies relative Sard",
+    :area "parametric-transversality-sard",
+    :proved-in :program-2026-10-13-close-t94a06},
+   :id :lemma-apm-t94a06-criticalimage-null-of-smoothextension,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
