@@ -466,7 +466,32 @@ theorem largeInterior_isOpen_aux_euclidean_aux_interior_aux_positive_aux_perturb
     (n : ℕ) (c : E n) {ε : ℝ} (hε : 0 < ε) :
     ∃ Φ : E n → E n, ContinuousOn Φ {c}ᶜ ∧ (∀ y, ε ≤ ‖y - c‖ → Φ y = y) ∧
       ∀ y, y ≠ c → ‖y - c‖ < ε → Φ y ∈ Metric.sphere c ε := by
-  sorry
+  let Φ : E n → E n := fun y ↦
+    c + max (ε / ‖y - c‖) 1 • (y - c)
+  refine ⟨Φ, ?_, ?_, ?_⟩
+  · intro y hy
+    have hyc : y ≠ c := by simpa using hy
+    have hyn : ‖y - c‖ ≠ 0 := by
+      simpa [norm_eq_zero, sub_eq_zero] using hyc
+    have hn : ContinuousAt (fun z : E n ↦ ‖z - c‖) y :=
+      (continuous_norm.comp (continuous_id.sub continuous_const)).continuousAt
+    have hq : ContinuousAt (fun z : E n ↦ ε / ‖z - c‖) y :=
+      continuousAt_const.div hn hyn
+    exact (continuousAt_const.add
+      ((hq.max continuousAt_const).smul
+        (continuous_id.sub continuous_const).continuousAt)).continuousWithinAt
+  · intro y hy
+    have hyn : 0 < ‖y - c‖ := lt_of_lt_of_le hε hy
+    have hdiv : ε / ‖y - c‖ ≤ 1 := (div_le_one hyn).2 hy
+    dsimp [Φ]
+    rw [max_eq_right hdiv, one_smul, add_sub_cancel]
+  · intro y hyc hy
+    have hyn : 0 < ‖y - c‖ := norm_pos_iff.mpr (sub_ne_zero.mpr hyc)
+    have hdiv : 1 ≤ ε / ‖y - c‖ := (le_div_iff₀ hyn).2 (by simpa using hy.le)
+    rw [Metric.mem_sphere, dist_eq_norm]
+    dsimp [Φ]
+    rw [add_sub_cancel_left, max_eq_left hdiv, norm_smul, Real.norm_eq_abs,
+      abs_of_pos (div_pos hε hyn), div_mul_cancel₀ ε (ne_of_gt hyn)]
 
 /-- Perturbation, approximation: a continuous self-map of `E n` is uniformly within `η` of a
 `C¹` map on any compact set (mollify with a `ContDiffBump`, or Stone–Weierstrass). -/
