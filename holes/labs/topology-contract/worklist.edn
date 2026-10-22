@@ -119152,62 +119152,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "program STOP commits nothing new since the latest program-history entry: evidence commit fe7396763a54bedb319f5ac9593c282b0665d6cb exactly equals history job 4 and changed-paths is empty",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Instantiate chart data; assemble Main.",
+    :residual "Construct chart data; Main.",
     :outcome :stop,
     :warnings ["Main sorry; review dirs"],
     :missing-theorems
-    [{:name "regularFiber_surfaceTopDegree_eq_signedSum",
-      :type "chart signed sum equals canonical fiber formula",
+    [{:name
+      "t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData",
+      :type "chart data implies H2 zero",
       :status :proved,
-      :consumers [:t00J02],
-      :depends-on
-      ["regularFiberLocalDegree_localization_eq"
-       "regularFiberSignedSum_eq_of_localizationCoefficients"],
-      :area "oriented-surface-degree"}
-     {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
-      :type "blueprint library boundary",
-      :status :partial,
       :consumers [:t00J02],
       :depends-on
       ["transverseDiskBounded_canonicalComponentSums_eq_zero"
        "regularFiber_surfaceTopDegree_eq_signedSum"],
+      :area "oriented-surface-degree"}
+     {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
+      :type "construct transverse chart data; blueprint boundary",
+      :status :partial,
+      :consumers [:t00J02],
+      :depends-on
+      ["t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "7365797afcf8a140e01c53ac3f0aa084200159d5579dc4d3f4e066d5b97e6f9d",
+     "51d4d133c44abf38b87b843f8429dd10ad33d75d88cddd7e77a4e3be4e54a15a",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "170/170"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked canonical fiber formula.",
+    :reason "Banked chart-data endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check; hashes; placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "topo-3",
-     :job "invoke-1792632685919-1990-9415e373",
-     :commands
-     ["git show/diff --check 757e75fc5"
-      "detached: lake env lean ConstructionTargets/t00J02Closure.lean"
-      "detached: lake env lean problems/t00J02/lean/Main.lean"
-      "detached: python3 scripts/statement-registry.py check"
-      "sha256sum; placeholder count"],
-     :finding
-     "PASS program STOP: 757e75fc5 changes only t00J02Closure.lean (+23), adding a compiled sorry-free regular-fiber top-degree formula beyond history f98a24843. Fixture afb497a6, Main 0b3b4888, closure 7365797a; registry 170/170; placeholders closure=0/Main=1 expected. Orientation is correct: the prior localization theorem gives canonical signed sum = coefficient sum, so its symmetry composes with htop (top degree = coefficient sum) to obtain top degree = canonical signed sum. Fiber subtype, component index, generator, and finite-sum representations remain identical. Axioms: propext, Classical.choice, Quot.sound. Residual: instantiate chart data and assemble Main."},
-    :commit "757e75fc5fcbc7ba9258ece8478e1290bc899223",
+     {:cmd "diff/hashes/placeholders", :exit 0}],
+    :commit "e3ad7c360c033f802bbd8c372e54fca8e410e416",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119215,7 +119203,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119985,7 +119973,8 @@
     :lemma-canonicalregularfibersignedsum-eq-zero-of-componentsums
     :lemma-surfacetopdegree-eq-zero-of-canonicalcomponentsums
     :lemma-transversediskbounded-canonicalcomponentsums-eq-zero
-    :lemma-regularfiber-surfacetopdegree-eq-signedsum],
+    :lemma-regularfiber-surfacetopdegree-eq-signedsum
+    :lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero-of-chartdata],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -123564,6 +123553,28 @@
    :id :lemma-regularfibersignedsum-eq-of-fiberequiv,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-eq-of-underlying-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData",
+    :type "chart data implies H2 zero"},
+   :lemma
+   {:name
+    "t00J02_transverse_diskBounded_topHomologyMap_eq_zero_of_chartData",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart data implies H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-t00j02-transverse-diskbounded-tophomologymap-eq-zero-of-chartdata,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transversediskbounded-canonicalcomponentsums-eq-zero
+    :lemma-regularfiber-surfacetopdegree-eq-signedsum],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
