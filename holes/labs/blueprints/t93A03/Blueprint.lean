@@ -154,9 +154,85 @@ theorem quotientHomeomorph
 /-- **LEAF (P2).** The product `S¹ × S²`, viewed as a three-manifold
 through an `E 1 × E 2 ≃ E 3` model change, has an open, path-connected
 collared puncture. -/
+def puncturedGeometry_aux_modelEquiv :
+    (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2)) ≃L[ℝ]
+      EuclideanSpace ℝ (Fin 3) :=
+  (LinearEquiv.ofFinrankEq _ _ (by simp)).toContinuousLinearEquiv
+
+noncomputable instance puncturedGeometry_aux_productChartedSpace :
+    ChartedSpace (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2))
+      T93A03Summand :=
+  prodChartedSpace (EuclideanSpace ℝ (Fin 1)) Circle
+    (EuclideanSpace ℝ (Fin 2)) T93A03Sphere2
+
+def puncturedGeometry_aux_chart (x : T93A03Summand) :
+    OpenPartialHomeomorph T93A03Summand (EuclideanSpace ℝ (Fin 3)) :=
+  (chartAt (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2)) x).trans
+      puncturedGeometry_aux_modelEquiv.toHomeomorph.toOpenPartialHomeomorph
+
+noncomputable instance puncturedGeometry_aux_chartedSpace :
+    ChartedSpace (EuclideanSpace ℝ (Fin 3)) T93A03Summand where
+  atlas := Set.range puncturedGeometry_aux_chart
+  chartAt := puncturedGeometry_aux_chart
+  mem_chart_source x := by simp [puncturedGeometry_aux_chart, mem_chart_source]
+  chart_mem_atlas x := ⟨x, rfl⟩
+
+theorem puncturedGeometry_aux_isManifold :
+    IsManifold (modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 3)))
+      (⊤ : ℕ∞) T93A03Summand := by
+  let e := puncturedGeometry_aux_modelEquiv
+  have hprod : IsManifold
+      (modelWithCornersSelf ℝ
+        (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2)))
+      (⊤ : ℕ∞) T93A03Summand := by
+    rw [modelWithCornersSelf_prod]
+    exact IsManifold.prod
+      (I := modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 1)))
+      (I' := modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 2))) Circle T93A03Sphere2
+  apply isManifold_of_contDiffOn
+  intro a b ha hb
+  obtain ⟨x, rfl⟩ := ha
+  obtain ⟨y, rfl⟩ := hb
+  have h := ((contDiffGroupoid (⊤ : ℕ∞)
+      (modelWithCornersSelf ℝ
+        (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2)))).compatible
+      (chart_mem_atlas _ x) (chart_mem_atlas _ y)).1
+  simp only [mfld_simps] at h
+  have h' := e.contDiff.comp_contDiffOn
+    (h.comp e.symm.contDiff.contDiffOn
+      (s := e.symm ⁻¹' ((chartAt _ x).symm.trans (chartAt _ y)).source)
+      (by intro z hz; simpa [mfld_simps] using hz))
+  simpa [puncturedGeometry_aux_chart, Function.comp_def, mfld_simps] using h'
+
 theorem puncturedGeometry (c : BallCollar 3 T93A03Summand) :
     IsOpen c.radialTwo ∧ PathConnectedSpace c.Punctured := by
-  sorry
+  letI : IsManifold (modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 3)))
+      (⊤ : ℕ∞) T93A03Summand := puncturedGeometry_aux_isManifold
+  letI : PathConnectedSpace T93A03Sphere2 :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (E := T93A03E3)
+        (by rw [← Module.finrank_eq_rank']; norm_num)
+        (0 : T93A03E3) (r := 1) (by norm_num))
+  letI : PathConnectedSpace (ConstructionTargets.SphereHomology.Sphere 1) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere
+        (E := EuclideanSpace ℝ (Fin 2))
+        (by rw [← Module.finrank_eq_rank']; norm_num)
+        (0 : EuclideanSpace ℝ (Fin 2)) (r := 1) (by norm_num))
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+          isPathConnected_univ
+      simpa using h)
+  letI : PathConnectedSpace T93A03Summand :=
+    { nonempty := inferInstance
+      joined := fun x y ↦ ⟨(PathConnectedSpace.somePath x.1 y.1).prod
+        (PathConnectedSpace.somePath x.2 y.2)⟩ }
+  have hopen := c.largeInterior_isOpen 3 T93A03Summand
+  exact ⟨hopen, c.punctured_pathConnected 3 (by omega) T93A03Summand hopen⟩
 
 /-- **LEAF (P3).** A collared puncture of `S¹ × S²` has the
 rank-one free fundamental group, at the boundary basepoint. -/
