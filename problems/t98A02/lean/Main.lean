@@ -1,48 +1,14 @@
 import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.CollaredConnectedSumHomology
 
 /-!
-# APM t98A02 — homology of a connected sum of four-manifolds
+# Blueprint for APM t98A02
 
-The connected sum is the actual quotient described in the source: remove the
-open interiors of two embedded closed four-balls and identify corresponding
-points of their boundary three-spheres.  Its homology groups are Mathlib's
-integral singular homology modules.
-
-## Statement repairs
-
-The construction and the supplied top-homology fact require `X₁` and `X₂` to
-be closed.  The source initially says only “connected oriented 4-manifolds,”
-but its intended solution uses closedness.  We therefore include compactness,
-along with the supplied integral top-homology hypotheses.
-
-## The source's simplex assumption
-
-The source adds: “You may assume that `φᵢ(D⁴)` is a 4-simplex in the
-triangulation of `Xᵢ`.”  Mathlib has no triangulated manifolds, so the
-sentence is not encoded literally.  Instead the statement takes, as
-hypotheses, the two consequences of it that the intended solution uses
-(Joe, 2026-10-11: restore the dropped sentence in the Lean framing):
-
-* *Collar.*  Each `φᵢ` extends to a topological embedding `ψᵢ` of the closed
-  ball of radius `2`, so the boundary sphere `φᵢ(∂D⁴)` has an exterior collar
-  in `Xᵢ`.  This is what makes the open-cover Mayer–Vietoris computation of
-  the connected sum available.  It follows from the source's assumption:
-  triangulations of 4-manifolds are combinatorial (vertex links are simply
-  connected 3-manifolds, hence `S³`), and a top simplex of a combinatorial
-  triangulation is bicollared by its PL regular neighbourhood.  Every
-  parametrisation `φᵢ` of the simplex then extends radially along the outer
-  collar.
-* *Dimension.*  `Hₖ(Xᵢ) = 0` for `k ≥ 5`.  This holds for every closed
-  4-manifold (Hatcher, Prop. 3.29); with the source's triangulation it is
-  immediate, since the simplicial chain complex vanishes above degree four.
-  Mathlib cannot yet derive it, so it is supplied like the source's
-  `H₄ ≅ ℤ` fact, and it excludes no case.
-
-Both hypotheses hold whenever the source's assumption does, so the theorem
-remains at least as strong as the source asks.  It no longer covers wild
-(uncollared) balls, which the source never asked about.
+The missing input is a connected-sum theorem for the concrete collared quotient
+and Mathlib's integral singular-homology functor.  It is isolated below as one
+library-scale theorem; the registered theorem is then a direct application.
 -/
 
 open CategoryTheory Set
@@ -51,14 +17,13 @@ open scoped Manifold
 noncomputable section
 
 abbrev T98A02E4 := EuclideanSpace ℝ (Fin 4)
-abbrev T98A02I4 := 𝓘(ℝ, T98A02E4)
+abbrev T98A02I4 := modelWithCornersSelf ℝ T98A02E4
 abbrev T98A02Disk := Metric.closedBall (0 : T98A02E4) 1
 abbrev T98A02Sphere := Metric.sphere (0 : T98A02E4) 1
 
 def t98A02SphereInDisk (x : T98A02Sphere) : T98A02Disk :=
   ⟨x, by simpa [Metric.mem_closedBall, Metric.mem_sphere] using x.property.le⟩
 
-/-- The closed ball of radius `2`, into which a collared ball extends. -/
 abbrev T98A02CollarBall := Metric.closedBall (0 : T98A02E4) 2
 
 def t98A02DiskInCollarBall (u : T98A02Disk) : T98A02CollarBall :=
@@ -89,180 +54,184 @@ noncomputable instance {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSp
     TopologicalSpace (T98A02ConnectedSum φ₁ φ₂) :=
   TopologicalSpace.coinduced (fun z ↦ Quotient.mk _ z) inferInstance
 
-def t98A02QuotientMap {X₁ X₂ : Type}
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    Sum (T98A02Punctured X₁ φ₁) (T98A02Punctured X₂ φ₂) →
-      T98A02ConnectedSum φ₁ φ₂ :=
-  fun z ↦ Quotient.mk _ z
-
-lemma t98A02_continuous_quotientMap
-    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    Continuous (t98A02QuotientMap φ₁ φ₂) := by
-  exact continuous_coinduced_rng
-
-lemma t98A02_surjective_quotientMap
-    {X₁ X₂ : Type} (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    Function.Surjective (t98A02QuotientMap φ₁ φ₂) := by
-  exact Quotient.mk_surjective
-
-def t98A02_leftInclusion {X₁ X₂ : Type}
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    T98A02Punctured X₁ φ₁ → T98A02ConnectedSum φ₁ φ₂ :=
-  fun x ↦ t98A02QuotientMap φ₁ φ₂ (.inl x)
-
-def t98A02_rightInclusion {X₁ X₂ : Type}
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    T98A02Punctured X₂ φ₂ → T98A02ConnectedSum φ₁ φ₂ :=
-  fun x ↦ t98A02QuotientMap φ₁ φ₂ (.inr x)
-
-lemma t98A02_continuous_leftInclusion
-    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    Continuous (t98A02_leftInclusion φ₁ φ₂) := by
-  exact (t98A02_continuous_quotientMap φ₁ φ₂).comp continuous_inl
-
-lemma t98A02_continuous_rightInclusion
-    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    Continuous (t98A02_rightInclusion φ₁ φ₂) := by
-  exact (t98A02_continuous_quotientMap φ₁ φ₂).comp continuous_inr
-
-lemma t98A02_boundary_identified
-    {X₁ X₂ : Type} (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
-    (s : T98A02Sphere)
-    (h₁ : φ₁ (t98A02SphereInDisk s) ∉
-      φ₁ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1})
-    (h₂ : φ₂ (t98A02SphereInDisk s) ∉
-      φ₂ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1}) :
-    t98A02_leftInclusion φ₁ φ₂ ⟨φ₁ (t98A02SphereInDisk s), h₁⟩ =
-      t98A02_rightInclusion φ₁ φ₂ ⟨φ₂ (t98A02SphereInDisk s), h₂⟩ := by
-  exact Quotient.sound
-    (Relation.EqvGen.rel _ _ (T98A02GlueRel.boundary s h₁ h₂))
-
-lemma t98A02_gluedDesc_respects
-    {X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] [TopologicalSpace Z]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
-    (f : C(T98A02Punctured X₁ φ₁, Z)) (g : C(T98A02Punctured X₂ φ₂, Z))
-    (hfg : ∀ (s : T98A02Sphere)
-      (h₁ : φ₁ (t98A02SphereInDisk s) ∉
-        φ₁ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1})
-      (h₂ : φ₂ (t98A02SphereInDisk s) ∉
-        φ₂ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1}),
-      f ⟨φ₁ (t98A02SphereInDisk s), h₁⟩ =
-        g ⟨φ₂ (t98A02SphereInDisk s), h₂⟩)
-    {x y} (hxy : Relation.EqvGen (T98A02GlueRel φ₁ φ₂) x y) :
-    Sum.elim f g x = Sum.elim f g y := by
-  induction hxy with
-  | rel a b hab =>
-      cases hab with
-      | boundary s h₁ h₂ => exact hfg s h₁ h₂
-  | refl => rfl
-  | symm _ _ _ ih => exact ih.symm
-  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
-
-noncomputable def t98A02_gluedDesc
-    {X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] [TopologicalSpace Z]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
-    (f : C(T98A02Punctured X₁ φ₁, Z)) (g : C(T98A02Punctured X₂ φ₂, Z))
-    (hfg : ∀ (s : T98A02Sphere)
-      (h₁ : φ₁ (t98A02SphereInDisk s) ∉
-        φ₁ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1})
-      (h₂ : φ₂ (t98A02SphereInDisk s) ∉
-        φ₂ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1}),
-      f ⟨φ₁ (t98A02SphereInDisk s), h₁⟩ =
-        g ⟨φ₂ (t98A02SphereInDisk s), h₂⟩) :
-    C(T98A02ConnectedSum φ₁ φ₂, Z) := by
-  let raw := Sum.elim f g
-  have hraw : Continuous raw := continuous_sum_dom.2 ⟨f.continuous, g.continuous⟩
-  exact ⟨Quotient.lift raw (fun _ _ hxy ↦
-      t98A02_gluedDesc_respects φ₁ φ₂ f g hfg hxy),
-    hraw.quotient_lift (fun _ _ hxy ↦
-      t98A02_gluedDesc_respects φ₁ φ₂ f g hfg hxy)⟩
-
-@[simp] lemma t98A02_gluedDesc_leftInclusion
-    {X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] [TopologicalSpace Z]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
-    (f : C(T98A02Punctured X₁ φ₁, Z)) (g : C(T98A02Punctured X₂ φ₂, Z))
-    (hfg) (x : T98A02Punctured X₁ φ₁) :
-    t98A02_gluedDesc φ₁ φ₂ f g hfg (t98A02_leftInclusion φ₁ φ₂ x) = f x := rfl
-
-@[simp] lemma t98A02_gluedDesc_rightInclusion
-    {X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] [TopologicalSpace Z]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
-    (f : C(T98A02Punctured X₁ φ₁, Z)) (g : C(T98A02Punctured X₂ φ₂, Z))
-    (hfg) (x : T98A02Punctured X₂ φ₂) :
-    t98A02_gluedDesc φ₁ φ₂ f g hfg (t98A02_rightInclusion φ₁ φ₂ x) = g x := rfl
-
-lemma t98A02_gluedDesc_unique
-    {X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂] [TopologicalSpace Z]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
-    (f : C(T98A02Punctured X₁ φ₁, Z)) (g : C(T98A02Punctured X₂ φ₂, Z))
-    (hfg) (u : C(T98A02ConnectedSum φ₁ φ₂, Z))
-    (hul : ∀ x, u (t98A02_leftInclusion φ₁ φ₂ x) = f x)
-    (hur : ∀ x, u (t98A02_rightInclusion φ₁ φ₂ x) = g x) :
-    u = t98A02_gluedDesc φ₁ φ₂ f g hfg := by
-  ext y
-  obtain ⟨x, rfl⟩ := t98A02_surjective_quotientMap φ₁ φ₂ y
-  cases x with
-  | inl x => exact hul x
-  | inr x => exact hur x
-
-def t98A02_leftInclusionMap
-    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    C(T98A02Punctured X₁ φ₁, T98A02ConnectedSum φ₁ φ₂) :=
-  ⟨t98A02_leftInclusion φ₁ φ₂, t98A02_continuous_leftInclusion φ₁ φ₂⟩
-
-def t98A02_rightInclusionMap
-    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    C(T98A02Punctured X₂ φ₂, T98A02ConnectedSum φ₁ φ₂) :=
-  ⟨t98A02_rightInclusion φ₁ φ₂, t98A02_continuous_rightInclusion φ₁ φ₂⟩
-
-/-- Compatible pairs of continuous maps from the two punctured summands. -/
-def t98A02CompatibleMaps
-    {X₁ X₂ : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
-    (Z : Type) [TopologicalSpace Z] :=
-  {fg : C(T98A02Punctured X₁ φ₁, Z) × C(T98A02Punctured X₂ φ₂, Z) //
-    ∀ (s : T98A02Sphere)
-      (h₁ : φ₁ (t98A02SphereInDisk s) ∉
-        φ₁ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1})
-      (h₂ : φ₂ (t98A02SphereInDisk s) ∉
-        φ₂ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1}),
-      fg.1 ⟨φ₁ (t98A02SphereInDisk s), h₁⟩ =
-        fg.2 ⟨φ₂ (t98A02SphereInDisk s), h₂⟩}
-
-/-- The concrete connected-sum quotient has the full maps-out universal
-property as an equivalence. -/
-def t98A02_gluedDescEquiv
-    {X₁ X₂ Z : Type} [TopologicalSpace X₁] [TopologicalSpace X₂]
-    [TopologicalSpace Z]
-    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂) :
-    t98A02CompatibleMaps φ₁ φ₂ Z ≃ C(T98A02ConnectedSum φ₁ φ₂, Z) where
-  toFun fg := t98A02_gluedDesc φ₁ φ₂ fg.1.1 fg.1.2 fg.2
-  invFun u := ⟨(u.comp (t98A02_leftInclusionMap φ₁ φ₂),
-      u.comp (t98A02_rightInclusionMap φ₁ φ₂)), fun s h₁ h₂ ↦ by
-        exact congrArg u (t98A02_boundary_identified φ₁ φ₂ s h₁ h₂)⟩
-  left_inv fg := by
-    apply Subtype.ext
-    apply Prod.ext <;> ext x <;> rfl
-  right_inv u := by
-    symm
-    apply t98A02_gluedDesc_unique φ₁ φ₂
-      (u.comp (t98A02_leftInclusionMap φ₁ φ₂))
-      (u.comp (t98A02_rightInclusionMap φ₁ φ₂))
-      (fun s h₁ h₂ ↦ congrArg u
-        (t98A02_boundary_identified φ₁ φ₂ s h₁ h₂))
-    · intro x
-      rfl
-    · intro x
-      rfl
-
 abbrev t98A02H (k : ℕ) (X : Type) [TopologicalSpace X] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
+
+namespace T98A02Adapter
+
+open ConstructionTargets.CollaredConnectedSumHomology
+
+/-- **LIBRARY (B12a).** The frozen quotient presentation agrees with the
+generic collared connected-sum quotient. -/
+theorem quotientHomeomorph {X₁ X₂ : Type}
+    [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
+    (c₁ : BallCollar 4 X₁) (c₂ : BallCollar 4 X₂)
+    (hc₁ : c₁.smallMap = φ₁) (hc₂ : c₂.smallMap = φ₂) :
+    Nonempty (T98A02ConnectedSum φ₁ φ₂ ≃ₜ ConnectedSum c₁ c₂) := by
+  subst φ₁
+  subst φ₂
+  let p₁ : T98A02Punctured X₁ c₁.smallMap → c₁.Punctured := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let p₂ : T98A02Punctured X₂ c₂.smallMap → c₂.Punctured := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let q₁ : c₁.Punctured → T98A02Punctured X₁ c₁.smallMap := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let q₂ : c₂.Punctured → T98A02Punctured X₂ c₂.smallMap := fun x ↦
+    ⟨x.1, by simpa [dist_eq_norm] using x.2⟩
+  let f : Sum (T98A02Punctured X₁ c₁.smallMap)
+      (T98A02Punctured X₂ c₂.smallMap) → Sum c₁.Punctured c₂.Punctured
+    | Sum.inl x => Sum.inl (p₁ x)
+    | Sum.inr x => Sum.inr (p₂ x)
+  let g : Sum c₁.Punctured c₂.Punctured →
+      Sum (T98A02Punctured X₁ c₁.smallMap)
+        (T98A02Punctured X₂ c₂.smallMap)
+    | Sum.inl x => Sum.inl (q₁ x)
+    | Sum.inr x => Sum.inr (q₂ x)
+  have hfg (x) : g (f x) = x := by
+    cases x <;> simp [f, g, p₁, p₂, q₁, q₂]
+  have hgf (x) : f (g x) = x := by
+    cases x <;> simp [f, g, p₁, p₂, q₁, q₂]
+  have hfrel {x y} (h : T98A02GlueRel c₁.smallMap c₂.smallMap x y) :
+      Relation.EqvGen (GlueRel c₁ c₂) (f x) (f y) := by
+    cases h with
+    | boundary s h₁ h₂ =>
+      apply Relation.EqvGen.rel
+      exact GlueRel.boundary s
+  have hgrel {x y} (h : GlueRel c₁ c₂ x y) :
+      Relation.EqvGen (T98A02GlueRel c₁.smallMap c₂.smallMap) (g x) (g y) := by
+    cases h with
+    | boundary s =>
+      apply Relation.EqvGen.rel
+      apply T98A02GlueRel.boundary s
+  let F : T98A02ConnectedSum c₁.smallMap c₂.smallMap → ConnectedSum c₁ c₂ :=
+    Quotient.map' f (fun _ _ h => by
+      change Relation.EqvGen (GlueRel c₁ c₂) _ _
+      induction h with
+      | rel _ _ h => exact hfrel h
+      | refl x => exact (Relation.EqvGen.refl (f x) :
+          Relation.EqvGen (GlueRel c₁ c₂) (f x) (f x))
+      | symm _ _ _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ =>
+        exact Relation.EqvGen.trans (f x) (f y) (f z) ih₁ ih₂)
+  let G : ConnectedSum c₁ c₂ → T98A02ConnectedSum c₁.smallMap c₂.smallMap :=
+    Quotient.map' g (fun _ _ h => by
+      change Relation.EqvGen (T98A02GlueRel c₁.smallMap c₂.smallMap) _ _
+      induction h with
+      | rel _ _ h => exact hgrel h
+      | refl x => exact (Relation.EqvGen.refl (g x) :
+          Relation.EqvGen (T98A02GlueRel c₁.smallMap c₂.smallMap) (g x) (g x))
+      | symm _ _ _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ =>
+        exact Relation.EqvGen.trans (g x) (g y) (g z) ih₁ ih₂)
+  have hFG (x) : G (F x) = x := by
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      have hh := congrArg
+        (Quotient.mk (Relation.EqvGen.setoid (T98A02GlueRel c₁.smallMap c₂.smallMap))) (hfg x)
+      simpa [F, G] using hh
+  have hGF (x) : F (G x) = x := by
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      have hh := congrArg (Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂))) (hgf x)
+      simpa [F, G] using hh
+  have hfcont : Continuous f := by
+    rw [continuous_sum_dom]
+    constructor
+    · exact continuous_inl.comp (continuous_subtype_val.subtype_mk _)
+    · exact continuous_inr.comp (continuous_subtype_val.subtype_mk _)
+  have hgcont : Continuous g := by
+    rw [continuous_sum_dom]
+    constructor
+    · exact continuous_inl.comp (continuous_subtype_val.subtype_mk _)
+    · exact continuous_inr.comp (continuous_subtype_val.subtype_mk _)
+  refine ⟨{ toEquiv := ⟨F, G, hFG, hGF⟩, continuous_toFun := ?_, continuous_invFun := ?_ }⟩
+  · rw [continuous_coinduced_dom]
+    exact continuous_coinduced_rng.comp hfcont
+  · rw [continuous_coinduced_dom]
+    exact continuous_coinduced_rng.comp hgcont
+
+/-- **LIBRARY (B12b).** Homology invariance transports the complete table
+across the quotient homeomorphism. -/
+theorem transportHomology {X₁ X₂ : Type}
+    [TopologicalSpace X₁] [TopologicalSpace X₂]
+    (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂)
+    (c₁ : BallCollar 4 X₁) (c₂ : BallCollar 4 X₂)
+    (e : T98A02ConnectedSum φ₁ φ₂ ≃ₜ ConnectedSum c₁ c₂)
+    (h : Nonempty (H 0 (ConnectedSum c₁ c₂) ≅ ModuleCat.of ℤ ℤ) ∧
+      (∀ k, 0 < k → k < 4 → Nonempty (H k (ConnectedSum c₁ c₂) ≅
+        ModuleCat.of ℤ ((H k X₁) × (H k X₂)))) ∧
+      Nonempty (H 4 (ConnectedSum c₁ c₂) ≅ ModuleCat.of ℤ ℤ) ∧
+      (∀ k, 4 < k → Limits.IsZero (H k (ConnectedSum c₁ c₂)))) :
+    let Y := T98A02ConnectedSum φ₁ φ₂
+    Nonempty (t98A02H 0 Y ≅ ModuleCat.of ℤ ℤ) ∧
+    (∀ k, 1 ≤ k → k ≤ 3 → Nonempty (t98A02H k Y ≅
+      ModuleCat.of ℤ ((t98A02H k X₁) × (t98A02H k X₂)))) ∧
+    Nonempty (t98A02H 4 Y ≅ ModuleCat.of ℤ ℤ) ∧
+    (∀ k, 5 ≤ k → Limits.IsZero (t98A02H k Y)) := by
+  dsimp
+  rcases h with ⟨hzero, hmiddle, htop, habove⟩
+  let F (k : ℕ) :=
+    (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)
+  have he (k : ℕ) : t98A02H k (T98A02ConnectedSum φ₁ φ₂) ≅
+      H k (ConnectedSum c₁ c₂) :=
+    (F k).mapIso (TopCat.isoOfHomeo e)
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact hzero.map fun i ↦ he 0 ≪≫ i
+  · intro k hk₁ hk₃
+    exact (hmiddle k (by omega) (by omega)).map fun i ↦ he k ≪≫ i
+  · exact htop.map fun i ↦ he 4 ≪≫ i
+  · intro k hk
+    exact Limits.IsZero.of_iso (habove k (by omega)) (he k)
+
+end T98A02Adapter
+
+/-- **LIBRARY boundary.** Integral singular homology of a collared connected
+sum of closed connected four-manifolds.  A proof requires the production
+open-cover Mayer--Vietoris sequence, comparison with `t98A02H`, punctured
+manifold local homology, and the top connecting-map calculation. -/
+theorem t98A02_collaredConnectedSum_homology :
+    ∀ (X₁ X₂ : Type)
+      [TopologicalSpace X₁] [T2Space X₁] [CompactSpace X₁]
+      [PathConnectedSpace X₁] [ChartedSpace T98A02E4 X₁]
+      [IsManifold T98A02I4 (⊤ : ℕ∞) X₁]
+      [TopologicalSpace X₂] [T2Space X₂] [CompactSpace X₂]
+      [PathConnectedSpace X₂] [ChartedSpace T98A02E4 X₂]
+      [IsManifold T98A02I4 (⊤ : ℕ∞) X₂]
+      (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂),
+      Topology.IsEmbedding φ₁ → Topology.IsEmbedding φ₂ →
+      (∃ ψ₁ : T98A02CollarBall → X₁, Topology.IsEmbedding ψ₁ ∧
+        ∀ u, ψ₁ (t98A02DiskInCollarBall u) = φ₁ u) →
+      (∃ ψ₂ : T98A02CollarBall → X₂, Topology.IsEmbedding ψ₂ ∧
+        ∀ u, ψ₂ (t98A02DiskInCollarBall u) = φ₂ u) →
+      Nonempty (t98A02H 4 X₁ ≅ ModuleCat.of ℤ ℤ) →
+      Nonempty (t98A02H 4 X₂ ≅ ModuleCat.of ℤ ℤ) →
+      (∀ k : ℕ, 5 ≤ k → Limits.IsZero (t98A02H k X₁)) →
+      (∀ k : ℕ, 5 ≤ k → Limits.IsZero (t98A02H k X₂)) →
+      let Y := T98A02ConnectedSum φ₁ φ₂
+      Nonempty (t98A02H 0 Y ≅ ModuleCat.of ℤ ℤ) ∧
+      (∀ k : ℕ, 1 ≤ k → k ≤ 3 →
+        Nonempty (t98A02H k Y ≅
+          ModuleCat.of ℤ ((t98A02H k X₁) × (t98A02H k X₂)))) ∧
+      Nonempty (t98A02H 4 Y ≅ ModuleCat.of ℤ ℤ) ∧
+      (∀ k : ℕ, 5 ≤ k → Limits.IsZero (t98A02H k Y)) := by
+  intro X₁ X₂ _ _ _ _ _ _ _ _ _ _ _ _ φ₁ φ₂ hφ₁ hφ₂
+    hcollar₁ hcollar₂ htop₁ htop₂ habove₁ habove₂
+  rcases hcollar₁ with ⟨ψ₁, hψ₁, hcompat₁⟩
+  rcases hcollar₂ with ⟨ψ₂, hψ₂, hcompat₂⟩
+  let c₁ : ConstructionTargets.CollaredConnectedSumHomology.BallCollar 4 X₁ :=
+    { smallMap := φ₁, largeMap := ψ₁, smallEmbedding := hφ₁,
+      largeEmbedding := hψ₁, compatible := funext hcompat₁ }
+  let c₂ : ConstructionTargets.CollaredConnectedSumHomology.BallCollar 4 X₂ :=
+    { smallMap := φ₂, largeMap := ψ₂, smallEmbedding := hφ₂,
+      largeEmbedding := hψ₂, compatible := funext hcompat₂ }
+  have hgeneric := ConstructionTargets.CollaredConnectedSumHomology.connectedSum_homology
+    4 (by norm_num) X₁ X₂ c₁ c₂ htop₁ htop₂
+    (fun k hk => habove₁ k (by omega)) (fun k hk => habove₂ k (by omega))
+  let e := Classical.choice (T98A02Adapter.quotientHomeomorph φ₁ φ₂ c₁ c₂ rfl rfl)
+  exact T98A02Adapter.transportHomology φ₁ φ₂ c₁ c₂ e hgeneric
 
 theorem apm_t98a02 :
     ∀ (X₁ X₂ : Type)
@@ -289,33 +258,6 @@ theorem apm_t98a02 :
           ModuleCat.of ℤ ((t98A02H k X₁) × (t98A02H k X₂)))) ∧
       Nonempty (t98A02H 4 Y ≅ ModuleCat.of ℤ ℤ) ∧
       (∀ k : ℕ, 5 ≤ k → Limits.IsZero (t98A02H k Y)) := by
-  /-
-  PARTIAL boundary (closer hop 3). Following the quotient-eliminator pattern
-  indexed in `LEMMA-INDEX.md` from siblings `t01J03`, `t02A04`, and `t03J02`,
-  hop 2 compiled the point-set gluing interface.
-  `t98A02QuotientMap` is continuous and surjective, the two punctured-piece
-  inclusions are continuous, and `t98A02_boundary_identified` proves the
-  generating boundary equality. `t98A02_gluedDesc_respects` performs EqvGen
-  induction; `t98A02_gluedDesc`, its two computation lemmas, and
-  `t98A02_gluedDesc_unique` give the continuous universal property of the
-  connected-sum quotient. Going beyond that boundary, hop 3 bundles the two
-  inclusions as continuous maps, defines `t98A02CompatibleMaps`, and proves
-  `t98A02_gluedDescEquiv`: maps out of the quotient are equivalent to pairs of
-  maps from the punctured summands agreeing on every boundary identification.
-  This is the complete maps-out pushout interface, rather than separate
-  existence and uniqueness lemmas.
+  exact t98A02_collaredConnectedSum_homology
 
-  Renewed searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, connected-sum
-  and gluing siblings (including the stronger equivalence in `t03J02`),
-  Mathlib's singular-homology, excision, exact-sequence, CW, manifold, and
-  Mayer--Vietoris sources, and git history found no singular excision theorem,
-  singular Mayer--Vietoris sequence, or cellular-to-singular comparison.
-  Mathlib's named Mayer--Vietoris development is for sheaf cohomology and does
-  not apply to `t98A02H`. Completing the frozen conclusions additionally needs
-  homology invariance under deleting an embedded open four-ball in degrees
-  `1..3`, the boundary-sphere connecting map/top-degree orientation argument,
-  connectedness of this quotient for `H₀`, and dimension-vanishing above
-  four. The compiled topological pushout eliminator does not by itself supply
-  those homological bridges.
-  -/
-  sorry
+#print axioms apm_t98a02

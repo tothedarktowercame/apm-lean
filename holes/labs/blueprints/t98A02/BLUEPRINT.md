@@ -29,6 +29,28 @@ audit and topology ledger instead report a foundational library obstruction.
 
 ## Remaining lemma
 
+### Implemented B12 split (2026-10-21)
+
+The former single library boundary is now a sorry-free assembly from the
+generic `connectedSum_homology` theorem and two independent leaves:
+
+* `T98A02Adapter.quotientHomeomorph` (60--120 lines) descends the identity on
+  the two punctured summands through the two generated relations and proves
+  the resulting maps continuous using the quotient topology.  It returns the
+  actual homeomorphism, wrapped in `Nonempty` because Lean theorem results are
+  propositions.  Truth check: boundary witnesses in the frozen relation are
+  proof-irrelevant, and `dist u 0 = ‖u‖`, so the puncture subtypes agree.
+* `T98A02Adapter.transportHomology` (40--80 lines) applies functorial homology
+  invariance to that homeomorphism degree-by-degree and converts `0 < k < 4`
+  to the frozen `1 ≤ k ≤ 3` inequalities.  Truth checks: it preserves the
+  single top class of `S⁴#S⁴` and the four degree-two generators for two
+  `S²×S²` summands.
+
+The adapter constructs both `BallCollar 4` values directly from the supplied
+radius-two extensions.  Its theorem statement and `apm_t98a02` are unchanged;
+both theorem bodies are sorry-free.  B2 supplies openness internally through
+B11, and the hypotheses `5 ≤ k` are converted to `4 < k` by arithmetic.
+
 ### `t98A02_collaredConnectedSum_homology` — LIBRARY
 
 **Statement in words.** For the concrete quotient obtained by deleting the

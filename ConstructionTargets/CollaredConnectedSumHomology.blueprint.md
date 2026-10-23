@@ -1,5 +1,95 @@
 # Collared connected-sum homology
 
+## Implemented split (2026-10-21)
+
+`connectedSum_homology` is now a sorry-free assembly.  Every admitted theorem
+below is independent: whenever a later mathematical stage needs an earlier
+conclusion, that conclusion is an explicit hypothesis.
+
+* `BallCollar.largeInterior_isOpen` (B2, **LIBRARY**, 250--500 lines):
+  invariance of domain for the restricted radius-two embedding.  Mathlib has
+  `IsOpenMap`/manifold chart machinery but no located invariance-of-domain
+  theorem.  There is no t00A01 proof: its `HasBallCollar` assumes openness.
+  For t93A03's `Circle × sphere` summands, openness can instead be proved from
+  its concrete product charts, but not from its present abstract embedding
+  data alone.  Truth checks: ordinary disks in dimensions 2 and 4 have open
+  interior images; dimension zero is intentionally outside B11 (`2 ≤ n`).
+* `BallCollar.punctured_pathConnected` (B3, 80--140 lines), template
+  `apm_t00A01_punctured_pathConnected` and its auxiliary proof at line 578.
+  Generalization replaces path detours in `S²` by path connectedness of
+  `S^(n-1)`, valid for `n ≥ 2`.  For punctured `S²`, `T²`, `S⁴`, and
+  `S² × S²`, the complement remains path connected.
+* B4 is split into two independent **LIBRARY** leaves:
+  `BallCollar.punctured_topHomology_zero` (180--350 lines) says `H_n` of the
+  puncture vanishes, while `BallCollar.boundary_homology_zero` (250--550
+  lines) says the actual inclusion-induced map
+  `H_(n-1)(Sphere n) ⟶ H_(n-1)(Punctured c)` is zero.  Template: the localization chain under
+  `apm_t00A01_punctured_isHomologyBall_aux_localization`.  Its `H₃` and local
+  degree-three generator must become degree `n`; the integral sign is
+  irrelevant to vanishing.  For punctured closed surfaces the boundary circle
+  bounds the remaining surface, and in dimension four the same relative
+  fundamental-class argument kills `H₄`.
+* `BallCollar.punctured_homology` (B5, 120--200 lines once B4 exists), template
+  `apm_t00A01_punctured_isHomologyBall` plus `_aux_cover`, `_aux_mv`, and
+  `_aux_mid_connecting`.  Sphere homology changes from `S²` to `S^(n-1)`.
+  In dimension two the boundary circle is zero in puncture `H₁` because it is
+  the boundary of the complementary fundamental chain, so `H₁` is preserved;
+  in dimension four it preserves the two middle `ℤ` classes of `S² × S²`.
+* `BallCollar.punctured_fundamentalGroup_three` (B6, 120--180 lines), template
+  `apm_t00A01_punctured_fundamentalGroup` and auxiliaries beginning near line
+  845.  This is deliberately dimension three: it uses simple connectivity of
+  `S²` and does not generalize to `n = 2`.  The supplied sphere point makes the
+  basepoint change explicit.
+* `BallCollar.connectedSum_standardCover` (B7, 150--250 lines), template
+  `apm_t00A01_collared_standardCover` and its `_aux_*` declarations.  Its
+  `HasStandardCover` conclusion includes open `U,V`, their union equation,
+  homotopy equivalences `U ≃ₕ P₁`, `V ≃ₕ P₂`, and
+  `U ∩ V ≃ₕ Sphere n`; it is not satisfiable merely by `U = V = univ`.
+  The equivalences are also compatible with the inclusions: transported
+  through them, `U ∩ V ⊆ U` and `U ∩ V ⊆ V` are homotopic to
+  `c₁.boundaryMap` and `c₂.boundaryMap`.  B9b (degree `n-1`) and B10 need
+  this, because their `boundaryHomologyMap = 0` hypotheses must reach the
+  Mayer--Vietoris map out of `H (U ∩ V)`; with unrelated equivalences they
+  could not (review fix, 2026-10-21).
+  Radial formulas are dimension-independent.  It works for both surface and four-manifold
+  connected sums, including `S² # S²` and `S⁴ # S⁴`.
+* B8 is **not a leaf**.  `ConstructionTargets.IntegralOpenCoverMayerVietoris.HZ`
+  and this module's `H` unfold to the same Mathlib singular-homology functor;
+  no production/Mathlib comparison is necessary.
+* B9 is split into three independent leaves:
+  `connectedSum_mayerVietoris_zero` (40--80 lines),
+  `connectedSum_mayerVietoris_middle` (100--170 lines), and
+  `connectedSum_mayerVietoris_above` (50--100 lines).  Each consumes only the
+  relevant parts of the two puncture tables plus the genuine standard cover.
+  The middle leaf additionally receives both boundary-map vanishing equations;
+  these are essential at `k = n-1`.  Templates:
+  `apm_t00A01_bridge_connectedSum_isHomology3Sphere` for assembly and
+  `apm_t00A01_punctured_isHomologyBall_aux_mv` for exactness.  In dimension
+  two it gives the expected direct sum on `H₁`; in dimension four it gives
+  rank four for `(S²×S²)#(S²×S²)` in degree two and no extra degree three.
+* `connectedSum_topConnecting_iso` (B10, **LIBRARY**, 150--300 lines): consumes
+  the two puncture top vanishings, both boundary-map vanishing equations, and
+  the genuine standard cover, and identifies the sole top
+  class.  Template: `_aux_mid_connecting` and the final bridge assembly.
+  The orientation sign changes the chosen generator only.  It gives one `ℤ`
+  for `S²#S²`, `T²#T²`, `S⁴#S⁴`, and four-dimensional oriented examples.
+
+B11 calls B2 twice, B3 twice, both B4 leaves twice, B5 twice, B7, B9, and B10.  B6 is an
+independent t93A03 consumer and therefore is intentionally not used by the
+homology assembly.  There are no admitted definitions and no placeholder
+propositions.
+
+The closed-annulus counterexample now fails B4b: for a radius-three closed
+ball punctured by the unit ball, the boundary inclusion
+`S^(n-1) → {1 ≤ ‖x‖ ≤ 3}` is a homotopy equivalence, so its map on
+`H_(n-1)` is not zero.  It also cannot substitute the trivial `U = V = univ`
+cover for B7, because the required overlap equivalence and two piece
+equivalences would force incompatible homotopy types.  For `n = 2`, B4b is
+exactly the fact that the boundary circle bounds the complementary surface;
+for `n = 4`, it removes the possible extra quotient in degree three, while
+the degree-two direct sum (for example rank four for two `S² × S²` summands)
+is unaffected.
+
 ## Sources and scope
 
 This blueprint follows:
@@ -129,7 +219,9 @@ status: planned
 Thicken each punctured summand across half of the other outer collar. Prove
 the two saturated subsets of the quotient are open, cover the quotient,
 retract to the respective punctured summands, and have intersection
-homotopy-equivalent to `S n`. All quotient descents are proved from the
+homotopy-equivalent to `S n`, compatibly: the overlap inclusions,
+transported through the equivalences, are homotopic to the collar boundary
+maps. All quotient descents are proved from the
 generating boundary equation before continuity is invoked.
 
 ### B8. Production/Mathlib homology comparison
