@@ -160,11 +160,117 @@ theorem puncturedGeometry (c : BallCollar 3 T93A03Summand) :
 
 /-- **LEAF (P3).** A collared puncture of `S¹ × S²` has the
 rank-one free fundamental group, at the boundary basepoint. -/
+def puncturedPiOne_aux_modelEquiv :
+    (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2)) ≃L[ℝ]
+      EuclideanSpace ℝ (Fin 3) :=
+  (LinearEquiv.ofFinrankEq _ _ (by simp)).toContinuousLinearEquiv
+
+noncomputable instance puncturedPiOne_aux_productChartedSpace :
+    ChartedSpace (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2))
+      T93A03Summand :=
+  prodChartedSpace (EuclideanSpace ℝ (Fin 1)) Circle
+    (EuclideanSpace ℝ (Fin 2)) T93A03Sphere2
+
+def puncturedPiOne_aux_chart (x : T93A03Summand) :
+    OpenPartialHomeomorph T93A03Summand (EuclideanSpace ℝ (Fin 3)) :=
+  (chartAt (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2)) x).trans
+      puncturedPiOne_aux_modelEquiv.toHomeomorph.toOpenPartialHomeomorph
+
+noncomputable instance puncturedPiOne_aux_chartedSpace :
+    ChartedSpace (EuclideanSpace ℝ (Fin 3)) T93A03Summand where
+  atlas := Set.range puncturedPiOne_aux_chart
+  chartAt := puncturedPiOne_aux_chart
+  mem_chart_source x := by simp [puncturedPiOne_aux_chart, mem_chart_source]
+  chart_mem_atlas x := ⟨x, rfl⟩
+
+theorem puncturedPiOne_aux_isManifold :
+    IsManifold (modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 3)))
+      (⊤ : ℕ∞) T93A03Summand := by
+  let e := puncturedPiOne_aux_modelEquiv
+  have hprod : IsManifold
+      (modelWithCornersSelf ℝ
+        (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2)))
+      (⊤ : ℕ∞) T93A03Summand := by
+    rw [modelWithCornersSelf_prod]
+    exact IsManifold.prod
+      (I := modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 1)))
+      (I' := modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 2))) Circle T93A03Sphere2
+  apply isManifold_of_contDiffOn
+  intro a b ha hb
+  obtain ⟨x, rfl⟩ := ha
+  obtain ⟨y, rfl⟩ := hb
+  have h := ((contDiffGroupoid (⊤ : ℕ∞)
+      (modelWithCornersSelf ℝ
+        (EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 2)))).compatible
+      (chart_mem_atlas _ x) (chart_mem_atlas _ y)).1
+  simp only [mfld_simps] at h
+  have h' := e.contDiff.comp_contDiffOn
+    (h.comp e.symm.contDiff.contDiffOn
+      (s := e.symm ⁻¹' ((chartAt _ x).symm.trans (chartAt _ y)).source)
+      (by intro z hz; simpa [mfld_simps] using hz))
+  simpa [puncturedPiOne_aux_chart, Function.comp_def, mfld_simps] using h'
+
+def puncturedPiOne_aux_prodPiOne {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (x : X) (y : Y) : FundamentalGroup (X × Y) (x, y) ≃*
+      FundamentalGroup X x × FundamentalGroup Y y where
+  toFun p := (Path.Homotopic.projLeft p, Path.Homotopic.projRight p)
+  invFun p := Path.Homotopic.prod p.1 p.2
+  left_inv := Path.Homotopic.prod_projLeft_projRight
+  right_inv p := by ext <;> simp
+  map_mul' p q := by
+    ext
+    · exact map_mul (FundamentalGroup.map ⟨Prod.fst, continuous_fst⟩ (x, y)) p q
+    · exact map_mul (FundamentalGroup.map ⟨Prod.snd, continuous_snd⟩ (x, y)) p q
+
+def puncturedPiOne_aux_prodSubsingleton (G H : Type*) [Group G] [Group H]
+    [Subsingleton H] : G × H ≃* G where
+  toFun := MonoidHom.fst G H
+  invFun g := (g, 1)
+  left_inv p := by ext <;> simp [Subsingleton.elim p.2 1]
+  right_inv g := rfl
+  map_mul' _ _ := rfl
+
 theorem puncturedPiOne (c : BallCollar 3 T93A03Summand)
     (hopen : IsOpen c.radialTwo) (hpath : PathConnectedSpace c.Punctured) :
     Nonempty (FundamentalGroup c.Punctured (c.boundaryMap sphereBasepoint) ≃*
       FreeGroup (Fin 1)) := by
-  sorry
+  letI : ChartedSpace (E 3) T93A03Summand := puncturedPiOne_aux_chartedSpace
+  letI : IsManifold (I 3) (⊤ : ℕ∞) T93A03Summand := puncturedPiOne_aux_isManifold
+  let v : T93A03Sphere2 := sphereBasepoint
+  have hv : ‖(v : T93A03E3)‖ = 1 := by simpa [Metric.mem_sphere] using v.property
+  have hv0 : (v : T93A03E3) ≠ 0 := by intro h; rw [h, norm_zero] at hv; norm_num at hv
+  haveI : Fact (Module.finrank ℝ T93A03E3 = 3) := ⟨by simp [Module.finrank_fin_fun]⟩
+  have hsfin : Module.finrank ℝ (ℝ ∙ (v : T93A03E3))ᗮ = 2 := by
+    simpa using Submodule.finrank_orthogonal_span_singleton hv0
+  letI : SimplyConnectedSpace T93A03Sphere2 := by
+    apply simplyConnectedSpace_sphere_of_pole (v : T93A03E3) hv
+    rw [← Module.finrank_eq_rank, hsfin]
+    norm_num
+  letI : PathConnectedSpace T93A03Sphere2 :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (E := T93A03E3) (by
+        rw [← Module.finrank_eq_rank]
+        norm_num) 0 (by norm_num))
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have hc : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+          isPathConnected_univ
+      simpa using hc)
+  letI : PathConnectedSpace T93A03Summand :=
+    ⟨⟨((1 : Circle), v)⟩, fun x y ↦
+      ⟨Path.prod (PathConnectedSpace.somePath x.1 y.1)
+        (PathConnectedSpace.somePath x.2 y.2)⟩⟩
+  letI : Subsingleton (FundamentalGroup T93A03Sphere2 v) :=
+    BallCollar.punctured_fundamentalGroup_three_aux_subsingleton v
+  obtain ⟨e⟩ := c.punctured_fundamentalGroup_three T93A03Summand
+    ((1 : Circle), v) sphereBasepoint hopen hpath
+  exact ⟨e.trans ((puncturedPiOne_aux_prodPiOne (1 : Circle) v).trans
+    ((puncturedPiOne_aux_prodSubsingleton _ _).trans
+      (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+        ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne)))⟩
 
 /-- **LIBRARY (P4).** Based van Kampen for the standard connected-sum cover.
 This is the generic two-open free-product boundary missing from the existing
