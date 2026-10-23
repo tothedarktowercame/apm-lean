@@ -352,6 +352,17 @@ theorem puncturedPiOne (c : BallCollar 3 T93A03Summand)
 This is the generic two-open free-product boundary missing from the existing
 fundamental-groupoid pseudopushout API. -/
 -- BEGIN SEAT AREA
+lemma standardCoverPiOneFreeProduct_aux_pathConnected_of_homotopyEquiv
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) [PathConnectedSpace Y] :
+    PathConnectedSpace X := by
+  refine ⟨⟨e.invFun (Classical.choice (inferInstance : Nonempty Y))⟩, ?_⟩
+  intro x y
+  let middle : Path (e.invFun (e.toFun x)) (e.invFun (e.toFun y)) :=
+    (PathConnectedSpace.somePath (e.toFun x) (e.toFun y)).map e.invFun.continuous
+  exact ⟨(e.left_inv.some.evalAt x).symm.trans
+    (middle.trans (e.left_inv.some.evalAt y))⟩
+
 theorem standardCoverPiOneFreeProduct
     (c₁ c₂ : BallCollar 3 T93A03Summand)
     (hcover : HasStandardCover c₁ c₂)
@@ -362,7 +373,50 @@ theorem standardCoverPiOneFreeProduct
     ∃ x : ConnectedSum c₁ c₂,
       Nonempty (FundamentalGroup (ConnectedSum c₁ c₂) x ≃*
         Monoid.Coprod (FreeGroup (Fin 1)) (FreeGroup (Fin 1))) := by
-  sorry
+  rcases hcover with ⟨U, V, hU, hV, hUV, h₁, h₂, h₀, -, -⟩
+  have hp₁ := (puncturedGeometry c₁).2
+  have hp₂ := (puncturedGeometry c₂).2
+  letI : PathConnectedSpace c₁.Punctured := hp₁
+  letI : PathConnectedSpace c₂.Punctured := hp₂
+  letI : PathConnectedSpace U :=
+    standardCoverPiOneFreeProduct_aux_pathConnected_of_homotopyEquiv h₁
+  letI : PathConnectedSpace V :=
+    standardCoverPiOneFreeProduct_aux_pathConnected_of_homotopyEquiv h₂
+  let v : T93A03Sphere2 := sphereBasepoint
+  have hv : ‖(v : T93A03E3)‖ = 1 := by
+    simpa [Metric.mem_sphere] using v.property
+  have hv0 : (v : T93A03E3) ≠ 0 := by
+    intro hz
+    rw [hz, norm_zero] at hv
+    norm_num at hv
+  letI : Fact (Module.finrank ℝ T93A03E3 = 3) :=
+    ⟨by simp [Module.finrank_fin_fun]⟩
+  have hsfin : Module.finrank ℝ (ℝ ∙ (v : T93A03E3))ᗮ = 2 := by
+    simpa using Submodule.finrank_orthogonal_span_singleton hv0
+  letI : SimplyConnectedSpace (Sphere 3) := by
+    apply simplyConnectedSpace_sphere_of_pole (v : T93A03E3) hv
+    rw [← Module.finrank_eq_rank, hsfin]
+    norm_num
+  letI : SimplyConnectedSpace (U ∩ V : Set (ConnectedSum c₁ c₂)) :=
+    h₀.simplyConnectedSpace
+  let w : (U ∩ V : Set (ConnectedSum c₁ c₂)) := h₀.invFun sphereBasepoint
+  let p₁ : Path (h₁.toFun (⟨w.1, w.2.1⟩ : U))
+      (c₁.boundaryMap sphereBasepoint) :=
+    PathConnectedSpace.somePath _ _
+  let p₂ : Path (h₂.toFun (⟨w.1, w.2.2⟩ : V))
+      (c₂.boundaryMap sphereBasepoint) :=
+    PathConnectedSpace.somePath _ _
+  let eu : FundamentalGroup U ⟨w.1, w.2.1⟩ ≃* FreeGroup (Fin 1) :=
+    (Classical.choice
+      (BallCollar.punctured_fundamentalGroup_three_aux_of_hequiv
+        (⟨w.1, w.2.1⟩ : U) (c₁.boundaryMap sphereBasepoint) h₁ p₁)).trans e₁
+  let ev : FundamentalGroup V ⟨w.1, w.2.2⟩ ≃* FreeGroup (Fin 1) :=
+    (Classical.choice
+      (BallCollar.punctured_fundamentalGroup_three_aux_of_hequiv
+        (⟨w.1, w.2.2⟩ : V) (c₂.boundaryMap sphereBasepoint) h₂ p₂)).trans e₂
+  refine ⟨w.1, ⟨?_⟩⟩
+  exact (ConstructionTargets.TwoOpenFreeProductMapping.groupEquivalence
+    hU hV hUV w).trans (eu.coprodCongr ev)
 -- END SEAT AREA
 
 /-- **LEAF (P5).** The free product of two rank-one free groups is the
