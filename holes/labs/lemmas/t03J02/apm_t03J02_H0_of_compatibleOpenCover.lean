@@ -239,7 +239,52 @@ theorem apm_t03J02_H0_of_compatibleOpenCover
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
     Nonempty (apm_t03J02_H 0 (apm_t03J02_space j₁ j₂) ≅ ModuleCat.of ℤ ℤ) := by
-  sorry
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have hc : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+          |>.isPathConnected_preimage.mpr isPathConnected_univ
+      simpa using hc)
+  letI : PathConnectedSpace apm_t03J02_Torus :=
+    ⟨⟨(1, 1)⟩, fun x y =>
+      ⟨Path.prod (PathConnectedSpace.somePath x.1 y.1)
+        (PathConnectedSpace.somePath x.2 y.2)⟩⟩
+  let z₀ : Circle := Classical.choice inferInstance
+  let ql := apm_t03J02_gluedInl j₁ j₂
+  let qr := apm_t03J02_gluedInr j₁ j₂
+  have joined_map {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+      (f : C(X, Y)) {x y : X} (h : Joined x y) : Joined (f x) (f y) := by
+    exact ⟨h.somePath.map f.continuous⟩
+  have hbridge : Joined (ql (j₁ z₀)) (qr (j₂ z₀)) := by
+    rw [show ql (j₁ z₀) = qr (j₂ z₀) from apm_t03J02_glue_eq j₁ j₂ z₀]
+  letI : PathConnectedSpace (apm_t03J02_space j₁ j₂) := {
+    nonempty := ⟨ql (j₁ z₀)⟩
+    joined := by
+      intro x y
+      refine Quotient.inductionOn x ?_
+      intro sx
+      refine Quotient.inductionOn y ?_
+      intro sy
+      cases sx with
+      | inl x =>
+          cases sy with
+          | inl y =>
+              exact joined_map ql (PathConnectedSpace.joined x y)
+          | inr y =>
+              exact (joined_map ql (PathConnectedSpace.joined x (j₁ z₀))).trans
+                (hbridge.trans (joined_map qr (PathConnectedSpace.joined (j₂ z₀) y)))
+      | inr x =>
+          cases sy with
+          | inl y =>
+              exact (joined_map qr (PathConnectedSpace.joined x (j₂ z₀))).trans
+                (hbridge.symm.trans
+                  (joined_map ql (PathConnectedSpace.joined (j₁ z₀) y)))
+          | inr y =>
+              exact joined_map qr (PathConnectedSpace.joined x y)
+    }
+  exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ (ql (j₁ z₀))⟩
 -- END SEAT AREA
 
 /-- Degree-one Mayer--Vietoris calculation; null-homotopy kills both legs. -/
