@@ -984,7 +984,30 @@ theorem orientablePairing_normalForm_aux_natWord_orientable (P : PairingData)
     (hor : IsOrientablePairing P) :
     orientablePairing_normalForm_aux_WordOrientable
       (orientablePairing_normalForm_aux_natWord P) := by
-  sorry
+  intro i j hij hlabel
+  let i' : Fin P.edgeCount := ⟨i, by
+    simpa [orientablePairing_normalForm_aux_natWord] using i.2⟩
+  let j' : Fin P.edgeCount := ⟨j, by
+    simpa [orientablePairing_normalForm_aux_natWord] using j.2⟩
+  have horbit : P.orbit i' = P.orbit j' :=
+    orientablePairing_normalForm_aux_enc_injective P (by
+      simpa [orientablePairing_normalForm_aux_natWord,
+        orientablePairing_normalForm_aux_wordOf, i', j'] using hlabel)
+  rcases (P.orbit_eq_iff i' j').mp horbit with h | h
+  · exfalso
+    apply hij
+    apply Fin.ext
+    simpa [i', j'] using (congrArg Fin.val h).symm
+  · have hi :
+        ((orientablePairing_normalForm_aux_natWord P).get i).2 = P.sign i' := by
+      simp [orientablePairing_normalForm_aux_natWord,
+        orientablePairing_normalForm_aux_wordOf, i']
+    have hj :
+        ((orientablePairing_normalForm_aux_natWord P).get j).2 = P.sign j' := by
+      simp [orientablePairing_normalForm_aux_natWord,
+        orientablePairing_normalForm_aux_wordOf, j']
+    rw [hi, hj, h]
+    exact (hor i').symm
 -- END SEAT AREA
 
 /-- **Leaf (geometric to combinatorial vertex).**  From `P.oneVertex`.  A
