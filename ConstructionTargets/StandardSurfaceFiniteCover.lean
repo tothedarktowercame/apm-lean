@@ -637,16 +637,139 @@ theorem standardCover_pairingData_aux_contract (k : ℕ) :
       ih C₁ hf₁ (by omega) (by omega) hor₁
     exact ⟨C₂, hf₂, by omega, hv₂, hor₂, ⟨e₁.trans e₂⟩⟩
 
-/-- **Leaf (read off the pairing).**  A one-face one-vertex complex is
+/-! Split of `_aux_toPairing` (claude-14, 2026-10-24, after a lemma-2 PARTIAL
+that banked nothing).  With one face, `C.Side` is `Fin C.totalSides`
+(`_aux_sideEquiv`); transport `pair` and `sign` along it (`_aux_pairing`).
+`oneVertex` comes from one corner step at a time (`_aux_cornerStep`), and the
+homeomorphism is the leaf `_aux_homeomorph`. -/
+
+/-- With one face, its index type is `Unique`. -/
+def standardCover_pairingData_aux_toPairing_aux_uniqueFace
+    (C : PolygonComplex) (h1 : C.faceCount = 1) : Unique (Fin C.faceCount) where
+  default := ⟨0, by omega⟩
+  uniq f := Fin.ext (by have := f.2; omega)
+
+/-- With one face, the sides of `C` are `Fin C.totalSides`: side `⟨f, i⟩`
+goes to `i`. -/
+def standardCover_pairingData_aux_toPairing_aux_sideEquiv
+    (C : PolygonComplex) (h1 : C.faceCount = 1) : C.Side ≃ Fin C.totalSides :=
+  letI := standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1
+  (Equiv.uniqueSigma (fun f => Fin (C.sides f))).trans
+    (finCongr (by simp [PolygonComplex.totalSides, Fintype.sum_unique]))
+
+/-- The pairing of `C` on `Fin C.totalSides`. -/
+abbrev standardCover_pairingData_aux_toPairing_aux_pair
+    (C : PolygonComplex) (h1 : C.faceCount = 1) : Equiv.Perm (Fin C.totalSides) :=
+  (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1).permCongr C.pair
+
+/-- The signs of `C` on `Fin C.totalSides`. -/
+abbrev standardCover_pairingData_aux_toPairing_aux_sign
+    (C : PolygonComplex) (h1 : C.faceCount = 1) : Fin C.totalSides → Bool :=
+  C.sign ∘ (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1).symm
+
+/-- `C` as `PairingData`, given the one-vertex condition for the transported
+pairing. -/
+def standardCover_pairingData_aux_toPairing_aux_pairing
+    (C : PolygonComplex) (h1 : C.faceCount = 1)
+    (hvert : ∀ i j : Fin C.totalSides,
+      Relation.EqvGen (boundaryRel C.totalSides
+          (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+          (standardCover_pairingData_aux_toPairing_aux_sign C h1))
+        (polygonVertex C.totalSides i) (polygonVertex C.totalSides j)) :
+    PairingData where
+  edgeCount := C.totalSides
+  edgeCount_pos := Fin.pos_iff_nonempty.mpr
+    ⟨standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1
+      ⟨⟨0, by omega⟩, ⟨0, C.sides_pos _⟩⟩⟩
+  pair := standardCover_pairingData_aux_toPairing_aux_pair C h1
+  pair_pair i := by simp [Equiv.permCongr_apply, C.pair_pair]
+  pair_ne i h := by
+    apply C.pair_ne ((standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1).symm i)
+    have := congrArg (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1).symm h
+    simpa [Equiv.permCongr_apply] using this
+  sign := standardCover_pairingData_aux_toPairing_aux_sign C h1
+  oneVertex := hvert
+
+/-- With one vertex class, any two corners are `CornerRel`-connected. -/
+theorem standardCover_pairingData_aux_toPairing_aux_cornersRelated
+    (C : PolygonComplex) (hV : C.vertexCount = 1) (a b : C.Side) :
+    Relation.EqvGen C.CornerRel a b := by
+  have hsub : Subsingleton C.Vertex := (Nat.card_eq_one_iff_unique.mp hV).1
+  exact Quotient.exact (@Subsingleton.elim C.Vertex hsub
+    (Quotient.mk (Relation.EqvGen.setoid C.CornerRel) a) (Quotient.mk _ b))
+
+/-- Leaf: one `CornerRel` step is a chain of boundary identifications of the
+corresponding polygon vertices.  Corner `s` is `polygonVertex (e s)`; corner
+`nextCorner s` is `edgePoint _ (e s) 1` (by `edgePoint_one_eq_succ_zero`, plus
+`edgePoint n n 0 = edgePoint n 0 0` at the wrap-around).  Each case of
+`CornerRel` is then one `boundaryRel` step at `t = 0` or `t = 1`. -/
+theorem standardCover_pairingData_aux_toPairing_aux_cornerStep
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (a b : C.Side)
+    (hab : C.CornerRel a b) :
+    Relation.EqvGen (boundaryRel C.totalSides
+        (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+        (standardCover_pairingData_aux_toPairing_aux_sign C h1))
+      (polygonVertex C.totalSides (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 a))
+      (polygonVertex C.totalSides (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 b)) := by
+  sorry
+
+theorem standardCover_pairingData_aux_toPairing_aux_oneVertex
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (hV : C.vertexCount = 1)
+    (i j : Fin C.totalSides) :
+    Relation.EqvGen (boundaryRel C.totalSides
+        (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+        (standardCover_pairingData_aux_toPairing_aux_sign C h1))
+      (polygonVertex C.totalSides i) (polygonVertex C.totalSides j) := by
+  set e := standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1
+  have key : ∀ a b, Relation.EqvGen C.CornerRel a b →
+      Relation.EqvGen (boundaryRel C.totalSides
+          (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+          (standardCover_pairingData_aux_toPairing_aux_sign C h1))
+        (polygonVertex C.totalSides (e a)) (polygonVertex C.totalSides (e b)) := by
+    intro a b h
+    induction h with
+    | rel a b hab => exact standardCover_pairingData_aux_toPairing_aux_cornerStep C h1 a b hab
+    | refl a => exact Relation.EqvGen.refl _
+    | symm a b _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  simpa [e] using key (e.symm i) (e.symm j)
+    (standardCover_pairingData_aux_toPairing_aux_cornersRelated C hV _ _)
+
+/-- Leaf: the glued spaces agree.  The map `⟨f, x⟩ ↦ x` from
+`Σ _ : Fin C.faceCount, Disk` to `Disk` is a homeomorphism (one face), and it
+carries `C.Rel` onto `boundaryRel` of the transported pairing: side `s` of
+`C` is arc `e s` of the `totalSides`-gon, and `C.sides f = C.totalSides` for
+the one face `f`, so `edgePoint` agrees on both sides.  Descend it and its
+inverse through the two quotients. -/
+theorem standardCover_pairingData_aux_toPairing_aux_homeomorph
+    (C : PolygonComplex) (h1 : C.faceCount = 1)
+    (hvert : ∀ i j : Fin C.totalSides,
+      Relation.EqvGen (boundaryRel C.totalSides
+          (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+          (standardCover_pairingData_aux_toPairing_aux_sign C h1))
+        (polygonVertex C.totalSides i) (polygonVertex C.totalSides j)) :
+    Nonempty (C.Space ≃ₜ
+      (standardCover_pairingData_aux_toPairing_aux_pairing C h1 hvert).Space) := by
+  sorry
+
+/-- **Read off the pairing.**  A one-face one-vertex complex is
 `PairingData`: reindex `Σ f : Fin 1, Fin (sides f)` as `Fin (sides 0)` and
 `Σ _ : Fin 1, Disk` as `Disk`.  `oneVertex` comes from `vertexCount = 1`:
-corner classes generate the identifications of `polygonVertex`. -/
+corner classes generate the identifications of `polygonVertex`.  Assembled
+from the `_aux_toPairing_aux_*` pieces above. -/
 theorem standardCover_pairingData_aux_toPairing
     (C : PolygonComplex) (h1 : C.faceCount = 1) (hV : C.vertexCount = 1)
     (hor : C.IsOrientable) :
     ∃ P : PairingData, IsOrientablePairing P ∧ P.edgeCount = C.totalSides ∧
       Nonempty (C.Space ≃ₜ P.Space) := by
-  sorry
+  have hvert := standardCover_pairingData_aux_toPairing_aux_oneVertex C h1 hV
+  refine ⟨standardCover_pairingData_aux_toPairing_aux_pairing C h1 hvert, ?_, rfl,
+    standardCover_pairingData_aux_toPairing_aux_homeomorph C h1 hvert⟩
+  intro i
+  set e := standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1
+  show C.sign (e.symm (e (C.pair (e.symm i)))) ≠ C.sign (e.symm i)
+  rw [Equiv.symm_apply_apply]
+  exact hor (e.symm i)
 
 /-- **Lifted polygon complex and dual-tree reduction.**  Lift the standard
 `4g`-gon cell structure through the cover.  Its `n` lifted vertices, `2gn`
