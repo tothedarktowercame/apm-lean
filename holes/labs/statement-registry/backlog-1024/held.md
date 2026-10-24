@@ -481,6 +481,20 @@ All ten rows graded faithful; `admit-batch.py 25` held none and all ten are in
   and part (d) gives an explicit two-element basis of the kernel for `ℂ/ℝ`.
 - No smoothness-order objection: no `ContDiff` in any batch 25 statement.
 
+## Batch 26 spot-check (b96A04 held)
+
+Nine rows faithful and already in `STATEMENTS.json`; `admit-batch.py 26` held
+one.
+
+- **b96A04 (narrower, upheld).** Part (a) of problem.md says that if `y ∈ R`
+  and `dy | y` then `d` is a unit. That is false for `y = 0`, since `0 | 0`
+  for every `d`. `apm_b96a04` (Main.lean:101) adds `y ≠ 0` to that clause
+  only, the permitted narrowing for a false problem.md; report it as a
+  problem.md error. Part (b)'s second clause also assumes `m ≠ 0`, which
+  carries over from the first sentence of (b) (and is needed: `m = 0` is
+  solved by `y = 0`). Parts (b)–(e) are faithful.
+- No smoothness-order objection: no `ContDiff` in any batch 26 statement.
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -488,4 +502,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–25.
+Batches 21–31 have grade files; spot-checks recorded here cover 00–26.
