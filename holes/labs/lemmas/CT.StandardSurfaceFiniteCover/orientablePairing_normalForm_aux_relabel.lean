@@ -714,11 +714,51 @@ open PolygonMoves in
 /-- **Leaf (injective relabeling).**  `WordRel` only compares labels for
 equality, so an injective relabeling gives the same relation on the disk. -/
 -- BEGIN SEAT AREA
+lemma orientablePairing_normalForm_aux_relabel_aux_wordRel {L L' : Type*}
+    [DecidableEq L] [DecidableEq L'] (w : List (Signed L)) (f : L → L')
+    (hf : Function.Injective f) :
+    WordRel (w.map fun x => (f x.1, x.2)) = WordRel w := by
+  funext p q
+  apply propext
+  let w' := w.map fun x => (f x.1, x.2)
+  constructor
+  · rintro ⟨i, j, hij, t, hlab, hp, hq⟩
+    let i' : Fin w.length := ⟨i.1, by simpa [w'] using i.2⟩
+    let j' : Fin w.length := ⟨j.1, by simpa [w'] using j.2⟩
+    have hij' : i' ≠ j' := by
+      intro h
+      exact hij (Fin.ext (by simpa [i', j'] using congrArg Fin.val h))
+    have hlab' : (w.get i').1 = (w.get j').1 := by
+      apply hf
+      simpa [w', i', j'] using hlab
+    refine ⟨i', j', hij', t, hlab', ?_, ?_⟩
+    · simpa [i', w'] using hp
+    · simpa [i', j', w'] using hq
+  · rintro ⟨i, j, hij, t, hlab, hp, hq⟩
+    let i' : Fin w'.length := ⟨i.1, by simpa [w'] using i.2⟩
+    let j' : Fin w'.length := ⟨j.1, by simpa [w'] using j.2⟩
+    have hij' : i' ≠ j' := by
+      intro h
+      exact hij (Fin.ext (by simpa [i', j'] using congrArg Fin.val h))
+    have hlab' : (w'.get i').1 = (w'.get j').1 := by
+      simpa [w', i', j'] using congrArg f hlab
+    refine ⟨i', j', hij', t, hlab', ?_, ?_⟩
+    · simpa [i', w'] using hp
+    · simpa [i', j', w'] using hq
+
+open PolygonMoves in
 theorem orientablePairing_normalForm_aux_relabel {L L' : Type*}
     [DecidableEq L] [DecidableEq L'] (w : List (Signed L)) (f : L → L')
     (hf : Function.Injective f) :
     Nonempty (PolygonSurface w ≃ₜ PolygonSurface (w.map fun x => (f x.1, x.2))) := by
-  sorry
+  let w' := w.map fun x => (f x.1, x.2)
+  have h : WordRel w' = WordRel w :=
+    orientablePairing_normalForm_aux_relabel_aux_wordRel w f hf
+  change Nonempty
+    (Quotient (Relation.EqvGen.setoid (WordRel w)) ≃ₜ
+      Quotient (Relation.EqvGen.setoid (WordRel w')))
+  rw [h]
+  exact ⟨Homeomorph.refl _⟩
 -- END SEAT AREA
 
 /-- Labels in `ℕ`: an orbit goes to the index of a chosen representative. -/
