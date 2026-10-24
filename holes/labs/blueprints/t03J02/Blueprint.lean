@@ -14,6 +14,7 @@ import ConstructionTargets.T97A04FrozenH1Coordinate
 import ConstructionTargets.BoundaryTorusIntegralHomologyComplete
 import ConstructionTargets.CircleSingularHomology
 import ConstructionTargets.ProjectiveQuotientExactSplitting
+import ConstructionTargets.SingularHomologyHomotopy
 
 /-! # Blueprint for APM t03J02 -/
 
@@ -288,6 +289,25 @@ theorem apm_t03J02_H0_of_compatibleOpenCover
               exact joined_map qr (PathConnectedSpace.joined x y)
     }
   exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ (ql (j₁ z₀))⟩
+
+/-- A null-homotopic map is zero on degree-one integral homology. -/
+lemma apm_t03J02_H1_of_compatibleOpenCover_aux_null_map
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X,Y)) (hf : f.Nullhomotopic) :
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f) = 0 :=
+  ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_zero_of_nullhomotopic
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero f hf
+
+/-- Each torus piece has `H₁ ≅ ℤ²`. -/
+lemma apm_t03J02_H1_of_compatibleOpenCover_aux_piece_iso :
+    Nonempty (apm_t03J02_H 1 apm_t03J02_Torus ≅
+      ModuleCat.of ℤ (Fin 2 → ℤ)) := by
+  exact ⟨ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      (ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusHomeomorphBoundaryTorus.trans
+        (Homeomorph.prodCongr (Homeomorph.refl Circle)
+          ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.symm)).symm.toHomotopyEquiv 1 ≪≫
+    ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1ModuleIsoFinTwo⟩
 
 /-- Degree-one Mayer--Vietoris calculation; null-homotopy kills both legs. -/
 theorem apm_t03J02_H1_of_compatibleOpenCover
