@@ -209,3 +209,23 @@ changes nothing and prints a02J03 as HELD.
   an ℕ-indexed ω cannot enumerate finitely many zeros, so f with finitely many
   zeros satisfies no hypothesis; the problem's conclusion is a finite sum there,
   so nothing of substance is lost.
+
+## Batch 11 spot-checks (all grades upheld)
+
+Batch 11 was admitted during the earlier sweep; rerunning `admit-batch.py 11`
+changes nothing and prints a02J07 as HELD.
+
+- a02J07 (narrower): `SlitPath` (Main.lean:125-136) requires
+  `DifferentiableAt ℝ γ t` at every t ∈ (0,1]. problem.md allows a piecewise
+  smooth path, which has corners where γ is not differentiable, so paths with
+  corners are excluded. The `integrable_logDeriv` field (repair 877118590) is
+  harmless: γ'/γ is integrable for any piecewise smooth path avoiding 0.
+  Upheld; held. Repair route: allow finitely many non-differentiable points
+  (differentiable off a finite set, or a partition with C¹ pieces).
+- a03J06 (stronger, admitted): `apm_a03j06` (Main.lean:70-73) takes `m : ℕ`,
+  so m = 0 is included; the claim is still true there (bounded entire ⇒
+  constant). Upheld.
+- a03J01 (faithful): `apmMultiplicitySet` (Main.lean:22-25) uses
+  `encard = j`, so points lying in infinitely many E_k belong to no F_j. Under
+  A < ∞ that set is null (Borel–Cantelli), so the identity is unaffected.
+  Upheld.
