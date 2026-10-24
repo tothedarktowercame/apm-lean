@@ -468,6 +468,19 @@ two.
   part (a) only would make part (b) faithful.
 - No smoothness-order objection: no `ContDiff` in any batch 24 statement.
 
+## Batch 25 spot-check (all grades upheld)
+
+All ten rows graded faithful; `admit-batch.py 25` held none and all ten are in
+`STATEMENTS.json` with batch-25 evidence. Read against problem.md:
+
+- **b94J02.** The three parts map one-to-one; quantifying part (a) over `m`
+  is equivalent to "for some positive `m`", and `(D.rank : K)` is the right
+  reading of `tr(D) = rank(D)` in positive characteristic.
+- **b95J03.** Uniqueness is stated as "φ satisfies the formula iff it equals
+  the constructed map", the image/kernel dimensions are `n` and `n^2 - n`,
+  and part (d) gives an explicit two-element basis of the kernel for `ℂ/ℝ`.
+- No smoothness-order objection: no `ContDiff` in any batch 25 statement.
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -475,4 +488,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–24.
+Batches 21–31 have grade files; spot-checks recorded here cover 00–25.
