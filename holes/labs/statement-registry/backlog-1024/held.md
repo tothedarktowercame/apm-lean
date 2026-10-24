@@ -447,6 +447,27 @@ one.
   a closure of the printed statement. Part (b) is faithful.
 - No smoothness-order objection: no `ContDiff` in any batch 23 statement.
 
+## Batch 24 spot-check (b90A02, b93J03 held)
+
+Eight rows faithful and already in `STATEMENTS.json`; `admit-batch.py 24` held
+two.
+
+- **b90A02 (narrower, upheld).** problem.md takes "a ring with unity" and
+  defines flatness for right modules. `apm_b90a02` quantifies `[CommRing R]`
+  with an ordinary `Module R M`; the file header says this is because
+  Mathlib's `Module.Flat` only covers commutative rings. problem.md is not
+  false, so this is a gap, not a permitted narrowing: the noncommutative case
+  stays open until it can be stated (e.g. via a hand-rolled right-module
+  flatness for a general `Ring R`).
+- **b93J03 (narrower, upheld).** Part (a) asks for a common eigenvector with
+  no assumption that `V ≠ 0`; for `V = 0` there is none, so part (a) is false
+  as printed. `apm_b93j03` (Main.lean:365) adds `[Nontrivial V]`, the
+  permitted narrowing for a false problem.md; report it as a problem.md error.
+  Note the hypothesis is theorem-wide, so part (b) (true for `V = 0` with the
+  empty basis) also loses that degenerate case; scoping `[Nontrivial V]` to
+  part (a) only would make part (b) faithful.
+- No smoothness-order objection: no `ContDiff` in any batch 24 statement.
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -454,4 +475,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–23.
+Batches 21–31 have grade files; spot-checks recorded here cover 00–24.
