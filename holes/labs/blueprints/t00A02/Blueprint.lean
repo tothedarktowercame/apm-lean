@@ -465,7 +465,22 @@ theorem apm_t00A02_standard_cover_adapter
     ∃ q : E → ConstructionTargets.Surfaces.Surface true 5,
       IsCoveringMap q ∧
       ∀ b, Nat.card {e : E // q e = b} = 10 := by
-  sorry
+  obtain ⟨h⟩ := hF
+  refine ⟨h ∘ p, ?_, ?_⟩
+  · exact hp.1.homeomorph_comp h
+  · intro b
+    let e : {x : E // (h ∘ p) x = b} ≃
+        {x : E // p x = h.symm b} :=
+      { toFun := fun x ↦ ⟨x.1, by
+            apply h.injective
+            simpa using x.2⟩
+        invFun := fun x ↦ ⟨x.1, by
+            change h (p x.1) = b
+            rw [x.2, h.apply_symm_apply]⟩
+        left_inv := by intro x; exact Subtype.ext rfl
+        right_inv := by intro x; exact Subtype.ext rfl }
+    rw [Nat.card_congr e]
+    exact hp.2 (h.symm b)
 
 /-- Assembly: both connected ten-sheeted covers are the standard genus-41
 surface, by `connectedFiniteCover_homeomorph_standardSurface`. -/
