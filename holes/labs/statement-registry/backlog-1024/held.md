@@ -342,8 +342,7 @@ row narrows a false source.
 ## Batch 18 spot-check (all grades upheld)
 
 All ten rows graded faithful, and all ten were already in `STATEMENTS.json`, so
-`admit-batch.py 18` admitted nothing and held nothing. Batch 17 has not been
-spot-checked yet.
+`admit-batch.py 18` admitted nothing and held nothing.
 
 - a96J08 (faithful, correction): problem.md records that the informal
   solution's boxed answer -π cot(πω) is a sign slip; its own last line gives
@@ -357,3 +356,23 @@ spot-checked yet.
   coincident-pole case is split off. Both are forced. Upheld.
 - No smoothness-order objection: no `ContDiff` in any batch 18 file; every `⊤`
   (a97A01, a97A02) is an `ENNReal` Lᵖ exponent.
+
+## Batch 17 spot-check (all grades upheld)
+
+`admit-batch.py 17` held a96A04 and admitted nothing new: the other nine rows
+(three stronger, six faithful) were already in `STATEMENTS.json`.
+
+- a96A04 (narrower): held. problem.md asks for the heat semigroup on ℝⁿ (its
+  `f ∈ L²(ℝ)` is inconsistent with the `(4πt)^{-n/2}` factor and the `∫_{ℝⁿ}`,
+  so the n-dimensional reading is the intended one). `heatKernel`, `heatConv`
+  and all three theorems are typed on ℝ, i.e. only n = 1. Needs re-encoding
+  over `EuclideanSpace ℝ (Fin n)`. Smoothness order is fine: Main.lean:93 and
+  :705 use `ContDiff ℝ ∞` under `open scoped ContDiff`, which is C^∞; the
+  bank's bare `⊤` (analytic) was correctly replaced.
+- a96A02 (faithful, correction): the bank's constant-zero placeholder made the
+  non-AC theorem false; the exact triangular-spike specification matches
+  problem.md (f(1/n) = 0, peak 1/n at the midpoint of [1/(n+1), 1/n]). Upheld.
+- a95J07 / a95J08 / a96J01 (stronger): dropping the nonemptiness hypothesis,
+  `1 ≤ p` for `1 < p`, and continuity on all of ℝ each imply the stated
+  problem. Upheld.
+- No other `ContDiff` in any batch 17 statement.
