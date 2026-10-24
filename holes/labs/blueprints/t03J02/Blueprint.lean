@@ -382,7 +382,25 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
     (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
     (apm_t03J02_overlapToLeft hcover.leftSet hcover.rightSet).Nullhomotopic ∧
       (apm_t03J02_overlapToRight hcover.leftSet hcover.rightSet).Nullhomotopic := by
-  sorry
+  constructor
+  · let leg := apm_t03J02_overlapToLeft hcover.leftSet hcover.rightSet
+    have hforward : (hcover.leftEquiv.toFun.comp leg).Nullhomotopic := by
+      obtain ⟨y, hy⟩ := hnull₁.comp_left hcover.overlapEquiv.toFun
+      exact ⟨y, hcover.left_compat.trans hy⟩
+    obtain ⟨x, hx⟩ := hforward.comp_right hcover.leftEquiv.invFun
+    refine ⟨x, ?_⟩
+    have hrecover := hcover.leftEquiv.left_inv.comp
+      (ContinuousMap.Homotopic.refl leg)
+    exact hrecover.symm.trans hx
+  · let leg := apm_t03J02_overlapToRight hcover.leftSet hcover.rightSet
+    have hforward : (hcover.rightEquiv.toFun.comp leg).Nullhomotopic := by
+      obtain ⟨y, hy⟩ := hnull₂.comp_left hcover.overlapEquiv.toFun
+      exact ⟨y, hcover.right_compat.trans hy⟩
+    obtain ⟨x, hx⟩ := hforward.comp_right hcover.rightEquiv.invFun
+    refine ⟨x, ?_⟩
+    have hrecover := hcover.rightEquiv.left_inv.comp
+      (ContinuousMap.Homotopic.refl leg)
+    exact hrecover.symm.trans hx
 
 /-- A homotopy equivalence between path-connected spaces identifies their
 fundamental groups at any two base points. -/
