@@ -1785,10 +1785,100 @@ Either compare `WordRel` with `SurfaceRel true h` directly (the
 about 150 lines), or go through `orientableStandardPairingData`, the bridge
 `_aux_bridge`, `_aux_relabel` and `standardPairingData_space_homeomorph`. -/
 -- BEGIN SEAT AREA
+@[simp] lemma orientablePairing_normalForm_aux_standard_aux_length (h : ℕ) :
+    (orientablePairing_normalForm_aux_standardWord h).length = 4 * h := by
+  simp [orientablePairing_normalForm_aux_standardWord, List.length_flatMap]
+  omega
+
+-- The `ℕ` label of a standard orbit: `aⱼ ↦ 2j`, `bⱼ ↦ 2j + 1`.
+def orientablePairing_normalForm_aux_standard_aux_label (h : ℕ) (hh : 0 < h)
+    (o : PairingOrbit (orientableStandardPairingData h hh).pair) : ℕ :=
+  let p := orientableOrbitEquiv h o
+  2 * p.1.1 + if p.2 then 1 else 0
+
+theorem orientablePairing_normalForm_aux_standard_aux_label_injective (h : ℕ) (hh : 0 < h) :
+    Function.Injective (orientablePairing_normalForm_aux_standard_aux_label h hh) := by
+  intro a b hab
+  apply (orientableOrbitEquiv h).injective
+  simp only [orientablePairing_normalForm_aux_standard_aux_label] at hab
+  generalize orientableOrbitEquiv h a = p at hab
+  generalize orientableOrbitEquiv h b = q at hab
+  rcases p with ⟨⟨p, hp⟩, s⟩
+  rcases q with ⟨⟨q, hq⟩, r⟩
+  cases s <;> cases r <;> simp at hab ⊢ <;> omega
+
+theorem orientablePairing_normalForm_aux_standard_aux_get (h n : ℕ) (hn : n < (orientablePairing_normalForm_aux_standardWord h).length) :
+    (orientablePairing_normalForm_aux_standardWord h)[n] =
+      (2 * (n / 4) + ![0, 1, 0, 1] ⟨n % 4, Nat.mod_lt _ (by norm_num)⟩,
+        ![true, true, false, false] ⟨n % 4, Nat.mod_lt _ (by norm_num)⟩) := by
+  induction h with
+  | zero => simp [orientablePairing_normalForm_aux_standardWord] at hn
+  | succ h ih =>
+    have hs : orientablePairing_normalForm_aux_standardWord (h + 1) =
+        orientablePairing_normalForm_aux_standardWord h ++
+          [(2 * h, true), (2 * h + 1, true), (2 * h, false), (2 * h + 1, false)] := by
+      simp [orientablePairing_normalForm_aux_standardWord, List.range_succ,
+        List.flatMap_append]
+    have hl := orientablePairing_normalForm_aux_standard_aux_length h
+    simp only [hs, List.getElem_append]
+    split_ifs with hlt
+    · exact ih hlt
+    · have hn' : n < 4 * h + 4 := by
+        have := orientablePairing_normalForm_aux_standard_aux_length (h + 1)
+        omega
+      have hq : n / 4 = h := by omega
+      have : n - (orientablePairing_normalForm_aux_standardWord h).length = n % 4 := by omega
+      simp only [this, hq]
+      obtain h0 | h0 | h0 | h0 : n % 4 = 0 ∨ n % 4 = 1 ∨ n % 4 = 2 ∨ n % 4 = 3 := by omega
+      all_goals simp [h0]
+
+theorem orientablePairing_normalForm_aux_standard_aux_wordEq (h : ℕ) (hh : 0 < h) :
+    ((orientablePairing_normalForm_aux_wordOf (orientableStandardPairingData h hh)).map
+        fun x => (orientablePairing_normalForm_aux_standard_aux_label h hh x.1, x.2)).map (fun x => (x.1, xor x.2 true)) =
+      orientablePairing_normalForm_aux_standardWord h := by
+  apply List.ext_getElem
+  · simp only [List.length_map, orientablePairing_normalForm_aux_wordOf_length,
+      orientablePairing_normalForm_aux_standard_aux_length]
+    rfl
+  · intro n h₁ h₂
+    rw [orientablePairing_normalForm_aux_standard_aux_get h n h₂]
+    simp only [List.getElem_map, orientablePairing_normalForm_aux_wordOf, List.getElem_ofFn]
+    have hn : n < 4 * h := by
+      rw [orientablePairing_normalForm_aux_standard_aux_length] at h₂
+      exact h₂
+    let i : Fin (4 * h) := ⟨n, hn⟩
+    have hc1 : ((orientableCoord h i).1 : ℕ) = n / 4 := by
+      simp [i, orientableCoord, Fin.coe_divNat]
+    have hc2 : (orientableCoord h i).2 = ⟨n % 4, Nat.mod_lt _ (by norm_num)⟩ :=
+      Fin.ext (by simp [i, orientableCoord, Fin.coe_modNat])
+    change (2 * ((orientableCoord h i).1 : ℕ) +
+        (if handleOrbitLabel (orientableCoord h i).2 then 1 else 0),
+        xor (handleSign (orientableCoord h i).2) true) = _
+    rw [hc1, hc2]
+    obtain h0 | h0 | h0 | h0 : n % 4 = 0 ∨ n % 4 = 1 ∨ n % 4 = 2 ∨ n % 4 = 3 := by omega
+    all_goals simp [h0, handleOrbitLabel, handleSign]
+
+open PolygonMoves in
 theorem orientablePairing_normalForm_aux_standard (h : ℕ) (hh : 1 ≤ h) :
     Nonempty (PolygonMoves.PolygonSurface
       (orientablePairing_normalForm_aux_standardWord h) ≃ₜ Surface true h) := by
-  sorry
+  have hh' : 0 < h := hh
+  let P := orientableStandardPairingData h hh'
+  obtain ⟨e₁⟩ := orientablePairing_normalForm_aux_bridge P
+  obtain ⟨e₂⟩ := orientablePairing_normalForm_aux_relabel
+    (orientablePairing_normalForm_aux_wordOf P) _ (orientablePairing_normalForm_aux_standard_aux_label_injective h hh')
+  let w₁ := (orientablePairing_normalForm_aux_wordOf P).map
+    fun x => (orientablePairing_normalForm_aux_standard_aux_label h hh' x.1, x.2)
+  have hflip : WordRel (w₁.map fun x => (x.1, xor x.2 true)) = WordRel w₁ :=
+    relabelInvert_aux_wordRel w₁ (Equiv.refl ℕ) (fun _ => true)
+  have e₃ : PolygonSurface w₁ ≃ₜ PolygonSurface (w₁.map fun x => (x.1, xor x.2 true)) := by
+    change Quotient (Relation.EqvGen.setoid (WordRel w₁)) ≃ₜ
+      Quotient (Relation.EqvGen.setoid (WordRel (w₁.map fun x => (x.1, xor x.2 true))))
+    rw [hflip]
+    exact Homeomorph.refl _
+  have e₀ : P.Space ≃ₜ Surface true h := standardPairingData_space_homeomorph true h hh'
+  rw [← orientablePairing_normalForm_aux_standard_aux_wordEq h hh']
+  exact ⟨(e₃.symm.trans (e₂.symm.trans e₁.symm)).trans e₀⟩
 -- END SEAT AREA
 
 /-- **Orientable polygon-word normal form.**  Assembled from the leaves
