@@ -167,3 +167,8 @@ rows are now admitted.
 `admit-batch.py` now skips ids in the registry's `revoked` list and reports
 them as HELD; without that, rerunning batch 08 re-admitted a00J06. Held
 count after batch 08: 38 rows, 32 of them narrower, plus a00J06 revoked.
+(`admit` fingerprints the committed revision. My first a00J03 admission came
+before the repair was committed and pinned the old statement, so it was
+revoked and redone at the repaired revision. The `revoked` list keeps that
+first entry, but `admit-batch.py` checks `entries` first, so a00J03 is not
+reported as held.)

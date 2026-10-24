@@ -32,14 +32,14 @@
     "composition_isometry",
     "composition_isometric_isomorphism"
    ],
-   "sha256": "44ec509da1eb38566e840074e9e2b48035b0a67770244fa87e0e4d313f30e3c6",
+   "sha256": "8b3d73ec568bbf9e8941f2cae6a43054a2e92411aac644fe14bbc8f9c328feab",
    "defs": [],
    "grade": "faithful",
    "grader": "claude-14 review of codex backlog-1024 grade (batch 08)",
    "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
    "prelim_defect": null,
-   "rev": "5c83c7ee0",
-   "approved_at": "2026-10-24T22:11:17Z"
+   "rev": "c6e083659",
+   "approved_at": "2026-10-24T22:12:28Z"
   },
   "a00J04": {
    "decls": [
@@ -7803,6 +7803,26 @@
    "reason": "statement holds by Lean's tsum junk value: f a x = 0 for x > 1 because the series is not summable, so AnalyticAt ℝ (f a) 1 fails without Pringsheim; continuation needs only agreement on (1-r,1)",
    "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
    "revoked_at": "2026-10-24T22:11:17Z"
+  },
+  {
+   "id": "a00J03",
+   "entry": {
+    "decls": [
+     "composition_isometry",
+     "composition_isometric_isomorphism"
+    ],
+    "sha256": "44ec509da1eb38566e840074e9e2b48035b0a67770244fa87e0e4d313f30e3c6",
+    "defs": [],
+    "grade": "faithful",
+    "grader": "claude-14 review of codex backlog-1024 grade (batch 08)",
+    "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
+    "prelim_defect": null,
+    "rev": "5c83c7ee0",
+    "approved_at": "2026-10-24T22:11:17Z"
+   },
+   "reason": "admitted before the he_symm repair was committed, so the entry pinned the old statement; re-admitted at the repaired revision",
+   "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
+   "revoked_at": "2026-10-24T22:12:28Z"
   }
  ]
 }
