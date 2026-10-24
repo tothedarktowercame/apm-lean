@@ -56,6 +56,34 @@ theorem apm_t94J04_subgroup_standard_cover_adapter
 
 /-- Adapter: a group isomorphic to `π₁` of a space homeomorphic to the standard
 genus-`(k+1)` surface is isomorphic to its `π₁` at `surfacePoint`. -/
+noncomputable def apm_t94J04_cover_group_transport_adapter_aux_equiv
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (f x) where
+  toFun := FundamentalGroup.map ⟨f, f.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨f.symm, f.symm.continuous⟩
+    (f.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map f.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact f.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact f.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
 theorem apm_t94J04_cover_group_transport_adapter
     (k : ℕ) (H : Type*) [Group H]
     (E : Type*) [TopologicalSpace E] [PathConnectedSpace E] (e : E)
@@ -66,7 +94,16 @@ theorem apm_t94J04_cover_group_transport_adapter
       (H ≃* FundamentalGroup
         (ConstructionTargets.Surfaces.Surface true (k + 1))
         (ConstructionTargets.StatementSurfaceModels.surfacePoint true (k + 1))) := by
-  sorry
+  obtain ⟨f⟩ := hE
+  obtain ⟨i⟩ := hpi
+  letI : PathConnectedSpace
+      (ConstructionTargets.Surfaces.Surface true (k + 1)) :=
+    f.surjective.pathConnectedSpace f.continuous
+  exact ⟨i.symm |>.trans
+    (apm_t94J04_cover_group_transport_adapter_aux_equiv f e) |>.trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+      (f e)
+      (ConstructionTargets.StatementSurfaceModels.surfacePoint true (k + 1)))⟩
 
 theorem apm_t94J04_finiteIndexSurfaceSubgroupClassification
     {F : Type} [TopologicalSpace F] [T2Space F] [CompactSpace F]
