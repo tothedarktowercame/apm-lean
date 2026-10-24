@@ -35,3 +35,8 @@ HELD | a01A09 | admit refused | refused a01A09: no theorem apm_a01a09 in committ
 HELD | a01A10 | admit refused | refused a01A10: no theorem apm_a01a10 in committed Main.lean
 HELD | a01A11 | hypothesis-carries-core | Parts (a) and (c) are faithful, but the part-(b) theorem assumes analyticity, decay, and nonzeroness instead of deriving/assembling them from compact positive-measure `K`.
 HELD | a01J01 | admit refused | refused a01J01: no theorem apm_a01j01 in committed Main.lean
+HELD | a98J03 | narrower | The intended Poisson-kernel result is encoded, including a stronger contraction bound, but only for real-valued `L²`; the prelim does not specify this scalar restriction.
+HELD | b98A01 | narrower | The last requested equivalence about a subgroup of order `3` is absent and is replaced by an equivalence about a subgroup of order `35`.
+HELD | m00A04 | vacuous | The PDE encoding collapses: compactness of the raw support forces every positive-dimensional smooth test function to be zero, hence every encoded `H¹₀` value is a.e. zero and the weak equation is solved trivially by `u=g=0`.
+HELD | m02A02 | narrower | The periodic Poisson existence/uniqueness clause assumes the additional compatibility condition `f (0, 0) = 0`, absent from the printed question (though mathematically necessary).
+HELD | m02A06 | narrower | Existence and uniqueness are proved only for `ε < 1 / (4*(1+C))`, and uniqueness only among solutions bounded by `2*(1+C)`; the prelim claims uniqueness for every `ε > 0`.
