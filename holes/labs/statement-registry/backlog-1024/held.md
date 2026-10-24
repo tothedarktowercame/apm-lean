@@ -338,3 +338,22 @@ row narrows a false source.
   needs repairing to n = 1 before admission.
 - No smoothness-order objection in this batch: no `ContDiff` appears in any
   batch 16 statement (the one in a95A06 Main.lean:296 is inside a proof).
+
+## Batch 18 spot-check (all grades upheld)
+
+All ten rows graded faithful, and all ten were already in `STATEMENTS.json`, so
+`admit-batch.py 18` admitted nothing and held nothing. Batch 17 has not been
+spot-checked yet.
+
+- a96J08 (faithful, correction): problem.md records that the informal
+  solution's boxed answer -π cot(πω) is a sign slip; its own last line gives
+  +π cot(πω). The source asks only to evaluate the integral, so the corrected
+  target is the true value of what is asked, not a narrowing. The old sign has
+  axiom-clean refutations at ω = 1/4 and 3/4. Upheld.
+- a96J05 (faithful, correction): the correction is to the registry (the first
+  bank file held only auxiliary lemmas); `apm_a96j05` states vector-space
+  closure, the norm axioms and completeness, as problem.md asks. Upheld.
+- a96J07: the source's ill-typed `b < R` is read as `|b| < R`, and the
+  coincident-pole case is split off. Both are forced. Upheld.
+- No smoothness-order objection: no `ContDiff` in any batch 18 file; every `⊤`
+  (a97A01, a97A02) is an `ENNReal` Lᵖ exponent.
