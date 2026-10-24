@@ -258,10 +258,148 @@ def standardCover_pairingData_aux_lift_aux_complex (g n : ℕ) (hg : 1 ≤ g)
       (congrArg Sigma.snd h |> fun h' => by simpa using h')
   sign s := standardCover_pairingData_aux_lift_aux_baseSign g s.2
 
-/-- Leaf: the lifts assemble to a homeomorphism.  The map
-`⟨i, x⟩ ↦ L i x` from the disjoint union of the disks is surjective (every
-point of `E` is on some lifted disk), identifies exactly the points that
-`Rel` generates (by `hside` and uniqueness of lifts), and is a quotient map. -/
+/-- Banked by lemma-3 (2026-10-24): the lifts form one continuous map on the
+disjoint union of the disks. -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_piecewise_continuous
+    (n : ℕ) (E : Type*) [TopologicalSpace E]
+    (L : Fin n → C(Disk, E)) :
+    Continuous (fun z : Σ _ : Fin n, Disk => L z.1 z.2) := by
+  apply continuous_sigma
+  intro i
+  exact (L i).continuous
+
+/-- Leaf: a cover of `Surface true g` is Hausdorff.  The base is Hausdorff:
+it is homeomorphic to `(standardPairingData true g _).Space`
+(`standardPairingData_space_homeomorph`), which is Hausdorff by
+`PairingData.spaceT2`.  Two points of one fibre lie in disjoint sheets of a
+trivialization; points of different fibres lie in preimages of disjoint
+open sets. -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_t2
+    (g : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p) :
+    T2Space E := by
+  sorry
+
+/-- Leaf: two lifted disks that meet at the same point of the disk are the
+same face.  `L i` and `L j` both lift `surfaceQuotient true g` through `p`
+and agree at `x`; the disk is connected, so they agree everywhere
+(`IsCoveringMap.eq_of_comp_eq`), in particular at the centre, and the
+uniqueness in `hfib` gives `i = j`. -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_lift_injective
+    (g n : ℕ)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p)
+    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
+    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
+      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
+    (x : Disk) (i j : Fin n) (h : L i x = L j x) : i = j := by
+  sorry
+
+/-- Leaf: every point of `E` lies on a lifted disk.  Take `x` with
+`surfaceQuotient true g x = p e`.  The points `L i x` are pairwise distinct
+(`_aux_lift_injective`) and lie over `p e`.  If `n > 0`, `hsheets` makes that
+fibre finite with `n` points, so they fill it.  If `n = 0`, `hfib` makes the
+fibre over the centre empty; lifting a path in the base from `p e` to the
+image of the centre, starting at `e`, gives a point of that fibre, a
+contradiction. -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_surjective
+    (g n : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p)
+    (hsheets : ∀ b, Nat.card {e : E // p e = b} = n)
+    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
+    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
+      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
+    (e : E) : ∃ i x, L i x = e := by
+  sorry
+
+/-- Leaf: chains of the base relation lift to chains of the lifted complex,
+from any face.  A `SurfaceRel true g` step joins side `k = 4j` (or `4j + 1`)
+at `t` to side `basePair k` at `1 - t`; from face `i` it is the `Rel` step
+along side `⟨i, k⟩` to face `σ i k`, and the reverse step from face `i` runs
+along side `⟨i, basePair k⟩` to face `σ i (basePair k)`.  Since every step
+lifts in both directions from every face, induction over the symmetric
+reflexive-transitive closure gives the chain (the `symm` case of a direct
+induction on `EqvGen` does not go through: the face reached is not
+controlled). -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_baseChain
+    (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    {x y : Disk} (h : Relation.EqvGen (SurfaceRel true g) x y) (i : Fin n) :
+    ∃ j, Relation.EqvGen (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Rel
+      ⟨i, x⟩ ⟨j, y⟩ := by
+  sorry
+
+/-- One gluing step of the lifted complex joins equal points of `E`
+(`hside`, with the parameter reversed because paired sides carry opposite
+signs). -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_descends
+    (g n : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (L : Fin n → C(Disk, E))
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (hside : ∀ i (k : Fin (4 * g)) t, L i (edgePoint (4 * g) k t) =
+      L (σ i k) (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t)))
+    {a b : Σ _ : Fin n, Disk}
+    (h : Relation.EqvGen (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Rel a b) :
+    L a.1 a.2 = L b.1 b.2 := by
+  induction h with
+  | rel a b hab =>
+    obtain ⟨s, t, rfl, rfl⟩ := hab
+    have hsign : standardCover_pairingData_aux_lift_aux_baseSign g s.2 ≠
+        standardCover_pairingData_aux_lift_aux_baseSign g
+          (standardCover_pairingData_aux_lift_aux_basePair g s.2) :=
+      (standardCover_pairingData_aux_lift_aux_baseSign_basePair g s.2).symm
+    dsimp only [PolygonComplex.pairedParameter, standardCover_pairingData_aux_lift_aux_complex,
+      Function.Involutive.toPerm, Equiv.coe_fn_mk]
+    rw [if_neg hsign]
+    exact hside s.1 s.2 t
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- The lifts make exactly the identifications of the lifted complex. -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_identifies
+    (g n : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p)
+    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
+    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
+      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (hside : ∀ i (k : Fin (4 * g)) t, L i (edgePoint (4 * g) k t) =
+      L (σ i k) (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t)))
+    (a b : Σ _ : Fin n, Disk) (h : L a.1 a.2 = L b.1 b.2) :
+    Relation.EqvGen (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Rel a b := by
+  obtain ⟨i, x⟩ := a
+  obtain ⟨j, y⟩ := b
+  have hq : surfaceQuotient true g x = surfaceQuotient true g y := by
+    have hx := congrFun (hL i) x
+    have hy := congrFun (hL j) y
+    simp only [Function.comp] at hx hy
+    rw [← hx, ← hy, h]
+  obtain ⟨j', hj'⟩ :=
+    standardCover_pairingData_aux_lift_aux_homeomorph_aux_baseChain g n hg σ hσ
+      (Quotient.exact hq) i
+  have hd := standardCover_pairingData_aux_lift_aux_homeomorph_aux_descends
+    g n hg E L σ hσ hside hj'
+  have : j' = j :=
+    standardCover_pairingData_aux_lift_aux_homeomorph_aux_lift_injective g n E p hp L hL hfib
+      y j' j (hd.symm.trans h)
+  subst this
+  exact hj'
+
+/-- The lifts assemble to a homeomorphism.  The map `⟨i, x⟩ ↦ L i x`
+descends to `C.Space` (`_aux_descends`), is injective there
+(`_aux_identifies`) and onto (`_aux_surjective`); `C.Space` is compact and
+`E` is Hausdorff (`_aux_t2`), so the continuous bijection is a
+homeomorphism. -/
 theorem standardCover_pairingData_aux_lift_aux_homeomorph
     (g n : ℕ) (hg : 1 ≤ g)
     (E : Type*) [TopologicalSpace E]
@@ -276,7 +414,33 @@ theorem standardCover_pairingData_aux_lift_aux_homeomorph
       L (σ i k) (edgePoint (4 * g)
         (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t))) :
     Nonempty (E ≃ₜ (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Space) := by
-  sorry
+  set C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  letI : T2Space E := standardCover_pairingData_aux_lift_aux_homeomorph_aux_t2 g hg E p hp
+  let Φ : C.Space → E := Quotient.lift (fun z : Σ _ : Fin n, Disk => L z.1 z.2)
+    (fun a b h => standardCover_pairingData_aux_lift_aux_homeomorph_aux_descends
+      g n hg E L σ hσ hside h)
+  have hΦ : Continuous Φ := by
+    rw [continuous_coinduced_dom]
+    exact standardCover_pairingData_aux_lift_aux_homeomorph_aux_piecewise_continuous n E L
+  have hinj : Function.Injective Φ := by
+    intro a b hab
+    induction a using Quotient.inductionOn
+    induction b using Quotient.inductionOn
+    exact Quotient.sound
+      (standardCover_pairingData_aux_lift_aux_homeomorph_aux_identifies g n hg E p hp L hL hfib
+        σ hσ hside _ _ hab)
+  have hsurj : Function.Surjective Φ := by
+    intro e
+    obtain ⟨i, x, hx⟩ := standardCover_pairingData_aux_lift_aux_homeomorph_aux_surjective
+      g n hg E p hp hsheets L hL hfib e
+    exact ⟨Quotient.mk _ ⟨i, x⟩, hx⟩
+  haveI : CompactSpace (Σ _ : Fin n, Disk) := by
+    haveI : CompactSpace Disk :=
+      isCompact_iff_compactSpace.mp (isCompact_closedBall (0 : ℂ) 1)
+    infer_instance
+  haveI : CompactSpace C.Space :=
+    Quotient.compactSpace (s := Relation.EqvGen.setoid C.Rel)
+  exact ⟨(hΦ.homeoOfEquivCompactToT2 (f := Equiv.ofBijective Φ ⟨hinj, hsurj⟩)).symm⟩
 
 /-- Leaf: a connected glued space has connected face-dual graph.  The faces
 in one dual class form a union of glued disks that is closed and open in
