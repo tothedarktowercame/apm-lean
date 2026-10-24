@@ -5,6 +5,7 @@ import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.Surfaces
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 import ConstructionTargets.WedgePermutationCover
+import ConstructionTargets.StandardSurfaceFiniteCover
 
 /-!
 # APM t00A02: finite coverings of surfaces and a projective-plane wedge
@@ -454,8 +455,20 @@ theorem apm_t00A02_irregular_wedge_cover
   exact apm_t00A02_shared_cover_adapter false r₀
     ConstructionTargets.WedgePermutationCover.rp2Wedge_irregular_four_cover
 
-/-- LIBRARY: finite-cover Euler characteristic plus classification of closed
-orientable surfaces, specialized to degree ten over genus five. -/
+/-- Adapter: transport a ten-sheeted cover of a genus-five surface `F` along
+`F ≃ₜ Surface true 5` to a ten-sheeted cover of the standard surface. -/
+theorem apm_t00A02_standard_cover_adapter
+    (F E : Type) [TopologicalSpace F] [TopologicalSpace E]
+    [PathConnectedSpace E]
+    (hF : apm_t00A02_isGenusFiveSurface F) (p : E → F)
+    (hp : apm_t00A02_isNfoldCover 10 p) :
+    ∃ q : E → ConstructionTargets.Surfaces.Surface true 5,
+      IsCoveringMap q ∧
+      ∀ b, Nat.card {e : E // q e = b} = 10 := by
+  sorry
+
+/-- Assembly: both connected ten-sheeted covers are the standard genus-41
+surface, by `connectedFiniteCover_homeomorph_standardSurface`. -/
 theorem apm_t00A02_connected_ten_cover_homeomorph :
     ∀ (F E₁ E₂ : Type)
         [TopologicalSpace F] [T2Space F] [CompactSpace F]
@@ -467,7 +480,17 @@ theorem apm_t00A02_connected_ten_cover_homeomorph :
         (p₁ : E₁ → F) (p₂ : E₂ → F),
       apm_t00A02_isNfoldCover 10 p₁ →
       apm_t00A02_isNfoldCover 10 p₂ → Nonempty (E₁ ≃ₜ E₂) := by
-  sorry
+  intro F E₁ E₂ _ _ _ _ _ _ _ _ _ _ hF p₁ p₂ hp₁ hp₂
+  obtain ⟨q₁, hq₁, hf₁⟩ := apm_t00A02_standard_cover_adapter F E₁ hF p₁ hp₁
+  obtain ⟨q₂, hq₂, hf₂⟩ := apm_t00A02_standard_cover_adapter F E₂ hF p₂ hp₂
+  obtain ⟨e₁⟩ :=
+    ConstructionTargets.StandardSurfaceFiniteCover.connectedFiniteCover_homeomorph_standardSurface
+      5 10 (by omega) (by omega) E₁ q₁ hq₁ hf₁
+  obtain ⟨e₂⟩ :=
+    ConstructionTargets.StandardSurfaceFiniteCover.connectedFiniteCover_homeomorph_standardSurface
+      5 10 (by omega) (by omega) E₂ q₂ hq₂ hf₂
+  norm_num at e₁ e₂ ⊢
+  exact ⟨e₁.trans e₂.symm⟩
 
 theorem apm_t00a02 :
     (∀ (F E₁ E₂ : Type)

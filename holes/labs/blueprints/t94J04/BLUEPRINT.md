@@ -1,6 +1,37 @@
 # Blueprint for t94J04
 
-## Triage
+## Finite-cover split (2026-10-24)
+
+The registered statement is unchanged. The `k=1` top-subgroup proof remains;
+the former `k>=2` LIBRARY lemma is a sorry-free shared-cover assembly.
+
+`apm_t94J04_subgroup_standard_cover_adapter` (90–150 lines, independent)
+applies `CoveringSubgroupCorrespondence.connectedCover`, supplies charted
+surface local and semilocal connectivity, then transports through
+`F ≃ₜ Surface true 2`. Tools: `connectedCover`, `IsCoveringMap.comp`,
+`Nat.card_congr`.
+
+`apm_t94J04_cover_group_transport_adapter` (30–60 lines, independent) takes
+explicit `E ≃ₜ Surface true (k+1)` and `pi1(E) ≃ H`, transports fundamental
+groups, and changes basepoint. Tools: `fundamentalGroupEquivOfHomeomorphEq`,
+`FundamentalGroup.fundamentalGroupMulEquivOfPathConnected`.
+
+C1 standard correspondence/invariance; C2 no final subgroup isomorphism is
+assumed; C3 both are transport; C4/C5 maps, basepoints and equivalences are
+explicit; C6 consumer hypotheses only; C7 natural index; C8 valid also at
+`k=1`, assembly uses `k>=2`; C9 neither repeats the ancestor; C10 matches.
+The assembly gives both subgroups the common group `pi1(Surface true (k+1))`.
+
+## Earlier record (blueprint time)
+
+Kept for the triage and the degeneracies checked, which still hold. Where it
+calls the finite-cover lemma LIBRARY, the 2026-10-24 section above supersedes it:
+that lemma is now an assembly over
+`ConstructionTargets.StandardSurfaceFiniteCover`, and its open obligations are
+the adapters named above.
+
+
+### Triage
 
 Verdict: **true and faithful** (as registered).
 
@@ -37,7 +68,7 @@ covers of a closed polygon surface.  `ConstructionTargets.Surfaces` supplies
 the polygon model and Euler-characteristic formula.  Thus there is no short
 elementary route already present.
 
-## Lemmas
+### Lemmas
 
 ### `apm_t94J04_subgroups_equiv_of_index_one` — proved
 
@@ -103,7 +134,7 @@ The classical subgroup-cover theorem confirms every finite-index subgroup is
 realized, including nonnormal subgroups; this is why mere equivalence of
 right-coset sets would not suffice.
 
-## Dependency layers
+### Dependency layers
 
 * **Layer 1 (parallel):** the two already proved elementary lemmas and the
   LIBRARY surface-subgroup classification program.
@@ -114,7 +145,7 @@ There is one open lemma, and it is intentionally marked LIBRARY because its
 honest proof is the stalled shared topology foundation rather than a
 30–150-line lemma-seat task.
 
-## Compilation and axioms
+### Compilation and axioms
 
 `Blueprint.lean` compiles with the required single-file command.  The output
 of `#print axioms apm_t94j04` is pasted below:
