@@ -409,7 +409,10 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
     (e : ContinuousMap.HomotopyEquiv X Y) [PathConnectedSpace Y]
     (x : X) (y : Y) :
     Nonempty (FundamentalGroup X x ≃* FundamentalGroup Y y) := by
-  sorry
+  let E := FundamentalGroupoidFunctor.equivOfHomotopyEquiv e
+  let eπ := E.fullyFaithfulFunctor.mulEquivEnd (FundamentalGroupoid.mk x)
+  exact ⟨eπ.trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected (e x) y)⟩
 
 /-- Two path-connected sets covering a space with nonempty intersection make
 the space path-connected. -/
