@@ -229,3 +229,22 @@ changes nothing and prints a02J07 as HELD.
   `encard = j`, so points lying in infinitely many E_k belong to no F_j. Under
   A < ∞ that set is null (Borel–Cantelli), so the identity is unaffected.
   Upheld.
+
+## Batch 12 spot-checks (all grades upheld)
+
+Batch 12 was admitted during the earlier sweep; rerunning `admit-batch.py 12`
+changes nothing and prints a92J03 as HELD.
+
+- a92J03 (narrower): `fourier_maps_L1_to_C0` (Main.lean:109-113) states
+  continuity, the bound by ‖f‖₁, and `Tendsto … (cocompact ℝ) (𝓝 0)` for every
+  integrable f, which is stronger than part (c). problem.md's closing sentence
+  also asks that f ↦ f̂ be a linear map L¹(ℝ) → C₀(ℝ), and no declaration states
+  linearity. Upheld; held. Repair route: add the linearity conjunct
+  (f̂ of a·f + b·g equals a·f̂ + b·ĝ for integrable f, g), or package the map as
+  a linear map into the bounded continuous functions vanishing at infinity.
+- a92J02 (stronger, admitted): `convergesInMeasure.exists_subseq_ae_tendsto`
+  (Main.lean:127-131) works over any `μ : Measure α` with no measurability
+  hypothesis on fₙ or f; `ConvergesInMeasure` (34-36) is the problem's ε/N
+  condition verbatim. Lebesgue measure on ℝ is an instance. Upheld.
+- No smoothness-order objection in this batch: a92J07 uses `ContDiff ℝ 1`,
+  which is C¹ as the problem asks, not a bare ⊤.
