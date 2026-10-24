@@ -42,3 +42,23 @@ The sorry-free assembly composes the leaves. Layer 1 is the two independent
 LIBRARY leaves, layer 2 the shared assembly, and layer 3 consumer adapters.
 Truth checks: `n=1` gives genus `g`; `g=1` gives a torus; zero cases are
 excluded. The sign convention matches `standardSign_orientable_pair`.
+
+### Split of `orientablePairing_normalForm_aux_cutPaste` (2026-10-24)
+
+lemma-1 found that `PolygonMoves.cutAndPaste` is the crosscap move (`x … x`)
+and cannot reach orientable words. The orientable move reuses its convex-piece
+geometry with `p = 0`: both pictures cut the disk along the same chord (vertex
+`0` to vertex `q = |α₁|+1+|α₂|`), so the old charts `cutOldA`/`cutOldB` serve
+both words. Only the boundary labels change, by circle homeomorphisms `ρA`
+(`α₁ y α₂ c⁻¹ ↦ α₂ c⁻¹ α₁ y`) and `ρB` (`β₁ y⁻¹ β₂ c ↦ β₂ c β₁ y⁻¹`). Proved in
+the file: `_aux_length` (banked by lemma-1), `_aux_lift`, `_aux_package`
+(the proof of `cut_charts_package` with the words abstracted), and the parent.
+Leaves, all parallel: `_aux_reparamA`, `_aux_reparamB` (piecewise-linear
+circle maps; junction angles and the `n₁ = 0`, `n₂ = 0`, `m₁ = 0`, `m₂ = 0`
+cases were checked by hand), `_aux_forward`, `_aux_reverse`,
+`_aux_fibreForward`, `_aux_fibreReverse` (combinatorics from the edge formulas
+in `_aux_Data`; models `cut_forward_generators`, `cut_reverse_generators`,
+`cut_forward_fibre`, `cut_reverse_fibre`). Signs: the `y` pair has opposite
+signs and lands on the chord read in opposite directions by the two pieces;
+the old chord becomes the `c⁻¹`/`c` sides at positions `|α₂|` and `q+|β₂|`
+with parameters `s` and `1-s`.

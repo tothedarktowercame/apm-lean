@@ -1117,6 +1117,504 @@ theorem orientablePairing_normalForm_aux_natWord_oneVertex (P : PairingData) :
       (orientablePairing_normalForm_aux_natWord P) := by
   sorry
 
+/-! ### Orientable cut-and-paste: span construction
+
+Both pictures use the same two convex pieces of the disk, cut by the chord from
+vertex `0` to vertex `q = |α₁| + 1 + |α₂|` (`cutOldA`/`cutOldB` of
+`PolygonMoves` with `p = 0`).  Only the labelling of the piece boundaries
+changes: piece `A` reads `α₁ y α₂ c⁻¹` in the old word and `α₂ c⁻¹ α₁ y` in the
+new one, piece `B` reads `β₁ y⁻¹ β₂ c` and `β₂ c β₁ y⁻¹`.  So the new boundary
+parametrisations are the old ones precomposed with circle homeomorphisms
+`ρA`, `ρB` that permute the boundary arcs (`_aux_reparamA`, `_aux_reparamB`).
+The relation bookkeeping (`_aux_forward`, `_aux_reverse`, `_aux_fibreForward`,
+`_aux_fibreReverse`) only uses the edge formulas collected in `_aux_Data`. -/
+
+/-- Banked (lemma-1, 2026-10-24): the two words have the same length. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_length
+    {L : Type*} (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed L))
+    (y c : PolygonMoves.Signed L) :
+    (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length =
+      (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length := by
+  simp only [List.length_append, List.length_cons, List.length_nil, Nat.add_zero]
+  omega
+
+open PolygonMoves in
+/-- Edge formulas for the orientable cut.  `L` is the word length; the old word
+is `α₁ y α₂ β₁ y⁻¹ β₂` with `|α₁| = n₁`, `|α₂| = n₂`, `|β₁| = m₁`, `|β₂| = m₂`,
+and `q = n₁ + 1 + n₂`.  The `old` fields are those of `CutBoundaryData L 0 q`;
+the `ρ` fields say where each old boundary arc goes in the new word
+`α₂ c⁻¹ α₁ β₂ c β₁` (same length, same chord). -/
+structure orientablePairing_normalForm_aux_cutPaste_aux_Data (L n₁ n₂ m₁ m₂ : ℕ)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle) : Prop where
+  length : L = n₁ + 1 + n₂ + m₁ + 1 + m₂
+  coverA : ∀ z : Circle,
+    (∃ e s, e < n₁ + 1 + n₂ ∧ z = cutEdgeCircle L e s) ∨
+      (∃ s : Icc (0 : ℝ) 1, z = cutChordParamA L 0 (n₁ + 1 + n₂) s)
+  coverB : ∀ z : Circle,
+    (∃ e s, n₁ + 1 + n₂ ≤ e ∧ e < L ∧ z = cutEdgeCircle L e s) ∨
+      (∃ s : Icc (0 : ℝ) 1, z = cutChordParamB L 0 (n₁ + 1 + n₂) s)
+  oldA_arc : ∀ e s, e < n₁ + 1 + n₂ →
+    oldA (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)
+  oldA_chord : ∀ s : Icc (0 : ℝ) 1,
+    oldA (cutChordParamA L 0 (n₁ + 1 + n₂) s) = cutChordA L 0 (n₁ + 1 + n₂) s
+  oldB_arc : ∀ e s, n₁ + 1 + n₂ ≤ e → e < L →
+    oldB (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)
+  oldB_chord : ∀ s : Icc (0 : ℝ) 1,
+    oldB (cutChordParamB L 0 (n₁ + 1 + n₂) s) = cutChordB L 0 (n₁ + 1 + n₂) s
+  ρA_α₁ : ∀ e s, e < n₁ → ρA (cutEdgeCircle L e s) = cutEdgeCircle L (e + n₂ + 1) s
+  ρA_y : ∀ s, ρA (cutEdgeCircle L n₁ s) = cutChordParamA L 0 (n₁ + 1 + n₂) s
+  ρA_α₂ : ∀ e s, n₁ + 1 ≤ e → e < n₁ + 1 + n₂ →
+    ρA (cutEdgeCircle L e s) = cutEdgeCircle L (e - n₁ - 1) s
+  ρA_chord : ∀ s, ρA (cutChordParamA L 0 (n₁ + 1 + n₂) s) = cutEdgeCircle L n₂ s
+  ρB_β₁ : ∀ e s, n₁ + 1 + n₂ ≤ e → e < n₁ + 1 + n₂ + m₁ →
+    ρB (cutEdgeCircle L e s) = cutEdgeCircle L (e + m₂ + 1) s
+  ρB_y : ∀ s, ρB (cutEdgeCircle L (n₁ + 1 + n₂ + m₁) s) = cutChordParamB L 0 (n₁ + 1 + n₂) s
+  ρB_β₂ : ∀ e s, n₁ + 1 + n₂ + m₁ + 1 ≤ e → e < L →
+    ρB (cutEdgeCircle L e s) = cutEdgeCircle L (e - m₁ - 1) s
+  ρB_chord : ∀ s, ρB (cutChordParamB L 0 (n₁ + 1 + n₂) s) =
+    cutEdgeCircle L (n₁ + 1 + n₂ + m₂) s
+
+open PolygonMoves in
+/-- Generic `EqvGen` lift through a surjective parametrisation (copy of
+`cutAndPaste_aux_triangle_charts_forward` with the words abstracted). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_lift {Y L L' : Type*}
+    [DecidableEq L] [DecidableEq L']
+    (w₁ : List (Signed L)) (w₂ : List (Signed L')) (a b : Y → Disk)
+    (has : Function.Surjective a)
+    (hfib : ∀ y y', a y = a y' → Relation.EqvGen (WordRel w₂) (b y) (b y'))
+    (hgen : ∀ y y', WordRel w₁ (a y) (a y') → Relation.EqvGen (WordRel w₂) (b y) (b y')) :
+    ∀ y y', Relation.EqvGen (WordRel w₁) (a y) (a y') →
+      Relation.EqvGen (WordRel w₂) (b y) (b y') := by
+  intro y y' h
+  have lift : ∀ p q : Disk, Relation.EqvGen (WordRel w₁) p q →
+      ∀ yp yq, a yp = p → a yq = q → Relation.EqvGen (WordRel w₂) (b yp) (b yq) := by
+    intro p q hpq
+    induction hpq with
+    | rel p q hpq =>
+        intro yp yq hyp hyq
+        apply hgen yp yq
+        simpa [hyp, hyq] using hpq
+    | refl p =>
+        intro yp yq hyp hyq
+        apply hfib yp yq
+        rw [hyp, hyq]
+    | symm p q _ ih =>
+        intro yp yq hyp hyq
+        exact Relation.EqvGen.symm _ _ (ih yq yp hyq hyp)
+    | trans p q r _ _ ihpq ihqr =>
+        intro yp yr hyp hyr
+        obtain ⟨yq, hyq⟩ := has q
+        exact Relation.EqvGen.trans _ _ _ (ihpq yp yq hyp hyq) (ihqr yq yr hyq hyr)
+  exact lift (a y) (a y') h y y' rfl rfl
+
+open PolygonMoves in
+/-- Generic form of `PolygonMoves.cut_charts_package`: its proof never looks at
+the two words, so it is copied with the words abstracted. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_package {Label : Type*}
+    [DecidableEq Label] (w₁ w₂ : List (Signed Label))
+    (KA KB KA' KB' : Set ℂ) (oldA oldB newA newB : Circle → ℂ) (φA φB ψA ψB : ℂ → ℂ)
+    (hA : CutChartSpec KA oldA φA) (hB : CutChartSpec KB oldB φB)
+    (hA' : CutChartSpec KA' newA ψA) (hB' : CutChartSpec KB' newB ψB)
+    (hcov : KA ∪ KB = Metric.closedBall 0 1) (hcov' : KA' ∪ KB' = Metric.closedBall 0 1)
+    (hdisj : interior KA ∩ KB = ∅) (hdisjB : interior KB ∩ KA = ∅)
+    (hdisj' : interior KA' ∩ KB' = ∅) (hdisjB' : interior KB' ∩ KA' = ∅)
+    (hfwd : ∀ (i i' : Bool) (y y' : Circle) (P P' N N' : Disk),
+      (P : ℂ) = (if i then oldB y else oldA y) → (P' : ℂ) = (if i' then oldB y' else oldA y') →
+      (N : ℂ) = (if i then newB y else newA y) → (N' : ℂ) = (if i' then newB y' else newA y') →
+      WordRel w₁ P P' →
+      Relation.EqvGen (WordRel w₂) N N')
+    (hrev : ∀ (i i' : Bool) (y y' : Circle) (P P' N N' : Disk),
+      (P : ℂ) = (if i then oldB y else oldA y) → (P' : ℂ) = (if i' then oldB y' else oldA y') →
+      (N : ℂ) = (if i then newB y else newA y) → (N' : ℂ) = (if i' then newB y' else newA y') →
+      WordRel w₂ N N' →
+      Relation.EqvGen (WordRel w₁) P P')
+    (hffib : ∀ (y y' : Circle) (N N' : Disk), oldA y = oldB y' →
+      (N : ℂ) = newA y → (N' : ℂ) = newB y' →
+      Relation.EqvGen (WordRel w₂) N N')
+    (hrfib : ∀ (y y' : Circle) (P P' : Disk), newA y = newB y' →
+      (P : ℂ) = oldA y → (P' : ℂ) = oldB y' →
+      Relation.EqvGen (WordRel w₁) P P') :
+    ∃ a b : Fin 2 × Disk → Disk, Continuous a ∧ Continuous b ∧
+      Function.Surjective a ∧ Function.Surjective b ∧
+      (∀ y y', WordRel w₁ (a y) (a y') →
+        Relation.EqvGen (WordRel w₂)
+          (b y) (b y')) ∧
+      (∀ y y', WordRel w₂ (b y) (b y') →
+        Relation.EqvGen (WordRel w₁)
+          (a y) (a y')) ∧
+      (∀ y y', a y = a y' → Relation.EqvGen (WordRel w₂) (b y) (b y')) ∧
+      (∀ y y', b y = b y' → Relation.EqvGen (WordRel w₁) (a y) (a y')) := by
+  have hKAsub : KA ⊆ Metric.closedBall (0 : ℂ) 1 := by
+    rw [← hcov]
+    exact subset_union_left
+  have hKBsub : KB ⊆ Metric.closedBall (0 : ℂ) 1 := by
+    rw [← hcov]
+    exact subset_union_right
+  have hKA'sub : KA' ⊆ Metric.closedBall (0 : ℂ) 1 := by
+    rw [← hcov']
+    exact subset_union_left
+  have hKB'sub : KB' ⊆ Metric.closedBall (0 : ℂ) 1 := by
+    rw [← hcov']
+    exact subset_union_right
+  let a : Fin 2 × Disk → Disk := fun iz =>
+    ⟨if iz.1 = 0 then φA iz.2 else φB iz.2, by
+      rcases iz with ⟨i, z⟩
+      fin_cases i
+      · simp only [Fin.isValue, Fin.zero_eta, Fin.val_zero, ↓reduceIte]
+        exact hKAsub (by rw [← hA.2.2.1]; exact ⟨z, z.2, rfl⟩)
+      · simp only [Fin.isValue, Fin.val_one, one_ne_zero, ↓reduceIte]
+        exact hKBsub (by rw [← hB.2.2.1]; exact ⟨z, z.2, rfl⟩)⟩
+  let b : Fin 2 × Disk → Disk := fun iz =>
+    ⟨if iz.1 = 0 then ψA iz.2 else ψB iz.2, by
+      rcases iz with ⟨i, z⟩
+      fin_cases i
+      · simp only [Fin.isValue, Fin.zero_eta, Fin.val_zero, ↓reduceIte]
+        exact hKA'sub (by rw [← hA'.2.2.1]; exact ⟨z, z.2, rfl⟩)
+      · simp only [Fin.isValue, Fin.val_one, one_ne_zero, ↓reduceIte]
+        exact hKB'sub (by rw [← hB'.2.2.1]; exact ⟨z, z.2, rfl⟩)⟩
+  have ha_cont : Continuous a := by
+    rw [continuous_prod_of_discrete_left]
+    intro i
+    apply Continuous.subtype_mk
+    fin_cases i
+    · simpa [a] using hA.1.comp continuous_subtype_val
+    · simpa [a] using hB.1.comp continuous_subtype_val
+  have hb_cont : Continuous b := by
+    rw [continuous_prod_of_discrete_left]
+    intro i
+    apply Continuous.subtype_mk
+    fin_cases i
+    · simpa [b] using hA'.1.comp continuous_subtype_val
+    · simpa [b] using hB'.1.comp continuous_subtype_val
+  have ha_surj : Function.Surjective a := by
+    intro p
+    have hp : (p : ℂ) ∈ KA ∪ KB := by rw [hcov]; exact p.2
+    rcases hp with hp | hp
+    · rw [← hA.2.2.1] at hp
+      rcases hp with ⟨z, hz, he⟩
+      exact ⟨(0, ⟨z, hz⟩), by apply Subtype.ext; simpa [a] using he⟩
+    · rw [← hB.2.2.1] at hp
+      rcases hp with ⟨z, hz, he⟩
+      exact ⟨(1, ⟨z, hz⟩), by apply Subtype.ext; simpa [a] using he⟩
+  have hb_surj : Function.Surjective b := by
+    intro p
+    have hp : (p : ℂ) ∈ KA' ∪ KB' := by rw [hcov']; exact p.2
+    rcases hp with hp | hp
+    · rw [← hA'.2.2.1] at hp
+      rcases hp with ⟨z, hz, he⟩
+      exact ⟨(0, ⟨z, hz⟩), by apply Subtype.ext; simpa [b] using he⟩
+    · rw [← hB'.2.2.1] at hp
+      rcases hp with ⟨z, hz, he⟩
+      exact ⟨(1, ⟨z, hz⟩), by apply Subtype.ext; simpa [b] using he⟩
+  have parameter_boundary_old : ∀ y : Fin 2 × Disk, ‖(a y : ℂ)‖ = 1 →
+      ∃ c : Circle,
+        ((a y : ℂ) = if y.1.1 = 0 then oldA c else oldB c) ∧
+        ((b y : ℂ) = if y.1.1 = 0 then newA c else newB c) := by
+    rintro ⟨i, z⟩ hy
+    fin_cases i
+    · have hz : ‖(z : ℂ)‖ = 1 := by
+        have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+        apply le_antisymm hle
+        by_contra hn
+        have hlt : ‖(z : ℂ)‖ < 1 := lt_of_not_ge hn
+        have hi := hA.2.2.2.2 (z : ℂ) hlt
+        have hi' := interior_mono hKAsub hi
+        rw [interior_closedBall (0 : ℂ) one_ne_zero] at hi'
+        have he : ‖φA (z : ℂ)‖ = 1 := by simpa [a] using hy
+        simpa [Metric.mem_ball, dist_zero_right, he] using hi'
+      let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+      refine ⟨c, ?_, ?_⟩
+      · simpa [a, c] using hA.2.2.2.1 c
+      · simpa [b, c] using hA'.2.2.2.1 c
+    · have hz : ‖(z : ℂ)‖ = 1 := by
+        have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+        apply le_antisymm hle
+        by_contra hn
+        have hlt : ‖(z : ℂ)‖ < 1 := lt_of_not_ge hn
+        have hi := hB.2.2.2.2 (z : ℂ) hlt
+        have hi' := interior_mono hKBsub hi
+        rw [interior_closedBall (0 : ℂ) one_ne_zero] at hi'
+        have he : ‖φB (z : ℂ)‖ = 1 := by simpa [a] using hy
+        simpa [Metric.mem_ball, dist_zero_right, he] using hi'
+      let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+      refine ⟨c, ?_, ?_⟩
+      · simpa [a, c] using hB.2.2.2.1 c
+      · simpa [b, c] using hB'.2.2.2.1 c
+  have parameter_boundary_new : ∀ y : Fin 2 × Disk, ‖(b y : ℂ)‖ = 1 →
+      ∃ c : Circle,
+        ((a y : ℂ) = if y.1.1 = 0 then oldA c else oldB c) ∧
+        ((b y : ℂ) = if y.1.1 = 0 then newA c else newB c) := by
+    rintro ⟨i, z⟩ hy
+    fin_cases i
+    · have hz : ‖(z : ℂ)‖ = 1 := by
+        have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+        apply le_antisymm hle
+        by_contra hn
+        have hlt : ‖(z : ℂ)‖ < 1 := lt_of_not_ge hn
+        have hi := hA'.2.2.2.2 (z : ℂ) hlt
+        have hi' := interior_mono hKA'sub hi
+        rw [interior_closedBall (0 : ℂ) one_ne_zero] at hi'
+        have he : ‖ψA (z : ℂ)‖ = 1 := by simpa [b] using hy
+        simpa [Metric.mem_ball, dist_zero_right, he] using hi'
+      let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+      refine ⟨c, ?_, ?_⟩
+      · simpa [a, c] using hA.2.2.2.1 c
+      · simpa [b, c] using hA'.2.2.2.1 c
+    · have hz : ‖(z : ℂ)‖ = 1 := by
+        have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+        apply le_antisymm hle
+        by_contra hn
+        have hlt : ‖(z : ℂ)‖ < 1 := lt_of_not_ge hn
+        have hi := hB'.2.2.2.2 (z : ℂ) hlt
+        have hi' := interior_mono hKB'sub hi
+        rw [interior_closedBall (0 : ℂ) one_ne_zero] at hi'
+        have he : ‖ψB (z : ℂ)‖ = 1 := by simpa [b] using hy
+        simpa [Metric.mem_ball, dist_zero_right, he] using hi'
+      let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+      refine ⟨c, ?_, ?_⟩
+      · simpa [a, c] using hB.2.2.2.1 c
+      · simpa [b, c] using hB'.2.2.2.1 c
+  have word_boundary : ∀ (w : List (Signed Label)) (P P' : Disk),
+      WordRel w P P' → ‖(P : ℂ)‖ = 1 ∧ ‖(P' : ℂ)‖ = 1 := by
+    intro w P P' h
+    rcases h with ⟨i, j, hij, s, hl, hP, hP'⟩
+    constructor
+    · rw [hP]; simp [edgePoint, Complex.norm_exp]
+    · rw [hP']; simp [edgePoint, Complex.norm_exp]
+  have mixed_old : ∀ z z' : Disk, φA z = φB z' →
+      ∃ c c' : Circle, oldA c = oldB c' ∧ ψA z = newA c ∧ ψB z' = newB c' := by
+    intro z z' he
+    have hzA : φA z ∈ KA := by rw [← hA.2.2.1]; exact ⟨z, z.2, rfl⟩
+    have hzB : φB z' ∈ KB := by rw [← hB.2.2.1]; exact ⟨z', z'.2, rfl⟩
+    have hz : ‖(z : ℂ)‖ = 1 := by
+      have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+      apply le_antisymm hle
+      by_contra hn
+      have hi := hA.2.2.2.2 (z : ℂ) (lt_of_not_ge hn)
+      have hm : φA z ∈ interior KA ∩ KB := ⟨hi, he ▸ hzB⟩
+      rw [hdisj] at hm
+      exact hm
+    have hz' : ‖(z' : ℂ)‖ = 1 := by
+      have hle : ‖(z' : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z'.2
+      apply le_antisymm hle
+      by_contra hn
+      have hi := hB.2.2.2.2 (z' : ℂ) (lt_of_not_ge hn)
+      have hm : φB z' ∈ interior KB ∩ KA := ⟨hi, he.symm ▸ hzA⟩
+      rw [hdisjB] at hm
+      exact hm
+    let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+    let c' : Circle := ⟨z', by simpa [Circle, Submonoid.unitSphere] using hz'⟩
+    refine ⟨c, c', ?_, ?_, ?_⟩
+    · rw [← hA.2.2.2.1 c, ← hB.2.2.2.1 c']
+      exact he
+    · exact hA'.2.2.2.1 c
+    · exact hB'.2.2.2.1 c'
+  have mixed_new : ∀ z z' : Disk, ψA z = ψB z' →
+      ∃ c c' : Circle, newA c = newB c' ∧ φA z = oldA c ∧ φB z' = oldB c' := by
+    intro z z' he
+    have hzA : ψA z ∈ KA' := by rw [← hA'.2.2.1]; exact ⟨z, z.2, rfl⟩
+    have hzB : ψB z' ∈ KB' := by rw [← hB'.2.2.1]; exact ⟨z', z'.2, rfl⟩
+    have hz : ‖(z : ℂ)‖ = 1 := by
+      have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+      apply le_antisymm hle
+      by_contra hn
+      have hi := hA'.2.2.2.2 (z : ℂ) (lt_of_not_ge hn)
+      have hm : ψA z ∈ interior KA' ∩ KB' := ⟨hi, he ▸ hzB⟩
+      rw [hdisj'] at hm
+      exact hm
+    have hz' : ‖(z' : ℂ)‖ = 1 := by
+      have hle : ‖(z' : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z'.2
+      apply le_antisymm hle
+      by_contra hn
+      have hi := hB'.2.2.2.2 (z' : ℂ) (lt_of_not_ge hn)
+      have hm : ψB z' ∈ interior KB' ∩ KA' := ⟨hi, he.symm ▸ hzA⟩
+      rw [hdisjB'] at hm
+      exact hm
+    let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+    let c' : Circle := ⟨z', by simpa [Circle, Submonoid.unitSphere] using hz'⟩
+    refine ⟨c, c', ?_, ?_, ?_⟩
+    · rw [← hA'.2.2.2.1 c, ← hB'.2.2.2.1 c']
+      exact he
+    · exact hA.2.2.2.1 c
+    · exact hB.2.2.2.1 c'
+  refine ⟨a, b, ha_cont, hb_cont, ha_surj, hb_surj, ?_, ?_, ?_, ?_⟩
+  · intro y y' h
+    rcases word_boundary _ _ _ h with ⟨hy, hy'⟩
+    rcases parameter_boundary_old y hy with ⟨c, hc, hd⟩
+    rcases parameter_boundary_old y' hy' with ⟨c', hc', hd'⟩
+    rcases y with ⟨i, z⟩; rcases y' with ⟨i', z'⟩
+    fin_cases i <;> fin_cases i'
+    · exact hfwd false false c c' _ _ _ _ (by simpa using hc) (by simpa using hc')
+        (by simpa using hd) (by simpa using hd') h
+    · exact hfwd false true c c' _ _ _ _ (by simpa using hc) (by simpa using hc')
+        (by simpa using hd) (by simpa using hd') h
+    · exact hfwd true false c c' _ _ _ _ (by simpa using hc) (by simpa using hc')
+        (by simpa using hd) (by simpa using hd') h
+    · exact hfwd true true c c' _ _ _ _ (by simpa using hc) (by simpa using hc')
+        (by simpa using hd) (by simpa using hd') h
+  · intro y y' h
+    rcases word_boundary _ _ _ h with ⟨hy, hy'⟩
+    rcases parameter_boundary_new y hy with ⟨c, hd, hc⟩
+    rcases parameter_boundary_new y' hy' with ⟨c', hd', hc'⟩
+    rcases y with ⟨i, z⟩; rcases y' with ⟨i', z'⟩
+    fin_cases i <;> fin_cases i'
+    · exact hrev false false c c' _ _ _ _ (by simpa using hd) (by simpa using hd')
+        (by simpa using hc) (by simpa using hc') h
+    · exact hrev false true c c' _ _ _ _ (by simpa using hd) (by simpa using hd')
+        (by simpa using hc) (by simpa using hc') h
+    · exact hrev true false c c' _ _ _ _ (by simpa using hd) (by simpa using hd')
+        (by simpa using hc) (by simpa using hc') h
+    · exact hrev true true c c' _ _ _ _ (by simpa using hd) (by simpa using hd')
+        (by simpa using hc) (by simpa using hc') h
+  · intro y y' h
+    rcases y with ⟨i, z⟩; rcases y' with ⟨i', z'⟩
+    fin_cases i <;> fin_cases i'
+    · have hz : z = z' := Subtype.ext (hA.2.1 (by exact z.2) (by exact z'.2) (congrArg Subtype.val h))
+      subst z'; exact .refl _
+    · have he : φA z = φB z' := by simpa [a] using congrArg Subtype.val h
+      rcases mixed_old z z' he with ⟨c, c', hcc, hz, hz'⟩
+      exact hffib c c' _ _ hcc (by simpa [b] using hz) (by simpa [b] using hz')
+    · have he : φA z' = φB z := by simpa [a] using (congrArg Subtype.val h).symm
+      rcases mixed_old z' z he with ⟨c, c', hcc, hz', hz⟩
+      exact (hffib c c' _ _ hcc (by simpa [b] using hz') (by simpa [b] using hz)).symm
+    · have hz : z = z' := Subtype.ext (hB.2.1 z.2 z'.2 (congrArg Subtype.val h))
+      subst z'; exact .refl _
+  · intro y y' h
+    rcases y with ⟨i, z⟩; rcases y' with ⟨i', z'⟩
+    fin_cases i <;> fin_cases i'
+    · have hz : z = z' := Subtype.ext (hA'.2.1 z.2 z'.2 (congrArg Subtype.val h))
+      subst z'; exact .refl _
+    · have he : ψA z = ψB z' := by simpa [b] using congrArg Subtype.val h
+      rcases mixed_new z z' he with ⟨c, c', hcc, hz, hz'⟩
+      exact hrfib c c' _ _ hcc (by simpa [a] using hz) (by simpa [a] using hz')
+    · have he : ψA z' = ψB z := by simpa [b] using (congrArg Subtype.val h).symm
+      rcases mixed_new z' z he with ⟨c, c', hcc, hz', hz⟩
+      exact (hrfib c c' _ _ hcc (by simpa [a] using hz') (by simpa [a] using hz)).symm
+    · have hz : z = z' := Subtype.ext (hB'.2.1 z.2 z'.2 (congrArg Subtype.val h))
+      subst z'; exact .refl _
+
+
+open PolygonMoves in
+/-- **Leaf (circle reparametrisation, piece `A`).**  An orientation-preserving
+piecewise-linear homeomorphism of the parameter circle of piece `A` that moves
+the old boundary arcs `α₁ y α₂ c⁻¹` to the new positions `α₂ c⁻¹ α₁ y`: the
+`α₁` arcs shift by `n₂ + 1`, the `y` arc goes onto the chord arc, the `α₂`
+arcs shift back by `n₁ + 1`, and the chord arc goes onto arc `n₂`.  The pieces
+fit at the junction angles (e.g. arc `n₁` at `s = 0` and the chord at `s = 0`
+are both at angle `α q`); `n₁ = 0` and `n₂ = 0` are allowed.  Built like
+`equivariantLift_of_interval` from a monotone lift on `[0, 2π]`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamA (L n₁ n₂ : ℕ)
+    (hL : n₁ + 1 + n₂ < L) :
+    ∃ ρ : Circle ≃ₜ Circle,
+      (∀ e s, e < n₁ → ρ (cutEdgeCircle L e s) = cutEdgeCircle L (e + n₂ + 1) s) ∧
+      (∀ s, ρ (cutEdgeCircle L n₁ s) = cutChordParamA L 0 (n₁ + 1 + n₂) s) ∧
+      (∀ e s, n₁ + 1 ≤ e → e < n₁ + 1 + n₂ →
+        ρ (cutEdgeCircle L e s) = cutEdgeCircle L (e - n₁ - 1) s) ∧
+      (∀ s, ρ (cutChordParamA L 0 (n₁ + 1 + n₂) s) = cutEdgeCircle L n₂ s) := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (circle reparametrisation, piece `B`).**  As `_aux_reparamA` for
+piece `B`: old arcs `β₁ y⁻¹ β₂ c` (arcs `q … L-1`, then the chord arc
+`cutChordParamB`, angles `2π … α q + 2π`) go to `β₂ c β₁ y⁻¹`.  With `m₁ = 0`
+the `y⁻¹` arc starts at angle `α q`, where the chord arc ends; both formulas
+then give angle `0`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamB (L n₁ n₂ m₁ m₂ : ℕ)
+    (hL : L = n₁ + 1 + n₂ + m₁ + 1 + m₂) :
+    ∃ ρ : Circle ≃ₜ Circle,
+      (∀ e s, n₁ + 1 + n₂ ≤ e → e < n₁ + 1 + n₂ + m₁ →
+        ρ (cutEdgeCircle L e s) = cutEdgeCircle L (e + m₂ + 1) s) ∧
+      (∀ s, ρ (cutEdgeCircle L (n₁ + 1 + n₂ + m₁) s) = cutChordParamB L 0 (n₁ + 1 + n₂) s) ∧
+      (∀ e s, n₁ + 1 + n₂ + m₁ + 1 ≤ e → e < L →
+        ρ (cutEdgeCircle L e s) = cutEdgeCircle L (e - m₁ - 1) s) ∧
+      (∀ s, ρ (cutChordParamB L 0 (n₁ + 1 + n₂) s) =
+        cutEdgeCircle L (n₁ + 1 + n₂ + m₂) s) := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (forward generators).**  An old side identification between two
+boundary points of the pieces becomes a chain of new identifications between
+the corresponding new points.  Model: `PolygonMoves.cut_forward_generators`
+(transfer each point to a side of the new word, then relate the sides).  The
+`y` pair lands on the chord, so its two points become equal; the other labels
+move rigidly with their arcs.  Vertex points have several preimages; their new
+images are related through `EqvGen` chains, as in `cut_transfer_consistency`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (i i' : Bool) (z z' : Circle) (P P' N N' : Disk)
+    (hP : (P : ℂ) = (if i then oldB z else oldA z))
+    (hP' : (P' : ℂ) = (if i' then oldB z' else oldA z'))
+    (hN : (N : ℂ) = (if i then oldB (ρB z) else oldA (ρA z)))
+    (hN' : (N' : ℂ) = (if i' then oldB (ρB z') else oldA (ρA z')))
+    (h : WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂) P P') :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N N' := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse generators).**  Converse of `_aux_forward`: a new side
+identification pulls back to an old chain.  The `c` pair lands on the old
+chord, so its two points become equal.  Model: `cut_reverse_generators`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (i i' : Bool) (z z' : Circle) (P P' N N' : Disk)
+    (hP : (P : ℂ) = (if i then oldB z else oldA z))
+    (hP' : (P' : ℂ) = (if i' then oldB z' else oldA z'))
+    (hN : (N : ℂ) = (if i then oldB (ρB z) else oldA (ρA z)))
+    (hN' : (N' : ℂ) = (if i' then oldB (ρB z') else oldA (ρA z')))
+    (h : WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) N N') :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P P' := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (forward fibre).**  A point on both old pieces lies on the chord
+`c` (or is one of its end vertices).  Its two new images are on the new sides
+`c⁻¹` (position `n₂`, parameter `s`) and `c` (position `q + m₂`, parameter
+`1 - s`), which the new word identifies.  Model: `cut_forward_fibre`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_fibreForward {L : Type*}
+    [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (z z' : Circle) (N N' : Disk) (h : oldA z = oldB z')
+    (hN : (N : ℂ) = oldA (ρA z)) (hN' : (N' : ℂ) = oldB (ρB z')) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N N' := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse fibre).**  A point on both new pieces lies on the new
+chord `y`.  Its old preimages are on the old sides `y` (position `n₁`) and
+`y⁻¹` (position `q + m₁`), which the old word identifies.  Model:
+`cut_reverse_fibre`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_fibreReverse {L : Type*}
+    [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (z z' : Circle) (P P' : Disk) (h : oldA (ρA z) = oldB (ρB z'))
+    (hP : (P : ℂ) = oldA z) (hP' : (P' : ℂ) = oldB z') :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P P' := by
+  sorry
+
 open PolygonMoves in
 /-- **Leaf (orientable cut-and-paste).**  Cut the polygon
 `α₁ y α₂ β₁ y⁻¹ β₂` along a new chord `c` from the start of `α₁` to the start
@@ -1133,7 +1631,90 @@ theorem orientablePairing_normalForm_aux_cutPaste {L : Type*} [DecidableEq L]
     (hw : IsPolygonWord (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) :
     Nonempty (PolygonSurface (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂) ≃ₜ
       PolygonSurface (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) := by
-  sorry
+  have hlen := orientablePairing_normalForm_aux_cutPaste_aux_length α₁ α₂ β₁ β₂ y c
+  set W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂ with hW
+  set W' := α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁ with hW'
+  set n := W.length with hn
+  set q := α₁.length + 1 + α₂.length with hq
+  have hWlen : n = α₁.length + 1 + α₂.length + β₁.length + 1 + β₂.length := by
+    simp only [hn, hW, List.length_append, List.length_cons, List.length_nil]
+  have hpq : 0 < q := by omega
+  have hqL : q < n := by omega
+  obtain ⟨ρA, hρA1, hρA2, hρA3, hρA4⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamA n α₁.length α₂.length hqL
+  obtain ⟨ρB, hρB1, hρB2, hρB3, hρB4⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamB n α₁.length α₂.length
+      β₁.length β₂.length hWlen
+  have hPQ : cutPoint n 0 ≠ cutPoint n q := cutPoint_ne hpq (by omega)
+  have hnorm := cutPoint_norm n
+  obtain ⟨cA, hcA⟩ := cutPiece_interior_nonempty (hnorm _) (hnorm _) hPQ
+  obtain ⟨cB, hcB⟩ := cutPiece_interior_nonempty (hnorm _) (hnorm _) hPQ.symm
+  have hrA := cutOldA_range hpq hqL (cutPiece_frontier (hnorm _) (hnorm _) hPQ) cutCross_exp
+  have hrB := cutOldB_range hpq hqL
+    (cutPiece_frontier (hnorm _) (hnorm _) hPQ.symm) cutCross_exp
+  obtain ⟨φA, hφA⟩ := cutAndPaste_aux_boundary_chart _ cA (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcA _ (cutOldA_continuous hpq hqL)
+    (cutOldA_injective hpq hqL) hrA
+  obtain ⟨φB, hφB⟩ := cutAndPaste_aux_boundary_chart _ cB (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcB _ (cutOldB_continuous hpq hqL)
+    (cutOldB_injective hpq hqL) hrB
+  obtain ⟨ψA, hψA⟩ := cutAndPaste_aux_boundary_chart _ cA (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcA (fun z => cutOldA n 0 q (ρA z))
+    ((cutOldA_continuous hpq hqL).comp ρA.continuous)
+    ((cutOldA_injective hpq hqL).comp ρA.injective)
+    (by rw [Set.range_comp', ρA.surjective.range_eq, Set.image_univ]; exact hrA)
+  obtain ⟨ψB, hψB⟩ := cutAndPaste_aux_boundary_chart _ cB (cutPiece_convex_compact _ _).1
+    (cutPiece_convex_compact _ _).2 hcB (fun z => cutOldB n 0 q (ρB z))
+    ((cutOldB_continuous hpq hqL).comp ρB.continuous)
+    ((cutOldB_injective hpq hqL).comp ρB.injective)
+    (by rw [Set.range_comp', ρB.surjective.range_eq, Set.image_univ]; exact hrB)
+  obtain ⟨hA1, hB1, hB2⟩ := cutBoundary_old_fields hpq hqL
+  have D : orientablePairing_normalForm_aux_cutPaste_aux_Data n α₁.length α₂.length
+      β₁.length β₂.length (cutOldA n 0 q) (cutOldB n 0 q) ρA ρB :=
+    { length := hWlen
+      coverA := fun z => by
+        rcases cutBoundary_coverA hpq hqL z with ⟨e, s, -, he, hz⟩ | h
+        · exact Or.inl ⟨e, s, he, hz⟩
+        · exact Or.inr h
+      coverB := fun z => by
+        rcases cutBoundary_coverB hpq hqL z with ⟨e, s, he, hz⟩ | h
+        · exact Or.inl ⟨e, s, by omega, by omega, hz⟩
+        · exact Or.inr h
+      oldA_arc := fun e s he =>
+        cutBoundaryData_concrete_aux_oldA_arc s hpq hqL (Nat.zero_le e) he
+      oldA_chord := hA1
+      oldB_arc := fun e s he he' => hB1 e s (Or.inl ⟨he, he'⟩)
+      oldB_chord := hB2
+      ρA_α₁ := hρA1
+      ρA_y := hρA2
+      ρA_α₂ := hρA3
+      ρA_chord := hρA4
+      ρB_β₁ := hρB1
+      ρB_y := hρB2
+      ρB_β₂ := hρB3
+      ρB_chord := hρB4 }
+  obtain ⟨a, b, ha, hb, has, hbs, hf, hr, hfa, hfb⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_package W W' _ _ _ _
+      (cutOldA n 0 q) (cutOldB n 0 q) (fun z => cutOldA n 0 q (ρA z))
+      (fun z => cutOldB n 0 q (ρB z)) φA φB ψA ψB hφA hφB hψA hψB
+      (cutPiece_union_disjoint _ _ hPQ).1 (cutPiece_union_disjoint _ _ hPQ).1
+      (cutPiece_union_disjoint _ _ hPQ).2 (cutPiece_union_disjoint _ _ hPQ.symm).2
+      (cutPiece_union_disjoint _ _ hPQ).2 (cutPiece_union_disjoint _ _ hPQ.symm).2
+      (fun i i' z z' P P' N N' hP hP' hN hN' h =>
+        orientablePairing_normalForm_aux_cutPaste_aux_forward α₁ α₂ β₁ β₂ y c hy hc
+          _ _ ρA ρB D i i' z z' P P' N N' hP hP' hN hN' h)
+      (fun i i' z z' P P' N N' hP hP' hN hN' h =>
+        orientablePairing_normalForm_aux_cutPaste_aux_reverse α₁ α₂ β₁ β₂ y c hy hc
+          _ _ ρA ρB D i i' z z' P P' N N' hP hP' hN hN' h)
+      (fun z z' N N' h hN hN' =>
+        orientablePairing_normalForm_aux_cutPaste_aux_fibreForward α₁ α₂ β₁ β₂ y c hy hc
+          _ _ ρA ρB D z z' N N' h hN hN')
+      (fun z z' P P' h hP hP' =>
+        orientablePairing_normalForm_aux_cutPaste_aux_fibreReverse α₁ α₂ β₁ β₂ y c hy hc
+          _ _ ρA ρB D z z' P P' h hP hP')
+  exact polygonSurface_homeomorph_of_span W W' a b ha hb has hbs fun z z' =>
+    ⟨orientablePairing_normalForm_aux_cutPaste_aux_lift W W' a b has hfa hf z z',
+      orientablePairing_normalForm_aux_cutPaste_aux_lift W' W b a hbs hfb hr z z'⟩
 
 open PolygonMoves in
 /-- One elementary move on words over `ℕ`.  Each constructor carries the
