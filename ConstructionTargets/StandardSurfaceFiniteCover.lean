@@ -342,7 +342,135 @@ theorem standardCover_pairingData_aux_lift
   · exact standardCover_pairingData_aux_lift_aux_vertexCount g n hg E p hp hsheets
       L hLp hfib σ hσ hside
 
-/-- **Leaf (one dual-tree glue).**  With at least two faces and a connected
+/-- Banked by lemma-3 (2026-10-24): with two faces and a connected dual graph,
+some side pairs two distinct faces. -/
+theorem standardCover_pairingData_aux_glueStep_aux_crossingSide
+    (C : PolygonComplex) (hC : 2 ≤ C.faceCount) (hconn : C.DualConnected) :
+    ∃ s : C.Side, s.1 ≠ (C.pair s).1 := by
+  let f : Fin C.faceCount := ⟨0, by omega⟩
+  let g : Fin C.faceCount := ⟨1, by omega⟩
+  by_contra h
+  push_neg at h
+  have hedge : ∀ a b : Fin C.faceCount,
+      (∃ s : C.Side, s.1 = a ∧ (C.pair s).1 = b) → a = b := by
+    intro a b hab
+    obtain ⟨s, rfl, hs⟩ := hab
+    exact (h s).trans hs
+  have heqv : ∀ {a b : Fin C.faceCount},
+      Relation.EqvGen (fun a b => ∃ s : C.Side,
+        s.1 = a ∧ (C.pair s).1 = b) a b → a = b := by
+    intro a b hab
+    induction hab with
+    | rel a b hab => exact hedge a b hab
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have hfg : f = g := heqv (hconn f g)
+  have : (0 : ℕ) = 1 := congrArg Fin.val hfg
+  omega
+
+/-- `C'` is `C` with faces `s.1` and `(C.pair s).1` glued along `s` into the
+face `merged`.  `old` sends each face of `C'` to the face of `C` it came from
+(`merged` to `s.1`); `toOld` sends each side of `C'` to the side of `C` it came
+from, and hits every side except `s` and `C.pair s`.  Unmerged faces keep their
+sides in order.  The merged face runs through sides `s.2 + 1, …, s.2 - 1` of
+`s.1` and then sides `(C.pair s).2 + 1, …, (C.pair s).2 - 1` of
+`(C.pair s).1`, each with its arc parameter kept. -/
+structure standardCover_pairingData_aux_glueStep_aux_GlueData
+    (C C' : PolygonComplex) (s : C.Side) where
+  faceCount_succ : C'.faceCount + 1 = C.faceCount
+  merged : Fin C'.faceCount
+  old : Fin C'.faceCount → Fin C.faceCount
+  old_merged : old merged = s.1
+  old_injective : Function.Injective old
+  old_ne : ∀ k, old k ≠ (C.pair s).1
+  sides_old : ∀ k, k ≠ merged → C'.sides k = C.sides (old k)
+  sides_merged : C'.sides merged + 2 = C.sides s.1 + C.sides (C.pair s).1
+  toOld : C'.Side → C.Side
+  toOld_injective : Function.Injective toOld
+  toOld_ne : ∀ t, toOld t ≠ s ∧ toOld t ≠ C.pair s
+  toOld_surj : ∀ u, u ≠ s → u ≠ C.pair s → ∃ t, toOld t = u
+  toOld_fst : ∀ t : C'.Side, t.1 ≠ merged → (toOld t).1 = old t.1
+  toOld_val : ∀ t : C'.Side, t.1 ≠ merged → (toOld t).2.val = t.2.val
+  toOld_merged_fst : ∀ m : Fin (C'.sides merged),
+    (toOld ⟨merged, m⟩).1 =
+      if m.val + 1 < C.sides s.1 then s.1 else (C.pair s).1
+  toOld_merged_val : ∀ m : Fin (C'.sides merged),
+    (toOld ⟨merged, m⟩).2.val =
+      if m.val + 1 < C.sides s.1 then (s.2.val + 1 + m.val) % C.sides s.1
+      else ((C.pair s).2.val + 1 + (m.val + 1 - C.sides s.1)) %
+        C.sides (C.pair s).1
+  pair_toOld : ∀ t, toOld (C'.pair t) = C.pair (toOld t)
+  sign_toOld : ∀ t, C'.sign t = C.sign (toOld t)
+
+/-- **Leaf (build the merged complex).** -/
+theorem standardCover_pairingData_aux_glueStep_aux_mergeExists
+    (C : PolygonComplex) (hsides : ∀ f, 2 ≤ C.sides f) (s : C.Side)
+    (hs : s.1 ≠ (C.pair s).1) :
+    ∃ C' : PolygonComplex,
+      Nonempty (standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) := by
+  sorry
+
+/-- **Leaf (arc count).**  Every side of `C` except `s` and `C.pair s` is a
+side of `C'`, once. -/
+theorem standardCover_pairingData_aux_glueStep_aux_totalSides
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) :
+    C'.totalSides + 2 = C.totalSides := by
+  sorry
+
+theorem standardCover_pairingData_aux_glueStep_aux_sides
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hsides : ∀ f, 2 ≤ C.sides f) : ∀ k, 2 ≤ C'.sides k := by
+  intro k
+  by_cases hk : k = D.merged
+  · subst hk
+    have h₁ := hsides s.1
+    have h₂ := hsides (C.pair s).1
+    have := D.sides_merged
+    omega
+  · rw [D.sides_old k hk]
+    exact hsides _
+
+theorem standardCover_pairingData_aux_glueStep_aux_orientable
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) : C'.IsOrientable := by
+  intro t
+  rw [D.sign_toOld, D.sign_toOld, D.pair_toOld]
+  exact hor _
+
+/-- **Leaf (dual graph).**  A dual edge of `C` between faces other than
+`s.1, (C.pair s).1` is a dual edge of `C'`; one at `s.1` or `(C.pair s).1`
+(other than `s` itself) is a dual edge at `merged`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_dualConnected
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hconn : C.DualConnected) : C'.DualConnected := by
+  sorry
+
+/-- **Leaf (corners).**  `toOld` induces a bijection of corner classes.  The
+four corners at the ends of `s` and `C.pair s` lie in two `C`-classes (by
+orientability); in `C'` they are the two junctions of the merged face. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) : C'.vertexCount = C.vertexCount := by
+  sorry
+
+/-- **Leaf (two disks glued along an arc).**  The disks of `s.1` and
+`(C.pair s).1`, glued along `s` with the parameter reversed, form one disk
+whose boundary is the merged face's boundary; all other identifications are
+carried by `toOld`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hsides : ∀ f, 2 ≤ C.sides f) (hor : C.IsOrientable) :
+    Nonempty (C.Space ≃ₜ C'.Space) := by
+  sorry
+
+/-- **One dual-tree glue.**  With at least two faces and a connected
 dual graph, some side pairs two distinct faces.  Gluing those two disks along
 that side gives one disk with `a + b - 2` sides; corners, orientability and
 dual connectivity are kept.  `2 ≤ sides` excludes two monogons forming a
@@ -354,7 +482,17 @@ theorem standardCover_pairingData_aux_glueStep
       C'.totalSides + 2 = C.totalSides ∧ C'.vertexCount = C.vertexCount ∧
       C'.IsOrientable ∧ C'.DualConnected ∧ (∀ f, 2 ≤ C'.sides f) ∧
       Nonempty (C.Space ≃ₜ C'.Space) := by
-  sorry
+  obtain ⟨s, hs⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_crossingSide C hC hconn
+  obtain ⟨C', ⟨D⟩⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_mergeExists C hsides s hs
+  exact ⟨C', D.faceCount_succ,
+    standardCover_pairingData_aux_glueStep_aux_totalSides D,
+    standardCover_pairingData_aux_glueStep_aux_vertexCount D hor,
+    standardCover_pairingData_aux_glueStep_aux_orientable D hor,
+    standardCover_pairingData_aux_glueStep_aux_dualConnected D hconn,
+    standardCover_pairingData_aux_glueStep_aux_sides D hsides,
+    standardCover_pairingData_aux_glueStep_aux_homeomorph D hsides hor⟩
 
 /-- Glue along a whole dual spanning tree: `k` glues on `k + 1` faces. -/
 theorem standardCover_pairingData_aux_treeGlue (k : ℕ) :
