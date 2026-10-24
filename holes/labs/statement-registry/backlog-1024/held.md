@@ -508,6 +508,27 @@ All ten rows graded faithful and already in `STATEMENTS.json` (evidence
 - Smoothness orders: the only `ContDiff` in batch 27 is `ContDiffOn ℝ 1` in
   bpm-1-1-2, i.e. C^1, as the problem says. No ⊤.
 
+## Batch 28 spot-check (m02J02 held)
+
+Nine rows (seven faithful, two stronger) already in `STATEMENTS.json` with
+evidence `grades-28.md`; `admit-batch.py 28` held one.
+
+- **m02J02 (narrower, upheld).** problem.md asks for a basis of `H_0^1(Ω)` on
+  `(0,1)`, `(0,∞)` and `ℝ`. `apm_m02j02_IsH10Basis` asks only for linear
+  independence and density of finite spans in the graph norm. That is a
+  complete independent system: it does not give unique convergent expansions
+  (Schauder) or orthonormality. It is not a false problem.md, so this stays
+  an open gap, not a permitted narrowing.
+- **m01J01, m01J03 (stronger, upheld).** m01J01 proves both theorems as well
+  as the implication. m01J03 converges in operator norm, which implies
+  strong-operator convergence.
+- m02A04: checked the formula. `∫ exp(-t³x² + t²x) dx = sqrt(π/t³) exp(t/4)`,
+  matching `apm_m02a04_leadingTerm`, under the documented sign correction.
+- Smoothness orders: m93J04 uses `((⊤ : ℕ∞) : WithTop ℕ∞)`, and m02J02 uses
+  `ContDiff ℝ ∞` under `open scoped ContDiff`, which is the same order. Both
+  mean C^∞, with no bare ⊤. The formal adjoint `x²φ'' + 5xφ' + 4φ` is correct
+  for `x²D² - xD + 1`.
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -515,4 +536,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–27.
+Batches 21–31 have grade files; spot-checks recorded here cover 00–28.
