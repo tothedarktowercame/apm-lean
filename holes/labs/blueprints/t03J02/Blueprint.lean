@@ -492,13 +492,222 @@ theorem apm_t03J02_H1_of_compatibleOpenCover
       (ModuleCat.of ℤ (Fin 2 → ℤ)) ≪≫ e4.toModuleIso⟩
 
 /-- Degree-two Mayer--Vietoris calculation, including the kernel `ℤ`. -/
+lemma apm_t03J02_H2_of_compatibleOpenCover_aux_circle_H2_zero :
+    Limits.IsZero (apm_t03J02_H 2 Circle) := by
+  exact (ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top
+    1 2 (by omega) (by omega)).of_iso
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+        (ModuleCat.of ℤ ℤ)).mapIso
+          (TopCat.isoOfHomeo
+            ConstructionTargets.CircleHomology.circleHomeomorphSphereOne))
+
+noncomputable def apm_t03J02_H2_of_compatibleOpenCover_aux_torus_H2_iso :
+    apm_t03J02_H 2 apm_t03J02_Torus ≅ ModuleCat.of ℤ ℤ :=
+  let e : apm_t03J02_Torus ≃ₜ
+      ConstructionTargets.SolidTorusGluingOpenCover.BoundaryTorus :=
+    (Homeomorph.refl Circle).prodCongr
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+      (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo e)) ≪≫
+    ConstructionTargets.BoundaryTorusIntegralHomologyComplete.boundaryTorusH2ModuleIsoInt
+
+lemma apm_t03J02_H2_of_compatibleOpenCover_aux_inclusion_H1_zero
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (hnull₁ : j₁.Nullhomotopic) (hnull₂ : j₂.Nullhomotopic)
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    IntegralMV.mvI hcover.leftSet hcover.rightSet 1 = 0 := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  have hz₁ : F.map (TopCat.ofHom j₁) = 0 :=
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_zero_of_nullhomotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero j₁ hnull₁
+  have hz₂ : F.map (TopCat.ofHom j₂) = 0 :=
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_zero_of_nullhomotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero j₂ hnull₂
+  have hl : IntegralMV.mvIncl
+      (X := apm_t03J02_space j₁ j₂)
+      (A := hcover.leftSet ∩ hcover.rightSet) (B := hcover.leftSet)
+      Set.inter_subset_left 1 = 0 := by
+    let q := F.map (TopCat.ofHom hcover.leftEquiv.toFun)
+    let r := F.map (TopCat.ofHom hcover.leftEquiv.invFun)
+    have hqr : q ≫ r = 𝟙 _ := by
+      rw [← F.map_comp]
+      have hc := ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hcover.leftEquiv.left_inv 1
+      rw [show TopCat.ofHom hcover.leftEquiv.toFun ≫
+          TopCat.ofHom hcover.leftEquiv.invFun =
+        TopCat.ofHom (hcover.leftEquiv.invFun.comp hcover.leftEquiv.toFun) by rfl,
+        hc]
+      rw [show TopCat.ofHom (ContinuousMap.id hcover.leftSet) =
+        𝟙 (TopCat.of hcover.leftSet) by rfl, F.map_id]
+    have hqinj : Function.Injective q.hom := by
+      intro x y h
+      have hh := congrArg r.hom h
+      have hqrhom := congrArg ModuleCat.Hom.hom hqr
+      calc
+        x = r.hom (q.hom x) := by
+          have hx := congrArg (fun f => f x) hqrhom
+          simpa using hx.symm
+        _ = r.hom (q.hom y) := hh
+        _ = y := by
+          have hy := congrArg (fun f => f y) hqrhom
+          simpa using hy
+    letI : Mono q := (ModuleCat.mono_iff_injective q).mpr hqinj
+    apply (cancel_mono q).1
+    have hm : IntegralMV.mvIncl Set.inter_subset_left 1 =
+        F.map (TopCat.ofHom (apm_t03J02_overlapToLeft
+          hcover.leftSet hcover.rightSet)) := by rfl
+    rw [hm]
+    simp only [Limits.zero_comp]
+    change F.map (TopCat.ofHom (apm_t03J02_overlapToLeft
+      hcover.leftSet hcover.rightSet)) ≫ q = 0
+    rw [← F.map_comp]
+    have hc := ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hcover.left_compat 1
+    rw [← show TopCat.ofHom (hcover.leftEquiv.toFun.comp
+        (apm_t03J02_overlapToLeft hcover.leftSet hcover.rightSet)) =
+      TopCat.ofHom (apm_t03J02_overlapToLeft hcover.leftSet hcover.rightSet) ≫
+        TopCat.ofHom hcover.leftEquiv.toFun by rfl]
+    rw [hc]
+    rw [show TopCat.ofHom (j₁.comp hcover.overlapEquiv.toFun) =
+      TopCat.ofHom hcover.overlapEquiv.toFun ≫ TopCat.ofHom j₁ by rfl,
+      F.map_comp]
+    rw [hz₁]
+    simp
+  have hr : IntegralMV.mvIncl
+      (X := apm_t03J02_space j₁ j₂)
+      (A := hcover.leftSet ∩ hcover.rightSet) (B := hcover.rightSet)
+      Set.inter_subset_right 1 = 0 := by
+    let q := F.map (TopCat.ofHom hcover.rightEquiv.toFun)
+    let r := F.map (TopCat.ofHom hcover.rightEquiv.invFun)
+    have hqr : q ≫ r = 𝟙 _ := by
+      rw [← F.map_comp]
+      have hc := ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hcover.rightEquiv.left_inv 1
+      rw [show TopCat.ofHom hcover.rightEquiv.toFun ≫
+          TopCat.ofHom hcover.rightEquiv.invFun =
+        TopCat.ofHom (hcover.rightEquiv.invFun.comp hcover.rightEquiv.toFun) by rfl,
+        hc]
+      rw [show TopCat.ofHom (ContinuousMap.id hcover.rightSet) =
+        𝟙 (TopCat.of hcover.rightSet) by rfl, F.map_id]
+    have hqinj : Function.Injective q.hom := by
+      intro x y h
+      have hh := congrArg r.hom h
+      have hqrhom := congrArg ModuleCat.Hom.hom hqr
+      calc
+        x = r.hom (q.hom x) := by
+          have hx := congrArg (fun f => f x) hqrhom
+          simpa using hx.symm
+        _ = r.hom (q.hom y) := hh
+        _ = y := by
+          have hy := congrArg (fun f => f y) hqrhom
+          simpa using hy
+    letI : Mono q := (ModuleCat.mono_iff_injective q).mpr hqinj
+    apply (cancel_mono q).1
+    have hm : IntegralMV.mvIncl Set.inter_subset_right 1 =
+        F.map (TopCat.ofHom (apm_t03J02_overlapToRight
+          hcover.leftSet hcover.rightSet)) := by rfl
+    rw [hm]
+    simp only [Limits.zero_comp]
+    change F.map (TopCat.ofHom (apm_t03J02_overlapToRight
+      hcover.leftSet hcover.rightSet)) ≫ q = 0
+    rw [← F.map_comp]
+    have hc := ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hcover.right_compat 1
+    rw [← show TopCat.ofHom (hcover.rightEquiv.toFun.comp
+        (apm_t03J02_overlapToRight hcover.leftSet hcover.rightSet)) =
+      TopCat.ofHom (apm_t03J02_overlapToRight hcover.leftSet hcover.rightSet) ≫
+        TopCat.ofHom hcover.rightEquiv.toFun by rfl]
+    rw [hc]
+    rw [show TopCat.ofHom (j₂.comp hcover.overlapEquiv.toFun) =
+      TopCat.ofHom hcover.overlapEquiv.toFun ≫ TopCat.ofHom j₂ by rfl,
+      F.map_comp]
+    rw [hz₂]
+    simp
+  apply Limits.biprod.hom_ext
+  · simp [IntegralMV.mvI, hl]
+  · simp [IntegralMV.mvI, hr]
+
+noncomputable def apm_t03J02_H2_of_compatibleOpenCover_aux_finThreeIso :
+    (ModuleCat.of ℤ ℤ ⊞ ModuleCat.of ℤ ℤ) ⊞ ModuleCat.of ℤ ℤ ≅
+      ModuleCat.of ℤ (Fin 3 → ℤ) :=
+  Limits.biprod.mapIso (ModuleCat.biprodIsoProd _ _) (Iso.refl _) ≪≫
+    ModuleCat.biprodIsoProd _ _ ≪≫
+    (LinearEquiv.ofBijective
+      { toFun := fun (p : (ℤ × ℤ) × ℤ) i => Fin.cases p.2 (fun k => Fin.cases p.1.1 (fun _ => p.1.2) k) i
+        map_add' := by intros; ext i; fin_cases i <;> rfl
+        map_smul' := by intros; ext i; fin_cases i <;> rfl }
+      ⟨by
+        intro x y h
+        apply Prod.ext
+        · apply Prod.ext
+          · exact congrFun h 1
+          · exact congrFun h 2
+        · exact congrFun h 0,
+       by
+        intro z
+        exact ⟨((z 1, z 2), z 0), by
+          ext i
+          fin_cases i <;> rfl⟩⟩).toModuleIso
+
 theorem apm_t03J02_H2_of_compatibleOpenCover
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic) (hnull₂ : j₂.Nullhomotopic)
     (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
     Nonempty (apm_t03J02_H 2 (apm_t03J02_space j₁ j₂) ≅
       ModuleCat.of ℤ (Fin 3 → ℤ)) := by
-  sorry
+  let U := hcover.leftSet
+  let V := hcover.rightSet
+  obtain ⟨δ, hexI, hexJ, hexD⟩ := IntegralMV.integralMayerVietoris U V
+    hcover.open_left hcover.open_right hcover.cover
+  let S : ShortComplex (ModuleCat ℤ) :=
+    ShortComplex.mk (IntegralMV.mvJ U V 2) (δ 1) (by
+      apply ModuleCat.hom_ext
+      ext x
+      change (δ 1).hom ((IntegralMV.mvJ U V 2).hom x) = 0
+      rw [← LinearMap.mem_ker, ← hexJ 1]
+      exact ⟨x, rfl⟩)
+  have hSexact : S.Exact := by
+    rw [ShortComplex.moduleCat_exact_iff_range_eq_ker]
+    exact hexJ 1
+  have hI2zero : Limits.IsZero (IntegralMV.HZ 2 (U ∩ V : Set _)) :=
+    apm_t03J02_H2_of_compatibleOpenCover_aux_circle_H2_zero.of_iso
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        hcover.overlapEquiv 2)
+  have hmono : Function.Injective (IntegralMV.mvJ U V 2).hom := by
+    rw [← LinearMap.ker_eq_bot, ← hexI 2]
+    apply LinearMap.range_eq_bot.mpr
+    have hm : IntegralMV.mvI U V 2 = 0 := hI2zero.eq_of_src _ 0
+    exact congrArg ModuleCat.Hom.hom hm
+  letI : Mono S.f := (ModuleCat.mono_iff_injective _).mpr hmono
+  have hI1zero : IntegralMV.mvI U V 1 = 0 :=
+    apm_t03J02_H2_of_compatibleOpenCover_aux_inclusion_H1_zero
+      j₁ j₂ hnull₁ hnull₂ hcover
+  have hepi : Function.Surjective (δ 1).hom := by
+    rw [← LinearMap.range_eq_top, hexD 1, hI1zero]
+    exact LinearMap.ker_zero
+  letI : Epi S.g := (ModuleCat.epi_iff_surjective _).mpr hepi
+  letI : Projective (IntegralMV.HZ 1 (U ∩ V : Set _)) := by
+    let e := ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      hcover.overlapEquiv 1 ≪≫
+      ConstructionTargets.SingularHomologyConcrete.circleSingularH1IsoInt
+    exact Projective.of_iso e.symm inferInstance
+  let split := ProjectiveQuotientExactSplitting.exactIsoBiprod S hSexact
+  let pieceIso : (IntegralMV.HZ 2 U ⊞ IntegralMV.HZ 2 V) ≅
+      (ModuleCat.of ℤ ℤ ⊞ ModuleCat.of ℤ ℤ) :=
+    Limits.biprod.mapIso
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        hcover.leftEquiv 2 ≪≫
+        apm_t03J02_H2_of_compatibleOpenCover_aux_torus_H2_iso)
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        hcover.rightEquiv 2 ≪≫
+        apm_t03J02_H2_of_compatibleOpenCover_aux_torus_H2_iso)
+  let overlapIso :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      hcover.overlapEquiv 1 ≪≫
+      ConstructionTargets.SingularHomologyConcrete.circleSingularH1IsoInt
+  exact ⟨split ≪≫ Limits.biprod.mapIso pieceIso overlapIso ≪≫
+    apm_t03J02_H2_of_compatibleOpenCover_aux_finThreeIso⟩
 
 /-- Mayer--Vietoris above the dimensions of the circle and torus. -/
 lemma apm_t03J02_Hhigh_of_compatibleOpenCover_aux_circle_zero
