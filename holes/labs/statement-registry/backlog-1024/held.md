@@ -172,3 +172,22 @@ before the repair was committed and pinned the old statement, so it was
 revoked and redone at the repaired revision. The `revoked` list keeps that
 first entry, but `admit-batch.py` checks `entries` first, so a00J03 is not
 reported as held.)
+
+## Batch 09 spot-checks (all grades upheld)
+
+Batch 09 was admitted during the earlier sweep (rev 8fccb9498); rerunning
+`admit-batch.py 09` changes nothing and prints a01A11 as HELD.
+
+- a01A11 (hypothesis-carries-core): `cauchyTransform_not_entire`
+  (Main.lean:246-251) takes `h_diff`, `h_decay` and `h_nonzero` as
+  hypotheses. Upheld. Repair route: `h_diff` is part (a)
+  (`cauchyTransform_differentiableAt`), `h_decay` follows from part (c)
+  (z g(z) → -|K| gives g → 0), and `h_nonzero` from
+  Im g(i) = ∫_K 1/(t²+1) dt > 0 because volume K > 0.
+- a01A05 (faithful, refutes printed part (a)): checked against problem.md.
+  Part (a) is false in either indexing: two unit vectors with inner product
+  ε = 2^{-m} give ‖f_m - e_m‖² = 2 - 2√(1-ε²) > ε². The Lean structure keeps
+  the problem's hypothesis with 0-based indices (Main.lean:30-35). Its
+  negation is stated as `¬ ∀ H`, with the witness in ℓ² rather than L². That is
+  harmless because ℓ² embeds isometrically in L². Upheld. This is a false
+  source to add to the list.
