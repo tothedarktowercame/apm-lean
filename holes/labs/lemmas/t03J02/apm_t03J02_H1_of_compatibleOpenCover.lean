@@ -11,6 +11,10 @@ import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.SingularHomologyConcrete
 import ConstructionTargets.SurfaceSchoenflies
 import ConstructionTargets.T97A04FrozenH1Coordinate
+import ConstructionTargets.BoundaryTorusIntegralHomologyComplete
+import ConstructionTargets.CircleSingularHomology
+import ConstructionTargets.ProjectiveQuotientExactSplitting
+import ConstructionTargets.SingularHomologyHomotopy
 
 /-! # Blueprint for APM t03J02 -/
 
@@ -286,6 +290,25 @@ theorem apm_t03J02_H0_of_compatibleOpenCover
     }
   exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ (ql (j₁ z₀))⟩
 
+/-- A null-homotopic map is zero on degree-one integral homology. -/
+lemma apm_t03J02_H1_of_compatibleOpenCover_aux_null_map
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X,Y)) (hf : f.Nullhomotopic) :
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f) = 0 :=
+  ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_zero_of_nullhomotopic
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero f hf
+
+/-- Each torus piece has `H₁ ≅ ℤ²`. -/
+lemma apm_t03J02_H1_of_compatibleOpenCover_aux_piece_iso :
+    Nonempty (apm_t03J02_H 1 apm_t03J02_Torus ≅
+      ModuleCat.of ℤ (Fin 2 → ℤ)) := by
+  exact ⟨ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+      (ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusHomeomorphBoundaryTorus.trans
+        (Homeomorph.prodCongr (Homeomorph.refl Circle)
+          ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.symm)).symm.toHomotopyEquiv 1 ≪≫
+    ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1ModuleIsoFinTwo⟩
+
 /-- Degree-one Mayer--Vietoris calculation; null-homotopy kills both legs. -/
 -- BEGIN SEAT AREA
 theorem apm_t03J02_H1_of_compatibleOpenCover
@@ -307,12 +330,63 @@ theorem apm_t03J02_H2_of_compatibleOpenCover
   sorry
 
 /-- Mayer--Vietoris above the dimensions of the circle and torus. -/
+lemma apm_t03J02_Hhigh_of_compatibleOpenCover_aux_circle_zero
+    (n : ℕ) (hn : 2 ≤ n) : Limits.IsZero (apm_t03J02_H n Circle) := by
+  exact (ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top
+    1 n (by omega) (by omega)).of_iso
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).mapIso
+          (TopCat.isoOfHomeo
+            ConstructionTargets.CircleHomology.circleHomeomorphSphereOne))
+
+lemma apm_t03J02_Hhigh_of_compatibleOpenCover_aux_torus_zero
+    (n : ℕ) (hn : 3 ≤ n) : Limits.IsZero (apm_t03J02_H n apm_t03J02_Torus) := by
+  let e : apm_t03J02_Torus ≃ₜ ConstructionTargets.SolidTorusGluingOpenCover.BoundaryTorus :=
+    (Homeomorph.refl Circle).prodCongr
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+  exact (ConstructionTargets.BoundaryTorusIntegralHomologyComplete.boundaryTorusModuleHomology_isZero_of_two_lt
+    n (by omega)).of_iso
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo e))
+
 theorem apm_t03J02_Hhigh_of_compatibleOpenCover
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
     ∀ k : ℕ, 3 ≤ k →
       Limits.IsZero (apm_t03J02_H k (apm_t03J02_space j₁ j₂)) := by
-  sorry
+  intro k hk
+  let U := hcover.leftSet
+  let V := hcover.rightSet
+  have hUk : Limits.IsZero (IntegralMV.HZ k U) :=
+    (apm_t03J02_Hhigh_of_compatibleOpenCover_aux_torus_zero k hk).of_iso
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        hcover.leftEquiv k)
+  have hVk : Limits.IsZero (IntegralMV.HZ k V) :=
+    (apm_t03J02_Hhigh_of_compatibleOpenCover_aux_torus_zero k hk).of_iso
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        hcover.rightEquiv k)
+  have hIp : Limits.IsZero (IntegralMV.HZ (k - 1) (U ∩ V : Set _)) :=
+    (apm_t03J02_Hhigh_of_compatibleOpenCover_aux_circle_zero (k - 1) (by omega)).of_iso
+      (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
+        hcover.overlapEquiv (k - 1))
+  obtain ⟨δ, -, hexJ, -⟩ := IntegralMV.integralMayerVietoris U V
+    hcover.open_left hcover.open_right hcover.cover
+  have hk' : k - 1 + 1 = k := by omega
+  have hUk' : Limits.IsZero (IntegralMV.HZ (k - 1 + 1) U) := by
+    simpa only [hk'] using hUk
+  have hVk' : Limits.IsZero (IntegralMV.HZ (k - 1 + 1) V) := by
+    simpa only [hk'] using hVk
+  let d := δ (k - 1)
+  have hdmono : Function.Injective d.hom := by
+    rw [← LinearMap.ker_eq_bot, ← hexJ (k - 1)]
+    apply LinearMap.range_eq_bot.mpr
+    have hpieces :=
+      (CategoryTheory.Limits.biprod_isZero_iff _ _).mpr ⟨hUk', hVk'⟩
+    have hm : IntegralMV.mvJ U V (k - 1 + 1) = 0 := hpieces.eq_of_src _ 0
+    exact congrArg ModuleCat.Hom.hom hm
+  letI : Mono d := (ModuleCat.mono_iff_injective d).mpr hdmono
+  have hz := @Limits.IsZero.of_mono (ModuleCat ℤ) _ _ _ _ d inferInstance hIp
+  simpa only [hk'] using hz
 
 theorem apm_t03j02
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
