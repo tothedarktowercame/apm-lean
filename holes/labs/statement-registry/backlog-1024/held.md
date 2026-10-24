@@ -529,6 +529,25 @@ evidence `grades-28.md`; `admit-batch.py 28` held one.
   mean C^∞, with no bare ⊤. The formal adjoint `x²φ'' + 5xφ' + 4φ` is correct
   for `x²D² - xD + 1`.
 
+## Batch 29 spot-check (m94A01 held)
+
+Nine rows (all faithful) already in `STATEMENTS.json` with evidence
+`grades-29.md`; `admit-batch.py 29` held one.
+
+- **m94A01 (narrower, upheld).** problem.md assumes only that `u_xxxx` and
+  `u_yyyy` are continuous; `apm_m94a01` assumes `ContDiff ℝ 4 u` on `ℝ²`, which
+  also requires the mixed partials. Not a false problem.md, so it stays an open
+  gap. The proof (lines 125–126) uses `hu` only to get `ContDiff ℝ 4` on the two
+  coordinate slices through `(x,y)`, so restating the hypothesis slicewise
+  looks like a small repair.
+- **m93J05, m95J05 (faithful with correction, upheld).** m93J05's repaired
+  lower-semicontinuity clause, `(∃ᶠ n, J(s n) ≤ r) → J f ≤ r`, is the correct
+  direction: it says `J f ≤ liminf J(s n)`. m95J05's test functions use
+  `ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)`, i.e. C^∞.
+- Smoothness orders: grepped all ten `Main.lean` files. Besides m95J05 (C^∞, as
+  above) and m94A01 (`ContDiff ℝ 4`), every `⊤` is an `ENNReal` or `Opens`
+  top. No bare `⊤` smoothness order.
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -536,4 +555,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–28.
+Batches 21–31 have grade files; spot-checks recorded here cover 00–29.
