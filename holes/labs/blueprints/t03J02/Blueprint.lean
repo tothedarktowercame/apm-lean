@@ -12,6 +12,8 @@ import ConstructionTargets.SingularHomologyConcrete
 import ConstructionTargets.SurfaceSchoenflies
 import ConstructionTargets.T97A04FrozenH1Coordinate
 import ConstructionTargets.BoundaryTorusIntegralHomologyComplete
+import ConstructionTargets.CircleSingularHomology
+import ConstructionTargets.ProjectiveQuotientExactSplitting
 
 /-! # Blueprint for APM t03J02 -/
 
