@@ -512,7 +512,90 @@ theorem standardCover_pairingData_aux_treeGlue (k : ℕ) :
     obtain ⟨C₂, hf₂, ht₂, hv₂, hor₂, ⟨e₂⟩⟩ := ih C₁ (by omega) hs₁ hconn₁ hor₁
     exact ⟨C₂, hf₂, by omega, hv₂.trans hv₁, hor₂, ⟨e₁.trans e₂⟩⟩
 
-/-- **Leaf (one 1-skeleton contraction).**  A one-face complex with at least
+/-! Split of `_aux_contractStep` (claude-14, 2026-10-24, after the lemma-1
+PARTIAL banked `_aux_totalSides_five_le`).  `ContractData C C' s` specifies the
+contracted complex without constructing it; `_aux_contractExists` builds one. -/
+
+/-- Banked by lemma-1 (2026-10-24). -/
+lemma standardCover_pairingData_aux_contractStep_aux_totalSides_five_le
+    (C : PolygonComplex) (hV : 2 ≤ C.vertexCount)
+    (hlarge : 2 * C.vertexCount < C.totalSides) :
+    5 ≤ C.totalSides := by
+  omega
+
+/-- **Leaf (a side with distinct ends).**  In a one-face complex the corners
+`⟨0, 0⟩, ⟨0, 1⟩, …` are joined in turn by sides; if every side had both ends
+in one class, all corners would be one vertex. -/
+theorem standardCover_pairingData_aux_contractStep_aux_distinctEnds
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (hV : 2 ≤ C.vertexCount) :
+    ∃ s : C.Side, Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s) := by
+  sorry
+
+/-- `C'` is the one-face complex `C` with sides `s` and `C.pair s` removed
+from the boundary.  `toOld` sends each side of `C'` to the side of `C` it came
+from, keeps the order of the boundary, and hits every side except `s` and
+`C.pair s`.  Pairings and signs are carried unchanged. -/
+structure standardCover_pairingData_aux_contractStep_aux_ContractData
+    (C C' : PolygonComplex) (s : C.Side) where
+  faceCount_eq : C'.faceCount = 1
+  totalSides_add_two : C'.totalSides + 2 = C.totalSides
+  toOld : C'.Side → C.Side
+  toOld_injective : Function.Injective toOld
+  toOld_ne : ∀ t, toOld t ≠ s ∧ toOld t ≠ C.pair s
+  toOld_surj : ∀ u, u ≠ s → u ≠ C.pair s → ∃ t, toOld t = u
+  toOld_lt : ∀ t t' : C'.Side, t.2.val < t'.2.val →
+    (toOld t).2.val < (toOld t').2.val
+  pair_toOld : ∀ t, toOld (C'.pair t) = C.pair (toOld t)
+  sign_toOld : ∀ t, C'.sign t = C.sign (toOld t)
+
+/-- **Leaf (build the contracted complex).**  `C'.sides 0 = C.sides 0 - 2`,
+`toOld` the increasing enumeration of the other sides, pairing and sign pulled
+back along it (`C.pair` swaps `s` and `C.pair s`, so it preserves the rest). -/
+theorem standardCover_pairingData_aux_contractStep_aux_contractExists
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (h3 : 3 ≤ C.totalSides)
+    (s : C.Side) :
+    ∃ C' : PolygonComplex,
+      Nonempty (standardCover_pairingData_aux_contractStep_aux_ContractData C C' s) := by
+  sorry
+
+theorem standardCover_pairingData_aux_contractStep_aux_orientable
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (hor : C.IsOrientable) : C'.IsOrientable := by
+  intro t
+  rw [D.sign_toOld, D.sign_toOld, D.pair_toOld]
+  exact hor _
+
+/-- **Leaf (corners).**  Map a corner `t` of `C'` to `toOld t`.  The classes
+of `s` and `C.nextCorner s` (distinct by `hs`) become one class; every other
+class is kept.  At the place where `s` (or `C.pair s`) was removed, the
+terminal corner of the side before it now equals the initial corner of the
+side after it, which joins the two classes. -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
+    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hor : C.IsOrientable) : C'.vertexCount + 1 = C.vertexCount := by
+  sorry
+
+/-- **Leaf (collapse an arc).**  Side `s` has distinct ends, so its image in
+`C.Space` is an embedded arc; collapsing it (and its partner, the same arc) to
+a point gives `C'.Space`.  In the disk: a homeomorphism `Disk → Disk` that
+sends side `s` and side `C.pair s` to single boundary points and the other
+sides onto the sides of the `(sides - 2)`-gon, compatible with the pairings. -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
+    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hor : C.IsOrientable) : Nonempty (C.Space ≃ₜ C'.Space) := by
+  sorry
+
+/-- **One 1-skeleton contraction.**  A one-face complex with at least
 two vertices has a side whose endpoints are distinct vertices.  Collapsing
 that side and its partner (an embedded arc in the surface) removes two
 boundary arcs and merges the two vertices.  `2 * vertexCount < totalSides`
@@ -524,7 +607,15 @@ theorem standardCover_pairingData_aux_contractStep
     ∃ C' : PolygonComplex, C'.faceCount = 1 ∧ C'.totalSides + 2 = C.totalSides ∧
       C'.vertexCount + 1 = C.vertexCount ∧ C'.IsOrientable ∧
       Nonempty (C.Space ≃ₜ C'.Space) := by
-  sorry
+  have h5 := standardCover_pairingData_aux_contractStep_aux_totalSides_five_le C hV hlarge
+  obtain ⟨s, hs⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_distinctEnds C h1 hV
+  obtain ⟨C', ⟨D⟩⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_contractExists C h1 (by omega) s
+  exact ⟨C', D.faceCount_eq, D.totalSides_add_two,
+    standardCover_pairingData_aux_contractStep_aux_vertexCount D h1 h5 hs hor,
+    standardCover_pairingData_aux_contractStep_aux_orientable D hor,
+    standardCover_pairingData_aux_contractStep_aux_homeomorph D h1 h5 hs hor⟩
 
 /-- Contract a spanning tree of the 1-skeleton: `k` contractions on `k + 1`
 vertices. -/
