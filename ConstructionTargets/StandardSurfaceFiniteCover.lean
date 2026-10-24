@@ -261,16 +261,311 @@ theorem standardCover_pairingData
   rw [hP, ← standardCover_pairingData_aux_edgeCount g n hg hn]
   omega
 
-/-- **LIBRARY (orientable polygon-word normal form).**  A one-vertex signed
-pairing with `4h` sides and orientation reversed on every paired pair can be
-put into the standard product-of-commutators word by elementary polygon
-moves.  `PolygonMoves` supplies the geometric homeomorphism for each move;
-the missing foundation is the terminating finite combinatorial normalizer. -/
+/-- Banked by lemma-2 (2026-10-24): the word of `P`, and `P.Space ≃ₜ PolygonSurface (wordOf P)`. -/
+def orientablePairing_normalForm_aux_wordOf (P : PairingData) :
+    List (PolygonMoves.Signed (PairingOrbit P.pair)) :=
+  List.ofFn (fun i : Fin P.edgeCount => (P.orbit i, P.sign i))
+
+local instance orientablePairing_normalForm_aux_orbit_decEq (P : PairingData) :
+    DecidableEq (PairingOrbit P.pair) := Classical.decEq _
+
+@[simp] theorem orientablePairing_normalForm_aux_wordOf_length (P : PairingData) :
+    (orientablePairing_normalForm_aux_wordOf P).length = P.edgeCount := by
+  simp [orientablePairing_normalForm_aux_wordOf]
+
+@[simp] theorem orientablePairing_normalForm_aux_wordOf_get (P : PairingData)
+    (i : Fin (orientablePairing_normalForm_aux_wordOf P).length) :
+    (orientablePairing_normalForm_aux_wordOf P).get i =
+      (P.orbit ⟨i, by simpa using i.2⟩, P.sign ⟨i, by simpa using i.2⟩) := by
+  simp [orientablePairing_normalForm_aux_wordOf]
+
+theorem orientablePairing_normalForm_aux_boundary_to_word (P : PairingData)
+    {x y : Disk} (hxy : P.Rel x y) :
+    PolygonMoves.WordRel (orientablePairing_normalForm_aux_wordOf P) x y := by
+  rcases hxy with ⟨i, t, rfl, rfl⟩
+  let i' : Fin (orientablePairing_normalForm_aux_wordOf P).length :=
+    ⟨i, by simpa using i.2⟩
+  let j' : Fin (orientablePairing_normalForm_aux_wordOf P).length :=
+    ⟨P.pair i, by simpa using (P.pair i).2⟩
+  refine ⟨i', j', ?_, t, ?_, ?_, ?_⟩
+  · intro hij
+    apply P.pair_ne i
+    exact Fin.ext (congrArg Fin.val hij).symm
+  · rw [orientablePairing_normalForm_aux_wordOf_get,
+      orientablePairing_normalForm_aux_wordOf_get]
+    simpa [i', j'] using (P.orbit_pair i).symm
+  · simp [i']
+  · rw [orientablePairing_normalForm_aux_wordOf_get,
+      orientablePairing_normalForm_aux_wordOf_get]
+    simp only [orientablePairing_normalForm_aux_wordOf_length]
+    simp [i', j', PolygonSurfacePiOne.pairedParameter,
+      PolygonMoves.reverseParameter, PolygonSurfacePiOne.reverseIcc]
+
+theorem orientablePairing_normalForm_aux_word_to_boundary (P : PairingData)
+    {x y : Disk}
+    (hxy : PolygonMoves.WordRel (orientablePairing_normalForm_aux_wordOf P) x y) :
+    Relation.EqvGen P.Rel x y := by
+  rcases hxy with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+  let i' : Fin P.edgeCount := ⟨i, by simpa using i.2⟩
+  let j' : Fin P.edgeCount := ⟨j, by simpa using j.2⟩
+  have horbit : P.orbit i' = P.orbit j' := by
+    rw [orientablePairing_normalForm_aux_wordOf_get,
+      orientablePairing_normalForm_aux_wordOf_get] at hlab
+    simpa [i', j'] using hlab
+  have hj : j' = P.pair i' := by
+    rcases (P.orbit_eq_iff i' j').mp horbit with h | h
+    · exfalso
+      apply hij
+      exact Fin.ext (congrArg Fin.val h).symm
+    · exact h
+  apply Relation.EqvGen.rel
+  refine ⟨i', t, ?_, ?_⟩
+  · simp [i']
+  · rw [orientablePairing_normalForm_aux_wordOf_get,
+      orientablePairing_normalForm_aux_wordOf_get]
+    simp only [orientablePairing_normalForm_aux_wordOf_length]
+    simp [i', j', hj, PolygonSurfacePiOne.pairedParameter,
+      PolygonMoves.reverseParameter, PolygonSurfacePiOne.reverseIcc]
+    congr 1
+    exact congrArg Fin.val hj
+
+theorem orientablePairing_normalForm_aux_eqv (P : PairingData) (x y : Disk) :
+    Relation.EqvGen P.Rel x y ↔
+      Relation.EqvGen
+        (PolygonMoves.WordRel (orientablePairing_normalForm_aux_wordOf P)) x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact .rel _ _ (orientablePairing_normalForm_aux_boundary_to_word P h)
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h => exact orientablePairing_normalForm_aux_word_to_boundary P h
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+
+def orientablePairing_normalForm_aux_bridge_equiv (P : PairingData) :
+    P.Space ≃ PolygonMoves.PolygonSurface
+      (orientablePairing_normalForm_aux_wordOf P) :=
+  Quotient.congrRight (orientablePairing_normalForm_aux_eqv P)
+
+theorem orientablePairing_normalForm_aux_bridge (P : PairingData) :
+    Nonempty (P.Space ≃ₜ PolygonMoves.PolygonSurface
+      (orientablePairing_normalForm_aux_wordOf P)) := by
+  let e := orientablePairing_normalForm_aux_bridge_equiv P
+  refine ⟨{ toEquiv := e, continuous_toFun := ?_, continuous_invFun := ?_ }⟩
+  · apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    change Continuous (fun x : Disk => e (Quotient.mk _ x))
+    simpa [e, orientablePairing_normalForm_aux_bridge_equiv] using
+      (PolygonMoves.continuous_polygonQuotient
+        (orientablePairing_normalForm_aux_wordOf P))
+  · apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    change Continuous (fun x : Disk => e.symm (Quotient.mk _ x))
+    simpa [e, orientablePairing_normalForm_aux_bridge_equiv] using
+      P.continuous_quotientMap
+
+
+/-! ## Word-level normalization
+
+Split of `orientablePairing_normalForm` (claude-14, 2026-10-24, after the
+lemma-2 PARTIAL banked the bridge above).  The proof runs on words over `ℕ`,
+where fresh labels exist: relabel `wordOf P` injectively into `ℕ`
+(`_aux_relabel`), check that the result is an orientable one-vertex polygon word
+(`_aux_natWord_isPolygonWord`, `_aux_natWord_orientable`,
+`_aux_natWord_oneVertex`), normalize it combinatorially by rotations, relabelings
+and orientable cut-and-paste steps (`_aux_normalize`), turn each step into a
+homeomorphism (`_aux_cutPaste` plus `PolygonMoves.rotation`/`relabelInvert`),
+and compare the standard word with `Surface true h` (`_aux_standard`). -/
+
+open PolygonMoves in
+/-- **Leaf (injective relabeling).**  `WordRel` only compares labels for
+equality, so an injective relabeling gives the same relation on the disk. -/
+theorem orientablePairing_normalForm_aux_relabel {L L' : Type*}
+    [DecidableEq L] [DecidableEq L'] (w : List (Signed L)) (f : L → L')
+    (hf : Function.Injective f) :
+    Nonempty (PolygonSurface w ≃ₜ PolygonSurface (w.map fun x => (f x.1, x.2))) := by
+  sorry
+
+/-- Labels in `ℕ`: an orbit goes to the index of a chosen representative. -/
+def orientablePairing_normalForm_aux_enc (P : PairingData) (o : PairingOrbit P.pair) : ℕ :=
+  (Quotient.out o : Fin P.edgeCount).val
+
+theorem orientablePairing_normalForm_aux_enc_injective (P : PairingData) :
+    Function.Injective (orientablePairing_normalForm_aux_enc P) := by
+  intro a b hab
+  exact Quotient.out_inj.mp (Fin.ext hab)
+
+/-- The word of `P` with labels in `ℕ`. -/
+def orientablePairing_normalForm_aux_natWord (P : PairingData) :
+    List (PolygonMoves.Signed ℕ) :=
+  (orientablePairing_normalForm_aux_wordOf P).map
+    fun x => (orientablePairing_normalForm_aux_enc P x.1, x.2)
+
+/-- Two distinct arcs with the same label carry opposite signs. -/
+def orientablePairing_normalForm_aux_WordOrientable {L : Type*}
+    (w : List (PolygonMoves.Signed L)) : Prop :=
+  ∀ i j : Fin w.length, i ≠ j → (w.get i).1 = (w.get j).1 → (w.get i).2 ≠ (w.get j).2
+
+/-- Corner `i` is the initial endpoint of arc `i`; its terminal endpoint is
+corner `finRotate _ i`.  Pairing two arcs identifies their corners: initial with
+initial when the signs agree (parameter preserved, as in `WordRel`), initial
+with terminal when they differ. -/
+def orientablePairing_normalForm_aux_WordCornerRel {L : Type*}
+    (w : List (PolygonMoves.Signed L)) (a b : Fin w.length) : Prop :=
+  ∃ i j : Fin w.length, i ≠ j ∧ (w.get i).1 = (w.get j).1 ∧
+    if (w.get i).2 = (w.get j).2 then
+      (a = i ∧ b = j) ∨ (a = finRotate _ i ∧ b = finRotate _ j)
+    else
+      (a = i ∧ b = finRotate _ j) ∨ (a = finRotate _ i ∧ b = j)
+
+/-- All corners of the word are one vertex. -/
+def orientablePairing_normalForm_aux_WordOneVertex {L : Type*}
+    (w : List (PolygonMoves.Signed L)) : Prop :=
+  ∀ a b : Fin w.length,
+    Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w) a b
+
+/-- **Leaf.**  Each orbit of `P.pair` has exactly the two arcs `i` and
+`P.pair i` (`PairingData.orbit_eq_iff`), and `P.edgeCount > 0`. -/
+theorem orientablePairing_normalForm_aux_natWord_isPolygonWord (P : PairingData) :
+    PolygonMoves.IsPolygonWord (orientablePairing_normalForm_aux_natWord P) := by
+  sorry
+
+/-- **Leaf.**  From `IsOrientablePairing`: the two arcs with one label are
+`i` and `P.pair i`, whose signs differ. -/
+theorem orientablePairing_normalForm_aux_natWord_orientable (P : PairingData)
+    (hor : IsOrientablePairing P) :
+    orientablePairing_normalForm_aux_WordOrientable
+      (orientablePairing_normalForm_aux_natWord P) := by
+  sorry
+
+/-- **Leaf (geometric to combinatorial vertex).**  From `P.oneVertex`.  A
+`boundaryRel` step that starts at a polygon vertex ends at a polygon vertex
+(an edge parameter `0` or `1` goes to `0` or `1`), and two arcs related at
+their endpoints have corner-related corners.  So the set of disk points that
+are corners corner-related to corner `a` is closed under `boundaryRel` in both
+directions, which turns the `EqvGen` chain of `oneVertex` into a
+`WordCornerRel` chain.  Needs: `edgePoint` is injective on the boundary away
+from the identification `edgePoint n i 1 = edgePoint n (i+1) 0`. -/
+theorem orientablePairing_normalForm_aux_natWord_oneVertex (P : PairingData) :
+    orientablePairing_normalForm_aux_WordOneVertex
+      (orientablePairing_normalForm_aux_natWord P) := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (orientable cut-and-paste).**  Cut the polygon
+`α₁ y α₂ β₁ y⁻¹ β₂` along a new chord `c` from the start of `α₁` to the start
+of `β₁`.  The pieces are `α₁ y α₂ c⁻¹` and `β₁ y⁻¹ β₂ c`; gluing them along `y`
+gives `α₂ c⁻¹ α₁ β₂ c β₁`.  (Checks: `a b a⁻¹ b⁻¹` with `y = a` gives
+`b c⁻¹ b⁻¹ c`; `a a⁻¹ b b⁻¹` gives `c⁻¹ b b⁻¹ c`.)  `PolygonMoves.cutAndPaste`
+is the crosscap version (`x … x`) and does not apply to orientable words;
+its chart machinery (`polygonSurface_homeomorph_of_span`, `cutPiece`,
+`cutSeam`) is the model for this one. -/
+theorem orientablePairing_normalForm_aux_cutPaste {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (hw : IsPolygonWord (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) :
+    Nonempty (PolygonSurface (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂) ≃ₜ
+      PolygonSurface (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) := by
+  sorry
+
+open PolygonMoves in
+/-- One elementary move on words over `ℕ`.  Each constructor carries the
+hypotheses its homeomorphism needs, so `_aux_step_homeomorph` is a case split. -/
+inductive orientablePairing_normalForm_aux_Step :
+    List (Signed ℕ) → List (Signed ℕ) → Prop
+  | rotation (u v : List (Signed ℕ)) (hw : IsPolygonWord (u ++ v)) :
+      orientablePairing_normalForm_aux_Step (u ++ v) (v ++ u)
+  | relabel (w : List (Signed ℕ)) (e : ℕ ≃ ℕ) (flip : ℕ → Bool)
+      (hw : IsPolygonWord w) :
+      orientablePairing_normalForm_aux_Step w
+        (w.map fun x => (e x.1, xor x.2 (flip x.1)))
+  | cutPaste (α₁ α₂ β₁ β₂ : List (Signed ℕ)) (y c : Signed ℕ)
+      (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+      (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+      (hw : IsPolygonWord (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) :
+      orientablePairing_normalForm_aux_Step
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)
+        (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)
+
+theorem orientablePairing_normalForm_aux_step_homeomorph
+    {w w' : List (PolygonMoves.Signed ℕ)}
+    (hs : orientablePairing_normalForm_aux_Step w w') :
+    Nonempty (PolygonMoves.PolygonSurface w ≃ₜ PolygonMoves.PolygonSurface w') := by
+  cases hs with
+  | rotation u v hw => exact PolygonMoves.rotation u v hw
+  | relabel w e flip hw => exact PolygonMoves.relabelInvert w e flip hw
+  | cutPaste α₁ α₂ β₁ β₂ y c hy hc hw =>
+      exact orientablePairing_normalForm_aux_cutPaste α₁ α₂ β₁ β₂ y c hy hc hw
+
+theorem orientablePairing_normalForm_aux_reach_homeomorph
+    {w w' : List (PolygonMoves.Signed ℕ)}
+    (hr : Relation.ReflTransGen orientablePairing_normalForm_aux_Step w w') :
+    Nonempty (PolygonMoves.PolygonSurface w ≃ₜ PolygonMoves.PolygonSurface w') := by
+  induction hr with
+  | refl => exact ⟨Homeomorph.refl _⟩
+  | tail _ hs ih =>
+      exact ⟨ih.some.trans (orientablePairing_normalForm_aux_step_homeomorph hs).some⟩
+
+/-- The standard word `a₀ b₀ a₀⁻¹ b₀⁻¹ ⋯` with `aⱼ = 2j`, `bⱼ = 2j + 1`. -/
+def orientablePairing_normalForm_aux_standardWord (h : ℕ) :
+    List (PolygonMoves.Signed ℕ) :=
+  (List.range h).flatMap fun j =>
+    [(2 * j, true), (2 * j + 1, true), (2 * j, false), (2 * j + 1, false)]
+
+/-- **Leaf (combinatorial normalizer).**  Every orientable one-vertex polygon
+word of length `4h` reaches the standard word.  Route (Massey, ch. 1 §7): in
+an orientable one-vertex word every pair `x … x⁻¹` is interlocked with some
+pair `y … y⁻¹` (otherwise the corners between the two `x` arcs form a
+separate vertex); two `cutPaste` steps turn `x … y … x⁻¹ … y⁻¹` into a
+commutator block `c d c⁻¹ d⁻¹` followed by the rest, and `cutPaste`
+preserves length, orientability and one-vertexness.  Measure: the number of
+standard commutator blocks at the front.  Split this into one lemma per step
+(interlocked pair exists; two cut-pastes produce a block; invariants are
+preserved) plus well-founded induction, if it does not close in one seat. -/
+theorem orientablePairing_normalForm_aux_normalize (h : ℕ) (hh : 1 ≤ h)
+    (w : List (PolygonMoves.Signed ℕ)) (hw : PolygonMoves.IsPolygonWord w)
+    (hor : orientablePairing_normalForm_aux_WordOrientable w)
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w)
+    (hlen : w.length = 4 * h) :
+    Relation.ReflTransGen orientablePairing_normalForm_aux_Step w
+      (orientablePairing_normalForm_aux_standardWord h) := by
+  sorry
+
+/-- **Leaf (standard word).**  The standard word presents `Surface true h`.
+Either compare `WordRel` with `SurfaceRel true h` directly (the
+`polygonNF_handle_eqvGen_iff` argument in `problems/t98A01/lean/Main.lean`,
+about 150 lines), or go through `orientableStandardPairingData`, the bridge
+`_aux_bridge`, `_aux_relabel` and `standardPairingData_space_homeomorph`. -/
+theorem orientablePairing_normalForm_aux_standard (h : ℕ) (hh : 1 ≤ h) :
+    Nonempty (PolygonMoves.PolygonSurface
+      (orientablePairing_normalForm_aux_standardWord h) ≃ₜ Surface true h) := by
+  sorry
+
+/-- **Orientable polygon-word normal form.**  Assembled from the leaves
+above: bridge to the word of `P`, relabel into `ℕ`, normalize, compare with
+the standard surface. -/
 theorem orientablePairing_normalForm
     (h : ℕ) (hh : 1 ≤ h) (P : PairingData)
     (hor : IsOrientablePairing P) (hedges : P.edgeCount = 4 * h) :
     Nonempty (P.Space ≃ₜ Surface true h) := by
-  sorry
+  obtain ⟨e₁⟩ := orientablePairing_normalForm_aux_bridge P
+  obtain ⟨e₂⟩ := orientablePairing_normalForm_aux_relabel
+    (orientablePairing_normalForm_aux_wordOf P) _
+    (orientablePairing_normalForm_aux_enc_injective P)
+  have hlen : (orientablePairing_normalForm_aux_natWord P).length = 4 * h := by
+    simp [orientablePairing_normalForm_aux_natWord, hedges]
+  obtain ⟨e₃⟩ := orientablePairing_normalForm_aux_reach_homeomorph
+    (orientablePairing_normalForm_aux_normalize h hh _
+      (orientablePairing_normalForm_aux_natWord_isPolygonWord P)
+      (orientablePairing_normalForm_aux_natWord_orientable P hor)
+      (orientablePairing_normalForm_aux_natWord_oneVertex P) hlen)
+  obtain ⟨e₄⟩ := orientablePairing_normalForm_aux_standard h hh
+  exact ⟨e₁.trans (e₂.trans (e₃.trans e₄))⟩
+
 
 /-- A connected positive finite cover of a positive-genus standard orientable
 surface is the standard orientable surface of genus `n * (g - 1) + 1`. -/
