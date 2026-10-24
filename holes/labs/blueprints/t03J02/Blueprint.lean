@@ -11,6 +11,7 @@ import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.SingularHomologyConcrete
 import ConstructionTargets.SurfaceSchoenflies
 import ConstructionTargets.T97A04FrozenH1Coordinate
+import ConstructionTargets.BoundaryTorusIntegralHomologyComplete
 
 /-! # Blueprint for APM t03J02 -/
 
