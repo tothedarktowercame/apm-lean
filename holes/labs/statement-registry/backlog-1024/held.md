@@ -495,6 +495,19 @@ one.
   solved by `y = 0`). Parts (b)–(e) are faithful.
 - No smoothness-order objection: no `ContDiff` in any batch 26 statement.
 
+## Batch 27 spot-check (all ten faithful, none held)
+
+All ten rows graded faithful and already in `STATEMENTS.json` (evidence
+`grades-27.md`); `admit-batch.py 27` held none.
+
+- Read bpm-1-1-2 against problem.md: `[0,1]`, `f(0)=0` only, sup of `|f|`
+  bounded by `sqrt (∫₀¹ (deriv f)^2)`. Matches. (The grader's prose says
+  "endpoint-zero on `[a,b]`"; the statement itself is the `[0,1]`, one-endpoint
+  form the problem asks for.) `deriv f` differs from the one-sided derivative
+  only at the endpoints, which does not change the integral.
+- Smoothness orders: the only `ContDiff` in batch 27 is `ContDiffOn ℝ 1` in
+  bpm-1-1-2, i.e. C^1, as the problem says. No ⊤.
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -502,4 +515,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–26.
+Batches 21–31 have grade files; spot-checks recorded here cover 00–27.
