@@ -432,6 +432,21 @@ one.
   The `⊤` occurrences in b00J01/b00J03 are the top subgroup and top
   intermediate field, not a smoothness order.
 
+## Batch 23 spot-check (b01J04 held)
+
+Nine rows faithful and already in `STATEMENTS.json`; `admit-batch.py 23` held
+one.
+
+- **b01J04 (narrower, upheld).** Part (a) of problem.md claims simultaneous
+  diagonalizability of `A, B ∈ ℂ^{n×n}` iff `AB = BA`, with no hypothesis that
+  `A` and `B` are diagonalizable. That is false: a nonzero nilpotent Jordan
+  block `N` commutes with itself and is not diagonalizable. `apm_b01j04`
+  (Main.lean:222) adds `apmMatrixDiagonalizable A → apmMatrixDiagonalizable B`,
+  the standard correct hypothesis. This is the permitted narrowing for a
+  false problem.md; it should be reported as a problem.md error, not counted as
+  a closure of the printed statement. Part (b) is faithful.
+- No smoothness-order objection: no `ContDiff` in any batch 23 statement.
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -439,4 +454,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–22.
+Batches 21–31 have grade files; spot-checks recorded here cover 00–23.
