@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "closer_note": "Compiled the exact x = 2u scaling reduction and proved global absolute integrability of the oscillatory kernel by scaling integrable_inv_one_add_sq and domination by |cos| <= 1. The shared positive-frequency Cauchy characteristic-function bridge remains open.",
   "imported_at": "2026-07-13T17:26:52.853875Z",

@@ -9,7 +9,7 @@
     "problem_tex": "apm/b93A01.tex"
   },
   "boundary": "Closed by frame f69 (campaign jit-all-open-v2, 2026-08-31): \"b93A01: update completed boundary note\". Banked verbatim from the f69 Solver terminal head 9fe22909136192a7eae2e49ad9ddd8566a5ff7ac on branch exp/countdown-f69-b93A01-solver; content identical to that head, no re-derivation. Frozen statement apm_b93a01 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

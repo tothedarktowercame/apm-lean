@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 2,
   "note": "Closed: finite CRT proves bijectivity; idempotent-generated principal ideals imply the custom zero-dimensional and reduced predicates; products of fields have coordinate-support idempotent generators.",
   "imported_at": "2026-07-13T17:26:54.124380Z"

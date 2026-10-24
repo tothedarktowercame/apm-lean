@@ -9,7 +9,7 @@
     "problem_tex": "apm/b01J03.tex"
   },
   "boundary": "Closed by frame f64 (campaign jit-all-open-v2, 2026-08-30): \"b01J03 complete self-normalizing Sylow proof\". Banked verbatim from the f64 Solver terminal head 62012effe48d2c61c08016d21ad1499d1ae570e1 on branch exp/countdown-f64-b01J03-solver; content identical to that head, no re-derivation. Frozen statement apm_b01j03 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

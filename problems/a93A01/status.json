@@ -24,7 +24,7 @@
     "has_informal_solution": true,
     "has_proof_outline": true
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "Fully proved. Both directions of the equivalence (uniform continuity on (0,1) iff difference quotient condition) are proven zero-sorry. Direction (b)=>(a) is a clean direct proof via delta=epsilon/N. Direction (a)=>(b) requires showing UC on (0,1) implies boundedness (since (0,1) is totally bounded), using TotallyBounded.image and isUniformEmbedding_subtype_val to transfer total boundedness to the subtype.",
   "key_lemmas": [
     "unifContOn01_imp: UnifContOn01 => UniformContinuousOn (bridge to Mathlib)",

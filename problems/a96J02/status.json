@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "Closed Steinhaus proof. Translation continuity in symmetric-difference measure follows from tendsto_measure_symmDiff_preimage_nhds_zero; intersection is nonexpansive in the MeasuredSets emetric, yielding continuity of the overlap measure and indicator convolution. Fubini gives a positive integral, and the open positive locus supplies an interval in A+B.",
   "checked_at": "2026-08-04T15:33:14Z",
   "checked_lean_state": {

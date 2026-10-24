@@ -9,7 +9,7 @@
     "problem_tex": "apm/b90A01.tex"
   },
   "boundary": "Closed by frame f67 (campaign jit-all-open-v2, 2026-08-31): \"prove alternating subgroup index bridge\". Banked verbatim from the f67 Solver terminal head 00fd8c879ed7c3865ad6c26b3765baa4ef772b98 on branch exp/countdown-f67-b90A01-solver; content identical to that head, no re-derivation. Frozen statement apm_b90a01 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "note": "The faithful Sylow action is now proved noncommutative and factored through the alternating group via the sign kernel, closing the first two conjuncts. General alternating-group simplicity and the exact order-120 Sylow enumeration remain.",
   "lean": {
     "main": "lean/Main.lean",

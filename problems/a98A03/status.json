@@ -10,7 +10,7 @@
     "problem_tex": "apm/a98A03.tex"
   },
   "boundary": "Closed by frame f48 (campaign jit-all-open-v2, 2026-08-28): \"a98A03 complete Cantor counterexample\". Banked verbatim from the f48 Solver terminal head d347177c0c525fdedcd6d9e04b24947f2432683d on branch exp/countdown-f48-a98A03-solver; content identical to that head, no re-derivation. Frozen statement apm_a98a03 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

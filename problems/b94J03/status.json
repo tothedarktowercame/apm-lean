@@ -10,7 +10,7 @@
     "problem_tex": "apm/b94J03.tex"
   },
   "boundary": "Closed by frame f75 (campaign jit-all-open-v2, 2026-09-01): \"b94J03 complete splitting field proof\". Banked verbatim from the f75 Solver terminal head 228eb5b28bac5f87b5880f1fb6e21cef5c7f0130 on branch exp/countdown-f75-b94J03-solver; content identical to that head, no re-derivation. Frozen statement apm_b94j03 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

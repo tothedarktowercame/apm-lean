@@ -27,7 +27,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "Textbook proof from the open mapping theorem supplied; no Lean material exists yet.",
   "imported_at": "2026-09-06"
 }

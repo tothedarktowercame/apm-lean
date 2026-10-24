@@ -10,7 +10,7 @@
     "problem_tex": "apm/a99J01.tex"
   },
   "boundary": "Closed by frame f52 (campaign jit-all-open-v2, 2026-08-28): \"prove a99J01 logarithmic integral bound\". Banked verbatim from the f52 Solver terminal head 3d6da7de5f84cf1420349331b2a32820b9936f0f on branch exp/countdown-f52-a99J01-solver; content identical to that head, no re-derivation. Frozen statement apm_a99j01 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

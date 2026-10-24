@@ -10,7 +10,7 @@
     "problem_tex": "apm/b01J01.tex"
   },
   "boundary": "Closed by frame f62 (campaign jit-all-open-v2, 2026-08-30): \"b01J01 prove constant Sylow trace fibers\". Banked verbatim from the f62 Solver terminal head 41338b0befbb0abd33a6590cf874de788907aa21 on branch exp/countdown-f62-b01J01-solver; content identical to that head, no re-derivation. Frozen statement apm_b01j01 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

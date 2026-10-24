@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.197032Z",
   "notes": "Partial Lean proof. Verified: antiderivative H'(u)=u/(1+u^3), antiderivative G'(x)=x^7/(1+x^12), G(0)=-pi*sqrt(3)/72, and all algebraic identities. Remaining: tendsto_G_atTop (limit as x->infty) and the main integral theorem.",
   "sorry_audit": {

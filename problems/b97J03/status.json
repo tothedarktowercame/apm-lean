@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "classification_detail": "The complete ambient factorization of X^6-2 into the six roots zeta^i alpha now compiles for every chosen root. Excluding the four non-antipodal roots from Q(alpha), and the general normalizer-index argument, remain.",
   "imported_at": "2026-07-13T17:26:54.127299Z",

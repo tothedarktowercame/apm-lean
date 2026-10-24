@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "boundary": "Metadata corrected 2026-08-26: the Lean on master has no sorry, but status.json still advertised this problem as open. banked on bank/f22-f25-20260823; the metadata recompute was never made. The stale status made the problem selectable by open-problem-queue, and the frame qualifier then refused it — stalling the regulator rather than skipping it.",
   "imported_at": "2026-07-13T17:26:54.575886Z",
   "obstructions": [

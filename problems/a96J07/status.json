@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "Complete: the two-pole contour integral is evaluated by partial fractions and Cauchy's formula; its normalized ML bound at poles a and 0 tends to zero and proves bounded entire functions constant.",
   "imported_at": "2026-07-13T17:26:52.696700Z",
   "checked_at": "2026-08-03T15:59:00Z",

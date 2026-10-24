@@ -21,7 +21,7 @@
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "checked_at": "2026-08-07T03:09:15Z",
   "checked_lean_state": {
     "exit_code": 0,

@@ -15,7 +15,7 @@
     }
   ],
   "boundary": "Closed by frame f74 (campaign jit-all-open-v2, 2026-09-01): \"complete invariant factor existence\". Banked verbatim from the f74 Solver terminal head 0a89a3dfbd631427785d9496d445824fab045059 on branch exp/countdown-f74-b94J01-solver; content identical to that head, no re-derivation. Frozen statement apm_b94j01 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

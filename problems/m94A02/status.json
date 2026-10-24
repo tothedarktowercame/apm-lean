@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "closer_note": "Hop 4 proves the missing imaginary-axis theorem locally and wires it into the complete skew-symmetric conjunct. The single remaining sorry is only the independent arbitrary ordered-spectrum normalization and Rayleigh bound for the first conjunct.",
   "imported_at": "2026-07-13T17:26:54.710925Z",

@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 4,
   "closer_note": "The remaining interfaces are now stated precisely: apm_m03J05_bridge_1 is the mixed Fredholm alternative, apm_m03J05_bridge_2 is Nemytskii energy differentiability, and apm_m03J05_bridge_3 is monotone nonlinear existence and uniqueness.",
   "imported_at": "2026-07-13T17:26:54.565716Z",

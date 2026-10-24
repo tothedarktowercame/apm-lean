@@ -24,7 +24,7 @@
     "has_informal_solution": true,
     "has_proof_outline": true
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "Part (1) FULLY PROVEN: a.e. limit of L²-bounded sequence is in L² unit ball, via Fatou's lemma (MeasureTheory.Lp.eLpNorm'_lim_le_liminf_eLpNorm'). Key technical: constructing IsBoundedUnder for liminf_le_of_le, and eLpNorm_eq_eLpNorm' to convert between primed/unprimed norms. Part (2) has 1 sorry: weak convergence via density + DCT.",
   "imported_at": "2026-07-26T22:00:00Z",
   "sorry_audit": {

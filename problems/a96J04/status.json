@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "Complete: ac_monotone_maps_null_to_null is proved by decomposing a small open cover into rational-indexed connected components, identifying them as disjoint open intervals, and applying the finite absolute-continuity hypothesis to finite component families.",
   "imported_at": "2026-08-03T08:00:00Z",
   "checked_at": "2026-08-03T15:35:51Z",

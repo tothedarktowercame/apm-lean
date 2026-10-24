@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "classification_detail": "Sorry-free proof: the supremum conductor is identified with a concrete elementwise ideal; prime uniqueness and the final map/intersection/conductor equalities follow from singleton-adjoin contraction.",
   "imported_at": "2026-07-13T17:26:54.147607Z"

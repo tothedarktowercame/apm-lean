@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 4,
   "classification_detail": "Three precise handoff lemmas now isolate the remaining work: irreducibility by Eisenstein, six-root exhaustion plus Polynomial.IsSplittingField packaging, and the S3 automorphism/intermediate-field classification. The frozen main theorem remains unchanged.",
   "imported_at": "2026-07-13T17:26:54.106107Z"

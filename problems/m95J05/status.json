@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_progress": "Hop 2 closes the theorem. The frozen unscoped `ContDiff ℝ ⊤` hypothesis is analytic regularity (`ω`), so analytic uniqueness forces every compactly supported admitted test function to vanish; the inhomogeneous solution and ODE then reduce to zero. Hop 1's fundamental-kernel proof remains unchanged.",
   "imported_at": "2026-07-13T17:26:55.194707Z",
   "obstructions": [

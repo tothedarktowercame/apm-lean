@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "Kernel continuity, one-sided derivatives, the Wronskian jump, and compact-support product integrability compile. The piecewise double integration-by-parts assembly remains.",
   "imported_at": "2026-07-13T17:26:56.220641Z"

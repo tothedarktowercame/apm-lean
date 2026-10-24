@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "closer_note": "Recovered the historical symmetric-limit proof and updated the absolute-integrability argument for the current Mathlib API.",
   "imported_at": "2026-07-13T17:26:52.571765Z",

@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "note": "Additive existence/uniqueness and the easy eigenspace inclusion are compiled. Both decomposition components are now proved to preserve every generalized eigenspace, closing the MapsTo bookkeeping for the restriction route. Restricted uniqueness, charpoly transport, and multiplicative decomposition remain.",
   "imported_at": "2026-07-13T17:26:54.133307Z"

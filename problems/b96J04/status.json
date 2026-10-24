@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "note": "After an IsCyclotomicExtension {16} Q K instance, the rational cyclotomic Galois equivalence and automorphism-group cardinality eight are now compiled. Constructing that instance from the arbitrary splitting field, decomposing the unit group, finite-field Frobenius transport, and intermediate-field enumeration remain.",
   "imported_at": "2026-07-13T17:26:54.094504Z"

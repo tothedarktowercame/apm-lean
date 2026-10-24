@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 4,
   "notes": "Fixed-point existence/uniqueness, global Lipschitzness, constant equilibrium, half-line uniqueness, and vector-field signs compile. The remaining work is now stated precisely by global-solution and trapping/monotonicity/convergence bridge theorems; their proofs intentionally remain sorry."
 }

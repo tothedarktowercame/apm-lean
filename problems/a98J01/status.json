@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "The proof uses inner regularity in the Polish refinement, transports compactness through the continuous identity to the ordinary topology, and uses the localized compact-to-Hausdorff homeomorphism on the compact subtype to transport continuity of f back to the ordinary topology.",
   "imported_at": "2026-07-13T17:26:53.000594Z"
 }

@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "note": "Parts (b), (c), and (d) are closed. Exact map/comap transport between fields inside E and ambient fields below E is now compiled. Part (a) still needs Galois and automorphism-quotient transport for the mapped commutator fixed field and its universal property.",
   "imported_at": "2026-07-13T17:26:54.143315Z"

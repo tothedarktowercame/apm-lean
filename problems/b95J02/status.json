@@ -9,7 +9,7 @@
     "problem_tex": "apm/b95J02.tex"
   },
   "boundary": "Closed by frame f76 (campaign jit-all-open-v2, 2026-09-01): \"prove cyclic operator criterion\". Banked verbatim from the f76 Solver terminal head d96bebe98be04ba9941638c7f59a657d654e831b on branch exp/countdown-f76-b95J02-solver; content identical to that head, no re-derivation. Frozen statement apm_b95j02 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

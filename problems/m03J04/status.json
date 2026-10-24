@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "One sorry remains. The closure-of-range subset of the custom annihilator is now proved; the reverse density inclusion still requires Riesz/orthogonal transport, followed by the inf-sup equivalence construction.",
   "imported_at": "2026-07-13T17:26:54.556139Z",

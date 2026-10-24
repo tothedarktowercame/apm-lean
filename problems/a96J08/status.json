@@ -10,7 +10,7 @@
     "problem_tex": "apm/a96J08.tex"
   },
   "boundary": "Closed by frame f46 (campaign jit-all-open-v2, 2026-08-27): \"complete principal value cotangent proof\". Banked verbatim from the f46 Solver terminal head 80361e369e2b17e265451128f63196d4944bfc83 on branch exp/countdown-f46-a96J08-solver; content identical to that head, no re-derivation. Frozen statement apm_a96j08 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

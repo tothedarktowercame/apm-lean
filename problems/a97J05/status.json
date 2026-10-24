@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.822715Z",
   "boundary": "Closed by frame f40 (campaign jit-all-open-nontopology-v1, 2026-08-26): \"a97J05: prove coefficient convergence\". Banked verbatim from the f40 Solver terminal head 143e17dd25b60d09f1546f669d097f462490d073 on branch exp/countdown-f40-a97J05-solver; content identical to that head, no re-derivation. Frozen statement apm_a97j05 unchanged from the pre-solve base.",
   "sorry_audit": {

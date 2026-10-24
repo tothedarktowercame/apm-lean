@@ -25,7 +25,7 @@
     "has_proof_outline": true,
     "has_status": true
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 2,
   "closer_note": "Ported the historical inside/outside evaluations and proved boundary nonintegrability by norm-equivalence with the bare Cauchy kernel.",
   "imported_at": "2026-07-13T17:26:52.228889Z"

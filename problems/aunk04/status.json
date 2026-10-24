@@ -32,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "Hop 4 states the two remaining interfaces precisely: the mixed real/natural-power Cauchy bound forces high derivatives to vanish, and analytic uniqueness reconstructs the entire function as a finite polynomial.",
   "closer_hop": 4,
   "closer_note": "apm_aunk04_bridge_1 states high-derivative vanishing from the growth bound; apm_aunk04_bridge_2 states global finite Taylor reconstruction.",

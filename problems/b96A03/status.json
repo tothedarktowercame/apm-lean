@@ -9,7 +9,7 @@
     "problem_tex": "apm/b96A03.tex"
   },
   "boundary": "Closed by frame f79 (campaign jit-all-open-v2, 2026-09-02): \"b96A03: complete orbit product descent proof\". Banked verbatim from the f79 Solver terminal head e61d4231159a8af2a83da21c9fd38f1a3090ce5d on branch exp/countdown-f79-b96A03-solver; content identical to that head, no re-derivation. Frozen statement apm_b96a03 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,

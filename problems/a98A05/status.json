@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "classification_detail": "The logarithmic terms are combined into one log of a rational function tending to 1, the arctangent limit is evaluated at infinity, and Mathlib's nonnegative-derivative improper FTC theorem completes the exact integral evaluation.",
   "imported_at": "2026-07-13T17:26:52.980576Z"
 }

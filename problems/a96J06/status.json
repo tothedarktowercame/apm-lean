@@ -31,7 +31,7 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "closer_note": "Closed by rescaling the negated disk bound, applying Mathlib's closed-ball affine equality case of Schwarz's lemma, extending equality from an infinite subset to the polynomial, and contradicting the nonzero top coefficient.",
   "imported_at": "2026-05-01T19:38:16.951065Z"

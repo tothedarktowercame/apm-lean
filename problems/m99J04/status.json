@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "Compact/self-adjoint conjugation, eigenvector transport, weighted inner products, and both directions of the A†A/orthonormality equivalence compile. Only the spectral eigenbasis constructor remains.",
   "imported_at": "2026-07-13T17:26:56.267775Z"

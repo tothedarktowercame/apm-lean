@@ -10,7 +10,7 @@
     "module_root": "ApmCanaries.Frames.A97A01.Apm_v2_a97A01_1775003392734"
   },
   "boundary": "Closed by frame f47 (campaign jit-all-open-v2, 2026-08-27): \"a97A01: prove dyadic step density and weak convergence\". Banked verbatim from the f47 Solver terminal head 443f3ce6983ca3bf1489e3648373a3290191a6cf on branch exp/countdown-f47-a97A01-solver; content identical to that head, no re-derivation. Frozen statement apm_a97a01 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",

@@ -10,7 +10,7 @@
     "module_root": "ApmCanaries.Frames.B93J01.Apm_v2_b93J01_1775006040768"
   },
   "boundary": "Closed by frame f70 (campaign jit-all-open-v2, 2026-09-01): \"Complete alternating simplicity and final theorem\". Banked verbatim from the f70 Solver terminal head 33756eb1e48fe1e7b8c3e4d2a79ea6312826e45b on branch exp/countdown-f70-b93J01-solver; content identical to that head, no re-derivation. Frozen statement apm_b93j01 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",

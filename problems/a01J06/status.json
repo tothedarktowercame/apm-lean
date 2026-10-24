@@ -31,7 +31,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "imported_at": "2026-05-01T19:52:19.168029Z",
   "boundary": "Closed independently on both Student attempt 2 and attempt 3 (campaign jit-all-open-nontopology-v1, 2026-08-24). Banked from refs/apm/preserved-student-attempts/f30/a01J06/58658226, since a retirement-time workspace reset left the exp/countdown-f30-a01J06-student branch tip stale at 1 sorry after the fact. Frozen statement apm_a01j06 unchanged from the pre-solve base.",
   "sorry_audit": {

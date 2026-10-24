@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:52.880727Z",
   "sorry_audit": {
     "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",

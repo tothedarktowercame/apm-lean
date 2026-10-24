@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "closer_hop": 4,
   "closer_note": "The missing uniform ContinuousMap-norm remainder is now stated precisely as apm_m93A04_bridge_hasFDerivAt, a reusable parameterized Nemytskii-integral differentiation theorem. Its proof intentionally remains sorry.",
   "imported_at": "2026-07-13T17:26:54.586091Z",

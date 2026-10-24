@@ -9,7 +9,7 @@
     "problem_tex": "apm/b00J01.tex"
   },
   "boundary": "Closed by frame f59 (campaign jit-all-open-v2, 2026-08-30): \"prove rational S3 intermediate field classification\". Banked verbatim from the f59 Solver terminal head 96183fe48c76c9edc71f0e3e6855126a43be7fdd on branch exp/countdown-f59-b00J01-solver; content identical to that head, no re-derivation. Frozen statement apm_b00j01 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "note": "Additionally proved that both the arbitrary finite-field splitting-field degree and its automorphism-group cardinality are divisible by three. The exact upper bound/Frobenius transport and real/rational components remain.",
   "lean": {
     "main": "lean/Main.lean",

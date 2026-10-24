@@ -10,7 +10,7 @@
     "module_root": "ApmCanaries.Frames.B96J03.Apm_v2_b96J03_1775006849349"
   },
   "boundary": "Closed by frame f81 (campaign jit-all-open-v2, 2026-09-02): \"complete generation proof and remove extra axioms\". Banked verbatim from the f81 Solver terminal head e3010220e22cc64eccc290acb6983d3f442a765f on branch exp/countdown-f81-b96J03-solver; content identical to that head, no re-derivation. Frozen statement apm_b96j03 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": "lean/Scratch.lean",

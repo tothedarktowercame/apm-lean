@@ -22,7 +22,7 @@
     "problem_tex": "apm/a99J03.tex"
   },
   "boundary": "Closed by frame f53 (campaign jit-all-open-v2, 2026-08-29): \"a99J03 prove smoothness by higher kernels\". Banked verbatim from the f53 Solver terminal head 01b255b328d212fd753d90553e09d994503ae2ab on branch exp/countdown-f53-a99J03-solver; content identical to that head, no re-derivation. Frozen statement apm_a99j03 unchanged from the pre-solve base.",
-  "classification": "closed-unregistered",
+  "classification": "complete",
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
