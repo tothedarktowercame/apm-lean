@@ -421,7 +421,11 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
     [PathConnectedSpace U] [PathConnectedSpace V]
     (w : (U ∩ V : Set X)) :
     PathConnectedSpace X := by
-  sorry
+  rw [pathConnectedSpace_iff_univ, ← hcov]
+  exact
+    (isPathConnected_iff_pathConnectedSpace.mpr (inferInstance : PathConnectedSpace U)).union
+      (isPathConnected_iff_pathConnectedSpace.mpr (inferInstance : PathConnectedSpace V))
+      ⟨w.1, w.2.1, w.2.2⟩
 
 /-- The van Kampen equivalence for the concrete gluing, with the two vertex
 groups read off the torus through the cover's homotopy equivalences. -/
