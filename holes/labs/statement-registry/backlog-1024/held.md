@@ -42,3 +42,27 @@ Nine faithful rows admitted. Held m97A05 (narrower) checked: the theorem
 (Main.lean:100-105) gives T, ∂x T = ∂y T and the wave equation but nothing for
 part (b), the Fourier transform. Faithful check, m99A04: unique continuous
 extension from a dense set (19-25), matches.
+
+## Batch 05 spot-checks (all grades upheld)
+
+Batch 05 was admitted in the earlier sweep (seven faithful rows registered);
+these checks came after its late reply. Two of the three held rows narrow a
+source claim that is false, so they belong on the false-problem.md list, not
+the ordinary narrower list.
+
+- m94J02 (narrower): lines 1107-1110 prove `‖fg‖ ≤ (5/4)‖f‖‖g‖`; part (c)
+  asks for constant 1. The source is false: f = g = 1 + z gives ‖f‖ = 3 and
+  ‖f²‖ = 1 + 2·2 + 5 = 10 > 9. The file says so (lines 8-10), and 5/4 is the
+  sharp constant: max over k, m of ((k+m)²+1)/((k²+1)(m²+1)) is 5/4, at
+  k = m = 1. Held; false source, repaired.
+- m94J05 (narrower, correction 8cf4ec3ee): uniqueness only in a sup-norm
+  ball. The file (lines 8-10) says unrestricted uniqueness is false at zero
+  forcing; a negative solution of (t²x')' = x² with x(1) = x(2) = 0 exists
+  beside x = 0 (superlinear Lane-Emden type). Held; false source, repaired.
+- m95A04 (hypothesis-carries-core): `regular`/`hregular`, `Dtest`/`hDtest`,
+  `Ddist`/`hDdist` (lines 645-654) are parameters, so parts (a) and (b), the
+  embedding and the definition of the derivative, are assumed rather than
+  constructed. Upheld.
+- m94A04 (faithful): `IsFrechetDerivative` (lines 109-122) is a bounded
+  L⁸→L² linear map with the o(‖h‖₈) remainder in L², and the theorem
+  (364-372) gives a derivative at every f. Upheld.
