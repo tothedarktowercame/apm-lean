@@ -319,3 +319,22 @@ the four is on the false-source list.
   does not give AE-strong measurability. Held.
 - No smoothness-order objection in this batch: no `ContDiff` appears in any
   batch 15 statement.
+
+## Batch 16 spot-check (all grades upheld)
+
+The nine faithful rows were already in `STATEMENTS.json` when
+`admit-batch.py 16` ran, so it admitted nothing new and holds one row. That
+row narrows a false source.
+
+- a95A06 (narrower): two departures from problem.md. (1) `lacunarySeries`
+  (Main.lean:53-54) sums from n = 0, so it is the source's f plus z (0! = 1! = 1);
+  the properties carry over, but the declarations are about a different
+  function. That part is an unforced gap. (2) `lacunarySeries_natural_boundary`
+  (lines 403-407) excludes extensions only on connected U (repair 83720e197).
+  Here the source is false as written: U = Δ ∪ a disjoint open disc properly
+  contains Δ and carries an analytic F agreeing with f on Δ, and the file
+  proves exactly this (`lacunarySeries_has_disconnected_extension`, lines
+  177-220). Held; on the false-source list for (b). The n = 0 offset still
+  needs repairing to n = 1 before admission.
+- No smoothness-order objection in this batch: no `ContDiff` appears in any
+  batch 16 statement (the one in a95A06 Main.lean:296 is inside a proof).
