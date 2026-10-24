@@ -133,7 +133,172 @@ theorem standardCover_pairingData_aux_edgeCount
     simpa using Nat.mul_le_mul_left n hg
   omega
 
-/-- **Leaf (lifted cell structure).**  Lift the standard `4g`-gon through the
+theorem standardCover_pairingData_aux_lift_aux_fiberEquiv
+    (n : ℕ) (hn : 1 ≤ n) (E B : Type*) (p : E → B)
+    (hsheets : ∀ b, Nat.card {e : E // p e = b} = n) (b : B) :
+    Nonempty ({e : E // p e = b} ≃ Fin n) := by
+  let F := {e : E // p e = b}
+  have hcard : Nat.card F = n := hsheets b
+  have hne : Nat.card F ≠ 0 := by omega
+  letI : Finite F := Nat.finite_of_card_ne_zero hne
+  letI : Fintype F := Fintype.ofFinite F
+  refine ⟨Fintype.equivFin F |>.trans (finCongr ?_)⟩
+  simpa [Nat.card_eq_fintype_card] using hcard
+
+/-! Split of `_aux_lift` (claude-14, 2026-10-24, after the lemma-2 PARTIAL
+that banked `_aux_fiberEquiv`).  Lift the base disk once through each point
+over its centre (`_aux_diskLift`), read off which lifted face meets which
+along each side (`_aux_sidePairing`), build the complex from that
+(`_aux_complex`), and check the three properties that are not by
+construction: `_aux_homeomorph`, `_aux_dualConnected`, `_aux_vertexCount`. -/
+
+/-- The centre of the disk. -/
+def standardCover_pairingData_aux_lift_aux_center : Disk :=
+  ⟨0, by simp⟩
+
+/-- The side pairing of `SurfaceRel true g` on the `4g`-gon:
+`4j ↔ 4j + 2` and `4j + 1 ↔ 4j + 3`, with the parameter reversed. -/
+def standardCover_pairingData_aux_lift_aux_basePair (g : ℕ) (k : Fin (4 * g)) :
+    Fin (4 * g) :=
+  ⟨if k.1 % 4 < 2 then k.1 + 2 else k.1 - 2, by have := k.2; split <;> omega⟩
+
+theorem standardCover_pairingData_aux_lift_aux_basePair_basePair (g : ℕ)
+    (k : Fin (4 * g)) :
+    standardCover_pairingData_aux_lift_aux_basePair g
+      (standardCover_pairingData_aux_lift_aux_basePair g k) = k := by
+  ext; simp only [standardCover_pairingData_aux_lift_aux_basePair]
+  split <;> split <;> omega
+
+theorem standardCover_pairingData_aux_lift_aux_basePair_ne (g : ℕ)
+    (k : Fin (4 * g)) :
+    standardCover_pairingData_aux_lift_aux_basePair g k ≠ k := by
+  intro h; have := congrArg Fin.val h
+  simp only [standardCover_pairingData_aux_lift_aux_basePair] at this
+  split at this <;> omega
+
+/-- Sides `4j` and `4j + 1` carry sign `true`, their partners `false`. -/
+def standardCover_pairingData_aux_lift_aux_baseSign (g : ℕ) (k : Fin (4 * g)) :
+    Bool :=
+  decide (k.1 % 4 < 2)
+
+theorem standardCover_pairingData_aux_lift_aux_baseSign_basePair (g : ℕ)
+    (k : Fin (4 * g)) :
+    standardCover_pairingData_aux_lift_aux_baseSign g
+        (standardCover_pairingData_aux_lift_aux_basePair g k) ≠
+      standardCover_pairingData_aux_lift_aux_baseSign g k := by
+  have := k.2
+  simp only [standardCover_pairingData_aux_lift_aux_baseSign,
+    standardCover_pairingData_aux_lift_aux_basePair, ne_eq, decide_eq_decide]
+  split <;> omega
+
+/-- Leaf: the closed disk is simply connected and locally path connected, so
+the quotient map lifts uniquely through the cover from any point over the
+centre (`IsCoveringMap.existsUnique_continuousMap_lifts`). -/
+theorem standardCover_pairingData_aux_lift_aux_diskLift (g : ℕ)
+    (E : Type*) [TopologicalSpace E] (p : E → Surface true g) (hp : IsCoveringMap p)
+    (e : E)
+    (he : p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center) :
+    ∃! L : C(Disk, E), p ∘ L = surfaceQuotient true g ∧
+      L standardCover_pairingData_aux_lift_aux_center = e := by
+  sorry
+
+/-- Leaf: with one lift `L i` of the disk through each point over the centre,
+side `k` of face `i` is glued to side `basePair k` of exactly one face
+`σ i k`, with the parameter reversed.  (Both sides lift the same path in the
+surface, so they agree once they agree at one point; the face is determined
+by uniqueness of lifts.) -/
+theorem standardCover_pairingData_aux_lift_aux_sidePairing
+    (g n : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p)
+    (hsheets : ∀ b, Nat.card {e : E // p e = b} = n)
+    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
+    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
+      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e) :
+    ∃ σ : Fin n → Fin (4 * g) → Fin n,
+      (∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i) ∧
+      ∀ i (k : Fin (4 * g)) t, L i (edgePoint (4 * g) k t) =
+        L (σ i k) (edgePoint (4 * g)
+          (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t)) := by
+  sorry
+
+/-- The lifted complex: `n` copies of the `4g`-gon, side `⟨i, k⟩` glued to
+side `⟨σ i k, basePair k⟩`. -/
+def standardCover_pairingData_aux_lift_aux_complex (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i) :
+    PolygonComplex where
+  faceCount := n
+  sides _ := 4 * g
+  sides_pos _ := by omega
+  pair := Function.Involutive.toPerm
+    (fun s : (Σ _ : Fin n, Fin (4 * g)) =>
+      (⟨σ s.1 s.2, standardCover_pairingData_aux_lift_aux_basePair g s.2⟩ :
+        Σ _ : Fin n, Fin (4 * g)))
+    (by
+      rintro ⟨i, k⟩
+      simp only [hσ, standardCover_pairingData_aux_lift_aux_basePair_basePair])
+  pair_pair s := by
+    rcases s with ⟨i, k⟩
+    simp [hσ, standardCover_pairingData_aux_lift_aux_basePair_basePair]
+  pair_ne s := by
+    rcases s with ⟨i, k⟩
+    intro h
+    exact standardCover_pairingData_aux_lift_aux_basePair_ne g k
+      (congrArg Sigma.snd h |> fun h' => by simpa using h')
+  sign s := standardCover_pairingData_aux_lift_aux_baseSign g s.2
+
+/-- Leaf: the lifts assemble to a homeomorphism.  The map
+`⟨i, x⟩ ↦ L i x` from the disjoint union of the disks is surjective (every
+point of `E` is on some lifted disk), identifies exactly the points that
+`Rel` generates (by `hside` and uniqueness of lifts), and is a quotient map. -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph
+    (g n : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p)
+    (hsheets : ∀ b, Nat.card {e : E // p e = b} = n)
+    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
+    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
+      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (hside : ∀ i (k : Fin (4 * g)) t, L i (edgePoint (4 * g) k t) =
+      L (σ i k) (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t))) :
+    Nonempty (E ≃ₜ (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Space) := by
+  sorry
+
+/-- Leaf: a connected glued space has connected face-dual graph.  The faces
+in one dual class form a union of glued disks that is closed and open in
+`C.Space`, since every side of such a face is glued to a face of the same
+class. -/
+theorem standardCover_pairingData_aux_lift_aux_dualConnected (C : PolygonComplex)
+    [ConnectedSpace C.Space] : C.DualConnected := by
+  sorry
+
+/-- Leaf: the corner classes of the lifted complex correspond to the `n`
+points over the image of the corners (all corners of the `4g`-gon are one
+point of `Surface true g`).  Corner `⟨i, k⟩` goes to
+`L i (edgePoint (4g) k 0)`; `CornerRel` generates exactly the identifications
+of this map. -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount
+    (g n : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p)
+    (hsheets : ∀ b, Nat.card {e : E // p e = b} = n)
+    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
+    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
+      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (hside : ∀ i (k : Fin (4 * g)) t, L i (edgePoint (4 * g) k t) =
+      L (σ i k) (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t))) :
+    (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).vertexCount = n := by
+  sorry
+
+/-- **Lifted cell structure**, assembled from the `_aux_lift_aux_*` leaves
+above.  Lift the standard `4g`-gon through the
 cover.  The interior of the base disk is simply connected, so it has `n`
 disjoint lifts; their closures are the `n` faces, each a `4g`-gon.  The faces
 inherit the base pairing, hence orientability.  Path-connectedness of `E`
@@ -148,7 +313,34 @@ theorem standardCover_pairingData_aux_lift
     ∃ C : PolygonComplex, C.faceCount = n ∧ (∀ f, C.sides f = 4 * g) ∧
       C.IsOrientable ∧ C.DualConnected ∧ C.vertexCount = n ∧
       Nonempty (E ≃ₜ C.Space) := by
-  sorry
+  set c := standardCover_pairingData_aux_lift_aux_center
+  set b := surfaceQuotient true g c
+  obtain ⟨eqv⟩ := standardCover_pairingData_aux_lift_aux_fiberEquiv n hn E _ p hsheets b
+  have hlift := fun i : Fin n =>
+    standardCover_pairingData_aux_lift_aux_diskLift g E p hp (eqv.symm i).1 (eqv.symm i).2
+  choose L hL using hlift
+  have hfib : ∀ e, p e = b → ∃! i, L i c = e := by
+    intro e he
+    refine ⟨eqv ⟨e, he⟩, ?_, ?_⟩
+    · exact ((hL _).1.2).trans (by simp)
+    · intro j hj
+      rw [← eqv.apply_symm_apply j]
+      congr 1; ext; exact ((hL j).1.2).symm.trans hj
+  have hLp : ∀ i, p ∘ L i = surfaceQuotient true g := fun i => (hL i).1.1
+  obtain ⟨σ, hσ, hside⟩ :=
+    standardCover_pairingData_aux_lift_aux_sidePairing g n hg E p hp hsheets L hLp hfib
+  obtain ⟨h⟩ := standardCover_pairingData_aux_lift_aux_homeomorph g n hg E p hp hsheets
+    L hLp hfib σ hσ hside
+  refine ⟨standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ, rfl,
+    fun _ => rfl, ?_, ?_, ?_, ⟨h⟩⟩
+  · intro s
+    exact standardCover_pairingData_aux_lift_aux_baseSign_basePair g s.2
+  · haveI : ConnectedSpace
+        (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Space :=
+      h.surjective.connectedSpace h.continuous
+    exact standardCover_pairingData_aux_lift_aux_dualConnected _
+  · exact standardCover_pairingData_aux_lift_aux_vertexCount g n hg E p hp hsheets
+      L hLp hfib σ hσ hside
 
 /-- **Leaf (one dual-tree glue).**  With at least two faces and a connected
 dual graph, some side pairs two distinct faces.  Gluing those two disks along
