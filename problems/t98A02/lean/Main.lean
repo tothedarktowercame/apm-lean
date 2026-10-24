@@ -4,7 +4,48 @@ import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.CollaredConnectedSumHomology
 
 /-!
-# Blueprint for APM t98A02
+# APM t98A02 — homology of a connected sum of four-manifolds
+
+The connected sum is the actual quotient described in the source: remove the
+open interiors of two embedded closed four-balls and identify corresponding
+points of their boundary three-spheres.  Its homology groups are Mathlib's
+integral singular homology modules.
+
+## Statement repairs
+
+The construction and the supplied top-homology fact require `X₁` and `X₂` to
+be closed.  The source initially says only “connected oriented 4-manifolds,”
+but its intended solution uses closedness.  We therefore include compactness,
+along with the supplied integral top-homology hypotheses.
+
+## The source's simplex assumption
+
+The source adds: “You may assume that `φᵢ(D⁴)` is a 4-simplex in the
+triangulation of `Xᵢ`.”  Mathlib has no triangulated manifolds, so the
+sentence is not encoded literally.  Instead the statement takes, as
+hypotheses, the two consequences of it that the intended solution uses
+(Joe, 2026-10-11: restore the dropped sentence in the Lean framing):
+
+* *Collar.*  Each `φᵢ` extends to a topological embedding `ψᵢ` of the closed
+  ball of radius `2`, so the boundary sphere `φᵢ(∂D⁴)` has an exterior collar
+  in `Xᵢ`.  This is what makes the open-cover Mayer–Vietoris computation of
+  the connected sum available.  It follows from the source's assumption:
+  triangulations of 4-manifolds are combinatorial (vertex links are simply
+  connected 3-manifolds, hence `S³`), and a top simplex of a combinatorial
+  triangulation is bicollared by its PL regular neighbourhood.  Every
+  parametrisation `φᵢ` of the simplex then extends radially along the outer
+  collar.
+* *Dimension.*  `Hₖ(Xᵢ) = 0` for `k ≥ 5`.  This holds for every closed
+  4-manifold (Hatcher, Prop. 3.29); with the source's triangulation it is
+  immediate, since the simplicial chain complex vanishes above degree four.
+  Mathlib cannot yet derive it, so it is supplied like the source's
+  `H₄ ≅ ℤ` fact, and it excludes no case.
+
+Both hypotheses hold whenever the source's assumption does, so the theorem
+remains at least as strong as the source asks.  It no longer covers wild
+(uncollared) balls, which the source never asked about.
+
+## Proof route
 
 The missing input is a connected-sum theorem for the concrete collared quotient
 and Mathlib's integral singular-homology functor.  It is isolated below as one
@@ -17,7 +58,7 @@ open scoped Manifold
 noncomputable section
 
 abbrev T98A02E4 := EuclideanSpace ℝ (Fin 4)
-abbrev T98A02I4 := modelWithCornersSelf ℝ T98A02E4
+abbrev T98A02I4 := 𝓘(ℝ, T98A02E4)
 abbrev T98A02Disk := Metric.closedBall (0 : T98A02E4) 1
 abbrev T98A02Sphere := Metric.sphere (0 : T98A02E4) 1
 
