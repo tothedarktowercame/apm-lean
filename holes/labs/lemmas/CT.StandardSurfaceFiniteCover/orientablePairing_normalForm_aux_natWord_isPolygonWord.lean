@@ -851,9 +851,65 @@ def orientablePairing_normalForm_aux_WordOneVertex {L : Type*}
 /-- **Leaf.**  Each orbit of `P.pair` has exactly the two arcs `i` and
 `P.pair i` (`PairingData.orbit_eq_iff`), and `P.edgeCount > 0`. -/
 -- BEGIN SEAT AREA
+theorem orientablePairing_normalForm_aux_natWord_isPolygonWord_aux_count_ofFn
+    {n : ℕ} {A : Type*} [DecidableEq A] (f : Fin n → A) (a : A) :
+    (List.ofFn f).count a = (Finset.univ.filter fun i => f i = a).card := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [List.ofFn_succ]
+      simp only [List.count_cons]
+      rw [Finset.card_eq_sum_ones, Finset.sum_filter, Fin.sum_univ_succ]
+      simp [ih]
+      omega
+
 theorem orientablePairing_normalForm_aux_natWord_isPolygonWord (P : PairingData) :
     PolygonMoves.IsPolygonWord (orientablePairing_normalForm_aux_natWord P) := by
-  sorry
+  let e := orientablePairing_normalForm_aux_enc P
+  let labels := (orientablePairing_normalForm_aux_natWord P).map Prod.fst
+  have hcount : ∀ a ∈ labels, labels.count a = 2 := by
+    intro a ha
+    have ha' : a ∈ List.ofFn (fun i : Fin P.edgeCount => e (P.orbit i)) := by
+      simpa [labels, orientablePairing_normalForm_aux_natWord,
+        orientablePairing_normalForm_aux_wordOf, e] using ha
+    obtain ⟨i, hi⟩ := (List.mem_ofFn.mp ha')
+    rw [← hi]
+    have hlabels : labels =
+        List.ofFn (fun j : Fin P.edgeCount => e (P.orbit j)) := by
+      simp only [labels, orientablePairing_normalForm_aux_natWord,
+        orientablePairing_normalForm_aux_wordOf, List.map_map, List.map_ofFn]
+      congr 1
+    rw [hlabels]
+    rw [orientablePairing_normalForm_aux_natWord_isPolygonWord_aux_count_ofFn]
+    have hfilt : (Finset.univ.filter fun j : Fin P.edgeCount =>
+        e (P.orbit j) = e (P.orbit i)) = {i, P.pair i} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+        Finset.mem_insert, Finset.mem_singleton]
+      rw [show e (P.orbit j) = e (P.orbit i) ↔ P.orbit j = P.orbit i from
+        (orientablePairing_normalForm_aux_enc_injective P).eq_iff]
+      rw [P.orbit_eq_iff]
+      constructor
+      · rintro (rfl | h)
+        · exact Or.inl rfl
+        · right
+          rw [h, P.pair_pair]
+      · rintro (rfl | rfl)
+        · exact Or.inl rfl
+        · exact Or.inr (P.pair_pair i).symm
+    rw [hfilt]
+    simp [Ne.symm (P.pair_ne i)]
+  unfold PolygonMoves.IsPolygonWord
+  refine ⟨?_, ?_, hcount⟩
+  · apply List.ne_nil_of_length_pos
+    simpa [orientablePairing_normalForm_aux_natWord] using P.edgeCount_pos
+  · have hlen : labels.length =
+        (orientablePairing_normalForm_aux_natWord P).length := by simp [labels]
+    rw [← hlen, ← List.sum_toFinset_count_eq_length labels]
+    apply Finset.even_sum
+    intro a ha
+    rw [hcount a (List.mem_toFinset.mp ha)]
+    exact ⟨1, by omega⟩
 -- END SEAT AREA
 
 /-- **Leaf.**  From `IsOrientablePairing`: the two arcs with one label are
