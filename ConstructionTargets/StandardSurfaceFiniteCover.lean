@@ -200,7 +200,17 @@ theorem standardCover_pairingData_aux_lift_aux_diskLift (g : ℕ)
     (he : p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center) :
     ∃! L : C(Disk, E), p ∘ L = surfaceQuotient true g ∧
       L standardCover_pairingData_aux_lift_aux_center = e := by
-  sorry
+  letI : ContractibleSpace Disk :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : LocPathConnectedSpace Disk :=
+    (convex_closedBall (0 : ℂ) 1).locPathConnectedSpace
+  let q : C(Disk, Surface true g) :=
+    ⟨surfaceQuotient true g, continuous_surfaceQuotient true g⟩
+  obtain ⟨L, hL, huniq⟩ := hp.existsUnique_continuousMap_lifts q
+    standardCover_pairingData_aux_lift_aux_center e he
+  refine ⟨L, ⟨hL.2, hL.1⟩, ?_⟩
+  intro L' hL'
+  exact huniq L' ⟨hL'.2, hL'.1⟩
 
 /-- Leaf: with one lift `L i` of the disk through each point over the centre,
 side `k` of face `i` is glued to side `basePair k` of exactly one face
