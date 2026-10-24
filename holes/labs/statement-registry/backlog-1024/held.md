@@ -248,3 +248,19 @@ changes nothing and prints a92J03 as HELD.
   condition verbatim. Lebesgue measure on ℝ is an instance. Upheld.
 - No smoothness-order objection in this batch: a92J07 uses `ContDiff ℝ 1`,
   which is C¹ as the problem asks, not a bare ⊤.
+
+## Batch 13 spot-checks (all grades upheld)
+
+Batch 13 was admitted during the earlier sweep; rerunning `admit-batch.py 13`
+changes nothing and holds no row.
+
+- a93J04 (stronger, admitted): `tendsto_eLpNorm_atTop` (Main.lean:67-73)
+  works over any measure with `μ univ < ⊤`, assuming AE-strong measurability
+  and `eLpNorm f ⊤ μ ≠ ⊤`. A bounded Lebesgue-measurable f on [0,1] satisfies
+  both, so the problem's claim is an instance. The `⊤` is the L^∞ exponent,
+  not a smoothness order. Upheld.
+- a93J02 (faithful): problem.md asks for the identity to be justified via
+  dominated convergence; the grade treats that as a proof-method hint, and the
+  statement is the series identity itself. Upheld.
+- No smoothness-order objection in this batch: no `ContDiff` appears in any
+  batch 13 statement.
