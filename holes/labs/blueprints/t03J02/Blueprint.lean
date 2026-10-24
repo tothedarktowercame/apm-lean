@@ -250,6 +250,103 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_torus
           ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt).trans
         (MulEquiv.prodMultiplicative ℤ ℤ).symm))⟩
 
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_groupoid
+    {A B : Type*} [TopologicalSpace A] [TopologicalSpace B]
+    (f : C(A, B)) (hf : f.Nullhomotopic) :
+    ∃ b : B, Nonempty
+      (FundamentalGroupoid.map f ≅
+        FundamentalGroupoid.map (ContinuousMap.const A b)) := by
+  obtain ⟨b, ⟨H⟩⟩ := hf
+  exact ⟨b, ⟨asIso (FundamentalGroupoidFunctor.homotopicMapsNatIso H)⟩⟩
+
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_map_eq_one
+    {A B : Type*} [TopologicalSpace A] [TopologicalSpace B]
+    (f : C(A, B)) (hf : f.Nullhomotopic) (a : A)
+    (g : FundamentalGroup A a) :
+    FundamentalGroup.map f a g = 1 := by
+  obtain ⟨b, H⟩ := hf
+  obtain ⟨K⟩ := H
+  have hn := (FundamentalGroupoidFunctor.homotopicMapsNatIso K).naturality g
+  change (FundamentalGroupoid.map f).map g ≫ ⟦K.evalAt a⟧ =
+    ⟦K.evalAt a⟧ ≫
+      (FundamentalGroupoid.map (ContinuousMap.const A b)).map g at hn
+  have hc :
+      (FundamentalGroupoid.map (ContinuousMap.const A b)).map g =
+        𝟙 (FundamentalGroupoid.mk b) := by
+    induction g using Quotient.inductionOn with
+    | h p =>
+      apply Quotient.sound
+      exact ⟨Path.Homotopy.refl _⟩
+  rw [hc] at hn
+  let q : FundamentalGroupoid.mk (f a) ⟶ FundamentalGroupoid.mk b :=
+    ⟦K.evalAt a⟧
+  change (FundamentalGroupoid.map f).map g ≫ q = q ≫ 𝟙 _ at hn
+  have hn' : (FundamentalGroupoid.map f).map g ≫ ⟦K.evalAt a⟧ =
+      ⟦K.evalAt a⟧ := by
+    simpa only [Category.comp_id] using hn
+  change (FundamentalGroupoid.map f).map g = 𝟙 _
+  apply (cancel_mono ⟦K.evalAt a⟧).1
+  simpa only [Category.id_comp] using hn'
+
+/-- A connected fundamental groupoid: a path-connected space has a connected
+fundamental groupoid. -/
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_isConnected
+    {Y : Type} [TopologicalSpace Y] [PathConnectedSpace Y] :
+    CategoryTheory.IsConnected (FundamentalGroupoid Y) := by
+  haveI : Nonempty (FundamentalGroupoid Y) :=
+    ⟨FundamentalGroupoid.mk (Classical.choice (inferInstance : Nonempty Y))⟩
+  refine isConnected_of_zigzag (fun j₁ j₂ => ⟨[j₂], ?_, by simp⟩)
+  simp only [List.isChain_cons_cons, List.IsChain.singleton, and_true]
+  let f : j₁ ⟶ j₂ := Path.Homotopic.Quotient.mk (PathConnectedSpace.somePath j₁.as j₂.as)
+  exact Zag.of_hom f
+
+/-- Over a connected overlap category `W`, pseudo-cocones on a span whose two
+legs factor through the point are the same as pseudo-cocones on the point
+span, naturally in the target category.  (Whiskering by `W ⥤ pt` is fully
+faithful on functor categories when `W` is connected:
+`Functor.const` is full for `IsConnected W`.) -/
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse
+    {W L R : Type} [Category.{0} W] [Category.{0} L] [Category.{0} R]
+    [CategoryTheory.IsConnected W]
+    (a : SingleObj PUnit.{1} ⥤ L) (b : SingleObj PUnit.{1} ⥤ R) :
+    Nonempty (Σ E : ∀ (C : Type) [Category.{0} C],
+        ConstructionTargets.GenericSpanPseudoCoconeTransport.SpanPseudoCocone
+            ((Functor.const W).obj (SingleObj.star PUnit.{1}) ⋙ a)
+            ((Functor.const W).obj (SingleObj.star PUnit.{1}) ⋙ b) C ≌
+          ConstructionTargets.GenericSpanPseudoCoconeTransport.SpanPseudoCocone a b C,
+      ∀ (C D : Type) [Category.{0} C] [Category.{0} D] (H : C ⥤ D),
+        ConstructionTargets.GenericSpanPseudoCoconeTransport.postcomposeFunctor H ⋙
+            (E D).functor ≅
+          (E C).functor ⋙
+            ConstructionTargets.GenericSpanPseudoCoconeTransport.postcomposeFunctor H) := by
+  sorry
+
+/-- The target-natural family of mapping-category equivalences for a two-open
+cover with nullhomotopic overlap legs: as in
+`TwoOpenFreeProductMapping.mapping`, but the overlap span is first replaced
+(legs naturally isomorphic to constant functors, `_aux_groupoid`) by one whose
+legs factor through the point, then collapsed by `_aux_collapse`; the pieces
+use the path connectors at `w` (`TwoOpenLegCompatibleConnectorSystems.pathConnector`)
+in place of `leftConnectors`/`rightConnectors`, which need a simply connected
+overlap. -/
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_mapping
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)]
+    (hl : (apm_t03J02_overlapToLeft U V).Nullhomotopic)
+    (hr : (apm_t03J02_overlapToRight U V).Nullhomotopic)
+    (w : (U ∩ V : Set X)) :
+    Nonempty (Σ E : ∀ (C : Type) [Category.{0} C],
+        (FundamentalGroupoid X ⥤ C) ≌
+          (SingleObj (Monoid.Coprod
+              (End (FundamentalGroupoid.mk (⟨w.1, w.2.1⟩ : U)))
+              (End (FundamentalGroupoid.mk (⟨w.1, w.2.2⟩ : V)))) ⥤ C),
+      ∀ (C D : Type) [Category.{0} C] [Category.{0} D] (K : C ⥤ D),
+        (Functor.whiskeringRight (FundamentalGroupoid X) C D).obj K ⋙ (E D).functor ≅
+          (E C).functor ⋙ (Functor.whiskeringRight _ C D).obj K) := by
+  sorry
+
 /-- Two-open van Kampen when both overlap inclusions are nullhomotopic: the
 fundamental group is the free product of the two pieces' groups.  The overlap
 need not be simply connected; on fundamental groupoids each leg functor is
@@ -267,7 +364,13 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
       (FundamentalGroup X w.1 ≃*
         Monoid.Coprod (FundamentalGroup U ⟨w.1, w.2.1⟩)
           (FundamentalGroup V ⟨w.1, w.2.2⟩)) := by
-  sorry
+  obtain ⟨⟨E, post⟩⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_mapping U V hU hV hcov hl hr w
+  let S := ConstructionTargets.GenericTargetNaturalSourceReconstruction.sourceEquivalence
+    (fun C _ => E C) (fun {C D} _ _ K => post C D K)
+  exact ⟨(S.fullyFaithfulFunctor.mulEquivEnd (FundamentalGroupoid.mk w.val)).trans
+    ((Iso.conj (eqToIso (show S.functor.obj (FundamentalGroupoid.mk w.val) =
+      SingleObj.star _ from Subsingleton.elim _ _))).trans (SingleObj.toEnd _).symm)⟩
 
 /-- Both overlap inclusions of a compatible cover are nullhomotopic:
 `leftEquiv ∘ leg ≃ j₁ ∘ overlapEquiv` is null, and composing with

@@ -35,7 +35,9 @@ itself are proved. Open, all prefixed `apm_t03J02_fundamentalGroup_of_compatible
 | leaf | claim | size |
 |---|---|---:|
 | `_aux_presentation` | `ℤ² * ℤ² ≃* freeProductZ2Z2` | 60–120 |
-| `_aux_vanKampen_aux_trivialLegs_aux_general` | two-open van Kampen with **nullhomotopic** overlap legs (overlap not simply connected): `π₁ X ≃* π₁ U * π₁ V`. Follow `TwoOpenFreeProductMapping`, replacing the simple-connectivity collapse of the overlap by the natural iso of each leg functor with a constant one. | **LIBRARY 300–800** |
+| `_aux_vanKampen_aux_trivialLegs_aux_general` | two-open van Kampen with **nullhomotopic** overlap legs (overlap not simply connected): `π₁ X ≃* π₁ U * π₁ V`. Follow `TwoOpenFreeProductMapping`, replacing the simple-connectivity collapse of the overlap by the natural iso of each leg functor with a constant one. | proved from `_aux_mapping` (claude-14, 2026-10-24, after lemma-3 PARTIAL banked `_aux_groupoid`, `_aux_map_eq_one`; `_aux_isConnected` proved) |
+| `_aux_general_aux_collapse` | generic: over a connected `W`, pseudo-cocones on a span whose legs factor through `W ⥤ pt` ≌ pseudo-cocones on the point span, natural in the target (`Functor.const` full for `IsConnected W`). The only place the old simply-connected argument is replaced. | 80–200 |
+| `_aux_general_aux_mapping` | target-natural `(Π X ⥤ C) ≌ (SingleObj (End u * End v) ⥤ C)`: chain as in `TwoOpenFreeProductMapping.mapping`; legs → const via `_aux_groupoid` + `pseudoCoconeEquivalenceOfSpanEquivalences` with identity equivalences; `_aux_collapse`; then the point-span comparison with `pathConnector` connector systems (not `leftConnectors`, which need a simply connected overlap). | 120–250 |
 | `_aux_vanKampen_aux_trivialLegs_aux_nullLegs` | both legs of a compatible cover are nullhomotopic (`leftEquiv.invFun ∘ leftEquiv ∘ leg`). | 20–40 |
 | `_aux_vanKampen_aux_trivialLegs_aux_hequiv` | homotopy equivalence, path-connected target ⇒ `π₁ X x ≃* π₁ Y y`; use `FundamentalGroupoidFunctor.equivOfHomotopyEquiv`. | 20–50 |
 | `_aux_vanKampen_aux_trivialLegs_aux_pathConnectedSpace` | `U ∪ V = univ`, both path-connected, meeting ⇒ `PathConnectedSpace X`. | 15–30 |
