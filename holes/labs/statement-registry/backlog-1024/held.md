@@ -264,3 +264,31 @@ changes nothing and holds no row.
   statement is the series identity itself. Upheld.
 - No smoothness-order objection in this batch: no `ContDiff` appears in any
   batch 13 statement.
+
+## Batch 14 spot-checks (all grades upheld)
+
+`admit-batch.py 14` admits eight rows and holds two. One of the two held rows
+narrows a false source.
+
+- a94A05 (narrower): `vitali_covering_lemma_5` (lines 116-121) covers a union
+  of closed balls by closed 5ρ-balls. problem.md part (a) takes open
+  subintervals and asks for the cover by the concentric *open* intervals five
+  times as long, by a (possibly finite) sequence. Closed-5ρ containment does
+  not give open-5ρ containment. Part (b) (lines 148-155) is faithful. Held; not
+  on the false-source list. Repair route: state (a) for a family of `Ioo`
+  intervals in a bounded interval, with a countable pairwise-disjoint
+  subfamily whose open 5x enlargements cover U. The open version holds by the
+  usual argument: x lies strictly inside some I_a, which meets a chosen I_j
+  with r_j ≥ r_a/2, so |x - c_j| < 2r_a + r_j ≤ 5r_j.
+- a94J02 (narrower): the statement restricts absolute continuity,
+  integrability, nonnegativity and strict monotonicity to `Icc 0 1`. The
+  source is false on ℝ: if h ≥ 0 is strictly increasing then h ≥ h(1) > 0 on
+  [1, ∞), so h is not integrable (the decreasing case is symmetric on
+  (-∞, -1]). Held; false source, repaired (`25d04f7c7` added the
+  absolute-continuity and interval-integrability conjuncts).
+- a94A04 (stronger, admitted): `zero_of_orthogonal_to_monomials`
+  (lines 78-86) works for any μ with μ restricted to [0,1] finite; Lebesgue
+  measure is an instance. The finite-measure instance added in `56f0b8e5c`
+  stops zero moments arising from `integral_undef`. Upheld.
+- No smoothness-order objection in this batch: no `ContDiff` appears in any
+  batch 14 statement.
