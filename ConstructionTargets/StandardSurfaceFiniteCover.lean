@@ -1906,16 +1906,148 @@ def orientablePairing_normalForm_aux_standardWord (h : ℕ) :
   (List.range h).flatMap fun j =>
     [(2 * j, true), (2 * j + 1, true), (2 * j, false), (2 * j + 1, false)]
 
-/-- **Leaf (combinatorial normalizer).**  Every orientable one-vertex polygon
-word of length `4h` reaches the standard word.  Route (Massey, ch. 1 §7): in
-an orientable one-vertex word every pair `x … x⁻¹` is interlocked with some
-pair `y … y⁻¹` (otherwise the corners between the two `x` arcs form a
-separate vertex); two `cutPaste` steps turn `x … y … x⁻¹ … y⁻¹` into a
-commutator block `c d c⁻¹ d⁻¹` followed by the rest, and `cutPaste`
-preserves length, orientability and one-vertexness.  Measure: the number of
-standard commutator blocks at the front.  Split this into one lemma per step
-(interlocked pair exists; two cut-pastes produce a block; invariants are
-preserved) plus well-founded induction, if it does not close in one seat. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_uniqueMate
+    (w : List (PolygonMoves.Signed ℕ)) (hw : PolygonMoves.IsPolygonWord w)
+    (hor : orientablePairing_normalForm_aux_WordOrientable w)
+    (i : Fin w.length) :
+    ∃! j : Fin w.length,
+      j ≠ i ∧ (w.get j).1 = (w.get i).1 ∧ (w.get j).2 ≠ (w.get i).2 := by
+  let S : Finset (Fin w.length) :=
+    Finset.univ.filter fun j => (w.get j).1 = (w.get i).1
+  have hmem : i ∈ S := by simp [S]
+  have hcard : S.card = 2 := by
+    have hc := hw.2.2 (w.get i).1 (by
+      apply List.mem_map.mpr
+      exact ⟨w.get i, List.get_mem w i, rfl⟩)
+    have hof := orientablePairing_normalForm_aux_natWord_isPolygonWord_aux_count_ofFn
+      (fun j : Fin w.length => (w.get j).1) (w.get i).1
+    rw [← hof]
+    simpa [List.map_eq_map] using hc
+  have herase : (S.erase i).card = 1 := by
+    rw [Finset.card_erase_of_mem hmem, hcard]
+  obtain ⟨j, hjS⟩ := Finset.card_eq_one.mp herase
+  have hjmem : j ∈ S.erase i := by simp [hjS]
+  have hji : j ≠ i := by exact (Finset.mem_erase.mp hjmem).1
+  have hjlabel : (w.get j).1 = (w.get i).1 :=
+    (Finset.mem_filter.mp (Finset.mem_of_mem_erase hjmem)).2
+  refine ⟨j, ⟨hji, hjlabel, hor j i hji hjlabel⟩, ?_⟩
+  intro k hk
+  have hkmem : k ∈ S.erase i := Finset.mem_erase.mpr ⟨hk.1, by
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hk.2.1⟩⟩
+  simpa [hjS] using hkmem
+
+/-- **Leaf (interlocking).**  In an orientable one-vertex word, the two arcs
+`i < j` of a label are separated by a third arc whose mate lies outside them.
+Otherwise the arcs strictly between `i` and `j` pair among themselves, and,
+since the signs of `i` and `j` differ, the corners `i+1, …, j` are closed under
+`WordCornerRel` and miss corner `i`. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_interlock
+    (w : List (PolygonMoves.Signed ℕ)) (hw : PolygonMoves.IsPolygonWord w)
+    (hor : orientablePairing_normalForm_aux_WordOrientable w)
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w)
+    (i j : Fin w.length) (hij : i < j) (hlab : (w.get i).1 = (w.get j).1) :
+    ∃ k l : Fin w.length, i < k ∧ k < j ∧ (j < l ∨ l < i) ∧
+      (w.get k).1 = (w.get l).1 := by
+  sorry
+
+/-- **Leaf.**  Every `Step` keeps the word a polygon word: rotation and
+relabelling (by an equivalence) permute the label counts, and `cutPaste`
+trades the pair `y, y⁻¹` for the fresh pair `c⁻¹, c`. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord
+    {w w' : List (PolygonMoves.Signed ℕ)}
+    (hs : orientablePairing_normalForm_aux_Step w w')
+    (hw : PolygonMoves.IsPolygonWord w) : PolygonMoves.IsPolygonWord w' := by
+  sorry
+
+/-- **Leaf.**  Every `Step` keeps the word orientable: `flip` changes both arcs
+of a label together, and `cutPaste` gives the new pair the signs `false, true`. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_orientable
+    {w w' : List (PolygonMoves.Signed ℕ)}
+    (hs : orientablePairing_normalForm_aux_Step w w')
+    (hw : PolygonMoves.IsPolygonWord w)
+    (hor : orientablePairing_normalForm_aux_WordOrientable w) :
+    orientablePairing_normalForm_aux_WordOrientable w' := by
+  sorry
+
+/-- **Leaf.**  Every `Step` keeps the word one-vertex.  Rotation shifts corners
+and relabelling leaves `WordCornerRel` unchanged; for `cutPaste`, send each
+corner of the new word to the corner of the old word at the same point of the
+cut polygon (the corners at the ends of `c` go to the corners at the ends of `y`)
+and check that each `WordCornerRel` step maps to a chain of old steps. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex
+    {w w' : List (PolygonMoves.Signed ℕ)}
+    (hs : orientablePairing_normalForm_aux_Step w w')
+    (hw : PolygonMoves.IsPolygonWord w)
+    (hor : orientablePairing_normalForm_aux_WordOrientable w)
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
+    orientablePairing_normalForm_aux_WordOneVertex w' := by
+  sorry
+
+theorem orientablePairing_normalForm_aux_normalize_aux_step_length
+    {w w' : List (PolygonMoves.Signed ℕ)}
+    (hs : orientablePairing_normalForm_aux_Step w w') : w'.length = w.length := by
+  cases hs with
+  | rotation u v hw => simp [Nat.add_comm]
+  | relabel w e flip hw => simp
+  | cutPaste α₁ α₂ β₁ β₂ y c hy hc hw => simp; omega
+
+theorem orientablePairing_normalForm_aux_normalize_aux_standardWord_length (k : ℕ) :
+    (orientablePairing_normalForm_aux_standardWord k).length = 4 * k := by
+  induction k with
+  | zero => simp [orientablePairing_normalForm_aux_standardWord]
+  | succ k ih =>
+      simp only [orientablePairing_normalForm_aux_standardWord, List.range_succ,
+        List.flatMap_append, List.length_append] at ih ⊢
+      simp [ih]; ring
+
+/-- **Leaf (one commutator block).**  If the word is `k` standard blocks
+followed by a tail `r` with labels `≥ 2k` and at least one more block's worth
+of letters, then steps reach `k + 1` standard blocks followed by a tail with
+labels `≥ 2k + 2`.  Route (Massey, ch. 1 §7): no label of the standard prefix
+interlocks with a label of `r`, so `_aux_interlock` applied to the first arc of
+`r` gives `x … y … x⁻¹ … y⁻¹` inside `r`; two `cutPaste` steps (with rotations
+to place the pieces) give a block `c d c⁻¹ d⁻¹`; rotate it to sit after the
+prefix and relabel `c ↦ 2k`, `d ↦ 2k + 1`, moving the tail's labels above
+`2k + 1`.  Use `_aux_step_isPolygonWord` and the other `_aux_step_*` leaves to
+carry the hypotheses through the intermediate words. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block (k m : ℕ) (hm : 1 ≤ m)
+    (r : List (PolygonMoves.Signed ℕ))
+    (hw : PolygonMoves.IsPolygonWord (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hor : orientablePairing_normalForm_aux_WordOrientable
+      (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hv : orientablePairing_normalForm_aux_WordOneVertex
+      (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hlen : (orientablePairing_normalForm_aux_standardWord k ++ r).length = 4 * (k + m))
+    (hr : ∀ x ∈ r, 2 * k ≤ x.1) :
+    ∃ r' : List (PolygonMoves.Signed ℕ),
+      Relation.ReflTransGen orientablePairing_normalForm_aux_Step
+        (orientablePairing_normalForm_aux_standardWord k ++ r)
+        (orientablePairing_normalForm_aux_standardWord (k + 1) ++ r') ∧
+      ∀ x ∈ r', 2 * (k + 1) ≤ x.1 := by
+  sorry
+
+/-- The hypotheses of `_aux_normalize` hold all along a chain of steps. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_reach_invariants
+    {w w' : List (PolygonMoves.Signed ℕ)}
+    (hr : Relation.ReflTransGen orientablePairing_normalForm_aux_Step w w')
+    (hw : PolygonMoves.IsPolygonWord w)
+    (hor : orientablePairing_normalForm_aux_WordOrientable w)
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
+    PolygonMoves.IsPolygonWord w' ∧ orientablePairing_normalForm_aux_WordOrientable w' ∧
+      orientablePairing_normalForm_aux_WordOneVertex w' ∧ w'.length = w.length := by
+  induction hr with
+  | refl => exact ⟨hw, hor, hv, rfl⟩
+  | tail _ hs ih =>
+      obtain ⟨hw', hor', hv', hl⟩ := ih
+      exact ⟨orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord hs hw',
+        orientablePairing_normalForm_aux_normalize_aux_step_orientable hs hw' hor',
+        orientablePairing_normalForm_aux_normalize_aux_step_oneVertex hs hw' hor' hv',
+        (orientablePairing_normalForm_aux_normalize_aux_step_length hs).trans hl⟩
+
+/-- **Combinatorial normalizer.**  Every orientable one-vertex polygon word of
+length `4h` reaches the standard word: apply `_aux_block` `h` times, carrying
+the hypotheses with `_aux_reach_invariants`; after `h` blocks the tail is
+empty by length. -/
 theorem orientablePairing_normalForm_aux_normalize (h : ℕ) (hh : 1 ≤ h)
     (w : List (PolygonMoves.Signed ℕ)) (hw : PolygonMoves.IsPolygonWord w)
     (hor : orientablePairing_normalForm_aux_WordOrientable w)
@@ -1923,7 +2055,31 @@ theorem orientablePairing_normalForm_aux_normalize (h : ℕ) (hh : 1 ≤ h)
     (hlen : w.length = 4 * h) :
     Relation.ReflTransGen orientablePairing_normalForm_aux_Step w
       (orientablePairing_normalForm_aux_standardWord h) := by
-  sorry
+  have key : ∀ k ≤ h, ∃ r : List (PolygonMoves.Signed ℕ),
+      Relation.ReflTransGen orientablePairing_normalForm_aux_Step w
+        (orientablePairing_normalForm_aux_standardWord k ++ r) ∧
+      ∀ x ∈ r, 2 * k ≤ x.1 := by
+    intro k hk
+    induction k with
+    | zero => exact ⟨w, by
+        simpa [orientablePairing_normalForm_aux_standardWord] using Relation.ReflTransGen.refl,
+        fun x _ => by simp⟩
+    | succ k ih =>
+        obtain ⟨r, hreach, hr⟩ := ih (by omega)
+        obtain ⟨hw', hor', hv', hl⟩ :=
+          orientablePairing_normalForm_aux_normalize_aux_reach_invariants hreach hw hor hv
+        obtain ⟨r', hreach', hr'⟩ :=
+          orientablePairing_normalForm_aux_normalize_aux_block k (h - k) (by omega) r
+            hw' hor' hv' (by rw [hl, hlen]; congr 1; omega) hr
+        exact ⟨r', hreach.trans hreach', hr'⟩
+  obtain ⟨r, hreach, -⟩ := key h le_rfl
+  obtain ⟨-, -, -, hl⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_reach_invariants hreach hw hor hv
+  have hr : r = [] := by
+    rw [List.length_append, orientablePairing_normalForm_aux_normalize_aux_standardWord_length,
+      hlen] at hl
+    exact List.length_eq_zero_iff.mp (by omega)
+  simpa [hr] using hreach
 
 /-- **Leaf (standard word).**  The standard word presents `Surface true h`.
 Either compare `WordRel` with `SurfaceRel true h` directly (the
