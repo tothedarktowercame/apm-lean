@@ -4,7 +4,7 @@
 Usage: admit-batch.py NN   (reads grades-NN.md; prints the non-admitted rows)
 The registry's own admit refuses flagged statements (axiom, opaque, sorry, bare ⊤).
 """
-import re, subprocess, sys
+import json, re, subprocess, sys
 from pathlib import Path
 D = Path(__file__).resolve().parent
 ROOT = D.parents[3]
@@ -16,6 +16,8 @@ for line in grades.read_text().splitlines():
     if not m or m.group(1) == "id" or set(m.group(1)) == {"-"}:
         continue
     pid, grade = m.group(1), m.group(2)
+    if pid in json.loads((ROOT / "problems/STATEMENTS.json").read_text())["entries"]:
+        continue
     if grade in ("faithful", "stronger"):
         cmd = [sys.executable, str(ROOT / "scripts/statement-registry.py"), "admit", pid,
                "--grade", grade, "--grader", f"codex read-only grader (backlog-1024 batch {n})",
