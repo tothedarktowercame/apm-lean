@@ -32,8 +32,8 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "solved",
-  "classification_detail": "Closer hop 3 routed around global primitives using Complex.isCoveringMap_exp and the simply-connected lifting theorem, proving a global continuous logarithm on \u03a9. The remaining sorry is the local analytic regularity upgrade: prove that a continuous lift G with exp \u2218 G holomorphic is itself holomorphic; Mathlib's covering local inverses are only topological.",
+  "classification": "closed-unregistered",
+  "classification_detail": "Closer hop 3 routed around global primitives using Complex.isCoveringMap_exp and the simply-connected lifting theorem, proving a global continuous logarithm on Ω. The remaining sorry is the local analytic regularity upgrade: prove that a continuous lift G with exp ∘ G holomorphic is itself holomorphic; Mathlib's covering local inverses are only topological.",
   "imported_at": "2026-07-13T17:26:53.073566Z",
   "sorry_audit": {
     "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings",

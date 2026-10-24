@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "imported_at": "2026-07-13T17:26:52.245274Z",
   "checked_at": "2026-07-24T22:30:00Z",
   "checked_lean_state": {
@@ -41,7 +41,7 @@
       "ac_maps_null_to_null (part b special case)",
       "ac_maps_measurable_to_measurable (part c, inherits from b)"
     ],
-    "blocker": "FTC for AC functions (AC \u27f9 f = f(0) + \u222bf') is not available in Mathlib in the needed direction. Mathlib has the converse (interval integrals are AC) but not the forward implication.",
+    "blocker": "FTC for AC functions (AC ⟹ f = f(0) + ∫f') is not available in Mathlib in the needed direction. Mathlib has the converse (interval integrals are AC) but not the forward implication.",
     "proved_lemmas": [
       "acOnUnitInterval_iff",
       "ac_continuousOn",

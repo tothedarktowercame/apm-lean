@@ -15,7 +15,11 @@
     "scratch": "lean/Scratch.lean",
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 0,
+    "files": [
+      "lean/Main.lean",
+      "lean/Scratch.lean"
+    ]
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,9 +31,9 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "solved",
+  "classification": "closed-unregistered",
   "imported_at": "2026-05-01T19:38:17.147910Z",
-  "boundary": "Metadata corrected 2026-08-26: the Lean on master has no sorry, but status.json still advertised this problem as open. banked on bank/f22-f25-20260823; the metadata recompute was never made. The stale status made the problem selectable by open-problem-queue, and the frame qualifier then refused it \u2014 stalling the regulator rather than skipping it.",
+  "boundary": "Metadata corrected 2026-08-26: the Lean on master has no sorry, but status.json still advertised this problem as open. banked on bank/f22-f25-20260823; the metadata recompute was never made. The stale status made the problem selectable by open-problem-queue, and the frame qualifier then refused it — stalling the regulator rather than skipping it.",
   "sorry_audit": {
     "method": "lake env lean elaboration; zero `declaration uses `sorry`` warnings; #print axioms",
     "at": "2026-08-26",

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "closer_hop": 4,
   "closer_note": "Closed the custom real-exponent finite power-mean squeeze with a zero-maximum branch and a positive-maximum branch using attained-coordinate lower bounds, the compiled power-sum upper bound, rpow_rpow_inv normalization, and the cardinality-factor limit.",
   "imported_at": "2026-07-13T17:26:55.222943Z"

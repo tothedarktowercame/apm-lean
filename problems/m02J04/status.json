@@ -10,12 +10,14 @@
     "problem_tex": "apm/m02J04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "imported_at": "2026-07-13T17:26:54.517380Z",
   "sorry_audit": {
     "method": "lake env lean elaboration + comment-aware token count",

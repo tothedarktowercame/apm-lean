@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "closer_note": "Imported the sharp YoungL2 contraction and proved that raw Poisson convolution and its packaged L2 output are invariant under a.e.-equal representatives, closing quotient well-definedness. Remaining work is proving/bundling linearity as a continuous linear map and transporting sibling a94J04 strong convergence.",
   "imported_at": "2026-07-13T17:26:53.021359Z",

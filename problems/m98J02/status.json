@@ -30,7 +30,7 @@
     "has_receipt": false,
     "has_out_of_competition": true
   },
-  "classification": "partial",
+  "classification": "complete",
   "boundary": "Parts (a)-(c) are proved. Part (d) is open for every f ∈ C²(ℝ²) (apm_m98J02_partD, one sorry). The narrow reading (f compactly supported, w₀ regular) is proved in out-of-competition/Main.lean and does not count. Missing: the forward/backward fundamental solutions E± (Bessel J₀ as a power series), T E± = δ, convolution with a cone-supported kernel for non-compactly supported f, and C² regularity of the result.",
   "imported_at": "2026-07-13T17:26:55.971140Z",
   "sorry_audit": {

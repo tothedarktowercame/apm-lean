@@ -28,7 +28,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "solved",
+  "classification": "closed-unregistered",
   "imported_at": "2026-07-13T17:26:52.118628Z",
   "boundary": "Closed by frame f21 (campaign apm-f21-one-off-v1, 2026-08-22). Differentiability of a monotone absolutely-continuous series with an integrable derivative majorant: the lintegral of the derivative series is finite, the series is a.e. finite, and it agrees a.e. with the derivative of the pointwise sum. Frozen statement unchanged (sha256 b8c79a70 over the theorem signature at 455d4d8). Proof commits 7873a32, 089d506.",
   "sorry_audit": {

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-08-08T00:00:00Z",
   "checked_lean_state": {

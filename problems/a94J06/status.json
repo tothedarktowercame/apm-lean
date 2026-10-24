@@ -12,7 +12,11 @@
   "lean": {
     "main": "lean/Main.lean",
     "sorry_count_main": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_scratch": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -21,7 +25,7 @@
     "has_proof_outline": true,
     "has_status": true
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "closer_hop": 2,
   "closer_note": "Ported the historical inside/outside evaluations and proved boundary nonintegrability by norm-equivalence with the bare Cauchy kernel.",
   "imported_at": "2026-07-13T17:26:52.228889Z"

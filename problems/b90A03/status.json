@@ -32,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "solved",
+  "classification": "closed-unregistered",
   "classification_detail": "Closer hop 2 closes the full existential conjunct. Closer hop 3 proves that literal singleton equality forces every Sylow fixed field to equal L. One sorry remains to transport this through injectivity/normality of the Galois correspondence and prove the reverse singleton implication.",
   "imported_at": "2026-07-13T17:26:53.664895Z",
   "sorry_audit": {

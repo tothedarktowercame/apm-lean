@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 1,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "notes": "Kernel continuity, one-sided derivatives, the Wronskian jump, and compact-support product integrability compile. The piecewise double integration-by-parts assembly remains.",
   "imported_at": "2026-07-13T17:26:56.220641Z"

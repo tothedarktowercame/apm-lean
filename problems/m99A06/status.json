@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "Raw self-map integrability, the sharp quadratic bound, and the two-input endpoint Young estimate compile. Polarization, L1 quotient fixed-point construction, and representative extraction remain.",
   "imported_at": "2026-07-13T17:26:56.155573Z",

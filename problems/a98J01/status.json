@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete-lean-proof",
+  "classification": "closed-unregistered",
   "classification_detail": "The proof uses inner regularity in the Polish refinement, transports compactness through the continuous identity to the ordinary topology, and uses the localized compact-to-Hausdorff homeomorphism on the compact subtype to transport continuity of f back to the ordinary topology.",
   "imported_at": "2026-07-13T17:26:53.000594Z"
 }

@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "classification_detail": "Hop 4 states four exact remaining contracts: the normal-subgroup lattice and solvability of S4, the universal order-24 action theorem, and the nonisomorphism/nonnormal-Sylow structure of SL2(F3). The compiled conjugacy classification and cardinalities remain unchanged.",
   "imported_at": "2026-07-13T17:26:54.096455Z"

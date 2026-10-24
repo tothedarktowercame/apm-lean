@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "classification_detail": "apm_m02j02 is proved (closed by the solve loop, df7cf59b9). It reads \"basis\" as a linearly independent family with dense span in the H^1 graph norm; for (b) and (c) this is weaker than the orthonormal basis that informal-solution.md (revised 7de364a86) gives. See the Main.lean header.",
   "imported_at": "2026-07-13T17:26:54.494725Z",
   "sorry_audit": {

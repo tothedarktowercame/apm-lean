@@ -25,5 +25,15 @@
       "apm_a01A01_integral_typewriter1d",
       "apm_a01A01_integral_typewriter1d_tendsto"
     ]
-  }
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 0
+  },
+  "classification": "closed-unregistered"
 }

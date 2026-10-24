@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-07-25T07:00:00Z",
   "checked_lean_state": {
@@ -37,13 +37,13 @@
     "command": "lake env lean problems/a96A02/lean/Main.lean",
     "sorry_count": 3,
     "sorry_locations": [
-      "spike_height_slope_bound (trivial arithmetic: (1/n)\u00b72(n+1) \u2264 4)",
-      "spikeFunction_holderWith (H\u00f6lder-1/2 bound)",
+      "spike_height_slope_bound (trivial arithmetic: (1/n)·2(n+1) ≤ 4)",
+      "spikeFunction_holderWith (Hölder-1/2 bound)",
       "spikeFunction_not_absolutelyContinuous (non-AC)"
     ],
     "blockers": [
       "Spike function definition: piecewise linear with infinitely many pieces is hard to define.",
-      "H\u00f6lder-1/2 proof requires within-spike and cross-spike arguments.",
+      "Hölder-1/2 proof requires within-spike and cross-spike arguments.",
       "Non-AC proof requires constructing AC-violating interval collections."
     ],
     "proved_lemmas": [

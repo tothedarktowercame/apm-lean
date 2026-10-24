@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "classification_detail": "All three parts proven: (a) smoothness via differentiation under the integral with polynomial-Gaussian dominators and iterated derivative structure; (b) L2 contraction via YoungL2.convolution_L2_contraction_of_probability_kernel; (c) L2 convergence via approximate identity with Gaussian L2 average bridge.",
   "imported_at": "2026-07-13T17:26:52.261601Z",
   "checked_at": "2026-08-03T07:32:00Z",

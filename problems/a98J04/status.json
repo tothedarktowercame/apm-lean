@@ -15,7 +15,11 @@
     "scratch": "lean/Scratch.lean",
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 0,
+    "files": [
+      "lean/Main.lean",
+      "lean/Scratch.lean"
+    ]
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +31,7 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "closer_hop": 1,
   "boundary": "Closed. Complex differentiability identifies the real fderiv with the scalar restriction of the complex-linear fderiv. The derivatives of conjugation and h are computed as explicit real continuous-linear maps, and their failure to commute with multiplication by I follows by evaluation at 1.",
   "imported_at": "2026-05-01T19:38:17.182715Z",

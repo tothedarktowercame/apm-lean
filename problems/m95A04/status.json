@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 4,
   "notes": "The total integral of a test-function derivative now compiles from Mathlib's two improper-FTC endpoint lemmas. The three nonsmooth distribution identities and weak-graph completeness remain, and their exact Lean propositions are recorded at the sorry boundary.",
   "obstructions": [

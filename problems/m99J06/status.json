@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "Galerkin uniqueness, abstract Riesz representation, and injectivity of the model's value/weak-derivative representation compile. Representative-level linearity and the forcing functional, Sobolev regularity/integration by parts, and weak sequential compactness/dense-limit passage remain.",
   "imported_at": "2026-07-13T17:26:56.310042Z"

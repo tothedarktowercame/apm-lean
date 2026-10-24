@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "Measurability and the exact radial sum identity compile. Each coordinate derivative square is now separately dominated by that radial Bertrand density. Polar transport, scalar improper-log integrability, and weak integration by parts remain.",
   "sorry_audit": {

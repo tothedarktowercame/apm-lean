@@ -31,7 +31,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "imported_at": "2026-05-01T19:52:19.170052Z",
   "sorry_audit": {
     "method": "lake env lean elaboration + comment-aware token count",

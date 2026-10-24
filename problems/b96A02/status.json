@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "closer_note": "Proved that the normal core of a prime-order subgroup is either bottom or the subgroup itself; construction of an order-15 subgroup and the Galois normal-closure bridge remain open.",
   "imported_at": "2026-07-13T17:26:54.068284Z",

@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "closed",
+  "classification": "closed-unregistered",
   "closer_hop": 2,
   "closer_note": "Closed by transporting ContDiff to coordinate slices, adding their centered O(h^4) bounds, normalizing iteratedDeriv 2, and extracting/dividing the local asymptotic estimate.",
   "imported_at": "2026-07-13T17:26:54.698992Z",

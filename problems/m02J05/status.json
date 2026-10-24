@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "classification_detail": "Hop 4 states three exact contracts: convexity plus AEEqFun submodule closure, the four Luxemburg sInf gauge laws, and complementary Young plus the Orlicz-Holder estimate.",
   "imported_at": "2026-07-13T17:26:54.522400Z"

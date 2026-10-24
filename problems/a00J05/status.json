@@ -30,7 +30,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "imported_at": "2026-07-13T17:26:51.629719Z",
   "checked_at": "2026-07-13T18:55:00Z",
   "validation_command": "cd /home/joe/code/apm-lean && lake env lean problems/a00J05/lean/Main.lean",

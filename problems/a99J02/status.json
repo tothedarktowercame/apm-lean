@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "closer_hop": 2,
   "closer_note": "Closed by adapting sibling a96J02's measured-set continuity argument locally. Reflection converts its subtraction-preimage overlap to the frozen image translate; continuity and positivity at zero yield positive overlap on a neighborhood.",
   "imported_at": "2026-07-13T17:26:53.048522Z",

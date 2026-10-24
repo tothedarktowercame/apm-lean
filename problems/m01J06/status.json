@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 6,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 6
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "boundary": "four major boundaries remain; hop 3 closes scalar-linearity of within-derivatives along variations and isolates dominated parametric integration as the shared stationarity prerequisite",
   "imported_at": "2026-07-13T17:26:54.355112Z",
   "sorry_audit": {

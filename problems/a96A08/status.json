@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "solved",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "closer_note": "Recovered the historical symmetric-limit proof and updated the absolute-integrability argument for the current Mathlib API.",
   "imported_at": "2026-07-13T17:26:52.571765Z",
@@ -54,5 +54,5 @@
       "resolved": null
     }
   ],
-  "boundary": "Metadata corrected 2026-08-26: the Lean on master has no sorry, but status.json still advertised this problem as open. banked on bank/f22-f25-20260823; the metadata recompute was never made. The stale status made the problem selectable by open-problem-queue, and the frame qualifier then refused it \u2014 stalling the regulator rather than skipping it."
+  "boundary": "Metadata corrected 2026-08-26: the Lean on master has no sorry, but status.json still advertised this problem as open. banked on bank/f22-f25-20260823; the metadata recompute was never made. The stale status made the problem selectable by open-problem-queue, and the frame qualifier then refused it — stalling the regulator rather than skipping it."
 }

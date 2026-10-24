@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_progress": "Hop 3 finds Mathlib's distributional fundamental lemma and compiles the a.e.-to-pointwise continuity upgrade; first-variation assembly, ODE uniqueness, and minimality remain.",
   "imported_at": "2026-07-13T17:26:56.070476Z",
   "obstructions": [

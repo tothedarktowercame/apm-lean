@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 4,
   "closer_progress": "Hop 4 states the exact unproved global Picard gluing contract: every initial value has a single half-line representative satisfying the frozen solution predicate. The endpoint-safe uniqueness and scalar attraction arguments remain local proof work.",
   "imported_at": "2026-07-13T17:26:54.264489Z"

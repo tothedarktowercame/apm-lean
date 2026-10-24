@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial-invalid-statement",
+  "classification": "complete",
   "classification_detail": "Proven: cauchy_estimate_taylor, geom_iteratedDeriv, geom_taylor_coeff, and entire_coeffs_tendsto_zero. The remaining frozen main theorem is false: f(z)=(1-z)^-1+(z-1)^-2 satisfies the hypotheses but has Taylor coefficients n+2.",
   "imported_at": "2026-08-03T07:40:00Z",
   "checked_at": "2026-08-03T07:40:00Z",

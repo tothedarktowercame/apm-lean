@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "Fourier differentiation, multiplier ODE, heat-kernel normalization, and absolute integrability of every heat-solution convolution integrand compile. Fubini/convolution, differentiation, and pointwise convergence remain.",
   "sorry_audit": {

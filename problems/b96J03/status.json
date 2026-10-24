@@ -1,43 +1,47 @@
 {
-  "schema" : "apm-problem-bundle.v1",
-  "layout" : "single-bundle",
-  "problem_id" : "b96J03",
-  "source" : {
-    "workspace_metadata" : "/home/joe/code/futon6/.state/proof-frames/b96J03/apm-v2-b96J03-1775006849349/workspace.json",
-    "receipt" : "/home/joe/code/futon6/.state/proof-frames/b96J03/apm-v2-b96J03-1775006849349.json",
-    "problem_tex" : "/home/joe/code/apm-lean/apm/b96J03.tex",
-    "frame_id" : "apm-v2-b96J03-1775006849349",
-    "module_root" : "ApmCanaries.Frames.B96J03.Apm_v2_b96J03_1775006849349"
+  "schema": "apm-problem-bundle.v1",
+  "layout": "single-bundle",
+  "problem_id": "b96J03",
+  "source": {
+    "workspace_metadata": "/home/joe/code/futon6/.state/proof-frames/b96J03/apm-v2-b96J03-1775006849349/workspace.json",
+    "receipt": "/home/joe/code/futon6/.state/proof-frames/b96J03/apm-v2-b96J03-1775006849349.json",
+    "problem_tex": "/home/joe/code/apm-lean/apm/b96J03.tex",
+    "frame_id": "apm-v2-b96J03-1775006849349",
+    "module_root": "ApmCanaries.Frames.B96J03.Apm_v2_b96J03_1775006849349"
   },
-  "boundary" : "Closed by frame f81 (campaign jit-all-open-v2, 2026-09-02): \"complete generation proof and remove extra axioms\". Banked verbatim from the f81 Solver terminal head e3010220e22cc64eccc290acb6983d3f442a765f on branch exp/countdown-f81-b96J03-solver; content identical to that head, no re-derivation. Frozen statement apm_b96j03 unchanged from the pre-solve base.",
-  "classification" : "solved",
-  "lean" : {
-    "main" : "lean/Main.lean",
-    "scratch" : "lean/Scratch.lean",
-    "sorry_count_main" : 0,
-    "sorry_count_scratch" : 0,
-    "sorry_count_total" : 0
+  "boundary": "Closed by frame f81 (campaign jit-all-open-v2, 2026-09-02): \"complete generation proof and remove extra axioms\". Banked verbatim from the f81 Solver terminal head e3010220e22cc64eccc290acb6983d3f442a765f on branch exp/countdown-f81-b96J03-solver; content identical to that head, no re-derivation. Frozen statement apm_b96j03 unchanged from the pre-solve base.",
+  "classification": "closed-unregistered",
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": "lean/Scratch.lean",
+    "sorry_count_main": 0,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 0,
+    "files": [
+      "lean/Main.lean",
+      "lean/Scratch.lean"
+    ]
   },
-  "bundle_root" : "problems/b96J03",
-  "sorry_audit" : {
-    "method" : "lake env lean elaboration; exact clean axiom set required by solve pin",
-    "at" : "2026-09-02",
-    "elaborated_exit" : 0,
-    "sorry_declarations" : 0,
-    "previous_classification" : "partial",
-    "previous_sorry_count_total" : 3,
-    "axioms" : "apm_b96j03 depends on axioms: [propext, Classical.choice, Quot.sound]",
-    "frame" : "f81"
+  "bundle_root": "problems/b96J03",
+  "sorry_audit": {
+    "method": "lake env lean elaboration; exact clean axiom set required by solve pin",
+    "at": "2026-09-02",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "previous_classification": "partial",
+    "previous_sorry_count_total": 3,
+    "axioms": "apm_b96j03 depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "frame": "f81"
   },
-  "imported_at" : "2026-05-01T19:38:17.698306Z",
-  "artifacts" : {
-    "has_problem_tex" : true,
-    "has_problem_md" : true,
-    "has_informal_solution" : true,
-    "has_proof_outline" : true,
-    "has_proof_plan" : true,
-    "has_changelog" : true,
-    "has_workspace_metadata" : true,
-    "has_receipt" : true
+  "imported_at": "2026-05-01T19:38:17.698306Z",
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": true,
+    "has_proof_plan": true,
+    "has_changelog": true,
+    "has_workspace_metadata": true,
+    "has_receipt": true
   }
 }

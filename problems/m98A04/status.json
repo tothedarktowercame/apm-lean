@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "Translated-reflected test functions, the canonical convolution witness, bundled test derivatives, and the empty-multiindex distributional derivative compile. LF-topological translation smoothness and nonempty distributional derivative transport remain."
 }

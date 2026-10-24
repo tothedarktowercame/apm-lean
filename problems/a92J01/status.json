@@ -15,7 +15,11 @@
     "scratch": "lean/Scratch.lean",
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 0,
+    "files": [
+      "lean/Main.lean",
+      "lean/Scratch.lean"
+    ]
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,7 +31,7 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "solved",
+  "classification": "closed-unregistered",
   "imported_at": "2026-05-01T19:38:16.190845Z",
   "boundary": "Closed by the f32 Student, attempt 3 (campaign jit-all-open-nontopology-v1, 2026-08-25); attempts are independent cold starts against the same frozen base, not a refinement chain -- attempt 1 also closed it independently, attempt 2 did not. Banked content is attempt 3's submission. Frozen statement apm_a92j01 unchanged from the pre-solve base.",
   "sorry_audit": {

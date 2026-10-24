@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "defective",
+  "classification": "complete",
   "closer_hop": 4,
   "defect": "Endpoint mismatch: ContDiffOn on Icc 0 T is one-sided, but the hypotheses use global deriv at 0. For g=0, alpha=beta=0, x(t)=|t|, y=0, every hypothesis holds for every T>0 while x(T)=T != 0=y(T).",
   "imported_at": "2026-07-13T17:26:55.485873Z",

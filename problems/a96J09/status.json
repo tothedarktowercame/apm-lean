@@ -19,7 +19,11 @@
     "sorry_count_main": 0,
     "sorry_count_total": 0,
     "sorry_closed_by_codex": 4,
-    "claude_initial_sorry": 4
+    "claude_initial_sorry": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_scratch": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -28,7 +32,7 @@
     "has_proof_outline": true,
     "has_lean_main": true
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "imported_at": "2026-05-01T20:34:46Z",
   "codex_pass_at": "2026-05-01T21:40:44Z"
 }

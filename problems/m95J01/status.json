@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "closer_note": "Compiled completeness of H by transporting finite dimensionality from degreeLE through P.symm and invoking FiniteDimensional.complete. The reverse triangular recursion and adapted orthonormal basis remain open.",
   "imported_at": "2026-07-13T17:26:55.091781Z",

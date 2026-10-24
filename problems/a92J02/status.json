@@ -12,7 +12,11 @@
   "lean": {
     "main": "lean/Main.lean",
     "sorry_count_main": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_scratch": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -20,7 +24,7 @@
     "has_informal_solution": true,
     "has_proof_outline": true
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "classification_detail": "Fully proved. ConvergesInMeasure (problem's epsilon-N formulation with strict >) is shown equivalent to Mathlib's TendstoInMeasure (which uses edist and <=), then Mathlib's TendstoInMeasure.exists_seq_tendsto_ae (Borel-Cantelli) gives the a.e.-convergent subsequence.",
   "key_lemmas": [
     "convergesInMeasure.tendstoInMeasure: problem def => Mathlib TendstoInMeasure",

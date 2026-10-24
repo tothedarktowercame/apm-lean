@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "note": "All four radical candidates are proved roots and pairwise distinct, and the Klein-four classification helper is compiled. Extracting the radicals from an arbitrary splitting field remains the upstream blocker, followed by exhaustion, the basis and automorphisms, and intermediate-field classification.",
   "imported_at": "2026-07-13T17:26:53.858683Z"

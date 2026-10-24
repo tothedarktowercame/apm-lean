@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "boundary": "Completeness, weak/strong equivalence, triviality of the mean-zero gradient joint kernel, and uniqueness on each affine mean slice are proved. Remaining work is compactness-to-Poincare and Lax-Milgram existence; compact-image and Fredholm APIs do not directly assemble the differing-codomain coercivity bridge.",
   "imported_at": "2026-07-13T17:26:54.383609Z",

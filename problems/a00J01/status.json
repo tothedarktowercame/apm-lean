@@ -14,7 +14,11 @@
     "scratch": "lean/Scratch.lean",
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 0,
+    "files": [
+      "lean/Main.lean",
+      "lean/Scratch.lean"
+    ]
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -26,7 +30,7 @@
     "has_workspace_metadata": true,
     "has_receipt": true
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "imported_at": "2026-05-01T17:03:22.978909Z",
   "historical_sources": [
     {

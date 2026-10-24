@@ -31,7 +31,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "solved",
+  "classification": "closed-unregistered",
   "imported_at": "2026-05-01T19:52:19.160390Z",
   "boundary": "Closed by the f28 Solver (campaign jit-all-open-nontopology-v1, 2026-08-24), before promote-solver. The frame itself closed :partial because the Student's own 3-attempt cycle never independently re-derived the proof, not because the mathematics is incomplete -- same pattern as the f21/a94A02 precedent. Frozen statement apm_a01a12 unchanged from the pre-solve base.",
   "sorry_audit": {
