@@ -602,7 +602,13 @@ theorem t96A01_homeomorph_fundamentalGroup_adapter
     Nonempty
       (FundamentalGroup E e ≃*
         FundamentalGroup (Surface true m) (T96A01SurfaceBase m)) := by
-  sorry
+  obtain ⟨h⟩ := hE
+  letI : PathConnectedSpace (Surface true m) :=
+    h.surjective.pathConnectedSpace h.continuous
+  exact ⟨
+    (fundamentalGroupEquivOfHomeomorphEq h e (h e) rfl).trans
+      (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+        (h e) (T96A01SurfaceBase m))⟩
 
 theorem t96A01_connectedFiniteCover_surfaceFundamentalGroup
     {S : Type*} [TopologicalSpace S]
