@@ -408,3 +408,21 @@ All ten rows graded faithful, and all ten were already in `STATEMENTS.json`, so
   so the common-U version proves strictly less. problem.md is not false, so
   this is not a forced correction: re-encode with the per-term quantifier.
 - No smoothness-order objection: no `ContDiff` in any batch 20 statement file.
+
+## Batch 21 spot-check (all grades upheld)
+
+All ten rows (a98J01–a99J07) graded faithful; `admit-batch.py 21` held none,
+and all ten were already in `STATEMENTS.json`.
+
+- Smoothness order: only a99J03 uses `ContDiff`. `apm_a99j03` states
+  `ContDiffOn ℝ ∞` (Main.lean:390) under `open scoped ContDiff` (line 18),
+  where `∞` is `((⊤ : ℕ∞) : WithTop ℕ∞)`, i.e. C^∞, not analytic. Upheld.
+
+## Status after all 32 batches
+
+All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
+dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
+(32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
+Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
+(repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
+Batches 21–31 have grade files; spot-checks recorded here cover 00–21.

@@ -12,10 +12,8 @@ HELD | batch 05 | m95A04 | hypothesis-carries-core | Hypotheses `regular`, `Dtes
 HELD | batch 06 | m95J01 | hypothesis-carries-core | `[InnerProductSpace ℝ H]` together with `hinner` assumes that the displayed integral already is a positive-definite inner product; the theorem proves completeness/dimension and the remaining requested claims.
 HELD | batch 06 | m95J02 | narrower | The current theorem covers only `2 ≤ n`, excluding the one-dimensional fundamental solution asked for by the unrestricted `n`-dimensional problem.
 HELD | batch 06 | m96J05 | hypothesis-carries-core | `hD` and `hT` assume the exact Fourier-multiplier descriptions of the finite difference and translation operators, without stating or proving their connection to the physical-space operators in the problem.
-HELD | batch 07 | m97A04 | narrower | It requires `b < 0` also at `0` and `1`, whereas the problem's coefficient condition is on the open ODE interval `0 < t < 1`.
 HELD | batch 07 | m98A05 | narrower | The current file has no `apm_m98a05`; the only surviving result is the generic IFT helper, omitting the perturbation and Sobolev BVP clauses.
-HELD | batch 08 | a00J03 | narrower | Isometry is proved from measure preservation, but surjectivity assumes separately that the measurable inverse is measure preserving instead of deriving it from the problem's hypotheses.
-HELD | batch 08 | a01A03 | admit refused | refused a01A03: statement reaches smoothness order bare ⊤ (analytic, not C^∞)
+HELD | batch 08 | a00J06 | revoked | reviewer revoked the admission; see held.md
 HELD | batch 09 | a01A11 | hypothesis-carries-core | Parts (a) and (c) are faithful, but the part-(b) theorem assumes analyticity, decay, and nonzeroness instead of deriving/assembling them from compact positive-measure `K`.
 HELD | batch 10 | a02J03 | narrower | The prelim is on `ℝⁿ`, while the theorem explicitly specializes `φ,f : ℝ → ℝ` and tests only intervals `[a,b]`; it proves only the `n=1` case.
 HELD | batch 11 | a02J07 | narrower | `SlitPath` requires differentiability at every point of `(0,1]` and explicitly assumes interval integrability, rather than directly encoding a general piecewise-smooth path.
