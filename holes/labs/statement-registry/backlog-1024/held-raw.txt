@@ -1,42 +1,40 @@
-HELD | m03J03 | narrower | The four requested distribution claims are represented, but `Distribution ... ⊤` and `TestFunction ... ⊤` use the bare analytic (`ω`) smoothness order rather than the prelim's standard `C^∞` test-function space.
-HELD | m93J02 | narrower | It treats only `0 < α < 1` and compact connected sets containing two distinct points; the prelim states merely compact connected `Ω` and does not explicitly exclude singletons or specify this exponent range.
-HELD | m93J03 | narrower | It proves existence plus uniqueness only inside a fixed small sup-norm neighborhood; the prelim asks for uniqueness among all continuous solutions, which is false at `ε = 0`.
-HELD | m93J06 | narrower | The existence/global-flow clauses require a uniform global Lipschitz constant in `y`, and the Hölder clause is replaced by a counterexample to uniqueness rather than the requested Hölder dependence.
-HELD | m94J02 | narrower | Replaces the requested `‖fg‖ ≤ ‖f‖‖g‖` with the weaker `‖fg‖ ≤ (5/4)‖f‖‖g‖`.
-HELD | m94J05 | narrower | Proves uniqueness only among solutions bounded by a fixed radius, not unrestricted uniqueness among all solutions.
-HELD | m95A04 | hypothesis-carries-core | Hypotheses `regular`, `Dtest`, and `Ddist` already supply the locally-integrable embedding and distributional derivative definitions requested in parts (a)–(b).
-HELD | m97A04 | narrower | It requires `b < 0` also at `0` and `1`, whereas the problem's coefficient condition is on the open ODE interval `0 < t < 1`.
-HELD | m98A05 | narrower | The current file has no `apm_m98a05`; the only surviving result is the generic IFT helper, omitting the perturbation and Sobolev BVP clauses.
-HELD | m99J02 | vacuous | `ContDiff ℝ (⊤ : ℕ∞)` makes test functions analytic; an analytic compactly supported function on ℝ is zero, so the identities test only `φ = 0`.
-refused a00J01: no theorem apm_a00j01 in committed Main.lean
-refused a00J05: no theorem apm_a00j05 in committed Main.lean
-refused a00J06: no theorem apm_a00j06 in committed Main.lean
-refused a01A02: no theorem apm_a01a02 in committed Main.lean
-refused a01A03: no theorem apm_a01a03 in committed Main.lean
-HELD | m99J03 | narrower | The three distributional limits are correct, but the test class uses `ContDiff ℝ (⊤ : ℕ∞)`, i.e. analytic (`ω`), rather than all compactly supported smooth functions.
-HELD | a00J01 | admit refused | refused a00J01: no theorem apm_a00j01 in committed Main.lean
-HELD | a00J03 | narrower | Isometry is proved from measure preservation, but surjectivity assumes separately that the measurable inverse is measure preserving instead of deriving it from the problem's hypotheses.
-HELD | a00J05 | admit refused | refused a00J05: no theorem apm_a00j05 in committed Main.lean
-HELD | a00J06 | admit refused | refused a00J06: no theorem apm_a00j06 in committed Main.lean
-HELD | a01A02 | admit refused | refused a01A02: no theorem apm_a01a02 in committed Main.lean
-HELD | a01A03 | admit refused | refused a01A03: no theorem apm_a01a03 in committed Main.lean
-refused a01A04: no theorem apm_a01a04 in committed Main.lean
-refused a01A06: no theorem apm_a01a06 in committed Main.lean
-refused a01A07: no theorem apm_a01a07 in committed Main.lean
-refused a01A08: no theorem apm_a01a08 in committed Main.lean
-refused a01A09: no theorem apm_a01a09 in committed Main.lean
-refused a01A10: no theorem apm_a01a10 in committed Main.lean
-refused a01J01: no theorem apm_a01j01 in committed Main.lean
-HELD | a01A04 | admit refused | refused a01A04: no theorem apm_a01a04 in committed Main.lean
-HELD | a01A06 | admit refused | refused a01A06: no theorem apm_a01a06 in committed Main.lean
-HELD | a01A07 | admit refused | refused a01A07: no theorem apm_a01a07 in committed Main.lean
-HELD | a01A08 | admit refused | refused a01A08: no theorem apm_a01a08 in committed Main.lean
-HELD | a01A09 | admit refused | refused a01A09: no theorem apm_a01a09 in committed Main.lean
-HELD | a01A10 | admit refused | refused a01A10: no theorem apm_a01a10 in committed Main.lean
-HELD | a01A11 | hypothesis-carries-core | Parts (a) and (c) are faithful, but the part-(b) theorem assumes analyticity, decay, and nonzeroness instead of deriving/assembling them from compact positive-measure `K`.
-HELD | a01J01 | admit refused | refused a01J01: no theorem apm_a01j01 in committed Main.lean
-HELD | a98J03 | narrower | The intended Poisson-kernel result is encoded, including a stronger contraction bound, but only for real-valued `L²`; the prelim does not specify this scalar restriction.
-HELD | b98A01 | narrower | The last requested equivalence about a subgroup of order `3` is absent and is replaced by an equivalence about a subgroup of order `35`.
-HELD | m00A04 | vacuous | The PDE encoding collapses: compactness of the raw support forces every positive-dimensional smooth test function to be zero, hence every encoded `H¹₀` value is a.e. zero and the weak equation is solved trivially by `u=g=0`.
-HELD | m02A02 | narrower | The periodic Poisson existence/uniqueness clause assumes the additional compatibility condition `f (0, 0) = 0`, absent from the printed question (though mathematically necessary).
-HELD | m02A06 | narrower | Existence and uniqueness are proved only for `ε < 1 / (4*(1+C))`, and uniqueness only among solutions bounded by `2*(1+C)`; the prelim claims uniqueness for every `ε > 0`.
+HELD | batch 00 | a98J03 | narrower | The intended Poisson-kernel result is encoded, including a stronger contraction bound, but only for real-valued `L²`; the prelim does not specify this scalar restriction.
+HELD | batch 01 | b98A01 | narrower | The last requested equivalence about a subgroup of order `3` is absent and is replaced by an equivalence about a subgroup of order `35`.
+HELD | batch 02 | m00A04 | vacuous | The PDE encoding collapses: compactness of the raw support forces every positive-dimensional smooth test function to be zero, hence every encoded `H¹₀` value is a.e. zero and the weak equation is solved trivially by `u=g=0`.
+HELD | batch 03 | m02A02 | narrower | The periodic Poisson existence/uniqueness clause assumes the additional compatibility condition `f (0, 0) = 0`, absent from the printed question (though mathematically necessary).
+HELD | batch 03 | m02A06 | narrower | Existence and uniqueness are proved only for `ε < 1 / (4*(1+C))`, and uniqueness only among solutions bounded by `2*(1+C)`; the prelim claims uniqueness for every `ε > 0`.
+HELD | batch 04 | m93J02 | narrower | It treats only `0 < α < 1` and compact connected sets containing two distinct points; the prelim states merely compact connected `Ω` and does not explicitly exclude singletons or specify this exponent range.
+HELD | batch 04 | m93J03 | narrower | It proves existence plus uniqueness only inside a fixed small sup-norm neighborhood; the prelim asks for uniqueness among all continuous solutions, which is false at `ε = 0`.
+HELD | batch 04 | m93J06 | narrower | The existence/global-flow clauses require a uniform global Lipschitz constant in `y`, and the Hölder clause is replaced by a counterexample to uniqueness rather than the requested Hölder dependence.
+HELD | batch 05 | m94J02 | narrower | Replaces the requested `‖fg‖ ≤ ‖f‖‖g‖` with the weaker `‖fg‖ ≤ (5/4)‖f‖‖g‖`.
+HELD | batch 05 | m94J05 | narrower | Proves uniqueness only among solutions bounded by a fixed radius, not unrestricted uniqueness among all solutions.
+HELD | batch 05 | m95A04 | hypothesis-carries-core | Hypotheses `regular`, `Dtest`, and `Ddist` already supply the locally-integrable embedding and distributional derivative definitions requested in parts (a)–(b).
+HELD | batch 06 | m95J01 | hypothesis-carries-core | `[InnerProductSpace ℝ H]` together with `hinner` assumes that the displayed integral already is a positive-definite inner product; the theorem proves completeness/dimension and the remaining requested claims.
+HELD | batch 06 | m95J02 | narrower | The current theorem covers only `2 ≤ n`, excluding the one-dimensional fundamental solution asked for by the unrestricted `n`-dimensional problem.
+HELD | batch 06 | m96J05 | hypothesis-carries-core | `hD` and `hT` assume the exact Fourier-multiplier descriptions of the finite difference and translation operators, without stating or proving their connection to the physical-space operators in the problem.
+HELD | batch 07 | m97A04 | narrower | It requires `b < 0` also at `0` and `1`, whereas the problem's coefficient condition is on the open ODE interval `0 < t < 1`.
+HELD | batch 07 | m98A05 | narrower | The current file has no `apm_m98a05`; the only surviving result is the generic IFT helper, omitting the perturbation and Sobolev BVP clauses.
+HELD | batch 08 | a00J03 | narrower | Isometry is proved from measure preservation, but surjectivity assumes separately that the measurable inverse is measure preserving instead of deriving it from the problem's hypotheses.
+HELD | batch 08 | a01A03 | admit refused | refused a01A03: statement reaches smoothness order bare ⊤ (analytic, not C^∞)
+HELD | batch 09 | a01A11 | hypothesis-carries-core | Parts (a) and (c) are faithful, but the part-(b) theorem assumes analyticity, decay, and nonzeroness instead of deriving/assembling them from compact positive-measure `K`.
+HELD | batch 10 | a02J03 | narrower | The prelim is on `ℝⁿ`, while the theorem explicitly specializes `φ,f : ℝ → ℝ` and tests only intervals `[a,b]`; it proves only the `n=1` case.
+HELD | batch 11 | a02J07 | narrower | `SlitPath` requires differentiability at every point of `(0,1]` and explicitly assumes interval integrability, rather than directly encoding a general piecewise-smooth path.
+HELD | batch 12 | a92J03 | narrower | It proves continuity, the norm bound, and vanishing at infinity (indeed for every integrable complex function), but never states that the Fourier-transform assignment is linear.
+HELD | batch 14 | a94A05 | narrower | Part (b) is faithful, but part (a) only covers a union of **closed** balls by closed fivefold enlargements; it does not state the requested cover by open fivefold intervals (nor explicitly the countable sequence).
+HELD | batch 14 | a94J02 | narrower | Replaces the requested function on all `ℝ`, globally integrable and strictly monotone, by one having those properties only on `[0,1]`; the literal source is inconsistent.
+HELD | batch 15 | a94J04 | narrower | The representative-level contraction and convergence results are present, but no declaration constructs the requested bounded linear operator `L²(ℝ) → L²(ℝ)` or states its linearity.
+HELD | batch 15 | a94J05 | narrower | The two Liouville conclusions are formalized, but the separate request to state Cauchy’s contour-integral formula is omitted.
+HELD | batch 15 | a95A01 | narrower | Part (a) is faithful, but part (b) proves non-Riemann-integrability only for the literal indicator `χ_K`, not for every bounded measurable `f` equal to it almost everywhere as printed.
+HELD | batch 15 | a95A03 | narrower | The `Lᵖ` range and integral are correct and the convolution norm bound is explicit, but the convolution theorem does not itself assert that the convolution is `MemLp ... 2`, as part (c) asks.
+HELD | batch 16 | a95A06 | narrower | The declarations concern the altered sum from `n=0` (the source starts at `n=1`) and exclude extensions only on connected open supersets.
+HELD | batch 17 | a96A04 | narrower | The problem asks for the heat kernel on `ℝⁿ`, but the entire encoding specializes to scalar `ℝ` (dimension one).
+HELD | batch 19 | a97A07 | narrower | Restricts the arbitrary Jordan curve to a circle centered at zero and restricts `f` from analytic inside/on that curve to entire; it also concludes degree `≤ n-1`, not exactly `n-1`.
+HELD | batch 20 | a98A07 | narrower | Requires one common open neighborhood of the closed disk on which every `f n` is holomorphic, rather than allowing an individual neighborhood for each term.
+HELD | batch 22 | aunk01 | narrower | The integral-invariance clause quantifies only real-valued `f : ℝ → ℝ`; the usual unqualified $L^1(\mathbb R)$ in this context includes complex-valued functions.
+HELD | batch 23 | b01J04 | narrower | Part (a) adds the necessary assumptions that `A` and `B` are individually diagonalizable; the printed unrestricted biconditional is false.
+HELD | batch 24 | b90A02 | narrower | Restricts the arbitrary unital ring and right-module formulation to a commutative ring and ordinary `Module R M`.
+HELD | batch 24 | b93J03 | narrower | Adds `[Nontrivial V]`, excluding the zero vector space so that the demanded common eigenvector can satisfy `v ≠ 0`.
+HELD | batch 26 | b96A04 | narrower | Part (a) adds the hypothesis `y ≠ 0`, absent from the prelim (but necessary, since the printed claim is false for `y = 0`); the remaining clauses are faithful.
+HELD | batch 28 | m02J02 | narrower | “Basis” is encoded only as linear independence plus density of finite spans in the graph norm; it does not assert a Schauder/orthonormal basis or unique convergent expansions.
+HELD | batch 29 | m94A01 | narrower | It assumes full `ContDiff ℝ 4 u`, whereas the problem only assumes continuity of the two pure fourth derivatives `u_xxxx` and `u_yyyy`.
+HELD | batch 30 | m97A05 | narrower | It constructs the distribution and proves the derivative/PDE relations, but omits the requested Fourier-transform formula and does not explicitly give the action formula for `∂x T`.

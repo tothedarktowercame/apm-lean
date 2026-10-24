@@ -3923,6 +3923,32 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
+  "m96A03": {
+   "decls": [
+    "apm_m96a03"
+   ],
+   "sha256": "0e53887da810d186d0fee978ca360a226339d1951cdd2b1de456d5bccd8624b3",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
+  },
+  "m96A04": {
+   "decls": [
+    "apm_m96a04"
+   ],
+   "sha256": "9d325cefab6dc4c98a724058d301410cd058912deea4281330b16821ef2bf3df",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
+  },
   "m96A05": {
    "decls": [
     "apm_m96a05"
@@ -3958,6 +3984,21 @@
    "prelim_defect": null,
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:53:16Z"
+  },
+  "m96J01": {
+   "decls": [
+    "projection_properties"
+   ],
+   "sha256": "1a055cf718625496c9a16cf03e4748891eab72adc7806acb32da644654031c22",
+   "defs": [
+    "proj"
+   ],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
   },
   "m96J02": {
    "decls": [
@@ -4093,6 +4134,21 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
+  "m98A01": {
+   "decls": [
+    "apm_m98a01"
+   ],
+   "sha256": "aadb98a8cb10db42e499f3d5478be57d5d5d0df19250ac594665dbb78d527571",
+   "defs": [
+    "apm_m98a01_C01"
+   ],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
+  },
   "m98A02": {
    "decls": [
     "apm_m98a02"
@@ -4158,6 +4214,21 @@
    "rev": "a68f67e45",
    "approved_at": "2026-10-13T09:42:56Z"
   },
+  "m98J01": {
+   "decls": [
+    "apm_m98j01_open_mapping",
+    "apm_m98j01_closed_graph",
+    "apm_m98j01_closed_graph_of_open_mapping"
+   ],
+   "sha256": "8adb4743a998d71dcfea999b4e023c91641a50e4ce625344bd15d6e0774fb4c9",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
+  },
   "m98J02": {
    "decls": [
     "apm_m98j02"
@@ -4180,6 +4251,21 @@
    "prelim_defect": null,
    "rev": "b69f81f3c",
    "approved_at": "2026-10-18T21:18:11Z"
+  },
+  "m98J03": {
+   "decls": [
+    "apm_m98j03"
+   ],
+   "sha256": "689588de33f16b215291c6a2991e239d4da2a62390bbd05ca3b5aaacc217a2c1",
+   "defs": [
+    "apm_m98J03_perp"
+   ],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
   },
   "m98J04": {
    "decls": [
@@ -4254,6 +4340,52 @@
    "prelim_defect": null,
    "rev": "53eeb619a",
    "approved_at": "2026-10-13T05:20:21Z"
+  },
+  "m99A03": {
+   "decls": [
+    "apm_m99a03"
+   ],
+   "sha256": "7c83a8cb26a577a07cbf49f590aed51aa7bd06e30b1a9f798538b83ddfc814b2",
+   "defs": [
+    "m99A03ExampleSpace",
+    "m99A03L2"
+   ],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
+  },
+  "m99A04": {
+   "decls": [
+    "apm_m99a04"
+   ],
+   "sha256": "08daf662517943dfbee7ce49f3b2982fda82a1db859b9a28136854333114cf2b",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
+  },
+  "m99A05": {
+   "decls": [
+    "apm_m99a05"
+   ],
+   "sha256": "555f820271cc3bbfc5bf1d1ef1a187acbb917bec9ff7c331e3219d4b89f3b45e",
+   "defs": [
+    "M99A05WeaklyConverges",
+    "m99A05BasisSequence",
+    "m99A05L2"
+   ],
+   "grade": "faithful",
+   "grader": "codex read-only grader (backlog-1024 batch 30)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "prelim_defect": null,
+   "rev": "b292dad40",
+   "approved_at": "2026-10-24T22:04:15Z"
   },
   "m99A06": {
    "decls": [
