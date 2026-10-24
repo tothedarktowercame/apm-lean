@@ -42,6 +42,44 @@ theorem apm_t94J04_eulerChar_cover_arithmetic (k : ℕ) :
 
 /-- Adapter: an index-`k` subgroup `H` of `π₁(F, p)` is the fundamental group
 of a connected `k`-sheeted cover of the standard genus-two surface. -/
+lemma apm_t94J04_subgroup_standard_cover_adapter_aux_slsc
+    (S : Type*) [TopologicalSpace S]
+    [ChartedSpace apm_t94J04_E S] :
+    ConstructionTargets.CoveringSubgroupCorrespondence.SemilocallySimplyConnected S := by
+  intro x
+  let e := chartAt apm_t94J04_E x
+  have hxsource : x ∈ e.source := mem_chart_source _ x
+  have hxtarget : e x ∈ e.target := e.map_source hxsource
+  obtain ⟨r, hr, hrsub⟩ := Metric.isOpen_iff.mp e.open_target (e x) hxtarget
+  let B : Set apm_t94J04_E := Metric.ball (e x) r
+  let U : Set S := e.symm '' B
+  have hBsub : B ⊆ e.symm.source := by
+    simpa [B] using hrsub
+  have hU_nhds : U ∈ nhds x := by
+    have hB_nhds : B ∈ nhds (e x) := Metric.ball_mem_nhds _ hr
+    have him := e.symm.image_mem_nhds hxtarget hB_nhds
+    simpa [U, e, e.left_inv hxsource] using him
+  refine ⟨U, hU_nhds, fun γ hγ ↦ ?_⟩
+  let h : B ≃ₜ U := e.symm.homeomorphOfImageSubsetSource hBsub rfl
+  letI : ContractibleSpace B :=
+    (convex_ball (e x) r).contractibleSpace ⟨e x, by simpa [B] using hr⟩
+  letI : ContractibleSpace U := h.symm.contractibleSpace
+  letI : SimplyConnectedSpace U := inferInstance
+  have hxU : x ∈ U := hγ ⟨0, Path.source γ⟩
+  let xU : U := ⟨x, hxU⟩
+  let γU : Path xU xU := {
+    toFun := fun t ↦ (⟨γ t, hγ ⟨t, rfl⟩⟩ : U)
+    continuous_toFun := (Path.continuous γ).subtype_mk _
+    source' := Subtype.ext (Path.source γ)
+    target' := Subtype.ext (Path.target γ)
+  }
+  have hhom : γU.Homotopic (Path.refl xU) :=
+    SimplyConnectedSpace.paths_homotopic _ _
+  let inc : C(U, S) := ⟨Subtype.val, continuous_subtype_val⟩
+  have hmapped := hhom.map inc
+  apply Path.Homotopic.Quotient.eq.mpr
+  simpa [γU] using hmapped
+
 theorem apm_t94J04_subgroup_standard_cover_adapter
     {F : Type} [TopologicalSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t94J04_E F] [CompactSpace F]
@@ -52,7 +90,38 @@ theorem apm_t94J04_subgroup_standard_cover_adapter
       IsCoveringMap q ∧ PathConnectedSpace E ∧
       (∀ b, Nat.card {x : E // q x = b} = k) ∧
       Nonempty (FundamentalGroup E e ≃* H) := by
-  sorry
+  letI : LocPathConnectedSpace F :=
+    ChartedSpace.locPathConnectedSpace apm_t94J04_E F
+  obtain ⟨f⟩ := hF
+  obtain ⟨E, topE, r, e, hr, hE, hre, hcard, hpi⟩ :=
+    ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover
+      (apm_t94J04_subgroup_standard_cover_adapter_aux_slsc F) p H
+  let q : E → ConstructionTargets.Surfaces.Surface true 2 := f ∘ r
+  refine ⟨E, topE, q, e, hr.homeomorph_comp f, hE, ?_, hpi⟩
+  intro b
+  obtain ⟨efib⟩ :=
+    ConstructionTargets.CoveringSubgroupCorrespondence.covering_fiber_equiv
+      hr p (f.symm b)
+  have hy : Nat.card (r ⁻¹' ({f.symm b} : Set F)) = k := by
+    calc
+      Nat.card (r ⁻¹' ({f.symm b} : Set F)) =
+          Nat.card (r ⁻¹' ({p} : Set F)) := Nat.card_congr efib.symm
+      _ = H.index := hcard
+      _ = k := hH
+  let eqv : {x : E // q x = b} ≃ (r ⁻¹' ({f.symm b} : Set F)) := {
+    toFun := fun x ↦ ⟨x.1, by
+      change r x.1 ∈ ({f.symm b} : Set F)
+      simp only [Set.mem_singleton_iff]
+      apply f.injective
+      simpa [q] using x.2⟩
+    invFun := fun x ↦ ⟨x.1, by
+      change f (r x.1) = b
+      have hxmem : r x.1 ∈ ({f.symm b} : Set F) := x.2
+      have hx : r x.1 = f.symm b := Set.mem_singleton_iff.mp hxmem
+      simpa [hx]⟩
+    left_inv x := Subtype.ext rfl
+    right_inv x := Subtype.ext rfl }
+  exact (Nat.card_congr eqv).trans hy
 
 /-- Adapter: a group isomorphic to `π₁` of a space homeomorphic to the standard
 genus-`(k+1)` surface is isomorphic to its `π₁` at `surfacePoint`. -/
