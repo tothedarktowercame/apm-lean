@@ -393,3 +393,18 @@ All ten rows graded faithful, and all ten were already in `STATEMENTS.json`, so
   repeats a hypothesis; the intended conclusion is integrability, and the
   theorem proves that plus `∫ |f| ≤ 2c`. Upheld.
 - No smoothness-order objection: no `ContDiff` in any batch 19 statement file.
+
+## Batch 20 spot-check (all grades upheld)
+
+`admit-batch.py 20` held a98A07 and admitted nothing new: the other nine rows
+(all faithful) were already in `STATEMENTS.json`.
+
+- a98A07 (narrower): held. Commit `4f743f3` ("use common holomorphy region")
+  replaced `∀ n, ∃ U, IsOpen U ∧ closedBall 0 1 ⊆ U ∧ DifferentiableOn ℂ (f n) U`
+  with one `U` shared by every `f n`. problem.md's singular "an open region
+  containing the closed unit disk" can be read either way, but the proof (a
+  Cauchy integral on the unit circle for each n) only uses a neighbourhood per
+  term, and a countable intersection of such neighbourhoods need not be open,
+  so the common-U version proves strictly less. problem.md is not false, so
+  this is not a forced correction: re-encode with the per-term quantifier.
+- No smoothness-order objection: no `ContDiff` in any batch 20 statement file.
