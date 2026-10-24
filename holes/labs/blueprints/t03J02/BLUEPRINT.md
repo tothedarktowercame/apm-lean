@@ -1,142 +1,113 @@
 # Blueprint for t03J02
 
-## Triage
+## Triage and interface repair
 
-Verdict: **true and faithful**.
+The registered statement is true and faithful. Embeddings are essential for
+the collar geometry: constant maps happen to give the same `π₁` answer, but a
+general degree-zero immersed loop can change `H₂`. Null-homotopy is used both
+on `π₁` and `H₁`. Mayer--Vietoris gives `H₂ ≅ ℤ² ⊕ ker(ℤ → ℤ⁴) = ℤ³`.
+
+Definitions through `apm_t03J02_gluedDescEquiv` now match current `Main.lean`.
+`apm_t03J02_CompatibleOpenCover` contains the open cover, its three homotopy
+equivalences, and homotopies identifying the transported overlap inclusions
+with `j₁` and `j₂`. Consumers therefore see the actual attaching maps. They
+take the certificate as a parameter, so all consumer leaves are independent
+of the geometric construction leaf.
+
+## Leaves
+
+| leaf | claim, intended tools | size | dependency |
+|---|---|---:|---|
+| `apm_t03J02_isPushout` | Concrete quotient is a `CategoryTheory.IsPushout`; use `gluedDescEquiv`, `gluedDesc_inl/inr`, `gluedDesc_unique`, and `PushoutCocone.IsColimit`. | 50–90 | definitions only |
+| `apm_t03J02_compatibleOpenCover` | Construct the compatible cover from global annular collars. `SurfaceSchoenflies.embeddedCircle_isClosed_range`, `embeddedCircle_finite_flat_subcover`, and local product charts are available, but no global collar theorem is. | **LIBRARY 500–1000** | definitions only |
+| `apm_t03J02_fundamentalGroup_of_compatibleOpenCover` | Van Kampen, transport via compatibility, kill both legs by null-homotopy, identify presentation. Use `PointWedgeVanKampen` and `TwoOpenFreeProductMapping`. | 150–250, possibly LIBRARY | certificate parameter |
+| `apm_t03J02_H0_of_compatibleOpenCover` | Degree-zero integral MV and connectedness. Use `IntegralOpenCoverMayerVietoris.integralMayerVietoris`, `ProductionOpenCoverMayerVietoris`, and `T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv`. | 60–100 | certificate parameter |
+| `apm_t03J02_H1_of_compatibleOpenCover` | Compatibility plus null-homotopy makes `H₁(S¹) → H₁(T²)²` zero; MV gives `ℤ⁴`. | 100–150 | certificate and null-homotopies |
+| `apm_t03J02_H2_of_compatibleOpenCover` | MV gives `0 → ℤ² → H₂ → ℤ → 0`; split using freeness/projectivity of `ℤ`, yielding `ℤ³`. | 120–180 | certificate and null-homotopies |
+| `apm_t03J02_Hhigh_of_compatibleOpenCover` | MV plus circle/torus homology vanishing above their dimensions. | 60–100 | certificate parameter |
+
+All seven leaves are layer 1 and mutually independent as statements. Layer 2
+is the sorry-free `apm_t03j02` assembly. The pushout leaf is reusable library
+infrastructure and is not artificially forced into the conjunction proof.
+
+## C1–C10 checks
+
+- `isPushout`: C1 quotient topology gives maps-out universality; C2 nonvacuous;
+  C3 small adapter; C4 uniqueness closes the cocone; C5 both canonical maps
+  exposed; C6 valid for arbitrary continuous maps; C7 exact `TopCat.ofHom`
+  types compile; C8 constant maps harmless; C9 new; C10 prose matches.
+- `compatibleOpenCover`: C1 needs embeddings and a genuine global collar; C2
+  does not assume the result; C3 honestly LIBRARY; C4 includes every cover
+  field; C5 includes both map homotopies; C6 exactly the embedding hypotheses;
+  C7 literal subtype intersections; C8 Circle is nonempty and cannot collapse;
+  C9 strictly strengthens the old interface; C10 matches.
+- `fundamentalGroup`: C1 compatible null legs give the free product; C2 result
+  not assumed; C3 limited to van Kampen/presentation algebra; C4 both legs
+  supplied; C5 compatibility fields used; C6 both null hypotheses retained;
+  C7 registered basepoint; C8 overlap nonempty; C9 new; C10 matches.
+- `H0`: C1 connected cover data gives `ℤ`; C2 nonvacuous; C3 one degree; C4 MV
+  inputs complete; C5 actual cover supplied; C6 null hypotheses correctly
+  omitted; C7 integral coefficients; C8 nonempty overlap; C9 new; C10 matches.
+- `H1`: C1 zero legs give rank four; C2 nonvacuous; C3 one degree; C4 exactness
+  supplies kernel/cokernel; C5 transported maps explicit; C6 both null inputs;
+  C7 signs irrelevant for zero; C8 no zero-dimensional edge; C9 new; C10 matches.
+- `H2`: C1 kernel contributes one `ℤ`; C2 nonvacuous; C3 one exact-sequence
+  calculation; C4 adjacent terms included; C5 compatibility explicit; C6 both
+  null inputs; C7 iso existence avoids coordinate-sign ambiguity; C8 degrees
+  1/2 included; C9 new; C10 matches.
+- `Hhigh`: C1 all adjacent terms vanish; C2 nonvacuous; C3 uniform MV; C4
+  adjacent degrees covered; C5 homotopy types suffice; C6 null hypotheses
+  correctly omitted; C7 natural-number inequality; C8 checks `k = 3`; C9 new;
+  C10 matches.
+
+## Missing foundation
+
+`SurfaceSchoenflies` stops at closed image, finite local-flat charts, and
+transport of local flatness. Cohering those charts into a global annular
+neighborhood is a genuine surface collar/Schoenflies library project, so the
+cover leaf is marked LIBRARY. The van Kampen leaf may additionally require a
+circle-overlap groupoid-pushout adapter beyond the existing simply-connected
+overlap convenience theorem.
+
+## Verification (2026-10-24)
+
+`lake env lean holes/labs/blueprints/t03J02/Blueprint.lean`: 0 errors; 7
+`sorry` warnings, one per leaf above (lines 180, 214, 224, 237, 244, 253, 262).
+`#print axioms apm_t03j02`: `[propext, sorryAx, Classical.choice, Quot.sound]`.
+`scripts/statement-registry.py check t03J02`: 1 registered statement matches.
+
+`apm_t03J02_isPushout` is not used by the main theorem. It is kept as a
+statement, not queued for a seat.
+
+## Earlier record (blueprint time)
+
+Kept from the first blueprint. Its three leaves (`pushout_openCover`,
+`fundamentalGroup_of_openCover`, `homology_of_openCover`) are superseded by the
+table above; the cover now carries the inclusion homotopies its caveat asked for.
+
+### Triage
 
 `Main.lean` encodes each simple closed curve by an embedding of `Circle` into
 the standard torus, records null-homotopy, forms the generated-relation
 quotient, and asks for exactly the classical answers
 `π₁ = ℤ² * ℤ²`, `H₀ = ℤ`, `H₁ = ℤ⁴`, `H₂ = ℤ³`, and `H_k = 0` for `k ≥ 3`.
 
-I tried the important edge cases.  `Circle` and the torus are nonempty, so the
-basepoint and gluing locus cannot disappear.  An embedding rules out a
-constant attaching map.  Null-homotopy makes both induced fundamental-group
-and first-homology maps trivial.  Abelianizing `ℤ² * ℤ²` gives `ℤ⁴`, agreeing
-with `H₁`; and the ranks give Euler characteristic `1 - 4 + 3 = 0`, agreeing
-with `χ(T²) + χ(T²) - χ(S¹) = 0`.  No counterexample appears in the solve-loop
-records or topology audit.
+Edge cases tried: `Circle` and the torus are nonempty, so the basepoint and
+gluing locus cannot disappear. An embedding rules out a constant attaching map.
+Null-homotopy makes both induced fundamental-group and first-homology maps
+trivial. Abelianizing `ℤ² * ℤ²` gives `ℤ⁴`, agreeing with `H₁`; the ranks give
+Euler characteristic `1 - 4 + 3 = 0`, agreeing with `χ(T²) + χ(T²) - χ(S¹) = 0`.
+No counterexample appears in the solve-loop records or topology audit.
 
 The topology ledger's reviewed STOP is genuine: maps-out universality of the
-quotient does not itself produce collars.  For arbitrary topological embedded
+quotient does not itself produce collars. For arbitrary topological embedded
 circles, one first needs annular-neighborhood/Jordan--Schoenflies input before
-the existing open-cover van Kampen and Mayer--Vietoris infrastructure applies.
+the open-cover van Kampen and Mayer--Vietoris infrastructure applies.
 
-## Available infrastructure
+### Infrastructure search
 
-The blueprint imports these sorry-free modules (checked by source search):
-
-* `ConstructionTargets.TwoOpenFreeProductMapping`, providing a two-open-set
-  fundamental-group free-product theorem when the overlap is simply connected;
-* `ConstructionTargets.ProductionOpenCoverMayerVietoris`, providing the
-  production singular Mayer--Vietoris exact sequence;
-* `ConstructionTargets.T00A01MayerVietorisAdapters`, providing useful
-  homotopy-invariance and exactness adapters;
-* `ConstructionTargets.SingularHomologyConcrete`, providing concrete singular
-  homology access.
-
-The first module does not directly handle this circle overlap.  The attaching
-maps must first be shown trivial and the resulting group pushout reduced to a
-free product.  Searches for `annulusNeighborhood`, `pushout_openCover`,
-`TwoOpenFreeProduct`, and `MayerVietoris` found no sorry-free construction of
-the required embedded-circle collar or quotient cover.
-
-## Remaining lemmas
-
-### `apm_t03J02_pushout_openCover` — LIBRARY
-
-**Statement in words.** For two embedded attaching circles, the quotient has
-an open cover whose pieces are homotopy equivalent to the two tori and whose
-intersection is homotopy equivalent to the circle.
-
-**Why true.** Use the annular-neighborhood theorem for a topological embedded
-circle in a surface.  Give each torus a half-collar from the other side after
-gluing.  The enlarged summands are open, cover the quotient, retract to their
-original tori, and their overlap retracts to the common core circle.
-
-**Expected size.** 500–1000 lines: the missing shared collar/Schoenflies
-program dominates; the quotient-cover assembly is about 180–300 lines.
-
-**Dependencies.** Definitions only.  This is the shared dependency of both
-invariant calculations.
-
-**Truth check.** In the model case where each circle is the boundary of a
-small embedded disk in a torus, ordinary annular collars give exactly this
-cover.  Compactness of `Circle` and embedding into the Hausdorff torus make
-the range closed, ruling out the usual nonclosed-subspace pathology.
-
-### `apm_t03J02_fundamentalGroup_of_openCover` — LIBRARY
-
-**Statement in words.** Given the cover conclusion and null-homotopy of both
-attaching maps, the fundamental group of the quotient is the frozen
-four-generator/two-commutator presentation.
-
-**Why true.** Seifert--van Kampen identifies the group as the pushout of the
-two torus groups over the circle group.  Both legs are trivial by the supplied
-null-homotopies, so this pushout is the free product.  Compute each torus group
-as `ℤ²` and identify its free product with the displayed `PresentedGroup`.
-The imported two-open fundamental-groupoid program supplies much of the
-open-cover categorical machinery, but a circle-overlap pushout adapter and
-the concrete torus calculation remain.
-
-**Expected size.** 300–600 lines (one library program).
-
-**Dependencies.** The conclusion of `apm_t03J02_pushout_openCover`, passed as
-an explicit hypothesis so this seat can work independently.
-
-**Truth check.** On generators, the overlap generator maps to the identity on
-both sides; hence the amalgamation adds no cross relation.  The resulting
-presentation has precisely `[a₁,b₁]` and `[a₂,b₂]`.
-
-### `apm_t03J02_homology_of_openCover` — LIBRARY
-
-**Statement in words.** Given the same cover conclusion and null attaching
-maps, compute all integral singular homology groups in the frozen form.
-
-**Why true.** Apply production Mayer--Vietoris.  The degree-one circle map into
-the sum of torus homologies is zero by null-homotopy.  Exactness gives
-`H₁ ≅ ℤ⁴` and a short exact sequence `0 → ℤ² → H₂ → ℤ → 0`; it splits because
-`ℤ` is free, yielding `H₂ ≅ ℤ³`.  Connectedness gives `H₀ ≅ ℤ`, and the same
-sequence gives vanishing above degree two.  The imported production sequence
-exists; the substantial remaining work is the concrete torus/circle
-coordinates and exact-sequence module algebra.
-
-**Expected size.** 300–700 lines (one library program).
-
-**Dependencies.** The conclusion of `apm_t03J02_pushout_openCover`, passed as
-an explicit hypothesis.  It is independent of the fundamental-group lemma.
-
-**Truth check.** The split sequence gives ranks `2 + 1 = 3` in degree two;
-Euler characteristic and abelianization independently agree with the result.
-
-## Dependency layers
-
-* **Layer 1:** `apm_t03J02_pushout_openCover` (shared geometry program).
-* **Layer 2, parallel:** `apm_t03J02_fundamentalGroup_of_openCover` and
-  `apm_t03J02_homology_of_openCover`, each receiving Layer 1's conclusion as a
-  hypothesis.
-* **Layer 3:** the sorry-free `apm_t03j02` conjunction assembly.
-
-One caveat for implementers: the compact cover certificate records homotopy
-types, while compatibility of its equivalences with the canonical quotient
-maps is not bundled into extra structure.  The two invariant programs still
-have `j₁`, `j₂`, their null-homotopies, and the concrete quotient available,
-so their statements are true, but a stronger future collar API may make their
-proofs substantially shorter.
-
-## Compilation and axioms
-
-Compiled with:
-
-```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t03J02/Blueprint.lean
-```
-
-The final output of `#print axioms apm_t03j02` is:
-
-```text
-'apm_t03j02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
-```
-
-The three warnings identifying `sorry` are exactly the three top-level library
-lemmas.  The main theorem contains no direct `sorry`.
+`TwoOpenFreeProductMapping` gives a two-open free-product theorem only when the
+overlap is simply connected, so it does not directly handle this circle overlap.
+Searches for `annulusNeighborhood`, `pushout_openCover`, `TwoOpenFreeProduct`,
+and `MayerVietoris` found no sorry-free construction of the embedded-circle
+collar or quotient cover.
