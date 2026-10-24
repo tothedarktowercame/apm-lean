@@ -593,7 +593,29 @@ theorem t96A01_standard_cover_adapter
     (hsheets : Nat.card (p ⁻¹' {s}) = n) :
     ∃ q : E → Surface true 4, IsCoveringMap q ∧
       ∀ b, Nat.card {x : E // q x = b} = n := by
-  sorry
+  obtain ⟨h⟩ := hgenus
+  let q : E → Surface true 4 := h ∘ p
+  have hq : IsCoveringMap q := hp.homeomorph_comp h
+  letI : PathConnectedSpace ConstructionTargets.Surfaces.Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+  letI : PathConnectedSpace (Surface true 4) :=
+    (ConstructionTargets.Surfaces.surjective_surfaceQuotient true 4).pathConnectedSpace
+      (ConstructionTargets.Surfaces.continuous_surfaceQuotient true 4)
+  have hbase : Nat.card {x : E // q x = h s} = n := by
+    let e : {x : E // q x = h s} ≃ {x : E // p x = s} :=
+      { toFun := fun x => ⟨x, h.injective x.2⟩
+        invFun := fun x => ⟨x, congrArg h x.2⟩
+        left_inv := fun x => Subtype.ext rfl
+        right_inv := fun x => Subtype.ext rfl }
+    rw [Nat.card_congr e]
+    simpa only [Set.mem_preimage, Set.mem_singleton_iff] using hsheets
+  refine ⟨q, hq, fun b => ?_⟩
+  let γ : Path (h s) b := PathConnectedSpace.somePath (h s) b
+  let e : {x : E // q x = h s} ≃ {x : E // q x = b} :=
+    Equiv.ofBijective (hq.monodromy (.mk γ)) (hq.monodromy_bijective (.mk γ))
+  rw [← Nat.card_congr e]
+  exact hbase
 -- END SEAT AREA
 
 /-- Adapter: a homeomorphism to the standard surface transports `π₁`, with the
