@@ -1104,18 +1104,164 @@ theorem orientablePairing_normalForm_aux_natWord_orientable (P : PairingData)
     rw [hi, hj, h]
     exact (hor i').symm
 
-/-- **Leaf (geometric to combinatorial vertex).**  From `P.oneVertex`.  A
-`boundaryRel` step that starts at a polygon vertex ends at a polygon vertex
-(an edge parameter `0` or `1` goes to `0` or `1`), and two arcs related at
-their endpoints have corner-related corners.  So the set of disk points that
-are corners corner-related to corner `a` is closed under `boundaryRel` in both
-directions, which turns the `EqvGen` chain of `oneVertex` into a
-`WordCornerRel` chain.  Needs: `edgePoint` is injective on the boundary away
-from the identification `edgePoint n i 1 = edgePoint n (i+1) 0`. -/
+/-! ### One vertex: from `boundaryRel` chains to corner chains
+
+Split of `_aux_natWord_oneVertex` (claude-14, 2026-10-24, after the lemma-3
+PARTIAL that proved `_aux_endpoint`).  Fix a corner `a`.  The set of disk
+points that are polygon vertices of corners corner-related to `a`
+(`_aux_Reach`) is closed under one `boundaryRel` step (`_aux_step`) and
+`boundaryRel` is symmetric (`_aux_symm`), so `EqvGen` induction carries it
+along the chain from `P.oneVertex`.  At the end, `polygonVertex` is injective
+(`_aux_endpoint` with parameter `0`), which recovers the corner `b`. -/
+
+/-- A disk point on edge `i` at a polygon vertex is at parameter `0` or `1`,
+at the initial or terminal corner of `i`. -/
+lemma orientablePairing_normalForm_aux_natWord_oneVertex_aux_endpoint
+    (n : ℕ) (hn : 0 < n) (i a : Fin n) (t : Set.Icc (0 : ℝ) 1)
+    (h : edgePoint n i t = polygonVertex n a) :
+    (t = ⟨0, by norm_num⟩ ∧ a = i) ∨
+      (t = ⟨1, by norm_num⟩ ∧ a = finRotate n i) := by
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn)
+  have h' := edgePoint_eq_imp_coordinate_cases (m + 1) hn i a t
+    ⟨0, by norm_num⟩ (by simpa [polygonVertex] using h)
+  rcases h' with hc | hw | hw
+  · by_cases ht : t = ⟨0, by norm_num⟩
+    · left
+      refine ⟨ht, Fin.ext ?_⟩
+      subst t
+      norm_num at hc ⊢
+      exact_mod_cast hc.symm
+    · right
+      norm_num at hc
+      have ht1 : t = ⟨1, by norm_num⟩ := by
+        apply Subtype.ext
+        have hi : ((i : ℕ) : ℝ) + 1 ≤ m + 1 := by
+          exact_mod_cast (show (i : ℕ) + 1 ≤ m + 1 by omega)
+        have ha : (a : ℝ) ≤ i + 1 := by linarith [t.2.2]
+        have hai : (a : ℕ) ≤ i + 1 := by exact_mod_cast ha
+        have hia : (i : ℕ) < a := by
+          by_contra hia
+          have hai' : (a : ℕ) ≤ i := by omega
+          have haiR : (a : ℝ) ≤ i := by exact_mod_cast hai'
+          have : (t : ℝ) = 0 := by linarith [t.2.1]
+          exact ht (Subtype.ext this)
+        have : (a : ℕ) = i + 1 := by omega
+        have : (t : ℝ) = 1 := by
+          have haiR : (a : ℝ) = i + 1 := by exact_mod_cast this
+          nlinarith
+        exact this
+      refine ⟨ht1, ?_⟩
+      have hi : (i : ℕ) < (m + 1) - 1 := by
+        subst t
+        norm_num at hc
+        have ha : (a : ℕ) = i + 1 := by exact_mod_cast hc.symm
+        omega
+      rw [finRotate_of_lt (show (i : ℕ) < m by simpa using hi)]
+      apply Fin.ext
+      subst t
+      norm_num at hc
+      exact_mod_cast hc.symm
+  · exfalso
+    norm_num at hw
+    have ha : ((a : ℕ) : ℝ) < m + 1 := by exact_mod_cast a.2
+    have ha' : (a : ℕ) = m + 1 := by exact_mod_cast hw.2
+    omega
+  · right
+    have ht : t = ⟨1, by norm_num⟩ := by
+      apply Subtype.ext
+      have hi : ((i : ℕ) : ℝ) + 1 ≤ m + 1 := by
+        exact_mod_cast (show (i : ℕ) + 1 ≤ m + 1 by omega)
+      norm_num at hw
+      linarith [t.2.2]
+    refine ⟨ht, ?_⟩
+    have hi : (i : ℕ) = (m + 1) - 1 := by
+      subst t
+      norm_num at hw
+      have hi' : (i : ℕ) = m := by exact_mod_cast hw.1
+      omega
+    have ha : a = (0 : Fin (m + 1)) := by
+      apply Fin.ext
+      norm_num at hw ⊢
+      exact_mod_cast hw.2
+    subst a
+    rw [show i = Fin.last m by apply Fin.ext; simpa using hi]
+    exact finRotate_last.symm
+
+
+/-- The disk points that are vertices of corners corner-related to `a`. -/
+def orientablePairing_normalForm_aux_natWord_oneVertex_aux_Reach (P : PairingData)
+    (a : Fin (orientablePairing_normalForm_aux_natWord P).length) (x : Disk) : Prop :=
+  ∃ c : Fin (orientablePairing_normalForm_aux_natWord P).length,
+    x = polygonVertex P.edgeCount
+      ⟨c, by simpa [orientablePairing_normalForm_aux_natWord] using c.2⟩ ∧
+    Relation.EqvGen
+      (orientablePairing_normalForm_aux_WordCornerRel
+        (orientablePairing_normalForm_aux_natWord P)) a c
+
+/-- **Leaf.**  `boundaryRel` is symmetric: from `x = edgePoint i t` and
+`y = edgePoint (pair i) (pairedParameter pair sign i t)`, take arc `pair i`
+and parameter `pairedParameter pair sign i t`; use `P.pair_pair` and that
+`pairedParameter` is an involution (`reverseIcc` is, and the sign test is
+symmetric in `i` and `pair i`). -/
+theorem orientablePairing_normalForm_aux_natWord_oneVertex_aux_symm (P : PairingData)
+    {x y : Disk} (h : P.Rel x y) : P.Rel y x := by
+  sorry
+
+/-- **Leaf.**  One `boundaryRel` step from a reached vertex reaches a vertex.
+Write `x = edgePoint i t = polygonVertex c`.  By `_aux_endpoint`, either
+`t = 0` and `c = i`, or `t = 1` and `c = finRotate i`.  Then
+`y = edgePoint (pair i) s` with `s = t` (signs equal) or `s = 1 - t`, so `s`
+is `0` or `1`; take `d = pair i` if `s = 0`, `d = finRotate (pair i)` if
+`s = 1` (`edgePoint _ j 1 = polygonVertex (finRotate j)`).  The step `c ~ d`
+is one `WordCornerRel` step with arcs `i` and `pair i`: their labels agree
+(`P.orbit_pair`), `i ≠ pair i` (`P.pair_ne`), and the four cases of the
+definition match the four cases above.  Word letters are
+`(enc (P.orbit i), P.sign i)` (`_aux_wordOf_get`). -/
+theorem orientablePairing_normalForm_aux_natWord_oneVertex_aux_step (P : PairingData)
+    (a : Fin (orientablePairing_normalForm_aux_natWord P).length) {x y : Disk}
+    (h : P.Rel x y)
+    (hx : orientablePairing_normalForm_aux_natWord_oneVertex_aux_Reach P a x) :
+    orientablePairing_normalForm_aux_natWord_oneVertex_aux_Reach P a y := by
+  sorry
+
+theorem orientablePairing_normalForm_aux_natWord_oneVertex_aux_lift
+    (P : PairingData)
+    (a b : Fin (orientablePairing_normalForm_aux_natWord P).length)
+    (h : Relation.EqvGen P.Rel
+      (polygonVertex P.edgeCount
+        ⟨a, by simpa [orientablePairing_normalForm_aux_natWord] using a.2⟩)
+      (polygonVertex P.edgeCount
+        ⟨b, by simpa [orientablePairing_normalForm_aux_natWord] using b.2⟩)) :
+    Relation.EqvGen
+      (orientablePairing_normalForm_aux_WordCornerRel
+        (orientablePairing_normalForm_aux_natWord P)) a b := by
+  have hiff : ∀ {x y : Disk}, Relation.EqvGen P.Rel x y →
+      (orientablePairing_normalForm_aux_natWord_oneVertex_aux_Reach P a x ↔
+        orientablePairing_normalForm_aux_natWord_oneVertex_aux_Reach P a y) := by
+    intro x y hxy
+    induction hxy with
+    | rel x y hr =>
+      exact ⟨orientablePairing_normalForm_aux_natWord_oneVertex_aux_step P a hr,
+        orientablePairing_normalForm_aux_natWord_oneVertex_aux_step P a
+          (orientablePairing_normalForm_aux_natWord_oneVertex_aux_symm P hr)⟩
+    | refl x => exact Iff.rfl
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  obtain ⟨c, hc, hac⟩ := (hiff h).mp ⟨a, rfl, Relation.EqvGen.refl _⟩
+  have hcb : c = b := by
+    rcases orientablePairing_normalForm_aux_natWord_oneVertex_aux_endpoint
+        P.edgeCount P.edgeCount_pos _ _ ⟨0, by norm_num⟩ hc.symm with h0 | h1
+    · exact Fin.ext (by simpa using (congrArg Fin.val h0.2).symm)
+    · exact absurd (congrArg Subtype.val h1.1) (by norm_num)
+  exact hcb ▸ hac
+
 theorem orientablePairing_normalForm_aux_natWord_oneVertex (P : PairingData) :
     orientablePairing_normalForm_aux_WordOneVertex
       (orientablePairing_normalForm_aux_natWord P) := by
-  sorry
+  unfold orientablePairing_normalForm_aux_WordOneVertex
+  intro a b
+  apply orientablePairing_normalForm_aux_natWord_oneVertex_aux_lift P a b
+  exact P.oneVertex _ _
 
 /-! ### Orientable cut-and-paste: span construction
 
