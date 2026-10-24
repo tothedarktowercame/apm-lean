@@ -191,3 +191,21 @@ Batch 09 was admitted during the earlier sweep (rev 8fccb9498); rerunning
   negation is stated as `¬ ∀ H`, with the witness in ℓ² rather than L². That is
   harmless because ℓ² embeds isometrically in L². Upheld. This is a false
   source to add to the list.
+
+## Batch 10 spot-checks (all grades upheld)
+
+Batch 10 was admitted during the earlier sweep; rerunning `admit-batch.py 10`
+changes nothing and prints a02J03 as HELD.
+
+- a02J03 (narrower): `scaled_integral_vanishes` (Main.lean:406-411) has
+  `φ f : ℝ → ℝ` and tests only `Set.Icc a b`; problem.md is on ℝⁿ with
+  n-dimensional rectangles. Only n = 1 is proved. Upheld; held.
+- a01J03 (stronger, admitted): `deriv_sum_of_monotone_ae` (Main.lean:151-156)
+  drops problem.md's `f_n ≥ 0`. The stronger claim is still true: summability
+  at 0 lets one subtract f_n(0), and the shifted summands have one sign on each
+  half-line, so Fubini's differentiation theorem applies on each. Upheld.
+- a01J06 (faithful): `EnumeratesZeros` (Main.lean:25-28) makes each fiber of
+  ω : ℕ → ℂ finite with cardinality `analyticOrderNatAt f z`. Upheld. Caveat:
+  an ℕ-indexed ω cannot enumerate finitely many zeros, so f with finitely many
+  zeros satisfies no hypothesis; the problem's conclusion is a finite sum there,
+  so nothing of substance is lost.
