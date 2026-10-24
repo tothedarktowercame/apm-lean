@@ -98,3 +98,31 @@ came after its late reply. One of the three held rows narrows a false source.
   of the false o(·) (lines 166-183), and the Numerov residual
   (1 - h²V₊/12)y₊ - (2 + 5h²V/6)y + (1 - h²V₋/12)y₋ = O(h⁶) (184-190). I
   rederived the h²(Ly) identity: the + sign on κh⁴y⁽⁴⁾ is right. Upheld.
+
+## Batch 07 spot-checks
+
+Batch 07 was admitted in the earlier sweep (eight rows registered: six
+faithful, m96J06 stronger, m99J02 overridden to faithful above). These checks
+came after its late reply. One held row is overridden; the other stays held.
+
+- m97A04 (graded narrower, overridden to faithful): the theorem assumes
+  `∀ t ∈ Set.Icc 0 1, b t < 0` (Main.lean:569). The source says "if
+  b(t)<0 for all t", not "for 0<t<1", so the closed interval is within what
+  problem.md states. (The open-interval version is also true, because the
+  stencil only evaluates b at interior mesh points, but the problem does not
+  ask for it.) The stencil identity (552-568) is the correction from 541f88367.
+  Admitted faithful with this file as evidence. This leaves 39 held rows,
+  33 of them narrower; `held-raw.txt` still lists m97A04 as raw output.
+- m98A05 (narrower): confirmed. The only declaration is `lemma
+  apm_m98a05_ift` (line 17), the generic IFT; the perturbation claim (b)
+  and the H²(0,π) existence claim (c) were deleted in 93c400876. Not a false
+  source: (b) is false for arbitrary ε₀, but the bank already repaired that
+  with ε₀ = 0, and (c) is true. Held; not on the false-source list.
+- m99J02 (graded vacuous, already overridden): rechecked against the pinned
+  Mathlib: `((⊤ : ℕ∞) : WithTop ℕ∞) = ∞` is `rfl` and `≠ ω` by `decide`. The
+  jump term is right: g' jumps by u₁(y)u₂'(y) − u₁'(y)u₂(y) = W(y), and
+  under the ODE W is constant, so c = W(0) (lines 278-290). Upheld faithful.
+- m96J06 (stronger, admitted): the extra conclusion |x| ≤ 1/12 on the ball
+  |y| < 1/48 is added to the exact equation. Upheld.
+- m99J01 (faithful): ODE imposed only for t ≥ 0 (lines 19-21), uniqueness on
+  t ≥ 0, unique ξ = cos ξ with every solution tending to ξ (502-512). Upheld.

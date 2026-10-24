@@ -4115,6 +4115,24 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:46:56Z"
   },
+  "m97A04": {
+   "decls": [
+    "apm_m97a04"
+   ],
+   "sha256": "b3202f341092958debbfc37460c22ab8bfb09bb07acd437d5ac0ae4697f80a57",
+   "defs": [
+    "apm_m97a04_extend",
+    "apm_m97a04_h",
+    "apm_m97a04_matrix",
+    "apm_m97a04_rhs"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 review override (backlog-1024 batch 07)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
+   "prelim_defect": null,
+   "rev": "b4b81d769",
+   "approved_at": "2026-10-24T22:09:20Z"
+  },
   "m97A06": {
    "decls": [
     "apm_m97a06"
