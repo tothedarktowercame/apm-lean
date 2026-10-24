@@ -248,12 +248,135 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen
   sorry
 
 -- BEGIN SEAT AREA
+def apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_pairHom
+    {G : Type*} [Group G] (x y : G) (hxy : Commute x y) :
+    Multiplicative (ℤ × ℤ) →* G where
+  toFun p := x ^ p.toAdd.1 * y ^ p.toAdd.2
+  map_one' := by simp
+  map_mul' p q := by
+    change x ^ (p.toAdd.1 + q.toAdd.1) * y ^ (p.toAdd.2 + q.toAdd.2) = _
+    rw [zpow_add, zpow_add]
+    calc
+      _ = x ^ p.toAdd.1 * (x ^ q.toAdd.1 * y ^ p.toAdd.2) * y ^ q.toAdd.2 := by
+        simp [mul_assoc]
+      _ = x ^ p.toAdd.1 * (y ^ p.toAdd.2 * x ^ q.toAdd.1) * y ^ q.toAdd.2 := by
+        rw [hxy.zpow_zpow q.toAdd.1 p.toAdd.2]
+      _ = _ := by simp [mul_assoc]
+
+def apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_basis
+    (j : Fin 2) : ℤ × ℤ :=
+  if j = 0 then (1, 0) else (0, 1)
+
+def apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_side
+    (i : Fin 2) : Multiplicative (ℤ × ℤ) →*
+      Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative (ℤ × ℤ)) :=
+  if i = 0 then Monoid.Coprod.inl else Monoid.Coprod.inr
+
+def apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen
+    (ij : apm_t03J02_generator) :
+      Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative (ℤ × ℤ)) :=
+  apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_side ij.1
+    (.ofAdd (apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_basis ij.2))
+
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_rel
+    (r : FreeGroup apm_t03J02_generator)
+    (hr : r ∈ Set.range apm_t03J02_commutatorRelation) :
+    FreeGroup.lift
+      apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen r = 1 := by
+  obtain ⟨i, rfl⟩ := hr
+  simp [apm_t03J02_commutatorRelation,
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen,
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_basis]
+  exact commutatorElement_eq_one_iff_commute.mpr <|
+    (Commute.all (Multiplicative.ofAdd (1, 0))
+    (Multiplicative.ofAdd (0, 1))).map
+      (apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_side i)
+
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_commute
+    (i : Fin 2) :
+    Commute
+      (PresentedGroup.of (rels := Set.range apm_t03J02_commutatorRelation) (i, 0))
+      (PresentedGroup.of (rels := Set.range apm_t03J02_commutatorRelation) (i, 1)) := by
+  rw [← commutatorElement_eq_one_iff_commute]
+  exact PresentedGroup.one_of_mem ⟨i, rfl⟩
+
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_toGroup_of
+    (ij : apm_t03J02_generator) :
+    PresentedGroup.toGroup
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_rel
+        (PresentedGroup.of ij) =
+      apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen ij :=
+  PresentedGroup.toGroup.of _
+
 lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation :
     Nonempty
       (Monoid.Coprod (Multiplicative (ℤ × ℤ))
           (Multiplicative (ℤ × ℤ)) ≃*
         apm_t03J02_freeProductZ2Z2) := by
-  sorry
+  let forward : Monoid.Coprod (Multiplicative (ℤ × ℤ))
+      (Multiplicative (ℤ × ℤ)) →* apm_t03J02_freeProductZ2Z2 :=
+    Monoid.Coprod.lift
+      (apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_pairHom
+        (PresentedGroup.of (0, 0)) (PresentedGroup.of (0, 1))
+        (apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_commute 0))
+      (apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_pairHom
+        (PresentedGroup.of (1, 0)) (PresentedGroup.of (1, 1))
+        (apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_commute 1))
+  let backward : apm_t03J02_freeProductZ2Z2 →*
+      Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative (ℤ × ℤ)) :=
+    PresentedGroup.toGroup
+      apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_rel
+  refine ⟨MonoidHom.toMulEquiv forward backward ?_ ?_⟩
+  · apply Monoid.Coprod.hom_ext
+    · apply MonoidHom.ext
+      intro p
+      rcases p with ⟨a, b⟩
+      dsimp [forward, backward,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_pairHom,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_side,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_basis]
+      rw [map_mul, map_zpow, map_zpow]
+      erw [
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_toGroup_of,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_toGroup_of]
+      simp [apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_side,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_basis,
+        ← map_zpow, ← map_mul]
+      congr 1
+      change (a • (1, 0) + b • (0, 1) : ℤ × ℤ) = (a, b)
+      simp
+    · apply MonoidHom.ext
+      intro p
+      rcases p with ⟨a, b⟩
+      dsimp [forward, backward,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_pairHom,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_side,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_basis]
+      rw [map_mul, map_zpow, map_zpow]
+      erw [
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_toGroup_of,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_toGroup_of]
+      simp [apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_side,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_basis,
+        ← map_zpow, ← map_mul]
+      congr 1
+      change (a • (1, 0) + b • (0, 1) : ℤ × ℤ) = (a, b)
+      simp
+  · apply PresentedGroup.ext
+    rintro ⟨i, j⟩
+    change forward (backward (PresentedGroup.of (i, j))) = PresentedGroup.of (i, j)
+    dsimp [backward]
+    erw [apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_toGroup_of]
+    fin_cases i <;> fin_cases j <;>
+      norm_num [forward,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_pairHom,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_gen,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_side,
+        apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_basis]
 -- END SEAT AREA
 
 /-- LIBRARY: van Kampen plus the algebraic identification of the two trivial
