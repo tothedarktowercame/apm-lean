@@ -376,3 +376,20 @@ All ten rows graded faithful, and all ten were already in `STATEMENTS.json`, so
   `1 ≤ p` for `1 < p`, and continuity on all of ℝ each imply the stated
   problem. Upheld.
 - No other `ContDiff` in any batch 17 statement.
+
+## Batch 19 spot-check (all grades upheld)
+
+`admit-batch.py 19` held a97A07 and admitted nothing new: the other nine rows
+(one stronger, eight faithful) were already in `STATEMENTS.json`.
+
+- a97A07 (narrower): held. `apm_a97A07_main` replaces the arbitrary Jordan
+  curve with a circle centred at 0 and assumes `f` entire rather than analytic
+  inside and on γ. Needs re-encoding over a general Jordan curve (or at least a
+  general cycle with the z_k inside). Separately, problem.md is false as
+  written: "degree n-1" fails for constant f (P is then the constant
+  interpolant, degree 0), so the `natDegree ≤ n - 1` conclusion is the forced
+  correction and is not part of the narrowing.
+- a97J01 (stronger): problem.md's conclusion "f is Lebesgue measurable"
+  repeats a hypothesis; the intended conclusion is integrability, and the
+  theorem proves that plus `∫ |f| ≤ 2c`. Upheld.
+- No smoothness-order objection: no `ContDiff` in any batch 19 statement file.
