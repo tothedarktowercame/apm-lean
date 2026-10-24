@@ -418,6 +418,20 @@ and all ten were already in `STATEMENTS.json`.
   `ContDiffOn ℝ ∞` (Main.lean:390) under `open scoped ContDiff` (line 18),
   where `∞` is `((⊤ : ℕ∞) : WithTop ℕ∞)`, i.e. C^∞, not analytic. Upheld.
 
+## Batch 22 spot-check (aunk01 held)
+
+Nine rows faithful and already in `STATEMENTS.json`; `admit-batch.py 22` held
+one.
+
+- **aunk01 (narrower, upheld).** Part (c) of problem.md says "if
+  $f\in L^1(\mathbb R)$" with no scalar field. `apm_aunk01`
+  (Main.lean:27) quantifies `(f : ℝ → ℝ)`, so complex-valued integrable
+  functions are not covered. problem.md is not false: re-encode part (c)
+  over `ℂ` (or a general normed space `E`), keeping parts (a) and (b).
+- No smoothness-order objection: no `ContDiff` in any batch 22 statement.
+  The `⊤` occurrences in b00J01/b00J03 are the top subgroup and top
+  intermediate field, not a smoothness order.
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -425,4 +439,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–21.
+Batches 21–31 have grade files; spot-checks recorded here cover 00–22.
