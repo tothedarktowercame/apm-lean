@@ -223,6 +223,37 @@ theorem apm_t03J02_compatibleOpenCover
     Nonempty (apm_t03J02_CompatibleOpenCover j₁ j₂) := by
   sorry
 
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) [PathConnectedSpace Y] :
+    PathConnectedSpace X := by
+  refine ⟨⟨e.symm (Classical.choice (inferInstance : Nonempty Y))⟩, ?_⟩
+  intro x y
+  let middle : Path (e.symm (e x)) (e.symm (e y)) :=
+    (PathConnectedSpace.somePath (e x) (e y)).map e.symm.continuous
+  exact ⟨(e.left_inv.some.evalAt x).symm.trans
+    (middle.trans (e.left_inv.some.evalAt y))⟩
+
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (hnull₁ : j₁.Nullhomotopic)
+    (hnull₂ : j₂.Nullhomotopic)
+    (z₀ : Circle)
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    Nonempty
+      (FundamentalGroup (apm_t03J02_space j₁ j₂)
+          (apm_t03J02_basepoint j₁ j₂ z₀) ≃*
+        Monoid.Coprod (Multiplicative (ℤ × ℤ))
+          (Multiplicative (ℤ × ℤ))) := by
+  sorry
+
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation :
+    Nonempty
+      (Monoid.Coprod (Multiplicative (ℤ × ℤ))
+          (Multiplicative (ℤ × ℤ)) ≃*
+        apm_t03J02_freeProductZ2Z2) := by
+  sorry
+
 /-- LIBRARY: van Kampen plus the algebraic identification of the two trivial
 attaching legs.  The open-cover conclusion is supplied as a hypothesis so this
 program can run in parallel with the homology program after the geometry lands. -/
@@ -236,9 +267,13 @@ theorem apm_t03J02_fundamentalGroup_of_compatibleOpenCover
       (FundamentalGroup (apm_t03J02_space j₁ j₂)
         (apm_t03J02_basepoint j₁ j₂ z₀) ≃*
           apm_t03J02_freeProductZ2Z2) := by
-  sorry
+  obtain ⟨e₁⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen
+      j₁ j₂ hnull₁ hnull₂ z₀ hcover
+  obtain ⟨e₂⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation
+  exact ⟨e₁.trans e₂⟩
 
-/-- Degree-zero Mayer--Vietoris calculation. -/
 theorem apm_t03J02_H0_of_compatibleOpenCover
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
