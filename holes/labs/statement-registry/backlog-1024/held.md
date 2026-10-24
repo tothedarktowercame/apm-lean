@@ -548,6 +548,30 @@ Nine rows (all faithful) already in `STATEMENTS.json` with evidence
   above) and m94A01 (`ContDiff ℝ 4`), every `⊤` is an `ENNReal` or `Opens`
   top. No bare `⊤` smoothness order.
 
+## Batch 30 spot-check (m97A05 held)
+
+Nine rows (all faithful) already in `STATEMENTS.json` with evidence
+`grades-30.md`; `admit-batch.py 30` held one.
+
+- **m97A05 (narrower, upheld).** problem.md asks (a) whether
+  `T(φ) = ∫ φ(s,-s) ds` is a distribution, (b) whether `T` has a Fourier
+  transform and its formula, (c) `∂x T`, (d) `(∂x² - ∂y²) T = 0`.
+  `apm_m97a05` (lines 100–105) gives a tempered `T` with that action (hence in
+  `𝓓'`), `∂x T = ∂y T`, and `∂x²T = ∂y²T`. Part (b) is absent, and (c) is only
+  related to `∂y T`, not computed as an action on test functions. Not a false
+  problem.md, so it stays an open gap.
+- Smoothness orders: no `ContDiff` or `⊤` in any of the ten `Main.lean` files.
+
+## Batch 31 spot-check (none held)
+
+One row, m99J05, faithful; `admit-batch.py 31` held nothing and the row is in
+`STATEMENTS.json` with evidence `grades-31.md`.
+
+- **m99J05 (faithful, upheld).** Read lines 17–32 against problem.md: the
+  quadratic is `½‖v‖² - f v` for `f : V →L[ℝ] ℝ` on a complete real inner
+  product space; the theorem states `∃!` minimizer (a) and, for every `u`,
+  minimizer ↔ `∀ v, ⟪u,v⟫ = f v`, which covers (b) and its converse (c).
+
 ## Status after all 32 batches
 
 All 32 `grades-NN.md` exist and every list in `dispatch.log` (00–31) was
@@ -555,4 +579,4 @@ dispatched. `held-raw.txt` regenerated from `admit-batch.py 00..31`: 38 rows
 (32 narrower, 4 hypothesis-carries-core, 1 vacuous m00A04, 1 revoked a00J06).
 Dropped since the earlier listing: m97A04 (overridden faithful), a00J03
 (repaired, admitted), a01A03 (admitted after the bare-⊤ refusal was cleared).
-Batches 21–31 have grade files; spot-checks recorded here cover 00–29.
+Spot-checks recorded here cover all 32 batches (00–31).
