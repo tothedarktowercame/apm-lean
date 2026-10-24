@@ -1,0 +1,37 @@
+HELD | m03J03 | narrower | The four requested distribution claims are represented, but `Distribution ... ⊤` and `TestFunction ... ⊤` use the bare analytic (`ω`) smoothness order rather than the prelim's standard `C^∞` test-function space.
+HELD | m93J02 | narrower | It treats only `0 < α < 1` and compact connected sets containing two distinct points; the prelim states merely compact connected `Ω` and does not explicitly exclude singletons or specify this exponent range.
+HELD | m93J03 | narrower | It proves existence plus uniqueness only inside a fixed small sup-norm neighborhood; the prelim asks for uniqueness among all continuous solutions, which is false at `ε = 0`.
+HELD | m93J06 | narrower | The existence/global-flow clauses require a uniform global Lipschitz constant in `y`, and the Hölder clause is replaced by a counterexample to uniqueness rather than the requested Hölder dependence.
+HELD | m94J02 | narrower | Replaces the requested `‖fg‖ ≤ ‖f‖‖g‖` with the weaker `‖fg‖ ≤ (5/4)‖f‖‖g‖`.
+HELD | m94J05 | narrower | Proves uniqueness only among solutions bounded by a fixed radius, not unrestricted uniqueness among all solutions.
+HELD | m95A04 | hypothesis-carries-core | Hypotheses `regular`, `Dtest`, and `Ddist` already supply the locally-integrable embedding and distributional derivative definitions requested in parts (a)–(b).
+HELD | m97A04 | narrower | It requires `b < 0` also at `0` and `1`, whereas the problem's coefficient condition is on the open ODE interval `0 < t < 1`.
+HELD | m98A05 | narrower | The current file has no `apm_m98a05`; the only surviving result is the generic IFT helper, omitting the perturbation and Sobolev BVP clauses.
+HELD | m99J02 | vacuous | `ContDiff ℝ (⊤ : ℕ∞)` makes test functions analytic; an analytic compactly supported function on ℝ is zero, so the identities test only `φ = 0`.
+refused a00J01: no theorem apm_a00j01 in committed Main.lean
+refused a00J05: no theorem apm_a00j05 in committed Main.lean
+refused a00J06: no theorem apm_a00j06 in committed Main.lean
+refused a01A02: no theorem apm_a01a02 in committed Main.lean
+refused a01A03: no theorem apm_a01a03 in committed Main.lean
+HELD | m99J03 | narrower | The three distributional limits are correct, but the test class uses `ContDiff ℝ (⊤ : ℕ∞)`, i.e. analytic (`ω`), rather than all compactly supported smooth functions.
+HELD | a00J01 | admit refused | refused a00J01: no theorem apm_a00j01 in committed Main.lean
+HELD | a00J03 | narrower | Isometry is proved from measure preservation, but surjectivity assumes separately that the measurable inverse is measure preserving instead of deriving it from the problem's hypotheses.
+HELD | a00J05 | admit refused | refused a00J05: no theorem apm_a00j05 in committed Main.lean
+HELD | a00J06 | admit refused | refused a00J06: no theorem apm_a00j06 in committed Main.lean
+HELD | a01A02 | admit refused | refused a01A02: no theorem apm_a01a02 in committed Main.lean
+HELD | a01A03 | admit refused | refused a01A03: no theorem apm_a01a03 in committed Main.lean
+refused a01A04: no theorem apm_a01a04 in committed Main.lean
+refused a01A06: no theorem apm_a01a06 in committed Main.lean
+refused a01A07: no theorem apm_a01a07 in committed Main.lean
+refused a01A08: no theorem apm_a01a08 in committed Main.lean
+refused a01A09: no theorem apm_a01a09 in committed Main.lean
+refused a01A10: no theorem apm_a01a10 in committed Main.lean
+refused a01J01: no theorem apm_a01j01 in committed Main.lean
+HELD | a01A04 | admit refused | refused a01A04: no theorem apm_a01a04 in committed Main.lean
+HELD | a01A06 | admit refused | refused a01A06: no theorem apm_a01a06 in committed Main.lean
+HELD | a01A07 | admit refused | refused a01A07: no theorem apm_a01a07 in committed Main.lean
+HELD | a01A08 | admit refused | refused a01A08: no theorem apm_a01a08 in committed Main.lean
+HELD | a01A09 | admit refused | refused a01A09: no theorem apm_a01a09 in committed Main.lean
+HELD | a01A10 | admit refused | refused a01A10: no theorem apm_a01a10 in committed Main.lean
+HELD | a01A11 | hypothesis-carries-core | Parts (a) and (c) are faithful, but the part-(b) theorem assumes analyticity, decay, and nonzeroness instead of deriving/assembling them from compact positive-measure `K`.
+HELD | a01J01 | admit refused | refused a01J01: no theorem apm_a01j01 in committed Main.lean
