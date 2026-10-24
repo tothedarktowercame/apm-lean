@@ -292,3 +292,30 @@ narrows a false source.
   stops zero moments arising from `integral_undef`. Upheld.
 - No smoothness-order objection in this batch: no `ContDiff` appears in any
   batch 14 statement.
+
+## Batch 15 spot-checks (all grades upheld)
+
+The six faithful rows were already in `STATEMENTS.json` when
+`admit-batch.py 15` ran, so it admitted nothing new and holds four. None of
+the four is on the false-source list.
+
+- a94J04 (narrower): `poissonConv_L2_contraction` (lines 200-203) bounds
+  `eLpNorm (poissonConv y f) 2` by `eLpNorm f 2` for each representative, and
+  `poissonConv_tendsto_L2` / `poissonConv_tendsto_ae` (503-538) cover (b) and
+  (c). problem.md (a) asks that P_y extend to a bounded *linear* operator on
+  L²; no declaration builds a map on `Lp ℝ 2` or states linearity or
+  independence of the representative. Held.
+- a94J05 (narrower): `liouville_bounded` and `liouville_re_bounded_below`
+  (lines 55-74) are (a) and (b). problem.md first asks to state Cauchy's
+  integral formula; nothing in the file states it. Held.
+- a95A01 (narrower): `indicator_not_riemann_integrable` (line 291) is stated
+  for the literal `K.indicator 1`. problem.md (b) takes any f equal to χ_K
+  almost everywhere. That version is still true (f is discontinuous at every
+  density point of K: near such a point f = 1 on a positive-measure part of K
+  and f = 0 a.e. on the open, nonempty complement), so this is a gap, not a
+  false source. Held.
+- a95A03 (narrower): `f_radial_conv_L2_bound` (lines 547-550) gives the
+  constant 2π², but nothing asserts `MemLp (f ∗ g) 2`; the norm bound alone
+  does not give AE-strong measurability. Held.
+- No smoothness-order objection in this batch: no `ContDiff` appears in any
+  batch 15 statement.
