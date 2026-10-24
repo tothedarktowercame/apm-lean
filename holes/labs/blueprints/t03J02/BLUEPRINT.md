@@ -26,6 +26,20 @@ of the geometric construction leaf.
 | `apm_t03J02_H2_of_compatibleOpenCover` | MV gives `0 → ℤ² → H₂ → ℤ → 0`; split using freeness/projectivity of `ℤ`, yielding `ℤ³`. | 120–180 | certificate and null-homotopies |
 | `apm_t03J02_Hhigh_of_compatibleOpenCover` | MV plus circle/torus homology vanishing above their dimensions. | 60–100 | certificate parameter |
 
+### Split of `..._fundamentalGroup_of_compatibleOpenCover` (2026-10-24)
+
+Assembly, `_aux_pathConnected`, `_aux_vanKampen` (from `_aux_trivialLegs` and
+`_aux_vanKampen_aux_torus`, both banked by lemma-3) and `_aux_trivialLegs`
+itself are proved. Open, all prefixed `apm_t03J02_fundamentalGroup_of_compatibleOpenCover_`:
+
+| leaf | claim | size |
+|---|---|---:|
+| `_aux_presentation` | `ℤ² * ℤ² ≃* freeProductZ2Z2` | 60–120 |
+| `_aux_vanKampen_aux_trivialLegs_aux_general` | two-open van Kampen with **nullhomotopic** overlap legs (overlap not simply connected): `π₁ X ≃* π₁ U * π₁ V`. Follow `TwoOpenFreeProductMapping`, replacing the simple-connectivity collapse of the overlap by the natural iso of each leg functor with a constant one. | **LIBRARY 300–800** |
+| `_aux_vanKampen_aux_trivialLegs_aux_nullLegs` | both legs of a compatible cover are nullhomotopic (`leftEquiv.invFun ∘ leftEquiv ∘ leg`). | 20–40 |
+| `_aux_vanKampen_aux_trivialLegs_aux_hequiv` | homotopy equivalence, path-connected target ⇒ `π₁ X x ≃* π₁ Y y`; use `FundamentalGroupoidFunctor.equivOfHomotopyEquiv`. | 20–50 |
+| `_aux_vanKampen_aux_trivialLegs_aux_pathConnectedSpace` | `U ∪ V = univ`, both path-connected, meeting ⇒ `PathConnectedSpace X`. | 15–30 |
+
 All seven leaves are layer 1 and mutually independent as statements. Layer 2
 is the sorry-free `apm_t03j02` assembly. The pushout leaf is reusable library
 infrastructure and is not artificially forced into the conjunction proof.

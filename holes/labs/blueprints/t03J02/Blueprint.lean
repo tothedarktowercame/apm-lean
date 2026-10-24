@@ -234,6 +234,121 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected
   exact ⟨(e.left_inv.some.evalAt x).symm.trans
     (middle.trans (e.left_inv.some.evalAt y))⟩
 
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_torus
+    (t : apm_t03J02_Torus) :
+    Nonempty (FundamentalGroup apm_t03J02_Torus t ≃* Multiplicative (ℤ × ℤ)) := by
+  letI : PathConnectedSpace apm_t03J02_Torus := { 
+    nonempty := ⟨((1 : Circle), (1 : Circle))⟩
+    joined x y := ⟨(PathConnectedSpace.somePath x.1 y.1).prod
+      (PathConnectedSpace.somePath x.2 y.2)⟩ }
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected t
+      ((1 : Circle), (1 : Circle))).trans
+    ((ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv
+        (1 : Circle) (1 : Circle)).trans
+      ((MulEquiv.prodCongr
+          ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt
+          ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt).trans
+        (MulEquiv.prodMultiplicative ℤ ℤ).symm))⟩
+
+/-- Two-open van Kampen when both overlap inclusions are nullhomotopic: the
+fundamental group is the free product of the two pieces' groups.  The overlap
+need not be simply connected; on fundamental groupoids each leg functor is
+naturally isomorphic to one through a point, so the overlap cocone condition
+collapses as in `TwoOpenFreeProductMapping`. -/
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)]
+    (hl : (apm_t03J02_overlapToLeft U V).Nullhomotopic)
+    (hr : (apm_t03J02_overlapToRight U V).Nullhomotopic)
+    (w : (U ∩ V : Set X)) :
+    Nonempty
+      (FundamentalGroup X w.1 ≃*
+        Monoid.Coprod (FundamentalGroup U ⟨w.1, w.2.1⟩)
+          (FundamentalGroup V ⟨w.1, w.2.2⟩)) := by
+  sorry
+
+/-- Both overlap inclusions of a compatible cover are nullhomotopic:
+`leftEquiv ∘ leg ≃ j₁ ∘ overlapEquiv` is null, and composing with
+`leftEquiv.invFun` recovers `leg` up to homotopy. -/
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_nullLegs
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (hnull₁ : j₁.Nullhomotopic)
+    (hnull₂ : j₂.Nullhomotopic)
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    (apm_t03J02_overlapToLeft hcover.leftSet hcover.rightSet).Nullhomotopic ∧
+      (apm_t03J02_overlapToRight hcover.leftSet hcover.rightSet).Nullhomotopic := by
+  sorry
+
+/-- A homotopy equivalence between path-connected spaces identifies their
+fundamental groups at any two base points. -/
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_hequiv
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) [PathConnectedSpace Y]
+    (x : X) (y : Y) :
+    Nonempty (FundamentalGroup X x ≃* FundamentalGroup Y y) := by
+  sorry
+
+/-- Two path-connected sets covering a space with nonempty intersection make
+the space path-connected. -/
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_pathConnectedSpace
+    {X : Type} [TopologicalSpace X] (U V : Set X) (hcov : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    (w : (U ∩ V : Set X)) :
+    PathConnectedSpace X := by
+  sorry
+
+/-- The van Kampen equivalence for the concrete gluing, with the two vertex
+groups read off the torus through the cover's homotopy equivalences. -/
+lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+    (hnull₁ : j₁.Nullhomotopic)
+    (hnull₂ : j₂.Nullhomotopic)
+    (z₀ : Circle)
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    Nonempty
+      (FundamentalGroup (apm_t03J02_space j₁ j₂)
+          (apm_t03J02_basepoint j₁ j₂ z₀) ≃*
+        Monoid.Coprod
+          (FundamentalGroup apm_t03J02_Torus (j₁ z₀))
+          (FundamentalGroup apm_t03J02_Torus (j₂ z₀))) := by
+  letI : PathConnectedSpace apm_t03J02_Torus := {
+    nonempty := ⟨((1 : Circle), (1 : Circle))⟩
+    joined x y := ⟨(PathConnectedSpace.somePath x.1 y.1).prod
+      (PathConnectedSpace.somePath x.2 y.2)⟩ }
+  haveI : PathConnectedSpace hcover.leftSet :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected
+      hcover.leftEquiv
+  haveI : PathConnectedSpace hcover.rightSet :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected
+      hcover.rightEquiv
+  haveI : PathConnectedSpace (hcover.leftSet ∩ hcover.rightSet :
+      Set (apm_t03J02_space j₁ j₂)) :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected
+      hcover.overlapEquiv
+  let w : (hcover.leftSet ∩ hcover.rightSet : Set (apm_t03J02_space j₁ j₂)) :=
+    hcover.overlapEquiv.invFun 1
+  haveI : PathConnectedSpace (apm_t03J02_space j₁ j₂) :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_pathConnectedSpace
+      hcover.leftSet hcover.rightSet hcover.cover w
+  obtain ⟨hl, hr⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_nullLegs
+      j₁ j₂ hnull₁ hnull₂ hcover
+  obtain ⟨g⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general
+      hcover.leftSet hcover.rightSet hcover.open_left hcover.open_right
+      hcover.cover hl hr w
+  obtain ⟨e₁⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_hequiv
+      hcover.leftEquiv ⟨w.1, w.2.1⟩ (j₁ z₀)
+  obtain ⟨e₂⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_hequiv
+      hcover.rightEquiv ⟨w.1, w.2.2⟩ (j₂ z₀)
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPath
+      (PathConnectedSpace.somePath _ w.1)).trans
+    (g.trans (MulEquiv.coprodCongr e₁ e₂))⟩
+
 lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic)
@@ -245,7 +360,16 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen
           (apm_t03J02_basepoint j₁ j₂ z₀) ≃*
         Monoid.Coprod (Multiplicative (ℤ × ℤ))
           (Multiplicative (ℤ × ℤ))) := by
-  sorry
+  obtain ⟨evk⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs
+      j₁ j₂ hnull₁ hnull₂ z₀ hcover
+  obtain ⟨e₁⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_torus
+      (j₁ z₀)
+  obtain ⟨e₂⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_torus
+      (j₂ z₀)
+  exact ⟨evk.trans (MulEquiv.coprodCongr e₁ e₂)⟩
 
 lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation :
     Nonempty
