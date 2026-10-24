@@ -66,3 +66,35 @@ the ordinary narrower list.
 - m94A04 (faithful): `IsFrechetDerivative` (lines 109-122) is a bounded
   L⁸→L² linear map with the o(‖h‖₈) remainder in L², and the theorem
   (364-372) gives a derivative at every f. Upheld.
+
+## Batch 04 spot-checks (all grades upheld)
+
+Batch 04 was admitted in the earlier sweep (seven rows registered: five
+faithful, m03J02 stronger, m03J03 overridden to faithful above). These checks
+came after its late reply. One of the three held rows narrows a false source.
+
+- m93J03 (narrower): uniqueness only among solutions of size < η
+  (Main.lean:689-698). The source is false: any solution has the form
+  x = ε + A sin t + B cos t, and at ε = 0 the nonzero solution
+  x = R sin(t + φ) needs R e^{2iφ} = -2π J₁(R). With φ = π/2 that is
+  R = 2π J₁(R), which has a root R > 0 (2π J₁(R) ≈ πR > R near 0, and
+  2π J₁(R) < R for R > 4). The file says so (lines 6-12). Held; false
+  source, repaired.
+- m93J02 (narrower): `hUnontrivial` and `0 < α < 1` (lines 689-693). The
+  source is underspecified rather than false: for a singleton Ω, or for α = 1
+  on an interval, (d) holds, while for 0 < α < 1 it fails (f(x) = x on [0,1]
+  has local seminorm 0 and global 1). The file names both restrictions
+  (lines 9-13). Held; not on the false-source list.
+- m93J06 (narrower): part (c) adds a global Lipschitz hypothesis
+  (lines 1815-1818) that the source does not need (continuity plus
+  |f| ≤ C|y| gives global existence). The negated uniqueness clause for (d)
+  is a fair repair, since without uniqueness the map y₀ ↦ y(t) is not
+  defined, but (c) is an unforced narrowing. Held; not on the false-source
+  list.
+- m03J02 (stronger, admitted): uniqueness on all of ℝ (lines 20-21,
+  501-504). f(u) = cos u - u is globally Lipschitz, so the backward solution
+  exists, and a forward solution on t > 0 extends uniquely to ℝ. Upheld.
+- m93J01 (faithful): κ = 1/12, the expansions with O(h⁶) and O(h⁴) in place
+  of the false o(·) (lines 166-183), and the Numerov residual
+  (1 - h²V₊/12)y₊ - (2 + 5h²V/6)y + (1 - h²V₋/12)y₋ = O(h⁶) (184-190). I
+  rederived the h²(Ly) identity: the + sign on κh⁴y⁽⁴⁾ is right. Upheld.
