@@ -16,7 +16,11 @@ for line in grades.read_text().splitlines():
     if not m or m.group(1) == "id" or set(m.group(1)) == {"-"}:
         continue
     pid, grade = m.group(1), m.group(2)
-    if pid in json.loads((ROOT / "problems/STATEMENTS.json").read_text())["entries"]:
+    reg = json.loads((ROOT / "problems/STATEMENTS.json").read_text())
+    if pid in reg["entries"]:
+        continue
+    if any(r.get("id") == pid for r in reg.get("revoked", [])):
+        held.append((pid, "revoked", "reviewer revoked the admission; see held.md"))
         continue
     if grade in ("faithful", "stronger"):
         cmd = [sys.executable, str(ROOT / "scripts/statement-registry.py"), "admit", pid,

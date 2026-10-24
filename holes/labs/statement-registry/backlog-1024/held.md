@@ -126,3 +126,44 @@ came after its late reply. One held row is overridden; the other stays held.
   |y| < 1/48 is added to the exact equation. Upheld.
 - m99J01 (faithful): ODE imposed only for t ≥ 0 (lines 19-21), uniqueness on
   t ≥ 0, unique ξ = cos ξ with every solution tending to ξ (502-512). Upheld.
+
+## Batch 08 spot-checks
+
+Batch 08 was admitted in the earlier sweep (eight rows registered: six
+faithful by the grader, a00J06 stronger, m99J03 overridden to faithful above).
+These checks came after its late reply. One admission is revoked; both held
+rows are now admitted.
+
+- a00J06 (graded stronger, admission revoked): `f a := (p a).sum`, and
+  `FormalMultilinearSeries.sum` is a `tsum`, which Lean sets to 0 where the
+  series is not summable. So `f a x = 0` for every x > 1, and the theorem
+  `¬ ∃ ρ, 0 < ρ ∧ AnalyticAt ℝ (f a) 1` (Main.lean:93-96) follows from
+  "positive just left of 1, zero just right of 1". The proof's own docstring
+  takes that route. Pringsheim's theorem is never used, and `ρ` is unused.
+  The problem asks that no analytic g near 1 agree with f on the part of the
+  disk |z| < 1 near 1; a real form that would be faithful is: no g with
+  `AnalyticAt ℝ g 1` and g = f on (1 - r, 1) for some r > 0. Held as
+  vacuous (junk-value statement); a repair needs a real proof.
+- a00J03 (graded narrower, repaired and admitted faithful): `he_symm` was
+  derivable, since μ(φA) = μ(φ⁻¹(φA)) = μ(A). I removed it from
+  `composition_isometric_isomorphism` and derived it inside the proof
+  from Mathlib's `MeasurePreserving.symm e he`. The file compiles
+  (`lake env lean`, warnings only). Admitted with `composition_isometry` and
+  `composition_isometric_isomorphism` pinned. The old canary copy under
+  `ApmCanaries/Frames/A00J03/` is unchanged.
+- a01A03 (graded faithful, admit refused, now admitted): the refusal was
+  for the bare ⊤ in `convolution_identity_counterexample` (line 229), the
+  compiled refutation of the old analytic-test version. The pin-every-theorem
+  fallback in `admit-batch.py` had picked it up. The graded theorem
+  `convolution_identity_implies_indicator` (98-104) uses `ContDiff ℝ ∞`;
+  admitted with that declaration pinned. Restricting the hypothesis from
+  C^1 to C_c^∞ weakens it (so the theorem is at least as strong), and it is
+  the class where g * f' is defined for g ∈ L¹.
+- m99J03 (narrower, already overridden): rechecked. Same `(⊤ : ℕ∞)`
+  test class as m99J02.
+- Faithful check, a00J02: f(x)/√x → 0 from the right under absolute
+  continuity, f(0) = 0 and f' ∈ L² (lines 119-126). Upheld.
+
+`admit-batch.py` now skips ids in the registry's `revoked` list and reports
+them as HELD; without that, rerunning batch 08 re-admitted a00J06. Held
+count after batch 08: 38 rows, 32 of them narrower, plus a00J06 revoked.

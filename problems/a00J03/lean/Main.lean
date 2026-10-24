@@ -46,9 +46,10 @@ theorem norm_comp_eq {φ : X → X} (hφ : MeasurePreserving φ μ μ)
 -- compMeasurePreserving e and compMeasurePreserving e.symm are mutual inverses.
 theorem composition_isometric_isomorphism [Fact (1 ≤ p)]
     (e : MeasurableEquiv X X)
-    (he : MeasurePreserving e μ μ)
-    (he_symm : MeasurePreserving e.symm μ μ) :
+    (he : MeasurePreserving e μ μ) :
     Function.Surjective (compMeasurePreserving e he : Lp E p μ → Lp E p μ) := by
+  -- μ(φ A) = μ(φ⁻¹(φ A)) = μ(A), so the inverse preserves μ as well.
+  have he_symm : MeasurePreserving e.symm μ μ := MeasurePreserving.symm e he
   intro g
   refine ⟨compMeasurePreserving e.symm he_symm g, ?_⟩
   simpa [Function.comp] using

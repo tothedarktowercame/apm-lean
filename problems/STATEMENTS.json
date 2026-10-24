@@ -27,6 +27,20 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:47:17Z"
   },
+  "a00J03": {
+   "decls": [
+    "composition_isometry",
+    "composition_isometric_isomorphism"
+   ],
+   "sha256": "44ec509da1eb38566e840074e9e2b48035b0a67770244fa87e0e4d313f30e3c6",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "claude-14 review of codex backlog-1024 grade (batch 08)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
+   "prelim_defect": null,
+   "rev": "5c83c7ee0",
+   "approved_at": "2026-10-24T22:11:17Z"
+  },
   "a00J04": {
    "decls": [
     "connectedComponents_complement_lemniscate_le"
@@ -60,22 +74,6 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:47:17Z"
   },
-  "a00J06": {
-   "decls": [
-    "singular_at_one"
-   ],
-   "sha256": "5d071a80ed2e79dfc0f0b7c5758e9be9f679acaffd730e7b92b4958e11c4a945",
-   "defs": [
-    "f",
-    "p"
-   ],
-   "grade": "stronger",
-   "grader": "codex read-only grader (backlog-1024 batch 08)",
-   "evidence": "holes/labs/statement-registry/backlog-1024/grades-08.md",
-   "prelim_defect": null,
-   "rev": "8fccb9498",
-   "approved_at": "2026-10-24T21:47:17Z"
-  },
   "a01A01": {
    "decls": [
     "apm_a01a01"
@@ -101,6 +99,19 @@
    "prelim_defect": null,
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:47:17Z"
+  },
+  "a01A03": {
+   "decls": [
+    "convolution_identity_implies_indicator"
+   ],
+   "sha256": "3ebb5c9d6b923f871a7e5075dc2d6a67035845d3766c6970ffd031aab51c610e",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "claude-14 review of codex backlog-1024 grade (batch 08)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
+   "prelim_defect": null,
+   "rev": "5c83c7ee0",
+   "approved_at": "2026-10-24T22:11:17Z"
   },
   "a01A04": {
    "decls": [
@@ -7770,6 +7781,28 @@
    "reason": "statement narrower than the printed problem: f assumed compactly supported; corrected informal solution proves part (d) for every f ∈ C²(ℝ²); reopened with the printed reading",
    "evidence": "problems/m98J02/problem.md",
    "revoked_at": "2026-10-18T21:17:07Z"
+  },
+  {
+   "id": "a00J06",
+   "entry": {
+    "decls": [
+     "singular_at_one"
+    ],
+    "sha256": "5d071a80ed2e79dfc0f0b7c5758e9be9f679acaffd730e7b92b4958e11c4a945",
+    "defs": [
+     "f",
+     "p"
+    ],
+    "grade": "stronger",
+    "grader": "codex read-only grader (backlog-1024 batch 08)",
+    "evidence": "holes/labs/statement-registry/backlog-1024/grades-08.md",
+    "prelim_defect": null,
+    "rev": "8fccb9498",
+    "approved_at": "2026-10-24T21:47:17Z"
+   },
+   "reason": "statement holds by Lean's tsum junk value: f a x = 0 for x > 1 because the series is not summable, so AnalyticAt ℝ (f a) 1 fails without Pringsheim; continuation needs only agreement on (1-r,1)",
+   "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
+   "revoked_at": "2026-10-24T22:11:17Z"
   }
  ]
 }
