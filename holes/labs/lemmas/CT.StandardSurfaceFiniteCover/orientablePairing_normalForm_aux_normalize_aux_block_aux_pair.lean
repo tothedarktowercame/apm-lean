@@ -7042,6 +7042,90 @@ letter `x` of `r` is `inv x` by orientability (`_aux_uniqueMate`); and
 outside.  The mate cannot lie before `i` (that is the prefix), so it lies after
 `x⁻¹`, and it is `inv y` by orientability. -/
 -- BEGIN SEAT AREA
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_prefix
+    (k : ℕ) (z : PolygonMoves.Signed ℕ)
+    (hz : z ∈ orientablePairing_normalForm_aux_standardWord k) : z.1 < 2 * k := by
+  simp only [orientablePairing_normalForm_aux_standardWord, List.mem_flatMap,
+    List.mem_range] at hz
+  obtain ⟨a, ha, hz⟩ := hz
+  simp only [List.mem_cons, List.mem_singleton] at hz
+  rcases hz with hz | hz | hz | hz
+  · subst z; simp; omega
+  · subst z; simp; omega
+  · subst z; simp; omega
+  · rcases hz with hz | hz
+    · subst z; simp; omega
+    · contradiction
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_split
+    {α : Type*} (r : List α) (i j l : ℕ)
+    (hi : 0 < i) (hij : i < j) (hjl : j < l) (hl : l < r.length) :
+    ∃ A B C D : List α,
+      r = [r[0]] ++ A ++ [r[i]] ++ B ++ [r[j]] ++ C ++ [r[l]] ++ D := by
+  let A := (r.drop 1).take (i - 1)
+  let B := (r.drop (i + 1)).take (j - i - 1)
+  let C := (r.drop (j + 1)).take (l - j - 1)
+  let D := r.drop (l + 1)
+  refine ⟨A, B, C, D, ?_⟩
+  have h0 : 0 < r.length := by omega
+  have hii : i < r.length := by omega
+  have hjj : j < r.length := by omega
+  have s0 := List.take_append_drop 1 r
+  have s1 := List.take_append_drop (i - 1) (r.drop 1)
+  have s2 := List.take_append_drop (j - i - 1) (r.drop (i + 1))
+  have s3 := List.take_append_drop (l - j - 1) (r.drop (j + 1))
+  rw [List.drop_eq_getElem_cons (by simp; omega : i - 1 < (r.drop 1).length)] at s1
+  rw [List.drop_eq_getElem_cons (by simp; omega : j - i - 1 < (r.drop (i + 1)).length)] at s2
+  rw [List.drop_eq_getElem_cons (by simp; omega : l - j - 1 < (r.drop (j + 1)).length)] at s3
+  simp only [List.take_one, List.head?_eq_getElem?, h0, ↓reduceDIte, Option.toList_some,
+    List.singleton_append, List.drop_drop] at s0 s1 s2 s3
+  have t0 : r = r[0] :: r.drop 1 := by
+    simpa using (List.drop_eq_getElem_cons h0)
+  have t1 : r.drop 1 = A ++ (r[i] :: r.drop (i + 1)) := by
+    have e1 : 1 + (i - 1) = i := by omega
+    have e2 : 1 + (i - 1 + 1) = i + 1 := by omega
+    dsimp [A]
+    calc
+      r.drop 1 = (r.drop 1).take (i - 1) ++ (r.drop 1)[i - 1]'(by simp; omega) ::
+          r.drop (1 + (i - 1 + 1)) := s1.symm
+      _ = (r.drop 1).take (i - 1) ++ r[i] :: r.drop (i + 1) := by
+        congr 2
+        · rw [List.getElem_drop]
+          exact getElem_congr rfl e1 _
+        · rw [e2]
+  have t2 : r.drop (i + 1) = B ++ (r[j] :: r.drop (j + 1)) := by
+    have e1 : i + 1 + (j - i - 1) = j := by omega
+    have e2 : i + 1 + (j - i - 1 + 1) = j + 1 := by omega
+    dsimp [B]
+    calc
+      r.drop (i + 1) = (r.drop (i + 1)).take (j - i - 1) ++
+          (r.drop (i + 1))[j - i - 1]'(by simp; omega) ::
+            r.drop (i + 1 + (j - i - 1 + 1)) := s2.symm
+      _ = (r.drop (i + 1)).take (j - i - 1) ++ r[j] :: r.drop (j + 1) := by
+        congr 2
+        · rw [List.getElem_drop]
+          exact getElem_congr rfl e1 _
+        · rw [e2]
+  have t3 : r.drop (j + 1) = C ++ (r[l] :: D) := by
+    have e1 : j + 1 + (l - j - 1) = l := by omega
+    have e2 : j + 1 + (l - j - 1 + 1) = l + 1 := by omega
+    dsimp [C, D]
+    calc
+      r.drop (j + 1) = (r.drop (j + 1)).take (l - j - 1) ++
+          (r.drop (j + 1))[l - j - 1]'(by simp; omega) ::
+            r.drop (j + 1 + (l - j - 1 + 1)) := s3.symm
+      _ = (r.drop (j + 1)).take (l - j - 1) ++ r[l] :: r.drop (l + 1) := by
+        congr 2
+        · rw [List.getElem_drop]
+          exact getElem_congr rfl e1 _
+        · rw [e2]
+  generalize hx0 : r[0] = x0 at t0 t1 t2 t3 ⊢
+  generalize hxi : r[i] = xi at t0 t1 t2 t3 ⊢
+  generalize hxj : r[j] = xj at t0 t1 t2 t3 ⊢
+  generalize hxl : r[l] = xl at t0 t1 t2 t3 ⊢
+  rw [t0, t1, t2, t3]
+  simp
+
 theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_pair (k m : ℕ) (hm : 1 ≤ m)
     (r : List (PolygonMoves.Signed ℕ))
     (hw : PolygonMoves.IsPolygonWord (orientablePairing_normalForm_aux_standardWord k ++ r))
@@ -7053,7 +7137,111 @@ theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_pair (k m : ℕ
     (hr : ∀ x ∈ r, 2 * k ≤ x.1) :
     ∃ (x y : PolygonMoves.Signed ℕ) (A B C D : List (PolygonMoves.Signed ℕ)),
       r = [x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D := by
-  sorry
+  classical
+  let w := orientablePairing_normalForm_aux_standardWord k ++ r
+  have hrne := orientablePairing_normalForm_aux_normalize_aux_block_aux_tail_nonempty
+    k m hm r hlen
+  have hwlen : (orientablePairing_normalForm_aux_standardWord k).length = 4 * k :=
+    orientablePairing_normalForm_aux_normalize_aux_standardWord_length k
+  have hwlenall : w.length = 4 * k + r.length := by simp [w, hwlen]
+  have hi_lt : 4 * k < w.length := by
+    simp only [w, List.length_append, hwlen]
+    have : 0 < r.length := by
+      have : r.length ≠ 0 := by simpa using hrne
+      omega
+    omega
+  let i : Fin w.length := ⟨4 * k, hi_lt⟩
+  obtain ⟨j, hj, hjuniq⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_uniqueMate w hw hor i
+  have hij : i < j := by
+    have hnot : ¬ j < i := by
+      intro hji
+      have hjpre : w.get j ∈ orientablePairing_normalForm_aux_standardWord k := by
+        rw [List.get_eq_getElem]
+        simp only [w]
+        rw [List.getElem_append_left]
+        · apply List.getElem_mem
+        · simpa [i, hwlen] using hji
+      have hjlow := orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_prefix
+        k (w.get j) hjpre
+      have hi_tail : w.get i = r[0]'(by
+          have : 0 < r.length := by
+            have : r.length ≠ 0 := by simpa using hrne
+            omega
+          omega) := by
+        rw [List.get_eq_getElem]
+        simp only [w]
+        rw [List.getElem_append_right]
+        · congr 1; simp [i, hwlen]
+        · simp [i, hwlen]
+      have hhigh : 2 * k ≤ (w.get i).1 := by
+        rw [hi_tail]
+        apply hr
+        apply List.getElem_mem
+      omega
+    exact lt_of_le_of_ne (le_of_not_gt hnot) hj.1.symm
+  obtain ⟨p, q, hip, hpj, hout, hpql⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_interlock w hw hor hv i j hij hj.2.1.symm
+  have hiq : i < q := by
+    rcases hout with hjq | hqi
+    · exact lt_trans hij hjq
+    · exfalso
+      have hqpre : w.get q ∈ orientablePairing_normalForm_aux_standardWord k := by
+        rw [List.get_eq_getElem]
+        simp only [w]
+        rw [List.getElem_append_left]
+        · apply List.getElem_mem
+        · simpa [i, hwlen] using hqi
+      have hqlow := orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_prefix
+        k (w.get q) hqpre
+      have hp_tail : w.get p ∈ r := by
+        rw [List.get_eq_getElem]
+        simp only [w]
+        rw [List.getElem_append_right]
+        · apply List.getElem_mem
+        · simpa [i, hwlen] using le_of_lt hip
+      have hphigh := hr (w.get p) hp_tail
+      omega
+  have hjq : j < q := by omega
+  let ip := p.1 - 4 * k
+  let ij := j.1 - 4 * k
+  let iq := q.1 - 4 * k
+  have hpR : ip < r.length := by simp [ip]; omega
+  have hjR : ij < r.length := by simp [ij]; omega
+  have hqR : iq < r.length := by simp [iq]; omega
+  have hpi : 0 < ip := by simp [ip, i] at hip ⊢; omega
+  have hpij : ip < ij := by simp [ip, ij, i] at hip hpj ⊢; omega
+  have hijq : ij < iq := by simp [ij, iq]; omega
+  obtain ⟨A, B, C, D, hrsplit⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_split
+      r ip ij iq hpi hpij hijq hqR
+  have wget (a : Fin w.length) (ha : i ≤ a) :
+      w.get a = r[a.1 - 4 * k]'(by omega) := by
+    rw [List.get_eq_getElem]
+    simp only [w]
+    rw [List.getElem_append_right]
+    · congr 1; simp [hwlen]
+    · simpa [i, hwlen] using ha
+  have hxj : w.get j = PolygonMoves.inv (w.get i) := by
+    apply Prod.ext
+    · simpa [PolygonMoves.inv] using hj.2.1
+    · simp only [PolygonMoves.inv]
+      exact Bool.eq_not_of_ne hj.2.2
+  have hypq : w.get q = PolygonMoves.inv (w.get p) := by
+    apply Prod.ext
+    · simpa [PolygonMoves.inv] using hpql.symm
+    · simp only [PolygonMoves.inv]
+      exact Bool.eq_not_of_ne (hor q p (ne_of_gt (lt_trans hpj hjq)) hpql.symm)
+  refine ⟨r[0], r[ip], A, B, C, D, ?_⟩
+  have hiR : w.get i = r[0] := by simpa [i] using wget i le_rfl
+  have hpget : w.get p = r[ip] := by simpa [ip] using wget p (le_of_lt hip)
+  have hjget : w.get j = r[ij] := by simpa [ij] using wget j (le_of_lt hij)
+  have hqget : w.get q = r[iq] := by simpa [iq] using wget q (le_of_lt hiq)
+  calc
+    r = [r[0]] ++ A ++ [r[ip]] ++ B ++ [r[ij]] ++ C ++ [r[iq]] ++ D := hrsplit
+    _ = [r[0]] ++ A ++ [r[ip]] ++ B ++ [PolygonMoves.inv r[0]] ++ C ++
+        [PolygonMoves.inv r[ip]] ++ D := by
+      rw [← hiR, ← hpget, ← hjget, ← hqget, hxj, hypq]
 -- END SEAT AREA
 
 /-- **Leaf (commutator).**  Steps take `P x A y B x⁻¹ C y⁻¹ D` to
