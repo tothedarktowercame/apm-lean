@@ -802,6 +802,19 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_chain
 (`PolygonBoundaryVertexClasses.edgePoint_one_eq_succ_zero` and periodicity
 of `Complex.exp`). -/
 -- BEGIN SEAT AREA
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_respect_aux_next
+    (m : ℕ) (hm : 0 < m) (k : Fin m) :
+    edgePoint m ((k.1 + 1) % m)
+        PolygonBoundaryVertexClasses.zeroIcc =
+      edgePoint m k PolygonBoundaryVertexClasses.oneIcc := by
+  rw [PolygonBoundaryVertexClasses.edgePoint_one_eq_succ_zero]
+  by_cases hk : k.1 + 1 < m
+  · rw [Nat.mod_eq_of_lt hk]
+  · have heq : k.1 + 1 = m := by omega
+    rw [heq, Nat.mod_self]
+    simpa using (PolygonMoves.rotation_aux_edgePoint_period m 0 (by omega)
+      PolygonBoundaryVertexClasses.zeroIcc).symm
+
 theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_respect
     (g n : ℕ) (hg : 1 ≤ g)
     (E : Type*) [TopologicalSpace E]
@@ -815,7 +828,51 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_respect
     (h : (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel a b) :
     L a.1 (edgePoint (4 * g) a.2 ⟨0, by norm_num⟩) =
       L b.1 (edgePoint (4 * g) b.2 ⟨0, by norm_num⟩) := by
-  sorry
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  obtain ⟨s, hs⟩ := h
+  have hpair : C.pair s =
+      ⟨σ s.1 s.2, standardCover_pairingData_aux_lift_aux_basePair g s.2⟩ := by
+    rfl
+  have hsign : C.sign s ≠ C.sign (C.pair s) := by
+    exact (standardCover_pairingData_aux_lift_aux_baseSign_basePair g s.2).symm
+  rw [if_neg hsign] at hs
+  rcases hs with hs | hs
+  · rcases hs with ⟨ha, hb⟩
+    subst a
+    subst b
+    have hside0 := hside s.1 s.2 PolygonBoundaryVertexClasses.zeroIcc
+    simp only [reverseIcc, PolygonBoundaryVertexClasses.zeroIcc,
+      PolygonBoundaryVertexClasses.oneIcc, sub_zero] at hside0
+    change L s.1 (edgePoint (4 * g) s.2 ⟨0, by norm_num⟩) =
+      L (C.nextCorner (C.pair s)).1
+        (edgePoint (4 * g) (C.nextCorner (C.pair s)).2 ⟨0, by norm_num⟩)
+    rw [hpair]
+    change L s.1 (edgePoint (4 * g) s.2 ⟨0, by norm_num⟩) =
+      L (σ s.1 s.2) (edgePoint (4 * g)
+        (((standardCover_pairingData_aux_lift_aux_basePair g s.2).1 + 1) % (4 * g))
+        PolygonBoundaryVertexClasses.zeroIcc)
+    rw [standardCover_pairingData_aux_lift_aux_vertexCount_aux_respect_aux_next
+      (m := 4 * g) (hm := by omega)
+      (k := standardCover_pairingData_aux_lift_aux_basePair g s.2)]
+    exact hside0
+  · rcases hs with ⟨ha, hb⟩
+    subst a
+    subst b
+    have hside1 := hside s.1 s.2 PolygonBoundaryVertexClasses.oneIcc
+    simp only [reverseIcc, PolygonBoundaryVertexClasses.zeroIcc,
+      PolygonBoundaryVertexClasses.oneIcc, sub_self] at hside1
+    change L (C.nextCorner s).1
+        (edgePoint (4 * g) (C.nextCorner s).2 ⟨0, by norm_num⟩) =
+      L (C.pair s).1 (edgePoint (4 * g) (C.pair s).2 ⟨0, by norm_num⟩)
+    rw [hpair]
+    change L s.1 (edgePoint (4 * g) ((s.2.1 + 1) % (4 * g))
+        PolygonBoundaryVertexClasses.zeroIcc) =
+      L (σ s.1 s.2) (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g s.2)
+        PolygonBoundaryVertexClasses.zeroIcc)
+    rw [standardCover_pairingData_aux_lift_aux_vertexCount_aux_respect_aux_next
+      (m := 4 * g) (hm := by omega) (k := s.2)]
+    exact hside1
 -- END SEAT AREA
 
 /-- The corner classes of the lifted complex correspond to the `n`
