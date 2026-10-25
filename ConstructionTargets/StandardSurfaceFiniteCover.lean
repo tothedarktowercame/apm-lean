@@ -5591,7 +5591,139 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_
         (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val) =
       (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).take s.2.val ++
         (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).drop (s.2.val + 2) := by
-  sorry
+  let W := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1
+    (fun u : C.Side => min u.2.val (C.pair u).2.val)
+  let W' := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C'
+    D.faceCount_eq
+    (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val)
+  have hsize : C'.totalSides + 2 = C.totalSides := D.totalSides_add_two
+  have hpairval : (C.pair s).2.val = s.2.val + 1 := by
+    have hsides : C.sides s.1 = C.totalSides :=
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1 s.1
+    have hmod : (s.2.val + 1) % C.sides s.1 = s.2.val + 1 := by
+      apply Nat.mod_eq_of_lt
+      simpa [hsides] using hk
+    have hh := congrArg (fun u : C.Side => u.2.val) hadj
+    simpa [PolygonComplex.nextCorner, hmod] using hh.symm
+  let f : Fin C'.totalSides → Fin C.totalSides := fun i =>
+    ⟨(D.toOld (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C'
+      D.faceCount_eq i)).2.val, by
+      rw [← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total
+        C h1 (D.toOld (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C'
+          D.faceCount_eq i)).1]
+      exact (D.toOld (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C'
+        D.faceCount_eq i)).2.isLt⟩
+  have hf : StrictMono f := by
+    intro i j hij
+    exact D.toOld_lt _ _ hij
+  have hfne : ∀ i, (f i).val ≠ s.2.val ∧ (f i).val ≠ s.2.val + 1 := by
+    intro i
+    rcases D.toOld_ne
+      (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C'
+        D.faceCount_eq i) with ⟨hs, hp⟩
+    constructor
+    · intro he
+      apply hs
+      apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1 he
+    · intro he
+      apply hp
+      apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1
+      simpa [hpairval] using he
+  have hfsurj : ∀ z, z < C.totalSides → z ≠ s.2.val → z ≠ s.2.val + 1 →
+      ∃ i, (f i).val = z := by
+    intro z hz hzs hzp
+    let u : C.Side := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 ⟨z, hz⟩
+    have hus : u ≠ s := by
+      intro hu
+      exact hzs (congrArg (fun q : C.Side => q.2.val) hu)
+    have hup : u ≠ C.pair s := by
+      intro hu
+      apply hzp
+      rw [← hpairval]
+      exact congrArg (fun q : C.Side => q.2.val) hu
+    obtain ⟨t, ht⟩ := D.toOld_surj u hus hup
+    have htface : t.1 = ⟨0, by rw [D.faceCount_eq]; omega⟩ := by
+      apply Fin.eq_of_val_eq
+      have := D.faceCount_eq
+      omega
+    let i : Fin C'.totalSides := ⟨t.2.val, by
+      rw [← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total
+        C' D.faceCount_eq t.1]
+      exact t.2.isLt⟩
+    refine ⟨i, ?_⟩
+    change (D.toOld
+      (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C'
+        D.faceCount_eq i)).2.val = z
+    have hi : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C'
+        D.faceCount_eq i = t := by
+      apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext
+        D.faceCount_eq
+      rfl
+    rw [hi, ht]
+    rfl
+  have henum (i : Fin C'.totalSides) :
+      (f i).val = if i.val < s.2.val then i.val else i.val + 2 :=
+    standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_enum
+      hsize hk f hf hfne hfsurj i
+  apply List.ext_get
+  · simp [W, W', standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word]
+    have hslt : s.2.val < C.totalSides := by omega
+    omega
+  · intro i hi₁ hi₂
+    simp only [W', standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word,
+      List.get_eq_getElem, List.getElem_ofFn]
+    by_cases hilow : i < s.2.val
+    · let ii : Fin C'.totalSides := ⟨i, by
+        simpa [W', standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word] using hi₁⟩
+      have he := henum ii
+      simp only [ii, hilow, if_true] at he
+      have hside : D.toOld
+          (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C'
+            D.faceCount_eq ii) =
+          standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1
+            ⟨i, by omega⟩ := by
+        apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1
+        exact he
+      rw [D.sign_toOld, hside]
+      have hiW : i < W.length := by
+        simp [W, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word]
+        omega
+      rw [List.getElem_append_left]
+      · apply Prod.ext <;> simp only [Prod.fst, Prod.snd]
+        · simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side]
+        · simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side]
+      · simpa [W, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word] using
+          And.intro hilow hiW
+    · let ii : Fin C'.totalSides := ⟨i, by
+        simpa [W', standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word] using hi₁⟩
+      have he := henum ii
+      simp only [ii, hilow, if_false] at he
+      have hi2lt : i + 2 < C.totalSides := by omega
+      have hside : D.toOld
+          (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C'
+            D.faceCount_eq ii) =
+          standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1
+            ⟨i + 2, hi2lt⟩ := by
+        apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1
+        exact he
+      rw [D.sign_toOld, hside]
+      have hiW : i + 2 < W.length := by
+        simp [W, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word]
+        omega
+      have htake : (W.take s.2.val).length = s.2.val := by
+        simp [W, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word]
+        omega
+      rw [List.getElem_append_right]
+      · rw [List.getElem_drop, List.getElem_ofFn]
+        have hidx : s.2.val + 2 + (i - (W.take s.2.val).length) = i + 2 := by omega
+        have hfin : (⟨i + 2, hi2lt⟩ : Fin C.totalSides) =
+            ⟨s.2.val + 2 + (i - (W.take s.2.val).length), by omega⟩ :=
+          Fin.ext hidx.symm
+        rw [hfin]
+        rfl
+      · simp [W, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word,
+          Nat.min_eq_left (by omega : s.2.val ≤ C.totalSides)]
+        omega
 
 /-- **Leaf (fresh label).**  The label is good
 (`…_homeomorph_aux_goodLabel`): the letter at position `s.2` shares its label
