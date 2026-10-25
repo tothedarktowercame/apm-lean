@@ -6987,7 +6987,118 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_count
       Nat.card {u : D.Side // (u = G.toOld (C.nextCorner a) ∨
           u = D.pair (G.toOld (C.nextCorner a))) ∧
         Relation.EqvGen D.CornerRel (G.toOld (C.nextCorner a)) u} := by
-  sorry
+  let b : D.Side := G.toOld (C.nextCorner a)
+  have hmerged : a.1 = G.merged := by
+    apply Fin.eq_of_val_eq
+    have ha' := a.1.isLt
+    have hm := G.merged.isLt
+    omega
+  have hside : 2 ≤ C.sides a.1 := by
+    by_contra h
+    have hs : C.sides a.1 = 1 := by
+      have := C.sides_pos a.1
+      omega
+    apply hPQ
+    rw [show C.nextCorner a = a by
+      apply Sigma.ext
+      · rfl
+      · apply (Fin.heq_ext_iff rfl).2
+        simp [PolygonComplex.nextCorner, ha, hs]]
+    exact Relation.EqvGen.refl _
+  have haeq : a = (⟨G.merged, ⟨0, by have := C.sides_pos G.merged; omega⟩⟩ : C.Side) := by
+    apply Sigma.ext hmerged
+    apply (Fin.heq_ext_iff (congrArg C.sides hmerged)).2
+    exact ha
+  have holda : G.toOld a = D.nextCorner c := by
+    let z : Fin (C.sides G.merged) := ⟨0, C.sides_pos G.merged⟩
+    have hf := G.toOld_merged_fst z
+    have hv := G.toOld_merged_val z
+    simp only [z, zero_add] at hf hv
+    rw [if_pos (by omega)] at hf hv
+    have hz : (c.2.val + 1) % D.sides c.1 = 0 := by rw [hc, hT]
+    rw [hz] at hv
+    rw [haeq]
+    apply Sigma.ext
+    · simpa [G.old_merged, PolygonComplex.nextCorner] using hf
+    · apply (Fin.heq_ext_iff (congrArg D.sides (by
+        simpa [G.old_merged, PolygonComplex.nextCorner] using hf))).2
+      simp [PolygonComplex.nextCorner, hc, hT]
+      simpa [G.old_merged] using hv
+  have hnextval : (C.nextCorner a).2.val = 1 := by
+    simp [PolygonComplex.nextCorner, ha, Nat.mod_eq_of_lt hside]
+  have holdb : b = D.nextCorner (D.nextCorner c) := by
+    have hneqa : C.nextCorner a =
+        (⟨G.merged, ⟨1, by simpa [hmerged] using (show 1 < C.sides a.1 by omega)⟩⟩ : C.Side) := by
+      apply Sigma.ext
+      · simpa [PolygonComplex.nextCorner] using hmerged
+      · apply (Fin.heq_ext_iff (congrArg C.sides (by
+          simpa [PolygonComplex.nextCorner] using hmerged))).2
+        exact hnextval
+    have hmnext : (C.nextCorner a).1 = G.merged := by simpa [PolygonComplex.nextCorner] using hmerged
+    let o : Fin (C.sides G.merged) :=
+      ⟨1, by simpa [← hmerged] using (show 1 < C.sides a.1 by omega)⟩
+    have hf := G.toOld_merged_fst o
+    have hv := G.toOld_merged_val o
+    simp only [o] at hf hv
+    rw [if_pos (by simpa [G.old_merged] using (show 1 + 1 < D.sides c.1 by omega))] at hf hv
+    have ho : (c.2.val + 1 + 1) % D.sides c.1 = 1 := by rw [hc, hT]
+    rw [ho] at hv
+    change G.toOld (C.nextCorner a) = _
+    rw [hneqa]
+    apply Sigma.ext
+    · simpa [b, G.old_merged, PolygonComplex.nextCorner] using hf
+    · apply (Fin.heq_ext_iff (congrArg D.sides (by
+        simpa [b, G.old_merged, PolygonComplex.nextCorner] using hf))).2
+      simp [PolygonComplex.nextCorner, hc, hT]
+      simpa [b, G.old_merged] using hv
+  have hbc : D.nextCorner b = c := by
+    rw [holdb]
+    apply Sigma.ext
+    · rfl
+    · apply (Fin.heq_ext_iff rfl).2
+      simp [PolygonComplex.nextCorner, hc, hT]
+  have hpc : ¬ Relation.EqvGen D.CornerRel b (D.pair c) := by
+    intro h
+    have hca : Relation.EqvGen D.CornerRel (D.pair c) (D.nextCorner c) := by
+      apply Relation.EqvGen.symm
+      apply Relation.EqvGen.rel
+      refine ⟨c, ?_⟩
+      rw [if_neg (Ne.symm (horD c))]
+      exact Or.inr ⟨rfl, rfl⟩
+    apply hPQ
+    apply standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect G horD
+    simpa [b, holda] using h.trans _ _ _ hca
+  have hcb : Relation.EqvGen D.CornerRel b c →
+      Relation.EqvGen D.CornerRel b (D.pair b) := by
+    intro h
+    refine h.trans _ _ _ (Relation.EqvGen.rel _ _ ?_)
+    refine ⟨b, ?_⟩
+    rw [if_neg (Ne.symm (horD b)), hbc]
+    exact Or.inr ⟨rfl, rfl⟩
+  let L := {u : D.Side // (u = c ∨ u = D.pair c) ∧ Relation.EqvGen D.CornerRel b u}
+  let R := {u : D.Side // (u = b ∨ u = D.pair b) ∧ Relation.EqvGen D.CornerRel b u}
+  let f : L → R := fun u => ⟨D.pair b, Or.inr rfl, by
+    rcases u.2.1 with hu | hu
+    · exact hcb (by simpa [hu] using u.2.2)
+    · exact False.elim (hpc (by simpa [hu] using u.2.2))⟩
+  have hf : Function.Injective f := by
+    intro u v _
+    apply Subtype.ext
+    rcases u.2.1 with hu | hu
+    · rcases v.2.1 with hv | hv
+      · exact hu.trans hv.symm
+      · exact False.elim (hpc (by simpa [hv] using v.2.2))
+    · exact False.elim (hpc (by simpa [hu] using u.2.2))
+  have hn : ¬ Function.Surjective f := by
+    intro hs
+    obtain ⟨u, hu⟩ := hs (⟨b, Or.inl rfl, Relation.EqvGen.refl _⟩ : R)
+    have hv := congrArg Subtype.val hu
+    exact D.pair_ne b (by simpa [f] using hv)
+  change Nat.card L < Nat.card R
+  letI : Fintype L := Fintype.ofFinite L
+  letI : Fintype R := Fintype.ofFinite R
+  simpa [Nat.card_eq_fintype_card] using
+    (Fintype.card_lt_of_injective_not_surjective f hf hn)
 
 /-- One cut-and-paste with `a` at index `0`: cut off the triangle `a b c`,
 glue it back along `b`. -/
