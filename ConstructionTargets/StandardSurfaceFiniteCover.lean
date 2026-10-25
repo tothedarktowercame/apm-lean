@@ -6683,16 +6683,114 @@ def standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide
     C.Side ≃ (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k).Side :=
   standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k
 
-/-- **Leaf (rotation is a homeomorphism).**  On face `f` use
-`PolygonMoves.rotation_aux_disk_homeomorph (C.sides f) k`, which sends
-`edgePoint n i t` to `edgePoint n (k + i) t` (`rotation_aux_edgePoint_add`,
-reduced mod `n` by `rotation_aux_edgePoint_period`); it carries the generators
-`C.Rel` to the generators of the rotated complex and back. -/
+lemma standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_shift_val
+    {n : ℕ} (hn : 0 < n) (k : ℕ) (i : Fin n) :
+    (((finRotate n) ^ k) i).val = (i.val + k) % n := by
+  induction k with
+  | zero => simp [Nat.mod_eq_of_lt i.isLt]
+  | succ k ih =>
+      obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn)
+      rw [pow_succ', Equiv.Perm.mul_apply, finRotate_succ_apply]
+      simp only [Fin.add_def, Fin.val_mk, ih]
+      rw [Nat.mod_add_mod]
+      rw [Nat.add_assoc]
+      norm_num
+      rcases n with _ | n
+      · simp
+      · rw [Nat.mod_eq_of_lt (by omega : 1 < n + 1 + 1)]
+
+lemma standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_edge_mod
+    (n e : ℕ) (hn : 0 < n) (t : Set.Icc (0 : ℝ) 1) :
+    edgePoint n e t = edgePoint n (e % n) t := by
+  induction e using Nat.strong_induction_on with
+  | h e ih =>
+      by_cases he : e < n
+      · rw [Nat.mod_eq_of_lt he]
+      · have hne : n ≤ e := Nat.le_of_not_gt he
+        have hsub : e - n < e := Nat.sub_lt (lt_of_lt_of_le hn hne) hn
+        have heq : e = n + (e - n) := (Nat.add_sub_of_le hne).symm
+        rw [heq, PolygonMoves.rotation_aux_edgePoint_period n (e - n) (Nat.ne_of_gt hn)]
+        rw [ih (e - n) hsub]
+        rw [heq, Nat.add_mod_left]
+
+lemma standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_edge
+    (C : PolygonComplex) (k : ℕ) (s : C.Side) (t : Set.Icc (0 : ℝ) 1) :
+    PolygonMoves.rotation_aux_disk (C.sides s.1) k
+        (edgePoint (C.sides s.1) s.2 t) =
+      edgePoint (C.sides s.1)
+        ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k s).2) t := by
+  rw [PolygonMoves.rotation_aux_edgePoint_add]
+  rw [standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_edge_mod
+    _ _ (C.sides_pos s.1)]
+  congr 2
+  simp only [standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift,
+    Equiv.sigmaCongrRight_apply]
+  rw [Nat.add_comm]
+  exact (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_shift_val
+    (C.sides_pos s.1) k s.2).symm
+
+
+/-- Face `f`'s disk turned by `PolygonMoves.rotation_aux_disk (C.sides f) k`. -/
+def standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_disks
+    (C : PolygonComplex) (k : ℕ) :
+    (Σ _ : Fin C.faceCount, Disk) ≃ (Σ _ : Fin C.faceCount, Disk) :=
+  Equiv.sigmaCongrRight fun f => PolygonMoves.rotation_aux_disk_equiv (C.sides f) k
+
+/-- **Leaf (rotation carries the generators).**  By `_aux_edge`, `_aux_disks`
+sends the point `edgePoint _ s.2 t` of face `s.1` to `edgePoint _ (shift s).2 t`.
+The rotated complex pairs `shift s` with `shift (pair s)` and gives `shift s`
+the sign of `s`, so its `pairedParameter` at `shift s` is `C.pairedParameter s`:
+a generator of `C.Rel` at side `s` goes to the generator of the rotated `Rel` at
+side `shift s`.  Backwards, take `s = shift.symm s'` and use that `_aux_disks`
+is injective. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_rel
+    (C : PolygonComplex) (k : ℕ) (x y : Σ _ : Fin C.faceCount, Disk) :
+    C.Rel x y ↔
+      (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k).Rel
+        (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_disks
+          C k x)
+        (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_disks
+          C k y) := by
+  sorry
+
+/-- Rotation is a homeomorphism: `_aux_disks` is a homeomorphism of the face
+disks carrying `C.Rel` onto the rotated `Rel` (`_aux_rel`), so
+`_aux_glueStep_aux_homeomorph_aux_span` applies with `a = id`, `b = _aux_disks`. -/
 theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph
     (C : PolygonComplex) (k : ℕ) :
     Nonempty (C.Space ≃ₜ
       (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k).Space) := by
-  sorry
+  let e :=
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_disks C k
+  let C' := standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k
+  have hgen := standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_rel
+    C k
+  have hfwd : ∀ x y, Relation.EqvGen C.Rel x y → Relation.EqvGen C'.Rel (e x) (e y) := by
+    intro x y h
+    induction h with
+    | rel x y h => exact Relation.EqvGen.rel _ _ ((hgen x y).mp h)
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih1 ih2 => exact Relation.EqvGen.trans _ _ _ ih1 ih2
+  have hbwd : ∀ u v : Σ _ : Fin C.faceCount, Disk, Relation.EqvGen C'.Rel u v →
+      Relation.EqvGen C.Rel (e.symm u) (e.symm v) := by
+    intro u v h
+    induction h with
+    | rel u v h =>
+        refine Relation.EqvGen.rel _ _ ((hgen _ _).mpr ?_)
+        show C'.Rel (e (e.symm u)) (e (e.symm v))
+        rwa [Equiv.apply_symm_apply, Equiv.apply_symm_apply]
+    | refl u => exact Relation.EqvGen.refl _
+    | symm u v _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans u v w _ _ ih1 ih2 => exact Relation.EqvGen.trans _ _ _ ih1 ih2
+  have hcont : Continuous e := by
+    refine continuous_sigma fun f => ?_
+    exact (continuous_sigmaMk (σ := fun _ : Fin C.faceCount => Disk)).comp
+      (PolygonMoves.rotation_aux_disk_continuous (C.sides f) k)
+  exact standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_span (C := C) (C' := C')
+    (Y := Σ _ : Fin C.faceCount, Disk) id e continuous_id hcont
+    Function.surjective_id e.surjective
+    (fun x y => ⟨hfwd x y, fun h => by simpa only [Equiv.symm_apply_apply] using hbwd _ _ h⟩)
 
 /-- **Leaf (rotation and corners).**  `rotateSide` adds `k` to the index mod
 the face's side count, so it commutes with `nextCorner`; with pairing and signs
