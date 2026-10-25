@@ -834,13 +834,119 @@ structure standardCover_pairingData_aux_glueStep_aux_GlueData
   pair_toOld : ∀ t, toOld (C'.pair t) = C.pair (toOld t)
   sign_toOld : ∀ t, C'.sign t = C.sign (toOld t)
 
-/-- **Leaf (build the merged complex).** -/
+/-- **Leaf (cyclic enumeration).**  Starting just after side `i` of an
+`a`-gon and walking once round, the `a - 1` steps hit every other side once. -/
+theorem standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_cyclic
+    (a : ℕ) (i : Fin a) :
+    ∃ e : Fin (a - 1) ≃ {j : Fin a // j ≠ i},
+      ∀ m, (e m).1.val = (i.val + 1 + m.val) % a := by
+  sorry
+
+/-- **Leaf (sides of the merged complex).**  Given the faces of `C'` (all faces
+of `C` but `(C.pair s).1`, with `merged` in place of `s.1`) and their side
+counts, the sides of `C'` correspond to the sides of `C` other than `s` and
+`C.pair s`: unmerged faces keep their sides, and the merged face walks round
+`s.1` from just after `s`, then round `(C.pair s).1` from just after
+`C.pair s`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_sideEquiv
+    (C : PolygonComplex) (s : C.Side) (hs : s.1 ≠ (C.pair s).1)
+    {m : ℕ} (old : Fin m → Fin C.faceCount) (merged : Fin m)
+    (sides' : Fin m → ℕ)
+    (old_merged : old merged = s.1) (old_injective : Function.Injective old)
+    (old_ne : ∀ k, old k ≠ (C.pair s).1)
+    (old_surj : ∀ f, f ≠ (C.pair s).1 → ∃ k, old k = f)
+    (sides_old : ∀ k, k ≠ merged → sides' k = C.sides (old k))
+    (sides_merged : sides' merged + 2 = C.sides s.1 + C.sides (C.pair s).1) :
+    ∃ e : (Σ k : Fin m, Fin (sides' k)) ≃ {u : C.Side // u ≠ s ∧ u ≠ C.pair s},
+      (∀ t : Σ k : Fin m, Fin (sides' k), t.1 ≠ merged →
+        (e t).1.1 = old t.1 ∧ (e t).1.2.val = t.2.val) ∧
+      (∀ j : Fin (sides' merged),
+        (e ⟨merged, j⟩).1.1 =
+            (if j.val + 1 < C.sides s.1 then s.1 else (C.pair s).1) ∧
+          (e ⟨merged, j⟩).1.2.val =
+            if j.val + 1 < C.sides s.1 then (s.2.val + 1 + j.val) % C.sides s.1
+            else ((C.pair s).2.val + 1 + (j.val + 1 - C.sides s.1)) %
+              C.sides (C.pair s).1) := by
+  sorry
+
+/-- Split by claude-14 (2026-10-25) after lemma-1's PARTIAL: the faces of `C'`
+are `Fin.succAbove (C.pair s).1`, the side correspondence is
+`_aux_sideEquiv`, and `pair`/`sign` are transported along it. -/
 theorem standardCover_pairingData_aux_glueStep_aux_mergeExists
     (C : PolygonComplex) (hsides : ∀ f, 2 ≤ C.sides f) (s : C.Side)
     (hs : s.1 ≠ (C.pair s).1) :
     ∃ C' : PolygonComplex,
       Nonempty (standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) := by
-  sorry
+  obtain ⟨m, hm⟩ : ∃ m, C.faceCount = m + 1 :=
+    Nat.exists_eq_succ_of_ne_zero (Fin.pos s.1).ne'
+  set p : Fin C.faceCount := (C.pair s).1 with hp
+  let old : Fin m → Fin C.faceCount := fun k =>
+    Fin.cast hm.symm ((Fin.cast hm p).succAbove k)
+  have old_injective : Function.Injective old := fun k k' h =>
+    Fin.succAbove_right_injective (Fin.cast_injective _ h)
+  have old_ne : ∀ k, old k ≠ p := by
+    intro k h
+    have h' := congrArg (Fin.cast hm) h
+    simp only [old, Fin.cast_cast, Fin.cast_eq_self] at h'
+    exact Fin.succAbove_ne (Fin.cast hm p) k h'
+  have old_surj : ∀ f, f ≠ p → ∃ k, old k = f := by
+    intro f hf
+    obtain ⟨k, hk⟩ := Fin.exists_succAbove_eq (x := Fin.cast hm f)
+      (y := Fin.cast hm p) (fun h => hf (Fin.cast_injective _ h))
+    exact ⟨k, by ext; simp [old, hk]⟩
+  obtain ⟨merged, old_merged⟩ := old_surj s.1 hs
+  let a := C.sides s.1
+  let b := C.sides p
+  let sides' : Fin m → ℕ := fun k => if k = merged then a + b - 2 else C.sides (old k)
+  have sides_old : ∀ k, k ≠ merged → sides' k = C.sides (old k) := fun k hk =>
+    if_neg hk
+  have sides_merged : sides' merged + 2 = C.sides s.1 + C.sides p := by
+    have := hsides s.1; have := hsides p
+    simp only [sides', if_pos rfl, a, b]; omega
+  obtain ⟨e, he_old, he_merged⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_sideEquiv C s hs
+      old merged sides' old_merged old_injective old_ne old_surj sides_old sides_merged
+  let Q : {u : C.Side // u ≠ s ∧ u ≠ C.pair s} → {u : C.Side // u ≠ s ∧ u ≠ C.pair s} :=
+    fun u => ⟨C.pair u.1, fun h => u.2.2 (by
+        have := congrArg C.pair h; rwa [C.pair_pair] at this),
+      fun h => u.2.1 (C.pair.injective h)⟩
+  have hQ : Function.Involutive Q := fun u => Subtype.ext (C.pair_pair u.1)
+  let pair' : Equiv.Perm (Σ k : Fin m, Fin (sides' k)) :=
+    (e.trans hQ.toPerm).trans e.symm
+  have pair'_apply : ∀ t, e (pair' t) = Q (e t) := fun t => by simp [pair']
+  let C' : PolygonComplex :=
+    { faceCount := m
+      sides := sides'
+      sides_pos := fun k => by
+        by_cases hk : k = merged
+        · have := hsides s.1; have := hsides p
+          simp only [sides', if_pos hk, a, b]; omega
+        · rw [sides_old k hk]; exact C.sides_pos _
+      pair := pair'
+      pair_pair := fun t => e.injective (by rw [pair'_apply, pair'_apply]; exact hQ _)
+      pair_ne := fun t h => C.pair_ne (e t).1 (by
+        have := congrArg (fun u => u.1) (pair'_apply t); simp only [h] at this
+        exact this.symm)
+      sign := fun t => C.sign (e t).1 }
+  refine ⟨C', ⟨
+    { faceCount_succ := hm.symm
+      merged := merged
+      old := old
+      old_merged := old_merged
+      old_injective := old_injective
+      old_ne := old_ne
+      sides_old := sides_old
+      sides_merged := sides_merged
+      toOld := fun t => (e t).1
+      toOld_injective := fun t t' h => e.injective (Subtype.ext h)
+      toOld_ne := fun t => (e t).2
+      toOld_surj := fun u hu hu' => ⟨e.symm ⟨u, hu, hu'⟩, by simp⟩
+      toOld_fst := fun t ht => (he_old t ht).1
+      toOld_val := fun t ht => (he_old t ht).2
+      toOld_merged_fst := fun j => (he_merged j).1
+      toOld_merged_val := fun j => (he_merged j).2
+      pair_toOld := fun t => congrArg Subtype.val (pair'_apply t)
+      sign_toOld := fun t => rfl }⟩⟩
 
 /-- **Leaf (arc count).**  Every side of `C` except `s` and `C.pair s` is a
 side of `C'`, once. -/
