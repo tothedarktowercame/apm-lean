@@ -4175,13 +4175,53 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord
 
 /-- **Leaf.**  Every `Step` keeps the word orientable: `flip` changes both arcs
 of a label together, and `cutPaste` gives the new pair the signs `false, true`. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_orientable_aux_nodup
+    {w : List (PolygonMoves.Signed ℕ)} :
+    orientablePairing_normalForm_aux_WordOrientable w ↔ w.Nodup := by
+  rw [List.nodup_iff_injective_get]
+  constructor
+  · intro h i j hij
+    by_contra hne
+    have hl : (w.get i).1 = (w.get j).1 := congrArg Prod.fst hij
+    exact (h i j hne hl) (congrArg Prod.snd hij)
+  · intro h i j hij hl hs
+    apply hij
+    apply h
+    exact Prod.ext hl hs
+
 theorem orientablePairing_normalForm_aux_normalize_aux_step_orientable
     {w w' : List (PolygonMoves.Signed ℕ)}
     (hs : orientablePairing_normalForm_aux_Step w w')
     (hw : PolygonMoves.IsPolygonWord w)
     (hor : orientablePairing_normalForm_aux_WordOrientable w) :
     orientablePairing_normalForm_aux_WordOrientable w' := by
-  sorry
+  rw [orientablePairing_normalForm_aux_normalize_aux_step_orientable_aux_nodup] at hor ⊢
+  cases hs with
+  | rotation u v h =>
+      rw [List.nodup_append] at hor ⊢
+      obtain ⟨hu, hv, huv⟩ := hor
+      refine ⟨hv, hu, ?_⟩
+      intro a ha b hb hab
+      exact huv b hb a ha hab.symm
+  | relabel w e flip h =>
+      apply hor.map
+      intro x y hxy
+      have hl : x.1 = y.1 := e.injective (congrArg Prod.fst hxy)
+      have hs : xor x.2 (flip x.1) = xor y.2 (flip y.1) := congrArg Prod.snd hxy
+      apply Prod.ext hl
+      rcases x with ⟨xl, xs⟩
+      rcases y with ⟨yl, ys⟩
+      simp only at hl hs ⊢
+      subst yl
+      cases xs <;> cases ys <;> simp_all
+  | cutPaste α₁ α₂ β₁ β₂ y c hy hc h =>
+      set_option maxHeartbeats 1000000 in
+        simp only [PolygonMoves.inv] at hor ⊢
+      set_option maxHeartbeats 1000000 in
+        simp only [List.nodup_append, List.nodup_cons, List.mem_append, List.mem_cons,
+          List.not_mem_nil, or_false, not_or] at hor ⊢
+      set_option maxHeartbeats 1000000 in
+        grind
 
 /-- **Leaf.**  Every `Step` keeps the word one-vertex.  Rotation shifts corners
 and relabelling leaves `WordCornerRel` unchanged; for `cutPaste`, send each
