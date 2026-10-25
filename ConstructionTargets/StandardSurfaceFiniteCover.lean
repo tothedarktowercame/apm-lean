@@ -1851,7 +1851,30 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merg
     (m : Fin (C'.sides D.merged)) (hm : m.val + 2 = C.sides s.1)
     (hb : 2 ≤ C.sides (C.pair s).1) :
     D.toOld (C'.nextCorner ⟨D.merged, m⟩) = C.nextCorner (C.pair s) := by
-  sorry
+  have hmnext : m.val + 1 < C'.sides D.merged := by
+    have heq := D.sides_merged
+    omega
+  let mn : Fin (C'.sides D.merged) := ⟨m.val + 1, hmnext⟩
+  have hnext : C'.nextCorner ⟨D.merged, m⟩ = ⟨D.merged, mn⟩ := by
+    have hfst : (C'.nextCorner ⟨D.merged, m⟩).1 =
+        (⟨D.merged, mn⟩ : C'.Side).1 := rfl
+    apply Sigma.ext hfst
+    apply (Fin.heq_ext_iff (congrArg C'.sides hfst)).2
+    simp [PolygonComplex.nextCorner, mn, Nat.mod_eq_of_lt hmnext]
+  rw [hnext]
+  have hnright : ¬ (mn.val + 1 < C.sides s.1) := by
+    simp only [mn]
+    omega
+  have hfst : (D.toOld ⟨D.merged, mn⟩).1 = (C.pair s).1 := by
+    simpa [hnright] using D.toOld_merged_fst mn
+  have htarget : (C.nextCorner (C.pair s)).1 = (C.pair s).1 := rfl
+  apply Sigma.ext (hfst.trans htarget.symm)
+  apply (Fin.heq_ext_iff (congrArg C.sides (hfst.trans htarget.symm))).2
+  have hval := D.toOld_merged_val mn
+  simp only [PolygonComplex.nextCorner]
+  rw [hval]
+  simp only [hnright, if_false, mn]
+  rw [show m.val + 1 + 1 - C.sides s.1 = 0 by omega]
 
 /-- **Assembly (first junction).**  `m + 2 = C.sides s.1`: `m` is the last side
 taken from `s.1`, so `toOld m` is side `s.2 - 1` and `C.nextCorner (toOld m) = s`.
