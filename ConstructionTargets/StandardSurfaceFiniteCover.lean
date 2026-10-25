@@ -1052,7 +1052,46 @@ theorem standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_cyclic
     (a : ℕ) (i : Fin a) :
     ∃ e : Fin (a - 1) ≃ {j : Fin a // j ≠ i},
       ∀ m, (e m).1.val = (i.val + 1 + m.val) % a := by
-  sorry
+  let f : Fin (a - 1) → {j : Fin a // j ≠ i} := fun m =>
+    ⟨⟨(i.val + 1 + m.val) % a, Nat.mod_lt _ (Nat.zero_lt_of_lt i.isLt)⟩, by
+      intro h
+      have hval : (i.val + 1 + m.val) % a = i.val := congrArg Fin.val h
+      by_cases hx : i.val + 1 + m.val < a
+      · rw [Nat.mod_eq_of_lt hx] at hval
+        omega
+      · rw [Nat.mod_eq_sub_mod (le_of_not_gt hx),
+          Nat.mod_eq_of_lt (by omega)] at hval
+        omega⟩
+  have hf : Function.Injective f := by
+    intro m n h
+    apply Fin.ext
+    have hval : (i.val + 1 + m.val) % a = (i.val + 1 + n.val) % a :=
+      congrArg (fun x => x.1.val) h
+    by_cases hm : i.val + 1 + m.val < a
+    · rw [Nat.mod_eq_of_lt hm] at hval
+      by_cases hn : i.val + 1 + n.val < a
+      · rw [Nat.mod_eq_of_lt hn] at hval
+        omega
+      · rw [Nat.mod_eq_sub_mod (le_of_not_gt hn),
+          Nat.mod_eq_of_lt (by omega)] at hval
+        omega
+    · rw [Nat.mod_eq_sub_mod (le_of_not_gt hm),
+        Nat.mod_eq_of_lt (by omega)] at hval
+      by_cases hn : i.val + 1 + n.val < a
+      · rw [Nat.mod_eq_of_lt hn] at hval
+        omega
+      · rw [Nat.mod_eq_sub_mod (le_of_not_gt hn),
+          Nat.mod_eq_of_lt (by omega)] at hval
+        omega
+  have hcard : Fintype.card (Fin (a - 1)) =
+      Fintype.card {j : Fin a // j ≠ i} := by
+    rw [Fintype.card_fin]
+    simpa using (Set.card_ne_eq i)
+  have hbij : Function.Bijective f :=
+    (Fintype.bijective_iff_injective_and_card f).2 ⟨hf, hcard⟩
+  refine ⟨Equiv.ofBijective f hbij, ?_⟩
+  intro m
+  rfl
 
 /-- **Leaf (sides of the merged complex).**  Given the faces of `C'` (all faces
 of `C` but `(C.pair s).1`, with `merged` in place of `s.1`) and their side
