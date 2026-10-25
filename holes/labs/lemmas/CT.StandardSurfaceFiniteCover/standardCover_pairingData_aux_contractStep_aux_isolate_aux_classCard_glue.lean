@@ -6872,7 +6872,51 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard_glu
     standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C x =
       standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C' t +
         Nat.card {u : C.Side // (u = s ∨ u = C.pair s) ∧ Relation.EqvGen C.CornerRel x u} := by
-  sorry
+  let A := {u : C.Side // Relation.EqvGen C.CornerRel x u}
+  let B := {u : C'.Side // Relation.EqvGen C'.CornerRel t u}
+  let p : A → Prop := fun u => u.1 = s ∨ u.1 = C.pair s
+  let R := {u : C.Side // (u = s ∨ u = C.pair s) ∧
+    Relation.EqvGen C.CornerRel x u}
+  have mapEqv : ∀ {a b : C'.Side}, Relation.EqvGen C'.CornerRel a b →
+      Relation.EqvGen C.CornerRel (G.toOld a) (G.toOld b) := by
+    intro a b h
+    induction h with
+    | rel a b h =>
+        exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_mapRel G hor h
+    | refl a => exact Relation.EqvGen.refl _
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans _ _ _ ih₂
+  let eB : B ≃ {u : A // ¬ p u} := Equiv.ofBijective
+    (fun v => ⟨⟨G.toOld v.1, hx.symm.trans _ _ _ (mapEqv v.2)⟩,
+      fun h => (G.toOld_ne v.1).1 (h.resolve_right (G.toOld_ne v.1).2)⟩)
+    ⟨by
+      intro a b h
+      apply Subtype.ext
+      apply G.toOld_injective
+      exact congrArg (λ z => z.1.1) h,
+     by
+      intro u
+      have hus : u.1.1 ≠ s := fun h => u.2 (Or.inl h)
+      have hup : u.1.1 ≠ C.pair s := fun h => u.2 (Or.inr h)
+      obtain ⟨v, hv⟩ := G.toOld_surj u.1.1 hus hup
+      have hvrel : Relation.EqvGen C'.CornerRel t v :=
+        standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect
+          G hor t v (hx.trans _ _ _ (by simpa [hv] using u.1.2))
+      refine ⟨⟨v, hvrel⟩, ?_⟩
+      apply Subtype.ext
+      apply Subtype.ext
+      exact hv⟩
+  let eR : {u : A // p u} ≃ R :=
+    ⟨fun u => ⟨u.1.1, u.2, u.1.2⟩,
+     fun u => ⟨⟨u.1, u.2.2⟩, u.2.1⟩,
+     fun _ => rfl, fun _ => rfl⟩
+  change Nat.card A = Nat.card B + Nat.card R
+  calc
+    Nat.card A = Nat.card ({u : A // p u} ⊕ {u : A // ¬ p u}) := by
+      exact (Nat.card_congr (Equiv.sumCompl p)).symm
+    _ = Nat.card {u : A // p u} + Nat.card {u : A // ¬ p u} := Nat.card_sum
+    _ = Nat.card R + Nat.card B := by rw [Nat.card_congr eR, Nat.card_congr eB]
+    _ = Nat.card B + Nat.card R := Nat.add_comm _ _
 -- END SEAT AREA
 
 /-- **Leaf (the count drops).**  Let `Q` be the vertex of `b = toOld (nextCorner a)`
