@@ -4008,7 +4008,52 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord
     {w w' : List (PolygonMoves.Signed ℕ)}
     (hs : orientablePairing_normalForm_aux_Step w w')
     (hw : PolygonMoves.IsPolygonWord w) : PolygonMoves.IsPolygonWord w' := by
-  sorry
+  cases hs with
+  | rotation u v h =>
+      refine ⟨?_, ?_, ?_⟩
+      · intro he
+        have : u ++ v = [] := by
+          apply List.eq_nil_iff_forall_not_mem.mpr
+          intro x hx
+          have : x ∈ v ++ u := by
+            simpa [List.mem_append, or_comm] using hx
+          simpa [he] using this
+        exact h.1 this
+      · simpa [List.length_append, Nat.add_comm] using h.2.1
+      · intro a ha
+        simpa [List.map_append, List.count_append, Nat.add_comm] using h.2.2 a (by
+          simpa [List.map_append, List.mem_append, or_comm] using ha)
+  | relabel w e flip h =>
+      refine ⟨by simpa using h.1, by simpa using h.2.1, ?_⟩
+      intro a ha
+      simp only [List.map_map, Function.comp_def] at ha ⊢
+      obtain ⟨b, hb, rfl⟩ := List.mem_map.mp ha
+      rw [show List.map (fun x => e x.1) w =
+        List.map e (List.map Prod.fst w) by simp [List.map_map, Function.comp_def]]
+      rw [List.count_map_of_injective _ e e.injective]
+      exact h.2.2 b.1 (List.mem_map.mpr ⟨b, hb, rfl⟩)
+  | cutPaste α₁ α₂ β₁ β₂ y c hy hc h =>
+      refine ⟨by simp, ?_, ?_⟩
+      · simpa [List.length_append, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+          using h.2.1
+      · intro a ha
+        simp only [List.map_append, List.map_cons, List.map_nil, List.mem_append,
+          List.mem_cons, List.not_mem_nil, or_false, not_or, PolygonMoves.inv] at hy hc ha ⊢
+        by_cases hac : a = c.1
+        · subst a
+          simp only [List.count_append, List.count_cons, List.count_nil, Nat.add_zero]
+          simp_all [List.count_eq_zero_of_not_mem]
+        · simp [hac] at ha
+          have hold := h.2.2 a (by aesop)
+          simp only [List.map_append, List.map_cons, List.map_nil, List.count_append,
+            List.count_cons, List.count_nil, Nat.add_zero, PolygonMoves.inv] at hold ⊢
+          have hay : y.1 ≠ a := by
+            intro hea
+            subst a
+            simp_all
+          have hca : c.1 ≠ a := Ne.symm hac
+          simp [hay, hca] at hold ⊢
+          omega
 
 /-- **Leaf.**  Every `Step` keeps the word orientable: `flip` changes both arcs
 of a label together, and `cutPaste` gives the new pair the signs `false, true`. -/
