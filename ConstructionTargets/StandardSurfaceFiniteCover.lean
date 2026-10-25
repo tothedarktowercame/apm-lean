@@ -3775,24 +3775,69 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
   rw [Nat.card_congr e]
   exact hc
 
-/-- **Leaf (collapse an arc).**  Side `s` has distinct ends, so its image in
-`C.Space` is an embedded arc; collapsing it (and its partner, the same arc) to
-a point gives `C'.Space`.  In the disk: a homeomorphism `Disk → Disk` that
-sends side `s` and side `C.pair s` to single boundary points and the other
-sides onto the sides of the `(sides - 2)`-gon, compatible with the pairings. -/
+/-! Re-split of `_aux_contractStep` (claude-14, 2026-10-25, after the lemma-2
+PARTIAL on `_aux_homeomorph`).  The earlier leaf asked for `C.Space ≃ₜ C'.Space`
+for any side `s` with distinct ends.  That is "a surface with an embedded arc
+collapsed is the same surface", and no disk map gives it: a map that collapses
+side `s` to a point descends to `C.Space → C'.Space` collapsing the arc, which is
+not injective.  Route now (Massey, Ch. 1 §8): cut-and-paste moves, each a cut
+(`GlueData` read backwards) followed by a glue (`_aux_glueStep_aux_homeomorph`),
+shrink one vertex class to a single corner (`_aux_isolate`); the two sides at
+that corner are `a a⁻¹`, and cancelling them (`_aux_homeomorph`, now for
+adjacent sides only) is `PolygonMoves.inversePairCancellation`. -/
+
+/-- **Leaf (cancel an adjacent pair).**  Side `C.pair s` follows side `s`
+on the boundary (`a a⁻¹`).  Zip the two sides together: the disk map of
+`PolygonMoves.inversePairCancellation_aux_collapse` (rotated so the pair sits
+at the chosen position; `PolygonMoves.rotation_aux_disk_homeomorph`) descends
+to `C.Space ≃ₜ C'.Space` by the argument of
+`PolygonMoves.polygonSurface_homeomorph_of_collapse`.  Unlike a collapse of a
+general side, the zip is injective on the interior and identifies only points
+`C.Rel` already identifies. -/
 theorem standardCover_pairingData_aux_contractStep_aux_homeomorph
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
     (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
-    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
-      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hadj : C.nextCorner s = C.pair s)
     (hor : C.IsOrientable) : Nonempty (C.Space ≃ₜ C'.Space) := by
   sorry
 
-/-- **One 1-skeleton contraction.**  A one-face complex with at least
-two vertices has a side whose endpoints are distinct vertices.  Collapsing
-that side and its partner (an embedded arc in the surface) removes two
-boundary arcs and merges the two vertices.  `2 * vertexCount < totalSides`
+/-- **Leaf (the middle corner of `a a⁻¹` is its own vertex).**  If
+`C.pair s = C.nextCorner s` and `C` is orientable, every `CornerRel` step
+from the corner `m = C.nextCorner s` returns to `m` (the only sides at `m` are
+`s` and `C.pair s`), so the class of `m` is `{m}`, and `s ≠ m` because the face
+has at least two sides. -/
+theorem standardCover_pairingData_aux_contractStep_aux_adjacentDistinct
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (h3 : 3 ≤ C.totalSides)
+    (hor : C.IsOrientable) (s : C.Side) (hadj : C.nextCorner s = C.pair s) :
+    Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s) := by
+  sorry
+
+/-- **Leaf, NOT YET SPLIT (bring a pair together).**  A one-face orientable
+complex with at least two vertices is homeomorphic to one with the same
+number of sides and vertices in which some side is followed by its partner.
+Massey's induction on the corner count of a vertex class `Q`: if `Q` has one
+corner, the sides at it are `a a⁻¹` (orientability); otherwise take sides
+`a` (from `P ≠ Q` to `Q`) and `b` (from `Q`) at a corner of `Q`, with
+`b ≠ C.pair a` (else done), cut off the triangle `a b c⁻¹` and glue it back
+along `b`: `X a b Y b⁻¹ Z` becomes `X c Y c⁻¹ a Z`, with one fewer corner in
+`Q` and the same vertex count.  The cut is a `GlueData` read backwards and
+both homeomorphisms are `_aux_glueStep_aux_homeomorph`; vertex counts are kept
+by `_aux_glueStep_aux_vertexCount`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (hV : 2 ≤ C.vertexCount)
+    (hlarge : 2 * C.vertexCount < C.totalSides) (hor : C.IsOrientable) :
+    ∃ C₁ : PolygonComplex, C₁.faceCount = 1 ∧ C₁.totalSides = C.totalSides ∧
+      C₁.vertexCount = C.vertexCount ∧ C₁.IsOrientable ∧
+      Nonempty (C.Space ≃ₜ C₁.Space) ∧
+      ∃ s : C₁.Side, C₁.nextCorner s = C₁.pair s := by
+  sorry
+
+/-- **One vertex removed.**  Move corners by cut-and-paste until some side
+is followed by its partner (`_aux_isolate`), then cancel that pair
+(`_aux_homeomorph`): two boundary arcs go, and the middle corner, a vertex on
+its own (`_aux_adjacentDistinct`), merges away.  `2 * vertexCount < totalSides`
 excludes the sphere words, where the contraction would reach zero sides; it
 is preserved by the step. -/
 theorem standardCover_pairingData_aux_contractStep
@@ -3801,15 +3846,21 @@ theorem standardCover_pairingData_aux_contractStep
     ∃ C' : PolygonComplex, C'.faceCount = 1 ∧ C'.totalSides + 2 = C.totalSides ∧
       C'.vertexCount + 1 = C.vertexCount ∧ C'.IsOrientable ∧
       Nonempty (C.Space ≃ₜ C'.Space) := by
-  have h5 := standardCover_pairingData_aux_contractStep_aux_totalSides_five_le C hV hlarge
-  obtain ⟨s, hs⟩ :=
-    standardCover_pairingData_aux_contractStep_aux_distinctEnds C h1 hV
+  obtain ⟨C₁, h1₁, hT₁, hV₁, hor₁, ⟨e₁⟩, s, hadj⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_isolate C h1 hV hlarge hor
+  have h5 : 5 ≤ C₁.totalSides := by
+    have := standardCover_pairingData_aux_contractStep_aux_totalSides_five_le C hV hlarge
+    omega
+  have hs := standardCover_pairingData_aux_contractStep_aux_adjacentDistinct
+    C₁ h1₁ (by omega) hor₁ s hadj
   obtain ⟨C', ⟨D⟩⟩ :=
-    standardCover_pairingData_aux_contractStep_aux_contractExists C h1 (by omega) s
-  exact ⟨C', D.faceCount_eq, D.totalSides_add_two,
-    standardCover_pairingData_aux_contractStep_aux_vertexCount D h1 h5 hs hor,
-    standardCover_pairingData_aux_contractStep_aux_orientable D hor,
-    standardCover_pairingData_aux_contractStep_aux_homeomorph D h1 h5 hs hor⟩
+    standardCover_pairingData_aux_contractStep_aux_contractExists C₁ h1₁ (by omega) s
+  obtain ⟨e₂⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph D h1₁ h5 hadj hor₁
+  exact ⟨C', D.faceCount_eq, by have := D.totalSides_add_two; omega,
+    by have := standardCover_pairingData_aux_contractStep_aux_vertexCount D h1₁ h5 hs hor₁
+       omega,
+    standardCover_pairingData_aux_contractStep_aux_orientable D hor₁,
+    ⟨e₁.trans e₂⟩⟩
 
 /-- Contract a spanning tree of the 1-skeleton: `k` contractions on `k + 1`
 vertices. -/
