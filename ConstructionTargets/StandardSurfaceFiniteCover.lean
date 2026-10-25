@@ -2573,7 +2573,36 @@ theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_lif
     (hy : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y = z)
     (hy' : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y' = z') :
     Relation.EqvGen C.Rel y y' := by
-  sorry
+  rcases hzz with ⟨v, t, rfl, rfl⟩
+  let x : Σ _ : Fin C.faceCount, Disk :=
+    ⟨(D.toOld v).1, edgePoint (C.sides (D.toOld v).1) (D.toOld v).2 t⟩
+  let x' : Σ _ : Fin C.faceCount, Disk :=
+    ⟨(C.pair (D.toOld v)).1,
+      edgePoint (C.sides (C.pair (D.toOld v)).1) (C.pair (D.toOld v)).2
+        (C.pairedParameter (D.toOld v) t)⟩
+  have hpar : C'.pairedParameter v t = C.pairedParameter (D.toOld v) t := by
+    simp only [PolygonComplex.pairedParameter]
+    rw [D.sign_toOld, D.sign_toOld, D.pair_toOld]
+  have hx : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR x =
+      ⟨v.1, edgePoint (C'.sides v.1) v.2 t⟩ := himage v t
+  have hx' : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR x' =
+      ⟨(C'.pair v).1,
+        edgePoint (C'.sides (C'.pair v).1) (C'.pair v).2
+          (C'.pairedParameter v t)⟩ := by
+    dsimp [x']
+    rw [← hpar]
+    have hi := himage (C'.pair v) (C'.pairedParameter v t)
+    rw [D.pair_toOld] at hi
+    exact hi
+  have hrel : C.Rel x x' := by
+    exact ⟨D.toOld v, t, rfl, rfl⟩
+  have hstep : Relation.EqvGen C.Rel x x' := by
+    apply Relation.EqvGen.rel
+    exact hrel
+  exact Relation.EqvGen.trans y x y'
+    (hker y x (hy.trans hx.symm))
+    (Relation.EqvGen.trans x x' y' hstep
+      (hker x' y' (hx'.trans hy'.symm)))
 
 /-- Two points of the disks of `C` are identified in `C` exactly when their
 images are identified in `C'` (assembly of `_aux_oldInv`, `_aux_edgeImage`,
