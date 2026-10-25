@@ -4386,6 +4386,40 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_orientable
       set_option maxHeartbeats 1000000 in
         grind
 
+/-- **Leaf.**  Rotating a word shifts every corner by `u.length` (mod the
+length) and every `WordCornerRel` step with it. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation
+    (u v : List (PolygonMoves.Signed ℕ))
+    (hv : orientablePairing_normalForm_aux_WordOneVertex (u ++ v)) :
+    orientablePairing_normalForm_aux_WordOneVertex (v ++ u) := by
+  sorry
+
+/-- **Leaf.**  Relabelling by an equivalence and flipping signs label-wise keeps
+"same label" and "same sign within a label", so `WordCornerRel` is unchanged. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_relabel
+    (w : List (PolygonMoves.Signed ℕ)) (σ : ℕ ≃ ℕ) (flip : ℕ → Bool)
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
+    orientablePairing_normalForm_aux_WordOneVertex
+      (w.map fun x => (σ x.1, xor x.2 (flip x.1))) := by
+  sorry
+
+/-- **Leaf.**  Cut-and-paste keeps the word one-vertex.  Send each corner of the
+new word to the corner of the old word at the same point of the cut polygon (the
+corners at the ends of `c` go to the corners at the ends of `y`) and check that
+each old `WordCornerRel` step maps to a chain of new steps.  The hypotheses are
+the `Step.cutPaste` ones; without `hy` it is false (`[y, inv y, y]` is
+one-vertex, `[inv c, y, c]` is not). -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).map Prod.fst)
+    (hw : PolygonMoves.IsPolygonWord (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂))
+    (hv : orientablePairing_normalForm_aux_WordOneVertex
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)) :
+    orientablePairing_normalForm_aux_WordOneVertex
+      (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) := by
+  sorry
+
 /-- **Leaf.**  Every `Step` keeps the word one-vertex.  Rotation shifts corners
 and relabelling leaves `WordCornerRel` unchanged; for `cutPaste`, send each
 corner of the new word to the corner of the old word at the same point of the
@@ -4398,7 +4432,14 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex
     (hor : orientablePairing_normalForm_aux_WordOrientable w)
     (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
     orientablePairing_normalForm_aux_WordOneVertex w' := by
-  sorry
+  cases hs with
+  | rotation u v h =>
+      exact orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation u v hv
+  | relabel w e flip h =>
+      exact orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_relabel w e flip hv
+  | cutPaste α₁ α₂ β₁ β₂ y c hy hc h =>
+      exact orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
+        α₁ α₂ β₁ β₂ y c hy hc h hv
 
 theorem orientablePairing_normalForm_aux_normalize_aux_step_length
     {w w' : List (PolygonMoves.Signed ℕ)}
