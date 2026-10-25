@@ -13163,7 +13163,9 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
       (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k = y) ∧
     ((k : ℕ) = α₁.length + 1 + α₂.length + β₁.length →
       (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k = PolygonMoves.inv y) := by
-  sorry
+  constructor <;> intro hk
+  · simpa [List.get_eq_getElem, hk]
+  · grind [List.get_eq_getElem, List.getElem_append]
 
 /-- **Leaf.**  Away from `y` and `inv y`, the corner map sends each arc to the
 same signed letter in the new word. -/
