@@ -2258,18 +2258,329 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_choo
     · rw [show g u = Classical.choose (hpre u) by simp only [g, dif_neg h]]
       exact Classical.choose_spec (hpre u)
 
+/-- `toOld` commutes literally with `nextCorner` when the old next corner is not
+deleted (banked from lemma-1's partial). -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_next
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (t : C'.Side)
+    (hns : C.nextCorner (D.toOld t) ≠ s)
+    (hnp : C.nextCorner (D.toOld t) ≠ C.pair s) :
+    D.toOld (C'.nextCorner t) = C.nextCorner (D.toOld t) := by
+  by_cases ht : t.1 = D.merged
+  · obtain ⟨f, m⟩ := t
+    dsimp only at ht
+    subst f
+    have hlt := m.isLt
+    by_cases h₁ : m.val + 2 < C.sides s.1
+    · exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_first D m h₁
+    by_cases h₂ : m.val + 2 = C.sides s.1
+    · exfalso
+      apply hns
+      exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_right D m h₂
+    by_cases h₃ : m.val + 1 < C'.sides D.merged
+    · exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_second D m (by omega) h₃
+    · exfalso
+      apply hnp
+      have hmsecond : ¬ (m.val + 1 < C.sides s.1) := by omega
+      have hfst : (D.toOld ⟨D.merged, m⟩).1 = (C.pair s).1 := by
+        simpa [hmsecond] using D.toOld_merged_fst m
+      apply Sigma.ext
+      · simpa [PolygonComplex.nextCorner] using hfst
+      apply (Fin.heq_ext_iff (congrArg C.sides (by
+        simpa [PolygonComplex.nextCorner] using hfst))).2
+      have hsize := D.sides_merged
+      have hm_last : m.val + 1 = C'.sides D.merged := by omega
+      have hval := D.toOld_merged_val m
+      simp only [hmsecond, if_false] at hval
+      simp only [PolygonComplex.nextCorner, hval]
+      rw [hfst]
+      have hp := (C.pair s).2.isLt
+      have hoff : m.val + 1 - C.sides s.1 = C.sides (C.pair s).1 - 2 := by omega
+      rw [hoff]
+      by_cases hp0 : (C.pair s).2.val = 0
+      · rw [hp0]
+        simp only [zero_add]
+        have hb : 2 ≤ C.sides (C.pair s).1 := by omega
+        rw [show 1 + (C.sides (C.pair s).1 - 2) =
+          C.sides (C.pair s).1 - 1 by omega]
+        rw [Nat.mod_eq_of_lt (Nat.sub_lt (by omega) (by omega))]
+        rw [show C.sides (C.pair s).1 - 1 + 1 =
+          C.sides (C.pair s).1 by omega, Nat.mod_self]
+      · have hx : (C.pair s).2.val + 1 + (C.sides (C.pair s).1 - 2) =
+            C.sides (C.pair s).1 + ((C.pair s).2.val - 1) := by omega
+        rw [hx]
+        have hsub : (C.pair s).2.val - 1 < C.sides (C.pair s).1 := by omega
+        have hmod : (C.sides (C.pair s).1 + ((C.pair s).2.val - 1)) %
+            C.sides (C.pair s).1 = (C.pair s).2.val - 1 := by
+          rw [Nat.add_mod, Nat.mod_self, zero_add]
+          rw [Nat.mod_eq_of_lt hsub, Nat.mod_eq_of_lt hsub]
+        rw [hmod]
+        rw [show (C.pair s).2.val - 1 + 1 = (C.pair s).2.val by omega,
+          Nat.mod_eq_of_lt hp]
+  · exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_unmerged D t ht
+
+/-- Where the map back sends a corner of `C` (it only matters which corner of
+`C'` it picks): itself, except that the deleted corners `s` and `C.pair s` go to
+`nextCorner (C.pair s)` and `nextCorner s`, their partners under `_aux_cutRel`.
+When that partner is itself deleted (its face is a 1-gon) the class is followed
+one step further. -/
+def standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect
+    {C : PolygonComplex} (s u : C.Side) : C.Side :=
+  if u = s then
+    if C.nextCorner (C.pair s) = C.pair s then C.nextCorner s else C.nextCorner (C.pair s)
+  else if u = C.pair s then
+    if C.nextCorner s = s then C.nextCorner (C.pair s) else C.nextCorner s
+  else u
+
+/-- The `toOld`-preimage of a corner of `C`, if it has one. -/
+def standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_pre
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) (v : C.Side) :
+    C'.Side := by
+  classical
+  exact if h : ∃ t, D.toOld t = v then Classical.choose h
+    else ⟨D.merged, ⟨0, C'.sides_pos D.merged⟩⟩
+
+/-- The map back on corners: redirect, then take the preimage. -/
+def standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) (u : C.Side) :
+    C'.Side :=
+  standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_pre D
+    (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect
+      s u)
+
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_spec
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) {u : C.Side}
+    {t : C'.Side}
+    (h : D.toOld t =
+      standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect
+        s u) :
+    standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D u =
+      t := by
+  have hex : ∃ t, D.toOld t =
+      standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect
+        s u := ⟨t, h⟩
+  apply D.toOld_injective
+  rw [h]
+  unfold standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv
+    standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_pre
+  rw [dif_pos hex]
+  exact Classical.choose_spec hex
+
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_toOld
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) (t : C'.Side) :
+    standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D
+      (D.toOld t) = t := by
+  apply standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_spec
+  simp [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect,
+    (D.toOld_ne t).1, (D.toOld_ne t).2]
+
+/-- The two deleted corners are redirected consistently with the two
+identifications `_aux_cutRel` makes across `s`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_cut
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) :
+    standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect s s =
+        standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect s
+          (C.nextCorner (C.pair s)) ∧
+      standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect s
+          (C.nextCorner s) =
+        standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect s
+          (C.pair s) := by
+  have hfaces : s.1 ≠ (C.pair s).1 := by
+    intro h
+    exact D.old_ne D.merged (D.old_merged.trans h)
+  have hfixed : ∀ t : C.Side, C.nextCorner t = t → C.sides t.1 = 1 := by
+    intro t ht
+    have hv := congrArg (fun u : C.Side => u.2.val) ht
+    simp only [PolygonComplex.nextCorner] at hv
+    have hp := C.sides_pos t.1
+    by_cases hlt : t.2.val + 1 < C.sides t.1
+    · rw [Nat.mod_eq_of_lt hlt] at hv
+      omega
+    · have heq : t.2.val + 1 = C.sides t.1 := by omega
+      rw [heq, Nat.mod_self] at hv
+      omega
+  have hboth : ¬ (C.nextCorner s = s ∧ C.nextCorner (C.pair s) = C.pair s) := by
+    rintro ⟨h1, h2⟩
+    have := hfixed s h1
+    have := hfixed _ h2
+    have := C'.sides_pos D.merged
+    have := D.sides_merged
+    omega
+  have hps : C.pair s ≠ s := C.pair_ne s
+  have hn1 : C.nextCorner (C.pair s) ≠ s := by
+    intro h
+    exact hfaces ((congrArg (fun x : C.Side => x.1) h).symm)
+  have hn2 : C.nextCorner s ≠ C.pair s := by
+    intro h
+    have hf := congrArg (fun x : C.Side => x.1) h
+    exact hfaces hf
+  constructor
+  · by_cases h2 : C.nextCorner (C.pair s) = C.pair s
+    · have h1 : C.nextCorner s ≠ s := fun h1 => hboth ⟨h1, h2⟩
+      rw [h2]
+      simp [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect,
+        h2, h1, hps]
+    · simp [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect,
+        h2, hn1]
+  · by_cases h1 : C.nextCorner s = s
+    · have h2 : C.nextCorner (C.pair s) ≠ C.pair s := fun h2 => hboth ⟨h1, h2⟩
+      rw [h1]
+      simp [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect,
+        h1, h2, hps]
+    · simp [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect,
+        h1, hn2, hps]
+
+/-- **Leaf (first junction, reverse direction).**  If the next corner after
+`toOld t` is `s`, then `t` is the last merged side taken from `s.1`
+(`t = ⟨merged, m⟩` with `m + 2 = C.sides s.1`), and the next corner of `t` in
+`C'` goes to `nextCorner (C.pair s)`, or to `nextCorner s` when `(C.pair s).1`
+is a 1-gon.  Proof: an unmerged `t` stays in a face `old t.1 ≠ s.1`, and a
+merged `m` with `C.sides s.1 ≤ m + 1` lies in `(C.pair s).1 ≠ s.1`; for
+`m + 1 < C.sides s.1`, `toOld_merged_val` and `nextCorner = s` give
+`(s.2 + 2 + m) % C.sides s.1 = s.2`, so `m + 2 = C.sides s.1`.  Then
+`_aux_next_aux_merged_aux_join_aux_one` / `_aux_join_aux_two`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_join
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (t : C'.Side) (h : C.nextCorner (D.toOld t) = s) :
+    D.toOld (C'.nextCorner t) =
+      if C.nextCorner (C.pair s) = C.pair s then C.nextCorner s
+      else C.nextCorner (C.pair s) := by
+  sorry
+
+/-- **Leaf (wrap-around junction, reverse direction).**  If the next corner
+after `toOld t` is `C.pair s`, then `t` is the last merged side
+(`t = ⟨merged, m⟩`, `m + 1 = C'.sides merged`, `C.sides s.1 ≤ m + 1`), so the
+next corner of `t` in `C'` wraps to merged side `0`, which `toOld` sends to
+`nextCorner s`, or to `nextCorner (C.pair s)` when `s.1` is a 1-gon.  Proof: an
+unmerged `t` stays in `old t.1 ≠ (C.pair s).1` (`old_ne`); a merged
+`m + 1 < C.sides s.1` lies in `s.1`; otherwise `toOld_merged_val` gives
+`((C.pair s).2 + 2 + (m + 1 - C.sides s.1)) % C.sides (C.pair s).1 = (C.pair s).2`
+with `m + 1 - C.sides s.1 ≤ C.sides (C.pair s).1 - 2` (`sides_merged`), so
+`m + 1 = C'.sides merged`.  The value of `toOld ⟨merged, 0⟩` is the `hleft`
+computation inside `_aux_next_aux_merged_aux_wrap`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_wrap
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (t : C'.Side) (h : C.nextCorner (D.toOld t) = C.pair s) :
+    D.toOld (C'.nextCorner t) =
+      if C.nextCorner s = s then C.nextCorner (C.pair s) else C.nextCorner s := by
+  sorry
+
+/-- The map back commutes with `nextCorner` on images of `toOld`:
+literally away from the deleted corners (`_aux_next`), and through the redirect
+at the two junctions (`_aux_join`, `_aux_wrap`). -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_next
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) (t : C'.Side) :
+    standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D
+      (C.nextCorner (D.toOld t)) = C'.nextCorner t := by
+  apply standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_spec
+  by_cases hs : C.nextCorner (D.toOld t) = s
+  · rw [hs, standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_join
+      D t hs]
+    simp [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect]
+  by_cases hp : C.nextCorner (D.toOld t) = C.pair s
+  · rw [hp, standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_wrap
+      D t hp]
+    simp [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect,
+      C.pair_ne s]
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_next
+      D t hs hp]
+    simp [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect,
+      hs, hp]
+
+/-- The map back carries every generating identification of `C` to a
+`C'`-equivalence (in fact a single step or an equality). -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_respect
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) {a b : C.Side} (h : C.CornerRel a b) :
+    Relation.EqvGen C'.CornerRel
+      (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D a)
+      (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D b) := by
+  obtain ⟨u, hu⟩ := h
+  rw [if_neg (Ne.symm (hor u))] at hu
+  obtain ⟨hcut1, hcut2⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_cut D
+  have heq : ∀ v w : C.Side,
+      standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect
+          s v =
+        standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_redirect
+          s w →
+      Relation.EqvGen C'.CornerRel
+        (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D v)
+        (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D w) := by
+    intro v w hvw
+    have e : standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv
+        D v =
+        standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D w :=
+      congrArg (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_pre
+        D) hvw
+    rw [e]
+    exact Relation.EqvGen.refl _
+  by_cases hus : u = s
+  · rw [hus] at hu
+    rcases hu with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+    · exact heq _ _ hcut1
+    · exact heq _ _ hcut2
+  by_cases hup : u = C.pair s
+  · rw [hup, C.pair_pair] at hu
+    rcases hu with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+    · exact heq _ _ hcut2.symm
+    · exact heq _ _ hcut1.symm
+  obtain ⟨t, rfl⟩ := D.toOld_surj u hus hup
+  have hpt : C.pair (D.toOld t) = D.toOld (C'.pair t) := (D.pair_toOld t).symm
+  have hsg : C'.sign (C'.pair t) ≠ C'.sign t := by
+    rw [D.sign_toOld, D.sign_toOld, D.pair_toOld]
+    exact hor _
+  rw [hpt] at hu
+  rcases hu with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_toOld,
+      standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_next]
+    apply Relation.EqvGen.rel
+    refine ⟨t, ?_⟩
+    rw [if_neg (Ne.symm hsg)]
+    exact Or.inl ⟨rfl, rfl⟩
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_toOld,
+      standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_next]
+    apply Relation.EqvGen.rel
+    refine ⟨t, ?_⟩
+    rw [if_neg (Ne.symm hsg)]
+    exact Or.inr ⟨rfl, rfl⟩
+
 /-- **Leaf (corner classes reflect).**  Two corners of `C'` whose images are
 `C`-equivalent are already `C'`-equivalent: the map of corner classes induced
 by `toOld` is injective.  A `C`-path between images may pass through the
 deleted corners `s` and `C.pair s`; each such visit enters and leaves through
-the two junction corners of the merged face of `C'`. -/
+the two junction corners of the merged face of `C'`.  Assembly: the map back
+`_aux_inv` respects every `C`-step (`_aux_respect`) and is a left inverse of
+`toOld`. -/
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (hor : C.IsOrientable) (x y : C'.Side)
     (h : Relation.EqvGen C.CornerRel (D.toOld x) (D.toOld y)) :
     Relation.EqvGen C'.CornerRel x y := by
-  sorry
+  have lift : ∀ a b, Relation.EqvGen C.CornerRel a b → Relation.EqvGen C'.CornerRel
+      (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D a)
+      (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv D b) := by
+    intro a b hab
+    induction hab with
+    | rel a b hab =>
+      exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_respect
+        D hor hab
+    | refl a => exact Relation.EqvGen.refl _
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans _ _ _ ih₂
+  simpa only [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect_aux_inv_toOld]
+    using lift _ _ h
 
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back
     {C C' : PolygonComplex} {s : C.Side}
