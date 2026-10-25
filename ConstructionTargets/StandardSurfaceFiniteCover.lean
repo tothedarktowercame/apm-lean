@@ -7132,11 +7132,21 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_orientable
 
 /-- **Leaf.**  Rotating a word shifts every corner by `u.length` (mod the
 length) and every `WordCornerRel` step with it. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation_aux
+    (w : List (PolygonMoves.Signed ℕ)) (n : ℕ)
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
+    orientablePairing_normalForm_aux_WordOneVertex (w.rotate n) := by
+  sorry
+
 theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation
     (u v : List (PolygonMoves.Signed ℕ))
     (hv : orientablePairing_normalForm_aux_WordOneVertex (u ++ v)) :
     orientablePairing_normalForm_aux_WordOneVertex (v ++ u) := by
-  sorry
+  have hrot : (u ++ v).rotate u.length = v ++ u := by simp
+  rw [← hrot]
+  exact
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation_aux
+      (u ++ v) u.length hv
 
 /-- **Leaf.**  Relabelling by an equivalence and flipping signs label-wise keeps
 "same label" and "same sign within a label", so `WordCornerRel` is unchanged. -/
