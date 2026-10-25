@@ -7008,7 +7008,110 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_glue
     (hE : standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_spec C n E) :
     Nonempty (standardCover_pairingData_aux_glueStep_aux_GlueData
       (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_complex C n h3 E) C (E.symm (Sum.inr 0))) := by
-  sorry
+  classical
+  let D := standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_complex C n h3 E
+  let c : D.Side := E.symm (Sum.inr 0)
+  rcases hE with ⟨hside, hc, hp⟩
+  -- `D`'s data are definitionally `Fin 2`, `![3, n - 1]` and `E.symm ∘ Sum.map C.pair (swap 0 1) ∘ E`,
+  -- so the facts about `c` are moved into `Fin 2` with `show` and never use a numeral of
+  -- type `Fin D.faceCount`.
+  have hpair : D.pair c = E.symm (Sum.inr 1) := by
+    show E.symm (Sum.map C.pair (Equiv.swap 0 1) (E (E.symm (Sum.inr 0)))) = E.symm (Sum.inr 1)
+    simp
+  have hcs : D.sides c.1 = 3 := by
+    show ![3, n - 1] (E.symm (Sum.inr 0)).1 = 3
+    rw [hc.1]
+    simp
+  have hps : D.sides (D.pair c).1 = n - 1 := by
+    rw [hpair]
+    show ![3, n - 1] (E.symm (Sum.inr 1)).1 = n - 1
+    rw [hp.1]
+    simp
+  have hcv : c.2.val = 2 := hc.2
+  have hpv : (D.pair c).2.val = 0 := by rw [hpair]; exact hp.2
+  let merged : Fin C.faceCount := ⟨0, by omega⟩
+  let old : Fin C.faceCount → Fin D.faceCount := fun _ => c.1
+  let toOld : C.Side → D.Side := fun u => E.symm (Sum.inl u)
+  refine ⟨{
+    faceCount_succ := by show C.faceCount + 1 = 2; omega
+    merged := merged
+    old := old
+    old_merged := rfl
+    old_injective := by
+      intro a b _
+      exact standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq C h1 a |>.trans
+        (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq C h1 b).symm
+    old_ne := by
+      intro k
+      rw [hpair]
+      show (E.symm (Sum.inr 0)).1 ≠ (E.symm (Sum.inr 1)).1
+      rw [hc.1, hp.1]
+      decide
+    sides_old := by
+      intro k hk
+      exact False.elim (hk (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq C h1 k))
+    sides_merged := by
+      rw [hcs, hps, standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_sides_eq C h1, hn]
+      omega
+    toOld := toOld
+    toOld_injective := by intro a b hab; exact Sum.inl_injective (E.symm.injective hab)
+    toOld_ne := by
+      intro t
+      constructor <;> intro heq
+      · have hh := congrArg E heq
+        simp [toOld, c] at hh
+      · rw [hpair] at heq
+        have hh := congrArg E heq
+        simp [toOld] at hh
+    toOld_surj := by
+      intro u hu hup
+      rcases eu : E u with v | i
+      · refine ⟨v, ?_⟩
+        simp [toOld, ← eu]
+      · fin_cases i
+        · exact False.elim (hu (E.injective (by simpa [c] using eu)))
+        · apply False.elim
+          apply hup
+          rw [hpair]
+          exact E.injective (by simpa using eu)
+    toOld_fst := by intro t ht; exact False.elim (ht (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq C h1 t.1))
+    toOld_val := by intro t ht; exact False.elim (ht (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq C h1 t.1))
+    toOld_merged_fst := by
+      intro m
+      have hs : (E.symm (Sum.inl ⟨merged, m⟩)).1 = if m.val < 2 then 0 else 1 :=
+        (hside ⟨merged, m⟩).1
+      rw [hcs, hpair]
+      show (E.symm (Sum.inl ⟨merged, m⟩)).1 =
+        if m.val + 1 < 3 then (E.symm (Sum.inr 0)).1 else (E.symm (Sum.inr 1)).1
+      rw [hs, hc.1, hp.1]
+      by_cases h2 : m.val < 2
+      · rw [if_pos h2, if_pos (by omega)]
+      · rw [if_neg h2, if_neg (by omega)]
+    toOld_merged_val := by
+      intro m
+      have hm : m.val < n := by
+        have := m.isLt
+        have hsm := standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_sides_eq C h1 merged
+        omega
+      have hs : (E.symm (Sum.inl ⟨merged, m⟩)).2.val = if m.val < 2 then m.val else m.val - 1 :=
+        (hside ⟨merged, m⟩).2
+      rw [hcv, hpv, hcs, hps]
+      show (E.symm (Sum.inl ⟨merged, m⟩)).2.val = _
+      rw [hs]
+      by_cases h2 : m.val < 2
+      · rw [if_pos h2, if_pos (by omega)]
+        omega
+      · rw [if_neg h2, if_neg (by omega), Nat.mod_eq_of_lt (by omega)]
+        omega
+    pair_toOld := by
+      intro t
+      show E.symm (Sum.inl (C.pair t)) =
+        E.symm (Sum.map C.pair (Equiv.swap 0 1) (E (E.symm (Sum.inl t))))
+      simp
+    sign_toOld := by
+      intro t
+      simp [D, toOld, standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_complex]
+  }⟩
 -- END SEAT AREA
 
 /-- **Leaf (the cut).**  A one-face complex with at least three sides is the
