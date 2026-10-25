@@ -10805,7 +10805,56 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_fibreForward_aux_boundary {L
     (hu : ‖oldA z‖ = 1)
     (hN : (N : ℂ) = oldA (ρA z)) (hN' : (N' : ℂ) = oldB (ρB z')) :
     Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N N' := by
-  sorry
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  have hq : α₁.length + 1 + α₂.length < W.length := by
+    dsimp [W]
+    simp
+    omega
+  obtain ⟨e, s, he, hes⟩ : ∃ (e : ℕ) (s : Icc (0 : ℝ) 1),
+      e < W.length ∧ (edgePoint W.length e s : ℂ) = oldA z := by
+    rcases D.coverA z with ⟨e, s, he, rfl⟩ | ⟨s, rfl⟩
+    · exact ⟨e, s, by omega, (D.oldA_arc e s he).symm⟩
+    · have hend : s.1 = 0 ∨ s.1 = 1 := by
+        apply orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordA_end
+          (p := 0) (q := α₁.length + 1 + α₂.length) (by omega) hq s
+        rw [← D.oldA_chord s]
+        exact hu
+      rcases hend with hs | hs
+      · have hs' : s = (0 : Icc (0 : ℝ) 1) := Subtype.ext hs
+        subst s
+        refine ⟨α₁.length + 1 + α₂.length, 0, hq, ?_⟩
+        calc
+          (edgePoint W.length (α₁.length + 1 + α₂.length) 0 : ℂ) =
+              cutPoint W.length (α₁.length + 1 + α₂.length) :=
+            edgePoint_zero_eq_cutPoint W.length _
+          _ = cutChordA W.length 0 (α₁.length + 1 + α₂.length) 0 := by
+            simp [cutChordA]
+          _ = oldA (cutChordParamA W.length 0 (α₁.length + 1 + α₂.length) 0) :=
+            (D.oldA_chord (0 : Icc (0 : ℝ) 1)).symm
+      · have hs' : s = (1 : Icc (0 : ℝ) 1) := Subtype.ext hs
+        subst s
+        refine ⟨0, 0, by omega, ?_⟩
+        calc
+          (edgePoint W.length 0 0 : ℂ) = cutPoint W.length 0 :=
+            edgePoint_zero_eq_cutPoint W.length 0
+          _ = cutChordA W.length 0 (α₁.length + 1 + α₂.length) 1 := by
+            simp [cutChordA]
+          _ = oldA (cutChordParamA W.length 0 (α₁.length + 1 + α₂.length) 1) :=
+            (D.oldA_chord (1 : Icc (0 : ℝ) 1)).symm
+  obtain ⟨T, hT, hNT⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency
+      α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D false z e he s N
+        (by simpa [W] using hes) (by simpa using hN)
+  obtain ⟨T', hT', hNT'⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency
+      α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D true z' e he s N'
+        (by simpa [W, h] using hes) (by simpa using hN')
+  have hTT' : T = T' := by
+    apply Subtype.ext
+    rw [hT, hT']
+  exact Relation.EqvGen.trans _ _ _ hNT
+    (Relation.EqvGen.trans _ _ _ (by subst T'; exact Relation.EqvGen.refl T)
+      (Relation.EqvGen.symm _ _ hNT'))
 
 open PolygonMoves in
 theorem orientablePairing_normalForm_aux_cutPaste_aux_fibreForward {L : Type*}
