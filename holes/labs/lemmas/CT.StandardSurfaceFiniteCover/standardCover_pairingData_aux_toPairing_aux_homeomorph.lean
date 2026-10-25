@@ -1974,6 +1974,100 @@ carries `C.Rel` onto `boundaryRel` of the transported pairing: side `s` of
 the one face `f`, so `edgePoint` agrees on both sides.  Descend it and its
 inverse through the two quotients. -/
 -- BEGIN SEAT AREA
+theorem standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_sides
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (f : Fin C.faceCount) :
+    C.sides f = C.totalSides := by
+  letI := standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1
+  rw [show f = default from Unique.eq_default f]
+  simp [PolygonComplex.totalSides]
+
+theorem standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_sideVal
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (s : C.Side) :
+    (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 s).val = s.2.val := by
+  letI := standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1
+  obtain ⟨f, i⟩ := s
+  have hf : f = default := Unique.eq_default f
+  subst f
+  simp [standardCover_pairingData_aux_toPairing_aux_sideEquiv,
+    Equiv.uniqueSigma_apply]
+
+theorem standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_edgePoint
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (s : C.Side)
+    (t : Set.Icc (0 : ℝ) 1) :
+    edgePoint (C.sides s.1) s.2 t = edgePoint C.totalSides
+      (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 s) t := by
+  exact congrArg₂ (fun m e : ℕ => edgePoint m e t)
+    (standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_sides C h1 s.1)
+    (standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_sideVal C h1 s).symm
+
+theorem standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_rel_forward
+    (C : PolygonComplex) (h1 : C.faceCount = 1)
+    {x y : Σ _ : Fin C.faceCount, Disk} (hxy : C.Rel x y) :
+    boundaryRel C.totalSides
+      (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+      (standardCover_pairingData_aux_toPairing_aux_sign C h1) x.2 y.2 := by
+  rcases hxy with ⟨s, t, rfl, rfl⟩
+  let e := standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1
+  refine ⟨e s, t, ?_, ?_⟩
+  · exact standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_edgePoint C h1 s t
+  · rw [standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_edgePoint C h1 (C.pair s)]
+    simp [standardCover_pairingData_aux_toPairing_aux_pair, Equiv.permCongr_apply,
+      PolygonComplex.pairedParameter, PolygonSurfacePiOne.pairedParameter,
+      standardCover_pairingData_aux_toPairing_aux_sign, e]
+
+theorem standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_rel_reverse
+    (C : PolygonComplex) (h1 : C.faceCount = 1) {x y : Disk}
+    (hxy : boundaryRel C.totalSides
+      (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+      (standardCover_pairingData_aux_toPairing_aux_sign C h1) x y) :
+    C.Rel
+      ⟨(standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1).default, x⟩
+      ⟨(standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1).default, y⟩ := by
+  letI := standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1
+  rcases hxy with ⟨i, t, rfl, rfl⟩
+  let e := standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1
+  let s : C.Side := e.symm i
+  refine ⟨s, t, ?_, ?_⟩
+  · apply Sigma.ext (Unique.eq_default s.1).symm
+    rw [standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_edgePoint C h1 s]
+    simp [s, e]
+  · apply Sigma.ext (Unique.eq_default (C.pair s).1).symm
+    rw [standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_edgePoint C h1 (C.pair s)]
+    simp [standardCover_pairingData_aux_toPairing_aux_pair, Equiv.permCongr_apply,
+      PolygonComplex.pairedParameter, PolygonSurfacePiOne.pairedParameter,
+      standardCover_pairingData_aux_toPairing_aux_sign, s, e]
+
+theorem standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_eqv_forward
+    (C : PolygonComplex) (h1 : C.faceCount = 1)
+    {x y : Σ _ : Fin C.faceCount, Disk}
+    (hxy : Relation.EqvGen C.Rel x y) :
+    Relation.EqvGen (boundaryRel C.totalSides
+      (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+      (standardCover_pairingData_aux_toPairing_aux_sign C h1)) x.2 y.2 := by
+  induction hxy with
+  | rel x y h =>
+      apply Relation.EqvGen.rel
+      exact standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_rel_forward C h1 h
+  | refl x => exact .refl _
+  | symm x y _ ih => exact .symm _ _ ih
+  | trans x y z _ _ ih₁ ih₂ => exact .trans _ _ _ ih₁ ih₂
+
+theorem standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_eqv_reverse
+    (C : PolygonComplex) (h1 : C.faceCount = 1) {x y : Disk}
+    (hxy : Relation.EqvGen (boundaryRel C.totalSides
+      (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+      (standardCover_pairingData_aux_toPairing_aux_sign C h1)) x y) :
+    Relation.EqvGen C.Rel
+      ⟨(standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1).default, x⟩
+      ⟨(standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1).default, y⟩ := by
+  induction hxy with
+  | rel x y h =>
+      apply Relation.EqvGen.rel
+      exact standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_rel_reverse C h1 h
+  | refl x => exact .refl _
+  | symm x y _ ih => exact .symm _ _ ih
+  | trans x y z _ _ ih₁ ih₂ => exact .trans _ _ _ ih₁ ih₂
+
 theorem standardCover_pairingData_aux_toPairing_aux_homeomorph
     (C : PolygonComplex) (h1 : C.faceCount = 1)
     (hvert : ∀ i j : Fin C.totalSides,
@@ -1983,7 +2077,32 @@ theorem standardCover_pairingData_aux_toPairing_aux_homeomorph
         (polygonVertex C.totalSides i) (polygonVertex C.totalSides j)) :
     Nonempty (C.Space ≃ₜ
       (standardCover_pairingData_aux_toPairing_aux_pairing C h1 hvert).Space) := by
-  sorry
+  let P := standardCover_pairingData_aux_toPairing_aux_pairing C h1 hvert
+  letI := standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1
+  refine ⟨{
+    toFun := Quotient.lift (fun z : Σ _ : Fin C.faceCount, Disk =>
+      Quotient.mk (Relation.EqvGen.setoid P.Rel) z.2) (fun _ _ h => Quotient.sound ?_)
+    invFun := Quotient.lift (fun x : Disk =>
+      Quotient.mk (Relation.EqvGen.setoid C.Rel) ⟨default, x⟩)
+      (fun _ _ h => Quotient.sound ?_)
+    left_inv := ?_
+    right_inv := ?_
+    continuous_toFun := ?_
+    continuous_invFun := ?_ }⟩
+  · exact standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_eqv_forward C h1 h
+  · exact standardCover_pairingData_aux_toPairing_aux_homeomorph_aux_eqv_reverse C h1 h
+  · rintro ⟨⟨f, x⟩⟩
+    have hf : f = default := Unique.eq_default f
+    subst f
+    rfl
+  · rintro ⟨x⟩
+    rfl
+  · apply Continuous.quotient_lift
+    apply continuous_sigma
+    intro f
+    exact continuous_coinduced_rng
+  · apply Continuous.quotient_lift
+    exact continuous_coinduced_rng.comp continuous_sigmaMk
 -- END SEAT AREA
 
 /-- **Read off the pairing.**  A one-face one-vertex complex is
