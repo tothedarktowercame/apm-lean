@@ -9286,7 +9286,62 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
-  sorry
+  let LL := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+  let p := α₁.length
+  let q := α₁.length + 1 + α₂.length
+  have hlen : LL = q + β₁.length + 1 + β₂.length := by
+    simp [LL, q]
+    omega
+  have he₀next : e₀ + 1 < LL := by omega
+  have he_eq : e = e₀ + 1 := by
+    change e = (e₀ + 1) % LL at hadj
+    rw [Nat.mod_eq_of_lt he₀next] at hadj
+    exact hadj
+  clear hadj
+  subst e
+  have hs₀' : s₀ = ⟨1, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hs₀
+  have hτ' : τ = ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hτ
+  subst s₀
+  subst τ
+  refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+  rw [hN]
+  by_cases hb₁ : e₀ < q + β₁.length
+  · rw [D.ρB_β₁ e₀ _ he₀ hb₁, D.oldB_arc]
+    · change (edgePoint LL (e₀ + β₂.length + 1) _ : ℂ) = _
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+        if_neg (by omega : e₀ + 1 ≠ p),
+        if_neg (by omega : e₀ + 1 ≠ q + β₁.length),
+        if_neg (by omega : ¬ e₀ + 1 < p),
+        if_neg (by omega : ¬ e₀ + 1 < q),
+        if_pos (by omega : e₀ + 1 < q + β₁.length)]
+      change (edgePoint LL (e₀ + β₂.length + 1) _ : ℂ) =
+        edgePoint LL (e₀ + 1 + β₂.length + 1) _
+      rw [show e₀ + 1 + β₂.length + 1 = (e₀ + β₂.length + 1) + 1 by omega]
+      exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_edge
+        LL (e₀ + β₂.length + 1)
+    · omega
+    · omega
+  · have hb₂ : q + β₁.length + 1 ≤ e₀ := by omega
+    rw [D.ρB_β₂ e₀ _ hb₂ he₀L, D.oldB_arc]
+    · change (edgePoint LL (e₀ - β₁.length - 1) _ : ℂ) = _
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+        if_neg (by omega : e₀ + 1 ≠ p),
+        if_neg (by omega : e₀ + 1 ≠ q + β₁.length),
+        if_neg (by omega : ¬ e₀ + 1 < p),
+        if_neg (by omega : ¬ e₀ + 1 < q),
+        if_neg (by omega : ¬ e₀ + 1 < q + β₁.length)]
+      rw [show (e₀ + 1) - β₁.length - 1 =
+          (e₀ - β₁.length - 1) + 1 by omega]
+      change (edgePoint LL (e₀ - β₁.length - 1) _ : ℂ) =
+        edgePoint LL ((e₀ - β₁.length - 1) + 1) _
+      exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_edge
+        LL (e₀ - β₁.length - 1)
+    · omega
+    · omega
 
 open PolygonMoves in
 /-- **Leaf (piece `B`, arc, prev-name case).**  The point is the end of side `e₀`
