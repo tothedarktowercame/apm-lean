@@ -306,6 +306,147 @@ span, naturally in the target category.  (Whiskering by `W ⥤ pt` is fully
 faithful on functor categories when `W` is connected:
 `Functor.const` is full for `IsConnected W`.) -/
 -- BEGIN SEAT AREA
+def apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux_isoMk {K L R C : Type} [Category.{0} K] [Category.{0} L]
+    [Category.{0} R] [Category.{0} C] {l : K ⥤ L} {r : K ⥤ R}
+    {P Q : ConstructionTargets.GenericSpanPseudoCoconeTransport.SpanPseudoCocone l r C}
+    (eL : P.left ≅ Q.left) (eR : P.right ≅ Q.right)
+    (h : ∀ k, P.glue.hom.app k ≫ eR.hom.app (r.obj k) =
+      eL.hom.app (l.obj k) ≫ Q.glue.hom.app k) :
+    P ≅ Q where
+  hom :=
+    { left := eL.hom
+      right := eR.hom
+      glue_naturality := by
+        ext k
+        simpa using h k }
+  inv :=
+    { left := eL.inv
+      right := eR.inv
+      glue_naturality := by
+        ext k
+        have := congrArg (fun f => eL.inv.app (l.obj k) ≫ f ≫ eR.inv.app (r.obj k)) (h k)
+        simpa using this.symm }
+  hom_inv_id := by
+    apply ConstructionTargets.GenericSpanPseudoCoconeTransport.SpanPseudoCoconeHom.ext <;>
+      exact Iso.hom_inv_id _
+  inv_hom_id := by
+    apply ConstructionTargets.GenericSpanPseudoCoconeTransport.SpanPseudoCoconeHom.ext <;>
+      exact Iso.inv_hom_id _
+
+namespace apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux
+
+open ConstructionTargets.GenericSpanPseudoCoconeTransport
+
+@[simp] lemma comp_left_app {K L R C : Type} [Category.{0} K] [Category.{0} L]
+    [Category.{0} R] [Category.{0} C] {l : K ⥤ L} {r : K ⥤ R}
+    {P Q S : SpanPseudoCocone l r C} (f : P ⟶ Q) (g : Q ⟶ S) (x : L) :
+    (f ≫ g).left.app x = f.left.app x ≫ g.left.app x := rfl
+
+@[simp] lemma comp_right_app {K L R C : Type} [Category.{0} K] [Category.{0} L]
+    [Category.{0} R] [Category.{0} C] {l : K ⥤ L} {r : K ⥤ R}
+    {P Q S : SpanPseudoCocone l r C} (f : P ⟶ Q) (g : Q ⟶ S) (x : R) :
+    (f ≫ g).right.app x = f.right.app x ≫ g.right.app x := rfl
+
+variable {W L R C : Type} [Category.{0} W] [Category.{0} L] [Category.{0} R]
+  [Category.{0} C] [CategoryTheory.IsConnected W]
+  (a : SingleObj PUnit.{1} ⥤ L) (b : SingleObj PUnit.{1} ⥤ R)
+
+abbrev wide (C : Type) [Category.{0} C] := SpanPseudoCocone
+  ((Functor.const W).obj (SingleObj.star PUnit.{1}) ⋙ a)
+  ((Functor.const W).obj (SingleObj.star PUnit.{1}) ⋙ b) C
+abbrev point (C : Type) [Category.{0} C] := SpanPseudoCocone a b C
+
+/-- The glue components over a connected index category are all equal. -/
+lemma glue_const (P : wide (W := W) a b C) (w w' : W) :
+    (P.glue.hom.app w : P.left.obj (a.obj (SingleObj.star _)) ⟶
+      P.right.obj (b.obj (SingleObj.star _))) = P.glue.hom.app w' := by
+  refine constant_of_preserves_morphisms
+    (α := P.left.obj (a.obj (SingleObj.star _)) ⟶ P.right.obj (b.obj (SingleObj.star _)))
+    (fun w => P.glue.hom.app w) (fun j₁ j₂ f => ?_) w w'
+  have := P.glue.hom.naturality f
+  simp only [Functor.comp_obj, Functor.const_obj_obj, Functor.comp_map,
+    Functor.const_obj_map] at this
+  rw [CategoryTheory.Functor.map_id, CategoryTheory.Functor.map_id,
+    CategoryTheory.Functor.map_id, CategoryTheory.Functor.map_id, Category.comp_id,
+    Category.id_comp] at this
+  exact this.symm
+
+def collapseObj (P : wide (W := W) a b C) : point a b C where
+  left := P.left
+  right := P.right
+  glue := NatIso.ofComponents (fun _ => P.glue.app (Classical.arbitrary W)) (fun f => by
+    change PUnit at f
+    cases f
+    change P.left.map (a.map (𝟙 _)) ≫ _ = _ ≫ P.right.map (b.map (𝟙 _))
+    simp)
+
+def expandObj (Q : point a b C) : wide (W := W) a b C where
+  left := Q.left
+  right := Q.right
+  glue := NatIso.ofComponents (fun _ => Q.glue.app (SingleObj.star _)) (fun f => by
+    change Q.left.map (a.map (𝟙 _)) ≫ _ = _ ≫ Q.right.map (b.map (𝟙 _))
+    simp)
+
+def collapse : wide (W := W) a b C ⥤ point a b C where
+  obj := collapseObj a b
+  map {P Q} φ :=
+    { left := φ.left
+      right := φ.right
+      glue_naturality := by
+        ext x
+        cases x
+        have := NatTrans.congr_app φ.glue_naturality (Classical.arbitrary W)
+        simpa [collapseObj] using this }
+
+def expand : point a b C ⥤ wide (W := W) a b C where
+  obj := expandObj a b
+  map {P Q} φ :=
+    { left := φ.left
+      right := φ.right
+      glue_naturality := by
+        ext w
+        have := NatTrans.congr_app φ.glue_naturality (SingleObj.star _)
+        simpa [expandObj] using this }
+
+def unitIso : 𝟭 (wide (W := W) a b C) ≅ collapse a b ⋙ expand a b :=
+  NatIso.ofComponents
+    (fun P => apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux_isoMk (Iso.refl _) (Iso.refl _) (fun w => by
+      simp [collapse, expand, collapseObj, expandObj, glue_const a b P w (Classical.arbitrary W)]))
+    (fun φ => by
+      apply SpanPseudoCoconeHom.ext <;> ext <;> simp [apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux_isoMk, collapse, expand]
+      all_goals exact (Category.comp_id _).trans (Category.id_comp _).symm)
+
+def counitIso : expand a b ⋙ collapse (W := W) a b ≅ 𝟭 (point a b C) :=
+  NatIso.ofComponents
+    (fun Q => apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux_isoMk (Iso.refl _) (Iso.refl _) (fun x => by
+      cases x
+      simp [collapse, expand, collapseObj, expandObj]
+      all_goals rfl))
+    (fun φ => by
+      apply SpanPseudoCoconeHom.ext <;> ext <;> simp [apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux_isoMk, collapse, expand]
+      all_goals exact (Category.comp_id _).trans (Category.id_comp _).symm)
+
+def equiv (C : Type) [Category.{0} C] : wide (W := W) a b C ≌ point a b C :=
+  CategoryTheory.Equivalence.mk (collapse a b) (expand a b) (unitIso a b) (counitIso a b)
+
+@[simp] lemma equiv_functor (C : Type) [Category.{0} C] :
+    (equiv (W := W) a b C).functor = collapse a b := rfl
+
+def naturality (C D : Type) [Category.{0} C] [Category.{0} D] (H : C ⥤ D) :
+    postcomposeFunctor H ⋙ (equiv (W := W) a b D).functor ≅
+      (equiv a b C).functor ⋙ postcomposeFunctor H :=
+  NatIso.ofComponents
+    (fun P => apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux_isoMk (Iso.refl _) (Iso.refl _) (fun x => by
+      cases x
+      simp [collapse, collapseObj, postcomposeFunctor, postcomposeObj]
+      all_goals rfl))
+    (fun φ => by
+      apply SpanPseudoCoconeHom.ext <;> ext <;>
+        simp [apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux_isoMk, collapse, postcomposeFunctor] <;>
+        exact (Category.comp_id _).trans (Category.id_comp _).symm)
+
+end apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux
+
 lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse
     {W L R : Type} [Category.{0} W] [Category.{0} L] [Category.{0} R]
     [CategoryTheory.IsConnected W]
@@ -320,7 +461,7 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
             (E D).functor ≅
           (E C).functor ⋙
             ConstructionTargets.GenericSpanPseudoCoconeTransport.postcomposeFunctor H) := by
-  sorry
+  exact ⟨⟨fun C _ => apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux.equiv a b C, fun C D _ _ H => apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux.naturality a b C D H⟩⟩
 -- END SEAT AREA
 
 /-- The target-natural family of mapping-category equivalences for a two-open
