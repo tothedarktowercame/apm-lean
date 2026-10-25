@@ -13243,7 +13243,17 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
     (hl₁ : (l : ℕ) ≠ α₁.length)
     (hl₂ : (l : ℕ) ≠ α₁.length + 1 + α₂.length + β₁.length)
     (h : orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k = orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c l) : k = l := by
-  sorry
+  apply Fin.ext
+  have hv := congrArg Fin.val h
+  change orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+      α₁.length α₂.length β₁.length β₂.length k =
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+      α₁.length α₂.length β₁.length β₂.length l at hv
+  have hklt := k.2
+  have hllt := l.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hklt hllt
+  unfold orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat at hv
+  split_ifs at hv <;> omega
 
 /-- **Leaf.**  Away from `y` and `inv y`, the end of an old arc and the end of
 its image are one new vertex.  They are equal except at the end of `α₂`
