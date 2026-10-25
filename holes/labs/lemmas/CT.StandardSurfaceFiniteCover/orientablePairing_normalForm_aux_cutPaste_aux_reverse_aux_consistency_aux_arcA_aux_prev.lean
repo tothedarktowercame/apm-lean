@@ -8957,6 +8957,50 @@ given new name is the next side's start: `s₀ = 1`, `τ = 0`,
 `e = (e₁ + 1) % L`.  Seams: `e₁ = n₂ - 1` (`e = n₂`, the chord) and
 `e₁ = q - 1` (`e = q`, a `β₂` side, or the `c` side when `m₂ = 0`). -/
 -- BEGIN SEAT AREA
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_prev_aux_y
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y : Signed L) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂))
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length ⟨0, by constructor <;> norm_num⟩)
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        (α₁.length + 1 + α₂.length + β₁.length)
+        ⟨1, by constructor <;> norm_num⟩) := by
+  apply Relation.EqvGen.symm
+  apply Relation.EqvGen.rel
+  let i : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length :=
+    ⟨α₁.length + 1 + α₂.length + β₁.length, by simp; omega⟩
+  let j : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length :=
+    ⟨α₁.length, by simp⟩
+  have hi : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i = inv y := by
+    simp only [List.get_eq_getElem, i, List.append_assoc]
+    rw [List.getElem_append_right
+      (show α₁.length ≤ α₁.length + 1 + α₂.length + β₁.length by omega)]
+    simp only [show α₁.length + 1 + α₂.length + β₁.length - α₁.length =
+      1 + α₂.length + β₁.length by omega]
+    rw [List.getElem_append_right
+      (show [y].length ≤ 1 + α₂.length + β₁.length by simp; omega)]
+    simp only [show 1 + α₂.length + β₁.length - [y].length =
+      α₂.length + β₁.length by simp; omega]
+    rw [List.getElem_append_right (show α₂.length ≤ α₂.length + β₁.length by omega)]
+    simp only [show α₂.length + β₁.length - α₂.length = β₁.length by omega]
+    rw [List.getElem_append_right (show β₁.length ≤ β₁.length by omega)]
+    simp
+  have hj : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j = y := by
+    simpa [j, List.get_eq_getElem] using
+      cut_transfer_generator_aux_get_x₁ α₁ (α₂ ++ β₁) β₂ y
+  refine ⟨i, j, ?_, ⟨1, by constructor <;> norm_num⟩, ?_, rfl, ?_⟩
+  · intro h
+    have := congrArg Fin.val h
+    simp [i, j] at this
+    omega
+  · rw [hi, hj]
+    simp [inv]
+  · rw [hi, hj]
+    simp [inv, reverseParameter]
+    change edgePoint _ α₁.length _ = edgePoint _ α₁.length _
+    rfl
+
 theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_prev
     {L : Type*} [DecidableEq L]
     (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
@@ -8975,7 +9019,100 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  let LL := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+  let n₁ := α₁.length
+  let n₂ := α₂.length
+  let m₁ := β₁.length
+  let m₂ := β₂.length
+  let q := n₁ + 1 + n₂
+  have hlen : LL = q + m₁ + 1 + m₂ := by simp [LL, q, n₁, n₂, m₁, m₂]; omega
+  have hnew : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length = LL := by
+    simp [LL]; omega
+  have he₁next : e₁ + 1 < LL := by
+    change e₁ < q at he₁
+    omega
+  have heq : e = e₁ + 1 := by
+    rw [hnew] at hadj
+    rw [Nat.mod_eq_of_lt he₁next] at hadj
+    exact hadj
+  clear hadj
+  subst e
+  have hs₀' : s₀ = ⟨1, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hs₀
+  have hτ' : τ = ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hτ
+  subst s₀
+  subst τ
+  change e₁ < q at he₁
+  by_cases hlo : e₁ < n₂
+  · refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+    rw [hP]
+    rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+      if_neg (by omega : e₁ ≠ n₂), if_neg (by omega), if_pos hlo]
+    by_cases hseam : e₁ + 1 = n₂
+    · rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+        if_pos hseam]
+      simp only [cutChordA, Set.Icc.coe_zero, Complex.ofReal_zero, zero_mul, add_zero]
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_cut]
+      exact (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans
+        (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge
+          _ _ _ _ _ (by omega) rfl)
+    · rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+        if_neg hseam, if_neg (by omega), if_pos (by omega)]
+      exact (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans
+        (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge
+          _ _ _ _ _ (by omega) rfl)
+  · have hn₂e : n₂ < e₁ := by omega
+    by_cases hlast : e₁ + 1 = q
+    · let T : Disk := edgePoint LL (q + m₁) ⟨1, by constructor <;> norm_num⟩
+      refine ⟨T, ?_, ?_⟩
+      · dsimp [T]
+        rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+          if_neg (by omega : e₁ + 1 ≠ n₂)]
+        by_cases hm₂ : m₂ = 0
+        · rw [if_pos (by omega : e₁ + 1 = n₁ + 1 + n₂ + m₂)]
+          simp only [cutChordB, Set.Icc.coe_zero, Complex.ofReal_zero, zero_mul, add_zero]
+          exact (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans
+            ((orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge
+              _ _ _ _ _ (by omega : q + m₁ + 1 = LL) rfl).trans
+              ((orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_wrap LL (by omega)).trans
+                (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_cut LL 0).symm))
+        · rw [if_neg (by omega : e₁ + 1 ≠ n₁ + 1 + n₂ + m₂),
+            if_neg (by omega : ¬ e₁ + 1 < n₂),
+            if_neg (by omega : ¬ e₁ + 1 < n₁ + 1 + n₂),
+            if_pos (by omega : e₁ + 1 < n₁ + 1 + n₂ + m₂)]
+          exact (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans
+            (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge
+              _ _ _ _ _ (by omega) rfl)
+      · have hPT : P = edgePoint LL n₁ ⟨0, by constructor <;> norm_num⟩ := by
+          apply Subtype.ext
+          rw [hP, orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+            if_neg (by omega : e₁ ≠ n₂), if_neg (by omega),
+            if_neg (by omega : ¬ e₁ < n₂), if_pos (by omega)]
+          exact (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans
+            (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge
+              _ _ _ _ _ (by omega) rfl)
+        rw [hPT]
+        change Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂))
+          (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length α₁.length _)
+          (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+            (α₁.length + 1 + α₂.length + β₁.length) _)
+        simpa [T] using
+          (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_prev_aux_y
+            α₁ α₂ β₁ β₂ y)
+    · refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      rw [hP]
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+        if_neg (by omega : e₁ ≠ n₂), if_neg (by omega),
+        if_neg (by omega : ¬ e₁ < n₂), if_pos (by omega)]
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+        if_neg (by omega : e₁ + 1 ≠ n₂), if_neg (by omega),
+        if_neg (by omega : ¬ e₁ + 1 < n₂), if_pos (by omega : e₁ + 1 < q)]
+      exact (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans
+        (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge
+          _ _ _ _ _ (by omega) rfl)
 -- END SEAT AREA
 
 open PolygonMoves in
