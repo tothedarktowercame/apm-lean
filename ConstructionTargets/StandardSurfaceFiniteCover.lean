@@ -1698,17 +1698,86 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_unme
   exact D.toOld_val (C'.nextCorner t) (by simpa [PolygonComplex.nextCorner] using ht)
 
 
+/-- **Leaf (first half).**  Merged side `m` and its successor both come from
+`s.1` (`m + 2 < C.sides s.1`); `toOld` sends them to sides `s.2 + 1 + m` and
+`s.2 + 2 + m` (mod `C.sides s.1`), so it commutes with `nextCorner` literally.
+(`m + 1` does not wrap: the merged face has `C.sides s.1 + C.sides (C.pair s).1 - 2`
+sides and `C.sides (C.pair s).1 ≥ 1`.) -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_first
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (m : Fin (C'.sides D.merged)) (hm : m.val + 2 < C.sides s.1) :
+    D.toOld (C'.nextCorner ⟨D.merged, m⟩) = C.nextCorner (D.toOld ⟨D.merged, m⟩) := by
+  sorry
+
+/-- **Leaf (second half).**  Merged side `m` and its successor both come from
+`(C.pair s).1` (`C.sides s.1 ≤ m + 1` and `m + 1` does not wrap); `toOld` sends
+them to consecutive sides `(C.pair s).2 + 1 + (m + 1 - C.sides s.1)` and the next
+(mod `C.sides (C.pair s).1`), so it commutes with `nextCorner` literally. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_second
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (m : Fin (C'.sides D.merged)) (hm₁ : C.sides s.1 ≤ m.val + 1)
+    (hm₂ : m.val + 1 < C'.sides D.merged) :
+    D.toOld (C'.nextCorner ⟨D.merged, m⟩) = C.nextCorner (D.toOld ⟨D.merged, m⟩) := by
+  sorry
+
+/-- **Leaf (first junction).**  `m + 2 = C.sides s.1`: `m` is the last side
+taken from `s.1`, so `toOld m` is side `s.2 - 1` and `C.nextCorner (toOld m) = s`.
+If `C.sides (C.pair s).1 ≥ 2`, the next merged side is the first one from
+`(C.pair s).1`, `toOld` of it is `C.nextCorner (C.pair s)`, and
+`(_aux_cutRel s hor).1` gives the step.  Degenerate case
+`C.sides (C.pair s).1 = 1`: then `m + 1` wraps to `0`, `toOld 0 = C.nextCorner s`,
+and `C.nextCorner (C.pair s) = C.pair s` (a 1-gon), so both halves of
+`_aux_cutRel` compose: `C.nextCorner s ~ C.pair s ~ s`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) (m : Fin (C'.sides D.merged))
+    (hm : m.val + 2 = C.sides s.1) :
+    Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner ⟨D.merged, m⟩))
+      (C.nextCorner (D.toOld ⟨D.merged, m⟩)) := by
+  sorry
+
+/-- **Leaf (wrap-around junction).**  `m` is the last merged side and comes from
+`(C.pair s).1`, so `toOld m` is side `(C.pair s).2 - 1` and
+`C.nextCorner (toOld m) = C.pair s`; `m + 1` wraps to `0`.  If `C.sides s.1 ≥ 2`,
+`toOld 0 = C.nextCorner s` and `(_aux_cutRel s hor).2` gives the step.
+Degenerate case `C.sides s.1 = 1`: then `toOld 0` is the first side from
+`(C.pair s).1`, i.e. `C.nextCorner (C.pair s)`, and `C.nextCorner s = s`, so
+`_aux_cutRel` composes: `C.nextCorner (C.pair s) ~ s = C.nextCorner s ~ C.pair s`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_wrap
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) (m : Fin (C'.sides D.merged))
+    (hm₁ : C.sides s.1 ≤ m.val + 1) (hm₂ : m.val + 1 = C'.sides D.merged) :
+    Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner ⟨D.merged, m⟩))
+      (C.nextCorner (D.toOld ⟨D.merged, m⟩)) := by
+  sorry
+
 /-- At a corner of the merged polygon, `toOld` commutes with `nextCorner` up to
-one old corner-equivalence step: within one half it commutes literally (the
-same-half arithmetic cases); at the two junctions it crosses a deleted side,
-and `_aux_cutRel` gives the step. -/
+one old corner-equivalence step: within one half it commutes literally
+(`_aux_first`, `_aux_second`); at the two junctions it crosses a deleted side,
+and `_aux_cutRel` gives the step (`_aux_join`, `_aux_wrap`). -/
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (hor : C.IsOrientable) (t : C'.Side) (ht : t.1 = D.merged) :
     Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner t))
       (C.nextCorner (D.toOld t)) := by
-  sorry
+  obtain ⟨tf, m⟩ := t
+  dsimp only at ht
+  subst ht
+  have hlt := m.isLt
+  by_cases h₁ : m.val + 2 < C.sides s.1
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_first D m h₁]
+    exact Relation.EqvGen.refl _
+  by_cases h₂ : m.val + 2 = C.sides s.1
+  · exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join D hor m h₂
+  by_cases h₃ : m.val + 1 < C'.sides D.merged
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_second D m (by omega) h₃]
+    exact Relation.EqvGen.refl _
+  · exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_wrap D hor m (by omega) (by omega)
 
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next
     {C C' : PolygonComplex} {s : C.Side}
