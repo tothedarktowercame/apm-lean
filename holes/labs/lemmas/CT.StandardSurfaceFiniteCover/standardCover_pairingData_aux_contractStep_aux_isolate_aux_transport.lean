@@ -6825,7 +6825,44 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_transport
         Relation.EqvGen C.CornerRel x y) ∧
       ∀ x, standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C' (e x) =
         standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C x := by
-  sorry
+  have hfwd : ∀ {x y}, Relation.EqvGen C.CornerRel x y →
+      Relation.EqvGen C'.CornerRel (e x) (e y) := by
+    intro x y h
+    induction h with
+    | rel x y h => exact Relation.EqvGen.rel _ _ ((he x y).mpr h)
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  have hbwd : ∀ {x y}, Relation.EqvGen C'.CornerRel x y →
+      Relation.EqvGen C.CornerRel (e.symm x) (e.symm y) := by
+    intro x y h
+    induction h with
+    | rel x y h =>
+        exact Relation.EqvGen.rel _ _ ((he (e.symm x) (e.symm y)).mp (by simpa using h))
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  have hEqv : ∀ x y, Relation.EqvGen C'.CornerRel (e x) (e y) ↔
+      Relation.EqvGen C.CornerRel x y := by
+    intro x y
+    exact ⟨fun h => by simpa using hbwd h, hfwd⟩
+  refine ⟨?_, hEqv, ?_⟩
+  · unfold PolygonComplex.vertexCount PolygonComplex.Vertex
+    exact Nat.card_congr
+      (Quotient.congr e (fun x y => (hEqv x y).symm)).symm
+  · intro x
+    unfold standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard
+    exact Nat.card_congr
+      ⟨fun v => ⟨e.symm v.1, by
+          apply (hEqv x (e.symm v.1)).mp
+          simpa only [Equiv.apply_symm_apply] using v.2⟩,
+       fun v => ⟨e v.1, (hEqv x v.1).mpr v.2⟩,
+       fun v => by
+         apply Subtype.ext
+         exact e.apply_symm_apply v.1,
+       fun v => by
+         apply Subtype.ext
+         exact e.symm_apply_apply v.1⟩
 -- END SEAT AREA
 
 /-! Split of `_aux_cut` (claude-14, 2026-10-25, after the lemma-1 PARTIAL that
