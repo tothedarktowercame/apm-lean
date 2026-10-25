@@ -4753,7 +4753,217 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_
     · rw [show g u = Classical.choose (hpre u) by simp only [g, dif_neg h]]
       exact Classical.choose_spec (hpre u)
 
-/-- **Leaf (corner classes reflect).**  Two corners of `C'` whose images are
+/-- Every side of a one-face complex with at least five sides moves under
+`nextCorner`, and so does every pair of steps. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_nexts
+    {C : PolygonComplex} (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides) (t : C.Side) :
+    C.nextCorner t ≠ t ∧ C.nextCorner (C.nextCorner t) ≠ t := by
+  have hside : C.sides t.1 = C.totalSides := by
+    classical
+    letI : Unique (Fin C.faceCount) :=
+      ⟨⟨t.1⟩, fun u => Fin.eq_of_val_eq (by omega)⟩
+    rw [PolygonComplex.totalSides, Fintype.sum_unique]
+    exact congrArg C.sides (Unique.uniq _ _)
+  have hp := C.sides_pos t.1
+  have ht := t.2.isLt
+  constructor
+  · intro h
+    have hv := congrArg (fun u : C.Side => u.2.val) h
+    simp only [PolygonComplex.nextCorner] at hv
+    by_cases hlt : t.2.val + 1 < C.sides t.1
+    · rw [Nat.mod_eq_of_lt hlt] at hv; omega
+    · have heq : t.2.val + 1 = C.sides t.1 := by omega
+      rw [heq, Nat.mod_self] at hv; omega
+  · intro h
+    have hv := congrArg (fun u : C.Side => u.2.val) h
+    simp only [PolygonComplex.nextCorner] at hv
+    by_cases hlt : t.2.val + 2 < C.sides t.1
+    · rw [Nat.mod_eq_of_lt (by omega : t.2.val + 1 < C.sides t.1),
+        Nat.mod_eq_of_lt (by omega)] at hv; omega
+    · by_cases heq : t.2.val + 1 = C.sides t.1
+      · rw [heq, Nat.mod_self, Nat.mod_eq_of_lt (by omega : 1 < C.sides t.1)] at hv; omega
+      · rw [Nat.mod_eq_of_lt (by omega : t.2.val + 1 < C.sides t.1),
+          (by omega : t.2.val + 1 + 1 = C.sides t.1), Nat.mod_self] at hv; omega
+
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_nonempty
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s) :
+    Nonempty C'.Side := by
+  have hface : 0 < C'.faceCount := by rw [D.faceCount_eq]; exact Nat.zero_lt_one
+  exact ⟨⟨⟨0, hface⟩, ⟨0, C'.sides_pos _⟩⟩⟩
+
+open Classical in
+/-- The map back from corners of `C` to corners of `C'`: a surviving corner
+goes to its `toOld` preimage, a removed corner (`s` or `C.pair s`) to the
+preimage of the first surviving corner after it. -/
+noncomputable def standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    [Nonempty C'.Side] (u : C.Side) : C'.Side :=
+  if ∃ t, D.toOld t = u then Function.invFun D.toOld u
+  else if ∃ t, D.toOld t = C.nextCorner u then Function.invFun D.toOld (C.nextCorner u)
+  else Function.invFun D.toOld (C.nextCorner (C.nextCorner u))
+
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_toOld
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    [Nonempty C'.Side] (t : C'.Side) :
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+      D (D.toOld t) = t := by
+  unfold standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+  rw [if_pos ⟨t, rfl⟩]
+  exact Function.leftInverse_invFun D.toOld_injective t
+
+/-- A removed corner goes where the corner after it goes: if `C.nextCorner u`
+survives both are its preimage, and otherwise `C.nextCorner u` is the other
+removed corner and both go to the preimage of the corner after that. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_removed
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    [Nonempty C'.Side] (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
+    {u : C.Side} (hu : u = s ∨ u = C.pair s) :
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+      D u =
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+      D (C.nextCorner u) := by
+  have hnu : ¬ ∃ t, D.toOld t = u := by
+    rintro ⟨t, ht⟩
+    rcases hu with rfl | rfl
+    · exact (D.toOld_ne t).1 ht
+    · exact (D.toOld_ne t).2 ht
+  obtain ⟨hn1, hn2⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_nexts
+      h1 h5 u
+  unfold standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+  rw [if_neg hnu]
+  by_cases h : ∃ t, D.toOld t = C.nextCorner u
+  · rw [if_pos h, if_pos h]
+  · rw [if_neg h, if_neg h]
+    -- `u` and `C.nextCorner u` are the two removed corners, so the next one survives.
+    have hrem : C.nextCorner u = s ∨ C.nextCorner u = C.pair s := by
+      by_contra hc
+      push_neg at hc
+      exact h (D.toOld_surj _ hc.1 hc.2)
+    have hn1' := (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_nexts
+      h1 h5 (C.nextCorner u)).1
+    have key : ∀ w, (w = s ∨ w = C.pair s) → w = u ∨ w = C.nextCorner u := by
+      intro w hw
+      rcases hu with rfl | rfl <;> rcases hrem with h' | h' <;> rcases hw with rfl | rfl <;>
+        first | exact Or.inl rfl | exact Or.inr h'.symm | exact absurd h' hn1
+    have hs : C.nextCorner (C.nextCorner u) ≠ s := fun h' =>
+      (key _ (Or.inl h')).elim hn2 hn1'
+    have hp : C.nextCorner (C.nextCorner u) ≠ C.pair s := fun h' =>
+      (key _ (Or.inr h')).elim hn2 hn1'
+    rw [if_pos (D.toOld_surj _ hs hp)]
+
+/-- `inv` commutes with `nextCorner` on surviving corners: the first surviving
+corner after `toOld t` is `toOld (C'.nextCorner t)` (`_aux_next_aux_skip`). -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_next
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    [Nonempty C'.Side] (h1 : C.faceCount = 1) (t : C'.Side) :
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+      D (C.nextCorner (D.toOld t)) = C'.nextCorner t := by
+  have notpre : ∀ v, (v = s ∨ v = C.pair s) → ¬ ∃ t, D.toOld t = v := by
+    rintro v hv ⟨t, rfl⟩
+    rcases hv with h | h
+    · exact (D.toOld_ne t).1 h
+    · exact (D.toOld_ne t).2 h
+  have hl := Function.leftInverse_invFun D.toOld_injective (C'.nextCorner t)
+  unfold standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+  rcases standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip D h1 t with
+    hA | ⟨hr, hB | ⟨hr2, hC⟩⟩
+  · rw [if_pos ⟨_, hA⟩, ← hA, hl]
+  · rw [if_neg (notpre _ hr), if_pos ⟨_, hB⟩, ← hB, hl]
+  · rw [if_neg (notpre _ hr), if_neg (notpre _ hr2), ← hC, hl]
+
+/-- In an orientable complex every corner `a` is identified with
+`nextCorner (pair a)`. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_rho
+    {C : PolygonComplex} (hor : C.IsOrientable) (a : C.Side) :
+    C.CornerRel a (C.nextCorner (C.pair a)) :=
+  ⟨a, by rw [if_neg (Ne.symm (hor a))]; exact Or.inl ⟨rfl, rfl⟩⟩
+
+/-- In an orientable complex those are all the identifications, in one
+direction or the other. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_rho_cases
+    {C : PolygonComplex} (hor : C.IsOrientable) {a b : C.Side} (h : C.CornerRel a b) :
+    b = C.nextCorner (C.pair a) ∨ a = C.nextCorner (C.pair b) := by
+  obtain ⟨w, hw⟩ := h
+  rw [if_neg (Ne.symm (hor w))] at hw
+  rcases hw with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+  · exact Or.inl rfl
+  · exact Or.inr (by rw [C.pair_pair])
+
+/-- **Leaf (the two junctions are one vertex of `C'`).**  The corner `inv s`
+(where `s` was removed: the initial corner of the side after `s`) and the
+corner `inv (C.pair s)` (where `C.pair s` was removed) are `C'`-equivalent.
+
+Proof sketch.  Write `ρ a = C.nextCorner (C.pair a)`; it is a permutation of
+the corners (`C.pair` is one, and so is `nextCorner` with one face), and
+`a ~ ρ a` in `C` (`_aux_rho`).  Since the corners are finite, `ρ^m s = s`
+for a least `m ≥ 1`.  Each `c_k = ρ^k s` is `C`-equivalent to `s`, so by `hs`
+and `_aux_cutRel` (`C.pair s ~ nextCorner s`) none of `c_1, …, c_{m-1}` is
+`C.pair s`, and none is `s` by minimality: they all survive, `c_k = toOld t_k`.
+Then `t_k ~ C'.nextCorner (C'.pair t_k)` in `C'` (`_aux_rho` for `C'`, which is
+orientable by `_aux_orientable`), and `inv` of that corner is `inv (c_{k+1})`
+(`_aux_inv_next` with `D.pair_toOld`).  So `inv c_1 ~ inv c_2 ~ … ~ inv c_m`
+in `C'`.  Finally `inv c_1 = inv (nextCorner (C.pair s)) = inv (C.pair s)` and
+`inv c_m = inv s` (`_aux_inv_removed`).  When `m = 1` the chain is empty and
+the two ends are equal by the same rewrites. -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_junction
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    [Nonempty C'.Side] (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
+    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hor : C.IsOrientable) :
+    Relation.EqvGen C'.CornerRel
+      (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv D s)
+      (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+        D (C.pair s)) := by
+  sorry
+
+/-- Every corner `c` and `ρ c = nextCorner (pair c)` go to `C'`-equivalent
+corners: directly by a `C'` identification when `c` survives, and by
+`_aux_junction` when `c` is removed. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_step
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    [Nonempty C'.Side] (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
+    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hor : C.IsOrientable) (c : C.Side) :
+    Relation.EqvGen C'.CornerRel
+      (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv D c)
+      (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+        D (C.nextCorner (C.pair c))) := by
+  have hj :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_junction
+      D h1 h5 hs hor
+  by_cases hc : ∃ t, D.toOld t = c
+  · obtain ⟨t, rfl⟩ := hc
+    rw [← D.pair_toOld,
+      standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_next
+        D h1,
+      standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_toOld]
+    exact Relation.EqvGen.rel _ _
+      (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_rho
+        (standardCover_pairingData_aux_contractStep_aux_orientable D hor) t)
+  · have hrem : c = s ∨ c = C.pair s := by
+      by_contra h
+      push_neg at h
+      exact hc (D.toOld_surj c h.1 h.2)
+    rcases hrem with rfl | rfl
+    · rw [← standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_removed
+        D h1 h5 (Or.inr rfl)]
+      exact hj
+    · rw [C.pair_pair,
+        ← standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_removed
+          D h1 h5 (Or.inl rfl)]
+      exact hj.symm
+
+/-- **Corner classes reflect.**  Two corners of `C'` whose images are
 equivalent in `C` modulo the merge `s ~ nextCorner s` are already
 `C'`-equivalent.  `C'` is `C` with the edge `s` contracted; `hs` says the two
 ends of that edge are different vertices, so the contraction merges exactly
@@ -4764,7 +4974,11 @@ the junction corners of `C'` where the removed sides were.
 `hs` is needed (added 2026-10-25): for the one-vertex word
 `a b a⁻¹ b⁻¹ c d c⁻¹ d⁻¹` with `s = a`, deleting `a` leaves
 `b b⁻¹ c d c⁻¹ d⁻¹`, which has two vertices, while every corner of `C` is
-equivalent. -/
+equivalent.
+
+Proof: `_aux_inv` carries every generator of the merged relation to a
+`C'`-equivalence (`_aux_rho_cases`, `_aux_step`, `_aux_inv_removed`), and
+undoes `toOld` (`_aux_inv_toOld`). -/
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
@@ -4777,7 +4991,34 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_
       (fun a b => C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s))
       (D.toOld x) (D.toOld y)) :
     Relation.EqvGen C'.CornerRel x y := by
-  sorry
+  haveI :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_nonempty D
+  have key : ∀ u v, Relation.EqvGen
+      (fun a b => C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s)) u v →
+      Relation.EqvGen C'.CornerRel
+        (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv D u)
+        (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
+          D v) := by
+    intro u v huv
+    induction huv with
+    | rel a b hab =>
+      rcases hab with hab | ⟨rfl, rfl⟩
+      · rcases standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_rho_cases
+          hor hab with rfl | rfl
+        · exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_step
+            D h1 h5 hs hor a
+        · exact (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_step
+            D h1 h5 hs hor b).symm
+      · rw [standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_removed
+          D h1 h5 (Or.inl rfl)]
+        exact Relation.EqvGen.refl _
+    | refl a => exact Relation.EqvGen.refl _
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans _ _ _ ih₂
+  have := key _ _ h
+  rwa [standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_toOld,
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_toOld]
+    at this
 
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel
     {C C' : PolygonComplex} {s : C.Side}
