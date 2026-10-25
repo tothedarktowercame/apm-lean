@@ -6666,7 +6666,74 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_entry
     (u : C.Side) :
     ∃ a : C.Side, Relation.EqvGen C.CornerRel u (C.nextCorner a) ∧
       ¬ Relation.EqvGen C.CornerRel u a := by
-  sorry
+  by_contra H
+  push_neg at H
+  have hback (a : C.Side) :
+      Relation.EqvGen C.CornerRel u (C.nextCorner a) →
+        Relation.EqvGen C.CornerRel u a := H a
+  have hface (v : C.Side) : v.1 = u.1 := by
+    apply Fin.ext
+    omega
+  have hn : 2 ≤ C.sides u.1 := by
+    have hp : (C.pair u).1 = u.1 := hface (C.pair u)
+    have hi : (C.pair u).2.val ≠ u.2.val := by
+      intro hi
+      apply C.pair_ne u
+      exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext
+        h1 hi
+    have hip : (C.pair u).2.val < C.sides u.1 := by
+      rw [← hp]
+      exact (C.pair u).2.isLt
+    omega
+  let side : Fin (C.sides u.1) → C.Side := fun i => ⟨u.1, i⟩
+  have hnext (i : Fin (C.sides u.1)) :
+      C.nextCorner (side i) = side (finRotate (C.sides u.1) i) := by
+    apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1
+    simp only [side, PolygonComplex.nextCorner]
+    generalize hs : C.sides u.1 = n at i ⊢
+    cases n with
+    | zero => exact absurd i.isLt (by omega)
+    | succ n =>
+        rw [finRotate_succ_apply, Fin.val_add_one]
+        split
+        · rename_i hi
+          subst i
+          simp
+        · rename_i hi
+          rw [Nat.mod_eq_of_lt]
+          exact Nat.succ_lt_succ (Fin.val_lt_last hi)
+  have hpull (i : Fin (C.sides u.1)) (k : ℕ) :
+      Relation.EqvGen C.CornerRel u
+          (side (((finRotate (C.sides u.1)) ^ k) i)) →
+        Relation.EqvGen C.CornerRel u (side i) := by
+    induction k with
+    | zero => simpa
+    | succ k ih =>
+        rw [pow_succ', Equiv.Perm.mul_apply, ← hnext] 
+        exact fun h => ih (hback _ h)
+  have hall : ∀ v : C.Side, Relation.EqvGen C.CornerRel u v := by
+    intro v
+    have hf := hface v
+    let i : Fin (C.sides u.1) := ⟨v.2.val, by rw [← hf]; exact v.2.isLt⟩
+    have hvi : v = side i := by
+      apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1
+      rfl
+    rw [hvi]
+    have hvne : finRotate (C.sides u.1) i ≠ i := by
+      rw [← Equiv.Perm.mem_support, support_finRotate_of_le hn]
+      simp
+    have hune : finRotate (C.sides u.1) u.2 ≠ u.2 := by
+      rw [← Equiv.Perm.mem_support, support_finRotate_of_le hn]
+      simp
+    obtain ⟨k, hk⟩ :=
+      (isCycle_finRotate_of_le hn).exists_pow_eq hvne hune
+    apply hpull i k
+    rw [hk]
+    exact Relation.EqvGen.refl _
+  obtain ⟨s, hs⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_distinctEnds C h1 hV
+  apply hs
+  exact Quotient.sound ((hall s).symm.trans _ _ _ (hall (C.nextCorner s)))
 
 /-- Each face's sides shifted forward by `k`. -/
 def standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift
