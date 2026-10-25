@@ -487,7 +487,134 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
       ∀ (C D : Type) [Category.{0} C] [Category.{0} D] (K : C ⥤ D),
         (Functor.whiskeringRight (FundamentalGroupoid X) C D).obj K ⋙ (E D).functor ≅
           (E C).functor ⋙ (Functor.whiskeringRight _ C D).obj K) := by
-  sorry
+  open ConstructionTargets.TwoOpenFundamentalGroupoidSpan in
+    open ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout in
+    open ConstructionTargets.GenericSpanPseudoCoconeTransport in
+    open ConstructionTargets.FreeProductPointSpanRepresentations in
+    open ConstructionTargets.FreeProductRepresentationSingleObjEquivalence in
+    open ConstructionTargets.ConnectedGroupoidSingleObjEquivalence in
+    open ConstructionTargets.TwoOpenLegCompatibleConnectorSystems in
+    open ConstructionTargets.TwoOpenFreeProductMapping in
+    classical
+    obtain ⟨u, ⟨iu⟩⟩ :=
+      apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_groupoid
+        (apm_t03J02_overlapToLeft U V) hl
+    obtain ⟨v, ⟨iv⟩⟩ :=
+      apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_groupoid
+        (apm_t03J02_overlapToRight U V) hr
+    let W := FundamentalGroupoid (U ∩ V : Set X)
+    letI : CategoryTheory.IsConnected W :=
+      apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_isConnected
+        (Y := (U ∩ V : Set X))
+    let L := FundamentalGroupoid U
+    let R := FundamentalGroupoid V
+    let P := SingleObj PUnit.{1}
+    let c : W ⥤ P := (Functor.const W).obj (SingleObj.star PUnit.{1})
+    let a : P ⥤ L := (Functor.const P).obj (FundamentalGroupoid.mk u)
+    let b : P ⥤ R := (Functor.const P).obj (FundamentalGroupoid.mk v)
+    let SL : ConstructionTargets.ConnectedGroupoidVertexReconstruction.ConnectorSystem L :=
+      { base := FundamentalGroupoid.mk (⟨w.1, w.2.1⟩ : U)
+        connector := pathConnector (⟨w.1, w.2.1⟩ : U) }
+    let SR : ConstructionTargets.ConnectedGroupoidVertexReconstruction.ConnectorSystem R :=
+      { base := FundamentalGroupoid.mk (⟨w.1, w.2.2⟩ : V)
+        connector := pathConnector (⟨w.1, w.2.2⟩ : V) }
+    let eL : L ≌ SingleObj (End SL.base) := connectorSingleObjEquivalence SL
+    let eR : R ≌ SingleObj (End SR.base) := connectorSingleObjEquivalence SR
+    let pcL : a ⋙ eL.functor ≅ pointLeg (End SL.base) :=
+      ConstructionTargets.TwoOpenPointSpanComparison.pointComparison (a ⋙ eL.functor)
+    let pcR : b ⋙ eR.functor ≅ pointLeg (End SR.base) :=
+      ConstructionTargets.TwoOpenPointSpanComparison.pointComparison (b ⋙ eR.functor)
+    let iu' : (CategoryTheory.Equivalence.refl (C := W)).inverse ⋙
+        overlapFundamentalGroupoidMap (U := U) (V := V) true ⋙
+        (CategoryTheory.Equivalence.refl (C := L)).functor ≅ c ⋙ a := by
+      refine (eqToIso ?_).trans (iu.trans (eqToIso ?_))
+      · aesop_cat
+      · refine CategoryTheory.Functor.ext (fun x => rfl) ?_
+        intro x y f
+        induction f using Quotient.inductionOn with
+        | h p =>
+          apply Quotient.sound
+          refine ⟨?_⟩
+          convert Path.Homotopy.refl (Path.refl u) using 1 <;>
+            ext t <;> simp [c, a]
+    let iv' : (CategoryTheory.Equivalence.refl (C := W)).inverse ⋙
+        overlapFundamentalGroupoidMap (U := U) (V := V) false ⋙
+        (CategoryTheory.Equivalence.refl (C := R)).functor ≅ c ⋙ b := by
+      refine (eqToIso ?_).trans (iv.trans (eqToIso ?_))
+      · aesop_cat
+      · refine CategoryTheory.Functor.ext (fun x => rfl) ?_
+        intro x y f
+        induction f using Quotient.inductionOn with
+        | h p =>
+          apply Quotient.sound
+          refine ⟨?_⟩
+          convert Path.Homotopy.refl (Path.refl v) using 1 <;>
+            ext t <;> simp [c, b]
+    let pcL' : (CategoryTheory.Equivalence.refl (C := P)).inverse ⋙ a ⋙ eL.functor ≅
+        pointLeg (End SL.base) := by simpa using pcL
+    let pcR' : (CategoryTheory.Equivalence.refl (C := P)).inverse ⋙ b ⋙ eR.functor ≅
+        pointLeg (End SR.base) := by simpa using pcR
+    let spanConst (C : Type) [Category.{0} C] :=
+      pseudoCoconeEquivalenceOfSpanEquivalences
+        (overlapFundamentalGroupoidMap (U := U) (V := V) true)
+        (overlapFundamentalGroupoidMap (U := U) (V := V) false)
+        (c ⋙ a) (c ⋙ b)
+        (CategoryTheory.Equivalence.refl (C := W))
+        (CategoryTheory.Equivalence.refl (C := L))
+        (CategoryTheory.Equivalence.refl (C := R))
+        iu' iv' (C := C)
+    let collapsed (C : Type) [Category.{0} C] :=
+      apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux.equiv
+        (W := W) a b C
+    let pointCoords (C : Type) [Category.{0} C] :=
+      pseudoCoconeEquivalenceOfSpanEquivalences a b
+        (pointLeg (End SL.base)) (pointLeg (End SR.base))
+        (CategoryTheory.Equivalence.refl (C := P)) eL eR pcL' pcR' (C := C)
+    let E (C : Type) [Category.{0} C] :=
+      let e0 := twoOpenFundamentalGroupoidPseudopushoutEquivalence (C := C) hU hV hcov
+      let e1 := e0.trans (pseudoSpanEquivalence (U := U) (V := V) C)
+      let e2 := e1.trans (spanConst C)
+      let e3 := e2.trans (collapsed C)
+      let e4 := e3.trans (pointCoords C)
+      let e5 := e4.trans (freeProductPointSpanEquivalence (End SL.base) (End SR.base) C)
+      e5.trans (representationSingleObjEquivalence (C := C) (End SL.base) (End SR.base))
+    refine ⟨⟨fun C _ => E C, ?_⟩⟩
+    intro C D _ _ K
+    let s0 : CatCommSq _
+        (twoOpenFundamentalGroupoidPseudopushoutEquivalence (C := C) hU hV hcov).functor
+        (twoOpenFundamentalGroupoidPseudopushoutEquivalence (C := D) hU hV hcov).functor
+        (postcomposePseudoFunctorCoconeFunctor K) :=
+      ⟨pseudopushoutPostcomposeNatIso hU hV hcov K⟩
+    let s1 : CatCommSq (postcomposePseudoFunctorCoconeFunctor K)
+        (pseudoSpanEquivalence (U := U) (V := V) C).functor
+        (pseudoSpanEquivalence (U := U) (V := V) D).functor (postcomposeFunctor K) :=
+      ⟨eqToIso (by rfl)⟩
+    let s2 : CatCommSq (postcomposeFunctor K) (spanConst C).functor
+        (spanConst D).functor (postcomposeFunctor K) :=
+      ⟨equivalenceFunctorPostcomposeIso _ _ _ _ _ _ _ iu' iv' K⟩
+    let s3 : CatCommSq (postcomposeFunctor K) (collapsed C).functor
+        (collapsed D).functor (postcomposeFunctor K) :=
+      ⟨apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_general_aux_collapse_aux.naturality
+        (W := W) a b C D K⟩
+    let s4 : CatCommSq (postcomposeFunctor K) (pointCoords C).functor
+        (pointCoords D).functor (postcomposeFunctor K) :=
+      ⟨equivalenceFunctorPostcomposeIso _ _ _ _ _ eL eR pcL' pcR' K⟩
+    let s5 : CatCommSq (postcomposeFunctor K)
+        (freeProductPointSpanEquivalence (End SL.base) (End SR.base) C).functor
+        (freeProductPointSpanEquivalence (End SL.base) (End SR.base) D).functor
+        (ConstructionTargets.FreeProductPointSpanRepresentations.postcomposeRepresentationFunctor
+          (End SL.base) (End SR.base) K) :=
+      ⟨ConstructionTargets.FreeProductPointSpanRepresentations.equivalenceFunctorPostcomposeIso
+        (End SL.base) (End SR.base) K⟩
+    let s6 : CatCommSq
+        (ConstructionTargets.FreeProductPointSpanRepresentations.postcomposeRepresentationFunctor
+          (End SL.base) (End SR.base) K)
+        (representationSingleObjEquivalence (C := C) (End SL.base) (End SR.base)).functor
+        (representationSingleObjEquivalence (C := D) (End SL.base) (End SR.base)).functor _ :=
+      ⟨representationToFunctorPostcomposeIso (End SL.base) (End SR.base) K⟩
+    exact (CatCommSq.vComp'
+      (CatCommSq.vComp' (CatCommSq.vComp' (CatCommSq.vComp' s0 s1) s2) s3)
+      (CatCommSq.vComp' s4 (CatCommSq.vComp' s5 s6))).iso
 -- END SEAT AREA
 
 /-- Two-open van Kampen when both overlap inclusions are nullhomotopic: the
