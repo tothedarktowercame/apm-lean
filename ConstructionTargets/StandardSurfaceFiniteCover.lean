@@ -4739,11 +4739,131 @@ side `s` at position `s.2` with parameter `pairedParameter`, exactly the
 `if`-on-signs of `WordRel`.  Same argument as
 `_aux_toPairing_aux_homeomorph_aux_eqv_forward`/`_reverse` together with
 `orientablePairing_normalForm_aux_bridge` (no vertex condition is needed). -/
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_edgePoint
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (s : C.Side)
+    (t : Set.Icc (0 : ℝ) 1) :
+    edgePoint (C.sides s.1) s.2 t = edgePoint C.totalSides s.2.val t := by
+  exact congrArg₂ (fun m e : ℕ => edgePoint m e t)
+    (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1 s.1) rfl
+
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_side_roundtrip
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (s : C.Side) :
+    standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1
+      ⟨s.2.val, by rw [← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1 s.1]; exact s.2.isLt⟩ = s := by
+  obtain ⟨f, k⟩ := s
+  have hf : f = ⟨0, by omega⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _
+  subst f
+  rfl
+
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_forward {L : Type*} [DecidableEq L]
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (lab : C.Side → L)
+    (hlab : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C lab)
+    {x y : Σ _ : Fin C.faceCount, Disk} (hxy : C.Rel x y) :
+    PolygonMoves.WordRel
+      (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab)
+      x.2 y.2 := by
+  rcases hxy with ⟨s, t, rfl, rfl⟩
+  let i : Fin C.totalSides := ⟨s.2, by
+    rw [← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1 s.1]
+    exact s.2.isLt⟩
+  let j : Fin C.totalSides := ⟨(C.pair s).2, by
+    rw [← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1 (C.pair s).1]
+    exact (C.pair s).2.isLt⟩
+  have hi : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i = s := by
+    exact standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_side_roundtrip C h1 s
+  have hj : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 j = C.pair s := by
+    exact standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_side_roundtrip C h1 (C.pair s)
+  let iw : Fin (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab).length :=
+    ⟨i, by simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word]⟩
+  let jw : Fin (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab).length :=
+    ⟨j, by simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word]⟩
+  refine ⟨iw, jw, ?_, t, ?_, ?_, ?_⟩
+  · intro hij
+    apply C.pair_ne s
+    rw [← hj, ← hi]
+    apply congrArg _
+    apply Fin.ext
+    exact (congrArg Fin.val hij).symm
+  · simpa [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word, iw, jw, hi, hj]
+      using (hlab s (C.pair s)).2 (Or.inr rfl)
+  · simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word, hi]
+    rw [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_edgePoint C h1 s t]
+  · simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word, hi, hj,
+      PolygonComplex.pairedParameter, PolygonMoves.reverseParameter,
+      PolygonSurfacePiOne.reverseIcc]
+    rw [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_edgePoint C h1 (C.pair s)]
+    simp [iw, jw, i, j, hi, hj]
+
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_reverse {L : Type*} [DecidableEq L]
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (lab : C.Side → L)
+    (hlab : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C lab)
+    {x y : Disk} (hxy : PolygonMoves.WordRel
+      (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab) x y) :
+    C.Rel ⟨⟨0, by omega⟩, x⟩ ⟨⟨0, by omega⟩, y⟩ := by
+  rcases hxy with ⟨i, j, hij, t, hlabij, rfl, rfl⟩
+  let i' : Fin C.totalSides := ⟨i, by simpa [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word] using i.2⟩
+  let j' : Fin C.totalSides := ⟨j, by simpa [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word] using j.2⟩
+  let a := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i'
+  let b := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 j'
+  have hl : lab a = lab b := by
+    simpa [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word, a, b, i', j'] using hlabij
+  have hb : b = C.pair a := by
+    rcases (hlab a b).mp hl with hba | hba
+    · exfalso
+      apply hij
+      apply Fin.ext
+      simpa [a, b, i', j', standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side] using (congrArg (λ z => z.2.val) hba).symm
+    · exact hba
+  refine ⟨a, t, ?_, ?_⟩
+  · apply Sigma.ext (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _)
+    rw [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_edgePoint C h1 a t]
+    simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word, a, i',
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side]
+  · apply Sigma.ext (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _)
+    rw [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_edgePoint C h1 (C.pair a)]
+    have hpval : (C.pair a).2.val = j.val := by
+      rw [← hb]
+      rfl
+    simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word, a, b, i', j', hb,
+      PolygonComplex.pairedParameter, PolygonMoves.reverseParameter,
+      PolygonSurfacePiOne.reverseIcc, hpval]
+
 theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge {L : Type*} [DecidableEq L]
     (C : PolygonComplex) (h1 : C.faceCount = 1) (lab : C.Side → L)
     (hlab : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C lab) :
     Nonempty (C.Space ≃ₜ PolygonMoves.PolygonSurface (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab)) := by
-  sorry
+  let f : Fin C.faceCount := ⟨0, by omega⟩
+  refine ⟨{
+    toFun := Quotient.lift (fun z : Σ _ : Fin C.faceCount, Disk => Quotient.mk _ z.2)
+      (fun _ _ h => Quotient.sound ?_)
+    invFun := Quotient.lift (fun x : Disk => Quotient.mk _ ⟨f, x⟩)
+      (fun _ _ h => Quotient.sound ?_)
+    left_inv := ?_
+    right_inv := ?_
+    continuous_toFun := ?_
+    continuous_invFun := ?_ }⟩
+  · induction h with
+    | rel x y h => exact .rel _ _ (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_forward C h1 lab hlab h)
+    | refl x => exact .refl _
+    | symm x y _ ih => exact .symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans _ _ _ ih₁ ih₂
+  · induction h with
+    | rel x y h => exact .rel _ _ (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge_reverse C h1 lab hlab h)
+    | refl x => exact .refl _
+    | symm x y _ ih => exact .symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans _ _ _ ih₁ ih₂
+  · rintro ⟨⟨g, x⟩⟩
+    have hg : g = f := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _
+    subst g
+    rfl
+  · rintro ⟨x⟩
+    rfl
+  · apply Continuous.quotient_lift
+    apply continuous_sigma
+    intro g
+    exact continuous_coinduced_rng
+  · apply Continuous.quotient_lift
+    exact continuous_coinduced_rng.comp continuous_sigmaMk
 
 /-- **Leaf (no wrap).**  If `s` is not the last side, `C.pair s` is the next
 one (`hadj`), with the opposite sign (`hor`): the word of `C` is
