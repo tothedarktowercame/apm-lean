@@ -787,7 +787,29 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod2
     ∃ i' : Fin n, Relation.EqvGen
       (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
       ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
-  sorry
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  have hk1 : k.1 + 1 < 4 * g := by omega
+  let e : Fin (4 * g) := ⟨k.1 + 1, hk1⟩
+  let j : Fin n := σ i (standardCover_pairingData_aux_lift_aux_basePair g e)
+  let s : C.Side := ⟨j, e⟩
+  refine ⟨j, ?_⟩
+  have heq : C.nextCorner (C.pair s) = ⟨i, k⟩ := by
+    apply Sigma.ext
+    · change σ j e = i
+      simpa [j, standardCover_pairingData_aux_lift_aux_basePair_basePair] using
+        hσ i (standardCover_pairingData_aux_lift_aux_basePair g e)
+    · apply heq_of_eq
+      apply Fin.ext
+      change
+        ((standardCover_pairingData_aux_lift_aux_basePair g e).1 + 1) % (4 * g) = k.1
+      have hemod : (k.1 + 1) % 4 = 3 := by omega
+      simp [e, standardCover_pairingData_aux_lift_aux_basePair, hemod]
+      rw [Nat.sub_add_cancel (by omega), Nat.mod_eq_of_lt k.2]
+  rw [← heq]
+  simpa [s, e, Nat.mod_eq_of_lt hk1] using
+    (Relation.EqvGen.symm _ _
+      (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+        g n hg σ hσ s))
 -- END SEAT AREA
 
 /-- Leaf: `_aux_step` when `k % 4 = 3`: three `_aux_corner` steps from `s = ⟨i, k⟩`. -/
