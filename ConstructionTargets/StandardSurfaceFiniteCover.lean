@@ -2110,7 +2110,56 @@ theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_old
     (f : Fin C.faceCount) (h1 : f ≠ s.1) (h2 : f ≠ (C.pair s).1) :
     D.old (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f) = f ∧
       standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f ≠ D.merged := by
-  sorry
+  have hold_surj : ∀ x : Fin C.faceCount, x ≠ (C.pair s).1 →
+      ∃ k : Fin C'.faceCount, D.old k = x := by
+    intro x hx
+    by_contra hnot
+    let F : Fin C'.faceCount ⊕ Fin 2 → Fin C.faceCount
+      | Sum.inl k => D.old k
+      | Sum.inr j => if j = 0 then (C.pair s).1 else x
+    have hF : Function.Injective F := by
+      intro a b hab
+      cases a with
+      | inl a =>
+          cases b with
+          | inl b => exact congrArg Sum.inl (D.old_injective hab)
+          | inr b =>
+              exfalso
+              simp only [F] at hab
+              split at hab
+              · exact D.old_ne a hab
+              · exact hnot ⟨a, hab⟩
+      | inr a =>
+          cases b with
+          | inl b =>
+              exfalso
+              simp only [F] at hab
+              split at hab
+              · exact D.old_ne b hab.symm
+              · exact hnot ⟨b, hab.symm⟩
+          | inr b =>
+              apply congrArg Sum.inr
+              fin_cases a
+              · fin_cases b
+                · rfl
+                · exfalso
+                  exact hx (by simpa [F] using hab.symm)
+              · fin_cases b
+                · exfalso
+                  exact hx (by simpa [F] using hab)
+                · rfl
+    have hc := Fintype.card_le_of_injective F hF
+    simp only [Fintype.card_sum, Fintype.card_fin] at hc
+    have hcount := D.faceCount_succ
+    omega
+  have hex := hold_surj f h2
+  simp only [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv,
+    dif_pos hex]
+  refine ⟨Classical.choose_spec hex, ?_⟩
+  intro heq
+  apply h1
+  exact (Classical.choose_spec hex).symm.trans
+    ((congrArg D.old heq).trans D.old_merged)
 
 /-- **Leaf (fibres, sides).**  Each side `v` of `C'` is the image of side
 `toOld v` of `C`, with the arc parameter kept.  Unmerged faces: `toOld_fst`,
