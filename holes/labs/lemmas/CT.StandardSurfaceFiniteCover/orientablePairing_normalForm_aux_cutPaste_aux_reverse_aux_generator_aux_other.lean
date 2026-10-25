@@ -8846,7 +8846,94 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_
     (hi : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 ≠ c.1)
     (hj : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1 ≠ c.1) :
     Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) T T' := by
-  sorry
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  let W' := α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁
+  have hi1 : (i : ℕ) ≠ α₂.length := by
+    intro h
+    apply hi
+    have hi' : i = ⟨α₂.length, by simp⟩ := Fin.ext h
+    rw [hi']
+    simp [inv]
+  have hi2 : (i : ℕ) ≠ α₂.length + 1 + α₁.length + β₂.length := by
+    intro h
+    apply hi
+    have hi' : i = ⟨α₂.length + 1 + α₁.length + β₂.length,
+        by simp; omega⟩ := Fin.ext h
+    rw [hi']
+    have hW' : α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁ =
+        (α₂ ++ [inv c] ++ α₁ ++ β₂) ++ (c :: β₁) := by simp
+    simp only [List.get_eq_getElem]
+    rw [List.getElem_of_eq hW', List.getElem_append_right (by simp; omega)]
+    simp [show α₂.length + 1 + α₁.length + β₂.length -
+      (α₂.length + (α₁.length + β₂.length + 1)) = 0 by omega]
+  have hj1 : (j : ℕ) ≠ α₂.length := by
+    intro h
+    apply hj
+    have hj' : j = ⟨α₂.length, by simp⟩ := Fin.ext h
+    rw [hj']
+    simp [inv]
+  have hj2 : (j : ℕ) ≠ α₂.length + 1 + α₁.length + β₂.length := by
+    intro h
+    apply hj
+    have hj' : j = ⟨α₂.length + 1 + α₁.length + β₂.length,
+        by simp; omega⟩ := Fin.ext h
+    rw [hj']
+    have hW' : α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁ =
+        (α₂ ++ [inv c] ++ α₁ ++ β₂) ++ (c :: β₁) := by simp
+    simp only [List.get_eq_getElem]
+    rw [List.getElem_of_eq hW', List.getElem_append_right (by simp; omega)]
+    simp [show α₂.length + 1 + α₁.length + β₂.length -
+      (α₂.length + (α₁.length + β₂.length + 1)) = 0 by omega]
+  let f (e : ℕ) := if e < α₂.length then e + α₁.length + 1
+    else if e < α₂.length + 1 + α₁.length then e - α₂.length - 1
+    else if e < α₂.length + 1 + α₁.length + β₂.length then e + β₁.length + 1
+    else e - β₂.length - 1
+  obtain ⟨hfi, hwi⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_side
+      α₁ α₂ β₁ β₂ y c i i.isLt hi1 hi2
+  obtain ⟨hfj, hwj⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_side
+      α₁ α₂ β₁ β₂ y c j j.isLt hj1 hj2
+  let i' : Fin W.length := ⟨f i, hfi⟩
+  let j' : Fin W.length := ⟨f j, hfj⟩
+  have hf_inj : f i = f j → (i : ℕ) = j := by
+    have hil := i.isLt
+    have hjl := j.isLt
+    simp only [List.length_append, List.length_cons, List.length_nil] at hil hjl
+    intro h
+    simp only [f] at h
+    split_ifs at h <;> omega
+  have hij' : i' ≠ j' := by
+    intro h
+    apply hij
+    apply Fin.ext
+    apply hf_inj
+    exact congrArg Fin.val h
+  apply Relation.EqvGen.rel
+  refine ⟨i', j', hij', τ, ?_, ?_, ?_⟩
+  · change (W.get i').1 = (W.get j').1
+    change (W.get ⟨f i, hfi⟩).1 = (W.get ⟨f j, hfj⟩).1
+    rw [hwi, hwj]
+    exact hlab
+  · apply Subtype.ext
+    change (T : ℂ) = (edgePoint W.length (f i) τ : ℂ)
+    rw [hT]
+    simp only [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+      hi1, hi2, if_false]
+    simp only [f]
+    split_ifs <;> congr 2 <;> (try simp [W, W']) <;> omega
+  · apply Subtype.ext
+    change (T' : ℂ) = (edgePoint W.length (f j)
+      (if (W.get i').2 = (W.get j').2 then τ else reverseParameter τ) : ℂ)
+    rw [hT']
+    simp only [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+      hj1, hj2, if_false]
+    have hs : (W.get i').2 = (W.get j').2 ↔ (W'.get i).2 = (W'.get j).2 := by
+      change (W.get ⟨f i, hfi⟩).2 = (W.get ⟨f j, hfj⟩).2 ↔ _
+      rw [hwi, hwj]
+    rw [if_congr hs rfl rfl]
+    simp only [f]
+    split_ifs <;> congr 2 <;> (try simp [W, W']) <;> omega
 -- END SEAT AREA
 
 open PolygonMoves in
