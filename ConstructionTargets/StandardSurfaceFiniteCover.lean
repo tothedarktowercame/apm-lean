@@ -7163,6 +7163,39 @@ corners at the ends of `c` go to the corners at the ends of `y`) and check that
 each old `WordCornerRel` step maps to a chain of new steps.  The hypotheses are
 the `Step.cutPaste` ones; without `hy` it is false (`[y, inv y, y]` is
 one-vertex, `[inv c, y, c]` is not). -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_yFresh
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y : PolygonMoves.Signed ℕ)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst) :
+    y.1 ∉ α₁.map Prod.fst ∧ y.1 ∉ α₂.map Prod.fst ∧
+      y.1 ∉ β₁.map Prod.fst ∧ y.1 ∉ β₂.map Prod.fst := by
+  simp only [List.map_append, List.mem_append, not_or] at hy
+  rcases hy with ⟨⟨⟨h₁, h₂⟩, h₃⟩, h₄⟩
+  exact ⟨h₁, h₂, h₃, h₄⟩
+
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_cFresh
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ))
+    (y c : PolygonMoves.Signed ℕ)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).map Prod.fst) :
+    c.1 ∉ α₁.map Prod.fst ∧ c.1 ≠ y.1 ∧ c.1 ∉ α₂.map Prod.fst ∧
+      c.1 ∉ β₁.map Prod.fst ∧ c.1 ∉ β₂.map Prod.fst := by
+  simp only [List.map_append, List.map_cons, List.map_nil, List.mem_append,
+    List.mem_cons, List.not_mem_nil, or_false, not_or, PolygonMoves.inv] at hc
+  grind
+
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (hy : y.1 ∉ α₁.map Prod.fst ∧ y.1 ∉ α₂.map Prod.fst ∧
+      y.1 ∉ β₁.map Prod.fst ∧ y.1 ∉ β₂.map Prod.fst)
+    (hc : c.1 ∉ α₁.map Prod.fst ∧ c.1 ≠ y.1 ∧ c.1 ∉ α₂.map Prod.fst ∧
+      c.1 ∉ β₁.map Prod.fst ∧ c.1 ∉ β₂.map Prod.fst)
+    (hw : PolygonMoves.IsPolygonWord (α₁ ++ [y] ++ α₂ ++ β₁ ++
+      [PolygonMoves.inv y] ++ β₂))
+    (hv : orientablePairing_normalForm_aux_WordOneVertex
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)) :
+    orientablePairing_normalForm_aux_WordOneVertex
+      (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) := by
+  sorry
+
 theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
     (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
     (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
@@ -7172,7 +7205,12 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPas
       (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)) :
     orientablePairing_normalForm_aux_WordOneVertex
       (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) := by
-  sorry
+  exact orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport
+    α₁ α₂ β₁ β₂ y c
+    (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_yFresh
+      α₁ α₂ β₁ β₂ y hy)
+    (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_cFresh
+      α₁ α₂ β₁ β₂ y c hc) hw hv
 
 /-- **Leaf.**  Every `Step` keeps the word one-vertex.  Rotation shifts corners
 and relabelling leaves `WordCornerRel` unchanged; for `cutPaste`, send each
