@@ -7146,7 +7146,44 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_relabe
     (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
     orientablePairing_normalForm_aux_WordOneVertex
       (w.map fun x => (σ x.1, xor x.2 (flip x.1))) := by
-  sorry
+  unfold orientablePairing_normalForm_aux_WordOneVertex at hv ⊢
+  have hl : (w.map fun x => (σ x.1, xor x.2 (flip x.1))).length = w.length :=
+    List.length_map _
+  have hrot : ∀ {n m : ℕ} (h : n = m) (i : Fin n),
+      finRotate m (Fin.cast h i) = Fin.cast h (finRotate n i) := by
+    intro n m h i; subst h; rfl
+  have key : ∀ c d : Fin w.length,
+      Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w) c d →
+        Relation.EqvGen
+          (orientablePairing_normalForm_aux_WordCornerRel
+            (w.map fun x => (σ x.1, xor x.2 (flip x.1))))
+          (Fin.cast hl.symm c) (Fin.cast hl.symm d) := by
+    intro c d h
+    induction h with
+    | rel c d hcd =>
+        apply Relation.EqvGen.rel
+        rcases hcd with ⟨i, j, hij, hlab, hcorners⟩
+        refine ⟨Fin.cast hl.symm i, Fin.cast hl.symm j,
+          fun h => hij (Fin.cast_injective _ h), ?_, ?_⟩
+        · simp only [List.get_eq_getElem] at hlab ⊢
+          simp [hlab]
+        · simp only [List.get_eq_getElem] at hlab hcorners ⊢
+          simp only [Fin.coe_cast, List.getElem_map, hrot, Fin.cast_inj]
+          have hflip : flip (w[i].1) = flip (w[j].1) := congrArg flip hlab
+          have hsign :
+              (xor w[i].2 (flip w[i].1) = xor w[j].2 (flip w[j].1)) ↔
+                w[i].2 = w[j].2 := by
+            rw [hflip]
+            cases w[i].2 <;> cases w[j].2 <;> cases flip (w[j].1) <;> simp
+          simp only [Fin.getElem_fin] at hsign hcorners ⊢
+          by_cases hs : w[(i : ℕ)].2 = w[(j : ℕ)].2
+          · rw [if_pos (hsign.mpr hs)]; rw [if_pos hs] at hcorners; exact hcorners
+          · rw [if_neg (mt hsign.mp hs)]; rw [if_neg hs] at hcorners; exact hcorners
+    | refl c => exact Relation.EqvGen.refl _
+    | symm c d _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans c d e _ _ ih1 ih2 => exact Relation.EqvGen.trans _ _ _ ih1 ih2
+  intro a b
+  simpa using key (Fin.cast hl a) (Fin.cast hl b) (hv _ _)
 -- END SEAT AREA
 
 /-- **Leaf.**  Cut-and-paste keeps the word one-vertex.  Send each corner of the
