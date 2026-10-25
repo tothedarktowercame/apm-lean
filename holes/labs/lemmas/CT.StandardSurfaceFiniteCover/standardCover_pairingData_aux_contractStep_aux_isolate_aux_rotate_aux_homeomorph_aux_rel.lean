@@ -6834,7 +6834,43 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_ho
           C k x)
         (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_disks
           C k y) := by
-  sorry
+  let sh := standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k
+  let R := standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k
+  let e :=
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_disks C k
+  have he (s : C.Side) (t : Set.Icc (0 : ℝ) 1) :
+      e ⟨s.1, edgePoint (C.sides s.1) s.2 t⟩ =
+        ⟨(sh s).1, edgePoint (C.sides (sh s).1) (sh s).2 t⟩ := by
+    change (⟨s.1, PolygonMoves.rotation_aux_disk (C.sides s.1) k
+      (edgePoint (C.sides s.1) s.2 t)⟩ : Σ _ : Fin C.faceCount, Disk) = _
+    rw [standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_edge]
+    rfl
+  have hpair (s : C.Side) : R.pair (sh s) = sh (C.pair s) := by
+    change ((sh.symm.trans C.pair).trans sh) (sh s) = sh (C.pair s)
+    simp
+  have hparam (s : C.Side) (t : Set.Icc (0 : ℝ) 1) :
+      R.pairedParameter (sh s) t = C.pairedParameter s t := by
+    rw [PolygonComplex.pairedParameter, PolygonComplex.pairedParameter]
+    change (if C.sign (sh.symm (sh s)) = C.sign (sh.symm (R.pair (sh s)))
+      then t else reverseIcc t) = _
+    rw [hpair]
+    simp
+  constructor
+  · rintro ⟨s, t, rfl, rfl⟩
+    refine ⟨sh s, t, ?_, ?_⟩
+    · exact he s t
+    · rw [hpair, hparam]
+      exact he (C.pair s) (C.pairedParameter s t)
+  · rintro ⟨s', t, hx, hy⟩
+    let s := sh.symm s'
+    have hs : sh s = s' := sh.apply_symm_apply s'
+    refine ⟨s, t, ?_, ?_⟩
+    · apply e.injective
+      rw [hx, ← hs]
+      exact (he s t).symm
+    · apply e.injective
+      rw [hy, ← hs, hpair, hparam]
+      exact (he (C.pair s) (C.pairedParameter s t)).symm
 -- END SEAT AREA
 
 /-- Rotation is a homeomorphism: `_aux_disks` is a homeomorphism of the face
