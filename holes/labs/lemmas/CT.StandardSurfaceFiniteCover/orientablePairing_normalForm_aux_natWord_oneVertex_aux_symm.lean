@@ -2657,7 +2657,20 @@ symmetric in `i` and `pair i`). -/
 -- BEGIN SEAT AREA
 theorem orientablePairing_normalForm_aux_natWord_oneVertex_aux_symm (P : PairingData)
     {x y : Disk} (h : P.Rel x y) : P.Rel y x := by
-  sorry
+  rcases h with ⟨i, t, hx, hy⟩
+  refine ⟨P.pair i, pairedParameter P.pair P.sign i t, hy, ?_⟩
+  rw [P.pair_pair i]
+  have ht :
+      pairedParameter P.pair P.sign (P.pair i)
+          (pairedParameter P.pair P.sign i t) = t := by
+    by_cases hs : P.sign i = P.sign (P.pair i)
+    · unfold PolygonSurfacePiOne.pairedParameter
+      rw [P.pair_pair, if_pos hs.symm, if_pos hs]
+    · have hs' : P.sign (P.pair i) ≠ P.sign i := by
+        exact fun hsi => hs hsi.symm
+      unfold PolygonSurfacePiOne.pairedParameter
+      rw [P.pair_pair, if_neg hs', if_neg hs, reverseIcc_reverseIcc]
+  exact hx.trans (congrArg (edgePoint P.edgeCount i) ht.symm)
 -- END SEAT AREA
 
 /-- **Leaf.**  One `boundaryRel` step from a reached vertex reaches a vertex.
