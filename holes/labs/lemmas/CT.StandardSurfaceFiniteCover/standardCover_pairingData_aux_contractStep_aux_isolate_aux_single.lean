@@ -6641,7 +6641,22 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_single
     (C : PolygonComplex) (hor : C.IsOrientable) (u : C.Side)
     (hu : standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C u = 1) :
     ∃ s : C.Side, C.nextCorner s = C.pair s := by
-  sorry
+  have hrel : Relation.EqvGen C.CornerRel u (C.nextCorner (C.pair u)) :=
+    (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel u hor).1
+  have hcard : Nat.card {v : C.Side // Relation.EqvGen C.CornerRel u v} = 1 := by
+    exact hu
+  have hsub : Subsingleton {v : C.Side // Relation.EqvGen C.CornerRel u v} :=
+    (Nat.card_eq_one_iff_unique.mp hcard).1
+  have heq : C.nextCorner (C.pair u) = u := by
+    exact congrArg Subtype.val
+      (hsub.elim
+        (⟨C.nextCorner (C.pair u), hrel⟩ :
+          {v : C.Side // Relation.EqvGen C.CornerRel u v})
+        (⟨u, Relation.EqvGen.refl u⟩ :
+          {v : C.Side // Relation.EqvGen C.CornerRel u v}))
+  refine ⟨C.pair u, ?_⟩
+  rw [C.pair_pair]
+  exact heq
 -- END SEAT AREA
 
 /-- **Leaf (a corner entered from another vertex).**  On one face, `nextCorner`
