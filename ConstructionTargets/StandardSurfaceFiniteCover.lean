@@ -618,7 +618,67 @@ theorem standardCover_pairingData_aux_lift_aux_dualConnected (C : PolygonComplex
   rw [hsat] at hxpre
   exact hxpre
 
-/-- Leaf: the corner classes of the lifted complex correspond to the `n`
+/-! Split of `_aux_vertexCount` (claude-14, 2026-10-25, after the lemma-3
+PARTIAL).  No fibre count is needed: `i ↦ [⟨i, 0⟩]` is a bijection
+`Fin n → Vertex`.  It is onto because every corner is joined to a corner at
+position `0` (`_aux_step`, `_aux_chain`), and one-to-one because
+`L i (edgePoint (4g) k 0)` is constant on corner classes (`_aux_respect`)
+and lifted disks meeting at one point are the same face
+(`_aux_homeomorph_aux_lift_injective`). -/
+
+/-- Leaf: in the lifted complex every corner `⟨i, k⟩` is joined to a corner
+`⟨i', k + 1⟩` of some face.  In the base `4g`-gon the corner relation gives
+`4j ~ 4j+3 ~ 4j+2 ~ 4j+1 ~ 4j+4` (indices mod `4g`); each step lifts to a
+`CornerRel` step from any face, taking `s = ⟨i, k⟩` or `s = ⟨i, k - 1⟩`
+(every pairing reverses the parameter, by `_aux_baseSign_basePair`). -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step
+    (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (i : Fin n) (k : Fin (4 * g)) :
+    ∃ i' : Fin n, Relation.EqvGen
+      (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
+      ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
+  sorry
+
+/-- Leaf: every corner is joined to a corner at position `0`.  Induction on
+`m` from the step hypothesis gives a face `i'` with `⟨i, k⟩` joined to
+`⟨i', (k + m) % 4g⟩`; take `m = 4g - k`. -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_chain
+    (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (hstep : ∀ (i : Fin n) (k : Fin (4 * g)), ∃ i' : Fin n, Relation.EqvGen
+      (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
+      ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩)
+    (i : Fin n) (k : Fin (4 * g)) :
+    ∃ i' : Fin n, Relation.EqvGen
+      (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
+      ⟨i, k⟩ ⟨i', ⟨0, k.pos⟩⟩ := by
+  sorry
+
+/-- Leaf: the corner `⟨i, k⟩` goes to `L i (edgePoint (4g) k 0)`, and one
+`CornerRel` step preserves it.  The signs always differ, so the step is
+`s ~ nextCorner (pair s)` or `nextCorner s ~ pair s`; both are `hside` at
+`t = 0` or `t = 1`, with `edgePoint m k 1 = edgePoint m ((k + 1) % m) 0`
+(`PolygonBoundaryVertexClasses.edgePoint_one_eq_succ_zero` and periodicity
+of `Complex.exp`). -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_respect
+    (g n : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (L : Fin n → C(Disk, E))
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (hside : ∀ i (k : Fin (4 * g)) t, L i (edgePoint (4 * g) k t) =
+      L (σ i k) (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t)))
+    (a b : (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Side)
+    (h : (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel a b) :
+    L a.1 (edgePoint (4 * g) a.2 ⟨0, by norm_num⟩) =
+      L b.1 (edgePoint (4 * g) b.2 ⟨0, by norm_num⟩) := by
+  sorry
+
+/-- The corner classes of the lifted complex correspond to the `n`
 points over the image of the corners (all corners of the `4g`-gon are one
 point of `Surface true g`).  Corner `⟨i, k⟩` goes to
 `L i (edgePoint (4g) k 0)`; `CornerRel` generates exactly the identifications
@@ -637,7 +697,36 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount
       L (σ i k) (edgePoint (4 * g)
         (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t))) :
     (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).vertexCount = n := by
-  sorry
+  set C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  have h4 : 0 < 4 * g := by omega
+  let φ : C.Side → E := fun a => L a.1 (edgePoint (4 * g) a.2 ⟨0, by norm_num⟩)
+  have hφ : ∀ a b, Relation.EqvGen C.CornerRel a b → φ a = φ b := by
+    intro a b h
+    induction h with
+    | rel a b hab =>
+      exact standardCover_pairingData_aux_lift_aux_vertexCount_aux_respect
+        g n hg E L σ hσ hside a b hab
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let f : Fin n → C.Vertex := fun i =>
+    Quotient.mk (Relation.EqvGen.setoid C.CornerRel) ⟨i, ⟨0, h4⟩⟩
+  have hinj : Function.Injective f := by
+    intro i j hij
+    have h := hφ _ _ (Quotient.exact hij)
+    exact standardCover_pairingData_aux_lift_aux_homeomorph_aux_lift_injective
+      g n E p hp L hL hfib _ i j h
+  have hsurj : Function.Surjective f := by
+    intro v
+    induction v using Quotient.ind with
+    | _ a =>
+      obtain ⟨i, k⟩ := a
+      obtain ⟨i', h⟩ := standardCover_pairingData_aux_lift_aux_vertexCount_aux_chain
+        g n hg σ hσ
+        (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step g n hg σ hσ) i k
+      exact ⟨i', (Quotient.sound h).symm⟩
+  rw [PolygonComplex.vertexCount, ← Nat.card_eq_of_bijective f ⟨hinj, hsurj⟩,
+    Nat.card_eq_fintype_card, Fintype.card_fin]
 
 /-- **Lifted cell structure**, assembled from the `_aux_lift_aux_*` leaves
 above.  Lift the standard `4g`-gon through the
