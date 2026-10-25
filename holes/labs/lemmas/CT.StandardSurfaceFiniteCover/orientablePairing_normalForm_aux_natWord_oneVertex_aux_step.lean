@@ -2669,12 +2669,175 @@ is one `WordCornerRel` step with arcs `i` and `pair i`: their labels agree
 definition match the four cases above.  Word letters are
 `(enc (P.orbit i), P.sign i)` (`_aux_wordOf_get`). -/
 -- BEGIN SEAT AREA
+theorem orientablePairing_normalForm_aux_natWord_oneVertex_aux_step_aux_finRotate
+    {n m : ℕ} (h : n = m) (i : Fin n) (j : Fin m)
+    (hv : (i : ℕ) = j) :
+    (finRotate n i : ℕ) = finRotate m j := by
+  subst m
+  have : i = j := Fin.ext hv
+  subst j
+  rfl
+
+theorem orientablePairing_normalForm_aux_natWord_oneVertex_aux_step_aux_one
+    (n : ℕ) (hn : 0 < n) (i : Fin n) :
+    edgePoint n i PolygonBoundaryVertexClasses.oneIcc =
+      polygonVertex n (finRotate n i) := by
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn)
+  rw [PolygonBoundaryVertexClasses.edgePoint_one_eq_succ_zero]
+  by_cases hi : (i : ℕ) < m
+  · rw [finRotate_of_lt hi]
+    rfl
+  · have hilast : i = Fin.last m := by
+      apply Fin.ext
+      simp
+      omega
+    rw [hilast, finRotate_last]
+    apply Subtype.ext
+    simp only [polygonVertex, edgePoint, PolygonBoundaryVertexClasses.zeroIcc,
+      Nat.cast_add, Nat.cast_one, Fin.val_zero]
+    simp only [Fin.val_last, Nat.cast_succ, Nat.cast_zero, add_zero]
+    push_cast
+    simp only [add_zero, zero_add]
+    have hm : (m : ℝ) + 1 ≠ 0 := by positivity
+    have hfrac : (2 : ℂ) * Real.pi * ((m : ℂ) + 1) / ((m : ℂ) + 1) =
+        2 * Real.pi := by
+      have hmC : (m : ℂ) + 1 ≠ 0 := by exact_mod_cast hm
+      field_simp
+    rw [hfrac]
+    rw [mul_comm]
+    convert Complex.exp_two_pi_mul_I using 1 <;> simp
+
 theorem orientablePairing_normalForm_aux_natWord_oneVertex_aux_step (P : PairingData)
     (a : Fin (orientablePairing_normalForm_aux_natWord P).length) {x y : Disk}
     (h : P.Rel x y)
     (hx : orientablePairing_normalForm_aux_natWord_oneVertex_aux_Reach P a x) :
     orientablePairing_normalForm_aux_natWord_oneVertex_aux_Reach P a y := by
-  sorry
+  rcases h with ⟨i, t, hxi, hyi⟩
+  rcases hx with ⟨c, hxc, hac⟩
+  have hit : edgePoint P.edgeCount i t =
+      polygonVertex P.edgeCount
+        ⟨c, by simpa [orientablePairing_normalForm_aux_natWord] using c.2⟩ := by
+    rw [← hxi, hxc]
+  rcases orientablePairing_normalForm_aux_natWord_oneVertex_aux_endpoint
+      P.edgeCount P.edgeCount_pos i
+      ⟨c, by simpa [orientablePairing_normalForm_aux_natWord] using c.2⟩ t hit with
+    hzero | hone
+  let i' : Fin (orientablePairing_normalForm_aux_natWord P).length :=
+    ⟨i, by simpa [orientablePairing_normalForm_aux_natWord] using i.2⟩
+  let j' : Fin (orientablePairing_normalForm_aux_natWord P).length :=
+    ⟨P.pair i, by simpa [orientablePairing_normalForm_aux_natWord] using (P.pair i).2⟩
+  have hlen : (orientablePairing_normalForm_aux_natWord P).length = P.edgeCount := by
+    simp [orientablePairing_normalForm_aux_natWord]
+  have hij : i' ≠ j' := by
+    intro e
+    apply P.pair_ne i
+    exact Fin.ext (congrArg Fin.val e).symm
+  have hlab :
+      ((orientablePairing_normalForm_aux_natWord P).get i').1 =
+        ((orientablePairing_normalForm_aux_natWord P).get j').1 := by
+    simp [orientablePairing_normalForm_aux_natWord,
+      orientablePairing_normalForm_aux_wordOf, i', j']
+  by_cases hs : P.sign i = P.sign (P.pair i)
+  · refine ⟨j', ?_, Relation.EqvGen.trans a c j' hac
+        (Relation.EqvGen.rel c j' ?_)⟩
+    · rw [hyi]
+      simp [PolygonSurfacePiOne.pairedParameter, hs, hzero.1, polygonVertex, j']
+    · refine ⟨i', j', hij, hlab, ?_⟩
+      have hsign :
+          ((orientablePairing_normalForm_aux_natWord P).get i').2 =
+            ((orientablePairing_normalForm_aux_natWord P).get j').2 := by
+        simpa [orientablePairing_normalForm_aux_natWord,
+          orientablePairing_normalForm_aux_wordOf, i', j'] using hs
+      rw [if_pos hsign]
+      exact Or.inl ⟨Fin.ext (by simpa [i'] using
+        (congrArg Fin.val hzero.2)), rfl⟩
+  · let d : Fin (orientablePairing_normalForm_aux_natWord P).length :=
+      finRotate _ j'
+    refine ⟨d, ?_, Relation.EqvGen.trans a c d hac
+      (Relation.EqvGen.rel c d ?_)⟩
+    · rw [hyi]
+      simp [PolygonSurfacePiOne.pairedParameter, hs, hzero.1,
+        PolygonSurfacePiOne.reverseIcc, polygonVertex]
+      change edgePoint P.edgeCount (P.pair i)
+        PolygonBoundaryVertexClasses.oneIcc = _
+      have hedge := orientablePairing_normalForm_aux_natWord_oneVertex_aux_step_aux_one
+        P.edgeCount P.edgeCount_pos (P.pair i)
+      rw [hedge]
+      unfold polygonVertex
+      exact congrArg (fun k : ℕ => edgePoint P.edgeCount k ⟨0, by simp⟩)
+        (orientablePairing_normalForm_aux_natWord_oneVertex_aux_step_aux_finRotate
+          hlen.symm (P.pair i) j' rfl)
+    · refine ⟨i', j', hij, hlab, ?_⟩
+      have hsign :
+          ((orientablePairing_normalForm_aux_natWord P).get i').2 ≠
+            ((orientablePairing_normalForm_aux_natWord P).get j').2 := by
+        simpa [orientablePairing_normalForm_aux_natWord,
+          orientablePairing_normalForm_aux_wordOf, i', j'] using hs
+      rw [if_neg hsign]
+      exact Or.inl ⟨Fin.ext (by simpa [i'] using
+        (congrArg Fin.val hzero.2)), rfl⟩
+  let i' : Fin (orientablePairing_normalForm_aux_natWord P).length :=
+    ⟨i, by simpa [orientablePairing_normalForm_aux_natWord] using i.2⟩
+  let j' : Fin (orientablePairing_normalForm_aux_natWord P).length :=
+    ⟨P.pair i, by simpa [orientablePairing_normalForm_aux_natWord] using (P.pair i).2⟩
+  have hlen : (orientablePairing_normalForm_aux_natWord P).length = P.edgeCount := by
+    simp [orientablePairing_normalForm_aux_natWord]
+  have hij : i' ≠ j' := by
+    intro e
+    apply P.pair_ne i
+    exact Fin.ext (congrArg Fin.val e).symm
+  have hlab :
+      ((orientablePairing_normalForm_aux_natWord P).get i').1 =
+        ((orientablePairing_normalForm_aux_natWord P).get j').1 := by
+    simp [orientablePairing_normalForm_aux_natWord,
+      orientablePairing_normalForm_aux_wordOf, i', j']
+  by_cases hs : P.sign i = P.sign (P.pair i)
+  · let d : Fin (orientablePairing_normalForm_aux_natWord P).length :=
+      finRotate _ j'
+    refine ⟨d, ?_, Relation.EqvGen.trans a c d hac
+      (Relation.EqvGen.rel c d ?_)⟩
+    · rw [hyi]
+      simp [PolygonSurfacePiOne.pairedParameter, hs, hone.1, polygonVertex]
+      change edgePoint P.edgeCount (P.pair i)
+        PolygonBoundaryVertexClasses.oneIcc = _
+      have hedge := orientablePairing_normalForm_aux_natWord_oneVertex_aux_step_aux_one
+        P.edgeCount P.edgeCount_pos (P.pair i)
+      rw [hedge]
+      unfold polygonVertex
+      exact congrArg (fun k : ℕ => edgePoint P.edgeCount k ⟨0, by simp⟩)
+        (orientablePairing_normalForm_aux_natWord_oneVertex_aux_step_aux_finRotate
+          hlen.symm (P.pair i) j' rfl)
+    · refine ⟨i', j', hij, hlab, ?_⟩
+      have hsign :
+          ((orientablePairing_normalForm_aux_natWord P).get i').2 =
+            ((orientablePairing_normalForm_aux_natWord P).get j').2 := by
+        simpa [orientablePairing_normalForm_aux_natWord,
+          orientablePairing_normalForm_aux_wordOf, i', j'] using hs
+      rw [if_pos hsign]
+      exact Or.inr ⟨Fin.ext (by simpa [i', orientablePairing_normalForm_aux_natWord,
+        orientablePairing_normalForm_aux_wordOf] using (show (c : Nat) =
+          (finRotate _ i' : Nat) by
+            rw [congrArg Fin.val hone.2]
+            exact orientablePairing_normalForm_aux_natWord_oneVertex_aux_step_aux_finRotate
+              hlen.symm i i' rfl)), rfl⟩
+  · refine ⟨j', ?_, Relation.EqvGen.trans a c j' hac
+        (Relation.EqvGen.rel c j' ?_)⟩
+    · rw [hyi]
+      simp [PolygonSurfacePiOne.pairedParameter, hs, hone.1,
+        PolygonSurfacePiOne.reverseIcc, polygonVertex, j']
+    · refine ⟨i', j', hij, hlab, ?_⟩
+      have hsign :
+          ((orientablePairing_normalForm_aux_natWord P).get i').2 ≠
+            ((orientablePairing_normalForm_aux_natWord P).get j').2 := by
+        simpa [orientablePairing_normalForm_aux_natWord,
+          orientablePairing_normalForm_aux_wordOf, i', j'] using hs
+      rw [if_neg hsign]
+      exact Or.inr ⟨Fin.ext (by simpa [i', orientablePairing_normalForm_aux_natWord,
+        orientablePairing_normalForm_aux_wordOf] using (show (c : Nat) =
+          (finRotate _ i' : Nat) by
+            rw [congrArg Fin.val hone.2]
+            exact orientablePairing_normalForm_aux_natWord_oneVertex_aux_step_aux_finRotate
+              hlen.symm i i' rfl)), rfl⟩
 -- END SEAT AREA
 
 theorem orientablePairing_normalForm_aux_natWord_oneVertex_aux_lift
