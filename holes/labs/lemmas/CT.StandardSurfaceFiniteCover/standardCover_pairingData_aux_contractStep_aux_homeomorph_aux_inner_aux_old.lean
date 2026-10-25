@@ -5467,7 +5467,74 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_
         (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).take s.2.val ++
           [x, PolygonMoves.inv x] ++
           (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).drop (s.2.val + 2) := by
-  sorry
+  let lab : C.Side → ℕ := fun u => min u.2.val (C.pair u).2.val
+  let w := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab
+  let i : Fin C.totalSides := ⟨s.2.val, by
+    rw [← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total
+      C h1 s.1]
+    exact s.2.isLt⟩
+  let j : Fin C.totalSides := ⟨s.2.val + 1, hk⟩
+  have hside_i :
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i = s := by
+    apply Sigma.ext
+    · exact standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _
+    · exact (Fin.heq_ext_iff (congrArg C.sides
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _))).mpr rfl
+  have hside_j :
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 j = C.pair s := by
+    rw [← hadj]
+    apply Sigma.ext
+    · exact standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _
+    · apply (Fin.heq_ext_iff (congrArg C.sides
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _))).mpr
+      change s.2.val + 1 = (s.2.val + 1) % C.sides s.1
+      have hlt : s.2.val + 1 < C.sides s.1 := lt_of_lt_of_eq hk
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total
+          C h1 s.1).symm
+      rw [Nat.mod_eq_of_lt hlt]
+  let x : PolygonMoves.Signed ℕ := (lab s, C.sign s)
+  refine ⟨x, ?_⟩
+  have hwlen : w.length = C.totalSides := by
+    simp only [w, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word,
+      List.length_ofFn]
+  have hi : s.2.val < w.length := by
+    rw [hwlen, ← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total
+      C h1 s.1]
+    exact s.2.isLt
+  have hj : s.2.val + 1 < w.length := by rw [hwlen]; exact hk
+  have hwi : w[s.2.val]'hi = x := by
+    simpa only [w, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word,
+      List.getElem_ofFn, x] using
+      congrArg (fun u => (lab u, C.sign u)) hside_i
+  have hwj : w[s.2.val + 1]'hj = PolygonMoves.inv x := by
+    have hsign : C.sign (C.pair s) = !C.sign s := by
+      cases hs : C.sign s <;> cases hp : C.sign (C.pair s) <;>
+        simp_all only [Bool.not_false, Bool.not_true, Bool.false_eq_true,
+          Bool.true_eq_false, not_false_eq_true]
+      · exact False.elim (hor s (hp.trans hs.symm))
+      · exact False.elim (hor s (hp.trans hs.symm))
+    have hlab : lab (C.pair s) = lab s := by
+      simp only [lab]
+      rw [C.pair_pair]
+      exact min_comm _ _
+    have hp := congrArg (fun u => (lab u, C.sign u)) hside_j
+    dsimp only at hp
+    rw [hlab, hsign] at hp
+    simpa only [w, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word,
+      List.getElem_ofFn, x, PolygonMoves.inv] using hp
+  change w = w.take s.2.val ++ [x, PolygonMoves.inv x] ++ w.drop (s.2.val + 2)
+  calc
+    w = w.take (s.2.val + 2) ++ w.drop (s.2.val + 2) :=
+      (List.take_append_drop (s.2.val + 2) w).symm
+    _ = (w.take (s.2.val + 1)).concat w[s.2.val + 1] ++
+        w.drop (s.2.val + 2) := by
+      rw [List.take_concat_get hj]
+    _ = ((w.take s.2.val).concat w[s.2.val]).concat w[s.2.val + 1] ++
+        w.drop (s.2.val + 2) := by rw [List.take_concat_get hi]
+    _ = w.take s.2.val ++ [x, PolygonMoves.inv x] ++ w.drop (s.2.val + 2) := by
+      rw [hwi, hwj]
+      simp only [List.concat_eq_append, List.append_assoc]
+      rfl
 -- END SEAT AREA
 
 /-- **Leaf (new word).**  `D.toOld` is the increasing enumeration of the
