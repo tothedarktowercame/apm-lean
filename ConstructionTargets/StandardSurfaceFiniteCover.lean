@@ -3992,6 +3992,33 @@ theorem orientablePairing_normalForm_aux_normalize_aux_uniqueMate
 Otherwise the arcs strictly between `i` and `j` pair among themselves, and,
 since the signs of `i` and `j` differ, the corners `i+1, …, j` are closed under
 `WordCornerRel` and miss corner `i`. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_interlock_aux_rotate
+    {N : ℕ} [NeZero N] (i j p : Fin N) :
+    (i < finRotate N p ∧ finRotate N p ≤ j) ↔ (i ≤ p ∧ p < j) := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne N)
+  cases n with
+  | zero =>
+    have hi : i = 0 := Subsingleton.elim _ _
+    have hj : j = 0 := Subsingleton.elim _ _
+    have hp : p = 0 := Subsingleton.elim _ _
+    constructor
+    · intro h
+      have hf : False := by simpa [hi, hp] using h.1
+      exact hf.elim
+    · intro h
+      have hf : False := by simpa [hp, hj] using h.2
+      exact hf.elim
+  | succ n =>
+    rw [finRotate_succ_apply]
+    change (i.1 < (p.1 + 1) % (n + 2) ∧ (p.1 + 1) % (n + 2) ≤ j.1) ↔
+      (i.1 ≤ p.1 ∧ p.1 < j.1)
+    by_cases hp : p.1 + 1 < n + 2
+    · rw [Nat.mod_eq_of_lt hp]
+      omega
+    · have hlast : p.1 + 1 = n + 2 := by omega
+      rw [hlast, Nat.mod_self]
+      omega
+
 theorem orientablePairing_normalForm_aux_normalize_aux_interlock
     (w : List (PolygonMoves.Signed ℕ)) (hw : PolygonMoves.IsPolygonWord w)
     (hor : orientablePairing_normalForm_aux_WordOrientable w)
@@ -3999,7 +4026,98 @@ theorem orientablePairing_normalForm_aux_normalize_aux_interlock
     (i j : Fin w.length) (hij : i < j) (hlab : (w.get i).1 = (w.get j).1) :
     ∃ k l : Fin w.length, i < k ∧ k < j ∧ (j < l ∨ l < i) ∧
       (w.get k).1 = (w.get l).1 := by
-  sorry
+  classical
+  by_contra hcross
+  push_neg at hcross
+  let A : Fin w.length → Prop := fun p => i ≤ p ∧ p < j
+  let C : Fin w.length → Prop := fun p => i < p ∧ p ≤ j
+  have hmate : ∀ p q : Fin w.length, p ≠ q →
+      (w.get p).1 = (w.get q).1 → (C p ↔ A q) := by
+    intro p q hpq hpql
+    have hui := orientablePairing_normalForm_aux_normalize_aux_uniqueMate w hw hor i
+    have hjpred : j ≠ i ∧ (w.get j).1 = (w.get i).1 ∧
+        (w.get j).2 ≠ (w.get i).2 :=
+      ⟨ne_of_gt hij, hlab.symm, hor j i (ne_of_gt hij) hlab.symm⟩
+    have hqi : q = i ↔ p = j := by
+      constructor
+      · intro h; subst q
+        exact hui.unique ⟨hpq, hpql, hor p i hpq hpql⟩ hjpred
+      · intro h; subst p
+        have huj := orientablePairing_normalForm_aux_normalize_aux_uniqueMate w hw hor j
+        exact huj.unique ⟨hpq.symm, hpql.symm, hor q j hpq.symm hpql.symm⟩
+          ⟨ne_of_lt hij, hlab, hor i j (ne_of_lt hij) hlab⟩
+    have hqj : q = j ↔ p = i := by
+      constructor
+      · intro h; subst q
+        have huj := orientablePairing_normalForm_aux_normalize_aux_uniqueMate w hw hor j
+        exact huj.unique ⟨hpq, hpql, hor p j hpq hpql⟩
+          ⟨ne_of_lt hij, hlab, hor i j (ne_of_lt hij) hlab⟩
+      · intro h; subst p
+        exact hui.unique ⟨hpq.symm, hpql.symm,
+          hor q i hpq.symm hpql.symm⟩ hjpred
+    constructor <;> intro hp
+    · by_cases hpi : p = j
+      · subst p
+        have hq : q = i := hqi.mpr rfl
+        subst q
+        exact ⟨le_rfl, hij⟩
+      have hip : i < p := hp.1
+      have hpj : p < j := lt_of_le_of_ne hp.2 hpi
+      have hnout : ¬ (j < q ∨ q < i) := fun hout => (hcross p q hip hpj hout) hpql
+      have hqi' : q ≠ i := by intro h; exact hpi (hqi.mp h)
+      have hqj' : q ≠ j := by intro h; exact (ne_of_gt hip) (hqj.mp h)
+      have hqle : i ≤ q := by
+        by_contra h; have := lt_of_not_ge h
+        exact hnout (Or.inr this)
+      have hqlt : q < j := by
+        by_contra h
+        have hjq : j ≤ q := le_of_not_gt h
+        exact hnout (Or.inl (lt_of_le_of_ne hjq (Ne.symm hqj')))
+      exact ⟨hqle, hqlt⟩
+    · let hq := hp
+      by_cases hqi0 : q = i
+      · exact ⟨by simpa [hqi.mp hqi0] using hij, by simp [hqi.mp hqi0]⟩
+      have hiq : i < q := lt_of_le_of_ne hq.1 (Ne.symm hqi0)
+      have hqj' : q < j := hq.2
+      have hnout : ¬ (j < p ∨ p < i) := fun hout => (hcross q p hiq hqj' hout) hpql.symm
+      have hpi' : p ≠ i := by intro h; exact (ne_of_gt hqj') (hqj.mpr h).symm
+      have hpj' : p ≠ j := by intro h; exact hqi0 (hqi.mpr h)
+      have hple : p ≤ j := by
+        by_contra h; exact hnout (Or.inl (lt_of_not_ge h))
+      have hpil : i < p := by
+        by_contra h
+        have hpi_le := le_of_not_gt h
+        have hlt : p < i := lt_of_le_of_ne hpi_le hpi'
+        exact hnout (Or.inr hlt)
+      exact ⟨hpil, hple⟩
+  have hrot : ∀ p : Fin w.length, C (finRotate _ p) ↔ A p := by
+    intro p
+    have hn : 0 < w.length := Nat.zero_lt_of_lt p.2
+    letI : NeZero w.length := ⟨hn.ne'⟩
+    exact orientablePairing_normalForm_aux_normalize_aux_interlock_aux_rotate i j p
+  have hstep : ∀ a b : Fin w.length,
+      orientablePairing_normalForm_aux_WordCornerRel w a b → (C a ↔ C b) := by
+    intro a b hab
+    rcases hab with ⟨p, q, hpq, hpql, hab⟩
+    rw [if_neg (hor p q hpq hpql)] at hab
+    rcases hab with (⟨ha, hb⟩ | ⟨ha, hb⟩)
+    · rw [ha, hb]
+      exact (hmate p q hpq hpql).trans (hrot q).symm
+    · rw [ha, hb]
+      exact (hrot p).trans (hmate q p hpq.symm hpql.symm).symm
+  have hinv : ∀ a b : Fin w.length,
+      Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w) a b →
+        (C a ↔ C b) := by
+    intro a b hab
+    induction hab with
+    | rel a b h => exact hstep a b h
+    | refl a => exact Iff.rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have hc := hinv i j (hv i j)
+  have hCi : ¬ C i := by simp [C]
+  have hCj : C j := by simp [C, hij]
+  exact hCi (hc.mpr hCj)
 
 /-- **Leaf.**  Every `Step` keeps the word a polygon word: rotation and
 relabelling (by an equivalence) permute the label counts, and `cutPaste`
