@@ -880,7 +880,101 @@ theorem standardCover_pairingData_aux_glueStep_aux_dualConnected
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (hconn : C.DualConnected) : C'.DualConnected := by
-  sorry
+  have hold_surj : ∀ x : Fin C.faceCount, x ≠ (C.pair s).1 →
+      ∃ k : Fin C'.faceCount, D.old k = x := by
+    intro x hx
+    by_contra hnot
+    let F : Fin C'.faceCount ⊕ Fin 2 → Fin C.faceCount
+      | Sum.inl k => D.old k
+      | Sum.inr j => if j = 0 then (C.pair s).1 else x
+    have hF : Function.Injective F := by
+      intro a b hab
+      cases a with
+      | inl a =>
+          cases b with
+          | inl b => exact congrArg Sum.inl (D.old_injective hab)
+          | inr b =>
+              exfalso
+              simp only [F] at hab
+              split at hab
+              · exact D.old_ne a hab
+              · exact hnot ⟨a, hab⟩
+      | inr a =>
+          cases b with
+          | inl b =>
+              exfalso
+              simp only [F] at hab
+              split at hab
+              · exact D.old_ne b hab.symm
+              · exact hnot ⟨b, hab.symm⟩
+          | inr b =>
+              apply congrArg Sum.inr
+              fin_cases a
+              · fin_cases b
+                · rfl
+                · exfalso
+                  exact hx (by simpa [F] using hab.symm)
+              · fin_cases b
+                · exfalso
+                  exact hx (by simpa [F] using hab)
+                · rfl
+    have hc := Fintype.card_le_of_injective F hF
+    simp only [Fintype.card_sum, Fintype.card_fin] at hc
+    have hcount := D.faceCount_succ
+    omega
+  let liftFace (x : Fin C.faceCount) : Fin C'.faceCount :=
+    if hx : x = (C.pair s).1 then D.merged
+    else Classical.choose (hold_surj x hx)
+  have liftFace_pair : liftFace (C.pair s).1 = D.merged := by
+    simp [liftFace]
+  have liftFace_old (k : Fin C'.faceCount) : liftFace (D.old k) = k := by
+    simp only [liftFace, D.old_ne k, ↓reduceDIte]
+    exact D.old_injective (Classical.choose_spec (hold_surj (D.old k) (D.old_ne k)))
+  have liftFace_s : liftFace s.1 = D.merged := by
+    rw [← D.old_merged, liftFace_old]
+  have liftFace_toOld (t : C'.Side) : liftFace (D.toOld t).1 = t.1 := by
+    by_cases ht : t.1 = D.merged
+    · obtain ⟨tf, m⟩ := t
+      dsimp only at ht ⊢
+      subst tf
+      rw [D.toOld_merged_fst]
+      split_ifs <;> simp only [liftFace_s, liftFace_pair]
+    · rw [D.toOld_fst t ht, liftFace_old]
+  have map_edge : ∀ {a b : Fin C.faceCount},
+      (∃ u : C.Side, u.1 = a ∧ (C.pair u).1 = b) →
+      Relation.EqvGen (fun a b => ∃ t : C'.Side,
+        t.1 = a ∧ (C'.pair t).1 = b) (liftFace a) (liftFace b) := by
+    rintro a b ⟨u, rfl, rfl⟩
+    by_cases hu : u = s
+    · subst hu
+      rw [liftFace_s, liftFace_pair]
+      exact Relation.EqvGen.refl _
+    by_cases hup : u = C.pair s
+    · subst hup
+      rw [C.pair_pair, liftFace_pair, liftFace_s]
+      exact Relation.EqvGen.refl _
+    obtain ⟨t, ht⟩ := D.toOld_surj u hu hup
+    apply Relation.EqvGen.rel
+    refine ⟨t, ?_, ?_⟩
+    · rw [← ht, liftFace_toOld]
+    · calc
+        (C'.pair t).1 = liftFace (D.toOld (C'.pair t)).1 :=
+          (liftFace_toOld (C'.pair t)).symm
+        _ = liftFace (C.pair u).1 := by rw [D.pair_toOld, ht]
+  intro f g
+  have map_path : ∀ {a b : Fin C.faceCount},
+      Relation.EqvGen (fun a b => ∃ u : C.Side,
+        u.1 = a ∧ (C.pair u).1 = b) a b →
+      Relation.EqvGen (fun a b => ∃ t : C'.Side,
+        t.1 = a ∧ (C'.pair t).1 = b) (liftFace a) (liftFace b) := by
+    intro a b path
+    induction path with
+    | rel a b h => exact map_edge h
+    | refl a => exact Relation.EqvGen.refl _
+    | symm a b _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  have mapped := map_path (hconn (D.old f) (D.old g))
+  simpa only [liftFace_old] using mapped
 -- END SEAT AREA
 
 /-- **Leaf (corners).**  `toOld` induces a bijection of corner classes.  The
