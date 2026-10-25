@@ -11214,7 +11214,89 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  let V := α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁
+  let q := α₁.length + 1 + α₂.length
+  have hlen : V.length = W.length := by simp [V, W]; omega
+  have hWlen : W.length = α₁.length + 1 + α₂.length + β₁.length + 1 + β₂.length := by
+    simp [W]
+    omega
+  have hL : 2 ≤ W.length := by simp [W]; omega
+  have heW : e < W.length := by rw [← hlen]; exact he
+  have hq : q < W.length := by simp [q, W]; omega
+  have hs' : s₀ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hs
+  subst s₀
+  have hedges : edgePoint W.length e τ =
+      edgePoint W.length q (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+    apply Subtype.ext
+    calc
+      (edgePoint W.length e τ : ℂ) = (edgePoint V.length e τ : ℂ) := by rw [hlen]
+      _ = cutChordB W.length 0 q 1 := hN
+      _ = (edgePoint W.length q
+          (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) := by
+            simp [cutChordB]
+            exact (edgePoint_zero_eq_cutPoint _ _).symm
+  dsimp [q, W, V] at *
+  rcases PolygonMoves.cutEdgePoint_eq hL heW hq hedges with hsame | hnext | hprev
+  · rcases hsame with ⟨rfl, hτ⟩
+    subst τ
+    by_cases hm₂ : β₂.length = 0
+    · refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+        if_neg (by omega), if_pos (by omega), hP,
+        show ∀ L k : ℕ, (edgePoint L k 1 : ℂ) = cutPoint L (k + 1) from
+          fun L k => edgePoint_one_eq_cutPoint L k]
+      have hidx : α₁.length + 1 + α₂.length + β₁.length + 1 =
+          0 + (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by omega
+      rw [hidx, cutPoint_add_length (by omega)]
+      simp [cutChordB]
+    · refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+        if_neg (by omega), if_neg (by omega), if_neg (by omega),
+        if_neg (by omega), if_pos (by omega), hP,
+        show ∀ L k : ℕ, (edgePoint L k 1 : ℂ) = cutPoint L (k + 1) from
+          fun L k => edgePoint_one_eq_cutPoint L k,
+        show ∀ L k : ℕ, (edgePoint L k 0 : ℂ) = cutPoint L k from
+          fun L k => edgePoint_zero_eq_cutPoint L k]
+  · rcases hnext with ⟨hτ, -, hadj⟩
+    have hτ' : τ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hτ
+    subst τ
+    have heq : e + 1 = q := by
+      have hlt : e + 1 < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by
+        by_contra hn
+        have heL : e + 1 = (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by omega
+        rw [heL, Nat.mod_self] at hadj
+        omega
+      rw [Nat.mod_eq_of_lt hlt] at hadj
+      exact hadj.symm
+    let T : Disk := edgePoint W.length α₁.length
+      (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+    refine ⟨T, ?_, ?_⟩
+    · dsimp [T]
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer]
+      dsimp [q] at heq
+      by_cases hn₁ : α₁.length = 0
+      · rw [if_pos (by omega)]
+        simpa [cutChordA, hn₁, W] using
+          (edgePoint_zero_eq_cutPoint W.length α₁.length)
+      · rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_pos (by omega),
+          show ∀ L k : ℕ, (edgePoint L k 1 : ℂ) = cutPoint L (k + 1) from
+            fun L k => edgePoint_one_eq_cutPoint L k,
+          show ∀ L k : ℕ, (edgePoint L k 0 : ℂ) = cutPoint L k from
+            fun L k => edgePoint_zero_eq_cutPoint L k]
+        congr 1
+        omega
+    · have hP' : P = edgePoint W.length (q + β₁.length)
+            (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+          apply Subtype.ext
+          simpa [W, q] using hP
+      rw [hP']
+      simpa [T, W, q, reverseParameter] using
+        (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordA_aux_y
+          α₁ α₂ β₁ β₂ y
+          (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)).symm
+  · rcases hprev with ⟨hzero, -⟩
+    norm_num at hzero
 
 open PolygonMoves in
 /-- **Leaf (reverse, piece `B`, arc, old `y⁻¹` seam).**  The piece point is on the
