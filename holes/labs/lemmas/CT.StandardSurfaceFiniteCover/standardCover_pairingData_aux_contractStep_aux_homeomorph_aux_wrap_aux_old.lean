@@ -5657,7 +5657,81 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_wrap_aux_o
       standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val) =
         (PolygonMoves.inv x ::
           (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).tail.dropLast) ++ [x] := by
-  sorry
+  let lab : C.Side → ℕ := fun u => min u.2.val (C.pair u).2.val
+  let w := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab
+  let x : PolygonMoves.Signed ℕ := (lab s, C.sign s)
+  have hsLast : s.2.val + 1 = C.totalSides :=
+    standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_wrap_aux_last h1 hk
+  have htotal : 0 < C.totalSides := by omega
+  have hpair0 : (C.pair s).2.val = 0 := by
+    have hp := congrArg (fun u : C.Side => u.2.val) hadj.symm
+    simp only [PolygonComplex.nextCorner] at hp
+    have heq : s.2.val + 1 = C.sides s.1 := hsLast.trans
+      (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1 s.1).symm
+    rw [heq, Nat.mod_self] at hp
+    simpa using hp
+  have hs_ne_pair : s ≠ C.pair s := (C.pair_ne s).symm
+  have htwo : 2 ≤ C.totalSides := by
+    by_contra hn
+    have hs0 : s.2.val = 0 := by omega
+    apply hs_ne_pair
+    let hf := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1
+      s.1 (C.pair s).1
+    refine Sigma.ext hf ((Fin.heq_ext_iff (congrArg C.sides hf)).2 ?_)
+    simpa [hs0, hpair0]
+  have hwne : w ≠ [] := by
+    simp [w, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word, htotal.ne']
+  have htailne : w.tail ≠ [] := by
+    have hlen : w.length = C.totalSides := by
+      simp [w, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word]
+    intro he
+    have := congrArg List.length he
+    simp [hlen] at this
+    omega
+  have hhead : w.head hwne = PolygonMoves.inv x := by
+    have hside0 :
+        standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1
+          ⟨0, htotal⟩ = C.pair s := by
+      let hf := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1
+          ⟨0, htotal⟩).1 (C.pair s).1
+      refine Sigma.ext hf ((Fin.heq_ext_iff (congrArg C.sides hf)).2 ?_)
+      exact hpair0.symm
+    change (List.ofFn fun i : Fin C.totalSides =>
+      (lab (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i),
+        C.sign (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i))).head _ = _
+    rw [List.head_ofFn]
+    rw [hside0]
+    apply Prod.ext
+    · dsimp [x, lab]
+      rw [C.pair_pair]
+      exact Nat.min_comm _ _
+    · dsimp [x, PolygonMoves.inv]
+      have hh := hor s
+      cases hs : C.sign s <;> cases hp : C.sign (C.pair s) <;> simp_all
+  have hlast : w.getLast hwne = x := by
+    have hsideLast :
+        standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1
+          ⟨C.totalSides - 1, by omega⟩ = s := by
+      let hf := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1
+          ⟨C.totalSides - 1, by omega⟩).1 s.1
+      refine Sigma.ext hf ((Fin.heq_ext_iff (congrArg C.sides hf)).2 ?_)
+      simp [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side]
+      omega
+    change (List.ofFn fun i : Fin C.totalSides =>
+      (lab (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i),
+        C.sign (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i))).getLast _ = x
+    rw [List.getLast_eq_getElem]
+    simp only [List.length_ofFn, List.getElem_ofFn]
+    rw [hsideLast]
+  have htailLast : w.tail.getLast htailne = x := by
+    rw [List.getLast_tail]
+    exact hlast
+  refine ⟨x, ?_⟩
+  change w = (PolygonMoves.inv x :: w.tail.dropLast) ++ [x]
+  rw [← hhead, List.cons_append, ← htailLast, List.dropLast_append_getLast htailne]
+  exact (List.cons_head_tail hwne).symm
 -- END SEAT AREA
 
 /-- **Leaf (new word, wrap).**  `D.toOld` is the increasing enumeration of
