@@ -89,3 +89,20 @@ change. `pair b = a` is excluded by `hab` (otherwise `pair b` would be in the
 triangle and `mergeExists` would not apply); `b → b` loops (`R = Q`) are
 covered, since then both `pair b` and `c` are at `Q`. `_aux_cut` needs
 `3 ≤ totalSides` so the second face has two sides.
+
+Split of `_aux_cut` (2026-10-25, after the lemma-1 PARTIAL, which banked
+`_aux_cut_aux_face_eq` and `_aux_cut_aux_sides_eq`). `D` is the def
+`_aux_cut_aux_complex C n hn E`: faces `![3, n - 1]`, its pairing is
+`C.pair ⊕ swap 0 1` transported along a side matching
+`E : D.Side ≃ C.Side ⊕ Fin 2`, and its signs are those of `C`, plus `true`/`false` on the
+two chord sides. The assembly proves `D.IsOrientable`, `2 ≤ D.sides f` and
+`D.sides c.1 = 3` itself. Leaves:
+`_aux_cut_aux_equiv` (Fin bookkeeping, ~60 lines: an `E` meeting `_aux_cut_aux_spec`,
+which sends side `j` of `C` to triangle side `j` for `j < 2`, else to side
+`j - 1` of the other face, and the chords to triangle side `2` and side `0`
+of the other face) and `_aux_cut_aux_glue` (~100 lines: the `GlueData` with
+`c = E.symm (inr 0)`, `old` constant, `toOld = E.symm ∘ inl`; the merged-side
+fields reduce to `(3 + m) % 3 = m` for `m < 2` and `(m - 1) % (n - 1) = m - 1`).
+Checks: C1, the counts match (`3 + (n - 1) = n + 2`) and the spec is injective
+(the images are distinct); C8, at `n = 3` the second face is a 2-gon
+`[pair c, side 2]`; C9, neither leaf restates `_aux_cut` or `_aux_isolate`.

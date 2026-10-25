@@ -6728,6 +6728,94 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_transport
         standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C x := by
   sorry
 
+/-! Split of `_aux_cut` (claude-14, 2026-10-25, after the lemma-1 PARTIAL that
+banked `_aux_cut_aux_face_eq` and `_aux_cut_aux_sides_eq`).  The cut `D` is built
+from a side matching `E` between `D` and `C` plus two chord sides
+(`_aux_cut_aux_complex`); the matching is `_aux_cut_aux_equiv` and the glue data
+is `_aux_cut_aux_glue`. -/
+
+lemma standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (f : Fin C.faceCount) :
+    f = ⟨0, by omega⟩ := by
+  apply Fin.ext
+  omega
+
+lemma standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_sides_eq
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (f : Fin C.faceCount) :
+    C.sides f = C.totalSides := by
+  classical
+  unfold PolygonComplex.totalSides
+  rw [Finset.sum_eq_single f]
+  · intro g _ hgf
+    exact False.elim (hgf (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq
+      C h1 g |>.trans
+        (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq C h1 f).symm))
+  · simp
+
+/-- The cut complex: a triangle (face `0`) and an `(n - 1)`-gon (face `1`), whose
+sides are matched by `E` with the sides of `C` and two chord sides `inr 0`
+(side `2` of the triangle) and `inr 1` (side `0` of the other face). -/
+def standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_complex
+    (C : PolygonComplex) (n : ℕ) (hn : 3 ≤ n)
+    (E : (Σ f : Fin 2, Fin (![3, n - 1] f)) ≃ C.Side ⊕ Fin 2) : PolygonComplex where
+  faceCount := 2
+  sides := ![3, n - 1]
+  sides_pos := by intro f; fin_cases f <;> simp <;> omega
+  pair := (E.trans (Equiv.sumCongr C.pair (Equiv.swap 0 1))).trans E.symm
+  pair_pair := by
+    intro s
+    simp only [Equiv.trans_apply, Equiv.apply_symm_apply, Equiv.symm_apply_eq]
+    rcases E s with u | ⟨_ | _ | _, hi⟩
+    · simp [C.pair_pair]
+    · rfl
+    · rfl
+    · omega
+  pair_ne := by
+    intro s h
+    simp only [Equiv.trans_apply, Equiv.symm_apply_eq] at h
+    rcases hs : E s with u | ⟨_ | _ | _, hi⟩ <;> rw [hs] at h
+    · exact C.pair_ne u (Sum.inl_injective h)
+    · simp at h
+    · simp at h
+    · omega
+  sign := fun s => Sum.elim C.sign (fun i => decide (i = 0)) (E s)
+
+/-- The side matching the cut needs: sides `0, 1` of `C` are sides `0, 1` of
+the triangle, side `j ≥ 2` of `C` is side `j - 1` of the other face, and the chord
+sides are side `2` of the triangle and side `0` of the other face. -/
+def standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_spec
+    (C : PolygonComplex) (n : ℕ)
+    (E : (Σ f : Fin 2, Fin (![3, n - 1] f)) ≃ C.Side ⊕ Fin 2) : Prop :=
+  (∀ u : C.Side,
+      (E.symm (Sum.inl u)).1 = (if u.2.val < 2 then 0 else 1) ∧
+        (E.symm (Sum.inl u)).2.val = if u.2.val < 2 then u.2.val else u.2.val - 1) ∧
+    ((E.symm (Sum.inr 0)).1 = 0 ∧ (E.symm (Sum.inr 0)).2.val = 2) ∧
+    (E.symm (Sum.inr 1)).1 = 1 ∧ (E.symm (Sum.inr 1)).2.val = 0
+
+/-- **Leaf (the side matching).**  `n + 2` sides on each side; send side `j` of
+`C` to side `j` of the triangle for `j < 2` and to side `j - 1` of the other
+face otherwise, and the two chord sides as stated.  Uses `_aux_cut_aux_sides_eq`
+for `C.sides f = n`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (n : ℕ) (hn : C.totalSides = n)
+    (h3 : 3 ≤ n) :
+    ∃ E : (Σ f : Fin 2, Fin (![3, n - 1] f)) ≃ C.Side ⊕ Fin 2,
+      standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_spec C n E := by
+  sorry
+
+/-- **Leaf (the cut glues back to `C`).**  With `c = E.symm (inr 0)` and
+`D.pair c = E.symm (inr 1)`: `merged` is the one face of `C`, `old` is constant
+`0`, `toOld = E.symm ∘ inl`; the `toOld_merged_*` fields are the spec, using
+`(2 + 1 + m) % 3 = m` for `m < 2` and `(m - 1) % (n - 1) = m - 1` for
+`2 ≤ m < n`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_glue
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (n : ℕ) (hn : C.totalSides = n)
+    (h3 : 3 ≤ n) (E : (Σ f : Fin 2, Fin (![3, n - 1] f)) ≃ C.Side ⊕ Fin 2)
+    (hE : standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_spec C n E) :
+    Nonempty (standardCover_pairingData_aux_glueStep_aux_GlueData
+      (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_complex C n h3 E) C (E.symm (Sum.inr 0))) := by
+  sorry
+
 /-- **Leaf (the cut).**  A one-face complex with at least three sides is the
 glue, along a chord `c`, of a triangle and a polygon: `D` has two faces, face
 `c.1` is the triangle with sides `0, 1` of `C` as its sides `0, 1` and `c` as
@@ -6739,7 +6827,21 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut
     ∃ D : PolygonComplex, ∃ c : D.Side,
       ∃ _G : standardCover_pairingData_aux_glueStep_aux_GlueData D C c,
         D.sides c.1 = 3 ∧ c.2.val = 2 ∧ D.IsOrientable ∧ ∀ f, 2 ≤ D.sides f := by
-  sorry
+  obtain ⟨E, hE⟩ := standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv C h1 _ rfl h3
+  obtain ⟨G⟩ := standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_glue C h1 _ rfl h3 E hE
+  refine ⟨_, _, G, ?_, hE.2.1.2, ?_, ?_⟩
+  · show ![3, C.totalSides - 1] (E.symm (Sum.inr 0)).1 = 3
+    rw [hE.2.1.1]; rfl
+  · intro s
+    show Sum.elim _ _ (E (E.symm _)) ≠ Sum.elim _ _ (E s)
+    simp only [Equiv.apply_symm_apply, Equiv.trans_apply]
+    rcases E s with u | ⟨_ | _ | _, hi⟩
+    · exact hor u
+    · simp only [Equiv.sumCongr_apply, Sum.map_inr, Sum.elim_inr]; revert hi; decide
+    · simp only [Equiv.sumCongr_apply, Sum.map_inr, Sum.elim_inr]; revert hi; decide
+    · omega
+  · intro f
+    fin_cases f <;> simp [standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_complex] <;> omega
 
 /-- **Leaf (the reglue is legal).**  In the cut `D`, `b = nextCorner a` is
 side `1` of the triangle; its partner is not `a` (`hab`) or `b`, so it lies in
