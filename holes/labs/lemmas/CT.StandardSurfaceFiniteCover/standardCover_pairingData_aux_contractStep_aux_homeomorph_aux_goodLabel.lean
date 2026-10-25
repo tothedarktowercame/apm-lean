@@ -4962,7 +4962,49 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_goodLabel
     standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C (fun u : C.Side => min u.2.val (C.pair u).2.val) ∧
       standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C'
         (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val) := by
-  sorry
+  have hgood : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C
+      (fun u : C.Side => min u.2.val (C.pair u).2.val) := by
+    intro a b
+    constructor
+    · intro hab
+      have hext : ∀ {u v : C.Side}, u.2.val = v.2.val → u = v := by
+        intro u v huv
+        exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1 huv
+      by_cases ha : a.2.val ≤ (C.pair a).2.val
+      · by_cases hb : b.2.val ≤ (C.pair b).2.val
+        · left
+          exact hext (by simpa [min_eq_left ha, min_eq_left hb] using hab.symm)
+        · right
+          have h : C.pair b = a := hext (by
+            simpa [min_eq_left ha, min_eq_right (Nat.le_of_not_ge hb)] using hab.symm)
+          rw [← h, C.pair_pair]
+      · by_cases hb : b.2.val ≤ (C.pair b).2.val
+        · right
+          exact hext (by simpa [min_eq_right (Nat.le_of_not_ge ha), min_eq_left hb] using hab.symm)
+        · left
+          have h : C.pair b = C.pair a := hext (by
+            simpa [min_eq_right (Nat.le_of_not_ge ha),
+              min_eq_right (Nat.le_of_not_ge hb)] using hab.symm)
+          exact C.pair.injective h
+    · intro hab
+      rcases hab with rfl | rfl
+      · rfl
+      · change min a.2.val (C.pair a).2.val =
+          min (C.pair a).2.val (C.pair (C.pair a)).2.val
+        rw [C.pair_pair]
+        exact min_comm _ _
+  refine ⟨hgood, ?_⟩
+  intro a b
+  rw [hgood (D.toOld a) (D.toOld b)]
+  constructor
+  · intro h
+    rcases h with h | h
+    · exact Or.inl (D.toOld_injective h)
+    · exact Or.inr (D.toOld_injective (h.trans (D.pair_toOld a).symm))
+  · intro h
+    rcases h with rfl | rfl
+    · exact Or.inl rfl
+    · exact Or.inr (D.pair_toOld a)
 -- END SEAT AREA
 
 /-- **Leaf.**  The word of a one-face complex under a good label is a polygon
