@@ -10927,7 +10927,108 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  have hlen : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length = W.length := by
+    simp [W]; omega
+  have hL : 2 ≤ W.length := by simp [W]; omega
+  have hs' : s₀ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hs
+  subst s₀
+  have hNc := hN
+  rw [hlen] at hNc
+  have hN' : edgePoint W.length e τ =
+      edgePoint W.length 0 (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+    apply Subtype.ext
+    dsimp [W] at hNc ⊢
+    rw [hNc]
+    simpa [cutChordB, W] using
+      (PolygonMoves.edgePoint_zero_eq_cutPoint
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0).symm
+  rcases PolygonMoves.cutEdgePoint_eq hL (by rw [← hlen]; exact he) (by omega) hN' with
+    ⟨rfl, rfl⟩ | ⟨hτ, hs0, hadj⟩ | ⟨hs0, hτ, hadj⟩
+  · let T : Disk := edgePoint W.length α₁.length
+        (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+    refine ⟨T, ?_, ?_⟩
+    · dsimp [T]
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer]
+      by_cases hn₂ : α₂.length = 0
+      · rw [if_pos (by omega)]
+        calc
+          (edgePoint W.length α₁.length
+              (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) =
+              cutPoint W.length (α₁.length + 1) :=
+            PolygonMoves.edgePoint_one_eq_cutPoint W.length α₁.length
+          _ = cutChordA W.length 0 (α₁.length + 1 + α₂.length)
+              (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+            simp [cutChordA, hn₂]
+      · rw [if_neg (by omega), if_neg (by omega), if_pos (by omega)]
+        have hv : (edgePoint W.length α₁.length
+            (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) =
+            (edgePoint W.length (α₁.length + 1)
+              (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) := by
+          rw [PolygonMoves.edgePoint_one_eq_cutPoint,
+            PolygonMoves.edgePoint_zero_eq_cutPoint]
+        simpa [W] using hv
+    · dsimp [T]
+      have hyrel :=
+        orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordA_aux_y
+          α₁ α₂ β₁ β₂ y (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+      have hPeq : P = edgePoint W.length
+          (α₁.length + 1 + α₂.length + β₁.length)
+          (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hP
+      subst P
+      simpa [W, reverseParameter] using hyrel.symm
+  · have hτ' : τ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hτ
+    subst τ
+    have heLast : e + 1 = W.length := by
+      have hz : (e + 1) % W.length = 0 := by simpa using hadj.symm
+      have hdvd : W.length ∣ e + 1 := Nat.dvd_of_mod_eq_zero hz
+      have heW : e < W.length := by rw [← hlen]; exact he
+      exact Nat.le_antisymm (by omega) (Nat.le_of_dvd (by omega) hdvd)
+    dsimp [W] at heLast
+    have hW : W.length = α₁.length + α₂.length + β₁.length + β₂.length + 2 := by
+      simp [W]
+      omega
+    have hOld : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length =
+        α₁.length + α₂.length + β₁.length + β₂.length + 2 := by
+      simp
+      omega
+    have heq : e = α₂.length + α₁.length + β₂.length + β₁.length + 1 := by
+      omega
+    subst e
+    refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+    dsimp [W] at hP ⊢
+    rw [hP, orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer]
+    by_cases hm₁ : β₁.length = 0
+    · rw [if_neg (by omega), if_pos (by omega)]
+      calc
+        (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+            (α₁.length + 1 + α₂.length + β₁.length)
+            (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) =
+            cutPoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+              (α₁.length + 1 + α₂.length + β₁.length) :=
+          PolygonMoves.edgePoint_zero_eq_cutPoint _ _
+        _ = cutChordB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+              (α₁.length + 1 + α₂.length)
+              (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+          simp [cutChordB, hm₁]
+    · rw [if_neg (by omega), if_neg (by omega), if_neg (by omega),
+        if_neg (by omega), if_neg (by omega)]
+      calc
+        (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+            (α₁.length + 1 + α₂.length + β₁.length)
+            (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) =
+            cutPoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+              (α₁.length + 1 + α₂.length + β₁.length) :=
+          PolygonMoves.edgePoint_zero_eq_cutPoint _ _
+        _ = cutPoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+              ((α₂.length + α₁.length + β₂.length + β₁.length + 1 - β₂.length - 1) + 1) := by
+          congr 1
+          omega
+        _ = (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+              (α₂.length + α₁.length + β₂.length + β₁.length + 1 - β₂.length - 1)
+              (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) :=
+          (PolygonMoves.edgePoint_one_eq_cutPoint _ _).symm
+  · exact False.elim (by norm_num at hs0)
 -- END SEAT AREA
 
 /-- Leaf (claude-14 split, 2026-10-25): `s₀ = 1`, so the vertex is `cutPoint L q`
