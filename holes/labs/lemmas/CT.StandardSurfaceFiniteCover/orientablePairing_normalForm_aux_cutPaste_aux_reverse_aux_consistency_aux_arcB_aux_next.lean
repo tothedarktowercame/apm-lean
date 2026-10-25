@@ -9629,6 +9629,46 @@ side, or the `c⁻¹` side when `n₁ = 0`) and `e₁ = q + m₂ + 1` (`e = q + 
 `c` side, transfer `cutChordB`); across the `y` seam use the old `y` pair
 (`_aux_chordA_aux_y`).  Mirror of `_aux_arcA_aux_next`. -/
 -- BEGIN SEAT AREA
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_next_aux_shift
+    (L n₁ n₂ m₁ m₂ e e₁ : ℕ) (hL : L = n₁ + 1 + n₂ + m₁ + 1 + m₂)
+    (he₁ : n₁ + 1 + n₂ < e₁) (he₁L : e₁ < L)
+    (he₁c : e₁ ≠ n₁ + 1 + n₂ + m₂) (hnext : e + 1 = e₁) :
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer L n₁ n₂ m₁ m₂ e
+        ⟨1, by constructor <;> norm_num⟩ =
+      orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer L n₁ n₂ m₁ m₂ e₁
+        ⟨0, by constructor <;> norm_num⟩ := by
+  have h0 := fun k => edgePoint_zero_eq_cutPoint L k
+  have h1 := fun k => edgePoint_one_eq_cutPoint L k
+  unfold orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+  by_cases hc : e = n₁ + 1 + n₂ + m₂
+  · rw [if_neg (by omega), if_pos hc, if_neg (by omega), if_neg he₁c,
+      if_neg (by omega), if_neg (by omega), if_neg (by omega), h0]
+    simp [cutChordB]
+    congr 1 <;> omega
+  · by_cases hb : e₁ < n₁ + 1 + n₂ + m₂
+    · rw [if_neg (by omega), if_neg hc, if_neg (by omega), if_neg (by omega),
+        if_pos (by omega), if_neg he₁c, if_neg (by omega), if_neg (by omega), if_pos hb]
+      rw [if_neg (by omega), h1, h0]
+      congr 1 <;> omega
+    · rw [if_neg (by omega), if_neg hc, if_neg (by omega), if_neg (by omega),
+        if_neg (by omega), if_neg he₁c, if_neg (by omega), if_neg (by omega), if_neg hb]
+      rw [if_neg (by omega), h1, h0]
+      congr 1 <;> omega
+
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_next_aux_seam
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y : Signed L) (e : ℕ)
+    (he : e + 1 = α₁.length + 1 + α₂.length) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂))
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        (α₁.length + 1 + α₂.length + β₁.length) ⟨1, by constructor <;> norm_num⟩)
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length ⟨0, by constructor <;> norm_num⟩) := by
+  apply Relation.EqvGen.symm
+  simpa [reverseParameter] using
+    (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordA_aux_y
+      α₁ α₂ β₁ β₂ y ⟨0, by constructor <;> norm_num⟩)
+
 theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_next
     {L : Type*} [DecidableEq L]
     (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
@@ -9648,7 +9688,78 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  have hlen : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length =
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by simp; omega
+  have hWL : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length =
+      α₁.length + 1 + α₂.length + β₁.length + 1 + β₂.length := by simp; omega
+  rw [hlen] at he hadj
+  have hs : s₀ = ⟨0, by constructor <;> norm_num⟩ := Subtype.ext hs₀
+  have ht : τ = ⟨1, by constructor <;> norm_num⟩ := Subtype.ext hτ
+  subst s₀; subst τ
+  have hnext : e + 1 = e₁ := by
+    have hlt : e + 1 < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by
+      by_contra hn
+      have heq : e + 1 = (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by omega
+      rw [heq, Nat.mod_self] at hadj
+      omega
+    rw [Nat.mod_eq_of_lt hlt] at hadj
+    exact hadj.symm
+  by_cases hq : e₁ = α₁.length + 1 + α₂.length
+  · let T : Disk := edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length ⟨0, by constructor <;> norm_num⟩
+    refine ⟨T, ?_, ?_⟩
+    · dsimp [T]
+      unfold orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      by_cases hn : α₁.length = 0
+      · rw [if_pos (by omega)]
+        have hz := edgePoint_zero_eq_cutPoint
+          (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length α₁.length
+        simp [cutChordA, hn]
+        simpa [PolygonBoundaryVertexClasses.zeroIcc, hn] using hz
+      · rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_pos (by omega)]
+        calc
+          (edgePoint _ α₁.length ⟨0, by constructor <;> norm_num⟩ : ℂ) =
+              cutPoint _ α₁.length := edgePoint_zero_eq_cutPoint _ _
+          _ = cutPoint _ ((e - α₂.length - 1) + 1) := by congr 1 <;> omega
+          _ = (edgePoint _ (e - α₂.length - 1) ⟨1, by constructor <;> norm_num⟩ : ℂ) :=
+            (edgePoint_one_eq_cutPoint _ _).symm
+    · have hPeq : P = edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+          (α₁.length + 1 + α₂.length + β₁.length)
+          ⟨1, by constructor <;> norm_num⟩ := by
+        apply Subtype.ext
+        rw [hP, hq]
+        unfold orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        by_cases hm : β₂.length = 0
+        · rw [if_neg (by omega), if_pos (by omega)]
+          simp [cutChordB]
+          calc
+            cutPoint _ 0 = cutPoint _ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by
+              simpa using
+                (cutPoint_add_length (L := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+                  (by simp) 0).symm
+            _ = cutPoint _ (α₁.length + 1 + α₂.length + β₁.length + 1) := by
+              congr 1
+              simp [hm] <;> omega
+            _ = (edgePoint _ (α₁.length + 1 + α₂.length + β₁.length)
+                ⟨1, by constructor <;> norm_num⟩ : ℂ) :=
+              (edgePoint_one_eq_cutPoint _ _).symm
+        · rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_neg (by omega),
+            if_pos (by omega)]
+          calc
+            (edgePoint _ (α₁.length + 1 + α₂.length + β₁.length + 1)
+                ⟨0, by constructor <;> norm_num⟩ : ℂ) =
+                cutPoint _ (α₁.length + 1 + α₂.length + β₁.length + 1) :=
+              edgePoint_zero_eq_cutPoint _ _
+            _ = (edgePoint _ (α₁.length + 1 + α₂.length + β₁.length)
+                ⟨1, by constructor <;> norm_num⟩ : ℂ) :=
+              (edgePoint_one_eq_cutPoint _ _).symm
+      rw [hPeq]
+      exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_next_aux_seam
+        α₁ α₂ β₁ β₂ y e (by omega)
+  · exact ⟨P, hP.trans
+        (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_next_aux_shift
+          _ _ _ _ _ e e₁ hWL (by omega) he₁L he₁c hnext).symm,
+        Relation.EqvGen.refl P⟩
 -- END SEAT AREA
 
 open PolygonMoves in
