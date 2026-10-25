@@ -13152,7 +13152,63 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
     (k : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length) :
     ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k).1 = y.1 ↔
       ((k : ℕ) = α₁.length ∨ (k : ℕ) = α₁.length + 1 + α₂.length + β₁.length) := by
-  sorry
+  classical
+  -- `a ∉ A` lets an `Option` lookup skip past `A`.
+  have skip : ∀ (A B : List ℕ) (a : ℕ), a ∉ A → ∀ j : ℕ,
+      ((A ++ B)[j]? = some a ↔ A.length ≤ j ∧ B[j - A.length]? = some a) := by
+    intro A B a hA j
+    by_cases hj : j < A.length
+    · rw [List.getElem?_append_left hj]
+      constructor
+      · intro h; exact absurd (List.mem_of_getElem? h) hA
+      · intro h; omega
+    · rw [List.getElem?_append_right (by omega)]
+      simp only [not_lt] at hj
+      simp [hj]
+  have head : ∀ (B : List ℕ) (a : ℕ), a ∉ B → ∀ j : ℕ,
+      ((a :: B)[j]? = some a ↔ j = 0) := by
+    intro B a hB j
+    cases j with
+    | zero => simp
+    | succ j =>
+      simp only [List.getElem?_cons_succ, Nat.add_one_ne_zero, iff_false]
+      intro h; exact hB (List.mem_of_getElem? h)
+  have hmap : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).map Prod.fst =
+      α₁.map Prod.fst ++ (y.1 :: (α₂.map Prod.fst ++ (β₁.map Prod.fst ++
+        (y.1 :: β₂.map Prod.fst)))) := by
+    simp [PolygonMoves.inv]
+  have hk : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k).1 = y.1 ↔
+      ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).map Prod.fst)[(k : ℕ)]? = some y.1 := by
+    rw [List.getElem?_map, List.getElem?_eq_getElem k.2]
+    simp
+  rw [hk, hmap, skip _ _ _ hy.1]
+  obtain ⟨h1, h2, h3, h4⟩ := hy
+  rcases Nat.lt_or_ge (k : ℕ) α₁.length with hlt | hge
+  · simp only [List.length_map, show ¬ α₁.length ≤ (k : ℕ) by omega, false_and, false_iff]; omega
+  obtain ⟨j, hj⟩ : ∃ j, (k : ℕ) = α₁.length + j := ⟨_, (Nat.add_sub_cancel' hge).symm⟩
+  rw [hj]
+  simp only [List.length_map, le_add_iff_nonneg_right, zero_le, true_and, Nat.add_sub_cancel_left]
+  cases j with
+  | zero => simp
+  | succ j =>
+    simp only [List.getElem?_cons_succ]
+    rw [skip _ _ _ h2, skip _ _ _ h3]
+    by_cases hj2 : α₂.length + β₁.length ≤ j
+    · obtain ⟨i, hi⟩ : ∃ i, j = α₂.length + β₁.length + i := ⟨_, (Nat.add_sub_cancel' hj2).symm⟩
+      subst hi
+      have e : α₂.length + β₁.length + i - (α₂.map Prod.fst).length - (β₁.map Prod.fst).length = i := by
+        simp; omega
+      rw [e, head _ _ h4]
+      simp only [List.length_map]
+      constructor
+      · rintro ⟨-, -, rfl⟩; right; omega
+      · rintro (h | h)
+        · omega
+        · refine ⟨by omega, by omega, by omega⟩
+    · simp only [List.length_map]
+      constructor
+      · rintro ⟨ha, hb, -⟩; omega
+      · rintro (h | h) <;> omega
 
 /-- **Leaf.**  The old word has `y` at position `|α₁|` and `inv y` at position
 `|α₁| + 1 + |α₂| + |β₁|`. -/
