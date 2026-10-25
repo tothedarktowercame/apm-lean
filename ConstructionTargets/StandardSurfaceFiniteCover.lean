@@ -4442,10 +4442,39 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_
     · rw [show g u = Classical.choose (hpre u) by simp only [g, dif_neg h]]
       exact Classical.choose_spec (hpre u)
 
+/-- **Leaf (corner classes reflect).**  Two corners of `C'` whose images are
+equivalent in `C` modulo the merge `s ~ nextCorner s` are already
+`C'`-equivalent.  `C'` is `C` with the edge `s` contracted; `hs` says the two
+ends of that edge are different vertices, so the contraction merges exactly
+those two classes and splits none.  A path between images may pass through
+the removed corners `s` and `C.pair s`; each such visit enters and leaves at
+the junction corners of `C'` where the removed sides were.
+
+`hs` is needed (added 2026-10-25): for the one-vertex word
+`a b a⁻¹ b⁻¹ c d c⁻¹ d⁻¹` with `s = a`, deleting `a` leaves
+`b b⁻¹ c d c⁻¹ d⁻¹`, which has two vertices, while every corner of `C` is
+equivalent. -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
+    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hor : C.IsOrientable)
+    (x y : C'.Side)
+    (h : Relation.EqvGen
+      (fun a b => C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s))
+      (D.toOld x) (D.toOld y)) :
+    Relation.EqvGen C'.CornerRel x y := by
+  sorry
+
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
-    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides) (hor : C.IsOrientable)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
+    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hor : C.IsOrientable)
     (g : C.Side → C'.Side)
     (hg1 : ∀ t, g (D.toOld t) = t)
     (hg2 : ∀ u, Relation.EqvGen
@@ -4453,12 +4482,20 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_
       (D.toOld (g u)) u) :
     ∀ a b, (C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s)) →
       Relation.EqvGen C'.CornerRel (g a) (g b) := by
-  sorry
+  intro a b hab
+  let r : C.Side → C.Side → Prop := fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)
+  have hab' : Relation.EqvGen r (D.toOld (g a)) (D.toOld (g b)) :=
+    (hg2 a).trans _ _ _ ((Relation.EqvGen.rel a b hab).trans _ _ _ (hg2 b).symm)
+  exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect
+    D h1 h5 hs hor (g a) (g b) hab'
 
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
-    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides) (hor : C.IsOrientable) :
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
+    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hor : C.IsOrientable) :
     ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
       (∀ u, Relation.EqvGen
         (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)) (D.toOld (g u)) u) ∧
@@ -4469,7 +4506,7 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back
       D h1 h5 hor
   exact ⟨g, hg1, hg2,
     standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel
-      D h1 h5 hor g hg1 hg2⟩
+      D h1 h5 hs hor g hg1 hg2⟩
 
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
     {C C' : PolygonComplex} {s : C.Side}
@@ -4479,7 +4516,7 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
       Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
     (hor : C.IsOrientable) : C'.vertexCount + 1 = C.vertexCount := by
   obtain ⟨g, hg1, hg2, hg3⟩ :=
-    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back D h1 h5 hor
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back D h1 h5 hs hor
   have lift : ∀ {α β : Type} {r : α → α → Prop} {r' : β → β → Prop} (h : α → β),
       (∀ a b, r a b → Relation.EqvGen r' (h a) (h b)) →
       ∀ a b, Relation.EqvGen r a b → Relation.EqvGen r' (h a) (h b) := by
