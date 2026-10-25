@@ -212,6 +212,87 @@ theorem standardCover_pairingData_aux_lift_aux_diskLift (g : ℕ)
   intro L' hL'
   exact huniq L' ⟨hL'.2, hL'.1⟩
 
+/-! Split of `_aux_sidePairing` (claude-14, 2026-10-25, after the lemma-1
+PARTIAL that banked `_aux_continuousEdge`).  Side `k` and side `basePair k`
+(reversed) are one `SurfaceRel` step apart (`_aux_edgeRel`), so the two
+lifted edge paths lift the same path and agree once they agree at `0`.  The
+face on the other side exists by `_aux_fibre`; the involution comes from
+`_aux_homeomorph_aux_lift_injective`, moved here from the homeomorph split. -/
+
+theorem standardCover_pairingData_aux_lift_aux_sidePairing_aux_continuousEdge
+    (m e : ℕ) : Continuous (fun t : Set.Icc (0 : ℝ) 1 ↦ edgePoint m e t) := by
+  apply Continuous.subtype_mk
+  change Continuous fun t : Set.Icc (0 : ℝ) 1 ↦
+    Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / m))
+  fun_prop
+
+/-- Side `k` at `t` and side `basePair k` at `1 - t` are the same point of the
+surface (one `SurfaceRel` step, read backwards when `k % 4 ≥ 2`). -/
+theorem standardCover_pairingData_aux_lift_aux_sidePairing_aux_edgeRel (g : ℕ)
+    (k : Fin (4 * g)) (t : Set.Icc (0 : ℝ) 1) :
+    surfaceQuotient true g (edgePoint (4 * g) k t) =
+      surfaceQuotient true g (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t)) := by
+  have step : ∀ j : ℕ, j < g → ∀ r : ℕ, r < 2 → ∀ s : Set.Icc (0 : ℝ) 1,
+      surfaceQuotient true g (edgePoint (4 * g) (4 * j + r) s) =
+        surfaceQuotient true g (edgePoint (4 * g) (4 * j + r + 2) (reverseIcc s)) := by
+    intro j hj r hr s
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    rw [SurfaceRel, if_pos rfl]
+    refine ⟨j, hj, s, ?_⟩
+    interval_cases r
+    · exact Or.inl ⟨rfl, rfl⟩
+    · exact Or.inr ⟨rfl, rfl⟩
+  obtain ⟨k, hk⟩ := k
+  simp only [standardCover_pairingData_aux_lift_aux_basePair]
+  split_ifs with h
+  · have := step (k / 4) (by omega) (k % 4) h t
+    rwa [show 4 * (k / 4) + k % 4 = k by omega] at this
+  · have := step (k / 4) (by omega) (k % 4 - 2) (by omega) (reverseIcc t)
+    rw [reverseIcc_reverseIcc, show 4 * (k / 4) + (k % 4 - 2) = k - 2 by omega,
+      show k - 2 + 2 = k by omega] at this
+    exact this.symm
+
+/-- Leaf: over every point `x` of the disk, the lifted disks fill the fibre.
+The points `L i x` are pairwise distinct (`_aux_homeomorph_aux_lift_injective`)
+and lie over `surfaceQuotient true g x`.  If `n > 0`, `hsheets` makes that
+fibre finite with `n` points, so they fill it.  If `n = 0`, `hfib` makes the
+fibre over the centre empty; lifting a path in the base from
+`surfaceQuotient true g x` to the image of the centre, starting at `e`, gives
+a point of that fibre, a contradiction. -/
+theorem standardCover_pairingData_aux_lift_aux_sidePairing_aux_fibre
+    (g n : ℕ) (hg : 1 ≤ g)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p)
+    (hsheets : ∀ b, Nat.card {e : E // p e = b} = n)
+    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
+    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
+      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
+    (x : Disk) (e : E) (he : p e = surfaceQuotient true g x) : ∃ j, L j x = e := by
+  sorry
+
+/-- Two lifted disks that meet at the same point of the disk are the
+same face.  `L i` and `L j` both lift `surfaceQuotient true g` through `p`
+and agree at `x`; the disk is connected, so they agree everywhere
+(`IsCoveringMap.eq_of_comp_eq`), in particular at the centre, and the
+uniqueness in `hfib` gives `i = j`. -/
+theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_lift_injective
+    (g n : ℕ)
+    (E : Type*) [TopologicalSpace E]
+    (p : E → Surface true g) (hp : IsCoveringMap p)
+    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
+    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
+      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
+    (x : Disk) (i j : Fin n) (h : L i x = L j x) : i = j := by
+  letI : ContractibleSpace Disk :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  have hij : (L i : Disk → E) = L j :=
+    hp.eq_of_comp_eq (L i).continuous (L j).continuous (by rw [hL, hL]) x h
+  obtain ⟨k, -, hk⟩ := hfib (L j standardCover_pairingData_aux_lift_aux_center)
+    (by rw [← Function.comp_apply (f := p), hL])
+  exact (hk i (congrFun hij _)).trans (hk j rfl).symm
+
 /-- Leaf: with one lift `L i` of the disk through each point over the centre,
 side `k` of face `i` is glued to side `basePair k` of exactly one face
 `σ i k`, with the parameter reversed.  (Both sides lift the same path in the
@@ -230,7 +311,46 @@ theorem standardCover_pairingData_aux_lift_aux_sidePairing
       ∀ i (k : Fin (4 * g)) t, L i (edgePoint (4 * g) k t) =
         L (σ i k) (edgePoint (4 * g)
           (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t)) := by
-  sorry
+  have hrev : Continuous reverseIcc :=
+    Continuous.subtype_mk (continuous_const.sub continuous_subtype_val) _
+  haveI : PreconnectedSpace (Set.Icc (0 : ℝ) 1) :=
+    Subtype.preconnectedSpace isPreconnected_Icc
+  let t0 : Set.Icc (0 : ℝ) 1 := ⟨0, by norm_num⟩
+  have hpath : ∀ i (k : Fin (4 * g)), ∃ j, ∀ t, L i (edgePoint (4 * g) k t) =
+      L j (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t)) := by
+    intro i k
+    obtain ⟨j, hj⟩ := standardCover_pairingData_aux_lift_aux_sidePairing_aux_fibre
+      g n hg E p hp hsheets L hL hfib
+      (edgePoint (4 * g) (standardCover_pairingData_aux_lift_aux_basePair g k)
+        (reverseIcc t0))
+      (L i (edgePoint (4 * g) k t0))
+      (by rw [← Function.comp_apply (f := p), hL,
+        standardCover_pairingData_aux_lift_aux_sidePairing_aux_edgeRel])
+    refine ⟨j, fun t => ?_⟩
+    have h := hp.eq_of_comp_eq
+      (g₁ := fun t => L i (edgePoint (4 * g) k t))
+      (g₂ := fun t => L j (edgePoint (4 * g)
+        (standardCover_pairingData_aux_lift_aux_basePair g k) (reverseIcc t)))
+      ((L i).continuous.comp
+        (standardCover_pairingData_aux_lift_aux_sidePairing_aux_continuousEdge _ _))
+      ((L j).continuous.comp
+        ((standardCover_pairingData_aux_lift_aux_sidePairing_aux_continuousEdge _ _).comp
+          hrev))
+      (by
+        funext s
+        change (p ∘ L i) _ = (p ∘ L j) _
+        rw [hL, hL]
+        exact standardCover_pairingData_aux_lift_aux_sidePairing_aux_edgeRel g k s)
+      t0 hj.symm
+    exact congrFun h t
+  choose σ hσ using hpath
+  refine ⟨σ, fun i k => ?_, hσ⟩
+  have h2 := hσ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k)
+    (reverseIcc t0)
+  rw [reverseIcc_reverseIcc, standardCover_pairingData_aux_lift_aux_basePair_basePair] at h2
+  exact standardCover_pairingData_aux_lift_aux_homeomorph_aux_lift_injective g n E p hp L hL
+    hfib (edgePoint (4 * g) k t0) _ _ (h2.symm.trans (hσ i k t0).symm)
 
 /-- The lifted complex: `n` copies of the `4g`-gon, side `⟨i, k⟩` glued to
 side `⟨σ i k, basePair k⟩`. -/
@@ -281,28 +401,8 @@ theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_t2
     T2Space E := by
   sorry
 
-/-- Leaf: two lifted disks that meet at the same point of the disk are the
-same face.  `L i` and `L j` both lift `surfaceQuotient true g` through `p`
-and agree at `x`; the disk is connected, so they agree everywhere
-(`IsCoveringMap.eq_of_comp_eq`), in particular at the centre, and the
-uniqueness in `hfib` gives `i = j`. -/
-theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_lift_injective
-    (g n : ℕ)
-    (E : Type*) [TopologicalSpace E]
-    (p : E → Surface true g) (hp : IsCoveringMap p)
-    (L : Fin n → C(Disk, E)) (hL : ∀ i, p ∘ L i = surfaceQuotient true g)
-    (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
-      ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
-    (x : Disk) (i j : Fin n) (h : L i x = L j x) : i = j := by
-  sorry
-
-/-- Leaf: every point of `E` lies on a lifted disk.  Take `x` with
-`surfaceQuotient true g x = p e`.  The points `L i x` are pairwise distinct
-(`_aux_lift_injective`) and lie over `p e`.  If `n > 0`, `hsheets` makes that
-fibre finite with `n` points, so they fill it.  If `n = 0`, `hfib` makes the
-fibre over the centre empty; lifting a path in the base from `p e` to the
-image of the centre, starting at `e`, gives a point of that fibre, a
-contradiction. -/
+/-- Every point of `E` lies on a lifted disk: write `p e` as the image of a
+point of the disk and apply `_aux_sidePairing_aux_fibre`. -/
 theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_surjective
     (g n : ℕ) (hg : 1 ≤ g)
     (E : Type*) [TopologicalSpace E]
@@ -312,7 +412,10 @@ theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_surjective
     (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
       ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
     (e : E) : ∃ i x, L i x = e := by
-  sorry
+  obtain ⟨x, hx⟩ := Quotient.exists_rep (p e)
+  obtain ⟨j, hj⟩ := standardCover_pairingData_aux_lift_aux_sidePairing_aux_fibre
+    g n hg E p hp hsheets L hL hfib x e hx.symm
+  exact ⟨j, x, hj⟩
 
 /-- Leaf: chains of the base relation lift to chains of the lifted complex,
 from any face.  A `SurfaceRel true g` step joins side `k = 4j` (or `4j + 1`)
