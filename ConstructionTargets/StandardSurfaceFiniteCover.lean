@@ -1771,6 +1771,148 @@ lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_cut
 /-- **Leaf (geometry).**  The circle reparametrization for the left half: the `p`-gon
 boundary onto the boundary parameter of `cutOldA (p + q - 2) 0 (p - 1)`,
 piecewise linear in the angle. -/
+def standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    (p L : ℕ) (x : ℝ) : ℝ :=
+  if x ≤ p - 1 then x else
+    (p - 1) + (x - (p - 1)) * (L - (p - 1))
+
+def standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g
+    (p L : ℕ) (y : ℝ) : ℝ :=
+  if y ≤ p - 1 then y else
+    (p - 1) + (y - (p - 1)) / (L - (p - 1))
+
+lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_props
+    (p L : ℕ) (hp : 2 ≤ p) (hL : p - 1 < L) :
+    let f := standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f p L
+    let g := standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g p L
+    Continuous f ∧ Continuous g ∧ f 0 = 0 ∧ f p = L ∧ g 0 = 0 ∧ g L = p ∧
+      Set.MapsTo f (Set.Icc 0 p) (Set.Icc 0 L) ∧
+      Set.MapsTo g (Set.Icc 0 L) (Set.Icc 0 p) ∧
+      (∀ x ∈ Set.Icc (0 : ℝ) p, g (f x) = x) ∧
+      (∀ y ∈ Set.Icc (0 : ℝ) L, f (g y) = y) := by
+  dsimp
+  have hp' : (1 : ℝ) ≤ p := by exact_mod_cast (show 1 ≤ p by omega)
+  have hcast : ((p - 1 : ℕ) : ℝ) = (p : ℝ) - 1 := by
+    norm_num [Nat.cast_sub (by omega : 1 ≤ p)]
+  have hd : (0 : ℝ) < L - (p - 1) := by
+    have hh : ((p - 1 : ℕ) : ℝ) < L := by exact_mod_cast hL
+    rw [hcast] at hh
+    linarith
+  have hf : Continuous
+      (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f p L) := by
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    apply Continuous.if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
+    intro x hx
+    rw [hx]
+    ring
+  have hg : Continuous
+      (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g p L) := by
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g
+    apply Continuous.if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
+    intro x hx
+    rw [hx]
+    field_simp
+    ring
+  refine ⟨hf, hg, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    rw [if_pos (by linarith)]
+  · unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    rw [if_neg (by linarith)]
+    push_cast
+    ring
+  · unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g
+    rw [if_pos (by linarith)]
+  · unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g
+    have hh : ((p - 1 : ℕ) : ℝ) < L := by exact_mod_cast hL
+    rw [hcast] at hh
+    rw [if_neg (by linarith)]
+    field_simp [hd.ne']
+    ring
+  · intro x hx
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    split_ifs with h
+    · exact ⟨hx.1, le_trans h (by
+        have hh : ((p - 1 : ℕ) : ℝ) ≤ L := by exact_mod_cast hL.le
+        rw [hcast] at hh
+        exact hh)⟩
+    · constructor
+      · nlinarith
+      · have hxp : x ≤ p := hx.2
+        nlinarith
+  · intro y hy
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g
+    split_ifs with h
+    · exact ⟨hy.1, le_trans h (by linarith)⟩
+    · constructor
+      · have : 0 ≤ y - (p - 1) := le_of_lt (sub_pos.mpr (lt_of_not_ge h))
+        have : 0 ≤ (y - (p - 1)) / (L - (p - 1)) := div_nonneg this hd.le
+        linarith
+      · have hyL : y ≤ L := hy.2
+        have hz : y - (p - 1) ≤ L - (p - 1) := by linarith
+        have := (div_le_one hd).2 hz
+        linarith
+  · intro x hx
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g
+    by_cases h : x ≤ (p : ℝ) - 1
+    · rw [if_pos h, if_pos h]
+    · rw [if_neg h, if_neg (by nlinarith)]
+      field_simp
+      ring
+  · intro y hy
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_g
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    by_cases h : y ≤ (p : ℝ) - 1
+    · rw [if_pos h, if_pos h]
+    · rw [if_neg h, if_neg (by have := div_pos (sub_pos.mpr (lt_of_not_ge h)) hd; linarith)]
+      field_simp
+      ring
+
+/-- The banked interval map is the identity on arcs `0, …, p - 2` and stretches
+the last arc `[p - 1, p]` linearly onto `[p - 1, L]`. -/
+lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_formulas
+    (p L : ℕ) (hp : 2 ≤ p) (hL : p - 1 < L) :
+    (∀ m, m + 1 < p → ∀ t : Set.Icc (0 : ℝ) 1,
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f p L
+        ((m : ℝ) + t) = m + t) ∧
+    (∀ t : Set.Icc (0 : ℝ) 1,
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f p L
+        ((p : ℝ) - 1 + t) = (p : ℝ) - 1 + t * ((L : ℝ) - ((p : ℝ) - 1))) := by
+  constructor
+  · intro m hm t
+    have hm2 : ((m + 1 + 1 : ℕ) : ℝ) ≤ p := by exact_mod_cast (show m + 1 + 1 ≤ p from hm)
+    push_cast at hm2
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    rw [if_pos (by linarith [t.2.2])]
+  · intro t
+    unfold standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+    by_cases h0 : (p : ℝ) - 1 + t ≤ p - 1
+    · have ht : (t : ℝ) = 0 := le_antisymm (by linarith) t.2.1
+      rw [if_pos h0, ht]; ring
+    · rw [if_neg h0]; ring
+
+/-- The banked interval homeomorphism descends to a circle homeomorphism
+(`PolygonMoves.equivariantLift_of_interval`, `equivariantCircleLift_homeomorph`). -/
+lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_lift
+    (p L : ℕ) (hp : 2 ≤ p) (hL : p - 1 < L) :
+    ∃ g : Circle ≃ₜ Circle, ∀ x ∈ Set.Icc (0 : ℝ) p,
+      g (AddCircle.toCircle (x : AddCircle (p : ℝ))) =
+        AddCircle.toCircle
+          ((standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+            p L x : ℝ) : AddCircle (L : ℝ)) := by
+  obtain ⟨hfc, hgc, hf0, hfp, hg0, hgL, hfm, hgm, hl, hr⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_props
+      p L hp hL
+  have hP : (0 : ℝ) < p := by exact_mod_cast (show 0 < p by omega)
+  have hQ : (0 : ℝ) < L := by exact_mod_cast (show 0 < L by omega)
+  obtain ⟨F, hF⟩ := PolygonMoves.equivariantLift_of_interval (p : ℝ) L hP hQ _ _
+    hfc hgc hf0 hfp hg0 hgL hfm hgm hl hr
+  obtain ⟨g, hg⟩ := PolygonMoves.equivariantCircleLift_homeomorph (p : ℝ) L hP hQ F
+  exact ⟨g, fun x hx => by rw [hg, hF x hx]⟩
+
+/-- **Leaf (geometry).**  The circle reparametrization for the left half: the `p`-gon
+boundary onto the boundary parameter of `cutOldA (p + q - 2) 0 (p - 1)`,
+piecewise linear in the angle.  Rotate by `-(i + 1)` arcs, then apply `_aux_lift`. -/
 lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL
     (p q i : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) (hi : i < p) :
     let L := p + q - 2
@@ -1783,7 +1925,71 @@ lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_repar
       (∀ t, ρ ⟨edgePoint p i t,
           by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint p i t⟩ =
         PolygonMoves.cutChordParamA L 0 (p - 1) t) := by
-  sorry
+  dsimp only
+  have hLp : p - 1 < p + q - 2 := by omega
+  obtain ⟨g, hg⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_lift
+      p (p + q - 2) hp hLp
+  obtain ⟨hfa, hfi⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_formulas
+      p (p + q - 2) hp hLp
+  have hP : (0 : ℝ) < p := by exact_mod_cast (show 0 < p by omega)
+  have hp2 : (2 : ℝ) ≤ p := by exact_mod_cast hp
+  have hπ := Real.pi_pos
+  let r : Circle := Circle.exp (2 * Real.pi / p * ((i : ℝ) + 1))
+  let ρ : Circle ≃ₜ Circle := (Homeomorph.mulLeft r⁻¹).trans g
+  have hexp : ∀ a b : ℝ, ∀ k : ℤ, a = b + k * (2 * Real.pi) →
+      Circle.exp a = Circle.exp b := by
+    intro a b k h
+    rw [h, Circle.exp_add, Circle.exp_int_mul_two_pi, mul_one]
+  -- ρ at the point with edge coordinate `a ≡ x + i + 1 (mod p)` is `f x`.
+  have hρ : ∀ x ∈ Set.Icc (0 : ℝ) p, ∀ (a : ℝ) (k : ℤ), a = x + ((i : ℝ) + 1) + k * p →
+      ρ (AddCircle.toCircle (a : AddCircle (p : ℝ))) =
+        AddCircle.toCircle
+          ((standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL_aux_f
+            p (p + q - 2) x : ℝ) : AddCircle ((p + q - 2 : ℕ) : ℝ)) := by
+    intro x hx a k ha
+    rw [← hg x hx]
+    change g (r⁻¹ * _) = _
+    congr 1
+    rw [AddCircle.toCircle_apply_mk, AddCircle.toCircle_apply_mk, ← Circle.exp_neg,
+      ← Circle.exp_add]
+    exact hexp _ _ k (by rw [ha]; field_simp; ring)
+  refine ⟨ρ, ?_, ?_⟩
+  · intro m hm t
+    change ρ (edgePointCircle p ((i + 1 + m) % p) t) = edgePointCircle (p + q - 2) m t
+    have hm2 : ((m + 1 + 1 : ℕ) : ℝ) ≤ p := by exact_mod_cast (show m + 1 + 1 ≤ p from hm)
+    push_cast at hm2
+    have hmd : (((i + 1 + m) % p : ℕ) : ℝ) + p * ((i + 1 + m) / p : ℕ) = i + 1 + m := by
+      exact_mod_cast Nat.mod_add_div (i + 1 + m) p
+    rw [edgePointCircle_eq_toCircle, edgePointCircle_eq_toCircle]
+    simp only [← AddCircle.coe_add]
+    rw [hρ ((m : ℝ) + t) ⟨by linarith [t.2.1], by linarith [t.2.2]⟩
+        ((((i + 1 + m) % p : ℕ) : ℝ) + t)
+        (-(((i + 1 + m) / p : ℕ) : ℤ))
+        (by rw [Int.cast_neg, Int.cast_natCast]; linarith),
+      hfa m hm t]
+  · intro t
+    change ρ (edgePointCircle p i t) = _
+    rw [edgePointCircle_eq_toCircle]
+    simp only [← AddCircle.coe_add]
+    rw [hρ ((p : ℝ) - 1 + t) ⟨by linarith [t.2.1], by linarith [t.2.2]⟩ ((i : ℝ) + t) (-1)
+        (by push_cast; ring),
+      hfi t]
+    unfold PolygonMoves.cutChordParamA PolygonMoves.cutAlpha
+    rw [AddCircle.homeomorphCircle'_apply_mk, AddCircle.toCircle_apply_mk]
+    have hc1 : ((p - 1 : ℕ) : ℝ) = (p : ℝ) - 1 := by
+      rw [Nat.cast_sub (by omega)]; push_cast; ring
+    have hc2 : ((p + q - 2 : ℕ) : ℝ) = (p : ℝ) + q - 2 := by
+      rw [Nat.cast_sub (by omega)]; push_cast; ring
+    have hLpos : (0 : ℝ) < (p : ℝ) + q - 2 := by
+      have : (2 : ℝ) ≤ q := by exact_mod_cast hq
+      linarith
+    rw [hc1, hc2]
+    congr 1
+    field_simp
+    ring
+
 
 /-- **Leaf (geometry).**  The circle reparametrization for the right half: the `q`-gon
 boundary onto the boundary parameter of `cutOldB (p + q - 2) 0 (p - 1)`. -/
