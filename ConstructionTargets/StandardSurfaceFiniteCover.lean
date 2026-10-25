@@ -6067,7 +6067,21 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_si
     ∃ hf : f < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length,
       (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get ⟨f, hf⟩ =
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get ⟨e, he⟩ := by
-  sorry
+  intro f
+  simp only [List.length_append, List.length_singleton] at he
+  have hW : α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂ =
+      α₁ ++ (y :: (α₂ ++ (β₁ ++ (inv y :: β₂)))) := by simp
+  have hW' : α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁ =
+      α₂ ++ (inv c :: (α₁ ++ (β₂ ++ (c :: β₁)))) := by simp
+  have hfl : f < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length := by
+    simp only [f, List.length_append, List.length_singleton]; split_ifs <;> omega
+  refine ⟨hfl, ?_⟩
+  simp only [List.get_eq_getElem]
+  rw [List.getElem_of_eq hW, List.getElem_of_eq hW']
+  simp only [f]
+  split_ifs with h1 h2 h3 <;>
+    simp only [List.getElem_append, List.getElem_cons] <;>
+    (repeat' split) <;> first | omega | rfl | (congr 1; omega)
 
 open PolygonMoves in
 /-- **Leaf.** By freshness of `y`, only the two `y` sides carry label `y.1`. -/
@@ -6079,7 +6093,15 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_y_
     (h : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 = y.1) :
     (i : ℕ) = α₁.length ∨
       (i : ℕ) = α₁.length + 1 + α₂.length + β₁.length := by
-  sorry
+  by_contra hne
+  push_neg at hne
+  apply hy
+  rw [List.mem_map]
+  refine ⟨_, ?_, h⟩
+  have hi := i.isLt
+  simp only [List.get_eq_getElem, List.getElem_append, List.getElem_singleton,
+    List.length_append, List.length_singleton] at hi ⊢
+  (repeat' split) <;> first | omega | simp [List.getElem_mem]
 
 open PolygonMoves in
 /-- **Leaf (y pair).** Both sides are `y` sides (opposite signs, so the
