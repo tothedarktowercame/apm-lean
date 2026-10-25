@@ -1743,7 +1743,34 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merg
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (m : Fin (C'.sides D.merged)) (hm : m.val + 2 < C.sides s.1) :
     D.toOld (C'.nextCorner ⟨D.merged, m⟩) = C.nextCorner (D.toOld ⟨D.merged, m⟩) := by
-  sorry
+  have hmnext : m.val + 1 < C'.sides D.merged := by
+    have hp := C.sides_pos (C.pair s).1
+    have heq := D.sides_merged
+    omega
+  have hmleft : m.val + 1 < C.sides s.1 := by omega
+  have hnleft : m.val + 2 < C.sides s.1 := hm
+  let mn : Fin (C'.sides D.merged) := ⟨m.val + 1, hmnext⟩
+  have hnext : C'.nextCorner ⟨D.merged, m⟩ = ⟨D.merged, mn⟩ := by
+    have hfst : (C'.nextCorner ⟨D.merged, m⟩).1 =
+        (⟨D.merged, mn⟩ : C'.Side).1 := rfl
+    apply Sigma.ext hfst
+    apply (Fin.heq_ext_iff (congrArg C'.sides hfst)).2
+    simp [PolygonComplex.nextCorner, Nat.mod_eq_of_lt hmnext, mn]
+  rw [hnext]
+  have hf : (D.toOld ⟨D.merged, mn⟩).1 =
+      (C.nextCorner (D.toOld ⟨D.merged, m⟩)).1 := by
+    simp [D.toOld_merged_fst, mn, hnleft, hmleft,
+      PolygonComplex.nextCorner]
+  apply Sigma.ext hf
+  apply (Fin.heq_ext_iff (congrArg C.sides hf)).2
+  have hfm : (D.toOld ⟨D.merged, m⟩).1 = s.1 := by
+    simpa [hmleft] using D.toOld_merged_fst m
+  simp [D.toOld_merged_val, mn, hnleft, hmleft,
+    PolygonComplex.nextCorner]
+  rw [hfm]
+  have ha : 1 < C.sides s.1 := by omega
+  rw [show s.2.val + 1 + (m.val + 1) = (s.2.val + 1 + m.val) + 1 by omega,
+    Nat.add_mod, Nat.mod_eq_of_lt ha]
 
 /-- **Leaf (second half).**  Merged side `m` and its successor both come from
 `(C.pair s).1` (`C.sides s.1 ≤ m + 1` and `m + 1` does not wrap); `toOld` sends
