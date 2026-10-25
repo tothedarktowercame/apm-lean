@@ -3357,9 +3357,88 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward {L : Type*} [Decid
       α₁ α₂ β₁ β₂ y c hy hc i₀ j₀ hij τ hlab T T' hT hT')
     (Relation.EqvGen.symm _ _ hNT'))
 
+/-- Banked (lemma-2, 2026-10-25): equal points are `EqvGen`-related. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_eq
+    {L : Type*} [DecidableEq L] (w : List (PolygonMoves.Signed L))
+    (P P' : Disk) (h : P = P') :
+    Relation.EqvGen (PolygonMoves.WordRel w) P P' := by
+  subst P'
+  exact Relation.EqvGen.refl _
+
 open PolygonMoves in
-/-- **Leaf (reverse generators).**  Converse of `_aux_forward`: a new side
-identification pulls back to an old chain.  The `c` pair lands on the old
+/-- Where a new boundary point (side `e` of the new word `α₂ c⁻¹ α₁ β₂ c β₁`,
+parameter `s`) comes from: the two `c` sides are the chord (piece `A` reads it
+as `cutChordA`, piece `B` as `cutChordB`), every other side moves rigidly back
+to its position in the old word `α₁ y α₂ β₁ y⁻¹ β₂`.  Inverse of
+`_aux_forward_aux_transfer` (`n₁ = |α₁|`, `n₂ = |α₂|`, `m₁ = |β₁|`,
+`m₂ = |β₂|`, `L` the common length). -/
+noncomputable def orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+    (L n₁ n₂ m₁ m₂ e : ℕ) (s : Icc (0 : ℝ) 1) : ℂ :=
+  if e = n₂ then cutChordA L 0 (n₁ + 1 + n₂) s
+  else if e = n₁ + 1 + n₂ + m₂ then cutChordB L 0 (n₁ + 1 + n₂) s
+  else if e < n₂ then (edgePoint L (e + n₁ + 1) s : ℂ)
+  else if e < n₁ + 1 + n₂ then (edgePoint L (e - n₂ - 1) s : ℂ)
+  else if e < n₁ + 1 + n₂ + m₂ then (edgePoint L (e + m₁ + 1) s : ℂ)
+  else (edgePoint L (e - m₂ - 1) s : ℂ)
+
+open PolygonMoves in
+/-- **Leaf (reverse transfer consistency).**  A piece point `z` on piece `i`
+whose new image is the new boundary point `(e, τ)` has old image `P`; `P` is
+`EqvGen`-related in the old word to `_aux_reverse_aux_transfer … e τ`.  As in
+`_aux_forward_aux_consistency`, the work is at the vertices, which have several
+names `(e, τ)` and several circle parameters `z`.  Model:
+`PolygonMoves.cut_transfer_consistency` (reverse direction). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (i : Bool) (z : Circle) (e : ℕ)
+    (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (hN : (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length e τ : ℂ) =
+      (if i then oldB (ρB z) else oldA (ρA z)))
+    (hP : (P : ℂ) = (if i then oldB z else oldA z)) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse transferred generator).**  Two distinct new sides with the
+same label, at matching parameters, pull back to old points that the old word
+relates.  For the `c` pair (`c⁻¹` at `n₂`, `c` at `q + m₂`, opposite signs) both
+pull back to the same chord point, `cutChordB L 0 q (1 - τ) = cutChordA L 0 q τ`
+(use `_aux_reverse_aux_eq`); every other pair moves back to a pair of old sides
+with the same labels and signs.  Model: `PolygonMoves.cut_transfer_generator`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2 then τ else reverseParameter τ)) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) T T' := by
+  sorry
+
+open PolygonMoves in
+/-- **Reverse generators** (split 2026-10-25 from lemma-2's partial into
+`_aux_consistency` and `_aux_generator`).  Converse of `_aux_forward`: a new
+side identification pulls back to an old chain.  The `c` pair lands on the old
 chord, so its two points become equal.  Model: `cut_reverse_generators`. -/
 theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse {L : Type*} [DecidableEq L]
     (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
@@ -3376,7 +3455,17 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse {L : Type*} [Decid
     (hN' : (N' : ℂ) = (if i' then oldB (ρB z') else oldA (ρA z')))
     (h : WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) N N') :
     Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P P' := by
-  sorry
+  obtain ⟨i₀, j₀, hij, τ, hlab, hN0, hN0'⟩ := h
+  obtain ⟨T, hT, hPT⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency
+      α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D i z i₀ i₀.2 τ P (by rw [← hN, hN0]) hP
+  obtain ⟨T', hT', hPT'⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency
+      α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D i' z' j₀ j₀.2 _ P' (by rw [← hN', hN0']) hP'
+  exact Relation.EqvGen.trans _ _ _ hPT (Relation.EqvGen.trans _ _ _
+    (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator
+      α₁ α₂ β₁ β₂ y c hy hc i₀ j₀ hij τ hlab T T' hT hT')
+    (Relation.EqvGen.symm _ _ hPT'))
 
 open PolygonMoves in
 /-- **Leaf (forward fibre).**  A point on both old pieces lies on the chord
