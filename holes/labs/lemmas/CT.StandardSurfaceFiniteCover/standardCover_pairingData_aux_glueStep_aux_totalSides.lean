@@ -760,7 +760,37 @@ theorem standardCover_pairingData_aux_glueStep_aux_totalSides
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) :
     C'.totalSides + 2 = C.totalSides := by
-  sorry
+  let e : C'.Side ≃ {u : C.Side // u ≠ s ∧ u ≠ C.pair s} :=
+    Equiv.ofBijective
+      (fun t ↦ ⟨D.toOld t, D.toOld_ne t⟩)
+      ⟨fun _ _ h ↦ D.toOld_injective (congrArg Subtype.val h), fun u ↦ by
+        obtain ⟨t, ht⟩ := D.toOld_surj u.1 u.2.1 u.2.2
+        exact ⟨t, Subtype.ext ht⟩⟩
+  have hcard : Fintype.card C'.Side =
+      Fintype.card {u : C.Side // u ≠ s ∧ u ≠ C.pair s} :=
+    Fintype.card_congr e
+  have hp : Fintype.card {u : C.Side // u = s ∨ u = C.pair s} = 2 := by
+    rw [Fintype.card_subtype]
+    have hfilter : Finset.filter (fun u : C.Side ↦ u = s ∨ u = C.pair s) Finset.univ =
+        {s, C.pair s} := by
+      ext u
+      simp [eq_comm]
+    rw [hfilter, Finset.card_pair]
+    exact (C.pair_ne s).symm
+  have hle : 2 ≤ Fintype.card C.Side := by
+    rw [← hp]
+    exact Fintype.card_subtype_le _
+  have hcompl : Fintype.card {u : C.Side // u ≠ s ∧ u ≠ C.pair s} =
+      Fintype.card C.Side - 2 := by
+    simpa only [not_or] using
+      (Fintype.card_subtype_compl (fun u : C.Side ↦ u = s ∨ u = C.pair s)).trans
+        (congrArg (Fintype.card C.Side - ·) hp)
+  have hC : C.totalSides = Fintype.card C.Side := by
+    simp [PolygonComplex.totalSides, Fintype.card_sigma]
+  have hC' : C'.totalSides = Fintype.card C'.Side := by
+    simp [PolygonComplex.totalSides, Fintype.card_sigma]
+  rw [hC', hC, hcard, hcompl]
+  omega
 -- END SEAT AREA
 
 theorem standardCover_pairingData_aux_glueStep_aux_sides
