@@ -5645,10 +5645,163 @@ noncomputable def orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_tran
   else (edgePoint L (e - m₁ - 1) s : ℂ)
 
 open PolygonMoves in
-/-- **Leaf (transfer consistency).**  An old boundary point, read on piece `i`
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_c
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (c : Signed L)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
+      (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length α₂.length s)
+      (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length
+        (α₂.length + 1 + α₁.length + β₂.length) (reverseParameter s)) := by
+  apply Relation.EqvGen.rel
+  let i : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+    ⟨α₂.length, by simp⟩
+  let j : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+    ⟨α₂.length + 1 + α₁.length + β₂.length, by simp; omega⟩
+  have hi : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i = inv c := by
+    simp [i, List.get_eq_getElem, List.getElem_append]
+  have hj : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j = c := by
+    rw [List.get_eq_getElem]
+    simp [j, List.getElem_append, Nat.add_assoc]
+    simp [Nat.add_comm, List.getElem_append]
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro h
+    have := congrArg Fin.val h
+    change α₂.length = α₂.length + 1 + α₁.length + β₂.length at this
+    omega
+  · rw [hi, hj]
+    simp [inv]
+  · rw [hi, hj]
+    simp [inv, reverseParameter]
+    rfl
+
+open PolygonMoves in
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordA_end
+    {L p q : ℕ} (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordA L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  exact cut_transfer_consistency_aux_chordA_end hpq hqL s h
+
+open PolygonMoves in
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordB_end
+    {L p q : ℕ} (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordB L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  exact cut_transfer_consistency_aux_chordB_end hpq hqL s h
+
+open PolygonMoves in
+/-- **Leaf (piece `A`, arc).**  The old point is `edgePoint L e₀ s₀` on an `A`
+side `e₀ < q`.  By `cutEdgePoint_eq`, either `(e, τ) = (e₀, s₀)` (then `N` is the
+transfer itself) or `(e, τ)` and `(e₀, s₀)` are the two endpoint names of one
+vertex, and the two transfers are joined in the new word.  Model:
+`PolygonMoves.cut_transfer_consistency_A_arc`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : e₀ < α₁.length + 1 + α₂.length)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldA (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))
+    (hN : (N : ℂ) =
+      oldA (ρA (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (piece `A`, chord).**  The old point is `cutChordA L 0 q s₀`; it lies on
+the boundary only at `s₀ = 0` (`cutPoint L q`) or `s₀ = 1` (`cutPoint L 0`), see
+`_aux_chordA_end`.  `N` is the new `edgePoint L n₂ s₀` (start/end of `c⁻¹`),
+joined to the transfer of each name `(e, τ)` of that vertex, using `_aux_c`.
+Model: `PolygonMoves.cut_transfer_consistency_A_chord`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordA
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldA (cutChordParamA (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀))
+    (hN : (N : ℂ) =
+      oldA (ρA (cutChordParamA (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀))) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (piece `B`, arc).**  As `_aux_arcA`, for an old side `q ≤ e₀ < L`.
+Model: `PolygonMoves.cut_transfer_consistency_B_arc`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : α₁.length + 1 + α₂.length ≤ e₀)
+    (he₀L : e₀ < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))
+    (hN : (N : ℂ) =
+      oldB (ρB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (piece `B`, chord).**  As `_aux_chordA`, with `cutChordB` (endpoints by
+`_aux_chordB_end`) and `N` on the new `c` side.
+Model: `PolygonMoves.cut_transfer_consistency_B_chord`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordB
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldB (cutChordParamB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀))
+    (hN : (N : ℂ) =
+      oldB (ρB (cutChordParamB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀))) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Transfer consistency.**  An old boundary point, read on piece `i`
 at circle parameter `z`, has new image `N`; whichever side `e` and parameter `τ`
 it is named by, `N` is `EqvGen`-related in the new word to the transferred
-point `_aux_transfer … e τ`.  The endpoint cases are the work: a vertex point
+point `_aux_transfer … e τ`.  Assembled from the four cover cases `_aux_arcA`, `_aux_chordA`, `_aux_arcB`, `_aux_chordB`; a vertex point
 has several names `(e, τ)` and several circle parameters `z`, and their images
 are joined through new-word identifications.  Model:
 `PolygonMoves.cut_transfer_consistency`. -/
@@ -5671,7 +5824,23 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
-  sorry
+  cases i with
+  | false =>
+    rcases D.coverA z with ⟨e₀, s₀, h1, rfl⟩ | ⟨s₀, rfl⟩
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N e₀ s₀ h1
+        (by simpa using hP) (by simpa using hN)
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordA
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N s₀
+        (by simpa using hP) (by simpa using hN)
+  | true =>
+    rcases D.coverB z with ⟨e₀, s₀, h1, h2, rfl⟩ | ⟨s₀, rfl⟩
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N e₀ s₀ h1 h2
+        (by simpa using hP) (by simpa using hN)
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordB
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N s₀
+        (by simpa using hP) (by simpa using hN)
 
 open PolygonMoves in
 /-- **Leaf (transferred generator).**  Two distinct old sides with the same
