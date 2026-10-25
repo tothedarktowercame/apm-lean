@@ -283,9 +283,74 @@ in one dual class form a union of glued disks that is closed and open in
 `C.Space`, since every side of such a face is glued to a face of the same
 class. -/
 -- BEGIN SEAT AREA
+theorem standardCover_pairingData_aux_lift_aux_dualConnected_aux_rel
+    (C : PolygonComplex) {x y : Σ _ : Fin C.faceCount, Disk} (h : C.Rel x y) :
+    ∃ s : C.Side, s.1 = x.1 ∧ (C.pair s).1 = y.1 := by
+  obtain ⟨s, t, rfl, rfl⟩ := h
+  exact ⟨s, rfl, rfl⟩
+
+theorem standardCover_pairingData_aux_lift_aux_dualConnected_aux_eqv
+    (C : PolygonComplex) {x y : Σ _ : Fin C.faceCount, Disk}
+    (h : Relation.EqvGen C.Rel x y) :
+    Relation.EqvGen
+      (fun a b => ∃ s : C.Side, s.1 = a ∧ (C.pair s).1 = b) x.1 y.1 := by
+  induction h with
+  | rel x y h =>
+      exact Relation.EqvGen.rel _ _
+        (standardCover_pairingData_aux_lift_aux_dualConnected_aux_rel C h)
+  | refl x => exact Relation.EqvGen.refl _
+  | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
 theorem standardCover_pairingData_aux_lift_aux_dualConnected (C : PolygonComplex)
     [ConnectedSpace C.Space] : C.DualConnected := by
-  sorry
+  intro f f'
+  let R : Fin C.faceCount → Fin C.faceCount → Prop :=
+    fun a b => ∃ s : C.Side, s.1 = a ∧ (C.pair s).1 = b
+  let A : Set (Fin C.faceCount) := {a | Relation.EqvGen R f a}
+  let U : Set (Σ _ : Fin C.faceCount, Disk) := Sigma.fst ⁻¹' A
+  let q : (Σ _ : Fin C.faceCount, Disk) → C.Space :=
+    fun x => Quotient.mk (Relation.EqvGen.setoid C.Rel) x
+  let S : Set C.Space := q '' U
+  have hsat : q ⁻¹' S = U := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, hxy⟩
+      change Relation.EqvGen R f x.1
+      have hy' : Relation.EqvGen R f y.1 := hy
+      have he : Relation.EqvGen C.Rel y x := Quotient.exact hxy
+      exact Relation.EqvGen.trans _ _ _ hy'
+        (standardCover_pairingData_aux_lift_aux_dualConnected_aux_eqv C he)
+    · intro hx
+      exact ⟨x, hx, rfl⟩
+  have hUopen : IsOpen U := by
+    exact isOpen_sigma_fst_preimage A
+  have hUclosed : IsClosed U := by
+    rw [← isOpen_compl_iff]
+    have h : IsOpen (Sigma.fst ⁻¹' (Aᶜ) :
+        Set (Σ _ : Fin C.faceCount, Disk)) :=
+      isOpen_sigma_fst_preimage (Aᶜ)
+    convert h using 1 <;> ext x <;> simp [U]
+  have hSopen : IsOpen S := by
+    change IsOpen (q ⁻¹' S)
+    rw [hsat]
+    exact hUopen
+  have hSclosed : IsClosed S := by
+    rw [← isOpen_compl_iff]
+    change IsOpen (q ⁻¹' Sᶜ)
+    rw [preimage_compl, hsat]
+    exact hUclosed.isOpen_compl
+  have hSne : S.Nonempty := by
+    let x : Σ _ : Fin C.faceCount, Disk :=
+      ⟨f, standardCover_pairingData_aux_lift_aux_center⟩
+    exact ⟨q x, x, Relation.EqvGen.refl _, rfl⟩
+  have hSuniv : S = Set.univ := IsClopen.eq_univ ⟨hSclosed, hSopen⟩ hSne
+  let x : Σ _ : Fin C.faceCount, Disk :=
+    ⟨f', standardCover_pairingData_aux_lift_aux_center⟩
+  have hxS : q x ∈ S := by rw [hSuniv]; trivial
+  have hxpre : x ∈ q ⁻¹' S := hxS
+  rw [hsat] at hxpre
+  exact hxpre
 -- END SEAT AREA
 
 /-- Leaf: the corner classes of the lifted complex correspond to the `n`
