@@ -5998,6 +5998,91 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency
         α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N s₀
         (by simpa using hP) (by simpa using hN)
 
+/-- **Leaf.** A non-`y` old side moves to a new side with the same letter. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_side
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (e : ℕ)
+    (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (he₁ : e ≠ α₁.length)
+    (he₂ : e ≠ α₁.length + 1 + α₂.length + β₁.length) :
+    let f := if e < α₁.length then e + α₂.length + 1
+      else if e < α₁.length + 1 + α₂.length then e - α₁.length - 1
+      else if e < α₁.length + 1 + α₂.length + β₁.length then e + β₂.length + 1
+      else e - β₁.length - 1
+    ∃ hf : f < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length,
+      (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get ⟨f, hf⟩ =
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get ⟨e, he⟩ := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf.** By freshness of `y`, only the two `y` sides carry label `y.1`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_y_index
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (i : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (h : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 = y.1) :
+    (i : ℕ) = α₁.length ∨
+      (i : ℕ) = α₁.length + 1 + α₂.length + β₁.length := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (y pair).** Both sides are `y` sides (opposite signs, so the
+parameter is reversed); both transfers are the same chord point
+(`cutChordB L 0 q (1 - τ) = cutChordA L 0 q τ`), so `T = T'`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_ypair
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 =
+      ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).2 =
+          ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2
+        then τ else reverseParameter τ))
+    (hi : (i : ℕ) = α₁.length ∨ (i : ℕ) = α₁.length + 1 + α₂.length + β₁.length)
+    (hj : (j : ℕ) = α₁.length ∨ (j : ℕ) = α₁.length + 1 + α₂.length + β₁.length) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) T T' := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (other pairs).** Neither side is a `y` side; both transfer to
+`edgePoint` at the new positions (`_aux_side`), which carry the same letters,
+so one `WordRel` step with the same parameter choice relates them. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_other
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 =
+      ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).2 =
+          ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2
+        then τ else reverseParameter τ))
+    (hiy : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 ≠ y.1)
+    (hjy : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).1 ≠ y.1) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) T T' := by
+  sorry
+
 open PolygonMoves in
 /-- **Leaf (transferred generator).**  Two distinct old sides with the same
 label, at matching parameters, transfer to new points that the new word
@@ -6025,7 +6110,12 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator
           ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2
         then τ else reverseParameter τ)) :
     Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) T T' := by
-  sorry
+  by_cases hiy : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 = y.1
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_ypair α₁ α₂ β₁ β₂ y c hy hc i j hij τ hlab T T' hT hT'
+      (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_y_index α₁ α₂ β₁ β₂ y hy i hiy)
+      (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_y_index α₁ α₂ β₁ β₂ y hy j (hlab ▸ hiy))
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_other α₁ α₂ β₁ β₂ y c hy hc i j hij τ hlab T T' hT hT'
+      hiy (fun h => hiy (hlab.trans h))
 
 open PolygonMoves in
 /-- **Forward generators** (split 2026-10-25 from lemma-1's partial into `_aux_consistency` and `_aux_generator`).  An old side identification between two
