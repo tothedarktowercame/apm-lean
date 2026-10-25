@@ -1633,6 +1633,44 @@ own `C`-class, and carrying every generating identification of `C` to a
 `C'`-equivalence.  The deleted corners `s` and `C.pair s` go to preimages of
 corners in their classes (`_aux_cutRel`: `s ~ nextCorner (C.pair s)` and
 `C.pair s ~ nextCorner s`). -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_leftInverse
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s) :
+    ∃ g : C.Side → C'.Side, ∀ t, g (D.toOld t) = t := by
+  haveI : Nonempty C'.Side := ⟨⟨D.merged, ⟨0, C'.sides_pos D.merged⟩⟩⟩
+  let g : C.Side → C'.Side := Function.invFun D.toOld
+  refine ⟨g, ?_⟩
+  intro t
+  exact Function.leftInverse_invFun D.toOld_injective t
+
+/-- **Leaf (choice of the inverse).**  A left inverse of `toOld` whose values
+at the deleted sides `s` and `C.pair s` are preimages of corners in their own
+`C`-classes.  By `_aux_cutRel`, `s ~ nextCorner (C.pair s)` and
+`C.pair s ~ nextCorner s`; the faces `s.1` and `(C.pair s).1` differ
+(`old_ne`, `old_merged`), so these corners are deleted only when a face is a
+1-gon, and then follow the class one more step (`sides_merged` with
+`C'.sides_pos` rules out both faces being 1-gons). -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_choose
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) :
+    ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
+      (∀ u, Relation.EqvGen C.CornerRel (D.toOld (g u)) u) := by
+  sorry
+
+/-- **Leaf (corner classes reflect).**  Two corners of `C'` whose images are
+`C`-equivalent are already `C'`-equivalent: the map of corner classes induced
+by `toOld` is injective.  A `C`-path between images may pass through the
+deleted corners `s` and `C.pair s`; each such visit enters and leaves through
+the two junction corners of the merged face of `C'`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) (x y : C'.Side)
+    (h : Relation.EqvGen C.CornerRel (D.toOld x) (D.toOld y)) :
+    Relation.EqvGen C'.CornerRel x y := by
+  sorry
+
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
@@ -1640,7 +1678,11 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back
     ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
       (∀ u, Relation.EqvGen C.CornerRel (D.toOld (g u)) u) ∧
       (∀ a b, C.CornerRel a b → Relation.EqvGen C'.CornerRel (g a) (g b)) := by
-  sorry
+  obtain ⟨g, hg1, hg2⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_choose D hor
+  refine ⟨g, hg1, hg2, fun a b hab => ?_⟩
+  apply standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_reflect D hor
+  exact (hg2 a).trans _ _ _ ((Relation.EqvGen.rel _ _ hab).trans _ _ _ (hg2 b).symm)
 
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount
     {C C' : PolygonComplex} {s : C.Side}
