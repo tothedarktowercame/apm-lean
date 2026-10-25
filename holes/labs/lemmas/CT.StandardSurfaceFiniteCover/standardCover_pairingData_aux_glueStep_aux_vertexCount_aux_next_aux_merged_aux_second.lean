@@ -1756,7 +1756,41 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merg
     (m : Fin (C'.sides D.merged)) (hm₁ : C.sides s.1 ≤ m.val + 1)
     (hm₂ : m.val + 1 < C'.sides D.merged) :
     D.toOld (C'.nextCorner ⟨D.merged, m⟩) = C.nextCorner (D.toOld ⟨D.merged, m⟩) := by
-  sorry
+  let m' : Fin (C'.sides D.merged) := (C'.nextCorner ⟨D.merged, m⟩).2
+  have hnext : C'.nextCorner ⟨D.merged, m⟩ = ⟨D.merged, m'⟩ := by
+    rfl
+  rw [hnext]
+  have hnval : m'.val = m.val + 1 := by
+    dsimp only [m']
+    simp only [PolygonComplex.nextCorner]
+    exact Nat.mod_eq_of_lt hm₂
+  have hnsecond : C.sides s.1 ≤ m'.val + 1 := by
+    omega
+  have hfst_left : (D.toOld ⟨D.merged, m'⟩).1 = (C.pair s).1 := by
+    simpa [show ¬ (m'.val + 1 < C.sides s.1) by omega] using
+      D.toOld_merged_fst m'
+  have hfst_m : (D.toOld ⟨D.merged, m⟩).1 = (C.pair s).1 := by
+    simpa [show ¬ (m.val + 1 < C.sides s.1) by omega] using
+      D.toOld_merged_fst m
+  have hfst_right : (C.nextCorner (D.toOld ⟨D.merged, m⟩)).1 =
+      (C.pair s).1 := by
+    simp only [PolygonComplex.nextCorner]
+    exact hfst_m
+  apply Sigma.ext (hfst_left.trans hfst_right.symm)
+  apply (Fin.heq_ext_iff (congrArg C.sides (hfst_left.trans hfst_right.symm))).2
+  have hval_left := D.toOld_merged_val m'
+  have hval_m := D.toOld_merged_val m
+  simp only [PolygonComplex.nextCorner]
+  rw [hval_left, hval_m]
+  simp only [if_neg (by omega : ¬ (m'.val + 1 < C.sides s.1)),
+    if_neg (by omega : ¬ (m.val + 1 < C.sides s.1)), hnval]
+  have hsub : m.val + 2 - C.sides s.1 =
+      (m.val + 1 - C.sides s.1) + 1 := by omega
+  rw [hsub, show (C.pair s).2.val + 1 +
+      ((m.val + 1 - C.sides s.1) + 1) =
+      ((C.pair s).2.val + 1 + (m.val + 1 - C.sides s.1)) + 1 by omega,
+    if_neg (by omega), hfst_m, Nat.add_mod]
+  simp [Nat.mod_eq_of_lt (C.sides_pos (C.pair s).1)]
 -- END SEAT AREA
 
 /-- **Leaf (first junction).**  `m + 2 = C.sides s.1`: `m` is the last side
