@@ -1866,11 +1866,129 @@ def standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge
     else if x.1 = (C.pair s).1 then ⟨D.merged, hR x.2⟩
     else ⟨standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D x.1, x.2⟩
 
-/-- **Leaf (fibres).**  Two points of the disks of `C` are identified in `C`
-exactly when their images are identified in `C'`.  The step along `s` becomes
-equality (`seam`; `hor` makes the paired parameter `reverseIcc`), steps along
-other sides become `C'` steps through `toOld` (`edge_left`, `edge_right`,
-`toOld_merged_*`, `toOld_fst`, `toOld_val`, `pair_toOld`, `sign_toOld`). -/
+/-- The step along `s` becomes equality: equal images of the two glued disks
+come from a `C.Rel` step along `s` (banked by lemma-2). -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_seam
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) {hL hR : Disk → Disk}
+    (hH : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
+      (C.sides s.1) (C.sides (C.pair s).1) s.2 (C.pair s).2 hL hR)
+    (x z : Disk)
+    (heq : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+        ⟨s.1, x⟩ =
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+        ⟨(C.pair s).1, z⟩) :
+    Relation.EqvGen C.Rel (⟨s.1, x⟩ : Σ _ : Fin C.faceCount, Disk)
+      ⟨(C.pair s).1, z⟩ := by
+  have hfaces : s.1 ≠ (C.pair s).1 := by
+    intro h
+    have := D.old_ne D.merged
+    exact this (D.old_merged.trans h)
+  have him : hL x = hR z := by
+    simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+      hfaces, hfaces.symm] using congrArg Sigma.snd heq
+  obtain ⟨t, rfl, rfl⟩ := (hH.seam x z).mp him
+  apply Relation.EqvGen.rel
+  refine ⟨s, t, rfl, ?_⟩
+  simp only [PolygonComplex.pairedParameter]
+  rw [if_neg (Ne.symm (hor s))]
+
+/-- **Leaf (fibres, faces).**  An unmerged face of `C` is `old` of a face of `C'`
+other than `merged`, and `oldInv` finds it: `old` is injective, misses
+`(C.pair s).1`, and `C'` has one face fewer (`faceCount_succ`), so its range is
+every other face. -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_oldInv
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (f : Fin C.faceCount) (h1 : f ≠ s.1) (h2 : f ≠ (C.pair s).1) :
+    D.old (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f) = f ∧
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f ≠ D.merged := by
+  sorry
+
+/-- **Leaf (fibres, sides).**  Each side `v` of `C'` is the image of side
+`toOld v` of `C`, with the arc parameter kept.  Unmerged faces: `toOld_fst`,
+`toOld_val`, `sides_old` and `oldInv (old k) = k` (from `old_injective`).
+Merged face: `toOld_merged_fst`, `toOld_merged_val`, then `hH.edge_left` or
+`hH.edge_right`, with `sides_merged` for `C'.sides merged = p + q - 2`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_edgeImage
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    {hL hR : Disk → Disk}
+    (hH : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
+      (C.sides s.1) (C.sides (C.pair s).1) s.2 (C.pair s).2 hL hR)
+    (v : C'.Side) (t : Set.Icc (0 : ℝ) 1) :
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+        ⟨(D.toOld v).1, edgePoint (C.sides (D.toOld v).1) (D.toOld v).2 t⟩ =
+      ⟨v.1, edgePoint (C'.sides v.1) v.2 t⟩ := by
+  sorry
+
+/-- **Leaf (fibres, kernel).**  Points of the disks of `C` with the same image are
+identified in `C`: within one glued disk by `hH.injective_left`/`_right`, across
+the two glued disks by `_aux_seam`, on unmerged disks by `hfaces` (their faces
+are distinct and never `merged`). -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_kernel
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) {hL hR : Disk → Disk}
+    (hH : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
+      (C.sides s.1) (C.sides (C.pair s).1) s.2 (C.pair s).2 hL hR)
+    (hfaces : ∀ f, f ≠ s.1 → f ≠ (C.pair s).1 →
+      D.old (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f) = f ∧
+        standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f ≠ D.merged)
+    (y y' : Σ _ : Fin C.faceCount, Disk)
+    (heq : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y =
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y') :
+    Relation.EqvGen C.Rel y y' := by
+  sorry
+
+/-- **Leaf (fibres, forward step).**  A generating step of `C` maps to equality or
+to one generating step of `C'`.  Along `s` or `C.pair s` the images are equal
+(`hH.seam`; `hor` makes the paired parameter `reverseIcc`).  Along any other
+side `u = toOld v` (`toOld_surj`), `himage` sends both ends onto the `C'` step
+along `v`, matched by `pair_toOld` and `sign_toOld`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_step
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) {hL hR : Disk → Disk}
+    (hH : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
+      (C.sides s.1) (C.sides (C.pair s).1) s.2 (C.pair s).2 hL hR)
+    (himage : ∀ (v : C'.Side) (t : Set.Icc (0 : ℝ) 1),
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+          ⟨(D.toOld v).1, edgePoint (C.sides (D.toOld v).1) (D.toOld v).2 t⟩ =
+        ⟨v.1, edgePoint (C'.sides v.1) v.2 t⟩)
+    (x y : Σ _ : Fin C.faceCount, Disk) (hxy : C.Rel x y) :
+    Relation.EqvGen C'.Rel
+      (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR x)
+      (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y) := by
+  sorry
+
+/-- **Leaf (fibres, reverse step).**  A generating step of `C'` along side `v`
+lifts to the `C` step along `toOld v` (`himage` at both ends, `pair_toOld`,
+`sign_toOld`); any preimages of its two ends are joined to those by `hker`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_lift
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    {hL hR : Disk → Disk}
+    (himage : ∀ (v : C'.Side) (t : Set.Icc (0 : ℝ) 1),
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+          ⟨(D.toOld v).1, edgePoint (C.sides (D.toOld v).1) (D.toOld v).2 t⟩ =
+        ⟨v.1, edgePoint (C'.sides v.1) v.2 t⟩)
+    (hker : ∀ y y' : Σ _ : Fin C.faceCount, Disk,
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y =
+          standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y' →
+        Relation.EqvGen C.Rel y y')
+    (z z' : Σ _ : Fin C'.faceCount, Disk) (hzz : C'.Rel z z')
+    (y y' : Σ _ : Fin C.faceCount, Disk)
+    (hy : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y = z)
+    (hy' : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y' = z') :
+    Relation.EqvGen C.Rel y y' := by
+  sorry
+
+/-- Two points of the disks of `C` are identified in `C` exactly when their
+images are identified in `C'` (assembly of `_aux_oldInv`, `_aux_edgeImage`,
+`_aux_kernel`, `_aux_step`, `_aux_lift`; induction on `EqvGen` both ways, the
+reverse one over preimages, which exist by `hH.cover`). -/
 theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
@@ -1882,7 +2000,65 @@ theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres
       Relation.EqvGen C'.Rel
         (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y)
         (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y') := by
-  sorry
+  let b := standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+  have hfaces := fun f (h1 : f ≠ s.1) (h2 : f ≠ (C.pair s).1) =>
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_oldInv D f h1 h2
+  have himage := fun v t =>
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_edgeImage D hH v t
+  have hker := fun y y' h =>
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_kernel
+      D hor hH hfaces y y' h
+  have hne : s.1 ≠ (C.pair s).1 := by
+    have h := D.old_ne D.merged
+    rwa [D.old_merged] at h
+  have hsurj : ∀ w, ∃ x, b x = w := by
+    rintro ⟨k, z⟩
+    by_cases hk : k = D.merged
+    · subst hk
+      rcases hH.cover z with ⟨x, hx⟩ | ⟨x, hx⟩
+      · exact ⟨⟨s.1, x⟩, by
+          simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge, hx]⟩
+      · exact ⟨⟨(C.pair s).1, x⟩, by
+          simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+            hne.symm, hx]⟩
+    · have h1 : D.old k ≠ s.1 := by
+        intro h
+        exact hk (D.old_injective (h.trans D.old_merged.symm))
+      have h2 : D.old k ≠ (C.pair s).1 := D.old_ne k
+      have hinv :
+          standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D (D.old k) = k :=
+        D.old_injective (hfaces _ h1 h2).1
+      refine ⟨⟨D.old k, z⟩, ?_⟩
+      simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge, h1, h2, hinv]
+  constructor
+  · intro h
+    induction h with
+    | rel x x' hxx =>
+      exact standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_step
+        D hor hH himage x x' hxx
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x x' _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x w x' _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro h
+    have key : ∀ z z', Relation.EqvGen C'.Rel z z' →
+        ∀ x x', b x = z → b x' = z' → Relation.EqvGen C.Rel x x' := by
+      intro z z' hz
+      induction hz with
+      | rel z z' hzz =>
+        intro x x' hx hx'
+        exact standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_lift
+          D himage hker z z' hzz x x' hx hx'
+      | refl z =>
+        intro x x' hx hx'
+        exact hker x x' (hx.trans hx'.symm)
+      | symm z z' _ ih =>
+        intro x x' hx hx'
+        exact Relation.EqvGen.symm _ _ (ih x' x hx' hx)
+      | trans z w z' _ _ ih₁ ih₂ =>
+        intro x x' hx hx'
+        obtain ⟨m, hm⟩ := hsurj w
+        exact Relation.EqvGen.trans _ _ _ (ih₁ x m hx hm) (ih₂ m x' hm hx')
+    exact key _ _ h y y' rfl rfl
 
 /-- The disks of `s.1` and `(C.pair s).1`, glued along `s` with the parameter
 reversed, form one disk whose boundary is the merged face's boundary; all other
