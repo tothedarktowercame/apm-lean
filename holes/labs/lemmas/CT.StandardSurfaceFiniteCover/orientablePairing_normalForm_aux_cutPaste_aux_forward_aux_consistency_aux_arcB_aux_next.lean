@@ -9132,7 +9132,104 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
-  sorry
+  have hnew : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length =
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by simp; omega
+  have hc' := orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_c
+    α₁ α₂ β₁ β₂ c ⟨0, by constructor <;> norm_num⟩
+  rw [hnew] at hc'
+  set LL := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length with hLL
+  set p := α₁.length with hp
+  set a := α₂.length with ha
+  set b1 := β₁.length with hb1
+  set b2 := β₂.length with hb2
+  let z : Icc (0 : ℝ) 1 := ⟨0, by constructor <;> norm_num⟩
+  let o : Icc (0 : ℝ) 1 := ⟨1, by constructor <;> norm_num⟩
+  have hlen : LL = p + 1 + a + b1 + 1 + b2 := D.length
+  have hs : s₀ = z := Subtype.ext hs₀
+  have ht : τ = o := Subtype.ext hτ
+  subst hs
+  subst ht
+  have hz : ∀ k, (edgePoint LL k z : ℂ) = cutPoint LL k :=
+    fun k => edgePoint_zero_eq_cutPoint LL k
+  have ho : ∀ k, (edgePoint LL k o : ℂ) = cutPoint LL (k + 1) :=
+    fun k => edgePoint_one_eq_cutPoint LL k
+  have hB0 : cutChordB LL 0 (p + 1 + a) z = cutPoint LL 0 := by simp [cutChordB, z]
+  have hB1 : cutChordB LL 0 (p + 1 + a) o = cutPoint LL (p + 1 + a) := by
+    simp [cutChordB, o]
+  have hA1 : cutChordA LL 0 (p + 1 + a) o = cutPoint LL 0 := by simp [cutChordA, o]
+  have hwrap : cutPoint LL LL = cutPoint LL 0 := by
+    simpa using cutPoint_add_length (L := LL) (by omega) 0
+  have he_next : e + 1 = e₀ := by
+    have hlt : e + 1 < LL := by
+      by_contra hn
+      have heqL : e + 1 = LL := by omega
+      rw [heqL, Nat.mod_self] at hadj
+      omega
+    rw [Nat.mod_eq_of_lt hlt] at hadj
+    exact hadj.symm
+  subst he_next
+  by_cases hq : e + 1 = p + 1 + a
+  · -- Seam: `e` is the last side of piece `A`; the common vertex is glued across `c`.
+    have hNc : (N : ℂ) = cutPoint LL (p + 1 + a + b2 + 1) := by
+      rw [hN]
+      by_cases hb : b1 = 0
+      · rw [show e + 1 = p + 1 + a + b1 by omega, D.ρB_y, D.oldB_chord, hB0,
+          show p + 1 + a + b2 + 1 = LL by omega, hwrap]
+      · rw [D.ρB_β₁ (e + 1) z (by omega) (by omega),
+          D.oldB_arc _ _ (by omega) (by omega), hz]
+        congr 1
+        omega
+    have hTc : orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        LL p a b1 b2 e o = cutPoint LL a := by
+      by_cases ha0 : a = 0
+      · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+          if_pos (by omega : e = p), hA1, ha0]
+      · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+          if_neg (by omega : e ≠ p), if_neg (by omega : e ≠ p + 1 + a + b1),
+          if_neg (by omega : ¬ e < p), if_pos (by omega : e < p + 1 + a), ho]
+        congr 1
+        omega
+    refine ⟨edgePoint LL a z, by rw [hz, hTc], ?_⟩
+    have hNd : N = edgePoint LL (a + 1 + p + b2) o := by
+      apply Subtype.ext
+      rw [hNc, ho]
+      congr 1
+      omega
+    have hrev : reverseParameter z = o := Subtype.ext (by simp [reverseParameter, z, o])
+    rw [hrev] at hc'
+    rw [hNd]
+    exact hc'.symm
+  · -- Off the seam: `e` and `e + 1` lie in piece `B`, and both sides name one point.
+    refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+    rw [hN]
+    by_cases h₁ : e + 1 < p + 1 + a + b1
+    · rw [D.ρB_β₁ (e + 1) z (by omega) h₁, D.oldB_arc _ _ (by omega) (by omega), hz,
+        orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+        if_neg (by omega : e ≠ p), if_neg (by omega : e ≠ p + 1 + a + b1),
+        if_neg (by omega : ¬ e < p), if_neg (by omega : ¬ e < p + 1 + a),
+        if_pos (by omega : e < p + 1 + a + b1), ho]
+      congr 1
+      omega
+    · by_cases hy₀ : e + 1 = p + 1 + a + b1
+      · rw [hy₀, D.ρB_y, D.oldB_chord, hB0,
+          orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+          if_neg (by omega : e ≠ p), if_neg (by omega : e ≠ p + 1 + a + b1),
+          if_neg (by omega : ¬ e < p), if_neg (by omega : ¬ e < p + 1 + a),
+          if_pos (by omega : e < p + 1 + a + b1), ho,
+          show e + b2 + 1 + 1 = LL by omega, hwrap]
+      · rw [D.ρB_β₂ (e + 1) z (by omega) (by omega),
+          D.oldB_arc _ _ (by omega) (by omega), hz]
+        by_cases hey : e = p + 1 + a + b1
+        · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg (by omega : e ≠ p), if_pos hey, hB1]
+          congr 1
+          omega
+        · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg (by omega : e ≠ p), if_neg hey,
+            if_neg (by omega : ¬ e < p), if_neg (by omega : ¬ e < p + 1 + a),
+            if_neg (by omega : ¬ e < p + 1 + a + b1), ho]
+          congr 1
+          omega
 -- END SEAT AREA
 
 open PolygonMoves in
