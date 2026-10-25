@@ -6077,7 +6077,49 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_wrap_aux_f
         (PolygonMoves.inv x ::
           (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).tail.dropLast) ++ [x]) :
     x.1 ∉ ((standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).tail.dropLast).map Prod.fst := by
-  sorry
+  classical
+  let lab : C.Side → ℕ := fun u => min u.2.val (C.pair u).2.val
+  let w := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab
+  let r := w.tail.dropLast
+  have hgood : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C lab := by
+    intro a b
+    constructor
+    · intro hab
+      have hext : ∀ {u v : C.Side}, u.2.val = v.2.val → u = v := by
+        intro u v huv
+        exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1 huv
+      by_cases ha : a.2.val ≤ (C.pair a).2.val
+      · by_cases hb : b.2.val ≤ (C.pair b).2.val
+        · left
+          exact hext (by simpa [lab, min_eq_left ha, min_eq_left hb] using hab.symm)
+        · right
+          have h : C.pair b = a := hext (by
+            simpa [lab, min_eq_left ha, min_eq_right (Nat.le_of_not_ge hb)] using hab.symm)
+          rw [← h, C.pair_pair]
+      · by_cases hb : b.2.val ≤ (C.pair b).2.val
+        · right
+          exact hext (by simpa [lab, min_eq_right (Nat.le_of_not_ge ha), min_eq_left hb] using hab.symm)
+        · left
+          have h : C.pair b = C.pair a := hext (by
+            simpa [lab, min_eq_right (Nat.le_of_not_ge ha),
+              min_eq_right (Nat.le_of_not_ge hb)] using hab.symm)
+          exact C.pair.injective h
+    · rintro (rfl | rfl)
+      · rfl
+      · change min a.2.val (C.pair a).2.val =
+          min (C.pair a).2.val (C.pair (C.pair a)).2.val
+        rw [C.pair_pair]
+        exact min_comm _ _
+  have hpoly := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_isPolygonWord C h1 lab hgood
+  have hxmem : x.1 ∈ w.map Prod.fst := by
+    rw [show w = (PolygonMoves.inv x :: r) ++ [x] by simpa [w, lab, r] using hw]
+    simp
+  have hcount : (w.map Prod.fst).count x.1 = 2 := hpoly.2.2 x.1 hxmem
+  have hz : (r.map Prod.fst).count x.1 = 0 := by
+    rw [show w = (PolygonMoves.inv x :: r) ++ [x] by simpa [w, lab, r] using hw] at hcount
+    simp [List.map_append, PolygonMoves.inv] at hcount ⊢
+    omega
+  simpa [w, lab, r, List.count_eq_zero] using hz
 
 /-- **Leaf (wrap).**  If `s` is the last side, `C.pair s` is side `0`: the
 word of `C` is `x⁻¹ :: v ++ [x]` and the word of `C'` is `v`. -/
