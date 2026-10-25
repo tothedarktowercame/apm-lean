@@ -1834,6 +1834,72 @@ corresponding polygon vertices.  Corner `s` is `polygonVertex (e s)`; corner
 `edgePoint n n 0 = edgePoint n 0 0` at the wrap-around).  Each case of
 `CornerRel` is then one `boundaryRel` step at `t = 0` or `t = 1`. -/
 -- BEGIN SEAT AREA
+theorem standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_val
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (s : C.Side) :
+    (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 s).1 = s.2.1 := by
+  letI := standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1
+  have hf : s.1 = default := Unique.uniq
+    (standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1) s.1
+  obtain ⟨f, i⟩ := s
+  dsimp at hf ⊢
+  subst f
+  simp [standardCover_pairingData_aux_toPairing_aux_sideEquiv,
+    Equiv.uniqueSigma, finCongr]
+
+theorem standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_next
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (s : C.Side) :
+    polygonVertex C.totalSides
+        (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 (C.nextCorner s)) =
+      edgePoint C.totalSides
+        (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 s)
+        PolygonBoundaryVertexClasses.oneIcc := by
+  rw [PolygonBoundaryVertexClasses.edgePoint_one_eq_succ_zero]
+  unfold polygonVertex
+  by_cases h : s.2.1 + 1 < C.sides s.1
+  · apply congrArg (fun k : ℕ => edgePoint C.totalSides k
+      PolygonBoundaryVertexClasses.zeroIcc)
+    rw [standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_val,
+      standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_val]
+    simp [PolygonComplex.nextCorner, Nat.mod_eq_of_lt h]
+  · have hw : s.2.1 + 1 = C.sides s.1 := by omega
+    rw [standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_val,
+      standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_val]
+    apply Subtype.ext
+    simp only [PolygonComplex.nextCorner, hw, Nat.mod_self, edgePoint,
+      PolygonBoundaryVertexClasses.zeroIcc, Set.mem_Icc, le_refl, zero_le_one,
+      add_zero, Nat.cast_zero, Nat.cast_add, Nat.cast_one, Complex.ofReal_zero,
+      Complex.exp_zero]
+    rw [show C.totalSides = C.sides s.1 by
+      letI := standardCover_pairingData_aux_toPairing_aux_uniqueFace C h1
+      simpa [PolygonComplex.totalSides] using
+        congrArg C.sides (Subsingleton.elim default s.1)]
+    simp only [mul_zero, zero_div, Complex.exp_zero]
+    have hn : (C.sides s.1 : ℂ) ≠ 0 := by
+      exact_mod_cast (Nat.ne_of_gt (C.sides_pos s.1))
+    have hfrac : 2 * (Real.pi : ℂ) * (C.sides s.1 : ℂ) /
+        (C.sides s.1 : ℂ) = 2 * Real.pi := by field_simp
+    rw [show (↑(↑(C.sides s.1) : ℝ) : ℂ) = (C.sides s.1 : ℂ) by norm_num,
+      hfrac]
+    simpa [mul_assoc, mul_comm, mul_left_comm] using
+      Complex.exp_two_pi_mul_I.symm
+
+theorem standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_rel
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (s : C.Side)
+    (t : Set.Icc (0 : ℝ) 1) :
+    boundaryRel C.totalSides
+        (standardCover_pairingData_aux_toPairing_aux_pair C h1)
+        (standardCover_pairingData_aux_toPairing_aux_sign C h1)
+      (edgePoint C.totalSides
+        (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 s) t)
+      (edgePoint C.totalSides
+        (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 (C.pair s))
+        (C.pairedParameter s t)) := by
+  refine ⟨standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 s, t, rfl, ?_⟩
+  simp [standardCover_pairingData_aux_toPairing_aux_pair,
+    standardCover_pairingData_aux_toPairing_aux_sign,
+    PolygonSurfacePiOne.pairedParameter, PolygonComplex.pairedParameter,
+    Equiv.permCongr_apply]
+
 theorem standardCover_pairingData_aux_toPairing_aux_cornerStep
     (C : PolygonComplex) (h1 : C.faceCount = 1) (a b : C.Side)
     (hab : C.CornerRel a b) :
@@ -1842,7 +1908,41 @@ theorem standardCover_pairingData_aux_toPairing_aux_cornerStep
         (standardCover_pairingData_aux_toPairing_aux_sign C h1))
       (polygonVertex C.totalSides (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 a))
       (polygonVertex C.totalSides (standardCover_pairingData_aux_toPairing_aux_sideEquiv C h1 b)) := by
-  sorry
+  obtain ⟨s, hs⟩ := hab
+  by_cases hsign : C.sign s = C.sign (C.pair s)
+  · simp only [hsign, if_pos] at hs
+    rcases hs with ⟨ha, hb⟩ | ⟨ha, hb⟩
+    · subst a; subst b
+      apply Relation.EqvGen.rel
+      simpa [polygonVertex, PolygonComplex.pairedParameter, hsign,
+        PolygonBoundaryVertexClasses.zeroIcc] using
+        (standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_rel C h1 s
+          PolygonBoundaryVertexClasses.zeroIcc)
+    · subst a; subst b
+      apply Relation.EqvGen.rel
+      rw [standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_next,
+        standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_next]
+      simpa [PolygonComplex.pairedParameter, hsign] using
+        (standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_rel C h1 s
+          PolygonBoundaryVertexClasses.oneIcc)
+  · simp only [hsign, if_neg] at hs
+    rcases hs with ⟨ha, hb⟩ | ⟨ha, hb⟩
+    · subst a; subst b
+      apply Relation.EqvGen.rel
+      rw [standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_next]
+      simpa [polygonVertex, PolygonComplex.pairedParameter, hsign, reverseIcc,
+        PolygonBoundaryVertexClasses.zeroIcc,
+        PolygonBoundaryVertexClasses.oneIcc] using
+        (standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_rel C h1 s
+          PolygonBoundaryVertexClasses.zeroIcc)
+    · subst a; subst b
+      apply Relation.EqvGen.rel
+      rw [standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_next]
+      simpa [polygonVertex, PolygonComplex.pairedParameter, hsign, reverseIcc,
+        PolygonBoundaryVertexClasses.zeroIcc,
+        PolygonBoundaryVertexClasses.oneIcc] using
+        (standardCover_pairingData_aux_toPairing_aux_cornerStep_aux_rel C h1 s
+          PolygonBoundaryVertexClasses.oneIcc)
 -- END SEAT AREA
 
 theorem standardCover_pairingData_aux_toPairing_aux_oneVertex
