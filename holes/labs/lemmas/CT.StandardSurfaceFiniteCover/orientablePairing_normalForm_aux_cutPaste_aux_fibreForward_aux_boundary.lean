@@ -8895,6 +8895,48 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_fibreForward_aux_chord {L : 
 
 open PolygonMoves in
 -- BEGIN SEAT AREA
+lemma orientablePairing_normalForm_aux_cutPaste_aux_fibreForward_aux_boundary_aux_edge
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y : Signed L)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (z : Circle) (hu : ‖oldA z‖ = 1) :
+    ∃ (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+      (s : Icc (0 : ℝ) 1),
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e s : ℂ) = oldA z := by
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  let q := α₁.length + 1 + α₂.length
+  rcases D.coverA z with ⟨e, s, he, hz⟩ | ⟨s, hz⟩
+  · refine ⟨e, by simp [W]; omega, s, ?_⟩
+    rw [hz, D.oldA_arc e s he]
+  · have hq : q < W.length := by simp [W, q]; omega
+    have hnorm : ‖cutChordA W.length 0 q s‖ = 1 := by
+      rw [hz, D.oldA_chord] at hu
+      simpa [W, q] using hu
+    have hs : s.1 = 0 ∨ s.1 = 1 :=
+      orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordA_end
+        (p := 0) (q := q) (by omega) hq s hnorm
+    rcases hs with hs | hs
+    · let z₀ : Icc (0 : ℝ) 1 := ⟨0, by constructor <;> norm_num⟩
+      have hsz : s = z₀ := Subtype.ext hs
+      refine ⟨q, by simpa [W] using hq, z₀, ?_⟩
+      rw [hz, D.oldA_chord, hsz]
+      exact (edgePoint_zero_eq_cutPoint W.length q).trans (by
+        simp only [cutChordA, z₀, Set.Icc.coe_zero, Complex.ofReal_zero,
+          zero_mul, add_zero]
+        congr 2 <;> simp [W, q] <;> omega)
+    · let z₀ : Icc (0 : ℝ) 1 := ⟨0, by constructor <;> norm_num⟩
+      let o : Icc (0 : ℝ) 1 := ⟨1, by constructor <;> norm_num⟩
+      have hso : s = o := Subtype.ext hs
+      refine ⟨0, by simp [W], z₀, ?_⟩
+      rw [hz, D.oldA_chord, hso]
+      exact (edgePoint_zero_eq_cutPoint W.length 0).trans (by
+        simp only [cutChordA, o, Set.Icc.coe_one, Complex.ofReal_one,
+          one_mul, add_sub_cancel]
+        congr 2 <;> simp [W] <;> omega)
+
 lemma orientablePairing_normalForm_aux_cutPaste_aux_fibreForward_aux_boundary {L : Type*}
     [DecidableEq L]
     (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
