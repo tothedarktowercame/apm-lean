@@ -1689,7 +1689,98 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_choo
     (hor : C.IsOrientable) :
     ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
       (∀ u, Relation.EqvGen C.CornerRel (D.toOld (g u)) u) := by
-  sorry
+  have hfaces : s.1 ≠ (C.pair s).1 := by
+    intro h
+    exact D.old_ne D.merged (D.old_merged.trans h)
+  have hfixed : ∀ t : C.Side, C.nextCorner t = t → C.sides t.1 = 1 := by
+    intro t ht
+    have hv := congrArg (fun u : C.Side => u.2.val) ht
+    simp only [PolygonComplex.nextCorner] at hv
+    have hp := C.sides_pos t.1
+    by_cases hlt : t.2.val + 1 < C.sides t.1
+    · rw [Nat.mod_eq_of_lt hlt] at hv
+      omega
+    · have heq : t.2.val + 1 = C.sides t.1 := by omega
+      rw [heq, Nat.mod_self] at hv
+      omega
+  have hpre : ∀ u : C.Side, ∃ t : C'.Side,
+      Relation.EqvGen C.CornerRel (D.toOld t) u := by
+    intro u
+    by_cases hu : u = s
+    · subst u
+      by_cases hp : C.nextCorner (C.pair s) = C.pair s
+      · have hsidesp := hfixed (C.pair s) hp
+        have hsides : C.nextCorner s ≠ s := by
+          intro hs
+          have hsidess := hfixed s hs
+          have hm := C'.sides_pos D.merged
+          have heq := D.sides_merged
+          omega
+        have hn1 : C.nextCorner s ≠ s := hsides
+        have hn2 : C.nextCorner s ≠ C.pair s := by
+          intro h
+          have hf := congrArg (fun x : C.Side => x.1) h
+          simp only [PolygonComplex.nextCorner] at hf
+          exact hfaces hf
+        obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner s) hn1 hn2
+        refine ⟨t, ?_⟩
+        rw [ht]
+        have hc := standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor
+        rw [hp] at hc
+        exact hc.2.trans _ _ _ hc.1.symm
+      · have hn1 : C.nextCorner (C.pair s) ≠ s := by
+          intro h
+          exact hfaces ((congrArg (fun x : C.Side => x.1) h).symm)
+        obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner (C.pair s)) hn1 hp
+        refine ⟨t, ?_⟩
+        rw [ht]
+        exact (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor).1.symm
+    · by_cases hup : u = C.pair s
+      · subst u
+        by_cases hs : C.nextCorner s = s
+        · have hsidess := hfixed s hs
+          have hsidesp : C.nextCorner (C.pair s) ≠ C.pair s := by
+            intro hp
+            have hsidesp := hfixed (C.pair s) hp
+            have hm := C'.sides_pos D.merged
+            have heq := D.sides_merged
+            omega
+          have hn1 : C.nextCorner (C.pair s) ≠ s := by
+            intro h
+            exact hfaces ((congrArg (fun x : C.Side => x.1) h).symm)
+          obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner (C.pair s)) hn1 hsidesp
+          refine ⟨t, ?_⟩
+          rw [ht]
+          have hc := standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor
+          rw [hs] at hc
+          exact hc.1.symm.trans _ _ _ hc.2
+        · have hn2 : C.nextCorner s ≠ C.pair s := by
+            intro h
+            have hf := congrArg (fun x : C.Side => x.1) h
+            simp only [PolygonComplex.nextCorner] at hf
+            exact hfaces hf
+          obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner s) hs hn2
+          refine ⟨t, ?_⟩
+          rw [ht]
+          exact (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor).2
+      · obtain ⟨t, ht⟩ := D.toOld_surj u hu hup
+        refine ⟨t, ?_⟩
+        rw [ht]
+        exact Relation.EqvGen.refl u
+  let g : C.Side → C'.Side := fun u =>
+    if h : ∃ t, D.toOld t = u then Classical.choose h else Classical.choose (hpre u)
+  refine ⟨g, ?_, ?_⟩
+  · intro t
+    have h : ∃ v, D.toOld v = D.toOld t := ⟨t, rfl⟩
+    rw [show g (D.toOld t) = Classical.choose h by simp only [g, dif_pos h]]
+    exact D.toOld_injective (Classical.choose_spec h)
+  · intro u
+    by_cases h : ∃ t, D.toOld t = u
+    · rw [show g u = Classical.choose h by simp only [g, dif_pos h]]
+      rw [Classical.choose_spec h]
+      exact Relation.EqvGen.refl u
+    · rw [show g u = Classical.choose (hpre u) by simp only [g, dif_neg h]]
+      exact Classical.choose_spec (hpre u)
 
 /-- **Leaf (corner classes reflect).**  Two corners of `C'` whose images are
 `C`-equivalent are already `C'`-equivalent: the map of corner classes induced
