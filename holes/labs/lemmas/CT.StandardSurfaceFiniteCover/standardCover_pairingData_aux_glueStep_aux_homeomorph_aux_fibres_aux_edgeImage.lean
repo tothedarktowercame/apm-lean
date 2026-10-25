@@ -2128,7 +2128,92 @@ theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_edg
     standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
         ⟨(D.toOld v).1, edgePoint (C.sides (D.toOld v).1) (D.toOld v).2 t⟩ =
       ⟨v.1, edgePoint (C'.sides v.1) v.2 t⟩ := by
-  sorry
+  by_cases hv : v.1 = D.merged
+  · obtain ⟨vf, m⟩ := v
+    dsimp only at hv ⊢
+    subst vf
+    have hsizes : C'.sides D.merged =
+        C.sides s.1 + C.sides (C.pair s).1 - 2 := by
+      have := D.sides_merged
+      omega
+    by_cases hm : m.val + 1 < C.sides s.1
+    · have hfst : (D.toOld ⟨D.merged, m⟩).1 = s.1 := by
+        simpa [hm] using D.toOld_merged_fst m
+      have hval : (D.toOld ⟨D.merged, m⟩).2.val =
+          (s.2.val + 1 + m.val) % C.sides s.1 := by
+        simpa [hm] using D.toOld_merged_val m
+      have hedge := hH.edge_left m.val hm t
+      have hinput : (⟨(D.toOld ⟨D.merged, m⟩).1,
+          edgePoint (C.sides (D.toOld ⟨D.merged, m⟩).1)
+            (D.toOld ⟨D.merged, m⟩).2 t⟩ : Σ _ : Fin C.faceCount, Disk) =
+          ⟨s.1, edgePoint (C.sides s.1)
+            ((s.2.val + 1 + m.val) % C.sides s.1) t⟩ := by
+        refine @Sigma.ext (Fin C.faceCount) (fun _ => Disk) _ _ hfst ?_
+        apply heq_of_eq
+        apply Subtype.ext
+        simp only [edgePoint, Subtype.coe_eta, Subtype.coe_mk]
+        rw [hval, hfst]
+      rw [hinput]
+      simp only [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+        if_pos]
+      rw [hedge, ← hsizes]
+    · have hfst : (D.toOld ⟨D.merged, m⟩).1 = (C.pair s).1 := by
+        simpa [hm] using D.toOld_merged_fst m
+      have hval : (D.toOld ⟨D.merged, m⟩).2.val =
+          ((C.pair s).2.val + 1 + (m.val + 1 - C.sides s.1)) %
+            C.sides (C.pair s).1 := by
+        simpa [hm] using D.toOld_merged_val m
+      have hlo : C.sides s.1 ≤ m.val + 1 := by omega
+      have hhi : m.val < C.sides s.1 + C.sides (C.pair s).1 - 2 := by
+        simpa [hsizes] using m.isLt
+      have hedge := hH.edge_right m.val hlo hhi t
+      have hinput : (⟨(D.toOld ⟨D.merged, m⟩).1,
+          edgePoint (C.sides (D.toOld ⟨D.merged, m⟩).1)
+            (D.toOld ⟨D.merged, m⟩).2 t⟩ : Σ _ : Fin C.faceCount, Disk) =
+          ⟨(C.pair s).1, edgePoint (C.sides (C.pair s).1)
+            (((C.pair s).2.val + 1 + (m.val + 1 - C.sides s.1)) %
+              C.sides (C.pair s).1) t⟩ := by
+        refine @Sigma.ext (Fin C.faceCount) (fun _ => Disk) _ _ hfst ?_
+        apply heq_of_eq
+        apply Subtype.ext
+        simp only [edgePoint, Subtype.coe_eta, Subtype.coe_mk]
+        rw [hval, hfst]
+      rw [hinput]
+      have hne : (C.pair s).1 ≠ s.1 := by
+        intro h
+        exact D.old_ne D.merged (D.old_merged.trans h.symm)
+      simp only [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+        if_neg hne, if_pos]
+      rw [hedge, ← hsizes]
+  · have hfst := D.toOld_fst v hv
+    have hval := D.toOld_val v hv
+    have hsides := D.sides_old v.1 hv
+    have hn1 : (D.toOld v).1 ≠ s.1 := by
+      rw [hfst]
+      intro h
+      exact hv (D.old_injective (h.trans D.old_merged.symm))
+    have hn2 : (D.toOld v).1 ≠ (C.pair s).1 := by
+      rw [hfst]
+      exact D.old_ne v.1
+    have hinv : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D
+        (D.old v.1) = v.1 := by
+      simp only [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv]
+      split
+      · rename_i hex
+        exact D.old_injective (Classical.choose_spec hex)
+      · rename_i h
+        exact False.elim (h ⟨v.1, rfl⟩)
+    simp only [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+      if_neg hn1, if_neg hn2]
+    have hinv' : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D
+        (D.toOld v).1 = v.1 := by rw [hfst]; exact hinv
+    apply Sigma.ext hinv'
+    apply heq_of_eq
+    apply Subtype.ext
+    simp only [edgePoint, Subtype.coe_eta, Subtype.coe_mk]
+    rw [hval, hfst]
+    congr 4
+    exact_mod_cast hsides.symm
 -- END SEAT AREA
 
 /-- **Leaf (fibres, kernel).**  Points of the disks of `C` with the same image are
