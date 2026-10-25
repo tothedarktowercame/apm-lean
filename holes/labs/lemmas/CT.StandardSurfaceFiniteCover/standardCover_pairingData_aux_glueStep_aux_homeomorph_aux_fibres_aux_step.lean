@@ -2394,7 +2394,59 @@ theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_ste
     Relation.EqvGen C'.Rel
       (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR x)
       (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y) := by
-  sorry
+  obtain ⟨u, t, rfl, rfl⟩ := hxy
+  have hfaces : s.1 ≠ (C.pair s).1 := by
+    intro h
+    exact D.old_ne D.merged (D.old_merged.trans h)
+  by_cases hu : u = s
+  · subst u
+    have heq :
+        standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+            ⟨s.1, edgePoint (C.sides s.1) s.2 t⟩ =
+          standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+            ⟨(C.pair s).1, edgePoint (C.sides (C.pair s).1) (C.pair s).2
+              (C.pairedParameter s t)⟩ := by
+      simp only [PolygonComplex.pairedParameter]
+      rw [if_neg (Ne.symm (hor s))]
+      simp only [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge]
+      simp only [if_true, if_false, hfaces, hfaces.symm]
+      exact congrArg
+        (fun z : Disk ↦ (⟨D.merged, z⟩ : Σ _ : Fin C'.faceCount, Disk))
+        ((hH.seam _ _).2 ⟨t, rfl, rfl⟩)
+    rw [heq]
+    exact Relation.EqvGen.refl _
+  by_cases hup : u = C.pair s
+  · subst u
+    have hpar : C.pairedParameter (C.pair s) t = reverseIcc t := by
+      simp only [PolygonComplex.pairedParameter]
+      rw [if_neg (Ne.symm (hor (C.pair s)))]
+    have heq :
+        standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+            ⟨(C.pair s).1, edgePoint (C.sides (C.pair s).1) (C.pair s).2 t⟩ =
+          standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+            ⟨(C.pair (C.pair s)).1,
+              edgePoint (C.sides (C.pair (C.pair s)).1) (C.pair (C.pair s)).2
+                (C.pairedParameter (C.pair s) t)⟩ := by
+      rw [C.pair_pair]
+      simp only [hpar, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge]
+      simp only [if_true, if_false, hfaces, hfaces.symm]
+      exact congrArg
+        (fun z : Disk ↦ (⟨D.merged, z⟩ : Σ _ : Fin C'.faceCount, Disk))
+        ((hH.seam _ _).2 ⟨reverseIcc t, rfl,
+          congrArg (edgePoint (C.sides (C.pair s).1) (C.pair s).2)
+            (reverseIcc_reverseIcc t).symm⟩).symm
+    rw [heq]
+    exact Relation.EqvGen.refl _
+  obtain ⟨v, hv⟩ := D.toOld_surj u hu hup
+  apply Relation.EqvGen.rel
+  refine ⟨v, t, ?_, ?_⟩
+  · rw [← hv]
+    exact himage v t
+  · have hparam : C.pairedParameter u t = C'.pairedParameter v t := by
+      simp only [PolygonComplex.pairedParameter]
+      rw [D.sign_toOld, D.sign_toOld, D.pair_toOld, hv]
+    rw [hparam, ← hv, ← D.pair_toOld]
+    exact himage (C'.pair v) (C'.pairedParameter v t)
 -- END SEAT AREA
 
 /-- **Leaf (fibres, reverse step).**  A generating step of `C'` along side `v`
