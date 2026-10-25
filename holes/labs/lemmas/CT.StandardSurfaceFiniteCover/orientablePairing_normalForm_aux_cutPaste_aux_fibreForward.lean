@@ -3384,6 +3384,103 @@ open PolygonMoves in
 `c⁻¹` (position `n₂`, parameter `s`) and `c` (position `q + m₂`, parameter
 `1 - s`), which the new word identifies.  Model: `cut_forward_fibre`. -/
 -- BEGIN SEAT AREA
+lemma orientablePairing_normalForm_aux_cutPaste_aux_fibreForward_aux_chord {L : Type*}
+    [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (z z' : Circle) (N N' : Disk) (h : oldA z = oldB z')
+    (hne : ‖oldA z‖ ≠ 1)
+    (hN : (N : ℂ) = oldA (ρA z)) (hN' : (N' : ℂ) = oldB (ρB z')) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N N' := by
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  let W' := α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁
+  have hlen : W.length = W'.length := by simp [W, W']; omega
+  obtain (⟨e, s, he, hz⟩ | ⟨s, hz⟩) := D.coverA z
+  · exfalso
+    apply hne
+    rw [hz, D.oldA_arc e s he]
+    exact PolygonMoves.norm_edgePoint W.length e s
+  obtain (⟨e, s', he₀, he₁, hz'⟩ | ⟨s', hz'⟩) := D.coverB z'
+  · exfalso
+    apply hne
+    rw [h, hz', D.oldB_arc e s' he₀ he₁]
+    exact PolygonMoves.norm_edgePoint W.length e s'
+  have hchord : cutChordA W.length 0 (α₁.length + 1 + α₂.length) s =
+      cutChordB W.length 0 (α₁.length + 1 + α₂.length) s' := by
+    rw [← D.oldA_chord s, ← D.oldB_chord s', ← hz, ← hz']
+    exact h
+  have hq : α₁.length + 1 + α₂.length < W.length := by
+    dsimp [W]
+    simp
+    omega
+  have hPQ : cutPoint W.length 0 - cutPoint W.length (α₁.length + 1 + α₂.length) ≠ 0 :=
+    sub_ne_zero.mpr (cutPoint_ne (by omega) (by omega))
+  have hcoefC : ((s.1 : ℂ) + (s'.1 : ℂ) - 1) = 0 := by
+    apply (mul_eq_zero.mp (show ((s.1 : ℂ) + (s'.1 : ℂ) - 1) *
+        (cutPoint W.length 0 - cutPoint W.length (α₁.length + 1 + α₂.length)) = 0 by
+      rw [cutChordA, cutChordB] at hchord
+      calc
+        _ = (cutPoint W.length (α₁.length + 1 + α₂.length) +
+              (s.1 : ℂ) * (cutPoint W.length 0 - cutPoint W.length (α₁.length + 1 + α₂.length))) -
+            (cutPoint W.length 0 + (s'.1 : ℂ) *
+              (cutPoint W.length (α₁.length + 1 + α₂.length) - cutPoint W.length 0)) := by ring
+        _ = 0 := sub_eq_zero.mpr hchord)).resolve_right hPQ
+  have hs : s' = reverseParameter s := by
+    apply Subtype.ext
+    simp [reverseParameter]
+    have hr : s.1 + s'.1 - 1 = 0 := by exact_mod_cast hcoefC
+    linarith
+  have hNN : N = edgePoint W'.length α₂.length s := by
+    apply Subtype.ext
+    rw [hN, hz, D.ρA_chord, D.oldA_arc]
+    · rw [hlen]
+    · simpa [W] using hq
+  have hNN' : N' = edgePoint W'.length
+      (α₂.length + 1 + α₁.length + β₂.length) (reverseParameter s) := by
+    apply Subtype.ext
+    rw [hN', hz', D.ρB_chord, D.oldB_arc]
+    · rw [hlen, hs]
+      congr 2
+      omega
+    · omega
+    · rw [D.length]
+      omega
+  rw [hNN, hNN']
+  apply Relation.EqvGen.rel
+  let i : Fin W'.length := ⟨α₂.length, by simp [W']⟩
+  let j : Fin W'.length := ⟨(α₂ ++ [inv c] ++ α₁ ++ β₂).length, by simp [W']⟩
+  have hj : W'.get j = c := by
+    simp [j, W', List.get_eq_getElem]
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp [i, j] at this
+  · change (W'.get i).1 = (W'.get j).1
+    rw [hj]
+    simp [i, W', List.get_eq_getElem, inv]
+  · have hind : α₂.length + 1 + α₁.length + β₂.length =
+        (α₂ ++ [inv c] ++ α₁ ++ β₂).length := by simp; omega
+    rw [hind, hj]
+    simp [i, j, W', List.get_eq_getElem, inv]
+
+open PolygonMoves in
+lemma orientablePairing_normalForm_aux_cutPaste_aux_fibreForward_aux_boundary {L : Type*}
+    [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (z z' : Circle) (N N' : Disk) (h : oldA z = oldB z')
+    (hu : ‖oldA z‖ = 1)
+    (hN : (N : ℂ) = oldA (ρA z)) (hN' : (N' : ℂ) = oldB (ρB z')) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N N' := by
+  sorry
+
+open PolygonMoves in
 theorem orientablePairing_normalForm_aux_cutPaste_aux_fibreForward {L : Type*}
     [DecidableEq L]
     (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
@@ -3396,7 +3493,11 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_fibreForward {L : Type*}
     (z z' : Circle) (N N' : Disk) (h : oldA z = oldB z')
     (hN : (N : ℂ) = oldA (ρA z)) (hN' : (N' : ℂ) = oldB (ρB z')) :
     Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N N' := by
-  sorry
+  by_cases hu : ‖oldA z‖ = 1
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_fibreForward_aux_boundary
+      α₁ α₂ β₁ β₂ y c oldA oldB ρA ρB D z z' N N' h hu hN hN'
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_fibreForward_aux_chord
+      α₁ α₂ β₁ β₂ y c oldA oldB ρA ρB D z z' N N' h hu hN hN'
 -- END SEAT AREA
 
 open PolygonMoves in
