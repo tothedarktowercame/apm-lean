@@ -1114,11 +1114,111 @@ theorem standardCover_pairingData_aux_glueStep_aux_dualConnected
 /-- **Leaf (corners).**  `toOld` induces a bijection of corner classes.  The
 four corners at the ends of `s` and `C.pair s` lie in two `C`-classes (by
 orientability); in `C'` they are the two junctions of the merged face. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel
+    {C : PolygonComplex} (s : C.Side) (hor : C.IsOrientable) :
+    Relation.EqvGen C.CornerRel s (C.nextCorner (C.pair s)) ∧
+      Relation.EqvGen C.CornerRel (C.nextCorner s) (C.pair s) := by
+  constructor
+  · apply Relation.EqvGen.rel
+    refine ⟨s, ?_⟩
+    rw [if_neg (Ne.symm (hor s))]
+    exact Or.inl ⟨rfl, rfl⟩
+  · apply Relation.EqvGen.rel
+    refine ⟨s, ?_⟩
+    rw [if_neg (Ne.symm (hor s))]
+    exact Or.inr ⟨rfl, rfl⟩
+
+/-- The only failure of `toOld` to literally commute with `nextCorner` is at
+the two joins of the merged polygon; there it crosses one of the two deleted
+sides, hence gives one old corner-equivalence step. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) (t : C'.Side) :
+    Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner t))
+      (C.nextCorner (D.toOld t)) := by
+  sorry
+
+/-- Once the cyclic-boundary calculation is isolated in `_aux_next`, every
+generating corner identification of the glued complex maps to an old corner
+equivalence. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_mapRel
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) {a b : C'.Side} (h : C'.CornerRel a b) :
+    Relation.EqvGen C.CornerRel (D.toOld a) (D.toOld b) := by
+  obtain ⟨t, ht⟩ := h
+  have hnext := standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next D hor
+  have hrel : ∀ x y, C.CornerRel x y → Relation.EqvGen C.CornerRel x y :=
+    fun x y h => Relation.EqvGen.rel x y h
+  have hsign : C'.sign t = C'.sign (C'.pair t) ↔
+      C.sign (D.toOld t) = C.sign (C.pair (D.toOld t)) := by
+    rw [D.sign_toOld, D.sign_toOld, D.pair_toOld]
+  by_cases hs : C'.sign t = C'.sign (C'.pair t)
+  · rw [if_pos hs] at ht
+    have hs' := hsign.mp hs
+    rcases ht with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;> rw [ha, hb]
+    · rw [D.pair_toOld]
+      exact hrel _ _ ⟨D.toOld t, by rw [if_pos hs']; exact Or.inl ⟨rfl, rfl⟩⟩
+    · refine (hnext t).trans _ _ _ ((hrel _ _ ⟨D.toOld t, ?_⟩).trans _ _ _
+        (hnext (C'.pair t)).symm)
+      rw [if_pos hs', D.pair_toOld]; exact Or.inr ⟨rfl, rfl⟩
+  · rw [if_neg hs] at ht
+    have hs' : ¬ C.sign (D.toOld t) = C.sign (C.pair (D.toOld t)) :=
+      fun h => hs (hsign.mpr h)
+    rcases ht with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;> rw [ha, hb]
+    · refine (hrel _ _ ⟨D.toOld t, ?_⟩).trans _ _ _ (hnext (C'.pair t)).symm
+      rw [if_neg hs', D.pair_toOld]; exact Or.inl ⟨rfl, rfl⟩
+    · refine (hnext t).trans _ _ _ (hrel _ _ ⟨D.toOld t, ?_⟩)
+      rw [if_neg hs', D.pair_toOld]; exact Or.inr ⟨rfl, rfl⟩
+
+/-- **Leaf (inverse on corners).**  A map back from the corners of `C` to the
+corners of `C'`: a left inverse of `toOld`, sending each corner to one in its
+own `C`-class, and carrying every generating identification of `C` to a
+`C'`-equivalence.  The deleted corners `s` and `C.pair s` go to preimages of
+corners in their classes (`_aux_cutRel`: `s ~ nextCorner (C.pair s)` and
+`C.pair s ~ nextCorner s`). -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) :
+    ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
+      (∀ u, Relation.EqvGen C.CornerRel (D.toOld (g u)) u) ∧
+      (∀ a b, C.CornerRel a b → Relation.EqvGen C'.CornerRel (g a) (g b)) := by
+  sorry
+
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (hor : C.IsOrientable) : C'.vertexCount = C.vertexCount := by
-  sorry
+  obtain ⟨g, hg1, hg2, hg3⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back D hor
+  have lift : ∀ {α β : Type} {r : α → α → Prop} {r' : β → β → Prop} (h : α → β),
+      (∀ a b, r a b → Relation.EqvGen r' (h a) (h b)) →
+      ∀ a b, Relation.EqvGen r a b → Relation.EqvGen r' (h a) (h b) := by
+    intro α β r r' h hh a b hab
+    induction hab with
+    | rel x y hxy => exact hh x y hxy
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih1 ih2 => exact ih1.trans _ _ _ ih2
+  have hF := lift (r := C'.CornerRel) (r' := C.CornerRel) D.toOld
+    (fun a b h => standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_mapRel D hor h)
+  have hG := lift (r := C.CornerRel) (r' := C'.CornerRel) g hg3
+  let F : C'.Vertex → C.Vertex := Quotient.map D.toOld hF
+  let G : C.Vertex → C'.Vertex := Quotient.map g hG
+  have e : C'.Vertex ≃ C.Vertex :=
+    { toFun := F
+      invFun := G
+      left_inv := by
+        intro x
+        induction x using Quotient.ind with
+        | _ t => exact congrArg (Quotient.mk _) (hg1 t)
+      right_inv := by
+        intro x
+        induction x using Quotient.ind with
+        | _ u => exact Quotient.sound (hg2 u) }
+  exact Nat.card_congr e
 
 /- A common compact parametrizing space gives the required homeomorphism of
 polygon-complex quotients once it has the same fibres on both sides.  This is
