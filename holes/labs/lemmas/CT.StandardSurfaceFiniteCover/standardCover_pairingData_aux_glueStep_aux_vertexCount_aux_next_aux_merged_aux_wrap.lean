@@ -1823,7 +1823,100 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merg
     (hm₁ : C.sides s.1 ≤ m.val + 1) (hm₂ : m.val + 1 = C'.sides D.merged) :
     Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner ⟨D.merged, m⟩))
       (C.nextCorner (D.toOld ⟨D.merged, m⟩)) := by
-  sorry
+  have hsize := D.sides_merged
+  have hnpos : 0 < C'.sides D.merged := by omega
+  have hmsecond : ¬ (m.val + 1 < C.sides s.1) := by omega
+  have hb2 : 2 ≤ C.sides (C.pair s).1 := by omega
+  have hright : C.nextCorner (D.toOld ⟨D.merged, m⟩) = C.pair s := by
+    have hfst : (D.toOld ⟨D.merged, m⟩).1 = (C.pair s).1 := by
+      simpa [hmsecond] using D.toOld_merged_fst m
+    apply Sigma.ext
+    · simpa [PolygonComplex.nextCorner] using hfst
+    apply (Fin.heq_ext_iff (congrArg C.sides (by
+      simpa [PolygonComplex.nextCorner] using hfst))).2
+    have hval := D.toOld_merged_val m
+    simp only [hmsecond, if_false] at hval
+    simp only [PolygonComplex.nextCorner, hval]
+    rw [hfst]
+    have hp := (C.pair s).2.isLt
+    have hoff : m.val + 1 - C.sides s.1 = C.sides (C.pair s).1 - 2 := by
+      omega
+    rw [hoff]
+    by_cases hp0 : (C.pair s).2.val = 0
+    · rw [hp0]
+      simp only [zero_add]
+      have hx : 1 + (C.sides (C.pair s).1 - 2) =
+          C.sides (C.pair s).1 - 1 := by omega
+      rw [hx, Nat.mod_eq_of_lt (Nat.sub_lt (by omega) (by omega))]
+      rw [show C.sides (C.pair s).1 - 1 + 1 =
+        C.sides (C.pair s).1 by omega, Nat.mod_self]
+    · have hx : (C.pair s).2.val + 1 + (C.sides (C.pair s).1 - 2) =
+          C.sides (C.pair s).1 + ((C.pair s).2.val - 1) := by omega
+      rw [hx]
+      have hmod : (C.sides (C.pair s).1 + ((C.pair s).2.val - 1)) %
+          C.sides (C.pair s).1 = (C.pair s).2.val - 1 := by
+        have hlt : (C.pair s).2.val - 1 < C.sides (C.pair s).1 := by omega
+        rw [Nat.add_mod, Nat.mod_self, zero_add]
+        rw [Nat.mod_eq_of_lt hlt, Nat.mod_eq_of_lt hlt]
+      rw [hmod, show (C.pair s).2.val - 1 + 1 =
+        (C.pair s).2.val by omega, Nat.mod_eq_of_lt hp]
+  have hnextval : ((m.val + 1) % C'.sides D.merged) = 0 := by
+    rw [hm₂, Nat.mod_self]
+  let z : Fin (C'.sides D.merged) := ⟨0, hnpos⟩
+  have hn : C'.nextCorner ⟨D.merged, m⟩ = ⟨D.merged, z⟩ := by
+    apply Sigma.ext
+    · rfl
+    apply (Fin.heq_ext_iff rfl).2
+    simpa [z, PolygonComplex.nextCorner] using hnextval
+  by_cases ha : C.sides s.1 = 1
+  · have hleft : D.toOld (C'.nextCorner ⟨D.merged, m⟩) =
+        C.nextCorner (C.pair s) := by
+      rw [hn]
+      have hfst := D.toOld_merged_fst z
+      have hval := D.toOld_merged_val z
+      dsimp only [z] at hfst hval
+      rw [if_neg (by omega)] at hfst hval
+      apply Sigma.ext
+      · simpa [PolygonComplex.nextCorner] using hfst
+      apply (Fin.heq_ext_iff (congrArg C.sides (by
+        simpa [PolygonComplex.nextCorner] using hfst))).2
+      simpa [PolygonComplex.nextCorner, ha] using hval
+    rw [hleft, hright]
+    apply Relation.EqvGen.trans _ s _
+    · apply Relation.EqvGen.symm
+      apply Relation.EqvGen.rel
+      refine ⟨s, ?_⟩
+      rw [if_neg (Ne.symm (hor s))]
+      exact Or.inl ⟨rfl, rfl⟩
+    · have hsnext : C.nextCorner s = s := by
+        apply Sigma.ext
+        · rfl
+        apply (Fin.heq_ext_iff rfl).2
+        have hsval : s.2.val = 0 := by have := s.2.isLt; omega
+        simpa [PolygonComplex.nextCorner, ha, hsval]
+      apply Relation.EqvGen.rel
+      refine ⟨s, ?_⟩
+      rw [if_neg (Ne.symm (hor s))]
+      exact Or.inr ⟨hsnext.symm, rfl⟩
+  · have hleft : D.toOld (C'.nextCorner ⟨D.merged, m⟩) =
+        C.nextCorner s := by
+      rw [hn]
+      have hfst := D.toOld_merged_fst z
+      have hval := D.toOld_merged_val z
+      dsimp only [z] at hfst hval
+      have hapos := C.sides_pos s.1
+      have ha2 : 0 + 1 < C.sides s.1 := by omega
+      rw [if_pos ha2] at hfst hval
+      apply Sigma.ext
+      · simpa [PolygonComplex.nextCorner] using hfst
+      apply (Fin.heq_ext_iff (congrArg C.sides (by
+        simpa [PolygonComplex.nextCorner] using hfst))).2
+      simpa [PolygonComplex.nextCorner] using hval
+    rw [hleft, hright]
+    apply Relation.EqvGen.rel
+    refine ⟨s, ?_⟩
+    rw [if_neg (Ne.symm (hor s))]
+    exact Or.inr ⟨rfl, rfl⟩
 -- END SEAT AREA
 
 /-- At a corner of the merged polygon, `toOld` commutes with `nextCorner` up to
