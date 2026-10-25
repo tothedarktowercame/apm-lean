@@ -2881,6 +2881,38 @@ arcs shift back by `n₁ + 1`, and the chord arc goes onto arc `n₂`.  The piec
 fit at the junction angles (e.g. arc `n₁` at `s = 0` and the chord at `s = 0`
 are both at angle `α q`); `n₁ = 0` and `n₂ = 0` are allowed.  Built like
 `equivariantLift_of_interval` from a monotone lift on `[0, 2π]`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular
+    (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
+    ∃ ρ : Circle ≃ₜ Circle,
+      (∀ e (s : Set.Icc (0 : ℝ) 1), e < n₁ →
+        ρ (AddCircle.homeomorphCircle'
+            (((cutAlpha L e + s.1 * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi)))) =
+          AddCircle.homeomorphCircle'
+            (((cutAlpha L (e + n₂ + 1) + s.1 * (2 * Real.pi / L) : ℝ) :
+              AddCircle (2 * Real.pi)))) ∧
+      (∀ s : Set.Icc (0 : ℝ) 1, ρ (AddCircle.homeomorphCircle'
+            (((cutAlpha L n₁ + s.1 * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi)))) =
+        AddCircle.homeomorphCircle'
+          (((cutAlpha L (n₁ + 1 + n₂) +
+              s.1 * (cutAlpha L 0 + 2 * Real.pi - cutAlpha L (n₁ + 1 + n₂)) : ℝ) :
+            AddCircle (2 * Real.pi)))) ∧
+      (∀ e (s : Set.Icc (0 : ℝ) 1), n₁ + 1 ≤ e → e < n₁ + 1 + n₂ →
+        ρ (AddCircle.homeomorphCircle'
+            (((cutAlpha L e + s.1 * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi)))) =
+          AddCircle.homeomorphCircle'
+            (((cutAlpha L (e - n₁ - 1) + s.1 * (2 * Real.pi / L) : ℝ) :
+              AddCircle (2 * Real.pi)))) ∧
+      (∀ s : Set.Icc (0 : ℝ) 1, ρ (AddCircle.homeomorphCircle'
+            (((cutAlpha L (n₁ + 1 + n₂) +
+              s.1 * (cutAlpha L 0 + 2 * Real.pi - cutAlpha L (n₁ + 1 + n₂)) : ℝ) :
+              AddCircle (2 * Real.pi)))) =
+        AddCircle.homeomorphCircle'
+          (((cutAlpha L n₂ + s.1 * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi)))) := by
+  sorry
+
+open PolygonMoves in
+/-- Piece `A` reparametrisation in `cutEdgeCircle`/`cutChordParamA` form, read
+off from the angular statement `_aux_angular`. -/
 theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamA (L n₁ n₂ : ℕ)
     (hL : n₁ + 1 + n₂ < L) :
     ∃ ρ : Circle ≃ₜ Circle,
@@ -2889,7 +2921,23 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamA (L n₁ n₂ : �
       (∀ e s, n₁ + 1 ≤ e → e < n₁ + 1 + n₂ →
         ρ (cutEdgeCircle L e s) = cutEdgeCircle L (e - n₁ - 1) s) ∧
       (∀ s, ρ (cutChordParamA L 0 (n₁ + 1 + n₂) s) = cutEdgeCircle L n₂ s) := by
-  sorry
+  obtain ⟨ρ, h₁, hy, h₂, hc⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular L n₁ n₂ hL
+  refine ⟨ρ, ?_, ?_, ?_, ?_⟩
+  · intro e s he
+    rw [cutBoundaryData_concrete_aux_edge_circle,
+      cutBoundaryData_concrete_aux_edge_circle]
+    exact h₁ e s he
+  · intro s
+    rw [cutBoundaryData_concrete_aux_edge_circle]
+    exact hy s
+  · intro e s he₀ he₁
+    rw [cutBoundaryData_concrete_aux_edge_circle,
+      cutBoundaryData_concrete_aux_edge_circle]
+    exact h₂ e s he₀ he₁
+  · intro s
+    rw [cutBoundaryData_concrete_aux_edge_circle]
+    exact hc s
 
 open PolygonMoves in
 /-- **Leaf (circle reparametrisation, piece `B`).**  As `_aux_reparamA` for
