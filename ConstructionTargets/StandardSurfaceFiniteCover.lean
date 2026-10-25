@@ -7056,12 +7056,140 @@ def standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_spec
 `C` to side `j` of the triangle for `j < 2` and to side `j - 1` of the other
 face otherwise, and the two chord sides as stated.  Uses `_aux_cut_aux_sides_eq`
 for `C.sides f = n`. -/
+def standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (n : ℕ) (hn : C.totalSides = n)
+    (h3 : 3 ≤ n) : C.Side ⊕ Fin 2 → (Σ f : Fin 2, Fin (![3, n - 1] f))
+  | Sum.inl u =>
+      if h : u.2.val < 2 then
+        ⟨0, ⟨u.2.val, by simp; omega⟩⟩
+      else
+        ⟨1, ⟨u.2.val - 1, by
+          simp
+          have hs := standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_sides_eq
+            C h1 u.1
+          have hu := u.2.isLt
+          have hu' : u.2.val < n := by simpa [hs, hn] using hu
+          omega⟩⟩
+  | Sum.inr i =>
+      if i = 0 then ⟨0, ⟨2, by simp⟩⟩ else ⟨1, ⟨0, by simp; omega⟩⟩
+
 theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv
     (C : PolygonComplex) (h1 : C.faceCount = 1) (n : ℕ) (hn : C.totalSides = n)
     (h3 : 3 ≤ n) :
     ∃ E : (Σ f : Fin 2, Fin (![3, n - 1] f)) ≃ C.Side ⊕ Fin 2,
       standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_spec C n E := by
-  sorry
+  classical
+  let F := standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv
+    C h1 n hn h3
+  have hF_inj : Function.Injective F := by
+    intro x y hxy
+    rcases x with u | i <;> rcases y with v | j
+    · obtain ⟨uf, uk⟩ := u
+      obtain ⟨vf, vk⟩ := v
+      have hvf : vf = uf :=
+        (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq C h1 vf).trans
+          (standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_face_eq C h1 uf).symm
+      subst vf
+      simp only [F, standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]
+        at hxy
+      split at hxy <;> split at hxy
+      · have huv : uk = vk := Fin.ext (by
+          simpa using congrArg (fun z => z.2.val) hxy)
+        subst vk
+        rfl
+      · have := congrArg (fun z => z.1.val) hxy
+        simp at this
+      · have := congrArg (fun z => z.1.val) hxy
+        simp at this
+      · have huv : uk = vk := Fin.ext (by
+          have hh : uk.val - 1 = vk.val - 1 := by
+            simpa using congrArg (fun z => z.2.val) hxy
+          have huk : 2 ≤ uk.val := by omega
+          have hvk : 2 ≤ vk.val := by omega
+          exact calc
+            uk.val = (uk.val - 1) + 1 := (Nat.sub_add_cancel (by omega)).symm
+            _ = (vk.val - 1) + 1 := by rw [hh]
+            _ = vk.val := Nat.sub_add_cancel (by omega))
+        subst vk
+        rfl
+    · simp only [F, standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]
+        at hxy
+      split at hxy <;> split at hxy
+      · have hh := congrArg (fun z => z.2.val) hxy
+        simp at hh
+        omega
+      · have hh := congrArg (fun z => z.1.val) hxy
+        simp at hh
+      · have hh := congrArg (fun z => z.1.val) hxy
+        simp at hh
+      · have hh := congrArg (fun z => z.2.val) hxy
+        simp at hh
+        omega
+    · simp only [F, standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]
+        at hxy
+      split at hxy <;> split at hxy
+      · have hh := congrArg (fun z => z.2.val) hxy
+        simp at hh
+        omega
+      · have hh := congrArg (fun z => z.1.val) hxy
+        simp at hh
+      · have hh := congrArg (fun z => z.1.val) hxy
+        simp at hh
+      · have hh := congrArg (fun z => z.2.val) hxy
+        simp at hh
+        omega
+    · have hij : i = j := by
+        fin_cases i <;> fin_cases j <;>
+          simp [F, standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]
+            at hxy ⊢
+      exact congrArg (fun z : Fin 2 => (Sum.inr z : C.Side ⊕ Fin 2)) hij
+  have hF_surj : Function.Surjective F := by
+    rintro ⟨f, k⟩
+    fin_cases f
+    · fin_cases k
+      · let u : C.Side := ⟨⟨0, by omega⟩, ⟨0, by
+          rw [standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_sides_eq
+            C h1 ⟨0, by omega⟩, hn]
+          omega⟩⟩
+        exact ⟨Sum.inl u, by simp [F, u,
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]⟩
+      · let u : C.Side := ⟨⟨0, by omega⟩, ⟨1, by
+          rw [standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_sides_eq
+            C h1 ⟨0, by omega⟩, hn]
+          omega⟩⟩
+        exact ⟨Sum.inl u, by simp [F, u,
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]⟩
+      · exact ⟨Sum.inr 0, by simp [F,
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]⟩
+    · by_cases hk : k.val = 0
+      · have hk' : k = ⟨0, by simp; omega⟩ := Fin.ext hk
+        rw [hk']
+        exact ⟨Sum.inr 1, by simp [F,
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]⟩
+      · let u : C.Side := ⟨⟨0, by omega⟩, ⟨k.val + 1, by
+          rw [standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_sides_eq
+            C h1 ⟨0, by omega⟩, hn]
+          have hh : k.val < n - 1 := by simpa using k.isLt
+          omega⟩⟩
+        refine ⟨Sum.inl u, ?_⟩
+        simp [F, u, hk,
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]
+  let e : (C.Side ⊕ Fin 2) ≃ (Σ f : Fin 2, Fin (![3, n - 1] f)) :=
+    Equiv.ofBijective F ⟨hF_inj, hF_surj⟩
+  refine ⟨e.symm, ?_⟩
+  change (∀ u : C.Side, (e (Sum.inl u)).1 = _ ∧ (e (Sum.inl u)).2.val = _) ∧
+    ((e (Sum.inr 0)).1 = 0 ∧ (e (Sum.inr 0)).2.val = 2) ∧
+    (e (Sum.inr 1)).1 = 1 ∧ (e (Sum.inr 1)).2.val = 0
+  simp only [e, Equiv.ofBijective_apply, F,
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut_aux_equiv_aux_inv]
+  constructor
+  · intro u
+    by_cases hu : u.2.val < 2
+    · rw [dif_pos hu]
+      simp [hu]
+    · rw [dif_neg hu]
+      simp [hu]
+  · simp
 
 /-- **Leaf (the cut glues back to `C`).**  With `c = E.symm (inr 0)` and
 `D.pair c = E.symm (inr 1)`: `merged` is the one face of `C`, `old` is constant
