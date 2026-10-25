@@ -8566,6 +8566,95 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
       α₁ α₂ β₁ β₂ y c hy hc e he τ P e₁ s₀ he₁ he₁L he₁c hPe hs₀ hτ (by rw [hlen']; exact hadj)
 
 open PolygonMoves in
+/-- Banked (lemma-3, 2026-10-25): the old `y` pair joins the start of `y⁻¹`
+(side `q + m₁`, parameter `s`) to the end of `y` (side `n₁`). -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordB_aux_y
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y : Signed L)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂))
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        (α₁.length + 1 + α₂.length + β₁.length) s)
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length (reverseParameter s)) := by
+  apply Relation.EqvGen.rel
+  let i : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length :=
+    ⟨α₁.length + 1 + α₂.length + β₁.length, by simp; omega⟩
+  let j : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length :=
+    ⟨α₁.length, by simp⟩
+  have hi : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i = inv y := by
+    simp only [List.get_eq_getElem, i, List.append_assoc]
+    rw [List.getElem_append_right (show α₁.length ≤ α₁.length + 1 + α₂.length + β₁.length by omega)]
+    simp only [show α₁.length + 1 + α₂.length + β₁.length - α₁.length =
+      1 + α₂.length + β₁.length by omega]
+    rw [List.getElem_append_right (show [y].length ≤ 1 + α₂.length + β₁.length by simp; omega)]
+    simp only [show 1 + α₂.length + β₁.length - [y].length = α₂.length + β₁.length by simp; omega]
+    rw [List.getElem_append_right (show α₂.length ≤ α₂.length + β₁.length by omega)]
+    simp only [show α₂.length + β₁.length - α₂.length = β₁.length by omega]
+    rw [List.getElem_append_right (show β₁.length ≤ β₁.length by omega)]
+    simp
+  have hj : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j = y := by
+    simpa [j, List.get_eq_getElem] using
+      cut_transfer_generator_aux_get_x₁ α₁ (α₂ ++ β₁) β₂ y
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro h
+    have := congrArg Fin.val h
+    simp [i, j] at this
+    omega
+  · rw [hi, hj]
+    simp [inv]
+  · rw [hi, hj]
+    simp [inv]
+    rfl
+
+open PolygonMoves in
+/-- **Leaf (reverse chord `B`, previous-name case).**  The new point is the end of
+side `e` (`τ = 1`) and the start of the `c` side `q + m₂ = (e+1) % L` (`s₀ = 0`), so
+`P = cutChordB L 0 q 0 = cutPoint L 0`.  Seam: `β₂ = []` (then `e = q - 1`, an `α₁`
+side whose transfer ends at the start of `y`, or the `c⁻¹` side when also `α₁ = []`).
+Relate `P` to the transfer of `(e, 1)` in the old word, with `_aux_y` where the
+vertex is shared with a `y` side. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordB_aux_prev
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hP : (P : ℂ) = cutChordB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)
+    (hs₀ : s₀.1 = 0) (hτ : τ.1 = 1)
+    (hadj : α₁.length + 1 + α₂.length + β₂.length =
+      (e + 1) % (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse chord `B`, next-name case).**  The new point is the start of
+side `e = (q + m₂ + 1) % L` (`τ = 0`) and the end of the `c` side (`s₀ = 1`), so
+`P = cutChordB L 0 q 1 = cutPoint L q`.  Seam: `β₁ = []` (then `e = 0`, an `α₂`
+side whose transfer starts at the end of `y`, or the `c⁻¹` side when also `α₂ = []`).
+Relate `P` to the transfer of `(e, 0)` in the old word, with `_aux_y` where the
+vertex is shared with a `y` side. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordB_aux_next
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hP : (P : ℂ) = cutChordB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)
+    (hs₀ : s₀.1 = 1) (hτ : τ.1 = 0)
+    (hadj : e = (α₁.length + 1 + α₂.length + β₂.length + 1) %
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+
+open PolygonMoves in
 /-- **Leaf (reverse, piece `B`, chord).**  As `_aux_chordA`, with
 `cutChordB` (`D.oldB_chord`, endpoints by `_aux_forward_aux_consistency_aux_chordB_end`)
 and new image on the `c` side `q + m₂` (`D.ρB_chord`). -/
@@ -8590,7 +8679,23 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  have hlen : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length =
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by simp; omega
+  have hL : 2 ≤ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by simp; omega
+  have hP' : (P : ℂ) = cutChordB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+      (α₁.length + 1 + α₂.length) s₀ := by rw [hP, D.oldB_chord]
+  have hDL := D.length
+  rw [D.ρB_chord, D.oldB_arc _ _ (by omega) (by omega), hlen] at hN
+  have hN' := Subtype.ext hN
+  rcases PolygonMoves.cutEdgePoint_eq hL (by rw [← hlen]; exact he) (by omega) hN' with
+    ⟨rfl, rfl⟩ | ⟨hτ, hs₀, hadj⟩ | ⟨hs₀, hτ, hadj⟩
+  · refine ⟨P, ?_, Relation.EqvGen.refl _⟩
+    rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer, if_neg (by omega),
+      if_pos rfl, hP']
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordB_aux_prev
+      α₁ α₂ β₁ β₂ y c e he τ P s₀ hP' hs₀ hτ hadj
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordB_aux_next
+      α₁ α₂ β₁ β₂ y c e he τ P s₀ hP' hs₀ hτ hadj
 
 open PolygonMoves in
 /-- **Reverse transfer consistency.**  A piece point `z` on piece `i`
