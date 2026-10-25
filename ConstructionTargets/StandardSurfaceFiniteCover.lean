@@ -9010,6 +9010,86 @@ image is side `e₁` of the new word (`e₁ < q`, `e₁ ≠ n₂`: an `α₂` or
 `τ = 1`, `s₀ = 0`, `e₁ = (e + 1) % L`.  Seams: `e = n₂` (the chord, `e₁ = n₂ + 1`),
 and the wraps `e₁ = 0` (`e = L - 1`, a `β₁` side) and `e₁ = n₂ + 1`; across
 the `y` seam use the old `y` pair (sides `n₁` and `q + m₁`). -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next_aux_rel
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y : Signed L)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂))
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length α₁.length s)
+      (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        (α₁.length + 1 + α₂.length + β₁.length) (reverseParameter s)) := by
+  apply Relation.EqvGen.rel
+  let i : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length :=
+    ⟨α₁.length, by simp⟩
+  let j : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length :=
+    ⟨α₁.length + 1 + α₂.length + β₁.length, by simp; omega⟩
+  have hi : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i = y := by
+    simp [i, List.get_eq_getElem, List.getElem_append]
+  have hj : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j = inv y := by
+    rw [List.get_eq_getElem]
+    simp [j, List.getElem_append, Nat.add_assoc]
+    simp [Nat.add_comm, List.getElem_append]
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro h
+    have h' := congrArg Fin.val h
+    change α₁.length = α₁.length + 1 + α₂.length + β₁.length at h'
+    omega
+  · rw [hi, hj]
+    simp [inv]
+  · rw [hi, hj]
+    simp [inv]
+    simp [i, j]
+
+/-- Banked (claude-14, 2026-10-25): away from the wrap, the end of new side `e`
+and the start of new side `e + 1` have the same transfer. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next_aux_shift
+    (L n₁ n₂ m₁ m₂ e e₁ : ℕ) (hL : L = n₁ + 1 + n₂ + m₁ + 1 + m₂)
+    (he₁ : e₁ < n₁ + 1 + n₂) (he₁c : e₁ ≠ n₂) (hnext : e + 1 = e₁) :
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer L n₁ n₂ m₁ m₂ e ⟨1, by constructor <;> norm_num⟩ =
+      orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer L n₁ n₂ m₁ m₂ e₁ ⟨0, by constructor <;> norm_num⟩ := by
+  have h0 := fun k => edgePoint_zero_eq_cutPoint L k
+  have h1 := fun k => edgePoint_one_eq_cutPoint L k
+  unfold orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+  by_cases ha : e₁ < n₂
+  · rw [if_neg (by omega), if_neg (by omega), if_pos (by omega),
+      if_neg (by omega), if_neg (by omega), if_pos ha, h1, h0]
+    congr 1; omega
+  · by_cases hb : e = n₂
+    · rw [if_pos hb, if_neg (by omega), if_neg (by omega), if_neg ha, if_pos he₁, h0]
+      simp [cutChordA]
+      congr 1; omega
+    · rw [if_neg hb, if_neg (by omega), if_neg (by omega), if_pos (by omega),
+        if_neg (by omega), if_neg (by omega), if_neg ha, if_pos he₁, h1, h0]
+      congr 1; omega
+
+/-- Banked (claude-14, 2026-10-25): the wrap `e₁ = 0`, `e = L - 1`.  The start of
+new side `0` is the end of the old `y` side, and the end of new side `L - 1` (a
+`β₁` side, or the `c` side when `β₁ = []`) is the start of the old `y⁻¹` side. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next_aux_wrap
+    (L n₁ n₂ m₁ m₂ e : ℕ) (hL : L = n₁ + 1 + n₂ + m₁ + 1 + m₂)
+    (hn₂ : 0 < n₂) (he : e + 1 = L) :
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer L n₁ n₂ m₁ m₂ 0 ⟨0, by constructor <;> norm_num⟩ =
+        (edgePoint L n₁ ⟨1, by constructor <;> norm_num⟩ : ℂ) ∧
+      orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer L n₁ n₂ m₁ m₂ e ⟨1, by constructor <;> norm_num⟩ =
+        (edgePoint L (n₁ + 1 + n₂ + m₁)
+          (reverseParameter ⟨1, by constructor <;> norm_num⟩) : ℂ) := by
+  have h0 := fun k => edgePoint_zero_eq_cutPoint L k
+  have h1 := fun k => edgePoint_one_eq_cutPoint L k
+  have hr : reverseParameter ⟨1, by constructor <;> norm_num⟩ =
+      (⟨0, by simp⟩ : Icc (0 : ℝ) 1) := Subtype.ext (by simp [reverseParameter])
+  rw [hr, h0, h1]
+  unfold orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+  constructor
+  · rw [if_neg (by omega), if_neg (by omega), if_pos hn₂, h0]
+    congr 1; omega
+  · by_cases hm : m₁ = 0
+    · rw [if_neg (by omega), if_pos (by omega)]
+      simp [cutChordB]
+      congr 1; omega
+    · rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_neg (by omega),
+        if_neg (by omega), h1]
+      congr 1; omega
+
 theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next
     {L : Type*} [DecidableEq L]
     (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
@@ -9028,7 +9108,37 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  have hlen : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length =
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by
+    simp only [List.length_append, List.length_cons, List.length_nil]; omega
+  have hWL : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length =
+      α₁.length + 1 + α₂.length + β₁.length + 1 + β₂.length := by
+    simp only [List.length_append, List.length_cons, List.length_nil]; try omega
+  rw [hlen] at he hadj
+  have hs : s₀ = ⟨0, by constructor <;> norm_num⟩ := Subtype.ext hs₀
+  have ht : τ = ⟨1, by constructor <;> norm_num⟩ := Subtype.ext hτ
+  subst hs ht
+  by_cases hw : e₁ = 0
+  · subst hw
+    have he1 : e + 1 = (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by
+      by_contra hn
+      rw [Nat.mod_eq_of_lt (by omega)] at hadj; omega
+    obtain ⟨hA, hB⟩ := orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next_aux_wrap _ _ _ _ _ e hWL (by omega) he1
+    refine ⟨edgePoint _ (α₁.length + 1 + α₂.length + β₁.length)
+      (reverseParameter ⟨1, by constructor <;> norm_num⟩), hB.symm, ?_⟩
+    have hP' : P = edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length α₁.length
+        ⟨1, by constructor <;> norm_num⟩ := Subtype.ext (hP.trans hA)
+    rw [hP']
+    exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next_aux_rel α₁ α₂ β₁ β₂ y _
+  · have hnext : e + 1 = e₁ := by
+      have hlt : e + 1 < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by
+        by_contra hn
+        rw [show e + 1 = (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length by omega,
+          Nat.mod_self] at hadj
+        exact hw hadj
+      rw [Nat.mod_eq_of_lt hlt] at hadj; exact hadj.symm
+    exact ⟨P, (hP.trans (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next_aux_shift _ _ _ _ _ e e₁ hWL he₁ he₁c hnext).symm),
+      Relation.EqvGen.refl P⟩
 
 open PolygonMoves in
 /-- **Leaf (reverse, piece `A`, arc, prev-name case).**  As `_aux_next`, but the
