@@ -7116,6 +7116,77 @@ the word, and rotations to bring each configuration into the
 cut, it stays inside one of the four pieces).  `hy` of each `cutPaste` comes
 from `hw`; `_aux_step_isPolygonWord` carries `hw` along. -/
 -- BEGIN SEAT AREA
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_le_fold
+    (a n : ℕ) (l : List ℕ) (ha : a ∈ l) :
+    a ≤ l.foldr max n := by
+  induction l with
+  | nil => simp at ha
+  | cons b l ih =>
+      simp only [List.foldr_cons]
+      simp only [List.mem_cons] at ha
+      rcases ha with rfl | ha
+      · exact le_max_left _ _
+      · exact (ih ha).trans (le_max_right _ _)
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_fresh
+    (n : ℕ) (l : List (PolygonMoves.Signed ℕ)) :
+    let a := (l.map Prod.fst).foldr max n + 1
+    n ≤ a ∧ a ∉ l.map Prod.fst := by
+  dsimp only
+  constructor
+  · have : n ≤ (l.map Prod.fst).foldr max n := by
+      induction l with
+      | nil => simp
+      | cons x l ih =>
+          simp only [List.map_cons, List.foldr_cons]
+          exact ih.trans (le_max_right _ _)
+    omega
+  · intro ha
+    have := orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_le_fold
+      _ n _ ha
+    omega
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_exists_fresh
+    (n : ℕ) (l : List (PolygonMoves.Signed ℕ)) :
+    ∃ a, n ≤ a ∧ a ∉ l.map Prod.fst :=
+  ⟨_, orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_fresh n l⟩
+
+/-- In a polygon word `α₁ y α₂ β₁ y⁻¹ β₂` the label of `y` occurs nowhere else. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_absent
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y : PolygonMoves.Signed ℕ)
+    (hw : PolygonMoves.IsPolygonWord
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)) :
+    y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst := by
+  intro hm
+  have h2 := hw.2.2 y.1 (by simp)
+  have hpos := List.count_pos_iff.mpr hm
+  simp only [List.map_append, List.count_append, List.map_cons, List.map_nil,
+    PolygonMoves.inv, List.count_cons_self, List.count_nil] at h2 hpos
+  omega
+
+/-- A rotation step, with the two words given by equations. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_rot
+    {w w' : List (PolygonMoves.Signed ℕ)} (u v : List (PolygonMoves.Signed ℕ))
+    (h1 : w = u ++ v) (h2 : w' = v ++ u) (hw : PolygonMoves.IsPolygonWord w) :
+    orientablePairing_normalForm_aux_Step w w' := by
+  subst h1 h2
+  exact orientablePairing_normalForm_aux_Step.rotation u v hw
+
+/-- A cut-and-paste step, with the two words given by equations and the
+uniqueness of `y` read off from the polygon word. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_cut
+    {w w' : List (PolygonMoves.Signed ℕ)} (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ))
+    (y c : PolygonMoves.Signed ℕ)
+    (h1 : w = α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)
+    (h2 : w' = α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)
+    (hc : c.1 ∉ w.map Prod.fst) (hw : PolygonMoves.IsPolygonWord w) :
+    orientablePairing_normalForm_aux_Step w w' := by
+  subst h1 h2
+  exact orientablePairing_normalForm_aux_Step.cutPaste α₁ α₂ β₁ β₂ y c
+    (orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_absent
+      α₁ α₂ β₁ β₂ y hw) hc hw
+
+set_option maxHeartbeats 4000000 in
 theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator (n : ℕ)
     (P A B C D : List (PolygonMoves.Signed ℕ)) (x y : PolygonMoves.Signed ℕ)
     (hw : PolygonMoves.IsPolygonWord (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++
@@ -7127,7 +7198,66 @@ theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator (n :
         (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D))
         (P ++ ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E)) ∧
       ∀ z ∈ c :: d :: E, n ≤ z.1 := by
-  sorry
+  -- x A y B x⁻¹ C y⁻¹ D P  →(cut on y, new c)  B x⁻¹ c⁻¹ x A D P c C
+  -- → C B x⁻¹ c⁻¹ x A D P c  →(cut on x⁻¹, new d)  d⁻¹ C B A D P c d c⁻¹
+  -- → P c d c⁻¹ d⁻¹ C B A D.
+  obtain ⟨cl, hcn, hcf⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_exists_fresh n
+      (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D))
+  let c : PolygonMoves.Signed ℕ := (cl, false)
+  have s0 : orientablePairing_normalForm_aux_Step
+      (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D))
+      ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D ++ P) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_rot P
+      ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D)
+      rfl (by simp) hw
+  have hw1 := orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord s0 hw
+  have s1 : orientablePairing_normalForm_aux_Step
+      ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D ++ P)
+      (B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c] ++ C) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_cut
+      ([x] ++ A) (B ++ [PolygonMoves.inv x]) C (D ++ P) y c (by simp) (by simp)
+      (by
+        intro h
+        apply hcf
+        simp only [List.map_append, List.mem_append] at h ⊢
+        tauto)
+      hw1
+  have hw2 := orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord s1 hw1
+  have s2 : orientablePairing_normalForm_aux_Step
+      (B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c] ++ C)
+      (C ++ B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c]) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_rot
+      (B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c]) C
+      (by simp) (by simp) hw2
+  have hw3 := orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord s2 hw2
+  obtain ⟨dl, hdn, hdf⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_exists_fresh n
+      (C ++ B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c])
+  let d : PolygonMoves.Signed ℕ := (dl, false)
+  have s3 : orientablePairing_normalForm_aux_Step
+      (C ++ B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c])
+      ([PolygonMoves.inv d] ++ C ++ B ++ A ++ D ++ P ++ [c] ++ [d] ++ [PolygonMoves.inv c]) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_cut
+      (C ++ B) [] [PolygonMoves.inv c] (A ++ D ++ P ++ [c]) (PolygonMoves.inv x) d
+      (by simp) (by simp) hdf hw3
+  have hw4 := orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord s3 hw3
+  have s4 : orientablePairing_normalForm_aux_Step
+      ([PolygonMoves.inv d] ++ C ++ B ++ A ++ D ++ P ++ [c] ++ [d] ++ [PolygonMoves.inv c])
+      (P ++ ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ (C ++ B ++ A ++ D))) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_rot
+      ([PolygonMoves.inv d] ++ C ++ B ++ A ++ D) (P ++ [c] ++ [d] ++ [PolygonMoves.inv c])
+      (by simp) (by simp) hw4
+  refine ⟨c, d, C ++ B ++ A ++ D, ?_, ?_⟩
+  · exact (((((Relation.ReflTransGen.single s0).tail s1).tail s2).tail s3).tail s4)
+  · intro z hz
+    simp only [List.mem_cons, List.mem_append] at hz
+    rcases hz with rfl | rfl | hz
+    · exact hcn
+    · exact hdn
+    · apply hr
+      simp only [List.mem_append, List.mem_cons]
+      tauto
 -- END SEAT AREA
 
 /-- **Leaf (relabel).**  One `relabel` step sends `c ↦ 2k`, `d ↦ 2k + 1` with
