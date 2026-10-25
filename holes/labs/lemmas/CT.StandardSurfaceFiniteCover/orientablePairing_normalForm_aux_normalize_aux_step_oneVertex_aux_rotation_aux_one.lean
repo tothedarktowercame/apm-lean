@@ -11312,7 +11312,83 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotati
     (w : List (PolygonMoves.Signed ℕ))
     (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
     orientablePairing_normalForm_aux_WordOneVertex (w.rotate 1) := by
-  sorry
+  cases w with
+  | nil =>
+      intro a
+      exact Fin.elim0 a
+  | cons x xs =>
+    let w := x :: xs
+    have hvw : orientablePairing_normalForm_aux_WordOneVertex w := hv
+    change orientablePairing_normalForm_aux_WordOneVertex (w.rotate 1)
+    let e : Fin (w.rotate 1).length ≃ Fin w.length :=
+    (finCongr (List.length_rotate w 1)).trans (finRotate w.length)
+    have rotate_cast {m n : ℕ} (h : m = n) (i : Fin m) :
+        Fin.cast h (finRotate m i) = finRotate n (Fin.cast h i) := by
+      subst n
+      rfl
+    have eget (i : Fin (w.rotate 1).length) :
+      (w.rotate 1).get i = w.get (e i) := by
+      rw [List.get_rotate_one]
+      congr 1
+      apply Fin.ext
+      simp only [e, Equiv.trans_apply, finCongr_apply]
+      simp [w, Fin.add_def]
+      have h := finRotate_succ_apply (n := xs.length)
+        (Fin.cast (List.length_rotate w 1) i)
+      have hval := congrArg Fin.val h
+      calc
+        (↑i + 1) % (xs.length + 1) =
+            ↑(Fin.cast (List.length_rotate w 1) i + 1) := by
+              simp only [Fin.add_def, Fin.val_cast, Fin.val_mk]
+              simp [w]
+        _ = ↑((finRotate (xs.length + 1))
+            (Fin.cast (List.length_rotate w 1) i)) := hval.symm
+    have erot (i : Fin (w.rotate 1).length) :
+      e (finRotate _ i) = finRotate _ (e i) := by
+      simp only [e, Equiv.trans_apply, finCongr_apply]
+      apply congrArg (finRotate w.length)
+      exact rotate_cast (List.length_rotate w 1) i
+    have eget_inv (i : Fin w.length) :
+      (w.rotate 1).get (e.symm i) = w.get i := by
+      simpa only [e.apply_symm_apply] using eget (e.symm i)
+    have erot_inv (i : Fin w.length) :
+      e.symm (finRotate _ i) = finRotate _ (e.symm i) := by
+      apply e.injective
+      simp only [e.apply_symm_apply, erot]
+    have hrel_inv (a b : Fin w.length)
+      (h : orientablePairing_normalForm_aux_WordCornerRel w a b) :
+      orientablePairing_normalForm_aux_WordCornerRel (w.rotate 1) (e.symm a) (e.symm b) := by
+      rcases h with ⟨i, j, hij, hlab, hends⟩
+      refine ⟨e.symm i, e.symm j, ?_, ?_, ?_⟩
+      · exact fun h => hij (e.symm.injective h)
+      · simpa only [eget_inv] using hlab
+      · rw [eget_inv, eget_inv]
+        by_cases hs : (w.get i).2 = (w.get j).2
+        · rw [if_pos hs] at hends ⊢
+          rcases hends with hends | hends
+          · exact Or.inl ⟨congrArg e.symm hends.1, congrArg e.symm hends.2⟩
+          · exact Or.inr ⟨by simpa only [erot_inv] using congrArg e.symm hends.1,
+              by simpa only [erot_inv] using congrArg e.symm hends.2⟩
+        · rw [if_neg hs] at hends ⊢
+          rcases hends with hends | hends
+          · exact Or.inl ⟨congrArg e.symm hends.1,
+              by simpa only [erot_inv] using congrArg e.symm hends.2⟩
+          · exact Or.inr ⟨by simpa only [erot_inv] using congrArg e.symm hends.1,
+              congrArg e.symm hends.2⟩
+    intro a b
+    have hab := hvw (e a) (e b)
+    have hpull : ∀ {x y},
+      Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w) x y →
+      Relation.EqvGen
+        (orientablePairing_normalForm_aux_WordCornerRel (w.rotate 1)) (e.symm x) (e.symm y) := by
+      intro x y h
+      induction h with
+      | rel x y h =>
+          exact Relation.EqvGen.rel _ _ (hrel_inv x y h)
+      | refl x => exact Relation.EqvGen.refl _
+      | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+      | trans x y z _ _ hxy hyz => exact Relation.EqvGen.trans _ _ _ hxy hyz
+    simpa only [e.symm_apply_apply] using hpull hab
 -- END SEAT AREA
 
 theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation_aux
