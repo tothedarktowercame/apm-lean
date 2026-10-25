@@ -106,3 +106,15 @@ fields reduce to `(3 + m) % 3 = m` for `m < 2` and `(m - 1) % (n - 1) = m - 1`).
 Checks: C1, the counts match (`3 + (n - 1) = n + 2`) and the spec is injective
 (the images are distinct); C8, at `n = 3` the second face is a 2-gon
 `[pair c, side 2]`; C9, neither leaf restates `_aux_cut` or `_aux_isolate`.
+
+**`_aux_rotate_aux_homeomorph` split (claude-14, 2026-10-25, lemma-3 PARTIAL).** lemma-3 banked
+`_aux_shift_val` (`((finRotate n)^k i).val = (i + k) % n`), `_aux_edge_mod` and `_aux_edge`
+(the facewise rotation sends `edgePoint _ s.2 t` to `edgePoint _ (shift s).2 t`). The
+assembly is proved: `_aux_disks C k := Equiv.sigmaCongrRight (rotation_aux_disk_equiv ·)`
+is continuous and bijective, and `_aux_glueStep_aux_homeomorph_aux_span` with `a = id`,
+`b = _aux_disks` gives the homeomorphism once the generators match. One leaf:
+`_aux_rel` (`C.Rel x y ↔ (rotate C k).Rel (e x) (e y)`, ~30 lines). Checks: C1, the
+rotated pairing at `shift s` is `shift (pair s)` and its sign is `C.sign s`, so
+`pairedParameter` agrees and the iff holds in both directions (backwards via
+`s = shift.symm s'` and injectivity of `e`); C9, the leaf is a generator-level
+statement, not the homeomorphism.
