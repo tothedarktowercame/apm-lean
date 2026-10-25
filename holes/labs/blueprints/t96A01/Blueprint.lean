@@ -8,6 +8,7 @@ import ConstructionTargets.CoveringDegree
 import ConstructionTargets.CoveringMonodromyCosets
 import ConstructionTargets.SuppliedCoverAlgebra
 import ConstructionTargets.CoveringSubgroupCorrespondence
+import ConstructionTargets.StandardSurfaceFiniteCover
 
 /-! # Blueprint for t96A01: finite-index subgroups of a genus-four surface group -/
 
@@ -580,9 +581,57 @@ theorem t96A01_finiteIndexSubgroup_connectedCover
     connectedCover (t96A01_surface_semilocallySimplyConnected S) s H
   exact ⟨E, topE, p, e, hp, hE, hpe, hcard.trans hindex, hpi⟩
 
-/-- **LIBRARY (finite-cover Euler characteristic and surface recognition).**
-A connected `n`-sheeted cover of a genus-four surface has genus `3*n+1`.
-The conclusion includes the harmless basepoint transport needed downstream. -/
+/-- Adapter: transport a cover of `S` (fibre over `s` of size `n`) along
+`S ≃ₜ Surface true 4` to a cover of the standard surface with every fibre of
+size `n`; needs that fibre cardinality is constant over a connected base. -/
+theorem t96A01_standard_cover_adapter
+    {S : Type*} [TopologicalSpace S]
+    (hgenus : Nonempty (S ≃ₜ Surface true 4)) (s : S)
+    (n : ℕ) (E : Type*) [TopologicalSpace E] [PathConnectedSpace E]
+    (p : E → S) (hp : IsCoveringMap p)
+    (hsheets : Nat.card (p ⁻¹' {s}) = n) :
+    ∃ q : E → Surface true 4, IsCoveringMap q ∧
+      ∀ b, Nat.card {x : E // q x = b} = n := by
+  obtain ⟨h⟩ := hgenus
+  let q : E → Surface true 4 := h ∘ p
+  have hq : IsCoveringMap q := hp.homeomorph_comp h
+  letI : PathConnectedSpace ConstructionTargets.Surfaces.Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+  letI : PathConnectedSpace (Surface true 4) :=
+    (ConstructionTargets.Surfaces.surjective_surfaceQuotient true 4).pathConnectedSpace
+      (ConstructionTargets.Surfaces.continuous_surfaceQuotient true 4)
+  have hbase : Nat.card {x : E // q x = h s} = n := by
+    let e : {x : E // q x = h s} ≃ {x : E // p x = s} :=
+      { toFun := fun x => ⟨x, h.injective x.2⟩
+        invFun := fun x => ⟨x, congrArg h x.2⟩
+        left_inv := fun x => Subtype.ext rfl
+        right_inv := fun x => Subtype.ext rfl }
+    rw [Nat.card_congr e]
+    simpa only [Set.mem_preimage, Set.mem_singleton_iff] using hsheets
+  refine ⟨q, hq, fun b => ?_⟩
+  let γ : Path (h s) b := PathConnectedSpace.somePath (h s) b
+  let e : {x : E // q x = h s} ≃ {x : E // q x = b} :=
+    Equiv.ofBijective (hq.monodromy (.mk γ)) (hq.monodromy_bijective (.mk γ))
+  rw [← Nat.card_congr e]
+  exact hbase
+
+/-- Adapter: a homeomorphism to the standard surface transports `π₁`, with the
+basepoint change allowed by path-connectedness. -/
+theorem t96A01_homeomorph_fundamentalGroup_adapter
+    (m : ℕ) (E : Type*) [TopologicalSpace E] [PathConnectedSpace E]
+    (e : E) (hE : Nonempty (E ≃ₜ Surface true m)) :
+    Nonempty
+      (FundamentalGroup E e ≃*
+        FundamentalGroup (Surface true m) (T96A01SurfaceBase m)) := by
+  obtain ⟨h⟩ := hE
+  letI : PathConnectedSpace (Surface true m) :=
+    h.surjective.pathConnectedSpace h.continuous
+  exact ⟨
+    (fundamentalGroupEquivOfHomeomorphEq h e (h e) rfl).trans
+      (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+        (h e) (T96A01SurfaceBase m))⟩
+
 theorem t96A01_connectedFiniteCover_surfaceFundamentalGroup
     {S : Type*} [TopologicalSpace S]
     [ChartedSpace (EuclideanSpace ℝ (Fin 2)) S]
@@ -596,7 +645,14 @@ theorem t96A01_connectedFiniteCover_surfaceFundamentalGroup
       (FundamentalGroup E e ≃*
         FundamentalGroup (Surface true (3 * n + 1))
           (T96A01SurfaceBase (3 * n + 1))) := by
-  sorry
+  obtain ⟨q, hq, hf⟩ :=
+    t96A01_standard_cover_adapter hgenus s n E p hp hsheets
+  obtain ⟨hE⟩ :=
+    ConstructionTargets.StandardSurfaceFiniteCover.connectedFiniteCover_homeomorph_standardSurface
+      4 n (by omega) hn E q hq hf
+  have harith : n * (4 - 1) + 1 = 3 * n + 1 := by omega
+  rw [harith] at hE
+  exact t96A01_homeomorph_fundamentalGroup_adapter (3 * n + 1) E e ⟨hE⟩
 
 theorem apm_t96a01
     {S : Type*} [TopologicalSpace S]

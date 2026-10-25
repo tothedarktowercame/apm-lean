@@ -1,34 +1,31 @@
 # Blueprint for t00A02
 
-## Status (2026-10-19)
+## Finite-cover split (2026-10-24)
 
-One lemma is still `sorry`: `apm_t00A02_connected_ten_cover_homeomorph`
-(part (a), surface classification).  Parts (b) and (c) are sorry-free:
+The registered statement is unchanged. The former finite-cover LIBRARY lemma
+is now a sorry-free assembly through `StandardSurfaceFiniteCover`. Unrelated
+antipodal and wedge-cover leaves remain proved.
 
-- `apm_t00A02_antipodalCover_isCoveringMap` — proved (lemma round).
-- `apm_t00A02_shared_cover_adapter` — proved (b95ee75cb).
-- `apm_t00A02_regular_wedge_cover`, `apm_t00A02_irregular_wedge_cover` —
-  assemblies over `ConstructionTargets.WedgePermutationCover`, which closed
-  with 0 sorry at 8244d7499.  The LIBRARY notes on these two lemmas below
-  are kept as written at blueprint time; they no longer describe a gap.
+`apm_t00A02_standard_cover_adapter` (40–80 lines, independent) chooses the
+supplied `F ≃ₜ Surface true 5`, composes it with `p`, uses the homeomorphism
+covering-map theorem, and transports fibres. Tools: `IsCoveringMap.comp`,
+`Homeomorph.isCoveringMap`, `Nat.card_congr`.
 
-`ConstructionTargets.SurfaceClassification` is now sorry-free, but it still
-stops at `compactSmoothSurfaceFiniteClosedDiskCover`; it has neither
-Euler-characteristic multiplicativity for finite covers nor the
-classification theorem, so it does not discharge the remaining lemma.
+C1 composition preserves covers/fibre cardinality; C2 returns the actual map;
+C3 only base transport; C4/C5 returns precisely covering and all-fibre data;
+C6 no new assumptions; C7 no casts; C8 degree ten gives genus 41; C9 not the
+old classification statement; C10 matches. The assembly sends both covers to
+`Surface true 41` and composes one homeomorphism with the other's inverse.
 
-Checked 2026-10-19 on branch `lemmas` (32509c4ee):
+## Earlier record (blueprint time)
 
-```text
-'apm_t00a02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
-'apm_t00A02_regular_wedge_cover' depends on axioms: [propext, Classical.choice, Quot.sound]
-'apm_t00A02_irregular_wedge_cover' depends on axioms: [propext, Classical.choice, Quot.sound]
-'apm_t00A02_antipodalCover_isCoveringMap' depends on axioms: [propext, Classical.choice, Quot.sound]
-```
+Kept for the triage and the degeneracies checked, which still hold. Where it
+calls the finite-cover lemma LIBRARY, the 2026-10-24 section above supersedes it:
+that lemma is now an assembly over
+`ConstructionTargets.StandardSurfaceFiniteCover`, and its open obligations are
+the adapters named above.
 
-The one `sorry` warning is at `apm_t00A02_connected_ten_cover_homeomorph`.
-
-## Triage
+### Triage
 
 Verdict: **true and faithful**.
 
@@ -61,7 +58,7 @@ the concrete polygon model.  The unfinished `SurfaceClassification` module is
 not imported: its current declarations stop at finite disk-cover infrastructure
 and it contains `sorry`.
 
-## Remaining lemmas
+### Remaining lemmas
 
 ### `apm_t00A02_antipodalCover_isCoveringMap`
 
@@ -180,7 +177,7 @@ foundation itself is estimated at 1,500–3,000 lines.
 different degree partitions yield nonhomeomorphic disconnected total spaces,
 and the formal hypotheses correctly exclude that case.
 
-## Assembly and dependency layers
+### Assembly and dependency layers
 
 The main theorem uses the classification lemma for its first conjunct, pairs
 the antipodal covering lemma with the already proved fibre-cardinality lemma,
@@ -199,7 +196,7 @@ There are four admitted lemmas.  The two wedge lemmas and surface
 classification lemma are marked LIBRARY because the missing reusable topology
 exceeds a single 30–150-line consumer proof.
 
-## Compilation and axioms
+### Compilation and axioms
 
 Compiled with:
 

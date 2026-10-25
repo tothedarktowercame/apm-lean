@@ -1,6 +1,38 @@
 # Blueprint for t96A01
 
-## Triage verdict
+## Finite-cover split (2026-10-24)
+
+The registered statement and earlier proved polygon-pi1/subgroup-cover lemmas
+are unchanged. The former connected-cover LIBRARY lemma is now a sorry-free
+assembly through `StandardSurfaceFiniteCover`.
+
+`t96A01_standard_cover_adapter` (50–90 lines, independent) composes the cover
+with `S ≃ₜ Surface true 4` and moves the known fibre count at `s` to all base
+points by path lifting. Tools: `IsCoveringMap.comp`, homeomorphism covering,
+covering fibre equivalence along a path, `Nat.card_congr`.
+
+`t96A01_homeomorph_fundamentalGroup_adapter` (25–50 lines, independent) takes
+the explicit shared homeomorphism, applies
+`fundamentalGroupEquivOfHomeomorphEq`, and changes target basepoint with
+`FundamentalGroup.fundamentalGroupMulEquivOfPathConnected`.
+
+C1 cover/homeomorphism invariance; C2 no conclusion assumed; C3 transport
+only; C4/C5 all maps and basepoints explicit; C6 no added geometry; C7 `omega`
+handles genus arithmetic; C8 `n=1` gives genus four and `hn` excludes zero; C9
+neither repeats classification; C10 matches. The assembly rewrites
+`n*(4-1)+1=3*n+1`. The pre-existing open orientable-surface pi1 LIBRARY lemma
+remains separate and is not part of this family split.
+
+## Earlier record (blueprint time)
+
+Kept for the triage and the degeneracies checked, which still hold. Where it
+calls the finite-cover lemma LIBRARY, the 2026-10-24 section above supersedes it:
+that lemma is now an assembly over
+`ConstructionTargets.StandardSurfaceFiniteCover`, and its open obligations are
+the adapters named above.
+
+
+### Triage verdict
 
 **True and faithful; no statement repair.**  The source asks for the
 presentation of an index-`n` subgroup of the fundamental group of a closed
@@ -31,13 +63,13 @@ infrastructure but not the final presented-group equivalence.  Thus none of
 the three LIBRARY interfaces below has a short elementary proof already in the
 repository.
 
-## Definitions
+### Definitions
 
 `T96A01SurfaceBase g` is the image of the center of the disk in the standard
 orientable genus-`g` polygon quotient.  It is only a canonical basepoint; no
 mathematical conclusion is encoded in the definition.
 
-## Lemmas
+### Lemmas
 
 ### `t96A01_orientableSurface_fundamentalGroup` — LIBRARY
 
@@ -133,7 +165,7 @@ general `2-2(3n+1) = -6n`.  Positivity rules out the empty/zero-sheet cover.
 Orientability lifts through local homeomorphisms, including for nonregular
 covers.
 
-## Dependency layers
+### Dependency layers
 
 - **Layer 1 (parallel):**
   `t96A01_orientableSurface_fundamentalGroup` (LIBRARY),
@@ -149,7 +181,7 @@ is a named stalled/shared topology foundation rather than a 30–150-line lemma
 seat.  I have no doubt about their mathematical truth; the uncertainty is only
 the substantial missing Lean infrastructure recorded by the topology loops.
 
-## Compilation and axioms
+### Compilation and axioms
 
 `Blueprint.lean` compiles with the required single-file command.  Its axiom
 output is:
@@ -157,7 +189,7 @@ output is:
 ```text
 'apm_t96a01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
-# Covering-subgroup split (2026-10-18)
+### Covering-subgroup split (2026-10-18)
 
 `t96A01_finiteIndexSubgroup_connectedCover` is now a sorry-free adapter to
 `ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover`.
