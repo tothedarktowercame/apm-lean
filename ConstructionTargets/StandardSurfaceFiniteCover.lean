@@ -13301,6 +13301,54 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
 /-- **Leaf.**  Every new corner is one vertex with the image of an old corner:
 the image misses only the starts of `c⁻¹` and `c`, which the `c` pairing joins
 to the ends of `c` and `c⁻¹` (`orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_opposite`). -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_rotVal
+    {n m : ℕ} (x : Fin n) (hn : n = m) :
+    ((finRotate n x : Fin n) : ℕ) = if (x : ℕ) + 1 = m then 0 else (x : ℕ) + 1 := by
+  subst hn
+  cases n with
+  | zero => exact x.elim0
+  | succ m =>
+    rw [coe_finRotate]
+    by_cases h : x = Fin.last m
+    · subst h; simp
+    · have hx : (x : ℕ) ≠ m := fun e => h (Fin.ext (by simpa using e))
+      rw [if_neg h, if_neg (by omega)]
+
+/-- Every corner of the new word other than the two inserted `c⁻¹`/`c` corners is a
+literal value of `mapNat`. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_preimage
+    (A1 A2 B1 B2 b : ℕ) (hb : b < A1 + A2 + B1 + B2 + 2) (h1 : b ≠ A2)
+    (h2 : b ≠ A2 + 1 + A1 + B2) :
+    ∃ k, k < A1 + A2 + B1 + B2 + 2 ∧
+      orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+        A1 A2 B1 B2 k = b := by
+  unfold orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+  by_cases h0 : b < A2
+  · exact ⟨A1 + 1 + b, by omega, by split_ifs <;> omega⟩
+  by_cases h3 : b < A2 + 1 + A1
+  · exact ⟨b - A2 - 1, by omega, by split_ifs <;> omega⟩
+  by_cases h4 : b < A2 + 1 + A1 + B2
+  · exact ⟨b + B1 + 1, by omega, by split_ifs <;> omega⟩
+  · exact ⟨b - B2 - 1, by omega, by split_ifs <;> omega⟩
+
+/-- The corner after `y` in the old word lands on the corner after `c`. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_minus
+    (A1 A2 B1 B2 : ℕ) :
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+        A1 A2 B1 B2 (A1 + A2 + 1) =
+      if A2 + 1 + A1 + B2 + 1 = A1 + A2 + B1 + B2 + 2 then 0 else A2 + 1 + A1 + B2 + 1 := by
+  unfold orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+  split_ifs <;> omega
+
+/-- The first corner of the old word lands on the corner after `c⁻¹`. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_plus
+    (A1 A2 B1 B2 : ℕ) :
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+        A1 A2 B1 B2 0 =
+      if A2 + 1 = A1 + A2 + B1 + B2 + 2 then 0 else A2 + 1 := by
+  unfold orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+  split_ifs <;> omega
+
 lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover
     (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
     (b : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) :
@@ -13308,7 +13356,57 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
       (orientablePairing_normalForm_aux_WordCornerRel
         (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
       (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c a) b := by
-  sorry
+  have hN : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length =
+      α₁.length + α₂.length + β₁.length + β₂.length + 2 := by simp; omega
+  have hM : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length =
+      α₁.length + α₂.length + β₁.length + β₂.length + 2 := by simp; omega
+  have hmv : ∀ a, ((orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map
+      α₁ α₂ β₁ β₂ y c a : Fin _) : ℕ) =
+      orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+        α₁.length α₂.length β₁.length β₂.length a := fun _ => rfl
+  have hb : (b : ℕ) < α₁.length + α₂.length + β₁.length + β₂.length + 2 := by
+    have := b.2; omega
+  let i : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+    ⟨α₂.length, by rw [hN]; omega⟩
+  let j : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+    ⟨α₂.length + 1 + α₁.length + β₂.length, by rw [hN]; omega⟩
+  have hi : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i = PolygonMoves.inv c := by
+    simp [i, List.get_eq_getElem, List.getElem_append]
+  have hj : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j = c := by
+    rw [List.get_eq_getElem]
+    simp [j, List.getElem_append, Nat.add_assoc]
+    simp [Nat.add_comm, List.getElem_append]
+  have hop := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_opposite
+    (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) i j
+    (by intro h; have := congrArg Fin.val h; dsimp [i, j] at this; omega)
+    (by rw [hi, hj]; simp [PolygonMoves.inv])
+    (by rw [hi, hj]; simp [PolygonMoves.inv])
+  by_cases hminus : (b : ℕ) = α₂.length
+  · refine ⟨⟨α₁.length + α₂.length + 1, by rw [hM]; omega⟩, ?_⟩
+    have hmap : orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map
+        α₁ α₂ β₁ β₂ y c ⟨α₁.length + α₂.length + 1, by rw [hM]; omega⟩ = finRotate _ j := by
+      apply Fin.ext
+      rw [hmv, orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_rotVal _ hN]
+      exact orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_minus _ _ _ _
+    rw [hmap, show b = i from Fin.ext hminus]
+    exact hop.1.symm
+  by_cases hplus : (b : ℕ) = α₂.length + 1 + α₁.length + β₂.length
+  · refine ⟨⟨0, by rw [hM]; omega⟩, ?_⟩
+    have hmap : orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map
+        α₁ α₂ β₁ β₂ y c ⟨0, by rw [hM]; omega⟩ = finRotate _ i := by
+      apply Fin.ext
+      rw [hmv, orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_rotVal _ hN]
+      exact orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_plus _ _ _ _
+    rw [hmap, show b = j from Fin.ext hplus]
+    exact hop.2
+  obtain ⟨k, hk, hkb⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover_aux_preimage
+      α₁.length α₂.length β₁.length β₂.length b hb hminus hplus
+  refine ⟨⟨k, by rw [hM]; exact hk⟩, ?_⟩
+  have hmap : orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map
+      α₁ α₂ β₁ β₂ y c ⟨k, by rw [hM]; exact hk⟩ = b := Fin.ext (by rw [hmv]; exact hkb)
+  rw [hmap]
+  exact Relation.EqvGen.refl _
 
 /-- Each old corner step maps to a new chain. -/
 lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_step
