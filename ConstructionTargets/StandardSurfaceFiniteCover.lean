@@ -760,7 +760,40 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_chain
     ∃ i' : Fin n, Relation.EqvGen
       (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
       ⟨i, k⟩ ⟨i', ⟨0, k.pos⟩⟩ := by
-  sorry
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  have h4 : 0 < 4 * g := by omega
+  have hiter : ∀ (m : ℕ) (j : Fin n) (l : Fin (4 * g)),
+      ∃ j' : Fin n, Relation.EqvGen C.CornerRel
+        ⟨j, l⟩ ⟨j', ⟨(l.1 + m) % (4 * g), Nat.mod_lt _ h4⟩⟩ := by
+    intro m
+    induction m with
+    | zero =>
+        intro j l
+        refine ⟨j, ?_⟩
+        simpa only [Nat.add_zero, Nat.mod_eq_of_lt l.isLt] using
+          (Relation.EqvGen.refl (r := C.CornerRel) ⟨j, l⟩)
+    | succ m ih =>
+        intro j l
+        obtain ⟨j₁, hj₁⟩ := ih j l
+        let l₁ : Fin (4 * g) :=
+          ⟨(l.1 + m) % (4 * g), Nat.mod_lt _ h4⟩
+        obtain ⟨j₂, hj₂⟩ := hstep j₁ l₁
+        refine ⟨j₂, hj₁.trans _ _ _ ?_⟩
+        convert hj₂ using 1
+        congr 1
+        apply Fin.ext
+        dsimp [l₁]
+        calc
+          (l.1 + (m + 1)) % (4 * g) = (l.1 + m + 1) % (4 * g) := by
+            congr 1 <;> omega
+          _ = ((l.1 + m) % (4 * g) + 1) % (4 * g) :=
+            (Nat.mod_add_mod _ _ _).symm
+  obtain ⟨i', hi'⟩ := hiter (4 * g - k.1) i k
+  refine ⟨i', ?_⟩
+  convert hi' using 1
+  congr 1
+  apply Fin.ext
+  simp
 
 /-- Leaf: the corner `⟨i, k⟩` goes to `L i (edgePoint (4g) k 0)`, and one
 `CornerRel` step preserves it.  The signs always differ, so the step is
