@@ -6593,17 +6593,296 @@ theorem standardCover_pairingData_aux_contractStep_aux_adjacentDistinct
   exact (standardCover_pairingData_aux_contractStep_aux_adjacentDistinct_aux_next_ne
     C h1 h3 s) hs.symm
 
-/-- **Leaf, NOT YET SPLIT (bring a pair together).**  A one-face orientable
-complex with at least two vertices is homeomorphic to one with the same
-number of sides and vertices in which some side is followed by its partner.
-Massey's induction on the corner count of a vertex class `Q`: if `Q` has one
-corner, the sides at it are `a a⁻¹` (orientability); otherwise take sides
-`a` (from `P ≠ Q` to `Q`) and `b` (from `Q`) at a corner of `Q`, with
-`b ≠ C.pair a` (else done), cut off the triangle `a b c⁻¹` and glue it back
-along `b`: `X a b Y b⁻¹ Z` becomes `X c Y c⁻¹ a Z`, with one fewer corner in
-`Q` and the same vertex count.  The cut is a `GlueData` read backwards and
-both homeomorphisms are `_aux_glueStep_aux_homeomorph`; vertex counts are kept
-by `_aux_glueStep_aux_vertexCount`. -/
+/-! Split of `_aux_isolate` (claude-14, 2026-10-25).  Massey's induction on the
+number of corners at one vertex `Q`.  `_aux_classCard C u` counts the corners
+at the vertex of corner `u`.  One cut-and-paste (`_aux_move`) takes a corner
+`nextCorner a` at `Q` whose predecessor corner `a` lies at another vertex `P`,
+and lowers the corner count of `Q` by one; the face count, side count, vertex
+count, orientability and the homeomorphism type are kept.  In words, with
+`b = nextCorner a`: `a b Y b⁻¹ Z` becomes `c⁻¹ a Z c Y`.
+
+* `_aux_rotate` renumbers the face so that `a` is side `0`
+  (`_aux_rotate_aux_homeomorph` from `PolygonMoves.rotation_aux_disk_homeomorph`,
+  `_aux_rotate_aux_corners`, and the generic `_aux_transport`).
+* `_aux_cut` reads a `GlueData` backwards: a two-face complex `D`, with the
+  triangle `a b c` as face `c.1` (`c` its side `2`) and the rest of the face as
+  the other face, glued along the chord `c`, gives `C`.
+* Gluing `D` along `b` instead (`_aux_glueStep_aux_mergeExists`, with
+  `_aux_cutFacts` for its hypothesis) gives `C₁`.  Both glues are
+  `_aux_glueStep_aux_homeomorph`, and vertex counts are kept by
+  `_aux_glueStep_aux_vertexCount`.
+* Corner counts are compared in `D`: a glue along `s` removes from each vertex
+  the sides among `s, pair s` at it (`_aux_classCard_glue`), and at `Q` the
+  glue along `c` removes fewer than the glue along `b` (`_aux_count`: `c` is at
+  `Q` exactly when `pair b` is, and `pair c` is at `P`).
+* When the count reaches one, the two sides at that corner are a pair
+  (`_aux_single`); a vertex `Q` with a corner whose predecessor is elsewhere
+  exists when there are two vertices (`_aux_entry`). -/
+
+/-- The number of corners at the vertex of corner `u`. -/
+noncomputable def standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard
+    (C : PolygonComplex) (u : C.Side) : ℕ :=
+  Nat.card {v : C.Side // Relation.EqvGen C.CornerRel u v}
+
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard_congr
+    (C : PolygonComplex) {u v : C.Side} (h : Relation.EqvGen C.CornerRel u v) :
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C u =
+      standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C v := by
+  unfold standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard
+  exact Nat.card_congr (Equiv.subtypeEquivRight fun w =>
+    ⟨fun hw => (Relation.EqvGen.symm _ _ h).trans _ _ _ hw, fun hw => h.trans _ _ _ hw⟩)
+
+/-- **Leaf (one corner).**  If the vertex of `u` has only the corner `u`, then,
+by orientability, side `u` is identified with the side before it:
+`CornerRel u (nextCorner (pair u))` forces `nextCorner (pair u) = u`, so
+`s = pair u` works. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_single
+    (C : PolygonComplex) (hor : C.IsOrientable) (u : C.Side)
+    (hu : standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C u = 1) :
+    ∃ s : C.Side, C.nextCorner s = C.pair s := by
+  sorry
+
+/-- **Leaf (a corner entered from another vertex).**  On one face, `nextCorner`
+runs once round all corners.  With two vertices the vertex of `u` is not every
+corner, so going round from a corner outside it, some corner `a` outside it is
+followed by a corner inside it. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_entry
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (hV : 2 ≤ C.vertexCount)
+    (u : C.Side) :
+    ∃ a : C.Side, Relation.EqvGen C.CornerRel u (C.nextCorner a) ∧
+      ¬ Relation.EqvGen C.CornerRel u a := by
+  sorry
+
+/-- Each face's sides shifted forward by `k`. -/
+def standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift
+    (C : PolygonComplex) (k : ℕ) : C.Side ≃ C.Side :=
+  Equiv.sigmaCongrRight fun f => finRotate (C.sides f) ^ k
+
+/-- `C` with side `i` of each face `f` renumbered `(i + k) % sides f`; pairing
+and signs are carried along. -/
+def standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate
+    (C : PolygonComplex) (k : ℕ) : PolygonComplex where
+  faceCount := C.faceCount
+  sides := C.sides
+  sides_pos := C.sides_pos
+  pair := ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm.trans
+    C.pair).trans (standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k)
+  pair_pair := by intro s; simp [C.pair_pair]
+  pair_ne := by
+    intro s h
+    have h' := congrArg
+      (standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm h
+    simp only [Equiv.trans_apply, Equiv.symm_apply_apply] at h'
+    exact C.pair_ne _ h'
+  sign := fun s =>
+    C.sign ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm s)
+
+/-- The side of `_aux_rotate C k` that side `s` of `C` becomes. -/
+def standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide
+    (C : PolygonComplex) (k : ℕ) :
+    C.Side ≃ (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k).Side :=
+  standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k
+
+/-- **Leaf (rotation is a homeomorphism).**  On face `f` use
+`PolygonMoves.rotation_aux_disk_homeomorph (C.sides f) k`, which sends
+`edgePoint n i t` to `edgePoint n (k + i) t` (`rotation_aux_edgePoint_add`,
+reduced mod `n` by `rotation_aux_edgePoint_period`); it carries the generators
+`C.Rel` to the generators of the rotated complex and back. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph
+    (C : PolygonComplex) (k : ℕ) :
+    Nonempty (C.Space ≃ₜ
+      (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k).Space) := by
+  sorry
+
+/-- **Leaf (rotation and corners).**  `rotateSide` adds `k` to the index mod
+the face's side count, so it commutes with `nextCorner`; with pairing and signs
+carried along, it carries `CornerRel` exactly. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_corners
+    (C : PolygonComplex) (k : ℕ) :
+    (∀ s : C.Side,
+        (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k s).1 = s.1 ∧
+        (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k s).2.val =
+          (s.2.val + k) % C.sides s.1) ∧
+    (∀ s : C.Side,
+      (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k).nextCorner
+          (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k s) =
+        standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k
+          (C.nextCorner s)) ∧
+    ∀ x y : C.Side,
+      (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k).CornerRel
+          (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k x)
+          (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k y) ↔
+        C.CornerRel x y := by
+  sorry
+
+/-- **Leaf (corner data along a side bijection).**  A bijection of sides that
+carries `CornerRel` exactly carries its equivalence classes: vertex counts,
+corner equivalence and corner counts agree. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_transport
+    {C C' : PolygonComplex} (e : C.Side ≃ C'.Side)
+    (he : ∀ x y, C'.CornerRel (e x) (e y) ↔ C.CornerRel x y) :
+    C'.vertexCount = C.vertexCount ∧
+      (∀ x y, Relation.EqvGen C'.CornerRel (e x) (e y) ↔
+        Relation.EqvGen C.CornerRel x y) ∧
+      ∀ x, standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C' (e x) =
+        standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C x := by
+  sorry
+
+/-- **Leaf (the cut).**  A one-face complex with at least three sides is the
+glue, along a chord `c`, of a triangle and a polygon: `D` has two faces, face
+`c.1` is the triangle with sides `0, 1` of `C` as its sides `0, 1` and `c` as
+side `2`, and face `(D.pair c).1` has `D.pair c` as side `0` followed by sides
+`2, …, n - 1` of `C`.  The signs of `c, pair c` are chosen to differ. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (h3 : 3 ≤ C.totalSides)
+    (hor : C.IsOrientable) :
+    ∃ D : PolygonComplex, ∃ c : D.Side,
+      ∃ _G : standardCover_pairingData_aux_glueStep_aux_GlueData D C c,
+        D.sides c.1 = 3 ∧ c.2.val = 2 ∧ D.IsOrientable ∧ ∀ f, 2 ≤ D.sides f := by
+  sorry
+
+/-- **Leaf (the reglue is legal).**  In the cut `D`, `b = nextCorner a` is
+side `1` of the triangle; its partner is not `a` (`hab`) or `b`, so it lies in
+the other face.  The corner `nextCorner (pair b)` of `C` is at the vertex of
+`b` (side `b`, orientable), is not `b` (else `pair b = a`) and is not
+`pair b`; its image in `D` is the witness. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_cutFacts
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (hor : C.IsOrientable)
+    (a : C.Side) (ha : a.2.val = 0) (hab : C.nextCorner a ≠ C.pair a)
+    {D : PolygonComplex} {c : D.Side}
+    (G : standardCover_pairingData_aux_glueStep_aux_GlueData D C c)
+    (hT : D.sides c.1 = 3) (hc : c.2.val = 2) (horD : D.IsOrientable) :
+    (G.toOld (C.nextCorner a)).1 ≠ (D.pair (G.toOld (C.nextCorner a))).1 ∧
+      ∃ u : D.Side, Relation.EqvGen D.CornerRel (G.toOld (C.nextCorner a)) u ∧
+        u ≠ G.toOld (C.nextCorner a) ∧ u ≠ D.pair (G.toOld (C.nextCorner a)) := by
+  sorry
+
+/-- **Leaf (corner count after a glue).**  The corners at the vertex of `x` in
+`C` are the images under `toOld` of the corners at the vertex of `t` in `C'`,
+together with those of `s, pair s` at that vertex.  Uses
+`_aux_glueStep_aux_vertexCount_aux_mapRel` and `_aux_back`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard_glue
+    {C C' : PolygonComplex} {s : C.Side}
+    (G : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) (t : C'.Side) (x : C.Side)
+    (hx : Relation.EqvGen C.CornerRel (G.toOld t) x) :
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C x =
+      standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C' t +
+        Nat.card {u : C.Side // (u = s ∨ u = C.pair s) ∧ Relation.EqvGen C.CornerRel x u} := by
+  sorry
+
+/-- **Leaf (the count drops).**  Let `Q` be the vertex of `b = toOld (nextCorner a)`
+in the cut `D`.  `b` is at `Q`, and `pair b` is at `Q` exactly when `c` is
+(side `b`: `nextCorner b = c` meets `pair b`).  `pair c` meets
+`nextCorner c = toOld a` (side `c`), which is not at `Q` by `hPQ`.  So `c, pair c`
+contribute one fewer corner at `Q` than `b, pair b`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_count
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (a : C.Side) (ha : a.2.val = 0)
+    (hPQ : ¬ Relation.EqvGen C.CornerRel (C.nextCorner a) a)
+    {D : PolygonComplex} {c : D.Side}
+    (G : standardCover_pairingData_aux_glueStep_aux_GlueData D C c)
+    (hT : D.sides c.1 = 3) (hc : c.2.val = 2) (horD : D.IsOrientable) :
+    Nat.card {u : D.Side // (u = c ∨ u = D.pair c) ∧
+        Relation.EqvGen D.CornerRel (G.toOld (C.nextCorner a)) u} <
+      Nat.card {u : D.Side // (u = G.toOld (C.nextCorner a) ∨
+          u = D.pair (G.toOld (C.nextCorner a))) ∧
+        Relation.EqvGen D.CornerRel (G.toOld (C.nextCorner a)) u} := by
+  sorry
+
+/-- One cut-and-paste with `a` at index `0`: cut off the triangle `a b c`,
+glue it back along `b`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_move0
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (h3 : 3 ≤ C.totalSides)
+    (hor : C.IsOrientable) (a : C.Side) (ha : a.2.val = 0)
+    (hPQ : ¬ Relation.EqvGen C.CornerRel (C.nextCorner a) a)
+    (hab : C.nextCorner a ≠ C.pair a) :
+    ∃ C₁ : PolygonComplex, C₁.faceCount = 1 ∧ C₁.totalSides = C.totalSides ∧
+      C₁.vertexCount = C.vertexCount ∧ C₁.IsOrientable ∧
+      Nonempty (C.Space ≃ₜ C₁.Space) ∧
+      ∃ u₁ : C₁.Side,
+        standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C₁ u₁ <
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C
+            (C.nextCorner a) := by
+  obtain ⟨D, c, G, hT, hc, horD, hsD⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_cut C h1 h3 hor
+  obtain ⟨hne, u, hu, hub, hupb⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_cutFacts
+      C h1 hor a ha hab G hT hc horD
+  obtain ⟨C₁, ⟨G'⟩⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_mergeExists D hsD _ hne
+  obtain ⟨t₁, ht₁⟩ := G'.toOld_surj u hub hupb
+  have hcount := standardCover_pairingData_aux_contractStep_aux_isolate_aux_count
+    C h1 a ha hPQ G hT hc horD
+  have hA := standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard_glue
+    G horD (C.nextCorner a) _ (Relation.EqvGen.refl _)
+  have hB := standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard_glue
+    G' horD t₁ (G.toOld (C.nextCorner a)) (by rw [ht₁]; exact hu.symm)
+  have hf := G.faceCount_succ
+  have hf' := G'.faceCount_succ
+  have hs := standardCover_pairingData_aux_glueStep_aux_totalSides G
+  have hs' := standardCover_pairingData_aux_glueStep_aux_totalSides G'
+  have hv := standardCover_pairingData_aux_glueStep_aux_vertexCount G horD
+  have hv' := standardCover_pairingData_aux_glueStep_aux_vertexCount G' horD
+  obtain ⟨e⟩ := standardCover_pairingData_aux_glueStep_aux_homeomorph G hsD horD
+  obtain ⟨e'⟩ := standardCover_pairingData_aux_glueStep_aux_homeomorph G' hsD horD
+  exact ⟨C₁, by omega, by omega, by omega,
+    standardCover_pairingData_aux_glueStep_aux_orientable G' horD,
+    ⟨e.symm.trans e'⟩, t₁, by omega⟩
+
+/-- One cut-and-paste: rotate `a` to index `0`, then `_aux_move0`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_move
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (h3 : 3 ≤ C.totalSides)
+    (hor : C.IsOrientable) (a : C.Side)
+    (hPQ : ¬ Relation.EqvGen C.CornerRel (C.nextCorner a) a)
+    (hab : C.nextCorner a ≠ C.pair a) :
+    ∃ C₁ : PolygonComplex, C₁.faceCount = 1 ∧ C₁.totalSides = C.totalSides ∧
+      C₁.vertexCount = C.vertexCount ∧ C₁.IsOrientable ∧
+      Nonempty (C.Space ≃ₜ C₁.Space) ∧
+      ∃ u₁ : C₁.Side,
+        standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C₁ u₁ <
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C
+            (C.nextCorner a) := by
+  set k := C.sides a.1 - a.2.val with hk
+  set C₀ := standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k with hC₀
+  set σ := standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k with hσ
+  obtain ⟨hidx, hnext, hrel⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_corners C k
+  obtain ⟨hV₀, hEqv, hcard⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_transport σ hrel
+  obtain ⟨e₀⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph C k
+  have hpair : ∀ s, C₀.pair (σ s) = σ (C.pair s) := by
+    intro s
+    show (((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm.trans C.pair).trans (standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k)) ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k) s) =
+      (standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k) (C.pair s)
+    simp
+  have hor₀ : C₀.IsOrientable := by
+    intro s
+    show C.sign ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm
+        ((((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm.trans C.pair).trans (standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k)) s)) ≠
+      C.sign ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm s)
+    simp only [Equiv.trans_apply, Equiv.symm_apply_apply]
+    exact hor _
+  have ha₀ : (σ a).2.val = 0 := by
+    rw [(hidx a).2, hk]
+    have := a.2.isLt
+    rw [show a.2.val + (C.sides a.1 - a.2.val) = C.sides a.1 by omega, Nat.mod_self]
+  have hPQ₀ : ¬ Relation.EqvGen C₀.CornerRel (C₀.nextCorner (σ a)) (σ a) := by
+    rw [hnext, hEqv]; exact hPQ
+  have hab₀ : C₀.nextCorner (σ a) ≠ C₀.pair (σ a) := by
+    rw [hnext, hpair]; exact fun h => hab (σ.injective h)
+  obtain ⟨C₁, h1₁, hT₁, hV₁, hor₁, ⟨e₁⟩, u₁, hlt⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_isolate_aux_move0 C₀ h1 h3 hor₀
+      (σ a) ha₀ hPQ₀ hab₀
+  rw [hnext, hcard] at hlt
+  exact ⟨C₁, h1₁, hT₁, hV₁.trans hV₀, hor₁, ⟨e₀.trans e₁⟩, u₁, hlt⟩
+
+/-- **Bring a pair together.**  A one-face orientable complex with at least two
+vertices is homeomorphic to one with the same number of sides and vertices in
+which some side is followed by its partner.  Massey's induction on the corner
+count of a vertex: `_aux_entry` finds a corner at it entered from another
+vertex, `_aux_move` lowers the count, and at count one `_aux_single` gives the
+pair. -/
 theorem standardCover_pairingData_aux_contractStep_aux_isolate
     (C : PolygonComplex) (h1 : C.faceCount = 1) (hV : 2 ≤ C.vertexCount)
     (hlarge : 2 * C.vertexCount < C.totalSides) (hor : C.IsOrientable) :
@@ -6611,7 +6890,54 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate
       C₁.vertexCount = C.vertexCount ∧ C₁.IsOrientable ∧
       Nonempty (C.Space ≃ₜ C₁.Space) ∧
       ∃ s : C₁.Side, C₁.nextCorner s = C₁.pair s := by
-  sorry
+  have H : ∀ n : ℕ, ∀ C : PolygonComplex, C.faceCount = 1 → 2 ≤ C.vertexCount →
+      2 * C.vertexCount < C.totalSides → C.IsOrientable → ∀ u : C.Side,
+      standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C u ≤ n →
+      ∃ C₁ : PolygonComplex, C₁.faceCount = 1 ∧ C₁.totalSides = C.totalSides ∧
+        C₁.vertexCount = C.vertexCount ∧ C₁.IsOrientable ∧
+        Nonempty (C.Space ≃ₜ C₁.Space) ∧
+        ∃ s : C₁.Side, C₁.nextCorner s = C₁.pair s := by
+    intro n
+    induction n with
+    | zero =>
+      intro C _ _ _ _ u hu
+      have : 0 < standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C u := by
+        haveI : Nonempty {v : C.Side // Relation.EqvGen C.CornerRel u v} :=
+          ⟨⟨u, Relation.EqvGen.refl _⟩⟩
+        exact Nat.card_pos
+      omega
+    | succ n ih =>
+      intro C h1 hV hlarge hor u hu
+      by_cases hadj : ∃ s : C.Side, C.nextCorner s = C.pair s
+      · exact ⟨C, h1, rfl, rfl, hor, ⟨Homeomorph.refl _⟩, hadj⟩
+      push_neg at hadj
+      have hpos : 0 < standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C u := by
+        haveI : Nonempty {v : C.Side // Relation.EqvGen C.CornerRel u v} :=
+          ⟨⟨u, Relation.EqvGen.refl _⟩⟩
+        exact Nat.card_pos
+      by_cases hone :
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard C u = 1
+      · obtain ⟨s, hs⟩ :=
+          standardCover_pairingData_aux_contractStep_aux_isolate_aux_single C hor u hone
+        exact absurd hs (hadj s)
+      obtain ⟨a, hua, hna⟩ :=
+        standardCover_pairingData_aux_contractStep_aux_isolate_aux_entry C h1 hV u
+      have hPQ : ¬ Relation.EqvGen C.CornerRel (C.nextCorner a) a :=
+        fun h => hna (hua.trans _ _ _ h)
+      obtain ⟨C₁, h1₁, hT₁, hV₁, hor₁, ⟨e₁⟩, u₁, hlt⟩ :=
+        standardCover_pairingData_aux_contractStep_aux_isolate_aux_move C h1 (by omega)
+          hor a hPQ (hadj a)
+      rw [← standardCover_pairingData_aux_contractStep_aux_isolate_aux_classCard_congr
+        C hua] at hlt
+      obtain ⟨C₂, h1₂, hT₂, hV₂, hor₂, ⟨e₂⟩, hadj₂⟩ :=
+        ih C₁ h1₁ (by omega) (by omega) hor₁ u₁ (by omega)
+      exact ⟨C₂, h1₂, hT₂.trans hT₁, hV₂.trans hV₁, hor₂, ⟨e₁.trans e₂⟩, hadj₂⟩
+  have hne : Nonempty C.Side := by
+    have hC : C.totalSides = Fintype.card C.Side := by
+      simp [PolygonComplex.totalSides, Fintype.card_sigma]
+    exact Fintype.card_pos_iff.mp (by omega)
+  obtain ⟨u⟩ := hne
+  exact H _ C h1 hV hlarge hor u le_rfl
 
 /-- **One vertex removed.**  Move corners by cut-and-paste until some side
 is followed by its partner (`_aux_isolate`), then cancel that pair

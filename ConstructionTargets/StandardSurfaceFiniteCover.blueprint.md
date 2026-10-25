@@ -62,3 +62,30 @@ in `_aux_Data`; models `cut_forward_generators`, `cut_reverse_generators`,
 signs and lands on the chord read in opposite directions by the two pieces;
 the old chord becomes the `c⁻¹`/`c` sides at positions `|α₂|` and `q+|β₂|`
 with parameters `s` and `1-s`.
+
+### Split of `standardCover_pairingData_aux_contractStep_aux_isolate` (2026-10-25)
+
+Massey's corner-moving induction, done with the glue machinery that is already
+proved (`_aux_glueStep_aux_mergeExists`, `_aux_glueStep_aux_homeomorph`,
+`_aux_glueStep_aux_vertexCount`), used in both directions. The measure is
+`_aux_isolate_aux_classCard C u`, the number of corners at the vertex of `u`.
+Proved in the file: `_aux_classCard_congr`, `_aux_move0`, `_aux_move`, and the
+parent (strong induction on the count). Leaves, all parallel:
+`_aux_single` (count one gives `nextCorner (pair u) = u`), `_aux_entry` (one
+face, two vertices: some corner `a` outside the vertex of `u` is followed by
+one inside), `_aux_rotate_aux_homeomorph` (face rotation, from
+`PolygonMoves.rotation_aux_disk_homeomorph`), `_aux_rotate_aux_corners`
+(rotation adds `k` mod `n` and carries `CornerRel`), `_aux_transport` (generic:
+a side bijection carrying `CornerRel` carries vertex count, `EqvGen` and
+corner counts), `_aux_cut` (a one-face complex is the triangle `a b c` glued to
+the rest along the chord `c`, as a `GlueData D C c` with `D.sides c.1 = 3`,
+`c.2 = 2`), `_aux_cutFacts` (`b` and `pair b` lie in different faces of `D`,
+and the vertex of `b` has a third corner), `_aux_classCard_glue` (generic: a
+glue along `s` removes the corners among `s, pair s` from each vertex),
+`_aux_count` (at the vertex `Q` of `b`, `c, pair c` give one corner fewer than
+`b, pair b`: `c` meets `pair b`, `pair c` meets `a`, which is not at `Q`).
+Checks: the move needs `P ≠ Q` (`hPQ`); with `P = Q` the count at `Q` does not
+change. `pair b = a` is excluded by `hab` (otherwise `pair b` would be in the
+triangle and `mergeExists` would not apply); `b → b` loops (`R = Q`) are
+covered, since then both `pair b` and `c` are at `Q`. `_aux_cut` needs
+`3 ≤ totalSides` so the second face has two sides.
