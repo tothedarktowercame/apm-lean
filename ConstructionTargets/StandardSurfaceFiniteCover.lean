@@ -762,7 +762,41 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod0
     ∃ i' : Fin n, Relation.EqvGen
       (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
       ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
-  sorry
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  let a := C.nextCorner (C.pair (⟨i, k⟩ : C.Side))
+  let b := C.nextCorner (C.pair a)
+  let c := C.nextCorner (C.pair b)
+  refine ⟨c.1, Relation.EqvGen.trans _ _ _
+    (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+      g n hg σ hσ ⟨i, k⟩)
+    (Relation.EqvGen.trans _ _ _
+      (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+        g n hg σ hσ a)
+      (Relation.EqvGen.trans _ _ _
+        (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+          g n hg σ hσ b) ?_))⟩
+  have ha : a.2.1 = k.1 + 3 := by
+    show ((standardCover_pairingData_aux_lift_aux_basePair g k).1 + 1) % (4 * g) = k.1 + 3
+    have := k.2
+    simp only [standardCover_pairingData_aux_lift_aux_basePair]
+    split <;> rw [Nat.mod_eq_of_lt (by omega)] <;> omega
+  have hb : b.2.1 = k.1 + 2 := by
+    show ((standardCover_pairingData_aux_lift_aux_basePair g a.2).1 + 1) % (4 * g) = k.1 + 2
+    have := k.2
+    simp only [standardCover_pairingData_aux_lift_aux_basePair, ha]
+    split <;> rw [Nat.mod_eq_of_lt (by omega)] <;> omega
+  have hc : c.2.1 = (k.1 + 1) % (4 * g) := by
+    show ((standardCover_pairingData_aux_lift_aux_basePair g b.2).1 + 1) % (4 * g) = _
+    simp only [standardCover_pairingData_aux_lift_aux_basePair, hb]
+    split
+    · omega
+    · rw [show k.1 + 2 - 2 + 1 = k.1 + 1 by omega]
+  have heq : c =
+      ⟨c.1, ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ :=
+    Sigma.ext rfl (heq_of_eq (Fin.ext hc))
+  change Relation.EqvGen C.CornerRel c _
+  rw [heq]
+  exact Relation.EqvGen.refl _
 
 /-- Leaf: `_aux_step` when `k % 4 = 1`: one `_aux_corner` step backwards from `s = ⟨i, k - 1⟩`. -/
 theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod1
