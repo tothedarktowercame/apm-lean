@@ -5544,6 +5544,70 @@ piece `B`: old arcs `β₁ y⁻¹ β₂ c` (arcs `q … L-1`, then the chord arc
 `cutChordParamB`, angles `2π … α q + 2π`) go to `β₂ c β₁ y⁻¹`.  With `m₁ = 0`
 the `y⁻¹` arc starts at angle `α q`, where the chord arc ends; both formulas
 then give angle `0`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular_aux_cutAlpha_zero
+    (L : ℕ) : cutAlpha L 0 = 0 := by simp [cutAlpha]
+
+set_option maxHeartbeats 1000000
+
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular_aux_props
+    (L a b : ℕ) (hL : a + 1 + b < L) :
+    let p := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L a b
+    let q := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q L a b
+    Continuous p ∧ Continuous q ∧ Function.LeftInverse q p ∧ Function.RightInverse q p ∧
+      p 0 = 0 ∧ p L = L ∧ q 0 = 0 ∧ q L = L ∧
+      Set.MapsTo p (Set.Icc 0 L) (Set.Icc 0 L) ∧
+      Set.MapsTo q (Set.Icc 0 L) (Set.Icc 0 L) := by
+  have hL' : (a : ℝ) + 1 + b < L := by exact_mod_cast hL
+  have hd : (0 : ℝ) < L - a - b - 1 := by linarith
+  have hd' : (0 : ℝ) < L - (a + 1 + b) := by linarith
+  dsimp
+  refine ⟨orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p_continuous L a b hL,
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q_continuous L a b hL,
+    ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    split_ifs with h₁ h₂ h₃ k₁ k₂ k₃ <;>
+      field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith
+  · intro x
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    set_option maxHeartbeats 1000000 in
+      split_ifs with h₁ h₂ h₃ k₁ k₂ k₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    simp
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    simp only [if_neg (by linarith : ¬ ((L : ℝ) ≤ a)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ a + 1)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ a + 1 + b))]
+    field_simp [ne_of_gt hd']; ring
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    simp
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    simp only [if_neg (by linarith : ¬ ((L : ℝ) ≤ a)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ L - b - 1)),
+      if_neg (by norm_num : ¬ ((L : ℝ) ≤ L - 1))]
+    ring
+  · intro x hx
+    constructor
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1]
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+  · intro x hx
+    constructor
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+
+open PolygonMoves
+
 theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular
     (L n₁ n₂ m₁ m₂ : ℕ)
     (hL : L = n₁ + 1 + n₂ + m₁ + 1 + m₂) :
@@ -5574,7 +5638,99 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular
           AddCircle.homeomorphCircle'
             (((cutAlpha L (n₁ + 1 + n₂ + m₂) +
               s.1 * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi)))) := by
-  sorry
+  let q := n₁ + 1 + n₂
+  have hm : m₁ + 1 + m₂ < L := by omega
+  obtain ⟨hpc, hqc, hl, hr, hp0, hpL, hq0, hqL, hpm, hqm⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular_aux_props
+      L m₁ m₂ hm
+  obtain ⟨hf₁, hfy, hf₂, hfc⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_formulas
+      L m₁ m₂ hm
+  have hLpos : (0 : ℝ) < L := by exact_mod_cast (show 0 < L by omega)
+  have hLne : (L : ℝ) ≠ 0 := hLpos.ne'
+  obtain ⟨F, hF⟩ := equivariantLift_of_interval (L : ℝ) L hLpos hLpos
+    (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L m₁ m₂)
+    (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q L m₁ m₂)
+    hpc hqc hp0 hpL hq0 hqL hpm hqm (fun x _ => hl x) (fun y _ => hr y)
+  obtain ⟨g, hg⟩ := equivariantCircleLift_homeomorph (L : ℝ) L hLpos hLpos F
+  let r₁ : Circle := Circle.exp (-(q : ℝ) * (2 * Real.pi / L))
+  let r₂ : Circle := Circle.exp ((q + m₂ + 1 : ℝ) * (2 * Real.pi / L))
+  let ρ := (Homeomorph.mulLeft r₁).trans (g.trans (Homeomorph.mulLeft r₂))
+  refine ⟨ρ, ?_⟩
+  have hρ : ∀ x ∈ Set.Icc (0 : ℝ) L, ∀ θ : ℝ,
+      θ = 2 * Real.pi * (x + q) / L →
+      ρ (AddCircle.homeomorphCircle' (θ : AddCircle (2 * Real.pi))) =
+        Circle.exp (2 * Real.pi *
+          (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+            L m₁ m₂ x + q + m₂ + 1) / L) := by
+    intro x hx θ hθ
+    have h1 : r₁ * AddCircle.homeomorphCircle' (θ : AddCircle (2 * Real.pi)) =
+        AddCircle.toCircle (x : AddCircle (L : ℝ)) := by
+      rw [AddCircle.homeomorphCircle'_apply_mk, AddCircle.toCircle_apply_mk]
+      change Circle.exp _ * Circle.exp _ = Circle.exp _
+      rw [← Circle.exp_add, hθ]
+      congr 1; field_simp; ring
+    change r₂ * g (r₁ * AddCircle.homeomorphCircle' (θ : AddCircle (2 * Real.pi))) = _
+    rw [h1, hg, hF x hx, AddCircle.toCircle_apply_mk]
+    change r₂ * Circle.exp _ = _
+    rw [← Circle.exp_add]
+    congr 1; field_simp; ring
+  have hexp : ∀ a b : ℝ, ∀ k : ℤ, a = b + k * (2 * Real.pi) →
+      Circle.exp a = AddCircle.homeomorphCircle' (b : AddCircle (2 * Real.pi)) := by
+    intro a b k h
+    rw [AddCircle.homeomorphCircle'_apply_mk, h, Circle.exp_add,
+      Circle.exp_int_mul_two_pi, mul_one]
+  have hπ := Real.pi_pos
+  have hq : q = n₁ + 1 + n₂ := rfl
+  have hreal : (L : ℝ) = q + m₁ + 1 + m₂ := by exact_mod_cast hL
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro e s he₀ he₁
+    have heq : q ≤ e := by simpa [q] using he₀
+    have he : e - q < m₁ := by simp [q] at he₁ ⊢; omega
+    have hecast : ((e - q : ℕ) : ℝ) = e - q := by rw [Nat.cast_sub heq]
+    have hx0 : (0 : ℝ) ≤ (e - q : ℕ) + s.1 :=
+      add_nonneg (Nat.cast_nonneg _) s.2.1
+    have hxL : (e - q : ℕ) + s.1 ≤ (L : ℝ) := by
+      have he' : ((e - q : ℕ) : ℝ) < m₁ := by exact_mod_cast he
+      have hm' : (m₁ : ℝ) + 1 ≤ L := by exact_mod_cast (show m₁ + 1 ≤ L by omega)
+      linarith [s.2.2]
+    rw [hρ ((e - q : ℕ) + s.1)
+      ⟨hx0, hxL⟩ _
+      (by unfold cutAlpha; rw [hecast]; push_cast; simp [q]; field_simp; ring), hf₁ (e - q) s he]
+    exact hexp _ _ 0 (by unfold cutAlpha; rw [hecast]; push_cast; simp [q]; field_simp; ring)
+  · intro s
+    have hx0 : (0 : ℝ) ≤ m₁ + s.1 := add_nonneg (Nat.cast_nonneg _) s.2.1
+    have hxL : (m₁ : ℝ) + s.1 ≤ L := by
+      have hm' : (m₁ : ℝ) + 1 ≤ L := by exact_mod_cast (show m₁ + 1 ≤ L by omega)
+      linarith [s.2.2]
+    rw [hρ (m₁ + s.1) ⟨hx0, hxL⟩ _
+      (by unfold cutAlpha; push_cast; simp [q]; field_simp; ring), hfy s]
+    exact hexp _ _ 0 (by unfold cutAlpha; push_cast; rw [hreal]; simp [q]; field_simp; ring)
+  · intro e s he₀ he₁
+    have heq : q ≤ e := by simp [q] at he₀ ⊢; omega
+    have he0 : m₁ + 1 ≤ e - q := by simp [q] at he₀ ⊢; omega
+    have he1 : e - q < m₁ + 1 + m₂ := by omega
+    have hecast : ((e - q : ℕ) : ℝ) = e - q := by rw [Nat.cast_sub heq]
+    have hx0 : (0 : ℝ) ≤ (e - q : ℕ) + s.1 :=
+      add_nonneg (Nat.cast_nonneg _) s.2.1
+    have hxL : (e - q : ℕ) + s.1 ≤ (L : ℝ) := by
+      have he' : ((e - q : ℕ) : ℝ) < m₁ + 1 + m₂ := by exact_mod_cast he1
+      have hm' : (m₁ : ℝ) + 1 + m₂ + 1 ≤ L := by exact_mod_cast (show m₁ + 1 + m₂ + 1 ≤ L by omega)
+      linarith [s.2.2]
+    rw [hρ ((e - q : ℕ) + s.1)
+      ⟨hx0, hxL⟩ _
+      (by unfold cutAlpha; rw [hecast]; push_cast; simp [q]; field_simp; ring),
+      hf₂ (e - q) s he0 he1]
+    have hsub : ((e - m₁ - 1 : ℕ) : ℝ) = e - m₁ - 1 := by
+      rw [Nat.cast_sub (by omega), Nat.cast_sub (by omega)]; push_cast; ring
+    exact hexp _ _ 1 (by unfold cutAlpha; rw [hecast, hsub]; push_cast; simp [q]; field_simp; ring)
+  · intro s
+    have harg : (m₁ : ℝ) + 1 + m₂ + s.1 * (L - (m₁ + 1 + m₂)) + q =
+        L + s.1 * q := by rw [hreal]; ring
+    rw [hρ (m₁ + 1 + m₂ + s.1 * (L - (m₁ + 1 + m₂)))
+      ⟨by nlinarith [s.2.1, s.2.2], by nlinarith [s.2.1, s.2.2]⟩ _
+      (by unfold cutAlpha; push_cast; rw [harg]; simp [q]; field_simp), hfc s]
+    exact hexp _ _ 1 (by unfold cutAlpha; push_cast; rw [hreal]; simp [q]; field_simp; ring)
 
 open PolygonMoves in
 /-- Piece `B` of the cut-and-paste reparametrisation, read off from the angular
