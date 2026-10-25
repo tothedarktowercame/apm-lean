@@ -2372,7 +2372,80 @@ theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_ker
     (heq : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y =
       standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y') :
     Relation.EqvGen C.Rel y y' := by
-  sorry
+  rcases y with ⟨f, x⟩
+  rcases y' with ⟨g, z⟩
+  have hne : s.1 ≠ (C.pair s).1 := by
+    have h := D.old_ne D.merged
+    rwa [D.old_merged] at h
+  by_cases hf : f = s.1
+  · subst f
+    by_cases hg : g = s.1
+    · subst g
+      have hx : x = z := hH.injective_left (by
+        simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+          hne] using congrArg Sigma.snd heq)
+      subst z
+      exact Relation.EqvGen.refl _
+    · by_cases hg' : g = (C.pair s).1
+      · subst g
+        exact standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_seam
+          D hor hH x z heq
+      · have hgdata := hfaces g hg hg'
+        have : D.merged =
+            standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D g := by
+          simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+            hg, hg'] using congrArg Sigma.fst heq
+        exact False.elim (hgdata.2 this.symm)
+  · by_cases hf' : f = (C.pair s).1
+    · subst f
+      by_cases hg : g = s.1
+      · subst g
+        exact (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres_aux_seam
+          D hor hH z x heq.symm).symm
+      · by_cases hg' : g = (C.pair s).1
+        · subst g
+          have hx : x = z := hH.injective_right (by
+            simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+              hne.symm] using congrArg Sigma.snd heq)
+          subst z
+          exact Relation.EqvGen.refl _
+        · have hgdata := hfaces g hg hg'
+          have : D.merged =
+              standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D g := by
+            simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+              hne.symm, hg, hg'] using congrArg Sigma.fst heq
+          exact False.elim (hgdata.2 this.symm)
+    · by_cases hg : g = s.1
+      · subst g
+        have hfdata := hfaces f hf hf'
+        have : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f =
+            D.merged := by
+          simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+            hf, hf'] using congrArg Sigma.fst heq
+        exact False.elim (hfdata.2 this)
+      · by_cases hg' : g = (C.pair s).1
+        · subst g
+          have hfdata := hfaces f hf hf'
+          have : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f =
+              D.merged := by
+            simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+              hf, hf', hne.symm] using congrArg Sigma.fst heq
+          exact False.elim (hfdata.2 this)
+        · have hfdata := hfaces f hf hf'
+          have hgdata := hfaces g hg hg'
+          have hfg : f = g := by
+            have hinv :
+                standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f =
+                  standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D g := by
+              simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+                hf, hf', hg, hg'] using congrArg Sigma.fst heq
+            exact hfdata.1.symm.trans ((congrArg D.old hinv).trans hgdata.1)
+          subst g
+          have hx : x = z := by
+            simpa [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+              hf, hf'] using congrArg Sigma.snd heq
+          subst z
+          exact Relation.EqvGen.refl _
 
 /-- **Leaf (fibres, forward step).**  A generating step of `C` maps to equality or
 to one generating step of `C'`.  Along `s` or `C.pair s` the images are equal
