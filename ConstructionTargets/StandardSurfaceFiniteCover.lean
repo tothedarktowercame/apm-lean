@@ -4080,6 +4080,139 @@ shrink one vertex class to a single corner (`_aux_isolate`); the two sides at
 that corner are `a a⁻¹`, and cancelling them (`_aux_homeomorph`, now for
 adjacent sides only) is `PolygonMoves.inversePairCancellation`. -/
 
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (f g : Fin C.faceCount) : f = g := by
+  apply Fin.ext
+  omega
+
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (f : Fin C.faceCount) :
+    C.sides f = C.totalSides := by
+  letI : Unique (Fin C.faceCount) :=
+    ⟨⟨0, by omega⟩, fun a => Fin.ext (by omega)⟩
+  rw [show f = default from Unique.eq_default f]
+  simp [PolygonComplex.totalSides]
+
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_totalSides_pos
+    (C : PolygonComplex) (h1 : C.faceCount = 1) : 0 < C.totalSides := by
+  let f : Fin C.faceCount := ⟨0, by omega⟩
+  rw [← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1 f]
+  exact C.sides_pos f
+
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_target_sizes
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) :
+    C'.faceCount = 1 ∧ C'.totalSides + 2 = C.totalSides ∧
+      (∀ f : Fin C.faceCount, C.sides f = C.totalSides) ∧
+      (∀ f : Fin C'.faceCount, C'.sides f = C'.totalSides) := by
+  refine ⟨D.faceCount_eq, D.totalSides_add_two, ?_, ?_⟩
+  · exact fun f =>
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1 f
+  · exact fun f =>
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total
+        C' D.faceCount_eq f
+
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_removed_signs
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (hor : C.IsOrientable) :
+    C.sign (C.pair s) = !C.sign s ∧ C'.IsOrientable := by
+  constructor
+  · cases hs : C.sign s <;> cases hp : C.sign (C.pair s) <;>
+      simp_all only [Bool.not_false, Bool.not_true, Bool.false_eq_true,
+        Bool.true_eq_false, not_false_eq_true]
+    · exact False.elim (hor s (hp.trans hs.symm))
+    · exact False.elim (hor s (hp.trans hs.symm))
+  · exact standardCover_pairingData_aux_contractStep_aux_orientable D hor
+
+/-! Split of `_aux_homeomorph` (claude-14, 2026-10-25, after the lemma-1
+PARTIAL).  Read the one face of `C` as a word (`_aux_word`, labels `lab`,
+signs `C.sign`); `_aux_bridge` identifies `C.Space` with its `PolygonSurface`.
+`_aux_inner`/`_aux_wrap` locate `s`, `C.pair s` as an `x x⁻¹` in the word
+(rotated in the wrap case), with the word of `C'` (labels pulled back along
+`D.toOld`) the remaining letters; then `PolygonMoves.rotation` and
+`PolygonMoves.inversePairCancellation`. -/
+
+/-- The side of a one-face complex at boundary position `i`. -/
+def standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side (C : PolygonComplex) (h1 : C.faceCount = 1)
+    (i : Fin C.totalSides) : C.Side :=
+  ⟨⟨0, by omega⟩, ⟨i.val, by
+    rw [standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total C h1]; exact i.isLt⟩⟩
+
+/-- The boundary word of a one-face complex, labelled by `lab`. -/
+def standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word {L : Type*} (C : PolygonComplex) (h1 : C.faceCount = 1)
+    (lab : C.Side → L) : List (PolygonMoves.Signed L) :=
+  List.ofFn fun i : Fin C.totalSides =>
+    (lab (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i), C.sign (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1 i))
+
+/-- A labelling that names exactly the pairs `{a, C.pair a}`. -/
+def standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel {L : Type*} (C : PolygonComplex) (lab : C.Side → L) : Prop :=
+  ∀ a b, lab a = lab b ↔ (b = a ∨ b = C.pair a)
+
+/-- **Leaf.**  The smaller position of each pair is a good label; pulled back
+along `D.toOld` it is a good label for `C'` (`D.pair_toOld`,
+`D.toOld_injective`). -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_goodLabel
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s) :
+    standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C (fun u : C.Side => min u.2.val (C.pair u).2.val) ∧
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C'
+        (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val) := by
+  sorry
+
+/-- **Leaf.**  The word of a one-face complex under a good label is a polygon
+word: nonempty (`C.sides_pos`), and every label occurs exactly twice
+(`C.pair_ne`, `C.pair_pair`), hence even length. -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_isPolygonWord {L : Type*} [DecidableEq L]
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (lab : C.Side → L)
+    (hlab : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C lab) :
+    PolygonMoves.IsPolygonWord (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab) := by
+  sorry
+
+/-- **Leaf (bridge).**  `C.Rel` on the single face is `WordRel` of the word:
+side `s` at position `s.2` with parameter `pairedParameter`, exactly the
+`if`-on-signs of `WordRel`.  Same argument as
+`_aux_toPairing_aux_homeomorph_aux_eqv_forward`/`_reverse` together with
+`orientablePairing_normalForm_aux_bridge` (no vertex condition is needed). -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge {L : Type*} [DecidableEq L]
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (lab : C.Side → L)
+    (hlab : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C lab) :
+    Nonempty (C.Space ≃ₜ PolygonMoves.PolygonSurface (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab)) := by
+  sorry
+
+/-- **Leaf (no wrap).**  If `s` is not the last side, `C.pair s` is the next
+one (`hadj`), with the opposite sign (`hor`): the word of `C` is
+`u ++ [x, x⁻¹] ++ v` with `u` the first `s.2` letters, and (`D.toOld_lt`,
+`D.toOld_surj`, `D.sign_toOld`) the word of `C'` is `u ++ v`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (hadj : C.nextCorner s = C.pair s)
+    (hor : C.IsOrientable) (hk : s.2.val + 1 < C.totalSides) :
+    ∃ (u v : List (PolygonMoves.Signed ℕ)) (x : PolygonMoves.Signed ℕ),
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val) =
+          u ++ [x, PolygonMoves.inv x] ++ v ∧
+        standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C' D.faceCount_eq
+          (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val) = u ++ v ∧
+        x.1 ∉ (u ++ v).map Prod.fst := by
+  sorry
+
+/-- **Leaf (wrap).**  If `s` is the last side, `C.pair s` is side `0`: the
+word of `C` is `x⁻¹ :: v ++ [x]` and the word of `C'` is `v`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_wrap
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (hadj : C.nextCorner s = C.pair s)
+    (hor : C.IsOrientable) (hk : ¬ s.2.val + 1 < C.totalSides) :
+    ∃ (v : List (PolygonMoves.Signed ℕ)) (x : PolygonMoves.Signed ℕ),
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val) =
+          (PolygonMoves.inv x :: v) ++ [x] ∧
+        standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C' D.faceCount_eq
+          (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val) = v ∧
+        x.1 ∉ v.map Prod.fst := by
+  sorry
+
 /-- **Leaf (cancel an adjacent pair).**  Side `C.pair s` follows side `s`
 on the boundary (`a a⁻¹`).  Zip the two sides together: the disk map of
 `PolygonMoves.inversePairCancellation_aux_collapse` (rotated so the pair sits
@@ -4094,7 +4227,27 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph
     (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
     (hadj : C.nextCorner s = C.pair s)
     (hor : C.IsOrientable) : Nonempty (C.Space ≃ₜ C'.Space) := by
-  sorry
+  obtain ⟨hlab, hlab'⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_goodLabel D
+  obtain ⟨e₁⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge C h1 _ hlab
+  obtain ⟨e₄⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge C' D.faceCount_eq _ hlab'
+  have hw' := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_isPolygonWord C' D.faceCount_eq _ hlab'
+  by_cases hk : s.2.val + 1 < C.totalSides
+  · obtain ⟨u, v, x, hw, hv, hx⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner D h1 hadj hor hk
+    rw [hv] at hw' e₄
+    rw [hw] at e₁
+    obtain ⟨e₂⟩ := PolygonMoves.inversePairCancellation u v x hx hw'
+    exact ⟨e₁.trans (e₂.trans e₄.symm)⟩
+  · obtain ⟨v, x, hw, hv, hx⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_wrap D h1 hadj hor hk
+    have hwC := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_isPolygonWord C h1 _ hlab
+    rw [hv] at hw' e₄
+    rw [hw] at e₁ hwC
+    obtain ⟨e₃⟩ := PolygonMoves.rotation (PolygonMoves.inv x :: v) [x] hwC
+    have hrot : [x] ++ (PolygonMoves.inv x :: v) = [] ++ [x, PolygonMoves.inv x] ++ v := by simp
+    rw [hrot] at e₃
+    obtain ⟨e₂⟩ := PolygonMoves.inversePairCancellation [] v x (by simpa using hx)
+      (by simpa using hw')
+    simp only [List.nil_append] at e₂ e₃
+    exact ⟨e₁.trans (e₃.trans (e₂.trans e₄.symm))⟩
 
 /-- **Leaf (the middle corner of `a a⁻¹` is its own vertex).**  If
 `C.pair s = C.nextCorner s` and `C` is orientable, every `CornerRel` step
