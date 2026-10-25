@@ -270,7 +270,21 @@ theorem standardCover_pairingData_aux_lift_aux_sidePairing_aux_fibre
     (hfib : ∀ e, p e = surfaceQuotient true g standardCover_pairingData_aux_lift_aux_center →
       ∃! i, L i standardCover_pairingData_aux_lift_aux_center = e)
     (x : Disk) (e : E) (he : p e = surfaceQuotient true g x) : ∃ j, L j x = e := by
-  sorry
+  letI : ContractibleSpace Disk :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : LocPathConnectedSpace Disk :=
+    (convex_closedBall (0 : ℂ) 1).locPathConnectedSpace
+  let q : C(Disk, Surface true g) :=
+    ⟨surfaceQuotient true g, continuous_surfaceQuotient true g⟩
+  obtain ⟨K, hK, -⟩ := hp.existsUnique_continuousMap_lifts q x e he
+  obtain ⟨j, hj, -⟩ := hfib
+    (K standardCover_pairingData_aux_lift_aux_center)
+    (by rw [← Function.comp_apply (f := p), hK.2]; rfl)
+  refine ⟨j, ?_⟩
+  have hLK : (L j : Disk → E) = K :=
+    hp.eq_of_comp_eq (L j).continuous K.continuous
+      (by rw [hL]; exact hK.2.symm) _ hj
+  rw [hLK, hK.1]
 
 /-- Two lifted disks that meet at the same point of the disk are the
 same face.  `L i` and `L j` both lift `surfaceQuotient true g` through `p`
