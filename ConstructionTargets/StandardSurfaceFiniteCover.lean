@@ -4655,11 +4655,84 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_goodLabel
 /-- **Leaf.**  The word of a one-face complex under a good label is a polygon
 word: nonempty (`C.sides_pos`), and every label occurs exactly twice
 (`C.pair_ne`, `C.pair_pair`), hence even length. -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_isPolygonWord_aux_count_ofFn
+    {n : ℕ} {A : Type*} [DecidableEq A] (f : Fin n → A) (a : A) :
+    (List.ofFn f).count a = (Finset.univ.filter fun i => f i = a).card := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [List.ofFn_succ]
+      simp only [List.count_cons]
+      rw [Finset.card_eq_sum_ones, Finset.sum_filter, Fin.sum_univ_succ]
+      simp [ih]
+      omega
+
 theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_isPolygonWord {L : Type*} [DecidableEq L]
     (C : PolygonComplex) (h1 : C.faceCount = 1) (lab : C.Side → L)
     (hlab : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C lab) :
     PolygonMoves.IsPolygonWord (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab) := by
-  sorry
+  let side := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_side C h1
+  let w := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 lab
+  let labels := w.map Prod.fst
+  have hside_inj : Function.Injective side := by
+    intro i j hij
+    apply Fin.ext
+    exact congrArg (fun u : C.Side => u.2.val) hij
+  have hcount : ∀ a ∈ labels, labels.count a = 2 := by
+    intro a ha
+    have ha' : a ∈ List.ofFn (fun i : Fin C.totalSides => lab (side i)) := by
+      simpa [labels, w,
+        standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word,
+        side, List.map_ofFn] using ha
+    obtain ⟨i, hi⟩ := List.mem_ofFn.mp ha'
+    rw [← hi]
+    have hlabels : labels = List.ofFn (fun j : Fin C.totalSides => lab (side j)) := by
+      simp only [labels, w,
+        standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word,
+        side, List.map_ofFn]
+      rfl
+    rw [hlabels,
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_isPolygonWord_aux_count_ofFn]
+    let pi : Fin C.totalSides := ⟨(C.pair (side i)).2.val, by
+      rw [← standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_sides_eq_total
+        C h1 (C.pair (side i)).1]
+      exact (C.pair (side i)).2.isLt⟩
+    have hside_pi : side pi = C.pair (side i) := by
+      apply Sigma.ext
+      · exact standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq
+          C h1 _ _
+      · exact (Fin.heq_ext_iff (congrArg C.sides
+          (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_face_eq C h1 _ _))).mpr rfl
+    have hfilt : (Finset.univ.filter fun j : Fin C.totalSides =>
+        lab (side j) = lab (side i)) = {i, pi} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+        Finset.mem_insert, Finset.mem_singleton]
+      rw [eq_comm, hlab]
+      constructor
+      · rintro (hs | hs)
+        · exact Or.inl (hside_inj hs)
+        · exact Or.inr (hside_inj (hs.trans hside_pi.symm))
+      · rintro (rfl | rfl)
+        · exact Or.inl rfl
+        · exact Or.inr hside_pi
+    rw [hfilt]
+    have hip : pi ≠ i := by
+      intro heq
+      apply C.pair_ne (side i)
+      rw [← hside_pi, heq]
+    simp [Ne.symm hip]
+  unfold PolygonMoves.IsPolygonWord
+  refine ⟨?_, ?_, hcount⟩
+  · apply List.ne_nil_of_length_pos
+    simpa [w, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word]
+      using standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_totalSides_pos C h1
+  · have hlen : labels.length = w.length := by simp [labels]
+    rw [← hlen, ← List.sum_toFinset_count_eq_length labels]
+    apply Finset.even_sum
+    intro a ha
+    rw [hcount a (List.mem_toFinset.mp ha)]
+    exact ⟨1, by omega⟩
 
 /-- **Leaf (bridge).**  `C.Rel` on the single face is `WordRel` of the word:
 side `s` at position `s.2` with parameter `pairedParameter`, exactly the
