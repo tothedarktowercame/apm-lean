@@ -6652,6 +6652,36 @@ open PolygonMoves in
 at `q` (wrap into piece `B`), which need `_aux_c`.
 Model: `PolygonMoves.cut_transfer_consistency_A_arc_aux_prev`. -/
 -- BEGIN SEAT AREA
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge (L k k' : ℕ) (s s' : Icc (0 : ℝ) 1)
+    (hk : k = k') (hs : s = s') : (edgePoint L k s : ℂ) = edgePoint L k' s' := by
+  subst hk; subst hs; rfl
+
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one (L k : ℕ) :
+    (edgePoint L k ⟨1, by constructor <;> norm_num⟩ : ℂ) =
+      edgePoint L (k + 1) ⟨0, by constructor <;> norm_num⟩ := by
+  simp only [edgePoint]
+  congr 1
+  push_cast
+  ring
+
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_wrap (L : ℕ) (hL : L ≠ 0) :
+    (edgePoint L L ⟨0, by constructor <;> norm_num⟩ : ℂ) =
+      edgePoint L 0 ⟨0, by constructor <;> norm_num⟩ := by
+  have hL' : (L : ℂ) ≠ 0 := by exact_mod_cast hL
+  simp only [edgePoint]
+  rw [Complex.exp_eq_exp_iff_exists_int]
+  refine ⟨1, ?_⟩
+  push_cast
+  field_simp
+  ring
+
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_cut (L m : ℕ) :
+    cutPoint L m = (edgePoint L m ⟨0, by constructor <;> norm_num⟩ : ℂ) := by
+  simp only [cutPoint, cutAlpha, edgePoint]
+  congr 1
+  push_cast
+  ring
+
 theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev
     {L : Type*} [DecidableEq L]
     (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
@@ -6674,7 +6704,175 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
-  sorry
+  let LL := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+  let p := α₁.length
+  let q := α₁.length + 1 + α₂.length
+  have hlen : LL = p + 1 + α₂.length + β₁.length + 1 + β₂.length := by
+    simp [LL, p]; omega
+  have he₀L : e₀ + 1 < LL := by omega
+  have he_eq : e = e₀ + 1 := by
+    change e = (e₀ + 1) % LL at hadj
+    rw [Nat.mod_eq_of_lt he₀L] at hadj
+    exact hadj
+  clear hadj
+  subst e
+  have hs₀' : s₀ = ⟨1, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext; exact hs₀
+  have hτ' : τ = ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext; exact hτ
+  subst s₀
+  subst τ
+  have hNform : (N : ℂ) =
+      orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        LL p α₂.length β₁.length β₂.length e₀ ⟨1, by constructor <;> norm_num⟩ := by
+    rw [hN]
+    by_cases h₁ : e₀ < p
+    · rw [D.ρA_α₁ e₀ _ h₁, D.oldA_arc]
+      · change (edgePoint LL (e₀ + α₂.length + 1) _ : ℂ) = _
+        rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+          if_neg (by omega : e₀ ≠ p),
+          if_neg (by omega : e₀ ≠ p + 1 + α₂.length + β₁.length), if_pos h₁]
+      · omega
+    · by_cases hy₀ : e₀ = p
+      · subst e₀
+        rw [D.ρA_y, D.oldA_chord]
+        change cutChordA LL 0 (p + 1 + α₂.length) _ = _
+        rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer, if_pos rfl]
+      · have hp₀ : p + 1 ≤ e₀ := by omega
+        rw [D.ρA_α₂ e₀ _ hp₀ he₀, D.oldA_arc]
+        · change (edgePoint LL (e₀ - p - 1) _ : ℂ) = _
+          rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg hy₀, if_neg (by omega : e₀ ≠ p + 1 + α₂.length + β₁.length),
+            if_neg (by omega : ¬ e₀ < p), if_pos he₀]
+        · omega
+  by_cases hlast : e₀ + 1 = q
+  · have he₀q : e₀ < q := by omega
+    let T : Disk := edgePoint LL (α₂.length + 1 + p + β₂.length)
+      ⟨1, by constructor <;> norm_num⟩
+    refine ⟨T, ?_, ?_⟩
+    · dsimp [T]
+      rw [hlast]
+      change (edgePoint LL (α₂.length + 1 + p + β₂.length) _ : ℂ) =
+        orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+          LL p α₂.length β₁.length β₂.length q _
+      rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer]
+      by_cases hb : β₁.length = 0
+      · rw [if_neg (by omega : q ≠ p),
+          if_pos (by omega : q = p + 1 + α₂.length + β₁.length)]
+        simp only [cutChordB, Set.Icc.coe_zero, Complex.ofReal_zero, zero_mul, add_zero]
+        rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_cut]
+        refine (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans ((orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge _ _ _ _ _ (by omega : _ = LL) rfl).trans ?_)
+        exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_wrap LL (by omega)
+      · rw [if_neg (by omega : q ≠ p),
+          if_neg (by omega : q ≠ p + 1 + α₂.length + β₁.length),
+          if_neg (by omega : ¬ q < p), if_neg (by omega : ¬ q < p + 1 + α₂.length),
+          if_pos (by omega : q < p + 1 + α₂.length + β₁.length)]
+        exact (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge _ _ _ _ _ (by omega) rfl)
+    · have hc' := orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_c
+          α₁ α₂ β₁ β₂ c (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+      have hN' : N = edgePoint LL α₂.length ⟨0, by constructor <;> norm_num⟩ := by
+        apply Subtype.ext
+        rw [hNform]
+        by_cases he₀p : e₀ = p
+        · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_pos he₀p]
+          simp only [cutChordA]
+          simp only [Complex.ofReal_one, one_mul, add_sub_cancel]
+          rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_cut]
+          exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge _ _ _ _ _ (by omega) rfl
+        · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg he₀p, if_neg (by omega : e₀ ≠ p + 1 + α₂.length + β₁.length),
+            if_neg (by omega : ¬ e₀ < p), if_pos he₀q]
+          rw [show e₀ - p - 1 = α₂.length - 1 by omega]
+          have ha : 0 < α₂.length := by omega
+          simp only [edgePoint]
+          congr 1
+          norm_num
+          rw [Nat.cast_sub (by omega : 1 ≤ α₂.length)]
+          push_cast
+          ring
+      rw [hN']
+      have hwordlen : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length = LL := by
+        simp [LL]
+        omega
+      rw [hwordlen] at hc'
+      simpa [T, p, reverseParameter] using hc'
+  · by_cases he₀p : e₀ = p
+    · subst e₀
+      have hp1q : p + 1 < q := by omega
+      let T : Disk := edgePoint LL 0 ⟨0, by constructor <;> norm_num⟩
+      refine ⟨T, ?_, ?_⟩
+      · dsimp [T]
+        change (edgePoint LL 0 _ : ℂ) =
+          orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+            LL p α₂.length β₁.length β₂.length (p + 1) _
+        rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+          if_neg (by omega : p + 1 ≠ p),
+          if_neg (by omega : p + 1 ≠ p + 1 + α₂.length + β₁.length),
+          if_neg (by omega : ¬ p + 1 < p), if_pos hp1q]
+        congr 2 <;> omega
+      · have hNT : N = T := by
+          apply Subtype.ext
+          rw [hNform, orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_pos rfl]
+          change cutChordA LL 0 q _ = _
+          simp [T, cutChordA, cutPoint, cutAlpha, edgePoint]
+        rw [hNT]
+        exact Relation.EqvGen.refl T
+    · by_cases he₀_before : e₀ < p
+      · let T : Disk := edgePoint LL (e₀ + α₂.length + 2)
+          ⟨0, by constructor <;> norm_num⟩
+        refine ⟨T, ?_, ?_⟩
+        · dsimp [T]
+          change (edgePoint LL (e₀ + α₂.length + 2) _ : ℂ) =
+            orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+              LL p α₂.length β₁.length β₂.length (e₀ + 1) _
+          rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer]
+          by_cases hseam : e₀ + 1 = p
+          · rw [if_pos hseam]
+            simp only [cutChordA, Set.Icc.coe_zero, Complex.ofReal_zero, zero_mul, add_zero]
+            rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_cut]
+            exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge _ _ _ _ _ (by omega) rfl
+          · rw [if_neg hseam,
+              if_neg (by omega : e₀ + 1 ≠ p + 1 + α₂.length + β₁.length),
+              if_pos (by omega : e₀ + 1 < p)]
+            exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge _ _ _ _ _ (by omega) rfl
+        · have hNT : N = T := by
+            apply Subtype.ext
+            rw [hNform, orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+              if_neg he₀p,
+              if_neg (by omega : e₀ ≠ p + 1 + α₂.length + β₁.length), if_pos he₀_before]
+            simp only [T, edgePoint]
+            congr 1
+            norm_num
+            push_cast
+            ring
+          rw [hNT]
+          exact Relation.EqvGen.refl T
+      · have hp₀ : p + 1 ≤ e₀ := by omega
+        have he₀next : e₀ + 1 < q := by omega
+        have he₀q' : e₀ < p + 1 + α₂.length := by omega
+        let T : Disk := edgePoint LL (e₀ - p)
+          ⟨0, by constructor <;> norm_num⟩
+        refine ⟨T, ?_, ?_⟩
+        · dsimp [T]
+          change (edgePoint LL (e₀ - p) _ : ℂ) =
+            orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+              LL p α₂.length β₁.length β₂.length (e₀ + 1) _
+          rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg (by omega : e₀ + 1 ≠ p),
+            if_neg (by omega : e₀ + 1 ≠ p + 1 + α₂.length + β₁.length),
+            if_neg (by omega : ¬ e₀ + 1 < p), if_pos he₀next]
+          congr 2 <;> omega
+        · have hNT : N = T := by
+            apply Subtype.ext
+            rw [hNform, orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+              if_neg he₀p,
+              if_neg (by omega : e₀ ≠ p + 1 + α₂.length + β₁.length),
+              if_neg he₀_before, if_pos he₀q']
+            exact (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_one _ _).trans (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA_aux_prev_aux_edge _ _ _ _ _ (by omega) rfl)
+          rw [hNT]
+          exact Relation.EqvGen.refl T
 -- END SEAT AREA
 
 open PolygonMoves in
