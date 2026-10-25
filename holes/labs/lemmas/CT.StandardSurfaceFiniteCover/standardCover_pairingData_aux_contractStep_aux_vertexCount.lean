@@ -1521,6 +1521,110 @@ class is kept.  At the place where `s` (or `C.pair s`) was removed, the
 terminal corner of the side before it now equals the initial corner of the
 side after it, which joins the two classes. -/
 -- BEGIN SEAT AREA
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_cutRel
+    {C : PolygonComplex} (s : C.Side) (hor : C.IsOrientable) :
+    Relation.EqvGen C.CornerRel s (C.nextCorner (C.pair s)) ∧
+      Relation.EqvGen C.CornerRel (C.nextCorner s) (C.pair s) := by
+  constructor
+  · apply Relation.EqvGen.rel
+    refine ⟨s, ?_⟩
+    rw [if_neg (Ne.symm (hor s))]
+    exact Or.inl ⟨rfl, rfl⟩
+  · apply Relation.EqvGen.rel
+    refine ⟨s, ?_⟩
+    rw [if_neg (Ne.symm (hor s))]
+    exact Or.inr ⟨rfl, rfl⟩
+
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_twoClasses
+    {C : PolygonComplex} {s : C.Side}
+    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hor : C.IsOrientable) :
+    Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner (C.pair s)) ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.pair s) := by
+  intro h
+  apply hs
+  have hrel :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_cutRel s hor
+  exact (Quotient.sound hrel.1).trans (h.trans (Quotient.sound hrel.2).symm)
+
+/-- **Leaf (counting a merge).**  Adding one generator `a ~ b` between two
+inequivalent elements merges exactly two classes into one. -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount
+    {α : Type} [Finite α] (r : α → α → Prop) (a b : α)
+    (hab : ¬ Relation.EqvGen r a b) :
+    Nat.card (Quotient (Relation.EqvGen.setoid
+        (fun x y => r x y ∨ (x = a ∧ y = b)))) + 1 =
+      Nat.card (Quotient (Relation.EqvGen.setoid r)) := by
+  sorry
+
+/-- **Leaf (boundary order).**  Modulo the merge `s ~ nextCorner s`, `toOld`
+commutes with `nextCorner`.  The only places where it does not commute
+literally are the sides of `C'` just before a removed side (`s` or
+`C.pair s`); there `_aux_cutRel` (`s ~ nextCorner (C.pair s)`,
+`nextCorner s ~ C.pair s`) and the merge close the gap.  Includes the case
+where `s` and `C.pair s` are adjacent, and the wrap-around at the last side. -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (hor : C.IsOrientable) (t : C'.Side) :
+    Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+      (D.toOld (C'.nextCorner t)) (C.nextCorner (D.toOld t)) := by
+  sorry
+
+/-- Every generating corner identification of `C'` maps under `toOld` to an
+equivalence of `C` modulo the merge. -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mapRel
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (hor : C.IsOrientable) {a b : C'.Side}
+    (h : C'.CornerRel a b) :
+    Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+      (D.toOld a) (D.toOld b) := by
+  obtain ⟨t, ht⟩ := h
+  have hnext := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next D h1 hor
+  have hrel : ∀ x y, C.CornerRel x y →
+      Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)) x y :=
+    fun x y h => Relation.EqvGen.rel x y (Or.inl h)
+  have hsign : C'.sign t = C'.sign (C'.pair t) ↔
+      C.sign (D.toOld t) = C.sign (C.pair (D.toOld t)) := by
+    rw [D.sign_toOld, D.sign_toOld, D.pair_toOld]
+  by_cases hs : C'.sign t = C'.sign (C'.pair t)
+  · rw [if_pos hs] at ht
+    have hs' := hsign.mp hs
+    rcases ht with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;> rw [ha, hb]
+    · rw [D.pair_toOld]
+      exact hrel _ _ ⟨D.toOld t, by rw [if_pos hs']; exact Or.inl ⟨rfl, rfl⟩⟩
+    · refine (hnext t).trans _ _ _ ((hrel _ _ ⟨D.toOld t, ?_⟩).trans _ _ _
+        (hnext (C'.pair t)).symm)
+      rw [if_pos hs', D.pair_toOld]; exact Or.inr ⟨rfl, rfl⟩
+  · rw [if_neg hs] at ht
+    have hs' : ¬ C.sign (D.toOld t) = C.sign (C.pair (D.toOld t)) :=
+      fun h => hs (hsign.mpr h)
+    rcases ht with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;> rw [ha, hb]
+    · refine (hrel _ _ ⟨D.toOld t, ?_⟩).trans _ _ _ (hnext (C'.pair t)).symm
+      rw [if_neg hs', D.pair_toOld]; exact Or.inl ⟨rfl, rfl⟩
+    · refine (hnext t).trans _ _ _ (hrel _ _ ⟨D.toOld t, ?_⟩)
+      rw [if_neg hs', D.pair_toOld]; exact Or.inr ⟨rfl, rfl⟩
+
+/-- **Leaf (inverse on corners).**  A map back from the corners of `C` to the
+corners of `C'`: a left inverse of `toOld`, sending each corner `u` to a
+corner whose image is equivalent to `u` modulo the merge, and carrying every
+generating identification of `C`, and the merge `s ~ nextCorner s` itself, to
+a `C'`-equivalence.  The removed corners `s` and `C.pair s` go to the
+`C'`-corner at the junction where the removed side was (the initial corner of
+the next surviving side). -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides) (hor : C.IsOrientable) :
+    ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
+      (∀ u, Relation.EqvGen
+        (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)) (D.toOld (g u)) u) ∧
+      (∀ a b, (C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s)) →
+        Relation.EqvGen C'.CornerRel (g a) (g b)) := by
+  sorry
+
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
@@ -1528,7 +1632,48 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
     (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
       Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
     (hor : C.IsOrientable) : C'.vertexCount + 1 = C.vertexCount := by
-  sorry
+  obtain ⟨g, hg1, hg2, hg3⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back D h1 h5 hor
+  have lift : ∀ {α β : Type} {r : α → α → Prop} {r' : β → β → Prop} (h : α → β),
+      (∀ a b, r a b → Relation.EqvGen r' (h a) (h b)) →
+      ∀ a b, Relation.EqvGen r a b → Relation.EqvGen r' (h a) (h b) := by
+    intro α β r r' h hh a b hab
+    induction hab with
+    | rel x y hxy => exact hh x y hxy
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih1 ih2 => exact ih1.trans _ _ _ ih2
+  have hF := lift (r := C'.CornerRel)
+    (r' := fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)) D.toOld
+    (fun a b h => standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mapRel
+      D h1 hor h)
+  have hG := lift (r := fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+    (r' := C'.CornerRel) g hg3
+  let F : C'.Vertex → Quotient (Relation.EqvGen.setoid
+      (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))) :=
+    Quotient.map D.toOld hF
+  let G : Quotient (Relation.EqvGen.setoid
+      (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))) → C'.Vertex :=
+    Quotient.map g hG
+  have e : C'.Vertex ≃ Quotient (Relation.EqvGen.setoid
+      (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))) :=
+    { toFun := F
+      invFun := G
+      left_inv := by
+        intro x
+        induction x using Quotient.ind with
+        | _ t => exact congrArg (Quotient.mk _) (hg1 t)
+      right_inv := by
+        intro x
+        induction x using Quotient.ind with
+        | _ u => exact Quotient.sound (hg2 u) }
+  have hab : ¬ Relation.EqvGen C.CornerRel s (C.nextCorner s) :=
+    fun h => hs (Quotient.sound h)
+  have hc := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount
+    C.CornerRel s (C.nextCorner s) hab
+  show Nat.card C'.Vertex + 1 = Nat.card C.Vertex
+  rw [Nat.card_congr e]
+  exact hc
 -- END SEAT AREA
 
 /-- **Leaf (collapse an arc).**  Side `s` has distinct ends, so its image in
