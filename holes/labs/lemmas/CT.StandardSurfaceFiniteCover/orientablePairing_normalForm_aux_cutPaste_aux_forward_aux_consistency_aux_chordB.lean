@@ -7204,7 +7204,176 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
-  sorry
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  let V := α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁
+  let q := α₁.length + 1 + α₂.length
+  let r := α₂.length + 1 + α₁.length + β₂.length
+  have hlen : W.length = V.length := by simp [W, V]; omega
+  have hform : W.length = α₁.length + 1 + α₂.length + β₁.length + 1 + β₂.length := by
+    simpa [W] using D.length
+  have hL : 2 ≤ W.length := by omega
+  have heW : e < W.length := he
+  have hqL : q < W.length := by omega
+  have hrL : r < W.length := by dsimp [r]; omega
+  have hend : s₀.1 = 0 ∨ s₀.1 = 1 := by
+    apply orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordB_end
+      (p := 0) (q := q) (by dsimp [q]; omega) hqL s₀
+    rw [← D.oldB_chord s₀, ← hP]
+    exact PolygonMoves.norm_edgePoint W.length e τ
+  rcases hend with hs | hs
+  · have hs' : s₀ = (0 : Icc (0 : ℝ) 1) := Subtype.ext hs
+    subst s₀
+    have hedges : edgePoint W.length e τ = edgePoint W.length 0 (0 : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      calc
+        (edgePoint W.length e τ : ℂ) = oldB (cutChordParamB W.length 0 q 0) := hP
+        _ = cutChordB W.length 0 q 0 := D.oldB_chord _
+        _ = (edgePoint W.length 0 0 : ℂ) := by
+          simpa [cutChordB] using (edgePoint_zero_eq_cutPoint W.length 0).symm
+    have hN' : N = edgePoint W.length r (0 : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      calc
+        (N : ℂ) = oldB (ρB (cutChordParamB W.length 0 q 0)) := hN
+        _ = oldB (cutEdgeCircle W.length
+            (α₁.length + 1 + α₂.length + β₂.length) 0) := by rw [D.ρB_chord]
+        _ = (edgePoint W.length r 0 : ℂ) := by
+          rw [D.oldB_arc]
+          · congr 2 <;> dsimp [r] <;> omega
+          · omega
+          · change α₁.length + 1 + α₂.length + β₂.length < W.length
+            omega
+    rcases cutEdgePoint_eq hL he (by omega : 0 < W.length) hedges with hsame | hnext | hprev
+    · rcases hsame with ⟨rfl, rfl⟩
+      refine ⟨edgePoint V.length α₂.length (1 : Icc (0 : ℝ) 1), ?_, ?_⟩
+      · rw [← hlen]
+        change (edgePoint W.length α₂.length 1 : ℂ) =
+          orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+            W.length α₁.length α₂.length β₁.length β₂.length 0 0
+        by_cases hα : α₁.length = 0
+        · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+              if_pos hα.symm]
+          simp [cutChordA, hα]
+          simpa [Nat.add_comm] using edgePoint_one_eq_cutPoint W.length α₂.length
+        · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+              if_neg (by omega), if_neg (by omega), if_pos (by omega)]
+          simpa only [Nat.zero_add] using congrArg Subtype.val
+            (cut_transfer_consistency_A_arc_aux_next_aux_edge W.length α₂.length)
+      · rw [hN', hlen]
+        simpa [V, r, reverseParameter, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+          (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_c
+            α₁ α₂ β₁ β₂ c (1 : Icc (0 : ℝ) 1)).symm
+    · rcases hnext with ⟨hτ, -, hadj⟩
+      have hτ' : τ = (1 : Icc (0 : ℝ) 1) := Subtype.ext hτ
+      subst τ
+      have he1 : e + 1 = W.length := by
+        by_contra hn
+        have he1lt : e + 1 < W.length := by omega
+        rw [Nat.mod_eq_of_lt he1lt] at hadj
+        omega
+      refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+      rw [hN']
+      change (edgePoint W.length r 0 : ℂ) =
+        orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+          W.length α₁.length α₂.length β₁.length β₂.length e 1
+      by_cases hβ : β₂.length = 0
+      · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg (by omega), if_pos (by omega)]
+        simp [cutChordB, r, hβ]
+        have hi : α₂.length + 1 + α₁.length = q := by dsimp [q]; omega
+        rw [hi]
+        exact edgePoint_zero_eq_cutPoint W.length q
+      · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg (by omega), if_neg (by omega), if_neg (by omega),
+            if_neg (by omega), if_neg (by omega)]
+        have hi : e - β₁.length - 1 + 1 = r := by dsimp [r]; omega
+        rw [← hi]
+        exact congrArg Subtype.val
+          (cut_transfer_consistency_A_arc_aux_next_aux_edge W.length
+            (e - β₁.length - 1)).symm
+    · rcases hprev with ⟨hbad, -⟩
+      norm_num at hbad
+  · have hs' : s₀ = (1 : Icc (0 : ℝ) 1) := Subtype.ext hs
+    subst s₀
+    have hedges : edgePoint W.length e τ = edgePoint W.length q (0 : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      calc
+        (edgePoint W.length e τ : ℂ) = oldB (cutChordParamB W.length 0 q 1) := hP
+        _ = cutChordB W.length 0 q 1 := D.oldB_chord _
+        _ = (edgePoint W.length q 0 : ℂ) := by
+          simpa [cutChordB] using (edgePoint_zero_eq_cutPoint W.length q).symm
+    have hN' : N = edgePoint W.length r (1 : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      calc
+        (N : ℂ) = oldB (ρB (cutChordParamB W.length 0 q 1)) := hN
+        _ = oldB (cutEdgeCircle W.length
+            (α₁.length + 1 + α₂.length + β₂.length) 1) := by rw [D.ρB_chord]
+        _ = (edgePoint W.length r 1 : ℂ) := by
+          rw [D.oldB_arc]
+          · congr 2 <;> dsimp [r] <;> omega
+          · omega
+          · change α₁.length + 1 + α₂.length + β₂.length < W.length
+            omega
+    rcases cutEdgePoint_eq hL he hqL hedges with hsame | hnext | hprev
+    · rcases hsame with ⟨rfl, rfl⟩
+      refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+      rw [hN']
+      change (edgePoint W.length r 1 : ℂ) =
+        orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+          W.length α₁.length α₂.length β₁.length β₂.length q 0
+      by_cases hβ : β₁.length = 0
+      · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg (by omega), if_pos (by omega)]
+        simp [cutChordB, r, hβ]
+        have hr1 : r + 1 = W.length := by dsimp [r]; omega
+        calc
+          (edgePoint W.length r 1 : ℂ) = cutPoint W.length (r + 1) :=
+            edgePoint_one_eq_cutPoint W.length r
+          _ = cutPoint W.length W.length := by rw [hr1]
+          _ = cutPoint W.length 0 := by
+            simpa using (cutPoint_add_length (L := W.length) (by omega) 0)
+      · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg (by omega), if_neg (by omega), if_neg (by omega),
+            if_neg (by omega), if_pos (by omega)]
+        have hi : q + β₂.length + 1 = r + 1 := by dsimp [r, q]; omega
+        rw [hi]
+        exact congrArg Subtype.val
+          (cut_transfer_consistency_A_arc_aux_next_aux_edge W.length r)
+    · rcases hnext with ⟨hτ, -, hadj⟩
+      have hτ' : τ = (1 : Icc (0 : ℝ) 1) := Subtype.ext hτ
+      subst τ
+      have he1lt : e + 1 < W.length := by
+        by_contra hn
+        have heqL : e + 1 = W.length := by omega
+        rw [heqL, Nat.mod_self] at hadj
+        dsimp [q] at hadj
+        omega
+      rw [Nat.mod_eq_of_lt he1lt] at hadj
+      refine ⟨edgePoint V.length α₂.length (0 : Icc (0 : ℝ) 1), ?_, ?_⟩
+      · rw [← hlen]
+        change (edgePoint W.length α₂.length 0 : ℂ) =
+          orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+            W.length α₁.length α₂.length β₁.length β₂.length e 1
+        by_cases hα : α₂.length = 0
+        · have hep : e = α₁.length := by dsimp [q] at hadj; omega
+          rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_pos hep]
+          simp [cutChordA, hα]
+          exact edgePoint_zero_eq_cutPoint W.length 0
+        · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+            if_neg (by omega), if_neg (by omega), if_neg (by omega), if_pos (by omega)]
+          have hi : e - α₁.length - 1 + 1 = α₂.length := by
+            dsimp [q] at hadj
+            omega
+          rw [← hi]
+          exact congrArg Subtype.val
+            (cut_transfer_consistency_A_arc_aux_next_aux_edge W.length
+              (e - α₁.length - 1)).symm
+      · rw [hN', hlen]
+        simpa [V, r, reverseParameter, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+          (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_c
+            α₁ α₂ β₁ β₂ c (0 : Icc (0 : ℝ) 1)).symm
+    · rcases hprev with ⟨hbad, -⟩
+      norm_num at hbad
 -- END SEAT AREA
 
 open PolygonMoves in
