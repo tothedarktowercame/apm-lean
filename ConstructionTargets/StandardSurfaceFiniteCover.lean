@@ -1791,7 +1791,42 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merg
     if_neg (by omega), hfst_m, Nat.add_mod]
   simp [Nat.mod_eq_of_lt (C.sides_pos (C.pair s).1)]
 
-/-- **Leaf (first junction).**  `m + 2 = C.sides s.1`: `m` is the last side
+/-! Split of `_aux_join` (claude-14, 2026-10-25, after the lemma-2 PARTIAL whose
+case analysis left only the three `Fin`/`Sigma` equalities below; the assembly
+composes them with `_aux_cutRel`). -/
+
+/-- **Leaf.**  `m + 2 = C.sides s.1`: `toOld m` is side
+`(s.2 + 1 + m) % C.sides s.1`, i.e. `s.2 - 1`, so its next corner is `s`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_right
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (m : Fin (C'.sides D.merged)) (hm : m.val + 2 = C.sides s.1) :
+    C.nextCorner (D.toOld ⟨D.merged, m⟩) = s := by
+  sorry
+
+/-- **Leaf.**  `m + 2 = C.sides s.1` and `(C.pair s).1` is a 1-gon: the merged
+face has `m + 1` sides, so `m + 1` wraps to `0` and `toOld 0` is side `s.2 + 1`
+of `s.1`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_one
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (m : Fin (C'.sides D.merged)) (hm : m.val + 2 = C.sides s.1)
+    (hb : C.sides (C.pair s).1 = 1) :
+    D.toOld (C'.nextCorner ⟨D.merged, m⟩) = C.nextCorner s := by
+  sorry
+
+/-- **Leaf.**  `m + 2 = C.sides s.1` and `C.sides (C.pair s).1 ≥ 2`: `m + 1`
+does not wrap and is the first merged side from `(C.pair s).1`, side
+`(C.pair s).2 + 1`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_two
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (m : Fin (C'.sides D.merged)) (hm : m.val + 2 = C.sides s.1)
+    (hb : 2 ≤ C.sides (C.pair s).1) :
+    D.toOld (C'.nextCorner ⟨D.merged, m⟩) = C.nextCorner (C.pair s) := by
+  sorry
+
+/-- **Assembly (first junction).**  `m + 2 = C.sides s.1`: `m` is the last side
 taken from `s.1`, so `toOld m` is side `s.2 - 1` and `C.nextCorner (toOld m) = s`.
 If `C.sides (C.pair s).1 ≥ 2`, the next merged side is the first one from
 `(C.pair s).1`, `toOld` of it is `C.nextCorner (C.pair s)`, and
@@ -1806,7 +1841,22 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merg
     (hm : m.val + 2 = C.sides s.1) :
     Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner ⟨D.merged, m⟩))
       (C.nextCorner (D.toOld ⟨D.merged, m⟩)) := by
-  sorry
+  have hc := standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor
+  rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_right D m hm]
+  by_cases hb : C.sides (C.pair s).1 = 1
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_one D m hm hb]
+    have hp : ∀ u : C.Side, C.sides u.1 = 1 → C.nextCorner u = u := by
+      rintro ⟨f, i⟩ hu
+      simp only [PolygonComplex.nextCorner] at hu ⊢
+      congr 1
+      ext
+      have := i.isLt
+      simp only [hu, Nat.mod_one]
+      omega
+    rw [hp _ hb] at hc
+    exact Relation.EqvGen.trans _ _ _ hc.2 (Relation.EqvGen.symm _ _ hc.1)
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_two D m hm (by have := C.sides_pos (C.pair s).1; omega)]
+    exact Relation.EqvGen.symm _ _ hc.1
 
 /-- **Leaf (wrap-around junction).**  `m` is the last merged side and comes from
 `(C.pair s).1`, so `toOld m` is side `(C.pair s).2 - 1` and
