@@ -4006,12 +4006,111 @@ from the corner `m = C.nextCorner s` returns to `m` (the only sides at `m` are
 `s` and `C.pair s`), so the class of `m` is `{m}`, and `s ≠ m` because the face
 has at least two sides. -/
 -- BEGIN SEAT AREA
+lemma standardCover_pairingData_aux_contractStep_aux_adjacentDistinct_aux_next_injective
+    (C : PolygonComplex) (h1 : C.faceCount = 1) :
+    Function.Injective C.nextCorner := by
+  intro u v huv
+  have hf : u.1 = v.1 := by
+    apply Fin.eq_of_val_eq
+    omega
+  apply Sigma.ext hf
+  apply (Fin.heq_ext_iff (congrArg C.sides hf)).2
+  have hv := congrArg (fun w : C.Side => w.2.val) huv
+  simp only [PolygonComplex.nextCorner] at hv
+  have hsizes : C.sides u.1 = C.sides v.1 := congrArg C.sides hf
+  by_cases hu : u.2.val + 1 < C.sides u.1
+  · rw [Nat.mod_eq_of_lt hu] at hv
+    by_cases hv' : v.2.val + 1 < C.sides v.1
+    · rw [Nat.mod_eq_of_lt hv'] at hv
+      omega
+    · have heq : v.2.val + 1 = C.sides v.1 := by omega
+      rw [heq, Nat.mod_self] at hv
+      omega
+  · have heq : u.2.val + 1 = C.sides u.1 := by omega
+    rw [heq, Nat.mod_self] at hv
+    by_cases hv' : v.2.val + 1 < C.sides v.1
+    · rw [Nat.mod_eq_of_lt hv'] at hv
+      omega
+    · have heq' : v.2.val + 1 = C.sides v.1 := by omega
+      omega
+
+lemma standardCover_pairingData_aux_contractStep_aux_adjacentDistinct_aux_next_ne
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (h3 : 3 ≤ C.totalSides)
+    (u : C.Side) : C.nextCorner u ≠ u := by
+  letI : Unique (Fin C.faceCount) :=
+    { default := ⟨0, by omega⟩
+      uniq := fun f => Fin.ext (by have := f.2; omega) }
+  have hsides : C.totalSides = C.sides u.1 := by
+    calc
+      C.totalSides = C.sides (default : Fin C.faceCount) := by
+        simp [PolygonComplex.totalSides]
+      _ = C.sides u.1 := congrArg C.sides (Subsingleton.elim _ _)
+  intro hu
+  have hv := congrArg (fun w : C.Side => w.2.val) hu
+  simp only [PolygonComplex.nextCorner] at hv
+  by_cases hlt : u.2.val + 1 < C.sides u.1
+  · rw [Nat.mod_eq_of_lt hlt] at hv
+    omega
+  · have heq : u.2.val + 1 = C.sides u.1 := by omega
+    rw [heq, Nat.mod_self] at hv
+    omega
+
+lemma standardCover_pairingData_aux_contractStep_aux_adjacentDistinct_aux_step
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (hor : C.IsOrientable)
+    (s a b : C.Side) (hadj : C.nextCorner s = C.pair s)
+    (hab : C.CornerRel a b) :
+    (a = C.nextCorner s ↔ b = C.nextCorner s) := by
+  obtain ⟨u, hu⟩ := hab
+  rw [if_neg (Ne.symm (hor u))] at hu
+  have hn :=
+    standardCover_pairingData_aux_contractStep_aux_adjacentDistinct_aux_next_injective C h1
+  rcases hu with ⟨ha, hb⟩ | ⟨ha, hb⟩
+  · constructor
+    · intro h
+      subst a
+      subst b
+      have hp : C.pair u = s := by
+        have := congrArg C.pair h
+        simpa [hadj, C.pair_pair] using this
+      simpa [hp]
+    · intro h
+      subst a
+      subst b
+      have hp : C.pair u = s := hn h
+      have := congrArg C.pair hp
+      simpa [C.pair_pair, hadj] using this
+  · constructor
+    · intro h
+      subst a
+      subst b
+      have hu : u = s := hn h
+      simpa [hu, hadj]
+    · intro h
+      subst a
+      subst b
+      have hu : u = s := C.pair.injective (by simpa [hadj] using h)
+      simpa [hu]
+
 theorem standardCover_pairingData_aux_contractStep_aux_adjacentDistinct
     (C : PolygonComplex) (h1 : C.faceCount = 1) (h3 : 3 ≤ C.totalSides)
     (hor : C.IsOrientable) (s : C.Side) (hadj : C.nextCorner s = C.pair s) :
     Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
       Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s) := by
-  sorry
+  intro hq
+  have hrel : Relation.EqvGen C.CornerRel s (C.nextCorner s) := Quotient.exact hq
+  have key : ∀ a b, Relation.EqvGen C.CornerRel a b →
+      (a = C.nextCorner s ↔ b = C.nextCorner s) := by
+    intro a b h
+    induction h with
+    | rel a b hab =>
+        exact standardCover_pairingData_aux_contractStep_aux_adjacentDistinct_aux_step
+          C h1 hor s a b hadj hab
+    | refl a => exact Iff.rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have hs : s = C.nextCorner s := (key s (C.nextCorner s) hrel).mpr rfl
+  exact (standardCover_pairingData_aux_contractStep_aux_adjacentDistinct_aux_next_ne
+    C h1 h3 s) hs.symm
 -- END SEAT AREA
 
 /-- **Leaf, NOT YET SPLIT (bring a pair together).**  A one-face orientable
