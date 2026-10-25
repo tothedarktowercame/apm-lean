@@ -2453,7 +2453,83 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_refl
     D.toOld (C'.nextCorner t) =
       if C.nextCorner (C.pair s) = C.pair s then C.nextCorner s
       else C.nextCorner (C.pair s) := by
-  sorry
+  obtain ⟨f, m⟩ := t
+  by_cases hf : f = D.merged
+  · subst f
+    have hmfirst : m.val + 1 < C.sides s.1 := by
+      by_contra hm
+      have hfst := D.toOld_merged_fst m
+      rw [if_neg (by omega)] at hfst
+      have hh := congrArg (fun u : C.Side => u.1) h
+      simp only [PolygonComplex.nextCorner] at hh
+      have hfaces : s.1 ≠ (C.pair s).1 := by
+        intro e
+        exact D.old_ne D.merged (D.old_merged.trans e)
+      exact hfaces (hh.symm.trans hfst)
+    have hval := D.toOld_merged_val m
+    rw [if_pos hmfirst] at hval
+    have hv := congrArg (fun u : C.Side => u.2.val) h
+    simp only [PolygonComplex.nextCorner] at hv
+    have hspos := C.sides_pos s.1
+    have hfst := D.toOld_merged_fst m
+    rw [if_pos hmfirst] at hfst
+    have hsides : C.sides (D.toOld ⟨D.merged, m⟩).1 = C.sides s.1 :=
+      congrArg C.sides hfst
+    rw [hval] at hv
+    have hv' : (((s.2.val + 1 + m.val) % C.sides s.1 + 1) % C.sides s.1) =
+        s.2.val := by
+      simpa only [hsides] using hv
+    have hmodeq : Nat.ModEq (C.sides s.1)
+        (s.2.val + (m.val + 2)) s.2.val := by
+      rw [Nat.ModEq]
+      rw [← Nat.mod_add_mod]
+      simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm,
+        Nat.mod_eq_of_lt s.2.isLt] using hv'
+    have hkmod : Nat.ModEq (C.sides s.1) (m.val + 2) 0 := by
+      apply Nat.ModEq.add_left_cancel (a := s.2.val) (b := s.2.val)
+      · exact Nat.ModEq.refl _
+      simpa [Nat.add_assoc] using hmodeq
+    have hdvd : C.sides s.1 ∣ m.val + 2 := by
+      apply Nat.dvd_of_mod_eq_zero
+      simpa [Nat.ModEq] using hkmod
+    have hm : m.val + 2 = C.sides s.1 := by
+      have hnle := Nat.le_of_dvd (by omega : 0 < m.val + 2) hdvd
+      omega
+    by_cases hb : C.nextCorner (C.pair s) = C.pair s
+    · rw [if_pos hb]
+      have hbsize : C.sides (C.pair s).1 = 1 := by
+        have hp := (C.pair s).2.isLt
+        have hbval := congrArg (fun u : C.Side => u.2.val) hb
+        simp only [PolygonComplex.nextCorner] at hbval
+        by_cases hz : (C.pair s).2.val + 1 < C.sides (C.pair s).1
+        · rw [Nat.mod_eq_of_lt hz] at hbval
+          omega
+        · have heq : (C.pair s).2.val + 1 = C.sides (C.pair s).1 := by omega
+          rw [heq, Nat.mod_self] at hbval
+          omega
+      exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_one
+        D m hm hbsize
+    · rw [if_neg hb]
+      exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged_aux_join_aux_two
+        D m hm (by
+          have hp := C.sides_pos (C.pair s).1
+          have hn : C.sides (C.pair s).1 ≠ 1 := by
+            intro he
+            apply hb
+            have hface : (C.nextCorner (C.pair s)).1 = (C.pair s).1 := rfl
+            apply Sigma.ext hface
+            apply (Fin.heq_ext_iff (congrArg C.sides hface)).2
+            have hip : (C.pair s).2.val = 0 := by
+              have := (C.pair s).2.isLt
+              omega
+            simp [PolygonComplex.nextCorner, he, hip]
+          omega)
+  · have hfst := D.toOld_fst ⟨f, m⟩
+    have hfst' := hfst hf
+    have hh := congrArg (fun u : C.Side => u.1) h
+    simp only [PolygonComplex.nextCorner] at hh
+    have : D.old f = s.1 := hfst'.symm.trans hh
+    exact (hf (D.old_injective (this.trans D.old_merged.symm))).elim
 -- END SEAT AREA
 
 /-- **Leaf (wrap-around junction, reverse direction).**  If the next corner
