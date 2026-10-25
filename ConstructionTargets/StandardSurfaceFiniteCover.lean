@@ -6955,7 +6955,120 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_cutFacts
     (G.toOld (C.nextCorner a)).1 ≠ (D.pair (G.toOld (C.nextCorner a))).1 ∧
       ∃ u : D.Side, Relation.EqvGen D.CornerRel (G.toOld (C.nextCorner a)) u ∧
         u ≠ G.toOld (C.nextCorner a) ∧ u ≠ D.pair (G.toOld (C.nextCorner a)) := by
-  sorry
+  have hmerged : a.1 = G.merged := by
+    apply Fin.eq_of_val_eq
+    have := a.1.isLt
+    have := G.merged.isLt
+    omega
+  have hCp : 0 < D.sides (D.pair c).1 := D.sides_pos _
+  have hCsides : 2 ≤ C.sides a.1 := by
+    have hm := G.sides_merged
+    rw [← hmerged, hT] at hm
+    omega
+  have hnextval : (C.nextCorner a).2.val = 1 := by
+    simp only [PolygonComplex.nextCorner, ha]
+    rw [Nat.mod_eq_of_lt (by omega)]
+  have htoA_face : (G.toOld a).1 = c.1 := by
+    obtain ⟨af, ai⟩ := a
+    dsimp only at hmerged ha hnextval ⊢
+    subst af
+    rw [G.toOld_merged_fst]
+    simp [ha, hT]
+  have htoA_val : (G.toOld a).2.val = 0 := by
+    obtain ⟨af, ai⟩ := a
+    dsimp only at hmerged ha hnextval ⊢
+    subst af
+    rw [G.toOld_merged_val]
+    simp [ha, hT, hc]
+  have htoB_face : (G.toOld (C.nextCorner a)).1 = c.1 := by
+    have hnface : (C.nextCorner a).1 = G.merged := by
+      simp only [PolygonComplex.nextCorner]
+      exact hmerged
+    have hb : C.nextCorner a =
+        ⟨G.merged, ⟨1, by rw [← hmerged]; omega⟩⟩ := by
+      apply Sigma.ext hnface
+      apply (Fin.heq_ext_iff (congrArg C.sides hnface)).2
+      exact hnextval
+    rw [hb]
+    rw [G.toOld_merged_fst]
+    simp [hT]
+  have htoB_val : (G.toOld (C.nextCorner a)).2.val = 1 := by
+    have hnface : (C.nextCorner a).1 = G.merged := by
+      simp only [PolygonComplex.nextCorner]
+      exact hmerged
+    have hb : C.nextCorner a =
+        ⟨G.merged, ⟨1, by rw [← hmerged]; omega⟩⟩ := by
+      apply Sigma.ext hnface
+      apply (Fin.heq_ext_iff (congrArg C.sides hnface)).2
+      exact hnextval
+    rw [hb]
+    rw [G.toOld_merged_val]
+    simp [hT, hc]
+  have hnextOld : D.nextCorner (G.toOld a) = G.toOld (C.nextCorner a) := by
+    apply Sigma.ext
+    · exact htoA_face.trans htoB_face.symm
+    apply (Fin.heq_ext_iff (congrArg D.sides (htoA_face.trans htoB_face.symm))).2
+    change (D.nextCorner (G.toOld a)).2.val =
+      (G.toOld (C.nextCorner a)).2.val
+    rw [htoB_val]
+    simp only [PolygonComplex.nextCorner]
+    rw [htoA_val, htoA_face, hT, Nat.mod_eq_of_lt (by omega)]
+  have hfaces : (G.toOld (C.nextCorner a)).1 ≠
+      (D.pair (G.toOld (C.nextCorner a))).1 := by
+    intro heq
+    have hpface : (D.pair (G.toOld (C.nextCorner a))).1 = c.1 := heq.symm.trans htoB_face
+    have hpval : (D.pair (G.toOld (C.nextCorner a))).2.val < 3 := by
+      rw [← hT, ← hpface]
+      exact (D.pair (G.toOld (C.nextCorner a))).2.isLt
+    have hpne_c : D.pair (G.toOld (C.nextCorner a)) ≠ c := by
+      intro hp
+      exact (G.toOld_ne (C.pair (C.nextCorner a))).1
+        (by rw [G.pair_toOld]; exact hp)
+    have hpne_b : D.pair (G.toOld (C.nextCorner a)) ≠ G.toOld (C.nextCorner a) :=
+      D.pair_ne _
+    have hpval_ne_two : (D.pair (G.toOld (C.nextCorner a))).2.val ≠ 2 := by
+      intro hv
+      apply hpne_c
+      apply Sigma.ext
+      · exact hpface
+      apply (Fin.heq_ext_iff (congrArg D.sides hpface)).2
+      exact hv.trans hc.symm
+    have hpval_ne_one : (D.pair (G.toOld (C.nextCorner a))).2.val ≠ 1 := by
+      intro hv
+      apply hpne_b
+      apply Sigma.ext
+      · exact hpface.trans htoB_face.symm
+      apply (Fin.heq_ext_iff (congrArg D.sides (hpface.trans htoB_face.symm))).2
+      exact hv.trans htoB_val.symm
+    have hpzero : (D.pair (G.toOld (C.nextCorner a))).2.val = 0 := by
+      omega
+    have hpair : D.pair (G.toOld (C.nextCorner a)) = G.toOld a := by
+      apply Sigma.ext (hpface.trans htoA_face.symm)
+      apply (Fin.heq_ext_iff (congrArg D.sides (hpface.trans htoA_face.symm))).2
+      exact hpzero.trans htoA_val.symm
+    have hpnext : C.pair (C.nextCorner a) = a :=
+      G.toOld_injective (G.pair_toOld (C.nextCorner a) |>.trans hpair)
+    have := congrArg C.pair hpnext
+    exact hab (by simpa [C.pair_pair] using this)
+  refine ⟨hfaces, D.pair (G.toOld a), ?_, ?_, ?_⟩
+  · apply Relation.EqvGen.rel
+    refine ⟨G.toOld a, ?_⟩
+    rw [if_neg (Ne.symm (horD (G.toOld a)))]
+    exact Or.inr ⟨hnextOld.symm, rfl⟩
+  · intro heq
+    have hold : G.toOld (C.pair a) = G.toOld (C.nextCorner a) := by
+      rw [G.pair_toOld]
+      exact heq
+    exact hab (G.toOld_injective hold).symm
+  · intro heq
+    have hp := D.pair.injective heq
+    have hae : a = C.nextCorner a := G.toOld_injective hp
+    exact (by
+      intro hae
+      have hv := congrArg (fun s : C.Side => s.2.val) hae
+      change a.2.val = (C.nextCorner a).2.val at hv
+      rw [ha, hnextval] at hv
+      omega : a ≠ C.nextCorner a) hae
 
 /-- **Leaf (corner count after a glue).**  The corners at the vertex of `x` in
 `C` are the images under `toOld` of the corners at the vertex of `t` in `C'`,
