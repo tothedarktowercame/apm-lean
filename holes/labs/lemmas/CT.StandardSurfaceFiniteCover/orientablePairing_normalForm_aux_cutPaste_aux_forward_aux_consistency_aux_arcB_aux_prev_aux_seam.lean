@@ -9164,7 +9164,70 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
-  sorry
+  let LL := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+  let p := α₁.length
+  let q := α₁.length + 1 + α₂.length
+  let r := q + β₁.length
+  have hlen : LL = q + β₁.length + 1 + β₂.length := by simp [LL, q]; omega
+  have hLL : LL ≠ 0 := by omega
+  have hwrap : (edgePoint LL LL ⟨0, by constructor <;> norm_num⟩ : ℂ) =
+      edgePoint LL 0 ⟨0, by constructor <;> norm_num⟩ := by
+    simp only [edgePoint]
+    rw [Complex.exp_eq_exp_iff_exists_int]
+    refine ⟨1, ?_⟩
+    push_cast
+    have hLL' : (LL : ℂ) ≠ 0 := by exact_mod_cast hLL
+    field_simp [hLL']
+    ring
+  have hedge : (edgePoint LL (LL - 1) ⟨1, by constructor <;> norm_num⟩ : ℂ) =
+      edgePoint LL LL ⟨0, by constructor <;> norm_num⟩ := by
+    simp only [edgePoint]
+    congr 1
+    norm_num
+    rw [Nat.cast_sub (by omega : 1 ≤ LL)]
+    push_cast
+    ring
+  have hzero : cutPoint LL 0 =
+      (edgePoint LL 0 ⟨0, by constructor <;> norm_num⟩ : ℂ) := by
+    exact (PolygonMoves.edgePoint_zero_eq_cutPoint LL 0).symm
+  have he₀next : e₀ + 1 < LL := by omega
+  have heq : e = e₀ + 1 := by
+    change e = (e₀ + 1) % LL at hadj
+    rw [Nat.mod_eq_of_lt he₀next] at hadj
+    exact hadj
+  have hs : s₀ = ⟨1, by constructor <;> norm_num⟩ := Subtype.ext hs₀
+  have ht : τ = ⟨0, by constructor <;> norm_num⟩ := Subtype.ext hτ
+  clear hadj
+  subst s₀
+  subst τ
+  subst e
+  refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+  rw [hN]
+  rcases hm with hm | hm
+  · rw [D.ρB_β₁ e₀ _ (by simpa [q] using he₀)
+        (by omega), D.oldB_arc]
+    · rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+          if_neg (by dsimp [p, r, q] at *; omega),
+          if_pos (by dsimp [r, q] at *; omega)]
+      have hi : e₀ + β₂.length + 1 = LL - 1 := by omega
+      rw [hi]
+      change (edgePoint LL (LL - 1) _ : ℂ) = cutChordB LL 0 q _
+      simpa [cutChordB, Nat.sub_add_cancel (by omega : 1 ≤ LL)] using
+        ((hedge.trans hwrap).trans hzero.symm)
+    · dsimp [r, q] at *; omega
+    · dsimp [LL, r, q] at *; omega
+  · subst e₀
+    rw [D.ρB_y, D.oldB_chord]
+    rw [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+      if_neg (by dsimp [p, q, r] at *; omega),
+      if_neg (by dsimp [q, r] at *; omega),
+      if_neg (by dsimp [p, q, r] at *; omega),
+      if_neg (by dsimp [q, r] at *; omega),
+      if_neg (by dsimp [q, r] at *; omega)]
+    rw [show (α₁.length + 1 + α₂.length + β₁.length + 1) - β₁.length - 1 = q by
+      dsimp [q]; omega]
+    change cutChordB LL 0 q _ = (edgePoint LL q _ : ℂ)
+    simpa [cutChordB] using (PolygonMoves.edgePoint_zero_eq_cutPoint LL q).symm
 -- END SEAT AREA
 
 open PolygonMoves in
