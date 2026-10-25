@@ -8061,6 +8061,111 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_au
   sorry
 
 open PolygonMoves in
+/-- Banked by lemma-2 (endpoint and zero-parameter identities). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_edge
+    (L k : ℕ) :
+    (edgePoint L k ⟨1, by constructor <;> norm_num⟩ : ℂ) =
+      edgePoint L (k + 1) ⟨0, by constructor <;> norm_num⟩ := by
+  exact congrArg Subtype.val (PolygonMoves.cut_transfer_consistency_A_arc_aux_next_aux_edge L k)
+
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_zero
+    (L k : ℕ) :
+    cutPoint L k = (edgePoint L k ⟨0, by constructor <;> norm_num⟩ : ℂ) := by
+  exact (PolygonMoves.edgePoint_zero_eq_cutPoint L k).symm
+
+open PolygonMoves in
+/-- **Leaf (`arcB_aux_prev`, wrap).**  `e₀ = L - 1`, so `e = 0`, `τ = 0`: vertex 0 as the
+end of `β₂` (or of `inv y` when `β₂ = []`) goes to the start of `c`; as the start of
+`α₁` (or of `y` when `α₁ = []`) it goes to the end of `c⁻¹`.  Joined by `_aux_c`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_wrap
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : α₁.length + 1 + α₂.length ≤ e₀)
+    (he₀L : e₀ < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))
+    (hN : (N : ℂ) =
+      oldB (ρB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)))
+    (hs₀ : s₀.1 = 1) (hτ : τ.1 = 0)
+    (hadj : e = (e₀ + 1) % (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hw : e₀ + 1 = (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (`arcB_aux_prev`, chord seam).**  `e₀ + 1 = q + |β₁|` (the end of the last
+`β₁` side is the start of `inv y`) or `e₀ = q + |β₁|` (the end of `inv y`), not the wrap.
+Both transfers are the same point of the new disk, one of them read through `cutChordB`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_seam
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : α₁.length + 1 + α₂.length ≤ e₀)
+    (he₀L : e₀ < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))
+    (hN : (N : ℂ) =
+      oldB (ρB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)))
+    (hs₀ : s₀.1 = 1) (hτ : τ.1 = 0)
+    (hadj : e = (e₀ + 1) % (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hw : e₀ + 1 ≠ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hm : e₀ + 1 = α₁.length + 1 + α₂.length + β₁.length ∨ e₀ = α₁.length + 1 + α₂.length + β₁.length) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (`arcB_aux_prev`, interior).**  `e₀` and `e = e₀ + 1` both inside `β₁` or both
+inside `β₂`: the two transfers are the same point (`_aux_edge`). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_inner
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : α₁.length + 1 + α₂.length ≤ e₀)
+    (he₀L : e₀ < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))
+    (hN : (N : ℂ) =
+      oldB (ρB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)))
+    (hs₀ : s₀.1 = 1) (hτ : τ.1 = 0)
+    (hadj : e = (e₀ + 1) % (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hw : e₀ + 1 ≠ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hm₁ : e₀ + 1 ≠ α₁.length + 1 + α₂.length + β₁.length)
+    (hm₂ : e₀ ≠ α₁.length + 1 + α₂.length + β₁.length) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
 /-- **Leaf (piece `B`, arc, prev-name case).**  The point is the end of side `e₀`
 (`s₀ = 1`) and the start of side `e = (e₀+1) % L` (`τ = 0`).  Seams at
 `q + β₁.length` (the chord) and the wrap `e₀ = L-1`, `e = 0`: vertex 0 as the end of
@@ -8089,7 +8194,17 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
-  sorry
+  by_cases hw : e₀ + 1 = (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_wrap
+      α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N e₀ s₀ he₀ he₀L hP hN hs₀ hτ hadj hw
+  by_cases hm₁ : e₀ + 1 = α₁.length + 1 + α₂.length + β₁.length
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_seam
+      α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N e₀ s₀ he₀ he₀L hP hN hs₀ hτ hadj hw (Or.inl hm₁)
+  by_cases hm₂ : e₀ = α₁.length + 1 + α₂.length + β₁.length
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_seam
+      α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N e₀ s₀ he₀ he₀L hP hN hs₀ hτ hadj hw (Or.inr hm₂)
+  exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB_aux_prev_aux_inner
+    α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N e₀ s₀ he₀ he₀L hP hN hs₀ hτ hadj hw hm₁ hm₂
 
 open PolygonMoves in
 /-- **Leaf (piece `B`, arc).**  As `_aux_arcA`, for an old side `q ≤ e₀ < L`.
