@@ -7145,7 +7145,134 @@ theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_relabel (k : �
           ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E))
         (orientablePairing_normalForm_aux_standardWord (k + 1) ++ E') ∧
       ∀ z ∈ E', 2 * (k + 1) ≤ z.1 := by
-  sorry
+  let a := c.1
+  let b := d.1
+  let p := 2 * k
+  let q := 2 * k + 1
+  have hab : a ≠ b := by
+    intro h
+    have hc := hw.2.2 a (by simp [a])
+    simp only [List.map_append, List.count_append] at hc
+    simp [a, b, h, PolygonMoves.inv] at hc
+    omega
+  let s₁ : ℕ ≃ ℕ := Equiv.swap a p
+  let b₁ := s₁ b
+  let s₂ : ℕ ≃ ℕ := Equiv.swap b₁ q
+  let e : ℕ ≃ ℕ := s₁.trans s₂
+  have hb₁p : b₁ ≠ p := by
+    intro h
+    have h' : s₁ b = s₁ a := by simpa [b₁, s₁] using h
+    exact hab (s₁.injective h').symm
+  have he_a : e a = p := by
+    change s₂ (s₁ a) = p
+    rw [show s₁ a = p by simp [s₁]]
+    exact Equiv.swap_apply_of_ne_of_ne hb₁p.symm (by omega)
+  have he_b : e b = q := by
+    simp [e, b₁, s₂]
+  have he_fix {x : ℕ} (hx : x < p) : e x = x := by
+    have hxa : x ≠ a := by intro h; subst x; exact (Nat.not_lt_of_ge (hr c (by simp)) hx)
+    have hxp : x ≠ p := Nat.ne_of_lt hx
+    have hxb : x ≠ b := by intro h; subst x; exact (Nat.not_lt_of_ge (hr d (by simp)) hx)
+    have hb₁ge : p ≤ b₁ := by
+      by_cases hbp : b = p
+      · simp [b₁, s₁, hbp, a]
+        exact hr c (by simp)
+      · simpa [b₁, s₁, Equiv.swap_apply_of_ne_of_ne hab.symm hbp] using hr d (by simp)
+    have hxb₁ : x ≠ b₁ := by
+      exact (Nat.ne_of_lt (lt_of_lt_of_le hx hb₁ge))
+    have hxq : x ≠ q := by omega
+    simp [e, s₁, s₂, Equiv.trans_apply, Equiv.swap_apply_of_ne_of_ne,
+      hxa, hxp, hxb₁, hxq]
+  have hEc : ∀ z ∈ E, z.1 ≠ a := by
+    intro z hz hza
+    have hc := hw.2.2 a (by simp [a])
+    have hpos : 0 < (E.map Prod.fst).count a := List.count_pos_iff.mpr (by
+      exact List.mem_map.mpr ⟨z, hz, hza⟩)
+    dsimp [a] at hpos
+    have hcd : c.1 ≠ d.1 := by simpa [a, b] using hab
+    dsimp [a] at hc
+    simp only [List.map_append, List.count_append] at hc
+    simp only [List.map_cons, List.map_nil, Prod.fst, PolygonMoves.inv] at hc
+    simp only [List.count_cons] at hc
+    simp [hcd, hcd.symm] at hc
+    have hzero : (E.map Prod.fst).count c.1 = 0 := by omega
+    omega
+  have hEd : ∀ z ∈ E, z.1 ≠ b := by
+    intro z hz hzb
+    have hd := hw.2.2 b (by simp [b])
+    have hpos : 0 < (E.map Prod.fst).count b := List.count_pos_iff.mpr (by
+      exact List.mem_map.mpr ⟨z, hz, hzb⟩)
+    dsimp [b] at hpos
+    simp only [List.map_append, List.count_append] at hd
+    simp [a, b, hab, PolygonMoves.inv, hzb] at hd
+    omega
+  let flip : ℕ → Bool := fun x => if x = a then !c.2 else if x = b then !d.2 else false
+  let f : PolygonMoves.Signed ℕ → PolygonMoves.Signed ℕ :=
+    fun x => (e x.1, xor x.2 (flip x.1))
+  have hprefix_general : ∀ (L : List (PolygonMoves.Signed ℕ)),
+      (∀ x ∈ L, x.1 < p) → L.map f = L := by
+    intro L hL
+    induction L with
+    | nil => simp
+    | cons x xs ih =>
+        have hxlt := hL x (by simp)
+        have hxa : x.1 ≠ a := by
+          intro h
+          exact (Nat.not_lt_of_ge (hr c (by simp))) (by simpa [a, p, h] using hxlt)
+        have hxb : x.1 ≠ b := by
+          intro h
+          exact (Nat.not_lt_of_ge (hr d (by simp))) (by simpa [b, p, h] using hxlt)
+        simp only [List.map_cons]
+        rw [ih (fun y hy => hL y (by simp [hy]))]
+        simp [f, flip, he_fix hxlt, hxa, hxb]
+  have hprefix : (orientablePairing_normalForm_aux_standardWord k).map f =
+      orientablePairing_normalForm_aux_standardWord k := by
+    apply hprefix_general
+    intro x hx
+    simp only [orientablePairing_normalForm_aux_standardWord, List.mem_flatMap,
+      List.mem_range] at hx
+    obtain ⟨j, hj, hx⟩ := hx
+    simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hx
+    rcases hx with rfl | rfl | rfl | rfl <;> simp [p] <;> omega
+  refine ⟨E.map f, ?_, ?_⟩
+  · have hmap :
+        (orientablePairing_normalForm_aux_standardWord k ++
+          ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E)).map
+            (fun x => (e x.1, xor x.2 (flip x.1))) =
+          orientablePairing_normalForm_aux_standardWord (k + 1) ++ E.map f := by
+      simp only [List.map_append]
+      rw [orientablePairing_normalForm_aux_standardWord,
+        orientablePairing_normalForm_aux_standardWord, List.range_succ,
+        List.flatMap_append]
+      simp only [List.flatMap_singleton]
+      rw [show ((List.range k).flatMap fun j =>
+        [(2 * j, true), (2 * j + 1, true), (2 * j, false), (2 * j + 1, false)]).map f =
+          (List.range k).flatMap (fun j =>
+        [(2 * j, true), (2 * j + 1, true), (2 * j, false), (2 * j + 1, false)]) by
+          exact hprefix]
+      simp [f, flip, a, b, p, q, hab, hab.symm, he_a, he_b, PolygonMoves.inv]
+    rw [← hmap]
+    exact orientablePairing_normalForm_aux_Step.relabel _ e flip hw
+  · intro z hz
+    obtain ⟨x, hx, rfl⟩ := List.mem_map.mp hz
+    simp only [f, Prod.fst]
+    have hxp : p ≤ x.1 := hr x (by simp [hx])
+    have hxc := hEc x hx
+    have hxd := hEd x hx
+    have hlow : p ≤ e x.1 := by
+      by_contra h
+      have helow : e x.1 < p := Nat.lt_of_not_ge h
+      have hfix := he_fix helow
+      have hxe : x.1 = e x.1 := e.injective hfix.symm
+      exact (Nat.not_lt_of_ge hxp) (hxe.symm ▸ helow)
+    have hnep : e x.1 ≠ p := by
+      intro h
+      exact hxc (e.injective (h.trans he_a.symm))
+    have hneq : e x.1 ≠ q := by
+      intro h
+      exact hxd (e.injective (h.trans he_b.symm))
+    dsimp [p, q] at hlow hnep hneq ⊢
+    omega
 -- END SEAT AREA
 
 /-- **Leaf (one commutator block).**  If the word is `k` standard blocks
