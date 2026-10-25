@@ -3309,13 +3309,129 @@ lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_twoClasses
 /-- **Leaf (counting a merge).**  Adding one generator `a ~ b` between two
 inequivalent elements merges exactly two classes into one. -/
 -- BEGIN SEAT AREA
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount_aux_iff
+    {α : Type} (r : α → α → Prop) (a b x y : α) :
+    Relation.EqvGen (fun u v => r u v ∨ (u = a ∧ v = b)) x y ↔
+      Relation.EqvGen r x y ∨
+        (Relation.EqvGen r x a ∧ Relation.EqvGen r b y) ∨
+        (Relation.EqvGen r x b ∧ Relation.EqvGen r a y) := by
+  let R := Relation.EqvGen r
+  let T := fun x y => R x y ∨ (R x a ∧ R b y) ∨ (R x b ∧ R a y)
+  have hrefl : ∀ x, T x x := fun x => Or.inl (Relation.EqvGen.refl x)
+  have hsymm : ∀ {x y}, T x y → T y x := by
+    intro x y h
+    rcases h with h | h | h
+    · exact Or.inl h.symm
+    · exact Or.inr (Or.inr ⟨h.2.symm, h.1.symm⟩)
+    · exact Or.inr (Or.inl ⟨h.2.symm, h.1.symm⟩)
+  have htrans : ∀ {x y z}, T x y → T y z → T x z := by
+    intro x y z hxy hyz
+    rcases hxy with hxy | ⟨hxa, hby⟩ | ⟨hxb, hay⟩
+    · rcases hyz with hyz | ⟨hya, hbz⟩ | ⟨hyb, haz⟩
+      · exact Or.inl (hxy.trans _ _ _ hyz)
+      · exact Or.inr (Or.inl ⟨hxy.trans _ _ _ hya, hbz⟩)
+      · exact Or.inr (Or.inr ⟨hxy.trans _ _ _ hyb, haz⟩)
+    · rcases hyz with hyz | ⟨hya, hbz⟩ | ⟨hyb, haz⟩
+      · exact Or.inr (Or.inl ⟨hxa, hby.trans _ _ _ hyz⟩)
+      · exact Or.inl (hxa.trans _ _ _ (hby.trans _ _ _ hya).symm |>.trans _ _ _ hbz)
+      · exact Or.inl (hxa.trans _ _ _ haz)
+    · rcases hyz with hyz | ⟨hya, hbz⟩ | ⟨hyb, haz⟩
+      · exact Or.inr (Or.inr ⟨hxb, hay.trans _ _ _ hyz⟩)
+      · exact Or.inl (hxb.trans _ _ _ hbz)
+      · exact Or.inl (hxb.trans _ _ _ (hay.trans _ _ _ hyb).symm |>.trans _ _ _ haz)
+  constructor
+  · intro h
+    induction h with
+    | rel x y hxy =>
+        rcases hxy with hxy | ⟨rfl, rfl⟩
+        · exact Or.inl (Relation.EqvGen.rel x y hxy)
+        · exact Or.inr (Or.inl ⟨Relation.EqvGen.refl _, Relation.EqvGen.refl _⟩)
+    | refl x => exact hrefl x
+    | symm x y _ ih => exact hsymm ih
+    | trans x y z _ _ ih₁ ih₂ => exact htrans ih₁ ih₂
+  · intro h
+    have hold : ∀ {x y}, Relation.EqvGen r x y →
+        Relation.EqvGen (fun u v => r u v ∨ (u = a ∧ v = b)) x y := by
+      intro x y hxy
+      induction hxy with
+      | rel x y h => exact Relation.EqvGen.rel x y (Or.inl h)
+      | refl x => exact Relation.EqvGen.refl x
+      | symm x y _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans _ _ _ ih₂
+    rcases h with h | ⟨hxa, hby⟩ | ⟨hxb, hay⟩
+    · exact hold h
+    · exact (hold hxa).trans _ _ _ ((Relation.EqvGen.rel a b (Or.inr ⟨rfl, rfl⟩)).trans _ _ _ (hold hby))
+    · exact (hold hxb).trans _ _ _ ((Relation.EqvGen.rel a b (Or.inr ⟨rfl, rfl⟩)).symm.trans _ _ _ (hold hay))
+
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount
     {α : Type} [Finite α] (r : α → α → Prop) (a b : α)
     (hab : ¬ Relation.EqvGen r a b) :
     Nat.card (Quotient (Relation.EqvGen.setoid
         (fun x y => r x y ∨ (x = a ∧ y = b)))) + 1 =
       Nat.card (Quotient (Relation.EqvGen.setoid r)) := by
-  sorry
+  classical
+  let R := Relation.EqvGen.setoid r
+  let S := Relation.EqvGen.setoid (fun x y => r x y ∨ (x = a ∧ y = b))
+  let qa : Quotient R := Quotient.mk R a
+  let qb : Quotient R := Quotient.mk R b
+  have habq : qa ≠ qb := by
+    intro h
+    exact hab (Quotient.exact h)
+  let f : Quotient R → Quotient S := Quotient.map id (by
+    intro x y h
+    exact (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount_aux_iff
+      r a b x y).mpr (Or.inl h))
+  have hf_surj : Function.Surjective f := by
+    intro q
+    induction q using Quotient.ind with
+    | _ x => exact ⟨Quotient.mk R x, rfl⟩
+  have hf_eq : ∀ q q' : Quotient R, f q = f q' ↔
+      q = q' ∨ (q = qa ∧ q' = qb) ∨ (q = qb ∧ q' = qa) := by
+    intro q q'
+    induction q using Quotient.ind with
+    | _ x =>
+      induction q' using Quotient.ind with
+      | _ y =>
+        change Quotient.mk S x = Quotient.mk S y ↔ _
+        rw [Quotient.eq]
+        change Relation.EqvGen (fun u v => r u v ∨ (u = a ∧ v = b)) x y ↔ _
+        rw [standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount_aux_iff]
+        simp only [qa, qb, R, Quotient.eq]
+        constructor <;> intro h
+        · rcases h with h | ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+          · exact Or.inl h
+          · exact Or.inr (Or.inl ⟨h₁, h₂.symm⟩)
+          · exact Or.inr (Or.inr ⟨h₁, h₂.symm⟩)
+        · rcases h with h | ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+          · exact Or.inl h
+          · exact Or.inr (Or.inl ⟨h₁, h₂.symm⟩)
+          · exact Or.inr (Or.inr ⟨h₁, h₂.symm⟩)
+  let A := {q : Quotient R // q ≠ qb}
+  let e : A ≃ Quotient S := Equiv.ofBijective (fun q => f q.1) ⟨by
+    intro x y hxy
+    have h := (hf_eq x.1 y.1).mp hxy
+    rcases h with h | ⟨_, h⟩ | ⟨h, _⟩
+    · exact Subtype.ext h
+    · exact False.elim (y.2 h)
+    · exact False.elim (x.2 h)
+    , by
+      intro z
+      obtain ⟨q, hq⟩ := hf_surj z
+      by_cases hqb : q = qb
+      · refine ⟨⟨qa, habq⟩, ?_⟩
+        exact ((hf_eq qa q).mpr (Or.inr (Or.inl ⟨rfl, hqb⟩))).trans hq
+      · exact ⟨⟨q, hqb⟩, hq⟩⟩
+  letI : Fintype (Quotient R) := Fintype.ofFinite _
+  letI : Fintype (Quotient S) := Fintype.ofFinite _
+  have hcardA : Fintype.card A + 1 = Fintype.card (Quotient R) := by
+    rw [Fintype.card_subtype_compl (fun q : Quotient R => q = qb)]
+    simp
+    have hpos : 0 < Fintype.card (Quotient R) :=
+      Fintype.card_pos_iff.mpr ⟨Quotient.mk R a⟩
+    omega
+  rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card,
+    ← Fintype.card_congr e]
+  exact hcardA
 -- END SEAT AREA
 
 /-- **Leaf (boundary order).**  Modulo the merge `s ~ nextCorner s`, `toOld`
