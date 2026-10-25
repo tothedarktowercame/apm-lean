@@ -775,7 +775,45 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod1
     ∃ i' : Fin n, Relation.EqvGen
       (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
       ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
-  sorry
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  let e : Fin (4 * g) := ⟨k.1 - 1, by omega⟩
+  let s : C.Side := ⟨i, e⟩
+  refine ⟨(C.pair s).1, ?_⟩
+  have heq : C.nextCorner (C.pair (C.pair s)) = ⟨i, k⟩ := by
+    rw [C.pair_pair]
+    apply Sigma.ext
+    · rfl
+    · simp only [C, standardCover_pairingData_aux_lift_aux_complex]
+      apply heq_of_eq
+      apply Fin.ext
+      change ((e.1 + 1) % (4 * g)) = k.1
+      have hev : e.1 + 1 = k.1 := by
+        simp [e]
+        omega
+      rw [hev, Nat.mod_eq_of_lt k.2]
+  have heq' : C.pair s =
+      ⟨(C.pair s).1, ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
+    apply Sigma.ext
+    · rfl
+    · simp only [C, standardCover_pairingData_aux_lift_aux_complex]
+      apply heq_of_eq
+      apply Fin.ext
+      change (standardCover_pairingData_aux_lift_aux_basePair g e).1 =
+        (k.1 + 1) % (4 * g)
+      have hklt : k.1 + 1 < 4 * g := by omega
+      rw [Nat.mod_eq_of_lt hklt]
+      have hemod : e.1 % 4 = 0 := by
+        simp [e]
+        omega
+      simp [standardCover_pairingData_aux_lift_aux_basePair, hemod, e]
+      omega
+  rw [← heq]
+  refine Relation.EqvGen.trans _ _ _
+    (Relation.EqvGen.symm _ _
+      (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+        g n hg σ hσ (C.pair s))) ?_
+  rw [heq']
+  exact Relation.EqvGen.refl _
 -- END SEAT AREA
 
 /-- Leaf: `_aux_step` when `k % 4 = 2`: one `_aux_corner` step backwards from `s = ⟨σ i (basePair (k + 1)), k + 1⟩` (note `k + 1 < 4g`). -/
