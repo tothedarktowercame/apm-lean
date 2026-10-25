@@ -6388,7 +6388,113 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency
         (by simpa using hN) (by simpa using hP)
 
 open PolygonMoves in
-/-- **Leaf (reverse transferred generator).**  Two distinct new sides with the
+/-- **Leaf (proved, lemma-1 + claude-14).** A non-`c` new side moves back to an old side with the same letter. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_side
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed L)) (y c : PolygonMoves.Signed L)
+    (e : ℕ)
+    (he : e < (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (he₁ : e ≠ α₂.length)
+    (he₂ : e ≠ α₂.length + 1 + α₁.length + β₂.length) :
+    let f := if e < α₂.length then e + α₁.length + 1
+      else if e < α₂.length + 1 + α₁.length then e - α₂.length - 1
+      else if e < α₂.length + 1 + α₁.length + β₂.length then e + β₁.length + 1
+      else e - β₂.length - 1
+    ∃ hf : f < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length,
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get ⟨f, hf⟩ =
+        (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get ⟨e, he⟩ := by
+  intro f
+  simp only [List.length_append, List.length_singleton] at he
+  have hW : α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂ =
+      α₁ ++ (y :: (α₂ ++ (β₁ ++ (PolygonMoves.inv y :: β₂)))) := by simp
+  have hW' : α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁ =
+      α₂ ++ (PolygonMoves.inv c :: (α₁ ++ (β₂ ++ (c :: β₁)))) := by simp
+  have hfl : f < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length := by
+    simp only [f, List.length_append, List.length_singleton]; split_ifs <;> omega
+  refine ⟨hfl, ?_⟩
+  simp only [List.get_eq_getElem]
+  rw [List.getElem_of_eq hW, List.getElem_of_eq hW']
+  simp only [f]
+  split_ifs with h1 h2 h3 <;>
+    simp only [List.getElem_append, List.getElem_cons] <;>
+    (repeat' split) <;> first | omega | rfl | (congr 1; omega)
+
+open PolygonMoves in
+/-- **Leaf (proved).** By freshness of `c`, only the two `c` sides carry label `c.1`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_c_index
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed L)) (y c : PolygonMoves.Signed L)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).map Prod.fst)
+    (i : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (hi : ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = c.1) :
+    (i : ℕ) = α₂.length ∨
+      (i : ℕ) = α₂.length + 1 + α₁.length + β₂.length := by
+  by_contra h
+  push_neg at h
+  obtain ⟨hf, hw⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_side
+      α₁ α₂ β₁ β₂ y c i i.isLt h.1 h.2
+  apply hc
+  rw [List.mem_map]
+  refine ⟨(α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get ⟨_, hf⟩,
+    List.get_mem _ _, ?_⟩
+  exact congrArg Prod.fst hw |>.trans hi
+
+open PolygonMoves in
+/-- **Leaf (c pair).** Both sides are `c` sides (`c⁻¹` at `n₂`, `c` at `q + m₂`;
+opposite signs, so the parameter is reversed).  Both transfers are the same old
+chord point, `cutChordB L 0 q (1 - τ) = cutChordA L 0 q τ` (use
+`cut_retransfer_consistency_aux_chords` / `_aux_reverse_aux_eq`), so `T = T'`;
+`i = j` is excluded by `hij`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_cpair
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2 then τ else reverseParameter τ))
+    (hi : (i : ℕ) = α₂.length ∨ (i : ℕ) = α₂.length + 1 + α₁.length + β₂.length)
+    (hj : (j : ℕ) = α₂.length ∨ (j : ℕ) = α₂.length + 1 + α₁.length + β₂.length) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) T T' := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (other pairs).** Neither side is a `c` side; both transfer back to
+`edgePoint` at the old positions given by `_aux_side`, which carry the same
+letters, so one old `WordRel` step with the same parameter choice relates them. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_other
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2 then τ else reverseParameter τ))
+    (hi : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 ≠ c.1)
+    (hj : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1 ≠ c.1) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) T T' := by
+  sorry
+
+open PolygonMoves in
+/-- **Reverse transferred generator** (split 2026-10-25 after lemma-1 PARTIAL into
+`_aux_side`, `_aux_c_index`, `_aux_cpair`, `_aux_other`).  Two distinct new sides with the
 same label, at matching parameters, pull back to old points that the old word
 relates.  For the `c` pair (`c⁻¹` at `n₂`, `c` at `q + m₂`, opposite signs) both
 pull back to the same chord point, `cutChordB L 0 q (1 - τ) = cutChordA L 0 q τ`
@@ -6411,7 +6517,12 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator
       α₁.length α₂.length β₁.length β₂.length j
       (if ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2 then τ else reverseParameter τ)) :
     Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) T T' := by
-  sorry
+  by_cases hic : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = c.1
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_cpair α₁ α₂ β₁ β₂ y c hy hc i j hij τ hlab T T' hT hT'
+      (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_c_index α₁ α₂ β₁ β₂ y c hc i hic)
+      (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_c_index α₁ α₂ β₁ β₂ y c hc j (hlab ▸ hic))
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_other α₁ α₂ β₁ β₂ y c hy hc i j hij τ hlab T T' hT hT'
+      hic (fun h => hic (hlab.trans h))
 
 open PolygonMoves in
 /-- **Reverse generators** (split 2026-10-25 from lemma-2's partial into
