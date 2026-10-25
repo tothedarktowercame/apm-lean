@@ -11406,6 +11406,244 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
     List.mem_cons, List.not_mem_nil, or_false, not_or, PolygonMoves.inv] at hc
   grind
 
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_opposite
+    {L : Type*} (w : List (PolygonMoves.Signed L))
+    (i j : Fin w.length) (hij : i ≠ j)
+    (hlab : (w.get i).1 = (w.get j).1)
+    (hsign : (w.get i).2 ≠ (w.get j).2) :
+    Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w)
+        i (finRotate _ j) ∧
+      Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w)
+        (finRotate _ i) j := by
+  constructor
+  · apply Relation.EqvGen.rel
+    refine ⟨i, j, hij, hlab, ?_⟩
+    rw [if_neg hsign]
+    exact Or.inl ⟨rfl, rfl⟩
+  · apply Relation.EqvGen.rel
+    refine ⟨i, j, hij, hlab, ?_⟩
+    rw [if_neg hsign]
+    exact Or.inr ⟨rfl, rfl⟩
+
+/-- The corner map of `orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport`, on positions.  An old corner at the start of an arc
+of `α₁`, `α₂`, `β₁` or `β₂` goes to the start of the same arc in the new word;
+the start of `y` goes to the end of `α₁` (position `|α₂| + 1 + |α₁|`) and the
+start of `inv y` to the end of `β₁` (position `0`).  Arguments are the block
+lengths `|α₁|, |α₂|, |β₁|, |β₂|`. -/
+def orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat (A1 A2 B1 B2 k : ℕ) : ℕ :=
+  if k < A1 then A2 + 1 + k
+  else if k = A1 then A2 + 1 + A1
+  else if k ≤ A1 + A2 then k - A1 - 1
+  else if k < A1 + 1 + A2 + B1 then k + 1 + B2
+  else if k = A1 + 1 + A2 + B1 then 0
+  else k - B1 - 1
+
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat_lt (A1 A2 B1 B2 k : ℕ) (hk : k < A1 + A2 + B1 + B2 + 2) :
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat A1 A2 B1 B2 k < A1 + A2 + B1 + B2 + 2 := by
+  unfold orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat
+  split_ifs <;> omega
+
+/-- The corner map from the old word `α₁ y α₂ β₁ y⁻¹ β₂` to the cut-pasted word
+`α₂ c⁻¹ α₁ β₂ c β₁`. -/
+def orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (k : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length) :
+    Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+  ⟨orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat α₁.length α₂.length β₁.length β₂.length k, by
+    have hk := k.2
+    simp only [List.length_append, List.length_cons, List.length_nil] at hk ⊢
+    have := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat_lt α₁.length α₂.length β₁.length β₂.length k (by omega)
+    omega⟩
+
+/-- One-vertex transfers along a corner map that sends old corner steps to new
+chains and reaches every new corner class. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_lift {L : Type*} (w w' : List (PolygonMoves.Signed L))
+    (f : Fin w.length → Fin w'.length)
+    (hstep : ∀ a b, orientablePairing_normalForm_aux_WordCornerRel w a b →
+      Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w') (f a) (f b))
+    (hcov : ∀ b, ∃ a, Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w')
+      (f a) b)
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
+    orientablePairing_normalForm_aux_WordOneVertex w' := by
+  have key : ∀ a b, Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w) a b →
+      Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w') (f a) (f b) := by
+    intro a b h
+    induction h with
+    | rel a b h => exact hstep a b h
+    | refl a => exact Relation.EqvGen.refl _
+    | symm a b _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  intro a' b'
+  obtain ⟨a, ha⟩ := hcov a'
+  obtain ⟨b, hb⟩ := hcov b'
+  exact Relation.EqvGen.trans _ _ _ (Relation.EqvGen.symm _ _ ha)
+    (Relation.EqvGen.trans _ _ _ (key a b (hv a b)) hb)
+
+/-- **Leaf.**  The only arcs of the old word labelled `y.1` are `y` (position
+`|α₁|`) and `inv y` (position `|α₁| + 1 + |α₂| + |β₁|`). -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_label
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y : PolygonMoves.Signed ℕ)
+    (hy : y.1 ∉ α₁.map Prod.fst ∧ y.1 ∉ α₂.map Prod.fst ∧
+      y.1 ∉ β₁.map Prod.fst ∧ y.1 ∉ β₂.map Prod.fst)
+    (k : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length) :
+    ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k).1 = y.1 ↔
+      ((k : ℕ) = α₁.length ∨ (k : ℕ) = α₁.length + 1 + α₂.length + β₁.length) := by
+  sorry
+
+/-- **Leaf.**  The old word has `y` at position `|α₁|` and `inv y` at position
+`|α₁| + 1 + |α₂| + |β₁|`. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_getY
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y : PolygonMoves.Signed ℕ)
+    (k : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length) :
+    ((k : ℕ) = α₁.length →
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k = y) ∧
+    ((k : ℕ) = α₁.length + 1 + α₂.length + β₁.length →
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k = PolygonMoves.inv y) := by
+  sorry
+
+/-- **Leaf.**  Away from `y` and `inv y`, the corner map sends each arc to the
+same signed letter in the new word. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_get
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (k : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length)
+    (hk₁ : (k : ℕ) ≠ α₁.length)
+    (hk₂ : (k : ℕ) ≠ α₁.length + 1 + α₂.length + β₁.length) :
+    (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k) =
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k := by
+  sorry
+
+/-- **Leaf.**  Away from `y` and `inv y`, the corner map is injective. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_inj
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (k l : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length)
+    (hk₁ : (k : ℕ) ≠ α₁.length)
+    (hk₂ : (k : ℕ) ≠ α₁.length + 1 + α₂.length + β₁.length)
+    (hl₁ : (l : ℕ) ≠ α₁.length)
+    (hl₂ : (l : ℕ) ≠ α₁.length + 1 + α₂.length + β₁.length)
+    (h : orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k = orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c l) : k = l := by
+  sorry
+
+/-- **Leaf.**  Away from `y` and `inv y`, the end of an old arc and the end of
+its image are one new vertex.  They are equal except at the end of `α₂`
+(new `c⁻¹`-start against the start of `β₁`) and the end of `β₂` (new `c`-start
+against the end of `c⁻¹`): the `c` pairing joins them (`orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_opposite`). -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_rot
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (k : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length)
+    (hk₁ : (k : ℕ) ≠ α₁.length)
+    (hk₂ : (k : ℕ) ≠ α₁.length + 1 + α₂.length + β₁.length) :
+    Relation.EqvGen
+      (orientablePairing_normalForm_aux_WordCornerRel
+        (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
+      (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c (finRotate _ k))
+      (finRotate _ (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k)) := by
+  sorry
+
+/-- **Leaf.**  The two old steps of the `y` pairing (signs differ) map to new
+vertices: start of `y` with end of `inv y`, end of `y` with start of `inv y`. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_ypair
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (k l : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length)
+    (hk : (k : ℕ) = α₁.length)
+    (hl : (l : ℕ) = α₁.length + 1 + α₂.length + β₁.length) :
+    Relation.EqvGen
+        (orientablePairing_normalForm_aux_WordCornerRel
+          (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
+        (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k)
+        (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c (finRotate _ l)) ∧
+      Relation.EqvGen
+        (orientablePairing_normalForm_aux_WordCornerRel
+          (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
+        (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c (finRotate _ k))
+        (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c l) := by
+  sorry
+
+/-- **Leaf.**  Every new corner is one vertex with the image of an old corner:
+the image misses only the starts of `c⁻¹` and `c`, which the `c` pairing joins
+to the ends of `c` and `c⁻¹` (`orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_opposite`). -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (b : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) :
+    ∃ a, Relation.EqvGen
+      (orientablePairing_normalForm_aux_WordCornerRel
+        (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
+      (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c a) b := by
+  sorry
+
+/-- Each old corner step maps to a new chain. -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_step
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (hy : y.1 ∉ α₁.map Prod.fst ∧ y.1 ∉ α₂.map Prod.fst ∧
+      y.1 ∉ β₁.map Prod.fst ∧ y.1 ∉ β₂.map Prod.fst)
+    (a b : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length)
+    (hab : orientablePairing_normalForm_aux_WordCornerRel
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂) a b) :
+    Relation.EqvGen
+      (orientablePairing_normalForm_aux_WordCornerRel
+        (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
+      (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c a) (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c b) := by
+  set W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂ with hW
+  set N := α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁ with hN
+  set F := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c with hF
+  set Y := α₁.length
+  set Yb := α₁.length + 1 + α₂.length + β₁.length
+  have hlab := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_label α₁ α₂ β₁ β₂ y hy
+  have hgetY := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_getY α₁ α₂ β₁ β₂ y
+  rcases hab with ⟨i, j, hij, hl, h⟩
+  by_cases hiy : (i : ℕ) = Y ∨ (i : ℕ) = Yb
+  · -- the `y` pairing: `{i, j} = {Y, Yb}` and the signs differ
+    have hjy : (j : ℕ) = Y ∨ (j : ℕ) = Yb := (hlab j).mp (hl ▸ (hlab i).mpr hiy)
+    have hYYb : Y ≠ Yb := by omega
+    have hs : (W.get i).2 ≠ (W.get j).2 := by
+      rcases hiy with hi | hi <;> rcases hjy with hj | hj
+      · exact absurd (Fin.ext (hi.trans hj.symm)) hij
+      · rw [(hgetY i).1 hi, (hgetY j).2 hj]; simp [PolygonMoves.inv]
+      · rw [(hgetY i).2 hi, (hgetY j).1 hj]; simp [PolygonMoves.inv]
+      · exact absurd (Fin.ext (hi.trans hj.symm)) hij
+    rw [if_neg hs] at h
+    rcases hiy with hi | hi <;> rcases hjy with hj | hj
+    · exact absurd (Fin.ext (hi.trans hj.symm)) hij
+    · have hp := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_ypair α₁ α₂ β₁ β₂ y c i j hi hj
+      rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+      · exact hp.1
+      · exact hp.2
+    · have hp := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_ypair α₁ α₂ β₁ β₂ y c j i hj hi
+      rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+      · exact Relation.EqvGen.symm _ _ hp.2
+      · exact Relation.EqvGen.symm _ _ hp.1
+    · exact absurd (Fin.ext (hi.trans hj.symm)) hij
+  · -- two arcs away from `y`: the same pairing in the new word
+    have hjy : ¬ ((j : ℕ) = Y ∨ (j : ℕ) = Yb) := fun hj =>
+      hiy ((hlab i).mp (hl.trans ((hlab j).mpr hj)))
+    push_neg at hiy hjy
+    have hgi := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_get α₁ α₂ β₁ β₂ y c i hiy.1 hiy.2
+    have hgj := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_get α₁ α₂ β₁ β₂ y c j hjy.1 hjy.2
+    have hne : F i ≠ F j := fun he =>
+      hij (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_inj α₁ α₂ β₁ β₂ y c i j hiy.1 hiy.2 hjy.1 hjy.2 he)
+    have hl' : (N.get (F i)).1 = (N.get (F j)).1 := by rw [hgi, hgj]; exact hl
+    have hri := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_rot α₁ α₂ β₁ β₂ y c i hiy.1 hiy.2
+    have hrj := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_rot α₁ α₂ β₁ β₂ y c j hjy.1 hjy.2
+    have hnew : ∀ a' b', (if (N.get (F i)).2 = (N.get (F j)).2 then
+          (a' = F i ∧ b' = F j) ∨ (a' = finRotate _ (F i) ∧ b' = finRotate _ (F j))
+        else (a' = F i ∧ b' = finRotate _ (F j)) ∨ (a' = finRotate _ (F i) ∧ b' = F j)) →
+        Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel N) a' b' :=
+      fun a' b' h' => Relation.EqvGen.rel _ _ ⟨F i, F j, hne, hl', h'⟩
+    by_cases hs : (W.get i).2 = (W.get j).2
+    · have hs' : (N.get (F i)).2 = (N.get (F j)).2 := by rw [hgi, hgj]; exact hs
+      rw [if_pos hs] at h
+      rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+      · exact hnew _ _ (by rw [if_pos hs']; exact Or.inl ⟨rfl, rfl⟩)
+      · exact Relation.EqvGen.trans _ _ _ hri (Relation.EqvGen.trans _ _ _
+          (hnew _ _ (by rw [if_pos hs']; exact Or.inr ⟨rfl, rfl⟩))
+          (Relation.EqvGen.symm _ _ hrj))
+    · have hs' : (N.get (F i)).2 ≠ (N.get (F j)).2 := by rw [hgi, hgj]; exact hs
+      rw [if_neg hs] at h
+      rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+      · exact Relation.EqvGen.trans _ _ _
+          (hnew _ _ (by rw [if_neg hs']; exact Or.inl ⟨rfl, rfl⟩))
+          (Relation.EqvGen.symm _ _ hrj)
+      · exact Relation.EqvGen.trans _ _ _ hri
+          (hnew _ _ (by rw [if_neg hs']; exact Or.inr ⟨rfl, rfl⟩))
+
 lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport
     (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
     (hy : y.1 ∉ α₁.map Prod.fst ∧ y.1 ∉ α₂.map Prod.fst ∧
@@ -11418,7 +11656,9 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
       (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)) :
     orientablePairing_normalForm_aux_WordOneVertex
       (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) := by
-  sorry
+  exact orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_lift _ _ (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c)
+    (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_step α₁ α₂ β₁ β₂ y c hy)
+    (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_cover α₁ α₂ β₁ β₂ y c) hv
 
 theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
     (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
