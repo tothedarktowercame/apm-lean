@@ -1542,7 +1542,109 @@ theorem standardCover_pairingData_aux_contractStep_aux_contractExists
     (s : C.Side) :
     ∃ C' : PolygonComplex,
       Nonempty (standardCover_pairingData_aux_contractStep_aux_ContractData C C' s) := by
-  sorry
+  let f0 : Fin C.faceCount := ⟨0, by omega⟩
+  have face_eq (f : Fin C.faceCount) : f = f0 := Fin.eq_of_val_eq (by omega)
+  let se : C.Side ≃ Fin (C.sides f0) :=
+    { toFun := fun t => Fin.cast (congrArg C.sides (face_eq t.1)) t.2
+      invFun := fun i => ⟨f0, i⟩
+      left_inv := by
+        rintro ⟨f, i⟩
+        have hf := face_eq f
+        cases hf
+        rfl
+      right_inv := by intro i; simp }
+  let good : Finset (Fin (C.sides f0)) :=
+    (Finset.univ.erase (se s)).erase (se (C.pair s))
+  have hps : C.pair s ≠ s := C.pair_ne s
+  have hsep : se (C.pair s) ≠ se s := fun h => hps (se.injective h)
+  letI : Unique (Fin C.faceCount) := ⟨⟨f0⟩, face_eq⟩
+  have hN : C.sides f0 = C.totalSides := by
+    rw [PolygonComplex.totalSides, Fintype.sum_unique]
+    exact congrArg C.sides (face_eq default).symm
+  have hgood : good.card + 2 = C.totalSides := by
+    rw [← hN]
+    simp [good, hps]
+    omega
+  have hgoodpos : 0 < good.card := by omega
+  let oe : Fin good.card ≃o good := good.orderIsoOfFin rfl
+  let pg : good → good := fun u =>
+    ⟨se (C.pair (se.symm u.1)), by
+      have hm := u.2
+      simp only [good, Finset.mem_erase, Finset.mem_univ, and_true] at hm ⊢
+      rcases hm with ⟨hup, hus⟩
+      constructor
+      · intro hp
+        apply hus
+        have he := C.pair.injective (se.injective hp)
+        simpa using congrArg se he
+      · intro hp
+        apply hup
+        have hp' := congrArg (fun x => se (C.pair (se.symm x))) hp
+        simpa [C.pair_pair] using hp'⟩
+  have pg_inv (u : good) : pg (pg u) = u := by
+    apply Subtype.ext
+    simp [pg, C.pair_pair]
+  let pe : Equiv.Perm good :=
+    { toFun := pg
+      invFun := pg
+      left_inv := pg_inv
+      right_inv := pg_inv }
+  let ne : (Σ _ : Fin 1, Fin good.card) ≃ good :=
+    { toFun := fun t => oe t.2
+      invFun := fun u => ⟨⟨0, Nat.zero_lt_one⟩, oe.symm u⟩
+      left_inv := by
+        intro t
+        apply Sigma.ext (Fin.eq_of_val_eq (by simp))
+        simp
+      right_inv := by intro u; simp }
+  let np : Equiv.Perm (Σ _ : Fin 1, Fin good.card) := ne.trans (pe.trans ne.symm)
+  let C' : PolygonComplex :=
+    { faceCount := 1
+      sides := fun _ => good.card
+      sides_pos := fun _ => hgoodpos
+      pair := np
+      pair_pair := by
+        intro t
+        simp [np, pe, pg, C.pair_pair]
+      pair_ne := by
+        intro t ht
+        have hp : C.pair (se.symm (ne t).1) = se.symm (ne t).1 := by
+          have := congrArg ne ht
+          have hv := congrArg Subtype.val this
+          apply se.injective
+          simpa [np, pe, pg] using hv
+        exact C.pair_ne _ hp
+      sign := fun t => C.sign (se.symm (ne t)) }
+  refine ⟨C', ⟨{
+    faceCount_eq := rfl
+    totalSides_add_two := ?_
+    toOld := fun t => se.symm (ne t)
+    toOld_injective := by
+      intro t t' h
+      apply ne.injective
+      apply Subtype.ext
+      exact se.symm.injective h
+    toOld_ne := ?_
+    toOld_surj := ?_
+    toOld_lt := ?_
+    pair_toOld := ?_
+    sign_toOld := fun _ => rfl }⟩⟩
+  · simpa [C', PolygonComplex.totalSides] using hgood
+  · intro t
+    have hm := (ne t).2
+    simp only [good, Finset.mem_erase, Finset.mem_univ, and_true] at hm
+    exact ⟨fun h => hm.2 (congrArg se h), fun h => hm.1 (congrArg se h)⟩
+  · intro u hus hup
+    have hu : se u ∈ good := by simp [good, hus, hup]
+    exact ⟨ne.symm ⟨se u, hu⟩, by simp⟩
+  · intro t t' htt
+    change (se.symm (ne t)).2.val < (se.symm (ne t')).2.val
+    change (ne t).1.val < (ne t').1.val
+    exact oe.strictMono htt
+  · intro t
+    apply se.injective
+    change (ne (np t)).1 = se (C.pair (se.symm (ne t)))
+    simp [np, pe, pg]
 
 theorem standardCover_pairingData_aux_contractStep_aux_orientable
     {C C' : PolygonComplex} {s : C.Side}
