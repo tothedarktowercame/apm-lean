@@ -6811,7 +6811,50 @@ theorem standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_co
           (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k x)
           (standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k y) ↔
         C.CornerRel x y := by
-  sorry
+  let e := standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotateSide C k
+  let C' := standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate C k
+  have he (s : C.Side) :
+      (e s).1 = s.1 ∧ (e s).2.val = (s.2.val + k) % C.sides s.1 := by
+    constructor
+    · rfl
+    · exact standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_shift_val
+        (C.sides_pos s.1) k s.2
+  have hnext (s : C.Side) : C'.nextCorner (e s) = e (C.nextCorner s) := by
+    refine Sigma.ext rfl (heq_of_eq (Fin.ext ?_))
+    simp only [C', PolygonComplex.nextCorner,
+      standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate, Fin.val_mk]
+    change (((((finRotate (C.sides s.1)) ^ k) s.2).val + 1) % C.sides s.1) =
+      (((finRotate (C.sides s.1)) ^ k)
+        ⟨(s.2.val + 1) % C.sides s.1, Nat.mod_lt _ (C.sides_pos s.1)⟩).val
+    rw [standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_shift_val
+      (C.sides_pos s.1)]
+    rw [standardCover_pairingData_aux_contractStep_aux_isolate_aux_rotate_aux_homeomorph_aux_shift_val
+      (C.sides_pos s.1)]
+    rw [Nat.mod_add_mod, Nat.mod_add_mod]
+    congr 1
+    omega
+  have hpair (s : C.Side) : C'.pair (e s) = e (C.pair s) := by
+    change (((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm.trans
+      C.pair).trans (standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k))
+      ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k) s) =
+        (standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k) (C.pair s)
+    simp only [Equiv.trans_apply, Equiv.symm_apply_apply]
+  have hsign (s : C.Side) : C'.sign (e s) = C.sign s := by
+    change C.sign ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k).symm
+      ((standardCover_pairingData_aux_contractStep_aux_isolate_aux_shift C k) s)) = _
+    rw [Equiv.symm_apply_apply]
+  refine ⟨he, hnext, ?_⟩
+  intro x y
+  change C'.CornerRel (e x) (e y) ↔ C.CornerRel x y
+  unfold PolygonComplex.CornerRel
+  constructor
+  · rintro ⟨s, hs⟩
+    obtain ⟨s, rfl⟩ := e.surjective s
+    refine ⟨s, ?_⟩
+    simpa only [hpair, hsign, hnext, Equiv.apply_eq_iff_eq] using hs
+  · rintro ⟨s, hs⟩
+    refine ⟨e s, ?_⟩
+    simpa only [hpair, hsign, hnext, Equiv.apply_eq_iff_eq] using hs
 
 /-- **Leaf (corner data along a side bijection).**  A bijection of sides that
 carries `CornerRel` exactly carries its equivalence classes: vertex counts,
