@@ -399,7 +399,18 @@ theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_t2
     (E : Type*) [TopologicalSpace E]
     (p : E → Surface true g) (hp : IsCoveringMap p) :
     T2Space E := by
-  sorry
+  let P := standardPairingData true g hg
+  letI : T2Space P.Space := P.spaceT2
+  let h : P.Space ≃ₜ Surface true g :=
+    standardPairingData_space_homeomorph true g hg
+  letI : T2Space (Surface true g) := h.t2Space
+  refine ⟨fun x y hxy ↦ ?_⟩
+  by_cases hxy' : p x = p y
+  · exact hp.isSeparatedMap x y hxy' hxy
+  · obtain ⟨u, v, hu, hv, hxu, hyv, huv⟩ := t2_separation hxy'
+    refine ⟨p ⁻¹' u, p ⁻¹' v, hu.preimage hp.continuous, hv.preimage hp.continuous,
+      hxu, hyv, ?_⟩
+    exact huv.preimage _
 
 /-- Every point of `E` lies on a lifted disk: write `p e` as the image of a
 point of the disk and apply `_aux_sidePairing_aux_fibre`. -/
