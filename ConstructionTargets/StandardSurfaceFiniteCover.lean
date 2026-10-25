@@ -2253,7 +2253,205 @@ lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_assem
     ∃ hL hR : Disk → Disk,
       standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
         p q i j hL hR := by
-  sorry
+  let L := p + q - 2
+  let P := PolygonMoves.cutPoint L 0
+  let Q := PolygonMoves.cutPoint L (p - 1)
+  have hpq : 0 < p - 1 := by omega
+  have hqL : p - 1 < L := by dsimp [L]; omega
+  have hPQ : P ≠ Q := by
+    exact PolygonMoves.cutPoint_ne hpq (by dsimp [L]; omega)
+  have hnP : ‖P‖ = 1 := PolygonMoves.cutPoint_norm _ _
+  have hnQ : ‖Q‖ = 1 := PolygonMoves.cutPoint_norm _ _
+  let βL : Circle → ℂ := fun z => PolygonMoves.cutOldA L 0 (p - 1) (ρL z)
+  let βR : Circle → ℂ := fun z => PolygonMoves.cutOldB L 0 (p - 1) (ρR z)
+  obtain ⟨cL, hcL⟩ := PolygonMoves.cutPiece_interior_nonempty hnP hnQ hPQ
+  obtain ⟨cR, hcR⟩ := PolygonMoves.cutPiece_interior_nonempty hnQ hnP hPQ.symm
+  have hrL := PolygonMoves.cutOldA_range hpq hqL
+    (PolygonMoves.cutPiece_frontier hnP hnQ hPQ) PolygonMoves.cutCross_exp
+  have hrR := PolygonMoves.cutOldB_range hpq hqL
+    (PolygonMoves.cutPiece_frontier hnQ hnP hPQ.symm) PolygonMoves.cutCross_exp
+  obtain ⟨φL, hφL⟩ := PolygonMoves.cutAndPaste_aux_boundary_chart
+    (PolygonMoves.cutPiece P Q) cL (PolygonMoves.cutPiece_convex_compact P Q).1
+    (PolygonMoves.cutPiece_convex_compact P Q).2 hcL βL
+    ((PolygonMoves.cutOldA_continuous hpq hqL).comp ρL.continuous)
+    ((PolygonMoves.cutOldA_injective hpq hqL).comp ρL.injective)
+    (by simp only [βL, Set.range_comp']; rw [ρL.surjective.range_eq, Set.image_univ]; exact hrL)
+  obtain ⟨φR, hφR⟩ := PolygonMoves.cutAndPaste_aux_boundary_chart
+    (PolygonMoves.cutPiece Q P) cR (PolygonMoves.cutPiece_convex_compact Q P).1
+    (PolygonMoves.cutPiece_convex_compact Q P).2 hcR βR
+    ((PolygonMoves.cutOldB_continuous hpq hqL).comp ρR.continuous)
+    ((PolygonMoves.cutOldB_injective hpq hqL).comp ρR.injective)
+    (by simp only [βR, Set.range_comp']; rw [ρR.surjective.range_eq, Set.image_univ]; exact hrR)
+  let fL : Disk → Disk := fun z => ⟨φL z, by
+    have hz : φL z ∈ PolygonMoves.cutPiece P Q := by
+      rw [← hφL.2.2.1]
+      exact ⟨z, z.2, rfl⟩
+    simpa [Metric.mem_closedBall, dist_zero_right] using hz.1⟩
+  let fR : Disk → Disk := fun z => ⟨φR z, by
+    have hz : φR z ∈ PolygonMoves.cutPiece Q P := by
+      rw [← hφR.2.2.1]
+      exact ⟨z, z.2, rfl⟩
+    simpa [Metric.mem_closedBall, dist_zero_right] using hz.1⟩
+  refine ⟨fL, fR, ?_⟩
+  constructor
+  · exact Continuous.subtype_mk (hφL.1.comp continuous_subtype_val) _
+  · exact Continuous.subtype_mk (hφR.1.comp continuous_subtype_val) _
+  · intro x y h
+    apply Subtype.ext
+    apply hφL.2.1 x.2 y.2
+    exact congrArg Subtype.val h
+  · intro x y h
+    apply Subtype.ext
+    apply hφR.2.1 x.2 y.2
+    exact congrArg Subtype.val h
+  · intro z
+    have hz : (z : ℂ) ∈ PolygonMoves.cutPiece P Q ∪ PolygonMoves.cutPiece Q P := by
+      rw [(PolygonMoves.cutPiece_union_disjoint P Q hPQ).1]
+      exact z.2
+    rcases hz with hz | hz
+    · rw [← hφL.2.2.1] at hz
+      rcases hz with ⟨x, hx, he⟩
+      exact Or.inl ⟨⟨x, hx⟩, Subtype.ext he⟩
+    · rw [← hφR.2.2.1] at hz
+      rcases hz with ⟨x, hx, he⟩
+      exact Or.inr ⟨⟨x, hx⟩, Subtype.ext he⟩
+  · intro x y
+    constructor
+    · intro heq
+      have hxpiece : φL x ∈ PolygonMoves.cutPiece P Q := by
+        rw [← hφL.2.2.1]; exact ⟨x, x.2, rfl⟩
+      have hypiece : φR y ∈ PolygonMoves.cutPiece Q P := by
+        rw [← hφR.2.2.1]; exact ⟨y, y.2, rfl⟩
+      have hxy : φL x = φR y := congrArg Subtype.val heq
+      have hnx : ‖(x : ℂ)‖ = 1 := by
+        have hxle : ‖(x : ℂ)‖ ≤ 1 := by
+          have hx := x.2
+          rw [Metric.mem_closedBall, dist_zero_right] at hx
+          exact hx
+        apply le_antisymm hxle
+        by_contra h
+        have hlt : ‖(x : ℂ)‖ < 1 := lt_of_not_ge h
+        have hi := hφL.2.2.2.2 x hlt
+        have : φL x ∈ interior (PolygonMoves.cutPiece P Q) ∩
+            PolygonMoves.cutPiece Q P := ⟨hi, hxy ▸ hypiece⟩
+        rw [(PolygonMoves.cutPiece_union_disjoint P Q hPQ).2] at this
+        exact this
+      have hny : ‖(y : ℂ)‖ = 1 := by
+        have hyle : ‖(y : ℂ)‖ ≤ 1 := by
+          have hy := y.2
+          rw [Metric.mem_closedBall, dist_zero_right] at hy
+          exact hy
+        apply le_antisymm hyle
+        by_contra h
+        have hlt : ‖(y : ℂ)‖ < 1 := lt_of_not_ge h
+        have hi := hφR.2.2.2.2 y hlt
+        have : φR y ∈ interior (PolygonMoves.cutPiece Q P) ∩
+            PolygonMoves.cutPiece P Q := ⟨hi, hxy ▸ hxpiece⟩
+        rw [(PolygonMoves.cutPiece_union_disjoint Q P hPQ.symm).2] at this
+        exact this
+      let zx : Circle := ⟨x, by simpa [Circle, Submonoid.unitSphere] using hnx⟩
+      let zy : Circle := ⟨y, by simpa [Circle, Submonoid.unitSphere] using hny⟩
+      have hbx : φL x = βL zx := by simpa [zx] using hφL.2.2.2.1 zx
+      have hby : φR y = βR zy := by simpa [zy] using hφR.2.2.2.1 zy
+      have hfront : φL x ∈ frontier (PolygonMoves.cutPiece P Q) := by
+        rw [← hrL]; exact ⟨ρL zx, by simpa [βL] using hbx.symm⟩
+      rw [PolygonMoves.cutPiece_frontier hnP hnQ hPQ] at hfront
+      have hseg : φL x ∈ segment ℝ P Q := by
+        rcases hfront with hc | hs
+        · have hb := hypiece
+          change ‖φR y‖ ≤ 1 ∧
+            PolygonMoves.cutCross (P - Q) (φR y - Q) ≤ 0 at hb
+          have hcross := PolygonMoves.cutPiece_union_disjoint_aux_cross P Q (φL x)
+          rw [← hxy] at hb
+          have hz : PolygonMoves.cutCross (Q - P) (φL x - P) = 0 := by
+            linarith [hc.2, hb.2, hcross]
+          exact (PolygonMoves.cutPiece_frontier_aux_chord hnP hnQ hPQ
+            (PolygonMoves.cutPiece_frontier_aux_line hPQ)).mp ⟨hc.1.le, hz⟩
+        · exact hs
+      rcases hseg with ⟨a, b, ha, hb, hab, hval⟩
+      let t : Set.Icc (0 : ℝ) 1 := ⟨a, by constructor <;> linarith⟩
+      have hchA : φL x = PolygonMoves.cutChordA L 0 (p - 1) t := by
+        rw [← hval]
+        simp [PolygonMoves.cutChordA, t, P, Q, smul_eq_mul]
+        have habC : (a : ℂ) + (b : ℂ) = 1 := by exact_mod_cast hab
+        linear_combination habC * Q
+      obtain ⟨hA, -, hB⟩ := PolygonMoves.cutBoundary_old_fields hpq hqL
+      have hxrho : ρL zx = PolygonMoves.cutChordParamA L 0 (p - 1) t := by
+        apply PolygonMoves.cutOldA_injective hpq hqL
+        rw [hA]
+        simpa [βL] using hbx.symm.trans hchA
+      have hyt : ρR zy = PolygonMoves.cutChordParamB L 0 (p - 1) (reverseIcc t) := by
+        apply PolygonMoves.cutOldB_injective hpq hqL
+        rw [hB]
+        calc
+          PolygonMoves.cutOldB L 0 (p - 1) (ρR zy) = φR y := hby.symm
+          _ = φL x := hxy.symm
+          _ = PolygonMoves.cutChordA L 0 (p - 1) t := hchA
+          _ = PolygonMoves.cutChordB L 0 (p - 1) (reverseIcc t) :=
+            PolygonMoves.cut_retransfer_consistency_aux_chords t
+      refine ⟨t, ?_, ?_⟩
+      ·
+        have := ρL.injective (hxrho.trans (hLchord t).symm)
+        have hv := congrArg (fun z : Circle => (z : ℂ)) this
+        apply Subtype.ext
+        exact hv
+      ·
+        have := ρR.injective (hyt.trans (hRchord (reverseIcc t)).symm)
+        have hv := congrArg (fun z : Circle => (z : ℂ)) this
+        apply Subtype.ext
+        exact hv
+    · rintro ⟨t, rfl, rfl⟩
+      apply Subtype.ext
+      change φL _ = φR _
+      let zL : Circle := ⟨edgePoint p i t,
+        by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint p i t⟩
+      let zR : Circle := ⟨edgePoint q j (reverseIcc t),
+        by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint q j (reverseIcc t)⟩
+      have hbL := hφL.2.2.2.1 zL
+      have hbR := hφR.2.2.2.1 zR
+      change φL (edgePoint p i t) = βL zL at hbL
+      change φR (edgePoint q j (reverseIcc t)) = βR zR at hbR
+      rw [hbL, hbR]
+      dsimp [βL, βR]
+      rw [hLchord, hRchord]
+      obtain ⟨hA, -, hB⟩ := PolygonMoves.cutBoundary_old_fields hpq hqL
+      rw [hA, hB, PolygonMoves.cut_retransfer_consistency_aux_chords]
+      congr 2
+  · intro m hm t
+    apply Subtype.ext
+    change φL _ = _
+    let z : Circle := ⟨edgePoint p ((i + 1 + m) % p) t,
+      by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint p ((i + 1 + m) % p) t⟩
+    have hb := hφL.2.2.2.1 z
+    change φL (edgePoint p ((i + 1 + m) % p) t) = βL z at hb
+    rw [hb]
+    dsimp [βL]
+    rw [hLedge m hm]
+    exact PolygonMoves.cutBoundaryData_concrete_aux_oldA_arc t hpq hqL (by omega) (by omega)
+  · intro m hm1 hm2 t
+    apply Subtype.ext
+    change φR _ = _
+    let z : Circle := ⟨edgePoint q ((j + 1 + (m + 1 - p)) % q) t,
+      by simpa [Circle, Submonoid.unitSphere] using
+        norm_edgePoint q ((j + 1 + (m + 1 - p)) % q) t⟩
+    have hb := hφR.2.2.2.1 z
+    change φR (edgePoint q ((j + 1 + (m + 1 - p)) % q) t) = βR z at hb
+    rw [hb]
+    dsimp [βR]
+    let k := m + 1 - p
+    have hk : k + 1 < q := by dsimp [k]; omega
+    rw [hRedge k hk]
+    obtain ⟨-, hB, -⟩ := PolygonMoves.cutBoundary_old_fields hpq hqL
+    rw [show p - 1 + k = m by dsimp [k]; omega]
+    exact hB m t (Or.inl ⟨by omega, by simpa [L] using hm2⟩)
+  · intro x hx
+    have hi := hφL.2.2.2.2 x hx
+    rw [PolygonMoves.cutPiece_frontier_aux_interior hPQ] at hi
+    exact hi.1
+  · intro y hy
+    have hi := hφR.2.2.2.2 y hy
+    rw [PolygonMoves.cutPiece_frontier_aux_interior hPQ.symm] at hi
+    exact hi.1
 
 /-- The half charts exist (assembly of `_aux_reparamL`, `_aux_reparamR` and
 `_aux_assemble`). -/
