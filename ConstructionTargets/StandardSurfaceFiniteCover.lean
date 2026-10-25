@@ -13277,7 +13277,120 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
         (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
       (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c (finRotate _ k))
       (finRotate _ (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k)) := by
-  sorry
+  classical
+  let N := α₁.length + α₂.length + β₁.length + β₂.length + 2
+  have hkraw := k.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hkraw
+  have hklt : (k : ℕ) < N := by dsimp [N]; omega
+  have hN : 0 < N := by dsimp [N]; omega
+  have rotval : ∀ {m : ℕ} (x : Fin m),
+      ((finRotate m x : Fin m) : ℕ) = if (x : ℕ) + 1 = m then 0 else (x : ℕ) + 1 := by
+    intro m x
+    cases m with
+    | zero => exact Fin.elim0 x
+    | succ n =>
+      rw [coe_finRotate]
+      simp only [Fin.ext_iff, Fin.val_last]
+      split_ifs <;> omega
+  by_cases ha : (k : ℕ) = α₁.length + α₂.length
+  · have hα₂ : 0 < α₂.length := by omega
+    let i : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+      ⟨α₂.length, by simp⟩
+    let j : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+      ⟨α₂.length + 1 + α₁.length + β₂.length, by simp; omega⟩
+    have hop := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_opposite
+      (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) i j
+      (by intro h; have := congrArg Fin.val h; dsimp [i, j] at this; omega)
+      (by
+        have hi : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i = PolygonMoves.inv c := by
+          simp [i, List.get_eq_getElem, List.getElem_append]
+        have hj : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j = c := by
+          rw [List.get_eq_getElem]
+          simp [j, List.getElem_append, Nat.add_assoc]
+          simp [Nat.add_comm, List.getElem_append]
+        change ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 =
+          ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1
+        rw [hi, hj]
+        simp [PolygonMoves.inv])
+      (by
+        have hi : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i = PolygonMoves.inv c := by
+          simp [i, List.get_eq_getElem, List.getElem_append]
+        have hj : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j = c := by
+          rw [List.get_eq_getElem]
+          simp [j, List.getElem_append, Nat.add_assoc]
+          simp [Nat.add_comm, List.getElem_append]
+        change ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 ≠
+          ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2
+        rw [hi, hj]
+        simp [PolygonMoves.inv])
+    have he₁ : orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c (finRotate _ k) = finRotate _ j := by
+      apply Fin.ext
+      simp [orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map,
+        orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat,
+        rotval, N, i, j]
+      split_ifs <;> omega
+    have he₂ : finRotate _ (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k) = i := by
+      apply Fin.ext
+      simp [orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map,
+        orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat,
+        rotval, N, i]
+      split_ifs <;> omega
+    rw [he₁, he₂]
+    exact Relation.EqvGen.symm _ _ hop.1
+  · by_cases hb : (k : ℕ) + 1 = N
+    · let i : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+        ⟨α₂.length, by simp⟩
+      let j : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+        ⟨α₂.length + 1 + α₁.length + β₂.length, by simp; omega⟩
+      have hop := orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_opposite
+        (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) i j
+        (by intro h; have := congrArg Fin.val h; dsimp [i, j] at this; omega)
+        (by
+          have hi : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i = PolygonMoves.inv c := by
+            simp [i, List.get_eq_getElem, List.getElem_append]
+          have hj : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j = c := by
+            rw [List.get_eq_getElem]
+            simp [j, List.getElem_append, Nat.add_assoc]
+            simp [Nat.add_comm, List.getElem_append]
+          change ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 =
+            ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1
+          rw [hi, hj]
+          simp [PolygonMoves.inv])
+        (by
+          have hi : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i = PolygonMoves.inv c := by
+            simp [i, List.get_eq_getElem, List.getElem_append]
+          have hj : (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j = c := by
+            rw [List.get_eq_getElem]
+            simp [j, List.getElem_append, Nat.add_assoc]
+            simp [Nat.add_comm, List.getElem_append]
+          change ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 ≠
+            ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2
+          rw [hi, hj]
+          simp [PolygonMoves.inv])
+      have he₁ : orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c (finRotate _ k) = finRotate _ i := by
+        apply Fin.ext
+        simp [orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map,
+          orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat,
+          rotval, N, i]
+        split_ifs <;> omega
+      have he₂ : finRotate _ (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k) = j := by
+        apply Fin.ext
+        simp [orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map,
+          orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat,
+          rotval, N, j]
+        split_ifs <;> omega
+      rw [he₁, he₂]
+      exact hop.2
+    · have he :
+          orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c (finRotate _ k) =
+            finRotate _ (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k) := by
+        apply Fin.ext
+        simp [orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map,
+          orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat,
+          rotval, N]
+        split_ifs <;> omega
+      rw [he]
+      exact Relation.EqvGen.refl _
 
 /-- **Leaf.**  The two old steps of the `y` pairing (signs differ) map to new
 vertices: start of `y` with end of `inv y`, end of `y` with start of `inv y`. -/
