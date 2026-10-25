@@ -4912,6 +4912,34 @@ in `C'`.  Finally `inv c_1 = inv (nextCorner (C.pair s)) = inv (C.pair s)` and
 `inv c_m = inv s` (`_aux_inv_removed`).  When `m = 1` the chain is empty and
 the two ends are equal by the same rewrites. -/
 -- BEGIN SEAT AREA
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_junction_aux_next_injective
+    (C : PolygonComplex) (h1 : C.faceCount = 1) :
+    Function.Injective C.nextCorner := by
+  intro u v huv
+  have hf : u.1 = v.1 := by
+    apply Fin.eq_of_val_eq
+    omega
+  apply Sigma.ext hf
+  apply (Fin.heq_ext_iff (congrArg C.sides hf)).2
+  have hv := congrArg (fun w : C.Side => w.2.val) huv
+  simp only [PolygonComplex.nextCorner] at hv
+  have hsizes : C.sides u.1 = C.sides v.1 := congrArg C.sides hf
+  by_cases hu : u.2.val + 1 < C.sides u.1
+  · rw [Nat.mod_eq_of_lt hu] at hv
+    by_cases hv' : v.2.val + 1 < C.sides v.1
+    · rw [Nat.mod_eq_of_lt hv'] at hv
+      omega
+    · have heq : v.2.val + 1 = C.sides v.1 := by omega
+      rw [heq, Nat.mod_self] at hv
+      omega
+  · have heq : u.2.val + 1 = C.sides u.1 := by omega
+    rw [heq, Nat.mod_self] at hv
+    by_cases hv' : v.2.val + 1 < C.sides v.1
+    · rw [Nat.mod_eq_of_lt hv'] at hv
+      omega
+    · have heq' : v.2.val + 1 = C.sides v.1 := by omega
+      omega
+
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_junction
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
@@ -4923,7 +4951,69 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_
       (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv D s)
       (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv
         D (C.pair s)) := by
-  sorry
+  let rho : C.Side → C.Side := fun a => C.nextCorner (C.pair a)
+  have hpinj : Function.Injective C.pair := by
+    intro a b h
+    rw [← C.pair_pair a, h, C.pair_pair]
+  have hrho : Function.Injective rho :=
+    (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_junction_aux_next_injective C h1).comp
+      hpinj
+  have hper : s ∈ Function.periodicPts rho := hrho.mem_periodicPts s
+  let m := Function.minimalPeriod rho s
+  have hm : 0 < m := Function.minimalPeriod_pos_of_mem_periodicPts hper
+  have hmfix : rho^[m] s = s := Function.isPeriodicPt_minimalPeriod rho s
+  have hpair : ∀ k, rho^[k] s ≠ C.pair s := by
+    intro k
+    have hchain : Relation.EqvGen C.CornerRel s (rho^[k] s) := by
+      induction k with
+      | zero => exact Relation.EqvGen.refl _
+      | succ k ih =>
+          rw [Function.iterate_succ_apply']
+          exact ih.trans _ _ _ (Relation.EqvGen.rel _ _
+            (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_rho hor _))
+    intro hk
+    apply hs
+    apply Quotient.sound
+    rw [hk] at hchain
+    exact hchain.trans _ _ _
+      (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_cutRel s hor).2.symm
+  have hstep : ∀ k, 0 < k → k < m →
+      Relation.EqvGen C'.CornerRel
+        (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv D (rho^[k] s))
+        (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv D (rho^[k+1] s)) := by
+    intro k hk0 hkm
+    have hne : rho^[k] s ≠ s := by
+      intro he
+      have hp : Function.IsPeriodicPt rho k s := he
+      exact hk0.ne' (Function.IsPeriodicPt.eq_zero_of_lt_minimalPeriod hp hkm)
+    obtain ⟨t, ht⟩ := D.toOld_surj _ hne (hpair k)
+    have hi := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_toOld D t
+    have hn := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_next D h1 (C'.pair t)
+    have hrel := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_rho
+      (standardCover_pairingData_aux_contractStep_aux_orientable D hor) t
+    have heq : rho (D.toOld t) = C.nextCorner (D.toOld (C'.pair t)) := by
+      simp only [rho, D.pair_toOld]
+    rw [Function.iterate_succ_apply', ← ht, hi, heq, hn]
+    exact Relation.EqvGen.rel _ _ hrel
+  have hchain : ∀ k, 0 < k → k ≤ m →
+      Relation.EqvGen C'.CornerRel
+        (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv D (rho^[1] s))
+        (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv D (rho^[k] s)) := by
+    intro k hk0 hkm
+    induction k using Nat.case_strong_induction_on with
+    | hz => omega
+    | hi k ih =>
+      by_cases hk : k = 0
+      · subst k; exact Relation.EqvGen.refl _
+      · exact (ih k (by omega) (by omega) (by omega)).trans _ _ _
+          (hstep k (by omega) (by omega))
+  have hc := hchain m (by exact hm) (le_refl m)
+  rw [hmfix] at hc
+  have hsrem := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_removed D h1 h5 (u := s) (Or.inl rfl)
+  have hprem := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel_aux_reflect_aux_inv_removed D h1 h5 (u := C.pair s) (Or.inr rfl)
+  simp only [Function.iterate_one, rho] at hc
+  rw [← hprem] at hc
+  exact hc.symm
 -- END SEAT AREA
 
 /-- Every corner `c` and `ρ c = nextCorner (pair c)` go to `C'`-equivalent
