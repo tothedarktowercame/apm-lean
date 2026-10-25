@@ -1156,6 +1156,11 @@ counts, the sides of `C'` correspond to the sides of `C` other than `s` and
 `C.pair s`: unmerged faces keep their sides, and the merged face walks round
 `s.1` from just after `s`, then round `(C.pair s).1` from just after
 `C.pair s`. -/
+theorem standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_sideEquiv_aux_length
+    (a b n : ℕ) (ha : 0 < a) (hb : 0 < b) (h : n + 2 = a + b) :
+    n = (a - 1) + (b - 1) := by
+  omega
+
 theorem standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_sideEquiv
     (C : PolygonComplex) (s : C.Side) (hs : s.1 ≠ (C.pair s).1)
     {m : ℕ} (old : Fin m → Fin C.faceCount) (merged : Fin m)
@@ -1175,7 +1180,149 @@ theorem standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_sideEquiv
             if j.val + 1 < C.sides s.1 then (s.2.val + 1 + j.val) % C.sides s.1
             else ((C.pair s).2.val + 1 + (j.val + 1 - C.sides s.1)) %
               C.sides (C.pair s).1) := by
-  sorry
+  classical
+  obtain ⟨i, si⟩ := s
+  obtain ⟨j, sj, hq⟩ : ∃ j sj, C.pair ⟨i, si⟩ = ⟨j, sj⟩ := ⟨_, _, rfl⟩
+  simp only [hq] at hs old_ne old_surj sides_merged ⊢
+  dsimp only at hs old_merged sides_merged ⊢
+  obtain ⟨ea, hea⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_cyclic (C.sides i) si
+  obtain ⟨eb, heb⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_cyclic (C.sides j) sj
+  have ha : 0 < C.sides i := C.sides_pos i
+  have hb : 0 < C.sides j := C.sides_pos j
+  have hlen : sides' merged = (C.sides i - 1) + (C.sides j - 1) :=
+    standardCover_pairingData_aux_glueStep_aux_mergeExists_aux_sideEquiv_aux_length
+      _ _ _ ha hb sides_merged
+  have lt1 : ∀ t : Σ k : Fin m, Fin (sides' k), t.1 = merged →
+      t.2.val < (C.sides i - 1) + (C.sides j - 1) := by
+    rintro ⟨k, x⟩ hk
+    dsimp only at hk ⊢
+    subst hk
+    exact hlen ▸ x.isLt
+  have lt3 : ∀ t : Σ k : Fin m, Fin (sides' k), t.1 ≠ merged →
+      t.2.val < C.sides (old t.1) := by
+    rintro ⟨k, x⟩ hk
+    exact sides_old k hk ▸ x.isLt
+  let F : (Σ k : Fin m, Fin (sides' k)) → C.Side := fun t =>
+    if hk : t.1 = merged then
+      if hj : t.2.val + 1 < C.sides i then
+        ⟨i, (ea ⟨t.2.val, by omega⟩).1⟩
+      else
+        ⟨j, (eb ⟨t.2.val + 1 - C.sides i, by have := lt1 t hk; omega⟩).1⟩
+    else ⟨old t.1, ⟨t.2.val, lt3 t hk⟩⟩
+  have F_old : ∀ t, (ht : t.1 ≠ merged) → F t = ⟨old t.1, ⟨t.2.val, lt3 t ht⟩⟩ :=
+    fun t ht => dif_neg ht
+  have F_lo : ∀ x : Fin (sides' merged), (hx : x.val + 1 < C.sides i) →
+      F ⟨merged, x⟩ = ⟨i, (ea ⟨x.val, by omega⟩).1⟩ :=
+    fun x hx => by simp only [F, dif_pos rfl, dif_pos hx]
+  have F_hi : ∀ x : Fin (sides' merged), (hx : ¬ x.val + 1 < C.sides i) →
+      F ⟨merged, x⟩ = ⟨j, (eb ⟨x.val + 1 - C.sides i, by
+        have := lt1 ⟨merged, x⟩ rfl; dsimp only at this; omega⟩).1⟩ :=
+    fun x hx => by simp only [F, dif_pos rfl, dif_neg hx]
+  have F_ne : ∀ t, F t ≠ ⟨i, si⟩ ∧ F t ≠ ⟨j, sj⟩ := by
+    rintro ⟨k, x⟩
+    by_cases hk : k = merged
+    · subst hk
+      by_cases hx : x.val + 1 < C.sides i
+      · rw [F_lo x hx]
+        exact ⟨fun h => (ea _).2 (eq_of_heq (Sigma.mk.inj_iff.1 h).2),
+          fun h => hs (Sigma.mk.inj_iff.1 h).1⟩
+      · rw [F_hi x hx]
+        exact ⟨fun h => hs (Sigma.mk.inj_iff.1 h).1.symm,
+          fun h => (eb _).2 (eq_of_heq (Sigma.mk.inj_iff.1 h).2)⟩
+    · rw [F_old _ hk]
+      exact ⟨fun h => hk (old_injective ((Sigma.mk.inj_iff.1 h).1.trans old_merged.symm)),
+        fun h => old_ne k (Sigma.mk.inj_iff.1 h).1⟩
+  have F_inj : Function.Injective F := by
+    rintro ⟨k, x⟩ ⟨k', y⟩ hxy
+    by_cases hk : k = merged <;> by_cases hk' : k' = merged
+    · subst hk; subst hk'
+      have hval : x.val = y.val := by
+        by_cases hx : x.val + 1 < C.sides i <;> by_cases hy : y.val + 1 < C.sides i
+        · rw [F_lo x hx, F_lo y hy] at hxy
+          have := ea.injective (Subtype.ext (eq_of_heq (Sigma.mk.inj_iff.1 hxy).2))
+          exact congrArg (fun z : Fin (C.sides i - 1) => z.val) this
+        · rw [F_lo x hx, F_hi y hy] at hxy
+          exact absurd (Sigma.mk.inj_iff.1 hxy).1 hs
+        · rw [F_hi x hx, F_lo y hy] at hxy
+          exact absurd (Sigma.mk.inj_iff.1 hxy).1.symm hs
+        · rw [F_hi x hx, F_hi y hy] at hxy
+          have := eb.injective (Subtype.ext (eq_of_heq (Sigma.mk.inj_iff.1 hxy).2))
+          have := congrArg Fin.val this
+          dsimp only at this
+          omega
+      exact congrArg (Sigma.mk _) (Fin.ext hval)
+    · subst hk
+      exfalso
+      rw [F_old ⟨k', y⟩ hk'] at hxy
+      by_cases hx : x.val + 1 < C.sides i
+      · rw [F_lo x hx] at hxy
+        exact hk' (old_injective ((Sigma.mk.inj_iff.1 hxy).1.symm.trans old_merged.symm))
+      · rw [F_hi x hx] at hxy
+        exact old_ne k' (Sigma.mk.inj_iff.1 hxy).1.symm
+    · subst hk'
+      exfalso
+      rw [F_old ⟨k, x⟩ hk] at hxy
+      by_cases hy : y.val + 1 < C.sides i
+      · rw [F_lo y hy] at hxy
+        exact hk (old_injective ((Sigma.mk.inj_iff.1 hxy).1.trans old_merged.symm))
+      · rw [F_hi y hy] at hxy
+        exact old_ne k (Sigma.mk.inj_iff.1 hxy).1
+    · rw [F_old ⟨k, x⟩ hk, F_old ⟨k', y⟩ hk'] at hxy
+      obtain ⟨h1, h2⟩ := Sigma.mk.inj_iff.1 hxy
+      have hkk := old_injective h1
+      dsimp only at hkk
+      subst hkk
+      have := congrArg Fin.val (eq_of_heq h2)
+      exact congrArg (Sigma.mk _) (Fin.ext this)
+  have F_surj : ∀ u : C.Side, u ≠ ⟨i, si⟩ → u ≠ ⟨j, sj⟩ → ∃ t, F t = u := by
+    rintro ⟨k, x⟩ hu1 hu2
+    by_cases hki : k = i
+    · subst hki
+      obtain ⟨y, hy⟩ := ea.surjective ⟨x, fun h => hu1 (h ▸ rfl)⟩
+      have hy1 : y.val + 1 < C.sides k := by have := y.isLt; omega
+      refine ⟨⟨merged, ⟨y.val, by rw [hlen]; have := y.isLt; omega⟩⟩, ?_⟩
+      rw [F_lo _ hy1]
+      simp only [Fin.eta, hy]
+    · by_cases hkj : k = j
+      · subst hkj
+        obtain ⟨y, hy⟩ := eb.surjective ⟨x, fun h => hu2 (h ▸ rfl)⟩
+        have hy0 := y.isLt
+        refine ⟨⟨merged, ⟨(C.sides i - 1) + y.val, by rw [hlen]; omega⟩⟩, ?_⟩
+        have hn : ¬ (C.sides i - 1 + y.val) + 1 < C.sides i := by omega
+        rw [F_hi _ hn]
+        dsimp only
+        have : (⟨C.sides i - 1 + y.val + 1 - C.sides i, by omega⟩ : Fin (C.sides k - 1)) = y :=
+          Fin.ext (by dsimp only; omega)
+        rw [this, hy]
+      · obtain ⟨k', hk'⟩ := old_surj k hkj
+        have hkm : k' ≠ merged := by
+          intro h; subst h; exact hki (hk'.symm.trans old_merged)
+        subst hk'
+        refine ⟨⟨k', ⟨x.val, by rw [sides_old k' hkm]; exact x.isLt⟩⟩, ?_⟩
+        rw [F_old _ hkm]
+  let f : (Σ k : Fin m, Fin (sides' k)) → {u : C.Side // u ≠ ⟨i, si⟩ ∧ u ≠ ⟨j, sj⟩} :=
+    fun t => ⟨F t, F_ne t⟩
+  have hf : Function.Bijective f := by
+    refine ⟨fun x y h => F_inj (congrArg Subtype.val h), fun u => ?_⟩
+    obtain ⟨t, ht⟩ := F_surj u.1 u.2.1 u.2.2
+    exact ⟨t, Subtype.ext ht⟩
+  refine ⟨(Equiv.ofBijective f hf).trans
+    (Equiv.subtypeEquivRight (fun u => by rw [hq])), ?_, ?_⟩
+  · intro t ht
+    change (F t).1 = old t.1 ∧ (F t).2.val = t.2.val
+    rw [F_old t ht]
+    exact ⟨rfl, rfl⟩
+  · intro x
+    change (F ⟨merged, x⟩).1 = _ ∧ (F ⟨merged, x⟩).2.val = _
+    by_cases hx : x.val + 1 < C.sides i
+    · rw [F_lo x hx, if_pos hx, if_pos hx]
+      exact ⟨rfl, hea _⟩
+    · rw [F_hi x hx, if_neg hx, if_neg hx]
+      refine ⟨rfl, ?_⟩
+      rw [hq]
+      exact heb _
 
 /-- Split by claude-14 (2026-10-25) after lemma-1's PARTIAL: the faces of `C'`
 are `Fin.succAbove (C.pair s).1`, the side correspondence is
