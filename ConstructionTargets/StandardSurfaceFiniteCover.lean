@@ -1870,7 +1870,28 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merg
     (m : Fin (C'.sides D.merged)) (hm : m.val + 2 = C.sides s.1)
     (hb : C.sides (C.pair s).1 = 1) :
     D.toOld (C'.nextCorner ⟨D.merged, m⟩) = C.nextCorner s := by
-  sorry
+  have hsize := D.sides_merged
+  have hnpos : 0 < C'.sides D.merged := by omega
+  have hm_last : m.val + 1 = C'.sides D.merged := by omega
+  have hnextval : (m.val + 1) % C'.sides D.merged = 0 := by
+    rw [hm_last, Nat.mod_self]
+  let z : Fin (C'.sides D.merged) := ⟨0, hnpos⟩
+  have hn : C'.nextCorner ⟨D.merged, m⟩ = ⟨D.merged, z⟩ := by
+    apply Sigma.ext
+    · rfl
+    apply (Fin.heq_ext_iff rfl).2
+    simpa [z, PolygonComplex.nextCorner] using hnextval
+  rw [hn]
+  have hfst := D.toOld_merged_fst z
+  have hval := D.toOld_merged_val z
+  dsimp only [z] at hfst hval
+  have hsides : 1 < C.sides s.1 := by omega
+  rw [if_pos hsides] at hfst hval
+  apply Sigma.ext
+  · simpa [PolygonComplex.nextCorner] using hfst
+  apply (Fin.heq_ext_iff (congrArg C.sides (by
+    simpa [PolygonComplex.nextCorner] using hfst))).2
+  simpa [PolygonComplex.nextCorner] using hval
 
 /-- **Leaf.**  `m + 2 = C.sides s.1` and `C.sides (C.pair s).1 ≥ 2`: `m + 1`
 does not wrap and is the first merged side from `(C.pair s).1`, side
