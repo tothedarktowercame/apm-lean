@@ -9466,11 +9466,23 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_orientable
 /-- **Leaf.**  Rotating a word shifts every corner by `u.length` (mod the
 length) and every `WordCornerRel` step with it. -/
 -- BEGIN SEAT AREA
+theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation_aux_one
+    (w : List (PolygonMoves.Signed ℕ))
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
+    orientablePairing_normalForm_aux_WordOneVertex (w.rotate 1) := by
+  sorry
+
 theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation_aux
     (w : List (PolygonMoves.Signed ℕ)) (n : ℕ)
     (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
     orientablePairing_normalForm_aux_WordOneVertex (w.rotate n) := by
-  sorry
+  induction n with
+  | zero => simpa using hv
+  | succ n ih =>
+      rw [← List.rotate_rotate w n 1]
+      exact
+        orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation_aux_one
+          (w.rotate n) ih
 -- END SEAT AREA
 
 theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation
