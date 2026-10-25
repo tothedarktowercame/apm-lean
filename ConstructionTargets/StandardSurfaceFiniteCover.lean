@@ -3786,7 +3786,78 @@ lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_sk
         ((f j).val = ((f i).val + 2) % n ∨
           (((f i).val + 2) % n = a ∨ ((f i).val + 2) % n = b) ∧
             (f j).val = ((f i).val + 3) % n) := by
-  sorry
+  intro j
+  have hmono {p q : Fin m} (hpq : p.val ≤ q.val) : (f p).val ≤ (f q).val := by
+    rcases lt_or_eq_of_le hpq with h | h
+    · exact Nat.le_of_lt (hf p q h)
+    · rw [Fin.ext h]
+  have hyn := (f j).isLt
+  have hxn := (f i).isLt
+  obtain ⟨hya, hyb⟩ := hne j
+  have hmod (d : ℕ) (hd : d ≤ 3) : ((f i).val + d) % n =
+      if (f i).val + d < n then (f i).val + d else (f i).val + d - n := by
+    split_ifs with h
+    · exact Nat.mod_eq_of_lt h
+    · rw [Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
+  have h1 := hmod 1 (by omega)
+  have h2 := hmod 2 (by omega)
+  have h3 := hmod 3 (by omega)
+  by_cases hi : i.val + 1 < m
+  · have hj : j.val = i.val + 1 := Nat.mod_eq_of_lt hi
+    have hxy : (f i).val < (f j).val := hf i j (by omega)
+    have hgapz {z : ℕ} (hz1 : (f i).val < z) (hz2 : z < (f j).val) : z = a ∨ z = b := by
+      by_contra hzab
+      push_neg at hzab
+      obtain ⟨k, hk⟩ := hsurj z (by omega) hzab.1 hzab.2
+      by_cases hki : k.val ≤ i.val
+      · have := hmono hki; omega
+      · have := hmono (show j.val ≤ k.val by omega); omega
+    by_cases g1 : (f j).val = (f i).val + 1
+    · left; split_ifs at h1 <;> omega
+    · have r1 := hgapz (z := (f i).val + 1) (by omega) (by omega)
+      by_cases g2 : (f j).val = (f i).val + 2
+      · right; split_ifs at h1 h2 <;> omega
+      · have r2 := hgapz (z := (f i).val + 2) (by omega) (by omega)
+        have g3 : (f j).val = (f i).val + 3 := by
+          by_contra g3
+          have r3 := hgapz (z := (f i).val + 3) (by omega) (by omega)
+          omega
+        right; split_ifs at h1 h2 h3 <;> omega
+  · have hj : j.val = 0 := by
+      show (i.val + 1) % m = 0
+      rw [show i.val + 1 = m by omega, Nat.mod_self]
+    have himax : i.val + 1 = m := by omega
+    have hhigh {z : ℕ} (hz1 : (f i).val < z) (hzn : z < n) : z = a ∨ z = b := by
+      by_contra hzab
+      push_neg at hzab
+      obtain ⟨k, hk⟩ := hsurj z hzn hzab.1 hzab.2
+      have := hmono (show k.val ≤ i.val by omega)
+      omega
+    have hlow {z : ℕ} (hz0 : z < (f j).val) : z = a ∨ z = b := by
+      by_contra hzab
+      push_neg at hzab
+      obtain ⟨k, hk⟩ := hsurj z (by omega) hzab.1 hzab.2
+      have := hmono (show j.val ≤ k.val by omega)
+      omega
+    -- the removed values are exactly those cyclically strictly between f i and f j
+    have hr (d : ℕ) (hd : 1 ≤ d) (hdn : (f i).val + d < n + (f j).val) :
+        ((f i).val + d) % n = a ∨ ((f i).val + d) % n = b := by
+      have hdl : d ≤ 3 ∨ 3 < d := by omega
+      by_cases hw : (f i).val + d < n
+      · rw [Nat.mod_eq_of_lt hw]; exact hhigh (by omega) hw
+      · rw [Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
+        exact hlow (by omega)
+    by_cases g1 : (f i).val + 1 = n + (f j).val
+    · left; split_ifs at h1 <;> omega
+    · have r1 := hr 1 le_rfl (by omega)
+      by_cases g2 : (f i).val + 2 = n + (f j).val
+      · right; split_ifs at h1 h2 <;> omega
+      · have r2 := hr 2 (by omega) (by omega)
+        have g3 : (f i).val + 3 = n + (f j).val := by
+          by_contra g3
+          have r3 := hr 3 (by omega) (by omega)
+          split_ifs at h1 h2 h3 <;> omega
+        right; split_ifs at h1 h2 h3 <;> omega
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
