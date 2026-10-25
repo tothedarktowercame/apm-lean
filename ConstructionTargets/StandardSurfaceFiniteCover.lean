@@ -1829,7 +1829,37 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merg
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (m : Fin (C'.sides D.merged)) (hm : m.val + 2 = C.sides s.1) :
     C.nextCorner (D.toOld ⟨D.merged, m⟩) = s := by
-  sorry
+  have hmfirst : m.val + 1 < C.sides s.1 := by omega
+  have hfst : (D.toOld ⟨D.merged, m⟩).1 = s.1 := by
+    simpa [hmfirst] using D.toOld_merged_fst m
+  have hface : (C.nextCorner (D.toOld ⟨D.merged, m⟩)).1 = s.1 := by
+    simpa only [PolygonComplex.nextCorner] using hfst
+  have hval : (D.toOld ⟨D.merged, m⟩).2.val =
+      (s.2.val + 1 + m.val) % C.sides s.1 := by
+    rw [D.toOld_merged_val m]
+    simp only [if_pos hmfirst]
+  have hsides : C.sides (D.toOld ⟨D.merged, m⟩).1 = C.sides s.1 :=
+    congrArg C.sides hfst
+  have hnum : (((s.2.val + 1 + m.val) % C.sides s.1) + 1) % C.sides s.1 =
+      s.2.val := by
+    by_cases hs : s.2.val = 0
+    · rw [hs]
+      simp only [zero_add]
+      rw [Nat.mod_eq_of_lt (by omega : 1 + m.val < C.sides s.1)]
+      rw [show 1 + m.val + 1 = C.sides s.1 by omega, Nat.mod_self]
+    · have hspos : 0 < s.2.val := Nat.pos_of_ne_zero hs
+      have hsum : s.2.val + 1 + m.val =
+          (s.2.val - 1) + C.sides s.1 := by omega
+      rw [hsum]
+      rw [Nat.add_mod_right]
+      rw [Nat.mod_eq_of_lt (by omega : s.2.val - 1 < C.sides s.1)]
+      rw [Nat.mod_eq_of_lt (by omega : s.2.val - 1 + 1 < C.sides s.1)]
+      omega
+  apply Sigma.ext hface
+  apply (Fin.heq_ext_iff (congrArg C.sides hface)).2
+  simp only [PolygonComplex.nextCorner]
+  rw [hval]
+  simpa only [hsides] using hnum
 
 /-- **Leaf.**  `m + 2 = C.sides s.1` and `(C.pair s).1` is a 1-gon: the merged
 face has `m + 1` sides, so `m + 1` wraps to `0` and `toOld 0` is side `s.2 + 1`
