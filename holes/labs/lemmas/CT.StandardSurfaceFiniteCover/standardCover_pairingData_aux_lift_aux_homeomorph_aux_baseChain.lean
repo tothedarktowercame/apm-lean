@@ -434,7 +434,87 @@ theorem standardCover_pairingData_aux_lift_aux_homeomorph_aux_baseChain
     {x y : Disk} (h : Relation.EqvGen (SurfaceRel true g) x y) (i : Fin n) :
     ∃ j, Relation.EqvGen (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Rel
       ⟨i, x⟩ ⟨j, y⟩ := by
-  sorry
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  have lift : ∀ {a b : Disk}, Relation.EqvGen (SurfaceRel true g) a b →
+      ((∀ i : Fin n, ∃ j, Relation.EqvGen C.Rel ⟨i, a⟩ ⟨j, b⟩) ∧
+       (∀ j : Fin n, ∃ i, Relation.EqvGen C.Rel ⟨i, a⟩ ⟨j, b⟩)) := by
+    intro a b hab
+    induction hab with
+    | rel a b hab =>
+        simp only [SurfaceRel, if_true] at hab
+        rcases hab with ⟨q, hq, t, hab | hab⟩
+        · rcases hab with ⟨rfl, rfl⟩
+          constructor
+          · intro i
+            refine ⟨σ i ⟨4 * q, by omega⟩, Relation.EqvGen.rel _ _ ?_⟩
+            dsimp [C, PolygonComplex.Rel,
+              standardCover_pairingData_aux_lift_aux_complex]
+            refine ⟨⟨i, ⟨4 * q, by change 4 * q < 4 * g; omega⟩⟩, t, rfl, ?_⟩
+            simp [C, PolygonComplex.pairedParameter,
+              standardCover_pairingData_aux_lift_aux_complex,
+              standardCover_pairingData_aux_lift_aux_basePair,
+              standardCover_pairingData_aux_lift_aux_baseSign, reverseIcc]
+          · intro j
+            let k : Fin (4 * g) := ⟨4 * q + 2, by omega⟩
+            refine ⟨σ j k, Relation.EqvGen.rel _ _ ?_⟩
+            dsimp [C, PolygonComplex.Rel,
+              standardCover_pairingData_aux_lift_aux_complex]
+            refine ⟨⟨σ j k, ⟨4 * q, by change 4 * q < 4 * g; omega⟩⟩, t, rfl, ?_⟩
+            simp [C, k, PolygonComplex.pairedParameter,
+              standardCover_pairingData_aux_lift_aux_complex,
+              standardCover_pairingData_aux_lift_aux_basePair,
+              standardCover_pairingData_aux_lift_aux_baseSign, reverseIcc] 
+            symm
+            convert hσ j k using 1
+            apply Fin.ext
+            simp [k, standardCover_pairingData_aux_lift_aux_basePair]
+        · rcases hab with ⟨rfl, rfl⟩
+          constructor
+          · intro i
+            refine ⟨σ i ⟨4 * q + 1, by omega⟩, Relation.EqvGen.rel _ _ ?_⟩
+            dsimp [C, PolygonComplex.Rel,
+              standardCover_pairingData_aux_lift_aux_complex]
+            refine ⟨⟨i, ⟨4 * q + 1, by change 4 * q + 1 < 4 * g; omega⟩⟩, t, rfl, ?_⟩
+            have hm : (4 * q + 3) % 4 = 3 := by omega
+            simp [C, PolygonComplex.pairedParameter,
+              standardCover_pairingData_aux_lift_aux_complex,
+              standardCover_pairingData_aux_lift_aux_basePair,
+              standardCover_pairingData_aux_lift_aux_baseSign, reverseIcc, hm]
+          · intro j
+            let k : Fin (4 * g) := ⟨4 * q + 3, by omega⟩
+            refine ⟨σ j k, Relation.EqvGen.rel _ _ ?_⟩
+            dsimp [C, PolygonComplex.Rel,
+              standardCover_pairingData_aux_lift_aux_complex]
+            refine ⟨⟨σ j k, ⟨4 * q + 1, by change 4 * q + 1 < 4 * g; omega⟩⟩, t, rfl, ?_⟩
+            have hm : (4 * q + 3) % 4 = 3 := by omega
+            simp [C, k, PolygonComplex.pairedParameter,
+              standardCover_pairingData_aux_lift_aux_complex,
+              standardCover_pairingData_aux_lift_aux_basePair,
+              standardCover_pairingData_aux_lift_aux_baseSign, reverseIcc, hm]
+            symm
+            convert hσ j k using 1
+            apply Fin.ext
+            simp [k, standardCover_pairingData_aux_lift_aux_basePair]
+    | refl a =>
+        exact ⟨fun i => ⟨i, .refl _⟩, fun i => ⟨i, .refl _⟩⟩
+    | symm a b _ ih =>
+        exact ⟨fun i => by
+          obtain ⟨j, hj⟩ := ih.2 i
+          exact ⟨j, hj.symm⟩,
+          fun j => by
+            obtain ⟨i, hi⟩ := ih.1 j
+            exact ⟨i, hi.symm⟩⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        constructor
+        · intro i
+          obtain ⟨j, hij⟩ := ih₁.1 i
+          obtain ⟨k, hjk⟩ := ih₂.1 j
+          exact ⟨k, Relation.EqvGen.trans _ _ _ hij hjk⟩
+        · intro k
+          obtain ⟨j, hjk⟩ := ih₂.2 k
+          obtain ⟨i, hij⟩ := ih₁.2 j
+          exact ⟨i, Relation.EqvGen.trans _ _ _ hij hjk⟩
+  exact (lift h).1 i
 -- END SEAT AREA
 
 /-- One gluing step of the lifted complex joins equal points of `E`
