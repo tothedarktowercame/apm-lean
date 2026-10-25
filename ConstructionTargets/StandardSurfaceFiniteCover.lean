@@ -3774,6 +3774,19 @@ the indices other than `s` and `C.pair s` (`toOld_lt`, `toOld_surj`), so
 `toOld t`: the next side, or the one after it when the next side is removed,
 or the one after that when the next two sides are both removed (`s` and
 `C.pair s` adjacent).  Includes the wrap-around at the last index. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip_aux
+    (m n a b : ℕ) (hsize : m + 2 = n) (ha : a < n) (hb : b < n)
+    (hab : a ≠ b) (f : Fin m → Fin n)
+    (hf : ∀ i j, i.val < j.val → (f i).val < (f j).val)
+    (hne : ∀ i, (f i).val ≠ a ∧ (f i).val ≠ b)
+    (hsurj : ∀ z, z < n → z ≠ a → z ≠ b → ∃ i, (f i).val = z)
+    (hm : 0 < m) (i : Fin m) : let j : Fin m := ⟨(i.val + 1) % m, Nat.mod_lt _ hm⟩;
+    (f j).val = ((f i).val + 1) % n ∨
+      (((f i).val + 1) % n = a ∨ ((f i).val + 1) % n = b) ∧
+        ((f j).val = ((f i).val + 2) % n ∨
+          (((f i).val + 2) % n = a ∨ ((f i).val + 2) % n = b) ∧
+            (f j).val = ((f i).val + 3) % n) := by
+  sorry
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
@@ -3785,7 +3798,97 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_
               C.nextCorner (C.nextCorner (D.toOld t)) = C.pair s) ∧
             D.toOld (C'.nextCorner t) =
               C.nextCorner (C.nextCorner (C.nextCorner (D.toOld t)))))) := by
-  sorry
+  let m := C'.sides t.1
+  let n := C.sides (D.toOld t).1
+  have hfold (u : C.Side) : u.1 = (D.toOld t).1 :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_face h1 _ _
+  have hfnew (u : C'.Side) : u.1 = t.1 := by
+    apply Fin.eq_of_val_eq
+    have := D.faceCount_eq
+    omega
+  let f : Fin m → Fin n := fun i =>
+    ⟨(D.toOld ⟨t.1, i⟩).2.val, by
+      calc
+        _ < C.sides (D.toOld ⟨t.1, i⟩).1 := (D.toOld ⟨t.1, i⟩).2.isLt
+        _ = n := congrArg C.sides (hfold (D.toOld ⟨t.1, i⟩))⟩
+  have hCold : C.totalSides = n := by
+    rw [PolygonComplex.totalSides]
+    haveI : Unique (Fin C.faceCount) :=
+      ⟨⟨(D.toOld t).1⟩, fun x => hfold ⟨x, ⟨0, C.sides_pos x⟩⟩⟩
+    rw [Fintype.sum_unique]
+    exact congrArg C.sides (hfold ⟨default, ⟨0, C.sides_pos default⟩⟩)
+  have hCnew : C'.totalSides = m := by
+    rw [PolygonComplex.totalSides]
+    haveI : Unique (Fin C'.faceCount) :=
+      ⟨⟨t.1⟩, fun x => hfnew ⟨x, ⟨0, C'.sides_pos x⟩⟩⟩
+    rw [Fintype.sum_unique]
+    exact congrArg C'.sides (hfnew ⟨default, ⟨0, C'.sides_pos default⟩⟩)
+  have hsize : m + 2 = n := by
+    rw [← hCnew, ← hCold]
+    exact D.totalSides_add_two
+  have hfa : s.2.val < n := by
+    calc _ < C.sides s.1 := s.2.isLt
+      _ = n := congrArg C.sides (hfold s)
+  have hfb : (C.pair s).2.val < n := by
+    calc _ < C.sides (C.pair s).1 := (C.pair s).2.isLt
+      _ = n := congrArg C.sides (hfold (C.pair s))
+  have hab : s.2.val ≠ (C.pair s).2.val := by
+    intro he
+    apply C.pair_ne s
+    apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1 he.symm
+  have hstrict : ∀ i j, i.val < j.val → (f i).val < (f j).val := by
+    intro i j hij
+    exact D.toOld_lt ⟨t.1, i⟩ ⟨t.1, j⟩ hij
+  have hfne : ∀ i, (f i).val ≠ s.2.val ∧ (f i).val ≠ (C.pair s).2.val := by
+    intro i
+    rcases D.toOld_ne ⟨t.1, i⟩ with ⟨ha, hb⟩
+    constructor
+    · intro hh
+      apply ha
+      exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1 hh
+    · intro hh
+      apply hb
+      exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1 hh
+  have hfsurj : ∀ z, z < n → z ≠ s.2.val → z ≠ (C.pair s).2.val →
+      ∃ i, (f i).val = z := by
+    intro z hz hzs hzp
+    let u : C.Side := ⟨(D.toOld t).1, ⟨z, hz⟩⟩
+    have hus : u ≠ s := by
+      intro hh
+      exact hzs (congrArg (fun q : C.Side => q.2.val) hh)
+    have hup : u ≠ C.pair s := by
+      intro hh
+      exact hzp (congrArg (fun q : C.Side => q.2.val) hh)
+    obtain ⟨v, hv⟩ := D.toOld_surj u hus hup
+    let i : Fin m := Fin.cast (congrArg C'.sides (hfnew v)) v.2
+    refine ⟨i, ?_⟩
+    change (D.toOld ⟨t.1, i⟩).2.val = z
+    have hvt : (⟨t.1, i⟩ : C'.Side) = v := by
+      apply standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext
+        D.faceCount_eq
+      simp [i]
+    rw [hvt, hv]
+  have harith :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip_aux
+      m n s.2.val (C.pair s).2.val hsize hfa hfb hab f hstrict hfne hfsurj
+      (C'.sides_pos t.1) t.2
+  have heq {u v : C.Side} (h : u.2.val = v.2.val) : u = v :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext h1 h
+  rcases harith with h | ⟨hr, h | ⟨hr2, h⟩⟩
+  · exact Or.inl (heq (by simpa [f, m, n, PolygonComplex.nextCorner] using h))
+  · refine Or.inr ⟨?_, Or.inl ?_⟩
+    · rcases hr with hr | hr
+      · exact Or.inl (heq (by simpa [f, m, n, PolygonComplex.nextCorner] using hr))
+      · exact Or.inr (heq (by simpa [f, m, n, PolygonComplex.nextCorner] using hr))
+    · exact heq (by simpa [f, m, n, PolygonComplex.nextCorner] using h)
+  · refine Or.inr ⟨?_, Or.inr ⟨?_, ?_⟩⟩
+    · rcases hr with hr | hr
+      · exact Or.inl (heq (by simpa [f, m, n, PolygonComplex.nextCorner] using hr))
+      · exact Or.inr (heq (by simpa [f, m, n, PolygonComplex.nextCorner] using hr))
+    · rcases hr2 with hr2 | hr2
+      · exact Or.inl (heq (by simpa [f, m, n, PolygonComplex.nextCorner] using hr2))
+      · exact Or.inr (heq (by simpa [f, m, n, PolygonComplex.nextCorner] using hr2))
+    · exact heq (by simpa [f, m, n, PolygonComplex.nextCorner] using h)
 
 /-- A removed side's two corners are equivalent modulo the merge: for `s` it
 is the merge itself, for `C.pair s` it is `_aux_cutRel` around the merge. -/
