@@ -9661,6 +9661,54 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_
     if_neg (by omega), if_pos (by omega)]
   congr 2 <;> omega
 
+/-- Leaf (claude-14 split of lemma-1 PARTIAL, 2026-10-25): `s₀ = 0`, so the vertex is
+`cutPoint L 0` (`cutChordB L 0 q 0`).  Route: write `hN` as
+`edgePoint L e τ = edgePoint L 0 0` and apply `PolygonMoves.cutEdgePoint_eq`, giving
+`(e, τ) = (0, 0)` or `(L - 1, 1)`; compute the transfer of each and relate it to
+`P = edgePoint L (q + m₁) 0` across the old `y` pair (`_aux_chordA_aux_y`,
+`_aux_arcA_aux_next_aux_rel`).  Do not rewrite the name as `edgePoint L n₂ (1 - s₀)`:
+the seat's draft did that, and it is false at both endpoints. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_y_aux_zero
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hN : (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length e τ : ℂ) =
+      cutChordB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)
+    (hP : (P : ℂ) = (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      (α₁.length + 1 + α₂.length + β₁.length) s₀ : ℂ))
+    (hs : s₀.1 = 0) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+/-- Leaf (claude-14 split, 2026-10-25): `s₀ = 1`, so the vertex is `cutPoint L q`
+(`cutChordB L 0 q 1`).  Route as for `_aux_zero`: `edgePoint L e τ = edgePoint L q 0`,
+so `(e, τ) = (q, 0)` or `(q - 1, 1)`, with `P = edgePoint L (q + m₁) 1`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_y_aux_one
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hN : (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length e τ : ℂ) =
+      cutChordB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)
+    (hP : (P : ℂ) = (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      (α₁.length + 1 + α₂.length + β₁.length) s₀ : ℂ))
+    (hs : s₀.1 = 1) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
 open PolygonMoves in
 /-- **Leaf (reverse, piece `B`, arc, old `y⁻¹` seam).**  The piece point is on the
 old `y⁻¹` side, `P = edgePoint L (q + m₁) s₀`, and its new image is the chord point
@@ -9685,7 +9733,18 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  have hlen : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length =
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length := by simp; omega
+  have hend : s₀.1 = 0 ∨ s₀.1 = 1 := by
+    apply orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordB_end
+      (show 0 < α₁.length + 1 + α₂.length by omega)
+      (show α₁.length + 1 + α₂.length < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length by
+        simp; omega)
+    rw [← hN, hlen]
+    exact PolygonMoves.norm_edgePoint _ _ _
+  rcases hend with hs | hs
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_y_aux_zero α₁ α₂ β₁ β₂ y c hy hc e he τ P s₀ hN hP hs
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB_aux_y_aux_one α₁ α₂ β₁ β₂ y c hy hc e he τ P s₀ hN hP hs
 
 open PolygonMoves in
 /-- **Leaf (reverse, piece `B`, arc, next-name case).**  The piece point's new
