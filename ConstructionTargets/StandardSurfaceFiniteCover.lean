@@ -5358,6 +5358,12 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q_conti
 are the images under `_p` of those of `_p`; both outer pieces are affine on
 all of `ℝ`, so the inverse laws hold globally.  Continuity is already proved
 (`_p_continuous`, `_q_continuous`). -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props_aux_cast
+    (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
+    (n₁ : ℝ) + 1 + n₂ < L := by
+  exact_mod_cast hL
+
+set_option maxHeartbeats 1000000 in
 lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props
     (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
     let p := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂
@@ -5366,7 +5372,55 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props
       p 0 = 0 ∧ p L = L ∧ q 0 = 0 ∧ q L = L ∧
       Set.MapsTo p (Set.Icc 0 L) (Set.Icc 0 L) ∧
       Set.MapsTo q (Set.Icc 0 L) (Set.Icc 0 L) := by
-  sorry
+  have hL' := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props_aux_cast L n₁ n₂ hL
+  have hd : (0 : ℝ) < L - n₁ - n₂ - 1 := by linarith
+  have hd' : (0 : ℝ) < L - (n₁ + 1 + n₂) := by linarith
+  dsimp
+  refine ⟨orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p_continuous L n₁ n₂ hL,
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q_continuous L n₁ n₂ hL,
+    ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    set_option maxHeartbeats 1000000 in
+      split_ifs with h₁ h₂ h₃ k₁ k₂ k₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith
+  · intro x
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    set_option maxHeartbeats 1000000 in
+      split_ifs with h₁ h₂ h₃ k₁ k₂ k₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    simp
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    simp only [if_neg (by linarith : ¬ ((L : ℝ) ≤ n₁)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ n₁ + 1)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ n₁ + 1 + n₂))]
+    field_simp [ne_of_gt hd']; ring
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    simp
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    simp only [if_neg (by linarith : ¬ ((L : ℝ) ≤ n₁)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ L - n₂ - 1)),
+      if_neg (by norm_num : ¬ ((L : ℝ) ≤ L - 1))]
+    ring
+  · intro x hx
+    constructor
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1]
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+  · intro x hx
+    constructor
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
 
 /-- Values of `_p` on the four old arcs: identity on the `α₁` arcs, the `y`
 arc stretched onto `[n₁, L - n₂ - 1]`, the `α₂` arcs shifted to start at
