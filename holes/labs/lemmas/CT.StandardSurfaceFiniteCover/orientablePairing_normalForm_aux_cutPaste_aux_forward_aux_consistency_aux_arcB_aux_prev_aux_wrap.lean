@@ -9013,7 +9013,57 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
-  sorry
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  let V := α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁
+  let q := α₁.length + 1 + α₂.length
+  have hlen : W.length = V.length := by simp [W, V]; omega
+  have hL : 0 < W.length := by simp [W]
+  have hs : s₀ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hs₀
+  have ht : τ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hτ
+  rw [hs] at hP hN
+  rw [ht] at hP ⊢
+  have hw' := hw
+  have he0 : e = 0 := by
+    rw [hw] at hadj
+    simp [Nat.mod_eq_of_lt hL] at hadj
+    exact hadj
+  rw [he0] at hP ⊢
+  refine ⟨edgePoint V.length α₂.length ⟨1, by constructor <;> norm_num⟩, ?_, ?_⟩
+  · rw [← hlen]
+    by_cases ha : α₁.length = 0
+    · simp [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+        ha, cutChordA, W]
+      refine (edgePoint_one_eq_cutPoint _ _).trans ?_
+      congr 1; omega
+    · simp only [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer]
+      rw [if_neg (by omega), if_neg (by omega), if_pos (by omega)]
+      refine (edgePoint_one_eq_cutPoint _ _).trans
+        (Eq.trans ?_ (edgePoint_zero_eq_cutPoint _ _).symm)
+      congr 1 <;> omega
+  · apply Relation.EqvGen.symm
+    have hcRel := orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_c
+      α₁ α₂ β₁ β₂ c (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+    rw [reverseParameter] at hcRel
+    have hN' : N = edgePoint V.length (α₂.length + 1 + α₁.length + β₂.length)
+        (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      rw [hN]
+      by_cases hb : β₂.length = 0
+      · have heq : e₀ = q + β₁.length := by simp [W, q, hb] at hw'; omega
+        subst e₀
+        rw [D.ρB_y, D.oldB_chord]
+        simp [cutChordB, q, hb, W, V]
+        refine Eq.trans ?_ (edgePoint_zero_eq_cutPoint _ _).symm
+        congr 1 <;> omega
+      · have hlo : q + β₁.length + 1 ≤ e₀ := by simp [W, q] at hw'; omega
+        rw [D.ρB_β₂ e₀ _ hlo he₀L, D.oldB_arc]
+        · rw [edgePoint_one_eq_cutPoint, edgePoint_zero_eq_cutPoint]
+          simp [W, V, q] at hw' ⊢
+          congr 1 <;> omega
+        · omega
+        · omega
+    rw [hN']
+    simpa [V] using hcRel
 -- END SEAT AREA
 
 open PolygonMoves in
