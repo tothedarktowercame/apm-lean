@@ -3673,6 +3673,42 @@ generating identification of `C`, and the merge `s ~ nextCorner s` itself, to
 a `C'`-equivalence.  The removed corners `s` and `C.pair s` go to the
 `C'`-corner at the junction where the removed side was (the initial corner of
 the next surviving side). -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_leftInverse
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s) :
+    ∃ g : C.Side → C'.Side, ∀ t, g (D.toOld t) = t := by
+  haveI : Nonempty C'.Side := by
+    have hface : 0 < C'.faceCount := by rw [D.faceCount_eq]; exact Nat.zero_lt_one
+    let f : Fin C'.faceCount := ⟨0, hface⟩
+    exact ⟨⟨f, ⟨0, C'.sides_pos f⟩⟩⟩
+  let g : C.Side → C'.Side := Function.invFun D.toOld
+  refine ⟨g, ?_⟩
+  intro t
+  exact Function.leftInverse_invFun D.toOld_injective t
+
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_choose
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides) (hor : C.IsOrientable) :
+    ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
+      (∀ u, Relation.EqvGen
+        (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+        (D.toOld (g u)) u) := by
+  sorry
+
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides) (hor : C.IsOrientable)
+    (g : C.Side → C'.Side)
+    (hg1 : ∀ t, g (D.toOld t) = t)
+    (hg2 : ∀ u, Relation.EqvGen
+      (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+      (D.toOld (g u)) u) :
+    ∀ a b, (C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s)) →
+      Relation.EqvGen C'.CornerRel (g a) (g b) := by
+  sorry
+
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
@@ -3682,7 +3718,12 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back
         (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)) (D.toOld (g u)) u) ∧
       (∀ a b, (C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s)) →
         Relation.EqvGen C'.CornerRel (g a) (g b)) := by
-  sorry
+  obtain ⟨g, hg1, hg2⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_choose
+      D h1 h5 hor
+  exact ⟨g, hg1, hg2,
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel
+      D h1 h5 hor g hg1 hg2⟩
 
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
     {C C' : PolygonComplex} {s : C.Side}
