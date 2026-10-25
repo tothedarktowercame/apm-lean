@@ -13213,7 +13213,117 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_fibreReverse {L : Type*}
     (z z' : Circle) (P P' : Disk) (h : oldA (ρA z) = oldB (ρB z'))
     (hP : (P : ℂ) = oldA z) (hP' : (P' : ℂ) = oldB z') :
     Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P P' := by
-  sorry
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  let W' := α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁
+  have hlen : W.length = W'.length := by simp [W, W']; omega
+  by_cases hu : ‖oldA (ρA z)‖ = 1
+  · obtain ⟨e, he, τ, hτ⟩ := PolygonMoves.cutEdgePoint_surj
+      (L := W'.length) (by simp [W']) hu
+    obtain ⟨T, hT, hPT⟩ :=
+      orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D false z e he τ P
+        (by simpa [W'] using hτ) (by simpa using hP)
+    obtain ⟨T', hT', hPT'⟩ :=
+      orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D true z' e he τ P'
+        (by simpa [W', h] using hτ) (by simpa using hP')
+    have hTT : T = T' := Subtype.ext (hT.trans hT'.symm)
+    subst T'
+    exact Relation.EqvGen.trans _ _ _ hPT (Relation.EqvGen.symm _ _ hPT')
+  · obtain (⟨e, s, he, hz⟩ | ⟨s, hz⟩) := D.coverA z
+    · have heq : e = α₁.length := by
+        by_contra hne
+        have hn : ‖oldA (ρA (cutEdgeCircle W.length e s))‖ = 1 := by
+          by_cases hlow : e < α₁.length
+          · rw [D.ρA_α₁ e s hlow, D.oldA_arc]
+            · exact PolygonMoves.norm_edgePoint W.length (e + α₂.length + 1) s
+            · omega
+          · have hhigh : α₁.length + 1 ≤ e := by omega
+            rw [D.ρA_α₂ e s hhigh he, D.oldA_arc]
+            · exact PolygonMoves.norm_edgePoint W.length (e - α₁.length - 1) s
+            · omega
+        exact hu (by rw [hz]; exact hn)
+      subst e
+      obtain (⟨e', s', he'₀, he'₁, hz'⟩ | ⟨s', hz'⟩) := D.coverB z'
+      · have heq' : e' = α₁.length + 1 + α₂.length + β₁.length := by
+          by_contra hne
+          have hn : ‖oldB (ρB (cutEdgeCircle W.length e' s'))‖ = 1 := by
+            by_cases hlow : e' < α₁.length + 1 + α₂.length + β₁.length
+            · rw [D.ρB_β₁ e' s' he'₀ hlow, D.oldB_arc]
+              · exact PolygonMoves.norm_edgePoint W.length (e' + β₂.length + 1) s'
+              · omega
+              · rw [D.length]; omega
+            · have hhigh : α₁.length + 1 + α₂.length + β₁.length + 1 ≤ e' := by omega
+              rw [D.ρB_β₂ e' s' hhigh he'₁, D.oldB_arc]
+              · exact PolygonMoves.norm_edgePoint W.length (e' - β₁.length - 1) s'
+              · omega
+              · omega
+          exact hu (by rw [h, hz']; exact hn)
+        subst e'
+        have hchord : cutChordA W.length 0 (α₁.length + 1 + α₂.length) s =
+            cutChordB W.length 0 (α₁.length + 1 + α₂.length) s' := by
+          rw [← D.oldA_chord s, ← D.oldB_chord s', ← D.ρA_y s, ← D.ρB_y s',
+            ← hz, ← hz']
+          exact h
+        have hPQ : cutPoint W.length 0 -
+            cutPoint W.length (α₁.length + 1 + α₂.length) ≠ 0 :=
+          sub_ne_zero.mpr (PolygonMoves.cutPoint_ne (by omega) (by simp [W]; omega))
+        have hcoefC : ((s.1 : ℂ) + (s'.1 : ℂ) - 1) = 0 := by
+          apply (mul_eq_zero.mp (show ((s.1 : ℂ) + (s'.1 : ℂ) - 1) *
+              (cutPoint W.length 0 - cutPoint W.length
+                (α₁.length + 1 + α₂.length)) = 0 by
+            rw [cutChordA, cutChordB] at hchord
+            calc
+              _ = (cutPoint W.length (α₁.length + 1 + α₂.length) +
+                    (s.1 : ℂ) * (cutPoint W.length 0 - cutPoint W.length
+                      (α₁.length + 1 + α₂.length))) -
+                  (cutPoint W.length 0 + (s'.1 : ℂ) *
+                    (cutPoint W.length (α₁.length + 1 + α₂.length) -
+                      cutPoint W.length 0)) := by ring
+              _ = 0 := sub_eq_zero.mpr hchord)).resolve_right hPQ
+        have hs : s' = reverseParameter s := by
+          apply Subtype.ext
+          simp [reverseParameter]
+          have hr : s.1 + s'.1 - 1 = 0 := by exact_mod_cast hcoefC
+          linarith
+        have hPP : P = edgePoint W.length α₁.length s := by
+          apply Subtype.ext
+          rw [hP, hz, D.oldA_arc]
+          omega
+        have hPP' : P' = edgePoint W.length
+            (α₁.length + 1 + α₂.length + β₁.length) (reverseParameter s) := by
+          apply Subtype.ext
+          rw [hP', hz', D.oldB_arc
+            (α₁.length + 1 + α₂.length + β₁.length) s' (by omega)
+              (by simp [W]; omega), hs]
+        rw [hPP, hPP']
+        apply Relation.EqvGen.rel
+        let i : Fin W.length := ⟨α₁.length, by simp [W]⟩
+        let j : Fin W.length :=
+          ⟨(α₁ ++ [y] ++ α₂ ++ β₁).length, by simp [W]⟩
+        refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+        · intro hij
+          have := congrArg Fin.val hij
+          simp [i, j] at this
+        · simp [i, j, W, List.get_eq_getElem, inv]
+        · have hsign : (W.get i).2 ≠ (W.get j).2 := by
+            simp [i, j, W, List.get_eq_getElem, inv]
+          rw [if_neg hsign]
+          congr 1 <;> simp [W, j] <;> omega
+      · have hn : ‖oldB (ρB (cutChordParamB W.length 0
+            (α₁.length + 1 + α₂.length) s'))‖ = 1 := by
+          rw [D.ρB_chord, D.oldB_arc]
+          · exact PolygonMoves.norm_edgePoint W.length
+              (α₁.length + 1 + α₂.length + β₂.length) s'
+          · omega
+          · rw [D.length]; omega
+        exact (hu (by rw [h, hz']; exact hn)).elim
+    · have hn : ‖oldA (ρA (cutChordParamA W.length 0
+          (α₁.length + 1 + α₂.length) s))‖ = 1 := by
+        rw [D.ρA_chord, D.oldA_arc]
+        · exact PolygonMoves.norm_edgePoint W.length α₂.length s
+        · omega
+      exact (hu (by rw [hz]; exact hn)).elim
 -- END SEAT AREA
 
 open PolygonMoves in
