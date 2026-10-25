@@ -9930,7 +9930,81 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  let W := α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂
+  have hlen : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length = W.length := by
+    simp [W]; omega
+  have heW : e < W.length := by omega
+  have hs₀' : s₀ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hs₀
+  have hτ' : τ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hτ
+  subst s₀; subst τ
+  have hq : α₁.length + 1 + α₂.length + β₂.length < W.length := by
+    simp [W]; omega
+  have heSucc : e + 1 < W.length := by
+    by_contra h
+    have heLast : e + 1 = W.length := by omega
+    have hadjW : α₁.length + 1 + α₂.length + β₂.length =
+        (e + 1) % W.length := by simpa [W] using hadj
+    rw [heLast, Nat.mod_self] at hadjW
+    omega
+  have hadjW : α₁.length + 1 + α₂.length + β₂.length =
+      (e + 1) % W.length := by simpa [W] using hadj
+  rw [Nat.mod_eq_of_lt heSucc] at hadjW
+  have heq : e + 1 = α₁.length + 1 + α₂.length + β₂.length := by omega
+  clear hadj
+  by_cases hm₂ : β₂.length = 0
+  · by_cases hn₁ : α₁.length = 0
+    · refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      rw [hP, orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+        if_pos (by omega)]
+      simp [cutChordA, cutChordB, W, hm₂, hn₁]
+    · let T : Disk := edgePoint W.length (α₁.length - 1)
+          (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+      refine ⟨T, ?_, ?_⟩
+      · dsimp [T]
+        rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+          if_neg (by omega), if_neg (by omega), if_neg (by omega), if_pos (by omega)]
+        congr 2 <;> omega
+      · have hyrel :=
+          orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordB_aux_y
+            α₁ α₂ β₁ β₂ y
+            (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+        have hPsrc : P = edgePoint W.length
+            (α₁.length + 1 + α₂.length + β₁.length)
+            (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+          apply Subtype.ext
+          rw [hP, edgePoint_one_eq_cutPoint]
+          simp only [cutChordB, Set.Icc.coe_zero, Complex.ofReal_zero, zero_mul, add_zero]
+          have hraw : (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length = W.length := rfl
+          have hi : α₁.length + 1 + α₂.length + β₁.length + 1 = W.length := by
+            simp [W, hm₂]; omega
+          rw [hraw, hi]
+          simpa using (cutPoint_add_length (L := W.length) (by simp [W]) 0).symm
+        have htarget : edgePoint W.length α₁.length
+            (reverseParameter (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)) = T := by
+          apply Subtype.ext
+          dsimp [T]
+          simp only [reverseParameter, Set.Icc.coe_one, sub_self]
+          calc
+            (edgePoint W.length α₁.length
+                (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) =
+                cutPoint W.length α₁.length := edgePoint_zero_eq_cutPoint _ _
+            _ = cutPoint W.length ((α₁.length - 1) + 1) := by congr 1; omega
+            _ = (edgePoint W.length (α₁.length - 1)
+                (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) :=
+              (edgePoint_one_eq_cutPoint _ _).symm
+        rw [hPsrc]
+        rw [← htarget]
+        simpa [W] using hyrel
+  · refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+    rw [hP, orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+      if_neg (by omega), if_neg (by omega), if_neg (by omega), if_neg (by omega),
+      if_pos (by omega)]
+    rw [edgePoint_one_eq_cutPoint]
+    simp only [cutChordB, Set.Icc.coe_zero, Complex.ofReal_zero, zero_mul, add_zero]
+    change cutPoint W.length 0 = cutPoint W.length (e + β₁.length + 1 + 1)
+    have hi : e + β₁.length + 1 + 1 = W.length := by simp [W]; omega
+    rw [hi]
+    simpa using (cutPoint_add_length (L := W.length) (by simp [W]) 0).symm
 -- END SEAT AREA
 
 open PolygonMoves in
