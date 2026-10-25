@@ -3091,6 +3091,145 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_package {Label : Type*}
       subst z'; exact .refl _
 
 
+/-- The lift behind `_aux_angular`, before rotating by `n₂ + 1` arcs: on
+`[0, L]` (in arc units) it fixes the `α₁` arcs, stretches the `y` arc onto
+`[n₁, L - n₂ - 1]`, shifts the `α₂` arcs onto `[L - n₂ - 1, L - 1]` and
+compresses the chord arc onto `[L - 1, L]`.  (lemma-3, banked.) -/
+def orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    (L n₁ n₂ : ℕ) (x : ℝ) : ℝ :=
+  if x ≤ n₁ then x
+  else if x ≤ n₁ + 1 then
+    n₁ + (x - n₁) * (L - n₁ - n₂ - 1)
+  else if x ≤ n₁ + 1 + n₂ then
+    L - n₂ - 1 + (x - (n₁ + 1))
+  else L - 1 + (x - (n₁ + 1 + n₂)) / (L - (n₁ + 1 + n₂))
+
+def orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    (L n₁ n₂ : ℕ) (y : ℝ) : ℝ :=
+  if y ≤ n₁ then y
+  else if y ≤ L - n₂ - 1 then
+    n₁ + (y - n₁) / (L - n₁ - n₂ - 1)
+  else if y ≤ L - 1 then
+    n₁ + 1 + (y - (L - n₂ - 1))
+  else n₁ + 1 + n₂ + (y - (L - 1)) * (L - (n₁ + 1 + n₂))
+
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p_continuous
+    (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
+    Continuous (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂) := by
+  have hL' : (n₁ : ℝ) + 1 + n₂ < L := by exact_mod_cast hL
+  unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+  have h3 : Continuous (fun x : ℝ => if x ≤ (n₁ : ℝ) + 1 + n₂ then
+      (L : ℝ) - n₂ - 1 + (x - (n₁ + 1))
+    else L - 1 + (x - (n₁ + 1 + n₂)) / (L - (n₁ + 1 + n₂))) := by
+    apply Continuous.if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
+    intro x hx; rw [hx]; field_simp; ring
+  have h2 : Continuous (fun x : ℝ => if x ≤ (n₁ : ℝ) + 1 then
+      n₁ + (x - n₁) * (L - n₁ - n₂ - 1)
+    else if x ≤ n₁ + 1 + n₂ then L - n₂ - 1 + (x - (n₁ + 1))
+    else L - 1 + (x - (n₁ + 1 + n₂)) / (L - (n₁ + 1 + n₂))) := by
+    apply Continuous.if_le (by fun_prop) h3 (by fun_prop) (by fun_prop)
+    intro x hx; rw [hx]
+    simp only [if_pos (by linarith : (n₁ : ℝ) + 1 ≤ n₁ + 1 + n₂)]
+    ring
+  apply Continuous.if_le (by fun_prop) h2 (by fun_prop) (by fun_prop)
+  intro x hx; rw [hx]
+  simp only [if_pos (by norm_num : (n₁ : ℝ) ≤ n₁ + 1)]
+  ring
+
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q_continuous
+    (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
+    Continuous (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q L n₁ n₂) := by
+  have hL' : (n₁ : ℝ) + 1 + n₂ < L := by exact_mod_cast hL
+  unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+  have h3 : Continuous (fun x : ℝ => if x ≤ (L : ℝ) - 1 then
+      n₁ + 1 + (x - (L - n₂ - 1))
+    else n₁ + 1 + n₂ + (x - (L - 1)) * (L - (n₁ + 1 + n₂))) := by
+    apply Continuous.if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
+    intro x hx; rw [hx]; ring
+  have h2 : Continuous (fun x : ℝ => if x ≤ (L : ℝ) - n₂ - 1 then
+      n₁ + (x - n₁) / (L - n₁ - n₂ - 1)
+    else if x ≤ L - 1 then n₁ + 1 + (x - (L - n₂ - 1))
+    else n₁ + 1 + n₂ + (x - (L - 1)) * (L - (n₁ + 1 + n₂))) := by
+    apply Continuous.if_le (by fun_prop) h3 (by fun_prop) (by fun_prop)
+    intro x hx; rw [hx]
+    have hn : (0 : ℝ) ≤ n₂ := by positivity
+    have hi : (L : ℝ) - n₂ - 1 ≤ L - 1 := by linarith
+    rw [if_pos hi]
+    field_simp [ne_of_gt (show (0 : ℝ) < L - n₁ - n₂ - 1 by linarith)]
+    ring
+  apply Continuous.if_le (by fun_prop) h2 (by fun_prop) (by fun_prop)
+  intro x hx; rw [hx]
+  simp only [if_pos (by linarith : (n₁ : ℝ) ≤ L - n₂ - 1)]
+  field_simp
+  ring
+
+/-- **Leaf.**  `_p` and `_q` (the four-piece monotone map of `[0, L]` behind
+`_aux_angular` and its piecewise inverse) are mutually inverse homeomorphisms of
+`ℝ` that fix `0` and `L` and map `[0, L]` to itself.  The breakpoints of `_q`
+are the images under `_p` of those of `_p`; both outer pieces are affine on
+all of `ℝ`, so the inverse laws hold globally.  Continuity is already proved
+(`_p_continuous`, `_q_continuous`). -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props
+    (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
+    let p := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂
+    let q := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q L n₁ n₂
+    Continuous p ∧ Continuous q ∧ Function.LeftInverse q p ∧ Function.RightInverse q p ∧
+      p 0 = 0 ∧ p L = L ∧ q 0 = 0 ∧ q L = L ∧
+      Set.MapsTo p (Set.Icc 0 L) (Set.Icc 0 L) ∧
+      Set.MapsTo q (Set.Icc 0 L) (Set.Icc 0 L) := by
+  sorry
+
+/-- Values of `_p` on the four old arcs: identity on the `α₁` arcs, the `y`
+arc stretched onto `[n₁, L - n₂ - 1]`, the `α₂` arcs shifted to start at
+`L - n₂ - 1`, the chord arc compressed onto `[L - 1, L]`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_formulas (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
+    (∀ e (s : Set.Icc (0 : ℝ) 1), e < n₁ → orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂ (e + s.1) = e + s.1) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1, orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂ (n₁ + s.1) = n₁ + s.1 * (L - n₁ - n₂ - 1)) ∧
+    (∀ e (s : Set.Icc (0 : ℝ) 1), n₁ + 1 ≤ e → e < n₁ + 1 + n₂ →
+      orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂ (e + s.1) = L - n₂ - 1 + (e - (n₁ + 1)) + s.1) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1,
+      orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂ (n₁ + 1 + n₂ + s.1 * (L - (n₁ + 1 + n₂))) = L - 1 + s.1) := by
+  have hL' : (n₁ : ℝ) + 1 + n₂ < L := by exact_mod_cast hL
+  have hn₂ : (0 : ℝ) ≤ n₂ := by positivity
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro e s he
+    have he' : (e : ℝ) + 1 ≤ n₁ := by exact_mod_cast he
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    rw [if_pos (by linarith [s.2.2])]
+  · intro s
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    by_cases h0 : (n₁ : ℝ) + s.1 ≤ n₁
+    · have hs : s.1 = 0 := le_antisymm (by linarith) s.2.1
+      rw [if_pos h0, hs]; ring
+    · rw [if_neg h0, if_pos (by linarith [s.2.2])]; ring
+  · intro e s he₀ he₁
+    have he₀' : (n₁ : ℝ) + 1 ≤ e := by exact_mod_cast he₀
+    have he₁' : (e : ℝ) + 1 ≤ n₁ + 1 + n₂ := by exact_mod_cast he₁
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    rw [if_neg (by linarith [s.2.1])]
+    by_cases h1 : (e : ℝ) + s.1 ≤ n₁ + 1
+    · have he : (e : ℝ) = n₁ + 1 := le_antisymm (by linarith [s.2.1]) he₀'
+      have hs : s.1 = 0 := le_antisymm (by linarith) s.2.1
+      rw [if_pos h1, he, hs]; ring
+    · rw [if_neg h1, if_pos (by linarith [s.2.2])]; ring
+  · intro s
+    have hd : (0 : ℝ) < L - (n₁ + 1 + n₂) := by linarith
+    have hx : 0 ≤ s.1 * (L - (n₁ + 1 + n₂)) := mul_nonneg s.2.1 hd.le
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    rw [if_neg (show ¬ ((n₁ : ℝ) + 1 + n₂ + s.1 * (L - (n₁ + 1 + n₂)) ≤ n₁) by linarith)]
+    by_cases h2 : (n₁ : ℝ) + 1 + n₂ + s.1 * (L - (n₁ + 1 + n₂)) ≤ n₁ + 1 + n₂
+    · have hs : s.1 = 0 := by
+        rcases eq_or_lt_of_le s.2.1 with h | h
+        · exact h.symm
+        · nlinarith
+      by_cases h1 : (n₁ : ℝ) + 1 + n₂ + s.1 * (L - (n₁ + 1 + n₂)) ≤ n₁ + 1
+      · have hn : (n₂ : ℝ) = 0 := by rw [hs] at h1; linarith
+        rw [if_pos h1, hs, hn]; ring
+      · rw [if_neg h1, if_pos h2, hs]; ring
+    · rw [if_neg (show ¬ ((n₁ : ℝ) + 1 + n₂ + s.1 * (L - (n₁ + 1 + n₂)) ≤ n₁ + 1) by
+          intro h; exact h2 (by linarith)), if_neg h2]
+      field_simp; ring
+
 open PolygonMoves in
 /-- **Leaf (circle reparametrisation, piece `A`).**  An orientation-preserving
 piecewise-linear homeomorphism of the parameter circle of piece `A` that moves
@@ -3127,7 +3266,59 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular
               AddCircle (2 * Real.pi)))) =
         AddCircle.homeomorphCircle'
           (((cutAlpha L n₂ + s.1 * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi)))) := by
-  sorry
+  obtain ⟨hpc, hqc, hl, hr, hp0, hpL, hq0, hqL, hpm, hqm⟩ := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props L n₁ n₂ hL
+  obtain ⟨hf₁, hfy, hf₂, hfc⟩ := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_formulas L n₁ n₂ hL
+  have hLpos : (0 : ℝ) < L := by exact_mod_cast (show 0 < L by omega)
+  have hLne : (L : ℝ) ≠ 0 := hLpos.ne'
+  obtain ⟨F, hF⟩ := equivariantLift_of_interval (L : ℝ) L hLpos hLpos (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂) (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q L n₁ n₂)
+    hpc hqc hp0 hpL hq0 hqL hpm hqm (fun x _ => hl x) (fun y _ => hr y)
+  obtain ⟨g, hg⟩ := equivariantCircleLift_homeomorph (L : ℝ) L hLpos hLpos F
+  let r : Circle := Circle.exp ((n₂ + 1) * (2 * Real.pi / L))
+  refine ⟨g.trans (Homeomorph.mulLeft r), ?_⟩
+  -- ρ at angle `2πx/L`, for `x ∈ [0, L]`, is the angle `2π(p x + n₂ + 1)/L`.
+  have hρ : ∀ x ∈ Set.Icc (0 : ℝ) L, ∀ θ : ℝ, θ = 2 * Real.pi * x / L →
+      (g.trans (Homeomorph.mulLeft r)) (AddCircle.homeomorphCircle' (θ : AddCircle (2 * Real.pi))) =
+        Circle.exp (2 * Real.pi * (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂ x + n₂ + 1) / L) := by
+    intro x hx θ hθ
+    have h1 : AddCircle.homeomorphCircle' (θ : AddCircle (2 * Real.pi)) =
+        AddCircle.toCircle (x : AddCircle (L : ℝ)) := by
+      rw [AddCircle.homeomorphCircle'_apply_mk, AddCircle.toCircle_apply_mk, hθ]
+      congr 1; field_simp
+    rw [Homeomorph.trans_apply, h1, hg, hF x hx, AddCircle.toCircle_apply_mk]
+    change r * _ = _
+    rw [← Circle.exp_add]; congr 1; field_simp; ring
+  -- Circle.exp agrees with homeomorphCircle' up to a multiple of `2π`.
+  have hexp : ∀ a b : ℝ, ∀ k : ℤ, a = b + k * (2 * Real.pi) →
+      Circle.exp a = AddCircle.homeomorphCircle' (b : AddCircle (2 * Real.pi)) := by
+    intro a b k h
+    rw [AddCircle.homeomorphCircle'_apply_mk, h, Circle.exp_add,
+      Circle.exp_int_mul_two_pi, mul_one]
+  have hπ := Real.pi_pos
+  have hL' : (n₁ : ℝ) + 1 + n₂ < L := by exact_mod_cast hL
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro e s he
+    have he' : (e : ℝ) + 1 ≤ n₁ := by exact_mod_cast he
+    rw [hρ (e + s.1) ⟨by linarith [s.2.1], by linarith [s.2.2]⟩ _
+      (by unfold cutAlpha; field_simp; try ring), hf₁ e s he]
+    exact hexp _ _ 0 (by unfold cutAlpha; push_cast; field_simp; try ring)
+  · intro s
+    rw [hρ (n₁ + s.1) ⟨by linarith [s.2.1], by linarith [s.2.2]⟩ _
+      (by unfold cutAlpha; field_simp; try ring), hfy s]
+    exact hexp _ _ 0 (by unfold cutAlpha; push_cast; field_simp; try ring)
+  · intro e s he₀ he₁
+    have he₀' : (n₁ : ℝ) + 1 ≤ e := by exact_mod_cast he₀
+    have he₁' : (e : ℝ) + 1 ≤ n₁ + 1 + n₂ := by exact_mod_cast he₁
+    rw [hρ (e + s.1) ⟨by linarith [s.2.1], by linarith [s.2.2]⟩ _
+      (by unfold cutAlpha; field_simp; try ring), hf₂ e s he₀ he₁]
+    have hsub : ((e - n₁ - 1 : ℕ) : ℝ) = e - n₁ - 1 := by
+      rw [Nat.cast_sub (by omega), Nat.cast_sub (by omega)]; push_cast; ring
+    exact hexp _ _ 1 (by unfold cutAlpha; rw [hsub]; push_cast; field_simp; try ring)
+  · intro s
+    have hL' : (n₁ : ℝ) + 1 + n₂ < L := by exact_mod_cast hL
+    rw [hρ (n₁ + 1 + n₂ + s.1 * (L - (n₁ + 1 + n₂)))
+      ⟨by nlinarith [s.2.1, s.2.2], by nlinarith [s.2.1, s.2.2]⟩ _
+      (by unfold cutAlpha; push_cast; field_simp; try ring), hfc s]
+    exact hexp _ _ 1 (by unfold cutAlpha; push_cast; field_simp; try ring)
 
 open PolygonMoves in
 /-- Piece `A` reparametrisation in `cutEdgeCircle`/`cutChordParamA` form, read
