@@ -731,6 +731,75 @@ position `0` (`_aux_step`, `_aux_chain`), and one-to-one because
 and lifted disks meeting at one point are the same face
 (`_aux_homeomorph_aux_lift_injective`). -/
 
+/-- Leaf (banked by lemma-3, 2026-10-25): one corner step from any side,
+`s ~ nextCorner (pair s)`, since every pairing reverses the parameter. -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+    (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (s : (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).Side) :
+    Relation.EqvGen
+      (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel s
+      ((standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).nextCorner
+        ((standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).pair s)) := by
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  change Relation.EqvGen C.CornerRel s (C.nextCorner (C.pair s))
+  apply Relation.EqvGen.rel
+  refine ⟨s, ?_⟩
+  have hs : C.sign s ≠ C.sign (C.pair s) := by
+    rcases s with ⟨j, e⟩
+    exact (standardCover_pairingData_aux_lift_aux_baseSign_basePair g e).symm
+  rw [if_neg hs]
+  exact Or.inl ⟨rfl, rfl⟩
+
+/-- Leaf: `_aux_step` when `k % 4 = 0`: three `_aux_corner` steps from `s = ⟨i, k⟩`. -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod0
+    (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (i : Fin n) (k : Fin (4 * g))
+    (hk : k.1 % 4 = 0) :
+    ∃ i' : Fin n, Relation.EqvGen
+      (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
+      ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
+  sorry
+
+/-- Leaf: `_aux_step` when `k % 4 = 1`: one `_aux_corner` step backwards from `s = ⟨i, k - 1⟩`. -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod1
+    (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (i : Fin n) (k : Fin (4 * g))
+    (hk : k.1 % 4 = 1) :
+    ∃ i' : Fin n, Relation.EqvGen
+      (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
+      ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
+  sorry
+
+/-- Leaf: `_aux_step` when `k % 4 = 2`: one `_aux_corner` step backwards from `s = ⟨σ i (basePair (k + 1)), k + 1⟩` (note `k + 1 < 4g`). -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod2
+    (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (i : Fin n) (k : Fin (4 * g))
+    (hk : k.1 % 4 = 2) :
+    ∃ i' : Fin n, Relation.EqvGen
+      (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
+      ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
+  sorry
+
+/-- Leaf: `_aux_step` when `k % 4 = 3`: three `_aux_corner` steps from `s = ⟨i, k⟩`. -/
+theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod3
+    (g n : ℕ) (hg : 1 ≤ g)
+    (σ : Fin n → Fin (4 * g) → Fin n)
+    (hσ : ∀ i k, σ (σ i k) (standardCover_pairingData_aux_lift_aux_basePair g k) = i)
+    (i : Fin n) (k : Fin (4 * g))
+    (hk : k.1 % 4 = 3) :
+    ∃ i' : Fin n, Relation.EqvGen
+      (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
+      ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
+  sorry
+
 /-- Leaf: in the lifted complex every corner `⟨i, k⟩` is joined to a corner
 `⟨i', k + 1⟩` of some face.  In the base `4g`-gon the corner relation gives
 `4j ~ 4j+3 ~ 4j+2 ~ 4j+1 ~ 4j+4` (indices mod `4g`); each step lifts to a
@@ -744,7 +813,12 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step
     ∃ i' : Fin n, Relation.EqvGen
       (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
       ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
-  sorry
+  have hk : k.1 % 4 = 0 ∨ k.1 % 4 = 1 ∨ k.1 % 4 = 2 ∨ k.1 % 4 = 3 := by omega
+  rcases hk with hk | hk | hk | hk
+  · exact standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod0 g n hg σ hσ i k hk
+  · exact standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod1 g n hg σ hσ i k hk
+  · exact standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod2 g n hg σ hσ i k hk
+  · exact standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod3 g n hg σ hσ i k hk
 
 /-- Leaf: every corner is joined to a corner at position `0`.  Induction on
 `m` from the step hypothesis gives a face `i'` with `⟨i, k⟩` joined to
