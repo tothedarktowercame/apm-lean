@@ -4865,6 +4865,90 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge {L 
   · apply Continuous.quotient_lift
     exact continuous_coinduced_rng.comp continuous_sigmaMk
 
+lemma standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_enum
+    {m n a : ℕ} (hsize : m + 2 = n) (ha : a + 1 < n)
+    (f : Fin m → Fin n) (hf : StrictMono f)
+    (hne : ∀ i, (f i).val ≠ a ∧ (f i).val ≠ a + 1)
+    (hsurj : ∀ z, z < n → z ≠ a → z ≠ a + 1 → ∃ i, (f i).val = z)
+    (i : Fin m) :
+    (f i).val = if i.val < a then i.val else i.val + 2 := by
+  let g : Fin m → Fin n := fun j =>
+    ⟨if j.val < a then j.val else j.val + 2, by split <;> omega⟩
+  have hg : StrictMono g := by
+    intro i j hij
+    simp only [g, Fin.mk_lt_mk]
+    split <;> split <;> omega
+  have hrange : Set.range f = Set.range g := by
+    ext z
+    constructor
+    · rintro ⟨j, rfl⟩
+      rcases hne j with ⟨hja, hja1⟩
+      by_cases hlt : (f j).val < a
+      · let k : Fin m := ⟨(f j).val, by omega⟩
+        refine ⟨k, Fin.ext ?_⟩
+        simp [g, k, hlt]
+      · have hhigh : a + 1 < (f j).val := by omega
+        let k : Fin m := ⟨(f j).val - 2, by omega⟩
+        refine ⟨k, Fin.ext ?_⟩
+        change (if (f j).val - 2 < a then (f j).val - 2 else (f j).val - 2 + 2) =
+          (f j).val
+        split <;> omega
+    · rintro ⟨j, rfl⟩
+      have hne' : (g j).val ≠ a ∧ (g j).val ≠ a + 1 := by
+        simp only [g]
+        split <;> omega
+      obtain ⟨k, hk⟩ := hsurj (g j).val (g j).isLt hne'.1 hne'.2
+      exact ⟨k, Fin.ext hk⟩
+  have hfg : f = g := (hf.range_inj hg).mp hrange
+  rw [hfg]
+/-- **Leaf (old word).**  Side `s` sits at position `s.2` and, by `hadj` and
+`hk`, `C.pair s` at position `s.2 + 1`; both carry the label
+`min s.2 (C.pair s).2` and (`hor`) opposite signs, so the word of `C` has
+`[x, x⁻¹]` at positions `s.2, s.2 + 1`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_old
+    {C : PolygonComplex} {s : C.Side}
+    (h1 : C.faceCount = 1) (hadj : C.nextCorner s = C.pair s)
+    (hor : C.IsOrientable) (hk : s.2.val + 1 < C.totalSides) :
+    ∃ x : PolygonMoves.Signed ℕ,
+      standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val) =
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).take s.2.val ++
+          [x, PolygonMoves.inv x] ++
+          (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).drop (s.2.val + 2) := by
+  sorry
+
+/-- **Leaf (new word).**  `D.toOld` is the increasing enumeration of the
+sides other than `s` and `C.pair s` (positions `s.2`, `s.2 + 1` by `hadj`,
+`hk`), so (`…_inner_aux_enum`) side `i` of `C'` is side `i` of `C` before the
+gap and side `i + 2` after it; with `D.sign_toOld` the word of `C'` is the
+word of `C` with those two letters deleted. -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_new
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (hadj : C.nextCorner s = C.pair s)
+    (hk : s.2.val + 1 < C.totalSides) :
+    standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C' D.faceCount_eq
+        (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val) =
+      (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).take s.2.val ++
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).drop (s.2.val + 2) := by
+  sorry
+
+/-- **Leaf (fresh label).**  The label is good
+(`…_homeomorph_aux_goodLabel`): the letter at position `s.2` shares its label
+only with `C.pair s`, at position `s.2 + 1`, so the label is absent from the
+rest of the word. -/
+theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_fresh
+    {C : PolygonComplex} {s : C.Side}
+    (h1 : C.faceCount = 1) (hadj : C.nextCorner s = C.pair s)
+    (hk : s.2.val + 1 < C.totalSides) (x : PolygonMoves.Signed ℕ)
+    (hw : standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val) =
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).take s.2.val ++
+          [x, PolygonMoves.inv x] ++
+          (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).drop (s.2.val + 2)) :
+    x.1 ∉ ((standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).take s.2.val ++
+        (standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C h1 (fun u : C.Side => min u.2.val (C.pair u).2.val)).drop (s.2.val + 2)).map Prod.fst := by
+  sorry
+
+
 /-- **Leaf (no wrap).**  If `s` is not the last side, `C.pair s` is the next
 one (`hadj`), with the opposite sign (`hor`): the word of `C` is
 `u ++ [x, x⁻¹] ++ v` with `u` the first `s.2` letters, and (`D.toOld_lt`,
@@ -4880,7 +4964,9 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner
         standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_word C' D.faceCount_eq
           (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val) = u ++ v ∧
         x.1 ∉ (u ++ v).map Prod.fst := by
-  sorry
+  obtain ⟨x, hw⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_old h1 hadj hor hk
+  exact ⟨_, _, x, hw, standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_new D h1 hadj hk,
+    standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_inner_aux_fresh h1 hadj hk x hw⟩
 
 /-- **Leaf (wrap).**  If `s` is the last side, `C.pair s` is side `0`: the
 word of `C` is `x⁻¹ :: v ++ [x]` and the word of `C'` is `v`. -/
