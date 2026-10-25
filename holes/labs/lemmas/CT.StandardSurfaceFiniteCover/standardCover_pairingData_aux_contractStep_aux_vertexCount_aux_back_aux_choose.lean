@@ -3858,7 +3858,103 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_
       (∀ u, Relation.EqvGen
         (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
         (D.toOld (g u)) u) := by
-  sorry
+  let R := fun x y : C.Side => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)
+  have hside : ∀ t : C.Side, C.sides t.1 = C.totalSides := by
+    intro t
+    classical
+    letI : Unique (Fin C.faceCount) :=
+      ⟨⟨t.1⟩, fun u => Fin.eq_of_val_eq (by omega)⟩
+    rw [PolygonComplex.totalSides, Fintype.sum_unique]
+    exact congrArg C.sides (Unique.uniq _ _)
+  have hnext : ∀ t : C.Side, C.nextCorner t ≠ t := by
+    intro t ht
+    have hv := congrArg (fun u : C.Side => u.2.val) ht
+    simp only [PolygonComplex.nextCorner] at hv
+    have hp := C.sides_pos t.1
+    by_cases hlt : t.2.val + 1 < C.sides t.1
+    · rw [Nat.mod_eq_of_lt hlt] at hv
+      omega
+    · have heq : t.2.val + 1 = C.sides t.1 := by omega
+      rw [heq, Nat.mod_self] at hv
+      have hn := hside t
+      omega
+  have hnext2 : ∀ t : C.Side, C.nextCorner (C.nextCorner t) ≠ t := by
+    intro t ht
+    have hv := congrArg (fun u : C.Side => u.2.val) ht
+    simp only [PolygonComplex.nextCorner] at hv
+    have hn := hside t
+    have hp := C.sides_pos t.1
+    by_cases hlt : t.2.val + 2 < C.sides t.1
+    · have hlt1 : t.2.val + 1 < C.sides t.1 := by omega
+      rw [Nat.mod_eq_of_lt hlt1, Nat.mod_eq_of_lt (by omega)] at hv
+      omega
+    · by_cases heq : t.2.val + 1 = C.sides t.1
+      · rw [heq, Nat.mod_self] at hv
+        have hone : 1 < C.sides t.1 := by omega
+        rw [Nat.mod_eq_of_lt hone] at hv
+        omega
+      · have hlt1 : t.2.val + 1 < C.sides t.1 := by omega
+        have heq2 : t.2.val + 2 = C.sides t.1 := by omega
+        rw [Nat.mod_eq_of_lt hlt1, heq2, Nat.mod_self] at hv
+        omega
+  have hlift : ∀ {x y}, Relation.EqvGen C.CornerRel x y → Relation.EqvGen R x y := by
+    intro x y h
+    induction h with
+    | rel x y hxy => exact Relation.EqvGen.rel _ _ (Or.inl hxy)
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans _ _ _ ih₂
+  have hm : Relation.EqvGen R s (C.nextCorner s) :=
+    Relation.EqvGen.rel _ _ (Or.inr ⟨rfl, rfl⟩)
+  have hc := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_cutRel s hor
+  have hpre : ∀ u : C.Side, ∃ t : C'.Side, Relation.EqvGen R (D.toOld t) u := by
+    intro u
+    by_cases hu : u = s
+    · subst u
+      by_cases hp : C.nextCorner s = C.pair s
+      · have hn1 : C.nextCorner (C.nextCorner s) ≠ s := hnext2 s
+        have hn2 : C.nextCorner (C.nextCorner s) ≠ C.pair s := by
+          rw [← hp]
+          exact hnext (C.nextCorner s)
+        obtain ⟨t, ht⟩ := D.toOld_surj _ hn1 hn2
+        refine ⟨t, ?_⟩
+        rw [ht, hp]
+        exact (hlift hc.1).symm
+      · obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner s) (hnext s) hp
+        exact ⟨t, by rw [ht]; exact hm.symm⟩
+    · by_cases hup : u = C.pair s
+      · subst u
+        by_cases hs : C.nextCorner (C.pair s) = s
+        · have hn1 : C.nextCorner s ≠ s := hnext s
+          have hn2 : C.nextCorner s ≠ C.pair s := by
+            intro h
+            apply hnext2 (C.pair s)
+            rw [hs, h]
+          obtain ⟨t, ht⟩ := D.toOld_surj _ hn1 hn2
+          refine ⟨t, ?_⟩
+          rw [ht]
+          exact hlift hc.2
+        · have hn2 : C.nextCorner (C.pair s) ≠ C.pair s := hnext _
+          obtain ⟨t, ht⟩ := D.toOld_surj _ hs hn2
+          refine ⟨t, ?_⟩
+          rw [ht]
+          exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed hor (Or.inr rfl)
+      · obtain ⟨t, ht⟩ := D.toOld_surj u hu hup
+        exact ⟨t, by rw [ht]; exact Relation.EqvGen.refl _⟩
+  let g : C.Side → C'.Side := fun u =>
+    if h : ∃ t, D.toOld t = u then Classical.choose h else Classical.choose (hpre u)
+  refine ⟨g, ?_, ?_⟩
+  · intro t
+    have h : ∃ v, D.toOld v = D.toOld t := ⟨t, rfl⟩
+    rw [show g (D.toOld t) = Classical.choose h by simp only [g, dif_pos h]]
+    exact D.toOld_injective (Classical.choose_spec h)
+  · intro u
+    by_cases h : ∃ t, D.toOld t = u
+    · rw [show g u = Classical.choose h by simp only [g, dif_pos h]]
+      rw [Classical.choose_spec h]
+      exact Relation.EqvGen.refl _
+    · rw [show g u = Classical.choose (hpre u) by simp only [g, dif_neg h]]
+      exact Classical.choose_spec (hpre u)
 -- END SEAT AREA
 
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel
