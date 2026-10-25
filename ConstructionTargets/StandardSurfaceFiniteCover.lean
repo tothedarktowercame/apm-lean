@@ -4641,10 +4641,12 @@ def standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel {L :
 
 /-- **Leaf.**  The smaller position of each pair is a good label; pulled back
 along `D.toOld` it is a good label for `C'` (`D.pair_toOld`,
-`D.toOld_injective`). -/
+`D.toOld_injective`).  `h1` is needed: the label reads only the position
+within the face, so with two faces sides of different faces can collide. -/
 theorem standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_goodLabel
     {C C' : PolygonComplex} {s : C.Side}
-    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s) :
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) :
     standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C (fun u : C.Side => min u.2.val (C.pair u).2.val) ∧
       standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_GoodLabel C'
         (fun u : C'.Side => min (D.toOld u).2.val (C.pair (D.toOld u)).2.val) := by
@@ -4716,7 +4718,7 @@ theorem standardCover_pairingData_aux_contractStep_aux_homeomorph
     (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
     (hadj : C.nextCorner s = C.pair s)
     (hor : C.IsOrientable) : Nonempty (C.Space ≃ₜ C'.Space) := by
-  obtain ⟨hlab, hlab'⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_goodLabel D
+  obtain ⟨hlab, hlab'⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_goodLabel D h1
   obtain ⟨e₁⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge C h1 _ hlab
   obtain ⟨e₄⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_bridge C' D.faceCount_eq _ hlab'
   have hw' := standardCover_pairingData_aux_contractStep_aux_homeomorph_aux_isPolygonWord C' D.faceCount_eq _ hlab'
