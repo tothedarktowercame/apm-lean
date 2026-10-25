@@ -3440,6 +3440,61 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCoun
       Nat.card (Quotient (Relation.EqvGen.setoid r)) := by
   sorry
 
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_face
+    {C : PolygonComplex} (h1 : C.faceCount = 1) (u v : C.Side) : u.1 = v.1 := by
+  apply Fin.eq_of_val_eq
+  omega
+
+/-- With one face, a side is determined by its index. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext
+    {C : PolygonComplex} (h1 : C.faceCount = 1) {u v : C.Side}
+    (hval : u.2.val = v.2.val) : u = v := by
+  have hf := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_face h1 u v
+  apply Sigma.ext hf
+  apply (Fin.heq_ext_iff (congrArg C.sides hf)).2
+  exact hval
+
+/-- **Leaf (cyclic enumeration).**  `toOld` is the increasing enumeration of
+the indices other than `s` and `C.pair s` (`toOld_lt`, `toOld_surj`), so
+`toOld (C'.nextCorner t)` is the first surviving side cyclically after
+`toOld t`: the next side, or the one after it when the next side is removed,
+or the one after that when the next two sides are both removed (`s` and
+`C.pair s` adjacent).  Includes the wrap-around at the last index. -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (t : C'.Side) :
+    D.toOld (C'.nextCorner t) = C.nextCorner (D.toOld t) ∨
+      ((C.nextCorner (D.toOld t) = s ∨ C.nextCorner (D.toOld t) = C.pair s) ∧
+        (D.toOld (C'.nextCorner t) = C.nextCorner (C.nextCorner (D.toOld t)) ∨
+          ((C.nextCorner (C.nextCorner (D.toOld t)) = s ∨
+              C.nextCorner (C.nextCorner (D.toOld t)) = C.pair s) ∧
+            D.toOld (C'.nextCorner t) =
+              C.nextCorner (C.nextCorner (C.nextCorner (D.toOld t)))))) := by
+  sorry
+
+/-- A removed side's two corners are equivalent modulo the merge: for `s` it
+is the merge itself, for `C.pair s` it is `_aux_cutRel` around the merge. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed
+    {C : PolygonComplex} {s w : C.Side} (hor : C.IsOrientable)
+    (hw : w = s ∨ w = C.pair s) :
+    Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+      (C.nextCorner w) w := by
+  have hcut := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_cutRel s hor
+  have hlift : ∀ {x y}, Relation.EqvGen C.CornerRel x y →
+      Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)) x y := by
+    intro x y h
+    induction h with
+    | rel x y hxy => exact Relation.EqvGen.rel _ _ (Or.inl hxy)
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans _ _ _ ih₂
+  have hmerge : Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+      s (C.nextCorner s) := Relation.EqvGen.rel _ _ (Or.inr ⟨rfl, rfl⟩)
+  rcases hw with rfl | rfl
+  · exact hmerge.symm
+  · exact (hlift hcut.1).symm.trans _ _ _ (hmerge.trans _ _ _ (hlift hcut.2))
+
 /-- **Leaf (boundary order).**  Modulo the merge `s ~ nextCorner s`, `toOld`
 commutes with `nextCorner`.  The only places where it does not commute
 literally are the sides of `C'` just before a removed side (`s` or
@@ -3452,7 +3507,13 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next
     (h1 : C.faceCount = 1) (hor : C.IsOrientable) (t : C'.Side) :
     Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
       (D.toOld (C'.nextCorner t)) (C.nextCorner (D.toOld t)) := by
-  sorry
+  rcases standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip D h1 t with h | ⟨hw, h | ⟨hw', h⟩⟩
+  · rw [h]
+    exact Relation.EqvGen.refl _
+  · rw [h]
+    exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed hor hw
+  · rw [h]
+    exact (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed hor hw').trans _ _ _ (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed hor hw)
 
 /-- Every generating corner identification of `C'` maps under `toOld` to an
 equivalence of `C` modulo the merge. -/
