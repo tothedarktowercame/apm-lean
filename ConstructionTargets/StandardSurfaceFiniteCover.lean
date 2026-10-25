@@ -1608,18 +1608,96 @@ structure standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
   interior_left : ∀ x : Disk, ‖(x : ℂ)‖ < 1 → ‖(hL x : ℂ)‖ < 1
   interior_right : ∀ y : Disk, ‖(y : ℂ)‖ < 1 → ‖(hR y : ℂ)‖ < 1
 
-/-- **Leaf (geometry).**  The half charts exist.  Route: `PolygonMoves`
-already has the two pieces `cutPiece` of a disk cut along a chord, their
-boundary maps `cutOldA`/`cutOldB` (with `L = p + q - 2`, chord corners `0` and
-`p - 1`) and the cone chart `cutAndPaste_aux_boundary_chart`; what is new is the
-circle reparametrization from the `p`-gon (resp. `q`-gon) to those boundary
-parameters. -/
+/-- The chord corners `0` and `p - 1` of the merged polygon are distinct corners
+(banked by lemma-1). -/
+lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_cut
+    (p q : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) :
+    let L := p + q - 2
+    0 < p - 1 ∧ p - 1 < L ∧
+      PolygonMoves.cutPoint L 0 ≠ PolygonMoves.cutPoint L (p - 1) := by
+  dsimp
+  have hp' : 0 < p - 1 := by omega
+  have hL : p - 1 < p + q - 2 := by omega
+  refine ⟨hp', hL, PolygonMoves.cutPoint_ne hp' ?_⟩
+  omega
+
+/-- **Leaf (geometry).**  The circle reparametrization for the left half: the `p`-gon
+boundary onto the boundary parameter of `cutOldA (p + q - 2) 0 (p - 1)`,
+piecewise linear in the angle. -/
+lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL
+    (p q i : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) (hi : i < p) :
+    let L := p + q - 2
+    ∃ ρ : Circle ≃ₜ Circle,
+      (∀ m, m + 1 < p → ∀ t,
+        ρ ⟨edgePoint p ((i + 1 + m) % p) t,
+          by simpa [Circle, Submonoid.unitSphere] using
+            norm_edgePoint p ((i + 1 + m) % p) t⟩ =
+          PolygonMoves.cutEdgeCircle L m t) ∧
+      (∀ t, ρ ⟨edgePoint p i t,
+          by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint p i t⟩ =
+        PolygonMoves.cutChordParamA L 0 (p - 1) t) := by
+  sorry
+
+/-- **Leaf (geometry).**  The circle reparametrization for the right half: the `q`-gon
+boundary onto the boundary parameter of `cutOldB (p + q - 2) 0 (p - 1)`. -/
+lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamR
+    (p q j : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) (hj : j < q) :
+    let L := p + q - 2
+    ∃ ρ : Circle ≃ₜ Circle,
+      (∀ k, k + 1 < q → ∀ t,
+        ρ ⟨edgePoint q ((j + 1 + k) % q) t,
+          by simpa [Circle, Submonoid.unitSphere] using
+            norm_edgePoint q ((j + 1 + k) % q) t⟩ =
+          PolygonMoves.cutEdgeCircle L (p - 1 + k) t) ∧
+      (∀ t, ρ ⟨edgePoint q j t,
+          by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint q j t⟩ =
+        PolygonMoves.cutChordParamB L 0 (p - 1) t) := by
+  sorry
+
+/-- **Leaf (geometry, assembly).**  Given the two circle reparametrizations
+(`_aux_reparamL`, `_aux_reparamR`), the half charts exist: `β = cutOldA ∘ ρL`
+and `cutOldB ∘ ρR` with the cone chart `cutAndPaste_aux_boundary_chart`,
+restricted to `Disk`; seam and cover from `cutPiece_union_disjoint`, interiors
+from `interior K ⊆ ball`. -/
+lemma standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_assemble
+    (p q i j : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) (hi : i < p) (hj : j < q)
+    (ρL ρR : Circle ≃ₜ Circle)
+    (hLedge : ∀ m, m + 1 < p → ∀ t,
+      ρL ⟨edgePoint p ((i + 1 + m) % p) t,
+          by simpa [Circle, Submonoid.unitSphere] using
+            norm_edgePoint p ((i + 1 + m) % p) t⟩ =
+        PolygonMoves.cutEdgeCircle (p + q - 2) m t)
+    (hLchord : ∀ t, ρL ⟨edgePoint p i t,
+          by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint p i t⟩ =
+        PolygonMoves.cutChordParamA (p + q - 2) 0 (p - 1) t)
+    (hRedge : ∀ k, k + 1 < q → ∀ t,
+      ρR ⟨edgePoint q ((j + 1 + k) % q) t,
+          by simpa [Circle, Submonoid.unitSphere] using
+            norm_edgePoint q ((j + 1 + k) % q) t⟩ =
+        PolygonMoves.cutEdgeCircle (p + q - 2) (p - 1 + k) t)
+    (hRchord : ∀ t, ρR ⟨edgePoint q j t,
+          by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint q j t⟩ =
+        PolygonMoves.cutChordParamB (p + q - 2) 0 (p - 1) t) :
+    ∃ hL hR : Disk → Disk,
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
+        p q i j hL hR := by
+  sorry
+
+/-- The half charts exist (assembly of `_aux_reparamL`, `_aux_reparamR` and
+`_aux_assemble`). -/
 theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves
     (p q i j : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) (hi : i < p) (hj : j < q) :
     ∃ hL hR : Disk → Disk,
       standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
         p q i j hL hR := by
-  sorry
+  obtain ⟨ρL, hLedge, hLchord⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamL
+      p q i hp hq hi
+  obtain ⟨ρR, hRedge, hRchord⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_reparamR
+      p q j hp hq hj
+  exact standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves_aux_assemble
+    p q i j hp hq hi hj ρL ρR hLedge hLchord hRedge hRchord
 
 open Classical in
 /-- The face of `C'` that an unmerged face of `C` became. -/
