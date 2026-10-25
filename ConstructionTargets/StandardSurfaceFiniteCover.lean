@@ -1586,13 +1586,46 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel
 /-- The only failure of `toOld` to literally commute with `nextCorner` is at
 the two joins of the merged polygon; there it crosses one of the two deleted
 sides, hence gives one old corner-equivalence step. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_unmerged
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (t : C'.Side) (ht : t.1 ≠ D.merged) :
+    D.toOld (C'.nextCorner t) = C.nextCorner (D.toOld t) := by
+  have hf : (D.toOld (C'.nextCorner t)).1 = (C.nextCorner (D.toOld t)).1 := by
+    simp only [PolygonComplex.nextCorner]
+    exact (D.toOld_fst (C'.nextCorner t) (by simpa [PolygonComplex.nextCorner] using ht)).trans
+      (D.toOld_fst t ht).symm
+  apply Sigma.ext hf
+  apply (Fin.heq_ext_iff (congrArg C.sides hf)).2
+  simp only [PolygonComplex.nextCorner]
+  have hs : C.sides (D.toOld t).1 = C'.sides t.1 :=
+    (congrArg C.sides (D.toOld_fst t ht)).trans (D.sides_old t.1 ht).symm
+  rw [D.toOld_val t ht, hs]
+  exact D.toOld_val (C'.nextCorner t) (by simpa [PolygonComplex.nextCorner] using ht)
+
+
+/-- At a corner of the merged polygon, `toOld` commutes with `nextCorner` up to
+one old corner-equivalence step: within one half it commutes literally (the
+same-half arithmetic cases); at the two junctions it crosses a deleted side,
+and `_aux_cutRel` gives the step. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) (t : C'.Side) (ht : t.1 = D.merged) :
+    Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner t))
+      (C.nextCorner (D.toOld t)) := by
+  sorry
+
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (hor : C.IsOrientable) (t : C'.Side) :
     Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner t))
       (C.nextCorner (D.toOld t)) := by
-  sorry
+  by_cases ht : t.1 = D.merged
+  · exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged D hor t ht
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_unmerged D t ht]
+    exact Relation.EqvGen.refl _
 
 /-- Once the cyclic-boundary calculation is isolated in `_aux_next`, every
 generating corner identification of the glued complex maps to an old corner
