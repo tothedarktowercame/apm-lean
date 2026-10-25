@@ -8062,7 +8062,130 @@ noncomputable def orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_tran
   else (edgePoint L (e - m₂ - 1) s : ℂ)
 
 open PolygonMoves in
-/-- **Leaf (reverse, piece `A`, arc).**  The piece point is
+/-- Banked (lemma-3, 2026-10-25): an `α₁` piece point is the transfer of its
+rigid image side `e₀ + n₂ + 1`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_alpha1
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : e₀ < α₁.length) (P : Disk)
+    (hP : (P : ℂ) = oldA (cutEdgeCircle
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)) :
+    (P : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length (e₀ + α₂.length + 1) s₀ := by
+  rw [hP, D.oldA_arc e₀ s₀ (by omega)]
+  rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+    if_neg (by omega), if_neg (by omega), if_neg (by omega),
+    if_pos (by omega)]
+  congr 2 <;> omega
+
+open PolygonMoves in
+/-- Banked (lemma-3, 2026-10-25): an `α₂` piece point is the transfer of its
+rigid image side `e₀ - n₁ - 1`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_alpha2
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (hlo : α₁.length < e₀)
+    (hhi : e₀ < α₁.length + 1 + α₂.length) (P : Disk)
+    (hP : (P : ℂ) = oldA (cutEdgeCircle
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)) :
+    (P : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length (e₀ - α₁.length - 1) s₀ := by
+  rw [hP, D.oldA_arc e₀ s₀ hhi]
+  rw [orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer,
+    if_neg (by omega), if_neg (by omega), if_pos (by omega)]
+  congr 2 <;> omega
+
+open PolygonMoves in
+/-- **Leaf (reverse, piece `A`, arc, `y` side).**  `e₀ = n₁`: the piece point
+is on the old `y` side, `P = edgePoint L n₁ s₀`, and its new image is the chord
+point `cutChordA L 0 q s₀` (`D.ρA_y`, `D.oldA_chord`).  That image lies on the
+boundary, so `s₀ ∈ {0, 1}` (`_aux_forward_aux_consistency_aux_chordA_end`) and it
+is `cutPoint L q` or `cutPoint L 0`; the transfer of every new name `(e, τ)` of
+that vertex is related to `P` across the old `y` pair (sides `n₁` and
+`q + m₁`). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_y
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hN : (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length e τ : ℂ) =
+      cutChordA (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)
+    (hP : (P : ℂ) = (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length s₀ : ℂ)) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse, piece `A`, arc, next-name case).**  The piece point's new
+image is side `e₁` of the new word (`e₁ < q`, `e₁ ≠ n₂`: an `α₂` or `α₁` side),
+`P` is its transfer, and the given new name is the previous side's end:
+`τ = 1`, `s₀ = 0`, `e₁ = (e + 1) % L`.  Seams: `e = n₂` (the chord, `e₁ = n₂ + 1`),
+and the wraps `e₁ = 0` (`e = L - 1`, a `β₁` side) and `e₁ = n₂ + 1`; across
+the `y` seam use the old `y` pair (sides `n₁` and `q + m₁`). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (e₁ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₁ : e₁ < α₁.length + 1 + α₂.length)
+    (he₁c : e₁ ≠ α₂.length)
+    (hP : (P : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length e₁ s₀)
+    (hτ : τ.1 = 1) (hs₀ : s₀.1 = 0)
+    (hadj : e₁ = (e + 1) % (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse, piece `A`, arc, prev-name case).**  As `_aux_next`, but the
+given new name is the next side's start: `s₀ = 1`, `τ = 0`,
+`e = (e₁ + 1) % L`.  Seams: `e₁ = n₂ - 1` (`e = n₂`, the chord) and
+`e₁ = q - 1` (`e = q`, a `β₂` side, or the `c` side when `m₂ = 0`). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_prev
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (e₁ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₁ : e₁ < α₁.length + 1 + α₂.length)
+    (he₁c : e₁ ≠ α₂.length)
+    (hP : (P : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length e₁ s₀)
+    (hs₀ : s₀.1 = 1) (hτ : τ.1 = 0)
+    (hadj : e = (e₁ + 1) % (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Reduced (reverse, piece `A`, arc; lemma-3 PARTIAL + claude-14, 2026-10-25)**
+to `_aux_y`, `_aux_next`, `_aux_prev`.  The piece point is
 `cutEdgeCircle L e₀ s₀` on an old `A` side `e₀ < q`, so `P = edgePoint L e₀ s₀`
 (`D.oldA_arc`).  Its new image is read by `D.ρA_α₁ / ρA_y / ρA_α₂`; by
 `cutEdgePoint_eq` the new name `(e, τ)` is either that image's own name (then the
@@ -8088,7 +8211,46 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_au
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
-  sorry
+  let LL := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+  have hlen' : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length = LL :=
+    (orientablePairing_normalForm_aux_cutPaste_aux_length α₁ α₂ β₁ β₂ y c).symm
+  have hlen : LL = α₁.length + 1 + α₂.length + β₁.length + 1 + β₂.length := D.length
+  have hLL : 2 ≤ LL := by omega
+  by_cases hy₀ : e₀ = α₁.length
+  · subst e₀
+    refine orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_y
+      α₁ α₂ β₁ β₂ y c hy hc e he τ P s₀ ?_ ?_
+    · rw [hN, D.ρA_y, D.oldA_chord]
+    · rw [hP, D.oldA_arc _ _ he₀]
+  -- the image side `e₁` of `e₀` in the new word, and `P` as its transfer
+  obtain ⟨e₁, he₁, he₁c, hNe, hPe⟩ : ∃ e₁, e₁ < α₁.length + 1 + α₂.length ∧
+      e₁ ≠ α₂.length ∧
+      (edgePoint LL e τ : ℂ) = (edgePoint LL e₁ s₀ : ℂ) ∧
+      (P : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        LL α₁.length α₂.length β₁.length β₂.length e₁ s₀ := by
+    by_cases h₁ : e₀ < α₁.length
+    · refine ⟨e₀ + α₂.length + 1, by omega, by omega, ?_,
+        orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_alpha1
+          α₁ α₂ β₁ β₂ y c oldA oldB ρA ρB D e₀ s₀ h₁ P hP⟩
+      rw [hlen'] at hN
+      rw [hN, D.ρA_α₁ e₀ s₀ h₁, D.oldA_arc _ _ (by omega)]
+      try rfl
+    · refine ⟨e₀ - α₁.length - 1, by omega, by omega, ?_,
+        orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_alpha2
+          α₁ α₂ β₁ β₂ y c oldA oldB ρA ρB D e₀ s₀ (by omega) he₀ P hP⟩
+      rw [hlen'] at hN
+      rw [hN, D.ρA_α₂ e₀ s₀ (by omega) he₀, D.oldA_arc _ _ (by omega)]
+      try rfl
+  have hedges : edgePoint LL e τ = edgePoint LL e₁ s₀ := Subtype.ext hNe
+  rcases cutEdgePoint_eq hLL (by omega) (by omega) hedges with hs | hf | hb
+  · rcases hs with ⟨rfl, rfl⟩
+    exact ⟨P, hPe, Relation.EqvGen.refl P⟩
+  · rcases hf with ⟨hτ, hs₀, hadj⟩
+    exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_next
+      α₁ α₂ β₁ β₂ y c hy hc e he τ P e₁ s₀ he₁ he₁c hPe hτ hs₀ (by rw [hlen']; exact hadj)
+  · rcases hb with ⟨hs₀, hτ, hadj⟩
+    exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA_aux_prev
+      α₁ α₂ β₁ β₂ y c hy hc e he τ P e₁ s₀ he₁ he₁c hPe hs₀ hτ (by rw [hlen']; exact hadj)
 
 open PolygonMoves in
 /-- **Leaf (reverse, piece `A`, chord).**  The piece point is
