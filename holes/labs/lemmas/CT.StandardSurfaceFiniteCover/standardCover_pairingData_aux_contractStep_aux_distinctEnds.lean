@@ -1192,7 +1192,44 @@ theorem standardCover_pairingData_aux_contractStep_aux_distinctEnds
     (C : PolygonComplex) (h1 : C.faceCount = 1) (hV : 2 ≤ C.vertexCount) :
     ∃ s : C.Side, Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
       Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s) := by
-  sorry
+  by_contra h
+  push_neg at h
+  have hface : ∀ f g : Fin C.faceCount, f = g := by
+    intro f g
+    apply Fin.ext
+    have hf : f.val = 0 := by omega
+    have hg : g.val = 0 := by omega
+    omega
+  have hbase (f : Fin C.faceCount) (k : ℕ) (hk : k < C.sides f) :
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel)
+          (⟨f, ⟨k, hk⟩⟩ : C.Side) =
+        Quotient.mk (Relation.EqvGen.setoid C.CornerRel)
+          (⟨f, ⟨0, C.sides_pos f⟩⟩ : C.Side) := by
+    induction k with
+    | zero => rfl
+    | succ k ih =>
+      have hk' : k < C.sides f := by omega
+      have hs := h (⟨f, ⟨k, hk'⟩⟩ : C.Side)
+      have hmod : (k + 1) % C.sides f = k + 1 := Nat.mod_eq_of_lt hk
+      have hnxt : C.nextCorner (⟨f, ⟨k, hk'⟩⟩ : C.Side) =
+          (⟨f, ⟨k + 1, hk⟩⟩ : C.Side) := by
+        simp [PolygonComplex.nextCorner, hmod]
+      rw [hnxt] at hs
+      exact hs.symm.trans (ih hk')
+  have hsub : Subsingleton C.Vertex := by
+    constructor
+    intro x y
+    induction x using Quotient.inductionOn with
+    | _ s =>
+      induction y using Quotient.inductionOn with
+      | _ t =>
+        obtain ⟨f, i⟩ := s
+        obtain ⟨g, j⟩ := t
+        obtain rfl := hface f g
+        exact (hbase f i.val i.isLt).trans (hbase f j.val j.isLt).symm
+  have hc : C.vertexCount ≤ 1 := by
+    exact (Finite.card_le_one_iff_subsingleton).2 hsub
+  omega
 -- END SEAT AREA
 
 /-- `C'` is the one-face complex `C` with sides `s` and `C.pair s` removed
