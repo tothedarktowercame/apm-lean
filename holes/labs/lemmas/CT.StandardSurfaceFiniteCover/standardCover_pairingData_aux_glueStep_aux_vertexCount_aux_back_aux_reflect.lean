@@ -762,7 +762,41 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod0
     ∃ i' : Fin n, Relation.EqvGen
       (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
       ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
-  sorry
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  let a := C.nextCorner (C.pair (⟨i, k⟩ : C.Side))
+  let b := C.nextCorner (C.pair a)
+  let c := C.nextCorner (C.pair b)
+  refine ⟨c.1, Relation.EqvGen.trans _ _ _
+    (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+      g n hg σ hσ ⟨i, k⟩)
+    (Relation.EqvGen.trans _ _ _
+      (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+        g n hg σ hσ a)
+      (Relation.EqvGen.trans _ _ _
+        (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+          g n hg σ hσ b) ?_))⟩
+  have ha : a.2.1 = k.1 + 3 := by
+    show ((standardCover_pairingData_aux_lift_aux_basePair g k).1 + 1) % (4 * g) = k.1 + 3
+    have := k.2
+    simp only [standardCover_pairingData_aux_lift_aux_basePair]
+    split <;> rw [Nat.mod_eq_of_lt (by omega)] <;> omega
+  have hb : b.2.1 = k.1 + 2 := by
+    show ((standardCover_pairingData_aux_lift_aux_basePair g a.2).1 + 1) % (4 * g) = k.1 + 2
+    have := k.2
+    simp only [standardCover_pairingData_aux_lift_aux_basePair, ha]
+    split <;> rw [Nat.mod_eq_of_lt (by omega)] <;> omega
+  have hc : c.2.1 = (k.1 + 1) % (4 * g) := by
+    show ((standardCover_pairingData_aux_lift_aux_basePair g b.2).1 + 1) % (4 * g) = _
+    simp only [standardCover_pairingData_aux_lift_aux_basePair, hb]
+    split
+    · omega
+    · rw [show k.1 + 2 - 2 + 1 = k.1 + 1 by omega]
+  have heq : c =
+      ⟨c.1, ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ :=
+    Sigma.ext rfl (heq_of_eq (Fin.ext hc))
+  change Relation.EqvGen C.CornerRel c _
+  rw [heq]
+  exact Relation.EqvGen.refl _
 
 /-- Leaf: `_aux_step` when `k % 4 = 1`: one `_aux_corner` step backwards from `s = ⟨i, k - 1⟩`. -/
 theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod1
@@ -774,7 +808,45 @@ theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod1
     ∃ i' : Fin n, Relation.EqvGen
       (standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ).CornerRel
       ⟨i, k⟩ ⟨i', ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
-  sorry
+  let C := standardCover_pairingData_aux_lift_aux_complex g n hg σ hσ
+  let e : Fin (4 * g) := ⟨k.1 - 1, by omega⟩
+  let s : C.Side := ⟨i, e⟩
+  refine ⟨(C.pair s).1, ?_⟩
+  have heq : C.nextCorner (C.pair (C.pair s)) = ⟨i, k⟩ := by
+    rw [C.pair_pair]
+    apply Sigma.ext
+    · rfl
+    · simp only [C, standardCover_pairingData_aux_lift_aux_complex]
+      apply heq_of_eq
+      apply Fin.ext
+      change ((e.1 + 1) % (4 * g)) = k.1
+      have hev : e.1 + 1 = k.1 := by
+        simp [e]
+        omega
+      rw [hev, Nat.mod_eq_of_lt k.2]
+  have heq' : C.pair s =
+      ⟨(C.pair s).1, ⟨(k.1 + 1) % (4 * g), Nat.mod_lt _ (by omega)⟩⟩ := by
+    apply Sigma.ext
+    · rfl
+    · simp only [C, standardCover_pairingData_aux_lift_aux_complex]
+      apply heq_of_eq
+      apply Fin.ext
+      change (standardCover_pairingData_aux_lift_aux_basePair g e).1 =
+        (k.1 + 1) % (4 * g)
+      have hklt : k.1 + 1 < 4 * g := by omega
+      rw [Nat.mod_eq_of_lt hklt]
+      have hemod : e.1 % 4 = 0 := by
+        simp [e]
+        omega
+      simp [standardCover_pairingData_aux_lift_aux_basePair, hemod, e]
+      omega
+  rw [← heq]
+  refine Relation.EqvGen.trans _ _ _
+    (Relation.EqvGen.symm _ _
+      (standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_corner
+        g n hg σ hσ (C.pair s))) ?_
+  rw [heq']
+  exact Relation.EqvGen.refl _
 
 /-- Leaf: `_aux_step` when `k % 4 = 2`: one `_aux_corner` step backwards from `s = ⟨σ i (basePair (k + 1)), k + 1⟩` (note `k + 1 < 4g`). -/
 theorem standardCover_pairingData_aux_lift_aux_vertexCount_aux_step_aux_mod2
@@ -1586,13 +1658,46 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel
 /-- The only failure of `toOld` to literally commute with `nextCorner` is at
 the two joins of the merged polygon; there it crosses one of the two deleted
 sides, hence gives one old corner-equivalence step. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_unmerged
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (t : C'.Side) (ht : t.1 ≠ D.merged) :
+    D.toOld (C'.nextCorner t) = C.nextCorner (D.toOld t) := by
+  have hf : (D.toOld (C'.nextCorner t)).1 = (C.nextCorner (D.toOld t)).1 := by
+    simp only [PolygonComplex.nextCorner]
+    exact (D.toOld_fst (C'.nextCorner t) (by simpa [PolygonComplex.nextCorner] using ht)).trans
+      (D.toOld_fst t ht).symm
+  apply Sigma.ext hf
+  apply (Fin.heq_ext_iff (congrArg C.sides hf)).2
+  simp only [PolygonComplex.nextCorner]
+  have hs : C.sides (D.toOld t).1 = C'.sides t.1 :=
+    (congrArg C.sides (D.toOld_fst t ht)).trans (D.sides_old t.1 ht).symm
+  rw [D.toOld_val t ht, hs]
+  exact D.toOld_val (C'.nextCorner t) (by simpa [PolygonComplex.nextCorner] using ht)
+
+
+/-- At a corner of the merged polygon, `toOld` commutes with `nextCorner` up to
+one old corner-equivalence step: within one half it commutes literally (the
+same-half arithmetic cases); at the two junctions it crosses a deleted side,
+and `_aux_cutRel` gives the step. -/
+theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hor : C.IsOrientable) (t : C'.Side) (ht : t.1 = D.merged) :
+    Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner t))
+      (C.nextCorner (D.toOld t)) := by
+  sorry
+
 theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (hor : C.IsOrientable) (t : C'.Side) :
     Relation.EqvGen C.CornerRel (D.toOld (C'.nextCorner t))
       (C.nextCorner (D.toOld t)) := by
-  sorry
+  by_cases ht : t.1 = D.merged
+  · exact standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_merged D hor t ht
+  · rw [standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_next_aux_unmerged D t ht]
+    exact Relation.EqvGen.refl _
 
 /-- Once the cyclic-boundary calculation is isolated in `_aux_next`, every
 generating corner identification of the glued complex maps to an old corner
@@ -1656,7 +1761,98 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_back_aux_choo
     (hor : C.IsOrientable) :
     ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
       (∀ u, Relation.EqvGen C.CornerRel (D.toOld (g u)) u) := by
-  sorry
+  have hfaces : s.1 ≠ (C.pair s).1 := by
+    intro h
+    exact D.old_ne D.merged (D.old_merged.trans h)
+  have hfixed : ∀ t : C.Side, C.nextCorner t = t → C.sides t.1 = 1 := by
+    intro t ht
+    have hv := congrArg (fun u : C.Side => u.2.val) ht
+    simp only [PolygonComplex.nextCorner] at hv
+    have hp := C.sides_pos t.1
+    by_cases hlt : t.2.val + 1 < C.sides t.1
+    · rw [Nat.mod_eq_of_lt hlt] at hv
+      omega
+    · have heq : t.2.val + 1 = C.sides t.1 := by omega
+      rw [heq, Nat.mod_self] at hv
+      omega
+  have hpre : ∀ u : C.Side, ∃ t : C'.Side,
+      Relation.EqvGen C.CornerRel (D.toOld t) u := by
+    intro u
+    by_cases hu : u = s
+    · subst u
+      by_cases hp : C.nextCorner (C.pair s) = C.pair s
+      · have hsidesp := hfixed (C.pair s) hp
+        have hsides : C.nextCorner s ≠ s := by
+          intro hs
+          have hsidess := hfixed s hs
+          have hm := C'.sides_pos D.merged
+          have heq := D.sides_merged
+          omega
+        have hn1 : C.nextCorner s ≠ s := hsides
+        have hn2 : C.nextCorner s ≠ C.pair s := by
+          intro h
+          have hf := congrArg (fun x : C.Side => x.1) h
+          simp only [PolygonComplex.nextCorner] at hf
+          exact hfaces hf
+        obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner s) hn1 hn2
+        refine ⟨t, ?_⟩
+        rw [ht]
+        have hc := standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor
+        rw [hp] at hc
+        exact hc.2.trans _ _ _ hc.1.symm
+      · have hn1 : C.nextCorner (C.pair s) ≠ s := by
+          intro h
+          exact hfaces ((congrArg (fun x : C.Side => x.1) h).symm)
+        obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner (C.pair s)) hn1 hp
+        refine ⟨t, ?_⟩
+        rw [ht]
+        exact (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor).1.symm
+    · by_cases hup : u = C.pair s
+      · subst u
+        by_cases hs : C.nextCorner s = s
+        · have hsidess := hfixed s hs
+          have hsidesp : C.nextCorner (C.pair s) ≠ C.pair s := by
+            intro hp
+            have hsidesp := hfixed (C.pair s) hp
+            have hm := C'.sides_pos D.merged
+            have heq := D.sides_merged
+            omega
+          have hn1 : C.nextCorner (C.pair s) ≠ s := by
+            intro h
+            exact hfaces ((congrArg (fun x : C.Side => x.1) h).symm)
+          obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner (C.pair s)) hn1 hsidesp
+          refine ⟨t, ?_⟩
+          rw [ht]
+          have hc := standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor
+          rw [hs] at hc
+          exact hc.1.symm.trans _ _ _ hc.2
+        · have hn2 : C.nextCorner s ≠ C.pair s := by
+            intro h
+            have hf := congrArg (fun x : C.Side => x.1) h
+            simp only [PolygonComplex.nextCorner] at hf
+            exact hfaces hf
+          obtain ⟨t, ht⟩ := D.toOld_surj (C.nextCorner s) hs hn2
+          refine ⟨t, ?_⟩
+          rw [ht]
+          exact (standardCover_pairingData_aux_glueStep_aux_vertexCount_aux_cutRel s hor).2
+      · obtain ⟨t, ht⟩ := D.toOld_surj u hu hup
+        refine ⟨t, ?_⟩
+        rw [ht]
+        exact Relation.EqvGen.refl u
+  let g : C.Side → C'.Side := fun u =>
+    if h : ∃ t, D.toOld t = u then Classical.choose h else Classical.choose (hpre u)
+  refine ⟨g, ?_, ?_⟩
+  · intro t
+    have h : ∃ v, D.toOld v = D.toOld t := ⟨t, rfl⟩
+    rw [show g (D.toOld t) = Classical.choose h by simp only [g, dif_pos h]]
+    exact D.toOld_injective (Classical.choose_spec h)
+  · intro u
+    by_cases h : ∃ t, D.toOld t = u
+    · rw [show g u = Classical.choose h by simp only [g, dif_pos h]]
+      rw [Classical.choose_spec h]
+      exact Relation.EqvGen.refl u
+    · rw [show g u = Classical.choose (hpre u) by simp only [g, dif_neg h]]
+      exact Classical.choose_spec (hpre u)
 
 /-- **Leaf (corner classes reflect).**  Two corners of `C'` whose images are
 `C`-equivalent are already `C'`-equivalent: the map of corner classes induced
@@ -3310,13 +3506,184 @@ lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_twoClasses
 
 /-- **Leaf (counting a merge).**  Adding one generator `a ~ b` between two
 inequivalent elements merges exactly two classes into one. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount_aux_iff
+    {α : Type} (r : α → α → Prop) (a b x y : α) :
+    Relation.EqvGen (fun u v => r u v ∨ (u = a ∧ v = b)) x y ↔
+      Relation.EqvGen r x y ∨
+        (Relation.EqvGen r x a ∧ Relation.EqvGen r b y) ∨
+        (Relation.EqvGen r x b ∧ Relation.EqvGen r a y) := by
+  let R := Relation.EqvGen r
+  let T := fun x y => R x y ∨ (R x a ∧ R b y) ∨ (R x b ∧ R a y)
+  have hrefl : ∀ x, T x x := fun x => Or.inl (Relation.EqvGen.refl x)
+  have hsymm : ∀ {x y}, T x y → T y x := by
+    intro x y h
+    rcases h with h | h | h
+    · exact Or.inl h.symm
+    · exact Or.inr (Or.inr ⟨h.2.symm, h.1.symm⟩)
+    · exact Or.inr (Or.inl ⟨h.2.symm, h.1.symm⟩)
+  have htrans : ∀ {x y z}, T x y → T y z → T x z := by
+    intro x y z hxy hyz
+    rcases hxy with hxy | ⟨hxa, hby⟩ | ⟨hxb, hay⟩
+    · rcases hyz with hyz | ⟨hya, hbz⟩ | ⟨hyb, haz⟩
+      · exact Or.inl (hxy.trans _ _ _ hyz)
+      · exact Or.inr (Or.inl ⟨hxy.trans _ _ _ hya, hbz⟩)
+      · exact Or.inr (Or.inr ⟨hxy.trans _ _ _ hyb, haz⟩)
+    · rcases hyz with hyz | ⟨hya, hbz⟩ | ⟨hyb, haz⟩
+      · exact Or.inr (Or.inl ⟨hxa, hby.trans _ _ _ hyz⟩)
+      · exact Or.inl (hxa.trans _ _ _ (hby.trans _ _ _ hya).symm |>.trans _ _ _ hbz)
+      · exact Or.inl (hxa.trans _ _ _ haz)
+    · rcases hyz with hyz | ⟨hya, hbz⟩ | ⟨hyb, haz⟩
+      · exact Or.inr (Or.inr ⟨hxb, hay.trans _ _ _ hyz⟩)
+      · exact Or.inl (hxb.trans _ _ _ hbz)
+      · exact Or.inl (hxb.trans _ _ _ (hay.trans _ _ _ hyb).symm |>.trans _ _ _ haz)
+  constructor
+  · intro h
+    induction h with
+    | rel x y hxy =>
+        rcases hxy with hxy | ⟨rfl, rfl⟩
+        · exact Or.inl (Relation.EqvGen.rel x y hxy)
+        · exact Or.inr (Or.inl ⟨Relation.EqvGen.refl _, Relation.EqvGen.refl _⟩)
+    | refl x => exact hrefl x
+    | symm x y _ ih => exact hsymm ih
+    | trans x y z _ _ ih₁ ih₂ => exact htrans ih₁ ih₂
+  · intro h
+    have hold : ∀ {x y}, Relation.EqvGen r x y →
+        Relation.EqvGen (fun u v => r u v ∨ (u = a ∧ v = b)) x y := by
+      intro x y hxy
+      induction hxy with
+      | rel x y h => exact Relation.EqvGen.rel x y (Or.inl h)
+      | refl x => exact Relation.EqvGen.refl x
+      | symm x y _ ih => exact ih.symm
+      | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans _ _ _ ih₂
+    rcases h with h | ⟨hxa, hby⟩ | ⟨hxb, hay⟩
+    · exact hold h
+    · exact (hold hxa).trans _ _ _ ((Relation.EqvGen.rel a b (Or.inr ⟨rfl, rfl⟩)).trans _ _ _ (hold hby))
+    · exact (hold hxb).trans _ _ _ ((Relation.EqvGen.rel a b (Or.inr ⟨rfl, rfl⟩)).symm.trans _ _ _ (hold hay))
+
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount
     {α : Type} [Finite α] (r : α → α → Prop) (a b : α)
     (hab : ¬ Relation.EqvGen r a b) :
     Nat.card (Quotient (Relation.EqvGen.setoid
         (fun x y => r x y ∨ (x = a ∧ y = b)))) + 1 =
       Nat.card (Quotient (Relation.EqvGen.setoid r)) := by
+  classical
+  let R := Relation.EqvGen.setoid r
+  let S := Relation.EqvGen.setoid (fun x y => r x y ∨ (x = a ∧ y = b))
+  let qa : Quotient R := Quotient.mk R a
+  let qb : Quotient R := Quotient.mk R b
+  have habq : qa ≠ qb := by
+    intro h
+    exact hab (Quotient.exact h)
+  let f : Quotient R → Quotient S := Quotient.map id (by
+    intro x y h
+    exact (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount_aux_iff
+      r a b x y).mpr (Or.inl h))
+  have hf_surj : Function.Surjective f := by
+    intro q
+    induction q using Quotient.ind with
+    | _ x => exact ⟨Quotient.mk R x, rfl⟩
+  have hf_eq : ∀ q q' : Quotient R, f q = f q' ↔
+      q = q' ∨ (q = qa ∧ q' = qb) ∨ (q = qb ∧ q' = qa) := by
+    intro q q'
+    induction q using Quotient.ind with
+    | _ x =>
+      induction q' using Quotient.ind with
+      | _ y =>
+        change Quotient.mk S x = Quotient.mk S y ↔ _
+        rw [Quotient.eq]
+        change Relation.EqvGen (fun u v => r u v ∨ (u = a ∧ v = b)) x y ↔ _
+        rw [standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_mergeCount_aux_iff]
+        simp only [qa, qb, R, Quotient.eq]
+        constructor <;> intro h
+        · rcases h with h | ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+          · exact Or.inl h
+          · exact Or.inr (Or.inl ⟨h₁, h₂.symm⟩)
+          · exact Or.inr (Or.inr ⟨h₁, h₂.symm⟩)
+        · rcases h with h | ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+          · exact Or.inl h
+          · exact Or.inr (Or.inl ⟨h₁, h₂.symm⟩)
+          · exact Or.inr (Or.inr ⟨h₁, h₂.symm⟩)
+  let A := {q : Quotient R // q ≠ qb}
+  let e : A ≃ Quotient S := Equiv.ofBijective (fun q => f q.1) ⟨by
+    intro x y hxy
+    have h := (hf_eq x.1 y.1).mp hxy
+    rcases h with h | ⟨_, h⟩ | ⟨h, _⟩
+    · exact Subtype.ext h
+    · exact False.elim (y.2 h)
+    · exact False.elim (x.2 h)
+    , by
+      intro z
+      obtain ⟨q, hq⟩ := hf_surj z
+      by_cases hqb : q = qb
+      · refine ⟨⟨qa, habq⟩, ?_⟩
+        exact ((hf_eq qa q).mpr (Or.inr (Or.inl ⟨rfl, hqb⟩))).trans hq
+      · exact ⟨⟨q, hqb⟩, hq⟩⟩
+  letI : Fintype (Quotient R) := Fintype.ofFinite _
+  letI : Fintype (Quotient S) := Fintype.ofFinite _
+  have hcardA : Fintype.card A + 1 = Fintype.card (Quotient R) := by
+    rw [Fintype.card_subtype_compl (fun q : Quotient R => q = qb)]
+    simp
+    have hpos : 0 < Fintype.card (Quotient R) :=
+      Fintype.card_pos_iff.mpr ⟨Quotient.mk R a⟩
+    omega
+  rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card,
+    ← Fintype.card_congr e]
+  exact hcardA
+
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_face
+    {C : PolygonComplex} (h1 : C.faceCount = 1) (u v : C.Side) : u.1 = v.1 := by
+  apply Fin.eq_of_val_eq
+  omega
+
+/-- With one face, a side is determined by its index. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_ext
+    {C : PolygonComplex} (h1 : C.faceCount = 1) {u v : C.Side}
+    (hval : u.2.val = v.2.val) : u = v := by
+  have hf := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_face h1 u v
+  apply Sigma.ext hf
+  apply (Fin.heq_ext_iff (congrArg C.sides hf)).2
+  exact hval
+
+/-- **Leaf (cyclic enumeration).**  `toOld` is the increasing enumeration of
+the indices other than `s` and `C.pair s` (`toOld_lt`, `toOld_surj`), so
+`toOld (C'.nextCorner t)` is the first surviving side cyclically after
+`toOld t`: the next side, or the one after it when the next side is removed,
+or the one after that when the next two sides are both removed (`s` and
+`C.pair s` adjacent).  Includes the wrap-around at the last index. -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (t : C'.Side) :
+    D.toOld (C'.nextCorner t) = C.nextCorner (D.toOld t) ∨
+      ((C.nextCorner (D.toOld t) = s ∨ C.nextCorner (D.toOld t) = C.pair s) ∧
+        (D.toOld (C'.nextCorner t) = C.nextCorner (C.nextCorner (D.toOld t)) ∨
+          ((C.nextCorner (C.nextCorner (D.toOld t)) = s ∨
+              C.nextCorner (C.nextCorner (D.toOld t)) = C.pair s) ∧
+            D.toOld (C'.nextCorner t) =
+              C.nextCorner (C.nextCorner (C.nextCorner (D.toOld t)))))) := by
   sorry
+
+/-- A removed side's two corners are equivalent modulo the merge: for `s` it
+is the merge itself, for `C.pair s` it is `_aux_cutRel` around the merge. -/
+lemma standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed
+    {C : PolygonComplex} {s w : C.Side} (hor : C.IsOrientable)
+    (hw : w = s ∨ w = C.pair s) :
+    Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+      (C.nextCorner w) w := by
+  have hcut := standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_cutRel s hor
+  have hlift : ∀ {x y}, Relation.EqvGen C.CornerRel x y →
+      Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)) x y := by
+    intro x y h
+    induction h with
+    | rel x y hxy => exact Relation.EqvGen.rel _ _ (Or.inl hxy)
+    | refl x => exact Relation.EqvGen.refl _
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans _ _ _ ih₂
+  have hmerge : Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+      s (C.nextCorner s) := Relation.EqvGen.rel _ _ (Or.inr ⟨rfl, rfl⟩)
+  rcases hw with rfl | rfl
+  · exact hmerge.symm
+  · exact (hlift hcut.1).symm.trans _ _ _ (hmerge.trans _ _ _ (hlift hcut.2))
 
 /-- **Leaf (boundary order).**  Modulo the merge `s ~ nextCorner s`, `toOld`
 commutes with `nextCorner`.  The only places where it does not commute
@@ -3330,7 +3697,13 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next
     (h1 : C.faceCount = 1) (hor : C.IsOrientable) (t : C'.Side) :
     Relation.EqvGen (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
       (D.toOld (C'.nextCorner t)) (C.nextCorner (D.toOld t)) := by
-  sorry
+  rcases standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_skip D h1 t with h | ⟨hw, h | ⟨hw', h⟩⟩
+  · rw [h]
+    exact Relation.EqvGen.refl _
+  · rw [h]
+    exact standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed hor hw
+  · rw [h]
+    exact (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed hor hw').trans _ _ _ (standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_next_aux_removed hor hw)
 
 /-- Every generating corner identification of `C'` maps under `toOld` to an
 equivalence of `C` modulo the merge. -/
@@ -3374,6 +3747,42 @@ generating identification of `C`, and the merge `s ~ nextCorner s` itself, to
 a `C'`-equivalence.  The removed corners `s` and `C.pair s` go to the
 `C'`-corner at the junction where the removed side was (the initial corner of
 the next surviving side). -/
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_leftInverse
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s) :
+    ∃ g : C.Side → C'.Side, ∀ t, g (D.toOld t) = t := by
+  haveI : Nonempty C'.Side := by
+    have hface : 0 < C'.faceCount := by rw [D.faceCount_eq]; exact Nat.zero_lt_one
+    let f : Fin C'.faceCount := ⟨0, hface⟩
+    exact ⟨⟨f, ⟨0, C'.sides_pos f⟩⟩⟩
+  let g : C.Side → C'.Side := Function.invFun D.toOld
+  refine ⟨g, ?_⟩
+  intro t
+  exact Function.leftInverse_invFun D.toOld_injective t
+
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_choose
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides) (hor : C.IsOrientable) :
+    ∃ g : C.Side → C'.Side, (∀ t, g (D.toOld t) = t) ∧
+      (∀ u, Relation.EqvGen
+        (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+        (D.toOld (g u)) u) := by
+  sorry
+
+theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
+    (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides) (hor : C.IsOrientable)
+    (g : C.Side → C'.Side)
+    (hg1 : ∀ t, g (D.toOld t) = t)
+    (hg2 : ∀ u, Relation.EqvGen
+      (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s))
+      (D.toOld (g u)) u) :
+    ∀ a b, (C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s)) →
+      Relation.EqvGen C'.CornerRel (g a) (g b) := by
+  sorry
+
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
@@ -3383,7 +3792,12 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back
         (fun x y => C.CornerRel x y ∨ (x = s ∧ y = C.nextCorner s)) (D.toOld (g u)) u) ∧
       (∀ a b, (C.CornerRel a b ∨ (a = s ∧ b = C.nextCorner s)) →
         Relation.EqvGen C'.CornerRel (g a) (g b)) := by
-  sorry
+  obtain ⟨g, hg1, hg2⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_choose
+      D h1 h5 hor
+  exact ⟨g, hg1, hg2,
+    standardCover_pairingData_aux_contractStep_aux_vertexCount_aux_back_aux_mapRel
+      D h1 h5 hor g hg1 hg2⟩
 
 theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
     {C C' : PolygonComplex} {s : C.Side}
@@ -3435,24 +3849,69 @@ theorem standardCover_pairingData_aux_contractStep_aux_vertexCount
   rw [Nat.card_congr e]
   exact hc
 
-/-- **Leaf (collapse an arc).**  Side `s` has distinct ends, so its image in
-`C.Space` is an embedded arc; collapsing it (and its partner, the same arc) to
-a point gives `C'.Space`.  In the disk: a homeomorphism `Disk → Disk` that
-sends side `s` and side `C.pair s` to single boundary points and the other
-sides onto the sides of the `(sides - 2)`-gon, compatible with the pairings. -/
+/-! Re-split of `_aux_contractStep` (claude-14, 2026-10-25, after the lemma-2
+PARTIAL on `_aux_homeomorph`).  The earlier leaf asked for `C.Space ≃ₜ C'.Space`
+for any side `s` with distinct ends.  That is "a surface with an embedded arc
+collapsed is the same surface", and no disk map gives it: a map that collapses
+side `s` to a point descends to `C.Space → C'.Space` collapsing the arc, which is
+not injective.  Route now (Massey, Ch. 1 §8): cut-and-paste moves, each a cut
+(`GlueData` read backwards) followed by a glue (`_aux_glueStep_aux_homeomorph`),
+shrink one vertex class to a single corner (`_aux_isolate`); the two sides at
+that corner are `a a⁻¹`, and cancelling them (`_aux_homeomorph`, now for
+adjacent sides only) is `PolygonMoves.inversePairCancellation`. -/
+
+/-- **Leaf (cancel an adjacent pair).**  Side `C.pair s` follows side `s`
+on the boundary (`a a⁻¹`).  Zip the two sides together: the disk map of
+`PolygonMoves.inversePairCancellation_aux_collapse` (rotated so the pair sits
+at the chosen position; `PolygonMoves.rotation_aux_disk_homeomorph`) descends
+to `C.Space ≃ₜ C'.Space` by the argument of
+`PolygonMoves.polygonSurface_homeomorph_of_collapse`.  Unlike a collapse of a
+general side, the zip is injective on the interior and identifies only points
+`C.Rel` already identifies. -/
 theorem standardCover_pairingData_aux_contractStep_aux_homeomorph
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_contractStep_aux_ContractData C C' s)
     (h1 : C.faceCount = 1) (h5 : 5 ≤ C.totalSides)
-    (hs : Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
-      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s))
+    (hadj : C.nextCorner s = C.pair s)
     (hor : C.IsOrientable) : Nonempty (C.Space ≃ₜ C'.Space) := by
   sorry
 
-/-- **One 1-skeleton contraction.**  A one-face complex with at least
-two vertices has a side whose endpoints are distinct vertices.  Collapsing
-that side and its partner (an embedded arc in the surface) removes two
-boundary arcs and merges the two vertices.  `2 * vertexCount < totalSides`
+/-- **Leaf (the middle corner of `a a⁻¹` is its own vertex).**  If
+`C.pair s = C.nextCorner s` and `C` is orientable, every `CornerRel` step
+from the corner `m = C.nextCorner s` returns to `m` (the only sides at `m` are
+`s` and `C.pair s`), so the class of `m` is `{m}`, and `s ≠ m` because the face
+has at least two sides. -/
+theorem standardCover_pairingData_aux_contractStep_aux_adjacentDistinct
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (h3 : 3 ≤ C.totalSides)
+    (hor : C.IsOrientable) (s : C.Side) (hadj : C.nextCorner s = C.pair s) :
+    Quotient.mk (Relation.EqvGen.setoid C.CornerRel) s ≠
+      Quotient.mk (Relation.EqvGen.setoid C.CornerRel) (C.nextCorner s) := by
+  sorry
+
+/-- **Leaf, NOT YET SPLIT (bring a pair together).**  A one-face orientable
+complex with at least two vertices is homeomorphic to one with the same
+number of sides and vertices in which some side is followed by its partner.
+Massey's induction on the corner count of a vertex class `Q`: if `Q` has one
+corner, the sides at it are `a a⁻¹` (orientability); otherwise take sides
+`a` (from `P ≠ Q` to `Q`) and `b` (from `Q`) at a corner of `Q`, with
+`b ≠ C.pair a` (else done), cut off the triangle `a b c⁻¹` and glue it back
+along `b`: `X a b Y b⁻¹ Z` becomes `X c Y c⁻¹ a Z`, with one fewer corner in
+`Q` and the same vertex count.  The cut is a `GlueData` read backwards and
+both homeomorphisms are `_aux_glueStep_aux_homeomorph`; vertex counts are kept
+by `_aux_glueStep_aux_vertexCount`. -/
+theorem standardCover_pairingData_aux_contractStep_aux_isolate
+    (C : PolygonComplex) (h1 : C.faceCount = 1) (hV : 2 ≤ C.vertexCount)
+    (hlarge : 2 * C.vertexCount < C.totalSides) (hor : C.IsOrientable) :
+    ∃ C₁ : PolygonComplex, C₁.faceCount = 1 ∧ C₁.totalSides = C.totalSides ∧
+      C₁.vertexCount = C.vertexCount ∧ C₁.IsOrientable ∧
+      Nonempty (C.Space ≃ₜ C₁.Space) ∧
+      ∃ s : C₁.Side, C₁.nextCorner s = C₁.pair s := by
+  sorry
+
+/-- **One vertex removed.**  Move corners by cut-and-paste until some side
+is followed by its partner (`_aux_isolate`), then cancel that pair
+(`_aux_homeomorph`): two boundary arcs go, and the middle corner, a vertex on
+its own (`_aux_adjacentDistinct`), merges away.  `2 * vertexCount < totalSides`
 excludes the sphere words, where the contraction would reach zero sides; it
 is preserved by the step. -/
 theorem standardCover_pairingData_aux_contractStep
@@ -3461,15 +3920,21 @@ theorem standardCover_pairingData_aux_contractStep
     ∃ C' : PolygonComplex, C'.faceCount = 1 ∧ C'.totalSides + 2 = C.totalSides ∧
       C'.vertexCount + 1 = C.vertexCount ∧ C'.IsOrientable ∧
       Nonempty (C.Space ≃ₜ C'.Space) := by
-  have h5 := standardCover_pairingData_aux_contractStep_aux_totalSides_five_le C hV hlarge
-  obtain ⟨s, hs⟩ :=
-    standardCover_pairingData_aux_contractStep_aux_distinctEnds C h1 hV
+  obtain ⟨C₁, h1₁, hT₁, hV₁, hor₁, ⟨e₁⟩, s, hadj⟩ :=
+    standardCover_pairingData_aux_contractStep_aux_isolate C h1 hV hlarge hor
+  have h5 : 5 ≤ C₁.totalSides := by
+    have := standardCover_pairingData_aux_contractStep_aux_totalSides_five_le C hV hlarge
+    omega
+  have hs := standardCover_pairingData_aux_contractStep_aux_adjacentDistinct
+    C₁ h1₁ (by omega) hor₁ s hadj
   obtain ⟨C', ⟨D⟩⟩ :=
-    standardCover_pairingData_aux_contractStep_aux_contractExists C h1 (by omega) s
-  exact ⟨C', D.faceCount_eq, D.totalSides_add_two,
-    standardCover_pairingData_aux_contractStep_aux_vertexCount D h1 h5 hs hor,
-    standardCover_pairingData_aux_contractStep_aux_orientable D hor,
-    standardCover_pairingData_aux_contractStep_aux_homeomorph D h1 h5 hs hor⟩
+    standardCover_pairingData_aux_contractStep_aux_contractExists C₁ h1₁ (by omega) s
+  obtain ⟨e₂⟩ := standardCover_pairingData_aux_contractStep_aux_homeomorph D h1₁ h5 hadj hor₁
+  exact ⟨C', D.faceCount_eq, by have := D.totalSides_add_two; omega,
+    by have := standardCover_pairingData_aux_contractStep_aux_vertexCount D h1₁ h5 hs hor₁
+       omega,
+    standardCover_pairingData_aux_contractStep_aux_orientable D hor₁,
+    ⟨e₁.trans e₂⟩⟩
 
 /-- Contract a spanning tree of the 1-skeleton: `k` contractions on `k + 1`
 vertices. -/
@@ -4967,6 +5432,12 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q_conti
 are the images under `_p` of those of `_p`; both outer pieces are affine on
 all of `ℝ`, so the inverse laws hold globally.  Continuity is already proved
 (`_p_continuous`, `_q_continuous`). -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props_aux_cast
+    (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
+    (n₁ : ℝ) + 1 + n₂ < L := by
+  exact_mod_cast hL
+
+set_option maxHeartbeats 1000000 in
 lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props
     (L n₁ n₂ : ℕ) (hL : n₁ + 1 + n₂ < L) :
     let p := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L n₁ n₂
@@ -4975,7 +5446,55 @@ lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props
       p 0 = 0 ∧ p L = L ∧ q 0 = 0 ∧ q L = L ∧
       Set.MapsTo p (Set.Icc 0 L) (Set.Icc 0 L) ∧
       Set.MapsTo q (Set.Icc 0 L) (Set.Icc 0 L) := by
-  sorry
+  have hL' := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_props_aux_cast L n₁ n₂ hL
+  have hd : (0 : ℝ) < L - n₁ - n₂ - 1 := by linarith
+  have hd' : (0 : ℝ) < L - (n₁ + 1 + n₂) := by linarith
+  dsimp
+  refine ⟨orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p_continuous L n₁ n₂ hL,
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q_continuous L n₁ n₂ hL,
+    ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    set_option maxHeartbeats 1000000 in
+      split_ifs with h₁ h₂ h₃ k₁ k₂ k₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith
+  · intro x
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    set_option maxHeartbeats 1000000 in
+      split_ifs with h₁ h₂ h₃ k₁ k₂ k₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    simp
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    simp only [if_neg (by linarith : ¬ ((L : ℝ) ≤ n₁)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ n₁ + 1)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ n₁ + 1 + n₂))]
+    field_simp [ne_of_gt hd']; ring
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    simp
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    simp only [if_neg (by linarith : ¬ ((L : ℝ) ≤ n₁)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ L - n₂ - 1)),
+      if_neg (by norm_num : ¬ ((L : ℝ) ≤ L - 1))]
+    ring
+  · intro x hx
+    constructor
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1]
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+  · intro x hx
+    constructor
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
 
 /-- Values of `_p` on the four old arcs: identity on the `α₁` arcs, the `y`
 arc stretched onto `[n₁, L - n₂ - 1]`, the `α₂` arcs shifted to start at
@@ -5153,6 +5672,70 @@ piece `B`: old arcs `β₁ y⁻¹ β₂ c` (arcs `q … L-1`, then the chord arc
 `cutChordParamB`, angles `2π … α q + 2π`) go to `β₂ c β₁ y⁻¹`.  With `m₁ = 0`
 the `y⁻¹` arc starts at angle `α q`, where the chord arc ends; both formulas
 then give angle `0`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular_aux_cutAlpha_zero
+    (L : ℕ) : cutAlpha L 0 = 0 := by simp [cutAlpha]
+
+set_option maxHeartbeats 1000000
+
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular_aux_props
+    (L a b : ℕ) (hL : a + 1 + b < L) :
+    let p := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L a b
+    let q := orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q L a b
+    Continuous p ∧ Continuous q ∧ Function.LeftInverse q p ∧ Function.RightInverse q p ∧
+      p 0 = 0 ∧ p L = L ∧ q 0 = 0 ∧ q L = L ∧
+      Set.MapsTo p (Set.Icc 0 L) (Set.Icc 0 L) ∧
+      Set.MapsTo q (Set.Icc 0 L) (Set.Icc 0 L) := by
+  have hL' : (a : ℝ) + 1 + b < L := by exact_mod_cast hL
+  have hd : (0 : ℝ) < L - a - b - 1 := by linarith
+  have hd' : (0 : ℝ) < L - (a + 1 + b) := by linarith
+  dsimp
+  refine ⟨orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p_continuous L a b hL,
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q_continuous L a b hL,
+    ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    split_ifs with h₁ h₂ h₃ k₁ k₂ k₃ <;>
+      field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith
+  · intro x
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    set_option maxHeartbeats 1000000 in
+      split_ifs with h₁ h₂ h₃ k₁ k₂ k₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    simp
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+    simp only [if_neg (by linarith : ¬ ((L : ℝ) ≤ a)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ a + 1)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ a + 1 + b))]
+    field_simp [ne_of_gt hd']; ring
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    simp
+  · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+    simp only [if_neg (by linarith : ¬ ((L : ℝ) ≤ a)),
+      if_neg (by linarith : ¬ ((L : ℝ) ≤ L - b - 1)),
+      if_neg (by norm_num : ¬ ((L : ℝ) ≤ L - 1))]
+    ring
+  · intro x hx
+    constructor
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1]
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+  · intro x hx
+    constructor
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+    · unfold orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q
+      split_ifs with h₁ h₂ h₃ <;>
+        field_simp [ne_of_gt hd, ne_of_gt hd'] at * <;> nlinarith [hx.1, hx.2]
+
+open PolygonMoves
+
 theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular
     (L n₁ n₂ m₁ m₂ : ℕ)
     (hL : L = n₁ + 1 + n₂ + m₁ + 1 + m₂) :
@@ -5183,7 +5766,99 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular
           AddCircle.homeomorphCircle'
             (((cutAlpha L (n₁ + 1 + n₂ + m₂) +
               s.1 * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi)))) := by
-  sorry
+  let q := n₁ + 1 + n₂
+  have hm : m₁ + 1 + m₂ < L := by omega
+  obtain ⟨hpc, hqc, hl, hr, hp0, hpL, hq0, hqL, hpm, hqm⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamB_aux_angular_aux_props
+      L m₁ m₂ hm
+  obtain ⟨hf₁, hfy, hf₂, hfc⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_formulas
+      L m₁ m₂ hm
+  have hLpos : (0 : ℝ) < L := by exact_mod_cast (show 0 < L by omega)
+  have hLne : (L : ℝ) ≠ 0 := hLpos.ne'
+  obtain ⟨F, hF⟩ := equivariantLift_of_interval (L : ℝ) L hLpos hLpos
+    (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p L m₁ m₂)
+    (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_q L m₁ m₂)
+    hpc hqc hp0 hpL hq0 hqL hpm hqm (fun x _ => hl x) (fun y _ => hr y)
+  obtain ⟨g, hg⟩ := equivariantCircleLift_homeomorph (L : ℝ) L hLpos hLpos F
+  let r₁ : Circle := Circle.exp (-(q : ℝ) * (2 * Real.pi / L))
+  let r₂ : Circle := Circle.exp ((q + m₂ + 1 : ℝ) * (2 * Real.pi / L))
+  let ρ := (Homeomorph.mulLeft r₁).trans (g.trans (Homeomorph.mulLeft r₂))
+  refine ⟨ρ, ?_⟩
+  have hρ : ∀ x ∈ Set.Icc (0 : ℝ) L, ∀ θ : ℝ,
+      θ = 2 * Real.pi * (x + q) / L →
+      ρ (AddCircle.homeomorphCircle' (θ : AddCircle (2 * Real.pi))) =
+        Circle.exp (2 * Real.pi *
+          (orientablePairing_normalForm_aux_cutPaste_aux_reparamA_aux_angular_p
+            L m₁ m₂ x + q + m₂ + 1) / L) := by
+    intro x hx θ hθ
+    have h1 : r₁ * AddCircle.homeomorphCircle' (θ : AddCircle (2 * Real.pi)) =
+        AddCircle.toCircle (x : AddCircle (L : ℝ)) := by
+      rw [AddCircle.homeomorphCircle'_apply_mk, AddCircle.toCircle_apply_mk]
+      change Circle.exp _ * Circle.exp _ = Circle.exp _
+      rw [← Circle.exp_add, hθ]
+      congr 1; field_simp; ring
+    change r₂ * g (r₁ * AddCircle.homeomorphCircle' (θ : AddCircle (2 * Real.pi))) = _
+    rw [h1, hg, hF x hx, AddCircle.toCircle_apply_mk]
+    change r₂ * Circle.exp _ = _
+    rw [← Circle.exp_add]
+    congr 1; field_simp; ring
+  have hexp : ∀ a b : ℝ, ∀ k : ℤ, a = b + k * (2 * Real.pi) →
+      Circle.exp a = AddCircle.homeomorphCircle' (b : AddCircle (2 * Real.pi)) := by
+    intro a b k h
+    rw [AddCircle.homeomorphCircle'_apply_mk, h, Circle.exp_add,
+      Circle.exp_int_mul_two_pi, mul_one]
+  have hπ := Real.pi_pos
+  have hq : q = n₁ + 1 + n₂ := rfl
+  have hreal : (L : ℝ) = q + m₁ + 1 + m₂ := by exact_mod_cast hL
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro e s he₀ he₁
+    have heq : q ≤ e := by simpa [q] using he₀
+    have he : e - q < m₁ := by simp [q] at he₁ ⊢; omega
+    have hecast : ((e - q : ℕ) : ℝ) = e - q := by rw [Nat.cast_sub heq]
+    have hx0 : (0 : ℝ) ≤ (e - q : ℕ) + s.1 :=
+      add_nonneg (Nat.cast_nonneg _) s.2.1
+    have hxL : (e - q : ℕ) + s.1 ≤ (L : ℝ) := by
+      have he' : ((e - q : ℕ) : ℝ) < m₁ := by exact_mod_cast he
+      have hm' : (m₁ : ℝ) + 1 ≤ L := by exact_mod_cast (show m₁ + 1 ≤ L by omega)
+      linarith [s.2.2]
+    rw [hρ ((e - q : ℕ) + s.1)
+      ⟨hx0, hxL⟩ _
+      (by unfold cutAlpha; rw [hecast]; push_cast; simp [q]; field_simp; ring), hf₁ (e - q) s he]
+    exact hexp _ _ 0 (by unfold cutAlpha; rw [hecast]; push_cast; simp [q]; field_simp; ring)
+  · intro s
+    have hx0 : (0 : ℝ) ≤ m₁ + s.1 := add_nonneg (Nat.cast_nonneg _) s.2.1
+    have hxL : (m₁ : ℝ) + s.1 ≤ L := by
+      have hm' : (m₁ : ℝ) + 1 ≤ L := by exact_mod_cast (show m₁ + 1 ≤ L by omega)
+      linarith [s.2.2]
+    rw [hρ (m₁ + s.1) ⟨hx0, hxL⟩ _
+      (by unfold cutAlpha; push_cast; simp [q]; field_simp; ring), hfy s]
+    exact hexp _ _ 0 (by unfold cutAlpha; push_cast; rw [hreal]; simp [q]; field_simp; ring)
+  · intro e s he₀ he₁
+    have heq : q ≤ e := by simp [q] at he₀ ⊢; omega
+    have he0 : m₁ + 1 ≤ e - q := by simp [q] at he₀ ⊢; omega
+    have he1 : e - q < m₁ + 1 + m₂ := by omega
+    have hecast : ((e - q : ℕ) : ℝ) = e - q := by rw [Nat.cast_sub heq]
+    have hx0 : (0 : ℝ) ≤ (e - q : ℕ) + s.1 :=
+      add_nonneg (Nat.cast_nonneg _) s.2.1
+    have hxL : (e - q : ℕ) + s.1 ≤ (L : ℝ) := by
+      have he' : ((e - q : ℕ) : ℝ) < m₁ + 1 + m₂ := by exact_mod_cast he1
+      have hm' : (m₁ : ℝ) + 1 + m₂ + 1 ≤ L := by exact_mod_cast (show m₁ + 1 + m₂ + 1 ≤ L by omega)
+      linarith [s.2.2]
+    rw [hρ ((e - q : ℕ) + s.1)
+      ⟨hx0, hxL⟩ _
+      (by unfold cutAlpha; rw [hecast]; push_cast; simp [q]; field_simp; ring),
+      hf₂ (e - q) s he0 he1]
+    have hsub : ((e - m₁ - 1 : ℕ) : ℝ) = e - m₁ - 1 := by
+      rw [Nat.cast_sub (by omega), Nat.cast_sub (by omega)]; push_cast; ring
+    exact hexp _ _ 1 (by unfold cutAlpha; rw [hecast, hsub]; push_cast; simp [q]; field_simp; ring)
+  · intro s
+    have harg : (m₁ : ℝ) + 1 + m₂ + s.1 * (L - (m₁ + 1 + m₂)) + q =
+        L + s.1 * q := by rw [hreal]; ring
+    rw [hρ (m₁ + 1 + m₂ + s.1 * (L - (m₁ + 1 + m₂)))
+      ⟨by nlinarith [s.2.1, s.2.2], by nlinarith [s.2.1, s.2.2]⟩ _
+      (by unfold cutAlpha; push_cast; rw [harg]; simp [q]; field_simp), hfc s]
+    exact hexp _ _ 1 (by unfold cutAlpha; push_cast; rw [hreal]; simp [q]; field_simp; ring)
 
 open PolygonMoves in
 /-- Piece `B` of the cut-and-paste reparametrisation, read off from the angular
@@ -5254,10 +5929,163 @@ noncomputable def orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_tran
   else (edgePoint L (e - m₁ - 1) s : ℂ)
 
 open PolygonMoves in
-/-- **Leaf (transfer consistency).**  An old boundary point, read on piece `i`
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_c
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (c : Signed L)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁))
+      (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length α₂.length s)
+      (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length
+        (α₂.length + 1 + α₁.length + β₂.length) (reverseParameter s)) := by
+  apply Relation.EqvGen.rel
+  let i : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+    ⟨α₂.length, by simp⟩
+  let j : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length :=
+    ⟨α₂.length + 1 + α₁.length + β₂.length, by simp; omega⟩
+  have hi : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i = inv c := by
+    simp [i, List.get_eq_getElem, List.getElem_append]
+  have hj : (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j = c := by
+    rw [List.get_eq_getElem]
+    simp [j, List.getElem_append, Nat.add_assoc]
+    simp [Nat.add_comm, List.getElem_append]
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro h
+    have := congrArg Fin.val h
+    change α₂.length = α₂.length + 1 + α₁.length + β₂.length at this
+    omega
+  · rw [hi, hj]
+    simp [inv]
+  · rw [hi, hj]
+    simp [inv, reverseParameter]
+    rfl
+
+open PolygonMoves in
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordA_end
+    {L p q : ℕ} (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordA L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  exact cut_transfer_consistency_aux_chordA_end hpq hqL s h
+
+open PolygonMoves in
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordB_end
+    {L p q : ℕ} (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordB L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  exact cut_transfer_consistency_aux_chordB_end hpq hqL s h
+
+open PolygonMoves in
+/-- **Leaf (piece `A`, arc).**  The old point is `edgePoint L e₀ s₀` on an `A`
+side `e₀ < q`.  By `cutEdgePoint_eq`, either `(e, τ) = (e₀, s₀)` (then `N` is the
+transfer itself) or `(e, τ)` and `(e₀, s₀)` are the two endpoint names of one
+vertex, and the two transfers are joined in the new word.  Model:
+`PolygonMoves.cut_transfer_consistency_A_arc`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : e₀ < α₁.length + 1 + α₂.length)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldA (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))
+    (hN : (N : ℂ) =
+      oldA (ρA (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (piece `A`, chord).**  The old point is `cutChordA L 0 q s₀`; it lies on
+the boundary only at `s₀ = 0` (`cutPoint L q`) or `s₀ = 1` (`cutPoint L 0`), see
+`_aux_chordA_end`.  `N` is the new `edgePoint L n₂ s₀` (start/end of `c⁻¹`),
+joined to the transfer of each name `(e, τ)` of that vertex, using `_aux_c`.
+Model: `PolygonMoves.cut_transfer_consistency_A_chord`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordA
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldA (cutChordParamA (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀))
+    (hN : (N : ℂ) =
+      oldA (ρA (cutChordParamA (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀))) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (piece `B`, arc).**  As `_aux_arcA`, for an old side `q ≤ e₀ < L`.
+Model: `PolygonMoves.cut_transfer_consistency_B_arc`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : α₁.length + 1 + α₂.length ≤ e₀)
+    (he₀L : e₀ < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))
+    (hN : (N : ℂ) =
+      oldB (ρB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀))) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (piece `B`, chord).**  As `_aux_chordA`, with `cutChordB` (endpoints by
+`_aux_chordB_end`) and `N` on the new `c` side.
+Model: `PolygonMoves.cut_transfer_consistency_B_chord`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordB
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk) (s₀ : Icc (0 : ℝ) 1)
+    (hP : (edgePoint (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e τ : ℂ) =
+      oldB (cutChordParamB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀))
+    (hN : (N : ℂ) =
+      oldB (ρB (cutChordParamB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀))) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  sorry
+
+open PolygonMoves in
+/-- **Transfer consistency.**  An old boundary point, read on piece `i`
 at circle parameter `z`, has new image `N`; whichever side `e` and parameter `τ`
 it is named by, `N` is `EqvGen`-related in the new word to the transferred
-point `_aux_transfer … e τ`.  The endpoint cases are the work: a vertex point
+point `_aux_transfer … e τ`.  Assembled from the four cover cases `_aux_arcA`, `_aux_chordA`, `_aux_arcB`, `_aux_chordB`; a vertex point
 has several names `(e, τ)` and several circle parameters `z`, and their images
 are joined through new-word identifications.  Model:
 `PolygonMoves.cut_transfer_consistency`. -/
@@ -5280,6 +6108,129 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) N T := by
+  cases i with
+  | false =>
+    rcases D.coverA z with ⟨e₀, s₀, h1, rfl⟩ | ⟨s₀, rfl⟩
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcA
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N e₀ s₀ h1
+        (by simpa using hP) (by simpa using hN)
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordA
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N s₀
+        (by simpa using hP) (by simpa using hN)
+  | true =>
+    rcases D.coverB z with ⟨e₀, s₀, h1, h2, rfl⟩ | ⟨s₀, rfl⟩
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_arcB
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N e₀ s₀ h1 h2
+        (by simpa using hP) (by simpa using hN)
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_consistency_aux_chordB
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ N s₀
+        (by simpa using hP) (by simpa using hN)
+
+/-- **Leaf.** A non-`y` old side moves to a new side with the same letter. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_side
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (e : ℕ)
+    (he : e < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (he₁ : e ≠ α₁.length)
+    (he₂ : e ≠ α₁.length + 1 + α₂.length + β₁.length) :
+    let f := if e < α₁.length then e + α₂.length + 1
+      else if e < α₁.length + 1 + α₂.length then e - α₁.length - 1
+      else if e < α₁.length + 1 + α₂.length + β₁.length then e + β₂.length + 1
+      else e - β₁.length - 1
+    ∃ hf : f < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length,
+      (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get ⟨f, hf⟩ =
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get ⟨e, he⟩ := by
+  intro f
+  simp only [List.length_append, List.length_singleton] at he
+  have hW : α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂ =
+      α₁ ++ (y :: (α₂ ++ (β₁ ++ (inv y :: β₂)))) := by simp
+  have hW' : α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁ =
+      α₂ ++ (inv c :: (α₁ ++ (β₂ ++ (c :: β₁)))) := by simp
+  have hfl : f < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length := by
+    simp only [f, List.length_append, List.length_singleton]; split_ifs <;> omega
+  refine ⟨hfl, ?_⟩
+  simp only [List.get_eq_getElem]
+  rw [List.getElem_of_eq hW, List.getElem_of_eq hW']
+  simp only [f]
+  split_ifs with h1 h2 h3 <;>
+    simp only [List.getElem_append, List.getElem_cons] <;>
+    (repeat' split) <;> first | omega | rfl | (congr 1; omega)
+
+open PolygonMoves in
+/-- **Leaf.** By freshness of `y`, only the two `y` sides carry label `y.1`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_y_index
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (i : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (h : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 = y.1) :
+    (i : ℕ) = α₁.length ∨
+      (i : ℕ) = α₁.length + 1 + α₂.length + β₁.length := by
+  by_contra hne
+  push_neg at hne
+  apply hy
+  rw [List.mem_map]
+  refine ⟨_, ?_, h⟩
+  have hi := i.isLt
+  simp only [List.get_eq_getElem, List.getElem_append, List.getElem_singleton,
+    List.length_append, List.length_singleton] at hi ⊢
+  (repeat' split) <;> first | omega | simp [List.getElem_mem]
+
+open PolygonMoves in
+/-- **Leaf (y pair).** Both sides are `y` sides (opposite signs, so the
+parameter is reversed); both transfers are the same chord point
+(`cutChordB L 0 q (1 - τ) = cutChordA L 0 q τ`), so `T = T'`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_ypair
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 =
+      ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).2 =
+          ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2
+        then τ else reverseParameter τ))
+    (hi : (i : ℕ) = α₁.length ∨ (i : ℕ) = α₁.length + 1 + α₂.length + β₁.length)
+    (hj : (j : ℕ) = α₁.length ∨ (j : ℕ) = α₁.length + 1 + α₂.length + β₁.length) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) T T' := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (other pairs).** Neither side is a `y` side; both transfer to
+`edgePoint` at the new positions (`_aux_side`), which carry the same letters,
+so one `WordRel` step with the same parameter choice relates them. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_other
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 =
+      ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).2 =
+          ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2
+        then τ else reverseParameter τ))
+    (hiy : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 ≠ y.1)
+    (hjy : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).1 ≠ y.1) :
+    Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) T T' := by
   sorry
 
 open PolygonMoves in
@@ -5309,7 +6260,12 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator
           ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2
         then τ else reverseParameter τ)) :
     Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) T T' := by
-  sorry
+  by_cases hiy : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).1 = y.1
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_ypair α₁ α₂ β₁ β₂ y c hy hc i j hij τ hlab T T' hT hT'
+      (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_y_index α₁ α₂ β₁ β₂ y hy i hiy)
+      (orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_y_index α₁ α₂ β₁ β₂ y hy j (hlab ▸ hiy))
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_other α₁ α₂ β₁ β₂ y c hy hc i j hij τ hlab T T' hT hT'
+      hiy (fun h => hiy (hlab.trans h))
 
 open PolygonMoves in
 /-- **Forward generators** (split 2026-10-25 from lemma-1's partial into `_aux_consistency` and `_aux_generator`).  An old side identification between two
@@ -5371,12 +6327,125 @@ noncomputable def orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_tran
   else (edgePoint L (e - m₂ - 1) s : ℂ)
 
 open PolygonMoves in
-/-- **Leaf (reverse transfer consistency).**  A piece point `z` on piece `i`
+/-- **Leaf (reverse, piece `A`, arc).**  The piece point is
+`cutEdgeCircle L e₀ s₀` on an old `A` side `e₀ < q`, so `P = edgePoint L e₀ s₀`
+(`D.oldA_arc`).  Its new image is read by `D.ρA_α₁ / ρA_y / ρA_α₂`; by
+`cutEdgePoint_eq` the new name `(e, τ)` is either that image's own name (then the
+transfer is `P` itself, or for `e₀ = n₁` the chord point, joined to `P` across the
+old `y` pair) or an adjacent vertex name.  Model: reverse of
+`PolygonMoves.cut_transfer_consistency_A_arc`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : e₀ < α₁.length + 1 + α₂.length)
+    (hN : (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length e τ : ℂ) =
+      oldA (ρA (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)))
+    (hP : (P : ℂ) = oldA (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse, piece `A`, chord).**  The piece point is
+`cutChordParamA L 0 q s₀`; `P = cutChordA L 0 q s₀` (`D.oldA_chord`) and its new
+image is `edgePoint L n₂ s₀`, the `c⁻¹` side (`D.ρA_chord`).  If `(e, τ)` is that
+name, the transfer is `P`.  Otherwise the point is a vertex, `s₀ ∈ {0, 1}`
+(`_aux_forward_aux_consistency_aux_chordA_end` applied to `P` on the boundary) and
+`P` is `cutPoint L q` or `cutPoint L 0`, related to the transfer of each other name
+of that vertex. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordA
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (s₀ : Icc (0 : ℝ) 1)
+    (hN : (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length e τ : ℂ) =
+      oldA (ρA (cutChordParamA (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)))
+    (hP : (P : ℂ) = oldA (cutChordParamA (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse, piece `B`, arc).**  As `_aux_arcA`, for an old
+side `q ≤ e₀ < L` (`D.oldB_arc`, `D.ρB_β₁ / ρB_y / ρB_β₂`). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : α₁.length + 1 + α₂.length ≤ e₀)
+    (he₀L : e₀ < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+    (hN : (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length e τ : ℂ) =
+      oldB (ρB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)))
+    (hP : (P : ℂ) = oldB (cutEdgeCircle (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length e₀ s₀)) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Leaf (reverse, piece `B`, chord).**  As `_aux_chordA`, with
+`cutChordB` (`D.oldB_chord`, endpoints by `_aux_forward_aux_consistency_aux_chordB_end`)
+and new image on the `c` side `q + m₂` (`D.ρB_chord`). -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordB
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (oldA oldB : Circle → ℂ) (ρA ρB : Circle → Circle)
+    (D : orientablePairing_normalForm_aux_cutPaste_aux_Data
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length oldA oldB ρA ρB)
+    (e : ℕ) (he : e < (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (s₀ : Icc (0 : ℝ) 1)
+    (hN : (edgePoint (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length e τ : ℂ) =
+      oldB (ρB (cutChordParamB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)))
+    (hP : (P : ℂ) = oldB (cutChordParamB (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length 0
+        (α₁.length + 1 + α₂.length) s₀)) :
+    ∃ T : Disk, (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+        (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+        α₁.length α₂.length β₁.length β₂.length e τ ∧
+      Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  sorry
+
+open PolygonMoves in
+/-- **Reverse transfer consistency.**  A piece point `z` on piece `i`
 whose new image is the new boundary point `(e, τ)` has old image `P`; `P` is
 `EqvGen`-related in the old word to `_aux_reverse_aux_transfer … e τ`.  As in
 `_aux_forward_aux_consistency`, the work is at the vertices, which have several
 names `(e, τ)` and several circle parameters `z`.  Model:
-`PolygonMoves.cut_transfer_consistency` (reverse direction). -/
+`PolygonMoves.cut_transfer_consistency` (reverse direction).  Assembled from the
+four cover cases `_aux_arcA`, `_aux_chordA`, `_aux_arcB`, `_aux_chordB`. -/
 theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency
     {L : Type*} [DecidableEq L]
     (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
@@ -5396,10 +6465,132 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency
         (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
         α₁.length α₂.length β₁.length β₂.length e τ ∧
       Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) P T := by
+  cases i with
+  | false =>
+    rcases D.coverA z with ⟨e₀, s₀, h1, rfl⟩ | ⟨s₀, rfl⟩
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcA
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ P e₀ s₀ h1
+        (by simpa using hN) (by simpa using hP)
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordA
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ P s₀
+        (by simpa using hN) (by simpa using hP)
+  | true =>
+    rcases D.coverB z with ⟨e₀, s₀, h1, h2, rfl⟩ | ⟨s₀, rfl⟩
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_arcB
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ P e₀ s₀ h1 h2
+        (by simpa using hN) (by simpa using hP)
+    · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_consistency_aux_chordB
+        α₁ α₂ β₁ β₂ y c hy hc oldA oldB ρA ρB D e he τ P s₀
+        (by simpa using hN) (by simpa using hP)
+
+open PolygonMoves in
+/-- **Leaf (proved, lemma-1 + claude-14).** A non-`c` new side moves back to an old side with the same letter. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_side
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed L)) (y c : PolygonMoves.Signed L)
+    (e : ℕ)
+    (he : e < (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (he₁ : e ≠ α₂.length)
+    (he₂ : e ≠ α₂.length + 1 + α₁.length + β₂.length) :
+    let f := if e < α₂.length then e + α₁.length + 1
+      else if e < α₂.length + 1 + α₁.length then e - α₂.length - 1
+      else if e < α₂.length + 1 + α₁.length + β₂.length then e + β₁.length + 1
+      else e - β₂.length - 1
+    ∃ hf : f < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length,
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get ⟨f, hf⟩ =
+        (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get ⟨e, he⟩ := by
+  intro f
+  simp only [List.length_append, List.length_singleton] at he
+  have hW : α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂ =
+      α₁ ++ (y :: (α₂ ++ (β₁ ++ (PolygonMoves.inv y :: β₂)))) := by simp
+  have hW' : α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁ =
+      α₂ ++ (PolygonMoves.inv c :: (α₁ ++ (β₂ ++ (c :: β₁)))) := by simp
+  have hfl : f < (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).length := by
+    simp only [f, List.length_append, List.length_singleton]; split_ifs <;> omega
+  refine ⟨hfl, ?_⟩
+  simp only [List.get_eq_getElem]
+  rw [List.getElem_of_eq hW, List.getElem_of_eq hW']
+  simp only [f]
+  split_ifs with h1 h2 h3 <;>
+    simp only [List.getElem_append, List.getElem_cons] <;>
+    (repeat' split) <;> first | omega | rfl | (congr 1; omega)
+
+open PolygonMoves in
+/-- **Leaf (proved).** By freshness of `c`, only the two `c` sides carry label `c.1`. -/
+lemma orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_c_index
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed L)) (y c : PolygonMoves.Signed L)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).map Prod.fst)
+    (i : Fin (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length)
+    (hi : ((α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = c.1) :
+    (i : ℕ) = α₂.length ∨
+      (i : ℕ) = α₂.length + 1 + α₁.length + β₂.length := by
+  by_contra h
+  push_neg at h
+  obtain ⟨hf, hw⟩ :=
+    orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_side
+      α₁ α₂ β₁ β₂ y c i i.isLt h.1 h.2
+  apply hc
+  rw [List.mem_map]
+  refine ⟨(α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get ⟨_, hf⟩,
+    List.get_mem _ _, ?_⟩
+  exact congrArg Prod.fst hw |>.trans hi
+
+open PolygonMoves in
+/-- **Leaf (c pair).** Both sides are `c` sides (`c⁻¹` at `n₂`, `c` at `q + m₂`;
+opposite signs, so the parameter is reversed).  Both transfers are the same old
+chord point, `cutChordB L 0 q (1 - τ) = cutChordA L 0 q τ` (use
+`cut_retransfer_consistency_aux_chords` / `_aux_reverse_aux_eq`), so `T = T'`;
+`i = j` is excluded by `hij`. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_cpair
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2 then τ else reverseParameter τ))
+    (hi : (i : ℕ) = α₂.length ∨ (i : ℕ) = α₂.length + 1 + α₁.length + β₂.length)
+    (hj : (j : ℕ) = α₂.length ∨ (j : ℕ) = α₂.length + 1 + α₁.length + β₂.length) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) T T' := by
   sorry
 
 open PolygonMoves in
-/-- **Leaf (reverse transferred generator).**  Two distinct new sides with the
+/-- **Leaf (other pairs).** Neither side is a `c` side; both transfer back to
+`edgePoint` at the old positions given by `_aux_side`, which carry the same
+letters, so one old `WordRel` step with the same parameter choice relates them. -/
+theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_other
+    {L : Type*} [DecidableEq L]
+    (α₁ α₂ β₁ β₂ : List (Signed L)) (y c : Signed L)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).map Prod.fst)
+    (i j : Fin (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length i τ)
+    (hT' : (T' : ℂ) = orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_transfer
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length
+      α₁.length α₂.length β₁.length β₂.length j
+      (if ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2 then τ else reverseParameter τ))
+    (hi : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 ≠ c.1)
+    (hj : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).1 ≠ c.1) :
+    Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) T T' := by
+  sorry
+
+open PolygonMoves in
+/-- **Reverse transferred generator** (split 2026-10-25 after lemma-1 PARTIAL into
+`_aux_side`, `_aux_c_index`, `_aux_cpair`, `_aux_other`).  Two distinct new sides with the
 same label, at matching parameters, pull back to old points that the old word
 relates.  For the `c` pair (`c⁻¹` at `n₂`, `c` at `q + m₂`, opposite signs) both
 pull back to the same chord point, `cutChordB L 0 q (1 - τ) = cutChordA L 0 q τ`
@@ -5422,7 +6613,12 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator
       α₁.length α₂.length β₁.length β₂.length j
       (if ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).2 = ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get j).2 then τ else reverseParameter τ)) :
     Relation.EqvGen (WordRel (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂)) T T' := by
-  sorry
+  by_cases hic : ((α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get i).1 = c.1
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_cpair α₁ α₂ β₁ β₂ y c hy hc i j hij τ hlab T T' hT hT'
+      (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_c_index α₁ α₂ β₁ β₂ y c hc i hic)
+      (orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_c_index α₁ α₂ β₁ β₂ y c hc j (hlab ▸ hic))
+  · exact orientablePairing_normalForm_aux_cutPaste_aux_reverse_aux_generator_aux_other α₁ α₂ β₁ β₂ y c hy hc i j hij τ hlab T T' hT hT'
+      hic (fun h => hic (hlab.trans h))
 
 open PolygonMoves in
 /-- **Reverse generators** (split 2026-10-25 from lemma-2's partial into
@@ -6010,11 +7206,21 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_orientable
 
 /-- **Leaf.**  Rotating a word shifts every corner by `u.length` (mod the
 length) and every `WordCornerRel` step with it. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation_aux
+    (w : List (PolygonMoves.Signed ℕ)) (n : ℕ)
+    (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
+    orientablePairing_normalForm_aux_WordOneVertex (w.rotate n) := by
+  sorry
+
 theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation
     (u v : List (PolygonMoves.Signed ℕ))
     (hv : orientablePairing_normalForm_aux_WordOneVertex (u ++ v)) :
     orientablePairing_normalForm_aux_WordOneVertex (v ++ u) := by
-  sorry
+  have hrot : (u ++ v).rotate u.length = v ++ u := by simp
+  rw [← hrot]
+  exact
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_rotation_aux
+      (u ++ v) u.length hv
 
 /-- **Leaf.**  Relabelling by an equivalence and flipping signs label-wise keeps
 "same label" and "same sign within a label", so `WordCornerRel` is unchanged. -/
@@ -6023,7 +7229,44 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_relabe
     (hv : orientablePairing_normalForm_aux_WordOneVertex w) :
     orientablePairing_normalForm_aux_WordOneVertex
       (w.map fun x => (σ x.1, xor x.2 (flip x.1))) := by
-  sorry
+  unfold orientablePairing_normalForm_aux_WordOneVertex at hv ⊢
+  have hl : (w.map fun x => (σ x.1, xor x.2 (flip x.1))).length = w.length :=
+    List.length_map _
+  have hrot : ∀ {n m : ℕ} (h : n = m) (i : Fin n),
+      finRotate m (Fin.cast h i) = Fin.cast h (finRotate n i) := by
+    intro n m h i; subst h; rfl
+  have key : ∀ c d : Fin w.length,
+      Relation.EqvGen (orientablePairing_normalForm_aux_WordCornerRel w) c d →
+        Relation.EqvGen
+          (orientablePairing_normalForm_aux_WordCornerRel
+            (w.map fun x => (σ x.1, xor x.2 (flip x.1))))
+          (Fin.cast hl.symm c) (Fin.cast hl.symm d) := by
+    intro c d h
+    induction h with
+    | rel c d hcd =>
+        apply Relation.EqvGen.rel
+        rcases hcd with ⟨i, j, hij, hlab, hcorners⟩
+        refine ⟨Fin.cast hl.symm i, Fin.cast hl.symm j,
+          fun h => hij (Fin.cast_injective _ h), ?_, ?_⟩
+        · simp only [List.get_eq_getElem] at hlab ⊢
+          simp [hlab]
+        · simp only [List.get_eq_getElem] at hlab hcorners ⊢
+          simp only [Fin.coe_cast, List.getElem_map, hrot, Fin.cast_inj]
+          have hflip : flip (w[i].1) = flip (w[j].1) := congrArg flip hlab
+          have hsign :
+              (xor w[i].2 (flip w[i].1) = xor w[j].2 (flip w[j].1)) ↔
+                w[i].2 = w[j].2 := by
+            rw [hflip]
+            cases w[i].2 <;> cases w[j].2 <;> cases flip (w[j].1) <;> simp
+          simp only [Fin.getElem_fin] at hsign hcorners ⊢
+          by_cases hs : w[(i : ℕ)].2 = w[(j : ℕ)].2
+          · rw [if_pos (hsign.mpr hs)]; rw [if_pos hs] at hcorners; exact hcorners
+          · rw [if_neg (mt hsign.mp hs)]; rw [if_neg hs] at hcorners; exact hcorners
+    | refl c => exact Relation.EqvGen.refl _
+    | symm c d _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans c d e _ _ ih1 ih2 => exact Relation.EqvGen.trans _ _ _ ih1 ih2
+  intro a b
+  simpa using key (Fin.cast hl a) (Fin.cast hl b) (hv _ _)
 
 /-- **Leaf.**  Cut-and-paste keeps the word one-vertex.  Send each corner of the
 new word to the corner of the old word at the same point of the cut polygon (the
@@ -6031,6 +7274,39 @@ corners at the ends of `c` go to the corners at the ends of `y`) and check that
 each old `WordCornerRel` step maps to a chain of new steps.  The hypotheses are
 the `Step.cutPaste` ones; without `hy` it is false (`[y, inv y, y]` is
 one-vertex, `[inv c, y, c]` is not). -/
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_yFresh
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y : PolygonMoves.Signed ℕ)
+    (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst) :
+    y.1 ∉ α₁.map Prod.fst ∧ y.1 ∉ α₂.map Prod.fst ∧
+      y.1 ∉ β₁.map Prod.fst ∧ y.1 ∉ β₂.map Prod.fst := by
+  simp only [List.map_append, List.mem_append, not_or] at hy
+  rcases hy with ⟨⟨⟨h₁, h₂⟩, h₃⟩, h₄⟩
+  exact ⟨h₁, h₂, h₃, h₄⟩
+
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_cFresh
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ))
+    (y c : PolygonMoves.Signed ℕ)
+    (hc : c.1 ∉ (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).map Prod.fst) :
+    c.1 ∉ α₁.map Prod.fst ∧ c.1 ≠ y.1 ∧ c.1 ∉ α₂.map Prod.fst ∧
+      c.1 ∉ β₁.map Prod.fst ∧ c.1 ∉ β₂.map Prod.fst := by
+  simp only [List.map_append, List.map_cons, List.map_nil, List.mem_append,
+    List.mem_cons, List.not_mem_nil, or_false, not_or, PolygonMoves.inv] at hc
+  grind
+
+lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
+    (hy : y.1 ∉ α₁.map Prod.fst ∧ y.1 ∉ α₂.map Prod.fst ∧
+      y.1 ∉ β₁.map Prod.fst ∧ y.1 ∉ β₂.map Prod.fst)
+    (hc : c.1 ∉ α₁.map Prod.fst ∧ c.1 ≠ y.1 ∧ c.1 ∉ α₂.map Prod.fst ∧
+      c.1 ∉ β₁.map Prod.fst ∧ c.1 ∉ β₂.map Prod.fst)
+    (hw : PolygonMoves.IsPolygonWord (α₁ ++ [y] ++ α₂ ++ β₁ ++
+      [PolygonMoves.inv y] ++ β₂))
+    (hv : orientablePairing_normalForm_aux_WordOneVertex
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)) :
+    orientablePairing_normalForm_aux_WordOneVertex
+      (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) := by
+  sorry
+
 theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
     (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y c : PolygonMoves.Signed ℕ)
     (hy : y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst)
@@ -6040,7 +7316,12 @@ theorem orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPas
       (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)) :
     orientablePairing_normalForm_aux_WordOneVertex
       (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁) := by
-  sorry
+  exact orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport
+    α₁ α₂ β₁ β₂ y c
+    (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_yFresh
+      α₁ α₂ β₁ β₂ y hy)
+    (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_cFresh
+      α₁ α₂ β₁ β₂ y c hc) hw hv
 
 /-- **Leaf.**  Every `Step` keeps the word one-vertex.  Rotation shifts corners
 and relabelling leaves `WordCornerRel` unchanged; for `cutPaste`, send each
@@ -6080,6 +7361,528 @@ theorem orientablePairing_normalForm_aux_normalize_aux_standardWord_length (k : 
         List.flatMap_append, List.length_append] at ih ⊢
       simp [ih]; ring
 
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_tail_length
+    (k m : ℕ) (r : List (PolygonMoves.Signed ℕ))
+    (hlen : (orientablePairing_normalForm_aux_standardWord k ++ r).length = 4 * (k + m)) :
+    r.length = 4 * m := by
+  rw [List.length_append,
+    orientablePairing_normalForm_aux_normalize_aux_standardWord_length] at hlen
+  omega
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_tail_nonempty
+    (k m : ℕ) (hm : 1 ≤ m) (r : List (PolygonMoves.Signed ℕ))
+    (hlen : (orientablePairing_normalForm_aux_standardWord k ++ r).length = 4 * (k + m)) :
+    r ≠ [] := by
+  intro hr
+  have hrl := orientablePairing_normalForm_aux_normalize_aux_block_aux_tail_length
+    k m r hlen
+  simp [hr] at hrl
+  omega
+
+/-- **Leaf (first pair).**  The tail starts with a label whose two arcs are
+interlocked with a second label of the tail: `r = x A y B x⁻¹ C y⁻¹ D`.  The
+labels of the standard prefix are `< 2k` and those of `r` are `≥ 2k`, so `r`
+is closed under mates; `r ≠ []` (`_aux_tail_nonempty`); the mate of the first
+letter `x` of `r` is `inv x` by orientability (`_aux_uniqueMate`); and
+`_aux_interlock` at `i = 4k` gives `y` strictly between them whose mate lies
+outside.  The mate cannot lie before `i` (that is the prefix), so it lies after
+`x⁻¹`, and it is `inv y` by orientability. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_prefix
+    (k : ℕ) (z : PolygonMoves.Signed ℕ)
+    (hz : z ∈ orientablePairing_normalForm_aux_standardWord k) : z.1 < 2 * k := by
+  simp only [orientablePairing_normalForm_aux_standardWord, List.mem_flatMap,
+    List.mem_range] at hz
+  obtain ⟨a, ha, hz⟩ := hz
+  simp only [List.mem_cons, List.mem_singleton] at hz
+  rcases hz with hz | hz | hz | hz
+  · subst z; simp; omega
+  · subst z; simp; omega
+  · subst z; simp; omega
+  · rcases hz with hz | hz
+    · subst z; simp; omega
+    · contradiction
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_split
+    {α : Type*} (r : List α) (i j l : ℕ)
+    (hi : 0 < i) (hij : i < j) (hjl : j < l) (hl : l < r.length) :
+    ∃ A B C D : List α,
+      r = [r[0]] ++ A ++ [r[i]] ++ B ++ [r[j]] ++ C ++ [r[l]] ++ D := by
+  let A := (r.drop 1).take (i - 1)
+  let B := (r.drop (i + 1)).take (j - i - 1)
+  let C := (r.drop (j + 1)).take (l - j - 1)
+  let D := r.drop (l + 1)
+  refine ⟨A, B, C, D, ?_⟩
+  have h0 : 0 < r.length := by omega
+  have hii : i < r.length := by omega
+  have hjj : j < r.length := by omega
+  have s0 := List.take_append_drop 1 r
+  have s1 := List.take_append_drop (i - 1) (r.drop 1)
+  have s2 := List.take_append_drop (j - i - 1) (r.drop (i + 1))
+  have s3 := List.take_append_drop (l - j - 1) (r.drop (j + 1))
+  rw [List.drop_eq_getElem_cons (by simp; omega : i - 1 < (r.drop 1).length)] at s1
+  rw [List.drop_eq_getElem_cons (by simp; omega : j - i - 1 < (r.drop (i + 1)).length)] at s2
+  rw [List.drop_eq_getElem_cons (by simp; omega : l - j - 1 < (r.drop (j + 1)).length)] at s3
+  simp only [List.take_one, List.head?_eq_getElem?, h0, ↓reduceDIte, Option.toList_some,
+    List.singleton_append, List.drop_drop] at s0 s1 s2 s3
+  have t0 : r = r[0] :: r.drop 1 := by
+    simpa using (List.drop_eq_getElem_cons h0)
+  have t1 : r.drop 1 = A ++ (r[i] :: r.drop (i + 1)) := by
+    have e1 : 1 + (i - 1) = i := by omega
+    have e2 : 1 + (i - 1 + 1) = i + 1 := by omega
+    dsimp [A]
+    calc
+      r.drop 1 = (r.drop 1).take (i - 1) ++ (r.drop 1)[i - 1]'(by simp; omega) ::
+          r.drop (1 + (i - 1 + 1)) := s1.symm
+      _ = (r.drop 1).take (i - 1) ++ r[i] :: r.drop (i + 1) := by
+        congr 2
+        · rw [List.getElem_drop]
+          exact getElem_congr rfl e1 _
+        · rw [e2]
+  have t2 : r.drop (i + 1) = B ++ (r[j] :: r.drop (j + 1)) := by
+    have e1 : i + 1 + (j - i - 1) = j := by omega
+    have e2 : i + 1 + (j - i - 1 + 1) = j + 1 := by omega
+    dsimp [B]
+    calc
+      r.drop (i + 1) = (r.drop (i + 1)).take (j - i - 1) ++
+          (r.drop (i + 1))[j - i - 1]'(by simp; omega) ::
+            r.drop (i + 1 + (j - i - 1 + 1)) := s2.symm
+      _ = (r.drop (i + 1)).take (j - i - 1) ++ r[j] :: r.drop (j + 1) := by
+        congr 2
+        · rw [List.getElem_drop]
+          exact getElem_congr rfl e1 _
+        · rw [e2]
+  have t3 : r.drop (j + 1) = C ++ (r[l] :: D) := by
+    have e1 : j + 1 + (l - j - 1) = l := by omega
+    have e2 : j + 1 + (l - j - 1 + 1) = l + 1 := by omega
+    dsimp [C, D]
+    calc
+      r.drop (j + 1) = (r.drop (j + 1)).take (l - j - 1) ++
+          (r.drop (j + 1))[l - j - 1]'(by simp; omega) ::
+            r.drop (j + 1 + (l - j - 1 + 1)) := s3.symm
+      _ = (r.drop (j + 1)).take (l - j - 1) ++ r[l] :: r.drop (l + 1) := by
+        congr 2
+        · rw [List.getElem_drop]
+          exact getElem_congr rfl e1 _
+        · rw [e2]
+  generalize hx0 : r[0] = x0 at t0 t1 t2 t3 ⊢
+  generalize hxi : r[i] = xi at t0 t1 t2 t3 ⊢
+  generalize hxj : r[j] = xj at t0 t1 t2 t3 ⊢
+  generalize hxl : r[l] = xl at t0 t1 t2 t3 ⊢
+  rw [t0, t1, t2, t3]
+  simp
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_pair (k m : ℕ) (hm : 1 ≤ m)
+    (r : List (PolygonMoves.Signed ℕ))
+    (hw : PolygonMoves.IsPolygonWord (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hor : orientablePairing_normalForm_aux_WordOrientable
+      (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hv : orientablePairing_normalForm_aux_WordOneVertex
+      (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hlen : (orientablePairing_normalForm_aux_standardWord k ++ r).length = 4 * (k + m))
+    (hr : ∀ x ∈ r, 2 * k ≤ x.1) :
+    ∃ (x y : PolygonMoves.Signed ℕ) (A B C D : List (PolygonMoves.Signed ℕ)),
+      r = [x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D := by
+  classical
+  let w := orientablePairing_normalForm_aux_standardWord k ++ r
+  have hrne := orientablePairing_normalForm_aux_normalize_aux_block_aux_tail_nonempty
+    k m hm r hlen
+  have hwlen : (orientablePairing_normalForm_aux_standardWord k).length = 4 * k :=
+    orientablePairing_normalForm_aux_normalize_aux_standardWord_length k
+  have hwlenall : w.length = 4 * k + r.length := by simp [w, hwlen]
+  have hi_lt : 4 * k < w.length := by
+    simp only [w, List.length_append, hwlen]
+    have : 0 < r.length := by
+      have : r.length ≠ 0 := by simpa using hrne
+      omega
+    omega
+  let i : Fin w.length := ⟨4 * k, hi_lt⟩
+  obtain ⟨j, hj, hjuniq⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_uniqueMate w hw hor i
+  have hij : i < j := by
+    have hnot : ¬ j < i := by
+      intro hji
+      have hjpre : w.get j ∈ orientablePairing_normalForm_aux_standardWord k := by
+        rw [List.get_eq_getElem]
+        simp only [w]
+        rw [List.getElem_append_left]
+        · apply List.getElem_mem
+        · simpa [i, hwlen] using hji
+      have hjlow := orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_prefix
+        k (w.get j) hjpre
+      have hi_tail : w.get i = r[0]'(by
+          have : 0 < r.length := by
+            have : r.length ≠ 0 := by simpa using hrne
+            omega
+          omega) := by
+        rw [List.get_eq_getElem]
+        simp only [w]
+        rw [List.getElem_append_right]
+        · congr 1; simp [i, hwlen]
+        · simp [i, hwlen]
+      have hhigh : 2 * k ≤ (w.get i).1 := by
+        rw [hi_tail]
+        apply hr
+        apply List.getElem_mem
+      omega
+    exact lt_of_le_of_ne (le_of_not_gt hnot) hj.1.symm
+  obtain ⟨p, q, hip, hpj, hout, hpql⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_interlock w hw hor hv i j hij hj.2.1.symm
+  have hiq : i < q := by
+    rcases hout with hjq | hqi
+    · exact lt_trans hij hjq
+    · exfalso
+      have hqpre : w.get q ∈ orientablePairing_normalForm_aux_standardWord k := by
+        rw [List.get_eq_getElem]
+        simp only [w]
+        rw [List.getElem_append_left]
+        · apply List.getElem_mem
+        · simpa [i, hwlen] using hqi
+      have hqlow := orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_prefix
+        k (w.get q) hqpre
+      have hp_tail : w.get p ∈ r := by
+        rw [List.get_eq_getElem]
+        simp only [w]
+        rw [List.getElem_append_right]
+        · apply List.getElem_mem
+        · simpa [i, hwlen] using le_of_lt hip
+      have hphigh := hr (w.get p) hp_tail
+      omega
+  have hjq : j < q := by omega
+  let ip := p.1 - 4 * k
+  let ij := j.1 - 4 * k
+  let iq := q.1 - 4 * k
+  have hpR : ip < r.length := by simp [ip]; omega
+  have hjR : ij < r.length := by simp [ij]; omega
+  have hqR : iq < r.length := by simp [iq]; omega
+  have hpi : 0 < ip := by simp [ip, i] at hip ⊢; omega
+  have hpij : ip < ij := by simp [ip, ij, i] at hip hpj ⊢; omega
+  have hijq : ij < iq := by simp [ij, iq]; omega
+  obtain ⟨A, B, C, D, hrsplit⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_pair_aux_split
+      r ip ij iq hpi hpij hijq hqR
+  have wget (a : Fin w.length) (ha : i ≤ a) :
+      w.get a = r[a.1 - 4 * k]'(by omega) := by
+    rw [List.get_eq_getElem]
+    simp only [w]
+    rw [List.getElem_append_right]
+    · congr 1; simp [hwlen]
+    · simpa [i, hwlen] using ha
+  have hxj : w.get j = PolygonMoves.inv (w.get i) := by
+    apply Prod.ext
+    · simpa [PolygonMoves.inv] using hj.2.1
+    · simp only [PolygonMoves.inv]
+      exact Bool.eq_not_of_ne hj.2.2
+  have hypq : w.get q = PolygonMoves.inv (w.get p) := by
+    apply Prod.ext
+    · simpa [PolygonMoves.inv] using hpql.symm
+    · simp only [PolygonMoves.inv]
+      exact Bool.eq_not_of_ne (hor q p (ne_of_gt (lt_trans hpj hjq)) hpql.symm)
+  refine ⟨r[0], r[ip], A, B, C, D, ?_⟩
+  have hiR : w.get i = r[0] := by simpa [i] using wget i le_rfl
+  have hpget : w.get p = r[ip] := by simpa [ip] using wget p (le_of_lt hip)
+  have hjget : w.get j = r[ij] := by simpa [ij] using wget j (le_of_lt hij)
+  have hqget : w.get q = r[iq] := by simpa [iq] using wget q (le_of_lt hiq)
+  calc
+    r = [r[0]] ++ A ++ [r[ip]] ++ B ++ [r[ij]] ++ C ++ [r[iq]] ++ D := hrsplit
+    _ = [r[0]] ++ A ++ [r[ip]] ++ B ++ [PolygonMoves.inv r[0]] ++ C ++
+        [PolygonMoves.inv r[ip]] ++ D := by
+      rw [← hiR, ← hpget, ← hjget, ← hqget, hxj, hypq]
+
+/-- **Leaf (commutator).**  Steps take `P x A y B x⁻¹ C y⁻¹ D` to
+`P c d c⁻¹ d⁻¹ E` with the labels of `c`, `d`, `E` still `≥ n` (Massey, ch. 1
+§7: two `cutPaste` steps with fresh labels `c`, `d` chosen above every label of
+the word, and rotations to bring each configuration into the
+`α₁ y α₂ β₁ y⁻¹ β₂` shape and finally to put `P` back in front; `P` is never
+cut, it stays inside one of the four pieces).  `hy` of each `cutPaste` comes
+from `hw`; `_aux_step_isPolygonWord` carries `hw` along. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_le_fold
+    (a n : ℕ) (l : List ℕ) (ha : a ∈ l) :
+    a ≤ l.foldr max n := by
+  induction l with
+  | nil => simp at ha
+  | cons b l ih =>
+      simp only [List.foldr_cons]
+      simp only [List.mem_cons] at ha
+      rcases ha with rfl | ha
+      · exact le_max_left _ _
+      · exact (ih ha).trans (le_max_right _ _)
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_fresh
+    (n : ℕ) (l : List (PolygonMoves.Signed ℕ)) :
+    let a := (l.map Prod.fst).foldr max n + 1
+    n ≤ a ∧ a ∉ l.map Prod.fst := by
+  dsimp only
+  constructor
+  · have : n ≤ (l.map Prod.fst).foldr max n := by
+      induction l with
+      | nil => simp
+      | cons x l ih =>
+          simp only [List.map_cons, List.foldr_cons]
+          exact ih.trans (le_max_right _ _)
+    omega
+  · intro ha
+    have := orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_le_fold
+      _ n _ ha
+    omega
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_exists_fresh
+    (n : ℕ) (l : List (PolygonMoves.Signed ℕ)) :
+    ∃ a, n ≤ a ∧ a ∉ l.map Prod.fst :=
+  ⟨_, orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_fresh n l⟩
+
+/-- In a polygon word `α₁ y α₂ β₁ y⁻¹ β₂` the label of `y` occurs nowhere else. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_absent
+    (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ)) (y : PolygonMoves.Signed ℕ)
+    (hw : PolygonMoves.IsPolygonWord
+      (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)) :
+    y.1 ∉ (α₁ ++ α₂ ++ β₁ ++ β₂).map Prod.fst := by
+  intro hm
+  have h2 := hw.2.2 y.1 (by simp)
+  have hpos := List.count_pos_iff.mpr hm
+  simp only [List.map_append, List.count_append, List.map_cons, List.map_nil,
+    PolygonMoves.inv, List.count_cons_self, List.count_nil] at h2 hpos
+  omega
+
+/-- A rotation step, with the two words given by equations. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_rot
+    {w w' : List (PolygonMoves.Signed ℕ)} (u v : List (PolygonMoves.Signed ℕ))
+    (h1 : w = u ++ v) (h2 : w' = v ++ u) (hw : PolygonMoves.IsPolygonWord w) :
+    orientablePairing_normalForm_aux_Step w w' := by
+  subst h1 h2
+  exact orientablePairing_normalForm_aux_Step.rotation u v hw
+
+/-- A cut-and-paste step, with the two words given by equations and the
+uniqueness of `y` read off from the polygon word. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_cut
+    {w w' : List (PolygonMoves.Signed ℕ)} (α₁ α₂ β₁ β₂ : List (PolygonMoves.Signed ℕ))
+    (y c : PolygonMoves.Signed ℕ)
+    (h1 : w = α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂)
+    (h2 : w' = α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)
+    (hc : c.1 ∉ w.map Prod.fst) (hw : PolygonMoves.IsPolygonWord w) :
+    orientablePairing_normalForm_aux_Step w w' := by
+  subst h1 h2
+  exact orientablePairing_normalForm_aux_Step.cutPaste α₁ α₂ β₁ β₂ y c
+    (orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_absent
+      α₁ α₂ β₁ β₂ y hw) hc hw
+
+set_option maxHeartbeats 4000000 in
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator (n : ℕ)
+    (P A B C D : List (PolygonMoves.Signed ℕ)) (x y : PolygonMoves.Signed ℕ)
+    (hw : PolygonMoves.IsPolygonWord (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++
+      [PolygonMoves.inv y] ++ D)))
+    (hr : ∀ z ∈ [x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D,
+      n ≤ z.1) :
+    ∃ (c d : PolygonMoves.Signed ℕ) (E : List (PolygonMoves.Signed ℕ)),
+      Relation.ReflTransGen orientablePairing_normalForm_aux_Step
+        (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D))
+        (P ++ ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E)) ∧
+      ∀ z ∈ c :: d :: E, n ≤ z.1 := by
+  -- x A y B x⁻¹ C y⁻¹ D P  →(cut on y, new c)  B x⁻¹ c⁻¹ x A D P c C
+  -- → C B x⁻¹ c⁻¹ x A D P c  →(cut on x⁻¹, new d)  d⁻¹ C B A D P c d c⁻¹
+  -- → P c d c⁻¹ d⁻¹ C B A D.
+  obtain ⟨cl, hcn, hcf⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_exists_fresh n
+      (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D))
+  let c : PolygonMoves.Signed ℕ := (cl, false)
+  have s0 : orientablePairing_normalForm_aux_Step
+      (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D))
+      ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D ++ P) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_rot P
+      ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D)
+      rfl (by simp) hw
+  have hw1 := orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord s0 hw
+  have s1 : orientablePairing_normalForm_aux_Step
+      ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D ++ P)
+      (B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c] ++ C) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_cut
+      ([x] ++ A) (B ++ [PolygonMoves.inv x]) C (D ++ P) y c (by simp) (by simp)
+      (by
+        intro h
+        apply hcf
+        simp only [List.map_append, List.mem_append] at h ⊢
+        tauto)
+      hw1
+  have hw2 := orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord s1 hw1
+  have s2 : orientablePairing_normalForm_aux_Step
+      (B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c] ++ C)
+      (C ++ B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c]) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_rot
+      (B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c]) C
+      (by simp) (by simp) hw2
+  have hw3 := orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord s2 hw2
+  obtain ⟨dl, hdn, hdf⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_exists_fresh n
+      (C ++ B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c])
+  let d : PolygonMoves.Signed ℕ := (dl, false)
+  have s3 : orientablePairing_normalForm_aux_Step
+      (C ++ B ++ [PolygonMoves.inv x] ++ [PolygonMoves.inv c] ++ [x] ++ A ++ D ++ P ++ [c])
+      ([PolygonMoves.inv d] ++ C ++ B ++ A ++ D ++ P ++ [c] ++ [d] ++ [PolygonMoves.inv c]) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_cut
+      (C ++ B) [] [PolygonMoves.inv c] (A ++ D ++ P ++ [c]) (PolygonMoves.inv x) d
+      (by simp) (by simp) hdf hw3
+  have hw4 := orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord s3 hw3
+  have s4 : orientablePairing_normalForm_aux_Step
+      ([PolygonMoves.inv d] ++ C ++ B ++ A ++ D ++ P ++ [c] ++ [d] ++ [PolygonMoves.inv c])
+      (P ++ ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ (C ++ B ++ A ++ D))) :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator_aux_rot
+      ([PolygonMoves.inv d] ++ C ++ B ++ A ++ D) (P ++ [c] ++ [d] ++ [PolygonMoves.inv c])
+      (by simp) (by simp) hw4
+  refine ⟨c, d, C ++ B ++ A ++ D, ?_, ?_⟩
+  · exact (((((Relation.ReflTransGen.single s0).tail s1).tail s2).tail s3).tail s4)
+  · intro z hz
+    simp only [List.mem_cons, List.mem_append] at hz
+    rcases hz with rfl | rfl | hz
+    · exact hcn
+    · exact hdn
+    · apply hr
+      simp only [List.mem_append, List.mem_cons]
+      tauto
+
+/-- **Leaf (relabel).**  One `relabel` step sends `c ↦ 2k`, `d ↦ 2k + 1` with
+signs `true`, and the tail above `2k + 1`: take `e = swap (2k+1) d' ∘ swap 2k c'`
+for fresh `c'`, `d'` above every label (with `c.1 ↦ 2k`, `d.1 ↦ 2k+1`), fixing
+everything below `2k` (the prefix), and `flip` making `c`, `d` positive.
+`c.1 ≠ d.1` and neither occurs in `E` by `hw` (each label occurs twice). -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_relabel (k : ℕ)
+    (c d : PolygonMoves.Signed ℕ) (E : List (PolygonMoves.Signed ℕ))
+    (hw : PolygonMoves.IsPolygonWord (orientablePairing_normalForm_aux_standardWord k ++
+      ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E)))
+    (hr : ∀ z ∈ c :: d :: E, 2 * k ≤ z.1) :
+    ∃ E' : List (PolygonMoves.Signed ℕ),
+      orientablePairing_normalForm_aux_Step
+        (orientablePairing_normalForm_aux_standardWord k ++
+          ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E))
+        (orientablePairing_normalForm_aux_standardWord (k + 1) ++ E') ∧
+      ∀ z ∈ E', 2 * (k + 1) ≤ z.1 := by
+  let a := c.1
+  let b := d.1
+  let p := 2 * k
+  let q := 2 * k + 1
+  have hab : a ≠ b := by
+    intro h
+    have hc := hw.2.2 a (by simp [a])
+    simp only [List.map_append, List.count_append] at hc
+    simp [a, b, h, PolygonMoves.inv] at hc
+    omega
+  let s₁ : ℕ ≃ ℕ := Equiv.swap a p
+  let b₁ := s₁ b
+  let s₂ : ℕ ≃ ℕ := Equiv.swap b₁ q
+  let e : ℕ ≃ ℕ := s₁.trans s₂
+  have hb₁p : b₁ ≠ p := by
+    intro h
+    have h' : s₁ b = s₁ a := by simpa [b₁, s₁] using h
+    exact hab (s₁.injective h').symm
+  have he_a : e a = p := by
+    change s₂ (s₁ a) = p
+    rw [show s₁ a = p by simp [s₁]]
+    exact Equiv.swap_apply_of_ne_of_ne hb₁p.symm (by omega)
+  have he_b : e b = q := by
+    simp [e, b₁, s₂]
+  have he_fix {x : ℕ} (hx : x < p) : e x = x := by
+    have hxa : x ≠ a := by intro h; subst x; exact (Nat.not_lt_of_ge (hr c (by simp)) hx)
+    have hxp : x ≠ p := Nat.ne_of_lt hx
+    have hxb : x ≠ b := by intro h; subst x; exact (Nat.not_lt_of_ge (hr d (by simp)) hx)
+    have hb₁ge : p ≤ b₁ := by
+      by_cases hbp : b = p
+      · simp [b₁, s₁, hbp, a]
+        exact hr c (by simp)
+      · simpa [b₁, s₁, Equiv.swap_apply_of_ne_of_ne hab.symm hbp] using hr d (by simp)
+    have hxb₁ : x ≠ b₁ := by
+      exact (Nat.ne_of_lt (lt_of_lt_of_le hx hb₁ge))
+    have hxq : x ≠ q := by omega
+    simp [e, s₁, s₂, Equiv.trans_apply, Equiv.swap_apply_of_ne_of_ne,
+      hxa, hxp, hxb₁, hxq]
+  have hEc : ∀ z ∈ E, z.1 ≠ a := by
+    intro z hz hza
+    have hc := hw.2.2 a (by simp [a])
+    have hpos : 0 < (E.map Prod.fst).count a := List.count_pos_iff.mpr (by
+      exact List.mem_map.mpr ⟨z, hz, hza⟩)
+    dsimp [a] at hpos
+    have hcd : c.1 ≠ d.1 := by simpa [a, b] using hab
+    dsimp [a] at hc
+    simp only [List.map_append, List.count_append] at hc
+    simp only [List.map_cons, List.map_nil, Prod.fst, PolygonMoves.inv] at hc
+    simp only [List.count_cons] at hc
+    simp [hcd, hcd.symm] at hc
+    have hzero : (E.map Prod.fst).count c.1 = 0 := by omega
+    omega
+  have hEd : ∀ z ∈ E, z.1 ≠ b := by
+    intro z hz hzb
+    have hd := hw.2.2 b (by simp [b])
+    have hpos : 0 < (E.map Prod.fst).count b := List.count_pos_iff.mpr (by
+      exact List.mem_map.mpr ⟨z, hz, hzb⟩)
+    dsimp [b] at hpos
+    simp only [List.map_append, List.count_append] at hd
+    simp [a, b, hab, PolygonMoves.inv, hzb] at hd
+    omega
+  let flip : ℕ → Bool := fun x => if x = a then !c.2 else if x = b then !d.2 else false
+  let f : PolygonMoves.Signed ℕ → PolygonMoves.Signed ℕ :=
+    fun x => (e x.1, xor x.2 (flip x.1))
+  have hprefix_general : ∀ (L : List (PolygonMoves.Signed ℕ)),
+      (∀ x ∈ L, x.1 < p) → L.map f = L := by
+    intro L hL
+    induction L with
+    | nil => simp
+    | cons x xs ih =>
+        have hxlt := hL x (by simp)
+        have hxa : x.1 ≠ a := by
+          intro h
+          exact (Nat.not_lt_of_ge (hr c (by simp))) (by simpa [a, p, h] using hxlt)
+        have hxb : x.1 ≠ b := by
+          intro h
+          exact (Nat.not_lt_of_ge (hr d (by simp))) (by simpa [b, p, h] using hxlt)
+        simp only [List.map_cons]
+        rw [ih (fun y hy => hL y (by simp [hy]))]
+        simp [f, flip, he_fix hxlt, hxa, hxb]
+  have hprefix : (orientablePairing_normalForm_aux_standardWord k).map f =
+      orientablePairing_normalForm_aux_standardWord k := by
+    apply hprefix_general
+    intro x hx
+    simp only [orientablePairing_normalForm_aux_standardWord, List.mem_flatMap,
+      List.mem_range] at hx
+    obtain ⟨j, hj, hx⟩ := hx
+    simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hx
+    rcases hx with rfl | rfl | rfl | rfl <;> simp [p] <;> omega
+  refine ⟨E.map f, ?_, ?_⟩
+  · have hmap :
+        (orientablePairing_normalForm_aux_standardWord k ++
+          ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E)).map
+            (fun x => (e x.1, xor x.2 (flip x.1))) =
+          orientablePairing_normalForm_aux_standardWord (k + 1) ++ E.map f := by
+      simp only [List.map_append]
+      rw [orientablePairing_normalForm_aux_standardWord,
+        orientablePairing_normalForm_aux_standardWord, List.range_succ,
+        List.flatMap_append]
+      simp only [List.flatMap_singleton]
+      rw [show ((List.range k).flatMap fun j =>
+        [(2 * j, true), (2 * j + 1, true), (2 * j, false), (2 * j + 1, false)]).map f =
+          (List.range k).flatMap (fun j =>
+        [(2 * j, true), (2 * j + 1, true), (2 * j, false), (2 * j + 1, false)]) by
+          exact hprefix]
+      simp [f, flip, a, b, p, q, hab, hab.symm, he_a, he_b, PolygonMoves.inv]
+    rw [← hmap]
+    exact orientablePairing_normalForm_aux_Step.relabel _ e flip hw
+  · intro z hz
+    obtain ⟨x, hx, rfl⟩ := List.mem_map.mp hz
+    simp only [f, Prod.fst]
+    have hxp : p ≤ x.1 := hr x (by simp [hx])
+    have hxc := hEc x hx
+    have hxd := hEd x hx
+    have hlow : p ≤ e x.1 := by
+      by_contra h
+      have helow : e x.1 < p := Nat.lt_of_not_ge h
+      have hfix := he_fix helow
+      have hxe : x.1 = e x.1 := e.injective hfix.symm
+      exact (Nat.not_lt_of_ge hxp) (hxe.symm ▸ helow)
+    have hnep : e x.1 ≠ p := by
+      intro h
+      exact hxc (e.injective (h.trans he_a.symm))
+    have hneq : e x.1 ≠ q := by
+      intro h
+      exact hxd (e.injective (h.trans he_b.symm))
+    dsimp [p, q] at hlow hnep hneq ⊢
+    omega
+
 /-- **Leaf (one commutator block).**  If the word is `k` standard blocks
 followed by a tail `r` with labels `≥ 2k` and at least one more block's worth
 of letters, then steps reach `k + 1` standard blocks followed by a tail with
@@ -6104,7 +7907,21 @@ theorem orientablePairing_normalForm_aux_normalize_aux_block (k m : ℕ) (hm : 1
         (orientablePairing_normalForm_aux_standardWord k ++ r)
         (orientablePairing_normalForm_aux_standardWord (k + 1) ++ r') ∧
       ∀ x ∈ r', 2 * (k + 1) ≤ x.1 := by
-  sorry
+  have hpw : ∀ {u u' : List (PolygonMoves.Signed ℕ)},
+      Relation.ReflTransGen orientablePairing_normalForm_aux_Step u u' →
+        PolygonMoves.IsPolygonWord u → PolygonMoves.IsPolygonWord u' := by
+    intro u u' h hu
+    induction h with
+    | refl => exact hu
+    | tail _ hs ih => exact orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord hs ih
+  obtain ⟨x, y, A, B, C, D, rfl⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_pair k m hm r hw hor hv hlen hr
+  obtain ⟨c, d, E, hch, hE⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator (2 * k)
+      (orientablePairing_normalForm_aux_standardWord k) A B C D x y hw hr
+  obtain ⟨E', hs, hE'⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_relabel k c d E (hpw hch hw) hE
+  exact ⟨E', hch.tail hs, hE'⟩
 
 /-- The hypotheses of `_aux_normalize` hold all along a chain of steps. -/
 theorem orientablePairing_normalForm_aux_normalize_aux_reach_invariants
