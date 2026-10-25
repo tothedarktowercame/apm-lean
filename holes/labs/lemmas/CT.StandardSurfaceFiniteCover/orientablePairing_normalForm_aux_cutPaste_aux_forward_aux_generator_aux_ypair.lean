@@ -7433,7 +7433,61 @@ theorem orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_generator_aux_
     (hi : (i : ℕ) = α₁.length ∨ (i : ℕ) = α₁.length + 1 + α₂.length + β₁.length)
     (hj : (j : ℕ) = α₁.length ∨ (j : ℕ) = α₁.length + 1 + α₂.length + β₁.length) :
     Relation.EqvGen (WordRel (α₂ ++ [inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁)) T T' := by
-  sorry
+  rcases hi with hi | hi <;> rcases hj with hj | hj
+  · exfalso
+    apply hij
+    exact Fin.ext (hi.trans hj.symm)
+  · have hTT : T = T' := by
+      have hsi : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).2 = y.2 := by
+        simp only [List.get_eq_getElem, List.getElem_append, List.getElem_singleton,
+          List.length_append, List.length_singleton] at hi ⊢
+        (repeat' split) <;> first | omega | simp
+      have hsj : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2 = !y.2 := by
+        simp only [List.get_eq_getElem, List.getElem_append, List.getElem_singleton,
+          List.length_append, List.length_singleton] at hj ⊢
+        (repeat' split) <;> first | omega | simp [inv]
+      have hsign : ¬ ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).2 =
+          ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2 := by
+        rw [hsi, hsj]
+        cases y.2 <;> decide
+      have hpos : α₁.length + 1 + α₂.length + β₁.length ≠ α₁.length := by omega
+      rw [if_neg hsign] at hT'
+      apply Subtype.ext
+      rw [hT, hT']
+      simpa [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+        hi, hj, hsign, hpos] using
+        (cut_retransfer_consistency_aux_chords
+          (L := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+          (p := 0) (q := α₁.length + 1 + α₂.length) τ)
+    rw [hTT]
+    exact Relation.EqvGen.refl _
+  · have hTT : T = T' := by
+      have hsi : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).2 = !y.2 := by
+        simp only [List.get_eq_getElem, List.getElem_append, List.getElem_singleton,
+          List.length_append, List.length_singleton] at hi ⊢
+        (repeat' split) <;> first | omega | simp [inv]
+      have hsj : ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2 = y.2 := by
+        simp only [List.get_eq_getElem, List.getElem_append, List.getElem_singleton,
+          List.length_append, List.length_singleton] at hj ⊢
+        (repeat' split) <;> first | omega | simp
+      have hsign : ¬ ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get i).2 =
+          ((α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).get j).2 := by
+        rw [hsi, hsj]
+        cases y.2 <;> decide
+      have hpos : α₁.length + 1 + α₂.length + β₁.length ≠ α₁.length := by omega
+      rw [if_neg hsign] at hT'
+      apply Subtype.ext
+      rw [hT, hT']
+      simpa [orientablePairing_normalForm_aux_cutPaste_aux_forward_aux_transfer,
+        hi, hj, hsign, hpos, reverseParameter] using
+        (cut_retransfer_consistency_aux_chords
+          (L := (α₁ ++ [y] ++ α₂ ++ β₁ ++ [inv y] ++ β₂).length)
+          (p := 0) (q := α₁.length + 1 + α₂.length) (reverseParameter τ)).symm
+    rw [hTT]
+    exact Relation.EqvGen.refl _
+  · exfalso
+    apply hij
+    exact Fin.ext (hi.trans hj.symm)
 -- END SEAT AREA
 
 open PolygonMoves in
