@@ -7015,6 +7015,83 @@ theorem orientablePairing_normalForm_aux_normalize_aux_standardWord_length (k : 
         List.flatMap_append, List.length_append] at ih ⊢
       simp [ih]; ring
 
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_tail_length
+    (k m : ℕ) (r : List (PolygonMoves.Signed ℕ))
+    (hlen : (orientablePairing_normalForm_aux_standardWord k ++ r).length = 4 * (k + m)) :
+    r.length = 4 * m := by
+  rw [List.length_append,
+    orientablePairing_normalForm_aux_normalize_aux_standardWord_length] at hlen
+  omega
+
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_tail_nonempty
+    (k m : ℕ) (hm : 1 ≤ m) (r : List (PolygonMoves.Signed ℕ))
+    (hlen : (orientablePairing_normalForm_aux_standardWord k ++ r).length = 4 * (k + m)) :
+    r ≠ [] := by
+  intro hr
+  have hrl := orientablePairing_normalForm_aux_normalize_aux_block_aux_tail_length
+    k m r hlen
+  simp [hr] at hrl
+  omega
+
+/-- **Leaf (first pair).**  The tail starts with a label whose two arcs are
+interlocked with a second label of the tail: `r = x A y B x⁻¹ C y⁻¹ D`.  The
+labels of the standard prefix are `< 2k` and those of `r` are `≥ 2k`, so `r`
+is closed under mates; `r ≠ []` (`_aux_tail_nonempty`); the mate of the first
+letter `x` of `r` is `inv x` by orientability (`_aux_uniqueMate`); and
+`_aux_interlock` at `i = 4k` gives `y` strictly between them whose mate lies
+outside.  The mate cannot lie before `i` (that is the prefix), so it lies after
+`x⁻¹`, and it is `inv y` by orientability. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_pair (k m : ℕ) (hm : 1 ≤ m)
+    (r : List (PolygonMoves.Signed ℕ))
+    (hw : PolygonMoves.IsPolygonWord (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hor : orientablePairing_normalForm_aux_WordOrientable
+      (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hv : orientablePairing_normalForm_aux_WordOneVertex
+      (orientablePairing_normalForm_aux_standardWord k ++ r))
+    (hlen : (orientablePairing_normalForm_aux_standardWord k ++ r).length = 4 * (k + m))
+    (hr : ∀ x ∈ r, 2 * k ≤ x.1) :
+    ∃ (x y : PolygonMoves.Signed ℕ) (A B C D : List (PolygonMoves.Signed ℕ)),
+      r = [x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D := by
+  sorry
+
+/-- **Leaf (commutator).**  Steps take `P x A y B x⁻¹ C y⁻¹ D` to
+`P c d c⁻¹ d⁻¹ E` with the labels of `c`, `d`, `E` still `≥ n` (Massey, ch. 1
+§7: two `cutPaste` steps with fresh labels `c`, `d` chosen above every label of
+the word, and rotations to bring each configuration into the
+`α₁ y α₂ β₁ y⁻¹ β₂` shape and finally to put `P` back in front; `P` is never
+cut, it stays inside one of the four pieces).  `hy` of each `cutPaste` comes
+from `hw`; `_aux_step_isPolygonWord` carries `hw` along. -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator (n : ℕ)
+    (P A B C D : List (PolygonMoves.Signed ℕ)) (x y : PolygonMoves.Signed ℕ)
+    (hw : PolygonMoves.IsPolygonWord (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++
+      [PolygonMoves.inv y] ++ D)))
+    (hr : ∀ z ∈ [x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D,
+      n ≤ z.1) :
+    ∃ (c d : PolygonMoves.Signed ℕ) (E : List (PolygonMoves.Signed ℕ)),
+      Relation.ReflTransGen orientablePairing_normalForm_aux_Step
+        (P ++ ([x] ++ A ++ [y] ++ B ++ [PolygonMoves.inv x] ++ C ++ [PolygonMoves.inv y] ++ D))
+        (P ++ ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E)) ∧
+      ∀ z ∈ c :: d :: E, n ≤ z.1 := by
+  sorry
+
+/-- **Leaf (relabel).**  One `relabel` step sends `c ↦ 2k`, `d ↦ 2k + 1` with
+signs `true`, and the tail above `2k + 1`: take `e = swap (2k+1) d' ∘ swap 2k c'`
+for fresh `c'`, `d'` above every label (with `c.1 ↦ 2k`, `d.1 ↦ 2k+1`), fixing
+everything below `2k` (the prefix), and `flip` making `c`, `d` positive.
+`c.1 ≠ d.1` and neither occurs in `E` by `hw` (each label occurs twice). -/
+theorem orientablePairing_normalForm_aux_normalize_aux_block_aux_relabel (k : ℕ)
+    (c d : PolygonMoves.Signed ℕ) (E : List (PolygonMoves.Signed ℕ))
+    (hw : PolygonMoves.IsPolygonWord (orientablePairing_normalForm_aux_standardWord k ++
+      ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E)))
+    (hr : ∀ z ∈ c :: d :: E, 2 * k ≤ z.1) :
+    ∃ E' : List (PolygonMoves.Signed ℕ),
+      orientablePairing_normalForm_aux_Step
+        (orientablePairing_normalForm_aux_standardWord k ++
+          ([c, d, PolygonMoves.inv c, PolygonMoves.inv d] ++ E))
+        (orientablePairing_normalForm_aux_standardWord (k + 1) ++ E') ∧
+      ∀ z ∈ E', 2 * (k + 1) ≤ z.1 := by
+  sorry
+
 /-- **Leaf (one commutator block).**  If the word is `k` standard blocks
 followed by a tail `r` with labels `≥ 2k` and at least one more block's worth
 of letters, then steps reach `k + 1` standard blocks followed by a tail with
@@ -7039,7 +7116,21 @@ theorem orientablePairing_normalForm_aux_normalize_aux_block (k m : ℕ) (hm : 1
         (orientablePairing_normalForm_aux_standardWord k ++ r)
         (orientablePairing_normalForm_aux_standardWord (k + 1) ++ r') ∧
       ∀ x ∈ r', 2 * (k + 1) ≤ x.1 := by
-  sorry
+  have hpw : ∀ {u u' : List (PolygonMoves.Signed ℕ)},
+      Relation.ReflTransGen orientablePairing_normalForm_aux_Step u u' →
+        PolygonMoves.IsPolygonWord u → PolygonMoves.IsPolygonWord u' := by
+    intro u u' h hu
+    induction h with
+    | refl => exact hu
+    | tail _ hs ih => exact orientablePairing_normalForm_aux_normalize_aux_step_isPolygonWord hs ih
+  obtain ⟨x, y, A, B, C, D, rfl⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_pair k m hm r hw hor hv hlen hr
+  obtain ⟨c, d, E, hch, hE⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_commutator (2 * k)
+      (orientablePairing_normalForm_aux_standardWord k) A B C D x y hw hr
+  obtain ⟨E', hs, hE'⟩ :=
+    orientablePairing_normalForm_aux_normalize_aux_block_aux_relabel k c d E (hpw hch hw) hE
+  exact ⟨E', hch.tail hs, hE'⟩
 
 /-- The hypotheses of `_aux_normalize` hold all along a chain of steps. -/
 theorem orientablePairing_normalForm_aux_normalize_aux_reach_invariants
