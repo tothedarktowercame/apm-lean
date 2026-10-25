@@ -1120,16 +1120,203 @@ theorem standardCover_pairingData_aux_glueStep_aux_vertexCount
     (hor : C.IsOrientable) : C'.vertexCount = C.vertexCount := by
   sorry
 
-/-- **Leaf (two disks glued along an arc).**  The disks of `s.1` and
-`(C.pair s).1`, glued along `s` with the parameter reversed, form one disk
-whose boundary is the merged face's boundary; all other identifications are
-carried by `toOld`. -/
+/- A common compact parametrizing space gives the required homeomorphism of
+polygon-complex quotients once it has the same fibres on both sides.  This is
+the quotient-topology part of the glue step; the remaining geometric task is
+to parametrize two disks joined along the chosen side by the merged disk. -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_span
+    {C C' : PolygonComplex} {Y : Type*} [TopologicalSpace Y] [CompactSpace Y]
+    (a : Y → Σ _ : Fin C.faceCount, Disk)
+    (b : Y → Σ _ : Fin C'.faceCount, Disk)
+    (ha : Continuous a) (hb : Continuous b)
+    (hasurj : Function.Surjective a) (hbsurj : Function.Surjective b)
+    (hrel : ∀ y y', Relation.EqvGen C.Rel (a y) (a y') ↔
+      Relation.EqvGen C'.Rel (b y) (b y')) :
+    Nonempty (C.Space ≃ₜ C'.Space) := by
+  let A : Y → C.Space := fun y => Quotient.mk (Relation.EqvGen.setoid C.Rel) (a y)
+  let B : Y → C'.Space := fun y => Quotient.mk (Relation.EqvGen.setoid C'.Rel) (b y)
+  have hqa : Topology.IsQuotientMap A := by
+    exact isQuotientMap_quot_mk.comp
+      (IsQuotientMap.of_surjective_continuous hasurj ha)
+  have hqb : Topology.IsQuotientMap B := by
+    exact isQuotientMap_quot_mk.comp
+      (IsQuotientMap.of_surjective_continuous hbsurj hb)
+  have hfib : ∀ y y', A y = A y' ↔ B y = B y' := by
+    intro y y'
+    change Quotient.mk _ (a y) = Quotient.mk _ (a y') ↔
+      Quotient.mk _ (b y) = Quotient.mk _ (b y')
+    rw [Quotient.eq, Quotient.eq]
+    exact hrel y y'
+  obtain ⟨sA, hsA⟩ := hqa.surjective.hasRightInverse
+  obtain ⟨sB, hsB⟩ := hqb.surjective.hasRightInverse
+  let f : C.Space → C'.Space := B ∘ sA
+  let g : C'.Space → C.Space := A ∘ sB
+  have hfA : f ∘ A = B := by
+    funext y
+    exact (hfib (sA (A y)) y).mp (hsA (A y))
+  have hgB : g ∘ B = A := by
+    funext y
+    exact (hfib (sB (B y)) y).mpr (hsB (B y))
+  refine ⟨{
+    toEquiv := {
+      toFun := f
+      invFun := g
+      left_inv := ?_
+      right_inv := ?_ }
+    continuous_toFun := hqa.continuous_iff.mpr ?_
+    continuous_invFun := hqb.continuous_iff.mpr ?_ }⟩
+  · intro x
+    obtain ⟨y, rfl⟩ := hqa.surjective x
+    rw [show f (A y) = B y from congrFun hfA y]
+    exact congrFun hgB y
+  · intro x
+    obtain ⟨y, rfl⟩ := hqb.surjective x
+    rw [show g (B y) = A y from congrFun hgB y]
+    exact congrFun hfA y
+  · rw [hfA]
+    exact continuous_coinduced_rng.comp hb
+  · rw [hgB]
+    exact continuous_coinduced_rng.comp ha
+
+/-- Charts of the two halves of the merged `(p + q - 2)`-gon cut along the chord
+from corner `p - 1` to corner `0`.  `hL` carries the `p`-gon onto the half that
+holds arcs `0, …, p - 2` (arc `(i + 1 + m) % p` onto arc `m`) and side `i` onto
+the chord, run from corner `p - 1` to corner `0`; `hR` carries the `q`-gon onto
+the other half (arc `(j + 1 + k) % q` onto arc `p - 1 + k`) and side `j` onto
+the same chord run backwards. -/
+structure standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
+    (p q i j : ℕ) (hL hR : Disk → Disk) : Prop where
+  continuous_left : Continuous hL
+  continuous_right : Continuous hR
+  injective_left : Function.Injective hL
+  injective_right : Function.Injective hR
+  cover : ∀ z, (∃ x, hL x = z) ∨ ∃ y, hR y = z
+  seam : ∀ x y, hL x = hR y ↔
+    ∃ t, x = edgePoint p i t ∧ y = edgePoint q j (reverseIcc t)
+  edge_left : ∀ m, m + 1 < p → ∀ t,
+    hL (edgePoint p ((i + 1 + m) % p) t) = edgePoint (p + q - 2) m t
+  edge_right : ∀ m, p ≤ m + 1 → m < p + q - 2 → ∀ t,
+    hR (edgePoint q ((j + 1 + (m + 1 - p)) % q) t) = edgePoint (p + q - 2) m t
+  interior_left : ∀ x : Disk, ‖(x : ℂ)‖ < 1 → ‖(hL x : ℂ)‖ < 1
+  interior_right : ∀ y : Disk, ‖(y : ℂ)‖ < 1 → ‖(hR y : ℂ)‖ < 1
+
+/-- **Leaf (geometry).**  The half charts exist.  Route: `PolygonMoves`
+already has the two pieces `cutPiece` of a disk cut along a chord, their
+boundary maps `cutOldA`/`cutOldB` (with `L = p + q - 2`, chord corners `0` and
+`p - 1`) and the cone chart `cutAndPaste_aux_boundary_chart`; what is new is the
+circle reparametrization from the `p`-gon (resp. `q`-gon) to those boundary
+parameters. -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves
+    (p q i j : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) (hi : i < p) (hj : j < q) :
+    ∃ hL hR : Disk → Disk,
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
+        p q i j hL hR := by
+  sorry
+
+open Classical in
+/-- The face of `C'` that an unmerged face of `C` became. -/
+def standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (f : Fin C.faceCount) : Fin C'.faceCount :=
+  if h : ∃ k, D.old k = f then h.choose else D.merged
+
+/-- The disks of `C` sent to the disks of `C'`: the two glued disks go onto
+the two halves of the merged disk, every other disk is kept. -/
+def standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hL hR : Disk → Disk) :
+    (Σ _ : Fin C.faceCount, Disk) → Σ _ : Fin C'.faceCount, Disk :=
+  fun x =>
+    if x.1 = s.1 then ⟨D.merged, hL x.2⟩
+    else if x.1 = (C.pair s).1 then ⟨D.merged, hR x.2⟩
+    else ⟨standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D x.1, x.2⟩
+
+/-- **Leaf (fibres).**  Two points of the disks of `C` are identified in `C`
+exactly when their images are identified in `C'`.  The step along `s` becomes
+equality (`seam`; `hor` makes the paired parameter `reverseIcc`), steps along
+other sides become `C'` steps through `toOld` (`edge_left`, `edge_right`,
+`toOld_merged_*`, `toOld_fst`, `toOld_val`, `pair_toOld`, `sign_toOld`). -/
+theorem standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres
+    {C C' : PolygonComplex} {s : C.Side}
+    (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
+    (hsides : ∀ f, 2 ≤ C.sides f) (hor : C.IsOrientable) {hL hR : Disk → Disk}
+    (hH : standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_HalfCharts
+      (C.sides s.1) (C.sides (C.pair s).1) s.2 (C.pair s).2 hL hR)
+    (y y' : Σ _ : Fin C.faceCount, Disk) :
+    Relation.EqvGen C.Rel y y' ↔
+      Relation.EqvGen C'.Rel
+        (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y)
+        (standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR y') := by
+  sorry
+
+/-- The disks of `s.1` and `(C.pair s).1`, glued along `s` with the parameter
+reversed, form one disk whose boundary is the merged face's boundary; all other
+identifications are carried by `toOld`.  Proved from `_aux_span` with the map
+`_aux_merge` built on the half charts `_aux_halves`; the fibre comparison is
+`_aux_fibres`. -/
 theorem standardCover_pairingData_aux_glueStep_aux_homeomorph
     {C C' : PolygonComplex} {s : C.Side}
     (D : standardCover_pairingData_aux_glueStep_aux_GlueData C C' s)
     (hsides : ∀ f, 2 ≤ C.sides f) (hor : C.IsOrientable) :
     Nonempty (C.Space ≃ₜ C'.Space) := by
-  sorry
+  obtain ⟨hL, hR, hH⟩ :=
+    standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_halves
+      (C.sides s.1) (C.sides (C.pair s).1) s.2 (C.pair s).2
+      (hsides _) (hsides _) s.2.isLt (C.pair s).2.isLt
+  let b := standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge D hL hR
+  have hne : s.1 ≠ (C.pair s).1 := by
+    have h := D.old_ne D.merged
+    rwa [D.old_merged] at h
+  have hb : Continuous b := by
+    refine continuous_sigma fun f => ?_
+    by_cases h1 : f = s.1
+    · have : (fun x : Disk => b ⟨f, x⟩) = fun x => ⟨D.merged, hL x⟩ := by
+        funext x
+        simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge, h1]
+      rw [this]
+      exact continuous_sigmaMk.comp hH.continuous_left
+    by_cases h2 : f = (C.pair s).1
+    · have : (fun x : Disk => b ⟨f, x⟩) = fun x => ⟨D.merged, hR x⟩ := by
+        funext x
+        simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge, h1, h2,
+          hne.symm]
+      rw [this]
+      exact continuous_sigmaMk.comp hH.continuous_right
+    · have : (fun x : Disk => b ⟨f, x⟩) = fun x =>
+          ⟨standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D f, x⟩ := by
+        funext x
+        simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge, h1, h2]
+      rw [this]
+      exact continuous_sigmaMk.comp continuous_id
+  have hbsurj : Function.Surjective b := by
+    rintro ⟨k, z⟩
+    by_cases hk : k = D.merged
+    · subst hk
+      rcases hH.cover z with ⟨x, hx⟩ | ⟨y, hy⟩
+      · exact ⟨⟨s.1, x⟩, by
+          simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge, hx]⟩
+      · exact ⟨⟨(C.pair s).1, y⟩, by
+          simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge,
+            hne.symm, hy]⟩
+    · have h1 : D.old k ≠ s.1 := by
+        intro h
+        exact hk (D.old_injective (h.trans D.old_merged.symm))
+      have h2 : D.old k ≠ (C.pair s).1 := D.old_ne k
+      have hinv :
+          standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv D (D.old k) = k := by
+        have hex : ∃ k', D.old k' = D.old k := ⟨k, rfl⟩
+        simp only [standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_oldInv,
+          dif_pos hex]
+        exact D.old_injective hex.choose_spec
+      refine ⟨⟨D.old k, z⟩, ?_⟩
+      simp [b, standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_merge, h1, h2, hinv]
+  exact standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_span
+    (Y := Σ _ : Fin C.faceCount, Disk) id b continuous_id hb
+    Function.surjective_id hbsurj
+    (fun y y' =>
+      standardCover_pairingData_aux_glueStep_aux_homeomorph_aux_fibres D hsides hor hH y y')
 
 /-- **One dual-tree glue.**  With at least two faces and a connected
 dual graph, some side pairs two distinct faces.  Gluing those two disks along
