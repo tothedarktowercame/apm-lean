@@ -13232,7 +13232,15 @@ lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste
     (hk₂ : (k : ℕ) ≠ α₁.length + 1 + α₂.length + β₁.length) :
     (α₂ ++ [PolygonMoves.inv c] ++ α₁ ++ β₂ ++ [c] ++ β₁).get (orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map α₁ α₂ β₁ β₂ y c k) =
       (α₁ ++ [y] ++ α₂ ++ β₁ ++ [PolygonMoves.inv y] ++ β₂).get k := by
-  sorry
+  have hk := k.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hk
+  simp only [List.get_eq_getElem,
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_map,
+    orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_mapNat]
+  split_ifs <;> simp only [List.length_append, List.length_cons, List.length_nil,
+    List.getElem_append, List.getElem_cons] <;>
+    (repeat' split) <;>
+    first | omega | exact getElem_congr rfl (by omega) _
 
 /-- **Leaf.**  Away from `y` and `inv y`, the corner map is injective. -/
 lemma orientablePairing_normalForm_aux_normalize_aux_step_oneVertex_aux_cutPaste_aux_transport_aux_inj
