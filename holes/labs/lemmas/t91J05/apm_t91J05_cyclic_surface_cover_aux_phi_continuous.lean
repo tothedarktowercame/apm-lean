@@ -176,9 +176,85 @@ point of the negative real axis the argument is near `±π`, where the profile
 vanishes, so `φ` is `0` nearby.  At `0`, `|φ z| ≤ ‖z‖` since the profile lies in
 `[0, 1]`. -/
 -- BEGIN SEAT AREA
+lemma apm_t91J05_cyclic_surface_cover_aux_phi_continuous_aux_profile :
+    Continuous apm_t91J05_profile := by
+  unfold apm_t91J05_profile
+  fun_prop
+
+lemma apm_t91J05_cyclic_surface_cover_aux_phi_continuous_aux_bounds (t : ℝ) :
+    0 ≤ apm_t91J05_profile t ∧ apm_t91J05_profile t ≤ 1 := by
+  unfold apm_t91J05_profile
+  constructor
+  · exact le_max_left _ _
+  · apply max_le (by norm_num)
+    exact (min_le_left _ _).trans (min_le_right _ _)
+
+lemma apm_t91J05_cyclic_surface_cover_aux_phi_continuous_aux_left
+    (z : ℂ) (hz : z.re < 0) :
+    apm_t91J05_profile z.arg = 0 := by
+  have hpi : 0 < Real.pi / 6 := div_pos Real.pi_pos (by norm_num)
+  unfold apm_t91J05_profile
+  by_cases hi : z.im < 0
+  · have ha : z.arg < 0 := Complex.arg_neg_iff.mpr hi
+    rw [max_eq_left]
+    exact (min_le_left _ _).trans
+      ((min_le_left _ _).trans (div_nonpos_of_nonpos_of_nonneg ha.le hpi.le))
+  · have hi' : 0 ≤ z.im := le_of_not_gt hi
+    have ha : Real.pi / 2 < z.arg := by
+      rw [lt_iff_not_ge, Complex.arg_le_pi_div_two_iff]
+      exact not_or_intro (not_le_of_gt hz) hi
+    rw [max_eq_left]
+    exact (min_le_right _ _).trans
+      (div_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr ha.le) hpi.le)
+
 theorem apm_t91J05_cyclic_surface_cover_aux_phi_continuous :
     Continuous apm_t91J05_phi := by
-  sorry
+  rw [continuous_iff_continuousAt]
+  intro z
+  rcases eq_or_ne (z : ℂ) 0 with hz | hz
+  · have hz' : z = 0 := Subtype.ext hz
+    subst z
+    rw [Metric.continuousAt_iff]
+    intro ε hε
+    refine ⟨ε, hε, ?_⟩
+    intro w hw
+    have hb :=
+      apm_t91J05_cyclic_surface_cover_aux_phi_continuous_aux_bounds
+        (Complex.arg (w : ℂ))
+    have hnonneg : 0 ≤ apm_t91J05_phi w :=
+      mul_nonneg (norm_nonneg _) hb.1
+    have hle : apm_t91J05_phi w ≤ ‖(w : ℂ)‖ := by
+      unfold apm_t91J05_phi
+      nlinarith [norm_nonneg (w : ℂ)]
+    rw [show apm_t91J05_phi (0 : Disk) = 0 by simp [apm_t91J05_phi]]
+    rw [Real.dist_eq, sub_zero, abs_of_nonneg hnonneg]
+    exact lt_of_le_of_lt hle (by
+      change dist (w : ℂ) 0 < ε at hw
+      simpa [dist_zero_right] using hw)
+  · by_cases hr : (z : ℂ).re < 0
+    · have hev : ∀ᶠ w : Disk in 𝓝 z, (w : ℂ).re < 0 :=
+        (Complex.continuous_re.continuousAt.comp
+          continuous_subtype_val.continuousAt).eventually (Iio_mem_nhds hr)
+      refine (continuousAt_const : ContinuousAt (fun _ : Disk => (0 : ℝ)) z).congr_of_eventuallyEq ?_
+      filter_upwards [hev] with w hw
+      symm
+      simp [apm_t91J05_phi,
+        apm_t91J05_cyclic_surface_cover_aux_phi_continuous_aux_left _ hw]
+    · have hr' : 0 ≤ (z : ℂ).re := le_of_not_gt hr
+      have hs : (z : ℂ) ∈ Complex.slitPlane := by
+        rw [Complex.mem_slitPlane_iff_arg]
+        refine ⟨?_, hz⟩
+        intro ha
+        have hn := (Complex.arg_eq_pi_iff.mp ha).1
+        exact (not_lt_of_ge hr') hn
+      have hn : ContinuousAt (fun w : Disk => ‖(w : ℂ)‖) z :=
+        continuous_norm.continuousAt.comp continuous_subtype_val.continuousAt
+      have ha : ContinuousAt (fun w : Disk => Complex.arg (w : ℂ)) z :=
+        (Complex.continuousAt_arg hs).comp continuous_subtype_val.continuousAt
+      change ContinuousAt
+        (fun w : Disk => ‖(w : ℂ)‖ * apm_t91J05_profile (Complex.arg (w : ℂ))) z
+      exact hn.mul
+        (apm_t91J05_cyclic_surface_cover_aux_phi_continuous_aux_profile.continuousAt.comp ha)
 -- END SEAT AREA
 
 /-- Leaf: boundary values on the first three sides.  `edgePoint 12 k t` is
