@@ -255,7 +255,44 @@ edgePoint 12 1 0` (same exponential), and the chain
 theorem apm_t91J05_cyclic_surface_cover_aux_vertex :
     surfaceQuotient true 3 (edgePoint 12 0 ⟨0, by norm_num, by norm_num⟩) =
       surfaceQuotient true 3 (edgePoint 12 0 ⟨1, by norm_num, by norm_num⟩) := by
-  sorry
+  let t0 : Set.Icc (0 : ℝ) 1 := ⟨0, by norm_num, by norm_num⟩
+  let t1 : Set.Icc (0 : ℝ) 1 := ⟨1, by norm_num, by norm_num⟩
+  have corner (k : ℕ) : edgePoint 12 k t1 = edgePoint 12 (k + 1) t0 := by
+    apply Subtype.ext
+    simp only [edgePoint, t0, t1]
+    congr 1
+    push_cast
+    ring
+  have pair0 (t : Set.Icc (0 : ℝ) 1) :
+      surfaceQuotient true 3 (edgePoint 12 0 t) =
+        surfaceQuotient true 3 (edgePoint 12 2
+          (ConstructionTargets.PolygonSurfacePiOne.reverseIcc t)) := by
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    rw [SurfaceRel, if_pos rfl]
+    exact ⟨0, by omega, t, Or.inl ⟨rfl, rfl⟩⟩
+  have pair1 (t : Set.Icc (0 : ℝ) 1) :
+      surfaceQuotient true 3 (edgePoint 12 1 t) =
+        surfaceQuotient true 3 (edgePoint 12 3
+          (ConstructionTargets.PolygonSurfacePiOne.reverseIcc t)) := by
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    rw [SurfaceRel, if_pos rfl]
+    exact ⟨0, by omega, t, Or.inr ⟨rfl, rfl⟩⟩
+  change surfaceQuotient true 3 (edgePoint 12 0 t0) =
+    surfaceQuotient true 3 (edgePoint 12 0 t1)
+  calc
+    surfaceQuotient true 3 (edgePoint 12 0 t0) =
+        surfaceQuotient true 3 (edgePoint 12 2 t1) := by
+          simpa [t0, t1, ConstructionTargets.PolygonSurfacePiOne.reverseIcc] using pair0 t0
+    _ = surfaceQuotient true 3 (edgePoint 12 3 t0) :=
+      congrArg (surfaceQuotient true 3) (corner 2)
+    _ = surfaceQuotient true 3 (edgePoint 12 1 t1) := by
+      simpa [t0, t1, ConstructionTargets.PolygonSurfacePiOne.reverseIcc] using (pair1 t1).symm
+    _ = surfaceQuotient true 3 (edgePoint 12 2 t0) :=
+      congrArg (surfaceQuotient true 3) (corner 1)
+    _ = surfaceQuotient true 3 (edgePoint 12 0 t1) := by
+      simpa [t0, t1, ConstructionTargets.PolygonSurfacePiOne.reverseIcc] using (pair0 t1).symm
 
 /-- Leaf: the fibre over the vertex is joined.  The vertex `s₀` is
 `surfaceQuotient true 3 (edgePoint 12 0 0)`, and `f s₀ = 1` by `hf` at `0`, so
