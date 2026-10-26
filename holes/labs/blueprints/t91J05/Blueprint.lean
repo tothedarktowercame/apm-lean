@@ -182,11 +182,61 @@ theorem apm_t91J05_cyclic_surface_cover_aux_phi_continuous :
 /-- Leaf: boundary values on the first three sides.  `edgePoint 12 k t` is
 `exp (i·π(k+t)/6)`, with argument `π(k+t)/6 ∈ [0, π/2]` for `k ≤ 2`
 (`Complex.arg_exp_mul_I` or `Complex.arg_cos_add_sin_mul_I`), and norm `1`. -/
+lemma apm_t91J05_cyclic_surface_cover_aux_phi_edge_low_aux_arg
+    (k : ℕ) (hk : k ≤ 2) (t : Set.Icc (0 : ℝ) 1) :
+    Complex.arg ((edgePoint 12 k t : Disk) : ℂ) =
+      Real.pi * ((k : ℝ) + t.1) / 6 := by
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have ht0 : 0 ≤ t.1 := t.2.1
+  have ht1 : t.1 ≤ 1 := t.2.2
+  have hk' : (k : ℝ) ≤ 2 := by exact_mod_cast hk
+  rw [show ((edgePoint 12 k t : Disk) : ℂ) =
+      Complex.exp ((Real.pi * ((k : ℝ) + t.1) / 6) * Complex.I) by
+    simp only [edgePoint]
+    congr 1
+    push_cast
+    ring]
+  have hrange : Real.pi * ((k : ℝ) + t.1) / 6 ∈
+      Set.Ioc (-Real.pi) (-Real.pi + 2 * Real.pi) := by
+    constructor <;> dsimp <;> nlinarith
+  have ha := Complex.arg_exp_mul_I (Real.pi * ((k : ℝ) + t.1) / 6)
+  rw [(toIocMod_eq_self Real.two_pi_pos).2 hrange] at ha
+  convert ha using 1 <;> push_cast <;> ring
+
 theorem apm_t91J05_cyclic_surface_cover_aux_phi_edge_low (t : Set.Icc (0 : ℝ) 1) :
     apm_t91J05_phi (edgePoint 12 0 t) = t ∧
       apm_t91J05_phi (edgePoint 12 1 t) = 1 ∧
       apm_t91J05_phi (edgePoint 12 2 t) = 1 - t := by
-  sorry
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hpine : Real.pi ≠ 0 := ne_of_gt hpi
+  have ht0 : 0 ≤ t.1 := t.2.1
+  have ht1 : t.1 ≤ 1 := t.2.2
+  simp only [apm_t91J05_phi, apm_t91J05_profile]
+  rw [apm_t91J05_cyclic_surface_cover_aux_phi_edge_low_aux_arg 0 (by omega),
+    apm_t91J05_cyclic_surface_cover_aux_phi_edge_low_aux_arg 1 (by omega),
+    apm_t91J05_cyclic_surface_cover_aux_phi_edge_low_aux_arg 2 (by omega)]
+  have hnorm (k : ℕ) : ‖((edgePoint 12 k t : Disk) : ℂ)‖ = 1 := by
+    simp [edgePoint, Complex.norm_exp]
+  have hdiv (k : ℕ) :
+      (Real.pi * ((k : ℝ) + t.1) / 6) / (Real.pi / 6) = (k : ℝ) + t.1 := by
+    field_simp
+  have hfall (k : ℕ) :
+      (Real.pi / 2 - Real.pi * ((k : ℝ) + t.1) / 6) / (Real.pi / 6) =
+        3 - ((k : ℝ) + t.1) := by
+    field_simp
+    ring
+  simp only [hnorm, one_mul, hdiv, hfall]
+  constructor
+  · norm_num
+    rw [min_eq_left ht1, min_eq_left (by linarith), max_eq_right ht0]
+  constructor
+  · norm_num
+    have hi : min (1 + t.1) 1 = 1 := min_eq_right (by linarith)
+    rw [hi, min_eq_left (by linarith), max_eq_right (by norm_num)]
+  · norm_num
+    have hi : min (2 + t.1) 1 = 1 := min_eq_right (by linarith)
+    rw [hi, min_eq_right (by linarith), max_eq_right (by linarith)]
+    ring
 
 /-- Leaf: `φ` vanishes on sides `3, …, 11`.  The angle `π(k+t)/6` lies in
 `[π/2, 2π]`; its argument is either that angle (when `≤ π`) or that angle
