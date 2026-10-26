@@ -244,7 +244,29 @@ theorem apm_t91J05_cyclic_surface_cover_aux_circleMap (ψ : Disk → ℝ)
     (hrel : ∀ x y, SurfaceRel true 3 x y → ∃ m : ℤ, ψ y = ψ x + m) :
     ∃ f : C(apm_t91J05_Surface 3, Circle),
       ∀ x, f (surfaceQuotient true 3 x) = Circle.exp (2 * Real.pi * ψ x) := by
-  sorry
+  let g : Disk → Circle := fun x ↦ Circle.exp (2 * Real.pi * ψ x)
+  have hgrel : ∀ x y, SurfaceRel true 3 x y → g x = g y := by
+    intro x y hxy
+    obtain ⟨m, hm⟩ := hrel x y hxy
+    symm
+    change Circle.exp (2 * Real.pi * ψ y) = Circle.exp (2 * Real.pi * ψ x)
+    rw [hm, mul_add, Circle.exp_add, Circle.exp_two_pi_mul_int, mul_one]
+  have hgeqv : ∀ x y, Relation.EqvGen (SurfaceRel true 3) x y → g x = g y := by
+    intro x y hxy
+    induction hxy with
+    | rel x y h => exact hgrel x y h
+    | refl x => rfl
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ihxy ihyz => exact ihxy.trans ihyz
+  let f : apm_t91J05_Surface 3 → Circle := Quotient.lift g hgeqv
+  have hg : Continuous g := by
+    exact Circle.exp.continuous.comp (continuous_const.mul hψ)
+  have hf : Continuous f := by
+    apply continuous_coinduced_dom.mpr
+    simpa [f, g, Function.comp_def] using hg
+  refine ⟨⟨f, hf⟩, ?_⟩
+  intro x
+  rfl
 
 /-- Leaf: both ends of side `0` are the vertex.  `edgePoint 12 0 1 =
 edgePoint 12 1 0` (same exponential), and the chain
