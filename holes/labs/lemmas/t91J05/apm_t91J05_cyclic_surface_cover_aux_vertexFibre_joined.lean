@@ -420,6 +420,46 @@ pullback (by `hf`) and joins `(s₀, w)` to `(s₀, w · ζ)`, `ζ = Circle.exp 
 using `hv` at the end.  Every `n`-th root of unity in `Circle` is a power of
 `ζ` (write `w = Circle.exp θ`; `nθ ∈ 2πℤ`), so all of them are joined to `1`. -/
 -- BEGIN SEAT AREA
+lemma apm_t91J05_cyclic_surface_cover_aux_vertexFibre_joined_aux_step
+    (n : ℕ) (hn : 0 < n) (f : C(apm_t91J05_Surface 3, Circle))
+    (hf : ∀ t : Set.Icc (0 : ℝ) 1,
+      f (surfaceQuotient true 3 (edgePoint 12 0 t)) = Circle.exp (2 * Real.pi * t))
+    (hv : surfaceQuotient true 3 (edgePoint 12 0 ⟨0, by norm_num, by norm_num⟩) =
+      surfaceQuotient true 3 (edgePoint 12 0 ⟨1, by norm_num, by norm_num⟩))
+    (w : Circle) (hw : w ^ n = 1) :
+    Joined
+      (⟨(surfaceQuotient true 3 (edgePoint 12 0 ⟨0, by norm_num, by norm_num⟩), w), by
+        rw [hf ⟨0, by norm_num, by norm_num⟩]
+        simpa using hw.symm⟩ :
+        apm_t91J05_CyclicCover n f)
+      (⟨(surfaceQuotient true 3 (edgePoint 12 0 ⟨0, by norm_num, by norm_num⟩),
+          w * Circle.exp (2 * Real.pi / n)), by
+        dsimp only
+        rw [hf ⟨0, by norm_num, by norm_num⟩]
+        simp only [CharP.cast_eq_zero, mul_zero, Circle.exp_zero]
+        rw [mul_pow, hw, one_mul, ← Circle.exp_natCast_mul]
+        congr 1
+        field_simp
+        simpa [mul_comm] using Circle.exp_two_pi.symm⟩ : apm_t91J05_CyclicCover n f) := by
+  let γ : C(Set.Icc (0 : ℝ) 1, apm_t91J05_CyclicCover n f) :=
+    ⟨fun t => ⟨(surfaceQuotient true 3 (edgePoint 12 0 t),
+        w * Circle.exp (2 * Real.pi * t / n)), by
+      dsimp only
+      rw [hf t, mul_pow, hw, one_mul, ← Circle.exp_natCast_mul]
+      congr 1
+      field_simp⟩, by
+        apply Continuous.subtype_mk
+        apply Continuous.prodMk
+        · exact (continuous_surfaceQuotient true 3).comp (by unfold edgePoint; fun_prop)
+        · fun_prop⟩
+  refine ⟨⟨γ, ?_, ?_⟩⟩
+  · apply Subtype.ext
+    simp [γ]
+  · apply Subtype.ext
+    apply Prod.ext
+    · exact hv.symm
+    · simp [γ]
+
 theorem apm_t91J05_cyclic_surface_cover_aux_vertexFibre_joined
     (n : ℕ) (hn : 0 < n) (f : C(apm_t91J05_Surface 3, Circle))
     (hf : ∀ t : Set.Icc (0 : ℝ) 1,
@@ -430,7 +470,78 @@ theorem apm_t91J05_cyclic_surface_cover_aux_vertexFibre_joined
     (hq : q.1.1 = surfaceQuotient true 3 (edgePoint 12 0 ⟨0, by norm_num, by norm_num⟩))
     (hq' : q'.1.1 = surfaceQuotient true 3 (edgePoint 12 0 ⟨0, by norm_num, by norm_num⟩)) :
     Joined q q' := by
-  sorry
+  let s₀ := surfaceQuotient true 3
+    (edgePoint 12 0 ⟨0, by norm_num, by norm_num⟩)
+  let ζ : Circle := Circle.exp (2 * Real.pi / n)
+  have hfvertex : f s₀ = 1 := by
+    simpa [s₀] using hf ⟨0, by norm_num, by norm_num⟩
+  have hqpow : q.1.2 ^ n = 1 := by
+    calc
+      q.1.2 ^ n = f q.1.1 := q.2.symm
+      _ = f s₀ := congrArg f (by simpa [s₀] using hq)
+      _ = 1 := hfvertex
+  have hq'pow : q'.1.2 ^ n = 1 := by
+    calc
+      q'.1.2 ^ n = f q'.1.1 := q'.2.symm
+      _ = f s₀ := congrArg f (by simpa [s₀] using hq')
+      _ = 1 := hfvertex
+  have hζpow : ζ ^ n = 1 := by
+    dsimp [ζ]
+    rw [← Circle.exp_natCast_mul]
+    convert Circle.exp_two_pi using 1
+    field_simp
+  let r : Circle := q.1.2⁻¹ * q'.1.2
+  have hrpow : r ^ n = 1 := by
+    simp [r, mul_pow, hqpow, hq'pow]
+  have hrpowC : ((r : Circle) : ℂ) ^ n = 1 := by
+    simpa using congrArg ((↑) : Circle → ℂ) hrpow
+  letI : NeZero n := ⟨by omega⟩
+  obtain ⟨i, hi, hir⟩ :=
+    (Complex.isPrimitiveRoot_exp n (by omega)).eq_pow_of_pow_eq_one hrpowC
+  have hri : r = ζ ^ i := by
+    apply Subtype.ext
+    dsimp [ζ]
+    rw [← hir]
+    congr 2
+    push_cast
+    field_simp
+  have hζiter (j : ℕ) : (ζ ^ j) ^ n = 1 := by
+    rw [← pow_mul, Nat.mul_comm, pow_mul, hζpow, one_pow]
+  have horbit : ∀ i : ℕ, Joined
+      (⟨(s₀, q.1.2), by exact hfvertex.trans hqpow.symm⟩ : apm_t91J05_CyclicCover n f)
+      (⟨(s₀, q.1.2 * ζ ^ i), by
+        dsimp only
+        rw [hfvertex, mul_pow, hqpow, hζiter, one_mul]⟩ :
+        apm_t91J05_CyclicCover n f) := by
+    intro j
+    induction j with
+    | zero => simpa only [pow_zero, mul_one] using
+        (Joined.refl
+          (⟨(s₀, q.1.2), by exact hfvertex.trans hqpow.symm⟩ :
+            apm_t91J05_CyclicCover n f))
+    | succ j ih =>
+        refine ih.trans ?_
+        have hs := apm_t91J05_cyclic_surface_cover_aux_vertexFibre_joined_aux_step
+          n hn f hf hv (q.1.2 * ζ ^ j) (by
+            rw [mul_pow, hqpow, hζiter, one_mul])
+        simpa [s₀, ζ, pow_succ, mul_assoc] using hs
+  have hqq : q =
+      (⟨(s₀, q.1.2), by exact hfvertex.trans hqpow.symm⟩ : apm_t91J05_CyclicCover n f) := by
+    apply Subtype.ext
+    exact Prod.ext hq (by rfl)
+  have hright :
+      (⟨(s₀, q.1.2 * ζ ^ i), by
+        dsimp only
+        rw [hfvertex, mul_pow, hqpow, hζiter, one_mul]⟩ :
+        apm_t91J05_CyclicCover n f) = q' := by
+    apply Subtype.ext
+    apply Prod.ext
+    · exact hq'.symm
+    · dsimp only
+      rw [← hri]
+      simp [r]
+  rw [hqq]
+  exact (horbit i).trans (hright ▸ Joined.refl q')
 -- END SEAT AREA
 
 /-- Leaf: if one fibre is joined, the cyclic cover is path-connected.  It is
