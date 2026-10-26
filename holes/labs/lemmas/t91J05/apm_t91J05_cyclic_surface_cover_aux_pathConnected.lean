@@ -348,7 +348,41 @@ theorem apm_t91J05_cyclic_surface_cover_aux_pathConnected
     (s₀ : apm_t91J05_Surface 3)
     (hjoin : ∀ q q' : apm_t91J05_CyclicCover n f, q.1.1 = s₀ → q'.1.1 = s₀ → Joined q q') :
     PathConnectedSpace (apm_t91J05_CyclicCover n f) := by
-  sorry
+  haveI : NeZero n := ⟨by omega⟩
+  let p := ConstructionTargets.LiteralPullbackCover.projection
+    (fun z : Circle => z ^ n) f
+  have hp : IsCoveringMap p :=
+    ConstructionTargets.LiteralPullbackCover.isCoveringMap
+      (Circle.isQuotientCoveringMap_npow n).isCoveringMap f.continuous
+  haveI : PathConnectedSpace Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      ((convex_closedBall (0 : ℂ) 1).isPathConnected
+        ⟨0, Metric.mem_closedBall_self zero_le_one⟩)
+  haveI : PathConnectedSpace (apm_t91J05_Surface 3) :=
+    (surjective_surfaceQuotient true 3).pathConnectedSpace
+      (continuous_surfaceQuotient true 3)
+  have hcard : Nat.card {q : apm_t91J05_CyclicCover n f // p q = s₀} = n :=
+    ConstructionTargets.LiteralPullbackCover.sheet_card _ f s₀ n
+      (ConstructionTargets.CirclePowerFiberCard.circlePower_fiber_card n (f s₀))
+  have hne : Nat.card {q : apm_t91J05_CyclicCover n f // p q = s₀} ≠ 0 := by
+    rw [hcard]
+    omega
+  obtain ⟨⟨q₀, hq₀⟩⟩ := (Nat.card_ne_zero.mp hne).1
+  refine ⟨⟨q₀⟩, ?_⟩
+  intro q q'
+  let γ := PathConnectedSpace.somePath (p q) s₀
+  let γ' := PathConnectedSpace.somePath (p q') s₀
+  let Γ := hp.liftPath γ q (by simp [γ])
+  let Γ' := hp.liftPath γ' q' (by simp [γ'])
+  have hΓ0 : Γ 0 = q := hp.liftPath_zero _ _ _
+  have hΓ'0 : Γ' 0 = q' := hp.liftPath_zero _ _ _
+  have hΓ1 : p (Γ 1) = s₀ :=
+    (congr_fun (hp.liftPath_lifts γ q (by simp [γ])) 1).trans γ.target
+  have hΓ'1 : p (Γ' 1) = s₀ :=
+    (congr_fun (hp.liftPath_lifts γ' q' (by simp [γ'])) 1).trans γ'.target
+  have hqΓ : Joined q (Γ 1) := ⟨⟨Γ, hΓ0, rfl⟩⟩
+  have hq'Γ' : Joined q' (Γ' 1) := ⟨⟨Γ', hΓ'0, rfl⟩⟩
+  exact hqΓ.trans ((hjoin (Γ 1) (Γ' 1) hΓ1 hΓ'1).trans hq'Γ'.symm)
 -- END SEAT AREA
 
 /-- The explicit connected cyclic cover of every positive degree. -/
