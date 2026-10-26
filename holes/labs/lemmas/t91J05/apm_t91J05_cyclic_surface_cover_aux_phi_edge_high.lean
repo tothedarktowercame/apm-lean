@@ -195,7 +195,53 @@ minus `2π` (in `(-π, 0]`), and the profile is `0` on both ranges. -/
 theorem apm_t91J05_cyclic_surface_cover_aux_phi_edge_high
     (k : ℕ) (hk3 : 3 ≤ k) (hk : k < 12) (t : Set.Icc (0 : ℝ) 1) :
     apm_t91J05_phi (edgePoint 12 k t) = 0 := by
-  sorry
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have ht0 : 0 ≤ t.1 := t.2.1
+  have ht1 : t.1 ≤ 1 := t.2.2
+  have hk3' : (3 : ℝ) ≤ k := by exact_mod_cast hk3
+  have hk12' : (k : ℝ) ≤ 11 := by exact_mod_cast (Nat.le_pred_of_lt hk)
+  let θ : ℝ := Real.pi * ((k : ℝ) + t.1) / 6
+  have hθlo : Real.pi / 2 ≤ θ := by
+    dsimp [θ]
+    nlinarith
+  have hθhi : θ ≤ 2 * Real.pi := by
+    dsimp [θ]
+    nlinarith
+  have hedge : ((edgePoint 12 k t : Disk) : ℂ) =
+      Complex.exp ((θ : ℂ) * Complex.I) := by
+    simp only [edgePoint]
+    congr 1
+    dsimp [θ]
+    push_cast
+    ring
+  have harg : Complex.arg (((edgePoint 12 k t : Disk) : ℂ)) = θ ∨
+      Complex.arg (((edgePoint 12 k t : Disk) : ℂ)) = θ - 2 * Real.pi := by
+    rw [hedge, Complex.arg_exp_mul_I]
+    by_cases hθ : θ ≤ Real.pi
+    · left
+      exact (toIocMod_eq_self Real.two_pi_pos).2 ⟨by nlinarith, by nlinarith⟩
+    · right
+      apply (toIocMod_eq_iff Real.two_pi_pos).2
+      constructor
+      · constructor <;> dsimp <;> nlinarith
+      · refine ⟨1, ?_⟩
+        norm_num
+  unfold apm_t91J05_phi apm_t91J05_profile
+  rcases harg with harg | harg
+  · rw [harg]
+    have hfall : (Real.pi / 2 - θ) / (Real.pi / 6) ≤ 0 := by
+      exact div_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr hθlo) (by positivity)
+    have hrise0 : 0 ≤ θ / (Real.pi / 6) := by positivity
+    have hinner0 : 0 ≤ min (θ / (Real.pi / 6)) 1 :=
+      le_min hrise0 (by norm_num)
+    rw [min_eq_right (le_trans hfall hinner0), max_eq_left hfall]
+    ring
+  · rw [harg]
+    have hnonpos : θ - 2 * Real.pi ≤ 0 := by linarith
+    have hrise : (θ - 2 * Real.pi) / (Real.pi / 6) ≤ 0 := by
+      exact div_nonpos_of_nonpos_of_nonneg hnonpos (by positivity)
+    rw [max_eq_left (le_trans (min_le_left _ _) (le_trans (min_le_left _ _) hrise))]
+    ring
 -- END SEAT AREA
 
 /-- Leaf: any `ψ` with these boundary values changes by an integer across a
