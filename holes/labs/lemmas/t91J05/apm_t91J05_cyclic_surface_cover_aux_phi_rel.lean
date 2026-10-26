@@ -210,7 +210,30 @@ theorem apm_t91J05_cyclic_surface_cover_aux_phi_rel (ψ : Disk → ℝ)
       ψ (edgePoint 12 k t) = 0)
     (x y : Disk) (hxy : SurfaceRel true 3 x y) :
     ∃ m : ℤ, ψ y = ψ x + m := by
-  sorry
+  simp only [SurfaceRel, if_true] at hxy
+  rcases hxy with ⟨j, hj, t, hxy | hxy⟩
+  · rcases hxy with ⟨rfl, rfl⟩
+    interval_cases j
+    · refine ⟨0, ?_⟩
+      rw [h0, h2]
+      simp
+    · refine ⟨0, ?_⟩
+      rw [hhigh 6 (by omega) (by omega), hhigh 4 (by omega) (by omega)]
+      norm_num
+    · refine ⟨0, ?_⟩
+      rw [hhigh 10 (by omega) (by omega), hhigh 8 (by omega) (by omega)]
+      norm_num
+  · rcases hxy with ⟨rfl, rfl⟩
+    interval_cases j
+    · refine ⟨-1, ?_⟩
+      rw [hhigh 3 (by omega) (by omega), h1]
+      norm_num
+    · refine ⟨0, ?_⟩
+      rw [hhigh 7 (by omega) (by omega), hhigh 5 (by omega) (by omega)]
+      norm_num
+    · refine ⟨0, ?_⟩
+      rw [hhigh 11 (by omega) (by omega), hhigh 9 (by omega) (by omega)]
+      norm_num
 -- END SEAT AREA
 
 /-- Leaf: a continuous `ψ` that changes by integers across the identifications
