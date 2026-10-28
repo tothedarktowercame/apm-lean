@@ -1210,6 +1210,29 @@ def openStar {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
       x ∉ convexHull ℝ ((s.erase v : Finset (Euc n)) : Set (Euc n))}
 
 /-- A simplicial vertex map has a continuous affine realization. -/
+lemma exists_inducedContinuousMap_aux_affine_family {n m : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (h : Euc n → Euc m) :
+    ∃ A : Finset (Euc n) → (Euc n →ᵃ[ℝ] Euc m),
+      (∀ s ∈ K.faces, ∀ v ∈ s, A s v = h v) ∧
+      (∀ s ∈ K.faces, ∀ t ∈ K.faces, ∀ x,
+        x ∈ convexHull ℝ (s : Set (Euc n)) →
+        x ∈ convexHull ℝ (t : Set (Euc n)) → A s x = A t x) ∧
+      ∀ s ∈ K.faces, ∀ x,
+        x ∈ convexHull ℝ (s : Set (Euc n)) →
+        A s x ∈ convexHull ℝ (s.image h : Set (Euc m)) := by
+  sorry
+
+lemma exists_inducedContinuousMap_aux_finite_glue {n m : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite)
+    (A : Finset (Euc n) → (Euc n →ᵃ[ℝ] Euc m))
+    (hcompat : ∀ s ∈ K.faces, ∀ t ∈ K.faces, ∀ x,
+      x ∈ convexHull ℝ (s : Set (Euc n)) →
+      x ∈ convexHull ℝ (t : Set (Euc n)) → A s x = A t x) :
+    ∃ g : C(K.space, Euc m), ∀ s ∈ K.faces, ∀ x : K.space,
+      (x : Euc n) ∈ convexHull ℝ (s : Set (Euc n)) → g x = A s x := by
+  sorry
+
 theorem exists_inducedContinuousMap {n m : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite)
     (L : Geometry.SimplicialComplex ℝ (Euc m)) (h : Euc n → Euc m)
@@ -1220,7 +1243,32 @@ theorem exists_inducedContinuousMap {n m : ℕ}
       ∀ s ∈ K.faces, ∀ x : K.space,
         (x : Euc n) ∈ convexHull ℝ (s : Set (Euc n)) →
         (f x : Euc m) ∈ convexHull ℝ (s.image h : Set (Euc m)) := by
-  sorry
+  classical
+  obtain ⟨A, hAvert, hAcompat, hAcarrier⟩ :=
+    exists_inducedContinuousMap_aux_affine_family K h
+  obtain ⟨g, hg⟩ := exists_inducedContinuousMap_aux_finite_glue K hK A hAcompat
+  have hgspace : ∀ x : K.space, g x ∈ L.space := by
+    intro x
+    obtain ⟨s, hs, hxs⟩ := Geometry.SimplicialComplex.mem_space_iff.mp x.property
+    rw [hg s hs x hxs]
+    exact Geometry.SimplicialComplex.mem_space_iff.mpr
+      ⟨s.image h, hh.2 s hs, hAcarrier s hs x hxs⟩
+  let f : C(K.space, L.space) :=
+    ⟨fun x => ⟨g x, hgspace x⟩, g.continuous.subtype_mk _⟩
+  refine ⟨f, ?_, ?_⟩
+  · intro v hv
+    have hvface : {v} ∈ K.faces :=
+      Geometry.SimplicialComplex.mem_vertices.mp hv
+    have hvhull : v ∈ convexHull ℝ (({v} : Finset (Euc n)) : Set (Euc n)) := by
+      simpa using (subset_convexHull ℝ (show v ∈ ({v} : Set (Euc n)) by simp))
+    apply Subtype.ext
+    change g ⟨v, Geometry.SimplicialComplex.vertices_subset_space hv⟩ = h v
+    rw [hg {v} hvface _ hvhull]
+    exact hAvert {v} hvface v (by simp)
+  · intro s hs x hxs
+    change g x ∈ convexHull ℝ (s.image h : Set (Euc m))
+    rw [hg s hs x hxs]
+    exact hAcarrier s hs x hxs
 
 /-- The star condition makes the affine realization straight-line homotopic
 to the original map. -/
