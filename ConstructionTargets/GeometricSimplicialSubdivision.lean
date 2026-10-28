@@ -86,7 +86,61 @@ theorem barycentricFaces_inter_subset_aux_positive_subchain {n : ℕ}
     (hx : x ∈ convexHull ℝ ((c.image barycenter : Finset (Euc n)) : Set (Euc n))) :
     ∃ c₀ ⊆ c, ∃ w : Finset (Euc n) → ℝ, (∀ s ∈ c₀, 0 < w s) ∧
       ∑ s ∈ c₀, w s = 1 ∧ ∑ s ∈ c₀, w s • barycenter s = x := by
-  sorry
+  classical
+  obtain ⟨a, ha0, ha1, hax⟩ := (Finset.mem_convexHull').mp hx
+  let d := (c.image barycenter).filter (fun y ↦ 0 < a y)
+  have hdmem : ∀ y ∈ d, y ∈ c.image barycenter := by
+    intro y hy
+    exact (Finset.mem_filter.mp hy).1
+  let r : (y : Euc n) → y ∈ d → Finset (Euc n) := fun y hy ↦
+    Classical.choose (Finset.mem_image.mp (hdmem y hy))
+  have hr_mem (y : Euc n) (hy : y ∈ d) : r y hy ∈ c := by
+    exact (Classical.choose_spec (Finset.mem_image.mp (hdmem y hy))).1
+  have hr_eq (y : Euc n) (hy : y ∈ d) : barycenter (r y hy) = y := by
+    exact (Classical.choose_spec (Finset.mem_image.mp (hdmem y hy))).2
+  let c₀ := d.attach.image (fun y ↦ r y.1 y.2)
+  refine ⟨c₀, ?_, fun s ↦ a (barycenter s), ?_, ?_, ?_⟩
+  · intro s hs
+    obtain ⟨y, hy, rfl⟩ := Finset.mem_image.mp hs
+    exact hr_mem y.1 y.2
+  · intro s hs
+    obtain ⟨y, hy, rfl⟩ := Finset.mem_image.mp hs
+    change 0 < a (barycenter (r y.1 y.2))
+    rw [hr_eq y.1 y.2]
+    exact (Finset.mem_filter.mp y.2).2
+  · rw [Finset.sum_image]
+    · simp_rw [hr_eq]
+      rw [Finset.sum_attach]
+      calc
+        ∑ y ∈ d, a y = ∑ y ∈ c.image barycenter, a y := by
+          apply Finset.sum_subset (Finset.filter_subset _ _)
+          intro y hy hyd
+          have hnpos : ¬ 0 < a y := by
+            intro hp
+            exact hyd (Finset.mem_filter.mpr ⟨hy, hp⟩)
+          exact le_antisymm (not_lt.mp hnpos) (ha0 y hy)
+        _ = 1 := ha1
+    · intro y hy z hz heq
+      apply Subtype.ext
+      simpa only [hr_eq] using congrArg barycenter heq
+  · rw [Finset.sum_image]
+    · simp_rw [hr_eq]
+      change ∑ y ∈ d.attach, a y.1 • y.1 = x
+      calc
+        ∑ y ∈ d.attach, a y.1 • y.1 = ∑ y ∈ d, a y • y :=
+          Finset.sum_attach d (fun y ↦ a y • y)
+        ∑ y ∈ d, a y • y = ∑ y ∈ c.image barycenter, a y • y := by
+          apply Finset.sum_subset (Finset.filter_subset _ _)
+          intro y hy hyd
+          have hnpos : ¬ 0 < a y := by
+            intro hp
+            exact hyd (Finset.mem_filter.mpr ⟨hy, hp⟩)
+          have hz : a y = 0 := le_antisymm (not_lt.mp hnpos) (ha0 y hy)
+          simp [hz]
+        _ = x := hax
+    · intro y hy z hz heq
+      apply Subtype.ext
+      simpa only [hr_eq] using congrArg barycenter heq
 
 /-- (I2) Uniqueness of the barycentric carrier chain: two strict chains of faces
 of `K` with positive weights representing the same point are equal.  Both top
