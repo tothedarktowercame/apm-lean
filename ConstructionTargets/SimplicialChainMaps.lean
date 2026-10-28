@@ -1671,6 +1671,34 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_newVe
 /-- First factor of `flagSign`: topping with `s` adds the pairs `(t, s)` with
 `v` below the new vertex of `t`.  The new vertices of the maximal chain `c'` are
 exactly `s.erase v`, once each, so there are `(k+1) - idx v` such pairs. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first_aux_newVertices
+    {n k : ℕ} (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
+    (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hc' : GeometricSimplicialSubdivision.IsStrictFaceChain K c')
+    (hcs : c' ⊆ (s.1.erase v).powerset) (hcard : c'.card = k + 1) :
+    Set.BijOn (flagNewVertex o c') c' (s.1.erase v) := by
+  sorry
+
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first_aux_rank
+    {n : ℕ} (o : LinearOrder (Euc n)) (a : Finset (Euc n)) (v : Euc n) (hv : v ∈ a) :
+    (a.filter fun x => @LT.lt (Euc n) o.toLT v x).card + (a.sort o.le).idxOf v =
+      a.card - 1 := by
+  sorry
+
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first_aux_insertCount
+    {n k : ℕ} (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
+    (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hc' : GeometricSimplicialSubdivision.IsStrictFaceChain K c')
+    (hcs : c' ⊆ (s.1.erase v).powerset) (hcard : c'.card = k + 1) :
+    ((insert s.1 c' ×ˢ insert s.1 c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o (insert s.1 c') tu.2)
+          (flagNewVertex o (insert s.1 c') tu.1)).card =
+      ((c' ×ˢ c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o c' tu.2)
+          (flagNewVertex o c' tu.1)).card +
+      ((s.1.erase v).filter fun x => @LT.lt (Euc n) o.toLT v x).card := by
+  sorry
+
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first {n k : ℕ}
     (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
     (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
@@ -1682,7 +1710,23 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first
       ((c' ×ˢ c').filter fun tu =>
         tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o c' tu.2)
           (flagNewVertex o c' tu.1)).card + (k + 1) := by
-  sorry
+  rw [subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first_aux_insertCount
+    o K s v hv c' hc' hcs hcard]
+  have hr := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first_aux_rank
+    o s.1 v hv
+  have hc : (s.1.erase v).card = k + 1 := by
+    rw [Finset.card_erase_of_mem hv, s.2.2]
+    omega
+  have hf :
+      ((s.1.erase v).filter fun x => @LT.lt (Euc n) o.toLT v x).card =
+        (s.1.filter fun x => @LT.lt (Euc n) o.toLT v x).card := by
+    congr 1
+    ext x
+    simp only [Finset.mem_filter, Finset.mem_erase]
+    aesop
+  rw [hf]
+  have hs : s.1.card = k + 2 := s.2.2
+  omega
 
 /-- Second factor of `flagSign`: topping with `s` adds the pairs `(t, s)` with
 `barycenter s` below `barycenter t`; with the `#lt` barycenters below it (no
