@@ -1001,6 +1001,35 @@ def ConeAdmissible {n k : ℕ} (K' : GSC n) (b : Euc n)
     (x : FaceModule K' k) : Prop :=
   ∀ u : FaceIndex K' k, x u ≠ 0 → b ∉ u.1 ∧ insert b u.1 ∈ K'.faces
 
+lemma subdivisionChainMap_commutes_aux_cone_boundary_aux_single_aux_sign
+    {α : Type*} [DecidableEq α] (o : LinearOrder α) (a : Finset α) (b p : α)
+    (hb : b ∉ a) (hp : p ∈ a) :
+    (-1 : ℚ) ^ (a.filter fun q => @LT.lt α o.toLT q b).card *
+        (-1 : ℚ) ^ ((insert b a).filter fun q => @LT.lt α o.toLT q p).card =
+      -((-1 : ℚ) ^ (a.filter fun q => @LT.lt α o.toLT q p).card *
+        (-1 : ℚ) ^ ((a.erase p).filter fun q => @LT.lt α o.toLT q b).card) := by
+  letI := o
+  by_cases hpb : p < b
+  · have hbp : ¬ b < p := not_lt_of_ge hpb.le
+    simp [Finset.filter_insert, Finset.filter_erase, hb, hp, hpb, hbp,
+      Finset.card_erase_of_mem]
+    have hcpos : 0 < (a.filter fun q => q < b).card :=
+      Finset.card_pos.mpr ⟨p, by simp [hp, hpb]⟩
+    have he : (a.filter fun q => q < b).card =
+        (a.filter fun q => q < b).card - 1 + 1 := by omega
+    rw [he, pow_succ]
+    have he2 : (a.filter fun q => q < b).card - 1 + 1 - 1 =
+        (a.filter fun q => q < b).card - 1 := by omega
+    rw [he2]
+    ring
+  · have hbp : b < p := lt_of_le_of_ne (le_of_not_gt hpb) (by
+      intro h
+      subst p
+      exact hb hp)
+    simp [Finset.filter_insert, Finset.filter_erase, hb, hp, hpb, hbp,
+      Finset.card_erase_of_mem, pow_succ]
+    ring
+
 /-- Positive-degree cone-boundary identity.  This is the local sign
 calculation: deletion of `b` gives `x`, while deleting a vertex of `u` has the
 opposite sign from coning that deletion.
@@ -1022,18 +1051,64 @@ lemma subdivisionChainMap_commutes_aux_cone_boundary_aux_single {n k : ℕ}
       Finsupp.single u 1 -
         subdivisionCone o K' b k (dK' k (Finsupp.single u 1)) := by
   classical
-  simp [subdivisionCone, hu]
-  rw [signedDeletion_sq_zero_aux_generator_aux_boundary o K' dK' hdK']
   let s : FaceIndex K' (k + 2) :=
     ⟨insert b u.1, hu.2, by rw [Finset.card_insert_of_notMem hu.1, u.2.2]⟩
-  change dK' (k + 1) (Finsupp.single s ((-1 : ℚ) ^ _)) = _
-  rw [show Finsupp.single s ((-1 : ℚ) ^ _) =
-    ((-1 : ℚ) ^ (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card) •
-      Finsupp.single s 1 by simp]
-  rw [map_smul, signedDeletion_sq_zero_aux_generator_aux_boundary o K' dK' hdK' s]
-  ext t
-  simp [subdivisionCone]
-  sorry
+  have hcone : subdivisionCone o K' b (k + 1) (Finsupp.single u 1) =
+      ((-1 : ℚ) ^ (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card) •
+        Finsupp.single s 1 := by
+    simp [subdivisionCone, hu, s, Finsupp.smul_single]
+  rw [hcone, map_smul, signedDeletion_sq_zero_aux_generator_aux_boundary o K' dK' hdK' s,
+    signedDeletion_sq_zero_aux_generator_aux_boundary o K' dK' hdK' u, map_sum]
+  have hs1 : (s.1 : Finset (Euc n)) = insert b u.1 := rfl
+  have hbnot : (⟨b, Finset.mem_insert_self b u.1⟩ : {x // x ∈ insert b u.1}) ∉
+      (u.1.attach).image fun x => (⟨x.1, Finset.mem_insert_of_mem x.2⟩ : {x // x ∈ insert b u.1}) := by
+    simp only [Finset.mem_image, Finset.mem_attach, true_and, not_exists]
+    intro x hx
+    have h := congrArg Subtype.val hx
+    simp only at h
+    exact hu.1 (h ▸ x.2)
+  simp only [hs1]
+  rw [Finset.attach_insert, Finset.sum_insert hbnot, Finset.sum_image (fun x _ y _ h =>
+    Subtype.ext (by simpa using congrArg Subtype.val h))]
+  set c : ℚ := (-1 : ℚ) ^ (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card with hc
+  have hcc : c * c = 1 := by rw [hc, ← pow_add, ← two_mul, pow_mul]; norm_num
+  have heb : signedDeletion_sq_zero_aux_generator_aux_erase K' s b
+      (Finset.mem_insert_self b u.1) = u := Subtype.ext (Finset.erase_insert hu.1)
+  have hidxb : List.idxOf b ((insert b u.1).sort o.le) =
+      (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card := by
+    rw [sort_idxOf_eq_card_lt o _ b (Finset.mem_insert_self b u.1), Finset.filter_insert,
+      if_neg (@lt_irrefl _ o.toPreorder b)]
+  simp only [Subtype.coe_mk]
+  rw [hidxb, heb, smul_add, smul_smul, hcc, one_smul, Finset.smul_sum, sub_eq_add_neg,
+    ← Finset.sum_neg_distrib]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro x _
+  have hxb : x.1 ≠ b := fun h => hu.1 (h ▸ x.2)
+  have he : b ∉ (u.1.erase x.1) ∧ insert b (u.1.erase x.1) ∈ K'.faces :=
+    ⟨fun h => hu.1 (Finset.mem_of_mem_erase h),
+      K'.down_closed hu.2 (Finset.insert_subset_insert _ (Finset.erase_subset _ _))
+        (Finset.insert_nonempty _ _)⟩
+  have hconex : subdivisionCone o K' b k
+      (Finsupp.single (signedDeletion_sq_zero_aux_generator_aux_erase K' u x.1 x.2) 1) =
+      ((-1 : ℚ) ^ ((u.1.erase x.1).filter fun q => @LT.lt (Euc n) o.toLT q b).card) •
+        Finsupp.single (⟨insert b (u.1.erase x.1), he.2, by
+          rw [Finset.card_insert_of_notMem he.1, Finset.card_erase_of_mem x.2, u.2.2]; omega⟩ :
+            FaceIndex K' (k + 1)) 1 := by
+    simp [subdivisionCone, signedDeletion_sq_zero_aux_generator_aux_erase, he]
+    exact (Finsupp.smul_single_one _ _).symm
+  rw [map_smul, hconex, smul_smul]
+  erw [smul_smul]
+  rw [← neg_smul]
+  have hex : signedDeletion_sq_zero_aux_generator_aux_erase K' s x.1
+      (Finset.mem_insert_of_mem x.2) = ⟨insert b (u.1.erase x.1), he.2, by
+          rw [Finset.card_insert_of_notMem he.1, Finset.card_erase_of_mem x.2, u.2.2]; omega⟩ :=
+    Subtype.ext (Finset.erase_insert_of_ne hxb.symm)
+  rw [hex]
+  congr 1
+  rw [sort_idxOf_eq_card_lt o _ x.1 (Finset.mem_insert_of_mem x.2),
+    sort_idxOf_eq_card_lt o _ x.1 x.2]
+  exact subdivisionChainMap_commutes_aux_cone_boundary_aux_single_aux_sign o u.1 b x.1 hu.1 x.2
 
 theorem subdivisionChainMap_commutes_aux_cone_boundary {n k : ℕ}
     (o : LinearOrder (Euc n)) (K' : GSC n)
