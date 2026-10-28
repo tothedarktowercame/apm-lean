@@ -6,6 +6,7 @@ import ConstructionTargets.AttachTwoCell
 import ConstructionTargets.CP2RationalHomology
 import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.SingularHomologyConcrete
+import ConstructionTargets.FiniteTriangulation
 
 /-! # APM t02A04 — fixed points after a `(1,2)` cell attachment -/
 
@@ -960,14 +961,24 @@ theorem apm_t02A04_lefschetz_number
       zero_add, pow_zero, one_mul]
     exact apm_t02A04_lefschetz_number_aux_trace_H0 e f
 
-/-- **LIBRARY (triangulation).** The space admits a finite geometric
+/-- **LIBRARY (compatible solid-torus/cell triangulation).** Triangulate the
+solid torus by subdivided triangular prisms and the attached disk so that
+`z ↦ (z,z²)` is simplicial; retain the disk centre as a marked vertex. -/
+theorem apm_t02A04_hasFiniteVertexTriangulation :
+    ConstructionTargets.FiniteTriangulation.HasFiniteVertexTriangulation
+      apm_t02a04_X
+      (apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩) := by
+  sorry
+
+/-- The space admits a finite geometric
 triangulation, as required by
 `ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz`.
 (claude-14, 2026-10-28; statement as recorded in that module's blueprint.) -/
 theorem apm_t02A04_isFinitePolyhedron :
     ConstructionTargets.LefschetzCompactPolyhedron.IsFinitePolyhedron
       apm_t02a04_X := by
-  sorry
+  exact ConstructionTargets.FiniteTriangulation.HasFiniteVertexTriangulation.isFinitePolyhedron
+    apm_t02A04_hasFiniteVertexTriangulation
 
 /-- **LIBRARY.** Specialized compact-polyhedron Lefschetz implication. -/
 theorem apm_t02A04_fixed_point_of_lefschetz

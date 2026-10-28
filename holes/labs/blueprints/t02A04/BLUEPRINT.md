@@ -118,6 +118,33 @@ the sole `Q` summand in degree zero and zero maps on zero higher groups, so
 both give Lefschetz number `1`.  The calculation has no parity or sign term
 outside degree zero.
 
+### `apm_t02A04_hasFiniteVertexTriangulation` — LIBRARY, 500–900 lines
+
+Triangulate a polygonal disk and circle, take a prism subdivision of their
+product, and subdivide the attached disk and boundary circles so that the
+degree-two map `z ↦ (z,z²)` is simplicial.  Glue the finite abstract complexes,
+realize their vertices by standard basis vectors, and descend the quotient map.
+Use `apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve`,
+`apm_t02a04_gluedDesc`, and `Continuous.homeoOfEquivCompactToT2`.  The disk
+centre is retained as a marked vertex.  This is independent of every homology
+leaf and is the one intentionally retained concrete LIBRARY foundation.
+
+C1 compatible subdivision makes the degree-two attaching map simplicial; C2
+the marked-triangulation conclusion is not assumed; C3 this is the concrete
+triangulation program (marked LIBRARY because it exceeds one seat); C4 both
+solid torus and disk are covered; C5 the quotient compatibility is the named
+boundary equality; C6 it uses the registered quotient verbatim; C7 compact
+source and the quotient's Hausdorff property justify the homeomorphism, whose
+target has the Euclidean subspace topology; C8 the disk centre is an interior
+vertex and the boundary degree-two map has a subdivision with two distinct
+preimage arcs; C9 it strengthens rather than repeats the old adapter; C10 exact.
+
+### `apm_t02A04_isFinitePolyhedron` — assembled
+
+The registered adapter is now sorry-free: it forgets the marked vertex from
+`apm_t02A04_hasFiniteVertexTriangulation` using
+`HasFiniteVertexTriangulation.isFinitePolyhedron`.
+
 ### `apm_t02A04_fixed_point_of_lefschetz` — LIBRARY
 
 **Statement.** If every continuous self-map of this quotient has Lefschetz
@@ -147,6 +174,7 @@ and one attached 2-cell after retracting the solid torus.
 ## Dependency layers
 
 * **Layer 1 (parallel):** the seven rational-homology leaves in the table;
+  `apm_t02A04_hasFiniteVertexTriangulation`;
   `apm_t02A04_lefschetz_number` (already proved, taking their assembled
   conclusion as a hypothesis); and `apm_t02A04_fixed_point_of_lefschetz`
   (LIBRARY, taking the Lefschetz-number conclusion as a hypothesis).

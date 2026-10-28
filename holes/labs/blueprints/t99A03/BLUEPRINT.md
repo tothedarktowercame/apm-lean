@@ -64,6 +64,22 @@ classification, or fixed-point theorem.
 
 ## Remaining lemmas
 
+### `t99A03_fourProjectivePlanesWedge_isFinitePolyhedron` — assembled
+
+Sorry-free adapter.  First apply
+`FiniteTriangulation.wedge_isFinitePolyhedron_of_vertexTriangulations` to two
+copies of the marked concrete `RP²` triangulation.  Then apply the generic
+`wedge_isFinitePolyhedron` to two copies of that twofold wedge.  The three
+parallel shared leaves and their estimates are documented in
+`ConstructionTargets/FiniteTriangulation.blueprint.md`.
+
+C1 four finite summands give a finite complex; C2 no conclusion hypothesis;
+C3 assembly only; C4 both binary wedge stages are explicit; C5 the first-stage
+common point is exactly `T99A03.twoWedgePoint`; C6 the abbreviation still
+denotes four copies; C7 shared homeomorphisms target Euclidean subspaces; C8
+the common point survives as a vertex (stellar subdivision handles the second
+stage); C9 not an ancestor; C10 exact.
+
 ### `t99A03_wedge_lefschetz_number` — LIBRARY
 
 **Statement.** Every continuous self-map of the concrete fourfold `RP²` wedge

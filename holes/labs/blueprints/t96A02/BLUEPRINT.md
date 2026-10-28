@@ -23,22 +23,23 @@ by the implication. C6–C7: coefficients and signs match `RationalLefschetz`.
 C8: identity and constant maps both give one. C9: no repeated ancestor. C10:
 exact statement.
 
-### `t96A02_projectivePlaneWedge_isFinitePolyhedron` — LIBRARY, 350–650 lines
+### `t96A02_projectivePlaneWedge_isFinitePolyhedron` — assembled
 
-Exhibit a finite geometric triangulation of the polygon quotient and its point
-wedge. Subdivide the disk so the `aa` boundary pairing is simplicial, descend
-to `Surface false 1`, then identify the two center vertices. Build on
-`Surfaces.PairingData`, the existing quotient presentation, and
-`PointWedgeQuotient.Wedge`. A reusable finite-Δ-complex-to-geometric-complex
-bridge is the missing foundation. Independent of the homology and shared
-module leaves.
+This is now sorry-free assembly from
+`FiniteTriangulation.realProjectivePlane_hasFiniteVertexTriangulation` and
+`wedge_isFinitePolyhedron_of_vertexTriangulations`.  The former supplies the
+subdivided `aa` polygon with its centre as a vertex; the latter identifies the
+two marked vertices and realizes the finite abstract complex by basis vectors.
+The three shared leaves, estimates, Mathlib tools, and C1--C10 records are in
+`ConstructionTargets/FiniteTriangulation.blueprint.md` and are independent of
+the homology leaf here.
 
-C1: finite polygon identifications produce a finite triangulation. C2: the
-predicate is geometric and does not mention fixed points. C3: only an adapter.
-C4–C5: produces exactly the public theorem's hypothesis. C6: describes the
-registered concrete space. C7: quotient and subtype topologies must match by a
-homeomorphism. C8: the wedge point remains a vertex. C9: no ancestor states
-triangulability. C10: exact statement.
+C1: point gluing of the two marked complexes is finite. C2: no conclusion is
+assumed. C3: assembly only. C4: both summands are supplied. C5: the marked
+centre equalities are the maps consumed by gluing. C6: the registered concrete
+space is unchanged. C7: the shared leaves supply a homeomorphism to the
+Euclidean subspace realization. C8: the wedge point is a vertex. C9: no
+ancestor states triangulability. C10: exact statement.
 
 ## Sorry-free assembly
 

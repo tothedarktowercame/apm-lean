@@ -3,6 +3,7 @@ import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.LefschetzCompactPolyhedron
 import ConstructionTargets.ProjectivePlaneWedgeRationalHomology
+import ConstructionTargets.FiniteTriangulation
 
 /-! # APM t99A03: fixed points on a wedge and a connected sum -/
 
@@ -57,7 +58,12 @@ triangulation, as required by
 theorem t99A03_fourProjectivePlanesWedge_isFinitePolyhedron :
     ConstructionTargets.LefschetzCompactPolyhedron.IsFinitePolyhedron
       T99A03.FourProjectivePlanesWedge := by
-  sorry
+  open ConstructionTargets.FiniteTriangulation in
+    have htwo := wedge_isFinitePolyhedron_of_vertexTriangulations _ _
+        realProjectivePlane_hasFiniteVertexTriangulation
+        realProjectivePlane_hasFiniteVertexTriangulation
+    exact (wedge_isFinitePolyhedron_of_vertexTriangulations _ _
+      htwo htwo).isFinitePolyhedron
 
 /-- **LIBRARY.** The Lefschetz fixed-point implication, specialized to the
 finite projective-plane wedge.  Its homology calculation is supplied as a
