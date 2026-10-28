@@ -1745,7 +1745,86 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_secon
       ((c' ×ˢ c').filter fun tu =>
         tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (GeometricSimplicialSubdivision.barycenter tu.2)
           (GeometricSimplicialSubdivision.barycenter tu.1)).card + (k + 1) := by
-  sorry
+  classical
+  let b : Finset (Euc n) → Euc n := GeometricSimplicialSubdivision.barycenter
+  let P : (Finset (Euc n) × Finset (Euc n)) → Prop := fun tu =>
+    tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (b tu.2) (b tu.1)
+  have hins := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_insert
+    o K s v hv c' hc' hcs hcard
+  have hchain := hins.1
+  have hsnot := hins.2.1
+  have hproper : ∀ t ∈ c', t ⊂ s.1 := by
+    intro t ht
+    exact subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_proper
+      K s v hv c' hcs t ht
+  have hbne : ∀ t ∈ c', b t ≠ b s.1 := by
+    intro t ht heq
+    have hi := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_bary_injOn
+      K (insert s.1 c') hchain
+    have := hi (Finset.mem_insert_of_mem ht) (Finset.mem_insert_self _ _) heq
+    exact hsnot (this ▸ ht)
+  have hprod :
+      ((insert s.1 c' ×ˢ insert s.1 c').filter P) =
+        ((c' ×ˢ c').filter P) ∪
+          ((c'.filter fun t => @LT.lt (Euc n) o.toLT (b s.1) (b t)) ×ˢ {s.1}) := by
+    ext ⟨a, d⟩
+    simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert,
+      Finset.mem_union, Finset.mem_singleton]
+    constructor
+    · rintro ⟨⟨rfl | ha, rfl | hd⟩, had⟩
+      · exact (had.1.ne rfl).elim
+      · exact (had.1.not_subset (hproper d hd).subset).elim
+      · exact Or.inr ⟨⟨ha, had.2⟩, rfl⟩
+      · exact Or.inl ⟨⟨ha, hd⟩, had⟩
+    · rintro (⟨⟨ha, hd⟩, had⟩ | ⟨⟨ha, had⟩, rfl⟩)
+      · exact ⟨⟨Or.inr ha, Or.inr hd⟩, had⟩
+      · exact ⟨⟨Or.inr ha, Or.inl rfl⟩, hproper a ha, had⟩
+  have hdisj : Disjoint ((c' ×ˢ c').filter P)
+      ((c'.filter fun t => @LT.lt (Euc n) o.toLT (b s.1) (b t)) ×ˢ {s.1}) := by
+    refine Finset.disjoint_left.2 ?_
+    intro x hx hy
+    have hsecond : x.2 = s.1 := Finset.mem_singleton.1 (Finset.mem_product.1 hy).2
+    have hmem : x.2 ∈ c' := (Finset.mem_product.1 (Finset.mem_filter.1 hx).1).2
+    exact hsnot (hsecond ▸ hmem)
+  have himage :
+      ((c'.image b).filter fun q => @LT.lt (Euc n) o.toLT q (b s.1)).card =
+        (c'.filter fun t => @LT.lt (Euc n) o.toLT (b t) (b s.1)).card := by
+    have heq :
+        (c'.image b).filter (fun q => @LT.lt (Euc n) o.toLT q (b s.1)) =
+          (c'.filter fun t => @LT.lt (Euc n) o.toLT (b t) (b s.1)).image b := by
+      ext q
+      simp only [Finset.mem_filter, Finset.mem_image]
+      constructor
+      · rintro ⟨⟨a, ha, rfl⟩, hlt⟩
+        exact ⟨a, ⟨ha, hlt⟩, rfl⟩
+      · rintro ⟨a, ⟨ha, hlt⟩, rfl⟩
+        exact ⟨⟨a, ha, rfl⟩, hlt⟩
+    have hi : Set.InjOn b
+        (↑(c'.filter fun t => @LT.lt (Euc n) o.toLT (b t) (b s.1)) :
+          Set (Finset (Euc n))) := by
+      intro a ha d hd had
+      exact subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_bary_injOn
+        K c' hc' (Finset.mem_filter.1 ha).1 (Finset.mem_filter.1 hd).1 had
+    rw [heq, Finset.card_image_iff.mpr hi]
+  have hsplit :
+      (c'.filter fun t => @LT.lt (Euc n) o.toLT (b s.1) (b t)).card +
+        (c'.filter fun t => @LT.lt (Euc n) o.toLT (b t) (b s.1)).card = c'.card := by
+    have heq : (c'.filter fun t => @LT.lt (Euc n) o.toLT (b s.1) (b t)) =
+        c'.filter (fun t => ¬ @LT.lt (Euc n) o.toLT (b t) (b s.1)) := by
+      ext t
+      simp only [Finset.mem_filter]
+      constructor
+      · rintro ⟨ht, hlt⟩
+        exact ⟨ht, not_lt_of_ge hlt.le⟩
+      · rintro ⟨ht, hnot⟩
+        exact ⟨ht, lt_of_le_of_ne (le_of_not_gt hnot) (hbne t ht).symm⟩
+    rw [heq, add_comm, Finset.card_filter_add_card_filter_not]
+  change ((insert s.1 c' ×ˢ insert s.1 c').filter P).card +
+      ((c'.image b).filter fun q => @LT.lt (Euc n) o.toLT q (b s.1)).card =
+    ((c' ×ˢ c').filter P).card + (k + 1)
+  rw [hprod, Finset.card_union_of_disjoint hdisj, Finset.card_product,
+    Finset.card_singleton, mul_one, himage]
+  omega
 
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_pow (A i A' m : ℕ) (h : A + i = A' + m) :
     (-1 : ℚ) ^ A = (-1) ^ A' * (-1) ^ m * (-1) ^ i := by
