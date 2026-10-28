@@ -1448,7 +1448,82 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_insert {n k : 
     (hcs : c' ⊆ (s.1.erase v).powerset) (hcard : c'.card = k + 1) :
     GeometricSimplicialSubdivision.IsStrictFaceChain K (insert s.1 c') ∧ s.1 ∉ c' ∧
       flagNewVertex o (insert s.1 c') s.1 = v := by
-  sorry
+  classical
+  have hsscard : s.1.card = k + 2 := s.2.2
+  have hercard : (s.1.erase v).card = k + 1 := by
+    rw [Finset.card_erase_of_mem hv, hsscard]
+    omega
+  have hinj : Set.InjOn Finset.card (c' : Set (Finset (Euc n))) := by
+    intro a ha b hb hab
+    by_contra hne
+    rcases hc'.2 a ha b hb hne with h | h
+    · exact (Nat.ne_of_lt (Finset.card_lt_card h)) hab
+    · exact (Nat.ne_of_lt (Finset.card_lt_card h)) hab.symm
+  have htop : s.1.erase v ∈ c' := by
+    by_contra hnot
+    have himsub : c'.image Finset.card ⊆ Finset.Icc 1 k := by
+      intro m hm
+      obtain ⟨t, htc, rfl⟩ := Finset.mem_image.1 hm
+      have htne := GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_nonempty
+        K c' hc' t htc
+      have htsub := Finset.mem_powerset.1 (hcs htc)
+      have htnefacet : t ≠ s.1.erase v := by exact fun h => hnot (h ▸ htc)
+      have hproper : t ⊂ s.1.erase v := Finset.ssubset_iff_subset_ne.2 ⟨htsub, htnefacet⟩
+      apply Finset.mem_Icc.2
+      constructor
+      · exact Finset.one_le_card.2 htne
+      · have := Finset.card_lt_card hproper
+        omega
+    have himcard : (c'.image Finset.card).card = k + 1 := by
+      rw [Finset.card_image_iff.mpr hinj]
+      exact hcard
+    have hle := Finset.card_le_card himsub
+    rw [Nat.card_Icc] at hle
+    omega
+  have hproperfacet : s.1.erase v ⊂ s.1 := by
+    exact Finset.ssubset_iff_subset_ne.2 ⟨Finset.erase_subset _ _, fun h => by
+      have hh := congrArg (fun z : Finset (Euc n) => v ∈ z) h
+      simp [hv] at hh⟩
+  have hchain : GeometricSimplicialSubdivision.IsStrictFaceChain K (insert s.1 c') := by
+    constructor
+    · intro t ht
+      rcases Finset.mem_insert.1 ht with rfl | ht
+      · exact s.2.1
+      · exact hc'.1 t ht
+    · intro a ha b hb hab
+      rcases Finset.mem_insert.1 ha with rfl | ha <;>
+        rcases Finset.mem_insert.1 hb with rfl | hb
+      · exact (hab rfl).elim
+      · right
+        exact (Finset.ssubset_of_subset_of_ssubset
+          (Finset.mem_powerset.1 (hcs hb)) hproperfacet)
+      · left
+        exact (Finset.ssubset_of_subset_of_ssubset
+          (Finset.mem_powerset.1 (hcs ha)) hproperfacet)
+      · exact hc'.2 a ha b hb hab
+  have hsnot : s.1 ∉ c' := by
+    intro hs
+    have := Finset.mem_powerset.1 (hcs hs)
+    exact hproperfacet.not_subset this
+  refine ⟨hchain, hsnot, ?_⟩
+  have hUnion : (insert s.1 c').biUnion (fun u => if u ⊂ s.1 then u else ∅) =
+      s.1.erase v := by
+    apply Finset.Subset.antisymm
+    · intro x hx
+      obtain ⟨u, hu, hxu⟩ := Finset.mem_biUnion.1 hx
+      rcases Finset.mem_insert.1 hu with rfl | hu
+      · have hirr : ¬ s.1 ⊂ s.1 := fun h => h.ne rfl
+        rw [if_neg hirr] at hxu
+        simp at hxu
+      · have husub := Finset.mem_powerset.1 (hcs hu)
+        have huprop := Finset.ssubset_of_subset_of_ssubset husub hproperfacet
+        simp [huprop] at hxu
+        exact husub hxu
+    · intro x hx
+      apply Finset.mem_biUnion.2
+      refine ⟨s.1.erase v, Finset.mem_insert_of_mem htop, ?_⟩
+      simp [hproperfacet, hx]
+  simp [flagNewVertex, hUnion, Finset.sdiff_erase, hv]
 
 /-- Sign recursion: topping a maximal chain `c'` of `s.erase v` with `s`
 multiplies `flagSign` by the deletion sign of `v` and the cone insertion sign
