@@ -51,11 +51,22 @@ theorem signedDeletion_exists {n : ℕ}
       IsSignedDeletion o K d := by
   sorry
 
+theorem signedDeletion_sq_zero_aux_generator {n : ℕ}
+    (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) (k : ℕ) (s : FaceIndex K (k + 2)) :
+    d k (d (k + 1) (Finsupp.single s 1)) = 0 := by
+  sorry
+
 theorem signedDeletion_sq_zero {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
     (hd : IsSignedDeletion o K d) : ∀ k, d (k + 1) ≫ d k = 0 := by
-  sorry
+  intro k
+  ext x t
+  change d k (d (k + 1) (Finsupp.single x 1)) t = 0
+  rw [signedDeletion_sq_zero_aux_generator o K d hd k x]
+  rfl
 
 theorem faceModule_finiteDimensional {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite) :
