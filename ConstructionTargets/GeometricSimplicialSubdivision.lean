@@ -46,7 +46,15 @@ theorem barycentricFaces_affineIndependent_aux_transfer {n : ℕ}
     (hchain : ∀ c : Finset (Finset (Euc n)), IsStrictFaceChain K c →
       AffineIndependent ℝ (fun s : c => barycenter (s : Finset (Euc n)))) :
     ∀ u ∈ barycentricFaces K, AffineIndependent ℝ ((↑) : u → Euc n) := by
-  sorry
+  rintro u ⟨c, hc, rfl⟩
+  have heq : Set.range (fun s : c => barycenter (s : Finset (Euc n))) =
+      (c.image barycenter : Set (Euc n)) := by
+    ext x
+    simp
+  change AffineIndependent ℝ
+    (fun x : (c.image barycenter : Set (Euc n)) => (x : Euc n))
+  rw [← heq]
+  exact (hchain c hc).range
 
 /-- Barycenters of a strict chain of nonempty faces are affinely independent. -/
 theorem barycentricFaces_affineIndependent {n : ℕ}
