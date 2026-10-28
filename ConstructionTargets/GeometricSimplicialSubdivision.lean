@@ -635,7 +635,19 @@ theorem barycentricSubdivision_finite {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite)
     (hi hd hx) :
     (barycentricSubdivision K hi hd hx).faces.Finite := by
-  sorry
+  classical
+  have hchains : {c : Finset (Finset (Euc n)) | (c : Set (Finset (Euc n))) ⊆ K.faces}.Finite := by
+    exact Set.Finite.preimage_embedding
+      (Finset.coeEmb : Finset (Finset (Euc n)) ↪o Set (Finset (Euc n))).toEmbedding
+      hK.finite_subsets
+  have himages : ((fun c : Finset (Finset (Euc n)) => c.image barycenter) ''
+      {c | (c : Set (Finset (Euc n))) ⊆ K.faces}).Finite := hchains.image _
+  apply himages.subset
+  intro u hu
+  have hu' : u ∈ barycentricFaces K := by
+    exact hu.1
+  obtain ⟨c, hc, rfl⟩ := hu'
+  exact ⟨c, (fun s hs => hc.1 s hs), rfl⟩
 
 /-- Every old simplex is the union of the chain simplices, and conversely. -/
 theorem barycentricSubdivision_space {n : ℕ}
