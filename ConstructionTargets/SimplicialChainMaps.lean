@@ -1,6 +1,7 @@
 import ConstructionTargets.OrientedSimplicialChains
 import ConstructionTargets.GeometricSimplicialSubdivision
 import ConstructionTargets.LefschetzCompactPolyhedron
+import ConstructionTargets.SimplicialSingularComparison
 
 /-! Concrete chain maps used in the finite-polyhedron Lefschetz argument. -/
 open Set CategoryTheory
