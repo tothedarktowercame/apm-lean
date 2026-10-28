@@ -58,7 +58,10 @@ theorem wedge_isFinitePolyhedron
     (hasFiniteVertexTriangulation_of_isFinitePolyhedron x₀ hX)
     (hasFiniteVertexTriangulation_of_isFinitePolyhedron y₀ hY)).isFinitePolyhedron
 
-/-- **LIBRARY (concrete `RP²` triangulation).** The subdivided polygon model
+/-- SUPERSEDED (claude-14, 2026-10-28): consumers use
+`RealProjectivePlaneTriangulation.realProjectivePlane_hasFiniteVertexTriangulation`
+(that module imports this one); not queued.
+**LIBRARY (concrete `RP²` triangulation).** The subdivided polygon model
 has a finite triangulation in which the disk centre is a vertex. -/
 theorem realProjectivePlane_hasFiniteVertexTriangulation :
     HasFiniteVertexTriangulation

@@ -4,6 +4,7 @@ import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.LefschetzCompactPolyhedron
 import ConstructionTargets.ProjectivePlaneWedgeRationalHomology
 import ConstructionTargets.FiniteTriangulation
+import ConstructionTargets.RealProjectivePlaneTriangulation
 
 /-! # APM t99A03: fixed points on a wedge and a connected sum -/
 
@@ -60,8 +61,8 @@ theorem t99A03_fourProjectivePlanesWedge_isFinitePolyhedron :
       T99A03.FourProjectivePlanesWedge := by
   open ConstructionTargets.FiniteTriangulation in
     have htwo := wedge_isFinitePolyhedron_of_vertexTriangulations _ _
-        realProjectivePlane_hasFiniteVertexTriangulation
-        realProjectivePlane_hasFiniteVertexTriangulation
+        ConstructionTargets.RealProjectivePlaneTriangulation.realProjectivePlane_hasFiniteVertexTriangulation
+        ConstructionTargets.RealProjectivePlaneTriangulation.realProjectivePlane_hasFiniteVertexTriangulation
     exact (wedge_isFinitePolyhedron_of_vertexTriangulations _ _
       htwo htwo).isFinitePolyhedron
 

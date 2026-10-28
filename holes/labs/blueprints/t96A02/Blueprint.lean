@@ -4,6 +4,7 @@ import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.LefschetzCompactPolyhedron
 import ConstructionTargets.ProjectivePlaneWedgeRationalHomology
 import ConstructionTargets.FiniteTriangulation
+import ConstructionTargets.RealProjectivePlaneTriangulation
 
 /-! # t96A02: fixed points on the wedge of two real projective planes -/
 
@@ -32,8 +33,8 @@ theorem t96A02_projectivePlaneWedge_isFinitePolyhedron :
     IsFinitePolyhedron ProjectivePlaneWedge := by
   open ConstructionTargets.FiniteTriangulation in
     exact (wedge_isFinitePolyhedron_of_vertexTriangulations _ _
-      realProjectivePlane_hasFiniteVertexTriangulation
-      realProjectivePlane_hasFiniteVertexTriangulation).isFinitePolyhedron
+      ConstructionTargets.RealProjectivePlaneTriangulation.realProjectivePlane_hasFiniteVertexTriangulation
+      ConstructionTargets.RealProjectivePlaneTriangulation.realProjectivePlane_hasFiniteVertexTriangulation).isFinitePolyhedron
 
 /-- The Lefschetz fixed-point implication, specialized to the wedge of two
 projective planes. Its homology calculation is supplied as a hypothesis so
