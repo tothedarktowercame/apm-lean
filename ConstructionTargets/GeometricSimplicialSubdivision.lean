@@ -1119,7 +1119,27 @@ lemma inducedMap_homotopic_of_star_condition_aux_target_carrier {m : ℕ}
     (s : Finset (Euc m))
     (hy : ∀ v ∈ s, (y : Euc m) ∈ openStar L v) :
     ∃ t ∈ L.faces, s ⊆ t ∧ (y : Euc m) ∈ convexHull ℝ (t : Set (Euc m)) := by
-  sorry
+  classical
+  by_cases hs : s.Nonempty
+  · obtain ⟨v₀, hv₀⟩ := hs
+    obtain ⟨t, ht, hv₀t, hyt, -⟩ := hy v₀ hv₀
+    refine ⟨t, ht, ?_, hyt⟩
+    intro v hv
+    obtain ⟨r, hr, hvr, hyr, hyerase⟩ := hy v hv
+    by_contra hvt
+    apply hyerase
+    have hyi : (y : Euc m) ∈
+        convexHull ℝ ((r ∩ t : Finset (Euc m)) : Set (Euc m)) := by
+      simpa only [Finset.coe_inter] using
+        (L.convexHull_inter_convexHull hr ht ▸ ⟨hyr, hyt⟩)
+    exact convexHull_mono (by
+      intro z hz
+      have hzr : z ∈ r := (Finset.mem_inter.mp hz).1
+      have hzt : z ∈ t := (Finset.mem_inter.mp hz).2
+      exact Finset.mem_erase.mpr ⟨fun hzv => hvt (hzv ▸ hzt), hzr⟩) hyi
+  · obtain ⟨t, ht, hyt⟩ :=
+      Geometry.SimplicialComplex.mem_space_iff.mp y.property
+    exact ⟨t, ht, by simpa [Finset.not_nonempty_iff_eq_empty.mp hs], hyt⟩
 
 theorem inducedMap_homotopic_of_star_condition {n m : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
