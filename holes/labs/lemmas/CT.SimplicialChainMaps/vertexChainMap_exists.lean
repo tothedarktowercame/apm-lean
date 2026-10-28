@@ -89,7 +89,21 @@ theorem vertexChainMap_exists {n m : ℕ} (on : LinearOrder (Euc n))
     (hh : GeometricSimplicialSubdivision.IsSimplicialVertexMap K L h) :
     ∃ hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k,
       IsVertexChainMap on om K L h hm := by
-  sorry
+  classical
+  let b : ∀ k, FaceIndex K k → FaceModule L k := fun k s =>
+    if hinj : (s.1.image h).card = k + 1 then
+      Finsupp.single
+        (⟨s.1.image h, hh.2 s.1 s.2.1, hinj⟩ : FaceIndex L k)
+        (sortingSign on om s.1 h)
+    else 0
+  let hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k := fun k =>
+    ModuleCat.ofHom (Finsupp.linearCombination ℚ (b k))
+  refine ⟨hm, ?_⟩
+  intro k s
+  split_ifs with hinj
+  · refine ⟨⟨s.1.image h, hh.2 s.1 s.2.1, hinj⟩, rfl, ?_⟩
+    simp [hm, b, hinj]
+  · simp [hm, b, hinj]
 -- END SEAT AREA
 
 theorem vertexChainMap_commutes {n m : ℕ} (on : LinearOrder (Euc n))
