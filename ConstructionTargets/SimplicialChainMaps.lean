@@ -1683,7 +1683,33 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first
     {n : ℕ} (o : LinearOrder (Euc n)) (a : Finset (Euc n)) (v : Euc n) (hv : v ∈ a) :
     (a.filter fun x => @LT.lt (Euc n) o.toLT v x).card + (a.sort o.le).idxOf v =
       a.card - 1 := by
-  sorry
+  letI : LinearOrder (Euc n) := o
+  rw [sort_idxOf_eq_card_lt o a v hv]
+  have h := (a.erase v).card_filter_add_card_filter_not
+    (fun x => @LT.lt (Euc n) o.toLT v x)
+  rw [Finset.card_erase_of_mem hv] at h
+  rw [← h]
+  congr 1
+  · congr 1
+    ext x
+    simp only [Finset.mem_filter, Finset.mem_erase]
+    constructor
+    · rintro ⟨hxa, hxlt⟩
+      exact ⟨⟨hxlt.ne', hxa⟩, hxlt⟩
+    · rintro ⟨⟨_, hxa⟩, hxlt⟩
+      exact ⟨hxa, hxlt⟩
+  · congr 1
+    ext x
+    simp only [Finset.mem_filter, Finset.mem_erase]
+    constructor
+    · rintro ⟨hxa, hxlt⟩
+      exact ⟨⟨hxlt.ne, hxa⟩, hxlt.asymm⟩
+    · rintro ⟨⟨hxne, hxa⟩, hnot⟩
+      refine ⟨hxa, ?_⟩
+      rcases lt_trichotomy x v with hxlt | hxeq | hxgt
+      · exact hxlt
+      · exact (hxne hxeq).elim
+      · exact (hnot hxgt).elim
 
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first_aux_insertCount
     {n k : ℕ} (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
