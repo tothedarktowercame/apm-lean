@@ -187,6 +187,42 @@ theorem vertexChainMap_commutes_aux_generator_aux_injective {n m : ℕ}
       hm k (dK k (Finsupp.single s 1)) := by
   sorry
 
+lemma vertexChainMap_commutes_aux_generator_aux_collapse_aux_image_card {n m k : ℕ}
+    (K : GSC n) (h : Euc n → Euc m) (s : FaceIndex K (k + 1))
+    (hcol : (s.1.image h).card ≠ k + 2) :
+    (s.1.image h).card ≤ k + 1 := by
+  have hle : (s.1.image h).card ≤ k + 2 := by
+    simpa [s.2.2] using Finset.card_image_le (f := h) (s := s.1)
+  omega
+
+/-- (C-A) At least two collisions: every one-vertex deletion still collapses,
+so every term of `dK s` maps to `0`. -/
+theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_many {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k)
+    (hdK : IsSignedDeletion on K dK)
+    (hhm : IsVertexChainMap on om K L h hm) (k : ℕ)
+    (s : FaceIndex K (k + 1))
+    (hcard : (s.1.image h).card ≤ k) :
+    hm k (dK k (Finsupp.single s 1)) = 0 := by
+  sorry
+
+/-- (C-B) Exactly one collision `h v = h w`, `v ≠ w`: only deleting `v` or `w`
+gives an injective image, the same face, with opposite signs. -/
+theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_one {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k)
+    (hdK : IsSignedDeletion on K dK)
+    (hhm : IsVertexChainMap on om K L h hm) (k : ℕ)
+    (s : FaceIndex K (k + 1))
+    (hcard : (s.1.image h).card = k + 1) :
+    hm k (dK k (Finsupp.single s 1)) = 0 := by
+  sorry
+
 /-- (VG2) `h` collapses `s`: the left side is `0`; on the right the deleted
 faces with injective image come in pairs (delete either of two vertices with the
 same image) whose terms cancel, and all others map to `0`. -/
@@ -202,7 +238,17 @@ theorem vertexChainMap_commutes_aux_generator_aux_collapse {n m : ℕ}
     (hcol : (s.1.image h).card ≠ k + 2) :
     dL k (hm (k + 1) (Finsupp.single s 1)) =
       hm k (dK k (Finsupp.single s 1)) := by
-  sorry
+  have hl : hm (k + 1) (Finsupp.single s 1) = 0 := by
+    have := hhm (k + 1) s
+    rw [dif_neg hcol] at this
+    exact this
+  rw [hl, map_zero]
+  have hle := vertexChainMap_commutes_aux_generator_aux_collapse_aux_image_card K h s hcol
+  rcases Nat.lt_or_ge (s.1.image h).card (k + 1) with hlt | hge
+  · exact (vertexChainMap_commutes_aux_generator_aux_collapse_aux_many on om K L h dK hm
+      hdK hhm k s (by omega)).symm
+  · exact (vertexChainMap_commutes_aux_generator_aux_collapse_aux_one on om K L h dK hm
+      hdK hhm k s (by omega)).symm
 
 lemma vertexChainMap_commutes_aux_generator {n m : ℕ}
     (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
