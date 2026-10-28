@@ -326,7 +326,108 @@ theorem barycentricFaces_inter_subset_aux_chain_unique_aux_relint {n : ℕ}
     ∑ s ∈ c, w s • barycenter s ∈ convexHull ℝ (t : Set (Euc n)) ∧
       ∀ v ∈ t, ∑ s ∈ c, w s • barycenter s ∉
         convexHull ℝ ((t.erase v : Finset (Euc n)) : Set (Euc n)) := by
-  sorry
+  classical
+  let a : Euc n → ℝ := fun v =>
+    ∑ s ∈ c, if v ∈ s then w s / (s.card : ℝ) else 0
+  have hne : ∀ s ∈ c, s.Nonempty :=
+    barycentricFaces_affineIndependent_aux_chain_nonempty K c hc
+  have hcard : ∀ s ∈ c, (s.card : ℝ) ≠ 0 := by
+    intro s hs
+    exact_mod_cast (Finset.card_ne_zero.mpr (hne s hs))
+  have ha0 : ∀ v ∈ t, 0 ≤ a v := by
+    intro v hv
+    apply Finset.sum_nonneg
+    intro s hs
+    split_ifs
+    · exact div_nonneg (le_of_lt (hw s hs)) (Nat.cast_nonneg _)
+    · exact le_rfl
+  have hasum : ∑ v ∈ t, a v = 1 := by
+    simp only [a, Finset.sum_ite_irrel, Finset.sum_const_zero, add_zero]
+    rw [Finset.sum_comm]
+    calc
+      ∑ s ∈ c, ∑ v ∈ t, (if v ∈ s then w s / (s.card : ℝ) else 0) =
+          ∑ s ∈ c, ∑ v ∈ s, w s / (s.card : ℝ) := by
+            apply Finset.sum_congr rfl
+            intro s hs
+            rw [← Finset.sum_subset (htop s hs)]
+            · simp
+            · intro v hvt hvs
+              simp [hvs]
+      _ = ∑ s ∈ c, w s := by
+            apply Finset.sum_congr rfl
+            intro s hs
+            rw [Finset.sum_const, nsmul_eq_mul]
+            field_simp [hcard s hs]
+      _ = 1 := hs
+  have haeq : ∑ v ∈ t, a v • v = ∑ s ∈ c, w s • barycenter s := by
+    simp only [a]
+    simp_rw [Finset.sum_smul]
+    rw [Finset.sum_comm]
+    calc
+      ∑ s ∈ c, ∑ v ∈ t, (if v ∈ s then w s / (s.card : ℝ) else 0) • v =
+          ∑ s ∈ c, ∑ v ∈ s, (w s / (s.card : ℝ)) • v := by
+            apply Finset.sum_congr rfl
+            intro s hs
+            rw [← Finset.sum_subset (htop s hs)]
+            · simp
+            · intro v hvt hvs
+              simp [hvs]
+      _ = ∑ s ∈ c, w s • barycenter s := by
+            apply Finset.sum_congr rfl
+            intro s hs
+            rw [barycentricFaces_affineIndependent_aux_barycenter_formula,
+              smul_smul, Finset.smul_sum]
+            apply Finset.sum_congr rfl
+            intro v hv
+            rw [div_eq_mul_inv, mul_comm]
+  constructor
+  · rw [← haeq]
+    exact Finset.mem_convexHull'.2 ⟨a, ha0, hasum, rfl⟩
+  · intro v hv hmem
+    have hspan : (∑ s ∈ c, w s • barycenter s) ∈
+        affineSpan ℝ ((fun x : t => (x : Euc n)) '' {x | (x : Euc n) ∈ t.erase v}) := by
+      have hsub : ((t.erase v : Finset (Euc n)) : Set (Euc n)) =
+          (fun x : t => (x : Euc n)) '' {x | (x : Euc n) ∈ t.erase v} := by
+        ext x
+        constructor
+        · intro hx
+          exact ⟨⟨x, (Finset.erase_subset v t) hx⟩, hx, rfl⟩
+        · rintro ⟨x, hx, rfl⟩
+          exact hx
+      rw [← hsub]
+      exact convexHull_subset_affineSpan _ hmem
+    have hatt : ∑ i ∈ t.attach, a (i : Euc n) • (i : Euc n) =
+        ∑ x ∈ t, a x • x := by
+      refine Finset.sum_bij (fun i _ => (i : Euc n)) ?_ ?_ ?_ ?_
+      · intro i hi
+        exact i.property
+      · intro i hi j hj hij
+        exact Subtype.ext hij
+      · intro x hx
+        exact ⟨⟨x, hx⟩, by simp, rfl⟩
+      · intro i hi
+        rfl
+    have hz := (K.indep (hc.1 t ht)).eq_zero_of_affineCombination_mem_affineSpan
+      (fs := t.attach) (w := fun x : t => a x) (s := {x | (x : Euc n) ∈ t.erase v})
+      (by simpa only [Finset.sum_attach] using hasum) (by
+        rw [Finset.affineCombination_eq_linear_combination]
+        · rw [hatt, haeq]
+          exact hspan
+        · simpa only [Finset.sum_attach] using hasum) (i := ⟨v, hv⟩) (by simp) (by simp)
+    have hpos : 0 < a v := by
+      have hterm : 0 < w t / (t.card : ℝ) :=
+        div_pos (hw t ht) (by exact_mod_cast (Finset.card_pos.mpr (hne t ht)))
+      have hle : w t / (t.card : ℝ) ≤ a v := by
+        change w t / (t.card : ℝ) ≤
+          ∑ s ∈ c, (if v ∈ s then w s / (s.card : ℝ) else 0)
+        simpa only [if_pos hv] using (Finset.single_le_sum (f := fun s =>
+            if v ∈ s then w s / (s.card : ℝ) else 0) (fun s hs => by
+          change 0 ≤ (if v ∈ s then w s / (s.card : ℝ) else 0)
+          split_ifs
+          · exact div_nonneg (le_of_lt (hw s hs)) (Nat.cast_nonneg _)
+          · exact le_rfl) ht)
+      exact lt_of_lt_of_le hterm hle
+    exact (ne_of_gt hpos) hz
 
 /-- (U1) Two faces of `K` whose relative interiors share a point are equal
 (intersection axiom: the point lies in the hull of `t₀ ∩ t₁`, a face of both,
