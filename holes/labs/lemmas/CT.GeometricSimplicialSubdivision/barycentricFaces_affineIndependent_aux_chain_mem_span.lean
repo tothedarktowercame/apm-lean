@@ -61,7 +61,12 @@ theorem barycentricFaces_affineIndependent_aux_chain_not_mem_span {n : ℕ}
 theorem barycentricFaces_affineIndependent_aux_chain_mem_span {n : ℕ}
     {s t : Finset (Euc n)} (hs : s.Nonempty) (hst : s ⊆ t) :
     barycenter s ∈ affineSpan ℝ (t : Set (Euc n)) := by
-  sorry
+  have hb : barycenter s ∈ convexHull ℝ (s : Set (Euc n)) := by
+    apply Finset.centerMass_id_mem_convexHull
+    · intro x hx
+      positivity
+    · simpa using (Finset.card_pos.mpr hs : 0 < s.card)
+  exact affineSpan_mono ℝ (by simpa using hst) (convexHull_subset_affineSpan _ hb)
 -- END SEAT AREA
 
 /-- (C3) Induction on the chain: remove its largest face `t`; the remaining
