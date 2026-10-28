@@ -125,7 +125,52 @@ theorem barycentricSubdivisionChainMap_exists {n : ℕ} (o : LinearOrder (Euc n)
         FaceModuleCat (GeometricSimplicialSubdivision.barycentricSubdivision K hi hd hx) k,
       IsSubdivisionChainMap o K
         (GeometricSimplicialSubdivision.barycentricSubdivision K hi hd hx) sd := by
-  sorry
+  classical
+  let K' := GeometricSimplicialSubdivision.barycentricSubdivision K hi hd hx
+  let b : ∀ k, FaceIndex K k → FaceModule K' k := fun k s =>
+    ∑ c ∈ s.1.powerset.powerset,
+      if hc : GeometricSimplicialSubdivision.IsStrictFaceChain K c then
+        if hcard : (c.image GeometricSimplicialSubdivision.barycenter).card = k + 1 then
+          Finsupp.single
+            (⟨c.image GeometricSimplicialSubdivision.barycenter,
+              ⟨⟨c, hc, rfl⟩, by
+                intro h
+                rw [Set.mem_singleton_iff] at h
+                rw [h] at hcard
+                simp at hcard⟩, hcard⟩ : FaceIndex K' k)
+            (flagSign o c)
+        else 0
+      else 0
+  let sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k := fun k =>
+    ModuleCat.ofHom (Finsupp.linearCombination ℚ (b k))
+  refine ⟨sd, ?_⟩
+  intro k s
+  refine ⟨b k s, ?_, ?_⟩
+  · simp [sd]
+  · intro u
+    simp only [b]
+    change Finsupp.applyAddHom u _ = _
+    rw [map_sum]
+    apply Finset.sum_congr rfl
+    intro c hcsub
+    by_cases hc : GeometricSimplicialSubdivision.IsStrictFaceChain K c
+    · by_cases hcard : (c.image GeometricSimplicialSubdivision.barycenter).card = k + 1
+      · simp [hc, hcard, Finsupp.single_apply]
+        apply if_congr
+        · constructor
+          · intro h
+            exact (congrArg Subtype.val h).symm
+          · intro h
+            exact Subtype.ext h.symm
+        · rfl
+        · rfl
+      · have hne : ¬u.1 = c.image GeometricSimplicialSubdivision.barycenter := by
+          intro heq
+          apply hcard
+          rw [← heq]
+          exact u.2.2
+        simp [hc, hcard, hne]
+    · simp [hc]
 
 theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
