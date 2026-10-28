@@ -1427,7 +1427,60 @@ lemma subdivisionChainMap_commutes_aux_induction_aux_augmentation {n : ℕ}
     (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd)
     (r : FaceIndex K 0) :
     (sd 0 (Finsupp.single r 1)).sum (fun _ a => a) = 1 := by
-  sorry
+  classical
+  obtain ⟨x, hx⟩ := Finset.card_eq_one.mp r.2.2
+  obtain ⟨z, hz, hcoeff⟩ := hsd 0 r
+  rw [hz]
+  have hrface : ({x} : Finset (Euc n)) ∈ K.faces := by simpa [hx] using r.2.1
+  let u : FaceIndex (barycentricStep K) 0 :=
+    ⟨{GeometricSimplicialSubdivision.barycenter ({x} : Finset (Euc n))}, by
+      constructor
+      · refine ⟨{{x}}, ?_, by simp⟩
+        constructor
+        · simpa using hrface
+        · simp
+      · simp,
+      by simp⟩
+  have hp₁ : ({x} : Finset (Euc n)).powerset = {∅, {x}} := by
+    ext a
+    simp [Finset.subset_singleton_iff]
+  have hp₂ : ({∅, {x}} : Finset (Finset (Euc n))).powerset =
+      {∅, {∅}, {{x}}, {∅, {x}}} := by
+    ext c
+    simp only [Finset.mem_powerset, Finset.mem_insert, Finset.mem_singleton]
+    grind
+  have hempty : (∅ : Finset (Euc n)) ∉ K.faces := by
+    intro h
+    exact (K.nonempty_of_mem_faces h).ne_empty rfl
+  have hself : ¬ ({x} : Finset (Euc n)) ⊂ {x} := by
+    intro h
+    exact h.ne rfl
+  have hzsingle : z = Finsupp.single u 1 := by
+    ext v
+    have hvempty : v.1 ≠ ∅ := by
+      intro h
+      have := v.2.2
+      simp [h] at this
+    rw [hcoeff]
+    rw [hx, hp₁, hp₂]
+    rw [Finset.sum_eq_single {{x}}]
+    · by_cases hv : v.1 = u.1
+      · have : v = u := Subtype.ext hv
+        subst v
+        simp [u, hrface, GeometricSimplicialSubdivision.IsStrictFaceChain,
+          flagSign, flagNewVertex, hself, Finset.filter_singleton]
+      · have hv' : v ≠ u := fun h => hv (congrArg Subtype.val h)
+        simp [u, hv, hv', hrface, GeometricSimplicialSubdivision.IsStrictFaceChain,
+          flagSign, flagNewVertex, hself, Finset.filter_singleton]
+    · intro c hc hne
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hc
+      rcases hc with rfl | rfl | rfl | rfl
+      all_goals try contradiction
+      all_goals simp [hvempty, hempty,
+        GeometricSimplicialSubdivision.IsStrictFaceChain]
+    · simp
+  rw [hzsingle]
+  simp
 
 lemma subdivisionChainMap_commutes_aux_induction_aux_edge_sign_sum {n : ℕ}
     (o : LinearOrder (Euc n)) (s : Finset (Euc n)) (hs : s.card = 2) :
