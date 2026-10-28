@@ -369,6 +369,7 @@ theorem affineCmp_comm_aux_vertices {n k : ℕ} (o : LinearOrder (Euc n))
         · exact (Finset.mem_sort o.le).1 (List.get_mem l ⟨i, hli⟩))).symm.trans
       (hopt.trans (List.getElem?_eq_getElem (by simp [l, s.2.2]; omega))))
 
+set_option maxHeartbeats 2000000 in
 theorem affineCmp_comm_aux_face {n k : ℕ} (o : LinearOrder (Euc n))
     {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K (k + 1))
     (i : Fin (k + 2)) :
@@ -376,7 +377,26 @@ theorem affineCmp_comm_aux_face {n k : ℕ} (o : LinearOrder (Euc n))
       faceSimplex o
         (signedDeletion_sq_zero_aux_generator_aux_erase K s
           (faceVertices o s i) (faceVertices_mem o s i)) := by
-  sorry
+  classical
+  simp only [faceSimplex]
+  rw [singularSimplexOfContinuousMap_face]
+  congr 1
+  ext x : 1
+  apply Subtype.ext
+  dsimp only [ContinuousMap.comp_apply, faceMap, affineSimplex]
+  change (∑ a : Fin (k + 2),
+      (∑ j : Fin (k + 1), x j *
+        (Pi.single (i.succAbove j) (1 : ℝ) : Fin (k + 2) → ℝ) a) •
+        faceVertices o s a) =
+    ∑ j : Fin (k + 1), x j • faceVertices o
+      (signedDeletion_sq_zero_aux_generator_aux_erase K s
+        (faceVertices o s i) (faceVertices_mem o s i)) j
+  simp_rw [Finset.sum_smul]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro j hj
+  rw [affineCmp_comm_aux_vertices o s i j]
+  simp [Pi.single_apply]
 
 /-- Reindex the singular boundary (`singularGenerator_boundary`) against the
 signed-deletion formula `hd`, given the face compatibility. -/
