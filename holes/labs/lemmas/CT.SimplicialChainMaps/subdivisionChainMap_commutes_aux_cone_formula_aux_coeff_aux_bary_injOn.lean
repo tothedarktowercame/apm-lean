@@ -1409,7 +1409,11 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_bary_injOn {n 
     (K : GSC n) (c : Finset (Finset (Euc n)))
     (hc : GeometricSimplicialSubdivision.IsStrictFaceChain K c) :
     Set.InjOn GeometricSimplicialSubdivision.barycenter (c : Set (Finset (Euc n))) := by
-  sorry
+  intro s hs t ht hst
+  have hi := (GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain
+    K c hc).injective
+  have heq : (⟨s, hs⟩ : c) = ⟨t, ht⟩ := hi hst
+  exact congrArg Subtype.val heq
 -- END SEAT AREA
 
 /-- A strict face chain of `k + 2` faces inside a `(k+1)`-face `s` is maximal: it
