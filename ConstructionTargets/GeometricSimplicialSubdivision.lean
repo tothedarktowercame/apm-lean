@@ -464,6 +464,60 @@ theorem barycentricFaces_inter_subset_aux_chain_unique_aux_carrier {n : ℕ}
       simp only [Finset.coe_erase, Set.mem_diff, Finset.mem_coe, Set.mem_singleton_iff]
       exact ⟨hy.2, fun hyv ↦ hv₀ (hyv ▸ hy.1)⟩) hx
 
+def barycentricFaces_inter_subset_aux_chain_unique_aux_within_q {n : ℕ}
+    (c : Finset (Finset (Euc n))) (w : Finset (Euc n) → ℝ) (v : Euc n) : ℝ :=
+  ∑ s ∈ c with v ∈ s, w s * (s.card : ℝ)⁻¹
+
+lemma barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_sum {n : ℕ}
+    (c : Finset (Finset (Euc n))) (t : Finset (Euc n))
+    (hne : ∀ s ∈ c, s.Nonempty) (hsub : ∀ s ∈ c, s ⊆ t)
+    (w : Finset (Euc n) → ℝ) :
+    ∑ v ∈ t, barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w v =
+      ∑ s ∈ c, w s := by
+  classical
+  simp only [barycentricFaces_inter_subset_aux_chain_unique_aux_within_q]
+  simp_rw [Finset.sum_filter]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro s hs
+  rw [← Finset.sum_filter]
+  have hf : t.filter (fun v ↦ v ∈ s) = s := by
+    ext v
+    simp only [Finset.mem_filter]
+    exact and_iff_right_of_imp (fun hv ↦ hsub s hs hv)
+  rw [hf]
+  have hcard : (s.card : ℝ) ≠ 0 := by
+    exact_mod_cast (Finset.card_ne_zero.mpr (hne s hs))
+  simp only [Finset.sum_const, nsmul_eq_mul]
+  field_simp
+
+/-- (W1) Equal points give equal vertex coefficients on `t`: both sides expand
+to `∑ v ∈ t, q v • v` (barycenter formula) with weights summing to `1`, and
+the vertices of `t` are affinely independent (`K.indep`). -/
+theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_eq {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c₀ c₁ : Finset (Finset (Euc n)))
+    (h₀ : IsStrictFaceChain K c₀) (h₁ : IsStrictFaceChain K c₁)
+    (t : Finset (Euc n)) (ht : t ∈ K.faces)
+    (hsub₀ : ∀ s ∈ c₀, s ⊆ t) (hsub₁ : ∀ s ∈ c₁, s ⊆ t)
+    (w₀ w₁ : Finset (Euc n) → ℝ)
+    (hs₀ : ∑ s ∈ c₀, w₀ s = 1) (hs₁ : ∑ s ∈ c₁, w₁ s = 1)
+    (heq : ∑ s ∈ c₀, w₀ s • barycenter s = ∑ s ∈ c₁, w₁ s • barycenter s) :
+    ∀ v ∈ t, barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c₀ w₀ v = barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c₁ w₁ v := by
+  sorry
+
+/-- (W2) A positive-weight strict chain inside `t` is the family of positive
+superlevel sets of its vertex coefficients: `q` is constant on each layer
+`sᵢ \ sᵢ₋₁`, strictly larger on deeper layers, and `0` off the top face. -/
+theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c)
+    (t : Finset (Euc n)) (hsub : ∀ s ∈ c, s ⊆ t)
+    (w : Finset (Euc n) → ℝ) (hw : ∀ s ∈ c, 0 < w s) :
+    ∀ s : Finset (Euc n), s ∈ c ↔ ∃ u ∈ t, 0 < barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w u ∧
+      s = t.filter (fun v => barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w u ≤ barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w v) := by
+  sorry
+
 /-- (U3) Inside one face `t` of `K`, a point determines the strict chain that
 represents it with positive weights: its barycentric coordinate on `v ∈ t` is
 `∑_{s ∋ v} w s / |s|`, a step function whose superlevel sets are the faces. -/
@@ -478,7 +532,21 @@ theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within {n : ℕ}
     (hs₀ : ∑ s ∈ c₀, w₀ s = 1) (hs₁ : ∑ s ∈ c₁, w₁ s = 1)
     (heq : ∑ s ∈ c₀, w₀ s • barycenter s = ∑ s ∈ c₁, w₁ s • barycenter s) :
     c₀ = c₁ := by
-  sorry
+  classical
+  have hq := barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_eq K c₀ c₁ h₀ h₁
+    t ht hsub₀ hsub₁ w₀ w₁ hs₀ hs₁ heq
+  ext s
+  rw [barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel K c₀ h₀ t
+      hsub₀ w₀ hw₀ s,
+    barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel K c₁ h₁ t
+      hsub₁ w₁ hw₁ s]
+  constructor
+  · rintro ⟨u, hu, hpos, rfl⟩
+    refine ⟨u, hu, (hq u hu) ▸ hpos, Finset.filter_congr fun v hv => ?_⟩
+    rw [hq u hu, hq v hv]
+  · rintro ⟨u, hu, hpos, rfl⟩
+    refine ⟨u, hu, (hq u hu).symm ▸ hpos, Finset.filter_congr fun v hv => ?_⟩
+    rw [hq u hu, hq v hv]
 
 /-- (I2) Uniqueness of the barycentric carrier chain: two strict chains of faces
 of `K` with positive weights representing the same point are equal.  Both top
