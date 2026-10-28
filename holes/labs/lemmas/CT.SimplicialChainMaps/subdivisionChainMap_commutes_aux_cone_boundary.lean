@@ -1118,7 +1118,21 @@ theorem subdivisionChainMap_commutes_aux_cone_boundary {n k : ℕ}
     (x : FaceModule K' (k + 1)) (hx : ConeAdmissible K' b x) :
     dK' (k + 1) (subdivisionCone o K' b (k + 1) x) =
       x - subdivisionCone o K' b k (dK' k x) := by
-  sorry
+  classical
+  rw [← Finsupp.sum_single x]
+  change dK' (k + 1) (subdivisionCone o K' b (k + 1)
+      (∑ u ∈ x.support, Finsupp.single u (x u))) =
+    (∑ u ∈ x.support, Finsupp.single u (x u)) -
+      subdivisionCone o K' b k
+        (dK' k (∑ u ∈ x.support, Finsupp.single u (x u)))
+  simp only [map_sum]
+  rw [← Finset.sum_sub_distrib]
+  apply Finset.sum_congr rfl
+  intro u hu
+  rw [← Finsupp.smul_single_one, map_smul, map_smul, map_smul]
+  rw [map_smul, ← smul_sub]
+  rw [subdivisionChainMap_commutes_aux_cone_boundary_aux_single o K' dK' hdK' b u
+    (hx u (Finsupp.mem_support_iff.mp hu))]
 -- END SEAT AREA
 
 /-- Degree-zero cone-boundary identity, with the augmentation term at the cone
