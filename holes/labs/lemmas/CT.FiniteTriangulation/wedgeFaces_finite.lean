@@ -162,7 +162,22 @@ theorem wedgeFaces_finite {a b : ℕ}
     (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
     (h₁ : K₁.faces.Finite) (h₂ : K₂.faces.Finite)
     (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) : (wedgeFaces K₁ K₂ v₁ v₂).Finite := by
-  sorry
+  classical
+  let F₁ := h₁.toFinset.biUnion fun s =>
+    (s.image (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1
+      (b := b) v₁)).powerset
+  let F₂ := h₂.toFinset.biUnion fun s =>
+    (s.image (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2
+      (a := a) v₂)).powerset
+  refine (F₁ ∪ F₂).finite_toSet.subset ?_
+  intro u hu
+  rcases hu with ⟨s, hs, hus⟩ | ⟨s, hs, hus⟩
+  · simp only [Finset.mem_coe, Finset.mem_union, F₁, Finset.mem_biUnion,
+      Set.Finite.mem_toFinset, Finset.mem_powerset]
+    exact Or.inl ⟨s, hs, hus⟩
+  · simp only [Finset.mem_coe, Finset.mem_union, F₂, Finset.mem_biUnion,
+      Set.Finite.mem_toFinset, Finset.mem_powerset]
+    exact Or.inr ⟨s, hs, hus⟩
 -- END SEAT AREA
 
 /-- (E6) The embeddings are continuous (affine). -/
