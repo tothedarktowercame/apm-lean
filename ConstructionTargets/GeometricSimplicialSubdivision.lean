@@ -846,19 +846,46 @@ theorem barycentricSubdivision_space_aux_subset {n : ℕ}
     · simpa using (Finset.card_pos.mpr hsne : 0 < s.card)
   exact convexHull_mono (by simpa using hst) hb
 
-/-- Flag decomposition (suggested route, claude-14): induction on `t.card`.  If
-`x = barycenter t`, take `{t}`.  Otherwise the ray from `barycenter t` through `x`
-leaves `hull t` at a point `y` of a proper face `t' ⊂ t` (a face of `K`: faces are
-closed under subsets), with `x ∈ segment (barycenter t) y`; by induction `y` lies in
-the hull of a chain `c'` of faces of `t'`, and `insert t c'` is a strict chain whose
-hull contains `x`. -/
+/-- (F1) Exit point: if `x ∈ hull t` is not the barycenter, push from the
+barycenter through `x` until a barycentric coordinate (of a chosen
+representation of `x`) reaches `0`; the endpoint `y` lies in a facet. -/
+theorem barycentricSubdivision_space_aux_superset_aux_flag_decomposition_aux_exit {n : ℕ}
+    (t : Finset (Euc n)) (x : Euc n)
+    (hxt : x ∈ convexHull ℝ (t : Set (Euc n))) (hne : x ≠ barycenter t) :
+    ∃ v ∈ t, ∃ y ∈ convexHull ℝ ((t.erase v : Finset (Euc n)) : Set (Euc n)),
+      x ∈ segment ℝ (barycenter t) y := by
+  sorry
+
+/-- (F2) The core, by strong induction on `t.card` using (F1): if
+`x = barycenter t` take `{t}`; otherwise the exit point `y` lies in a facet
+`t.erase v`, which by induction carries a chain `c'`, and `insert t c'` works
+(`x ∈ segment (barycenter t) y`). -/
+lemma barycentricSubdivision_space_aux_superset_aux_flag_decomposition_aux_core {n : ℕ}
+    (hF1 : ∀ (t : Finset (Euc n)) (x : Euc n), x ∈ convexHull ℝ (t : Set (Euc n)) →
+      x ≠ barycenter t → ∃ v ∈ t, ∃ y ∈ convexHull ℝ ((t.erase v : Finset (Euc n)) : Set (Euc n)),
+        x ∈ segment ℝ (barycenter t) y)
+    (t : Finset (Euc n)) (x : Euc n)
+    (hxt : x ∈ convexHull ℝ (t : Set (Euc n))) :
+    ∃ c : Finset (Finset (Euc n)),
+      (∀ s ∈ c, s.Nonempty ∧ s ⊆ t) ∧
+      (∀ s ∈ c, ∀ u ∈ c, s ≠ u → s ⊂ u ∨ u ⊂ s) ∧ c.Nonempty ∧
+      x ∈ convexHull ℝ ((c.image barycenter : Finset (Euc n)) : Set (Euc n)) := by
+  sorry
+
 lemma barycentricSubdivision_space_aux_superset_aux_flag_decomposition {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (t : Finset (Euc n)) (ht : t ∈ K.faces) (x : Euc n)
     (hxt : x ∈ convexHull ℝ (t : Set (Euc n))) :
     ∃ c : Finset (Finset (Euc n)), IsStrictFaceChain K c ∧ c.Nonempty ∧
       x ∈ convexHull ℝ ((c.image barycenter : Finset (Euc n)) : Set (Euc n)) := by
-  sorry
+  classical
+  obtain ⟨c, hcsub, hcchain, hcne, hxc⟩ :=
+    barycentricSubdivision_space_aux_superset_aux_flag_decomposition_aux_core
+      (fun t x h₁ h₂ => barycentricSubdivision_space_aux_superset_aux_flag_decomposition_aux_exit t x h₁ h₂)
+      t x hxt
+  refine ⟨c, ⟨?_, hcchain⟩, hcne, hxc⟩
+  intro s hs
+  exact K.down_closed ht (hcsub s hs).2 (hcsub s hs).1
 
 theorem barycentricSubdivision_space_aux_superset {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hi hd hx) :
