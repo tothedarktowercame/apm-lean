@@ -70,26 +70,23 @@ classification, or fixed-point theorem.
 has rational Lefschetz number `1` in the honest singular-homology definition
 from `ConstructionTargets.RationalLefschetz`.
 
-**Why true.** `RP²` has zero reduced rational homology.  Apply reduced
-Mayer–Vietoris for a point wedge repeatedly to obtain zero reduced rational
-homology for the fourfold wedge.  Consequently only `H₀ ≅ ℚ` contributes, and
-every self-map acts as the identity on `H₀`, so the alternating trace is `1`.
-The topology worklist already records the foundations
-`projectivePlane_rationalReducedHomology_zero` and
-`projectivePlaneWedge_rationalHomology`; the latter must be iterated once more
-for this fourfold model.  `RationalLefschetz.lean` is the closest sorry-free
-construction, but currently supplies vocabulary only.
+**Why true.** This is now a sorry-free adapter to
+`ConstructionTargets.ProjectivePlaneWedgeRationalHomology`.  That module first
+computes one `RP²`, applies its generic point-wedge Mayer--Vietoris theorem to
+obtain the twofold wedge, applies the same theorem once more to the two copies,
+and invokes its generic Lefschetz trace assembly.  The local pointed
+contractible-neighbourhood hypothesis is preserved at the first wedge point,
+so the second application is legitimate.
 
-**Estimate.** LIBRARY program, 700–1500 lines after the shared projective-plane
-and point-wedge homology foundations land.
+**Estimate.** Adapter proved; the six shared leaves and their estimates are in
+`ConstructionTargets/ProjectivePlaneWedgeRationalHomology.blueprint.md`.
 
-**Depends on.** No other blueprint lemma.
+**Depends on.** Only the shared module, not another t99A03 blueprint lemma.
 
-**Truth check.** By hand, over `ℚ`, each positive homology group of `RP²`
-vanishes and reduced homology takes point wedges to direct sums.  Four zero
-summands remain zero.  In degree zero the connected wedge gives one copy of
-`ℚ`; the induced map of any self-map is identity on that copy.  The constant
-map and the identity map both therefore have Lefschetz number `1`.
+**Truth check.** All coefficients are explicitly `ℚ` (integrally `H₁(RP²)` is
+`ℤ/2`).  The neighbourhood hypothesis excludes wild point wedges.  The
+dimension-zero endpoint (wedging points) remains a point.  Both constant and
+identity maps have trace one on `H₀` and zero positive contributions.
 
 ### `t99A03_wedge_fixed_point_of_lefschetz` — LIBRARY
 
@@ -171,14 +168,17 @@ excluded exactly where needed.
 
 ## Dependency layers
 
-* **Layer 1 (parallel):** `t99A03_wedge_lefschetz_number` (LIBRARY),
-  `t99A03_wedge_fixed_point_of_lefschetz` (LIBRARY, taking the first
-  conclusion as a hypothesis), and `t99A03_exists_N4_deck_involution`
-  (LIBRARY).  The generic deck lemma is already proved.
+* **Shared homology module:** six parallel leaves, documented in
+  `ConstructionTargets/ProjectivePlaneWedgeRationalHomology.blueprint.md`;
+  the generic and concrete homology/Lefschetz assemblies are proved.
+* **Layer 1 (parallel):** `t99A03_wedge_lefschetz_number` is now a proved
+  adapter; `t99A03_wedge_fixed_point_of_lefschetz` and
+  `t99A03_exists_N4_deck_involution` remain LIBRARY.  The generic deck lemma
+  is already proved.
 * **Layer 2:** `apm_t99a03`, a sorry-free assembly from the three Layer 1
   conclusions and the proved deck lemma.
 
-There are **three open lemmas**, all honestly marked LIBRARY foundations.
+There are **two open t99A03 lemmas**, both honestly marked LIBRARY foundations.
 The principal doubt is scheduling, not truth: the compact-polyhedron Lefschetz
 theorem and explicit polygon-cover identification are both much larger than a
 normal lemma seat.
@@ -198,5 +198,6 @@ The final output of `#print axioms apm_t99a03` was:
 'apm_t99a03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The three warnings are exactly the three LIBRARY lemmas.  The generic deck
-lemma and the main theorem contain no `sorry`.
+The two local warnings are exactly the two remaining LIBRARY lemmas.  The
+wedge-Lefschetz adapter, generic deck lemma, and main theorem contain no
+`sorry`; imported `sorryAx` comes through the six shared homology leaves.

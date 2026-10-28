@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.ProjectivePlaneWedgeRationalHomology
 
 /-! # APM t99A03: fixed points on a wedge and a connected sum -/
 
@@ -35,7 +36,18 @@ rational Lefschetz number one. -/
 theorem t99A03_wedge_lefschetz_number :
     ∀ f : C(T99A03.FourProjectivePlanesWedge,
         T99A03.FourProjectivePlanesWedge), HasLefschetzNumber f 1 := by
-  sorry
+  intro f
+  open ConstructionTargets.ProjectivePlaneWedgeRationalHomology in
+    letI : PathConnectedSpace
+        ConstructionTargets.StatementSurfaceModels.RealProjectivePlane :=
+      realProjectivePlane_pathConnected
+    let hH : RationallyPointlike T99A03.FourProjectivePlanesWedge :=
+      wedge_rationallyPointlike _ _
+        projectivePlaneWedge_rationallyPointlike
+        projectivePlaneWedge_rationallyPointlike
+        projectivePlaneWedge_pointedNeighbourhood
+        projectivePlaneWedge_pointedNeighbourhood
+    exact lefschetzNumber_one_of_rationallyPointlike hH f
 
 /-- **LIBRARY.** The Lefschetz fixed-point implication, specialized to the
 finite projective-plane wedge.  Its homology calculation is supplied as a
