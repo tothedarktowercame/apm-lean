@@ -88,6 +88,81 @@ theorem signedDeletion_exists {n : ℕ}
     intro v hv
     simp only [Subtype.ext_iff]
 
+theorem signedDeletion_sq_zero_aux_generator_aux_idxOf_erase
+    {α : Type*} [DecidableEq α] (l : List α) (a b : α)
+    (hn : l.Nodup) (ha : a ∈ l) (hb : b ∈ l) (hab : a ≠ b) :
+    (l.erase a).idxOf b =
+      if l.idxOf a < l.idxOf b then l.idxOf b - 1 else l.idxOf b := by
+  induction l with
+  | nil => simp at ha
+  | cons x l ih =>
+      simp only [List.nodup_cons] at hn
+      by_cases hax : a = x
+      · subst a
+        have hbx : b ≠ x := Ne.symm hab
+        have hpos : 0 < (x :: l).idxOf b := by
+          simp [List.idxOf_cons_ne, hab, hbx]
+        simp [List.idxOf_cons_ne, hab, hbx, hpos]
+      · have hax' : x ≠ a := Ne.symm hax
+        have hal : a ∈ l := (List.mem_cons.mp ha).resolve_left hax
+        by_cases hbx : b = x
+        · subst b
+          simp [hax, hax', hn.1, List.idxOf_cons_ne]
+        · have hbx' : x ≠ b := Ne.symm hbx
+          have hbl : b ∈ l := (List.mem_cons.mp hb).resolve_left hbx
+          simp only [List.erase_cons]
+          simp [hax']
+          rw [List.idxOf_cons_ne (l.erase a) hbx']
+          simp only [List.idxOf_cons_ne l hax', List.idxOf_cons_ne l hbx']
+          rw [ih hn.2 hal hbl]
+          split_ifs <;> omega
+
+theorem signedDeletion_sq_zero_aux_generator_aux_sign_cancel
+    {α : Type*} [DecidableEq α] (l : List α) (a b : α)
+    (hn : l.Nodup) (ha : a ∈ l) (hb : b ∈ l) (hab : a ≠ b) :
+    (-1 : ℚ) ^ l.idxOf a * (-1 : ℚ) ^ (l.erase a).idxOf b +
+      (-1 : ℚ) ^ l.idxOf b * (-1 : ℚ) ^ (l.erase b).idxOf a = 0 := by
+  rw [signedDeletion_sq_zero_aux_generator_aux_idxOf_erase l a b hn ha hb hab,
+    signedDeletion_sq_zero_aux_generator_aux_idxOf_erase l b a hn hb ha hab.symm]
+  have hidx : l.idxOf a ≠ l.idxOf b := by
+    intro h
+    apply hab
+    have hi := congrArg (fun i => l[i]?) h
+    have hla := List.getElem?_idxOf ha
+    have hlb := List.getElem?_idxOf hb
+    exact Option.some.inj (hla.symm.trans (hi.trans hlb))
+  rcases lt_or_gt_of_ne hidx with hlt | hgt
+  · rw [if_pos hlt, if_neg (not_lt_of_ge hlt.le)]
+    have hp : 0 < l.idxOf b := lt_of_le_of_lt (Nat.zero_le _) hlt
+    rw [← pow_add, ← pow_add]
+    have he : l.idxOf b + l.idxOf a = l.idxOf a + (l.idxOf b - 1) + 1 := by omega
+    rw [he, pow_succ]
+    ring
+  · rw [if_neg (not_lt_of_ge hgt.le), if_pos hgt]
+    have hp : 0 < l.idxOf a := lt_of_le_of_lt (Nat.zero_le _) hgt
+    rw [← pow_add, ← pow_add]
+    have he : l.idxOf a + l.idxOf b = l.idxOf b + (l.idxOf a - 1) + 1 := by omega
+    rw [he, pow_succ]
+    ring
+
+def signedDeletion_sq_zero_aux_generator_aux_erase {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : FaceIndex K (k + 1))
+    (v : Euc n) (hv : v ∈ s.1) : FaceIndex K k :=
+  ⟨s.1.erase v,
+    K.down_closed s.2.1 (Finset.erase_subset _ _) (by
+      rw [← Finset.card_pos, Finset.card_erase_of_mem hv, s.2.2]
+      omega),
+    by rw [Finset.card_erase_of_mem hv, s.2.2]; omega⟩
+
+theorem signedDeletion_sq_zero_aux_generator_aux_boundary {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) (s : FaceIndex K (k + 1)) :
+    d k (Finsupp.single s 1) =
+      ∑ v ∈ s.1.attach, (-1 : ℚ) ^ ((s.1.sort o.le).idxOf v.1) •
+        Finsupp.single (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1 := by
+  sorry
+
 theorem signedDeletion_sq_zero_aux_generator {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
