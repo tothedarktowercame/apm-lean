@@ -192,7 +192,15 @@ is injective on singular simplices, and chains are free on simplices). -/
 -- BEGIN SEAT AREA
 theorem subsetPush_injective (X : Type) [TopologicalSpace X] (A : Set X) (k : ℕ) :
     Function.Injective ((subsetPush X A).f k) := by
-  sorry
+  apply (ModuleCat.mono_iff_injective _).mp
+  dsimp [subsetPush, AlgebraicTopology.singularChainComplexFunctor,
+    AlgebraicTopology.SSet.singularChainComplexFunctor]
+  apply Limits.MonoCoprod.mono_map'_of_injective
+  intro s t h
+  apply (TopCat.toSSetObjEquiv (TopCat.of A) _).injective
+  ext x
+  exact congrArg (fun u ↦ u x)
+    (congrArg (TopCat.toSSetObjEquiv (TopCat.of X) _) h)
 -- END SEAT AREA
 
 /-- (FB-b3) Pushforwards of subspace chains are carried. -/
