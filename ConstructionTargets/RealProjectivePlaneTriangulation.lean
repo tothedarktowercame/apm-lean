@@ -26,7 +26,9 @@ theorem rp2_t2Space : T2Space RealProjectivePlane := by
 theorem finite_simplicialComplex_space_isCompact
     {n : ℕ} (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
     (hK : K.faces.Finite) : IsCompact K.space := by
-  sorry
+  rw [Geometry.SimplicialComplex.space]
+  exact hK.isCompact_biUnion fun s _ =>
+    s.finite_toSet.isCompact_convexHull ℝ
 
 /-- **LIBRARY (explicit six-vertex model).** There is a finite coordinate realization of
 the standard six-vertex, ten-triangle triangulation of `RP²`, together with a continuous
