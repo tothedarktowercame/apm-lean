@@ -371,7 +371,34 @@ theorem FiniteChainEndomorphism.chainTrace_succ_eq
           LinearMap.trace ℚ (V ⧸ W) (W.mapQ W φ (fun x hx => hW x hx)))
     (M : FiniteChainEndomorphism) (k : ℕ) :
     M.chainTrace (k + 1) = M.cyclesTrace (k + 1) + M.bdriesTrace k := by
-  sorry
+  letI := M.finiteChain (k + 1)
+  letI := M.finiteChain k
+  let d : M.C.X (k + 1) →ₗ[ℚ] M.C.X k := (M.C.d (k + 1) k).hom
+  let e : (M.C.X (k + 1) ⧸ M.cycles (k + 1)) ≃ₗ[ℚ] M.bdries k :=
+    d.quotKerEquivRange
+  have hcomm :
+      e.toLinearMap.comp ((M.cycles (k + 1)).mapQ (M.cycles (k + 1))
+        (M.φ.f (k + 1)).hom (M.cycles_invariant (k + 1))) =
+        ((M.φ.f k).hom.restrict (M.bdries_invariant k)).comp e.toLinearMap := by
+    ext x
+    change d ((M.φ.f (k + 1)).hom x) = (M.φ.f k).hom (d x)
+    have h := congrArg (fun g => g.hom x) (M.φ.comm (k + 1) k)
+    simpa only [ModuleCat.hom_comp, LinearMap.comp_apply] using h
+  have heq :
+      e.conj ((M.cycles (k + 1)).mapQ (M.cycles (k + 1))
+        (M.φ.f (k + 1)).hom (M.cycles_invariant (k + 1))) =
+        (M.φ.f k).hom.restrict (M.bdries_invariant k) := by
+    ext x
+    have h := LinearMap.congr_fun hcomm (e.symm x)
+    rw [LinearEquiv.conj_apply]
+    simp only [LinearMap.comp_apply]
+    convert congrArg Subtype.val h using 1 <;> simp
+  unfold FiniteChainEndomorphism.chainTrace FiniteChainEndomorphism.cyclesTrace
+    FiniteChainEndomorphism.bdriesTrace
+  rw [hT (M.φ.f (k + 1)).hom (M.cycles (k + 1))
+    (M.cycles_invariant (k + 1))]
+  congr 1
+  rw [← heq, LinearMap.trace_conj']
 
 /-- (H) The trace on cycles is the trace on boundaries plus the homology
 trace: `Z k ⧸ B k ≅ homology k` equivariantly (`ShortComplex.moduleCatHomologyIso`
