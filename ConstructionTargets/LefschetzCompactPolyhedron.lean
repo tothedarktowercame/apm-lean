@@ -339,7 +339,26 @@ theorem FiniteChainEndomorphism.cyclesTrace_eq
 /-- (E) Above the bound there are no chains, so the top boundaries vanish. -/
 theorem FiniteChainEndomorphism.bdriesTrace_bound
     (M : FiniteChainEndomorphism) : M.bdriesTrace M.bound = 0 := by
-  sorry
+  letI : Subsingleton (M.C.X (M.bound + 1)) :=
+    M.chainAbove (M.bound + 1) (Nat.lt_succ_self M.bound)
+  have hb : M.bdries M.bound = ⊥ := by
+    apply le_antisymm
+    · rintro x ⟨y, rfl⟩
+      have hy : y = 0 := Subsingleton.elim y 0
+      rw [hy, map_zero]
+      exact Submodule.zero_mem ⊥
+    · exact bot_le
+  letI : Subsingleton (M.bdries M.bound) := by
+    rw [hb]
+    infer_instance
+  unfold FiniteChainEndomorphism.bdriesTrace
+  rw [show (M.φ.f M.bound).hom.restrict (M.bdries_invariant M.bound) = 0 by
+    ext x
+    have hx : (M.φ.f M.bound).hom x ∈ (⊥ : Submodule ℚ (M.C.X M.bound)) := by
+      rw [← hb]
+      exact M.bdries_invariant M.bound x x.property
+    exact hx]
+  simp
 
 lemma hopf_trace_formula_aux_trace_decomposition (M : FiniteChainEndomorphism) :
     ∃ b : ℕ → ℚ,
