@@ -460,7 +460,24 @@ theorem carriedHomotopy_aux_comp_d_carried {o : LinearOrder (Euc n)}
     (hf : ∀ t : FaceIndex K k, FaceCarriedChain K t.1 (f (Finsupp.single t 1)))
     (s : FaceIndex K (k + 1)) :
     FaceCarriedChain K s.1 ((d k ≫ f) (Finsupp.single s 1)) := by
-  sorry
+  classical
+  rcases hd k s with ⟨z, hz, hformula⟩
+  rw [CategoryTheory.comp_apply, hz]
+  apply carried_chainHomotopy_exists_aux_linear_combination K s.1 f
+  · intro t ht
+    exact faceCarriedChain_mono K s.1 t.1 ht _ (hf t)
+  · intro t ht x hx
+    have hzt : z t ≠ 0 := Finsupp.mem_support_iff.mp ht
+    rw [hformula t] at hzt
+    by_contra hxs
+    have hall : ∀ v ∈ s.1, s.1.erase v ≠ t.1 := by
+      intro v hv he
+      have hxe : x ∈ s.1.erase v := by simpa [he] using hx
+      exact hxs (Finset.mem_of_mem_erase hxe)
+    apply hzt
+    apply Finset.sum_eq_zero
+    intro v hv
+    simp [hall v hv]
 -- END SEAT AREA
 
 /-- (R3) Carried subtraction. -/
