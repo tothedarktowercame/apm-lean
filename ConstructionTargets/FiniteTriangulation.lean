@@ -121,12 +121,88 @@ theorem wedgeFaces_isLowerSet {a b : ℕ}
 
 /-- (E1) Faces are affinely independent (subsets of affine-injective images of
 independent sets). -/
+def wedgeFaces_indep_aux_l1 {a b : ℕ} :
+    EuclideanSpace ℝ (Fin a) →ₗ[ℝ] EuclideanSpace ℝ (Fin (a + b)) where
+  toFun x := WithLp.toLp 2 (Fin.append (WithLp.ofLp x) 0)
+  map_add' x y := by
+    apply WithLp.ofLp_injective (p := 2)
+    ext i
+    refine Fin.addCases ?_ ?_ i <;> intro j <;> simp
+  map_smul' c x := by
+    apply WithLp.ofLp_injective (p := 2)
+    ext i
+    refine Fin.addCases ?_ ?_ i <;> intro j <;> simp
+
+def wedgeFaces_indep_aux_l2 {a b : ℕ} :
+    EuclideanSpace ℝ (Fin b) →ₗ[ℝ] EuclideanSpace ℝ (Fin (a + b)) where
+  toFun x := WithLp.toLp 2 (Fin.append 0 (WithLp.ofLp x))
+  map_add' x y := by
+    apply WithLp.ofLp_injective (p := 2)
+    ext i
+    refine Fin.addCases ?_ ?_ i <;> intro j <;> simp
+  map_smul' c x := by
+    apply WithLp.ofLp_injective (p := 2)
+    ext i
+    refine Fin.addCases ?_ ?_ i <;> intro j <;> simp
+
+def wedgeFaces_indep_aux_f1 {a b : ℕ} (v : EuclideanSpace ℝ (Fin a)) :
+    EuclideanSpace ℝ (Fin a) →ᵃ[ℝ] EuclideanSpace ℝ (Fin (a + b)) :=
+  (wedgeFaces_indep_aux_l1 (a := a) (b := b)).toAffineMap.comp
+    (AffineEquiv.constVAdd ℝ (EuclideanSpace ℝ (Fin a)) (-v)).toAffineMap
+
+def wedgeFaces_indep_aux_f2 {a b : ℕ} (v : EuclideanSpace ℝ (Fin b)) :
+    EuclideanSpace ℝ (Fin b) →ᵃ[ℝ] EuclideanSpace ℝ (Fin (a + b)) :=
+  (wedgeFaces_indep_aux_l2 (a := a) (b := b)).toAffineMap.comp
+    (AffineEquiv.constVAdd ℝ (EuclideanSpace ℝ (Fin b)) (-v)).toAffineMap
+
 theorem wedgeFaces_indep {a b : ℕ}
     (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
     (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
     (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) :
     ∀ u ∈ wedgeFaces K₁ K₂ v₁ v₂, AffineIndependent ℝ ((↑) : u → EuclideanSpace ℝ (Fin (a + b))) := by
-  sorry
+  classical
+  intro u hu
+  rcases hu with ⟨s, hs, hus⟩ | ⟨s, hs, hus⟩
+  · let f := wedgeFaces_indep_aux_f1 (b := b) v₁
+    have hf : Function.Injective f := by
+      intro x y h
+      apply wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1_injective v₁
+      simpa [f, wedgeFaces_indep_aux_f1, wedgeFaces_indep_aux_l1,
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1,
+        sub_eq_add_neg, add_comm] using h
+    have heq : ∀ x, f x =
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁ x := by
+      intro x
+      simp [f, wedgeFaces_indep_aux_f1, wedgeFaces_indep_aux_l1,
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1,
+        sub_eq_add_neg, add_comm]
+    have hi := (K₁.indep hs).map' f hf
+    have hr := hi.range
+    apply hr.mono
+    intro z hz
+    simp only [Set.mem_range, Function.comp_apply] at ⊢
+    obtain ⟨x, hxs, rfl⟩ := Finset.mem_image.mp (hus hz)
+    exact ⟨⟨x, hxs⟩, by simp [heq]⟩
+  · let f := wedgeFaces_indep_aux_f2 (a := a) v₂
+    have hf : Function.Injective f := by
+      intro x y h
+      apply wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2_injective v₂
+      simpa [f, wedgeFaces_indep_aux_f2, wedgeFaces_indep_aux_l2,
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2,
+        sub_eq_add_neg, add_comm] using h
+    have heq : ∀ x, f x =
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂ x := by
+      intro x
+      simp [f, wedgeFaces_indep_aux_f2, wedgeFaces_indep_aux_l2,
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2,
+        sub_eq_add_neg, add_comm]
+    have hi := (K₂.indep hs).map' f hf
+    have hr := hi.range
+    apply hr.mono
+    intro z hz
+    simp only [Set.mem_range, Function.comp_apply] at ⊢
+    obtain ⟨x, hxs, rfl⟩ := Finset.mem_image.mp (hus hz)
+    exact ⟨⟨x, hxs⟩, by simp [heq]⟩
 
 /-- (E2) Intersection axiom: same-side faces pull back to `K₁`/`K₂`'s axiom;
 a point in a `j₁`-face and a `j₂`-face is `j₁ v₁ = j₂ v₂ = 0`, a vertex of both
