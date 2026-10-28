@@ -547,6 +547,75 @@ theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_eq {n : ℕ}
 /-- (W2) A positive-weight strict chain inside `t` is the family of positive
 superlevel sets of its vertex coefficients: `q` is constant on each layer
 `sᵢ \ sᵢ₋₁`, strictly larger on deeper layers, and `0` off the top face. -/
+lemma barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel_aux_term_pos {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c)
+    (w : Finset (Euc n) → ℝ) (hw : ∀ s ∈ c, 0 < w s) :
+    ∀ s ∈ c, 0 < w s * (s.card : ℝ)⁻¹ := by
+  intro s hs
+  exact mul_pos (hw s hs) (inv_pos.mpr (by
+    exact_mod_cast (Finset.card_pos.mpr
+      (barycentricFaces_affineIndependent_aux_chain_nonempty K c hc s hs))))
+
+lemma barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel_aux_min {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c)
+    (t : Finset (Euc n)) (hsub : ∀ s ∈ c, s ⊆ t)
+    (w : Finset (Euc n) → ℝ) (hw : ∀ s ∈ c, 0 < w s)
+    (u : Euc n) (s : Finset (Euc n)) (hs : s ∈ c) (hu : u ∈ s)
+    (hmin : ∀ r ∈ c, u ∈ r → s ⊆ r) :
+    0 < barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w u ∧
+      s = t.filter (fun v =>
+        barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w u ≤
+          barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w v) := by
+  classical
+  let p : Finset (Euc n) → ℝ := fun r => w r * (r.card : ℝ)⁻¹
+  let A : Euc n → Finset (Finset (Euc n)) := fun v => c.filter (fun r => v ∈ r)
+  have hp : ∀ r ∈ c, 0 < p r :=
+    barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel_aux_term_pos K c hc w hw
+  have hq (v : Euc n) :
+      barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w v = ∑ r ∈ A v, p r := by
+    simp [barycentricFaces_inter_subset_aux_chain_unique_aux_within_q, A, p]
+  have hsu : s ∈ A u := by simp [A, hs, hu]
+  constructor
+  · rw [hq]
+    exact Finset.sum_pos' (fun r hr => (hp r (by
+      have hr' := hr
+      simp only [A, Finset.mem_filter] at hr'
+      exact hr'.1)).le) ⟨s, hsu, hp s hs⟩
+  · ext v
+    simp only [Finset.mem_filter]
+    constructor
+    · intro hv
+      refine ⟨hsub s hs hv, ?_⟩
+      rw [hq, hq]
+      apply Finset.sum_le_sum_of_subset_of_nonneg
+      · intro r hr
+        simp only [A, Finset.mem_filter] at hr ⊢
+        exact ⟨hr.1, hmin r hr.1 hr.2 hv⟩
+      · intro r hr₁ hr₂
+        exact (hp r (by
+          have hr' := hr₁
+          simp only [A, Finset.mem_filter] at hr'
+          exact hr'.1)).le
+    · rintro ⟨hv, hle⟩
+      by_contra hvs
+      have hAvu : A v ⊆ A u := by
+        intro r hr
+        simp only [A, Finset.mem_filter] at hr ⊢
+        rcases hc.2 r hr.1 s hs (fun h => hvs (h ▸ hr.2)) with hrs | hsr
+        · exact False.elim (hvs (hrs.subset hr.2))
+        · exact ⟨hr.1, hsr.subset hu⟩
+      have hsnot : s ∉ A v := by simp [A, hs, hvs]
+      have hlt : (∑ r ∈ A v, p r) < ∑ r ∈ A u, p r := by
+        exact Finset.sum_lt_sum_of_subset hAvu hsu hsnot (hp s hs)
+          (fun r hr _ => (hp r (by
+            have hr' := hr
+            simp only [A, Finset.mem_filter] at hr'
+            exact hr'.1)).le)
+      rw [hq, hq] at hle
+      exact (not_lt_of_ge hle) hlt
+
 theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c)
@@ -554,7 +623,64 @@ theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel {n 
     (w : Finset (Euc n) → ℝ) (hw : ∀ s ∈ c, 0 < w s) :
     ∀ s : Finset (Euc n), s ∈ c ↔ ∃ u ∈ t, 0 < barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w u ∧
       s = t.filter (fun v => barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w u ≤ barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w v) := by
-  sorry
+  classical
+  intro s
+  constructor
+  · intro hs
+    let d := c.filter (fun r => r ⊂ s)
+    by_cases hd : d.Nonempty
+    · obtain ⟨r, hr, hrmax⟩ := Finset.exists_max_image d Finset.card hd
+      have hrs : r ⊂ s := (Finset.mem_filter.mp hr).2
+      obtain ⟨u, hus, hur⟩ := (Finset.ssubset_iff_of_subset hrs.subset).mp hrs
+      refine ⟨u, hsub s hs hus, ?_⟩
+      apply barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel_aux_min
+        K c hc t hsub w hw u s hs hus
+      intro a ha hua
+      by_cases has : a = s
+      · simpa [has]
+      rcases hc.2 a ha s hs has with hasub | hssub
+      · exfalso
+        apply hur
+        have had : a ∈ d := Finset.mem_filter.mpr ⟨ha, hasub⟩
+        rcases hc.2 a ha r (Finset.mem_filter.mp hr).1 (fun h => by
+          subst h
+          exact hur hua) with har | hra
+        · exact har.subset hua
+        · exact False.elim ((Nat.not_lt_of_ge (hrmax a had)) (Finset.card_lt_card hra))
+      · exact hssub.subset
+    · have hno : ∀ r ∈ c, ¬ r ⊂ s := by
+        intro r hr hrs
+        exact hd ⟨r, Finset.mem_filter.mpr ⟨hr, hrs⟩⟩
+      obtain ⟨u, hus⟩ := barycentricFaces_affineIndependent_aux_chain_nonempty K c hc s hs
+      refine ⟨u, hsub s hs hus, ?_⟩
+      apply barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel_aux_min
+        K c hc t hsub w hw u s hs hus
+      intro r hr hur
+      by_cases hrs : r = s
+      · simpa [hrs]
+      rcases hc.2 r hr s hs hrs with hrs | hsr
+      · exact False.elim (hno r hr hrs)
+      · exact hsr.subset
+  · rintro ⟨u, hut, hqu, s_eq⟩
+    have hAu : (c.filter (fun r => u ∈ r)).Nonempty := by
+      by_contra h
+      have he : c.filter (fun r => u ∈ r) = ∅ := Finset.not_nonempty_iff_eq_empty.mp h
+      simp [barycentricFaces_inter_subset_aux_chain_unique_aux_within_q, he] at hqu
+    obtain ⟨r, hr, hrmin⟩ := Finset.exists_min_image
+      (c.filter (fun r => u ∈ r)) Finset.card hAu
+    have hrc : r ∈ c := (Finset.mem_filter.mp hr).1
+    have hru : u ∈ r := (Finset.mem_filter.mp hr).2
+    have hminimal : ∀ a ∈ c, u ∈ a → r ⊆ a := by
+      intro a ha hua
+      by_cases har : a = r
+      · simpa [har]
+      rcases hc.2 a ha r hrc har with har | hra
+      · exact False.elim ((Nat.not_lt_of_ge
+          (hrmin a (Finset.mem_filter.mpr ⟨ha, hua⟩))) (Finset.card_lt_card har))
+      · exact hra.subset
+    have H := barycentricFaces_inter_subset_aux_chain_unique_aux_within_superlevel_aux_min
+      K c hc t hsub w hw u r hrc hru hminimal
+    exact s_eq.trans H.2.symm ▸ hrc
 
 /-- (U3) Inside one face `t` of `K`, a point determines the strict chain that
 represents it with positive weights: its barycentric coordinate on `v ∈ t` is
