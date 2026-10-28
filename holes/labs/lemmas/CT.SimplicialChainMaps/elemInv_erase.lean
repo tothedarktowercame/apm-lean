@@ -187,7 +187,38 @@ theorem elemInv_erase {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (
     elemInv on om a h = elemInv on om (a.erase v) h +
       ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT u v ∧ @LT.lt (Euc m) om.toLT (h v) (h u))).card +
       ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT v u ∧ @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
-  sorry
+  classical
+  rw [← Finset.insert_erase hv]
+  simp only [elemInv]
+  rw [← Finset.card_disjSum, ← Finset.card_disjSum]
+  apply Finset.card_bij
+    (fun p _ =>
+      if p.1 = v then Sum.inr p.2
+      else if p.2 = v then Sum.inl (Sum.inr p.1)
+      else Sum.inl (Sum.inl p))
+  · simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert,
+      Finset.mem_erase, Finset.mem_disjSum]
+    aesop
+  · intro p₁ hp₁ p₂ hp₂ heq
+    simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert] at hp₁ hp₂
+    split_ifs at heq <;> simp_all [Prod.ext_iff]
+  · intro q hq
+    simp only [Finset.mem_disjSum, Finset.mem_filter, Finset.mem_product,
+      Finset.mem_erase] at hq
+    rcases q with (q | q)
+    · rcases q with (q | q)
+      · refine ⟨q, ?_, ?_⟩
+        · simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert]
+          grind
+        · rcases hq with ⟨x, y, hxy, rfl⟩ <;> simp_all
+      · refine ⟨(q, v), ?_, ?_⟩
+        · simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert]
+          grind
+        · simp_all
+    · refine ⟨(v, q), ?_, ?_⟩
+      · simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert]
+        grind
+      · simp_all
 -- END SEAT AREA
 
 open scoped Classical in
