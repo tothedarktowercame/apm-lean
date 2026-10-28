@@ -1055,7 +1055,106 @@ lemma subdivisionChainMap_commutes_aux_cone_boundary_zero_aux_single {n : ℕ}
     dK' 0 (subdivisionCone o K' b 0 (Finsupp.single u a)) =
       Finsupp.single u a - a •
         Finsupp.single (⟨{b}, hb, by simp⟩ : FaceIndex K' 0) 1 := by
-  sorry
+  classical
+  letI : LinearOrder (Euc n) := o
+  obtain ⟨v, hv⟩ := Finset.card_eq_one.mp u.2.2
+  have hvb : v ≠ b := by
+    rintro rfl; exact hu.1 (by rw [hv]; exact Finset.mem_singleton_self _)
+  let s : FaceIndex K' 1 :=
+    ⟨insert b u.1, hu.2, by rw [Finset.card_insert_of_notMem hu.1, u.2.2]⟩
+  have hcone : subdivisionCone o K' b 0 (Finsupp.single u a) =
+      (a * (-1 : ℚ) ^ (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card) •
+        Finsupp.single s 1 := by
+    simp [subdivisionCone, hu, s, Finsupp.smul_single, mul_comm]
+  rw [hcone, map_smul]
+  erw [Finsupp.smul_single_one]
+  obtain ⟨z, hz, hzt⟩ := hdK' 0 s
+  rw [hz]
+  ext t
+  rw [Finsupp.smul_apply, hzt t]
+  simp only [s, hv]
+  rw [Finset.sum_pair hvb.symm]
+  have e1 : ({b, v} : Finset (Euc n)).erase b = {v} := by
+    ext x; simp only [Finset.mem_erase, Finset.mem_insert, Finset.mem_singleton]
+    constructor
+    · rintro ⟨h1, h2 | h2⟩; exact absurd h2 h1; exact h2
+    · rintro rfl; exact ⟨hvb, Or.inr rfl⟩
+  have e2 : ({b, v} : Finset (Euc n)).erase v = {b} := by
+    ext x; simp only [Finset.mem_erase, Finset.mem_insert, Finset.mem_singleton]
+    constructor
+    · rintro ⟨h1, h2 | h2⟩; exact h2; exact absurd h2 h1
+    · rintro rfl; exact ⟨hvb.symm, Or.inl rfl⟩
+  rw [e1, e2, sort_idxOf_eq_card_lt o _ b (by simp), sort_idxOf_eq_card_lt o _ v (by simp)]
+  have hut : (u = t) ↔ ({v} : Finset (Euc n)) = t.1 := by rw [← hv]; exact Subtype.ext_iff
+  have hbt : ((⟨{b}, hb, by simp⟩ : FaceIndex K' 0) = t) ↔ ({b} : Finset (Euc n)) = t.1 :=
+    Subtype.ext_iff
+  simp only [Finsupp.sub_apply, Finsupp.coe_smul, Pi.smul_apply, Finsupp.single_apply, smul_eq_mul]
+  have hvneb : ({v} : Finset (Euc n)) ≠ {b} := by simpa using hvb
+  rcases lt_or_gt_of_ne hvb with hlt | hgt
+  · have c1 : (({b, v} : Finset (Euc n)).filter fun q => @LT.lt (Euc n) o.toLT q b).card = 1 := by
+      rw [Finset.card_eq_one]; refine ⟨v, ?_⟩; ext x
+      simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]
+      constructor
+      · rintro ⟨rfl | rfl, h⟩; exact absurd h (lt_irrefl _); rfl
+      · rintro rfl; exact ⟨Or.inr rfl, hlt⟩
+    have c2 : (({b, v} : Finset (Euc n)).filter fun q => @LT.lt (Euc n) o.toLT q v).card = 0 := by
+      rw [Finset.card_eq_zero, Finset.filter_eq_empty_iff]
+      rintro x hx; simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+      rcases hx with rfl | rfl
+      · exact not_lt_of_gt hlt
+      · exact lt_irrefl _
+    have c3 : (({v} : Finset (Euc n)).filter fun q => @LT.lt (Euc n) o.toLT q b).card = 1 := by
+      rw [Finset.filter_singleton, if_pos hlt]; rfl
+    rw [c1, c2, c3]
+    by_cases h1 : ({v} : Finset (Euc n)) = t.1
+    · have h2 : ({b} : Finset (Euc n)) ≠ t.1 := fun h => hvneb (h1.trans h.symm)
+      simp only [h1, if_true, h2, if_false]
+      erw [Finsupp.single_apply, if_neg ((hbt.not).mpr h2)]
+      norm_num
+      exact fun h => absurd (hut.mpr h1) h
+    · by_cases h2 : ({b} : Finset (Euc n)) = t.1
+      · simp only [h1, if_false, h2, if_true]
+        erw [Finsupp.single_apply]
+        rw [if_neg ((hut.not).mpr h1)]
+        split_ifs with hh
+        · norm_num
+        · exact absurd (Subtype.ext (by rfl)) hh
+      · simp only [h1, if_false, h2]
+        erw [Finsupp.single_apply, if_neg ((hbt.not).mpr h2)]
+        norm_num
+        exact fun h => absurd h ((hut.not).mpr h1)
+  · have c1 : (({b, v} : Finset (Euc n)).filter fun q => @LT.lt (Euc n) o.toLT q b).card = 0 := by
+      rw [Finset.card_eq_zero, Finset.filter_eq_empty_iff]
+      rintro x hx; simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+      rcases hx with rfl | rfl
+      · exact lt_irrefl _
+      · exact not_lt_of_gt hgt
+    have c2 : (({b, v} : Finset (Euc n)).filter fun q => @LT.lt (Euc n) o.toLT q v).card = 1 := by
+      rw [Finset.card_eq_one]; refine ⟨b, ?_⟩; ext x
+      simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]
+      constructor
+      · rintro ⟨rfl | rfl, h⟩; rfl; exact absurd h (lt_irrefl _)
+      · rintro rfl; exact ⟨Or.inl rfl, hgt⟩
+    have c3 : (({v} : Finset (Euc n)).filter fun q => @LT.lt (Euc n) o.toLT q b).card = 0 := by
+      rw [Finset.filter_singleton, if_neg (not_lt_of_gt hgt)]; rfl
+    rw [c1, c2, c3]
+    by_cases h1 : ({v} : Finset (Euc n)) = t.1
+    · have h2 : ({b} : Finset (Euc n)) ≠ t.1 := fun h => hvneb (h1.trans h.symm)
+      simp only [h1, if_true, h2, if_false]
+      erw [Finsupp.single_apply, if_neg ((hbt.not).mpr h2)]
+      norm_num
+      exact fun h => absurd (hut.mpr h1) h
+    · by_cases h2 : ({b} : Finset (Euc n)) = t.1
+      · simp only [h1, if_false, h2, if_true]
+        erw [Finsupp.single_apply]
+        rw [if_neg ((hut.not).mpr h1)]
+        split_ifs with hh
+        · norm_num
+        · exact absurd (Subtype.ext (by rfl)) hh
+      · simp only [h1, if_false, h2]
+        erw [Finsupp.single_apply, if_neg ((hbt.not).mpr h2)]
+        norm_num
+        exact fun h => absurd h ((hut.not).mpr h1)
 /-
   classical
   obtain ⟨v, hv⟩ := Finset.card_eq_one.mp u.2.2
