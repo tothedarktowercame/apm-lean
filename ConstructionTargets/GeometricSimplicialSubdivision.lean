@@ -1043,7 +1043,24 @@ lemma inducedMap_homotopic_of_star_condition_aux_source_carrier {n : ℕ}
       (x : Euc n) ∈ convexHull ℝ (s : Set (Euc n)) ∧
       ∀ v ∈ s,
         (x : Euc n) ∉ convexHull ℝ ((s.erase v : Finset (Euc n)) : Set (Euc n)) := by
-  sorry
+  classical
+  obtain ⟨s, hs, hxs⟩ := Geometry.SimplicialComplex.mem_space_iff.mp x.2
+  let t : Finset (Euc n) := Caratheodory.minCardFinsetOfMemConvexHull hxs
+  have hts : (t : Set (Euc n)) ⊆ (s : Set (Euc n)) :=
+    Caratheodory.minCardFinsetOfMemConvexHull_subseteq hxs
+  have hxt : (x : Euc n) ∈ convexHull ℝ (t : Set (Euc n)) :=
+    Caratheodory.mem_minCardFinsetOfMemConvexHull hxs
+  have htne : t.Nonempty :=
+    Caratheodory.minCardFinsetOfMemConvexHull_nonempty hxs
+  have htface : t ∈ K.faces := K.down_closed hs (by simpa using hts) htne
+  refine ⟨t, htface, hxt, ?_⟩
+  intro v hv herase
+  have hcard := Caratheodory.minCardFinsetOfMemConvexHull_card_le_card hxs
+    (Set.Subset.trans (by simpa using Finset.erase_subset v t) hts) herase
+  change t.card ≤ (t.erase v).card at hcard
+  rw [Finset.card_erase_of_mem hv] at hcard
+  have htpos : 0 < t.card := Finset.card_pos.mpr htne
+  omega
 
 lemma inducedMap_homotopic_of_star_condition_aux_target_carrier {m : ℕ}
     (L : Geometry.SimplicialComplex ℝ (Euc m)) (y : L.space)
