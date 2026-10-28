@@ -279,7 +279,29 @@ theorem barycentricFaces_inter_subset_aux_chain_unique_aux_carrier {n : ℕ}
     (hi₀ : ∀ v ∈ t₀, x ∉ convexHull ℝ ((t₀.erase v : Finset (Euc n)) : Set (Euc n)))
     (hi₁ : ∀ v ∈ t₁, x ∉ convexHull ℝ ((t₁.erase v : Finset (Euc n)) : Set (Euc n))) :
     t₀ = t₁ := by
-  sorry
+  apply Finset.Subset.antisymm
+  · intro v hv₀
+    by_contra hv₁
+    apply hi₀ v hv₀
+    have hx : x ∈ convexHull ℝ ((t₀ ∩ t₁ : Finset (Euc n)) : Set (Euc n)) := by
+      simpa only [Finset.coe_inter] using
+        (K.convexHull_inter_convexHull ht₀ ht₁ ▸ ⟨hx₀, hx₁⟩)
+    exact convexHull_mono (by
+      intro y hy
+      simp only [Finset.coe_inter, Set.mem_inter_iff, Finset.mem_coe] at hy
+      simp only [Finset.coe_erase, Set.mem_diff, Finset.mem_coe, Set.mem_singleton_iff]
+      exact ⟨hy.1, fun hyv ↦ hv₁ (hyv ▸ hy.2)⟩) hx
+  · intro v hv₁
+    by_contra hv₀
+    apply hi₁ v hv₁
+    have hx : x ∈ convexHull ℝ ((t₀ ∩ t₁ : Finset (Euc n)) : Set (Euc n)) := by
+      simpa only [Finset.coe_inter] using
+        (K.convexHull_inter_convexHull ht₀ ht₁ ▸ ⟨hx₀, hx₁⟩)
+    exact convexHull_mono (by
+      intro y hy
+      simp only [Finset.coe_inter, Set.mem_inter_iff, Finset.mem_coe] at hy
+      simp only [Finset.coe_erase, Set.mem_diff, Finset.mem_coe, Set.mem_singleton_iff]
+      exact ⟨hy.2, fun hyv ↦ hv₀ (hyv ▸ hy.1)⟩) hx
 -- END SEAT AREA
 
 /-- (U3) Inside one face `t` of `K`, a point determines the strict chain that
