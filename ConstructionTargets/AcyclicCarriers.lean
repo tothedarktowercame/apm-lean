@@ -154,7 +154,37 @@ theorem affineComparison_degreeZero_eq {n : ℕ}
     (cmp₁ cmp₂ : ∀ k, FaceModuleCat K k ⟶ (SingularQChains K).X k)
     (hcmp₁ : IsAffineComparison K cmp₁) (hcmp₂ : IsAffineComparison K cmp₂) :
     cmp₁ 0 = cmp₂ 0 := by
-  sorry
+  apply ModuleCat.hom_ext
+  apply Finsupp.lhom_ext'
+  intro s
+  apply LinearMap.ext
+  intro a
+  obtain ⟨σ₁, hσ₁, hrange₁⟩ := hcmp₁ 0 s
+  obtain ⟨σ₂, hσ₂, hrange₂⟩ := hcmp₂ 0 s
+  obtain ⟨v, hv⟩ := Finset.card_eq_one.mp (by simpa using s.2.2)
+  have hmaps : continuousMapOfSingularSimplex 0 σ₁ =
+      continuousMapOfSingularSimplex 0 σ₂ := by
+    apply ContinuousMap.ext
+    intro x
+    apply Subtype.ext
+    have h₁ : continuousMapOfSingularSimplex 0 σ₁ x ∈
+        Set.range (continuousMapOfSingularSimplex 0 σ₁) := ⟨x, rfl⟩
+    have h₂ : continuousMapOfSingularSimplex 0 σ₂ x ∈
+        Set.range (continuousMapOfSingularSimplex 0 σ₂) := ⟨x, rfl⟩
+    rw [hrange₁, hv, Finset.coe_singleton, convexHull_singleton] at h₁
+    rw [hrange₂, hv, Finset.coe_singleton, convexHull_singleton] at h₂
+    exact h₁.trans h₂.symm
+  have hsigma : σ₁ = σ₂ := by
+    have h₁ : singularSimplexOfContinuousMap (TopCat.of K.space) 0
+        (continuousMapOfSingularSimplex 0 σ₁) = σ₁ :=
+      Equiv.symm_apply_apply _ _
+    have h₂ : singularSimplexOfContinuousMap (TopCat.of K.space) 0
+        (continuousMapOfSingularSimplex 0 σ₂) = σ₂ :=
+      Equiv.symm_apply_apply _ _
+    rw [← h₁, ← h₂, hmaps]
+  change cmp₁ 0 (Finsupp.single s a) = cmp₂ 0 (Finsupp.single s a)
+  rw [show Finsupp.single s a = a • Finsupp.single s 1 by simp]
+  rw [map_smul, map_smul, hσ₁, hσ₂, hsigma]
 
 /-- The inductive acyclic-carrier construction.  The filling operation is an
 explicit hypothesis so this leaf is independent of its topological proof.
