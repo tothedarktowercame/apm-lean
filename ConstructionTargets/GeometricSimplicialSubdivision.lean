@@ -846,10 +846,34 @@ theorem barycentricSubdivision_space_aux_subset {n : ℕ}
     · simpa using (Finset.card_pos.mpr hsne : 0 < s.card)
   exact convexHull_mono (by simpa using hst) hb
 
+/-- Flag decomposition (suggested route, claude-14): induction on `t.card`.  If
+`x = barycenter t`, take `{t}`.  Otherwise the ray from `barycenter t` through `x`
+leaves `hull t` at a point `y` of a proper face `t' ⊂ t` (a face of `K`: faces are
+closed under subsets), with `x ∈ segment (barycenter t) y`; by induction `y` lies in
+the hull of a chain `c'` of faces of `t'`, and `insert t c'` is a strict chain whose
+hull contains `x`. -/
+lemma barycentricSubdivision_space_aux_superset_aux_flag_decomposition {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (t : Finset (Euc n)) (ht : t ∈ K.faces) (x : Euc n)
+    (hxt : x ∈ convexHull ℝ (t : Set (Euc n))) :
+    ∃ c : Finset (Finset (Euc n)), IsStrictFaceChain K c ∧ c.Nonempty ∧
+      x ∈ convexHull ℝ ((c.image barycenter : Finset (Euc n)) : Set (Euc n)) := by
+  sorry
+
 theorem barycentricSubdivision_space_aux_superset {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hi hd hx) :
     K.space ⊆ (barycentricSubdivision K hi hd hx).space := by
-  sorry
+  classical
+  intro x hxK
+  rw [Geometry.SimplicialComplex.mem_space_iff] at hxK ⊢
+  obtain ⟨t, ht, hxt⟩ := hxK
+  obtain ⟨c, hc, hcne, hxc⟩ :=
+    barycentricSubdivision_space_aux_superset_aux_flag_decomposition K t ht x hxt
+  refine ⟨c.image barycenter, ?_, hxc⟩
+  constructor
+  · exact ⟨c, hc, rfl⟩
+  · simpa only [Set.mem_singleton_iff] using
+      (Finset.nonempty_iff_ne_empty.mp (Finset.image_nonempty.mpr hcne))
 
 theorem barycentricSubdivision_space {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hi hd hx) :
