@@ -1402,6 +1402,72 @@ theorem subdivisionChainMap_commutes_aux_facet_admissible {n k : ℕ}
     · rw [Finset.image_insert, ← huimage]
   · simp
 
+/-- Distinct members of a strict face chain have distinct barycenters (the
+larger face's barycenter is off the affine span of the smaller one). -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_bary_injOn {n : ℕ}
+    (K : GSC n) (c : Finset (Finset (Euc n)))
+    (hc : GeometricSimplicialSubdivision.IsStrictFaceChain K c) :
+    Set.InjOn GeometricSimplicialSubdivision.barycenter (c : Set (Finset (Euc n))) := by
+  sorry
+
+/-- A strict face chain of `k + 2` faces inside a `(k+1)`-face `s` is maximal: it
+contains `s`, and the rest lies in the facet opposite the new vertex of `s`. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_top {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
+    (c : Finset (Finset (Euc n)))
+    (hc : GeometricSimplicialSubdivision.IsStrictFaceChain K c)
+    (hcs : c ⊆ s.1.powerset) (hcard : c.card = k + 2) :
+    s.1 ∈ c ∧ flagNewVertex o c s.1 ∈ s.1 ∧
+      c.erase s.1 ⊆ (s.1.erase (flagNewVertex o c s.1)).powerset := by
+  sorry
+
+/-- Converse of `_aux_top`: topping a maximal chain of the facet `s.erase v`
+with `s` gives a strict face chain whose new vertex at `s` is `v`. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_insert {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
+    (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hc' : GeometricSimplicialSubdivision.IsStrictFaceChain K c')
+    (hcs : c' ⊆ (s.1.erase v).powerset) (hcard : c'.card = k + 1) :
+    GeometricSimplicialSubdivision.IsStrictFaceChain K (insert s.1 c') ∧ s.1 ∉ c' ∧
+      flagNewVertex o (insert s.1 c') s.1 = v := by
+  sorry
+
+/-- Sign recursion: topping a maximal chain `c'` of `s.erase v` with `s`
+multiplies `flagSign` by the deletion sign of `v` and the cone insertion sign
+of `barycenter s`.  (New pairs `(t, s)`: `v` precedes the new vertices of the
+`(k+1) - idx v` larger vertices; `barycenter s` precedes the `(k+1) - #lt`
+larger barycenters; `2(k+1)` cancels.) -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
+    (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hc' : GeometricSimplicialSubdivision.IsStrictFaceChain K c')
+    (hcs : c' ⊆ (s.1.erase v).powerset) (hcard : c'.card = k + 1) :
+    flagSign o (insert s.1 c') =
+      (-1 : ℚ) ^ ((s.1.sort o.le).idxOf v) *
+        (-1 : ℚ) ^ ((c'.image GeometricSimplicialSubdivision.barycenter).filter fun q =>
+          @LT.lt (Euc n) o.toLT q (GeometricSimplicialSubdivision.barycenter s.1)).card *
+        flagSign o c' := by
+  sorry
+
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n)
+    (sd : ∀ j, FaceModuleCat K j ⟶ FaceModuleCat (barycentricStep K) j)
+    (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd)
+    (s : FaceIndex K (k + 1)) (u : FaceIndex (barycentricStep K) (k + 1)) : by
+    classical
+    exact
+    (∑ c ∈ s.1.powerset.powerset,
+      if GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+          u.1 = c.image GeometricSimplicialSubdivision.barycenter then
+        flagSign o c else 0) =
+      (∑ v ∈ s.1.attach,
+        (-1 : ℚ) ^ ((s.1.sort o.le).idxOf v.1) •
+          subdivisionCone o (barycentricStep K)
+            (GeometricSimplicialSubdivision.barycenter s.1) k
+            (sd k (Finsupp.single
+              (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1))) u := by
+  sorry
+
 /-- Recursive cone formula for the canonical flag subdivision of a non-vertex
 face. -/
 theorem subdivisionChainMap_commutes_aux_cone_formula {n k : ℕ}
@@ -1416,7 +1482,11 @@ theorem subdivisionChainMap_commutes_aux_cone_formula {n k : ℕ}
             (GeometricSimplicialSubdivision.barycenter s.1) k
             (sd k (Finsupp.single
               (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1)) := by
-  sorry
+  classical
+  ext u
+  obtain ⟨z, hz, hcoeff⟩ := hsd (k + 1) s
+  rw [hz, hcoeff]
+  exact subdivisionChainMap_commutes_aux_cone_formula_aux_coeff o K sd hsd s u
 
 /-- Formal induction assembling the cone formula and cone-boundary identities.
 The sign-bearing geometric facts are supplied explicitly so this lemma is
