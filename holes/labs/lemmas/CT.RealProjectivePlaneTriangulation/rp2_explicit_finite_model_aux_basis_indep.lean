@@ -202,7 +202,13 @@ def basisVertex (N : ℕ) (i : Fin N) : EuclideanSpace ℝ (Fin N) :=
 lemma rp2_explicit_finite_model_aux_basis_indep {N : ℕ} (s : Finset (Fin N)) :
     AffineIndependent ℝ
       ((↑) : ↥(s.image (basisVertex N)) → EuclideanSpace ℝ (Fin N)) := by
-  sorry
+  apply LinearIndependent.affineIndependent
+  rw [linearIndependent_subtype_iff]
+  apply EuclideanSpace.orthonormal_single.linearIndependent.linearIndepOn_id.mono
+  intro x hx
+  simp only [Finset.mem_coe, Finset.mem_image] at hx
+  obtain ⟨i, _, rfl⟩ := hx
+  exact ⟨i, rfl⟩
 -- END SEAT AREA
 
 /-- Convex hulls of basis-vertex faces meet in the hull of the common face
