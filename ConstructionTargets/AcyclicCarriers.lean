@@ -381,6 +381,83 @@ lemma carried_chainHomotopy_exists_aux_linear_combination {n k l : ℕ}
           exact False.elim (htx hu)
         · simpa [Finsupp.single_apply, h, Finsupp.mem_support_iff] using hu
 
+section CarriedHomotopy
+
+variable {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+
+/-- One stage of the carried homotopy: two consecutive components, both carried,
+satisfying the homotopy equation in degree `k + 1`. -/
+structure CarriedStage (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (cmp₁ cmp₂ : ∀ k, FaceModuleCat K k ⟶ (SingularQChains K).X k) (k : ℕ) where
+  f : FaceModuleCat K k ⟶ (SingularQChains K).X (k + 1)
+  f' : FaceModuleCat K (k + 1) ⟶ (SingularQChains K).X (k + 2)
+  cf : ∀ s : FaceIndex K k, FaceCarriedChain K s.1 (f (Finsupp.single s 1))
+  cf' : ∀ s : FaceIndex K (k + 1), FaceCarriedChain K s.1 (f' (Finsupp.single s 1))
+  eq : cmp₁ (k + 1) - cmp₂ (k + 1) = d k ≫ f + f' ≫ (SingularQChains K).d (k + 2) (k + 1)
+
+/-- (R1) The difference of two face-carried comparisons is carried. -/
+theorem carriedHomotopy_aux_diff_carried
+    (cmp₁ cmp₂ : ∀ k, FaceModuleCat K k ⟶ (SingularQChains K).X k)
+    (hcmp₁ : IsAffineComparison K cmp₁) (hcmp₂ : IsAffineComparison K cmp₂)
+    {k : ℕ} (s : FaceIndex K k) :
+    FaceCarriedChain K s.1 ((cmp₁ k - cmp₂ k) (Finsupp.single s 1)) := by
+  sorry
+
+/-- (R2) A carried map composed after the signed-deletion differential is carried
+on each face (the boundary faces of `s` are subfaces). -/
+theorem carriedHomotopy_aux_comp_d_carried {o : LinearOrder (Euc n)}
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hd : IsSignedDeletion o K d)
+    {k l : ℕ} (f : FaceModuleCat K k ⟶ (SingularQChains K).X l)
+    (hf : ∀ t : FaceIndex K k, FaceCarriedChain K t.1 (f (Finsupp.single t 1)))
+    (s : FaceIndex K (k + 1)) :
+    FaceCarriedChain K s.1 ((d k ≫ f) (Finsupp.single s 1)) := by
+  sorry
+
+/-- (R3) Carried subtraction. -/
+theorem carriedHomotopy_aux_sub {k : ℕ} (s : Finset (Euc n)) (x y : (SingularQChains K).X k)
+    (hx : FaceCarriedChain K s x) (hy : FaceCarriedChain K s y) :
+    FaceCarriedChain K s (x - y) := by
+  sorry
+
+theorem carriedHomotopy_aux_fill
+    (hfill : ∀ (k : ℕ) (s : FaceIndex K k) (z : (SingularQChains K).X k),
+      FaceCarriedChain K s.1 z → (SingularQChains K).d k (k - 1) z = 0 →
+      0 < k → ∃ w : (SingularQChains K).X (k + 1),
+        FaceCarriedChain K s.1 w ∧ (SingularQChains K).d (k + 1) k w = z)
+    {k : ℕ} (g : FaceModuleCat K (k + 1) ⟶ (SingularQChains K).X (k + 1))
+    (hg : ∀ s : FaceIndex K (k + 1), FaceCarriedChain K s.1 (g (Finsupp.single s 1)))
+    (hcyc : g ≫ (SingularQChains K).d (k + 1) k = 0) :
+    ∃ f : FaceModuleCat K (k + 1) ⟶ (SingularQChains K).X (k + 2),
+      (∀ s : FaceIndex K (k + 1), FaceCarriedChain K s.1 (f (Finsupp.single s 1))) ∧
+        f ≫ (SingularQChains K).d (k + 2) (k + 1) = g := by
+  have hw : ∀ s : FaceIndex K (k + 1), ∃ w : (SingularQChains K).X (k + 2),
+      FaceCarriedChain K s.1 w ∧
+        (SingularQChains K).d (k + 2) (k + 1) w = g (Finsupp.single s 1) := by
+    intro s
+    refine hfill (k + 1) s _ (hg s) ?_ (Nat.succ_pos k)
+    have := congrArg (fun φ => φ (Finsupp.single s 1)) hcyc
+    simpa using this
+  choose w hwc hwd using hw
+  let f : FaceModuleCat K (k + 1) ⟶ (SingularQChains K).X (k + 2) :=
+    ModuleCat.ofHom (Finsupp.lsum ℚ (fun s : FaceIndex K (k + 1) =>
+      LinearMap.toSpanSingleton ℚ ((SingularQChains K).X (k + 2)) (w s)))
+  have hfs : ∀ s, f (Finsupp.single s 1) = w s := by
+    intro s
+    change (Finsupp.lsum ℚ (fun s : FaceIndex K (k + 1) =>
+      LinearMap.toSpanSingleton ℚ ((SingularQChains K).X (k + 2)) (w s)))
+        (Finsupp.single s 1) = _
+    rw [Finsupp.lsum_single]
+    simp
+  refine ⟨f, fun s => by rw [hfs]; exact hwc s, ?_⟩
+  apply ModuleCat.hom_ext
+  apply Finsupp.lhom_ext'
+  intro s
+  apply LinearMap.ext_ring
+  simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply, ModuleCat.hom_comp]
+  rw [hfs, hwd]
+
+end CarriedHomotopy
+
 /- Second route note (claude-14, after a second partial): `Homotopy.mkInductive`
 CANNOT be used as is — its `succ` must work for an arbitrary previous component
 `p.2.1`, but filling needs `p.2.1` to be carried (else the cycle is not in a
@@ -417,6 +494,67 @@ theorem carried_chainHomotopy_exists {n : ℕ}
         (j + 2) (j + 1) j) cmp₁ hchain₁)
       (ChainComplex.ofHom _ _ hdd _ _ (fun j ↦ (SingularQChains K).d_comp_d
         (j + 2) (j + 1) j) cmp₂ hchain₂)) := by
-  sorry
+  classical
+  have hbase : ∃ f1 : FaceModuleCat K 1 ⟶ (SingularQChains K).X 2,
+      (∀ s : FaceIndex K 1, FaceCarriedChain K s.1 (f1 (Finsupp.single s 1))) ∧
+        f1 ≫ (SingularQChains K).d 2 1 = cmp₁ 1 - cmp₂ 1 := by
+    apply carriedHomotopy_aux_fill K hfill (cmp₁ 1 - cmp₂ 1)
+      (fun s => carriedHomotopy_aux_diff_carried K cmp₁ cmp₂ hcmp₁ hcmp₂ s)
+    rw [Preadditive.sub_comp, hchain₁ 0, hchain₂ 0, hzero, sub_self]
+  let S0 : CarriedStage K d cmp₁ cmp₂ 0 :=
+    ⟨0, hbase.choose, fun s => by simpa using carried_chainHomotopy_exists_aux_zero K s.1,
+      hbase.choose_spec.1, by
+        simp only [Limits.comp_zero, zero_add]
+        exact hbase.choose_spec.2.symm⟩
+  have hstep : ∀ k (S : CarriedStage K d cmp₁ cmp₂ k),
+      ∃ f'' : FaceModuleCat K (k + 2) ⟶ (SingularQChains K).X (k + 3),
+        (∀ s : FaceIndex K (k + 2), FaceCarriedChain K s.1 (f'' (Finsupp.single s 1))) ∧
+        cmp₁ (k + 2) - cmp₂ (k + 2) =
+          d (k + 1) ≫ S.f' + f'' ≫ (SingularQChains K).d (k + 3) (k + 2) := by
+    intro k S
+    obtain ⟨f'', hc, hf⟩ := carriedHomotopy_aux_fill K hfill
+      ((cmp₁ (k + 2) - cmp₂ (k + 2)) - d (k + 1) ≫ S.f')
+      (fun s => carriedHomotopy_aux_sub K s.1 _ _
+        (carriedHomotopy_aux_diff_carried K cmp₁ cmp₂ hcmp₁ hcmp₂ s)
+        (carriedHomotopy_aux_comp_d_carried K d hd S.f' S.cf' s))
+      (by
+        rw [Preadditive.sub_comp, Preadditive.sub_comp, hchain₁ (k + 1), hchain₂ (k + 1),
+          ← Preadditive.comp_sub, S.eq, Preadditive.comp_add, ← Category.assoc (d (k + 1)) (d k),
+          hdd, Limits.zero_comp, zero_add, Category.assoc, sub_self])
+    exact ⟨f'', hc, by rw [hf]; abel⟩
+  let step : ∀ k, CarriedStage K d cmp₁ cmp₂ k → CarriedStage K d cmp₁ cmp₂ (k + 1) :=
+    fun k S => ⟨S.f', (hstep k S).choose, S.cf', (hstep k S).choose_spec.1,
+      (hstep k S).choose_spec.2⟩
+  let F : ∀ k, CarriedStage K d cmp₁ cmp₂ k :=
+    fun k => Nat.rec (motive := fun k => CarriedStage K d cmp₁ cmp₂ k) S0 step k
+  have hF0 : (F 0).f = 0 := rfl
+  have hF : ∀ k, (F (k + 1)).f = (F k).f' := fun k => rfl
+  let hom : ∀ i j, FaceModuleCat K i ⟶ (SingularQChains K).X j := fun i j =>
+    if h : i + 1 = j then (F i).f ≫ eqToHom (congrArg (fun m => (SingularQChains K).X m) h)
+    else 0
+  refine ⟨{ hom := hom, zero := ?_, comm := ?_ }⟩
+  · intro i j hij
+    simp only [hom]
+    split_ifs with h
+    · exact absurd (by simp [ComplexShape.down_Rel]; omega) hij
+    · rfl
+  · intro i
+    cases i with
+    | zero =>
+      rw [Homotopy.dNext_zero_chainComplex, Homotopy.prevD_chainComplex]
+      simp only [hom, dif_pos]
+      rw [ChainComplex.of_d]
+      simp only [hF0, Limits.zero_comp, zero_add, eqToHom_refl, Category.comp_id]
+      erw [Limits.zero_comp, zero_add]
+      exact hzero
+    | succ i =>
+      rw [Homotopy.dNext_succ_chainComplex, Homotopy.prevD_chainComplex]
+      simp only [hom, dif_pos]
+      rw [ChainComplex.of_d, ChainComplex.of_d]
+      simp only [eqToHom_refl, Category.comp_id, hF]
+      change cmp₁ (i + 1) = d i ≫ (F i).f + (F i).f' ≫ (SingularQChains K).d (i + 2) (i + 1) +
+        cmp₂ (i + 1)
+      rw [← (F i).eq]
+      abel
 
 end ConstructionTargets.AcyclicCarriers
