@@ -258,11 +258,62 @@ theorem sort_idxOf_eq_card_lt {n : ℕ} (on : LinearOrder (Euc n))
 
 open scoped Classical in
 /-- (P3) The same for the image, through the injective `h`. -/
+theorem image_sort_idxOf_eq_card_lt_aux {α : Type*} [DecidableEq α] (o : LinearOrder α)
+    (l : List α) (v : α) (hv : v ∈ l) (hs : l.Pairwise o.le) (hn : l.Nodup) :
+    l.idxOf v = (l.toFinset.filter (fun x => @LT.lt α o.toLT x v)).card := by
+  letI := o
+  induction l with
+  | nil => simp at hv
+  | cons x l ih =>
+      cases hs with
+      | cons hrel hs =>
+       cases hn with
+       | cons hnotmem hn =>
+      simp only [List.mem_cons] at hv
+      rcases hv with rfl | hv
+      · have hnot : ∀ y ∈ l, ¬y < v := by
+          intro y hy hyx
+          exact (not_lt_of_ge (hrel y hy)) hyx
+        simp only [List.idxOf_cons_self, List.toFinset_cons, Finset.filter_insert,
+          lt_self_iff_false, if_false]
+        exact (Finset.card_eq_zero.mpr (by
+          rw [Finset.filter_eq_empty_iff]
+          intro y hy
+          exact hnot y (by simpa using hy))).symm
+      · have hxl : x ≤ v := hrel v hv
+        have hxv : x < v := lt_of_le_of_ne hxl (by
+          intro h
+          subst x
+          exact (hnotmem v hv) rfl)
+        rw [List.idxOf_cons_ne l (ne_of_lt hxv)]
+        simp only [List.toFinset_cons, Finset.filter_insert, hxv, if_true]
+        rw [Finset.card_insert_of_notMem]
+        · simp [ih hv hs hn]
+        · intro hx
+          rw [Finset.mem_filter] at hx
+          exact hnotmem x (by simpa using hx.1) rfl
+
 theorem image_sort_idxOf_eq_card_lt {n m : ℕ} (om : LinearOrder (Euc m))
     (a : Finset (Euc n)) (h : Euc n → Euc m) (hinj : Set.InjOn h a)
     (v : Euc n) (hv : v ∈ a) :
     ((a.image h).sort om.le).idxOf (h v) = (a.filter (fun u => @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
-  sorry
+  letI := om
+  rw [image_sort_idxOf_eq_card_lt_aux om ((a.image h).sort om.le) (h v)
+    (by simpa using ⟨v, hv, rfl⟩) ((a.image h).pairwise_sort (· ≤ ·))
+    (Finset.sort_nodup _ _)]
+  rw [Finset.sort_toFinset]
+  have heq : ((a.image h).filter (fun z => z < h v)) =
+      (a.filter (fun u => h u < h v)).image h := by
+    ext z
+    simp only [Finset.mem_filter, Finset.mem_image]
+    constructor
+    · rintro ⟨⟨u, hu, rfl⟩, huv⟩
+      exact ⟨u, ⟨hu, huv⟩, rfl⟩
+    · rintro ⟨u, ⟨hu, huv⟩, rfl⟩
+      exact ⟨⟨u, hu, rfl⟩, huv⟩
+  rw [heq, Finset.card_image_iff.mpr]
+  intro x hx y hy hxy
+  exact hinj (Finset.mem_filter.mp hx).1 (Finset.mem_filter.mp hy).1 hxy
 
 open scoped Classical in
 /-- (P4) The parity count: with `A = #{u <_on v}`, `B = #{h u <_om h v}`,
