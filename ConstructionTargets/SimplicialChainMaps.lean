@@ -118,6 +118,60 @@ lemma vertexChainMap_commutes_aux_ext {n m k : ℕ}
   ext s a
   exact congrArg (fun x => x a) (hfg s)
 
+lemma vertexChainMap_commutes_aux_generator_aux_boundaryK {n k : ℕ}
+    (on : LinearOrder (Euc n)) (K : GSC n)
+    (dK : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hdK : IsSignedDeletion on K dK) (s : FaceIndex K (k + 1)) :
+    dK k (Finsupp.single s 1) =
+      ∑ v ∈ s.1.attach, (-1 : ℚ) ^ ((s.1.sort on.le).idxOf v.1) •
+        Finsupp.single
+          (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1 := by
+  exact signedDeletion_sq_zero_aux_generator_aux_boundary on K dK hdK s
+
+lemma vertexChainMap_commutes_aux_generator_aux_boundaryL {m k : ℕ}
+    (om : LinearOrder (Euc m)) (L : GSC m)
+    (dL : ∀ k, FaceModuleCat L (k + 1) ⟶ FaceModuleCat L k)
+    (hdL : IsSignedDeletion om L dL) (t : FaceIndex L (k + 1)) :
+    dL k (Finsupp.single t 1) =
+      ∑ v ∈ t.1.attach, (-1 : ℚ) ^ ((t.1.sort om.le).idxOf v.1) •
+        Finsupp.single
+          (signedDeletion_sq_zero_aux_generator_aux_erase L t v.1 v.2) 1 := by
+  exact signedDeletion_sq_zero_aux_generator_aux_boundary om L dL hdL t
+
+/-- (VG1) `h` injective on `s`: deleting a vertex commutes with taking images,
+and the sorting signs agree (`sortingSign` of `s.erase v` times the position sign
+in `s` equals the position sign of `h v` in `h '' s` times `sortingSign` of `s`). -/
+theorem vertexChainMap_commutes_aux_generator_aux_injective {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (dL : ∀ k, FaceModuleCat L (k+1) ⟶ FaceModuleCat L k)
+    (hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k)
+    (hdK : IsSignedDeletion on K dK) (hdL : IsSignedDeletion om L dL)
+    (hhm : IsVertexChainMap on om K L h hm) (k : ℕ)
+    (s : FaceIndex K (k + 1))
+    (hinj : (s.1.image h).card = k + 2) :
+    dL k (hm (k + 1) (Finsupp.single s 1)) =
+      hm k (dK k (Finsupp.single s 1)) := by
+  sorry
+
+/-- (VG2) `h` collapses `s`: the left side is `0`; on the right the deleted
+faces with injective image come in pairs (delete either of two vertices with the
+same image) whose terms cancel, and all others map to `0`. -/
+theorem vertexChainMap_commutes_aux_generator_aux_collapse {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (dL : ∀ k, FaceModuleCat L (k+1) ⟶ FaceModuleCat L k)
+    (hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k)
+    (hdK : IsSignedDeletion on K dK) (hdL : IsSignedDeletion om L dL)
+    (hhm : IsVertexChainMap on om K L h hm) (k : ℕ)
+    (s : FaceIndex K (k + 1))
+    (hcol : (s.1.image h).card ≠ k + 2) :
+    dL k (hm (k + 1) (Finsupp.single s 1)) =
+      hm k (dK k (Finsupp.single s 1)) := by
+  sorry
+
 lemma vertexChainMap_commutes_aux_generator {n m : ℕ}
     (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
     (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
@@ -129,7 +183,11 @@ lemma vertexChainMap_commutes_aux_generator {n m : ℕ}
     (s : FaceIndex K (k + 1)) :
     dL k (hm (k + 1) (Finsupp.single s 1)) =
       hm k (dK k (Finsupp.single s 1)) := by
-  sorry
+  by_cases hinj : (s.1.image h).card = k + 2
+  · exact vertexChainMap_commutes_aux_generator_aux_injective on om K L h dK dL hm
+      hdK hdL hhm k s hinj
+  · exact vertexChainMap_commutes_aux_generator_aux_collapse on om K L h dK dL hm
+      hdK hdL hhm k s hinj
 
 theorem vertexChainMap_commutes {n m : ℕ} (on : LinearOrder (Euc n))
     (om : LinearOrder (Euc m)) (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
