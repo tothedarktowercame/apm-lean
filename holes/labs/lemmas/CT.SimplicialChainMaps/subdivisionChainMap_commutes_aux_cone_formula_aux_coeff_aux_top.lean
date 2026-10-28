@@ -1427,6 +1427,16 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_bary_injOn {n 
 /-- A strict face chain of `k + 2` faces inside a `(k+1)`-face `s` is maximal: it
 contains `s`, and the rest lies in the facet opposite the new vertex of `s`. -/
 -- BEGIN SEAT AREA
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_top_aux_card_inj {n : ℕ}
+    (K : GSC n) (c : Finset (Finset (Euc n)))
+    (hc : GeometricSimplicialSubdivision.IsStrictFaceChain K c) :
+    Set.InjOn Finset.card (c : Set (Finset (Euc n))) := by
+  intro a ha b hb hab
+  by_contra hne
+  rcases hc.2 a ha b hb hne with h | h
+  · exact (Finset.card_lt_card h).ne hab
+  · exact (Finset.card_lt_card h).ne' hab
+
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_top {n k : ℕ}
     (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
     (c : Finset (Finset (Euc n)))
@@ -1434,7 +1444,113 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_top {n k : ℕ
     (hcs : c ⊆ s.1.powerset) (hcard : c.card = k + 2) :
     s.1 ∈ c ∧ flagNewVertex o c s.1 ∈ s.1 ∧
       c.erase s.1 ⊆ (s.1.erase (flagNewVertex o c s.1)).powerset := by
-  sorry
+  have hscard : s.1.card = k + 2 := s.2.2
+  have hcinj := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_top_aux_card_inj K c hc
+  have himage : (c.image Finset.card).card = k + 2 := by
+    rw [Finset.card_image_iff.mpr hcinj, hcard]
+  have htop : s.1 ∈ c := by
+    by_contra hs
+    have hsub : c.image Finset.card ⊆ Finset.Icc 1 (k + 1) := by
+      intro m hm
+      obtain ⟨t, htc, rfl⟩ := Finset.mem_image.1 hm
+      have htne : t.Nonempty := K.nonempty_of_mem_faces (hc.1 t htc)
+      have htle := Finset.card_le_card (Finset.mem_powerset.1 (hcs htc))
+      have htlt : t.card < s.1.card := lt_of_le_of_ne htle (fun h => by
+        have heq := Finset.eq_of_subset_of_card_le
+          (Finset.mem_powerset.1 (hcs htc)) h.symm.le
+        exact hs (heq ▸ htc))
+      rw [hscard] at htlt
+      simp only [Finset.mem_Icc]
+      constructor
+      · exact Finset.card_pos.2 htne
+      · exact Nat.lt_succ_iff.1 (by simpa [Nat.add_assoc] using htlt)
+    have hbad : k + 2 ≤ k + 1 := by
+      simpa [himage, Nat.card_Icc] using Finset.card_le_card hsub
+    omega
+  let d := c.erase s.1
+  have hdcard : d.card = k + 1 := by
+    dsimp [d]
+    rw [Finset.card_erase_of_mem htop, hcard]
+    omega
+  have hdsub : d.image Finset.card ⊆ Finset.Icc 1 (k + 1) := by
+    intro m hm
+    obtain ⟨t, htd, rfl⟩ := Finset.mem_image.1 hm
+    have htc : t ∈ c := (Finset.mem_erase.1 htd).2
+    have htne : t.Nonempty := K.nonempty_of_mem_faces (hc.1 t htc)
+    have htss : t ⊂ s.1 := by
+      rcases hc.2 t htc s.1 htop (Finset.mem_erase.1 htd).1 with h | h
+      · exact h
+      · exact (h.not_subset (Finset.mem_powerset.1 (hcs htc))).elim
+    simp only [Finset.mem_Icc]
+    constructor
+    · exact Finset.card_pos.2 htne
+    · have := Finset.card_lt_card htss
+      omega
+  have hdinj : Set.InjOn Finset.card (d : Set (Finset (Euc n))) :=
+    hcinj.mono (Finset.erase_subset _ _)
+  have hdimagecard : (d.image Finset.card).card = k + 1 := by
+    rw [Finset.card_image_iff.mpr hdinj, hdcard]
+  have hdeq : d.image Finset.card = Finset.Icc 1 (k + 1) := by
+    apply Finset.eq_of_subset_of_card_le hdsub
+    rw [Nat.card_Icc, hdimagecard]
+    omega
+  have hex : ∃ t ∈ d, t.card = k + 1 := by
+    have hm : k + 1 ∈ d.image Finset.card := by
+      rw [hdeq]
+      simp
+    simpa using Finset.mem_image.1 hm
+  obtain ⟨t, htd, htcard⟩ := hex
+  have htc : t ∈ c := (Finset.mem_erase.1 htd).2
+  have htss : t ⊂ s.1 := by
+    rcases hc.2 t htc s.1 htop (Finset.mem_erase.1 htd).1 with h | h
+    · exact h
+    · exact (h.not_subset (Finset.mem_powerset.1 (hcs htc))).elim
+  have hall : ∀ u ∈ c, u ⊂ s.1 → u ⊆ t := by
+    intro u huc hus
+    by_cases hut : u = t
+    · simpa [hut]
+    rcases hc.2 u huc t htc hut with h | h
+    · exact h.subset
+    · have := Finset.card_lt_card h
+      have huscard := Finset.card_lt_card hus
+      omega
+  have hUnion : c.biUnion (fun u => if u ⊂ s.1 then u else ∅) = t := by
+    apply Finset.Subset.antisymm
+    · intro x hx
+      obtain ⟨u, huc, hxu⟩ := Finset.mem_biUnion.1 hx
+      split at hxu
+      · exact hall u huc ‹u ⊂ s.1› hxu
+      · simp at hxu
+    · intro x hxt
+      apply Finset.mem_biUnion.2
+      exact ⟨t, htc, by simp [htss, hxt]⟩
+  have hdiffcard : (s.1 \ t).card = 1 := by
+    rw [Finset.card_sdiff_of_subset htss.subset, hscard, htcard]
+    omega
+  obtain ⟨v, hv⟩ : ∃ v, s.1 \ t = {v} := Finset.card_eq_one.1 hdiffcard
+  have hvmem : v ∈ s.1 \ t := by rw [hv]; simp
+  have hflag : flagNewVertex o c s.1 = v := by
+    rw [flagNewVertex, hUnion, hv]
+    simp
+  refine ⟨htop, ?_, ?_⟩
+  · rw [hflag]
+    exact (Finset.mem_sdiff.1 hvmem).1
+  · rw [hflag]
+    intro u hud
+    apply Finset.mem_powerset.2
+    have huc := (Finset.mem_erase.1 hud).2
+    have hus : u ⊂ s.1 := by
+      rcases hc.2 u huc s.1 htop (Finset.mem_erase.1 hud).1 with h | h
+      · exact h
+      · exact (h.not_subset (Finset.mem_powerset.1 (hcs huc))).elim
+    have hut := hall u huc hus
+    intro x hxu
+    have hxs : x ∈ s.1 := hus.subset hxu
+    have hxv : x ≠ v := by
+      by_contra hx
+      have hxmem : x ∈ s.1 \ t := by simpa [hx] using hvmem
+      exact (Finset.mem_sdiff.1 hxmem).2 (hut hxu)
+    exact Finset.mem_erase.2 ⟨hxv, hxs⟩
 -- END SEAT AREA
 
 /-- Converse of `_aux_top`: topping a maximal chain of the facet `s.erase v`
