@@ -680,11 +680,128 @@ theorem apm_t02A04_H1_zero_of_cover
   exact ModuleCat.isZero_of_subsingleton _
 
 /-- The degree-two Mayer--Vietoris calculation: injectivity kills the kernel. -/
+noncomputable def apm_t02A04_H2_zero_of_cover_aux_iso
+    {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
+    (e : ContinuousMap.HomotopyEquiv S T) (k : ℕ) :
+    Homology S k ≅ Homology T k where
+  hom := induced e.toFun k
+  inv := induced e.invFun k
+  hom_inv_id := by
+    dsimp [induced]
+    rw [← CategoryTheory.Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map (TopCat.ofHom (e.invFun.comp e.toFun)) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) e.left_inv k]
+    exact ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map_id (TopCat.of S)
+  inv_hom_id := by
+    dsimp [induced]
+    rw [← CategoryTheory.Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map (TopCat.ofHom (e.toFun.comp e.invFun)) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) e.right_inv k]
+    exact ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map_id (TopCat.of T)
+
+open CategoryTheory
+
+noncomputable def apm_t02A04_H2_zero_of_cover_aux_solidEquiv :
+    ContinuousMap.HomotopyEquiv apm_t02a04_SolidTorus Circle where
+  toFun := ⟨Prod.snd, continuous_snd⟩
+  invFun := ⟨fun z ↦ (⟨0, by simp [apm_t02a04_Disk]⟩, z),
+    continuous_const.prodMk continuous_id⟩
+  left_inv := ⟨{
+    toFun := fun p ↦
+      (⟨((p.1 : ℝ) : ℂ) * p.2.1.1, by
+        rw [Metric.mem_closedBall, dist_zero_right, norm_mul, Complex.norm_real,
+          Real.norm_eq_abs, abs_of_nonneg p.1.2.1]
+        have hx : ‖p.2.1.1‖ ≤ 1 := by
+          simpa only [Metric.mem_closedBall, dist_zero_right] using p.2.1.2
+        exact mul_le_one₀ p.1.2.2 (norm_nonneg _) hx⟩, p.2.2)
+    continuous_toFun := by fun_prop
+    map_zero_left := by intro x; ext <;> simp
+    map_one_left := by intro x; ext <;> simp }⟩
+  right_inv := by rfl
+
+lemma apm_t02A04_H2_zero_of_cover_aux_circle :
+    CategoryTheory.Limits.IsZero (Homology Circle 2) := by
+  let e : Homology Circle 2 ≅
+      ConstructionTargets.CoefficientContractiblePair.H ℚ 1
+        (TopCat.of (ConstructionTargets.SphereHomology.Sphere 0)) :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.toHomotopyEquiv 2 ≪≫
+    (by simpa using
+      ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 1 (by omega))
+  exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ 1 (by omega)).of_iso e
+
 theorem apm_t02A04_H2_zero_of_cover
     (C : apm_t02A04_CompatibleOpenCover)
     (hdegree : CategoryTheory.IsIso (induced apm_t02A04_attachingCurve 1)) :
     CategoryTheory.Limits.IsZero (apm_t02A04_HQ 2) := by
-  sorry
+  let eI := apm_t02A04_H2_zero_of_cover_aux_iso C.overlapEquiv 1
+  let eO := apm_t02A04_H2_zero_of_cover_aux_iso C.outerEquiv 1
+  have hfirst : CategoryTheory.IsIso
+      (RP3Homology.mvIncl
+        (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1) := by
+    have heq : (RP3Homology.mvIncl
+          (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1) ≫ eO.hom =
+        eI.hom ≫ induced apm_t02A04_attachingCurve 1 := by
+      change induced (apm_t02A04_overlapToOuter C.outer C.inner) 1 ≫
+          induced C.outerEquiv.toFun 1 =
+        induced C.overlapEquiv.toFun 1 ≫ induced apm_t02A04_attachingCurve 1
+      dsimp [induced]
+      rw [← CategoryTheory.Functor.map_comp, ← CategoryTheory.Functor.map_comp]
+      exact ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+        (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) C.outer_compat 1
+    haveI : CategoryTheory.IsIso
+        (eI.hom ≫ induced apm_t02A04_attachingCurve 1) := inferInstance
+    haveI : CategoryTheory.IsIso
+        ((RP3Homology.mvIncl
+          (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1) ≫ eO.hom) :=
+      heq.symm ▸ inferInstance
+    exact CategoryTheory.IsIso.of_isIso_comp_right _ eO.hom
+  have hmvI : Function.Injective (RP3Homology.mvI C.outer C.inner 1).hom := by
+    intro x y hxy
+    apply (ModuleCat.mono_iff_injective
+      (RP3Homology.mvIncl
+        (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1)).mp inferInstance
+    have hp := congrArg
+      (fun q => (CategoryTheory.Limits.biprod.fst :
+        Homology C.outer 1 ⊞ Homology C.inner 1 ⟶ Homology C.outer 1).hom q) hxy
+    change ((RP3Homology.mvI C.outer C.inner 1 ≫
+      Limits.biprod.fst).hom x) =
+      ((RP3Homology.mvI C.outer C.inner 1 ≫ Limits.biprod.fst).hom y) at hp
+    have hm : RP3Homology.mvI C.outer C.inner 1 ≫ Limits.biprod.fst =
+        RP3Homology.mvIncl Set.inter_subset_left 1 := by
+      simp [RP3Homology.mvI]
+    rw [hm] at hp
+    exact hp
+  have houter : CategoryTheory.Limits.IsZero (Homology C.outer 2) :=
+    apm_t02A04_H2_zero_of_cover_aux_circle.of_iso
+      (apm_t02A04_H2_zero_of_cover_aux_iso
+        (C.outerEquiv.trans apm_t02A04_H2_zero_of_cover_aux_solidEquiv) 2)
+  have hinner : CategoryTheory.Limits.IsZero (Homology C.inner 2) := by
+    letI : ContractibleSpace PUnit := inferInstance
+    exact (ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ PUnit 2
+      (by decide)).of_iso (apm_t02A04_H2_zero_of_cover_aux_iso C.innerEquiv 2)
+  obtain ⟨δ, -, hexJ, hexδ⟩ := RP3Homology.rationalMayerVietoris
+    C.outer C.inner C.open_outer C.open_inner C.cover
+  have hpieces := RP3Homology.cp2_homology_of_mv_aux_biprod_zero houter hinner
+  have hd_inj : Function.Injective (δ 1).hom := by
+    rw [← LinearMap.ker_eq_bot, ← hexJ 1]
+    apply LinearMap.range_eq_bot.mpr
+    exact congrArg ModuleCat.Hom.hom (hpieces.eq_of_src _ 0)
+  have hd_zero : (δ 1).hom = 0 := by
+    apply LinearMap.range_eq_bot.mp
+    rw [hexδ 1, LinearMap.ker_eq_bot.mpr hmvI]
+  letI : Subsingleton (apm_t02A04_HQ 2) := ⟨by
+    intro x y
+    apply hd_inj
+    rw [hd_zero]
+    rfl⟩
+  exact ModuleCat.isZero_of_subsingleton _
 
 /-- Mayer--Vietoris above the dimensions of the circle and solid torus. -/
 lemma apm_t02A04_Hhigh_zero_of_cover_aux_circle (n : ℕ) (hn : 2 ≤ n) :
