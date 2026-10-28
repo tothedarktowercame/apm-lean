@@ -76,7 +76,29 @@ theorem induced_zero_eq_id
     {X : Type} [TopologicalSpace X] [PathConnectedSpace X]
     (e : Homology X 0 ≅ ModuleCat.of ℚ ℚ) (f : C(X, X)) :
     (induced f 0).hom = LinearMap.id := by
-  sorry
+  open ConstructionTargets.CoefficientH0 in
+    letI : FiniteDimensional ℚ (Homology X 0) :=
+      Module.Finite.equiv e.toLinearEquiv.symm
+    let ε : Homology X 0 ⟶ ModuleCat.of ℚ ℚ := h0Augmentation ℚ
+    let p : X := Classical.choice inferInstance
+    have hsurj : Function.Surjective ε := by
+      intro a
+      refine ⟨singularVertexH0Class ℚ p a, ?_⟩
+      exact congrArg (fun g => g a)
+        (singularVertexH0Class_comp_h0Augmentation ℚ p)
+    have hdim : Module.finrank ℚ (Homology X 0) =
+        Module.finrank ℚ (ModuleCat.of ℚ ℚ) := by
+      simpa using e.toLinearEquiv.finrank_eq
+    have hinj : Function.Injective ε :=
+      (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).2 hsurj
+    letI : Mono ε := (ModuleCat.mono_iff_injective ε).2 hinj
+    have hcat : (induced f 0) ≫ ε = (𝟙 _) ≫ ε := by
+      rw [Category.id_comp]
+      change HomologicalComplex.homologyMap
+          (singularPostcomposition ℚ f) 0 ≫ ε = ε
+      exact h0Augmentation_naturality ℚ f
+    have h := (cancel_mono ε).1 hcat
+    exact congrArg (fun g => g.hom) h
 
 /-- A path-connected rational homology point has Lefschetz number one for
 every self-map. -/
