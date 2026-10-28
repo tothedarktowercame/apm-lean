@@ -29,6 +29,53 @@ lemma barycentricFaces_affineIndependent_aux_barycenter_formula {n : ℕ}
     barycenter s = (s.card : ℝ)⁻¹ • ∑ x ∈ s, x := by
   simp [barycenter, Finset.centerMass]
 
+lemma barycentricFaces_affineIndependent_aux_chain_nonempty {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c) :
+    ∀ s ∈ c, s.Nonempty := by
+  intro s hs
+  exact K.nonempty_of_mem_faces (hc.1 s hs)
+
+lemma barycentricFaces_affineIndependent_aux_chain_subset_of_card_le {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c)
+    {s t : Finset (Euc n)} (hs : s ∈ c) (ht : t ∈ c) (hst : s.card ≤ t.card) :
+    s ⊆ t := by
+  by_cases h : s = t
+  · simpa [h]
+  rcases hc.2 s hs t ht h with hsub | hsub
+  · exact hsub.subset
+  · exact False.elim (Nat.not_lt_of_ge hst (Finset.card_lt_card hsub))
+
+/-- (C1) For faces `s ⊊ t` of `K`, the barycenter of `t` is not in the affine
+span of `s`: its barycentric weight on a vertex of `t \ s` is positive, and the
+vertices of `t` are affinely independent (`K.indep`). -/
+theorem barycentricFaces_affineIndependent_aux_chain_not_mem_span {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) {s t : Finset (Euc n)}
+    (ht : t ∈ K.faces) (hst : s ⊂ t) :
+    barycenter t ∉ affineSpan ℝ (s : Set (Euc n)) := by
+  sorry
+
+/-- (C2) The barycenter of a nonempty `s ⊆ t` lies in the affine span of `t`. -/
+theorem barycentricFaces_affineIndependent_aux_chain_mem_span {n : ℕ}
+    {s t : Finset (Euc n)} (hs : s.Nonempty) (hst : s ⊆ t) :
+    barycenter s ∈ affineSpan ℝ (t : Set (Euc n)) := by
+  sorry
+
+/-- (C3) Induction on the chain: remove its largest face `t`; the remaining
+barycenters are independent (induction) and lie in the affine span of the next
+largest face `s ⊊ t` (C2), which does not contain `barycenter t` (C1);
+`AffineIndependent` is preserved by adjoining a point outside the span. -/
+theorem barycentricFaces_affineIndependent_aux_chain_induction {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (hC1 : ∀ {s t : Finset (Euc n)}, t ∈ K.faces → s ⊂ t →
+      barycenter t ∉ affineSpan ℝ (s : Set (Euc n)))
+    (hC2 : ∀ {s t : Finset (Euc n)}, s.Nonempty → s ⊆ t →
+      barycenter s ∈ affineSpan ℝ (t : Set (Euc n)))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c) :
+    AffineIndependent ℝ (fun s : c => barycenter (s : Finset (Euc n))) := by
+  sorry
+
 /-- (A1) Along a strict chain `s₀ ⊂ s₁ ⊂ ⋯` of faces of `K`, the barycenters are
 affinely independent: all lie in the top face, whose vertices are independent
 (`K.indep`), and `barycenter sᵢ` has positive weight on a vertex of
@@ -37,7 +84,9 @@ theorem barycentricFaces_affineIndependent_aux_chain {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c) :
     AffineIndependent ℝ (fun s : c => barycenter (s : Finset (Euc n))) := by
-  sorry
+  exact barycentricFaces_affineIndependent_aux_chain_induction K
+    (fun ht hst => barycentricFaces_affineIndependent_aux_chain_not_mem_span K ht hst)
+    (fun hs hst => barycentricFaces_affineIndependent_aux_chain_mem_span hs hst) c hc
 
 /-- (A2) Transfer from the chain-indexed family to the image finset
 (an affinely independent family is injective; `AffineIndependent.range`). -/
