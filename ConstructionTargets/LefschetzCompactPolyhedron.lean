@@ -193,6 +193,134 @@ theorem exists_faceAvoiding_simplicial_trace_model
     exists_carrier_avoiding_oriented_chain_model K hK e g δ hδ hmargin
   exact ⟨M, hchain, homologyTrace_eq_of_models M g hmodel⟩
 
+/-! ### Hopf trace formula (split by claude-14, 2026-10-28, after lemma-3's
+partial banked the telescoping and the final assembly) -/
+
+lemma hopf_trace_formula_aux_boundary_sum (n : ℕ) (b : ℕ → ℚ) :
+    (∑ k ∈ Finset.range (n + 1), (-1 : ℚ)^k * (b k + b (k + 1))) =
+      b 0 + (-1 : ℚ)^n * b (n + 1) := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [Finset.sum_range_succ, ih]
+      rw [pow_succ]
+      ring
+
+lemma hopf_trace_formula_aux_telescope (n : ℕ) (h b : ℕ → ℚ)
+    (hb0 : b 0 = 0) (hbtop : b (n + 1) = 0) :
+    (∑ k ∈ Finset.range (n + 1), (-1 : ℚ)^k * (h k + b k + b (k + 1))) =
+      ∑ k ∈ Finset.range (n + 1), (-1 : ℚ)^k * h k := by
+  calc
+    _ = ∑ k ∈ Finset.range (n + 1),
+        ((-1 : ℚ)^k * h k + (-1 : ℚ)^k * (b k + b (k + 1))) := by
+          apply Finset.sum_congr rfl
+          intro k hk
+          ring
+    _ = (∑ k ∈ Finset.range (n + 1), (-1 : ℚ)^k * h k) +
+        ∑ k ∈ Finset.range (n + 1), (-1 : ℚ)^k * (b k + b (k + 1)) := by
+          rw [Finset.sum_add_distrib]
+    _ = _ := by rw [hopf_trace_formula_aux_boundary_sum, hb0, hbtop]; simp
+
+/-- (T) Trace is additive over an invariant subspace and its quotient. -/
+theorem trace_eq_trace_restrict_add_trace_mapQ
+    {V : Type*} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+    (φ : V →ₗ[ℚ] V) (W : Submodule ℚ V) (hW : ∀ x ∈ W, φ x ∈ W) :
+    LinearMap.trace ℚ V φ =
+      LinearMap.trace ℚ W (φ.restrict hW) +
+        LinearMap.trace ℚ (V ⧸ W) (W.mapQ W φ (fun x hx => hW x hx)) := by
+  sorry
+
+namespace FiniteChainEndomorphism
+
+/-- Cycles in degree `k`: the kernel of the outgoing differential. -/
+def cycles (M : FiniteChainEndomorphism) (k : ℕ) : Submodule ℚ (M.C.X k) :=
+  LinearMap.ker (M.C.d k (k - 1)).hom
+
+/-- Boundaries in degree `k`: the image of the incoming differential. -/
+def bdries (M : FiniteChainEndomorphism) (k : ℕ) : Submodule ℚ (M.C.X k) :=
+  LinearMap.range (M.C.d (k + 1) k).hom
+
+lemma cycles_invariant (M : FiniteChainEndomorphism) (k : ℕ) :
+    ∀ x ∈ M.cycles k, (M.φ.f k).hom x ∈ M.cycles k := by
+  intro x hx
+  have h := congrArg (fun g => g.hom x) (M.φ.comm k (k - 1))
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at h
+  change (M.C.d k (k - 1)).hom ((M.φ.f k).hom x) = 0
+  rw [h, show (M.C.d k (k - 1)).hom x = 0 from hx, map_zero]
+
+lemma bdries_invariant (M : FiniteChainEndomorphism) (k : ℕ) :
+    ∀ x ∈ M.bdries k, (M.φ.f k).hom x ∈ M.bdries k := by
+  rintro _ ⟨y, rfl⟩
+  refine ⟨(M.φ.f (k + 1)).hom y, ?_⟩
+  have h := congrArg (fun g => g.hom y) (M.φ.comm (k + 1) k)
+  simpa only [ModuleCat.hom_comp, LinearMap.comp_apply] using h
+
+/-- Trace of the chain endomorphism on the cycles of degree `k`. -/
+noncomputable def cyclesTrace (M : FiniteChainEndomorphism) (k : ℕ) : ℚ :=
+  LinearMap.trace ℚ (M.cycles k) ((M.φ.f k).hom.restrict (M.cycles_invariant k))
+
+/-- Trace of the chain endomorphism on the boundaries of degree `k`. -/
+noncomputable def bdriesTrace (M : FiniteChainEndomorphism) (k : ℕ) : ℚ :=
+  LinearMap.trace ℚ (M.bdries k) ((M.φ.f k).hom.restrict (M.bdries_invariant k))
+
+end FiniteChainEndomorphism
+
+/-- (A0) In degree `0` every chain is a cycle (the outgoing differential
+`d 0 0` is zero by the shape of a `ℕ`-indexed chain complex). -/
+theorem FiniteChainEndomorphism.chainTrace_zero_eq_cyclesTrace
+    (M : FiniteChainEndomorphism) : M.chainTrace 0 = M.cyclesTrace 0 := by
+  sorry
+
+/-- (A) In degree `k + 1`, the chain trace splits into the trace on cycles and
+the trace on the boundaries one degree down: `X (k+1) ⧸ Z (k+1) ≅ B k`
+equivariantly via the differential.  Takes (T) as a hypothesis. -/
+theorem FiniteChainEndomorphism.chainTrace_succ_eq
+    (hT : ∀ {V : Type} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+      (φ : V →ₗ[ℚ] V) (W : Submodule ℚ V) (hW : ∀ x ∈ W, φ x ∈ W),
+      LinearMap.trace ℚ V φ =
+        LinearMap.trace ℚ W (φ.restrict hW) +
+          LinearMap.trace ℚ (V ⧸ W) (W.mapQ W φ (fun x hx => hW x hx)))
+    (M : FiniteChainEndomorphism) (k : ℕ) :
+    M.chainTrace (k + 1) = M.cyclesTrace (k + 1) + M.bdriesTrace k := by
+  sorry
+
+/-- (H) The trace on cycles is the trace on boundaries plus the homology
+trace: `Z k ⧸ B k ≅ homology k` equivariantly (`ShortComplex.moduleCatHomologyIso`
+or the `ModuleCat` homology API).  Takes (T) as a hypothesis. -/
+theorem FiniteChainEndomorphism.cyclesTrace_eq
+    (hT : ∀ {V : Type} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+      (φ : V →ₗ[ℚ] V) (W : Submodule ℚ V) (hW : ∀ x ∈ W, φ x ∈ W),
+      LinearMap.trace ℚ V φ =
+        LinearMap.trace ℚ W (φ.restrict hW) +
+          LinearMap.trace ℚ (V ⧸ W) (W.mapQ W φ (fun x hx => hW x hx)))
+    (M : FiniteChainEndomorphism) (k : ℕ) :
+    M.cyclesTrace k = M.bdriesTrace k + M.homologyTrace k := by
+  sorry
+
+/-- (E) Above the bound there are no chains, so the top boundaries vanish. -/
+theorem FiniteChainEndomorphism.bdriesTrace_bound
+    (M : FiniteChainEndomorphism) : M.bdriesTrace M.bound = 0 := by
+  sorry
+
+lemma hopf_trace_formula_aux_trace_decomposition (M : FiniteChainEndomorphism) :
+    ∃ b : ℕ → ℚ,
+      b 0 = 0 ∧ b (M.bound + 1) = 0 ∧
+      ∀ k ∈ Finset.range (M.bound + 1),
+        M.chainTrace k = M.homologyTrace k + b k + b (k + 1) := by
+  have hT := @trace_eq_trace_restrict_add_trace_mapQ
+  refine ⟨fun k => if k = 0 then 0 else M.bdriesTrace (k - 1), by simp,
+    by simpa using M.bdriesTrace_bound, ?_⟩
+  intro k _
+  cases k with
+  | zero =>
+      rw [M.chainTrace_zero_eq_cyclesTrace, M.cyclesTrace_eq hT 0]
+      simp only [if_true, Nat.one_ne_zero, if_false, Nat.sub_self, zero_add]
+      ring
+  | succ j =>
+      rw [M.chainTrace_succ_eq hT j, M.cyclesTrace_eq hT (j + 1)]
+      simp only [Nat.succ_ne_zero, if_false, Nat.add_sub_cancel]
+      ring
+
 /-- The Hopf trace formula for a bounded complex of finite-dimensional rational
 vector spaces. -/
 theorem hopf_trace_formula (M : FiniteChainEndomorphism) :
@@ -200,7 +328,11 @@ theorem hopf_trace_formula (M : FiniteChainEndomorphism) :
       (-1 : ℚ)^k * M.homologyTrace k) =
     ∑ k ∈ Finset.range (M.bound + 1),
       (-1 : ℚ)^k * M.chainTrace k := by
-  sorry
+  obtain ⟨b, hb0, hbtop, hb⟩ := hopf_trace_formula_aux_trace_decomposition M
+  rw [← hopf_trace_formula_aux_telescope M.bound M.homologyTrace b hb0 hbtop]
+  apply Finset.sum_congr rfl
+  intro k hk
+  rw [hb k hk]
 
 /-- The bound in a simplicial trace model can replace the bound occurring in a
 `HasLefschetzNumber` certificate. -/
