@@ -1358,7 +1358,37 @@ lemma subdivisionChainMap_commutes_aux_induction_aux_augmentation {n : ℕ}
 lemma subdivisionChainMap_commutes_aux_induction_aux_edge_sign_sum {n : ℕ}
     (o : LinearOrder (Euc n)) (s : Finset (Euc n)) (hs : s.card = 2) :
     ∑ v ∈ s.attach, (-1 : ℚ) ^ ((s.sort o.le).idxOf v.1) = 0 := by
-  sorry
+  classical
+  obtain ⟨a, b, hab, rfl⟩ := Finset.card_eq_two.mp hs
+  have ha : a ∈ ({a, b} : Finset (Euc n)) := by simp
+  have hb : b ∈ ({a, b} : Finset (Euc n)) := by simp
+  have hatt : ({a, b} : Finset (Euc n)).attach = {⟨a, ha⟩, ⟨b, hb⟩} := by
+    ext x
+    simp only [Finset.mem_attach, Finset.mem_insert, Finset.mem_singleton]
+    constructor
+    · intro _
+      rcases Finset.mem_insert.mp x.2 with hxa | hxb
+      · exact Or.inl (Subtype.ext hxa)
+      · exact Or.inr (Subtype.ext (Finset.mem_singleton.mp hxb))
+    · intro _
+      trivial
+  rw [hatt]
+  rcases @lt_or_gt_of_ne (Euc n) o a b hab with hablt | hbalt
+  · have hsort : ({a, b} : Finset (Euc n)).sort o.le = [a, b] := by
+      simpa using Finset.sort_insert (s := {b}) (a := a) o.le
+        (fun x hx => by
+          rw [Finset.mem_singleton.mp hx]
+          exact le_of_lt hablt)
+        (by simpa only [Finset.mem_singleton] using hab)
+    simp [hsort, hab, hab.symm]
+  · have hsort : ({a, b} : Finset (Euc n)).sort o.le = [b, a] := by
+      rw [Finset.pair_comm]
+      simpa using Finset.sort_insert (s := {a}) (a := b) o.le
+        (fun x hx => by
+          rw [Finset.mem_singleton.mp hx]
+          exact le_of_lt hbalt)
+        (by simpa only [Finset.mem_singleton] using hab.symm)
+    simp [hsort, hab, hab.symm]
 -- END SEAT AREA
 
 /- Note (claude-14): lemma-3's 99-line assembly attempt (does not compile; the
