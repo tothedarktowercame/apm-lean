@@ -138,9 +138,41 @@ lemma vertexChainMap_commutes_aux_generator_aux_boundaryL {m k : ℕ}
           (signedDeletion_sq_zero_aux_generator_aux_erase L t v.1 v.2) 1 := by
   exact signedDeletion_sq_zero_aux_generator_aux_boundary om L dL hdL t
 
-/-- (VG1) `h` injective on `s`: deleting a vertex commutes with taking images,
-and the sorting signs agree (`sortingSign` of `s.erase v` times the position sign
-in `s` equals the position sign of `h v` in `h '' s` times `sortingSign` of `s`). -/
+lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_injOn {n m : ℕ}
+    {k : ℕ} (K : GSC n) (s : FaceIndex K (k + 1)) (h : Euc n → Euc m)
+    (hinj : (s.1.image h).card = k + 2) : Set.InjOn h s.1 := by
+  apply Finset.injOn_of_card_image_eq
+  rw [hinj, s.2.2]
+
+lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_image_erase {n m : ℕ}
+    {k : ℕ} (K : GSC n) (s : FaceIndex K (k + 1)) (h : Euc n → Euc m)
+    (hinj : (s.1.image h).card = k + 2) (v : Euc n) (hv : v ∈ s.1) :
+    (s.1.erase v).image h = (s.1.image h).erase (h v) := by
+  ext z
+  simp only [Finset.mem_image, Finset.mem_erase]
+  constructor
+  · rintro ⟨x, ⟨hxv, hxs⟩, rfl⟩
+    refine ⟨?_, x, hxs, rfl⟩
+    intro heq
+    exact hxv (vertexChainMap_commutes_aux_generator_aux_injective_aux_injOn K s h hinj
+      hxs hv heq)
+  · rintro ⟨hzv, x, hxs, rfl⟩
+    refine ⟨x, ⟨?_, hxs⟩, rfl⟩
+    rintro rfl
+    exact hzv rfl
+
+/-- The parity identity behind naturality of oriented deletion.  This is the
+Laplace-minor sign rule for the permutation which reorders `h '' s`. -/
+lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_sign {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    {k : ℕ} (K : GSC n) (s : FaceIndex K (k + 1)) (h : Euc n → Euc m)
+    (hinj : (s.1.image h).card = k + 2) (v : Euc n) (hv : v ∈ s.1) :
+    (-1 : ℚ) ^ ((s.1.sort on.le).idxOf v) *
+        sortingSign on om (s.1.erase v) h =
+      sortingSign on om s.1 h *
+        (-1 : ℚ) ^ (((s.1.image h).sort om.le).idxOf (h v)) := by
+  sorry
+
 theorem vertexChainMap_commutes_aux_generator_aux_injective {n m : ℕ}
     (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
     (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
