@@ -1036,7 +1036,69 @@ theorem subdivisionChainMap_commutes_aux_facet_admissible {n k : ℕ}
     ConeAdmissible (barycentricStep K) (GeometricSimplicialSubdivision.barycenter s.1)
       (sd k (Finsupp.single
         (signedDeletion_sq_zero_aux_generator_aux_erase K s v hv) 1)) := by
-  sorry
+  classical
+  let r := signedDeletion_sq_zero_aux_generator_aux_erase K s v hv
+  obtain ⟨z, hz, hcoeff⟩ := hsd k r
+  rw [hz]
+  intro u hu
+  have hzu : z u ≠ 0 := hu
+  rw [hcoeff u] at hzu
+  have hex : ∃ c ∈ r.1.powerset.powerset,
+      GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+        u.1 = c.image GeometricSimplicialSubdivision.barycenter := by
+    by_contra hn
+    push_neg at hn
+    apply hzu
+    apply Finset.sum_eq_zero
+    intro c hc
+    split_ifs with hi
+    · exact (hn c hc hi.1 hi.2).elim
+    · rfl
+  obtain ⟨c, hcps, hc, huimage⟩ := hex
+  have hcsub : ∀ t ∈ c, t ⊆ s.1.erase v := by
+    intro t ht
+    exact Finset.mem_powerset.1 ((Finset.mem_powerset.1 hcps) ht)
+  have htsub : ∀ t ∈ c, t ⊂ s.1 := by
+    intro t ht
+    refine Finset.ssubset_iff_subset_ne.2 ⟨(hcsub t ht).trans (Finset.erase_subset _ _), ?_⟩
+    intro heq
+    have hvt : v ∈ t := by rw [heq]; exact hv
+    have := (hcsub t ht) hvt
+    simpa using this
+  have hbnot : GeometricSimplicialSubdivision.barycenter s.1 ∉ u.1 := by
+    rw [huimage]
+    intro hb
+    obtain ⟨t, htc, hbt⟩ := Finset.mem_image.1 hb
+    have htne : t.Nonempty := K.nonempty_of_mem_faces (hc.1 t htc)
+    have hmem := GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_mem_span
+      htne (show t ⊆ t from fun _ h => h)
+    apply GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_not_mem_span
+      K s.2.1 (htsub t htc)
+    simpa [hbt] using hmem
+  refine ⟨hbnot, ?_⟩
+  change insert (GeometricSimplicialSubdivision.barycenter s.1) u.1 ∈
+    (GeometricSimplicialSubdivision.barycentricSubdivision K
+      (GeometricSimplicialSubdivision.barycentricFaces_affineIndependent K)
+      (GeometricSimplicialSubdivision.barycentricFaces_isLowerSet K)
+      (GeometricSimplicialSubdivision.barycentricFaces_inter_subset K)).faces
+  change insert (GeometricSimplicialSubdivision.barycenter s.1) u.1 ∈
+    GeometricSimplicialSubdivision.barycentricFaces K \ {∅}
+  constructor
+  · refine ⟨insert s.1 c, ?_, ?_⟩
+    · constructor
+      · intro t ht
+        rcases Finset.mem_insert.1 ht with rfl | htc
+        · exact s.2.1
+        · exact hc.1 t htc
+      · intro a ha b hb hab
+        rcases Finset.mem_insert.1 ha with rfl | hac <;>
+          rcases Finset.mem_insert.1 hb with rfl | hbc
+        · exact (hab rfl).elim
+        · exact Or.inr (htsub b hbc)
+        · exact Or.inl (htsub a hac)
+        · exact hc.2 a hac b hbc hab
+    · rw [Finset.image_insert, ← huimage]
+  · simp
 
 /-- Recursive cone formula for the canonical flag subdivision of a non-vertex
 face. -/
