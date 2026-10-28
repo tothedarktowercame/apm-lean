@@ -75,7 +75,89 @@ with its antipode (write it as `edgePoint 2 0 t` or `edgePoint 2 1 t`). -/
 theorem rp2_t2Space_aux_boundary_rel {x y : Surfaces.Disk}
     (hx : ‖(x : ℂ)‖ = 1) (hy : (y : ℂ) = -(x : ℂ)) :
     Relation.EqvGen (Surfaces.SurfaceRel false 1) x y := by
-  sorry
+  by_cases harg : 0 ≤ Complex.arg (x : ℂ)
+  · let t : Set.Icc (0 : ℝ) 1 :=
+      ⟨Complex.arg (x : ℂ) / Real.pi, by
+        constructor
+        · exact div_nonneg harg Real.pi_pos.le
+        · exact (div_le_one Real.pi_pos).2 (Complex.arg_le_pi _)⟩
+    apply Relation.EqvGen.rel _ _
+    simp only [Surfaces.SurfaceRel, Bool.false_eq_true, if_false]
+    refine ⟨0, by omega, t, ?_, ?_⟩
+    · apply Subtype.ext
+      simp only [Surfaces.edgePoint, Subtype.coe_mk]
+      norm_num
+      change (x : ℂ) = Complex.exp
+        (Complex.I * (2 * Real.pi * t.1 / 2))
+      rw [show (x : ℂ) = Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        symm
+        simpa [hx] using Complex.norm_mul_exp_arg_mul_I (x : ℂ)]
+      congr 1
+      simp [t]
+      field_simp [ne_of_gt Real.pi_pos]
+    · apply Subtype.ext
+      simp only [Surfaces.edgePoint, Subtype.coe_mk]
+      norm_num
+      change (y : ℂ) = Complex.exp
+        (Complex.I * (2 * Real.pi * ((1 : ℝ) + t.1) / 2))
+      rw [hy, show (x : ℂ) = Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        symm
+        simpa [hx] using Complex.norm_mul_exp_arg_mul_I (x : ℂ)]
+      rw [show -Complex.exp (Complex.arg (x : ℂ) * Complex.I) =
+          Complex.exp (Real.pi * Complex.I) *
+            Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        rw [Complex.exp_pi_mul_I]
+        simp]
+      rw [← Complex.exp_add]
+      apply congrArg Complex.exp
+      simp [t]
+      field_simp [ne_of_gt Real.pi_pos]
+  · let t : Set.Icc (0 : ℝ) 1 :=
+      ⟨Complex.arg (x : ℂ) / Real.pi + 1, by
+        constructor
+        · have h := Complex.neg_pi_lt_arg (x : ℂ)
+          have : (-1 : ℝ) < Complex.arg (x : ℂ) / Real.pi :=
+            (lt_div_iff₀ Real.pi_pos).2 (by linarith)
+          linarith
+        · have ha : Complex.arg (x : ℂ) ≤ 0 := le_of_not_ge harg
+          have := div_nonpos_of_nonpos_of_nonneg ha Real.pi_pos.le
+          linarith⟩
+    apply Relation.EqvGen.symm _ _
+    apply Relation.EqvGen.rel _ _
+    simp only [Surfaces.SurfaceRel, Bool.false_eq_true, if_false]
+    refine ⟨0, by omega, t, ?_, ?_⟩
+    · apply Subtype.ext
+      simp only [Surfaces.edgePoint, Subtype.coe_mk]
+      norm_num
+      change (y : ℂ) = Complex.exp
+        (Complex.I * (2 * Real.pi * t.1 / 2))
+      rw [hy, show (x : ℂ) = Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        symm
+        simpa [hx] using Complex.norm_mul_exp_arg_mul_I (x : ℂ)]
+      rw [show -Complex.exp (Complex.arg (x : ℂ) * Complex.I) =
+          Complex.exp (Real.pi * Complex.I) *
+            Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        rw [Complex.exp_pi_mul_I]
+        simp]
+      rw [← Complex.exp_add]
+      apply congrArg Complex.exp
+      simp [t]
+      field_simp [ne_of_gt Real.pi_pos]
+      ring
+    · apply Subtype.ext
+      simp only [Surfaces.edgePoint, Subtype.coe_mk]
+      norm_num
+      change (x : ℂ) = Complex.exp
+        (Complex.I * (2 * Real.pi * ((1 : ℝ) + t.1) / 2))
+      rw [show (x : ℂ) = Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        symm
+        simpa [hx] using Complex.norm_mul_exp_arg_mul_I (x : ℂ)]
+      rw [← mul_one (Complex.exp (Complex.arg (x : ℂ) * Complex.I)),
+        ← Complex.exp_two_pi_mul_I, ← Complex.exp_add]
+      apply congrArg Complex.exp
+      simp [t]
+      field_simp [ne_of_gt Real.pi_pos]
+      ring
 
 theorem rp2_t2Space_aux_isClosed :
     IsClosed {p : Surfaces.Disk × Surfaces.Disk |
