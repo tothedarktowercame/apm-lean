@@ -1646,6 +1646,72 @@ multiplies `flagSign` by the deletion sign of `v` and the cone insertion sign
 of `barycenter s`.  (New pairs `(t, s)`: `v` precedes the new vertices of the
 `(k+1) - idx v` larger vertices; `barycenter s` precedes the `(k+1) - #lt`
 larger barycenters; `2(k+1)` cancels.) -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_proper {n k : ℕ}
+    (K : GSC n) (s : FaceIndex K (k + 1)) (v : Euc n)
+    (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hcs : c' ⊆ (s.1.erase v).powerset) (t : Finset (Euc n)) (ht : t ∈ c') :
+    t ⊂ s.1 := by
+  refine Finset.ssubset_iff_subset_ne.2
+    ⟨(Finset.mem_powerset.1 (hcs ht)).trans (Finset.erase_subset _ _), ?_⟩
+  intro heq
+  have hsub := Finset.mem_powerset.1 (hcs ht)
+  have : v ∈ s.1.erase v := hsub (heq ▸ hv)
+  simpa using this
+
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_newVertex {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
+    (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hcs : c' ⊆ (s.1.erase v).powerset) (t : Finset (Euc n)) (ht : t ∈ c') :
+    flagNewVertex o (insert s.1 c') t = flagNewVertex o c' t := by
+  classical
+  have hp := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_proper
+    K s v hv c' hcs t ht
+  simp [flagNewVertex, Finset.biUnion_insert, hp.asymm]
+
+/-- First factor of `flagSign`: topping with `s` adds the pairs `(t, s)` with
+`v` below the new vertex of `t`.  The new vertices of the maximal chain `c'` are
+exactly `s.erase v`, once each, so there are `(k+1) - idx v` such pairs. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
+    (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hc' : GeometricSimplicialSubdivision.IsStrictFaceChain K c')
+    (hcs : c' ⊆ (s.1.erase v).powerset) (hcard : c'.card = k + 1) :
+    ((insert s.1 c' ×ˢ insert s.1 c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o (insert s.1 c') tu.2)
+          (flagNewVertex o (insert s.1 c') tu.1)).card + (s.1.sort o.le).idxOf v =
+      ((c' ×ˢ c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o c' tu.2)
+          (flagNewVertex o c' tu.1)).card + (k + 1) := by
+  sorry
+
+/-- Second factor of `flagSign`: topping with `s` adds the pairs `(t, s)` with
+`barycenter s` below `barycenter t`; with the `#lt` barycenters below it (no
+ties, by `_aux_bary_injOn` and `_aux_insert`) they account for all `k + 1`
+faces of `c'`. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_second {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
+    (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hc' : GeometricSimplicialSubdivision.IsStrictFaceChain K c')
+    (hcs : c' ⊆ (s.1.erase v).powerset) (hcard : c'.card = k + 1) :
+    ((insert s.1 c' ×ˢ insert s.1 c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (GeometricSimplicialSubdivision.barycenter tu.2)
+          (GeometricSimplicialSubdivision.barycenter tu.1)).card +
+        ((c'.image GeometricSimplicialSubdivision.barycenter).filter fun q =>
+          @LT.lt (Euc n) o.toLT q (GeometricSimplicialSubdivision.barycenter s.1)).card =
+      ((c' ×ˢ c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (GeometricSimplicialSubdivision.barycenter tu.2)
+          (GeometricSimplicialSubdivision.barycenter tu.1)).card + (k + 1) := by
+  sorry
+
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_pow (A i A' m : ℕ) (h : A + i = A' + m) :
+    (-1 : ℚ) ^ A = (-1) ^ A' * (-1) ^ m * (-1) ^ i := by
+  have hi : (-1 : ℚ) ^ i * (-1) ^ i = 1 := by
+    rw [← mul_pow]; norm_num
+  have : (-1 : ℚ) ^ A * (-1) ^ i = (-1) ^ A' * (-1) ^ m := by
+    rw [← pow_add, h, pow_add]
+  calc (-1 : ℚ) ^ A = (-1) ^ A * ((-1) ^ i * (-1) ^ i) := by rw [hi, mul_one]
+    _ = _ := by rw [← mul_assoc, this]
+
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign {n k : ℕ}
     (o : LinearOrder (Euc n)) (K : GSC n) (s : FaceIndex K (k + 1))
     (v : Euc n) (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
@@ -1656,7 +1722,24 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign {n k : �
         (-1 : ℚ) ^ ((c'.image GeometricSimplicialSubdivision.barycenter).filter fun q =>
           @LT.lt (Euc n) o.toLT q (GeometricSimplicialSubdivision.barycenter s.1)).card *
         flagSign o c' := by
-  sorry
+  have h1 := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_pow _ _ _ _
+    (subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first o K s v hv c' hc' hcs hcard)
+  have h2 := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_pow _ _ _ _
+    (subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_second o K s v hv c' hc' hcs hcard)
+  have hm : (-1 : ℚ) ^ (k + 1) * (-1) ^ (k + 1) = 1 := by
+    rw [← mul_pow]; norm_num
+  unfold flagSign
+  rw [h1, h2]
+  linear_combination
+    ((-1 : ℚ) ^ ((s.1.sort o.le).idxOf v) *
+      (-1) ^ ((c'.image GeometricSimplicialSubdivision.barycenter).filter fun q =>
+          @LT.lt (Euc n) o.toLT q (GeometricSimplicialSubdivision.barycenter s.1)).card *
+      (-1) ^ ((c' ×ˢ c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o c' tu.2)
+          (flagNewVertex o c' tu.1)).card *
+      (-1) ^ ((c' ×ˢ c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (GeometricSimplicialSubdivision.barycenter tu.2)
+          (GeometricSimplicialSubdivision.barycenter tu.1)).card) * hm
 
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff {n k : ℕ}
     (o : LinearOrder (Euc n)) (K : GSC n)
