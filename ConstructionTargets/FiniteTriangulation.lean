@@ -46,6 +46,27 @@ theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_base_eq
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ Rel.base
 
+/-- Banked from lemma-3's partial (2026-10-28). Route for (G1), claude-14:
+`j₁ x := WithLp.toLp 2 (Fin.append (WithLp.ofLp (x - v₁)) 0)`,
+`j₂ y := WithLp.toLp 2 (Fin.append 0 (WithLp.ofLp (y - v₂)))` (affine, injective,
+continuous); faces `F := (Finset.image j₁) '' K₁.faces ∪ (Finset.image j₂) '' K₂.faces`;
+build `K` by `Geometry.SimplicialComplex.ofErase F` inside the proof (independence:
+affine-injective images; lower set: images of subsets; intersection: a point in
+both a `j₁`-face and a `j₂`-face is `0`, which then is a vertex of both by
+`_aux_vertex_mem_hull_iff`; same-side faces by `K₁`/`K₂`'s own axiom pulled back
+along the injective affine map); `p := 0`. -/
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_vertex_mem_space
+    {n : ℕ} (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+    (v : EuclideanSpace ℝ (Fin n)) (hv : {v} ∈ K.faces) : v ∈ K.space := by
+  exact K.subset_space hv (by simp)
+
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_vertex_mem_hull_iff
+    {n : ℕ} (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+    (v : EuclideanSpace ℝ (Fin n)) (s : Finset (EuclideanSpace ℝ (Fin n)))
+    (hv : {v} ∈ K.faces) (hs : s ∈ K.faces) :
+    v ∈ convexHull ℝ (s : Set (EuclideanSpace ℝ (Fin n))) ↔ v ∈ s := by
+  exact K.vertex_mem_convexHull_iff hv hs
+
 /-- (G1) Two finite complexes glued at one vertex each: translate the marked
 vertices to the origin and place the complexes in the two factors of
 `ℝ^(a+b)`.  The images meet only at the origin; the intersection axiom holds
