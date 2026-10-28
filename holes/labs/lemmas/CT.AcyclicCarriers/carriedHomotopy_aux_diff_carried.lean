@@ -450,7 +450,24 @@ theorem carriedHomotopy_aux_diff_carried
     (hcmp₁ : IsAffineComparison K cmp₁) (hcmp₂ : IsAffineComparison K cmp₂)
     {k : ℕ} (s : FaceIndex K k) :
     FaceCarriedChain K s.1 ((cmp₁ k - cmp₂ k) (Finsupp.single s 1)) := by
-  sorry
+  classical
+  rcases affineComparison_generator_carried K cmp₁ hcmp₁ s with
+    ⟨m₁, a₁, σ₁, h₁, hc₁⟩
+  rcases affineComparison_generator_carried K cmp₂ hcmp₂ s with
+    ⟨m₂, a₂, σ₂, h₂, hc₂⟩
+  refine ⟨m₁ + m₂, Fin.append a₁ (fun i ↦ -a₂ i), Fin.append σ₁ σ₂, ?_, ?_⟩
+  · rw [Fin.sum_univ_add]
+    simp only [Fin.append_left, Fin.append_right]
+    rw [← h₁]
+    simp only [map_neg]
+    rw [Finset.sum_neg_distrib, ← h₂]
+    rw [sub_eq_add_neg]
+    simp only [ModuleCat.hom_add, ModuleCat.hom_neg, LinearMap.add_apply,
+      LinearMap.neg_apply]
+  · intro i
+    refine Fin.addCases (fun j ↦ ?_) (fun j ↦ ?_) i
+    · simpa using hc₁ j
+    · simpa using hc₂ j
 -- END SEAT AREA
 
 /-- (R2) A carried map composed after the signed-deletion differential is carried
