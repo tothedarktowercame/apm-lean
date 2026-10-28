@@ -328,6 +328,38 @@ theorem faceSimplex_range {n k : ℕ} (o : LinearOrder (Euc n))
       (fun x : K.space => (x : Euc n)) ⁻¹' convexHull ℝ (s.1 : Set (Euc n)) := by
   exact faceSimplex_range_aux o s
 
+theorem affineCmp_comm_aux_vertices {n k : ℕ} (o : LinearOrder (Euc n))
+    {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K (k + 1))
+    (i : Fin (k + 2)) (j : Fin (k + 1)) :
+    faceVertices o
+        (signedDeletion_sq_zero_aux_generator_aux_erase K s
+          (faceVertices o s i) (faceVertices_mem o s i)) j =
+      faceVertices o s (i.succAbove j) := by
+  sorry
+
+theorem affineCmp_comm_aux_face {n k : ℕ} (o : LinearOrder (Euc n))
+    {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K (k + 1))
+    (i : Fin (k + 2)) :
+    (TopCat.toSSet.obj (TopCat.of K.space)).δ i (faceSimplex o s) =
+      faceSimplex o
+        (signedDeletion_sq_zero_aux_generator_aux_erase K s
+          (faceVertices o s i) (faceVertices_mem o s i)) := by
+  sorry
+
+/-- Reindex the singular boundary (`singularGenerator_boundary`) against the
+signed-deletion formula `hd`, given the face compatibility. -/
+theorem affineCmp_comm_aux_sum {n : ℕ} (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (hface : ∀ (k : ℕ) (s : FaceIndex K (k + 1)) (i : Fin (k + 2)),
+      (TopCat.toSSet.obj (TopCat.of K.space)).δ i (faceSimplex o s) =
+        faceSimplex o (signedDeletion_sq_zero_aux_generator_aux_erase K s (faceVertices o s i) (faceVertices_mem o s i)))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) (k : ℕ) :
+    affineCmp o K (k + 1) ≫
+        (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k =
+      d k ≫ affineCmp o K k := by
+  sorry
+
 /-- (AC3) The comparison is a chain map: the `i`-th singular face of
 `faceSimplex s` is `faceSimplex (s.erase (i-th vertex))`
 (`singularSimplexOfContinuousMap_face`, `affineSimplex` of the face inclusion),
@@ -339,7 +371,7 @@ theorem affineCmp_comm {n : ℕ} (o : LinearOrder (Euc n))
     affineCmp o K (k + 1) ≫
         (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k =
       d k ≫ affineCmp o K k := by
-  sorry
+  exact affineCmp_comm_aux_sum o K (fun k s i => affineCmp_comm_aux_face o s i) d hd k
 
 theorem affineComparison_exists_and_commutes {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
