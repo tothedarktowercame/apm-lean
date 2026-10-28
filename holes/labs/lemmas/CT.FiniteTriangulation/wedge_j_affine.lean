@@ -227,7 +227,17 @@ theorem wedgeFaces_inter_aux_affine_image
 theorem wedge_j_affine {a b : ℕ} (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) :
     (∃ A : EuclideanSpace ℝ (Fin a) →ᵃ[ℝ] EuclideanSpace ℝ (Fin (a + b)), ⇑A = wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁) ∧
       (∃ A : EuclideanSpace ℝ (Fin b) →ᵃ[ℝ] EuclideanSpace ℝ (Fin (a + b)), ⇑A = wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂) := by
-  sorry
+  constructor
+  · refine ⟨wedgeFaces_indep_aux_f1 (b := b) v₁, ?_⟩
+    funext x
+    simp [wedgeFaces_indep_aux_f1, wedgeFaces_indep_aux_l1,
+      wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1,
+      sub_eq_add_neg, add_comm]
+  · refine ⟨wedgeFaces_indep_aux_f2 (a := a) v₂, ?_⟩
+    funext y
+    simp [wedgeFaces_indep_aux_f2, wedgeFaces_indep_aux_l2,
+      wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2,
+      sub_eq_add_neg, add_comm]
 -- END SEAT AREA
 
 /-- (X2) Same side: subsets of images of two faces under an injective affine
