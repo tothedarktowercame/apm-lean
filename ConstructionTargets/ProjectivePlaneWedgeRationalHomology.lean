@@ -6,6 +6,7 @@ import ConstructionTargets.ProductionOpenCoverMayerVietoris
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.PolygonInnerOpenPointedContraction
+import ConstructionTargets.RationalPolygonSurfaceHomology
 
 /-! Rational homology and Lefschetz-number interfaces for finite point wedges
 of the polygon model of the real projective plane. -/
@@ -37,7 +38,39 @@ def HasPointedContractibleNeighbourhood
 /-- L1 (LIBRARY): the polygon `aa` calculation over `ℚ`. -/
 theorem realProjectivePlane_rationallyPointlike :
     RationallyPointlike RealProjectivePlane := by
-  sorry
+  open ConstructionTargets.RationalPolygonSurfaceHomology
+    ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology in
+  let P := standardPairingData false 1 one_pos
+  let φ : P.Space ≃ₜ RealProjectivePlane := standardPairingData_space_homeomorph false 1 one_pos
+  have hiso : ∀ k, Homology RealProjectivePlane k ≅ Homology P.Space k := fun k =>
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).mapIso (TopCat.isoOfHomeo φ).symm
+  obtain ⟨⟨h0⟩, ⟨h1⟩, ⟨h2⟩, h3⟩ := polygonQuotient_homology P
+  obtain ⟨hfin1, hr1, hr2⟩ := polygonNF_standard_boundary_ranks false 1 one_pos
+  have r0 := ratUC_rationalHomology_finrank P.Space 0 ℤ h0
+  have r1 := ratUC_rationalHomology_finrank P.Space 1 _ h1
+  have r2 := ratUC_rationalHomology_finrank P.Space 2 _ h2
+  have zero_of : ∀ k, FiniteDimensional ℚ (Homology P.Space k) →
+      Module.finrank ℚ (Homology P.Space k) = 0 →
+      IsZero (Homology RealProjectivePlane k) := by
+    intro k hfd hr
+    have : Subsingleton (Homology P.Space k) := Module.finrank_zero_iff.mp hr
+    exact (ModuleCat.isZero_of_subsingleton _).of_iso (hiso k)
+  refine ⟨?_, ?_⟩
+  · haveI := r0.1
+    have hr : Module.finrank ℚ (Homology P.Space 0) =
+        Module.finrank ℚ (ModuleCat.of ℚ ℚ) := by
+      rw [r0.2]; simp
+    exact ⟨hiso 0 ≪≫ (LinearEquiv.ofFinrankEq _ _ hr).toModuleIso⟩
+  · intro k hk
+    rcases k with _ | _ | _ | k
+    · omega
+    · exact zero_of 1 r1.1 (by rw [r1.2, hr1]; rfl)
+    · exact zero_of 2 r2.1 (by rw [r2.2, hr2]; rfl)
+    · have z := ratUC_rationalHomology_finrank P.Space (k + 3) PUnit
+        ((h3 (k + 3) (by omega)).iso
+          (ModuleCat.isZero_of_subsingleton (ModuleCat.of ℤ PUnit)))
+      exact zero_of _ z.1 (by simpa using z.2)
 
 /-- L2: the polygon quotient is path connected. -/
 theorem realProjectivePlane_pathConnected :
