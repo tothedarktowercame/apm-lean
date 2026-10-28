@@ -1247,6 +1247,24 @@ theorem subdivisionChainMap_commutes_aux_cone_formula {n k : ℕ}
 /-- Formal induction assembling the cone formula and cone-boundary identities.
 The sign-bearing geometric facts are supplied explicitly so this lemma is
 independent of their proofs. -/
+lemma subdivisionChainMap_commutes_aux_induction_aux_augmentation {n : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n)
+    (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat (barycentricStep K) k)
+    (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd)
+    (r : FaceIndex K 0) :
+    (sd 0 (Finsupp.single r 1)).sum (fun _ a => a) = 1 := by
+  sorry
+
+lemma subdivisionChainMap_commutes_aux_induction_aux_edge_sign_sum {n : ℕ}
+    (o : LinearOrder (Euc n)) (s : Finset (Euc n)) (hs : s.card = 2) :
+    ∑ v ∈ s.attach, (-1 : ℚ) ^ ((s.sort o.le).idxOf v.1) = 0 := by
+  sorry
+
+/- Note (claude-14): lemma-3's 99-line assembly attempt (does not compile; the
+positive-degree residual must be handled as ONE summed expression — apply the
+induction hypothesis inside the sum, then linearity and `dK ≫ dK = 0`; it cannot
+be killed termwise) is saved at
+~/notes/packets/lemmas/partials/subdivisionChainMap_commutes_aux_induction.attempt-lemma3.lean -/
 theorem subdivisionChainMap_commutes_aux_induction {n : ℕ}
     (o : LinearOrder (Euc n)) (K : GSC n)
     (dK : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
