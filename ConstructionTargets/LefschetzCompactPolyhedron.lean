@@ -267,7 +267,50 @@ theorem trace_eq_trace_restrict_add_trace_mapQ
     LinearMap.trace ℚ V φ =
       LinearMap.trace ℚ W (φ.restrict hW) +
         LinearMap.trace ℚ (V ⧸ W) (W.mapQ W φ (fun x hx => hW x hx)) := by
-  sorry
+  classical
+  obtain ⟨U, hU⟩ := W.exists_isCompl
+  let e : (W × U) ≃ₗ[ℚ] V := W.prodEquivOfIsCompl U hU
+  let p : V →ₗ[ℚ] W := (LinearMap.fst ℚ W U).comp e.symm.toLinearMap
+  let q : V →ₗ[ℚ] V ⧸ W := W.mkQ
+  let s : (V ⧸ W) →ₗ[ℚ] V :=
+    U.subtype.comp (W.quotientEquivOfIsCompl U hU).toLinearMap
+  have hp (x : W) : p x = x := by
+    change (e.symm x).1 = x
+    rw [Submodule.prodEquivOfIsCompl_symm_apply_left]
+  have hq (x : V ⧸ W) : q (s x) = x := by
+    change W.mkQ (W.quotientEquivOfIsCompl U hU x) = x
+    exact W.mk_quotientEquivOfIsCompl_apply U hU x
+  have hdecomp : W.subtype.comp p + s.comp q = LinearMap.id := by
+    ext x
+    let y : W × U := e.symm x
+    have hxy : e y = x := e.apply_symm_apply x
+    change (p x : V) + s (q x) = x
+    rw [← hxy]
+    simp [p, q, s, e]
+  have hφ : φ = W.subtype.comp (p.comp φ) + s.comp (q.comp φ) := by
+    ext x
+    simpa only [LinearMap.add_apply, LinearMap.comp_apply, LinearMap.id_apply] using
+      (LinearMap.congr_fun hdecomp (φ x)).symm
+  calc
+    LinearMap.trace ℚ V φ = LinearMap.trace ℚ V
+        (W.subtype.comp (p.comp φ) + s.comp (q.comp φ)) := congrArg _ hφ
+    _ = LinearMap.trace ℚ V (W.subtype.comp (p.comp φ)) +
+        LinearMap.trace ℚ V (s.comp (q.comp φ)) := map_add _ _ _
+    _ = _ := by
+      have hfirst : (p.comp φ).comp W.subtype = φ.restrict hW := by
+        ext x
+        exact congrArg Subtype.val (hp ⟨φ x, hW x x.property⟩)
+      have hsecond : (q.comp φ).comp s =
+          W.mapQ W φ (fun x hx => hW x hx) := by
+        apply LinearMap.ext
+        intro x
+        change q (φ (s x)) = W.mapQ W φ (fun x hx => hW x hx) x
+        calc
+          _ = W.mapQ W φ (fun x hx => hW x hx) (q (s x)) := by
+            simp [q, Submodule.mapQ_apply]
+          _ = _ := congrArg _ (hq x)
+      rw [LinearMap.trace_comp_comm', hfirst,
+        LinearMap.trace_comp_comm', hsecond]
 
 namespace FiniteChainEndomorphism
 
