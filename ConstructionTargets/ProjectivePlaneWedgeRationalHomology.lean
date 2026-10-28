@@ -148,12 +148,223 @@ Mayer--Vietoris `RP3Homology.rationalMayerVietoris`
 (`ConstructionTargets/CP2RationalHomology.lean`); degree-zero surjectivity of
 `H₀ U ⊕ H₀ V → H₀ Z` is not part of that theorem and comes from points: every
 point lies in `U` or `V`. -/
+lemma rationallyPointlike_of_openCover_aux_h0Map_bijective
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B] [Nonempty A]
+    (f : C(A, B)) (hA : RationallyPointlike A) (hB : RationallyPointlike B) :
+    Function.Bijective
+      (HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℚ f) 0).hom := by
+  obtain ⟨eA⟩ := hA.1
+  obtain ⟨eB⟩ := hB.1
+  letI : FiniteDimensional ℚ (Homology A 0) :=
+    Module.Finite.equiv eA.toLinearEquiv.symm
+  letI : FiniteDimensional ℚ (Homology B 0) :=
+    Module.Finite.equiv eB.toLinearEquiv.symm
+  let εA : Homology A 0 ⟶ ModuleCat.of ℚ ℚ :=
+    ConstructionTargets.CoefficientH0.h0Augmentation ℚ
+  let εB : Homology B 0 ⟶ ModuleCat.of ℚ ℚ :=
+    ConstructionTargets.CoefficientH0.h0Augmentation ℚ
+  have hsA : Function.Surjective εA.hom := by
+    intro a
+    refine ⟨(ConstructionTargets.CoefficientH0.singularVertexH0Class ℚ
+      (Classical.choice (inferInstance : Nonempty A))).hom a, ?_⟩
+    exact congrArg (fun g => g.hom a)
+      (ConstructionTargets.CoefficientH0.singularVertexH0Class_comp_h0Augmentation
+        ℚ (Classical.choice (inferInstance : Nonempty A)))
+  have hdA : Module.finrank ℚ (Homology A 0) =
+      Module.finrank ℚ (ModuleCat.of ℚ ℚ) := by
+    simpa using eA.toLinearEquiv.finrank_eq
+  have hiA : Function.Injective εA.hom :=
+    (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdA).2 hsA
+  let F := HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientH0.singularPostcomposition ℚ f) 0
+  have hiF : Function.Injective F.hom := by
+    intro x y hxy
+    apply hiA
+    have hn := ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ f
+    have hx := congrArg (fun g => g.hom x) hn
+    have hy := congrArg (fun g => g.hom y) hn
+    simp only [CategoryTheory.comp_apply] at hx hy
+    exact hx.symm.trans (congrArg εB.hom hxy |>.trans hy)
+  have hd : Module.finrank ℚ (Homology A 0) = Module.finrank ℚ (Homology B 0) := by
+    rw [eA.toLinearEquiv.finrank_eq, eB.toLinearEquiv.finrank_eq]
+  exact ⟨hiF, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hd).1 hiF⟩
+
+lemma rationallyPointlike_of_openCover_aux_elem_zero
+    {M : ModuleCat ℚ} (hM : IsZero M) (x : M) : x = 0 := by
+  have h := congrArg (fun f : M ⟶ M => f.hom x) (hM.eq_of_tgt (𝟙 M) 0)
+  simpa using h
+
+lemma rationallyPointlike_of_openCover_aux_biprod_zero
+    {M N : ModuleCat ℚ} (hM : IsZero M) (hN : IsZero N) : IsZero (M ⊞ N) := by
+  rw [biprod_isZero_iff]
+  exact ⟨hM, hN⟩
+
+lemma rationallyPointlike_of_openCover_aux_exact_zero
+    {A B C : ModuleCat ℚ} (f : A ⟶ B) (g : B ⟶ C)
+    (hA : IsZero A) (hC : IsZero C)
+    (hex : LinearMap.range f.hom = LinearMap.ker g.hom) : IsZero B := by
+  letI : Subsingleton B := ⟨by
+    intro x y
+    suffices hz : ∀ z : B, z = 0 by exact (hz x).trans (hz y).symm
+    intro z
+    have hgz : g.hom z = 0 := rationallyPointlike_of_openCover_aux_elem_zero hC _
+    have hzker : z ∈ LinearMap.ker g.hom := hgz
+    rw [← hex] at hzker
+    obtain ⟨a, ha⟩ := hzker
+    rw [← ha, rationallyPointlike_of_openCover_aux_elem_zero hA a, map_zero]⟩
+  exact ModuleCat.isZero_of_subsingleton _
+
+def rationallyPointlike_of_openCover_aux_codiagonal
+    {I P Q : ModuleCat ℚ} (i : I ≅ P) (j : I ≅ Q) : P ⊞ Q ⟶ I :=
+  biprod.desc i.inv j.inv
+
+def rationallyPointlike_of_openCover_aux_cokernelCofork
+    {I P Q : ModuleCat ℚ} (i : I ≅ P) (j : I ≅ Q) :
+    CokernelCofork (biprod.lift i.hom (-j.hom)) :=
+  CokernelCofork.ofπ (rationallyPointlike_of_openCover_aux_codiagonal i j) (by
+    simp [rationallyPointlike_of_openCover_aux_codiagonal])
+
+def rationallyPointlike_of_openCover_aux_cokernelIsColimit
+    {I P Q : ModuleCat ℚ} (i : I ≅ P) (j : I ≅ Q) :
+    IsColimit (rationallyPointlike_of_openCover_aux_cokernelCofork i j) :=
+  Cofork.IsColimit.mk' _ fun s =>
+    ⟨i.hom ≫ biprod.inl ≫ s.π, by
+      have hs : biprod.lift i.hom (-j.hom) ≫ s.π = 0 := by
+        simpa only [zero_comp] using s.condition
+      have hdecomp : s.π =
+          biprod.desc (biprod.inl ≫ s.π) (biprod.inr ≫ s.π) := by
+        apply biprod.hom_ext' <;> simp
+      have hs' : i.hom ≫ biprod.inl ≫ s.π = j.hom ≫ biprod.inr ≫ s.π := by
+        rw [← sub_eq_zero]
+        rw [hdecomp, biprod.lift_desc] at hs
+        simpa only [Category.assoc, Preadditive.neg_comp, sub_eq_add_neg] using hs
+      apply biprod.hom_ext'
+      · simp [rationallyPointlike_of_openCover_aux_cokernelCofork,
+          rationallyPointlike_of_openCover_aux_codiagonal]
+      · have h := congrArg (fun k => j.inv ≫ k) hs'
+        simpa [rationallyPointlike_of_openCover_aux_cokernelCofork,
+          rationallyPointlike_of_openCover_aux_codiagonal, Category.assoc] using h,
+    fun {m} hm => by
+      rw [← hm]
+      simp [rationallyPointlike_of_openCover_aux_cokernelCofork,
+        rationallyPointlike_of_openCover_aux_codiagonal]⟩
+
+def rationallyPointlike_of_openCover_aux_targetIso
+    {I P Q X : ModuleCat ℚ} (i : I ≅ P) (j : I ≅ Q) (r : P ⊞ Q ⟶ X)
+    (hr : biprod.lift i.hom (-j.hom) ≫ r = 0)
+    (hex : (ShortComplex.mk (biprod.lift i.hom (-j.hom)) r hr).Exact)
+    [Epi r] : X ≅ I := by
+  let S := ShortComplex.mk (biprod.lift i.hom (-j.hom)) r hr
+  let hR : IsColimit (CokernelCofork.ofπ r hr) :=
+    (S.exact_and_epi_g_iff_g_is_cokernel.mp ⟨hex, inferInstance⟩).some
+  exact hR.coconePointUniqueUpToIso
+    (rationallyPointlike_of_openCover_aux_cokernelIsColimit i j)
+
 theorem rationallyPointlike_of_openCover {Z : Type} [TopologicalSpace Z]
     (U V : Set Z) (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
     (hne : (U ∩ V).Nonempty)
     (hUp : RationallyPointlike U) (hVp : RationallyPointlike V)
     (hIp : RationallyPointlike ↥(U ∩ V)) : RationallyPointlike Z := by
-  sorry
+  open RP3Homology in
+    letI : Nonempty ↥(U ∩ V) := hne.to_subtype
+    letI : Nonempty U := ⟨⟨hne.choose, hne.choose_spec.1⟩⟩
+    letI : Nonempty V := ⟨⟨hne.choose, hne.choose_spec.2⟩⟩
+    obtain ⟨δ, e1, e2, e3⟩ := rationalMayerVietoris U V hU hV hcov
+    let iU : C(↥(U ∩ V), U) :=
+      ⟨Set.inclusion Set.inter_subset_left, continuous_inclusion _⟩
+    let iV : C(↥(U ∩ V), V) :=
+      ⟨Set.inclusion Set.inter_subset_right, continuous_inclusion _⟩
+    have biU := rationallyPointlike_of_openCover_aux_h0Map_bijective iU hIp hUp
+    have biV := rationallyPointlike_of_openCover_aux_h0Map_bijective iV hIp hVp
+    have hi0 : Function.Injective (mvI U V 0).hom := by
+      intro x y hxy
+      apply biU.1
+      have h := congrArg (fun z =>
+        ((biprod.fst : Homology U 0 ⊞ Homology V 0 ⟶ Homology U 0).hom z)) hxy
+      have hc : ((mvI U V 0 ≫
+          (biprod.fst : Homology U 0 ⊞ Homology V 0 ⟶ Homology U 0)).hom x) =
+          ((mvI U V 0 ≫ biprod.fst).hom y) := by
+        simpa [ModuleCat.comp_apply] using h
+      rw [show mvI U V 0 ≫ biprod.fst = mvIncl Set.inter_subset_left 0 by
+        simp [mvI]] at hc
+      simpa [mvIncl, iU] using hc
+    have hJ0epi : Epi (mvJ U V 0) := by
+      haveI : Epi (rationalMayerVietoris_aux_SC U V).g :=
+        (ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortExact
+        ℚ (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).epi_g
+      have hg : Epi (HomologicalComplex.homologyMap
+          (rationalMayerVietoris_aux_SC U V).g 0) :=
+        HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+          (rationalMayerVietoris_aux_SC U V).g 0 (by
+          intro j hj
+          dsimp at hj
+          omega)
+      apply (ModuleCat.epi_iff_surjective (mvJ U V 0)).2
+      rw [← rationalMayerVietoris_aux_unionArrow U V hU hV hcov 0]
+      exact ((ConcreteCategory.bijective_of_isIso
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov 0).hom).2).comp
+          (((ModuleCat.epi_iff_surjective _).1 hg).comp
+            (ConcreteCategory.bijective_of_isIso
+              (rationalMayerVietoris_aux_pieceIso U V 0).inv).2)
+    have hJ0surj : Function.Surjective (mvJ U V 0).hom :=
+      (ModuleCat.epi_iff_surjective (mvJ U V 0)).mp hJ0epi
+    obtain ⟨eI⟩ := hIp.1
+    let fU := HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientH0.singularPostcomposition ℚ iU) 0
+    let fV := HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientH0.singularPostcomposition ℚ iV) 0
+    letI : IsIso fU := (ConcreteCategory.isIso_iff_bijective fU).2 biU
+    letI : IsIso fV := (ConcreteCategory.isIso_iff_bijective fV).2 biV
+    let isoU := asIso fU
+    let isoV := (asIso fV) ≪≫ rationalMayerVietoris_aux_negIso _
+    have hmvI : mvI U V 0 = biprod.lift isoU.hom (-isoV.hom) := by
+      dsimp [mvI]
+      congr 1
+      simp [isoV, rationalMayerVietoris_aux_negIso]
+      rfl
+    have hzero : biprod.lift isoU.hom (-isoV.hom) ≫ mvJ U V 0 = 0 := by
+      rw [← hmvI]
+      apply ModuleCat.hom_ext
+      ext x
+      change (mvJ U V 0).hom ((mvI U V 0).hom x) = 0
+      have hx : (mvI U V 0).hom x ∈ LinearMap.range (mvI U V 0).hom := ⟨x, rfl⟩
+      rw [e1 0] at hx
+      exact hx
+    have hex : (ShortComplex.mk (biprod.lift isoU.hom (-isoV.hom))
+        (mvJ U V 0) hzero).Exact := by
+      rw [ShortComplex.moduleCat_exact_iff_range_eq_ker]
+      simpa [hmvI] using e1 0
+    haveI : Epi (mvJ U V 0) := hJ0epi
+    have h0iso : Nonempty (Homology Z 0 ≅ ModuleCat.of ℚ ℚ) :=
+      ⟨(@rationallyPointlike_of_openCover_aux_targetIso _ _ _ _ isoU isoV
+        (mvJ U V 0) hzero hex hJ0epi) ≪≫ eI⟩
+    refine ⟨h0iso, ?_⟩
+    intro k hk
+    rcases k with _ | k
+    · omega
+    rcases k with _ | k
+    · have hr : LinearMap.range (δ 0).hom = ⊥ := by
+        rw [e3 0, LinearMap.ker_eq_bot]
+        exact hi0
+      have hd : (δ 0).hom = 0 := LinearMap.range_eq_bot.mp hr
+      have hz := rationallyPointlike_of_openCover_aux_biprod_zero
+        (hUp.2 1 (by omega)) (hVp.2 1 (by omega))
+      letI : Subsingleton (Homology Z 1) := ⟨by
+        intro x y
+        suffices hh : ∀ z : Homology Z 1, z = 0 by exact (hh x).trans (hh y).symm
+        intro z
+        have hzker : z ∈ LinearMap.ker (δ 0).hom := by rw [hd]; simp
+        rw [← e2 0] at hzker
+        obtain ⟨a, ha⟩ := hzker
+        rw [← ha, rationallyPointlike_of_openCover_aux_elem_zero hz a, map_zero]⟩
+      exact ModuleCat.isZero_of_subsingleton _
+    · apply rationallyPointlike_of_openCover_aux_exact_zero
+        (mvJ U V (k + 2)) (δ (k + 1))
+      · exact rationallyPointlike_of_openCover_aux_biprod_zero
+          (hUp.2 _ (by omega)) (hVp.2 _ (by omega))
+      · exact hIp.2 _ (by omega)
+      · simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using e2 (k + 1)
 
 /-- L4 (LIBRARY): rational Mayer--Vietoris for a point wedge.  The local
 hypotheses rule out wild wedges such as the Hawaiian earring. -/
