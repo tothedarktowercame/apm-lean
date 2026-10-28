@@ -370,7 +370,13 @@ def rp2Map (y : rp2Complex.space) : RealProjectivePlane := by
 -- Stage 3: the radial map.
 -- BEGIN SEAT AREA
 lemma rp2_explicit_finite_model_aux_hex_norm (z : ℂ) : ‖hexToDisk z‖ = gauge hexagon z := by
-  sorry
+  by_cases hz : z = 0
+  · simp [hz, hexToDisk]
+  · have hn : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz
+    change ‖((gauge hexagon z / ‖z‖ : ℝ) : ℂ) * z‖ = gauge hexagon z
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (div_nonneg (gauge_nonneg _) (norm_nonneg z))]
+    exact div_mul_cancel₀ (gauge hexagon z) hn
 -- END SEAT AREA
 
 lemma rp2_explicit_finite_model_aux_hex_continuous : Continuous hexToDisk := by
