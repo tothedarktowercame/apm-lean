@@ -17,7 +17,7 @@ open scoped Manifold
 noncomputable section
 
 abbrev T98A02E4 := EuclideanSpace ℝ (Fin 4)
-abbrev T98A02I4 := modelWithCornersSelf ℝ T98A02E4
+abbrev T98A02I4 := 𝓘(ℝ, T98A02E4)
 abbrev T98A02Disk := Metric.closedBall (0 : T98A02E4) 1
 abbrev T98A02Sphere := Metric.sphere (0 : T98A02E4) 1
 
