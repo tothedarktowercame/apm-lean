@@ -57,7 +57,11 @@ theorem affineComparison_generator_carried {n k : ℕ}
     (cmp : ∀ j, FaceModuleCat K j ⟶ (SingularQChains K).X j)
     (hcmp : IsAffineComparison K cmp) (s : FaceIndex K k) :
     FaceCarriedChain K s.1 (cmp k (Finsupp.single s 1)) := by
-  sorry
+  rcases hcmp k s with ⟨σ, hσ, hrange⟩
+  refine ⟨1, fun _ ↦ 1, fun _ ↦ σ, ?_, ?_⟩
+  · simpa using hσ
+  · intro i
+    simpa [hrange]
 
 /-- Carrier monotonicity: a chain carried by a subface is carried by the
 containing face.  This is `convexHull_mono`. -/
