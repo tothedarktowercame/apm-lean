@@ -262,7 +262,10 @@ theorem affineCmp_single {n : ℕ} (o : LinearOrder (Euc n))
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (k : ℕ) (s : FaceIndex K k) :
     affineCmp o K k (Finsupp.single s 1) =
       (CoefficientH0.singularGenerator ℚ _ k (faceSimplex o s)) 1 := by
-  sorry
+  change (Finsupp.lsum ℚ (fun s : FaceIndex K k =>
+    (CoefficientH0.singularGenerator ℚ (TopCat.of K.space) k
+      (faceSimplex o s)).hom)) (Finsupp.single s 1) = _
+  rw [Finsupp.lsum_single]
 -- END SEAT AREA
 
 /-- (AC2) The affine simplex of a face has image exactly the face's hull. -/
