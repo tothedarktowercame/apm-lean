@@ -197,7 +197,20 @@ theorem faceHullPreimage_rationallyPointlike {n k : ℕ}
     (hpoint : RationallyPointlike (convexHull ℝ (s.1 : Set (Euc n)))) :
     RationallyPointlike ((fun x : K.space => (x : Euc n)) ⁻¹'
       convexHull ℝ (s.1 : Set (Euc n))) := by
-  sorry
+  let e : ((fun x : K.space => (x : Euc n)) ⁻¹'
+        convexHull ℝ (s.1 : Set (Euc n))) ≃ₜ
+      convexHull ℝ (s.1 : Set (Euc n)) :=
+    { toEquiv :=
+        { toFun := fun x => ⟨x.1.1, x.2⟩
+          invFun := fun x =>
+            ⟨⟨x.1, K.convexHull_subset_space s.2.1 x.2⟩, x.2⟩
+          left_inv := fun x => by ext; rfl
+          right_inv := fun x => by ext; rfl }
+      continuous_toFun :=
+        continuous_subtype_val.comp continuous_subtype_val |>.subtype_mk _
+      continuous_invFun :=
+        (continuous_subtype_val.subtype_mk _).subtype_mk _ }
+  exact rationallyPointlike_of_homotopyEquiv e.toHomotopyEquiv hpoint
 
 /-- Positive-degree acyclicity in the concrete carrier form needed by the
 induction: a carried cycle bounds a carried chain.  Its proof lifts the finite
