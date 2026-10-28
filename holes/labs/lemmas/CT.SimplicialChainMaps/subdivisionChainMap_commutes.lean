@@ -58,12 +58,23 @@ def flagNewVertex {n : ℕ} (o : LinearOrder (Euc n))
     (c : Finset (Finset (Euc n))) (t : Finset (Euc n)) : Euc n :=
   ((t \ c.biUnion (fun u => if u ⊂ t then u else ∅)).1.sort o.le).getD 0 0
 
-/-- Closed orientation formula for a flag: order the faces by inclusion and
-take the inversion parity of the successive newly introduced old vertices. -/
+/-- Closed orientation formula for a flag `s₀ ⊂ ⋯ ⊂ s_k` (claude-14 fix
+2026-10-28, from lemma-2's counterexample): the coefficient of the `o`-sorted
+subdivided face is the product of
+* the inversion parity, under `o`, of the newly introduced old vertices in
+  inclusion order (the sign of `sd` on the `o`-ordered simplex), and
+* the inversion parity, under `o`, of the barycenters in inclusion order
+  (reordering `[b₀,…,b_k]` into the `o`-sorted basis of the subdivision).
+The earlier form had only the first factor and compared with the POINTWISE `>`
+of EuclideanSpace instead of `o`.  Check: edge `[0,1]`, `o` reversed, `m = 1/2`:
+both flags get `+1`, matching `sd[1,0] = [m,0] - [m,1]`. -/
 def flagSign {n : ℕ} (o : LinearOrder (Euc n))
     (c : Finset (Finset (Euc n))) : ℚ :=
   (-1 : ℚ) ^ ((c ×ˢ c).filter fun tu =>
-    tu.1 ⊂ tu.2 ∧ flagNewVertex o c tu.1 > flagNewVertex o c tu.2).card
+    tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o c tu.2) (flagNewVertex o c tu.1)).card *
+  (-1 : ℚ) ^ ((c ×ˢ c).filter fun tu =>
+    tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (GeometricSimplicialSubdivision.barycenter tu.2)
+      (GeometricSimplicialSubdivision.barycenter tu.1)).card
 
 def IsSubdivisionChainMap {n : ℕ} (o : LinearOrder (Euc n)) (K K' : GSC n)
     (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k) : Prop := by
