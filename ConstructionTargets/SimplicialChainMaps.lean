@@ -109,6 +109,27 @@ theorem vertexChainMap_exists {n m : ℕ} (on : LinearOrder (Euc n))
     simp [hm, b, hinj]
   · simp [hm, b, hinj]
 
+lemma vertexChainMap_commutes_aux_ext {n m k : ℕ}
+    (K : GSC n) (L : GSC m)
+    (f g : FaceModuleCat K (k + 1) ⟶ FaceModuleCat L k)
+    (hfg : ∀ s : FaceIndex K (k + 1),
+      f (Finsupp.single s 1) = g (Finsupp.single s 1)) : f = g := by
+  ext s a
+  exact congrArg (fun x => x a) (hfg s)
+
+lemma vertexChainMap_commutes_aux_generator {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (dL : ∀ k, FaceModuleCat L (k+1) ⟶ FaceModuleCat L k)
+    (hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k)
+    (hdK : IsSignedDeletion on K dK) (hdL : IsSignedDeletion om L dL)
+    (hhm : IsVertexChainMap on om K L h hm) (k : ℕ)
+    (s : FaceIndex K (k + 1)) :
+    dL k (hm (k + 1) (Finsupp.single s 1)) =
+      hm k (dK k (Finsupp.single s 1)) := by
+  sorry
+
 theorem vertexChainMap_commutes {n m : ℕ} (on : LinearOrder (Euc n))
     (om : LinearOrder (Euc m)) (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
     (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
@@ -117,7 +138,10 @@ theorem vertexChainMap_commutes {n m : ℕ} (on : LinearOrder (Euc n))
     (hdK : IsSignedDeletion on K dK) (hdL : IsSignedDeletion om L dL)
     (hhm : IsVertexChainMap on om K L h hm) :
     ∀ k, hm (k+1) ≫ dL k = dK k ≫ hm k := by
-  sorry
+  intro k
+  apply vertexChainMap_commutes_aux_ext
+  intro s
+  exact vertexChainMap_commutes_aux_generator on om K L h dK dL hm hdK hdL hhm k s
 
 theorem barycentricSubdivisionChainMap_exists {n : ℕ} (o : LinearOrder (Euc n))
     (K : GSC n) (hi hd hx) :
