@@ -855,7 +855,93 @@ theorem barycentricSubdivision_space_aux_superset_aux_flag_decomposition_aux_exi
     (hxt : x ∈ convexHull ℝ (t : Set (Euc n))) (hne : x ≠ barycenter t) :
     ∃ v ∈ t, ∃ y ∈ convexHull ℝ ((t.erase v : Finset (Euc n)) : Set (Euc n)),
       x ∈ segment ℝ (barycenter t) y := by
-  sorry
+  classical
+  have htne : t.Nonempty := by
+    by_contra ht
+    rw [Finset.not_nonempty_iff_eq_empty.mp ht] at hxt
+    simpa using hxt
+  obtain ⟨w, hw0, hw1, hwx⟩ := Finset.mem_convexHull'.mp hxt
+  let q : ℝ := (t.card : ℝ)⁻¹
+  have hcard : (t.card : ℝ) ≠ 0 := by
+    exact_mod_cast Finset.card_ne_zero.mpr htne
+  have hqcard : (t.card : ℝ) * q = 1 := by
+    simp [q, hcard]
+  have hqsum : ∑ _u ∈ t, q = 1 := by
+    rw [Finset.sum_const, nsmul_eq_mul]
+    exact hqcard
+  have hlt : ∃ v ∈ t, w v < q := by
+    by_contra h
+    push_neg at h
+    have heq : ∀ v ∈ t, w v = q := by
+      intro v hv
+      apply le_antisymm
+      · by_contra hvq
+        have hvq' : q < w v := lt_of_not_ge hvq
+        have hslt : (∑ u ∈ t, q) < ∑ u ∈ t, w u := by
+          apply Finset.sum_lt_sum
+          · intro u hu
+            exact h u hu
+          · exact ⟨v, hv, hvq'⟩
+        linarith [hqsum, hw1]
+      · exact h v hv
+    apply hne
+    rw [barycentricFaces_affineIndependent_aux_barycenter_formula, ← hwx,
+      Finset.smul_sum]
+    apply Finset.sum_congr rfl
+    intro z hz
+    rw [heq z hz]
+  obtain ⟨v, hv, hvmin⟩ := Finset.exists_min_image t w htne
+  obtain ⟨u, hu, huq⟩ := hlt
+  have hvq : w v < q := lt_of_le_of_lt (hvmin u hu) huq
+  let a : ℝ := (t.card : ℝ) * w v
+  have hva0 : 0 ≤ w v := hw0 v hv
+  have ha0 : 0 ≤ a := mul_nonneg (by positivity) hva0
+  have ha1 : a < 1 := by
+    calc
+      a < (t.card : ℝ) * q := (mul_lt_mul_of_pos_left hvq (by exact_mod_cast Finset.card_pos.mpr htne))
+      _ = 1 := hqcard
+  have hden : 0 < 1 - a := sub_pos.mpr ha1
+  let wy : Euc n → ℝ := fun u => (w u - w v) / (1 - a)
+  let y : Euc n := ∑ u ∈ t, wy u • u
+  have hwy0 : ∀ u ∈ t.erase v, 0 ≤ wy u := by
+    intro u hu
+    apply div_nonneg _ hden.le
+    exact sub_nonneg.mpr (hvmin u (Finset.mem_of_mem_erase hu))
+  have hwyv : wy v = 0 := by simp [wy]
+  have hwysum_t : ∑ u ∈ t, wy u = 1 := by
+    simp only [wy]
+    rw [← Finset.sum_div, Finset.sum_sub_distrib, hw1, Finset.sum_const,
+      nsmul_eq_mul]
+    change (1 - a) / (1 - a) = 1
+    exact div_self (ne_of_gt hden)
+  have hwysum : ∑ u ∈ t.erase v, wy u = 1 := by
+    rw [← hwysum_t, ← Finset.sum_erase_add _ _ hv, hwyv, add_zero]
+  have hy : y ∈ convexHull ℝ ((t.erase v : Finset (Euc n)) : Set (Euc n)) := by
+    apply Finset.mem_convexHull'.mpr
+    refine ⟨wy, hwy0, hwysum, ?_⟩
+    change (t.erase v).sum (fun u => wy u • u) = y
+    rw [show y = ∑ u ∈ t, wy u • u by rfl, ← Finset.sum_erase_add _ _ hv, hwyv,
+      zero_smul, add_zero]
+  refine ⟨v, hv, y, hy, ?_⟩
+  refine ⟨a, 1 - a, ha0, hden.le, by ring, ?_⟩
+  have hb : barycenter t = q • ∑ u ∈ t, u := by
+    simp [barycentricFaces_affineIndependent_aux_barycenter_formula, q]
+  rw [hb]
+  change a • (q • ∑ u ∈ t, u) + (1 - a) • (∑ u ∈ t, wy u • u) = x
+  rw [← hwx]
+  simp only [smul_smul, Finset.smul_sum]
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro z hz
+  have hqa : a * q = w v := by
+    calc
+      a * q = w v * ((t.card : ℝ) * q) := by dsimp [a]; ring
+      _ = w v := by rw [hqcard, mul_one]
+  simp only [wy]
+  rw [← add_smul]
+  congr 1
+  field_simp
+  linarith
 -- END SEAT AREA
 
 /-- (F2) The core, by strong induction on `t.card` using (F1): if
