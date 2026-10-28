@@ -24,11 +24,36 @@ def barycentricFaces {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n)) :
   {u | ∃ c : Finset (Finset (Euc n)), IsStrictFaceChain K c ∧
       u = c.image barycenter}
 
+lemma barycentricFaces_affineIndependent_aux_barycenter_formula {n : ℕ}
+    (s : Finset (Euc n)) :
+    barycenter s = (s.card : ℝ)⁻¹ • ∑ x ∈ s, x := by
+  simp [barycenter, Finset.centerMass]
+
+/-- (A1) Along a strict chain `s₀ ⊂ s₁ ⊂ ⋯` of faces of `K`, the barycenters are
+affinely independent: all lie in the top face, whose vertices are independent
+(`K.indep`), and `barycenter sᵢ` has positive weight on a vertex of
+`sᵢ \ sᵢ₋₁` that every earlier barycenter lacks (triangular coordinates). -/
+theorem barycentricFaces_affineIndependent_aux_chain {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c) :
+    AffineIndependent ℝ (fun s : c => barycenter (s : Finset (Euc n))) := by
+  sorry
+
+/-- (A2) Transfer from the chain-indexed family to the image finset
+(an affinely independent family is injective; `AffineIndependent.range`). -/
+theorem barycentricFaces_affineIndependent_aux_transfer {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (hchain : ∀ c : Finset (Finset (Euc n)), IsStrictFaceChain K c →
+      AffineIndependent ℝ (fun s : c => barycenter (s : Finset (Euc n)))) :
+    ∀ u ∈ barycentricFaces K, AffineIndependent ℝ ((↑) : u → Euc n) := by
+  sorry
+
 /-- Barycenters of a strict chain of nonempty faces are affinely independent. -/
 theorem barycentricFaces_affineIndependent {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) :
     ∀ u ∈ barycentricFaces K, AffineIndependent ℝ ((↑) : u → Euc n) := by
-  sorry
+  exact barycentricFaces_affineIndependent_aux_transfer K
+    (fun c hc => barycentricFaces_affineIndependent_aux_chain K c hc)
 
 /-- Subsets of barycenter sets of strict chains are again such sets. -/
 theorem barycentricFaces_isLowerSet {n : ℕ}
