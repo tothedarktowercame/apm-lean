@@ -55,7 +55,35 @@ theorem barycentricFaces_affineIndependent_aux_chain_not_mem_span {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) {s t : Finset (Euc n)}
     (ht : t ∈ K.faces) (hst : s ⊂ t) :
     barycenter t ∉ affineSpan ℝ (s : Set (Euc n)) := by
-  sorry
+  classical
+  obtain ⟨v, hvt, hvs⟩ := Finset.exists_of_ssubset hst
+  intro hm
+  let i : t := ⟨v, hvt⟩
+  letI : Nonempty t := ⟨i⟩
+  let u : Set t := {x | (x : Euc n) ∈ s}
+  have himage : ((fun x : t => (x : Euc n)) '' u) = (s : Set (Euc n)) := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      exact hy
+    · intro hx
+      exact ⟨⟨x, hst.subset hx⟩, hx, rfl⟩
+  have hnonempty : t.Nonempty := K.nonempty_of_mem_faces ht
+  have hattach : t.attach.Nonempty := by simp [hnonempty]
+  have hsum : ∑ x ∈ t.attach, t.attach.centroidWeights ℝ x = 1 :=
+    t.attach.sum_centroidWeights_eq_one_of_nonempty ℝ hattach
+  have hbary : barycenter t = t.attach.affineCombination ℝ
+      (fun x : t => (x : Euc n)) (t.attach.centroidWeights ℝ) := by
+    rw [barycentricFaces_affineIndependent_aux_barycenter_formula]
+    rw [t.attach.affineCombination_eq_linear_combination _ _ hsum]
+    simp only [Finset.centroidWeights_apply, Finset.card_attach, Finset.sum_attach]
+    rw [Finset.smul_sum]
+  have hz := (K.indep ht).eq_zero_of_affineCombination_mem_affineSpan
+    hsum (s := u) (i := i) (by simpa [← himage, ← hbary] using hm)
+    (by simp [i]) (by simpa [u, i] using hvs)
+  have hcard : (t.card : ℝ) ≠ 0 := by
+    exact_mod_cast (Finset.card_ne_zero.mpr hnonempty)
+  exact hcard (inv_eq_zero.mp (by simpa using hz))
 -- END SEAT AREA
 
 /-- (C2) The barycenter of a nonempty `s ⊆ t` lies in the affine span of `t`. -/
