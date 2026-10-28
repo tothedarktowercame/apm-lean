@@ -66,14 +66,78 @@ theorem hasLefschetzNumber_of_homotopic
     HasLefschetzNumber g L := by
   sorry
 
-/-- **LIBRARY (Hopf trace and comparison).** A face-avoiding map on a finite
-polyhedron has Lefschetz number zero. -/
+/-- A bounded, degreewise finite-dimensional rational chain complex together
+with an endomorphism. -/
+structure FiniteChainEndomorphism where
+  C : ChainComplex (ModuleCat ℚ) ℕ
+  φ : C ⟶ C
+  bound : ℕ
+  finiteChain : ∀ k, FiniteDimensional ℚ (C.X k)
+  finiteHomology : ∀ k, FiniteDimensional ℚ (C.homology k)
+  chainAbove : ∀ k, bound < k → Subsingleton (C.X k)
+
+namespace FiniteChainEndomorphism
+
+noncomputable def chainTrace (M : FiniteChainEndomorphism) (k : ℕ) : ℚ := by
+  letI := M.finiteChain k
+  exact LinearMap.trace ℚ (M.C.X k) (M.φ.f k).hom
+
+noncomputable def homologyTrace (M : FiniteChainEndomorphism) (k : ℕ) : ℚ := by
+  letI := M.finiteHomology k
+  exact LinearMap.trace ℚ (M.C.homology k)
+    (HomologicalComplex.homologyMap M.φ k).hom
+
+end FiniteChainEndomorphism
+
+/-- **LIBRARY (direct simplicial--singular comparison).** A face-avoiding map
+admits a bounded oriented simplicial chain model.  Its chain diagonal is zero,
+and its homology traces are the traces of the singular-homology maps of `g`.
+The latter clause is naturality of the direct simplicial-to-singular comparison,
+not a Lefschetz-number conclusion. -/
+theorem exists_faceAvoiding_simplicial_trace_model
+    {X : Type} [TopologicalSpace X] {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+    (hK : K.faces.Finite) (e : X ≃ₜ K.space) (g : C(X, X))
+    (havoid : FaceAvoiding K e g) :
+    ∃ M : FiniteChainEndomorphism,
+      (∀ k, M.chainTrace k = 0) ∧
+      (∀ k, M.homologyTrace k =
+        LinearMap.trace ℚ (Homology X k) (induced g k).hom) := by
+  sorry
+
+/-- The Hopf trace formula for a bounded complex of finite-dimensional rational
+vector spaces. -/
+theorem hopf_trace_formula (M : FiniteChainEndomorphism) :
+    (∑ k ∈ Finset.range (M.bound + 1),
+      (-1 : ℚ)^k * M.homologyTrace k) =
+    ∑ k ∈ Finset.range (M.bound + 1),
+      (-1 : ℚ)^k * M.chainTrace k := by
+  sorry
+
+/-- The bound in a simplicial trace model can replace the bound occurring in a
+`HasLefschetzNumber` certificate. -/
+theorem lefschetzNumber_eq_model_homology_trace
+    {X : Type} [TopologicalSpace X] (g : C(X, X)) {L : ℚ}
+    (hL : HasLefschetzNumber g L) (M : FiniteChainEndomorphism)
+    (htrace : ∀ k, M.homologyTrace k =
+      LinearMap.trace ℚ (Homology X k) (induced g k).hom) :
+    L = ∑ k ∈ Finset.range (M.bound + 1),
+      (-1 : ℚ)^k * M.homologyTrace k := by
+  sorry
+
+/-- A face-avoiding map on a finite polyhedron has Lefschetz number zero. -/
 theorem lefschetzNumber_eq_zero_of_faceAvoiding
     {X : Type} [TopologicalSpace X] {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
     (hK : K.faces.Finite) (e : X ≃ₜ K.space) (g : C(X, X)) {L : ℚ}
     (havoid : FaceAvoiding K e g) (hL : HasLefschetzNumber g L) : L = 0 := by
-  sorry
+  obtain ⟨M, hchain, htrace⟩ :=
+    exists_faceAvoiding_simplicial_trace_model K hK e g havoid
+  rw [lefschetzNumber_eq_model_homology_trace g hL M htrace,
+    hopf_trace_formula M]
+  apply Finset.sum_eq_zero
+  intro k hk
+  rw [hchain k, mul_zero]
 
 /-- Rational Lefschetz fixed-point theorem for a finite polyhedron. -/
 theorem fixedPointOfNonzeroLefschetz

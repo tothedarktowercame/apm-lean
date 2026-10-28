@@ -67,30 +67,85 @@ needed by the trace leaf, for the same map `g`. C6: no extra geometry. C7: the
 direction of homotopy does not matter for equality. C8: empty and zero-dimensional
 spaces are covered functorially. C9: not an ancestor repeat. C10: exact match.
 
-### `lefschetzNumber_eq_zero_of_faceAvoiding` — LIBRARY, 1000–1800 lines
+### Split of `lefschetzNumber_eq_zero_of_faceAvoiding`
 
-For a specified finite triangulation, a face-avoiding map with Lefschetz number
-`L` has `L = 0`.  Construct the finite oriented simplicial chain complex over
-`ℚ`; simplicial approximation gives a chain map whose diagonal entries vanish
-by `FaceAvoiding`, hence every chain trace is zero.  Apply the finite Hopf trace
-formula, then transport from simplicial homology to the singular homology used
-by `RationalLefschetz.Homology`.  Build the comparison on the existing singular
-simplex machinery in `CoefficientSimplicialChainFinsupp*`, subdivision from
-`CoefficientSingularSubdivision.lean`, naturality from
-`CoefficientBarycentricNaturality.lean`, and the homology infrastructure in
-`CoefficientSubcomplexRelative*`.  The comparison theorem and finite Hopf
-trace formula do not yet exist as repo declarations, so this leaf is genuinely
-LIBRARY rather than hiding them in a hypothesis.
+The file now defines `FiniteChainEndomorphism`, a bounded degreewise
+finite-dimensional rational chain complex with an endomorphism, and its chain
+and homology traces.  This is data, not a proposition encoding the desired
+equality; in particular it has no field mentioning a Lefschetz number.
 
-Independent.  C1: avoidance of every closed simplex forces every diagonal
-simplex coefficient to vanish. C2: neither `FaceAvoiding` nor `HasLefschetzNumber`
-contains `L = 0`. C3: this is the algebraic/comparison half only; it does not
-produce an approximation or fixed point. C4: it accepts the exact geometric
-output of the first leaf. C5: `K`, `e`, and `g` are explicit. C6: no extra
-assumption beyond the public triangulation. C7: the alternating sign is
-`(-1 : ℚ)^k`, matching `HasLefschetzNumber`. C8: the empty complex has zero
-chain complex; dimension zero reduces to the diagonal of vertices. C9: no
-ancestor states this comparison. C10: exact match.
+#### `exists_faceAvoiding_simplicial_trace_model` — LIBRARY, 700–1100 lines
+
+Construct the oriented simplicial chain complex and a chain endomorphism for a
+simplicial approximation to `g`.  It returns (a) zero chain trace in every
+degree, from the face-avoidance diagonal calculation, and (b) equality of its
+homology trace with the trace of the actual singular-homology map induced by
+`g`.  The construction uses a sufficiently close simplicial approximation;
+the straight-line homotopy and `hasLefschetzNumber_of_homotopic` identify its
+map with `g`.  Orientation changes conjugate the matrix by a diagonal sign
+matrix, so the trace and the zero-diagonal claim are independent of choices.
+
+Use `CoefficientSimplicialChainFinsuppNaturality`,
+`CoefficientSimplicialChainFinsuppRange`, `CoefficientSingularSubdivision`,
+`CoefficientBarycentricNaturality`, and the affine-simplex maps in
+`CoefficientAffineNaturality`.  The direct chain map from oriented simplicial
+chains to singular chains is preferable to the skeletal-filtration route:
+the repository already has the required simplex/finsupp and subdivision
+naturality tools, whereas a filtration proof would additionally need cellular
+boundary identifications and natural exact-couple machinery.  This is the one
+remaining large missing foundation and is therefore honestly marked LIBRARY.
+
+Independent of the two algebra leaves. C1: compact closed faces give the
+positive margin needed to retain avoidance during approximation; the returned
+trace comparison concerns the actual `induced g k`. C2: neither returned
+equation says `L = 0`, and no Lefschetz value is an input. C3: it does not prove
+Hopf trace or sum the traces; its size is the explicitly marked missing
+comparison foundation. C4: its two outputs are exactly the inputs used by the
+assembly and the Hopf leaf. C5: `K,e,g` and the induced maps are explicit. C6:
+only finiteness and `FaceAvoiding` are used. C7: traces are over `ℚ`; oriented
+boundary signs are conjugacy-invariant. C8: for an empty realization use the
+zero complex; in dimension zero face avoidance says no vertex can map to
+itself. C9: unlike its ancestor it produces a chain model and trace identities,
+not the Lefschetz conclusion. C10: exact match with the Lean statement.
+
+#### `hopf_trace_formula` — 120–180 lines
+
+For `FiniteChainEndomorphism M`, prove that the alternating trace on homology
+equals the alternating chain trace through `M.bound`.  Split each finite
+dimensional chain group into boundaries, homology representatives, and a
+complement mapping isomorphically onto boundaries one degree lower; off-diagonal
+blocks do not affect trace and boundary traces telescope.  Use
+`LinearMap.trace_conj'`, `LinearMap.trace_comp_comm`, the homology short exact
+sequences for `HomologicalComplex`, and finite-dimensional complements.
+
+Independent. C1: boundedness kills the terminal boundary term and makes the
+finite formula true. C2: its hypotheses are structural fields, not its
+conclusion. C3: this is pure linear algebra and knows nothing about spaces or
+face avoidance. C4: the range is exactly the model bound. C5: the endomorphism
+is `M.φ` on both chain and homology. C6: no geometric hypothesis is added. C7:
+the sign is exactly `(-1 : ℚ)^k`. C8: the zero complex and bound zero work;
+degree zero has no lower boundary term. C9: no ancestor is an abstract Hopf
+trace theorem. C10: exact match.
+
+#### `lefschetzNumber_eq_model_homology_trace` — 80–140 lines
+
+Reconcile the arbitrary bound in `HasLefschetzNumber g L` with `M.bound`, then
+rewrite each summand by `htrace`.  Above `M.bound`, `M.chainAbove` implies zero
+homology; above the certificate's bound the singular homology is subsingleton.
+Pad both sums to the maximum of the bounds and use `LinearMap.trace_eq_zero_of_subsingleton`.
+
+Independent of the construction and Hopf leaves: it takes their eventual
+trace equality explicitly. C1: the two vanishing hypotheses justify changing
+bounds. C2: `htrace` is degreewise naturality, not the alternating-sum
+conclusion. C3: only finite-sum padding/rewrite remains. C4: it yields precisely
+the first equality in the assembly. C5: both sides use the named map `g`. C6:
+no geometry. C7: the exponent/sign is copied byte-for-byte from
+`HasLefschetzNumber`. C8: bound zero and subsingleton homology are included.
+C9: no ancestor is a bound-reconciliation statement. C10: exact match.
+
+`lefschetzNumber_eq_zero_of_faceAvoiding` is now sorry-free: obtain the model,
+rewrite `L` as its alternating homology trace, apply Hopf trace, and use the
+degreewise zero chain traces.
 
 ## Assembly
 
@@ -98,8 +153,12 @@ ancestor states this comparison. C10: exact match.
 the explicit triangulation, obtain the homotopic face-avoiding `g`, transport
 the Lefschetz certificate to `g`, and deduce `L = 0`, contradicting `L ≠ 0`.
 
-Dependency layer 1 contains all three leaves in parallel.  The public theorem
-is layer 2.
+For this re-split, the three new leaves are all independently provable: the
+comparison leaf constructs the model, while the other two quantify over an
+arbitrary supplied model (and the bound leaf takes trace naturality explicitly).
+Their sorry-free assembly is the next layer.  The earlier subdivision,
+separation, fine-face, and homotopy leaves keep their prior dependency status;
+the public theorem remains the final layer.
 
 ## Consumer adapters
 
@@ -146,9 +205,18 @@ Both are LIBRARY adapters, independent of the Lefschetz leaves.
 * `ℝ` cannot satisfy `IsFinitePolyhedron`: a finite realization is compact,
   whereas `ℝ` is not.  Thus translation of `ℝ`, despite its formal Lefschetz
   value `1`, is excluded.
+* For the boundary of a triangle, subdivide finely enough and take the
+  half-turn rotation.  No closed fine edge meets its image; the chain diagonal
+  is zero and the circle Lefschetz number is `1 - 1 = 0`.
+* For a single vertex, `FaceAvoiding` is impossible: applying it to the unique
+  point and vertex face says that same vertex is both in and not in its convex
+  hull.  Thus no leaf asserts existence of a face-avoiding self-map there.
+* The alternating convention in every new sum is `(-1 : ℚ)^k * trace`, exactly
+  the convention in `HasLefschetzNumber`.  Reversing a simplex orientation
+  conjugates its matrix by signs, leaving the trace (and zero diagonal) fixed.
 
 Main doubt: the theorem leaves are mathematically standard, but Mathlib lacks
-the geometric subdivision and simplicial/singular comparison layers.  The
+the geometric subdivision and direct simplicial/singular comparison layers.  The
 adapter estimates assume a reusable finite-Δ-complex-to-geometric-complex
 construction; without it each quotient adapter would be substantially larger.
 
