@@ -312,11 +312,188 @@ theorem apm_t02A04_attachingCurve_H1_isIso :
   sorry
 
 /-- The degree-one Mayer--Vietoris calculation for a compatible cover. -/
+noncomputable def apm_t02A04_H1_zero_of_cover_aux_iso
+    {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
+    (e : ContinuousMap.HomotopyEquiv S T) (k : ℕ) :
+    Homology S k ≅ Homology T k where
+  hom := induced e.toFun k
+  inv := induced e.invFun k
+  hom_inv_id := by
+    dsimp [induced]
+    rw [← CategoryTheory.Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map (TopCat.ofHom (e.invFun.comp e.toFun)) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) e.left_inv k]
+    exact ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map_id (TopCat.of S)
+  inv_hom_id := by
+    dsimp [induced]
+    rw [← CategoryTheory.Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map (TopCat.ofHom (e.toFun.comp e.invFun)) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) e.right_inv k]
+    exact ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map_id (TopCat.of T)
+
+open CategoryTheory
+
+lemma apm_t02A04_H1_zero_of_cover_aux_pathConnected
+    {S T : Type*} [TopologicalSpace S] [TopologicalSpace T]
+    (e : ContinuousMap.HomotopyEquiv S T) [PathConnectedSpace T] :
+    PathConnectedSpace S := by
+  rcases e.left_inv with ⟨K⟩
+  refine ⟨⟨e.invFun (Classical.choice (inferInstance : Nonempty T))⟩, ?_⟩
+  intro x y
+  exact ⟨(K.evalAt x).symm.trans
+    (((PathConnectedSpace.somePath (e x) (e y)).map e.invFun.continuous).trans
+      (K.evalAt y))⟩
+
+lemma apm_t02A04_H1_zero_of_cover_aux_mv0_injective
+    (C : apm_t02A04_CompatibleOpenCover) :
+    Function.Injective (RP3Homology.mvI C.outer C.inner 0).hom := by
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+          isPathConnected_univ
+      simpa using h)
+  letI : PathConnectedSpace (C.outer ∩ C.inner : Set apm_t02a04_X) :=
+    apm_t02A04_H1_zero_of_cover_aux_pathConnected C.overlapEquiv
+  letI : PathConnectedSpace C.outer := by
+    letI : PathConnectedSpace apm_t02a04_Disk :=
+      isPathConnected_iff_pathConnectedSpace.mp
+        (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+    letI : PathConnectedSpace apm_t02a04_SolidTorus := by
+      refine ⟨⟨(Classical.choice (inferInstance : Nonempty apm_t02a04_Disk),
+        Classical.choice (inferInstance : Nonempty Circle))⟩, ?_⟩
+      intro x y
+      exact ⟨(PathConnectedSpace.somePath x.1 y.1).prod
+        (PathConnectedSpace.somePath x.2 y.2)⟩
+    exact apm_t02A04_H1_zero_of_cover_aux_pathConnected C.outerEquiv
+  let f : C((C.outer ∩ C.inner : Set apm_t02a04_X), C.outer) :=
+    apm_t02A04_overlapToOuter C.outer C.inner
+  let p := Classical.choice
+    (inferInstance : Nonempty (C.outer ∩ C.inner : Set apm_t02a04_X))
+  let q := Classical.choice (inferInstance : Nonempty C.outer)
+  let e := ConstructionTargets.CoefficientH0.h0Iso ℚ p ≪≫
+    (ConstructionTargets.CoefficientH0.h0Iso ℚ q).symm
+  have hmap : e.hom = RP3Homology.mvIncl Set.inter_subset_left 0 := by
+    apply (CategoryTheory.cancel_mono
+      (ConstructionTargets.CoefficientH0.h0Iso ℚ q).hom).mp
+    change (ConstructionTargets.CoefficientH0.h0Augmentation ℚ ≫
+        ConstructionTargets.CoefficientH0.singularVertexH0Class ℚ q) ≫
+        ConstructionTargets.CoefficientH0.h0Augmentation ℚ = _
+    rw [CategoryTheory.Category.assoc,
+      ConstructionTargets.CoefficientH0.singularVertexH0Class_comp_h0Augmentation,
+      CategoryTheory.Category.comp_id]
+    exact (ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ f).symm
+  have hincl : Function.Injective
+      (RP3Homology.mvIncl
+        (Set.inter_subset_left : C.outer ∩ C.inner ⊆ C.outer) 0).hom := by
+    rw [← hmap]
+    exact (ModuleCat.mono_iff_injective e.hom).mp inferInstance
+  intro a b hab
+  apply hincl
+  have h := congrArg
+    (fun z => (CategoryTheory.Limits.biprod.fst : Homology C.outer 0 ⊞
+      Homology C.inner 0 ⟶ Homology C.outer 0).hom z) hab
+  simp only [RP3Homology.mvI] at h
+  rw [← ModuleCat.comp_apply, ← ModuleCat.comp_apply,
+    CategoryTheory.Limits.biprod.lift_fst] at h
+  exact h
+
 theorem apm_t02A04_H1_zero_of_cover
     (C : apm_t02A04_CompatibleOpenCover)
     (hdegree : CategoryTheory.IsIso (induced apm_t02A04_attachingCurve 1)) :
     CategoryTheory.Limits.IsZero (apm_t02A04_HQ 1) := by
-  sorry
+  let eI := apm_t02A04_H1_zero_of_cover_aux_iso C.overlapEquiv 1
+  let eO := apm_t02A04_H1_zero_of_cover_aux_iso C.outerEquiv 1
+  let eN := apm_t02A04_H1_zero_of_cover_aux_iso C.innerEquiv 1
+  have hinner : CategoryTheory.Limits.IsZero (Homology C.inner 1) := by
+    letI : ContractibleSpace PUnit := inferInstance
+    exact (ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ PUnit 1
+      (by decide)).of_iso eN
+  have hsquare :
+      (C.outerEquiv.toFun.comp (apm_t02A04_overlapToOuter C.outer C.inner)).Homotopic
+        (apm_t02A04_attachingCurve.comp C.overlapEquiv.toFun) := C.outer_compat
+  have hfirst : CategoryTheory.IsIso
+      (RP3Homology.mvIncl
+        (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1) := by
+    have heq : (RP3Homology.mvIncl
+          (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1) ≫ eO.hom =
+        eI.hom ≫ induced apm_t02A04_attachingCurve 1 := by
+      change induced (apm_t02A04_overlapToOuter C.outer C.inner) 1 ≫
+          induced C.outerEquiv.toFun 1 =
+        induced C.overlapEquiv.toFun 1 ≫ induced apm_t02A04_attachingCurve 1
+      dsimp [induced]
+      rw [← CategoryTheory.Functor.map_comp, ← CategoryTheory.Functor.map_comp]
+      exact ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+        (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) hsquare 1
+    haveI : CategoryTheory.IsIso
+        (eI.hom ≫ induced apm_t02A04_attachingCurve 1) := inferInstance
+    haveI : CategoryTheory.IsIso
+        ((RP3Homology.mvIncl
+          (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1) ≫ eO.hom) :=
+      heq.symm ▸ inferInstance
+    exact CategoryTheory.IsIso.of_isIso_comp_right
+      (RP3Homology.mvIncl
+        (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1) eO.hom
+  obtain ⟨δ, hexI, hexJ, hexδ⟩ :=
+    RP3Homology.rationalMayerVietoris C.outer C.inner
+      C.open_outer C.open_inner C.cover
+  have hmv0 := apm_t02A04_H1_zero_of_cover_aux_mv0_injective C
+  have hd_zero : (δ 0).hom = 0 := by
+    apply LinearMap.range_eq_bot.mp
+    rw [hexδ 0, LinearMap.ker_eq_bot.mpr hmv0]
+  have hJ_surj : Function.Surjective (RP3Homology.mvJ C.outer C.inner 1).hom := by
+    rw [← LinearMap.range_eq_top, hexJ 0, hd_zero, LinearMap.ker_zero]
+  have hI_surj : Function.Surjective (RP3Homology.mvI C.outer C.inner 1).hom := by
+    intro x
+    let xo := (CategoryTheory.Limits.biprod.fst :
+      Homology C.outer 1 ⊞ Homology C.inner 1 ⟶ Homology C.outer 1).hom x
+    obtain ⟨z, hz⟩ := (ModuleCat.epi_iff_surjective
+      (RP3Homology.mvIncl
+        (Set.inter_subset_left : C.outer ∩ C.inner ⊆ C.outer) 1)).mp inferInstance xo
+    refine ⟨z, ?_⟩
+    have hproj : (Limits.biprod.fst : Homology C.outer 1 ⊞ Homology C.inner 1 ⟶ _) ≫
+        Limits.biprod.inl = 𝟙 _ := by
+      rw [← Limits.biprod.total]
+      rw [hinner.eq_of_tgt (Limits.biprod.snd : _ ⟶ Homology C.inner 1) 0]
+      simp
+    have hx : (Limits.biprod.inl : Homology C.outer 1 ⟶
+        Homology C.outer 1 ⊞ Homology C.inner 1).hom xo = x := by
+      have hh := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hproj) x
+      simpa [ModuleCat.hom_comp, xo] using hh
+    rw [← hx]
+    have hsnd : RP3Homology.mvIncl
+        (Set.inter_subset_right : (C.outer ∩ C.inner) ⊆ C.inner) 1 = 0 :=
+      hinner.eq_of_tgt _ _
+    rw [RP3Homology.mvI, hsnd]
+    have hlift : Limits.biprod.lift
+        (RP3Homology.mvIncl
+          (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1) 0 =
+        RP3Homology.mvIncl
+          (Set.inter_subset_left : (C.outer ∩ C.inner) ⊆ C.outer) 1 ≫
+          (Limits.biprod.inl : Homology C.outer 1 ⟶
+            Homology C.outer 1 ⊞ Homology C.inner 1) := by
+      apply Limits.biprod.hom_ext <;> simp
+    rw [hlift, ModuleCat.comp_apply, hz]
+  have hJ_zero : (RP3Homology.mvJ C.outer C.inner 1).hom = 0 := by
+    apply LinearMap.ker_eq_top.mp
+    rw [← hexI 1, LinearMap.range_eq_top.mpr hI_surj]
+  letI : Subsingleton (apm_t02A04_HQ 1) := ⟨by
+    intro x y
+    obtain ⟨a, ha⟩ := hJ_surj x
+    obtain ⟨b, hb⟩ := hJ_surj y
+    have hza := DFunLike.congr_fun hJ_zero a
+    have hzb := DFunLike.congr_fun hJ_zero b
+    rw [← ha, ← hb]
+    simpa using hza.trans hzb.symm⟩
+  exact ModuleCat.isZero_of_subsingleton _
 
 /-- The degree-two Mayer--Vietoris calculation: injectivity kills the kernel. -/
 theorem apm_t02A04_H2_zero_of_cover
