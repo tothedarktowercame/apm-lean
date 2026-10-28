@@ -138,10 +138,75 @@ theorem apm_t02A04_H2_zero_of_cover
 
 /-- Mayer--Vietoris above the dimensions of the circle and solid torus. -/
 -- BEGIN SEAT AREA
+lemma apm_t02A04_Hhigh_zero_of_cover_aux_circle (n : ℕ) (hn : 2 ≤ n) :
+    CategoryTheory.Limits.IsZero (Homology Circle n) := by
+  let e : Homology Circle n ≅
+      ConstructionTargets.CoefficientContractiblePair.H ℚ (n - 1)
+        (TopCat.of (ConstructionTargets.SphereHomology.Sphere 0)) :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.toHomotopyEquiv n ≪≫
+    (by
+      simpa [Nat.sub_add_cancel (by omega : 1 ≤ n)] using
+        ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (n - 1) (by omega))
+  exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ
+    (n - 1) (by omega)).of_iso e
+
+noncomputable def apm_t02A04_Hhigh_zero_of_cover_aux_solidEquiv :
+    ContinuousMap.HomotopyEquiv apm_t02a04_SolidTorus Circle where
+  toFun := ⟨Prod.snd, continuous_snd⟩
+  invFun := ⟨fun z ↦ (⟨0, by simp [apm_t02a04_Disk]⟩, z),
+    continuous_const.prodMk continuous_id⟩
+  left_inv := ⟨{
+    toFun := fun p ↦
+      (⟨((p.1 : ℝ) : ℂ) * p.2.1.1, by
+        rw [Metric.mem_closedBall, dist_zero_right, norm_mul, Complex.norm_real,
+          Real.norm_eq_abs, abs_of_nonneg p.1.2.1]
+        have hx : ‖p.2.1.1‖ ≤ 1 := by
+          simpa only [Metric.mem_closedBall, dist_zero_right] using p.2.1.2
+        exact mul_le_one₀ p.1.2.2 (norm_nonneg _) hx⟩, p.2.2)
+    continuous_toFun := by fun_prop
+    map_zero_left := by intro x; ext <;> simp
+    map_one_left := by intro x; ext <;> simp }⟩
+  right_inv := by rfl
+
+lemma apm_t02A04_Hhigh_zero_of_cover_aux_outer
+    (C : apm_t02A04_CompatibleOpenCover) (n : ℕ) (hn : 2 ≤ n) :
+    CategoryTheory.Limits.IsZero (Homology C.outer n) := by
+  exact (apm_t02A04_Hhigh_zero_of_cover_aux_circle n hn).of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      (C.outerEquiv.trans apm_t02A04_Hhigh_zero_of_cover_aux_solidEquiv) n)
+
+lemma apm_t02A04_Hhigh_zero_of_cover_aux_inner
+    (C : apm_t02A04_CompatibleOpenCover) (n : ℕ) (hn : 0 < n) :
+    CategoryTheory.Limits.IsZero (Homology C.inner n) := by
+  have hz : CategoryTheory.Limits.IsZero (Homology PUnit n) := by
+    letI : ContractibleSpace PUnit := inferInstance
+    exact ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ PUnit n
+      (Nat.ne_of_gt hn)
+  exact hz.of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      C.innerEquiv n)
+
+lemma apm_t02A04_Hhigh_zero_of_cover_aux_overlap
+    (C : apm_t02A04_CompatibleOpenCover) (n : ℕ) (hn : 2 ≤ n) :
+    CategoryTheory.Limits.IsZero (Homology (C.outer ∩ C.inner : Set apm_t02a04_X) n) := by
+  exact (apm_t02A04_Hhigh_zero_of_cover_aux_circle n hn).of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      C.overlapEquiv n)
+
 theorem apm_t02A04_Hhigh_zero_of_cover
     (C : apm_t02A04_CompatibleOpenCover) (k : ℕ) (hk : 3 ≤ k) :
     CategoryTheory.Limits.IsZero (apm_t02A04_HQ k) := by
-  sorry
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : k ≠ 0)
+  obtain ⟨δ, -, hex, -⟩ := RP3Homology.rationalMayerVietoris
+    C.outer C.inner C.open_outer C.open_inner C.cover
+  apply RP3Homology.cp2_homology_of_mv_aux_exact_zero
+    (RP3Homology.mvJ C.outer C.inner (m + 1)) (δ m)
+  · exact RP3Homology.cp2_homology_of_mv_aux_biprod_zero
+      (apm_t02A04_Hhigh_zero_of_cover_aux_outer C (m + 1) (by omega))
+      (apm_t02A04_Hhigh_zero_of_cover_aux_inner C (m + 1) (by omega))
+  · exact apm_t02A04_Hhigh_zero_of_cover_aux_overlap C m (by omega)
+  · exact hex m
 -- END SEAT AREA
 
 /-- Path-connectedness identifies rational degree-zero homology with `ℚ`. -/
