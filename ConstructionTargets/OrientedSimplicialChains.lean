@@ -214,6 +214,75 @@ theorem faceModule_zero_above {n : ℕ}
   letI := hempty
   infer_instance
 
+/-! Concrete affine comparison (claude-14, 2026-10-28, after lemma-3 returned it
+unstarted): defs with no proof obligations left open, three Prop leaves. -/
+
+/-- The vertices of a face in increasing `o`-order. -/
+noncomputable def faceVertices {n k : ℕ} (o : LinearOrder (Euc n))
+    {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K k) : Fin (k + 1) → Euc n :=
+  fun i => (s.1.sort o.le).get ⟨i, by rw [Finset.length_sort, s.2.2]; exact i.2⟩
+
+lemma faceVertices_mem {n k : ℕ} (o : LinearOrder (Euc n))
+    {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K k) (i : Fin (k + 1)) :
+    faceVertices o s i ∈ s.1 := by
+  have := List.get_mem (s.1.sort o.le) ⟨i, by rw [Finset.length_sort, s.2.2]; exact i.2⟩
+  simpa [faceVertices] using (Finset.mem_sort o.le).1 this
+
+/-- The affine simplex of a face. -/
+noncomputable def faceMap {n k : ℕ} (o : LinearOrder (Euc n))
+    {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K k) :
+    C(stdSimplex ℝ (Fin (k + 1)), K.space) where
+  toFun x := ⟨∑ i, x i • faceVertices o s i, by
+    apply Geometry.SimplicialComplex.convexHull_subset_space s.2.1
+    apply (convex_convexHull ℝ _).sum_mem (fun i _ => stdSimplex.zero_le x i)
+      (by simpa using x.2.2)
+    intro i _
+    exact subset_convexHull ℝ _ (faceVertices_mem o s i)⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact continuous_finset_sum _ fun i _ =>
+      (((continuous_apply i).comp continuous_subtype_val)).smul continuous_const
+
+/-- The singular simplex of a face. -/
+noncomputable def faceSimplex {n k : ℕ} (o : LinearOrder (Euc n))
+    {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K k) :
+    SingularSimplex (TopCat.of K.space) k :=
+  singularSimplexOfContinuousMap _ k (faceMap o s)
+
+/-- The comparison: linear extension of `s ↦ [faceSimplex s]`. -/
+noncomputable def affineCmp {n : ℕ} (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (k : ℕ) :
+    FaceModuleCat K k ⟶ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k :=
+  ModuleCat.ofHom (Finsupp.lsum ℚ (fun s : FaceIndex K k =>
+    (CoefficientH0.singularGenerator ℚ (TopCat.of K.space) k (faceSimplex o s)).hom))
+
+/-- (AC1) The comparison sends a basis face to its singular simplex. -/
+theorem affineCmp_single {n : ℕ} (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (k : ℕ) (s : FaceIndex K k) :
+    affineCmp o K k (Finsupp.single s 1) =
+      (CoefficientH0.singularGenerator ℚ _ k (faceSimplex o s)) 1 := by
+  sorry
+
+/-- (AC2) The affine simplex of a face has image exactly the face's hull. -/
+theorem faceSimplex_range {n k : ℕ} (o : LinearOrder (Euc n))
+    {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K k) :
+    Set.range (continuousMapOfSingularSimplex k (faceSimplex o s)) =
+      (fun x : K.space => (x : Euc n)) ⁻¹' convexHull ℝ (s.1 : Set (Euc n)) := by
+  sorry
+
+/-- (AC3) The comparison is a chain map: the `i`-th singular face of
+`faceSimplex s` is `faceSimplex (s.erase (i-th vertex))`
+(`singularSimplexOfContinuousMap_face`, `affineSimplex` of the face inclusion),
+so `singularGenerator_boundary` matches the signed-deletion formula `hd`. -/
+theorem affineCmp_comm {n : ℕ} (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) (k : ℕ) :
+    affineCmp o K (k + 1) ≫
+        (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k =
+      d k ≫ affineCmp o K k := by
+  sorry
+
 theorem affineComparison_exists_and_commutes {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
@@ -223,7 +292,8 @@ theorem affineComparison_exists_and_commutes {n : ℕ}
       IsAffineComparison K cmp ∧ ∀ k,
         cmp (k + 1) ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k =
           d k ≫ cmp k := by
-  sorry
+  exact ⟨affineCmp o K, fun k s => ⟨faceSimplex o s, affineCmp_single o K k s,
+    faceSimplex_range o s⟩, affineCmp_comm o K d hd⟩
 
 /-! Stage 2.  `ChainComplex.of` occurs only with the stage-one square-zero
 conclusion supplied explicitly, so these declarations acquire no hidden axiom. -/
