@@ -119,9 +119,193 @@ theorem apm_t02A04_pathConnected : PathConnectedSpace apm_t02a04_X := by
 
 /-- In rational `H₁`, the attaching loop has invertible degree two. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t02A04_attachingCurve_H1_isIso_aux_square : C(Circle, Circle) :=
+  ⟨fun z ↦ z ^ 2, by fun_prop⟩
+
+open CategoryTheory
+
+noncomputable def apm_t02A04_attachingCurve_H1_isIso_aux_fiberEquiv
+    (b : Circle) :
+    {z : Circle // z ^ 2 = b} ≃ Fin 2 := by
+  classical
+  let c : Circle := Classical.choose
+    ((Circle.isQuotientCoveringMap_npow 2).surjective b)
+  have hc : c ^ 2 = b := Classical.choose_spec
+    ((Circle.isQuotientCoveringMap_npow 2).surjective b)
+  let f : {z : Circle // z ^ 2 = b} → Fin 2 := fun z ↦
+    if z.1 = c then 0 else 1
+  refine Equiv.ofBijective f ⟨?_, ?_⟩
+  · intro x y hxy
+    by_cases hx : x.1 = c
+    · have hy : y.1 = c := by
+        by_contra hy
+        simp [f, hx, hy] at hxy
+      exact Subtype.ext (hx.trans hy.symm)
+    · have hy : y.1 ≠ c := by
+        intro hy
+        simp [f, hx, hy] at hxy
+      apply Subtype.ext
+      have hxc : (x.1 : ℂ) = -(c : ℂ) := by
+        have hs : (x.1 : ℂ) ^ 2 = (c : ℂ) ^ 2 := by
+          exact congrArg (fun z : Circle ↦ ((z : Circle) : ℂ)) (x.2.trans hc.symm)
+        rcases (sq_eq_sq_iff_eq_or_eq_neg).mp hs with h | h
+        · exact (hx (Subtype.ext h)).elim
+        · exact h
+      have hyc : (y.1 : ℂ) = -(c : ℂ) := by
+        have hs : (y.1 : ℂ) ^ 2 = (c : ℂ) ^ 2 := by
+          exact congrArg (fun z : Circle ↦ ((z : Circle) : ℂ)) (y.2.trans hc.symm)
+        rcases (sq_eq_sq_iff_eq_or_eq_neg).mp hs with h | h
+        · exact (hy (Subtype.ext h)).elim
+        · exact h
+      exact Subtype.ext (hxc.trans hyc.symm)
+  · intro i
+    fin_cases i
+    · exact ⟨⟨c, hc⟩, by simp [f]⟩
+    · let nc : Circle := ⟨-(c : ℂ), by
+        change -(c : ℂ) ∈ Metric.sphere (0 : ℂ) 1
+        rw [mem_sphere_zero_iff_norm, norm_neg]
+        exact mem_sphere_zero_iff_norm.mp c.property⟩
+      have hnc : nc ^ 2 = b := by
+        apply Subtype.ext
+        simpa [nc] using congrArg (fun z : Circle ↦ (z : ℂ)) hc
+      refine ⟨⟨nc, hnc⟩, ?_⟩
+      simp only [f]
+      rw [if_neg]
+      · rfl
+      · intro h
+        have hz : (c : ℂ) = 0 := by
+          have := congrArg (fun z : Circle ↦ (z : ℂ)) h
+          exact CharZero.neg_eq_self_iff.mp (by simpa [nc] using this)
+        have hc0 : (c : ℂ) ∈ Metric.sphere (0 : ℂ) 1 := c.property
+        rw [mem_sphere_zero_iff_norm, hz, norm_zero] at hc0
+        norm_num at hc0
+
+theorem apm_t02A04_attachingCurve_H1_isIso_aux_square_cover :
+    ConstructionTargets.CoveringDegree.IsKSheetedCover
+      (fun z : Circle ↦ z ^ 2) 2 where
+  isCoveringMap := (Circle.isQuotientCoveringMap_npow 2).isCoveringMap
+  finite_fiber b :=
+    Finite.of_injective (apm_t02A04_attachingCurve_H1_isIso_aux_fiberEquiv b)
+      (apm_t02A04_attachingCurve_H1_isIso_aux_fiberEquiv b).injective
+  card_fiber b := by
+    rw [Nat.card_congr (apm_t02A04_attachingCurve_H1_isIso_aux_fiberEquiv b)]
+    simp
+
+noncomputable def apm_t02A04_attachingCurve_H1_isIso_aux_circleIso :
+    Homology Circle 1 ≅ ModuleCat.of ℚ ℚ :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 1).obj
+      (ModuleCat.of ℚ ℚ)).mapIso
+        (TopCat.isoOfHomeo
+          ConstructionTargets.CircleHomology.circleHomeomorphSphereOne) ≪≫
+    ConstructionTargets.CoefficientFirstReflection.topIso ℚ 0
+
+theorem apm_t02A04_attachingCurve_H1_isIso_aux_square_isIso :
+    CategoryTheory.IsIso
+      (induced apm_t02A04_attachingCurve_H1_isIso_aux_square 1) := by
+  let A := Homology Circle 1
+  let f : A ⟶ A := induced apm_t02A04_attachingCurve_H1_isIso_aux_square 1
+  let tr : A ⟶ A := HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientCoveringTransfer.transfer ℚ
+      (fun z : Circle ↦ z ^ 2)
+      apm_t02A04_attachingCurve_H1_isIso_aux_square_cover) 1
+  have htf : tr ≫ f = 2 • 𝟙 A := by
+    exact ConstructionTargets.CoefficientCoveringTransfer.rational_homology_projection
+      (fun z : Circle ↦ z ^ 2)
+      apm_t02A04_attachingCurve_H1_isIso_aux_square_cover 1
+  have hsurj : Function.Surjective f := by
+    intro y
+    refine ⟨(2 : ℚ)⁻¹ • tr y, ?_⟩
+    have heq := congrArg (fun g ↦ g y) htf
+    change f (tr y) = 2 • y at heq
+    rw [map_smul, heq]
+    module
+  letI : FiniteDimensional ℚ A :=
+    Module.Finite.equiv
+      apm_t02A04_attachingCurve_H1_isIso_aux_circleIso.toLinearEquiv.symm
+  have hinj : Function.Injective f :=
+    LinearMap.injective_iff_surjective_of_finrank_eq_finrank rfl |>.2 hsurj
+  exact (ConcreteCategory.isIso_iff_bijective f).2 ⟨hinj, hsurj⟩
+
+noncomputable def apm_t02A04_attachingCurve_H1_isIso_aux_projection :
+    C(apm_t02a04_SolidTorus, Circle) :=
+  ⟨Prod.snd, continuous_snd⟩
+
+noncomputable def apm_t02A04_attachingCurve_H1_isIso_aux_core :
+    C(Circle, apm_t02a04_SolidTorus) :=
+  ⟨fun z ↦ (⟨0, by simp [apm_t02a04_Disk]⟩, z),
+    continuous_const.prodMk continuous_id⟩
+
+noncomputable def apm_t02A04_attachingCurve_H1_isIso_aux_contraction :
+    ContinuousMap.Homotopy (ContinuousMap.id apm_t02a04_SolidTorus)
+      (apm_t02A04_attachingCurve_H1_isIso_aux_core.comp
+        apm_t02A04_attachingCurve_H1_isIso_aux_projection) where
+  toFun := fun p ↦
+      (⟨((1 - (p.1 : ℝ)) : ℂ) * (p.2.1 : ℂ), by
+          rw [Metric.mem_closedBall, dist_zero_right, norm_mul]
+          have hx : ‖(p.2.1 : ℂ)‖ ≤ 1 := by
+            simpa only [dist_zero_right] using
+              (Metric.mem_closedBall.mp p.2.1.2)
+          have ht : 0 ≤ 1 - (p.1 : ℝ) := sub_nonneg.mpr p.1.2.2
+          have ht' : 1 - (p.1 : ℝ) ≤ 1 := by linarith [p.1.2.1]
+          have hn : ‖(1 : ℂ) - ((p.1 : ℝ) : ℂ)‖ = 1 - (p.1 : ℝ) := by
+            calc
+              _ = ‖(1 - (p.1 : ℝ) : ℝ)‖ := by
+                rw [← Complex.norm_real]
+                congr 1
+                norm_num
+              _ = _ := by rw [Real.norm_eq_abs, abs_of_nonneg ht]
+          rw [hn]
+          nlinarith⟩,
+        p.2.2)
+  continuous_toFun := by fun_prop
+  map_zero_left x := by ext <;> simp
+  map_one_left x := by ext <;> simp [apm_t02A04_attachingCurve_H1_isIso_aux_core,
+    apm_t02A04_attachingCurve_H1_isIso_aux_projection]
+
+theorem apm_t02A04_attachingCurve_H1_isIso_aux_projection_isIso :
+    IsIso (induced apm_t02A04_attachingCurve_H1_isIso_aux_projection 1) := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 1).obj
+    (ModuleCat.of ℚ ℚ)
+  let p := apm_t02A04_attachingCurve_H1_isIso_aux_projection
+  let i := apm_t02A04_attachingCurve_H1_isIso_aux_core
+  let fp := induced p 1
+  let fi := induced i 1
+  have hpi : fp ≫ fi = 𝟙 _ := by
+    change F.map (TopCat.ofHom p) ≫ F.map (TopCat.ofHom i) = _
+    rw [← F.map_comp]
+    change F.map (TopCat.ofHom (i.comp p)) = _
+    have hh := ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ)
+      ⟨apm_t02A04_attachingCurve_H1_isIso_aux_contraction⟩ 1
+    rw [← hh]
+    exact F.map_id _
+  have hip : fi ≫ fp = 𝟙 _ := by
+    change F.map (TopCat.ofHom i) ≫ F.map (TopCat.ofHom p) = _
+    rw [← F.map_comp]
+    have heq : p.comp i = ContinuousMap.id Circle := by ext; rfl
+    change F.map (TopCat.ofHom (p.comp i)) = _
+    rw [heq]
+    exact F.map_id _
+  exact ⟨⟨fi, hpi, hip⟩⟩
+
 theorem apm_t02A04_attachingCurve_H1_isIso :
     CategoryTheory.IsIso (induced apm_t02A04_attachingCurve 1) := by
-  sorry
+  let a := induced apm_t02A04_attachingCurve 1
+  let p := induced apm_t02A04_attachingCurve_H1_isIso_aux_projection 1
+  have hap : a ≫ p =
+      induced apm_t02A04_attachingCurve_H1_isIso_aux_square 1 := by
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 1).obj
+      (ModuleCat.of ℚ ℚ)).map (TopCat.ofHom apm_t02A04_attachingCurve) ≫
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 1).obj
+      (ModuleCat.of ℚ ℚ)).map
+        (TopCat.ofHom apm_t02A04_attachingCurve_H1_isIso_aux_projection) = _
+    rw [← Functor.map_comp]
+    rfl
+  letI : IsIso p := apm_t02A04_attachingCurve_H1_isIso_aux_projection_isIso
+  letI : IsIso (induced apm_t02A04_attachingCurve_H1_isIso_aux_square 1) :=
+    apm_t02A04_attachingCurve_H1_isIso_aux_square_isIso
+  letI : IsIso (a ≫ p) := by rw [hap]; infer_instance
+  exact IsIso.of_isIso_comp_right a p
 -- END SEAT AREA
 
 /-- The degree-one Mayer--Vietoris calculation for a compatible cover. -/
