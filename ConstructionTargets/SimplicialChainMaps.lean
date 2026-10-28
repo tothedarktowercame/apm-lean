@@ -166,8 +166,70 @@ lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_image_erase {n m :
     rintro rfl
     exact hzv rfl
 
+open scoped Classical in
+/-- Inversions of `h` on `a`, counted on elements: pairs `x <_on y` with `h y <_om h x`. -/
+noncomputable def elemInv {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) : ℕ :=
+  ((a ×ˢ a).filter (fun p => @LT.lt (Euc n) on.toLT p.1 p.2 ∧ @LT.lt (Euc m) om.toLT (h p.2) (h p.1))).card
+
+/-- (P0) Index form = element form: the sorted list is an order isomorphism
+`Fin a.card ≃o a`. -/
+theorem sortingSign_eq_elemInv {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) :
+    sortingSign on om a h = (-1 : ℚ) ^ elemInv on om a h := by
+  sorry
+
+open scoped Classical in
+/-- (P1) Removing `v` removes exactly the inversions involving `v`. -/
+theorem elemInv_erase {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) (v : Euc n) (hv : v ∈ a) :
+    elemInv on om a h = elemInv on om (a.erase v) h +
+      ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT u v ∧ @LT.lt (Euc m) om.toLT (h v) (h u))).card +
+      ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT v u ∧ @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
+  sorry
+
+open scoped Classical in
+/-- (P2) Position in the sorted list = number of smaller elements. -/
+theorem sort_idxOf_eq_card_lt {n : ℕ} (on : LinearOrder (Euc n))
+    (a : Finset (Euc n)) (v : Euc n) (hv : v ∈ a) :
+    (a.sort on.le).idxOf v = (a.filter (fun u => @LT.lt (Euc n) on.toLT u v)).card := by
+  sorry
+
+open scoped Classical in
+/-- (P3) The same for the image, through the injective `h`. -/
+theorem image_sort_idxOf_eq_card_lt {n m : ℕ} (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) (hinj : Set.InjOn h a)
+    (v : Euc n) (hv : v ∈ a) :
+    ((a.image h).sort om.le).idxOf (h v) = (a.filter (fun u => @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
+  sorry
+
+open scoped Classical in
+/-- (P4) The parity count: with `A = #{u <_on v}`, `B = #{h u <_om h v}`,
+`X = #{both}`, the two `P1` counts are `A - X` and `B - X` (injectivity makes the
+`om`-comparison of `h u, h v` total for `u ≠ v`), so the sign changes by
+`(-1)^(A+B)`. -/
+theorem vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity_aux_count {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) (hinj : Set.InjOn h a)
+    (v : Euc n) (hv : v ∈ a) :
+    (-1 : ℚ) ^ (a.filter (fun u => @LT.lt (Euc n) on.toLT u v)).card * (-1 : ℚ) ^ elemInv on om (a.erase v) h =
+      (-1 : ℚ) ^ elemInv on om a h * (-1 : ℚ) ^ (a.filter (fun u => @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
+  sorry
+
 /-- The parity identity behind naturality of oriented deletion.  This is the
 Laplace-minor sign rule for the permutation which reorders `h '' s`. -/
+lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) (hinj : Set.InjOn h a)
+    (v : Euc n) (hv : v ∈ a) :
+    (-1 : ℚ) ^ ((a.sort on.le).idxOf v) * sortingSign on om (a.erase v) h =
+      sortingSign on om a h *
+        (-1 : ℚ) ^ (((a.image h).sort om.le).idxOf (h v)) := by
+  classical
+  rw [sortingSign_eq_elemInv, sortingSign_eq_elemInv, sort_idxOf_eq_card_lt on a v hv,
+    image_sort_idxOf_eq_card_lt om a h hinj v hv]
+  convert vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity_aux_count on om a h hinj v hv using 3
+
 lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_sign {n m : ℕ}
     (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
     {k : ℕ} (K : GSC n) (s : FaceIndex K (k + 1)) (h : Euc n → Euc m)
@@ -176,7 +238,9 @@ lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_sign {n m : ℕ}
         sortingSign on om (s.1.erase v) h =
       sortingSign on om s.1 h *
         (-1 : ℚ) ^ (((s.1.image h).sort om.le).idxOf (h v)) := by
-  sorry
+  apply vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity
+  · exact vertexChainMap_commutes_aux_generator_aux_injective_aux_injOn K s h hinj
+  · exact hv
 
 theorem vertexChainMap_commutes_aux_generator_aux_injective {n m : ℕ}
     (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
