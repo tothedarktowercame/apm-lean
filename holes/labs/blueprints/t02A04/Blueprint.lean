@@ -109,9 +109,154 @@ structure apm_t02A04_CompatibleOpenCover where
       (apm_t02A04_attachingCurve.comp overlapEquiv.toFun)
 
 /-- The radial cover of the attached disk, transported from `AttachTwoCell.Cell`. -/
+noncomputable def apm_t02A04_compatibleOpenCover_aux_homeomorph :
+    ConstructionTargets.AttachTwoCell.Cell apm_t02A04_attachingCurve ≃ₜ
+      apm_t02a04_X := by
+  let f : ConstructionTargets.AttachTwoCell.Cell apm_t02A04_attachingCurve →
+      apm_t02a04_X :=
+    Quotient.lift
+      (fun x ↦ Quotient.mk (Relation.EqvGen.setoid apm_t02a04_Glue) x)
+      (by
+        intro x y hxy
+        apply Quotient.sound
+        induction hxy with
+        | rel a b hab =>
+          cases hab with
+          | boundary z =>
+            exact Relation.EqvGen.symm _ _
+              (Relation.EqvGen.rel _ _ (apm_t02a04_Glue.boundary z))
+        | refl a => exact Relation.EqvGen.refl a
+        | symm a b _ ih => exact Relation.EqvGen.symm _ _ ih
+        | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+  let g : apm_t02a04_X →
+      ConstructionTargets.AttachTwoCell.Cell apm_t02A04_attachingCurve :=
+    Quotient.lift
+      (fun x ↦ ConstructionTargets.AttachTwoCell.cellMk
+        apm_t02A04_attachingCurve x)
+      (by
+        intro x y hxy
+        apply Quotient.sound
+        induction hxy with
+        | rel a b hab =>
+          cases hab with
+          | boundary z =>
+            exact Relation.EqvGen.symm _ _
+              (Relation.EqvGen.rel _ _
+                (ConstructionTargets.AttachTwoCell.CellRel.boundary z))
+        | refl a => exact Relation.EqvGen.refl a
+        | symm a b _ ih => exact Relation.EqvGen.symm _ _ ih
+        | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+  have hf : Continuous f := by
+    apply Continuous.quotient_lift continuous_coinduced_rng
+  have hg : Continuous g := by
+    apply Continuous.quotient_lift
+    exact ConstructionTargets.AttachTwoCell.continuous_cellMk _
+  exact
+    { toFun := f
+      invFun := g
+      left_inv := by
+        intro x
+        refine Quotient.inductionOn x ?_
+        intro a
+        rfl
+      right_inv := by
+        intro x
+        refine Quotient.inductionOn x ?_
+        intro a
+        rfl
+      continuous_toFun := hf
+      continuous_invFun := hg }
+
+noncomputable def apm_t02A04_compatibleOpenCover_aux_restrict
+    (S : Set (ConstructionTargets.AttachTwoCell.Cell apm_t02A04_attachingCurve)) :
+    {x : apm_t02a04_X |
+      apm_t02A04_compatibleOpenCover_aux_homeomorph.symm x ∈ S} ≃ₜ S where
+  toFun x := ⟨apm_t02A04_compatibleOpenCover_aux_homeomorph.symm x.1, x.2⟩
+  invFun x := ⟨apm_t02A04_compatibleOpenCover_aux_homeomorph x.1, by simp⟩
+  left_inv x := by apply Subtype.ext; simp
+  right_inv x := by apply Subtype.ext; simp
+  continuous_toFun :=
+    Continuous.subtype_mk
+      (apm_t02A04_compatibleOpenCover_aux_homeomorph.symm.continuous.comp
+        continuous_subtype_val) _
+  continuous_invFun :=
+    Continuous.subtype_mk
+      (apm_t02A04_compatibleOpenCover_aux_homeomorph.continuous.comp
+        continuous_subtype_val) _
+
 theorem apm_t02A04_compatibleOpenCover :
     Nonempty apm_t02A04_CompatibleOpenCover := by
-  sorry
+  let γ := apm_t02A04_attachingCurve
+  let h := apm_t02A04_compatibleOpenCover_aux_homeomorph
+  let U : Set apm_t02a04_X := h.symm ⁻¹' ConstructionTargets.AttachTwoCell.cellOuter γ
+  let V : Set apm_t02a04_X := h.symm ⁻¹' ConstructionTargets.AttachTwoCell.cellInner γ
+  obtain ⟨⟨hU, hV, hcover⟩, hcontract, ⟨eO, heO⟩, ⟨eU, heU⟩, hloop⟩ :=
+    ConstructionTargets.AttachTwoCell.cell_facts γ
+  let rU : U ≃ₜ ConstructionTargets.AttachTwoCell.cellOuter γ :=
+    apm_t02A04_compatibleOpenCover_aux_restrict _
+  let rV : V ≃ₜ ConstructionTargets.AttachTwoCell.cellInner γ :=
+    apm_t02A04_compatibleOpenCover_aux_restrict _
+  let rO : (U ∩ V : Set apm_t02a04_X) ≃ₜ
+      (ConstructionTargets.AttachTwoCell.cellOuter γ ∩
+        ConstructionTargets.AttachTwoCell.cellInner γ : Set _) :=
+    { toFun := fun x ↦ ⟨h.symm x.1, x.2⟩
+      invFun := fun x ↦ ⟨h x.1, ⟨by simpa [U] using x.2.1,
+        by simpa [V] using x.2.2⟩⟩
+      left_inv := fun x ↦ by apply Subtype.ext; simp
+      right_inv := fun x ↦ by apply Subtype.ext; simp
+      continuous_toFun := Continuous.subtype_mk
+        (h.symm.continuous.comp continuous_subtype_val) _
+      continuous_invFun := Continuous.subtype_mk
+        (h.continuous.comp continuous_subtype_val) _ }
+  letI : ContractibleSpace (ConstructionTargets.AttachTwoCell.cellInner γ) :=
+    hcontract
+  let eV : ContinuousMap.HomotopyEquiv V PUnit := rV.toHomotopyEquiv.trans
+    (Classical.choice (ContractibleSpace.hequiv_unit _))
+  refine ⟨⟨U, V, ?_, ?_, ?_,
+    rU.toHomotopyEquiv.trans eU, eV,
+    rO.toHomotopyEquiv.trans eO, ?_⟩⟩
+  · exact hU.preimage h.symm.continuous
+  · exact hV.preimage h.symm.continuous
+  · apply Set.eq_univ_of_forall
+    intro x
+    have hx : h.symm x ∈ ConstructionTargets.AttachTwoCell.cellOuter γ ∪
+        ConstructionTargets.AttachTwoCell.cellInner γ := by
+      rw [hcover]
+      trivial
+    exact hx
+  ·
+    let i := apm_t92J05_twoOpen_overlapToLeft
+      (ConstructionTargets.AttachTwoCell.cellOuter γ)
+      (ConstructionTargets.AttachTwoCell.cellInner γ)
+    have hloop' : (i.comp eO.invFun).Homotopic (eU.invFun.comp γ) := by
+      rw [heO, heU]
+      exact hloop
+    have hs : (eU.toFun.comp i).Homotopic (γ.comp eO.toFun) := by
+      have hstart : (eU.toFun.comp i).Homotopic
+          (eU.toFun.comp ((i.comp eO.invFun).comp eO.toFun)) := by
+        simpa only [ContinuousMap.comp_assoc, ContinuousMap.comp_id] using
+          ContinuousMap.Homotopic.comp
+            (ContinuousMap.Homotopic.refl (eU.toFun.comp i)) eO.left_inv.symm
+      have hmiddle :
+          (eU.toFun.comp ((i.comp eO.invFun).comp eO.toFun)).Homotopic
+            (eU.toFun.comp ((eU.invFun.comp γ).comp eO.toFun)) := by
+        simpa only [ContinuousMap.comp_assoc] using
+          ContinuousMap.Homotopic.comp (ContinuousMap.Homotopic.refl eU.toFun)
+            (ContinuousMap.Homotopic.comp
+              hloop'
+              (ContinuousMap.Homotopic.refl eO.toFun))
+      have hend :
+          (eU.toFun.comp ((eU.invFun.comp γ).comp eO.toFun)).Homotopic
+            (γ.comp eO.toFun) := by
+        simpa only [ContinuousMap.comp_assoc, ContinuousMap.id_comp] using
+          ContinuousMap.Homotopic.comp eU.right_inv
+            (ContinuousMap.Homotopic.refl (γ.comp eO.toFun))
+      exact hstart.trans (hmiddle.trans hend)
+    have ht := ContinuousMap.Homotopic.comp hs
+      (ContinuousMap.Homotopic.refl rO.toHomotopyEquiv.toFun)
+    change ((eU.toFun.comp i).comp rO.toHomotopyEquiv.toFun).Homotopic
+      ((γ.comp eO.toFun).comp rO.toHomotopyEquiv.toFun)
+    exact ht
 
 /-- The concrete quotient is path-connected. -/
 theorem apm_t02A04_pathConnected : PathConnectedSpace apm_t02a04_X := by
