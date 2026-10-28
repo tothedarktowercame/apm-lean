@@ -67,6 +67,107 @@ theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_vertex_me
     v ∈ convexHull ℝ (s : Set (EuclideanSpace ℝ (Fin n))) ↔ v ∈ s := by
   exact K.vertex_mem_convexHull_iff hv hs
 
+def wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1
+    {a b : ℕ} (v₁ : EuclideanSpace ℝ (Fin a)) :
+    EuclideanSpace ℝ (Fin a) → EuclideanSpace ℝ (Fin (a + b)) :=
+  fun x => WithLp.toLp 2 (Fin.append (WithLp.ofLp (x - v₁)) 0)
+
+def wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2
+    {a b : ℕ} (v₂ : EuclideanSpace ℝ (Fin b)) :
+    EuclideanSpace ℝ (Fin b) → EuclideanSpace ℝ (Fin (a + b)) :=
+  fun y => WithLp.toLp 2 (Fin.append 0 (WithLp.ofLp (y - v₂)))
+
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1_injective
+    {a b : ℕ} (v₁ : EuclideanSpace ℝ (Fin a)) :
+    Function.Injective
+      (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁) := by
+  intro x y h
+  have h' := congrArg WithLp.ofLp h
+  have hv : x - v₁ = y - v₁ := by
+    ext i
+    have hi := congrFun h' (Fin.castAdd b i)
+    simpa [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1] using hi
+  exact sub_left_inj.mp hv
+
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2_injective
+    {a b : ℕ} (v₂ : EuclideanSpace ℝ (Fin b)) :
+    Function.Injective
+      (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂) := by
+  intro x y h
+  have h' := congrArg WithLp.ofLp h
+  have hv : x - v₂ = y - v₂ := by
+    ext i
+    have hi := congrFun h' (Fin.natAdd a i)
+    simpa [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2] using hi
+  exact sub_left_inj.mp hv
+
+open scoped Classical in
+/-- Faces of the glued complex: subsets of images of faces of either side. -/
+def wedgeFaces {a b : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) : Set (Finset (EuclideanSpace ℝ (Fin (a + b)))) :=
+  {u | (∃ s ∈ K₁.faces, u ⊆ s.image (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁)) ∨
+      (∃ s ∈ K₂.faces, u ⊆ s.image (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂))}
+
+theorem wedgeFaces_isLowerSet {a b : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) : IsLowerSet (wedgeFaces K₁ K₂ v₁ v₂) := by
+  intro u w hwu hu
+  rcases hu with ⟨s, hs, h⟩ | ⟨s, hs, h⟩
+  · exact Or.inl ⟨s, hs, (Finset.le_iff_subset.mp hwu).trans h⟩
+  · exact Or.inr ⟨s, hs, (Finset.le_iff_subset.mp hwu).trans h⟩
+
+/-- (E1) Faces are affinely independent (subsets of affine-injective images of
+independent sets). -/
+theorem wedgeFaces_indep {a b : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) :
+    ∀ u ∈ wedgeFaces K₁ K₂ v₁ v₂, AffineIndependent ℝ ((↑) : u → EuclideanSpace ℝ (Fin (a + b))) := by
+  sorry
+
+/-- (E2) Intersection axiom: same-side faces pull back to `K₁`/`K₂`'s axiom;
+a point in a `j₁`-face and a `j₂`-face is `j₁ v₁ = j₂ v₂ = 0`, a vertex of both
+(`_aux_vertex_mem_hull_iff`). -/
+theorem wedgeFaces_inter {a b : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b))
+    (hv₁ : {v₁} ∈ K₁.faces) (hv₂ : {v₂} ∈ K₂.faces) :
+    ∀ᵉ (s ∈ wedgeFaces K₁ K₂ v₁ v₂) (t ∈ wedgeFaces K₁ K₂ v₁ v₂),
+      convexHull ℝ (s : Set (EuclideanSpace ℝ (Fin (a + b)))) ∩ convexHull ℝ (t : Set (EuclideanSpace ℝ (Fin (a + b)))) ⊆
+        convexHull ℝ (s ∩ t : Set (EuclideanSpace ℝ (Fin (a + b)))) := by
+  sorry
+
+/-- (E3) The union of the face hulls is the union of the two embedded spaces. -/
+theorem wedgeFaces_space {a b : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) (z : EuclideanSpace ℝ (Fin (a + b))) :
+    (∃ s ∈ wedgeFaces K₁ K₂ v₁ v₂, z ∈ convexHull ℝ (s : Set (EuclideanSpace ℝ (Fin (a + b))))) ↔
+      (∃ x ∈ K₁.space, wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁ x = z) ∨ (∃ y ∈ K₂.space, wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂ y = z) := by
+  sorry
+
+/-- (E4) The two embeddings meet only at the marked vertices. -/
+theorem wedge_j_meet {a b : ℕ} (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) (x : EuclideanSpace ℝ (Fin a)) (y : EuclideanSpace ℝ (Fin b)) :
+    wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁ x = wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂ y ↔ x = v₁ ∧ y = v₂ := by
+  sorry
+
+/-- (E5) Finitely many faces. -/
+theorem wedgeFaces_finite {a b : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (h₁ : K₁.faces.Finite) (h₂ : K₂.faces.Finite)
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) : (wedgeFaces K₁ K₂ v₁ v₂).Finite := by
+  sorry
+
+/-- (E6) The embeddings are continuous (affine). -/
+theorem wedge_j_continuous {a b : ℕ} (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) :
+    Continuous (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁) ∧ Continuous (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂) := by
+  sorry
+
 /-- (G1) Two finite complexes glued at one vertex each: translate the marked
 vertices to the origin and place the complexes in the two factors of
 `ℝ^(a+b)`.  The images meet only at the origin; the intersection axiom holds
@@ -87,7 +188,44 @@ theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed {a b : ℕ}
         ((x : EuclideanSpace ℝ (Fin a)) = v₁ ∧ (y : EuclideanSpace ℝ (Fin b)) = v₂)) ∧
       (∀ x : K₁.space, (x : EuclideanSpace ℝ (Fin a)) = v₁ →
         (ι₁ x : EuclideanSpace ℝ (Fin N)) = p) := by
-  sorry
+  classical
+  let F := wedgeFaces K₁ K₂ v₁ v₂
+  let K := Geometry.SimplicialComplex.ofErase F (wedgeFaces_indep K₁ K₂ v₁ v₂)
+    (wedgeFaces_isLowerSet K₁ K₂ v₁ v₂) (wedgeFaces_inter K₁ K₂ v₁ v₂ hv₁ hv₂)
+  have hspace : ∀ z, z ∈ K.space ↔
+      (∃ x ∈ K₁.space, wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁ x = z) ∨ (∃ y ∈ K₂.space, wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂ y = z) := by
+    intro z
+    rw [← wedgeFaces_space K₁ K₂ v₁ v₂ z, Geometry.SimplicialComplex.mem_space_iff]
+    constructor
+    · rintro ⟨u, hu, hz⟩; exact ⟨u, hu.1, hz⟩
+    · rintro ⟨u, hu, hz⟩
+      refine ⟨u, ⟨hu, ?_⟩, hz⟩
+      rintro rfl
+      simp at hz
+  obtain ⟨hc₁, hc₂⟩ := wedge_j_continuous (a := a) (b := b) v₁ v₂
+  let ι₁ : C(K₁.space, K.space) :=
+    ⟨fun x => ⟨wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 v₁ x, (hspace _).2 (Or.inl ⟨x, x.2, rfl⟩)⟩,
+      (hc₁.comp continuous_subtype_val).subtype_mk _⟩
+  let ι₂ : C(K₂.space, K.space) :=
+    ⟨fun y => ⟨wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 v₂ y, (hspace _).2 (Or.inr ⟨y, y.2, rfl⟩)⟩,
+      (hc₂.comp continuous_subtype_val).subtype_mk _⟩
+  refine ⟨a + b, K, ι₁, ι₂, wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 v₁ v₁, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact (wedgeFaces_finite K₁ K₂ h₁ h₂ v₁ v₂).diff
+  · refine ⟨Or.inl ⟨{v₁}, hv₁, by simp⟩, by simp⟩
+  · intro x y h
+    exact Subtype.ext (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1_injective v₁ (congrArg Subtype.val h))
+  · intro x y h
+    exact Subtype.ext (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2_injective v₂ (congrArg Subtype.val h))
+  · intro z
+    rcases (hspace z).1 z.2 with ⟨x, hx, hxz⟩ | ⟨y, hy, hyz⟩
+    · exact Or.inl ⟨⟨x, hx⟩, Subtype.ext hxz⟩
+    · exact Or.inr ⟨⟨y, hy⟩, Subtype.ext hyz⟩
+  · intro x y
+    rw [← wedge_j_meet v₁ v₂ x y]
+    exact ⟨fun h => congrArg Subtype.val h, fun h => Subtype.ext h⟩
+  · intro x hx
+    change wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 v₁ x = wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 v₁ v₁
+    rw [hx]
 
 /-- (G2) From (G1)'s embedding data and marked homeomorphisms `X ≃ₜ K₁.space`,
 `Y ≃ₜ K₂.space`, the wedge is homeomorphic to `K.space` with the wedge point at
