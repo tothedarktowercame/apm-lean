@@ -326,6 +326,61 @@ lemma carried_chainHomotopy_exists_aux_smul {n k : ℕ}
   rw [← map_smul]
   rfl
 
+lemma carried_chainHomotopy_exists_aux_add {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n))
+    (x y : (SingularQChains K).X k)
+    (hx : FaceCarriedChain K s x) (hy : FaceCarriedChain K s y) :
+    FaceCarriedChain K s (x + y) := by
+  classical
+  rcases hx with ⟨m, a, σ, rfl, hσ⟩
+  rcases hy with ⟨m', a', σ', rfl, hσ'⟩
+  let e : Fin m ⊕ Fin m' ≃ Fin (m + m') := finSumFinEquiv
+  let b : Fin (m + m') → ℚ := Sum.elim a a' ∘ e.symm
+  let τ : Fin (m + m') → SingularSimplex (TopCat.of K.space) k :=
+    Sum.elim σ σ' ∘ e.symm
+  refine ⟨m + m', b, τ, ?_, ?_⟩
+  · rw [← e.sum_comp]
+    simp [b, τ, Fintype.sum_sum_type]
+  · intro i
+    generalize hp : e.symm i = p
+    rcases p with j | j
+    · simpa [τ, hp] using hσ j
+    · simpa [τ, hp] using hσ' j
+
+lemma carried_chainHomotopy_exists_aux_linear_combination {n k l : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n))
+    (f : FaceModuleCat K k ⟶ (SingularQChains K).X l)
+    (hf : ∀ t : FaceIndex K k, t.1 ⊆ s →
+      FaceCarriedChain K s (f (Finsupp.single t 1)))
+    (x : FaceModule K k)
+    (hx : ∀ t ∈ x.support, t.1 ⊆ s) : FaceCarriedChain K s (f x) := by
+  classical
+  induction x using Finsupp.induction with
+  | zero =>
+      simpa using carried_chainHomotopy_exists_aux_zero K s
+  | @single_add t r x htx hr ih =>
+      rw [map_add]
+      apply carried_chainHomotopy_exists_aux_add K s
+      · have ht : f (Finsupp.single t r) = r • f (Finsupp.single t 1) := by
+          rw [← map_smul]
+          simp
+        rw [ht]
+        exact carried_chainHomotopy_exists_aux_smul K s
+          (f (Finsupp.single t 1)) (hf t (hx t (by
+            simp only [Finsupp.mem_support_iff, Finsupp.add_apply,
+              Finsupp.single_eq_same]
+            have hxt : x t = 0 := by
+              simpa [Finsupp.mem_support_iff] using htx
+            simp [hxt, hr]))) r
+      · apply ih
+        intro u hu
+        apply hx u
+        simp only [Finsupp.mem_support_iff, Finsupp.add_apply]
+        by_cases h : u = t
+        · subst u
+          exact False.elim (htx hu)
+        · simpa [Finsupp.single_apply, h, Finsupp.mem_support_iff] using hu
+
 /- Second route note (claude-14, after a second partial): `Homotopy.mkInductive`
 CANNOT be used as is — its `succ` must work for an arbitrary previous component
 `p.2.1`, but filling needs `p.2.1` to be carried (else the cycle is not in a
