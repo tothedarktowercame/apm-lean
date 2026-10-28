@@ -59,7 +59,14 @@ theorem faceAvoiding_of_fine
     (hfine : ∀ s ∈ K.faces, Metric.diam (convexHull ℝ (↑s : Set (EuclideanSpace ℝ (Fin n)))) < ε)
     (hsep : ∀ x : X, ε ≤ dist (e x : EuclideanSpace ℝ (Fin n)) (e (f x))) :
     FaceAvoiding K e f := by
-  sorry
+  intro s hs x hx hfx
+  have hb : Bornology.IsBounded
+      (convexHull ℝ (↑s : Set (EuclideanSpace ℝ (Fin n)))) :=
+    isBounded_convexHull.mpr s.finite_toSet.isBounded
+  have hd : dist (e x : EuclideanSpace ℝ (Fin n)) (e (f x)) ≤
+      Metric.diam (convexHull ℝ (↑s : Set (EuclideanSpace ℝ (Fin n)))) :=
+    Metric.dist_le_diam_of_mem hb hx hfx
+  exact (not_lt_of_ge (hsep x)) (hd.trans_lt (hfine s hs))
 -- END SEAT AREA
 
 /-- Homotopic maps have the same rational Lefschetz number. -/
