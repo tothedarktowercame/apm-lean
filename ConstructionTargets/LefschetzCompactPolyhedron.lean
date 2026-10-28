@@ -47,7 +47,21 @@ theorem fixedPointFree_uniform_separation
     (hfree : ∀ x, f x ≠ x) :
     ∃ ε > 0, ∀ x : X,
       ε ≤ dist (e x : EuclideanSpace ℝ (Fin n)) (e (f x)) := by
-  sorry
+  have hcompact : IsCompact K.space := by
+    rw [Geometry.SimplicialComplex.space]
+    exact hK.isCompact_biUnion fun s hs =>
+      s.finite_toSet.isCompact_convexHull ℝ
+  letI : CompactSpace K.space := isCompact_iff_compactSpace.mp hcompact
+  letI : CompactSpace X := e.symm.compactSpace
+  let d : X → ℝ := fun x =>
+    dist (e x : EuclideanSpace ℝ (Fin n)) (e (f x))
+  have hd : Continuous d := by
+    fun_prop
+  obtain ⟨ε, hε, hbound⟩ :=
+    isCompact_univ.exists_forall_le' hd.continuousOn
+      (fun x _ => dist_pos.mpr (fun heq =>
+        hfree x ((e.injective (Subtype.ext heq)).symm)))
+  exact ⟨ε, hε, fun x => hbound x (mem_univ x)⟩
 
 /-- If every face is shorter than the distance each point is moved, the map
 avoids every face. -/
