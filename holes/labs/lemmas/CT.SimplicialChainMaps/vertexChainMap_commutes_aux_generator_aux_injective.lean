@@ -17,11 +17,16 @@ abbrev GSC (n : ℕ) := Geometry.SimplicialComplex ℝ (Euc n)
 /-- The parity of the inversions created by applying `h` to the increasing
 vertices of `s`.  This definition is meaningful even when `h` has collisions;
 the vertex-chain specification uses it only in the injective case. -/
+/- claude-14 fix 2026-10-28 (from lemma-3's sign leaf): the inversion test used
+`>` on `Euc m`, which resolves to the POINTWISE partial order of EuclideanSpace,
+not `om`; pointwise-incomparable images were never counted, so this was not the
+sign of the sorting permutation. It now compares with `om` explicitly. -/
 def sortingSign {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
     (s : Finset (Euc n)) (h : Euc n → Euc m) : ℚ :=
   (-1 : ℚ) ^ ((Finset.univ.filter fun ij : Fin s.card × Fin s.card =>
     ij.1 < ij.2 ∧
-      h ((s.1.sort on.le).getD ij.1 0) > h ((s.1.sort on.le).getD ij.2 0)).card)
+      @LT.lt (Euc m) om.toLT (h ((s.1.sort on.le).getD ij.2 0))
+        (h ((s.1.sort on.le).getD ij.1 0))).card)
 
 /-- Generator formula for the ordered-face map of a simplicial vertex map.
 It is zero on a collapsed face and otherwise is the image face with sorting sign. -/
@@ -138,9 +143,329 @@ lemma vertexChainMap_commutes_aux_generator_aux_boundaryL {m k : ℕ}
           (signedDeletion_sq_zero_aux_generator_aux_erase L t v.1 v.2) 1 := by
   exact signedDeletion_sq_zero_aux_generator_aux_boundary om L dL hdL t
 
-/-- (VG1) `h` injective on `s`: deleting a vertex commutes with taking images,
-and the sorting signs agree (`sortingSign` of `s.erase v` times the position sign
-in `s` equals the position sign of `h v` in `h '' s` times `sortingSign` of `s`). -/
+lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_injOn {n m : ℕ}
+    {k : ℕ} (K : GSC n) (s : FaceIndex K (k + 1)) (h : Euc n → Euc m)
+    (hinj : (s.1.image h).card = k + 2) : Set.InjOn h s.1 := by
+  apply Finset.injOn_of_card_image_eq
+  rw [hinj, s.2.2]
+
+lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_image_erase {n m : ℕ}
+    {k : ℕ} (K : GSC n) (s : FaceIndex K (k + 1)) (h : Euc n → Euc m)
+    (hinj : (s.1.image h).card = k + 2) (v : Euc n) (hv : v ∈ s.1) :
+    (s.1.erase v).image h = (s.1.image h).erase (h v) := by
+  ext z
+  simp only [Finset.mem_image, Finset.mem_erase]
+  constructor
+  · rintro ⟨x, ⟨hxv, hxs⟩, rfl⟩
+    refine ⟨?_, x, hxs, rfl⟩
+    intro heq
+    exact hxv (vertexChainMap_commutes_aux_generator_aux_injective_aux_injOn K s h hinj
+      hxs hv heq)
+  · rintro ⟨hzv, x, hxs, rfl⟩
+    refine ⟨x, ⟨?_, hxs⟩, rfl⟩
+    rintro rfl
+    exact hzv rfl
+
+open scoped Classical in
+/-- Inversions of `h` on `a`, counted on elements: pairs `x <_on y` with `h y <_om h x`. -/
+noncomputable def elemInv {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) : ℕ :=
+  ((a ×ˢ a).filter (fun p => @LT.lt (Euc n) on.toLT p.1 p.2 ∧ @LT.lt (Euc m) om.toLT (h p.2) (h p.1))).card
+
+/-- (P0) Index form = element form: the sorted list is an order isomorphism
+`Fin a.card ≃o a`. -/
+theorem sortingSign_eq_elemInv {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) :
+    sortingSign on om a h = (-1 : ℚ) ^ elemInv on om a h := by
+  classical
+  letI := on
+  letI := om
+  let e : Fin a.card ≃o a := a.orderIsoOfFin rfl
+  have hget (i : Fin a.card) :
+      (a.1.sort on.le).getD i 0 = (e i : Euc n) := by
+    calc
+      _ = (a.1.sort on.le)[i] := List.getD_eq_getElem _ _ (by simpa using i.2)
+      _ = (e i : Euc n) := (a.orderEmbOfFin_apply rfl i).symm
+  let source := Finset.univ.filter (fun ij : Fin a.card × Fin a.card =>
+        ij.1 < ij.2 ∧
+          @LT.lt (Euc m) om.toLT (h ((a.1.sort on.le).getD ij.2 0))
+            (h ((a.1.sort on.le).getD ij.1 0)))
+  let target := (a ×ˢ a).filter (fun p =>
+        @LT.lt (Euc n) on.toLT p.1 p.2 ∧
+          @LT.lt (Euc m) om.toLT (h p.2) (h p.1))
+  have hc : source.card = target.card := by
+    apply Finset.card_bij
+        (fun ij _ => ((e ij.1 : Euc n), (e ij.2 : Euc n)))
+    · intro ij hij
+      simp only [source, Finset.mem_filter, Finset.mem_univ, true_and] at hij
+      rw [hget, hget] at hij
+      simp only [Finset.mem_filter, Finset.mem_product, (e ij.1).2, (e ij.2).2,
+        true_and, target]
+      exact ⟨e.lt_iff_lt.mpr hij.1, hij.2⟩
+    · intro ij₁ hij₁ ij₂ hij₂ heq
+      apply Prod.ext
+      · exact e.injective (Subtype.ext (congrArg Prod.fst heq))
+      · exact e.injective (Subtype.ext (congrArg Prod.snd heq))
+    · intro p hp
+      simp only [target, Finset.mem_filter, Finset.mem_product] at hp
+      let i : Fin a.card := e.symm ⟨p.1, hp.1.1⟩
+      let j : Fin a.card := e.symm ⟨p.2, hp.1.2⟩
+      have hi : (e i : Euc n) = p.1 := by simp [i]
+      have hj : (e j : Euc n) = p.2 := by simp [j]
+      refine ⟨(i, j), ?_, ?_⟩
+      · simp only [source, Finset.mem_filter, Finset.mem_univ, true_and]
+        constructor
+        · exact e.lt_iff_lt.mp (by simpa [i, j] using hp.2.1)
+        · rw [hget, hget, hi, hj]
+          exact hp.2.2
+      · simp [i, j]
+  simp only [sortingSign, elemInv]
+  exact congrArg ((-1 : ℚ) ^ ·) (by simpa [source, target] using hc)
+
+open scoped Classical in
+/-- (P1) Removing `v` removes exactly the inversions involving `v`. -/
+theorem elemInv_erase {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) (v : Euc n) (hv : v ∈ a) :
+    elemInv on om a h = elemInv on om (a.erase v) h +
+      ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT u v ∧ @LT.lt (Euc m) om.toLT (h v) (h u))).card +
+      ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT v u ∧ @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
+  classical
+  rw [← Finset.insert_erase hv]
+  simp only [elemInv]
+  rw [← Finset.card_disjSum, ← Finset.card_disjSum]
+  apply Finset.card_bij
+    (fun p _ =>
+      if p.1 = v then Sum.inr p.2
+      else if p.2 = v then Sum.inl (Sum.inr p.1)
+      else Sum.inl (Sum.inl p))
+  · simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert,
+      Finset.mem_erase, Finset.mem_disjSum]
+    aesop
+  · intro p₁ hp₁ p₂ hp₂ heq
+    simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert] at hp₁ hp₂
+    split_ifs at heq <;> simp_all [Prod.ext_iff]
+  · intro q hq
+    simp only [Finset.mem_disjSum, Finset.mem_filter, Finset.mem_product,
+      Finset.mem_erase] at hq
+    rcases q with (q | q)
+    · rcases q with (q | q)
+      · refine ⟨q, ?_, ?_⟩
+        · simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert]
+          grind
+        · rcases hq with ⟨x, y, hxy, rfl⟩ <;> simp_all
+      · refine ⟨(q, v), ?_, ?_⟩
+        · simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert]
+          grind
+        · simp_all
+    · refine ⟨(v, q), ?_, ?_⟩
+      · simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert]
+        grind
+      · simp_all
+
+open scoped Classical in
+/-- (P2) Position in the sorted list = number of smaller elements. -/
+theorem sort_idxOf_eq_card_lt_aux {α : Type*} [DecidableEq α] (o : LinearOrder α)
+    (l : List α) (v : α) (hv : v ∈ l) (hs : l.Pairwise o.le) (hn : l.Nodup) :
+    l.idxOf v = (l.toFinset.filter (fun x => o.lt x v)).card := by
+  letI := o
+  induction l with
+  | nil => simp at hv
+  | cons x l ih =>
+      simp only [List.mem_cons] at hv
+      rcases hv with rfl | hv
+      · have hnot : ∀ y ∈ l, ¬y < v := by
+          intro y hy hyx
+          exact (not_lt_of_ge (hs.rel_head_tail hy)) hyx
+        have hf : l.toFinset.filter (fun y => y < v) = ∅ := by
+          apply Finset.eq_empty_iff_forall_notMem.mpr
+          intro y hy
+          simp only [Finset.mem_filter, List.mem_toFinset] at hy
+          exact hnot y hy.1 hy.2
+        rw [List.idxOf_cons_self, List.toFinset_cons, Finset.filter_insert]
+        simp [hf]
+      · have hxl : x ≤ v := hs.rel_head_tail hv
+        have hxv : x < v := lt_of_le_of_ne hxl (hn.rel_head_tail hv)
+        rw [List.idxOf_cons_ne l (ne_of_lt hxv)]
+        simp only [List.toFinset_cons, Finset.filter_insert, hxv, if_true]
+        rw [Finset.card_insert_of_notMem]
+        · simp [ih hv hs.tail hn.tail]
+        · intro hx
+          simp only [Finset.mem_filter, List.mem_toFinset] at hx
+          exact (hn.rel_head_tail hx.1) rfl
+
+theorem sort_idxOf_eq_card_lt {n : ℕ} (on : LinearOrder (Euc n))
+    (a : Finset (Euc n)) (v : Euc n) (hv : v ∈ a) :
+    (a.sort on.le).idxOf v = (a.filter (fun u => @LT.lt (Euc n) on.toLT u v)).card := by
+  simpa using sort_idxOf_eq_card_lt_aux on (a.sort on.le) v (by simpa using hv)
+    (a.pairwise_sort on.le) (a.sort_nodup on.le)
+
+open scoped Classical in
+/-- (P3) The same for the image, through the injective `h`. -/
+theorem image_sort_idxOf_eq_card_lt_aux {α : Type*} [DecidableEq α] (o : LinearOrder α)
+    (l : List α) (v : α) (hv : v ∈ l) (hs : l.Pairwise o.le) (hn : l.Nodup) :
+    l.idxOf v = (l.toFinset.filter (fun x => @LT.lt α o.toLT x v)).card := by
+  letI := o
+  induction l with
+  | nil => simp at hv
+  | cons x l ih =>
+      cases hs with
+      | cons hrel hs =>
+       cases hn with
+       | cons hnotmem hn =>
+      simp only [List.mem_cons] at hv
+      rcases hv with rfl | hv
+      · have hnot : ∀ y ∈ l, ¬y < v := by
+          intro y hy hyx
+          exact (not_lt_of_ge (hrel y hy)) hyx
+        simp only [List.idxOf_cons_self, List.toFinset_cons, Finset.filter_insert,
+          lt_self_iff_false, if_false]
+        exact (Finset.card_eq_zero.mpr (by
+          rw [Finset.filter_eq_empty_iff]
+          intro y hy
+          exact hnot y (by simpa using hy))).symm
+      · have hxl : x ≤ v := hrel v hv
+        have hxv : x < v := lt_of_le_of_ne hxl (by
+          intro h
+          subst x
+          exact (hnotmem v hv) rfl)
+        rw [List.idxOf_cons_ne l (ne_of_lt hxv)]
+        simp only [List.toFinset_cons, Finset.filter_insert, hxv, if_true]
+        rw [Finset.card_insert_of_notMem]
+        · simp [ih hv hs hn]
+        · intro hx
+          rw [Finset.mem_filter] at hx
+          exact hnotmem x (by simpa using hx.1) rfl
+
+theorem image_sort_idxOf_eq_card_lt {n m : ℕ} (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) (hinj : Set.InjOn h a)
+    (v : Euc n) (hv : v ∈ a) :
+    ((a.image h).sort om.le).idxOf (h v) = (a.filter (fun u => @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
+  letI := om
+  rw [image_sort_idxOf_eq_card_lt_aux om ((a.image h).sort om.le) (h v)
+    (by simpa using ⟨v, hv, rfl⟩) ((a.image h).pairwise_sort (· ≤ ·))
+    (Finset.sort_nodup _ _)]
+  rw [Finset.sort_toFinset]
+  have heq : ((a.image h).filter (fun z => z < h v)) =
+      (a.filter (fun u => h u < h v)).image h := by
+    ext z
+    simp only [Finset.mem_filter, Finset.mem_image]
+    constructor
+    · rintro ⟨⟨u, hu, rfl⟩, huv⟩
+      exact ⟨u, ⟨hu, huv⟩, rfl⟩
+    · rintro ⟨u, ⟨hu, huv⟩, rfl⟩
+      exact ⟨⟨u, hu, rfl⟩, huv⟩
+  rw [heq, Finset.card_image_iff.mpr]
+  intro x hx y hy hxy
+  exact hinj (Finset.mem_filter.mp hx).1 (Finset.mem_filter.mp hy).1 hxy
+
+open scoped Classical in
+/-- (P4) The parity count: with `A = #{u <_on v}`, `B = #{h u <_om h v}`,
+`X = #{both}`, the two `P1` counts are `A - X` and `B - X` (injectivity makes the
+`om`-comparison of `h u, h v` total for `u ≠ v`), so the sign changes by
+`(-1)^(A+B)`. -/
+theorem vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity_aux_count {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) (hinj : Set.InjOn h a)
+    (v : Euc n) (hv : v ∈ a) :
+    (-1 : ℚ) ^ (a.filter (fun u => @LT.lt (Euc n) on.toLT u v)).card * (-1 : ℚ) ^ elemInv on om (a.erase v) h =
+      (-1 : ℚ) ^ elemInv on om a h * (-1 : ℚ) ^ (a.filter (fun u => @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
+  classical
+  let A := a.filter (fun u => @LT.lt (Euc n) on.toLT u v)
+  let B := a.filter (fun u => @LT.lt (Euc m) om.toLT (h u) (h v))
+  let X := a.filter (fun u =>
+    @LT.lt (Euc n) on.toLT u v ∧ @LT.lt (Euc m) om.toLT (h u) (h v))
+  let Y := a.filter (fun u =>
+    @LT.lt (Euc n) on.toLT u v ∧ @LT.lt (Euc m) om.toLT (h v) (h u))
+  let Z := a.filter (fun u =>
+    @LT.lt (Euc n) on.toLT v u ∧ @LT.lt (Euc m) om.toLT (h u) (h v))
+  have himage_ne (u : Euc n) (hu : u ∈ a) (huv : u ≠ v) : h u ≠ h v := by
+    exact fun huv' => huv (hinj hu hv huv')
+  have hA : A.card = X.card + Y.card := by
+    have hdis : Disjoint X Y := by
+      rw [Finset.disjoint_left]
+      intro u huX huY
+      simp only [X, Y, Finset.mem_filter] at huX huY
+      exact (not_lt_of_ge (le_of_lt huX.2.2)) huY.2.2
+    rw [← Finset.card_union_of_disjoint hdis]
+    congr 1
+    ext u
+    simp only [A, X, Y, Finset.mem_union, Finset.mem_filter]
+    constructor
+    · intro hu
+      have hne : h u ≠ h v := himage_ne u hu.1 (ne_of_lt hu.2)
+      rcases lt_or_gt_of_ne hne with hlt | hgt
+      · exact Or.inl ⟨hu.1, hu.2, hlt⟩
+      · exact Or.inr ⟨hu.1, hu.2, hgt⟩
+    · aesop
+  have hB : B.card = X.card + Z.card := by
+    have hdis : Disjoint X Z := by
+      rw [Finset.disjoint_left]
+      intro u huX huZ
+      simp only [X, Z, Finset.mem_filter] at huX huZ
+      exact (not_lt_of_ge (le_of_lt huX.2.1)) huZ.2.1
+    rw [← Finset.card_union_of_disjoint hdis]
+    congr 1
+    ext u
+    simp only [B, X, Z, Finset.mem_union, Finset.mem_filter]
+    constructor
+    · intro hu
+      have hne : u ≠ v := by
+        intro huv
+        subst u
+        exact (lt_irrefl (h v)) hu.2
+      rcases lt_or_gt_of_ne hne with hlt | hgt
+      · exact Or.inl ⟨hu.1, hlt, hu.2⟩
+      · exact Or.inr ⟨hu.1, hgt, hu.2⟩
+    · aesop
+  have hY :
+      ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT u v ∧
+        @LT.lt (Euc m) om.toLT (h v) (h u))).card = Y.card := by
+    congr 1
+    ext u
+    simp only [Y, Finset.mem_filter, Finset.mem_erase]
+    aesop
+  have hZ :
+      ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT v u ∧
+        @LT.lt (Euc m) om.toLT (h u) (h v))).card = Z.card := by
+    congr 1
+    ext u
+    simp only [Z, Finset.mem_filter, Finset.mem_erase]
+    aesop
+  have hInv : elemInv on om a h = elemInv on om (a.erase v) h + Y.card + Z.card := by
+    rw [elemInv_erase on om a h v hv, hY, hZ]
+  change (-1 : ℚ) ^ A.card * (-1 : ℚ) ^ elemInv on om (a.erase v) h =
+    (-1 : ℚ) ^ elemInv on om a h * (-1 : ℚ) ^ B.card
+  rw [← pow_add, ← pow_add, hA, hB, hInv]
+  ring_nf
+  rw [pow_mul]
+  rcases neg_one_pow_eq_or ℚ Z.card with hz | hz <;> simp [hz]
+
+/-- The parity identity behind naturality of oriented deletion.  This is the
+Laplace-minor sign rule for the permutation which reorders `h '' s`. -/
+lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (a : Finset (Euc n)) (h : Euc n → Euc m) (hinj : Set.InjOn h a)
+    (v : Euc n) (hv : v ∈ a) :
+    (-1 : ℚ) ^ ((a.sort on.le).idxOf v) * sortingSign on om (a.erase v) h =
+      sortingSign on om a h *
+        (-1 : ℚ) ^ (((a.image h).sort om.le).idxOf (h v)) := by
+  classical
+  rw [sortingSign_eq_elemInv, sortingSign_eq_elemInv, sort_idxOf_eq_card_lt on a v hv,
+    image_sort_idxOf_eq_card_lt om a h hinj v hv]
+  convert vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity_aux_count on om a h hinj v hv using 3
+
+lemma vertexChainMap_commutes_aux_generator_aux_injective_aux_sign {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    {k : ℕ} (K : GSC n) (s : FaceIndex K (k + 1)) (h : Euc n → Euc m)
+    (hinj : (s.1.image h).card = k + 2) (v : Euc n) (hv : v ∈ s.1) :
+    (-1 : ℚ) ^ ((s.1.sort on.le).idxOf v) *
+        sortingSign on om (s.1.erase v) h =
+      sortingSign on om s.1 h *
+        (-1 : ℚ) ^ (((s.1.image h).sort om.le).idxOf (h v)) := by
+  apply vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity
+  · exact vertexChainMap_commutes_aux_generator_aux_injective_aux_injOn K s h hinj
+  · exact hv
+
 -- BEGIN SEAT AREA
 theorem vertexChainMap_commutes_aux_generator_aux_injective {n m : ℕ}
     (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
@@ -157,6 +482,63 @@ theorem vertexChainMap_commutes_aux_generator_aux_injective {n m : ℕ}
   sorry
 -- END SEAT AREA
 
+lemma vertexChainMap_commutes_aux_generator_aux_collapse_aux_image_card {n m k : ℕ}
+    (K : GSC n) (h : Euc n → Euc m) (s : FaceIndex K (k + 1))
+    (hcol : (s.1.image h).card ≠ k + 2) :
+    (s.1.image h).card ≤ k + 1 := by
+  have hle : (s.1.image h).card ≤ k + 2 := by
+    simpa [s.2.2] using Finset.card_image_le (f := h) (s := s.1)
+  omega
+
+/-- (C-A) At least two collisions: every one-vertex deletion still collapses,
+so every term of `dK s` maps to `0`. -/
+theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_many {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k)
+    (hdK : IsSignedDeletion on K dK)
+    (hhm : IsVertexChainMap on om K L h hm) (k : ℕ)
+    (s : FaceIndex K (k + 1))
+    (hcard : (s.1.image h).card ≤ k) :
+    hm k (dK k (Finsupp.single s 1)) = 0 := by
+  rw [vertexChainMap_commutes_aux_generator_aux_boundaryK on K dK hdK s,
+    map_sum]
+  apply Finset.sum_eq_zero
+  intro v hv
+  rw [map_smul]
+  have himage : ((s.1.erase v.1).image h).card ≤ k := by
+    apply le_trans (Finset.card_le_card ?_) hcard
+    intro y hy
+    rcases Finset.mem_image.mp hy with ⟨x, hx, rfl⟩
+    exact Finset.mem_image.mpr ⟨x, Finset.erase_subset _ _ hx, rfl⟩
+  have hzero :
+      hm k (Finsupp.single
+        (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1) = 0 := by
+    have hspec := hhm k
+      (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2)
+    rw [dif_neg] at hspec
+    · exact hspec
+    · intro heq
+      change ((s.1.erase v.1).image h).card = k + 1 at heq
+      rw [heq] at himage
+      omega
+  rw [hzero, smul_zero]
+
+/-- (C-B) Exactly one collision `h v = h w`, `v ≠ w`: only deleting `v` or `w`
+gives an injective image, the same face, with opposite signs. -/
+theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_one {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k)
+    (hdK : IsSignedDeletion on K dK)
+    (hhm : IsVertexChainMap on om K L h hm) (k : ℕ)
+    (s : FaceIndex K (k + 1))
+    (hcard : (s.1.image h).card = k + 1) :
+    hm k (dK k (Finsupp.single s 1)) = 0 := by
+  sorry
+
 /-- (VG2) `h` collapses `s`: the left side is `0`; on the right the deleted
 faces with injective image come in pairs (delete either of two vertices with the
 same image) whose terms cancel, and all others map to `0`. -/
@@ -172,7 +554,17 @@ theorem vertexChainMap_commutes_aux_generator_aux_collapse {n m : ℕ}
     (hcol : (s.1.image h).card ≠ k + 2) :
     dL k (hm (k + 1) (Finsupp.single s 1)) =
       hm k (dK k (Finsupp.single s 1)) := by
-  sorry
+  have hl : hm (k + 1) (Finsupp.single s 1) = 0 := by
+    have := hhm (k + 1) s
+    rw [dif_neg hcol] at this
+    exact this
+  rw [hl, map_zero]
+  have hle := vertexChainMap_commutes_aux_generator_aux_collapse_aux_image_card K h s hcol
+  rcases Nat.lt_or_ge (s.1.image h).card (k + 1) with hlt | hge
+  · exact (vertexChainMap_commutes_aux_generator_aux_collapse_aux_many on om K L h dK hm
+      hdK hhm k s (by omega)).symm
+  · exact (vertexChainMap_commutes_aux_generator_aux_collapse_aux_one on om K L h dK hm
+      hdK hhm k s (by omega)).symm
 
 lemma vertexChainMap_commutes_aux_generator {n m : ℕ}
     (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
