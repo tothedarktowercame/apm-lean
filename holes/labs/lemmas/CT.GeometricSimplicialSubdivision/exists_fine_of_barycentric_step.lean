@@ -707,6 +707,70 @@ theorem barycentricSubdivision_mesh {n d : ℕ}
 /-- Iterating any finite, space-preserving subdivision with the barycentric
 mesh contraction produces a prescribed mesh. -/
 -- BEGIN SEAT AREA
+lemma exists_fine_of_barycentric_step_aux_iterate {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite)
+    (step : ∀ L : Geometry.SimplicialComplex ℝ (Euc n), L.faces.Finite →
+      ∃ L' : Geometry.SimplicialComplex ℝ (Euc n), L'.faces.Finite ∧
+        L'.space = L.space ∧
+        ∀ u ∈ L'.faces,
+          Metric.diam (convexHull ℝ (u : Set (Euc n))) ≤
+            (n / (n + 1 : ℝ)) *
+              sSup {r : ℝ | ∃ s ∈ L.faces,
+                r = Metric.diam (convexHull ℝ (s : Set (Euc n)))}) :
+    ∀ m : ℕ, ∃ L : Geometry.SimplicialComplex ℝ (Euc n),
+      L.faces.Finite ∧ L.space = K.space ∧
+      ∀ u ∈ L.faces,
+        Metric.diam (convexHull ℝ (u : Set (Euc n))) ≤
+          (n / (n + 1 : ℝ)) ^ m *
+            sSup {r : ℝ | ∃ s ∈ K.faces,
+              r = Metric.diam (convexHull ℝ (s : Set (Euc n)))} := by
+  intro m
+  have hM0 : 0 ≤ sSup {r : ℝ | ∃ s ∈ K.faces,
+      r = Metric.diam (convexHull ℝ (s : Set (Euc n)))} := by
+    by_cases hneK : K.faces.Nonempty
+    · obtain ⟨s, hs⟩ := hneK
+      refine Metric.diam_nonneg.trans (le_csSup ?_ ⟨s, hs, rfl⟩)
+      apply (hK.image (fun t : Finset (Euc n) ↦
+          Metric.diam (convexHull ℝ (t : Set (Euc n))))).bddAbove.mono
+      intro r hr
+      obtain ⟨t, ht, rfl⟩ := hr
+      exact ⟨t, ht, rfl⟩
+    · simp [Set.not_nonempty_iff_eq_empty.mp hneK]
+  induction m with
+  | zero =>
+      refine ⟨K, hK, rfl, ?_⟩
+      intro u hu
+      simp only [pow_zero, one_mul]
+      apply le_csSup
+      · apply (hK.image (fun s : Finset (Euc n) ↦
+            Metric.diam (convexHull ℝ (s : Set (Euc n))))).bddAbove.mono
+        intro r hr
+        obtain ⟨s, hs, rfl⟩ := hr
+        exact ⟨s, hs, rfl⟩
+      · exact ⟨u, hu, rfl⟩
+  | succ m ih =>
+      obtain ⟨L, hL, hspace, hmesh⟩ := ih
+      obtain ⟨L', hL', hspace', hstep⟩ := step L hL
+      refine ⟨L', hL', hspace'.trans hspace, ?_⟩
+      intro u hu
+      refine (hstep u hu).trans ?_
+      have hsup : sSup {r : ℝ | ∃ s ∈ L.faces,
+          r = Metric.diam (convexHull ℝ (s : Set (Euc n)))} ≤
+          (n / (n + 1 : ℝ)) ^ m *
+            sSup {r : ℝ | ∃ s ∈ K.faces,
+              r = Metric.diam (convexHull ℝ (s : Set (Euc n)))} := by
+        by_cases hne : {r : ℝ | ∃ s ∈ L.faces,
+            r = Metric.diam (convexHull ℝ (s : Set (Euc n)))}.Nonempty
+        · apply csSup_le hne
+          intro r hr
+          obtain ⟨s, hs, rfl⟩ := hr
+          exact hmesh s hs
+        · rw [Set.not_nonempty_iff_eq_empty.mp hne]
+          rw [Real.sSup_empty]
+          exact mul_nonneg (by positivity) hM0
+      simpa [pow_succ, mul_assoc, mul_comm, mul_left_comm] using
+        (mul_le_mul_of_nonneg_left hsup (by positivity : 0 ≤ n / (n + 1 : ℝ)))
+
 theorem exists_fine_of_barycentric_step {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite)
     (step : ∀ L : Geometry.SimplicialComplex ℝ (Euc n), L.faces.Finite →
@@ -722,7 +786,25 @@ theorem exists_fine_of_barycentric_step {n : ℕ}
       K'.faces.Finite ∧ K'.space = K.space ∧
       ∀ s ∈ K'.faces,
         Metric.diam (convexHull ℝ (↑s : Set (Euc n))) < ε := by
-  sorry
+  let M := sSup {r : ℝ | ∃ s ∈ K.faces,
+    r = Metric.diam (convexHull ℝ (s : Set (Euc n)))}
+  let q : ℝ := n / (n + 1 : ℝ)
+  have hq0 : 0 ≤ q := by positivity
+  have hq1 : q < 1 := by
+    dsimp [q]
+    rw [div_lt_one (by positivity : (0 : ℝ) < n + 1)]
+    norm_num
+  have hlim : Filter.Tendsto (fun m : ℕ ↦ q ^ m * M) Filter.atTop (nhds 0) :=
+    by simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one hq0 hq1).mul_const M
+  obtain ⟨m, hm⟩ : ∃ m : ℕ, q ^ m * M < ε := by
+    have hevent : ∀ᶠ m : ℕ in Filter.atTop, q ^ m * M < ε :=
+      (tendsto_order.1 hlim).2 ε hε
+    exact hevent.exists
+  obtain ⟨L, hL, hspace, hmesh⟩ :=
+    exists_fine_of_barycentric_step_aux_iterate K hK step m
+  refine ⟨L, hL, hspace, ?_⟩
+  intro s hs
+  exact (hmesh s hs).trans_lt (by simpa [q, M] using hm)
 -- END SEAT AREA
 
 /-- Every finite geometric simplicial complex admits an arbitrarily fine
