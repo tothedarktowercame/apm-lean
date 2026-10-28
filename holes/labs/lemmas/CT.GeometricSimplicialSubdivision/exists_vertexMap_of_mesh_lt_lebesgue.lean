@@ -1009,6 +1009,48 @@ theorem inducedMap_homotopic_of_star_condition {n m : ℕ}
 /-- Lebesgue-number simplicial approximation: sufficiently small stars admit
 a vertex choice satisfying the star condition. -/
 -- BEGIN SEAT AREA
+lemma exists_vertexMap_of_mesh_lt_lebesgue_aux_barycenter_mem_openStar {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) {s : Finset (Euc n)}
+    (hs : s ∈ K.faces) {v : Euc n} (hv : v ∈ s) :
+    barycenter s ∈ openStar K v := by
+  classical
+  refine ⟨s, hs, hv, ?_, ?_⟩
+  · apply Finset.centerMass_id_mem_convexHull
+    · intro x hx
+      positivity
+    · simpa using (Finset.card_pos.mpr (K.nonempty_of_mem_faces hs) : 0 < s.card)
+  · exact fun h =>
+      barycentricFaces_affineIndependent_aux_chain_not_mem_span K hs
+        (Finset.erase_ssubset hv) (by
+          have hc : convexHull ℝ ((s.erase v : Finset (Euc n)) : Set (Euc n)) ⊆
+              affineSpan ℝ ((s.erase v : Finset (Euc n)) : Set (Euc n)) :=
+            convexHull_subset_affineSpan ((s.erase v : Finset (Euc n)) : Set (Euc n))
+          exact hc h)
+
+lemma exists_vertexMap_of_mesh_lt_lebesgue_aux_common_openStars {m : ℕ}
+    (L : Geometry.SimplicialComplex ℝ (Euc m))
+    (u : Finset (Euc m)) (hu : u.Nonempty) {x : Euc m}
+    (hx : ∀ w ∈ u, x ∈ openStar L w) : u ∈ L.faces := by
+  classical
+  have hu' := hu
+  obtain ⟨w₀, hw₀⟩ := hu
+  obtain ⟨t, ht, hw₀t, hxt, -⟩ := hx w₀ hw₀
+  apply L.down_closed ht
+  · intro w hw
+    obtain ⟨r, hr, hwr, hxr, hxerase⟩ := hx w hw
+    by_contra hwt
+    apply hxerase
+    have hxi : x ∈ convexHull ℝ ((r ∩ t : Finset (Euc m)) : Set (Euc m)) := by
+      simpa only [Finset.coe_inter] using
+        (L.convexHull_inter_convexHull hr ht ▸ ⟨hxr, hxt⟩)
+    exact convexHull_mono (by
+      intro y hy
+      have hyr : y ∈ r := (Finset.mem_inter.mp hy).1
+      have hyt : y ∈ t := (Finset.mem_inter.mp hy).2
+      exact Finset.mem_erase.mpr ⟨fun hyw => hwt (hyw ▸ hyt), hyr⟩) hxi
+  · exact hu'
+
+set_option maxHeartbeats 800000 in
 theorem exists_vertexMap_of_mesh_lt_lebesgue {n m : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (L : Geometry.SimplicialComplex ℝ (Euc m)) (g : C(K.space, L.space))
@@ -1021,7 +1063,55 @@ theorem exists_vertexMap_of_mesh_lt_lebesgue {n m : ℕ}
       ∀ v ∈ K.vertices,
         g '' ((Subtype.val : K.space → Euc n) ⁻¹' openStar K v) ⊆
           (Subtype.val : L.space → Euc m) ⁻¹' openStar L (h v) := by
-  sorry
+  classical
+  have hchoice : ∀ v : Euc n, ∃ w : Euc m, ∀ hv : v ∈ K.vertices,
+      w ∈ L.vertices ∧
+        Metric.ball (⟨v, Geometry.SimplicialComplex.vertices_subset_space hv⟩ : K.space) δ ⊆
+          g ⁻¹' ((Subtype.val : L.space → Euc m) ⁻¹' openStar L w) := by
+    intro v
+    by_cases hv : v ∈ K.vertices
+    · obtain ⟨w, hw, hb⟩ :=
+        hlebesgue (⟨v, Geometry.SimplicialComplex.vertices_subset_space hv⟩ : K.space)
+      exact ⟨w, fun hv' => ⟨hw, by simpa only using hb⟩⟩
+    · exact ⟨0, fun hv' => (hv hv').elim⟩
+  choose h hh using hchoice
+  refine ⟨h, ⟨?_, ?_⟩, ?_⟩
+  · intro v hv
+    exact (hh v hv).1
+  · intro s hs
+    have hbHull : barycenter s ∈ convexHull ℝ (s : Set (Euc n)) := by
+      apply Finset.centerMass_id_mem_convexHull
+      · intro y hy
+        positivity
+      · simpa using (Finset.card_pos.mpr (K.nonempty_of_mem_faces hs) : 0 < s.card)
+    let b : K.space := ⟨barycenter s, K.convexHull_subset_space hs hbHull⟩
+    apply exists_vertexMap_of_mesh_lt_lebesgue_aux_common_openStars L
+      (s.image h) (Finset.image_nonempty.mpr (K.nonempty_of_mem_faces hs))
+      (x := (g b : Euc m))
+    · intro z hz
+      obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hz
+      have hvvertex : v ∈ K.vertices :=
+        K.down_closed hs (Finset.singleton_subset_iff.mpr hv) (Finset.singleton_nonempty v)
+      have hbball : b ∈ Metric.ball (⟨v,
+          Geometry.SimplicialComplex.vertices_subset_space hvvertex⟩ : K.space) δ := by
+        rw [Metric.mem_ball]
+        change dist (barycenter s) v < δ
+        exact (Metric.dist_le_diam_of_mem
+          (isBounded_convexHull.mpr s.finite_toSet.isBounded)
+          hbHull
+          (subset_convexHull ℝ (s : Set (Euc n)) hv)).trans_lt
+          ((hmesh s hs).trans (by linarith))
+      exact (hh v hvvertex).2 hbball
+  · intro v hv y hy
+    obtain ⟨x, hx, rfl⟩ := hy
+    apply (hh v hv).2
+    rw [Metric.mem_ball]
+    change dist (x : Euc n) v < δ
+    obtain ⟨s, hs, hvs, hxs, -⟩ := hx
+    exact (Metric.dist_le_diam_of_mem
+      (isBounded_convexHull.mpr s.finite_toSet.isBounded) hxs
+      (subset_convexHull ℝ (s : Set (Euc n)) hvs)).trans_lt
+      ((hmesh s hs).trans (by linarith))
 -- END SEAT AREA
 
 end ConstructionTargets.GeometricSimplicialSubdivision
