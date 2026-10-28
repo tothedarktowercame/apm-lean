@@ -79,8 +79,13 @@ def barycentricStep {n : ℕ} (K : GSC n) : GSC n :=
 def homeomorphMap {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     (e : X ≃ₜ Y) : C(X,Y) := ⟨e, e.continuous⟩
 
+/-- Carrier avoidance: every face `u` of the subdivision lying GEOMETRICALLY in a
+face `s` of `K` (its vertices in `convexHull s`) is sent by `h` to vertices off
+`s`.  (claude-14 fix 2026-10-28, from lemma-1's report: the earlier
+`(u : Set _) ⊆ s` compared vertex sets, but subdivision vertices are barycenters,
+not vertices of `s`, so it almost never applied.) -/
 def CarrierAvoidingVertexMap {n : ℕ} (K K' : GSC n) (h : Euc n → Euc n) : Prop :=
-  ∀ s ∈ K.faces, ∀ u ∈ K'.faces, (u : Set (Euc n)) ⊆ s →
+  ∀ s ∈ K.faces, ∀ u ∈ K'.faces, (u : Set (Euc n)) ⊆ convexHull ℝ (s : Set (Euc n)) →
     Disjoint (u.image h : Set (Euc n)) s
 
 theorem vertexChainMap_exists {n m : ℕ} (on : LinearOrder (Euc n))
@@ -88,7 +93,21 @@ theorem vertexChainMap_exists {n m : ℕ} (on : LinearOrder (Euc n))
     (hh : GeometricSimplicialSubdivision.IsSimplicialVertexMap K L h) :
     ∃ hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k,
       IsVertexChainMap on om K L h hm := by
-  sorry
+  classical
+  let b : ∀ k, FaceIndex K k → FaceModule L k := fun k s =>
+    if hinj : (s.1.image h).card = k + 1 then
+      Finsupp.single
+        (⟨s.1.image h, hh.2 s.1 s.2.1, hinj⟩ : FaceIndex L k)
+        (sortingSign on om s.1 h)
+    else 0
+  let hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k := fun k =>
+    ModuleCat.ofHom (Finsupp.linearCombination ℚ (b k))
+  refine ⟨hm, ?_⟩
+  intro k s
+  split_ifs with hinj
+  · refine ⟨⟨s.1.image h, hh.2 s.1 s.2.1, hinj⟩, rfl, ?_⟩
+    simp [hm, b, hinj]
+  · simp [hm, b, hinj]
 
 theorem vertexChainMap_commutes {n m : ℕ} (on : LinearOrder (Euc n))
     (om : LinearOrder (Euc m)) (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
