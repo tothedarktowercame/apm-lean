@@ -285,11 +285,48 @@ theorem affineCmp_single {n : ℕ} (o : LinearOrder (Euc n))
   rw [Finsupp.lsum_single]
 
 /-- (AC2) The affine simplex of a face has image exactly the face's hull. -/
+theorem faceSimplex_range_aux {n k : ℕ} (o : LinearOrder (Euc n))
+    {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K k) :
+    Set.range (continuousMapOfSingularSimplex k (faceSimplex o s)) =
+      (fun x : K.space => (x : Euc n)) ⁻¹' convexHull ℝ (s.1 : Set (Euc n)) := by
+  classical
+  simp only [faceSimplex, continuousMapOfSingularSimplex_ofContinuousMap]
+  ext x
+  constructor
+  · rintro ⟨w, rfl⟩
+    exact (convex_convexHull ℝ _).sum_mem
+      (fun i _ => stdSimplex.zero_le w i) (by simpa using w.2.2)
+      (fun i _ => subset_convexHull ℝ _ (faceVertices_mem o s i))
+  · intro hx
+    let e : Fin (k + 1) ≃ s.1 := (s.1.orderIsoOfFin s.2.2).toEquiv
+    rw [Finset.convexHull_eq] at hx
+    rcases hx with ⟨w, hw₀, hw₁, hwx⟩
+    let u : Fin (k + 1) → ℝ := fun i => w (e i : Euc n)
+    have hu : u ∈ stdSimplex ℝ (Fin (k + 1)) := by
+      refine ⟨fun i => hw₀ _ (e i).2, ?_⟩
+      rw [show ∑ i, u i = ∑ y : s.1, w y by
+        exact Equiv.sum_comp e (fun y : s.1 => w y)]
+      rw [← Finset.sum_attach] at hw₁
+      exact hw₁
+    refine ⟨⟨u, hu⟩, Subtype.ext ?_⟩
+    have hv (i : Fin (k + 1)) : faceVertices o s i = (e i : Euc n) := by
+      set_option maxHeartbeats 5000000 in
+        change (s.1.sort o.le).get _ = s.1.orderEmbOfFin s.2.2 i
+        exact (Finset.orderEmbOfFin_apply s.1 s.2.2 i).symm
+    rw [s.1.centerMass_eq_of_sum_1 (w := w) (z := id) hw₁] at hwx
+    change (∑ i, u i • faceVertices o s i) = (x : Euc n)
+    rw [show ∑ i, u i • faceVertices o s i =
+        ∑ y : s.1, w y.1 • y.1 by
+      simpa only [u, hv] using
+        (Equiv.sum_comp e (fun y : s.1 => w y.1 • y.1))]
+    rw [← Finset.sum_attach] at hwx
+    exact hwx
+
 theorem faceSimplex_range {n k : ℕ} (o : LinearOrder (Euc n))
     {K : Geometry.SimplicialComplex ℝ (Euc n)} (s : FaceIndex K k) :
     Set.range (continuousMapOfSingularSimplex k (faceSimplex o s)) =
       (fun x : K.space => (x : Euc n)) ⁻¹' convexHull ℝ (s.1 : Set (Euc n)) := by
-  sorry
+  exact faceSimplex_range_aux o s
 
 /-- (AC3) The comparison is a chain map: the `i`-th singular face of
 `faceSimplex s` is `faceSimplex (s.erase (i-th vertex))`
