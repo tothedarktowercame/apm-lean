@@ -828,7 +828,59 @@ theorem barycentricSubdivision_mesh_aux_barycenter_dist {n : ℕ}
     (hp : p ∈ convexHull ℝ (t : Set (Euc n))) :
     dist p (barycenter t) ≤ ((t.card - 1 : ℝ) / t.card) *
       Metric.diam (convexHull ℝ (t : Set (Euc n))) := by
-  sorry
+  classical
+  let D := Metric.diam (convexHull ℝ (t : Set (Euc n)))
+  have hbounded : Bornology.IsBounded (convexHull ℝ (t : Set (Euc n))) :=
+    isBounded_convexHull.mpr t.finite_toSet.isBounded
+  have hvertex (v : Euc n) (hv : v ∈ t) :
+      dist v (barycenter t) ≤ ((t.card - 1 : ℝ) / t.card) * D := by
+    have hcard : (t.card : ℝ) ≠ 0 := by
+      exact_mod_cast (Finset.card_ne_zero.mpr ht)
+    have hvh : v ∈ convexHull ℝ (t : Set (Euc n)) :=
+      (subset_convexHull ℝ (t : Set (Euc n))) (by simpa using hv)
+    have hpair (w : Euc n) (hw : w ∈ t.erase v) : dist v w ≤ D := by
+      apply Metric.dist_le_diam_of_mem hbounded hvh
+      exact (subset_convexHull ℝ (t : Set (Euc n)))
+        (by simpa using (Finset.mem_of_mem_erase hw))
+    rw [dist_eq_norm, barycentricFaces_affineIndependent_aux_barycenter_formula]
+    have hid : v - (t.card : ℝ)⁻¹ • ∑ x ∈ t, x =
+        (t.card : ℝ)⁻¹ • ∑ x ∈ t.erase v, (v - x) := by
+      rw [← Finset.sum_erase_add _ _ hv]
+      simp only [smul_add]
+      rw [Finset.sum_sub_distrib, Finset.sum_const, Finset.card_erase_of_mem hv]
+      rw [← Nat.cast_smul_eq_nsmul ℝ]
+      rw [Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr (Finset.card_ne_zero.mpr ht))]
+      have hinv : (t.card : ℝ)⁻¹ * ((t.card : ℝ) - 1) =
+          1 - (t.card : ℝ)⁻¹ := by field_simp
+      rw [smul_sub, smul_smul]
+      norm_num only [Nat.cast_one]
+      rw [hinv, sub_smul]
+      module
+    rw [hid, norm_smul, norm_inv, norm_natCast]
+    calc
+      (t.card : ℝ)⁻¹ * ‖∑ x ∈ t.erase v, (v - x)‖
+          ≤ (t.card : ℝ)⁻¹ * ∑ x ∈ t.erase v, ‖v - x‖ := by
+              gcongr
+              exact norm_sum_le _ _
+      _ ≤ (t.card : ℝ)⁻¹ * ((t.erase v).card * D) := by
+              gcongr
+              calc
+                ∑ x ∈ t.erase v, ‖v - x‖ = ∑ x ∈ t.erase v, dist v x := by
+                  apply Finset.sum_congr rfl
+                  intro x hx
+                  rw [dist_eq_norm]
+                _ ≤ ∑ _x ∈ t.erase v, D := Finset.sum_le_sum fun x hx => hpair x hx
+                _ = (t.erase v).card * D := by simp
+      _ = ((t.card - 1 : ℝ) / t.card) * D := by
+              rw [Finset.card_erase_of_mem hv]
+              push_cast
+              field_simp
+              rw [Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr (Finset.card_ne_zero.mpr ht))]
+              ring
+  obtain ⟨v, hv, hvmax⟩ :=
+    (convexOn_univ_dist (barycenter t)).exists_ge_of_mem_convexHull
+      (by simp) hp
+  exact hvmax.trans (hvertex v hv)
 
 /-- (M2) Pairwise bound for chain barycenters: two faces of a chain are nested,
 the smaller barycenter lies in the hull of the larger face `t`, apply (M1),
