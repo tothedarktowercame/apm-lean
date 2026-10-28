@@ -981,6 +981,117 @@ theorem subdivisionChainMap_commutes_aux_subdivision_unique {n : ℕ}
   change sd k (Finsupp.single s 1) u = se k (Finsupp.single s 1) u
   rw [hz, hw, hza, hwa]
 
+/-- The ordered cone on a subdivided face.  Its value is zero unless adjoining
+`b` again gives a face; the exponent is the position at which `b` is inserted
+in the order `o`. -/
+def subdivisionCone {n : ℕ} (o : LinearOrder (Euc n)) (K' : GSC n)
+    (b : Euc n) (k : ℕ) : FaceModuleCat K' k ⟶ FaceModuleCat K' (k + 1) := by
+  classical
+  let c : FaceIndex K' k → FaceModule K' (k + 1) := fun u =>
+    if hb : b ∉ u.1 ∧ insert b u.1 ∈ K'.faces then
+      Finsupp.single
+        (⟨insert b u.1, hb.2, by rw [Finset.card_insert_of_notMem hb.1, u.2.2]⟩ :
+          FaceIndex K' (k + 1))
+        ((-1 : ℚ) ^ (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card)
+    else 0
+  exact ModuleCat.ofHom (Finsupp.linearCombination ℚ c)
+
+/-- Every generator occurring in `x` can be coned to `b`. -/
+def ConeAdmissible {n k : ℕ} (K' : GSC n) (b : Euc n)
+    (x : FaceModule K' k) : Prop :=
+  ∀ u : FaceIndex K' k, x u ≠ 0 → b ∉ u.1 ∧ insert b u.1 ∈ K'.faces
+
+/-- Positive-degree cone-boundary identity.  This is the local sign
+calculation: deletion of `b` gives `x`, while deleting a vertex of `u` has the
+opposite sign from coning that deletion. -/
+theorem subdivisionChainMap_commutes_aux_cone_boundary {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K' : GSC n)
+    (dK' : ∀ j, FaceModuleCat K' (j + 1) ⟶ FaceModuleCat K' j)
+    (hdK' : IsSignedDeletion o K' dK') (b : Euc n)
+    (x : FaceModule K' (k + 1)) (hx : ConeAdmissible K' b x) :
+    dK' (k + 1) (subdivisionCone o K' b (k + 1) x) =
+      x - subdivisionCone o K' b k (dK' k x) := by
+  sorry
+
+/-- Degree-zero cone-boundary identity, with the augmentation term at the cone
+vertex made explicit. -/
+theorem subdivisionChainMap_commutes_aux_cone_boundary_zero {n : ℕ}
+    (o : LinearOrder (Euc n)) (K' : GSC n)
+    (dK' : ∀ j, FaceModuleCat K' (j + 1) ⟶ FaceModuleCat K' j)
+    (hdK' : IsSignedDeletion o K' dK') (b : Euc n)
+    (hb : ({b} : Finset (Euc n)) ∈ K'.faces) (x : FaceModule K' 0)
+    (hx : ConeAdmissible K' b x) :
+    dK' 0 (subdivisionCone o K' b 0 x) =
+      x - (x.sum fun _ a => a) •
+        Finsupp.single (⟨{b}, hb, by simp⟩ : FaceIndex K' 0) 1 := by
+  sorry
+
+/-- Subdivision chains of proper facets can be coned to the barycenter of the
+ambient face. -/
+theorem subdivisionChainMap_commutes_aux_facet_admissible {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n)
+    (sd : ∀ j, FaceModuleCat K j ⟶ FaceModuleCat (barycentricStep K) j)
+    (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd)
+    (s : FaceIndex K (k + 1)) (v : Euc n) (hv : v ∈ s.1) :
+    ConeAdmissible (barycentricStep K) (GeometricSimplicialSubdivision.barycenter s.1)
+      (sd k (Finsupp.single
+        (signedDeletion_sq_zero_aux_generator_aux_erase K s v hv) 1)) := by
+  sorry
+
+/-- Recursive cone formula for the canonical flag subdivision of a non-vertex
+face. -/
+theorem subdivisionChainMap_commutes_aux_cone_formula {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n)
+    (sd : ∀ j, FaceModuleCat K j ⟶ FaceModuleCat (barycentricStep K) j)
+    (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd)
+    (s : FaceIndex K (k + 1)) :
+    sd (k + 1) (Finsupp.single s 1) =
+      ∑ v ∈ s.1.attach,
+        (-1 : ℚ) ^ ((s.1.sort o.le).idxOf v.1) •
+          subdivisionCone o (barycentricStep K)
+            (GeometricSimplicialSubdivision.barycenter s.1) k
+            (sd k (Finsupp.single
+              (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1)) := by
+  sorry
+
+/-- Formal induction assembling the cone formula and cone-boundary identities.
+The sign-bearing geometric facts are supplied explicitly so this lemma is
+independent of their proofs. -/
+theorem subdivisionChainMap_commutes_aux_induction {n : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n)
+    (dK : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (dK' : ∀ k, FaceModuleCat (barycentricStep K) (k + 1) ⟶
+      FaceModuleCat (barycentricStep K) k)
+    (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat (barycentricStep K) k)
+    (hdK : IsSignedDeletion o K dK)
+    (hdK' : IsSignedDeletion o (barycentricStep K) dK')
+    (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd)
+    (hCB : ∀ k (b : Euc n) (x : FaceModule (barycentricStep K) (k + 1)),
+      ConeAdmissible (barycentricStep K) b x →
+      dK' (k + 1) (subdivisionCone o (barycentricStep K) b (k + 1) x) =
+        x - subdivisionCone o (barycentricStep K) b k (dK' k x))
+    (hCB0 : ∀ (b : Euc n) (hb : ({b} : Finset (Euc n)) ∈ (barycentricStep K).faces)
+        (x : FaceModule (barycentricStep K) 0),
+      ConeAdmissible (barycentricStep K) b x →
+      dK' 0 (subdivisionCone o (barycentricStep K) b 0 x) =
+        x - (x.sum fun _ a => a) •
+          Finsupp.single (⟨{b}, hb, by simp⟩ : FaceIndex (barycentricStep K) 0) 1)
+    (hCF : ∀ k (s : FaceIndex K (k + 1)),
+      sd (k + 1) (Finsupp.single s 1) =
+        ∑ v ∈ s.1.attach,
+          (-1 : ℚ) ^ ((s.1.sort o.le).idxOf v.1) •
+            subdivisionCone o (barycentricStep K)
+              (GeometricSimplicialSubdivision.barycenter s.1) k
+              (sd k (Finsupp.single
+                (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1)))
+    (hAdm : ∀ k (s : FaceIndex K (k + 1)) (v : Euc n) (hv : v ∈ s.1),
+      ConeAdmissible (barycentricStep K)
+        (GeometricSimplicialSubdivision.barycenter s.1)
+        (sd k (Finsupp.single
+          (signedDeletion_sq_zero_aux_generator_aux_erase K s v hv) 1))) :
+    ∀ k, sd (k + 1) ≫ dK' k = dK k ≫ sd k := by
+  sorry
+
 theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
     (dK' : ∀ k, FaceModuleCat K' (k+1) ⟶ FaceModuleCat K' k)
@@ -989,7 +1100,15 @@ theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
     (hK' : K' = barycentricStep K)
     (hsd : IsSubdivisionChainMap o K K' sd) :
     ∀ k, sd (k+1) ≫ dK' k = dK k ≫ sd k := by
-  sorry
+  subst K'
+  apply subdivisionChainMap_commutes_aux_induction o K dK dK' sd hdK hdK' hsd
+  · intro k
+    exact subdivisionChainMap_commutes_aux_cone_boundary o (barycentricStep K) dK' hdK'
+  · exact subdivisionChainMap_commutes_aux_cone_boundary_zero o (barycentricStep K) dK' hdK'
+  · intro k
+    exact subdivisionChainMap_commutes_aux_cone_formula o K sd hsd
+  · intro k
+    exact subdivisionChainMap_commutes_aux_facet_admissible o K sd hsd
 
 theorem vertexChainMap_affineComparison_square {n m : ℕ} (on : LinearOrder (Euc n))
     (om : LinearOrder (Euc m)) (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
