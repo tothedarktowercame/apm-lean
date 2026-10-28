@@ -276,7 +276,76 @@ theorem vertexChainMap_commutes_aux_generator_aux_injective_aux_sign_aux_parity_
     (v : Euc n) (hv : v ∈ a) :
     (-1 : ℚ) ^ (a.filter (fun u => @LT.lt (Euc n) on.toLT u v)).card * (-1 : ℚ) ^ elemInv on om (a.erase v) h =
       (-1 : ℚ) ^ elemInv on om a h * (-1 : ℚ) ^ (a.filter (fun u => @LT.lt (Euc m) om.toLT (h u) (h v))).card := by
-  sorry
+  classical
+  let A := a.filter (fun u => @LT.lt (Euc n) on.toLT u v)
+  let B := a.filter (fun u => @LT.lt (Euc m) om.toLT (h u) (h v))
+  let X := a.filter (fun u =>
+    @LT.lt (Euc n) on.toLT u v ∧ @LT.lt (Euc m) om.toLT (h u) (h v))
+  let Y := a.filter (fun u =>
+    @LT.lt (Euc n) on.toLT u v ∧ @LT.lt (Euc m) om.toLT (h v) (h u))
+  let Z := a.filter (fun u =>
+    @LT.lt (Euc n) on.toLT v u ∧ @LT.lt (Euc m) om.toLT (h u) (h v))
+  have himage_ne (u : Euc n) (hu : u ∈ a) (huv : u ≠ v) : h u ≠ h v := by
+    exact fun huv' => huv (hinj hu hv huv')
+  have hA : A.card = X.card + Y.card := by
+    have hdis : Disjoint X Y := by
+      rw [Finset.disjoint_left]
+      intro u huX huY
+      simp only [X, Y, Finset.mem_filter] at huX huY
+      exact (not_lt_of_ge (le_of_lt huX.2.2)) huY.2.2
+    rw [← Finset.card_union_of_disjoint hdis]
+    congr 1
+    ext u
+    simp only [A, X, Y, Finset.mem_union, Finset.mem_filter]
+    constructor
+    · intro hu
+      have hne : h u ≠ h v := himage_ne u hu.1 (ne_of_lt hu.2)
+      rcases lt_or_gt_of_ne hne with hlt | hgt
+      · exact Or.inl ⟨hu.1, hu.2, hlt⟩
+      · exact Or.inr ⟨hu.1, hu.2, hgt⟩
+    · aesop
+  have hB : B.card = X.card + Z.card := by
+    have hdis : Disjoint X Z := by
+      rw [Finset.disjoint_left]
+      intro u huX huZ
+      simp only [X, Z, Finset.mem_filter] at huX huZ
+      exact (not_lt_of_ge (le_of_lt huX.2.1)) huZ.2.1
+    rw [← Finset.card_union_of_disjoint hdis]
+    congr 1
+    ext u
+    simp only [B, X, Z, Finset.mem_union, Finset.mem_filter]
+    constructor
+    · intro hu
+      have hne : u ≠ v := by
+        intro huv
+        subst u
+        exact (lt_irrefl (h v)) hu.2
+      rcases lt_or_gt_of_ne hne with hlt | hgt
+      · exact Or.inl ⟨hu.1, hlt, hu.2⟩
+      · exact Or.inr ⟨hu.1, hgt, hu.2⟩
+    · aesop
+  have hY :
+      ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT u v ∧
+        @LT.lt (Euc m) om.toLT (h v) (h u))).card = Y.card := by
+    congr 1
+    ext u
+    simp only [Y, Finset.mem_filter, Finset.mem_erase]
+    aesop
+  have hZ :
+      ((a.erase v).filter (fun u => @LT.lt (Euc n) on.toLT v u ∧
+        @LT.lt (Euc m) om.toLT (h u) (h v))).card = Z.card := by
+    congr 1
+    ext u
+    simp only [Z, Finset.mem_filter, Finset.mem_erase]
+    aesop
+  have hInv : elemInv on om a h = elemInv on om (a.erase v) h + Y.card + Z.card := by
+    rw [elemInv_erase on om a h v hv, hY, hZ]
+  change (-1 : ℚ) ^ A.card * (-1 : ℚ) ^ elemInv on om (a.erase v) h =
+    (-1 : ℚ) ^ elemInv on om a h * (-1 : ℚ) ^ B.card
+  rw [← pow_add, ← pow_add, hA, hB, hInv]
+  ring_nf
+  rw [pow_mul]
+  rcases neg_one_pow_eq_or ℚ Z.card with hz | hz <;> simp [hz]
 -- END SEAT AREA
 
 /-- The parity identity behind naturality of oriented deletion.  This is the
