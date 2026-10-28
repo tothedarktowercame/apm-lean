@@ -86,7 +86,16 @@ theorem hasLefschetzNumber_of_homotopic
     {X : Type} [TopologicalSpace X] {f g : C(X, X)} {L : ℚ}
     (hfg : ContinuousMap.Homotopic f g) (hL : HasLefschetzNumber f L) :
     HasLefschetzNumber g L := by
-  sorry
+  rcases hL with ⟨hfinite, bound, habove, hsum⟩
+  refine ⟨hfinite, bound, habove, ?_⟩
+  rw [← hsum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  have hmap :=
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) hfg k
+  change induced f k = induced g k at hmap
+  rw [← hmap]
 
 /-- A bounded, degreewise finite-dimensional rational chain complex together
 with an endomorphism. -/
