@@ -177,7 +177,50 @@ noncomputable def elemInv {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrd
 theorem sortingSign_eq_elemInv {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
     (a : Finset (Euc n)) (h : Euc n → Euc m) :
     sortingSign on om a h = (-1 : ℚ) ^ elemInv on om a h := by
-  sorry
+  classical
+  letI := on
+  letI := om
+  let e : Fin a.card ≃o a := a.orderIsoOfFin rfl
+  have hget (i : Fin a.card) :
+      (a.1.sort on.le).getD i 0 = (e i : Euc n) := by
+    calc
+      _ = (a.1.sort on.le)[i] := List.getD_eq_getElem _ _ (by simpa using i.2)
+      _ = (e i : Euc n) := (a.orderEmbOfFin_apply rfl i).symm
+  let source := Finset.univ.filter (fun ij : Fin a.card × Fin a.card =>
+        ij.1 < ij.2 ∧
+          @LT.lt (Euc m) om.toLT (h ((a.1.sort on.le).getD ij.2 0))
+            (h ((a.1.sort on.le).getD ij.1 0)))
+  let target := (a ×ˢ a).filter (fun p =>
+        @LT.lt (Euc n) on.toLT p.1 p.2 ∧
+          @LT.lt (Euc m) om.toLT (h p.2) (h p.1))
+  have hc : source.card = target.card := by
+    apply Finset.card_bij
+        (fun ij _ => ((e ij.1 : Euc n), (e ij.2 : Euc n)))
+    · intro ij hij
+      simp only [source, Finset.mem_filter, Finset.mem_univ, true_and] at hij
+      rw [hget, hget] at hij
+      simp only [Finset.mem_filter, Finset.mem_product, (e ij.1).2, (e ij.2).2,
+        true_and, target]
+      exact ⟨e.lt_iff_lt.mpr hij.1, hij.2⟩
+    · intro ij₁ hij₁ ij₂ hij₂ heq
+      apply Prod.ext
+      · exact e.injective (Subtype.ext (congrArg Prod.fst heq))
+      · exact e.injective (Subtype.ext (congrArg Prod.snd heq))
+    · intro p hp
+      simp only [target, Finset.mem_filter, Finset.mem_product] at hp
+      let i : Fin a.card := e.symm ⟨p.1, hp.1.1⟩
+      let j : Fin a.card := e.symm ⟨p.2, hp.1.2⟩
+      have hi : (e i : Euc n) = p.1 := by simp [i]
+      have hj : (e j : Euc n) = p.2 := by simp [j]
+      refine ⟨(i, j), ?_, ?_⟩
+      · simp only [source, Finset.mem_filter, Finset.mem_univ, true_and]
+        constructor
+        · exact e.lt_iff_lt.mp (by simpa [i, j] using hp.2.1)
+        · rw [hget, hget, hi, hj]
+          exact hp.2.2
+      · simp [i, j]
+  simp only [sortingSign, elemInv]
+  exact congrArg ((-1 : ℚ) ^ ·) (by simpa [source, target] using hc)
 
 open scoped Classical in
 /-- (P1) Removing `v` removes exactly the inversions involving `v`. -/
