@@ -65,7 +65,9 @@ theorem faceCarriedChain_mono {n k : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (s t : Finset (Euc n)) (hst : t ⊆ s) (z : (SingularQChains K).X k)
     (hz : FaceCarriedChain K t z) : FaceCarriedChain K s z := by
-  sorry
+  rcases hz with ⟨m, a, σ, hz, hσ⟩
+  refine ⟨m, a, σ, hz, fun i ↦ (hσ i).trans ?_⟩
+  exact preimage_mono (convexHull_mono (by simpa using hst))
 
 /-- Positive-degree acyclicity in the concrete carrier form needed by the
 induction: a carried cycle bounds a carried chain.  Its proof lifts the finite
