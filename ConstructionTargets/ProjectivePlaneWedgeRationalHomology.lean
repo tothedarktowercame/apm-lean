@@ -5,6 +5,7 @@ import ConstructionTargets.GenericPointWedgeOverlapInclusionSquares
 import ConstructionTargets.ProductionOpenCoverMayerVietoris
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.PolygonInnerOpenPointedContraction
 
 /-! Rational homology and Lefschetz-number interfaces for finite point wedges
 of the polygon model of the real projective plane. -/
@@ -52,7 +53,13 @@ theorem realProjectivePlane_pathConnected :
 neighbourhood. -/
 theorem surfacePoint_hasPointedContractibleNeighbourhood :
     HasPointedContractibleNeighbourhood (surfacePoint false 1) := by
-  sorry
+  open ConstructionTargets.PolygonRadialOpenCover
+    ConstructionTargets.PolygonInnerOpenPointedContraction in
+  exact ⟨innerOpen (Surfaces.SurfaceRel false 1), (innerBase _).2,
+    innerOpen_isOpen _ (fun {_ _} h => surfaceRel_radius_eq false 1 h),
+    ⟨innerOpenPointedContraction _
+      (fun {_ _} h => surfaceRel_radius_eq false 1 h)
+      (fun {_ _} h => ConstructionTargets.PolygonOuterRadialRelation.surfaceRel_boundary false 1 h)⟩⟩
 
 /-- L4 (LIBRARY): rational Mayer--Vietoris for a point wedge.  The local
 hypotheses rule out wild wedges such as the Hawaiian earring. -/
