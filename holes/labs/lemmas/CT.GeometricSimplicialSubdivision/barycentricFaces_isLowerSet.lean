@@ -35,7 +35,24 @@ theorem barycentricFaces_affineIndependent {n : ℕ}
 theorem barycentricFaces_isLowerSet {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) :
     IsLowerSet (barycentricFaces K) := by
-  sorry
+  intro u v hv hu
+  obtain ⟨c, hc, rfl⟩ := hu
+  refine ⟨c.filter (fun s ↦ barycenter s ∈ v), ?_, ?_⟩
+  · constructor
+    · intro s hs
+      exact hc.1 s (Finset.mem_filter.mp hs).1
+    · intro s hs t ht hst
+      exact hc.2 s (Finset.mem_filter.mp hs).1 t
+        (Finset.mem_filter.mp ht).1 hst
+  · ext x
+    rw [Finset.mem_image]
+    constructor
+    · intro hx
+      have hx' : x ∈ c.image barycenter := hv hx
+      obtain ⟨s, hs, rfl⟩ := Finset.mem_image.mp hx'
+      exact ⟨s, Finset.mem_filter.mpr ⟨hs, hx⟩, rfl⟩
+    · rintro ⟨s, hs, rfl⟩
+      exact (Finset.mem_filter.mp hs).2
 -- END SEAT AREA
 
 /-- The common barycentric coordinates of two chain simplices are supported on
