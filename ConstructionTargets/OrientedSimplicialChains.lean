@@ -181,12 +181,115 @@ theorem signedDeletion_sq_zero_aux_generator_aux_boundary {n k : ℕ}
       exact h (congrArg Subtype.val he)
     simp [h, ht]
 
+theorem signedDeletion_sq_zero_aux_generator_aux_sort_erase
+    {α : Type*} [DecidableEq α] (o : LinearOrder α) (s : Finset α) (a : α) :
+    (s.erase a).sort o.le = (s.sort o.le).erase a := by
+  letI : DecidableRel o.le := o.toDecidableLE
+  letI : IsTrans α o.le := ⟨o.le_trans⟩
+  letI : Std.Antisymm o.le := ⟨o.le_antisymm⟩
+  letI : Std.Total o.le := ⟨o.le_total⟩
+  apply List.eq_of_perm_of_sorted
+  · intro x y _ _ hxy hyx
+    exact le_antisymm hxy hyx
+  · exact Finset.sort_sorted _ _
+  · exact (Finset.sort_sorted _ _).sublist (List.erase_sublist)
+  · apply Multiset.coe_eq_coe.mp
+    simp only [Finset.sort_eq]
+    rw [← Multiset.coe_erase]
+    change s.1.erase a = (↑(s.sort (· ≤ ·)) : Multiset α).erase a
+    rw [Finset.sort_eq]
+
+set_option maxHeartbeats 1000000 in
 theorem signedDeletion_sq_zero_aux_generator {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
     (hd : IsSignedDeletion o K d) (k : ℕ) (s : FaceIndex K (k + 2)) :
     d k (d (k + 1) (Finsupp.single s 1)) = 0 := by
-  sorry
+  classical
+  rw [signedDeletion_sq_zero_aux_generator_aux_boundary o K d hd s]
+  rw [map_sum]
+  simp_rw [map_smul]
+  simp_rw [signedDeletion_sq_zero_aux_generator_aux_boundary o K d hd]
+  ext t
+  change (Finsupp.lapply t : FaceModule K k →ₗ[ℚ] ℚ) (∑ x ∈ s.1.attach, _) = 0
+  rw [map_sum]
+  simp_rw [map_smul, map_sum]
+  simp_rw [map_smul]
+  simp only [smul_eq_mul]
+  simp_rw [Finset.mul_sum]
+  change (∑ x ∈ s.1.attach, ∑ v ∈
+    (signedDeletion_sq_zero_aux_generator_aux_erase K s x.1 x.2).1.attach,
+      (-1 : ℚ) ^ ((s.1.sort o.le).idxOf x.1) *
+      ((-1 : ℚ) ^ (((signedDeletion_sq_zero_aux_generator_aux_erase K s x.1 x.2).1.sort o.le).idxOf v.1) *
+        Finsupp.single
+          (signedDeletion_sq_zero_aux_generator_aux_erase K
+            (signedDeletion_sq_zero_aux_generator_aux_erase K s x.1 x.2) v.1 v.2) 1 t)) = 0
+  let f := fun p : Σ x : s.1, (s.1.erase x.1) =>
+    (-1 : ℚ) ^ ((s.1.sort o.le).idxOf p.1.1) *
+      ((-1 : ℚ) ^ (((s.1.erase p.1.1).sort o.le).idxOf p.2.1) *
+        Finsupp.single
+          (signedDeletion_sq_zero_aux_generator_aux_erase K
+            (signedDeletion_sq_zero_aux_generator_aux_erase K s p.1.1 p.1.2)
+            p.2.1 p.2.2) 1 t)
+  change (∑ x ∈ s.1.attach, ∑ v ∈
+    (signedDeletion_sq_zero_aux_generator_aux_erase K s x.1 x.2).1.attach,
+      f ⟨x, v⟩) = 0
+  rw [← Finset.sum_sigma s.1.attach (fun x =>
+    (signedDeletion_sq_zero_aux_generator_aux_erase K s x.1 x.2).1.attach) f]
+  apply Finset.sum_involution (fun p _ =>
+    ⟨⟨p.2.1, (Finset.mem_erase.mp p.2.2).2⟩,
+      ⟨p.1.1, Finset.mem_erase.mpr
+        ⟨(Finset.mem_erase.mp p.2.2).1.symm, p.1.2⟩⟩⟩)
+  · intro p hp
+    have hne : p.1.1 ≠ p.2.1 := (Finset.mem_erase.mp p.2.2).1.symm
+    simp only [f]
+    have hi1 : ((s.1.erase p.1.1).sort o.le).idxOf p.2.1 =
+        ((s.1.sort o.le).erase p.1.1).idxOf p.2.1 :=
+      congrArg (fun l => l.idxOf p.2.1)
+        (signedDeletion_sq_zero_aux_generator_aux_sort_erase o s.1 p.1.1)
+    have hi2 : ((s.1.erase p.2.1).sort o.le).idxOf p.1.1 =
+        ((s.1.sort o.le).erase p.2.1).idxOf p.1.1 :=
+      congrArg (fun l => l.idxOf p.1.1)
+        (signedDeletion_sq_zero_aux_generator_aux_sort_erase o s.1 p.2.1)
+    rw [hi1, hi2]
+    have hc := signedDeletion_sq_zero_aux_generator_aux_sign_cancel
+      (s.1.sort o.le) p.1.1 p.2.1 (Finset.sort_nodup _ _)
+      (by simpa using p.1.2) (by simpa using (Finset.mem_erase.mp p.2.2).2) hne
+    have herase : (s.1.erase p.1.1).erase p.2.1 =
+        (s.1.erase p.2.1).erase p.1.1 := by
+      ext x
+      simp only [Finset.mem_erase]
+      tauto
+    by_cases hface :
+        signedDeletion_sq_zero_aux_generator_aux_erase K
+          (signedDeletion_sq_zero_aux_generator_aux_erase K s p.1.1 p.1.2)
+          p.2.1 p.2.2 = t
+    · have hface' :
+        signedDeletion_sq_zero_aux_generator_aux_erase K
+          (signedDeletion_sq_zero_aux_generator_aux_erase K s p.2.1
+            (Finset.mem_erase.mp p.2.2).2)
+          p.1.1 (Finset.mem_erase.mpr ⟨hne, p.1.2⟩) = t := by
+        apply Subtype.ext
+        exact herase.symm.trans (congrArg Subtype.val hface)
+      simp [hface, hface', hc]
+    · have hface' :
+        signedDeletion_sq_zero_aux_generator_aux_erase K
+          (signedDeletion_sq_zero_aux_generator_aux_erase K s p.2.1
+            (Finset.mem_erase.mp p.2.2).2)
+          p.1.1 (Finset.mem_erase.mpr ⟨hne, p.1.2⟩) ≠ t := by
+        intro h
+        apply hface
+        apply Subtype.ext
+        exact herase.trans (congrArg Subtype.val h)
+      simp [hface, hface']
+  · intro p hp _ hfix
+    have h := congrArg (fun q => q.1.1) hfix
+    exact (Finset.mem_erase.mp p.2.2).1 h
+  · intro p hp
+    rfl
+  · intro p hp
+    rw [Finset.mem_sigma]
+    exact ⟨Finset.mem_attach _ _, Finset.mem_attach _ _⟩
 
 theorem signedDeletion_sq_zero {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
