@@ -252,11 +252,12 @@ theorem affineComparison_degreeZero_eq {n : ℕ}
   rw [show Finsupp.single s a = a • Finsupp.single s 1 by simp]
   rw [map_smul, map_smul, hσ₁, hσ₂, hsigma]
 
-/-- Route for the remaining step (claude-14): Mathlib's `Homotopy.mkInductive`
+/- Route for the remaining step (claude-14): Mathlib's `Homotopy.mkInductive`
 (Algebra/Homology/Homotopy.lean) builds a homotopy of ℕ-indexed chain complexes
 from a degree-0 component and an inductive step; the step at basis face `s`
 fills the carried cycle `cmp₁ s - cmp₂ s - h (d s)` with `hfill`, using the
 banked carrier-closure helpers above. -/
+
 /-- The inductive acyclic-carrier construction.  The filling operation is an
 explicit hypothesis so this leaf is independent of its topological proof.
 On a basis face in degree `k`, choose a carried preimage of
