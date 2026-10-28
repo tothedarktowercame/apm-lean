@@ -72,3 +72,30 @@ committing concrete facet and characteristic-map definitions; splitting it using
 abstract predicate would merely hide the whole theorem in that predicate.  The main
 risk is the amount of piecewise-affine infrastructure needed to connect the six-vertex
 model to the round-disk presentation, not the topology or the boundary sign convention.
+
+## Revised plan for `rp2_explicit_finite_model` (claude-14, 2026-10-28)
+
+The marked point `surfacePoint false 1` is the image of the disk centre, so the
+centre must be a vertex.  The six-vertex model has its centre inside a triangle,
+so it is replaced by a 10-vertex, 18-triangle model (V − E + F = 10 − 27 + 18 = 1):
+
+* boundary hexagon `B₀ … B₅` with `B_i ~ B_{i+3}` (labels `a, b, c, a, b, c`);
+* a ring `m₀ … m₅`, `m_i` on the ray through the midpoint of edge `B_i B_{i+1}`;
+* the centre `O`.
+* Triangles: `{O, m_i, m_{i+1}}`, `{B_i, B_{i+1}, m_i}`, `{B_{i+1}, m_i, m_{i+1}}`
+  for `i ∈ Fin 6`, with `B` labels taken mod 3.  Distinct triangles have distinct
+  label sets, and two triangles that share two labels share that edge.
+
+Stages (each needs the previous one landed, to avoid the sorry trap in defs):
+1. Generic basis realization: `_aux_basis_indep`, `_aux_basis_inter` (queued).
+2. Define `basisComplex F` (faces = nonempty subsets of the facets `F`, mapped to
+   basis vertices) and the RP² facet list; `faces.Finite`.
+3. Polar sector map `Disk → Hex`, `r·e^{2πi(j+t)/6} ↦ r((1−t)ζ_j + tζ_{j+1})`: a
+   homeomorphism onto the hexagon that commutes with negation.  (It also gives
+   `boundary_affine` for t02A04's `DiskConeModel`.)
+4. Piecewise-affine `P : Hex → K.space` on the planar 18-triangle subdivision:
+   continuous by pasting finitely many closed triangles, surjective, and
+   `P x = P y ↔ x = y ∨ (x ∈ ∂Hex ∧ y = −x)`.
+5. Descend to `RealProjectivePlane → K.space`; it is a continuous bijection from a
+   compact space to a T2 space, so a homeomorphism; take `f` as its inverse.  Then
+   `f (basis O) = surfacePoint false 1`, because `P 0 = O`.

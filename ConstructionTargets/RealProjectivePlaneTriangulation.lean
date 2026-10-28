@@ -193,6 +193,27 @@ theorem finite_simplicialComplex_space_isCompact
   exact hK.isCompact_biUnion fun s _ =>
     s.finite_toSet.isCompact_convexHull ℝ
 
+/-- Standard basis vector, used to realize an abstract complex on `Fin N`. -/
+def basisVertex (N : ℕ) (i : Fin N) : EuclideanSpace ℝ (Fin N) :=
+  EuclideanSpace.single i 1
+
+/-- Basis vertices of any finite vertex set are affinely independent. -/
+lemma rp2_explicit_finite_model_aux_basis_indep {N : ℕ} (s : Finset (Fin N)) :
+    AffineIndependent ℝ
+      ((↑) : ↥(s.image (basisVertex N)) → EuclideanSpace ℝ (Fin N)) := by
+  sorry
+
+/-- Convex hulls of basis-vertex faces meet in the hull of the common face
+(a point of either hull has nonnegative coordinates summing to `1`, supported
+on the face's index set). -/
+lemma rp2_explicit_finite_model_aux_basis_inter {N : ℕ} (s t : Finset (Fin N)) :
+    convexHull ℝ (↑(s.image (basisVertex N)) : Set (EuclideanSpace ℝ (Fin N))) ∩
+        convexHull ℝ ↑(t.image (basisVertex N)) ⊆
+      convexHull ℝ
+        ((↑(s.image (basisVertex N)) : Set (EuclideanSpace ℝ (Fin N))) ∩
+          ↑(t.image (basisVertex N))) := by
+  sorry
+
 /-- **LIBRARY (explicit six-vertex model).** There is a finite coordinate realization of
 the standard six-vertex, ten-triangle triangulation of `RP²`, together with a continuous
 bijection to the disk quotient.  The distinguished vertex maps to the disk centre.
