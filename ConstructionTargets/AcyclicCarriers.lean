@@ -465,7 +465,9 @@ theorem carriedHomotopy_aux_comp_d_carried {o : LinearOrder (Euc n)}
 theorem carriedHomotopy_aux_sub {k : ℕ} (s : Finset (Euc n)) (x y : (SingularQChains K).X k)
     (hx : FaceCarriedChain K s x) (hy : FaceCarriedChain K s y) :
     FaceCarriedChain K s (x - y) := by
-  sorry
+  rw [sub_eq_add_neg]
+  apply carried_chainHomotopy_exists_aux_add K s x (-y) hx
+  simpa using carried_chainHomotopy_exists_aux_smul K s y hy (-1)
 
 theorem carriedHomotopy_aux_fill
     (hfill : ∀ (k : ℕ) (s : FaceIndex K k) (z : (SingularQChains K).X k),
