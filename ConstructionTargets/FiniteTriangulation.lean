@@ -204,6 +204,60 @@ theorem wedgeFaces_indep {a b : ℕ}
     obtain ⟨x, hxs, rfl⟩ := Finset.mem_image.mp (hus hz)
     exact ⟨⟨x, hxs⟩, by simp [heq]⟩
 
+theorem wedgeFaces_inter_aux_affine_image
+    {E F : Type} [DecidableEq E] [DecidableEq F]
+    [AddCommGroup E] [Module ℝ E] [AddCommGroup F] [Module ℝ F]
+    (K : Geometry.SimplicialComplex ℝ E) (f : E →ᵃ[ℝ] F)
+    (hf : Function.Injective f) {r q : Finset E}
+    (hr : r ∈ K.faces) (hq : q ∈ K.faces) :
+    convexHull ℝ (r.image f : Set F) ∩ convexHull ℝ (q.image f : Set F) ⊆
+      convexHull ℝ (r.image f ∩ q.image f : Set F) := by
+  simp only [Finset.coe_image]
+  rw [← f.image_convexHull, ← f.image_convexHull]
+  rintro z ⟨⟨x, hx, rfl⟩, ⟨y, hy, hxy⟩⟩
+  have hyx : y = x := hf hxy
+  subst y
+  have hxy : x ∈ convexHull ℝ (r ∩ q : Set E) := K.inter_subset_convexHull hr hq ⟨hx, hy⟩
+  rw [← Set.image_inter hf, ← f.image_convexHull]
+  refine ⟨x, hxy, ?_⟩
+  rfl
+
+/-- (X1) The coordinate embeddings are affine maps. -/
+theorem wedge_j_affine {a b : ℕ} (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) :
+    (∃ A : EuclideanSpace ℝ (Fin a) →ᵃ[ℝ] EuclideanSpace ℝ (Fin (a + b)), ⇑A = wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁) ∧
+      (∃ A : EuclideanSpace ℝ (Fin b) →ᵃ[ℝ] EuclideanSpace ℝ (Fin (a + b)), ⇑A = wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂) := by
+  sorry
+
+/-- (X2) Same side: subsets of images of two faces under an injective affine
+map satisfy the intersection axiom (pull the subsets back to subfaces, which are
+faces, and use `wedgeFaces_inter_aux_affine_image`). -/
+theorem wedgeFaces_inter_aux_same_side
+    {E F : Type} [DecidableEq E] [DecidableEq F]
+    [AddCommGroup E] [Module ℝ E] [AddCommGroup F] [Module ℝ F]
+    (K : Geometry.SimplicialComplex ℝ E) (f : E →ᵃ[ℝ] F)
+    (hf : Function.Injective f) {s t : Finset F}
+    {r q : Finset E} (hr : r ∈ K.faces) (hq : q ∈ K.faces)
+    (hs : s ⊆ r.image f) (ht : t ⊆ q.image f) :
+    convexHull ℝ (s : Set F) ∩ convexHull ℝ (t : Set F) ⊆ convexHull ℝ (s ∩ t : Set F) := by
+  sorry
+
+open scoped Classical in
+/-- (X3) Cross side: hulls of a `j₁`-subface and a `j₂`-subface meet at most in
+the origin `j₁ v₁ = j₂ v₂` (last `b`, resp. first `a`, coordinates vanish), and
+if they meet, the origin is a vertex of both (`_aux_vertex_mem_hull_iff` after
+pulling back). -/
+theorem wedgeFaces_inter_aux_cross {a b : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b))
+    (hv₁ : {v₁} ∈ K₁.faces) (hv₂ : {v₂} ∈ K₂.faces)
+    {s t : Finset (EuclideanSpace ℝ (Fin (a + b)))} {r : Finset (EuclideanSpace ℝ (Fin a))} {q : Finset (EuclideanSpace ℝ (Fin b))}
+    (hr : r ∈ K₁.faces) (hq : q ∈ K₂.faces)
+    (hs : s ⊆ r.image (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁)) (ht : t ⊆ q.image (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂)) :
+    convexHull ℝ (s : Set (EuclideanSpace ℝ (Fin (a + b)))) ∩ convexHull ℝ (t : Set (EuclideanSpace ℝ (Fin (a + b)))) ⊆
+      convexHull ℝ (s ∩ t : Set (EuclideanSpace ℝ (Fin (a + b)))) := by
+  sorry
+
 /-- (E2) Intersection axiom: same-side faces pull back to `K₁`/`K₂`'s axiom;
 a point in a `j₁`-face and a `j₂`-face is `j₁ v₁ = j₂ v₂ = 0`, a vertex of both
 (`_aux_vertex_mem_hull_iff`). -/
@@ -215,7 +269,18 @@ theorem wedgeFaces_inter {a b : ℕ}
     ∀ᵉ (s ∈ wedgeFaces K₁ K₂ v₁ v₂) (t ∈ wedgeFaces K₁ K₂ v₁ v₂),
       convexHull ℝ (s : Set (EuclideanSpace ℝ (Fin (a + b)))) ∩ convexHull ℝ (t : Set (EuclideanSpace ℝ (Fin (a + b)))) ⊆
         convexHull ℝ (s ∩ t : Set (EuclideanSpace ℝ (Fin (a + b)))) := by
-  sorry
+  classical
+  obtain ⟨⟨A₁, hA₁⟩, ⟨A₂, hA₂⟩⟩ := wedge_j_affine (a := a) (b := b) v₁ v₂
+  have hi₁ : Function.Injective A₁ := hA₁ ▸ wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1_injective v₁
+  have hi₂ : Function.Injective A₂ := hA₂ ▸ wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2_injective v₂
+  intro s hs t ht
+  rcases hs with ⟨r, hr, hsr⟩ | ⟨r, hr, hsr⟩ <;> rcases ht with ⟨q, hq, htq⟩ | ⟨q, hq, htq⟩
+  · exact wedgeFaces_inter_aux_same_side K₁ A₁ hi₁ hr hq (hA₁ ▸ hsr) (hA₁ ▸ htq)
+  · exact wedgeFaces_inter_aux_cross K₁ K₂ v₁ v₂ hv₁ hv₂ hr hq hsr htq
+  · intro z hz
+    have h := wedgeFaces_inter_aux_cross K₁ K₂ v₁ v₂ hv₁ hv₂ hq hr htq hsr ⟨hz.2, hz.1⟩
+    rwa [Set.inter_comm] at h
+  · exact wedgeFaces_inter_aux_same_side K₂ A₂ hi₂ hr hq (hA₂ ▸ hsr) (hA₂ ▸ htq)
 
 /-- (E3) The union of the face hulls is the union of the two embedded spaces. -/
 def wedgeFaces_space_aux_l1 {a b : ℕ} :
