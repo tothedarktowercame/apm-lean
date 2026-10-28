@@ -46,6 +46,27 @@ theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_base_eq
   apply Quotient.sound
   exact Relation.EqvGen.rel _ _ Rel.base
 
+/-- Banked from lemma-3's partial (2026-10-28). Route for (G1), claude-14:
+`j₁ x := WithLp.toLp 2 (Fin.append (WithLp.ofLp (x - v₁)) 0)`,
+`j₂ y := WithLp.toLp 2 (Fin.append 0 (WithLp.ofLp (y - v₂)))` (affine, injective,
+continuous); faces `F := (Finset.image j₁) '' K₁.faces ∪ (Finset.image j₂) '' K₂.faces`;
+build `K` by `Geometry.SimplicialComplex.ofErase F` inside the proof (independence:
+affine-injective images; lower set: images of subsets; intersection: a point in
+both a `j₁`-face and a `j₂`-face is `0`, which then is a vertex of both by
+`_aux_vertex_mem_hull_iff`; same-side faces by `K₁`/`K₂`'s own axiom pulled back
+along the injective affine map); `p := 0`. -/
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_vertex_mem_space
+    {n : ℕ} (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+    (v : EuclideanSpace ℝ (Fin n)) (hv : {v} ∈ K.faces) : v ∈ K.space := by
+  exact K.subset_space hv (by simp)
+
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_vertex_mem_hull_iff
+    {n : ℕ} (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+    (v : EuclideanSpace ℝ (Fin n)) (s : Finset (EuclideanSpace ℝ (Fin n)))
+    (hv : {v} ∈ K.faces) (hs : s ∈ K.faces) :
+    v ∈ convexHull ℝ (s : Set (EuclideanSpace ℝ (Fin n))) ↔ v ∈ s := by
+  exact K.vertex_mem_convexHull_iff hv hs
+
 /-- (G1) Two finite complexes glued at one vertex each: translate the marked
 vertices to the origin and place the complexes in the two factors of
 `ℝ^(a+b)`.  The images meet only at the origin; the intersection axiom holds
@@ -95,7 +116,83 @@ theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_homeomorph
       (ι₁ x : EuclideanSpace ℝ (Fin N)) = p) :
     ∃ e : Wedge x₀ y₀ ≃ₜ K.space,
       (e (quotientMap x₀ y₀ (.inl x₀)) : EuclideanSpace ℝ (Fin N)) = p := by
-  sorry
+  let g : Sum X Y → K.space :=
+    Sum.elim (fun x => ι₁ (e₁ x)) (fun y => ι₂ (e₂ y))
+  have hgbase : g (.inl x₀) = g (.inr y₀) := by
+    apply (hmeet (e₁ x₀) (e₂ y₀)).2
+    exact ⟨he₁, he₂⟩
+  have hgrel : ∀ s t, Relation.EqvGen (Rel x₀ y₀) s t → g s = g t := by
+    intro s t h
+    induction h with
+    | rel s t hst => cases hst; exact hgbase
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let f : Wedge x₀ y₀ → K.space := Quotient.lift g hgrel
+  have hf_surj : Function.Surjective f := by
+    intro z
+    rcases hcov z with ⟨x, rfl⟩ | ⟨y, rfl⟩
+    · refine ⟨quotientMap x₀ y₀ (.inl (e₁.symm x)), ?_⟩
+      change ι₁ (e₁ (e₁.symm x)) = ι₁ x
+      rw [e₁.apply_symm_apply]
+    · refine ⟨quotientMap x₀ y₀ (.inr (e₂.symm y)), ?_⟩
+      change ι₂ (e₂ (e₂.symm y)) = ι₂ y
+      rw [e₂.apply_symm_apply]
+  have hf_inj : Function.Injective f := by
+    rintro ⟨s⟩ ⟨t⟩ h
+    apply Quotient.sound
+    cases s with
+    | inl x =>
+      cases t with
+      | inl x' =>
+        have : e₁ x = e₁ x' := hinj₁ h
+        have hxx : x = x' := e₁.injective this
+        subst x'
+        exact Relation.EqvGen.refl _
+      | inr y =>
+        have hm := (hmeet (e₁ x) (e₂ y)).1 h
+        have hx : x = x₀ := e₁.injective (Subtype.ext (hm.1.trans he₁.symm))
+        have hy : y = y₀ := e₂.injective (Subtype.ext (hm.2.trans he₂.symm))
+        subst x; subst y
+        exact Relation.EqvGen.rel _ _ Rel.base
+    | inr y =>
+      cases t with
+      | inl x =>
+        have hm := (hmeet (e₁ x) (e₂ y)).1 h.symm
+        have hx : x = x₀ := e₁.injective (Subtype.ext (hm.1.trans he₁.symm))
+        have hy : y = y₀ := e₂.injective (Subtype.ext (hm.2.trans he₂.symm))
+        subst x; subst y
+        exact (Relation.EqvGen.rel _ _ Rel.base).symm
+      | inr y' =>
+        have : e₂ y = e₂ y' := hinj₂ h
+        have hyy : y = y' := e₂.injective this
+        subst y'
+        exact Relation.EqvGen.refl _
+  have hgcont : Continuous g := by
+    apply continuous_sum_dom.2
+    exact ⟨ι₁.continuous.comp e₁.continuous, ι₂.continuous.comp e₂.continuous⟩
+  have hfcont : Continuous f := by
+    apply Continuous.quotient_lift
+    exact hgcont
+  have hcompact₁ : IsCompact K₁.space := by
+    rw [Geometry.SimplicialComplex.space]
+    exact h₁.isCompact_biUnion fun s _ => s.finite_toSet.isCompact_convexHull ℝ
+  have hcompact₂ : IsCompact K₂.space := by
+    rw [Geometry.SimplicialComplex.space]
+    exact h₂.isCompact_biUnion fun s _ => s.finite_toSet.isCompact_convexHull ℝ
+  letI : CompactSpace K₁.space := isCompact_iff_compactSpace.mp hcompact₁
+  letI : CompactSpace K₂.space := isCompact_iff_compactSpace.mp hcompact₂
+  letI : CompactSpace X := e₁.symm.compactSpace
+  letI : CompactSpace Y := e₂.symm.compactSpace
+  have hwcompact : IsCompact (Set.univ : Set (Wedge x₀ y₀)) := by
+    rw [← Set.range_eq_univ.mpr (surjective_quotientMap x₀ y₀), ← image_univ]
+    exact isCompact_univ.image (continuous_quotientMap x₀ y₀)
+  letI : CompactSpace (Wedge x₀ y₀) := ⟨hwcompact⟩
+  let e : Wedge x₀ y₀ ≃ₜ K.space :=
+    hfcont.homeoOfEquivCompactToT2 (f := Equiv.ofBijective f ⟨hf_inj, hf_surj⟩)
+  refine ⟨e, ?_⟩
+  change (ι₁ (e₁ x₀) : EuclideanSpace ℝ (Fin N)) = p
+  exact hp (e₁ x₀) he₁
 
 /-- **LIBRARY (simplicial point gluing).** Triangulations whose marked points
 are vertices glue to a finite geometric triangulation of the point wedge. -/
