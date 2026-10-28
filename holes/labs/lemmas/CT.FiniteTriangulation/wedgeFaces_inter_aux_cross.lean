@@ -257,6 +257,41 @@ the origin `j₁ v₁ = j₂ v₂` (last `b`, resp. first `a`, coordinates vanis
 if they meet, the origin is a vertex of both (`_aux_vertex_mem_hull_iff` after
 pulling back). -/
 -- BEGIN SEAT AREA
+theorem wedgeFaces_inter_aux_cross_aux_vertex
+    {E F : Type} [DecidableEq E] [DecidableEq F]
+    [AddCommGroup E] [Module ℝ E] [AddCommGroup F] [Module ℝ F]
+    (K : Geometry.SimplicialComplex ℝ E) (f : E →ᵃ[ℝ] F)
+    (hf : Function.Injective f) (v : E) (hv : {v} ∈ K.faces)
+    (hfv : f v = 0) {s : Finset F} {r : Finset E}
+    (hr : r ∈ K.faces) (hs : s ⊆ r.image f)
+    (h0 : (0 : F) ∈ convexHull ℝ (s : Set F)) : (0 : F) ∈ s := by
+  classical
+  let u := r.filter fun x => f x ∈ s
+  have hu_image : u.image f = s := by
+    rw [show u.image f = (r.image f).filter (fun y => y ∈ s) by
+      simp [u, Finset.filter_image]]
+    ext y
+    simp only [Finset.mem_filter]
+    constructor
+    · exact fun h => h.2
+    · exact fun hy => ⟨hs hy, hy⟩
+  have hu_nonempty : u.Nonempty := by
+    have hsne : s.Nonempty := convexHull_nonempty_iff.mp ⟨(0 : F), h0⟩
+    rw [← hu_image] at hsne
+    obtain ⟨y, hy⟩ := hsne
+    obtain ⟨x, hx, _⟩ := Finset.mem_image.mp hy
+    exact ⟨x, hx⟩
+  have hu : u ∈ K.faces := K.down_closed hr (Finset.filter_subset _ _) hu_nonempty
+  have h0' : (0 : F) ∈ f '' convexHull ℝ (u : Set E) := by
+    rw [f.image_convexHull, ← Finset.coe_image, hu_image]
+    exact h0
+  obtain ⟨x, hx, hfx⟩ := h0'
+  have hxv : x = v := hf (hfx.trans hfv.symm)
+  have hvu : v ∈ u :=
+    (K.vertex_mem_convexHull_iff hv hu).mp (hxv ▸ hx)
+  rw [← hu_image]
+  exact Finset.mem_image.mpr ⟨v, hvu, hfv⟩
+
 theorem wedgeFaces_inter_aux_cross {a b : ℕ}
     (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
     (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
@@ -267,7 +302,57 @@ theorem wedgeFaces_inter_aux_cross {a b : ℕ}
     (hs : s ⊆ r.image (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁)) (ht : t ⊆ q.image (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂)) :
     convexHull ℝ (s : Set (EuclideanSpace ℝ (Fin (a + b)))) ∩ convexHull ℝ (t : Set (EuclideanSpace ℝ (Fin (a + b)))) ⊆
       convexHull ℝ (s ∩ t : Set (EuclideanSpace ℝ (Fin (a + b)))) := by
-  sorry
+  classical
+  obtain ⟨⟨A₁, hA₁⟩, ⟨A₂, hA₂⟩⟩ := wedge_j_affine (a := a) (b := b) v₁ v₂
+  have hi₁ : Function.Injective A₁ :=
+    hA₁ ▸ wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1_injective v₁
+  have hi₂ : Function.Injective A₂ :=
+    hA₂ ▸ wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2_injective v₂
+  have hA₁v : A₁ v₁ = 0 := by
+    rw [hA₁]
+    apply WithLp.ofLp_injective (p := 2)
+    ext i
+    refine Fin.addCases ?_ ?_ i <;> intro j <;>
+      simp [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1]
+  have hA₂v : A₂ v₂ = 0 := by
+    rw [hA₂]
+    apply WithLp.ofLp_injective (p := 2)
+    ext i
+    refine Fin.addCases ?_ ?_ i <;> intro j <;>
+      simp [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2]
+  intro z hz
+  have hz₁ : z ∈ convexHull ℝ (r.image A₁ : Set _) :=
+    convexHull_mono (hA₁ ▸ hs) hz.1
+  have hz₂ : z ∈ convexHull ℝ (q.image A₂ : Set _) :=
+    convexHull_mono (hA₂ ▸ ht) hz.2
+  have hz₁' : z ∈ A₁ '' convexHull ℝ (r : Set _) := by
+    rw [A₁.image_convexHull]
+    simpa only [Finset.coe_image] using hz₁
+  have hz₂' : z ∈ A₂ '' convexHull ℝ (q : Set _) := by
+    rw [A₂.image_convexHull]
+    simpa only [Finset.coe_image] using hz₂
+  obtain ⟨x, hx, rfl⟩ := hz₁'
+  obtain ⟨y, hy, hxy⟩ := hz₂'
+  have hzero : A₁ x = 0 := by
+    rw [hA₁, hA₂] at hxy
+    rw [hA₁]
+    apply WithLp.ofLp_injective (p := 2)
+    ext i
+    refine Fin.addCases ?_ ?_ i
+    · intro j
+      have hj := congrFun (congrArg WithLp.ofLp hxy) (Fin.castAdd b j)
+      simpa [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1,
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2] using hj.symm
+    · intro j
+      simp [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1]
+  have h0s : (0 : EuclideanSpace ℝ (Fin (a + b))) ∈ s :=
+    wedgeFaces_inter_aux_cross_aux_vertex K₁ A₁ hi₁ v₁ hv₁ hA₁v hr
+      (hA₁ ▸ hs) (hzero ▸ hz.1)
+  have h0t : (0 : EuclideanSpace ℝ (Fin (a + b))) ∈ t :=
+    wedgeFaces_inter_aux_cross_aux_vertex K₂ A₂ hi₂ v₂ hv₂ hA₂v hq
+      (hA₂ ▸ ht) (hzero ▸ hz.2)
+  rw [hzero]
+  exact subset_convexHull ℝ _ ⟨h0s, h0t⟩
 -- END SEAT AREA
 
 /-- (E2) Intersection axiom: same-side faces pull back to `K₁`/`K₂`'s axiom;
