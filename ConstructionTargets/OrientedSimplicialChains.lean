@@ -48,20 +48,24 @@ def IsAffineComparison {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
 theorem signedDeletion_exists {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n)) :
     ∃ d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k,
-      IsSignedDeletion o K d := by sorry
+      IsSignedDeletion o K d := by
+  sorry
 
 theorem signedDeletion_sq_zero {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
-    (hd : IsSignedDeletion o K d) : ∀ k, d (k + 1) ≫ d k = 0 := by sorry
+    (hd : IsSignedDeletion o K d) : ∀ k, d (k + 1) ≫ d k = 0 := by
+  sorry
 
 theorem faceModule_finiteDimensional {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite) :
-    ∀ k, FiniteDimensional ℚ (FaceModule K k) := by sorry
+    ∀ k, FiniteDimensional ℚ (FaceModule K k) := by
+  sorry
 
 theorem faceModule_zero_above {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite) :
-    ∃ b, ∀ k, b < k → Subsingleton (FaceModule K k) := by sorry
+    ∃ b, ∀ k, b < k → Subsingleton (FaceModule K k) := by
+  sorry
 
 theorem affineComparison_exists_and_commutes {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
@@ -71,7 +75,8 @@ theorem affineComparison_exists_and_commutes {n : ℕ}
         (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k,
       IsAffineComparison K cmp ∧ ∀ k,
         cmp (k + 1) ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k =
-          d k ≫ cmp k := by sorry
+          d k ≫ cmp k := by
+  sorry
 
 /-! Stage 2.  `ChainComplex.of` occurs only with the stage-one square-zero
 conclusion supplied explicitly, so these declarations acquire no hidden axiom. -/
