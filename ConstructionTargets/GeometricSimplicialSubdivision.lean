@@ -1037,6 +1037,21 @@ theorem exists_inducedContinuousMap {n m : ℕ}
 
 /-- The star condition makes the affine realization straight-line homotopic
 to the original map. -/
+lemma inducedMap_homotopic_of_star_condition_aux_source_carrier {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (x : K.space) :
+    ∃ s ∈ K.faces,
+      (x : Euc n) ∈ convexHull ℝ (s : Set (Euc n)) ∧
+      ∀ v ∈ s,
+        (x : Euc n) ∉ convexHull ℝ ((s.erase v : Finset (Euc n)) : Set (Euc n)) := by
+  sorry
+
+lemma inducedMap_homotopic_of_star_condition_aux_target_carrier {m : ℕ}
+    (L : Geometry.SimplicialComplex ℝ (Euc m)) (y : L.space)
+    (s : Finset (Euc m))
+    (hy : ∀ v ∈ s, (y : Euc m) ∈ openStar L v) :
+    ∃ t ∈ L.faces, s ⊆ t ∧ (y : Euc m) ∈ convexHull ℝ (t : Set (Euc m)) := by
+  sorry
+
 theorem inducedMap_homotopic_of_star_condition {n m : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (L : Geometry.SimplicialComplex ℝ (Euc m))
@@ -1048,7 +1063,40 @@ theorem inducedMap_homotopic_of_star_condition {n m : ℕ}
       (x : Euc n) ∈ convexHull ℝ (s : Set (Euc n)) →
       (f x : Euc m) ∈ convexHull ℝ (s.image h : Set (Euc m))) :
     ContinuousMap.Homotopic g f := by
-  sorry
+  have hcarrier : ∀ x : K.space, ∃ t ∈ L.faces,
+      (g x : Euc m) ∈ convexHull ℝ (t : Set (Euc m)) ∧
+      (f x : Euc m) ∈ convexHull ℝ (t : Set (Euc m)) := by
+    intro x
+    obtain ⟨s, hs, hxs, hxmin⟩ :=
+      inducedMap_homotopic_of_star_condition_aux_source_carrier K x
+    have hgstar : ∀ w ∈ s.image h, (g x : Euc m) ∈ openStar L w := by
+      intro w hw
+      obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hw
+      apply hstar v (K.down_closed hs (Finset.singleton_subset_iff.mpr hv) (Finset.singleton_nonempty v))
+      have hxstar : (x : Euc n) ∈ openStar K v := ⟨s, hs, hv, hxs, hxmin v hv⟩
+      exact ⟨x, hxstar, rfl⟩
+    obtain ⟨t, ht, hst, hgt⟩ :=
+      inducedMap_homotopic_of_star_condition_aux_target_carrier L (g x) (s.image h) hgstar
+    refine ⟨t, ht, hgt, ?_⟩
+    exact convexHull_mono hst (haff s hs x hxs)
+  let F : C(Set.Icc (0 : ℝ) 1 × K.space, L.space) :=
+    { toFun := fun z =>
+        ⟨(1 - (z.1 : ℝ)) • (g z.2 : Euc m) + (z.1 : ℝ) • (f z.2 : Euc m), by
+          obtain ⟨t, ht, hgt, hft⟩ := hcarrier z.2
+          apply Geometry.SimplicialComplex.convexHull_subset_space ht
+          exact (convex_convexHull ℝ (t : Set (Euc m))) hgt hft
+            (by linarith [z.1.2.2]) z.1.2.1 (by ring)⟩
+      continuous_toFun := by fun_prop }
+  refine ⟨{
+    toContinuousMap := F
+    map_zero_left := ?_
+    map_one_left := ?_ }⟩
+  · intro x
+    apply Subtype.ext
+    simp [F]
+  · intro x
+    apply Subtype.ext
+    simp [F]
 
 /-- Lebesgue-number simplicial approximation: sufficiently small stars admit
 a vertex choice satisfying the star condition. -/
