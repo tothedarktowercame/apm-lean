@@ -154,7 +154,23 @@ theorem wedgeFaces_space {a b : ℕ}
 -- BEGIN SEAT AREA
 theorem wedge_j_meet {a b : ℕ} (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) (x : EuclideanSpace ℝ (Fin a)) (y : EuclideanSpace ℝ (Fin b)) :
     wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁ x = wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂ y ↔ x = v₁ ∧ y = v₂ := by
-  sorry
+  constructor
+  · intro h
+    have h' := congrArg WithLp.ofLp h
+    constructor
+    · apply sub_eq_zero.mp
+      ext i
+      have hi := congrFun h' (Fin.castAdd b i)
+      simpa [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1,
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2] using hi
+    · apply sub_eq_zero.mp
+      ext i
+      have hi := congrFun h' (Fin.natAdd a i)
+      simpa [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1,
+        wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2] using hi.symm
+  · rintro ⟨rfl, rfl⟩
+    simp [wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1,
+      wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2]
 -- END SEAT AREA
 
 /-- (E5) Finitely many faces. -/
