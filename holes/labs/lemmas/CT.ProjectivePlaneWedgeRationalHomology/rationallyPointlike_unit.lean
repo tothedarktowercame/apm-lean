@@ -105,7 +105,16 @@ theorem rationallyPointlike_of_homotopyEquiv {A B : Type}
 /-- (Wc) A point has the rational homology of a point. -/
 -- BEGIN SEAT AREA
 theorem rationallyPointlike_unit : RationallyPointlike Unit := by
-  sorry
+  refine ⟨?_, ?_⟩
+  · exact ⟨(
+      AlgebraicTopology.singularHomologyFunctorZeroOfTotallyDisconnectedSpace
+          (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) (TopCat.of Unit) ≪≫
+        Limits.coproductUniqueIso (fun _ : Unit ↦ ModuleCat.of ℚ ℚ))⟩
+  · intro k hk
+    exact
+      AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+        (ModuleCat ℚ) k (ModuleCat.of ℚ ℚ) (TopCat.of Unit)
+        (Nat.ne_of_gt hk)
 -- END SEAT AREA
 
 /-- (Wa) Two open pieces with nonempty intersection, all three rationally
