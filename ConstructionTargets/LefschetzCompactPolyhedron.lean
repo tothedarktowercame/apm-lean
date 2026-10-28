@@ -484,6 +484,85 @@ noncomputable def FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient_a
       map_add' := fun _ _ => Subtype.ext rfl
       map_smul' := fun _ _ => Subtype.ext rfl }
 
+namespace FiniteChainEndomorphism
+
+variable (M : FiniteChainEndomorphism) (k : ℕ)
+
+/-- class of a cycle in Mathlib's homology -/
+noncomputable def h2aCls : M.cycles k →ₗ[ℚ] M.C.homology k :=
+  (M.C.homologyπ k).hom ∘ₗ ((M.C.sc k).moduleCatCyclesIso.inv.hom ∘ₗ
+    (M.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv k).toLinearMap)
+
+lemma h2a_iCycles (x : M.cycles k) :
+    (M.C.iCycles k).hom ((M.C.sc k).moduleCatCyclesIso.inv.hom
+      (M.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv k x)) = x.1 := by
+  have := congrArg (fun f => f.hom (M.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv k x))
+    (M.C.sc k).moduleCatCyclesIso_inv_iCycles
+  simpa using this
+
+lemma h2a_natural (x : M.cycles k) :
+    (HomologicalComplex.homologyMap M.φ k).hom (M.h2aCls k x) =
+      M.h2aCls k ((M.φ.f k).hom.restrict (M.cycles_invariant k) x) := by
+  have hinj : Function.Injective (M.C.iCycles k).hom :=
+    (ModuleCat.mono_iff_injective _).1 inferInstance
+  have hc : (HomologicalComplex.cyclesMap M.φ k).hom ((M.C.sc k).moduleCatCyclesIso.inv.hom
+      (M.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv k x)) =
+      (M.C.sc k).moduleCatCyclesIso.inv.hom
+        (M.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv k
+          ((M.φ.f k).hom.restrict (M.cycles_invariant k) x)) := by
+    apply hinj
+    have h1 := congrArg (fun f => f.hom ((M.C.sc k).moduleCatCyclesIso.inv.hom
+      (M.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv k x)))
+      (HomologicalComplex.cyclesMap_i M.φ k)
+    simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at h1
+    rw [h1, M.h2a_iCycles k, M.h2a_iCycles k]
+    rfl
+  have h2 := congrArg (fun f => f.hom ((M.C.sc k).moduleCatCyclesIso.inv.hom
+      (M.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv k x)))
+      (HomologicalComplex.homologyπ_naturality M.φ k)
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at h2
+  simp only [h2aCls, LinearMap.coe_comp, Function.comp_apply, LinearEquiv.coe_coe]
+  exact h2.trans (congrArg (fun y => (M.C.homologyπ k).hom y) hc)
+
+lemma h2a_surjective : Function.Surjective (M.h2aCls k) := by
+  have hπ : Function.Surjective (M.C.homologyπ k).hom :=
+    (ModuleCat.epi_iff_surjective _).1 inferInstance
+  have hinv : Function.Surjective (M.C.sc k).moduleCatCyclesIso.inv.hom := fun y =>
+    ⟨(M.C.sc k).moduleCatCyclesIso.hom.hom y, by
+      have := congrArg (fun f => ModuleCat.Hom.hom f y) (M.C.sc k).moduleCatCyclesIso.hom_inv_id
+      simpa only [ModuleCat.hom_comp, LinearMap.comp_apply, ModuleCat.hom_id,
+        LinearMap.id_apply] using this⟩
+  exact hπ.comp (hinv.comp
+    (M.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv k).surjective)
+
+lemma h2a_range_prev (j : ℕ) (hj : j = k + 1) :
+    LinearMap.range (M.C.d j k).hom = LinearMap.range (M.C.d (k + 1) k).hom := by
+  subst hj; rfl
+
+lemma h2a_ker : LinearMap.ker (M.h2aCls k) = (M.bdries k).comap (M.cycles k).subtype := by
+  have hk : ∀ y, (M.C.homologyπ k).hom ((M.C.sc k).moduleCatCyclesIso.inv.hom y) =
+      (M.C.sc k).moduleCatHomologyIso.inv.hom
+        ((LinearMap.range (M.C.sc k).moduleCatToCycles).mkQ y) := fun y => by
+    simpa using congrArg (fun f => f.hom y) (M.C.sc k).moduleCatCyclesIso_inv_π
+  have hinj : Function.Injective (M.C.sc k).moduleCatHomologyIso.inv.hom :=
+    (ModuleCat.mono_iff_injective _).1 inferInstance
+  have hr : LinearMap.range (M.C.sc k).f.hom = M.bdries k :=
+    M.h2a_range_prev k _ (ChainComplex.prev ℕ k)
+  ext x
+  simp only [LinearMap.mem_ker, Submodule.mem_comap, Submodule.coe_subtype, h2aCls,
+    LinearMap.coe_comp, Function.comp_apply, LinearEquiv.coe_coe]
+  erw [hk]
+  erw [map_eq_zero_iff _ hinj]
+  rw [Submodule.mkQ_apply]
+  erw [Submodule.Quotient.mk_eq_zero]
+  rw [← hr]
+  constructor
+  · rintro ⟨y, hy⟩
+    exact ⟨y, congrArg Subtype.val hy⟩
+  · rintro ⟨y, hy⟩
+    exact ⟨y, Subtype.ext hy⟩
+end FiniteChainEndomorphism
+
 /-- (H2a) `Z k ⧸ B k` is linearly equivalent to the homology object, and the
 equivalence intertwines the induced endomorphisms (`ShortComplex.moduleCatHomologyIso`
 and its naturality; the cycles identification above matches its kernel). -/
@@ -497,7 +576,15 @@ theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient_aux_conj
           ((M.bdries k).comap (M.cycles k).subtype)
           ((M.φ.f k).hom.restrict (M.cycles_invariant k)) hW) =
         (HomologicalComplex.homologyMap M.φ k).hom ∘ₗ E.toLinearMap := by
-  sorry
+  let E := (Submodule.quotEquivOfEq _ _ (M.h2a_ker k).symm).trans
+    ((M.h2aCls k).quotKerEquivOfSurjective (M.h2a_surjective k))
+  refine ⟨E, ?_⟩
+  apply Submodule.linearMap_qext
+  ext x
+  simp only [LinearMap.coe_comp, Function.comp_apply, Submodule.mkQ_apply,
+    Submodule.mapQ_apply, LinearEquiv.coe_coe, E, LinearEquiv.trans_apply,
+    Submodule.quotEquivOfEq_mk, LinearMap.quotKerEquivOfSurjective_apply_mk]
+  exact (M.h2a_natural k x).symm
 
 /-- (H2) `Z k ⧸ B k` is the homology in degree `k`, compatibly with `φ`. -/
 theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient
