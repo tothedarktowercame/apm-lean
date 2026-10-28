@@ -1,4 +1,5 @@
 import ConstructionTargets.OrientedSimplicialChains
+import ConstructionTargets.AcyclicCarriers
 
 /-!
 # Ordered faces versus singular chains
@@ -97,7 +98,18 @@ theorem affineComparison_homologyMap_eq {n : ℕ}
         (ChainComplex.ofHom _ _ hdd _ _
           (fun j => (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d_comp_d
             (j + 2) (j + 1) j) cmp₂ hchain₂) k).hom := by
-  sorry
+  open ConstructionTargets.AcyclicCarriers in
+    have hzero := affineComparison_degreeZero_eq K cmp₁ cmp₂ hcmp₁ hcmp₂
+    have hfill : ∀ (k : ℕ) (s : FaceIndex K k) (z : (SingularQChains K).X k),
+        FaceCarriedChain K s.1 z → (SingularQChains K).d k (k - 1) z = 0 →
+        0 < k → ∃ w : (SingularQChains K).X (k + 1),
+          FaceCarriedChain K s.1 w ∧ (SingularQChains K).d (k + 1) k w = z := by
+      intro k s z hz hcycle hk
+      exact faceCarriedCycle_bounds K s (faceHull_rationallyPointlike K s) z hz hcycle hk
+    obtain ⟨H⟩ := carried_chainHomotopy_exists o K d hd hdd cmp₁ cmp₂
+      hcmp₁ hcmp₂ hchain₁ hchain₂ hzero hfill
+    intro k
+    exact congrArg (fun q ↦ q.hom) (H.homologyMap_eq k)
 
 /-- The ordered-face comparison theorem, with the statement kept identical to
 `OrientedSimplicialChains.orderedFace_singular_quasiIso`. -/
