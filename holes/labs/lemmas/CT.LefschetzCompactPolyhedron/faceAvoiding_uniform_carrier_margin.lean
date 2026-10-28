@@ -145,7 +145,46 @@ theorem faceAvoiding_uniform_carrier_margin
       (e x : EuclideanSpace ℝ (Fin n)) ∈ convexHull ℝ (s : Set _) →
       ∀ y ∈ convexHull ℝ (s : Set _),
         δ ≤ dist (e (g x) : EuclideanSpace ℝ (Fin n)) y := by
-  sorry
+  have hcompact : IsCompact K.space := by
+    rw [Geometry.SimplicialComplex.space]
+    exact hK.isCompact_biUnion fun s hs =>
+      s.finite_toSet.isCompact_convexHull ℝ
+  letI : CompactSpace K.space := isCompact_iff_compactSpace.mp hcompact
+  letI : CompactSpace X := e.symm.compactSpace
+  let E := EuclideanSpace ℝ (Fin n)
+  let T : Set (X × E) := ⋃ s ∈ K.faces,
+    {x : X | (e x : E) ∈ convexHull ℝ (s : Set E)} ×ˢ
+      convexHull ℝ (s : Set E)
+  have hecont : Continuous (fun x : X => (e x : E)) :=
+    continuous_subtype_val.comp e.continuous
+  have hT : IsCompact T := by
+    apply hK.isCompact_biUnion
+    intro s hs
+    apply IsCompact.prod
+    · exact ((s.finite_toSet.isClosed_convexHull ℝ).preimage hecont).isCompact
+    · exact s.finite_toSet.isCompact_convexHull ℝ
+  let d : X × E → ℝ := fun p => dist (e (g p.1) : E) p.2
+  have hd : Continuous d := by
+    fun_prop
+  by_cases hne : T.Nonempty
+  · obtain ⟨p, hp, hmin⟩ := hT.exists_isMinOn hne hd.continuousOn
+    have hdp : 0 < d p := by
+      rcases mem_iUnion.mp hp with ⟨s, hp⟩
+      rcases mem_iUnion.mp hp with ⟨hs, hp⟩
+      exact dist_pos.mpr fun heq => havoid s hs p.1 hp.1 (heq ▸ hp.2)
+    refine ⟨d p, hdp, ?_⟩
+    intro s hs x hx y hy
+    have hxy : (x, y) ∈ T := by
+      exact mem_iUnion₂.mpr ⟨s, hs, hx, hy⟩
+    change d p ≤ d (x, y)
+    exact hmin hxy
+  · refine ⟨1, zero_lt_one, ?_⟩
+    intro s hs x hx y hy
+    exfalso
+    apply hne
+    refine ⟨(x, y), ?_⟩
+    change (x, y) ∈ T
+    exact mem_iUnion₂.mpr ⟨s, hs, hx, hy⟩
 -- END SEAT AREA
 
 /-- **LIBRARY (oriented simplicial chains and direct comparison).** Given the
