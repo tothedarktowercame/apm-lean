@@ -7,6 +7,7 @@ import ConstructionTargets.CoefficientH0
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.PolygonInnerOpenPointedContraction
 import ConstructionTargets.RationalPolygonSurfaceHomology
+import ConstructionTargets.CP2RationalHomology
 
 /-! Rational homology and Lefschetz-number interfaces for finite point wedges
 of the polygon model of the real projective plane. -/
@@ -94,6 +95,30 @@ theorem surfacePoint_hasPointedContractibleNeighbourhood :
       (fun {_ _} h => surfaceRel_radius_eq false 1 h)
       (fun {_ _} h => ConstructionTargets.PolygonOuterRadialRelation.surfaceRel_boundary false 1 h)⟩⟩
 
+/-- (Wb) Rational pointlikeness is a homotopy invariant (homotopy invariance
+of singular homology: `SingularHomologyHomotopy`). -/
+theorem rationallyPointlike_of_homotopyEquiv {A B : Type}
+    [TopologicalSpace A] [TopologicalSpace B] (e : A ≃ₕ B)
+    (h : RationallyPointlike B) : RationallyPointlike A := by
+  sorry
+
+/-- (Wc) A point has the rational homology of a point. -/
+theorem rationallyPointlike_unit : RationallyPointlike Unit := by
+  sorry
+
+/-- (Wa) Two open pieces with nonempty intersection, all three rationally
+pointlike, give a rationally pointlike union.  Use the generic rational
+Mayer--Vietoris `RP3Homology.rationalMayerVietoris`
+(`ConstructionTargets/CP2RationalHomology.lean`); degree-zero surjectivity of
+`H₀ U ⊕ H₀ V → H₀ Z` is not part of that theorem and comes from points: every
+point lies in `U` or `V`. -/
+theorem rationallyPointlike_of_openCover {Z : Type} [TopologicalSpace Z]
+    (U V : Set Z) (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hne : (U ∩ V).Nonempty)
+    (hUp : RationallyPointlike U) (hVp : RationallyPointlike V)
+    (hIp : RationallyPointlike ↥(U ∩ V)) : RationallyPointlike Z := by
+  sorry
+
 /-- L4 (LIBRARY): rational Mayer--Vietoris for a point wedge.  The local
 hypotheses rule out wild wedges such as the Hawaiian earring. -/
 theorem wedge_rationallyPointlike
@@ -103,7 +128,15 @@ theorem wedge_rationallyPointlike
     (hnX : HasPointedContractibleNeighbourhood x₀)
     (hnY : HasPointedContractibleNeighbourhood y₀) :
     RationallyPointlike (Wedge x₀ y₀) := by
-  sorry
+  open ConstructionTargets.GenericPointWedgeOpenCoverComparison in
+  obtain ⟨M, hy, hM, ⟨cM⟩⟩ := hnY
+  obtain ⟨N, hx, hN, ⟨cN⟩⟩ := hnX
+  let P := genericPointWedgeCoverPackage x₀ y₀ M N hM hN hy hx cM cN
+  exact rationallyPointlike_of_openCover _ _ P.leftOpen_isOpen P.rightOpen_isOpen
+    P.union_eq_univ ⟨_, (P.intersectionEquiv.invFun ()).2⟩
+    (rationallyPointlike_of_homotopyEquiv P.leftEquiv hX)
+    (rationallyPointlike_of_homotopyEquiv P.rightEquiv hY)
+    (rationallyPointlike_of_homotopyEquiv P.intersectionEquiv rationallyPointlike_unit)
 
 /-- L5: pointed contractible neighbourhoods persist at the point of a
 binary wedge. -/
