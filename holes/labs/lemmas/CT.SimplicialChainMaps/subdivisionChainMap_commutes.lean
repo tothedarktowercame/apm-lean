@@ -958,6 +958,29 @@ theorem barycentricSubdivisionChainMap_exists {n : ℕ} (o : LinearOrder (Euc n)
 barycentric subdivision; for an arbitrary `K'` (e.g. only the vertices `a, b, m`
 of a subdivided edge, no edges) the coefficient condition is vacuous in degree 1
 and `sd` is not a chain map. -/
+theorem subdivisionChainMap_commutes_aux_signedDeletion_unique {n : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n)
+    (d e : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) (he : IsSignedDeletion o K e) : d = e := by
+  funext k
+  ext s t
+  obtain ⟨z, hz, hza⟩ := hd k s
+  obtain ⟨w, hw, hwa⟩ := he k s
+  change d k (Finsupp.single s 1) t = e k (Finsupp.single s 1) t
+  rw [hz, hw, hza, hwa]
+
+theorem subdivisionChainMap_commutes_aux_subdivision_unique {n : ℕ}
+    (o : LinearOrder (Euc n)) (K K' : GSC n)
+    (sd se : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
+    (hsd : IsSubdivisionChainMap o K K' sd)
+    (hse : IsSubdivisionChainMap o K K' se) : sd = se := by
+  funext k
+  ext s u
+  obtain ⟨z, hz, hza⟩ := hsd k s
+  obtain ⟨w, hw, hwa⟩ := hse k s
+  change sd k (Finsupp.single s 1) u = se k (Finsupp.single s 1) u
+  rw [hz, hw, hza, hwa]
+
 -- BEGIN SEAT AREA
 theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
