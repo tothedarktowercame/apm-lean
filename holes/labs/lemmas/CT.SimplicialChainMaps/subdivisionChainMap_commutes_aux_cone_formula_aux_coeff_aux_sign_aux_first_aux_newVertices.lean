@@ -1678,7 +1678,139 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first
     (hc' : GeometricSimplicialSubdivision.IsStrictFaceChain K c')
     (hcs : c' ⊆ (s.1.erase v).powerset) (hcard : c'.card = k + 1) :
     Set.BijOn (flagNewVertex o c') c' (s.1.erase v) := by
-  sorry
+  classical
+  let U := s.1.erase v
+  have hUcard : U.card = k + 1 := by
+    dsimp [U]
+    rw [Finset.card_erase_of_mem hv, s.2.2]
+    omega
+  have hcinj : Set.InjOn Finset.card (c' : Set (Finset (Euc n))) :=
+    subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_top_aux_card_inj K c' hc'
+  have himsub : c'.image Finset.card ⊆ Finset.Icc 1 (k + 1) := by
+    intro m hm
+    obtain ⟨t, ht, rfl⟩ := Finset.mem_image.1 hm
+    refine Finset.mem_Icc.2 ⟨?_, ?_⟩
+    · exact Finset.one_le_card.2
+        (GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_nonempty
+          K c' hc' t ht)
+    · simpa [← hUcard] using
+        Finset.card_le_card (Finset.mem_powerset.1 (hcs ht))
+  have himcard : (c'.image Finset.card).card = k + 1 := by
+    rw [Finset.card_image_iff.mpr hcinj, hcard]
+  have himeq : c'.image Finset.card = Finset.Icc 1 (k + 1) := by
+    apply Finset.eq_of_subset_of_card_le himsub
+    rw [Nat.card_Icc, himcard]
+    omega
+  have hnew : ∀ t ∈ c',
+      flagNewVertex o c' t ∈ t ∧
+        ∀ u ∈ c', u ⊂ t → flagNewVertex o c' t ∉ u := by
+    intro t ht
+    have htne :=
+      GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_nonempty
+        K c' hc' t ht
+    let B := c'.biUnion (fun u => if u ⊂ t then u else ∅)
+    have hBsub : B ⊆ t := by
+      intro x hx
+      obtain ⟨u, hu, hxu⟩ := Finset.mem_biUnion.1 hx
+      split at hxu
+      · exact (Finset.ssubset_iff_subset_ne.1 ‹u ⊂ t›).1 hxu
+      · simp at hxu
+    have hBcard : B.card = t.card - 1 := by
+      by_cases hone : t.card = 1
+      · have hBempty : B = ∅ := by
+          apply Finset.not_nonempty_iff_eq_empty.1
+          intro hBn
+          obtain ⟨x, hx⟩ := hBn
+          obtain ⟨u, hu, hxu⟩ := Finset.mem_biUnion.1 hx
+          split at hxu
+          · have hupos : 0 < u.card := Finset.card_pos.2
+                (GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_nonempty
+                  K c' hc' u hu)
+            have hult := Finset.card_lt_card ‹u ⊂ t›
+            omega
+          · simp at hxu
+        simp [hBempty, hone]
+      · have htwo : 2 ≤ t.card := by
+          have := Finset.card_pos.2 htne
+          omega
+        have htupper : t.card ≤ k + 1 := by
+          simpa [← hUcard] using
+            Finset.card_le_card (Finset.mem_powerset.1 (hcs ht))
+        have hpredmem : t.card - 1 ∈ c'.image Finset.card := by
+          rw [himeq]
+          simp only [Finset.mem_Icc]
+          omega
+        obtain ⟨p, hp, hpcard⟩ := Finset.mem_image.1 hpredmem
+        have hpt : p ⊂ t := by
+          by_cases hptne : p = t
+          · subst p
+            omega
+          rcases hc'.2 p hp t ht hptne with h | h
+          · exact h
+          · have := Finset.card_lt_card h
+            omega
+        have hBeq : B = p := by
+          apply Finset.Subset.antisymm
+          · intro x hx
+            obtain ⟨u, hu, hxu⟩ := Finset.mem_biUnion.1 hx
+            split at hxu
+            · by_cases hup : u = p
+              · simpa [hup] using hxu
+              rcases hc'.2 u hu p hp hup with h | h
+              · exact h.subset hxu
+              · have hutcard := Finset.card_lt_card ‹u ⊂ t›
+                have hpucard := Finset.card_lt_card h
+                omega
+            · simp at hxu
+          · intro x hxp
+            apply Finset.mem_biUnion.2
+            exact ⟨p, hp, by simp [hpt, hxp]⟩
+        rw [hBeq, hpcard]
+    have hdiffcard : (t \ B).card = 1 := by
+      rw [Finset.card_sdiff_of_subset hBsub, hBcard]
+      have := Finset.card_pos.2 htne
+      omega
+    obtain ⟨x, hx⟩ := Finset.card_eq_one.1 hdiffcard
+    have hflag : flagNewVertex o c' t = x := by
+      rw [flagNewVertex]
+      change ((t \ B).1.sort o.le).getD 0 0 = x
+      rw [hx]
+      simp
+    have hxmem : x ∈ t \ B := by simp [hx]
+    refine ⟨hflag.symm ▸ (Finset.mem_sdiff.1 hxmem).1, ?_⟩
+    intro u hu hut hxu
+    rw [hflag] at hxu
+    have hxB : x ∈ B := Finset.mem_biUnion.2 ⟨u, hu, by simp [hut, hxu]⟩
+    exact (Finset.mem_sdiff.1 hxmem).2 hxB
+  refine ⟨?_, ?_, ?_⟩
+  · intro t ht
+    exact Finset.mem_powerset.1 (hcs ht) (hnew t ht).1
+  · intro a ha b hb hab
+    by_contra hne
+    rcases hc'.2 a ha b hb hne with h | h
+    · exact (hnew b hb).2 a ha h (hab ▸ (hnew a ha).1)
+    · exact (hnew a ha).2 b hb h (hab.symm ▸ (hnew b hb).1)
+  · intro x hx
+    have hmap : Set.MapsTo (flagNewVertex o c') (c' : Set _) (U : Set _) := by
+      intro t ht
+      exact Finset.mem_powerset.1 (hcs ht) (hnew t ht).1
+    have hcardU : (U : Set (Euc n)).ncard = k + 1 := by simp [hUcard]
+    have hcardc : (c' : Set (Finset (Euc n))).ncard = k + 1 := by simp [hcard]
+    have himcardset : ((flagNewVertex o c') '' (c' : Set _)).ncard = k + 1 := by
+      rw [Set.ncard_image_of_injOn]
+      · exact hcardc
+      · intro a ha b hb hab
+        by_contra hne
+        rcases hc'.2 a ha b hb hne with h | h
+        · exact (hnew b hb).2 a ha h (hab ▸ (hnew a ha).1)
+        · exact (hnew a ha).2 b hb h (hab.symm ▸ (hnew b hb).1)
+    have heq : (flagNewVertex o c') '' (c' : Set _) = (U : Set _) := by
+      apply Set.eq_of_subset_of_ncard_le
+      · exact hmap.image_subset
+      · rw [himcardset, hcardU]
+      · exact Set.toFinite _
+    rw [← heq] at hx
+    exact hx
 -- END SEAT AREA
 
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first_aux_rank
