@@ -53,6 +53,42 @@ theorem barycentricFaces_isLowerSet {n : ℕ}
     · rintro ⟨s, hs, rfl⟩
       exact (Finset.mem_filter.mp hs).2
 
+/-- (I1) A point of the hull of finitely many barycenters is a positive-weight
+combination of the barycenters of some sub-collection (drop the zero weights;
+if two faces share a barycenter keep one). -/
+theorem barycentricFaces_inter_subset_aux_positive_subchain {n : ℕ}
+    (c : Finset (Finset (Euc n))) (x : Euc n)
+    (hx : x ∈ convexHull ℝ ((c.image barycenter : Finset (Euc n)) : Set (Euc n))) :
+    ∃ c₀ ⊆ c, ∃ w : Finset (Euc n) → ℝ, (∀ s ∈ c₀, 0 < w s) ∧
+      ∑ s ∈ c₀, w s = 1 ∧ ∑ s ∈ c₀, w s • barycenter s = x := by
+  sorry
+
+/-- (I2) Uniqueness of the barycentric carrier chain: two strict chains of faces
+of `K` with positive weights representing the same point are equal.  Both top
+faces are the carrier of the point in `K` (positive weight on the top barycenter
+puts positive barycentric weight on every vertex of the top face and none
+outside it; `K`'s intersection axiom makes the carrier unique), and inside that
+simplex the chain is the family of superlevel sets of the point's barycentric
+coordinates. -/
+theorem barycentricFaces_inter_subset_aux_chain_unique {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c₀ c₁ : Finset (Finset (Euc n)))
+    (h₀ : IsStrictFaceChain K c₀) (h₁ : IsStrictFaceChain K c₁)
+    (w₀ w₁ : Finset (Euc n) → ℝ)
+    (hw₀ : ∀ s ∈ c₀, 0 < w₀ s) (hw₁ : ∀ s ∈ c₁, 0 < w₁ s)
+    (hs₀ : ∑ s ∈ c₀, w₀ s = 1) (hs₁ : ∑ s ∈ c₁, w₁ s = 1)
+    (heq : ∑ s ∈ c₀, w₀ s • barycenter s = ∑ s ∈ c₁, w₁ s • barycenter s) :
+    c₀ = c₁ := by
+  sorry
+
+/-- (I3) A nonnegative normalized combination of barycenters lies in their hull. -/
+theorem barycentricFaces_inter_subset_aux_mem_hull {n : ℕ}
+    (c : Finset (Finset (Euc n))) (w : Finset (Euc n) → ℝ)
+    (hw : ∀ s ∈ c, 0 ≤ w s) (hs : ∑ s ∈ c, w s = 1) :
+    ∑ s ∈ c, w s • barycenter s ∈
+      convexHull ℝ ((c.image barycenter : Finset (Euc n)) : Set (Euc n)) := by
+  sorry
+
 /-- The common barycentric coordinates of two chain simplices are supported on
 their common barycenters.  This is the hard intersection axiom. -/
 theorem barycentricFaces_inter_subset {n : ℕ}
@@ -60,7 +96,27 @@ theorem barycentricFaces_inter_subset {n : ℕ}
     ∀ᵉ (s ∈ barycentricFaces K) (t ∈ barycentricFaces K),
       convexHull ℝ (s : Set (Euc n)) ∩ convexHull ℝ (t : Set (Euc n)) ⊆
         convexHull ℝ (s ∩ t : Set (Euc n)) := by
-  sorry
+  rintro _ ⟨c, hc, rfl⟩ _ ⟨c', hc', rfl⟩ x ⟨hx, hx'⟩
+  obtain ⟨c₀, hsub, w₀, hw₀, hs₀, hx₀⟩ :=
+    barycentricFaces_inter_subset_aux_positive_subchain c x hx
+  obtain ⟨c₁, hsub', w₁, hw₁, hs₁, hx₁⟩ :=
+    barycentricFaces_inter_subset_aux_positive_subchain c' x hx'
+  have hchain : ∀ {d e : Finset (Finset (Euc n))}, IsStrictFaceChain K d → e ⊆ d →
+      IsStrictFaceChain K e := fun hd he =>
+    ⟨fun s hs => hd.1 s (he hs), fun s hs t ht hne => hd.2 s (he hs) t (he ht) hne⟩
+  have hc01 : c₀ = c₁ :=
+    barycentricFaces_inter_subset_aux_chain_unique K c₀ c₁ (hchain hc hsub)
+      (hchain hc' hsub') w₀ w₁ hw₀ hw₁ hs₀ hs₁ (hx₀.trans hx₁.symm)
+  subst hc01
+  rw [← hx₀]
+  refine convexHull_mono ?_ (barycentricFaces_inter_subset_aux_mem_hull c₀ w₀
+    (fun s hs => (hw₀ s hs).le) hs₀)
+  intro y hy
+  simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe] at hy
+  obtain ⟨s, hs, rfl⟩ := hy
+  simp only [Finset.coe_inter, Finset.coe_image, Set.mem_inter_iff, Set.mem_image,
+    Finset.mem_coe]
+  exact ⟨⟨s, hsub hs, rfl⟩, ⟨s, hsub' hs, rfl⟩⟩
 
 /-- Assemble the three independent face facts into Mathlib's geometric complex. -/
 def barycentricSubdivision {n : ℕ}
