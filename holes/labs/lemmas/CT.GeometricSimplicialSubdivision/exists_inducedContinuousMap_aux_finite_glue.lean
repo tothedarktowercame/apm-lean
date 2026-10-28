@@ -1232,7 +1232,30 @@ lemma exists_inducedContinuousMap_aux_finite_glue {n m : ℕ}
       x ∈ convexHull ℝ (t : Set (Euc n)) → A s x = A t x) :
     ∃ g : C(K.space, Euc m), ∀ s ∈ K.faces, ∀ x : K.space,
       (x : Euc n) ∈ convexHull ℝ (s : Set (Euc n)) → g x = A s x := by
-  sorry
+  classical
+  letI : Fintype K.faces := hK.fintype
+  choose face hface_mem hface_hull using
+    fun x : K.space => Geometry.SimplicialComplex.mem_space_iff.mp x.property
+  let g : K.space → Euc m := fun x => A (face x) x
+  have hg (s : Finset (Euc n)) (hs : s ∈ K.faces) (x : K.space)
+      (hxs : (x : Euc n) ∈ convexHull ℝ (s : Set (Euc n))) : g x = A s x := by
+    apply hcompat (face x) (hface_mem x) s hs x (hface_hull x) hxs
+  have hclosed (s : K.faces) : IsClosed
+      {x : K.space | (x : Euc n) ∈ convexHull ℝ (s.1 : Set (Euc n))} := by
+    exact (s.1.finite_toSet.isClosed_convexHull ℝ).preimage continuous_subtype_val
+  have hcont (s : K.faces) : ContinuousOn g
+      {x : K.space | (x : Euc n) ∈ convexHull ℝ (s.1 : Set (Euc n))} := by
+    apply Continuous.continuousOn
+      ((A s.1).continuous_of_finiteDimensional.comp continuous_subtype_val) |>.congr
+    intro x hx
+    simpa only [Function.comp_apply] using hg s.1 s.2 x hx
+  have hcover : (⋃ s : K.faces,
+      {x : K.space | (x : Euc n) ∈ convexHull ℝ (s.1 : Set (Euc n))}) = Set.univ := by
+    ext x
+    simp only [Set.mem_iUnion, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    exact ⟨⟨face x, hface_mem x⟩, hface_hull x⟩
+  refine ⟨⟨g, (locallyFinite_of_finite _).continuous hcover hclosed hcont⟩, ?_⟩
+  exact hg
 -- END SEAT AREA
 
 theorem exists_inducedContinuousMap {n m : ℕ}
