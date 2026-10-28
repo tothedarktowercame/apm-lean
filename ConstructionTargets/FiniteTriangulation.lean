@@ -249,7 +249,46 @@ theorem wedgeFaces_inter_aux_same_side
     {r q : Finset E} (hr : r ∈ K.faces) (hq : q ∈ K.faces)
     (hs : s ⊆ r.image f) (ht : t ⊆ q.image f) :
     convexHull ℝ (s : Set F) ∩ convexHull ℝ (t : Set F) ⊆ convexHull ℝ (s ∩ t : Set F) := by
-  sorry
+  rcases s.eq_empty_or_nonempty with rfl | hsne
+  · simp
+  rcases t.eq_empty_or_nonempty with rfl | htne
+  · simp
+  let u := r.filter (fun x ↦ f x ∈ s)
+  let v := q.filter (fun x ↦ f x ∈ t)
+  have hu_sub : u ⊆ r := Finset.filter_subset _ _
+  have hv_sub : v ⊆ q := Finset.filter_subset _ _
+  have hu_ne : u.Nonempty := by
+    obtain ⟨y, hy⟩ := hsne
+    obtain ⟨x, hxr, hxy⟩ := Finset.mem_image.mp (hs hy)
+    subst y
+    exact ⟨x, Finset.mem_filter.mpr ⟨hxr, hy⟩⟩
+  have hv_ne : v.Nonempty := by
+    obtain ⟨y, hy⟩ := htne
+    obtain ⟨x, hxq, hxy⟩ := Finset.mem_image.mp (ht hy)
+    subst y
+    exact ⟨x, Finset.mem_filter.mpr ⟨hxq, hy⟩⟩
+  have hu_face : u ∈ K.faces := K.down_closed hr hu_sub hu_ne
+  have hv_face : v ∈ K.faces := K.down_closed hq hv_sub hv_ne
+  have hu_image : u.image f = s := by
+    apply Finset.Subset.antisymm
+    · intro y hy
+      obtain ⟨x, hx, rfl⟩ := Finset.mem_image.mp hy
+      exact (Finset.mem_filter.mp hx).2
+    · intro y hy
+      obtain ⟨x, hxr, hxy⟩ := Finset.mem_image.mp (hs hy)
+      subst y
+      exact Finset.mem_image.mpr ⟨x, Finset.mem_filter.mpr ⟨hxr, hy⟩, rfl⟩
+  have hv_image : v.image f = t := by
+    apply Finset.Subset.antisymm
+    · intro y hy
+      obtain ⟨x, hx, rfl⟩ := Finset.mem_image.mp hy
+      exact (Finset.mem_filter.mp hx).2
+    · intro y hy
+      obtain ⟨x, hxq, hxy⟩ := Finset.mem_image.mp (ht hy)
+      subst y
+      exact Finset.mem_image.mpr ⟨x, Finset.mem_filter.mpr ⟨hxq, hy⟩, rfl⟩
+  simpa [hu_image, hv_image] using
+    (wedgeFaces_inter_aux_affine_image K f hf hu_face hv_face)
 
 open scoped Classical in
 /-- (X3) Cross side: hulls of a `j₁`-subface and a `j₂`-subface meet at most in
