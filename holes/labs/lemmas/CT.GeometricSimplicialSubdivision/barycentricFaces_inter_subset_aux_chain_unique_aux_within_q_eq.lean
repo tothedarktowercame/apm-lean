@@ -495,6 +495,31 @@ lemma barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_sum {n : ℕ}
 to `∑ v ∈ t, q v • v` (barycenter formula) with weights summing to `1`, and
 the vertices of `t` are affinely independent (`K.indep`). -/
 -- BEGIN SEAT AREA
+lemma barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_eq_aux_expand {n : ℕ}
+    (c : Finset (Finset (Euc n))) (t : Finset (Euc n))
+    (hsub : ∀ s ∈ c, s ⊆ t) (w : Finset (Euc n) → ℝ) :
+    ∑ v ∈ t, barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c w v • v =
+      ∑ s ∈ c, w s • barycenter s := by
+  classical
+  simp only [barycentricFaces_inter_subset_aux_chain_unique_aux_within_q]
+  simp_rw [Finset.sum_filter, Finset.sum_smul]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro s hs
+  rw [show (∑ x ∈ t, (if x ∈ s then w s * (s.card : ℝ)⁻¹ else 0) • x) =
+      ∑ x ∈ t, if x ∈ s then (w s * (s.card : ℝ)⁻¹) • x else 0 by
+    apply Finset.sum_congr rfl
+    intro x hx
+    by_cases hxs : x ∈ s <;> simp [hxs]]
+  rw [← Finset.sum_filter]
+  have hf : t.filter (fun v ↦ v ∈ s) = s := by
+    ext v
+    simp only [Finset.mem_filter]
+    exact and_iff_right_of_imp (fun hv ↦ hsub s hs hv)
+  rw [hf, barycentricFaces_affineIndependent_aux_barycenter_formula]
+  rw [← Finset.smul_sum]
+  simp only [smul_smul]
+
 theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_eq {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (c₀ c₁ : Finset (Finset (Euc n)))
@@ -505,7 +530,20 @@ theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_eq {n : ℕ}
     (hs₀ : ∑ s ∈ c₀, w₀ s = 1) (hs₁ : ∑ s ∈ c₁, w₁ s = 1)
     (heq : ∑ s ∈ c₀, w₀ s • barycenter s = ∑ s ∈ c₁, w₁ s • barycenter s) :
     ∀ v ∈ t, barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c₀ w₀ v = barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c₁ w₁ v := by
-  sorry
+  classical
+  have hne₀ := barycentricFaces_affineIndependent_aux_chain_nonempty K c₀ h₀
+  have hne₁ := barycentricFaces_affineIndependent_aux_chain_nonempty K c₁ h₁
+  have hsum₀ : ∑ v ∈ t, barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c₀ w₀ v = 1 := by
+    rw [barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_sum c₀ t hne₀ hsub₀ w₀,
+      hs₀]
+  have hsum₁ : ∑ v ∈ t, barycentricFaces_inter_subset_aux_chain_unique_aux_within_q c₁ w₁ v = 1 := by
+    rw [barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_sum c₁ t hne₁ hsub₁ w₁,
+      hs₁]
+  apply (K.indep ht).eq_of_sum_eq_sum_subtype
+  · rw [hsum₀, hsum₁]
+  · rw [barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_eq_aux_expand c₀ t hsub₀ w₀,
+      barycentricFaces_inter_subset_aux_chain_unique_aux_within_q_eq_aux_expand c₁ t hsub₁ w₁]
+    exact heq
 -- END SEAT AREA
 
 /-- (W2) A positive-weight strict chain inside `t` is the family of positive
