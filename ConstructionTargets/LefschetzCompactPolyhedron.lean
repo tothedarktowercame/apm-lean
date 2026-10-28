@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.SingularHomologyHomotopy
+import ConstructionTargets.GeometricSimplicialSubdivision
 
 /-! # The rational Lefschetz theorem for finite polyhedra -/
 
@@ -35,7 +36,7 @@ theorem exists_fine_subdivision {n : ℕ}
     ∃ K' : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)),
       K'.faces.Finite ∧ K'.space = K.space ∧
       ∀ s ∈ K'.faces, Metric.diam (convexHull ℝ (↑s : Set (EuclideanSpace ℝ (Fin n)))) < ε := by
-  sorry
+  exact ConstructionTargets.GeometricSimplicialSubdivision.exists_fine_subdivision K hK hε
 
 /-- A fixed-point-free self-map of a finite polyhedron moves every point by at
 least a uniform positive distance (compactness of the realization). -/
