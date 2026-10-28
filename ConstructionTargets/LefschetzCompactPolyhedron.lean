@@ -451,6 +451,34 @@ theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_boundary_quotient
   congr 1
   rw [← heq, LinearMap.trace_conj']
 
+lemma FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient_aux_cycles
+    (M : FiniteChainEndomorphism) (k : ℕ) :
+    LinearMap.ker (M.C.sc k).g.hom = M.cycles k := by
+  unfold FiniteChainEndomorphism.cycles
+  change LinearMap.ker (M.C.d k ((ComplexShape.down ℕ).next k)).hom =
+    LinearMap.ker (M.C.d k (k - 1)).hom
+  cases k with
+  | zero => rw [ChainComplex.next_nat_zero]
+  | succ n =>
+      simp only [Nat.succ_sub_one]
+      rw [ChainComplex.next_nat_succ]
+      rfl
+
+/-- (H2a) `Z k ⧸ B k` is linearly equivalent to the homology object, and the
+equivalence intertwines the induced endomorphisms (`ShortComplex.moduleCatHomologyIso`
+and its naturality; the cycles identification above matches its kernel). -/
+theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient_aux_conj
+    (M : FiniteChainEndomorphism) (k : ℕ)
+    (hW : ∀ x ∈ (M.bdries k).comap (M.cycles k).subtype,
+      (M.φ.f k).hom.restrict (M.cycles_invariant k) x ∈
+        (M.bdries k).comap (M.cycles k).subtype) :
+    ∃ E : (M.cycles k ⧸ (M.bdries k).comap (M.cycles k).subtype) ≃ₗ[ℚ] M.C.homology k,
+      E.toLinearMap ∘ₗ (((M.bdries k).comap (M.cycles k).subtype).mapQ
+          ((M.bdries k).comap (M.cycles k).subtype)
+          ((M.φ.f k).hom.restrict (M.cycles_invariant k)) hW) =
+        (HomologicalComplex.homologyMap M.φ k).hom ∘ₗ E.toLinearMap := by
+  sorry
+
 /-- (H2) `Z k ⧸ B k` is the homology in degree `k`, compatibly with `φ`. -/
 theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient
     (M : FiniteChainEndomorphism) (k : ℕ)
@@ -463,7 +491,18 @@ theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient
           ((M.bdries k).comap (M.cycles k).subtype)
           ((M.φ.f k).hom.restrict (M.cycles_invariant k)) hW) =
       M.homologyTrace k := by
-  sorry
+  obtain ⟨E, hE⟩ := M.cyclesTrace_eq_aux_homology_quotient_aux_conj k hW
+  have h : (HomologicalComplex.homologyMap M.φ k).hom =
+      E.conj (((M.bdries k).comap (M.cycles k).subtype).mapQ
+        ((M.bdries k).comap (M.cycles k).subtype)
+        ((M.φ.f k).hom.restrict (M.cycles_invariant k)) hW) := by
+    ext y
+    have := congrArg (fun g => g (E.symm y)) hE
+    simp only [LinearMap.coe_comp, Function.comp_apply, LinearEquiv.coe_coe,
+      LinearEquiv.apply_symm_apply] at this
+    simp [LinearEquiv.conj_apply, this]
+  unfold FiniteChainEndomorphism.homologyTrace
+  rw [h, LinearMap.trace_conj']
 
 /-- (H) The trace on cycles is the trace on boundaries plus the homology
 trace: `Z k ⧸ B k ≅ homology k` equivariantly (`ShortComplex.moduleCatHomologyIso`
