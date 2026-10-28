@@ -523,6 +523,38 @@ theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_many {n m : ℕ}
       omega
   rw [hzero, smul_zero]
 
+/-- (B2) The two surviving deletions of a single collision have opposite signs:
+`h '' (s.erase v)` and `h '' (s.erase w)` are the same sequence except that the
+common value `h v = h w` moves across the `b - 1 - a` vertices strictly between
+`v` (position `a`) and `w` (position `b`); each crossing flips one inversion. -/
+theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_one_aux_sign {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    {k : ℕ} (K : GSC n) (h : Euc n → Euc m) (s : FaceIndex K (k + 1))
+    (hcard : (s.1.image h).card = k + 1)
+    {v w : Euc n} (hv : v ∈ s.1) (hw : w ∈ s.1) (hvw : v ≠ w) (hh : h v = h w) :
+    (-1 : ℚ) ^ ((s.1.sort on.le).idxOf v) * sortingSign on om (s.1.erase v) h =
+      -((-1 : ℚ) ^ ((s.1.sort on.le).idxOf w) * sortingSign on om (s.1.erase w) h) := by
+  sorry
+
+
+/-- (B-sum) Given (B2): expand `dK s` (`_aux_boundaryK`); deletions other than
+`v, w` still collapse and map to `0`; the two remaining terms are the same face
+with opposite coefficients. -/
+theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_one_aux_sum {n m : ℕ}
+    (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
+    (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hm : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat L k)
+    (hdK : IsSignedDeletion on K dK)
+    (hhm : IsVertexChainMap on om K L h hm) (k : ℕ)
+    (s : FaceIndex K (k + 1))
+    (hcard : (s.1.image h).card = k + 1)
+    (hB2 : ∀ {v w : Euc n}, v ∈ s.1 → w ∈ s.1 → v ≠ w → h v = h w →
+      (-1 : ℚ) ^ ((s.1.sort on.le).idxOf v) * sortingSign on om (s.1.erase v) h =
+        -((-1 : ℚ) ^ ((s.1.sort on.le).idxOf w) * sortingSign on om (s.1.erase w) h)) :
+    hm k (dK k (Finsupp.single s 1)) = 0 := by
+  sorry
+
 /-- (C-B) Exactly one collision `h v = h w`, `v ≠ w`: only deleting `v` or `w`
 gives an injective image, the same face, with opposite signs. -/
 theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_one {n m : ℕ}
@@ -535,7 +567,8 @@ theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_one {n m : ℕ}
     (s : FaceIndex K (k + 1))
     (hcard : (s.1.image h).card = k + 1) :
     hm k (dK k (Finsupp.single s 1)) = 0 := by
-  sorry
+  exact vertexChainMap_commutes_aux_generator_aux_collapse_aux_one_aux_sum on om K L h dK hm hdK hhm k s hcard
+    (fun hv hw hvw hh => vertexChainMap_commutes_aux_generator_aux_collapse_aux_one_aux_sign on om K h s hcard hv hw hvw hh)
 
 /-- (VG2) `h` collapses `s`: the left side is `0`; on the right the deleted
 faces with injective image come in pairs (delete either of two vertices with the
