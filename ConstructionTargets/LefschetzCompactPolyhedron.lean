@@ -430,7 +430,26 @@ theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_boundary_quotient
           (((M.bdries k).comap (M.cycles k).subtype).mapQ
             ((M.bdries k).comap (M.cycles k).subtype)
             ((M.φ.f k).hom.restrict (M.cycles_invariant k)) hW) := by
-  sorry
+  intro hW
+  letI := M.finiteChain k
+  have hBZ : M.bdries k ≤ M.cycles k := by
+    rintro _ ⟨y, rfl⟩
+    have hdd := congrArg (fun f => f.hom y) (M.C.d_comp_d (k + 1) k (k - 1))
+    simpa only [ModuleCat.hom_comp, LinearMap.comp_apply, ModuleCat.hom_zero,
+      LinearMap.zero_apply] using hdd
+  let e : (M.bdries k).comap (M.cycles k).subtype ≃ₗ[ℚ] M.bdries k :=
+    Submodule.comapSubtypeEquivOfLe hBZ
+  have heq :
+      e.conj (((M.φ.f k).hom.restrict (M.cycles_invariant k)).restrict hW) =
+        (M.φ.f k).hom.restrict (M.bdries_invariant k) := by
+    ext x
+    rw [LinearEquiv.conj_apply]
+    rfl
+  unfold FiniteChainEndomorphism.cyclesTrace FiniteChainEndomorphism.bdriesTrace
+  rw [hT ((M.φ.f k).hom.restrict (M.cycles_invariant k))
+    ((M.bdries k).comap (M.cycles k).subtype) hW]
+  congr 1
+  rw [← heq, LinearMap.trace_conj']
 
 /-- (H2) `Z k ⧸ B k` is the homology in degree `k`, compatibly with `φ`. -/
 theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient
