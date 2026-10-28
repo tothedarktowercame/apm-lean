@@ -49,7 +49,57 @@ theorem faceCarriedChain_boundary {n k : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n))
     (z : (SingularQChains K).X (k + 1)) (hz : FaceCarriedChain K s z) :
     FaceCarriedChain K s ((SingularQChains K).d (k + 1) k z) := by
-  sorry
+  classical
+  rcases hz with ⟨m, a, σ, rfl, hσ⟩
+  let e : (Fin m × Fin (k + 2)) ≃ Fin (Fintype.card (Fin m × Fin (k + 2))) :=
+    Fintype.equivFin _
+  let τ : Fin (Fintype.card (Fin m × Fin (k + 2))) →
+      SingularSimplex (TopCat.of K.space) k := fun j ↦
+    (TopCat.toSSet.obj (TopCat.of K.space)).δ (e.symm j).2 (σ (e.symm j).1)
+  let b : Fin (Fintype.card (Fin m × Fin (k + 2))) → ℚ := fun j ↦
+    ((-1 : ℚ) ^ ((e.symm j).2 : ℕ)) * a (e.symm j).1
+  refine ⟨_, b, τ, ?_, ?_⟩
+  · simp only [map_sum]
+    calc
+      _ = ∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of K.space)
+            (k + 1) (σ i) ≫ (SingularQChains K).d (k + 1) k) (a i) := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          rfl
+      _ = ∑ i, ∑ j : Fin (k + 2),
+            (CoefficientH0.singularGenerator ℚ (TopCat.of K.space) k
+              ((TopCat.toSSet.obj (TopCat.of K.space)).δ j (σ i)))
+              (((-1 : ℚ) ^ (j : ℕ)) * a i) := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          rw [CoefficientH0.singularGenerator_boundary]
+          simp only [ModuleCat.hom_sum, LinearMap.coe_sum, Finset.sum_apply]
+          apply Finset.sum_congr rfl
+          intro j hj
+          rw [ModuleCat.hom_smul, LinearMap.smul_apply]
+          rw [← Int.cast_smul_eq_zsmul ℚ]
+          rw [← map_smul]
+          simp
+    calc
+      _ = ∑ p : Fin m × Fin (k + 2),
+          (CoefficientH0.singularGenerator ℚ (TopCat.of K.space) k
+            ((TopCat.toSSet.obj (TopCat.of K.space)).δ p.2 (σ p.1)))
+            (((-1 : ℚ) ^ (p.2 : ℕ)) * a p.1) := by
+          rw [Fintype.sum_prod_type]
+      _ = _ := by
+        simpa [τ, b] using e.sum_comp (fun j ↦
+          (CoefficientH0.singularGenerator ℚ (TopCat.of K.space) k (τ j)) (b j))
+  · intro j
+    let p := e.symm j
+    let cσ := continuousMapOfSingularSimplex (k + 1) (σ p.1)
+    have hcσ : singularSimplexOfContinuousMap (TopCat.of K.space) (k + 1) cσ =
+        σ p.1 :=
+      Equiv.symm_apply_apply _ _
+    dsimp [τ]
+    rw [← hcσ, singularSimplexOfContinuousMap_face]
+    simp only [continuousMapOfSingularSimplex_ofContinuousMap]
+    rintro x ⟨y, rfl⟩
+    exact hσ p.1 ⟨_, rfl⟩
 -- END SEAT AREA
 
 /-- The image of a face generator under an affine comparison is carried by
