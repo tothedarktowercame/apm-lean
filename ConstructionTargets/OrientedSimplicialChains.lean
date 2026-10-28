@@ -49,7 +49,44 @@ theorem signedDeletion_exists {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n)) :
     ∃ d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k,
       IsSignedDeletion o K d := by
-  sorry
+  let b : ∀ k, FaceIndex K (k + 1) → FaceModule K k := fun k s =>
+    ∑ v : s.1, Finsupp.single
+      (⟨s.1.erase v.1,
+        K.down_closed s.2.1 (Finset.erase_subset v.1 s.1) (by
+          rw [Finset.nonempty_iff_ne_empty]
+          intro h
+          have hc := Finset.card_erase_of_mem v.2
+          rw [h, Finset.card_empty, s.2.2] at hc
+          omega),
+        by
+          rw [Finset.card_erase_of_mem v.2, s.2.2]
+          omega⟩ : FaceIndex K k)
+      ((-1 : ℚ) ^ ((s.1.sort o.le).idxOf v.1))
+  let d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k := fun k =>
+    ModuleCat.ofHom (Finsupp.linearCombination ℚ (b k))
+  refine ⟨d, ?_⟩
+  intro k s
+  refine ⟨b k s, ?_, ?_⟩
+  · simp [d]
+  · intro t
+    simp only [b]
+    change Finsupp.applyAddHom t _ = _
+    rw [map_sum]
+    change (∑ v : s.1, Finsupp.single
+      (⟨s.1.erase v.1,
+        K.down_closed s.2.1 (Finset.erase_subset v.1 s.1) (by
+          rw [Finset.nonempty_iff_ne_empty]
+          intro h
+          have hc := Finset.card_erase_of_mem v.2
+          rw [h, Finset.card_empty, s.2.2] at hc
+          omega),
+        by rw [Finset.card_erase_of_mem v.2, s.2.2]; omega⟩ : FaceIndex K k)
+      ((-1 : ℚ) ^ ((s.1.sort o.le).idxOf v.1)) t) = _
+    simp_rw [Finsupp.single_apply]
+    rw [← Finset.sum_attach s.1]
+    apply Finset.sum_congr rfl
+    intro v hv
+    simp only [Subtype.ext_iff]
 
 theorem signedDeletion_sq_zero_aux_generator {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
