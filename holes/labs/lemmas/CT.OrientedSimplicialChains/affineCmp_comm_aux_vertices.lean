@@ -336,7 +336,39 @@ theorem affineCmp_comm_aux_vertices {n k : ℕ} (o : LinearOrder (Euc n))
         (signedDeletion_sq_zero_aux_generator_aux_erase K s
           (faceVertices o s i) (faceVertices_mem o s i)) j =
       faceVertices o s (i.succAbove j) := by
-  sorry
+  classical
+  letI : LinearOrder (Euc n) := o
+  let l := s.1.sort o.le
+  have hli : i.1 < l.length := by simp [l, s.2.2]; omega
+  have herase :
+      (s.1.erase (l.get ⟨i, hli⟩)).sort o.le = l.erase (l.get ⟨i, hli⟩) := by
+    apply List.Perm.eq_of_pairwise' (r := o.le)
+    · exact Finset.pairwise_sort _ _
+    · exact (Finset.pairwise_sort s.1 o.le).erase _
+    · rw [List.perm_ext_iff_of_nodup (Finset.sort_nodup _ _)
+      ((Finset.sort_nodup s.1 o.le).erase _)]
+      intro x
+      rw [(Finset.sort_nodup s.1 o.le).mem_erase_iff]
+      simp [Finset.mem_sort, l]
+  have hnodup : l.Nodup := Finset.sort_nodup _ _
+  simp only [faceVertices, signedDeletion_sq_zero_aux_generator_aux_erase]
+  change ((s.1.erase (l.get ⟨i, hli⟩)).sort o.le).get _ = l.get _
+  have hopt : ((s.1.erase (l.get ⟨i, hli⟩)).sort o.le)[j.1]? =
+      l[(i.succAbove j).1]? := by
+    rw [herase, hnodup.erase_get, List.getElem?_eraseIdx]
+    split_ifs with h
+    · congr 1
+      exact congrArg Fin.val (Fin.succAbove_of_castSucc_lt i j h).symm
+    · congr 1
+      exact congrArg Fin.val
+        (Fin.succAbove_of_le_castSucc i j (Nat.le_of_not_gt h)).symm
+  exact Option.some.inj
+    ((List.getElem?_eq_getElem (by
+        rw [Finset.length_sort, Finset.card_erase_of_mem]
+        · rw [s.2.2]
+          omega
+        · exact (Finset.mem_sort o.le).1 (List.get_mem l ⟨i, hli⟩))).symm.trans
+      (hopt.trans (List.getElem?_eq_getElem (by simp [l, s.2.2]; omega))))
 -- END SEAT AREA
 
 theorem affineCmp_comm_aux_face {n k : ℕ} (o : LinearOrder (Euc n))
