@@ -1003,7 +1003,15 @@ def ConeAdmissible {n k : ℕ} (K' : GSC n) (b : Euc n)
 
 /-- Positive-degree cone-boundary identity.  This is the local sign
 calculation: deletion of `b` gives `x`, while deleting a vertex of `u` has the
-opposite sign from coning that deletion. -/
+opposite sign from coning that deletion.
+Route (claude-14): with `s = insert b u` and `c_u = #{q ∈ u | q <_o b}`, split
+`∑ c ∈ s.attach` as the `b`-term plus `∑ p ∈ u` (`Finset.sum_insert`, after
+transporting `attach`).  `b`-term: `s.erase b = u` and `idx_s b = #{q ∈ s | q <_o b} = c_u`
+(`sort_idxOf_eq_card_lt`), so the sign `(-1)^(c_u + idx_s b) = 1`.  `p`-term:
+`s.erase p = insert b (u.erase p)`; `idx_s p = idx_u p + [b <_o p]` and
+`c_u = c_{u.erase p} + [p <_o b]` (both from `sort_idxOf_eq_card_lt` and
+`Finset.filter_insert`/`filter_erase`), so the exponents differ by `1`
+(`p ≠ b`, `o` total); the cone condition for `u.erase p` holds by `K'.down_closed`. -/
 lemma subdivisionChainMap_commutes_aux_cone_boundary_aux_single {n k : ℕ}
     (o : LinearOrder (Euc n)) (K' : GSC n)
     (dK' : ∀ j, FaceModuleCat K' (j + 1) ⟶ FaceModuleCat K' j)
