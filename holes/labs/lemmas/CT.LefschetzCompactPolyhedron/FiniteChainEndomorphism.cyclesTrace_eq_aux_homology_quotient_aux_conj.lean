@@ -464,6 +464,26 @@ lemma FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient_aux_cycles
       rw [ChainComplex.next_nat_succ]
       rfl
 
+/-- Banked from lemma-1's partial (2026-10-28). Route for H2a: quotient this
+equivalence by the boundaries (`Submodule.Quotient.equiv`; show the boundary
+submodule maps onto `range moduleCatToCycles`), compose with
+`ShortComplex.moduleCatHomologyIso`, and get equivariance from
+`HomologicalComplex.homologyπ_naturality`. -/
+noncomputable def FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient_aux_conj_aux_cyclesEquiv
+    (M : FiniteChainEndomorphism) (k : ℕ) :
+    M.cycles k ≃ₗ[ℚ] LinearMap.ker (M.C.sc k).g.hom := by
+  have hZ : LinearMap.ker (M.C.sc k).g.hom = M.cycles k :=
+    M.cyclesTrace_eq_aux_homology_quotient_aux_cycles k
+  exact
+    { toFun := fun x =>
+        ⟨by simpa using x.1, by simpa using (hZ.symm ▸ x.property)⟩
+      invFun := fun x =>
+        ⟨by simpa using x.1, by simpa using (hZ ▸ x.property)⟩
+      left_inv := fun x => Subtype.ext rfl
+      right_inv := fun x => Subtype.ext rfl
+      map_add' := fun _ _ => Subtype.ext rfl
+      map_smul' := fun _ _ => Subtype.ext rfl }
+
 /-- (H2a) `Z k ⧸ B k` is linearly equivalent to the homology object, and the
 equivalence intertwines the induced endomorphisms (`ShortComplex.moduleCatHomologyIso`
 and its naturality; the cycles identification above matches its kernel). -/
