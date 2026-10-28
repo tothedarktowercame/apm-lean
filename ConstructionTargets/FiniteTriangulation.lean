@@ -197,7 +197,19 @@ theorem wedgeFaces_finite {a b : ℕ}
 /-- (E6) The embeddings are continuous (affine). -/
 theorem wedge_j_continuous {a b : ℕ} (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b)) :
     Continuous (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1 (b := b) v₁) ∧ Continuous (wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2 (a := a) v₂) := by
-  sorry
+  constructor
+  · unfold wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j1
+    apply (PiLp.continuous_toLp 2 _).comp
+    simpa only [Function.comp_apply] using
+      (Fin.continuous_append a b).comp
+        (((PiLp.continuous_ofLp 2 _).comp
+          (continuous_id.sub continuous_const)).prodMk continuous_const)
+  · unfold wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed_aux_j2
+    apply (PiLp.continuous_toLp 2 _).comp
+    simpa only [Function.comp_apply] using
+      (Fin.continuous_append a b).comp
+        (continuous_const.prodMk
+          ((PiLp.continuous_ofLp 2 _).comp (continuous_id.sub continuous_const)))
 
 /-- (G1) Two finite complexes glued at one vertex each: translate the marked
 vertices to the origin and place the complexes in the two factors of
