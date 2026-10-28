@@ -116,7 +116,51 @@ theorem apm_t02A04_compatibleOpenCover :
 /-- The concrete quotient is path-connected. -/
 -- BEGIN SEAT AREA
 theorem apm_t02A04_pathConnected : PathConnectedSpace apm_t02a04_X := by
-  sorry
+  let f : ConstructionTargets.AttachTwoCell.Cell apm_t02A04_attachingCurve →
+      apm_t02a04_X :=
+    Quotient.lift
+      (fun x ↦ Quotient.mk (Relation.EqvGen.setoid apm_t02a04_Glue) x)
+      (by
+        intro x y hxy
+        apply Quotient.sound
+        induction hxy with
+        | rel a b hab =>
+          cases hab with
+          | boundary z =>
+            exact Relation.EqvGen.symm _ _
+              (Relation.EqvGen.rel _ _ (apm_t02a04_Glue.boundary z))
+        | refl a => exact Relation.EqvGen.refl a
+        | symm a b _ ih => exact Relation.EqvGen.symm _ _ ih
+        | trans a b c _ _ ih₁ ih₂ =>
+          exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+  have hf : Continuous f := by
+    apply Continuous.quotient_lift continuous_coinduced_rng
+  have hsurj : Function.Surjective f := by
+    intro x
+    refine Quotient.inductionOn x ?_
+    intro a
+    exact ⟨Quotient.mk _ a, rfl⟩
+  letI : PathConnectedSpace apm_t02a04_Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+          isPathConnected_univ
+      simpa using h)
+  letI : PathConnectedSpace apm_t02a04_SolidTorus := by
+    refine ⟨⟨(Classical.choice (inferInstance : Nonempty apm_t02a04_Disk),
+      Classical.choice (inferInstance : Nonempty Circle))⟩, ?_⟩
+    intro x y
+    exact ⟨(PathConnectedSpace.somePath x.1 y.1).prod
+      (PathConnectedSpace.somePath x.2 y.2)⟩
+  letI : PathConnectedSpace
+      (ConstructionTargets.AttachTwoCell.Cell apm_t02A04_attachingCurve) :=
+    ConstructionTargets.AttachTwoCell.cell_pc apm_t02A04_attachingCurve
+  exact hsurj.pathConnectedSpace hf
 -- END SEAT AREA
 
 /-- In rational `H₁`, the attaching loop has invertible degree two. -/
