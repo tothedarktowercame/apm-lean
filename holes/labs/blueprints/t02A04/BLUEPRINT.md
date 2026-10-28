@@ -118,26 +118,60 @@ the sole `Q` summand in degree zero and zero maps on zero higher groups, so
 both give Lefschetz number `1`.  The calculation has no parity or sign term
 outside degree zero.
 
-### `apm_t02A04_hasFiniteVertexTriangulation` — LIBRARY, 500–900 lines
+### Split of `apm_t02A04_hasFiniteVertexTriangulation`
 
-Triangulate a polygonal disk and circle, take a prism subdivision of their
-product, and subdivide the attached disk and boundary circles so that the
-degree-two map `z ↦ (z,z²)` is simplicial.  Glue the finite abstract complexes,
-realize their vertices by standard basis vectors, and descend the quotient map.
-Use `apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve`,
-`apm_t02a04_gluedDesc`, and `Continuous.homeoOfEquivCompactToT2`.  The disk
-centre is retained as a marked vertex.  This is independent of every homology
-leaf and is the one intentionally retained concrete LIBRARY foundation.
+The old 500–900 line LIBRARY leaf is now a sorry-free compact-to-Hausdorff
+assembly, following `RealProjectivePlaneTriangulation`.  Its construction is
+split at the concrete polygon/prism/cone/quotient boundaries.
 
-C1 compatible subdivision makes the degree-two attaching map simplicial; C2
-the marked-triangulation conclusion is not assumed; C3 this is the concrete
-triangulation program (marked LIBRARY because it exceeds one seat); C4 both
-solid torus and disk are covered; C5 the quotient compatibility is the named
-boundary equality; C6 it uses the registered quotient verbatim; C7 compact
-source and the quotient's Hausdorff property justify the homeomorphism, whose
-target has the Euclidean subspace topology; C8 the disk centre is an interior
-vertex and the boundary degree-two map has a subdivision with two distinct
-preimage arcs; C9 it strengthens rather than repeats the old adapter; C10 exact.
+| leaf | claim and proof target | estimate | independence / building-on |
+|---|---|---:|---|
+| `apm_t02A04_gluingSetoid_isClosed` | The generated gluing equivalence relation is closed.  Expand its classes: diagonal plus the graph and converse graph of the boundary embedding; use `isClosed_diagonal`, compactness of `Circle`, and closed images into a Hausdorff sum. | 80–140 | independent |
+| `apm_t02A04_doublingCircle_subdivision` | Six distinct source points and three distinct target points on `Circle`, with the exact equation `source i ^ 2 = target (i % 3)`.  Use roots of unity at angles `kπ/3`, `Complex.ext`, and trigonometric periodicity. | 40–80 | independent |
+| `apm_t02A04_solidTorus_prism_model` | Cone the six-gon for `D²`, take its product with the triangle for `S¹`, and staircase-subdivide each triangular prism; output a homeomorphism to the actual solid torus whose six named vertices map exactly to `(source i, source i ^ 2)`.  Use `Geometry.SimplicialComplex.ofErase` and coordinate-support affine independence. | 100–150 | receives the circle data explicitly |
+| `apm_t02A04_attachedDisk_cone_model` | Cone the source six-gon; output a homeomorphism to the actual disk sending the boundary vertices to `source i` and the marked cone point to zero.  Use `Geometry.SimplicialComplex.ofErase` and standard-basis support calculations. | 60–110 | receives the circle data explicitly; parallel with prism |
+| `apm_t02A04_quotientComplex_model` | Identify the two six-vertex subcomplexes, realize the finite pushout in standard coordinates, and define the piecewise-affine map onto the registered quotient; prove finiteness, marked-vertex equation, continuity, and bijectivity.  Use `apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve`, `apm_t02a04_gluedDesc`, `continuousOn_iff_continuous_restrict`, and `Quotient.eq'`. | 140–200, LIBRARY | receives all three concrete piece witnesses; this is the only sequential construction leaf |
+
+`apm_t02A04_t2Space` is a proved adapter (not a leaf): from the closed-relation
+leaf it calls `ConstructionTargets.compact_closed_equivalence_quotient_t2`.
+The final assembly calls
+`RealProjectivePlaneTriangulation.finite_simplicialComplex_space_isCompact`
+and `Continuous.homeoOfEquivCompactToT2`, then reverses the homeomorphism and
+checks the marked point by injectivity.
+
+**C1–C10 checks.**
+
+* `gluingSetoid_isClosed`: C1 classes have size one off the two boundary
+  copies and size two on them; C2 closedness is not Hausdorffness; C3 only the
+  point-set calculation; C4 the EqvGen expansion includes diagonal, graph,
+  converse; C5 exactly the setoid used by `X`; C6 no stronger quotient; C7 the
+  topology is the registered coinduced topology; C8 the boundary is nonempty
+  and has no exceptional points; C9 not the triangulation ancestor; C10 exact.
+* `doublingCircle_subdivision`: C1 six source angles map in pairs to three
+  target angles; C2 actual finite sets and map are produced; C3 only the
+  one-dimensional subdivision; C4 surjectivity covers every target vertex;
+  C5 the map is explicit data consumed by both pieces; C6 degree is exactly
+  two; C7 cards are natural numbers; C8 `N=3`, so no one- or two-gon
+  degeneration; C9 not the ancestor; C10 exact.
+* `solidTorus_prism_model`: C1 the disk factor makes the first coordinate of
+  the attaching curve injective; C2 it produces a complex, not its desired
+  quotient; C3 only the solid-torus piece; C4 all prisms are subdivided; C5
+  exposes six curve vertices; C6 models `D²×S¹`; C7 finite faces; C8 the cone
+  centre and boundary prisms are included; C9 not the ancestor; C10 exact.
+* `attachedDisk_cone_model`: C1 a six-gon cone is a disk; C2 centre and
+  boundary are computed; C3 only the disk; C4 all six sectors occur; C5 the
+  boundary has the matching cardinality; C6 models the attached disk; C7
+  singleton means a geometric vertex; C8 centre is explicitly off boundary;
+  C9 not the ancestor; C10 exact.
+* `quotientComplex_model`: C1 the six boundary vertices are identified with
+  six distinct curve vertices (the first coordinate prevents collisions);
+  C2 no conclusion is assumed; C3 the piece triangulations are supplied, so
+  this leaf only glues and verifies the map; C4 covers both quotient summands;
+  C5 outputs exactly the map used by the assembly; C6 target is the registered
+  `apm_t02a04_X`; C7 continuity is piecewise and respects the boundary; C8 the
+  centre is not glued and remains marked; C9 strictly below the ancestor; C10
+  exact.  This leaf is marked LIBRARY because Mathlib has no ready-made finite
+  geometric-complex pushout theorem and the estimate reaches 200 lines.
 
 ### `apm_t02A04_isFinitePolyhedron` — assembled
 
@@ -173,21 +207,18 @@ and one attached 2-cell after retracting the solid torus.
 
 ## Dependency layers
 
-* **Layer 1 (parallel):** the seven rational-homology leaves in the table;
-  `apm_t02A04_hasFiniteVertexTriangulation`;
-  `apm_t02A04_lefschetz_number` (already proved, taking their assembled
-  conclusion as a hypothesis); and `apm_t02A04_fixed_point_of_lefschetz`
-  (LIBRARY, taking the Lefschetz-number conclusion as a hypothesis).
-* **Layer 2:** the sorry-free `apm_t02A04_rational_homology` assembles its
-  seven leaves.
-* **Layer 3:** the byte-identical theorem `apm_t02a04` applies the homology,
-  Lefschetz-number, and fixed-point results.
+* **Layer 1 (parallel):** `gluingSetoid_isClosed` and
+  `doublingCircle_subdivision`.
+* **Layer 2 (parallel once circle data is supplied):**
+  `solidTorus_prism_model` and `attachedDisk_cone_model`.
+* **Layer 3:** `quotientComplex_model` receives all three concrete witnesses.
+* **Layer 4:** the sorry-free `hasFiniteVertexTriangulation` assembly upgrades
+  its continuous bijection to a homeomorphism.  The byte-identical theorem
+  `apm_t02a04` then uses the already assembled homology and Lefschetz results.
 
-There are **eight open lemmas**: seven ordinary independent homology leaves
-and the unchanged fixed-point LIBRARY lemma.  I have no mathematical doubt
-about their statements.  The substantial remaining implementation risk is
-the shared Lefschetz foundation, which the topology audit estimates at months
-rather than one ordinary lemma session.
+There are **five new open lemmas** in this split.  The quotient-complex leaf is
+the sole remaining LIBRARY item; the risk is the absence of a ready-made
+geometric simplicial-complex pushout API, not a missing topological theorem.
 
 ## Compilation and axioms
 
@@ -203,6 +234,10 @@ The final output of `#print axioms apm_t02a04` was:
 'apm_t02a04' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The eight `sorry` warnings are exactly the seven new homology leaves and the
-unchanged `apm_t02A04_fixed_point_of_lefschetz`; both the rational-homology
-assembly and the main theorem contain no `sorry`.
+The five `sorry` warnings are exactly the five construction leaves listed
+above.  The Hausdorff adapter, triangulation assembly, finite-polyhedron
+adapter, and main theorem contain no `sorry`.
+
+### Review fix to the triangulation split (claude-14, 2026-10-28)
+
+`SolidPrismModel` and `DiskConeModel` fixed only the six vertices, so `apm_t02A04_quotientComplex_model` (glue along the curve) could not use them: the disk's boundary edges and the attaching curve need not run along matching edges. Both now carry `*_edge` (consecutive vertices span an edge) and `*_affine` (the curve `(z, z²)`, resp. the boundary circle, is the straight segment between consecutive vertices at the same parameter `t` of `apm_t02A04_arcPoint i t = exp(2πi(i+t)/6)`); `CircleSubdivision.source_eq` pins the vertices to `arcPoint i 0`. True: the homeomorphisms are ours to choose, so they can send each straight edge to its arc at the arc parameter. The glue then identifies `(1-t)b_i + t b_{i+1}` with `(1-t)c_i + t c_{i+1}`, which is the attaching relation.
