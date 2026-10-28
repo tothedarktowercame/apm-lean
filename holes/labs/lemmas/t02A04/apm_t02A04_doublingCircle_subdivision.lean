@@ -1008,9 +1008,58 @@ structure apm_t02A04_CircleSubdivision where
   source_eq : ∀ i, source i = apm_t02A04_arcPoint i 0
 
 -- BEGIN SEAT AREA
+lemma apm_t02A04_doublingCircle_subdivision_aux_injective (n : ℕ) (hn : n ≤ 6) :
+    Function.Injective (fun i : Fin n ↦ apm_t02A04_arcPoint ⟨i.1, lt_of_lt_of_le i.2 hn⟩ 0) := by
+  intro i j hij
+  dsimp [apm_t02A04_arcPoint] at hij
+  rw [Circle.exp_eq_exp] at hij
+  obtain ⟨m, hm⟩ := hij
+  have hp : Real.pi ≠ 0 := ne_of_gt Real.pi_pos
+  have hm' : (i.1 : ℤ) = (j.1 : ℤ) + m * 6 := by
+    apply_mod_cast (show (i.1 : ℝ) = (j.1 : ℝ) + (m : ℝ) * 6 from ?_)
+    field_simp [hp] at hm ⊢
+    linarith
+  apply Fin.ext
+  omega
+
+lemma apm_t02A04_doublingCircle_subdivision_aux_target_injective :
+    Function.Injective (fun i : Fin 3 ↦
+      apm_t02A04_arcPoint ⟨2 * i.1, by omega⟩ 0) := by
+  intro i j hij
+  dsimp [apm_t02A04_arcPoint] at hij
+  rw [Circle.exp_eq_exp] at hij
+  obtain ⟨m, hm⟩ := hij
+  have hp : Real.pi ≠ 0 := ne_of_gt Real.pi_pos
+  have hm' : (2 * i.1 : ℤ) = 2 * j.1 + m * 6 := by
+    have hr : (2 * i.1 : ℝ) = 2 * j.1 + (m : ℝ) * 6 := by
+      field_simp [hp] at hm
+      norm_num [Nat.cast_mul] at hm
+      linarith
+    exact_mod_cast hr
+  apply Fin.ext
+  omega
+
 theorem apm_t02A04_doublingCircle_subdivision :
     Nonempty apm_t02A04_CircleSubdivision := by
-  sorry
+  let source : Fin 6 → Circle := fun i ↦ apm_t02A04_arcPoint i 0
+  let target : Fin 3 → Circle := fun i ↦
+    apm_t02A04_arcPoint ⟨2 * i.1, by omega⟩ 0
+  refine ⟨⟨source, target, ?_, ?_, ?_, ?_⟩⟩
+  · exact apm_t02A04_doublingCircle_subdivision_aux_injective 6 (by omega)
+  · exact apm_t02A04_doublingCircle_subdivision_aux_target_injective
+  · intro i
+    fin_cases i <;>
+      dsimp [source, target, apm_t02A04_arcPoint] <;>
+      rw [← Circle.exp_natCast_mul] <;>
+      apply Circle.exp_eq_exp.mpr
+    · exact ⟨0, by ring⟩
+    · exact ⟨0, by ring⟩
+    · exact ⟨0, by ring⟩
+    · exact ⟨1, by ring⟩
+    · exact ⟨1, by ring⟩
+    · exact ⟨1, by ring⟩
+  · intro i
+    rfl
 -- END SEAT AREA
 
 /-- A finite prism triangulation of the solid torus in which all six points of
