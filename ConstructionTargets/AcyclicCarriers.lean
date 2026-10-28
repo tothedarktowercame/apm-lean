@@ -173,6 +173,32 @@ def SubsetCarriedChain (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
     z = ∑ i, (CoefficientH0.singularGenerator ℚ _ k (σ i)) (a i) ∧
     ∀ i, Set.range (continuousMapOfSingularSimplex k (σ i)) ⊆ A
 
+/-- Pushforward of singular chains along the inclusion of a subset. -/
+noncomputable abbrev subsetPush (X : Type) [TopologicalSpace X] (A : Set X) :
+    CoefficientH0.SingularChains ℚ (TopCat.of A) ⟶ CoefficientH0.SingularChains ℚ (TopCat.of X) :=
+  ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℚ)).obj (ModuleCat.of ℚ ℚ)).map
+    (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
+
+/-- (FB-b1) A carried chain lifts to a chain of the subspace (each simplex
+lands in `A`). -/
+theorem subsetPush_lift (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
+    (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
+    (hz : SubsetCarriedChain X A z) :
+    ∃ z' : (CoefficientH0.SingularChains ℚ (TopCat.of A)).X k, (subsetPush X A).f k z' = z := by
+  sorry
+
+/-- (FB-b2) Pushforward along a subspace inclusion is injective on chains (it
+is injective on singular simplices, and chains are free on simplices). -/
+theorem subsetPush_injective (X : Type) [TopologicalSpace X] (A : Set X) (k : ℕ) :
+    Function.Injective ((subsetPush X A).f k) := by
+  sorry
+
+/-- (FB-b3) Pushforwards of subspace chains are carried. -/
+theorem subsetPush_carried (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
+    (w : (CoefficientH0.SingularChains ℚ (TopCat.of A)).X k) :
+    SubsetCarriedChain X A ((subsetPush X A).f k w) := by
+  sorry
+
 /-- (FB-b) Generic filling: in a rationally pointlike subset `A`, a carried
 positive-degree cycle bounds a carried chain.  Route: a carried chain is the
 pushforward of a chain of the subspace `A` (lift each simplex, which lands in
@@ -188,7 +214,24 @@ theorem subsetCarriedCycle_bounds (X : Type) [TopologicalSpace X] (A : Set X)
     ∃ w : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X (k + 1),
       SubsetCarriedChain X A w ∧
         (CoefficientH0.SingularChains ℚ (TopCat.of X)).d (k + 1) k w = z := by
-  sorry
+  obtain ⟨j, rfl⟩ : ∃ j, k = j + 1 := ⟨k - 1, by omega⟩
+  obtain ⟨z', hz'⟩ := subsetPush_lift X A z hz
+  have hcyc' : (CoefficientH0.SingularChains ℚ (TopCat.of A)).d (j + 1) j z' = 0 := by
+    apply subsetPush_injective X A j
+    have h := congrArg (fun g => g z') ((subsetPush X A).comm (j + 1) j)
+    simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at h
+    rw [map_zero, ← h, hz']
+    simpa using hcycle
+  obtain ⟨x, hx⟩ := faceCarriedCycle_bounds_aux_cycle_lift _ j z' hcyc'
+  have hπ : (CoefficientH0.SingularChains ℚ (TopCat.of A)).homologyπ (j + 1) x = 0 :=
+    haveI : Subsingleton ((CoefficientH0.SingularChains ℚ (TopCat.of A)).homology (j + 1)) :=
+      ModuleCat.subsingleton_of_isZero (hA.2 (j + 1) (by omega))
+    Subsingleton.elim _ _
+  obtain ⟨b, hb⟩ := faceCarriedCycle_bounds_aux_exists_boundary _ (j + 1) x hπ
+  refine ⟨(subsetPush X A).f (j + 2) b, subsetPush_carried X A b, ?_⟩
+  have h := congrArg (fun g => g b) ((subsetPush X A).comm (j + 2) (j + 1))
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at h
+  erw [h, hb, hx, hz']
 
 /-- (FB-a) The preimage of a face hull in `K.space` is homeomorphic to the hull
 (the hull lies in `K.space`), so it is rationally pointlike too. -/
