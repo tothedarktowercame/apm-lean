@@ -956,7 +956,58 @@ lemma barycentricSubdivision_space_aux_superset_aux_flag_decomposition_aux_core 
       (∀ s ∈ c, s.Nonempty ∧ s ⊆ t) ∧
       (∀ s ∈ c, ∀ u ∈ c, s ≠ u → s ⊂ u ∨ u ⊂ s) ∧ c.Nonempty ∧
       x ∈ convexHull ℝ ((c.image barycenter : Finset (Euc n)) : Set (Euc n)) := by
-  sorry
+  classical
+  induction t using Finset.strongInduction generalizing x with
+  | H t ih =>
+    by_cases hxb : x = barycenter t
+    · refine ⟨{t}, ?_, ?_, Finset.singleton_nonempty t, ?_⟩
+      · intro s hs
+        have hst : s = t := by simpa using hs
+        subst s
+        refine ⟨?_, Finset.Subset.rfl⟩
+        by_contra ht0
+        have ht : t = ∅ := Finset.not_nonempty_iff_eq_empty.mp ht0
+        subst t
+        simpa using hxt
+      · intro s hs u hu hsu
+        have hst : s = t := by simpa using hs
+        have hut : u = t := by simpa using hu
+        exact (hsu (hst.trans hut.symm)).elim
+      · subst x
+        apply subset_convexHull ℝ
+        simp
+    · obtain ⟨v, hv, y, hy, hxy⟩ := hF1 t x hxt hxb
+      obtain ⟨c, hcsub, hcchain, hcne, hyc⟩ :=
+        ih (t.erase v) (t.erase_ssubset hv) y hy
+      refine ⟨insert t c, ?_, ?_, Finset.insert_nonempty t c, ?_⟩
+      · intro s hs
+        simp only [Finset.mem_insert] at hs
+        rcases hs with hs | hs
+        · rw [hs]
+          exact ⟨⟨v, hv⟩, Finset.Subset.rfl⟩
+        · exact ⟨(hcsub s hs).1, (hcsub s hs).2.trans (Finset.erase_subset v t)⟩
+      · intro s hs u hu hsu
+        simp only [Finset.mem_insert] at hs hu
+        rcases hs with hs | hs
+        · rcases hu with hu | hu
+          · exact (hsu (hs.trans hu.symm)).elim
+          · right
+            rw [hs]
+            exact (hcsub u hu).2.trans_ssubset (t.erase_ssubset hv)
+        · rcases hu with hu | hu
+          · left
+            rw [hu]
+            exact (hcsub s hs).2.trans_ssubset (t.erase_ssubset hv)
+          · exact hcchain s hs u hu hsu
+      · apply (convex_convexHull ℝ _).segment_subset
+        · apply subset_convexHull ℝ
+          exact Finset.mem_image.mpr ⟨t, Finset.mem_insert_self t c, rfl⟩
+        · apply convexHull_mono _ hyc
+          intro z hz
+          simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe] at hz ⊢
+          obtain ⟨s, hs, rfl⟩ := hz
+          exact ⟨s, Finset.mem_insert_of_mem hs, rfl⟩
+        · exact hxy
 
 lemma barycentricSubdivision_space_aux_superset_aux_flag_decomposition {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
