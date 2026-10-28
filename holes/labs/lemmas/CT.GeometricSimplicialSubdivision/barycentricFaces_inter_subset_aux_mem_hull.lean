@@ -88,7 +88,10 @@ theorem barycentricFaces_inter_subset_aux_mem_hull {n : ℕ}
     (hw : ∀ s ∈ c, 0 ≤ w s) (hs : ∑ s ∈ c, w s = 1) :
     ∑ s ∈ c, w s • barycenter s ∈
       convexHull ℝ ((c.image barycenter : Finset (Euc n)) : Set (Euc n)) := by
-  sorry
+  refine (convex_convexHull ℝ _).sum_mem hw hs ?_
+  intro s hs
+  apply subset_convexHull ℝ _
+  exact Finset.mem_coe.mpr (Finset.mem_image.mpr ⟨s, hs, rfl⟩)
 -- END SEAT AREA
 
 /-- The common barycentric coordinates of two chain simplices are supported on
