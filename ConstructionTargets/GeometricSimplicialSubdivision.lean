@@ -896,7 +896,79 @@ theorem barycentricSubdivision_mesh_aux_chain_bound {n d : ℕ}
       dist x y ≤ (d / (d + 1 : ℝ)) *
         sSup {r : ℝ | ∃ s ∈ K.faces,
           r = Metric.diam (convexHull ℝ (s : Set (Euc n)))} := by
-  sorry
+  classical
+  intro x hx y hy
+  obtain ⟨s, hs, rfl⟩ := Finset.mem_image.mp hx
+  obtain ⟨t, ht, rfl⟩ := Finset.mem_image.mp hy
+  let A : Set ℝ := {r : ℝ | ∃ u ∈ K.faces,
+    r = Metric.diam (convexHull ℝ (u : Set (Euc n)))}
+  have hAfin : A.Finite := by
+    have him : A = (fun u : Finset (Euc n) =>
+        Metric.diam (convexHull ℝ (u : Set (Euc n)))) '' K.faces := by
+      ext r
+      constructor
+      · rintro ⟨u, hu, rfl⟩
+        exact ⟨u, hu, rfl⟩
+      · rintro ⟨u, hu, rfl⟩
+        exact ⟨u, hu, rfl⟩
+    rw [him]
+    exact hK.image _
+  have hAbdd : BddAbove A := hAfin.bddAbove
+  have hcoef (u : Finset (Euc n)) (hu : u ∈ K.faces) (hune : u.Nonempty) :
+      ((u.card - 1 : ℝ) / u.card) ≤ d / (d + 1 : ℝ) := by
+    have hcardpos : (0 : ℝ) < u.card := by
+      exact_mod_cast Finset.card_pos.mpr hune
+    have hdpos : (0 : ℝ) < d + 1 := by positivity
+    have hle : (u.card : ℝ) ≤ d + 1 := by
+      exact_mod_cast hdim u hu
+    apply (div_le_div_iff₀ hcardpos hdpos).2
+    nlinarith
+  have hbaryHull (u v : Finset (Euc n)) (hune : u.Nonempty) (huv : u ⊆ v) :
+      barycenter u ∈ convexHull ℝ (v : Set (Euc n)) := by
+    apply convexHull_mono (by simpa using huv)
+    apply Finset.centerMass_id_mem_convexHull
+    · intro z hz
+      positivity
+    · simpa using (Finset.card_pos.mpr hune : 0 < u.card)
+  have hdiam (u : Finset (Euc n)) (hu : u ∈ K.faces) :
+      Metric.diam (convexHull ℝ (u : Set (Euc n))) ≤ sSup A := by
+    apply le_csSup hAbdd
+    exact ⟨u, hu, rfl⟩
+  by_cases hst : s = t
+  · subst t
+    simp
+    exact mul_nonneg (div_nonneg (Nat.cast_nonneg d) (by positivity))
+      (Real.sSup_nonneg fun r hr => by
+        obtain ⟨u, hu, rfl⟩ := hr
+        exact Metric.diam_nonneg)
+  rcases hc.2 s hs t ht hst with hsub | hsub
+  · have htK := hc.1 t ht
+    have htne := barycentricFaces_affineIndependent_aux_chain_nonempty K c hc t ht
+    calc
+      dist (barycenter s) (barycenter t) ≤
+          ((t.card - 1 : ℝ) / t.card) *
+            Metric.diam (convexHull ℝ (t : Set (Euc n))) :=
+        hM1 t htne (barycenter s)
+          (hbaryHull s t
+            (barycentricFaces_affineIndependent_aux_chain_nonempty K c hc s hs)
+            hsub.subset)
+      _ ≤ (d / (d + 1 : ℝ)) * sSup A :=
+        mul_le_mul (hcoef t htK htne) (hdiam t htK) Metric.diam_nonneg
+          (div_nonneg (Nat.cast_nonneg d) (by positivity))
+  · have hsK := hc.1 s hs
+    have hsne := barycentricFaces_affineIndependent_aux_chain_nonempty K c hc s hs
+    rw [dist_comm]
+    calc
+      dist (barycenter t) (barycenter s) ≤
+          ((s.card - 1 : ℝ) / s.card) *
+            Metric.diam (convexHull ℝ (s : Set (Euc n))) :=
+        hM1 s hsne (barycenter t)
+          (hbaryHull t s
+            (barycentricFaces_affineIndependent_aux_chain_nonempty K c hc t ht)
+            hsub.subset)
+      _ ≤ (d / (d + 1 : ℝ)) * sSup A :=
+        mul_le_mul (hcoef s hsK hsne) (hdiam s hsK) Metric.diam_nonneg
+          (div_nonneg (Nat.cast_nonneg d) (by positivity))
 
 /-- Hatcher's mesh estimate for one barycentric subdivision. -/
 theorem barycentricSubdivision_mesh {n d : ℕ}
