@@ -17,11 +17,16 @@ abbrev GSC (n : ℕ) := Geometry.SimplicialComplex ℝ (Euc n)
 /-- The parity of the inversions created by applying `h` to the increasing
 vertices of `s`.  This definition is meaningful even when `h` has collisions;
 the vertex-chain specification uses it only in the injective case. -/
+/- claude-14 fix 2026-10-28 (from lemma-3's sign leaf): the inversion test used
+`>` on `Euc m`, which resolves to the POINTWISE partial order of EuclideanSpace,
+not `om`; pointwise-incomparable images were never counted, so this was not the
+sign of the sorting permutation. It now compares with `om` explicitly. -/
 def sortingSign {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (Euc m))
     (s : Finset (Euc n)) (h : Euc n → Euc m) : ℚ :=
   (-1 : ℚ) ^ ((Finset.univ.filter fun ij : Fin s.card × Fin s.card =>
     ij.1 < ij.2 ∧
-      h ((s.1.sort on.le).getD ij.1 0) > h ((s.1.sort on.le).getD ij.2 0)).card)
+      @LT.lt (Euc m) om.toLT (h ((s.1.sort on.le).getD ij.2 0))
+        (h ((s.1.sort on.le).getD ij.1 0))).card)
 
 /-- Generator formula for the ordered-face map of a simplicial vertex map.
 It is zero on a collapsed face and otherwise is the image face with sorting sign. -/
