@@ -191,10 +191,40 @@ theorem elemInv_erase {n m : ℕ} (on : LinearOrder (Euc n)) (om : LinearOrder (
 open scoped Classical in
 /-- (P2) Position in the sorted list = number of smaller elements. -/
 -- BEGIN SEAT AREA
+theorem sort_idxOf_eq_card_lt_aux {α : Type*} [DecidableEq α] (o : LinearOrder α)
+    (l : List α) (v : α) (hv : v ∈ l) (hs : l.Pairwise o.le) (hn : l.Nodup) :
+    l.idxOf v = (l.toFinset.filter (fun x => o.lt x v)).card := by
+  letI := o
+  induction l with
+  | nil => simp at hv
+  | cons x l ih =>
+      simp only [List.mem_cons] at hv
+      rcases hv with rfl | hv
+      · have hnot : ∀ y ∈ l, ¬y < v := by
+          intro y hy hyx
+          exact (not_lt_of_ge (hs.rel_head_tail hy)) hyx
+        have hf : l.toFinset.filter (fun y => y < v) = ∅ := by
+          apply Finset.eq_empty_iff_forall_notMem.mpr
+          intro y hy
+          simp only [Finset.mem_filter, List.mem_toFinset] at hy
+          exact hnot y hy.1 hy.2
+        rw [List.idxOf_cons_self, List.toFinset_cons, Finset.filter_insert]
+        simp [hf]
+      · have hxl : x ≤ v := hs.rel_head_tail hv
+        have hxv : x < v := lt_of_le_of_ne hxl (hn.rel_head_tail hv)
+        rw [List.idxOf_cons_ne l (ne_of_lt hxv)]
+        simp only [List.toFinset_cons, Finset.filter_insert, hxv, if_true]
+        rw [Finset.card_insert_of_notMem]
+        · simp [ih hv hs.tail hn.tail]
+        · intro hx
+          simp only [Finset.mem_filter, List.mem_toFinset] at hx
+          exact (hn.rel_head_tail hx.1) rfl
+
 theorem sort_idxOf_eq_card_lt {n : ℕ} (on : LinearOrder (Euc n))
     (a : Finset (Euc n)) (v : Euc n) (hv : v ∈ a) :
     (a.sort on.le).idxOf v = (a.filter (fun u => @LT.lt (Euc n) on.toLT u v)).card := by
-  sorry
+  simpa using sort_idxOf_eq_card_lt_aux on (a.sort on.le) v (by simpa using hv)
+    (a.pairwise_sort on.le) (a.sort_nodup on.le)
 -- END SEAT AREA
 
 open scoped Classical in
