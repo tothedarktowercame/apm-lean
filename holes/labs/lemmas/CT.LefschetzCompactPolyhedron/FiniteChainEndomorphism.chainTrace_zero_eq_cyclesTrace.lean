@@ -309,7 +309,14 @@ end FiniteChainEndomorphism
 -- BEGIN SEAT AREA
 theorem FiniteChainEndomorphism.chainTrace_zero_eq_cyclesTrace
     (M : FiniteChainEndomorphism) : M.chainTrace 0 = M.cyclesTrace 0 := by
-  sorry
+  letI := M.finiteChain 0
+  unfold FiniteChainEndomorphism.chainTrace FiniteChainEndomorphism.cyclesTrace
+  symm
+  apply LinearMap.trace_restrict_eq_of_forall_mem
+  intro x
+  change (M.C.d 0 0).hom ((M.φ.f 0).hom x) = 0
+  rw [M.C.shape 0 0 (by simp [ComplexShape.down, ComplexShape.down'])]
+  rfl
 -- END SEAT AREA
 
 /-- (A) In degree `k + 1`, the chain trace splits into the trace on cycles and

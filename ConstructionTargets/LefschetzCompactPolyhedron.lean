@@ -308,7 +308,14 @@ end FiniteChainEndomorphism
 `d 0 0` is zero by the shape of a `ℕ`-indexed chain complex). -/
 theorem FiniteChainEndomorphism.chainTrace_zero_eq_cyclesTrace
     (M : FiniteChainEndomorphism) : M.chainTrace 0 = M.cyclesTrace 0 := by
-  sorry
+  letI := M.finiteChain 0
+  unfold FiniteChainEndomorphism.chainTrace FiniteChainEndomorphism.cyclesTrace
+  symm
+  apply LinearMap.trace_restrict_eq_of_forall_mem
+  intro x
+  change (M.C.d 0 0).hom ((M.φ.f 0).hom x) = 0
+  rw [M.C.shape 0 0 (by simp [ComplexShape.down, ComplexShape.down'])]
+  rfl
 
 /-- (A) In degree `k + 1`, the chain trace splits into the trace on cycles and
 the trace on the boundaries one degree down: `X (k+1) ⧸ Z (k+1) ≅ B k`
