@@ -199,6 +199,70 @@ theorem barycentricFaces_inter_subset_aux_positive_subchain {n : ℕ}
       apply Subtype.ext
       simpa only [hr_eq] using congrArg barycenter heq
 
+lemma barycentricFaces_inter_subset_aux_chain_unique_aux_nonempty
+    {n : ℕ} (c : Finset (Finset (Euc n))) (w : Finset (Euc n) → ℝ)
+    (hs : ∑ s ∈ c, w s = 1) : c.Nonempty := by
+  by_contra hc
+  rw [Finset.not_nonempty_iff_eq_empty.mp hc] at hs
+  simp at hs
+
+lemma barycentricFaces_inter_subset_aux_chain_unique_aux_top
+    {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c)
+    (hne : c.Nonempty) :
+    ∃ t ∈ c, ∀ s ∈ c, s ⊆ t := by
+  classical
+  obtain ⟨t, ht, hcard⟩ := Finset.exists_max_image c Finset.card hne
+  refine ⟨t, ht, ?_⟩
+  intro s hs
+  by_cases hst : s = t
+  · simpa [hst]
+  · rcases hc.2 s hs t ht hst with hsub | hsup
+    · exact hsub.subset
+    · exact False.elim ((Nat.not_lt_of_ge (hcard s hs)) (Finset.card_lt_card hsup))
+
+/-- (U2) A positive-weight combination of the barycenters of a strict chain lies
+in the closed hull of the chain's top face `t` and in no facet `t.erase v`
+(every vertex of `t` gets positive barycentric weight from `barycenter t`). -/
+theorem barycentricFaces_inter_subset_aux_chain_unique_aux_relint {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c)
+    (t : Finset (Euc n)) (ht : t ∈ c) (htop : ∀ s ∈ c, s ⊆ t)
+    (w : Finset (Euc n) → ℝ) (hw : ∀ s ∈ c, 0 < w s) (hs : ∑ s ∈ c, w s = 1) :
+    ∑ s ∈ c, w s • barycenter s ∈ convexHull ℝ (t : Set (Euc n)) ∧
+      ∀ v ∈ t, ∑ s ∈ c, w s • barycenter s ∉
+        convexHull ℝ ((t.erase v : Finset (Euc n)) : Set (Euc n)) := by
+  sorry
+
+/-- (U1) Two faces of `K` whose relative interiors share a point are equal
+(intersection axiom: the point lies in the hull of `t₀ ∩ t₁`, a face of both,
+which must then be all of each). -/
+theorem barycentricFaces_inter_subset_aux_chain_unique_aux_carrier {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) {t₀ t₁ : Finset (Euc n)}
+    (ht₀ : t₀ ∈ K.faces) (ht₁ : t₁ ∈ K.faces) (x : Euc n)
+    (hx₀ : x ∈ convexHull ℝ (t₀ : Set (Euc n)))
+    (hx₁ : x ∈ convexHull ℝ (t₁ : Set (Euc n)))
+    (hi₀ : ∀ v ∈ t₀, x ∉ convexHull ℝ ((t₀.erase v : Finset (Euc n)) : Set (Euc n)))
+    (hi₁ : ∀ v ∈ t₁, x ∉ convexHull ℝ ((t₁.erase v : Finset (Euc n)) : Set (Euc n))) :
+    t₀ = t₁ := by
+  sorry
+
+/-- (U3) Inside one face `t` of `K`, a point determines the strict chain that
+represents it with positive weights: its barycentric coordinate on `v ∈ t` is
+`∑_{s ∋ v} w s / |s|`, a step function whose superlevel sets are the faces. -/
+theorem barycentricFaces_inter_subset_aux_chain_unique_aux_within {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (c₀ c₁ : Finset (Finset (Euc n)))
+    (h₀ : IsStrictFaceChain K c₀) (h₁ : IsStrictFaceChain K c₁)
+    (t : Finset (Euc n)) (ht : t ∈ K.faces)
+    (hsub₀ : ∀ s ∈ c₀, s ⊆ t) (hsub₁ : ∀ s ∈ c₁, s ⊆ t)
+    (w₀ w₁ : Finset (Euc n) → ℝ)
+    (hw₀ : ∀ s ∈ c₀, 0 < w₀ s) (hw₁ : ∀ s ∈ c₁, 0 < w₁ s)
+    (hs₀ : ∑ s ∈ c₀, w₀ s = 1) (hs₁ : ∑ s ∈ c₁, w₁ s = 1)
+    (heq : ∑ s ∈ c₀, w₀ s • barycenter s = ∑ s ∈ c₁, w₁ s • barycenter s) :
+    c₀ = c₁ := by
+  sorry
+
 /-- (I2) Uniqueness of the barycentric carrier chain: two strict chains of faces
 of `K` with positive weights representing the same point are equal.  Both top
 faces are the carrier of the point in `K` (positive weight on the top barycenter
@@ -215,7 +279,20 @@ theorem barycentricFaces_inter_subset_aux_chain_unique {n : ℕ}
     (hs₀ : ∑ s ∈ c₀, w₀ s = 1) (hs₁ : ∑ s ∈ c₁, w₁ s = 1)
     (heq : ∑ s ∈ c₀, w₀ s • barycenter s = ∑ s ∈ c₁, w₁ s • barycenter s) :
     c₀ = c₁ := by
-  sorry
+  obtain ⟨t₀, ht₀, htop₀⟩ := barycentricFaces_inter_subset_aux_chain_unique_aux_top K c₀ h₀
+    (barycentricFaces_inter_subset_aux_chain_unique_aux_nonempty c₀ w₀ hs₀)
+  obtain ⟨t₁, ht₁, htop₁⟩ := barycentricFaces_inter_subset_aux_chain_unique_aux_top K c₁ h₁
+    (barycentricFaces_inter_subset_aux_chain_unique_aux_nonempty c₁ w₁ hs₁)
+  obtain ⟨hx₀, hi₀⟩ := barycentricFaces_inter_subset_aux_chain_unique_aux_relint K c₀ h₀
+    t₀ ht₀ htop₀ w₀ hw₀ hs₀
+  obtain ⟨hx₁, hi₁⟩ := barycentricFaces_inter_subset_aux_chain_unique_aux_relint K c₁ h₁
+    t₁ ht₁ htop₁ w₁ hw₁ hs₁
+  rw [heq] at hx₀ hi₀
+  have ht : t₀ = t₁ := barycentricFaces_inter_subset_aux_chain_unique_aux_carrier K
+    (h₀.1 t₀ ht₀) (h₁.1 t₁ ht₁) _ hx₀ hx₁ hi₀ hi₁
+  subst ht
+  exact barycentricFaces_inter_subset_aux_chain_unique_aux_within K c₀ c₁ h₀ h₁ t₀
+    (h₀.1 t₀ ht₀) htop₀ htop₁ w₀ w₁ hw₀ hw₁ hs₀ hs₁ heq
 
 /-- (I3) A nonnegative normalized combination of barycenters lies in their hull. -/
 theorem barycentricFaces_inter_subset_aux_mem_hull {n : ℕ}
