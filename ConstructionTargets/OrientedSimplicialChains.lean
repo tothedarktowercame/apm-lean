@@ -73,7 +73,23 @@ theorem faceModule_finiteDimensional {n : ℕ}
 theorem faceModule_zero_above {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite) :
     ∃ b, ∀ k, b < k → Subsingleton (FaceModule K k) := by
-  sorry
+  classical
+  let F : Finset (Finset (Euc n)) := hK.toFinset
+  let U : Finset (Euc n) := F.biUnion id
+  refine ⟨U.card, fun k hk => ?_⟩
+  have hempty : IsEmpty (FaceIndex K k) :=
+    ⟨fun s => by
+      have hsF : s.1 ∈ F := by
+        simpa [F] using s.2.1
+      have hsub : s.1 ⊆ U := by
+        intro x hx
+        simp only [U, Finset.mem_biUnion]
+        exact ⟨s.1, hsF, hx⟩
+      have hcard : s.1.card ≤ U.card := Finset.card_le_card hsub
+      have heq : s.1.card = k + 1 := s.2.2
+      omega⟩
+  letI := hempty
+  infer_instance
 
 theorem affineComparison_exists_and_commutes {n : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
