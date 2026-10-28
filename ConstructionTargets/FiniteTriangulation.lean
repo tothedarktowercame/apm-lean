@@ -39,6 +39,62 @@ theorem hasFiniteVertexTriangulation_of_isFinitePolyhedron
     (hX : IsFinitePolyhedron X) : HasFiniteVertexTriangulation X x₀ := by
   sorry
 
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_base_eq
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y) :
+    quotientMap x₀ y₀ (.inl x₀) = quotientMap x₀ y₀ (.inr y₀) := by
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _ Rel.base
+
+/-- (G1) Two finite complexes glued at one vertex each: translate the marked
+vertices to the origin and place the complexes in the two factors of
+`ℝ^(a+b)`.  The images meet only at the origin; the intersection axiom holds
+because a vertex lying in the hull of a face is a vertex of that face. -/
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed {a b : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (h₁ : K₁.faces.Finite) (h₂ : K₂.faces.Finite)
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b))
+    (hv₁ : {v₁} ∈ K₁.faces) (hv₂ : {v₂} ∈ K₂.faces) :
+    ∃ (N : ℕ) (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin N)))
+      (ι₁ : C(K₁.space, K.space)) (ι₂ : C(K₂.space, K.space))
+      (p : EuclideanSpace ℝ (Fin N)),
+      K.faces.Finite ∧ {p} ∈ K.faces ∧
+      Function.Injective ι₁ ∧ Function.Injective ι₂ ∧
+      (∀ z : K.space, (∃ x, ι₁ x = z) ∨ (∃ y, ι₂ y = z)) ∧
+      (∀ x y, ι₁ x = ι₂ y ↔
+        ((x : EuclideanSpace ℝ (Fin a)) = v₁ ∧ (y : EuclideanSpace ℝ (Fin b)) = v₂)) ∧
+      (∀ x : K₁.space, (x : EuclideanSpace ℝ (Fin a)) = v₁ →
+        (ι₁ x : EuclideanSpace ℝ (Fin N)) = p) := by
+  sorry
+
+/-- (G2) From (G1)'s embedding data and marked homeomorphisms `X ≃ₜ K₁.space`,
+`Y ≃ₜ K₂.space`, the wedge is homeomorphic to `K.space` with the wedge point at
+`p`: the map induced on the quotient by `Sum.elim (ι₁ ∘ e₁) (ι₂ ∘ e₂)` is a
+continuous bijection from a compact space to a Hausdorff one. -/
+theorem wedge_isFinitePolyhedron_of_vertexTriangulations_aux_homeomorph
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y) {a b N : ℕ}
+    (K₁ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin a)))
+    (K₂ : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin b)))
+    (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin N)))
+    (h₁ : K₁.faces.Finite) (h₂ : K₂.faces.Finite) (hK : K.faces.Finite)
+    (e₁ : X ≃ₜ K₁.space) (e₂ : Y ≃ₜ K₂.space)
+    (v₁ : EuclideanSpace ℝ (Fin a)) (v₂ : EuclideanSpace ℝ (Fin b))
+    (he₁ : (e₁ x₀ : EuclideanSpace ℝ (Fin a)) = v₁)
+    (he₂ : (e₂ y₀ : EuclideanSpace ℝ (Fin b)) = v₂)
+    (ι₁ : C(K₁.space, K.space)) (ι₂ : C(K₂.space, K.space))
+    (p : EuclideanSpace ℝ (Fin N))
+    (hinj₁ : Function.Injective ι₁) (hinj₂ : Function.Injective ι₂)
+    (hcov : ∀ z : K.space, (∃ x, ι₁ x = z) ∨ (∃ y, ι₂ y = z))
+    (hmeet : ∀ x y, ι₁ x = ι₂ y ↔
+      ((x : EuclideanSpace ℝ (Fin a)) = v₁ ∧ (y : EuclideanSpace ℝ (Fin b)) = v₂))
+    (hp : ∀ x : K₁.space, (x : EuclideanSpace ℝ (Fin a)) = v₁ →
+      (ι₁ x : EuclideanSpace ℝ (Fin N)) = p) :
+    ∃ e : Wedge x₀ y₀ ≃ₜ K.space,
+      (e (quotientMap x₀ y₀ (.inl x₀)) : EuclideanSpace ℝ (Fin N)) = p := by
+  sorry
+
 /-- **LIBRARY (simplicial point gluing).** Triangulations whose marked points
 are vertices glue to a finite geometric triangulation of the point wedge. -/
 theorem wedge_isFinitePolyhedron_of_vertexTriangulations
@@ -47,7 +103,13 @@ theorem wedge_isFinitePolyhedron_of_vertexTriangulations
     (hX : HasFiniteVertexTriangulation X x₀)
     (hY : HasFiniteVertexTriangulation Y y₀) :
     HasFiniteVertexTriangulation (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) := by
-  sorry
+  obtain ⟨a, K₁, e₁, v₁, hK₁, hv₁, he₁⟩ := hX
+  obtain ⟨b, K₂, e₂, v₂, hK₂, hv₂, he₂⟩ := hY
+  obtain ⟨N, K, ι₁, ι₂, p, hK, hp, hinj₁, hinj₂, hcov, hmeet, hpv⟩ :=
+    wedge_isFinitePolyhedron_of_vertexTriangulations_aux_embed K₁ K₂ hK₁ hK₂ v₁ v₂ hv₁ hv₂
+  obtain ⟨e, he⟩ := wedge_isFinitePolyhedron_of_vertexTriangulations_aux_homeomorph
+    x₀ y₀ K₁ K₂ K hK₁ hK₂ hK e₁ e₂ v₁ v₂ he₁ he₂ ι₁ ι₂ p hinj₁ hinj₂ hcov hmeet hpv
+  exact ⟨N, K, e, p, hK, hp, he⟩
 
 /-- Finite polyhedra are closed under point wedges. -/
 theorem wedge_isFinitePolyhedron
