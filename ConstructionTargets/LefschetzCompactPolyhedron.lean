@@ -412,6 +412,40 @@ theorem FiniteChainEndomorphism.chainTrace_succ_eq
   congr 1
   rw [← heq, LinearMap.trace_conj']
 
+/-- (H1) Inside the cycles, the boundaries (`B ⊆ Z` since `d ∘ d = 0`) split
+off the quotient trace; the boundary part is `bdriesTrace`. -/
+theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_boundary_quotient
+    (hT : ∀ {V : Type} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+      (φ : V →ₗ[ℚ] V) (W : Submodule ℚ V) (hW : ∀ x ∈ W, φ x ∈ W),
+      LinearMap.trace ℚ V φ =
+        LinearMap.trace ℚ W (φ.restrict hW) +
+          LinearMap.trace ℚ (V ⧸ W) (W.mapQ W φ (fun x hx => hW x hx)))
+    (M : FiniteChainEndomorphism) (k : ℕ) :
+    ∀ (hW : ∀ x ∈ (M.bdries k).comap (M.cycles k).subtype,
+        (M.φ.f k).hom.restrict (M.cycles_invariant k) x ∈
+          (M.bdries k).comap (M.cycles k).subtype),
+      M.cyclesTrace k = M.bdriesTrace k +
+        LinearMap.trace ℚ
+          (M.cycles k ⧸ (M.bdries k).comap (M.cycles k).subtype)
+          (((M.bdries k).comap (M.cycles k).subtype).mapQ
+            ((M.bdries k).comap (M.cycles k).subtype)
+            ((M.φ.f k).hom.restrict (M.cycles_invariant k)) hW) := by
+  sorry
+
+/-- (H2) `Z k ⧸ B k` is the homology in degree `k`, compatibly with `φ`. -/
+theorem FiniteChainEndomorphism.cyclesTrace_eq_aux_homology_quotient
+    (M : FiniteChainEndomorphism) (k : ℕ)
+    (hW : ∀ x ∈ (M.bdries k).comap (M.cycles k).subtype,
+      (M.φ.f k).hom.restrict (M.cycles_invariant k) x ∈
+        (M.bdries k).comap (M.cycles k).subtype) :
+    LinearMap.trace ℚ
+        (M.cycles k ⧸ (M.bdries k).comap (M.cycles k).subtype)
+        (((M.bdries k).comap (M.cycles k).subtype).mapQ
+          ((M.bdries k).comap (M.cycles k).subtype)
+          ((M.φ.f k).hom.restrict (M.cycles_invariant k)) hW) =
+      M.homologyTrace k := by
+  sorry
+
 /-- (H) The trace on cycles is the trace on boundaries plus the homology
 trace: `Z k ⧸ B k ≅ homology k` equivariantly (`ShortComplex.moduleCatHomologyIso`
 or the `ModuleCat` homology API).  Takes (T) as a hypothesis. -/
@@ -423,7 +457,12 @@ theorem FiniteChainEndomorphism.cyclesTrace_eq
           LinearMap.trace ℚ (V ⧸ W) (W.mapQ W φ (fun x hx => hW x hx)))
     (M : FiniteChainEndomorphism) (k : ℕ) :
     M.cyclesTrace k = M.bdriesTrace k + M.homologyTrace k := by
-  sorry
+  have hW : ∀ x ∈ (M.bdries k).comap (M.cycles k).subtype,
+      (M.φ.f k).hom.restrict (M.cycles_invariant k) x ∈
+        (M.bdries k).comap (M.cycles k).subtype :=
+    fun x hx => M.bdries_invariant k _ hx
+  rw [M.cyclesTrace_eq_aux_boundary_quotient hT k hW,
+    M.cyclesTrace_eq_aux_homology_quotient k hW]
 
 /-- (E) Above the bound there are no chains, so the top boundaries vanish. -/
 theorem FiniteChainEndomorphism.bdriesTrace_bound
