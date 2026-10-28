@@ -1324,6 +1324,38 @@ def openStar {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
 
 /-- A simplicial vertex map has a continuous affine realization. -/
 -- BEGIN SEAT AREA
+lemma exists_inducedContinuousMap_aux_affine_family_aux_extend {n m : ℕ}
+    (s : Finset (Euc n)) (hs : AffineIndependent ℝ ((↑) : s → Euc n))
+    (h : Euc n → Euc m) :
+    ∃ f : Euc n →ᵃ[ℝ] Euc m, ∀ v ∈ s, f v = h v := by
+  classical
+  obtain ⟨t, hst, htind, htspan⟩ :=
+    exists_subset_affineIndependent_affineSpan_eq_top hs
+  let b : AffineBasis t ℝ (Euc n) :=
+    ⟨((↑) : t → Euc n), htind, by
+      convert htspan using 1
+      ext x
+      simp⟩
+  letI : Finite t := b.finite
+  letI : Fintype t := Fintype.ofFinite t
+  let f : Euc n →ᵃ[ℝ] Euc m :=
+    ∑ i : t, ((LinearMap.id.smulRight (h i)).toAffineMap.comp (b.coord i))
+  refine ⟨f, ?_⟩
+  intro v hv
+  let i : t := ⟨v, hst hv⟩
+  change f (b i) = h (b i)
+  dsimp [f]
+  have heval (u : Finset t) :
+      (∑ j ∈ u, ((LinearMap.id.smulRight (h j)).toAffineMap.comp (b.coord j))) (b i) =
+        ∑ j ∈ u, ((LinearMap.id.smulRight (h j)).toAffineMap.comp (b.coord j)) (b i) := by
+    induction u using Finset.induction_on with
+    | empty => simp
+    | @insert j u hju ih => simp [hju, ih]
+  rw [heval Finset.univ]
+  simp [AffineMap.comp_apply, AffineBasis.coord_apply]
+  change h i = h i
+  rfl
+
 lemma exists_inducedContinuousMap_aux_affine_family {n m : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (h : Euc n → Euc m) :
@@ -1335,7 +1367,45 @@ lemma exists_inducedContinuousMap_aux_affine_family {n m : ℕ}
       ∀ s ∈ K.faces, ∀ x,
         x ∈ convexHull ℝ (s : Set (Euc n)) →
         A s x ∈ convexHull ℝ (s.image h : Set (Euc m)) := by
-  sorry
+  classical
+  have hext (s : Finset (Euc n)) (hs : s ∈ K.faces) :
+      ∃ f : Euc n →ᵃ[ℝ] Euc m, ∀ v ∈ s, f v = h v :=
+    exists_inducedContinuousMap_aux_affine_family_aux_extend s (K.indep hs) h
+  choose F hF using hext
+  let A : Finset (Euc n) → (Euc n →ᵃ[ℝ] Euc m) := fun s ↦
+    if hs : s ∈ K.faces then F s hs else 0
+  have hA (s : Finset (Euc n)) (hs : s ∈ K.faces) (v : Euc n) (hv : v ∈ s) :
+      A s v = h v := by
+    simp only [A, dif_pos hs]
+    exact hF s hs v hv
+  refine ⟨A, hA, ?_, ?_⟩
+  · intro s hs t ht x hxs hxt
+    have hxst : x ∈ convexHull ℝ ((s ∩ t : Finset (Euc n)) : Set (Euc n)) := by
+      have hx : x ∈ convexHull ℝ (s : Set (Euc n)) ∩
+          convexHull ℝ (t : Set (Euc n)) := ⟨hxs, hxt⟩
+      rw [K.convexHull_inter_convexHull hs ht] at hx
+      simpa using hx
+    rw [show ((s ∩ t : Finset (Euc n)) : Set (Euc n)) =
+        Set.range ((↑) : (s ∩ t : Finset (Euc n)) → Euc n) by ext; simp,
+      convexHull_range_eq_exists_affineCombination] at hxst
+    obtain ⟨u, w, hw0, hw1, rfl⟩ := hxst
+    rw [u.map_affineCombination ((↑) : (s ∩ t : Finset (Euc n)) → Euc n) w hw1 (A s),
+      u.map_affineCombination ((↑) : (s ∩ t : Finset (Euc n)) → Euc n) w hw1 (A t)]
+    apply u.affineCombination_congr (fun _ _ ↦ rfl)
+    intro i hi
+    exact (hA s hs i (Finset.mem_of_mem_inter_left i.property)).trans
+      (hA t ht i (Finset.mem_of_mem_inter_right i.property)).symm
+  · intro s hs x hx
+    have him : A s '' (s : Set (Euc n)) = (s.image h : Set (Euc m)) := by
+      ext y
+      simp only [Set.mem_image, Finset.mem_coe, Finset.mem_image]
+      constructor
+      · rintro ⟨v, hv, rfl⟩
+        exact ⟨v, hv, (hA s hs v hv).symm⟩
+      · rintro ⟨v, hv, rfl⟩
+        exact ⟨v, hv, hA s hs v hv⟩
+    rw [← him, ← (A s).image_convexHull (s : Set (Euc n))]
+    exact ⟨x, hx, rfl⟩
 -- END SEAT AREA
 
 lemma exists_inducedContinuousMap_aux_finite_glue {n m : ℕ}
