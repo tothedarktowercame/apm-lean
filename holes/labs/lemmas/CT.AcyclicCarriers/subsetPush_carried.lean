@@ -198,7 +198,55 @@ theorem subsetPush_injective (X : Type) [TopologicalSpace X] (A : Set X) (k : �
 theorem subsetPush_carried (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
     (w : (CoefficientH0.SingularChains ℚ (TopCat.of A)).X k) :
     SubsetCarriedChain X A ((subsetPush X A).f k w) := by
-  sorry
+  classical
+  let S := SingularSimplex (TopCat.of A) k
+  let D := ModuleCat.coprodIsoDirectSum (fun _ : S ↦ ModuleCat.of ℚ ℚ)
+  let q : DirectSum S (fun _ ↦ ℚ) := D.hom w
+  let e : Fin q.support.card ≃ q.support := q.support.equivFin.symm
+  let σ : Fin q.support.card → SingularSimplex (TopCat.of A) k := fun i ↦ (e i).1
+  let a : Fin q.support.card → ℚ := fun i ↦ q (e i).1
+  let f : C(A, X) := ⟨Subtype.val, continuous_subtype_val⟩
+  let τ : Fin q.support.card → SingularSimplex (TopCat.of X) k := fun i ↦
+    singularSimplexOfContinuousMap (TopCat.of X) k
+      (f.comp (continuousMapOfSingularSimplex k (σ i)))
+  refine ⟨q.support.card, a, τ, ?_, ?_⟩
+  · have hw : w = ∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i)) (a i) := by
+      have hq : D.hom w = D.hom
+          (∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i)) (a i)) := by
+        change q = D.hom (∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i)) (a i))
+        simp only [map_sum]
+        have hr : q = ∑ i, DirectSum.of (fun _ : S ↦ ℚ) (σ i) (a i) := by
+          calc
+            q = ∑ x ∈ q.support, DirectSum.of (fun _ : S ↦ ℚ) x (q x) :=
+              (DirectSum.sum_support_of q).symm
+            _ = ∑ x : q.support, DirectSum.of (fun _ : S ↦ ℚ) x.1 (q x.1) := by
+              exact (Finset.sum_attach q.support
+                (fun x ↦ DirectSum.of (fun _ : S ↦ ℚ) x (q x))).symm
+            _ = _ := by
+              simpa [σ, a] using (e.sum_comp
+                (fun x : q.support ↦ DirectSum.of (fun _ : S ↦ ℚ) x.1 (q x.1))).symm
+        have hgen (i : Fin q.support.card) :
+            D.hom ((CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i)) (a i)) =
+              DirectSum.of (fun _ : S ↦ ℚ) (σ i) (a i) := by
+          dsimp [D, CoefficientH0.singularGenerator]
+          exact ConcreteCategory.congr_hom
+            (ModuleCat.ι_coprodIsoDirectSum_hom
+              (Z := fun _ : S ↦ ModuleCat.of ℚ ℚ) (σ i)) (a i)
+        simpa only [hgen] using hr
+      simpa using congrArg D.inv hq
+    rw [hw, map_sum]
+    apply Finset.sum_congr rfl
+    intro i hi
+    change ((CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i) ≫
+      (subsetPush X A).f k) (a i)) = _
+    simpa [subsetPush, f, τ] using congrArg (fun g ↦ g (a i))
+      (CoefficientH0.singularGenerator_singularPostcomposition ℚ k
+        (continuousMapOfSingularSimplex k (σ i)) f)
+  · intro i
+    dsimp [τ]
+    simp only [continuousMapOfSingularSimplex_ofContinuousMap]
+    rintro x ⟨y, rfl⟩
+    exact (continuousMapOfSingularSimplex k (σ i) y).property
 -- END SEAT AREA
 
 /-- (FB-b) Generic filling: in a rationally pointlike subset `A`, a carried
