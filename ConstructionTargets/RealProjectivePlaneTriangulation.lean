@@ -390,8 +390,32 @@ lemma rp2_explicit_finite_model_aux_hex_surj (w : ℂ) (hw : ‖w‖ ≤ 1) : �
   sorry
 
 /-- `gauge hexagon z ≤ 1` exactly on the hexagon (closed, convex, `0` inside). -/
-lemma rp2_explicit_finite_model_aux_hex_gauge_le_one (z : ℂ) : gauge hexagon z ≤ 1 ↔ z ∈ hexagon := by
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_convex :
+    Convex ℝ hexagon := by
+  exact convex_convexHull ℝ _
+
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_closed :
+    IsClosed hexagon := by
+  apply Set.Finite.isClosed_convexHull
+  exact Set.finite_range _
+
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_of_nhds
+    (h₀ : hexagon ∈ nhds (0 : ℂ)) (z : ℂ) :
+    gauge hexagon z ≤ 1 ↔ z ∈ hexagon := by
+  rw [gauge_le_one_iff_mem_closure
+    rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_convex h₀]
+  rw [rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_closed.closure_eq]
+
+/-- `0` is interior to the hexagon: e.g. `ball 0 (1/2)` lies in it (apothem
+`√3/2`); a point of the ball lies in a sector triangle `0 ζ_j ζ_{j+1}`, or use
+that the hexagon contains the convex hull of `±1, ±ζ_1` which contains a
+square around `0`. -/
+lemma rp2_explicit_finite_model_aux_hex_nhds : hexagon ∈ nhds (0 : ℂ) := by
   sorry
+
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one (z : ℂ) : gauge hexagon z ≤ 1 ↔ z ∈ hexagon :=
+  rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_of_nhds
+    rp2_explicit_finite_model_aux_hex_nhds z
 
 -- Stage 4: the facets.
 lemma rp2_explicit_finite_model_aux_cover (y : EuclideanSpace ℝ (Fin 10)) (hy : y ∈ rp2Complex.space) :
