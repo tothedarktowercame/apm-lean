@@ -814,10 +814,49 @@ theorem barycentricSubdivision_finite {n : ℕ}
   exact ⟨c, (fun s hs => hc.1 s hs), rfl⟩
 
 /-- Every old simplex is the union of the chain simplices, and conversely. -/
+theorem barycentricSubdivision_space_aux_subset {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (hi hd hx) :
+    (barycentricSubdivision K hi hd hx).space ⊆ K.space := by
+  classical
+  intro x hxspace
+  rw [Geometry.SimplicialComplex.mem_space_iff] at hxspace
+  obtain ⟨u, hu, hxu⟩ := hxspace
+  have hub : u ∈ barycentricFaces K := by
+    exact hu.1
+  obtain ⟨c, hc, rfl⟩ := hub
+  have hcne : c.Nonempty := by
+    by_contra h
+    have hc0 : c = ∅ := Finset.not_nonempty_iff_eq_empty.mp h
+    subst c
+    simpa [barycentricSubdivision] using hu
+  obtain ⟨t, ht, htmax⟩ := Finset.exists_max_image c Finset.card hcne
+  apply K.convexHull_subset_space (hc.1 t ht)
+  refine convexHull_min ?_ (convex_convexHull ℝ _) hxu
+  intro y hy
+  simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe] at hy
+  obtain ⟨s, hs, rfl⟩ := hy
+  have hst : s ⊆ t :=
+    barycentricFaces_affineIndependent_aux_chain_subset_of_card_le K c hc hs ht
+      (htmax s hs)
+  have hsne := barycentricFaces_affineIndependent_aux_chain_nonempty K c hc s hs
+  have hb : barycenter s ∈ convexHull ℝ (s : Set (Euc n)) := by
+    apply Finset.centerMass_id_mem_convexHull
+    · intro z hz
+      positivity
+    · simpa using (Finset.card_pos.mpr hsne : 0 < s.card)
+  exact convexHull_mono (by simpa using hst) hb
+
+theorem barycentricSubdivision_space_aux_superset {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (hi hd hx) :
+    K.space ⊆ (barycentricSubdivision K hi hd hx).space := by
+  sorry
+
 theorem barycentricSubdivision_space {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hi hd hx) :
     (barycentricSubdivision K hi hd hx).space = K.space := by
-  sorry
+  exact Set.Subset.antisymm
+    (barycentricSubdivision_space_aux_subset K hi hd hx)
+    (barycentricSubdivision_space_aux_superset K hi hd hx)
 
 /-- (M1) Hatcher's estimate: a point of a simplex is within
 `(m-1)/m · diam` of its barycenter, `m` the number of vertices (the distance to
