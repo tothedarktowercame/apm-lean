@@ -146,7 +146,9 @@ theorem apm_t02A04_Hhigh_zero_of_cover
 theorem apm_t02A04_H0_of_pathConnected
     (hpc : PathConnectedSpace apm_t02a04_X) :
     Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) := by
-  sorry
+  letI : PathConnectedSpace apm_t02a04_X := hpc
+  exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℚ
+    (apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩)⟩
 
 /-- **LIBRARY.** The concrete degree-two attachment is rationally acyclic. -/
 theorem apm_t02A04_rational_homology :
