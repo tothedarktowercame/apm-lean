@@ -1003,7 +1003,15 @@ def ConeAdmissible {n k : ℕ} (K' : GSC n) (b : Euc n)
 
 /-- Positive-degree cone-boundary identity.  This is the local sign
 calculation: deletion of `b` gives `x`, while deleting a vertex of `u` has the
-opposite sign from coning that deletion. -/
+opposite sign from coning that deletion.
+Route (claude-14): with `s = insert b u` and `c_u = #{q ∈ u | q <_o b}`, split
+`∑ c ∈ s.attach` as the `b`-term plus `∑ p ∈ u` (`Finset.sum_insert`, after
+transporting `attach`).  `b`-term: `s.erase b = u` and `idx_s b = #{q ∈ s | q <_o b} = c_u`
+(`sort_idxOf_eq_card_lt`), so the sign `(-1)^(c_u + idx_s b) = 1`.  `p`-term:
+`s.erase p = insert b (u.erase p)`; `idx_s p = idx_u p + [b <_o p]` and
+`c_u = c_{u.erase p} + [p <_o b]` (both from `sort_idxOf_eq_card_lt` and
+`Finset.filter_insert`/`filter_erase`), so the exponents differ by `1`
+(`p ≠ b`, `o` total); the cone condition for `u.erase p` holds by `K'.down_closed`. -/
 -- BEGIN SEAT AREA
 lemma subdivisionChainMap_commutes_aux_cone_boundary_aux_single {n k : ℕ}
     (o : LinearOrder (Euc n)) (K' : GSC n)
@@ -1040,6 +1048,84 @@ theorem subdivisionChainMap_commutes_aux_cone_boundary {n k : ℕ}
 
 /-- Degree-zero cone-boundary identity, with the augmentation term at the cone
 vertex made explicit. -/
+lemma subdivisionChainMap_commutes_aux_cone_boundary_zero_aux_single {n : ℕ}
+    (o : LinearOrder (Euc n)) (K' : GSC n)
+    (dK' : ∀ j, FaceModuleCat K' (j + 1) ⟶ FaceModuleCat K' j)
+    (hdK' : IsSignedDeletion o K' dK') (b : Euc n)
+    (hb : ({b} : Finset (Euc n)) ∈ K'.faces) (u : FaceIndex K' 0)
+    (hu : b ∉ u.1 ∧ insert b u.1 ∈ K'.faces) (a : ℚ) :
+    dK' 0 (subdivisionCone o K' b 0 (Finsupp.single u a)) =
+      Finsupp.single u a - a •
+        Finsupp.single (⟨{b}, hb, by simp⟩ : FaceIndex K' 0) 1 := by
+  sorry
+/-
+  classical
+  obtain ⟨v, hv⟩ := Finset.card_eq_one.mp u.2.2
+  have hvb : v ≠ b := by simpa [hv, Finset.mem_singleton, eq_comm] using hu.1
+  rw [show Finsupp.single u a = a • Finsupp.single u 1 by
+    ext; simp [Finsupp.single_apply]]
+  rw [map_smul, map_smul]
+  simp only [subdivisionCone]
+  change a • dK' 0 ((Finsupp.linearCombination ℚ fun w : FaceIndex K' 0 =>
+      if hw : b ∉ w.1 ∧ insert b w.1 ∈ K'.faces then
+        Finsupp.single
+          (⟨insert b w.1, hw.2,
+            by rw [Finset.card_insert_of_notMem hw.1, w.2.2]⟩ : FaceIndex K' 1)
+          ((-1 : ℚ) ^ (w.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card)
+      else 0) (Finsupp.single u 1)) = _
+  rw [Finsupp.linearCombination_single]
+  rw [dif_pos hu]
+  simp only [one_smul]
+  let s : FaceIndex K' 1 :=
+    ⟨insert b u.1, hu.2, by rw [Finset.card_insert_of_notMem hu.1, u.2.2]⟩
+  let e : ℚ := (-1 : ℚ) ^
+    (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card
+  change a • dK' 0 (Finsupp.single s e) = _
+  rw [show Finsupp.single s e = e • Finsupp.single s 1 by
+    ext; simp [Finsupp.single_apply]]
+  rw [map_smul]
+  obtain ⟨z, hz, hformula⟩ := hdK' 0 s
+  rw [hz]
+  ext t
+  change a * (e * z t) = _
+  rw [hformula]
+  obtain ⟨w, hw⟩ := Finset.card_eq_one.mp t.2.2
+  have hut : u = t ↔ v = w := by
+    constructor
+    · intro h; simpa [hv, hw] using congrArg Subtype.val h
+    · intro h; subst w; exact Subtype.ext (hv.trans hw.symm)
+  have hbt : (⟨{b}, hb, by simp⟩ : FaceIndex K' 0) = t ↔ b = w := by
+    constructor
+    · intro h; simpa [hw] using congrArg Subtype.val h
+    · intro h; subst w; exact Subtype.ext hw.symm
+  have herasev : ({b, v} : Finset (Euc n)).erase v = {b} := by
+    ext q; simp [hvb, hvb.symm]
+  have heraseb : ({b, v} : Finset (Euc n)).erase b = {v} := by
+    ext q; simp [hvb, hvb.symm]
+  rcases lt_or_gt_of_ne hvb with hvlt | hblt
+  · have hsort : ({b, v} : Finset (Euc n)).sort o.le = [v, b] := by
+      rw [Finset.pair_comm]
+      exact Finset.sort_insert o.le (by simp [le_of_lt hvlt]) (by simp [hvb])
+    by_cases hwv : w = v
+    · subst w; simp [s, e, hv, hw, hsort, herasev, heraseb, hut, hbt,
+        Finsupp.single_apply, hvb, hvb.symm, hvlt]
+    by_cases hwb : w = b
+    · subst w; simp [s, e, hv, hw, hsort, herasev, heraseb, hut, hbt,
+        Finsupp.single_apply, hvb, hvb.symm, hvlt]
+    simp [s, e, hv, hw, hsort, herasev, heraseb, hut, hbt, Finsupp.single_apply, hvb, hvb.symm,
+      hvlt, hwv, hwb]
+  · have hsort : ({b, v} : Finset (Euc n)).sort o.le = [b, v] := by
+      exact Finset.sort_insert o.le (by simp [le_of_lt hblt]) (by simp [hvb])
+    by_cases hwv : w = v
+    · subst w; simp [s, e, hv, hw, hsort, herasev, heraseb, hut, hbt,
+        Finsupp.single_apply, hvb, hvb.symm, hblt]
+    by_cases hwb : w = b
+    · subst w; simp [s, e, hv, hw, hsort, herasev, heraseb, hut, hbt,
+        Finsupp.single_apply, hvb, hvb.symm, hblt]
+    simp [s, e, hv, hw, hsort, herasev, heraseb, hut, hbt, Finsupp.single_apply, hvb, hvb.symm,
+      hblt, hwv, hwb]
+-/
+
 theorem subdivisionChainMap_commutes_aux_cone_boundary_zero {n : ℕ}
     (o : LinearOrder (Euc n)) (K' : GSC n)
     (dK' : ∀ j, FaceModuleCat K' (j + 1) ⟶ FaceModuleCat K' j)
@@ -1050,6 +1136,25 @@ theorem subdivisionChainMap_commutes_aux_cone_boundary_zero {n : ℕ}
       x - (x.sum fun _ a => a) •
         Finsupp.single (⟨{b}, hb, by simp⟩ : FaceIndex K' 0) 1 := by
   sorry
+/-
+  classical
+  rw [← Finsupp.sum_single x]
+  change dK' 0 (subdivisionCone o K' b 0
+      (∑ u ∈ x.support, Finsupp.single u (x u))) = _
+  simp only [map_sum]
+  have hsum :
+      (∑ u ∈ x.support,
+        dK' 0 (subdivisionCone o K' b 0 (Finsupp.single u (x u)))) =
+      ∑ u ∈ x.support, (Finsupp.single u (x u) - (x u) •
+        Finsupp.single (⟨{b}, hb, by simp⟩ : FaceIndex K' 0) 1) := by
+    apply Finset.sum_congr rfl
+    intro u hu
+    exact subdivisionChainMap_commutes_aux_cone_boundary_zero_aux_single
+      o K' dK' hdK' b hb u (hx u (Finsupp.mem_support_iff.mp hu)) (x u)
+  rw [hsum]
+  rw [Finset.sum_sub_distrib]
+  rw [← Finset.sum_smul]
+-/
 
 /-- Subdivision chains of proper facets can be coned to the barycenter of the
 ambient face. -/
