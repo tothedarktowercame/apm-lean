@@ -954,12 +954,17 @@ theorem barycentricSubdivisionChainMap_exists {n : ℕ} (o : LinearOrder (Euc n)
         simp [hc, hcard, hne]
     · simp [hc]
 
+/- claude-14 fix 2026-10-28 (lemma-2's counterexample): `K'` must be the
+barycentric subdivision; for an arbitrary `K'` (e.g. only the vertices `a, b, m`
+of a subdivided edge, no edges) the coefficient condition is vacuous in degree 1
+and `sd` is not a chain map. -/
 -- BEGIN SEAT AREA
 theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
     (dK' : ∀ k, FaceModuleCat K' (k+1) ⟶ FaceModuleCat K' k)
     (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
     (hdK : IsSignedDeletion o K dK) (hdK' : IsSignedDeletion o K' dK')
+    (hK' : K' = barycentricStep K)
     (hsd : IsSubdivisionChainMap o K K' sd) :
     ∀ k, sd (k+1) ≫ dK' k = dK k ≫ sd k := by
   sorry
