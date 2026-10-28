@@ -1004,6 +1004,29 @@ def ConeAdmissible {n k : ℕ} (K' : GSC n) (b : Euc n)
 /-- Positive-degree cone-boundary identity.  This is the local sign
 calculation: deletion of `b` gives `x`, while deleting a vertex of `u` has the
 opposite sign from coning that deletion. -/
+lemma subdivisionChainMap_commutes_aux_cone_boundary_aux_single {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K' : GSC n)
+    (dK' : ∀ j, FaceModuleCat K' (j + 1) ⟶ FaceModuleCat K' j)
+    (hdK' : IsSignedDeletion o K' dK') (b : Euc n)
+    (u : FaceIndex K' (k + 1))
+    (hu : b ∉ u.1 ∧ insert b u.1 ∈ K'.faces) :
+    dK' (k + 1) (subdivisionCone o K' b (k + 1) (Finsupp.single u 1)) =
+      Finsupp.single u 1 -
+        subdivisionCone o K' b k (dK' k (Finsupp.single u 1)) := by
+  classical
+  simp [subdivisionCone, hu]
+  rw [signedDeletion_sq_zero_aux_generator_aux_boundary o K' dK' hdK']
+  let s : FaceIndex K' (k + 2) :=
+    ⟨insert b u.1, hu.2, by rw [Finset.card_insert_of_notMem hu.1, u.2.2]⟩
+  change dK' (k + 1) (Finsupp.single s ((-1 : ℚ) ^ _)) = _
+  rw [show Finsupp.single s ((-1 : ℚ) ^ _) =
+    ((-1 : ℚ) ^ (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card) •
+      Finsupp.single s 1 by simp]
+  rw [map_smul, signedDeletion_sq_zero_aux_generator_aux_boundary o K' dK' hdK' s]
+  ext t
+  simp [subdivisionCone]
+  sorry
+
 theorem subdivisionChainMap_commutes_aux_cone_boundary {n k : ℕ}
     (o : LinearOrder (Euc n)) (K' : GSC n)
     (dK' : ∀ j, FaceModuleCat K' (j + 1) ⟶ FaceModuleCat K' j)
