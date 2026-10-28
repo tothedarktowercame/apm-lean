@@ -211,7 +211,19 @@ theorem homologyTrace_eq_of_models
     (g : C(X, X)) (hmodel : HomologyModels M g) :
     ∀ k, M.homologyTrace k =
       LinearMap.trace ℚ (Homology X k) (induced g k).hom := by
-  sorry
+  obtain ⟨E, hE⟩ := hmodel
+  intro k
+  letI := M.finiteHomology k
+  have hconj :
+      (E k).conj (HomologicalComplex.homologyMap M.φ k).hom =
+        (induced g k).hom := by
+    ext x
+    have h := LinearMap.congr_fun (hE k) ((E k).symm x)
+    rw [LinearEquiv.conj_apply]
+    simp only [LinearMap.comp_apply]
+    simpa using h
+  unfold FiniteChainEndomorphism.homologyTrace
+  rw [← hconj, LinearMap.trace_conj']
 -- END SEAT AREA
 
 /-- **LIBRARY (direct simplicial--singular comparison).** A face-avoiding map
