@@ -1856,7 +1856,80 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first
         tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o c' tu.2)
           (flagNewVertex o c' tu.1)).card +
       ((s.1.erase v).filter fun x => @LT.lt (Euc n) o.toLT v x).card := by
-  sorry
+  classical
+  obtain ⟨_, hsnot, htop⟩ :=
+    subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_insert
+      o K s v hv c' hc' hcs hcard
+  let B := (c' ×ˢ c').filter fun tu =>
+    tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o c' tu.2)
+      (flagNewVertex o c' tu.1)
+  let C := c'.filter fun t =>
+    @LT.lt (Euc n) o.toLT v (flagNewVertex o c' t)
+  have hdecomp :
+      ((insert s.1 c' ×ˢ insert s.1 c').filter fun tu =>
+        tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (flagNewVertex o (insert s.1 c') tu.2)
+          (flagNewVertex o (insert s.1 c') tu.1)) = B ∪ (C ×ˢ {s.1}) := by
+    ext ⟨a, b⟩
+    simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_insert,
+      Finset.mem_union, Finset.mem_singleton, B, C]
+    constructor
+    · rintro ⟨⟨ha | ha, hb | hb⟩, hab, hlt⟩
+      · subst a; subst b; exact (hab.ne rfl).elim
+      · subst a
+        exact hab.not_subset
+          (subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_proper
+            K s v hv c' hcs b hb).subset |>.elim
+      · right
+        subst b
+        rw [htop] at hlt
+        rw [subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_newVertex
+          o K s v hv c' hcs a ha] at hlt
+        exact ⟨⟨ha, hlt⟩, rfl⟩
+      · left
+        rw [subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_newVertex
+          o K s v hv c' hcs a ha,
+          subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_newVertex
+            o K s v hv c' hcs b hb] at hlt
+        exact ⟨⟨ha, hb⟩, hab, hlt⟩
+    · rintro (⟨⟨ha, hb⟩, hab, hlt⟩ | ⟨⟨ha, hlt⟩, rfl⟩)
+      · refine ⟨⟨Or.inr ha, Or.inr hb⟩, hab, ?_⟩
+        simpa only [
+          subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_newVertex
+            o K s v hv c' hcs a ha,
+          subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_newVertex
+            o K s v hv c' hcs b hb] using hlt
+      · refine ⟨⟨Or.inr ha, Or.inl rfl⟩,
+          subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_proper
+            K s v hv c' hcs a ha, ?_⟩
+        simpa only [htop,
+          subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_newVertex
+            o K s v hv c' hcs a ha] using hlt
+  rw [hdecomp, Finset.card_union_of_disjoint]
+  · simp only [Finset.card_product, Finset.card_singleton, mul_one, B]
+    congr 1
+    have hbij :=
+      subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first_aux_newVertices
+        o K s v hv c' hc' hcs hcard
+    apply Finset.card_bij (fun t _ => flagNewVertex o c' t)
+    · intro t ht
+      simp only [C, Finset.mem_filter] at ht
+      simp only [Finset.mem_filter]
+      exact ⟨hbij.1 ht.1, ht.2⟩
+    · intro a ha b hb hab
+      simp only [C, Finset.mem_filter] at ha hb
+      exact hbij.2.1 ha.1 hb.1 hab
+    · intro x hx
+      simp only [Finset.mem_filter] at hx
+      obtain ⟨t, ht, heq⟩ := hbij.2.2 hx.1
+      refine ⟨t, ?_, heq⟩
+      simp only [C, Finset.mem_filter]
+      exact ⟨ht, heq ▸ hx.2⟩
+  · rw [Finset.disjoint_left]
+    intro ⟨a, b⟩ hab hac
+    simp only [B, Finset.mem_filter, Finset.mem_product] at hab
+    simp only [Finset.mem_product, Finset.mem_singleton] at hac
+    rcases hac with ⟨_, rfl⟩
+    exact hsnot hab.1.2
 -- END SEAT AREA
 
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign_aux_first {n k : ℕ}
