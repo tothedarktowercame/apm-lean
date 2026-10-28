@@ -1,5 +1,6 @@
 import Mathlib
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.LefschetzCompactPolyhedron
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.AttachTwoCell
 import ConstructionTargets.CP2RationalHomology
@@ -959,11 +960,22 @@ theorem apm_t02A04_lefschetz_number
       zero_add, pow_zero, one_mul]
     exact apm_t02A04_lefschetz_number_aux_trace_H0 e f
 
+/-- **LIBRARY (triangulation).** The space admits a finite geometric
+triangulation, as required by
+`ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz`.
+(claude-14, 2026-10-28; statement as recorded in that module's blueprint.) -/
+theorem apm_t02A04_isFinitePolyhedron :
+    ConstructionTargets.LefschetzCompactPolyhedron.IsFinitePolyhedron
+      apm_t02a04_X := by
+  sorry
+
 /-- **LIBRARY.** Specialized compact-polyhedron Lefschetz implication. -/
 theorem apm_t02A04_fixed_point_of_lefschetz
     (hL : ∀ f : C(apm_t02a04_X, apm_t02a04_X), HasLefschetzNumber f 1) :
     ∀ f : C(apm_t02a04_X, apm_t02a04_X), ∃ x, f x = x := by
-  sorry
+  intro f
+  exact ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz
+    apm_t02A04_isFinitePolyhedron f (hL f) one_ne_zero
 
 theorem apm_t02a04 :
     ∀ f : apm_t02a04_X → apm_t02a04_X,

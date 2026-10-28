@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.StatementSurfaceModels
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.LefschetzCompactPolyhedron
 import ConstructionTargets.ProjectivePlaneWedgeRationalHomology
 
 /-! # APM t99A03: fixed points on a wedge and a connected sum -/
@@ -49,6 +50,15 @@ theorem t99A03_wedge_lefschetz_number :
         projectivePlaneWedge_pointedNeighbourhood
     exact lefschetzNumber_one_of_rationallyPointlike hH f
 
+/-- **LIBRARY (triangulation).** The space admits a finite geometric
+triangulation, as required by
+`ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz`.
+(claude-14, 2026-10-28; statement as recorded in that module's blueprint.) -/
+theorem t99A03_fourProjectivePlanesWedge_isFinitePolyhedron :
+    ConstructionTargets.LefschetzCompactPolyhedron.IsFinitePolyhedron
+      T99A03.FourProjectivePlanesWedge := by
+  sorry
+
 /-- **LIBRARY.** The Lefschetz fixed-point implication, specialized to the
 finite projective-plane wedge.  Its homology calculation is supplied as a
 hypothesis so this foundation can be developed in parallel with that
@@ -58,7 +68,9 @@ theorem t99A03_wedge_fixed_point_of_lefschetz
         T99A03.FourProjectivePlanesWedge), HasLefschetzNumber f 1) :
     ∀ f : C(T99A03.FourProjectivePlanesWedge,
         T99A03.FourProjectivePlanesWedge), ∃ x, f x = x := by
-  sorry
+  intro f
+  exact ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz
+    t99A03_fourProjectivePlanesWedge_isFinitePolyhedron f (hL f) one_ne_zero
 
 /-- **LIBRARY.** The index-two normal subgroup of `π₁(N₃)` determined by one
 crosscap is realized by a connected double cover with total space `N₄`; its
