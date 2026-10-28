@@ -1,6 +1,10 @@
 import Mathlib
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.CoefficientH0
+import ConstructionTargets.AttachTwoCell
+import ConstructionTargets.CP2RationalHomology
+import ConstructionTargets.T00A01MayerVietorisAdapters
+import ConstructionTargets.SingularHomologyConcrete
 
 /-! # APM t02A04 — fixed points after a `(1,2)` cell attachment -/
 
@@ -80,11 +84,83 @@ noncomputable def apm_t02a04_gluedDesc
 noncomputable abbrev apm_t02A04_HQ (k : ℕ) :=
   Homology apm_t02a04_X k
 
+noncomputable def apm_t02A04_attachingCurve :
+    C(Circle, apm_t02a04_SolidTorus) :=
+  ⟨fun z ↦
+      ((⟨(z : ℂ), by simpa using z.property.le⟩ : apm_t02a04_Disk), z ^ 2),
+    by fun_prop⟩
+
+def apm_t02A04_overlapToOuter (U V : Set apm_t02a04_X) :
+    C((U ∩ V : Set apm_t02a04_X), U) :=
+  ⟨fun x ↦ ⟨x.1, x.2.1⟩, continuous_subtype_val.subtype_mk _⟩
+
+structure apm_t02A04_CompatibleOpenCover where
+  outer : Set apm_t02a04_X
+  inner : Set apm_t02a04_X
+  open_outer : IsOpen outer
+  open_inner : IsOpen inner
+  cover : outer ∪ inner = Set.univ
+  outerEquiv : ContinuousMap.HomotopyEquiv outer apm_t02a04_SolidTorus
+  innerEquiv : ContinuousMap.HomotopyEquiv inner PUnit
+  overlapEquiv : ContinuousMap.HomotopyEquiv
+    (outer ∩ inner : Set apm_t02a04_X) Circle
+  outer_compat :
+    (outerEquiv.toFun.comp (apm_t02A04_overlapToOuter outer inner)).Homotopic
+      (apm_t02A04_attachingCurve.comp overlapEquiv.toFun)
+
+/-- The radial cover of the attached disk, transported from `AttachTwoCell.Cell`. -/
+theorem apm_t02A04_compatibleOpenCover :
+    Nonempty apm_t02A04_CompatibleOpenCover := by
+  sorry
+
+/-- The concrete quotient is path-connected. -/
+theorem apm_t02A04_pathConnected : PathConnectedSpace apm_t02a04_X := by
+  sorry
+
+/-- In rational `H₁`, the attaching loop has invertible degree two. -/
+theorem apm_t02A04_attachingCurve_H1_isIso :
+    CategoryTheory.IsIso (induced apm_t02A04_attachingCurve 1) := by
+  sorry
+
+/-- The degree-one Mayer--Vietoris calculation for a compatible cover. -/
+theorem apm_t02A04_H1_zero_of_cover
+    (C : apm_t02A04_CompatibleOpenCover)
+    (hdegree : CategoryTheory.IsIso (induced apm_t02A04_attachingCurve 1)) :
+    CategoryTheory.Limits.IsZero (apm_t02A04_HQ 1) := by
+  sorry
+
+/-- The degree-two Mayer--Vietoris calculation: injectivity kills the kernel. -/
+theorem apm_t02A04_H2_zero_of_cover
+    (C : apm_t02A04_CompatibleOpenCover)
+    (hdegree : CategoryTheory.IsIso (induced apm_t02A04_attachingCurve 1)) :
+    CategoryTheory.Limits.IsZero (apm_t02A04_HQ 2) := by
+  sorry
+
+/-- Mayer--Vietoris above the dimensions of the circle and solid torus. -/
+theorem apm_t02A04_Hhigh_zero_of_cover
+    (C : apm_t02A04_CompatibleOpenCover) (k : ℕ) (hk : 3 ≤ k) :
+    CategoryTheory.Limits.IsZero (apm_t02A04_HQ k) := by
+  sorry
+
+/-- Path-connectedness identifies rational degree-zero homology with `ℚ`. -/
+theorem apm_t02A04_H0_of_pathConnected
+    (hpc : PathConnectedSpace apm_t02a04_X) :
+    Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) := by
+  sorry
+
 /-- **LIBRARY.** The concrete degree-two attachment is rationally acyclic. -/
 theorem apm_t02A04_rational_homology :
     Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧
       ∀ k : ℕ, 0 < k → CategoryTheory.Limits.IsZero (apm_t02A04_HQ k) := by
-  sorry
+  let C := Classical.choice apm_t02A04_compatibleOpenCover
+  have hdegree := apm_t02A04_attachingCurve_H1_isIso
+  refine ⟨apm_t02A04_H0_of_pathConnected apm_t02A04_pathConnected, ?_⟩
+  intro k hk
+  rcases k with _ | _ | _ | k
+  · omega
+  · exact apm_t02A04_H1_zero_of_cover C hdegree
+  · exact apm_t02A04_H2_zero_of_cover C hdegree
+  · exact apm_t02A04_Hhigh_zero_of_cover C (k + 3) (by omega)
 
 lemma apm_t02A04_lefschetz_number_aux_trace_H0_aux_induced_eq_id
     (e : apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ)

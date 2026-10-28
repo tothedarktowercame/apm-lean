@@ -28,34 +28,72 @@ does not supply a homology computation or fixed-point theorem.
 
 ## Remaining lemmas
 
-### `apm_t02A04_rational_homology` — LIBRARY
+### Split of `apm_t02A04_rational_homology`
 
-**Statement.** The concrete quotient has `H₀(-;Q) ≅ Q` and zero rational
-singular homology in every positive degree.
+The old 400–700 line LIBRARY boundary is now a sorry-free assembly from seven
+leaves.  The interface follows `t03J02`'s `CompatibleOpenCover`: in particular
+`outer_compat` identifies the actual overlap inclusion, after the displayed
+homotopy equivalences, with the concrete attaching curve.  Thus the
+Mayer–Vietoris map is reachable; the cover does not merely package abstract
+equivalences.
 
-**Why true.** Retract `D² × S¹` to its circle factor.  Under this retraction
-the attaching curve becomes `z ↦ z²`.  Transport the attachment to the
-one-cell CW model and compute the cellular complex
-`0 → Q --2--> Q → Q → 0`.  Equivalently, construct the open cover recorded in
-the topology audit, identify the overlap-to-solid-torus `H₁` map with
-multiplication by two, and use coefficient-`Q` Mayer–Vietoris.  This is the
-worklist target
-`ConstructionTargets.CoefficientMayerVietoris.cellAttachmentHomologyQ`, with
-the concrete prerequisites `t02a04_cellAttachment_openCover` and
-`t02a04_H1_attaching_map_eq_two`.
+| leaf | claim and proof target | estimate | dependencies |
+|---|---|---:|---|
+| `apm_t02A04_compatibleOpenCover` | The quotient has the radial outer/inner cover, with outer `≃ D²×S¹`, inner `≃ PUnit`, overlap `≃ S¹`, and compatible outer leg. Transport `ConstructionTargets.AttachTwoCell.cell_facts` across the evident quotient homeomorphism. | 100–150 | independent; `AttachTwoCell.cell_facts`, `cell_overlap_loop` |
+| `apm_t02A04_pathConnected` | The concrete quotient is path-connected. Identify it with `AttachTwoCell.Cell apm_t02A04_attachingCurve`, use the product path-connected instance and `AttachTwoCell.cell_pc`. | 40–80 | independent |
+| `apm_t02A04_attachingCurve_H1_isIso` | The attaching curve induces an isomorphism on rational `H₁`. Retract the disk coordinate, identify the second projection with `z ↦ z²`, and use the circle winding/covering-degree calculation; scalar `2 : ℚ` is invertible. | 80–150 | independent; `CoveringDegree`, `CircleHomology`, `T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv` |
+| `apm_t02A04_H1_zero_of_cover` | For any compatible cover and invertible attaching `H₁` map, rational `H₁(X)` is zero. Apply `RP3Homology.rationalMayerVietoris`; the inner `H₁` is zero and exactness makes the outer map surjective. | 90–150 | independent, receives cover and degree fact |
+| `apm_t02A04_H2_zero_of_cover` | For any compatible cover and invertible attaching `H₁` map, rational `H₂(X)` is zero. In MV the preceding piece groups vanish and the overlap-to-pieces map is injective. | 100–150 | independent, receives cover and degree fact |
+| `apm_t02A04_Hhigh_zero_of_cover` | For `k ≥ 3`, rational `H_k(X)` is zero because circle, solid torus, and point vanish in the adjacent degrees. | 70–120 | independent, receives cover |
+| `apm_t02A04_H0_of_pathConnected` | A supplied path-connectedness instance gives `H₀(X;ℚ) ≅ ℚ`. Use `ConstructionTargets.CoefficientH0.h0Iso`. | 20–40 | independent, receives path-connectedness |
 
-**Estimate.** LIBRARY program, roughly 400–700 lines including the concrete
-open-cover and degree computation; the final Mayer–Vietoris assembly is
-120–220 lines.  It is stated once rather than split into fake small lemmas.
+None of these leaves is LIBRARY: each sits on banked open-cover/MV, homotopy,
+or circle-degree infrastructure.  `apm_t02A04_rational_homology` chooses the
+cover once and dispatches degrees `0`, `1`, `2`, and `≥3`; it contains no
+`sorry`.
 
-**Depends on.** No other blueprint lemma.  The proved quotient eliminator and
-piece inclusions are available in the definitions block.
+**C1–C10 checks.**
 
-**Truth check.** In degrees `2 → 1`, multiplication by `2` has zero kernel and
-full image over `Q`; hence both `H₂` and `H₁` vanish.  The quotient is nonempty
-and connected, giving `H₀ ≅ Q`.  If the longitudinal degree were zero this
-check would fail (`H₁` would survive), which confirms that the encoded square
-in the second coordinate is essential.
+* `compatibleOpenCover`: C1/C5 the compatibility is an explicit homotopy of
+  maps from the overlap, including its basepoint-free circle parameter; C2 it
+  supplies geometric data rather than the homology conclusion; C3 it is only
+  point-set geometry; C4 the four cover fields are precisely those consumed;
+  C6 matches the concrete quotient; C7 subspace intersections are Lean
+  subtypes; C8 the pieces and overlap are nonempty (radius `1/2`); C9 it is not
+  the ancestor's homology claim; C10 the table matches the structure.
+* `pathConnected`: C1 follows from connected pieces with nonempty circle
+  overlap; C2/C3 it supplies only connectivity; C4–C7 no hidden algebraic
+  premise; C8 the disk centre supplies a point; C9 distinct from the ancestor;
+  C10 as stated.
+* `attachingCurve_H1_isIso`: C1 degree `2` is nonzero and invertible over `ℚ`;
+  C2 no computed scalar is passed as a hypothesis; C3 only the degree
+  calculation; C4/C5 the named concrete map is used; C6/C7 coefficients are
+  explicitly rational; C8 the circle basepoint `1` maps to `((1),1)` and the
+  meridian coordinate retracts away; C9 not the ancestor; C10 as stated.
+* `H1_zero_of_cover`: C1 exactness plus surjectivity is sufficient; C2 the
+  conclusion is not assumed; C3 only degree one; C4/C5 `outer_compat` reaches
+  the MV leg; C6/C7 over `ℚ`; C8 degree zero would fail (cokernel `ℚ`), as it
+  should; C9 not the ancestor; C10 as stated.
+* `H2_zero_of_cover`: C1 exactness plus injectivity is sufficient; C2/C3 only
+  degree two; C4/C5 use the same reachable MV leg; C6/C7 over `ℚ`; C8 degree
+  zero would fail (kernel `ℚ`), while degree one also succeeds; C9 not the
+  ancestor; C10 as stated.
+* `Hhigh_zero_of_cover`: C1 uses the adjacent vanishing ranges; C2/C3 only
+  `k≥3`; C4 covers the MV neighbors; C5 no map coordinate is needed; C6/C7
+  rational singular homology; C8 the boundary case `k=3` uses `H₂(S¹)=0`;
+  C9 not the ancestor; C10 as stated.
+* `H0_of_pathConnected`: C1 `CoefficientH0.h0Iso` applies; C2 connectivity is
+  strictly weaker than the conclusion; C3 only degree zero; C4–C7 direct; C8
+  nonemptiness is part of `PathConnectedSpace`; C9 not the ancestor; C10 as
+  stated.
+
+**Integral and degree truth audit.** Over `ℤ`, multiplication by two has
+cokernel `ℤ/2`, so the rational-only `IsIso` leaf deliberately does not claim an
+integral result.  Degree one remains invertible and gives the same acyclicity.
+Degree zero is neither injective nor surjective: the `H1` and `H2` leaves then
+correctly cease to apply, and both groups are `ℚ`.  The overlap circle is
+parameterized by its radius-`1/2` representative, with basepoint `1`; the
+compatibility homotopy fixes which attaching map its generator follows.
 
 ### `apm_t02A04_lefschetz_number`
 
@@ -108,17 +146,20 @@ and one attached 2-cell after retracting the solid torus.
 
 ## Dependency layers
 
-* **Layer 1 (parallel):** `apm_t02A04_rational_homology` (LIBRARY),
-  `apm_t02A04_lefschetz_number` (taking the first conclusion as a hypothesis),
-  and `apm_t02A04_fixed_point_of_lefschetz` (LIBRARY, taking the second
-  conclusion as a hypothesis).
-* **Layer 2:** the sorry-free theorem `apm_t02a04` applies those three results.
+* **Layer 1 (parallel):** the seven rational-homology leaves in the table;
+  `apm_t02A04_lefschetz_number` (already proved, taking their assembled
+  conclusion as a hypothesis); and `apm_t02A04_fixed_point_of_lefschetz`
+  (LIBRARY, taking the Lefschetz-number conclusion as a hypothesis).
+* **Layer 2:** the sorry-free `apm_t02A04_rational_homology` assembles its
+  seven leaves.
+* **Layer 3:** the byte-identical theorem `apm_t02a04` applies the homology,
+  Lefschetz-number, and fixed-point results.
 
-There are **three open lemmas**.  I have no mathematical doubt about their
-statements.  The substantial implementation risk is the shared Lefschetz
-foundation, which the topology audit estimates at months rather than one
-ordinary lemma session; the concrete homology computation is also a library
-program rather than a 30–150 line seat.
+There are **eight open lemmas**: seven ordinary independent homology leaves
+and the unchanged fixed-point LIBRARY lemma.  I have no mathematical doubt
+about their statements.  The substantial remaining implementation risk is
+the shared Lefschetz foundation, which the topology audit estimates at months
+rather than one ordinary lemma session.
 
 ## Compilation and axioms
 
@@ -134,5 +175,6 @@ The final output of `#print axioms apm_t02a04` was:
 'apm_t02a04' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The three `sorry` warnings are exactly the three top-level lemmas above; the
-main theorem contains no `sorry`.
+The eight `sorry` warnings are exactly the seven new homology leaves and the
+unchanged `apm_t02A04_fixed_point_of_lefschetz`; both the rational-homology
+assembly and the main theorem contain no `sorry`.
