@@ -134,6 +134,71 @@ theorem faceCarriedChain_mono {n k : ℕ}
   refine ⟨m, a, σ, hz, fun i ↦ (hσ i).trans ?_⟩
   exact preimage_mono (convexHull_mono (by simpa using hst))
 
+lemma faceCarriedCycle_bounds_aux_cycle_lift
+    (C : ChainComplex (ModuleCat.{0} ℚ) ℕ) (j : ℕ)
+    (q : C.X (j + 1)) (hq : C.d (j + 1) j q = 0) :
+    ∃ x : C.cycles (j + 1), C.iCycles (j + 1) x = q := by
+  let e : ModuleCat.of ℚ ℚ ⟶ C.X (j + 1) :=
+    ModuleCat.ofHom (LinearMap.toSpanSingleton ℚ (C.X (j + 1)) q)
+  have he : e ≫ C.d (j + 1) j = 0 := by
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext
+    intro r
+    change C.d (j + 1) j (r • q) = 0
+    simp [hq]
+  refine ⟨C.liftCycles e j (by simp) he 1, ?_⟩
+  have h := ConcreteCategory.congr_hom
+    (C.liftCycles_i e j (by simp) he) 1
+  exact h.trans (by simp [e])
+
+lemma faceCarriedCycle_bounds_aux_exists_boundary
+    (C : ChainComplex (ModuleCat.{0} ℚ) ℕ) (j : ℕ)
+    (x : C.cycles j) (h : C.homologyπ j x = 0) :
+    ∃ b : C.X (j + 1), C.d (j + 1) j b = C.iCycles j x := by
+  let S := ShortComplex.mk (C.toCycles (j + 1) j) (C.homologyπ j)
+    (C.toCycles_comp_homologyπ (j + 1) j)
+  have hS : S.Exact :=
+    S.exact_of_g_is_cokernel (C.homologyIsCokernel (j + 1) j (by simp))
+  obtain ⟨b, hb⟩ := (S.moduleCat_exact_iff.mp hS) x h
+  change C.toCycles (j + 1) j b = x at hb
+  refine ⟨b, ?_⟩
+  have hi := ConcreteCategory.congr_hom (C.toCycles_i (j + 1) j) b
+  simpa only [CategoryTheory.comp_apply, hb] using hi.symm
+
+/-- Chains of `X` carried by a subset `A`: finite generator combinations of
+simplices with image in `A` (`FaceCarriedChain` is the case `A = preimage of a hull`). -/
+def SubsetCarriedChain (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
+    (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k) : Prop :=
+  ∃ (m : ℕ) (a : Fin m → ℚ) (σ : Fin m → SingularSimplex (TopCat.of X) k),
+    z = ∑ i, (CoefficientH0.singularGenerator ℚ _ k (σ i)) (a i) ∧
+    ∀ i, Set.range (continuousMapOfSingularSimplex k (σ i)) ⊆ A
+
+/-- (FB-b) Generic filling: in a rationally pointlike subset `A`, a carried
+positive-degree cycle bounds a carried chain.  Route: a carried chain is the
+pushforward of a chain of the subspace `A` (lift each simplex, which lands in
+`A`); pushforward along the subspace inclusion is injective on chains (it is
+injective on simplices) and commutes with `d`, so the lift is a cycle; it bounds
+in `A` (`hA` and the banked `_aux_cycle_lift`/`_aux_exists_boundary`); push the
+bounding chain forward. -/
+theorem subsetCarriedCycle_bounds (X : Type) [TopologicalSpace X] (A : Set X)
+    (hA : RationallyPointlike A) {k : ℕ} (hk : 0 < k)
+    (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
+    (hz : SubsetCarriedChain X A z)
+    (hcycle : (CoefficientH0.SingularChains ℚ (TopCat.of X)).d k (k - 1) z = 0) :
+    ∃ w : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X (k + 1),
+      SubsetCarriedChain X A w ∧
+        (CoefficientH0.SingularChains ℚ (TopCat.of X)).d (k + 1) k w = z := by
+  sorry
+
+/-- (FB-a) The preimage of a face hull in `K.space` is homeomorphic to the hull
+(the hull lies in `K.space`), so it is rationally pointlike too. -/
+theorem faceHullPreimage_rationallyPointlike {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : FaceIndex K k)
+    (hpoint : RationallyPointlike (convexHull ℝ (s.1 : Set (Euc n)))) :
+    RationallyPointlike ((fun x : K.space => (x : Euc n)) ⁻¹'
+      convexHull ℝ (s.1 : Set (Euc n))) := by
+  sorry
+
 /-- Positive-degree acyclicity in the concrete carrier form needed by the
 induction: a carried cycle bounds a carried chain.  Its proof lifts the finite
 presentation to singular chains on the hull subtype, uses positive-degree
@@ -145,7 +210,8 @@ theorem faceCarriedCycle_bounds {n k : ℕ}
     (hcycle : (SingularQChains K).d k (k - 1) z = 0) (hk : 0 < k) :
     ∃ w : (SingularQChains K).X (k + 1), FaceCarriedChain K s.1 w ∧
       (SingularQChains K).d (k + 1) k w = z := by
-  sorry
+  exact subsetCarriedCycle_bounds K.space _ (faceHullPreimage_rationallyPointlike K s hpoint)
+    hk z hz hcycle
 
 /-- In degree zero an affine comparison is forced on vertices: a singular
 zero-simplex whose range is the singleton hull of a vertex is constant. -/
@@ -186,6 +252,11 @@ theorem affineComparison_degreeZero_eq {n : ℕ}
   rw [show Finsupp.single s a = a • Finsupp.single s 1 by simp]
   rw [map_smul, map_smul, hσ₁, hσ₂, hsigma]
 
+/-- Route for the remaining step (claude-14): Mathlib's `Homotopy.mkInductive`
+(Algebra/Homology/Homotopy.lean) builds a homotopy of ℕ-indexed chain complexes
+from a degree-0 component and an inductive step; the step at basis face `s`
+fills the carried cycle `cmp₁ s - cmp₂ s - h (d s)` with `hfill`, using the
+banked carrier-closure helpers above. -/
 /-- The inductive acyclic-carrier construction.  The filling operation is an
 explicit hypothesis so this leaf is independent of its topological proof.
 On a basis face in degree `k`, choose a carried preimage of
