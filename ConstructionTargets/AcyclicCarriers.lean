@@ -185,7 +185,23 @@ theorem subsetPush_lift (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
     (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
     (hz : SubsetCarriedChain X A z) :
     ∃ z' : (CoefficientH0.SingularChains ℚ (TopCat.of A)).X k, (subsetPush X A).f k z' = z := by
-  sorry
+  classical
+  rcases hz with ⟨m, a, σ, rfl, hσ⟩
+  let f : C(A, X) := ⟨Subtype.val, continuous_subtype_val⟩
+  let τ : Fin m → SingularSimplex (TopCat.of A) k := fun i ↦
+    singularSimplexOfContinuousMap (TopCat.of A) k
+      ⟨fun x ↦ ⟨continuousMapOfSingularSimplex k (σ i) x, hσ i ⟨x, rfl⟩⟩,
+        (continuousMapOfSingularSimplex k (σ i)).continuous.subtype_mk _⟩
+  refine ⟨∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of A) k (τ i)) (a i), ?_⟩
+  rw [map_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  change ((CoefficientH0.singularGenerator ℚ (TopCat.of A) k (τ i) ≫
+    (subsetPush X A).f k) (a i)) = _
+  rw [show (subsetPush X A).f k =
+      (CoefficientH0.singularPostcomposition ℚ f).f k by rfl]
+  rw [CoefficientH0.singularGenerator_singularPostcomposition]
+  congr 2
 
 /-- (FB-b2) Pushforward along a subspace inclusion is injective on chains (it
 is injective on singular simplices, and chains are free on simplices). -/
