@@ -218,7 +218,31 @@ lemma rp2_explicit_finite_model_aux_basis_inter {N : ℕ} (s t : Finset (Fin N))
       convexHull ℝ
         ((↑(s.image (basisVertex N)) : Set (EuclideanSpace ℝ (Fin N))) ∩
           ↑(t.image (basisVertex N))) := by
-  sorry
+  classical
+  let u := s ∪ t
+  have hlin : LinearIndependent ℝ (basisVertex N) := by
+    simpa [basisVertex] using
+      (Pi.linearIndependent_single_one (Fin N) ℝ).map'
+        (EuclideanSpace.equiv (Fin N) ℝ).symm.toLinearMap
+        (LinearMap.ker_eq_bot.mpr
+          (EuclideanSpace.equiv (Fin N) ℝ).symm.injective)
+  have hu : AffineIndependent ℝ
+      ((↑) : ↥(u.image (basisVertex N)) → EuclideanSpace ℝ (Fin N)) := by
+    refine hlin.affineIndependent.range.mono ?_
+    rintro x hx
+    simp only [Finset.mem_coe, Finset.mem_image] at hx
+    obtain ⟨i, -, rfl⟩ := hx
+    exact ⟨i, rfl⟩
+  rw [hu.convexHull_inter (t₁ := s.image (basisVertex N))
+    (t₂ := t.image (basisVertex N))]
+  · intro x hx
+    simp only [Finset.mem_image] at hx ⊢
+    obtain ⟨i, hi, rfl⟩ := hx
+    exact ⟨i, Finset.mem_union_left t hi, rfl⟩
+  · intro x hx
+    simp only [Finset.mem_image] at hx ⊢
+    obtain ⟨i, hi, rfl⟩ := hx
+    exact ⟨i, Finset.mem_union_right s hi, rfl⟩
 
 /-- **LIBRARY (explicit six-vertex model).** There is a finite coordinate realization of
 the standard six-vertex, ten-triangle triangulation of `RP²`, together with a continuous
