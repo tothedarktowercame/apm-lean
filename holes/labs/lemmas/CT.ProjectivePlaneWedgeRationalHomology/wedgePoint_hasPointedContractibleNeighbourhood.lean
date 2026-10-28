@@ -68,13 +68,153 @@ theorem wedge_rationallyPointlike
 /-- L5: pointed contractible neighbourhoods persist at the point of a
 binary wedge. -/
 -- BEGIN SEAT AREA
+def wedgePoint_hasPointedContractibleNeighbourhood_aux_sum
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} {y₀ : Y} (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) (t : unitInterval) :
+    Sum X Y → Wedge x₀ y₀
+  | .inl x => quotientMap x₀ y₀ (.inl (hX.homotopy (t, x)))
+  | .inr y => quotientMap x₀ y₀ (.inr (hY.homotopy (t, y)))
+
+private theorem wedgePoint_hasPointedContractibleNeighbourhood_aux_respects
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} {y₀ : Y} (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) (t : unitInterval) (a b : Sum X Y)
+    (hab : Relation.EqvGen (Rel x₀ y₀) a b) :
+    wedgePoint_hasPointedContractibleNeighbourhood_aux_sum hX hY t a =
+      wedgePoint_hasPointedContractibleNeighbourhood_aux_sum hX hY t b := by
+  induction hab with
+  | rel a b hab =>
+      cases hab
+      change quotientMap x₀ y₀ (.inl (hX.homotopy (t, x₀))) =
+        quotientMap x₀ y₀ (.inr (hY.homotopy (t, y₀)))
+      rw [hX.fixed, hY.fixed]
+      exact Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def wedgePoint_hasPointedContractibleNeighbourhood_aux_map
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} {y₀ : Y} (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) :
+    unitInterval × Wedge x₀ y₀ → Wedge x₀ y₀ :=
+  fun p => Quotient.lift
+    (wedgePoint_hasPointedContractibleNeighbourhood_aux_sum hX hY p.1)
+    (wedgePoint_hasPointedContractibleNeighbourhood_aux_respects hX hY p.1) p.2
+
+theorem wedgePoint_hasPointedContractibleNeighbourhood_aux_continuous
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} {y₀ : Y} (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) :
+    Continuous (wedgePoint_hasPointedContractibleNeighbourhood_aux_map hX hY) := by
+  have hq : Topology.IsQuotientMap (quotientMap x₀ y₀) :=
+    isQuotientMap_quotient_mk'
+  apply hq.continuous_lift_prod_right
+  let g : (unitInterval × X) ⊕ (unitInterval × Y) → Wedge x₀ y₀
+    | .inl p => quotientMap x₀ y₀ (.inl (hX.homotopy p))
+    | .inr p => quotientMap x₀ y₀ (.inr (hY.homotopy p))
+  have hg : Continuous g := by
+    rw [continuous_sum_dom]
+    exact ⟨(continuous_quotientMap x₀ y₀).comp
+      (continuous_inl.comp hX.homotopy.continuous),
+      (continuous_quotientMap x₀ y₀).comp
+        (continuous_inr.comp hY.homotopy.continuous)⟩
+  have heq : (fun p : unitInterval × Sum X Y =>
+      wedgePoint_hasPointedContractibleNeighbourhood_aux_map hX hY
+        (p.1, quotientMap x₀ y₀ p.2)) =
+      g ∘ Homeomorph.prodSumDistrib := by
+    funext p
+    rcases p with ⟨t, s⟩
+    cases s <;> rfl
+  rw [heq]
+  exact hg.comp Homeomorph.prodSumDistrib.continuous
+
+def wedgePoint_hasPointedContractibleNeighbourhood_aux_contraction
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} {y₀ : Y} (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) :
+    PointedContraction (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) where
+  homotopy :=
+    { toFun := wedgePoint_hasPointedContractibleNeighbourhood_aux_map hX hY
+      continuous_toFun :=
+        wedgePoint_hasPointedContractibleNeighbourhood_aux_continuous hX hY
+      map_zero_left := by
+        rintro ⟨a⟩
+        cases a with
+        | inl x =>
+            change quotientMap x₀ y₀ (Sum.inl (hX.homotopy (0, x))) =
+              quotientMap x₀ y₀ (Sum.inl x)
+            exact congrArg (fun z => quotientMap x₀ y₀ (Sum.inl z))
+              (hX.homotopy.map_zero_left x)
+        | inr y =>
+            change quotientMap x₀ y₀ (Sum.inr (hY.homotopy (0, y))) =
+              quotientMap x₀ y₀ (Sum.inr y)
+            exact congrArg (fun z => quotientMap x₀ y₀ (Sum.inr z))
+              (hY.homotopy.map_zero_left y)
+      map_one_left := by
+        rintro ⟨a⟩
+        cases a with
+        | inl x =>
+            change quotientMap x₀ y₀ (Sum.inl (hX.homotopy (1, x))) =
+              quotientMap x₀ y₀ (Sum.inl x₀)
+            exact congrArg (fun z => quotientMap x₀ y₀ (Sum.inl z))
+              (hX.homotopy.map_one_left x)
+        | inr y =>
+            calc
+              quotientMap x₀ y₀ (.inr (hY.homotopy (1, y))) =
+                  quotientMap x₀ y₀ (.inr y₀) := congrArg
+                    (fun z => quotientMap x₀ y₀ (.inr z))
+                    (hY.homotopy.map_one_left y)
+              _ = quotientMap x₀ y₀ (.inl x₀) :=
+                (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm }
+  fixed := by
+    intro t
+    change quotientMap x₀ y₀ (.inl (hX.homotopy (t, x₀))) = _
+    rw [hX.fixed]
+
+def wedgePoint_hasPointedContractibleNeighbourhood_aux_transport
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} (e : X ≃ₜ Y) (h : PointedContraction Y (e x₀)) :
+    PointedContraction X x₀ where
+  homotopy :=
+    { toFun := fun p => e.symm (h.homotopy (p.1, e p.2))
+      continuous_toFun := e.symm.continuous.comp
+        (h.homotopy.continuous.comp
+          (continuous_fst.prodMk (e.continuous.comp continuous_snd)))
+      map_zero_left := by intro x; simp
+      map_one_left := by intro x; simp }
+  fixed := by
+    intro t
+    change e.symm (h.homotopy (t, e x₀)) = x₀
+    rw [h.fixed]
+    exact e.symm_apply_apply x₀
+
 theorem wedgePoint_hasPointedContractibleNeighbourhood
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     (x₀ : X) (y₀ : Y)
     (hnX : HasPointedContractibleNeighbourhood x₀)
     (hnY : HasPointedContractibleNeighbourhood y₀) :
     HasPointedContractibleNeighbourhood (quotientMap x₀ y₀ (.inl x₀)) := by
-  sorry
+  rcases hnX with ⟨A, hx, hA, ⟨cA⟩⟩
+  rcases hnY with ⟨B, hy, hB, ⟨cB⟩⟩
+  let U := ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen
+    x₀ y₀ A B
+  have hU : IsOpen U :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen_isOpen
+      hA hB hx hy
+  have hp : quotientMap x₀ y₀ (.inl x₀) ∈ U := ⟨.inl x₀, hx, rfl⟩
+  let e : U ≃ₜ Wedge (⟨x₀, hx⟩ : A) (⟨y₀, hy⟩ : B) :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge
+      hA hB hx hy
+  let c := wedgePoint_hasPointedContractibleNeighbourhood_aux_contraction cA cB
+  have he : e ⟨_, hp⟩ = quotientMap (⟨x₀, hx⟩ : A) (⟨y₀, hy⟩ : B)
+      (.inl ⟨x₀, hx⟩) :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge_left
+      _ _ _ _ _ _
+  rw [← he] at c
+  exact ⟨U, hp, hU,
+    ⟨wedgePoint_hasPointedContractibleNeighbourhood_aux_transport e c⟩⟩
 -- END SEAT AREA
 
 /-- L6: every endomorphism acts identically on one-dimensional `H₀` of a
