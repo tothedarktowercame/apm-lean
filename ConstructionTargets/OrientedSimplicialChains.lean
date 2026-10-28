@@ -60,7 +60,15 @@ theorem signedDeletion_sq_zero {n : ℕ}
 theorem faceModule_finiteDimensional {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite) :
     ∀ k, FiniteDimensional ℚ (FaceModule K k) := by
-  sorry
+  intro k
+  letI : Finite K.faces := hK
+  letI : Finite (FaceIndex K k) :=
+    Finite.of_injective
+      (fun s : FaceIndex K k => (⟨s.1, s.2.1⟩ : K.faces))
+      (by
+        intro s t h
+        exact Subtype.ext (congrArg (fun x : K.faces => x.1) h))
+  infer_instance
 
 theorem faceModule_zero_above {n : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite) :
