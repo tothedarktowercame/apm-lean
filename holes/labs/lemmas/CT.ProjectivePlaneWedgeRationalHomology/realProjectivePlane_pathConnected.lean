@@ -42,7 +42,12 @@ theorem realProjectivePlane_rationallyPointlike :
 -- BEGIN SEAT AREA
 theorem realProjectivePlane_pathConnected :
     PathConnectedSpace RealProjectivePlane := by
-  sorry
+  letI : PathConnectedSpace ConstructionTargets.Surfaces.Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+  exact
+    (ConstructionTargets.Surfaces.surjective_surfaceQuotient false 1).pathConnectedSpace
+      (ConstructionTargets.Surfaces.continuous_surfaceQuotient false 1)
 -- END SEAT AREA
 
 /-- L3: the image of the polygon centre has a small pointed contractible
