@@ -380,8 +380,48 @@ lemma rp2_explicit_finite_model_aux_hex_norm (z : ℂ) : ‖hexToDisk z‖ = gau
 lemma rp2_explicit_finite_model_aux_hex_continuous : Continuous hexToDisk := by
   sorry
 
+lemma rp2_explicit_finite_model_aux_hex_neg_vertex (j : ℕ) :
+    hexVertex (j + 3) = -hexVertex j := by
+  unfold hexVertex
+  rw [show (2 * (Real.pi : ℂ) * Complex.I * ((j + 3 : ℕ) : ℂ) / 6) =
+      Real.pi * Complex.I +
+        2 * (Real.pi : ℂ) * Complex.I * (j : ℂ) / 6 by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_pi_mul_I]
+  simp
+
+lemma rp2_explicit_finite_model_aux_hex_neg_mem {z : ℂ} (hz : z ∈ hexagon) :
+    -z ∈ hexagon := by
+  let V : Set ℂ := Set.range fun j : Fin 6 => hexVertex j
+  have hgen : ∀ z ∈ V, -z ∈ V := by
+    rintro _ ⟨j, rfl⟩
+    by_cases hj : j.1 < 3
+    · refine ⟨⟨j.1 + 3, by omega⟩, ?_⟩
+      change hexVertex (j.1 + 3) = -hexVertex j.1
+      exact rp2_explicit_finite_model_aux_hex_neg_vertex j.1
+    · refine ⟨⟨j.1 - 3, by omega⟩, ?_⟩
+      change hexVertex (j.1 - 3) = -hexVertex j.1
+      have heq : j.1 - 3 + 3 = j.1 := by omega
+      have h := rp2_explicit_finite_model_aux_hex_neg_vertex (j.1 - 3)
+      rw [heq] at h
+      rw [h, neg_neg]
+  have hrange : -(Set.range fun j : Fin 6 => hexVertex j) =
+      Set.range fun j : Fin 6 => hexVertex j := by
+    ext x
+    change (-x ∈ V ↔ x ∈ V)
+    constructor
+    · intro hx
+      simpa using hgen (-x) hx
+    · intro hx
+      exact hgen x hx
+  rw [hexagon, ← hrange, convexHull_neg]
+  exact neg_mem_neg.mpr hz
+
 lemma rp2_explicit_finite_model_aux_hex_neg (z : ℂ) : hexToDisk (-z) = -hexToDisk z := by
-  sorry
+  unfold hexToDisk
+  rw [gauge_neg (fun _ => rp2_explicit_finite_model_aux_hex_neg_mem), norm_neg]
+  simp
 
 lemma rp2_explicit_finite_model_aux_hex_injOn : Set.InjOn hexToDisk hexagon := by
   sorry
