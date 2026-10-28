@@ -554,7 +554,99 @@ theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_one_aux_sum {n m 
       (-1 : ℚ) ^ ((s.1.sort on.le).idxOf v) * sortingSign on om (s.1.erase v) h =
         -((-1 : ℚ) ^ ((s.1.sort on.le).idxOf w) * sortingSign on om (s.1.erase w) h)) :
     hm k (dK k (Finsupp.single s 1)) = 0 := by
-  sorry
+  classical
+  have hlt : (s.1.image h).card < s.1.card := by
+    rw [hcard, s.2.2]
+    omega
+  obtain ⟨v, hv, w, hw, hvw, hcollapse⟩ :=
+    Finset.exists_ne_map_eq_of_card_image_lt hlt
+  have himage_v : (s.1.erase v).image h = s.1.image h := by
+    apply Finset.Subset.antisymm (Finset.image_mono h (Finset.erase_subset _ _))
+    intro y hy
+    rcases Finset.mem_image.mp hy with ⟨x, hx, rfl⟩
+    by_cases hxv : x = v
+    · subst x
+      exact Finset.mem_image.mpr ⟨w, Finset.mem_erase.mpr ⟨hvw.symm, hw⟩,
+        hcollapse.symm⟩
+    · exact Finset.mem_image.mpr ⟨x, Finset.mem_erase.mpr ⟨hxv, hx⟩, rfl⟩
+  have himage_w : (s.1.erase w).image h = s.1.image h := by
+    apply Finset.Subset.antisymm (Finset.image_mono h (Finset.erase_subset _ _))
+    intro y hy
+    rcases Finset.mem_image.mp hy with ⟨x, hx, rfl⟩
+    by_cases hxw : x = w
+    · subst x
+      exact Finset.mem_image.mpr ⟨v, Finset.mem_erase.mpr ⟨hvw, hv⟩,
+        hcollapse⟩
+    · exact Finset.mem_image.mpr ⟨x, Finset.mem_erase.mpr ⟨hxw, hx⟩, rfl⟩
+  let ev := signedDeletion_sq_zero_aux_generator_aux_erase K s v hv
+  let ew := signedDeletion_sq_zero_aux_generator_aux_erase K s w hw
+  have hev_image : ev.1.image h = s.1.image h := himage_v
+  have hew_image : ew.1.image h = s.1.image h := himage_w
+  have hcard_ev : (ev.1.image h).card = k + 1 := by rw [hev_image, hcard]
+  have hcard_ew : (ew.1.image h).card = k + 1 := by rw [hew_image, hcard]
+  have hspecv := hhm k ev
+  rw [dif_pos hcard_ev] at hspecv
+  obtain ⟨tv, htv, hmapv⟩ := hspecv
+  have hspecw := hhm k ew
+  rw [dif_pos hcard_ew] at hspecw
+  obtain ⟨tw, htw, hmapw⟩ := hspecw
+  have htvw : tv = tw := by
+    apply Subtype.ext
+    rw [htv, htw, hev_image, hew_image]
+  have hzero (u : Euc n) (hu : u ∈ s.1) (huv : u ≠ v) (huw : u ≠ w) :
+      hm k (Finsupp.single
+        (signedDeletion_sq_zero_aux_generator_aux_erase K s u hu) 1) = 0 := by
+    have hc : ((s.1.erase u).image h).card ≠ k + 1 := by
+      intro hc
+      have hcard_erase : (s.1.erase u).card = k + 1 := by
+        rw [Finset.card_erase_of_mem hu, s.2.2]
+        omega
+      have hinj : Set.InjOn h (s.1.erase u) :=
+        Finset.injOn_of_card_image_eq (hc.trans hcard_erase.symm)
+      exact hvw (hinj (Finset.mem_erase.mpr ⟨huv.symm, hv⟩)
+        (Finset.mem_erase.mpr ⟨huw.symm, hw⟩) hcollapse)
+    have hspec := hhm k
+      (signedDeletion_sq_zero_aux_generator_aux_erase K s u hu)
+    change (if hinj : ((s.1.erase u).image h).card = k + 1 then _ else _) at hspec
+    rw [dif_neg hc] at hspec
+    exact hspec
+  rw [vertexChainMap_commutes_aux_generator_aux_boundaryK on K dK hdK s, map_sum]
+  let vv : {x // x ∈ s.1} := ⟨v, hv⟩
+  let ww : {x // x ∈ s.1} := ⟨w, hw⟩
+  have hvv : vv ≠ ww := by
+    intro heq
+    exact hvw (congrArg Subtype.val heq)
+  rw [Finset.sum_eq_add_sum_diff_singleton_of_mem (Finset.mem_attach _ vv)]
+  have hwwmem : ww ∈ s.1.attach \ {vv} := by
+    simp only [Finset.mem_sdiff, Finset.mem_attach, Finset.mem_singleton]
+    exact ⟨trivial, hvv.symm⟩
+  rw [Finset.sum_eq_add_sum_diff_singleton_of_mem hwwmem]
+  have hrest : ∑ u ∈ (s.1.attach \ {vv}) \ {ww},
+      hm k (((-1 : ℚ) ^ ((s.1.sort on.le).idxOf u.1)) •
+        Finsupp.single (signedDeletion_sq_zero_aux_generator_aux_erase K s u.1 u.2) 1) = 0 := by
+    apply Finset.sum_eq_zero
+    intro u hu
+    rcases Finset.mem_sdiff.mp hu with ⟨hu, huw⟩
+    rcases Finset.mem_sdiff.mp hu with ⟨_, huv⟩
+    rw [map_smul, hzero u.1 u.2]
+    · exact smul_zero _
+    · intro heq
+      apply huv
+      exact Finset.mem_singleton.mpr (Subtype.ext heq)
+    · intro heq
+      apply huw
+      exact Finset.mem_singleton.mpr (Subtype.ext heq)
+  rw [hrest, add_zero, map_smul, map_smul]
+  change _ • hm k (Finsupp.single ev 1) + _ • hm k (Finsupp.single ew 1) = 0
+  rw [hmapv, hmapw, htvw]
+  have hs := hB2 hv hw hvw hcollapse
+  change (-1 : ℚ) ^ ((s.1.sort on.le).idxOf v) * sortingSign on om ev.1 h =
+    -((-1 : ℚ) ^ ((s.1.sort on.le).idxOf w) * sortingSign on om ew.1 h) at hs
+  ext z
+  by_cases hz : z = tw
+  · subst z
+    simpa [vv, ww] using (eq_neg_iff_add_eq_zero.mp hs)
+  · simp [hz]
 -- END SEAT AREA
 
 /-- (C-B) Exactly one collision `h v = h w`, `v ≠ w`: only deleting `v` or `w`
