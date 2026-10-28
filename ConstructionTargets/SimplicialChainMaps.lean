@@ -212,7 +212,28 @@ theorem vertexChainMap_commutes_aux_generator_aux_collapse_aux_many {n m : ℕ}
     (s : FaceIndex K (k + 1))
     (hcard : (s.1.image h).card ≤ k) :
     hm k (dK k (Finsupp.single s 1)) = 0 := by
-  sorry
+  rw [vertexChainMap_commutes_aux_generator_aux_boundaryK on K dK hdK s,
+    map_sum]
+  apply Finset.sum_eq_zero
+  intro v hv
+  rw [map_smul]
+  have himage : ((s.1.erase v.1).image h).card ≤ k := by
+    apply le_trans (Finset.card_le_card ?_) hcard
+    intro y hy
+    rcases Finset.mem_image.mp hy with ⟨x, hx, rfl⟩
+    exact Finset.mem_image.mpr ⟨x, Finset.erase_subset _ _ hx, rfl⟩
+  have hzero :
+      hm k (Finsupp.single
+        (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1) = 0 := by
+    have hspec := hhm k
+      (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2)
+    rw [dif_neg] at hspec
+    · exact hspec
+    · intro heq
+      change ((s.1.erase v.1).image h).card = k + 1 at heq
+      rw [heq] at himage
+      omega
+  rw [hzero, smul_zero]
 
 /-- (C-B) Exactly one collision `h v = h w`, `v ≠ w`: only deleting `v` or `w`
 gives an injective image, the same face, with opposite signs. -/
