@@ -1,138 +1,98 @@
 # Ordered faces versus singular chains
 
-## Triage and route
+## Triage and correction to route C
 
-The target statement is true at its stated generality.  In particular, it must
-hold for **any** `cmp` satisfying `IsAffineComparison` and the chain-map square:
-each basis face is carried by its closed convex hull, and those hulls are
-contractible, so the acyclic-carriers theorem makes all such comparisons chain
-homotopic.
+The target is true, including the empty complex and degree zero. The reference
+map is now the concrete `OrientedSimplicialChains.affineCmp`; AC1--AC3 provide
+its basis formula, carrier condition, and chain square.
 
-This split chooses route **(C), acyclic carriers plus subdivision**.  Route (A)
-would require a new singular Mayer--Vietoris comparison for closed face
-attachments (the existing `RP3Homology.rationalMayerVietoris` is for open
-covers).  Route (B) would require the currently absent relative ordered-face
-complex and its relative comparison theorem.  Route (C) can use the already
-available chain-map calculations
-`CoefficientSingularSubdivision.singularSubdivisionDegree_comm_d`,
-`CoefficientSingularSubdivision.generator_formula`,
-`CoefficientBarycentricNaturality.vertexSubdivision_comm_d`, and
-`CoefficientBarycentricNaturality.vertexSubdivision_affine_natural`.
+A fixed choice `c : K.space → K.vertices` does **not** give the proposed map
+from open-star-small singular simplices by sending the chosen vertex tuple to a
+face and nonfaces to zero. Although choices commute with taking a singular
+face, a tuple which is not a face can have codimension-one subtuples which are
+faces, so the zero image can have nonzero prescribed boundary. The repair is
+the standard one: subdivide sufficiently and use a compatible simplicial
+approximation (or construct it inductively by dimension), then use an
+acyclic-carrier prism. The existing
+`CoefficientSmallComparison.inclusion_isIso`, `homologyIso_hom`,
+`inverse_left`, and `inverse_right` identify open-cover-small homology with all
+singular homology.
 
-The imported subdivision library still lacks the decisive bridge from its
-full vertex-chain complex to `FaceModule K`: it has no theorem identifying the
-ordered-face subcomplex and no small-chain quasi-isomorphism specialized to a
-finite geometric complex.  This is recorded as a LIBRARY leaf below rather
-than hidden in an ordinary seat.
+## Statement ladder
 
-## Statement ladder and assembly
+`affine_reference_quasiIso_exists` keeps its statement byte-identical and is a
+sorry-free assembly: choose `affineCmp`, discharge `IsAffineComparison` using
+`affineCmp_single` and `faceSimplex_range`, use `affineCmp_comm` for the chain
+square, and combine the two new leaves below. The separately queued
+`affineComparison_homologyMap_eq` is unchanged.
 
-The final theorem has the identical binders, hypotheses, and conclusion of
-`OrientedSimplicialChains.orderedFace_singular_quasiIso`.  Its proof extracts a
-reference comparison from `affine_reference_quasiIso_exists`, rewrites the
-given comparison's homology map using
-`affineComparison_homologyMap_eq`, and applies the reference bijectivity.
-Thus the assembly is sorry-free and neither leaf uses the other.
-
-| Leaf | Actual claim and proof route | Estimate | Independence / status |
+| Leaf | Claim and tools | Estimate | Independence / building on |
 |---|---|---:|---|
-| `affine_reference_quasiIso_exists` | There exists a face-carried chain map whose induced maps are bijective.  Build it from affine face simplices; use `CoefficientSingularSubdivision.singularSubdivisionDegree_comm_d` and `generator_formula`, `CoefficientBarycentricNaturality.vertexSubdivision_comm_d` and `vertexSubdivision_affine_natural`, and the finite-subdivision results `GeometricSimplicialSubdivision.barycentricSubdivision_finite`, `barycentricSubdivision_space`, and `exists_fine_subdivision`.  The missing ordered-face/small-chain bridge makes this about 350--500 lines. | 350--500 | independent; **LIBRARY** |
-| `affineComparison_homologyMap_eq` | Any two chain maps whose basis images fill exactly the corresponding closed face hull induce equal homology maps.  Construct the carrier homotopy inductively on degree, filling cycles in each convex hull by the straight-line cone/prism; conclude with Mathlib's homology-map invariance under homotopy (or the corresponding `HomologicalComplex` boundary calculation). | 180--280 | independent; possibly **LIBRARY** until a reusable algebraic acyclic-carriers theorem exists |
+| `affineCmp_homologyMap_injective` | Injectivity in degree `k`. Represent a null image by an open-star-small bounding chain via `CoefficientEventualSmallness.actual_chain_eventual`; use `CoefficientSmallComparison.inclusion_isIso` and `inverse_left`; construct the compatible subdivided approximation back to ordered faces; the carrier prism shows the original ordered cycle bounds. Use `GeometricSimplicialSubdivision.openStar`, `exists_vertexMap_of_mesh_lt_lebesgue`, `CoefficientSingularSubdivision.singularSubdivisionDegree_comm_d`, and `CoefficientBarycentricNaturality.vertexSubdivision_comm_d`. | 140--200 | independent of surjectivity; builds on AC1--AC3 and the sorry-free small-chain library |
+| `affineCmp_homologyMap_surjective` | Surjectivity in degree `k`. Subdivide a representative cycle until open-star-small, apply the compatible approximation to obtain an ordered-face cycle, and use the carrier prism plus `CoefficientSmallComparison.inverse_right` to identify its affine image with the original class. Same subdivision and star tools. | 140--200 | independent of injectivity; builds on AC1--AC3 and the sorry-free small-chain library |
+| `affineComparison_homologyMap_eq` | Any two face-carried chain maps induce equal homology maps, by the facewise convex acyclic-carrier homotopy. | 180--280 | independent, pre-existing and queued to another seat; untouched here |
 
-Dependency layers: both leaves are layer 0 and can be proved in parallel; the
-sorry-free final theorem is layer 1.
+Dependency layers: the injective and surjective leaves are layer 0 and can be
+proved in parallel. The reference existential is a small layer-1 assembly. The
+final theorem additionally consumes the independent carrier-invariance leaf.
 
-## Why the leaves are not placeholders or overloaded
-
-The reference leaf constructs one concrete quasi-isomorphism but says nothing
-about an arbitrary comparison.  The carrier leaf proves only equality of two
-induced maps and says nothing about bijectivity.  Neither conclusion repeats a
-hypothesis, and neither leaf implies the target without the other.
-
-The existential in the reference leaf packages its chain-map proof together
-with the witness.  This is intentional: the final assembly does not call the
-currently sorry-backed `affineCmp_comm`, so its only nonstandard axiom sources
-are the two new leaves.  The witness is not consumed by a sibling leaf; the
-generic carrier leaf accepts both comparisons and their exact chain squares as
-parameters.
+The new leaves share no sibling conclusion. Splitting by injectivity and
+surjectivity avoids an abstract “inverse data” hypothesis which would merely
+restate quasi-isomorphism. Each seat performs one direction of the
+small-chain/subdivision argument, not the whole comparison theorem.
 
 ## C1--C10 checks
 
-### `affine_reference_quasiIso_exists`
+### `affineCmp_homologyMap_injective`
 
-- **C1:** This is the standard finite-simplicial-complex comparison theorem over
-  `ℚ`; geometric subdivision preserves `K.space`.
-- **C2:** No hypothesis supplies a comparison, inverse, or bijectivity.
-- **C3:** It is the remaining large subdivision/small-chain foundation and is
-  explicitly marked LIBRARY; it does not include independence of arbitrary
-  comparisons.
-- **C4:** The reference map, its chain square, and bijectivity are packaged
-  together, so the assembly has every proof argument needed by
-  `ChainComplex.ofHom`.
-- **C5:** The witness has exactly the `FaceModule` components and singular-chain
-  codomain consumed by the target.
-- **C6:** Finiteness is exactly `hK`; no connectedness or purity hypothesis is
-  added.
-- **C7:** Coefficients are `ℚ`, degrees are homological `ℕ`, and the supplied
-  signed deletion uses the same ambient order `o`.
-- **C8:** Empty `K` gives zero complexes; one vertex gives `ℚ` in degree zero;
-  two isolated vertices give `ℚ²`; boundary of a triangle gives `H₁ = ℚ`; a
-  filled triangle is acyclic above degree zero.
-- **C9:** Unlike the ancestor target, this asserts existence of one reference
-  comparison, not that every comparison is a quasi-isomorphism.  Unlike
-  `affineComparison_exists_and_commutes`, it additionally proves bijectivity.
-- **C10:** The Lean statement packages precisely the witness, carrier condition,
-  chain square, and degreewise bijectivity described here.
+- **C1:** Standard simplicial/singular comparison injectivity; finiteness gives the uniform subdivision and open-star cover.
+- **C2:** No null-homology reflection or inverse is assumed.
+- **C3:** Only one degree and one direction are proved; surjectivity and carrier invariance are absent.
+- **C4:** `hdd` builds the source complex and AC3 supplies the exact chain map.
+- **C5:** The conclusion is the precise `ChainComplex.ofHom` map used by the assembly.
+- **C6:** No purity, connectedness, or nonemptiness hypothesis is added.
+- **C7:** Homological degrees are `ℕ`; coefficients and signs are `ℚ` and `o`.
+- **C8:** Empty source is injective; a single vertex is identity on `ℚ`; two vertices remain separated; degree zero needs no predecessor degree.
+- **C9:** Unlike the ancestor it proves neither existence nor bijectivity, only injectivity of the defined concrete map.
+- **C10:** The prose describes exactly this concrete degreewise map.
 
-### `affineComparison_homologyMap_eq`
+### `affineCmp_homologyMap_surjective`
 
-- **C1:** Closed convex hulls are nonempty for every `FaceIndex`; facewise cone
-  fillings prove the acyclic-carrier uniqueness theorem.
-- **C2:** Equality of homology maps is not assumed; only carrier and chain-map
-  conditions are supplied.
-- **C3:** It proves invariance only, not either map's bijectivity.
-- **C4:** Both maps share the exact source differential `d`, and both chain
-  squares are explicit hypotheses.
-- **C5:** The conclusion compares the exact `ChainComplex.ofHom` maps used by
-  the consumer, including their proof arguments (proof irrelevance handles
-  those arguments).
-- **C6:** No finiteness is required for carrier uniqueness, and none is added.
-- **C7:** The hull equality in `IsAffineComparison` fixes the carrier; signs are
-  already controlled by the two chain squares.
-- **C8:** In degree zero, `IsAffineComparison` sends a vertex to the constant
-  simplex at that vertex.  Empty complexes are vacuous; disconnected complexes
-  remain componentwise, so two vertices are not accidentally identified.
-- **C9:** The ancestor concludes bijectivity; this concludes equality of maps
-  for a pair of comparisons and is a genuine transfer theorem.
-- **C10:** The prose and Lean both state equality of induced homology maps, not
-  equality of chain maps.
+- **C1:** Small-chain inclusion is an isomorphism for the open-star cover, and compatible approximation supplies a face representative.
+- **C2:** No representative lift or surjectivity is assumed.
+- **C3:** Only one degree and one direction are proved.
+- **C4:** Subdivision preserves cycles and the carrier prism identifies the affine image; `inverse_right` returns to full homology.
+- **C5:** The preimage belongs to the exact ordered-face homology object in the conclusion.
+- **C6:** Uses precisely finiteness, signed deletion, and square-zero from the registered statement.
+- **C7:** Choice is made after compatible subdivision; no invalid pointwise nonface-to-zero convention is used.
+- **C8:** Empty space gives zero chains; one vertex gives `H₀ = ℚ`; two vertices give `ℚ²`; triangle boundary gives `H₁ = ℚ`; a filled triangle has no positive homology; degree zero uses the H0 branch of `inclusion_isIso`.
+- **C9:** One direction for the concrete map is not the ancestor's theorem for every carried comparison.
+- **C10:** Prose and Lean both state degreewise surjectivity.
+
+The unchanged carrier leaf retains its prior audit: convex face hulls are
+nonempty for indexed faces, equality is not assumed, it proves equality only
+(not bijectivity), and empty/disconnected/degree-zero cases remain facewise.
 
 ## Truth-case audit
 
-- Single vertex: the reference and arbitrary comparisons send its generator to
-  the constant singular 0-simplex; both homologies are `ℚ` in degree zero.
-- Two vertices: carrier fillings never cross components, so `H₀ = ℚ²`.
-- Triangle boundary: subdivision/small chains preserve its single rational
-  1-cycle, giving `H₁ = ℚ`.
-- Filled 2-simplex: its convex carrier contracts positive-degree cycles.
-- Degree zero convention: `stdSimplex ℝ (Fin 1)` is a point, and the range
-  condition forces the constant simplex at the unique face vertex.
+- Single vertex: `affineCmp` induces the identity on `ℚ` in degree zero.
+- Two isolated vertices: the disjoint star carriers give `ℚ²`.
+- Triangle boundary: compatible subdivision preserves its rational 1-cycle.
+- Filled triangle: its convex carrier kills positive-degree homology.
+- Degree zero: the small-chain theorem has an explicit H0 case; no fictitious degree `-1` occurs.
 
-## Compile gate
+## Compile gate and doubts
 
-`lake env lean ConstructionTargets/SimplicialSingularComparison.lean` under the
-required lock and 12G systemd scope reports zero errors and exactly two sorry
-warnings, one for each leaf.  The final `#print axioms` reports
-`[propext, sorryAx, Classical.choice, Quot.sound]`; inspection of the assembly
-shows `sorryAx` enters only through the two leaves above.
+The scoped compile reports zero errors and exactly three sorry warnings: the
+two new directional leaves and unchanged `affineComparison_homologyMap_eq`.
+`#print axioms` reports `[propext, sorryAx, Classical.choice, Quot.sound]`;
+within this file `sorryAx` reaches the final theorem only through these leaves
+(AC2/AC3 are upstream conclusions explicitly permitted by the packet).
 
-No import or declaration from `SphereCap*` or `LinearGraphMeasure` is used.
-
-## Doubts / missing foundation
-
-The main uncertainty is size, not truth.  Without a reusable acyclic-carriers
-theorem, the second leaf may grow beyond 280 lines and should then be split into
-a generic carrier-homotopy construction and a 30--60-line homology-invariance
-corollary.  The first leaf is definitely LIBRARY-sized until the ordered-face
-small-chain bridge is implemented; pretending the existing subdivision chain
-maps alone close that gap would be incorrect.
+The remaining risk is implementation size. The repository has the small-chain
+isomorphism and geometric star/subdivision ingredients, but no ready-made
+ordered-face approximation chain map. If either proof exceeds 200 lines, the
+genuine shared missing foundation is a reusable compatible
+approximation/carrier-prism construction; it should become a **LIBRARY** module
+which does not import `SimplicialChainMaps`, rather than reviving the false
+point-choice map. No forbidden sphere-cap or linear-graph module is imported.
