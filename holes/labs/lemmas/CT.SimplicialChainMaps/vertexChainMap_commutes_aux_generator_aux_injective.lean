@@ -479,7 +479,62 @@ theorem vertexChainMap_commutes_aux_generator_aux_injective {n m : ℕ}
     (hinj : (s.1.image h).card = k + 2) :
     dL k (hm (k + 1) (Finsupp.single s 1)) =
       hm k (dK k (Finsupp.single s 1)) := by
-  sorry
+  classical
+  have hinj' : (s.1.image h).card = (k + 1) + 1 := by omega
+  have hs := hhm (k + 1) s
+  rw [dif_pos hinj'] at hs
+  obtain ⟨t, ht, hmt⟩ := hs
+  rw [hmt, show Finsupp.single t (sortingSign on om s.1 h) =
+      (sortingSign on om s.1 h) • Finsupp.single t 1 by ext; simp,
+    map_smul, vertexChainMap_commutes_aux_generator_aux_boundaryL om L dL hdL t,
+    vertexChainMap_commutes_aux_generator_aux_boundaryK on K dK hdK s]
+  simp only [map_sum, map_smul]
+  simp only [Finset.smul_sum, smul_smul]
+  symm
+  apply Finset.sum_bij (fun v _ => ⟨h v.1, by simpa [ht] using Finset.mem_image_of_mem h v.2⟩)
+  · intro v hv
+    exact Finset.mem_attach _ _
+  · intro a ha b hb hab
+    apply Subtype.ext
+    apply (vertexChainMap_commutes_aux_generator_aux_injective_aux_injOn K s h hinj)
+    · exact a.2
+    · exact b.2
+    · exact congrArg Subtype.val hab
+  · intro w hw
+    have hw' : w.1 ∈ s.1.image h := by rw [← ht]; exact w.2
+    obtain ⟨v, hv, heq⟩ := Finset.mem_image.mp hw'
+    exact ⟨⟨v, hv⟩, Finset.mem_attach _ _, Subtype.ext heq⟩
+  · intro v hv
+    have himg := vertexChainMap_commutes_aux_generator_aux_injective_aux_image_erase
+      K s h hinj v.1 v.2
+    have hcard : ((s.1.erase v.1).image h).card = k + 1 := by
+      rw [himg, Finset.card_erase_of_mem (Finset.mem_image_of_mem h v.2), hinj]
+      omega
+    let sv := signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2
+    have hsv := hhm k sv
+    rw [dif_pos (by simpa [sv] using hcard)] at hsv
+    obtain ⟨u, hu, hmu⟩ := hsv
+    have hut : u = signedDeletion_sq_zero_aux_generator_aux_erase L t (h v.1) (by
+        simpa [ht] using Finset.mem_image_of_mem h v.2) := by
+      apply Subtype.ext
+      change u.1 = t.1.erase (h v.1)
+      rw [hu]
+      simp only [sv, signedDeletion_sq_zero_aux_generator_aux_erase]
+      rw [himg, ht]
+    subst u
+    rw [hmu]
+    rw [show Finsupp.single
+        (signedDeletion_sq_zero_aux_generator_aux_erase L t (h v.1) (by
+          simpa [ht] using Finset.mem_image_of_mem h v.2))
+        (sortingSign on om sv.1 h) =
+        (sortingSign on om sv.1 h) • Finsupp.single
+          (signedDeletion_sq_zero_aux_generator_aux_erase L t (h v.1) (by
+            simpa [ht] using Finset.mem_image_of_mem h v.2)) 1 by ext; simp]
+    rw [smul_smul]
+    congr 1
+    simpa [ht, sv, signedDeletion_sq_zero_aux_generator_aux_erase] using
+      (vertexChainMap_commutes_aux_generator_aux_injective_aux_sign
+      on om K s h hinj v.1 v.2)
 -- END SEAT AREA
 
 lemma vertexChainMap_commutes_aux_generator_aux_collapse_aux_image_card {n m k : ℕ}
