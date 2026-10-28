@@ -97,10 +97,37 @@ theorem surfacePoint_hasPointedContractibleNeighbourhood :
 
 /-- (Wb) Rational pointlikeness is a homotopy invariant (homotopy invariance
 of singular homology: `SingularHomologyHomotopy`). -/
+noncomputable def rationallyPointlike_of_homotopyEquiv_aux_iso
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (e : A ≃ₕ B) (k : ℕ) : Homology A k ≅ Homology B k where
+  hom := induced e.toFun k
+  inv := induced e.invFun k
+  hom_inv_id := by
+    dsimp only [induced]
+    rw [← Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map (TopCat.ofHom (e.invFun.comp e.toFun)) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) e.left_inv k]
+    exact ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map_id (TopCat.of A)
+  inv_hom_id := by
+    dsimp only [induced]
+    rw [← Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map (TopCat.ofHom (e.toFun.comp e.invFun)) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) e.right_inv k]
+    exact ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).map_id (TopCat.of B)
+
 theorem rationallyPointlike_of_homotopyEquiv {A B : Type}
     [TopologicalSpace A] [TopologicalSpace B] (e : A ≃ₕ B)
     (h : RationallyPointlike B) : RationallyPointlike A := by
-  sorry
+  rcases h with ⟨⟨h0⟩, hp⟩
+  refine ⟨⟨rationallyPointlike_of_homotopyEquiv_aux_iso e 0 ≪≫ h0⟩, ?_⟩
+  intro k hk
+  exact (hp k hk).of_iso (rationallyPointlike_of_homotopyEquiv_aux_iso e k)
 
 /-- (Wc) A point has the rational homology of a point. -/
 theorem rationallyPointlike_unit : RationallyPointlike Unit := by
