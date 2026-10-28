@@ -819,6 +819,33 @@ theorem barycentricSubdivision_space {n : ℕ}
     (barycentricSubdivision K hi hd hx).space = K.space := by
   sorry
 
+/-- (M1) Hatcher's estimate: a point of a simplex is within
+`(m-1)/m · diam` of its barycenter, `m` the number of vertices (the distance to
+the barycenter is convex, so its maximum is at a vertex `v`, and
+`v - barycenter t = (1/m) ∑_{w} (v - w)` has at most `m - 1` nonzero terms). -/
+theorem barycentricSubdivision_mesh_aux_barycenter_dist {n : ℕ}
+    (t : Finset (Euc n)) (ht : t.Nonempty) (p : Euc n)
+    (hp : p ∈ convexHull ℝ (t : Set (Euc n))) :
+    dist p (barycenter t) ≤ ((t.card - 1 : ℝ) / t.card) *
+      Metric.diam (convexHull ℝ (t : Set (Euc n))) := by
+  sorry
+
+/-- (M2) Pairwise bound for chain barycenters: two faces of a chain are nested,
+the smaller barycenter lies in the hull of the larger face `t`, apply (M1),
+then `(|t|-1)/|t| ≤ d/(d+1)` and `diam t ≤ sSup` (finite set, so bounded). -/
+theorem barycentricSubdivision_mesh_aux_chain_bound {n d : ℕ}
+    (hM1 : ∀ (t : Finset (Euc n)), t.Nonempty → ∀ p ∈ convexHull ℝ (t : Set (Euc n)),
+      dist p (barycenter t) ≤ ((t.card - 1 : ℝ) / t.card) *
+        Metric.diam (convexHull ℝ (t : Set (Euc n))))
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite)
+    (hdim : ∀ s ∈ K.faces, s.card ≤ d + 1)
+    (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c) :
+    ∀ x ∈ c.image barycenter, ∀ y ∈ c.image barycenter,
+      dist x y ≤ (d / (d + 1 : ℝ)) *
+        sSup {r : ℝ | ∃ s ∈ K.faces,
+          r = Metric.diam (convexHull ℝ (s : Set (Euc n)))} := by
+  sorry
+
 /-- Hatcher's mesh estimate for one barycentric subdivision. -/
 theorem barycentricSubdivision_mesh {n d : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (hK : K.faces.Finite)
@@ -828,7 +855,24 @@ theorem barycentricSubdivision_mesh {n d : ℕ}
         (d / (d + 1 : ℝ)) *
           sSup {r : ℝ | ∃ s ∈ K.faces,
             r = Metric.diam (convexHull ℝ (s : Set (Euc n)))} := by
-  sorry
+  classical
+  intro u hu
+  have hu' : u ∈ barycentricFaces K := hu.1
+  obtain ⟨c, hc, rfl⟩ := hu'
+  rw [convexHull_diam]
+  let M : ℝ := sSup {r : ℝ | ∃ s ∈ K.faces,
+    r = Metric.diam (convexHull ℝ (s : Set (Euc n)))}
+  have hM : 0 ≤ M := by
+    apply Real.sSup_nonneg
+    intro r hr
+    obtain ⟨s, hs, rfl⟩ := hr
+    exact Metric.diam_nonneg
+  apply Metric.diam_le_of_forall_dist_le
+    (mul_nonneg (div_nonneg (Nat.cast_nonneg d) (by positivity)) hM)
+  intro x hx y hy
+  exact barycentricSubdivision_mesh_aux_chain_bound
+    (fun t ht p hp => barycentricSubdivision_mesh_aux_barycenter_dist t ht p hp)
+    K hK hdim c hc x hx y hy
 
 /-- Iterating any finite, space-preserving subdivision with the barycentric
 mesh contraction produces a prescribed mesh. -/
