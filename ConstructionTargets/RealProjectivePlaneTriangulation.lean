@@ -301,6 +301,126 @@ lemma basisComplex_vertex_mem {N : ℕ} {F : Finset (Finset (Fin N))} {f : Finse
   · simpa using Finset.mem_image_of_mem (basisVertex N) hi
   · simp
 
+/-! ### The 10-vertex model (plan in the blueprint, 2026-10-28)
+
+Vertices `Fin 10`: `0` is the centre `O`, `ringIdx j = 1 + j % 6` is `m_j`, and
+`bdryIdx j = 7 + j % 3` is the boundary label of the hexagon vertex `ζ_j`
+(so `ζ_j` and `ζ_{j+3} = -ζ_j` share a label).  Facet `(i, 0)` is
+`O m_i m_{i+1}`, `(i, 1)` is `B_i B_{i+1} m_i`, `(i, 2)` is `B_{i+1} m_i m_{i+1}`.
+`checks/rp2_ten_vertex_check.py` and `checks/rp2_planar_tiling_check.py` (in
+the lemma-packet notes) check the surface and the planar tiling. -/
+
+/-- Hexagon vertex `ζ_j = exp(2πij/6)`. -/
+def hexVertex (j : ℕ) : ℂ := Complex.exp (2 * Real.pi * Complex.I * (j : ℂ) / 6)
+
+/-- Ring vertex `m_j`, two thirds of the way to the midpoint of `ζ_j ζ_{j+1}`. -/
+def ringVertex (j : ℕ) : ℂ := (hexVertex j + hexVertex (j + 1)) / 3
+
+/-- The closed hexagon. -/
+def hexagon : Set ℂ := convexHull ℝ (Set.range fun j : Fin 6 => hexVertex j)
+
+def ringIdx (j : ℕ) : Fin 10 := ⟨1 + j % 6, by omega⟩
+
+def bdryIdx (j : ℕ) : Fin 10 := ⟨7 + j % 3, by omega⟩
+
+def rp2Facet (p : Fin 6 × Fin 3) : Finset (Fin 10) :=
+  if p.2.1 = 0 then {0, ringIdx p.1, ringIdx (p.1 + 1)}
+  else if p.2.1 = 1 then {bdryIdx p.1, bdryIdx (p.1 + 1), ringIdx p.1}
+  else {bdryIdx (p.1 + 1), ringIdx p.1, ringIdx (p.1 + 1)}
+
+def rp2Facets : Finset (Finset (Fin 10)) := Finset.univ.image rp2Facet
+
+def rp2Complex : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin 10)) :=
+  basisComplex 10 rp2Facets
+
+/-- Planar position of vertex `k` in facet `p` (the value off the facet is
+irrelevant). -/
+def rp2Corner (p : Fin 6 × Fin 3) (k : Fin 10) : ℂ :=
+  if k = 0 then 0
+  else if k = ringIdx p.1 then ringVertex p.1
+  else if k = ringIdx (p.1 + 1) then ringVertex (p.1 + 1)
+  else if k = bdryIdx p.1 ∧ p.2.1 = 1 then hexVertex p.1
+  else if k = bdryIdx (p.1 + 1) then hexVertex (p.1 + 1)
+  else 0
+
+/-- The affine map of facet `p` into the plane, in barycentric coordinates. -/
+def rp2Affine (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) : ℂ :=
+  ∑ k, (y k : ℂ) * rp2Corner p k
+
+def facetHull (p : Fin 6 × Fin 3) : Set (EuclideanSpace ℝ (Fin 10)) :=
+  convexHull ℝ ↑((rp2Facet p).image (basisVertex 10))
+
+/-- Radial map from the hexagon onto the round disk: rescale by the hexagon
+gauge. -/
+def hexToDisk (z : ℂ) : ℂ := (gauge hexagon z / ‖z‖) • z
+
+/-- Points outside the disk are sent to the centre; only used on the disk. -/
+def diskClamp (w : ℂ) : Surfaces.Disk :=
+  if h : ‖w‖ ≤ 1 then ⟨w, by simpa [Metric.mem_closedBall] using h⟩
+  else ⟨0, by simp [Metric.mem_closedBall]⟩
+
+/-- The characteristic map: on a facet containing `y`, go affinely to the
+hexagon, radially to the disk, then to the quotient. -/
+def rp2Map (y : rp2Complex.space) : RealProjectivePlane := by
+  classical
+  exact Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine
+    (if h : ∃ p, (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull p then Classical.choose h
+      else (0, 0)) y)))
+
+-- Stage 3: the radial map.
+lemma rp2_explicit_finite_model_aux_hex_norm (z : ℂ) : ‖hexToDisk z‖ = gauge hexagon z := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_hex_continuous : Continuous hexToDisk := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_hex_neg (z : ℂ) : hexToDisk (-z) = -hexToDisk z := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_hex_injOn : Set.InjOn hexToDisk hexagon := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_hex_surj (w : ℂ) (hw : ‖w‖ ≤ 1) : ∃ z ∈ hexagon, hexToDisk z = w := by
+  sorry
+
+/-- `gauge hexagon z ≤ 1` exactly on the hexagon (closed, convex, `0` inside). -/
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one (z : ℂ) : gauge hexagon z ≤ 1 ↔ z ∈ hexagon := by
+  sorry
+
+-- Stage 4: the facets.
+lemma rp2_explicit_finite_model_aux_cover (y : EuclideanSpace ℝ (Fin 10)) (hy : y ∈ rp2Complex.space) :
+    ∃ p, y ∈ facetHull p := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_affine_mem (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) : rp2Affine p y ∈ hexagon := by
+  sorry
+
+/-- Two facets containing `y` give the same point of `RP²`: their planar
+positions agree, or (on a boundary edge) are antipodal boundary points. -/
+lemma rp2_explicit_finite_model_aux_agree (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p') :
+    Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p y))) =
+      Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p' y))) := by
+  sorry
+
+/-- Pasting over the 18 closed facet hulls (finite closed cover, `_agree`). -/
+lemma rp2_explicit_finite_model_aux_continuous : Continuous rp2Map := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_injective : Function.Injective rp2Map := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_surjective : Function.Surjective rp2Map := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_centre_mem : basisVertex 10 0 ∈ rp2Complex.space := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_mark :
+    rp2Map ⟨basisVertex 10 0, rp2_explicit_finite_model_aux_centre_mem⟩ = surfacePoint false 1 := by
+  sorry
+
 /-- **LIBRARY (explicit six-vertex model).** There is a finite coordinate realization of
 the standard six-vertex, ten-triangle triangulation of `RP²`, together with a continuous
 bijection to the disk quotient.  The distinguished vertex maps to the disk centre.
@@ -314,7 +434,11 @@ theorem rp2_explicit_finite_model :
       K.faces.Finite ∧ {(v : EuclideanSpace ℝ (Fin n))} ∈ K.faces ∧
       Continuous f ∧ Function.Bijective f ∧
       f v = surfacePoint false 1 := by
-  sorry
+  refine ⟨10, rp2Complex, ⟨basisVertex 10 0, rp2_explicit_finite_model_aux_centre_mem⟩, rp2Map,
+    basisComplex_faces_finite 10 rp2Facets, ?_, rp2_explicit_finite_model_aux_continuous,
+    ⟨rp2_explicit_finite_model_aux_injective, rp2_explicit_finite_model_aux_surjective⟩, rp2_explicit_finite_model_aux_mark⟩
+  exact basisComplex_vertex_mem (f := rp2Facet (0, 0))
+    (Finset.mem_image_of_mem _ (Finset.mem_univ _)) (by simp [rp2Facet])
 
 /-- Upgrade the explicit continuous bijection to a marked finite vertex triangulation. -/
 theorem realProjectivePlane_hasFiniteVertexTriangulation :
