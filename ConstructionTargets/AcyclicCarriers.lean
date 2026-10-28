@@ -265,6 +265,31 @@ theorem affineComparison_degreeZero_eq {n : ℕ}
   rw [show Finsupp.single s a = a • Finsupp.single s 1 by simp]
   rw [map_smul, map_smul, hσ₁, hσ₂, hsigma]
 
+lemma carried_chainHomotopy_exists_aux_zero {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n)) :
+    FaceCarriedChain K s (0 : (SingularQChains K).X k) := by
+  refine ⟨0, Fin.elim0, Fin.elim0, ?_, fun i ↦ i.elim0⟩
+  simp
+
+lemma carried_chainHomotopy_exists_aux_smul {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n))
+    (z : (SingularQChains K).X k) (hz : FaceCarriedChain K s z) (r : ℚ) :
+    FaceCarriedChain K s (r • z) := by
+  rcases hz with ⟨m, a, σ, rfl, hσ⟩
+  refine ⟨m, fun i ↦ r * a i, σ, ?_, hσ⟩
+  rw [Finset.smul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [← map_smul]
+  rfl
+
+/- Second route note (claude-14, after a second partial): `Homotopy.mkInductive`
+CANNOT be used as is — its `succ` must work for an arbitrary previous component
+`p.2.1`, but filling needs `p.2.1` to be carried (else the cycle is not in a
+contractible carrier).  Copy Mathlib's `Homotopy.mkInductiveAux₁`/`mkInductiveAux₂`/
+`mkInductive` (Mathlib/Algebra/Homology/Homotopy.lean, ~70 lines) locally, adding
+"both components are carried" to the `Σ'` that the recursion threads, so the step
+receives the invariant; the homotopy equations are then exactly as there. -/
 /- Route for the remaining step (claude-14): Mathlib's `Homotopy.mkInductive`
 (Algebra/Homology/Homotopy.lean) builds a homotopy of ℕ-indexed chain complexes
 from a degree-0 component and an inductive step; the step at basis face `s`
