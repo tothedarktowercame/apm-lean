@@ -162,7 +162,25 @@ theorem signedDeletion_sq_zero_aux_generator_aux_boundary {n k : ℕ}
     d k (Finsupp.single s 1) =
       ∑ v ∈ s.1.attach, (-1 : ℚ) ^ ((s.1.sort o.le).idxOf v.1) •
         Finsupp.single (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1 := by
-  sorry
+  rcases hd k s with ⟨z, hz, hformula⟩
+  rw [hz]
+  ext t
+  rw [hformula]
+  rw [← Finset.sum_attach s.1]
+  change _ = Finsupp.applyAddHom t
+    (∑ v ∈ s.1.attach, (-1 : ℚ) ^ ((s.1.sort o.le).idxOf v.1) •
+      Finsupp.single (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1)
+  rw [map_sum]
+  apply Finset.sum_congr rfl
+  intro v hv
+  by_cases h : s.1.erase v.1 = t.1
+  · have ht : signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2 = t :=
+      Subtype.ext h
+    simp [h, ht]
+  · have ht : signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2 ≠ t := by
+      intro he
+      exact h (congrArg Subtype.val he)
+    simp [h, ht]
 -- END SEAT AREA
 
 theorem signedDeletion_sq_zero_aux_generator {n : ℕ}
