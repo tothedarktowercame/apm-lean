@@ -74,39 +74,92 @@ finite-dimensional rational chain complex with an endomorphism, and its chain
 and homology traces.  This is data, not a proposition encoding the desired
 equality; in particular it has no field mentioning a Lefschetz number.
 
-#### `exists_faceAvoiding_simplicial_trace_model` — LIBRARY, 700–1100 lines
+#### `HomologyModels` — definition (no `sorry`)
 
-Construct the oriented simplicial chain complex and a chain endomorphism for a
-simplicial approximation to `g`.  It returns (a) zero chain trace in every
-degree, from the face-avoidance diagonal calculation, and (b) equality of its
-homology trace with the trace of the actual singular-homology map induced by
-`g`.  The construction uses a sufficiently close simplicial approximation;
-the straight-line homotopy and `hasLefschetzNumber_of_homotopic` identify its
-map with `g`.  Orientation changes conjugate the matrix by a diagonal sign
-matrix, so the trace and the zero-diagonal claim are independent of choices.
+`HomologyModels M g` supplies degreewise linear equivalences from the model's
+homology to singular homology and says that they intertwine the two
+endomorphisms.  It deliberately does **not** mention traces.  This prevents the
+comparison interface from merely renaming the desired trace equality.
 
-Use `CoefficientSimplicialChainFinsuppNaturality`,
-`CoefficientSimplicialChainFinsuppRange`, `CoefficientSingularSubdivision`,
-`CoefficientBarycentricNaturality`, and the affine-simplex maps in
-`CoefficientAffineNaturality`.  The direct chain map from oriented simplicial
-chains to singular chains is preferable to the skeletal-filtration route:
-the repository already has the required simplex/finsupp and subdivision
-naturality tools, whereas a filtration proof would additionally need cellular
-boundary identifications and natural exact-couple machinery.  This is the one
-remaining large missing foundation and is therefore honestly marked LIBRARY.
+#### `faceAvoiding_uniform_carrier_margin` — 90–150 lines, independent
 
-Independent of the two algebra leaves. C1: compact closed faces give the
-positive margin needed to retain avoidance during approximation; the returned
-trace comparison concerns the actual `induced g k`. C2: neither returned
-equation says `L = 0`, and no Lefschetz value is an input. C3: it does not prove
-Hopf trace or sum the traces; its size is the explicitly marked missing
-comparison foundation. C4: its two outputs are exactly the inputs used by the
-assembly and the Hopf leaf. C5: `K,e,g` and the induced maps are explicit. C6:
-only finiteness and `FaceAvoiding` are used. C7: traces are over `ℚ`; oriented
-boundary signs are conjugacy-invariant. C8: for an empty realization use the
-zero complex; in dimension zero face avoidance says no vertex can map to
-itself. C9: unlike its ancestor it produces a chain model and trace identities,
-not the Lefschetz conclusion. C10: exact match with the Lean statement.
+Finite many compact closed faces and pointwise face avoidance give one
+`δ > 0` separating `g x` from every point of the face containing `x`.  Prove
+compactness with `isCompact_convexHull`, finite-union compactness, compactness
+of `K.space`, continuity of distance, and a finite minimum over faces.  The
+empty realization is handled separately (take `δ = 1`); empty faces contribute
+no points.
+
+C1: the margin is over the compact incidence set `(s,x,y)`, and finiteness is
+essential. C2: pointwise nonmembership does not restate a positive uniform
+distance. C3: only compactness/separation, no chains. C4–C5: its exact `δ` and
+inequality are passed to the model leaf. C6: no stronger avoidance is assumed.
+C7: ordinary real distance. C8: empty space/empty face are vacuous; a one-vertex
+complex admits no `havoid`. C9: the ancestor returned a chain model, not a
+metric margin. C10: matches the quantified `y` in Lean.
+
+#### `exists_carrier_avoiding_oriented_chain_model` — LIBRARY, 450–750 lines
+
+From an explicit positive carrier margin, construct a fine barycentric
+subdivision `K'`, a carrier-avoiding simplicial approximation `h`, the ordered
+or oriented rational chains of `K`, the subdivision chain map `sd`, and
+`φ = h_# ≫ sd` (with the categorical composition order checked in the proof).
+The ordered simplex basis is finite in each degree and empty above the maximum
+face cardinality, supplying `finiteChain`, `finiteHomology`, and `chainAbove`.
+Carrier avoidance makes every diagonal coefficient zero.  The direct
+simplicial-simplex realization map to singular chains is a chain-homotopy
+equivalence and gives the degreewise equivalences and intertwining equation in
+`HomologyModels`.
+
+Build on the sorry-free declarations
+`CoefficientSimplicialChainFinsuppNaturality.chainsMap_component_finsupp_naturality`,
+`CoefficientSimplicialChainFinsuppRange.chainsMap_component_range_finsupp`,
+`CoefficientSingularSubdivision.singularSubdivision`,
+`CoefficientSingularSubdivision.singularSubdivision_natural`,
+`CoefficientBarycentricNaturality.vertexSubdivision_affine_natural`, and
+`CoefficientAffineNaturality.vertexRealization_affine_natural`.  The missing
+foundation is specifically the geometric `SimplicialComplex` barycentric
+subdivision plus simplicial-approximation/carrier construction; Mathlib's
+coefficient chain operators begin only after that data exists.  This is why
+this residual piece is honestly LIBRARY rather than split into false
+independently statable claims about a nonexistent canonical `K'`.
+
+The star condition uses two inputs: uniform continuity of `g` on compact
+`K.space` controls `g(st v) ⊆ st(h v)`, while the explicit `hmargin` controls
+carrier avoidance after making the subdivision mesh smaller than `δ`.
+
+C1: the supplied margin is exactly strong enough for closed carriers. C2:
+`HomologyModels` is conjugacy data, not trace equality. C3: this remains the one
+declared missing library foundation; it does not contain the trace algebra,
+Hopf formula, or Lefschetz sum. C4–C5: it returns precisely `M`, zero chain
+traces, and the comparison equivalences consumed downstream. C6: the metric
+hypothesis was derived from the public assumptions. C7: changing orientations
+conjugates by diagonal signs, so diagonal zero and trace are invariant. C8:
+empty realization gives the zero complex; dimension zero is logically valid
+though `hmargin` cannot arise for a nonempty vertex-only self-map. C9: stronger
+structural conjugacy, but no trace conclusion of the ancestor. C10: exact Lean
+output is `∃ M, (∀k, chainTrace=0) ∧ HomologyModels M g`.
+
+#### `homologyTrace_eq_of_models` — 35–70 lines, independent algebra
+
+Unpack the degreewise equivalence and intertwining equation.  Apply trace
+invariance under conjugacy, using `LinearMap.trace_conj'` (or equivalently
+`LinearMap.trace_comp_comm` twice), installing `M.finiteHomology k`; finite
+dimensionality of `Homology X k` follows through the equivalence.
+
+C1: conjugate finite-dimensional maps have equal trace. C2: the hypothesis is
+an actual intertwiner and contains no trace equation. C3: one-degree linear
+algebra only. C4–C5: conclusion is exactly the original consumer's trace
+equation for `induced g k`. C6: no geometry. C7: composition direction is
+spelled out in `HomologyModels`. C8: zero-dimensional vector spaces work. C9:
+not the model-existence ancestor. C10: matches Lean.
+
+#### `exists_faceAvoiding_simplicial_trace_model` — sorry-free assembly
+
+Obtain the uniform margin, obtain the oriented model and its conjugacy
+certificate, then apply `homologyTrace_eq_of_models`.  Thus `sorryAx` reaches
+this declaration only through the three new leaves, never through another
+leaf's proof.
 
 #### `hopf_trace_formula` — 120–180 lines
 

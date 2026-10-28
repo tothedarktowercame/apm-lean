@@ -89,6 +89,59 @@ noncomputable def homologyTrace (M : FiniteChainEndomorphism) (k : ℕ) : ℚ :=
 
 end FiniteChainEndomorphism
 
+/-- A chain model represents a topological endomorphism when its homology
+endomorphism is conjugate, degree by degree, to the induced singular-homology
+endomorphism.  This records the comparison isomorphisms, rather than merely
+recording equality of their traces. -/
+def HomologyModels {X : Type} [TopologicalSpace X]
+    (M : FiniteChainEndomorphism) (g : C(X, X)) : Prop :=
+  ∃ E : ∀ k, M.C.homology k ≃ₗ[ℚ] Homology X k,
+    ∀ k,
+      (E k).toLinearMap.comp
+          (HomologicalComplex.homologyMap M.φ k).hom =
+        (induced g k).hom.comp (E k).toLinearMap
+
+/-- Face avoidance has a uniform positive carrier margin.  The quantified
+point `y` ranges over the whole closed face, not only over `e x`; this is the
+margin needed to retain carrier avoidance during simplicial approximation. -/
+theorem faceAvoiding_uniform_carrier_margin
+    {X : Type} [TopologicalSpace X] {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+    (hK : K.faces.Finite) (e : X ≃ₜ K.space) (g : C(X, X))
+    (havoid : FaceAvoiding K e g) :
+    ∃ δ > 0, ∀ s ∈ K.faces, ∀ x : X,
+      (e x : EuclideanSpace ℝ (Fin n)) ∈ convexHull ℝ (s : Set _) →
+      ∀ y ∈ convexHull ℝ (s : Set _),
+        δ ≤ dist (e (g x) : EuclideanSpace ℝ (Fin n)) y := by
+  sorry
+
+/-- **LIBRARY (oriented simplicial chains and direct comparison).** Given the
+uniform carrier margin, construct the finite oriented simplicial chain model,
+its carrier-avoiding subdivision/approximation endomorphism, and the direct
+simplicial-to-singular comparison.  Zero chain trace is the zero-diagonal
+consequence; `HomologyModels` is the stronger, conjugacy-level naturality
+statement consumed separately below. -/
+theorem exists_carrier_avoiding_oriented_chain_model
+    {X : Type} [TopologicalSpace X] {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+    (hK : K.faces.Finite) (e : X ≃ₜ K.space) (g : C(X, X))
+    (δ : ℝ) (hδ : 0 < δ)
+    (hmargin : ∀ s ∈ K.faces, ∀ x : X,
+      (e x : EuclideanSpace ℝ (Fin n)) ∈ convexHull ℝ (s : Set _) →
+      ∀ y ∈ convexHull ℝ (s : Set _),
+        δ ≤ dist (e (g x) : EuclideanSpace ℝ (Fin n)) y) :
+    ∃ M : FiniteChainEndomorphism,
+      (∀ k, M.chainTrace k = 0) ∧ HomologyModels M g := by
+  sorry
+
+/-- Conjugate finite-dimensional homology endomorphisms have equal traces. -/
+theorem homologyTrace_eq_of_models
+    {X : Type} [TopologicalSpace X] (M : FiniteChainEndomorphism)
+    (g : C(X, X)) (hmodel : HomologyModels M g) :
+    ∀ k, M.homologyTrace k =
+      LinearMap.trace ℚ (Homology X k) (induced g k).hom := by
+  sorry
+
 /-- **LIBRARY (direct simplicial--singular comparison).** A face-avoiding map
 admits a bounded oriented simplicial chain model.  Its chain diagonal is zero,
 and its homology traces are the traces of the singular-homology maps of `g`.
@@ -103,7 +156,11 @@ theorem exists_faceAvoiding_simplicial_trace_model
       (∀ k, M.chainTrace k = 0) ∧
       (∀ k, M.homologyTrace k =
         LinearMap.trace ℚ (Homology X k) (induced g k).hom) := by
-  sorry
+  obtain ⟨δ, hδ, hmargin⟩ :=
+    faceAvoiding_uniform_carrier_margin K hK e g havoid
+  obtain ⟨M, hchain, hmodel⟩ :=
+    exists_carrier_avoiding_oriented_chain_model K hK e g δ hδ hmargin
+  exact ⟨M, hchain, homologyTrace_eq_of_models M g hmodel⟩
 
 /-- The Hopf trace formula for a bounded complex of finite-dimensional rational
 vector spaces. -/
@@ -157,6 +214,7 @@ theorem fixedPointOfNonzeroLefschetz
 end ConstructionTargets.LefschetzCompactPolyhedron
 
 #print axioms ConstructionTargets.LefschetzCompactPolyhedron.exists_fine_subdivision
+#print axioms ConstructionTargets.LefschetzCompactPolyhedron.exists_faceAvoiding_simplicial_trace_model
 #print axioms ConstructionTargets.LefschetzCompactPolyhedron.hasLefschetzNumber_of_homotopic
 #print axioms ConstructionTargets.LefschetzCompactPolyhedron.lefschetzNumber_eq_zero_of_faceAvoiding
 #print axioms ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz
