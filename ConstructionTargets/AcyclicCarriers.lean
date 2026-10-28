@@ -39,7 +39,18 @@ a point.  The proof contracts the subtype `convexHull ℝ s` and applies
 theorem faceHull_rationallyPointlike {n k : ℕ}
     (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : FaceIndex K k) :
     RationallyPointlike (convexHull ℝ (s.1 : Set (Euc n))) := by
-  sorry
+  have hs : (s.1 : Set (Euc n)).Nonempty := by
+    rw [Finset.coe_nonempty]
+    apply Finset.card_pos.mp
+    rw [s.2.2]
+    omega
+  have hh : (convexHull ℝ (s.1 : Set (Euc n))).Nonempty :=
+    convexHull_nonempty_iff.mpr hs
+  letI : ContractibleSpace (convexHull ℝ (s.1 : Set (Euc n))) :=
+    (convex_convexHull ℝ (s.1 : Set (Euc n))).contractibleSpace hh
+  obtain ⟨e⟩ := ContractibleSpace.hequiv_unit
+    (convexHull ℝ (s.1 : Set (Euc n)))
+  exact rationallyPointlike_of_homotopyEquiv e rationallyPointlike_unit
 
 /-- Taking the singular boundary preserves the face carrier.  This is the
 generator boundary formula together with the fact that restricting a simplex
