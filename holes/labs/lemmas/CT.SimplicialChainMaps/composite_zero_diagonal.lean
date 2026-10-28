@@ -188,6 +188,45 @@ theorem subdivision_affineComparison_square {n : ℕ} (o : LinearOrder (Euc n))
   sorry
 
 -- BEGIN SEAT AREA
+lemma composite_zero_diagonal_aux_barycenter_mem {n : ℕ}
+    (t s : Finset (Euc n)) (ht : t.Nonempty) (hts : t ⊆ s) :
+    GeometricSimplicialSubdivision.barycenter t ∈ convexHull ℝ (s : Set (Euc n)) := by
+  apply convexHull_mono (by simpa using hts)
+  apply Finset.centerMass_id_mem_convexHull
+  · intro x hx
+    positivity
+  · simpa using (Finset.card_pos.mpr ht : 0 < t.card)
+
+lemma composite_zero_diagonal_aux_vertex {n : ℕ} (o : LinearOrder (Euc n))
+    (K K' : GSC n) (h : Euc n → Euc n)
+    (hm : ∀ k, FaceModuleCat K' k ⟶ FaceModuleCat K k)
+    (hhm : IsVertexChainMap o o K' K h hm)
+    (havoid : CarrierAvoidingVertexMap K K' h) (k : ℕ)
+    (s : FaceIndex K k) (u : FaceIndex K' k)
+    (hu : (u.1 : Set (Euc n)) ⊆ convexHull ℝ (s.1 : Set (Euc n))) :
+    (hm k (Finsupp.single u 1)) s = 0 := by
+  classical
+  have hdis : Disjoint (u.1.image h : Set (Euc n)) s.1 :=
+    havoid s.1 s.2.1 u.1 u.2.1 hu
+  by_cases hinj : (u.1.image h).card = k + 1
+  · have hv := hhm k u
+    simp only [dif_pos hinj] at hv
+    obtain ⟨t, ht, heq⟩ := hv
+    rw [heq, Finsupp.single_apply]
+    simp only [ite_eq_right_iff]
+    intro hts
+    subst t
+    have hsne : s.1.Nonempty := K.nonempty_of_mem_faces s.2.1
+    obtain ⟨x, hx⟩ := hsne
+    have hxim : x ∈ u.1.image h := by
+      rw [← ht]
+      exact hx
+    exact (Set.disjoint_left.1 hdis hxim hx).elim
+  · have hz := hhm k u
+    simp only [dif_neg hinj] at hz
+    rw [hz]
+    rfl
+
 theorem composite_zero_diagonal {n : ℕ} (o : LinearOrder (Euc n)) (K K' : GSC n)
     (h : Euc n → Euc n) (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
     (hm : ∀ k, FaceModuleCat K' k ⟶ FaceModuleCat K k)
@@ -195,7 +234,44 @@ theorem composite_zero_diagonal {n : ℕ} (o : LinearOrder (Euc n)) (K K' : GSC 
     (hhm : IsVertexChainMap o o K' K h hm)
     (havoid : CarrierAvoidingVertexMap K K' h) :
     ∀ k (s : FaceIndex K k), (hm k (sd k (Finsupp.single s 1))) s = 0 := by
-  sorry
+  classical
+  intro k s
+  obtain ⟨z, hsdz, hz⟩ := hsd k s
+  rw [hsdz]
+  rw [← Finsupp.sum_single z]
+  change Finsupp.applyAddHom s
+    (hm k (∑ u ∈ z.support, Finsupp.single u (z u))) = 0
+  rw [map_sum, map_sum]
+  apply Finset.sum_eq_zero
+  intro u hu
+  rw [← Finsupp.smul_single_one, map_smul]
+  change z u * (hm k (Finsupp.single u 1)) s = 0
+  rw [composite_zero_diagonal_aux_vertex o K K' h hm hhm havoid k s u]
+  simp only [mul_zero]
+  intro x hx
+  have hzu : z u ≠ 0 := Finsupp.mem_support_iff.mp hu
+  rw [hz u] at hzu
+  have hex : ∃ c ∈ s.1.powerset.powerset,
+      GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+        u.1 = c.image GeometricSimplicialSubdivision.barycenter := by
+    by_contra hn
+    push_neg at hn
+    apply hzu
+    apply Finset.sum_eq_zero
+    intro c hc
+    split_ifs with hi
+    · exact (hn c hc hi.1 hi.2).elim
+    · rfl
+  obtain ⟨c, hcps, hcond⟩ := hex
+  have hcsub : ∀ t ∈ c, t ⊆ s.1 := by
+    intro t ht
+    exact Finset.mem_powerset.1 ((Finset.mem_powerset.1 hcps) ht)
+  have hxu : x ∈ c.image GeometricSimplicialSubdivision.barycenter := by
+    simpa [hcond.2] using hx
+  obtain ⟨t, htc, rfl⟩ := Finset.mem_image.1 hxu
+  apply composite_zero_diagonal_aux_barycenter_mem t s.1
+  · exact K.nonempty_of_mem_faces (hcond.1.1 t htc)
+  · exact hcsub t htc
 -- END SEAT AREA
 
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
