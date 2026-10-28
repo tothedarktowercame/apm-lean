@@ -359,7 +359,52 @@ theorem affineCmp_comm_aux_sum {n : ℕ} (o : LinearOrder (Euc n))
     affineCmp o K (k + 1) ≫
         (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k =
       d k ≫ affineCmp o K k := by
-  sorry
+  classical
+  ext s
+  rw [ModuleCat.hom_comp, ModuleCat.hom_comp]
+  change ((CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k)
+      (affineCmp o K (k + 1) (Finsupp.single s 1)) =
+    affineCmp o K k (d k (Finsupp.single s 1))
+  rw [affineCmp_single]
+  change ((CoefficientH0.singularGenerator ℚ _ (k + 1) (faceSimplex o s) ≫
+        (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k) 1) = _
+  rw [CoefficientH0.singularGenerator_boundary]
+  rw [signedDeletion_sq_zero_aux_generator_aux_boundary o K d hd s]
+  rw [map_sum]
+  simp only [ModuleCat.hom_sum, LinearMap.coe_sum, Finset.sum_apply, map_smul]
+  simp_rw [affineCmp_single o K k]
+  change (∑ i : Fin (k + 2), ((-1 : ℤ) ^ (i : ℕ) •
+      CoefficientH0.singularGenerator ℚ _ k
+        ((TopCat.toSSet.obj (TopCat.of K.space)).δ i (faceSimplex o s))) 1) = _
+  simp_rw [hface]
+  simp only [ModuleCat.hom_smul]
+  apply Finset.sum_bij
+    (fun i _ => ⟨faceVertices o s i, faceVertices_mem o s i⟩)
+    (fun _ _ => Finset.mem_attach _ _)
+  · intro i₁ hi₁ i₂ hi₂ he
+    apply Fin.ext
+    have h := congrArg (fun v => (s.1.sort o.le).idxOf v)
+      (congrArg Subtype.val he)
+    simp only [faceVertices] at h
+    rw [List.get_idxOf (Finset.sort_nodup _ _),
+      List.get_idxOf (Finset.sort_nodup _ _)] at h
+    exact h
+  · intro v hv
+    let i : Fin (k + 2) := ⟨(s.1.sort o.le).idxOf v.1, by
+      have hlt : (s.1.sort o.le).idxOf v.1 < (s.1.sort o.le).length :=
+        List.idxOf_lt_length_iff.mpr ((Finset.mem_sort o.le).2 v.2)
+      simp only [Finset.length_sort, s.2.2] at hlt
+      omega⟩
+    refine ⟨i, Finset.mem_univ _, ?_⟩
+    apply Subtype.ext
+    have hlt : (s.1.sort o.le).idxOf v.1 < (s.1.sort o.le).length :=
+      List.idxOf_lt_length_iff.mpr ((Finset.mem_sort o.le).2 v.2)
+    exact List.idxOf_get hlt
+  · intro i hi
+    simp only [faceVertices]
+    rw [List.get_idxOf (Finset.sort_nodup _ _)]
+    rw [← Int.cast_smul_eq_zsmul ℚ]
+    norm_num
 -- END SEAT AREA
 
 /-- (AC3) The comparison is a chain map: the `i`-th singular face of
