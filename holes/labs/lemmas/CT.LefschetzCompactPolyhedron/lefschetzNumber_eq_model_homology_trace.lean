@@ -189,7 +189,58 @@ theorem lefschetzNumber_eq_model_homology_trace
       LinearMap.trace ℚ (Homology X k) (induced g k).hom) :
     L = ∑ k ∈ Finset.range (M.bound + 1),
       (-1 : ℚ)^k * M.homologyTrace k := by
-  sorry
+  rcases hL with ⟨hfinite, b, habove, hsum⟩
+  letI (k : ℕ) := hfinite k
+  let N := max b M.bound
+  have hsingular (k : ℕ) (hk : b < k) :
+      LinearMap.trace ℚ (Homology X k) (induced g k).hom = 0 := by
+    letI := habove k hk
+    rw [Subsingleton.elim (induced g k).hom 0]
+    exact map_zero (LinearMap.trace ℚ (Homology X k))
+  have hmodel (k : ℕ) (hk : M.bound < k) : M.homologyTrace k = 0 := by
+    letI hCX : Subsingleton (M.C.X k) := M.chainAbove k hk
+    have hzX : Limits.IsZero (M.C.X k) := ModuleCat.isZero_of_subsingleton _
+    have hz : Limits.IsZero (M.C.homology k) :=
+      (M.C.sc k).isZero_homology_of_isZero_X₂ (by simpa using hzX)
+    letI : Subsingleton (M.C.homology k) := ModuleCat.subsingleton_of_isZero hz
+    unfold FiniteChainEndomorphism.homologyTrace
+    rw [Subsingleton.elim (HomologicalComplex.homologyMap M.φ k).hom 0]
+    exact map_zero (LinearMap.trace ℚ (M.C.homology k))
+  have hbN : Finset.range (b + 1) ⊆ Finset.range (N + 1) := by
+    intro k hk
+    simp only [Finset.mem_range] at hk ⊢
+    exact lt_of_lt_of_le hk (Nat.succ_le_succ (le_max_left _ _))
+  have hMN : Finset.range (M.bound + 1) ⊆ Finset.range (N + 1) := by
+    intro k hk
+    simp only [Finset.mem_range] at hk ⊢
+    exact lt_of_lt_of_le hk (Nat.succ_le_succ (le_max_right _ _))
+  have hpadSingular :
+      (∑ k ∈ Finset.range (b + 1),
+        (-1 : ℚ)^k * LinearMap.trace ℚ (Homology X k) (induced g k).hom) =
+      ∑ k ∈ Finset.range (N + 1),
+        (-1 : ℚ)^k * LinearMap.trace ℚ (Homology X k) (induced g k).hom := by
+    apply Finset.sum_subset hbN
+    intro k hkN hkb
+    simp only [Finset.mem_range, not_lt] at hkN hkb
+    rw [hsingular k (lt_of_lt_of_le (Nat.lt_succ_self b) hkb), mul_zero]
+  have hpadModel :
+      (∑ k ∈ Finset.range (M.bound + 1), (-1 : ℚ)^k * M.homologyTrace k) =
+      ∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * M.homologyTrace k := by
+    apply Finset.sum_subset hMN
+    intro k hkN hkM
+    simp only [Finset.mem_range, not_lt] at hkN hkM
+    rw [hmodel k (lt_of_lt_of_le (Nat.lt_succ_self M.bound) hkM), mul_zero]
+  calc
+    L = ∑ k ∈ Finset.range (b + 1),
+        (-1 : ℚ)^k * LinearMap.trace ℚ (Homology X k) (induced g k).hom := hsum.symm
+    _ = ∑ k ∈ Finset.range (N + 1),
+        (-1 : ℚ)^k * LinearMap.trace ℚ (Homology X k) (induced g k).hom := hpadSingular
+    _ = ∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * M.homologyTrace k := by
+      apply Finset.sum_congr rfl
+      intro k hk
+      rw [htrace k]
+    _ = ∑ k ∈ Finset.range (M.bound + 1),
+        (-1 : ℚ)^k * M.homologyTrace k := hpadModel.symm
 -- END SEAT AREA
 
 /-- A face-avoiding map on a finite polyhedron has Lefschetz number zero. -/
