@@ -107,7 +107,68 @@ theorem barycentricFaces_affineIndependent_aux_chain_induction {n : ℕ}
       barycenter s ∈ affineSpan ℝ (t : Set (Euc n)))
     (c : Finset (Finset (Euc n))) (hc : IsStrictFaceChain K c) :
     AffineIndependent ℝ (fun s : c => barycenter (s : Finset (Euc n))) := by
-  sorry
+  classical
+  refine Finset.induction_on_max_value Finset.card c ?_ ?_ hc
+  · intro
+    exact affineIndependent_of_subsingleton ℝ _
+  · intro a c ha hmax ih hc
+    all_goals
+      have hca : a ∈ K.faces := hc.1 a (Finset.mem_insert_self a c)
+      have hcc : IsStrictFaceChain K c := by
+        refine ⟨fun s hs => hc.1 s (Finset.mem_insert_of_mem hs), ?_⟩
+        intro s hs t ht hst
+        exact hc.2 s (Finset.mem_insert_of_mem hs) t (Finset.mem_insert_of_mem ht) hst
+      have hind : AffineIndependent ℝ
+          (fun s : c => barycenter (s : Finset (Euc n))) := ih hcc
+      by_cases hce : c = ∅
+      · subst c
+        rw [Finset.insert_empty]
+        exact affineIndependent_of_subsingleton ℝ _
+      · have hcne : c.Nonempty := Finset.nonempty_iff_ne_empty.mpr hce
+        obtain ⟨b, hb, hbmax⟩ := Finset.exists_max_image c Finset.card hcne
+        let i : (insert a c : Finset (Finset (Euc n))) :=
+          ⟨a, Finset.mem_insert_self a c⟩
+        apply AffineIndependent.affineIndependent_of_notMem_span (i := i)
+        · let e : {x : (insert a c : Finset (Finset (Euc n))) // x ≠ i} ≃ c :=
+            { toFun := fun x => ⟨x.1.1, by
+                have hx := x.1.2
+                simp only [Finset.mem_insert] at hx
+                rcases hx with hxa | hxc
+                · exfalso
+                  apply x.2
+                  apply Subtype.ext
+                  exact hxa
+                · exact hxc⟩
+              invFun := fun x => ⟨⟨x.1, Finset.mem_insert_of_mem x.2⟩, by
+                intro h
+                have := congrArg Subtype.val h
+                change x.1 = a at this
+                exact ha (this ▸ x.2)⟩
+              left_inv := by intro x; exact Subtype.ext (Subtype.ext rfl)
+              right_inv := by intro x; exact Subtype.ext rfl }
+          convert (affineIndependent_equiv e).2 hind using 1
+        · intro hmem
+          have hba : b ⊂ a := by
+            have hba' := hc.2 b (Finset.mem_insert_of_mem hb) a
+              (Finset.mem_insert_self a c) (by exact fun h => ha (h ▸ hb))
+            rcases hba' with hba' | hab'
+            · exact hba'
+            · exact False.elim (Nat.not_lt_of_ge (hmax b hb) (Finset.card_lt_card hab'))
+          apply hC1 hca hba
+          refine (affineSpan_le.2 ?_) hmem
+          rintro y ⟨x, hx, rfl⟩
+          have hxc : x.1 ∈ c := by
+            have hxin := x.2
+            simp only [Finset.mem_insert] at hxin
+            rcases hxin with hxa | hxc
+            · exfalso
+              apply hx
+              apply Subtype.ext
+              exact hxa
+            · exact hxc
+          apply hC2 (barycentricFaces_affineIndependent_aux_chain_nonempty K c hcc x.1 hxc)
+          exact barycentricFaces_affineIndependent_aux_chain_subset_of_card_le K c hcc hxc hb
+            (hbmax x.1 hxc)
 
 /-- (A1) Along a strict chain `s₀ ⊂ s₁ ⊂ ⋯` of faces of `K`, the barycenters are
 affinely independent: all lie in the top face, whose vertices are independent
