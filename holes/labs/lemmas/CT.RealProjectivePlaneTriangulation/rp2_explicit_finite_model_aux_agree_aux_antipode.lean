@@ -1149,7 +1149,18 @@ lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one
 lemma rp2_explicit_finite_model_aux_agree_aux_antipode (z : ℂ) (hz : gauge hexagon z = 1) :
     Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (-z))) =
       Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk z)) := by
-  sorry
+  have hn : ‖hexToDisk z‖ = 1 :=
+    (rp2_explicit_finite_model_aux_hex_norm z).trans hz
+  have hnneg : ‖hexToDisk (-z)‖ = 1 := by
+    rw [rp2_explicit_finite_model_aux_hex_neg, norm_neg, hn]
+  apply Quotient.sound
+  apply rp2_t2Space_aux_boundary_rel
+  · change ‖((diskClamp (hexToDisk (-z)) : Surfaces.Disk) : ℂ)‖ = 1
+    simp [diskClamp, hnneg]
+  · change ((diskClamp (hexToDisk z) : Surfaces.Disk) : ℂ) =
+      -((diskClamp (hexToDisk (-z)) : Surfaces.Disk) : ℂ)
+    simp [diskClamp, hn.le,
+      rp2_explicit_finite_model_aux_hex_neg]
 -- END SEAT AREA
 
 lemma rp2_explicit_finite_model_aux_agree (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
