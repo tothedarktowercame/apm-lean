@@ -1312,10 +1312,35 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_
         {hexVertex (i + 1), ringVertex i, ringVertex (i + 1)} := by
   sorry
 
+/-- Every plane vector lies in one of the six sector cones. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone (z : ℂ) :
+    ∃ j : Fin 6, ∃ α β : ℝ, 0 ≤ α ∧ 0 ≤ β ∧
+      z = (α : ℂ) * hexVertex j + (β : ℂ) * hexVertex (j + 1) := by
+  sorry
+
+/-- Generic: `α a + β b` with `α, β ≥ 0`, `α + β ≤ 1` lies in the triangle `0 a b`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_triangle (a b : ℂ) (α β : ℝ) (hα : 0 ≤ α) (hβ : 0 ≤ β) (hs : α + β ≤ 1) :
+    (α : ℂ) * a + (β : ℂ) * b ∈ convexHull ℝ {0, a, b} := by
+  sorry
+
 /-- The hexagon is the fan of its six sector triangles `0 ζ_j ζ_{j+1}`. -/
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan (z : ℂ) (hz : z ∈ hexagon) :
     ∃ j : Fin 6, z ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} := by
-  sorry
+  obtain ⟨j, α, β, hα, hβ, rfl⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone z
+  refine ⟨j, rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_triangle _ _ α β hα hβ ?_⟩
+  have hc : 0 < Real.cos (Real.pi / 6) := by
+    apply Real.cos_pos_of_mem_Ioo; constructor <;> linarith [Real.pi_pos]
+  have h := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane j _ hz
+  have h1 := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line j (hexVertex j) (left_mem_segment ℝ _ _)
+  have h2 := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line j (hexVertex (j + 1)) (right_mem_segment ℝ _ _)
+  have hlin : (((α : ℂ) * hexVertex j + (β : ℂ) * hexVertex (j + 1)) *
+      starRingEnd ℂ (edgeNormal j)).re =
+      α * (hexVertex j * starRingEnd ℂ (edgeNormal j)).re +
+        β * (hexVertex (j + 1) * starRingEnd ℂ (edgeNormal j)).re := by
+    rw [add_mul, Complex.add_re, mul_assoc, mul_assoc, Complex.re_ofReal_mul,
+      Complex.re_ofReal_mul]
+  rw [hlin, h1, h2] at h
+  nlinarith
 
 /-- `m_j` is the centroid of the sector triangle `0 ζ_j ζ_{j+1}`. -/
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_centroid (j : ℕ) :
