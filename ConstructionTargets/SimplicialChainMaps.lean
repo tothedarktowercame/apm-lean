@@ -3865,7 +3865,15 @@ theorem vertexChainMap_square_package {n : ℕ} (o : LinearOrder (Euc n))
       IsVertexChainMap o o K' K h (fun k ↦ hmH.f k) ∧
       ∀ k, HomologicalComplex.homologyMap hmH k ≫ HomologicalComplex.homologyMap cmpKH k =
         HomologicalComplex.homologyMap cmpK'H k ≫ induced f k := by
-  sorry
+  obtain ⟨hm, hhm⟩ := vertexChainMap_exists o o K' K h hh
+  have hcomm := vertexChainMap_commutes o o K' K h dK' dK hm hdK' hdK hhm
+  let hmH : ChainComplex.of _ dK' hddK' ⟶ ChainComplex.of _ dK hddK :=
+    ChainComplex.ofHom _ _ hddK' _ _ hddK hm hcomm
+  refine ⟨hmH, ?_, ?_⟩
+  · simpa [hmH] using hhm
+  · exact vertexChainMap_affineComparison_square o o K' K h hh f hf hm hhm
+      dK' dK hddK' hddK hmH (by intro k; simp [hmH]) cmpK' cmpK
+      hcmpK' hcmpK cmpK'H cmpKH cmpK'H_f cmpKH_f
 
 /-- Oriented chain homology of a finite complex is finite-dimensional (the
 `finiteHomology` field of `FiniteChainEndomorphism`). The chain modules are
