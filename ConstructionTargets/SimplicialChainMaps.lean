@@ -2336,7 +2336,85 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff {n k : ℕ}
             (GeometricSimplicialSubdivision.barycenter s.1) k
             (sd k (Finsupp.single
               (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1))) u := by
-  sorry
+  classical
+  let b := GeometricSimplicialSubdivision.barycenter s.1
+  rw [subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex o K s u.1 u.2.2]
+  rw [show GeometricSimplicialSubdivision.barycenter s.1 = b from rfl]
+  rw [Finsupp.finset_sum_apply]
+  by_cases hb : b ∈ u.1
+  · let w : FaceIndex (barycentricStep K) k :=
+      ⟨u.1.erase b,
+        (barycentricStep K).down_closed u.2.1 (Finset.erase_subset _ _)
+          (Finset.card_pos.mp (by rw [Finset.card_erase_of_mem hb, u.2.2]; omega)),
+        by rw [Finset.card_erase_of_mem hb, u.2.2]; omega⟩
+    apply Finset.sum_congr rfl
+    intro v hv
+    simp only [Finsupp.coe_smul, Pi.smul_apply]
+    rw [subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_mem
+      o (barycentricStep K) b
+      (sd k (Finsupp.single
+        (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1)) u w hb rfl]
+    rw [subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sd_coeff
+      o K sd hsd (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) w]
+    simp only [signedDeletion_sq_zero_aux_generator_aux_erase]
+    simp only [smul_eq_mul]
+    rw [Finset.mul_sum]
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro c' hc'
+    have hsub : c' ⊆ (s.1.erase v.1).powerset := Finset.mem_powerset.1 hc'
+    by_cases hchain : GeometricSimplicialSubdivision.IsStrictFaceChain K c'
+    ·
+      have hbn : b ∉ c'.image GeometricSimplicialSubdivision.barycenter := by
+        intro hmem
+        obtain ⟨t, ht, heq⟩ := Finset.mem_image.1 hmem
+        have htss := Finset.mem_powerset.1 (hsub ht)
+        have hproper : t ⊂ s.1 :=
+          Finset.ssubset_of_subset_of_ssubset htss (Finset.erase_ssubset v.2)
+        have htne : t.Nonempty := K.nonempty_of_mem_faces (hchain.1 t ht)
+        have hmemspan :=
+          GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_mem_span
+            htne (show t ⊆ t from fun _ h => h)
+        apply GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_not_mem_span
+          K s.2.1 hproper
+        simpa [b, heq] using hmemspan
+      have hequiv :
+          u.1 = insert b (c'.image GeometricSimplicialSubdivision.barycenter) ↔
+            w.1 = c'.image GeometricSimplicialSubdivision.barycenter := by
+        constructor
+        · intro h
+          have := congrArg (fun z : Finset (Euc n) => z.erase b) h
+          simpa [w, hb, hbn] using this
+        · intro h
+          change u.1.erase b = _ at h
+          rw [← h, Finset.insert_erase hb]
+      simp only [hchain, true_and, if_pos]
+      split_ifs with huimg himg
+      · have hi := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_bary_injOn K c' hchain
+        have hcard : c'.card = k + 1 := by
+          have hc := congrArg Finset.card himg
+          rw [w.2.2, Finset.card_image_iff.mpr hi] at hc
+          exact hc.symm
+        have hsign := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign
+          o K s v.1 v.2 c' hchain hsub hcard
+        rw [hsign, himg]
+        ring
+      all_goals simp_all
+    · simp [hchain]
+  · apply Finset.sum_congr rfl
+    intro v hv
+    simp only [Finsupp.coe_smul, Pi.smul_apply]
+    rw [subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_not_mem
+      o (barycentricStep K) b
+      (sd k (Finsupp.single
+        (signedDeletion_sq_zero_aux_generator_aux_erase K s v.1 v.2) 1)) u hb]
+    simp only [smul_zero]
+    apply Finset.sum_eq_zero
+    intro c' hc'
+    split_ifs with h
+    · exact (hb (h.2.symm ▸ Finset.mem_insert_self b _)).elim
+    · rfl
+
 
 /-- Recursive cone formula for the canonical flag subdivision of a non-vertex
 face. -/
