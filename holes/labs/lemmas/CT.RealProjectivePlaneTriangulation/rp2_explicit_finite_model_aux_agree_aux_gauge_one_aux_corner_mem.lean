@@ -1158,7 +1158,9 @@ lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_shared_boundary
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_corner_mem (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k ∈ rp2Facet p)
     (h7 : 7 ≤ k.1) :
     rp2Corner p k = hexVertex p.1 ∨ rp2Corner p k = hexVertex (p.1 + 1) := by
-  sorry
+  rcases p with ⟨i, j⟩
+  fin_cases i <;> fin_cases j <;> fin_cases k <;>
+    simp [rp2Facet, rp2Corner, ringIdx, bdryIdx] at hk h7 ⊢
 -- END SEAT AREA
 
 /-- Points of a hexagon edge have gauge one. -/
