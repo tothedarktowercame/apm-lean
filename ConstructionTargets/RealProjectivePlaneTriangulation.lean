@@ -931,7 +931,11 @@ lemma rp2_explicit_finite_model_aux_surjective : Function.Surjective rp2Map := b
   sorry
 
 lemma rp2_explicit_finite_model_aux_centre_mem : basisVertex 10 0 ∈ rp2Complex.space := by
-  sorry
+  rw [Geometry.SimplicialComplex.mem_space_iff]
+  refine ⟨{basisVertex 10 0}, basisComplex_vertex_mem (f := rp2Facet (0, 0)) ?_ ?_, ?_⟩
+  · exact Finset.mem_image_of_mem _ (Finset.mem_univ _)
+  · simp [rp2Facet]
+  · simp
 
 lemma rp2_explicit_finite_model_aux_mark :
     rp2Map ⟨basisVertex 10 0, rp2_explicit_finite_model_aux_centre_mem⟩ = surfacePoint false 1 := by
