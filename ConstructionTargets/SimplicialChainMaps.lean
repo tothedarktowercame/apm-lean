@@ -2095,6 +2095,54 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign {n k : �
         tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (GeometricSimplicialSubdivision.barycenter tu.2)
           (GeometricSimplicialSubdivision.barycenter tu.1)).card) * hm
 
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sd_coeff {n j : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n)
+    (sd : ∀ i, FaceModuleCat K i ⟶ FaceModuleCat (barycentricStep K) i)
+    (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd)
+    (r : FaceIndex K j) (w : FaceIndex (barycentricStep K) j) : by
+    classical
+    exact sd j (Finsupp.single r 1) w =
+      ∑ c ∈ r.1.powerset.powerset,
+        if GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+            w.1 = c.image GeometricSimplicialSubdivision.barycenter then
+          flagSign o c else 0 := by
+  classical
+  obtain ⟨z, hz, hcoeff⟩ := hsd j r
+  rw [hz, hcoeff]
+
+/-- Coefficient of a cone at a face containing the apex: only the face with
+the apex erased contributes. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_mem {n k : ℕ} (o : LinearOrder (Euc n)) (K' : GSC n)
+    (b : Euc n) (x : FaceModuleCat K' k) (U : FaceIndex K' (k + 1)) (w : FaceIndex K' k)
+    (hb : b ∈ U.1) (hw : w.1 = U.1.erase b) :
+    subdivisionCone o K' b k x U =
+      (-1 : ℚ) ^ (w.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card * x w := by
+  sorry
+
+/-- A cone vanishes on faces not containing the apex. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_not_mem {n k : ℕ} (o : LinearOrder (Euc n)) (K' : GSC n)
+    (b : Euc n) (x : FaceModuleCat K' k) (U : FaceIndex K' (k + 1)) (hb : b ∉ U.1) :
+    subdivisionCone o K' b k x U = 0 := by
+  sorry
+
+/-- Reindexing: strict chains of `s` with barycenter image `u` (necessarily
+maximal, hence topped by `s`) correspond to pairs `(v, c')` with `c'` a chain of
+`s.erase v` and `c = insert s c'` (`_aux_top`, `_aux_insert`, `_aux_bary_injOn`). -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex {n k : ℕ} (o : LinearOrder (Euc n)) (K : GSC n)
+    (s : FaceIndex K (k + 1)) (u : Finset (Euc n)) (hu : u.card = k + 2) : by
+    classical
+    exact
+    (∑ c ∈ s.1.powerset.powerset,
+      if GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+          u = c.image GeometricSimplicialSubdivision.barycenter then
+        flagSign o c else 0) =
+      ∑ v ∈ s.1.attach, ∑ c' ∈ (s.1.erase v.1).powerset.powerset,
+        if GeometricSimplicialSubdivision.IsStrictFaceChain K c' ∧
+            u = insert (GeometricSimplicialSubdivision.barycenter s.1)
+              (c'.image GeometricSimplicialSubdivision.barycenter) then
+          flagSign o (insert s.1 c') else 0 := by
+  sorry
+
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff {n k : ℕ}
     (o : LinearOrder (Euc n)) (K : GSC n)
     (sd : ∀ j, FaceModuleCat K j ⟶ FaceModuleCat (barycentricStep K) j)
