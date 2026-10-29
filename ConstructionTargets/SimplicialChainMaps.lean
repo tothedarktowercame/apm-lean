@@ -3830,6 +3830,36 @@ theorem iterSubdivision_square {n : ℕ} (o : LinearOrder (Euc n)) (m : ℕ) (K 
           induced (Homeomorph.setCongr (barycentricStep_iterate_space K m).symm) k := by
   sorry
 
+/-- The vertex chain map as a chain map, with its comparison square: take `hm`
+from `vertexChainMap_exists`, make it a chain map with `ChainComplex.ofHom` and
+`vertexChainMap_commutes`, and read the square off
+`vertexChainMap_affineComparison_square` (one order `o` on both sides). -/
+theorem vertexChainMap_square_package {n : ℕ} (o : LinearOrder (Euc n))
+    (K' K : GSC n) (h : Euc n → Euc n)
+    (hh : GeometricSimplicialSubdivision.IsSimplicialVertexMap K' K h)
+    (f : C(K'.space, K.space))
+    (hf : ∀ s ∈ K'.faces, ∀ x : K'.space, (x : Euc n) ∈ convexHull ℝ (s : Set _) →
+      (f x : Euc n) ∈ convexHull ℝ (s.image h : Set _))
+    (dK' : ∀ k, FaceModuleCat K' (k+1) ⟶ FaceModuleCat K' k)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hdK' : IsSignedDeletion o K' dK') (hdK : IsSignedDeletion o K dK)
+    (hddK' : ∀ k, dK' (k+1) ≫ dK' k = 0) (hddK : ∀ k, dK (k+1) ≫ dK k = 0)
+    (cmpK' : ∀ k, FaceModuleCat K' k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K'.space)).X k)
+    (cmpK : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmpK' : IsAffineComparison K' cmpK') (hcmpK : IsAffineComparison K cmpK)
+    (cmpK'H : ChainComplex.of _ dK' hddK' ⟶
+      CoefficientH0.SingularChains ℚ (TopCat.of K'.space))
+    (cmpKH : ChainComplex.of _ dK hddK ⟶
+      CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpK'H_f : ∀ k, cmpK'H.f k = cmpK' k) (cmpKH_f : ∀ k, cmpKH.f k = cmpK k) :
+    ∃ hmH : ChainComplex.of _ dK' hddK' ⟶ ChainComplex.of _ dK hddK,
+      IsVertexChainMap o o K' K h (fun k ↦ hmH.f k) ∧
+      ∀ k, HomologicalComplex.homologyMap hmH k ≫ HomologicalComplex.homologyMap cmpKH k =
+        HomologicalComplex.homologyMap cmpK'H k ≫ induced f k := by
+  sorry
+
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
 an iterated barycentric subdivision, together with a carrier-avoiding simplicial
 approximation homotopic to `g`. -/
