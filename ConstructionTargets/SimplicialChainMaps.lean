@@ -4189,7 +4189,35 @@ theorem carrierAvoiding_of_star_margin {n : ℕ} (L K'' : GSC n)
       G '' ((Subtype.val : K''.space → Euc n) ⁻¹' GeometricSimplicialSubdivision.openStar K'' v) ⊆
         (Subtype.val : L.space → Euc n) ⁻¹' GeometricSimplicialSubdivision.openStar L (h v)) :
     CarrierAvoidingVertexMap L K'' h := by
-  sorry
+  classical
+  intro s hs u hu hus
+  rw [Set.disjoint_left]
+  intro z hz hzs
+  simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe] at hz
+  obtain ⟨v, hvu, rfl⟩ := hz
+  have hvface : {v} ∈ K''.faces :=
+    K''.down_closed hu (Finset.singleton_subset_iff.mpr hvu) (Finset.singleton_nonempty v)
+  have hvvert : v ∈ K''.vertices := Geometry.SimplicialComplex.mem_vertices.mpr hvface
+  have hvspace : v ∈ K''.space := by
+    apply Geometry.SimplicialComplex.mem_space_iff.mpr
+    exact ⟨{v}, hvface, by simp⟩
+  let x : K''.space := ⟨v, hvspace⟩
+  have hxstar : (x : Euc n) ∈ GeometricSimplicialSubdivision.openStar K'' v := by
+    refine ⟨{v}, hvface, by simp, by simp [x], ?_⟩
+    simp
+  have hGstar := hstar v hvvert ⟨x, hxstar, rfl⟩
+  simp only [Set.mem_preimage] at hGstar
+  obtain ⟨t, ht, hht, hGt, -⟩ := hGstar
+  have hxHull : (x : Euc n) ∈ convexHull ℝ (s : Set (Euc n)) := hus hvu
+  have hhHull : h v ∈ convexHull ℝ (s : Set (Euc n)) :=
+    subset_convexHull ℝ (s : Set (Euc n)) hzs
+  have hlower : δ ≤ dist (G x : Euc n) (h v) := hmarg s hs x hxHull (h v) hhHull
+  have hupper : dist (G x : Euc n) (h v) ≤
+      Metric.diam (convexHull ℝ (t : Set (Euc n))) := by
+    exact Metric.dist_le_diam_of_mem
+      (isBounded_convexHull.mpr t.finite_toSet.isBounded) hGt
+      (subset_convexHull ℝ (t : Set (Euc n)) hht)
+  exact (not_lt_of_ge (hlower.trans hupper)) (hmesh t ht)
 
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
 an iterated barycentric subdivision, together with a carrier-avoiding simplicial
