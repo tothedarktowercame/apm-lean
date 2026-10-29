@@ -2203,11 +2203,75 @@ lemma rp2_explicit_finite_model_aux_injective_aux_boundary (p : Fin 6 × Fin 3) 
 `_aux_boundary`, `y'` lies in the face of boundary labels of `p'`, which is also a
 face of `p'' = (p'.1 + 3, p'.2)`; there `rp2Affine p'' y' = -rp2Affine p' y'`
 (`_agree_aux_affine_neg`, `_hex_neg_vertex`), so `_aux_planar` applies to `p, p''`. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_antipodal_aux_bary
+    (s : Finset (Fin 10)) (hs : s.Nonempty) (y : EuclideanSpace ℝ (Fin 10))
+    (hn : ∀ k, 0 ≤ y k) (hsum : ∑ k, y k = 1)
+    (hz : ∀ k, k ∉ s → y k = 0) :
+    y ∈ convexHull ℝ (↑(s.image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) := by
+  classical
+  let i₀ : ↑s := ⟨hs.choose, hs.choose_spec⟩
+  let w : Fin 10 → ℝ := fun i => y i
+  let z : Fin 10 → EuclideanSpace ℝ (Fin 10) := fun i =>
+    if hi : i ∈ s then basisVertex 10 i else basisVertex 10 i₀
+  apply mem_convexHull_of_exists_fintype w z
+  · exact hn
+  · exact hsum
+  · intro i
+    simp only [z]
+    split_ifs with hi
+    · exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i, hi, rfl⟩)
+    · exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i₀, i₀.property, rfl⟩)
+  · rw [show (∑ i, w i • z i) = ∑ i, (y i) • basisVertex 10 i by
+      apply Finset.sum_congr rfl
+      intro i _
+      by_cases hi : i ∈ s
+      · simp [w, z, hi]
+      · rw [show w i = 0 from hz i hi, hz i hi]
+        simp]
+    apply (EuclideanSpace.equiv (Fin 10) ℝ).injective
+    funext k
+    simp [basisVertex, Pi.single_apply, eq_comm]
+
+set_option maxHeartbeats 2000000 in
+lemma rp2_explicit_finite_model_aux_injective_aux_antipodal_aux_corner
+    (p' : Fin 6 × Fin 3) :
+    ∀ k, k ∈ rp2Facet (p'.1 + 3, p'.2) → k ∈ rp2Facet p' →
+      rp2Corner (p'.1 + 3, p'.2) k = -rp2Corner p' k := by
+  intro k hk hk'
+  rcases p' with ⟨i, j⟩
+  fin_cases i <;> fin_cases j <;> fin_cases k <;>
+    simp [rp2Facet, rp2Corner, ringIdx, bdryIdx,
+      rp2_explicit_finite_model_aux_hex_neg_vertex] at hk hk' ⊢
+
 lemma rp2_explicit_finite_model_aux_injective_aux_antipodal (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) (hy' : y' ∈ facetHull p')
     (hg : gauge hexagon (rp2Affine p' y') = 1)
     (h : rp2Affine p y = -rp2Affine p' y') : y = y' := by
-  sorry
+  let p'' : Fin 6 × Fin 3 := (p'.1 + 3, p'.2)
+  have hb := rp2_explicit_finite_model_aux_injective_aux_boundary p' y' hy' hg
+  obtain ⟨hn, hs, ho⟩ :=
+    rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary (rp2Facet p') y' hy'
+  have hz : ∀ k, k ∉ rp2Facet p'' → y' k = 0 := by
+    intro k hk
+    by_cases h7 : k.1 < 7
+    · exact hb k h7
+    · apply ho k
+      rcases p' with ⟨i, j⟩
+      fin_cases i <;> fin_cases j <;> fin_cases k <;>
+        simp [p'', rp2Facet, ringIdx, bdryIdx] at hk h7 ⊢
+  have hne : (rp2Facet p'').Nonempty := by
+    rcases p'' with ⟨i, j⟩
+    fin_cases j <;> simp [rp2Facet]
+  have hy'' : y' ∈ facetHull p'' :=
+    rp2_explicit_finite_model_aux_injective_aux_antipodal_aux_bary
+      (rp2Facet p'') hne y' hn hs hz
+  have hc : ∀ k, k ∈ rp2Facet p'' → k ∈ rp2Facet p' →
+      rp2Corner p'' k = -rp2Corner p' k := by
+    exact rp2_explicit_finite_model_aux_injective_aux_antipodal_aux_corner p'
+  have hneg := rp2_explicit_finite_model_aux_agree_aux_affine_neg
+    p'' p' y' hy'' hy' hc
+  apply rp2_explicit_finite_model_aux_injective_aux_planar p p'' y y' hy hy''
+  exact h.trans hneg.symm
 
 lemma rp2_explicit_finite_model_aux_injective_aux_quotient_cases
     (x y : Surfaces.Disk)
