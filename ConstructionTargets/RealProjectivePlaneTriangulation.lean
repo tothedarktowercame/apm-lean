@@ -1387,9 +1387,6 @@ lemma rp2_explicit_finite_model_aux_agree (p p' : Fin 6 × Fin 3) (y : Euclidean
 lemma rp2_explicit_finite_model_aux_continuous : Continuous rp2Map := by
   sorry
 
-lemma rp2_explicit_finite_model_aux_injective : Function.Injective rp2Map := by
-  sorry
-
 /-- The 18 planar triangles cover the hexagon. -/
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_lift
     (p : Fin 6 × Fin 3) (z : ℂ)
@@ -1890,6 +1887,73 @@ lemma rp2_explicit_finite_model_aux_rp2Map_eq (y : rp2Complex.space) (p : Fin 6 
   unfold rp2Map
   rw [dif_pos hex]
   exact rp2_explicit_finite_model_aux_agree _ _ _ (Classical.choose_spec hex) hp
+
+/-- Planar fibres are single points: two facet points with the same planar image
+are equal.  Plan: in lattice coordinates `z = a + b·ζ₁` (`a = Re z - Im z/√3`,
+`b = 2 Im z/√3`) every corner has rational coordinates (`ζ_j ∈ {±1, ±ζ₁, ±(ζ₁-1)}`,
+`m_j = (ζ_j + ζ_{j+1})/3`); with the barycentric description of `facetHull`
+each of the 18×18 facet pairs is linear arithmetic (`linarith`). -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y' ∈ facetHull p')
+    (h : rp2Affine p y = rp2Affine p' y') : y = y' := by
+  sorry
+
+/-- A facet point whose image has hexagon gauge one is supported on boundary labels.
+Plan: `gauge` is convex and equals `1` at `ζ_j`, `0` at `0`, `2/3` at `m_j`; so
+`1 = gauge (Σ y_k c_k) ≤ Σ y_k gauge c_k` forces `y_k = 0` for `k < 7`. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hg : gauge hexagon (rp2Affine p y) = 1) :
+    ∀ k : Fin 10, k.1 < 7 → y k = 0 := by
+  sorry
+
+/-- Antipodal images on the boundary come from the same point.  Plan: by
+`_aux_boundary`, `y'` lies in the face of boundary labels of `p'`, which is also a
+face of `p'' = (p'.1 + 3, p'.2)`; there `rp2Affine p'' y' = -rp2Affine p' y'`
+(`_agree_aux_affine_neg`, `_hex_neg_vertex`), so `_aux_planar` applies to `p, p''`. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_antipodal (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y' ∈ facetHull p')
+    (hg : gauge hexagon (rp2Affine p' y') = 1)
+    (h : rp2Affine p y = -rp2Affine p' y') : y = y' := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_injective_aux_quotient_cases
+    (x y : Surfaces.Disk)
+    (h : Surfaces.surfaceQuotient false 1 x =
+      Surfaces.surfaceQuotient false 1 y) :
+    x = y ∨ (‖(x : ℂ)‖ = 1 ∧ (y : ℂ) = -(x : ℂ)) := by
+  exact rp2_t2Space_aux_eqv_cases (Quotient.exact h)
+
+lemma rp2_explicit_finite_model_aux_injective_aux_clamp
+    (z : ℂ) (hz : z ∈ hexagon) :
+    ((diskClamp (hexToDisk z) : Surfaces.Disk) : ℂ) = hexToDisk z := by
+  have hg : gauge hexagon z ≤ 1 :=
+    (rp2_explicit_finite_model_aux_hex_gauge_le_one z).2 hz
+  have hn : ‖hexToDisk z‖ ≤ 1 := by
+    rw [rp2_explicit_finite_model_aux_hex_norm]
+    exact hg
+  simp [diskClamp, hn]
+
+lemma rp2_explicit_finite_model_aux_injective : Function.Injective rp2Map := by
+  rintro ⟨y, hy⟩ ⟨y', hy'⟩ h
+  obtain ⟨p, hp⟩ := rp2_explicit_finite_model_aux_cover y hy
+  obtain ⟨p', hp'⟩ := rp2_explicit_finite_model_aux_cover y' hy'
+  rw [rp2_explicit_finite_model_aux_rp2Map_eq _ p hp,
+    rp2_explicit_finite_model_aux_rp2Map_eq _ p' hp'] at h
+  have hz := rp2_explicit_finite_model_aux_affine_mem p y hp
+  have hz' := rp2_explicit_finite_model_aux_affine_mem p' y' hp'
+  apply Subtype.ext
+  change y = y'
+  rcases rp2_explicit_finite_model_aux_injective_aux_quotient_cases _ _ h with h | ⟨hn, hneg⟩
+  · have h2 := congrArg (fun x : Surfaces.Disk => (x : ℂ)) h
+    simp only [rp2_explicit_finite_model_aux_injective_aux_clamp _ hz, rp2_explicit_finite_model_aux_injective_aux_clamp _ hz'] at h2
+    exact rp2_explicit_finite_model_aux_injective_aux_planar p p' y y' hp hp'
+      (rp2_explicit_finite_model_aux_hex_injOn hz hz' h2)
+  · rw [rp2_explicit_finite_model_aux_injective_aux_clamp _ hz, rp2_explicit_finite_model_aux_injective_aux_clamp _ hz'] at hneg
+    rw [rp2_explicit_finite_model_aux_injective_aux_clamp _ hz, rp2_explicit_finite_model_aux_hex_norm] at hn
+    rw [← rp2_explicit_finite_model_aux_hex_neg] at hneg
+    have heq := rp2_explicit_finite_model_aux_hex_injOn hz'
+      (rp2_explicit_finite_model_aux_hex_neg_mem hz) hneg
+    refine (rp2_explicit_finite_model_aux_injective_aux_antipodal p' p y' y hp' hp hn heq).symm
 
 lemma rp2_explicit_finite_model_aux_diskClamp_coe (x : Surfaces.Disk) : diskClamp (x : ℂ) = x := by
   have hx : ‖(x : ℂ)‖ ≤ 1 := by
