@@ -423,8 +423,129 @@ lemma rp2_explicit_finite_model_aux_hex_neg (z : ℂ) : hexToDisk (-z) = -hexToD
   rw [gauge_neg (fun _ => rp2_explicit_finite_model_aux_hex_neg_mem), norm_neg]
   simp
 
+lemma rp2_explicit_finite_model_aux_hex_injOn_aux_nhds : hexagon ∈ nhds (0 : ℂ) := by
+  have hsymm : -hexagon = hexagon := by
+    rw [hexagon, ← convexHull_neg]
+    congr 1
+    ext z
+    simp only [Set.mem_neg, Set.mem_range]
+    constructor
+    · rintro ⟨j, hj⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp_all [rp2_explicit_finite_model_aux_hex_neg_vertex]
+    · rintro ⟨j, rfl⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp [rp2_explicit_finite_model_aux_hex_neg_vertex]
+  have hspan : affineSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) = ⊤ := by
+    rw [AffineSubspace.affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty ℝ ℂ ℂ
+      (Set.range_nonempty _)]
+    apply top_unique
+    intro z hz
+    have h0 : hexVertex (0 : Fin 6) = 1 := by simp [hexVertex]
+    have h1 : hexVertex (1 : Fin 6) = 1 / 2 + (Real.sqrt 3 / 2) * Complex.I := by
+      unfold hexVertex
+      norm_num
+      rw [show 2 * (Real.pi : ℂ) * Complex.I / 6 = (Real.pi / 3) * Complex.I by ring]
+      rw [show (Real.pi : ℂ) / 3 = ((Real.pi / 3 : ℝ) : ℂ) by norm_num]
+      rw [Complex.exp_ofReal_mul_I, Real.cos_pi_div_three, Real.sin_pi_div_three]
+      push_cast
+      ring
+    have h3 : hexVertex (3 : Fin 6) = -1 := by
+      rw [← h0]
+      exact rp2_explicit_finite_model_aux_hex_neg_vertex 0
+    have ha := vsub_mem_vectorSpan ℝ
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (3 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    have hb := vsub_mem_vectorSpan ℝ
+      (show hexVertex (1 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    rw [h0, h3] at ha
+    rw [h0, h1] at hb
+    simp only [vsub_eq_sub] at ha hb
+    have hone : (1 : ℂ) ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (1 / 2 : ℝ) ha using 1
+      change (1 : ℂ) = ((1 / 2 : ℝ) : ℂ) * ((1 : ℂ) - -1)
+      norm_num
+    have hI : Complex.I ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      have hc := (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).sub_mem hb
+        ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+          (-1 / 2) hone)
+      have hs : Real.sqrt 3 ≠ 0 := ne_of_gt (Real.sqrt_pos.2 (by norm_num))
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (2 / Real.sqrt 3 : ℝ) hc using 1
+      change Complex.I = ((2 / Real.sqrt 3 : ℝ) : ℂ) *
+        ((1 : ℂ) / 2 + (Real.sqrt 3 : ℂ) / 2 * Complex.I - 1 -
+          ((-1 / 2 : ℝ) : ℂ) * 1)
+      push_cast
+      field_simp
+      ring
+    rw [← Complex.re_add_im z]
+    convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).add_mem
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.re hone)
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.im hI) using 1
+    change (z.re : ℂ) + (z.im : ℂ) * Complex.I =
+      (z.re : ℂ) * 1 + (z.im : ℂ) * Complex.I
+    ring
+  obtain ⟨x, hx⟩ : (interior hexagon).Nonempty := by
+    rw [hexagon, interior_convexHull_nonempty_iff_affineSpan_eq_top]
+    exact hspan
+  have hz : (0 : ℂ) ∈ interior hexagon := by
+    by_cases hx0 : x = 0
+    · simpa [hx0] using hx
+    · have hnx : -x ∈ hexagon := by
+        rw [← hsymm]
+        exact Set.neg_mem_neg.mpr (interior_subset hx)
+      have hm : midpoint ℝ x (-x) ∈ openSegment ℝ x (-x) :=
+        midpoint_mem_openSegment x (-x)
+      have hi := (convex_convexHull ℝ _).openSegment_interior_self_subset_interior hx hnx hm
+      simpa [midpoint_eq_smul_add, smul_eq_mul] using hi
+  exact mem_interior_iff_mem_nhds.mp hz
+
 lemma rp2_explicit_finite_model_aux_hex_injOn : Set.InjOn hexToDisk hexagon := by
-  sorry
+  have ha : Absorbent ℝ hexagon :=
+    absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_injOn_aux_nhds
+  have hb : Bornology.IsVonNBounded ℝ hexagon := by
+    apply NormedSpace.isVonNBounded_of_isBounded ℝ
+    rw [hexagon, isBounded_convexHull]
+    exact (Set.finite_range _).isBounded
+  intro x hx y hy hxy
+  have hgxy : gauge hexagon x = gauge hexagon y := by
+    rw [← rp2_explicit_finite_model_aux_hex_norm x,
+      ← rp2_explicit_finite_model_aux_hex_norm y, hxy]
+  by_cases hx0 : x = 0
+  · subst x
+    have : gauge hexagon y = 0 := by simpa using hgxy.symm
+    exact (gauge_eq_zero ha hb).mp this |>.symm
+  have hy0 : y ≠ 0 := by
+    intro hy0
+    subst y
+    exact hx0 ((gauge_eq_zero ha hb).mp (by simpa using hgxy))
+  have hg0 : gauge hexagon x ≠ 0 := ((gauge_pos ha hb).2 hx0).ne'
+  have hnx : ‖x‖ ≠ 0 := norm_ne_zero_iff.mpr hx0
+  have hny : ‖y‖ ≠ 0 := norm_ne_zero_iff.mpr hy0
+  have hdir : (‖x‖⁻¹ : ℂ) * x = (‖y‖⁻¹ : ℂ) * y := by
+    apply mul_left_cancel₀ (show (gauge hexagon x : ℂ) ≠ 0 by exact_mod_cast hg0)
+    simpa [hexToDisk, div_eq_mul_inv, hgxy, mul_assoc] using hxy
+  have hnorm : ‖x‖ = ‖y‖ := by
+    have hgmap := congrArg (gauge hexagon) hxy
+    change gauge hexagon ((gauge hexagon x / ‖x‖) • x) =
+      gauge hexagon ((gauge hexagon y / ‖y‖) • y) at hgmap
+    have hxmap : gauge hexagon ((gauge hexagon x / ‖x‖) • x) =
+        (gauge hexagon x / ‖x‖) • gauge hexagon x :=
+      gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ)
+        (div_nonneg (gauge_nonneg _) (norm_nonneg _)) x
+    have hymap : gauge hexagon ((gauge hexagon y / ‖y‖) • y) =
+        (gauge hexagon y / ‖y‖) • gauge hexagon y :=
+      gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ)
+        (div_nonneg (gauge_nonneg _) (norm_nonneg _)) y
+    rw [hxmap, hymap] at hgmap
+    simp only [smul_eq_mul, hgxy] at hgmap
+    field_simp [hnx, hny] at hgmap
+    have hgy0 : gauge hexagon y ≠ 0 := by simpa [hgxy] using hg0
+    exact (mul_left_cancel₀ (pow_ne_zero 2 hgy0) hgmap).symm
+  apply (mul_left_cancel₀ (show (‖x‖⁻¹ : ℂ) ≠ 0 by exact_mod_cast inv_ne_zero hnx))
+  simpa [hnorm] using hdir
 
 lemma rp2_explicit_finite_model_aux_hex_surj (w : ℂ) (hw : ‖w‖ ≤ 1) : ∃ z ∈ hexagon, hexToDisk z = w := by
   sorry
