@@ -1084,7 +1084,35 @@ lemma rp2_explicit_finite_model_aux_agree_aux_affine_neg
     (hcorner : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
       rp2Corner p k = -rp2Corner p' k) :
     rp2Affine p y = -rp2Affine p' y := by
-  sorry
+  classical
+  have hinter : y ∈ convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) :=
+    rp2_explicit_finite_model_aux_basis_inter (rp2Facet p) (rp2Facet p') ⟨hy, hy'⟩
+  let L : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ :=
+    rp2AffineLinear p + rp2AffineLinear p'
+  have hsub : convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) ⊆ L.ker := by
+    apply convexHull_min
+    · rintro x ⟨hx, hx'⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+      have hinj : Function.Injective (basisVertex 10) := by
+        intro i j hij
+        have hij' := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+        simpa [basisVertex, EuclideanSpace.single_apply] using hij'
+      have hkk : k = k' := hinj heq.symm
+      subst k'
+      change rp2Affine p (basisVertex 10 k) + rp2Affine p' (basisVertex 10 k) = 0
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis,
+        rp2_explicit_finite_model_aux_affine_mem_aux_basis, hcorner k hk hk']
+      simp
+    · exact L.ker.convex
+  have hz : L y = 0 := hsub hinter
+  change rp2Affine p y + rp2Affine p' y = 0 at hz
+  exact eq_neg_of_add_eq_zero_left hz
+
 
 /-- (C) A point in two facets whose shared vertices are all boundary labels maps
 to the hexagon boundary: it lies on a boundary vertex or edge `ζ_j ζ_{j+1}`. -/
