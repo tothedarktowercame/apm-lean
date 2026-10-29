@@ -1230,7 +1230,23 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective (N : ℕ) :
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_vertex_mem (k : Fin 7) :
     ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 k ∈ apm_t02A04_coneComplex.space := by
-  sorry
+  have h (i : Fin 6) (j : Fin 7) (hj : j ∈ apm_t02A04_coneFacet i) :
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 j ∈
+        apm_t02A04_coneComplex.space := by
+    rw [Geometry.SimplicialComplex.mem_space_iff]
+    refine ⟨{ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 j},
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_vertex_mem
+        (f := apm_t02A04_coneFacet i) ?_ hj, ?_⟩
+    · exact Finset.mem_image_of_mem _ (Finset.mem_univ i)
+    · simp
+  fin_cases k
+  · exact h 0 0 (by simp [apm_t02A04_coneFacet])
+  · exact h 0 1 (by simp [apm_t02A04_coneFacet, apm_t02A04_coneIdx])
+  · exact h 1 2 (by simp [apm_t02A04_coneFacet, apm_t02A04_coneIdx])
+  · exact h 2 3 (by simp [apm_t02A04_coneFacet, apm_t02A04_coneIdx])
+  · exact h 3 4 (by simp [apm_t02A04_coneFacet, apm_t02A04_coneIdx])
+  · exact h 4 5 (by simp [apm_t02A04_coneFacet, apm_t02A04_coneIdx])
+  · exact h 5 6 (by simp [apm_t02A04_coneFacet, apm_t02A04_coneIdx])
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx i) +
