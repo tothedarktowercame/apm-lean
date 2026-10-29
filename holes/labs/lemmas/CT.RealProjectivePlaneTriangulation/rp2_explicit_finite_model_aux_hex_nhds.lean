@@ -411,8 +411,94 @@ lemma rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_of_nhds
 that the hexagon contains the convex hull of `±1, ±ζ_1` which contains a
 square around `0`. -/
 -- BEGIN SEAT AREA
+lemma rp2_explicit_finite_model_aux_hex_nhds_aux_neg (j : ℕ) :
+    hexVertex (j + 3) = -hexVertex j := by
+  rw [hexVertex, hexVertex]
+  push_cast
+  rw [show 2 * (Real.pi : ℂ) * Complex.I * ((j : ℂ) + 3) / 6 =
+      2 * Real.pi * Complex.I * (j : ℂ) / 6 + Real.pi * Complex.I by ring]
+  rw [Complex.exp_add, Complex.exp_pi_mul_I]
+  ring
+
 lemma rp2_explicit_finite_model_aux_hex_nhds : hexagon ∈ nhds (0 : ℂ) := by
-  sorry
+  have hsymm : -hexagon = hexagon := by
+    rw [hexagon, ← convexHull_neg]
+    congr 1
+    ext z
+    simp only [Set.mem_neg, Set.mem_range]
+    constructor
+    · rintro ⟨j, hj⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp_all [rp2_explicit_finite_model_aux_hex_nhds_aux_neg]
+    · rintro ⟨j, rfl⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp [rp2_explicit_finite_model_aux_hex_nhds_aux_neg]
+  have hspan : affineSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) = ⊤ := by
+    rw [AffineSubspace.affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty ℝ ℂ ℂ
+      (Set.range_nonempty _)]
+    apply top_unique
+    intro z hz
+    have h0 : hexVertex (0 : Fin 6) = 1 := by
+      simp [hexVertex]
+    have h1 : hexVertex (1 : Fin 6) = 1 / 2 + (Real.sqrt 3 / 2) * Complex.I := by
+      unfold hexVertex
+      norm_num
+      rw [show 2 * (Real.pi : ℂ) * Complex.I / 6 = (Real.pi / 3) * Complex.I by ring]
+      rw [show (Real.pi : ℂ) / 3 = ((Real.pi / 3 : ℝ) : ℂ) by norm_num]
+      rw [Complex.exp_ofReal_mul_I]
+      rw [Real.cos_pi_div_three, Real.sin_pi_div_three]
+      push_cast
+      ring
+    have h3 : hexVertex (3 : Fin 6) = -1 := by
+      rw [← h0]
+      exact rp2_explicit_finite_model_aux_hex_nhds_aux_neg 0
+    have ha := vsub_mem_vectorSpan ℝ
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (3 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    have hb := vsub_mem_vectorSpan ℝ
+      (show hexVertex (1 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    rw [h0, h3] at ha
+    rw [h0, h1] at hb
+    simp only [vsub_eq_sub] at ha hb
+    have hone : (1 : ℂ) ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem (1 / 2 : ℝ) ha using 1
+      change (1 : ℂ) = ((1 / 2 : ℝ) : ℂ) * ((1 : ℂ) - -1)
+      norm_num
+    have hI : Complex.I ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      have hc := (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).sub_mem hb
+        ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+          (-1 / 2) hone)
+      have hs : Real.sqrt 3 ≠ 0 := ne_of_gt (Real.sqrt_pos.2 (by norm_num))
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (2 / Real.sqrt 3 : ℝ) hc using 1
+      change Complex.I = ((2 / Real.sqrt 3 : ℝ) : ℂ) *
+        ((1 : ℂ) / 2 + (Real.sqrt 3 : ℂ) / 2 * Complex.I - 1 -
+          ((-1 / 2 : ℝ) : ℂ) * 1)
+      push_cast
+      field_simp
+      ring
+    rw [← Complex.re_add_im z]
+    convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).add_mem
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.re hone)
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.im hI) using 1
+    change (z.re : ℂ) + (z.im : ℂ) * Complex.I =
+      (z.re : ℂ) * 1 + (z.im : ℂ) * Complex.I
+    ring
+  obtain ⟨x, hx⟩ : (interior hexagon).Nonempty := by
+    rw [hexagon, interior_convexHull_nonempty_iff_affineSpan_eq_top]
+    exact hspan
+  have hz : (0 : ℂ) ∈ interior hexagon := by
+    by_cases hx0 : x = 0
+    · simpa [hx0] using hx
+    · have hnx : -x ∈ hexagon := by
+        rw [← hsymm]
+        exact Set.neg_mem_neg.mpr (interior_subset hx)
+      have hm : midpoint ℝ x (-x) ∈ openSegment ℝ x (-x) :=
+        midpoint_mem_openSegment x (-x)
+      have hi := (convex_convexHull ℝ _).openSegment_interior_self_subset_interior hx hnx hm
+      simpa [midpoint_eq_smul_add, smul_eq_mul] using hi
+  exact mem_interior_iff_mem_nhds.mp hz
 -- END SEAT AREA
 
 lemma rp2_explicit_finite_model_aux_hex_gauge_le_one (z : ℂ) : gauge hexagon z ≤ 1 ↔ z ∈ hexagon :=
