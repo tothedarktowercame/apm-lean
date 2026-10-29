@@ -2650,6 +2650,32 @@ theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
 a combination of its own subfaces: the boundary of the comparison simplex of `s`
 has range in `convexHull s`, and comparison simplices of distinct faces are
 distinct generators whose ranges are the face hulls. -/
+lemma vertexChainMap_affineComparison_square_aux_d_support_aux_hull {n : ℕ} (K : GSC n)
+    {u v : Finset (Euc n)} (hu : u ∈ K.faces) (hv : v ∈ K.faces)
+    (h : convexHull ℝ (u : Set (Euc n)) ⊆ convexHull ℝ (v : Set (Euc n))) : u ⊆ v := by
+  classical
+  intro x hx
+  have hxu : x ∈ convexHull ℝ (u : Set (Euc n)) := subset_convexHull ℝ _ hx
+  have hxi : x ∈ convexHull ℝ ((u ∩ v : Finset (Euc n)) : Set (Euc n)) := by
+    rw [show convexHull ℝ ((u ∩ v : Finset (Euc n)) : Set (Euc n)) =
+        convexHull ℝ (u : Set (Euc n)) ∩ convexHull ℝ (v : Set (Euc n)) by
+      simpa only [Finset.coe_inter] using (K.convexHull_inter_convexHull hu hv).symm]
+    exact ⟨hxu, h hxu⟩
+  by_contra hxv
+  have heq := (K.indep hu).convexHull_inter (R := ℝ)
+    (show {x} ⊆ u by simpa) (show u ∩ v ⊆ u by simp)
+  have hempty : ({x} ∩ (u ∩ v) : Finset (Euc n)) = ∅ := by
+    ext y
+    simp [hxv]
+  have hp : x ∈ convexHull ℝ (({x} ∩ (u ∩ v) : Finset (Euc n)) : Set (Euc n)) := by
+    rw [show convexHull ℝ (({x} ∩ (u ∩ v) : Finset (Euc n)) : Set (Euc n)) =
+        convexHull ℝ ({x} : Set (Euc n)) ∩
+          convexHull ℝ ((u ∩ v : Finset (Euc n)) : Set (Euc n)) by
+      simpa only [Finset.coe_inter, Finset.coe_singleton] using heq]
+    exact ⟨by simpa using hx, hxi⟩
+  rw [hempty, Finset.coe_empty, convexHull_empty] at hp
+  exact hp
+
 lemma vertexChainMap_affineComparison_square_aux_d_support {n : ℕ} (K : GSC n)
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
     (cmp : ∀ k, FaceModuleCat K k ⟶
