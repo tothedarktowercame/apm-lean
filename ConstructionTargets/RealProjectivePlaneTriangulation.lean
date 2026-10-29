@@ -1136,12 +1136,62 @@ lemma rp2_explicit_finite_model_aux_agree_aux_affine_neg
 
 /-- (C) A point in two facets whose shared vertices are all boundary labels maps
 to the hexagon boundary: it lies on a boundary vertex or edge `ζ_j ζ_{j+1}`. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_shared_boundary
+    (p p' : Fin 6 × Fin 3)
+    (hlab : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → 7 ≤ k.1) :
+    (↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10)) ⊆
+      basisVertex 10 '' {k : Fin 10 | 7 ≤ k.1} := by
+  rintro x ⟨hx, hx'⟩
+  obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+  obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+  have hinj : Function.Injective (basisVertex 10) := by
+    intro i j hij
+    have hij' := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+    simpa [basisVertex, EuclideanSpace.single_apply] using hij'
+  have hkk : k = k' := hinj heq.symm
+  subst k'
+  exact ⟨k, hlab k hk hk', rfl⟩
+
+/-- Boundary-label corners of a facet are its two hexagon vertices `ζ_i, ζ_{i+1}`. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_corner_mem (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k ∈ rp2Facet p)
+    (h7 : 7 ≤ k.1) :
+    rp2Corner p k = hexVertex p.1 ∨ rp2Corner p k = hexVertex (p.1 + 1) := by
+  sorry
+
+/-- Points of a hexagon edge have gauge one. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment (j : ℕ) (z : ℂ)
+    (hz : z ∈ segment ℝ (hexVertex j) (hexVertex (j + 1))) : gauge hexagon z = 1 := by
+  sorry
+
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one
     (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
     (hlab : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → 7 ≤ k.1) :
     gauge hexagon (rp2Affine p y) = 1 := by
-  sorry
+  classical
+  have hy2 := rp2_explicit_finite_model_aux_agree_aux_inter p p' y hy hy'
+  have hinj : Function.Injective (basisVertex 10) := by
+    intro i j hij
+    have := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+    simpa [basisVertex, EuclideanSpace.single_apply] using this
+  have hseg : convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) ⊆
+      rp2AffineLinear p ⁻¹' segment ℝ (hexVertex p.1) (hexVertex (p.1 + 1)) := by
+    apply convexHull_min
+    · rintro x ⟨hx, hx'⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+      have hkk : k' = k := hinj heq
+      subst hkk
+      change rp2Affine p (basisVertex 10 k') ∈ segment ℝ (hexVertex p.1) (hexVertex (p.1 + 1))
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis]
+      rcases rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_corner_mem p k' hk (hlab k' hk hk') with h | h <;> rw [h]
+      · exact left_mem_segment ℝ _ _
+      · exact right_mem_segment ℝ _ _
+    · exact (convex_segment _ _).linear_preimage _
+  exact rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment _ _ (hseg hy2)
 
 /-- (D) A hexagon boundary point and its antipode are identified in `RP²`
 (`_aux_hex_norm`, `_aux_hex_neg`, `rp2_t2Space_aux_boundary_rel`). -/
