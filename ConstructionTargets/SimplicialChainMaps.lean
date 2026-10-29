@@ -3287,7 +3287,60 @@ lemma subdivision_affineComparison_square_aux_vertex {n : ℕ} (o : LinearOrder 
     (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd) (s : FaceIndex K 0) :
     ∃ u : FaceIndex (barycentricStep K) 0, u.1 = s.1 ∧
       sd 0 (Finsupp.single s 1) = Finsupp.single u 1 := by
-  sorry
+  classical
+  obtain ⟨x, hx⟩ := Finset.card_eq_one.mp s.2.2
+  have hsface : ({x} : Finset (Euc n)) ∈ K.faces := by
+    simpa [hx] using s.2.1
+  let u : FaceIndex (barycentricStep K) 0 :=
+    ⟨{GeometricSimplicialSubdivision.barycenter ({x} : Finset (Euc n))}, by
+      constructor
+      · refine ⟨{{x}}, ?_, by simp⟩
+        constructor
+        · simpa using hsface
+        · simp
+      · simp,
+      by simp⟩
+  refine ⟨u, ?_, ?_⟩
+  · simp only [u, hx, GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_barycenter_formula]
+    simp
+  · obtain ⟨z, hz, hcoeff⟩ := hsd 0 s
+    rw [hz]
+    have hp₁ : ({x} : Finset (Euc n)).powerset = {∅, {x}} := by
+      ext a
+      simp [Finset.subset_singleton_iff]
+    have hp₂ : ({∅, {x}} : Finset (Finset (Euc n))).powerset =
+        {∅, {∅}, {{x}}, {∅, {x}}} := by
+      ext c
+      simp only [Finset.mem_powerset, Finset.mem_insert, Finset.mem_singleton]
+      grind
+    have hempty : (∅ : Finset (Euc n)) ∉ K.faces := by
+      intro h
+      exact (K.nonempty_of_mem_faces h).ne_empty rfl
+    have hself : ¬ ({x} : Finset (Euc n)) ⊂ {x} := by
+      intro h
+      exact h.ne rfl
+    ext v
+    have hvempty : v.1 ≠ ∅ := by
+      intro h
+      have := v.2.2
+      simp [h] at this
+    rw [hcoeff, hx, hp₁, hp₂]
+    rw [Finset.sum_eq_single {{x}}]
+    · by_cases hv : v.1 = u.1
+      · have : v = u := Subtype.ext hv
+        subst v
+        simp [u, hsface, GeometricSimplicialSubdivision.IsStrictFaceChain,
+          flagSign, flagNewVertex, hself, Finset.filter_singleton]
+      · have hv' : v ≠ u := fun h => hv (congrArg Subtype.val h)
+        simp [u, hv, hv', hsface, GeometricSimplicialSubdivision.IsStrictFaceChain,
+          flagSign, flagNewVertex, hself, Finset.filter_singleton]
+    · intro c hc hne
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hc
+      rcases hc with rfl | rfl | rfl | rfl
+      all_goals try contradiction
+      all_goals simp [hvempty, hempty,
+        GeometricSimplicialSubdivision.IsStrictFaceChain]
+    · simp
 
 /-- (claude-14, 2026-10-29: added `hK'`. With an arbitrary `K'` of the same space
 the square is false: for `K` the two collinear edges `[a,v]`, `[v,b]` and `K'` the
