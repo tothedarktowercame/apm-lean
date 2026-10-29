@@ -1350,7 +1350,22 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan (z 
 /-- `m_j` is the centroid of the sector triangle `0 ζ_j ζ_{j+1}`. -/
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_centroid (j : ℕ) :
     ringVertex j ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} := by
-  sorry
+  have h0 : (0 : ℂ) ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} :=
+    subset_convexHull ℝ _ (by simp)
+  have hj : hexVertex j ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} :=
+    subset_convexHull ℝ _ (by simp)
+  have hj1 : hexVertex (j + 1) ∈
+      convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} :=
+    subset_convexHull ℝ _ (by simp)
+  have hm := (convex_convexHull ℝ _).midpoint_mem hj hj1
+  have hs := (convex_convexHull ℝ _).smul_mem_of_zero_mem h0 hm
+    (show (2 / 3 : ℝ) ∈ Set.Icc 0 1 by norm_num)
+  unfold ringVertex
+  convert hs using 1
+  simp only [midpoint_eq_smul_add, invOf_eq_inv]
+  rw [smul_smul]
+  norm_num [Complex.real_smul]
+  apply Complex.ext <;> simp [(· • ·), SMul.smul] <;> ring
 
 /-- The diagonals `0 ζ_{j+1}` and `m_j m_{j+1}` meet (at `ζ_{j+1} / 2`). -/
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal (j : ℕ) :
