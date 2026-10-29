@@ -1991,7 +1991,24 @@ lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat (j : ℕ) :
 `ringVertex`). -/
 lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_corner_lat (p : Fin 6 × Fin 3) (k : Fin 10) :
     rp2Corner p k = ((rp2CornerLat p k).1 : ℂ) + ((rp2CornerLat p k).2 : ℂ) * hexVertex 1 := by
-  sorry
+  unfold rp2Corner rp2CornerLat
+  split_ifs
+  · simp
+  · simp only [ringLat, ringVertex, Prod.fst, Prod.snd]
+    have h₀ := rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat (p.1 : ℕ)
+    have h₁ := rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat ((p.1 : ℕ) + 1)
+    simp only [h₀, h₁]
+    push_cast
+    ring
+  · simp only [ringLat, ringVertex, Prod.fst, Prod.snd]
+    have h₀ := rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat ((p.1 : ℕ) + 1)
+    have h₁ := rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat ((p.1 : ℕ) + 1 + 1)
+    simp only [h₀, h₁]
+    push_cast
+    ring
+  · exact rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat _
+  · exact rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat _
+  · simp
 
 /-- Barycentric description of a basis-face hull. -/
 lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary
