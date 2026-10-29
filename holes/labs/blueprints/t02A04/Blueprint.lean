@@ -1189,11 +1189,6 @@ structure apm_t02A04_SolidPrismModel (C : apm_t02A04_CircleSubdivision) where
       (1 - t) • ((curveVertex i : K.space) : EuclideanSpace ℝ (Fin n)) +
         t • ((curveVertex (i + 1) : K.space) : EuclideanSpace ℝ (Fin n))
 
-theorem apm_t02A04_solidTorus_prism_model
-    (C : apm_t02A04_CircleSubdivision) :
-    Nonempty (apm_t02A04_SolidPrismModel C) := by
-  sorry
-
 /-! ### Coned hexagon (claude-14, 2026-10-29)
 Vertices `Fin 7`: `0` is the centre, `apm_t02A04_coneIdx i = 1 + i` the boundary
 vertex over `arcPoint i 0`.  On facet `i` (`0, i, i+1`) a point with weights
@@ -1853,6 +1848,149 @@ theorem apm_t02A04_attachedDisk_cone_model
         ⟨_, apm_t02A04_attachedDisk_cone_model_aux_edge_mem i t ht0 ht1⟩ := by
       rw [Homeomorph.symm_apply_eq]
       exact Subtype.ext (apm_t02A04_attachedDisk_cone_model_aux_edge_map i t ht0 ht1).symm
+    rw [hsymm]
+
+/-! ### Prism model of the solid torus (claude-14, 2026-10-29)
+Vertices `Fin 21`: `prismIdx d w = 3d + w` for a cone vertex `d : Fin 7` and a circle
+vertex `w : Fin 3`.  Over cone facet `i` (ordered `0, i, i+1` by `prismDisk i`) and
+circle edge `j, j+1`, the prism is cut into the three staircase tetrahedra
+`k = 0, 1, 2`: bottom vertices `m ≤ k`, top vertices `m ≥ k`.  A point goes to the
+cone point of its disk weights (`diskProj`) and the circle point at angle
+`2π(j + s)/3`, `s` = its weight on circle vertex `j + 1`.  The curve edge `i` is the
+diagonal from `(i, i mod 3)` to `(i+1, i+1 mod 3)` of the boundary square, which
+lies in tetrahedra `k = 1, 2`; along it disk and circle parameters are both `t`. -/
+
+def apm_t02A04_prismIdx (d : Fin 7) (w : Fin 3) : Fin 21 := ⟨3 * d.1 + w.1, by omega⟩
+
+def apm_t02A04_prismDisk (i : Fin 6) : Fin 3 → Fin 7 :=
+  ![0, apm_t02A04_coneIdx i, apm_t02A04_coneIdx (i + 1)]
+
+def apm_t02A04_prismFacet (q : Fin 6 × Fin 3 × Fin 3) : Finset (Fin 21) :=
+  ((Finset.univ.filter fun m : Fin 3 => m ≤ q.2.2).image
+      fun m => apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 m) q.2.1) ∪
+  ((Finset.univ.filter fun m : Fin 3 => q.2.2 ≤ m).image
+      fun m => apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 m) (q.2.1 + 1))
+
+noncomputable def apm_t02A04_prismComplex :
+    Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin 21)) :=
+  ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex 21 (Finset.univ.image apm_t02A04_prismFacet)
+
+def apm_t02A04_prismHull (q : Fin 6 × Fin 3 × Fin 3) : Set (EuclideanSpace ℝ (Fin 21)) :=
+  convexHull ℝ ↑((apm_t02A04_prismFacet q).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21))
+
+/-- Disk weights: sum over the circle coordinate. -/
+noncomputable def apm_t02A04_diskProj (y : EuclideanSpace ℝ (Fin 21)) : EuclideanSpace ℝ (Fin 7) :=
+  WithLp.toLp 2 fun d : Fin 7 => ∑ w : Fin 3, y (apm_t02A04_prismIdx d w)
+
+/-- Weight on circle vertex `j + 1`. -/
+noncomputable def apm_t02A04_circleWeight (j : Fin 3) (y : EuclideanSpace ℝ (Fin 21)) : ℝ :=
+  ∑ d : Fin 7, y (apm_t02A04_prismIdx d (j + 1))
+
+noncomputable def apm_t02A04_circlePoint (j : Fin 3) (y : EuclideanSpace ℝ (Fin 21)) : Circle :=
+  Circle.exp (2 * Real.pi * ((j : ℝ) + apm_t02A04_circleWeight j y) / 3)
+
+noncomputable def apm_t02A04_prismPoint (q : Fin 6 × Fin 3 × Fin 3)
+    (y : EuclideanSpace ℝ (Fin 21)) : apm_t02a04_SolidTorus :=
+  (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y)), apm_t02A04_circlePoint q.2.1 y)
+
+noncomputable def apm_t02A04_prismMap (y : apm_t02A04_prismComplex.space) : apm_t02a04_SolidTorus := by
+  classical
+  exact apm_t02A04_prismPoint
+    (if h : ∃ q, (y : EuclideanSpace ℝ (Fin 21)) ∈ apm_t02A04_prismHull q then Classical.choose h
+      else (0, 0, 0)) y
+
+/-- Curve vertex `i`: cone vertex `i` over circle vertex `i mod 3`. -/
+def apm_t02A04_curveIdx (i : Fin 6) : Fin 21 :=
+  apm_t02A04_prismIdx (apm_t02A04_coneIdx i) ⟨i.1 % 3, Nat.mod_lt _ (by decide)⟩
+
+/-- Every point of the complex lies in one of the 54 tetrahedra (as `_cone_model_aux_cover`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_cover (y : EuclideanSpace ℝ (Fin 21))
+    (hy : y ∈ apm_t02A04_prismComplex.space) : ∃ q, y ∈ apm_t02A04_prismHull q := by
+  sorry
+
+lemma apm_t02A04_solidTorus_prism_model_aux_vertex_mem (i : Fin 6) :
+    ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i) ∈ apm_t02A04_prismComplex.space := by
+  sorry
+
+/-- The curve edge `i` is an edge of tetrahedron `(i, i mod 3, 1)`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_curve_edge (i : Fin 6) :
+    ({ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i), ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx (i + 1))} :
+      Finset (EuclideanSpace ℝ (Fin 21))) ∈ apm_t02A04_prismComplex.faces := by
+  sorry
+
+lemma apm_t02A04_solidTorus_prism_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
+    (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i) +
+      t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx (i + 1)) ∈ apm_t02A04_prismComplex.space := by
+  sorry
+
+/-- Along curve edge `i` the disk weights are `(0, 1 - t, t)` on facet `i` and the circle
+weight is `t` on edge `i mod 3`, so the image is the curve point (`_cone_model_aux_edge_map`
+for the disk factor; `Circle.exp` periodicity for `arcPoint i t ^ 2`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_edge_map (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
+    apm_t02A04_prismMap ⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i t ht0 ht1⟩ =
+      (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
+        simpa using (apm_t02A04_arcPoint i t).property.le⟩, apm_t02A04_arcPoint i t ^ 2) := by
+  sorry
+
+/-- Pasting over the 54 closed tetrahedra; adjacent tetrahedra give the same point
+(shared radial and boundary faces; circle vertex `j + 1` has weight `1` on edge `j` and
+`0` on edge `j + 1`, both at angle `2π(j+1)/3`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_continuous : Continuous apm_t02A04_prismMap := by
+  sorry
+
+/-- Staircase uniqueness: the disk weights `a` (cumulative `A_m`) and the circle weight
+determine the tetrahedron and all its weights (`y (m, bottom) = max 0 (min A_m (1-s) - A_{m-1})`);
+injectivity of the cone point and of `Circle.exp` on one turn give equal weights. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_injective : Function.Injective apm_t02A04_prismMap := by
+  sorry
+
+/-- Staircase existence: for a disk point (`_cone_model_aux_surjective`) and a circle point
+at parameter `s` on edge `j`, the same formula gives a point of the prism. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_surjective : Function.Surjective apm_t02A04_prismMap := by
+  sorry
+
+theorem apm_t02A04_solidTorus_prism_model
+    (C : apm_t02A04_CircleSubdivision) :
+    Nonempty (apm_t02A04_SolidPrismModel C) := by
+  classical
+  letI : CompactSpace apm_t02A04_prismComplex.space :=
+    isCompact_iff_compactSpace.mp
+      (ConstructionTargets.RealProjectivePlaneTriangulation.finite_simplicialComplex_space_isCompact _ (ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_faces_finite 21 _))
+  let e : apm_t02A04_prismComplex.space ≃ₜ apm_t02a04_SolidTorus :=
+    apm_t02A04_solidTorus_prism_model_aux_continuous.homeoOfEquivCompactToT2
+      (f := Equiv.ofBijective _ ⟨apm_t02A04_solidTorus_prism_model_aux_injective,
+        apm_t02A04_solidTorus_prism_model_aux_surjective⟩)
+  refine ⟨⟨21, apm_t02A04_prismComplex,
+    fun i => ⟨_, apm_t02A04_solidTorus_prism_model_aux_vertex_mem i⟩, e,
+    ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_faces_finite 21 _, ?_, ?_, ?_, ?_⟩⟩
+  · -- curveVertex_injective
+    intro i j hij
+    have h := apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective 21 (congrArg Subtype.val hij)
+    have h' := congrArg Fin.val h
+    simp [apm_t02A04_curveIdx, apm_t02A04_prismIdx, apm_t02A04_coneIdx] at h'
+    exact Fin.ext (by omega)
+  · -- curveVertex_eq
+    intro i
+    have h0 := apm_t02A04_solidTorus_prism_model_aux_edge_map i 0 le_rfl zero_le_one
+    have hv : (⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i 0 le_rfl zero_le_one⟩ :
+        apm_t02A04_prismComplex.space) = ⟨_, apm_t02A04_solidTorus_prism_model_aux_vertex_mem i⟩ :=
+      Subtype.ext (by simp)
+    rw [hv] at h0
+    change apm_t02A04_prismMap _ = _
+    rw [h0]
+    have hs := C.source_eq i
+    ext
+    · simp [hs]
+    · simp [hs]
+  · -- curve_edge
+    exact apm_t02A04_solidTorus_prism_model_aux_curve_edge
+  · -- curve_affine
+    intro i t ht0 ht1
+    have hsymm : e.symm (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
+        simpa using (apm_t02A04_arcPoint i t).property.le⟩, apm_t02A04_arcPoint i t ^ 2) =
+        ⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i t ht0 ht1⟩ := by
+      rw [Homeomorph.symm_apply_eq]
+      exact (apm_t02A04_solidTorus_prism_model_aux_edge_map i t ht0 ht1).symm
     rw [hsymm]
 
 /-- Glue the two finite complexes along the six distinct curve vertices.
