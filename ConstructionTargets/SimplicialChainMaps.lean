@@ -2573,7 +2573,60 @@ theorem subdivisionChainMap_commutes_aux_induction {n : ℕ}
         (sd k (Finsupp.single
           (signedDeletion_sq_zero_aux_generator_aux_erase K s v hv) 1))) :
     ∀ k, sd (k + 1) ≫ dK' k = dK k ≫ sd k := by
-  sorry
+  classical
+  intro k
+  induction k with
+  | zero =>
+      apply vertexChainMap_commutes_aux_ext
+      intro s
+      change dK' 0 (sd 1 (Finsupp.single s 1)) =
+        sd 0 (dK 0 (Finsupp.single s 1))
+      rw [hCF 0 s, map_sum]
+      simp only [map_smul]
+      rw [signedDeletion_sq_zero_aux_generator_aux_boundary o K dK hdK s, map_sum]
+      simp only [map_smul]
+      have hb : ({GeometricSimplicialSubdivision.barycenter s.1} : Finset (Euc n)) ∈
+          (barycentricStep K).faces := by
+        change ({GeometricSimplicialSubdivision.barycenter s.1} : Finset (Euc n)) ∈
+          GeometricSimplicialSubdivision.barycentricFaces K \ {∅}
+        constructor
+        · refine ⟨{s.1}, ?_, by simp⟩
+          exact ⟨by simpa using s.2.1, by simp⟩
+        · simp
+      simp_rw [hCB0 _ hb _ (hAdm 0 s _ _), smul_sub]
+      rw [Finset.sum_sub_distrib]
+      apply sub_eq_self.mpr
+      simp_rw [subdivisionChainMap_commutes_aux_induction_aux_augmentation o K sd hsd]
+      rw [← Finset.sum_smul]
+      rw [subdivisionChainMap_commutes_aux_induction_aux_edge_sign_sum o s.1 s.2.2]
+      rw [zero_smul]
+  | succ k ih =>
+      apply vertexChainMap_commutes_aux_ext
+      intro s
+      change dK' (k + 1) (sd (k + 2) (Finsupp.single s 1)) =
+        sd (k + 1) (dK (k + 1) (Finsupp.single s 1))
+      rw [hCF (k + 1) s, map_sum]
+      simp only [map_smul]
+      rw [signedDeletion_sq_zero_aux_generator_aux_boundary o K dK hdK s, map_sum]
+      simp only [map_smul]
+      simp_rw [hCB k _ _ (hAdm (k + 1) s _ _), smul_sub]
+      rw [Finset.sum_sub_distrib]
+      apply sub_eq_self.mpr
+      have ih_app (x : FaceModule K (k + 1)) :
+          dK' k (sd (k + 1) x) = sd k (dK k x) := by
+        change (sd (k + 1) ≫ dK' k) x = (dK k ≫ sd k) x
+        rw [ih]
+      simp_rw [ih_app]
+      simp_rw [← map_smul]
+      rw [← map_sum, ← map_sum, ← map_sum]
+      rw [← signedDeletion_sq_zero_aux_generator_aux_boundary o K dK hdK s]
+      have hsq := signedDeletion_sq_zero o K dK hdK k
+      change dK (k + 1) ≫ dK k = 0 at hsq
+      have hzero : dK k (dK (k + 1) (Finsupp.single s 1)) = 0 := by
+        change (dK (k + 1) ≫ dK k) (Finsupp.single s 1) = 0
+        rw [hsq]
+        rfl
+      rw [hzero, map_zero, map_zero]
 
 theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
