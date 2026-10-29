@@ -1194,6 +1194,80 @@ theorem apm_t02A04_solidTorus_prism_model
     Nonempty (apm_t02A04_SolidPrismModel C) := by
   sorry
 
+/-! ### Coned hexagon (claude-14, 2026-10-29)
+Vertices `Fin 7`: `0` is the centre, `apm_t02A04_coneIdx i = 1 + i` the boundary
+vertex over `arcPoint i 0`.  On facet `i` (`0, i, i+1`) a point with weights
+`(a, b, c)` goes to radius `b + c` at arc parameter `c / (b + c)`, so each
+boundary edge is affine in the arc parameter by construction. -/
+
+def apm_t02A04_coneIdx (i : Fin 6) : Fin 7 := ⟨1 + i.1, by omega⟩
+
+def apm_t02A04_coneFacet (i : Fin 6) : Finset (Fin 7) :=
+  {0, apm_t02A04_coneIdx i, apm_t02A04_coneIdx (i + 1)}
+
+noncomputable def apm_t02A04_coneComplex : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin 7)) :=
+  ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex 7 (Finset.univ.image apm_t02A04_coneFacet)
+
+def apm_t02A04_coneHull (i : Fin 6) : Set (EuclideanSpace ℝ (Fin 7)) :=
+  convexHull ℝ ↑((apm_t02A04_coneFacet i).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7))
+
+noncomputable def apm_t02A04_conePoint (i : Fin 6) (y : EuclideanSpace ℝ (Fin 7)) : ℂ :=
+  ((y (apm_t02A04_coneIdx i) + y (apm_t02A04_coneIdx (i + 1)) : ℝ) : ℂ) *
+    ((apm_t02A04_arcPoint i (y (apm_t02A04_coneIdx (i + 1)) /
+      (y (apm_t02A04_coneIdx i) + y (apm_t02A04_coneIdx (i + 1)))) : Circle) : ℂ)
+
+noncomputable def apm_t02A04_coneMap (y : apm_t02A04_coneComplex.space) : apm_t02a04_Disk := by
+  classical
+  exact ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint
+    (if h : ∃ i, (y : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull i then Classical.choose h else 0) y)
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective (N : ℕ) :
+    Function.Injective (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex N) := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_vertex_mem (k : Fin 7) :
+    ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 k ∈ apm_t02A04_coneComplex.space := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
+    (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx i) +
+      t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx (i + 1)) ∈ apm_t02A04_coneComplex.space := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_cover (y : EuclideanSpace ℝ (Fin 7)) (hy : y ∈ apm_t02A04_coneComplex.space) :
+    ∃ i, y ∈ apm_t02A04_coneHull i := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_point_norm (i : Fin 6) (y : EuclideanSpace ℝ (Fin 7)) (hy : y ∈ apm_t02A04_coneHull i) :
+    ‖apm_t02A04_conePoint i y‖ ≤ 1 := by
+  sorry
+
+/-- Facets sharing a point agree there: on the edge `0, i+1` both give arc
+parameter `1` resp. `0` of adjacent arcs, the same circle point; at the centre
+the radius is `0`. -/
+lemma apm_t02A04_attachedDisk_cone_model_aux_agree (i j : Fin 6) (y : EuclideanSpace ℝ (Fin 7))
+    (hi : y ∈ apm_t02A04_coneHull i) (hj : y ∈ apm_t02A04_coneHull j) :
+    apm_t02A04_conePoint i y = apm_t02A04_conePoint j y := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_continuous : Continuous apm_t02A04_coneMap := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective : Function.Injective apm_t02A04_coneMap := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_surjective : Function.Surjective apm_t02A04_coneMap := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_centre_map :
+    ((apm_t02A04_coneMap ⟨ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0, apm_t02A04_attachedDisk_cone_model_aux_vertex_mem 0⟩ : apm_t02a04_Disk) : ℂ) = 0 := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_edge_map (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
+    ((apm_t02A04_coneMap ⟨_, apm_t02A04_attachedDisk_cone_model_aux_edge_mem i t ht0 ht1⟩ : apm_t02a04_Disk) : ℂ) =
+      ((apm_t02A04_arcPoint i t : Circle) : ℂ) := by
+  sorry
+
 /-- A coned six-gon triangulation of the attached disk, with its boundary
 vertices at the same six circle points and its centre retained as a vertex. -/
 structure apm_t02A04_DiskConeModel (C : apm_t02A04_CircleSubdivision) where
@@ -1223,7 +1297,65 @@ structure apm_t02A04_DiskConeModel (C : apm_t02A04_CircleSubdivision) where
 theorem apm_t02A04_attachedDisk_cone_model
     (C : apm_t02A04_CircleSubdivision) :
     Nonempty (apm_t02A04_DiskConeModel C) := by
-  sorry
+  classical
+  letI : CompactSpace apm_t02A04_coneComplex.space :=
+    isCompact_iff_compactSpace.mp
+      (ConstructionTargets.RealProjectivePlaneTriangulation.finite_simplicialComplex_space_isCompact _
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_faces_finite 7 _))
+  let e : apm_t02A04_coneComplex.space ≃ₜ apm_t02a04_Disk :=
+    apm_t02A04_attachedDisk_cone_model_aux_continuous.homeoOfEquivCompactToT2
+      (f := Equiv.ofBijective _ ⟨apm_t02A04_attachedDisk_cone_model_aux_injective, apm_t02A04_attachedDisk_cone_model_aux_surjective⟩)
+  have hface : ∀ i : Fin 6, ∀ S ⊆ apm_t02A04_coneFacet i, S.Nonempty →
+      S.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7) ∈ apm_t02A04_coneComplex.faces := by
+    intro i S hS hne
+    refine ⟨⟨apm_t02A04_coneFacet i, Finset.mem_image_of_mem _ (Finset.mem_univ _),
+      Finset.image_subset_image hS⟩, ?_⟩
+    simpa [Finset.image_eq_empty] using hne.ne_empty
+  have hbv : ∀ (i : Fin 6) (z : apm_t02A04_coneComplex.space),
+      (z : EuclideanSpace ℝ (Fin 7)) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx i) →
+      ((e z : apm_t02a04_Disk) : ℂ) = ((apm_t02A04_arcPoint i 0 : Circle) : ℂ) := by
+    intro i z hz
+    have hz' : z = ⟨_, apm_t02A04_attachedDisk_cone_model_aux_edge_mem i 0 le_rfl zero_le_one⟩ := by
+      apply Subtype.ext; rw [hz]; simp
+    rw [hz']
+    exact apm_t02A04_attachedDisk_cone_model_aux_edge_map i 0 le_rfl zero_le_one
+  refine ⟨⟨7, apm_t02A04_coneComplex, ⟨_, apm_t02A04_attachedDisk_cone_model_aux_vertex_mem 0⟩,
+    fun i => ⟨_, apm_t02A04_attachedDisk_cone_model_aux_vertex_mem (apm_t02A04_coneIdx i)⟩, e,
+    ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_faces_finite 7 _, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩⟩
+  · -- centre_vertex
+    simpa using hface 0 {0} (by simp [apm_t02A04_coneFacet]) (by simp)
+  · -- boundaryVertex_injective
+    intro i j hij
+    have h := apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective 7 (congrArg Subtype.val hij)
+    have h' := congrArg Fin.val h
+    simp [apm_t02A04_coneIdx] at h'
+    exact Fin.ext h'
+  · -- centre_ne_boundary
+    intro i hi
+    have h := apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective 7 (congrArg Subtype.val hi)
+    have h' := congrArg Fin.val h
+    simp [apm_t02A04_coneIdx] at h'
+    omega
+  · -- centre_eq
+    exact Subtype.ext apm_t02A04_attachedDisk_cone_model_aux_centre_map
+  · -- boundaryVertex_eq
+    intro i
+    apply Subtype.ext
+    rw [hbv i _ rfl, C.source_eq i]
+  · -- boundary_edge
+    intro i
+    have := hface i {apm_t02A04_coneIdx i, apm_t02A04_coneIdx (i + 1)}
+      (by intro x hx; simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+          rcases hx with rfl | rfl <;> simp [apm_t02A04_coneFacet]) (by simp)
+    simpa [Finset.image_insert, Finset.image_singleton] using this
+  · -- boundary_affine
+    intro i t ht0 ht1
+    have hsymm : e.symm ⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
+        simpa using (apm_t02A04_arcPoint i t).property.le⟩ =
+        ⟨_, apm_t02A04_attachedDisk_cone_model_aux_edge_mem i t ht0 ht1⟩ := by
+      rw [Homeomorph.symm_apply_eq]
+      exact Subtype.ext (apm_t02A04_attachedDisk_cone_model_aux_edge_map i t ht0 ht1).symm
+    rw [hsymm]
 
 /-- Glue the two finite complexes along the six distinct curve vertices.
 The resulting coordinate realization has the required finite face set and
