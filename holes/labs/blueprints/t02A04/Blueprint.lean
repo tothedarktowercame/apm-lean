@@ -1223,7 +1223,10 @@ noncomputable def apm_t02A04_coneMap (y : apm_t02A04_coneComplex.space) : apm_t0
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective (N : ℕ) :
     Function.Injective (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex N) := by
-  sorry
+  intro i j hij
+  have h := congrArg (fun z : EuclideanSpace ℝ (Fin N) => z i) hij
+  simpa [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+    EuclideanSpace.single_apply] using h
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_vertex_mem (k : Fin 7) :
     ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 k ∈ apm_t02A04_coneComplex.space := by
