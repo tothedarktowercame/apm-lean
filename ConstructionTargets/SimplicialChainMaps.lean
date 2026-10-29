@@ -3557,6 +3557,45 @@ theorem composite_zero_diagonal {n : ℕ} (o : LinearOrder (Euc n)) (K K' : GSC 
   · exact K.nonempty_of_mem_faces (hcond.1.1 t htc)
   · exact hcsub t htc
 
+/-- Chain maps whose image of a face `s` is supported on faces lying in the hull
+of `s`. The m-step subdivision map has this property (`oriented_model` plan,
+leaves O1a and O3). -/
+def IsHullCarried {n : ℕ} (K K' : GSC n)
+    (F : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k) : Prop :=
+  ∀ k (s : FaceIndex K k), ∀ u ∈ (F k (Finsupp.single s 1)).support,
+    (u.1 : Set (Euc n)) ⊆ convexHull ℝ (s.1 : Set (Euc n))
+
+/-- A one-step subdivision map is hull-carried: every face in the support of
+`sd s` is the barycenter image of a strict face chain in `s`. Reuse the middle of
+the proof of `composite_zero_diagonal` and
+`composite_zero_diagonal_aux_barycenter_mem`. -/
+theorem subdivisionChainMap_isHullCarried {n : ℕ} (o : LinearOrder (Euc n))
+    (K K' : GSC n) (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
+    (hsd : IsSubdivisionChainMap o K K' sd) : IsHullCarried K K' sd := by
+  sorry
+
+/-- Hull-carried maps compose: the support of `G (F s)` lies in the union of the
+supports of `G u` for `u` in the support of `F s` (`Finsupp` linearity), and
+`hull u ⊆ hull s` for those `u` (`convexHull_min` with `convex_convexHull`). -/
+theorem IsHullCarried.comp {n : ℕ} {K K' K'' : GSC n}
+    {F : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k}
+    {G : ∀ k, FaceModuleCat K' k ⟶ FaceModuleCat K'' k}
+    (hF : IsHullCarried K K' F) (hG : IsHullCarried K' K'' G) :
+    IsHullCarried K K'' (fun k ↦ F k ≫ G k) := by
+  sorry
+
+/-- `composite_zero_diagonal` for any hull-carried map in place of a one-step
+subdivision: the same proof, with `composite_zero_diagonal_aux_vertex`
+applied directly to the support hypothesis. -/
+theorem composite_zero_diagonal_of_isHullCarried {n : ℕ} (o : LinearOrder (Euc n))
+    (K K' : GSC n) (h : Euc n → Euc n) (F : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
+    (hm : ∀ k, FaceModuleCat K' k ⟶ FaceModuleCat K k)
+    (hF : IsHullCarried K K' F)
+    (hhm : IsVertexChainMap o o K' K h hm)
+    (havoid : CarrierAvoidingVertexMap K K' h) :
+    ∀ k (s : FaceIndex K k), (hm k (F k (Finsupp.single s 1))) s = 0 := by
+  sorry
+
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
 an iterated barycentric subdivision, together with a carrier-avoiding simplicial
 approximation homotopic to `g`. -/
