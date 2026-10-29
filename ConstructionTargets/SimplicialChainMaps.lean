@@ -3101,7 +3101,158 @@ theorem vertexChainMap_affineComparison_square {n m : ℕ} (on : LinearOrder (Eu
     ∀ k,
       HomologicalComplex.homologyMap hmH k ≫ HomologicalComplex.homologyMap cmpLH k =
       HomologicalComplex.homologyMap cmpKH k ≫ induced f k := by
-  sorry
+  classical
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of L.space)
+  let post := CoefficientH0.singularPostcomposition ℚ f
+  let φ : ChainComplex.of _ dK hddK ⟶ C := hmH ≫ cmpLH
+  let ψ : ChainComplex.of _ dK hddK ⟶ C := cmpKH ≫ post
+  let A : Finset (Euc n) → Set L.space := fun s ↦
+    (fun y : L.space ↦ (y : Euc m)) ⁻¹' convexHull ℝ (s.image h : Set (Euc m))
+  have hA : ∀ s t, s ⊆ t → A s ⊆ A t := by
+    intro s t hst y hy
+    exact convexHull_mono (by
+      intro z hz
+      rcases Finset.mem_image.mp hz with ⟨x, hx, rfl⟩
+      exact Finset.mem_coe.mpr (Finset.mem_image.mpr ⟨x, hst hx, rfl⟩)) hy
+  have hpt : ∀ k (s : FaceIndex K k),
+      ProjectivePlaneWedgeRationalHomology.RationallyPointlike (A s.1) := by
+    intro k s
+    have hne : (s.1.image h).Nonempty := s.1.image_nonempty.mpr
+      (Finset.card_pos.mp (by rw [s.2.2]; omega))
+    let q := (s.1.image h).card - 1
+    let t : FaceIndex L q := ⟨s.1.image h, hh.2 s.1 s.2.1, by
+      dsimp [q]
+      exact (Nat.sub_add_cancel (Finset.card_pos.mpr hne)).symm⟩
+    exact AcyclicCarriers.faceHullPreimage_rationallyPointlike L t
+      (AcyclicCarriers.faceHull_rationallyPointlike L t)
+  have hφ : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain L.space (A s.1)
+        (φ.f k (Finsupp.single s 1)) := by
+    intro k s
+    rw [HomologicalComplex.comp_f, hmH_f, cmpLH_f]
+    change AcyclicCarriers.SubsetCarriedChain L.space (A s.1)
+      (cmpL k (hm k (Finsupp.single s 1)))
+    by_cases hinj : (s.1.image h).card = k + 1
+    · obtain ⟨t, ht, hmap⟩ := (by simpa [IsVertexChainMap, hinj] using hhm k s)
+      rw [hmap]
+      obtain ⟨σ, hσ, hr⟩ := hcmpL k t
+      rw [show cmpL k (Finsupp.single t (sortingSign on om s.1 h)) =
+          sortingSign on om s.1 h • cmpL k (Finsupp.single t 1) by rw [← map_smul]; simp,
+        hσ]
+      apply vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_smul
+      refine ⟨1, fun _ ↦ 1, fun _ ↦ σ, ?_, ?_⟩
+      · simp
+      · intro i
+        rw [hr, ht]
+    · have hz := hhm k s
+      simp only [IsVertexChainMap, dif_neg hinj] at hz
+      rw [hz, map_zero]
+      exact vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_zero _ _
+  have hψ : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain L.space (A s.1)
+        (ψ.f k (Finsupp.single s 1)) := by
+    intro k s
+    rw [HomologicalComplex.comp_f, cmpKH_f]
+    change AcyclicCarriers.SubsetCarriedChain L.space (A s.1)
+      (post.f k (cmpK k (Finsupp.single s 1)))
+    obtain ⟨σ, hσ, hr⟩ := hcmpK k s
+    rw [hσ]
+    change ((CoefficientH0.singularGenerator ℚ _ k
+      (SingularSubdivision.singularSimplexOfContinuousMap _ k
+        (SingularSubdivision.continuousMapOfSingularSimplex k σ)) ≫ post.f k) 1) |> fun z ↦
+      AcyclicCarriers.SubsetCarriedChain L.space (A s.1) z
+    rw [CoefficientH0.singularGenerator_singularPostcomposition]
+    refine ⟨1, fun _ ↦ 1, fun _ ↦
+      SingularSubdivision.singularSimplexOfContinuousMap (TopCat.of L.space) k
+        (f.comp (SingularSubdivision.continuousMapOfSingularSimplex k σ)), ?_, ?_⟩
+    · simp
+    · intro i y hy
+      rcases hy with ⟨x, rfl⟩
+      apply hf s.1 s.2.1
+      have hmem : ∀ z, (SingularSubdivision.continuousMapOfSingularSimplex k σ z : Euc n) ∈
+          convexHull ℝ (s.1 : Set (Euc n)) := fun z => by
+        have hz := Set.mem_range_self (f := SingularSubdivision.continuousMapOfSingularSimplex k σ) z
+        rw [hr] at hz
+        exact hz
+      exact hmem _
+  have hzero : φ.f 0 = ψ.f 0 := by
+    apply ModuleCat.hom_ext
+    apply Finsupp.lhom_ext'
+    intro s
+    apply LinearMap.ext_ring
+    simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply]
+    obtain ⟨v, hsone⟩ := Finset.card_eq_one.mp s.2.2
+    have hinj : (s.1.image h).card = 1 := by simp [hsone]
+    obtain ⟨t, ht, hmst⟩ := (by simpa [IsVertexChainMap, hinj] using hhm 0 s)
+    obtain ⟨σL, hσL, hrL⟩ := hcmpL 0 t
+    obtain ⟨σK, hσK, hrK⟩ := hcmpK 0 s
+    rw [HomologicalComplex.comp_f, HomologicalComplex.comp_f, hmH_f, cmpLH_f,
+      cmpKH_f]
+    change cmpL 0 (hm 0 (Finsupp.single s 1)) =
+      post.f 0 (cmpK 0 (Finsupp.single s 1))
+    rw [hmst]
+    have hss : sortingSign on om s.1 h = 1 := by
+      unfold sortingSign
+      rw [Finset.card_eq_zero.mpr, pow_zero]
+      rw [Finset.filter_eq_empty_iff]
+      rintro ⟨a, b⟩ _ ⟨hab, _⟩
+      have hc : s.1.card = 1 := by rw [hsone, Finset.card_singleton]
+      have ha := a.isLt
+      have hb := b.isLt
+      rw [Fin.lt_def] at hab
+      omega
+    rw [hss]
+    simp only [map_smul, hσL, hσK]
+    erw [← ConcreteCategory.comp_apply]
+    change _ = (CoefficientH0.singularGenerator ℚ _ 0
+      (SingularSubdivision.singularSimplexOfContinuousMap _ 0
+        (SingularSubdivision.continuousMapOfSingularSimplex 0 σK)) ≫ post.f 0) 1
+    rw [CoefficientH0.singularGenerator_singularPostcomposition]
+    congr 2
+    suffices key : SingularSubdivision.continuousMapOfSingularSimplex 0 σL =
+        f.comp (SingularSubdivision.continuousMapOfSingularSimplex 0 σK) by
+      rw [← key]
+      congr 1
+    refine ContinuousMap.ext fun x => Subtype.ext ?_
+    have hxL : ((SingularSubdivision.continuousMapOfSingularSimplex 0 σL x : L.space) : Euc m) =
+        h v := by
+      have hz : SingularSubdivision.continuousMapOfSingularSimplex 0 σL x ∈
+          Set.range (SingularSubdivision.continuousMapOfSingularSimplex 0 σL) := ⟨x, rfl⟩
+      rw [hrL, ht, hsone] at hz
+      simpa using hz
+    have hxK : (SingularSubdivision.continuousMapOfSingularSimplex 0 σK x : Euc n) ∈
+        convexHull ℝ (s.1 : Set (Euc n)) := by
+      have hz := Set.mem_range_self (f := SingularSubdivision.continuousMapOfSingularSimplex 0 σK) x
+      rw [hrK] at hz
+      exact hz
+    have hfx := hf s.1 s.2.1 _ hxK
+    rw [hsone] at hfx
+    simp at hfx
+    exact hxL.trans hfx.symm
+  have hdsupp := vertexChainMap_affineComparison_square_aux_d_support K dK cmpK hcmpK
+    (fun k ↦ by
+      rw [← cmpKH_f, ← cmpKH_f]
+      simpa only [ChainComplex.of_d] using cmpKH.comm (k + 1) k)
+  obtain ⟨H⟩ := vertexChainMap_affineComparison_square_aux_carrier_homotopy
+    K dK hdsupp hddK L.space A hA hpt
+    (fun k ↦ φ.f k) (fun k ↦ ψ.f k) hφ hψ
+    (fun k ↦ by simpa only [ChainComplex.of_d] using φ.comm (k + 1) k)
+    (fun k ↦ by simpa only [ChainComplex.of_d] using ψ.comm (k + 1) k) hzero
+  let e : ChainComplex.of _ (fun j ↦ C.d (j + 1) j) (fun j ↦ C.d_comp_d (j + 2) (j + 1) j) ⟶ C :=
+    { f := fun _ ↦ 𝟙 _
+      comm' := by
+        rintro i j (rfl : j + 1 = i)
+        simp [ChainComplex.of_d] }
+  have hH := (H.compRight e).homologyMap_eq
+  intro k
+  rw [← HomologicalComplex.homologyMap_comp]
+  change HomologicalComplex.homologyMap φ k = _
+  have hφψ : HomologicalComplex.homologyMap φ k = HomologicalComplex.homologyMap ψ k := by
+    convert hH k using 2 <;> ext j : 1 <;> simp [e]
+  rw [hφψ]
+  change HomologicalComplex.homologyMap ψ k = _
+  rw [HomologicalComplex.homologyMap_comp]
+  rfl
 
 theorem subdivision_affineComparison_square {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (hspace : K.space = K'.space)
