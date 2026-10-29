@@ -4239,12 +4239,35 @@ theorem openStar_cover {n : ℕ} (L : GSC n) (x : L.space) :
 /-- A Lebesgue number for the pulled-back open-star cover. `L.space` is compact
 (a finite union of compact hulls), so apply `lebesgue_number_lemma_of_metric` to
 the cover `G ⁻¹' (val ⁻¹' openStar L w)` with `openStar_isOpen`, `openStar_cover`. -/
+lemma exists_lebesgue_openStar_aux_compact {n : ℕ} (L : GSC n)
+    (hL : L.faces.Finite) : IsCompact L.space := by
+  rw [Geometry.SimplicialComplex.space]
+  exact hL.isCompact_biUnion fun s _ =>
+    s.finite_toSet.isCompact_convexHull ℝ
+
 theorem exists_lebesgue_openStar {n : ℕ} (L : GSC n) (hL : L.faces.Finite)
     (G : C(L.space, L.space)) :
     ∃ δ > 0, ∀ x : L.space, ∃ w ∈ L.vertices,
       Metric.ball x δ ⊆ G ⁻¹' ((Subtype.val : L.space → Euc n) ⁻¹'
         GeometricSimplicialSubdivision.openStar L w) := by
-  sorry
+  letI : CompactSpace L.space :=
+    isCompact_iff_compactSpace.mp (exists_lebesgue_openStar_aux_compact L hL)
+  let U : L.vertices → Set L.space := fun w =>
+    G ⁻¹' ((Subtype.val : L.space → Euc n) ⁻¹'
+      GeometricSimplicialSubdivision.openStar L w)
+  have hUopen : ∀ w, IsOpen (U w) := by
+    intro w
+    exact (openStar_isOpen L hL w).preimage G.continuous
+  have hUcover : (Set.univ : Set L.space) ⊆ ⋃ w, U w := by
+    intro x _
+    obtain ⟨w, hw, hx⟩ := openStar_cover L (G x)
+    exact Set.mem_iUnion.mpr ⟨⟨w, hw⟩, hx⟩
+  obtain ⟨δ, hδ, hball⟩ :=
+    lebesgue_number_lemma_of_metric (s := (Set.univ : Set L.space))
+      isCompact_univ hUopen hUcover
+  refine ⟨δ, hδ, fun x => ?_⟩
+  obtain ⟨w, hw⟩ := hball x (Set.mem_univ x)
+  exact ⟨w, w.property, hw⟩
 
 /-- The star condition with a mesh below the margin gives carrier avoidance. Let
 `v ∈ u` with `u ⊆ hull s`. Since `v ∈ openStar K'' v`, `G v` lies in the hull of
