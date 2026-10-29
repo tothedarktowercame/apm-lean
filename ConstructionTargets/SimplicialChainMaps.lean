@@ -2646,6 +2646,52 @@ theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
   · intro k
     exact subdivisionChainMap_commutes_aux_facet_admissible o K sd hsd
 
+/-- (V1) A differential intertwined by an affine comparison sends each face to
+a combination of its own subfaces: the boundary of the comparison simplex of `s`
+has range in `convexHull s`, and comparison simplices of distinct faces are
+distinct generators whose ranges are the face hulls. -/
+lemma vertexChainMap_affineComparison_square_aux_d_support {n : ℕ} (K : GSC n)
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : IsAffineComparison K cmp)
+    (hchain : ∀ k, cmp (k + 1) ≫
+        (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k = d k ≫ cmp k)
+    (k : ℕ) (s : FaceIndex K (k + 1)) (t : FaceIndex K k)
+    (ht : d k (Finsupp.single s 1) t ≠ 0) : t.1 ⊆ s.1 := by
+  sorry
+
+/-- (V2) Acyclic carriers into an arbitrary space: two chain maps from the face
+complex into the singular chains of `Y`, each carrying `s` into a monotone
+family of rationally pointlike subsets `A s` and equal in degree zero, are chain
+homotopic.  This generalizes `AcyclicCarriers.carried_chainHomotopy_exists`
+(target `K.space`, carrier = face-hull preimage, `IsSignedDeletion`): the same
+`CarriedStage` recursion goes through with `SubsetCarriedChain Y (A s)`
+in place of `FaceCarriedChain`, `subsetCarriedCycle_bounds` for the fill step,
+and `hdsupp` + `hA` in place of `IsSignedDeletion` for the carriedness of
+`d ≫ f'`. -/
+lemma vertexChainMap_affineComparison_square_aux_carrier_homotopy {n : ℕ} (K : GSC n)
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hdsupp : ∀ k (s : FaceIndex K (k + 1)) (t : FaceIndex K k),
+      d k (Finsupp.single s 1) t ≠ 0 → t.1 ⊆ s.1)
+    (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (Y : Type) [TopologicalSpace Y] (A : Finset (Euc n) → Set Y)
+    (hA : ∀ s t, s ⊆ t → A s ⊆ A t)
+    (hpt : ∀ k (s : FaceIndex K k),
+      ProjectivePlaneWedgeRationalHomology.RationallyPointlike (A s.1))
+    (φ ψ : ∀ k, FaceModuleCat K k ⟶ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X k)
+    (hφ : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain Y (A s.1) (φ k (Finsupp.single s 1)))
+    (hψ : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain Y (A s.1) (ψ k (Finsupp.single s 1)))
+    (hchainφ : ∀ k, φ (k + 1) ≫ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d (k + 1) k = d k ≫ φ k)
+    (hchainψ : ∀ k, ψ (k + 1) ≫ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d (k + 1) k = d k ≫ ψ k)
+    (hzero : φ 0 = ψ 0) :
+    Nonempty (Homotopy
+      (ChainComplex.ofHom _ _ hdd _ _ (fun j ↦ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d_comp_d (j + 2) (j + 1) j) φ hchainφ)
+      (ChainComplex.ofHom _ _ hdd _ _ (fun j ↦ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d_comp_d (j + 2) (j + 1) j) ψ hchainψ)) := by
+  sorry
+
 theorem vertexChainMap_affineComparison_square {n m : ℕ} (on : LinearOrder (Euc n))
     (om : LinearOrder (Euc m)) (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
     (hh : GeometricSimplicialSubdivision.IsSimplicialVertexMap K L h)
