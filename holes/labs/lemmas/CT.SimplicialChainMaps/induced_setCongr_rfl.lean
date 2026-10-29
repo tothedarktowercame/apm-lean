@@ -3794,7 +3794,9 @@ theorem induced_setCongr_comp {E : Type} [TopologicalSpace E] {A B C : Set E}
 -- BEGIN SEAT AREA
 theorem induced_setCongr_rfl {E : Type} [TopologicalSpace E] (A : Set E) (k : ℕ) :
     induced (Homeomorph.setCongr (rfl : A = A) : C(A, A)) k = 𝟙 _ := by
-  sorry
+  rw [show (Homeomorph.setCongr (rfl : A = A) : C(A, A)) = ContinuousMap.id A by rfl]
+  simp only [induced]
+  exact CategoryTheory.Functor.map_id _ _
 -- END SEAT AREA
 
 /-- The `m`-step subdivision chain map: hull-carried, and compatible with any
