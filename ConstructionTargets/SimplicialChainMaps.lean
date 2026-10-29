@@ -3781,7 +3781,9 @@ theorem induced_setCongr_comp {E : Type} [TopologicalSpace E] {A B C : Set E}
     (h₁ : A = B) (h₂ : B = C) (k : ℕ) :
     induced (Homeomorph.setCongr h₁ : C(A, B)) k ≫ induced (Homeomorph.setCongr h₂ : C(B, C)) k =
       induced (Homeomorph.setCongr (h₁.trans h₂) : C(A, C)) k := by
-  sorry
+  unfold induced
+  rw [← Functor.map_comp]
+  congr 1
 
 /-- `induced` along `setCongr rfl` is the identity (`Functor.map_id`). -/
 theorem induced_setCongr_rfl {E : Type} [TopologicalSpace E] (A : Set E) (k : ℕ) :
