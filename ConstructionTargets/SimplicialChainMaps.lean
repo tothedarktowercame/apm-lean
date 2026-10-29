@@ -2116,7 +2116,50 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_mem
     (hb : b ∈ U.1) (hw : w.1 = U.1.erase b) :
     subdivisionCone o K' b k x U =
       (-1 : ℚ) ^ (w.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card * x w := by
-  sorry
+  classical
+  have hbn : b ∉ w.1 := by
+    rw [hw]
+    simp
+  have hins : insert b w.1 = U.1 := by
+    rw [hw, Finset.insert_erase hb]
+  have hface : insert b w.1 ∈ K'.faces := by
+    rw [hins]
+    exact U.2.1
+  have hwU :
+      (⟨insert b w.1, hface, by rw [hins]; exact U.2.2⟩ : FaceIndex K' (k + 1)) = U := by
+    apply Subtype.ext
+    exact hins
+  simp only [subdivisionCone, ModuleCat.hom_ofHom, LinearMap.coe_mk, AddHom.coe_mk,
+    Finsupp.linearCombination_apply]
+  rw [Finsupp.sum_apply]
+  simp only [Finsupp.sum]
+  rw [Finset.sum_eq_single w]
+  · simp [hbn, hface, hwU, mul_comm]
+  · intro c hc hcw
+    by_cases hadm : b ∉ c.1 ∧ insert b c.1 ∈ K'.faces
+    · have hne (hf : insert b c.1 ∈ K'.faces)
+          (hcard : (insert b c.1).card = k + 2) :
+          (⟨insert b c.1, hf, hcard⟩ : FaceIndex K' (k + 1)) ≠ U := by
+          intro heq
+          apply hcw
+          apply Subtype.ext
+          have hv := congrArg (fun z : FaceIndex K' (k + 1) => z.1.erase b) heq
+          simpa [hadm.1, hw] using hv
+      simp [hadm, hne]
+      left
+      rw [Finsupp.single_apply]
+      split
+      · rename_i he
+        exfalso
+        apply hcw
+        apply Subtype.ext
+        have hv := congrArg (fun z : FaceIndex K' (k + 1) => z.1.erase b) he
+        simpa [hadm.1, hw] using hv
+      · rfl
+    · simp [hadm]
+  · intro hwsp
+    have hxw : x w = 0 := by simpa using hwsp
+    simp [hxw]
 
 /-- A cone vanishes on faces not containing the apex. -/
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_not_mem {n k : ℕ} (o : LinearOrder (Euc n)) (K' : GSC n)
