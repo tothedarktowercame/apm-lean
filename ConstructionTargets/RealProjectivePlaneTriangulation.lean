@@ -1754,10 +1754,54 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_sp
       · exact subset_convexHull ℝ _ (by simp)
       · exact subset_convexHull ℝ _ (by simp)
 
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod {a b : ℕ} (h : a % 6 = b % 6) : hexVertex a = hexVertex b := by
+  have key : ∀ n : ℕ, hexVertex n = hexVertex (n % 6) := by
+    intro n
+    unfold hexVertex
+    conv_lhs => rw [← Nat.mod_add_div n 6]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * ((n % 6 + 6 * (n / 6) : ℕ) : ℂ) / 6 =
+        2 * Real.pi * Complex.I * ((n % 6 : ℕ) : ℂ) / 6 +
+          ((n / 6 : ℕ) : ℂ) * (2 * Real.pi * Complex.I) by push_cast; ring,
+      Complex.exp_add, Complex.exp_nat_mul_two_pi_mul_I, mul_one]
+  rw [key a, key b, h]
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_succ (i : Fin 6) :
+    hexVertex ((i + 1 : Fin 6) : ℕ) = hexVertex ((i : ℕ) + 1) ∧
+      ringVertex ((i + 1 : Fin 6) : ℕ) = ringVertex ((i : ℕ) + 1) := by
+  have hv : ((i + 1 : Fin 6) : ℕ) = ((i : ℕ) + 1) % 6 := by simp [Fin.val_add]
+  have h1 : hexVertex ((i + 1 : Fin 6) : ℕ) = hexVertex ((i : ℕ) + 1) :=
+    rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod (by rw [hv]; omega)
+  refine ⟨h1, ?_⟩
+  unfold ringVertex
+  rw [h1, rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod (a := ((i + 1 : Fin 6) : ℕ) + 1) (b := (i : ℕ) + 1 + 1)
+    (by rw [hv]; omega)]
+
+/-- The quadrilateral `0, m_i, ζ_{i+1}, m_{i+1}` is covered by facets `(i,0)` and `(i,2)`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad (i : Fin 6) (z : ℂ)
+    (hz : z ∈ convexHull ℝ {0, ringVertex i, hexVertex ((i : ℕ) + 1)} ∪
+      convexHull ℝ {0, hexVertex ((i : ℕ) + 1), ringVertex ((i : ℕ) + 1)}) :
+    ∃ p, z ∈ convexHull ℝ (rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10))) := by
+  obtain ⟨hs0, -, hs2⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_sets i
+  rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split _ _ _ _ (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal i) hz with h | h
+  · exact ⟨(i, 0), by rw [hs0]; exact h⟩
+  · refine ⟨(i, 2), ?_⟩
+    rw [hs2]; convert h using 2; ext; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; tauto
+
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling
     (z : ℂ) (hz : z ∈ hexagon) :
     ∃ p, z ∈ convexHull ℝ (rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10))) := by
-  sorry
+  obtain ⟨j, hj⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan z hz
+  rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split _ _ _ _ (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_centroid j) hj with (h | h) | h
+  · -- facet `(j,1)`
+    obtain ⟨-, hs1, -⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_sets j
+    refine ⟨(j, 1), ?_⟩
+    rw [hs1]; convert h using 2; ext; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; tauto
+  · exact rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad j z (Or.inl h)
+  · -- the quadrilateral of sector `j - 1`
+    obtain ⟨hζ', hm'⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_succ (j - 1)
+    rw [sub_add_cancel] at hζ' hm'
+    refine rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad (j - 1) z (Or.inr ?_)
+    rw [← hζ', ← hm']; convert h using 2
 
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar (z : ℂ) (hz : z ∈ hexagon) :
     ∃ p y, y ∈ facetHull p ∧ rp2Affine p y = z := by
