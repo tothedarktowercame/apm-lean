@@ -5,6 +5,7 @@ import ConstructionTargets.LefschetzCompactPolyhedron
 import ConstructionTargets.ProjectivePlaneWedgeRationalHomology
 import ConstructionTargets.FiniteTriangulation
 import ConstructionTargets.RealProjectivePlaneTriangulation
+import ConstructionTargets.LefschetzFixedPoint
 
 /-! # t96A02: fixed points on the wedge of two real projective planes -/
 
@@ -44,7 +45,7 @@ theorem t96A02_wedge_fixed_point_of_lefschetz
       HasLefschetzNumber f 1) :
     ∀ f : C(ProjectivePlaneWedge, ProjectivePlaneWedge), ∃ x, f x = x := by
   intro f
-  exact fixedPointOfNonzeroLefschetz
+  exact ConstructionTargets.LefschetzFixedPoint.fixedPointOfNonzeroLefschetz
     t96A02_projectivePlaneWedge_isFinitePolyhedron f (hL f) one_ne_zero
 
 theorem apm_t96a02 :

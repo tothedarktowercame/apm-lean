@@ -8,6 +8,7 @@ import ConstructionTargets.T00A01MayerVietorisAdapters
 import ConstructionTargets.SingularHomologyConcrete
 import ConstructionTargets.FiniteTriangulation
 import ConstructionTargets.RealProjectivePlaneTriangulation
+import ConstructionTargets.LefschetzFixedPoint
 import ConstructionTargets.CompactClosedEquivalenceQuotient
 
 /-! # APM t02A04 — fixed points after a `(1,2)` cell attachment -/
@@ -2189,7 +2190,7 @@ theorem apm_t02A04_fixed_point_of_lefschetz
     (hL : ∀ f : C(apm_t02a04_X, apm_t02a04_X), HasLefschetzNumber f 1) :
     ∀ f : C(apm_t02a04_X, apm_t02a04_X), ∃ x, f x = x := by
   intro f
-  exact ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz
+  exact ConstructionTargets.LefschetzFixedPoint.fixedPointOfNonzeroLefschetz
     apm_t02A04_isFinitePolyhedron f (hL f) one_ne_zero
 
 theorem apm_t02a04 :

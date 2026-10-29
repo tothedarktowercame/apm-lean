@@ -3254,8 +3254,47 @@ theorem vertexChainMap_affineComparison_square {n m : ℕ} (on : LinearOrder (Eu
   rw [HomologicalComplex.homologyMap_comp]
   rfl
 
+/-- The hull of a face of `K`, read inside a complex `K'` with the same space,
+is rationally pointlike (transport `faceHullPreimage_rationallyPointlike` along
+`K.space = K'.space`; the subtype values agree). -/
+lemma subdivision_affineComparison_square_aux_pointlike {n k : ℕ} (K K' : GSC n)
+    (hspace : K.space = K'.space) (s : FaceIndex K k) :
+    ProjectivePlaneWedgeRationalHomology.RationallyPointlike
+      ((fun y : K'.space ↦ (y : Euc n)) ⁻¹' convexHull ℝ (s.1 : Set (Euc n))) := by
+  sorry
+
+/-- The subdivision of a face `s`, compared into singular chains, is carried by
+the hull of `s`: every face `u` in the support of `sd s` is spanned by
+barycenters of faces of `s` (`composite_zero_diagonal_aux_barycenter_mem`), and
+`cmpK' u` has range the hull of `u`. Decompose `sd s` as a finite sum of singles
+and use `_aux_carrier_homotopy_aux_add`/`_aux_smul`/`_aux_zero`. -/
+lemma subdivision_affineComparison_square_aux_carried {n : ℕ} (o : LinearOrder (Euc n))
+    (K K' : GSC n) (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
+    (hsd : IsSubdivisionChainMap o K K' sd)
+    (cmpK' : ∀ k, FaceModuleCat K' k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K'.space)).X k)
+    (hcmpK' : IsAffineComparison K' cmpK') (k : ℕ) (s : FaceIndex K k) :
+    AcyclicCarriers.SubsetCarriedChain K'.space
+      ((fun y : K'.space ↦ (y : Euc n)) ⁻¹' convexHull ℝ (s.1 : Set (Euc n)))
+      (cmpK' k (sd k (Finsupp.single s 1))) := by
+  sorry
+
+/-- On the barycentric subdivision, `sd` sends a vertex to the same vertex: the
+only strict face chain in `{v}.powerset` with a one-point barycenter image is
+`{{v}}`, with `flagSign = 1`, and `{v}` is a face of `barycentricStep K`. -/
+lemma subdivision_affineComparison_square_aux_vertex {n : ℕ} (o : LinearOrder (Euc n))
+    (K : GSC n) (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat (barycentricStep K) k)
+    (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd) (s : FaceIndex K 0) :
+    ∃ u : FaceIndex (barycentricStep K) 0, u.1 = s.1 ∧
+      sd 0 (Finsupp.single s 1) = Finsupp.single u 1 := by
+  sorry
+
+/-- (claude-14, 2026-10-29: added `hK'`. With an arbitrary `K'` of the same space
+the square is false: for `K` the two collinear edges `[a,v]`, `[v,b]` and `K'` the
+single edge `[a,b]`, `sd` kills the vertex `v` while the right side does not.) -/
 theorem subdivision_affineComparison_square {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (hspace : K.space = K'.space)
+    (hK' : K' = barycentricStep K)
     (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
     (hsd : IsSubdivisionChainMap o K K' sd)
     (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
@@ -3277,7 +3316,108 @@ theorem subdivision_affineComparison_square {n : ℕ} (o : LinearOrder (Euc n))
       HomologicalComplex.homologyMap sdH k ≫ HomologicalComplex.homologyMap cmpK'H k =
       HomologicalComplex.homologyMap cmpKH k ≫
         induced (Homeomorph.setCongr hspace) k := by
-  sorry
+  classical
+  subst hK'
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of (barycentricStep K).space)
+  let post := CoefficientH0.singularPostcomposition ℚ
+    (Homeomorph.setCongr hspace : C(K.space, (barycentricStep K).space))
+  let φ : ChainComplex.of _ dK hddK ⟶ C := sdH ≫ cmpK'H
+  let ψ : ChainComplex.of _ dK hddK ⟶ C := cmpKH ≫ post
+  let A : Finset (Euc n) → Set (barycentricStep K).space := fun s ↦
+    (fun y : (barycentricStep K).space ↦ (y : Euc n)) ⁻¹' convexHull ℝ (s : Set (Euc n))
+  have hA : ∀ s t, s ⊆ t → A s ⊆ A t := fun s t hst y hy ↦
+    convexHull_mono (by exact_mod_cast hst) hy
+  have hpt : ∀ k (s : FaceIndex K k),
+      ProjectivePlaneWedgeRationalHomology.RationallyPointlike (A s.1) := fun k s ↦
+    subdivision_affineComparison_square_aux_pointlike K _ hspace s
+  have hφ : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain _ (A s.1) (φ.f k (Finsupp.single s 1)) := by
+    intro k s
+    rw [HomologicalComplex.comp_f, sdH_f, cmpK'H_f]
+    exact subdivision_affineComparison_square_aux_carried o K _ sd hsd cmpK' hcmpK' k s
+  have hψ : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain _ (A s.1) (ψ.f k (Finsupp.single s 1)) := by
+    intro k s
+    rw [HomologicalComplex.comp_f, cmpKH_f]
+    change AcyclicCarriers.SubsetCarriedChain _ (A s.1)
+      (post.f k (cmpK k (Finsupp.single s 1)))
+    obtain ⟨σ, hσ, hr⟩ := hcmpK k s
+    rw [hσ]
+    change ((CoefficientH0.singularGenerator ℚ _ k
+      (SingularSubdivision.singularSimplexOfContinuousMap _ k
+        (SingularSubdivision.continuousMapOfSingularSimplex k σ)) ≫ post.f k) 1) |> fun z ↦
+      AcyclicCarriers.SubsetCarriedChain _ (A s.1) z
+    rw [CoefficientH0.singularGenerator_singularPostcomposition]
+    refine ⟨1, fun _ ↦ 1, fun _ ↦
+      SingularSubdivision.singularSimplexOfContinuousMap (TopCat.of (barycentricStep K).space) k
+        ((Homeomorph.setCongr hspace : C(K.space, (barycentricStep K).space)).comp
+          (SingularSubdivision.continuousMapOfSingularSimplex k σ)), ?_, ?_⟩
+    · simp
+    · intro i y hy
+      rcases hy with ⟨x, rfl⟩
+      have hz := Set.mem_range_self (f := SingularSubdivision.continuousMapOfSingularSimplex k σ) x
+      rw [hr] at hz
+      exact hz
+  have hzero : φ.f 0 = ψ.f 0 := by
+    apply ModuleCat.hom_ext
+    apply Finsupp.lhom_ext'
+    intro s
+    apply LinearMap.ext_ring
+    simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply]
+    obtain ⟨v, hsone⟩ := Finset.card_eq_one.mp s.2.2
+    obtain ⟨u, hu, hsdu⟩ := subdivision_affineComparison_square_aux_vertex o K sd hsd s
+    obtain ⟨σL, hσL, hrL⟩ := hcmpK' 0 u
+    obtain ⟨σK, hσK, hrK⟩ := hcmpK 0 s
+    rw [HomologicalComplex.comp_f, HomologicalComplex.comp_f, sdH_f, cmpK'H_f, cmpKH_f]
+    change cmpK' 0 (sd 0 (Finsupp.single s 1)) = post.f 0 (cmpK 0 (Finsupp.single s 1))
+    rw [hsdu, hσL, hσK]
+    erw [← ConcreteCategory.comp_apply]
+    change _ = (CoefficientH0.singularGenerator ℚ _ 0
+      (SingularSubdivision.singularSimplexOfContinuousMap _ 0
+        (SingularSubdivision.continuousMapOfSingularSimplex 0 σK)) ≫ post.f 0) 1
+    rw [CoefficientH0.singularGenerator_singularPostcomposition]
+    congr 2
+    suffices key : SingularSubdivision.continuousMapOfSingularSimplex 0 σL =
+        (Homeomorph.setCongr hspace : C(K.space, (barycentricStep K).space)).comp
+          (SingularSubdivision.continuousMapOfSingularSimplex 0 σK) by
+      rw [← key]
+      congr 1
+    refine ContinuousMap.ext fun x => Subtype.ext ?_
+    have hxL : ((SingularSubdivision.continuousMapOfSingularSimplex 0 σL x :
+        (barycentricStep K).space) : Euc n) = v := by
+      have hz := Set.mem_range_self (f := SingularSubdivision.continuousMapOfSingularSimplex 0 σL) x
+      rw [hrL, hu, hsone] at hz
+      simpa using hz
+    have hxK : ((SingularSubdivision.continuousMapOfSingularSimplex 0 σK x : K.space) : Euc n) =
+        v := by
+      have hz := Set.mem_range_self (f := SingularSubdivision.continuousMapOfSingularSimplex 0 σK) x
+      rw [hrK, hsone] at hz
+      simpa using hz
+    exact hxL.trans hxK.symm
+  have hdsupp := vertexChainMap_affineComparison_square_aux_d_support K dK cmpK hcmpK
+    (fun k ↦ by
+      rw [← cmpKH_f, ← cmpKH_f]
+      simpa only [ChainComplex.of_d] using cmpKH.comm (k + 1) k)
+  obtain ⟨H⟩ := vertexChainMap_affineComparison_square_aux_carrier_homotopy
+    K dK hdsupp hddK _ A hA hpt
+    (fun k ↦ φ.f k) (fun k ↦ ψ.f k) hφ hψ
+    (fun k ↦ by simpa only [ChainComplex.of_d] using φ.comm (k + 1) k)
+    (fun k ↦ by simpa only [ChainComplex.of_d] using ψ.comm (k + 1) k) hzero
+  let e : ChainComplex.of _ (fun j ↦ C.d (j + 1) j) (fun j ↦ C.d_comp_d (j + 2) (j + 1) j) ⟶ C :=
+    { f := fun _ ↦ 𝟙 _
+      comm' := by
+        rintro i j (rfl : j + 1 = i)
+        simp [ChainComplex.of_d] }
+  have hH := (H.compRight e).homologyMap_eq
+  intro k
+  rw [← HomologicalComplex.homologyMap_comp]
+  change HomologicalComplex.homologyMap φ k = _
+  have hφψ : HomologicalComplex.homologyMap φ k = HomologicalComplex.homologyMap ψ k := by
+    convert hH k using 2 <;> ext j : 1 <;> simp [e]
+  rw [hφψ]
+  change HomologicalComplex.homologyMap ψ k = _
+  rw [HomologicalComplex.homologyMap_comp]
+  rfl
 
 lemma composite_zero_diagonal_aux_barycenter_mem {n : ℕ}
     (t s : Finset (Euc n)) (ht : t.Nonempty) (hts : t ⊆ s) :

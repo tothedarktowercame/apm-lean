@@ -5,6 +5,7 @@ import ConstructionTargets.LefschetzCompactPolyhedron
 import ConstructionTargets.ProjectivePlaneWedgeRationalHomology
 import ConstructionTargets.FiniteTriangulation
 import ConstructionTargets.RealProjectivePlaneTriangulation
+import ConstructionTargets.LefschetzFixedPoint
 
 /-! # APM t99A03: fixed points on a wedge and a connected sum -/
 
@@ -76,7 +77,7 @@ theorem t99A03_wedge_fixed_point_of_lefschetz
     ∀ f : C(T99A03.FourProjectivePlanesWedge,
         T99A03.FourProjectivePlanesWedge), ∃ x, f x = x := by
   intro f
-  exact ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz
+  exact ConstructionTargets.LefschetzFixedPoint.fixedPointOfNonzeroLefschetz
     t99A03_fourProjectivePlanesWedge_isFinitePolyhedron f (hL f) one_ne_zero
 
 /-- **LIBRARY.** The index-two normal subgroup of `π₁(N₃)` determined by one
