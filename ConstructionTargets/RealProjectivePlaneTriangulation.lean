@@ -898,7 +898,15 @@ lemma rp2_explicit_finite_model_aux_hex_gauge_le_one (z : ℂ) : gauge hexagon z
 -- Stage 4: the facets.
 lemma rp2_explicit_finite_model_aux_cover (y : EuclideanSpace ℝ (Fin 10)) (hy : y ∈ rp2Complex.space) :
     ∃ p, y ∈ facetHull p := by
-  sorry
+  classical
+  rw [Geometry.SimplicialComplex.mem_space_iff] at hy
+  obtain ⟨S, hS, hy⟩ := hy
+  have hSb : S ∈ basisFaces 10 rp2Facets := by
+    exact hS.1
+  obtain ⟨f, hf, hSf⟩ := hSb
+  obtain ⟨p, -, rfl⟩ := Finset.mem_image.mp hf
+  refine ⟨p, ?_⟩
+  exact convexHull_mono (by exact_mod_cast hSf) hy
 
 lemma rp2_explicit_finite_model_aux_affine_mem (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) : rp2Affine p y ∈ hexagon := by
