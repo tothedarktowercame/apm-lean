@@ -3762,7 +3762,12 @@ theorem barycentricStep_iterate_space {n : ℕ} (K : GSC n) (m : ℕ) :
 finiteness theorem for `barycentricSubdivision` in `GeometricSimplicialSubdivision`. -/
 theorem barycentricStep_iterate_finite {n : ℕ} (K : GSC n) (hK : K.faces.Finite) (m : ℕ) :
     ((barycentricStep^[m]) K).faces.Finite := by
-  sorry
+  induction m with
+  | zero => exact hK
+  | succ m ih =>
+      rw [Function.iterate_succ_apply']
+      exact GeometricSimplicialSubdivision.barycentricSubdivision_finite
+        ((barycentricStep^[m]) K) ih _ _ _
 
 /-- The identity is hull-carried: the support of `single s 1` is `{s}`, and
 `s ⊆ convexHull s` (`subset_convexHull`). -/
@@ -3793,7 +3798,9 @@ theorem induced_setCongr_comp {E : Type} [TopologicalSpace E] {A B C : Set E}
 /-- `induced` along `setCongr rfl` is the identity (`Functor.map_id`). -/
 theorem induced_setCongr_rfl {E : Type} [TopologicalSpace E] (A : Set E) (k : ℕ) :
     induced (Homeomorph.setCongr (rfl : A = A) : C(A, A)) k = 𝟙 _ := by
-  sorry
+  rw [show (Homeomorph.setCongr (rfl : A = A) : C(A, A)) = ContinuousMap.id A by rfl]
+  simp only [induced]
+  exact CategoryTheory.Functor.map_id _ _
 
 /-- The `m`-step subdivision chain map: hull-carried, and compatible with any
 affine comparisons on homology. Prove by induction on `m`, generalizing `dK'`,
@@ -3831,6 +3838,55 @@ theorem iterSubdivision_square {n : ℕ} (o : LinearOrder (Euc n)) (m : ℕ) (K 
           induced (Homeomorph.setCongr (barycentricStep_iterate_space K m).symm) k := by
   sorry
 -- END SEAT AREA
+
+/-- The vertex chain map as a chain map, with its comparison square: take `hm`
+from `vertexChainMap_exists`, make it a chain map with `ChainComplex.ofHom` and
+`vertexChainMap_commutes`, and read the square off
+`vertexChainMap_affineComparison_square` (one order `o` on both sides). -/
+theorem vertexChainMap_square_package {n : ℕ} (o : LinearOrder (Euc n))
+    (K' K : GSC n) (h : Euc n → Euc n)
+    (hh : GeometricSimplicialSubdivision.IsSimplicialVertexMap K' K h)
+    (f : C(K'.space, K.space))
+    (hf : ∀ s ∈ K'.faces, ∀ x : K'.space, (x : Euc n) ∈ convexHull ℝ (s : Set _) →
+      (f x : Euc n) ∈ convexHull ℝ (s.image h : Set _))
+    (dK' : ∀ k, FaceModuleCat K' (k+1) ⟶ FaceModuleCat K' k)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hdK' : IsSignedDeletion o K' dK') (hdK : IsSignedDeletion o K dK)
+    (hddK' : ∀ k, dK' (k+1) ≫ dK' k = 0) (hddK : ∀ k, dK (k+1) ≫ dK k = 0)
+    (cmpK' : ∀ k, FaceModuleCat K' k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K'.space)).X k)
+    (cmpK : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmpK' : IsAffineComparison K' cmpK') (hcmpK : IsAffineComparison K cmpK)
+    (cmpK'H : ChainComplex.of _ dK' hddK' ⟶
+      CoefficientH0.SingularChains ℚ (TopCat.of K'.space))
+    (cmpKH : ChainComplex.of _ dK hddK ⟶
+      CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpK'H_f : ∀ k, cmpK'H.f k = cmpK' k) (cmpKH_f : ∀ k, cmpKH.f k = cmpK k) :
+    ∃ hmH : ChainComplex.of _ dK' hddK' ⟶ ChainComplex.of _ dK hddK,
+      IsVertexChainMap o o K' K h (fun k ↦ hmH.f k) ∧
+      ∀ k, HomologicalComplex.homologyMap hmH k ≫ HomologicalComplex.homologyMap cmpKH k =
+        HomologicalComplex.homologyMap cmpK'H k ≫ induced f k := by
+  obtain ⟨hm, hhm⟩ := vertexChainMap_exists o o K' K h hh
+  have hcomm := vertexChainMap_commutes o o K' K h dK' dK hm hdK' hdK hhm
+  let hmH : ChainComplex.of _ dK' hddK' ⟶ ChainComplex.of _ dK hddK :=
+    ChainComplex.ofHom _ _ hddK' _ _ hddK hm hcomm
+  refine ⟨hmH, ?_, ?_⟩
+  · simpa [hmH] using hhm
+  · exact vertexChainMap_affineComparison_square o o K' K h hh f hf hm hhm
+      dK' dK hddK' hddK hmH (by intro k; simp [hmH]) cmpK' cmpK
+      hcmpK' hcmpK cmpK'H cmpKH cmpK'H_f cmpKH_f
+
+/-- Oriented chain homology of a finite complex is finite-dimensional (the
+`finiteHomology` field of `FiniteChainEndomorphism`). The chain modules are
+finite-dimensional (`faceModule_finiteDimensional`), and homology is a subquotient
+of them: for example `ShortComplex.moduleCatHomologyIso`, or the epimorphism
+from cycles together with a monomorphism into `X k`. -/
+theorem orientedChains_homology_finiteDimensional {n : ℕ} (K : GSC n)
+    (hK : K.faces.Finite) (d : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hdd : ∀ k, d (k+1) ≫ d k = 0) (k : ℕ) :
+    FiniteDimensional ℚ ((ChainComplex.of _ d hdd).homology k) := by
+  sorry
 
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
 an iterated barycentric subdivision, together with a carrier-avoiding simplicial
