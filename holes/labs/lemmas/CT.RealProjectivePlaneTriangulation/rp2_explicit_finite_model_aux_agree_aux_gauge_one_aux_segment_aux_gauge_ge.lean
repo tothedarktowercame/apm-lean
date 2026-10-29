@@ -1248,7 +1248,36 @@ lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line 
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_gauge_ge (ν : ℂ) (c : ℝ) (hc : 0 < c)
     (hbound : ∀ w ∈ hexagon, (w * starRingEnd ℂ ν).re ≤ c) (z : ℂ) :
     (z * starRingEnd ℂ ν).re ≤ c * gauge hexagon z := by
-  sorry
+  by_cases hz : z = 0
+  · subst z
+    simp [gauge_zero, hc.le]
+  have ha : Absorbent ℝ hexagon :=
+    absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_nhds
+  have hb : Bornology.IsVonNBounded ℝ hexagon := by
+    apply NormedSpace.isVonNBounded_of_isBounded ℝ
+    rw [hexagon, isBounded_convexHull]
+    exact (Set.finite_range _).isBounded
+  have hg : 0 < gauge hexagon z := (gauge_pos ha hb).2 hz
+  let w : ℂ := ((gauge hexagon z)⁻¹ : ℝ) • z
+  have hgw : gauge hexagon w = 1 := by
+    have hh := gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ)
+      (inv_nonneg.2 hg.le) z
+    change gauge hexagon (((gauge hexagon z)⁻¹ : ℝ) • z) = 1
+    calc
+      _ = (gauge hexagon z)⁻¹ * gauge hexagon z := hh
+      _ = 1 := inv_mul_cancel₀ hg.ne'
+  have hw : w ∈ hexagon :=
+    (rp2_explicit_finite_model_aux_hex_gauge_le_one w).mp (by rw [hgw])
+  have h := hbound w hw
+  have hzw : gauge hexagon z • w = z := by
+    simp [w, smul_smul, hg.ne']
+  have hscale : (z * starRingEnd ℂ ν).re =
+      gauge hexagon z * (w * starRingEnd ℂ ν).re := by
+    conv_lhs => rw [← hzw]
+    simp [Complex.real_smul]
+    ring
+  rw [hscale]
+  nlinarith [mul_le_mul_of_nonneg_left h hg.le]
 -- END SEAT AREA
 
 /-- Points of a hexagon edge have gauge one. -/
