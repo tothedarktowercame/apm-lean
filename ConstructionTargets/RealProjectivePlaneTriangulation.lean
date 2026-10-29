@@ -908,9 +908,45 @@ lemma rp2_explicit_finite_model_aux_cover (y : EuclideanSpace ℝ (Fin 10)) (hy 
   refine ⟨p, ?_⟩
   exact convexHull_mono (by exact_mod_cast hSf) hy
 
+/-- Each corner of a facet lies in the hexagon (`0`, ring vertices, hexagon
+vertices; the hexagon contains its vertices and `0`, and is convex). -/
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k ∈ rp2Facet p) :
+    rp2Corner p k ∈ hexagon := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_basis (p : Fin 6 × Fin 3) (k : Fin 10) :
+    rp2Affine p (basisVertex 10 k) = rp2Corner p k := by
+  classical
+  unfold rp2Affine
+  rw [Finset.sum_eq_single k]
+  · simp [basisVertex]
+  · intro j _ hj
+    simp [basisVertex, EuclideanSpace.single_apply, hj]
+  · simp
+
+/-- `rp2Affine p` as an `ℝ`-linear map. -/
+def rp2AffineLinear (p : Fin 6 × Fin 3) : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ where
+  toFun := rp2Affine p
+  map_add' y z := by
+    simp [rp2Affine, add_mul, Finset.sum_add_distrib]
+  map_smul' r y := by
+    simp only [rp2Affine, Finset.smul_sum, PiLp.smul_apply, smul_eq_mul, Complex.ofReal_mul,
+      RingHom.id_apply, mul_assoc]
+    refine Finset.sum_congr rfl fun x _ => ?_
+    exact (Complex.real_smul (x := r) (z := _)).symm
+
 lemma rp2_explicit_finite_model_aux_affine_mem (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) : rp2Affine p y ∈ hexagon := by
-  sorry
+  classical
+  have hsub : facetHull p ⊆ rp2AffineLinear p ⁻¹' hexagon := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      change rp2Affine p (basisVertex 10 k) ∈ hexagon
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis]
+      exact rp2_explicit_finite_model_aux_affine_mem_aux_corner p k hk
+    · exact (convex_convexHull ℝ _).linear_preimage _
+  exact hsub hy
 
 /-- Two facets containing `y` give the same point of `RP²`: their planar
 positions agree, or (on a boundary edge) are antipodal boundary points. -/
