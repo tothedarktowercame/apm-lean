@@ -3912,7 +3912,18 @@ lemma iterSubdivision_square_aux_paste {n : ℕ} {K L L' : GSC n}
           HomologicalComplex.homologyMap cmpL'H k =
         HomologicalComplex.homologyMap cmpKH k ≫
           induced (Homeomorph.setCongr (hA.trans hB)) k := by
-  sorry
+  constructor
+  · simpa only [HomologicalComplex.comp_f] using hcA.comp hcB
+  · intro k
+    rw [HomologicalComplex.homologyMap_comp, Category.assoc, sqB k]
+    have h := congrArg
+      (fun q ↦ q ≫ induced
+        (Homeomorph.setCongr hB : C(L.space, L'.space)) k) (sqA k)
+    rw [← induced_setCongr_comp hA hB k]
+    calc
+      _ = (_ ≫ _) ≫ _ := (Category.assoc _ _ _).symm
+      _ = _ := h
+      _ = _ := Category.assoc _ _ _
 -- END SEAT AREA
 
 /-- The `m`-step subdivision chain map: hull-carried, and compatible with any
