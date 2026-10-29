@@ -1316,10 +1316,61 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_point_norm (i : Fin 6) (y : Euclide
 /-- Facets sharing a point agree there: on the edge `0, i+1` both give arc
 parameter `1` resp. `0` of adjacent arcs, the same circle point; at the centre
 the radius is `0`. -/
+lemma apm_t02A04_attachedDisk_cone_model_aux_agree_aux_zero
+    (i : Fin 6) (y : EuclideanSpace ℝ (Fin 7))
+    (hy : y ∈ apm_t02A04_coneHull i) (k : Fin 7)
+    (hk : k ∉ apm_t02A04_coneFacet i) : y k = 0 := by
+  let L : EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] ℝ :=
+    ((PiLp.proj 2 (fun _ : Fin 7 ↦ ℝ) k).toLinearMap :
+      EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] ℝ)
+  have hsub : apm_t02A04_coneHull i ⊆ L.ker := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨j, hj, rfl⟩ := Finset.mem_image.1 hx
+      change ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 j k = 0
+      simp only [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply]
+      split_ifs with h
+      · subst j
+        exact (hk hj).elim
+      · rfl
+    · exact L.ker.convex
+  exact hsub hy
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_agree_aux_arc (i : Fin 6) :
+    apm_t02A04_arcPoint i 1 = apm_t02A04_arcPoint (i + 1) 0 := by
+  apply Circle.exp_eq_exp.mpr
+  fin_cases i <;> dsimp [apm_t02A04_arcPoint]
+  · exact ⟨0, by ring⟩
+  · exact ⟨0, by ring⟩
+  · exact ⟨0, by ring⟩
+  · exact ⟨0, by ring⟩
+  · exact ⟨0, by ring⟩
+  · exact ⟨1, by ring⟩
+
+set_option maxHeartbeats 2000000 in
 lemma apm_t02A04_attachedDisk_cone_model_aux_agree (i j : Fin 6) (y : EuclideanSpace ℝ (Fin 7))
     (hi : y ∈ apm_t02A04_coneHull i) (hj : y ∈ apm_t02A04_coneHull j) :
     apm_t02A04_conePoint i y = apm_t02A04_conePoint j y := by
-  sorry
+  classical
+  have hzi : ∀ k, k ∉ apm_t02A04_coneFacet i → y k = 0 :=
+    fun k hk ↦ apm_t02A04_attachedDisk_cone_model_aux_agree_aux_zero i y hi k hk
+  have hzj : ∀ k, k ∉ apm_t02A04_coneFacet j → y k = 0 :=
+    fun k hk ↦ apm_t02A04_attachedDisk_cone_model_aux_agree_aux_zero j y hj k hk
+  by_cases hri : y (apm_t02A04_coneIdx i) + y (apm_t02A04_coneIdx (i + 1)) = 0
+  · by_cases hrj : y (apm_t02A04_coneIdx j) + y (apm_t02A04_coneIdx (j + 1)) = 0
+    · simp [apm_t02A04_conePoint, hri, hrj]
+    · exfalso
+      fin_cases i <;> fin_cases j <;>
+        simp_all [apm_t02A04_coneIdx, apm_t02A04_coneFacet]
+  by_cases hrj : y (apm_t02A04_coneIdx j) + y (apm_t02A04_coneIdx (j + 1)) = 0
+  · exfalso
+    fin_cases i <;> fin_cases j <;>
+      simp_all [apm_t02A04_coneIdx, apm_t02A04_coneFacet]
+  fin_cases i <;> fin_cases j <;>
+    simp_all [apm_t02A04_conePoint, apm_t02A04_coneIdx,
+      apm_t02A04_coneFacet,
+      apm_t02A04_attachedDisk_cone_model_aux_agree_aux_arc]
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_continuous : Continuous apm_t02A04_coneMap := by
   sorry
