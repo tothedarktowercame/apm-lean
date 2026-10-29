@@ -3865,6 +3865,17 @@ theorem vertexChainMap_square_package {n : ℕ} (o : LinearOrder (Euc n))
         HomologicalComplex.homologyMap cmpK'H k ≫ induced f k := by
   sorry
 
+/-- Oriented chain homology of a finite complex is finite-dimensional (the
+`finiteHomology` field of `FiniteChainEndomorphism`). The chain modules are
+finite-dimensional (`faceModule_finiteDimensional`), and homology is a subquotient
+of them: for example `ShortComplex.moduleCatHomologyIso`, or the epimorphism
+from cycles together with a monomorphism into `X k`. -/
+theorem orientedChains_homology_finiteDimensional {n : ℕ} (K : GSC n)
+    (hK : K.faces.Finite) (d : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hdd : ∀ k, d (k+1) ≫ d k = 0) (k : ℕ) :
+    FiniteDimensional ℚ ((ChainComplex.of _ d hdd).homology k) := by
+  sorry
+
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
 an iterated barycentric subdivision, together with a carrier-avoiding simplicial
 approximation homotopic to `g`. -/
