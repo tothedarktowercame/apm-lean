@@ -1956,9 +1956,37 @@ def rp2CornerLat (p : Fin 6 × Fin 3) (k : Fin 10) : ℝ × ℝ :=
 
 /-- `ζ_j = a + b·ζ₁` with `(a, b) = hexLat j`. -/
 -- BEGIN SEAT AREA
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat_aux_root :
+    hexVertex 2 = -1 + hexVertex 1 := by
+  unfold hexVertex
+  rw [show 2 * (Real.pi : ℂ) * Complex.I * ((2 : ℕ) : ℂ) / 6 =
+      ((2 * (Real.pi / 3) : ℝ) : ℂ) * Complex.I by push_cast; ring,
+    show 2 * (Real.pi : ℂ) * Complex.I * ((1 : ℕ) : ℂ) / 6 =
+      ((Real.pi / 3 : ℝ) : ℂ) * Complex.I by push_cast; ring,
+    Complex.exp_mul_I, Complex.exp_mul_I]
+  rw [← Complex.ofReal_cos, ← Complex.ofReal_sin,
+    ← Complex.ofReal_cos, ← Complex.ofReal_sin]
+  apply Complex.ext <;>
+    simp [show Real.pi * (2 / 3 : ℝ) = 2 * (Real.pi / 3) by ring,
+      show Real.pi * (1 / 3 : ℝ) = Real.pi / 3 by ring,
+      Real.cos_two_mul, Real.sin_two_mul, Real.cos_pi_div_three] <;> norm_num <;> ring
+
 lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat (j : ℕ) :
     hexVertex j = ((hexLat j).1 : ℂ) + ((hexLat j).2 : ℂ) * hexVertex 1 := by
-  sorry
+  rw [rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod
+    (a := j) (b := j % 6) (by simp)]
+  have hj : j % 6 < 6 := Nat.mod_lt _ (by omega)
+  interval_cases h : j % 6
+  · simp [hexLat, h, hexVertex]
+  · simp [hexLat, h]
+  · simpa [hexLat, h] using
+      rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat_aux_root
+  · simpa [hexLat, h, hexVertex] using
+      rp2_explicit_finite_model_aux_hex_neg_vertex 0
+  · simpa [hexLat, h] using rp2_explicit_finite_model_aux_hex_neg_vertex 1
+  · have hn := rp2_explicit_finite_model_aux_hex_neg_vertex 2
+    rw [rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat_aux_root] at hn
+    simpa [hexLat, h, add_comm] using hn
 -- END SEAT AREA
 
 /-- Corner positions in lattice coordinates (`_aux_hex_lat`, unfold `rp2Corner`,
