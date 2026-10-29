@@ -3764,7 +3764,16 @@ theorem barycentricStep_iterate_finite {n : ℕ} (K : GSC n) (hK : K.faces.Finit
 -- BEGIN SEAT AREA
 theorem isHullCarried_id {n : ℕ} (K : GSC n) :
     IsHullCarried K K (fun k ↦ 𝟙 (FaceModuleCat K k)) := by
-  sorry
+  intro k s u hu
+  have hus : u = s := by
+    have hne : Finsupp.single s (1 : ℚ) u ≠ 0 := by
+      apply Finsupp.mem_support_iff.mp
+      simpa using hu
+    by_contra h
+    apply hne
+    simp [h]
+  subst u
+  exact subset_convexHull ℝ (s.1 : Set (Euc n))
 -- END SEAT AREA
 
 /-- `induced` along `setCongr` is functorial: compose with

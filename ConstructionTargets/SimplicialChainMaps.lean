@@ -3763,7 +3763,16 @@ theorem barycentricStep_iterate_finite {n : ℕ} (K : GSC n) (hK : K.faces.Finit
 `s ⊆ convexHull s` (`subset_convexHull`). -/
 theorem isHullCarried_id {n : ℕ} (K : GSC n) :
     IsHullCarried K K (fun k ↦ 𝟙 (FaceModuleCat K k)) := by
-  sorry
+  intro k s u hu
+  have hus : u = s := by
+    have hne : Finsupp.single s (1 : ℚ) u ≠ 0 := by
+      apply Finsupp.mem_support_iff.mp
+      simpa using hu
+    by_contra h
+    apply hne
+    simp [h]
+  subst u
+  exact subset_convexHull ℝ (s.1 : Set (Euc n))
 
 /-- `induced` along `setCongr` is functorial: compose with
 `RationalLefschetz.induced` unfolded to `singularHomologyFunctor.map`, and
