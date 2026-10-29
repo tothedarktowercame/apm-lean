@@ -1486,10 +1486,29 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary (i : F
 shared endpoint of adjacent arcs.  (`Circle.exp` is `2π`-periodic and injective on
 a half-open period; compare `2π(i + s)/6` with `2π(j + s')/6`.) -/
 -- BEGIN SEAT AREA
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_angle_aux_pi_pos :
+    0 < Real.pi := Real.pi_pos
+
+set_option maxHeartbeats 2000000 in
 lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_angle (i j : Fin 6) (s s' : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1)
     (hs0' : 0 ≤ s') (hs1' : s' ≤ 1) (h : apm_t02A04_arcPoint i s = apm_t02A04_arcPoint j s') :
     (i = j ∧ s = s') ∨ (j = i + 1 ∧ s = 1 ∧ s' = 0) ∨ (i = j + 1 ∧ s = 0 ∧ s' = 1) := by
-  sorry
+  unfold apm_t02A04_arcPoint at h
+  obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h
+  have heq : (i : ℝ) + s = (j : ℝ) + s' + (m : ℝ) * 6 := by
+    have hp := Real.pi_pos
+    push_cast at hm
+    nlinarith
+  fin_cases i <;> fin_cases j
+  all_goals
+    norm_num at heq
+    have hmlo : (-1 : ℤ) ≤ m := by
+      exact_mod_cast (show (-1 : ℝ) ≤ (m : ℝ) by linarith)
+    have hmhi : m ≤ (1 : ℤ) := by
+      exact_mod_cast (show (m : ℝ) ≤ (1 : ℝ) by linarith)
+    interval_cases m <;> norm_num at heq
+  all_goals
+    aesop (add safe (by linarith))
 -- END SEAT AREA
 
 /-- Plan: `‖conePoint i x‖ = x_b + x_c =: R` (arc points have norm one), so the radii
