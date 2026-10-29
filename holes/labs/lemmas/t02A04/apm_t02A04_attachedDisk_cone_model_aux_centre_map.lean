@@ -1333,7 +1333,10 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_surjective : Function.Surjective ap
 -- BEGIN SEAT AREA
 lemma apm_t02A04_attachedDisk_cone_model_aux_centre_map :
     ((apm_t02A04_coneMap ⟨ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0, apm_t02A04_attachedDisk_cone_model_aux_vertex_mem 0⟩ : apm_t02a04_Disk) : ℂ) = 0 := by
-  sorry
+  simp [apm_t02A04_coneMap, apm_t02A04_conePoint,
+    ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp,
+    ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+    apm_t02A04_coneIdx]
 -- END SEAT AREA
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_edge_map (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
