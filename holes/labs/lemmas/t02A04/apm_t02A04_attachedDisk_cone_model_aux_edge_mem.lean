@@ -1236,7 +1236,26 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_vertex_mem (k : Fin 7) :
 lemma apm_t02A04_attachedDisk_cone_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx i) +
       t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx (i + 1)) ∈ apm_t02A04_coneComplex.space := by
-  sorry
+  classical
+  apply Geometry.SimplicialComplex.convexHull_subset_space (K := apm_t02A04_coneComplex)
+    (s := (apm_t02A04_coneFacet i).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7))
+  · refine ⟨⟨apm_t02A04_coneFacet i, Finset.mem_image_of_mem _ (Finset.mem_univ _),
+      Finset.Subset.refl _⟩, ?_⟩
+    simp [apm_t02A04_coneFacet]
+  · apply segment_subset_convexHull
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx i) ∈
+        ↑((apm_t02A04_coneFacet i).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)) by
+        simp [apm_t02A04_coneFacet])
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx (i + 1)) ∈
+        ↑((apm_t02A04_coneFacet i).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)) by
+        simp [apm_t02A04_coneFacet])
+    rw [segment_eq_image]
+    exact ⟨t, ⟨ht0, ht1⟩, rfl⟩
 -- END SEAT AREA
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_cover (y : EuclideanSpace ℝ (Fin 7)) (hy : y ∈ apm_t02A04_coneComplex.space) :
