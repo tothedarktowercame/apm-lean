@@ -3652,6 +3652,73 @@ theorem composite_zero_diagonal_of_isHullCarried {n : ℕ} (o : LinearOrder (Euc
     (hF k s u hu)]
   simp only [mul_zero]
 
+/-- Iterated barycentric subdivision keeps the space: induction on `m` with
+`Function.iterate_succ_apply'` and `GeometricSimplicialSubdivision.barycentricSubdivision_space`. -/
+theorem barycentricStep_iterate_space {n : ℕ} (K : GSC n) (m : ℕ) :
+    ((barycentricStep^[m]) K).space = K.space := by
+  sorry
+
+/-- Iterated barycentric subdivision keeps finiteness: induction on `m` with the
+finiteness theorem for `barycentricSubdivision` in `GeometricSimplicialSubdivision`. -/
+theorem barycentricStep_iterate_finite {n : ℕ} (K : GSC n) (hK : K.faces.Finite) (m : ℕ) :
+    ((barycentricStep^[m]) K).faces.Finite := by
+  sorry
+
+/-- The identity is hull-carried: the support of `single s 1` is `{s}`, and
+`s ⊆ convexHull s` (`subset_convexHull`). -/
+theorem isHullCarried_id {n : ℕ} (K : GSC n) :
+    IsHullCarried K K (fun k ↦ 𝟙 (FaceModuleCat K k)) := by
+  sorry
+
+/-- `induced` along `setCongr` is functorial: compose with
+`RationalLefschetz.induced` unfolded to `singularHomologyFunctor.map`, and
+`Functor.map_comp` (the two `setCongr` composites agree as `ContinuousMap`s by `ext; rfl`). -/
+theorem induced_setCongr_comp {E : Type} [TopologicalSpace E] {A B C : Set E}
+    (h₁ : A = B) (h₂ : B = C) (k : ℕ) :
+    induced (Homeomorph.setCongr h₁ : C(A, B)) k ≫ induced (Homeomorph.setCongr h₂ : C(B, C)) k =
+      induced (Homeomorph.setCongr (h₁.trans h₂) : C(A, C)) k := by
+  sorry
+
+/-- `induced` along `setCongr rfl` is the identity (`Functor.map_id`). -/
+theorem induced_setCongr_rfl {E : Type} [TopologicalSpace E] (A : Set E) (k : ℕ) :
+    induced (Homeomorph.setCongr (rfl : A = A) : C(A, A)) k = 𝟙 _ := by
+  sorry
+
+/-- The `m`-step subdivision chain map: hull-carried, and compatible with any
+affine comparisons on homology. Prove by induction on `m`, generalizing `dK'`,
+`cmpK'` and their packages. Base case: `𝟙`, with `isHullCarried_id` and
+`induced_setCongr_rfl` (after `Subsingleton.elim` on the space proof). Step: write
+`barycentricStep^[m+1] K = barycentricStep (barycentricStep^[m] K)`
+(`Function.iterate_succ_apply'`). Choose `d` and `cmp` for the middle complex
+(`signedDeletion_exists`, `signedDeletion_sq_zero`,
+`affineComparison_exists_and_commutes`) and apply the induction hypothesis. Take
+the one-step `sd` from `barycentricSubdivisionChainMap_exists`, as a chain map
+via `subdivisionChainMap_commutes`. Paste the IH square with
+`subdivision_affineComparison_square`; finish with `IsHullCarried.comp` and
+`induced_setCongr_comp`. -/
+theorem iterSubdivision_square {n : ℕ} (o : LinearOrder (Euc n)) (m : ℕ) (K : GSC n)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (dK' : ∀ k, FaceModuleCat ((barycentricStep^[m]) K) (k+1) ⟶
+      FaceModuleCat ((barycentricStep^[m]) K) k)
+    (hdK : IsSignedDeletion o K dK) (hdK' : IsSignedDeletion o _ dK')
+    (hddK : ∀ k, dK (k+1) ≫ dK k = 0) (hddK' : ∀ k, dK' (k+1) ≫ dK' k = 0)
+    (cmpK : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (cmpK' : ∀ k, FaceModuleCat ((barycentricStep^[m]) K) k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of ((barycentricStep^[m]) K).space)).X k)
+    (hcmpK : IsAffineComparison K cmpK) (hcmpK' : IsAffineComparison _ cmpK')
+    (cmpKH : ChainComplex.of _ dK hddK ⟶
+      CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpK'H : ChainComplex.of _ dK' hddK' ⟶
+      CoefficientH0.SingularChains ℚ (TopCat.of ((barycentricStep^[m]) K).space))
+    (cmpKH_f : ∀ k, cmpKH.f k = cmpK k) (cmpK'H_f : ∀ k, cmpK'H.f k = cmpK' k) :
+    ∃ sdH : ChainComplex.of _ dK hddK ⟶ ChainComplex.of _ dK' hddK',
+      IsHullCarried K _ (fun k ↦ sdH.f k) ∧
+      ∀ k, HomologicalComplex.homologyMap sdH k ≫ HomologicalComplex.homologyMap cmpK'H k =
+        HomologicalComplex.homologyMap cmpKH k ≫
+          induced (Homeomorph.setCongr (barycentricStep_iterate_space K m).symm) k := by
+  sorry
+
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
 an iterated barycentric subdivision, together with a carrier-avoiding simplicial
 approximation homotopic to `g`. -/
