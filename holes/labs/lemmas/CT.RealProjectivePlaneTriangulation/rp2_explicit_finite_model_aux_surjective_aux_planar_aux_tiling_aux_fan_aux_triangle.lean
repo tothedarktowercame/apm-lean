@@ -1327,7 +1327,19 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux
 -- BEGIN SEAT AREA
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_triangle (a b : ℂ) (α β : ℝ) (hα : 0 ≤ α) (hβ : 0 ≤ β) (hs : α + β ≤ 1) :
     (α : ℂ) * a + (β : ℂ) * b ∈ convexHull ℝ {0, a, b} := by
-  sorry
+  let w : Fin 3 → ℝ := fun i =>
+    if i = 0 then 1 - α - β else if i = 1 then α else β
+  let v : Fin 3 → ℂ := fun i =>
+    if i = 0 then 0 else if i = 1 then a else b
+  have h21 : (2 : Fin 3) ≠ 1 := by decide
+  apply mem_convexHull_of_exists_fintype w v
+  · intro i
+    fin_cases i <;> simp [w] <;> linarith
+  · norm_num [Fin.sum_univ_succ, w, h21]
+  · intro i
+    fin_cases i <;> simp [v]
+  · norm_num [Fin.sum_univ_succ, w, v, h21]
+    rfl
 -- END SEAT AREA
 
 /-- The hexagon is the fan of its six sector triangles `0 ζ_j ζ_{j+1}`. -/
