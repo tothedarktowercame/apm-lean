@@ -1314,10 +1314,103 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_
 
 /-- Every plane vector lies in one of the six sector cones. -/
 -- BEGIN SEAT AREA
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone_aux_vertices :
+    hexVertex 0 = 1 ∧
+    hexVertex 1 = (1 / 2 : ℝ) + (Real.sqrt 3 / 2) * Complex.I ∧
+    hexVertex 2 = (-1 / 2 : ℝ) + (Real.sqrt 3 / 2) * Complex.I ∧
+    hexVertex 3 = -1 ∧
+    hexVertex 4 = (-1 / 2 : ℝ) - (Real.sqrt 3 / 2) * Complex.I ∧
+    hexVertex 5 = (1 / 2 : ℝ) - (Real.sqrt 3 / 2) * Complex.I ∧
+    hexVertex 6 = 1 := by
+  constructor
+  · simp [hexVertex]
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 1 / 6 =
+        (((Real.pi / 3 : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I, Real.cos_pi_div_three, Real.sin_pi_div_three]
+    push_cast
+    ring
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 2 / 6 =
+        (((2 * Real.pi / 3 : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I]
+    rw [show 2 * Real.pi / 3 = 2 * (Real.pi / 3) by ring,
+      Real.cos_two_mul, Real.sin_two_mul, Real.cos_pi_div_three,
+      Real.sin_pi_div_three]
+    push_cast
+    ring
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 3 / 6 =
+        (((Real.pi : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I]
+    simp
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 4 / 6 =
+        (((Real.pi + Real.pi / 3 : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I]
+    simp [Real.cos_add, Real.sin_add, Real.cos_pi_div_three,
+      Real.sin_pi_div_three]
+    ring
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 5 / 6 =
+        (((2 * Real.pi - Real.pi / 3 : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I]
+    simp [Real.cos_sub, Real.sin_sub, Real.cos_pi_div_three,
+      Real.sin_pi_div_three]
+    ring
+  · simp [hexVertex]
+
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone (z : ℂ) :
     ∃ j : Fin 6, ∃ α β : ℝ, 0 ≤ α ∧ 0 ≤ β ∧
       z = (α : ℂ) * hexVertex j + (β : ℂ) * hexVertex (j + 1) := by
-  sorry
+  rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone_aux_vertices with
+    ⟨hv0, hv1, hv2, hv3, hv4, hv5, hv6⟩
+  have hs : 0 < Real.sqrt 3 := Real.sqrt_pos.2 (by norm_num)
+  by_cases hy : 0 ≤ z.im
+  · by_cases hx₀ : z.im / Real.sqrt 3 ≤ z.re
+    · refine ⟨0, z.re - z.im / Real.sqrt 3, 2 * z.im / Real.sqrt 3,
+        by linarith, by positivity, ?_⟩
+      norm_num [hv0, hv1]
+      apply Complex.ext <;> simp <;> field_simp <;> ring
+    · have hx₀' : z.re < z.im / Real.sqrt 3 := lt_of_not_ge hx₀
+      by_cases hx₁ : -(z.im / Real.sqrt 3) ≤ z.re
+      · refine ⟨1, z.re + z.im / Real.sqrt 3, z.im / Real.sqrt 3 - z.re,
+          by linarith, by linarith, ?_⟩
+        norm_num [hv1, hv2]
+        apply Complex.ext <;> simp <;> field_simp <;> ring
+      · have hx₁' : z.re < -(z.im / Real.sqrt 3) := lt_of_not_ge hx₁
+        refine ⟨2, 2 * z.im / Real.sqrt 3, -z.re - z.im / Real.sqrt 3,
+          by positivity, by linarith, ?_⟩
+        norm_num [hv2, hv3]
+        apply Complex.ext <;> simp <;> field_simp <;> ring
+  · have hy' : z.im < 0 := lt_of_not_ge hy
+    let q : ℝ := -z.im / Real.sqrt 3
+    have hq : 0 ≤ q := by
+      dsimp [q]
+      exact div_nonneg (neg_nonneg.2 hy'.le) hs.le
+    by_cases hx₅ : q ≤ z.re
+    · refine ⟨5, 2 * q, z.re - q, by positivity, by linarith, ?_⟩
+      norm_num [hv5, hv6]
+      apply Complex.ext <;> simp [q] <;> field_simp <;> ring
+    · have hx₅' : z.re < q := lt_of_not_ge hx₅
+      by_cases hx₄ : -q ≤ z.re
+      · refine ⟨4, q - z.re, q + z.re, by linarith, by linarith, ?_⟩
+        norm_num [hv4, hv5]
+        apply Complex.ext <;> simp [q] <;> field_simp <;> ring
+      · have hx₄' : z.re < -q := lt_of_not_ge hx₄
+        refine ⟨3, -z.re - q, 2 * q, by linarith, by positivity, ?_⟩
+        norm_num [hv3, hv4]
+        apply Complex.ext <;> simp [q] <;> field_simp <;> ring
 -- END SEAT AREA
 
 /-- Generic: `α a + β b` with `α, β ≥ 0`, `α + β ≤ 1` lies in the triangle `0 a b`. -/
