@@ -1372,8 +1372,77 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_agree (i j : Fin 6) (y : EuclideanS
       apm_t02A04_coneFacet,
       apm_t02A04_attachedDisk_cone_model_aux_agree_aux_arc]
 
+lemma apm_t02A04_attachedDisk_cone_model_aux_continuous_piece (i : Fin 6) :
+    ContinuousOn (apm_t02A04_conePoint i) (apm_t02A04_coneHull i) := by
+  intro x hx
+  let r : EuclideanSpace ℝ (Fin 7) → ℝ := fun y ↦
+    y (apm_t02A04_coneIdx i) + y (apm_t02A04_coneIdx (i + 1))
+  by_cases hr : r x = 0
+  · rw [ContinuousWithinAt]
+    rw [show apm_t02A04_conePoint i x = 0 by simp [apm_t02A04_conePoint, r, hr]]
+    rw [tendsto_zero_iff_norm_tendsto_zero]
+    have hcont : Continuous r := by unfold r; fun_prop
+    have ht : Filter.Tendsto (fun y ↦ |r y|)
+        (nhdsWithin x (apm_t02A04_coneHull i)) (nhds 0) := by
+      simpa [hr] using
+        ((continuous_abs.comp hcont).continuousAt (x := x)).continuousWithinAt.tendsto
+    rw [show (fun y ↦ ‖apm_t02A04_conePoint i y‖) = (fun y ↦ |r y|) by
+      funext y
+      simp [apm_t02A04_conePoint, r, norm_mul, Complex.norm_real,
+        Circle.norm_coe, Real.norm_eq_abs, ← Complex.ofReal_add]]
+    exact ht
+  · have hr' : ContinuousWithinAt r (apm_t02A04_coneHull i) x := by
+      unfold r
+      fun_prop
+    unfold apm_t02A04_conePoint
+    fun_prop (disch := assumption)
+
 lemma apm_t02A04_attachedDisk_cone_model_aux_continuous : Continuous apm_t02A04_coneMap := by
-  sorry
+  classical
+  let C : Fin 6 → Set apm_t02A04_coneComplex.space := fun i ↦
+    {y | (y : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull i}
+  have hcover : ⋃ i, C i = Set.univ := by
+    ext y
+    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+    exact apm_t02A04_attachedDisk_cone_model_aux_cover y y.2
+  have hclosed : ∀ i, IsClosed (C i) := by
+    intro i
+    change IsClosed ((fun y : apm_t02A04_coneComplex.space ↦
+      (y : EuclideanSpace ℝ (Fin 7))) ⁻¹' apm_t02A04_coneHull i)
+    unfold apm_t02A04_coneHull
+    simpa only [Finset.coe_image] using
+      (((apm_t02A04_coneFacet i).finite_toSet.image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)).isCompact_convexHull ℝ).isClosed.preimage
+          (continuous_subtype_val : Continuous
+            (fun y : apm_t02A04_coneComplex.space ↦
+              (y : EuclideanSpace ℝ (Fin 7))))
+  refine (locallyFinite_of_finite C).continuous hcover hclosed ?_
+  intro i
+  rw [continuousOn_iff_continuous_restrict]
+  apply continuous_induced_rng.mpr
+  change Continuous (fun y : C i ↦ ((apm_t02A04_coneMap y : apm_t02a04_Disk) : ℂ))
+  have hp : Continuous fun y : C i ↦ apm_t02A04_conePoint i
+      ((y : apm_t02A04_coneComplex.space) : EuclideanSpace ℝ (Fin 7)) := by
+    rw [← continuousOn_univ]
+    have hv : Continuous (fun y : C i ↦
+        ((y : apm_t02A04_coneComplex.space) : EuclideanSpace ℝ (Fin 7))) :=
+      continuous_subtype_val.comp continuous_subtype_val
+    exact (apm_t02A04_attachedDisk_cone_model_aux_continuous_piece i).comp
+      hv.continuousOn (by intro y _; exact y.2)
+  have heq : (fun y : C i ↦ ((apm_t02A04_coneMap y : apm_t02a04_Disk) : ℂ)) =
+      fun y : C i ↦ apm_t02A04_conePoint i y := by
+    funext y
+    unfold apm_t02A04_coneMap
+    have hc := apm_t02A04_attachedDisk_cone_model_aux_cover
+      (y : EuclideanSpace ℝ (Fin 7)) y.1.2
+    have ha := apm_t02A04_attachedDisk_cone_model_aux_agree
+      (if h : ∃ j, (y : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull j
+        then Classical.choose h else 0) i y
+      (by simp only [dif_pos hc]; exact Classical.choose_spec hc) y.2
+    have hn := apm_t02A04_attachedDisk_cone_model_aux_point_norm i y y.2
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, hn, ha]
+  rw [heq]
+  exact hp
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_conePoint
     (x y : apm_t02A04_coneComplex.space) (i j : Fin 6)
