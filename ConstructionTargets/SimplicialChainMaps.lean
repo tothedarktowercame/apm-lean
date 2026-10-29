@@ -4468,7 +4468,17 @@ theorem faceModule_trace_eq_zero {n : ℕ} (K : GSC n) (hK : K.faces.Finite) (k 
     (φ : FaceModuleCat K k ⟶ FaceModuleCat K k)
     (hdiag : ∀ s : FaceIndex K k, (φ (Finsupp.single s 1)) s = 0) :
     LinearMap.trace ℚ (FaceModule K k) φ.hom = 0 := by
-  sorry
+  classical
+  letI : Finite K.faces := hK
+  letI : Finite (FaceIndex K k) :=
+    Finite.of_injective
+      (fun s : FaceIndex K k => (⟨s.1, s.2.1⟩ : K.faces))
+      (by
+        intro s t h
+        exact Subtype.ext (congrArg (fun x : K.faces => x.1) h))
+  letI : Fintype (FaceIndex K k) := Fintype.ofFinite _
+  rw [LinearMap.trace_eq_matrix_trace ℚ Finsupp.basisSingleOne]
+  simp [Matrix.trace, LinearMap.toMatrix_apply, hdiag]
 
 /-- An oriented package's comparison is a quasi-isomorphism. Transport
 `SimplicialSingularComparison.orderedFace_singular_quasiIso` (stated with
