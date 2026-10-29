@@ -1070,11 +1070,31 @@ lemma rp2_explicit_finite_model_aux_agree_aux_affine_eq
 /-- (E) Facet pairs: shared vertices get the same planar corner in both facets,
 or all shared vertices are boundary labels (`7 ≤ k`) placed antipodally
 (`ζ_{j+3} = -ζ_j`).  A finite check over the 18 × 18 facet pairs. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_cases_aux_period (j : ℕ) :
+    hexVertex (j + 6) = hexVertex j := by
+  unfold hexVertex
+  rw [show 2 * (Real.pi : ℂ) * Complex.I * ((j + 6 : ℕ) : ℂ) / 6 =
+      2 * Real.pi * Complex.I +
+        2 * Real.pi * Complex.I * (j : ℂ) / 6 by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I]
+  simp
+
+set_option maxHeartbeats 2000000 in
 lemma rp2_explicit_finite_model_aux_agree_aux_cases (p p' : Fin 6 × Fin 3) :
     (∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → rp2Corner p k = rp2Corner p' k) ∨
     (∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
       7 ≤ k.1 ∧ rp2Corner p k = -rp2Corner p' k) := by
-  sorry
+  have hring : ringVertex 6 = ringVertex 0 := by
+    simp only [ringVertex]
+    rw [rp2_explicit_finite_model_aux_agree_aux_cases_aux_period 0,
+      rp2_explicit_finite_model_aux_agree_aux_cases_aux_period 1]
+  rcases p with ⟨i, j⟩
+  rcases p' with ⟨i', j'⟩
+  fin_cases i <;> fin_cases j <;> fin_cases i' <;> fin_cases j' <;>
+    simp [rp2Facet, rp2Corner, ringIdx, bdryIdx,
+      rp2_explicit_finite_model_aux_hex_neg_vertex, hring]
 
 /-- (B) Antipodal corners give antipodal images (as `_aux_affine_eq`, with the
 linear map `rp2AffineLinear p + rp2AffineLinear p'`). -/
