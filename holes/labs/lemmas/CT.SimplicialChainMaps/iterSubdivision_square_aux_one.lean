@@ -3884,7 +3884,19 @@ lemma iterSubdivision_square_aux_one {n : ℕ} (o : LinearOrder (Euc n)) (K : GS
       IsHullCarried K _ (fun k ↦ sdH.f k) ∧
       ∀ k, HomologicalComplex.homologyMap sdH k ≫ HomologicalComplex.homologyMap cmpK'H k =
         HomologicalComplex.homologyMap cmpKH k ≫ induced (Homeomorph.setCongr hsp) k := by
-  sorry
+  obtain ⟨sd, hsd⟩ := barycentricSubdivisionChainMap_exists o K
+    (GeometricSimplicialSubdivision.barycentricFaces_affineIndependent K)
+    (GeometricSimplicialSubdivision.barycentricFaces_isLowerSet K)
+    (GeometricSimplicialSubdivision.barycentricFaces_inter_subset K)
+  have hcomm := subdivisionChainMap_commutes o K (barycentricStep K) dK dK' sd
+    hdK hdK' rfl hsd
+  let sdH : ChainComplex.of _ dK hddK ⟶ ChainComplex.of _ dK' hddK' :=
+    ChainComplex.ofHom _ _ hddK _ _ hddK' sd hcomm
+  refine ⟨sdH, ?_, ?_⟩
+  · simpa [sdH] using subdivisionChainMap_isHullCarried o K (barycentricStep K) sd hsd
+  · exact subdivision_affineComparison_square o K (barycentricStep K) hsp rfl sd hsd
+      dK dK' hddK hddK' sdH (by intro k; simp [sdH]) cmpK cmpK'
+      hcmpK hcmpK' cmpKH cmpK'H cmpKH_f cmpK'H_f
 -- END SEAT AREA
 
 /-- Pasting two hull-carried squares: `HomologicalComplex.comp_f`,
