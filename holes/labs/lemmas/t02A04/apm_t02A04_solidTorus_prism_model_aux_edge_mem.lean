@@ -1953,7 +1953,44 @@ lemma apm_t02A04_solidTorus_prism_model_aux_curve_edge (i : Fin 6) :
 lemma apm_t02A04_solidTorus_prism_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i) +
       t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx (i + 1)) ∈ apm_t02A04_prismComplex.space := by
-  sorry
+  classical
+  let q : Fin 6 × Fin 3 × Fin 3 :=
+    (i, ⟨i.1 % 3, Nat.mod_lt _ (by decide)⟩, 1)
+  have hi : apm_t02A04_curveIdx i ∈ apm_t02A04_prismFacet q := by
+    dsimp [q]
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and, apm_t02A04_curveIdx]
+    left
+    refine ⟨1, le_rfl, ?_⟩
+    simp [apm_t02A04_prismDisk]
+  have hj : apm_t02A04_curveIdx (i + 1) ∈ apm_t02A04_prismFacet q := by
+    dsimp [q]
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    right
+    refine ⟨2, by decide, ?_⟩
+    fin_cases i <;>
+      rfl
+  apply Geometry.SimplicialComplex.convexHull_subset_space
+    (K := apm_t02A04_prismComplex)
+    (s := (apm_t02A04_prismFacet q).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21))
+  · refine ⟨⟨apm_t02A04_prismFacet q,
+        Finset.mem_image_of_mem _ (Finset.mem_univ q), Finset.Subset.refl _⟩, ?_⟩
+    exact Finset.ne_empty_of_mem (Finset.mem_image_of_mem _ hi)
+  · apply segment_subset_convexHull
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx i) ∈
+        ↑((apm_t02A04_prismFacet q).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) by
+        exact Finset.mem_image_of_mem _ hi)
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx (i + 1)) ∈
+        ↑((apm_t02A04_prismFacet q).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) by
+        exact Finset.mem_image_of_mem _ hj)
+    rw [segment_eq_image]
+    exact ⟨t, ⟨ht0, ht1⟩, rfl⟩
 -- END SEAT AREA
 
 /-- Along curve edge `i` the disk weights are `(0, 1 - t, t)` on facet `i` and the circle
