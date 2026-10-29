@@ -1936,7 +1936,20 @@ lemma apm_t02A04_solidTorus_prism_model_aux_vertex_mem (i : Fin 6) :
 lemma apm_t02A04_solidTorus_prism_model_aux_curve_edge (i : Fin 6) :
     ({ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i), ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx (i + 1))} :
       Finset (EuclideanSpace ℝ (Fin 21))) ∈ apm_t02A04_prismComplex.faces := by
-  sorry
+  classical
+  let j : Fin 3 := ⟨i.1 % 3, Nat.mod_lt _ (by decide)⟩
+  let q : Fin 6 × Fin 3 × Fin 3 := (i, j, 1)
+  refine ⟨⟨apm_t02A04_prismFacet q, ?_, ?_⟩, by simp⟩
+  · exact Finset.mem_image_of_mem apm_t02A04_prismFacet (Finset.mem_univ q)
+  · intro x hx
+    fin_cases i <;>
+      simp [apm_t02A04_curveIdx, apm_t02A04_prismFacet,
+        apm_t02A04_prismDisk, apm_t02A04_coneIdx, j, q] at hx ⊢ <;>
+      rcases hx with rfl | rfl
+    all_goals
+      first
+      | exact ⟨_, Or.inl ⟨1, by decide, rfl⟩, rfl⟩
+      | exact ⟨_, Or.inr ⟨2, by decide, rfl⟩, rfl⟩
 -- END SEAT AREA
 
 lemma apm_t02A04_solidTorus_prism_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
