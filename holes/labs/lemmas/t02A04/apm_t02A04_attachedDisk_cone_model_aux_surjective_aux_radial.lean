@@ -1447,11 +1447,64 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_surjective_aux_radial
     (hr0 : 0 ≤ r) (hr1 : r ≤ 1) :
     ∃ y, ((apm_t02A04_coneMap y : apm_t02a04_Disk) : ℂ) =
       (r : ℂ) * (apm_t02A04_arcPoint i t : ℂ) := by
-  -- Plan (seat lemma-3, PARTIAL 10-29): y = (1-r)•c + r•((1-t)•v_i + t•v_{i+1}) with
-  -- c = basisVertex 7 0, v_k = basisVertex 7 (coneIdx k); y lies in coneHull i, so
-  -- coneMap y = conePoint i y (_aux_agree); then simplify the cone parameter
-  -- r*t / (r*(1-t) + r*t) = t for r ≠ 0, and r = 0 gives the centre.
-  sorry
+  classical
+  let c := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0
+  let e := (1 - t) •
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+        (apm_t02A04_coneIdx i) +
+    t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+        (apm_t02A04_coneIdx (i + 1))
+  let y := (1 - r) • c + r • e
+  have hc : c ∈ apm_t02A04_coneHull i := by
+    apply subset_convexHull ℝ
+    simp [c, apm_t02A04_coneFacet]
+  have he : e ∈ apm_t02A04_coneHull i := by
+    apply segment_subset_convexHull
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx i) ∈
+        ↑((apm_t02A04_coneFacet i).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)) by
+        simp [apm_t02A04_coneFacet])
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx (i + 1)) ∈
+        ↑((apm_t02A04_coneFacet i).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)) by
+        simp [apm_t02A04_coneFacet])
+    rw [segment_eq_image]
+    exact ⟨t, ⟨ht0, ht1⟩, rfl⟩
+  have hyi : y ∈ apm_t02A04_coneHull i := by
+    rw [show y = (1 - r) • c + r • e by rfl]
+    exact (convex_convexHull ℝ _).segment_subset hc he
+      (by rw [segment_eq_image]; exact ⟨r, ⟨hr0, hr1⟩, rfl⟩)
+  have hyspace : y ∈ apm_t02A04_coneComplex.space := by
+    apply Geometry.SimplicialComplex.convexHull_subset_space
+      (K := apm_t02A04_coneComplex)
+      (s := (apm_t02A04_coneFacet i).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7))
+    · refine ⟨⟨apm_t02A04_coneFacet i,
+        Finset.mem_image_of_mem _ (Finset.mem_univ _), Finset.Subset.refl _⟩, ?_⟩
+      simp [apm_t02A04_coneFacet]
+    · exact hyi
+  refine ⟨⟨y, hyspace⟩, ?_⟩
+  have hcover : ∃ j, y ∈ apm_t02A04_coneHull j := ⟨i, hyi⟩
+  simp only [apm_t02A04_coneMap, dif_pos hcover]
+  rw [apm_t02A04_attachedDisk_cone_model_aux_agree
+    (Classical.choose hcover) i y (Classical.choose_spec hcover) hyi]
+  have hnorm := apm_t02A04_attachedDisk_cone_model_aux_point_norm i y hyi
+  simp only [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, hnorm,
+    dite_true]
+  by_cases hr : r = 0
+  · subst r
+    simp [apm_t02A04_conePoint, y, e, c,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      apm_t02A04_coneIdx]
+  · have hri : r * (1 - t) + r * t = r := by ring
+    simp only [apm_t02A04_conePoint]
+    fin_cases i <;>
+      simp [y, e, c, apm_t02A04_coneIdx,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply, hri, hr] <;>
+      field_simp <;> ring
 -- END SEAT AREA
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_surjective : Function.Surjective apm_t02A04_coneMap := by
