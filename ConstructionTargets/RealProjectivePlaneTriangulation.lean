@@ -1937,15 +1937,86 @@ lemma rp2_explicit_finite_model_aux_rp2Map_eq (y : rp2Complex.space) (p : Fin 6 
   rw [dif_pos hex]
   exact rp2_explicit_finite_model_aux_agree _ _ _ (Classical.choose_spec hex) hp
 
+/-- Lattice coordinates of `ζ_j` in the basis `1, ζ₁`. -/
+def hexLat (j : ℕ) : ℝ × ℝ :=
+  ![((1 : ℝ), (0 : ℝ)), (0, 1), (-1, 1), (-1, 0), (0, -1), (1, -1)] ⟨j % 6, by omega⟩
+
+/-- Lattice coordinates of `m_j`. -/
+def ringLat (j : ℕ) : ℝ × ℝ :=
+  (((hexLat j).1 + (hexLat (j + 1)).1) / 3, ((hexLat j).2 + (hexLat (j + 1)).2) / 3)
+
+/-- Lattice coordinates of `rp2Corner p k` (same case split). -/
+def rp2CornerLat (p : Fin 6 × Fin 3) (k : Fin 10) : ℝ × ℝ :=
+  if k = 0 then (0, 0)
+  else if k = ringIdx p.1 then ringLat p.1
+  else if k = ringIdx (p.1 + 1) then ringLat (p.1 + 1)
+  else if k = bdryIdx p.1 ∧ p.2.1 = 1 then hexLat p.1
+  else if k = bdryIdx (p.1 + 1) then hexLat (p.1 + 1)
+  else (0, 0)
+
+/-- `ζ_j = a + b·ζ₁` with `(a, b) = hexLat j`. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat (j : ℕ) :
+    hexVertex j = ((hexLat j).1 : ℂ) + ((hexLat j).2 : ℂ) * hexVertex 1 := by
+  sorry
+
+/-- Corner positions in lattice coordinates (`_aux_hex_lat`, unfold `rp2Corner`,
+`ringVertex`). -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_corner_lat (p : Fin 6 × Fin 3) (k : Fin 10) :
+    rp2Corner p k = ((rp2CornerLat p k).1 : ℂ) + ((rp2CornerLat p k).2 : ℂ) * hexVertex 1 := by
+  sorry
+
+/-- Barycentric description of a basis-face hull. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary
+    (s : Finset (Fin 10)) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ convexHull ℝ (↑(s.image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10)))) :
+    (∀ k, 0 ≤ y k) ∧ (∑ k, y k = 1) ∧ (∀ k, k ∉ s → y k = 0) := by
+  sorry
+
+/-- The finite check: in lattice coordinates, equal images from facets `p, p'`
+force equal barycentric coordinates.  `fin_cases p <;> fin_cases p'`, expand the
+sums over `Fin 10` and the corner table, then `linarith` for each coordinate
+(the 18 triangles are a proper triangulation in which each planar vertex has a
+single label; `checks/rp2_planar_tiling_check.py`). -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_cases (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
+    (h0 : ∀ k, 0 ≤ y k) (h1 : ∑ k, y k = 1) (h2 : ∀ k, k ∉ rp2Facet p → y k = 0)
+    (h0' : ∀ k, 0 ≤ y' k) (h1' : ∑ k, y' k = 1) (h2' : ∀ k, k ∉ rp2Facet p' → y' k = 0)
+    (ha : ∑ k, y k * (rp2CornerLat p k).1 = ∑ k, y' k * (rp2CornerLat p' k).1)
+    (hb : ∑ k, y k * (rp2CornerLat p k).2 = ∑ k, y' k * (rp2CornerLat p' k).2) :
+    ∀ k, y k = y' k := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_split (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) :
+    rp2Affine p y = ((∑ k, y k * (rp2CornerLat p k).1 : ℝ) : ℂ) +
+      ((∑ k, y k * (rp2CornerLat p k).2 : ℝ) : ℂ) * hexVertex 1 := by
+  unfold rp2Affine
+  simp_rw [rp2_explicit_finite_model_aux_injective_aux_planar_aux_corner_lat]
+  push_cast
+  rw [Finset.sum_mul, ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl fun k _ => by ring
+
 /-- Planar fibres are single points: two facet points with the same planar image
-are equal.  Plan: in lattice coordinates `z = a + b·ζ₁` (`a = Re z - Im z/√3`,
-`b = 2 Im z/√3`) every corner has rational coordinates (`ζ_j ∈ {±1, ±ζ₁, ±(ζ₁-1)}`,
-`m_j = (ζ_j + ζ_{j+1})/3`); with the barycentric description of `facetHull`
-each of the 18×18 facet pairs is linear arithmetic (`linarith`). -/
+are equal. -/
 lemma rp2_explicit_finite_model_aux_injective_aux_planar (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) (hy' : y' ∈ facetHull p')
     (h : rp2Affine p y = rp2Affine p' y') : y = y' := by
-  sorry
+  obtain ⟨h0, h1, h2⟩ := rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary _ y hy
+  obtain ⟨h0', h1', h2'⟩ := rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary _ y' hy'
+  have him : (hexVertex 1).im ≠ 0 := by
+    have e : hexVertex 1 = Complex.exp (((Real.pi / 3 : ℝ) : ℂ) * Complex.I) := by
+      unfold hexVertex; congr 1; push_cast; ring
+    rw [e, Complex.exp_ofReal_mul_I_im, Real.sin_pi_div_three]
+    positivity
+  rw [rp2_explicit_finite_model_aux_injective_aux_planar_aux_split, rp2_explicit_finite_model_aux_injective_aux_planar_aux_split] at h
+  have hb := congrArg Complex.im h
+  simp only [Complex.add_im, Complex.ofReal_im, Complex.mul_im, Complex.ofReal_re,
+    zero_add, zero_mul, add_zero] at hb
+  have hb' := mul_right_cancel₀ him hb
+  have ha := congrArg Complex.re h
+  simp only [Complex.add_re, Complex.ofReal_re, Complex.mul_re, Complex.ofReal_im,
+    zero_mul, sub_zero, hb'] at ha
+  have ha' := add_right_cancel ha
+  ext k
+  exact rp2_explicit_finite_model_aux_injective_aux_planar_aux_cases p p' y y' h0 h1 h2 h0' h1' h2' ha' hb' k
 
 /-- A facet point whose image has hexagon gauge one is supported on boundary labels.
 Plan: `gauge` is convex and equals `1` at `ζ_j`, `0` at `0`, `2/3` at `m_j`; so
