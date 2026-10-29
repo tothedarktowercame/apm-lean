@@ -4495,7 +4495,37 @@ theorem orientedPackage_homology_bijective {n : ℕ} (o : LinearOrder (Euc n)) (
     (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
     (cmpH_f : ∀ k, cmpH.f k = cmp k) :
     ∀ k, Function.Bijective (HomologicalComplex.homologyMap cmpH k).hom := by
-  sorry
+  have hchain : ∀ k, cmp (k + 1) ≫
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k =
+        d k ≫ cmp k := by
+    intro k
+    rw [← cmpH_f, ← cmpH_f]
+    simpa only [ChainComplex.of_d] using cmpH.comm (k + 1) k
+  let q := ChainComplex.ofHom _ _ hdd _ _
+    (fun k => (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d_comp_d
+      (k + 2) (k + 1) k) cmp hchain
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of K.space)
+  let e : ChainComplex.of _ (fun j ↦ C.d (j + 1) j)
+      (fun j ↦ C.d_comp_d (j + 2) (j + 1) j) ⟶ C :=
+    { f := fun _ ↦ 𝟙 _
+      comm' := by
+        rintro i j (rfl : j + 1 = i)
+        simp [ChainComplex.of_d] }
+  have hq : q ≫ e = cmpH := by
+    ext k x
+    simpa [q, e] using congrArg (fun f ↦ f x) (cmpH_f k).symm
+  rw [← hq]
+  intro k
+  have hb := SimplicialSingularComparison.orderedFace_singular_quasiIso
+    o K hK d hd hdd cmp hcmp hchain k
+  letI (i : ℕ) : IsIso (e.f i) := by
+    dsimp [e]
+    infer_instance
+  letI : IsIso e := HomologicalComplex.Hom.isIso_of_components e
+  have he : Function.Bijective (HomologicalComplex.homologyMap e k).hom :=
+    ConcreteCategory.bijective_of_isIso _
+  rw [HomologicalComplex.homologyMap_comp]
+  exact he.comp hb
 
 /-- The composite `sd ≫ hm` is conjugate on homology to `e ∘ g ∘ e⁻¹`. Apply
 `homologyMap_comp`, then `hv` and `hsd`, reassociating. Then
