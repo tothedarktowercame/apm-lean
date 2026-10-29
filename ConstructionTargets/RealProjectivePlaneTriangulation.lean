@@ -1654,11 +1654,105 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangl
 
 /-- Generic: a quadrilateral whose diagonals meet has both triangulations
 covering the same set. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_segment
+    (a c q : ℂ) (hq : q ∈ segment ℝ a c) :
+    segment ℝ a c ⊆ segment ℝ a q ∪ segment ℝ q c := by
+  intro x hx
+  rcases eq_or_ne x a with rfl | hxa
+  · exact Or.inl (left_mem_segment ℝ _ _)
+  rcases eq_or_ne x c with rfl | hxc
+  · exact Or.inr (right_mem_segment ℝ _ _)
+  have hxopen : x ∈ openSegment ℝ a c :=
+    mem_openSegment_of_ne_left_right hxa.symm hxc.symm hx
+  have hqline : q ∈ Set.range (AffineMap.lineMap a c : ℝ → ℂ) := by
+    rcases hq with ⟨u, v, hu, hv, huv, rfl⟩
+    refine ⟨v, ?_⟩
+    rw [AffineMap.lineMap_apply_module]
+    rw [show 1 - v = u by linarith]
+    rfl
+  have hx' := openSegment_subset_union a c hqline hxopen
+  rcases hx' with rfl | hx'
+  · exact Or.inl (right_mem_segment ℝ _ _)
+  · rcases hx' with hx' | hx'
+    · exact Or.inl (openSegment_subset_segment ℝ _ _ hx')
+    · exact Or.inr (openSegment_subset_segment ℝ _ _ hx')
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_triangle
+    (a b c q : ℂ) (hq : q ∈ segment ℝ a c) :
+    convexHull ℝ {a, b, c} ⊆
+      convexHull ℝ {a, b, q} ∪ convexHull ℝ {q, b, c} := by
+  have habc : ({a, b, c} : Set ℂ) = {b, a, c} := by
+    ext x; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; aesop
+  have habq : ({a, b, q} : Set ℂ) = {b, a, q} := by
+    ext x; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; aesop
+  have hqbc : ({q, b, c} : Set ℂ) = {b, q, c} := by
+    ext x; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; aesop
+  rw [habc, habq, hqbc]
+  rw [← convexJoin_singleton_segment b a c]
+  rintro x hx
+  rw [mem_convexJoin] at hx
+  rcases hx with ⟨y, hy, z, hz, hxz⟩
+  simp only [Set.mem_singleton_iff] at hy
+  subst y
+  rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_segment
+      a c q hq hz with hz | hz
+  · left
+    rw [← convexJoin_singleton_segment b a q]
+    exact segment_subset_convexJoin (by simp) hz hxz
+  · right
+    rw [← convexJoin_singleton_segment b q c]
+    exact segment_subset_convexJoin (by simp) hz hxz
+
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split (a b c d : ℂ)
     (hdiag : (segment ℝ a c ∩ segment ℝ b d).Nonempty) :
     convexHull ℝ {a, b, c} ∪ convexHull ℝ {a, c, d} ⊆
       convexHull ℝ {a, b, d} ∪ convexHull ℝ {b, c, d} := by
-  sorry
+  rcases hdiag with ⟨q, hqac, hqbd⟩
+  have hqab : q ∈ convexHull ℝ {a, b, d} :=
+    segment_subset_convexHull (by simp) (by simp) hqbd
+  have hqbc : q ∈ convexHull ℝ {b, c, d} :=
+    segment_subset_convexHull (by simp) (by simp) hqbd
+  rintro x (hx | hx)
+  · rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_triangle
+      a b c q hqac hx with hx | hx
+    · left
+      apply convexHull_min _ (convex_convexHull ℝ _) hx
+      intro y hy
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      rcases hy with rfl | rfl | rfl
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact hqab
+    · right
+      apply convexHull_min _ (convex_convexHull ℝ _) hx
+      intro y hy
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      rcases hy with rfl | rfl | rfl
+      · exact hqbc
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact subset_convexHull ℝ _ (by simp)
+  · rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_triangle
+      a d c q hqac (by
+        have hacd : ({a, d, c} : Set ℂ) = {a, c, d} := by
+          ext y; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; aesop
+        rw [hacd]
+        exact hx) with hx | hx
+    · left
+      apply convexHull_min _ (convex_convexHull ℝ _) hx
+      intro y hy
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      rcases hy with rfl | rfl | rfl
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact hqab
+    · right
+      apply convexHull_min _ (convex_convexHull ℝ _) hx
+      intro y hy
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      rcases hy with rfl | rfl | rfl
+      · exact hqbc
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact subset_convexHull ℝ _ (by simp)
 
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling
     (z : ℂ) (hz : z ∈ hexagon) :
