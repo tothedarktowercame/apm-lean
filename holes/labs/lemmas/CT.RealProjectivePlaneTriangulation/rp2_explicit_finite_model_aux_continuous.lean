@@ -1386,7 +1386,56 @@ lemma rp2_explicit_finite_model_aux_agree (p p' : Fin 6 × Fin 3) (y : Euclidean
 /-- Pasting over the 18 closed facet hulls (finite closed cover, `_agree`). -/
 -- BEGIN SEAT AREA
 lemma rp2_explicit_finite_model_aux_continuous : Continuous rp2Map := by
-  sorry
+  classical
+  let C : Fin 6 × Fin 3 → Set rp2Complex.space :=
+    fun p => {y | (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull p}
+  have hclosed : ∀ p, IsClosed (C p) := by
+    intro p
+    exact ((Finset.finite_toSet _).isCompact_convexHull ℝ).isClosed.preimage
+      continuous_subtype_val
+  have hcover : ⋃ p, C p = Set.univ := by
+    ext y
+    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+    exact rp2_explicit_finite_model_aux_cover y y.2
+  refine (locallyFinite_of_finite C).continuous hcover hclosed ?_
+  intro p
+  have hA : Continuous (rp2Affine p) := by
+    unfold rp2Affine
+    fun_prop
+  have hcomplex : Continuous fun y : rp2Complex.space =>
+      hexToDisk (rp2Affine p (y : EuclideanSpace ℝ (Fin 10))) :=
+    rp2_explicit_finite_model_aux_hex_continuous.comp
+      (hA.comp continuous_subtype_val)
+  have hclamp : ContinuousOn
+      (fun y : rp2Complex.space => diskClamp
+        (hexToDisk (rp2Affine p (y : EuclideanSpace ℝ (Fin 10))))) (C p) := by
+    rw [continuousOn_iff_continuous_restrict]
+    apply continuous_induced_rng.mpr
+    change Continuous (fun y : C p =>
+      ((diskClamp (hexToDisk (rp2Affine p
+        ((y : rp2Complex.space) : EuclideanSpace ℝ (Fin 10)))) : Surfaces.Disk) : ℂ))
+    have heq : (fun y : C p =>
+        ((diskClamp (hexToDisk (rp2Affine p
+          ((y : rp2Complex.space) : EuclideanSpace ℝ (Fin 10)))) : Surfaces.Disk) : ℂ)) =
+        fun y : C p => hexToDisk (rp2Affine p
+          ((y : rp2Complex.space) : EuclideanSpace ℝ (Fin 10))) := by
+      funext y
+      have hm := rp2_explicit_finite_model_aux_affine_mem p _ y.2
+      have hn : ‖hexToDisk (rp2Affine p
+          ((y : rp2Complex.space) : EuclideanSpace ℝ (Fin 10)))‖ ≤ 1 := by
+        rw [rp2_explicit_finite_model_aux_hex_norm]
+        exact (rp2_explicit_finite_model_aux_hex_gauge_le_one _).2 hm
+      simp [diskClamp, hn]
+    rw [heq]
+    exact hcomplex.comp continuous_subtype_val
+  apply ContinuousOn.congr
+    ((Surfaces.continuous_surfaceQuotient false 1).comp_continuousOn' hclamp)
+  intro y hy
+  have hex : ∃ q, (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull q :=
+    rp2_explicit_finite_model_aux_cover y y.2
+  unfold rp2Map
+  rw [dif_pos hex]
+  exact rp2_explicit_finite_model_aux_agree _ p _ (Classical.choose_spec hex) hy
 -- END SEAT AREA
 
 lemma rp2_explicit_finite_model_aux_injective : Function.Injective rp2Map := by
