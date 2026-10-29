@@ -1269,9 +1269,80 @@ lemma rp2_explicit_finite_model_aux_injective : Function.Injective rp2Map := by
   sorry
 
 /-- The 18 planar triangles cover the hexagon. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_lift
+    (p : Fin 6 × Fin 3) (z : ℂ)
+    (hz : z ∈ convexHull ℝ (rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10)))) :
+    ∃ y, y ∈ facetHull p ∧ rp2Affine p y = z := by
+  classical
+  let L := rp2AffineLinear p
+  have himage : L '' (↑((rp2Facet p).image (basisVertex 10)) :
+      Set (EuclideanSpace ℝ (Fin 10))) =
+      rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10)) := by
+    ext w
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hy
+      refine ⟨k, hk, ?_⟩
+      exact (rp2_explicit_finite_model_aux_affine_mem_aux_basis p k).symm
+    · rintro ⟨k, hk, rfl⟩
+      refine ⟨basisVertex 10 k, Finset.mem_image.2 ⟨k, hk, rfl⟩, ?_⟩
+      exact rp2_explicit_finite_model_aux_affine_mem_aux_basis p k
+  rw [← himage, ← L.image_convexHull] at hz
+  obtain ⟨y, hy, hLy⟩ := hz
+  refine ⟨y, hy, ?_⟩
+  exact hLy
+
+/-- Planar corner sets of the three facet types at `i`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_sets (i : Fin 6) :
+    rp2Corner (i, 0) '' (↑(rp2Facet (i, 0)) : Set (Fin 10)) =
+        {0, ringVertex i, ringVertex (i + 1)} ∧
+    rp2Corner (i, 1) '' (↑(rp2Facet (i, 1)) : Set (Fin 10)) =
+        {hexVertex i, hexVertex (i + 1), ringVertex i} ∧
+    rp2Corner (i, 2) '' (↑(rp2Facet (i, 2)) : Set (Fin 10)) =
+        {hexVertex (i + 1), ringVertex i, ringVertex (i + 1)} := by
+  sorry
+
+/-- The hexagon is the fan of its six sector triangles `0 ζ_j ζ_{j+1}`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan (z : ℂ) (hz : z ∈ hexagon) :
+    ∃ j : Fin 6, z ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} := by
+  sorry
+
+/-- `m_j` is the centroid of the sector triangle `0 ζ_j ζ_{j+1}`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_centroid (j : ℕ) :
+    ringVertex j ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} := by
+  sorry
+
+/-- The diagonals `0 ζ_{j+1}` and `m_j m_{j+1}` meet (at `ζ_{j+1} / 2`). -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal (j : ℕ) :
+    (segment ℝ 0 (hexVertex (j + 1)) ∩ segment ℝ (ringVertex j) (ringVertex (j + 1))).Nonempty := by
+  sorry
+
+/-- Generic: a triangle is covered by the three triangles at any of its points. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split (a b c q : ℂ) (hq : q ∈ convexHull ℝ {a, b, c}) :
+    convexHull ℝ {a, b, c} ⊆
+      convexHull ℝ {q, b, c} ∪ convexHull ℝ {a, q, c} ∪ convexHull ℝ {a, b, q} := by
+  sorry
+
+/-- Generic: a quadrilateral whose diagonals meet has both triangulations
+covering the same set. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split (a b c d : ℂ)
+    (hdiag : (segment ℝ a c ∩ segment ℝ b d).Nonempty) :
+    convexHull ℝ {a, b, c} ∪ convexHull ℝ {a, c, d} ⊆
+      convexHull ℝ {a, b, d} ∪ convexHull ℝ {b, c, d} := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling
+    (z : ℂ) (hz : z ∈ hexagon) :
+    ∃ p, z ∈ convexHull ℝ (rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10))) := by
+  sorry
+
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar (z : ℂ) (hz : z ∈ hexagon) :
     ∃ p y, y ∈ facetHull p ∧ rp2Affine p y = z := by
-  sorry
+  obtain ⟨p, hp⟩ :=
+    rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling z hz
+  obtain ⟨y, hy, hAy⟩ :=
+    rp2_explicit_finite_model_aux_surjective_aux_planar_aux_lift p z hp
+  exact ⟨p, y, hy, hAy⟩
 
 lemma rp2_explicit_finite_model_aux_facetHull_subset (p : Fin 6 × Fin 3) : facetHull p ⊆ rp2Complex.space := by
   intro y hy
