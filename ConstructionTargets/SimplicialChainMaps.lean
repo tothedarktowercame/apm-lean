@@ -3762,7 +3762,12 @@ theorem barycentricStep_iterate_space {n : ℕ} (K : GSC n) (m : ℕ) :
 finiteness theorem for `barycentricSubdivision` in `GeometricSimplicialSubdivision`. -/
 theorem barycentricStep_iterate_finite {n : ℕ} (K : GSC n) (hK : K.faces.Finite) (m : ℕ) :
     ((barycentricStep^[m]) K).faces.Finite := by
-  sorry
+  induction m with
+  | zero => exact hK
+  | succ m ih =>
+      rw [Function.iterate_succ_apply']
+      exact GeometricSimplicialSubdivision.barycentricSubdivision_finite
+        ((barycentricStep^[m]) K) ih _ _ _
 
 /-- The identity is hull-carried: the support of `single s 1` is `{s}`, and
 `s ⊆ convexHull s` (`subset_convexHull`). -/
