@@ -1,0 +1,2297 @@
+import ConstructionTargets.FiniteTriangulation
+import ConstructionTargets.CompactClosedEquivalenceQuotient
+
+/-! # A finite marked triangulation of the real projective plane
+
+This file isolates the concrete polygon-triangulation input from the compact-to-Hausdorff
+topological upgrade.  The intended proof of `rp2_explicit_finite_model` uses the six-vertex
+triangulation of `RP²` (ten triangles), realized by coordinate vertices.
+-/
+
+open Set
+
+noncomputable section
+
+namespace ConstructionTargets.RealProjectivePlaneTriangulation
+
+open ConstructionTargets.FiniteTriangulation
+open ConstructionTargets.StatementSurfaceModels
+
+/-- The one-crosscap polygon quotient is Hausdorff.  Concretely, its generating relation
+identifies a boundary point with its antipode and is a closed equivalence relation on the
+compact disk. -/
+theorem rp2_t2Space_aux_edge_neg (t : Set.Icc (0 : ℝ) 1) :
+    ((Surfaces.edgePoint 2 1 t : Surfaces.Disk) : ℂ) =
+      -((Surfaces.edgePoint 2 0 t : Surfaces.Disk) : ℂ) := by
+  simp only [Surfaces.edgePoint, Subtype.coe_mk]
+  norm_num
+  change Complex.exp (Complex.I * (2 * (Real.pi : ℂ) *
+    (1 + (t.1 : ℂ)) / 2)) =
+    -Complex.exp (Complex.I * (2 * (Real.pi : ℂ) * (t.1 : ℂ) / 2))
+  calc
+    _ = Complex.exp (Real.pi * Complex.I) *
+        Complex.exp (Complex.I * (Real.pi * t.1)) := by
+          rw [← Complex.exp_add]
+          congr 1
+          ring_nf
+    _ = _ := by rw [Complex.exp_pi_mul_I]; ring
+
+theorem rp2_t2Space_aux_rel_cases {x y : Surfaces.Disk}
+    (h : Surfaces.SurfaceRel false 1 x y) :
+    ‖(x : ℂ)‖ = 1 ∧ (y : ℂ) = -(x : ℂ) := by
+  simp only [Surfaces.SurfaceRel, Bool.false_eq_true, if_false] at h
+  rcases h with ⟨j, hj, t, rfl, rfl⟩
+  have : j = 0 := by omega
+  subst j
+  constructor
+  · simp [Surfaces.edgePoint, Complex.norm_exp]
+  · exact rp2_t2Space_aux_edge_neg t
+
+theorem rp2_t2Space_aux_eqv_cases {x y : Surfaces.Disk}
+    (h : Relation.EqvGen (Surfaces.SurfaceRel false 1) x y) :
+    x = y ∨ (‖(x : ℂ)‖ = 1 ∧ (y : ℂ) = -(x : ℂ)) := by
+  induction h with
+  | rel x y h => exact Or.inr (rp2_t2Space_aux_rel_cases h)
+  | refl x => exact Or.inl rfl
+  | symm x y _ ih =>
+      rcases ih with rfl | ⟨hx, hy⟩
+      · exact Or.inl rfl
+      · right
+        constructor
+        · rw [hy, norm_neg, hx]
+        · rw [hy, neg_neg]
+  | trans x y z _ _ ih₁ ih₂ =>
+      rcases ih₁ with rfl | ⟨hx, hy⟩
+      · exact ih₂
+      · rcases ih₂ with rfl | ⟨hy', hz⟩
+        · exact Or.inr ⟨hx, hy⟩
+        · left
+          apply Subtype.ext
+          change (x : ℂ) = (z : ℂ)
+          rw [hz, hy, neg_neg]
+
+/-- Converse of `rp2_t2Space_aux_eqv_cases`: every boundary point is identified
+with its antipode (write it as `edgePoint 2 0 t` or `edgePoint 2 1 t`). -/
+theorem rp2_t2Space_aux_boundary_rel {x y : Surfaces.Disk}
+    (hx : ‖(x : ℂ)‖ = 1) (hy : (y : ℂ) = -(x : ℂ)) :
+    Relation.EqvGen (Surfaces.SurfaceRel false 1) x y := by
+  by_cases harg : 0 ≤ Complex.arg (x : ℂ)
+  · let t : Set.Icc (0 : ℝ) 1 :=
+      ⟨Complex.arg (x : ℂ) / Real.pi, by
+        constructor
+        · exact div_nonneg harg Real.pi_pos.le
+        · exact (div_le_one Real.pi_pos).2 (Complex.arg_le_pi _)⟩
+    apply Relation.EqvGen.rel _ _
+    simp only [Surfaces.SurfaceRel, Bool.false_eq_true, if_false]
+    refine ⟨0, by omega, t, ?_, ?_⟩
+    · apply Subtype.ext
+      simp only [Surfaces.edgePoint, Subtype.coe_mk]
+      norm_num
+      change (x : ℂ) = Complex.exp
+        (Complex.I * (2 * Real.pi * t.1 / 2))
+      rw [show (x : ℂ) = Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        symm
+        simpa [hx] using Complex.norm_mul_exp_arg_mul_I (x : ℂ)]
+      congr 1
+      simp [t]
+      field_simp [ne_of_gt Real.pi_pos]
+    · apply Subtype.ext
+      simp only [Surfaces.edgePoint, Subtype.coe_mk]
+      norm_num
+      change (y : ℂ) = Complex.exp
+        (Complex.I * (2 * Real.pi * ((1 : ℝ) + t.1) / 2))
+      rw [hy, show (x : ℂ) = Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        symm
+        simpa [hx] using Complex.norm_mul_exp_arg_mul_I (x : ℂ)]
+      rw [show -Complex.exp (Complex.arg (x : ℂ) * Complex.I) =
+          Complex.exp (Real.pi * Complex.I) *
+            Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        rw [Complex.exp_pi_mul_I]
+        simp]
+      rw [← Complex.exp_add]
+      apply congrArg Complex.exp
+      simp [t]
+      field_simp [ne_of_gt Real.pi_pos]
+  · let t : Set.Icc (0 : ℝ) 1 :=
+      ⟨Complex.arg (x : ℂ) / Real.pi + 1, by
+        constructor
+        · have h := Complex.neg_pi_lt_arg (x : ℂ)
+          have : (-1 : ℝ) < Complex.arg (x : ℂ) / Real.pi :=
+            (lt_div_iff₀ Real.pi_pos).2 (by linarith)
+          linarith
+        · have ha : Complex.arg (x : ℂ) ≤ 0 := le_of_not_ge harg
+          have := div_nonpos_of_nonpos_of_nonneg ha Real.pi_pos.le
+          linarith⟩
+    apply Relation.EqvGen.symm _ _
+    apply Relation.EqvGen.rel _ _
+    simp only [Surfaces.SurfaceRel, Bool.false_eq_true, if_false]
+    refine ⟨0, by omega, t, ?_, ?_⟩
+    · apply Subtype.ext
+      simp only [Surfaces.edgePoint, Subtype.coe_mk]
+      norm_num
+      change (y : ℂ) = Complex.exp
+        (Complex.I * (2 * Real.pi * t.1 / 2))
+      rw [hy, show (x : ℂ) = Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        symm
+        simpa [hx] using Complex.norm_mul_exp_arg_mul_I (x : ℂ)]
+      rw [show -Complex.exp (Complex.arg (x : ℂ) * Complex.I) =
+          Complex.exp (Real.pi * Complex.I) *
+            Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        rw [Complex.exp_pi_mul_I]
+        simp]
+      rw [← Complex.exp_add]
+      apply congrArg Complex.exp
+      simp [t]
+      field_simp [ne_of_gt Real.pi_pos]
+      ring
+    · apply Subtype.ext
+      simp only [Surfaces.edgePoint, Subtype.coe_mk]
+      norm_num
+      change (x : ℂ) = Complex.exp
+        (Complex.I * (2 * Real.pi * ((1 : ℝ) + t.1) / 2))
+      rw [show (x : ℂ) = Complex.exp (Complex.arg (x : ℂ) * Complex.I) by
+        symm
+        simpa [hx] using Complex.norm_mul_exp_arg_mul_I (x : ℂ)]
+      rw [← mul_one (Complex.exp (Complex.arg (x : ℂ) * Complex.I)),
+        ← Complex.exp_two_pi_mul_I, ← Complex.exp_add]
+      apply congrArg Complex.exp
+      simp [t]
+      field_simp [ne_of_gt Real.pi_pos]
+      ring
+
+theorem rp2_t2Space_aux_isClosed :
+    IsClosed {p : Surfaces.Disk × Surfaces.Disk |
+      (Relation.EqvGen.setoid (Surfaces.SurfaceRel false 1)).r p.1 p.2} := by
+  have hset : {p : Surfaces.Disk × Surfaces.Disk |
+      (Relation.EqvGen.setoid (Surfaces.SurfaceRel false 1)).r p.1 p.2} =
+      {p | p.1 = p.2} ∪ {p | ‖(p.1 : ℂ)‖ = 1 ∧ (p.2 : ℂ) = -(p.1 : ℂ)} := by
+    ext p
+    constructor
+    · intro h
+      exact rp2_t2Space_aux_eqv_cases h
+    · rintro (h | ⟨hx, hy⟩)
+      · obtain ⟨a, b⟩ := p
+        change a = b at h
+        subst h
+        exact Relation.EqvGen.refl _
+      · exact rp2_t2Space_aux_boundary_rel hx hy
+  rw [hset]
+  refine (isClosed_diagonal).union (IsClosed.inter ?_ ?_)
+  · exact isClosed_eq (by fun_prop) continuous_const
+  · exact isClosed_eq (by fun_prop) (by fun_prop)
+
+theorem rp2_t2Space : T2Space RealProjectivePlane := by
+  haveI : CompactSpace Surfaces.Disk :=
+    isCompact_iff_compactSpace.mp (isCompact_closedBall (0 : ℂ) 1)
+  exact compact_closed_equivalence_quotient_t2 _ rp2_t2Space_aux_isClosed
+
+/-- A finite geometric simplicial complex has compact underlying space. -/
+theorem finite_simplicialComplex_space_isCompact
+    {n : ℕ} (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+    (hK : K.faces.Finite) : IsCompact K.space := by
+  rw [Geometry.SimplicialComplex.space]
+  exact hK.isCompact_biUnion fun s _ =>
+    s.finite_toSet.isCompact_convexHull ℝ
+
+/-- Standard basis vector, used to realize an abstract complex on `Fin N`. -/
+def basisVertex (N : ℕ) (i : Fin N) : EuclideanSpace ℝ (Fin N) :=
+  EuclideanSpace.single i 1
+
+/-- Basis vertices of any finite vertex set are affinely independent. -/
+lemma rp2_explicit_finite_model_aux_basis_indep {N : ℕ} (s : Finset (Fin N)) :
+    AffineIndependent ℝ
+      ((↑) : ↥(s.image (basisVertex N)) → EuclideanSpace ℝ (Fin N)) := by
+  apply LinearIndependent.affineIndependent
+  rw [linearIndependent_subtype_iff]
+  apply EuclideanSpace.orthonormal_single.linearIndependent.linearIndepOn_id.mono
+  intro x hx
+  simp only [Finset.mem_coe, Finset.mem_image] at hx
+  obtain ⟨i, _, rfl⟩ := hx
+  exact ⟨i, rfl⟩
+
+/-- Convex hulls of basis-vertex faces meet in the hull of the common face
+(a point of either hull has nonnegative coordinates summing to `1`, supported
+on the face's index set). -/
+lemma rp2_explicit_finite_model_aux_basis_inter {N : ℕ} (s t : Finset (Fin N)) :
+    convexHull ℝ (↑(s.image (basisVertex N)) : Set (EuclideanSpace ℝ (Fin N))) ∩
+        convexHull ℝ ↑(t.image (basisVertex N)) ⊆
+      convexHull ℝ
+        ((↑(s.image (basisVertex N)) : Set (EuclideanSpace ℝ (Fin N))) ∩
+          ↑(t.image (basisVertex N))) := by
+  classical
+  let u := s ∪ t
+  have hlin : LinearIndependent ℝ (basisVertex N) := by
+    simpa [basisVertex] using
+      (Pi.linearIndependent_single_one (Fin N) ℝ).map'
+        (EuclideanSpace.equiv (Fin N) ℝ).symm.toLinearMap
+        (LinearMap.ker_eq_bot.mpr
+          (EuclideanSpace.equiv (Fin N) ℝ).symm.injective)
+  have hu : AffineIndependent ℝ
+      ((↑) : ↥(u.image (basisVertex N)) → EuclideanSpace ℝ (Fin N)) := by
+    refine hlin.affineIndependent.range.mono ?_
+    rintro x hx
+    simp only [Finset.mem_coe, Finset.mem_image] at hx
+    obtain ⟨i, -, rfl⟩ := hx
+    exact ⟨i, rfl⟩
+  rw [hu.convexHull_inter (t₁ := s.image (basisVertex N))
+    (t₂ := t.image (basisVertex N))]
+  · intro x hx
+    simp only [Finset.mem_image] at hx ⊢
+    obtain ⟨i, hi, rfl⟩ := hx
+    exact ⟨i, Finset.mem_union_left t hi, rfl⟩
+  · intro x hx
+    simp only [Finset.mem_image] at hx ⊢
+    obtain ⟨i, hi, rfl⟩ := hx
+    exact ⟨i, Finset.mem_union_right s hi, rfl⟩
+
+/-- Vertex sets lying in the basis image of one of the facets `F`. -/
+def basisFaces (N : ℕ) (F : Finset (Finset (Fin N))) :
+    Set (Finset (EuclideanSpace ℝ (Fin N))) :=
+  {S | ∃ f ∈ F, S ⊆ f.image (basisVertex N)}
+
+lemma basisFaces_eq_image {N : ℕ} {f : Finset (Fin N)}
+    {S : Finset (EuclideanSpace ℝ (Fin N))} (hS : S ⊆ f.image (basisVertex N)) :
+    (Finset.univ.filter fun i => basisVertex N i ∈ S).image (basisVertex N) = S := by
+  ext x
+  simp only [Finset.mem_image, Finset.mem_filter, Finset.mem_univ, true_and]
+  constructor
+  · rintro ⟨i, hi, rfl⟩
+    exact hi
+  · intro hx
+    obtain ⟨i, -, rfl⟩ := Finset.mem_image.1 (hS hx)
+    exact ⟨i, hx, rfl⟩
+
+/-- The geometric realization of the abstract complex generated by the facets
+`F`, on the standard basis vertices of `ℝ^N`. -/
+def basisComplex (N : ℕ) (F : Finset (Finset (Fin N))) :
+    Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin N)) :=
+  Geometry.SimplicialComplex.ofErase (basisFaces N F)
+    (by
+      rintro S ⟨f, -, hS⟩
+      have h := rp2_explicit_finite_model_aux_basis_indep
+        (Finset.univ.filter fun i => basisVertex N i ∈ S)
+      rw [basisFaces_eq_image hS] at h
+      exact h)
+    (by
+      rintro S T hTS ⟨f, hf, hS⟩
+      exact ⟨f, hf, (show T ⊆ S from hTS).trans hS⟩)
+    (by
+      rintro S ⟨f, -, hS⟩ T ⟨g, -, hT⟩
+      have h := rp2_explicit_finite_model_aux_basis_inter
+        (Finset.univ.filter fun i => basisVertex N i ∈ S)
+        (Finset.univ.filter fun i => basisVertex N i ∈ T)
+      rw [basisFaces_eq_image hS, basisFaces_eq_image hT] at h
+      exact h)
+
+lemma basisComplex_faces_finite (N : ℕ) (F : Finset (Finset (Fin N))) :
+    (basisComplex N F).faces.Finite := by
+  classical
+  have : basisFaces N F ⊆
+      ↑((F.image fun f => f.image (basisVertex N)).biUnion Finset.powerset) := by
+    rintro S ⟨f, hf, hS⟩
+    simp only [Finset.coe_biUnion, Finset.coe_image, Set.mem_iUnion, Finset.mem_coe,
+      Finset.mem_powerset, Set.mem_image, exists_prop]
+    exact ⟨_, ⟨f, hf, rfl⟩, hS⟩
+  exact ((Finset.finite_toSet _).subset this).subset Set.diff_subset
+
+lemma basisComplex_vertex_mem {N : ℕ} {F : Finset (Finset (Fin N))} {f : Finset (Fin N)}
+    (hf : f ∈ F) {i : Fin N} (hi : i ∈ f) :
+    {basisVertex N i} ∈ (basisComplex N F).faces := by
+  refine ⟨⟨f, hf, ?_⟩, ?_⟩
+  · simpa using Finset.mem_image_of_mem (basisVertex N) hi
+  · simp
+
+/-! ### The 10-vertex model (plan in the blueprint, 2026-10-28)
+
+Vertices `Fin 10`: `0` is the centre `O`, `ringIdx j = 1 + j % 6` is `m_j`, and
+`bdryIdx j = 7 + j % 3` is the boundary label of the hexagon vertex `ζ_j`
+(so `ζ_j` and `ζ_{j+3} = -ζ_j` share a label).  Facet `(i, 0)` is
+`O m_i m_{i+1}`, `(i, 1)` is `B_i B_{i+1} m_i`, `(i, 2)` is `B_{i+1} m_i m_{i+1}`.
+`checks/rp2_ten_vertex_check.py` and `checks/rp2_planar_tiling_check.py` (in
+the lemma-packet notes) check the surface and the planar tiling. -/
+
+/-- Hexagon vertex `ζ_j = exp(2πij/6)`. -/
+def hexVertex (j : ℕ) : ℂ := Complex.exp (2 * Real.pi * Complex.I * (j : ℂ) / 6)
+
+/-- Ring vertex `m_j`, two thirds of the way to the midpoint of `ζ_j ζ_{j+1}`. -/
+def ringVertex (j : ℕ) : ℂ := (hexVertex j + hexVertex (j + 1)) / 3
+
+/-- The closed hexagon. -/
+def hexagon : Set ℂ := convexHull ℝ (Set.range fun j : Fin 6 => hexVertex j)
+
+def ringIdx (j : ℕ) : Fin 10 := ⟨1 + j % 6, by omega⟩
+
+def bdryIdx (j : ℕ) : Fin 10 := ⟨7 + j % 3, by omega⟩
+
+def rp2Facet (p : Fin 6 × Fin 3) : Finset (Fin 10) :=
+  if p.2.1 = 0 then {0, ringIdx p.1, ringIdx (p.1 + 1)}
+  else if p.2.1 = 1 then {bdryIdx p.1, bdryIdx (p.1 + 1), ringIdx p.1}
+  else {bdryIdx (p.1 + 1), ringIdx p.1, ringIdx (p.1 + 1)}
+
+def rp2Facets : Finset (Finset (Fin 10)) := Finset.univ.image rp2Facet
+
+def rp2Complex : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin 10)) :=
+  basisComplex 10 rp2Facets
+
+/-- Planar position of vertex `k` in facet `p` (the value off the facet is
+irrelevant). -/
+def rp2Corner (p : Fin 6 × Fin 3) (k : Fin 10) : ℂ :=
+  if k = 0 then 0
+  else if k = ringIdx p.1 then ringVertex p.1
+  else if k = ringIdx (p.1 + 1) then ringVertex (p.1 + 1)
+  else if k = bdryIdx p.1 ∧ p.2.1 = 1 then hexVertex p.1
+  else if k = bdryIdx (p.1 + 1) then hexVertex (p.1 + 1)
+  else 0
+
+/-- The affine map of facet `p` into the plane, in barycentric coordinates. -/
+def rp2Affine (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) : ℂ :=
+  ∑ k, (y k : ℂ) * rp2Corner p k
+
+def facetHull (p : Fin 6 × Fin 3) : Set (EuclideanSpace ℝ (Fin 10)) :=
+  convexHull ℝ ↑((rp2Facet p).image (basisVertex 10))
+
+/-- Radial map from the hexagon onto the round disk: rescale by the hexagon
+gauge. -/
+def hexToDisk (z : ℂ) : ℂ := (gauge hexagon z / ‖z‖) • z
+
+/-- Points outside the disk are sent to the centre; only used on the disk. -/
+def diskClamp (w : ℂ) : Surfaces.Disk :=
+  if h : ‖w‖ ≤ 1 then ⟨w, by simpa [Metric.mem_closedBall] using h⟩
+  else ⟨0, by simp [Metric.mem_closedBall]⟩
+
+/-- The characteristic map: on a facet containing `y`, go affinely to the
+hexagon, radially to the disk, then to the quotient. -/
+def rp2Map (y : rp2Complex.space) : RealProjectivePlane := by
+  classical
+  exact Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine
+    (if h : ∃ p, (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull p then Classical.choose h
+      else (0, 0)) y)))
+
+-- Stage 3: the radial map.
+lemma rp2_explicit_finite_model_aux_hex_norm (z : ℂ) : ‖hexToDisk z‖ = gauge hexagon z := by
+  by_cases hz : z = 0
+  · simp [hz, hexToDisk]
+  · have hn : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz
+    change ‖((gauge hexagon z / ‖z‖ : ℝ) : ℂ) * z‖ = gauge hexagon z
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (div_nonneg (gauge_nonneg _) (norm_nonneg z))]
+    exact div_mul_cancel₀ (gauge hexagon z) hn
+
+lemma rp2_explicit_finite_model_aux_hex_continuous_aux_neg (j : ℕ) :
+    hexVertex (j + 3) = -hexVertex j := by
+  unfold hexVertex
+  rw [show (2 * (Real.pi : ℂ) * Complex.I * ((j + 3 : ℕ) : ℂ) / 6) =
+      Real.pi * Complex.I +
+        2 * (Real.pi : ℂ) * Complex.I * (j : ℂ) / 6 by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_pi_mul_I]
+  ring_nf
+
+lemma rp2_explicit_finite_model_aux_hex_continuous_aux_nhds :
+    hexagon ∈ nhds (0 : ℂ) := by
+  have hsymm : -hexagon = hexagon := by
+    rw [hexagon, ← convexHull_neg]
+    congr 1
+    ext z
+    simp only [Set.mem_neg, Set.mem_range]
+    constructor
+    · rintro ⟨j, hj⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;>
+        simp_all [rp2_explicit_finite_model_aux_hex_continuous_aux_neg]
+    · rintro ⟨j, rfl⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;>
+        simp [rp2_explicit_finite_model_aux_hex_continuous_aux_neg]
+  have hspan : affineSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) = ⊤ := by
+    rw [AffineSubspace.affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty ℝ ℂ ℂ
+      (Set.range_nonempty _)]
+    apply top_unique
+    intro z hz
+    have h0 : hexVertex (0 : Fin 6) = 1 := by simp [hexVertex]
+    have h1 : hexVertex (1 : Fin 6) = 1 / 2 + (Real.sqrt 3 / 2) * Complex.I := by
+      unfold hexVertex
+      norm_num
+      rw [show 2 * (Real.pi : ℂ) * Complex.I / 6 =
+        (Real.pi / 3) * Complex.I by ring]
+      rw [show (Real.pi : ℂ) / 3 = ((Real.pi / 3 : ℝ) : ℂ) by norm_num]
+      rw [Complex.exp_ofReal_mul_I, Real.cos_pi_div_three, Real.sin_pi_div_three]
+      push_cast
+      ring
+    have h3 : hexVertex (3 : Fin 6) = -1 := by
+      rw [← h0]
+      exact rp2_explicit_finite_model_aux_hex_continuous_aux_neg 0
+    have ha := vsub_mem_vectorSpan ℝ
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (3 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    have hb := vsub_mem_vectorSpan ℝ
+      (show hexVertex (1 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    rw [h0, h3] at ha
+    rw [h0, h1] at hb
+    simp only [vsub_eq_sub] at ha hb
+    have hone : (1 : ℂ) ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (1 / 2 : ℝ) ha using 1
+      change (1 : ℂ) = ((1 / 2 : ℝ) : ℂ) * ((1 : ℂ) - -1)
+      norm_num
+    have hI : Complex.I ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      have hc := (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).sub_mem hb
+        ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+          (-1 / 2) hone)
+      have hs : Real.sqrt 3 ≠ 0 := ne_of_gt (Real.sqrt_pos.2 (by norm_num))
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (2 / Real.sqrt 3 : ℝ) hc using 1
+      change Complex.I = ((2 / Real.sqrt 3 : ℝ) : ℂ) *
+        ((1 : ℂ) / 2 + (Real.sqrt 3 : ℂ) / 2 * Complex.I - 1 -
+          ((-1 / 2 : ℝ) : ℂ) * 1)
+      push_cast
+      field_simp
+      ring
+    rw [← Complex.re_add_im z]
+    convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).add_mem
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.re hone)
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.im hI) using 1
+    change (z.re : ℂ) + (z.im : ℂ) * Complex.I =
+      (z.re : ℂ) * 1 + (z.im : ℂ) * Complex.I
+    ring
+  obtain ⟨x, hx⟩ : (interior hexagon).Nonempty := by
+    rw [hexagon, interior_convexHull_nonempty_iff_affineSpan_eq_top]
+    exact hspan
+  have hz : (0 : ℂ) ∈ interior hexagon := by
+    by_cases hx0 : x = 0
+    · simpa [hx0] using hx
+    · have hnx : -x ∈ hexagon := by
+        rw [← hsymm]
+        exact Set.neg_mem_neg.mpr (interior_subset hx)
+      have hm : midpoint ℝ x (-x) ∈ openSegment ℝ x (-x) :=
+        midpoint_mem_openSegment x (-x)
+      have hi := (convex_convexHull ℝ _).openSegment_interior_self_subset_interior hx hnx hm
+      simpa [midpoint_eq_smul_add, smul_eq_mul] using hi
+  exact mem_interior_iff_mem_nhds.mp hz
+
+lemma rp2_explicit_finite_model_aux_hex_continuous : Continuous hexToDisk := by
+  have heq : hexToDisk = gaugeRescale hexagon (Metric.ball (0 : ℂ) 1) := by
+    funext z
+    simp only [hexToDisk, gaugeRescale_def, gauge_unit_ball]
+    rfl
+  have h := continuous_gaugeRescale
+    (s := hexagon) (t := Metric.ball (0 : ℂ) 1)
+    (convex_convexHull ℝ _)
+    rp2_explicit_finite_model_aux_hex_continuous_aux_nhds
+    (convex_ball 0 1) (Metric.ball_mem_nhds 0 one_pos)
+    (NormedSpace.isVonNBounded_ball ℝ ℂ 1)
+  rw [heq]
+  exact h
+
+lemma rp2_explicit_finite_model_aux_hex_neg_vertex (j : ℕ) :
+    hexVertex (j + 3) = -hexVertex j := by
+  unfold hexVertex
+  rw [show (2 * (Real.pi : ℂ) * Complex.I * ((j + 3 : ℕ) : ℂ) / 6) =
+      Real.pi * Complex.I +
+        2 * (Real.pi : ℂ) * Complex.I * (j : ℂ) / 6 by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_pi_mul_I]
+  simp
+
+lemma rp2_explicit_finite_model_aux_hex_neg_mem {z : ℂ} (hz : z ∈ hexagon) :
+    -z ∈ hexagon := by
+  let V : Set ℂ := Set.range fun j : Fin 6 => hexVertex j
+  have hgen : ∀ z ∈ V, -z ∈ V := by
+    rintro _ ⟨j, rfl⟩
+    by_cases hj : j.1 < 3
+    · refine ⟨⟨j.1 + 3, by omega⟩, ?_⟩
+      change hexVertex (j.1 + 3) = -hexVertex j.1
+      exact rp2_explicit_finite_model_aux_hex_neg_vertex j.1
+    · refine ⟨⟨j.1 - 3, by omega⟩, ?_⟩
+      change hexVertex (j.1 - 3) = -hexVertex j.1
+      have heq : j.1 - 3 + 3 = j.1 := by omega
+      have h := rp2_explicit_finite_model_aux_hex_neg_vertex (j.1 - 3)
+      rw [heq] at h
+      rw [h, neg_neg]
+  have hrange : -(Set.range fun j : Fin 6 => hexVertex j) =
+      Set.range fun j : Fin 6 => hexVertex j := by
+    ext x
+    change (-x ∈ V ↔ x ∈ V)
+    constructor
+    · intro hx
+      simpa using hgen (-x) hx
+    · intro hx
+      exact hgen x hx
+  rw [hexagon, ← hrange, convexHull_neg]
+  exact neg_mem_neg.mpr hz
+
+lemma rp2_explicit_finite_model_aux_hex_neg (z : ℂ) : hexToDisk (-z) = -hexToDisk z := by
+  unfold hexToDisk
+  rw [gauge_neg (fun _ => rp2_explicit_finite_model_aux_hex_neg_mem), norm_neg]
+  simp
+
+lemma rp2_explicit_finite_model_aux_hex_injOn_aux_nhds : hexagon ∈ nhds (0 : ℂ) := by
+  have hsymm : -hexagon = hexagon := by
+    rw [hexagon, ← convexHull_neg]
+    congr 1
+    ext z
+    simp only [Set.mem_neg, Set.mem_range]
+    constructor
+    · rintro ⟨j, hj⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp_all [rp2_explicit_finite_model_aux_hex_neg_vertex]
+    · rintro ⟨j, rfl⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp [rp2_explicit_finite_model_aux_hex_neg_vertex]
+  have hspan : affineSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) = ⊤ := by
+    rw [AffineSubspace.affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty ℝ ℂ ℂ
+      (Set.range_nonempty _)]
+    apply top_unique
+    intro z hz
+    have h0 : hexVertex (0 : Fin 6) = 1 := by simp [hexVertex]
+    have h1 : hexVertex (1 : Fin 6) = 1 / 2 + (Real.sqrt 3 / 2) * Complex.I := by
+      unfold hexVertex
+      norm_num
+      rw [show 2 * (Real.pi : ℂ) * Complex.I / 6 = (Real.pi / 3) * Complex.I by ring]
+      rw [show (Real.pi : ℂ) / 3 = ((Real.pi / 3 : ℝ) : ℂ) by norm_num]
+      rw [Complex.exp_ofReal_mul_I, Real.cos_pi_div_three, Real.sin_pi_div_three]
+      push_cast
+      ring
+    have h3 : hexVertex (3 : Fin 6) = -1 := by
+      rw [← h0]
+      exact rp2_explicit_finite_model_aux_hex_neg_vertex 0
+    have ha := vsub_mem_vectorSpan ℝ
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (3 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    have hb := vsub_mem_vectorSpan ℝ
+      (show hexVertex (1 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    rw [h0, h3] at ha
+    rw [h0, h1] at hb
+    simp only [vsub_eq_sub] at ha hb
+    have hone : (1 : ℂ) ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (1 / 2 : ℝ) ha using 1
+      change (1 : ℂ) = ((1 / 2 : ℝ) : ℂ) * ((1 : ℂ) - -1)
+      norm_num
+    have hI : Complex.I ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      have hc := (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).sub_mem hb
+        ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+          (-1 / 2) hone)
+      have hs : Real.sqrt 3 ≠ 0 := ne_of_gt (Real.sqrt_pos.2 (by norm_num))
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (2 / Real.sqrt 3 : ℝ) hc using 1
+      change Complex.I = ((2 / Real.sqrt 3 : ℝ) : ℂ) *
+        ((1 : ℂ) / 2 + (Real.sqrt 3 : ℂ) / 2 * Complex.I - 1 -
+          ((-1 / 2 : ℝ) : ℂ) * 1)
+      push_cast
+      field_simp
+      ring
+    rw [← Complex.re_add_im z]
+    convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).add_mem
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.re hone)
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.im hI) using 1
+    change (z.re : ℂ) + (z.im : ℂ) * Complex.I =
+      (z.re : ℂ) * 1 + (z.im : ℂ) * Complex.I
+    ring
+  obtain ⟨x, hx⟩ : (interior hexagon).Nonempty := by
+    rw [hexagon, interior_convexHull_nonempty_iff_affineSpan_eq_top]
+    exact hspan
+  have hz : (0 : ℂ) ∈ interior hexagon := by
+    by_cases hx0 : x = 0
+    · simpa [hx0] using hx
+    · have hnx : -x ∈ hexagon := by
+        rw [← hsymm]
+        exact Set.neg_mem_neg.mpr (interior_subset hx)
+      have hm : midpoint ℝ x (-x) ∈ openSegment ℝ x (-x) :=
+        midpoint_mem_openSegment x (-x)
+      have hi := (convex_convexHull ℝ _).openSegment_interior_self_subset_interior hx hnx hm
+      simpa [midpoint_eq_smul_add, smul_eq_mul] using hi
+  exact mem_interior_iff_mem_nhds.mp hz
+
+lemma rp2_explicit_finite_model_aux_hex_injOn : Set.InjOn hexToDisk hexagon := by
+  have ha : Absorbent ℝ hexagon :=
+    absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_injOn_aux_nhds
+  have hb : Bornology.IsVonNBounded ℝ hexagon := by
+    apply NormedSpace.isVonNBounded_of_isBounded ℝ
+    rw [hexagon, isBounded_convexHull]
+    exact (Set.finite_range _).isBounded
+  intro x hx y hy hxy
+  have hgxy : gauge hexagon x = gauge hexagon y := by
+    rw [← rp2_explicit_finite_model_aux_hex_norm x,
+      ← rp2_explicit_finite_model_aux_hex_norm y, hxy]
+  by_cases hx0 : x = 0
+  · subst x
+    have : gauge hexagon y = 0 := by simpa using hgxy.symm
+    exact (gauge_eq_zero ha hb).mp this |>.symm
+  have hy0 : y ≠ 0 := by
+    intro hy0
+    subst y
+    exact hx0 ((gauge_eq_zero ha hb).mp (by simpa using hgxy))
+  have hg0 : gauge hexagon x ≠ 0 := ((gauge_pos ha hb).2 hx0).ne'
+  have hnx : ‖x‖ ≠ 0 := norm_ne_zero_iff.mpr hx0
+  have hny : ‖y‖ ≠ 0 := norm_ne_zero_iff.mpr hy0
+  have hdir : (‖x‖⁻¹ : ℂ) * x = (‖y‖⁻¹ : ℂ) * y := by
+    apply mul_left_cancel₀ (show (gauge hexagon x : ℂ) ≠ 0 by exact_mod_cast hg0)
+    simpa [hexToDisk, div_eq_mul_inv, hgxy, mul_assoc] using hxy
+  have hnorm : ‖x‖ = ‖y‖ := by
+    have hgmap := congrArg (gauge hexagon) hxy
+    change gauge hexagon ((gauge hexagon x / ‖x‖) • x) =
+      gauge hexagon ((gauge hexagon y / ‖y‖) • y) at hgmap
+    have hxmap : gauge hexagon ((gauge hexagon x / ‖x‖) • x) =
+        (gauge hexagon x / ‖x‖) • gauge hexagon x :=
+      gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ)
+        (div_nonneg (gauge_nonneg _) (norm_nonneg _)) x
+    have hymap : gauge hexagon ((gauge hexagon y / ‖y‖) • y) =
+        (gauge hexagon y / ‖y‖) • gauge hexagon y :=
+      gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ)
+        (div_nonneg (gauge_nonneg _) (norm_nonneg _)) y
+    rw [hxmap, hymap] at hgmap
+    simp only [smul_eq_mul, hgxy] at hgmap
+    field_simp [hnx, hny] at hgmap
+    have hgy0 : gauge hexagon y ≠ 0 := by simpa [hgxy] using hg0
+    exact (mul_left_cancel₀ (pow_ne_zero 2 hgy0) hgmap).symm
+  apply (mul_left_cancel₀ (show (‖x‖⁻¹ : ℂ) ≠ 0 by exact_mod_cast inv_ne_zero hnx))
+  simpa [hnorm] using hdir
+
+lemma rp2_explicit_finite_model_aux_hex_surj_aux_nhds : hexagon ∈ nhds (0 : ℂ) := by
+  have hsymm : -hexagon = hexagon := by
+    rw [hexagon, ← convexHull_neg]
+    congr 1
+    ext z
+    simp only [Set.mem_neg, Set.mem_range]
+    constructor
+    · rintro ⟨j, hj⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp_all [rp2_explicit_finite_model_aux_hex_neg_vertex]
+    · rintro ⟨j, rfl⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp [rp2_explicit_finite_model_aux_hex_neg_vertex]
+  have hspan : affineSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) = ⊤ := by
+    rw [AffineSubspace.affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty ℝ ℂ ℂ
+      (Set.range_nonempty _)]
+    apply top_unique
+    intro z hz
+    have h0 : hexVertex (0 : Fin 6) = 1 := by simp [hexVertex]
+    have h1 : hexVertex (1 : Fin 6) = 1 / 2 + (Real.sqrt 3 / 2) * Complex.I := by
+      unfold hexVertex
+      norm_num
+      rw [show 2 * (Real.pi : ℂ) * Complex.I / 6 = (Real.pi / 3) * Complex.I by ring]
+      rw [show (Real.pi : ℂ) / 3 = ((Real.pi / 3 : ℝ) : ℂ) by norm_num]
+      rw [Complex.exp_ofReal_mul_I, Real.cos_pi_div_three, Real.sin_pi_div_three]
+      push_cast
+      ring
+    have h3 : hexVertex (3 : Fin 6) = -1 := by
+      rw [← h0]
+      exact rp2_explicit_finite_model_aux_hex_neg_vertex 0
+    have ha := vsub_mem_vectorSpan ℝ
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (3 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    have hb := vsub_mem_vectorSpan ℝ
+      (show hexVertex (1 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    rw [h0, h3] at ha
+    rw [h0, h1] at hb
+    simp only [vsub_eq_sub] at ha hb
+    have hone : (1 : ℂ) ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (1 / 2 : ℝ) ha using 1
+      change (1 : ℂ) = ((1 / 2 : ℝ) : ℂ) * ((1 : ℂ) - -1)
+      norm_num
+    have hI : Complex.I ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      have hc := (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).sub_mem hb
+        ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+          (-1 / 2) hone)
+      have hs : Real.sqrt 3 ≠ 0 := ne_of_gt (Real.sqrt_pos.2 (by norm_num))
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (2 / Real.sqrt 3 : ℝ) hc using 1
+      change Complex.I = ((2 / Real.sqrt 3 : ℝ) : ℂ) *
+        ((1 : ℂ) / 2 + (Real.sqrt 3 : ℂ) / 2 * Complex.I - 1 -
+          ((-1 / 2 : ℝ) : ℂ) * 1)
+      push_cast
+      field_simp
+      ring
+    rw [← Complex.re_add_im z]
+    convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).add_mem
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.re hone)
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.im hI) using 1
+    change (z.re : ℂ) + (z.im : ℂ) * Complex.I =
+      (z.re : ℂ) * 1 + (z.im : ℂ) * Complex.I
+    ring
+  obtain ⟨x, hx⟩ : (interior hexagon).Nonempty := by
+    rw [hexagon, interior_convexHull_nonempty_iff_affineSpan_eq_top]
+    exact hspan
+  have hz : (0 : ℂ) ∈ interior hexagon := by
+    by_cases hx0 : x = 0
+    · simpa [hx0] using hx
+    · have hnx : -x ∈ hexagon := by
+        rw [← hsymm]
+        exact Set.neg_mem_neg.mpr (interior_subset hx)
+      have hm : midpoint ℝ x (-x) ∈ openSegment ℝ x (-x) :=
+        midpoint_mem_openSegment x (-x)
+      have hi := (convex_convexHull ℝ _).openSegment_interior_self_subset_interior hx hnx hm
+      simpa [midpoint_eq_smul_add, smul_eq_mul] using hi
+  exact mem_interior_iff_mem_nhds.mp hz
+
+lemma rp2_explicit_finite_model_aux_hex_surj (w : ℂ) (hw : ‖w‖ ≤ 1) : ∃ z ∈ hexagon, hexToDisk z = w := by
+  by_cases hw0 : w = 0
+  · subst w
+    refine ⟨0, ?_, by simp [hexToDisk]⟩
+    exact mem_of_mem_nhds rp2_explicit_finite_model_aux_hex_surj_aux_nhds
+  have ha : Absorbent ℝ hexagon :=
+    absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_surj_aux_nhds
+  have hb : Bornology.IsVonNBounded ℝ hexagon := by
+    apply NormedSpace.isVonNBounded_of_isBounded ℝ
+    rw [hexagon, isBounded_convexHull]
+    exact (Set.finite_range _).isBounded
+  have hgpos : 0 < gauge hexagon w := (gauge_pos ha hb).2 hw0
+  let a : ℝ := ‖w‖ / gauge hexagon w
+  let z : ℂ := a • w
+  have ha0 : 0 ≤ a := div_nonneg (norm_nonneg w) hgpos.le
+  have hgz : gauge hexagon z = ‖w‖ := by
+    have hg := gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ) ha0 w
+    calc
+      gauge hexagon z = a * gauge hexagon w := by
+        simpa [z, Complex.real_smul] using hg
+      _ = ‖w‖ := by
+        simp only [a]
+        exact div_mul_cancel₀ ‖w‖ hgpos.ne'
+  have hz : z ∈ hexagon := by
+    have hzcl : z ∈ closure hexagon :=
+      (gauge_le_one_iff_mem_closure (convex_convexHull ℝ _)
+        rp2_explicit_finite_model_aux_hex_surj_aux_nhds).mp (hgz.trans_le hw)
+    have hc : IsClosed hexagon := by
+      apply Set.Finite.isClosed_convexHull
+      exact Set.finite_range _
+    rwa [hc.closure_eq] at hzcl
+  refine ⟨z, hz, ?_⟩
+  have hnw : ‖w‖ ≠ 0 := norm_ne_zero_iff.mpr hw0
+  have hga : gauge hexagon w ≠ 0 := hgpos.ne'
+  have ha_ne : a ≠ 0 := div_ne_zero hnw hga
+  have hz0 : z ≠ 0 := smul_ne_zero ha_ne hw0
+  unfold hexToDisk
+  rw [hgz]
+  change ((‖w‖ / ‖z‖ : ℝ) : ℂ) * z = w
+  change ((‖w‖ / ‖(a : ℂ) * w‖ : ℝ) : ℂ) * ((a : ℂ) * w) = w
+  rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg ha0]
+  change ((‖w‖ / (a * ‖w‖) : ℝ) : ℂ) * ((a : ℂ) * w) = w
+  have hc : ‖w‖ / (a * ‖w‖) * a = 1 := by
+    field_simp
+  calc
+    _ = ((‖w‖ / (a * ‖w‖) * a : ℝ) : ℂ) * w := by
+      push_cast
+      ring
+    _ = w := by rw [hc]; simp
+
+/-- `gauge hexagon z ≤ 1` exactly on the hexagon (closed, convex, `0` inside). -/
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_convex :
+    Convex ℝ hexagon := by
+  exact convex_convexHull ℝ _
+
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_closed :
+    IsClosed hexagon := by
+  apply Set.Finite.isClosed_convexHull
+  exact Set.finite_range _
+
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_of_nhds
+    (h₀ : hexagon ∈ nhds (0 : ℂ)) (z : ℂ) :
+    gauge hexagon z ≤ 1 ↔ z ∈ hexagon := by
+  rw [gauge_le_one_iff_mem_closure
+    rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_convex h₀]
+  rw [rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_closed.closure_eq]
+
+/-- `0` is interior to the hexagon: e.g. `ball 0 (1/2)` lies in it (apothem
+`√3/2`); a point of the ball lies in a sector triangle `0 ζ_j ζ_{j+1}`, or use
+that the hexagon contains the convex hull of `±1, ±ζ_1` which contains a
+square around `0`. -/
+lemma rp2_explicit_finite_model_aux_hex_nhds_aux_neg (j : ℕ) :
+    hexVertex (j + 3) = -hexVertex j := by
+  rw [hexVertex, hexVertex]
+  push_cast
+  rw [show 2 * (Real.pi : ℂ) * Complex.I * ((j : ℂ) + 3) / 6 =
+      2 * Real.pi * Complex.I * (j : ℂ) / 6 + Real.pi * Complex.I by ring]
+  rw [Complex.exp_add, Complex.exp_pi_mul_I]
+  ring
+
+lemma rp2_explicit_finite_model_aux_hex_nhds : hexagon ∈ nhds (0 : ℂ) := by
+  have hsymm : -hexagon = hexagon := by
+    rw [hexagon, ← convexHull_neg]
+    congr 1
+    ext z
+    simp only [Set.mem_neg, Set.mem_range]
+    constructor
+    · rintro ⟨j, hj⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp_all [rp2_explicit_finite_model_aux_hex_nhds_aux_neg]
+    · rintro ⟨j, rfl⟩
+      refine ⟨⟨(j.1 + 3) % 6, Nat.mod_lt _ (by omega)⟩, ?_⟩
+      fin_cases j <;> simp [rp2_explicit_finite_model_aux_hex_nhds_aux_neg]
+  have hspan : affineSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) = ⊤ := by
+    rw [AffineSubspace.affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty ℝ ℂ ℂ
+      (Set.range_nonempty _)]
+    apply top_unique
+    intro z hz
+    have h0 : hexVertex (0 : Fin 6) = 1 := by
+      simp [hexVertex]
+    have h1 : hexVertex (1 : Fin 6) = 1 / 2 + (Real.sqrt 3 / 2) * Complex.I := by
+      unfold hexVertex
+      norm_num
+      rw [show 2 * (Real.pi : ℂ) * Complex.I / 6 = (Real.pi / 3) * Complex.I by ring]
+      rw [show (Real.pi : ℂ) / 3 = ((Real.pi / 3 : ℝ) : ℂ) by norm_num]
+      rw [Complex.exp_ofReal_mul_I]
+      rw [Real.cos_pi_div_three, Real.sin_pi_div_three]
+      push_cast
+      ring
+    have h3 : hexVertex (3 : Fin 6) = -1 := by
+      rw [← h0]
+      exact rp2_explicit_finite_model_aux_hex_nhds_aux_neg 0
+    have ha := vsub_mem_vectorSpan ℝ
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (3 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    have hb := vsub_mem_vectorSpan ℝ
+      (show hexVertex (1 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+      (show hexVertex (0 : Fin 6) ∈ Set.range (fun j : Fin 6 => hexVertex j) from ⟨_, rfl⟩)
+    rw [h0, h3] at ha
+    rw [h0, h1] at hb
+    simp only [vsub_eq_sub] at ha hb
+    have hone : (1 : ℂ) ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem (1 / 2 : ℝ) ha using 1
+      change (1 : ℂ) = ((1 / 2 : ℝ) : ℂ) * ((1 : ℂ) - -1)
+      norm_num
+    have hI : Complex.I ∈ vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j) := by
+      have hc := (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).sub_mem hb
+        ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+          (-1 / 2) hone)
+      have hs : Real.sqrt 3 ≠ 0 := ne_of_gt (Real.sqrt_pos.2 (by norm_num))
+      convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem
+        (2 / Real.sqrt 3 : ℝ) hc using 1
+      change Complex.I = ((2 / Real.sqrt 3 : ℝ) : ℂ) *
+        ((1 : ℂ) / 2 + (Real.sqrt 3 : ℂ) / 2 * Complex.I - 1 -
+          ((-1 / 2 : ℝ) : ℂ) * 1)
+      push_cast
+      field_simp
+      ring
+    rw [← Complex.re_add_im z]
+    convert (vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).add_mem
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.re hone)
+      ((vectorSpan ℝ (Set.range fun j : Fin 6 => hexVertex j)).smul_mem z.im hI) using 1
+    change (z.re : ℂ) + (z.im : ℂ) * Complex.I =
+      (z.re : ℂ) * 1 + (z.im : ℂ) * Complex.I
+    ring
+  obtain ⟨x, hx⟩ : (interior hexagon).Nonempty := by
+    rw [hexagon, interior_convexHull_nonempty_iff_affineSpan_eq_top]
+    exact hspan
+  have hz : (0 : ℂ) ∈ interior hexagon := by
+    by_cases hx0 : x = 0
+    · simpa [hx0] using hx
+    · have hnx : -x ∈ hexagon := by
+        rw [← hsymm]
+        exact Set.neg_mem_neg.mpr (interior_subset hx)
+      have hm : midpoint ℝ x (-x) ∈ openSegment ℝ x (-x) :=
+        midpoint_mem_openSegment x (-x)
+      have hi := (convex_convexHull ℝ _).openSegment_interior_self_subset_interior hx hnx hm
+      simpa [midpoint_eq_smul_add, smul_eq_mul] using hi
+  exact mem_interior_iff_mem_nhds.mp hz
+
+lemma rp2_explicit_finite_model_aux_hex_gauge_le_one (z : ℂ) : gauge hexagon z ≤ 1 ↔ z ∈ hexagon :=
+  rp2_explicit_finite_model_aux_hex_gauge_le_one_aux_of_nhds
+    rp2_explicit_finite_model_aux_hex_nhds z
+
+-- Stage 4: the facets.
+lemma rp2_explicit_finite_model_aux_cover (y : EuclideanSpace ℝ (Fin 10)) (hy : y ∈ rp2Complex.space) :
+    ∃ p, y ∈ facetHull p := by
+  classical
+  rw [Geometry.SimplicialComplex.mem_space_iff] at hy
+  obtain ⟨S, hS, hy⟩ := hy
+  have hSb : S ∈ basisFaces 10 rp2Facets := by
+    exact hS.1
+  obtain ⟨f, hf, hSf⟩ := hSb
+  obtain ⟨p, -, rfl⟩ := Finset.mem_image.mp hf
+  refine ⟨p, ?_⟩
+  exact convexHull_mono (by exact_mod_cast hSf) hy
+
+/-- Each corner of a facet lies in the hexagon (`0`, ring vertices, hexagon
+vertices; the hexagon contains its vertices and `0`, and is convex). -/
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (j : Fin 6) :
+    hexVertex j ∈ hexagon := by
+  exact subset_convexHull ℝ _ (Set.mem_range_self j)
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six :
+    hexVertex 6 ∈ hexagon := by
+  have h : hexVertex 6 = hexVertex 0 := by
+    unfold hexVertex
+    norm_num
+  rw [h]
+  exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 0
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero :
+    (0 : ℂ) ∈ hexagon := by
+  have h0 := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (0 : Fin 6)
+  have h3 := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (3 : Fin 6)
+  have hm := (convex_convexHull ℝ _).midpoint_mem h0 h3
+  rw [show hexVertex (3 : Fin 6) = -hexVertex (0 : Fin 6) by
+    exact rp2_explicit_finite_model_aux_hex_neg_vertex 0] at hm
+  simpa [midpoint_eq_smul_add, smul_eq_mul] using hm
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring (j : Fin 6) :
+    ringVertex j ∈ hexagon := by
+  have hj := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex j
+  have hj1 : hexVertex (j.1 + 1) ∈ hexagon := by
+    by_cases h : j.1 + 1 < 6
+    · exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex
+        ⟨j.1 + 1, h⟩
+    · have : j.1 + 1 = 6 := by omega
+      simpa [this] using
+        rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six
+  have hm := (convex_convexHull ℝ _).midpoint_mem hj hj1
+  have hs := (convex_convexHull ℝ _).smul_mem_of_zero_mem
+    rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero hm
+    (show (2 / 3 : ℝ) ∈ Set.Icc 0 1 by norm_num)
+  unfold ringVertex
+  convert hs using 1
+  simp only [midpoint_eq_smul_add, invOf_eq_inv]
+  rw [smul_smul]
+  norm_num [Complex.real_smul]
+  apply Complex.ext <;> simp [(· • ·), SMul.smul] <;> ring
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring_six :
+    ringVertex 6 ∈ hexagon := by
+  have h6 : hexVertex 6 = hexVertex 0 := by
+    unfold hexVertex
+    norm_num
+  have h7 : hexVertex 7 = hexVertex 1 := by
+    unfold hexVertex
+    norm_num only [Nat.cast_ofNat]
+    rw [show (2 * (Real.pi : ℂ) * Complex.I * 7 / 6) =
+        2 * Real.pi * Complex.I + 2 * Real.pi * Complex.I / 6 by ring]
+    rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]
+    congr 1 <;> ring
+  rw [ringVertex, h6, h7]
+  exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 0
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k ∈ rp2Facet p) :
+    rp2Corner p k ∈ hexagon := by
+  obtain ⟨i, t⟩ := p
+  fin_cases i
+  all_goals
+    unfold rp2Corner
+    split_ifs <;>
+      first
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 0
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 1
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 2
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 3
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 4
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 5
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring_six
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 0
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 1
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 2
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 3
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 4
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 5
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_basis (p : Fin 6 × Fin 3) (k : Fin 10) :
+    rp2Affine p (basisVertex 10 k) = rp2Corner p k := by
+  classical
+  unfold rp2Affine
+  rw [Finset.sum_eq_single k]
+  · simp [basisVertex]
+  · intro j _ hj
+    simp [basisVertex, EuclideanSpace.single_apply, hj]
+  · simp
+
+/-- `rp2Affine p` as an `ℝ`-linear map. -/
+def rp2AffineLinear (p : Fin 6 × Fin 3) : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ where
+  toFun := rp2Affine p
+  map_add' y z := by
+    simp [rp2Affine, add_mul, Finset.sum_add_distrib]
+  map_smul' r y := by
+    simp only [rp2Affine, Finset.smul_sum, PiLp.smul_apply, smul_eq_mul, Complex.ofReal_mul,
+      RingHom.id_apply, mul_assoc]
+    refine Finset.sum_congr rfl fun x _ => ?_
+    exact (Complex.real_smul (x := r) (z := _)).symm
+
+lemma rp2_explicit_finite_model_aux_affine_mem (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) : rp2Affine p y ∈ hexagon := by
+  classical
+  have hsub : facetHull p ⊆ rp2AffineLinear p ⁻¹' hexagon := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      change rp2Affine p (basisVertex 10 k) ∈ hexagon
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis]
+      exact rp2_explicit_finite_model_aux_affine_mem_aux_corner p k hk
+    · exact (convex_convexHull ℝ _).linear_preimage _
+  exact hsub hy
+
+/-- Two facets containing `y` give the same point of `RP²`: their planar
+positions agree, or (on a boundary edge) are antipodal boundary points. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_inter
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p') :
+    y ∈ convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) := by
+  exact rp2_explicit_finite_model_aux_basis_inter (rp2Facet p) (rp2Facet p') ⟨hy, hy'⟩
+
+lemma rp2_explicit_finite_model_aux_agree_aux_affine_eq
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hcorner : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      rp2Corner p k = rp2Corner p' k) :
+    rp2Affine p y = rp2Affine p' y := by
+  classical
+  have hinter := rp2_explicit_finite_model_aux_agree_aux_inter p p' y hy hy'
+  let L : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ :=
+    rp2AffineLinear p - rp2AffineLinear p'
+  have hsub : convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) ⊆ L.ker := by
+    apply convexHull_min
+    · rintro x ⟨hx, hx'⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+      have hinj : Function.Injective (basisVertex 10) := by
+        intro i j hij
+        have := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+        simpa [basisVertex, EuclideanSpace.single_apply] using this
+      have hkk : k = k' := hinj heq.symm
+      subst k'
+      change rp2Affine p (basisVertex 10 k) - rp2Affine p' (basisVertex 10 k) = 0
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis,
+        rp2_explicit_finite_model_aux_affine_mem_aux_basis, hcorner k hk hk']
+      simp
+    · exact L.ker.convex
+  have hz : L y = 0 := hsub hinter
+  change rp2Affine p y - rp2Affine p' y = 0 at hz
+  exact sub_eq_zero.mp hz
+
+/-- (E) Facet pairs: shared vertices get the same planar corner in both facets,
+or all shared vertices are boundary labels (`7 ≤ k`) placed antipodally
+(`ζ_{j+3} = -ζ_j`).  A finite check over the 18 × 18 facet pairs. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_cases_aux_period (j : ℕ) :
+    hexVertex (j + 6) = hexVertex j := by
+  unfold hexVertex
+  rw [show 2 * (Real.pi : ℂ) * Complex.I * ((j + 6 : ℕ) : ℂ) / 6 =
+      2 * Real.pi * Complex.I +
+        2 * Real.pi * Complex.I * (j : ℂ) / 6 by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I]
+  simp
+
+set_option maxHeartbeats 2000000 in
+lemma rp2_explicit_finite_model_aux_agree_aux_cases (p p' : Fin 6 × Fin 3) :
+    (∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → rp2Corner p k = rp2Corner p' k) ∨
+    (∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      7 ≤ k.1 ∧ rp2Corner p k = -rp2Corner p' k) := by
+  have hring : ringVertex 6 = ringVertex 0 := by
+    simp only [ringVertex]
+    rw [rp2_explicit_finite_model_aux_agree_aux_cases_aux_period 0,
+      rp2_explicit_finite_model_aux_agree_aux_cases_aux_period 1]
+  rcases p with ⟨i, j⟩
+  rcases p' with ⟨i', j'⟩
+  fin_cases i <;> fin_cases j <;> fin_cases i' <;> fin_cases j' <;>
+    simp [rp2Facet, rp2Corner, ringIdx, bdryIdx,
+      rp2_explicit_finite_model_aux_hex_neg_vertex, hring]
+
+/-- (B) Antipodal corners give antipodal images (as `_aux_affine_eq`, with the
+linear map `rp2AffineLinear p + rp2AffineLinear p'`). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_affine_neg
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hcorner : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      rp2Corner p k = -rp2Corner p' k) :
+    rp2Affine p y = -rp2Affine p' y := by
+  classical
+  have hinter : y ∈ convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) :=
+    rp2_explicit_finite_model_aux_basis_inter (rp2Facet p) (rp2Facet p') ⟨hy, hy'⟩
+  let L : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ :=
+    rp2AffineLinear p + rp2AffineLinear p'
+  have hsub : convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) ⊆ L.ker := by
+    apply convexHull_min
+    · rintro x ⟨hx, hx'⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+      have hinj : Function.Injective (basisVertex 10) := by
+        intro i j hij
+        have hij' := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+        simpa [basisVertex, EuclideanSpace.single_apply] using hij'
+      have hkk : k = k' := hinj heq.symm
+      subst k'
+      change rp2Affine p (basisVertex 10 k) + rp2Affine p' (basisVertex 10 k) = 0
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis,
+        rp2_explicit_finite_model_aux_affine_mem_aux_basis, hcorner k hk hk']
+      simp
+    · exact L.ker.convex
+  have hz : L y = 0 := hsub hinter
+  change rp2Affine p y + rp2Affine p' y = 0 at hz
+  exact eq_neg_of_add_eq_zero_left hz
+
+
+/-- (C) A point in two facets whose shared vertices are all boundary labels maps
+to the hexagon boundary: it lies on a boundary vertex or edge `ζ_j ζ_{j+1}`. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_shared_boundary
+    (p p' : Fin 6 × Fin 3)
+    (hlab : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → 7 ≤ k.1) :
+    (↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10)) ⊆
+      basisVertex 10 '' {k : Fin 10 | 7 ≤ k.1} := by
+  rintro x ⟨hx, hx'⟩
+  obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+  obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+  have hinj : Function.Injective (basisVertex 10) := by
+    intro i j hij
+    have hij' := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+    simpa [basisVertex, EuclideanSpace.single_apply] using hij'
+  have hkk : k = k' := hinj heq.symm
+  subst k'
+  exact ⟨k, hlab k hk hk', rfl⟩
+
+/-- Boundary-label corners of a facet are its two hexagon vertices `ζ_i, ζ_{i+1}`. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_corner_mem (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k ∈ rp2Facet p)
+    (h7 : 7 ≤ k.1) :
+    rp2Corner p k = hexVertex p.1 ∨ rp2Corner p k = hexVertex (p.1 + 1) := by
+  rcases p with ⟨i, j⟩
+  fin_cases i <;> fin_cases j <;> fin_cases k <;>
+    simp [rp2Facet, rp2Corner, ringIdx, bdryIdx] at hk h7 ⊢
+
+/-- Unit outer normal of the hexagon edge `ζ_j ζ_{j+1}`. -/
+def edgeNormal (j : ℕ) : ℂ := Complex.exp (Complex.I * (Real.pi * (2 * (j : ℂ) + 1) / 6))
+
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_edge_subset (j : ℕ) :
+    segment ℝ (hexVertex j) (hexVertex (j + 1)) ⊆ hexagon := by
+  have hver : ∀ n : ℕ, hexVertex n ∈ hexagon := by
+    intro n
+    induction n using Nat.strong_induction_on with
+    | h n ih =>
+        by_cases hn : n < 6
+        · exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex ⟨n, hn⟩
+        · have hn6 : 6 ≤ n := le_of_not_gt hn
+          have heq : n - 6 + 6 = n := Nat.sub_add_cancel hn6
+          rw [← heq, rp2_explicit_finite_model_aux_agree_aux_cases_aux_period]
+          exact ih (n - 6) (by omega)
+  exact (convex_convexHull ℝ _).segment_subset (hver j) (hver (j + 1))
+
+/-- The hexagon lies in the half-plane `Re (w · conj ν_j) ≤ cos (π/6)` (check the
+six vertices: the angle to `ν_j` is at least `π/6`; then convexity). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_period
+    (n : ℕ) : edgeNormal (n + 6) = edgeNormal n := by
+  unfold edgeNormal
+  rw [show Complex.I * (Real.pi * (2 * ((n + 6 : ℕ) : ℂ) + 1) / 6) =
+      2 * Real.pi * Complex.I +
+        Complex.I * (Real.pi * (2 * (n : ℂ) + 1) / 6) by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I]
+  simp
+
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_cos (m : ℤ) : Real.cos (Real.pi * (2 * m - 1) / 6) ≤ Real.cos (Real.pi / 6) := by
+  obtain ⟨q, r, hr0, hr6, rfl⟩ : ∃ q r : ℤ, 0 ≤ r ∧ r < 6 ∧ m = r + 6 * q :=
+    ⟨m / 6, m % 6, Int.emod_nonneg _ (by norm_num), Int.emod_lt_of_pos _ (by norm_num),
+      by omega⟩
+  have hper : Real.pi * (2 * ((r + 6 * q : ℤ) : ℝ) - 1) / 6 =
+      Real.pi * (2 * (r : ℝ) - 1) / 6 + q * (2 * Real.pi) := by push_cast; ring
+  rw [hper, Real.cos_add_int_mul_two_pi]
+  have hc : 0 < Real.cos (Real.pi / 6) := by rw [Real.cos_pi_div_six]; positivity
+  interval_cases r
+  · rw [show Real.pi * (2 * ((0 : ℤ) : ℝ) - 1) / 6 = -(Real.pi / 6) by push_cast; ring,
+      Real.cos_neg]
+  · rw [show Real.pi * (2 * ((1 : ℤ) : ℝ) - 1) / 6 = Real.pi / 6 by push_cast; ring]
+  · rw [show Real.pi * (2 * ((2 : ℤ) : ℝ) - 1) / 6 = Real.pi / 2 by push_cast; ring,
+      Real.cos_pi_div_two]; exact hc.le
+  · rw [show Real.pi * (2 * ((3 : ℤ) : ℝ) - 1) / 6 = Real.pi - Real.pi / 6 by push_cast; ring,
+      Real.cos_pi_sub]; linarith
+  · rw [show Real.pi * (2 * ((4 : ℤ) : ℝ) - 1) / 6 = Real.pi / 6 + Real.pi by push_cast; ring,
+      Real.cos_add_pi]; linarith
+  · rw [show Real.pi * (2 * ((5 : ℤ) : ℝ) - 1) / 6 = Real.pi / 2 + Real.pi by push_cast; ring,
+      Real.cos_add_pi, Real.cos_pi_div_two]; linarith
+
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_vertex (j k : ℕ) :
+    (hexVertex k * starRingEnd ℂ (edgeNormal j)).re ≤ Real.cos (Real.pi / 6) := by
+  have h1 : hexVertex k = Complex.exp (((2 * Real.pi * k / 6 : ℝ) : ℂ) * Complex.I) := by
+    unfold hexVertex; congr 1; push_cast; ring
+  have h2 : edgeNormal j = Complex.exp (((Real.pi * (2 * j + 1) / 6 : ℝ) : ℂ) * Complex.I) := by
+    unfold edgeNormal; congr 1; push_cast; ring
+  rw [h1, h2, Complex.mul_re, Complex.conj_re, Complex.conj_im, Complex.exp_ofReal_mul_I_re,
+    Complex.exp_ofReal_mul_I_re, Complex.exp_ofReal_mul_I_im, Complex.exp_ofReal_mul_I_im]
+  have := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_cos ((k : ℤ) - j)
+  rw [show Real.pi * (2 * (((k : ℤ) - j : ℤ) : ℝ) - 1) / 6 =
+      2 * Real.pi * k / 6 - Real.pi * (2 * j + 1) / 6 by push_cast; ring, Real.cos_sub] at this
+  linarith
+
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane (j : ℕ) (w : ℂ) (hw : w ∈ hexagon) :
+    (w * starRingEnd ℂ (edgeNormal j)).re ≤ Real.cos (Real.pi / 6) := by
+  have hlin : IsLinearMap ℝ fun w : ℂ => (w * starRingEnd ℂ (edgeNormal j)).re := by
+    constructor
+    · intro x y; simp [add_mul]
+    · intro c x; erw [Complex.real_smul]; simp [Complex.mul_re]; ring
+  have hconv := convex_halfSpace_le hlin (Real.cos (Real.pi / 6))
+  refine convexHull_min ?_ hconv hw
+  rintro _ ⟨k, rfl⟩
+  exact rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_vertex j k
+
+/-- Edge `j` lies on the boundary line of that half-plane. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line (j : ℕ) (z : ℂ)
+    (hz : z ∈ segment ℝ (hexVertex j) (hexVertex (j + 1))) :
+    (z * starRingEnd ℂ (edgeNormal j)).re = Real.cos (Real.pi / 6) := by
+  have hleft :
+      (hexVertex j * starRingEnd ℂ (edgeNormal j)).re =
+        Real.cos (Real.pi / 6) := by
+    rw [hexVertex, edgeNormal]
+    rw [← Complex.exp_conj, ← Complex.exp_add]
+    rw [Complex.exp_re]
+    congr 1
+    push_cast
+    rw [starRingEnd_apply, Complex.star_def]
+    simp only [map_mul, map_div₀, map_add, map_one, map_ofNat, map_natCast,
+      Complex.conj_ofReal, Complex.conj_I]
+    ring_nf
+    norm_num [Complex.mul_re, Complex.mul_im]
+  have hright :
+      (hexVertex (j + 1) * starRingEnd ℂ (edgeNormal j)).re =
+        Real.cos (Real.pi / 6) := by
+    rw [hexVertex, edgeNormal]
+    rw [← Complex.exp_conj, ← Complex.exp_add]
+    rw [Complex.exp_re]
+    congr 1
+    push_cast
+    rw [starRingEnd_apply, Complex.star_def]
+    simp only [map_mul, map_div₀, map_add, map_one, map_ofNat, map_natCast,
+      Complex.conj_ofReal, Complex.conj_I]
+    ring_nf
+    simp [Complex.mul_re, Complex.mul_im]
+  rcases hz with ⟨a, b, ha, hb, hab, rfl⟩
+  rw [add_mul, smul_mul_assoc, smul_mul_assoc, Complex.add_re,
+    Complex.smul_re, Complex.smul_re,
+    hleft, hright]
+  simp only [smul_eq_mul]
+  rw [← add_mul, hab, one_mul]
+
+/-- A linear functional bounded by `c` on the hexagon is bounded by
+`c · gauge` (the hexagon is absorbent, `_aux_hex_nhds`). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_gauge_ge (ν : ℂ) (c : ℝ) (hc : 0 < c)
+    (hbound : ∀ w ∈ hexagon, (w * starRingEnd ℂ ν).re ≤ c) (z : ℂ) :
+    (z * starRingEnd ℂ ν).re ≤ c * gauge hexagon z := by
+  by_cases hz : z = 0
+  · subst z
+    simp [gauge_zero, hc.le]
+  have ha : Absorbent ℝ hexagon :=
+    absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_nhds
+  have hb : Bornology.IsVonNBounded ℝ hexagon := by
+    apply NormedSpace.isVonNBounded_of_isBounded ℝ
+    rw [hexagon, isBounded_convexHull]
+    exact (Set.finite_range _).isBounded
+  have hg : 0 < gauge hexagon z := (gauge_pos ha hb).2 hz
+  let w : ℂ := ((gauge hexagon z)⁻¹ : ℝ) • z
+  have hgw : gauge hexagon w = 1 := by
+    have hh := gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ)
+      (inv_nonneg.2 hg.le) z
+    change gauge hexagon (((gauge hexagon z)⁻¹ : ℝ) • z) = 1
+    calc
+      _ = (gauge hexagon z)⁻¹ * gauge hexagon z := hh
+      _ = 1 := inv_mul_cancel₀ hg.ne'
+  have hw : w ∈ hexagon :=
+    (rp2_explicit_finite_model_aux_hex_gauge_le_one w).mp (by rw [hgw])
+  have h := hbound w hw
+  have hzw : gauge hexagon z • w = z := by
+    simp [w, smul_smul, hg.ne']
+  have hscale : (z * starRingEnd ℂ ν).re =
+      gauge hexagon z * (w * starRingEnd ℂ ν).re := by
+    conv_lhs => rw [← hzw]
+    simp [Complex.real_smul]
+    ring
+  rw [hscale]
+  nlinarith [mul_le_mul_of_nonneg_left h hg.le]
+
+/-- Points of a hexagon edge have gauge one. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment (j : ℕ) (z : ℂ)
+    (hz : z ∈ segment ℝ (hexVertex j) (hexVertex (j + 1))) : gauge hexagon z = 1 := by
+  have hc : 0 < Real.cos (Real.pi / 6) := by
+    apply Real.cos_pos_of_mem_Ioo; constructor <;> linarith [Real.pi_pos]
+  apply le_antisymm
+  · exact (rp2_explicit_finite_model_aux_hex_gauge_le_one z).2
+      (rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_edge_subset j hz)
+  · have h := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_gauge_ge (edgeNormal j) _ hc
+      (rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane j) z
+    rw [rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line j z hz] at h
+    nlinarith
+
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hlab : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → 7 ≤ k.1) :
+    gauge hexagon (rp2Affine p y) = 1 := by
+  classical
+  have hy2 := rp2_explicit_finite_model_aux_agree_aux_inter p p' y hy hy'
+  have hinj : Function.Injective (basisVertex 10) := by
+    intro i j hij
+    have := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+    simpa [basisVertex, EuclideanSpace.single_apply] using this
+  have hseg : convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) ⊆
+      rp2AffineLinear p ⁻¹' segment ℝ (hexVertex p.1) (hexVertex (p.1 + 1)) := by
+    apply convexHull_min
+    · rintro x ⟨hx, hx'⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+      have hkk : k' = k := hinj heq
+      subst hkk
+      change rp2Affine p (basisVertex 10 k') ∈ segment ℝ (hexVertex p.1) (hexVertex (p.1 + 1))
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis]
+      rcases rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_corner_mem p k' hk (hlab k' hk hk') with h | h <;> rw [h]
+      · exact left_mem_segment ℝ _ _
+      · exact right_mem_segment ℝ _ _
+    · exact (convex_segment _ _).linear_preimage _
+  exact rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment _ _ (hseg hy2)
+
+/-- (D) A hexagon boundary point and its antipode are identified in `RP²`
+(`_aux_hex_norm`, `_aux_hex_neg`, `rp2_t2Space_aux_boundary_rel`). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_antipode (z : ℂ) (hz : gauge hexagon z = 1) :
+    Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (-z))) =
+      Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk z)) := by
+  have hn : ‖hexToDisk z‖ = 1 :=
+    (rp2_explicit_finite_model_aux_hex_norm z).trans hz
+  have hnneg : ‖hexToDisk (-z)‖ = 1 := by
+    rw [rp2_explicit_finite_model_aux_hex_neg, norm_neg, hn]
+  apply Quotient.sound
+  apply rp2_t2Space_aux_boundary_rel
+  · change ‖((diskClamp (hexToDisk (-z)) : Surfaces.Disk) : ℂ)‖ = 1
+    simp [diskClamp, hnneg]
+  · change ((diskClamp (hexToDisk z) : Surfaces.Disk) : ℂ) =
+      -((diskClamp (hexToDisk (-z)) : Surfaces.Disk) : ℂ)
+    simp [diskClamp, hn.le,
+      rp2_explicit_finite_model_aux_hex_neg]
+
+lemma rp2_explicit_finite_model_aux_agree (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p') :
+    Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p y))) =
+      Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p' y))) := by
+  rcases rp2_explicit_finite_model_aux_agree_aux_cases p p' with h | h
+  · rw [rp2_explicit_finite_model_aux_agree_aux_affine_eq p p' y hy hy' h]
+  · have hneg := rp2_explicit_finite_model_aux_agree_aux_affine_neg p p' y hy hy' (fun k hk hk' => (h k hk hk').2)
+    have hg : gauge hexagon (rp2Affine p' y) = 1 := by
+      have hlab' : ∀ k, k ∈ rp2Facet p' → k ∈ rp2Facet p → 7 ≤ k.1 :=
+        fun k hk' hk => (h k hk hk').1
+      exact rp2_explicit_finite_model_aux_agree_aux_gauge_one p' p y hy' hy hlab'
+    rw [hneg]
+    exact rp2_explicit_finite_model_aux_agree_aux_antipode _ hg
+
+/-- Pasting over the 18 closed facet hulls (finite closed cover, `_agree`). -/
+lemma rp2_explicit_finite_model_aux_continuous : Continuous rp2Map := by
+  classical
+  let C : Fin 6 × Fin 3 → Set rp2Complex.space :=
+    fun p => {y | (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull p}
+  have hclosed : ∀ p, IsClosed (C p) := by
+    intro p
+    exact ((Finset.finite_toSet _).isCompact_convexHull ℝ).isClosed.preimage
+      continuous_subtype_val
+  have hcover : ⋃ p, C p = Set.univ := by
+    ext y
+    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+    exact rp2_explicit_finite_model_aux_cover y y.2
+  refine (locallyFinite_of_finite C).continuous hcover hclosed ?_
+  intro p
+  have hA : Continuous (rp2Affine p) := by
+    unfold rp2Affine
+    fun_prop
+  have hcomplex : Continuous fun y : rp2Complex.space =>
+      hexToDisk (rp2Affine p (y : EuclideanSpace ℝ (Fin 10))) :=
+    rp2_explicit_finite_model_aux_hex_continuous.comp
+      (hA.comp continuous_subtype_val)
+  have hclamp : ContinuousOn
+      (fun y : rp2Complex.space => diskClamp
+        (hexToDisk (rp2Affine p (y : EuclideanSpace ℝ (Fin 10))))) (C p) := by
+    rw [continuousOn_iff_continuous_restrict]
+    apply continuous_induced_rng.mpr
+    change Continuous (fun y : C p =>
+      ((diskClamp (hexToDisk (rp2Affine p
+        ((y : rp2Complex.space) : EuclideanSpace ℝ (Fin 10)))) : Surfaces.Disk) : ℂ))
+    have heq : (fun y : C p =>
+        ((diskClamp (hexToDisk (rp2Affine p
+          ((y : rp2Complex.space) : EuclideanSpace ℝ (Fin 10)))) : Surfaces.Disk) : ℂ)) =
+        fun y : C p => hexToDisk (rp2Affine p
+          ((y : rp2Complex.space) : EuclideanSpace ℝ (Fin 10))) := by
+      funext y
+      have hm := rp2_explicit_finite_model_aux_affine_mem p _ y.2
+      have hn : ‖hexToDisk (rp2Affine p
+          ((y : rp2Complex.space) : EuclideanSpace ℝ (Fin 10)))‖ ≤ 1 := by
+        rw [rp2_explicit_finite_model_aux_hex_norm]
+        exact (rp2_explicit_finite_model_aux_hex_gauge_le_one _).2 hm
+      simp [diskClamp, hn]
+    rw [heq]
+    exact hcomplex.comp continuous_subtype_val
+  apply ContinuousOn.congr
+    ((Surfaces.continuous_surfaceQuotient false 1).comp_continuousOn' hclamp)
+  intro y hy
+  have hex : ∃ q, (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull q :=
+    rp2_explicit_finite_model_aux_cover y y.2
+  unfold rp2Map
+  rw [dif_pos hex]
+  exact rp2_explicit_finite_model_aux_agree _ p _ (Classical.choose_spec hex) hy
+
+/-- The 18 planar triangles cover the hexagon. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_lift
+    (p : Fin 6 × Fin 3) (z : ℂ)
+    (hz : z ∈ convexHull ℝ (rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10)))) :
+    ∃ y, y ∈ facetHull p ∧ rp2Affine p y = z := by
+  classical
+  let L := rp2AffineLinear p
+  have himage : L '' (↑((rp2Facet p).image (basisVertex 10)) :
+      Set (EuclideanSpace ℝ (Fin 10))) =
+      rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10)) := by
+    ext w
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hy
+      refine ⟨k, hk, ?_⟩
+      exact (rp2_explicit_finite_model_aux_affine_mem_aux_basis p k).symm
+    · rintro ⟨k, hk, rfl⟩
+      refine ⟨basisVertex 10 k, Finset.mem_image.2 ⟨k, hk, rfl⟩, ?_⟩
+      exact rp2_explicit_finite_model_aux_affine_mem_aux_basis p k
+  rw [← himage, ← L.image_convexHull] at hz
+  obtain ⟨y, hy, hLy⟩ := hz
+  refine ⟨y, hy, ?_⟩
+  exact hLy
+
+/-- Planar corner sets of the three facet types at `i`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_sets (i : Fin 6) :
+    rp2Corner (i, 0) '' (↑(rp2Facet (i, 0)) : Set (Fin 10)) =
+        {0, ringVertex i, ringVertex (i + 1)} ∧
+    rp2Corner (i, 1) '' (↑(rp2Facet (i, 1)) : Set (Fin 10)) =
+        {hexVertex i, hexVertex (i + 1), ringVertex i} ∧
+    rp2Corner (i, 2) '' (↑(rp2Facet (i, 2)) : Set (Fin 10)) =
+        {hexVertex (i + 1), ringVertex i, ringVertex (i + 1)} := by
+  fin_cases i <;>
+    (constructor
+     · ext z
+       simp [rp2Facet, rp2Corner, ringIdx, bdryIdx, eq_comm]
+     · constructor <;> ext z <;>
+         simp [rp2Facet, rp2Corner, ringIdx, bdryIdx, eq_comm])
+
+/-- Every plane vector lies in one of the six sector cones. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone_aux_vertices :
+    hexVertex 0 = 1 ∧
+    hexVertex 1 = (1 / 2 : ℝ) + (Real.sqrt 3 / 2) * Complex.I ∧
+    hexVertex 2 = (-1 / 2 : ℝ) + (Real.sqrt 3 / 2) * Complex.I ∧
+    hexVertex 3 = -1 ∧
+    hexVertex 4 = (-1 / 2 : ℝ) - (Real.sqrt 3 / 2) * Complex.I ∧
+    hexVertex 5 = (1 / 2 : ℝ) - (Real.sqrt 3 / 2) * Complex.I ∧
+    hexVertex 6 = 1 := by
+  constructor
+  · simp [hexVertex]
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 1 / 6 =
+        (((Real.pi / 3 : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I, Real.cos_pi_div_three, Real.sin_pi_div_three]
+    push_cast
+    ring
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 2 / 6 =
+        (((2 * Real.pi / 3 : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I]
+    rw [show 2 * Real.pi / 3 = 2 * (Real.pi / 3) by ring,
+      Real.cos_two_mul, Real.sin_two_mul, Real.cos_pi_div_three,
+      Real.sin_pi_div_three]
+    push_cast
+    ring
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 3 / 6 =
+        (((Real.pi : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I]
+    simp
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 4 / 6 =
+        (((Real.pi + Real.pi / 3 : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I]
+    simp [Real.cos_add, Real.sin_add, Real.cos_pi_div_three,
+      Real.sin_pi_div_three]
+    ring
+  constructor
+  · rw [hexVertex]
+    norm_num only [Nat.cast_ofNat]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * 5 / 6 =
+        (((2 * Real.pi - Real.pi / 3 : ℝ) : ℂ) * Complex.I) by push_cast; ring]
+    rw [Complex.exp_ofReal_mul_I]
+    simp [Real.cos_sub, Real.sin_sub, Real.cos_pi_div_three,
+      Real.sin_pi_div_three]
+    ring
+  · simp [hexVertex]
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone (z : ℂ) :
+    ∃ j : Fin 6, ∃ α β : ℝ, 0 ≤ α ∧ 0 ≤ β ∧
+      z = (α : ℂ) * hexVertex j + (β : ℂ) * hexVertex (j + 1) := by
+  rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone_aux_vertices with
+    ⟨hv0, hv1, hv2, hv3, hv4, hv5, hv6⟩
+  have hs : 0 < Real.sqrt 3 := Real.sqrt_pos.2 (by norm_num)
+  by_cases hy : 0 ≤ z.im
+  · by_cases hx₀ : z.im / Real.sqrt 3 ≤ z.re
+    · refine ⟨0, z.re - z.im / Real.sqrt 3, 2 * z.im / Real.sqrt 3,
+        by linarith, by positivity, ?_⟩
+      norm_num [hv0, hv1]
+      apply Complex.ext <;> simp <;> field_simp <;> ring
+    · have hx₀' : z.re < z.im / Real.sqrt 3 := lt_of_not_ge hx₀
+      by_cases hx₁ : -(z.im / Real.sqrt 3) ≤ z.re
+      · refine ⟨1, z.re + z.im / Real.sqrt 3, z.im / Real.sqrt 3 - z.re,
+          by linarith, by linarith, ?_⟩
+        norm_num [hv1, hv2]
+        apply Complex.ext <;> simp <;> field_simp <;> ring
+      · have hx₁' : z.re < -(z.im / Real.sqrt 3) := lt_of_not_ge hx₁
+        refine ⟨2, 2 * z.im / Real.sqrt 3, -z.re - z.im / Real.sqrt 3,
+          by positivity, by linarith, ?_⟩
+        norm_num [hv2, hv3]
+        apply Complex.ext <;> simp <;> field_simp <;> ring
+  · have hy' : z.im < 0 := lt_of_not_ge hy
+    let q : ℝ := -z.im / Real.sqrt 3
+    have hq : 0 ≤ q := by
+      dsimp [q]
+      exact div_nonneg (neg_nonneg.2 hy'.le) hs.le
+    by_cases hx₅ : q ≤ z.re
+    · refine ⟨5, 2 * q, z.re - q, by positivity, by linarith, ?_⟩
+      norm_num [hv5, hv6]
+      apply Complex.ext <;> simp [q] <;> field_simp <;> ring
+    · have hx₅' : z.re < q := lt_of_not_ge hx₅
+      by_cases hx₄ : -q ≤ z.re
+      · refine ⟨4, q - z.re, q + z.re, by linarith, by linarith, ?_⟩
+        norm_num [hv4, hv5]
+        apply Complex.ext <;> simp [q] <;> field_simp <;> ring
+      · have hx₄' : z.re < -q := lt_of_not_ge hx₄
+        refine ⟨3, -z.re - q, 2 * q, by linarith, by positivity, ?_⟩
+        norm_num [hv3, hv4]
+        apply Complex.ext <;> simp [q] <;> field_simp <;> ring
+
+/-- Generic: `α a + β b` with `α, β ≥ 0`, `α + β ≤ 1` lies in the triangle `0 a b`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_triangle (a b : ℂ) (α β : ℝ) (hα : 0 ≤ α) (hβ : 0 ≤ β) (hs : α + β ≤ 1) :
+    (α : ℂ) * a + (β : ℂ) * b ∈ convexHull ℝ {0, a, b} := by
+  let w : Fin 3 → ℝ := fun i =>
+    if i = 0 then 1 - α - β else if i = 1 then α else β
+  let v : Fin 3 → ℂ := fun i =>
+    if i = 0 then 0 else if i = 1 then a else b
+  have h21 : (2 : Fin 3) ≠ 1 := by decide
+  apply mem_convexHull_of_exists_fintype w v
+  · intro i
+    fin_cases i <;> simp [w] <;> linarith
+  · norm_num [Fin.sum_univ_succ, w, h21]
+  · intro i
+    fin_cases i <;> simp [v]
+  · norm_num [Fin.sum_univ_succ, w, v, h21]
+    rfl
+
+/-- The hexagon is the fan of its six sector triangles `0 ζ_j ζ_{j+1}`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan (z : ℂ) (hz : z ∈ hexagon) :
+    ∃ j : Fin 6, z ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} := by
+  obtain ⟨j, α, β, hα, hβ, rfl⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_cone z
+  refine ⟨j, rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan_aux_triangle _ _ α β hα hβ ?_⟩
+  have hc : 0 < Real.cos (Real.pi / 6) := by
+    apply Real.cos_pos_of_mem_Ioo; constructor <;> linarith [Real.pi_pos]
+  have h := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane j _ hz
+  have h1 := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line j (hexVertex j) (left_mem_segment ℝ _ _)
+  have h2 := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line j (hexVertex (j + 1)) (right_mem_segment ℝ _ _)
+  have hlin : (((α : ℂ) * hexVertex j + (β : ℂ) * hexVertex (j + 1)) *
+      starRingEnd ℂ (edgeNormal j)).re =
+      α * (hexVertex j * starRingEnd ℂ (edgeNormal j)).re +
+        β * (hexVertex (j + 1) * starRingEnd ℂ (edgeNormal j)).re := by
+    rw [add_mul, Complex.add_re, mul_assoc, mul_assoc, Complex.re_ofReal_mul,
+      Complex.re_ofReal_mul]
+  rw [hlin, h1, h2] at h
+  nlinarith
+
+/-- `m_j` is the centroid of the sector triangle `0 ζ_j ζ_{j+1}`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_centroid (j : ℕ) :
+    ringVertex j ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} := by
+  have h0 : (0 : ℂ) ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} :=
+    subset_convexHull ℝ _ (by simp)
+  have hj : hexVertex j ∈ convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} :=
+    subset_convexHull ℝ _ (by simp)
+  have hj1 : hexVertex (j + 1) ∈
+      convexHull ℝ {0, hexVertex j, hexVertex (j + 1)} :=
+    subset_convexHull ℝ _ (by simp)
+  have hm := (convex_convexHull ℝ _).midpoint_mem hj hj1
+  have hs := (convex_convexHull ℝ _).smul_mem_of_zero_mem h0 hm
+    (show (2 / 3 : ℝ) ∈ Set.Icc 0 1 by norm_num)
+  unfold ringVertex
+  convert hs using 1
+  simp only [midpoint_eq_smul_add, invOf_eq_inv]
+  rw [smul_smul]
+  norm_num [Complex.real_smul]
+  apply Complex.ext <;> simp [(· • ·), SMul.smul] <;> ring
+
+/-- The diagonals `0 ζ_{j+1}` and `m_j m_{j+1}` meet (at `ζ_{j+1} / 2`). -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal_aux_rec
+    (j : ℕ) :
+    hexVertex j + hexVertex (j + 2) = hexVertex (j + 1) := by
+  let w : ℂ := Complex.exp ((Real.pi / 3 : ℝ) * Complex.I)
+  have hw : w = (1 / 2 : ℝ) + (Real.sqrt 3 / 2 : ℝ) * Complex.I := by
+    simp [w, Complex.exp_ofReal_mul_I, Real.cos_pi_div_three,
+      Real.sin_pi_div_three]
+  have hwpoly : 1 + w ^ 2 = w := by
+    rw [hw]
+    have hs : (Real.sqrt 3) ^ 2 = 3 := Real.sq_sqrt (by norm_num)
+    push_cast
+    apply Complex.ext <;>
+      simp [pow_two, Complex.mul_re, Complex.mul_im] <;> nlinarith
+  have hv (n : ℕ) : hexVertex n = w ^ n := by
+    unfold hexVertex
+    rw [← Complex.exp_nat_mul]
+    congr 1
+    simp [w]
+    push_cast
+    ring
+  rw [hv j, hv (j + 1), hv (j + 2), pow_add, pow_add]
+  simp only [pow_one]
+  calc
+    w ^ j + w ^ j * w ^ 2 = w ^ j * (1 + w ^ 2) := by ring
+    _ = w ^ j * w := by rw [hwpoly]
+    _ = w ^ j * w := rfl
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal (j : ℕ) :
+    (segment ℝ 0 (hexVertex (j + 1)) ∩ segment ℝ (ringVertex j) (ringVertex (j + 1))).Nonempty := by
+  refine ⟨midpoint ℝ 0 (hexVertex (j + 1)), midpoint_mem_segment _ _, ?_⟩
+  have hmid : midpoint ℝ (ringVertex j) (ringVertex (j + 1)) =
+      midpoint ℝ 0 (hexVertex (j + 1)) := by
+    unfold ringVertex
+    rw [midpoint_eq_smul_add, midpoint_eq_smul_add]
+    have hrec :=
+      rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal_aux_rec j
+    rw [show j + 1 + 1 = j + 2 by omega]
+    congr 1
+    linear_combination (1 / 3 : ℂ) * hrec
+  rw [← hmid]
+  exact midpoint_mem_segment _ _
+
+/-- Generic: a triangle is covered by the three triangles at any of its points. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_mem
+    (p₀ p₁ p₂ x : ℂ) (u₀ u₁ u₂ : ℝ) (h₀ : 0 ≤ u₀) (h₁ : 0 ≤ u₁) (h₂ : 0 ≤ u₂)
+    (hs : u₀ + u₁ + u₂ = 1)
+    (hx : (u₀ : ℂ) * p₀ + (u₁ : ℂ) * p₁ + (u₂ : ℂ) * p₂ = x) :
+    x ∈ convexHull ℝ {p₀, p₁, p₂} := by
+  let w : Fin 3 → ℝ := ![u₀, u₁, u₂]
+  let z : Fin 3 → ℂ := ![p₀, p₁, p₂]
+  apply mem_convexHull_of_exists_fintype w z
+  · intro i
+    fin_cases i <;> simp [w, h₀, h₁, h₂]
+  · simpa [w, Fin.sum_univ_succ, add_assoc] using hs
+  · intro i
+    fin_cases i <;> simp [z]
+  · simpa [w, z, Fin.sum_univ_succ, Complex.real_smul, add_assoc] using hx
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coords (a b c x : ℂ) (hx : x ∈ convexHull ℝ {a, b, c}) :
+    ∃ u₀ u₁ u₂ : ℝ, 0 ≤ u₀ ∧ 0 ≤ u₁ ∧ 0 ≤ u₂ ∧ u₀ + u₁ + u₂ = 1 ∧
+      (u₀ : ℂ) * a + (u₁ : ℂ) * b + (u₂ : ℂ) * c = x := by
+  rw [← convexJoin_singleton_segment, mem_convexJoin] at hx
+  obtain ⟨a', ha', y, ⟨s, t, hs, ht, hst, rfl⟩, ⟨α, β, hα, hβ, hαβ, rfl⟩⟩ := hx
+  rw [mem_singleton_iff] at ha'
+  subst ha'
+  refine ⟨α, β * s, β * t, hα, mul_nonneg hβ hs, mul_nonneg hβ ht, ?_, ?_⟩
+  · linear_combination hαβ + β * hst
+  · simp only [smul_add, smul_smul]
+    erw [Complex.real_smul, Complex.real_smul, Complex.real_smul]
+    push_cast; ring
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef (t xj qj : ℝ) (hx : 0 ≤ xj) (hq : 0 ≤ qj) (h : 0 < qj → t ≤ xj / qj) :
+    0 ≤ xj - t * qj := by
+  rcases hq.lt_or_eq with h' | h'
+  · have := (le_div_iff₀ h').1 (h h'); linarith
+  · subst h'; simpa using hx
+
+/-- Generic: a point `q` of a triangle splits it into the three triangles obtained by
+replacing one vertex with `q` (minimum-ratio barycentric argument). -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split (a b c q : ℂ) (hq : q ∈ convexHull ℝ {a, b, c}) :
+    convexHull ℝ {a, b, c} ⊆
+      convexHull ℝ {q, b, c} ∪ convexHull ℝ {a, q, c} ∪ convexHull ℝ {a, b, q} := by
+  intro x hx
+  obtain ⟨x₀, x₁, x₂, hx₀, hx₁, hx₂, hxs, rfl⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coords a b c x hx
+  obtain ⟨q₀, q₁, q₂, hq₀, hq₁, hq₂, hqs, rfl⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coords a b c q hq
+  -- An index `i` with `qᵢ > 0` minimising `xᵢ / qᵢ`.
+  have key : (0 < q₀ ∧ (0 < q₁ → x₀ / q₀ ≤ x₁ / q₁) ∧ (0 < q₂ → x₀ / q₀ ≤ x₂ / q₂)) ∨
+      (0 < q₁ ∧ (0 < q₀ → x₁ / q₁ ≤ x₀ / q₀) ∧ (0 < q₂ → x₁ / q₁ ≤ x₂ / q₂)) ∨
+      (0 < q₂ ∧ (0 < q₀ → x₂ / q₂ ≤ x₀ / q₀) ∧ (0 < q₁ → x₂ / q₂ ≤ x₁ / q₁)) := by
+    have e01 := le_total (x₀ / q₀) (x₁ / q₁)
+    have e02 := le_total (x₀ / q₀) (x₂ / q₂)
+    have e12 := le_total (x₁ / q₁) (x₂ / q₂)
+    rcases hq₀.lt_or_eq with h0 | h0 <;> rcases hq₁.lt_or_eq with h1 | h1 <;>
+      rcases hq₂.lt_or_eq with h2 | h2 <;>
+      rcases e01 with e01 | e01 <;> rcases e02 with e02 | e02 <;>
+      rcases e12 with e12 | e12 <;>
+      first
+      | exact Or.inl ⟨h0, fun _ => by linarith, fun _ => by linarith⟩
+      | exact Or.inr (Or.inl ⟨h1, fun _ => by linarith, fun _ => by linarith⟩)
+      | exact Or.inr (Or.inr ⟨h2, fun _ => by linarith, fun _ => by linarith⟩)
+      | (exfalso; linarith)
+  rcases key with ⟨hp, k1, k2⟩ | ⟨hp, k0, k2⟩ | ⟨hp, k0, k1⟩
+  · left; left
+    set t := x₀ / q₀
+    have ht : t * q₀ = x₀ := div_mul_cancel₀ _ hp.ne'
+    apply rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_mem _ _ _ _ t (x₁ - t * q₁) (x₂ - t * q₂) (div_nonneg hx₀ hq₀)
+      (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₁ hq₁ k1) (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₂ hq₂ k2)
+    · linear_combination ht + hxs - t * hqs
+    · have htc : (t : ℂ) * q₀ = x₀ := by exact_mod_cast ht
+      push_cast; linear_combination htc * a
+  · left; right
+    set t := x₁ / q₁
+    have ht : t * q₁ = x₁ := div_mul_cancel₀ _ hp.ne'
+    apply rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_mem _ _ _ _ (x₀ - t * q₀) t (x₂ - t * q₂) (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₀ hq₀ k0)
+      (div_nonneg hx₁ hq₁) (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₂ hq₂ k2)
+    · linear_combination ht + hxs - t * hqs
+    · have htc : (t : ℂ) * q₁ = x₁ := by exact_mod_cast ht
+      push_cast; linear_combination htc * b
+  · right
+    set t := x₂ / q₂
+    have ht : t * q₂ = x₂ := div_mul_cancel₀ _ hp.ne'
+    apply rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_mem _ _ _ _ (x₀ - t * q₀) (x₁ - t * q₁) t (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₀ hq₀ k0)
+      (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₁ hq₁ k1) (div_nonneg hx₂ hq₂)
+    · linear_combination ht + hxs - t * hqs
+    · have htc : (t : ℂ) * q₂ = x₂ := by exact_mod_cast ht
+      push_cast; linear_combination htc * c
+
+/-- Generic: a quadrilateral whose diagonals meet has both triangulations
+covering the same set. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_segment
+    (a c q : ℂ) (hq : q ∈ segment ℝ a c) :
+    segment ℝ a c ⊆ segment ℝ a q ∪ segment ℝ q c := by
+  intro x hx
+  rcases eq_or_ne x a with rfl | hxa
+  · exact Or.inl (left_mem_segment ℝ _ _)
+  rcases eq_or_ne x c with rfl | hxc
+  · exact Or.inr (right_mem_segment ℝ _ _)
+  have hxopen : x ∈ openSegment ℝ a c :=
+    mem_openSegment_of_ne_left_right hxa.symm hxc.symm hx
+  have hqline : q ∈ Set.range (AffineMap.lineMap a c : ℝ → ℂ) := by
+    rcases hq with ⟨u, v, hu, hv, huv, rfl⟩
+    refine ⟨v, ?_⟩
+    rw [AffineMap.lineMap_apply_module]
+    rw [show 1 - v = u by linarith]
+    rfl
+  have hx' := openSegment_subset_union a c hqline hxopen
+  rcases hx' with rfl | hx'
+  · exact Or.inl (right_mem_segment ℝ _ _)
+  · rcases hx' with hx' | hx'
+    · exact Or.inl (openSegment_subset_segment ℝ _ _ hx')
+    · exact Or.inr (openSegment_subset_segment ℝ _ _ hx')
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_triangle
+    (a b c q : ℂ) (hq : q ∈ segment ℝ a c) :
+    convexHull ℝ {a, b, c} ⊆
+      convexHull ℝ {a, b, q} ∪ convexHull ℝ {q, b, c} := by
+  have habc : ({a, b, c} : Set ℂ) = {b, a, c} := by
+    ext x; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; aesop
+  have habq : ({a, b, q} : Set ℂ) = {b, a, q} := by
+    ext x; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; aesop
+  have hqbc : ({q, b, c} : Set ℂ) = {b, q, c} := by
+    ext x; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; aesop
+  rw [habc, habq, hqbc]
+  rw [← convexJoin_singleton_segment b a c]
+  rintro x hx
+  rw [mem_convexJoin] at hx
+  rcases hx with ⟨y, hy, z, hz, hxz⟩
+  simp only [Set.mem_singleton_iff] at hy
+  subst y
+  rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_segment
+      a c q hq hz with hz | hz
+  · left
+    rw [← convexJoin_singleton_segment b a q]
+    exact segment_subset_convexJoin (by simp) hz hxz
+  · right
+    rw [← convexJoin_singleton_segment b q c]
+    exact segment_subset_convexJoin (by simp) hz hxz
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split (a b c d : ℂ)
+    (hdiag : (segment ℝ a c ∩ segment ℝ b d).Nonempty) :
+    convexHull ℝ {a, b, c} ∪ convexHull ℝ {a, c, d} ⊆
+      convexHull ℝ {a, b, d} ∪ convexHull ℝ {b, c, d} := by
+  rcases hdiag with ⟨q, hqac, hqbd⟩
+  have hqab : q ∈ convexHull ℝ {a, b, d} :=
+    segment_subset_convexHull (by simp) (by simp) hqbd
+  have hqbc : q ∈ convexHull ℝ {b, c, d} :=
+    segment_subset_convexHull (by simp) (by simp) hqbd
+  rintro x (hx | hx)
+  · rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_triangle
+      a b c q hqac hx with hx | hx
+    · left
+      apply convexHull_min _ (convex_convexHull ℝ _) hx
+      intro y hy
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      rcases hy with rfl | rfl | rfl
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact hqab
+    · right
+      apply convexHull_min _ (convex_convexHull ℝ _) hx
+      intro y hy
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      rcases hy with rfl | rfl | rfl
+      · exact hqbc
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact subset_convexHull ℝ _ (by simp)
+  · rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split_aux_triangle
+      a d c q hqac (by
+        have hacd : ({a, d, c} : Set ℂ) = {a, c, d} := by
+          ext y; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; aesop
+        rw [hacd]
+        exact hx) with hx | hx
+    · left
+      apply convexHull_min _ (convex_convexHull ℝ _) hx
+      intro y hy
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      rcases hy with rfl | rfl | rfl
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact hqab
+    · right
+      apply convexHull_min _ (convex_convexHull ℝ _) hx
+      intro y hy
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      rcases hy with rfl | rfl | rfl
+      · exact hqbc
+      · exact subset_convexHull ℝ _ (by simp)
+      · exact subset_convexHull ℝ _ (by simp)
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod {a b : ℕ} (h : a % 6 = b % 6) : hexVertex a = hexVertex b := by
+  have key : ∀ n : ℕ, hexVertex n = hexVertex (n % 6) := by
+    intro n
+    unfold hexVertex
+    conv_lhs => rw [← Nat.mod_add_div n 6]
+    rw [show 2 * (Real.pi : ℂ) * Complex.I * ((n % 6 + 6 * (n / 6) : ℕ) : ℂ) / 6 =
+        2 * Real.pi * Complex.I * ((n % 6 : ℕ) : ℂ) / 6 +
+          ((n / 6 : ℕ) : ℂ) * (2 * Real.pi * Complex.I) by push_cast; ring,
+      Complex.exp_add, Complex.exp_nat_mul_two_pi_mul_I, mul_one]
+  rw [key a, key b, h]
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_succ (i : Fin 6) :
+    hexVertex ((i + 1 : Fin 6) : ℕ) = hexVertex ((i : ℕ) + 1) ∧
+      ringVertex ((i + 1 : Fin 6) : ℕ) = ringVertex ((i : ℕ) + 1) := by
+  have hv : ((i + 1 : Fin 6) : ℕ) = ((i : ℕ) + 1) % 6 := by simp [Fin.val_add]
+  have h1 : hexVertex ((i + 1 : Fin 6) : ℕ) = hexVertex ((i : ℕ) + 1) :=
+    rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod (by rw [hv]; omega)
+  refine ⟨h1, ?_⟩
+  unfold ringVertex
+  rw [h1, rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod (a := ((i + 1 : Fin 6) : ℕ) + 1) (b := (i : ℕ) + 1 + 1)
+    (by rw [hv]; omega)]
+
+/-- The quadrilateral `0, m_i, ζ_{i+1}, m_{i+1}` is covered by facets `(i,0)` and `(i,2)`. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad (i : Fin 6) (z : ℂ)
+    (hz : z ∈ convexHull ℝ {0, ringVertex i, hexVertex ((i : ℕ) + 1)} ∪
+      convexHull ℝ {0, hexVertex ((i : ℕ) + 1), ringVertex ((i : ℕ) + 1)}) :
+    ∃ p, z ∈ convexHull ℝ (rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10))) := by
+  obtain ⟨hs0, -, hs2⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_sets i
+  rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad_split _ _ _ _ (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal i) hz with h | h
+  · exact ⟨(i, 0), by rw [hs0]; exact h⟩
+  · refine ⟨(i, 2), ?_⟩
+    rw [hs2]; convert h using 2; ext; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; tauto
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling
+    (z : ℂ) (hz : z ∈ hexagon) :
+    ∃ p, z ∈ convexHull ℝ (rp2Corner p '' (↑(rp2Facet p) : Set (Fin 10))) := by
+  obtain ⟨j, hj⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_fan z hz
+  rcases rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split _ _ _ _ (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_centroid j) hj with (h | h) | h
+  · -- facet `(j,1)`
+    obtain ⟨-, hs1, -⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_sets j
+    refine ⟨(j, 1), ?_⟩
+    rw [hs1]; convert h using 2; ext; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; tauto
+  · exact rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad j z (Or.inl h)
+  · -- the quadrilateral of sector `j - 1`
+    obtain ⟨hζ', hm'⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_succ (j - 1)
+    rw [sub_add_cancel] at hζ' hm'
+    refine rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_quad (j - 1) z (Or.inr ?_)
+    rw [← hζ', ← hm']; convert h using 2
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar (z : ℂ) (hz : z ∈ hexagon) :
+    ∃ p y, y ∈ facetHull p ∧ rp2Affine p y = z := by
+  obtain ⟨p, hp⟩ :=
+    rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling z hz
+  obtain ⟨y, hy, hAy⟩ :=
+    rp2_explicit_finite_model_aux_surjective_aux_planar_aux_lift p z hp
+  exact ⟨p, y, hy, hAy⟩
+
+lemma rp2_explicit_finite_model_aux_facetHull_subset (p : Fin 6 × Fin 3) : facetHull p ⊆ rp2Complex.space := by
+  intro y hy
+  refine Geometry.SimplicialComplex.convexHull_subset_space (K := rp2Complex) ?_ hy
+  refine ⟨⟨rp2Facet p, Finset.mem_image_of_mem _ (Finset.mem_univ _), Finset.Subset.refl _⟩, ?_⟩
+  simp only [Set.mem_singleton_iff, Finset.image_eq_empty]
+  intro h
+  have : (0 : Fin 10) ∈ rp2Facet p ∨ ringIdx p.1 ∈ rp2Facet p := by
+    unfold rp2Facet; split_ifs <;> simp
+  rcases this with h0 | h0 <;> simp [h] at h0
+
+/-- `rp2Map` may be evaluated on any facet containing the point (`_aux_agree`). -/
+lemma rp2_explicit_finite_model_aux_rp2Map_eq (y : rp2Complex.space) (p : Fin 6 × Fin 3)
+    (hp : (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull p) :
+    rp2Map y = Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p y))) := by
+  classical
+  have hex : ∃ p, (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull p := ⟨p, hp⟩
+  unfold rp2Map
+  rw [dif_pos hex]
+  exact rp2_explicit_finite_model_aux_agree _ _ _ (Classical.choose_spec hex) hp
+
+/-- Lattice coordinates of `ζ_j` in the basis `1, ζ₁`. -/
+def hexLat (j : ℕ) : ℝ × ℝ :=
+  ![((1 : ℝ), (0 : ℝ)), (0, 1), (-1, 1), (-1, 0), (0, -1), (1, -1)] ⟨j % 6, by omega⟩
+
+/-- Lattice coordinates of `m_j`. -/
+def ringLat (j : ℕ) : ℝ × ℝ :=
+  (((hexLat j).1 + (hexLat (j + 1)).1) / 3, ((hexLat j).2 + (hexLat (j + 1)).2) / 3)
+
+/-- Lattice coordinates of `rp2Corner p k` (same case split). -/
+def rp2CornerLat (p : Fin 6 × Fin 3) (k : Fin 10) : ℝ × ℝ :=
+  if k = 0 then (0, 0)
+  else if k = ringIdx p.1 then ringLat p.1
+  else if k = ringIdx (p.1 + 1) then ringLat (p.1 + 1)
+  else if k = bdryIdx p.1 ∧ p.2.1 = 1 then hexLat p.1
+  else if k = bdryIdx (p.1 + 1) then hexLat (p.1 + 1)
+  else (0, 0)
+
+/-- `ζ_j = a + b·ζ₁` with `(a, b) = hexLat j`. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat (j : ℕ) :
+    hexVertex j = ((hexLat j).1 : ℂ) + ((hexLat j).2 : ℂ) * hexVertex 1 := by
+  sorry
+
+/-- Corner positions in lattice coordinates (`_aux_hex_lat`, unfold `rp2Corner`,
+`ringVertex`). -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_corner_lat (p : Fin 6 × Fin 3) (k : Fin 10) :
+    rp2Corner p k = ((rp2CornerLat p k).1 : ℂ) + ((rp2CornerLat p k).2 : ℂ) * hexVertex 1 := by
+  sorry
+
+/-- Barycentric description of a basis-face hull. -/
+-- BEGIN SEAT AREA
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary
+    (s : Finset (Fin 10)) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ convexHull ℝ (↑(s.image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10)))) :
+    (∀ k, 0 ≤ y k) ∧ (∑ k, y k = 1) ∧ (∀ k, k ∉ s → y k = 0) := by
+  sorry
+-- END SEAT AREA
+
+/-- The finite check: in lattice coordinates, equal images from facets `p, p'`
+force equal barycentric coordinates.  `fin_cases p <;> fin_cases p'`, expand the
+sums over `Fin 10` and the corner table, then `linarith` for each coordinate
+(the 18 triangles are a proper triangulation in which each planar vertex has a
+single label; `checks/rp2_planar_tiling_check.py`). -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_cases (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
+    (h0 : ∀ k, 0 ≤ y k) (h1 : ∑ k, y k = 1) (h2 : ∀ k, k ∉ rp2Facet p → y k = 0)
+    (h0' : ∀ k, 0 ≤ y' k) (h1' : ∑ k, y' k = 1) (h2' : ∀ k, k ∉ rp2Facet p' → y' k = 0)
+    (ha : ∑ k, y k * (rp2CornerLat p k).1 = ∑ k, y' k * (rp2CornerLat p' k).1)
+    (hb : ∑ k, y k * (rp2CornerLat p k).2 = ∑ k, y' k * (rp2CornerLat p' k).2) :
+    ∀ k, y k = y' k := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_split (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) :
+    rp2Affine p y = ((∑ k, y k * (rp2CornerLat p k).1 : ℝ) : ℂ) +
+      ((∑ k, y k * (rp2CornerLat p k).2 : ℝ) : ℂ) * hexVertex 1 := by
+  unfold rp2Affine
+  simp_rw [rp2_explicit_finite_model_aux_injective_aux_planar_aux_corner_lat]
+  push_cast
+  rw [Finset.sum_mul, ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl fun k _ => by ring
+
+/-- Planar fibres are single points: two facet points with the same planar image
+are equal. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_planar (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y' ∈ facetHull p')
+    (h : rp2Affine p y = rp2Affine p' y') : y = y' := by
+  obtain ⟨h0, h1, h2⟩ := rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary _ y hy
+  obtain ⟨h0', h1', h2'⟩ := rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary _ y' hy'
+  have him : (hexVertex 1).im ≠ 0 := by
+    have e : hexVertex 1 = Complex.exp (((Real.pi / 3 : ℝ) : ℂ) * Complex.I) := by
+      unfold hexVertex; congr 1; push_cast; ring
+    rw [e, Complex.exp_ofReal_mul_I_im, Real.sin_pi_div_three]
+    positivity
+  rw [rp2_explicit_finite_model_aux_injective_aux_planar_aux_split, rp2_explicit_finite_model_aux_injective_aux_planar_aux_split] at h
+  have hb := congrArg Complex.im h
+  simp only [Complex.add_im, Complex.ofReal_im, Complex.mul_im, Complex.ofReal_re,
+    zero_add, zero_mul, add_zero] at hb
+  have hb' := mul_right_cancel₀ him hb
+  have ha := congrArg Complex.re h
+  simp only [Complex.add_re, Complex.ofReal_re, Complex.mul_re, Complex.ofReal_im,
+    zero_mul, sub_zero, hb'] at ha
+  have ha' := add_right_cancel ha
+  ext k
+  exact rp2_explicit_finite_model_aux_injective_aux_planar_aux_cases p p' y y' h0 h1 h2 h0' h1' h2' ha' hb' k
+
+/-- A facet point whose image has hexagon gauge one is supported on boundary labels.
+Plan: `gauge` is convex and equals `1` at `ζ_j`, `0` at `0`, `2/3` at `m_j`; so
+`1 = gauge (Σ y_k c_k) ≤ Σ y_k gauge c_k` forces `y_k = 0` for `k < 7`. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_nonneg
+    (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) (hy : y ∈ facetHull p) :
+    ∀ k, 0 ≤ y k := by
+  intro k
+  apply (convexHull_min (s := (↑((rp2Facet p).image (basisVertex 10)) :
+      Set (EuclideanSpace ℝ (Fin 10)))) (t := {x | 0 ≤ x k}) ?_ ?_) hy
+  · rintro x hx
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_image.1 hx
+    simp [basisVertex]
+    split <;> positivity
+  · intro a ha b hb u v hu hv huv
+    simp only [Set.mem_setOf_eq] at ha hb ⊢
+    simp only [PiLp.add_apply, PiLp.smul_apply]
+    positivity
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_sum
+    (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) (hy : y ∈ facetHull p) :
+    ∑ k, y k = 1 := by
+  apply (convexHull_min (s := (↑((rp2Facet p).image (basisVertex 10)) :
+      Set (EuclideanSpace ℝ (Fin 10)))) (t := {x | ∑ k, x k = 1}) ?_ ?_) hy
+  · rintro x hx
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_image.1 hx
+    simp [basisVertex]
+  · intro a ha b hb u v hu hv huv
+    simp only [Set.mem_setOf_eq] at ha hb ⊢
+    simp only [PiLp.add_apply, PiLp.smul_apply, Finset.sum_add_distrib]
+    simp_rw [smul_eq_mul, ← Finset.mul_sum]
+    rw [ha, hb]
+    linarith
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_corner_one
+    (p : Fin 6 × Fin 3) (k : Fin 10) : gauge hexagon (rp2Corner p k) ≤ 1 := by
+  apply gauge_le_one_of_mem
+  obtain ⟨i, t⟩ := p
+  fin_cases i <;> unfold rp2Corner <;> split_ifs <;>
+    first
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 0
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 1
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 2
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 3
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 4
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 5
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring_six
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 0
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 1
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 2
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 3
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 4
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 5
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_ring (j : ℕ) :
+    gauge hexagon (ringVertex j) ≤ 2 / 3 := by
+  have ha : Absorbent ℝ hexagon := absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_nhds
+  have hadd := gauge_add_le (convex_convexHull ℝ _) ha (hexVertex j) (hexVertex (j + 1))
+  have hsm := gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ)
+    (show 0 ≤ (1 / 3 : ℝ) by norm_num) (hexVertex j + hexVertex (j + 1))
+  have hv (n : ℕ) : gauge hexagon (hexVertex n) ≤ 1 := by
+    apply gauge_le_one_of_mem
+    rw [rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod
+      (a := n) (b := n % 6) (by omega)]
+    exact subset_convexHull ℝ _ ⟨⟨n % 6, Nat.mod_lt _ (by omega)⟩, rfl⟩
+  have h1 := hv j
+  have h2 := hv (j + 1)
+  unfold ringVertex
+  rw [show (hexVertex j + hexVertex (j + 1)) / 3 =
+      (1 / 3 : ℝ) • (hexVertex j + hexVertex (j + 1)) by
+        rw [Complex.real_smul]; push_cast; ring]
+  calc
+    gauge hexagon ((1 / 3 : ℝ) • (hexVertex j + hexVertex (j + 1))) =
+        (1 / 3 : ℝ) * gauge hexagon (hexVertex j + hexVertex (j + 1)) := by
+          exact hsm
+    _ ≤ (1 / 3 : ℝ) * (gauge hexagon (hexVertex j) +
+        gauge hexagon (hexVertex (j + 1))) := by
+          exact mul_le_mul_of_nonneg_left hadd (by norm_num)
+    _ ≤ 2 / 3 := by nlinarith
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_corner_two_thirds
+    (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k.1 < 7) :
+    gauge hexagon (rp2Corner p k) ≤ 2 / 3 := by
+  unfold rp2Corner
+  split_ifs with h0 h1 h2 h3 h4
+  · subst k; norm_num [gauge_zero]
+  · exact rp2_explicit_finite_model_aux_injective_aux_boundary_aux_ring p.1
+  · exact rp2_explicit_finite_model_aux_injective_aux_boundary_aux_ring (p.1 + 1)
+  · exfalso
+    have := congrArg Fin.val h3.1
+    simp [bdryIdx] at this
+    omega
+  · exfalso
+    have := congrArg Fin.val h4
+    simp [bdryIdx] at this
+    omega
+  · norm_num [gauge_zero]
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hg : gauge hexagon (rp2Affine p y) = 1) :
+    ∀ k : Fin 10, k.1 < 7 → y k = 0 := by
+  intro k hk
+  have hn := rp2_explicit_finite_model_aux_injective_aux_boundary_aux_nonneg p y hy
+  have hs := rp2_explicit_finite_model_aux_injective_aux_boundary_aux_sum p y hy
+  have ha : Absorbent ℝ hexagon := absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_nhds
+  have hsum := gauge_sum_le (convex_convexHull ℝ _) ha Finset.univ
+    (fun i : Fin 10 => (y i) • rp2Corner p i)
+  have hterm : ∀ i : Fin 10, gauge hexagon ((y i) • rp2Corner p i) ≤
+      if i = k then y i * (2 / 3) else y i := by
+    intro i
+    have hsm := gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ) (hn i)
+      (rp2Corner p i)
+    calc
+      gauge hexagon ((y i) • rp2Corner p i) =
+          y i * gauge hexagon (rp2Corner p i) := by simpa [smul_eq_mul] using hsm
+      _ ≤ if i = k then y i * (2 / 3) else y i := by
+        split_ifs with hik
+        · subst i
+          exact mul_le_mul_of_nonneg_left
+            (rp2_explicit_finite_model_aux_injective_aux_boundary_aux_corner_two_thirds p k hk) (hn k)
+        · simpa using mul_le_mul_of_nonneg_left
+            (rp2_explicit_finite_model_aux_injective_aux_boundary_aux_corner_one p i) (hn i)
+  have hbound : gauge hexagon (rp2Affine p y) ≤ 1 - y k / 3 := by
+    calc
+      gauge hexagon (rp2Affine p y) =
+          gauge hexagon (∑ i, (y i) • rp2Corner p i) := by
+            simp only [rp2Affine, Complex.real_smul]
+      _ ≤ ∑ i, gauge hexagon ((y i) • rp2Corner p i) := by simpa using hsum
+      _ ≤ ∑ i, (if i = k then y i * (2 / 3) else y i) :=
+        Finset.sum_le_sum fun i _ => hterm i
+      _ = 1 - y k / 3 := by
+        calc
+          (∑ i, (if i = k then y i * (2 / 3) else y i)) =
+              ∑ i, (y i - if i = k then y i / 3 else 0) := by
+                apply Finset.sum_congr rfl
+                intro i hi
+                by_cases hik : i = k <;> simp [hik] <;> ring
+          _ = (∑ i, y i) - ∑ i, (if i = k then y i / 3 else 0) := by
+                rw [Finset.sum_sub_distrib]
+          _ = 1 - y k / 3 := by simp [hs]
+  rw [hg] at hbound
+  linarith [hn k]
+
+/-- Antipodal images on the boundary come from the same point.  Plan: by
+`_aux_boundary`, `y'` lies in the face of boundary labels of `p'`, which is also a
+face of `p'' = (p'.1 + 3, p'.2)`; there `rp2Affine p'' y' = -rp2Affine p' y'`
+(`_agree_aux_affine_neg`, `_hex_neg_vertex`), so `_aux_planar` applies to `p, p''`. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_antipodal (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y' ∈ facetHull p')
+    (hg : gauge hexagon (rp2Affine p' y') = 1)
+    (h : rp2Affine p y = -rp2Affine p' y') : y = y' := by
+  sorry
+
+lemma rp2_explicit_finite_model_aux_injective_aux_quotient_cases
+    (x y : Surfaces.Disk)
+    (h : Surfaces.surfaceQuotient false 1 x =
+      Surfaces.surfaceQuotient false 1 y) :
+    x = y ∨ (‖(x : ℂ)‖ = 1 ∧ (y : ℂ) = -(x : ℂ)) := by
+  exact rp2_t2Space_aux_eqv_cases (Quotient.exact h)
+
+lemma rp2_explicit_finite_model_aux_injective_aux_clamp
+    (z : ℂ) (hz : z ∈ hexagon) :
+    ((diskClamp (hexToDisk z) : Surfaces.Disk) : ℂ) = hexToDisk z := by
+  have hg : gauge hexagon z ≤ 1 :=
+    (rp2_explicit_finite_model_aux_hex_gauge_le_one z).2 hz
+  have hn : ‖hexToDisk z‖ ≤ 1 := by
+    rw [rp2_explicit_finite_model_aux_hex_norm]
+    exact hg
+  simp [diskClamp, hn]
+
+lemma rp2_explicit_finite_model_aux_injective : Function.Injective rp2Map := by
+  rintro ⟨y, hy⟩ ⟨y', hy'⟩ h
+  obtain ⟨p, hp⟩ := rp2_explicit_finite_model_aux_cover y hy
+  obtain ⟨p', hp'⟩ := rp2_explicit_finite_model_aux_cover y' hy'
+  rw [rp2_explicit_finite_model_aux_rp2Map_eq _ p hp,
+    rp2_explicit_finite_model_aux_rp2Map_eq _ p' hp'] at h
+  have hz := rp2_explicit_finite_model_aux_affine_mem p y hp
+  have hz' := rp2_explicit_finite_model_aux_affine_mem p' y' hp'
+  apply Subtype.ext
+  change y = y'
+  rcases rp2_explicit_finite_model_aux_injective_aux_quotient_cases _ _ h with h | ⟨hn, hneg⟩
+  · have h2 := congrArg (fun x : Surfaces.Disk => (x : ℂ)) h
+    simp only [rp2_explicit_finite_model_aux_injective_aux_clamp _ hz, rp2_explicit_finite_model_aux_injective_aux_clamp _ hz'] at h2
+    exact rp2_explicit_finite_model_aux_injective_aux_planar p p' y y' hp hp'
+      (rp2_explicit_finite_model_aux_hex_injOn hz hz' h2)
+  · rw [rp2_explicit_finite_model_aux_injective_aux_clamp _ hz, rp2_explicit_finite_model_aux_injective_aux_clamp _ hz'] at hneg
+    rw [rp2_explicit_finite_model_aux_injective_aux_clamp _ hz, rp2_explicit_finite_model_aux_hex_norm] at hn
+    rw [← rp2_explicit_finite_model_aux_hex_neg] at hneg
+    have heq := rp2_explicit_finite_model_aux_hex_injOn hz'
+      (rp2_explicit_finite_model_aux_hex_neg_mem hz) hneg
+    refine (rp2_explicit_finite_model_aux_injective_aux_antipodal p' p y' y hp' hp hn heq).symm
+
+lemma rp2_explicit_finite_model_aux_diskClamp_coe (x : Surfaces.Disk) : diskClamp (x : ℂ) = x := by
+  have hx : ‖(x : ℂ)‖ ≤ 1 := by
+    have h := x.2
+    rwa [Metric.mem_closedBall, dist_zero_right] at h
+  simp [diskClamp, hx]
+
+lemma rp2_explicit_finite_model_aux_surjective : Function.Surjective rp2Map := by
+  intro q
+  obtain ⟨x, rfl⟩ := Surfaces.surjective_surfaceQuotient false 1 q
+  have hx : ‖(x : ℂ)‖ ≤ 1 := by
+    have h := x.2
+    rwa [Metric.mem_closedBall, dist_zero_right] at h
+  obtain ⟨z, hz, hzx⟩ := rp2_explicit_finite_model_aux_hex_surj (x : ℂ) hx
+  obtain ⟨p, y, hy, hA⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar z hz
+  refine ⟨⟨y, rp2_explicit_finite_model_aux_facetHull_subset p hy⟩, ?_⟩
+  rw [rp2_explicit_finite_model_aux_rp2Map_eq _ p hy]
+  change Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p y))) = _
+  rw [hA, hzx, rp2_explicit_finite_model_aux_diskClamp_coe]
+
+lemma rp2_explicit_finite_model_aux_centre_mem : basisVertex 10 0 ∈ rp2Complex.space := by
+  rw [Geometry.SimplicialComplex.mem_space_iff]
+  refine ⟨{basisVertex 10 0}, basisComplex_vertex_mem (f := rp2Facet (0, 0)) ?_ ?_, ?_⟩
+  · exact Finset.mem_image_of_mem _ (Finset.mem_univ _)
+  · simp [rp2Facet]
+  · simp
+
+lemma rp2_explicit_finite_model_aux_mark_aux_affine_zero (p : Fin 6 × Fin 3) :
+    rp2Affine p (basisVertex 10 0) = 0 := by
+  unfold rp2Affine
+  apply Finset.sum_eq_zero
+  intro k _
+  by_cases hk : k = 0
+  · subst k
+    simp [basisVertex, rp2Corner]
+  · simp [basisVertex, hk]
+
+lemma rp2_explicit_finite_model_aux_mark :
+    rp2Map ⟨basisVertex 10 0, rp2_explicit_finite_model_aux_centre_mem⟩ = surfacePoint false 1 := by
+  classical
+  unfold rp2Map surfacePoint
+  rw [rp2_explicit_finite_model_aux_mark_aux_affine_zero]
+  simp [hexToDisk, diskClamp]
+
+/-- **LIBRARY (explicit six-vertex model).** There is a finite coordinate realization of
+the standard six-vertex, ten-triangle triangulation of `RP²`, together with a continuous
+bijection to the disk quotient.  The distinguished vertex maps to the disk centre.
+
+The combinatorial model has vertices `Fin 6`; its ten facets are the complementary pairs
+in the standard minimal triangulation.  Realizing vertices by standard basis vectors makes
+affine independence and the face-intersection axiom coordinate-support calculations. -/
+theorem rp2_explicit_finite_model :
+    ∃ (n : ℕ) (K : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin n)))
+      (v : K.space) (f : K.space → RealProjectivePlane),
+      K.faces.Finite ∧ {(v : EuclideanSpace ℝ (Fin n))} ∈ K.faces ∧
+      Continuous f ∧ Function.Bijective f ∧
+      f v = surfacePoint false 1 := by
+  refine ⟨10, rp2Complex, ⟨basisVertex 10 0, rp2_explicit_finite_model_aux_centre_mem⟩, rp2Map,
+    basisComplex_faces_finite 10 rp2Facets, ?_, rp2_explicit_finite_model_aux_continuous,
+    ⟨rp2_explicit_finite_model_aux_injective, rp2_explicit_finite_model_aux_surjective⟩, rp2_explicit_finite_model_aux_mark⟩
+  exact basisComplex_vertex_mem (f := rp2Facet (0, 0))
+    (Finset.mem_image_of_mem _ (Finset.mem_univ _)) (by simp [rp2Facet])
+
+/-- Upgrade the explicit continuous bijection to a marked finite vertex triangulation. -/
+theorem realProjectivePlane_hasFiniteVertexTriangulation :
+    HasFiniteVertexTriangulation RealProjectivePlane (surfacePoint false 1) := by
+  obtain ⟨n, K, v, f, hfin, hv, hfcont, hfbij, hmark⟩ :=
+    rp2_explicit_finite_model
+  letI : CompactSpace K.space :=
+    isCompact_iff_compactSpace.mp (finite_simplicialComplex_space_isCompact K hfin)
+  letI : T2Space RealProjectivePlane := rp2_t2Space
+  let e' : K.space ≃ₜ RealProjectivePlane :=
+    hfcont.homeoOfEquivCompactToT2 (f := Equiv.ofBijective f hfbij)
+  let e : RealProjectivePlane ≃ₜ K.space := e'.symm
+  refine ⟨n, K, e, (v : EuclideanSpace ℝ (Fin n)), hfin, hv, ?_⟩
+  have heq : e (surfacePoint false 1) = v := by
+    apply e'.injective
+    simpa [e, e'] using hmark.symm
+  exact congrArg Subtype.val heq
+
+#print axioms realProjectivePlane_hasFiniteVertexTriangulation
+
+end ConstructionTargets.RealProjectivePlaneTriangulation
