@@ -1369,9 +1369,47 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_centroi
 
 /-- The diagonals `0 ζ_{j+1}` and `m_j m_{j+1}` meet (at `ζ_{j+1} / 2`). -/
 -- BEGIN SEAT AREA
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal_aux_rec
+    (j : ℕ) :
+    hexVertex j + hexVertex (j + 2) = hexVertex (j + 1) := by
+  let w : ℂ := Complex.exp ((Real.pi / 3 : ℝ) * Complex.I)
+  have hw : w = (1 / 2 : ℝ) + (Real.sqrt 3 / 2 : ℝ) * Complex.I := by
+    simp [w, Complex.exp_ofReal_mul_I, Real.cos_pi_div_three,
+      Real.sin_pi_div_three]
+  have hwpoly : 1 + w ^ 2 = w := by
+    rw [hw]
+    have hs : (Real.sqrt 3) ^ 2 = 3 := Real.sq_sqrt (by norm_num)
+    push_cast
+    apply Complex.ext <;>
+      simp [pow_two, Complex.mul_re, Complex.mul_im] <;> nlinarith
+  have hv (n : ℕ) : hexVertex n = w ^ n := by
+    unfold hexVertex
+    rw [← Complex.exp_nat_mul]
+    congr 1
+    simp [w]
+    push_cast
+    ring
+  rw [hv j, hv (j + 1), hv (j + 2), pow_add, pow_add]
+  simp only [pow_one]
+  calc
+    w ^ j + w ^ j * w ^ 2 = w ^ j * (1 + w ^ 2) := by ring
+    _ = w ^ j * w := by rw [hwpoly]
+    _ = w ^ j * w := rfl
+
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal (j : ℕ) :
     (segment ℝ 0 (hexVertex (j + 1)) ∩ segment ℝ (ringVertex j) (ringVertex (j + 1))).Nonempty := by
-  sorry
+  refine ⟨midpoint ℝ 0 (hexVertex (j + 1)), midpoint_mem_segment _ _, ?_⟩
+  have hmid : midpoint ℝ (ringVertex j) (ringVertex (j + 1)) =
+      midpoint ℝ 0 (hexVertex (j + 1)) := by
+    unfold ringVertex
+    rw [midpoint_eq_smul_add, midpoint_eq_smul_add]
+    have hrec :=
+      rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagonal_aux_rec j
+    rw [show j + 1 + 1 = j + 2 by omega]
+    congr 1
+    linear_combination (1 / 3 : ℂ) * hrec
+  rw [← hmid]
+  exact midpoint_mem_segment _ _
 -- END SEAT AREA
 
 /-- Generic: a triangle is covered by the three triangles at any of its points. -/
