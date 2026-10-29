@@ -1301,7 +1301,12 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_corner_
         {hexVertex i, hexVertex (i + 1), ringVertex i} ∧
     rp2Corner (i, 2) '' (↑(rp2Facet (i, 2)) : Set (Fin 10)) =
         {hexVertex (i + 1), ringVertex i, ringVertex (i + 1)} := by
-  sorry
+  fin_cases i <;>
+    (constructor
+     · ext z
+       simp [rp2Facet, rp2Corner, ringIdx, bdryIdx, eq_comm]
+     · constructor <;> ext z <;>
+         simp [rp2Facet, rp2Corner, ringIdx, bdryIdx, eq_comm])
 -- END SEAT AREA
 
 /-- The hexagon is the fan of its six sector triangles `0 ζ_j ζ_{j+1}`. -/
