@@ -1167,7 +1167,17 @@ def edgeNormal (j : ℕ) : ℂ := Complex.exp (Complex.I * (Real.pi * (2 * (j : 
 -- BEGIN SEAT AREA
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_edge_subset (j : ℕ) :
     segment ℝ (hexVertex j) (hexVertex (j + 1)) ⊆ hexagon := by
-  sorry
+  have hver : ∀ n : ℕ, hexVertex n ∈ hexagon := by
+    intro n
+    induction n using Nat.strong_induction_on with
+    | h n ih =>
+        by_cases hn : n < 6
+        · exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex ⟨n, hn⟩
+        · have hn6 : 6 ≤ n := le_of_not_gt hn
+          have heq : n - 6 + 6 = n := Nat.sub_add_cancel hn6
+          rw [← heq, rp2_explicit_finite_model_aux_agree_aux_cases_aux_period]
+          exact ih (n - 6) (by omega)
+  exact (convex_convexHull ℝ _).segment_subset (hver j) (hver (j + 1))
 -- END SEAT AREA
 
 /-- The hexagon lies in the half-plane `Re (w · conj ν_j) ≤ cos (π/6)` (check the
