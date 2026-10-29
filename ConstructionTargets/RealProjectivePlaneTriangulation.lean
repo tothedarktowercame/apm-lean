@@ -937,9 +937,22 @@ lemma rp2_explicit_finite_model_aux_centre_mem : basisVertex 10 0 ∈ rp2Complex
   · simp [rp2Facet]
   · simp
 
+lemma rp2_explicit_finite_model_aux_mark_aux_affine_zero (p : Fin 6 × Fin 3) :
+    rp2Affine p (basisVertex 10 0) = 0 := by
+  unfold rp2Affine
+  apply Finset.sum_eq_zero
+  intro k _
+  by_cases hk : k = 0
+  · subst k
+    simp [basisVertex, rp2Corner]
+  · simp [basisVertex, hk]
+
 lemma rp2_explicit_finite_model_aux_mark :
     rp2Map ⟨basisVertex 10 0, rp2_explicit_finite_model_aux_centre_mem⟩ = surfacePoint false 1 := by
-  sorry
+  classical
+  unfold rp2Map surfacePoint
+  rw [rp2_explicit_finite_model_aux_mark_aux_affine_zero]
+  simp [hexToDisk, diskClamp]
 
 /-- **LIBRARY (explicit six-vertex model).** There is a finite coordinate realization of
 the standard six-vertex, ten-triangle triangulation of `RP²`, together with a continuous
