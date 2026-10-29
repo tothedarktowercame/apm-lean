@@ -1027,11 +1027,94 @@ lemma rp2_explicit_finite_model_aux_affine_mem (p : Fin 6 × Fin 3) (y : Euclide
 
 /-- Two facets containing `y` give the same point of `RP²`: their planar
 positions agree, or (on a boundary edge) are antipodal boundary points. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_inter
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p') :
+    y ∈ convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) := by
+  exact rp2_explicit_finite_model_aux_basis_inter (rp2Facet p) (rp2Facet p') ⟨hy, hy'⟩
+
+lemma rp2_explicit_finite_model_aux_agree_aux_affine_eq
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hcorner : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      rp2Corner p k = rp2Corner p' k) :
+    rp2Affine p y = rp2Affine p' y := by
+  classical
+  have hinter := rp2_explicit_finite_model_aux_agree_aux_inter p p' y hy hy'
+  let L : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ :=
+    rp2AffineLinear p - rp2AffineLinear p'
+  have hsub : convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) ⊆ L.ker := by
+    apply convexHull_min
+    · rintro x ⟨hx, hx'⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+      have hinj : Function.Injective (basisVertex 10) := by
+        intro i j hij
+        have := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+        simpa [basisVertex, EuclideanSpace.single_apply] using this
+      have hkk : k = k' := hinj heq.symm
+      subst k'
+      change rp2Affine p (basisVertex 10 k) - rp2Affine p' (basisVertex 10 k) = 0
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis,
+        rp2_explicit_finite_model_aux_affine_mem_aux_basis, hcorner k hk hk']
+      simp
+    · exact L.ker.convex
+  have hz : L y = 0 := hsub hinter
+  change rp2Affine p y - rp2Affine p' y = 0 at hz
+  exact sub_eq_zero.mp hz
+
+/-- (E) Facet pairs: shared vertices get the same planar corner in both facets,
+or all shared vertices are boundary labels (`7 ≤ k`) placed antipodally
+(`ζ_{j+3} = -ζ_j`).  A finite check over the 18 × 18 facet pairs. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_cases (p p' : Fin 6 × Fin 3) :
+    (∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → rp2Corner p k = rp2Corner p' k) ∨
+    (∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      7 ≤ k.1 ∧ rp2Corner p k = -rp2Corner p' k) := by
+  sorry
+
+/-- (B) Antipodal corners give antipodal images (as `_aux_affine_eq`, with the
+linear map `rp2AffineLinear p + rp2AffineLinear p'`). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_affine_neg
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hcorner : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      rp2Corner p k = -rp2Corner p' k) :
+    rp2Affine p y = -rp2Affine p' y := by
+  sorry
+
+/-- (C) A point in two facets whose shared vertices are all boundary labels maps
+to the hexagon boundary: it lies on a boundary vertex or edge `ζ_j ζ_{j+1}`. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hlab : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → 7 ≤ k.1) :
+    gauge hexagon (rp2Affine p y) = 1 := by
+  sorry
+
+/-- (D) A hexagon boundary point and its antipode are identified in `RP²`
+(`_aux_hex_norm`, `_aux_hex_neg`, `rp2_t2Space_aux_boundary_rel`). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_antipode (z : ℂ) (hz : gauge hexagon z = 1) :
+    Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (-z))) =
+      Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk z)) := by
+  sorry
+
 lemma rp2_explicit_finite_model_aux_agree (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p') :
     Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p y))) =
       Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p' y))) := by
-  sorry
+  rcases rp2_explicit_finite_model_aux_agree_aux_cases p p' with h | h
+  · rw [rp2_explicit_finite_model_aux_agree_aux_affine_eq p p' y hy hy' h]
+  · have hneg := rp2_explicit_finite_model_aux_agree_aux_affine_neg p p' y hy hy' (fun k hk hk' => (h k hk hk').2)
+    have hg : gauge hexagon (rp2Affine p' y) = 1 := by
+      have hlab' : ∀ k, k ∈ rp2Facet p' → k ∈ rp2Facet p → 7 ≤ k.1 :=
+        fun k hk' hk => (h k hk hk').1
+      exact rp2_explicit_finite_model_aux_agree_aux_gauge_one p' p y hy' hy hlab'
+    rw [hneg]
+    exact rp2_explicit_finite_model_aux_agree_aux_antipode _ hg
 
 /-- Pasting over the 18 closed facet hulls (finite closed cover, `_agree`). -/
 lemma rp2_explicit_finite_model_aux_continuous : Continuous rp2Map := by
