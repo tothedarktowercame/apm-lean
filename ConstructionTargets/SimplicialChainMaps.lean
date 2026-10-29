@@ -3802,6 +3802,100 @@ theorem induced_setCongr_rfl {E : Type} [TopologicalSpace E] (A : Set E) (k : �
   simp only [induced]
   exact CategoryTheory.Functor.map_id _ _
 
+/-- The oriented chain package of any complex: a signed deletion, square zero,
+and an affine comparison packaged as a chain map into singular chains. Use
+`signedDeletion_exists`, `signedDeletion_sq_zero` and
+`affineComparison_exists_and_commutes`. Build the chain map with
+`ChainComplex.ofHom` and compose it with the identity
+`ChainComplex.of _ (fun j ↦ C.d (j+1) j) _ ⟶ C`; see the map `e` at the end of
+`vertexChainMap_affineComparison_square`. -/
+theorem orientedPackage_exists {n : ℕ} (o : LinearOrder (Euc n)) (L : GSC n) :
+    ∃ (d : ∀ k, FaceModuleCat L (k+1) ⟶ FaceModuleCat L k) (_ : IsSignedDeletion o L d)
+      (hdd : ∀ k, d (k+1) ≫ d k = 0)
+      (cmp : ∀ k, FaceModuleCat L k ⟶
+        (CoefficientH0.SingularChains ℚ (TopCat.of L.space)).X k)
+      (_ : IsAffineComparison L cmp)
+      (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of L.space)),
+      ∀ k, cmpH.f k = cmp k := by
+  sorry
+
+lemma iterSubdivision_square_aux_zero {n : ℕ} (o : LinearOrder (Euc n)) (K : GSC n)
+    (d : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (d' : ∀ k, FaceModuleCat ((barycentricStep^[0]) K) (k+1) ⟶
+      FaceModuleCat ((barycentricStep^[0]) K) k)
+    (hd : IsSignedDeletion o K d) (hd' : IsSignedDeletion o _ d')
+    (hdd : ∀ k, d (k+1) ≫ d k = 0) (hdd' : ∀ k, d' (k+1) ≫ d' k = 0)
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (cmp' : ∀ k, FaceModuleCat ((barycentricStep^[0]) K) k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of ((barycentricStep^[0]) K).space)).X k)
+    (hcmp : IsAffineComparison K cmp) (hcmp' : IsAffineComparison _ cmp')
+    (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpH' : ChainComplex.of _ d' hdd' ⟶ CoefficientH0.SingularChains ℚ
+      (TopCat.of ((barycentricStep^[0]) K).space))
+    (hcmpH : ∀ k, cmpH.f k = cmp k) (hcmpH' : ∀ k, cmpH'.f k = cmp' k) :
+    ∃ sdH : ChainComplex.of _ d hdd ⟶ ChainComplex.of _ d' hdd',
+      IsHullCarried K _ (fun k ↦ sdH.f k) ∧
+      ∀ k, HomologicalComplex.homologyMap sdH k ≫ HomologicalComplex.homologyMap cmpH' k =
+        HomologicalComplex.homologyMap cmpH k ≫
+          induced (Homeomorph.setCongr (barycentricStep_iterate_space K 0).symm) k := by
+  sorry
+
+
+/-- One subdivision step as a hull-carried chain map with its square. Take `sd`
+from `barycentricSubdivisionChainMap_exists`; it is a chain map by
+`subdivisionChainMap_commutes`, hull-carried by
+`subdivisionChainMap_isHullCarried`, and its square is
+`subdivision_affineComparison_square`. -/
+lemma iterSubdivision_square_aux_one {n : ℕ} (o : LinearOrder (Euc n)) (K : GSC n)
+    (dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (dK' : ∀ k, FaceModuleCat (barycentricStep K) (k+1) ⟶ FaceModuleCat (barycentricStep K) k)
+    (hdK : IsSignedDeletion o K dK) (hdK' : IsSignedDeletion o _ dK')
+    (hddK : ∀ k, dK (k+1) ≫ dK k = 0) (hddK' : ∀ k, dK' (k+1) ≫ dK' k = 0)
+    (cmpK : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (cmpK' : ∀ k, FaceModuleCat (barycentricStep K) k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of (barycentricStep K).space)).X k)
+    (hcmpK : IsAffineComparison K cmpK) (hcmpK' : IsAffineComparison _ cmpK')
+    (cmpKH : ChainComplex.of _ dK hddK ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpK'H : ChainComplex.of _ dK' hddK' ⟶
+      CoefficientH0.SingularChains ℚ (TopCat.of (barycentricStep K).space))
+    (cmpKH_f : ∀ k, cmpKH.f k = cmpK k) (cmpK'H_f : ∀ k, cmpK'H.f k = cmpK' k)
+    (hsp : K.space = (barycentricStep K).space) :
+    ∃ sdH : ChainComplex.of _ dK hddK ⟶ ChainComplex.of _ dK' hddK',
+      IsHullCarried K _ (fun k ↦ sdH.f k) ∧
+      ∀ k, HomologicalComplex.homologyMap sdH k ≫ HomologicalComplex.homologyMap cmpK'H k =
+        HomologicalComplex.homologyMap cmpKH k ≫ induced (Homeomorph.setCongr hsp) k := by
+  sorry
+
+/-- Pasting two hull-carried squares: `HomologicalComplex.comp_f`,
+`IsHullCarried.comp`, `HomologicalComplex.homologyMap_comp`, then `sqB`, `sqA`
+(reassociating) and `induced_setCongr_comp`. -/
+lemma iterSubdivision_square_aux_paste {n : ℕ} {K L L' : GSC n}
+    {dK : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k}
+    {dL : ∀ k, FaceModuleCat L (k+1) ⟶ FaceModuleCat L k}
+    {dL' : ∀ k, FaceModuleCat L' (k+1) ⟶ FaceModuleCat L' k}
+    {hddK : ∀ k, dK (k+1) ≫ dK k = 0} {hddL : ∀ k, dL (k+1) ≫ dL k = 0}
+    {hddL' : ∀ k, dL' (k+1) ≫ dL' k = 0}
+    (sdA : ChainComplex.of _ dK hddK ⟶ ChainComplex.of _ dL hddL)
+    (sdB : ChainComplex.of _ dL hddL ⟶ ChainComplex.of _ dL' hddL')
+    (cmpKH : ChainComplex.of _ dK hddK ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpLH : ChainComplex.of _ dL hddL ⟶ CoefficientH0.SingularChains ℚ (TopCat.of L.space))
+    (cmpL'H : ChainComplex.of _ dL' hddL' ⟶
+      CoefficientH0.SingularChains ℚ (TopCat.of L'.space))
+    (hA : K.space = L.space) (hB : L.space = L'.space)
+    (hcA : IsHullCarried K L (fun k ↦ sdA.f k)) (hcB : IsHullCarried L L' (fun k ↦ sdB.f k))
+    (sqA : ∀ k, HomologicalComplex.homologyMap sdA k ≫ HomologicalComplex.homologyMap cmpLH k =
+      HomologicalComplex.homologyMap cmpKH k ≫ induced (Homeomorph.setCongr hA) k)
+    (sqB : ∀ k, HomologicalComplex.homologyMap sdB k ≫ HomologicalComplex.homologyMap cmpL'H k =
+      HomologicalComplex.homologyMap cmpLH k ≫ induced (Homeomorph.setCongr hB) k) :
+    IsHullCarried K L' (fun k ↦ (sdA ≫ sdB).f k) ∧
+      ∀ k, HomologicalComplex.homologyMap (sdA ≫ sdB) k ≫
+          HomologicalComplex.homologyMap cmpL'H k =
+        HomologicalComplex.homologyMap cmpKH k ≫
+          induced (Homeomorph.setCongr (hA.trans hB)) k := by
+  sorry
+
 /-- The `m`-step subdivision chain map: hull-carried, and compatible with any
 affine comparisons on homology. Prove by induction on `m`, generalizing `dK'`,
 `cmpK'` and their packages. Base case: `𝟙`, with `isHullCarried_id` and
@@ -3835,7 +3929,23 @@ theorem iterSubdivision_square {n : ℕ} (o : LinearOrder (Euc n)) (m : ℕ) (K 
       ∀ k, HomologicalComplex.homologyMap sdH k ≫ HomologicalComplex.homologyMap cmpK'H k =
         HomologicalComplex.homologyMap cmpKH k ≫
           induced (Homeomorph.setCongr (barycentricStep_iterate_space K m).symm) k := by
-  sorry
+  induction m generalizing K with
+  | zero =>
+      exact iterSubdivision_square_aux_zero o K dK dK' hdK hdK'
+        hddK hddK' cmpK cmpK' hcmpK hcmpK' cmpKH cmpK'H cmpKH_f cmpK'H_f
+  | succ m ih =>
+      -- `barycentricStep^[m+1] K` is `barycentricStep^[m] (barycentricStep K)` by
+      -- definition: subdivide once, then apply `ih` to `barycentricStep K`.
+      obtain ⟨d1, hd1, hdd1, cmp1, hcmp1, cmp1H, cmp1H_f⟩ :=
+        orientedPackage_exists o (barycentricStep K)
+      obtain ⟨sdA, hcA, sqA⟩ := iterSubdivision_square_aux_one o K dK d1 hdK hd1 hddK hdd1
+        cmpK cmp1 hcmpK hcmp1 cmpKH cmp1H cmpKH_f cmp1H_f
+        (barycentricStep_iterate_space K 1).symm
+      obtain ⟨sdB, hcB, sqB⟩ := ih (barycentricStep K) d1 dK' hd1 hdK' hdd1 hddK'
+        cmp1 cmpK' hcmp1 hcmpK' cmp1H cmpK'H cmp1H_f cmpK'H_f
+      obtain ⟨hc, sq⟩ := iterSubdivision_square_aux_paste sdA sdB cmpKH cmp1H cmpK'H
+        _ _ hcA hcB sqA sqB
+      exact ⟨sdA ≫ sdB, hc, sq⟩
 
 /-- The vertex chain map as a chain map, with its comparison square: take `hm`
 from `vertexChainMap_exists`, make it a chain map with `ChainComplex.ofHom` and
