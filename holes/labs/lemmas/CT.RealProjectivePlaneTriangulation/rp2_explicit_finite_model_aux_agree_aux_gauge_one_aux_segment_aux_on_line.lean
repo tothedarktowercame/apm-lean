@@ -1189,7 +1189,38 @@ lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplan
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line (j : ℕ) (z : ℂ)
     (hz : z ∈ segment ℝ (hexVertex j) (hexVertex (j + 1))) :
     (z * starRingEnd ℂ (edgeNormal j)).re = Real.cos (Real.pi / 6) := by
-  sorry
+  have hleft :
+      (hexVertex j * starRingEnd ℂ (edgeNormal j)).re =
+        Real.cos (Real.pi / 6) := by
+    rw [hexVertex, edgeNormal]
+    rw [← Complex.exp_conj, ← Complex.exp_add]
+    rw [Complex.exp_re]
+    congr 1
+    push_cast
+    rw [starRingEnd_apply, Complex.star_def]
+    simp only [map_mul, map_div₀, map_add, map_one, map_ofNat, map_natCast,
+      Complex.conj_ofReal, Complex.conj_I]
+    ring_nf
+    norm_num [Complex.mul_re, Complex.mul_im]
+  have hright :
+      (hexVertex (j + 1) * starRingEnd ℂ (edgeNormal j)).re =
+        Real.cos (Real.pi / 6) := by
+    rw [hexVertex, edgeNormal]
+    rw [← Complex.exp_conj, ← Complex.exp_add]
+    rw [Complex.exp_re]
+    congr 1
+    push_cast
+    rw [starRingEnd_apply, Complex.star_def]
+    simp only [map_mul, map_div₀, map_add, map_one, map_ofNat, map_natCast,
+      Complex.conj_ofReal, Complex.conj_I]
+    ring_nf
+    simp [Complex.mul_re, Complex.mul_im]
+  rcases hz with ⟨a, b, ha, hb, hab, rfl⟩
+  rw [add_mul, smul_mul_assoc, smul_mul_assoc, Complex.add_re,
+    Complex.smul_re, Complex.smul_re,
+    hleft, hright]
+  simp only [smul_eq_mul]
+  rw [← add_mul, hab, one_mul]
 -- END SEAT AREA
 
 /-- A linear functional bounded by `c` on the hexagon is bounded by
