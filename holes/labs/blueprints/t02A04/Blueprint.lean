@@ -1375,8 +1375,69 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_agree (i j : Fin 6) (y : EuclideanS
 lemma apm_t02A04_attachedDisk_cone_model_aux_continuous : Continuous apm_t02A04_coneMap := by
   sorry
 
-lemma apm_t02A04_attachedDisk_cone_model_aux_injective : Function.Injective apm_t02A04_coneMap := by
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_conePoint
+    (x y : apm_t02A04_coneComplex.space) (i j : Fin 6)
+    (hxi : (x : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull i)
+    (hyj : (y : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull j)
+    (hxy : apm_t02A04_coneMap x = apm_t02A04_coneMap y) :
+    apm_t02A04_conePoint i x = apm_t02A04_conePoint j y := by
+  classical
+  have hxex : ∃ k, (x : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull k := ⟨i, hxi⟩
+  have hyex : ∃ k, (y : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull k := ⟨j, hyj⟩
+  let ix : Fin 6 := Classical.choose hxex
+  let iy : Fin 6 := Classical.choose hyex
+  have hxix : (x : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull ix :=
+    Classical.choose_spec hxex
+  have hyiy : (y : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull iy :=
+    Classical.choose_spec hyex
+  have hnx : ‖apm_t02A04_conePoint ix x‖ ≤ 1 :=
+    apm_t02A04_attachedDisk_cone_model_aux_point_norm ix x hxix
+  have hny : ‖apm_t02A04_conePoint iy y‖ ≤ 1 :=
+    apm_t02A04_attachedDisk_cone_model_aux_point_norm iy y hyiy
+  have hagreex := apm_t02A04_attachedDisk_cone_model_aux_agree ix i x hxix hxi
+  have hagreey := apm_t02A04_attachedDisk_cone_model_aux_agree iy j y hyiy hyj
+  have hcoe := congrArg (fun z : apm_t02a04_Disk => (z : ℂ)) hxy
+  simp only [apm_t02A04_coneMap, dif_pos hxex, dif_pos hyex] at hcoe
+  change ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+      (apm_t02A04_conePoint ix x) : apm_t02a04_Disk) : ℂ) =
+    ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+      (apm_t02A04_conePoint iy y) : apm_t02a04_Disk) : ℂ) at hcoe
+  simp only [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp,
+    dif_pos hnx, dif_pos hny, Subtype.coe_mk] at hcoe
+  exact hagreex.symm.trans (hcoe.trans hagreey)
+
+/-- Barycentric description of a cone facet hull. -/
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary (i : Fin 6) (x : EuclideanSpace ℝ (Fin 7))
+    (hx : x ∈ apm_t02A04_coneHull i) :
+    (∀ k, 0 ≤ x k) ∧ x 0 + x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)) = 1 ∧
+      (∀ k, k ∉ apm_t02A04_coneFacet i → x k = 0) := by
   sorry
+
+/-- Equal arc points with parameters in `[0, 1]`: same arc and parameter, or the
+shared endpoint of adjacent arcs.  (`Circle.exp` is `2π`-periodic and injective on
+a half-open period; compare `2π(i + s)/6` with `2π(j + s')/6`.) -/
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_angle (i j : Fin 6) (s s' : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1)
+    (hs0' : 0 ≤ s') (hs1' : s' ≤ 1) (h : apm_t02A04_arcPoint i s = apm_t02A04_arcPoint j s') :
+    (i = j ∧ s = s') ∨ (j = i + 1 ∧ s = 1 ∧ s' = 0) ∨ (i = j + 1 ∧ s = 0 ∧ s' = 1) := by
+  sorry
+
+/-- Plan: `‖conePoint i x‖ = x_b + x_c =: R` (arc points have norm one), so the radii
+agree.  `R = 0` forces both to the centre vertex (`_aux_bary`: `x 0 = 1`).  Otherwise
+cancel `R` to get equal arc points, apply `_aux_angle` with `s = x_c / R`, and in each
+of the three cases read off all seven coordinates with `_aux_bary`. -/
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet
+    (x y : EuclideanSpace ℝ (Fin 7)) (i j : Fin 6)
+    (hxi : x ∈ apm_t02A04_coneHull i) (hyj : y ∈ apm_t02A04_coneHull j)
+    (hxy : apm_t02A04_conePoint i x = apm_t02A04_conePoint j y) : x = y := by
+  sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective : Function.Injective apm_t02A04_coneMap := by
+  intro x y hxy
+  obtain ⟨i, hxi⟩ := apm_t02A04_attachedDisk_cone_model_aux_cover x x.property
+  obtain ⟨j, hyj⟩ := apm_t02A04_attachedDisk_cone_model_aux_cover y y.property
+  apply Subtype.ext
+  exact apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet x y i j hxi hyj
+    (apm_t02A04_attachedDisk_cone_model_aux_injective_aux_conePoint x y i j hxi hyj hxy)
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_surjective_aux_circle
     (z : Circle) : ∃ (i : Fin 6) (t : ℝ), 0 ≤ t ∧ t ≤ 1 ∧
