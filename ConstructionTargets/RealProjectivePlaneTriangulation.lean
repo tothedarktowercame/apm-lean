@@ -1516,10 +1516,89 @@ lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_diagona
   exact midpoint_mem_segment _ _
 
 /-- Generic: a triangle is covered by the three triangles at any of its points. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_mem
+    (p₀ p₁ p₂ x : ℂ) (u₀ u₁ u₂ : ℝ) (h₀ : 0 ≤ u₀) (h₁ : 0 ≤ u₁) (h₂ : 0 ≤ u₂)
+    (hs : u₀ + u₁ + u₂ = 1)
+    (hx : (u₀ : ℂ) * p₀ + (u₁ : ℂ) * p₁ + (u₂ : ℂ) * p₂ = x) :
+    x ∈ convexHull ℝ {p₀, p₁, p₂} := by
+  let w : Fin 3 → ℝ := ![u₀, u₁, u₂]
+  let z : Fin 3 → ℂ := ![p₀, p₁, p₂]
+  apply mem_convexHull_of_exists_fintype w z
+  · intro i
+    fin_cases i <;> simp [w, h₀, h₁, h₂]
+  · simpa [w, Fin.sum_univ_succ, add_assoc] using hs
+  · intro i
+    fin_cases i <;> simp [z]
+  · simpa [w, z, Fin.sum_univ_succ, Complex.real_smul, add_assoc] using hx
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coords (a b c x : ℂ) (hx : x ∈ convexHull ℝ {a, b, c}) :
+    ∃ u₀ u₁ u₂ : ℝ, 0 ≤ u₀ ∧ 0 ≤ u₁ ∧ 0 ≤ u₂ ∧ u₀ + u₁ + u₂ = 1 ∧
+      (u₀ : ℂ) * a + (u₁ : ℂ) * b + (u₂ : ℂ) * c = x := by
+  rw [← convexJoin_singleton_segment, mem_convexJoin] at hx
+  obtain ⟨a', ha', y, ⟨s, t, hs, ht, hst, rfl⟩, ⟨α, β, hα, hβ, hαβ, rfl⟩⟩ := hx
+  rw [mem_singleton_iff] at ha'
+  subst ha'
+  refine ⟨α, β * s, β * t, hα, mul_nonneg hβ hs, mul_nonneg hβ ht, ?_, ?_⟩
+  · linear_combination hαβ + β * hst
+  · simp only [smul_add, smul_smul]
+    erw [Complex.real_smul, Complex.real_smul, Complex.real_smul]
+    push_cast; ring
+
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef (t xj qj : ℝ) (hx : 0 ≤ xj) (hq : 0 ≤ qj) (h : 0 < qj → t ≤ xj / qj) :
+    0 ≤ xj - t * qj := by
+  rcases hq.lt_or_eq with h' | h'
+  · have := (le_div_iff₀ h').1 (h h'); linarith
+  · subst h'; simpa using hx
+
+/-- Generic: a point `q` of a triangle splits it into the three triangles obtained by
+replacing one vertex with `q` (minimum-ratio barycentric argument). -/
 lemma rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split (a b c q : ℂ) (hq : q ∈ convexHull ℝ {a, b, c}) :
     convexHull ℝ {a, b, c} ⊆
       convexHull ℝ {q, b, c} ∪ convexHull ℝ {a, q, c} ∪ convexHull ℝ {a, b, q} := by
-  sorry
+  intro x hx
+  obtain ⟨x₀, x₁, x₂, hx₀, hx₁, hx₂, hxs, rfl⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coords a b c x hx
+  obtain ⟨q₀, q₁, q₂, hq₀, hq₁, hq₂, hqs, rfl⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coords a b c q hq
+  -- An index `i` with `qᵢ > 0` minimising `xᵢ / qᵢ`.
+  have key : (0 < q₀ ∧ (0 < q₁ → x₀ / q₀ ≤ x₁ / q₁) ∧ (0 < q₂ → x₀ / q₀ ≤ x₂ / q₂)) ∨
+      (0 < q₁ ∧ (0 < q₀ → x₁ / q₁ ≤ x₀ / q₀) ∧ (0 < q₂ → x₁ / q₁ ≤ x₂ / q₂)) ∨
+      (0 < q₂ ∧ (0 < q₀ → x₂ / q₂ ≤ x₀ / q₀) ∧ (0 < q₁ → x₂ / q₂ ≤ x₁ / q₁)) := by
+    have e01 := le_total (x₀ / q₀) (x₁ / q₁)
+    have e02 := le_total (x₀ / q₀) (x₂ / q₂)
+    have e12 := le_total (x₁ / q₁) (x₂ / q₂)
+    rcases hq₀.lt_or_eq with h0 | h0 <;> rcases hq₁.lt_or_eq with h1 | h1 <;>
+      rcases hq₂.lt_or_eq with h2 | h2 <;>
+      rcases e01 with e01 | e01 <;> rcases e02 with e02 | e02 <;>
+      rcases e12 with e12 | e12 <;>
+      first
+      | exact Or.inl ⟨h0, fun _ => by linarith, fun _ => by linarith⟩
+      | exact Or.inr (Or.inl ⟨h1, fun _ => by linarith, fun _ => by linarith⟩)
+      | exact Or.inr (Or.inr ⟨h2, fun _ => by linarith, fun _ => by linarith⟩)
+      | (exfalso; linarith)
+  rcases key with ⟨hp, k1, k2⟩ | ⟨hp, k0, k2⟩ | ⟨hp, k0, k1⟩
+  · left; left
+    set t := x₀ / q₀
+    have ht : t * q₀ = x₀ := div_mul_cancel₀ _ hp.ne'
+    apply rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_mem _ _ _ _ t (x₁ - t * q₁) (x₂ - t * q₂) (div_nonneg hx₀ hq₀)
+      (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₁ hq₁ k1) (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₂ hq₂ k2)
+    · linear_combination ht + hxs - t * hqs
+    · have htc : (t : ℂ) * q₀ = x₀ := by exact_mod_cast ht
+      push_cast; linear_combination htc * a
+  · left; right
+    set t := x₁ / q₁
+    have ht : t * q₁ = x₁ := div_mul_cancel₀ _ hp.ne'
+    apply rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_mem _ _ _ _ (x₀ - t * q₀) t (x₂ - t * q₂) (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₀ hq₀ k0)
+      (div_nonneg hx₁ hq₁) (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₂ hq₂ k2)
+    · linear_combination ht + hxs - t * hqs
+    · have htc : (t : ℂ) * q₁ = x₁ := by exact_mod_cast ht
+      push_cast; linear_combination htc * b
+  · right
+    set t := x₂ / q₂
+    have ht : t * q₂ = x₂ := div_mul_cancel₀ _ hp.ne'
+    apply rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_mem _ _ _ _ (x₀ - t * q₀) (x₁ - t * q₁) t (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₀ hq₀ k0)
+      (rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_triangle_split_aux_coef _ _ _ hx₁ hq₁ k1) (div_nonneg hx₂ hq₂)
+    · linear_combination ht + hxs - t * hqs
+    · have htc : (t : ℂ) * q₂ = x₂ := by exact_mod_cast ht
+      push_cast; linear_combination htc * c
 
 /-- Generic: a quadrilateral whose diagonals meet has both triangulations
 covering the same set. -/
