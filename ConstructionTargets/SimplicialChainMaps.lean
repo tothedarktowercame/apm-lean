@@ -4549,7 +4549,40 @@ theorem oriented_model_aux_conj {X : Type} [TopologicalSpace X] {n : ℕ} (K K' 
     ∀ k, HomologicalComplex.homologyMap (sdH ≫ hmH) k ≫ HomologicalComplex.homologyMap cmpKH k =
       HomologicalComplex.homologyMap cmpKH k ≫
         induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k := by
-  sorry
+  intro k
+  have hf :=
+    ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) hhom k
+  change induced
+      ((homeomorphMap e).comp (g.comp ((homeomorphMap e.symm).comp
+        (homeomorphMap (Homeomorph.setCongr hspace))))) k = induced f k at hf
+  have hind :
+      induced (homeomorphMap (Homeomorph.setCongr hspace.symm)) k ≫ induced f k =
+        induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k := by
+    rw [← hf]
+    unfold induced
+    rw [← Functor.map_comp, ← TopCat.ofHom_comp]
+    congr 1
+  calc
+    HomologicalComplex.homologyMap (sdH ≫ hmH) k ≫
+        HomologicalComplex.homologyMap cmpKH k =
+      HomologicalComplex.homologyMap sdH k ≫
+        (HomologicalComplex.homologyMap hmH k ≫
+          HomologicalComplex.homologyMap cmpKH k) := by
+            rw [HomologicalComplex.homologyMap_comp, Category.assoc]
+    _ = HomologicalComplex.homologyMap sdH k ≫
+        (HomologicalComplex.homologyMap cmpK'H k ≫ induced f k) := by
+      exact congrArg (fun z => HomologicalComplex.homologyMap sdH k ≫ z) (hv k)
+    _ = (HomologicalComplex.homologyMap sdH k ≫
+        HomologicalComplex.homologyMap cmpK'H k) ≫ induced f k :=
+      (Category.assoc _ _ _).symm
+    _ = (HomologicalComplex.homologyMap cmpKH k ≫
+        induced (homeomorphMap (Homeomorph.setCongr hspace.symm)) k) ≫ induced f k := by
+      exact congrArg (fun z => z ≫ induced f k) (hsd k)
+    _ = HomologicalComplex.homologyMap cmpKH k ≫
+        induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k := by
+      exact (Category.assoc _ _ _).trans
+        (congrArg (fun z => HomologicalComplex.homologyMap cmpKH k ≫ z) hind)
 
 /-- A chain model with a bijective comparison square represents `g`. Set
 `E k := LinearEquiv.ofBijective (c k).hom (hc k)`, followed by the isomorphism
