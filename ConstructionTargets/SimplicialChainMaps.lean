@@ -3636,7 +3636,21 @@ theorem composite_zero_diagonal_of_isHullCarried {n : ℕ} (o : LinearOrder (Euc
     (hhm : IsVertexChainMap o o K' K h hm)
     (havoid : CarrierAvoidingVertexMap K K' h) :
     ∀ k (s : FaceIndex K k), (hm k (F k (Finsupp.single s 1))) s = 0 := by
-  sorry
+  classical
+  intro k s
+  rw [← Finsupp.sum_single (F k (Finsupp.single s 1))]
+  change Finsupp.applyAddHom s
+    (hm k (∑ u ∈ (F k (Finsupp.single s 1)).support,
+      Finsupp.single u ((F k (Finsupp.single s 1)) u))) = 0
+  rw [map_sum, map_sum]
+  apply Finset.sum_eq_zero
+  intro u hu
+  rw [← Finsupp.smul_single_one, map_smul]
+  change (F k (Finsupp.single s 1)) u *
+    (hm k (Finsupp.single u 1)) s = 0
+  rw [composite_zero_diagonal_aux_vertex o K K' h hm hhm havoid k s u
+    (hF k s u hu)]
+  simp only [mul_zero]
 
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
 an iterated barycentric subdivision, together with a carrier-avoiding simplicial
