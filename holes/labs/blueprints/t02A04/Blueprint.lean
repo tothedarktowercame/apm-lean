@@ -1274,7 +1274,16 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_cover (y : EuclideanSpace ℝ (Fin 7)) (hy : y ∈ apm_t02A04_coneComplex.space) :
     ∃ i, y ∈ apm_t02A04_coneHull i := by
-  sorry
+  classical
+  rw [Geometry.SimplicialComplex.mem_space_iff] at hy
+  obtain ⟨S, hS, hy⟩ := hy
+  have hSb : S ∈ ConstructionTargets.RealProjectivePlaneTriangulation.basisFaces 7
+      (Finset.univ.image apm_t02A04_coneFacet) := by
+    exact hS.1
+  obtain ⟨f, hf, hSf⟩ := hSb
+  obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hf
+  refine ⟨i, ?_⟩
+  exact convexHull_mono (by exact_mod_cast hSf) hy
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_point_norm (i : Fin 6) (y : EuclideanSpace ℝ (Fin 7)) (hy : y ∈ apm_t02A04_coneHull i) :
     ‖apm_t02A04_conePoint i y‖ ≤ 1 := by
