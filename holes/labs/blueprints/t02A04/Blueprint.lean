@@ -1480,7 +1480,58 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary (i : F
     (hx : x ∈ apm_t02A04_coneHull i) :
     (∀ k, 0 ≤ x k) ∧ x 0 + x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)) = 1 ∧
       (∀ k, k ∉ apm_t02A04_coneFacet i → x k = 0) := by
-  sorry
+  have hstd : x ∈ {z : EuclideanSpace ℝ (Fin 7) |
+      (∀ k, 0 ≤ z k) ∧ ∑ k, z k = 1} := by
+    apply convexHull_min _ (show Convex ℝ {z : EuclideanSpace ℝ (Fin 7) |
+        (∀ k, 0 ≤ z k) ∧ ∑ k, z k = 1} by
+      intro y hy z hz a b ha hb hab
+      simp only [Set.mem_setOf_eq] at hy hz ⊢
+      constructor
+      · intro k
+        exact add_nonneg (mul_nonneg ha (hy.1 k)) (mul_nonneg hb (hz.1 k))
+      · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hy.2, hz.2, hab]) hx
+    rintro y hy
+    simp only [apm_t02A04_coneHull, Finset.coe_image, Set.mem_image] at hy
+    obtain ⟨j, hj, rfl⟩ := hy
+    constructor
+    · intro k
+      simp only [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply]
+      split_ifs <;> norm_num
+    · simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+  have hzero : ∀ k, k ∉ apm_t02A04_coneFacet i → x k = 0 := by
+    intro k hk
+    apply convexHull_min _ (show Convex ℝ {z : EuclideanSpace ℝ (Fin 7) | z k = 0} by
+      intro y hy z hz a b ha hb hab
+      simp only [Set.mem_setOf_eq] at hy hz ⊢
+      simp [hy, hz]) hx
+    rintro y hy
+    simp only [apm_t02A04_coneHull, Finset.coe_image, Set.mem_image] at hy
+    obtain ⟨j, hj, rfl⟩ := hy
+    simp only [Set.mem_setOf_eq,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply]
+    split_ifs with h
+    · exact (hk (h ▸ hj)).elim
+    · rfl
+  have hsum : x 0 + x (apm_t02A04_coneIdx i) +
+      x (apm_t02A04_coneIdx (i + 1)) = 1 := by
+    apply convexHull_min _ (show Convex ℝ {z : EuclideanSpace ℝ (Fin 7) |
+        z 0 + z (apm_t02A04_coneIdx i) +
+          z (apm_t02A04_coneIdx (i + 1)) = 1} by
+      intro y hy z hz a b ha hb hab
+      simp only [Set.mem_setOf_eq] at hy hz ⊢
+      simp only [PiLp.add_apply, PiLp.smul_apply, smul_eq_mul]
+      nlinarith [hy, hz]) hx
+    rintro y hy
+    simp only [Finset.coe_image, Set.mem_image] at hy
+    obtain ⟨j, hj, rfl⟩ := hy
+    fin_cases i <;>
+      simp [apm_t02A04_coneFacet, apm_t02A04_coneIdx,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply] at hj ⊢ <;>
+      aesop
+  exact ⟨hstd.1, hsum, hzero⟩
 
 /-- Equal arc points with parameters in `[0, 1]`: same arc and parameter, or the
 shared endpoint of adjacent arcs.  (`Circle.exp` is `2π`-periodic and injective on
