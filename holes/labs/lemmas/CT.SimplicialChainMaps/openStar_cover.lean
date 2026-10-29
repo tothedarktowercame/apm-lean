@@ -4000,7 +4000,15 @@ hull contains `x`. Then `x` is off the hull of `s.erase w` for each `w ∈ s`, a
 -- BEGIN SEAT AREA
 theorem openStar_cover {n : ℕ} (L : GSC n) (x : L.space) :
     ∃ w ∈ L.vertices, (x : Euc n) ∈ GeometricSimplicialSubdivision.openStar L w := by
-  sorry
+  classical
+  obtain ⟨s, hs, hxs, hinterior⟩ :=
+    GeometricSimplicialSubdivision.inducedMap_homotopic_of_star_condition_aux_source_carrier
+      L x
+  obtain ⟨w, hw⟩ := L.nonempty_of_mem_faces hs
+  have hwface : {w} ∈ L.faces :=
+    L.down_closed hs (Finset.singleton_subset_iff.mpr hw) (Finset.singleton_nonempty w)
+  refine ⟨w, Geometry.SimplicialComplex.mem_vertices.mpr hwface, ?_⟩
+  exact ⟨s, hs, hw, hxs, hinterior w hw⟩
 -- END SEAT AREA
 
 /-- A Lebesgue number for the pulled-back open-star cover. `L.space` is compact
