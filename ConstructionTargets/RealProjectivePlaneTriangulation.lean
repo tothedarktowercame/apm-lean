@@ -1221,8 +1221,49 @@ lemma rp2_explicit_finite_model_aux_continuous : Continuous rp2Map := by
 lemma rp2_explicit_finite_model_aux_injective : Function.Injective rp2Map := by
   sorry
 
-lemma rp2_explicit_finite_model_aux_surjective : Function.Surjective rp2Map := by
+/-- The 18 planar triangles cover the hexagon. -/
+lemma rp2_explicit_finite_model_aux_surjective_aux_planar (z : ℂ) (hz : z ∈ hexagon) :
+    ∃ p y, y ∈ facetHull p ∧ rp2Affine p y = z := by
   sorry
+
+lemma rp2_explicit_finite_model_aux_facetHull_subset (p : Fin 6 × Fin 3) : facetHull p ⊆ rp2Complex.space := by
+  intro y hy
+  refine Geometry.SimplicialComplex.convexHull_subset_space (K := rp2Complex) ?_ hy
+  refine ⟨⟨rp2Facet p, Finset.mem_image_of_mem _ (Finset.mem_univ _), Finset.Subset.refl _⟩, ?_⟩
+  simp only [Set.mem_singleton_iff, Finset.image_eq_empty]
+  intro h
+  have : (0 : Fin 10) ∈ rp2Facet p ∨ ringIdx p.1 ∈ rp2Facet p := by
+    unfold rp2Facet; split_ifs <;> simp
+  rcases this with h0 | h0 <;> simp [h] at h0
+
+/-- `rp2Map` may be evaluated on any facet containing the point (`_aux_agree`). -/
+lemma rp2_explicit_finite_model_aux_rp2Map_eq (y : rp2Complex.space) (p : Fin 6 × Fin 3)
+    (hp : (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull p) :
+    rp2Map y = Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p y))) := by
+  classical
+  have hex : ∃ p, (y : EuclideanSpace ℝ (Fin 10)) ∈ facetHull p := ⟨p, hp⟩
+  unfold rp2Map
+  rw [dif_pos hex]
+  exact rp2_explicit_finite_model_aux_agree _ _ _ (Classical.choose_spec hex) hp
+
+lemma rp2_explicit_finite_model_aux_diskClamp_coe (x : Surfaces.Disk) : diskClamp (x : ℂ) = x := by
+  have hx : ‖(x : ℂ)‖ ≤ 1 := by
+    have h := x.2
+    rwa [Metric.mem_closedBall, dist_zero_right] at h
+  simp [diskClamp, hx]
+
+lemma rp2_explicit_finite_model_aux_surjective : Function.Surjective rp2Map := by
+  intro q
+  obtain ⟨x, rfl⟩ := Surfaces.surjective_surfaceQuotient false 1 q
+  have hx : ‖(x : ℂ)‖ ≤ 1 := by
+    have h := x.2
+    rwa [Metric.mem_closedBall, dist_zero_right] at h
+  obtain ⟨z, hz, hzx⟩ := rp2_explicit_finite_model_aux_hex_surj (x : ℂ) hx
+  obtain ⟨p, y, hy, hA⟩ := rp2_explicit_finite_model_aux_surjective_aux_planar z hz
+  refine ⟨⟨y, rp2_explicit_finite_model_aux_facetHull_subset p hy⟩, ?_⟩
+  rw [rp2_explicit_finite_model_aux_rp2Map_eq _ p hy]
+  change Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p y))) = _
+  rw [hA, hzx, rp2_explicit_finite_model_aux_diskClamp_coe]
 
 lemma rp2_explicit_finite_model_aux_centre_mem : basisVertex 10 0 ∈ rp2Complex.space := by
   rw [Geometry.SimplicialComplex.mem_space_iff]
