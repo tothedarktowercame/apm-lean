@@ -2124,7 +2124,31 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_mem
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_not_mem {n k : ℕ} (o : LinearOrder (Euc n)) (K' : GSC n)
     (b : Euc n) (x : FaceModuleCat K' k) (U : FaceIndex K' (k + 1)) (hb : b ∉ U.1) :
     subdivisionCone o K' b k x U = 0 := by
-  sorry
+  classical
+  simp only [subdivisionCone]
+  change (Finsupp.linearCombination ℚ (fun u : FaceIndex K' k =>
+    if hu : b ∉ u.1 ∧ insert b u.1 ∈ K'.faces then
+      Finsupp.single
+        (⟨insert b u.1, hu.2,
+          by rw [Finset.card_insert_of_notMem hu.1, u.2.2]⟩ : FaceIndex K' (k + 1))
+        ((-1 : ℚ) ^ (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card)
+    else 0)) x U = 0
+  rw [Finsupp.linearCombination_apply]
+  simp only [Finsupp.sum_apply, Finsupp.sum]
+  rw [Finsupp.finset_sum_apply]
+  apply Finset.sum_eq_zero
+  intro u hu
+  split_ifs with hcone
+  · simp only [Finsupp.coe_smul, Pi.smul_apply]
+    rw [Finsupp.single_apply]
+    split_ifs with heq
+    · exfalso
+      apply hb
+      rw [← congrArg Subtype.val heq]
+      exact Finset.mem_insert_self b u.1
+    · simp
+  · rw [smul_zero]
+    rfl
 -- END SEAT AREA
 
 /-- Reindexing: strict chains of `s` with barycenter image `u` (necessarily
