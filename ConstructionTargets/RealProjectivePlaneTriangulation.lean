@@ -1180,9 +1180,61 @@ lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_edge_sub
 
 /-- The hexagon lies in the half-plane `Re (w · conj ν_j) ≤ cos (π/6)` (check the
 six vertices: the angle to `ν_j` is at least `π/6`; then convexity). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_period
+    (n : ℕ) : edgeNormal (n + 6) = edgeNormal n := by
+  unfold edgeNormal
+  rw [show Complex.I * (Real.pi * (2 * ((n + 6 : ℕ) : ℂ) + 1) / 6) =
+      2 * Real.pi * Complex.I +
+        Complex.I * (Real.pi * (2 * (n : ℂ) + 1) / 6) by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I]
+  simp
+
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_cos (m : ℤ) : Real.cos (Real.pi * (2 * m - 1) / 6) ≤ Real.cos (Real.pi / 6) := by
+  obtain ⟨q, r, hr0, hr6, rfl⟩ : ∃ q r : ℤ, 0 ≤ r ∧ r < 6 ∧ m = r + 6 * q :=
+    ⟨m / 6, m % 6, Int.emod_nonneg _ (by norm_num), Int.emod_lt_of_pos _ (by norm_num),
+      by omega⟩
+  have hper : Real.pi * (2 * ((r + 6 * q : ℤ) : ℝ) - 1) / 6 =
+      Real.pi * (2 * (r : ℝ) - 1) / 6 + q * (2 * Real.pi) := by push_cast; ring
+  rw [hper, Real.cos_add_int_mul_two_pi]
+  have hc : 0 < Real.cos (Real.pi / 6) := by rw [Real.cos_pi_div_six]; positivity
+  interval_cases r
+  · rw [show Real.pi * (2 * ((0 : ℤ) : ℝ) - 1) / 6 = -(Real.pi / 6) by push_cast; ring,
+      Real.cos_neg]
+  · rw [show Real.pi * (2 * ((1 : ℤ) : ℝ) - 1) / 6 = Real.pi / 6 by push_cast; ring]
+  · rw [show Real.pi * (2 * ((2 : ℤ) : ℝ) - 1) / 6 = Real.pi / 2 by push_cast; ring,
+      Real.cos_pi_div_two]; exact hc.le
+  · rw [show Real.pi * (2 * ((3 : ℤ) : ℝ) - 1) / 6 = Real.pi - Real.pi / 6 by push_cast; ring,
+      Real.cos_pi_sub]; linarith
+  · rw [show Real.pi * (2 * ((4 : ℤ) : ℝ) - 1) / 6 = Real.pi / 6 + Real.pi by push_cast; ring,
+      Real.cos_add_pi]; linarith
+  · rw [show Real.pi * (2 * ((5 : ℤ) : ℝ) - 1) / 6 = Real.pi / 2 + Real.pi by push_cast; ring,
+      Real.cos_add_pi, Real.cos_pi_div_two]; linarith
+
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_vertex (j k : ℕ) :
+    (hexVertex k * starRingEnd ℂ (edgeNormal j)).re ≤ Real.cos (Real.pi / 6) := by
+  have h1 : hexVertex k = Complex.exp (((2 * Real.pi * k / 6 : ℝ) : ℂ) * Complex.I) := by
+    unfold hexVertex; congr 1; push_cast; ring
+  have h2 : edgeNormal j = Complex.exp (((Real.pi * (2 * j + 1) / 6 : ℝ) : ℂ) * Complex.I) := by
+    unfold edgeNormal; congr 1; push_cast; ring
+  rw [h1, h2, Complex.mul_re, Complex.conj_re, Complex.conj_im, Complex.exp_ofReal_mul_I_re,
+    Complex.exp_ofReal_mul_I_re, Complex.exp_ofReal_mul_I_im, Complex.exp_ofReal_mul_I_im]
+  have := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_cos ((k : ℤ) - j)
+  rw [show Real.pi * (2 * (((k : ℤ) - j : ℤ) : ℝ) - 1) / 6 =
+      2 * Real.pi * k / 6 - Real.pi * (2 * j + 1) / 6 by push_cast; ring, Real.cos_sub] at this
+  linarith
+
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane (j : ℕ) (w : ℂ) (hw : w ∈ hexagon) :
     (w * starRingEnd ℂ (edgeNormal j)).re ≤ Real.cos (Real.pi / 6) := by
-  sorry
+  have hlin : IsLinearMap ℝ fun w : ℂ => (w * starRingEnd ℂ (edgeNormal j)).re := by
+    constructor
+    · intro x y; simp [add_mul]
+    · intro c x; erw [Complex.real_smul]; simp [Complex.mul_re]; ring
+  have hconv := convex_halfSpace_le hlin (Real.cos (Real.pi / 6))
+  refine convexHull_min ?_ hconv hw
+  rintro _ ⟨k, rfl⟩
+  exact rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane_aux_vertex j k
 
 /-- Edge `j` lies on the boundary line of that half-plane. -/
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line (j : ℕ) (z : ℂ)
