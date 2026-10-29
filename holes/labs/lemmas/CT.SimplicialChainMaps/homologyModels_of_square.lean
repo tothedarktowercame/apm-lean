@@ -4533,7 +4533,64 @@ theorem homologyModels_of_square {X : Type} [TopologicalSpace X] {n : ℕ} (K : 
     (hsq : ∀ k, HomologicalComplex.homologyMap M.φ k ≫ c k =
       c k ≫ induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k) :
     LefschetzCompactPolyhedron.HomologyModels M g := by
-  sorry
+  let F : ℕ → TopCat ⥤ ModuleCat ℚ := fun k =>
+    (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)
+  have hei (k : ℕ) : Function.Bijective (induced (homeomorphMap e.symm) k).hom := by
+    apply Function.bijective_iff_has_inverse.mpr
+    refine ⟨(induced (homeomorphMap e) k).hom, ?_, ?_⟩
+    · intro x
+      have h : induced (homeomorphMap e.symm) k ≫ induced (homeomorphMap e) k = 𝟙 _ := by
+        change (F k).map _ ≫ (F k).map _ = _
+        rw [← Functor.map_comp]
+        rw [show TopCat.ofHom (homeomorphMap e.symm) ≫ TopCat.ofHom (homeomorphMap e) = 𝟙 _ by
+          apply TopCat.hom_ext
+          apply ContinuousMap.ext
+          intro y
+          exact e.apply_symm_apply y]
+        exact (F k).map_id _
+      exact congrArg (fun q => q.hom x) h
+    · intro x
+      have h : induced (homeomorphMap e) k ≫ induced (homeomorphMap e.symm) k = 𝟙 _ := by
+        change (F k).map _ ≫ (F k).map _ = _
+        rw [← Functor.map_comp]
+        rw [show TopCat.ofHom (homeomorphMap e) ≫ TopCat.ofHom (homeomorphMap e.symm) = 𝟙 _ by
+          apply TopCat.hom_ext
+          apply ContinuousMap.ext
+          intro y
+          exact e.symm_apply_apply y]
+        exact (F k).map_id _
+      exact congrArg (fun q => q.hom x) h
+  let E : ∀ k, M.C.homology k ≃ₗ[ℚ] Homology X k := fun k =>
+    (LinearEquiv.ofBijective (c k).hom (hc k)).trans
+      (LinearEquiv.ofBijective (induced (homeomorphMap e.symm) k).hom (hei k))
+  refine ⟨E, fun k => ?_⟩
+  apply LinearMap.ext
+  intro x
+  have hs := congrArg (fun q => q.hom x) (hsq k)
+  change (c k).hom ((HomologicalComplex.homologyMap M.φ k).hom x) =
+    (induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k).hom
+      ((c k).hom x) at hs
+  change (induced (homeomorphMap e.symm) k).hom
+      ((c k).hom ((HomologicalComplex.homologyMap M.φ k).hom x)) =
+    (induced g k).hom ((induced (homeomorphMap e.symm) k).hom ((c k).hom x))
+  rw [hs]
+  change (induced (homeomorphMap e.symm) k).hom
+      ((induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k).hom
+        ((c k).hom x)) =
+    (induced g k).hom ((induced (homeomorphMap e.symm) k).hom ((c k).hom x))
+  have hnat :
+      induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k ≫
+          induced (homeomorphMap e.symm) k =
+        induced (homeomorphMap e.symm) k ≫ induced g k := by
+    change (F k).map _ ≫ (F k).map _ = (F k).map _ ≫ (F k).map _
+    rw [← Functor.map_comp, ← Functor.map_comp]
+    apply congrArg (F k).map
+    apply TopCat.hom_ext
+    apply ContinuousMap.ext
+    intro y
+    exact e.symm_apply_apply (g (e.symm y))
+  exact congrArg (fun q => q.hom ((c k).hom x)) hnat
 -- END SEAT AREA
 
 /-- LIBRARY: assemble explicit commuting subdivision and vertex maps, their
