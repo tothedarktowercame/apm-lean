@@ -1911,7 +1911,19 @@ lemma apm_t02A04_solidTorus_prism_model_aux_cover (y : EuclideanSpace ℝ (Fin 2
 -- BEGIN SEAT AREA
 lemma apm_t02A04_solidTorus_prism_model_aux_vertex_mem (i : Fin 6) :
     ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i) ∈ apm_t02A04_prismComplex.space := by
-  sorry
+  rw [Geometry.SimplicialComplex.mem_space_iff]
+  refine ⟨{ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+      (apm_t02A04_curveIdx i)},
+    ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_vertex_mem
+      (f := apm_t02A04_prismFacet
+        (i, ⟨i.1 % 3, Nat.mod_lt _ (by decide)⟩, 1)) ?_ ?_, ?_⟩
+  · exact Finset.mem_image_of_mem _ (Finset.mem_univ _)
+  · simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and, apm_t02A04_curveIdx]
+    left
+    refine ⟨1, le_rfl, ?_⟩
+    simp [apm_t02A04_prismDisk]
+  · simp
 -- END SEAT AREA
 
 /-- The curve edge `i` is an edge of tetrahedron `(i, i mod 3, 1)`. -/
