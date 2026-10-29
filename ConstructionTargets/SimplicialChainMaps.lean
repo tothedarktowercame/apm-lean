@@ -4410,7 +4410,44 @@ theorem exists_fine_iterated_approximation
                   ((barycentricStep^[m]) ((barycentricStep^[p]) K)) v) ⊆
             (Subtype.val : ((barycentricStep^[p]) K).space → Euc n) ⁻¹'
               GeometricSimplicialSubdivision.openStar ((barycentricStep^[p]) K) (h v) := by
-  sorry
+  classical
+  obtain ⟨p, hpmesh⟩ := barycentricStep_iterate_mesh_lt K hK δ hδ
+  let L : GSC n := (barycentricStep^[p]) K
+  have hL : L.space = K.space := barycentricStep_iterate_space K p
+  have hLfin : L.faces.Finite := barycentricStep_iterate_finite K hK p
+  let E : X ≃ₜ L.space := e.trans (Homeomorph.setCongr hL.symm)
+  let G : C(L.space, L.space) :=
+    (homeomorphMap E).comp (g.comp (homeomorphMap E.symm))
+  obtain ⟨ε, hε, hleb⟩ := exists_lebesgue_openStar L hLfin G
+  obtain ⟨m, hmmesh⟩ :=
+    barycentricStep_iterate_mesh_lt L hLfin (ε / 2) (by linarith)
+  let K'' : GSC n := (barycentricStep^[m]) L
+  have hspace : K''.space = L.space := barycentricStep_iterate_space L m
+  have hK''fin : K''.faces.Finite := barycentricStep_iterate_finite L hLfin m
+  let H : C(K''.space, L.space) :=
+    G.comp (homeomorphMap (Homeomorph.setCongr hspace))
+  have hleb' : ∀ x : K''.space, ∃ w ∈ L.vertices,
+      Metric.ball x ε ⊆ H ⁻¹' ((Subtype.val : L.space → Euc n) ⁻¹'
+        GeometricSimplicialSubdivision.openStar L w) := by
+    intro x
+    obtain ⟨w, hw, hb⟩ := hleb (Homeomorph.setCongr hspace x)
+    refine ⟨w, hw, ?_⟩
+    intro y hy
+    apply hb
+    rw [Metric.mem_ball] at hy ⊢
+    exact hy
+  obtain ⟨h, hh, hstar⟩ :=
+    GeometricSimplicialSubdivision.exists_vertexMap_of_mesh_lt_lebesgue
+      K'' L H ε hε hleb' hmmesh
+  refine ⟨p, m, hL, hLfin, hspace, hK''fin, h, hh, ?_, ?_⟩
+  · apply carrierAvoiding_of_star_margin L K'' H h δ hpmesh
+    · intro s hs x hxs y hy
+      obtain ⟨S, hS, hsS⟩ := barycentricStep_iterate_face_hull K p s hs
+      apply hmargin S hS (E.symm (Homeomorph.setCongr hspace x))
+      · simpa [E] using hsS hxs
+      · exact hsS hy
+    · exact hstar
+  · simpa [L, K'', E, G, H, homeomorphMap] using hstar
 
 /-- LIBRARY: assemble explicit commuting subdivision and vertex maps, their
 comparison squares and quasi-isomorphism into the packaged finite chain model. -/
