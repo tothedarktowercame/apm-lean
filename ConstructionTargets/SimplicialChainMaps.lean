@@ -3751,7 +3751,12 @@ theorem composite_zero_diagonal_of_isHullCarried {n : ℕ} (o : LinearOrder (Euc
 `Function.iterate_succ_apply'` and `GeometricSimplicialSubdivision.barycentricSubdivision_space`. -/
 theorem barycentricStep_iterate_space {n : ℕ} (K : GSC n) (m : ℕ) :
     ((barycentricStep^[m]) K).space = K.space := by
-  sorry
+  induction m with
+  | zero => rfl
+  | succ m ih =>
+      rw [Function.iterate_succ_apply', barycentricStep,
+        GeometricSimplicialSubdivision.barycentricSubdivision_space]
+      exact ih
 
 /-- Iterated barycentric subdivision keeps finiteness: induction on `m` with the
 finiteness theorem for `barycentricSubdivision` in `GeometricSimplicialSubdivision`. -/
