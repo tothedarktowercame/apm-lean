@@ -3877,7 +3877,15 @@ theorem orientedChains_homology_finiteDimensional {n : ℕ} (K : GSC n)
     (hK : K.faces.Finite) (d : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
     (hdd : ∀ k, d (k+1) ≫ d k = 0) (k : ℕ) :
     FiniteDimensional ℚ ((ChainComplex.of _ d hdd).homology k) := by
-  sorry
+  let C := ChainComplex.of (fun k ↦ FaceModuleCat K k) d hdd
+  letI : FiniteDimensional ℚ (C.X k) := by
+    change FiniteDimensional ℚ (FaceModule K k)
+    exact faceModule_finiteDimensional K hK k
+  letI : FiniteDimensional ℚ (C.cycles k) :=
+    FiniteDimensional.of_injective (C.iCycles k).hom
+      ((ModuleCat.mono_iff_injective (C.iCycles k)).mp inferInstance)
+  exact FiniteDimensional.of_surjective (C.homologyπ k).hom
+    ((ModuleCat.epi_iff_surjective (C.homologyπ k)).mp inferInstance)
 -- END SEAT AREA
 
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
