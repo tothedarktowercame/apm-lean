@@ -3817,7 +3817,24 @@ theorem orientedPackage_exists {n : ℕ} (o : LinearOrder (Euc n)) (L : GSC n) :
       (_ : IsAffineComparison L cmp)
       (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of L.space)),
       ∀ k, cmpH.f k = cmp k := by
-  sorry
+  obtain ⟨d, hd⟩ := signedDeletion_exists o L
+  let hdd : ∀ k, d (k + 1) ≫ d k = 0 := signedDeletion_sq_zero o L d hd
+  obtain ⟨cmp, hcmp, hchain⟩ := affineComparison_exists_and_commutes o L d hd
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of L.space)
+  let cmpOf : ChainComplex.of _ d hdd ⟶
+      ChainComplex.of _ (fun j ↦ C.d (j + 1) j)
+        (fun j ↦ C.d_comp_d (j + 2) (j + 1) j) :=
+    ChainComplex.ofHom _ _ hdd _ _
+      (fun j ↦ C.d_comp_d (j + 2) (j + 1) j) cmp hchain
+  let e : ChainComplex.of _ (fun j ↦ C.d (j + 1) j)
+      (fun j ↦ C.d_comp_d (j + 2) (j + 1) j) ⟶ C :=
+    { f := fun _ ↦ 𝟙 _
+      comm' := by
+        rintro i j (rfl : j + 1 = i)
+        simp [ChainComplex.of_d] }
+  refine ⟨d, hd, hdd, cmp, hcmp, cmpOf ≫ e, ?_⟩
+  intro k
+  simp [cmpOf, e]
 
 lemma iterSubdivision_square_aux_zero {n : ℕ} (o : LinearOrder (Euc n)) (K : GSC n)
     (d : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
