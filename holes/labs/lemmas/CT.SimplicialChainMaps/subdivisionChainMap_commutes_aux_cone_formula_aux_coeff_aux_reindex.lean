@@ -1321,10 +1321,8 @@ theorem subdivisionChainMap_commutes_aux_cone_boundary_zero {n : ℕ}
     dK' 0 (subdivisionCone o K' b 0 x) =
       x - (x.sum fun _ a => a) •
         Finsupp.single (⟨{b}, hb, by simp⟩ : FaceIndex K' 0) 1 := by
-  sorry
-/-
   classical
-  rw [← Finsupp.sum_single x]
+  conv_lhs => rw [← Finsupp.sum_single x]
   change dK' 0 (subdivisionCone o K' b 0
       (∑ u ∈ x.support, Finsupp.single u (x u))) = _
   simp only [map_sum]
@@ -1337,10 +1335,11 @@ theorem subdivisionChainMap_commutes_aux_cone_boundary_zero {n : ℕ}
     intro u hu
     exact subdivisionChainMap_commutes_aux_cone_boundary_zero_aux_single
       o K' dK' hdK' b hb u (hx u (Finsupp.mem_support_iff.mp hu)) (x u)
-  rw [hsum]
-  rw [Finset.sum_sub_distrib]
-  rw [← Finset.sum_smul]
--/
+  rw [hsum, Finset.sum_sub_distrib]
+  congr 1
+  · exact Finsupp.sum_single x
+  · rw [Finsupp.sum]
+    exact Finset.sum_smul.symm
 
 /-- Subdivision chains of proper facets can be coned to the barycenter of the
 ambient face. -/
