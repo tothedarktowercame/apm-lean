@@ -2646,6 +2646,437 @@ theorem subdivisionChainMap_commutes {n : ℕ} (o : LinearOrder (Euc n))
   · intro k
     exact subdivisionChainMap_commutes_aux_facet_admissible o K sd hsd
 
+/-- (V1) A differential intertwined by an affine comparison sends each face to
+a combination of its own subfaces: the boundary of the comparison simplex of `s`
+has range in `convexHull s`, and comparison simplices of distinct faces are
+distinct generators whose ranges are the face hulls. -/
+lemma vertexChainMap_affineComparison_square_aux_d_support_aux_hull {n : ℕ} (K : GSC n)
+    {u v : Finset (Euc n)} (hu : u ∈ K.faces) (hv : v ∈ K.faces)
+    (h : convexHull ℝ (u : Set (Euc n)) ⊆ convexHull ℝ (v : Set (Euc n))) : u ⊆ v := by
+  classical
+  intro x hx
+  have hxu : x ∈ convexHull ℝ (u : Set (Euc n)) := subset_convexHull ℝ _ hx
+  have hxi : x ∈ convexHull ℝ ((u ∩ v : Finset (Euc n)) : Set (Euc n)) := by
+    rw [show convexHull ℝ ((u ∩ v : Finset (Euc n)) : Set (Euc n)) =
+        convexHull ℝ (u : Set (Euc n)) ∩ convexHull ℝ (v : Set (Euc n)) by
+      simpa only [Finset.coe_inter] using (K.convexHull_inter_convexHull hu hv).symm]
+    exact ⟨hxu, h hxu⟩
+  by_contra hxv
+  have heq := (K.indep hu).convexHull_inter (R := ℝ)
+    (show {x} ⊆ u by simpa) (show u ∩ v ⊆ u by simp)
+  have hempty : ({x} ∩ (u ∩ v) : Finset (Euc n)) = ∅ := by
+    ext y
+    simp [hxv]
+  have hp : x ∈ convexHull ℝ (({x} ∩ (u ∩ v) : Finset (Euc n)) : Set (Euc n)) := by
+    rw [show convexHull ℝ (({x} ∩ (u ∩ v) : Finset (Euc n)) : Set (Euc n)) =
+        convexHull ℝ ({x} : Set (Euc n)) ∩
+          convexHull ℝ ((u ∩ v : Finset (Euc n)) : Set (Euc n)) by
+      simpa only [Finset.coe_inter, Finset.coe_singleton] using heq]
+    exact ⟨by simpa using hx, hxi⟩
+  rw [hempty, Finset.coe_empty, convexHull_empty] at hp
+  exact hp
+
+lemma vertexChainMap_affineComparison_square_aux_d_support {n : ℕ} (K : GSC n)
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : IsAffineComparison K cmp)
+    (hchain : ∀ k, cmp (k + 1) ≫
+        (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k = d k ≫ cmp k)
+    (k : ℕ) (s : FaceIndex K (k + 1)) (t : FaceIndex K k)
+    (ht : d k (Finsupp.single s 1) t ≠ 0) : t.1 ⊆ s.1 := by
+  classical
+  let σ : ∀ j, FaceIndex K j → SingularSubdivision.SingularSimplex (TopCat.of K.space) j :=
+    fun j u => Classical.choose (hcmp j u)
+  have hσ (j : ℕ) (u : FaceIndex K j) :
+      cmp j (Finsupp.single u 1) =
+        (CoefficientH0.singularGenerator ℚ _ j (σ j u)) 1 :=
+    (Classical.choose_spec (hcmp j u)).1
+  have hrange (j : ℕ) (u : FaceIndex K j) :
+      Set.range (SingularSubdivision.continuousMapOfSingularSimplex j (σ j u)) =
+        (fun x : K.space => (x : Euc n)) ⁻¹'
+          convexHull ℝ (u.1 : Set (Euc n)) :=
+    (Classical.choose_spec (hcmp j u)).2
+  have hσ_inj (j : ℕ) : Function.Injective (σ j) := by
+    intro u v huv
+    apply Subtype.ext
+    apply Finset.Subset.antisymm
+    · apply vertexChainMap_affineComparison_square_aux_d_support_aux_hull K u.2.1 v.2.1
+      intro x hx
+      have hx' : (⟨x, K.convexHull_subset_space u.2.1 hx⟩ : K.space) ∈
+          Set.range (SingularSubdivision.continuousMapOfSingularSimplex j (σ j u)) := by
+        rw [hrange]
+        exact hx
+      rw [huv, hrange] at hx'
+      exact hx'
+    · apply vertexChainMap_affineComparison_square_aux_d_support_aux_hull K v.2.1 u.2.1
+      intro x hx
+      have hx' : (⟨x, K.convexHull_subset_space v.2.1 hx⟩ : K.space) ∈
+          Set.range (SingularSubdivision.continuousMapOfSingularSimplex j (σ j v)) := by
+        rw [hrange]
+        exact hx
+      rw [← huv, hrange] at hx'
+      exact hx'
+  let π : (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k ⟶
+      ModuleCat.of ℚ ℚ :=
+    Limits.Sigma.desc fun τ => if τ = σ k t then 𝟙 _ else 0
+  have hproj_any (τ : SingularSubdivision.SingularSimplex (TopCat.of K.space) k)
+      (a : ℚ) :
+      ((CoefficientH0.singularGenerator ℚ _ k τ ≫ π) a) =
+        if τ = σ k t then a else 0 := by
+    change ((Limits.Sigma.ι (fun _ : SingularSubdivision.SingularSimplex
+      (TopCat.of K.space) k => ModuleCat.of ℚ ℚ) τ ≫ π) a) = _
+    rw [Limits.Sigma.ι_desc]
+    split_ifs <;> simp
+  have hproj (u : FaceIndex K k) (a : ℚ) :
+      ((CoefficientH0.singularGenerator ℚ _ k (σ k u) ≫ π) a) =
+        if u = t then a else 0 := by
+    rw [hproj_any]
+    by_cases hut : u = t
+    · simp [hut]
+    · have hne : σ k u ≠ σ k t := fun h => hut ((hσ_inj k).eq_iff.mp h)
+      rw [if_neg hne, if_neg hut]
+  have hcoeff (x : FaceModule K k) : π (cmp k x) = x t := by
+    induction x using Finsupp.induction with
+    | zero => simp
+    | @single_add u a x hux ha ih =>
+        rw [map_add, map_add]
+        rw [show Finsupp.single u a = a • Finsupp.single u 1 by simp,
+          map_smul, map_smul, hσ]
+        have hp : a • π ((CoefficientH0.singularGenerator ℚ _ k (σ k u)) 1) =
+            if u = t then a else 0 := by
+          calc
+            _ = π (a • (CoefficientH0.singularGenerator ℚ _ k (σ k u)) 1) :=
+              (map_smul (ConcreteCategory.hom π) a _).symm
+            _ = π ((CoefficientH0.singularGenerator ℚ _ k (σ k u)) a) := by
+              congr 1
+              simpa using (map_smul (ConcreteCategory.hom
+                (CoefficientH0.singularGenerator ℚ _ k (σ k u))) a (1 : ℚ)).symm
+            _ = _ := hproj u a
+        rw [hp, ih]
+        by_cases hut : u = t <;> simp [hut, Finsupp.single_apply]
+  obtain ⟨σs, hσs, hrs⟩ := hcmp (k + 1) s
+  have hboundary :
+      ((CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k)
+          ((CoefficientH0.singularGenerator ℚ _ (k + 1) σs) 1) =
+        cmp k (d k (Finsupp.single s 1)) := by
+    rw [← hσs]
+    change ((cmp (k + 1) ≫
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k)
+        (Finsupp.single s 1)) = _
+    rw [hchain]
+    rfl
+  have hnonzero : π (((CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d
+      (k + 1) k) ((CoefficientH0.singularGenerator ℚ _ (k + 1) σs) 1)) ≠ 0 := by
+    rw [hboundary, hcoeff]
+    exact ht
+  rw [show ((CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k)
+      ((CoefficientH0.singularGenerator ℚ _ (k + 1) σs) 1) =
+        (∑ i : Fin (k + 2), (-1 : ℤ) ^ (i : ℕ) •
+          CoefficientH0.singularGenerator ℚ _ k
+            ((TopCat.toSSet.obj (TopCat.of K.space)).δ i σs)) 1 by
+      exact congrArg (fun f => f 1)
+        (CoefficientH0.singularGenerator_boundary ℚ _ k σs)] at hnonzero
+  simp only [ModuleCat.hom_sum, LinearMap.coe_sum, Finset.sum_apply, map_sum,
+    ModuleCat.hom_smul, LinearMap.smul_apply] at hnonzero
+  have hex : ∃ i : Fin (k + 2),
+      (TopCat.toSSet.obj (TopCat.of K.space)).δ i σs = σ k t := by
+    by_contra h
+    push_neg at h
+    apply hnonzero
+    apply Finset.sum_eq_zero
+    intro i hi
+    rw [← Int.cast_smul_eq_zsmul ℚ, map_smul]
+    apply smul_eq_zero.mpr
+    right
+    have hp := hproj_any
+      ((TopCat.toSSet.obj (TopCat.of K.space)).δ i σs) 1
+    rw [if_neg (h i)] at hp
+    exact hp
+  obtain ⟨i, hi⟩ := hex
+  apply vertexChainMap_affineComparison_square_aux_d_support_aux_hull K t.2.1 s.2.1
+  intro x hx
+  have hx' : (⟨x, K.convexHull_subset_space t.2.1 hx⟩ : K.space) ∈
+      Set.range (SingularSubdivision.continuousMapOfSingularSimplex k (σ k t)) := by
+    rw [hrange]
+    exact hx
+  rw [← hi] at hx'
+  rcases hx' with ⟨y, hy⟩
+  have hz : (⟨x, K.convexHull_subset_space t.2.1 hx⟩ : K.space) ∈
+      Set.range (SingularSubdivision.continuousMapOfSingularSimplex (k + 1) σs) := by
+    refine ⟨stdSimplex.map (SimplexCategory.δ i) y, ?_⟩
+    change (SingularSubdivision.continuousMapOfSingularSimplex k
+      ((TopCat.toSSet.obj (TopCat.of K.space)).δ i σs)) y = _
+    exact hy
+  rw [hrs] at hz
+  exact hz
+
+/-- (V2) Acyclic carriers into an arbitrary space: two chain maps from the face
+complex into the singular chains of `Y`, each carrying `s` into a monotone
+family of rationally pointlike subsets `A s` and equal in degree zero, are chain
+homotopic.  This generalizes `AcyclicCarriers.carried_chainHomotopy_exists`
+(target `K.space`, carrier = face-hull preimage, `IsSignedDeletion`): the same
+`CarriedStage` recursion goes through with `SubsetCarriedChain Y (A s)`
+in place of `FaceCarriedChain`, `subsetCarriedCycle_bounds` for the fill step,
+and `hdsupp` + `hA` in place of `IsSignedDeletion` for the carriedness of
+`d ≫ f'`. -/
+lemma vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_zero
+    (Y : Type) [TopologicalSpace Y] (A : Set Y) {k : ℕ} :
+    AcyclicCarriers.SubsetCarriedChain Y A
+      (0 : (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X k) := by
+  refine ⟨0, Fin.elim0, Fin.elim0, ?_, fun i ↦ i.elim0⟩
+  simp
+
+lemma vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_smul
+    (Y : Type) [TopologicalSpace Y] (A : Set Y) {k : ℕ}
+    (z : (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X k)
+    (hz : AcyclicCarriers.SubsetCarriedChain Y A z) (r : ℚ) :
+    AcyclicCarriers.SubsetCarriedChain Y A (r • z) := by
+  rcases hz with ⟨m, a, σ, rfl, hσ⟩
+  refine ⟨m, fun i ↦ r * a i, σ, ?_, hσ⟩
+  rw [Finset.smul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [← map_smul]
+  rfl
+
+lemma vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_add
+    (Y : Type) [TopologicalSpace Y] (A : Set Y) {k : ℕ}
+    (x y : (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X k)
+    (hx : AcyclicCarriers.SubsetCarriedChain Y A x)
+    (hy : AcyclicCarriers.SubsetCarriedChain Y A y) :
+    AcyclicCarriers.SubsetCarriedChain Y A (x + y) := by
+  classical
+  rcases hx with ⟨m, a, σ, rfl, hσ⟩
+  rcases hy with ⟨m', a', σ', rfl, hσ'⟩
+  let e : Fin m ⊕ Fin m' ≃ Fin (m + m') := finSumFinEquiv
+  let b : Fin (m + m') → ℚ := Sum.elim a a' ∘ e.symm
+  let τ : Fin (m + m') → SingularSubdivision.SingularSimplex (TopCat.of Y) k :=
+    Sum.elim σ σ' ∘ e.symm
+  refine ⟨m + m', b, τ, ?_, ?_⟩
+  · rw [← e.sum_comp]
+    simp [b, τ, Fintype.sum_sum_type]
+  · intro i
+    generalize hp : e.symm i = p
+    rcases p with j | j
+    · simpa [τ, hp] using hσ j
+    · simpa [τ, hp] using hσ' j
+
+lemma vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_sub
+    (Y : Type) [TopologicalSpace Y] (A : Set Y) {k : ℕ}
+    (x y : (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X k)
+    (hx : AcyclicCarriers.SubsetCarriedChain Y A x)
+    (hy : AcyclicCarriers.SubsetCarriedChain Y A y) :
+    AcyclicCarriers.SubsetCarriedChain Y A (x - y) := by
+  rw [sub_eq_add_neg]
+  apply vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_add Y A x (-y) hx
+  simpa using vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_smul
+    Y A y hy (-1)
+
+lemma vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_linear
+    {n : ℕ} (K : GSC n) (Y : Type) [TopologicalSpace Y]
+    (A : Finset (Euc n) → Set Y) (hA : ∀ s t, s ⊆ t → A s ⊆ A t)
+    {k l : ℕ} (f : FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X l)
+    (hf : ∀ t : FaceIndex K k,
+      AcyclicCarriers.SubsetCarriedChain Y (A t.1) (f (Finsupp.single t 1)))
+    (s : FaceIndex K (k + 1)) (x : FaceModule K k)
+    (hx : ∀ t ∈ x.support, t.1 ⊆ s.1) :
+    AcyclicCarriers.SubsetCarriedChain Y (A s.1) (f x) := by
+  classical
+  induction x using Finsupp.induction with
+  | zero => simpa using
+      (vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_zero Y (A s.1))
+  | @single_add t r x htx hr ih =>
+      rw [map_add]
+      apply vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_add Y (A s.1)
+      · have ht : f (Finsupp.single t r) = r • f (Finsupp.single t 1) := by
+          rw [← map_smul]
+          simp
+        rw [ht]
+        apply vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_smul
+        rcases hf t with ⟨m, a, σ, heq, hc⟩
+        refine ⟨m, a, σ, heq, fun i => ?_⟩
+        exact (hc i).trans (hA t.1 s.1 (hx t (by
+          simp only [Finsupp.mem_support_iff, Finsupp.add_apply, Finsupp.single_eq_same]
+          have hxt : x t = 0 := by simpa [Finsupp.mem_support_iff] using htx
+          simp [hxt, hr])))
+      · apply ih
+        intro u hu
+        apply hx u
+        simp only [Finsupp.mem_support_iff, Finsupp.add_apply]
+        by_cases h : u = t
+        · subst u; exact False.elim (htx hu)
+        · simpa [Finsupp.single_apply, h, Finsupp.mem_support_iff] using hu
+
+structure vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_Stage
+    {n : ℕ} (K : GSC n)
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (Y : Type) [TopologicalSpace Y]
+    (A : Finset (Euc n) → Set Y)
+    (φ ψ : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X k) (k : ℕ) where
+  f : FaceModuleCat K k ⟶ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X (k + 1)
+  f' : FaceModuleCat K (k + 1) ⟶
+    (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X (k + 2)
+  cf : ∀ s : FaceIndex K k,
+    AcyclicCarriers.SubsetCarriedChain Y (A s.1) (f (Finsupp.single s 1))
+  cf' : ∀ s : FaceIndex K (k + 1),
+    AcyclicCarriers.SubsetCarriedChain Y (A s.1) (f' (Finsupp.single s 1))
+  eq : φ (k + 1) - ψ (k + 1) = d k ≫ f + f' ≫
+    (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d (k + 2) (k + 1)
+
+lemma vertexChainMap_affineComparison_square_aux_carrier_homotopy {n : ℕ} (K : GSC n)
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hdsupp : ∀ k (s : FaceIndex K (k + 1)) (t : FaceIndex K k),
+      d k (Finsupp.single s 1) t ≠ 0 → t.1 ⊆ s.1)
+    (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (Y : Type) [TopologicalSpace Y] (A : Finset (Euc n) → Set Y)
+    (hA : ∀ s t, s ⊆ t → A s ⊆ A t)
+    (hpt : ∀ k (s : FaceIndex K k),
+      ProjectivePlaneWedgeRationalHomology.RationallyPointlike (A s.1))
+    (φ ψ : ∀ k, FaceModuleCat K k ⟶ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).X k)
+    (hφ : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain Y (A s.1) (φ k (Finsupp.single s 1)))
+    (hψ : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain Y (A s.1) (ψ k (Finsupp.single s 1)))
+    (hchainφ : ∀ k, φ (k + 1) ≫ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d (k + 1) k = d k ≫ φ k)
+    (hchainψ : ∀ k, ψ (k + 1) ≫ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d (k + 1) k = d k ≫ ψ k)
+    (hzero : φ 0 = ψ 0) :
+    Nonempty (Homotopy
+      (ChainComplex.ofHom _ _ hdd _ _ (fun j ↦ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d_comp_d (j + 2) (j + 1) j) φ hchainφ)
+      (ChainComplex.ofHom _ _ hdd _ _ (fun j ↦ (CoefficientH0.SingularChains ℚ (TopCat.of Y)).d_comp_d (j + 2) (j + 1) j) ψ hchainψ)) := by
+  classical
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of Y)
+  have hfill : ∀ (k : ℕ) (s : FaceIndex K k) (z : C.X k),
+      AcyclicCarriers.SubsetCarriedChain Y (A s.1) z → C.d k (k - 1) z = 0 →
+      0 < k → ∃ w : C.X (k + 1),
+        AcyclicCarriers.SubsetCarriedChain Y (A s.1) w ∧ C.d (k + 1) k w = z := by
+    intro k s z hz hcyc hk
+    exact AcyclicCarriers.subsetCarriedCycle_bounds Y (A s.1) (hpt k s) hk z hz hcyc
+  have hdiff : ∀ k (s : FaceIndex K k),
+      AcyclicCarriers.SubsetCarriedChain Y (A s.1)
+        ((φ k - ψ k) (Finsupp.single s 1)) := by
+    intro k s
+    apply vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_sub
+    · exact hφ k s
+    · exact hψ k s
+  have hcomp : ∀ {k l} (f : FaceModuleCat K k ⟶ C.X l)
+      (hf : ∀ t : FaceIndex K k,
+        AcyclicCarriers.SubsetCarriedChain Y (A t.1) (f (Finsupp.single t 1)))
+      (s : FaceIndex K (k + 1)),
+      AcyclicCarriers.SubsetCarriedChain Y (A s.1)
+        ((d k ≫ f) (Finsupp.single s 1)) := by
+    intro k l f hf s
+    apply vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_linear
+      K Y A hA f hf s
+    intro t ht
+    exact hdsupp k s t (Finsupp.mem_support_iff.mp ht)
+  have fillMap : ∀ {k} (g : FaceModuleCat K (k + 1) ⟶ C.X (k + 1))
+      (hg : ∀ s : FaceIndex K (k + 1),
+        AcyclicCarriers.SubsetCarriedChain Y (A s.1) (g (Finsupp.single s 1)))
+      (hcyc : g ≫ C.d (k + 1) k = 0),
+      ∃ f : FaceModuleCat K (k + 1) ⟶ C.X (k + 2),
+        (∀ s : FaceIndex K (k + 1),
+          AcyclicCarriers.SubsetCarriedChain Y (A s.1) (f (Finsupp.single s 1))) ∧
+        f ≫ C.d (k + 2) (k + 1) = g := by
+    intro k g hg hcyc
+    have hw : ∀ s : FaceIndex K (k + 1), ∃ w : C.X (k + 2),
+        AcyclicCarriers.SubsetCarriedChain Y (A s.1) w ∧
+          C.d (k + 2) (k + 1) w = g (Finsupp.single s 1) := by
+      intro s
+      refine hfill (k + 1) s _ (hg s) ?_ (Nat.succ_pos k)
+      have hh := congrArg (fun q => q (Finsupp.single s 1)) hcyc
+      simpa using hh
+    choose w hwc hwd using hw
+    let f : FaceModuleCat K (k + 1) ⟶ C.X (k + 2) :=
+      ModuleCat.ofHom (Finsupp.lsum ℚ (fun s : FaceIndex K (k + 1) ↦
+        LinearMap.toSpanSingleton ℚ (C.X (k + 2)) (w s)))
+    have hfs : ∀ s, f (Finsupp.single s 1) = w s := by
+      intro s
+      change (Finsupp.lsum ℚ (fun s : FaceIndex K (k + 1) ↦
+        LinearMap.toSpanSingleton ℚ (C.X (k + 2)) (w s))) (Finsupp.single s 1) = _
+      rw [Finsupp.lsum_single]
+      simp
+    refine ⟨f, fun s => by rw [hfs]; exact hwc s, ?_⟩
+    apply ModuleCat.hom_ext
+    apply Finsupp.lhom_ext'
+    intro s
+    apply LinearMap.ext_ring
+    simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply,
+      ModuleCat.hom_comp]
+    rw [hfs, hwd]
+  have hbase : ∃ f1 : FaceModuleCat K 1 ⟶ C.X 2,
+      (∀ s : FaceIndex K 1,
+        AcyclicCarriers.SubsetCarriedChain Y (A s.1) (f1 (Finsupp.single s 1))) ∧
+      f1 ≫ C.d 2 1 = φ 1 - ψ 1 := by
+    apply fillMap (φ 1 - ψ 1) (fun s => hdiff 1 s)
+    rw [Preadditive.sub_comp, hchainφ 0, hchainψ 0, hzero, sub_self]
+  let S0 : vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_Stage
+      K d Y A φ ψ 0 :=
+    ⟨0, hbase.choose,
+      fun s => by simpa using
+        (vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_zero Y (A s.1)),
+      hbase.choose_spec.1, by
+        simp only [Limits.comp_zero, zero_add]
+        exact hbase.choose_spec.2.symm⟩
+  have hstep : ∀ k
+      (S : vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_Stage
+        K d Y A φ ψ k),
+      ∃ f'' : FaceModuleCat K (k + 2) ⟶ C.X (k + 3),
+        (∀ s : FaceIndex K (k + 2),
+          AcyclicCarriers.SubsetCarriedChain Y (A s.1) (f'' (Finsupp.single s 1))) ∧
+        φ (k + 2) - ψ (k + 2) =
+          d (k + 1) ≫ S.f' + f'' ≫ C.d (k + 3) (k + 2) := by
+    intro k S
+    obtain ⟨f'', hc, hf⟩ := fillMap
+      ((φ (k + 2) - ψ (k + 2)) - d (k + 1) ≫ S.f')
+      (fun s => vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_sub
+        Y (A s.1) _ _ (hdiff (k + 2) s) (hcomp S.f' S.cf' s))
+      (by
+        rw [Preadditive.sub_comp, Preadditive.sub_comp, hchainφ (k + 1), hchainψ (k + 1),
+          ← Preadditive.comp_sub, S.eq, Preadditive.comp_add,
+          ← Category.assoc (d (k + 1)) (d k), hdd, Limits.zero_comp, zero_add,
+          Category.assoc, sub_self])
+    exact ⟨f'', hc, by rw [hf]; abel⟩
+  let step : ∀ k,
+      vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_Stage K d Y A φ ψ k →
+      vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_Stage K d Y A φ ψ (k + 1) :=
+    fun k S => ⟨S.f', (hstep k S).choose, S.cf', (hstep k S).choose_spec.1,
+      (hstep k S).choose_spec.2⟩
+  let F : ∀ k,
+      vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_Stage K d Y A φ ψ k :=
+    fun k => Nat.rec (motive := fun k =>
+      vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_Stage
+        K d Y A φ ψ k) S0 step k
+  have hF0 : (F 0).f = 0 := rfl
+  have hF : ∀ k, (F (k + 1)).f = (F k).f' := fun k => rfl
+  let hom : ∀ i j, FaceModuleCat K i ⟶ C.X j := fun i j =>
+    if h : i + 1 = j then (F i).f ≫ eqToHom (congrArg (fun m => C.X m) h) else 0
+  refine ⟨{ hom := hom, zero := ?_, comm := ?_ }⟩
+  · intro i j hij
+    simp only [hom]
+    split_ifs with h
+    · exact absurd (by simp [ComplexShape.down_Rel]; omega) hij
+    · rfl
+  · intro i
+    cases i with
+    | zero =>
+      rw [Homotopy.dNext_zero_chainComplex, Homotopy.prevD_chainComplex]
+      simp only [hom, dif_pos]
+      rw [ChainComplex.of_d]
+      simp only [hF0, Limits.zero_comp, zero_add, eqToHom_refl, Category.comp_id]
+      erw [Limits.zero_comp, zero_add]
+      exact hzero
+    | succ i =>
+      rw [Homotopy.dNext_succ_chainComplex, Homotopy.prevD_chainComplex]
+      simp only [hom, dif_pos]
+      rw [ChainComplex.of_d, ChainComplex.of_d]
+      simp only [eqToHom_refl, Category.comp_id, hF]
+      change φ (i + 1) = d i ≫ (F i).f + (F i).f' ≫ C.d (i + 2) (i + 1) + ψ (i + 1)
+      rw [← (F i).eq]
+      abel
+
 -- BEGIN SEAT AREA
 theorem vertexChainMap_affineComparison_square {n m : ℕ} (on : LinearOrder (Euc n))
     (om : LinearOrder (Euc m)) (K : GSC n) (L : GSC m) (h : Euc n → Euc m)
