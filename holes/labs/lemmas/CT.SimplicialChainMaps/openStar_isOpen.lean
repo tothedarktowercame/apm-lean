@@ -3993,7 +3993,54 @@ containing `w`. -/
 theorem openStar_isOpen {n : ℕ} (L : GSC n) (hL : L.faces.Finite) (w : Euc n) :
     IsOpen ((Subtype.val : L.space → Euc n) ⁻¹'
       GeometricSimplicialSubdivision.openStar L w) := by
-  sorry
+  classical
+  let bad : Set (Finset (Euc n)) := {s | s ∈ L.faces ∧ w ∉ s}
+  have hbad : bad.Finite := hL.subset (by
+    intro s hs
+    exact hs.1)
+  have hclosed : IsClosed (⋃ s ∈ bad,
+      (Subtype.val : L.space → Euc n) ⁻¹' convexHull ℝ (s : Set (Euc n))) := by
+    apply hbad.isClosed_biUnion
+    intro s hs
+    exact (s.finite_toSet.isClosed_convexHull ℝ).preimage continuous_subtype_val
+  rw [← isClosed_compl_iff]
+  convert hclosed using 1
+  ext x
+  simp only [Set.mem_compl_iff, Set.mem_preimage, Set.mem_iUnion, bad,
+    Set.mem_setOf_eq]
+  constructor
+  · intro hx
+    obtain ⟨s, hs, hxs⟩ := Geometry.SimplicialComplex.mem_space_iff.mp x.property
+    by_cases hws : w ∈ s
+    · have hxerase : (x : Euc n) ∈
+          convexHull ℝ ((s.erase w : Finset (Euc n)) : Set (Euc n)) := by
+        by_contra hne
+        exact hx ⟨s, hs, hws, hxs, hne⟩
+      have hene : (s.erase w).Nonempty := by
+        rw [Finset.nonempty_iff_ne_empty]
+        intro he
+        rw [he] at hxerase
+        simpa using hxerase
+      refine ⟨s.erase w, ?_, hxerase⟩
+      exact ⟨L.down_closed hs (Finset.erase_subset w s) hene,
+        by simp⟩
+    · exact ⟨s, ⟨hs, hws⟩, hxs⟩
+  · rintro ⟨s, ⟨hs, hws⟩, hxs⟩ hstar
+    obtain ⟨t, ht, hwt, hxt, hxerase⟩ := hstar
+    have hinter := L.convexHull_inter_convexHull hs ht
+    have hxinter : (x : Euc n) ∈
+        convexHull ℝ ((s ∩ t : Finset (Euc n)) : Set (Euc n)) := by
+      have hxboth : (x : Euc n) ∈
+          convexHull ℝ (s : Set (Euc n)) ∩ convexHull ℝ (t : Set (Euc n)) :=
+        ⟨hxs, hxt⟩
+      rw [hinter] at hxboth
+      simpa only [Finset.coe_inter] using hxboth
+    apply hxerase
+    apply convexHull_mono (𝕜 := ℝ) _ hxinter
+    intro z hz
+    simp only [Finset.coe_inter, Set.mem_inter_iff, Finset.mem_coe,
+      Finset.mem_erase] at hz ⊢
+    exact ⟨fun hzw => hws (hzw ▸ hz.1), hz.2⟩
 -- END SEAT AREA
 
 /-- Open stars of vertices cover the space: take a face of minimal card whose
