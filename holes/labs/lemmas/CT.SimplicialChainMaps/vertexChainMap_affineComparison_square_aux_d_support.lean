@@ -2686,7 +2686,131 @@ lemma vertexChainMap_affineComparison_square_aux_d_support {n : ℕ} (K : GSC n)
         (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k = d k ≫ cmp k)
     (k : ℕ) (s : FaceIndex K (k + 1)) (t : FaceIndex K k)
     (ht : d k (Finsupp.single s 1) t ≠ 0) : t.1 ⊆ s.1 := by
-  sorry
+  classical
+  let σ : ∀ j, FaceIndex K j → SingularSubdivision.SingularSimplex (TopCat.of K.space) j :=
+    fun j u => Classical.choose (hcmp j u)
+  have hσ (j : ℕ) (u : FaceIndex K j) :
+      cmp j (Finsupp.single u 1) =
+        (CoefficientH0.singularGenerator ℚ _ j (σ j u)) 1 :=
+    (Classical.choose_spec (hcmp j u)).1
+  have hrange (j : ℕ) (u : FaceIndex K j) :
+      Set.range (SingularSubdivision.continuousMapOfSingularSimplex j (σ j u)) =
+        (fun x : K.space => (x : Euc n)) ⁻¹'
+          convexHull ℝ (u.1 : Set (Euc n)) :=
+    (Classical.choose_spec (hcmp j u)).2
+  have hσ_inj (j : ℕ) : Function.Injective (σ j) := by
+    intro u v huv
+    apply Subtype.ext
+    apply Finset.Subset.antisymm
+    · apply vertexChainMap_affineComparison_square_aux_d_support_aux_hull K u.2.1 v.2.1
+      intro x hx
+      have hx' : (⟨x, K.convexHull_subset_space u.2.1 hx⟩ : K.space) ∈
+          Set.range (SingularSubdivision.continuousMapOfSingularSimplex j (σ j u)) := by
+        rw [hrange]
+        exact hx
+      rw [huv, hrange] at hx'
+      exact hx'
+    · apply vertexChainMap_affineComparison_square_aux_d_support_aux_hull K v.2.1 u.2.1
+      intro x hx
+      have hx' : (⟨x, K.convexHull_subset_space v.2.1 hx⟩ : K.space) ∈
+          Set.range (SingularSubdivision.continuousMapOfSingularSimplex j (σ j v)) := by
+        rw [hrange]
+        exact hx
+      rw [← huv, hrange] at hx'
+      exact hx'
+  let π : (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k ⟶
+      ModuleCat.of ℚ ℚ :=
+    Limits.Sigma.desc fun τ => if τ = σ k t then 𝟙 _ else 0
+  have hproj_any (τ : SingularSubdivision.SingularSimplex (TopCat.of K.space) k)
+      (a : ℚ) :
+      ((CoefficientH0.singularGenerator ℚ _ k τ ≫ π) a) =
+        if τ = σ k t then a else 0 := by
+    change ((Limits.Sigma.ι (fun _ : SingularSubdivision.SingularSimplex
+      (TopCat.of K.space) k => ModuleCat.of ℚ ℚ) τ ≫ π) a) = _
+    rw [Limits.Sigma.ι_desc]
+    split_ifs <;> simp
+  have hproj (u : FaceIndex K k) (a : ℚ) :
+      ((CoefficientH0.singularGenerator ℚ _ k (σ k u) ≫ π) a) =
+        if u = t then a else 0 := by
+    rw [hproj_any]
+    by_cases hut : u = t
+    · simp [hut]
+    · have hne : σ k u ≠ σ k t := fun h => hut ((hσ_inj k).eq_iff.mp h)
+      rw [if_neg hne, if_neg hut]
+  have hcoeff (x : FaceModule K k) : π (cmp k x) = x t := by
+    induction x using Finsupp.induction with
+    | zero => simp
+    | @single_add u a x hux ha ih =>
+        rw [map_add, map_add]
+        rw [show Finsupp.single u a = a • Finsupp.single u 1 by simp,
+          map_smul, map_smul, hσ]
+        have hp : a • π ((CoefficientH0.singularGenerator ℚ _ k (σ k u)) 1) =
+            if u = t then a else 0 := by
+          calc
+            _ = π (a • (CoefficientH0.singularGenerator ℚ _ k (σ k u)) 1) :=
+              (map_smul (ConcreteCategory.hom π) a _).symm
+            _ = π ((CoefficientH0.singularGenerator ℚ _ k (σ k u)) a) := by
+              congr 1
+              simpa using (map_smul (ConcreteCategory.hom
+                (CoefficientH0.singularGenerator ℚ _ k (σ k u))) a (1 : ℚ)).symm
+            _ = _ := hproj u a
+        rw [hp, ih]
+        by_cases hut : u = t <;> simp [hut, Finsupp.single_apply]
+  obtain ⟨σs, hσs, hrs⟩ := hcmp (k + 1) s
+  have hboundary :
+      ((CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k)
+          ((CoefficientH0.singularGenerator ℚ _ (k + 1) σs) 1) =
+        cmp k (d k (Finsupp.single s 1)) := by
+    rw [← hσs]
+    change ((cmp (k + 1) ≫
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k)
+        (Finsupp.single s 1)) = _
+    rw [hchain]
+    rfl
+  have hnonzero : π (((CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d
+      (k + 1) k) ((CoefficientH0.singularGenerator ℚ _ (k + 1) σs) 1)) ≠ 0 := by
+    rw [hboundary, hcoeff]
+    exact ht
+  rw [show ((CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k)
+      ((CoefficientH0.singularGenerator ℚ _ (k + 1) σs) 1) =
+        (∑ i : Fin (k + 2), (-1 : ℤ) ^ (i : ℕ) •
+          CoefficientH0.singularGenerator ℚ _ k
+            ((TopCat.toSSet.obj (TopCat.of K.space)).δ i σs)) 1 by
+      exact congrArg (fun f => f 1)
+        (CoefficientH0.singularGenerator_boundary ℚ _ k σs)] at hnonzero
+  simp only [ModuleCat.hom_sum, LinearMap.coe_sum, Finset.sum_apply, map_sum,
+    ModuleCat.hom_smul, LinearMap.smul_apply] at hnonzero
+  have hex : ∃ i : Fin (k + 2),
+      (TopCat.toSSet.obj (TopCat.of K.space)).δ i σs = σ k t := by
+    by_contra h
+    push_neg at h
+    apply hnonzero
+    apply Finset.sum_eq_zero
+    intro i hi
+    rw [← Int.cast_smul_eq_zsmul ℚ, map_smul]
+    apply smul_eq_zero.mpr
+    right
+    have hp := hproj_any
+      ((TopCat.toSSet.obj (TopCat.of K.space)).δ i σs) 1
+    rw [if_neg (h i)] at hp
+    exact hp
+  obtain ⟨i, hi⟩ := hex
+  apply vertexChainMap_affineComparison_square_aux_d_support_aux_hull K t.2.1 s.2.1
+  intro x hx
+  have hx' : (⟨x, K.convexHull_subset_space t.2.1 hx⟩ : K.space) ∈
+      Set.range (SingularSubdivision.continuousMapOfSingularSimplex k (σ k t)) := by
+    rw [hrange]
+    exact hx
+  rw [← hi] at hx'
+  rcases hx' with ⟨y, hy⟩
+  have hz : (⟨x, K.convexHull_subset_space t.2.1 hx⟩ : K.space) ∈
+      Set.range (SingularSubdivision.continuousMapOfSingularSimplex (k + 1) σs) := by
+    refine ⟨stdSimplex.map (SimplexCategory.δ i) y, ?_⟩
+    change (SingularSubdivision.continuousMapOfSingularSimplex k
+      ((TopCat.toSSet.obj (TopCat.of K.space)).δ i σs)) y = _
+    exact hy
+  rw [hrs] at hz
+  exact hz
 -- END SEAT AREA
 
 /-- (V2) Acyclic carriers into an arbitrary space: two chain maps from the face
