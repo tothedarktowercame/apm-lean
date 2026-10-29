@@ -3262,7 +3262,23 @@ lemma subdivision_affineComparison_square_aux_pointlike {n k : ℕ} (K K' : GSC 
     (hspace : K.space = K'.space) (s : FaceIndex K k) :
     ProjectivePlaneWedgeRationalHomology.RationallyPointlike
       ((fun y : K'.space ↦ (y : Euc n)) ⁻¹' convexHull ℝ (s.1 : Set (Euc n))) := by
-  sorry
+  let e : ((fun y : K'.space ↦ (y : Euc n)) ⁻¹'
+        convexHull ℝ (s.1 : Set (Euc n))) ≃ₜ
+      ((fun y : K.space ↦ (y : Euc n)) ⁻¹'
+        convexHull ℝ (s.1 : Set (Euc n))) :=
+    { toEquiv :=
+        { toFun := fun y => ⟨⟨y.1.1, hspace.symm ▸ y.1.2⟩, y.2⟩
+          invFun := fun y => ⟨⟨y.1.1, hspace ▸ y.1.2⟩, y.2⟩
+          left_inv := fun y => by ext; rfl
+          right_inv := fun y => by ext; rfl }
+      continuous_toFun :=
+        continuous_subtype_val.comp continuous_subtype_val |>.subtype_mk _ |>.subtype_mk _
+      continuous_invFun :=
+        continuous_subtype_val.comp continuous_subtype_val |>.subtype_mk _ |>.subtype_mk _ }
+  apply ProjectivePlaneWedgeRationalHomology.rationallyPointlike_of_homotopyEquiv
+    e.toHomotopyEquiv
+  exact AcyclicCarriers.faceHullPreimage_rationallyPointlike K s
+    (AcyclicCarriers.faceHull_rationallyPointlike K s)
 -- END SEAT AREA
 
 /-- The subdivision of a face `s`, compared into singular chains, is carried by
