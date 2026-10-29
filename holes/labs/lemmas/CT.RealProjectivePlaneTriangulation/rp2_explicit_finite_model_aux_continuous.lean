@@ -908,17 +908,261 @@ lemma rp2_explicit_finite_model_aux_cover (y : EuclideanSpace ℝ (Fin 10)) (hy 
   refine ⟨p, ?_⟩
   exact convexHull_mono (by exact_mod_cast hSf) hy
 
+/-- Each corner of a facet lies in the hexagon (`0`, ring vertices, hexagon
+vertices; the hexagon contains its vertices and `0`, and is convex). -/
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (j : Fin 6) :
+    hexVertex j ∈ hexagon := by
+  exact subset_convexHull ℝ _ (Set.mem_range_self j)
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six :
+    hexVertex 6 ∈ hexagon := by
+  have h : hexVertex 6 = hexVertex 0 := by
+    unfold hexVertex
+    norm_num
+  rw [h]
+  exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 0
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero :
+    (0 : ℂ) ∈ hexagon := by
+  have h0 := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (0 : Fin 6)
+  have h3 := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (3 : Fin 6)
+  have hm := (convex_convexHull ℝ _).midpoint_mem h0 h3
+  rw [show hexVertex (3 : Fin 6) = -hexVertex (0 : Fin 6) by
+    exact rp2_explicit_finite_model_aux_hex_neg_vertex 0] at hm
+  simpa [midpoint_eq_smul_add, smul_eq_mul] using hm
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring (j : Fin 6) :
+    ringVertex j ∈ hexagon := by
+  have hj := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex j
+  have hj1 : hexVertex (j.1 + 1) ∈ hexagon := by
+    by_cases h : j.1 + 1 < 6
+    · exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex
+        ⟨j.1 + 1, h⟩
+    · have : j.1 + 1 = 6 := by omega
+      simpa [this] using
+        rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six
+  have hm := (convex_convexHull ℝ _).midpoint_mem hj hj1
+  have hs := (convex_convexHull ℝ _).smul_mem_of_zero_mem
+    rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero hm
+    (show (2 / 3 : ℝ) ∈ Set.Icc 0 1 by norm_num)
+  unfold ringVertex
+  convert hs using 1
+  simp only [midpoint_eq_smul_add, invOf_eq_inv]
+  rw [smul_smul]
+  norm_num [Complex.real_smul]
+  apply Complex.ext <;> simp [(· • ·), SMul.smul] <;> ring
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring_six :
+    ringVertex 6 ∈ hexagon := by
+  have h6 : hexVertex 6 = hexVertex 0 := by
+    unfold hexVertex
+    norm_num
+  have h7 : hexVertex 7 = hexVertex 1 := by
+    unfold hexVertex
+    norm_num only [Nat.cast_ofNat]
+    rw [show (2 * (Real.pi : ℂ) * Complex.I * 7 / 6) =
+        2 * Real.pi * Complex.I + 2 * Real.pi * Complex.I / 6 by ring]
+    rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]
+    congr 1 <;> ring
+  rw [ringVertex, h6, h7]
+  exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 0
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k ∈ rp2Facet p) :
+    rp2Corner p k ∈ hexagon := by
+  obtain ⟨i, t⟩ := p
+  fin_cases i
+  all_goals
+    unfold rp2Corner
+    split_ifs <;>
+      first
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 0
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 1
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 2
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 3
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 4
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 5
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring_six
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 0
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 1
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 2
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 3
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 4
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 5
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_basis (p : Fin 6 × Fin 3) (k : Fin 10) :
+    rp2Affine p (basisVertex 10 k) = rp2Corner p k := by
+  classical
+  unfold rp2Affine
+  rw [Finset.sum_eq_single k]
+  · simp [basisVertex]
+  · intro j _ hj
+    simp [basisVertex, EuclideanSpace.single_apply, hj]
+  · simp
+
+/-- `rp2Affine p` as an `ℝ`-linear map. -/
+def rp2AffineLinear (p : Fin 6 × Fin 3) : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ where
+  toFun := rp2Affine p
+  map_add' y z := by
+    simp [rp2Affine, add_mul, Finset.sum_add_distrib]
+  map_smul' r y := by
+    simp only [rp2Affine, Finset.smul_sum, PiLp.smul_apply, smul_eq_mul, Complex.ofReal_mul,
+      RingHom.id_apply, mul_assoc]
+    refine Finset.sum_congr rfl fun x _ => ?_
+    exact (Complex.real_smul (x := r) (z := _)).symm
+
 lemma rp2_explicit_finite_model_aux_affine_mem (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) : rp2Affine p y ∈ hexagon := by
-  sorry
+  classical
+  have hsub : facetHull p ⊆ rp2AffineLinear p ⁻¹' hexagon := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      change rp2Affine p (basisVertex 10 k) ∈ hexagon
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis]
+      exact rp2_explicit_finite_model_aux_affine_mem_aux_corner p k hk
+    · exact (convex_convexHull ℝ _).linear_preimage _
+  exact hsub hy
 
 /-- Two facets containing `y` give the same point of `RP²`: their planar
 positions agree, or (on a boundary edge) are antipodal boundary points. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_inter
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p') :
+    y ∈ convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) := by
+  exact rp2_explicit_finite_model_aux_basis_inter (rp2Facet p) (rp2Facet p') ⟨hy, hy'⟩
+
+lemma rp2_explicit_finite_model_aux_agree_aux_affine_eq
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hcorner : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      rp2Corner p k = rp2Corner p' k) :
+    rp2Affine p y = rp2Affine p' y := by
+  classical
+  have hinter := rp2_explicit_finite_model_aux_agree_aux_inter p p' y hy hy'
+  let L : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ :=
+    rp2AffineLinear p - rp2AffineLinear p'
+  have hsub : convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) ⊆ L.ker := by
+    apply convexHull_min
+    · rintro x ⟨hx, hx'⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+      have hinj : Function.Injective (basisVertex 10) := by
+        intro i j hij
+        have := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+        simpa [basisVertex, EuclideanSpace.single_apply] using this
+      have hkk : k = k' := hinj heq.symm
+      subst k'
+      change rp2Affine p (basisVertex 10 k) - rp2Affine p' (basisVertex 10 k) = 0
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis,
+        rp2_explicit_finite_model_aux_affine_mem_aux_basis, hcorner k hk hk']
+      simp
+    · exact L.ker.convex
+  have hz : L y = 0 := hsub hinter
+  change rp2Affine p y - rp2Affine p' y = 0 at hz
+  exact sub_eq_zero.mp hz
+
+/-- (E) Facet pairs: shared vertices get the same planar corner in both facets,
+or all shared vertices are boundary labels (`7 ≤ k`) placed antipodally
+(`ζ_{j+3} = -ζ_j`).  A finite check over the 18 × 18 facet pairs. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_cases_aux_period (j : ℕ) :
+    hexVertex (j + 6) = hexVertex j := by
+  unfold hexVertex
+  rw [show 2 * (Real.pi : ℂ) * Complex.I * ((j + 6 : ℕ) : ℂ) / 6 =
+      2 * Real.pi * Complex.I +
+        2 * Real.pi * Complex.I * (j : ℂ) / 6 by
+    push_cast
+    ring]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I]
+  simp
+
+set_option maxHeartbeats 2000000 in
+lemma rp2_explicit_finite_model_aux_agree_aux_cases (p p' : Fin 6 × Fin 3) :
+    (∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → rp2Corner p k = rp2Corner p' k) ∨
+    (∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      7 ≤ k.1 ∧ rp2Corner p k = -rp2Corner p' k) := by
+  have hring : ringVertex 6 = ringVertex 0 := by
+    simp only [ringVertex]
+    rw [rp2_explicit_finite_model_aux_agree_aux_cases_aux_period 0,
+      rp2_explicit_finite_model_aux_agree_aux_cases_aux_period 1]
+  rcases p with ⟨i, j⟩
+  rcases p' with ⟨i', j'⟩
+  fin_cases i <;> fin_cases j <;> fin_cases i' <;> fin_cases j' <;>
+    simp [rp2Facet, rp2Corner, ringIdx, bdryIdx,
+      rp2_explicit_finite_model_aux_hex_neg_vertex, hring]
+
+/-- (B) Antipodal corners give antipodal images (as `_aux_affine_eq`, with the
+linear map `rp2AffineLinear p + rp2AffineLinear p'`). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_affine_neg
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hcorner : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' →
+      rp2Corner p k = -rp2Corner p' k) :
+    rp2Affine p y = -rp2Affine p' y := by
+  classical
+  have hinter : y ∈ convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) :=
+    rp2_explicit_finite_model_aux_basis_inter (rp2Facet p) (rp2Facet p') ⟨hy, hy'⟩
+  let L : EuclideanSpace ℝ (Fin 10) →ₗ[ℝ] ℂ :=
+    rp2AffineLinear p + rp2AffineLinear p'
+  have hsub : convexHull ℝ
+      ((↑((rp2Facet p).image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10))) ∩
+        ↑((rp2Facet p').image (basisVertex 10))) ⊆ L.ker := by
+    apply convexHull_min
+    · rintro x ⟨hx, hx'⟩
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      obtain ⟨k', hk', heq⟩ := Finset.mem_image.1 hx'
+      have hinj : Function.Injective (basisVertex 10) := by
+        intro i j hij
+        have hij' := congrArg (fun z : EuclideanSpace ℝ (Fin 10) => z i) hij
+        simpa [basisVertex, EuclideanSpace.single_apply] using hij'
+      have hkk : k = k' := hinj heq.symm
+      subst k'
+      change rp2Affine p (basisVertex 10 k) + rp2Affine p' (basisVertex 10 k) = 0
+      rw [rp2_explicit_finite_model_aux_affine_mem_aux_basis,
+        rp2_explicit_finite_model_aux_affine_mem_aux_basis, hcorner k hk hk']
+      simp
+    · exact L.ker.convex
+  have hz : L y = 0 := hsub hinter
+  change rp2Affine p y + rp2Affine p' y = 0 at hz
+  exact eq_neg_of_add_eq_zero_left hz
+
+
+/-- (C) A point in two facets whose shared vertices are all boundary labels maps
+to the hexagon boundary: it lies on a boundary vertex or edge `ζ_j ζ_{j+1}`. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one
+    (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
+    (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p')
+    (hlab : ∀ k, k ∈ rp2Facet p → k ∈ rp2Facet p' → 7 ≤ k.1) :
+    gauge hexagon (rp2Affine p y) = 1 := by
+  sorry
+
+/-- (D) A hexagon boundary point and its antipode are identified in `RP²`
+(`_aux_hex_norm`, `_aux_hex_neg`, `rp2_t2Space_aux_boundary_rel`). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_antipode (z : ℂ) (hz : gauge hexagon z = 1) :
+    Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (-z))) =
+      Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk z)) := by
+  sorry
+
 lemma rp2_explicit_finite_model_aux_agree (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) (hy' : y ∈ facetHull p') :
     Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p y))) =
       Surfaces.surfaceQuotient false 1 (diskClamp (hexToDisk (rp2Affine p' y))) := by
-  sorry
+  rcases rp2_explicit_finite_model_aux_agree_aux_cases p p' with h | h
+  · rw [rp2_explicit_finite_model_aux_agree_aux_affine_eq p p' y hy hy' h]
+  · have hneg := rp2_explicit_finite_model_aux_agree_aux_affine_neg p p' y hy hy' (fun k hk hk' => (h k hk hk').2)
+    have hg : gauge hexagon (rp2Affine p' y) = 1 := by
+      have hlab' : ∀ k, k ∈ rp2Facet p' → k ∈ rp2Facet p → 7 ≤ k.1 :=
+        fun k hk' hk => (h k hk hk').1
+      exact rp2_explicit_finite_model_aux_agree_aux_gauge_one p' p y hy' hy hlab'
+    rw [hneg]
+    exact rp2_explicit_finite_model_aux_agree_aux_antipode _ hg
 
 /-- Pasting over the 18 closed facet hulls (finite closed cover, `_agree`). -/
 -- BEGIN SEAT AREA
