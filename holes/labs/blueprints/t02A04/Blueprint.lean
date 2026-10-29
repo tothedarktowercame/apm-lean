@@ -1391,7 +1391,47 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_centre_map :
 lemma apm_t02A04_attachedDisk_cone_model_aux_edge_map (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     ((apm_t02A04_coneMap ⟨_, apm_t02A04_attachedDisk_cone_model_aux_edge_mem i t ht0 ht1⟩ : apm_t02a04_Disk) : ℂ) =
       ((apm_t02A04_arcPoint i t : Circle) : ℂ) := by
-  sorry
+  classical
+  let y : EuclideanSpace ℝ (Fin 7) :=
+    (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+        (apm_t02A04_coneIdx i) +
+      t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+        (apm_t02A04_coneIdx (i + 1))
+  have hyi : y ∈ apm_t02A04_coneHull i := by
+    apply segment_subset_convexHull
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx i) ∈
+        (↑((apm_t02A04_coneFacet i).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)) :
+            Set (EuclideanSpace ℝ (Fin 7))) by
+        simp [apm_t02A04_coneFacet])
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx (i + 1)) ∈
+        (↑((apm_t02A04_coneFacet i).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)) :
+            Set (EuclideanSpace ℝ (Fin 7))) by
+        simp [apm_t02A04_coneFacet])
+    rw [segment_eq_image]
+    exact ⟨t, ⟨ht0, ht1⟩, rfl⟩
+  have hex : ∃ j, y ∈ apm_t02A04_coneHull j := ⟨i, hyi⟩
+  let j : Fin 6 := Classical.choose hex
+  have hyj : y ∈ apm_t02A04_coneHull j := Classical.choose_spec hex
+  have hagree : apm_t02A04_conePoint j y = apm_t02A04_conePoint i y :=
+    apm_t02A04_attachedDisk_cone_model_aux_agree j i y hyj hyi
+  have hpoint : apm_t02A04_conePoint i y =
+      ((apm_t02A04_arcPoint i t : Circle) : ℂ) := by
+    fin_cases i <;>
+      simp [y, apm_t02A04_conePoint, apm_t02A04_coneIdx,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply, sub_add_cancel]
+  have hnorm : ‖apm_t02A04_conePoint j y‖ ≤ 1 := by
+    exact apm_t02A04_attachedDisk_cone_model_aux_point_norm j y hyj
+  simp only [apm_t02A04_coneMap]
+  rw [dif_pos hex]
+  change ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+    (apm_t02A04_conePoint j y) : apm_t02a04_Disk) : ℂ) = _
+  simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp,
+    hnorm, hagree, hpoint]
 
 /-- A coned six-gon triangulation of the attached disk, with its boundary
 vertices at the same six circle points and its centre retained as a vertex. -/
