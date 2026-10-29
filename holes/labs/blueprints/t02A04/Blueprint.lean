@@ -1378,8 +1378,107 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_continuous : Continuous apm_t02A04_
 lemma apm_t02A04_attachedDisk_cone_model_aux_injective : Function.Injective apm_t02A04_coneMap := by
   sorry
 
-lemma apm_t02A04_attachedDisk_cone_model_aux_surjective : Function.Surjective apm_t02A04_coneMap := by
+lemma apm_t02A04_attachedDisk_cone_model_aux_surjective_aux_circle
+    (z : Circle) : ∃ (i : Fin 6) (t : ℝ), 0 ≤ t ∧ t ≤ 1 ∧
+      apm_t02A04_arcPoint i t = z := by
+  let a := Complex.arg (z : ℂ)
+  let u := if a < 0 then a + 2 * Real.pi else a
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have ha0 : -Real.pi < a := Complex.neg_pi_lt_arg _
+  have ha1 : a ≤ Real.pi := Complex.arg_le_pi _
+  have hu0 : 0 ≤ u := by
+    dsimp [u]
+    split_ifs with h
+    · linarith
+    · linarith
+  have hu1 : u ≤ 2 * Real.pi := by
+    dsimp [u]
+    split_ifs with h <;> linarith
+  have hexp : Circle.exp u = z := by
+    dsimp [u]
+    split_ifs with h
+    · rw [Circle.exp_add]
+      rw [show Circle.exp (2 * Real.pi) = 1 by
+        apply Circle.ext
+        simp [Circle.coe_exp, Complex.exp_mul_I]]
+      simpa [a] using Circle.exp_arg z
+    · exact Circle.exp_arg z
+  by_cases h0 : u ≤ Real.pi / 3
+  · refine ⟨0, 3 * u / Real.pi, by positivity, ?_, ?_⟩
+    · apply (div_le_iff₀ hpi).2; linarith
+    · rw [← hexp]
+      apply congrArg Circle.exp
+      simp [apm_t02A04_arcPoint]
+      field_simp
+      ring
+  by_cases h1 : u ≤ 2 * Real.pi / 3
+  · refine ⟨1, 3 * u / Real.pi - 1, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2; apply (le_div_iff₀ hpi).2; linarith
+    · apply sub_le_iff_le_add.2; apply (div_le_iff₀ hpi).2; linarith
+    · rw [← hexp]; apply congrArg Circle.exp
+      simp [apm_t02A04_arcPoint]; field_simp; ring
+  by_cases h2 : u ≤ Real.pi
+  · refine ⟨2, 3 * u / Real.pi - 2, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2; apply (le_div_iff₀ hpi).2; linarith
+    · apply sub_le_iff_le_add.2; apply (div_le_iff₀ hpi).2; linarith
+    · rw [← hexp]; apply congrArg Circle.exp
+      simp [apm_t02A04_arcPoint]; field_simp; ring
+  by_cases h3 : u ≤ 4 * Real.pi / 3
+  · refine ⟨3, 3 * u / Real.pi - 3, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2; apply (le_div_iff₀ hpi).2; linarith
+    · apply sub_le_iff_le_add.2; apply (div_le_iff₀ hpi).2; linarith
+    · rw [← hexp]; apply congrArg Circle.exp
+      simp [apm_t02A04_arcPoint]; field_simp; ring
+  by_cases h4 : u ≤ 5 * Real.pi / 3
+  · refine ⟨4, 3 * u / Real.pi - 4, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2; apply (le_div_iff₀ hpi).2; linarith
+    · apply sub_le_iff_le_add.2; apply (div_le_iff₀ hpi).2; linarith
+    · rw [← hexp]; apply congrArg Circle.exp
+      simp [apm_t02A04_arcPoint]; field_simp; ring
+  · refine ⟨5, 3 * u / Real.pi - 5, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2; apply (le_div_iff₀ hpi).2; linarith
+    · apply sub_le_iff_le_add.2; apply (div_le_iff₀ hpi).2; linarith
+    · rw [← hexp]; apply congrArg Circle.exp
+      simp [apm_t02A04_arcPoint]; field_simp; ring
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_surjective_aux_radial
+    (i : Fin 6) (t r : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
+    (hr0 : 0 ≤ r) (hr1 : r ≤ 1) :
+    ∃ y, ((apm_t02A04_coneMap y : apm_t02a04_Disk) : ℂ) =
+      (r : ℂ) * (apm_t02A04_arcPoint i t : ℂ) := by
+  -- Plan (seat lemma-3, PARTIAL 10-29): y = (1-r)•c + r•((1-t)•v_i + t•v_{i+1}) with
+  -- c = basisVertex 7 0, v_k = basisVertex 7 (coneIdx k); y lies in coneHull i, so
+  -- coneMap y = conePoint i y (_aux_agree); then simplify the cone parameter
+  -- r*t / (r*(1-t) + r*t) = t for r ≠ 0, and r = 0 gives the centre.
   sorry
+
+lemma apm_t02A04_attachedDisk_cone_model_aux_surjective : Function.Surjective apm_t02A04_coneMap := by
+  intro x
+  by_cases hx : (x : ℂ) = 0
+  · refine ⟨⟨ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0,
+      apm_t02A04_attachedDisk_cone_model_aux_vertex_mem 0⟩, ?_⟩
+    apply Subtype.ext
+    simpa [hx, apm_t02A04_coneMap, apm_t02A04_conePoint,
+      ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      apm_t02A04_coneIdx]
+  · let z : Circle := ⟨(x : ℂ) / ‖(x : ℂ)‖, by
+        show _ ∈ Metric.sphere (0 : ℂ) 1
+        rw [mem_sphere_zero_iff_norm, norm_div, Complex.norm_real, norm_norm,
+          div_self (norm_ne_zero_iff.mpr hx)]⟩
+    obtain ⟨i, t, ht0, ht1, hzt⟩ :=
+      apm_t02A04_attachedDisk_cone_model_aux_surjective_aux_circle z
+    have hr0 : 0 ≤ ‖(x : ℂ)‖ := norm_nonneg _
+    have hr1 : ‖(x : ℂ)‖ ≤ 1 := by
+      change ‖(x : ℂ)‖ ≤ 1
+      simpa only [apm_t02a04_Disk, Metric.mem_closedBall, dist_zero_right] using x.2
+    obtain ⟨y, hy⟩ := apm_t02A04_attachedDisk_cone_model_aux_surjective_aux_radial
+      i t ‖(x : ℂ)‖ ht0 ht1 hr0 hr1
+    refine ⟨y, Subtype.ext ?_⟩
+    rw [hy, hzt]
+    change ((‖(x : ℂ)‖ : ℝ) : ℂ) * ((x : ℂ) / ‖(x : ℂ)‖) = x
+    have hn : ((‖(x : ℂ)‖ : ℝ) : ℂ) ≠ 0 := by exact_mod_cast norm_ne_zero_iff.mpr hx
+    field_simp
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_centre_map :
     ((apm_t02A04_coneMap ⟨ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0, apm_t02A04_attachedDisk_cone_model_aux_vertex_mem 0⟩ : apm_t02a04_Disk) : ℂ) = 0 := by
