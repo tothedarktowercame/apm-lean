@@ -3895,6 +3895,73 @@ theorem orientedChains_homology_finiteDimensional {n : ℕ} (K : GSC n)
     ((ModuleCat.epi_iff_surjective (C.homologyπ k)).mp inferInstance)
 #print axioms orientedChains_homology_finiteDimensional
 
+/-- Barycentric subdivision keeps a dimension bound: a face of
+`barycentricStep K` is the barycenter image of a strict chain of faces of `K`,
+and the chain has at most `d + 1` members (the cards strictly increase inside
+`[1, d + 1]`). -/
+theorem barycentricStep_card_le {n d : ℕ} (K : GSC n)
+    (hdim : ∀ s ∈ K.faces, s.card ≤ d + 1) :
+    ∀ u ∈ (barycentricStep K).faces, u.card ≤ d + 1 := by
+  sorry
+
+/-- Mesh goes to zero under iteration: iterate
+`GeometricSimplicialSubdivision.barycentricSubdivision_mesh` with a dimension
+bound from finiteness (`barycentricStep_card_le`, `barycentricStep_iterate_finite`),
+then use `(d/(d+1))^p → 0` (`tendsto_pow_atTop_nhds_zero_of_lt_one`). -/
+theorem barycentricStep_iterate_mesh_lt {n : ℕ} (K : GSC n) (hK : K.faces.Finite)
+    (ε : ℝ) (hε : 0 < ε) :
+    ∃ p : ℕ, ∀ s ∈ ((barycentricStep^[p]) K).faces,
+      Metric.diam (convexHull ℝ (s : Set (Euc n))) < ε := by
+  sorry
+
+/-- Each face of an iterated subdivision lies in the hull of a face of `K`
+(induction on `p`: a barycenter face lies in the hull of the top face of its
+chain, `composite_zero_diagonal_aux_barycenter_mem`). -/
+theorem barycentricStep_iterate_face_hull {n : ℕ} (K : GSC n) (p : ℕ) :
+    ∀ u ∈ ((barycentricStep^[p]) K).faces, ∃ S ∈ K.faces,
+      convexHull ℝ (u : Set (Euc n)) ⊆ convexHull ℝ (S : Set (Euc n)) := by
+  sorry
+
+/-- The open star of a vertex is open in the space of a finite complex. Its
+complement in `L.space` is the finite union of the closed hulls of faces not
+containing `w`. -/
+theorem openStar_isOpen {n : ℕ} (L : GSC n) (hL : L.faces.Finite) (w : Euc n) :
+    IsOpen ((Subtype.val : L.space → Euc n) ⁻¹'
+      GeometricSimplicialSubdivision.openStar L w) := by
+  sorry
+
+/-- Open stars of vertices cover the space: take a face of minimal card whose
+hull contains `x`. Then `x` is off the hull of `s.erase w` for each `w ∈ s`, and
+`{w}` is a face (`down_closed`). -/
+theorem openStar_cover {n : ℕ} (L : GSC n) (x : L.space) :
+    ∃ w ∈ L.vertices, (x : Euc n) ∈ GeometricSimplicialSubdivision.openStar L w := by
+  sorry
+
+/-- A Lebesgue number for the pulled-back open-star cover. `L.space` is compact
+(a finite union of compact hulls), so apply `lebesgue_number_lemma_of_metric` to
+the cover `G ⁻¹' (val ⁻¹' openStar L w)` with `openStar_isOpen`, `openStar_cover`. -/
+theorem exists_lebesgue_openStar {n : ℕ} (L : GSC n) (hL : L.faces.Finite)
+    (G : C(L.space, L.space)) :
+    ∃ δ > 0, ∀ x : L.space, ∃ w ∈ L.vertices,
+      Metric.ball x δ ⊆ G ⁻¹' ((Subtype.val : L.space → Euc n) ⁻¹'
+        GeometricSimplicialSubdivision.openStar L w) := by
+  sorry
+
+/-- The star condition with a mesh below the margin gives carrier avoidance. Let
+`v ∈ u` with `u ⊆ hull s`. Since `v ∈ openStar K'' v`, `G v` lies in the hull of
+a face `t ∋ h v`, so `dist (G v) (h v) ≤ diam (hull t) < δ`. If `h v ∈ s`, the
+margin at `y := h v` gives `δ ≤ dist (G v) (h v)`, a contradiction. -/
+theorem carrierAvoiding_of_star_margin {n : ℕ} (L K'' : GSC n)
+    (G : C(K''.space, L.space)) (h : Euc n → Euc n) (δ : ℝ)
+    (hmesh : ∀ t ∈ L.faces, Metric.diam (convexHull ℝ (t : Set (Euc n))) < δ)
+    (hmarg : ∀ s ∈ L.faces, ∀ x : K''.space, (x : Euc n) ∈ convexHull ℝ (s : Set _) →
+      ∀ y ∈ convexHull ℝ (s : Set _), δ ≤ dist (G x : Euc n) y)
+    (hstar : ∀ v ∈ K''.vertices,
+      G '' ((Subtype.val : K''.space → Euc n) ⁻¹' GeometricSimplicialSubdivision.openStar K'' v) ⊆
+        (Subtype.val : L.space → Euc n) ⁻¹' GeometricSimplicialSubdivision.openStar L (h v)) :
+    CarrierAvoidingVertexMap L K'' h := by
+  sorry
+
 /-- LIBRARY: geometric preparation retaining the fact that the fine complex is
 an iterated barycentric subdivision, together with a carrier-avoiding simplicial
 approximation homotopic to `g`. -/
