@@ -3917,10 +3917,52 @@ theorem barycentricStep_iterate_mesh_lt {n : ℕ} (K : GSC n) (hK : K.faces.Fini
 /-- Each face of an iterated subdivision lies in the hull of a face of `K`
 (induction on `p`: a barycenter face lies in the hull of the top face of its
 chain, `composite_zero_diagonal_aux_barycenter_mem`). -/
+lemma barycentricStep_iterate_face_hull_aux_one {n : ℕ} (K : GSC n) :
+    ∀ u ∈ (barycentricStep K).faces, ∃ S ∈ K.faces,
+      convexHull ℝ (u : Set (Euc n)) ⊆ convexHull ℝ (S : Set (Euc n)) := by
+  classical
+  intro u hu
+  have hub : u ∈ GeometricSimplicialSubdivision.barycentricFaces K := by
+    exact hu.1
+  obtain ⟨c, hc, rfl⟩ := hub
+  have hcne : c.Nonempty := by
+    by_contra h
+    have hc0 : c = ∅ := Finset.not_nonempty_iff_eq_empty.mp h
+    subst c
+    simpa [barycentricStep, GeometricSimplicialSubdivision.barycentricSubdivision] using hu
+  obtain ⟨S, hS, hSmax⟩ := Finset.exists_max_image c Finset.card hcne
+  refine ⟨S, hc.1 S hS, convexHull_min ?_ (convex_convexHull ℝ _)⟩
+  intro y hy
+  simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe] at hy
+  obtain ⟨s, hs, rfl⟩ := hy
+  have hsS : s ⊆ S :=
+    GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_subset_of_card_le
+      K c hc hs hS (hSmax s hs)
+  have hsne :=
+    GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_nonempty
+      K c hc s hs
+  have hb : GeometricSimplicialSubdivision.barycenter s ∈
+      convexHull ℝ (s : Set (Euc n)) := by
+    apply Finset.centerMass_id_mem_convexHull
+    · intro z hz
+      positivity
+    · simpa using (Finset.card_pos.mpr hsne : 0 < s.card)
+  exact convexHull_mono (by simpa using hsS) hb
+
 theorem barycentricStep_iterate_face_hull {n : ℕ} (K : GSC n) (p : ℕ) :
     ∀ u ∈ ((barycentricStep^[p]) K).faces, ∃ S ∈ K.faces,
       convexHull ℝ (u : Set (Euc n)) ⊆ convexHull ℝ (S : Set (Euc n)) := by
-  sorry
+  induction p with
+  | zero =>
+      intro u hu
+      exact ⟨u, hu, Set.Subset.rfl⟩
+  | succ p ih =>
+      rw [Function.iterate_succ_apply']
+      intro u hu
+      obtain ⟨T, hT, huT⟩ :=
+        barycentricStep_iterate_face_hull_aux_one ((barycentricStep^[p]) K) u hu
+      obtain ⟨S, hS, hTS⟩ := ih T hT
+      exact ⟨S, hS, huT.trans hTS⟩
 
 /-- The open star of a vertex is open in the space of a finite complex. Its
 complement in `L.space` is the finite union of the closed hulls of faces not
