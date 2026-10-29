@@ -1161,10 +1161,44 @@ lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_corner_mem (p : Fin 
   fin_cases i <;> fin_cases j <;> fin_cases k <;>
     simp [rp2Facet, rp2Corner, ringIdx, bdryIdx] at hk h7 ⊢
 
+/-- Unit outer normal of the hexagon edge `ζ_j ζ_{j+1}`. -/
+def edgeNormal (j : ℕ) : ℂ := Complex.exp (Complex.I * (Real.pi * (2 * (j : ℂ) + 1) / 6))
+
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_edge_subset (j : ℕ) :
+    segment ℝ (hexVertex j) (hexVertex (j + 1)) ⊆ hexagon := by
+  sorry
+
+/-- The hexagon lies in the half-plane `Re (w · conj ν_j) ≤ cos (π/6)` (check the
+six vertices: the angle to `ν_j` is at least `π/6`; then convexity). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane (j : ℕ) (w : ℂ) (hw : w ∈ hexagon) :
+    (w * starRingEnd ℂ (edgeNormal j)).re ≤ Real.cos (Real.pi / 6) := by
+  sorry
+
+/-- Edge `j` lies on the boundary line of that half-plane. -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line (j : ℕ) (z : ℂ)
+    (hz : z ∈ segment ℝ (hexVertex j) (hexVertex (j + 1))) :
+    (z * starRingEnd ℂ (edgeNormal j)).re = Real.cos (Real.pi / 6) := by
+  sorry
+
+/-- A linear functional bounded by `c` on the hexagon is bounded by
+`c · gauge` (the hexagon is absorbent, `_aux_hex_nhds`). -/
+lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_gauge_ge (ν : ℂ) (c : ℝ) (hc : 0 < c)
+    (hbound : ∀ w ∈ hexagon, (w * starRingEnd ℂ ν).re ≤ c) (z : ℂ) :
+    (z * starRingEnd ℂ ν).re ≤ c * gauge hexagon z := by
+  sorry
+
 /-- Points of a hexagon edge have gauge one. -/
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment (j : ℕ) (z : ℂ)
     (hz : z ∈ segment ℝ (hexVertex j) (hexVertex (j + 1))) : gauge hexagon z = 1 := by
-  sorry
+  have hc : 0 < Real.cos (Real.pi / 6) := by
+    apply Real.cos_pos_of_mem_Ioo; constructor <;> linarith [Real.pi_pos]
+  apply le_antisymm
+  · exact (rp2_explicit_finite_model_aux_hex_gauge_le_one z).2
+      (rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_edge_subset j hz)
+  · have h := rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_gauge_ge (edgeNormal j) _ hc
+      (rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_halfplane j) z
+    rw [rp2_explicit_finite_model_aux_agree_aux_gauge_one_aux_segment_aux_on_line j z hz] at h
+    nlinarith
 
 lemma rp2_explicit_finite_model_aux_agree_aux_gauge_one
     (p p' : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
