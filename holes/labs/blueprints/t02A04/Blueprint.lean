@@ -2036,8 +2036,47 @@ lemma apm_t02A04_solidTorus_prism_model_aux_edge_map (i : Fin 6) (t : ℝ) (ht0 
 /-- Pasting over the 54 closed tetrahedra; adjacent tetrahedra give the same point
 (shared radial and boundary faces; circle vertex `j + 1` has weight `1` on edge `j` and
 `0` on edge `j + 1`, both at angle `2π(j+1)/3`). -/
-lemma apm_t02A04_solidTorus_prism_model_aux_continuous : Continuous apm_t02A04_prismMap := by
+lemma apm_t02A04_solidTorus_prism_model_aux_continuous_aux_piece (q : Fin 6 × Fin 3 × Fin 3) :
+    ContinuousOn (apm_t02A04_prismPoint q) (apm_t02A04_prismHull q) := by
   sorry
+
+lemma apm_t02A04_solidTorus_prism_model_aux_continuous : Continuous apm_t02A04_prismMap := by
+  classical
+  let C : Fin 6 × Fin 3 × Fin 3 → Set apm_t02A04_prismComplex.space := fun q ↦
+    {y | (y : EuclideanSpace ℝ (Fin 21)) ∈ apm_t02A04_prismHull q}
+  have hcover : ⋃ q, C q = Set.univ := by
+    ext y
+    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+    exact apm_t02A04_solidTorus_prism_model_aux_cover y y.2
+  have hclosed : ∀ q, IsClosed (C q) := by
+    intro q
+    change IsClosed ((fun y : apm_t02A04_prismComplex.space ↦
+      (y : EuclideanSpace ℝ (Fin 21))) ⁻¹' apm_t02A04_prismHull q)
+    unfold apm_t02A04_prismHull
+    simpa only [Finset.coe_image] using
+      (((apm_t02A04_prismFacet q).finite_toSet.image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)).isCompact_convexHull ℝ).isClosed.preimage
+          (continuous_subtype_val : Continuous
+            (fun y : apm_t02A04_prismComplex.space ↦ (y : EuclideanSpace ℝ (Fin 21))))
+  refine (locallyFinite_of_finite C).continuous hcover hclosed ?_
+  intro q
+  rw [continuousOn_iff_continuous_restrict]
+  have hv : Continuous (fun y : C q ↦
+      ((y : apm_t02A04_prismComplex.space) : EuclideanSpace ℝ (Fin 21))) :=
+    continuous_subtype_val.comp continuous_subtype_val
+  have hp : Continuous fun y : C q ↦ apm_t02A04_prismPoint q
+      ((y : apm_t02A04_prismComplex.space) : EuclideanSpace ℝ (Fin 21)) := by
+    rw [← continuousOn_univ]
+    exact (apm_t02A04_solidTorus_prism_model_aux_continuous_aux_piece q).comp
+      hv.continuousOn (by intro y _; exact y.2)
+  convert hp using 1
+  funext y
+  change apm_t02A04_prismMap y.1 = _
+  unfold apm_t02A04_prismMap
+  have hex : ∃ q', ((y.1 : apm_t02A04_prismComplex.space) : EuclideanSpace ℝ (Fin 21)) ∈
+      apm_t02A04_prismHull q' := ⟨q, y.2⟩
+  rw [dif_pos hex]
+  exact apm_t02A04_solidTorus_prism_model_aux_agree _ q _ (Classical.choose_spec hex) y.2
 
 /-- Staircase uniqueness: the disk weights `a` (cumulative `A_m`) and the circle weight
 determine the tetrahedron and all its weights (`y (m, bottom) = max 0 (min A_m (1-s) - A_{m-1})`);
