@@ -1288,7 +1288,31 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_cover (y : EuclideanSpace ℝ (Fin 
 -- BEGIN SEAT AREA
 lemma apm_t02A04_attachedDisk_cone_model_aux_point_norm (i : Fin 6) (y : EuclideanSpace ℝ (Fin 7)) (hy : y ∈ apm_t02A04_coneHull i) :
     ‖apm_t02A04_conePoint i y‖ ≤ 1 := by
-  sorry
+  classical
+  let a := apm_t02A04_coneIdx i
+  let b := apm_t02A04_coneIdx (i + 1)
+  let L : EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] ℝ :=
+    ((PiLp.proj 2 (fun _ : Fin 7 ↦ ℝ) a).toLinearMap :
+      EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] ℝ) +
+    ((PiLp.proj 2 (fun _ : Fin 7 ↦ ℝ) b).toLinearMap :
+      EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] ℝ)
+  have hsub : apm_t02A04_coneHull i ⊆ L ⁻¹' Set.Icc (0 : ℝ) 1 := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      simp only [Set.mem_preimage, Set.mem_Icc]
+      fin_cases i <;> fin_cases k <;>
+        simp_all [L, a, b, apm_t02A04_coneFacet, apm_t02A04_coneIdx,
+          ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+    · exact (convex_Icc (0 : ℝ) 1).linear_preimage L
+  have hr := hsub hy
+  change 0 ≤ L y ∧ L y ≤ 1 at hr
+  rw [show apm_t02A04_conePoint i y = ((L y : ℝ) : ℂ) *
+      (apm_t02A04_arcPoint i (y b / L y) : ℂ) by
+    simp [apm_t02A04_conePoint, L, a, b]]
+  rw [norm_mul, Complex.norm_real, Circle.norm_coe, mul_one, Real.norm_eq_abs,
+    abs_of_nonneg hr.1]
+  exact hr.2
 -- END SEAT AREA
 
 /-- Facets sharing a point agree there: on the edge `0, i+1` both give arc
