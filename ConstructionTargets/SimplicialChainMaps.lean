@@ -4449,6 +4449,70 @@ theorem exists_fine_iterated_approximation
     · exact hstar
   · simpa [L, K'', E, G, H, homeomorphMap] using hstar
 
+/-- A face-module endomorphism with zero diagonal has trace zero: compute the
+trace in the basis `Finsupp.basisSingleOne` (`LinearMap.trace_eq_matrix_trace`,
+`Matrix.trace`, `LinearMap.toMatrix_apply`), where each diagonal entry is
+`φ (single s 1) s`. -/
+theorem faceModule_trace_eq_zero {n : ℕ} (K : GSC n) (hK : K.faces.Finite) (k : ℕ)
+    (φ : FaceModuleCat K k ⟶ FaceModuleCat K k)
+    (hdiag : ∀ s : FaceIndex K k, (φ (Finsupp.single s 1)) s = 0) :
+    LinearMap.trace ℚ (FaceModule K k) φ.hom = 0 := by
+  sorry
+
+/-- An oriented package's comparison is a quasi-isomorphism. Transport
+`SimplicialSingularComparison.orderedFace_singular_quasiIso` (stated with
+`ChainComplex.ofHom`) to `cmpH` through the identity map from
+`ChainComplex.of _ (fun j ↦ C.d (j+1) j) _` to `C`, as in the map `e` at the end of
+`vertexChainMap_affineComparison_square`. That theorem is the accepted interface:
+its own `sorry` is tracked in SimplicialSingularComparison, so use it. -/
+theorem orientedPackage_homology_bijective {n : ℕ} (o : LinearOrder (Euc n)) (K : GSC n)
+    (hK : K.faces.Finite) (d : ∀ k, FaceModuleCat K (k+1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) (hdd : ∀ k, d (k+1) ≫ d k = 0)
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : IsAffineComparison K cmp)
+    (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpH_f : ∀ k, cmpH.f k = cmp k) :
+    ∀ k, Function.Bijective (HomologicalComplex.homologyMap cmpH k).hom := by
+  sorry
+
+/-- The composite `sd ≫ hm` is conjugate on homology to `e ∘ g ∘ e⁻¹`. Apply
+`homologyMap_comp`, then `hv` and `hsd`, reassociating. Then
+`induced (setCongr hspace.symm) ≫ induced f = induced (e ∘ g ∘ e⁻¹)`: replace `f`
+using `hhom` (`SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic`,
+used in the same way as in `LefschetzCompactPolyhedron`), then use functoriality
+(`Functor.map_comp`, with `setCongr hspace.symm` followed by `setCongr hspace`
+equal to `id` by `ext; rfl`). -/
+theorem oriented_model_aux_conj {X : Type} [TopologicalSpace X] {n : ℕ} (K K' : GSC n)
+    (hspace : K'.space = K.space) (e : X ≃ₜ K.space) (g : C(X,X)) (f : C(K'.space, K.space))
+    {CK CK' : ChainComplex (ModuleCat ℚ) ℕ} (sdH : CK ⟶ CK') (hmH : CK' ⟶ CK)
+    (cmpKH : CK ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpK'H : CK' ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K'.space))
+    (hsd : ∀ k, HomologicalComplex.homologyMap sdH k ≫ HomologicalComplex.homologyMap cmpK'H k =
+      HomologicalComplex.homologyMap cmpKH k ≫ induced (Homeomorph.setCongr hspace.symm) k)
+    (hv : ∀ k, HomologicalComplex.homologyMap hmH k ≫ HomologicalComplex.homologyMap cmpKH k =
+      HomologicalComplex.homologyMap cmpK'H k ≫ induced f k)
+    (hhom : ContinuousMap.Homotopic
+      ((homeomorphMap e).comp (g.comp ((homeomorphMap e.symm).comp
+        (homeomorphMap (Homeomorph.setCongr hspace : K'.space ≃ₜ K.space))))) f) :
+    ∀ k, HomologicalComplex.homologyMap (sdH ≫ hmH) k ≫ HomologicalComplex.homologyMap cmpKH k =
+      HomologicalComplex.homologyMap cmpKH k ≫
+        induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k := by
+  sorry
+
+/-- A chain model with a bijective comparison square represents `g`. Set
+`E k := LinearEquiv.ofBijective (c k).hom (hc k)`, followed by the isomorphism
+`induced (homeomorphMap e.symm) k` (whose inverse is `induced (homeomorphMap e) k`,
+by functoriality). The square is `hsq`, conjugated by `e`. -/
+theorem homologyModels_of_square {X : Type} [TopologicalSpace X] {n : ℕ} (K : GSC n)
+    (e : X ≃ₜ K.space) (g : C(X,X)) (M : LefschetzCompactPolyhedron.FiniteChainEndomorphism)
+    (c : ∀ k, M.C.homology k ⟶ Homology K.space k)
+    (hc : ∀ k, Function.Bijective (c k).hom)
+    (hsq : ∀ k, HomologicalComplex.homologyMap M.φ k ≫ c k =
+      c k ≫ induced ((homeomorphMap e).comp (g.comp (homeomorphMap e.symm))) k) :
+    LefschetzCompactPolyhedron.HomologyModels M g := by
+  sorry
+
 /-- LIBRARY: assemble explicit commuting subdivision and vertex maps, their
 comparison squares and quasi-isomorphism into the packaged finite chain model. -/
 theorem oriented_model_of_explicit_maps
@@ -4468,7 +4532,31 @@ theorem oriented_model_of_explicit_maps
           (homeomorphMap (Homeomorph.setCongr hspace : K'.space ≃ₜ K.space))))) f) :
     ∃ M : LefschetzCompactPolyhedron.FiniteChainEndomorphism,
       (∀ k, M.chainTrace k = 0) ∧ LefschetzCompactPolyhedron.HomologyModels M g := by
-  sorry
+  classical
+  let o : LinearOrder (Euc n) := IsWellOrder.linearOrder WellOrderingRel
+  subst hiter
+  obtain ⟨dK, hdK, hddK, cmpK, hcmpK, cmpKH, cmpKH_f⟩ := orientedPackage_exists o K
+  obtain ⟨dK', hdK', hddK', cmpK', hcmpK', cmpK'H, cmpK'H_f⟩ :=
+    orientedPackage_exists o ((barycentricStep^[m]) K)
+  obtain ⟨sdH, hcarr, hsd⟩ := iterSubdivision_square o m K dK dK' hdK hdK' hddK hddK'
+    cmpK cmpK' hcmpK hcmpK' cmpKH cmpK'H cmpKH_f cmpK'H_f
+  obtain ⟨hmH, hvert, hv⟩ := vertexChainMap_square_package o _ K h hh f hf dK' dK
+    hdK' hdK hddK' hddK cmpK' cmpK hcmpK' hcmpK cmpK'H cmpKH cmpK'H_f cmpKH_f
+  obtain ⟨b, hb⟩ := faceModule_zero_above K hK
+  let M : LefschetzCompactPolyhedron.FiniteChainEndomorphism :=
+    { C := ChainComplex.of _ dK hddK
+      φ := sdH ≫ hmH
+      bound := b
+      finiteChain := faceModule_finiteDimensional K hK
+      finiteHomology := orientedChains_homology_finiteDimensional K hK dK hddK
+      chainAbove := hb }
+  refine ⟨M, fun k ↦ ?_, ?_⟩
+  · exact faceModule_trace_eq_zero K hK k ((sdH ≫ hmH).f k)
+      (composite_zero_diagonal_of_isHullCarried o K _ h (fun k ↦ sdH.f k) (fun k ↦ hmH.f k)
+        hcarr hvert havoid k)
+  · exact homologyModels_of_square K e g M (fun k ↦ HomologicalComplex.homologyMap cmpKH k)
+      (orientedPackage_homology_bijective o K hK dK hdK hddK cmpK hcmpK cmpKH cmpKH_f)
+      (oriented_model_aux_conj K _ hspace e g f sdH hmH cmpKH cmpK'H hsd hv hhom)
 
 /-- Adapter with exactly the statement consumed by `LefschetzCompactPolyhedron`. -/
 theorem exists_carrier_avoiding_oriented_chain_model
