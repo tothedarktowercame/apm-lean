@@ -3935,7 +3935,77 @@ theorem barycentricStep_iterate_mesh_lt {n : ℕ} (K : GSC n) (hK : K.faces.Fini
     (ε : ℝ) (hε : 0 < ε) :
     ∃ p : ℕ, ∀ s ∈ ((barycentricStep^[p]) K).faces,
       Metric.diam (convexHull ℝ (s : Set (Euc n))) < ε := by
-  sorry
+  let M := sSup {r : ℝ | ∃ s ∈ K.faces,
+    r = Metric.diam (convexHull ℝ (s : Set (Euc n)))}
+  let q : ℝ := n / (n + 1 : ℝ)
+  have hdim : ∀ s ∈ K.faces, s.card ≤ n + 1 := by
+    intro s hs
+    have hspan := Submodule.finrank_le
+      (vectorSpan ℝ (Set.range ((↑) : s → Euc n)))
+    have hcard := (K.indep hs).card_le_finrank_succ.trans
+      (Nat.add_le_add_right hspan 1)
+    simpa using hcard
+  have hdim_iter : ∀ m : ℕ, ∀ s ∈ ((barycentricStep^[m]) K).faces,
+      s.card ≤ n + 1 := by
+    intro m
+    induction m with
+    | zero => simpa using hdim
+    | succ m hm =>
+        rw [Function.iterate_succ_apply']
+        exact barycentricStep_card_le ((barycentricStep^[m]) K) hm
+  have hmesh : ∀ m : ℕ, ∀ u ∈ ((barycentricStep^[m]) K).faces,
+      Metric.diam (convexHull ℝ (u : Set (Euc n))) ≤ q ^ m * M := by
+    intro m
+    induction m with
+    | zero =>
+        intro u hu
+        simp only [Function.iterate_zero_apply, pow_zero, one_mul]
+        apply le_csSup
+        · apply (hK.image (fun s : Finset (Euc n) ↦
+              Metric.diam (convexHull ℝ (s : Set (Euc n))))).bddAbove.mono
+          intro r hr
+          obtain ⟨s, hs, rfl⟩ := hr
+          exact ⟨s, hs, rfl⟩
+        · exact ⟨u, hu, rfl⟩
+    | succ m ih =>
+        intro u hu
+        rw [Function.iterate_succ_apply'] at hu
+        refine (GeometricSimplicialSubdivision.barycentricSubdivision_mesh (d := n)
+          ((barycentricStep^[m]) K)
+          (barycentricStep_iterate_finite K hK m)
+          ?_ _ _ _ u hu).trans ?_
+        · exact hdim_iter m
+        · have hsup : sSup {r : ℝ | ∃ s ∈ ((barycentricStep^[m]) K).faces,
+              r = Metric.diam (convexHull ℝ (s : Set (Euc n)))} ≤ q ^ m * M := by
+            by_cases hne : {r : ℝ | ∃ s ∈ ((barycentricStep^[m]) K).faces,
+                r = Metric.diam (convexHull ℝ (s : Set (Euc n)))}.Nonempty
+            · apply csSup_le hne
+              intro r hr
+              obtain ⟨s, hs, rfl⟩ := hr
+              exact ih s hs
+            · rw [Set.not_nonempty_iff_eq_empty.mp hne, Real.sSup_empty]
+              exact mul_nonneg (by positivity) (by
+                dsimp [M]
+                by_cases hneK : K.faces.Nonempty
+                · obtain ⟨s, hs⟩ := hneK
+                  exact Metric.diam_nonneg.trans (le_csSup
+                    ((hK.image (fun t : Finset (Euc n) ↦
+                      Metric.diam (convexHull ℝ (t : Set (Euc n))))).bddAbove.mono
+                        (by rintro r ⟨t, ht, rfl⟩; exact ⟨t, ht, rfl⟩))
+                    ⟨s, hs, rfl⟩)
+                · simp [Set.not_nonempty_iff_eq_empty.mp hneK])
+          simpa [q, pow_succ, mul_assoc, mul_comm, mul_left_comm] using
+            (mul_le_mul_of_nonneg_left hsup (by positivity : 0 ≤ q))
+  have hq0 : 0 ≤ q := by positivity
+  have hq1 : q < 1 := by
+    dsimp [q]
+    rw [div_lt_one (by positivity : (0 : ℝ) < n + 1)]
+    norm_num
+  have hlim : Filter.Tendsto (fun m : ℕ ↦ q ^ m * M) Filter.atTop (nhds 0) :=
+    by simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one hq0 hq1).mul_const M
+  obtain ⟨p, hp⟩ : ∃ p : ℕ, q ^ p * M < ε := by
+    exact ((tendsto_order.1 hlim).2 ε hε).exists
+  exact ⟨p, fun s hs ↦ (hmesh p s hs).trans_lt hp⟩
 -- END SEAT AREA
 
 /-- Each face of an iterated subdivision lies in the hull of a face of `K`
