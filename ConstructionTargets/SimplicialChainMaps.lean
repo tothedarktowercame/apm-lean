@@ -3588,7 +3588,33 @@ the proof of `composite_zero_diagonal` and
 theorem subdivisionChainMap_isHullCarried {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
     (hsd : IsSubdivisionChainMap o K K' sd) : IsHullCarried K K' sd := by
-  sorry
+  classical
+  intro k s u hu x hx
+  obtain ⟨z, hsdz, hz⟩ := hsd k s
+  rw [hsdz] at hu
+  have hzu : z u ≠ 0 := Finsupp.mem_support_iff.mp hu
+  rw [hz u] at hzu
+  have hex : ∃ c ∈ s.1.powerset.powerset,
+      GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+        u.1 = c.image GeometricSimplicialSubdivision.barycenter := by
+    by_contra hn
+    push_neg at hn
+    apply hzu
+    apply Finset.sum_eq_zero
+    intro c hc
+    split_ifs with hi
+    · exact (hn c hc hi.1 hi.2).elim
+    · rfl
+  obtain ⟨c, hcps, hcond⟩ := hex
+  have hcsub : ∀ t ∈ c, t ⊆ s.1 := by
+    intro t ht
+    exact Finset.mem_powerset.1 ((Finset.mem_powerset.1 hcps) ht)
+  have hxu : x ∈ c.image GeometricSimplicialSubdivision.barycenter := by
+    simpa [hcond.2] using hx
+  obtain ⟨t, htc, rfl⟩ := Finset.mem_image.1 hxu
+  apply composite_zero_diagonal_aux_barycenter_mem t s.1
+  · exact K.nonempty_of_mem_faces (hcond.1.1 t htc)
+  · exact hcsub t htc
 
 /-- Hull-carried maps compose: the support of `G (F s)` lies in the union of the
 supports of `G u` for `u` in the support of `F s` (`Finsupp` linearity), and
