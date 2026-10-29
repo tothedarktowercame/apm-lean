@@ -3599,7 +3599,28 @@ theorem IsHullCarried.comp {n : ℕ} {K K' K'' : GSC n}
     {G : ∀ k, FaceModuleCat K' k ⟶ FaceModuleCat K'' k}
     (hF : IsHullCarried K K' F) (hG : IsHullCarried K' K'' G) :
     IsHullCarried K K'' (fun k ↦ F k ≫ G k) := by
-  sorry
+  intro k s w hw
+  have hwne : (G k (F k (Finsupp.single s 1))) w ≠ 0 := by
+    exact Finsupp.mem_support_iff.mp hw
+  have hex : ∃ u ∈ (F k (Finsupp.single s 1)).support,
+      w ∈ (G k (Finsupp.single u 1)).support := by
+    by_contra hn
+    push_neg at hn
+    apply hwne
+    rw [← Finsupp.sum_single (F k (Finsupp.single s 1))]
+    change Finsupp.applyAddHom w
+      (G k (∑ u ∈ (F k (Finsupp.single s 1)).support,
+        Finsupp.single u ((F k (Finsupp.single s 1)) u))) = 0
+    rw [map_sum, map_sum]
+    apply Finset.sum_eq_zero
+    intro u hu
+    rw [← Finsupp.smul_single_one, map_smul]
+    change (F k (Finsupp.single s 1)) u * (G k (Finsupp.single u 1)) w = 0
+    rw [Finsupp.notMem_support_iff.mp (hn u hu)]
+    simp
+  obtain ⟨u, hu, hwu⟩ := hex
+  exact (hG k u w hwu).trans
+    (convexHull_min (hF k s u hu) (convex_convexHull ℝ (s.1 : Set (Euc n))))
 -- END SEAT AREA
 
 /-- `composite_zero_diagonal` for any hull-carried map in place of a one-step
