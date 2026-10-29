@@ -3903,7 +3903,29 @@ and the chain has at most `d + 1` members (the cards strictly increase inside
 theorem barycentricStep_card_le {n d : ℕ} (K : GSC n)
     (hdim : ∀ s ∈ K.faces, s.card ≤ d + 1) :
     ∀ u ∈ (barycentricStep K).faces, u.card ≤ d + 1 := by
-  sorry
+  classical
+  intro u hu
+  obtain ⟨c, hc, rfl⟩ := hu.1
+  refine (Finset.card_image_le.trans ?_)
+  let f : Finset ℕ := c.image Finset.card
+  have hfsub : f ⊆ Finset.Icc 1 (d + 1) := by
+    intro k hk
+    obtain ⟨s, hs, rfl⟩ := Finset.mem_image.mp hk
+    exact Finset.mem_Icc.mpr
+      ⟨Finset.card_pos.mpr
+          (GeometricSimplicialSubdivision.barycentricFaces_affineIndependent_aux_chain_nonempty
+            K c hc s hs),
+        hdim s (hc.1 s hs)⟩
+  have hfinj : Set.InjOn Finset.card (c : Set (Finset (Euc n))) := by
+    intro s hs t ht heq
+    by_contra hne
+    rcases hc.2 s hs t ht hne with hst | hts
+    · exact (Finset.card_lt_card hst).ne heq
+    · exact (Finset.card_lt_card hts).ne heq.symm
+  calc
+    c.card = f.card := (Finset.card_image_iff.mpr hfinj).symm
+    _ ≤ (Finset.Icc 1 (d + 1)).card := Finset.card_le_card hfsub
+    _ = d + 1 := by simp
 -- END SEAT AREA
 
 /-- Mesh goes to zero under iteration: iterate
