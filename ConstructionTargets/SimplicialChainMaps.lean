@@ -3856,7 +3856,49 @@ lemma iterSubdivision_square_aux_zero {n : ℕ} (o : LinearOrder (Euc n)) (K : G
       ∀ k, HomologicalComplex.homologyMap sdH k ≫ HomologicalComplex.homologyMap cmpH' k =
         HomologicalComplex.homologyMap cmpH k ≫
           induced (Homeomorph.setCongr (barycentricStep_iterate_space K 0).symm) k := by
-  sorry
+  classical
+  change ∃ sdH : ChainComplex.of _ d hdd ⟶ ChainComplex.of _ d' hdd',
+    IsHullCarried K K (fun k ↦ sdH.f k) ∧ _
+  have hh : GeometricSimplicialSubdivision.IsSimplicialVertexMap K K id := by
+    constructor
+    · intro v hv
+      simpa using hv
+    · intro s hs
+      simpa using hs
+  have hf : ∀ s ∈ K.faces, ∀ x : K.space,
+      (x : Euc n) ∈ convexHull ℝ (s : Set _) →
+      ((ContinuousMap.id K.space) x : Euc n) ∈
+        convexHull ℝ (s.image id : Set _) := by
+    intro s hs x hx
+    simpa using hx
+  obtain ⟨sd, hsd⟩ := vertexChainMap_exists o o K K id hh
+  have hcomm := vertexChainMap_commutes o o K K id d d' sd hd hd' hsd
+  let sdH : ChainComplex.of _ d hdd ⟶ ChainComplex.of _ d' hdd' :=
+    ChainComplex.ofHom _ _ hdd _ _ hdd' sd hcomm
+  have hsq := vertexChainMap_affineComparison_square o o K K id hh
+    (ContinuousMap.id K.space) hf sd hsd d d' hdd hdd' sdH
+    (by intro k; simp [sdH]) cmp cmp' hcmp hcmp' cmpH cmpH' hcmpH hcmpH'
+  refine ⟨sdH, ?_, ?_⟩
+  · intro k s u hu
+    have hs := hsd k s
+    rw [show s.1.image id = s.1 by simp, dif_pos s.2.2] at hs
+    obtain ⟨t, ht, hst⟩ := hs
+    have hut : u = t := by
+      have hne : Finsupp.single t (sortingSign o o s.1 id) u ≠ 0 := by
+        apply Finsupp.mem_support_iff.mp
+        have hu' : u ∈ (sd k (Finsupp.single s 1)).support := by
+          simpa [sdH] using hu
+        simpa [hst] using hu'
+      by_contra h
+      apply hne
+      simp [h]
+    subst u
+    have hts : t = s := by
+      apply Subtype.ext
+      simpa using ht
+    subst t
+    exact subset_convexHull ℝ (s.1 : Set (Euc n))
+  · simpa using hsq
 
 
 /-- One subdivision step as a hull-carried chain map with its square. Take `sd`
