@@ -1,5 +1,6 @@
 import ConstructionTargets.FiniteTriangulation
 import ConstructionTargets.CompactClosedEquivalenceQuotient
+import ConstructionTargets.RealProjectivePlaneLattice
 
 /-! # A finite marked triangulation of the real projective plane
 
@@ -318,15 +319,6 @@ def ringVertex (j : ℕ) : ℂ := (hexVertex j + hexVertex (j + 1)) / 3
 
 /-- The closed hexagon. -/
 def hexagon : Set ℂ := convexHull ℝ (Set.range fun j : Fin 6 => hexVertex j)
-
-def ringIdx (j : ℕ) : Fin 10 := ⟨1 + j % 6, by omega⟩
-
-def bdryIdx (j : ℕ) : Fin 10 := ⟨7 + j % 3, by omega⟩
-
-def rp2Facet (p : Fin 6 × Fin 3) : Finset (Fin 10) :=
-  if p.2.1 = 0 then {0, ringIdx p.1, ringIdx (p.1 + 1)}
-  else if p.2.1 = 1 then {bdryIdx p.1, bdryIdx (p.1 + 1), ringIdx p.1}
-  else {bdryIdx (p.1 + 1), ringIdx p.1, ringIdx (p.1 + 1)}
 
 def rp2Facets : Finset (Finset (Fin 10)) := Finset.univ.image rp2Facet
 
@@ -1937,23 +1929,6 @@ lemma rp2_explicit_finite_model_aux_rp2Map_eq (y : rp2Complex.space) (p : Fin 6 
   rw [dif_pos hex]
   exact rp2_explicit_finite_model_aux_agree _ _ _ (Classical.choose_spec hex) hp
 
-/-- Lattice coordinates of `ζ_j` in the basis `1, ζ₁`. -/
-def hexLat (j : ℕ) : ℝ × ℝ :=
-  ![((1 : ℝ), (0 : ℝ)), (0, 1), (-1, 1), (-1, 0), (0, -1), (1, -1)] ⟨j % 6, by omega⟩
-
-/-- Lattice coordinates of `m_j`. -/
-def ringLat (j : ℕ) : ℝ × ℝ :=
-  (((hexLat j).1 + (hexLat (j + 1)).1) / 3, ((hexLat j).2 + (hexLat (j + 1)).2) / 3)
-
-/-- Lattice coordinates of `rp2Corner p k` (same case split). -/
-def rp2CornerLat (p : Fin 6 × Fin 3) (k : Fin 10) : ℝ × ℝ :=
-  if k = 0 then (0, 0)
-  else if k = ringIdx p.1 then ringLat p.1
-  else if k = ringIdx (p.1 + 1) then ringLat (p.1 + 1)
-  else if k = bdryIdx p.1 ∧ p.2.1 = 1 then hexLat p.1
-  else if k = bdryIdx (p.1 + 1) then hexLat (p.1 + 1)
-  else (0, 0)
-
 /-- `ζ_j = a + b·ζ₁` with `(a, b) = hexLat j`. -/
 lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_hex_lat_aux_root :
     hexVertex 2 = -1 + hexVertex 1 := by
@@ -2046,19 +2021,6 @@ lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary
   split_ifs with h
   · exact (hk (h ▸ hi)).elim
   · rfl
-
-/-- The finite check: in lattice coordinates, equal images from facets `p, p'`
-force equal barycentric coordinates.  `fin_cases p <;> fin_cases p'`, expand the
-sums over `Fin 10` and the corner table, then `linarith` for each coordinate
-(the 18 triangles are a proper triangulation in which each planar vertex has a
-single label; `checks/rp2_planar_tiling_check.py`). -/
-lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_cases (p p' : Fin 6 × Fin 3) (y y' : EuclideanSpace ℝ (Fin 10))
-    (h0 : ∀ k, 0 ≤ y k) (h1 : ∑ k, y k = 1) (h2 : ∀ k, k ∉ rp2Facet p → y k = 0)
-    (h0' : ∀ k, 0 ≤ y' k) (h1' : ∑ k, y' k = 1) (h2' : ∀ k, k ∉ rp2Facet p' → y' k = 0)
-    (ha : ∑ k, y k * (rp2CornerLat p k).1 = ∑ k, y' k * (rp2CornerLat p' k).1)
-    (hb : ∑ k, y k * (rp2CornerLat p k).2 = ∑ k, y' k * (rp2CornerLat p' k).2) :
-    ∀ k, y k = y' k := by
-  sorry
 
 lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_split (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) :
     rp2Affine p y = ((∑ k, y k * (rp2CornerLat p k).1 : ℝ) : ℂ) +
