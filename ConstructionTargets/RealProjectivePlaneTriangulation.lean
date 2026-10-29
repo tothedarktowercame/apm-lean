@@ -1970,7 +1970,37 @@ lemma rp2_explicit_finite_model_aux_injective_aux_planar_aux_bary
     (s : Finset (Fin 10)) (y : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ convexHull ℝ (↑(s.image (basisVertex 10)) : Set (EuclideanSpace ℝ (Fin 10)))) :
     (∀ k, 0 ≤ y k) ∧ (∑ k, y k = 1) ∧ (∀ k, k ∉ s → y k = 0) := by
-  sorry
+  have hstd : y ∈ {z : EuclideanSpace ℝ (Fin 10) |
+      (∀ k, 0 ≤ z k) ∧ ∑ k, z k = 1} := by
+    apply convexHull_min _ (show Convex ℝ {z : EuclideanSpace ℝ (Fin 10) |
+        (∀ k, 0 ≤ z k) ∧ ∑ k, z k = 1} by
+      intro x hx z hz a b ha hb hab
+      simp only [Set.mem_setOf_eq] at hx hz ⊢
+      constructor
+      · intro k
+        exact add_nonneg (mul_nonneg ha (hx.1 k)) (mul_nonneg hb (hz.1 k))
+      · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hx.2, hz.2, hab]) hy
+    rintro z hz
+    simp only [Finset.coe_image, Set.mem_image] at hz
+    obtain ⟨i, hi, rfl⟩ := hz
+    constructor
+    · intro k
+      simp only [basisVertex, EuclideanSpace.single_apply]
+      split_ifs <;> norm_num
+    · simp [basisVertex]
+  refine ⟨hstd.1, hstd.2, ?_⟩
+  intro k hk
+  apply convexHull_min _ (show Convex ℝ {z : EuclideanSpace ℝ (Fin 10) | z k = 0} by
+    intro x hx z hz a b ha hb hab
+    simp only [Set.mem_setOf_eq] at hx hz ⊢
+    simp [hx, hz]) hy
+  rintro z hz
+  simp only [Finset.coe_image, Set.mem_image] at hz
+  obtain ⟨i, hi, rfl⟩ := hz
+  simp only [Set.mem_setOf_eq, basisVertex, EuclideanSpace.single_apply]
+  split_ifs with h
+  · exact (hk (h ▸ hi)).elim
+  · rfl
 
 /-- The finite check: in lattice coordinates, equal images from facets `p, p'`
 force equal barycentric coordinates.  `fin_cases p <;> fin_cases p'`, expand the
