@@ -1925,7 +1925,16 @@ def apm_t02A04_curveIdx (i : Fin 6) : Fin 21 :=
 /-- Every point of the complex lies in one of the 54 tetrahedra (as `_cone_model_aux_cover`). -/
 lemma apm_t02A04_solidTorus_prism_model_aux_cover (y : EuclideanSpace ℝ (Fin 21))
     (hy : y ∈ apm_t02A04_prismComplex.space) : ∃ q, y ∈ apm_t02A04_prismHull q := by
-  sorry
+  classical
+  rw [Geometry.SimplicialComplex.mem_space_iff] at hy
+  obtain ⟨S, hS, hy⟩ := hy
+  have hSb : S ∈ ConstructionTargets.RealProjectivePlaneTriangulation.basisFaces 21
+      (Finset.univ.image apm_t02A04_prismFacet) := by
+    exact hS.1
+  obtain ⟨f, hf, hSf⟩ := hSb
+  obtain ⟨q, -, rfl⟩ := Finset.mem_image.mp hf
+  refine ⟨q, ?_⟩
+  exact convexHull_mono (by exact_mod_cast hSf) hy
 
 lemma apm_t02A04_solidTorus_prism_model_aux_vertex_mem (i : Fin 6) :
     ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i) ∈ apm_t02A04_prismComplex.space := by
