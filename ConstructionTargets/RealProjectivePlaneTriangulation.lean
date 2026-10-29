@@ -2021,10 +2021,146 @@ lemma rp2_explicit_finite_model_aux_injective_aux_planar (p p' : Fin 6 × Fin 3)
 /-- A facet point whose image has hexagon gauge one is supported on boundary labels.
 Plan: `gauge` is convex and equals `1` at `ζ_j`, `0` at `0`, `2/3` at `m_j`; so
 `1 = gauge (Σ y_k c_k) ≤ Σ y_k gauge c_k` forces `y_k = 0` for `k < 7`. -/
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_nonneg
+    (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) (hy : y ∈ facetHull p) :
+    ∀ k, 0 ≤ y k := by
+  intro k
+  apply (convexHull_min (s := (↑((rp2Facet p).image (basisVertex 10)) :
+      Set (EuclideanSpace ℝ (Fin 10)))) (t := {x | 0 ≤ x k}) ?_ ?_) hy
+  · rintro x hx
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_image.1 hx
+    simp [basisVertex]
+    split <;> positivity
+  · intro a ha b hb u v hu hv huv
+    simp only [Set.mem_setOf_eq] at ha hb ⊢
+    simp only [PiLp.add_apply, PiLp.smul_apply]
+    positivity
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_sum
+    (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10)) (hy : y ∈ facetHull p) :
+    ∑ k, y k = 1 := by
+  apply (convexHull_min (s := (↑((rp2Facet p).image (basisVertex 10)) :
+      Set (EuclideanSpace ℝ (Fin 10)))) (t := {x | ∑ k, x k = 1}) ?_ ?_) hy
+  · rintro x hx
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_image.1 hx
+    simp [basisVertex]
+  · intro a ha b hb u v hu hv huv
+    simp only [Set.mem_setOf_eq] at ha hb ⊢
+    simp only [PiLp.add_apply, PiLp.smul_apply, Finset.sum_add_distrib]
+    simp_rw [smul_eq_mul, ← Finset.mul_sum]
+    rw [ha, hb]
+    linarith
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_corner_one
+    (p : Fin 6 × Fin 3) (k : Fin 10) : gauge hexagon (rp2Corner p k) ≤ 1 := by
+  apply gauge_le_one_of_mem
+  obtain ⟨i, t⟩ := p
+  fin_cases i <;> unfold rp2Corner <;> split_ifs <;>
+    first
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 0
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 1
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 2
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 3
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 4
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 5
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring_six
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 0
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 1
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 2
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 3
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 4
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 5
+    | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_ring (j : ℕ) :
+    gauge hexagon (ringVertex j) ≤ 2 / 3 := by
+  have ha : Absorbent ℝ hexagon := absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_nhds
+  have hadd := gauge_add_le (convex_convexHull ℝ _) ha (hexVertex j) (hexVertex (j + 1))
+  have hsm := gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ)
+    (show 0 ≤ (1 / 3 : ℝ) by norm_num) (hexVertex j + hexVertex (j + 1))
+  have hv (n : ℕ) : gauge hexagon (hexVertex n) ≤ 1 := by
+    apply gauge_le_one_of_mem
+    rw [rp2_explicit_finite_model_aux_surjective_aux_planar_aux_tiling_aux_hex_mod
+      (a := n) (b := n % 6) (by omega)]
+    exact subset_convexHull ℝ _ ⟨⟨n % 6, Nat.mod_lt _ (by omega)⟩, rfl⟩
+  have h1 := hv j
+  have h2 := hv (j + 1)
+  unfold ringVertex
+  rw [show (hexVertex j + hexVertex (j + 1)) / 3 =
+      (1 / 3 : ℝ) • (hexVertex j + hexVertex (j + 1)) by
+        rw [Complex.real_smul]; push_cast; ring]
+  calc
+    gauge hexagon ((1 / 3 : ℝ) • (hexVertex j + hexVertex (j + 1))) =
+        (1 / 3 : ℝ) * gauge hexagon (hexVertex j + hexVertex (j + 1)) := by
+          exact hsm
+    _ ≤ (1 / 3 : ℝ) * (gauge hexagon (hexVertex j) +
+        gauge hexagon (hexVertex (j + 1))) := by
+          exact mul_le_mul_of_nonneg_left hadd (by norm_num)
+    _ ≤ 2 / 3 := by nlinarith
+
+lemma rp2_explicit_finite_model_aux_injective_aux_boundary_aux_corner_two_thirds
+    (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k.1 < 7) :
+    gauge hexagon (rp2Corner p k) ≤ 2 / 3 := by
+  unfold rp2Corner
+  split_ifs with h0 h1 h2 h3 h4
+  · subst k; norm_num [gauge_zero]
+  · exact rp2_explicit_finite_model_aux_injective_aux_boundary_aux_ring p.1
+  · exact rp2_explicit_finite_model_aux_injective_aux_boundary_aux_ring (p.1 + 1)
+  · exfalso
+    have := congrArg Fin.val h3.1
+    simp [bdryIdx] at this
+    omega
+  · exfalso
+    have := congrArg Fin.val h4
+    simp [bdryIdx] at this
+    omega
+  · norm_num [gauge_zero]
+
 lemma rp2_explicit_finite_model_aux_injective_aux_boundary (p : Fin 6 × Fin 3) (y : EuclideanSpace ℝ (Fin 10))
     (hy : y ∈ facetHull p) (hg : gauge hexagon (rp2Affine p y) = 1) :
     ∀ k : Fin 10, k.1 < 7 → y k = 0 := by
-  sorry
+  intro k hk
+  have hn := rp2_explicit_finite_model_aux_injective_aux_boundary_aux_nonneg p y hy
+  have hs := rp2_explicit_finite_model_aux_injective_aux_boundary_aux_sum p y hy
+  have ha : Absorbent ℝ hexagon := absorbent_nhds_zero rp2_explicit_finite_model_aux_hex_nhds
+  have hsum := gauge_sum_le (convex_convexHull ℝ _) ha Finset.univ
+    (fun i : Fin 10 => (y i) • rp2Corner p i)
+  have hterm : ∀ i : Fin 10, gauge hexagon ((y i) • rp2Corner p i) ≤
+      if i = k then y i * (2 / 3) else y i := by
+    intro i
+    have hsm := gauge_smul_of_nonneg (E := ℂ) (s := hexagon) (α := ℝ) (hn i)
+      (rp2Corner p i)
+    calc
+      gauge hexagon ((y i) • rp2Corner p i) =
+          y i * gauge hexagon (rp2Corner p i) := by simpa [smul_eq_mul] using hsm
+      _ ≤ if i = k then y i * (2 / 3) else y i := by
+        split_ifs with hik
+        · subst i
+          exact mul_le_mul_of_nonneg_left
+            (rp2_explicit_finite_model_aux_injective_aux_boundary_aux_corner_two_thirds p k hk) (hn k)
+        · simpa using mul_le_mul_of_nonneg_left
+            (rp2_explicit_finite_model_aux_injective_aux_boundary_aux_corner_one p i) (hn i)
+  have hbound : gauge hexagon (rp2Affine p y) ≤ 1 - y k / 3 := by
+    calc
+      gauge hexagon (rp2Affine p y) =
+          gauge hexagon (∑ i, (y i) • rp2Corner p i) := by
+            simp only [rp2Affine, Complex.real_smul]
+      _ ≤ ∑ i, gauge hexagon ((y i) • rp2Corner p i) := by simpa using hsum
+      _ ≤ ∑ i, (if i = k then y i * (2 / 3) else y i) :=
+        Finset.sum_le_sum fun i _ => hterm i
+      _ = 1 - y k / 3 := by
+        calc
+          (∑ i, (if i = k then y i * (2 / 3) else y i)) =
+              ∑ i, (y i - if i = k then y i / 3 else 0) := by
+                apply Finset.sum_congr rfl
+                intro i hi
+                by_cases hik : i = k <;> simp [hik] <;> ring
+          _ = (∑ i, y i) - ∑ i, (if i = k then y i / 3 else 0) := by
+                rw [Finset.sum_sub_distrib]
+          _ = 1 - y k / 3 := by simp [hs]
+  rw [hg] at hbound
+  linarith [hn k]
 
 /-- Antipodal images on the boundary come from the same point.  Plan: by
 `_aux_boundary`, `y'` lies in the face of boundary labels of `p'`, which is also a
