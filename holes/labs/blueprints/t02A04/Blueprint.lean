@@ -2013,9 +2013,20 @@ lemma apm_t02A04_solidTorus_prism_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0 
     rw [segment_eq_image]
     exact ⟨t, ⟨ht0, ht1⟩, rfl⟩
 
+/-- The point does not depend on the tetrahedron: on a shared face the disk weights lie
+in a shared cone face (`_cone_model_aux_agree`), and the circle points agree (same edge,
+or circle vertex `j + 1` = weight `1` on edge `j` and weight `0` on edge `j + 1`, both at
+angle `2π(j+1)/3`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_agree (q q' : Fin 6 × Fin 3 × Fin 3)
+    (y : EuclideanSpace ℝ (Fin 21)) (hq : y ∈ apm_t02A04_prismHull q)
+    (hq' : y ∈ apm_t02A04_prismHull q') :
+    apm_t02A04_prismPoint q y = apm_t02A04_prismPoint q' y := by
+  sorry
+
 /-- Along curve edge `i` the disk weights are `(0, 1 - t, t)` on facet `i` and the circle
 weight is `t` on edge `i mod 3`, so the image is the curve point (`_cone_model_aux_edge_map`
-for the disk factor; `Circle.exp` periodicity for `arcPoint i t ^ 2`). -/
+for the disk factor; `Circle.exp` periodicity for `arcPoint i t ^ 2`).  Evaluate on the
+explicit tetrahedron `(i, i mod 3, 1)` and use `_aux_agree` for the chosen one. -/
 lemma apm_t02A04_solidTorus_prism_model_aux_edge_map (i : Fin 6) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     apm_t02A04_prismMap ⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i t ht0 ht1⟩ =
       (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
