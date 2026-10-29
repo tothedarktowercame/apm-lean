@@ -1321,10 +1321,8 @@ theorem subdivisionChainMap_commutes_aux_cone_boundary_zero {n : ℕ}
     dK' 0 (subdivisionCone o K' b 0 x) =
       x - (x.sum fun _ a => a) •
         Finsupp.single (⟨{b}, hb, by simp⟩ : FaceIndex K' 0) 1 := by
-  sorry
-/-
   classical
-  rw [← Finsupp.sum_single x]
+  conv_lhs => rw [← Finsupp.sum_single x]
   change dK' 0 (subdivisionCone o K' b 0
       (∑ u ∈ x.support, Finsupp.single u (x u))) = _
   simp only [map_sum]
@@ -1337,10 +1335,11 @@ theorem subdivisionChainMap_commutes_aux_cone_boundary_zero {n : ℕ}
     intro u hu
     exact subdivisionChainMap_commutes_aux_cone_boundary_zero_aux_single
       o K' dK' hdK' b hb u (hx u (Finsupp.mem_support_iff.mp hu)) (x u)
-  rw [hsum]
-  rw [Finset.sum_sub_distrib]
-  rw [← Finset.sum_smul]
--/
+  rw [hsum, Finset.sum_sub_distrib]
+  congr 1
+  · exact Finsupp.sum_single x
+  · rw [Finsupp.sum]
+    exact Finset.sum_smul.symm
 
 /-- Subdivision chains of proper facets can be coned to the barycenter of the
 ambient face. -/
@@ -2094,6 +2093,231 @@ lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sign {n k : �
       (-1) ^ ((c' ×ˢ c').filter fun tu =>
         tu.1 ⊂ tu.2 ∧ @LT.lt (Euc n) o.toLT (GeometricSimplicialSubdivision.barycenter tu.2)
           (GeometricSimplicialSubdivision.barycenter tu.1)).card) * hm
+
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_sd_coeff {n j : ℕ}
+    (o : LinearOrder (Euc n)) (K : GSC n)
+    (sd : ∀ i, FaceModuleCat K i ⟶ FaceModuleCat (barycentricStep K) i)
+    (hsd : IsSubdivisionChainMap o K (barycentricStep K) sd)
+    (r : FaceIndex K j) (w : FaceIndex (barycentricStep K) j) : by
+    classical
+    exact sd j (Finsupp.single r 1) w =
+      ∑ c ∈ r.1.powerset.powerset,
+        if GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+            w.1 = c.image GeometricSimplicialSubdivision.barycenter then
+          flagSign o c else 0 := by
+  classical
+  obtain ⟨z, hz, hcoeff⟩ := hsd j r
+  rw [hz, hcoeff]
+
+/-- Coefficient of a cone at a face containing the apex: only the face with
+the apex erased contributes. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_mem {n k : ℕ} (o : LinearOrder (Euc n)) (K' : GSC n)
+    (b : Euc n) (x : FaceModuleCat K' k) (U : FaceIndex K' (k + 1)) (w : FaceIndex K' k)
+    (hb : b ∈ U.1) (hw : w.1 = U.1.erase b) :
+    subdivisionCone o K' b k x U =
+      (-1 : ℚ) ^ (w.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card * x w := by
+  classical
+  have hbn : b ∉ w.1 := by
+    rw [hw]
+    simp
+  have hins : insert b w.1 = U.1 := by
+    rw [hw, Finset.insert_erase hb]
+  have hface : insert b w.1 ∈ K'.faces := by
+    rw [hins]
+    exact U.2.1
+  have hwU :
+      (⟨insert b w.1, hface, by rw [hins]; exact U.2.2⟩ : FaceIndex K' (k + 1)) = U := by
+    apply Subtype.ext
+    exact hins
+  simp only [subdivisionCone, ModuleCat.hom_ofHom, LinearMap.coe_mk, AddHom.coe_mk,
+    Finsupp.linearCombination_apply]
+  rw [Finsupp.sum_apply]
+  simp only [Finsupp.sum]
+  rw [Finset.sum_eq_single w]
+  · simp [hbn, hface, hwU, mul_comm]
+  · intro c hc hcw
+    by_cases hadm : b ∉ c.1 ∧ insert b c.1 ∈ K'.faces
+    · have hne (hf : insert b c.1 ∈ K'.faces)
+          (hcard : (insert b c.1).card = k + 2) :
+          (⟨insert b c.1, hf, hcard⟩ : FaceIndex K' (k + 1)) ≠ U := by
+          intro heq
+          apply hcw
+          apply Subtype.ext
+          have hv := congrArg (fun z : FaceIndex K' (k + 1) => z.1.erase b) heq
+          simpa [hadm.1, hw] using hv
+      simp [hadm, hne]
+      left
+      rw [Finsupp.single_apply]
+      split
+      · rename_i he
+        exfalso
+        apply hcw
+        apply Subtype.ext
+        have hv := congrArg (fun z : FaceIndex K' (k + 1) => z.1.erase b) he
+        simpa [hadm.1, hw] using hv
+      · rfl
+    · simp [hadm]
+  · intro hwsp
+    have hxw : x w = 0 := by simpa using hwsp
+    simp [hxw]
+
+/-- A cone vanishes on faces not containing the apex. -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_not_mem {n k : ℕ} (o : LinearOrder (Euc n)) (K' : GSC n)
+    (b : Euc n) (x : FaceModuleCat K' k) (U : FaceIndex K' (k + 1)) (hb : b ∉ U.1) :
+    subdivisionCone o K' b k x U = 0 := by
+  classical
+  simp only [subdivisionCone]
+  change (Finsupp.linearCombination ℚ (fun u : FaceIndex K' k =>
+    if hu : b ∉ u.1 ∧ insert b u.1 ∈ K'.faces then
+      Finsupp.single
+        (⟨insert b u.1, hu.2,
+          by rw [Finset.card_insert_of_notMem hu.1, u.2.2]⟩ : FaceIndex K' (k + 1))
+        ((-1 : ℚ) ^ (u.1.filter fun q => @LT.lt (Euc n) o.toLT q b).card)
+    else 0)) x U = 0
+  rw [Finsupp.linearCombination_apply]
+  simp only [Finsupp.sum_apply, Finsupp.sum]
+  rw [Finsupp.finset_sum_apply]
+  apply Finset.sum_eq_zero
+  intro u hu
+  split_ifs with hcone
+  · simp only [Finsupp.coe_smul, Pi.smul_apply]
+    rw [Finsupp.single_apply]
+    split_ifs with heq
+    · exfalso
+      apply hb
+      rw [← congrArg Subtype.val heq]
+      exact Finset.mem_insert_self b u.1
+    · simp
+  · rw [smul_zero]
+    rfl
+
+/-- Reindexing: strict chains of `s` with barycenter image `u` (necessarily
+maximal, hence topped by `s`) correspond to pairs `(v, c')` with `c'` a chain of
+`s.erase v` and `c = insert s c'` (`_aux_top`, `_aux_insert`, `_aux_bary_injOn`). -/
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex_aux_left_card
+    {n k : ℕ} (K : GSC n) (c : Finset (Finset (Euc n)))
+    (hc : GeometricSimplicialSubdivision.IsStrictFaceChain K c)
+    (u : Finset (Euc n)) (hu : u.card = k + 2)
+    (heq : u = c.image GeometricSimplicialSubdivision.barycenter) :
+    c.card = k + 2 := by
+  have hi := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_bary_injOn K c hc
+  rw [heq, Finset.card_image_iff.mpr hi] at hu
+  exact hu
+
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex_aux_right_card
+    {n k : ℕ} (K : GSC n) (s : FaceIndex K (k + 1)) (v : Euc n)
+    (hv : v ∈ s.1) (c' : Finset (Finset (Euc n)))
+    (hc' : GeometricSimplicialSubdivision.IsStrictFaceChain K c')
+    (hcs : c' ⊆ (s.1.erase v).powerset) (u : Finset (Euc n))
+    (hu : u.card = k + 2)
+    (heq : u = insert (GeometricSimplicialSubdivision.barycenter s.1)
+      (c'.image GeometricSimplicialSubdivision.barycenter)) :
+    c'.card = k + 1 := by
+  have hle : c'.card ≤ k + 1 := by
+    have hi := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_top_aux_card_inj K c' hc'
+    calc
+      c'.card = (c'.image Finset.card).card := (Finset.card_image_iff.mpr hi).symm
+      _ ≤ (Finset.Icc 1 (k + 1)).card := by
+        apply Finset.card_le_card
+        intro m hm
+        obtain ⟨t, ht, rfl⟩ := Finset.mem_image.1 hm
+        have htne := K.nonempty_of_mem_faces (hc'.1 t ht)
+        refine Finset.mem_Icc.2 ⟨Finset.card_pos.2 htne, ?_⟩
+        have h := Finset.card_le_card (Finset.mem_powerset.1 (hcs ht))
+        rw [Finset.card_erase_of_mem hv, s.2.2] at h
+        omega
+      _ = k + 1 := by simp
+  have himage_le : (c'.image GeometricSimplicialSubdivision.barycenter).card ≤ c'.card :=
+    Finset.card_image_le
+  have hins_le :
+      (insert (GeometricSimplicialSubdivision.barycenter s.1)
+        (c'.image GeometricSimplicialSubdivision.barycenter)).card ≤
+          (c'.image GeometricSimplicialSubdivision.barycenter).card + 1 :=
+    Finset.card_insert_le _ _
+  have hge : k + 1 ≤ c'.card := by
+    rw [← heq, hu] at hins_le
+    omega
+  omega
+
+lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex {n k : ℕ} (o : LinearOrder (Euc n)) (K : GSC n)
+    (s : FaceIndex K (k + 1)) (u : Finset (Euc n)) (hu : u.card = k + 2) : by
+    classical
+    exact
+    (∑ c ∈ s.1.powerset.powerset,
+      if GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+          u = c.image GeometricSimplicialSubdivision.barycenter then
+        flagSign o c else 0) =
+      ∑ v ∈ s.1.attach, ∑ c' ∈ (s.1.erase v.1).powerset.powerset,
+        if GeometricSimplicialSubdivision.IsStrictFaceChain K c' ∧
+            u = insert (GeometricSimplicialSubdivision.barycenter s.1)
+              (c'.image GeometricSimplicialSubdivision.barycenter) then
+          flagSign o (insert s.1 c') else 0 := by
+  classical
+  rw [Finset.sum_sigma']
+  symm
+  refine Finset.sum_bij_ne_zero (fun x _ _ => insert s.1 x.2) ?_ ?_ ?_ ?_
+  · rintro ⟨⟨v, hv⟩, c'⟩ hx hne
+    simp only [Finset.mem_sigma, Finset.mem_attach, true_and, Finset.mem_powerset] at hx ⊢
+    intro t ht
+    rcases Finset.mem_insert.1 ht with rfl | ht
+    · exact Finset.mem_powerset.2 (Finset.Subset.refl _)
+    · exact Finset.mem_powerset.2
+        ((Finset.mem_powerset.1 (hx ht)).trans (Finset.erase_subset _ _))
+  · rintro ⟨⟨v, hv⟩, c'⟩ hx hne ⟨⟨w, hw⟩, d'⟩ hy hne' heq
+    simp only [Finset.mem_sigma, Finset.mem_attach, true_and] at hx hy
+    have hcx : GeometricSimplicialSubdivision.IsStrictFaceChain K c' ∧
+        u = insert (GeometricSimplicialSubdivision.barycenter s.1)
+          (c'.image GeometricSimplicialSubdivision.barycenter) := by
+      by_contra h; exact hne (if_neg h)
+    have hcy : GeometricSimplicialSubdivision.IsStrictFaceChain K d' ∧
+        u = insert (GeometricSimplicialSubdivision.barycenter s.1)
+          (d'.image GeometricSimplicialSubdivision.barycenter) := by
+      by_contra h; exact hne' (if_neg h)
+    have hxs : c' ⊆ (s.1.erase v).powerset := Finset.mem_powerset.1 hx
+    have hys : d' ⊆ (s.1.erase w).powerset := Finset.mem_powerset.1 hy
+    have hix := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_insert o K s v hv c' hcx.1 hxs
+      (subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex_aux_right_card K s v hv c' hcx.1 hxs u hu hcx.2)
+    have hiy := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_insert o K s w hw d' hcy.1 hys
+      (subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex_aux_right_card K s w hw d' hcy.1 hys u hu hcy.2)
+    have heq' : insert s.1 c' = insert s.1 d' := heq
+    have hvw : v = w := by rw [← hix.2.2, ← hiy.2.2, heq']
+    subst hvw
+    have hcd : c' = d' := by
+      rw [← Finset.erase_insert hix.2.1, ← Finset.erase_insert hiy.2.1, heq']
+    subst hcd
+    rfl
+  · intro c hc hne
+    have hcond : GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+        u = c.image GeometricSimplicialSubdivision.barycenter := by
+      by_contra h; exact hne (if_neg h)
+    have hcs : c ⊆ s.1.powerset := fun t ht => Finset.mem_powerset.1 hc ht
+    have htop := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_top o K s c hcond.1 hcs
+      (subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex_aux_left_card K c hcond.1 u hu hcond.2)
+    have hins : insert s.1 (c.erase s.1) = c := Finset.insert_erase htop.1
+    refine ⟨⟨⟨flagNewVertex o c s.1, htop.2.1⟩, c.erase s.1⟩, ?_, ?_, hins⟩
+    · simp only [Finset.mem_sigma, Finset.mem_attach, true_and, Finset.mem_powerset]
+      exact htop.2.2
+    · have hchain : GeometricSimplicialSubdivision.IsStrictFaceChain K (c.erase s.1) :=
+        ⟨fun t ht => hcond.1.1 t (Finset.mem_of_mem_erase ht),
+          fun a ha b hb hab => hcond.1.2 a (Finset.mem_of_mem_erase ha) b
+            (Finset.mem_of_mem_erase hb) hab⟩
+      have himg : u = insert (GeometricSimplicialSubdivision.barycenter s.1)
+          ((c.erase s.1).image GeometricSimplicialSubdivision.barycenter) := by
+        rw [← Finset.image_insert, hins]; exact hcond.2
+      simp only
+      rw [if_pos ⟨hchain, himg⟩, hins]
+      intro h0; exact hne (by rw [if_pos hcond, h0])
+  · rintro ⟨⟨v, hv⟩, c'⟩ hx hne
+    simp only [Finset.mem_sigma, Finset.mem_attach, true_and] at hx
+    have hcx : GeometricSimplicialSubdivision.IsStrictFaceChain K c' ∧
+        u = insert (GeometricSimplicialSubdivision.barycenter s.1)
+          (c'.image GeometricSimplicialSubdivision.barycenter) := by
+      by_contra h; exact hne (if_neg h)
+    have hxs : c' ⊆ (s.1.erase v).powerset := Finset.mem_powerset.1 hx
+    have hix := subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_insert o K s v hv c' hcx.1 hxs
+      (subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_reindex_aux_right_card K s v hv c' hcx.1 hxs u hu hcx.2)
+    simp only
+    rw [if_pos hcx, if_pos ⟨hix.1, by rw [Finset.image_insert]; exact hcx.2⟩]
 
 -- BEGIN SEAT AREA
 lemma subdivisionChainMap_commutes_aux_cone_formula_aux_coeff {n k : ℕ}
