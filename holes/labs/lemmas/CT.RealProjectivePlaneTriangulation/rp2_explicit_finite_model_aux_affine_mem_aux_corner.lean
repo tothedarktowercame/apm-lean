@@ -911,9 +911,86 @@ lemma rp2_explicit_finite_model_aux_cover (y : EuclideanSpace ℝ (Fin 10)) (hy 
 /-- Each corner of a facet lies in the hexagon (`0`, ring vertices, hexagon
 vertices; the hexagon contains its vertices and `0`, and is convex). -/
 -- BEGIN SEAT AREA
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (j : Fin 6) :
+    hexVertex j ∈ hexagon := by
+  exact subset_convexHull ℝ _ (Set.mem_range_self j)
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six :
+    hexVertex 6 ∈ hexagon := by
+  have h : hexVertex 6 = hexVertex 0 := by
+    unfold hexVertex
+    norm_num
+  rw [h]
+  exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 0
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero :
+    (0 : ℂ) ∈ hexagon := by
+  have h0 := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (0 : Fin 6)
+  have h3 := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex (3 : Fin 6)
+  have hm := (convex_convexHull ℝ _).midpoint_mem h0 h3
+  rw [show hexVertex (3 : Fin 6) = -hexVertex (0 : Fin 6) by
+    exact rp2_explicit_finite_model_aux_hex_neg_vertex 0] at hm
+  simpa [midpoint_eq_smul_add, smul_eq_mul] using hm
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring (j : Fin 6) :
+    ringVertex j ∈ hexagon := by
+  have hj := rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex j
+  have hj1 : hexVertex (j.1 + 1) ∈ hexagon := by
+    by_cases h : j.1 + 1 < 6
+    · exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex
+        ⟨j.1 + 1, h⟩
+    · have : j.1 + 1 = 6 := by omega
+      simpa [this] using
+        rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six
+  have hm := (convex_convexHull ℝ _).midpoint_mem hj hj1
+  have hs := (convex_convexHull ℝ _).smul_mem_of_zero_mem
+    rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero hm
+    (show (2 / 3 : ℝ) ∈ Set.Icc 0 1 by norm_num)
+  unfold ringVertex
+  convert hs using 1
+  simp only [midpoint_eq_smul_add, invOf_eq_inv]
+  rw [smul_smul]
+  norm_num [Complex.real_smul]
+  apply Complex.ext <;> simp [(· • ·), SMul.smul] <;> ring
+
+lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring_six :
+    ringVertex 6 ∈ hexagon := by
+  have h6 : hexVertex 6 = hexVertex 0 := by
+    unfold hexVertex
+    norm_num
+  have h7 : hexVertex 7 = hexVertex 1 := by
+    unfold hexVertex
+    norm_num only [Nat.cast_ofNat]
+    rw [show (2 * (Real.pi : ℂ) * Complex.I * 7 / 6) =
+        2 * Real.pi * Complex.I + 2 * Real.pi * Complex.I / 6 by ring]
+    rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]
+    congr 1 <;> ring
+  rw [ringVertex, h6, h7]
+  exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 0
+
 lemma rp2_explicit_finite_model_aux_affine_mem_aux_corner (p : Fin 6 × Fin 3) (k : Fin 10) (hk : k ∈ rp2Facet p) :
     rp2Corner p k ∈ hexagon := by
-  sorry
+  obtain ⟨i, t⟩ := p
+  fin_cases i
+  all_goals
+    unfold rp2Corner
+    split_ifs <;>
+      first
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_zero
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 0
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 1
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 2
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 3
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 4
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring 5
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_ring_six
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 0
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 1
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 2
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 3
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 4
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex 5
+      | exact rp2_explicit_finite_model_aux_affine_mem_aux_corner_aux_vertex_six
 -- END SEAT AREA
 
 lemma rp2_explicit_finite_model_aux_affine_mem_aux_basis (p : Fin 6 × Fin 3) (k : Fin 10) :
