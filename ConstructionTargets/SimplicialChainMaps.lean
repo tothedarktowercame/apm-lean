@@ -3284,6 +3284,47 @@ the hull of `s`: every face `u` in the support of `sd s` is spanned by
 barycenters of faces of `s` (`composite_zero_diagonal_aux_barycenter_mem`), and
 `cmpK' u` has range the hull of `u`. Decompose `sd s` as a finite sum of singles
 and use `_aux_carrier_homotopy_aux_add`/`_aux_smul`/`_aux_zero`. -/
+lemma subdivision_affineComparison_square_aux_carried_aux_linear {n k : ℕ}
+    (K : GSC n)
+    (cmp : FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : ∀ u : FaceIndex K k,
+      ∃ σ : SingularSubdivision.SingularSimplex (TopCat.of K.space) k,
+      cmp (Finsupp.single u 1) = (CoefficientH0.singularGenerator ℚ _ k σ) 1 ∧
+      Set.range (SingularSubdivision.continuousMapOfSingularSimplex k σ) =
+        (fun y : K.space => (y : Euc n)) ⁻¹' convexHull ℝ (u.1 : Set (Euc n)))
+    (A : Set K.space) (x : FaceModule K k)
+    (hx : ∀ u ∈ x.support,
+      (fun y : K.space ↦ (y : Euc n)) ⁻¹' convexHull ℝ (u.1 : Set (Euc n)) ⊆ A) :
+    AcyclicCarriers.SubsetCarriedChain K.space A (cmp x) := by
+  classical
+  induction x using Finsupp.induction with
+  | zero =>
+      simpa using
+        (vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_zero K.space A)
+  | @single_add u r x hux hr ih =>
+      rw [map_add]
+      apply vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_add K.space A
+      · rw [show cmp (Finsupp.single u r) = r • cmp (Finsupp.single u 1) by
+          rw [← map_smul]; simp]
+        apply vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_smul
+        rcases hcmp u with ⟨σ, hσ, hrange⟩
+        refine ⟨1, fun _ => 1, fun _ => σ, ?_, ?_⟩
+        · simpa using hσ
+        · intro i
+          rw [hrange]
+          apply hx u
+          have hx0 : x u = 0 := Finsupp.notMem_support_iff.mp hux
+          simp [Finsupp.mem_support_iff, hx0, hr]
+      · apply ih
+        intro v hv
+        apply hx v
+        simp only [Finsupp.mem_support_iff, Finsupp.add_apply]
+        by_cases h : v = u
+        · subst v
+          exact False.elim (hux hv)
+        · simpa [Finsupp.single_apply, h, Finsupp.mem_support_iff] using hv
+
 lemma subdivision_affineComparison_square_aux_carried {n : ℕ} (o : LinearOrder (Euc n))
     (K K' : GSC n) (sd : ∀ k, FaceModuleCat K k ⟶ FaceModuleCat K' k)
     (hsd : IsSubdivisionChainMap o K K' sd)
@@ -3293,7 +3334,40 @@ lemma subdivision_affineComparison_square_aux_carried {n : ℕ} (o : LinearOrder
     AcyclicCarriers.SubsetCarriedChain K'.space
       ((fun y : K'.space ↦ (y : Euc n)) ⁻¹' convexHull ℝ (s.1 : Set (Euc n)))
       (cmpK' k (sd k (Finsupp.single s 1))) := by
-  sorry
+  classical
+  obtain ⟨z, hsdz, hz⟩ := hsd k s
+  rw [hsdz]
+  apply subdivision_affineComparison_square_aux_carried_aux_linear K'
+    (cmpK' k) (hcmpK' k)
+  intro u hu y hy
+  have hzu : z u ≠ 0 := by simpa [Finsupp.mem_support_iff] using hu
+  rw [hz u] at hzu
+  have hex : ∃ c ∈ s.1.powerset.powerset,
+      GeometricSimplicialSubdivision.IsStrictFaceChain K c ∧
+        u.1 = c.image GeometricSimplicialSubdivision.barycenter := by
+    by_contra h
+    push_neg at h
+    apply hzu
+    apply Finset.sum_eq_zero
+    intro c hc
+    rw [if_neg]
+    intro hcond
+    exact h c hc hcond.1 hcond.2
+  rcases hex with ⟨c, hc, hchain, huc⟩
+  rw [huc] at hy
+  apply convexHull_min ?_ (convex_convexHull ℝ (s.1 : Set (Euc n))) hy
+  rintro b hb
+  rcases Finset.mem_image.mp hb with ⟨t, htc, rfl⟩
+  have hts : t ⊆ s.1 := Finset.mem_powerset.mp (Finset.mem_powerset.mp hc htc)
+  have htface : t ∈ K.faces := hchain.1 t htc
+  have htne : t.Nonempty := K.nonempty_of_mem_faces htface
+  have hbary : GeometricSimplicialSubdivision.barycenter t ∈
+      convexHull ℝ (t : Set (Euc n)) := by
+    apply Finset.centerMass_id_mem_convexHull
+    · intro x hx
+      positivity
+    · simpa using (Finset.card_pos.mpr htne : 0 < t.card)
+  exact convexHull_mono (by simpa using hts) hbary
 
 /-- On the barycentric subdivision, `sd` sends a vertex to the same vertex: the
 only strict face chain in `{v}.powerset` with a one-point barycenter image is
