@@ -1318,7 +1318,57 @@ check on generators, where `Limits.Sigma.ι_desc` evaluates `sigmaCoeff`. -/
 theorem sigma_eq_sum {I : Type} (q : SigmaQ I) :
     ∃ F : Finset I, q = ∑ t ∈ F, (sigmaCoeff t q) •
       (Limits.Sigma.ι (fun _ : I => ModuleCat.of ℚ ℚ) t) (1 : ℚ) := by
-  sorry
+  classical
+  let e := ModuleCat.coprodIsoDirectSum (fun _ : I => ModuleCat.of ℚ ℚ)
+  let x := e.hom q
+  have hcoeff (t : I) : sigmaCoeff t q = x t := by
+    have hm : sigmaCoeff t =
+        e.hom ≫ ModuleCat.ofHom
+          (DirectSum.component ℚ I (fun _ : I => ℚ) t) := by
+      apply Limits.Sigma.hom_ext
+      intro i
+      dsimp [e]
+      rw [← Category.assoc]
+      change Limits.Sigma.ι (fun _ : I => ModuleCat.of ℚ ℚ) i ≫
+          Limits.Sigma.desc (fun j => if j = t then 𝟙 _ else 0) = _
+      rw [Limits.Sigma.ι_desc]
+      rw [ModuleCat.ι_coprodIsoDirectSum_hom]
+      by_cases h : i = t
+      · subst i
+        ext a
+        simp [ModuleCat.hom_comp, DirectSum.component.lof_self]
+      · ext a
+        simp [ModuleCat.hom_comp, DirectSum.component.of, h]
+    exact congrArg (fun f => f q) hm
+  have hgen (t : I) (a : ℚ) :
+      e.hom (a • (Limits.Sigma.ι (fun _ : I => ModuleCat.of ℚ ℚ) t) (1 : ℚ)) =
+        DirectSum.of (fun _ : I => ℚ) t a := by
+    rw [map_smul]
+    dsimp [e]
+    change a • ((Limits.Sigma.ι (fun _ : I => ModuleCat.of ℚ ℚ) t ≫
+      (ModuleCat.coprodIsoDirectSum (fun _ : I => ModuleCat.of ℚ ℚ)).hom) (1 : ℚ)) = _
+    rw [ModuleCat.ι_coprodIsoDirectSum_hom]
+    change a • (DirectSum.lof ℚ I (fun _ : I => ℚ) t) 1 =
+      (DirectSum.lof ℚ I (fun _ : I => ℚ) t) a
+    rw [← map_smul]
+    simp
+  refine ⟨x.support, ?_⟩
+  have heinj : Function.Injective (fun z => e.hom z) := by
+    intro a b hab
+    have h := congrArg (fun z => e.inv z) hab
+    simpa using h
+  apply_fun e.hom using heinj
+  simp_rw [hcoeff]
+  simp only [map_sum]
+  change x = ∑ t ∈ x.support,
+    e.hom ((x t) • (Limits.Sigma.ι (fun _ : I => ModuleCat.of ℚ ℚ) t) (1 : ℚ))
+  calc
+    x = ∑ t ∈ x.support, DirectSum.of (fun _ : I => ℚ) t (x t) :=
+      (DirectSum.sum_support_of x).symm
+    _ = _ := by
+      apply Finset.sum_congr rfl
+      intro t ht
+      exact (hgen t (x t)).symm
 
 /-- The coefficient of a small chain at a small simplex. -/
 noncomputable def smallCoeff {X α : Type} [TopologicalSpace X] (U : α → Set X) {k : ℕ}
