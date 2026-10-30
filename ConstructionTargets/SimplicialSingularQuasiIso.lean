@@ -607,7 +607,13 @@ theorem smallGen_aug {X α : Type} [TopologicalSpace X] (U : α → Set X)
     (t : SmallSimplex U 0) :
     smallGen U t ≫ (CoefficientSmallPath.coverSmallInclusion ℚ U).f 0 ≫
       CoefficientH0.zeroChainAugmentation ℚ = 𝟙 _ := by
-  sorry
+  dsimp [smallGen, CoefficientSmallPath.coverSmallInclusion,
+    CoefficientSmallPath.coverSmallChains, CoefficientH0.SingularChains,
+    AlgebraicTopology.singularChainComplexFunctor,
+    AlgebraicTopology.SSet.singularChainComplexFunctor,
+    CoefficientH0.zeroChainAugmentation]
+  rw [← Category.assoc, Limits.Sigma.ι_comp_map', Category.assoc,
+    Limits.Sigma.ι_desc, Category.comp_id]
 
 theorem smallToFace_aux_fill_succ {n : ℕ} (o : LinearOrder (Euc n))
     (K : Geometry.SimplicialComplex ℝ (Euc n))
