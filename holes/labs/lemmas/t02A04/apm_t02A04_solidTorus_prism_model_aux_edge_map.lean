@@ -2219,7 +2219,29 @@ lemma apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass
     (q : Fin 6 × Fin 3 × Fin 3) (y : EuclideanSpace ℝ (Fin 21))
     (hy : y ∈ apm_t02A04_prismHull q) :
     ∑ k, y k = 1 ∧ apm_t02A04_circleWeight (q.2.1 + 1) y = 0 := by
-  sorry
+  classical
+  constructor
+  · let L : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ :=
+      { toFun := fun z => ∑ k, z k
+        map_add' := by intro x z; simp [Finset.sum_add_distrib]
+        map_smul' := by intro c x; simp [Finset.mul_sum, smul_eq_mul] }
+    have hsub : apm_t02A04_prismHull q ⊆ {z | L z = 1} := by
+      apply convexHull_min
+      · intro x hx
+        obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+        simp [L, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+      · exact (convex_singleton (1 : ℝ)).linear_preimage L
+    exact hsub hy
+  · apply Finset.sum_eq_zero
+    intro d _
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero q y hy
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨m, -, h⟩ | ⟨m, -, h⟩)
+    all_goals
+      have hv := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at hv
+      omega
 
 /-- Adjacent circle edges: if `y` lies in prisms over circle edges `j` and `j + 1`, its
 weight sits in column `j + 1` only (columns `j` and `j + 2` lie outside one of the two
@@ -2230,7 +2252,21 @@ lemma apm_t02A04_solidTorus_prism_model_aux_agree_aux_step
     (hq : y ∈ apm_t02A04_prismHull q) (hq' : y ∈ apm_t02A04_prismHull q')
     (hj : q'.2.1 = q.2.1 + 1) :
     apm_t02A04_circleWeight q.2.1 y = 1 ∧ apm_t02A04_circleWeight q'.2.1 y = 0 := by
-  sorry
+  classical
+  have hm := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).1
+  have hz := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).2
+  have hz' := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q' y hq').2
+  constructor
+  · generalize q.2.1 = j at hj hz ⊢
+    generalize q'.2.1 = j' at hj hz'
+    fin_cases j <;> fin_cases j' <;>
+      simp [Fin.sum_univ_succ] at hm <;>
+      simp only [apm_t02A04_circleWeight, Fin.sum_univ_succ] at hz hz' ⊢ <;>
+      simp at hj <;>
+      simp [apm_t02A04_prismIdx] at hz hz' ⊢ <;>
+      linarith
+  · rw [hj]
+    exact (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).2
 
 /-- Case on `q'.2.1 - q.2.1 ∈ {0, 1, 2}`: equal edges are `rfl`; for adjacent edges
 `_aux_step` gives angles `2π(j + 1)/3` and `2π(j + 1 + 0)/3` (for `j = 2` the second is
@@ -2355,6 +2391,201 @@ lemma apm_t02A04_solidTorus_prism_model_aux_continuous : Continuous apm_t02A04_p
       apm_t02A04_prismHull q' := ⟨q, y.2⟩
   rw [dif_pos hex]
   exact apm_t02A04_solidTorus_prism_model_aux_agree _ q _ (Classical.choose_spec hex) y.2
+
+/-! #### Injectivity and surjectivity of the prism map: leaves (claude-14, 2026-10-30)
+Notation: for `q = (i, j, k)` the rows are `d m = prismDisk i m` (`m : Fin 3`), the bottom
+weights `y (prismIdx (d m) j)` and the top weights `y (prismIdx (d m) (j + 1))`. -/
+
+/-- A point with nonnegative coordinates of total mass one, supported in `F`, lies in the
+simplex spanned by `F` (write `y = ∑ k ∈ F, y k • basisVertex k`; `Finset.centerMass_mem_convexHull`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_mem_hull (F : Finset (Fin 21))
+    (y : EuclideanSpace ℝ (Fin 21)) (hnn : ∀ k, 0 ≤ y k) (hsum : ∑ k, y k = 1)
+    (hF : ∀ k, k ∉ F → y k = 0) :
+    y ∈ convexHull ℝ ↑(F.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) := by
+  classical
+  have hne : F.Nonempty := by
+    by_contra h
+    rw [Finset.not_nonempty_iff_eq_empty] at h
+    have hz : ∀ k, y k = 0 := by
+      intro k
+      exact hF k (by simp [h])
+    simpa [hz] using hsum
+  let i₀ : ↑F := ⟨hne.choose, hne.choose_spec⟩
+  let z : Fin 21 → EuclideanSpace ℝ (Fin 21) := fun i ↦
+    if hi : i ∈ F then
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i
+    else
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i₀
+  apply mem_convexHull_of_exists_fintype (fun i ↦ y i) z
+  · exact hnn
+  · exact hsum
+  · intro i
+    simp only [z]
+    split_ifs with hi
+    · exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i, hi, rfl⟩)
+    · exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i₀, i₀.property, rfl⟩)
+  · rw [show (∑ i, y i • z i) =
+        ∑ i, y i • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i by
+      apply Finset.sum_congr rfl
+      intro i _
+      by_cases hi : i ∈ F
+      · simp [z, hi]
+      · rw [hF i hi]
+        simp]
+    apply (EuclideanSpace.equiv (Fin 21) ℝ).injective
+    funext k
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      Pi.single_apply, eq_comm]
+
+/-- Prism coordinates are nonnegative and the circle weight lies in `[0, 1]`
+(`convexHull_min` onto the nonnegative orthant; then `_aux_agree_aux_mass`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_weight_mem (q : Fin 6 × Fin 3 × Fin 3)
+    (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q) :
+    (∀ k, 0 ≤ y k) ∧ 0 ≤ apm_t02A04_circleWeight q.2.1 y ∧
+      apm_t02A04_circleWeight q.2.1 y ≤ 1 := by
+  classical
+  have hnn : ∀ k, 0 ≤ y k := by
+    intro k
+    apply (convexHull_min
+      (s := (↑((apm_t02A04_prismFacet q).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) :
+          Set (EuclideanSpace ℝ (Fin 21))))
+      (t := {x | 0 ≤ x k}) ?_ ?_) hy
+    · intro x hx
+      obtain ⟨i, hi, rfl⟩ := Finset.mem_image.1 hx
+      simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+      split <;> positivity
+    · intro a ha b hb u v hu hv huv
+      simp only [Set.mem_setOf_eq] at ha hb ⊢
+      simp only [PiLp.add_apply, PiLp.smul_apply]
+      positivity
+  refine ⟨hnn, ?_, ?_⟩
+  · unfold apm_t02A04_circleWeight
+    exact Finset.sum_nonneg fun d _ ↦ hnn _
+  · have hmass :=
+      (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hy).1
+    unfold apm_t02A04_circleWeight
+    rw [← hmass]
+    rw [← Finset.sum_image]
+    · exact Finset.sum_le_univ_sum_of_nonneg hnn
+    · intro d _ d' _ h
+      have hv := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at hv
+      exact Fin.ext (by omega)
+
+/-- Equal circle points with parameters in `[0, 1]`: same edge and parameter, or the shared
+endpoint of adjacent edges. Copy `_cone_model_aux_injective_aux_facet_aux_angle` with
+period `3` in place of `6`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_injective_aux_angle (j j' : Fin 3) (s s' : ℝ)
+    (hs0 : 0 ≤ s) (hs1 : s ≤ 1) (hs0' : 0 ≤ s') (hs1' : s' ≤ 1)
+    (h : Circle.exp (2 * Real.pi * ((j : ℝ) + s) / 3) =
+      Circle.exp (2 * Real.pi * ((j' : ℝ) + s') / 3)) :
+    (j = j' ∧ s = s') ∨ (j' = j + 1 ∧ s = 1 ∧ s' = 0) ∨ (j = j' + 1 ∧ s = 0 ∧ s' = 1) := by
+  sorry
+
+/-- All weight on circle column `j + 1`: then column `j` is empty (mass one), so the point
+is supported on `prismIdx (d m) (j + 1)`, all in the bottom of prism `(i, j + 1, 2)`
+(`_aux_mem_hull`), and its weight on column `j + 2` is zero. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_top (i : Fin 6) (j k : Fin 3)
+    (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull (i, j, k))
+    (h1 : apm_t02A04_circleWeight j y = 1) :
+    y ∈ apm_t02A04_prismHull (i, j + 1, 2) ∧ apm_t02A04_circleWeight (j + 1) y = 0 := by
+  sorry
+
+/-- Change of cone facet. If the disk weights also lie in facet `i'`, the support of `y`
+lies in rows of `coneFacet i ∩ coneFacet i'` (`_cone_model_aux_injective_aux_facet_aux_bary`
+for both), which keep their relative order, so `y` lies in a prism over `i'` and the same
+circle edge (`_aux_mem_hull`). Cases: `i' = i`; `i' = i + 1` (shared rows `0, coneIdx (i+1)`
+at positions `0, 2` of `i` and `0, 1` of `i'`: `k' = 0, 0, 1` for `k = 0, 1, 2`);
+`i = i' + 1` (symmetric); otherwise only row `0` (`k' = 0`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_reface (q : Fin 6 × Fin 3 × Fin 3) (i' : Fin 6)
+    (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q)
+    (hi' : apm_t02A04_diskProj y ∈ apm_t02A04_coneHull i') :
+    ∃ k', y ∈ apm_t02A04_prismHull (i', q.2.1, k') := by
+  sorry
+
+/-- Staircase uniqueness for three rows: bottom `b`, top `t`, with `t m = 0` below the
+step `k` and `b m = 0` above it. Equal row sums `b + t` and equal top mass force equal
+tops (`fin_cases k <;> fin_cases k'`, then `linarith` per row). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_real (k k' : Fin 3)
+    (b t b' t' : Fin 3 → ℝ) (hb : ∀ m, 0 ≤ b m) (ht : ∀ m, 0 ≤ t m)
+    (hb' : ∀ m, 0 ≤ b' m) (ht' : ∀ m, 0 ≤ t' m)
+    (hrow : ∀ m, b m + t m = b' m + t' m) (htop : ∑ m, t m = ∑ m, t' m)
+    (hk : ∀ m, m < k → t m = 0) (hk2 : ∀ m, k < m → b m = 0)
+    (hk' : ∀ m, m < k' → t' m = 0) (hk2' : ∀ m, k' < m → b' m = 0) :
+    t = t' := by
+  sorry
+
+/-- Two points over the same facet and edge with equal disk weights and circle weight are
+equal: read `b m = y (prismIdx (d m) j)`, `t m = y (prismIdx (d m) (j + 1))`; the step
+conditions and all other coordinates come from `_aux_agree_aux_zero`; apply
+`_aux_staircase_real`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase (i : Fin 6) (j k k' : Fin 3)
+    (y y' : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull (i, j, k))
+    (hy' : y' ∈ apm_t02A04_prismHull (i, j, k'))
+    (hd : apm_t02A04_diskProj y = apm_t02A04_diskProj y')
+    (hw : apm_t02A04_circleWeight j y = apm_t02A04_circleWeight j y') : y = y' := by
+  sorry
+
+/-- The map on a chosen prism: `dif_pos` and `_aux_agree`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_map_eq (q : Fin 6 × Fin 3 × Fin 3)
+    (y : apm_t02A04_prismComplex.space)
+    (hy : (y : EuclideanSpace ℝ (Fin 21)) ∈ apm_t02A04_prismHull q) :
+    apm_t02A04_prismMap y = apm_t02A04_prismPoint q y := by
+  classical
+  unfold apm_t02A04_prismMap
+  have hex : ∃ q', (y : EuclideanSpace ℝ (Fin 21)) ∈ apm_t02A04_prismHull q' := ⟨q, hy⟩
+  rw [dif_pos hex]
+  exact apm_t02A04_solidTorus_prism_model_aux_agree _ q _ (Classical.choose_spec hex) hy
+
+/-- Equal disk components give equal disk weights: `diskClamp` is the identity on the cone
+points (`_cone_model_aux_point_norm` with `_aux_proj`), then
+`_cone_model_aux_injective_aux_facet`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_injective_aux_disk (q q' : Fin 6 × Fin 3 × Fin 3)
+    (y y' : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q)
+    (hy' : y' ∈ apm_t02A04_prismHull q')
+    (h : ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y)) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint q'.1 (apm_t02A04_diskProj y'))) :
+    apm_t02A04_diskProj y = apm_t02A04_diskProj y' := by
+  sorry
+
+/-- Every circle point is `Circle.exp (2π(j + s)/3)` with `s ∈ [0, 1]` (as
+`_cone_model_aux_surjective_aux_circle`, period `3`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_circle (c : Circle) :
+    ∃ (j : Fin 3) (s : ℝ), 0 ≤ s ∧ s ≤ 1 ∧
+      Circle.exp (2 * Real.pi * ((j : ℝ) + s) / 3) = c := by
+  sorry
+
+/-- Every disk point is a cone point: `_cone_model_aux_surjective`, a facet from
+`_cone_model_aux_cover`, then `_cone_model_aux_agree` and `_cone_model_aux_point_norm`
+to remove the choice and the clamp. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_disk (z : apm_t02a04_Disk) :
+    ∃ (i : Fin 6) (x : EuclideanSpace ℝ (Fin 7)), x ∈ apm_t02A04_coneHull i ∧
+      apm_t02A04_conePoint i x = (z : ℂ) := by
+  sorry
+
+/-- Staircase existence for three rows: for row sums `a ≥ 0` with `∑ a = 1` and
+`s ∈ [0, 1]` there is a step `k` and a split `a = b + t` with `∑ t = s` (take `k` with
+`∑_{m > k} a m ≤ s ≤ ∑_{m ≥ k} a m`; `t m = a m` above `k`, `0` below). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_exists (a : Fin 3 → ℝ)
+    (ha : ∀ m, 0 ≤ a m) (hsum : ∑ m, a m = 1) (s : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1) :
+    ∃ (k : Fin 3) (b t : Fin 3 → ℝ), (∀ m, 0 ≤ b m) ∧ (∀ m, 0 ≤ t m) ∧
+      (∀ m, b m + t m = a m) ∧ ∑ m, t m = s ∧
+      (∀ m, m < k → t m = 0) ∧ (∀ m, k < m → b m = 0) := by
+  sorry
+
+/-- A prism point with given disk weights and circle weight: apply
+`_aux_staircase_exists` to `a m = x (prismDisk i m)` (`_cone_model_aux_injective_aux_facet_aux_bary`),
+put `b m` at `prismIdx (d m) j` and `t m` at `prismIdx (d m) (j + 1)`, and use
+`_aux_mem_hull` for membership. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_build (i : Fin 6) (j : Fin 3)
+    (x : EuclideanSpace ℝ (Fin 7)) (hx : x ∈ apm_t02A04_coneHull i) (s : ℝ)
+    (hs0 : 0 ≤ s) (hs1 : s ≤ 1) :
+    ∃ (k : Fin 3) (y : EuclideanSpace ℝ (Fin 21)), y ∈ apm_t02A04_prismHull (i, j, k) ∧
+      apm_t02A04_diskProj y = x ∧ apm_t02A04_circleWeight j y = s := by
+  sorry
 
 /-- Staircase uniqueness: the disk weights `a` (cumulative `A_m`) and the circle weight
 determine the tetrahedron and all its weights (`y (m, bottom) = max 0 (min A_m (1-s) - A_{m-1})`);
