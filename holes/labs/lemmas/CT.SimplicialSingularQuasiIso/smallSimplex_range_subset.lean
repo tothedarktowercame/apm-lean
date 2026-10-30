@@ -438,7 +438,8 @@ and the range of a simplex pushed forward from `U a` lies in `U a`. -/
 -- BEGIN SEAT AREA
 theorem smallSimplex_range_subset {X α : Type} [TopologicalSpace X] (U : α → Set X)
     {k : ℕ} (t : SmallSimplex U k) : ∃ a, smallRange U t ⊆ U a := by
-  sorry
+  exact SingularSubdivision.range_subset_of_singularSimplex_mem_coverSmallSSet
+    U t.1 t.2
 -- END SEAT AREA
 
 /-- `coverSmallGenerator` is `smallGen` at the small simplex of `σ`, whose image is
