@@ -907,13 +907,53 @@ theorem smallHomotopy_aux_diff_carried {n : ℕ} (K : Geometry.SimplicialComplex
 faces with smaller image, `starCarrier_mono` makes their `starHull` smaller, and
 carried chains are closed under linear combinations (span induction). -/
 -- BEGIN SEAT AREA
+theorem smallHomotopy_aux_comp_d_carried_aux_starHull_mono {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) {A B : Set K.space} (hAB : A ⊆ B) :
+    starHull K A ⊆ starHull K B := by
+  intro x hx
+  rcases Set.mem_iUnion₂.mp hx with ⟨s, hs, hxs⟩
+  exact Set.mem_iUnion₂.mpr ⟨s, starCarrier_mono K hAB hs, hxs⟩
+
+theorem smallHomotopy_aux_comp_d_carried_aux_mono {X : Type} [TopologicalSpace X]
+    {A B : Set X} (hAB : A ⊆ B) {j : ℕ}
+    {z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X j}
+    (hz : AcyclicCarriers.SubsetCarriedChain X A z) :
+    AcyclicCarriers.SubsetCarriedChain X B z := by
+  rcases hz with ⟨m, a, σ, heq, hσ⟩
+  exact ⟨m, a, σ, heq, fun i ↦ (hσ i).trans hAB⟩
+
 theorem smallHomotopy_aux_comp_d_carried {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
     {k j : ℕ}
     (g : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X k ⟶
       (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X j)
     (hg : SmallCarried K g) :
     SmallCarried K ((CoefficientSmallPath.coverSmallChains ℚ (starCover K)).d (k + 1) k ≫ g) := by
-  sorry
+  intro t
+  rw [CategoryTheory.comp_apply]
+  have hd := smallChains_d_span (starCover K) t
+  generalize
+    (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).d (k + 1) k
+      (smallGen (starCover K) t 1) = z at hd ⊢
+  induction hd using Submodule.span_induction with
+  | mem x hx =>
+    obtain ⟨t', ht', rfl⟩ := hx
+    exact smallHomotopy_aux_comp_d_carried_aux_mono
+      (smallHomotopy_aux_comp_d_carried_aux_starHull_mono K ht') (hg t')
+  | zero =>
+    rw [map_zero]
+    exact
+      SimplicialChainMaps.vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_zero
+        K.space (starHull K (smallRange (starCover K) t))
+  | add x y _ _ hx hy =>
+    rw [map_add]
+    exact
+      SimplicialChainMaps.vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_add
+        K.space (starHull K (smallRange (starCover K) t)) (g x) (g y) hx hy
+  | smul r x _ hx =>
+    rw [map_smul]
+    exact
+      SimplicialChainMaps.vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_smul
+        K.space (starHull K (smallRange (starCover K) t)) (g x) hx r
 -- END SEAT AREA
 
 /-- Small-carried maps are closed under subtraction (`subsetCarriedChain_sub`). -/
