@@ -3454,7 +3454,78 @@ lemma apm_t02A04_quotientComplex_model_aux_cone_coords (i : Fin 6) :
         apm_t02A04_liftD (apm_t02A04_projD z) = z) ∧
       ∀ x ∈ apm_t02A04_coneHull i, apm_t02A04_liftD x ∈ apm_t02A04_gluedConeHull i ∧
         apm_t02A04_projD (apm_t02A04_liftD x) = x := by
-  sorry
+  classical
+  have hinj := apm_t02A04_quotientComplex_model_aux_idx.2
+  let LD : EuclideanSpace ℝ (Fin 22) →ₗ[ℝ] EuclideanSpace ℝ (Fin 7) :=
+    { toFun := apm_t02A04_projD
+      map_add' := by intro u v; ext d; simp [apm_t02A04_projD]
+      map_smul' := by intro (c : ℝ) u; ext d; simp [apm_t02A04_projD] }
+  let LL : EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] EuclideanSpace ℝ (Fin 22) :=
+    { toFun := apm_t02A04_liftD
+      map_add' := by intro u v; simp [apm_t02A04_liftD, add_smul, Finset.sum_add_distrib]
+      map_smul' := by intro (c : ℝ) u; simp [apm_t02A04_liftD, mul_smul, Finset.smul_sum] }
+  have hD : ∀ c, LD (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_gluedIdxD c)) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 c := by
+    intro c
+    change apm_t02A04_projD _ = _
+    ext a
+    simp [apm_t02A04_projD, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, hinj.eq_iff]
+  have hL : ∀ c, LL (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 c) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_gluedIdxD c) := by
+    intro c
+    change apm_t02A04_liftD _ = _
+    unfold apm_t02A04_liftD
+    rw [Finset.sum_eq_single c]
+    · simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+    · intro d _ hd
+      simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, hd]
+    · simp
+  have hvert : ∀ z ∈ (↑((apm_t02A04_gluedConeFacet i).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) :
+      Set (EuclideanSpace ℝ (Fin 22))), ∃ c ∈ apm_t02A04_coneFacet i,
+        z = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_gluedIdxD c) := by
+    intro z hz
+    obtain ⟨a, ha, rfl⟩ := Finset.mem_image.1 (Finset.mem_coe.1 hz)
+    obtain ⟨c, hc, rfl⟩ := Finset.mem_image.1 ha
+    exact ⟨c, hc, rfl⟩
+  have hvert' : ∀ x ∈ (↑((apm_t02A04_coneFacet i).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)) :
+      Set (EuclideanSpace ℝ (Fin 7))), ∃ c ∈ apm_t02A04_coneFacet i, x = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 c := by
+    intro x hx
+    obtain ⟨c, hc, rfl⟩ := Finset.mem_image.1 (Finset.mem_coe.1 hx)
+    exact ⟨c, hc, rfl⟩
+  have h1 : apm_t02A04_gluedConeHull i ⊆ LD ⁻¹' apm_t02A04_coneHull i := by
+    apply convexHull_min
+    · intro z hz
+      obtain ⟨c, hc, rfl⟩ := hvert z hz
+      change LD _ ∈ apm_t02A04_coneHull i
+      rw [hD]
+      exact subset_convexHull ℝ _ (Finset.mem_coe.2 (Finset.mem_image_of_mem _ hc))
+    · exact (convex_convexHull ℝ _).linear_preimage LD
+  have h2 : apm_t02A04_gluedConeHull i ⊆
+      (LinearMap.eqLocus (LL ∘ₗ LD) LinearMap.id : Set (EuclideanSpace ℝ (Fin 22))) := by
+    apply convexHull_min
+    · intro z hz
+      obtain ⟨c, hc, rfl⟩ := hvert z hz
+      change LL (LD _) = _
+      rw [hD, hL]
+      rfl
+    · exact (LinearMap.eqLocus (LL ∘ₗ LD) LinearMap.id).convex
+  have h3 : apm_t02A04_coneHull i ⊆ LL ⁻¹' apm_t02A04_gluedConeHull i := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨c, hc, rfl⟩ := hvert' x hx
+      change LL _ ∈ apm_t02A04_gluedConeHull i
+      rw [hL]
+      refine subset_convexHull ℝ _ (Finset.mem_coe.2 (Finset.mem_image_of_mem _ ?_))
+      exact Finset.mem_image_of_mem _ hc
+    · exact (convex_convexHull ℝ _).linear_preimage LL
+  have h4 : apm_t02A04_coneHull i ⊆
+      (LinearMap.eqLocus (LD ∘ₗ LL) LinearMap.id : Set (EuclideanSpace ℝ (Fin 7))) := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨c, hc, rfl⟩ := hvert' x hx
+      change LD (LL _) = _
+      rw [hL, hD]
+      rfl
+    · exact (LinearMap.eqLocus (LD ∘ₗ LL) LinearMap.id).convex
+  exact ⟨fun z hz => ⟨h1 hz, h2 hz⟩, fun x hx => ⟨h3 hx, h4 hx⟩⟩
 
 /-- A prism hull and a cone hull meet only on the curve edge `i`: the only vertices of
 `gluedConeFacet i` that are prism vertices are `(curveIdx i).castSucc` and
