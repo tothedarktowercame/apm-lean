@@ -2637,11 +2637,60 @@ for both), which keep their relative order, so `y` lies in a prism over `i'` and
 circle edge (`_aux_mem_hull`). Cases: `i' = i`; `i' = i + 1` (shared rows `0, coneIdx (i+1)`
 at positions `0, 2` of `i` and `0, 1` of `i'`: `k' = 0, 0, 1` for `k = 0, 1, 2`);
 `i = i' + 1` (symmetric); otherwise only row `0` (`k' = 0`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_reface_aux_row
+    (q : Fin 6 × Fin 3 × Fin 3) (i' : Fin 6)
+    (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q)
+    (hi' : apm_t02A04_diskProj y ∈ apm_t02A04_coneHull i')
+    (d : Fin 7) (hd : d ∉ apm_t02A04_coneFacet i') (w : Fin 3) :
+    y (apm_t02A04_prismIdx d w) = 0 := by
+  have hnn := (apm_t02A04_solidTorus_prism_model_aux_weight_mem q y hy).1
+  have hz :=
+    (apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary
+      i' (apm_t02A04_diskProj y) hi').2.2 d hd
+  simp only [apm_t02A04_diskProj, Fin.sum_univ_three] at hz
+  have h0 := hnn (apm_t02A04_prismIdx d (0 : Fin 3))
+  have h1 := hnn (apm_t02A04_prismIdx d (1 : Fin 3))
+  have h2 := hnn (apm_t02A04_prismIdx d (2 : Fin 3))
+  have hz0 : y (apm_t02A04_prismIdx d (0 : Fin 3)) = 0 := by linarith
+  have hz1 : y (apm_t02A04_prismIdx d (1 : Fin 3)) = 0 := by linarith
+  have hz2 : y (apm_t02A04_prismIdx d (2 : Fin 3)) = 0 := by linarith
+  fin_cases w <;> assumption
+
+set_option maxHeartbeats 20000000
 lemma apm_t02A04_solidTorus_prism_model_aux_reface (q : Fin 6 × Fin 3 × Fin 3) (i' : Fin 6)
     (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q)
     (hi' : apm_t02A04_diskProj y ∈ apm_t02A04_coneHull i') :
     ∃ k', y ∈ apm_t02A04_prismHull (i', q.2.1, k') := by
-  sorry
+  classical
+  rcases q with ⟨i, j, k⟩
+  let k' : Fin 3 :=
+    if i' = i then k
+    else if i' = i + 1 then if k = 2 then 1 else 0
+    else if i = i' + 1 then if k = 0 then 0 else 2
+    else 0
+  refine ⟨k', apm_t02A04_solidTorus_prism_model_aux_mem_hull _ y
+    (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k) y hy).1
+    (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass (i, j, k) y hy).1 ?_⟩
+  intro x hx
+  by_cases hxo : x ∈ apm_t02A04_prismFacet (i, j, k)
+  · simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and] at hxo hx
+    rcases hxo with ⟨m, hm, rfl⟩ | ⟨m, hm, rfl⟩
+    all_goals
+      by_cases hii : i' = i
+      · subst i'
+        exfalso
+        apply hx
+        simp [k']
+        first | exact Or.inl ⟨m, hm, rfl⟩ | exact Or.inr ⟨m, hm, rfl⟩
+      apply apm_t02A04_solidTorus_prism_model_aux_reface_aux_row
+        (i, j, k) i' y hy hi'
+      set_option maxHeartbeats 10000000 in
+        fin_cases i <;> fin_cases i' <;> fin_cases j <;> fin_cases k <;> fin_cases m <;>
+          simp_all [k', apm_t02A04_prismDisk, apm_t02A04_coneFacet,
+            apm_t02A04_coneIdx, apm_t02A04_prismIdx, Fin.forall_fin_succ]
+  · exact apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy x hxo
+set_option maxHeartbeats 200000
 
 /-- Staircase uniqueness for three rows: bottom `b`, top `t`, with `t m = 0` below the
 step `k` and `b m = 0` above it. Equal row sums `b + t` and equal top mass force equal
