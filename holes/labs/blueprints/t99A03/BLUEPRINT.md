@@ -217,3 +217,24 @@ The final output of `#print axioms apm_t99a03` was:
 The two local warnings are exactly the two remaining LIBRARY lemmas.  The
 wedge-Lefschetz adapter, generic deck lemma, and main theorem contain no
 `sorry`; imported `sorryAx` comes through the six shared homology leaves.
+
+## Part (b) rerouted: fixed-point-free map without a cover (claude-14, 2026-10-30)
+
+`t99A03_exists_N4_deck_involution` (a double cover `N₄ → N₃` with its deck
+involution) is replaced: building a covering map out of the polygon quotient
+costs far more than the theorem needs, which is just one fixed-point-free self-map
+of `N₄`. In the model `Surface false 4` (8-gon `a₁a₁a₂a₂a₃a₃a₄a₄`):
+
+* `h : N₄ → S¹` winds once along `a₁`, once backwards along `a₂`, constant on
+  `a₃, a₄` (boundary degree `1 + 1 - 1 - 1 = 0`, so it extends radially over the
+  disk), rotated by `π`;
+* `γ : S¹ → N₄` is the `a₁` edge loop;
+* `h ∘ γ = (z ↦ -z)`, so `f = γ ∘ h` has no fixed point.
+
+Leaves: `t99A03_aux_boundaryAngle` (the boundary angle `φ`),
+`t99A03_aux_circleMap` (radial extension and descent; after `boundaryAngle`),
+`t99A03_aux_edgeLoop`, `t99A03_aux_circle_param`. The assembly
+`t99A03_exists_fixedPointFree_N4` and `apm_t99a03` part (b) are proved from them.
+Truth check: each pair of glued arcs `2j, 2j+1` has the same parameter, and the
+angles there differ by `0` or `2π`, so `h` is well defined; `h ∘ γ` is exactly
+`Circle.exp (2πt + π)` on `Circle.exp (2πt)`.

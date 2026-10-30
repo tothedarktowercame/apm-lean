@@ -80,18 +80,77 @@ theorem t99A03_wedge_fixed_point_of_lefschetz
   exact ConstructionTargets.LefschetzFixedPoint.fixedPointOfNonzeroLefschetz
     t99A03_fourProjectivePlanesWedge_isFinitePolyhedron f (hL f) one_ne_zero
 
-/-- **LIBRARY.** The index-two normal subgroup of `π₁(N₃)` determined by one
-crosscap is realized by a connected double cover with total space `N₄`; its
-nontrivial deck involution is included in the output. -/
-theorem t99A03_exists_N4_deck_involution :
-    ∃ (_ : ConnectedSpace T99A03.FourProjectivePlanesConnectedSum)
-      (p : T99A03.FourProjectivePlanesConnectedSum →
-        T99A03.ThreeProjectivePlanesConnectedSum)
-      (τ : T99A03.FourProjectivePlanesConnectedSum ≃ₜ
-        T99A03.FourProjectivePlanesConnectedSum),
-      IsCoveringMap p ∧ p ∘ τ = p ∧
-        τ ≠ Homeomorph.refl T99A03.FourProjectivePlanesConnectedSum := by
+/-! ### A fixed-point-free self-map of `N₄` (claude-14, 2026-10-30)
+
+The earlier route (a double cover `N₄ → N₃` and its deck involution) needs a
+covering map out of a polygon quotient. A shorter one: in the model `Surface false 4`
+(the 8-gon `a₁a₁a₂a₂a₃a₃a₄a₄`), a map `h : N₄ → S¹` winding once along `a₁`, once
+backwards along `a₂`, and constant on `a₃, a₄`, composed after the `a₁` edge loop
+`γ : S¹ → N₄`, is the rotation `z ↦ -z`. Then `f = γ ∘ h` has no fixed point:
+`f x = x` gives `h x = h (γ (h x)) = -h x`. -/
+
+/-- The boundary angle of the circle map: a continuous `φ : S¹ → ℝ` with the
+prescribed values on the eight arcs (arc `j` is `Circle.exp (2π(j + t)/8)`,
+`t ∈ [0, 1]`). Take the 1-periodic piecewise-linear `ψ : ℝ → ℝ` with these values on
+`[j/8, (j+1)/8]` (it is `0` at both ends of a period, so periodic extension is
+continuous) and descend it along `t ↦ Circle.exp (2πt)`
+(`Function.Periodic.lift`, or `AddCircle.homeomorphCircle'`). -/
+theorem t99A03_aux_boundaryAngle :
+    ∃ φ : C(Circle, ℝ), ∀ t : Set.Icc (0 : ℝ) 1,
+      φ (Circle.exp (2 * Real.pi * (0 + t.1) / 8)) = 2 * Real.pi * t.1 ∧
+      φ (Circle.exp (2 * Real.pi * (1 + t.1) / 8)) = 2 * Real.pi + 2 * Real.pi * t.1 ∧
+      φ (Circle.exp (2 * Real.pi * (2 + t.1) / 8)) = 4 * Real.pi - 2 * Real.pi * t.1 ∧
+      φ (Circle.exp (2 * Real.pi * (3 + t.1) / 8)) = 2 * Real.pi - 2 * Real.pi * t.1 ∧
+      ∀ j : ℕ, 4 ≤ j → j < 8 → φ (Circle.exp (2 * Real.pi * (j + t.1) / 8)) = 0 := by
   sorry
+
+/-- The circle map. Take `φ` from `t99A03_aux_boundaryAngle` (`edgePoint 8 j t` is
+the boundary point `Circle.exp (2π(j + t)/8)`, by `Circle.coe_exp`). Extend
+radially, `Φ z = ‖z‖ * φ (z / ‖z‖)` (`0` at `z = 0`) (continuous at the centre since `φ` is bounded), and
+set `h = Circle.exp (Φ + π)`. Paired arcs `2j, 2j+1` (same parameter) get equal
+values modulo `2π`, so `h` respects `SurfaceRel false 4` and descends through the
+coinduced topology (`Quotient.lift`, `continuous_coinduced_dom`). On arc 0,
+`h = Circle.exp (2πs + π)`. -/
+theorem t99A03_aux_circleMap :
+    ∃ h : C(T99A03.FourProjectivePlanesConnectedSum, Circle),
+      ∀ t : Set.Icc (0 : ℝ) 1,
+        h (surfaceQuotient false 4 (edgePoint 8 0 t)) =
+          Circle.exp (2 * Real.pi * t.1 + Real.pi) := by
+  sorry
+
+/-- The edge loop of `a₁`. The path `t ↦ surfaceQuotient (edgePoint 8 0 t)` on
+`[0, 1]` is closed: its endpoints are polygon vertices `0` and `1`, identified by
+`SurfaceRel false 4` at `j = 0, t = 0` (edge 1 starts where edge 0 ends). Descend it
+along the quotient map `[0, 1] → Circle`, `t ↦ Circle.exp (2πt)` (a closed map from a
+compact space onto a Hausdorff space, so a quotient map identifying only `0 ~ 1`). -/
+theorem t99A03_aux_edgeLoop :
+    ∃ γ : C(Circle, T99A03.FourProjectivePlanesConnectedSum),
+      ∀ t : Set.Icc (0 : ℝ) 1,
+        γ (Circle.exp (2 * Real.pi * t.1)) = surfaceQuotient false 4 (edgePoint 8 0 t) := by
+  sorry
+
+/-- Every point of the circle is `Circle.exp (2πt)` for some `t ∈ [0, 1]`: take
+`t = toIcoMod` of the argument divided by `2π` (`Circle.periodic_exp`,
+`Circle.exp_arg` or the surjectivity of `Circle.exp`). -/
+theorem t99A03_aux_circle_param (z : Circle) :
+    ∃ t : Set.Icc (0 : ℝ) 1, Circle.exp (2 * Real.pi * t.1) = z := by
+  sorry
+
+theorem t99A03_exists_fixedPointFree_N4 :
+    ∃ f : C(T99A03.FourProjectivePlanesConnectedSum,
+        T99A03.FourProjectivePlanesConnectedSum), ∀ x, f x ≠ x := by
+  obtain ⟨h, hh⟩ := t99A03_aux_circleMap
+  obtain ⟨γ, hγ⟩ := t99A03_aux_edgeLoop
+  refine ⟨γ.comp h, fun x hx => ?_⟩
+  obtain ⟨t, ht⟩ := t99A03_aux_circle_param (h x)
+  have hfix : h (γ (h x)) = h x := congrArg h hx
+  rw [← ht, hγ t, hh t, Circle.exp_add] at hfix
+  have hpi : Circle.exp Real.pi = 1 := by
+    have := congrArg (fun w => (Circle.exp (2 * Real.pi * t.1))⁻¹ * w) hfix
+    simpa using this
+  have hc := congrArg (fun w : Circle => (w : ℂ)) hpi
+  simp [Circle.coe_exp, Complex.exp_pi_mul_I] at hc
+  norm_num at hc
 
 /-- A nonidentity deck transformation of a connected cover has no fixed
 point.  This is the generic uniqueness-of-lifts step from the old stand-in. -/
@@ -115,9 +174,6 @@ theorem apm_t99a03 :
   constructor
   · exact t99A03_wedge_fixed_point_of_lefschetz
       t99A03_wedge_lefschetz_number
-  · obtain ⟨hconn, p, τ, hp, hdeck, hne⟩ :=
-      t99A03_exists_N4_deck_involution
-    letI := hconn
-    exact ⟨τ, t99A03_deckTransformation_fixedPointFree p hp τ hdeck hne⟩
+  · exact t99A03_exists_fixedPointFree_N4
 
 #print axioms apm_t99a03
