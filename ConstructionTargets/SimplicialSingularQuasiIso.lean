@@ -589,13 +589,24 @@ theorem smallChains_d_span {X α : Type} [TopologicalSpace X] (U : α → Set X)
   rintro x ⟨y, rfl⟩
   exact ⟨_, rfl⟩
 
-/-- The boundary of a small 1-simplex is a difference of two small 0-generators
-(the alternating face sum with two terms). -/
-theorem smallChains_d_one {X α : Type} [TopologicalSpace X] (U : α → Set X)
-    (t : SmallSimplex U 1) :
-    ∃ t₀ t₁ : SmallSimplex U 0,
-      (CoefficientSmallPath.coverSmallChains ℚ U).d 1 0 (smallGen U t 1) =
-        smallGen U t₀ 1 - smallGen U t₁ 1 := by
+/-- The boundary of a small 1-chain has augmentation zero: the inclusion is a chain
+map and `CoefficientH0.boundary_comp_zeroChainAugmentation_eq_zero`. (Replaces an
+explicit two-face formula, whose coproduct computation timed out.) -/
+theorem smallChains_d_aug {X α : Type} [TopologicalSpace X] (U : α → Set X) :
+    (CoefficientSmallPath.coverSmallChains ℚ U).d 1 0 ≫
+      (CoefficientSmallPath.coverSmallInclusion ℚ U).f 0 ≫
+        CoefficientH0.zeroChainAugmentation ℚ = 0 := by
+  rw [← Category.assoc, ← (CoefficientSmallPath.coverSmallInclusion ℚ U).comm 1 0,
+    Category.assoc, CoefficientH0.boundary_comp_zeroChainAugmentation_eq_zero,
+    Limits.comp_zero]
+
+/-- A small point has augmentation one: the inclusion sends `smallGen U t` to the
+singular generator of `t.1` (as in `singCoeff_inclusion`), and the augmentation is
+`Sigma.desc` of identities (`Limits.Sigma.ι_desc`). -/
+theorem smallGen_aug {X α : Type} [TopologicalSpace X] (U : α → Set X)
+    (t : SmallSimplex U 0) :
+    smallGen U t ≫ (CoefficientSmallPath.coverSmallInclusion ℚ U).f 0 ≫
+      CoefficientH0.zeroChainAugmentation ℚ = 𝟙 _ := by
   sorry
 
 theorem smallToFace_aux_fill_succ {n : ℕ} (o : LinearOrder (Euc n))
@@ -644,8 +655,10 @@ structure SmallStage {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
 point `t`, send it to `single {v} 1` for a vertex `v` of a minimal face of the point
 (`exists_isMinimalFace`; `{v}` is in `starCarrier` by `starCarrier_down`); define the
 component by `Sigma.desc` of `CoefficientSmallComparison.elementHom`. Degree 1: on a
-small 1-simplex `t`, `f (d (smallGen t 1))` has coefficient sum `1 - 1 = 0`
-(`smallChains_d_one`) and is carried by `starCarrier K (smallRange t)`
+small 1-simplex `t`, `f (d (smallGen t 1))` has coefficient sum zero: the
+coefficient-sum map `FaceModule K 0 → ℚ` composed after `f` equals
+`inc.f 0 ≫ zeroChainAugmentation` (both are `1` on each generator, by the degree-0
+definition and `smallGen_aug`; `Limits.Sigma.hom_ext`), and `smallChains_d_aug` and is carried by `starCarrier K (smallRange t)`
 (`smallChains_d_span`, `starCarrier_mono`, span induction), so fill it with
 `smallToFace_aux_fill_zero`. `comm` holds on generators (`Limits.Sigma.hom_ext`). -/
 theorem smallToFace_aux_base {n : ℕ} (o : LinearOrder (Euc n))
