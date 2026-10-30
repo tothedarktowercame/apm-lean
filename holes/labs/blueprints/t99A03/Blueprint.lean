@@ -95,6 +95,37 @@ prescribed values on the eight arcs (arc `j` is `Circle.exp (2π(j + t)/8)`,
 `[j/8, (j+1)/8]` (it is `0` at both ends of a period, so periodic extension is
 continuous) and descend it along `t ↦ Circle.exp (2πt)`
 (`Function.Periodic.lift`, or `AddCircle.homeomorphCircle'`). -/
+private def t99A03_aux_boundaryAngle_g (x : ℝ) : ℝ :=
+  max 0 (4 * Real.pi - 8 * |x - Real.pi / 2|)
+
+private lemma t99A03_aux_boundaryAngle_g_continuous :
+    Continuous t99A03_aux_boundaryAngle_g := by
+  unfold t99A03_aux_boundaryAngle_g
+  fun_prop
+
+private lemma t99A03_aux_boundaryAngle_g_end :
+    t99A03_aux_boundaryAngle_g 0 =
+      t99A03_aux_boundaryAngle_g (2 * Real.pi) := by
+  unfold t99A03_aux_boundaryAngle_g
+  have hp : 0 < Real.pi := Real.pi_pos
+  rw [abs_of_nonpos (by linarith), abs_of_nonneg (by linarith)]
+  rw [max_eq_left (by nlinarith), max_eq_left (by nlinarith)]
+
+private lemma t99A03_aux_boundaryAngle_eval
+    [Fact (0 < 2 * Real.pi)]
+    (x : ℝ) (hx0 : 0 ≤ x) (hx2 : x ≤ 2 * Real.pi) :
+    AddCircle.liftIco (2 * Real.pi) 0 t99A03_aux_boundaryAngle_g (x : AddCircle (2 * Real.pi)) =
+      t99A03_aux_boundaryAngle_g x := by
+  rcases hx2.eq_or_lt with rfl | hx
+  · rw [show ((2 * Real.pi : ℝ) : AddCircle (2 * Real.pi)) = (0 : AddCircle (2 * Real.pi)) by
+      simpa using (AddCircle.coe_add_period (2 * Real.pi) (0 : ℝ))]
+    change AddCircle.liftIco (2 * Real.pi) 0 t99A03_aux_boundaryAngle_g
+      ((0 : ℝ) : AddCircle (2 * Real.pi)) = _
+    rw [AddCircle.liftIco_zero_coe_apply (p := 2 * Real.pi) (x := 0) (by
+      exact ⟨le_rfl, by positivity⟩)]
+    exact t99A03_aux_boundaryAngle_g_end
+  · exact AddCircle.liftIco_zero_coe_apply ⟨hx0, hx⟩
+
 theorem t99A03_aux_boundaryAngle :
     ∃ φ : C(Circle, ℝ), ∀ t : Set.Icc (0 : ℝ) 1,
       φ (Circle.exp (2 * Real.pi * (0 + t.1) / 8)) = 2 * Real.pi * t.1 ∧
@@ -102,7 +133,79 @@ theorem t99A03_aux_boundaryAngle :
       φ (Circle.exp (2 * Real.pi * (2 + t.1) / 8)) = 4 * Real.pi - 2 * Real.pi * t.1 ∧
       φ (Circle.exp (2 * Real.pi * (3 + t.1) / 8)) = 2 * Real.pi - 2 * Real.pi * t.1 ∧
       ∀ j : ℕ, 4 ≤ j → j < 8 → φ (Circle.exp (2 * Real.pi * (j + t.1) / 8)) = 0 := by
-  sorry
+  letI : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
+  let F : AddCircle (2 * Real.pi) → ℝ :=
+    AddCircle.liftIco (2 * Real.pi) 0 t99A03_aux_boundaryAngle_g
+  have hF : Continuous F := AddCircle.liftIco_zero_continuous
+    t99A03_aux_boundaryAngle_g_end
+    t99A03_aux_boundaryAngle_g_continuous.continuousOn
+  let φ : C(Circle, ℝ) :=
+    ⟨fun z ↦ F (AddCircle.homeomorphCircle'.symm z),
+      hF.comp AddCircle.homeomorphCircle'.symm.continuous⟩
+  refine ⟨φ, fun t ↦ ?_⟩
+  have ht0 : 0 ≤ t.1 := t.2.1
+  have ht1 : t.1 ≤ 1 := t.2.2
+  have heval (j : ℕ) (hj : j < 8) :
+      φ (Circle.exp (2 * Real.pi * (j + t.1) / 8)) =
+        t99A03_aux_boundaryAngle_g (2 * Real.pi * (j + t.1) / 8) := by
+    change F (AddCircle.homeomorphCircle'.symm
+      (Circle.exp (2 * Real.pi * (j + t.1) / 8))) = _
+    rw [← AddCircle.homeomorphCircle'_apply_mk]
+    rw [AddCircle.homeomorphCircle'.symm_apply_apply]
+    apply t99A03_aux_boundaryAngle_eval
+    · positivity
+    · apply (div_le_iff₀ (by norm_num : (0 : ℝ) < 8)).2
+      have hj' : (j : ℝ) + t.1 ≤ 8 := by
+        have hj7 : (j : ℝ) ≤ 7 := by exact_mod_cast (Nat.le_pred_of_lt hj)
+        linarith
+      nlinarith [Real.pi_pos]
+  constructor
+  · have h := heval 0 (by norm_num)
+    norm_num at h
+    norm_num only [zero_add] at ⊢
+    rw [h]
+    unfold t99A03_aux_boundaryAngle_g
+    rw [abs_of_nonpos (by nlinarith [Real.pi_pos])]
+    rw [max_eq_right]
+    · ring
+    · nlinarith [Real.pi_pos]
+  constructor
+  · have h := heval 1 (by norm_num)
+    norm_num at h
+    rw [h]
+    unfold t99A03_aux_boundaryAngle_g
+    rw [abs_of_nonpos (by nlinarith [Real.pi_pos])]
+    rw [max_eq_right]
+    · ring
+    · nlinarith [Real.pi_pos]
+  constructor
+  · have h := heval 2 (by norm_num)
+    norm_num at h
+    rw [h]
+    unfold t99A03_aux_boundaryAngle_g
+    rw [abs_of_nonneg (by nlinarith [Real.pi_pos])]
+    rw [max_eq_right]
+    · ring
+    · nlinarith [Real.pi_pos]
+  constructor
+  · have h := heval 3 (by norm_num)
+    norm_num at h
+    rw [h]
+    unfold t99A03_aux_boundaryAngle_g
+    rw [abs_of_nonneg (by nlinarith [Real.pi_pos])]
+    rw [max_eq_right]
+    · ring
+    · nlinarith [Real.pi_pos]
+  · intro j hj4 hj8
+    rw [heval j hj8]
+    rw [t99A03_aux_boundaryAngle_g, max_eq_left]
+    have hj4' : (4 : ℝ) ≤ j := by exact_mod_cast hj4
+    have habs : Real.pi / 2 ≤
+        |2 * Real.pi * ((j : ℝ) + t.1) / 8 - Real.pi / 2| := by
+      rw [abs_of_nonneg]
+      · nlinarith [Real.pi_pos]
+      · nlinarith [Real.pi_pos]
+    nlinarith
 
 /-- The circle map. Take `φ` from `t99A03_aux_boundaryAngle` (`edgePoint 8 j t` is
 the boundary point `Circle.exp (2π(j + t)/8)`, by `Circle.coe_exp`). Extend
