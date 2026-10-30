@@ -1286,6 +1286,63 @@ theorem subdivisionIterate_subsetCarried {X : Type} [TopologicalSpace X] (A : Se
       ((CoefficientEventualSmallness.subdivisionIterate ℚ r).f k c) := by
   sorry
 
+/-- A coproduct of copies of `ℚ` (the shape of the singular and small chain modules). -/
+abbrev SigmaQ (I : Type) : ModuleCat.{0} ℚ := ∐ fun _ : I => ModuleCat.of ℚ ℚ
+
+/-- The coefficient at `t` of an element of a coproduct of copies of `ℚ`. -/
+noncomputable def sigmaCoeff {I : Type} (t : I) :
+    SigmaQ I ⟶ ModuleCat.of ℚ ℚ := by
+  classical
+  exact Limits.Sigma.desc fun i => if i = t then 𝟙 _ else 0
+
+/-- An element of a coproduct of copies of `ℚ` is the finite sum of its
+coefficients times the generators. In `ModuleCat` the coproduct is a direct sum
+(`ModuleCat.coprodIsoDirectSum`-style isomorphisms, or the cofan
+`ModuleCat.coproductCocone`); both sides are linear in `q`, so it suffices to
+check on generators, where `Limits.Sigma.ι_desc` evaluates `sigmaCoeff`. -/
+theorem sigma_eq_sum {I : Type} (q : SigmaQ I) :
+    ∃ F : Finset I, q = ∑ t ∈ F, (sigmaCoeff t q) •
+      (Limits.Sigma.ι (fun _ : I => ModuleCat.of ℚ ℚ) t) (1 : ℚ) := by
+  sorry
+
+/-- The coefficient of a small chain at a small simplex. -/
+noncomputable def smallCoeff {X α : Type} [TopologicalSpace X] (U : α → Set X) {k : ℕ}
+    (t : SmallSimplex U k) :
+    (CoefficientSmallPath.coverSmallChains ℚ U).X k ⟶ ModuleCat.of ℚ ℚ := by
+  change (∐ fun _ : SmallSimplex U k => ModuleCat.of ℚ ℚ) ⟶ _
+  exact sigmaCoeff t
+
+/-- The coefficient of a singular chain at a singular simplex. -/
+noncomputable def singCoeff {X : Type} [TopologicalSpace X] {k : ℕ}
+    (σ : SingularSubdivision.SingularSimplex (TopCat.of X) k) :
+    (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k ⟶ ModuleCat.of ℚ ℚ := by
+  change (∐ fun _ : SingularSubdivision.SingularSimplex (TopCat.of X) k =>
+    ModuleCat.of ℚ ℚ) ⟶ _
+  exact sigmaCoeff σ
+
+/-- A small chain and its image under the inclusion have the same coefficients.
+Both sides are linear in `q`; on a generator `smallGen U t' 1` the inclusion gives
+the singular generator of `t'.1` (the inclusion is `Sigma.map'` along `Subtype.val`,
+as in the proof of `SingularSubdivision.coverSmallGeneratorOfMem_comp_ι`), and both
+coefficients are `if t' = t then 1 else 0` (`Subtype.ext`). Use `sigma_eq_sum` to
+reduce to generators. -/
+theorem singCoeff_inclusion {X α : Type} [TopologicalSpace X] (U : α → Set X) {k : ℕ}
+    (t : SmallSimplex U k) (q : (CoefficientSmallPath.coverSmallChains ℚ U).X k) :
+    singCoeff t.1 ((CoefficientSmallPath.coverSmallInclusion ℚ U).f k q) =
+      smallCoeff U t q := by
+  sorry
+
+/-- A chain carried by `A` has nonzero coefficients only at simplices with range in
+`A`: in the carried presentation `c = ∑ i, gen (σ i) (a i)`, the coefficient at `σ`
+is the sum of the `a i` with `σ i = σ` (`Limits.Sigma.ι_desc` on each term), which
+is zero if no `σ i` equals `σ`. -/
+theorem singCoeff_ne_zero_of_subsetCarried {X : Type} [TopologicalSpace X] (A : Set X)
+    {k : ℕ} (c : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
+    (hc : AcyclicCarriers.SubsetCarriedChain X A c)
+    (σ : SingularSubdivision.SingularSimplex (TopCat.of X) k) (hσ : singCoeff σ c ≠ 0) :
+    Set.range (SingularSubdivision.continuousMapOfSingularSimplex k σ) ⊆ A := by
+  sorry
+
 /-- A small chain whose image in all singular chains is carried by `A` is a
 combination of small generators with range in `A`. The small chain module is a
 coproduct over small simplices and the inclusion is injective on it; compare
@@ -1298,7 +1355,23 @@ theorem smallChain_span_of_subsetCarried {X α : Type} [TopologicalSpace X]
     q ∈ Submodule.span ℚ {x | ∃ (σ : C(stdSimplex ℝ (Fin (k + 1)), X)) (a : α)
       (hσ : Set.range σ ⊆ U a), Set.range σ ⊆ A ∧
         x = CoefficientSmallPath.coverSmallGenerator ℚ U σ a hσ 1} := by
-  sorry
+  classical
+  obtain ⟨F, hF⟩ := sigma_eq_sum (I := SmallSimplex U k) q
+  change q ∈ _
+  rw [hF]
+  refine Submodule.sum_mem _ fun t _ => ?_
+  by_cases h0 : sigmaCoeff t q = 0
+  · rw [h0, zero_smul]
+    exact Submodule.zero_mem _
+  · refine Submodule.smul_mem _ _ (Submodule.subset_span ?_)
+    obtain ⟨σ, a, hσ, ht, hr⟩ := smallGen_eq_coverSmallGenerator U t
+    refine ⟨σ, a, hσ, ?_, ?_⟩
+    · rw [hr]
+      apply singCoeff_ne_zero_of_subsetCarried A _ hq t.1
+      rw [singCoeff_inclusion U t q]
+      exact h0
+    · rw [← ht]
+      rfl
 
 /-- `Φ ≫ ψ` is face-carried and the identity in degree zero. Positive degree:
 `Φ (single s)` maps to `Sd^r (cmp s)`, which is carried by the hull of `s`
