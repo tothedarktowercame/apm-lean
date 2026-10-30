@@ -3352,7 +3352,58 @@ lemma apm_t02A04_quotientComplex_model_aux_inclusions :
       Function.Injective apm_t02a04_diskInclusion ∧
       ∀ s d, apm_t02a04_solidInclusion s = apm_t02a04_diskInclusion d →
         ∃ c : Circle, (d : ℂ) = c ∧ s = (⟨(c : ℂ), by simpa using c.property.le⟩, c ^ 2) := by
-  sorry
+  classical
+  let first : Sum apm_t02a04_SolidTorus apm_t02a04_Disk → ℂ :=
+    Sum.elim (fun s ↦ (s.1 : ℂ)) (fun d ↦ (d : ℂ))
+  let second : Sum apm_t02a04_SolidTorus apm_t02a04_Disk → ℂ :=
+    Sum.elim (fun s ↦ (s.2 : ℂ)) (fun d ↦ (d : ℂ) ^ 2)
+  have first_eq {x y} (hxy : Relation.EqvGen apm_t02a04_Glue x y) :
+      first x = first y := by
+    induction hxy with
+    | rel a b hab => cases hab <;> rfl
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have second_eq {x y} (hxy : Relation.EqvGen apm_t02a04_Glue x y) :
+      second x = second y := by
+    induction hxy with
+    | rel a b hab => cases hab <;> rfl
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have invariants {x y}
+      (hxy : Quotient.mk (Relation.EqvGen.setoid apm_t02a04_Glue) x =
+        Quotient.mk (Relation.EqvGen.setoid apm_t02a04_Glue) y) :
+      first x = first y ∧ second x = second y := by
+    have hrel : Relation.EqvGen apm_t02a04_Glue x y := Quotient.exact hxy
+    exact ⟨first_eq hrel, second_eq hrel⟩
+  constructor
+  · intro s t h
+    obtain ⟨h₁, h₂⟩ := invariants h
+    apply Prod.ext
+    · apply Subtype.ext
+      exact h₁
+    · apply Subtype.ext
+      exact h₂
+  constructor
+  · intro d e h
+    obtain ⟨h₁, -⟩ := invariants h
+    exact Subtype.ext h₁
+  · intro s d h
+    obtain ⟨h₁, h₂⟩ := invariants h
+    have hd_norm_sq : ‖(d : ℂ)‖ ^ 2 = 1 := by
+      calc
+        ‖(d : ℂ)‖ ^ 2 = ‖(d : ℂ) ^ 2‖ := by rw [norm_pow]
+        _ = ‖(s.2 : ℂ)‖ := congrArg norm h₂.symm
+        _ = 1 := mem_sphere_zero_iff_norm.mp s.2.property
+    have hd_norm : ‖(d : ℂ)‖ = 1 := by nlinarith [norm_nonneg (d : ℂ)]
+    let c : Circle := ⟨(d : ℂ), mem_sphere_zero_iff_norm.mpr hd_norm⟩
+    refine ⟨c, rfl, ?_⟩
+    apply Prod.ext
+    · apply Subtype.ext
+      exact h₁
+    · apply Subtype.ext
+      exact h₂
 -- END SEAT AREA
 
 /-- The centre: `basisVertex 22 (Fin.last 21)` is a vertex of the glued complex, lies in no
