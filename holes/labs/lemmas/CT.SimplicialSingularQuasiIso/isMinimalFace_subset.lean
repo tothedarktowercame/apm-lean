@@ -82,7 +82,17 @@ theorem exists_isMinimalFace {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc 
 theorem isMinimalFace_subset {n : ℕ} {K : Geometry.SimplicialComplex ℝ (Euc n)}
     {x : Euc n} {t s : Finset (Euc n)} (ht : IsMinimalFace K x t) (hs : s ∈ K.faces)
     (hx : x ∈ convexHull ℝ (s : Set (Euc n))) : t ⊆ s := by
-  sorry
+  intro w hwt
+  by_contra hws
+  have hxinter : x ∈ convexHull ℝ ((t ∩ s : Finset (Euc n)) : Set (Euc n)) :=
+    by simpa only [Finset.coe_inter] using
+      K.inter_subset_convexHull ht.1 hs ⟨ht.2.1, hx⟩
+  apply ht.2.2 w hwt
+  apply convexHull_mono (𝕜 := ℝ) _ hxinter
+  intro y hy
+  simp only [Finset.coe_inter, Set.mem_inter_iff] at hy
+  simp only [Finset.coe_erase, Set.mem_diff, Finset.mem_coe]
+  exact ⟨hy.1, fun hyw ↦ hws (hyw ▸ hy.2)⟩
 -- END SEAT AREA
 
 /-- A point in the open star of `a` has `a` in its minimal face. From the
