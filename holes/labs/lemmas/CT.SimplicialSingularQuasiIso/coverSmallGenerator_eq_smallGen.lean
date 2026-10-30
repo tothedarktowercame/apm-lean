@@ -449,7 +449,27 @@ theorem coverSmallGenerator_eq_smallGen {X α : Type} [TopologicalSpace X]
     ∃ t : SmallSimplex U k,
       CoefficientSmallPath.coverSmallGenerator ℚ U σ a hσ = smallGen U t ∧
         smallRange U t = Set.range σ := by
-  sorry
+  let τ := SingularSubdivision.singularSimplexOfContinuousMap (TopCat.of (U a)) k
+    (SingularSubdivision.liftSimplexToCover U σ a hσ)
+  let f := TopCat.toSSet.map (SingularSubdivision.coverSubspaceInclusion U a)
+  have hmapped : f.app (Opposite.op (SimplexCategory.mk k)) τ =
+      SingularSubdivision.singularSimplexOfContinuousMap (TopCat.of X) k σ := by
+    change (TopCat.toSSetObjEquiv (TopCat.of X) _).symm
+      ((⟨Subtype.val, continuous_subtype_val⟩ : C(U a, X)).comp
+        (SingularSubdivision.liftSimplexToCover U σ a hσ)) = _
+    congr 1
+  have hmem : SingularSubdivision.singularSimplexOfContinuousMap (TopCat.of X) k σ ∈
+      (SingularSubdivision.coverSmallSSet U).obj
+        (Opposite.op (SimplexCategory.mk k)) := by
+    rw [← hmapped]
+    apply (le_iSup (fun a => SSet.Subcomplex.range
+      (TopCat.toSSet.map (SingularSubdivision.coverSubspaceInclusion U a))) a)
+    exact ⟨τ, rfl⟩
+  let t : SmallSimplex U k :=
+    ⟨SingularSubdivision.singularSimplexOfContinuousMap (TopCat.of X) k σ, hmem⟩
+  refine ⟨t, ?_, ?_⟩
+  · rfl
+  · simp [smallRange, t]
 -- END SEAT AREA
 
 /-- The boundary of a small generator is a combination of small generators at its
