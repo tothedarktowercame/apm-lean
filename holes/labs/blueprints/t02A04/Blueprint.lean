@@ -2866,7 +2866,27 @@ to remove the choice and the clamp. -/
 lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_disk (z : apm_t02a04_Disk) :
     ∃ (i : Fin 6) (x : EuclideanSpace ℝ (Fin 7)), x ∈ apm_t02A04_coneHull i ∧
       apm_t02A04_conePoint i x = (z : ℂ) := by
-  sorry
+  classical
+  obtain ⟨y, hy⟩ := apm_t02A04_attachedDisk_cone_model_aux_surjective z
+  obtain ⟨i, hi⟩ :=
+    apm_t02A04_attachedDisk_cone_model_aux_cover
+      (y : EuclideanSpace ℝ (Fin 7)) y.property
+  refine ⟨i, y, hi, ?_⟩
+  have hex : ∃ j, (y : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull j :=
+    ⟨i, hi⟩
+  have hagree := apm_t02A04_attachedDisk_cone_model_aux_agree
+    (Classical.choose hex) i (y : EuclideanSpace ℝ (Fin 7))
+    (Classical.choose_spec hex) hi
+  have hnorm := apm_t02A04_attachedDisk_cone_model_aux_point_norm i
+    (y : EuclideanSpace ℝ (Fin 7)) hi
+  have hcoe := congrArg (fun w : apm_t02a04_Disk => (w : ℂ)) hy
+  simp only [apm_t02A04_coneMap, dif_pos hex] at hcoe
+  change ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+      (apm_t02A04_conePoint (Classical.choose hex) y) : apm_t02a04_Disk) : ℂ) =
+    (z : ℂ) at hcoe
+  rw [hagree] at hcoe
+  simpa only [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp,
+    dif_pos hnorm, Subtype.coe_mk] using hcoe
 
 /-- Staircase existence for three rows: for row sums `a ≥ 0` with `∑ a = 1` and
 `s ∈ [0, 1]` there is a step `k` and a split `a = b + t` with `∑ t = s` (take `k` with
