@@ -457,12 +457,75 @@ the injective inclusion into singular chains (`CoefficientH0.singularGenerator_b
 `coverSmallSSet U` directly; a face is the simplex precomposed with a face inclusion
 of the standard simplex, so its range is contained in the original range. -/
 -- BEGIN SEAT AREA
+lemma smallChains_d_span_aux_boundary {X α : Type} [TopologicalSpace X]
+    (U : α → Set X) {k : ℕ} (t : SmallSimplex U (k + 1)) :
+    smallGen U t ≫ (CoefficientSmallPath.coverSmallChains ℚ U).d (k + 1) k =
+      ∑ i : Fin (k + 2), (-1 : ℤ) ^ (i : ℕ) •
+        smallGen U ((SingularSubdivision.coverSmallSSet U : SSet).δ i t) := by
+  dsimp [smallGen, CoefficientSmallPath.coverSmallChains,
+    AlgebraicTopology.SSet.singularChainComplexFunctor]
+  rw [AlgebraicTopology.alternatingFaceMapComplex_obj_d]
+  unfold AlgebraicTopology.AlternatingFaceMapComplex.objD
+  calc
+    _ = ∑ i : Fin (k + 2), Limits.Sigma.ι
+          (fun _ : SmallSimplex U (k + 1) ↦ ModuleCat.of ℚ ℚ) t ≫
+        ((-1 : ℤ) ^ (i : ℕ) •
+          ((((SimplicialObject.whiskering Type (ModuleCat ℚ)).obj
+              (CategoryTheory.Limits.sigmaConst.obj (ModuleCat.of ℚ ℚ))).obj
+                (SingularSubdivision.coverSmallSSet U : SSet)).δ i)) := by
+      simpa only [Finset.sum_filter, Finset.mem_univ, ↓reduceIte]
+        using Preadditive.comp_sum (Finset.univ : Finset (Fin (k + 2)))
+          (Limits.Sigma.ι
+            (fun _ : SmallSimplex U (k + 1) ↦ ModuleCat.of ℚ ℚ) t)
+          (fun i ↦ (-1 : ℤ) ^ (i : ℕ) •
+            ((((SimplicialObject.whiskering Type (ModuleCat ℚ)).obj
+              (CategoryTheory.Limits.sigmaConst.obj (ModuleCat.of ℚ ℚ))).obj
+                (SingularSubdivision.coverSmallSSet U : SSet)).δ i))
+    _ = _ := by
+      apply Finset.sum_congr rfl
+      intro i _
+      calc
+        _ = (-1 : ℤ) ^ (i : ℕ) •
+            (Limits.Sigma.ι (fun _ : SmallSimplex U (k + 1) ↦
+              ModuleCat.of ℚ ℚ) t ≫
+              ((((SimplicialObject.whiskering Type (ModuleCat ℚ)).obj
+                (CategoryTheory.Limits.sigmaConst.obj (ModuleCat.of ℚ ℚ))).obj
+                  (SingularSubdivision.coverSmallSSet U : SSet)).δ i)) := by
+          exact CategoryTheory.Preadditive.comp_zsmul _ _ _
+        _ = _ := by
+          congr 1
+          dsimp [SimplicialObject.δ, SimplicialObject.whiskering,
+            CategoryTheory.Limits.sigmaConst]
+          rw [Limits.Sigma.ι_comp_map']
+          rfl
+
 theorem smallChains_d_span {X α : Type} [TopologicalSpace X] (U : α → Set X) {k : ℕ}
     (t : SmallSimplex U (k + 1)) :
     (CoefficientSmallPath.coverSmallChains ℚ U).d (k + 1) k (smallGen U t 1) ∈
       Submodule.span ℚ {x | ∃ t' : SmallSimplex U k,
         smallRange U t' ⊆ smallRange U t ∧ x = smallGen U t' 1} := by
-  sorry
+  classical
+  rw [← CategoryTheory.comp_apply, smallChains_d_span_aux_boundary]
+  simp only [ModuleCat.hom_sum, LinearMap.coe_sum, Finset.sum_apply,
+    ModuleCat.hom_zsmul]
+  apply Submodule.sum_mem
+  intro i _
+  change ((-1 : ℤ) ^ (i : ℕ)) •
+    smallGen U ((SingularSubdivision.coverSmallSSet U : SSet).δ i t) 1 ∈ _
+  rw [← Int.cast_smul_eq_zsmul ℚ]
+  apply Submodule.smul_mem
+  apply Submodule.subset_span
+  refine ⟨(SingularSubdivision.coverSmallSSet U : SSet).δ i t, ?_, rfl⟩
+  let σ := SingularSubdivision.continuousMapOfSingularSimplex (k + 1) t.1
+  have hσ : SingularSubdivision.singularSimplexOfContinuousMap (TopCat.of X) (k + 1) σ =
+      t.1 := Equiv.symm_apply_apply _ _
+  dsimp [smallRange]
+  rw [show ((SingularSubdivision.coverSmallSSet U : SSet).δ i t).1 =
+      (TopCat.toSSet.obj (TopCat.of X)).δ i t.1 from rfl]
+  rw [← hσ, SingularSubdivision.singularSimplexOfContinuousMap_face]
+  simp only [SingularSubdivision.continuousMapOfSingularSimplex_ofContinuousMap]
+  rintro x ⟨y, rfl⟩
+  exact ⟨_, rfl⟩
 -- END SEAT AREA
 
 /-- The boundary of a small 1-simplex is a difference of two small 0-generators
