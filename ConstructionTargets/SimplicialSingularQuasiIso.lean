@@ -720,16 +720,230 @@ theorem smallToFace_exists {n : ℕ} (o : LinearOrder (Euc n))
     rw [ht]
     exact hS0 t
 
-/-- `ψ ≫ cmpH` and the small-chain inclusion agree on homology. They are chain
-homotopic by acyclic carriers with source the small chains: a small simplex `σ`
-is carried by the polyhedron of `starCarrier K (Set.range σ)` (it contains `range σ`
-by `subset_starCarrier_hull`, and contains `cmp` of each carrier face because
-`IsAffineComparison` gives range equal to the face hull). The carrier is rationally
-pointlike (`starCarrier_pointlike`), so carried cycles bound carried chains in
-positive degree (`AcyclicCarriers.subsetCarriedCycle_bounds`). In degree zero the
-two maps send a small point to points of the same star-shaped carrier, whose
-difference bounds there (H₀ of a pointlike space). Build the homotopy degree by
-degree as in `AcyclicCarriers.carried_chainHomotopy_exists`. -/
+/-- Every small generator is a `coverSmallGenerator` with the same image: take
+`σ = continuousMapOfSingularSimplex k t.1`, `a` from `smallSimplex_range_subset`,
+and compare with `coverSmallGenerator_eq_smallGen` (the small simplex it produces
+is `t`, since `singularSimplexOfContinuousMap ∘ continuousMapOfSingularSimplex = id`
+by `Equiv.symm_apply_apply`, and small simplices are equal when their underlying
+simplices are, `Subtype.ext`). -/
+theorem smallGen_eq_coverSmallGenerator {X α : Type} [TopologicalSpace X]
+    (U : α → Set X) {k : ℕ} (t : SmallSimplex U k) :
+    ∃ (σ : C(stdSimplex ℝ (Fin (k + 1)), X)) (a : α) (hσ : Set.range σ ⊆ U a),
+      smallGen U t = CoefficientSmallPath.coverSmallGenerator ℚ U σ a hσ ∧
+        Set.range σ = smallRange U t := by
+  sorry
+
+/-- The properties of `ψ` from `smallToFace_exists`, in terms of `smallGen`. -/
+def StarCarriedMap {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd) :
+    Prop :=
+  (∀ k (t : SmallSimplex (starCover K) k) (u : FaceIndex K k),
+    (show FaceModule K k from ψ.f k (smallGen _ t 1)) u ≠ 0 →
+      u.1 ∈ starCarrier K (smallRange _ t)) ∧
+  ∀ t : SmallSimplex (starCover K) 0,
+    ((show FaceModule K 0 from ψ.f 0 (smallGen _ t 1)).sum fun _ c ↦ c) = 1
+
+/-- The polyhedron of `starCarrier K A`, inside `K.space`. -/
+def starHull {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n)) (A : Set K.space) :
+    Set K.space :=
+  (Subtype.val : K.space → Euc n) ⁻¹' ⋃ s ∈ starCarrier K A, convexHull ℝ (s : Set (Euc n))
+
+/-- A map out of small chains whose value on each small generator `t` is carried by
+`starHull K (smallRange t)`. -/
+def SmallCarried {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n)) {k j : ℕ}
+    (g : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X j) : Prop :=
+  ∀ t : SmallSimplex (starCover K) k,
+    AcyclicCarriers.SubsetCarriedChain K.space (starHull K (smallRange _ t))
+      (g (smallGen _ t 1))
+
+/-- Restate the hypotheses of `smallToFace_homology` as `StarCarriedMap`, using
+`smallGen_eq_coverSmallGenerator`. -/
+theorem starCarriedMap_of_coverSmallGenerator {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd)
+    (hψ : ∀ k (σ : C(stdSimplex ℝ (Fin (k + 1)), K.space)) (a : Euc n)
+          (hσ : Set.range σ ⊆ starCover K a) (u : FaceIndex K k),
+        (show FaceModule K k from ψ.f k
+          (CoefficientSmallPath.coverSmallGenerator ℚ (starCover K) σ a hσ 1)) u ≠ 0 →
+          u.1 ∈ starCarrier K (Set.range σ))
+    (hψ0 : ∀ (σ : C(stdSimplex ℝ (Fin 1), K.space)) (a : Euc n)
+          (hσ : Set.range σ ⊆ starCover K a),
+        ((show FaceModule K 0 from ψ.f 0
+          (CoefficientSmallPath.coverSmallGenerator ℚ (starCover K) σ a hσ 1)).sum
+            fun _ c ↦ c) = 1) :
+    StarCarriedMap K d hdd ψ := by
+  refine ⟨fun k t u hu => ?_, fun t => ?_⟩
+  · obtain ⟨σ, a, hσ, ht, hr⟩ := smallGen_eq_coverSmallGenerator (starCover K) t
+    rw [ht] at hu
+    rw [← hr]
+    exact hψ k σ a hσ u hu
+  · obtain ⟨σ, a, hσ, ht, -⟩ := smallGen_eq_coverSmallGenerator (starCover K) t
+    rw [ht]
+    exact hψ0 σ a hσ
+
+/-- Carried chains are closed under subtraction: concatenate the two finite
+presentations (`Fin.append`), negating the coefficients of the second. -/
+theorem subsetCarriedChain_sub (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
+    (x y : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
+    (hx : AcyclicCarriers.SubsetCarriedChain X A x)
+    (hy : AcyclicCarriers.SubsetCarriedChain X A y) :
+    AcyclicCarriers.SubsetCarriedChain X A (x - y) := by
+  sorry
+
+/-- The difference `ψ ≫ cmpH - inc` is small-carried. `inc (smallGen t)` is the
+singular generator of `t` (`coverSmallGeneratorOfMem_comp_ι` in the `ℚ` form, or
+via `smallGen_eq_coverSmallGenerator` and `CoefficientSmallPath`), whose range lies
+in `starHull` by `subset_starCarrier_hull`. `ψ (smallGen t)` is a combination of
+faces `s ∈ starCarrier K (smallRange t)`, and `cmp (single s)` is a generator with
+range the hull of `s` (`IsAffineComparison`), inside `starHull`. Close up with
+`subsetCarriedChain_sub` and the analogous sum/scalar closure. -/
+theorem smallHomotopy_aux_diff_carried {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : IsAffineComparison K cmp)
+    (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpH_f : ∀ k, cmpH.f k = cmp k)
+    (ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd)
+    (hψ : StarCarriedMap K d hdd ψ) (k : ℕ) :
+    SmallCarried K ((ψ ≫ cmpH).f k -
+      (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f k) := by
+  sorry
+
+/-- Precomposing a small-carried map with the small boundary keeps it carried:
+`smallChains_d_span` writes `d (smallGen t)` as a combination of generators at
+faces with smaller image, `starCarrier_mono` makes their `starHull` smaller, and
+carried chains are closed under linear combinations (span induction). -/
+theorem smallHomotopy_aux_comp_d_carried {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    {k j : ℕ}
+    (g : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X j)
+    (hg : SmallCarried K g) :
+    SmallCarried K ((CoefficientSmallPath.coverSmallChains ℚ (starCover K)).d (k + 1) k ≫ g) := by
+  sorry
+
+/-- Small-carried maps are closed under subtraction (`subsetCarriedChain_sub`). -/
+theorem smallCarried_sub {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n)) {k j : ℕ}
+    (g g' : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X j)
+    (hg : SmallCarried K g) (hg' : SmallCarried K g') : SmallCarried K (g - g') := by
+  intro t
+  exact subsetCarriedChain_sub K.space _ _ _ (hg t) (hg' t)
+
+/-- Positive-degree filling of a small-carried map of cycles. For each small
+generator `t`, `g (smallGen t)` is a carried cycle; `starHull K (smallRange t)` is
+rationally pointlike (`starCarrier_pointlike`, with `smallSimplex_range_subset` and
+the range nonempty), so `AcyclicCarriers.subsetCarriedCycle_bounds` gives a carried
+filling. Assemble the fillings with `Limits.Sigma.desc` and
+`CoefficientSmallComparison.elementHom`; check `f ≫ d = g` on generators. -/
+theorem smallHomotopy_aux_fill_succ {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    {k : ℕ}
+    (g : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X (k + 1) ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X (k + 1))
+    (hg : SmallCarried K g)
+    (hcyc : g ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 1) k = 0) :
+    ∃ f : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X (k + 1) ⟶
+        (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X (k + 2),
+      SmallCarried K f ∧
+        f ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 2) (k + 1) = g := by
+  sorry
+
+/-- Degree-zero filling: a small-carried map to 0-chains with augmentation zero is
+a carried boundary. In a rationally pointlike carrier, a carried 0-chain of
+augmentation zero bounds there (lift to the subspace with
+`AcyclicCarriers.subsetPush_lift`, use `H₀ ≅ ℚ` through the augmentation, and push
+the filling forward). Assemble generatorwise as in `smallHomotopy_aux_fill_succ`. -/
+theorem smallHomotopy_aux_fill_zero {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (g : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X 0 ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X 0)
+    (hg : SmallCarried K g)
+    (haug : g ≫ CoefficientH0.zeroChainAugmentation ℚ = 0) :
+    ∃ f : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X 0 ⟶
+        (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X 1,
+      SmallCarried K f ∧
+        f ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d 1 0 = g := by
+  sorry
+
+/-- The two maps have the same augmentation in degree zero: on a small point `t`,
+`inc (smallGen t)` has augmentation `1`, and `cmp (ψ (smallGen t))` has augmentation
+the coefficient sum of `ψ (smallGen t)`, which is `1` (`hψ.2`), since `cmp` sends each
+vertex to a single generator (`IsAffineComparison`). Check on generators
+(`Limits.Sigma.hom_ext`). -/
+theorem smallHomotopy_aux_aug_zero {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : IsAffineComparison K cmp)
+    (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpH_f : ∀ k, cmpH.f k = cmp k)
+    (ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd)
+    (hψ : StarCarriedMap K d hdd ψ) :
+    ((ψ ≫ cmpH).f 0 - (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f 0) ≫
+      CoefficientH0.zeroChainAugmentation ℚ = 0 := by
+  sorry
+
+/-- One stage of the homotopy between `ψ ≫ cmpH` and the inclusion. -/
+structure SmallHomotopyStage {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd)
+    (k : ℕ) where
+  f : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X k ⟶
+    (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X (k + 1)
+  f' : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X (k + 1) ⟶
+    (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X (k + 2)
+  cf : SmallCarried K f
+  cf' : SmallCarried K f'
+  eq : (ψ ≫ cmpH).f (k + 1) - (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f (k + 1) =
+    (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).d (k + 1) k ≫ f +
+      f' ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 2) (k + 1)
+
+/-- The first stage. `f` is `smallHomotopy_aux_fill_zero` applied to
+`φ₀ = (ψ ≫ cmpH).f 0 - inc.f 0` (`smallHomotopy_aux_diff_carried`,
+`smallHomotopy_aux_aug_zero`). `f'` is `smallHomotopy_aux_fill_succ` (with `k = 0`)
+applied to `φ₁ - d ≫ f`, carried by `smallCarried_sub` and
+`smallHomotopy_aux_comp_d_carried`; it is a cycle because `φ` is a chain map
+difference (`Hom.comm` of `ψ ≫ cmpH` and of `inc`) and `f ≫ d = φ₀`. -/
+theorem smallHomotopy_aux_base {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : IsAffineComparison K cmp)
+    (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpH_f : ∀ k, cmpH.f k = cmp k)
+    (ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd)
+    (hψ : StarCarriedMap K d hdd ψ) :
+    ∃ S : SmallHomotopyStage K d hdd cmpH ψ 0,
+      (ψ ≫ cmpH).f 0 - (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f 0 =
+        S.f ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d 1 0 := by
+  sorry
+
+/-- Extend a stage, keeping its top component: apply `smallHomotopy_aux_fill_succ`
+to `φ (k+2) - d ≫ S.f'`, carried by `smallCarried_sub` and
+`smallHomotopy_aux_comp_d_carried`, a cycle by `S.eq`, `d ≫ d = 0` and the chain-map
+property of `φ`; compare the `hstep` block of
+`AcyclicCarriers.carried_chainHomotopy_exists`. -/
+theorem smallHomotopy_aux_step {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : IsAffineComparison K cmp)
+    (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
+    (cmpH_f : ∀ k, cmpH.f k = cmp k)
+    (ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd)
+    (hψ : StarCarriedMap K d hdd ψ) {k : ℕ} (S : SmallHomotopyStage K d hdd cmpH ψ k) :
+    ∃ S' : SmallHomotopyStage K d hdd cmpH ψ (k + 1), S'.f = S.f' := by
+  sorry
+
+/-- `ψ ≫ cmpH` and the small-chain inclusion agree on homology, by a chain homotopy
+built from `SmallHomotopyStage`s (`smallHomotopy_aux_base`, `smallHomotopy_aux_step`)
+and assembled as at the end of `AcyclicCarriers.carried_chainHomotopy_exists`,
+except that the degree-zero equation is the base stage's equation instead of
+`hzero`. The hypotheses become `StarCarriedMap` by
+`starCarriedMap_of_coverSmallGenerator`. -/
 theorem smallToFace_homology {n : ℕ} (o : LinearOrder (Euc n))
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
@@ -753,7 +967,44 @@ theorem smallToFace_homology {n : ℕ} (o : LinearOrder (Euc n))
     ∀ k, HomologicalComplex.homologyMap (ψ ≫ cmpH) k =
       HomologicalComplex.homologyMap
         (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)) k := by
-  sorry
+  classical
+  have hψ' := starCarriedMap_of_coverSmallGenerator K d hdd ψ hψ hψ0
+  obtain ⟨S0, hS0⟩ := smallHomotopy_aux_base K d hdd cmp hcmp cmpH cmpH_f ψ hψ'
+  have hstep : ∀ k (S : SmallHomotopyStage K d hdd cmpH ψ k),
+      ∃ S' : SmallHomotopyStage K d hdd cmpH ψ (k + 1), S'.f = S.f' :=
+    fun k S => smallHomotopy_aux_step K d hdd cmp hcmp cmpH cmpH_f ψ hψ' S
+  choose g hg using hstep
+  let F : ∀ k, SmallHomotopyStage K d hdd cmpH ψ k := fun k =>
+    Nat.rec (motive := fun k => SmallHomotopyStage K d hdd cmpH ψ k) S0 (fun k S => g k S) k
+  have hF0 : F 0 = S0 := rfl
+  have hF : ∀ k, (F (k + 1)).f = (F k).f' := fun k => hg k (F k)
+  let hom : ∀ i j, (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X i ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X j := fun i j =>
+    if h : i + 1 = j then (F i).f ≫ eqToHom
+      (congrArg (fun m => (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X m) h)
+    else 0
+  let H : Homotopy (ψ ≫ cmpH) (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)) :=
+    { hom := hom
+      zero := by
+        intro i j hij
+        simp only [hom]
+        split_ifs with h
+        · exact absurd (by simp [ComplexShape.down_Rel]; omega) hij
+        · rfl
+      comm := by
+        intro i
+        cases i with
+        | zero =>
+          rw [Homotopy.dNext_zero_chainComplex, Homotopy.prevD_chainComplex]
+          simp only [hom, dif_pos, eqToHom_refl, Category.comp_id, zero_add]
+          rw [hF0, ← hS0]
+          abel
+        | succ i =>
+          rw [Homotopy.dNext_succ_chainComplex, Homotopy.prevD_chainComplex]
+          simp only [hom, dif_pos, eqToHom_refl, Category.comp_id, hF]
+          rw [← sub_eq_iff_eq_add, (F i).eq] }
+  intro k
+  exact H.homologyMap_eq k
 
 /-- A chain endomorphism of the ordered-face complex that sends each face into
 chains on its own subsets, and is the identity in degree zero, is the identity on
