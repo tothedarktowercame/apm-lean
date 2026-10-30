@@ -1001,6 +1001,82 @@ faces `s ∈ starCarrier K (smallRange t)`, and `cmp (single s)` is a generator 
 range the hull of `s` (`IsAffineComparison`), inside `starHull`. Close up with
 `subsetCarriedChain_sub` and the analogous sum/scalar closure. -/
 -- BEGIN SEAT AREA
+theorem smallHomotopy_aux_diff_carried_aux_zero {X : Type} [TopologicalSpace X]
+    (A : Set X) {k : ℕ} :
+    AcyclicCarriers.SubsetCarriedChain X A
+      (0 : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k) := by
+  refine ⟨0, Fin.elim0, Fin.elim0, ?_, fun i ↦ i.elim0⟩
+  simp
+
+theorem smallHomotopy_aux_diff_carried_aux_smul {X : Type} [TopologicalSpace X]
+    (A : Set X) {k : ℕ} (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
+    (hz : AcyclicCarriers.SubsetCarriedChain X A z) (r : ℚ) :
+    AcyclicCarriers.SubsetCarriedChain X A (r • z) := by
+  rcases hz with ⟨m, a, σ, rfl, hσ⟩
+  refine ⟨m, fun i ↦ r * a i, σ, ?_, hσ⟩
+  rw [Finset.smul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [← map_smul]
+  rfl
+
+theorem smallHomotopy_aux_diff_carried_aux_add {X : Type} [TopologicalSpace X]
+    (A : Set X) {k : ℕ} (x y : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
+    (hx : AcyclicCarriers.SubsetCarriedChain X A x)
+    (hy : AcyclicCarriers.SubsetCarriedChain X A y) :
+    AcyclicCarriers.SubsetCarriedChain X A (x + y) := by
+  classical
+  rcases hx with ⟨m, a, σ, rfl, hσ⟩
+  rcases hy with ⟨m', a', σ', rfl, hσ'⟩
+  let e : Fin m ⊕ Fin m' ≃ Fin (m + m') := finSumFinEquiv
+  let b : Fin (m + m') → ℚ := Sum.elim a a' ∘ e.symm
+  let τ : Fin (m + m') → SingularSubdivision.SingularSimplex (TopCat.of X) k :=
+    Sum.elim σ σ' ∘ e.symm
+  refine ⟨m + m', b, τ, ?_, ?_⟩
+  · rw [← e.sum_comp]
+    simp [b, τ, Fintype.sum_sum_type]
+  · intro i
+    obtain ⟨i, rfl⟩ := e.surjective i
+    cases i with
+    | inl i => simpa [τ, e] using hσ i
+    | inr i => simpa [τ, e] using hσ' i
+
+theorem smallHomotopy_aux_diff_carried_aux_cmp {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (cmp : ∀ k, FaceModuleCat K k ⟶
+      (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X k)
+    (hcmp : IsAffineComparison K cmp) {k : ℕ} (A : Set K.space)
+    (z : FaceModule K k) (hz : ∀ u, z u ≠ 0 → u.1 ∈ starCarrier K A) :
+    AcyclicCarriers.SubsetCarriedChain K.space (starHull K A) (cmp k z) := by
+  classical
+  induction z using Finsupp.induction with
+  | zero => simpa using smallHomotopy_aux_diff_carried_aux_zero (starHull K A)
+  | @single_add u r z huz hr ih =>
+      rw [map_add]
+      apply smallHomotopy_aux_diff_carried_aux_add
+      · rw [show Finsupp.single u r = r • Finsupp.single u 1 by simp, map_smul]
+        apply smallHomotopy_aux_diff_carried_aux_smul
+        obtain ⟨σ, hσ, hrange⟩ := hcmp k u
+        refine ⟨1, fun _ ↦ 1, fun _ ↦ σ, ?_, ?_⟩
+        · simpa [hσ]
+        · intro i x hx
+          refine Set.mem_iUnion₂.mpr ⟨u.1, ?_, ?_⟩
+          · apply hz u
+            have hzu : z u = 0 := by
+              simpa [Finsupp.mem_support_iff] using huz
+            simpa [hzu] using hr
+          · change (x : Euc n) ∈ convexHull ℝ (u.1 : Set (Euc n))
+            rw [← Set.mem_preimage, ← hrange]
+            exact hx
+      · apply ih
+        intro v hv
+        apply hz v
+        simp only [Finsupp.add_apply]
+        by_cases h : v = u
+        · subst v
+          exact False.elim (huz (Finsupp.mem_support_iff.mpr hv))
+        · simpa [Finsupp.single_apply, h] using hv
+
 theorem smallHomotopy_aux_diff_carried {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
     (cmp : ∀ k, FaceModuleCat K k ⟶
@@ -1012,7 +1088,24 @@ theorem smallHomotopy_aux_diff_carried {n : ℕ} (K : Geometry.SimplicialComplex
     (hψ : StarCarriedMap K d hdd ψ) (k : ℕ) :
     SmallCarried K ((ψ ≫ cmpH).f k -
       (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f k) := by
-  sorry
+  classical
+  intro t
+  apply subsetCarriedChain_sub
+  · rw [HomologicalComplex.comp_f, cmpH_f]
+    apply smallHomotopy_aux_diff_carried_aux_cmp K cmp hcmp
+    exact hψ.1 k t
+  · obtain ⟨σ, a, hσ, ht, hrange⟩ :=
+      smallGen_eq_coverSmallGenerator (starCover K) t
+    rw [ht, ← CategoryTheory.comp_apply,
+      CoefficientSmallPath.coverSmallGenerator_comp_ι]
+    refine ⟨1, fun _ ↦ 1,
+      fun _ ↦ SingularSubdivision.singularSimplexOfContinuousMap
+        (TopCat.of K.space) k σ, ?_, ?_⟩
+    · simp
+    · intro i x hx
+      apply subset_starCarrier_hull K (smallRange _ t)
+      rw [← hrange]
+      simpa only [SingularSubdivision.continuousMapOfSingularSimplex_ofContinuousMap]
 -- END SEAT AREA
 
 /-- Precomposing a small-carried map with the small boundary keeps it carried:
