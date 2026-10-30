@@ -973,6 +973,60 @@ a carried boundary. In a rationally pointlike carrier, a carried 0-chain of
 augmentation zero bounds there (lift to the subspace with
 `AcyclicCarriers.subsetPush_lift`, use `H₀ ≅ ℚ` through the augmentation, and push
 the filling forward). Assemble generatorwise as in `smallHomotopy_aux_fill_succ`. -/
+theorem smallHomotopy_aux_fill_zero_aux_bounds
+    (X : Type) [TopologicalSpace X] (A : Set X)
+    (hA : ProjectivePlaneWedgeRationalHomology.RationallyPointlike A)
+    (hAn : A.Nonempty)
+    (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X 0)
+    (hz : AcyclicCarriers.SubsetCarriedChain X A z)
+    (haug : CoefficientH0.zeroChainAugmentation ℚ z = 0) :
+    ∃ w : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X 1,
+      AcyclicCarriers.SubsetCarriedChain X A w ∧
+        (CoefficientH0.SingularChains ℚ (TopCat.of X)).d 1 0 w = z := by
+  letI : Nonempty A := hAn.to_subtype
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of A)
+  obtain ⟨z', hz'⟩ := AcyclicCarriers.subsetPush_lift X A z hz
+  have haug' : CoefficientH0.zeroChainAugmentation ℚ z' = 0 := by
+    have hn := CoefficientH0.chainMap_comp_zeroChainAugmentation ℚ
+      (X := A) (Y := X) ⟨Subtype.val, continuous_subtype_val⟩
+    have he := ConcreteCategory.congr_hom hn z'
+    simp only [CategoryTheory.comp_apply] at he
+    exact he.symm.trans (hz' ▸ haug)
+  obtain ⟨e⟩ := hA.1
+  letI : FiniteDimensional ℚ (C.homology 0) :=
+    Module.Finite.equiv e.toLinearEquiv.symm
+  let ε : C.homology 0 ⟶ ModuleCat.of ℚ ℚ := CoefficientH0.h0Augmentation ℚ
+  have hεs : Function.Surjective ε.hom := by
+    intro a
+    let p : A := Classical.choice (inferInstance : Nonempty A)
+    refine ⟨(CoefficientH0.singularVertexH0Class ℚ p).hom a, ?_⟩
+    exact congrArg (fun q => q.hom a)
+      (CoefficientH0.singularVertexH0Class_comp_h0Augmentation ℚ p)
+  have hdim : Module.finrank ℚ (C.homology 0) =
+      Module.finrank ℚ (ModuleCat.of ℚ ℚ) := by
+    simpa using e.toLinearEquiv.finrank_eq
+  have hεi : Function.Injective ε.hom :=
+    (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).2 hεs
+  have hclass : CoefficientH0.zeroChainH0Class ℚ z' = 0 := by
+    apply hεi
+    have heq := ConcreteCategory.congr_hom
+      (CoefficientH0.zeroChainH0Class_comp_h0Augmentation ℚ (X := A)) z'
+    calc
+      ε.hom (CoefficientH0.zeroChainH0Class ℚ z') = 0 := by
+        simpa [ε, CategoryTheory.comp_apply, haug'] using heq
+      _ = ε.hom 0 := (ε.hom.map_zero).symm
+  let x : C.cycles 0 := CoefficientH0.zeroChainsToCycles ℚ z'
+  have hx : C.iCycles 0 x = z' := by
+    exact ConcreteCategory.congr_hom (CoefficientH0.zeroChainsToCycles_i ℚ (X := A)) z'
+  have hπ : C.homologyπ 0 x = 0 := by
+    exact hclass
+  obtain ⟨b, hb⟩ := AcyclicCarriers.faceCarriedCycle_bounds_aux_exists_boundary C 0 x hπ
+  refine ⟨(AcyclicCarriers.subsetPush X A).f 1 b,
+    AcyclicCarriers.subsetPush_carried X A b, ?_⟩
+  have hc := congrArg (fun q => q b) ((AcyclicCarriers.subsetPush X A).comm 1 0)
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at hc
+  erw [hc, hb, hx, hz']
+
 theorem smallHomotopy_aux_fill_zero {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
     (g : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X 0 ⟶
       (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X 0)
@@ -982,7 +1036,35 @@ theorem smallHomotopy_aux_fill_zero {n : ℕ} (K : Geometry.SimplicialComplex �
         (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X 1,
       SmallCarried K f ∧
         f ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d 1 0 = g := by
-  sorry
+  classical
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of K.space)
+  have hw : ∀ t : SmallSimplex (starCover K) 0, ∃ w : C.X 1,
+      AcyclicCarriers.SubsetCarriedChain K.space (starHull K (smallRange _ t)) w ∧
+        C.d 1 0 w = g (smallGen _ t 1) := by
+    intro t
+    obtain ⟨a, ha⟩ := smallSimplex_range_subset (starCover K) t
+    apply smallHomotopy_aux_fill_zero_aux_bounds K.space
+      (starHull K (smallRange _ t))
+      (starCarrier_pointlike K ha (Set.range_nonempty _))
+      (Set.range_nonempty _ |>.mono (subset_starCarrier_hull K (smallRange _ t)))
+      (g (smallGen _ t 1)) (hg t)
+    have h := ConcreteCategory.congr_hom haug (smallGen _ t 1)
+    simpa [CategoryTheory.comp_apply] using h
+  choose w hwc hwd using hw
+  let f : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X 0 ⟶ C.X 1 :=
+    Limits.Sigma.desc (fun t => CoefficientSmallComparison.elementHom ℚ (w t))
+  have hf (t : SmallSimplex (starCover K) 0) : f (smallGen _ t 1) = w t := by
+    change (smallGen _ t ≫ f) 1 = _
+    rw [show smallGen (starCover K) t ≫ f =
+        CoefficientSmallComparison.elementHom ℚ (w t) from Limits.Sigma.ι_desc _ t]
+    exact CoefficientSmallComparison.elementHom_one ℚ (w t)
+  refine ⟨f, fun t => by rw [hf]; exact hwc t, ?_⟩
+  apply Limits.Sigma.hom_ext
+  intro t
+  apply ModuleCat.hom_ext
+  apply LinearMap.ext_ring
+  change C.d 1 0 (f (smallGen _ t 1)) = g (smallGen _ t 1)
+  rw [hf, hwd]
 
 /-- The two maps have the same augmentation in degree zero: on a small point `t`,
 `inc (smallGen t)` has augmentation `1`, and `cmp (ψ (smallGen t))` has augmentation
