@@ -815,7 +815,11 @@ theorem smallGen_eq_coverSmallGenerator {X α : Type} [TopologicalSpace X]
     ∃ (σ : C(stdSimplex ℝ (Fin (k + 1)), X)) (a : α) (hσ : Set.range σ ⊆ U a),
       smallGen U t = CoefficientSmallPath.coverSmallGenerator ℚ U σ a hσ ∧
         Set.range σ = smallRange U t := by
-  sorry
+  obtain ⟨a, ha⟩ := smallSimplex_range_subset U t
+  let σ := SingularSubdivision.continuousMapOfSingularSimplex k t.1
+  refine ⟨σ, a, ha, ?_, rfl⟩
+  dsimp [smallGen, CoefficientSmallPath.coverSmallGenerator, σ]
+  congr 1
 -- END SEAT AREA
 
 /-- The properties of `ψ` from `smallToFace_exists`, in terms of `smallGen`. -/
