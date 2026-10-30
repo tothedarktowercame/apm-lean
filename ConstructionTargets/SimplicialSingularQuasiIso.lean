@@ -2073,7 +2073,31 @@ theorem affineCmp_homologyMap_injective {n : ℕ}
         (ChainComplex.ofHom _ _ hdd _ _
           (fun j => (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d_comp_d
             (j + 2) (j + 1) j) (affineCmp o K) (affineCmp_comm o K d hd)) k).hom := by
-  sorry
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of K.space)
+  let q := ChainComplex.ofHom _ _ hdd _ _
+    (fun j => C.d_comp_d (j + 2) (j + 1) j) (affineCmp o K) (affineCmp_comm o K d hd)
+  let e : ChainComplex.of _ (fun j ↦ C.d (j + 1) j)
+      (fun j ↦ C.d_comp_d (j + 2) (j + 1) j) ⟶ C :=
+    { f := fun _ ↦ 𝟙 _
+      comm' := by
+        rintro i j (rfl : j + 1 = i)
+        simp [ChainComplex.of_d] }
+  have hf : ∀ j, (q ≫ e).f j = affineCmp o K j := fun j => by
+    simp [q, e]
+  have hcmp : IsAffineComparison K (affineCmp o K) := fun j s =>
+    ⟨faceSimplex o s, affineCmp_single o K j s, faceSimplex_range o s⟩
+  letI (i : ℕ) : IsIso (e.f i) := by
+    dsimp [e]
+    infer_instance
+  letI : IsIso e := HomologicalComplex.Hom.isIso_of_components e
+  have he : Function.Bijective (HomologicalComplex.homologyMap e k).hom :=
+    ConcreteCategory.bijective_of_isIso _
+  have hi := package_homology_injective o K hK d hd hdd (affineCmp o K) hcmp (q ≫ e) hf k
+  rw [HomologicalComplex.homologyMap_comp] at hi
+  intro a b hab
+  apply hi
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply]
+  exact congrArg _ hab
 
 /-- Surjective half for the concrete affine comparison, in `ChainComplex.ofHom`
 form. As for the injective half, apply `package_homology_surjective` to
@@ -2089,7 +2113,31 @@ theorem affineCmp_homologyMap_surjective {n : ℕ}
         (ChainComplex.ofHom _ _ hdd _ _
           (fun j => (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d_comp_d
             (j + 2) (j + 1) j) (affineCmp o K) (affineCmp_comm o K d hd)) k).hom := by
-  sorry
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of K.space)
+  let q := ChainComplex.ofHom _ _ hdd _ _
+    (fun j => C.d_comp_d (j + 2) (j + 1) j) (affineCmp o K) (affineCmp_comm o K d hd)
+  let e : ChainComplex.of _ (fun j ↦ C.d (j + 1) j)
+      (fun j ↦ C.d_comp_d (j + 2) (j + 1) j) ⟶ C :=
+    { f := fun _ ↦ 𝟙 _
+      comm' := by
+        rintro i j (rfl : j + 1 = i)
+        simp [ChainComplex.of_d] }
+  have hf : ∀ j, (q ≫ e).f j = affineCmp o K j := fun j => by
+    simp [q, e]
+  have hcmp : IsAffineComparison K (affineCmp o K) := fun j s =>
+    ⟨faceSimplex o s, affineCmp_single o K j s, faceSimplex_range o s⟩
+  letI (i : ℕ) : IsIso (e.f i) := by
+    dsimp [e]
+    infer_instance
+  letI : IsIso e := HomologicalComplex.Hom.isIso_of_components e
+  have he : Function.Bijective (HomologicalComplex.homologyMap e k).hom :=
+    ConcreteCategory.bijective_of_isIso _
+  have hs := package_homology_surjective o K hK d hd hdd (affineCmp o K) hcmp (q ≫ e) hf k
+  rw [HomologicalComplex.homologyMap_comp] at hs
+  intro y
+  obtain ⟨x, hx⟩ := hs ((HomologicalComplex.homologyMap e k).hom y)
+  refine ⟨x, he.1 ?_⟩
+  simpa only [ModuleCat.hom_comp, LinearMap.comp_apply] using hx
 
 /-- The concrete affine comparison is the reference quasi-isomorphism. -/
 theorem affine_reference_quasiIso_exists {n : ℕ}
