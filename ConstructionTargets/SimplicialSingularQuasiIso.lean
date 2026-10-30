@@ -335,7 +335,84 @@ theorem coneSupported_zero_bounds {n : ℕ} (o : LinearOrder (Euc n))
     (hcone : ∀ s ∈ Λ, insert a s ∈ Λ) (z : FaceModule K 0)
     (hz : ∀ u, z u ≠ 0 → u.1 ∈ Λ) (hsum : (z.sum fun _ c ↦ c) = 0) :
     ∃ w : FaceModule K 1, (∀ u, w u ≠ 0 → u.1 ∈ Λ) ∧ d 0 w = z := by
-  sorry
+  classical
+  by_cases hz0 : z = 0
+  · subst z
+    exact ⟨0, by simp⟩
+  obtain ⟨u, hu⟩ := Finsupp.ne_iff.mp hz0
+  have hua : u.1 ∈ Λ := hz u hu
+  have haΛ : ({a} : Finset (Euc n)) ∈ Λ := by
+    apply hdown (insert a u.1) (hcone u.1 hua) {a}
+    · exact Finset.singleton_subset_iff.mpr (Finset.mem_insert_self _ _)
+    · exact Finset.singleton_nonempty _
+  have haK : ({a} : Finset (Euc n)) ∈ K.faces := hΛ _ haΛ
+  let A : FaceIndex K 0 := ⟨{a}, haK, by simp⟩
+  let x := z - Finsupp.single A (z A)
+  let w := SimplicialChainMaps.subdivisionCone o K a 0 x
+  have hadm : SimplicialChainMaps.ConeAdmissible K a x := by
+    intro v hv
+    have hva : a ∉ v.1 := by
+      by_contra h
+      have hvA : v = A := by
+        apply Subtype.ext
+        obtain ⟨b, hb⟩ := Finset.card_eq_one.mp v.2.2
+        change v.1 = {a}
+        have hab : a = b := by simpa [hb] using h
+        rw [hb, hab]
+      subst v
+      exact hv (by simp [x])
+    have hvz : z v ≠ 0 := by
+      have hAv : A ≠ v := by
+        intro hAv
+        apply hva
+        rw [← hAv]
+        exact Finset.mem_singleton_self a
+      simpa [x, Finsupp.single_apply, hAv] using hv
+    exact ⟨hva, hΛ _ (hcone v.1 (hz v hvz))⟩
+  refine ⟨w, ?_, ?_⟩
+  · intro U hU
+    have haU : a ∈ U.1 := by
+      by_contra haU
+      exact hU (SimplicialChainMaps.subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_not_mem
+          o K a x U haU)
+    have herase_ne : (U.1.erase a).Nonempty := by
+      apply Finset.card_ne_zero.mp
+      rw [Finset.card_erase_of_mem haU, U.2.2]
+      omega
+    have herase_face : U.1.erase a ∈ K.faces :=
+      K.down_closed U.2.1 (Finset.erase_subset a U.1) herase_ne
+    let v : FaceIndex K 0 :=
+      ⟨U.1.erase a, herase_face, by
+        rw [Finset.card_erase_of_mem haU, U.2.2]⟩
+    have hvx : x v ≠ 0 := by
+      intro hv
+      apply hU
+      rw [SimplicialChainMaps.subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_mem
+          o K a x U v haU rfl, hv, mul_zero]
+    have hva : a ∉ v.1 := by simp [v]
+    have hvz : z v ≠ 0 := by
+      have hAv : A ≠ v := by
+        intro hAv
+        apply hva
+        rw [← hAv]
+        exact Finset.mem_singleton_self a
+      simpa [x, Finsupp.single_apply, hAv] using hvx
+    simpa [v, Finset.insert_erase haU] using hcone v.1 (hz v hvz)
+  · have hxsum : x.sum (fun _ c ↦ c) = -z A := by
+      rw [show x = z - Finsupp.single A (z A) from rfl,
+        Finsupp.sum_sub_index (by intros; ring)]
+      simp [hsum]
+    have hA : A = (⟨{a}, haK, by simp⟩ : FaceIndex K 0) := Subtype.ext rfl
+    have hb := SimplicialChainMaps.subdivisionChainMap_commutes_aux_cone_boundary_zero
+      o K d hd a haK x hadm
+    rw [hxsum, ← hA] at hb
+    have hrhs : x - (-z A) • Finsupp.single A 1 = z := by
+      ext v
+      by_cases hv : v = A
+      · subst v
+        simp [x]
+      · simp [x, Finsupp.single_apply, hv]
+    exact hb.trans hrhs
 
 /-- The acyclic-carrier chain map from small chains to ordered faces. Build the
 components by recursion on degree, as in `AcyclicCarriers.carried_chainHomotopy_exists`
