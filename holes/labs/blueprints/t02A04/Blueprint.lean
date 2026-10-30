@@ -2555,7 +2555,22 @@ lemma apm_t02A04_solidTorus_prism_model_aux_injective_aux_angle (j j' : Fin 3) (
     (h : Circle.exp (2 * Real.pi * ((j : ℝ) + s) / 3) =
       Circle.exp (2 * Real.pi * ((j' : ℝ) + s') / 3)) :
     (j = j' ∧ s = s') ∨ (j' = j + 1 ∧ s = 1 ∧ s' = 0) ∨ (j = j' + 1 ∧ s = 0 ∧ s' = 1) := by
-  sorry
+  set_option maxHeartbeats 2000000 in
+    obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h
+    have heq : (j : ℝ) + s = (j' : ℝ) + s' + (m : ℝ) * 3 := by
+      have hp := Real.pi_pos
+      push_cast at hm
+      nlinarith
+    fin_cases j <;> fin_cases j'
+    all_goals
+      norm_num at heq
+      have hmlo : (-1 : ℤ) ≤ m := by
+        exact_mod_cast (show (-1 : ℝ) ≤ (m : ℝ) by linarith)
+      have hmhi : m ≤ (1 : ℤ) := by
+        exact_mod_cast (show (m : ℝ) ≤ (1 : ℝ) by linarith)
+      interval_cases m <;> norm_num at heq
+    all_goals
+      simp <;> (try constructor) <;> linarith
 
 /-- All weight on circle column `j + 1`: then column `j` is empty (mass one), so the point
 is supported on `prismIdx (d m) (j + 1)`, all in the bottom of prism `(i, j + 1, 2)`
