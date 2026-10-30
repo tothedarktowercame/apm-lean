@@ -3278,7 +3278,22 @@ lemma apm_t02A04_quotientComplex_model_aux_idx :
 lemma apm_t02A04_quotientComplex_model_aux_cover (z : EuclideanSpace ℝ (Fin 22))
     (hz : z ∈ apm_t02A04_gluedComplex.space) :
     (∃ q, z ∈ apm_t02A04_gluedPrismHull q) ∨ ∃ i, z ∈ apm_t02A04_gluedConeHull i := by
-  sorry
+  classical
+  rw [Geometry.SimplicialComplex.mem_space_iff] at hz
+  obtain ⟨S, hS, hz⟩ := hz
+  have hSb : S ∈ ConstructionTargets.RealProjectivePlaneTriangulation.basisFaces 22
+      (Finset.univ.image apm_t02A04_gluedPrismFacet ∪
+        Finset.univ.image apm_t02A04_gluedConeFacet) := hS.1
+  obtain ⟨f, hf, hSf⟩ := hSb
+  rcases Finset.mem_union.mp hf with hf | hf
+  · obtain ⟨q, -, rfl⟩ := Finset.mem_image.mp hf
+    left
+    refine ⟨q, ?_⟩
+    exact convexHull_mono (by exact_mod_cast hSf) hz
+  · obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hf
+    right
+    refine ⟨i, ?_⟩
+    exact convexHull_mono (by exact_mod_cast hSf) hz
 -- END SEAT AREA
 
 /-- Restriction to the prism coordinates: `projS` is linear and sends `basisVertex 22
