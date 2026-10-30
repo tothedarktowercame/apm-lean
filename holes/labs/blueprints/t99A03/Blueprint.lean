@@ -127,7 +127,53 @@ theorem t99A03_aux_edgeLoop :
     ∃ γ : C(Circle, T99A03.FourProjectivePlanesConnectedSum),
       ∀ t : Set.Icc (0 : ℝ) 1,
         γ (Circle.exp (2 * Real.pi * t.1)) = surfaceQuotient false 4 (edgePoint 8 0 t) := by
-  sorry
+  let e : Set.Icc (0 : ℝ) 1 → T99A03.FourProjectivePlanesConnectedSum :=
+    fun t ↦ surfaceQuotient false 4 (edgePoint 8 0 t)
+  have he : Continuous e := by
+    apply (continuous_surfaceQuotient false 4).comp
+    apply Continuous.subtype_mk
+    fun_prop
+  have hend : e ⟨0, by norm_num⟩ = e ⟨1, by norm_num⟩ := by
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    simp only [SurfaceRel, Bool.false_eq_true, ↓reduceIte]
+    refine ⟨0, by norm_num, ⟨(0 : ℝ), by norm_num⟩, ?_, ?_⟩
+    · ext
+      simp [e, edgePoint]
+    · ext
+      simp [e, edgePoint]
+  let f : ℝ → T99A03.FourProjectivePlanesConnectedSum :=
+    fun x ↦ e (Set.projIcc 0 1 (by norm_num) x)
+  have hf : Continuous f := he.comp continuous_projIcc
+  let g : C(AddCircle (1 : ℝ), T99A03.FourProjectivePlanesConnectedSum) :=
+    ⟨AddCircle.liftIco 1 0 f,
+      AddCircle.liftIco_zero_continuous
+        (by simpa [f] using hend) hf.continuousOn⟩
+  let γ : C(Circle, T99A03.FourProjectivePlanesConnectedSum) :=
+    g.comp ⟨(AddCircle.homeomorphCircle one_ne_zero).symm,
+      (AddCircle.homeomorphCircle one_ne_zero).symm.continuous⟩
+  refine ⟨γ, ?_⟩
+  intro t
+  change g ((AddCircle.homeomorphCircle one_ne_zero).symm
+    (Circle.exp (2 * Real.pi * t.1))) = _
+  have hcircle : AddCircle.homeomorphCircle one_ne_zero
+      (t.1 : AddCircle (1 : ℝ)) = Circle.exp (2 * Real.pi * t.1) := by
+    rw [AddCircle.homeomorphCircle_apply, AddCircle.toCircle_apply_mk]
+    congr 1
+    ring
+  rw [← hcircle, Homeomorph.symm_apply_apply]
+  by_cases ht : t.1 = 1
+  · have ht' : t = ⟨1, by norm_num⟩ := Subtype.ext ht
+    subst t
+    change AddCircle.liftIco 1 0 f ((1 : ℝ) : AddCircle (1 : ℝ)) = e ⟨1, by norm_num⟩
+    rw [show ((1 : ℝ) : AddCircle (1 : ℝ)) = 0 by simp]
+    change AddCircle.liftIco 1 0 f ((0 : ℝ) : AddCircle (1 : ℝ)) = _
+    rw [AddCircle.liftIco_zero_coe_apply (p := (1 : ℝ)) (x := (0 : ℝ)) (by norm_num)]
+    simpa [f] using hend
+  · change AddCircle.liftIco 1 0 f (t.1 : AddCircle (1 : ℝ)) = e t
+    rw [AddCircle.liftIco_zero_coe_apply]
+    · simp [f, e, t.2]
+    · exact ⟨t.2.1, lt_of_le_of_ne t.2.2 ht⟩
 
 /-- Every point of the circle is `Circle.exp (2πt)` for some `t ∈ [0, 1]`: take
 `t = toIcoMod` of the argument divided by `2π` (`Circle.periodic_exp`,
