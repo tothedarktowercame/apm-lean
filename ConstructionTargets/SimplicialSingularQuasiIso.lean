@@ -1333,7 +1333,31 @@ theorem singCoeff_inclusion {X α : Type} [TopologicalSpace X] (U : α → Set X
     (t : SmallSimplex U k) (q : (CoefficientSmallPath.coverSmallChains ℚ U).X k) :
     singCoeff t.1 ((CoefficientSmallPath.coverSmallInclusion ℚ U).f k q) =
       smallCoeff U t q := by
-  sorry
+  classical
+  have h : (CoefficientSmallPath.coverSmallInclusion ℚ U).f k ≫ singCoeff t.1 =
+      smallCoeff U t := by
+    apply Limits.Sigma.hom_ext
+    intro t'
+    dsimp [CoefficientSmallPath.coverSmallInclusion,
+      CoefficientSmallPath.coverSmallChains, CoefficientH0.SingularChains,
+      AlgebraicTopology.singularChainComplexFunctor,
+      AlgebraicTopology.SSet.singularChainComplexFunctor, singCoeff, smallCoeff,
+      sigmaCoeff]
+    rw [← Category.assoc, Limits.Sigma.ι_comp_map', Category.id_comp,
+      Limits.Sigma.ι_desc, Limits.Sigma.ι_desc]
+    by_cases ht : t' = t
+    · subst t'
+      simp
+    · have hv : (t' : SingularSubdivision.SingularSimplex (TopCat.of X) k) ≠ t.1 := by
+        intro he
+        apply ht
+        exact Subtype.ext he
+      have hv' : (SingularSubdivision.coverSmallSSet U).ι.app
+          (Opposite.op (SimplexCategory.mk k)) t' ≠ t.1 := by
+        exact hv
+      rw [if_neg hv']
+      split <;> simp_all
+  exact ConcreteCategory.congr_hom h q
 
 /-- A chain carried by `A` has nonzero coefficients only at simplices with range in
 `A`: in the carried presentation `c = ∑ i, gen (σ i) (a i)`, the coefficient at `σ`
