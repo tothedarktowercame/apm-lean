@@ -2781,6 +2781,159 @@ theorem apm_t02A04_solidTorus_prism_model
       exact (apm_t02A04_solidTorus_prism_model_aux_edge_map i t ht0 ht1).symm
     rw [hsymm]
 
+/-! ### The glued complex (claude-14, 2026-10-30)
+Vertices `Fin 22`: prism vertex `k` is `k.castSucc`, the disk centre is `Fin.last 21`, and
+disk boundary vertex `coneIdx i` is the curve vertex `curveIdx i`. The facets are the 54
+prism facets and the 6 cone facets. A point of a prism hull goes to the solid torus by
+`prismPoint`, a point of a cone hull to the disk by `conePoint`; the two kinds of hull meet
+only along the curve edges, where `Glue.boundary` identifies the images. -/
+
+def apm_t02A04_gluedIdxD : Fin 7 → Fin 22 :=
+  Fin.cases (Fin.last 21) (fun i : Fin 6 => (apm_t02A04_curveIdx i).castSucc)
+
+def apm_t02A04_gluedPrismFacet (q : Fin 6 × Fin 3 × Fin 3) : Finset (Fin 22) :=
+  (apm_t02A04_prismFacet q).map Fin.castSuccEmb
+
+def apm_t02A04_gluedConeFacet (i : Fin 6) : Finset (Fin 22) :=
+  (apm_t02A04_coneFacet i).image apm_t02A04_gluedIdxD
+
+noncomputable def apm_t02A04_gluedComplex : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin 22)) :=
+  ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex 22
+    (Finset.univ.image apm_t02A04_gluedPrismFacet ∪ Finset.univ.image apm_t02A04_gluedConeFacet)
+
+def apm_t02A04_gluedPrismHull (q : Fin 6 × Fin 3 × Fin 3) : Set (EuclideanSpace ℝ (Fin 22)) :=
+  convexHull ℝ ↑((apm_t02A04_gluedPrismFacet q).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22))
+
+def apm_t02A04_gluedConeHull (i : Fin 6) : Set (EuclideanSpace ℝ (Fin 22)) :=
+  convexHull ℝ ↑((apm_t02A04_gluedConeFacet i).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22))
+
+noncomputable def apm_t02A04_projS (z : EuclideanSpace ℝ (Fin 22)) : EuclideanSpace ℝ (Fin 21) :=
+  WithLp.toLp 2 fun k => z k.castSucc
+
+noncomputable def apm_t02A04_projD (z : EuclideanSpace ℝ (Fin 22)) : EuclideanSpace ℝ (Fin 7) :=
+  WithLp.toLp 2 fun d => z (apm_t02A04_gluedIdxD d)
+
+noncomputable def apm_t02A04_liftS (y : EuclideanSpace ℝ (Fin 21)) : EuclideanSpace ℝ (Fin 22) :=
+  WithLp.toLp 2 fun k => if h : k = Fin.last 21 then 0 else y (k.castPred h)
+
+noncomputable def apm_t02A04_liftD (x : EuclideanSpace ℝ (Fin 7)) : EuclideanSpace ℝ (Fin 22) :=
+  ∑ d, x d • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_gluedIdxD d)
+
+noncomputable def apm_t02A04_gluedMap (z : apm_t02A04_gluedComplex.space) : apm_t02a04_X := by
+  classical
+  exact if h : ∃ q, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q then
+      apm_t02a04_solidInclusion (apm_t02A04_prismPoint (Classical.choose h) (apm_t02A04_projS z))
+    else apm_t02a04_diskInclusion (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint
+      (if h' : ∃ i, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedConeHull i then Classical.choose h' else 0)
+      (apm_t02A04_projD z)))
+
+/-- `gluedIdxD` on boundary vertices (`fin_cases i <;> rfl`), and it is injective
+(`decide`). -/
+lemma apm_t02A04_quotientComplex_model_aux_idx :
+    (∀ i : Fin 6, apm_t02A04_gluedIdxD (apm_t02A04_coneIdx i) = (apm_t02A04_curveIdx i).castSucc) ∧
+      Function.Injective apm_t02A04_gluedIdxD := by
+  sorry
+
+/-- Every point of the glued complex lies in a prism hull or a cone hull (as
+`_prism_model_aux_cover`). -/
+lemma apm_t02A04_quotientComplex_model_aux_cover (z : EuclideanSpace ℝ (Fin 22))
+    (hz : z ∈ apm_t02A04_gluedComplex.space) :
+    (∃ q, z ∈ apm_t02A04_gluedPrismHull q) ∨ ∃ i, z ∈ apm_t02A04_gluedConeHull i := by
+  sorry
+
+/-- Restriction to the prism coordinates: `projS` is linear and sends `basisVertex 22
+k.castSucc` to `basisVertex 21 k` (`convexHull_min`, as `_prism_model_aux_proj`); and
+`liftS` is a right inverse that maps prism hulls into glued prism hulls. -/
+lemma apm_t02A04_quotientComplex_model_aux_prism_coords (q : Fin 6 × Fin 3 × Fin 3) :
+    (∀ z ∈ apm_t02A04_gluedPrismHull q, apm_t02A04_projS z ∈ apm_t02A04_prismHull q ∧
+        apm_t02A04_liftS (apm_t02A04_projS z) = z) ∧
+      ∀ y ∈ apm_t02A04_prismHull q, apm_t02A04_liftS y ∈ apm_t02A04_gluedPrismHull q ∧
+        apm_t02A04_projS (apm_t02A04_liftS y) = y := by
+  sorry
+
+/-- The same for the cone coordinates, with `projD`, `liftD` and `gluedIdxD` injective
+(`_aux_idx`). -/
+lemma apm_t02A04_quotientComplex_model_aux_cone_coords (i : Fin 6) :
+    (∀ z ∈ apm_t02A04_gluedConeHull i, apm_t02A04_projD z ∈ apm_t02A04_coneHull i ∧
+        apm_t02A04_liftD (apm_t02A04_projD z) = z) ∧
+      ∀ x ∈ apm_t02A04_coneHull i, apm_t02A04_liftD x ∈ apm_t02A04_gluedConeHull i ∧
+        apm_t02A04_projD (apm_t02A04_liftD x) = x := by
+  sorry
+
+/-- A prism hull and a cone hull meet only on the curve edge `i`: the only vertices of
+`gluedConeFacet i` that are prism vertices are `(curveIdx i).castSucc` and
+`(curveIdx (i + 1)).castSucc` (the centre is `Fin.last 21`); points of both hulls vanish
+off both facets and have mass one. -/
+lemma apm_t02A04_quotientComplex_model_aux_overlap (q : Fin 6 × Fin 3 × Fin 3) (i : Fin 6)
+    (z : EuclideanSpace ℝ (Fin 22)) (hq : z ∈ apm_t02A04_gluedPrismHull q) (hi : z ∈ apm_t02A04_gluedConeHull i) :
+    ∃ t : ℝ, 0 ≤ t ∧ t ≤ 1 ∧
+      z = (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc := by
+  sorry
+
+/-- On curve edge `i` the two formulas give the same point of `X`: the prism side is
+`(arcPoint i t, arcPoint i t ^ 2)` (`_prism_model_aux_edge_map` with `_aux_map_eq`), the
+cone side is `arcPoint i t` (`_cone_model_aux_edge_map`, `_cone_model_aux_agree`), and
+`apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve` identifies them. -/
+lemma apm_t02A04_quotientComplex_model_aux_edge_eq (q : Fin 6 × Fin 3 × Fin 3) (i i' : Fin 6)
+    (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
+    (hq : (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc ∈ apm_t02A04_gluedPrismHull q)
+    (hi' : (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc ∈ apm_t02A04_gluedConeHull i') :
+    apm_t02a04_solidInclusion (apm_t02A04_prismPoint q (apm_t02A04_projS
+        ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+          t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc))) =
+      apm_t02a04_diskInclusion (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i' (apm_t02A04_projD
+        ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+          t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc)))) := by
+  sorry
+
+/-- Points of `X`: `solidInclusion` and `diskInclusion` are injective, and they meet only
+at `(z, z ^ 2)` against `z` for `z` on the circle. Use `apm_t02a04_gluedDesc_respects`
+with invariants of the relation (for instance `Sum.elim` of the identity and
+`fun d ↦ (d, d ^ 2)` on the circle, read in `SolidTorus ⊕ Disk`). -/
+lemma apm_t02A04_quotientComplex_model_aux_inclusions :
+    Function.Injective apm_t02a04_solidInclusion ∧
+      Function.Injective apm_t02a04_diskInclusion ∧
+      ∀ s d, apm_t02a04_solidInclusion s = apm_t02a04_diskInclusion d →
+        ∃ c : Circle, (d : ℂ) = c ∧ s = (⟨(c : ℂ), by simpa using c.property.le⟩, c ^ 2) := by
+  sorry
+
+/-- The centre: `basisVertex 22 (Fin.last 21)` is a vertex of the glued complex, lies in no
+prism hull (its last coordinate is `1`, prism hull points have `0` there), lies in cone
+hull `0`, and goes to `diskInclusion 0`. -/
+lemma apm_t02A04_quotientComplex_model_aux_centre :
+    ∃ hv : ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (Fin.last 21) ∈ apm_t02A04_gluedComplex.space,
+      {ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (Fin.last 21)} ∈ apm_t02A04_gluedComplex.faces ∧
+      apm_t02A04_gluedMap ⟨_, hv⟩ =
+        apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩ := by
+  sorry
+
+/-- Pasting over the 60 closed hulls (as `_prism_model_aux_continuous`): on a prism hull
+`gluedMap` is `solidInclusion ∘ prismPoint q ∘ projS` (`_prism_model_aux_agree`,
+`_prism_model_aux_continuous_aux_piece`); on a cone hull it is
+`diskInclusion ∘ diskClamp ∘ conePoint i ∘ projD`, using `_aux_overlap` and `_aux_edge_eq`
+where the cone hull meets a prism hull. -/
+lemma apm_t02A04_quotientComplex_model_aux_continuous : Continuous apm_t02A04_gluedMap := by
+  sorry
+
+/-- Injectivity: two prism points by `_prism_model_aux_injective` and `_aux_prism_coords`;
+two cone points by `_cone_model_aux_injective` and `_aux_cone_coords`; a prism point and a
+cone point with the same image map to `(c, c ^ 2)` and `c` (`_aux_inclusions`), so both are
+the curve point over `c` (`_cone_model_aux_surjective_aux_circle`, the two `_edge_map`s and
+the two injectivities), equal in the glued complex. -/
+lemma apm_t02A04_quotientComplex_model_aux_injective :
+    Function.Injective apm_t02A04_gluedMap := by
+  sorry
+
+/-- Surjectivity: points of `X` are `solidInclusion s` or `diskInclusion d`
+(`Quotient.ind`); lift a preimage under `prismMap` (`_prism_model_aux_surjective`) or
+`coneMap` with `_aux_prism_coords` or `_aux_cone_coords`. -/
+lemma apm_t02A04_quotientComplex_model_aux_surjective :
+    Function.Surjective apm_t02A04_gluedMap := by
+  sorry
+
 /-- Glue the two finite complexes along the six distinct curve vertices.
 The resulting coordinate realization has the required finite face set and
 marked vertex, and carries the canonical piecewise-affine map to `X`. -/
@@ -2794,7 +2947,12 @@ theorem apm_t02A04_quotientComplex_model
       M.toQuotient M.v =
         apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩ ∧
       Continuous M.toQuotient ∧ Function.Bijective M.toQuotient := by
-  sorry
+  obtain ⟨hv, hface, hmark⟩ := apm_t02A04_quotientComplex_model_aux_centre
+  exact ⟨⟨22, apm_t02A04_gluedComplex, ⟨_, hv⟩, apm_t02A04_gluedMap⟩,
+    ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_faces_finite 22 _,
+    hface, hmark, apm_t02A04_quotientComplex_model_aux_continuous,
+    apm_t02A04_quotientComplex_model_aux_injective,
+    apm_t02A04_quotientComplex_model_aux_surjective⟩
 
 /-- Compatible finite solid-torus/cell triangulation, assembled from the
 independent coordinate leaves above. -/
