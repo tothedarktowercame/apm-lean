@@ -2488,7 +2488,72 @@ lemma apm_t02A04_solidTorus_prism_model_aux_top (i : Fin 6) (j k : Fin 3)
     (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull (i, j, k))
     (h1 : apm_t02A04_circleWeight j y = 1) :
     y ∈ apm_t02A04_prismHull (i, j + 1, 2) ∧ apm_t02A04_circleWeight (j + 1) y = 0 := by
-  sorry
+  classical
+  have hnn : ∀ a, 0 ≤ y a := by
+    intro a
+    let L : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ :=
+      ((PiLp.proj 2 (fun _ : Fin 21 ↦ ℝ) a).toLinearMap :
+        EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ)
+    have hsub : apm_t02A04_prismHull (i, j, k) ⊆ {z | 0 ≤ L z} := by
+      apply convexHull_min
+      · intro z hz
+        obtain ⟨b, hb, rfl⟩ := Finset.mem_image.1 hz
+        change 0 ≤ ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 b a
+        by_cases hab : a = b <;>
+          simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, hab]
+      · intro x hx z hz p q hp hq hpq
+        change 0 ≤ L (p • x + q • z)
+        rw [map_add, map_smul, map_smul]
+        exact add_nonneg (smul_nonneg hp hx) (smul_nonneg hq hz)
+    exact hsub hy
+  obtain ⟨hmass, hnext⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass (i, j, k) y hy
+  constructor
+  · apply apm_t02A04_solidTorus_prism_model_aux_mem_hull
+      (apm_t02A04_prismFacet (i, j + 1, 2)) y hnn hmass
+    intro a ha
+    by_cases haold : a ∈ apm_t02A04_prismFacet (i, j, k)
+    · simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+          Finset.mem_filter, Finset.mem_univ, true_and] at haold
+      rcases haold with ⟨m, hm, rfl⟩ | ⟨m, hm, rfl⟩
+      · let S : Finset (Fin 21) := Finset.univ.image
+            (fun d : Fin 7 ↦ apm_t02A04_prismIdx d (j + 1))
+        have hSinj : Function.Injective
+            (fun d : Fin 7 ↦ apm_t02A04_prismIdx d (j + 1)) := by
+          intro d e hde
+          apply Fin.ext
+          have := congrArg Fin.val hde
+          simp [apm_t02A04_prismIdx] at this
+          omega
+        have hSsum : ∑ a ∈ S, y a = 1 := by
+          rw [Finset.sum_image]
+          · simpa [S, apm_t02A04_circleWeight] using h1
+          · exact hSinj.injOn
+        have hnotS : apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j ∉ S := by
+          simp only [S, Finset.mem_image, Finset.mem_univ, true_and]
+          rintro ⟨d, hd⟩
+          have hd' := congrArg Fin.val hd
+          simp [apm_t02A04_prismIdx] at hd'
+          have hj : (j : Fin 3) ≠ j + 1 := by omega
+          exact hj (Fin.ext (by omega))
+        have hle : ∑ a ∈ insert
+              (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j) S, y a ≤
+              ∑ a, y a := by
+          apply Finset.sum_le_sum_of_subset_of_nonneg
+          · exact Finset.subset_univ _
+          · intro a _ _
+            exact hnn a
+        rw [Finset.sum_insert hnotS, hSsum, hmass] at hle
+        linarith [hnn (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j)]
+      · exfalso
+        apply ha
+        simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+          Finset.mem_filter, Finset.mem_univ, true_and]
+        left
+        exact ⟨m, by omega, rfl⟩
+    · exact apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero
+        (i, j, k) y hy a haold
+  · exact hnext
 
 /-- Change of cone facet. If the disk weights also lie in facet `i'`, the support of `y`
 lies in rows of `coneFacet i ∩ coneFacet i'` (`_cone_model_aux_injective_aux_facet_aux_bary`
