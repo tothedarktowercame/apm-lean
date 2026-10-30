@@ -855,7 +855,9 @@ theorem subsetCarriedChain_sub (X : Type) [TopologicalSpace X] (A : Set X) {k : 
     (hx : AcyclicCarriers.SubsetCarriedChain X A x)
     (hy : AcyclicCarriers.SubsetCarriedChain X A y) :
     AcyclicCarriers.SubsetCarriedChain X A (x - y) := by
-  sorry
+  exact
+    SimplicialChainMaps.vertexChainMap_affineComparison_square_aux_carrier_homotopy_aux_sub
+      X A x y hx hy
 
 /-- The difference `ψ ≫ cmpH - inc` is small-carried. `inc (smallGen t)` is the
 singular generator of `t` (`coverSmallGeneratorOfMem_comp_ι` in the `ℚ` form, or
