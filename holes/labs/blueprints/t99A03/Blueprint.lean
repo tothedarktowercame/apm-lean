@@ -219,7 +219,90 @@ theorem t99A03_aux_circleMap :
       ∀ t : Set.Icc (0 : ℝ) 1,
         h (surfaceQuotient false 4 (edgePoint 8 0 t)) =
           Circle.exp (2 * Real.pi * t.1 + Real.pi) := by
-  sorry
+  obtain ⟨φ, hφ⟩ := t99A03_aux_boundaryAngle
+  let ι : Circle → ConstructionTargets.Surfaces.Disk := fun z ↦
+    ⟨(z : ℂ), by
+      rw [Metric.mem_closedBall, dist_zero_right]
+      have hz : ‖(z : ℂ)‖ = 1 := by
+        simpa [Submonoid.unitSphere] using z.2
+      exact hz.le⟩
+  have hιc : Continuous ι := by
+    apply Continuous.subtype_mk
+    fun_prop
+  have hιi : Function.Injective ι := by
+    intro z w h
+    exact Subtype.ext (congr_arg (fun q : ConstructionTargets.Surfaces.Disk ↦ (q : ℂ)) h)
+  have hι : Topology.IsClosedEmbedding ι := hιc.isClosedEmbedding hιi
+  obtain ⟨Φ, hΦ⟩ := φ.exists_extension hι
+  have hιedge (j : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+      ι (Circle.exp (2 * Real.pi * (j + t.1) / 8)) = edgePoint 8 j t := by
+    apply Subtype.ext
+    rw [Circle.coe_exp]
+    simp only [edgePoint, Subtype.coe_mk]
+    congr 1
+    push_cast
+    ring
+  have hΦedge (j : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+      Φ (edgePoint 8 j t) = φ (Circle.exp (2 * Real.pi * (j + t.1) / 8)) := by
+    rw [← hιedge]
+    exact DFunLike.congr_fun hΦ _
+  let H : ConstructionTargets.Surfaces.Disk → Circle :=
+    fun z ↦ Circle.exp (Φ z + Real.pi)
+  have hHc : Continuous H := Circle.exp.continuous.comp (Φ.continuous.add continuous_const)
+  have hHrel {x y : ConstructionTargets.Surfaces.Disk}
+      (hxy : ConstructionTargets.Surfaces.SurfaceRel false 4 x y) : H x = H y := by
+    simp only [ConstructionTargets.Surfaces.SurfaceRel, Bool.false_eq_true, if_false] at hxy
+    rcases hxy with ⟨j, hj, t, rfl, rfl⟩
+    have hv := hφ t
+    interval_cases j
+    · change Circle.exp (Φ (edgePoint 8 0 t) + Real.pi) =
+        Circle.exp (Φ (edgePoint 8 1 t) + Real.pi)
+      rw [hΦedge, hΦedge]
+      norm_num at ⊢
+      have hv0 := hv.1
+      have hv1 := hv.2.1
+      norm_num at hv0 hv1
+      rw [hv0, hv1]
+      rw [show 2 * Real.pi + 2 * Real.pi * t.1 =
+          2 * Real.pi * t.1 + 2 * Real.pi by ring,
+        Circle.exp_add_two_pi]
+    · change Circle.exp (Φ (edgePoint 8 2 t) + Real.pi) =
+        Circle.exp (Φ (edgePoint 8 3 t) + Real.pi)
+      rw [hΦedge, hΦedge]
+      norm_num at ⊢
+      rw [hv.2.2.1, hv.2.2.2.1]
+      rw [show 4 * Real.pi - 2 * Real.pi * t.1 =
+          (2 * Real.pi - 2 * Real.pi * t.1) + 2 * Real.pi by ring,
+        Circle.exp_add_two_pi]
+    · change Circle.exp (Φ (edgePoint 8 4 t) + Real.pi) =
+        Circle.exp (Φ (edgePoint 8 5 t) + Real.pi)
+      rw [hΦedge, hΦedge, hv.2.2.2.2 4 (by omega) (by omega),
+        hv.2.2.2.2 5 (by omega) (by omega)]
+    · change Circle.exp (Φ (edgePoint 8 6 t) + Real.pi) =
+        Circle.exp (Φ (edgePoint 8 7 t) + Real.pi)
+      rw [hΦedge, hΦedge, hv.2.2.2.2 6 (by omega) (by omega),
+        hv.2.2.2.2 7 (by omega) (by omega)]
+  have hHeq {x y : ConstructionTargets.Surfaces.Disk}
+      (hxy : Relation.EqvGen (ConstructionTargets.Surfaces.SurfaceRel false 4) x y) :
+      H x = H y := by
+    induction hxy with
+    | rel x y h => exact hHrel h
+    | refl x => rfl
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let h0 : T99A03.FourProjectivePlanesConnectedSum → Circle :=
+    Quotient.lift H (fun _ _ hxy ↦ hHeq hxy)
+  have hh0 : Continuous h0 := by
+    apply continuous_coinduced_dom.mpr
+    exact hHc
+  refine ⟨⟨h0, hh0⟩, fun t ↦ ?_⟩
+  change H (edgePoint 8 0 t) = _
+  change Circle.exp (Φ (edgePoint 8 0 t) + Real.pi) = _
+  rw [hΦedge]
+  norm_num at ⊢
+  have hv0 := (hφ t).1
+  norm_num at hv0
+  rw [hv0]
 
 /-- The edge loop of `a₁`. The path `t ↦ surfaceQuotient (edgePoint 8 0 t)` on
 `[0, 1]` is closed: its endpoints are polygon vertices `0` and `1`, identified by
