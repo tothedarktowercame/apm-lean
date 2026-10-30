@@ -199,7 +199,33 @@ lemma coneSupported_cycle_bounds_aux_support {n k : ℕ}
     (hz : ∀ u, z u ≠ 0 → u.1 ∈ Λ) :
     ∀ u, SimplicialChainMaps.subdivisionCone o K a (k + 1)
       (Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z) u ≠ 0 → u.1 ∈ Λ := by
-  sorry
+  intro u hu
+  have hau : a ∈ u.1 := by
+    by_contra h
+    exact hu (SimplicialChainMaps.subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_not_mem
+        o K a _ u h)
+  have herase_ne : (u.1.erase a).Nonempty := by
+    apply Finset.card_ne_zero.mp
+    rw [Finset.card_erase_of_mem hau, u.2.2]
+    omega
+  have herase_face : u.1.erase a ∈ K.faces :=
+    K.down_closed u.2.1 (Finset.erase_subset a u.1) herase_ne
+  let w : FaceIndex K (k + 1) :=
+    ⟨u.1.erase a, herase_face, by
+      rw [Finset.card_erase_of_mem hau, u.2.2]
+      omega⟩
+  have hw : w.1 = u.1.erase a := rfl
+  have hfiltered :
+      Finsupp.filter (fun v : FaceIndex K (k + 1) => a ∉ v.1) z w ≠ 0 := by
+    intro hzero
+    apply hu
+    rw [SimplicialChainMaps.subdivisionChainMap_commutes_aux_cone_formula_aux_coeff_aux_cone_apply_mem
+        o K a _ u w hau hw, hzero, mul_zero]
+  have haw : a ∉ w.1 := by simp [hw]
+  have hzw : z w ≠ 0 := by
+    simpa [Finsupp.filter_apply, haw] using hfiltered
+  have := hcone w.1 (hz w hzw)
+  simpa [hw, Finset.insert_erase hau] using this
 
 lemma coneSupported_cycle_bounds_aux_boundary {n k : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
