@@ -1369,7 +1369,26 @@ theorem singCoeff_ne_zero_of_subsetCarried {X : Type} [TopologicalSpace X] (A : 
     (hc : AcyclicCarriers.SubsetCarriedChain X A c)
     (σ : SingularSubdivision.SingularSimplex (TopCat.of X) k) (hσ : singCoeff σ c ≠ 0) :
     Set.range (SingularSubdivision.continuousMapOfSingularSimplex k σ) ⊆ A := by
-  sorry
+  classical
+  obtain ⟨m, a, τ, rfl, hτ⟩ := hc
+  by_contra hrange
+  apply hσ
+  simp only [map_sum]
+  apply Finset.sum_eq_zero
+  intro i hi
+  have hne : τ i ≠ σ := by
+    intro h
+    apply hrange
+    simpa [h] using hτ i
+  change ((Limits.Sigma.ι
+      (fun _ : SingularSubdivision.SingularSimplex (TopCat.of X) k =>
+        ModuleCat.of ℚ ℚ) (τ i) ≫ sigmaCoeff σ) (a i)) = 0
+  calc
+    _ = ((if τ i = σ then 𝟙 (ModuleCat.of ℚ ℚ) else 0) (a i)) := by
+      apply ConcreteCategory.congr_hom
+      dsimp [sigmaCoeff]
+      exact Limits.Sigma.ι_desc _ _
+    _ = 0 := by simp [hne]
 -- END SEAT AREA
 
 /-- A small chain whose image in all singular chains is carried by `A` is a
