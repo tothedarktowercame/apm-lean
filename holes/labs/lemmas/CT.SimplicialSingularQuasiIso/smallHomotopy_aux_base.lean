@@ -1402,7 +1402,38 @@ theorem smallHomotopy_aux_base {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Eu
     ∃ S : SmallHomotopyStage K d hdd cmpH ψ 0,
       (ψ ≫ cmpH).f 0 - (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f 0 =
         S.f ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d 1 0 := by
-  sorry
+  let A := CoefficientSmallPath.coverSmallChains ℚ (starCover K)
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of K.space)
+  let inc := CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)
+  let φ : ∀ k, A.X k ⟶ C.X k := fun k => (ψ ≫ cmpH).f k - inc.f k
+  obtain ⟨f, hfcar, hf⟩ := smallHomotopy_aux_fill_zero K (φ 0)
+    (smallHomotopy_aux_diff_carried K d hdd cmp hcmp cmpH cmpH_f ψ hψ 0)
+    (smallHomotopy_aux_aug_zero K d hdd cmp hcmp cmpH cmpH_f ψ hψ)
+  let g : A.X 1 ⟶ C.X 1 := φ 1 - A.d 1 0 ≫ f
+  have hgcar : SmallCarried K g := smallCarried_sub K _ _
+    (smallHomotopy_aux_diff_carried K d hdd cmp hcmp cmpH cmpH_f ψ hψ 1)
+    (smallHomotopy_aux_comp_d_carried K f hfcar)
+  have hφ : φ 1 ≫ C.d 1 0 = A.d 1 0 ≫ φ 0 := by
+    dsimp [φ, A, C, inc]
+    rw [Preadditive.sub_comp, Preadditive.comp_sub]
+    congr 1
+    · simpa only [HomologicalComplex.comp_f, Category.assoc] using (ψ ≫ cmpH).comm 1 0
+    · exact (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).comm 1 0
+  have hgcyc : g ≫ C.d 1 0 = 0 := by
+    rw [Preadditive.sub_comp, Category.assoc, hf, hφ]
+    exact sub_self _
+  obtain ⟨f', hf'car, hf'⟩ := smallHomotopy_aux_fill_succ K g hgcar hgcyc
+  let S : SmallHomotopyStage K d hdd cmpH ψ 0 :=
+    { f := f
+      f' := f'
+      cf := hfcar
+      cf' := hf'car
+      eq := by
+        change φ 1 = A.d 1 0 ≫ f + f' ≫ C.d 2 1
+        rw [hf']
+        dsimp [g]
+        abel }
+  exact ⟨S, hf.symm⟩
 -- END SEAT AREA
 
 /-- Extend a stage, keeping its top component: apply `smallHomotopy_aux_fill_succ`
