@@ -2770,7 +2770,23 @@ lemma apm_t02A04_solidTorus_prism_model_aux_injective_aux_disk (q q' : Fin 6 × 
       ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
         (apm_t02A04_conePoint q'.1 (apm_t02A04_diskProj y'))) :
     apm_t02A04_diskProj y = apm_t02A04_diskProj y' := by
-  sorry
+  have hyproj : apm_t02A04_diskProj y ∈ apm_t02A04_coneHull q.1 :=
+    apm_t02A04_solidTorus_prism_model_aux_proj q y hy
+  have hy'proj : apm_t02A04_diskProj y' ∈ apm_t02A04_coneHull q'.1 :=
+    apm_t02A04_solidTorus_prism_model_aux_proj q' y' hy'
+  have hynorm : ‖apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y)‖ ≤ 1 :=
+    apm_t02A04_attachedDisk_cone_model_aux_point_norm q.1
+      (apm_t02A04_diskProj y) hyproj
+  have hy'norm : ‖apm_t02A04_conePoint q'.1 (apm_t02A04_diskProj y')‖ ≤ 1 :=
+    apm_t02A04_attachedDisk_cone_model_aux_point_norm q'.1
+      (apm_t02A04_diskProj y') hy'proj
+  have hpoint : apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y) =
+      apm_t02A04_conePoint q'.1 (apm_t02A04_diskProj y') := by
+    simpa only [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp,
+      dif_pos hynorm, dif_pos hy'norm, Subtype.mk.injEq] using h
+  exact apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet
+    (apm_t02A04_diskProj y) (apm_t02A04_diskProj y') q.1 q'.1
+    hyproj hy'proj hpoint
 
 /-- Every circle point is `Circle.exp (2π(j + s)/3)` with `s ∈ [0, 1]` (as
 `_cone_model_aux_surjective_aux_circle`, period `3`). -/
