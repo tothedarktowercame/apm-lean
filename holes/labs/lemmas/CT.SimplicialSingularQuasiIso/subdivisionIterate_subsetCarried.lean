@@ -1531,7 +1531,31 @@ theorem subdivisionIterate_subsetCarried {X : Type} [TopologicalSpace X] (A : Se
     (hc : AcyclicCarriers.SubsetCarriedChain X A c) :
     AcyclicCarriers.SubsetCarriedChain X A
       ((CoefficientEventualSmallness.subdivisionIterate ℚ r).f k c) := by
-  sorry
+  induction r with
+  | zero =>
+      simpa [CoefficientEventualSmallness.subdivisionIterate] using hc
+  | succ r ih =>
+      obtain ⟨c', hc'⟩ := AcyclicCarriers.subsetPush_lift X A _ ih
+      rw [show (CoefficientEventualSmallness.subdivisionIterate ℚ (r + 1)).f k c =
+          (CoefficientSingularSubdivision.singularSubdivision ℚ).f k
+            ((CoefficientEventualSmallness.subdivisionIterate ℚ r).f k c) by rfl,
+        ← hc']
+      have hnat := congrArg (fun f => f.f k)
+        (CoefficientSingularSubdivision.naturality ℚ
+          (⟨Subtype.val, continuous_subtype_val⟩ : C(A, X)))
+      have happ := congrArg (fun f => f c') hnat
+      rw [show (AcyclicCarriers.subsetPush X A).f k =
+          (CoefficientH0.singularPostcomposition ℚ
+            (⟨Subtype.val, continuous_subtype_val⟩ : C(A, X))).f k by rfl]
+      rw [show (CoefficientSingularSubdivision.singularSubdivision ℚ).f k
+            ((CoefficientH0.singularPostcomposition ℚ
+              (⟨Subtype.val, continuous_subtype_val⟩ : C(A, X))).f k c') =
+          (CoefficientH0.singularPostcomposition ℚ
+            (⟨Subtype.val, continuous_subtype_val⟩ : C(A, X))).f k
+              ((CoefficientSingularSubdivision.singularSubdivision ℚ).f k c') by
+            simpa only [CategoryTheory.comp_apply] using happ]
+      exact AcyclicCarriers.subsetPush_carried X A
+        ((CoefficientSingularSubdivision.singularSubdivision ℚ).f k c')
 -- END SEAT AREA
 
 /-- A coproduct of copies of `ℚ` (the shape of the singular and small chain modules). -/
