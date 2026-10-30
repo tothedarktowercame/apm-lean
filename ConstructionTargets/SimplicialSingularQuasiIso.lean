@@ -151,7 +151,49 @@ theorem starCarrier_pointlike {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc
     ProjectivePlaneWedgeRationalHomology.RationallyPointlike
       ((Subtype.val : K.space → Euc n) ⁻¹'
         ⋃ s ∈ starCarrier K A, convexHull ℝ (s : Set (Euc n))) := by
-  sorry
+  let U : Set (Euc n) := ⋃ s ∈ starCarrier K A, convexHull ℝ (s : Set (Euc n))
+  have hU_ne : U.Nonempty := by
+    obtain ⟨x, hx⟩ := hne
+    obtain ⟨t, ht⟩ := exists_isMinimalFace K x
+    have htne : t.Nonempty := by
+      by_contra h
+      rw [Finset.not_nonempty_iff_eq_empty] at h
+      simpa [h] using ht.2.1
+    refine ⟨x, Set.mem_iUnion₂.mpr ⟨t, ?_, ht.2.1⟩⟩
+    exact ⟨htne, x, hx, t, ht, subset_rfl⟩
+  have hU_star : StarConvex ℝ a U := by
+    intro y hy b c hb hc hbc
+    obtain ⟨s, hs, hys⟩ := Set.mem_iUnion₂.mp hy
+    have his : insert a s ∈ starCarrier K A := starCarrier_cone K hA hs
+    have ha : a ∈ convexHull ℝ ((insert a s : Finset (Euc n)) : Set (Euc n)) :=
+      (subset_convexHull ℝ ((insert a s : Finset (Euc n)) : Set (Euc n)))
+        (by exact Finset.mem_insert_self a s)
+    refine Set.mem_iUnion₂.mpr ⟨insert a s, his, ?_⟩
+    apply (convex_convexHull ℝ ((insert a s : Finset (Euc n)) : Set (Euc n)))
+      ha
+      (convexHull_mono (by exact_mod_cast Finset.subset_insert a s) hys)
+      hb hc hbc
+  have hU_space : U ⊆ K.space := by
+    intro y hy
+    obtain ⟨s, hs, hys⟩ := Set.mem_iUnion₂.mp hy
+    exact K.convexHull_subset_space (starCarrier_faces K A hs) hys
+  letI : ContractibleSpace U := hU_star.contractibleSpace hU_ne
+  have hU_point : ProjectivePlaneWedgeRationalHomology.RationallyPointlike U := by
+    obtain ⟨e⟩ := ContractibleSpace.hequiv_unit U
+    exact ProjectivePlaneWedgeRationalHomology.rationallyPointlike_of_homotopyEquiv e
+      ProjectivePlaneWedgeRationalHomology.rationallyPointlike_unit
+  let e : ((Subtype.val : K.space → Euc n) ⁻¹' U) ≃ₜ U :=
+    { toEquiv :=
+        { toFun := fun x => ⟨x.1.1, x.2⟩
+          invFun := fun x => ⟨⟨x.1, hU_space x.2⟩, x.2⟩
+          left_inv := fun x => by ext; rfl
+          right_inv := fun x => by ext; rfl }
+      continuous_toFun :=
+        continuous_subtype_val.comp continuous_subtype_val |>.subtype_mk _
+      continuous_invFun :=
+        (continuous_subtype_val.subtype_mk _).subtype_mk _ }
+  exact ProjectivePlaneWedgeRationalHomology.rationallyPointlike_of_homotopyEquiv
+    e.toHomotopyEquiv hU_point
 
 /-- Each point of `A` lies in the carrier polyhedron (its minimal face, from
 `exists_isMinimalFace`, is in the carrier). -/
