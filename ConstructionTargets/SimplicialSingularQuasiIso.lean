@@ -2055,7 +2055,34 @@ theorem package_homology_injective {n : ℕ} (o : LinearOrder (Euc n))
     (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
     (cmpH_f : ∀ k, cmpH.f k = cmp k) (k : ℕ) :
     Function.Injective (HomologicalComplex.homologyMap cmpH k).hom := by
-  sorry
+  obtain ⟨r, Φ, hΦ⟩ := affineCmp_small_lift K hK d hdd cmpH
+  obtain ⟨ψ, hψ, hψ0⟩ := smallToFace_exists o K d hd hdd
+  obtain ⟨hcarr, h0⟩ :=
+    smallLift_comp_carried o K d hd hdd cmp hcmp cmpH cmpH_f r Φ hΦ ψ hψ hψ0
+  have hid := faceCarried_endo_homology o K d hd hdd (Φ ≫ ψ) hcarr h0 k
+  rw [HomologicalComplex.homologyMap_comp] at hid
+  have hinc : HomologicalComplex.homologyMap Φ k ≫ HomologicalComplex.homologyMap
+      (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)) k =
+        HomologicalComplex.homologyMap cmpH k := by
+    rw [← HomologicalComplex.homologyMap_comp, hΦ, HomologicalComplex.homologyMap_comp,
+      CoefficientIteratedHomotopy.absolute_homology_identity, Category.comp_id]
+  letI := CoefficientSmallComparison.inclusion_isIso ℚ (starCover K)
+    (starCover_isOpen K hK) (starCover_covers K) k
+  have hb := ConcreteCategory.bijective_of_isIso (HomologicalComplex.homologyMap
+    (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)) k)
+  intro a b hab
+  have hΦab : (HomologicalComplex.homologyMap Φ k).hom a =
+      (HomologicalComplex.homologyMap Φ k).hom b := by
+    apply hb.1
+    have ha := congrArg (fun g => g.hom a) hinc
+    have hb' := congrArg (fun g => g.hom b) hinc
+    simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at ha hb'
+    rw [ha, hb', hab]
+  have ha := congrArg (fun g => g.hom a) hid
+  have hb2 := congrArg (fun g => g.hom b) hid
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply, ModuleCat.hom_id, LinearMap.id_apply]
+    at ha hb2
+  rw [← ha, ← hb2, hΦab]
 
 /-- Injective half for the concrete affine comparison, in `ChainComplex.ofHom`
 form. Apply `package_homology_injective` to `cmpH := q ≫ e`, where `q` is the
