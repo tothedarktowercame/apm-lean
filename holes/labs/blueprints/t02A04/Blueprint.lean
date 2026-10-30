@@ -2219,7 +2219,29 @@ lemma apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass
     (q : Fin 6 × Fin 3 × Fin 3) (y : EuclideanSpace ℝ (Fin 21))
     (hy : y ∈ apm_t02A04_prismHull q) :
     ∑ k, y k = 1 ∧ apm_t02A04_circleWeight (q.2.1 + 1) y = 0 := by
-  sorry
+  classical
+  constructor
+  · let L : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ :=
+      { toFun := fun z => ∑ k, z k
+        map_add' := by intro x z; simp [Finset.sum_add_distrib]
+        map_smul' := by intro c x; simp [Finset.mul_sum, smul_eq_mul] }
+    have hsub : apm_t02A04_prismHull q ⊆ {z | L z = 1} := by
+      apply convexHull_min
+      · intro x hx
+        obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+        simp [L, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+      · exact (convex_singleton (1 : ℝ)).linear_preimage L
+    exact hsub hy
+  · apply Finset.sum_eq_zero
+    intro d _
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero q y hy
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨m, -, h⟩ | ⟨m, -, h⟩)
+    all_goals
+      have hv := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at hv
+      omega
 
 /-- Adjacent circle edges: if `y` lies in prisms over circle edges `j` and `j + 1`, its
 weight sits in column `j + 1` only (columns `j` and `j + 2` lie outside one of the two
