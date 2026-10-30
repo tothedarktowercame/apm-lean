@@ -74,7 +74,10 @@ when nonempty (`K.down_closed`), and the hull of the empty set is empty. -/
 -- BEGIN SEAT AREA
 theorem exists_isMinimalFace {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
     (x : K.space) : ∃ t, IsMinimalFace K (x : Euc n) t := by
-  sorry
+  obtain ⟨t, ht, hxt, hmin⟩ :=
+    GeometricSimplicialSubdivision.inducedMap_homotopic_of_star_condition_aux_source_carrier
+      K x
+  exact ⟨t, ht, hxt, hmin⟩
 -- END SEAT AREA
 
 /-- A minimal face of `x` lies inside every face whose hull contains `x`.

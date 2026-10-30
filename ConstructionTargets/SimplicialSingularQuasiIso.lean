@@ -73,7 +73,10 @@ hull contains it (`Nat.find` on the card, as at the start of
 when nonempty (`K.down_closed`), and the hull of the empty set is empty. -/
 theorem exists_isMinimalFace {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
     (x : K.space) : ∃ t, IsMinimalFace K (x : Euc n) t := by
-  sorry
+  obtain ⟨t, ht, hxt, hmin⟩ :=
+    GeometricSimplicialSubdivision.inducedMap_homotopic_of_star_condition_aux_source_carrier
+      K x
+  exact ⟨t, ht, hxt, hmin⟩
 
 /-- A minimal face of `x` lies inside every face whose hull contains `x`.
 `K.inter_subset_convexHull` puts `x` in the hull of `t ∩ s`; if `t ∩ s ≠ t`, pick
