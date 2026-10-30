@@ -2252,7 +2252,21 @@ lemma apm_t02A04_solidTorus_prism_model_aux_agree_aux_step
     (hq : y ∈ apm_t02A04_prismHull q) (hq' : y ∈ apm_t02A04_prismHull q')
     (hj : q'.2.1 = q.2.1 + 1) :
     apm_t02A04_circleWeight q.2.1 y = 1 ∧ apm_t02A04_circleWeight q'.2.1 y = 0 := by
-  sorry
+  classical
+  have hm := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).1
+  have hz := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).2
+  have hz' := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q' y hq').2
+  constructor
+  · generalize q.2.1 = j at hj hz ⊢
+    generalize q'.2.1 = j' at hj hz'
+    fin_cases j <;> fin_cases j' <;>
+      simp [Fin.sum_univ_succ] at hm <;>
+      simp only [apm_t02A04_circleWeight, Fin.sum_univ_succ] at hz hz' ⊢ <;>
+      simp at hj <;>
+      simp [apm_t02A04_prismIdx] at hz hz' ⊢ <;>
+      linarith
+  · rw [hj]
+    exact (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).2
 
 /-- Case on `q'.2.1 - q.2.1 ∈ {0, 1, 2}`: equal edges are `rfl`; for adjacent edges
 `_aux_step` gives angles `2π(j + 1)/3` and `2π(j + 1 + 0)/3` (for `j = 2` the second is
