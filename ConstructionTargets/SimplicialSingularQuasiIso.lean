@@ -2003,7 +2003,148 @@ theorem smallLift_comp_carried {n : ℕ} (o : LinearOrder (Euc n))
     (∀ k (s : FaceIndex K k) (u : FaceIndex K k),
       (show FaceModule K k from (Φ ≫ ψ).f k (Finsupp.single s 1)) u ≠ 0 → u.1 ⊆ s.1) ∧
     (Φ ≫ ψ).f 0 = 𝟙 _ := by
-  sorry
+  classical
+  let inc := CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)
+  have hvalue (k : ℕ) (s : FaceIndex K k) :
+      inc.f k (Φ.f k (Finsupp.single s 1)) =
+        (CoefficientEventualSmallness.subdivisionIterate ℚ r).f k
+          (cmp k (Finsupp.single s 1)) := by
+    have h := congrArg (fun f => f.f k) hΦ
+    have h' := ConcreteCategory.congr_hom h (Finsupp.single s 1)
+    simpa [inc, cmpH_f, CategoryTheory.comp_apply] using h'
+  have hspan (k : ℕ) (s : FaceIndex K k) :
+      Φ.f k (Finsupp.single s 1) ∈
+        Submodule.span ℚ {x | ∃ (σ : C(stdSimplex ℝ (Fin (k + 1)), K.space))
+          (a : Euc n) (hσ : Set.range σ ⊆ starCover K a),
+          Set.range σ ⊆ (Subtype.val : K.space → Euc n) ⁻¹'
+            convexHull ℝ (s.1 : Set (Euc n)) ∧
+          x = CoefficientSmallPath.coverSmallGenerator ℚ (starCover K) σ a hσ 1} := by
+    apply smallChain_span_of_subsetCarried (starCover K)
+      ((Subtype.val : K.space → Euc n) ⁻¹' convexHull ℝ (s.1 : Set (Euc n)))
+    rw [hvalue]
+    apply subdivisionIterate_subsetCarried
+    obtain ⟨σ, hσ, hrange⟩ := hcmp k s
+    refine ⟨1, fun _ ↦ 1, fun _ ↦ σ, ?_, ?_⟩
+    · simpa using hσ
+    · intro i
+      simpa [hrange]
+  have hcarried : ∀ k (s : FaceIndex K k) (u : FaceIndex K k),
+      (show FaceModule K k from (Φ ≫ ψ).f k (Finsupp.single s 1)) u ≠ 0 →
+        u.1 ⊆ s.1 := by
+    intro k s u hu
+    refine Submodule.span_induction (p := fun x _ =>
+      (show FaceModule K k from ψ.f k x) u ≠ 0 → u.1 ⊆ s.1) ?_ ?_ ?_ ?_
+        (hspan k s) (by simpa [CategoryTheory.comp_apply] using hu)
+    · rintro x ⟨σ, a, hσ, hrange, rfl⟩ hx
+      obtain ⟨hne, y, hy, t, ht, hut⟩ := hψ k σ a hσ u hx
+      exact hut.trans (isMinimalFace_subset ht s.2.1 (hrange hy))
+    · intro hz
+      exfalso
+      apply hz
+      simpa using congrArg (fun z : FaceModule K k => z u) (map_zero (ψ.f k).hom)
+    · intro x y hx hy ihx ihy hxy
+      rw [map_add] at hxy
+      by_cases hxu : (show FaceModule K k from ψ.f k x) u = 0
+      · apply ihy
+        intro hyu
+        apply hxy
+        change ((show FaceModule K k from ψ.f k x) +
+          (show FaceModule K k from ψ.f k y)) u = 0
+        rw [Finsupp.add_apply, hxu, hyu, add_zero]
+      · exact ihx hxu
+    · intro a x hx ih hax
+      rw [map_smul] at hax
+      apply ih
+      intro hz
+      apply hax
+      change (a • (show FaceModule K k from ψ.f k x)) u = 0
+      rw [Finsupp.smul_apply, hz, smul_zero]
+  refine ⟨hcarried, ?_⟩
+  let aug : FaceModuleCat K 0 ⟶ ModuleCat.of ℚ ℚ :=
+    ModuleCat.ofHom
+      (Finsupp.lsum ℚ (fun _ : FaceIndex K 0 => (LinearMap.id : ℚ →ₗ[ℚ] ℚ)))
+  have hψaug : ψ.f 0 ≫ aug = inc.f 0 ≫ CoefficientH0.zeroChainAugmentation ℚ := by
+    apply Limits.Sigma.hom_ext
+    intro t
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext_ring
+    obtain ⟨σ, a, hσ, ht, hr⟩ := smallGen_eq_coverSmallGenerator (starCover K) t
+    change ((show FaceModule K 0 from ψ.f 0 (smallGen _ t 1)).sum fun _ c ↦ c) = _
+    rw [ht, hψ0 σ a hσ]
+    have h := ConcreteCategory.congr_hom (smallGen_aug (starCover K) t) 1
+    simpa [inc, CategoryTheory.comp_apply] using h.symm
+  apply ModuleCat.hom_ext
+  apply Finsupp.lhom_ext'
+  intro s
+  apply LinearMap.ext_ring
+  have hsupp : ∀ u, (show FaceModule K 0 from
+      (Φ ≫ ψ).f 0 (Finsupp.single s 1)) u ≠ 0 → u = s := by
+    intro u hu
+    apply Subtype.ext
+    apply Finset.eq_of_subset_of_card_le (hcarried 0 s u hu)
+    simp [u.2.2, s.2.2]
+  have hsum : ((show FaceModule K 0 from
+      (Φ ≫ ψ).f 0 (Finsupp.single s 1)).sum fun _ c ↦ c) = 1 := by
+    have he := ConcreteCategory.congr_hom hψaug (Φ.f 0 (Finsupp.single s 1))
+    have hv := hvalue 0 s
+    obtain ⟨σ, hσ, -⟩ := hcmp 0 s
+    have hsd : ∀ m, (CoefficientEventualSmallness.subdivisionIterate ℚ (X := K.space) m).f 0 =
+        𝟙 _ := by
+      intro m
+      rw [CoefficientEventualSmallness.subdivisionIterate_f]
+      induction m with
+      | zero => rfl
+      | succ m ih =>
+          change CoefficientEventualSmallness.singularSubdivisionIterate ℚ 0 m ≫
+            (CoefficientSingularSubdivision.singularSubdivision ℚ).f 0 = 𝟙 _
+          rw [ih]
+          change 𝟙 _ ≫ CoefficientBarycentricNaturality.degree ℚ 0 = 𝟙 _
+          rw [CoefficientSingularSubdivision.singularSubdivisionDegree_zero,
+            Category.id_comp]
+    simp only [CategoryTheory.comp_apply] at he
+    rw [hv, hsd r, CategoryTheory.id_apply, hσ] at he
+    have hgen : CoefficientH0.singularGenerator ℚ (TopCat.of K.space) 0 σ ≫
+        CoefficientH0.zeroChainAugmentation ℚ = 𝟙 _ := by
+      change Limits.Sigma.ι (fun _ : SingularSubdivision.SingularSimplex (TopCat.of K.space) 0 ↦
+        ModuleCat.of ℚ ℚ) σ ≫ Limits.Sigma.desc (fun _ => 𝟙 _) = 𝟙 _
+      exact Limits.Sigma.ι_desc _ _
+    have hg1 := ConcreteCategory.congr_hom hgen 1
+    rw [CategoryTheory.comp_apply, CategoryTheory.id_apply] at hg1
+    rw [hg1] at he
+    simpa [aug, CategoryTheory.comp_apply] using he
+  apply Finsupp.ext
+  intro u
+  simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply,
+    ModuleCat.hom_id, LinearMap.id_coe, id_eq]
+  by_cases hu : u = s
+  · subst u
+    let z : FaceModule K 0 := (Φ ≫ ψ).f 0 (Finsupp.single s 1)
+    have hzform : z = Finsupp.single s (z s) := by
+      apply Finsupp.ext
+      intro v
+      by_cases hv : v = s
+      · subst v
+        simp
+      · have hzv : z v = 0 := by
+          by_contra hn
+          exact hv (hsupp v hn)
+        simp [hzv, hv]
+    have hsumz : z.sum (fun _ c ↦ c) = 1 := by exact hsum
+    rw [hzform] at hsumz
+    have hzone : z s = 1 := by simpa using hsumz
+    change (show FaceModule K 0 from
+      (Φ ≫ ψ).f 0 (Finsupp.single s 1)) s = (Finsupp.single s 1) s
+    simpa [z] using hzone
+  · have hz : (show FaceModule K 0 from
+        (Φ ≫ ψ).f 0 (Finsupp.single s 1)) u = 0 := by
+      by_contra hn
+      exact hu (hsupp u hn)
+    have hus : s ≠ u := Ne.symm hu
+    have hrhs : (LinearMap.id (R := ℚ) (M := FaceModule K 0)
+        (Finsupp.single s 1)) u = 0 := by
+      change (Finsupp.single s 1) u = 0
+      simp [hus]
+    exact hz.trans hrhs.symm
 
 /-- Surjectivity for a packaged affine comparison. With `ψ` from
 `smallToFace_exists`, `smallToFace_homology` gives
