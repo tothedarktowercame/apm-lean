@@ -1324,8 +1324,9 @@ noncomputable def singCoeff {X : Type} [TopologicalSpace X] {k : ℕ}
 Both sides are linear in `q`; on a generator `smallGen U t' 1` the inclusion gives
 the singular generator of `t'.1` (the inclusion is `Sigma.map'` along `Subtype.val`,
 as in the proof of `SingularSubdivision.coverSmallGeneratorOfMem_comp_ι`), and both
-coefficients are `if t' = t then 1 else 0` (`Subtype.ext`). Use `sigma_eq_sum` to
-reduce to generators. -/
+coefficients are `if t' = t then 1 else 0` (`Subtype.ext`). Reduce to generators
+by proving the morphism equation `inc.f k ≫ singCoeff t.1 = smallCoeff U t` with
+`Limits.Sigma.hom_ext` (no need for `sigma_eq_sum`). -/
 theorem singCoeff_inclusion {X α : Type} [TopologicalSpace X] (U : α → Set X) {k : ℕ}
     (t : SmallSimplex U k) (q : (CoefficientSmallPath.coverSmallChains ℚ U).X k) :
     singCoeff t.1 ((CoefficientSmallPath.coverSmallInclusion ℚ U).f k q) =
