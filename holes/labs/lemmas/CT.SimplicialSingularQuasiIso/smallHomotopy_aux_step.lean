@@ -1419,7 +1419,36 @@ theorem smallHomotopy_aux_step {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Eu
     (ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd)
     (hψ : StarCarriedMap K d hdd ψ) {k : ℕ} (S : SmallHomotopyStage K d hdd cmpH ψ k) :
     ∃ S' : SmallHomotopyStage K d hdd cmpH ψ (k + 1), S'.f = S.f' := by
-  sorry
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of K.space)
+  let D := CoefficientSmallPath.coverSmallChains ℚ (starCover K)
+  let inc := CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)
+  let g : D.X (k + 2) ⟶ C.X (k + 2) :=
+    (ψ ≫ cmpH).f (k + 2) - inc.f (k + 2) -
+      D.d (k + 2) (k + 1) ≫ S.f'
+  have hg : SmallCarried K g := by
+    apply smallCarried_sub K
+    · exact smallHomotopy_aux_diff_carried K d hdd cmp hcmp cmpH cmpH_f ψ hψ (k + 2)
+    · exact smallHomotopy_aux_comp_d_carried K S.f' S.cf'
+  have hcyc : g ≫ C.d (k + 2) (k + 1) = 0 := by
+    have hdiffcomm :
+        ((ψ ≫ cmpH).f (k + 2) - inc.f (k + 2)) ≫ C.d (k + 2) (k + 1) =
+          D.d (k + 2) (k + 1) ≫
+            ((ψ ≫ cmpH).f (k + 1) - inc.f (k + 1)) := by
+      rw [Preadditive.sub_comp, (ψ ≫ cmpH).comm (k + 2) (k + 1),
+        inc.comm (k + 2) (k + 1), Preadditive.comp_sub]
+    dsimp only [g]
+    rw [Preadditive.sub_comp, hdiffcomm, Category.assoc,
+      ← Preadditive.comp_sub, S.eq,
+      show (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 2) (k + 1) =
+        C.d (k + 2) (k + 1) from rfl,
+      add_sub_cancel_right,
+      ← Category.assoc, (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).d_comp_d,
+      Limits.zero_comp]
+  obtain ⟨f'', hf'', hfd⟩ := smallHomotopy_aux_fill_succ K g hg hcyc
+  refine ⟨⟨S.f', f'', S.cf', hf'', ?_⟩, rfl⟩
+  dsimp [g, C, D, inc] at hfd ⊢
+  rw [hfd]
+  abel
 -- END SEAT AREA
 
 /-- `ψ ≫ cmpH` and the small-chain inclusion agree on homology, by a chain homotopy
