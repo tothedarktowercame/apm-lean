@@ -934,7 +934,35 @@ theorem smallHomotopy_aux_fill_succ {n : ℕ} (K : Geometry.SimplicialComplex �
         (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).X (k + 2),
       SmallCarried K f ∧
         f ≫ (CoefficientH0.SingularChains ℚ (TopCat.of K.space)).d (k + 2) (k + 1) = g := by
-  sorry
+  classical
+  let C := CoefficientH0.SingularChains ℚ (TopCat.of K.space)
+  have hw : ∀ t : SmallSimplex (starCover K) (k + 1), ∃ w : C.X (k + 2),
+      AcyclicCarriers.SubsetCarriedChain K.space (starHull K (smallRange _ t)) w ∧
+        C.d (k + 2) (k + 1) w = g (smallGen _ t 1) := by
+    intro t
+    obtain ⟨a, ha⟩ := smallSimplex_range_subset (starCover K) t
+    apply AcyclicCarriers.subsetCarriedCycle_bounds K.space
+      (starHull K (smallRange _ t)) (starCarrier_pointlike K ha (Set.range_nonempty _))
+      (Nat.succ_pos k) (g (smallGen _ t 1)) (hg t)
+    have h := ConcreteCategory.congr_hom hcyc (smallGen _ t 1)
+    simpa [CategoryTheory.comp_apply, C] using h
+  choose w hwc hwd using hw
+  let f : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X (k + 1) ⟶
+      C.X (k + 2) :=
+    Limits.Sigma.desc (fun t => CoefficientSmallComparison.elementHom ℚ (w t))
+  have hf (t : SmallSimplex (starCover K) (k + 1)) :
+      f (smallGen _ t 1) = w t := by
+    change (smallGen _ t ≫ f) 1 = _
+    rw [show smallGen (starCover K) t ≫ f =
+        CoefficientSmallComparison.elementHom ℚ (w t) from Limits.Sigma.ι_desc _ t]
+    exact CoefficientSmallComparison.elementHom_one ℚ (w t)
+  refine ⟨f, fun t => by rw [hf]; exact hwc t, ?_⟩
+  apply Limits.Sigma.hom_ext
+  intro t
+  apply ModuleCat.hom_ext
+  apply LinearMap.ext_ring
+  change C.d (k + 2) (k + 1) (f (smallGen _ t 1)) = g (smallGen _ t 1)
+  rw [hf, hwd]
 
 /-- Degree-zero filling: a small-carried map to 0-chains with augmentation zero is
 a carried boundary. In a rationally pointlike carrier, a carried 0-chain of
