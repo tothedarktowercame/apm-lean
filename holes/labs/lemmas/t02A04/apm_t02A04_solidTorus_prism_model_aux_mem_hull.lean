@@ -2387,7 +2387,40 @@ lemma apm_t02A04_solidTorus_prism_model_aux_mem_hull (F : Finset (Fin 21))
     (y : EuclideanSpace ℝ (Fin 21)) (hnn : ∀ k, 0 ≤ y k) (hsum : ∑ k, y k = 1)
     (hF : ∀ k, k ∉ F → y k = 0) :
     y ∈ convexHull ℝ ↑(F.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) := by
-  sorry
+  classical
+  have hne : F.Nonempty := by
+    by_contra h
+    rw [Finset.not_nonempty_iff_eq_empty] at h
+    have hz : ∀ k, y k = 0 := by
+      intro k
+      exact hF k (by simp [h])
+    simpa [hz] using hsum
+  let i₀ : ↑F := ⟨hne.choose, hne.choose_spec⟩
+  let z : Fin 21 → EuclideanSpace ℝ (Fin 21) := fun i ↦
+    if hi : i ∈ F then
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i
+    else
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i₀
+  apply mem_convexHull_of_exists_fintype (fun i ↦ y i) z
+  · exact hnn
+  · exact hsum
+  · intro i
+    simp only [z]
+    split_ifs with hi
+    · exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i, hi, rfl⟩)
+    · exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i₀, i₀.property, rfl⟩)
+  · rw [show (∑ i, y i • z i) =
+        ∑ i, y i • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i by
+      apply Finset.sum_congr rfl
+      intro i _
+      by_cases hi : i ∈ F
+      · simp [z, hi]
+      · rw [hF i hi]
+        simp]
+    apply (EuclideanSpace.equiv (Fin 21) ℝ).injective
+    funext k
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      Pi.single_apply, eq_comm]
 -- END SEAT AREA
 
 /-- Prism coordinates are nonnegative and the circle weight lies in `[0, 1]`
