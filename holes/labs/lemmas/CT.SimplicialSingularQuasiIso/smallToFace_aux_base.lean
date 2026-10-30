@@ -674,7 +674,118 @@ theorem smallToFace_aux_base {n : ℕ} (o : LinearOrder (Euc n))
     (hd : IsSignedDeletion o K d) :
     ∃ S : SmallStage K d 0, ∀ t : SmallSimplex (starCover K) 0,
       ((show FaceModule K 0 from S.f (smallGen _ t 1)).sum fun _ c ↦ c) = 1 := by
-  sorry
+  classical
+  let C := CoefficientSmallPath.coverSmallChains ℚ (starCover K)
+  have hq : ∀ t : SmallSimplex (starCover K) 0, ∃ q : FaceModule K 0,
+      (∀ u, q u ≠ 0 → u.1 ∈ starCarrier K (smallRange _ t)) ∧
+      q.sum (fun _ c ↦ c) = 1 := by
+    intro t
+    obtain ⟨x, hx⟩ := Set.range_nonempty
+      (SingularSubdivision.continuousMapOfSingularSimplex 0 t.1)
+    obtain ⟨s, hs⟩ := exists_isMinimalFace K x
+    have hsne : s.Nonempty := by
+      by_contra h
+      rw [Finset.not_nonempty_iff_eq_empty] at h
+      simpa [h] using hs.2.1
+    obtain ⟨v, hv⟩ := hsne
+    have hvK : ({v} : Finset (Euc n)) ∈ K.faces :=
+      K.down_closed hs.1 (by simpa using hv) (by simp)
+    let u : FaceIndex K 0 := ⟨{v}, hvK, by simp⟩
+    refine ⟨Finsupp.single u 1, ?_, by simp⟩
+    intro u' hu'
+    have huu : u' = u := by
+      by_contra hne
+      simp [Finsupp.single_apply, hne] at hu'
+    subst u'
+    refine ⟨by simp [u], x, hx, s, hs, ?_⟩
+    · simpa [u] using hv
+  choose q hqc hqsum using hq
+  let f : C.X 0 ⟶ FaceModuleCat K 0 :=
+    Limits.Sigma.desc (fun t => CoefficientSmallComparison.elementHom ℚ (q t))
+  have hf (t : SmallSimplex (starCover K) 0) : f (smallGen _ t 1) = q t := by
+    change (smallGen _ t ≫ f) 1 = _
+    rw [show smallGen (starCover K) t ≫ f =
+      CoefficientSmallComparison.elementHom ℚ (q t) from Limits.Sigma.ι_desc _ t]
+    exact CoefficientSmallComparison.elementHom_one ℚ (M := FaceModuleCat K 0) (q t)
+  let aug : FaceModuleCat K 0 ⟶ ModuleCat.of ℚ ℚ :=
+    ModuleCat.ofHom
+      (Finsupp.lsum ℚ (fun _ : FaceIndex K 0 => (LinearMap.id : ℚ →ₗ[ℚ] ℚ)))
+  have haug : f ≫ aug =
+      (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f 0 ≫
+        CoefficientH0.zeroChainAugmentation ℚ := by
+    apply Limits.Sigma.hom_ext
+    intro t
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext_ring
+    dsimp [aug]
+    change (f (smallGen _ t 1)).sum (fun _ c ↦ c) = _
+    rw [hf, hqsum]
+    have h := ConcreteCategory.congr_hom (smallGen_aug (starCover K) t) 1
+    simpa [CategoryTheory.comp_apply] using h.symm
+  have hfill : ∀ t : SmallSimplex (starCover K) 1, ∃ w : FaceModule K 1,
+      (∀ u, w u ≠ 0 → u.1 ∈ starCarrier K (smallRange _ t)) ∧
+      d 0 w = f (C.d 1 0 (smallGen _ t 1)) := by
+    intro t
+    apply smallToFace_aux_fill_zero o K d hd t
+    · intro u hu
+      have hs := smallChains_d_span (starCover K) t
+      refine Submodule.span_induction (p := fun x _ =>
+        ∀ u, (show FaceModule K 0 from f x) u ≠ 0 →
+          u.1 ∈ starCarrier K (smallRange _ t)) ?_ ?_ ?_ ?_ hs u hu
+      · rintro y ⟨t', ht', rfl⟩ u hu
+        exact starCarrier_mono K ht' (hqc t' u (by simpa [hf] using hu))
+      · intro u hu; simp at hu
+      · intro x y hx hy ihx ihy u hu
+        rw [map_add] at hu
+        by_cases hxu : (show FaceModule K 0 from f x) u = 0
+        · apply ihy u; simpa [hxu] using hu
+        · exact ihx u hxu
+      · intro a x hx ih u hu
+        rw [map_smul] at hu
+        apply ih u
+        intro hz
+        simp [hz] at hu
+    · have he := ConcreteCategory.congr_hom haug (C.d 1 0 (smallGen _ t 1))
+      have h := ConcreteCategory.congr_hom (smallChains_d_aug (starCover K))
+        (smallGen _ t 1)
+      dsimp [aug] at he
+      have he' : (f (C.d 1 0 (smallGen _ t 1))).sum (fun _ c ↦ c) =
+          ((CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f 0 ≫
+            CoefficientH0.zeroChainAugmentation ℚ)
+              (C.d 1 0 (smallGen _ t 1)) := by
+        simpa only [id_eq, CategoryTheory.comp_apply] using he
+      change (f (C.d 1 0 (smallGen _ t 1))).sum (fun _ c ↦ c) = 0
+      rw [he']
+      simpa [CategoryTheory.comp_apply] using h
+  choose w hwc hwd using hfill
+  let f' : C.X 1 ⟶ FaceModuleCat K 1 :=
+    Limits.Sigma.desc (fun t => CoefficientSmallComparison.elementHom ℚ (w t))
+  have hf' (t : SmallSimplex (starCover K) 1) : f' (smallGen _ t 1) = w t := by
+    change (smallGen _ t ≫ f') 1 = _
+    rw [show smallGen (starCover K) t ≫ f' =
+      CoefficientSmallComparison.elementHom ℚ (w t) from Limits.Sigma.ι_desc _ t]
+    exact CoefficientSmallComparison.elementHom_one ℚ (M := FaceModuleCat K 1) (w t)
+  have hcf : ∀ (t : SmallSimplex (starCover K) 0) (u : FaceIndex K 0),
+      (show FaceModule K 0 from f (smallGen _ t 1)) u ≠ 0 →
+        u.1 ∈ starCarrier K (smallRange _ t) := by
+    intro t u hu
+    apply hqc t u
+    simpa [hf] using hu
+  have hcf' : ∀ (t : SmallSimplex (starCover K) 1) (u : FaceIndex K 1),
+      (show FaceModule K 1 from f' (smallGen _ t 1)) u ≠ 0 →
+        u.1 ∈ starCarrier K (smallRange _ t) := by
+    intro t u hu
+    apply hwc t u
+    simpa [hf'] using hu
+  refine ⟨{ f := f, f' := f', cf := hcf, cf' := hcf', comm := ?_ }, ?_⟩
+  · apply Limits.Sigma.hom_ext
+    intro t
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext_ring
+    change d 0 (f' (smallGen _ t 1)) = f (C.d 1 0 (smallGen _ t 1))
+    rw [hf', hwd]
+  · intro t
+    simpa [hf] using hqsum t
 -- END SEAT AREA
 
 /-- Extend a stage by one degree, keeping its top component. On a small simplex
