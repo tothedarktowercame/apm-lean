@@ -1,4 +1,4 @@
-import ConstructionTargets.SimplicialChainMaps
+import ConstructionTargets.SimplicialChainModel
 
 /-! # Rational Lefschetz fixed-point theorem (wired through `SimplicialChainMaps`)
 
