@@ -626,7 +626,71 @@ theorem smallToFace_aux_step {n : ℕ} (o : LinearOrder (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
     (hd : IsSignedDeletion o K d) {k : ℕ} (S : SmallStage K d k) :
     ∃ S' : SmallStage K d (k + 1), S'.f = S.f' := by
-  sorry
+  classical
+  let C := CoefficientSmallPath.coverSmallChains ℚ (starCover K)
+  have hcarried (t : SmallSimplex (starCover K) (k + 2)) :
+      ∀ x ∈ Submodule.span ℚ {x | ∃ t' : SmallSimplex (starCover K) (k + 1),
+          smallRange _ t' ⊆ smallRange _ t ∧ x = smallGen _ t' 1},
+        ∀ u, (show FaceModule K (k + 1) from S.f' x) u ≠ 0 →
+          u.1 ∈ starCarrier K (smallRange _ t) := by
+    intro x hx
+    refine Submodule.span_induction
+      (p := fun x _ => ∀ u, (show FaceModule K (k + 1) from S.f' x) u ≠ 0 →
+        u.1 ∈ starCarrier K (smallRange _ t)) ?_ ?_ ?_ ?_ hx
+    · rintro y ⟨t', ht', rfl⟩ u hu
+      exact starCarrier_mono K ht' (S.cf' t' u hu)
+    · intro u hu
+      simp at hu
+    · intro x y hx hy ihx ihy u hu
+      rw [map_add] at hu
+      by_cases hxu : (show FaceModule K (k + 1) from S.f' x) u = 0
+      · apply ihy u
+        simpa [hxu] using hu
+      · exact ihx u hxu
+    · intro a x hx ih u hu
+      rw [map_smul] at hu
+      apply ih u
+      intro hzero
+      simp [hzero] at hu
+  have hfill : ∀ t : SmallSimplex (starCover K) (k + 2),
+      ∃ w : FaceModule K (k + 2),
+        (∀ u, w u ≠ 0 → u.1 ∈ starCarrier K (smallRange _ t)) ∧
+        d (k + 1) w = S.f' (C.d (k + 2) (k + 1) (smallGen _ t 1)) := by
+    intro t
+    apply smallToFace_aux_fill_succ o K d hd t
+    · exact hcarried t _ (smallChains_d_span (starCover K) t)
+    · have hcomm := ConcreteCategory.congr_hom S.comm
+          (C.d (k + 2) (k + 1) (smallGen _ t 1))
+      have hcomm' : d k (S.f' (C.d (k + 2) (k + 1) (smallGen _ t 1))) =
+          S.f (C.d (k + 1) k (C.d (k + 2) (k + 1) (smallGen _ t 1))) := by
+        simpa [CategoryTheory.comp_apply] using hcomm
+      rw [hcomm']
+      change S.f ((C.d (k + 2) (k + 1) ≫ C.d (k + 1) k)
+        (smallGen _ t 1)) = 0
+      rw [C.d_comp_d]
+      simp
+  choose w hwc hwd using hfill
+  let f'' : C.X (k + 2) ⟶ FaceModuleCat K (k + 2) :=
+    Limits.Sigma.desc (fun t => CoefficientSmallComparison.elementHom ℚ (w t))
+  have hf'' (t : SmallSimplex (starCover K) (k + 2)) :
+      f'' (smallGen _ t 1) = w t := by
+    change (smallGen _ t ≫ f'') 1 = _
+    rw [show smallGen (starCover K) t ≫ f'' =
+        CoefficientSmallComparison.elementHom ℚ (w t) from Limits.Sigma.ι_desc _ t]
+    simpa using (CoefficientSmallComparison.elementHom_one ℚ (M := FaceModuleCat K (k + 2)) (w t))
+  refine ⟨{
+    f := S.f'
+    f' := f''
+    cf := S.cf'
+    cf' := fun t u hu => hwc t u (by simpa [hf''] using hu)
+    comm := ?_ }, rfl⟩
+  apply Limits.Sigma.hom_ext
+  intro t
+  apply ModuleCat.hom_ext
+  apply LinearMap.ext_ring
+  change d (k + 1) (f'' (smallGen _ t 1)) =
+    S.f' (C.d (k + 2) (k + 1) (smallGen _ t 1))
+  rw [hf'', hwd]
 -- END SEAT AREA
 
 /-- The acyclic-carrier chain map from small chains to ordered faces. Build the
