@@ -159,6 +159,41 @@ and `cone (d z₁) = -z₂` because `d z₁ = -d z₂` and the cone of the part 
 off `a` recovers `z₂` (the sign identity is
 `subdivisionChainMap_commutes_aux_cone_boundary_aux_single_aux_sign`). The pieces
 of the cone stay in `Λ` by `hcone`. -/
+lemma coneSupported_cycle_bounds_aux_admissible {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (Λ : Set (Finset (Euc n)))
+    (a : Euc n) (hΛ : ∀ s ∈ Λ, s ∈ K.faces)
+    (hcone : ∀ s ∈ Λ, insert a s ∈ Λ) (z : FaceModule K (k + 1))
+    (hz : ∀ u, z u ≠ 0 → u.1 ∈ Λ) :
+    SimplicialChainMaps.ConeAdmissible K a
+      (Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z) := by
+  intro u hu
+  have hua : a ∉ u.1 := by
+    by_contra h
+    simp [Finsupp.filter_apply, h] at hu
+  have huz : z u ≠ 0 := by
+    simpa [Finsupp.filter_apply, hua] using hu
+  exact ⟨hua, hΛ _ (hcone _ (hz u huz))⟩
+
+lemma coneSupported_cycle_bounds_aux_support {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (Λ : Set (Finset (Euc n))) (a : Euc n)
+    (hcone : ∀ s ∈ Λ, insert a s ∈ Λ) (z : FaceModule K (k + 1))
+    (hz : ∀ u, z u ≠ 0 → u.1 ∈ Λ) :
+    ∀ u, SimplicialChainMaps.subdivisionCone o K a (k + 1)
+      (Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z) u ≠ 0 → u.1 ∈ Λ := by
+  sorry
+
+lemma coneSupported_cycle_bounds_aux_boundary {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ j, FaceModuleCat K (j + 1) ⟶ FaceModuleCat K j)
+    (hd : IsSignedDeletion o K d) (a : Euc n) (z : FaceModule K (k + 1))
+    (hcyc : d k z = 0)
+    (hadm : SimplicialChainMaps.ConeAdmissible K a
+      (Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z)) :
+    d (k + 1) (SimplicialChainMaps.subdivisionCone o K a (k + 1)
+      (Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z)) = z := by
+  sorry
+
 theorem coneSupported_cycle_bounds {n : ℕ} (o : LinearOrder (Euc n))
     (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
@@ -168,7 +203,13 @@ theorem coneSupported_cycle_bounds {n : ℕ} (o : LinearOrder (Euc n))
     (hcone : ∀ s ∈ Λ, insert a s ∈ Λ) {k : ℕ} (z : FaceModule K (k + 1))
     (hz : ∀ u, z u ≠ 0 → u.1 ∈ Λ) (hcyc : d k z = 0) :
     ∃ w : FaceModule K (k + 2), (∀ u, w u ≠ 0 → u.1 ∈ Λ) ∧ d (k + 1) w = z := by
-  sorry
+  let z₁ := Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z
+  let w := SimplicialChainMaps.subdivisionCone o K a (k + 1) z₁
+  have hadm : SimplicialChainMaps.ConeAdmissible K a z₁ :=
+    coneSupported_cycle_bounds_aux_admissible K Λ a hΛ hcone z hz
+  refine ⟨w, ?_, ?_⟩
+  · exact coneSupported_cycle_bounds_aux_support o K Λ a hcone z hz
+  · exact coneSupported_cycle_bounds_aux_boundary o K d hd a z hcyc hadm
 
 /-- Cone acyclicity in degree zero: a 0-chain supported in `Λ` with coefficient
 sum zero is the boundary of a 1-chain supported in `Λ`. Same cone construction,
