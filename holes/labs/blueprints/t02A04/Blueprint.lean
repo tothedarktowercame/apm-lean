@@ -2702,7 +2702,40 @@ lemma apm_t02A04_solidTorus_prism_model_aux_staircase_real (k k' : Fin 3)
     (hk : ∀ m, m < k → t m = 0) (hk2 : ∀ m, k < m → b m = 0)
     (hk' : ∀ m, m < k' → t' m = 0) (hk2' : ∀ m, k' < m → b' m = 0) :
     t = t' := by
-  sorry
+  have hr0 := hrow (0 : Fin 3)
+  have hr1 := hrow (1 : Fin 3)
+  have hr2 := hrow (2 : Fin 3)
+  have hn0 := hb (0 : Fin 3)
+  have hn1 := hb (1 : Fin 3)
+  have hn2 := hb (2 : Fin 3)
+  have hnt0 := ht (0 : Fin 3)
+  have hnt1 := ht (1 : Fin 3)
+  have hnt2 := ht (2 : Fin 3)
+  have hn0' := hb' (0 : Fin 3)
+  have hn1' := hb' (1 : Fin 3)
+  have hn2' := hb' (2 : Fin 3)
+  have hnt0' := ht' (0 : Fin 3)
+  have hnt1' := ht' (1 : Fin 3)
+  have hnt2' := ht' (2 : Fin 3)
+  have hz0 := hk (0 : Fin 3)
+  have hz1 := hk (1 : Fin 3)
+  have hz2 := hk (2 : Fin 3)
+  have hbz0 := hk2 (0 : Fin 3)
+  have hbz1 := hk2 (1 : Fin 3)
+  have hbz2 := hk2 (2 : Fin 3)
+  have hz0' := hk' (0 : Fin 3)
+  have hz1' := hk' (1 : Fin 3)
+  have hz2' := hk' (2 : Fin 3)
+  have hbz0' := hk2' (0 : Fin 3)
+  have hbz1' := hk2' (1 : Fin 3)
+  have hbz2' := hk2' (2 : Fin 3)
+  have htop' : t 0 + t 1 + t 2 = t' 0 + t' 1 + t' 2 := by
+    simpa [Fin.sum_univ_succ, add_assoc] using htop
+  funext m
+  fin_cases k <;> fin_cases k' <;> fin_cases m <;>
+    simp at hz0 hz1 hz2 hbz0 hbz1 hbz2 hz0' hz1' hz2' hbz0' hbz1' hbz2' <;>
+    simp at ⊢ <;>
+    linarith
 
 /-- Two points over the same facet and edge with equal disk weights and circle weight are
 equal: read `b m = y (prismIdx (d m) j)`, `t m = y (prismIdx (d m) (j + 1))`; the step
