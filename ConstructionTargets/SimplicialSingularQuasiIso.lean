@@ -1233,7 +1233,46 @@ theorem smallHomotopy_aux_aug_zero {n : ℕ} (K : Geometry.SimplicialComplex ℝ
     (hψ : StarCarriedMap K d hdd ψ) :
     ((ψ ≫ cmpH).f 0 - (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f 0) ≫
       CoefficientH0.zeroChainAugmentation ℚ = 0 := by
-  sorry
+  classical
+  have hcmp_aug (z : FaceModule K 0) :
+      CoefficientH0.zeroChainAugmentation ℚ (cmp 0 z) =
+        z.sum (fun _ c ↦ c) := by
+    induction z using Finsupp.induction with
+    | zero => simp
+    | @single_add s c z hsz hc ih =>
+        obtain ⟨σ, hσ, -⟩ := hcmp 0 s
+        rw [map_add, map_add, ih]
+        rw [show Finsupp.single s c = c • Finsupp.single s 1 by simp,
+          map_smul, hσ, map_smul]
+        have hgen : CoefficientH0.zeroChainAugmentation ℚ
+            ((CoefficientH0.singularGenerator ℚ _ 0 σ) 1) = 1 := by
+          change ((Limits.Sigma.ι (fun _ : SingularSubdivision.SingularSimplex
+              (TopCat.of K.space) 0 ↦
+            ModuleCat.of ℚ ℚ) σ ≫ Limits.Sigma.desc (fun _ ↦ 𝟙 _)) 1) = 1
+          rw [Limits.Sigma.ι_desc]
+          rfl
+        rw [hgen]
+        simp [Finsupp.sum_add_index, hc]
+  apply Limits.Sigma.hom_ext
+  intro t
+  rw [Preadditive.sub_comp]
+  apply ModuleCat.hom_ext
+  apply LinearMap.ext_ring
+  simp only [CategoryTheory.comp_apply, map_sub, map_zero]
+  change CoefficientH0.zeroChainAugmentation ℚ
+      (cmpH.f 0 (ψ.f 0 (smallGen _ t 1))) -
+      CoefficientH0.zeroChainAugmentation ℚ
+        ((CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f 0
+          (smallGen _ t 1)) = 0
+  rw [cmpH_f]
+  have ha := hcmp_aug (ψ.f 0 (smallGen _ t 1))
+  have hs := hψ.2 t
+  have hinc := ConcreteCategory.congr_hom (smallGen_aug (starCover K) t) (1 : ℚ)
+  have hi : CoefficientH0.zeroChainAugmentation ℚ
+      ((CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f 0
+        (smallGen _ t 1)) = 1 := by
+    simpa [CategoryTheory.comp_apply] using hinc
+  exact sub_eq_zero.mpr (ha.trans (hs.trans hi.symm))
 
 /-- One stage of the homotopy between `ψ ≫ cmpH` and the inclusion. -/
 structure SmallHomotopyStage {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
