@@ -2794,7 +2794,57 @@ lemma apm_t02A04_solidTorus_prism_model_aux_injective_aux_disk (q q' : Fin 6 × 
 lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_circle (c : Circle) :
     ∃ (j : Fin 3) (s : ℝ), 0 ≤ s ∧ s ≤ 1 ∧
       Circle.exp (2 * Real.pi * ((j : ℝ) + s) / 3) = c := by
-  sorry
+  let a := Complex.arg (c : ℂ)
+  let u := if a < 0 then a + 2 * Real.pi else a
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have ha0 : -Real.pi < a := Complex.neg_pi_lt_arg _
+  have ha1 : a ≤ Real.pi := Complex.arg_le_pi _
+  have hu0 : 0 ≤ u := by
+    dsimp [u]
+    split_ifs <;> linarith
+  have hu1 : u ≤ 2 * Real.pi := by
+    dsimp [u]
+    split_ifs <;> linarith
+  have hexp : Circle.exp u = c := by
+    dsimp [u]
+    split_ifs with h
+    · rw [Circle.exp_add]
+      rw [show Circle.exp (2 * Real.pi) = 1 by
+        apply Circle.ext
+        simp [Circle.coe_exp, Complex.exp_mul_I]]
+      simpa [a] using Circle.exp_arg c
+    · exact Circle.exp_arg c
+  by_cases h0 : u ≤ 2 * Real.pi / 3
+  · refine ⟨0, 3 * u / (2 * Real.pi), by positivity, ?_, ?_⟩
+    · apply (div_le_one (by positivity)).2
+      linarith
+    · rw [← hexp]
+      apply congrArg Circle.exp
+      norm_num
+      field_simp
+  by_cases h1 : u ≤ 4 * Real.pi / 3
+  · refine ⟨1, 3 * u / (2 * Real.pi) - 1, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2
+      apply (one_le_div (by positivity)).2
+      linarith
+    · apply sub_le_iff_le_add.2
+      apply (div_le_iff₀ (by positivity)).2
+      linarith
+    · rw [← hexp]
+      apply congrArg Circle.exp
+      norm_num
+      field_simp
+  · refine ⟨2, 3 * u / (2 * Real.pi) - 2, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2
+      apply (le_div_iff₀ (by positivity)).2
+      linarith
+    · apply sub_le_iff_le_add.2
+      apply (div_le_iff₀ (by positivity)).2
+      linarith
+    · rw [← hexp]
+      apply congrArg Circle.exp
+      norm_num
+      field_simp
 -- END SEAT AREA
 
 /-- Every disk point is a cone point: `_cone_model_aux_surjective`, a facet from
