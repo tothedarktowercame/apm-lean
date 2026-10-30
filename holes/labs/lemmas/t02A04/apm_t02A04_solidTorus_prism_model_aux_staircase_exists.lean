@@ -2897,7 +2897,51 @@ lemma apm_t02A04_solidTorus_prism_model_aux_staircase_exists (a : Fin 3 → ℝ)
     ∃ (k : Fin 3) (b t : Fin 3 → ℝ), (∀ m, 0 ≤ b m) ∧ (∀ m, 0 ≤ t m) ∧
       (∀ m, b m + t m = a m) ∧ ∑ m, t m = s ∧
       (∀ m, m < k → t m = 0) ∧ (∀ m, k < m → b m = 0) := by
-  sorry
+  have ha0 := ha (0 : Fin 3)
+  have ha1 := ha (1 : Fin 3)
+  have ha2 := ha (2 : Fin 3)
+  have hsum' : a 0 + a 1 + a 2 = 1 := by
+    simpa [Fin.sum_univ_succ, add_assoc] using hsum
+  by_cases h2 : s ≤ a 2
+  · refine ⟨2, ![a 0, a 1, a 2 - s], ![0, 0, s], ?_, ?_, ?_, ?_, ?_, ?_⟩
+    · intro m
+      fin_cases m <;> simp <;> linarith
+    · intro m
+      fin_cases m <;> simp <;> linarith
+    · intro m
+      fin_cases m <;> simp
+    · simp [Fin.sum_univ_succ]
+    · intro m hm
+      fin_cases m <;> simp_all
+    · intro m hm
+      fin_cases m <;> simp_all
+  · by_cases h1 : s ≤ a 1 + a 2
+    · refine ⟨1, ![a 0, a 1 + a 2 - s, 0], ![0, s - a 2, a 2],
+        ?_, ?_, ?_, ?_, ?_, ?_⟩
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · simp [Fin.sum_univ_succ]
+      · intro m hm
+        fin_cases m <;> simp_all
+      · intro m hm
+        fin_cases m <;> simp_all
+    · refine ⟨0, ![1 - s, 0, 0], ![s - a 1 - a 2, a 1, a 2],
+        ?_, ?_, ?_, ?_, ?_, ?_⟩
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · simp [Fin.sum_univ_succ]
+      · intro m hm
+        fin_cases m <;> simp_all
+      · intro m hm
+        fin_cases m <;> simp_all
 -- END SEAT AREA
 
 /-- A prism point with given disk weights and circle weight: apply
