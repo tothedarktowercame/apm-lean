@@ -64,32 +64,45 @@ classification, or fixed-point theorem.
 
 ## Remaining lemmas
 
+### `t99A03_fourProjectivePlanesWedge_isFinitePolyhedron` — assembled
+
+Sorry-free adapter.  First apply
+`FiniteTriangulation.wedge_isFinitePolyhedron_of_vertexTriangulations` to two
+copies of the marked concrete `RP²` triangulation.  Then apply the generic
+`wedge_isFinitePolyhedron` to two copies of that twofold wedge.  The three
+parallel shared leaves and their estimates are documented in
+`ConstructionTargets/FiniteTriangulation.blueprint.md`.
+
+C1 four finite summands give a finite complex; C2 no conclusion hypothesis;
+C3 assembly only; C4 both binary wedge stages are explicit; C5 the first-stage
+common point is exactly `T99A03.twoWedgePoint`; C6 the abbreviation still
+denotes four copies; C7 shared homeomorphisms target Euclidean subspaces; C8
+the common point survives as a vertex (stellar subdivision handles the second
+stage); C9 not an ancestor; C10 exact.
+
 ### `t99A03_wedge_lefschetz_number` — LIBRARY
 
 **Statement.** Every continuous self-map of the concrete fourfold `RP²` wedge
 has rational Lefschetz number `1` in the honest singular-homology definition
 from `ConstructionTargets.RationalLefschetz`.
 
-**Why true.** `RP²` has zero reduced rational homology.  Apply reduced
-Mayer–Vietoris for a point wedge repeatedly to obtain zero reduced rational
-homology for the fourfold wedge.  Consequently only `H₀ ≅ ℚ` contributes, and
-every self-map acts as the identity on `H₀`, so the alternating trace is `1`.
-The topology worklist already records the foundations
-`projectivePlane_rationalReducedHomology_zero` and
-`projectivePlaneWedge_rationalHomology`; the latter must be iterated once more
-for this fourfold model.  `RationalLefschetz.lean` is the closest sorry-free
-construction, but currently supplies vocabulary only.
+**Why true.** This is now a sorry-free adapter to
+`ConstructionTargets.ProjectivePlaneWedgeRationalHomology`.  That module first
+computes one `RP²`, applies its generic point-wedge Mayer--Vietoris theorem to
+obtain the twofold wedge, applies the same theorem once more to the two copies,
+and invokes its generic Lefschetz trace assembly.  The local pointed
+contractible-neighbourhood hypothesis is preserved at the first wedge point,
+so the second application is legitimate.
 
-**Estimate.** LIBRARY program, 700–1500 lines after the shared projective-plane
-and point-wedge homology foundations land.
+**Estimate.** Adapter proved; the six shared leaves and their estimates are in
+`ConstructionTargets/ProjectivePlaneWedgeRationalHomology.blueprint.md`.
 
-**Depends on.** No other blueprint lemma.
+**Depends on.** Only the shared module, not another t99A03 blueprint lemma.
 
-**Truth check.** By hand, over `ℚ`, each positive homology group of `RP²`
-vanishes and reduced homology takes point wedges to direct sums.  Four zero
-summands remain zero.  In degree zero the connected wedge gives one copy of
-`ℚ`; the induced map of any self-map is identity on that copy.  The constant
-map and the identity map both therefore have Lefschetz number `1`.
+**Truth check.** All coefficients are explicitly `ℚ` (integrally `H₁(RP²)` is
+`ℤ/2`).  The neighbourhood hypothesis excludes wild point wedges.  The
+dimension-zero endpoint (wedging points) remains a point.  Both constant and
+identity maps have trace one on `H₀` and zero positive contributions.
 
 ### `t99A03_wedge_fixed_point_of_lefschetz` — LIBRARY
 
@@ -171,14 +184,17 @@ excluded exactly where needed.
 
 ## Dependency layers
 
-* **Layer 1 (parallel):** `t99A03_wedge_lefschetz_number` (LIBRARY),
-  `t99A03_wedge_fixed_point_of_lefschetz` (LIBRARY, taking the first
-  conclusion as a hypothesis), and `t99A03_exists_N4_deck_involution`
-  (LIBRARY).  The generic deck lemma is already proved.
+* **Shared homology module:** six parallel leaves, documented in
+  `ConstructionTargets/ProjectivePlaneWedgeRationalHomology.blueprint.md`;
+  the generic and concrete homology/Lefschetz assemblies are proved.
+* **Layer 1 (parallel):** `t99A03_wedge_lefschetz_number` is now a proved
+  adapter; `t99A03_wedge_fixed_point_of_lefschetz` and
+  `t99A03_exists_N4_deck_involution` remain LIBRARY.  The generic deck lemma
+  is already proved.
 * **Layer 2:** `apm_t99a03`, a sorry-free assembly from the three Layer 1
   conclusions and the proved deck lemma.
 
-There are **three open lemmas**, all honestly marked LIBRARY foundations.
+There are **two open t99A03 lemmas**, both honestly marked LIBRARY foundations.
 The principal doubt is scheduling, not truth: the compact-polyhedron Lefschetz
 theorem and explicit polygon-cover identification are both much larger than a
 normal lemma seat.
@@ -198,5 +214,27 @@ The final output of `#print axioms apm_t99a03` was:
 'apm_t99a03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The three warnings are exactly the three LIBRARY lemmas.  The generic deck
-lemma and the main theorem contain no `sorry`.
+The two local warnings are exactly the two remaining LIBRARY lemmas.  The
+wedge-Lefschetz adapter, generic deck lemma, and main theorem contain no
+`sorry`; imported `sorryAx` comes through the six shared homology leaves.
+
+## Part (b) rerouted: fixed-point-free map without a cover (claude-14, 2026-10-30)
+
+`t99A03_exists_N4_deck_involution` (a double cover `N₄ → N₃` with its deck
+involution) is replaced: building a covering map out of the polygon quotient
+costs far more than the theorem needs, which is just one fixed-point-free self-map
+of `N₄`. In the model `Surface false 4` (8-gon `a₁a₁a₂a₂a₃a₃a₄a₄`):
+
+* `h : N₄ → S¹` winds once along `a₁`, once backwards along `a₂`, constant on
+  `a₃, a₄` (boundary degree `1 + 1 - 1 - 1 = 0`, so it extends radially over the
+  disk), rotated by `π`;
+* `γ : S¹ → N₄` is the `a₁` edge loop;
+* `h ∘ γ = (z ↦ -z)`, so `f = γ ∘ h` has no fixed point.
+
+Leaves: `t99A03_aux_boundaryAngle` (the boundary angle `φ`),
+`t99A03_aux_circleMap` (radial extension and descent; after `boundaryAngle`),
+`t99A03_aux_edgeLoop`, `t99A03_aux_circle_param`. The assembly
+`t99A03_exists_fixedPointFree_N4` and `apm_t99a03` part (b) are proved from them.
+Truth check: each pair of glued arcs `2j, 2j+1` has the same parameter, and the
+angles there differ by `0` or `2π`, so `h` is well defined; `h ∘ γ` is exactly
+`Circle.exp (2πt + π)` on `Circle.exp (2πt)`.

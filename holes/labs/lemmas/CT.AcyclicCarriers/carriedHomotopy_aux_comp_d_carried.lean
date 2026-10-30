@@ -1,0 +1,629 @@
+import ConstructionTargets.OrientedSimplicialChains
+import ConstructionTargets.ProjectivePlaneWedgeRationalHomology
+import Mathlib.Analysis.Convex.Contractible
+
+/-!
+# Acyclic carriers for ordered simplicial chains
+
+This file isolates the acyclic-carrier input used to compare two affine
+realizations of the ordered-face complex.
+-/
+
+open Set CategoryTheory
+noncomputable section
+
+namespace ConstructionTargets.AcyclicCarriers
+
+open ConstructionTargets.OrientedSimplicialChains
+open ConstructionTargets.ProjectivePlaneWedgeRationalHomology
+open SingularSubdivision
+
+abbrev SingularQChains {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n)) :=
+  CoefficientH0.SingularChains ℚ (TopCat.of K.space)
+
+/-- A production singular chain is carried by the convex hull of `s` if it
+has a finite generator presentation all of whose simplices land in that hull.
+The existential presentation makes this definition independent of a choice of
+coordinates for the categorical coproduct defining singular chains. -/
+def FaceCarriedChain {n k : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (s : Finset (Euc n)) (z : (SingularQChains K).X k) : Prop :=
+  ∃ (m : ℕ) (a : Fin m → ℚ)
+      (σ : Fin m → SingularSimplex (TopCat.of K.space) k),
+    z = ∑ i, (CoefficientH0.singularGenerator ℚ _ k (σ i)) (a i) ∧
+    ∀ i, Set.range (continuousMapOfSingularSimplex k (σ i)) ⊆
+      (fun x : K.space => (x : Euc n)) ⁻¹' convexHull ℝ (s : Set (Euc n))
+
+/-- The convex carrier of every (nonempty) face has the rational homology of
+a point.  The proof contracts the subtype `convexHull ℝ s` and applies
+`rationallyPointlike_of_homotopyEquiv` and `rationallyPointlike_unit`. -/
+theorem faceHull_rationallyPointlike {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : FaceIndex K k) :
+    RationallyPointlike (convexHull ℝ (s.1 : Set (Euc n))) := by
+  have hs : (s.1 : Set (Euc n)).Nonempty := by
+    rw [Finset.coe_nonempty]
+    apply Finset.card_pos.mp
+    rw [s.2.2]
+    omega
+  have hh : (convexHull ℝ (s.1 : Set (Euc n))).Nonempty :=
+    convexHull_nonempty_iff.mpr hs
+  letI : ContractibleSpace (convexHull ℝ (s.1 : Set (Euc n))) :=
+    (convex_convexHull ℝ (s.1 : Set (Euc n))).contractibleSpace hh
+  obtain ⟨e⟩ := ContractibleSpace.hequiv_unit
+    (convexHull ℝ (s.1 : Set (Euc n)))
+  exact rationallyPointlike_of_homotopyEquiv e rationallyPointlike_unit
+
+/-- Taking the singular boundary preserves the face carrier.  This is the
+generator boundary formula together with the fact that restricting a simplex
+to a standard face does not enlarge its range. -/
+theorem faceCarriedChain_boundary {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n))
+    (z : (SingularQChains K).X (k + 1)) (hz : FaceCarriedChain K s z) :
+    FaceCarriedChain K s ((SingularQChains K).d (k + 1) k z) := by
+  classical
+  rcases hz with ⟨m, a, σ, rfl, hσ⟩
+  let e : (Fin m × Fin (k + 2)) ≃ Fin (Fintype.card (Fin m × Fin (k + 2))) :=
+    Fintype.equivFin _
+  let τ : Fin (Fintype.card (Fin m × Fin (k + 2))) →
+      SingularSimplex (TopCat.of K.space) k := fun j ↦
+    (TopCat.toSSet.obj (TopCat.of K.space)).δ (e.symm j).2 (σ (e.symm j).1)
+  let b : Fin (Fintype.card (Fin m × Fin (k + 2))) → ℚ := fun j ↦
+    ((-1 : ℚ) ^ ((e.symm j).2 : ℕ)) * a (e.symm j).1
+  refine ⟨_, b, τ, ?_, ?_⟩
+  · simp only [map_sum]
+    calc
+      _ = ∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of K.space)
+            (k + 1) (σ i) ≫ (SingularQChains K).d (k + 1) k) (a i) := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          rfl
+      _ = ∑ i, ∑ j : Fin (k + 2),
+            (CoefficientH0.singularGenerator ℚ (TopCat.of K.space) k
+              ((TopCat.toSSet.obj (TopCat.of K.space)).δ j (σ i)))
+              (((-1 : ℚ) ^ (j : ℕ)) * a i) := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          rw [CoefficientH0.singularGenerator_boundary]
+          simp only [ModuleCat.hom_sum, LinearMap.coe_sum, Finset.sum_apply]
+          apply Finset.sum_congr rfl
+          intro j hj
+          rw [ModuleCat.hom_smul, LinearMap.smul_apply]
+          rw [← Int.cast_smul_eq_zsmul ℚ]
+          rw [← map_smul]
+          simp
+    calc
+      _ = ∑ p : Fin m × Fin (k + 2),
+          (CoefficientH0.singularGenerator ℚ (TopCat.of K.space) k
+            ((TopCat.toSSet.obj (TopCat.of K.space)).δ p.2 (σ p.1)))
+            (((-1 : ℚ) ^ (p.2 : ℕ)) * a p.1) := by
+          rw [Fintype.sum_prod_type]
+      _ = _ := by
+        simpa [τ, b] using e.sum_comp (fun j ↦
+          (CoefficientH0.singularGenerator ℚ (TopCat.of K.space) k (τ j)) (b j))
+  · intro j
+    let p := e.symm j
+    let cσ := continuousMapOfSingularSimplex (k + 1) (σ p.1)
+    have hcσ : singularSimplexOfContinuousMap (TopCat.of K.space) (k + 1) cσ =
+        σ p.1 :=
+      Equiv.symm_apply_apply _ _
+    dsimp [τ]
+    rw [← hcσ, singularSimplexOfContinuousMap_face]
+    simp only [continuousMapOfSingularSimplex_ofContinuousMap]
+    rintro x ⟨y, rfl⟩
+    exact hσ p.1 ⟨_, rfl⟩
+
+/-- The image of a face generator under an affine comparison is carried by
+that face. -/
+theorem affineComparison_generator_carried {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (cmp : ∀ j, FaceModuleCat K j ⟶ (SingularQChains K).X j)
+    (hcmp : IsAffineComparison K cmp) (s : FaceIndex K k) :
+    FaceCarriedChain K s.1 (cmp k (Finsupp.single s 1)) := by
+  rcases hcmp k s with ⟨σ, hσ, hrange⟩
+  refine ⟨1, fun _ ↦ 1, fun _ ↦ σ, ?_, ?_⟩
+  · simpa using hσ
+  · intro i
+    simpa [hrange]
+
+/-- Carrier monotonicity: a chain carried by a subface is carried by the
+containing face.  This is `convexHull_mono`. -/
+theorem faceCarriedChain_mono {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (s t : Finset (Euc n)) (hst : t ⊆ s) (z : (SingularQChains K).X k)
+    (hz : FaceCarriedChain K t z) : FaceCarriedChain K s z := by
+  rcases hz with ⟨m, a, σ, hz, hσ⟩
+  refine ⟨m, a, σ, hz, fun i ↦ (hσ i).trans ?_⟩
+  exact preimage_mono (convexHull_mono (by simpa using hst))
+
+lemma faceCarriedCycle_bounds_aux_cycle_lift
+    (C : ChainComplex (ModuleCat.{0} ℚ) ℕ) (j : ℕ)
+    (q : C.X (j + 1)) (hq : C.d (j + 1) j q = 0) :
+    ∃ x : C.cycles (j + 1), C.iCycles (j + 1) x = q := by
+  let e : ModuleCat.of ℚ ℚ ⟶ C.X (j + 1) :=
+    ModuleCat.ofHom (LinearMap.toSpanSingleton ℚ (C.X (j + 1)) q)
+  have he : e ≫ C.d (j + 1) j = 0 := by
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext
+    intro r
+    change C.d (j + 1) j (r • q) = 0
+    simp [hq]
+  refine ⟨C.liftCycles e j (by simp) he 1, ?_⟩
+  have h := ConcreteCategory.congr_hom
+    (C.liftCycles_i e j (by simp) he) 1
+  exact h.trans (by simp [e])
+
+lemma faceCarriedCycle_bounds_aux_exists_boundary
+    (C : ChainComplex (ModuleCat.{0} ℚ) ℕ) (j : ℕ)
+    (x : C.cycles j) (h : C.homologyπ j x = 0) :
+    ∃ b : C.X (j + 1), C.d (j + 1) j b = C.iCycles j x := by
+  let S := ShortComplex.mk (C.toCycles (j + 1) j) (C.homologyπ j)
+    (C.toCycles_comp_homologyπ (j + 1) j)
+  have hS : S.Exact :=
+    S.exact_of_g_is_cokernel (C.homologyIsCokernel (j + 1) j (by simp))
+  obtain ⟨b, hb⟩ := (S.moduleCat_exact_iff.mp hS) x h
+  change C.toCycles (j + 1) j b = x at hb
+  refine ⟨b, ?_⟩
+  have hi := ConcreteCategory.congr_hom (C.toCycles_i (j + 1) j) b
+  simpa only [CategoryTheory.comp_apply, hb] using hi.symm
+
+/-- Chains of `X` carried by a subset `A`: finite generator combinations of
+simplices with image in `A` (`FaceCarriedChain` is the case `A = preimage of a hull`). -/
+def SubsetCarriedChain (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
+    (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k) : Prop :=
+  ∃ (m : ℕ) (a : Fin m → ℚ) (σ : Fin m → SingularSimplex (TopCat.of X) k),
+    z = ∑ i, (CoefficientH0.singularGenerator ℚ _ k (σ i)) (a i) ∧
+    ∀ i, Set.range (continuousMapOfSingularSimplex k (σ i)) ⊆ A
+
+/-- Pushforward of singular chains along the inclusion of a subset. -/
+noncomputable abbrev subsetPush (X : Type) [TopologicalSpace X] (A : Set X) :
+    CoefficientH0.SingularChains ℚ (TopCat.of A) ⟶ CoefficientH0.SingularChains ℚ (TopCat.of X) :=
+  ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℚ)).obj (ModuleCat.of ℚ ℚ)).map
+    (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
+
+/-- (FB-b1) A carried chain lifts to a chain of the subspace (each simplex
+lands in `A`). -/
+theorem subsetPush_lift (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
+    (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
+    (hz : SubsetCarriedChain X A z) :
+    ∃ z' : (CoefficientH0.SingularChains ℚ (TopCat.of A)).X k, (subsetPush X A).f k z' = z := by
+  sorry
+
+/-- (FB-b2) Pushforward along a subspace inclusion is injective on chains (it
+is injective on singular simplices, and chains are free on simplices). -/
+theorem subsetPush_injective (X : Type) [TopologicalSpace X] (A : Set X) (k : ℕ) :
+    Function.Injective ((subsetPush X A).f k) := by
+  sorry
+
+/-- (FB-b3) Pushforwards of subspace chains are carried. -/
+theorem subsetPush_carried (X : Type) [TopologicalSpace X] (A : Set X) {k : ℕ}
+    (w : (CoefficientH0.SingularChains ℚ (TopCat.of A)).X k) :
+    SubsetCarriedChain X A ((subsetPush X A).f k w) := by
+  classical
+  let S := SingularSimplex (TopCat.of A) k
+  let D := ModuleCat.coprodIsoDirectSum (fun _ : S ↦ ModuleCat.of ℚ ℚ)
+  let q : DirectSum S (fun _ ↦ ℚ) := D.hom w
+  let e : Fin q.support.card ≃ q.support := q.support.equivFin.symm
+  let σ : Fin q.support.card → SingularSimplex (TopCat.of A) k := fun i ↦ (e i).1
+  let a : Fin q.support.card → ℚ := fun i ↦ q (e i).1
+  let f : C(A, X) := ⟨Subtype.val, continuous_subtype_val⟩
+  let τ : Fin q.support.card → SingularSimplex (TopCat.of X) k := fun i ↦
+    singularSimplexOfContinuousMap (TopCat.of X) k
+      (f.comp (continuousMapOfSingularSimplex k (σ i)))
+  refine ⟨q.support.card, a, τ, ?_, ?_⟩
+  · have hw : w = ∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i)) (a i) := by
+      have hq : D.hom w = D.hom
+          (∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i)) (a i)) := by
+        change q = D.hom (∑ i, (CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i)) (a i))
+        simp only [map_sum]
+        have hr : q = ∑ i, DirectSum.of (fun _ : S ↦ ℚ) (σ i) (a i) := by
+          calc
+            q = ∑ x ∈ q.support, DirectSum.of (fun _ : S ↦ ℚ) x (q x) :=
+              (DirectSum.sum_support_of q).symm
+            _ = ∑ x : q.support, DirectSum.of (fun _ : S ↦ ℚ) x.1 (q x.1) := by
+              exact (Finset.sum_attach q.support
+                (fun x ↦ DirectSum.of (fun _ : S ↦ ℚ) x (q x))).symm
+            _ = _ := by
+              simpa [σ, a] using (e.sum_comp
+                (fun x : q.support ↦ DirectSum.of (fun _ : S ↦ ℚ) x.1 (q x.1))).symm
+        have hgen (i : Fin q.support.card) :
+            D.hom ((CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i)) (a i)) =
+              DirectSum.of (fun _ : S ↦ ℚ) (σ i) (a i) := by
+          dsimp [D, CoefficientH0.singularGenerator]
+          exact ConcreteCategory.congr_hom
+            (ModuleCat.ι_coprodIsoDirectSum_hom
+              (Z := fun _ : S ↦ ModuleCat.of ℚ ℚ) (σ i)) (a i)
+        simpa only [hgen] using hr
+      simpa using congrArg D.inv hq
+    rw [hw, map_sum]
+    apply Finset.sum_congr rfl
+    intro i hi
+    change ((CoefficientH0.singularGenerator ℚ (TopCat.of A) k (σ i) ≫
+      (subsetPush X A).f k) (a i)) = _
+    simpa [subsetPush, f, τ] using congrArg (fun g ↦ g (a i))
+      (CoefficientH0.singularGenerator_singularPostcomposition ℚ k
+        (continuousMapOfSingularSimplex k (σ i)) f)
+  · intro i
+    dsimp [τ]
+    simp only [continuousMapOfSingularSimplex_ofContinuousMap]
+    rintro x ⟨y, rfl⟩
+    exact (continuousMapOfSingularSimplex k (σ i) y).property
+
+/-- (FB-b) Generic filling: in a rationally pointlike subset `A`, a carried
+positive-degree cycle bounds a carried chain.  Route: a carried chain is the
+pushforward of a chain of the subspace `A` (lift each simplex, which lands in
+`A`); pushforward along the subspace inclusion is injective on chains (it is
+injective on simplices) and commutes with `d`, so the lift is a cycle; it bounds
+in `A` (`hA` and the banked `_aux_cycle_lift`/`_aux_exists_boundary`); push the
+bounding chain forward. -/
+theorem subsetCarriedCycle_bounds (X : Type) [TopologicalSpace X] (A : Set X)
+    (hA : RationallyPointlike A) {k : ℕ} (hk : 0 < k)
+    (z : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X k)
+    (hz : SubsetCarriedChain X A z)
+    (hcycle : (CoefficientH0.SingularChains ℚ (TopCat.of X)).d k (k - 1) z = 0) :
+    ∃ w : (CoefficientH0.SingularChains ℚ (TopCat.of X)).X (k + 1),
+      SubsetCarriedChain X A w ∧
+        (CoefficientH0.SingularChains ℚ (TopCat.of X)).d (k + 1) k w = z := by
+  obtain ⟨j, rfl⟩ : ∃ j, k = j + 1 := ⟨k - 1, by omega⟩
+  obtain ⟨z', hz'⟩ := subsetPush_lift X A z hz
+  have hcyc' : (CoefficientH0.SingularChains ℚ (TopCat.of A)).d (j + 1) j z' = 0 := by
+    apply subsetPush_injective X A j
+    have h := congrArg (fun g => g z') ((subsetPush X A).comm (j + 1) j)
+    simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at h
+    rw [map_zero, ← h, hz']
+    simpa using hcycle
+  obtain ⟨x, hx⟩ := faceCarriedCycle_bounds_aux_cycle_lift _ j z' hcyc'
+  have hπ : (CoefficientH0.SingularChains ℚ (TopCat.of A)).homologyπ (j + 1) x = 0 :=
+    haveI : Subsingleton ((CoefficientH0.SingularChains ℚ (TopCat.of A)).homology (j + 1)) :=
+      ModuleCat.subsingleton_of_isZero (hA.2 (j + 1) (by omega))
+    Subsingleton.elim _ _
+  obtain ⟨b, hb⟩ := faceCarriedCycle_bounds_aux_exists_boundary _ (j + 1) x hπ
+  refine ⟨(subsetPush X A).f (j + 2) b, subsetPush_carried X A b, ?_⟩
+  have h := congrArg (fun g => g b) ((subsetPush X A).comm (j + 2) (j + 1))
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at h
+  erw [h, hb, hx, hz']
+
+/-- (FB-a) The preimage of a face hull in `K.space` is homeomorphic to the hull
+(the hull lies in `K.space`), so it is rationally pointlike too. -/
+theorem faceHullPreimage_rationallyPointlike {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : FaceIndex K k)
+    (hpoint : RationallyPointlike (convexHull ℝ (s.1 : Set (Euc n)))) :
+    RationallyPointlike ((fun x : K.space => (x : Euc n)) ⁻¹'
+      convexHull ℝ (s.1 : Set (Euc n))) := by
+  let e : ((fun x : K.space => (x : Euc n)) ⁻¹'
+        convexHull ℝ (s.1 : Set (Euc n))) ≃ₜ
+      convexHull ℝ (s.1 : Set (Euc n)) :=
+    { toEquiv :=
+        { toFun := fun x => ⟨x.1.1, x.2⟩
+          invFun := fun x =>
+            ⟨⟨x.1, K.convexHull_subset_space s.2.1 x.2⟩, x.2⟩
+          left_inv := fun x => by ext; rfl
+          right_inv := fun x => by ext; rfl }
+      continuous_toFun :=
+        continuous_subtype_val.comp continuous_subtype_val |>.subtype_mk _
+      continuous_invFun :=
+        (continuous_subtype_val.subtype_mk _).subtype_mk _ }
+  exact rationallyPointlike_of_homotopyEquiv e.toHomotopyEquiv hpoint
+
+/-- Positive-degree acyclicity in the concrete carrier form needed by the
+induction: a carried cycle bounds a carried chain.  Its proof lifts the finite
+presentation to singular chains on the hull subtype, uses positive-degree
+rational homology vanishing, and pushes the bounding chain forward. -/
+theorem faceCarriedCycle_bounds {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : FaceIndex K k)
+    (hpoint : RationallyPointlike (convexHull ℝ (s.1 : Set (Euc n))))
+    (z : (SingularQChains K).X k) (hz : FaceCarriedChain K s.1 z)
+    (hcycle : (SingularQChains K).d k (k - 1) z = 0) (hk : 0 < k) :
+    ∃ w : (SingularQChains K).X (k + 1), FaceCarriedChain K s.1 w ∧
+      (SingularQChains K).d (k + 1) k w = z := by
+  exact subsetCarriedCycle_bounds K.space _ (faceHullPreimage_rationallyPointlike K s hpoint)
+    hk z hz hcycle
+
+/-- In degree zero an affine comparison is forced on vertices: a singular
+zero-simplex whose range is the singleton hull of a vertex is constant. -/
+theorem affineComparison_degreeZero_eq {n : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (cmp₁ cmp₂ : ∀ k, FaceModuleCat K k ⟶ (SingularQChains K).X k)
+    (hcmp₁ : IsAffineComparison K cmp₁) (hcmp₂ : IsAffineComparison K cmp₂) :
+    cmp₁ 0 = cmp₂ 0 := by
+  apply ModuleCat.hom_ext
+  apply Finsupp.lhom_ext'
+  intro s
+  apply LinearMap.ext
+  intro a
+  obtain ⟨σ₁, hσ₁, hrange₁⟩ := hcmp₁ 0 s
+  obtain ⟨σ₂, hσ₂, hrange₂⟩ := hcmp₂ 0 s
+  obtain ⟨v, hv⟩ := Finset.card_eq_one.mp (by simpa using s.2.2)
+  have hmaps : continuousMapOfSingularSimplex 0 σ₁ =
+      continuousMapOfSingularSimplex 0 σ₂ := by
+    apply ContinuousMap.ext
+    intro x
+    apply Subtype.ext
+    have h₁ : continuousMapOfSingularSimplex 0 σ₁ x ∈
+        Set.range (continuousMapOfSingularSimplex 0 σ₁) := ⟨x, rfl⟩
+    have h₂ : continuousMapOfSingularSimplex 0 σ₂ x ∈
+        Set.range (continuousMapOfSingularSimplex 0 σ₂) := ⟨x, rfl⟩
+    rw [hrange₁, hv, Finset.coe_singleton, convexHull_singleton] at h₁
+    rw [hrange₂, hv, Finset.coe_singleton, convexHull_singleton] at h₂
+    exact h₁.trans h₂.symm
+  have hsigma : σ₁ = σ₂ := by
+    have h₁ : singularSimplexOfContinuousMap (TopCat.of K.space) 0
+        (continuousMapOfSingularSimplex 0 σ₁) = σ₁ :=
+      Equiv.symm_apply_apply _ _
+    have h₂ : singularSimplexOfContinuousMap (TopCat.of K.space) 0
+        (continuousMapOfSingularSimplex 0 σ₂) = σ₂ :=
+      Equiv.symm_apply_apply _ _
+    rw [← h₁, ← h₂, hmaps]
+  change cmp₁ 0 (Finsupp.single s a) = cmp₂ 0 (Finsupp.single s a)
+  rw [show Finsupp.single s a = a • Finsupp.single s 1 by simp]
+  rw [map_smul, map_smul, hσ₁, hσ₂, hsigma]
+
+lemma carried_chainHomotopy_exists_aux_zero {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n)) :
+    FaceCarriedChain K s (0 : (SingularQChains K).X k) := by
+  refine ⟨0, Fin.elim0, Fin.elim0, ?_, fun i ↦ i.elim0⟩
+  simp
+
+lemma carried_chainHomotopy_exists_aux_smul {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n))
+    (z : (SingularQChains K).X k) (hz : FaceCarriedChain K s z) (r : ℚ) :
+    FaceCarriedChain K s (r • z) := by
+  rcases hz with ⟨m, a, σ, rfl, hσ⟩
+  refine ⟨m, fun i ↦ r * a i, σ, ?_, hσ⟩
+  rw [Finset.smul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [← map_smul]
+  rfl
+
+lemma carried_chainHomotopy_exists_aux_add {n k : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n))
+    (x y : (SingularQChains K).X k)
+    (hx : FaceCarriedChain K s x) (hy : FaceCarriedChain K s y) :
+    FaceCarriedChain K s (x + y) := by
+  classical
+  rcases hx with ⟨m, a, σ, rfl, hσ⟩
+  rcases hy with ⟨m', a', σ', rfl, hσ'⟩
+  let e : Fin m ⊕ Fin m' ≃ Fin (m + m') := finSumFinEquiv
+  let b : Fin (m + m') → ℚ := Sum.elim a a' ∘ e.symm
+  let τ : Fin (m + m') → SingularSimplex (TopCat.of K.space) k :=
+    Sum.elim σ σ' ∘ e.symm
+  refine ⟨m + m', b, τ, ?_, ?_⟩
+  · rw [← e.sum_comp]
+    simp [b, τ, Fintype.sum_sum_type]
+  · intro i
+    generalize hp : e.symm i = p
+    rcases p with j | j
+    · simpa [τ, hp] using hσ j
+    · simpa [τ, hp] using hσ' j
+
+lemma carried_chainHomotopy_exists_aux_linear_combination {n k l : ℕ}
+    (K : Geometry.SimplicialComplex ℝ (Euc n)) (s : Finset (Euc n))
+    (f : FaceModuleCat K k ⟶ (SingularQChains K).X l)
+    (hf : ∀ t : FaceIndex K k, t.1 ⊆ s →
+      FaceCarriedChain K s (f (Finsupp.single t 1)))
+    (x : FaceModule K k)
+    (hx : ∀ t ∈ x.support, t.1 ⊆ s) : FaceCarriedChain K s (f x) := by
+  classical
+  induction x using Finsupp.induction with
+  | zero =>
+      simpa using carried_chainHomotopy_exists_aux_zero K s
+  | @single_add t r x htx hr ih =>
+      rw [map_add]
+      apply carried_chainHomotopy_exists_aux_add K s
+      · have ht : f (Finsupp.single t r) = r • f (Finsupp.single t 1) := by
+          rw [← map_smul]
+          simp
+        rw [ht]
+        exact carried_chainHomotopy_exists_aux_smul K s
+          (f (Finsupp.single t 1)) (hf t (hx t (by
+            simp only [Finsupp.mem_support_iff, Finsupp.add_apply,
+              Finsupp.single_eq_same]
+            have hxt : x t = 0 := by
+              simpa [Finsupp.mem_support_iff] using htx
+            simp [hxt, hr]))) r
+      · apply ih
+        intro u hu
+        apply hx u
+        simp only [Finsupp.mem_support_iff, Finsupp.add_apply]
+        by_cases h : u = t
+        · subst u
+          exact False.elim (htx hu)
+        · simpa [Finsupp.single_apply, h, Finsupp.mem_support_iff] using hu
+
+section CarriedHomotopy
+
+variable {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+
+/-- One stage of the carried homotopy: two consecutive components, both carried,
+satisfying the homotopy equation in degree `k + 1`. -/
+structure CarriedStage (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (cmp₁ cmp₂ : ∀ k, FaceModuleCat K k ⟶ (SingularQChains K).X k) (k : ℕ) where
+  f : FaceModuleCat K k ⟶ (SingularQChains K).X (k + 1)
+  f' : FaceModuleCat K (k + 1) ⟶ (SingularQChains K).X (k + 2)
+  cf : ∀ s : FaceIndex K k, FaceCarriedChain K s.1 (f (Finsupp.single s 1))
+  cf' : ∀ s : FaceIndex K (k + 1), FaceCarriedChain K s.1 (f' (Finsupp.single s 1))
+  eq : cmp₁ (k + 1) - cmp₂ (k + 1) = d k ≫ f + f' ≫ (SingularQChains K).d (k + 2) (k + 1)
+
+/-- (R1) The difference of two face-carried comparisons is carried. -/
+theorem carriedHomotopy_aux_diff_carried
+    (cmp₁ cmp₂ : ∀ k, FaceModuleCat K k ⟶ (SingularQChains K).X k)
+    (hcmp₁ : IsAffineComparison K cmp₁) (hcmp₂ : IsAffineComparison K cmp₂)
+    {k : ℕ} (s : FaceIndex K k) :
+    FaceCarriedChain K s.1 ((cmp₁ k - cmp₂ k) (Finsupp.single s 1)) := by
+  sorry
+
+/-- (R2) A carried map composed after the signed-deletion differential is carried
+on each face (the boundary faces of `s` are subfaces). -/
+-- BEGIN SEAT AREA
+theorem carriedHomotopy_aux_comp_d_carried {o : LinearOrder (Euc n)}
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (hd : IsSignedDeletion o K d)
+    {k l : ℕ} (f : FaceModuleCat K k ⟶ (SingularQChains K).X l)
+    (hf : ∀ t : FaceIndex K k, FaceCarriedChain K t.1 (f (Finsupp.single t 1)))
+    (s : FaceIndex K (k + 1)) :
+    FaceCarriedChain K s.1 ((d k ≫ f) (Finsupp.single s 1)) := by
+  classical
+  rcases hd k s with ⟨z, hz, hformula⟩
+  rw [CategoryTheory.comp_apply, hz]
+  apply carried_chainHomotopy_exists_aux_linear_combination K s.1 f
+  · intro t ht
+    exact faceCarriedChain_mono K s.1 t.1 ht _ (hf t)
+  · intro t ht x hx
+    have hzt : z t ≠ 0 := Finsupp.mem_support_iff.mp ht
+    rw [hformula t] at hzt
+    by_contra hxs
+    have hall : ∀ v ∈ s.1, s.1.erase v ≠ t.1 := by
+      intro v hv he
+      have hxe : x ∈ s.1.erase v := by simpa [he] using hx
+      exact hxs (Finset.mem_of_mem_erase hxe)
+    apply hzt
+    apply Finset.sum_eq_zero
+    intro v hv
+    simp [hall v hv]
+-- END SEAT AREA
+
+/-- (R3) Carried subtraction. -/
+theorem carriedHomotopy_aux_sub {k : ℕ} (s : Finset (Euc n)) (x y : (SingularQChains K).X k)
+    (hx : FaceCarriedChain K s x) (hy : FaceCarriedChain K s y) :
+    FaceCarriedChain K s (x - y) := by
+  rw [sub_eq_add_neg]
+  apply carried_chainHomotopy_exists_aux_add K s x (-y) hx
+  simpa using carried_chainHomotopy_exists_aux_smul K s y hy (-1)
+
+theorem carriedHomotopy_aux_fill
+    (hfill : ∀ (k : ℕ) (s : FaceIndex K k) (z : (SingularQChains K).X k),
+      FaceCarriedChain K s.1 z → (SingularQChains K).d k (k - 1) z = 0 →
+      0 < k → ∃ w : (SingularQChains K).X (k + 1),
+        FaceCarriedChain K s.1 w ∧ (SingularQChains K).d (k + 1) k w = z)
+    {k : ℕ} (g : FaceModuleCat K (k + 1) ⟶ (SingularQChains K).X (k + 1))
+    (hg : ∀ s : FaceIndex K (k + 1), FaceCarriedChain K s.1 (g (Finsupp.single s 1)))
+    (hcyc : g ≫ (SingularQChains K).d (k + 1) k = 0) :
+    ∃ f : FaceModuleCat K (k + 1) ⟶ (SingularQChains K).X (k + 2),
+      (∀ s : FaceIndex K (k + 1), FaceCarriedChain K s.1 (f (Finsupp.single s 1))) ∧
+        f ≫ (SingularQChains K).d (k + 2) (k + 1) = g := by
+  have hw : ∀ s : FaceIndex K (k + 1), ∃ w : (SingularQChains K).X (k + 2),
+      FaceCarriedChain K s.1 w ∧
+        (SingularQChains K).d (k + 2) (k + 1) w = g (Finsupp.single s 1) := by
+    intro s
+    refine hfill (k + 1) s _ (hg s) ?_ (Nat.succ_pos k)
+    have := congrArg (fun φ => φ (Finsupp.single s 1)) hcyc
+    simpa using this
+  choose w hwc hwd using hw
+  let f : FaceModuleCat K (k + 1) ⟶ (SingularQChains K).X (k + 2) :=
+    ModuleCat.ofHom (Finsupp.lsum ℚ (fun s : FaceIndex K (k + 1) =>
+      LinearMap.toSpanSingleton ℚ ((SingularQChains K).X (k + 2)) (w s)))
+  have hfs : ∀ s, f (Finsupp.single s 1) = w s := by
+    intro s
+    change (Finsupp.lsum ℚ (fun s : FaceIndex K (k + 1) =>
+      LinearMap.toSpanSingleton ℚ ((SingularQChains K).X (k + 2)) (w s)))
+        (Finsupp.single s 1) = _
+    rw [Finsupp.lsum_single]
+    simp
+  refine ⟨f, fun s => by rw [hfs]; exact hwc s, ?_⟩
+  apply ModuleCat.hom_ext
+  apply Finsupp.lhom_ext'
+  intro s
+  apply LinearMap.ext_ring
+  simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply, ModuleCat.hom_comp]
+  rw [hfs, hwd]
+
+end CarriedHomotopy
+
+/- Second route note (claude-14, after a second partial): `Homotopy.mkInductive`
+CANNOT be used as is — its `succ` must work for an arbitrary previous component
+`p.2.1`, but filling needs `p.2.1` to be carried (else the cycle is not in a
+contractible carrier).  Copy Mathlib's `Homotopy.mkInductiveAux₁`/`mkInductiveAux₂`/
+`mkInductive` (Mathlib/Algebra/Homology/Homotopy.lean, ~70 lines) locally, adding
+"both components are carried" to the `Σ'` that the recursion threads, so the step
+receives the invariant; the homotopy equations are then exactly as there. -/
+/- Route for the remaining step (claude-14): Mathlib's `Homotopy.mkInductive`
+(Algebra/Homology/Homotopy.lean) builds a homotopy of ℕ-indexed chain complexes
+from a degree-0 component and an inductive step; the step at basis face `s`
+fills the carried cycle `cmp₁ s - cmp₂ s - h (d s)` with `hfill`, using the
+banked carrier-closure helpers above. -/
+
+/-- The inductive acyclic-carrier construction.  The filling operation is an
+explicit hypothesis so this leaf is independent of its topological proof.
+On a basis face in degree `k`, choose a carried preimage of
+`cmp₁(s) - cmp₂(s) - H(d s)` and extend linearly. -/
+theorem carried_chainHomotopy_exists {n : ℕ}
+    (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) (hdd : ∀ k, d (k + 1) ≫ d k = 0)
+    (cmp₁ cmp₂ : ∀ k, FaceModuleCat K k ⟶ (SingularQChains K).X k)
+    (hcmp₁ : IsAffineComparison K cmp₁) (hcmp₂ : IsAffineComparison K cmp₂)
+    (hchain₁ : ∀ k, cmp₁ (k + 1) ≫ (SingularQChains K).d (k + 1) k = d k ≫ cmp₁ k)
+    (hchain₂ : ∀ k, cmp₂ (k + 1) ≫ (SingularQChains K).d (k + 1) k = d k ≫ cmp₂ k)
+    (hzero : cmp₁ 0 = cmp₂ 0)
+    (hfill : ∀ (k : ℕ) (s : FaceIndex K k) (z : (SingularQChains K).X k),
+      FaceCarriedChain K s.1 z → (SingularQChains K).d k (k - 1) z = 0 →
+      0 < k → ∃ w : (SingularQChains K).X (k + 1),
+        FaceCarriedChain K s.1 w ∧ (SingularQChains K).d (k + 1) k w = z) :
+    Nonempty (Homotopy
+      (ChainComplex.ofHom _ _ hdd _ _ (fun j ↦ (SingularQChains K).d_comp_d
+        (j + 2) (j + 1) j) cmp₁ hchain₁)
+      (ChainComplex.ofHom _ _ hdd _ _ (fun j ↦ (SingularQChains K).d_comp_d
+        (j + 2) (j + 1) j) cmp₂ hchain₂)) := by
+  classical
+  have hbase : ∃ f1 : FaceModuleCat K 1 ⟶ (SingularQChains K).X 2,
+      (∀ s : FaceIndex K 1, FaceCarriedChain K s.1 (f1 (Finsupp.single s 1))) ∧
+        f1 ≫ (SingularQChains K).d 2 1 = cmp₁ 1 - cmp₂ 1 := by
+    apply carriedHomotopy_aux_fill K hfill (cmp₁ 1 - cmp₂ 1)
+      (fun s => carriedHomotopy_aux_diff_carried K cmp₁ cmp₂ hcmp₁ hcmp₂ s)
+    rw [Preadditive.sub_comp, hchain₁ 0, hchain₂ 0, hzero, sub_self]
+  let S0 : CarriedStage K d cmp₁ cmp₂ 0 :=
+    ⟨0, hbase.choose, fun s => by simpa using carried_chainHomotopy_exists_aux_zero K s.1,
+      hbase.choose_spec.1, by
+        simp only [Limits.comp_zero, zero_add]
+        exact hbase.choose_spec.2.symm⟩
+  have hstep : ∀ k (S : CarriedStage K d cmp₁ cmp₂ k),
+      ∃ f'' : FaceModuleCat K (k + 2) ⟶ (SingularQChains K).X (k + 3),
+        (∀ s : FaceIndex K (k + 2), FaceCarriedChain K s.1 (f'' (Finsupp.single s 1))) ∧
+        cmp₁ (k + 2) - cmp₂ (k + 2) =
+          d (k + 1) ≫ S.f' + f'' ≫ (SingularQChains K).d (k + 3) (k + 2) := by
+    intro k S
+    obtain ⟨f'', hc, hf⟩ := carriedHomotopy_aux_fill K hfill
+      ((cmp₁ (k + 2) - cmp₂ (k + 2)) - d (k + 1) ≫ S.f')
+      (fun s => carriedHomotopy_aux_sub K s.1 _ _
+        (carriedHomotopy_aux_diff_carried K cmp₁ cmp₂ hcmp₁ hcmp₂ s)
+        (carriedHomotopy_aux_comp_d_carried K d hd S.f' S.cf' s))
+      (by
+        rw [Preadditive.sub_comp, Preadditive.sub_comp, hchain₁ (k + 1), hchain₂ (k + 1),
+          ← Preadditive.comp_sub, S.eq, Preadditive.comp_add, ← Category.assoc (d (k + 1)) (d k),
+          hdd, Limits.zero_comp, zero_add, Category.assoc, sub_self])
+    exact ⟨f'', hc, by rw [hf]; abel⟩
+  let step : ∀ k, CarriedStage K d cmp₁ cmp₂ k → CarriedStage K d cmp₁ cmp₂ (k + 1) :=
+    fun k S => ⟨S.f', (hstep k S).choose, S.cf', (hstep k S).choose_spec.1,
+      (hstep k S).choose_spec.2⟩
+  let F : ∀ k, CarriedStage K d cmp₁ cmp₂ k :=
+    fun k => Nat.rec (motive := fun k => CarriedStage K d cmp₁ cmp₂ k) S0 step k
+  have hF0 : (F 0).f = 0 := rfl
+  have hF : ∀ k, (F (k + 1)).f = (F k).f' := fun k => rfl
+  let hom : ∀ i j, FaceModuleCat K i ⟶ (SingularQChains K).X j := fun i j =>
+    if h : i + 1 = j then (F i).f ≫ eqToHom (congrArg (fun m => (SingularQChains K).X m) h)
+    else 0
+  refine ⟨{ hom := hom, zero := ?_, comm := ?_ }⟩
+  · intro i j hij
+    simp only [hom]
+    split_ifs with h
+    · exact absurd (by simp [ComplexShape.down_Rel]; omega) hij
+    · rfl
+  · intro i
+    cases i with
+    | zero =>
+      rw [Homotopy.dNext_zero_chainComplex, Homotopy.prevD_chainComplex]
+      simp only [hom, dif_pos]
+      rw [ChainComplex.of_d]
+      simp only [hF0, Limits.zero_comp, zero_add, eqToHom_refl, Category.comp_id]
+      erw [Limits.zero_comp, zero_add]
+      exact hzero
+    | succ i =>
+      rw [Homotopy.dNext_succ_chainComplex, Homotopy.prevD_chainComplex]
+      simp only [hom, dif_pos]
+      rw [ChainComplex.of_d, ChainComplex.of_d]
+      simp only [eqToHom_refl, Category.comp_id, hF]
+      change cmp₁ (i + 1) = d i ≫ (F i).f + (F i).f' ≫ (SingularQChains K).d (i + 2) (i + 1) +
+        cmp₂ (i + 1)
+      rw [← (F i).eq]
+      abel
+
+end ConstructionTargets.AcyclicCarriers
