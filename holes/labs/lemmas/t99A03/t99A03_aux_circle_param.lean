@@ -135,7 +135,32 @@ theorem t99A03_aux_edgeLoop :
 -- BEGIN SEAT AREA
 theorem t99A03_aux_circle_param (z : Circle) :
     ∃ t : Set.Icc (0 : ℝ) 1, Circle.exp (2 * Real.pi * t.1) = z := by
-  sorry
+  by_cases h : 0 ≤ Complex.arg (z : ℂ)
+  · let t : ℝ := Complex.arg (z : ℂ) / (2 * Real.pi)
+    have ht : t ∈ Set.Icc (0 : ℝ) 1 := by
+      constructor
+      · exact div_nonneg h (by positivity)
+      · apply (div_le_one (by positivity : (0 : ℝ) < 2 * Real.pi)).2
+        have hz := Complex.arg_le_pi (z : ℂ)
+        linarith [Real.pi_pos]
+    refine ⟨⟨t, ht⟩, ?_⟩
+    convert Circle.exp_arg z using 1
+    · dsimp [t]
+      field_simp
+  · let t : ℝ := (Complex.arg (z : ℂ) + 2 * Real.pi) / (2 * Real.pi)
+    have ht : t ∈ Set.Icc (0 : ℝ) 1 := by
+      constructor
+      · apply div_nonneg
+        · have hz := Complex.neg_pi_lt_arg (z : ℂ)
+          linarith [Real.pi_pos]
+        · positivity
+      · apply (div_le_one (by positivity : (0 : ℝ) < 2 * Real.pi)).2
+        exact add_le_of_nonpos_left (le_of_not_ge h)
+    refine ⟨⟨t, ht⟩, ?_⟩
+    rw [show 2 * Real.pi * t = Complex.arg (z : ℂ) + 2 * Real.pi by
+      dsimp [t]
+      field_simp]
+    rw [Circle.exp_add_two_pi, Circle.exp_arg]
 -- END SEAT AREA
 
 theorem t99A03_exists_fixedPointFree_N4 :
