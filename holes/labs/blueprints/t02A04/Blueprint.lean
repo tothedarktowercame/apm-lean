@@ -3124,7 +3124,48 @@ lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_build (i : Fin 6) (j 
 determine the tetrahedron and all its weights (`y (m, bottom) = max 0 (min A_m (1-s) - A_{m-1})`);
 injectivity of the cone point and of `Circle.exp` on one turn give equal weights. -/
 lemma apm_t02A04_solidTorus_prism_model_aux_injective : Function.Injective apm_t02A04_prismMap := by
-  sorry
+  intro y y' hyy'
+  obtain ⟨⟨i, j, k⟩, hy⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_cover
+      (y : EuclideanSpace ℝ (Fin 21)) y.2
+  obtain ⟨⟨i', j', k'⟩, hy'⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_cover
+      (y' : EuclideanSpace ℝ (Fin 21)) y'.2
+  have hp : apm_t02A04_prismPoint (i, j, k) y =
+      apm_t02A04_prismPoint (i', j', k') y' := by
+    rw [← apm_t02A04_solidTorus_prism_model_aux_map_eq (i, j, k) y hy,
+      ← apm_t02A04_solidTorus_prism_model_aux_map_eq (i', j', k') y' hy']
+    exact hyy'
+  have hd : apm_t02A04_diskProj y = apm_t02A04_diskProj y' := by
+    apply apm_t02A04_solidTorus_prism_model_aux_injective_aux_disk
+      (i, j, k) (i', j', k') y y' hy hy'
+    exact congrArg Prod.fst hp
+  obtain ⟨k'', hy''⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_reface (i', j', k') i y' hy'
+      (hd ▸ apm_t02A04_solidTorus_prism_model_aux_proj (i, j, k) y hy)
+  have hc : apm_t02A04_circlePoint j y = apm_t02A04_circlePoint j' y' :=
+    congrArg Prod.snd hp
+  obtain ⟨hnn, hs0, hs1⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k) y hy
+  obtain ⟨hnn', hs0', hs1'⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j', k'') y' hy''
+  have ha := apm_t02A04_solidTorus_prism_model_aux_injective_aux_angle
+    j j' (apm_t02A04_circleWeight j y) (apm_t02A04_circleWeight j' y')
+    hs0 hs1 hs0' hs1' hc
+  apply Subtype.ext
+  rcases ha with ⟨rfl, hw⟩ | ⟨hj, hw, hw'⟩ | ⟨hj, hw, hw'⟩
+  · exact apm_t02A04_solidTorus_prism_model_aux_staircase i j k k'' y y'
+      hy hy'' hd hw
+  · obtain ⟨hytop, hyweight⟩ :=
+      apm_t02A04_solidTorus_prism_model_aux_top i j k y hy hw
+    subst j'
+    exact apm_t02A04_solidTorus_prism_model_aux_staircase i (j + 1) 2 k'' y y'
+      hytop hy'' hd (hyweight.trans hw'.symm)
+  · obtain ⟨hy'top, hy'weight⟩ :=
+      apm_t02A04_solidTorus_prism_model_aux_top i j' k'' y' hy'' hw'
+    subst j
+    exact apm_t02A04_solidTorus_prism_model_aux_staircase i (j' + 1) k 2 y y'
+      hy hy'top hd (hw.trans hy'weight.symm)
 
 /-- Staircase existence: for a disk point (`_cone_model_aux_surjective`) and a circle point
 at parameter `s` on edge `j`, the same formula gives a point of the prism. -/
