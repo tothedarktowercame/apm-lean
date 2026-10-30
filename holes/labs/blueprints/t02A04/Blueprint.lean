@@ -3182,7 +3182,10 @@ noncomputable def apm_t02A04_gluedMap (z : apm_t02A04_gluedComplex.space) : apm_
 lemma apm_t02A04_quotientComplex_model_aux_idx :
     (∀ i : Fin 6, apm_t02A04_gluedIdxD (apm_t02A04_coneIdx i) = (apm_t02A04_curveIdx i).castSucc) ∧
       Function.Injective apm_t02A04_gluedIdxD := by
-  sorry
+  constructor
+  · intro i
+    fin_cases i <;> rfl
+  · decide
 
 /-- Every point of the glued complex lies in a prism hull or a cone hull (as
 `_prism_model_aux_cover`). -/
