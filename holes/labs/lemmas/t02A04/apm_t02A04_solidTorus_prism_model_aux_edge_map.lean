@@ -2321,7 +2321,83 @@ lemma apm_t02A04_solidTorus_prism_model_aux_edge_map (i : Fin 6) (t : ℝ) (ht0 
     apm_t02A04_prismMap ⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i t ht0 ht1⟩ =
       (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
         simpa using (apm_t02A04_arcPoint i t).property.le⟩, apm_t02A04_arcPoint i t ^ 2) := by
-  sorry
+  classical
+  let y : EuclideanSpace ℝ (Fin 21) :=
+    (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+        (apm_t02A04_curveIdx i) +
+      t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+        (apm_t02A04_curveIdx (i + 1))
+  let j : Fin 3 := ⟨i.1 % 3, Nat.mod_lt _ (by decide)⟩
+  let q : Fin 6 × Fin 3 × Fin 3 := (i, j, 1)
+  have hi : apm_t02A04_curveIdx i ∈ apm_t02A04_prismFacet q := by
+    dsimp [q, j]
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and, apm_t02A04_curveIdx]
+    left
+    refine ⟨1, le_rfl, ?_⟩
+    simp [apm_t02A04_prismDisk]
+  have hi1 : apm_t02A04_curveIdx (i + 1) ∈ apm_t02A04_prismFacet q := by
+    dsimp [q, j]
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    right
+    refine ⟨2, by decide, ?_⟩
+    fin_cases i <;> rfl
+  have hyq : y ∈ apm_t02A04_prismHull q := by
+    apply segment_subset_convexHull
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx i) ∈
+        ↑((apm_t02A04_prismFacet q).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) by
+        exact Finset.mem_image_of_mem _ hi)
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx (i + 1)) ∈
+        ↑((apm_t02A04_prismFacet q).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) by
+        exact Finset.mem_image_of_mem _ hi1)
+    rw [segment_eq_image]
+    exact ⟨t, ⟨ht0, ht1⟩, rfl⟩
+  have hex : ∃ q', y ∈ apm_t02A04_prismHull q' := ⟨q, hyq⟩
+  let q' := Classical.choose hex
+  have hyq' : y ∈ apm_t02A04_prismHull q' := Classical.choose_spec hex
+  have hagree : apm_t02A04_prismPoint q' y = apm_t02A04_prismPoint q y :=
+    apm_t02A04_solidTorus_prism_model_aux_agree q' q y hyq' hyq
+  simp only [apm_t02A04_prismMap]
+  rw [dif_pos hex]
+  change apm_t02A04_prismPoint q' y = _
+  rw [hagree]
+  apply Prod.ext
+  · apply Subtype.ext
+    have hp : apm_t02A04_conePoint i (apm_t02A04_diskProj y) =
+        ((apm_t02A04_arcPoint i t : Circle) : ℂ) := by
+      fin_cases i <;>
+        simp [y, apm_t02A04_diskProj, apm_t02A04_curveIdx,
+          apm_t02A04_prismIdx, apm_t02A04_conePoint, apm_t02A04_coneIdx,
+          ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+          EuclideanSpace.single_apply, Fin.sum_univ_succ, sub_add_cancel]
+    simp [apm_t02A04_prismPoint, q, hp,
+      ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp]
+  · unfold apm_t02A04_prismPoint apm_t02A04_circlePoint
+    have hw : apm_t02A04_circleWeight j y = t := by
+      fin_cases i <;>
+        simp [j, y, apm_t02A04_circleWeight, apm_t02A04_curveIdx,
+          apm_t02A04_prismIdx, apm_t02A04_coneIdx,
+          ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+          Fin.sum_univ_succ]
+    change Circle.exp (2 * Real.pi * ((j : ℝ) + apm_t02A04_circleWeight j y) / 3) = _
+    rw [hw]
+    unfold apm_t02A04_arcPoint
+    change Circle.exp (2 * Real.pi * ((j : ℝ) + t) / 3) =
+      Circle.exp (2 * Real.pi * ((i : ℝ) + t) / 6) ^ 2
+    rw [pow_two, ← Circle.exp_add]
+    apply Circle.exp_eq_exp.mpr
+    fin_cases i
+    · exact ⟨0, by simp [j]; ring⟩
+    · exact ⟨0, by simp [j]; ring⟩
+    · exact ⟨0, by simp [j]; ring⟩
+    · exact ⟨-1, by simp [j]; ring⟩
+    · exact ⟨-1, by simp [j]; ring⟩
+    · exact ⟨-1, by simp [j]; ring⟩
 -- END SEAT AREA
 
 /-- Pasting over the 54 closed tetrahedra; adjacent tetrahedra give the same point
