@@ -414,6 +414,135 @@ theorem coneSupported_zero_bounds {n : ℕ} (o : LinearOrder (Euc n))
       · simp [x, Finsupp.single_apply, hv]
     exact hb.trans hrhs
 
+/-- Degree-`k` simplices of the small-chain complex: singular simplices lying in
+one member of `U`. -/
+abbrev SmallSimplex {X α : Type} [TopologicalSpace X] (U : α → Set X) (k : ℕ) :=
+  (SingularSubdivision.coverSmallSSet U : SSet).obj (Opposite.op (SimplexCategory.mk k))
+
+/-- The image of a small simplex. -/
+def smallRange {X α : Type} [TopologicalSpace X] (U : α → Set X) {k : ℕ}
+    (t : SmallSimplex U k) : Set X :=
+  Set.range (SingularSubdivision.continuousMapOfSingularSimplex k t.1)
+
+/-- The generator of the small-chain module at a small simplex. -/
+noncomputable def smallGen {X α : Type} [TopologicalSpace X] (U : α → Set X) {k : ℕ}
+    (t : SmallSimplex U k) :
+    ModuleCat.of ℚ ℚ ⟶ (CoefficientSmallPath.coverSmallChains ℚ U).X k := by
+  change ModuleCat.of ℚ ℚ ⟶ ∐ fun _ : SmallSimplex U k => ModuleCat.of ℚ ℚ
+  exact Limits.Sigma.ι (fun _ : SmallSimplex U k => ModuleCat.of ℚ ℚ) t
+
+/-- A small simplex lies in one member of the cover: unfold membership in
+`coverSmallSSet U = ⨆ a, range (toSSet.map (coverSubspaceInclusion U a))`
+(a supremum of subcomplexes is computed pointwise, `SSet.Subcomplex.iSup_obj`),
+and the range of a simplex pushed forward from `U a` lies in `U a`. -/
+theorem smallSimplex_range_subset {X α : Type} [TopologicalSpace X] (U : α → Set X)
+    {k : ℕ} (t : SmallSimplex U k) : ∃ a, smallRange U t ⊆ U a := by
+  sorry
+
+/-- `coverSmallGenerator` is `smallGen` at the small simplex of `σ`, whose image is
+the range of `σ` (`continuousMapOfSingularSimplex_ofContinuousMap`). The equation
+should be `rfl` after unfolding `coverSmallGenerator`. -/
+theorem coverSmallGenerator_eq_smallGen {X α : Type} [TopologicalSpace X]
+    (U : α → Set X) {k : ℕ} (σ : C(stdSimplex ℝ (Fin (k + 1)), X)) (a : α)
+    (hσ : Set.range σ ⊆ U a) :
+    ∃ t : SmallSimplex U k,
+      CoefficientSmallPath.coverSmallGenerator ℚ U σ a hσ = smallGen U t ∧
+        smallRange U t = Set.range σ := by
+  sorry
+
+/-- The boundary of a small generator is a combination of small generators at its
+faces, and each face has smaller image. Use the generator boundary formula through
+the injective inclusion into singular chains (`CoefficientH0.singularGenerator_boundary`,
+`coverSmallGeneratorOfMem_comp_ι`), or compute with the simplicial-set face maps of
+`coverSmallSSet U` directly; a face is the simplex precomposed with a face inclusion
+of the standard simplex, so its range is contained in the original range. -/
+theorem smallChains_d_span {X α : Type} [TopologicalSpace X] (U : α → Set X) {k : ℕ}
+    (t : SmallSimplex U (k + 1)) :
+    (CoefficientSmallPath.coverSmallChains ℚ U).d (k + 1) k (smallGen U t 1) ∈
+      Submodule.span ℚ {x | ∃ t' : SmallSimplex U k,
+        smallRange U t' ⊆ smallRange U t ∧ x = smallGen U t' 1} := by
+  sorry
+
+/-- The boundary of a small 1-simplex is a difference of two small 0-generators
+(the alternating face sum with two terms). -/
+theorem smallChains_d_one {X α : Type} [TopologicalSpace X] (U : α → Set X)
+    (t : SmallSimplex U 1) :
+    ∃ t₀ t₁ : SmallSimplex U 0,
+      (CoefficientSmallPath.coverSmallChains ℚ U).d 1 0 (smallGen U t 1) =
+        smallGen U t₀ 1 - smallGen U t₁ 1 := by
+  sorry
+
+theorem smallToFace_aux_fill_succ {n : ℕ} (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) {k : ℕ} (t : SmallSimplex (starCover K) (k + 2))
+    (c : FaceModule K (k + 1))
+    (hc : ∀ u, c u ≠ 0 → u.1 ∈ starCarrier K (smallRange _ t)) (hcyc : d k c = 0) :
+    ∃ w : FaceModule K (k + 2),
+      (∀ u, w u ≠ 0 → u.1 ∈ starCarrier K (smallRange _ t)) ∧ d (k + 1) w = c := by
+  obtain ⟨a, ha⟩ := smallSimplex_range_subset (starCover K) t
+  exact coneSupported_cycle_bounds o K d hd _ a (fun s hs => starCarrier_faces K _ hs)
+    (fun s hs u hu hne => starCarrier_down K _ hs hu hne)
+    (fun s hs => starCarrier_cone K ha hs) c hc hcyc
+
+theorem smallToFace_aux_fill_zero {n : ℕ} (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) (t : SmallSimplex (starCover K) 1)
+    (c : FaceModule K 0)
+    (hc : ∀ u, c u ≠ 0 → u.1 ∈ starCarrier K (smallRange _ t))
+    (hsum : (c.sum fun _ x ↦ x) = 0) :
+    ∃ w : FaceModule K 1,
+      (∀ u, w u ≠ 0 → u.1 ∈ starCarrier K (smallRange _ t)) ∧ d 0 w = c := by
+  obtain ⟨a, ha⟩ := smallSimplex_range_subset (starCover K) t
+  exact coneSupported_zero_bounds o K d hd _ a (fun s hs => starCarrier_faces K _ hs)
+    (fun s hs u hu hne => starCarrier_down K _ hs hu hne)
+    (fun s hs => starCarrier_cone K ha hs) c hc hsum
+
+/-- One stage of the recursion for `ψ`: two consecutive components, both carried
+by `starCarrier` of the generator's image, commuting with the differentials. -/
+structure SmallStage {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k) (k : ℕ) where
+  f : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X k ⟶ FaceModuleCat K k
+  f' : (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X (k + 1) ⟶
+    FaceModuleCat K (k + 1)
+  cf : ∀ (t : SmallSimplex (starCover K) k) (u : FaceIndex K k),
+    (show FaceModule K k from f (smallGen _ t 1)) u ≠ 0 →
+      u.1 ∈ starCarrier K (smallRange _ t)
+  cf' : ∀ (t : SmallSimplex (starCover K) (k + 1)) (u : FaceIndex K (k + 1)),
+    (show FaceModule K (k + 1) from f' (smallGen _ t 1)) u ≠ 0 →
+      u.1 ∈ starCarrier K (smallRange _ t)
+  comm : f' ≫ d k = (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).d (k + 1) k ≫ f
+
+/-- The first stage, with coefficient sum one in degree zero. Degree 0: on a small
+point `t`, send it to `single {v} 1` for a vertex `v` of a minimal face of the point
+(`exists_isMinimalFace`; `{v}` is in `starCarrier` by `starCarrier_down`); define the
+component by `Sigma.desc` of `CoefficientSmallComparison.elementHom`. Degree 1: on a
+small 1-simplex `t`, `f (d (smallGen t 1))` has coefficient sum `1 - 1 = 0`
+(`smallChains_d_one`) and is carried by `starCarrier K (smallRange t)`
+(`smallChains_d_span`, `starCarrier_mono`, span induction), so fill it with
+`smallToFace_aux_fill_zero`. `comm` holds on generators (`Limits.Sigma.hom_ext`). -/
+theorem smallToFace_aux_base {n : ℕ} (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) :
+    ∃ S : SmallStage K d 0, ∀ t : SmallSimplex (starCover K) 0,
+      ((show FaceModule K 0 from S.f (smallGen _ t 1)).sum fun _ c ↦ c) = 1 := by
+  sorry
+
+/-- Extend a stage by one degree, keeping its top component. On a small simplex
+`t` of degree `k + 2`, `c = S.f' (d (smallGen t 1))` is carried by
+`starCarrier K (smallRange t)` (`smallChains_d_span`, `S.cf'`, `starCarrier_mono`,
+span induction) and is a cycle (`S.comm` and `d ≫ d = 0` in the small complex), so
+fill it with `smallToFace_aux_fill_succ`. The new top component is the
+`Sigma.desc` of the fillings; `comm` holds on generators. -/
+theorem smallToFace_aux_step {n : ℕ} (o : LinearOrder (Euc n))
+    (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ k, FaceModuleCat K (k + 1) ⟶ FaceModuleCat K k)
+    (hd : IsSignedDeletion o K d) {k : ℕ} (S : SmallStage K d k) :
+    ∃ S' : SmallStage K d (k + 1), S'.f = S.f' := by
+  sorry
+
 /-- The acyclic-carrier chain map from small chains to ordered faces. Build the
 components by recursion on degree, as in `AcyclicCarriers.carried_chainHomotopy_exists`
 (a `CarriedStage`-style structure carrying two consecutive components). Degree 0:
@@ -441,7 +570,29 @@ theorem smallToFace_exists {n : ℕ} (o : LinearOrder (Euc n))
         ((show FaceModule K 0 from ψ.f 0
           (CoefficientSmallPath.coverSmallGenerator ℚ (starCover K) σ a hσ 1)).sum
             fun _ c ↦ c) = 1) := by
-  sorry
+  classical
+  obtain ⟨S0, hS0⟩ := smallToFace_aux_base o K d hd
+  have hstep : ∀ k (S : SmallStage K d k), ∃ S' : SmallStage K d (k + 1), S'.f = S.f' :=
+    fun k S => smallToFace_aux_step o K d hd S
+  choose g hg using hstep
+  let st : ∀ k, SmallStage K d k := fun k => Nat.rec S0 (fun k S => g k S) k
+  have hst : ∀ k, (st (k + 1)).f = (st k).f' := fun k => hg k (st k)
+  let ψ : CoefficientSmallPath.coverSmallChains ℚ (starCover K) ⟶ ChainComplex.of _ d hdd :=
+    { f := fun k => (st k).f
+      comm' := by
+        rintro i j (rfl : j + 1 = i)
+        rw [ChainComplex.of_d, hst j]
+        exact (st j).comm }
+  refine ⟨ψ, ?_, ?_⟩
+  · intro k σ a hσ u hu
+    obtain ⟨t, ht, hrange⟩ := coverSmallGenerator_eq_smallGen (starCover K) σ a hσ
+    rw [← hrange]
+    rw [ht] at hu
+    exact (st k).cf t u hu
+  · intro σ a hσ
+    obtain ⟨t, ht, -⟩ := coverSmallGenerator_eq_smallGen (starCover K) σ a hσ
+    rw [ht]
+    exact hS0 t
 
 /-- `ψ ≫ cmpH` and the small-chain inclusion agree on homology. They are chain
 homotopic by acyclic carriers with source the small chains: a small simplex `σ`
