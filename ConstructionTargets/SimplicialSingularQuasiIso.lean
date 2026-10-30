@@ -755,7 +755,84 @@ theorem affineCmp_small_lift {n : ℕ} (K : Geometry.SimplicialComplex ℝ (Euc 
         CoefficientSmallPath.coverSmallChains ℚ (starCover K)),
       Φ ≫ CoefficientSmallPath.coverSmallInclusion ℚ (starCover K) =
         cmpH ≫ CoefficientEventualSmallness.subdivisionIterate ℚ r := by
-  sorry
+  classical
+  let faceEquiv : Sigma (FaceIndex K) ≃ K.faces := {
+    toFun := fun (p : Sigma (FaceIndex K)) => ⟨p.2.1, p.2.2.1⟩
+    invFun := fun (s : K.faces) => ⟨s.1.card - 1, ⟨s.1, s.2, by
+      rw [Nat.sub_add_cancel (Finset.one_le_card.mpr (K.nonempty_of_mem_faces s.2))]⟩⟩
+    left_inv := fun p => by
+      rcases p with ⟨k, s⟩
+      rcases s with ⟨val, hface, hcard⟩
+      simp_all [Sigma.ext_iff]
+      have hk : val.card - 1 = k := by omega
+      subst k
+      exact heq_of_eq (Subtype.ext rfl)
+    right_inv := fun s => by
+      apply Subtype.ext
+      rfl }
+  letI : Fintype K.faces := hK.fintype
+  letI : Fintype (Sigma (FaceIndex K)) :=
+    Fintype.ofEquiv K.faces faceEquiv.symm
+  have hev (s : Sigma (FaceIndex K)) :
+      ∃ N, ∀ r, N ≤ r → ∃ q :
+          (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X s.1,
+        (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f s.1 q =
+          (CoefficientEventualSmallness.subdivisionIterate ℚ r).f s.1
+            (cmpH.f s.1 (Finsupp.single s.2 1)) :=
+    CoefficientEventualSmallness.actual_chain_eventual ℚ (starCover K) s.1
+      (cmpH.f s.1 (Finsupp.single s.2 1))
+      (starCover_isOpen K hK) (starCover_covers K)
+  choose N hN using hev
+  let r := Finset.univ.sup N
+  have hNr (s : Sigma (FaceIndex K)) : N s ≤ r :=
+    Finset.le_sup (f := N) (Finset.mem_univ s)
+  choose q hq using fun s : Sigma (FaceIndex K) => hN s r (hNr s)
+  let liftComponent (k : ℕ) : FaceModuleCat K k ⟶
+      (CoefficientSmallPath.coverSmallChains ℚ (starCover K)).X k :=
+    ModuleCat.ofHom (Finsupp.lsum ℚ (fun s : FaceIndex K k =>
+      LinearMap.toSpanSingleton ℚ _ (q ⟨k, s⟩)))
+  have hcomponent (k : ℕ) :
+      liftComponent k ≫ (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f k =
+        cmpH.f k ≫ (CoefficientEventualSmallness.subdivisionIterate ℚ r).f k := by
+    apply ModuleCat.hom_ext
+    apply Finsupp.lhom_ext'
+    intro s
+    apply LinearMap.ext_ring
+    simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply,
+      ModuleCat.hom_comp]
+    change (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f k
+        ((Finsupp.lsum ℚ (fun t : FaceIndex K k =>
+          LinearMap.toSpanSingleton ℚ _ (q ⟨k, t⟩))) (Finsupp.single s 1)) = _
+    rw [Finsupp.lsum_single]
+    simp only [LinearMap.toSpanSingleton_apply, one_smul]
+    exact hq ⟨k, s⟩
+  let Φ : ChainComplex.of _ d hdd ⟶
+      CoefficientSmallPath.coverSmallChains ℚ (starCover K) := {
+    f := liftComponent
+    comm' := fun i j _ => by
+      apply (cancel_mono
+        ((CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f j)).1
+      rw [Category.assoc, ←
+        (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).comm]
+      change (liftComponent i ≫
+        (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f i) ≫ _ = _
+      rw [hcomponent]
+      rw [Category.assoc]
+      change _ = _ ≫ (liftComponent j ≫
+        (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)).f j)
+      rw [hcomponent]
+      exact
+        (Category.assoc _ _ _).trans <|
+          (congrArg (fun z => cmpH.f i ≫ z)
+            ((CoefficientEventualSmallness.subdivisionIterate ℚ r).comm i j)).trans <|
+          (Category.assoc _ _ _).symm.trans <|
+          (congrArg (fun z => z ≫
+              (CoefficientEventualSmallness.subdivisionIterate ℚ r).f j)
+            (cmpH.comm i j)).trans <|
+          Category.assoc _ _ _ }
+  refine ⟨r, Φ, ?_⟩
+  apply HomologicalComplex.Hom.ext
+  exact funext hcomponent
 
 /-- Iterated singular subdivision keeps a chain inside a subset: subdivision is
 natural (`CoefficientSingularSubdivision`, or `subsetPush` naturality), and a chain
