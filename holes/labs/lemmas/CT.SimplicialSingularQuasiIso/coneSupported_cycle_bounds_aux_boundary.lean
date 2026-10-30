@@ -197,6 +197,55 @@ lemma coneSupported_cycle_bounds_aux_support {n k : ℕ}
   sorry
 
 -- BEGIN SEAT AREA
+lemma coneSupported_cycle_bounds_aux_boundary_aux_single {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ j, FaceModuleCat K (j + 1) ⟶ FaceModuleCat K j)
+    (hd : IsSignedDeletion o K d) (a : Euc n) (u : FaceIndex K (k + 1))
+    (ha : a ∈ u.1) :
+    SimplicialChainMaps.subdivisionCone o K a k (d k (Finsupp.single u 1)) =
+      Finsupp.single u 1 := by
+  classical
+  rw [signedDeletion_sq_zero_aux_generator_aux_boundary o K d hd u, map_sum]
+  simp only [map_smul]
+  rw [Finset.sum_eq_single (⟨a, ha⟩ : {x // x ∈ u.1})]
+  · have hidx : List.idxOf a (u.1.sort o.le) =
+        (u.1.filter fun q => @LT.lt (Euc n) o.toLT q a).card :=
+      SimplicialChainMaps.sort_idxOf_eq_card_lt o u.1 a ha
+    have herase : ((u.1.erase a).filter fun q => @LT.lt (Euc n) o.toLT q a).card =
+        (u.1.filter fun q => @LT.lt (Euc n) o.toLT q a).card := by
+      rw [Finset.filter_erase, Finset.erase_eq_of_notMem]
+      simp
+    simp [SimplicialChainMaps.subdivisionCone,
+      signedDeletion_sq_zero_aux_generator_aux_erase, ha, u.2.1, hidx,
+      herase, ← pow_add, ← two_mul, pow_mul]
+  · intro p _ hpa
+    have hne : p.1 ≠ a := by
+      intro h
+      apply hpa
+      exact Subtype.ext h
+    have hmem : a ∈ u.1.erase p.1 := Finset.mem_erase.mpr ⟨hne.symm, ha⟩
+    simp [SimplicialChainMaps.subdivisionCone,
+      signedDeletion_sq_zero_aux_generator_aux_erase, hmem]
+  · simp
+
+lemma coneSupported_cycle_bounds_aux_boundary_aux_containing {n k : ℕ}
+    (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
+    (d : ∀ j, FaceModuleCat K (j + 1) ⟶ FaceModuleCat K j)
+    (hd : IsSignedDeletion o K d) (a : Euc n) (x : FaceModule K (k + 1))
+    (hx : ∀ u, x u ≠ 0 → a ∈ u.1) :
+    SimplicialChainMaps.subdivisionCone o K a k (d k x) = x := by
+  classical
+  rw [← Finsupp.sum_single x]
+  change SimplicialChainMaps.subdivisionCone o K a k
+      (d k (∑ u ∈ x.support, Finsupp.single u (x u))) =
+    ∑ u ∈ x.support, Finsupp.single u (x u)
+  simp only [map_sum]
+  apply Finset.sum_congr rfl
+  intro u hu
+  rw [← Finsupp.smul_single_one, map_smul, map_smul,
+    coneSupported_cycle_bounds_aux_boundary_aux_single o K d hd a u
+      (hx u (Finsupp.mem_support_iff.mp hu))]
+
 lemma coneSupported_cycle_bounds_aux_boundary {n k : ℕ}
     (o : LinearOrder (Euc n)) (K : Geometry.SimplicialComplex ℝ (Euc n))
     (d : ∀ j, FaceModuleCat K (j + 1) ⟶ FaceModuleCat K j)
@@ -206,7 +255,25 @@ lemma coneSupported_cycle_bounds_aux_boundary {n k : ℕ}
       (Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z)) :
     d (k + 1) (SimplicialChainMaps.subdivisionCone o K a (k + 1)
       (Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z)) = z := by
-  sorry
+  classical
+  let x := Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∉ u.1) z
+  let y := Finsupp.filter (fun u : FaceIndex K (k + 1) => a ∈ u.1) z
+  have hxy : x + y = z := by
+    ext u
+    simp only [x, y, Finsupp.add_apply, Finsupp.filter_apply]
+    by_cases h : a ∈ u.1 <;> simp [h]
+  have hy : ∀ u, y u ≠ 0 → a ∈ u.1 := by
+    intro u hu
+    by_contra h
+    simp [y, Finsupp.filter_apply, h] at hu
+  have hdx : d k x = -(d k y) := by
+    have := congrArg (fun q => q - d k y) hcyc
+    rw [← hxy, map_add] at hcyc
+    exact eq_neg_of_add_eq_zero_left hcyc
+  rw [SimplicialChainMaps.subdivisionChainMap_commutes_aux_cone_boundary
+    o K d hd a x hadm, hdx, map_neg,
+    coneSupported_cycle_bounds_aux_boundary_aux_containing o K d hd a y hy]
+  rw [sub_neg_eq_add, hxy]
 -- END SEAT AREA
 
 theorem coneSupported_cycle_bounds {n : ℕ} (o : LinearOrder (Euc n))
