@@ -2427,7 +2427,35 @@ lemma apm_t02A04_solidTorus_prism_model_aux_weight_mem (q : Fin 6 × Fin 3 × Fi
     (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q) :
     (∀ k, 0 ≤ y k) ∧ 0 ≤ apm_t02A04_circleWeight q.2.1 y ∧
       apm_t02A04_circleWeight q.2.1 y ≤ 1 := by
-  sorry
+  classical
+  have hnn : ∀ k, 0 ≤ y k := by
+    intro k
+    apply (convexHull_min
+      (s := (↑((apm_t02A04_prismFacet q).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) :
+          Set (EuclideanSpace ℝ (Fin 21))))
+      (t := {x | 0 ≤ x k}) ?_ ?_) hy
+    · intro x hx
+      obtain ⟨i, hi, rfl⟩ := Finset.mem_image.1 hx
+      simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+      split <;> positivity
+    · intro a ha b hb u v hu hv huv
+      simp only [Set.mem_setOf_eq] at ha hb ⊢
+      simp only [PiLp.add_apply, PiLp.smul_apply]
+      positivity
+  refine ⟨hnn, ?_, ?_⟩
+  · unfold apm_t02A04_circleWeight
+    exact Finset.sum_nonneg fun d _ ↦ hnn _
+  · have hmass :=
+      (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hy).1
+    unfold apm_t02A04_circleWeight
+    rw [← hmass]
+    rw [← Finset.sum_image]
+    · exact Finset.sum_le_univ_sum_of_nonneg hnn
+    · intro d _ d' _ h
+      have hv := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at hv
+      exact Fin.ext (by omega)
 
 /-- Equal circle points with parameters in `[0, 1]`: same edge and parameter, or the shared
 endpoint of adjacent edges. Copy `_cone_model_aux_injective_aux_facet_aux_angle` with
