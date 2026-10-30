@@ -417,7 +417,100 @@ theorem faceCarried_endo_homology {n : ℕ} (o : LinearOrder (Euc n))
       (show FaceModule K k from F.f k (Finsupp.single s 1)) u ≠ 0 → u.1 ⊆ s.1)
     (h0 : F.f 0 = 𝟙 _) :
     ∀ k, HomologicalComplex.homologyMap F k = 𝟙 _ := by
-  sorry
+  classical
+  have hdiag : ∀ k (s : FaceIndex K k),
+      F.f k (Finsupp.single s 1) =
+        Finsupp.single s ((show FaceModule K k from
+          F.f k (Finsupp.single s 1)) s) := by
+    intro k s
+    apply Finsupp.ext
+    intro u
+    by_cases hus : u = s
+    · subst u
+      simp only [Finsupp.single_eq_same]
+    · rw [Finsupp.single_apply]
+      simp only [hus, ↓reduceIte]
+      rw [if_neg (Ne.symm hus)]
+      by_contra hu
+      have hsub := hF k s u hu
+      have heq : u.1 = s.1 := Finset.eq_of_subset_of_card_le hsub (by
+        rw [u.2.2, s.2.2])
+      apply hus
+      exact Subtype.ext heq
+  have hcomp : ∀ k, F.f k = 𝟙 _ := by
+    intro k
+    induction k with
+    | zero => exact h0
+    | succ k ih =>
+      apply ModuleCat.hom_ext
+      apply Finsupp.lhom_ext'
+      intro s
+      apply LinearMap.ext_ring
+      simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply,
+        ModuleCat.hom_id, LinearMap.id_coe, id_eq]
+      suffices F.f (k + 1) (Finsupp.single s 1) = Finsupp.single s 1 by
+        exact this
+      rw [hdiag]
+      let v : Euc n := s.1.min' (by
+        rw [Finset.nonempty_iff_ne_empty]
+        intro hs
+        have := s.2.2
+        rw [hs, Finset.card_empty] at this
+        omega)
+      have hv : v ∈ s.1 := Finset.min'_mem _ _
+      have herase_ne : (s.1.erase v).Nonempty := by
+        rw [Finset.nonempty_iff_ne_empty]
+        intro he
+        have hc := Finset.card_erase_of_mem hv
+        rw [he, Finset.card_empty, s.2.2] at hc
+        omega
+      have herase_face : s.1.erase v ∈ K.faces :=
+        K.down_closed s.2.1 (Finset.erase_subset _ _) herase_ne
+      let t : FaceIndex K k := ⟨s.1.erase v, herase_face, by
+        rw [Finset.card_erase_of_mem hv, s.2.2]
+        omega⟩
+      obtain ⟨z, hz, hzformula⟩ := hd k s
+      have hcomm : F.f (k + 1) ≫ d k = d k ≫ F.f k := by
+        simpa only [ChainComplex.of_d] using F.comm (k + 1) k
+      rw [ih] at hcomm
+      have hcomm' : F.f (k + 1) ≫ d k = d k := by simpa using hcomm
+      have heval := congrArg (fun f => f (Finsupp.single s 1)) hcomm'
+      simp only [CategoryTheory.comp_apply] at heval
+      rw [hdiag] at heval
+      rw [show Finsupp.single s
+          ((show FaceModule K (k + 1) from F.f (k + 1) (Finsupp.single s 1)) s) =
+          ((show FaceModule K (k + 1) from F.f (k + 1) (Finsupp.single s 1)) s) •
+            Finsupp.single s 1 by simp] at heval
+      change (d k).hom
+          (((show FaceModule K (k + 1) from F.f (k + 1) (Finsupp.single s 1)) s) •
+            Finsupp.single s 1) = (d k).hom (Finsupp.single s 1) at heval
+      rw [(d k).hom.map_smul, hz] at heval
+      have ht := congrArg (fun x : FaceModule K k => x t) heval
+      simp only [Finsupp.smul_apply, hzformula, t] at ht
+      rw [Finset.sum_eq_single v] at ht
+      · simp only [Finset.erase_eq_self, hv, not_true_eq_false, ↓reduceIte,
+          one_mul] at ht
+        apply Finsupp.ext
+        intro u
+        rw [Finsupp.single_apply, Finsupp.single_apply]
+        split_ifs with hu
+        · subst u
+          simpa using ht
+        · rfl
+      · intro b hb hbv
+        split_ifs with h
+        · have : b = v := (Finset.erase_inj s.1 hb).mp h
+          exact (hbv this).elim
+        · rfl
+      · intro hv'
+        exact (hv' hv).elim
+  intro k
+  have hFid : F = 𝟙 _ := by
+    apply HomologicalComplex.Hom.ext
+    funext j
+    exact hcomp j
+  subst F
+  exact HomologicalComplex.homologyMap_id _ _
 -- END SEAT AREA
 
 /-- Uniformly iterated subdivision makes the affine comparison small, and it lifts
