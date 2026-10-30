@@ -2742,12 +2742,179 @@ equal: read `b m = y (prismIdx (d m) j)`, `t m = y (prismIdx (d m) (j + 1))`; th
 conditions and all other coordinates come from `_aux_agree_aux_zero`; apply
 `_aux_staircase_real`. -/
 -- BEGIN SEAT AREA
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_idx
+    (d d' : Fin 7) (w w' : Fin 3)
+    (h : apm_t02A04_prismIdx d w = apm_t02A04_prismIdx d' w') : d = d' ∧ w = w' := by
+  have hv := congrArg Fin.val h
+  simp [apm_t02A04_prismIdx] at hv
+  constructor <;> apply Fin.ext <;> omega
+
+set_option maxHeartbeats 20000000 in
 lemma apm_t02A04_solidTorus_prism_model_aux_staircase (i : Fin 6) (j k k' : Fin 3)
     (y y' : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull (i, j, k))
     (hy' : y' ∈ apm_t02A04_prismHull (i, j, k'))
     (hd : apm_t02A04_diskProj y = apm_t02A04_diskProj y')
     (hw : apm_t02A04_circleWeight j y = apm_t02A04_circleWeight j y') : y = y' := by
-  sorry
+  classical
+  let b : Fin 3 → ℝ := fun m ↦
+    y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j)
+  let t : Fin 3 → ℝ := fun m ↦
+    y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1))
+  let b' : Fin 3 → ℝ := fun m ↦
+    y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j)
+  let t' : Fin 3 → ℝ := fun m ↦
+    y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1))
+  have hnn :=
+    (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k) y hy).1
+  have hnn' :=
+    (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k') y' hy').1
+  have hz (m : Fin 3) :
+      y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 2)) = 0 := by
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
+      fin_cases i <;> fin_cases j <;> fin_cases k <;> fin_cases m <;> fin_cases n <;>
+      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
+  have hz' (m : Fin 3) :
+      y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 2)) = 0 := by
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy'
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
+      fin_cases i <;> fin_cases j <;> fin_cases k <;> fin_cases m <;> fin_cases n <;>
+      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
+  have hrow : ∀ m, b m + t m = b' m + t' m := by
+    intro m
+    have h := congrArg
+      (fun x : EuclideanSpace ℝ (Fin 7) ↦ x (apm_t02A04_prismDisk i m)) hd
+    simp only [apm_t02A04_diskProj, Fin.sum_univ_three] at h
+    dsimp [b, t, b', t']
+    fin_cases j <;> simp at hz hz' h ⊢ <;> linarith [hz m, hz' m]
+  have hout (d : Fin 7) (hdisk : d ∉ apm_t02A04_coneFacet i) :
+      y (apm_t02A04_prismIdx d (j + 1)) = 0 := by
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨m, hm, h⟩ | ⟨m, hm, h⟩)
+    · have := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at this
+      omega
+    · apply hdisk
+      have heq : d = apm_t02A04_prismDisk i m := by
+        apply Fin.ext
+        have := congrArg Fin.val h
+        simp [apm_t02A04_prismIdx] at this
+        omega
+      subst d
+      fin_cases m <;> simp [apm_t02A04_coneFacet, apm_t02A04_prismDisk]
+  have hout' (d : Fin 7) (hdisk : d ∉ apm_t02A04_coneFacet i) :
+      y' (apm_t02A04_prismIdx d (j + 1)) = 0 := by
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy'
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨m, hm, h⟩ | ⟨m, hm, h⟩)
+    · have := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at this
+      omega
+    · apply hdisk
+      have heq : d = apm_t02A04_prismDisk i m := by
+        apply Fin.ext
+        have := congrArg Fin.val h
+        simp [apm_t02A04_prismIdx] at this
+        omega
+      subst d
+      fin_cases m <;> simp [apm_t02A04_coneFacet, apm_t02A04_prismDisk]
+  have htop : ∑ m, t m = ∑ m, t' m := by
+    have ho0 := hout (0 : Fin 7)
+    have ho1 := hout (1 : Fin 7)
+    have ho2 := hout (2 : Fin 7)
+    have ho3 := hout (3 : Fin 7)
+    have ho4 := hout (4 : Fin 7)
+    have ho5 := hout (5 : Fin 7)
+    have ho6 := hout (6 : Fin 7)
+    have ho0' := hout' (0 : Fin 7)
+    have ho1' := hout' (1 : Fin 7)
+    have ho2' := hout' (2 : Fin 7)
+    have ho3' := hout' (3 : Fin 7)
+    have ho4' := hout' (4 : Fin 7)
+    have ho5' := hout' (5 : Fin 7)
+    have ho6' := hout' (6 : Fin 7)
+    set_option maxHeartbeats 20000000 in
+      fin_cases i <;> fin_cases j <;>
+        simp_all [t, t', apm_t02A04_circleWeight, apm_t02A04_prismDisk,
+          apm_t02A04_coneFacet, apm_t02A04_coneIdx, Fin.sum_univ_succ] <;>
+        linarith
+  have hk0 : ∀ m, m < k → t m = 0 := by
+    intro m hm
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
+      fin_cases i <;> fin_cases j <;> fin_cases k <;> fin_cases m <;> fin_cases n <;>
+      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
+  have hk2 : ∀ m, k < m → b m = 0 := by
+    intro m hm
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
+      fin_cases i <;> fin_cases j <;> fin_cases k <;> fin_cases m <;> fin_cases n <;>
+      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
+  have hk0' : ∀ m, m < k' → t' m = 0 := by
+    intro m hm
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy'
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
+      fin_cases i <;> fin_cases j <;> fin_cases k' <;> fin_cases m <;> fin_cases n <;>
+      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
+  have hk2' : ∀ m, k' < m → b' m = 0 := by
+    intro m hm
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy'
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
+      fin_cases i <;> fin_cases j <;> fin_cases k' <;> fin_cases m <;> fin_cases n <;>
+      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
+  have ht : t = t' :=
+    apm_t02A04_solidTorus_prism_model_aux_staircase_real k k' b t b' t'
+      (fun m ↦ hnn _) (fun m ↦ hnn _) (fun m ↦ hnn' _) (fun m ↦ hnn' _)
+      hrow htop hk0 hk2 hk0' hk2'
+  have hb : b = b' := by
+    funext m
+    have := hrow m
+    rw [congrFun ht m] at this
+    linarith
+  apply (EuclideanSpace.equiv (Fin 21) ℝ).injective
+  funext x
+  change y x = y' x
+  by_cases hx : (∃ m, x = apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j) ∨
+      (∃ m, x = apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1))
+  · rcases hx with ⟨m, rfl⟩ | ⟨m, rfl⟩
+    · exact congrFun hb m
+    · exact congrFun ht m
+  · have hy0 := apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero
+        (i, j, k) y hy x
+    have hy0' := apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero
+        (i, j, k') y' hy' x
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and] at hy0 hy0'
+    have hnot : ¬((∃ a, a ≤ k ∧
+        apm_t02A04_prismIdx (apm_t02A04_prismDisk i a) j = x) ∨
+        ∃ a, k ≤ a ∧
+          apm_t02A04_prismIdx (apm_t02A04_prismDisk i a) (j + 1) = x) := by
+      rintro (⟨a, ha, hax⟩ | ⟨a, ha, hax⟩)
+      · exact hx (Or.inl ⟨a, hax.symm⟩)
+      · exact hx (Or.inr ⟨a, hax.symm⟩)
+    have hnot' : ¬((∃ a, a ≤ k' ∧
+        apm_t02A04_prismIdx (apm_t02A04_prismDisk i a) j = x) ∨
+        ∃ a, k' ≤ a ∧
+          apm_t02A04_prismIdx (apm_t02A04_prismDisk i a) (j + 1) = x) := by
+      rintro (⟨a, ha, hax⟩ | ⟨a, ha, hax⟩)
+      · exact hx (Or.inl ⟨a, hax.symm⟩)
+      · exact hx (Or.inr ⟨a, hax.symm⟩)
+    rw [hy0 hnot, hy0' hnot']
 -- END SEAT AREA
 
 /-- The map on a chosen prism: `dif_pos` and `_aux_agree`. -/
