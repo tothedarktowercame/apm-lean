@@ -2020,7 +2020,24 @@ theorem package_homology_surjective {n : ℕ} (o : LinearOrder (Euc n))
     (cmpH : ChainComplex.of _ d hdd ⟶ CoefficientH0.SingularChains ℚ (TopCat.of K.space))
     (cmpH_f : ∀ k, cmpH.f k = cmp k) (k : ℕ) :
     Function.Surjective (HomologicalComplex.homologyMap cmpH k).hom := by
-  sorry
+  obtain ⟨ψ, hψ, hψ0⟩ := smallToFace_exists o K d hd hdd
+  have hH := smallToFace_homology o K d hd hdd cmp hcmp cmpH cmpH_f ψ hψ hψ0 k
+  letI := CoefficientSmallComparison.inclusion_isIso ℚ (starCover K)
+    (starCover_isOpen K hK) (starCover_covers K) k
+  have hcomp : HomologicalComplex.homologyMap ψ k ≫ HomologicalComplex.homologyMap cmpH k =
+      HomologicalComplex.homologyMap
+        (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)) k := by
+    rw [← HomologicalComplex.homologyMap_comp]
+    exact hH
+  intro x
+  refine ⟨(HomologicalComplex.homologyMap ψ k).hom ((inv (HomologicalComplex.homologyMap
+    (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)) k)).hom x), ?_⟩
+  have h2 : inv (HomologicalComplex.homologyMap
+      (CoefficientSmallPath.coverSmallInclusion ℚ (starCover K)) k) ≫
+      HomologicalComplex.homologyMap ψ k ≫ HomologicalComplex.homologyMap cmpH k = 𝟙 _ := by
+    rw [hcomp, IsIso.inv_hom_id]
+  have := congrArg (fun g => g.hom x) h2
+  simpa using this
 
 /-- Injectivity for a packaged affine comparison. Take `r, Φ` from
 `affineCmp_small_lift` and `ψ` from `smallToFace_exists`. By
