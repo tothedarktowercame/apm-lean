@@ -103,7 +103,12 @@ definition of `openStar`, `x` lies in the hull of a face `r ∋ a` but not of
 theorem isMinimalFace_mem_of_openStar {n : ℕ} {K : Geometry.SimplicialComplex ℝ (Euc n)}
     {x a : Euc n} {t : Finset (Euc n)} (ht : IsMinimalFace K x t)
     (ha : x ∈ GeometricSimplicialSubdivision.openStar K a) : a ∈ t := by
-  sorry
+  obtain ⟨r, hr, har, hxr, hxr'⟩ := ha
+  have htr : t ⊆ r := isMinimalFace_subset ht hr hxr
+  by_contra hat
+  have hsub : t ⊆ r.erase a := fun w hw =>
+    Finset.mem_erase.mpr ⟨fun h => hat (h ▸ hw), htr hw⟩
+  exact hxr' (convexHull_mono (by exact_mod_cast hsub) ht.2.1)
 
 /-- The carrier of a set `A ⊆ K.space`: nonempty subsets of minimal faces of points
 of `A`. It shrinks with `A` (so it is a carrier for small simplices and their
