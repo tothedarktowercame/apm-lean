@@ -3612,7 +3612,67 @@ lemma apm_t02A04_quotientComplex_model_aux_overlap (q : Fin 6 × Fin 3 × Fin 3)
     ∃ t : ℝ, 0 ≤ t ∧ t ≤ 1 ∧
       z = (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
         t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc := by
-  sorry
+  classical
+  let P := (apm_t02A04_gluedPrismFacet q).image
+    (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)
+  let D := (apm_t02A04_gluedConeFacet i).image
+    (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)
+  have hP : P ∈ apm_t02A04_gluedComplex.faces := by
+    refine ⟨⟨apm_t02A04_gluedPrismFacet q, ?_, Finset.Subset.refl _⟩, ?_⟩
+    · exact Finset.mem_union_left _ (Finset.mem_image_of_mem _ (Finset.mem_univ q))
+    · have hne : P.Nonempty := by
+        refine Finset.image_nonempty.mpr ?_
+        refine ⟨(apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 q.2.2) q.2.1).castSucc, ?_⟩
+        rw [apm_t02A04_gluedPrismFacet, Finset.mem_map]
+        refine ⟨_, ?_, rfl⟩
+        simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image, Finset.mem_filter,
+          Finset.mem_univ, true_and]
+        exact Or.inl ⟨q.2.2, le_rfl, rfl⟩
+      exact fun h => hne.ne_empty (by simpa using h)
+  have hD : D ∈ apm_t02A04_gluedComplex.faces := by
+    refine ⟨⟨apm_t02A04_gluedConeFacet i, ?_, Finset.Subset.refl _⟩, ?_⟩
+    · exact Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ i))
+    · simp [D, apm_t02A04_gluedConeFacet, apm_t02A04_coneFacet]
+  have hzinter : z ∈ convexHull ℝ (↑(P ∩ D) : Set (EuclideanSpace ℝ (Fin 22))) := by
+    simpa only [Finset.coe_inter] using
+      (apm_t02A04_gluedComplex.inter_subset_convexHull hP hD ⟨hq, hi⟩)
+  let a := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (apm_t02A04_curveIdx i).castSucc
+  let b := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (apm_t02A04_curveIdx (i + 1)).castSucc
+  have hinter : (↑(P ∩ D) : Set (EuclideanSpace ℝ (Fin 22))) ⊆ ({a, b} : Set _) := by
+    intro x hx
+    rcases Finset.mem_inter.mp hx with ⟨hxP, hxD⟩
+    rcases Finset.mem_image.mp hxP with ⟨k, hk, rfl⟩
+    rcases Finset.mem_image.mp hxD with ⟨d, hd, heq⟩
+    have hind0 : k = d :=
+      (apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective 22 heq).symm
+    simp only [apm_t02A04_gluedConeFacet, Finset.mem_image] at hd
+    rcases hd with ⟨e, he, rfl⟩
+    have hind : k = apm_t02A04_gluedIdxD e := hind0
+    simp only [apm_t02A04_coneFacet, Finset.mem_insert, Finset.mem_singleton] at he
+    rcases he with rfl | rfl | rfl
+    · have hlast := congrArg Fin.val hind
+      have hklt : k.val < 21 := by
+        rcases Finset.mem_map.mp hk with ⟨k', -, rfl⟩
+        exact k'.isLt
+      simp [apm_t02A04_gluedIdxD] at hlast
+      omega
+    · left
+      simp only [a]
+      congr 1
+      simpa only [(apm_t02A04_quotientComplex_model_aux_idx).1 i] using hind
+    · right
+      simp only [b]
+      congr 1
+      simpa only [(apm_t02A04_quotientComplex_model_aux_idx).1 (i + 1)] using hind
+  have hzedge : z ∈ convexHull ℝ ({a, b} : Set _) :=
+    convexHull_mono hinter hzinter
+  have hzseg : z ∈ segment ℝ a b := by
+    simpa [convexHull_pair] using hzedge
+  rw [segment_eq_image] at hzseg
+  rcases hzseg with ⟨t, ⟨ht0, ht1⟩, rfl⟩
+  exact ⟨t, ht0, ht1, by simp [a, b]⟩
 -- END SEAT AREA
 
 /-- On curve edge `i` the two formulas give the same point of `X`: the prism side is
