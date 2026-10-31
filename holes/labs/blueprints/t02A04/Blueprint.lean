@@ -3326,7 +3326,39 @@ lemma apm_t02A04_solidTorus_prism_model_aux_injective : Function.Injective apm_t
 /-- Staircase existence: for a disk point (`_cone_model_aux_surjective`) and a circle point
 at parameter `s` on edge `j`, the same formula gives a point of the prism. -/
 lemma apm_t02A04_solidTorus_prism_model_aux_surjective : Function.Surjective apm_t02A04_prismMap := by
-  sorry
+  classical
+  intro xc
+  obtain ⟨i, ξ, hξ, hξz⟩ := apm_t02A04_solidTorus_prism_model_aux_surjective_aux_disk xc.1
+  obtain ⟨j, s, hs0, hs1, hsc⟩ := apm_t02A04_solidTorus_prism_model_aux_surjective_aux_circle xc.2
+  obtain ⟨k, y, hy, hproj, hweight⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_surjective_aux_build i j ξ hξ s hs0 hs1
+  have hne : ((apm_t02A04_prismFacet (i, j, k)).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)).Nonempty := by
+    apply Finset.image_nonempty.2
+    refine ⟨apm_t02A04_prismIdx (apm_t02A04_prismDisk i (Fin.last 2)) (j + 1), ?_⟩
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    exact Or.inr ⟨Fin.last 2, Fin.le_last k, rfl⟩
+  have hmem : y ∈ apm_t02A04_prismComplex.space := by
+    rw [Geometry.SimplicialComplex.mem_space_iff]
+    exact ⟨(apm_t02A04_prismFacet (i, j, k)).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21),
+      ⟨⟨apm_t02A04_prismFacet (i, j, k),
+        Finset.mem_image_of_mem _ (Finset.mem_univ _), subset_rfl⟩,
+        fun h => hne.ne_empty (by simpa using h)⟩, hy⟩
+  refine ⟨⟨y, hmem⟩, ?_⟩
+  rw [apm_t02A04_solidTorus_prism_model_aux_map_eq (i, j, k) ⟨y, hmem⟩ hy]
+  change apm_t02A04_prismPoint (i, j, k) y = xc
+  have hnorm := apm_t02A04_attachedDisk_cone_model_aux_point_norm i ξ hξ
+  apply Prod.ext
+  · change ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_diskProj y)) = xc.1
+    rw [hproj]
+    apply Subtype.ext
+    simp only [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, dif_pos hnorm]
+    exact hξz
+  · show Circle.exp (2 * Real.pi * ((j : ℝ) + apm_t02A04_circleWeight j y) / 3) = xc.2
+    rw [hweight]
+    exact hsc
 
 theorem apm_t02A04_solidTorus_prism_model
     (C : apm_t02A04_CircleSubdivision) :
