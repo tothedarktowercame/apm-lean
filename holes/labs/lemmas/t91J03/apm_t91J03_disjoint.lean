@@ -226,7 +226,60 @@ lemma apm_t91J03_disjoint (gamma : C(Circle, apm_t91J03_Annulus))
     (hx : θ s = θ t + 2 * Real.pi)
     (hh : apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) =
       apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t))) : False := by
-  sorry
+  have hπ : (2 : ℝ) * Real.pi ≠ 0 := by positivity
+  -- Integer-shift law for `θ`, from one-step periodicity `hper`.
+  have key : ∀ (k : ℤ) (u : ℝ),
+      θ (u + (k : ℝ)) = θ u + 2 * Real.pi * (d : ℝ) * k := by
+    intro k
+    induction k using Int.induction_on with
+    | zero => intro u; simp
+    | succ n ih =>
+        intro u
+        rw [show u + ((↑n + 1 : ℤ) : ℝ) = (u + ((↑n : ℤ) : ℝ)) + 1 by push_cast; ring,
+          hper, ih u]
+        push_cast
+        ring
+    | pred n ih =>
+        intro u
+        have hb : θ ((u + ((-↑n : ℤ) : ℝ)) - 1) =
+            θ (u + ((-↑n : ℤ) : ℝ)) - 2 * Real.pi * d := by
+          have h := hper (u + ((-↑n : ℤ) : ℝ) - 1)
+          rw [show u + ((-↑n : ℤ) : ℝ) - 1 + 1 = u + ((-↑n : ℤ) : ℝ) by ring] at h
+          linarith
+        rw [show u + ((-↑n - 1 : ℤ) : ℝ) = (u + ((-↑n : ℤ) : ℝ)) - 1 by
+          push_cast; ring, hb, ih u]
+        push_cast
+        ring
+  -- The two circle points have equal `gamma` values, hence are equal.
+  have hexp : Circle.exp (θ s) = Circle.exp (θ t) := by
+    rw [hx]
+    exact Circle.exp_add_two_pi _
+  have hproj : apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * s)) =
+      apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * t)) := by
+    rw [← hθ s, ← hθ t, hexp]
+  have hval : gamma (Circle.exp (2 * Real.pi * s)) =
+      gamma (Circle.exp (2 * Real.pi * t)) := by
+    apply Prod.ext
+    · exact hproj
+    · exact Subtype.ext hh
+  have hzw : Circle.exp (2 * Real.pi * s) = Circle.exp (2 * Real.pi * t) :=
+    hgamma.injective hval
+  -- So `s = t + m` for an integer `m`.
+  obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp hzw
+  have hsm : s = t + (m : ℝ) := by
+    have h2 : 2 * Real.pi * s = 2 * Real.pi * (t + (m : ℝ)) := by
+      linarith [hm]
+    exact mul_left_cancel₀ hπ h2
+  -- Then `hx` forces `d * m = 1`, contradicting `2 ≤ |d|`.
+  rw [hsm, key m t] at hx
+  have hdm : d * m = 1 := by
+    have hmul : (d : ℝ) * (m : ℝ) = 1 := by
+      have h2 : 2 * Real.pi * ((d : ℝ) * (m : ℝ)) = 2 * Real.pi * 1 := by
+        linarith [hx]
+      exact mul_left_cancel₀ hπ h2
+    exact_mod_cast hmul
+  rcases Int.eq_one_or_neg_one_of_mul_eq_one hdm with h | h <;>
+    subst h <;> norm_num at hd
 -- END SEAT AREA
 
 open unitInterval in
