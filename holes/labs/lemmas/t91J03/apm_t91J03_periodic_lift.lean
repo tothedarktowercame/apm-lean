@@ -78,10 +78,105 @@ strips, and `I` is connected). Prove that once, then chase the four corners: sta
 `(0,0)` in `(π/2, π] + 2πa`, go along the bottom to `[0, π/2) + 2πa`, up the right edge to
 `(-π/2, 0] + 2πa`, along the top to `[-π, -π/2) + 2πa`; but the left edge from `(0,0)` stays in
 `(π/2, 3π/2) + 2πa`, which is disjoint from that. -/
+lemma apm_t91J03_crossing_aux_corners_aux_neg (a : ℤ) (y : ℝ)
+    (h1 : 2 * Real.pi * a + Real.pi < y) (h2 : y < 2 * Real.pi * a + 2 * Real.pi) :
+    Real.sin y < 0 := by
+  have h := Real.sin_sub_int_mul_two_pi y (a + 1)
+  rw [← h]
+  push_cast
+  apply Real.sin_neg_of_neg_of_neg_pi_lt <;> nlinarith
+
+open unitInterval in
+/-- A continuous function on `I` with `0 ≤ sin` stays in one strip `[2πa, 2πa + π]`. -/
+lemma apm_t91J03_crossing_aux_corners_aux_strip (g : C(I, ℝ)) (h : ∀ t, 0 ≤ Real.sin (g t)) :
+    ∃ a : ℤ, ∀ t, 2 * Real.pi * a ≤ g t ∧ g t ≤ 2 * Real.pi * a + Real.pi := by
+  have hp := Real.pi_pos
+  have h2p : 0 < 2 * Real.pi := by linarith
+  let a : ℤ := ⌊g 0 / (2 * Real.pi)⌋
+  have ha1 : 2 * Real.pi * a ≤ g 0 := by
+    have := Int.floor_le (g 0 / (2 * Real.pi))
+    rwa [le_div_iff₀ h2p, mul_comm] at this
+  have ha2 : g 0 < 2 * Real.pi * a + 2 * Real.pi := by
+    have := Int.lt_floor_add_one (g 0 / (2 * Real.pi))
+    rw [div_lt_iff₀ h2p] at this
+    nlinarith
+  have ha3 : g 0 ≤ 2 * Real.pi * a + Real.pi := by
+    by_contra hc
+    exact absurd (h 0) (not_le.2 (apm_t91J03_crossing_aux_corners_aux_neg a _ (not_le.1 hc) ha2))
+  refine ⟨a, fun t => ⟨?_, ?_⟩⟩
+  · by_contra hc
+    push_neg at hc
+    let y := max (g t) (2 * Real.pi * a - Real.pi / 2)
+    have hy1 : g t ≤ y := le_max_left _ _
+    have hy2 : y < 2 * Real.pi * a := max_lt hc (by linarith)
+    obtain ⟨u, hu⟩ := mem_range_of_exists_le_of_exists_ge g.continuous ⟨t, hy1⟩
+      ⟨0, by linarith⟩
+    have hy3 : 2 * Real.pi * a - Real.pi / 2 ≤ y := le_max_right _ _
+    have := apm_t91J03_crossing_aux_corners_aux_neg (a - 1) y
+      (by push_cast; nlinarith) (by push_cast; nlinarith)
+    have h' := h u
+    rw [hu] at h'
+    linarith
+  · by_contra hc
+    push_neg at hc
+    let y := min (g t) (2 * Real.pi * a + 3 * Real.pi / 2)
+    have hy1 : y ≤ g t := min_le_left _ _
+    have hy2 : 2 * Real.pi * a + Real.pi < y := lt_min hc (by linarith)
+    obtain ⟨u, hu⟩ := mem_range_of_exists_le_of_exists_ge g.continuous ⟨0, by linarith⟩
+      ⟨t, hy1⟩
+    have hy3 : y ≤ 2 * Real.pi * a + 3 * Real.pi / 2 := min_le_right _ _
+    have := apm_t91J03_crossing_aux_corners_aux_neg a y hy2 (by linarith)
+    have h' := h u
+    rw [hu] at h'
+    linarith
+
+lemma apm_t91J03_crossing_aux_corners_aux_int (u v : ℤ) (c : ℝ) (hc : c < 2)
+    (h : 2 * Real.pi * u ≤ 2 * Real.pi * v + c * Real.pi) : u ≤ v := by
+  have hp := Real.pi_pos
+  have h1 : (2 * (u : ℝ) - 2 * v - c) * Real.pi ≤ 0 := by nlinarith
+  have h2 : 2 * (u : ℝ) - 2 * v - c ≤ 0 := by
+    by_contra hn
+    exact absurd h1 (not_le.2 (mul_pos (not_le.1 hn) hp))
+  have h3 : (u : ℝ) < v + 1 := by linarith
+  have h4 : u < v + 1 := by exact_mod_cast h3
+  omega
+
+open unitInterval in
 lemma apm_t91J03_crossing_aux_corners (θ : C(I × I, ℝ))
     (hL : ∀ t, Real.cos (θ (0, t)) < 0) (hR : ∀ t, 0 < Real.cos (θ (1, t)))
     (hB : ∀ s, 0 ≤ Real.sin (θ (s, 0))) (hT : ∀ s, Real.sin (θ (s, 1)) ≤ 0) : False := by
-  sorry
+  have hp := Real.pi_pos
+  let gB : C(I, ℝ) := ⟨fun s => θ (s, 0), by fun_prop⟩
+  let gT : C(I, ℝ) := ⟨fun s => θ (s, 1) + Real.pi, by fun_prop⟩
+  let gL : C(I, ℝ) := ⟨fun t => θ (0, t) - Real.pi / 2, by fun_prop⟩
+  let gR : C(I, ℝ) := ⟨fun t => θ (1, t) + Real.pi / 2, by fun_prop⟩
+  obtain ⟨b, hb⟩ := apm_t91J03_crossing_aux_corners_aux_strip gB hB
+  obtain ⟨c, hc⟩ := apm_t91J03_crossing_aux_corners_aux_strip gT (fun s => by
+    change 0 ≤ Real.sin (θ (s, 1) + Real.pi)
+    rw [Real.sin_add_pi]
+    linarith [hT s])
+  obtain ⟨a, ha⟩ := apm_t91J03_crossing_aux_corners_aux_strip gL (fun t => by
+    change 0 ≤ Real.sin (θ (0, t) - Real.pi / 2)
+    rw [Real.sin_sub_pi_div_two]
+    linarith [hL t])
+  obtain ⟨d, hd⟩ := apm_t91J03_crossing_aux_corners_aux_strip gR (fun t => by
+    change 0 ≤ Real.sin (θ (1, t) + Real.pi / 2)
+    rw [Real.sin_add_pi_div_two]
+    exact (hR t).le)
+  have ib := hb 0; have ib' := hb 1; have ic := hc 0; have ic' := hc 1
+  have ia := ha 0; have ia' := ha 1; have id := hd 0; have id' := hd 1
+  simp only [gB, gT, gL, gR, ContinuousMap.coe_mk] at ib ib' ic ic' ia ia' id id'
+  have e1 : b ≤ a := apm_t91J03_crossing_aux_corners_aux_int b a (3 / 2) (by norm_num) (by linarith)
+  have e2 : a ≤ b := apm_t91J03_crossing_aux_corners_aux_int a b (1 / 2) (by norm_num) (by linarith)
+  have e3 : d ≤ b := apm_t91J03_crossing_aux_corners_aux_int d b (3 / 2) (by norm_num) (by linarith)
+  have e4 : b ≤ d := apm_t91J03_crossing_aux_corners_aux_int b d (1 / 2) (by norm_num) (by linarith)
+  have e5 : c ≤ d := apm_t91J03_crossing_aux_corners_aux_int c d (3 / 2) (by norm_num) (by linarith)
+  have e6 : d ≤ c := apm_t91J03_crossing_aux_corners_aux_int d c (1 / 2) (by norm_num) (by linarith)
+  have hab : a = b := le_antisymm e2 e1
+  have hdb : d = b := le_antisymm e3 e4
+  have hcd : c = d := le_antisymm e5 e6
+  subst hab hdb hcd
+  linarith
 
 open unitInterval in
 /-- Planar crossing lemma: a curve `α` in the strip from the left of `β` to the right of `β` meets
@@ -132,7 +227,60 @@ lemma apm_t91J03_disjoint (gamma : C(Circle, apm_t91J03_Annulus))
     (hx : θ s = θ t + 2 * Real.pi)
     (hh : apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) =
       apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t))) : False := by
-  sorry
+  have hπ : (2 : ℝ) * Real.pi ≠ 0 := by positivity
+  -- Integer-shift law for `θ`, from one-step periodicity `hper`.
+  have key : ∀ (k : ℤ) (u : ℝ),
+      θ (u + (k : ℝ)) = θ u + 2 * Real.pi * (d : ℝ) * k := by
+    intro k
+    induction k using Int.induction_on with
+    | zero => intro u; simp
+    | succ n ih =>
+        intro u
+        rw [show u + ((↑n + 1 : ℤ) : ℝ) = (u + ((↑n : ℤ) : ℝ)) + 1 by push_cast; ring,
+          hper, ih u]
+        push_cast
+        ring
+    | pred n ih =>
+        intro u
+        have hb : θ ((u + ((-↑n : ℤ) : ℝ)) - 1) =
+            θ (u + ((-↑n : ℤ) : ℝ)) - 2 * Real.pi * d := by
+          have h := hper (u + ((-↑n : ℤ) : ℝ) - 1)
+          rw [show u + ((-↑n : ℤ) : ℝ) - 1 + 1 = u + ((-↑n : ℤ) : ℝ) by ring] at h
+          linarith
+        rw [show u + ((-↑n - 1 : ℤ) : ℝ) = (u + ((-↑n : ℤ) : ℝ)) - 1 by
+          push_cast; ring, hb, ih u]
+        push_cast
+        ring
+  -- The two circle points have equal `gamma` values, hence are equal.
+  have hexp : Circle.exp (θ s) = Circle.exp (θ t) := by
+    rw [hx]
+    exact Circle.exp_add_two_pi _
+  have hproj : apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * s)) =
+      apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * t)) := by
+    rw [← hθ s, ← hθ t, hexp]
+  have hval : gamma (Circle.exp (2 * Real.pi * s)) =
+      gamma (Circle.exp (2 * Real.pi * t)) := by
+    apply Prod.ext
+    · exact hproj
+    · exact Subtype.ext hh
+  have hzw : Circle.exp (2 * Real.pi * s) = Circle.exp (2 * Real.pi * t) :=
+    hgamma.injective hval
+  -- So `s = t + m` for an integer `m`.
+  obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp hzw
+  have hsm : s = t + (m : ℝ) := by
+    have h2 : 2 * Real.pi * s = 2 * Real.pi * (t + (m : ℝ)) := by
+      linarith [hm]
+    exact mul_left_cancel₀ hπ h2
+  -- Then `hx` forces `d * m = 1`, contradicting `2 ≤ |d|`.
+  rw [hsm, key m t] at hx
+  have hdm : d * m = 1 := by
+    have hmul : (d : ℝ) * (m : ℝ) = 1 := by
+      have h2 : 2 * Real.pi * ((d : ℝ) * (m : ℝ)) = 2 * Real.pi * 1 := by
+        linarith [hx]
+      exact mul_left_cancel₀ hπ h2
+    exact_mod_cast hmul
+  rcases Int.eq_one_or_neg_one_of_mul_eq_one hdm with h | h <;>
+    subst h <;> norm_num at hd
 
 open unitInterval in
 /-- The barrier. With `h t` the height of `gamma (exp 2πt)` and `L₁ t = (θ t + 2π, h t)`, take a
