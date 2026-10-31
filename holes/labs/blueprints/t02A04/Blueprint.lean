@@ -1556,6 +1556,27 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_angle (i j 
   all_goals
     aesop (add safe (by linarith))
 
+/-- Two facet points agreeing on both facets' vertices are equal (`_aux_bary`: zero
+off the facet). -/
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_coords
+    (x y : EuclideanSpace ℝ (Fin 7)) (i j : Fin 6)
+    (hxi : x ∈ apm_t02A04_coneHull i) (hyj : y ∈ apm_t02A04_coneHull j)
+    (h : ∀ k, k ∈ apm_t02A04_coneFacet i ∨ k ∈ apm_t02A04_coneFacet j → x k = y k) :
+    x = y := by
+  obtain ⟨-, -, hx⟩ := apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary i x hxi
+  obtain ⟨-, -, hy⟩ := apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary j y hyj
+  ext k
+  by_cases hk : k ∈ apm_t02A04_coneFacet i ∨ k ∈ apm_t02A04_coneFacet j
+  · exact h k hk
+  · push_neg at hk
+    rw [hx k hk.1, hy k hk.2]
+
+/-- The vertex before facet `i + 1` and the vertex after facet `i`. -/
+lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_notMem (i : Fin 6) :
+    apm_t02A04_coneIdx i ∉ apm_t02A04_coneFacet (i + 1) ∧
+      apm_t02A04_coneIdx (i + 1 + 1) ∉ apm_t02A04_coneFacet i := by
+  fin_cases i <;> decide
+
 /-- Plan: `‖conePoint i x‖ = x_b + x_c =: R` (arc points have norm one), so the radii
 agree.  `R = 0` forces both to the centre vertex (`_aux_bary`: `x 0 = 1`).  Otherwise
 cancel `R` to get equal arc points, apply `_aux_angle` with `s = x_c / R`, and in each
@@ -1564,7 +1585,103 @@ lemma apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet
     (x y : EuclideanSpace ℝ (Fin 7)) (i j : Fin 6)
     (hxi : x ∈ apm_t02A04_coneHull i) (hyj : y ∈ apm_t02A04_coneHull j)
     (hxy : apm_t02A04_conePoint i x = apm_t02A04_conePoint j y) : x = y := by
-  sorry
+  classical
+  obtain ⟨hxnonneg, hxsum, hxzero⟩ :=
+    apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary i x hxi
+  obtain ⟨hynonneg, hysum, hyzero⟩ :=
+    apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary j y hyj
+  have hbx : 0 ≤ x (apm_t02A04_coneIdx i) := hxnonneg _
+  have hcx : 0 ≤ x (apm_t02A04_coneIdx (i + 1)) := hxnonneg _
+  have hby : 0 ≤ y (apm_t02A04_coneIdx j) := hynonneg _
+  have hcy : 0 ≤ y (apm_t02A04_coneIdx (j + 1)) := hynonneg _
+  have hrx : 0 ≤ x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)) := add_nonneg hbx hcx
+  have hry : 0 ≤ y (apm_t02A04_coneIdx j) + y (apm_t02A04_coneIdx (j + 1)) := add_nonneg hby hcy
+  have hr : x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)) =
+      y (apm_t02A04_coneIdx j) + y (apm_t02A04_coneIdx (j + 1)) := by
+    have hn := congrArg norm hxy
+    simp only [apm_t02A04_conePoint, norm_mul, Complex.norm_real, Circle.norm_coe, mul_one,
+      Real.norm_eq_abs] at hn
+    rwa [abs_of_nonneg hrx, abs_of_nonneg hry] at hn
+  apply apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_coords x y i j hxi hyj
+  intro k hk
+  simp only [apm_t02A04_coneFacet, Finset.mem_insert, Finset.mem_singleton] at hk
+  by_cases hr0 : x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)) = 0
+  · have hbx0 : x (apm_t02A04_coneIdx i) = 0 := by linarith
+    have hcx0 : x (apm_t02A04_coneIdx (i + 1)) = 0 := by linarith
+    have hby0 : y (apm_t02A04_coneIdx j) = 0 := by linarith
+    have hcy0 : y (apm_t02A04_coneIdx (j + 1)) = 0 := by linarith
+    have hxo : ∀ k, k ∈ apm_t02A04_coneFacet i ∨ k ∈ apm_t02A04_coneFacet j → k ≠ 0 → x k = 0 := by
+      intro k hk hk0
+      by_cases hki : k ∈ apm_t02A04_coneFacet i
+      · simp only [apm_t02A04_coneFacet, Finset.mem_insert, Finset.mem_singleton] at hki
+        rcases hki with rfl | rfl | rfl
+        · exact (hk0 rfl).elim
+        · exact hbx0
+        · exact hcx0
+      · exact hxzero k hki
+    have hyo : ∀ k, k ∈ apm_t02A04_coneFacet i ∨ k ∈ apm_t02A04_coneFacet j → k ≠ 0 → y k = 0 := by
+      intro k hk hk0
+      by_cases hkj : k ∈ apm_t02A04_coneFacet j
+      · simp only [apm_t02A04_coneFacet, Finset.mem_insert, Finset.mem_singleton] at hkj
+        rcases hkj with rfl | rfl | rfl
+        · exact (hk0 rfl).elim
+        · exact hby0
+        · exact hcy0
+      · exact hyzero k hkj
+    have hk' : k ∈ apm_t02A04_coneFacet i ∨ k ∈ apm_t02A04_coneFacet j := by
+      simp only [apm_t02A04_coneFacet, Finset.mem_insert, Finset.mem_singleton]; exact hk
+    by_cases hk0 : k = 0
+    · subst hk0; linarith
+    · rw [hxo k hk' hk0, hyo k hk' hk0]
+  have hrpos : 0 < x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)) :=
+    lt_of_le_of_ne hrx (Ne.symm hr0)
+  have hrypos : 0 < y (apm_t02A04_coneIdx j) + y (apm_t02A04_coneIdx (j + 1)) := hr ▸ hrpos
+  have hs1 : x (apm_t02A04_coneIdx (i + 1)) /
+      (x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1))) ≤ 1 :=
+    (div_le_one hrpos).2 (by linarith)
+  have hs1' : y (apm_t02A04_coneIdx (j + 1)) /
+      (y (apm_t02A04_coneIdx j) + y (apm_t02A04_coneIdx (j + 1))) ≤ 1 :=
+    (div_le_one hrypos).2 (by linarith)
+  have harc : apm_t02A04_arcPoint i (x (apm_t02A04_coneIdx (i + 1)) /
+        (x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)))) =
+      apm_t02A04_arcPoint j (y (apm_t02A04_coneIdx (j + 1)) /
+        (y (apm_t02A04_coneIdx j) + y (apm_t02A04_coneIdx (j + 1)))) := by
+    apply Subtype.ext
+    have hp := hxy
+    simp only [apm_t02A04_conePoint] at hp
+    rw [show ((y (apm_t02A04_coneIdx j) + y (apm_t02A04_coneIdx (j + 1)) : ℝ) : ℂ) =
+      ((x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)) : ℝ) : ℂ) by rw [hr]] at hp
+    exact mul_left_cancel₀ (show ((x (apm_t02A04_coneIdx i) + x (apm_t02A04_coneIdx (i + 1)) : ℝ) : ℂ) ≠ 0 by
+      exact_mod_cast hr0) hp
+  rcases apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_angle i j _ _
+      (div_nonneg hcx hrx) hs1 (div_nonneg hcy hry) hs1' harc with
+    ⟨rfl, hss⟩ | ⟨rfl, hsone, hs'zero⟩ | ⟨rfl, hszero, hs'one⟩
+  · rw [← hr, div_left_inj' hr0] at hss
+    rcases hk with (rfl | rfl | rfl) | (rfl | rfl | rfl) <;> first | exact hss | linarith
+  · have hbx0 : x (apm_t02A04_coneIdx i) = 0 := by
+      rw [div_eq_one_iff_eq hr0] at hsone; linarith
+    have hcy0 : y (apm_t02A04_coneIdx (i + 1 + 1)) = 0 :=
+      (div_eq_zero_iff.mp hs'zero).resolve_right (ne_of_gt hrypos)
+    have hn := apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_notMem i
+    rcases hk with (rfl | rfl | rfl) | (rfl | rfl | rfl)
+    · linarith
+    · rw [hbx0, hyzero _ hn.1]
+    · linarith
+    · linarith
+    · linarith
+    · rw [hcy0, hxzero _ hn.2]
+  · have hcx0 : x (apm_t02A04_coneIdx (j + 1 + 1)) = 0 :=
+      (div_eq_zero_iff.mp hszero).resolve_right (ne_of_gt hrpos)
+    have hby0 : y (apm_t02A04_coneIdx j) = 0 := by
+      rw [div_eq_one_iff_eq (ne_of_gt hrypos)] at hs'one; linarith
+    have hn := apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_notMem j
+    rcases hk with (rfl | rfl | rfl) | (rfl | rfl | rfl)
+    · linarith
+    · linarith
+    · rw [hcx0, hyzero _ hn.2]
+    · linarith
+    · rw [hby0, hxzero _ hn.1]
+    · linarith
 
 lemma apm_t02A04_attachedDisk_cone_model_aux_injective : Function.Injective apm_t02A04_coneMap := by
   intro x y hxy
@@ -2014,6 +2131,170 @@ lemma apm_t02A04_solidTorus_prism_model_aux_edge_mem (i : Fin 6) (t : ℝ) (ht0 
     rw [segment_eq_image]
     exact ⟨t, ⟨ht0, ht1⟩, rfl⟩
 
+/-- A prism vertex projects to its disk vertex: `diskProj` sums the three circle
+coordinates of cone vertex `a`, and `basisVertex 21 (3d + w)` has one nonzero coordinate. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_proj_vertex (d : Fin 7) (w : Fin 3) :
+    apm_t02A04_diskProj (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+        (apm_t02A04_prismIdx d w)) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 d := by
+  ext a
+  simp only [apm_t02A04_diskProj, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+    EuclideanSpace.single_apply, apm_t02A04_prismIdx, Fin.ext_iff]
+  by_cases had : a.1 = d.1
+  · rw [if_pos had]
+    rw [Finset.sum_eq_single w]
+    · simp [had]
+    · intro b _ hb
+      rw [if_neg]
+      intro h
+      exact hb (Fin.ext (by omega))
+    · simp
+  · rw [if_neg had]
+    apply Finset.sum_eq_zero
+    intro b _
+    rw [if_neg]
+    intro h
+    exact had (by omega)
+
+/-- The disk weights of a prism point lie in the cone facet below it (convex hull of the
+images of the prism vertices, by `_aux_proj_vertex`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_proj
+    (q : Fin 6 × Fin 3 × Fin 3) (y : EuclideanSpace ℝ (Fin 21))
+    (hy : y ∈ apm_t02A04_prismHull q) :
+    apm_t02A04_diskProj y ∈ apm_t02A04_coneHull q.1 := by
+  let L : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] EuclideanSpace ℝ (Fin 7) :=
+      { toFun := apm_t02A04_diskProj
+        map_add' := by intro x z; ext d; simp [apm_t02A04_diskProj, Finset.sum_add_distrib]
+        map_smul' := by
+          intro (c : ℝ) x
+          ext d
+          simp [apm_t02A04_diskProj, Finset.mul_sum, smul_eq_mul] }
+  have hsub : apm_t02A04_prismHull q ⊆ L ⁻¹' apm_t02A04_coneHull q.1 := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+      have hkd : ∃ (d : Fin 3) (w : Fin 3),
+          apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 d) w = k := by
+        simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+          Finset.mem_filter, Finset.mem_univ, true_and] at hk
+        rcases hk with ⟨d, -, rfl⟩ | ⟨d, -, rfl⟩
+        · exact ⟨d, q.2.1, rfl⟩
+        · exact ⟨d, q.2.1 + 1, rfl⟩
+      obtain ⟨d, w, rfl⟩ := hkd
+      change apm_t02A04_diskProj (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+        (apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 d) w)) ∈ apm_t02A04_coneHull q.1
+      rw [apm_t02A04_solidTorus_prism_model_aux_proj_vertex]
+      apply subset_convexHull ℝ
+      apply Finset.mem_coe.mpr
+      apply Finset.mem_image_of_mem
+      fin_cases d <;> simp [apm_t02A04_coneFacet, apm_t02A04_prismDisk]
+    · exact (convex_convexHull ℝ _).linear_preimage L
+  exact hsub hy
+
+lemma apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero
+    (q : Fin 6 × Fin 3 × Fin 3) (y : EuclideanSpace ℝ (Fin 21))
+    (hy : y ∈ apm_t02A04_prismHull q) (k : Fin 21)
+    (hk : k ∉ apm_t02A04_prismFacet q) : y k = 0 := by
+  let L : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ :=
+    ((PiLp.proj 2 (fun _ : Fin 21 ↦ ℝ) k).toLinearMap :
+      EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ)
+  have hsub : apm_t02A04_prismHull q ⊆ L.ker := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨j, hj, rfl⟩ := Finset.mem_image.1 hx
+      change ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 j k = 0
+      simp only [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply]
+      split_ifs with h
+      · subst j
+        exact (hk hj).elim
+      · rfl
+    · exact L.ker.convex
+  exact hsub hy
+
+/-- Total mass one, and no weight on circle column `j + 2` (`j = q.2.1`): `convexHull_min`
+onto the hyperplane `∑ k, y k = 1`; column `j + 2` lies outside `prismFacet q`, so
+`_aux_agree_aux_zero` kills each of its seven coordinates. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass
+    (q : Fin 6 × Fin 3 × Fin 3) (y : EuclideanSpace ℝ (Fin 21))
+    (hy : y ∈ apm_t02A04_prismHull q) :
+    ∑ k, y k = 1 ∧ apm_t02A04_circleWeight (q.2.1 + 1) y = 0 := by
+  classical
+  constructor
+  · let L : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ :=
+      { toFun := fun z => ∑ k, z k
+        map_add' := by intro x z; simp [Finset.sum_add_distrib]
+        map_smul' := by intro c x; simp [Finset.mul_sum, smul_eq_mul] }
+    have hsub : apm_t02A04_prismHull q ⊆ {z | L z = 1} := by
+      apply convexHull_min
+      · intro x hx
+        obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hx
+        simp [L, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+      · exact (convex_singleton (1 : ℝ)).linear_preimage L
+    exact hsub hy
+  · apply Finset.sum_eq_zero
+    intro d _
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero q y hy
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨m, -, h⟩ | ⟨m, -, h⟩)
+    all_goals
+      have hv := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at hv
+      omega
+
+/-- Adjacent circle edges: if `y` lies in prisms over circle edges `j` and `j + 1`, its
+weight sits in column `j + 1` only (columns `j` and `j + 2` lie outside one of the two
+facets, `_aux_agree_aux_zero`), so with `_aux_mass` the weight on circle vertex `j + 1`
+is `1` read on edge `j` and `0` read on edge `j + 1`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_agree_aux_step
+    (q q' : Fin 6 × Fin 3 × Fin 3) (y : EuclideanSpace ℝ (Fin 21))
+    (hq : y ∈ apm_t02A04_prismHull q) (hq' : y ∈ apm_t02A04_prismHull q')
+    (hj : q'.2.1 = q.2.1 + 1) :
+    apm_t02A04_circleWeight q.2.1 y = 1 ∧ apm_t02A04_circleWeight q'.2.1 y = 0 := by
+  classical
+  have hm := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).1
+  have hz := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).2
+  have hz' := (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q' y hq').2
+  constructor
+  · generalize q.2.1 = j at hj hz ⊢
+    generalize q'.2.1 = j' at hj hz'
+    fin_cases j <;> fin_cases j' <;>
+      simp [Fin.sum_univ_succ] at hm <;>
+      simp only [apm_t02A04_circleWeight, Fin.sum_univ_succ] at hz hz' ⊢ <;>
+      simp at hj <;>
+      simp [apm_t02A04_prismIdx] at hz hz' ⊢ <;>
+      linarith
+  · rw [hj]
+    exact (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hq).2
+
+/-- Case on `q'.2.1 - q.2.1 ∈ {0, 1, 2}`: equal edges are `rfl`; for adjacent edges
+`_aux_step` gives angles `2π(j + 1)/3` and `2π(j + 1 + 0)/3` (for `j = 2` the second is
+`2π·0/3`, equal modulo `2π`: `Circle.exp_eq_exp`); the third case is the second with
+`q, q'` swapped. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_agree_aux_circle
+    (q q' : Fin 6 × Fin 3 × Fin 3) (y : EuclideanSpace ℝ (Fin 21))
+    (hq : y ∈ apm_t02A04_prismHull q) (hq' : y ∈ apm_t02A04_prismHull q') :
+    apm_t02A04_circlePoint q.2.1 y = apm_t02A04_circlePoint q'.2.1 y := by
+  have hstep : ∀ q q' : Fin 6 × Fin 3 × Fin 3, y ∈ apm_t02A04_prismHull q →
+      y ∈ apm_t02A04_prismHull q' → q'.2.1 = q.2.1 + 1 →
+        apm_t02A04_circlePoint q.2.1 y = apm_t02A04_circlePoint q'.2.1 y := by
+    intro q q' hq hq' hj
+    obtain ⟨h1, h0⟩ := apm_t02A04_solidTorus_prism_model_aux_agree_aux_step q q' y hq hq' hj
+    unfold apm_t02A04_circlePoint
+    rw [h1, h0, hj]
+    apply Circle.exp_eq_exp.mpr
+    generalize q.2.1 = j
+    fin_cases j
+    · exact ⟨0, by simp⟩
+    · exact ⟨0, by simp; ring⟩
+    · exact ⟨1, by simp; ring⟩
+  have htri : ∀ a b : Fin 3, b = a ∨ b = a + 1 ∨ a = b + 1 := by decide
+  rcases htri q.2.1 q'.2.1 with h | h | h
+  · rw [h]
+  · exact hstep q q' hq hq' h
+  · exact (hstep q' q hq' hq h).symm
+
 /-- The point does not depend on the tetrahedron: on a shared face the disk weights lie
 in a shared cone face (`_cone_model_aux_agree`), and the circle points agree (same edge,
 or circle vertex `j + 1` = weight `1` on edge `j` and weight `0` on edge `j + 1`, both at
@@ -2022,7 +2303,14 @@ lemma apm_t02A04_solidTorus_prism_model_aux_agree (q q' : Fin 6 × Fin 3 × Fin 
     (y : EuclideanSpace ℝ (Fin 21)) (hq : y ∈ apm_t02A04_prismHull q)
     (hq' : y ∈ apm_t02A04_prismHull q') :
     apm_t02A04_prismPoint q y = apm_t02A04_prismPoint q' y := by
-  sorry
+  classical
+  have hd := apm_t02A04_attachedDisk_cone_model_aux_agree q.1 q'.1
+    (apm_t02A04_diskProj y)
+    (apm_t02A04_solidTorus_prism_model_aux_proj q y hq)
+    (apm_t02A04_solidTorus_prism_model_aux_proj q' y hq')
+  apply Prod.ext
+  · exact congrArg ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp hd
+  · exact apm_t02A04_solidTorus_prism_model_aux_agree_aux_circle q q' y hq hq'
 
 /-- Along curve edge `i` the disk weights are `(0, 1 - t, t)` on facet `i` and the circle
 weight is `t` on edge `i mod 3`, so the image is the curve point (`_cone_model_aux_edge_map`
@@ -2032,14 +2320,113 @@ lemma apm_t02A04_solidTorus_prism_model_aux_edge_map (i : Fin 6) (t : ℝ) (ht0 
     apm_t02A04_prismMap ⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i t ht0 ht1⟩ =
       (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
         simpa using (apm_t02A04_arcPoint i t).property.le⟩, apm_t02A04_arcPoint i t ^ 2) := by
-  sorry
+  classical
+  let y : EuclideanSpace ℝ (Fin 21) :=
+    (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+        (apm_t02A04_curveIdx i) +
+      t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+        (apm_t02A04_curveIdx (i + 1))
+  let j : Fin 3 := ⟨i.1 % 3, Nat.mod_lt _ (by decide)⟩
+  let q : Fin 6 × Fin 3 × Fin 3 := (i, j, 1)
+  have hi : apm_t02A04_curveIdx i ∈ apm_t02A04_prismFacet q := by
+    dsimp [q, j]
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and, apm_t02A04_curveIdx]
+    left
+    refine ⟨1, le_rfl, ?_⟩
+    simp [apm_t02A04_prismDisk]
+  have hi1 : apm_t02A04_curveIdx (i + 1) ∈ apm_t02A04_prismFacet q := by
+    dsimp [q, j]
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    right
+    refine ⟨2, by decide, ?_⟩
+    fin_cases i <;> rfl
+  have hyq : y ∈ apm_t02A04_prismHull q := by
+    apply segment_subset_convexHull
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx i) ∈
+        ↑((apm_t02A04_prismFacet q).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) by
+        exact Finset.mem_image_of_mem _ hi)
+      (show ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx (i + 1)) ∈
+        ↑((apm_t02A04_prismFacet q).image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) by
+        exact Finset.mem_image_of_mem _ hi1)
+    rw [segment_eq_image]
+    exact ⟨t, ⟨ht0, ht1⟩, rfl⟩
+  have hex : ∃ q', y ∈ apm_t02A04_prismHull q' := ⟨q, hyq⟩
+  let q' := Classical.choose hex
+  have hyq' : y ∈ apm_t02A04_prismHull q' := Classical.choose_spec hex
+  have hagree : apm_t02A04_prismPoint q' y = apm_t02A04_prismPoint q y :=
+    apm_t02A04_solidTorus_prism_model_aux_agree q' q y hyq' hyq
+  simp only [apm_t02A04_prismMap]
+  rw [dif_pos hex]
+  change apm_t02A04_prismPoint q' y = _
+  rw [hagree]
+  apply Prod.ext
+  · apply Subtype.ext
+    have hp : apm_t02A04_conePoint i (apm_t02A04_diskProj y) =
+        ((apm_t02A04_arcPoint i t : Circle) : ℂ) := by
+      fin_cases i <;>
+        simp [y, apm_t02A04_diskProj, apm_t02A04_curveIdx,
+          apm_t02A04_prismIdx, apm_t02A04_conePoint, apm_t02A04_coneIdx,
+          ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+          EuclideanSpace.single_apply, Fin.sum_univ_succ, sub_add_cancel]
+    simp [apm_t02A04_prismPoint, q, hp,
+      ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp]
+  · unfold apm_t02A04_prismPoint apm_t02A04_circlePoint
+    have hw : apm_t02A04_circleWeight j y = t := by
+      fin_cases i <;>
+        simp [j, y, apm_t02A04_circleWeight, apm_t02A04_curveIdx,
+          apm_t02A04_prismIdx, apm_t02A04_coneIdx,
+          ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+          Fin.sum_univ_succ]
+    change Circle.exp (2 * Real.pi * ((j : ℝ) + apm_t02A04_circleWeight j y) / 3) = _
+    rw [hw]
+    unfold apm_t02A04_arcPoint
+    change Circle.exp (2 * Real.pi * ((j : ℝ) + t) / 3) =
+      Circle.exp (2 * Real.pi * ((i : ℝ) + t) / 6) ^ 2
+    rw [pow_two, ← Circle.exp_add]
+    apply Circle.exp_eq_exp.mpr
+    fin_cases i
+    · exact ⟨0, by simp [j]; ring⟩
+    · exact ⟨0, by simp [j]; ring⟩
+    · exact ⟨0, by simp [j]; ring⟩
+    · exact ⟨-1, by simp [j]; ring⟩
+    · exact ⟨-1, by simp [j]; ring⟩
+    · exact ⟨-1, by simp [j]; ring⟩
 
 /-- Pasting over the 54 closed tetrahedra; adjacent tetrahedra give the same point
 (shared radial and boundary faces; circle vertex `j + 1` has weight `1` on edge `j` and
 `0` on edge `j + 1`, both at angle `2π(j+1)/3`). -/
 lemma apm_t02A04_solidTorus_prism_model_aux_continuous_aux_piece (q : Fin 6 × Fin 3 × Fin 3) :
     ContinuousOn (apm_t02A04_prismPoint q) (apm_t02A04_prismHull q) := by
-  sorry
+  apply ContinuousOn.prodMk
+  · rw [continuousOn_iff_continuous_restrict]
+    apply continuous_induced_rng.mpr
+    change Continuous (fun y : apm_t02A04_prismHull q ↦
+      ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y)) : apm_t02a04_Disk) : ℂ))
+    have hc : ContinuousOn (fun y ↦
+        ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+          (apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y)) : apm_t02a04_Disk) : ℂ))
+        (apm_t02A04_prismHull q) :=
+      ((apm_t02A04_attachedDisk_cone_model_aux_continuous_piece q.1).comp
+      (by
+        unfold apm_t02A04_diskProj
+        fun_prop : ContinuousOn apm_t02A04_diskProj (apm_t02A04_prismHull q))
+      (apm_t02A04_solidTorus_prism_model_aux_proj q)).congr
+        (by
+          intro y hy
+          have hn := apm_t02A04_attachedDisk_cone_model_aux_point_norm q.1
+            (apm_t02A04_diskProj y)
+            (apm_t02A04_solidTorus_prism_model_aux_proj q y hy)
+          simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, hn])
+    exact continuousOn_iff_continuous_restrict.mp hc
+  · unfold apm_t02A04_circlePoint apm_t02A04_circleWeight
+    fun_prop
 
 lemma apm_t02A04_solidTorus_prism_model_aux_continuous : Continuous apm_t02A04_prismMap := by
   classical
@@ -2079,16 +2466,899 @@ lemma apm_t02A04_solidTorus_prism_model_aux_continuous : Continuous apm_t02A04_p
   rw [dif_pos hex]
   exact apm_t02A04_solidTorus_prism_model_aux_agree _ q _ (Classical.choose_spec hex) y.2
 
+/-! #### Injectivity and surjectivity of the prism map: leaves (claude-14, 2026-10-30)
+Notation: for `q = (i, j, k)` the rows are `d m = prismDisk i m` (`m : Fin 3`), the bottom
+weights `y (prismIdx (d m) j)` and the top weights `y (prismIdx (d m) (j + 1))`. -/
+
+/-- A point with nonnegative coordinates of total mass one, supported in `F`, lies in the
+simplex spanned by `F` (write `y = ∑ k ∈ F, y k • basisVertex k`; `Finset.centerMass_mem_convexHull`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_mem_hull (F : Finset (Fin 21))
+    (y : EuclideanSpace ℝ (Fin 21)) (hnn : ∀ k, 0 ≤ y k) (hsum : ∑ k, y k = 1)
+    (hF : ∀ k, k ∉ F → y k = 0) :
+    y ∈ convexHull ℝ ↑(F.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) := by
+  classical
+  have hne : F.Nonempty := by
+    by_contra h
+    rw [Finset.not_nonempty_iff_eq_empty] at h
+    have hz : ∀ k, y k = 0 := by
+      intro k
+      exact hF k (by simp [h])
+    simpa [hz] using hsum
+  let i₀ : ↑F := ⟨hne.choose, hne.choose_spec⟩
+  let z : Fin 21 → EuclideanSpace ℝ (Fin 21) := fun i ↦
+    if hi : i ∈ F then
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i
+    else
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i₀
+  apply mem_convexHull_of_exists_fintype (fun i ↦ y i) z
+  · exact hnn
+  · exact hsum
+  · intro i
+    simp only [z]
+    split_ifs with hi
+    · exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i, hi, rfl⟩)
+    · exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i₀, i₀.property, rfl⟩)
+  · rw [show (∑ i, y i • z i) =
+        ∑ i, y i • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 i by
+      apply Finset.sum_congr rfl
+      intro i _
+      by_cases hi : i ∈ F
+      · simp [z, hi]
+      · rw [hF i hi]
+        simp]
+    apply (EuclideanSpace.equiv (Fin 21) ℝ).injective
+    funext k
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      Pi.single_apply, eq_comm]
+
+/-- Prism coordinates are nonnegative and the circle weight lies in `[0, 1]`
+(`convexHull_min` onto the nonnegative orthant; then `_aux_agree_aux_mass`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_weight_mem (q : Fin 6 × Fin 3 × Fin 3)
+    (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q) :
+    (∀ k, 0 ≤ y k) ∧ 0 ≤ apm_t02A04_circleWeight q.2.1 y ∧
+      apm_t02A04_circleWeight q.2.1 y ≤ 1 := by
+  classical
+  have hnn : ∀ k, 0 ≤ y k := by
+    intro k
+    apply (convexHull_min
+      (s := (↑((apm_t02A04_prismFacet q).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) :
+          Set (EuclideanSpace ℝ (Fin 21))))
+      (t := {x | 0 ≤ x k}) ?_ ?_) hy
+    · intro x hx
+      obtain ⟨i, hi, rfl⟩ := Finset.mem_image.1 hx
+      simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+      split <;> positivity
+    · intro a ha b hb u v hu hv huv
+      simp only [Set.mem_setOf_eq] at ha hb ⊢
+      simp only [PiLp.add_apply, PiLp.smul_apply]
+      positivity
+  refine ⟨hnn, ?_, ?_⟩
+  · unfold apm_t02A04_circleWeight
+    exact Finset.sum_nonneg fun d _ ↦ hnn _
+  · have hmass :=
+      (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass q y hy).1
+    unfold apm_t02A04_circleWeight
+    rw [← hmass]
+    rw [← Finset.sum_image]
+    · exact Finset.sum_le_univ_sum_of_nonneg hnn
+    · intro d _ d' _ h
+      have hv := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at hv
+      exact Fin.ext (by omega)
+
+/-- Equal circle points with parameters in `[0, 1]`: same edge and parameter, or the shared
+endpoint of adjacent edges. Copy `_cone_model_aux_injective_aux_facet_aux_angle` with
+period `3` in place of `6`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_injective_aux_angle (j j' : Fin 3) (s s' : ℝ)
+    (hs0 : 0 ≤ s) (hs1 : s ≤ 1) (hs0' : 0 ≤ s') (hs1' : s' ≤ 1)
+    (h : Circle.exp (2 * Real.pi * ((j : ℝ) + s) / 3) =
+      Circle.exp (2 * Real.pi * ((j' : ℝ) + s') / 3)) :
+    (j = j' ∧ s = s') ∨ (j' = j + 1 ∧ s = 1 ∧ s' = 0) ∨ (j = j' + 1 ∧ s = 0 ∧ s' = 1) := by
+  set_option maxHeartbeats 2000000 in
+    obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h
+    have heq : (j : ℝ) + s = (j' : ℝ) + s' + (m : ℝ) * 3 := by
+      have hp := Real.pi_pos
+      push_cast at hm
+      nlinarith
+    fin_cases j <;> fin_cases j'
+    all_goals
+      norm_num at heq
+      have hmlo : (-1 : ℤ) ≤ m := by
+        exact_mod_cast (show (-1 : ℝ) ≤ (m : ℝ) by linarith)
+      have hmhi : m ≤ (1 : ℤ) := by
+        exact_mod_cast (show (m : ℝ) ≤ (1 : ℝ) by linarith)
+      interval_cases m <;> norm_num at heq
+    all_goals
+      simp <;> (try constructor) <;> linarith
+
+/-- All weight on circle column `j + 1`: then column `j` is empty (mass one), so the point
+is supported on `prismIdx (d m) (j + 1)`, all in the bottom of prism `(i, j + 1, 2)`
+(`_aux_mem_hull`), and its weight on column `j + 2` is zero. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_top (i : Fin 6) (j k : Fin 3)
+    (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull (i, j, k))
+    (h1 : apm_t02A04_circleWeight j y = 1) :
+    y ∈ apm_t02A04_prismHull (i, j + 1, 2) ∧ apm_t02A04_circleWeight (j + 1) y = 0 := by
+  classical
+  have hnn : ∀ a, 0 ≤ y a := by
+    intro a
+    let L : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ :=
+      ((PiLp.proj 2 (fun _ : Fin 21 ↦ ℝ) a).toLinearMap :
+        EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ)
+    have hsub : apm_t02A04_prismHull (i, j, k) ⊆ {z | 0 ≤ L z} := by
+      apply convexHull_min
+      · intro z hz
+        obtain ⟨b, hb, rfl⟩ := Finset.mem_image.1 hz
+        change 0 ≤ ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 b a
+        by_cases hab : a = b <;>
+          simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, hab]
+      · intro x hx z hz p q hp hq hpq
+        change 0 ≤ L (p • x + q • z)
+        rw [map_add, map_smul, map_smul]
+        exact add_nonneg (smul_nonneg hp hx) (smul_nonneg hq hz)
+    exact hsub hy
+  obtain ⟨hmass, hnext⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass (i, j, k) y hy
+  constructor
+  · apply apm_t02A04_solidTorus_prism_model_aux_mem_hull
+      (apm_t02A04_prismFacet (i, j + 1, 2)) y hnn hmass
+    intro a ha
+    by_cases haold : a ∈ apm_t02A04_prismFacet (i, j, k)
+    · simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+          Finset.mem_filter, Finset.mem_univ, true_and] at haold
+      rcases haold with ⟨m, hm, rfl⟩ | ⟨m, hm, rfl⟩
+      · let S : Finset (Fin 21) := Finset.univ.image
+            (fun d : Fin 7 ↦ apm_t02A04_prismIdx d (j + 1))
+        have hSinj : Function.Injective
+            (fun d : Fin 7 ↦ apm_t02A04_prismIdx d (j + 1)) := by
+          intro d e hde
+          apply Fin.ext
+          have := congrArg Fin.val hde
+          simp [apm_t02A04_prismIdx] at this
+          omega
+        have hSsum : ∑ a ∈ S, y a = 1 := by
+          rw [Finset.sum_image]
+          · simpa [S, apm_t02A04_circleWeight] using h1
+          · exact hSinj.injOn
+        have hnotS : apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j ∉ S := by
+          simp only [S, Finset.mem_image, Finset.mem_univ, true_and]
+          rintro ⟨d, hd⟩
+          have hd' := congrArg Fin.val hd
+          simp [apm_t02A04_prismIdx] at hd'
+          have hj : (j : Fin 3) ≠ j + 1 := by omega
+          exact hj (Fin.ext (by omega))
+        have hle : ∑ a ∈ insert
+              (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j) S, y a ≤
+              ∑ a, y a := by
+          apply Finset.sum_le_sum_of_subset_of_nonneg
+          · exact Finset.subset_univ _
+          · intro a _ _
+            exact hnn a
+        rw [Finset.sum_insert hnotS, hSsum, hmass] at hle
+        linarith [hnn (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j)]
+      · exfalso
+        apply ha
+        simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+          Finset.mem_filter, Finset.mem_univ, true_and]
+        left
+        exact ⟨m, by omega, rfl⟩
+    · exact apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero
+        (i, j, k) y hy a haold
+  · exact hnext
+
+/-- The step of the staircase over facet `i'` matching step `k` over facet `i`. -/
+def apm_t02A04_solidTorus_prism_model_aux_refaceStep (i i' : Fin 6) (k : Fin 3) : Fin 3 :=
+  if i' = i then k
+  else if i' = i + 1 then if k = 2 then 1 else 0
+  else if i = i' + 1 then if k = 0 then 0 else 2
+  else 0
+
+/-- Finite check of the two staircases: a vertex of prism `(i, j, k)` whose row lies in
+facet `i'` is a vertex of prism `(i', j, refaceStep i i' k)`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_reface_aux_bottom : ∀ (i i' : Fin 6) (j k m : Fin 3), m ≤ k →
+    apm_t02A04_prismDisk i m ∈ apm_t02A04_coneFacet i' →
+    apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j ∈
+      apm_t02A04_prismFacet (i', j, apm_t02A04_solidTorus_prism_model_aux_refaceStep i i' k) := by
+  decide +kernel
+
+lemma apm_t02A04_solidTorus_prism_model_aux_reface_aux_top : ∀ (i i' : Fin 6) (j k m : Fin 3), k ≤ m →
+    apm_t02A04_prismDisk i m ∈ apm_t02A04_coneFacet i' →
+    apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1) ∈
+      apm_t02A04_prismFacet (i', j, apm_t02A04_solidTorus_prism_model_aux_refaceStep i i' k) := by
+  decide +kernel
+
+/-- Change of cone facet. If the disk weights also lie in facet `i'`, the support of `y`
+lies in rows of `coneFacet i ∩ coneFacet i'` (`_cone_model_aux_injective_aux_facet_aux_bary`
+for both), which keep their relative order, so `y` lies in a prism over `i'` and the same
+circle edge (`_aux_mem_hull`). Cases: `i' = i`; `i' = i + 1` (shared rows `0, coneIdx (i+1)`
+at positions `0, 2` of `i` and `0, 1` of `i'`: `k' = 0, 0, 1` for `k = 0, 1, 2`);
+`i = i' + 1` (symmetric); otherwise only row `0` (`k' = 0`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_reface_aux_row
+    (q : Fin 6 × Fin 3 × Fin 3) (i' : Fin 6)
+    (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q)
+    (hi' : apm_t02A04_diskProj y ∈ apm_t02A04_coneHull i')
+    (d : Fin 7) (hd : d ∉ apm_t02A04_coneFacet i') (w : Fin 3) :
+    y (apm_t02A04_prismIdx d w) = 0 := by
+  have hnn := (apm_t02A04_solidTorus_prism_model_aux_weight_mem q y hy).1
+  have hz :=
+    (apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary
+      i' (apm_t02A04_diskProj y) hi').2.2 d hd
+  simp only [apm_t02A04_diskProj, Fin.sum_univ_three] at hz
+  have h0 := hnn (apm_t02A04_prismIdx d (0 : Fin 3))
+  have h1 := hnn (apm_t02A04_prismIdx d (1 : Fin 3))
+  have h2 := hnn (apm_t02A04_prismIdx d (2 : Fin 3))
+  have hz0 : y (apm_t02A04_prismIdx d (0 : Fin 3)) = 0 := by linarith
+  have hz1 : y (apm_t02A04_prismIdx d (1 : Fin 3)) = 0 := by linarith
+  have hz2 : y (apm_t02A04_prismIdx d (2 : Fin 3)) = 0 := by linarith
+  fin_cases w <;> assumption
+
+set_option maxHeartbeats 20000000
+lemma apm_t02A04_solidTorus_prism_model_aux_reface (q : Fin 6 × Fin 3 × Fin 3) (i' : Fin 6)
+    (y : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q)
+    (hi' : apm_t02A04_diskProj y ∈ apm_t02A04_coneHull i') :
+    ∃ k', y ∈ apm_t02A04_prismHull (i', q.2.1, k') := by
+  classical
+  rcases q with ⟨i, j, k⟩
+  refine ⟨apm_t02A04_solidTorus_prism_model_aux_refaceStep i i' k, apm_t02A04_solidTorus_prism_model_aux_mem_hull _ y
+    (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k) y hy).1
+    (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass (i, j, k) y hy).1 ?_⟩
+  intro x hx
+  by_cases hxo : x ∈ apm_t02A04_prismFacet (i, j, k)
+  · simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and] at hxo
+    rcases hxo with ⟨m, hm, rfl⟩ | ⟨m, hm, rfl⟩
+    · by_cases hrow : apm_t02A04_prismDisk i m ∈ apm_t02A04_coneFacet i'
+      · exact absurd (apm_t02A04_solidTorus_prism_model_aux_reface_aux_bottom i i' j k m hm hrow) hx
+      · exact apm_t02A04_solidTorus_prism_model_aux_reface_aux_row (i, j, k) i' y hy hi' _ hrow _
+    · by_cases hrow : apm_t02A04_prismDisk i m ∈ apm_t02A04_coneFacet i'
+      · exact absurd (apm_t02A04_solidTorus_prism_model_aux_reface_aux_top i i' j k m hm hrow) hx
+      · exact apm_t02A04_solidTorus_prism_model_aux_reface_aux_row (i, j, k) i' y hy hi' _ hrow _
+  · exact apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy x hxo
+set_option maxHeartbeats 200000
+
+/-- Staircase uniqueness for three rows: bottom `b`, top `t`, with `t m = 0` below the
+step `k` and `b m = 0` above it. Equal row sums `b + t` and equal top mass force equal
+tops (`fin_cases k <;> fin_cases k'`, then `linarith` per row). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_real (k k' : Fin 3)
+    (b t b' t' : Fin 3 → ℝ) (hb : ∀ m, 0 ≤ b m) (ht : ∀ m, 0 ≤ t m)
+    (hb' : ∀ m, 0 ≤ b' m) (ht' : ∀ m, 0 ≤ t' m)
+    (hrow : ∀ m, b m + t m = b' m + t' m) (htop : ∑ m, t m = ∑ m, t' m)
+    (hk : ∀ m, m < k → t m = 0) (hk2 : ∀ m, k < m → b m = 0)
+    (hk' : ∀ m, m < k' → t' m = 0) (hk2' : ∀ m, k' < m → b' m = 0) :
+    t = t' := by
+  have hr0 := hrow (0 : Fin 3)
+  have hr1 := hrow (1 : Fin 3)
+  have hr2 := hrow (2 : Fin 3)
+  have hn0 := hb (0 : Fin 3)
+  have hn1 := hb (1 : Fin 3)
+  have hn2 := hb (2 : Fin 3)
+  have hnt0 := ht (0 : Fin 3)
+  have hnt1 := ht (1 : Fin 3)
+  have hnt2 := ht (2 : Fin 3)
+  have hn0' := hb' (0 : Fin 3)
+  have hn1' := hb' (1 : Fin 3)
+  have hn2' := hb' (2 : Fin 3)
+  have hnt0' := ht' (0 : Fin 3)
+  have hnt1' := ht' (1 : Fin 3)
+  have hnt2' := ht' (2 : Fin 3)
+  have hz0 := hk (0 : Fin 3)
+  have hz1 := hk (1 : Fin 3)
+  have hz2 := hk (2 : Fin 3)
+  have hbz0 := hk2 (0 : Fin 3)
+  have hbz1 := hk2 (1 : Fin 3)
+  have hbz2 := hk2 (2 : Fin 3)
+  have hz0' := hk' (0 : Fin 3)
+  have hz1' := hk' (1 : Fin 3)
+  have hz2' := hk' (2 : Fin 3)
+  have hbz0' := hk2' (0 : Fin 3)
+  have hbz1' := hk2' (1 : Fin 3)
+  have hbz2' := hk2' (2 : Fin 3)
+  have htop' : t 0 + t 1 + t 2 = t' 0 + t' 1 + t' 2 := by
+    simpa [Fin.sum_univ_succ, add_assoc] using htop
+  funext m
+  fin_cases k <;> fin_cases k' <;> fin_cases m <;>
+    simp at hz0 hz1 hz2 hbz0 hbz1 hbz2 hz0' hz1' hz2' hbz0' hbz1' hbz2' <;>
+    simp at ⊢ <;>
+    linarith
+
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_vertexIdx (d d' : Fin 7) (w w' : Fin 3)
+    (h : apm_t02A04_prismIdx d w = apm_t02A04_prismIdx d' w') : d = d' ∧ w = w' := by
+  have hv := congrArg Fin.val h
+  simp only [apm_t02A04_prismIdx] at hv
+  have h1 := w.isLt
+  have h2 := w'.isLt
+  exact ⟨Fin.ext (by omega), Fin.ext (by omega)⟩
+
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowInj (i : Fin 6) : Function.Injective (apm_t02A04_prismDisk i) := by
+  fin_cases i <;> decide
+
+/-- A vertex outside the staircase: not on the bottom (`w ≠ j` or above the step) and not on
+the top (`w ≠ j + 1` or below the step). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet (i : Fin 6) (j k m w : Fin 3)
+    (h1 : w ≠ j ∨ k < m) (h2 : w ≠ j + 1 ∨ m < k) :
+    apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) w ∉ apm_t02A04_prismFacet (i, j, k) := by
+  intro h
+  simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image, Finset.mem_filter,
+    Finset.mem_univ, true_and] at h
+  rcases h with ⟨n, hn, h⟩ | ⟨n, hn, h⟩
+  · obtain ⟨hd, hw⟩ := apm_t02A04_solidTorus_prism_model_aux_staircase_aux_vertexIdx _ _ _ _ h
+    have hnm := apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowInj i hd
+    subst hnm
+    subst hw
+    rcases h1 with h1 | h1
+    · exact h1 rfl
+    · exact absurd hn (not_le.2 h1)
+  · obtain ⟨hd, hw⟩ := apm_t02A04_solidTorus_prism_model_aux_staircase_aux_vertexIdx _ _ _ _ h
+    have hnm := apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowInj i hd
+    subst hnm
+    subst hw
+    rcases h2 with h2 | h2
+    · exact h2 rfl
+    · exact absurd hn (not_le.2 h2)
+
+/-- The circle weight is the sum over the three rows when the other rows are empty. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowSum (i : Fin 6) (j : Fin 3) (y : EuclideanSpace ℝ (Fin 21))
+    (hout : ∀ d, d ∉ apm_t02A04_coneFacet i → y (apm_t02A04_prismIdx d (j + 1)) = 0) :
+    ∑ m, y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1)) =
+      apm_t02A04_circleWeight j y := by
+  have him : Finset.univ.image (apm_t02A04_prismDisk i) = apm_t02A04_coneFacet i := by
+    fin_cases i <;> decide
+  have h := Finset.sum_subset (Finset.subset_univ (apm_t02A04_coneFacet i))
+    (fun d _ (hd : d ∉ apm_t02A04_coneFacet i) => hout d hd)
+  unfold apm_t02A04_circleWeight
+  rw [← h, ← him, Finset.sum_image (fun a _ b _ hab => apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowInj i hab)]
+
+/-- Two points over the same facet and edge with equal disk weights and circle weight are
+equal: read `b m = y (prismIdx (d m) j)`, `t m = y (prismIdx (d m) (j + 1))`; the step
+conditions and all other coordinates come from `_aux_agree_aux_zero`; apply
+`_aux_staircase_real`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_idx
+    (d d' : Fin 7) (w w' : Fin 3)
+    (h : apm_t02A04_prismIdx d w = apm_t02A04_prismIdx d' w') : d = d' ∧ w = w' := by
+  have hv := congrArg Fin.val h
+  simp [apm_t02A04_prismIdx] at hv
+  constructor <;> apply Fin.ext <;> omega
+
+set_option maxHeartbeats 20000000 in
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase (i : Fin 6) (j k k' : Fin 3)
+    (y y' : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull (i, j, k))
+    (hy' : y' ∈ apm_t02A04_prismHull (i, j, k'))
+    (hd : apm_t02A04_diskProj y = apm_t02A04_diskProj y')
+    (hw : apm_t02A04_circleWeight j y = apm_t02A04_circleWeight j y') : y = y' := by
+  classical
+  let b : Fin 3 → ℝ := fun m ↦
+    y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j)
+  let t : Fin 3 → ℝ := fun m ↦
+    y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1))
+  let b' : Fin 3 → ℝ := fun m ↦
+    y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j)
+  let t' : Fin 3 → ℝ := fun m ↦
+    y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1))
+  have hnn :=
+    (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k) y hy).1
+  have hnn' :=
+    (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k') y' hy').1
+  have hj1 : ∀ j : Fin 3, j + 1 ≠ j := by decide
+  have hj2 : ∀ j : Fin 3, j + 2 ≠ j := by decide
+  have hj21 : ∀ j : Fin 3, j + 2 ≠ j + 1 := by decide
+  have hz (m : Fin 3) : y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 2)) = 0 :=
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k m _ (Or.inl (hj2 j)) (Or.inl (hj21 j)))
+  have hz' (m : Fin 3) : y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 2)) = 0 :=
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy' _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k' m _ (Or.inl (hj2 j)) (Or.inl (hj21 j)))
+  have hrow : ∀ m, b m + t m = b' m + t' m := by
+    intro m
+    have h := congrArg
+      (fun x : EuclideanSpace ℝ (Fin 7) ↦ x (apm_t02A04_prismDisk i m)) hd
+    simp only [apm_t02A04_diskProj, Fin.sum_univ_three] at h
+    dsimp [b, t, b', t']
+    fin_cases j <;> simp at hz hz' h ⊢ <;> linarith [hz m, hz' m]
+  have hout (d : Fin 7) (hdisk : d ∉ apm_t02A04_coneFacet i) :
+      y (apm_t02A04_prismIdx d (j + 1)) = 0 := by
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨m, hm, h⟩ | ⟨m, hm, h⟩)
+    · have := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at this
+      omega
+    · apply hdisk
+      have heq : d = apm_t02A04_prismDisk i m := by
+        apply Fin.ext
+        have := congrArg Fin.val h
+        simp [apm_t02A04_prismIdx] at this
+        omega
+      subst d
+      fin_cases m <;> simp [apm_t02A04_coneFacet, apm_t02A04_prismDisk]
+  have hout' (d : Fin 7) (hdisk : d ∉ apm_t02A04_coneFacet i) :
+      y' (apm_t02A04_prismIdx d (j + 1)) = 0 := by
+    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy'
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    rintro (⟨m, hm, h⟩ | ⟨m, hm, h⟩)
+    · have := congrArg Fin.val h
+      simp [apm_t02A04_prismIdx] at this
+      omega
+    · apply hdisk
+      have heq : d = apm_t02A04_prismDisk i m := by
+        apply Fin.ext
+        have := congrArg Fin.val h
+        simp [apm_t02A04_prismIdx] at this
+        omega
+      subst d
+      fin_cases m <;> simp [apm_t02A04_coneFacet, apm_t02A04_prismDisk]
+  have htop : ∑ m, t m = ∑ m, t' m := by
+    change ∑ m, y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1)) =
+      ∑ m, y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1))
+    rw [apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowSum i j y hout, apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowSum i j y' hout', hw]
+  have hk0 : ∀ m, m < k → t m = 0 := fun m hm =>
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k m _ (Or.inl (hj1 j)) (Or.inr hm))
+  have hk2 : ∀ m, k < m → b m = 0 := fun m hm =>
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k m _ (Or.inr hm) (Or.inl (hj1 j).symm))
+  have hk0' : ∀ m, m < k' → t' m = 0 := fun m hm =>
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy' _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k' m _ (Or.inl (hj1 j)) (Or.inr hm))
+  have hk2' : ∀ m, k' < m → b' m = 0 := fun m hm =>
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy' _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k' m _ (Or.inr hm) (Or.inl (hj1 j).symm))
+  have ht : t = t' :=
+    apm_t02A04_solidTorus_prism_model_aux_staircase_real k k' b t b' t'
+      (fun m ↦ hnn _) (fun m ↦ hnn _) (fun m ↦ hnn' _) (fun m ↦ hnn' _)
+      hrow htop hk0 hk2 hk0' hk2'
+  have hb : b = b' := by
+    funext m
+    have := hrow m
+    rw [congrFun ht m] at this
+    linarith
+  apply (EuclideanSpace.equiv (Fin 21) ℝ).injective
+  funext x
+  change y x = y' x
+  by_cases hx : (∃ m, x = apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j) ∨
+      (∃ m, x = apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1))
+  · rcases hx with ⟨m, rfl⟩ | ⟨m, rfl⟩
+    · exact congrFun hb m
+    · exact congrFun ht m
+  · have hy0 := apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero
+        (i, j, k) y hy x
+    have hy0' := apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero
+        (i, j, k') y' hy' x
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and] at hy0 hy0'
+    have hnot : ¬((∃ a, a ≤ k ∧
+        apm_t02A04_prismIdx (apm_t02A04_prismDisk i a) j = x) ∨
+        ∃ a, k ≤ a ∧
+          apm_t02A04_prismIdx (apm_t02A04_prismDisk i a) (j + 1) = x) := by
+      rintro (⟨a, ha, hax⟩ | ⟨a, ha, hax⟩)
+      · exact hx (Or.inl ⟨a, hax.symm⟩)
+      · exact hx (Or.inr ⟨a, hax.symm⟩)
+    have hnot' : ¬((∃ a, a ≤ k' ∧
+        apm_t02A04_prismIdx (apm_t02A04_prismDisk i a) j = x) ∨
+        ∃ a, k' ≤ a ∧
+          apm_t02A04_prismIdx (apm_t02A04_prismDisk i a) (j + 1) = x) := by
+      rintro (⟨a, ha, hax⟩ | ⟨a, ha, hax⟩)
+      · exact hx (Or.inl ⟨a, hax.symm⟩)
+      · exact hx (Or.inr ⟨a, hax.symm⟩)
+    rw [hy0 hnot, hy0' hnot']
+
+/-- The map on a chosen prism: `dif_pos` and `_aux_agree`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_map_eq (q : Fin 6 × Fin 3 × Fin 3)
+    (y : apm_t02A04_prismComplex.space)
+    (hy : (y : EuclideanSpace ℝ (Fin 21)) ∈ apm_t02A04_prismHull q) :
+    apm_t02A04_prismMap y = apm_t02A04_prismPoint q y := by
+  classical
+  unfold apm_t02A04_prismMap
+  have hex : ∃ q', (y : EuclideanSpace ℝ (Fin 21)) ∈ apm_t02A04_prismHull q' := ⟨q, hy⟩
+  rw [dif_pos hex]
+  exact apm_t02A04_solidTorus_prism_model_aux_agree _ q _ (Classical.choose_spec hex) hy
+
+/-- Equal disk components give equal disk weights: `diskClamp` is the identity on the cone
+points (`_cone_model_aux_point_norm` with `_aux_proj`), then
+`_cone_model_aux_injective_aux_facet`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_injective_aux_disk (q q' : Fin 6 × Fin 3 × Fin 3)
+    (y y' : EuclideanSpace ℝ (Fin 21)) (hy : y ∈ apm_t02A04_prismHull q)
+    (hy' : y' ∈ apm_t02A04_prismHull q')
+    (h : ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y)) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint q'.1 (apm_t02A04_diskProj y'))) :
+    apm_t02A04_diskProj y = apm_t02A04_diskProj y' := by
+  have hyproj : apm_t02A04_diskProj y ∈ apm_t02A04_coneHull q.1 :=
+    apm_t02A04_solidTorus_prism_model_aux_proj q y hy
+  have hy'proj : apm_t02A04_diskProj y' ∈ apm_t02A04_coneHull q'.1 :=
+    apm_t02A04_solidTorus_prism_model_aux_proj q' y' hy'
+  have hynorm : ‖apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y)‖ ≤ 1 :=
+    apm_t02A04_attachedDisk_cone_model_aux_point_norm q.1
+      (apm_t02A04_diskProj y) hyproj
+  have hy'norm : ‖apm_t02A04_conePoint q'.1 (apm_t02A04_diskProj y')‖ ≤ 1 :=
+    apm_t02A04_attachedDisk_cone_model_aux_point_norm q'.1
+      (apm_t02A04_diskProj y') hy'proj
+  have hpoint : apm_t02A04_conePoint q.1 (apm_t02A04_diskProj y) =
+      apm_t02A04_conePoint q'.1 (apm_t02A04_diskProj y') := by
+    simpa only [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp,
+      dif_pos hynorm, dif_pos hy'norm, Subtype.mk.injEq] using h
+  exact apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet
+    (apm_t02A04_diskProj y) (apm_t02A04_diskProj y') q.1 q'.1
+    hyproj hy'proj hpoint
+
+/-- Every circle point is `Circle.exp (2π(j + s)/3)` with `s ∈ [0, 1]` (as
+`_cone_model_aux_surjective_aux_circle`, period `3`). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_circle (c : Circle) :
+    ∃ (j : Fin 3) (s : ℝ), 0 ≤ s ∧ s ≤ 1 ∧
+      Circle.exp (2 * Real.pi * ((j : ℝ) + s) / 3) = c := by
+  let a := Complex.arg (c : ℂ)
+  let u := if a < 0 then a + 2 * Real.pi else a
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have ha0 : -Real.pi < a := Complex.neg_pi_lt_arg _
+  have ha1 : a ≤ Real.pi := Complex.arg_le_pi _
+  have hu0 : 0 ≤ u := by
+    dsimp [u]
+    split_ifs <;> linarith
+  have hu1 : u ≤ 2 * Real.pi := by
+    dsimp [u]
+    split_ifs <;> linarith
+  have hexp : Circle.exp u = c := by
+    dsimp [u]
+    split_ifs with h
+    · rw [Circle.exp_add]
+      rw [show Circle.exp (2 * Real.pi) = 1 by
+        apply Circle.ext
+        simp [Circle.coe_exp, Complex.exp_mul_I]]
+      simpa [a] using Circle.exp_arg c
+    · exact Circle.exp_arg c
+  by_cases h0 : u ≤ 2 * Real.pi / 3
+  · refine ⟨0, 3 * u / (2 * Real.pi), by positivity, ?_, ?_⟩
+    · apply (div_le_one (by positivity)).2
+      linarith
+    · rw [← hexp]
+      apply congrArg Circle.exp
+      norm_num
+      field_simp
+  by_cases h1 : u ≤ 4 * Real.pi / 3
+  · refine ⟨1, 3 * u / (2 * Real.pi) - 1, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2
+      apply (one_le_div (by positivity)).2
+      linarith
+    · apply sub_le_iff_le_add.2
+      apply (div_le_iff₀ (by positivity)).2
+      linarith
+    · rw [← hexp]
+      apply congrArg Circle.exp
+      norm_num
+      field_simp
+  · refine ⟨2, 3 * u / (2 * Real.pi) - 2, ?_, ?_, ?_⟩
+    · apply sub_nonneg.2
+      apply (le_div_iff₀ (by positivity)).2
+      linarith
+    · apply sub_le_iff_le_add.2
+      apply (div_le_iff₀ (by positivity)).2
+      linarith
+    · rw [← hexp]
+      apply congrArg Circle.exp
+      norm_num
+      field_simp
+
+/-- Every disk point is a cone point: `_cone_model_aux_surjective`, a facet from
+`_cone_model_aux_cover`, then `_cone_model_aux_agree` and `_cone_model_aux_point_norm`
+to remove the choice and the clamp. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_disk (z : apm_t02a04_Disk) :
+    ∃ (i : Fin 6) (x : EuclideanSpace ℝ (Fin 7)), x ∈ apm_t02A04_coneHull i ∧
+      apm_t02A04_conePoint i x = (z : ℂ) := by
+  classical
+  obtain ⟨y, hy⟩ := apm_t02A04_attachedDisk_cone_model_aux_surjective z
+  obtain ⟨i, hi⟩ :=
+    apm_t02A04_attachedDisk_cone_model_aux_cover
+      (y : EuclideanSpace ℝ (Fin 7)) y.property
+  refine ⟨i, y, hi, ?_⟩
+  have hex : ∃ j, (y : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull j :=
+    ⟨i, hi⟩
+  have hagree := apm_t02A04_attachedDisk_cone_model_aux_agree
+    (Classical.choose hex) i (y : EuclideanSpace ℝ (Fin 7))
+    (Classical.choose_spec hex) hi
+  have hnorm := apm_t02A04_attachedDisk_cone_model_aux_point_norm i
+    (y : EuclideanSpace ℝ (Fin 7)) hi
+  have hcoe := congrArg (fun w : apm_t02a04_Disk => (w : ℂ)) hy
+  simp only [apm_t02A04_coneMap, dif_pos hex] at hcoe
+  change ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+      (apm_t02A04_conePoint (Classical.choose hex) y) : apm_t02a04_Disk) : ℂ) =
+    (z : ℂ) at hcoe
+  rw [hagree] at hcoe
+  simpa only [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp,
+    dif_pos hnorm, Subtype.coe_mk] using hcoe
+
+/-- Staircase existence for three rows: for row sums `a ≥ 0` with `∑ a = 1` and
+`s ∈ [0, 1]` there is a step `k` and a split `a = b + t` with `∑ t = s` (take `k` with
+`∑_{m > k} a m ≤ s ≤ ∑_{m ≥ k} a m`; `t m = a m` above `k`, `0` below). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_exists (a : Fin 3 → ℝ)
+    (ha : ∀ m, 0 ≤ a m) (hsum : ∑ m, a m = 1) (s : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1) :
+    ∃ (k : Fin 3) (b t : Fin 3 → ℝ), (∀ m, 0 ≤ b m) ∧ (∀ m, 0 ≤ t m) ∧
+      (∀ m, b m + t m = a m) ∧ ∑ m, t m = s ∧
+      (∀ m, m < k → t m = 0) ∧ (∀ m, k < m → b m = 0) := by
+  have ha0 := ha (0 : Fin 3)
+  have ha1 := ha (1 : Fin 3)
+  have ha2 := ha (2 : Fin 3)
+  have hsum' : a 0 + a 1 + a 2 = 1 := by
+    simpa [Fin.sum_univ_succ, add_assoc] using hsum
+  by_cases h2 : s ≤ a 2
+  · refine ⟨2, ![a 0, a 1, a 2 - s], ![0, 0, s], ?_, ?_, ?_, ?_, ?_, ?_⟩
+    · intro m
+      fin_cases m <;> simp <;> linarith
+    · intro m
+      fin_cases m <;> simp <;> linarith
+    · intro m
+      fin_cases m <;> simp
+    · simp [Fin.sum_univ_succ]
+    · intro m hm
+      fin_cases m <;> simp_all
+    · intro m hm
+      fin_cases m <;> simp_all
+  · by_cases h1 : s ≤ a 1 + a 2
+    · refine ⟨1, ![a 0, a 1 + a 2 - s, 0], ![0, s - a 2, a 2],
+        ?_, ?_, ?_, ?_, ?_, ?_⟩
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · simp [Fin.sum_univ_succ]
+      · intro m hm
+        fin_cases m <;> simp_all
+      · intro m hm
+        fin_cases m <;> simp_all
+    · refine ⟨0, ![1 - s, 0, 0], ![s - a 1 - a 2, a 1, a 2],
+        ?_, ?_, ?_, ?_, ?_, ?_⟩
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · intro m
+        fin_cases m <;> simp <;> linarith
+      · simp [Fin.sum_univ_succ]
+      · intro m hm
+        fin_cases m <;> simp_all
+      · intro m hm
+        fin_cases m <;> simp_all
+
+/-- A prism point with given disk weights and circle weight: apply
+`_aux_staircase_exists` to `a m = x (prismDisk i m)` (`_cone_model_aux_injective_aux_facet_aux_bary`),
+put `b m` at `prismIdx (d m) j` and `t m` at `prismIdx (d m) (j + 1)`, and use
+`_aux_mem_hull` for membership. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_build_aux_weight (d : Fin 7) (j : Fin 3) :
+    apm_t02A04_circleWeight j (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_prismIdx d (j + 1))) = 1 ∧
+      apm_t02A04_circleWeight j (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_prismIdx d j)) = 0 := by
+  have hne : ∀ j : Fin 3, ((j + 1 : Fin 3) : ℕ) ≠ j.1 := by decide
+  have hj := hne j
+  have hj1 := (j + 1).isLt
+  have hj2 := j.isLt
+  constructor
+  · simp only [apm_t02A04_circleWeight, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply,
+      apm_t02A04_prismIdx, Fin.ext_iff]
+    rw [Finset.sum_eq_single d]
+    · simp
+    · intro b _ hb
+      rw [if_neg]
+      intro h
+      exact hb (Fin.ext (by omega))
+    · simp
+  · simp only [apm_t02A04_circleWeight, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply,
+      apm_t02A04_prismIdx, Fin.ext_iff]
+    apply Finset.sum_eq_zero
+    intro b _
+    rw [if_neg]
+    intro h
+    omega
+
+lemma apm_t02A04_solidTorus_prism_model_aux_surjective_aux_build (i : Fin 6) (j : Fin 3)
+    (x : EuclideanSpace ℝ (Fin 7)) (hx : x ∈ apm_t02A04_coneHull i) (s : ℝ)
+    (hs0 : 0 ≤ s) (hs1 : s ≤ 1) :
+    ∃ (k : Fin 3) (y : EuclideanSpace ℝ (Fin 21)), y ∈ apm_t02A04_prismHull (i, j, k) ∧
+      apm_t02A04_diskProj y = x ∧ apm_t02A04_circleWeight j y = s := by
+  classical
+  obtain ⟨hnn, hsum, -⟩ := apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_bary i x hx
+  have hsum3 : ∑ m, x (apm_t02A04_prismDisk i m) = 1 := by
+    simpa [Fin.sum_univ_three, apm_t02A04_prismDisk] using hsum
+  obtain ⟨k, b, t, hb, ht, hrow, htop, hk, hk2⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_staircase_exists (fun m => x (apm_t02A04_prismDisk i m)) (fun m => hnn _) hsum3 s hs0 hs1
+  let A : Fin 3 → Fin 21 := fun m => apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j
+  let B : Fin 3 → Fin 21 := fun m => apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1)
+  let y : EuclideanSpace ℝ (Fin 21) := ∑ m, (b m • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (A m) + t m • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (B m))
+  have hcoord : ∀ c, y c = ∑ m, (b m * ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (A m) c + t m * ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (B m) c) := by
+    intro c
+    let P : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ :=
+      ((PiLp.proj 2 (fun _ : Fin 21 ↦ ℝ) c).toLinearMap :
+        EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ)
+    change P y = _
+    simp only [y, map_sum, map_add, map_smul, smul_eq_mul]
+    rfl
+  have he : ∀ a c, 0 ≤ ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 a c := by
+    intro a c
+    simp only [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply]
+    split_ifs <;> norm_num
+  have hone : ∀ a, ∑ c, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 a c = 1 := by
+    intro a
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+  have hoff : ∀ a c, a ≠ c → ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 a c = 0 := by
+    intro a c hac
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, hac.symm]
+  have hA : ∀ m, m ≤ k → A m ∈ apm_t02A04_prismFacet (i, j, k) := by
+    intro m hm
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image, Finset.mem_filter,
+      Finset.mem_univ, true_and]
+    exact Or.inl ⟨m, hm, rfl⟩
+  have hB : ∀ m, k ≤ m → B m ∈ apm_t02A04_prismFacet (i, j, k) := by
+    intro m hm
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image, Finset.mem_filter,
+      Finset.mem_univ, true_and]
+    exact Or.inr ⟨m, hm, rfl⟩
+  have hynn : ∀ c, 0 ≤ y c := by
+    intro c
+    rw [hcoord]
+    exact Finset.sum_nonneg fun m _ =>
+      add_nonneg (mul_nonneg (hb m) (he _ _)) (mul_nonneg (ht m) (he _ _))
+  have hmass : ∑ c, y c = 1 := by
+    simp_rw [hcoord]
+    rw [Finset.sum_comm]
+    simp_rw [Finset.sum_add_distrib, ← Finset.mul_sum, hone, mul_one]
+    rw [← Finset.sum_add_distrib]
+    simp_rw [hrow]
+    exact hsum3
+  have hsupp : ∀ c, c ∉ apm_t02A04_prismFacet (i, j, k) → y c = 0 := by
+    intro c hc
+    rw [hcoord]
+    apply Finset.sum_eq_zero
+    intro m _
+    have h1 : b m * ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (A m) c = 0 := by
+      by_cases hm : m ≤ k
+      · rw [hoff _ _ (fun h => hc (by rw [← h]; exact hA m hm)), mul_zero]
+      · rw [hk2 m (not_le.mp hm), zero_mul]
+    have h2 : t m * ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (B m) c = 0 := by
+      by_cases hm : k ≤ m
+      · rw [hoff _ _ (fun h => hc (by rw [← h]; exact hB m hm)), mul_zero]
+      · rw [hk m (not_le.mp hm), zero_mul]
+    rw [h1, h2, add_zero]
+  have hy : y ∈ apm_t02A04_prismHull (i, j, k) :=
+    apm_t02A04_solidTorus_prism_model_aux_mem_hull _ y hynn hmass hsupp
+  refine ⟨k, y, hy, ?_, ?_⟩
+  · let L : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] EuclideanSpace ℝ (Fin 7) :=
+      { toFun := apm_t02A04_diskProj
+        map_add' := by intro u v; ext d; simp [apm_t02A04_diskProj, Finset.sum_add_distrib]
+        map_smul' := by
+          intro (c : ℝ) u
+          ext d
+          simp [apm_t02A04_diskProj, Finset.mul_sum, smul_eq_mul] }
+    have hL : apm_t02A04_diskProj y =
+        ∑ m, (b m + t m) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_prismDisk i m) := by
+      change L y = _
+      simp only [y, map_sum, map_add, map_smul]
+      refine Finset.sum_congr rfl fun m _ => ?_
+      change b m • apm_t02A04_diskProj _ + t m • apm_t02A04_diskProj _ = _
+      rw [apm_t02A04_solidTorus_prism_model_aux_proj_vertex, apm_t02A04_solidTorus_prism_model_aux_proj_vertex, add_smul]
+    have hinj : Function.Injective (apm_t02A04_prismDisk i) := by
+      fin_cases i <;> decide
+    apply apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet_aux_coords _ _ i i (apm_t02A04_solidTorus_prism_model_aux_proj (i, j, k) y hy) hx
+    intro c hc
+    have hc' : ∃ n, apm_t02A04_prismDisk i n = c := by
+      simp only [apm_t02A04_coneFacet, Finset.mem_insert, Finset.mem_singleton, or_self] at hc
+      rcases hc with rfl | rfl | rfl
+      · exact ⟨0, by simp [apm_t02A04_prismDisk]⟩
+      · exact ⟨1, by simp [apm_t02A04_prismDisk]⟩
+      · exact ⟨2, by simp [apm_t02A04_prismDisk]⟩
+    obtain ⟨n, rfl⟩ := hc'
+    rw [hL]
+    let Q : EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] ℝ :=
+      ((PiLp.proj 2 (fun _ : Fin 7 ↦ ℝ) (apm_t02A04_prismDisk i n)).toLinearMap :
+        EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] ℝ)
+    change Q (∑ m, (b m + t m) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_prismDisk i m)) = _
+    simp only [map_sum, map_smul, smul_eq_mul]
+    rw [Finset.sum_eq_single n]
+    · rw [hrow n]
+      change _ * ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 _ _ = _
+      simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+    · intro m _ hm
+      have hnm : apm_t02A04_prismDisk i n ≠ apm_t02A04_prismDisk i m := fun h => hm (hinj h).symm
+      change _ * ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 _ _ = 0
+      simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, hnm]
+    · simp
+  · let W : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] ℝ :=
+      { toFun := apm_t02A04_circleWeight j
+        map_add' := by intro u v; simp [apm_t02A04_circleWeight, Finset.sum_add_distrib]
+        map_smul' := by
+          intro (c : ℝ) u
+          simp [apm_t02A04_circleWeight, Finset.mul_sum, smul_eq_mul] }
+    change W y = s
+    simp only [y, map_sum, map_add, map_smul, smul_eq_mul]
+    rw [← htop]
+    refine Finset.sum_congr rfl fun m _ => ?_
+    change b m * apm_t02A04_circleWeight j _ + t m * apm_t02A04_circleWeight j _ = _
+    rw [(apm_t02A04_solidTorus_prism_model_aux_surjective_aux_build_aux_weight _ j).1, (apm_t02A04_solidTorus_prism_model_aux_surjective_aux_build_aux_weight _ j).2]
+    ring
+
 /-- Staircase uniqueness: the disk weights `a` (cumulative `A_m`) and the circle weight
 determine the tetrahedron and all its weights (`y (m, bottom) = max 0 (min A_m (1-s) - A_{m-1})`);
 injectivity of the cone point and of `Circle.exp` on one turn give equal weights. -/
 lemma apm_t02A04_solidTorus_prism_model_aux_injective : Function.Injective apm_t02A04_prismMap := by
-  sorry
+  intro y y' hyy'
+  obtain ⟨⟨i, j, k⟩, hy⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_cover
+      (y : EuclideanSpace ℝ (Fin 21)) y.2
+  obtain ⟨⟨i', j', k'⟩, hy'⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_cover
+      (y' : EuclideanSpace ℝ (Fin 21)) y'.2
+  have hp : apm_t02A04_prismPoint (i, j, k) y =
+      apm_t02A04_prismPoint (i', j', k') y' := by
+    rw [← apm_t02A04_solidTorus_prism_model_aux_map_eq (i, j, k) y hy,
+      ← apm_t02A04_solidTorus_prism_model_aux_map_eq (i', j', k') y' hy']
+    exact hyy'
+  have hd : apm_t02A04_diskProj y = apm_t02A04_diskProj y' := by
+    apply apm_t02A04_solidTorus_prism_model_aux_injective_aux_disk
+      (i, j, k) (i', j', k') y y' hy hy'
+    exact congrArg Prod.fst hp
+  obtain ⟨k'', hy''⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_reface (i', j', k') i y' hy'
+      (hd ▸ apm_t02A04_solidTorus_prism_model_aux_proj (i, j, k) y hy)
+  have hc : apm_t02A04_circlePoint j y = apm_t02A04_circlePoint j' y' :=
+    congrArg Prod.snd hp
+  obtain ⟨hnn, hs0, hs1⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k) y hy
+  obtain ⟨hnn', hs0', hs1'⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j', k'') y' hy''
+  have ha := apm_t02A04_solidTorus_prism_model_aux_injective_aux_angle
+    j j' (apm_t02A04_circleWeight j y) (apm_t02A04_circleWeight j' y')
+    hs0 hs1 hs0' hs1' hc
+  apply Subtype.ext
+  rcases ha with ⟨rfl, hw⟩ | ⟨hj, hw, hw'⟩ | ⟨hj, hw, hw'⟩
+  · exact apm_t02A04_solidTorus_prism_model_aux_staircase i j k k'' y y'
+      hy hy'' hd hw
+  · obtain ⟨hytop, hyweight⟩ :=
+      apm_t02A04_solidTorus_prism_model_aux_top i j k y hy hw
+    subst j'
+    exact apm_t02A04_solidTorus_prism_model_aux_staircase i (j + 1) 2 k'' y y'
+      hytop hy'' hd (hyweight.trans hw'.symm)
+  · obtain ⟨hy'top, hy'weight⟩ :=
+      apm_t02A04_solidTorus_prism_model_aux_top i j' k'' y' hy'' hw'
+    subst j
+    exact apm_t02A04_solidTorus_prism_model_aux_staircase i (j' + 1) k 2 y y'
+      hy hy'top hd (hw.trans hy'weight.symm)
 
 /-- Staircase existence: for a disk point (`_cone_model_aux_surjective`) and a circle point
 at parameter `s` on edge `j`, the same formula gives a point of the prism. -/
 lemma apm_t02A04_solidTorus_prism_model_aux_surjective : Function.Surjective apm_t02A04_prismMap := by
-  sorry
+  classical
+  intro xc
+  obtain ⟨i, ξ, hξ, hξz⟩ := apm_t02A04_solidTorus_prism_model_aux_surjective_aux_disk xc.1
+  obtain ⟨j, s, hs0, hs1, hsc⟩ := apm_t02A04_solidTorus_prism_model_aux_surjective_aux_circle xc.2
+  obtain ⟨k, y, hy, hproj, hweight⟩ :=
+    apm_t02A04_solidTorus_prism_model_aux_surjective_aux_build i j ξ hξ s hs0 hs1
+  have hne : ((apm_t02A04_prismFacet (i, j, k)).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)).Nonempty := by
+    apply Finset.image_nonempty.2
+    refine ⟨apm_t02A04_prismIdx (apm_t02A04_prismDisk i (Fin.last 2)) (j + 1), ?_⟩
+    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
+      Finset.mem_filter, Finset.mem_univ, true_and]
+    exact Or.inr ⟨Fin.last 2, Fin.le_last k, rfl⟩
+  have hmem : y ∈ apm_t02A04_prismComplex.space := by
+    rw [Geometry.SimplicialComplex.mem_space_iff]
+    exact ⟨(apm_t02A04_prismFacet (i, j, k)).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21),
+      ⟨⟨apm_t02A04_prismFacet (i, j, k),
+        Finset.mem_image_of_mem _ (Finset.mem_univ _), subset_rfl⟩,
+        fun h => hne.ne_empty (by simpa using h)⟩, hy⟩
+  refine ⟨⟨y, hmem⟩, ?_⟩
+  rw [apm_t02A04_solidTorus_prism_model_aux_map_eq (i, j, k) ⟨y, hmem⟩ hy]
+  change apm_t02A04_prismPoint (i, j, k) y = xc
+  have hnorm := apm_t02A04_attachedDisk_cone_model_aux_point_norm i ξ hξ
+  apply Prod.ext
+  · change ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_diskProj y)) = xc.1
+    rw [hproj]
+    apply Subtype.ext
+    simp only [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, dif_pos hnorm]
+    exact hξz
+  · show Circle.exp (2 * Real.pi * ((j : ℝ) + apm_t02A04_circleWeight j y) / 3) = xc.2
+    rw [hweight]
+    exact hsc
 
 theorem apm_t02A04_solidTorus_prism_model
     (C : apm_t02A04_CircleSubdivision) :
@@ -2134,6 +3404,1005 @@ theorem apm_t02A04_solidTorus_prism_model
       exact (apm_t02A04_solidTorus_prism_model_aux_edge_map i t ht0 ht1).symm
     rw [hsymm]
 
+/-! ### The glued complex (claude-14, 2026-10-30)
+Vertices `Fin 22`: prism vertex `k` is `k.castSucc`, the disk centre is `Fin.last 21`, and
+disk boundary vertex `coneIdx i` is the curve vertex `curveIdx i`. The facets are the 54
+prism facets and the 6 cone facets. A point of a prism hull goes to the solid torus by
+`prismPoint`, a point of a cone hull to the disk by `conePoint`; the two kinds of hull meet
+only along the curve edges, where `Glue.boundary` identifies the images. -/
+
+def apm_t02A04_gluedIdxD : Fin 7 → Fin 22 :=
+  Fin.cases (Fin.last 21) (fun i : Fin 6 => (apm_t02A04_curveIdx i).castSucc)
+
+def apm_t02A04_gluedPrismFacet (q : Fin 6 × Fin 3 × Fin 3) : Finset (Fin 22) :=
+  (apm_t02A04_prismFacet q).map Fin.castSuccEmb
+
+def apm_t02A04_gluedConeFacet (i : Fin 6) : Finset (Fin 22) :=
+  (apm_t02A04_coneFacet i).image apm_t02A04_gluedIdxD
+
+noncomputable def apm_t02A04_gluedComplex : Geometry.SimplicialComplex ℝ (EuclideanSpace ℝ (Fin 22)) :=
+  ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex 22
+    (Finset.univ.image apm_t02A04_gluedPrismFacet ∪ Finset.univ.image apm_t02A04_gluedConeFacet)
+
+def apm_t02A04_gluedPrismHull (q : Fin 6 × Fin 3 × Fin 3) : Set (EuclideanSpace ℝ (Fin 22)) :=
+  convexHull ℝ ↑((apm_t02A04_gluedPrismFacet q).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22))
+
+def apm_t02A04_gluedConeHull (i : Fin 6) : Set (EuclideanSpace ℝ (Fin 22)) :=
+  convexHull ℝ ↑((apm_t02A04_gluedConeFacet i).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22))
+
+noncomputable def apm_t02A04_projS (z : EuclideanSpace ℝ (Fin 22)) : EuclideanSpace ℝ (Fin 21) :=
+  WithLp.toLp 2 fun k => z k.castSucc
+
+noncomputable def apm_t02A04_projD (z : EuclideanSpace ℝ (Fin 22)) : EuclideanSpace ℝ (Fin 7) :=
+  WithLp.toLp 2 fun d => z (apm_t02A04_gluedIdxD d)
+
+noncomputable def apm_t02A04_liftS (y : EuclideanSpace ℝ (Fin 21)) : EuclideanSpace ℝ (Fin 22) :=
+  WithLp.toLp 2 fun k => if h : k = Fin.last 21 then 0 else y (k.castPred h)
+
+noncomputable def apm_t02A04_liftD (x : EuclideanSpace ℝ (Fin 7)) : EuclideanSpace ℝ (Fin 22) :=
+  ∑ d, x d • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_gluedIdxD d)
+
+noncomputable def apm_t02A04_gluedMap (z : apm_t02A04_gluedComplex.space) : apm_t02a04_X := by
+  classical
+  exact if h : ∃ q, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q then
+      apm_t02a04_solidInclusion (apm_t02A04_prismPoint (Classical.choose h) (apm_t02A04_projS z))
+    else apm_t02a04_diskInclusion (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint
+      (if h' : ∃ i, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedConeHull i then Classical.choose h' else 0)
+      (apm_t02A04_projD z)))
+
+/-- `gluedIdxD` on boundary vertices (`fin_cases i <;> rfl`), and it is injective
+(`decide`). -/
+lemma apm_t02A04_quotientComplex_model_aux_idx :
+    (∀ i : Fin 6, apm_t02A04_gluedIdxD (apm_t02A04_coneIdx i) = (apm_t02A04_curveIdx i).castSucc) ∧
+      Function.Injective apm_t02A04_gluedIdxD := by
+  constructor
+  · intro i
+    fin_cases i <;> rfl
+  · decide
+
+/-- Every point of the glued complex lies in a prism hull or a cone hull (as
+`_prism_model_aux_cover`). -/
+lemma apm_t02A04_quotientComplex_model_aux_cover (z : EuclideanSpace ℝ (Fin 22))
+    (hz : z ∈ apm_t02A04_gluedComplex.space) :
+    (∃ q, z ∈ apm_t02A04_gluedPrismHull q) ∨ ∃ i, z ∈ apm_t02A04_gluedConeHull i := by
+  classical
+  rw [Geometry.SimplicialComplex.mem_space_iff] at hz
+  obtain ⟨S, hS, hz⟩ := hz
+  have hSb : S ∈ ConstructionTargets.RealProjectivePlaneTriangulation.basisFaces 22
+      (Finset.univ.image apm_t02A04_gluedPrismFacet ∪
+        Finset.univ.image apm_t02A04_gluedConeFacet) := hS.1
+  obtain ⟨f, hf, hSf⟩ := hSb
+  rcases Finset.mem_union.mp hf with hf | hf
+  · obtain ⟨q, -, rfl⟩ := Finset.mem_image.mp hf
+    left
+    refine ⟨q, ?_⟩
+    exact convexHull_mono (by exact_mod_cast hSf) hz
+  · obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hf
+    right
+    refine ⟨i, ?_⟩
+    exact convexHull_mono (by exact_mod_cast hSf) hz
+
+/-- Restriction to the prism coordinates: `projS` is linear and sends `basisVertex 22
+k.castSucc` to `basisVertex 21 k` (`convexHull_min`, as `_prism_model_aux_proj`); and
+`liftS` is a right inverse that maps prism hulls into glued prism hulls. -/
+lemma apm_t02A04_quotientComplex_model_aux_prism_coords (q : Fin 6 × Fin 3 × Fin 3) :
+    (∀ z ∈ apm_t02A04_gluedPrismHull q, apm_t02A04_projS z ∈ apm_t02A04_prismHull q ∧
+        apm_t02A04_liftS (apm_t02A04_projS z) = z) ∧
+      ∀ y ∈ apm_t02A04_prismHull q, apm_t02A04_liftS y ∈ apm_t02A04_gluedPrismHull q ∧
+        apm_t02A04_projS (apm_t02A04_liftS y) = y := by
+  classical
+  have hne : ∀ c : Fin 21, c.castSucc ≠ (21 : Fin 22) := by decide
+  let LS : EuclideanSpace ℝ (Fin 22) →ₗ[ℝ] EuclideanSpace ℝ (Fin 21) :=
+    { toFun := apm_t02A04_projS
+      map_add' := by intro u v; ext d; simp [apm_t02A04_projS]
+      map_smul' := by intro (c : ℝ) u; ext d; simp [apm_t02A04_projS] }
+  let LL : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] EuclideanSpace ℝ (Fin 22) :=
+    { toFun := apm_t02A04_liftS
+      map_add' := by
+        intro u v
+        ext a
+        induction a using Fin.lastCases <;> simp [apm_t02A04_liftS, hne]
+      map_smul' := by
+        intro (c : ℝ) u
+        ext a
+        induction a using Fin.lastCases <;> simp [apm_t02A04_liftS, hne] }
+  have hS : ∀ c : Fin 21, LS (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 c.castSucc) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 c := by
+    intro c
+    change apm_t02A04_projS _ = _
+    ext a
+    simp [apm_t02A04_projS, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply]
+  have hL : ∀ c : Fin 21, LL (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 c) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 c.castSucc := by
+    intro c
+    change apm_t02A04_liftS _ = _
+    ext a
+    induction a using Fin.lastCases with
+    | last => simp [apm_t02A04_liftS, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, (hne c).symm]
+    | cast a => simp [apm_t02A04_liftS, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, hne]
+  have hvert : ∀ z ∈ (↑((apm_t02A04_gluedPrismFacet q).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) :
+      Set (EuclideanSpace ℝ (Fin 22))), ∃ c ∈ apm_t02A04_prismFacet q,
+        z = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 c.castSucc := by
+    intro z hz
+    obtain ⟨a, ha, rfl⟩ := Finset.mem_image.1 (Finset.mem_coe.1 hz)
+    obtain ⟨c, hc, rfl⟩ := Finset.mem_map.1 ha
+    exact ⟨c, hc, rfl⟩
+  have hvert' : ∀ x ∈ (↑((apm_t02A04_prismFacet q).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) :
+      Set (EuclideanSpace ℝ (Fin 21))), ∃ c ∈ apm_t02A04_prismFacet q, x = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 c := by
+    intro x hx
+    obtain ⟨c, hc, rfl⟩ := Finset.mem_image.1 (Finset.mem_coe.1 hx)
+    exact ⟨c, hc, rfl⟩
+  have h1 : apm_t02A04_gluedPrismHull q ⊆ LS ⁻¹' apm_t02A04_prismHull q := by
+    apply convexHull_min
+    · intro z hz
+      obtain ⟨c, hc, rfl⟩ := hvert z hz
+      change LS _ ∈ apm_t02A04_prismHull q
+      rw [hS]
+      exact subset_convexHull ℝ _ (Finset.mem_coe.2 (Finset.mem_image_of_mem _ hc))
+    · exact (convex_convexHull ℝ _).linear_preimage LS
+  have h2 : apm_t02A04_gluedPrismHull q ⊆
+      (LinearMap.eqLocus (LL ∘ₗ LS) LinearMap.id : Set (EuclideanSpace ℝ (Fin 22))) := by
+    apply convexHull_min
+    · intro z hz
+      obtain ⟨c, hc, rfl⟩ := hvert z hz
+      change LL (LS _) = _
+      rw [hS, hL]
+      rfl
+    · exact (LinearMap.eqLocus (LL ∘ₗ LS) LinearMap.id).convex
+  have h3 : apm_t02A04_prismHull q ⊆ LL ⁻¹' apm_t02A04_gluedPrismHull q := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨c, hc, rfl⟩ := hvert' x hx
+      change LL _ ∈ apm_t02A04_gluedPrismHull q
+      rw [hL]
+      refine subset_convexHull ℝ _ (Finset.mem_coe.2 (Finset.mem_image_of_mem _ ?_))
+      exact Finset.mem_map_of_mem Fin.castSuccEmb hc
+    · exact (convex_convexHull ℝ _).linear_preimage LL
+  have h4 : apm_t02A04_prismHull q ⊆
+      (LinearMap.eqLocus (LS ∘ₗ LL) LinearMap.id : Set (EuclideanSpace ℝ (Fin 21))) := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨c, hc, rfl⟩ := hvert' x hx
+      change LS (LL _) = _
+      rw [hL, hS]
+      rfl
+    · exact (LinearMap.eqLocus (LS ∘ₗ LL) LinearMap.id).convex
+  exact ⟨fun z hz => ⟨h1 hz, h2 hz⟩, fun y hy => ⟨h3 hy, h4 hy⟩⟩
+
+/-- The same for the cone coordinates, with `projD`, `liftD` and `gluedIdxD` injective
+(`_aux_idx`). -/
+lemma apm_t02A04_quotientComplex_model_aux_cone_coords (i : Fin 6) :
+    (∀ z ∈ apm_t02A04_gluedConeHull i, apm_t02A04_projD z ∈ apm_t02A04_coneHull i ∧
+        apm_t02A04_liftD (apm_t02A04_projD z) = z) ∧
+      ∀ x ∈ apm_t02A04_coneHull i, apm_t02A04_liftD x ∈ apm_t02A04_gluedConeHull i ∧
+        apm_t02A04_projD (apm_t02A04_liftD x) = x := by
+  classical
+  have hinj := apm_t02A04_quotientComplex_model_aux_idx.2
+  let LD : EuclideanSpace ℝ (Fin 22) →ₗ[ℝ] EuclideanSpace ℝ (Fin 7) :=
+    { toFun := apm_t02A04_projD
+      map_add' := by intro u v; ext d; simp [apm_t02A04_projD]
+      map_smul' := by intro (c : ℝ) u; ext d; simp [apm_t02A04_projD] }
+  let LL : EuclideanSpace ℝ (Fin 7) →ₗ[ℝ] EuclideanSpace ℝ (Fin 22) :=
+    { toFun := apm_t02A04_liftD
+      map_add' := by intro u v; simp [apm_t02A04_liftD, add_smul, Finset.sum_add_distrib]
+      map_smul' := by intro (c : ℝ) u; simp [apm_t02A04_liftD, mul_smul, Finset.smul_sum] }
+  have hD : ∀ c, LD (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_gluedIdxD c)) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 c := by
+    intro c
+    change apm_t02A04_projD _ = _
+    ext a
+    simp [apm_t02A04_projD, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, hinj.eq_iff]
+  have hL : ∀ c, LL (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 c) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_gluedIdxD c) := by
+    intro c
+    change apm_t02A04_liftD _ = _
+    unfold apm_t02A04_liftD
+    rw [Finset.sum_eq_single c]
+    · simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+    · intro d _ hd
+      simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, hd]
+    · simp
+  have hvert : ∀ z ∈ (↑((apm_t02A04_gluedConeFacet i).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) :
+      Set (EuclideanSpace ℝ (Fin 22))), ∃ c ∈ apm_t02A04_coneFacet i,
+        z = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_gluedIdxD c) := by
+    intro z hz
+    obtain ⟨a, ha, rfl⟩ := Finset.mem_image.1 (Finset.mem_coe.1 hz)
+    obtain ⟨c, hc, rfl⟩ := Finset.mem_image.1 ha
+    exact ⟨c, hc, rfl⟩
+  have hvert' : ∀ x ∈ (↑((apm_t02A04_coneFacet i).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7)) :
+      Set (EuclideanSpace ℝ (Fin 7))), ∃ c ∈ apm_t02A04_coneFacet i, x = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 c := by
+    intro x hx
+    obtain ⟨c, hc, rfl⟩ := Finset.mem_image.1 (Finset.mem_coe.1 hx)
+    exact ⟨c, hc, rfl⟩
+  have h1 : apm_t02A04_gluedConeHull i ⊆ LD ⁻¹' apm_t02A04_coneHull i := by
+    apply convexHull_min
+    · intro z hz
+      obtain ⟨c, hc, rfl⟩ := hvert z hz
+      change LD _ ∈ apm_t02A04_coneHull i
+      rw [hD]
+      exact subset_convexHull ℝ _ (Finset.mem_coe.2 (Finset.mem_image_of_mem _ hc))
+    · exact (convex_convexHull ℝ _).linear_preimage LD
+  have h2 : apm_t02A04_gluedConeHull i ⊆
+      (LinearMap.eqLocus (LL ∘ₗ LD) LinearMap.id : Set (EuclideanSpace ℝ (Fin 22))) := by
+    apply convexHull_min
+    · intro z hz
+      obtain ⟨c, hc, rfl⟩ := hvert z hz
+      change LL (LD _) = _
+      rw [hD, hL]
+      rfl
+    · exact (LinearMap.eqLocus (LL ∘ₗ LD) LinearMap.id).convex
+  have h3 : apm_t02A04_coneHull i ⊆ LL ⁻¹' apm_t02A04_gluedConeHull i := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨c, hc, rfl⟩ := hvert' x hx
+      change LL _ ∈ apm_t02A04_gluedConeHull i
+      rw [hL]
+      refine subset_convexHull ℝ _ (Finset.mem_coe.2 (Finset.mem_image_of_mem _ ?_))
+      exact Finset.mem_image_of_mem _ hc
+    · exact (convex_convexHull ℝ _).linear_preimage LL
+  have h4 : apm_t02A04_coneHull i ⊆
+      (LinearMap.eqLocus (LD ∘ₗ LL) LinearMap.id : Set (EuclideanSpace ℝ (Fin 7))) := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨c, hc, rfl⟩ := hvert' x hx
+      change LD (LL _) = _
+      rw [hL, hD]
+      rfl
+    · exact (LinearMap.eqLocus (LD ∘ₗ LL) LinearMap.id).convex
+  exact ⟨fun z hz => ⟨h1 hz, h2 hz⟩, fun x hx => ⟨h3 hx, h4 hx⟩⟩
+
+/-- A prism hull and a cone hull meet only on the curve edge `i`: the only vertices of
+`gluedConeFacet i` that are prism vertices are `(curveIdx i).castSucc` and
+`(curveIdx (i + 1)).castSucc` (the centre is `Fin.last 21`); points of both hulls vanish
+off both facets and have mass one. -/
+lemma apm_t02A04_quotientComplex_model_aux_overlap (q : Fin 6 × Fin 3 × Fin 3) (i : Fin 6)
+    (z : EuclideanSpace ℝ (Fin 22)) (hq : z ∈ apm_t02A04_gluedPrismHull q) (hi : z ∈ apm_t02A04_gluedConeHull i) :
+    ∃ t : ℝ, 0 ≤ t ∧ t ≤ 1 ∧
+      z = (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc := by
+  classical
+  let P := (apm_t02A04_gluedPrismFacet q).image
+    (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)
+  let D := (apm_t02A04_gluedConeFacet i).image
+    (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)
+  have hP : P ∈ apm_t02A04_gluedComplex.faces := by
+    refine ⟨⟨apm_t02A04_gluedPrismFacet q, ?_, Finset.Subset.refl _⟩, ?_⟩
+    · exact Finset.mem_union_left _ (Finset.mem_image_of_mem _ (Finset.mem_univ q))
+    · have hne : P.Nonempty := by
+        refine Finset.image_nonempty.mpr ?_
+        refine ⟨(apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 q.2.2) q.2.1).castSucc, ?_⟩
+        rw [apm_t02A04_gluedPrismFacet, Finset.mem_map]
+        refine ⟨_, ?_, rfl⟩
+        simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image, Finset.mem_filter,
+          Finset.mem_univ, true_and]
+        exact Or.inl ⟨q.2.2, le_rfl, rfl⟩
+      exact fun h => hne.ne_empty (by simpa using h)
+  have hD : D ∈ apm_t02A04_gluedComplex.faces := by
+    refine ⟨⟨apm_t02A04_gluedConeFacet i, ?_, Finset.Subset.refl _⟩, ?_⟩
+    · exact Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ i))
+    · simp [D, apm_t02A04_gluedConeFacet, apm_t02A04_coneFacet]
+  have hzinter : z ∈ convexHull ℝ (↑(P ∩ D) : Set (EuclideanSpace ℝ (Fin 22))) := by
+    simpa only [Finset.coe_inter] using
+      (apm_t02A04_gluedComplex.inter_subset_convexHull hP hD ⟨hq, hi⟩)
+  let a := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (apm_t02A04_curveIdx i).castSucc
+  let b := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (apm_t02A04_curveIdx (i + 1)).castSucc
+  have hinter : (↑(P ∩ D) : Set (EuclideanSpace ℝ (Fin 22))) ⊆ ({a, b} : Set _) := by
+    intro x hx
+    rcases Finset.mem_inter.mp hx with ⟨hxP, hxD⟩
+    rcases Finset.mem_image.mp hxP with ⟨k, hk, rfl⟩
+    rcases Finset.mem_image.mp hxD with ⟨d, hd, heq⟩
+    have hind0 : k = d :=
+      (apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective 22 heq).symm
+    simp only [apm_t02A04_gluedConeFacet, Finset.mem_image] at hd
+    rcases hd with ⟨e, he, rfl⟩
+    have hind : k = apm_t02A04_gluedIdxD e := hind0
+    simp only [apm_t02A04_coneFacet, Finset.mem_insert, Finset.mem_singleton] at he
+    rcases he with rfl | rfl | rfl
+    · have hlast := congrArg Fin.val hind
+      have hklt : k.val < 21 := by
+        rcases Finset.mem_map.mp hk with ⟨k', -, rfl⟩
+        exact k'.isLt
+      simp [apm_t02A04_gluedIdxD] at hlast
+      omega
+    · left
+      simp only [a]
+      congr 1
+      simpa only [(apm_t02A04_quotientComplex_model_aux_idx).1 i] using hind
+    · right
+      simp only [b]
+      congr 1
+      simpa only [(apm_t02A04_quotientComplex_model_aux_idx).1 (i + 1)] using hind
+  have hzedge : z ∈ convexHull ℝ ({a, b} : Set _) :=
+    convexHull_mono hinter hzinter
+  have hzseg : z ∈ segment ℝ a b := by
+    simpa [convexHull_pair] using hzedge
+  rw [segment_eq_image] at hzseg
+  rcases hzseg with ⟨t, ⟨ht0, ht1⟩, rfl⟩
+  exact ⟨t, ht0, ht1, by simp [a, b]⟩
+
+/-- On curve edge `i` the two formulas give the same point of `X`: the prism side is
+`(arcPoint i t, arcPoint i t ^ 2)` (`_prism_model_aux_edge_map` with `_aux_map_eq`), the
+cone side is `arcPoint i t` (`_cone_model_aux_edge_map`, `_cone_model_aux_agree`), and
+`apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve` identifies them. -/
+lemma apm_t02A04_quotientComplex_model_aux_edge_eq (q : Fin 6 × Fin 3 × Fin 3) (i i' : Fin 6)
+    (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
+    (hq : (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc ∈ apm_t02A04_gluedPrismHull q)
+    (hi' : (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc ∈ apm_t02A04_gluedConeHull i') :
+    apm_t02a04_solidInclusion (apm_t02A04_prismPoint q (apm_t02A04_projS
+        ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+          t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc))) =
+      apm_t02a04_diskInclusion (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i' (apm_t02A04_projD
+        ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
+          t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc)))) := by
+  classical
+  set z : EuclideanSpace ℝ (Fin 22) :=
+    (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+        (apm_t02A04_curveIdx i).castSucc +
+      t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+        (apm_t02A04_curveIdx (i + 1)).castSucc with hz
+  -- The prism coordinates of the glued edge point are the prism edge point.
+  have hPS : apm_t02A04_projS z =
+      (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx i) +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx (i + 1)) := by
+    ext a
+    simp [hz, apm_t02A04_projS,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply, Fin.castSucc_inj]
+  -- The disk coordinates of the glued edge point are the cone edge point.
+  have hPD : apm_t02A04_projD z =
+      (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx i) +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx (i + 1)) := by
+    ext d
+    have e1 := ((apm_t02A04_quotientComplex_model_aux_idx).1 i).symm
+    have e2 := ((apm_t02A04_quotientComplex_model_aux_idx).1 (i + 1)).symm
+    have hinj := (apm_t02A04_quotientComplex_model_aux_idx).2
+    simp [hz, apm_t02A04_projD,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply, e1, e2, hinj.eq_iff]
+  have hPSq : apm_t02A04_projS z ∈ apm_t02A04_prismHull q :=
+    ((apm_t02A04_quotientComplex_model_aux_prism_coords q).1 z hq).1
+  have hDhi' : apm_t02A04_projD z ∈ apm_t02A04_coneHull i' :=
+    ((apm_t02A04_quotientComplex_model_aux_cone_coords i').1 z hi').1
+  have hmemP : apm_t02A04_projS z ∈ apm_t02A04_prismComplex.space := by
+    rw [hPS]
+    exact apm_t02A04_solidTorus_prism_model_aux_edge_mem i t ht0 ht1
+  have hmemD : apm_t02A04_projD z ∈ apm_t02A04_coneComplex.space := by
+    rw [hPD]
+    exact apm_t02A04_attachedDisk_cone_model_aux_edge_mem i t ht0 ht1
+  -- The prism side lands at the attaching curve point.
+  have hp1 : apm_t02A04_prismPoint q (apm_t02A04_projS z) =
+      (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
+        simpa using (apm_t02A04_arcPoint i t).property.le⟩,
+        apm_t02A04_arcPoint i t ^ 2) := by
+    calc apm_t02A04_prismPoint q (apm_t02A04_projS z)
+        = apm_t02A04_prismMap ⟨apm_t02A04_projS z, hmemP⟩ :=
+          (apm_t02A04_solidTorus_prism_model_aux_map_eq q
+            ⟨apm_t02A04_projS z, hmemP⟩ hPSq).symm
+      _ = apm_t02A04_prismMap
+            ⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i t ht0 ht1⟩ := by
+          congr 1
+          exact Subtype.ext hPS
+      _ = _ := apm_t02A04_solidTorus_prism_model_aux_edge_map i t ht0 ht1
+  -- The cone side lands at the same point of the disk.
+  have hp2 : ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint i' (apm_t02A04_projD z)) =
+      (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
+        simpa using (apm_t02A04_arcPoint i t).property.le⟩ : apm_t02a04_Disk) := by
+    calc ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+          (apm_t02A04_conePoint i' (apm_t02A04_projD z))
+        = apm_t02A04_coneMap ⟨apm_t02A04_projD z, hmemD⟩ := by
+          have hex : ∃ j, apm_t02A04_projD z ∈ apm_t02A04_coneHull j := ⟨i', hDhi'⟩
+          simp only [apm_t02A04_coneMap]
+          rw [dif_pos hex]
+          exact congrArg _
+            (apm_t02A04_attachedDisk_cone_model_aux_agree i' _ (apm_t02A04_projD z)
+              hDhi' (Classical.choose_spec hex))
+      _ = apm_t02A04_coneMap
+            ⟨_, apm_t02A04_attachedDisk_cone_model_aux_edge_mem i t ht0 ht1⟩ := by
+          congr 1
+          exact Subtype.ext hPD
+      _ = _ := Subtype.ext
+          (apm_t02A04_attachedDisk_cone_model_aux_edge_map i t ht0 ht1)
+  calc apm_t02a04_solidInclusion (apm_t02A04_prismPoint q (apm_t02A04_projS z))
+      = apm_t02a04_solidInclusion
+          (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
+            simpa using (apm_t02A04_arcPoint i t).property.le⟩,
+            apm_t02A04_arcPoint i t ^ 2) := congrArg _ hp1
+    _ = apm_t02a04_diskInclusion
+          (⟨((apm_t02A04_arcPoint i t : Circle) : ℂ), by
+            simpa using (apm_t02A04_arcPoint i t).property.le⟩ : apm_t02a04_Disk) :=
+        (apm_t02a04_mk_disk_boundary_eq_mk_attachingCurve (apm_t02A04_arcPoint i t)).symm
+    _ = _ := congrArg _ hp2.symm
+
+/-- Points of `X`: `solidInclusion` and `diskInclusion` are injective, and they meet only
+at `(z, z ^ 2)` against `z` for `z` on the circle. Use `apm_t02a04_gluedDesc_respects`
+with invariants of the relation (for instance `Sum.elim` of the identity and
+`fun d ↦ (d, d ^ 2)` on the circle, read in `SolidTorus ⊕ Disk`). -/
+lemma apm_t02A04_quotientComplex_model_aux_inclusions :
+    Function.Injective apm_t02a04_solidInclusion ∧
+      Function.Injective apm_t02a04_diskInclusion ∧
+      ∀ s d, apm_t02a04_solidInclusion s = apm_t02a04_diskInclusion d →
+        ∃ c : Circle, (d : ℂ) = c ∧ s = (⟨(c : ℂ), by simpa using c.property.le⟩, c ^ 2) := by
+  classical
+  let first : Sum apm_t02a04_SolidTorus apm_t02a04_Disk → ℂ :=
+    Sum.elim (fun s ↦ (s.1 : ℂ)) (fun d ↦ (d : ℂ))
+  let second : Sum apm_t02a04_SolidTorus apm_t02a04_Disk → ℂ :=
+    Sum.elim (fun s ↦ (s.2 : ℂ)) (fun d ↦ (d : ℂ) ^ 2)
+  have first_eq {x y} (hxy : Relation.EqvGen apm_t02a04_Glue x y) :
+      first x = first y := by
+    induction hxy with
+    | rel a b hab => cases hab <;> rfl
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have second_eq {x y} (hxy : Relation.EqvGen apm_t02a04_Glue x y) :
+      second x = second y := by
+    induction hxy with
+    | rel a b hab => cases hab <;> rfl
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have invariants {x y}
+      (hxy : Quotient.mk (Relation.EqvGen.setoid apm_t02a04_Glue) x =
+        Quotient.mk (Relation.EqvGen.setoid apm_t02a04_Glue) y) :
+      first x = first y ∧ second x = second y := by
+    have hrel : Relation.EqvGen apm_t02a04_Glue x y := Quotient.exact hxy
+    exact ⟨first_eq hrel, second_eq hrel⟩
+  constructor
+  · intro s t h
+    obtain ⟨h₁, h₂⟩ := invariants h
+    apply Prod.ext
+    · apply Subtype.ext
+      exact h₁
+    · apply Subtype.ext
+      exact h₂
+  constructor
+  · intro d e h
+    obtain ⟨h₁, -⟩ := invariants h
+    exact Subtype.ext h₁
+  · intro s d h
+    obtain ⟨h₁, h₂⟩ := invariants h
+    have hd_norm_sq : ‖(d : ℂ)‖ ^ 2 = 1 := by
+      calc
+        ‖(d : ℂ)‖ ^ 2 = ‖(d : ℂ) ^ 2‖ := by rw [norm_pow]
+        _ = ‖(s.2 : ℂ)‖ := congrArg norm h₂.symm
+        _ = 1 := mem_sphere_zero_iff_norm.mp s.2.property
+    have hd_norm : ‖(d : ℂ)‖ = 1 := by nlinarith [norm_nonneg (d : ℂ)]
+    let c : Circle := ⟨(d : ℂ), mem_sphere_zero_iff_norm.mpr hd_norm⟩
+    refine ⟨c, rfl, ?_⟩
+    apply Prod.ext
+    · apply Subtype.ext
+      exact h₁
+    · apply Subtype.ext
+      exact h₂
+
+/-- The centre: `basisVertex 22 (Fin.last 21)` is a vertex of the glued complex, lies in no
+prism hull (its last coordinate is `1`, prism hull points have `0` there), lies in cone
+hull `0`, and goes to `diskInclusion 0`. -/
+lemma apm_t02A04_quotientComplex_model_aux_centre :
+    ∃ hv : ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (Fin.last 21) ∈ apm_t02A04_gluedComplex.space,
+      {ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (Fin.last 21)} ∈ apm_t02A04_gluedComplex.faces ∧
+      apm_t02A04_gluedMap ⟨_, hv⟩ =
+        apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩ := by
+  classical
+  let v := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (Fin.last 21)
+  have hlast : v (Fin.last 21) = 1 := by
+    simp [v, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply]
+  have hnot : ¬ ∃ q, v ∈ apm_t02A04_gluedPrismHull q := by
+    rintro ⟨q, hq⟩
+    have hz : ∀ z ∈ (↑((apm_t02A04_gluedPrismFacet q).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) :
+          Set (EuclideanSpace ℝ (Fin 22))), z (Fin.last 21) = 0 := by
+      intro z hz
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.mp hz
+      obtain ⟨j, hj, rfl⟩ := Finset.mem_map.mp hk
+      rw [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply, if_neg]
+      exact (Fin.castSucc_ne_last j) ∘ Eq.symm
+    have hall : ∀ z ∈ apm_t02A04_gluedPrismHull q, z (Fin.last 21) = 0 := by
+      exact convexHull_min hz
+        (convex_hyperplane
+          (PiLp.proj 2 (fun _ : Fin 22 ↦ ℝ) (Fin.last 21)).toLinearMap.isLinear 0)
+    exact zero_ne_one (by rw [← hall v hq, hlast])
+  have hcentre : Fin.last 21 ∈ apm_t02A04_gluedConeFacet 0 := by
+    simp [apm_t02A04_gluedConeFacet, apm_t02A04_gluedIdxD,
+      apm_t02A04_coneFacet]
+  have hface : {v} ∈ apm_t02A04_gluedComplex.faces := by
+    apply ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_vertex_mem
+      (f := apm_t02A04_gluedConeFacet 0)
+    · exact Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ 0))
+    · exact hcentre
+  have hv : v ∈ apm_t02A04_gluedComplex.space := by
+    rw [Geometry.SimplicialComplex.mem_space_iff]
+    exact ⟨{v}, hface, by simp⟩
+  refine ⟨hv, hface, ?_⟩
+  have hcone : ∃ i, v ∈ apm_t02A04_gluedConeHull i := by
+    refine ⟨0, ?_⟩
+    apply subset_convexHull ℝ
+    exact Finset.mem_image_of_mem _ hcentre
+  let i := Classical.choose hcone
+  have hi := Classical.choose_spec hcone
+  have hp := (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 v hi
+  have hp0 : apm_t02A04_projD v =
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0 := by
+    ext d
+    have heq : apm_t02A04_gluedIdxD d = Fin.last 21 ↔ d = 0 := by
+      constructor
+      · intro hd
+        apply apm_t02A04_quotientComplex_model_aux_idx.2
+        rw [hd]
+        rfl
+      · rintro rfl
+        rfl
+    have heq' : apm_t02A04_gluedIdxD d = (21 : Fin 22) ↔ d = 0 := by
+      simpa using heq
+    by_cases hd : d = 0
+    · subst d
+      rfl
+    · have hg : apm_t02A04_gluedIdxD d ≠ (21 : Fin 22) :=
+        fun h ↦ hd (heq'.mp h)
+      have hgr : (21 : Fin 22) ≠ apm_t02A04_gluedIdxD d := fun h ↦ hg h.symm
+      simp [apm_t02A04_projD, v,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, hd, hg, hgr]
+  change apm_t02A04_gluedMap ⟨v, hv⟩ = _
+  simp only [apm_t02A04_gluedMap, dif_neg hnot, dif_pos hcone]
+  change apm_t02a04_diskInclusion
+      (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint i (apm_t02A04_projD v))) = _
+  rw [hp0]
+  apply congrArg apm_t02a04_diskInclusion
+  apply Subtype.ext
+  have hpoint_all : ∀ j : Fin 6, apm_t02A04_conePoint j
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0) = 0 := by
+    intro j
+    fin_cases j <;>
+      simp [apm_t02A04_conePoint,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply, apm_t02A04_coneIdx]
+  have hpoint := hpoint_all i
+  rw [hpoint]
+  simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp]
+
+/-- Glued hulls lie in the glued complex (a hull that contains a point has a nonempty
+vertex set). -/
+lemma apm_t02A04_quotientComplex_model_aux_hull_space :
+    (∀ q, apm_t02A04_gluedPrismHull q ⊆ apm_t02A04_gluedComplex.space) ∧
+      ∀ i, apm_t02A04_gluedConeHull i ⊆ apm_t02A04_gluedComplex.space := by
+  have key : ∀ f ∈ Finset.univ.image apm_t02A04_gluedPrismFacet ∪
+        Finset.univ.image apm_t02A04_gluedConeFacet,
+      ∀ z ∈ convexHull ℝ (↑(f.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) : Set (EuclideanSpace ℝ (Fin 22))),
+        z ∈ apm_t02A04_gluedComplex.space := by
+    intro f hf z hz
+    have hne : f.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22) ≠ ∅ := by
+      intro h
+      rw [h] at hz
+      simp at hz
+    exact Geometry.SimplicialComplex.convexHull_subset_space (K := apm_t02A04_gluedComplex)
+      (s := f.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) ⟨⟨f, hf, Finset.Subset.refl _⟩, hne⟩ hz
+  exact ⟨fun q z hz => key _ (Finset.mem_union_left _ (Finset.mem_image_of_mem _ (Finset.mem_univ q))) z hz,
+    fun i z hz => key _ (Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ i))) z hz⟩
+
+/-- On a prism hull `gluedMap` is the prism formula, for any prism containing the point. -/
+lemma apm_t02A04_quotientComplex_model_aux_map_prism (z : apm_t02A04_gluedComplex.space) (q : Fin 6 × Fin 3 × Fin 3)
+    (hq : (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q) :
+    apm_t02A04_gluedMap z =
+      apm_t02a04_solidInclusion (apm_t02A04_prismPoint q (apm_t02A04_projS z)) := by
+  classical
+  have hex : ∃ q, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q := ⟨q, hq⟩
+  unfold apm_t02A04_gluedMap
+  rw [dif_pos hex]
+  exact congrArg apm_t02a04_solidInclusion (apm_t02A04_solidTorus_prism_model_aux_agree _ q _
+    ((apm_t02A04_quotientComplex_model_aux_prism_coords _).1 _ (Classical.choose_spec hex)).1 ((apm_t02A04_quotientComplex_model_aux_prism_coords q).1 _ hq).1)
+
+/-- On a cone hull `gluedMap` is the cone formula: if the point is also in a prism hull it
+lies on a curve edge (`_aux_overlap`), where the two formulas agree (`_aux_edge_eq`). -/
+lemma apm_t02A04_quotientComplex_model_aux_map_cone (z : apm_t02A04_gluedComplex.space) (i : Fin 6)
+    (hi : (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedConeHull i) :
+    apm_t02A04_gluedMap z = apm_t02a04_diskInclusion
+      (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_projD z))) := by
+  classical
+  by_cases hex : ∃ q, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q
+  · obtain ⟨q, hq⟩ := hex
+    rw [apm_t02A04_quotientComplex_model_aux_map_prism z q hq]
+    obtain ⟨t, h0, h1, hz⟩ := apm_t02A04_quotientComplex_model_aux_overlap q i z hq hi
+    rw [hz] at hq hi ⊢
+    exact apm_t02A04_quotientComplex_model_aux_edge_eq q i i t h0 h1 hq hi
+  · have hex' : ∃ i, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedConeHull i := ⟨i, hi⟩
+    unfold apm_t02A04_gluedMap
+    rw [dif_neg hex, dif_pos hex',
+      apm_t02A04_attachedDisk_cone_model_aux_agree _ i _ ((apm_t02A04_quotientComplex_model_aux_cone_coords _).1 _ (Classical.choose_spec hex')).1
+        ((apm_t02A04_quotientComplex_model_aux_cone_coords i).1 _ hi).1]
+
+/-- Pasting over the 60 closed hulls (as `_prism_model_aux_continuous`): on a prism hull
+`gluedMap` is `solidInclusion ∘ prismPoint q ∘ projS` (`_prism_model_aux_agree`,
+`_prism_model_aux_continuous_aux_piece`); on a cone hull it is
+`diskInclusion ∘ diskClamp ∘ conePoint i ∘ projD`, using `_aux_overlap` and `_aux_edge_eq`
+where the cone hull meets a prism hull. -/
+lemma apm_t02A04_quotientComplex_model_aux_continuous : Continuous apm_t02A04_gluedMap := by
+  classical
+  let C : (Fin 6 × Fin 3 × Fin 3) ⊕ Fin 6 → Set apm_t02A04_gluedComplex.space :=
+    Sum.elim (fun q ↦ {z | (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q})
+      (fun i ↦ {z | (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedConeHull i})
+  have hcover : ⋃ s, C s = Set.univ := by
+    ext z
+    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+    rcases apm_t02A04_quotientComplex_model_aux_cover z z.2 with ⟨q, hq⟩ | ⟨i, hi⟩
+    · exact ⟨Sum.inl q, hq⟩
+    · exact ⟨Sum.inr i, hi⟩
+  have hclosed : ∀ s, IsClosed (C s) := by
+    intro s
+    rcases s with q | i
+    · change IsClosed ((fun z : apm_t02A04_gluedComplex.space ↦
+        (z : EuclideanSpace ℝ (Fin 22))) ⁻¹' apm_t02A04_gluedPrismHull q)
+      unfold apm_t02A04_gluedPrismHull
+      simpa only [Finset.coe_image] using
+        (((apm_t02A04_gluedPrismFacet q).finite_toSet.image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)).isCompact_convexHull ℝ).isClosed.preimage
+            (continuous_subtype_val : Continuous
+              (fun z : apm_t02A04_gluedComplex.space ↦ (z : EuclideanSpace ℝ (Fin 22))))
+    · change IsClosed ((fun z : apm_t02A04_gluedComplex.space ↦
+        (z : EuclideanSpace ℝ (Fin 22))) ⁻¹' apm_t02A04_gluedConeHull i)
+      unfold apm_t02A04_gluedConeHull
+      simpa only [Finset.coe_image] using
+        (((apm_t02A04_gluedConeFacet i).finite_toSet.image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)).isCompact_convexHull ℝ).isClosed.preimage
+            (continuous_subtype_val : Continuous
+              (fun z : apm_t02A04_gluedComplex.space ↦ (z : EuclideanSpace ℝ (Fin 22))))
+  refine (locallyFinite_of_finite C).continuous hcover hclosed ?_
+  intro s
+  rw [continuousOn_iff_continuous_restrict]
+  rcases s with q | i
+  · have hv : Continuous (fun z : C (Sum.inl q) ↦
+        ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) :=
+      continuous_subtype_val.comp continuous_subtype_val
+    have hproj : Continuous (fun z : C (Sum.inl q) ↦
+        apm_t02A04_projS ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) := by
+      unfold apm_t02A04_projS
+      fun_prop
+    have hp : Continuous fun z : C (Sum.inl q) ↦ apm_t02A04_prismPoint q
+        (apm_t02A04_projS ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) := by
+      rw [← continuousOn_univ]
+      exact (apm_t02A04_solidTorus_prism_model_aux_continuous_aux_piece q).comp
+        hproj.continuousOn
+        (by intro z _; exact (apm_t02A04_quotientComplex_model_aux_prism_coords q).1 _ z.2 |>.1)
+    convert apm_t02a04_continuous_solidInclusion.comp hp using 1
+    funext z
+    change apm_t02A04_gluedMap z.1 = _
+    exact apm_t02A04_quotientComplex_model_aux_map_prism z.1 q z.2
+  · have hproj : Continuous (fun z : C (Sum.inr i) ↦
+        apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) := by
+      unfold apm_t02A04_projD
+      fun_prop
+    have hpoint : Continuous fun z : C (Sum.inr i) ↦ apm_t02A04_conePoint i
+        (apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) := by
+      rw [← continuousOn_univ]
+      exact (apm_t02A04_attachedDisk_cone_model_aux_continuous_piece i).comp
+        hproj.continuousOn
+        (by intro z _; exact (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 _ z.2 |>.1)
+    have hn : ∀ z : C (Sum.inr i), ‖apm_t02A04_conePoint i
+        (apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22)))‖ ≤ 1 :=
+      fun z ↦ apm_t02A04_attachedDisk_cone_model_aux_point_norm i _
+        ((apm_t02A04_quotientComplex_model_aux_cone_coords i).1 _ z.2).1
+    have hmem : ∀ z : C (Sum.inr i), apm_t02A04_conePoint i
+        (apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22)))
+          ∈ apm_t02a04_Disk :=
+      fun z ↦ by simpa [apm_t02a04_Disk] using hn z
+    have hf : Continuous fun z : C (Sum.inr i) ↦
+        (⟨apm_t02A04_conePoint i
+          (apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))),
+          hmem z⟩ : apm_t02a04_Disk) :=
+      hpoint.subtype_mk hmem
+    convert apm_t02a04_continuous_diskInclusion.comp hf using 1
+    funext z
+    change apm_t02A04_gluedMap z.1 = _
+    rw [apm_t02A04_quotientComplex_model_aux_map_cone z.1 i z.2]
+    apply congrArg apm_t02a04_diskInclusion
+    apply Subtype.ext
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, hn z]
+
+/-- Two glued prism points with the same prism point are equal. Make subtype points of
+`prismComplex.space` from `projS z` (a prism hull lies in the space, as in the proof of
+`_prism_model_aux_surjective`), use `_prism_model_aux_map_eq` and
+`_prism_model_aux_injective`, then `liftS (projS z) = z` from `_aux_prism_coords`. -/
+lemma apm_t02A04_quotientComplex_model_aux_prism_inj (q q' : Fin 6 × Fin 3 × Fin 3) (z z' : EuclideanSpace ℝ (Fin 22))
+    (hz : z ∈ apm_t02A04_gluedPrismHull q) (hz' : z' ∈ apm_t02A04_gluedPrismHull q')
+    (h : apm_t02A04_prismPoint q (apm_t02A04_projS z) =
+      apm_t02A04_prismPoint q' (apm_t02A04_projS z')) : z = z' := by
+  classical
+  obtain ⟨hzq, hzl⟩ := (apm_t02A04_quotientComplex_model_aux_prism_coords q).1 z hz
+  obtain ⟨hz'q, hz'l⟩ := (apm_t02A04_quotientComplex_model_aux_prism_coords q').1 z' hz'
+  have hfmem : ∀ q : Fin 6 × Fin 3 × Fin 3,
+      apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 q.2.2) q.2.1 ∈
+        apm_t02A04_prismFacet q := by
+    intro q
+    exact Finset.mem_union.mpr (Or.inl (Finset.mem_image.mpr
+      ⟨q.2.2, Finset.mem_filter.mpr ⟨Finset.mem_univ _, le_rfl⟩, rfl⟩))
+  have hmem : apm_t02A04_projS z ∈ apm_t02A04_prismComplex.space :=
+    Geometry.SimplicialComplex.convexHull_subset_space (K := apm_t02A04_prismComplex)
+      (s := (apm_t02A04_prismFacet q).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21))
+      ⟨⟨apm_t02A04_prismFacet q, Finset.mem_image_of_mem _ (Finset.mem_univ q),
+          Finset.Subset.refl _⟩,
+        Finset.ne_empty_of_mem (Finset.mem_image_of_mem _ (hfmem q))⟩ hzq
+  have hmem' : apm_t02A04_projS z' ∈ apm_t02A04_prismComplex.space :=
+    Geometry.SimplicialComplex.convexHull_subset_space (K := apm_t02A04_prismComplex)
+      (s := (apm_t02A04_prismFacet q').image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21))
+      ⟨⟨apm_t02A04_prismFacet q', Finset.mem_image_of_mem _ (Finset.mem_univ q'),
+          Finset.Subset.refl _⟩,
+        Finset.ne_empty_of_mem (Finset.mem_image_of_mem _ (hfmem q'))⟩ hz'q
+  have hp : apm_t02A04_prismMap ⟨apm_t02A04_projS z, hmem⟩ =
+      apm_t02A04_prismMap ⟨apm_t02A04_projS z', hmem'⟩ := by
+    rw [apm_t02A04_solidTorus_prism_model_aux_map_eq q ⟨apm_t02A04_projS z, hmem⟩ hzq,
+      apm_t02A04_solidTorus_prism_model_aux_map_eq q' ⟨apm_t02A04_projS z', hmem'⟩ hz'q]
+    exact h
+  have hps : apm_t02A04_projS z = apm_t02A04_projS z' :=
+    congrArg Subtype.val (apm_t02A04_solidTorus_prism_model_aux_injective hp)
+  calc z = apm_t02A04_liftS (apm_t02A04_projS z) := hzl.symm
+    _ = apm_t02A04_liftS (apm_t02A04_projS z') := by rw [hps]
+    _ = z' := hz'l
+
+/-- Two glued cone points with the same disk point are equal: `diskClamp` is the identity by
+`_cone_model_aux_point_norm`, then `_cone_model_aux_injective_aux_facet`, then
+`liftD (projD z) = z` from `_aux_cone_coords`. -/
+lemma apm_t02A04_quotientComplex_model_aux_cone_inj (i i' : Fin 6) (z z' : EuclideanSpace ℝ (Fin 22))
+    (hz : z ∈ apm_t02A04_gluedConeHull i) (hz' : z' ∈ apm_t02A04_gluedConeHull i')
+    (h : ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_projD z)) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i' (apm_t02A04_projD z'))) : z = z' := by
+  classical
+  obtain ⟨hD, hDl⟩ := (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 z hz
+  obtain ⟨hD', hDl'⟩ := (apm_t02A04_quotientComplex_model_aux_cone_coords i').1 z' hz'
+  have hn := apm_t02A04_attachedDisk_cone_model_aux_point_norm i _ hD
+  have hn' := apm_t02A04_attachedDisk_cone_model_aux_point_norm i' _ hD'
+  have hpt : apm_t02A04_conePoint i (apm_t02A04_projD z) =
+      apm_t02A04_conePoint i' (apm_t02A04_projD z') := by
+    have hc := congrArg (fun d : apm_t02a04_Disk => (d : ℂ)) h
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, hn, hn'] at hc
+    exact hc
+  have heq : apm_t02A04_projD z = apm_t02A04_projD z' :=
+    apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet _ _ i i' hD hD' hpt
+  rw [← hDl, ← hDl', heq]
+
+/-- The prism and cone copies of a curve edge are the same point of the glued complex. Do NOT
+expand coordinates: both lifts are linear on these sums (prove `liftS` additive and homogeneous
+with `ext a; induction a using Fin.lastCases`, as in `_aux_prism_coords`, and use the `simp`
+facts for `liftD` from `_aux_cone_coords`), both send a basis vertex to a basis vertex, and
+`_aux_idx` matches `gluedIdxD (coneIdx i)` with `(curveIdx i).castSucc`. -/
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_add
+    (u v : EuclideanSpace ℝ (Fin 21)) :
+    apm_t02A04_liftS (u + v) = apm_t02A04_liftS u + apm_t02A04_liftS v := by
+  have hne : ∀ c : Fin 21, c.castSucc ≠ (21 : Fin 22) := by decide
+  ext a
+  induction a using Fin.lastCases <;> simp [apm_t02A04_liftS, hne]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_smul
+    (c : ℝ) (u : EuclideanSpace ℝ (Fin 21)) :
+    apm_t02A04_liftS (c • u) = c • apm_t02A04_liftS u := by
+  have hne : ∀ c : Fin 21, c.castSucc ≠ (21 : Fin 22) := by decide
+  ext a
+  induction a using Fin.lastCases <;> simp [apm_t02A04_liftS, hne]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_basis (c : Fin 21) :
+    apm_t02A04_liftS
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 c) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 c.castSucc := by
+  have hne : ∀ c : Fin 21, c.castSucc ≠ (21 : Fin 22) := by decide
+  ext a
+  induction a using Fin.lastCases with
+  | last => simp [apm_t02A04_liftS,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply, (hne c).symm]
+  | cast a => simp [apm_t02A04_liftS,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply, hne]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_add
+    (u v : EuclideanSpace ℝ (Fin 7)) :
+    apm_t02A04_liftD (u + v) = apm_t02A04_liftD u + apm_t02A04_liftD v := by
+  simp [apm_t02A04_liftD, add_smul, Finset.sum_add_distrib]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_smul
+    (c : ℝ) (u : EuclideanSpace ℝ (Fin 7)) :
+    apm_t02A04_liftD (c • u) = c • apm_t02A04_liftD u := by
+  simp [apm_t02A04_liftD, mul_smul, Finset.smul_sum]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_basis (c : Fin 7) :
+    apm_t02A04_liftD
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 c) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+        (apm_t02A04_gluedIdxD c) := by
+  unfold apm_t02A04_liftD
+  rw [Finset.sum_eq_single c]
+  · simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+  · intro d _ hd
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply, hd]
+  · simp
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge (i : Fin 6) (t : ℝ) :
+    apm_t02A04_liftS ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i) +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx (i + 1))) =
+      apm_t02A04_liftD ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx i) +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx (i + 1))) := by
+  rw [apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_add,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_smul,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_smul,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_basis,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_basis,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_add,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_smul,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_smul,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_basis,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_basis,
+    (apm_t02A04_quotientComplex_model_aux_idx).1 i,
+    (apm_t02A04_quotientComplex_model_aux_idx).1 (i + 1)]
+
+/-- A prism point and a cone point over the same circle point are equal. Write
+`c = arcPoint i' t` (`_cone_model_aux_surjective_aux_circle`). `_prism_model_aux_edge_map` with
+`_prism_model_aux_injective` shows `projS z` is the prism edge point, and
+`_cone_model_aux_edge_map` with `_cone_model_aux_injective` shows `projD z'` is the cone edge
+point. Then `_aux_prism_coords`, `_aux_cone_coords` and `_aux_lift_edge` give `z = z'`. -/
+-- A prism hull lies in the prism complex (the facet is one of the generating facets and
+-- its vertex set is nonempty: it contains the `0`-th disk vertex over circle vertex `q.2.1`).
+lemma apm_t02A04_quotientComplex_model_aux_cross_aux_prismHull_space
+    (q : Fin 6 × Fin 3 × Fin 3) :
+    apm_t02A04_prismHull q ⊆ apm_t02A04_prismComplex.space := by
+  intro z hz
+  have hm : apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 0) q.2.1 ∈
+      apm_t02A04_prismFacet q :=
+    Finset.mem_union_left _
+      (Finset.mem_image_of_mem _
+        (Finset.mem_filter.2 ⟨Finset.mem_univ 0, Fin.zero_le _⟩))
+  have hne : (apm_t02A04_prismFacet q).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21) ≠ ∅ :=
+    Finset.nonempty_iff_ne_empty.mp (Finset.image_nonempty.mpr ⟨_, hm⟩)
+  exact Geometry.SimplicialComplex.convexHull_subset_space
+    (K := apm_t02A04_prismComplex)
+    (s := (apm_t02A04_prismFacet q).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21))
+    ⟨⟨apm_t02A04_prismFacet q,
+      Finset.mem_image_of_mem _ (Finset.mem_univ q), Finset.Subset.refl _⟩, hne⟩ hz
+
+-- A cone hull lies in the cone complex (the facet `{0, i, i+1}` is nonempty).
+lemma apm_t02A04_quotientComplex_model_aux_cross_aux_coneHull_space (i : Fin 6) :
+    apm_t02A04_coneHull i ⊆ apm_t02A04_coneComplex.space := by
+  intro z hz
+  have hm : (0 : Fin 7) ∈ apm_t02A04_coneFacet i := Finset.mem_insert_self _ _
+  have hne : (apm_t02A04_coneFacet i).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7) ≠ ∅ :=
+    Finset.nonempty_iff_ne_empty.mp (Finset.image_nonempty.mpr ⟨_, hm⟩)
+  exact Geometry.SimplicialComplex.convexHull_subset_space
+    (K := apm_t02A04_coneComplex)
+    (s := (apm_t02A04_coneFacet i).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7))
+    ⟨⟨apm_t02A04_coneFacet i,
+      Finset.mem_image_of_mem _ (Finset.mem_univ i), Finset.Subset.refl _⟩, hne⟩ hz
+
+lemma apm_t02A04_quotientComplex_model_aux_cross (q : Fin 6 × Fin 3 × Fin 3) (i : Fin 6) (z z' : EuclideanSpace ℝ (Fin 22))
+    (hz : z ∈ apm_t02A04_gluedPrismHull q) (hz' : z' ∈ apm_t02A04_gluedConeHull i) (c : Circle)
+    (hd : ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_projD z')) : apm_t02a04_Disk) : ℂ) = c)
+    (hs : apm_t02A04_prismPoint q (apm_t02A04_projS z) =
+      (⟨(c : ℂ), by simpa using c.property.le⟩, c ^ 2)) : z = z' := by
+  classical
+  obtain ⟨hSq, hSz⟩ := (apm_t02A04_quotientComplex_model_aux_prism_coords q).1 z hz
+  obtain ⟨hDi, hDz⟩ := (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 z' hz'
+  obtain ⟨i', t, ht0, ht1, htc⟩ :=
+    apm_t02A04_attachedDisk_cone_model_aux_surjective_aux_circle c
+  subst htc
+  have hmemP : apm_t02A04_projS z ∈ apm_t02A04_prismComplex.space :=
+    apm_t02A04_quotientComplex_model_aux_cross_aux_prismHull_space q hSq
+  have hmemD : apm_t02A04_projD z' ∈ apm_t02A04_coneComplex.space :=
+    apm_t02A04_quotientComplex_model_aux_cross_aux_coneHull_space i hDi
+  -- `projS z` is the prism edge point over `c`, by injectivity of `prismMap`.
+  have hpP : apm_t02A04_prismMap ⟨apm_t02A04_projS z, hmemP⟩ =
+      apm_t02A04_prismMap
+        ⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i' t ht0 ht1⟩ := by
+    rw [apm_t02A04_solidTorus_prism_model_aux_map_eq q ⟨apm_t02A04_projS z, hmemP⟩ hSq,
+      apm_t02A04_solidTorus_prism_model_aux_edge_map i' t ht0 ht1]
+    exact hs
+  have hPS : apm_t02A04_projS z =
+      (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+        (apm_t02A04_curveIdx i') +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx (i' + 1)) :=
+    Subtype.ext_iff.mp (apm_t02A04_solidTorus_prism_model_aux_injective hpP)
+  -- `projD z'` is the cone edge point over `c`, by injectivity of `coneMap`.
+  have hpD : apm_t02A04_coneMap ⟨apm_t02A04_projD z', hmemD⟩ =
+      apm_t02A04_coneMap
+        ⟨_, apm_t02A04_attachedDisk_cone_model_aux_edge_mem i' t ht0 ht1⟩ := by
+    apply Subtype.ext
+    have hcm : apm_t02A04_coneMap ⟨apm_t02A04_projD z', hmemD⟩ =
+        ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+          (apm_t02A04_conePoint i (apm_t02A04_projD z')) := by
+      have hex : ∃ j, apm_t02A04_projD z' ∈ apm_t02A04_coneHull j := ⟨i, hDi⟩
+      simp only [apm_t02A04_coneMap]
+      rw [dif_pos hex]
+      exact congrArg _
+        (apm_t02A04_attachedDisk_cone_model_aux_agree _ i _
+          (Classical.choose_spec hex) hDi)
+    rw [hcm, hd]
+    exact (apm_t02A04_attachedDisk_cone_model_aux_edge_map i' t ht0 ht1).symm
+  have hPD : apm_t02A04_projD z' =
+      (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+        (apm_t02A04_coneIdx i') +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx (i' + 1)) :=
+    Subtype.ext_iff.mp (apm_t02A04_attachedDisk_cone_model_aux_injective hpD)
+  calc z = apm_t02A04_liftS (apm_t02A04_projS z) := hSz.symm
+    _ = apm_t02A04_liftS
+          ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+            (apm_t02A04_curveIdx i') +
+            t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+              (apm_t02A04_curveIdx (i' + 1))) := by rw [hPS]
+    _ = apm_t02A04_liftD
+          ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+            (apm_t02A04_coneIdx i') +
+            t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+              (apm_t02A04_coneIdx (i' + 1))) :=
+        apm_t02A04_quotientComplex_model_aux_lift_edge i' t
+    _ = apm_t02A04_liftD (apm_t02A04_projD z') := by rw [hPD]
+    _ = z' := hDz
+
+/-- Injectivity: two prism points by `_prism_model_aux_injective` and `_aux_prism_coords`;
+two cone points by `_cone_model_aux_injective` and `_aux_cone_coords`; a prism point and a
+cone point with the same image map to `(c, c ^ 2)` and `c` (`_aux_inclusions`), so both are
+the curve point over `c` (`_cone_model_aux_surjective_aux_circle`, the two `_edge_map`s and
+the two injectivities), equal in the glued complex. -/
+lemma apm_t02A04_quotientComplex_model_aux_injective :
+    Function.Injective apm_t02A04_gluedMap := by
+  intro z z' h
+  obtain ⟨hsi, hdi, hcr⟩ := apm_t02A04_quotientComplex_model_aux_inclusions
+  apply Subtype.ext
+  rcases apm_t02A04_quotientComplex_model_aux_cover z z.2 with ⟨q, hq⟩ | ⟨i, hi⟩ <;>
+    rcases apm_t02A04_quotientComplex_model_aux_cover z' z'.2 with ⟨q', hq'⟩ | ⟨i', hi'⟩
+  · rw [apm_t02A04_quotientComplex_model_aux_map_prism z q hq, apm_t02A04_quotientComplex_model_aux_map_prism z' q' hq'] at h
+    exact apm_t02A04_quotientComplex_model_aux_prism_inj q q' _ _ hq hq' (hsi h)
+  · rw [apm_t02A04_quotientComplex_model_aux_map_prism z q hq, apm_t02A04_quotientComplex_model_aux_map_cone z' i' hi'] at h
+    obtain ⟨c, hd, hs⟩ := hcr _ _ h
+    exact apm_t02A04_quotientComplex_model_aux_cross q i' _ _ hq hi' c hd hs
+  · rw [apm_t02A04_quotientComplex_model_aux_map_cone z i hi, apm_t02A04_quotientComplex_model_aux_map_prism z' q' hq'] at h
+    obtain ⟨c, hd, hs⟩ := hcr _ _ h.symm
+    exact (apm_t02A04_quotientComplex_model_aux_cross q' i _ _ hq' hi c hd hs).symm
+  · rw [apm_t02A04_quotientComplex_model_aux_map_cone z i hi, apm_t02A04_quotientComplex_model_aux_map_cone z' i' hi'] at h
+    exact apm_t02A04_quotientComplex_model_aux_cone_inj i i' _ _ hi hi' (hdi h)
+
+/-- Surjectivity: points of `X` are `solidInclusion s` or `diskInclusion d`
+(`Quotient.ind`); lift a preimage under `prismMap` (`_prism_model_aux_surjective`) or
+`coneMap` with `_aux_prism_coords` or `_aux_cone_coords`. -/
+lemma apm_t02A04_quotientComplex_model_aux_surjective :
+    Function.Surjective apm_t02A04_gluedMap := by
+  classical
+  intro x
+  obtain ⟨a, rfl⟩ : ∃ a, Quotient.mk (Relation.EqvGen.setoid apm_t02a04_Glue) a = x :=
+    Quotient.exists_rep x
+  rcases a with s | d
+  · obtain ⟨y, hy⟩ := apm_t02A04_solidTorus_prism_model_aux_surjective s
+    obtain ⟨q, hq⟩ := apm_t02A04_solidTorus_prism_model_aux_cover y y.2
+    obtain ⟨h1, h2⟩ := (apm_t02A04_quotientComplex_model_aux_prism_coords q).2 _ hq
+    refine ⟨⟨_, apm_t02A04_quotientComplex_model_aux_hull_space.1 q h1⟩, ?_⟩
+    rw [apm_t02A04_quotientComplex_model_aux_map_prism _ q h1]
+    change apm_t02a04_solidInclusion (apm_t02A04_prismPoint q
+      (apm_t02A04_projS (apm_t02A04_liftS y))) = apm_t02a04_solidInclusion s
+    rw [h2, ← apm_t02A04_solidTorus_prism_model_aux_map_eq q y hq, hy]
+  · obtain ⟨x, hx⟩ := apm_t02A04_attachedDisk_cone_model_aux_surjective d
+    obtain ⟨i, hi⟩ := apm_t02A04_attachedDisk_cone_model_aux_cover x x.2
+    obtain ⟨h1, h2⟩ := (apm_t02A04_quotientComplex_model_aux_cone_coords i).2 _ hi
+    refine ⟨⟨_, apm_t02A04_quotientComplex_model_aux_hull_space.2 i h1⟩, ?_⟩
+    rw [apm_t02A04_quotientComplex_model_aux_map_cone _ i h1]
+    change apm_t02a04_diskInclusion (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i
+      (apm_t02A04_projD (apm_t02A04_liftD x)))) = apm_t02a04_diskInclusion d
+    have hm : apm_t02A04_coneMap x = ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i x) := by
+      have hex : ∃ i, (x : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull i := ⟨i, hi⟩
+      unfold apm_t02A04_coneMap
+      rw [dif_pos hex, apm_t02A04_attachedDisk_cone_model_aux_agree _ i _ (Classical.choose_spec hex) hi]
+    rw [h2, ← hm, hx]
+
 /-- Glue the two finite complexes along the six distinct curve vertices.
 The resulting coordinate realization has the required finite face set and
 marked vertex, and carries the canonical piecewise-affine map to `X`. -/
@@ -2147,7 +4416,12 @@ theorem apm_t02A04_quotientComplex_model
       M.toQuotient M.v =
         apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩ ∧
       Continuous M.toQuotient ∧ Function.Bijective M.toQuotient := by
-  sorry
+  obtain ⟨hv, hface, hmark⟩ := apm_t02A04_quotientComplex_model_aux_centre
+  exact ⟨⟨22, apm_t02A04_gluedComplex, ⟨_, hv⟩, apm_t02A04_gluedMap⟩,
+    ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_faces_finite 22 _,
+    hface, hmark, apm_t02A04_quotientComplex_model_aux_continuous,
+    apm_t02A04_quotientComplex_model_aux_injective,
+    apm_t02A04_quotientComplex_model_aux_surjective⟩
 
 /-- Compatible finite solid-torus/cell triangulation, assembled from the
 independent coordinate leaves above. -/
