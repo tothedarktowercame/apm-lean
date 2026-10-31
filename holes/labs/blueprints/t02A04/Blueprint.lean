@@ -3701,7 +3701,86 @@ lemma apm_t02A04_quotientComplex_model_aux_centre :
       {ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (Fin.last 21)} ∈ apm_t02A04_gluedComplex.faces ∧
       apm_t02A04_gluedMap ⟨_, hv⟩ =
         apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩ := by
-  sorry
+  classical
+  let v := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (Fin.last 21)
+  have hlast : v (Fin.last 21) = 1 := by
+    simp [v, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply]
+  have hnot : ¬ ∃ q, v ∈ apm_t02A04_gluedPrismHull q := by
+    rintro ⟨q, hq⟩
+    have hz : ∀ z ∈ (↑((apm_t02A04_gluedPrismFacet q).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) :
+          Set (EuclideanSpace ℝ (Fin 22))), z (Fin.last 21) = 0 := by
+      intro z hz
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.mp hz
+      obtain ⟨j, hj, rfl⟩ := Finset.mem_map.mp hk
+      rw [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply, if_neg]
+      exact (Fin.castSucc_ne_last j) ∘ Eq.symm
+    have hall : ∀ z ∈ apm_t02A04_gluedPrismHull q, z (Fin.last 21) = 0 := by
+      exact convexHull_min hz
+        (convex_hyperplane
+          (PiLp.proj 2 (fun _ : Fin 22 ↦ ℝ) (Fin.last 21)).toLinearMap.isLinear 0)
+    exact zero_ne_one (by rw [← hall v hq, hlast])
+  have hcentre : Fin.last 21 ∈ apm_t02A04_gluedConeFacet 0 := by
+    simp [apm_t02A04_gluedConeFacet, apm_t02A04_gluedIdxD,
+      apm_t02A04_coneFacet]
+  have hface : {v} ∈ apm_t02A04_gluedComplex.faces := by
+    apply ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_vertex_mem
+      (f := apm_t02A04_gluedConeFacet 0)
+    · exact Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ 0))
+    · exact hcentre
+  have hv : v ∈ apm_t02A04_gluedComplex.space := by
+    rw [Geometry.SimplicialComplex.mem_space_iff]
+    exact ⟨{v}, hface, by simp⟩
+  refine ⟨hv, hface, ?_⟩
+  have hcone : ∃ i, v ∈ apm_t02A04_gluedConeHull i := by
+    refine ⟨0, ?_⟩
+    apply subset_convexHull ℝ
+    exact Finset.mem_image_of_mem _ hcentre
+  let i := Classical.choose hcone
+  have hi := Classical.choose_spec hcone
+  have hp := (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 v hi
+  have hp0 : apm_t02A04_projD v =
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0 := by
+    ext d
+    have heq : apm_t02A04_gluedIdxD d = Fin.last 21 ↔ d = 0 := by
+      constructor
+      · intro hd
+        apply apm_t02A04_quotientComplex_model_aux_idx.2
+        rw [hd]
+        rfl
+      · rintro rfl
+        rfl
+    have heq' : apm_t02A04_gluedIdxD d = (21 : Fin 22) ↔ d = 0 := by
+      simpa using heq
+    by_cases hd : d = 0
+    · subst d
+      rfl
+    · have hg : apm_t02A04_gluedIdxD d ≠ (21 : Fin 22) :=
+        fun h ↦ hd (heq'.mp h)
+      have hgr : (21 : Fin 22) ≠ apm_t02A04_gluedIdxD d := fun h ↦ hg h.symm
+      simp [apm_t02A04_projD, v,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, hd, hg, hgr]
+  change apm_t02A04_gluedMap ⟨v, hv⟩ = _
+  simp only [apm_t02A04_gluedMap, dif_neg hnot, dif_pos hcone]
+  change apm_t02a04_diskInclusion
+      (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint i (apm_t02A04_projD v))) = _
+  rw [hp0]
+  apply congrArg apm_t02a04_diskInclusion
+  apply Subtype.ext
+  have hpoint_all : ∀ j : Fin 6, apm_t02A04_conePoint j
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0) = 0 := by
+    intro j
+    fin_cases j <;>
+      simp [apm_t02A04_conePoint,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply, apm_t02A04_coneIdx]
+  have hpoint := hpoint_all i
+  rw [hpoint]
+  simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp]
 
 /-- Pasting over the 60 closed hulls (as `_prism_model_aux_continuous`): on a prism hull
 `gluedMap` is `solidInclusion ∘ prismPoint q ∘ projS` (`_prism_model_aux_agree`,
