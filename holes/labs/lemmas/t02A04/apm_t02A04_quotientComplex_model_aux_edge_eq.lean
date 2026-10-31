@@ -3889,12 +3889,105 @@ lemma apm_t02A04_quotientComplex_model_aux_centre :
   rw [hpoint]
   simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp]
 
+/-- Glued hulls lie in the glued complex (a hull that contains a point has a nonempty
+vertex set). -/
+lemma apm_t02A04_quotientComplex_model_aux_hull_space :
+    (∀ q, apm_t02A04_gluedPrismHull q ⊆ apm_t02A04_gluedComplex.space) ∧
+      ∀ i, apm_t02A04_gluedConeHull i ⊆ apm_t02A04_gluedComplex.space := by
+  have key : ∀ f ∈ Finset.univ.image apm_t02A04_gluedPrismFacet ∪
+        Finset.univ.image apm_t02A04_gluedConeFacet,
+      ∀ z ∈ convexHull ℝ (↑(f.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) : Set (EuclideanSpace ℝ (Fin 22))),
+        z ∈ apm_t02A04_gluedComplex.space := by
+    intro f hf z hz
+    have hne : f.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22) ≠ ∅ := by
+      intro h
+      rw [h] at hz
+      simp at hz
+    exact Geometry.SimplicialComplex.convexHull_subset_space (K := apm_t02A04_gluedComplex)
+      (s := f.image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) ⟨⟨f, hf, Finset.Subset.refl _⟩, hne⟩ hz
+  exact ⟨fun q z hz => key _ (Finset.mem_union_left _ (Finset.mem_image_of_mem _ (Finset.mem_univ q))) z hz,
+    fun i z hz => key _ (Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ i))) z hz⟩
+
+/-- On a prism hull `gluedMap` is the prism formula, for any prism containing the point. -/
+lemma apm_t02A04_quotientComplex_model_aux_map_prism (z : apm_t02A04_gluedComplex.space) (q : Fin 6 × Fin 3 × Fin 3)
+    (hq : (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q) :
+    apm_t02A04_gluedMap z =
+      apm_t02a04_solidInclusion (apm_t02A04_prismPoint q (apm_t02A04_projS z)) := by
+  classical
+  have hex : ∃ q, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q := ⟨q, hq⟩
+  unfold apm_t02A04_gluedMap
+  rw [dif_pos hex]
+  exact congrArg apm_t02a04_solidInclusion (apm_t02A04_solidTorus_prism_model_aux_agree _ q _
+    ((apm_t02A04_quotientComplex_model_aux_prism_coords _).1 _ (Classical.choose_spec hex)).1 ((apm_t02A04_quotientComplex_model_aux_prism_coords q).1 _ hq).1)
+
+/-- On a cone hull `gluedMap` is the cone formula: if the point is also in a prism hull it
+lies on a curve edge (`_aux_overlap`), where the two formulas agree (`_aux_edge_eq`). -/
+lemma apm_t02A04_quotientComplex_model_aux_map_cone (z : apm_t02A04_gluedComplex.space) (i : Fin 6)
+    (hi : (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedConeHull i) :
+    apm_t02A04_gluedMap z = apm_t02a04_diskInclusion
+      (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_projD z))) := by
+  classical
+  by_cases hex : ∃ q, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q
+  · obtain ⟨q, hq⟩ := hex
+    rw [apm_t02A04_quotientComplex_model_aux_map_prism z q hq]
+    obtain ⟨t, h0, h1, hz⟩ := apm_t02A04_quotientComplex_model_aux_overlap q i z hq hi
+    rw [hz] at hq hi ⊢
+    exact apm_t02A04_quotientComplex_model_aux_edge_eq q i i t h0 h1 hq hi
+  · have hex' : ∃ i, (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedConeHull i := ⟨i, hi⟩
+    unfold apm_t02A04_gluedMap
+    rw [dif_neg hex, dif_pos hex',
+      apm_t02A04_attachedDisk_cone_model_aux_agree _ i _ ((apm_t02A04_quotientComplex_model_aux_cone_coords _).1 _ (Classical.choose_spec hex')).1
+        ((apm_t02A04_quotientComplex_model_aux_cone_coords i).1 _ hi).1]
+
 /-- Pasting over the 60 closed hulls (as `_prism_model_aux_continuous`): on a prism hull
 `gluedMap` is `solidInclusion ∘ prismPoint q ∘ projS` (`_prism_model_aux_agree`,
 `_prism_model_aux_continuous_aux_piece`); on a cone hull it is
 `diskInclusion ∘ diskClamp ∘ conePoint i ∘ projD`, using `_aux_overlap` and `_aux_edge_eq`
 where the cone hull meets a prism hull. -/
 lemma apm_t02A04_quotientComplex_model_aux_continuous : Continuous apm_t02A04_gluedMap := by
+  sorry
+
+/-- Two glued prism points with the same prism point are equal. Make subtype points of
+`prismComplex.space` from `projS z` (a prism hull lies in the space, as in the proof of
+`_prism_model_aux_surjective`), use `_prism_model_aux_map_eq` and
+`_prism_model_aux_injective`, then `liftS (projS z) = z` from `_aux_prism_coords`. -/
+lemma apm_t02A04_quotientComplex_model_aux_prism_inj (q q' : Fin 6 × Fin 3 × Fin 3) (z z' : EuclideanSpace ℝ (Fin 22))
+    (hz : z ∈ apm_t02A04_gluedPrismHull q) (hz' : z' ∈ apm_t02A04_gluedPrismHull q')
+    (h : apm_t02A04_prismPoint q (apm_t02A04_projS z) =
+      apm_t02A04_prismPoint q' (apm_t02A04_projS z')) : z = z' := by
+  sorry
+
+/-- Two glued cone points with the same disk point are equal: `diskClamp` is the identity by
+`_cone_model_aux_point_norm`, then `_cone_model_aux_injective_aux_facet`, then
+`liftD (projD z) = z` from `_aux_cone_coords`. -/
+lemma apm_t02A04_quotientComplex_model_aux_cone_inj (i i' : Fin 6) (z z' : EuclideanSpace ℝ (Fin 22))
+    (hz : z ∈ apm_t02A04_gluedConeHull i) (hz' : z' ∈ apm_t02A04_gluedConeHull i')
+    (h : ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_projD z)) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i' (apm_t02A04_projD z'))) : z = z' := by
+  sorry
+
+/-- The prism and cone copies of a curve edge are the same point of the glued complex. Do NOT
+expand coordinates: both lifts are linear on these sums (prove `liftS` additive and homogeneous
+with `ext a; induction a using Fin.lastCases`, as in `_aux_prism_coords`, and use the `simp`
+facts for `liftD` from `_aux_cone_coords`), both send a basis vertex to a basis vertex, and
+`_aux_idx` matches `gluedIdxD (coneIdx i)` with `(curveIdx i).castSucc`. -/
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge (i : Fin 6) (t : ℝ) :
+    apm_t02A04_liftS ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i) +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx (i + 1))) =
+      apm_t02A04_liftD ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx i) +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx (i + 1))) := by
+  sorry
+
+/-- A prism point and a cone point over the same circle point are equal. Write
+`c = arcPoint i' t` (`_cone_model_aux_surjective_aux_circle`). `_prism_model_aux_edge_map` with
+`_prism_model_aux_injective` shows `projS z` is the prism edge point, and
+`_cone_model_aux_edge_map` with `_cone_model_aux_injective` shows `projD z'` is the cone edge
+point. Then `_aux_prism_coords`, `_aux_cone_coords` and `_aux_lift_edge` give `z = z'`. -/
+lemma apm_t02A04_quotientComplex_model_aux_cross (q : Fin 6 × Fin 3 × Fin 3) (i : Fin 6) (z z' : EuclideanSpace ℝ (Fin 22))
+    (hz : z ∈ apm_t02A04_gluedPrismHull q) (hz' : z' ∈ apm_t02A04_gluedConeHull i) (c : Circle)
+    (hd : ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_projD z')) : apm_t02a04_Disk) : ℂ) = c)
+    (hs : apm_t02A04_prismPoint q (apm_t02A04_projS z) =
+      (⟨(c : ℂ), by simpa using c.property.le⟩, c ^ 2)) : z = z' := by
   sorry
 
 /-- Injectivity: two prism points by `_prism_model_aux_injective` and `_aux_prism_coords`;
@@ -3904,14 +3997,52 @@ the curve point over `c` (`_cone_model_aux_surjective_aux_circle`, the two `_edg
 the two injectivities), equal in the glued complex. -/
 lemma apm_t02A04_quotientComplex_model_aux_injective :
     Function.Injective apm_t02A04_gluedMap := by
-  sorry
+  intro z z' h
+  obtain ⟨hsi, hdi, hcr⟩ := apm_t02A04_quotientComplex_model_aux_inclusions
+  apply Subtype.ext
+  rcases apm_t02A04_quotientComplex_model_aux_cover z z.2 with ⟨q, hq⟩ | ⟨i, hi⟩ <;>
+    rcases apm_t02A04_quotientComplex_model_aux_cover z' z'.2 with ⟨q', hq'⟩ | ⟨i', hi'⟩
+  · rw [apm_t02A04_quotientComplex_model_aux_map_prism z q hq, apm_t02A04_quotientComplex_model_aux_map_prism z' q' hq'] at h
+    exact apm_t02A04_quotientComplex_model_aux_prism_inj q q' _ _ hq hq' (hsi h)
+  · rw [apm_t02A04_quotientComplex_model_aux_map_prism z q hq, apm_t02A04_quotientComplex_model_aux_map_cone z' i' hi'] at h
+    obtain ⟨c, hd, hs⟩ := hcr _ _ h
+    exact apm_t02A04_quotientComplex_model_aux_cross q i' _ _ hq hi' c hd hs
+  · rw [apm_t02A04_quotientComplex_model_aux_map_cone z i hi, apm_t02A04_quotientComplex_model_aux_map_prism z' q' hq'] at h
+    obtain ⟨c, hd, hs⟩ := hcr _ _ h.symm
+    exact (apm_t02A04_quotientComplex_model_aux_cross q' i _ _ hq' hi c hd hs).symm
+  · rw [apm_t02A04_quotientComplex_model_aux_map_cone z i hi, apm_t02A04_quotientComplex_model_aux_map_cone z' i' hi'] at h
+    exact apm_t02A04_quotientComplex_model_aux_cone_inj i i' _ _ hi hi' (hdi h)
 
 /-- Surjectivity: points of `X` are `solidInclusion s` or `diskInclusion d`
 (`Quotient.ind`); lift a preimage under `prismMap` (`_prism_model_aux_surjective`) or
 `coneMap` with `_aux_prism_coords` or `_aux_cone_coords`. -/
 lemma apm_t02A04_quotientComplex_model_aux_surjective :
     Function.Surjective apm_t02A04_gluedMap := by
-  sorry
+  classical
+  intro x
+  obtain ⟨a, rfl⟩ : ∃ a, Quotient.mk (Relation.EqvGen.setoid apm_t02a04_Glue) a = x :=
+    Quotient.exists_rep x
+  rcases a with s | d
+  · obtain ⟨y, hy⟩ := apm_t02A04_solidTorus_prism_model_aux_surjective s
+    obtain ⟨q, hq⟩ := apm_t02A04_solidTorus_prism_model_aux_cover y y.2
+    obtain ⟨h1, h2⟩ := (apm_t02A04_quotientComplex_model_aux_prism_coords q).2 _ hq
+    refine ⟨⟨_, apm_t02A04_quotientComplex_model_aux_hull_space.1 q h1⟩, ?_⟩
+    rw [apm_t02A04_quotientComplex_model_aux_map_prism _ q h1]
+    change apm_t02a04_solidInclusion (apm_t02A04_prismPoint q
+      (apm_t02A04_projS (apm_t02A04_liftS y))) = apm_t02a04_solidInclusion s
+    rw [h2, ← apm_t02A04_solidTorus_prism_model_aux_map_eq q y hq, hy]
+  · obtain ⟨x, hx⟩ := apm_t02A04_attachedDisk_cone_model_aux_surjective d
+    obtain ⟨i, hi⟩ := apm_t02A04_attachedDisk_cone_model_aux_cover x x.2
+    obtain ⟨h1, h2⟩ := (apm_t02A04_quotientComplex_model_aux_cone_coords i).2 _ hi
+    refine ⟨⟨_, apm_t02A04_quotientComplex_model_aux_hull_space.2 i h1⟩, ?_⟩
+    rw [apm_t02A04_quotientComplex_model_aux_map_cone _ i h1]
+    change apm_t02a04_diskInclusion (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i
+      (apm_t02A04_projD (apm_t02A04_liftD x)))) = apm_t02a04_diskInclusion d
+    have hm : apm_t02A04_coneMap x = ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i x) := by
+      have hex : ∃ i, (x : EuclideanSpace ℝ (Fin 7)) ∈ apm_t02A04_coneHull i := ⟨i, hi⟩
+      unfold apm_t02A04_coneMap
+      rw [dif_pos hex, apm_t02A04_attachedDisk_cone_model_aux_agree _ i _ (Classical.choose_spec hex) hi]
+    rw [h2, ← hm, hx]
 
 /-- Glue the two finite complexes along the six distinct curve vertices.
 The resulting coordinate realization has the required finite face set and
