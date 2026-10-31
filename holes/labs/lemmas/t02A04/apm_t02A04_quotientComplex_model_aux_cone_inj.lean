@@ -4045,7 +4045,19 @@ lemma apm_t02A04_quotientComplex_model_aux_cone_inj (i i' : Fin 6) (z z' : Eucli
     (hz : z ∈ apm_t02A04_gluedConeHull i) (hz' : z' ∈ apm_t02A04_gluedConeHull i')
     (h : ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_projD z)) =
       ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i' (apm_t02A04_projD z'))) : z = z' := by
-  sorry
+  classical
+  obtain ⟨hD, hDl⟩ := (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 z hz
+  obtain ⟨hD', hDl'⟩ := (apm_t02A04_quotientComplex_model_aux_cone_coords i').1 z' hz'
+  have hn := apm_t02A04_attachedDisk_cone_model_aux_point_norm i _ hD
+  have hn' := apm_t02A04_attachedDisk_cone_model_aux_point_norm i' _ hD'
+  have hpt : apm_t02A04_conePoint i (apm_t02A04_projD z) =
+      apm_t02A04_conePoint i' (apm_t02A04_projD z') := by
+    have hc := congrArg (fun d : apm_t02a04_Disk => (d : ℂ)) h
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, hn, hn'] at hc
+    exact hc
+  have heq : apm_t02A04_projD z = apm_t02A04_projD z' :=
+    apm_t02A04_attachedDisk_cone_model_aux_injective_aux_facet _ _ i i' hD hD' hpt
+  rw [← hDl, ← hDl', heq]
 -- END SEAT AREA
 
 /-- The prism and cone copies of a curve edge are the same point of the glued complex. Do NOT
