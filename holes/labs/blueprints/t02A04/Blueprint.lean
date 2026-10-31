@@ -4051,12 +4051,74 @@ expand coordinates: both lifts are linear on these sums (prove `liftS` additive 
 with `ext a; induction a using Fin.lastCases`, as in `_aux_prism_coords`, and use the `simp`
 facts for `liftD` from `_aux_cone_coords`), both send a basis vertex to a basis vertex, and
 `_aux_idx` matches `gluedIdxD (coneIdx i)` with `(curveIdx i).castSucc`. -/
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_add
+    (u v : EuclideanSpace ℝ (Fin 21)) :
+    apm_t02A04_liftS (u + v) = apm_t02A04_liftS u + apm_t02A04_liftS v := by
+  have hne : ∀ c : Fin 21, c.castSucc ≠ (21 : Fin 22) := by decide
+  ext a
+  induction a using Fin.lastCases <;> simp [apm_t02A04_liftS, hne]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_smul
+    (c : ℝ) (u : EuclideanSpace ℝ (Fin 21)) :
+    apm_t02A04_liftS (c • u) = c • apm_t02A04_liftS u := by
+  have hne : ∀ c : Fin 21, c.castSucc ≠ (21 : Fin 22) := by decide
+  ext a
+  induction a using Fin.lastCases <;> simp [apm_t02A04_liftS, hne]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_basis (c : Fin 21) :
+    apm_t02A04_liftS
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 c) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 c.castSucc := by
+  have hne : ∀ c : Fin 21, c.castSucc ≠ (21 : Fin 22) := by decide
+  ext a
+  induction a using Fin.lastCases with
+  | last => simp [apm_t02A04_liftS,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply, (hne c).symm]
+  | cast a => simp [apm_t02A04_liftS,
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply, hne]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_add
+    (u v : EuclideanSpace ℝ (Fin 7)) :
+    apm_t02A04_liftD (u + v) = apm_t02A04_liftD u + apm_t02A04_liftD v := by
+  simp [apm_t02A04_liftD, add_smul, Finset.sum_add_distrib]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_smul
+    (c : ℝ) (u : EuclideanSpace ℝ (Fin 7)) :
+    apm_t02A04_liftD (c • u) = c • apm_t02A04_liftD u := by
+  simp [apm_t02A04_liftD, mul_smul, Finset.smul_sum]
+
+lemma apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_basis (c : Fin 7) :
+    apm_t02A04_liftD
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 c) =
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+        (apm_t02A04_gluedIdxD c) := by
+  unfold apm_t02A04_liftD
+  rw [Finset.sum_eq_single c]
+  · simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex]
+  · intro d _ hd
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply, hd]
+  · simp
+
 lemma apm_t02A04_quotientComplex_model_aux_lift_edge (i : Fin 6) (t : ℝ) :
     apm_t02A04_liftS ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx i) +
         t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 (apm_t02A04_curveIdx (i + 1))) =
       apm_t02A04_liftD ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx i) +
         t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 (apm_t02A04_coneIdx (i + 1))) := by
-  sorry
+  rw [apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_add,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_smul,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_smul,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_basis,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftS_basis,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_add,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_smul,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_smul,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_basis,
+    apm_t02A04_quotientComplex_model_aux_lift_edge_aux_liftD_basis,
+    (apm_t02A04_quotientComplex_model_aux_idx).1 i,
+    (apm_t02A04_quotientComplex_model_aux_idx).1 (i + 1)]
 
 /-- A prism point and a cone point over the same circle point are equal. Write
 `c = arcPoint i' t` (`_cone_model_aux_surjective_aux_circle`). `_prism_model_aux_edge_map` with
