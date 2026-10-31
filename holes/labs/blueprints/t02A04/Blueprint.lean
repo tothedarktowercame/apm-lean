@@ -3445,7 +3445,82 @@ lemma apm_t02A04_quotientComplex_model_aux_prism_coords (q : Fin 6 × Fin 3 × F
         apm_t02A04_liftS (apm_t02A04_projS z) = z) ∧
       ∀ y ∈ apm_t02A04_prismHull q, apm_t02A04_liftS y ∈ apm_t02A04_gluedPrismHull q ∧
         apm_t02A04_projS (apm_t02A04_liftS y) = y := by
-  sorry
+  classical
+  have hne : ∀ c : Fin 21, c.castSucc ≠ (21 : Fin 22) := by decide
+  let LS : EuclideanSpace ℝ (Fin 22) →ₗ[ℝ] EuclideanSpace ℝ (Fin 21) :=
+    { toFun := apm_t02A04_projS
+      map_add' := by intro u v; ext d; simp [apm_t02A04_projS]
+      map_smul' := by intro (c : ℝ) u; ext d; simp [apm_t02A04_projS] }
+  let LL : EuclideanSpace ℝ (Fin 21) →ₗ[ℝ] EuclideanSpace ℝ (Fin 22) :=
+    { toFun := apm_t02A04_liftS
+      map_add' := by
+        intro u v
+        ext a
+        induction a using Fin.lastCases <;> simp [apm_t02A04_liftS, hne]
+      map_smul' := by
+        intro (c : ℝ) u
+        ext a
+        induction a using Fin.lastCases <;> simp [apm_t02A04_liftS, hne] }
+  have hS : ∀ c : Fin 21, LS (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 c.castSucc) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 c := by
+    intro c
+    change apm_t02A04_projS _ = _
+    ext a
+    simp [apm_t02A04_projS, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply]
+  have hL : ∀ c : Fin 21, LL (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 c) = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 c.castSucc := by
+    intro c
+    change apm_t02A04_liftS _ = _
+    ext a
+    induction a using Fin.lastCases with
+    | last => simp [apm_t02A04_liftS, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, (hne c).symm]
+    | cast a => simp [apm_t02A04_liftS, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, EuclideanSpace.single_apply, hne]
+  have hvert : ∀ z ∈ (↑((apm_t02A04_gluedPrismFacet q).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) :
+      Set (EuclideanSpace ℝ (Fin 22))), ∃ c ∈ apm_t02A04_prismFacet q,
+        z = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 c.castSucc := by
+    intro z hz
+    obtain ⟨a, ha, rfl⟩ := Finset.mem_image.1 (Finset.mem_coe.1 hz)
+    obtain ⟨c, hc, rfl⟩ := Finset.mem_map.1 ha
+    exact ⟨c, hc, rfl⟩
+  have hvert' : ∀ x ∈ (↑((apm_t02A04_prismFacet q).image (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21)) :
+      Set (EuclideanSpace ℝ (Fin 21))), ∃ c ∈ apm_t02A04_prismFacet q, x = ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21 c := by
+    intro x hx
+    obtain ⟨c, hc, rfl⟩ := Finset.mem_image.1 (Finset.mem_coe.1 hx)
+    exact ⟨c, hc, rfl⟩
+  have h1 : apm_t02A04_gluedPrismHull q ⊆ LS ⁻¹' apm_t02A04_prismHull q := by
+    apply convexHull_min
+    · intro z hz
+      obtain ⟨c, hc, rfl⟩ := hvert z hz
+      change LS _ ∈ apm_t02A04_prismHull q
+      rw [hS]
+      exact subset_convexHull ℝ _ (Finset.mem_coe.2 (Finset.mem_image_of_mem _ hc))
+    · exact (convex_convexHull ℝ _).linear_preimage LS
+  have h2 : apm_t02A04_gluedPrismHull q ⊆
+      (LinearMap.eqLocus (LL ∘ₗ LS) LinearMap.id : Set (EuclideanSpace ℝ (Fin 22))) := by
+    apply convexHull_min
+    · intro z hz
+      obtain ⟨c, hc, rfl⟩ := hvert z hz
+      change LL (LS _) = _
+      rw [hS, hL]
+      rfl
+    · exact (LinearMap.eqLocus (LL ∘ₗ LS) LinearMap.id).convex
+  have h3 : apm_t02A04_prismHull q ⊆ LL ⁻¹' apm_t02A04_gluedPrismHull q := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨c, hc, rfl⟩ := hvert' x hx
+      change LL _ ∈ apm_t02A04_gluedPrismHull q
+      rw [hL]
+      refine subset_convexHull ℝ _ (Finset.mem_coe.2 (Finset.mem_image_of_mem _ ?_))
+      exact Finset.mem_map_of_mem Fin.castSuccEmb hc
+    · exact (convex_convexHull ℝ _).linear_preimage LL
+  have h4 : apm_t02A04_prismHull q ⊆
+      (LinearMap.eqLocus (LS ∘ₗ LL) LinearMap.id : Set (EuclideanSpace ℝ (Fin 21))) := by
+    apply convexHull_min
+    · intro x hx
+      obtain ⟨c, hc, rfl⟩ := hvert' x hx
+      change LS (LL _) = _
+      rw [hL, hS]
+      rfl
+    · exact (LinearMap.eqLocus (LS ∘ₗ LL) LinearMap.id).convex
+  exact ⟨fun z hz => ⟨h1 hz, h2 hz⟩, fun y hy => ⟨h3 hy, h4 hy⟩⟩
 
 /-- The same for the cone coordinates, with `projD`, `liftD` and `gluedIdxD` injective
 (`_aux_idx`). -/
