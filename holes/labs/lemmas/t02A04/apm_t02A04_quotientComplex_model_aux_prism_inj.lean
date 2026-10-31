@@ -4036,7 +4036,39 @@ lemma apm_t02A04_quotientComplex_model_aux_prism_inj (q q' : Fin 6 × Fin 3 × F
     (hz : z ∈ apm_t02A04_gluedPrismHull q) (hz' : z' ∈ apm_t02A04_gluedPrismHull q')
     (h : apm_t02A04_prismPoint q (apm_t02A04_projS z) =
       apm_t02A04_prismPoint q' (apm_t02A04_projS z')) : z = z' := by
-  sorry
+  classical
+  obtain ⟨hzq, hzl⟩ := (apm_t02A04_quotientComplex_model_aux_prism_coords q).1 z hz
+  obtain ⟨hz'q, hz'l⟩ := (apm_t02A04_quotientComplex_model_aux_prism_coords q').1 z' hz'
+  have hfmem : ∀ q : Fin 6 × Fin 3 × Fin 3,
+      apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 q.2.2) q.2.1 ∈
+        apm_t02A04_prismFacet q := by
+    intro q
+    exact Finset.mem_union.mpr (Or.inl (Finset.mem_image.mpr
+      ⟨q.2.2, Finset.mem_filter.mpr ⟨Finset.mem_univ _, le_rfl⟩, rfl⟩))
+  have hmem : apm_t02A04_projS z ∈ apm_t02A04_prismComplex.space :=
+    Geometry.SimplicialComplex.convexHull_subset_space (K := apm_t02A04_prismComplex)
+      (s := (apm_t02A04_prismFacet q).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21))
+      ⟨⟨apm_t02A04_prismFacet q, Finset.mem_image_of_mem _ (Finset.mem_univ q),
+          Finset.Subset.refl _⟩,
+        Finset.ne_empty_of_mem (Finset.mem_image_of_mem _ (hfmem q))⟩ hzq
+  have hmem' : apm_t02A04_projS z' ∈ apm_t02A04_prismComplex.space :=
+    Geometry.SimplicialComplex.convexHull_subset_space (K := apm_t02A04_prismComplex)
+      (s := (apm_t02A04_prismFacet q').image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21))
+      ⟨⟨apm_t02A04_prismFacet q', Finset.mem_image_of_mem _ (Finset.mem_univ q'),
+          Finset.Subset.refl _⟩,
+        Finset.ne_empty_of_mem (Finset.mem_image_of_mem _ (hfmem q'))⟩ hz'q
+  have hp : apm_t02A04_prismMap ⟨apm_t02A04_projS z, hmem⟩ =
+      apm_t02A04_prismMap ⟨apm_t02A04_projS z', hmem'⟩ := by
+    rw [apm_t02A04_solidTorus_prism_model_aux_map_eq q ⟨apm_t02A04_projS z, hmem⟩ hzq,
+      apm_t02A04_solidTorus_prism_model_aux_map_eq q' ⟨apm_t02A04_projS z', hmem'⟩ hz'q]
+    exact h
+  have hps : apm_t02A04_projS z = apm_t02A04_projS z' :=
+    congrArg Subtype.val (apm_t02A04_solidTorus_prism_model_aux_injective hp)
+  calc z = apm_t02A04_liftS (apm_t02A04_projS z) := hzl.symm
+    _ = apm_t02A04_liftS (apm_t02A04_projS z') := by rw [hps]
+    _ = z' := hz'l
 -- END SEAT AREA
 
 /-- Two glued cone points with the same disk point are equal: `diskClamp` is the identity by
