@@ -3,6 +3,9 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.CoveringSubgroupCorrespondence
+import ConstructionTargets.DegreeOneHurewiczSurjective
+import ConstructionTargets.TorusPiOneWindingCoordinates
+import ConstructionTargets.IntegralSingularHomologyComparison
 
 /-!
 # Blueprint for APM t00J06
@@ -42,9 +45,55 @@ def apm_t00J06_imageSubgroup
     Subgroup (FundamentalGroup S (f apm_t00J06_torusBase)) :=
   (FundamentalGroup.map f apm_t00J06_torusBase).range
 
-/-- **LIBRARY (surface classification / finite-cover homology).**  The image
-of the fundamental group of a torus in a closed orientable genus-two surface
-has infinite index.  Mathlib encodes infinite subgroup index by `0`. -/
+/-- A subgroup carried by a copy of `ℤ²` has infinite index in a group surjecting onto `ℤ⁴`:
+a finite index `m` would put `(m!) • ℤ⁴`, of rank four, inside the image of `ℤ²`. -/
+theorem apm_t00J06_torus_image_index_zero_aux_rank {G T : Type*} [Group G] [Group T]
+    (φ : G →* Multiplicative (Fin 4 → ℤ)) (hφ : Function.Surjective φ)
+    (ψ : T →* G) (e : T ≃* Multiplicative (Fin 2 → ℤ)) : ψ.range.index = 0 := by
+  by_contra h
+  let n := ψ.range.index.factorial
+  have hn : 0 < n := Nat.factorial_pos _
+  let θ0 : Multiplicative (Fin 2 → ℤ) →* Multiplicative (Fin 4 → ℤ) :=
+    φ.comp (ψ.comp e.symm.toMonoidHom)
+  let θ : (Fin 2 → ℤ) →+ (Fin 4 → ℤ) := AddMonoidHom.toMultiplicative.symm θ0
+  let L : (Fin 2 → ℤ) →ₗ[ℤ] (Fin 4 → ℤ) := θ.toIntLinearMap
+  let M : (Fin 4 → ℤ) →ₗ[ℤ] (Fin 4 → ℤ) := (n : ℤ) • LinearMap.id
+  have hM : Function.Injective M := by
+    intro a b hab
+    have hn' : (n : ℤ) ≠ 0 := by exact_mod_cast hn.ne'
+    exact smul_right_injective _ hn' hab
+  have hsub : LinearMap.range M ≤ LinearMap.range L := by
+    rintro _ ⟨v, rfl⟩
+    obtain ⟨g, hg⟩ := hφ (Multiplicative.ofAdd v)
+    have hmem : g ^ n ∈ ψ.range :=
+      Subgroup.pow_mem_of_index_ne_zero_of_dvd h g
+        (fun m hm hle => Nat.dvd_factorial hm hle)
+    obtain ⟨t, ht⟩ := hmem
+    refine ⟨(e t).toAdd, ?_⟩
+    change (φ (ψ (e.symm (e t)))).toAdd = _
+    rw [e.symm_apply_apply, ht, map_pow, hg]
+    simp [M]
+  have h4 : Module.finrank ℤ (LinearMap.range M) = 4 := by
+    rw [LinearMap.finrank_range_of_inj hM]; simp
+  have h2 : Module.finrank ℤ (LinearMap.range L) ≤ 2 := by
+    simpa using LinearMap.finrank_range_le L
+  have := Submodule.finrank_mono hsub
+  omega
+
+/-- The `ModuleCat ℤ` first homology of the hypothesis, in the additive-group presentation used
+by the Hurewicz map. -/
+theorem apm_t00J06_torus_image_index_zero_aux_h1
+    (S : Type) [TopologicalSpace S]
+    (e : apm_t00J06_H 1 S ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) :
+    Nonempty (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 S ≃+ (Fin 4 → ℤ)) := by
+  let c := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of S) 1
+  let i := c.symm ≪≫ ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso e
+  exact ⟨i.addCommGroupIsoToAddEquiv⟩
+
+/-- The image of the fundamental group of a torus in a closed orientable genus-two surface
+has infinite index (no surface classification is needed: `_aux_rank` with the Hurewicz
+surjection onto `H₁ ≅ ℤ⁴`). Mathlib encodes infinite subgroup index by `0`. -/
 theorem apm_t00J06_torus_image_index_zero
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S]
@@ -53,7 +102,18 @@ theorem apm_t00J06_torus_image_index_zero
     (hS : apm_t00J06_hasGenusTwoHomology S)
     (f : C(apm_t00J06_Torus, S)) :
     (apm_t00J06_imageSubgroup f).index = 0 := by
-  sorry
+  obtain ⟨e⟩ := hS.2.1
+  obtain ⟨a⟩ := apm_t00J06_torus_image_index_zero_aux_h1 S e
+  let x0 := f apm_t00J06_torusBase
+  let φ : FundamentalGroup S x0 →* Multiplicative (Fin 4 → ℤ) :=
+    (AddMonoidHom.toMultiplicative a.toAddMonoidHom).comp
+      (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x0)
+  have hφ : Function.Surjective φ :=
+    (Multiplicative.ofAdd.surjective.comp (a.surjective.comp Multiplicative.toAdd.surjective)).comp
+      (ConstructionTargets.DegreeOneHurewiczSurjective.fundamentalGroupH1Hom_surjective x0)
+  exact apm_t00J06_torus_image_index_zero_aux_rank φ hφ
+    (FundamentalGroup.map f apm_t00J06_torusBase)
+    ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord
 
 /- **LIBRARY (covering-subgroup correspondence).**  An infinite-index image
 subgroup is realized by a connected cover, the original map lifts to that
