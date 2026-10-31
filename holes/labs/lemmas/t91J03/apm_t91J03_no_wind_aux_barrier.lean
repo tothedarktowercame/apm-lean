@@ -188,7 +188,70 @@ lemma apm_t91J03_crossing (α β : C(I, ℝ × ℝ))
     (hα : ∀ s, 0 ≤ (α s).2 ∧ (α s).2 ≤ 1) (hβ0 : (β 0).2 = 0) (hβ1 : (β 1).2 = 1)
     (hl : ∀ t, (α 0).1 < (β t).1) (hr : ∀ t, (β t).1 < (α 1).1) :
     ∃ s t, α s = β t := by
-  sorry
+  by_contra hcon
+  push_neg at hcon
+  have hfcont : Continuous fun p : I × I =>
+      ((α p.1).1 - (β p.2).1 : ℂ) + ((α p.1).2 - (β p.2).2 : ℂ) * Complex.I := by
+    fun_prop
+  set f : C(I × I, ℂ) := ⟨fun p => ((α p.1).1 - (β p.2).1 : ℂ) +
+    ((α p.1).2 - (β p.2).2 : ℂ) * Complex.I, hfcont⟩ with hfdef
+  have hfne : ∀ p : I × I, f p ≠ 0 := by
+    intro p hp
+    have hre : (α p.1).1 - (β p.2).1 = 0 := by
+      have h1 := congrArg Complex.re hp
+      simp [f] at h1
+      linarith
+    have him : (α p.1).2 - (β p.2).2 = 0 := by
+      have h1 := congrArg Complex.im hp
+      simp [f] at h1
+      linarith
+    exact hcon p.1 p.2 (Prod.ext (sub_eq_zero.1 hre) (sub_eq_zero.1 him))
+  have hnorm : ∀ p : I × I, 0 < ‖f p‖ := fun p => norm_pos_iff.2 (hfne p)
+  have hmem : ∀ p : I × I, f p / (‖f p‖ : ℂ) ∈ Submonoid.unitSphere ℂ := by
+    intro p
+    have h1 : ‖f p / (‖f p‖ : ℂ)‖ = 1 := by
+      rw [norm_div, Complex.norm_real, norm_norm]
+      exact div_self (hnorm p).ne'
+    simpa [Submonoid.unitSphere] using h1
+  have hHcont : Continuous fun p : I × I =>
+      (⟨f p / (‖f p‖ : ℂ), hmem p⟩ : Circle) :=
+    (Continuous.div f.continuous
+      (Complex.continuous_ofReal.comp (continuous_norm.comp f.continuous))
+      (fun p => Complex.ofReal_ne_zero.2 (hnorm p).ne')).subtype_mk hmem
+  set H : C(I × I, Circle) := ⟨fun p => ⟨f p / (‖f p‖ : ℂ), hmem p⟩, hHcont⟩ with hHdef
+  set a := Complex.arg (H (0, 0) : ℂ) with hadef
+  have h0 : H (0, 0) = Circle.exp a := (Circle.exp_arg _).symm
+  set θ := ConstructionTargets.PeriodicCircleHomotopyWinding.liftedSquare H a h0 with hθdef
+  have key : ∀ p : I × I, Real.cos (θ p) = ((H p : ℂ)).re ∧
+      Real.sin (θ p) = (H p : ℂ).im := by
+    intro p
+    have e : Circle.exp (θ p) = H p :=
+      ConstructionTargets.PeriodicCircleHomotopyWinding.exp_liftedSquare H a h0 p
+    rw [← e]
+    simp [Circle.coe_exp, Complex.exp_mul_I, ← Complex.ofReal_cos, ← Complex.ofReal_sin]
+  have hre : ∀ p : I × I, (H p : ℂ).re = ((α p.1).1 - (β p.2).1) / ‖f p‖ := by
+    intro p
+    show (f p / (‖f p‖ : ℂ)).re = _
+    rw [Complex.div_ofReal_re]
+    simp [f]
+  have him : ∀ p : I × I, (H p : ℂ).im = ((α p.1).2 - (β p.2).2) / ‖f p‖ := by
+    intro p
+    show (f p / (‖f p‖ : ℂ)).im = _
+    rw [Complex.div_ofReal_im]
+    simp [f]
+  exact apm_t91J03_crossing_aux_corners θ
+    (fun t => by
+      rw [(key _).1, hre]
+      exact div_neg_of_neg_of_pos (sub_neg.2 (hl t)) (hnorm _))
+    (fun t => by
+      rw [(key _).1, hre]
+      exact div_pos (sub_pos.2 (hr t)) (hnorm _))
+    (fun s => by
+      rw [(key _).2, him, hβ0, sub_zero]
+      exact div_nonneg (hα s).1 (hnorm _).le)
+    (fun s => by
+      rw [(key _).2, him, hβ1]
+      exact div_nonpos_of_nonpos_of_nonneg (sub_nonpos.2 (hα s).2) (hnorm _).le)
 
 /-- The periodic lift of a circle self-map, by `Circle.isCoveringMap_exp` and
 `IsCoveringMap.existsUnique_continuousMap_lifts` on `ℝ` (or `CircleExponentialPathLift`).
@@ -196,7 +259,41 @@ lemma apm_t91J03_crossing (α β : C(I, ℝ × ℝ))
 lemma apm_t91J03_periodic_lift (c : C(Circle, Circle)) :
     ∃ (θ : C(ℝ, ℝ)) (d : ℤ), (∀ t, Circle.exp (θ t) = c (Circle.exp (2 * Real.pi * t))) ∧
       ∀ t, θ (t + 1) = θ t + 2 * Real.pi * d := by
-  sorry
+  set f : C(ℝ, Circle) :=
+    ⟨fun t => c (Circle.exp (2 * Real.pi * t)),
+      c.continuous.comp (Circle.exp.continuous.comp (by continuity))⟩ with hf
+  have hper : ∀ t : ℝ, f (t + 1) = f t := by
+    intro t
+    have e : 2 * Real.pi * (t + 1) = 2 * Real.pi * t + 2 * Real.pi := by ring
+    simp only [hf, ContinuousMap.coe_mk, e, Circle.exp_add_two_pi]
+  obtain ⟨e₀, he₀⟩ : ∃ e : ℝ, Circle.exp e = f 0 := ⟨Complex.arg (f 0), Circle.exp_arg _⟩
+  obtain ⟨θ, ⟨-, hθlift⟩, -⟩ :=
+    Circle.isCoveringMap_exp.existsUnique_continuousMap_lifts f 0 e₀ he₀
+  have hlift : ∀ t : ℝ, Circle.exp (θ t) = f t := fun t => congr_fun hθlift t
+  have h10 : f 1 = f 0 := by simpa using hper 0
+  obtain ⟨d, hd⟩ := Circle.exp_eq_exp.mp ((hlift 1).trans (h10.trans (hlift 0).symm))
+  have he' : Circle.exp (θ 1) = f 0 := (hlift 1).trans h10
+  obtain ⟨L, -, hLuniq⟩ :=
+    Circle.isCoveringMap_exp.existsUnique_continuousMap_lifts f 0 (θ 1) he'
+  have h2pi : Circle.exp (↑d * (2 * Real.pi)) = 1 := by
+    rw [Circle.exp_intCast_mul, Circle.exp_two_pi, one_zpow]
+  have h1 := hLuniq ⟨fun t => θ t + ↑d * (2 * Real.pi), θ.continuous.add continuous_const⟩
+    ⟨by show θ 0 + ↑d * (2 * Real.pi) = θ 1
+        exact hd.symm,
+     funext fun t => by
+       show Circle.exp (θ t + ↑d * (2 * Real.pi)) = f t
+       rw [Circle.exp_add, h2pi, mul_one]
+       exact hlift t⟩
+  have h2 := hLuniq ⟨fun t => θ (t + 1), θ.continuous.comp (continuous_add_const 1)⟩
+    ⟨by show θ (0 + 1) = θ 1
+        rw [zero_add],
+     funext fun t => (hlift (t + 1)).trans (hper t)⟩
+  have hshift := h1.trans h2.symm
+  refine ⟨θ, d, fun t => hlift t, fun t => ?_⟩
+  have h := DFunLike.congr_fun hshift t
+  simp only [ContinuousMap.coe_mk] at h
+  rw [← h]
+  ring
 
 /-- The lift displacement is the action on `H₁`. Both sides are additive in `a`, and `H₁(Circle)`
 is generated by the Hurewicz image of the positive loop
