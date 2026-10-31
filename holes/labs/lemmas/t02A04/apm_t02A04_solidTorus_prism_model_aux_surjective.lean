@@ -2646,6 +2646,27 @@ lemma apm_t02A04_solidTorus_prism_model_aux_top (i : Fin 6) (j k : Fin 3)
         (i, j, k) y hy a haold
   · exact hnext
 
+/-- The step of the staircase over facet `i'` matching step `k` over facet `i`. -/
+def apm_t02A04_solidTorus_prism_model_aux_refaceStep (i i' : Fin 6) (k : Fin 3) : Fin 3 :=
+  if i' = i then k
+  else if i' = i + 1 then if k = 2 then 1 else 0
+  else if i = i' + 1 then if k = 0 then 0 else 2
+  else 0
+
+/-- Finite check of the two staircases: a vertex of prism `(i, j, k)` whose row lies in
+facet `i'` is a vertex of prism `(i', j, refaceStep i i' k)`. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_reface_aux_bottom : ∀ (i i' : Fin 6) (j k m : Fin 3), m ≤ k →
+    apm_t02A04_prismDisk i m ∈ apm_t02A04_coneFacet i' →
+    apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) j ∈
+      apm_t02A04_prismFacet (i', j, apm_t02A04_solidTorus_prism_model_aux_refaceStep i i' k) := by
+  decide +kernel
+
+lemma apm_t02A04_solidTorus_prism_model_aux_reface_aux_top : ∀ (i i' : Fin 6) (j k m : Fin 3), k ≤ m →
+    apm_t02A04_prismDisk i m ∈ apm_t02A04_coneFacet i' →
+    apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1) ∈
+      apm_t02A04_prismFacet (i', j, apm_t02A04_solidTorus_prism_model_aux_refaceStep i i' k) := by
+  decide +kernel
+
 /-- Change of cone facet. If the disk weights also lie in facet `i'`, the support of `y`
 lies in rows of `coneFacet i ∩ coneFacet i'` (`_cone_model_aux_injective_aux_facet_aux_bary`
 for both), which keep their relative order, so `y` lies in a prism over `i'` and the same
@@ -2678,32 +2699,20 @@ lemma apm_t02A04_solidTorus_prism_model_aux_reface (q : Fin 6 × Fin 3 × Fin 3)
     ∃ k', y ∈ apm_t02A04_prismHull (i', q.2.1, k') := by
   classical
   rcases q with ⟨i, j, k⟩
-  let k' : Fin 3 :=
-    if i' = i then k
-    else if i' = i + 1 then if k = 2 then 1 else 0
-    else if i = i' + 1 then if k = 0 then 0 else 2
-    else 0
-  refine ⟨k', apm_t02A04_solidTorus_prism_model_aux_mem_hull _ y
+  refine ⟨apm_t02A04_solidTorus_prism_model_aux_refaceStep i i' k, apm_t02A04_solidTorus_prism_model_aux_mem_hull _ y
     (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k) y hy).1
     (apm_t02A04_solidTorus_prism_model_aux_agree_aux_mass (i, j, k) y hy).1 ?_⟩
   intro x hx
   by_cases hxo : x ∈ apm_t02A04_prismFacet (i, j, k)
   · simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
-      Finset.mem_filter, Finset.mem_univ, true_and] at hxo hx
+      Finset.mem_filter, Finset.mem_univ, true_and] at hxo
     rcases hxo with ⟨m, hm, rfl⟩ | ⟨m, hm, rfl⟩
-    all_goals
-      by_cases hii : i' = i
-      · subst i'
-        exfalso
-        apply hx
-        simp [k']
-        first | exact Or.inl ⟨m, hm, rfl⟩ | exact Or.inr ⟨m, hm, rfl⟩
-      apply apm_t02A04_solidTorus_prism_model_aux_reface_aux_row
-        (i, j, k) i' y hy hi'
-      set_option maxHeartbeats 10000000 in
-        fin_cases i <;> fin_cases i' <;> fin_cases j <;> fin_cases k <;> fin_cases m <;>
-          simp_all [k', apm_t02A04_prismDisk, apm_t02A04_coneFacet,
-            apm_t02A04_coneIdx, apm_t02A04_prismIdx, Fin.forall_fin_succ]
+    · by_cases hrow : apm_t02A04_prismDisk i m ∈ apm_t02A04_coneFacet i'
+      · exact absurd (apm_t02A04_solidTorus_prism_model_aux_reface_aux_bottom i i' j k m hm hrow) hx
+      · exact apm_t02A04_solidTorus_prism_model_aux_reface_aux_row (i, j, k) i' y hy hi' _ hrow _
+    · by_cases hrow : apm_t02A04_prismDisk i m ∈ apm_t02A04_coneFacet i'
+      · exact absurd (apm_t02A04_solidTorus_prism_model_aux_reface_aux_top i i' j k m hm hrow) hx
+      · exact apm_t02A04_solidTorus_prism_model_aux_reface_aux_row (i, j, k) i' y hy hi' _ hrow _
   · exact apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy x hxo
 set_option maxHeartbeats 200000
 
@@ -2752,6 +2761,53 @@ lemma apm_t02A04_solidTorus_prism_model_aux_staircase_real (k k' : Fin 3)
     simp at ⊢ <;>
     linarith
 
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_vertexIdx (d d' : Fin 7) (w w' : Fin 3)
+    (h : apm_t02A04_prismIdx d w = apm_t02A04_prismIdx d' w') : d = d' ∧ w = w' := by
+  have hv := congrArg Fin.val h
+  simp only [apm_t02A04_prismIdx] at hv
+  have h1 := w.isLt
+  have h2 := w'.isLt
+  exact ⟨Fin.ext (by omega), Fin.ext (by omega)⟩
+
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowInj (i : Fin 6) : Function.Injective (apm_t02A04_prismDisk i) := by
+  fin_cases i <;> decide
+
+/-- A vertex outside the staircase: not on the bottom (`w ≠ j` or above the step) and not on
+the top (`w ≠ j + 1` or below the step). -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet (i : Fin 6) (j k m w : Fin 3)
+    (h1 : w ≠ j ∨ k < m) (h2 : w ≠ j + 1 ∨ m < k) :
+    apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) w ∉ apm_t02A04_prismFacet (i, j, k) := by
+  intro h
+  simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image, Finset.mem_filter,
+    Finset.mem_univ, true_and] at h
+  rcases h with ⟨n, hn, h⟩ | ⟨n, hn, h⟩
+  · obtain ⟨hd, hw⟩ := apm_t02A04_solidTorus_prism_model_aux_staircase_aux_vertexIdx _ _ _ _ h
+    have hnm := apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowInj i hd
+    subst hnm
+    subst hw
+    rcases h1 with h1 | h1
+    · exact h1 rfl
+    · exact absurd hn (not_le.2 h1)
+  · obtain ⟨hd, hw⟩ := apm_t02A04_solidTorus_prism_model_aux_staircase_aux_vertexIdx _ _ _ _ h
+    have hnm := apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowInj i hd
+    subst hnm
+    subst hw
+    rcases h2 with h2 | h2
+    · exact h2 rfl
+    · exact absurd hn (not_le.2 h2)
+
+/-- The circle weight is the sum over the three rows when the other rows are empty. -/
+lemma apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowSum (i : Fin 6) (j : Fin 3) (y : EuclideanSpace ℝ (Fin 21))
+    (hout : ∀ d, d ∉ apm_t02A04_coneFacet i → y (apm_t02A04_prismIdx d (j + 1)) = 0) :
+    ∑ m, y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1)) =
+      apm_t02A04_circleWeight j y := by
+  have him : Finset.univ.image (apm_t02A04_prismDisk i) = apm_t02A04_coneFacet i := by
+    fin_cases i <;> decide
+  have h := Finset.sum_subset (Finset.subset_univ (apm_t02A04_coneFacet i))
+    (fun d _ (hd : d ∉ apm_t02A04_coneFacet i) => hout d hd)
+  unfold apm_t02A04_circleWeight
+  rw [← h, ← him, Finset.sum_image (fun a _ b _ hab => apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowInj i hab)]
+
 /-- Two points over the same facet and edge with equal disk weights and circle weight are
 equal: read `b m = y (prismIdx (d m) j)`, `t m = y (prismIdx (d m) (j + 1))`; the step
 conditions and all other coordinates come from `_aux_agree_aux_zero`; apply
@@ -2782,22 +2838,15 @@ lemma apm_t02A04_solidTorus_prism_model_aux_staircase (i : Fin 6) (j k k' : Fin 
     (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k) y hy).1
   have hnn' :=
     (apm_t02A04_solidTorus_prism_model_aux_weight_mem (i, j, k') y' hy').1
-  have hz (m : Fin 3) :
-      y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 2)) = 0 := by
-    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy
-    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
-      Finset.mem_filter, Finset.mem_univ, true_and]
-    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
-      fin_cases i <;> fin_cases j <;> fin_cases k <;> fin_cases m <;> fin_cases n <;>
-      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
-  have hz' (m : Fin 3) :
-      y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 2)) = 0 := by
-    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy'
-    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
-      Finset.mem_filter, Finset.mem_univ, true_and]
-    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
-      fin_cases i <;> fin_cases j <;> fin_cases k <;> fin_cases m <;> fin_cases n <;>
-      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
+  have hj1 : ∀ j : Fin 3, j + 1 ≠ j := by decide
+  have hj2 : ∀ j : Fin 3, j + 2 ≠ j := by decide
+  have hj21 : ∀ j : Fin 3, j + 2 ≠ j + 1 := by decide
+  have hz (m : Fin 3) : y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 2)) = 0 :=
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k m _ (Or.inl (hj2 j)) (Or.inl (hj21 j)))
+  have hz' (m : Fin 3) : y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 2)) = 0 :=
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy' _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k' m _ (Or.inl (hj2 j)) (Or.inl (hj21 j)))
   have hrow : ∀ m, b m + t m = b' m + t' m := by
     intro m
     have h := congrArg
@@ -2840,57 +2889,21 @@ lemma apm_t02A04_solidTorus_prism_model_aux_staircase (i : Fin 6) (j k k' : Fin 
       subst d
       fin_cases m <;> simp [apm_t02A04_coneFacet, apm_t02A04_prismDisk]
   have htop : ∑ m, t m = ∑ m, t' m := by
-    have ho0 := hout (0 : Fin 7)
-    have ho1 := hout (1 : Fin 7)
-    have ho2 := hout (2 : Fin 7)
-    have ho3 := hout (3 : Fin 7)
-    have ho4 := hout (4 : Fin 7)
-    have ho5 := hout (5 : Fin 7)
-    have ho6 := hout (6 : Fin 7)
-    have ho0' := hout' (0 : Fin 7)
-    have ho1' := hout' (1 : Fin 7)
-    have ho2' := hout' (2 : Fin 7)
-    have ho3' := hout' (3 : Fin 7)
-    have ho4' := hout' (4 : Fin 7)
-    have ho5' := hout' (5 : Fin 7)
-    have ho6' := hout' (6 : Fin 7)
-    set_option maxHeartbeats 20000000 in
-      fin_cases i <;> fin_cases j <;>
-        simp_all [t, t', apm_t02A04_circleWeight, apm_t02A04_prismDisk,
-          apm_t02A04_coneFacet, apm_t02A04_coneIdx, Fin.sum_univ_succ] <;>
-        linarith
-  have hk0 : ∀ m, m < k → t m = 0 := by
-    intro m hm
-    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy
-    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
-      Finset.mem_filter, Finset.mem_univ, true_and]
-    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
-      fin_cases i <;> fin_cases j <;> fin_cases k <;> fin_cases m <;> fin_cases n <;>
-      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
-  have hk2 : ∀ m, k < m → b m = 0 := by
-    intro m hm
-    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy
-    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
-      Finset.mem_filter, Finset.mem_univ, true_and]
-    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
-      fin_cases i <;> fin_cases j <;> fin_cases k <;> fin_cases m <;> fin_cases n <;>
-      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
-  have hk0' : ∀ m, m < k' → t' m = 0 := by
-    intro m hm
-    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy'
-    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
-      Finset.mem_filter, Finset.mem_univ, true_and]
-    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
-      fin_cases i <;> fin_cases j <;> fin_cases k' <;> fin_cases m <;> fin_cases n <;>
-      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
-  have hk2' : ∀ m, k' < m → b' m = 0 := by
-    intro m hm
-    apply apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy'
-    simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image,
-      Finset.mem_filter, Finset.mem_univ, true_and]
-    rintro (⟨n, hn, h⟩ | ⟨n, hn, h⟩) <;>
-      fin_cases i <;> fin_cases j <;> fin_cases k' <;> fin_cases m <;> fin_cases n <;>
-      simp_all [apm_t02A04_prismIdx, apm_t02A04_prismDisk, apm_t02A04_coneIdx]
+    change ∑ m, y (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1)) =
+      ∑ m, y' (apm_t02A04_prismIdx (apm_t02A04_prismDisk i m) (j + 1))
+    rw [apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowSum i j y hout, apm_t02A04_solidTorus_prism_model_aux_staircase_aux_rowSum i j y' hout', hw]
+  have hk0 : ∀ m, m < k → t m = 0 := fun m hm =>
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k m _ (Or.inl (hj1 j)) (Or.inr hm))
+  have hk2 : ∀ m, k < m → b m = 0 := fun m hm =>
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k) y hy _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k m _ (Or.inr hm) (Or.inl (hj1 j).symm))
+  have hk0' : ∀ m, m < k' → t' m = 0 := fun m hm =>
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy' _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k' m _ (Or.inl (hj1 j)) (Or.inr hm))
+  have hk2' : ∀ m, k' < m → b' m = 0 := fun m hm =>
+    apm_t02A04_solidTorus_prism_model_aux_agree_aux_zero (i, j, k') y' hy' _
+      (apm_t02A04_solidTorus_prism_model_aux_staircase_aux_offFacet i j k' m _ (Or.inr hm) (Or.inl (hj1 j).symm))
   have ht : t = t' :=
     apm_t02A04_solidTorus_prism_model_aux_staircase_real k k' b t b' t'
       (fun m ↦ hnn _) (fun m ↦ hnn _) (fun m ↦ hnn' _) (fun m ↦ hnn' _)
@@ -3613,7 +3626,67 @@ lemma apm_t02A04_quotientComplex_model_aux_overlap (q : Fin 6 × Fin 3 × Fin 3)
     ∃ t : ℝ, 0 ≤ t ∧ t ≤ 1 ∧
       z = (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx i).castSucc +
         t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (apm_t02A04_curveIdx (i + 1)).castSucc := by
-  sorry
+  classical
+  let P := (apm_t02A04_gluedPrismFacet q).image
+    (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)
+  let D := (apm_t02A04_gluedConeFacet i).image
+    (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)
+  have hP : P ∈ apm_t02A04_gluedComplex.faces := by
+    refine ⟨⟨apm_t02A04_gluedPrismFacet q, ?_, Finset.Subset.refl _⟩, ?_⟩
+    · exact Finset.mem_union_left _ (Finset.mem_image_of_mem _ (Finset.mem_univ q))
+    · have hne : P.Nonempty := by
+        refine Finset.image_nonempty.mpr ?_
+        refine ⟨(apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 q.2.2) q.2.1).castSucc, ?_⟩
+        rw [apm_t02A04_gluedPrismFacet, Finset.mem_map]
+        refine ⟨_, ?_, rfl⟩
+        simp only [apm_t02A04_prismFacet, Finset.mem_union, Finset.mem_image, Finset.mem_filter,
+          Finset.mem_univ, true_and]
+        exact Or.inl ⟨q.2.2, le_rfl, rfl⟩
+      exact fun h => hne.ne_empty (by simpa using h)
+  have hD : D ∈ apm_t02A04_gluedComplex.faces := by
+    refine ⟨⟨apm_t02A04_gluedConeFacet i, ?_, Finset.Subset.refl _⟩, ?_⟩
+    · exact Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ i))
+    · simp [D, apm_t02A04_gluedConeFacet, apm_t02A04_coneFacet]
+  have hzinter : z ∈ convexHull ℝ (↑(P ∩ D) : Set (EuclideanSpace ℝ (Fin 22))) := by
+    simpa only [Finset.coe_inter] using
+      (apm_t02A04_gluedComplex.inter_subset_convexHull hP hD ⟨hq, hi⟩)
+  let a := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (apm_t02A04_curveIdx i).castSucc
+  let b := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (apm_t02A04_curveIdx (i + 1)).castSucc
+  have hinter : (↑(P ∩ D) : Set (EuclideanSpace ℝ (Fin 22))) ⊆ ({a, b} : Set _) := by
+    intro x hx
+    rcases Finset.mem_inter.mp hx with ⟨hxP, hxD⟩
+    rcases Finset.mem_image.mp hxP with ⟨k, hk, rfl⟩
+    rcases Finset.mem_image.mp hxD with ⟨d, hd, heq⟩
+    have hind0 : k = d :=
+      (apm_t02A04_attachedDisk_cone_model_aux_basisVertex_injective 22 heq).symm
+    simp only [apm_t02A04_gluedConeFacet, Finset.mem_image] at hd
+    rcases hd with ⟨e, he, rfl⟩
+    have hind : k = apm_t02A04_gluedIdxD e := hind0
+    simp only [apm_t02A04_coneFacet, Finset.mem_insert, Finset.mem_singleton] at he
+    rcases he with rfl | rfl | rfl
+    · have hlast := congrArg Fin.val hind
+      have hklt : k.val < 21 := by
+        rcases Finset.mem_map.mp hk with ⟨k', -, rfl⟩
+        exact k'.isLt
+      simp [apm_t02A04_gluedIdxD] at hlast
+      omega
+    · left
+      simp only [a]
+      congr 1
+      simpa only [(apm_t02A04_quotientComplex_model_aux_idx).1 i] using hind
+    · right
+      simp only [b]
+      congr 1
+      simpa only [(apm_t02A04_quotientComplex_model_aux_idx).1 (i + 1)] using hind
+  have hzedge : z ∈ convexHull ℝ ({a, b} : Set _) :=
+    convexHull_mono hinter hzinter
+  have hzseg : z ∈ segment ℝ a b := by
+    simpa [convexHull_pair] using hzedge
+  rw [segment_eq_image] at hzseg
+  rcases hzseg with ⟨t, ⟨ht0, ht1⟩, rfl⟩
+  exact ⟨t, ht0, ht1, by simp [a, b]⟩
 
 /-- On curve edge `i` the two formulas give the same point of `X`: the prism side is
 `(arcPoint i t, arcPoint i t ^ 2)` (`_prism_model_aux_edge_map` with `_aux_map_eq`), the
@@ -3703,7 +3776,86 @@ lemma apm_t02A04_quotientComplex_model_aux_centre :
       {ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22 (Fin.last 21)} ∈ apm_t02A04_gluedComplex.faces ∧
       apm_t02A04_gluedMap ⟨_, hv⟩ =
         apm_t02a04_diskInclusion ⟨0, by simp [apm_t02a04_Disk]⟩ := by
-  sorry
+  classical
+  let v := ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22
+    (Fin.last 21)
+  have hlast : v (Fin.last 21) = 1 := by
+    simp [v, ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+      EuclideanSpace.single_apply]
+  have hnot : ¬ ∃ q, v ∈ apm_t02A04_gluedPrismHull q := by
+    rintro ⟨q, hq⟩
+    have hz : ∀ z ∈ (↑((apm_t02A04_gluedPrismFacet q).image
+        (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)) :
+          Set (EuclideanSpace ℝ (Fin 22))), z (Fin.last 21) = 0 := by
+      intro z hz
+      obtain ⟨k, hk, rfl⟩ := Finset.mem_image.mp hz
+      obtain ⟨j, hj, rfl⟩ := Finset.mem_map.mp hk
+      rw [ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply, if_neg]
+      exact (Fin.castSucc_ne_last j) ∘ Eq.symm
+    have hall : ∀ z ∈ apm_t02A04_gluedPrismHull q, z (Fin.last 21) = 0 := by
+      exact convexHull_min hz
+        (convex_hyperplane
+          (PiLp.proj 2 (fun _ : Fin 22 ↦ ℝ) (Fin.last 21)).toLinearMap.isLinear 0)
+    exact zero_ne_one (by rw [← hall v hq, hlast])
+  have hcentre : Fin.last 21 ∈ apm_t02A04_gluedConeFacet 0 := by
+    simp [apm_t02A04_gluedConeFacet, apm_t02A04_gluedIdxD,
+      apm_t02A04_coneFacet]
+  have hface : {v} ∈ apm_t02A04_gluedComplex.faces := by
+    apply ConstructionTargets.RealProjectivePlaneTriangulation.basisComplex_vertex_mem
+      (f := apm_t02A04_gluedConeFacet 0)
+    · exact Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ 0))
+    · exact hcentre
+  have hv : v ∈ apm_t02A04_gluedComplex.space := by
+    rw [Geometry.SimplicialComplex.mem_space_iff]
+    exact ⟨{v}, hface, by simp⟩
+  refine ⟨hv, hface, ?_⟩
+  have hcone : ∃ i, v ∈ apm_t02A04_gluedConeHull i := by
+    refine ⟨0, ?_⟩
+    apply subset_convexHull ℝ
+    exact Finset.mem_image_of_mem _ hcentre
+  let i := Classical.choose hcone
+  have hi := Classical.choose_spec hcone
+  have hp := (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 v hi
+  have hp0 : apm_t02A04_projD v =
+      ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0 := by
+    ext d
+    have heq : apm_t02A04_gluedIdxD d = Fin.last 21 ↔ d = 0 := by
+      constructor
+      · intro hd
+        apply apm_t02A04_quotientComplex_model_aux_idx.2
+        rw [hd]
+        rfl
+      · rintro rfl
+        rfl
+    have heq' : apm_t02A04_gluedIdxD d = (21 : Fin 22) ↔ d = 0 := by
+      simpa using heq
+    by_cases hd : d = 0
+    · subst d
+      rfl
+    · have hg : apm_t02A04_gluedIdxD d ≠ (21 : Fin 22) :=
+        fun h ↦ hd (heq'.mp h)
+      have hgr : (21 : Fin 22) ≠ apm_t02A04_gluedIdxD d := fun h ↦ hg h.symm
+      simp [apm_t02A04_projD, v,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex, hd, hg, hgr]
+  change apm_t02A04_gluedMap ⟨v, hv⟩ = _
+  simp only [apm_t02A04_gluedMap, dif_neg hnot, dif_pos hcone]
+  change apm_t02a04_diskInclusion
+      (ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+        (apm_t02A04_conePoint i (apm_t02A04_projD v))) = _
+  rw [hp0]
+  apply congrArg apm_t02a04_diskInclusion
+  apply Subtype.ext
+  have hpoint_all : ∀ j : Fin 6, apm_t02A04_conePoint j
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7 0) = 0 := by
+    intro j
+    fin_cases j <;>
+      simp [apm_t02A04_conePoint,
+        ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex,
+        EuclideanSpace.single_apply, apm_t02A04_coneIdx]
+  have hpoint := hpoint_all i
+  rw [hpoint]
+  simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp]
 
 /-- Pasting over the 60 closed hulls (as `_prism_model_aux_continuous`): on a prism hull
 `gluedMap` is `solidInclusion ∘ prismPoint q ∘ projS` (`_prism_model_aux_agree`,
