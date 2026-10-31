@@ -4025,7 +4025,86 @@ lemma apm_t02A04_quotientComplex_model_aux_map_cone (z : apm_t02A04_gluedComplex
 `diskInclusion ∘ diskClamp ∘ conePoint i ∘ projD`, using `_aux_overlap` and `_aux_edge_eq`
 where the cone hull meets a prism hull. -/
 lemma apm_t02A04_quotientComplex_model_aux_continuous : Continuous apm_t02A04_gluedMap := by
-  sorry
+  classical
+  let C : (Fin 6 × Fin 3 × Fin 3) ⊕ Fin 6 → Set apm_t02A04_gluedComplex.space :=
+    Sum.elim (fun q ↦ {z | (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedPrismHull q})
+      (fun i ↦ {z | (z : EuclideanSpace ℝ (Fin 22)) ∈ apm_t02A04_gluedConeHull i})
+  have hcover : ⋃ s, C s = Set.univ := by
+    ext z
+    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+    rcases apm_t02A04_quotientComplex_model_aux_cover z z.2 with ⟨q, hq⟩ | ⟨i, hi⟩
+    · exact ⟨Sum.inl q, hq⟩
+    · exact ⟨Sum.inr i, hi⟩
+  have hclosed : ∀ s, IsClosed (C s) := by
+    intro s
+    rcases s with q | i
+    · change IsClosed ((fun z : apm_t02A04_gluedComplex.space ↦
+        (z : EuclideanSpace ℝ (Fin 22))) ⁻¹' apm_t02A04_gluedPrismHull q)
+      unfold apm_t02A04_gluedPrismHull
+      simpa only [Finset.coe_image] using
+        (((apm_t02A04_gluedPrismFacet q).finite_toSet.image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)).isCompact_convexHull ℝ).isClosed.preimage
+            (continuous_subtype_val : Continuous
+              (fun z : apm_t02A04_gluedComplex.space ↦ (z : EuclideanSpace ℝ (Fin 22))))
+    · change IsClosed ((fun z : apm_t02A04_gluedComplex.space ↦
+        (z : EuclideanSpace ℝ (Fin 22))) ⁻¹' apm_t02A04_gluedConeHull i)
+      unfold apm_t02A04_gluedConeHull
+      simpa only [Finset.coe_image] using
+        (((apm_t02A04_gluedConeFacet i).finite_toSet.image
+          (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 22)).isCompact_convexHull ℝ).isClosed.preimage
+            (continuous_subtype_val : Continuous
+              (fun z : apm_t02A04_gluedComplex.space ↦ (z : EuclideanSpace ℝ (Fin 22))))
+  refine (locallyFinite_of_finite C).continuous hcover hclosed ?_
+  intro s
+  rw [continuousOn_iff_continuous_restrict]
+  rcases s with q | i
+  · have hv : Continuous (fun z : C (Sum.inl q) ↦
+        ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) :=
+      continuous_subtype_val.comp continuous_subtype_val
+    have hproj : Continuous (fun z : C (Sum.inl q) ↦
+        apm_t02A04_projS ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) := by
+      unfold apm_t02A04_projS
+      fun_prop
+    have hp : Continuous fun z : C (Sum.inl q) ↦ apm_t02A04_prismPoint q
+        (apm_t02A04_projS ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) := by
+      rw [← continuousOn_univ]
+      exact (apm_t02A04_solidTorus_prism_model_aux_continuous_aux_piece q).comp
+        hproj.continuousOn
+        (by intro z _; exact (apm_t02A04_quotientComplex_model_aux_prism_coords q).1 _ z.2 |>.1)
+    convert apm_t02a04_continuous_solidInclusion.comp hp using 1
+    funext z
+    change apm_t02A04_gluedMap z.1 = _
+    exact apm_t02A04_quotientComplex_model_aux_map_prism z.1 q z.2
+  · have hproj : Continuous (fun z : C (Sum.inr i) ↦
+        apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) := by
+      unfold apm_t02A04_projD
+      fun_prop
+    have hpoint : Continuous fun z : C (Sum.inr i) ↦ apm_t02A04_conePoint i
+        (apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))) := by
+      rw [← continuousOn_univ]
+      exact (apm_t02A04_attachedDisk_cone_model_aux_continuous_piece i).comp
+        hproj.continuousOn
+        (by intro z _; exact (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 _ z.2 |>.1)
+    have hn : ∀ z : C (Sum.inr i), ‖apm_t02A04_conePoint i
+        (apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22)))‖ ≤ 1 :=
+      fun z ↦ apm_t02A04_attachedDisk_cone_model_aux_point_norm i _
+        ((apm_t02A04_quotientComplex_model_aux_cone_coords i).1 _ z.2).1
+    have hmem : ∀ z : C (Sum.inr i), apm_t02A04_conePoint i
+        (apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22)))
+          ∈ apm_t02a04_Disk :=
+      fun z ↦ by simpa [apm_t02a04_Disk] using hn z
+    have hf : Continuous fun z : C (Sum.inr i) ↦
+        (⟨apm_t02A04_conePoint i
+          (apm_t02A04_projD ((z : apm_t02A04_gluedComplex.space) : EuclideanSpace ℝ (Fin 22))),
+          hmem z⟩ : apm_t02a04_Disk) :=
+      hpoint.subtype_mk hmem
+    convert apm_t02a04_continuous_diskInclusion.comp hf using 1
+    funext z
+    change apm_t02A04_gluedMap z.1 = _
+    rw [apm_t02A04_quotientComplex_model_aux_map_cone z.1 i z.2]
+    apply congrArg apm_t02a04_diskInclusion
+    apply Subtype.ext
+    simp [ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp, hn z]
 
 /-- Two glued prism points with the same prism point are equal. Make subtype points of
 `prismComplex.space` from `projS z` (a prism hull lies in the space, as in the proof of
