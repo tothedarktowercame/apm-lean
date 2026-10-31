@@ -4169,12 +4169,106 @@ lemma apm_t02A04_quotientComplex_model_aux_lift_edge (i : Fin 6) (t : ℝ) :
 `_prism_model_aux_injective` shows `projS z` is the prism edge point, and
 `_cone_model_aux_edge_map` with `_cone_model_aux_injective` shows `projD z'` is the cone edge
 point. Then `_aux_prism_coords`, `_aux_cone_coords` and `_aux_lift_edge` give `z = z'`. -/
+-- A prism hull lies in the prism complex (the facet is one of the generating facets and
+-- its vertex set is nonempty: it contains the `0`-th disk vertex over circle vertex `q.2.1`).
+lemma apm_t02A04_quotientComplex_model_aux_cross_aux_prismHull_space
+    (q : Fin 6 × Fin 3 × Fin 3) :
+    apm_t02A04_prismHull q ⊆ apm_t02A04_prismComplex.space := by
+  intro z hz
+  have hm : apm_t02A04_prismIdx (apm_t02A04_prismDisk q.1 0) q.2.1 ∈
+      apm_t02A04_prismFacet q :=
+    Finset.mem_union_left _
+      (Finset.mem_image_of_mem _
+        (Finset.mem_filter.2 ⟨Finset.mem_univ 0, Fin.zero_le _⟩))
+  have hne : (apm_t02A04_prismFacet q).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21) ≠ ∅ :=
+    Finset.nonempty_iff_ne_empty.mp (Finset.image_nonempty.mpr ⟨_, hm⟩)
+  exact Geometry.SimplicialComplex.convexHull_subset_space
+    (K := apm_t02A04_prismComplex)
+    (s := (apm_t02A04_prismFacet q).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21))
+    ⟨⟨apm_t02A04_prismFacet q,
+      Finset.mem_image_of_mem _ (Finset.mem_univ q), Finset.Subset.refl _⟩, hne⟩ hz
+
+-- A cone hull lies in the cone complex (the facet `{0, i, i+1}` is nonempty).
+lemma apm_t02A04_quotientComplex_model_aux_cross_aux_coneHull_space (i : Fin 6) :
+    apm_t02A04_coneHull i ⊆ apm_t02A04_coneComplex.space := by
+  intro z hz
+  have hm : (0 : Fin 7) ∈ apm_t02A04_coneFacet i := Finset.mem_insert_self _ _
+  have hne : (apm_t02A04_coneFacet i).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7) ≠ ∅ :=
+    Finset.nonempty_iff_ne_empty.mp (Finset.image_nonempty.mpr ⟨_, hm⟩)
+  exact Geometry.SimplicialComplex.convexHull_subset_space
+    (K := apm_t02A04_coneComplex)
+    (s := (apm_t02A04_coneFacet i).image
+      (ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7))
+    ⟨⟨apm_t02A04_coneFacet i,
+      Finset.mem_image_of_mem _ (Finset.mem_univ i), Finset.Subset.refl _⟩, hne⟩ hz
+
 lemma apm_t02A04_quotientComplex_model_aux_cross (q : Fin 6 × Fin 3 × Fin 3) (i : Fin 6) (z z' : EuclideanSpace ℝ (Fin 22))
     (hz : z ∈ apm_t02A04_gluedPrismHull q) (hz' : z' ∈ apm_t02A04_gluedConeHull i) (c : Circle)
     (hd : ((ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp (apm_t02A04_conePoint i (apm_t02A04_projD z')) : apm_t02a04_Disk) : ℂ) = c)
     (hs : apm_t02A04_prismPoint q (apm_t02A04_projS z) =
       (⟨(c : ℂ), by simpa using c.property.le⟩, c ^ 2)) : z = z' := by
-  sorry
+  classical
+  obtain ⟨hSq, hSz⟩ := (apm_t02A04_quotientComplex_model_aux_prism_coords q).1 z hz
+  obtain ⟨hDi, hDz⟩ := (apm_t02A04_quotientComplex_model_aux_cone_coords i).1 z' hz'
+  obtain ⟨i', t, ht0, ht1, htc⟩ :=
+    apm_t02A04_attachedDisk_cone_model_aux_surjective_aux_circle c
+  subst htc
+  have hmemP : apm_t02A04_projS z ∈ apm_t02A04_prismComplex.space :=
+    apm_t02A04_quotientComplex_model_aux_cross_aux_prismHull_space q hSq
+  have hmemD : apm_t02A04_projD z' ∈ apm_t02A04_coneComplex.space :=
+    apm_t02A04_quotientComplex_model_aux_cross_aux_coneHull_space i hDi
+  -- `projS z` is the prism edge point over `c`, by injectivity of `prismMap`.
+  have hpP : apm_t02A04_prismMap ⟨apm_t02A04_projS z, hmemP⟩ =
+      apm_t02A04_prismMap
+        ⟨_, apm_t02A04_solidTorus_prism_model_aux_edge_mem i' t ht0 ht1⟩ := by
+    rw [apm_t02A04_solidTorus_prism_model_aux_map_eq q ⟨apm_t02A04_projS z, hmemP⟩ hSq,
+      apm_t02A04_solidTorus_prism_model_aux_edge_map i' t ht0 ht1]
+    exact hs
+  have hPS : apm_t02A04_projS z =
+      (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+        (apm_t02A04_curveIdx i') +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+          (apm_t02A04_curveIdx (i' + 1)) :=
+    Subtype.ext_iff.mp (apm_t02A04_solidTorus_prism_model_aux_injective hpP)
+  -- `projD z'` is the cone edge point over `c`, by injectivity of `coneMap`.
+  have hpD : apm_t02A04_coneMap ⟨apm_t02A04_projD z', hmemD⟩ =
+      apm_t02A04_coneMap
+        ⟨_, apm_t02A04_attachedDisk_cone_model_aux_edge_mem i' t ht0 ht1⟩ := by
+    apply Subtype.ext
+    have hcm : apm_t02A04_coneMap ⟨apm_t02A04_projD z', hmemD⟩ =
+        ConstructionTargets.RealProjectivePlaneTriangulation.diskClamp
+          (apm_t02A04_conePoint i (apm_t02A04_projD z')) := by
+      have hex : ∃ j, apm_t02A04_projD z' ∈ apm_t02A04_coneHull j := ⟨i, hDi⟩
+      simp only [apm_t02A04_coneMap]
+      rw [dif_pos hex]
+      exact congrArg _
+        (apm_t02A04_attachedDisk_cone_model_aux_agree _ i _
+          (Classical.choose_spec hex) hDi)
+    rw [hcm, hd]
+    exact (apm_t02A04_attachedDisk_cone_model_aux_edge_map i' t ht0 ht1).symm
+  have hPD : apm_t02A04_projD z' =
+      (1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+        (apm_t02A04_coneIdx i') +
+        t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+          (apm_t02A04_coneIdx (i' + 1)) :=
+    Subtype.ext_iff.mp (apm_t02A04_attachedDisk_cone_model_aux_injective hpD)
+  calc z = apm_t02A04_liftS (apm_t02A04_projS z) := hSz.symm
+    _ = apm_t02A04_liftS
+          ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+            (apm_t02A04_curveIdx i') +
+            t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 21
+              (apm_t02A04_curveIdx (i' + 1))) := by rw [hPS]
+    _ = apm_t02A04_liftD
+          ((1 - t) • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+            (apm_t02A04_coneIdx i') +
+            t • ConstructionTargets.RealProjectivePlaneTriangulation.basisVertex 7
+              (apm_t02A04_coneIdx (i' + 1))) :=
+        apm_t02A04_quotientComplex_model_aux_lift_edge i' t
+    _ = apm_t02A04_liftD (apm_t02A04_projD z') := by rw [hPD]
+    _ = z' := hDz
 
 /-- Injectivity: two prism points by `_prism_model_aux_injective` and `_aux_prism_coords`;
 two cone points by `_cone_model_aux_injective` and `_aux_cone_coords`; a prism point and a
