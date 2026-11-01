@@ -115,7 +115,20 @@ theorem double_self_cover_conjugate_homeomorph
     (hcard : ∀ x : X, Nat.card {y : X // p y = x} = 2) :
     ∃ q : Y → Y, IsCoveringMap q ∧
       ∀ y : Y, Nat.card {z : Y // q z = y} = 2 := by
-  sorry
+  let q : Y → Y := fun y ↦ e (p (e.symm y))
+  have hq : IsCoveringMap q := by
+    have h := (hp.comp_homeomorph e.symm).homeomorph_comp e
+    simpa only [q, Function.comp_apply] using h
+  refine ⟨q, hq, ?_⟩
+  intro y
+  let fiberEquiv : {z : Y // q z = y} ≃ {x : X // p x = e.symm y} :=
+    { toFun := fun z ↦ ⟨e.symm z.1, by
+          apply e.injective
+          simpa [q] using z.2⟩
+      invFun := fun x ↦ ⟨e x.1, by simpa [q] using congrArg e x.2⟩
+      left_inv := fun z ↦ Subtype.ext (e.apply_symm_apply z.1)
+      right_inv := fun x ↦ Subtype.ext (e.symm_apply_apply x.1) }
+  exact (Nat.card_congr fiberEquiv).trans (hcard (e.symm y))
 
 /-- Assembly of the affine quotient cover and the banked homeomorphism to the
 disk-polygon Klein bottle. -/
