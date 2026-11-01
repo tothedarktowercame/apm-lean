@@ -1897,7 +1897,11 @@ path connectedness from the sphere and three-circle summands. -/
 theorem apm_t97A03_invariants_aux_modelWedge_h0 :
     Nonempty (apm_t97A03_Homology apm_t97A03_modelWedge 0 ≅
       ModuleCat.of ℤ ℤ) := by
-  sorry
+  letI : PathConnectedSpace apm_t97A03_S2 :=
+    ConstructionTargets.SphereHomology.spherePathConnectedSpace 2
+  letI : PathConnectedSpace apm_t97A03_ThreeCircles :=
+    ConstructionTargets.PointWedgeVanKampen.threeCircles_pathConnected
+  exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ apm_t97A03_modelWedgeBase⟩
 
 /-- Degree one is supplied entirely by the three-circle summand.  Combine
 `PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv`, Hurewicz, and the
