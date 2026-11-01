@@ -219,7 +219,27 @@ theorem finite_piOne_no_double_self_cover :
       ∀ p : X → X,
         ¬ (IsCoveringMap p ∧
           ∀ z : X, Nat.card {y : X // p y = z} = 2) := by
-  sorry
+  intro X _ _ x hfinite p ⟨hp, hfiber⟩
+  let f := ConstructionTargets.coveringInducedFundamentalGroupMap hp x
+  let changeBase : FundamentalGroup X x ≃* FundamentalGroup X (p x) :=
+    FundamentalGroup.fundamentalGroupMulEquivOfPathConnected x (p x)
+  let rangeEquiv : FundamentalGroup X x ≃* f.range :=
+    MonoidHom.ofInjective
+      (ConstructionTargets.coveringInducedFundamentalGroupMap_injective hp x)
+  haveI : Finite (FundamentalGroup X (p x)) :=
+    Finite.of_equiv (FundamentalGroup X x) changeBase.toEquiv
+  have hindex : f.range.index = 2 := by
+    rw [← ConstructionTargets.coveringFiberCard_eq_index hp x]
+    simpa only [Set.mem_preimage, Set.mem_singleton_iff] using hfiber (p x)
+  have hrange : Nat.card f.range = Nat.card (FundamentalGroup X x) :=
+    Nat.card_congr rangeEquiv.toEquiv.symm
+  have hbase : Nat.card (FundamentalGroup X (p x)) =
+      Nat.card (FundamentalGroup X x) :=
+    Nat.card_congr changeBase.toEquiv.symm
+  have hmul := f.range.card_mul_index
+  rw [hindex, hrange, hbase] at hmul
+  have hpos : 0 < Nat.card (FundamentalGroup X x) := Nat.card_pos
+  omega
 -- END SEAT AREA
 
 end APM.T95A01
