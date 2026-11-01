@@ -761,10 +761,127 @@ theorem t99J02_chi_spec :
 `(chart w).re ± (chart w).im) / 2` lie in `[-5/16, 5/8]`. Two such with equal image in the torus
 differ by integers of size at most `15/16`, hence are equal, and the chart is injective
 (`klein_cut_chartInv_chart`). -/
+lemma t99J02_torus_injOn_aux_bounds (u : ℂ) (hu : ‖u‖ ≤ 5 / 4) :
+    let w := KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)
+    (-5 / 16 ≤ (w.re + w.im) / 2 ∧ (w.re + w.im) / 2 ≤ 5 / 8 ∧
+      -5 / 16 ≤ (w.re - w.im) / 2 ∧ (w.re - w.im) / 2 ≤ 5 / 8) := by
+  dsimp only
+  have hur : |u.re| ≤ ‖u‖ := Complex.abs_re_le_norm u
+  have hui : |u.im| ≤ ‖u‖ := Complex.abs_im_le_norm u
+  have hsq : ‖u‖ ^ 2 = u.re ^ 2 + u.im ^ 2 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]
+    ring
+  have hp : 0 ≤ 7 * ‖u‖ + 5 * u.re + 4 * u.im := by
+    have hlin : (5 * u.re + 4 * u.im) ^ 2 ≤ 41 * ‖u‖ ^ 2 := by
+      rw [hsq]
+      nlinarith [sq_nonneg (4 * u.re - 5 * u.im)]
+    nlinarith [norm_nonneg u]
+  have hm : 0 ≤ 7 * ‖u‖ + 5 * u.re - 4 * u.im := by
+    have hlin : (5 * u.re - 4 * u.im) ^ 2 ≤ 41 * ‖u‖ ^ 2 := by
+      rw [hsq]
+      nlinarith [sq_nonneg (4 * u.re + 5 * u.im)]
+    nlinarith [norm_nonneg u]
+  have hellnorm : ‖t99J02_ell u‖ ≤ 5 / 4 := by
+    rw [t99J02_ell_norm]
+    have : u.re ≤ ‖u‖ := le_trans (le_abs_self _) hur
+    nlinarith
+  by_cases he : t99J02_ell u = 0
+  · simp [he, KleinSquareDiskCutAndPaste.klein_cut_chart]
+    norm_num
+  · have hlpos : 0 < KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u) :=
+      KleinSquareDiskCutAndPaste.klein_cut_l1_pos he
+    have hc0 : 0 ≤ ‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u) :=
+      div_nonneg (norm_nonneg _) hlpos.le
+    have hc1 : ‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u) ≤ 1 := by
+      apply (div_le_one hlpos).2
+      simpa [KleinSquareDiskCutAndPaste.klein_cut_l1] using
+        Complex.norm_le_abs_re_add_abs_im (t99J02_ell u)
+    rw [KleinSquareDiskCutAndPaste.klein_cut_chart, if_neg he]
+    simp only [Complex.mul_re, Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
+      zero_mul, sub_zero]
+    have habsp : |((‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+        (t99J02_ell u).re)| +
+        |((‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+        (t99J02_ell u).im)| ≤ 5 / 4 := by
+      simp only [abs_mul, abs_of_nonneg hc0]
+      rw [← mul_add, ← KleinSquareDiskCutAndPaste.klein_cut_l1,
+        div_mul_cancel₀ _ hlpos.ne']
+      exact hellnorm
+    have hupperp :
+        (‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+          ((t99J02_ell u).re + (t99J02_ell u).im) ≤ 5 / 4 := by
+      rw [mul_add]
+      exact le_trans (add_le_add (le_abs_self _) (le_abs_self _)) habsp
+    have hupperm :
+        (‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+          ((t99J02_ell u).re - (t99J02_ell u).im) ≤ 5 / 4 := by
+      rw [mul_sub]
+      exact le_trans (add_le_add (le_abs_self _) (neg_le_abs _)) habsp
+    have hlowerp : -5 / 8 ≤ (t99J02_ell u).re + (t99J02_ell u).im := by
+      simp only [t99J02_ell]
+      nlinarith
+    have hlowerm : -5 / 8 ≤ (t99J02_ell u).re - (t99J02_ell u).im := by
+      simp only [t99J02_ell]
+      nlinarith
+    have hlowerp' : -5 / 8 ≤
+        (‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+          ((t99J02_ell u).re + (t99J02_ell u).im) := by
+      by_cases hneg : 0 ≤ (t99J02_ell u).re + (t99J02_ell u).im
+      · nlinarith [hc0]
+      · nlinarith [hc0, hc1, hlowerp]
+    have hlowerm' : -5 / 8 ≤
+        (‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+          ((t99J02_ell u).re - (t99J02_ell u).im) := by
+      by_cases hneg : 0 ≤ (t99J02_ell u).re - (t99J02_ell u).im
+      · nlinarith [hc0]
+      · nlinarith [hc0, hc1, hlowerm]
+    exact ⟨by nlinarith, by nlinarith, by nlinarith, by nlinarith⟩
+
 theorem t99J02_torus_injOn (u v : ℂ) (hu : ‖u‖ ≤ 5 / 4) (hv : ‖v‖ ≤ 5 / 4)
     (h : t95J03_torus_bridge_aux_f (t99J02_ell u) = t95J03_torus_bridge_aux_f (t99J02_ell v)) :
     t99J02_ell u = t99J02_ell v := by
-  sorry
+  have hb_u := t99J02_torus_injOn_aux_bounds u hu
+  have hb_v := t99J02_torus_injOn_aux_bounds v hv
+  have h1 := congrArg Prod.fst h
+  have h2 := congrArg Prod.snd h
+  simp only [t95J03_torus_bridge_aux_f] at h1 h2
+  obtain ⟨n, hn⟩ := t95J03_torus_bridge_aux_int_of_coe_eq h1
+  obtain ⟨m, hm⟩ := t95J03_torus_bridge_aux_int_of_coe_eq h2
+  have hn0 : n = 0 := by
+    have hlo : (-1 : ℝ) < n := by nlinarith [hb_u.1, hb_v.2.1]
+    have hhi : (n : ℝ) < 1 := by nlinarith [hb_u.2.1, hb_v.1]
+    have hlo' : (-1 : ℤ) < n := by exact_mod_cast hlo
+    have hhi' : n < (1 : ℤ) := by exact_mod_cast hhi
+    omega
+  have hm0 : m = 0 := by
+    have hlo : (-1 : ℝ) < m := by nlinarith [hb_u.2.2.1, hb_v.2.2.2]
+    have hhi : (m : ℝ) < 1 := by nlinarith [hb_u.2.2.2, hb_v.2.2.1]
+    have hlo' : (-1 : ℤ) < m := by exact_mod_cast hlo
+    have hhi' : m < (1 : ℤ) := by exact_mod_cast hhi
+    omega
+  have ha :
+      ((KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)).re +
+        (KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)).im) / 2 =
+      ((KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v)).re +
+        (KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v)).im) / 2 := by
+    rw [hn0] at hn
+    norm_num at hn
+    exact sub_eq_zero.mp hn
+  have hb :
+      ((KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)).re -
+        (KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)).im) / 2 =
+      ((KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v)).re -
+        (KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v)).im) / 2 := by
+    rw [hm0] at hm
+    norm_num at hm
+    exact sub_eq_zero.mp hm
+  have hchart : KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u) =
+      KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v) := by
+    apply Complex.ext
+    · nlinarith
+    · nlinarith
+  rw [← KleinSquareDiskCutAndPaste.klein_cut_chartInv_chart (t99J02_ell u),
+    ← KleinSquareDiskCutAndPaste.klein_cut_chartInv_chart (t99J02_ell v), hchart]
 
 /-! ### Layer 0: quotient facts -/
 
@@ -861,10 +978,101 @@ theorem t99J02_q2_neg {z z' : ConstructionTargets.Surfaces.Disk}
 
 /-- The real points `1`, `-1` of the octagon are one point of the surface; both are vertices
 (`orientable_standard_oneVertex`, transported by `orientableStandardSpaceHomeomorph`). -/
+theorem t99J02_q2_one_neg_one_aux_val (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ) =
+      Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / 8)) := rfl
+
+/-- Transport the right endpoint of an `EqvGen` along an equality of points. -/
+theorem t99J02_q2_one_neg_one_aux_of_eq {a b b' : ConstructionTargets.Surfaces.Disk}
+    (h : Relation.EqvGen (SurfaceRel true 2) a b) (e : b = b') :
+    Relation.EqvGen (SurfaceRel true 2) a b' := by
+  rw [← e]
+  exact h
+
+/-- An edge pair of the standard orientable octagon: at parameter `t` on edge `e`, paired with
+parameter `t'` on edge `e + 2`, where `t' = 1 - t`. -/
+theorem t99J02_q2_one_neg_one_aux_rel (j e : ℕ) (hj : j < 2)
+    (he : e = 4 * j ∨ e = 4 * j + 1) (t t' : Set.Icc (0 : ℝ) 1)
+    (ht : (t' : ℝ) = 1 - t.1) :
+    Relation.EqvGen (SurfaceRel true 2) (edgePoint 8 e t) (edgePoint 8 (e + 2) t') := by
+  refine Relation.EqvGen.rel _ _ ⟨j, hj, t, ?_⟩
+  rcases he with h | h
+  · subst h
+    refine Or.inl ⟨rfl, ?_⟩
+    apply Subtype.ext
+    simp only [edgePoint]
+    rw [ht]
+  · subst h
+    refine Or.inr ⟨rfl, ?_⟩
+    apply Subtype.ext
+    simp only [edgePoint]
+    rw [ht]
+
+/-- The end of one edge is the start of the next. -/
+theorem t99J02_q2_one_neg_one_aux_wrap (e : ℕ) :
+    edgePoint 8 e ⟨1, by norm_num⟩ = edgePoint 8 (e + 1) ⟨0, by norm_num⟩ := by
+  apply Subtype.ext
+  rw [t99J02_q2_one_neg_one_aux_val, t99J02_q2_one_neg_one_aux_val]
+  congr 1
+  try norm_num
+  try ring
+
+/-- The vertex chain `v₀ ~ v₃ ~ v₂ ~ v₁ ~ v₄` of the standard octagon. -/
+theorem t99J02_q2_one_neg_one_aux_chain :
+    Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 0 ⟨0, by norm_num⟩) (edgePoint 8 4 ⟨0, by norm_num⟩) := by
+  have s1 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 0 ⟨0, by norm_num⟩) (edgePoint 8 3 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (t99J02_q2_one_neg_one_aux_rel 0 0 (by norm_num) (Or.inl rfl)
+        ⟨0, by norm_num⟩ ⟨1, by norm_num⟩ (by norm_num))
+      (t99J02_q2_one_neg_one_aux_wrap 2)
+  have s2 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 3 ⟨0, by norm_num⟩) (edgePoint 8 2 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (Relation.EqvGen.symm _ _
+        (t99J02_q2_one_neg_one_aux_rel 0 1 (by norm_num) (Or.inr rfl)
+          ⟨1, by norm_num⟩ ⟨0, by norm_num⟩ (by norm_num)))
+      (t99J02_q2_one_neg_one_aux_wrap 1)
+  have s3 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 2 ⟨0, by norm_num⟩) (edgePoint 8 1 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (Relation.EqvGen.symm _ _
+        (t99J02_q2_one_neg_one_aux_rel 0 0 (by norm_num) (Or.inl rfl)
+          ⟨1, by norm_num⟩ ⟨0, by norm_num⟩ (by norm_num)))
+      (t99J02_q2_one_neg_one_aux_wrap 0)
+  have s4 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 1 ⟨0, by norm_num⟩) (edgePoint 8 4 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (t99J02_q2_one_neg_one_aux_rel 0 1 (by norm_num) (Or.inr rfl)
+        ⟨0, by norm_num⟩ ⟨1, by norm_num⟩ (by norm_num))
+      (t99J02_q2_one_neg_one_aux_wrap 3)
+  exact Relation.EqvGen.trans _ _ _ s1
+    (Relation.EqvGen.trans _ _ _ s2 (Relation.EqvGen.trans _ _ _ s3 s4))
+
 theorem t99J02_q2_one_neg_one (h1 : (1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1)
     (h2 : (-1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1) :
     surfaceQuotient true 2 ⟨1, h1⟩ = surfaceQuotient true 2 ⟨-1, h2⟩ := by
-  sorry
+  have hv1 : ((edgePoint 8 0 ⟨0, by norm_num⟩ :
+      ConstructionTargets.Surfaces.Disk) : ℂ) = 1 := by
+    rw [t99J02_q2_one_neg_one_aux_val]
+    simp
+  have hv4 : ((edgePoint 8 4 ⟨0, by norm_num⟩ :
+      ConstructionTargets.Surfaces.Disk) : ℂ) = -1 := by
+    rw [t99J02_q2_one_neg_one_aux_val]
+    have h4 : (((4 : ℕ) : ℝ) : ℂ) = 4 := by exact_mod_cast rfl
+    have h0 : ((⟨0, by norm_num⟩ : Set.Icc (0 : ℝ) 1) : ℂ) = 0 := by
+      exact_mod_cast rfl
+    have hpi : ((2 : ℂ) * (Real.pi : ℂ) * (4 + 0) / 8) = Real.pi := by
+      field_simp
+      norm_num
+    rw [h4, h0, hpi, mul_comm Complex.I (Real.pi : ℂ), Complex.exp_mul_I]
+    norm_num [Complex.cos_pi, Complex.sin_pi]
+  have e1 : edgePoint 8 0 ⟨0, by norm_num⟩ = ⟨1, h1⟩ := Subtype.ext hv1
+  have e4 : edgePoint 8 4 ⟨0, by norm_num⟩ = ⟨-1, h2⟩ := Subtype.ext hv4
+  rw [← e1, ← e4]
+  exact Quotient.sound t99J02_q2_one_neg_one_aux_chain
+
 
 /-- Identifications of the torus lift to the upper arc of the octagon. Induct on the `EqvGen`, with
 `P x y := x = y ∨ (both on the circle and the statement holds)`. A generator is an edge pair of
@@ -881,7 +1089,9 @@ theorem t99J02_edge_lift {x y : ConstructionTargets.Surfaces.Disk} (h : Relation
 /-- The small map of the collar: `ell` into the disk, then the quotient. -/
 theorem t99J02_ell_mem (u : ℂ) (hu : ‖u‖ ≤ 1) :
     t99J02_ell u ∈ Metric.closedBall (0 : ℂ) 1 := by
-  sorry
+  rw [mem_closedBall_zero_iff, t99J02_ell_norm]
+  have hre : u.re ≤ ‖u‖ := le_trans (le_abs_self u.re) (Complex.abs_re_le_norm u)
+  linarith
 
 /-- Fibres of `q₁ ∘ phi` on the upper half are fibres of `q₂`. Off the circle `phi z = phi z'`, so use
 `t99J02_phi_injOn`; on the circle `phi z = z²` and use `t99J02_edge_lift`. -/
@@ -1332,7 +1542,114 @@ theorem t99J02_homeomorph_of_G [T2Space (Surface true 1)] (hch : t99J02_Chord g�
     (hs₁ : Function.Surjective g₁) (hs₂ : Function.Surjective g₂)
     (hcg₁ : Continuous g₁) (hcg₂ : Continuous g₂) :
     Nonempty (ConnectedSum c₁ c₂ ≃ₜ Surface true 2) := by
-  sorry
+  let F : Surface true 2 → ConnectedSum c₁ c₂ :=
+    Quotient.lift (t99J02_G g₁ g₂) (fun _ _ h => hrel h)
+  have hFq (z : ConstructionTargets.Surfaces.Disk) :
+      F (surfaceQuotient true 2 z) = t99J02_G g₁ g₂ z := rfl
+  have hFc : Continuous F := by
+    apply continuous_coinduced_dom.mpr
+    exact hcont
+  have hFi : Function.Injective F := by
+    intro x y hxy
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      induction y using Quotient.inductionOn with
+      | _ y => exact hinj hxy
+  have hFs : Function.Surjective F := by
+    intro p
+    induction p using Quotient.inductionOn with
+    | _ p =>
+      cases p with
+      | inl p =>
+        obtain ⟨z, rfl⟩ := hs₁ p
+        refine ⟨surfaceQuotient true 2 z.1, ?_⟩
+        rw [hFq, t99J02_G, dif_pos z.2]
+        congr 3
+      | inr p =>
+        obtain ⟨z, rfl⟩ := hs₂ p
+        refine ⟨surfaceQuotient true 2 (t99J02_neg z.1), ?_⟩
+        rw [hFq, t99J02_G_lower g₁ g₂ hch]
+        · congr 3
+          apply Subtype.ext
+          simp [t99J02_neg]
+        · simp [t99J02_neg, z.2]
+  have hFclosed : IsClosedMap F := by
+    have hUpperClosed : IsClosed {z : ConstructionTargets.Surfaces.Disk |
+        0 ≤ (z : ℂ).im} :=
+      isClosed_le continuous_const (Complex.continuous_im.comp continuous_subtype_val)
+    letI : CompactSpace t99J02_Upper :=
+      isCompact_iff_compactSpace.mp hUpperClosed.isCompact
+    intro A hA
+    apply t99J02_isClosed_of
+    · let B : Set t99J02_Upper :=
+        {z | surfaceQuotient true 2 z.1 ∈ A}
+      have hBc : IsClosed B := by
+        change IsClosed ((fun z : t99J02_Upper =>
+          surfaceQuotient true 2 z.1) ⁻¹' A)
+        exact hA.preimage ((continuous_surfaceQuotient true 2).comp continuous_subtype_val)
+      have hBcompact : IsCompact B := hBc.isCompact
+      have heq :
+          (fun p => t99J02_mk c₁ c₂ (Sum.inl p)) ⁻¹' (F '' A) = g₁ '' B := by
+        ext p
+        constructor
+        · rintro ⟨x, hxA, hxp⟩
+          induction x using Quotient.inductionOn with
+          | _ x =>
+            obtain ⟨z, rfl⟩ := hs₁ p
+            refine ⟨z, ?_, rfl⟩
+            change surfaceQuotient true 2 z.1 ∈ A
+            have hzG : t99J02_G g₁ g₂ z.1 =
+                t99J02_mk c₁ c₂ (Sum.inl (g₁ z)) := by
+              rw [t99J02_G, dif_pos z.2]
+            rw [hinj (hzG.trans hxp.symm)]
+            exact hxA
+        · rintro ⟨z, hzB, rfl⟩
+          refine ⟨surfaceQuotient true 2 z.1, hzB, ?_⟩
+          rw [hFq, t99J02_G, dif_pos z.2]
+      rw [heq]
+      exact (hBcompact.image hcg₁).isClosed
+    · let B : Set t99J02_Upper :=
+        {z | surfaceQuotient true 2 (t99J02_neg z.1) ∈ A}
+      have hneg : Continuous t99J02_neg := by
+        apply Continuous.subtype_mk
+        change Continuous (fun z : ConstructionTargets.Surfaces.Disk => -(z : ℂ))
+        fun_prop
+      have hBc : IsClosed B := by
+        change IsClosed ((fun z : t99J02_Upper =>
+          surfaceQuotient true 2 (t99J02_neg z.1)) ⁻¹' A)
+        exact hA.preimage ((continuous_surfaceQuotient true 2).comp
+          (hneg.comp continuous_subtype_val))
+      have hBcompact : IsCompact B := hBc.isCompact
+      have heq :
+          (fun p => t99J02_mk c₁ c₂ (Sum.inr p)) ⁻¹' (F '' A) = g₂ '' B := by
+        ext p
+        constructor
+        · rintro ⟨x, hxA, hxp⟩
+          induction x using Quotient.inductionOn with
+          | _ x =>
+            obtain ⟨z, rfl⟩ := hs₂ p
+            refine ⟨z, ?_, rfl⟩
+            change surfaceQuotient true 2 (t99J02_neg z.1) ∈ A
+            have hzG : t99J02_G g₁ g₂ (t99J02_neg z.1) =
+                t99J02_mk c₁ c₂ (Sum.inr (g₂ z)) := by
+              rw [t99J02_G_lower g₁ g₂ hch]
+              · congr 3
+                exact Subtype.ext (by simp [t99J02_neg])
+              · simp [t99J02_neg, z.2]
+            rw [hinj (hzG.trans hxp.symm)]
+            exact hxA
+        · rintro ⟨z, hzB, rfl⟩
+          refine ⟨surfaceQuotient true 2 (t99J02_neg z.1), hzB, ?_⟩
+          rw [hFq, t99J02_G_lower g₁ g₂ hch]
+          · congr 3
+            exact Subtype.ext (by simp [t99J02_neg])
+          · simp [t99J02_neg, z.2]
+      rw [heq]
+      exact (hBcompact.image hcg₂).isClosed
+  have hhome : IsHomeomorph F :=
+    isHomeomorph_iff_continuous_isClosedMap_bijective.mpr
+      ⟨hFc, hFclosed, hFi, hFs⟩
+  exact ⟨(hhome.homeomorph F).symm⟩
 
 end Glue
 
