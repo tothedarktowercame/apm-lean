@@ -628,7 +628,28 @@ theorem iteratedFDeriv_eq_zero_of_support_subset_ball
     {u : E → F} (hu : ContDiff ℝ ∞ u) {c : E} {r : ℝ}
     (hsupp : Function.support u ⊆ Metric.ball c r) (k : ℕ) {x : E}
     (hx : x ∉ Metric.ball c r) : iteratedFDeriv ℝ k u x = 0 := by
-  sorry
+  by_cases hr : 0 < r
+  swap
+  · have hu0 : u = 0 := by
+      funext y
+      by_contra hy
+      have hyball := hsupp (show y ∈ Function.support u from hy)
+      exact (not_lt_of_ge (le_of_not_gt hr))
+        (lt_of_le_of_lt (dist_nonneg : 0 ≤ dist y c) (by simpa [dist_comm] using hyball))
+    subst u
+    simp
+  by_contra hxderiv
+  have hxderiv' : x ∈ Function.support (iteratedFDeriv ℝ k u) := hxderiv
+  have hopen : IsOpen (Function.support (iteratedFDeriv ℝ k u)) :=
+    (hu.continuous_iteratedFDeriv (mod_cast le_top)).isOpen_support
+  have hclosed : Function.support (iteratedFDeriv ℝ k u) ⊆ Metric.closedBall c r :=
+    (support_iteratedFDeriv_subset k).trans
+      (closure_minimal (hsupp.trans Metric.ball_subset_closedBall) Metric.isClosed_closedBall)
+  have hxint : x ∈ interior (Metric.closedBall c r) := by
+    rw [mem_interior_iff_mem_nhds]
+    exact Filter.mem_of_superset (hopen.mem_nhds hxderiv') hclosed
+  rw [interior_closedBall c hr.ne'] at hxint
+  exact hx hxint
 -- END SEAT AREA
 
 /-- Normalising the bump family gives a partition of unity with derivative bounds at every
