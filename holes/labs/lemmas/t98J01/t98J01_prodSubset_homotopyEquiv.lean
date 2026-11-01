@@ -837,7 +837,44 @@ theorem t98J01_complexLefschetz_sum_eq
     (N : ℕ) (hN : ∀ k, N < k → Subsingleton (C.homology k)) :
     (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k *
       LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom) = v := by
-  sorry
+  rcases h with ⟨hfinite, b, hb, hsum⟩
+  letI (k : ℕ) := hfinite k
+  let M := max N b
+  have htraceN (k : ℕ) (hk : N < k) :
+      LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom = 0 := by
+    letI := hN k hk
+    rw [Subsingleton.elim (HomologicalComplex.homologyMap φ k).hom 0]
+    exact map_zero (LinearMap.trace ℚ (C.homology k))
+  have htraceb (k : ℕ) (hk : b < k) :
+      LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom = 0 := by
+    letI := hb k hk
+    rw [Subsingleton.elim (HomologicalComplex.homologyMap φ k).hom 0]
+    exact map_zero (LinearMap.trace ℚ (C.homology k))
+  have hNM : Finset.range (N + 1) ⊆ Finset.range (M + 1) := by
+    apply Finset.range_mono
+    exact Nat.succ_le_succ (le_max_left _ _)
+  have hbM : Finset.range (b + 1) ⊆ Finset.range (M + 1) := by
+    apply Finset.range_mono
+    exact Nat.succ_le_succ (le_max_right _ _)
+  have hpadN :
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k *
+        LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom) =
+      ∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k *
+        LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom := by
+    apply Finset.sum_subset hNM
+    intro k hkM hkN
+    simp only [Finset.mem_range, not_lt] at hkM hkN
+    rw [htraceN k (lt_of_lt_of_le (Nat.lt_succ_self N) hkN), mul_zero]
+  have hpadb :
+      (∑ k ∈ Finset.range (b + 1), (-1 : ℚ)^k *
+        LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom) =
+      ∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k *
+        LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom := by
+    apply Finset.sum_subset hbM
+    intro k hkM hkb
+    simp only [Finset.mem_range, not_lt] at hkM hkb
+    rw [htraceb k (lt_of_lt_of_le (Nat.lt_succ_self b) hkb), mul_zero]
+  rw [hpadN, ← hpadb, hsum]
 
 /-- Seat: a short exact sequence of chain complexes is surjective on `H₀`. In degree 0 every chain is a cycle: `S.g.f 0` is epi (`hS.epi_g`), and `homologyπ` is epi from the cycles. Lift a representative along `S.g.f 0`, lift it to cycles (the outgoing differential is zero, `ChainComplex` with `(ComplexShape.down ℕ).next 0 = 0`). -/
 theorem t98J01_homologyMap_g_zero_surjective
@@ -865,7 +902,66 @@ theorem t98J01_complexLefschetz_congr
     (hg : ∀ n, IsIso (HomologicalComplex.homologyMap g n))
     {φ : C ⟶ C} {ψ : D ⟶ D} (hc : φ ≫ g = g ≫ ψ) (v : ℚ) :
     t98J01_ComplexLefschetz C φ v ↔ t98J01_ComplexLefschetz D ψ v := by
-  sorry
+  have hcomm (n : ℕ) :
+      HomologicalComplex.homologyMap φ n ≫ HomologicalComplex.homologyMap g n =
+        HomologicalComplex.homologyMap g n ≫ HomologicalComplex.homologyMap ψ n := by
+    rw [← HomologicalComplex.homologyMap_comp, hc,
+      HomologicalComplex.homologyMap_comp]
+  have htrace (n : ℕ)
+      [FiniteDimensional ℚ (C.homology n)] [FiniteDimensional ℚ (D.homology n)] :
+      LinearMap.trace ℚ (C.homology n)
+          (HomologicalComplex.homologyMap φ n).hom =
+        LinearMap.trace ℚ (D.homology n)
+          (HomologicalComplex.homologyMap ψ n).hom := by
+    letI := hg n
+    let e := asIso (HomologicalComplex.homologyMap g n)
+    have he : (HomologicalComplex.homologyMap ψ n).hom =
+        e.hom.hom.comp ((HomologicalComplex.homologyMap φ n).hom.comp e.inv.hom) := by
+      apply LinearMap.ext
+      intro x
+      have h := congrArg ModuleCat.Hom.hom (hcomm n)
+      simp only [ModuleCat.hom_comp, LinearMap.ext_iff] at h
+      simpa [LinearMap.comp_apply, e] using (h (e.inv.hom x)).symm
+    rw [he, LinearMap.trace_comp_comm']
+    have hi : e.inv.hom.comp e.hom.hom = LinearMap.id := by
+      simpa only [ModuleCat.hom_comp, ModuleCat.hom_id] using
+        congrArg ModuleCat.Hom.hom e.hom_inv_id
+    rw [LinearMap.comp_assoc, hi, LinearMap.comp_id]
+  constructor
+  · rintro ⟨hfd, b, hb, hs⟩
+    have hfdD : ∀ n, FiniteDimensional ℚ (D.homology n) := by
+      intro n
+      letI := hg n
+      letI := hfd n
+      exact FiniteDimensional.of_injective
+        (inv (HomologicalComplex.homologyMap g n)).hom
+        (asIso (HomologicalComplex.homologyMap g n)).symm.toLinearEquiv.injective
+    refine ⟨hfdD, b, ?_, ?_⟩
+    · intro n hn
+      letI := hg n
+      letI := hb n hn
+      exact Function.Injective.subsingleton
+        (asIso (HomologicalComplex.homologyMap g n)).symm.toLinearEquiv.injective
+    · haveI (n : ℕ) := hfd n
+      haveI (n : ℕ) := hfdD n
+      simpa only [htrace] using hs
+  · rintro ⟨hfd, b, hb, hs⟩
+    have hfdC : ∀ n, FiniteDimensional ℚ (C.homology n) := by
+      intro n
+      letI := hg n
+      letI := hfd n
+      exact FiniteDimensional.of_injective
+        (HomologicalComplex.homologyMap g n).hom
+        (asIso (HomologicalComplex.homologyMap g n)).toLinearEquiv.injective
+    refine ⟨hfdC, b, ?_, ?_⟩
+    · intro n hn
+      letI := hg n
+      letI := hb n hn
+      exact Function.Injective.subsingleton
+        (asIso (HomologicalComplex.homologyMap g n)).toLinearEquiv.injective
+    · haveI (n : ℕ) := hfdC n
+      haveI (n : ℕ) := hfd n
+      simpa only [htrace] using hs
 
 /-! ### Spaces -/
 
@@ -873,7 +969,34 @@ theorem t98J01_complexLefschetz_congr
 theorem t98J01_homotopyEquiv_isIso {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     (e : ContinuousMap.HomotopyEquiv Y X) (n : ℕ) :
     IsIso (HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n) := by
-  sorry
+  have hmap : ∀ {Z : Type} [TopologicalSpace Z] {f g : C(Z, Z)},
+      f.Homotopic g →
+      HomologicalComplex.homologyMap (t98J01_chainMap f) n =
+        HomologicalComplex.homologyMap (t98J01_chainMap g) n :=
+    fun H => ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) H n
+  have hcomp : ∀ {W Z : Type} [TopologicalSpace W] [TopologicalSpace Z]
+      (f : C(W, Z)) (g : C(Z, W)),
+      t98J01_chainMap (g.comp f) = t98J01_chainMap f ≫ t98J01_chainMap g :=
+    fun f g => by
+      simp only [t98J01_chainMap, ← CategoryTheory.Functor.map_comp]
+      rfl
+  have hid : ∀ {Z : Type} [TopologicalSpace Z],
+      HomologicalComplex.homologyMap (t98J01_chainMap (ContinuousMap.id Z)) n = 𝟙 _ := by
+    intro Z _
+    have hcid : t98J01_chainMap (ContinuousMap.id Z) = 𝟙 (t98J01_chains Z) := by
+      simp [t98J01_chainMap, t98J01_chains]
+    rw [hcid, HomologicalComplex.homologyMap_id]
+  have h1 : HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n ≫
+      HomologicalComplex.homologyMap (t98J01_chainMap e.invFun) n = 𝟙 _ := by
+    rw [← HomologicalComplex.homologyMap_comp, ← hcomp, hmap e.left_inv, hid]
+  have h2 : HomologicalComplex.homologyMap (t98J01_chainMap e.invFun) n ≫
+      HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n = 𝟙 _ := by
+    rw [← HomologicalComplex.homologyMap_comp, ← hcomp, hmap e.right_inv, hid]
+  exact CategoryTheory.Iso.isIso_hom
+    (CategoryTheory.Iso.mk
+      (hom := HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n)
+      (inv := HomologicalComplex.homologyMap (t98J01_chainMap e.invFun) n) h1 h2)
 
 theorem t98J01_chainMap_comp {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
     [TopologicalSpace Z] (f : C(X, Y)) (g : C(Y, Z)) :
