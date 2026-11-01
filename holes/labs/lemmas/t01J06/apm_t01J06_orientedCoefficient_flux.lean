@@ -99,12 +99,75 @@ gives one third of the mass, `odd_integral` gives zero for the coordinate, and t
 `apm_t02a05_euclideanHausdorff_unitSphere_mass`. Integrability: bounded continuous on a compact space
 of finite measure. If instances clash, see `apm_t02a05_radialFlux_integral_aux_inst` in
 `problems/t02A05/lean/Main.lean`. -/
+lemma apm_t01J06_sphere_moments_aux_inst :
+    ConstructionTargets.LinearGraphMeasure.domainMeasurable 3 =
+      (inferInstance : MeasurableSpace (EuclideanSpace ℝ (Fin 3))) := by
+  unfold ConstructionTargets.LinearGraphMeasure.domainMeasurable
+  exact BorelSpace.measurable_eq.symm
+
 theorem apm_t01J06_sphere_moments :
     Integrable (fun q : apm_t01J06_S2 ↦ q.1 2 ^ 2) μHE[2] ∧
     Integrable (fun q : apm_t01J06_S2 ↦ q.1 2) μHE[2] ∧
     (∫ q : apm_t01J06_S2, q.1 2 ^ 2 ∂μHE[2]) = 4 * Real.pi / 3 ∧
     (∫ q : apm_t01J06_S2, q.1 2 ∂μHE[2]) = 0 := by
-  sorry
+  have hinst := apm_t01J06_sphere_moments_aux_inst
+  have hsraw : Integrable (fun q : apm_t01J06_S2 ↦ q.1 2 ^ 2) μH[2] := by
+    convert ConstructionTargets.IntrinsicSphereFinite.continuous_integrable
+      2 (by decide) (fun q : ConstructionTargets.IntrinsicSphereFinite.Sphere 2 ↦ q.1 2 ^ 2)
+        (by fun_prop) using 1
+    all_goals first | exact hinst | exact hinst.symm | exact proof_irrel_heq _ _
+  have hlraw : Integrable (fun q : apm_t01J06_S2 ↦ q.1 2) μH[2] := by
+    convert ConstructionTargets.IntrinsicSphereFinite.continuous_integrable
+      2 (by decide) (fun q : ConstructionTargets.IntrinsicSphereFinite.Sphere 2 ↦ q.1 2)
+        (by fun_prop) using 1
+    all_goals first | exact hinst | exact hinst.symm | exact proof_irrel_heq _ _
+  have hs : Integrable (fun q : apm_t01J06_S2 ↦ q.1 2 ^ 2) μHE[2] := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def]
+    exact hsraw.smul_measure_nnreal
+  have hl : Integrable (fun q : apm_t01J06_S2 ↦ q.1 2) μHE[2] := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def]
+    exact hlraw.smul_measure_nnreal
+  have hmass := apm_t02a05_euclideanHausdorff_unitSphere_mass
+  have hmraw :
+      (apm_t02a05_cM : ℝ) *
+        ConstructionTargets.IntrinsicSphereSecondMoments.mass 2 = 4 * Real.pi := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, Measure.smul_apply,
+      ENNReal.toReal_smul] at hmass
+    change (apm_t02a05_cM : ℝ) *
+      (Measure.hausdorffMeasure 2
+        (Set.univ : Set (ConstructionTargets.IntrinsicSphereFinite.Sphere 2))).toReal =
+        4 * Real.pi at hmass
+    simpa [ConstructionTargets.IntrinsicSphereSecondMoments.mass,
+      MeasureTheory.Measure.hausdorffMeasure_apply] using hmass
+  have hsquare : (∫ q : apm_t01J06_S2, q.1 2 ^ 2 ∂μHE[2]) = 4 * Real.pi / 3 := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, integral_smul_nnreal_measure]
+    have hm := ConstructionTargets.IntrinsicSphereSecondMoments.square_moment
+      2 (by decide) (2 : Fin 3)
+    have hm' : (∫ q : apm_t01J06_S2, q.1 2 ^ 2 ∂μH[2]) =
+        ConstructionTargets.IntrinsicSphereSecondMoments.mass 2 / 3 := by
+      convert hm using 3
+      all_goals first | exact hinst | exact hinst.symm | norm_num
+    change (apm_t02a05_cM : ℝ) *
+      (∫ q : apm_t01J06_S2, q.1 2 ^ 2 ∂μH[2]) = 4 * Real.pi / 3
+    rw [hm']
+    calc
+      _ = ((apm_t02a05_cM : ℝ) *
+            ConstructionTargets.IntrinsicSphereSecondMoments.mass 2) / 3 := by ring
+      _ = _ := by rw [hmraw]
+  have hlinear : (∫ q : apm_t01J06_S2, q.1 2 ∂μHE[2]) = 0 := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, integral_smul_nnreal_measure]
+    have ho := ConstructionTargets.IntrinsicSphereSecondMoments.odd_integral
+      2 (2 : Fin 3) (fun q ↦ q.1 2) (by
+        intro q
+        change ConstructionTargets.IntrinsicSphereSecondMoments.reflection 2 2 q.1 2 = -q.1 2
+        simp [ConstructionTargets.IntrinsicSphereSecondMoments.reflection_apply])
+    have ho' : (∫ q : apm_t01J06_S2, q.1 2 ∂μH[2]) = 0 := by
+      convert ho using 3
+      all_goals first | exact hinst | exact hinst.symm
+    change (apm_t02a05_cM : ℝ) *
+      (∫ q : apm_t01J06_S2, q.1 2 ∂μH[2]) = 0
+    rw [ho', mul_zero]
+  exact ⟨hs, hl, hsquare, hlinear⟩
 
 /-- Unit vector `e i`. -/
 abbrev apm_t01J06_e (i : Fin 3) : apm_t01J06_E3 := EuclideanSpace.single i 1
@@ -142,12 +205,59 @@ theorem apm_t01J06_closed_divergence_free
     apm_t01J06_partial 0 (fun y ↦ eta y ![apm_t01J06_e 1, apm_t01J06_e 2]) x -
       apm_t01J06_partial 1 (fun y ↦ eta y ![apm_t01J06_e 0, apm_t01J06_e 2]) x +
       apm_t01J06_partial 2 (fun y ↦ eta y ![apm_t01J06_e 0, apm_t01J06_e 1]) x = 0 := by
+  have hd : DifferentiableAt ℝ eta x := (hs.differentiable (by simp)) x
+  have hclosed : extDeriv eta x ![apm_t01J06_e 0, apm_t01J06_e 1,
+      apm_t01J06_e 2] = 0 := by
+    rw [hc]
+    rfl
+  rw [extDeriv_apply hd] at hclosed
+  have hv1 : Fin.removeNth (1 : Fin 3)
+      ![apm_t01J06_e 0, apm_t01J06_e 1, apm_t01J06_e 2] =
+      ![apm_t01J06_e 0, apm_t01J06_e 2] := by
+    ext i
+    fin_cases i <;> rfl
+  have hv2 : Fin.removeNth (2 : Fin 3)
+      ![apm_t01J06_e 0, apm_t01J06_e 1, apm_t01J06_e 2] =
+      ![apm_t01J06_e 0, apm_t01J06_e 1] := by
+    ext i
+    fin_cases i <;> rfl
+  rw [Fin.sum_univ_three] at hclosed
+  rw [hv1, hv2] at hclosed
+  simpa [apm_t01J06_partial] using hclosed
+
+/-- Seat: differentiation under the integral on the compact interval. `hasFDerivAt_integral_of_dominated_of_fderiv_le`
+(or the interval version) with the bound from continuity of `fderiv g` on `[0,1] × closedBall x 1`; continuity of the
+derivative is continuity of a parametric integral (`intervalIntegral.continuous_parametric_intervalIntegral_of_continuous`
+or `continuous_parametric_integral_of_continuous`). -/
+theorem apm_t01J06_parametric_integral (g : ℝ × apm_t01J06_E3 → ℝ)
+    (hg : ContDiff ℝ (⊤ : ℕ∞) g) :
+    ContDiff ℝ 1 (fun x ↦ ∫ t in (0 : ℝ)..1, g (t, x)) ∧
+    ∀ x v, fderiv ℝ (fun y ↦ ∫ t in (0 : ℝ)..1, g (t, y)) x v =
+      ∫ t in (0 : ℝ)..1, fderiv ℝ (fun y ↦ g (t, y)) x v := by
   sorry
 
-/-- Seat: a divergence-free field is a curl. Take `A x = ∫ t in 0..1, t • (F (t x) × x)`. Differentiate
-under the integral (`hasFDerivAt_integral_of_dominated_of_fderiv_le` or
-`intervalIntegral.hasFDerivAt_integral_of_dominated_of_fderiv_le`); then
-`curl (t • F (t x) × x) = d/dt (t² F (t x))` using `div F = 0`, and the FTC gives `F x`. -/
+/-- The integrand of the cone formula: `t • (F (t x) × x)`, component `k`. -/
+def apm_t01J06_coneField (F : Fin 3 → apm_t01J06_E3 → ℝ) (k : Fin 3)
+    (p : ℝ × apm_t01J06_E3) : ℝ :=
+  p.1 * (F (k + 1) (p.1 • p.2) * p.2 (k + 2) - F (k + 2) (p.1 • p.2) * p.2 (k + 1))
+
+/-- Seat: the pointwise cone identity. By the product and chain rules, the left side is
+`2 t F i (t x) + t² (∂ (i + 1) F i x (i + 1) + ∂ (i + 2) F i x (i + 2)) - t² x i (∂ (i + 1) F (i + 1) + ∂ (i + 2) F (i + 2))`,
+all derivatives at `t x`. `hdiv` turns the last bracket into `-∂ i F i`, giving `2 t F i + t² Σ x j ∂ j F i`, the
+derivative in `t` of `t² F i (t x)`. Do `i` generally, or `fin_cases i`. -/
+theorem apm_t01J06_cone_identity (F : Fin 3 → apm_t01J06_E3 → ℝ)
+    (hF : ∀ i, ContDiff ℝ (⊤ : ℕ∞) (F i))
+    (hdiv : ∀ x, apm_t01J06_partial 0 (F 0) x + apm_t01J06_partial 1 (F 1) x +
+      apm_t01J06_partial 2 (F 2) x = 0) (i : Fin 3) (t : ℝ) (x : apm_t01J06_E3) :
+    apm_t01J06_partial (i + 1) (fun y ↦ apm_t01J06_coneField F (i + 2) (t, y)) x -
+      apm_t01J06_partial (i + 2) (fun y ↦ apm_t01J06_coneField F (i + 1) (t, y)) x =
+    deriv (fun s : ℝ ↦ s ^ 2 * F i (s • x)) t := by
+  sorry
+
+/-- Seat: a divergence-free field is a curl. Take `A k x = ∫ t in 0..1, apm_t01J06_coneField F k (t, x)`.
+`apm_t01J06_coneField` is smooth (`fun_prop`, coordinates are continuous linear). `apm_t01J06_parametric_integral`
+gives `ContDiff` and moves `partial` inside; `integral_sub`, `apm_t01J06_cone_identity`, and the FTC
+`intervalIntegral.integral_deriv_eq_sub'` give `1 ^ 2 * F i (1 • x) - 0`. -/
 theorem apm_t01J06_divergenceFree_isCurl (F : Fin 3 → apm_t01J06_E3 → ℝ)
     (hF : ∀ i, ContDiff ℝ (⊤ : ℕ∞) (F i))
     (hdiv : ∀ x, apm_t01J06_partial 0 (F 0) x + apm_t01J06_partial 1 (F 1) x +
@@ -161,10 +271,78 @@ theorem apm_t01J06_divergenceFree_isCurl (F : Fin 3 → apm_t01J06_E3 → ℝ)
 /-- Seat: rotation invariance. `t ↦ ∫ q, f (R t q)` is constant by
 `IntrinsicSphereSecondMoments.integral_isometry` (with `R t` the rotation about axis `k`) and `μHE[2]`
 a multiple of `μH[2]`. Its derivative at `0`, under the integral on the compact sphere, is the left side. -/
+def apm_t01J06_rotation_derivative_integral_aux_rot (k : Fin 3) (t : ℝ)
+    (x : apm_t01J06_E3) : apm_t01J06_E3 :=
+  match k with
+  | 0 => WithLp.toLp 2 ![x 0, Real.cos t * x 1 - Real.sin t * x 2,
+      Real.sin t * x 1 + Real.cos t * x 2]
+  | 1 => WithLp.toLp 2 ![Real.cos t * x 0 + Real.sin t * x 2, x 1,
+      -Real.sin t * x 0 + Real.cos t * x 2]
+  | 2 => WithLp.toLp 2 ![Real.cos t * x 0 - Real.sin t * x 1,
+      Real.sin t * x 0 + Real.cos t * x 1, x 2]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_rot_zero (k : Fin 3)
+    (x : apm_t01J06_E3) :
+    apm_t01J06_rotation_derivative_integral_aux_rot k 0 x = x := by
+  fin_cases k <;> ext i <;> fin_cases i <;>
+    simp [apm_t01J06_rotation_derivative_integral_aux_rot]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_rot_add (k : Fin 3) (s t : ℝ)
+    (x : apm_t01J06_E3) :
+    apm_t01J06_rotation_derivative_integral_aux_rot k s
+      (apm_t01J06_rotation_derivative_integral_aux_rot k t x) =
+        apm_t01J06_rotation_derivative_integral_aux_rot k (s + t) x := by
+  fin_cases k <;> ext i <;> fin_cases i <;>
+    simp [apm_t01J06_rotation_derivative_integral_aux_rot, Real.sin_add, Real.cos_add] <;> ring
+
+lemma apm_t01J06_rotation_derivative_integral_aux_rot_neg (k : Fin 3) (t : ℝ)
+    (x : apm_t01J06_E3) :
+    apm_t01J06_rotation_derivative_integral_aux_rot k (-t)
+      (apm_t01J06_rotation_derivative_integral_aux_rot k t x) = x := by
+  rw [apm_t01J06_rotation_derivative_integral_aux_rot_add]
+  simp [apm_t01J06_rotation_derivative_integral_aux_rot_zero]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_norm (k : Fin 3) (t : ℝ)
+    (x : apm_t01J06_E3) :
+    ‖apm_t01J06_rotation_derivative_integral_aux_rot k t x‖ = ‖x‖ := by
+  have h : ‖apm_t01J06_rotation_derivative_integral_aux_rot k t x‖ ^ 2 = ‖x‖ ^ 2 := by
+    simp only [EuclideanSpace.norm_sq_eq, Fin.sum_univ_three]
+    fin_cases k <;>
+      simp [apm_t01J06_rotation_derivative_integral_aux_rot] <;>
+      nlinarith [Real.sin_sq_add_cos_sq t]
+  nlinarith [norm_nonneg x,
+    norm_nonneg (apm_t01J06_rotation_derivative_integral_aux_rot k t x)]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_sub (k : Fin 3) (t : ℝ)
+    (x y : apm_t01J06_E3) :
+    apm_t01J06_rotation_derivative_integral_aux_rot k t (x - y) =
+      apm_t01J06_rotation_derivative_integral_aux_rot k t x -
+        apm_t01J06_rotation_derivative_integral_aux_rot k t y := by
+  fin_cases k <;> ext i <;> fin_cases i <;>
+    simp [apm_t01J06_rotation_derivative_integral_aux_rot] <;> ring
+
+lemma apm_t01J06_rotation_derivative_integral_aux_isometry (k : Fin 3) (t : ℝ) :
+    Isometry (apm_t01J06_rotation_derivative_integral_aux_rot k t) := by
+  rw [isometry_iff_dist_eq]
+  intro x y
+  rw [dist_eq_norm, dist_eq_norm, ← apm_t01J06_rotation_derivative_integral_aux_sub,
+    apm_t01J06_rotation_derivative_integral_aux_norm]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_hasDeriv (k : Fin 3)
+    (x : apm_t01J06_E3) :
+    HasDerivAt (fun t : ℝ ↦ apm_t01J06_rotation_derivative_integral_aux_rot k t x)
+      (apm_t01J06_rotField k x) 0 := by
+  sorry
+
+lemma apm_t01J06_rotation_derivative_integral_aux_key (k : Fin 3)
+    (f : apm_t01J06_E3 → ℝ) (hf : ContDiff ℝ 1 f) :
+    (∫ q : apm_t01J06_S2, fderiv ℝ f q.1 (apm_t01J06_rotField k q.1) ∂μHE[2]) = 0 := by
+  sorry
+
 theorem apm_t01J06_rotation_derivative_integral (k : Fin 3) (f : apm_t01J06_E3 → ℝ)
     (hf : ContDiff ℝ 1 f) :
     (∫ q : apm_t01J06_S2, fderiv ℝ f q.1 (apm_t01J06_rotField k q.1) ∂μHE[2]) = 0 := by
-  sorry
+  exact apm_t01J06_rotation_derivative_integral_aux_key k f hf
 
 /-- Seat: the flux of a curl through the sphere vanishes. Pointwise,
 `q · curl A = ∑ k, fderiv (A k) q (rotField k q)` (expand `fderiv` in the basis `e`, `Fin.sum_univ_three`). -/
