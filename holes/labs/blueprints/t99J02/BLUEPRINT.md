@@ -32,7 +32,7 @@ vertex.
 Coordinates. Write `z = x + i y` in the disk and `Y = √(1 - x²)`.
 
 - The hole is `ell` of the unit disk, where `ell (z²) = (x + i y/2)²`, that is
-  `ell u = 3/8 ‖u‖ + 5/8 Re u + i Im u / 4`. No square root appears, `ell` is
+  `ell u = 3/8 ‖u‖ + 5/8 Re u + i Im u / 2`. No square root appears, `ell` is
   homogeneous, and `‖ell u‖ = 5/8 ‖u‖ + 3/8 Re u`, so `ell` of the closed unit
   disk meets the unit circle only at the torus vertex `1`.
 - `phi z = (x + i (y + Y)/2)²` sends the closed upper half disk onto the disk
