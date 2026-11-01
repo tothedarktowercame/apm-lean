@@ -1992,10 +1992,118 @@ theorem apm_t97A03_pointWedge_h1 {X Y : Type} [TopologicalSpace X] [TopologicalS
 /-- Degree one is supplied entirely by the three-circle summand. Apply `apm_t97A03_pointWedge_h1` to `modelWedge` and to
 `twoSphereWedge` (`H₁(S²) = 0`), and for `ThreeCircles` iterate it over circles or use the finite-wedge `H₁` results,
 to obtain the fixed `Fin 3` basis. -/
+noncomputable def apm_t97A03_invariants_aux_modelWedge_h1_aux_sphereNeighborhood :
+    ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood
+      apm_t97A03_S2 apm_t97A03_north := by
+  let south : apm_t97A03_S2 := -apm_t97A03_north
+  have hsouth : ‖(south : apm_t97A03_R3)‖ = 1 := norm_eq_of_mem_sphere south
+  let e0 := stereographic hsouth
+  let e : e0.source ≃ₜ Submodule.orthogonal (ℝ ∙ (south : apm_t97A03_R3)) :=
+    e0.toHomeomorphSourceTarget.trans
+      ((Homeomorph.setCongr (by simp [e0, stereographic_target])).trans (Homeomorph.Set.univ _))
+  have hnorth : apm_t97A03_north ∈ e0.source := by
+    rw [stereographic_source]
+    simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
+    intro h
+    have h2 := congrArg (fun x : apm_t97A03_R3 ↦ x (2 : Fin 3)) (congrArg Subtype.val h)
+    norm_num [south, apm_t97A03_north, EuclideanSpace.single_apply] at h2
+  have he_base : e ⟨apm_t97A03_north, hnorth⟩ = 0 := by
+    change e0 apm_t97A03_north = 0
+    simpa [south, e0] using stereographic_apply_neg south
+  let h : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      (Submodule.orthogonal (ℝ ∙ (south : apm_t97A03_R3))) 0 :=
+    { homotopy :=
+        { toFun := fun p ↦ (1 - (p.1 : ℝ)) • p.2
+          continuous_toFun := (continuous_const.sub
+            (continuous_subtype_val.comp continuous_fst)).smul continuous_snd
+          map_zero_left := by intro x; simp
+          map_one_left := by intro x; simp }
+      fixed := by
+        intro t
+        change (1 - (t : ℝ)) • (0 : Submodule.orthogonal
+          (ℝ ∙ (south : apm_t97A03_R3))) = 0
+        simp }
+  rw [← he_base] at h
+  exact
+    { carrier := e0.source
+      isOpen := e0.open_source
+      mem := hnorth
+      contraction :=
+        ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h }
+
+noncomputable def apm_t97A03_invariants_aux_modelWedge_h1_aux_finThreeLinearEquiv :
+    ((Fin 2 → ℤ) × ℤ) ≃ₗ[ℤ] (Fin 3 → ℤ) where
+  toFun p := Fin.lastCases p.2 p.1
+  invFun g := (fun i ↦ g i.castSucc, g (Fin.last 2))
+  left_inv p := by
+    apply Prod.ext
+    · funext i
+      simp
+    · simp only [Fin.lastCases_last]
+  right_inv g := by
+    funext i
+    refine Fin.lastCases ?_ (fun j ↦ ?_) i
+    · simp only [Fin.lastCases_last]
+    · simp only [Fin.lastCases_castSucc]
+  map_add' p q := by
+    funext i
+    fin_cases i <;> rfl
+  map_smul' z p := by
+    funext i
+    fin_cases i <;> rfl
+
 theorem apm_t97A03_invariants_aux_modelWedge_h1 :
     Nonempty (apm_t97A03_Homology apm_t97A03_modelWedge 1 ≅
       ModuleCat.of ℤ (Fin 3 → ℤ)) := by
-  sorry
+  open ConstructionTargets.PolygonSurfaceHomology in
+    letI : PathConnectedSpace apm_t97A03_S2 :=
+      ConstructionTargets.SphereHomology.spherePathConnectedSpace 2
+    letI : PathConnectedSpace apm_t97A03_ThreeCircles := by infer_instance
+    let PS := apm_t97A03_invariants_aux_modelWedge_h1_aux_sphereNeighborhood
+    let PC := circlePointedContractibleNeighborhood
+    let PtwoSphere := pointWedgePointedContractibleNeighborhood PS PS
+    let PtwoCircle := pointWedgePointedContractibleNeighborhood PC PC
+    let PthreeCircle := pointWedgePointedContractibleNeighborhood PtwoCircle PC
+    obtain ⟨eTwoSphere⟩ := apm_t97A03_pointWedge_h1
+      apm_t97A03_north apm_t97A03_north PS PS
+    obtain ⟨eTwoCircle⟩ := apm_t97A03_pointWedge_h1 (1 : Circle) (1 : Circle) PC PC
+    obtain ⟨eThreeCircle⟩ := apm_t97A03_pointWedge_h1
+      ConstructionTargets.StatementSurfaceModels.twoCirclesPoint (1 : Circle) PtwoCircle PC
+    have hOuter : Nonempty
+        (apm_t97A03_Homology apm_t97A03_modelWedge 1 ≅
+          (apm_t97A03_Homology apm_t97A03_twoSphereWedge 1 ⊞
+            apm_t97A03_Homology apm_t97A03_ThreeCircles 1)) :=
+      apm_t97A03_pointWedge_h1 apm_t97A03_twoSphereBase
+        ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+        PtwoSphere PthreeCircle
+    obtain ⟨eOuter⟩ := hOuter
+    have hSphere : Limits.IsZero (apm_t97A03_Homology apm_t97A03_S2 1) :=
+      ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top
+        2 1 (by omega) (by omega)
+    have hTwoSphere : Limits.IsZero
+        (apm_t97A03_Homology apm_t97A03_twoSphereWedge 1) :=
+      ((Limits.biprod_isZero_iff _ _).2 ⟨hSphere, hSphere⟩).of_iso eTwoSphere
+    let eCircle := ConstructionTargets.CircleHomology.circleH1IsoInt
+    let eTwoCoordinates := (eTwoCircle ≪≫
+      CategoryTheory.Limits.biprod.mapIso eCircle eCircle ≪≫
+      ModuleCat.biprodIsoProd _ _ ≪≫
+      (LinearEquiv.piFinTwo ℤ (fun _ : Fin 2 ↦ ℤ)).symm.toModuleIso)
+    let eThreeCoordinates := (eThreeCircle ≪≫
+      CategoryTheory.Limits.biprod.mapIso eTwoCoordinates eCircle ≪≫
+      ModuleCat.biprodIsoProd _ _ ≪≫
+      apm_t97A03_invariants_aux_modelWedge_h1_aux_finThreeLinearEquiv.toModuleIso)
+    letI : IsIso (CategoryTheory.Limits.biprod.inl :
+        apm_t97A03_Homology apm_t97A03_ThreeCircles 1 ⟶
+          (apm_t97A03_Homology apm_t97A03_ThreeCircles 1 ⊞
+            apm_t97A03_Homology apm_t97A03_twoSphereWedge 1)) :=
+      (CategoryTheory.Biprod.isIso_inl_iff_isZero _ _).2 hTwoSphere
+    exact ⟨eOuter ≪≫
+      CategoryTheory.Limits.biprod.braiding _ _ ≪≫
+      (asIso (CategoryTheory.Limits.biprod.inl :
+        apm_t97A03_Homology apm_t97A03_ThreeCircles 1 ⟶
+          (apm_t97A03_Homology apm_t97A03_ThreeCircles 1 ⊞
+            apm_t97A03_Homology apm_t97A03_twoSphereWedge 1))).symm ≪≫
+      eThreeCoordinates⟩
 
 /-- Degree two is the biproduct of the top homology of the two sphere
 summands.  Use `SphereHomology.sphereModuleTopHomologyIsoInt` twice and
