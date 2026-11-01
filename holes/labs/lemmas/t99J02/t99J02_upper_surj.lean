@@ -1405,7 +1405,32 @@ theorem t99J02_upper_surj (c : BallCollar 2 (Surface true 1))
     (g : t99J02_Upper → c.Punctured)
     (hg : ∀ z, (g z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1)) :
     Function.Surjective g := by
-  sorry
+  intro p
+  obtain ⟨w, hw⟩ := surjective_surfaceQuotient true 1 p.1
+  have houtside : ∀ u : ℂ, ‖u‖ < 1 → (w : ℂ) ≠ t99J02_ell u := by
+    intro u hu heq
+    have hell : t99J02_ell u ∈ Metric.closedBall (0 : ℂ) 1 := by
+      rw [← heq]
+      exact w.2
+    obtain ⟨v, hv, hcv⟩ := hc u hu hell
+    apply p.2
+    refine ⟨v, hv, ?_⟩
+    rw [hcv]
+    calc
+      surfaceQuotient true 1 ⟨t99J02_ell u, hell⟩ =
+          surfaceQuotient true 1 w :=
+        congrArg (surfaceQuotient true 1) (Subtype.ext heq.symm)
+      _ = p.1 := hw
+  obtain ⟨z, hz, hphi⟩ := t99J02_phi_surj w houtside
+  let z' : t99J02_Upper := ⟨z, hz⟩
+  refine ⟨z', Subtype.ext ?_⟩
+  rw [hg]
+  calc
+    surfaceQuotient true 1 (t99J02_phiDisk z'.1) =
+        surfaceQuotient true 1 w := by
+      apply congrArg (surfaceQuotient true 1)
+      exact Subtype.ext hphi
+    _ = p.1 := hw
 -- END SEAT AREA
 
 section Glue
