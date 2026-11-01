@@ -1897,11 +1897,28 @@ path connectedness from the sphere and three-circle summands. -/
 theorem apm_t97A03_invariants_aux_modelWedge_h0 :
     Nonempty (apm_t97A03_Homology apm_t97A03_modelWedge 0 ≅
       ModuleCat.of ℤ ℤ) := by
+  letI : PathConnectedSpace apm_t97A03_S2 :=
+    ConstructionTargets.SphereHomology.spherePathConnectedSpace 2
+  letI : PathConnectedSpace apm_t97A03_ThreeCircles :=
+    ConstructionTargets.PointWedgeVanKampen.threeCircles_pathConnected
+  exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ apm_t97A03_modelWedgeBase⟩
+
+/-- Seat: degree one of a point wedge of path-connected spaces. Follow the proof of
+`PolygonSurfaceHomology.pointWedgeHigherHomologyIsZero`, using its cover package. Mayer–Vietoris
+(`IntegralMV.integralMayerVietoris`): `H₁(U ∩ V) = 0` because the overlap is contractible, and `H₀(U ∩ V) → H₀ U ⊕ H₀ V` is
+injective because `H₀` of the contractible overlap is `ℤ` and maps isomorphically to `H₀ U` for path-connected `U`
+(`CoefficientH0`). So `H₁ U ⊕ H₁ V ≅ H₁` of the wedge, and `U`, `V` are homotopy equivalent to `X`, `Y`. -/
+theorem apm_t97A03_pointWedge_h1 {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] [PathConnectedSpace Y] (x₀ : X) (y₀ : Y)
+    (PX : ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood X x₀)
+    (PY : ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood Y y₀) :
+    Nonempty (apm_t97A03_Homology (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀) 1 ≅
+      (apm_t97A03_Homology X 1 ⊞ apm_t97A03_Homology Y 1)) := by
   sorry
 
-/-- Degree one is supplied entirely by the three-circle summand.  Combine
-`PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv`, Hurewicz, and the
-point-wedge Mayer--Vietoris comparison to obtain the fixed `Fin 3` basis. -/
+/-- Degree one is supplied entirely by the three-circle summand. Apply `apm_t97A03_pointWedge_h1` to `modelWedge` and to
+`twoSphereWedge` (`H₁(S²) = 0`), and for `ThreeCircles` iterate it over circles or use the finite-wedge `H₁` results,
+to obtain the fixed `Fin 3` basis. -/
 theorem apm_t97A03_invariants_aux_modelWedge_h1 :
     Nonempty (apm_t97A03_Homology apm_t97A03_modelWedge 1 ≅
       ModuleCat.of ℤ (Fin 3 → ℤ)) := by
