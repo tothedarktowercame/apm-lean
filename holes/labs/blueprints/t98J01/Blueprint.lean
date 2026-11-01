@@ -1489,7 +1489,54 @@ theorem t98J01_clopen_swap_lefschetz {Y : Type} [TopologicalSpace Y] (A B : Set 
     (N : ℕ) (hzA : ∀ k, N < k → Subsingleton (Homology A k))
     (hzB : ∀ k, N < k → Subsingleton (Homology B k)) :
     HasLefschetzNumber φ 0 := by
-  sorry
+  classical
+  let φAB : C(A, B) := ⟨hAB.restrict φ A B, φ.continuous.restrict hAB⟩
+  let φBA : C(B, A) := ⟨hBA.restrict φ B A, φ.continuous.restrict hBA⟩
+  have hsplit (k : ℕ) : Function.Bijective
+      (LinearMap.coprod (induced (t98J01_incl A) k).hom
+        (induced (t98J01_incl B) k).hom) :=
+    t98J01_clopen_homology_bijective A B hA hB hcov hdis k
+  have hfdY (k : ℕ) : FiniteDimensional ℚ (Homology Y k) := by
+    letI := hfdA k
+    letI := hfdB k
+    exact FiniteDimensional.of_surjective _ (hsplit k).2
+  have hzY (k : ℕ) (hk : N < k) : Subsingleton (Homology Y k) := by
+    letI := hzA k hk
+    letI := hzB k hk
+    constructor
+    intro x y
+    obtain ⟨p, rfl⟩ := (hsplit k).2 x
+    obtain ⟨q, rfl⟩ := (hsplit k).2 y
+    rw [Subsingleton.elim p q]
+  refine ⟨hfdY, N, hzY, ?_⟩
+  apply Finset.sum_eq_zero
+  intro k hk
+  have htr : LinearMap.trace ℚ (Homology Y k) (induced φ k).hom = 0 := by
+    letI := hfdA k
+    letI := hfdB k
+    letI := hfdY k
+    apply t98J01_trace_offDiagonal
+      (induced (t98J01_incl A) k).hom (induced (t98J01_incl B) k).hom
+      (hsplit k) (induced φ k).hom (induced φAB k).hom (induced φBA k).hom
+    · let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+          (ModuleCat.of ℚ ℚ)
+      have hc : TopCat.ofHom (t98J01_incl A) ≫ TopCat.ofHom φ =
+          TopCat.ofHom φAB ≫ TopCat.ofHom (t98J01_incl B) := by
+        ext x
+        rfl
+      change (F.map (TopCat.ofHom (t98J01_incl A)) ≫ F.map (TopCat.ofHom φ)).hom =
+        (F.map (TopCat.ofHom φAB) ≫ F.map (TopCat.ofHom (t98J01_incl B))).hom
+      rw [← F.map_comp, hc, F.map_comp]
+    · let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+          (ModuleCat.of ℚ ℚ)
+      have hc : TopCat.ofHom (t98J01_incl B) ≫ TopCat.ofHom φ =
+          TopCat.ofHom φBA ≫ TopCat.ofHom (t98J01_incl A) := by
+        ext x
+        rfl
+      change (F.map (TopCat.ofHom (t98J01_incl B)) ≫ F.map (TopCat.ofHom φ)).hom =
+        (F.map (TopCat.ofHom φBA) ≫ F.map (TopCat.ofHom (t98J01_incl A))).hom
+      rw [← F.map_comp, hc, F.map_comp]
+  rw [htr, mul_zero]
 
 /-! ### Circle geometry -/
 
