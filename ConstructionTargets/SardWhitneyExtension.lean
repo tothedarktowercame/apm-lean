@@ -674,7 +674,259 @@ theorem exists_whitneySmoothPartition_aux_deriv_bound_aux_inside
       ‖iteratedFDeriv ℝ k
         (fun y => psi i y * (∑' j, psi j y)⁻¹) x‖ ≤
           D k * (Metric.infDist i.center K)⁻¹ ^ k := by
-  sorry
+  classical
+  obtain ⟨N, hN⟩ := hoverlap
+  -- Uniform scale for the sum derivatives: `A j * dᵢ⁻¹ʲ`.
+  set A : ℕ → ℝ := fun j ↦ (N : ℝ) * |C j| * 3 ^ j with hAdef
+  have hBall : ∀ k : ℕ, ∃ B ≥ 0, ∀ (S : E → ℝ) (x : E) (r : ℝ), 0 < r → 1 ≤ S x →
+      ContDiffAt ℝ k S x → (∀ j ≤ k, ‖iteratedFDeriv ℝ j S x‖ ≤ A j * r⁻¹ ^ j) →
+      ‖iteratedFDeriv ℝ k (fun y ↦ (S y)⁻¹) x‖ ≤ B * r⁻¹ ^ k :=
+    fun k ↦ iteratedFDeriv_inv_bound E k A
+  choose B hBnn hB using hBall
+  refine ⟨fun k ↦ ∑ p ∈ Finset.range (k + 1), (k.choose p : ℝ) * |C p| * (B (k - p)),
+    fun k ↦ Finset.sum_nonneg fun p _ ↦ by
+      have h0 := (hBnn (k - p))
+      positivity, ?_⟩
+  intro k i x hx
+  set di : ℝ := Metric.infDist i.center K with hdidef
+  have hdi : 0 < di :=
+    lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 ^ i.1)
+      ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.1
+  have hdpos : ∀ l : SardConvexDomain.WhitneyNetIndex K,
+      0 < Metric.infDist l.center K :=
+    fun l ↦ lt_of_lt_of_le (by positivity : (0 : ℝ) < 2 ^ l.1)
+      ((SardConvexDomain.whitneyStratumNet_spec K l.1).1 l.2.2).2.1
+  have hxK : x ∉ K := by
+    intro hxm
+    have hle := Metric.infDist_le_dist_of_mem (x := i.center) hxm
+    rw [dist_comm] at hle
+    have hlt : dist x i.center < Metric.infDist i.center K / 2 := Metric.mem_ball.1 hx
+    linarith
+  set S : E → ℝ := fun y ↦ ∑' j, psi j y with hSdef
+  have hSx : 1 ≤ S x := hpositive x hxK
+  have hcomp_i0 := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hx
+  rw [← hdidef] at hcomp_i0
+  have hcomp_i := hcomp_i0
+  -- The half-ball incidence set at `x`.
+  set Fset : Set (SardConvexDomain.WhitneyNetIndex K) :=
+    {l | x ∈ Metric.ball l.center (Metric.infDist l.center K / 2)} with hFsetdef
+  have hFfin : Fset.Finite := by
+    have hfib : ∀ k : ℤ,
+        {l : SardConvexDomain.WhitneyNetIndex K | l.1 = k ∧ l ∈ Fset}.Finite := by
+      intro k
+      let f : SardConvexDomain.WhitneyNetIndex K → E :=
+        SardConvexDomain.WhitneyNetIndex.center
+      have hinj : Set.InjOn f {l | l.1 = k ∧ l ∈ Fset} := by
+        intro a ha b hb hab
+        have hk : a.1 = b.1 := ha.1.trans hb.1.symm
+        cases a with
+        | mk ak ac =>
+          cases b with
+          | mk bk bc =>
+            dsimp at hk hab ⊢
+            subst bk
+            exact congrArg (Sigma.mk ak) (Subtype.ext hab)
+      apply Set.Finite.of_finite_image (f := f) _ hinj
+      apply (SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact K k
+        (isCompact_closedBall x (3 * di))).subset
+      rintro c ⟨l, hl, rfl⟩
+      constructor
+      · change l.2.1 ∈ SardConvexDomain.whitneyStratumNet K k
+        rw [← hl.1]
+        exact l.2.2
+      · apply Metric.mem_closedBall.2
+        have hlt : dist x l.center < Metric.infDist l.center K / 2 :=
+          Metric.mem_ball.1 hl.2
+        have hcomp := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hl.2
+        have hdc : dist l.center x = dist x l.center := dist_comm _ _
+        show dist l.center x ≤ 3 * di
+        linarith [hcomp.1, hcomp_i.2]
+    apply (Set.Finite.biUnion (Finset.finite_toSet (Finset.Icc (i.1 - 2) (i.1 + 2)))
+      (fun k _ ↦ hfib k)).subset
+    intro l hl
+    have hlo : (2 : ℝ) ^ l.1 ≤ Metric.infDist l.center K :=
+      ((SardConvexDomain.whitneyStratumNet_spec K l.1).1 l.2.2).2.1
+    have hup : Metric.infDist l.center K < (2 : ℝ) ^ (l.1 + 1) :=
+      ((SardConvexDomain.whitneyStratumNet_spec K l.1).1 l.2.2).2.2
+    have hcomp := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hl
+    have hloi : (2 : ℝ) ^ i.1 ≤ di :=
+      ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.1
+    have hupi : di < 2 * (2 : ℝ) ^ i.1 := by
+      have h : di < (2 : ℝ) ^ (i.1 + 1) :=
+        ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.2
+      rw [zpow_add₀ (show (2 : ℝ) ≠ 0 by norm_num), zpow_one] at h
+      linarith [h]
+    have hup2 : Metric.infDist l.center K < 2 * (2 : ℝ) ^ l.1 := by
+      rw [zpow_add₀ (show (2 : ℝ) ≠ 0 by norm_num), zpow_one] at hup
+      linarith [hup]
+    have hk1 : i.1 - 2 ≤ l.1 := by
+      by_contra hn
+      have hp : (2 : ℝ) ^ (l.1 + 3) ≤ (2 : ℝ) ^ i.1 :=
+        zpow_le_zpow_right₀ (by norm_num) (by omega)
+      rw [zpow_add₀ (show (2 : ℝ) ≠ 0 by norm_num)] at hp
+      norm_num at hp
+      have hpl : (0 : ℝ) < (2 : ℝ) ^ l.1 := by positivity
+      nlinarith
+    have hk2 : l.1 ≤ i.1 + 2 := by
+      by_contra hn
+      have hp : (2 : ℝ) ^ (i.1 + 3) ≤ (2 : ℝ) ^ l.1 :=
+        zpow_le_zpow_right₀ (by norm_num) (by omega)
+      rw [zpow_add₀ (show (2 : ℝ) ≠ 0 by norm_num)] at hp
+      norm_num at hp
+      have hpi : (0 : ℝ) < (2 : ℝ) ^ i.1 := by positivity
+      nlinarith
+    exact Set.mem_iUnion.2 ⟨l.1, Set.mem_iUnion.2 ⟨Finset.mem_Icc.2 ⟨hk1, hk2⟩, rfl, hl⟩⟩
+  set Fs := hFfin.toFinset with hFsdef
+  have hcard : (Fs.card : ℝ) ≤ N := by
+    have h1 := hN x
+    rw [Set.ncard_eq_toFinset_card _ hFfin] at h1
+    exact_mod_cast h1
+  -- Local finiteness data at `x`.
+  obtain ⟨U, hU, hT⟩ := hlocal x hxK
+  have hxU : x ∈ U := mem_of_mem_nhds hU
+  set TF := hT.toFinset with hTFdef
+  have hG : ContDiff ℝ ∞ (fun y ↦ ∑ l ∈ TF, psi l y) :=
+    ContDiff.sum fun l _ ↦ hsmooth l
+  have hSG : S =ᶠ[nhds x] (fun y ↦ ∑ l ∈ TF, psi l y) := by
+    filter_upwards [hU] with y hy
+    exact tsum_eq_sum (fun l hl ↦ by
+      by_contra hne
+      exact hl (hT.mem_toFinset.2 ⟨y, hy, hne⟩))
+  have hSc : ContDiffAt ℝ ∞ S x := hG.contDiffAt.congr_of_eventuallyEq hSG
+  -- Every derivative of the sum at `x` is the sum over the incident indices.
+  have hsum : ∀ j : ℕ, iteratedFDeriv ℝ j S x =
+      ∑ l ∈ Fs, iteratedFDeriv ℝ j (psi l) x := by
+    intro j
+    have h1 : iteratedFDeriv ℝ j S x =
+        iteratedFDeriv ℝ j (fun y ↦ ∑ l ∈ TF, psi l y) x :=
+      (Filter.EventuallyEq.iteratedFDeriv ℝ hSG j).eq_of_nhds
+    rw [h1, iteratedFDeriv_fun_sum_apply (fun l _ ↦ (hsmooth l).contDiffAt.of_le (mod_cast le_top))]
+    have hA1 : ∑ l ∈ TF, iteratedFDeriv ℝ j (psi l) x =
+        ∑ l ∈ TF ∩ Fs, iteratedFDeriv ℝ j (psi l) x := by
+      symm
+      apply Finset.sum_subset Finset.inter_subset_left
+      intro l _hlT hlnot
+      have hxnot : x ∉ Metric.ball l.center (Metric.infDist l.center K / 2) := by
+        intro hb
+        exact hlnot (Finset.mem_inter.2 ⟨_hlT, hFfin.mem_toFinset.2 hb⟩)
+      exact iteratedFDeriv_eq_zero_of_support_subset_ball (hsmooth l) (hsupp l) j hxnot
+    have hA2 : ∑ l ∈ Fs, iteratedFDeriv ℝ j (psi l) x =
+        ∑ l ∈ TF ∩ Fs, iteratedFDeriv ℝ j (psi l) x := by
+      symm
+      apply Finset.sum_subset Finset.inter_subset_right
+      intro l hlF hlnot
+      have hlT : l ∉ TF := fun h ↦ hlnot (Finset.mem_inter.2 ⟨h, hlF⟩)
+      have hzero : psi l =ᶠ[nhds x] 0 := by
+        filter_upwards [hU] with y hy
+        by_contra hne
+        exact hlT (hT.mem_toFinset.2 ⟨y, hy, hne⟩)
+      rw [(Filter.EventuallyEq.iteratedFDeriv ℝ hzero j).eq_of_nhds]
+      simp
+    rw [hA1, ← hA2]
+  -- Scale bound for the derivatives of `S` at `x`.
+  have hSbound : ∀ j : ℕ, ‖iteratedFDeriv ℝ j S x‖ ≤ A j * di⁻¹ ^ j := by
+    intro j
+    rw [hsum j]
+    calc ‖∑ l ∈ Fs, iteratedFDeriv ℝ j (psi l) x‖
+        ≤ ∑ l ∈ Fs, ‖iteratedFDeriv ℝ j (psi l) x‖ := norm_sum_le _ _
+      _ ≤ ∑ l ∈ Fs, |C j| * (3 * di⁻¹) ^ j := by
+          apply Finset.sum_le_sum
+          intro l hl
+          have hlF : l ∈ Fset := hFfin.mem_toFinset.1 hl
+          have hcomp := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hlF
+          have h1 : di < 3 * Metric.infDist l.center K := lt_trans hcomp_i.1 hcomp.2
+          have h2 : (Metric.infDist l.center K)⁻¹ ≤ 3 * di⁻¹ := by
+            calc (Metric.infDist l.center K)⁻¹ ≤ (di / 3)⁻¹ :=
+                  inv_anti₀ (by positivity) (by linarith)
+              _ = 3 * di⁻¹ := by rw [inv_div, div_eq_mul_inv]
+          have hC0 : 0 ≤ (Metric.infDist l.center K)⁻¹ ^ j :=
+            pow_nonneg (inv_nonneg.2 (hdpos l).le) _
+          calc ‖iteratedFDeriv ℝ j (psi l) x‖
+              ≤ C j * (Metric.infDist l.center K)⁻¹ ^ j := hC j l x
+            _ ≤ |C j| * (Metric.infDist l.center K)⁻¹ ^ j :=
+                mul_le_mul_of_nonneg_right (le_abs_self _) hC0
+            _ ≤ |C j| * (3 * di⁻¹) ^ j :=
+                mul_le_mul_of_nonneg_left
+                  (pow_le_pow_left₀ (inv_nonneg.2 (hdpos l).le) h2 j) (abs_nonneg _)
+      _ = (Fs.card : ℝ) * (|C j| * (3 * di⁻¹) ^ j) := by
+          rw [Finset.sum_const, nsmul_eq_mul]
+      _ ≤ (N : ℝ) * (|C j| * (3 * di⁻¹) ^ j) :=
+          mul_le_mul_of_nonneg_right hcard (by positivity)
+      _ = A j * di⁻¹ ^ j := by rw [hAdef, mul_pow]; ring
+  -- An open neighborhood of `x` where `S` is smooth and `> 1/2`.
+  obtain ⟨V, hVU, hVopen, hxV⟩ := mem_nhds_iff.1 hU
+  have hGV : ∀ y ∈ V, S y = ∑ l ∈ TF, psi l y := fun y hy ↦ by
+    have hyn : V ∈ nhds y := hVopen.mem_nhds hy
+    have : S =ᶠ[nhds y] (fun z ↦ ∑ l ∈ TF, psi l z) := by
+      filter_upwards [hyn] with z hz
+      exact tsum_eq_sum (fun l hl ↦ by
+        by_contra hne
+        exact hl (hT.mem_toFinset.2 ⟨z, hVU hz, hne⟩))
+    exact this.eq_of_nhds
+  have hSGV : EqOn S (fun y ↦ ∑ l ∈ TF, psi l y) V := fun y hy ↦ hGV y hy
+  have hSon : ContDiffOn ℝ ∞ S V := hG.contDiffOn.congr hSGV
+  have hcont : ContinuousAt S x := hSc.continuousAt
+  have hsV : V ∩ S ⁻¹' Set.Ioi (1 / 2 : ℝ) ∈ nhds x :=
+    Filter.inter_mem (hVopen.mem_nhds hxV)
+      (hcont.preimage_mem_nhds (isOpen_Ioi.mem_nhds (by linarith : (1 / 2 : ℝ) < S x)))
+  obtain ⟨s, hssV, hsopen, hxs⟩ := mem_nhds_iff.1 hsV
+  have hmapS : Set.MapsTo S s (Set.Ioi (1 / 2 : ℝ)) := fun y hy ↦ (hssV hy).2
+  have hSs : ContDiffOn ℝ ∞ S s := hSon.mono (hssV.trans Set.inter_subset_left)
+  have hSinv : ContDiffOn ℝ ∞ (fun y ↦ (S y)⁻¹) s :=
+    hSs.inv fun y hy ↦ ne_of_gt (lt_trans (by norm_num) (hmapS hy))
+  -- Product (Leibniz) bound on `s`, then convert to global derivatives.
+  have hprod := norm_iteratedFDerivWithin_mul_le
+    (f := psi i) (g := fun y ↦ (S y)⁻¹) (N := (∞ : WithTop ℕ∞)) (n := k)
+    ((hsmooth i).contDiffOn.mono (Set.subset_univ s))
+    hSinv (hsopen.uniqueDiffOn) hxs (mod_cast le_top)
+  rw [iteratedFDerivWithin_of_isOpen k hsopen hxs] at hprod
+  have hconv1 : ∀ p : ℕ, iteratedFDerivWithin ℝ p (psi i) s x =
+      iteratedFDeriv ℝ p (psi i) x :=
+    fun p ↦ iteratedFDerivWithin_of_isOpen p hsopen hxs
+  have hconv2 : ∀ p : ℕ, ‖iteratedFDerivWithin ℝ p (fun y ↦ (S y)⁻¹) s x‖ ≤
+      (B p) * di⁻¹ ^ p := by
+    intro p
+    rw [iteratedFDerivWithin_of_isOpen p hsopen hxs]
+    have h0 := (hBnn p)
+    have h1 := hB p S x di hdi hSx (hSc.of_le (mod_cast le_top))
+      (fun j _ ↦ hSbound j)
+    exact h1
+  calc ‖iteratedFDeriv ℝ k (fun y => psi i y * (S y)⁻¹) x‖
+      ≤ ∑ p ∈ Finset.range (k + 1), (k.choose p : ℝ) * |C p| * di⁻¹ ^ p *
+          ((B (k - p)) * di⁻¹ ^ (k - p)) := by
+        refine hprod.trans (Finset.sum_le_sum fun p hp ↦ ?_)
+        have hpk : p ≤ k := Nat.le_of_lt_succ (Finset.mem_range.1 hp)
+        have h1 : ‖iteratedFDerivWithin ℝ p (psi i) s x‖ ≤ |C p| * di⁻¹ ^ p := by
+          rw [hconv1 p]
+          calc ‖iteratedFDeriv ℝ p (psi i) x‖ ≤ C p * di⁻¹ ^ p := hC p i x
+            _ ≤ |C p| * di⁻¹ ^ p :=
+                mul_le_mul_of_nonneg_right (le_abs_self _)
+                  (pow_nonneg (inv_nonneg.2 hdi.le) _)
+        have h2 : ‖iteratedFDerivWithin ℝ (k - p) (fun y ↦ (S y)⁻¹) s x‖ ≤
+            (B (k - p)) * di⁻¹ ^ (k - p) := hconv2 (k - p)
+        have hc0 : (0 : ℝ) ≤ (k.choose p : ℝ) := by positivity
+        have hX0 : (0 : ℝ) ≤ |C p| * di⁻¹ ^ p := by positivity
+        have hY0 : (0 : ℝ) ≤ (B (k - p)) * di⁻¹ ^ (k - p) := by
+          have := (hBnn (k - p))
+          positivity
+        have h3 : (k.choose p : ℝ) * ‖iteratedFDerivWithin ℝ p (psi i) s x‖ ≤
+            (k.choose p : ℝ) * |C p| * di⁻¹ ^ p := by
+          rw [mul_assoc]
+          exact mul_le_mul_of_nonneg_left h1 hc0
+        exact mul_le_mul h3 h2 (norm_nonneg _)
+          (mul_nonneg (mul_nonneg hc0 (abs_nonneg _)) (pow_nonneg (inv_nonneg.2 hdi.le) _))
+    _ = (∑ p ∈ Finset.range (k + 1), (k.choose p : ℝ) * |C p| * (B (k - p))) *
+          di⁻¹ ^ k := by
+        rw [Finset.sum_mul]
+        apply Finset.sum_congr rfl
+        intro p hp
+        have hpk : p ≤ k := Nat.le_of_lt_succ (Finset.mem_range.1 hp)
+        have hpow : di⁻¹ ^ p * di⁻¹ ^ (k - p) = di⁻¹ ^ k := by
+          rw [← pow_add, Nat.add_sub_cancel' hpk]
+        calc (k.choose p : ℝ) * |C p| * di⁻¹ ^ p * ((B (k - p)) * di⁻¹ ^ (k - p))
+            = (k.choose p : ℝ) * |C p| * (B (k - p)) * (di⁻¹ ^ p * di⁻¹ ^ (k - p)) :=
+              by ring
+          _ = (k.choose p : ℝ) * |C p| * (B (k - p)) * di⁻¹ ^ k := by rw [hpow]
 
 theorem exists_whitneySmoothPartition_aux_deriv_bound_aux_outside_aux_local
     {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
