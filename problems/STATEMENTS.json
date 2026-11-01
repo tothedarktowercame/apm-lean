@@ -3925,6 +3925,24 @@
    "rev": "910761253",
    "approved_at": "2026-11-01T21:40:42Z"
   },
+  "m93J03": {
+   "decls": [
+    "apm_m93j03"
+   ],
+   "sha256": "83b5a1f03fd91700b7c59e09a988ac9458679c72772568d4ee0798978c4c3ab0",
+   "defs": [
+    "apm_m93J03_clamp",
+    "apm_m93J03_ext",
+    "apm_m93J03_isSmall",
+    "apm_m93J03_isSolution"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": "problems/m93J03/PRELIM-DEFECT.md",
+   "rev": "1b059ffa4",
+   "approved_at": "2026-11-01T21:47:33Z"
+  },
   "m93J04": {
    "decls": [
     "apm_m93j04"
