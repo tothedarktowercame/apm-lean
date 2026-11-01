@@ -1083,12 +1083,366 @@ def apm_t01J06_exists_closed_product_extension_aux_Z :
   (apm_t01J06_exists_closed_product_extension_aux_eta x.1).compContinuousLinearMap
     (ContinuousLinearMap.fst ℝ apm_t01J06_E3 apm_t01J06_E2)
 
+/- Route (claude-14): smoothness and closedness of the solid-angle pullback. Helpers below
+follow the t94A10Closure library computations, adapted to the local volume form. -/
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_volume_apply
+    (v : Fin 3 → apm_t01J06_E3) :
+    apm_t01J06_exists_closed_product_extension_aux_volume v =
+      Matrix.det (fun i j => v i j) := rfl
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_hasFDerivAt_invCube
+    (x : apm_t01J06_E3) (hx : x ≠ 0) :
+    HasFDerivAt (fun y : apm_t01J06_E3 => (‖y‖ ^ 3)⁻¹)
+      ((-3 * ‖x‖⁻¹ ^ 5) • innerSL ℝ x) x := by
+  have hnorm : ‖x‖ ≠ 0 := (norm_pos_iff.mpr hx).ne'
+  have hsq : HasFDerivAt (fun y : apm_t01J06_E3 => ‖y‖ ^ 2)
+      (2 • innerSL ℝ x) x := by
+    simpa using (hasFDerivAt_id x).norm_sq
+  have hsqrt := (Real.hasDerivAt_sqrt (pow_ne_zero 2 hnorm)).comp_hasFDerivAt x hsq
+  have hn : HasFDerivAt (fun y : apm_t01J06_E3 => ‖y‖)
+      ((1 / (2 * ‖x‖)) • (2 • innerSL ℝ x)) x := by
+    convert hsqrt using 1
+    · funext y
+      simp [Real.sqrt_sq (norm_nonneg y)]
+    · rw [Real.sqrt_sq (norm_nonneg x)]
+  have hcub := hn.pow 3
+  have hinv := (hasDerivAt_inv (pow_ne_zero 3 hnorm)).comp_hasFDerivAt x hcub
+  convert hinv using 1
+  ext u
+  simp only [ContinuousLinearMap.smul_apply, nsmul_eq_mul,
+    one_div, innerSL_apply_apply]
+  simp only [smul_eq_mul]
+  field_simp [hnorm]
+  ring
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_hasFDerivAt_solidAngle
+    (x : apm_t01J06_E3) (hx : x ≠ 0) :
+    HasFDerivAt apm_t01J06_exists_closed_product_extension_aux_solidAngle
+      (((‖x‖ ^ 3)⁻¹) • apm_t01J06_exists_closed_product_extension_aux_volume.curryLeft +
+        (((-3 * ‖x‖⁻¹ ^ 5) • innerSL ℝ x).smulRight
+          (apm_t01J06_exists_closed_product_extension_aux_volume.curryLeft x))) x := by
+  simpa [apm_t01J06_exists_closed_product_extension_aux_solidAngle] using
+    (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_hasFDerivAt_invCube
+      x hx).smul
+      (apm_t01J06_exists_closed_product_extension_aux_volume.curryLeft.hasFDerivAt)
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_solidAngle_closed
+    (x : apm_t01J06_E3) (hx : x ≠ 0) :
+    DifferentiableAt ℝ apm_t01J06_exists_closed_product_extension_aux_solidAngle x ∧
+      extDeriv apm_t01J06_exists_closed_product_extension_aux_solidAngle x = 0 := by
+  have hd :=
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_hasFDerivAt_solidAngle
+      x hx
+  refine ⟨hd.differentiableAt, ?_⟩
+  ext v
+  rw [extDeriv_apply hd.differentiableAt]
+  simp_rw [(hd.continuousAlternatingMap_apply_const _).fderiv]
+  simp only [ContinuousLinearMap.flipAlternating_apply_apply,
+    ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+    ContinuousLinearMap.smulRight_apply, smul_eq_mul]
+  simp [Fin.sum_univ_three,
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_volume_apply,
+    Matrix.det_fin_three, Fin.removeNth, Fin.succAbove, PiLp.inner_apply,
+    real_inner_eq_re_inner]
+  have hn : ‖x‖ ≠ 0 := (norm_pos_iff.mpr hx).ne'
+  rw [show (‖x‖ ^ 3)⁻¹ = ‖x‖⁻¹ ^ 3 by rw [inv_pow]]
+  field_simp [hn]
+  ring_nf
+  rw [EuclideanSpace.norm_sq_eq]
+  simp [Fin.sum_univ_three]
+  ring
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_invCube :
+    ContDiffOn ℝ (⊤ : ℕ∞) (fun y : apm_t01J06_E3 => (‖y‖ ^ 3)⁻¹) {x | x ≠ 0} := by
+  intro x hx
+  have hx' : x ≠ 0 := hx
+  exact (((contDiffAt_norm ℝ hx').pow 3).inv
+    (pow_ne_zero 3 (norm_ne_zero_iff.mpr hx'))).contDiffWithinAt
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_solidAngle :
+    ContDiffOn ℝ (⊤ : ℕ∞) apm_t01J06_exists_closed_product_extension_aux_solidAngle
+      {x | x ≠ 0} := by
+  intro x hx
+  have h2 : ContDiffWithinAt ℝ (⊤ : ℕ∞)
+      (fun y : apm_t01J06_E3 =>
+        apm_t01J06_exists_closed_product_extension_aux_volume.curryLeft y) {x | x ≠ 0} x :=
+    (ContinuousLinearMap.contDiff
+      apm_t01J06_exists_closed_product_extension_aux_volume.curryLeft).contDiffWithinAt
+  exact (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_invCube
+    x hx).smul h2
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_scalar :
+    ContDiffOn ℝ (⊤ : ℕ∞) apm_t01J06_exists_closed_product_extension_aux_scalar
+      {x | x ≠ 0} := by
+  intro x hx
+  have hx' : x ≠ 0 := hx
+  have hc : ContDiffAt ℝ (⊤ : ℕ∞) (fun y : apm_t01J06_E3 => y 2) x := by
+    fun_prop
+  have hnrm : ContDiffAt ℝ (⊤ : ℕ∞) (fun y : apm_t01J06_E3 => ‖y‖) x := contDiffAt_norm ℝ hx'
+  have hr : ContDiffAt ℝ (⊤ : ℕ∞) (fun y : apm_t01J06_E3 => y 2 / ‖y‖) x :=
+    hc.div hnrm (norm_ne_zero_iff.mpr hx')
+  exact (((hr.add contDiffAt_const).mul hr)).contDiffWithinAt
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_eta :
+    ContDiffOn ℝ (⊤ : ℕ∞) apm_t01J06_exists_closed_product_extension_aux_eta {x | x ≠ 0} := by
+  intro x hx
+  exact (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_scalar
+    x hx).smul
+    (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_solidAngle
+      x hx)
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_differentiable_scalar
+    (x : apm_t01J06_E3) (hx : x ≠ 0) :
+    DifferentiableAt ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x :=
+  (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_scalar.contDiffAt
+    (isOpen_ne.mem_nhds hx)).differentiableAt (by simp)
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_differentiable_eta
+    (x : apm_t01J06_E3) (hx : x ≠ 0) :
+    DifferentiableAt ℝ apm_t01J06_exists_closed_product_extension_aux_eta x :=
+  (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_eta.contDiffAt
+    (isOpen_ne.mem_nhds hx)).differentiableAt (by simp)
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_scalar_homogeneous
+    (x : apm_t01J06_E3) (hx : x ≠ 0) {t : ℝ} (ht : 0 < t) :
+    apm_t01J06_exists_closed_product_extension_aux_scalar (t • x) =
+      apm_t01J06_exists_closed_product_extension_aux_scalar x := by
+  have h1 : (t • x : apm_t01J06_E3) 2 = t * x 2 := by
+    simp [PiLp.smul_apply, smul_eq_mul]
+  have h2 : ‖(t • x : apm_t01J06_E3)‖ = t * ‖x‖ := by
+    rw [norm_smul, Real.norm_eq_abs, abs_of_pos ht]
+  have hn : ‖x‖ ≠ 0 := (norm_pos_iff.mpr hx).ne'
+  have ht' : t ≠ 0 := ht.ne'
+  have hratio : t * x 2 / (t * ‖x‖) = x 2 / ‖x‖ := by
+    field_simp
+  unfold apm_t01J06_exists_closed_product_extension_aux_scalar
+  rw [h1, h2, hratio]
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_fderiv_scalar_radial
+    (x : apm_t01J06_E3) (hx : x ≠ 0) :
+    fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x x = 0 := by
+  have hd :=
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_differentiable_scalar
+      x hx
+  set g : ℝ → apm_t01J06_E3 := fun t => (1 + t) • x with hg
+  have hgc : HasDerivAt g x 0 := by
+    have h := (hasDerivAt_const (0 : ℝ) x).add ((hasDerivAt_id (0 : ℝ)).smul_const x)
+    have hg' : g = (fun _ : ℝ => x) + fun t => t • x := by
+      funext t
+      simp [hg, add_smul, Pi.add_apply]
+    rw [hg']
+    convert h using 1
+    simp
+  have hconst : ∀ᶠ t in nhds (0 : ℝ),
+      apm_t01J06_exists_closed_product_extension_aux_scalar (g t) =
+        apm_t01J06_exists_closed_product_extension_aux_scalar x := by
+    filter_upwards [Ioo_mem_nhds (show (-1 : ℝ) < 0 by norm_num)
+      (show (0 : ℝ) < 1 by norm_num)] with t ht
+    exact
+      apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_scalar_homogeneous
+        x hx (by linarith [ht.1])
+  have hder0 : HasDerivAt
+      (fun t => apm_t01J06_exists_closed_product_extension_aux_scalar (g t)) 0 0 :=
+    (hasDerivAt_const (0 : ℝ)
+      (apm_t01J06_exists_closed_product_extension_aux_scalar x)).congr_of_eventuallyEq hconst
+  have hg0 : g 0 = x := by simp [hg]
+  have hcomp0 : HasDerivAt
+      (apm_t01J06_exists_closed_product_extension_aux_scalar ∘ g)
+      (fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar (g 0) x) 0 :=
+    (hg0 ▸ hd.hasFDerivAt).comp_hasDerivAt (0 : ℝ) hgc
+  rw [hg0] at hcomp0
+  have hcomp : HasDerivAt
+      (fun t => apm_t01J06_exists_closed_product_extension_aux_scalar (g t))
+      (fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x x) 0 := by
+    simpa [Function.comp_def] using hcomp0
+  exact (hder0.unique hcomp).symm
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_cross
+    (x : apm_t01J06_E3) (v : Fin 3 → apm_t01J06_E3) :
+    (Matrix.det ![x, v 1, v 2]) • v 0 - (Matrix.det ![x, v 0, v 2]) • v 1 +
+        (Matrix.det ![x, v 0, v 1]) • v 2 =
+      (Matrix.det ![v 0, v 1, v 2]) • x := by
+  ext l
+  fin_cases l <;>
+    simp [Matrix.det_fin_three, PiLp.smul_apply, PiLp.sub_apply, PiLp.add_apply,
+      smul_eq_mul, sub_eq_add_neg] <;> ring
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_cross'
+    (x : apm_t01J06_E3) (v : Fin 3 → apm_t01J06_E3) :
+    ∑ i : Fin 3, ((-1 : ℝ) ^ i.val *
+        Matrix.det ![x, (i.removeNth v) 0, (i.removeNth v) 1]) • v i =
+      (Matrix.det ![v 0, v 1, v 2]) • x := by
+  have e0 : (0 : Fin 3).removeNth v = ![v 1, v 2] := by
+    funext j
+    fin_cases j <;> simp [Fin.removeNth, Fin.succAbove]
+  have e1 : (1 : Fin 3).removeNth v = ![v 0, v 2] := by
+    funext j
+    fin_cases j <;> simp [Fin.removeNth, Fin.succAbove]
+  have e2 : (2 : Fin 3).removeNth v = ![v 0, v 1] := by
+    funext j
+    fin_cases j <;> simp [Fin.removeNth, Fin.succAbove]
+  rw [Fin.sum_univ_three, e0, e1, e2]
+  have hcross :=
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_cross x v
+  simpa [neg_smul, sub_eq_add_neg] using hcross
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_solidAngle_apply_det
+    (x : apm_t01J06_E3) (v : Fin 2 → apm_t01J06_E3) :
+    apm_t01J06_exists_closed_product_extension_aux_solidAngle x v =
+      (‖x‖ ^ 3)⁻¹ * Matrix.det ![x, v 0, v 1] := by
+  change (‖x‖ ^ 3)⁻¹ * Matrix.det (Matrix.vecCons (fun j => x j) (fun i j => v i j)) = _
+  congr 1
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_extDeriv_eta
+    (x : apm_t01J06_E3) (hx : x ≠ 0) :
+    extDeriv apm_t01J06_exists_closed_product_extension_aux_eta x = 0 := by
+  have hd :=
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_differentiable_eta x hx
+  have hsd :=
+    (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_solidAngle_closed
+      x hx).1
+  have hsc :=
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_differentiable_scalar
+      x hx
+  have hclosed :=
+    (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_solidAngle_closed
+      x hx).2
+  ext v
+  rw [extDeriv_apply hd,
+    show (0 : apm_t01J06_E3 [⋀^Fin 3]→L[ℝ] ℝ) v = 0 from rfl]
+  show (∑ i : Fin 3, (-1 : ℤ) ^ i.val •
+        fderiv ℝ (fun y => apm_t01J06_exists_closed_product_extension_aux_eta y
+          (i.removeNth v)) x (v i)) = 0
+  have hfd : ∀ w : Fin 2 → apm_t01J06_E3,
+      fderiv ℝ (fun y => apm_t01J06_exists_closed_product_extension_aux_eta y w) x =
+        apm_t01J06_exists_closed_product_extension_aux_scalar x •
+            fderiv ℝ (fun y =>
+              apm_t01J06_exists_closed_product_extension_aux_solidAngle y w) x +
+          (fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x).smulRight
+            (apm_t01J06_exists_closed_product_extension_aux_solidAngle x w) := by
+    intro w
+    have h2 := hsd.hasFDerivAt.continuousAlternatingMap_apply_const w
+    have h := hsc.hasFDerivAt.smul h2
+    have hfun : (fun y => apm_t01J06_exists_closed_product_extension_aux_eta y w) =
+        apm_t01J06_exists_closed_product_extension_aux_scalar •
+          fun y => apm_t01J06_exists_closed_product_extension_aux_solidAngle y w := by
+      funext y
+      rfl
+    rw [hfun, h.fderiv, h2.fderiv]
+  simp_rw [hfd]
+  simp only [zsmul_eq_mul, Int.cast_pow, Int.cast_neg, Int.cast_one,
+    ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+    ContinuousLinearMap.smulRight_apply, smul_eq_mul]
+  have hterm : ∀ i : Fin 3, (-1 : ℝ) ^ i.val *
+        (apm_t01J06_exists_closed_product_extension_aux_scalar x *
+            fderiv ℝ (fun y =>
+              apm_t01J06_exists_closed_product_extension_aux_solidAngle y
+                (i.removeNth v)) x (v i) +
+          fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x (v i) *
+            apm_t01J06_exists_closed_product_extension_aux_solidAngle x
+              (i.removeNth v)) =
+        apm_t01J06_exists_closed_product_extension_aux_scalar x *
+            ((-1 : ℝ) ^ i.val *
+              fderiv ℝ (fun y =>
+                apm_t01J06_exists_closed_product_extension_aux_solidAngle y
+                  (i.removeNth v)) x (v i)) +
+          (-1 : ℝ) ^ i.val *
+            (fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x (v i) *
+              apm_t01J06_exists_closed_product_extension_aux_solidAngle x
+                (i.removeNth v)) := fun i => by
+    ring
+  rw [Finset.sum_congr rfl (fun i _ => hterm i), Finset.sum_add_distrib, ← Finset.mul_sum]
+  have hsumE : (∑ i : Fin 3, (-1 : ℝ) ^ i.val *
+        fderiv ℝ (fun y =>
+          apm_t01J06_exists_closed_product_extension_aux_solidAngle y
+            (i.removeNth v)) x (v i)) = 0 := by
+    have h := extDeriv_apply hsd v
+    have h0v : (0 : apm_t01J06_E3 [⋀^Fin 3]→L[ℝ] ℝ) v = 0 := rfl
+    rw [hclosed, h0v] at h
+    have hbridge : (∑ i : Fin 3, (-1 : ℝ) ^ i.val *
+          fderiv ℝ (fun y =>
+            apm_t01J06_exists_closed_product_extension_aux_solidAngle y
+              (i.removeNth v)) x (v i)) =
+        ∑ i : Fin 3, (-1 : ℤ) ^ i.val •
+          fderiv ℝ (fun y =>
+            apm_t01J06_exists_closed_product_extension_aux_solidAngle y
+              (i.removeNth v)) x (v i) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      simp only [zsmul_eq_mul, Int.cast_pow, Int.cast_neg, Int.cast_one]
+    rw [hbridge, ← h]
+  rw [hsumE, mul_zero, zero_add]
+  simp_rw [apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_solidAngle_apply_det]
+  have h0 : fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x x = 0 :=
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_fderiv_scalar_radial x hx
+  have key : (∑ i : Fin 3, (-1 : ℝ) ^ i.val *
+        (fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x (v i) *
+          ((‖x‖ ^ 3)⁻¹ *
+            Matrix.det ![x, (i.removeNth v) 0, (i.removeNth v) 1]))) =
+      (‖x‖ ^ 3)⁻¹ *
+        fderiv ℝ apm_t01J06_exists_closed_product_extension_aux_scalar x
+          (∑ i : Fin 3, ((-1 : ℝ) ^ i.val *
+            Matrix.det ![x, (i.removeNth v) 0, (i.removeNth v) 1]) • v i) := by
+    rw [map_sum, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro i _
+    rw [map_smul, smul_eq_mul]
+    ring
+  rw [key,
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_cross', map_smul,
+    smul_eq_mul, h0, mul_zero, mul_zero]
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_Z :
+    ContDiffOn ℝ (⊤ : ℕ∞) apm_t01J06_exists_closed_product_extension_aux_Z
+      {x : apm_t01J06_E5 | x.1 ≠ 0} := by
+  have h1 : ContDiffOn ℝ (⊤ : ℕ∞)
+      (fun x : apm_t01J06_E5 => apm_t01J06_exists_closed_product_extension_aux_eta x.1)
+      {x : apm_t01J06_E5 | x.1 ≠ 0} :=
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_eta.comp
+      (contDiff_fst.contDiffOn) (fun x hx => hx)
+  have h2 := (ContinuousLinearMap.contDiff
+      (ContinuousAlternatingMap.compContinuousLinearMapCLM
+        (ContinuousLinearMap.fst ℝ apm_t01J06_E3 apm_t01J06_E2))).contDiffOn.comp h1
+      (Set.mapsTo_univ _ _)
+  have hZ : apm_t01J06_exists_closed_product_extension_aux_Z =
+      (ContinuousAlternatingMap.compContinuousLinearMapCLM
+        (ContinuousLinearMap.fst ℝ apm_t01J06_E3 apm_t01J06_E2)) ∘
+        (fun x : apm_t01J06_E5 => apm_t01J06_exists_closed_product_extension_aux_eta x.1) := by
+    funext x
+    rfl
+  rw [hZ]
+  exact h2
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_extDeriv_Z
+    (x : apm_t01J06_E5) (hx : x.1 ≠ 0) :
+    extDeriv apm_t01J06_exists_closed_product_extension_aux_Z x = 0 := by
+  have hfst : ∀ y : apm_t01J06_E5,
+      fderiv ℝ Prod.fst y = ContinuousLinearMap.fst ℝ apm_t01J06_E3 apm_t01J06_E2 :=
+    fun y => (ContinuousLinearMap.fst ℝ apm_t01J06_E3 apm_t01J06_E2).hasFDerivAt.fderiv
+  have hZ : apm_t01J06_exists_closed_product_extension_aux_Z =
+      fun y => (apm_t01J06_exists_closed_product_extension_aux_eta
+          (Prod.fst y)).compContinuousLinearMap (fderiv ℝ Prod.fst y) := by
+    funext y
+    rw [hfst y]
+    rfl
+  rw [hZ,
+    extDeriv_pullback
+      (apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_differentiable_eta
+        x.1 hx)
+      contDiff_fst.contDiffAt le_top,
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_extDeriv_eta x.1 hx]
+  ext v
+  rfl
+
 lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed :
     ContDiffOn ℝ (⊤ : ℕ∞) apm_t01J06_exists_closed_product_extension_aux_Z
       {x : apm_t01J06_E5 | x.1 ≠ 0} ∧
     ∀ x ∈ {x : apm_t01J06_E5 | x.1 ≠ 0},
       extDeriv apm_t01J06_exists_closed_product_extension_aux_Z x = 0 := by
-  sorry
+  refine ⟨apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_contDiffOn_Z, ?_⟩
+  intro x hx
+  exact apm_t01J06_exists_closed_product_extension_aux_smooth_closed_aux_extDeriv_Z x hx
 
 lemma apm_t01J06_exists_closed_product_extension_aux_restrict
     (omega : apm_t01J06_AmbientForm2) (homega : apm_t01J06_isOmega omega)
