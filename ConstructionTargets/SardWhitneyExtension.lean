@@ -64,20 +64,6 @@ theorem convexWithinJet_nat
     exact ((hf y (interior_subset hy)).of_le hle).domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior
       hu k hy σ
 
-/-- On a compact convex set, continuity of the top within derivative gives one uniform
-Taylor constant for every lower jet.  Apply the Banach-valued segment integral remainder
-on `K`, bound the top jet on the compact set, and absorb factorial constants into `C`. -/
-theorem compactConvex_taylor_remainder_bound
-    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
-    {K : Set E} {f : E → F} {m : ℕ}
-    (hKc : IsCompact K) (hK : Convex ℝ K) (hKi : (interior K).Nonempty)
-    (hf : ContDiffOn ℝ (m + 1) f K) :
-    ∃ C ≥ 0, ∀ k ≤ m, ∀ a ∈ K, ∀ x ∈ K,
-      ‖iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) x -
-          convexJet k f K x‖ ≤ C * ‖x - a‖ ^ (m + 1 - k) := by
-  sorry
-
 /-- Exact derivative formula for the Taylor polynomial.  Evaluate on `v`, differentiate
 the diagonal monomials, use symmetry to identify all injections of the `k` derivative
 variables, and cancel `j!/(j-k)!` against `j!`; the surviving factor is `(j-k)!⁻¹`. -/
@@ -502,6 +488,20 @@ theorem iteratedFDeriv_taylorPolynomial_bound
     · omega
   · intro q hq
     simp
+
+/-- On a compact convex set, continuity of the top within derivative gives one uniform
+Taylor constant for every lower jet.  Apply the Banach-valued segment integral remainder
+on `K`, bound the top jet on the compact set, and absorb factorial constants into `C`. -/
+theorem compactConvex_taylor_remainder_bound
+    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
+    {K : Set E} {f : E → F} {m : ℕ}
+    (hKc : IsCompact K) (hK : Convex ℝ K) (hKi : (interior K).Nonempty)
+    (hf : ContDiffOn ℝ (m + 1) f K) :
+    ∃ C ≥ 0, ∀ k ≤ m, ∀ a ∈ K, ∀ x ∈ K,
+      ‖iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) x -
+          convexJet k f K x‖ ≤ C * ‖x - a‖ ^ (m + 1 - k) := by
+  sorry
 
 /-- Taylor polynomials based at two points of `K` differ to the full Whitney order.
 Expand `P_a-P_b` at `b`; its derivatives there are controlled by the compact convex
