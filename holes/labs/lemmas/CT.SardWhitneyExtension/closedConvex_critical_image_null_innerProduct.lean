@@ -3397,7 +3397,16 @@ theorem closedConvex_critical_image_null_innerProduct
     (f : E → F) (hf : ContDiffOn ℝ ∞ f s) :
     mu (f '' {x | x ∈ s ∧
       ¬ Function.Surjective (fderivWithin ℝ f s x)}) = 0 := by
-  sorry
+  obtain ⟨p, hp⟩ := hsi
+  apply measure_mono_null
+    (t := ⋃ n : ℕ, f '' {x | x ∈ s ∩ Metric.ball p (n + 1 : ℝ) ∧
+      ¬ Function.Surjective (fderivWithin ℝ f s x)})
+  · rintro y ⟨x, hx, rfl⟩
+    obtain ⟨n, hn⟩ := Set.mem_iUnion.mp
+      (subset_iUnion_inter_ball_nat s p hx.1)
+    exact Set.mem_iUnion.mpr ⟨n, ⟨x, ⟨hn, hx.2⟩, rfl⟩⟩
+  · exact measure_iUnion_null fun n ↦
+      compactExhaustion_critical_image_null mu hs hsc hp f hf n
 -- END SEAT AREA
 
 /-- The same closed-convex Sard theorem for an arbitrary finite-dimensional normed source.
