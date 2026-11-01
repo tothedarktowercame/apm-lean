@@ -1958,7 +1958,26 @@ theorem apm_t97A03_invariants_aux_transport
     Nonempty (apm_t97A03_Homology Y 2 ≅ ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
     (∀ n, 3 ≤ n → Limits.IsZero (apm_t97A03_Homology Y n)) ∧
     Nonempty (FundamentalGroup Y y ≃* FreeGroup (Fin 3)) := by
-  sorry
+  obtain ⟨h0⟩ := h0
+  obtain ⟨h1⟩ := h1
+  obtain ⟨h2⟩ := h2
+  let homologyTransport (n : ℕ) :
+      apm_t97A03_Homology Y n ≅ apm_t97A03_Homology apm_t97A03_modelWedge n :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of Y) n (apm_t97A03_Homology apm_t97A03_modelWedge n)
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        e n ≪≫
+       (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of apm_t97A03_modelWedge) n).symm)
+  refine ⟨⟨homologyTransport 0 ≪≫ h0⟩,
+    ⟨homologyTransport 1 ≪≫ h1⟩,
+    ⟨homologyTransport 2 ≪≫ h2⟩, ?_, ?_⟩
+  · intro n hn
+    exact Limits.IsZero.of_iso (hhigh n hn) (homologyTransport n)
+  · obtain ⟨hpi⟩ := hpi (e.toFun y)
+    let epi := (FundamentalGroupoidFunctor.equivOfHomotopyEquiv e).fullyFaithfulFunctor.mulEquivEnd
+      (FundamentalGroupoid.mk y)
+    exact ⟨epi.trans hpi⟩
 -- END SEAT AREA
 
 /-- Why this unblocks `apm_t97a03`: this is the missing global monodromy
