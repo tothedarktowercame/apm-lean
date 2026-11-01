@@ -1316,7 +1316,29 @@ theorem t99J02_ell_mem (u : ℂ) (hu : ‖u‖ ≤ 1) :
 theorem t99J02_fibre (z z' : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im) (hz' : 0 ≤ (z' : ℂ).im)
     (h : surfaceQuotient true 1 (t99J02_phiDisk z) = surfaceQuotient true 1 (t99J02_phiDisk z')) :
     surfaceQuotient true 2 z = surfaceQuotient true 2 z' := by
-  sorry
+  have hrel : Relation.EqvGen (SurfaceRel true 1)
+      (t99J02_phiDisk z) (t99J02_phiDisk z') := Quotient.exact h
+  rcases t99J02_rel_boundary true 1 hrel with heq | ⟨hn, hn'⟩
+  · have hphi : t99J02_phi (z : ℂ) = t99J02_phi (z' : ℂ) := by
+      exact congrArg Subtype.val heq
+    rcases t99J02_phi_injOn z z' hz hz' hphi with rfl | ⟨hzend, hz'end⟩
+    · rfl
+    · rcases hzend with hz1 | hzn1 <;> rcases hz'end with hz'1 | hz'n1
+      · rw [show z = z' by apply Subtype.ext; rw [hz1, hz'1]]
+      · have ez : z = ⟨1, by simp⟩ := Subtype.ext hz1
+        have ez' : z' = ⟨-1, by simp⟩ := Subtype.ext hz'n1
+        rw [ez, ez']
+        exact t99J02_q2_one_neg_one (by simp) (by simp)
+      · have ez : z = ⟨-1, by simp⟩ := Subtype.ext hzn1
+        have ez' : z' = ⟨1, by simp⟩ := Subtype.ext hz'1
+        rw [ez, ez']
+        exact (t99J02_q2_one_neg_one (by simp) (by simp)).symm
+      · rw [show z = z' by apply Subtype.ext; rw [hzn1, hz'n1]]
+  · have hz_norm : ‖(z : ℂ)‖ = 1 := t99J02_phi_norm z hz hn
+    have hz'_norm : ‖(z' : ℂ)‖ = 1 := t99J02_phi_norm z' hz' hn'
+    apply t99J02_edge_lift hrel hn z z' hz hz'
+    · simpa [t99J02_phiDisk] using (t99J02_phi_edge_aux (z : ℂ) hz_norm hz).symm
+    · simpa [t99J02_phiDisk] using (t99J02_phi_edge_aux (z' : ℂ) hz'_norm hz').symm
 -- END SEAT AREA
 
 /-- The collar. Its large map is `e⁻¹ ∘ f ∘ ell ∘ stretch ∘ chi`, for `e`, `f` from
