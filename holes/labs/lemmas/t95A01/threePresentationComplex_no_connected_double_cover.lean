@@ -74,6 +74,23 @@ path-connected total space, then `coveringFiberCard_eq_index`; transport the
 subgroup through the supplied group equivalence and contradict divisibility
 of the order three group. -/
 -- BEGIN SEAT AREA
+private noncomputable instance
+    threePresentationComplex_no_connected_double_cover_aux_sphereLocPathConnected :
+    LocPathConnectedSpace (ConstructionTargets.SphereHomology.Sphere 1) :=
+  ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 1))
+    (ConstructionTargets.SphereHomology.Sphere 1)
+
+private noncomputable instance
+    threePresentationComplex_no_connected_double_cover_aux_circleLocPathConnected :
+    LocPathConnectedSpace Circle :=
+  Topology.IsQuotientMap.locPathConnectedSpace
+    ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.symm.isQuotientMap
+
+private noncomputable instance
+    threePresentationComplex_no_connected_double_cover_aux_diskLocPathConnected :
+    LocPathConnectedSpace ConstructionTargets.AttachTwoCell.Disk :=
+  (convex_closedBall (0 : ℂ) 1).locPathConnectedSpace
+
 theorem threePresentationComplex_no_connected_double_cover
     (hpi : Nonempty
       (FundamentalGroup ThreePresentationComplex threePresentationBasepoint ≃*
@@ -83,7 +100,36 @@ theorem threePresentationComplex_no_connected_double_cover
       ¬ (IsCoveringMap p ∧
         ∀ x : ThreePresentationComplex,
           Nat.card {e : E // p e = x} = 2) := by
-  sorry
+  intro E _ _ p ⟨hp, hcard⟩
+  letI : LocPathConnectedSpace ThreePresentationComplex :=
+    Quotient.locPathConnectedSpace
+  letI : LocPathConnectedSpace E :=
+    ConstructionTargets.CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace hp
+  letI : PathConnectedSpace E := PathConnectedSpace.of_locPathConnectedSpace
+  letI : PathConnectedSpace ThreePresentationComplex :=
+    ConstructionTargets.AttachTwoCell.cell_pc degreeThreeLoop
+  have hfiberpos : 0 < Nat.card {e : E // p e = threePresentationBasepoint} := by
+    rw [hcard threePresentationBasepoint]
+    norm_num
+  obtain ⟨⟨e, he⟩⟩ := (Nat.card_pos_iff.mp hfiberpos).1
+  have hindex :
+      (ConstructionTargets.coveringInducedFundamentalGroupMap hp e).range.index = 2 := by
+    rw [← ConstructionTargets.coveringFiberCard_eq_index hp e]
+    simpa only [Set.mem_singleton_iff] using hcard (p e)
+  have hbasecard : Nat.card (FundamentalGroup ThreePresentationComplex (p e)) = 3 := by
+    let q : Path (p e) threePresentationBasepoint := PathConnectedSpace.somePath _ _
+    obtain ⟨φ⟩ := hpi
+    calc
+      Nat.card (FundamentalGroup ThreePresentationComplex (p e)) =
+          Nat.card (FundamentalGroup ThreePresentationComplex threePresentationBasepoint) :=
+        Nat.card_congr (FundamentalGroup.fundamentalGroupMulEquivOfPath q).toEquiv
+      _ = Nat.card (Multiplicative (ZMod 3)) := Nat.card_congr φ.toEquiv
+      _ = 3 := by simp
+  have hdvd : 2 ∣ Nat.card (FundamentalGroup ThreePresentationComplex (p e)) := by
+    rw [← hindex]
+    exact (ConstructionTargets.coveringInducedFundamentalGroupMap hp e).range.index_dvd_card
+  rw [hbasecard] at hdvd
+  norm_num at hdvd
 -- END SEAT AREA
 
 /-- The degree-two singular homology of the `aabb` polygon vanishes.  Use
