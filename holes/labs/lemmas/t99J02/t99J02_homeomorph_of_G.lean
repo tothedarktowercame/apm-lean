@@ -1539,7 +1539,114 @@ theorem t99J02_homeomorph_of_G [T2Space (Surface true 1)] (hch : t99J02_Chord g�
     (hs₁ : Function.Surjective g₁) (hs₂ : Function.Surjective g₂)
     (hcg₁ : Continuous g₁) (hcg₂ : Continuous g₂) :
     Nonempty (ConnectedSum c₁ c₂ ≃ₜ Surface true 2) := by
-  sorry
+  let F : Surface true 2 → ConnectedSum c₁ c₂ :=
+    Quotient.lift (t99J02_G g₁ g₂) (fun _ _ h => hrel h)
+  have hFq (z : ConstructionTargets.Surfaces.Disk) :
+      F (surfaceQuotient true 2 z) = t99J02_G g₁ g₂ z := rfl
+  have hFc : Continuous F := by
+    apply continuous_coinduced_dom.mpr
+    exact hcont
+  have hFi : Function.Injective F := by
+    intro x y hxy
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      induction y using Quotient.inductionOn with
+      | _ y => exact hinj hxy
+  have hFs : Function.Surjective F := by
+    intro p
+    induction p using Quotient.inductionOn with
+    | _ p =>
+      cases p with
+      | inl p =>
+        obtain ⟨z, rfl⟩ := hs₁ p
+        refine ⟨surfaceQuotient true 2 z.1, ?_⟩
+        rw [hFq, t99J02_G, dif_pos z.2]
+        congr 3
+      | inr p =>
+        obtain ⟨z, rfl⟩ := hs₂ p
+        refine ⟨surfaceQuotient true 2 (t99J02_neg z.1), ?_⟩
+        rw [hFq, t99J02_G_lower g₁ g₂ hch]
+        · congr 3
+          apply Subtype.ext
+          simp [t99J02_neg]
+        · simp [t99J02_neg, z.2]
+  have hFclosed : IsClosedMap F := by
+    have hUpperClosed : IsClosed {z : ConstructionTargets.Surfaces.Disk |
+        0 ≤ (z : ℂ).im} :=
+      isClosed_le continuous_const (Complex.continuous_im.comp continuous_subtype_val)
+    letI : CompactSpace t99J02_Upper :=
+      isCompact_iff_compactSpace.mp hUpperClosed.isCompact
+    intro A hA
+    apply t99J02_isClosed_of
+    · let B : Set t99J02_Upper :=
+        {z | surfaceQuotient true 2 z.1 ∈ A}
+      have hBc : IsClosed B := by
+        change IsClosed ((fun z : t99J02_Upper =>
+          surfaceQuotient true 2 z.1) ⁻¹' A)
+        exact hA.preimage ((continuous_surfaceQuotient true 2).comp continuous_subtype_val)
+      have hBcompact : IsCompact B := hBc.isCompact
+      have heq :
+          (fun p => t99J02_mk c₁ c₂ (Sum.inl p)) ⁻¹' (F '' A) = g₁ '' B := by
+        ext p
+        constructor
+        · rintro ⟨x, hxA, hxp⟩
+          induction x using Quotient.inductionOn with
+          | _ x =>
+            obtain ⟨z, rfl⟩ := hs₁ p
+            refine ⟨z, ?_, rfl⟩
+            change surfaceQuotient true 2 z.1 ∈ A
+            have hzG : t99J02_G g₁ g₂ z.1 =
+                t99J02_mk c₁ c₂ (Sum.inl (g₁ z)) := by
+              rw [t99J02_G, dif_pos z.2]
+            rw [hinj (hzG.trans hxp.symm)]
+            exact hxA
+        · rintro ⟨z, hzB, rfl⟩
+          refine ⟨surfaceQuotient true 2 z.1, hzB, ?_⟩
+          rw [hFq, t99J02_G, dif_pos z.2]
+      rw [heq]
+      exact (hBcompact.image hcg₁).isClosed
+    · let B : Set t99J02_Upper :=
+        {z | surfaceQuotient true 2 (t99J02_neg z.1) ∈ A}
+      have hneg : Continuous t99J02_neg := by
+        apply Continuous.subtype_mk
+        change Continuous (fun z : ConstructionTargets.Surfaces.Disk => -(z : ℂ))
+        fun_prop
+      have hBc : IsClosed B := by
+        change IsClosed ((fun z : t99J02_Upper =>
+          surfaceQuotient true 2 (t99J02_neg z.1)) ⁻¹' A)
+        exact hA.preimage ((continuous_surfaceQuotient true 2).comp
+          (hneg.comp continuous_subtype_val))
+      have hBcompact : IsCompact B := hBc.isCompact
+      have heq :
+          (fun p => t99J02_mk c₁ c₂ (Sum.inr p)) ⁻¹' (F '' A) = g₂ '' B := by
+        ext p
+        constructor
+        · rintro ⟨x, hxA, hxp⟩
+          induction x using Quotient.inductionOn with
+          | _ x =>
+            obtain ⟨z, rfl⟩ := hs₂ p
+            refine ⟨z, ?_, rfl⟩
+            change surfaceQuotient true 2 (t99J02_neg z.1) ∈ A
+            have hzG : t99J02_G g₁ g₂ (t99J02_neg z.1) =
+                t99J02_mk c₁ c₂ (Sum.inr (g₂ z)) := by
+              rw [t99J02_G_lower g₁ g₂ hch]
+              · congr 3
+                exact Subtype.ext (by simp [t99J02_neg])
+              · simp [t99J02_neg, z.2]
+            rw [hinj (hzG.trans hxp.symm)]
+            exact hxA
+        · rintro ⟨z, hzB, rfl⟩
+          refine ⟨surfaceQuotient true 2 (t99J02_neg z.1), hzB, ?_⟩
+          rw [hFq, t99J02_G_lower g₁ g₂ hch]
+          · congr 3
+            exact Subtype.ext (by simp [t99J02_neg])
+          · simp [t99J02_neg, z.2]
+      rw [heq]
+      exact (hBcompact.image hcg₂).isClosed
+  have hhome : IsHomeomorph F :=
+    isHomeomorph_iff_continuous_isClosedMap_bijective.mpr
+      ⟨hFc, hFclosed, hFi, hFs⟩
+  exact ⟨(hhome.homeomorph F).symm⟩
 -- END SEAT AREA
 
 end Glue
