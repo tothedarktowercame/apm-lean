@@ -2288,6 +2288,248 @@ theorem whitneyOffExtension_sub_taylor
 polynomial at a nearest point.  Differentiate the subtraction identity, use
 `norm_iteratedFDeriv_smul_le`, `taylor_difference_bound`, support geometry, derivative
 bounds, and uniform overlap; each Leibniz term has power `dist(x,K)^(m+1-k)`. -/
+/- Variant of `whitney_bounded_overlap_aux_fiber`: stratum-`k` indices whose center is
+within `(9/5)·2^(k+1)` of `x` are bounded by one fixed packing number. -/
+theorem whitneyOffExtension_jet_bound_aux_fiber
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    (K : Set E) (k : ℤ) (x : E) :
+    {i : SardConvexDomain.WhitneyNetIndex K | i.1 = k ∧
+      dist x i.center < (9 / 5 : ℝ) * (2 : ℝ) ^ (k + 1)}.encard ≤
+      Metric.packingNumber ((1 : NNReal) / 8) (Metric.closedBall (0 : E) 4) := by
+  let I : Set (SardConvexDomain.WhitneyNetIndex K) := {i | i.1 = k ∧
+    dist x i.center < (9 / 5 : ℝ) * (2 : ℝ) ^ (k + 1)}
+  let f : SardConvexDomain.WhitneyNetIndex K → E := fun i =>
+    SardConvexDomain.whitneyNormalize k x i.center
+  have hinj : Set.InjOn f I := by
+    intro i hi j hj hij
+    have hk : i.1 = j.1 := hi.1.trans hj.1.symm
+    have hcent : i.center = j.center := by
+      have hz : ((2 : ℝ) ^ k)⁻¹ * dist i.center j.center = 0 := by
+        rw [← SardConvexDomain.dist_whitneyNormalize k x i.center j.center]
+        have hij' : SardConvexDomain.whitneyNormalize k x i.center =
+            SardConvexDomain.whitneyNormalize k x j.center := by simpa [f] using hij
+        rw [hij', dist_self]
+      exact dist_eq_zero.mp ((mul_eq_zero.mp hz).resolve_left
+        (ne_of_gt (inv_pos.mpr (by positivity))))
+    cases i with
+    | mk ik ic =>
+      cases j with
+      | mk jk jc =>
+        dsimp at hk hcent ⊢
+        subst jk
+        exact congrArg (Sigma.mk ik) (Subtype.ext hcent)
+  rw [← hinj.encard_image]
+  refine (?_ : Metric.IsSeparated (↑((1 : NNReal) / 8)) (f '' I)).encard_le_packingNumber ?_
+  · apply Set.Pairwise.image
+    intro (i : SardConvexDomain.WhitneyNetIndex K) hi j hj hne
+    have hcne : i.center ≠ j.center := by
+      intro h
+      apply hne
+      have hk : i.1 = j.1 := hi.1.trans hj.1.symm
+      cases i with
+      | mk ik ic =>
+        cases j with
+        | mk jk jc =>
+          dsimp at hk h ⊢
+          subst jk
+          exact congrArg (Sigma.mk ik) (Subtype.ext h)
+    have hsep := (SardConvexDomain.whitneyStratumNet_spec K k).2.1
+      (by rw [← hi.1]; exact i.2.2) (by rw [← hj.1]; exact j.2.2) hcne
+    have hr : (2 : ℝ) ^ k / 8 < dist i.center j.center := by
+      simpa [SardConvexDomain.whitneyStratumRadius, edist_dist] using hsep
+    have hn := SardConvexDomain.dist_whitneyNormalize k x i.center j.center
+    have hfixed : (1 / 8 : ℝ) < dist (f i) (f j) := by
+      change (1 / 8 : ℝ) < dist (SardConvexDomain.whitneyNormalize k x i.center)
+        (SardConvexDomain.whitneyNormalize k x j.center)
+      rw [hn]
+      calc
+        (1 / 8 : ℝ) = ((2 : ℝ) ^ k)⁻¹ * ((2 : ℝ) ^ k / 8) := by field_simp
+        _ < ((2 : ℝ) ^ k)⁻¹ * dist i.center j.center :=
+          mul_lt_mul_of_pos_left hr (inv_pos.mpr (by positivity))
+    dsimp only [Function.onFun]
+    rw [edist_dist]
+    simpa using (ENNReal.ofReal_lt_ofReal_iff
+      (lt_trans (by norm_num : (0 : ℝ) < 1 / 8) hfixed)).2 hfixed
+  · rintro _ ⟨i, hi, rfl⟩
+    apply Metric.mem_closedBall.2
+    have hdist : dist i.center x < (9 / 5 : ℝ) * (2 : ℝ) ^ (k + 1) := by
+      rw [dist_comm]; exact hi.2
+    refine le_of_lt (calc
+      dist (SardConvexDomain.whitneyNormalize k x i.center) 0 =
+          ((2 : ℝ) ^ k)⁻¹ * dist i.center x := by
+        simpa [SardConvexDomain.whitneyNormalize] using
+          SardConvexDomain.dist_whitneyNormalize k x i.center x
+      _ < ((2 : ℝ) ^ k)⁻¹ * ((9 / 5 : ℝ) * (2 : ℝ) ^ (k + 1)) :=
+        mul_lt_mul_of_pos_left hdist (inv_pos.mpr (by positivity))
+      _ = 18 / 5 := by
+        have h2k : (2 : ℝ) ^ (k + 1) = (2 : ℝ) ^ k * 2 := by
+          rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0), zpow_one]
+        rw [h2k]
+        field_simp
+        norm_num
+      _ ≤ 4 := by norm_num)
+
+/- The half-distance balls meeting the definite ball around a complement point form a
+finite set of uniformly bounded cardinality: at most five strata, each packing-bounded. -/
+theorem whitneyOffExtension_jet_bound_aux_count
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    (K : Set E) {x : E} :
+    ∃ S : Finset (SardConvexDomain.WhitneyNetIndex K),
+      (∀ i, i ∈ S ↔ (Metric.ball x (Metric.infDist x K / 16) ∩
+          Metric.ball i.center (Metric.infDist i.center K / 2)).Nonempty) ∧
+      S.card ≤ 5 * (Metric.packingNumber ((1 : NNReal) / 8)
+        (Metric.closedBall (0 : E) 4)).toNat := by
+  classical
+  set d := Metric.infDist x K with hd_def
+  set T : Set (SardConvexDomain.WhitneyNetIndex K) :=
+    {i | (Metric.ball x (d / 16) ∩
+      Metric.ball i.center (Metric.infDist i.center K / 2)).Nonempty} with hT_def
+  set P₀ : ℕ∞ := Metric.packingNumber ((1 : NNReal) / 8)
+    (Metric.closedBall (0 : E) 4) with hP₀_def
+  have hP₀ : P₀ ≠ ⊤ := (isCompact_closedBall (0 : E) 4).packingNumber_ne_top _
+    (by norm_num)
+  set fib : ℤ → Set (SardConvexDomain.WhitneyNetIndex K) := fun k =>
+    {i | i.1 = k ∧ dist x i.center < (9 / 5 : ℝ) * (2 : ℝ) ^ (k + 1)} with hfib_def
+  have hfib_encard : ∀ k, (fib k).encard ≤ P₀ := fun k => by
+    exact whitneyOffExtension_jet_bound_aux_fiber K k x
+  have hfib_fin : ∀ k, (fib k).Finite := fun k => by
+    rw [← Set.encard_ne_top_iff]
+    exact ((hfib_encard k).trans_lt (lt_top_iff_ne_top.2 hP₀)).ne
+  by_cases hT : T.Nonempty
+  · obtain ⟨i₀, hi₀⟩ := hT
+    obtain ⟨z₀, hz₀x, hz₀b⟩ := hi₀
+    have hz₀x' : dist x z₀ < d / 16 := by
+      rw [dist_comm]; exact Metric.mem_ball.1 hz₀x
+    have hcomp₀ := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hz₀b
+    have hlipxz₀ := Metric.infDist_le_infDist_add_dist (s := K) (x := x) (y := z₀)
+    have hlipzx₀ := Metric.infDist_le_infDist_add_dist (s := K) (x := z₀) (y := x)
+    rw [dist_comm z₀ x] at hlipzx₀
+    have he₀lo : (5 / 8 : ℝ) * d < Metric.infDist i₀.center K := by linarith [hcomp₀.2]
+    have he₀hi : Metric.infDist i₀.center K < (17 / 8 : ℝ) * d := by linarith [hcomp₀.1]
+    have hspec₀ := (SardConvexDomain.whitneyStratumNet_spec K i₀.1).1 i₀.2.2
+    have hsub : T ⊆ ⋃ k ∈ Finset.Icc (i₀.1 - 2) (i₀.1 + 2), fib k := by
+      intro i hi
+      obtain ⟨z, hzx, hzb⟩ := hi
+      have hzx' : dist x z < d / 16 := by
+        rw [dist_comm]; exact Metric.mem_ball.1 hzx
+      have hcomp := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hzb
+      have hlipxz := Metric.infDist_le_infDist_add_dist (s := K) (x := x) (y := z)
+      have hlipzx := Metric.infDist_le_infDist_add_dist (s := K) (x := z) (y := x)
+      rw [dist_comm z x] at hlipzx
+      have helo : (5 / 8 : ℝ) * d < Metric.infDist i.center K := by linarith [hcomp.2]
+      have hehi : Metric.infDist i.center K < (17 / 8 : ℝ) * d := by linarith [hcomp.1]
+      have hspec_i := (SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2
+      have hsilo : (2 : ℝ) ^ i.1 ≤ Metric.infDist i.center K := hspec_i.2.1
+      have hsihi : Metric.infDist i.center K < (2 : ℝ) ^ (i.1 + 1) := hspec_i.2.2
+      have hs₀lo : (2 : ℝ) ^ i₀.1 ≤ Metric.infDist i₀.center K := hspec₀.2.1
+      have hs₀hi : Metric.infDist i₀.center K < (2 : ℝ) ^ (i₀.1 + 1) := hspec₀.2.2
+      have hklo : i₀.1 - 2 ≤ i.1 := by
+        by_contra hlt
+        push_neg at hlt
+        have h1 : (2 : ℝ) ^ (i.1 + 1) ≤ (2 : ℝ) ^ (i₀.1 - 2) :=
+          zpow_le_zpow_right₀ (by norm_num) (by omega)
+        have h2 : (2 : ℝ) ^ (i₀.1 - 2) = (2 : ℝ) ^ i₀.1 / 4 := by
+          rw [show (i₀.1 - 2) = i₀.1 + (-2 : ℤ) from by omega,
+            zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0),
+            show (2 : ℝ) ^ (-2 : ℤ) = 1 / 4 from by norm_num]
+          ring
+        linarith
+      have hkhi : i.1 ≤ i₀.1 + 2 := by
+        by_contra hlt
+        push_neg at hlt
+        have h1 : (2 : ℝ) ^ (i₀.1 + 3) ≤ (2 : ℝ) ^ i.1 :=
+          zpow_le_zpow_right₀ (by norm_num) (by omega)
+        have h2 : (2 : ℝ) ^ (i₀.1 + 3) = 8 * (2 : ℝ) ^ i₀.1 := by
+          rw [show (i₀.1 + 3) = i₀.1 + (3 : ℤ) from by omega,
+            zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0),
+            show (2 : ℝ) ^ (3 : ℤ) = 8 from by norm_num]
+          ring
+        have h5 : (2 : ℝ) ^ (i₀.1 + 1) = 2 * (2 : ℝ) ^ i₀.1 := by
+          rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0), zpow_one]
+          ring
+        linarith
+      have hdist : dist x i.center < (9 / 5 : ℝ) * (2 : ℝ) ^ (i.1 + 1) := by
+        have hzc : dist z i.center < Metric.infDist i.center K / 2 := Metric.mem_ball.1 hzb
+        calc dist x i.center ≤ dist x z + dist z i.center := dist_triangle _ _ _
+          _ < d / 16 + Metric.infDist i.center K / 2 := add_lt_add hzx' hzc
+          _ < d / 16 + ((17 / 8 : ℝ) * d) / 2 := by linarith [hehi]
+          _ = (9 / 8 : ℝ) * d := by ring
+          _ = (9 / 5 : ℝ) * ((5 / 8 : ℝ) * d) := by ring
+          _ < (9 / 5 : ℝ) * Metric.infDist i.center K :=
+            mul_lt_mul_of_pos_left helo (by norm_num)
+          _ < (9 / 5 : ℝ) * (2 : ℝ) ^ (i.1 + 1) :=
+            mul_lt_mul_of_pos_left hspec_i.2.2 (by norm_num)
+      refine Set.mem_iUnion.2 ⟨i.1, Set.mem_iUnion.2
+        ⟨Finset.mem_Icc.2 ⟨hklo, hkhi⟩, rfl, hdist⟩⟩
+    have hTfin : T.Finite :=
+      ((Finset.finite_toSet (Finset.Icc (i₀.1 - 2) (i₀.1 + 2))).biUnion
+        (fun k _ ↦ hfib_fin k)).subset hsub
+    have henc : T.encard ≤ 5 * P₀ := calc
+      T.encard ≤ (⋃ k ∈ Finset.Icc (i₀.1 - 2) (i₀.1 + 2), fib k).encard :=
+        Set.encard_le_encard hsub
+      _ ≤ ∑ k ∈ Finset.Icc (i₀.1 - 2) (i₀.1 + 2), (fib k).encard :=
+        Finset.set_encard_biUnion_le _ _
+      _ ≤ ∑ k ∈ Finset.Icc (i₀.1 - 2) (i₀.1 + 2), P₀ :=
+        Finset.sum_le_sum (fun k _ ↦ hfib_encard k)
+      _ = 5 * P₀ := by
+        rw [Finset.sum_const, nsmul_eq_mul]
+        have hcard : (Finset.Icc (i₀.1 - 2) (i₀.1 + 2)).card = 5 := by
+          rw [Int.card_Icc]
+          have h5 : i₀.1 + 2 + 1 - (i₀.1 - 2) = (5 : ℤ) := by omega
+          rw [h5]
+          rfl
+        rw [hcard]
+        norm_cast
+    have hcast : (5 : ℕ∞) * P₀ = ((5 * P₀.toNat : ℕ) : ℕ∞) := by
+      conv_lhs => rw [← ENat.coe_toNat hP₀]
+      rw [ENat.coe_mul]
+      norm_cast
+    refine ⟨hTfin.toFinset, ?_, ?_⟩
+    · intro i
+      rw [Set.Finite.mem_toFinset]
+      rfl
+    · calc hTfin.toFinset.card = T.ncard := (Set.ncard_eq_toFinset_card T hTfin).symm
+        _ = T.encard.toNat := Set.ncard_def T
+        _ ≤ (5 * P₀).toNat :=
+          ENat.toNat_le_toNat henc (by rw [hcast]; exact ENat.coe_ne_top _)
+        _ = 5 * P₀.toNat := by rw [hcast, ENat.toNat_coe]
+  · refine ⟨∅, ?_, by simp⟩
+    intro i
+    simp only [Finset.notMem_empty, false_iff]
+    intro hi
+    exact hT ⟨i, hi⟩
+
+/- Iterated derivatives commute with pointwise subtraction of `C^∞` maps. -/
+theorem whitneyOffExtension_jet_bound_aux_iteratedFDeriv_sub
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {φ ψ : E → F} (hφ : ContDiff ℝ (∞ : WithTop ℕ∞) φ) (hψ : ContDiff ℝ (∞ : WithTop ℕ∞) ψ) (k : ℕ) :
+    ∀ (x : E) (u : Fin k → E),
+      iteratedFDeriv ℝ k (fun y ↦ φ y - ψ y) x u =
+        iteratedFDeriv ℝ k φ x u - iteratedFDeriv ℝ k ψ x u := by
+  induction k with
+  | zero =>
+    intro x u
+    rw [iteratedFDeriv_zero_apply, iteratedFDeriv_zero_apply, iteratedFDeriv_zero_apply]
+  | succ k ih =>
+    intro x u
+    have hfun : iteratedFDeriv ℝ k (fun z ↦ φ z - ψ z) =
+        iteratedFDeriv ℝ k φ - iteratedFDeriv ℝ k ψ := by
+      funext y
+      rw [Pi.sub_apply]
+      ext v
+      rw [ContinuousMultilinearMap.sub_apply]
+      exact ih y v
+    rw [iteratedFDeriv_succ_apply_left, iteratedFDeriv_succ_apply_left,
+      iteratedFDeriv_succ_apply_left, hfun]
+    have hlt : (k : WithTop ℕ∞) < (∞ : WithTop ℕ∞) :=
+      WithTop.coe_lt_coe.2 (ENat.coe_lt_top k)
+    have hA : DifferentiableAt ℝ (iteratedFDeriv ℝ k φ) x :=
+      hφ.contDiffAt.differentiableAt_iteratedFDeriv hlt
+    have hB : DifferentiableAt ℝ (iteratedFDeriv ℝ k ψ) x :=
+      hψ.contDiffAt.differentiableAt_iteratedFDeriv hlt
+    rw [fderiv_sub hA hB, ContinuousLinearMap.sub_apply, ContinuousMultilinearMap.sub_apply]
+
 theorem whitneyOffExtension_jet_bound
     {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
@@ -2301,7 +2543,207 @@ theorem whitneyOffExtension_jet_bound
             iteratedFDeriv ℝ k
               (taylorPolynomial m (fun j ↦ convexJet j f K) a) x‖ ≤
           C * (Metric.infDist x K) ^ (m + 1 - k) := by
-  sorry
+  classical
+  set hKn : K.Nonempty := hKi.mono interior_subset
+  set J : (k : ℕ) → E → E[×k]→L[ℝ] F := fun j ↦ convexJet j f K with hJ_def
+  obtain ⟨C₁, hC₁0, hC₁⟩ := taylor_difference_bound hKc hK hKi hf
+  set Nn : ℕ := 5 * (Metric.packingNumber ((1 : NNReal) / 8)
+    (Metric.closedBall (0 : E) 4)).toNat with hNn_def
+  set Wval : ℕ → ℕ → ℝ := fun p j ↦
+    (p.choose j : ℝ) * P.derivConstant j * 2 ^ j * 5 ^ (m + 1 - p + j) with hWval_def
+  set B : ℝ := ∑ p ∈ Finset.range (m + 1), ∑ j ∈ Finset.range (p + 1), Wval p j
+    with hB_def
+  have hWval_nn : ∀ p j, 0 ≤ Wval p j := fun p j ↦ by
+    rw [hWval_def]
+    dsimp only
+    exact mul_nonneg (mul_nonneg (mul_nonneg (Nat.cast_nonneg _)
+      (P.derivConstant_nonneg j)) (pow_nonneg (by norm_num) j))
+      (pow_nonneg (by norm_num) _)
+  have hBnn : 0 ≤ B := Finset.sum_nonneg fun p _ ↦
+    Finset.sum_nonneg fun j _ ↦ hWval_nn p j
+  have hPa : ∀ c : E, ContDiff ℝ (∞ : WithTop ℕ∞) (taylorPolynomial m J c) :=
+    fun c ↦ (taylor_difference_bound_aux_contDiff m J c).of_le le_top
+  have hphi : ∀ i, ContDiff ℝ (∞ : WithTop ℕ∞) (P.phi i) := fun i ↦ P.contDiff_phi i
+  refine ⟨(Nn : ℝ) * C₁ * B, mul_nonneg (mul_nonneg (Nat.cast_nonneg _) hC₁0) hBnn,
+    fun k hk x hx ↦ ?_⟩
+  set d := Metric.infDist x K with hd_def
+  have hdpos : 0 < d := (hKc.isClosed.notMem_iff_infDist_pos hKn).1 hx
+  obtain ⟨a, haK, hda⟩ := hKc.exists_infDist_eq_dist hKn x
+  obtain ⟨S, hS, hScard⟩ := whitneyOffExtension_jet_bound_aux_count K (x := x)
+  refine ⟨a, haK, hda, ?_⟩
+  set anc : SardConvexDomain.WhitneyNetIndex K → E :=
+    fun i ↦ SardConvexDomain.whitneyNetAnchor hKc.isClosed hKn i with hanc_def
+  set Ta : E → F := taylorPolynomial m J a with hTa_def
+  set W : E → F := whitneyOffExtension m f hKc.isClosed hKn P with hW_def
+  set W' : E → F := fun y ↦ ∑ i ∈ S, P.phi i y • taylorPolynomial m J (anc i) y
+    with hW'_def
+  set G : E → F := fun y ↦ ∑ i ∈ S, P.phi i y •
+    (taylorPolynomial m J (anc i) y - Ta y) with hG_def
+  set V : Set E := Metric.ball x (d / 16) ∩ Kᶜ with hV_def
+  have hVnhds : V ∈ nhds x :=
+    Filter.inter_mem (Metric.ball_mem_nhds x (by linarith))
+      (hKc.isClosed.isOpen_compl.mem_nhds hx)
+  have hzeroV : ∀ y ∈ V, ∀ i ∉ S, P.phi i y = 0 := by
+    intro y hy i hi
+    by_contra hne
+    apply hi
+    rw [hS i]
+    exact ⟨y, hy.1, P.support_subset i (Function.mem_support.2 hne)⟩
+  have heqW : W =ᶠ[nhds x] W' := Filter.eventuallyEq_iff_exists_mem.2 ⟨V, hVnhds, fun y hy ↦ by
+    rw [hW_def, hW'_def]
+    unfold whitneyOffExtension
+    exact tsum_eq_sum (fun i hi ↦ by simp [hzeroV y hy i hi])⟩
+  have heqG : (fun y ↦ W' y - Ta y) =ᶠ[nhds x] G :=
+    Filter.eventuallyEq_iff_exists_mem.2 ⟨V, hVnhds, fun y hy ↦ by
+      have h1 : W y - Ta y = G y := by
+        rw [hW_def, hG_def, hTa_def]
+        rw [whitneyOffExtension_sub_taylor hKc.isClosed hKn P hy.2]
+        exact tsum_eq_sum (fun i hi ↦ by simp [hzeroV y hy i hi])
+      have h2 : W y = W' y := by
+        rw [hW_def, hW'_def]
+        unfold whitneyOffExtension
+        exact tsum_eq_sum (fun i hi ↦ by simp [hzeroV y hy i hi])
+      show W' y - Ta y = G y
+      rw [← h2]
+      exact h1⟩
+  have hW'smooth : ContDiff ℝ (∞ : WithTop ℕ∞) W' := by
+    rw [hW'_def]
+    exact ContDiff.sum fun i _ ↦ (hphi i).smul (hPa (anc i))
+  have hTa_smooth : ContDiff ℝ (∞ : WithTop ℕ∞) Ta := hPa a
+  have hGsmooth : ∀ i, ContDiff ℝ (∞ : WithTop ℕ∞)
+      (fun y ↦ P.phi i y • (taylorPolynomial m J (anc i) y - Ta y)) :=
+    fun i ↦ (hphi i).smul ((hPa (anc i)).sub hTa_smooth)
+  have E1 : iteratedFDeriv ℝ k W x = iteratedFDeriv ℝ k W' x :=
+    (heqW.iteratedFDeriv ℝ k).eq_of_nhds
+  have E2 : iteratedFDeriv ℝ k (fun y ↦ W' y - Ta y) x =
+      iteratedFDeriv ℝ k W' x - iteratedFDeriv ℝ k Ta x :=
+    ContinuousMultilinearMap.ext fun u ↦
+      whitneyOffExtension_jet_bound_aux_iteratedFDeriv_sub hW'smooth hTa_smooth k x u
+  have E3 : iteratedFDeriv ℝ k (fun y ↦ W' y - Ta y) x = iteratedFDeriv ℝ k G x :=
+    (heqG.iteratedFDeriv ℝ k).eq_of_nhds
+  rw [E1, ← E2, E3]
+  have hGsum : iteratedFDeriv ℝ k G x = ∑ i ∈ S, iteratedFDeriv ℝ k
+      (fun y ↦ P.phi i y • (taylorPolynomial m J (anc i) y - Ta y)) x := by
+    rw [hG_def]
+    exact iteratedFDeriv_fun_sum_apply fun i _ ↦
+      ((hGsmooth i).contDiffAt).of_le (WithTop.coe_le_coe.2 le_top)
+  rw [hGsum]
+  -- Per-index bound, uniform over `S`.
+  have hper : ∀ i ∈ S, ‖iteratedFDeriv ℝ k
+      (fun y ↦ P.phi i y • (taylorPolynomial m J (anc i) y - Ta y)) x‖ ≤
+      C₁ * d ^ (m + 1 - k) * B := by
+    intro i hiS
+    obtain ⟨z, hzx, hzb⟩ := (hS i).1 hiS
+    have hzx' : dist x z < d / 16 := by
+      rw [dist_comm]; exact Metric.mem_ball.1 hzx
+    set e := Metric.infDist i.center K with he_def
+    have hcomp := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hzb
+    have hlipxz := Metric.infDist_le_infDist_add_dist (s := K) (x := x) (y := z)
+    have hlipzx := Metric.infDist_le_infDist_add_dist (s := K) (x := z) (y := x)
+    rw [dist_comm z x] at hlipzx
+    have helo : (5 / 8 : ℝ) * d < e := by linarith [hcomp.2]
+    have hehi : e < (17 / 8 : ℝ) * d := by linarith [hcomp.1]
+    have he_pos : 0 < e := lt_trans (by positivity) helo
+    have hdist : dist x i.center < (9 / 8 : ℝ) * d := by
+      have hzc : dist z i.center < e / 2 := Metric.mem_ball.1 hzb
+      linarith [dist_triangle x z i.center]
+    have hancd : dist x (anc i) ≤ 4 * d := by
+      have h1 : dist x (anc i) ≤ dist x i.center + dist i.center (anc i) :=
+        dist_triangle _ _ _
+      have h2 : dist i.center (anc i) = e := by
+        rw [hanc_def]
+        dsimp only
+        rw [← SardConvexDomain.whitneyNetAnchor_nearest hKc.isClosed hKn i]
+      linarith
+    have hsm := norm_iteratedFDeriv_smul_le (hphi i) ((hPa (anc i)).sub hTa_smooth) x
+      (n := k) (WithTop.coe_le_coe.2 le_top)
+    refine hsm.trans ?_
+    -- Bound each Leibniz summand.
+    have hjb : ∀ j ∈ Finset.range (k + 1),
+        (k.choose j : ℝ) * ‖iteratedFDeriv ℝ j (P.phi i) x‖ *
+            ‖iteratedFDeriv ℝ (k - j)
+              (fun y ↦ taylorPolynomial m J (anc i) y - Ta y) x‖ ≤
+          C₁ * Wval k j * d ^ (m + 1 - k) := by
+      intro j hj
+      have hjk : j ≤ k := Nat.lt_succ_iff.1 (Finset.mem_range.1 hj)
+      have hder : ‖iteratedFDeriv ℝ j (P.phi i) x‖ ≤ P.derivConstant j * e⁻¹ ^ j :=
+        P.deriv_bound j i x
+      have heinv : e⁻¹ ≤ 2 * d⁻¹ := by
+        have h1 : e⁻¹ ≤ ((5 / 8 : ℝ) * d)⁻¹ := by
+          rw [inv_eq_one_div, inv_eq_one_div]
+          exact one_div_le_one_div_of_le (by positivity) helo.le
+        refine h1.trans ?_
+        rw [mul_inv, show ((5 / 8 : ℝ))⁻¹ = 8 / 5 from by norm_num]
+        exact mul_le_mul_of_nonneg_right (by norm_num) (inv_nonneg.mpr hdpos.le)
+      have heinvj : e⁻¹ ^ j ≤ (2 * d⁻¹) ^ j :=
+        pow_le_pow_left₀ (inv_nonneg.mpr he_pos.le) heinv j
+      have hexp : m + 1 - (k - j) = m + 1 - k + j := by omega
+      have hancK : anc i ∈ K := by
+        rw [hanc_def]
+        dsimp only
+        exact SardConvexDomain.whitneyNetAnchor_mem hKc.isClosed hKn i
+      have ht0 := hC₁ (k - j) (by omega) (anc i) hancK a haK x
+      rw [hexp] at ht0
+      have hnorm_a : ‖x - anc i‖ + ‖x - a‖ ≤ 5 * d := by
+        have hna : ‖x - anc i‖ = dist x (anc i) := (dist_eq_norm x (anc i)).symm
+        have hnb : ‖x - a‖ = dist x a := (dist_eq_norm x a).symm
+        rw [hna, hnb, ← hda, hd_def]
+        linarith [hancd]
+      have htj : ‖iteratedFDeriv ℝ (k - j)
+          (fun y ↦ taylorPolynomial m J (anc i) y - Ta y) x‖ ≤
+          C₁ * (5 * d) ^ (m + 1 - k + j) := by
+        refine ht0.trans (mul_le_mul_of_nonneg_left ?_ hC₁0)
+        exact pow_le_pow_left₀ (add_nonneg (norm_nonneg _) (norm_nonneg _)) hnorm_a _
+      have hkey : (k.choose j : ℝ) * (P.derivConstant j * (2 * d⁻¹) ^ j) *
+            (C₁ * (5 * d) ^ (m + 1 - k + j)) =
+          C₁ * Wval k j * d ^ (m + 1 - k) := by
+        have e1 : (2 * d⁻¹) ^ j = 2 ^ j * (d⁻¹) ^ j := mul_pow _ _ _
+        have e2 : (5 * d) ^ (m + 1 - k + j) =
+            5 ^ (m + 1 - k + j) * d ^ (m + 1 - k + j) := mul_pow _ _ _
+        have e3 : d ^ (m + 1 - k + j) = d ^ (m + 1 - k) * d ^ j :=
+          pow_add d (m + 1 - k) j
+        have e4 : (d⁻¹) ^ j * d ^ j = 1 := by
+          rw [inv_pow, inv_mul_cancel₀ (pow_ne_zero j hdpos.ne')]
+        rw [e1, e2, e3, hWval_def]
+        trans (C₁ * ((k.choose j : ℝ) * P.derivConstant j * 2 ^ j *
+            5 ^ (m + 1 - k + j)) * d ^ (m + 1 - k)) * ((d⁻¹) ^ j * d ^ j)
+        · ring
+        · rw [e4, mul_one]
+      refine (mul_le_mul (mul_le_mul_of_nonneg_left
+        (hder.trans (mul_le_mul_of_nonneg_left heinvj (P.derivConstant_nonneg j)))
+        (Nat.cast_nonneg _)) htj (norm_nonneg _)
+        (mul_nonneg (Nat.cast_nonneg _) (mul_nonneg (P.derivConstant_nonneg j)
+          (pow_nonneg (mul_nonneg (by norm_num) (inv_nonneg.mpr hdpos.le)) _)))).trans
+        hkey.le
+    calc ∑ j ∈ Finset.range (k + 1), (k.choose j : ℝ) * ‖iteratedFDeriv ℝ j (P.phi i) x‖ *
+            ‖iteratedFDeriv ℝ (k - j)
+              (fun y ↦ taylorPolynomial m J (anc i) y - Ta y) x‖
+        ≤ ∑ j ∈ Finset.range (k + 1), C₁ * Wval k j * d ^ (m + 1 - k) :=
+          Finset.sum_le_sum hjb
+      _ = (C₁ * d ^ (m + 1 - k)) * ∑ j ∈ Finset.range (k + 1), Wval k j := by
+          rw [Finset.mul_sum]
+          exact Finset.sum_congr rfl fun j _ ↦ by ring
+      _ ≤ (C₁ * d ^ (m + 1 - k)) * B := by
+          apply mul_le_mul_of_nonneg_left _ (mul_nonneg hC₁0 (pow_nonneg hdpos.le _))
+          rw [hB_def]
+          exact Finset.single_le_sum (s := Finset.range (m + 1))
+            (f := fun p ↦ ∑ j ∈ Finset.range (p + 1), Wval p j) (a := k)
+            (fun p _ ↦ Finset.sum_nonneg fun j _ ↦ hWval_nn p j)
+            (Finset.mem_range.2 (by omega))
+      _ = C₁ * d ^ (m + 1 - k) * B := by ring
+  calc ‖∑ i ∈ S, iteratedFDeriv ℝ k
+        (fun y ↦ P.phi i y • (taylorPolynomial m J (anc i) y - Ta y)) x‖
+      ≤ ∑ i ∈ S, ‖iteratedFDeriv ℝ k
+        (fun y ↦ P.phi i y • (taylorPolynomial m J (anc i) y - Ta y)) x‖ :=
+        norm_sum_le _ _
+    _ ≤ ∑ _i ∈ S, C₁ * d ^ (m + 1 - k) * B := Finset.sum_le_sum hper
+    _ = (S.card : ℝ) * (C₁ * d ^ (m + 1 - k) * B) := by
+        rw [Finset.sum_const, nsmul_eq_mul]
+    _ ≤ (Nn : ℝ) * (C₁ * d ^ (m + 1 - k) * B) := by
+        apply mul_le_mul_of_nonneg_right _
+          (mul_nonneg (mul_nonneg hC₁0 (pow_nonneg hdpos.le _)) hBnn)
+        exact Nat.cast_le.2 hScard
+    _ = (Nn : ℝ) * C₁ * B * d ^ (m + 1 - k) := by ring
 
 /-- The candidate global Taylor series: within jets on `K`, ordinary iterated derivatives
 off `K`.  The order-zero terms are stored as continuous zero-linear maps, just as in
