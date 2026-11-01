@@ -42,7 +42,28 @@ theorem convexWithinJet_nat
       (∀ x ∈ K, ∀ v, convexJet 1 f K x (fun _ ↦ v) = fderivWithin ℝ f K x v) ∧
       ∀ k ≤ m + 1, ∀ x ∈ K, ∀ σ : Equiv.Perm (Fin k),
         (convexJet k f K x).domDomCongr σ = convexJet k f K x := by
-  sorry
+  have hu : UniqueDiffOn ℝ K := uniqueDiffOn_convex hK hKi
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro k hk
+    exact hf.continuousOn_iteratedFDerivWithin (by exact_mod_cast hk) hu
+  · intro x hx
+    exact iteratedFDerivWithin_zero_apply _
+  · intro x hx v
+    exact iteratedFDerivWithin_one_apply (hu x hx) _
+  · intro k hk x hx σ
+    let L : ContinuousMultilinearMap ℝ (fun _ : Fin k ↦ E) F ≃ₗᵢ[ℝ]
+        ContinuousMultilinearMap ℝ (fun _ : Fin k ↦ E) F :=
+      ContinuousMultilinearMap.domDomCongrₗᵢ ℝ E F σ
+    have hle : (k : WithTop ENat) ≤ (m + 1 : ℕ) := by exact_mod_cast hk
+    have hc := (hf x hx).continuousWithinAt_iteratedFDerivWithin hu hle hx
+    apply ContinuousWithinAt.eq_of_eqOn_interior_of_mem_closure
+      (by
+        rw [hK.closure_interior_eq_closure_of_nonempty_interior hKi]
+        exact subset_closure hx)
+      (L.continuous.continuousAt.comp_continuousWithinAt hc) hc
+    intro y hy
+    exact ((hf y (interior_subset hy)).of_le hle).domDomCongr_iteratedFDerivWithin_of_nat_of_mem_interior
+      hu k hy σ
 -- END SEAT AREA
 
 /-- On a compact convex set, continuity of the top within derivative gives one uniform
