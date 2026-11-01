@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.CoefficientFirstReflection
 import ConstructionTargets.SingularHomologyHomotopy
+import ConstructionTargets.CP2RationalHomology
 
 /-! # t98J01 blueprint
 
@@ -639,32 +640,456 @@ theorem t98J01_reflection_lefschetz :
   · norm_num [Finset.sum_range_succ, t98J01_reflection_trace_zero,
       t98J01_reflection_trace_one]
 
-/-- LIBRARY: multiplicativity of the rational Lefschetz number under products.
-This is the single large missing map-natural Künneth/trace-additivity foundation. -/
-theorem t98J01_lefschetz_product
-    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
-    (f : C(X, X)) (g : C(Y, Y)) (a b : ℚ)
-    (hf : HasLefschetzNumber f a) (hg : HasLefschetzNumber g b) :
-    HasLefschetzNumber (f.prodMap g) (a * b) := by
+open CategoryTheory CategoryTheory.Limits
+
+/-! ### Lefschetz numbers of chain complexes -/
+
+abbrev t98J01_sset :=
+  (AlgebraicTopology.SSet.singularChainComplexFunctor (ModuleCat ℚ)).obj (ModuleCat.of ℚ ℚ)
+
+abbrev t98J01_chains (X : Type) [TopologicalSpace X] : ChainComplex (ModuleCat ℚ) ℕ :=
+  t98J01_sset.obj (TopCat.toSSet.obj (TopCat.of X))
+
+def t98J01_chainMap {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) :
+    t98J01_chains X ⟶ t98J01_chains Y :=
+  t98J01_sset.map (TopCat.toSSet.map (TopCat.ofHom f))
+
+def t98J01_ComplexLefschetz (C : ChainComplex (ModuleCat ℚ) ℕ) (φ : C ⟶ C) (v : ℚ) : Prop :=
+  (∀ k, FiniteDimensional ℚ (C.homology k)) ∧
+  ∃ bound : ℕ, (∀ k, bound < k → Subsingleton (C.homology k)) ∧
+    (∑ k ∈ Finset.range (bound + 1), (-1 : ℚ)^k *
+      LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom) = v
+
+theorem t98J01_hasLefschetzNumber_iff {X : Type} [TopologicalSpace X] (f : C(X, X)) (v : ℚ) :
+    HasLefschetzNumber f v ↔ t98J01_ComplexLefschetz (t98J01_chains X) (t98J01_chainMap f) v :=
+  Iff.rfl
+
+def t98J01_selfRestrict {X : Type} [TopologicalSpace X] (φ : C(X, X)) (A : Set X)
+    (h : Set.MapsTo φ A A) : C(A, A) :=
+  ⟨h.restrict φ A A, φ.continuous.restrict h⟩
+
+open ConstructionTargets.SingularExcision in
+abbrev t98J01_range {X : Type} [TopologicalSpace X] (A : Set X) :
+    (TopCat.toSSet.obj (TopCat.of X)).Subcomplex := ambientSubspaceRange A
+
+theorem t98J01_range_image_le {X : Type} [TopologicalSpace X] (φ : C(X, X)) (A : Set X)
+    (h : Set.MapsTo φ A A) :
+    (t98J01_range A).image (TopCat.toSSet.map (TopCat.ofHom φ)) ≤ t98J01_range A := by
+  change (SSet.Subcomplex.range (TopCat.toSSet.map
+      (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A))).image _ ≤
+    SSet.Subcomplex.range (TopCat.toSSet.map
+      (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A))
+  rw [← SSet.Subcomplex.range_comp, ← TopCat.toSSet.map_comp,
+    ← ConstructionTargets.SingularExcision.subspaceMap_inclusion A A φ h,
+    TopCat.toSSet.map_comp, SSet.Subcomplex.range_comp]
+  exact SSet.Subcomplex.image_le_range _ _
+
+open ConstructionTargets ConstructionTargets.ProductionOpenCoverMayerVietoris in
+/-- the morphism of stored short complexes -/
+def t98J01_mvSelfMap {X : Type} [TopologicalSpace X] (φ : C(X, X)) (P Q : (TopCat.toSSet.obj (TopCat.of X)).Subcomplex)
+    (hP : P.image (TopCat.toSSet.map (TopCat.ofHom φ)) ≤ P)
+    (hQ : Q.image (TopCat.toSSet.map (TopCat.ofHom φ)) ≤ Q) :
+    CoefficientSubcomplexMayerVietoris.shortComplex ℚ P Q ⟶
+      CoefficientSubcomplexMayerVietoris.shortComplex ℚ P Q :=
+  let F := TopCat.toSSet.map (TopCat.ofHom φ)
+  ShortComplex.Hom.mk
+    (t98J01_sset.map (subcomplexMap (P ⊓ Q) (P ⊓ Q) F
+      (subcomplex_inf_image_le P Q P Q F hP hQ)))
+    (biprod.map (t98J01_sset.map (subcomplexMap P P F hP))
+      (t98J01_sset.map (subcomplexMap Q Q F hQ)))
+    (t98J01_sset.map (subcomplexMap (P ⊔ Q) (P ⊔ Q) F
+      (subcomplex_sup_image_le P Q P Q F hP hQ)))
+    (by
+      apply biprod.hom_ext
+      · simp [CoefficientSubcomplexMayerVietoris.shortComplex, ← Functor.map_comp]
+        congr 1
+      · simp [CoefficientSubcomplexMayerVietoris.shortComplex, ← Functor.map_comp]
+        congr 1)
+    (by
+      apply biprod.hom_ext'
+      · simp [CoefficientSubcomplexMayerVietoris.shortComplex, ← Functor.map_comp]
+        congr 1
+      · simp [CoefficientSubcomplexMayerVietoris.shortComplex, ← Functor.map_comp]
+        congr 1)
+
+/-! ### Linear algebra -/
+
+/-- Trace additivity (copied from `LefschetzCompactPolyhedron`, which carries an unrelated `sorry`). -/
+theorem t98J01_trace_restrict_add_mapQ
+    {V : Type*} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+    (φ : V →ₗ[ℚ] V) (W : Submodule ℚ V) (hW : ∀ x ∈ W, φ x ∈ W) :
+    LinearMap.trace ℚ V φ =
+      LinearMap.trace ℚ W (φ.restrict hW) +
+        LinearMap.trace ℚ (V ⧸ W) (W.mapQ W φ (fun x hx => hW x hx)) := by
+  classical
+  obtain ⟨U, hU⟩ := W.exists_isCompl
+  let e : (W × U) ≃ₗ[ℚ] V := W.prodEquivOfIsCompl U hU
+  let p : V →ₗ[ℚ] W := (LinearMap.fst ℚ W U).comp e.symm.toLinearMap
+  let q : V →ₗ[ℚ] V ⧸ W := W.mkQ
+  let s : (V ⧸ W) →ₗ[ℚ] V :=
+    U.subtype.comp (W.quotientEquivOfIsCompl U hU).toLinearMap
+  have hp (x : W) : p x = x := by
+    change (e.symm x).1 = x
+    rw [Submodule.prodEquivOfIsCompl_symm_apply_left]
+  have hq (x : V ⧸ W) : q (s x) = x := by
+    change W.mkQ (W.quotientEquivOfIsCompl U hU x) = x
+    exact W.mk_quotientEquivOfIsCompl_apply U hU x
+  have hdecomp : W.subtype.comp p + s.comp q = LinearMap.id := by
+    ext x
+    let y : W × U := e.symm x
+    have hxy : e y = x := e.apply_symm_apply x
+    change (p x : V) + s (q x) = x
+    rw [← hxy]
+    simp [p, q, s, e]
+  have hφ : φ = W.subtype.comp (p.comp φ) + s.comp (q.comp φ) := by
+    ext x
+    simpa only [LinearMap.add_apply, LinearMap.comp_apply, LinearMap.id_apply] using
+      (LinearMap.congr_fun hdecomp (φ x)).symm
+  calc
+    LinearMap.trace ℚ V φ = LinearMap.trace ℚ V
+        (W.subtype.comp (p.comp φ) + s.comp (q.comp φ)) := congrArg _ hφ
+    _ = LinearMap.trace ℚ V (W.subtype.comp (p.comp φ)) +
+        LinearMap.trace ℚ V (s.comp (q.comp φ)) := map_add _ _ _
+    _ = _ := by
+      have hfirst : (p.comp φ).comp W.subtype = φ.restrict hW := by
+        ext x
+        exact congrArg Subtype.val (hp ⟨φ x, hW x x.property⟩)
+      have hsecond : (q.comp φ).comp s =
+          W.mapQ W φ (fun x hx => hW x hx) := by
+        apply LinearMap.ext
+        intro x
+        change q (φ (s x)) = W.mapQ W φ (fun x hx => hW x hx) x
+        calc
+          _ = W.mapQ W φ (fun x hx => hW x hx) (q (s x)) := by
+            simp [q, Submodule.mapQ_apply]
+          _ = _ := congrArg _ (hq x)
+      rw [LinearMap.trace_comp_comm', hfirst,
+        LinearMap.trace_comp_comm', hsecond]
+
+
+/-- Seat: trace splits along kernel and range of an intertwiner. Use `t98J01_trace_restrict_add_mapQ` with `W = ker T`, then transport the quotient term along `LinearMap.quotKerEquivRange` with `LinearMap.trace_conj'`. -/
+theorem t98J01_trace_ker_add_range
+    {V W : Type} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+    [AddCommGroup W] [Module ℚ W] [FiniteDimensional ℚ W]
+    (T : V →ₗ[ℚ] W) (φ : V →ₗ[ℚ] V) (ψ : W →ₗ[ℚ] W) (hT : T ∘ₗ φ = ψ ∘ₗ T)
+    (hk : ∀ x ∈ LinearMap.ker T, φ x ∈ LinearMap.ker T)
+    (hr : ∀ x ∈ LinearMap.range T, ψ x ∈ LinearMap.range T) :
+    LinearMap.trace ℚ V φ =
+      LinearMap.trace ℚ (LinearMap.ker T) (φ.restrict hk) +
+        LinearMap.trace ℚ (LinearMap.range T) (ψ.restrict hr) := by
   sorry
 
-/-- The former library boundary, now a sorry-free assembly from factor
-computations and the isolated generic Künneth foundation. -/
+/-- Seat: the alternating trace vanishes along a bounded long exact sequence with compatible endomorphisms. Apply `t98J01_trace_ker_add_range` to `i k`, `j k` and `δ k`. With `d k` the trace on `range (δ k)`, `e k` on `range (i k)`, `g k` on `range (j k)`: `tr a k = d k + e k`, `tr b k = e k + g k`, `tr c (k+1) = g (k+1) + d k`, `tr c 0 = g 0` (`hj0`). The exactness equalities identify the submodules. `C (N+1)` is trivial so `d N = 0`, and the sum telescopes. -/
+theorem t98J01_trace_longExact
+    (A B C : ℕ → Type)
+    [∀ n, AddCommGroup (A n)] [∀ n, Module ℚ (A n)] [∀ n, FiniteDimensional ℚ (A n)]
+    [∀ n, AddCommGroup (B n)] [∀ n, Module ℚ (B n)] [∀ n, FiniteDimensional ℚ (B n)]
+    [∀ n, AddCommGroup (C n)] [∀ n, Module ℚ (C n)] [∀ n, FiniteDimensional ℚ (C n)]
+    (i : ∀ n, A n →ₗ[ℚ] B n) (j : ∀ n, B n →ₗ[ℚ] C n) (δ : ∀ n, C (n + 1) →ₗ[ℚ] A n)
+    (a : ∀ n, A n →ₗ[ℚ] A n) (b : ∀ n, B n →ₗ[ℚ] B n) (c : ∀ n, C n →ₗ[ℚ] C n)
+    (hi : ∀ n, i n ∘ₗ a n = b n ∘ₗ i n) (hj : ∀ n, j n ∘ₗ b n = c n ∘ₗ j n)
+    (hδ : ∀ n, δ n ∘ₗ c (n + 1) = a n ∘ₗ δ n)
+    (ex₁ : ∀ n, LinearMap.range (i n) = LinearMap.ker (j n))
+    (ex₂ : ∀ n, LinearMap.range (j (n + 1)) = LinearMap.ker (δ n))
+    (ex₃ : ∀ n, LinearMap.range (δ n) = LinearMap.ker (i n))
+    (hj0 : Function.Surjective (j 0))
+    (N : ℕ) (hC : ∀ k, N < k → Subsingleton (C k)) :
+    (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (B k) (b k)) =
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (A k) (a k)) +
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (C k) (c k)) := by
+  sorry
+
+/-- Seat: an endomorphism swapping the two summands of a direct sum has trace zero. Conjugate by `LinearEquiv.ofBijective (coprod i₁ i₂) hbij` to `V₁ × V₂`, and write the conjugate as `inl ∘ₗ φ₂₁ ∘ₗ snd + inr ∘ₗ φ₁₂ ∘ₗ fst`. Each term has trace zero by `LinearMap.trace_comp_comm'` (`snd ∘ₗ inl = 0`, `fst ∘ₗ inr = 0`). -/
+theorem t98J01_trace_offDiagonal
+    {V₁ V₂ E : Type} [AddCommGroup V₁] [Module ℚ V₁] [FiniteDimensional ℚ V₁]
+    [AddCommGroup V₂] [Module ℚ V₂] [FiniteDimensional ℚ V₂]
+    [AddCommGroup E] [Module ℚ E] [FiniteDimensional ℚ E]
+    (i₁ : V₁ →ₗ[ℚ] E) (i₂ : V₂ →ₗ[ℚ] E)
+    (hbij : Function.Bijective (LinearMap.coprod i₁ i₂))
+    (φ : E →ₗ[ℚ] E) (φ₁₂ : V₁ →ₗ[ℚ] V₂) (φ₂₁ : V₂ →ₗ[ℚ] V₁)
+    (h₁ : φ ∘ₗ i₁ = i₂ ∘ₗ φ₁₂) (h₂ : φ ∘ₗ i₂ = i₁ ∘ₗ φ₂₁) :
+    LinearMap.trace ℚ E φ = 0 := by
+  sorry
+
+/-! ### Chain-complex Lefschetz numbers -/
+
+/-- Seat: the alternating sum can be taken up to any vanishing bound. Compare with the stored bound; terms above either bound vanish because the trace on a subsingleton module is zero (`LinearMap.trace_eq_zero_of_subsingleton` or similar). -/
+theorem t98J01_complexLefschetz_sum_eq
+    {C : ChainComplex (ModuleCat ℚ) ℕ} {φ : C ⟶ C} {v : ℚ} (h : t98J01_ComplexLefschetz C φ v)
+    (N : ℕ) (hN : ∀ k, N < k → Subsingleton (C.homology k)) :
+    (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k *
+      LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom) = v := by
+  sorry
+
+/-- Seat: a short exact sequence of chain complexes is surjective on `H₀`. In degree 0 every chain is a cycle: `S.g.f 0` is epi (`hS.epi_g`), and `homologyπ` is epi from the cycles. Lift a representative along `S.g.f 0`, lift it to cycles (the outgoing differential is zero, `ChainComplex` with `(ComplexShape.down ℕ).next 0 = 0`). -/
+theorem t98J01_homologyMap_g_zero_surjective
+    {S : ShortComplex (ChainComplex (ModuleCat ℚ) ℕ)} (hS : S.ShortExact) :
+    Function.Surjective (HomologicalComplex.homologyMap S.g 0).hom := by
+  sorry
+
+/-- Seat: additivity of the Lefschetz number on a short exact sequence. Use `hS.homology_exact₁/₂/₃`, `HomologicalComplex.HomologySequence.δ_naturality`, then `t98J01_trace_longExact` with `A = X₁.homology`, `B = X₂.homology`, `C = X₃.homology`, `N = max b₂ (b₁ + 1)`. `H_k(X₃)` is finite-dimensional because it sits between `H_k(X₂)` and `H_{k-1}(X₁)`. Zero `H₀` tail: `t98J01_homologyMap_g_zero_surjective`. Sums to `N`: `t98J01_complexLefschetz_sum_eq`. -/
+theorem t98J01_complexLefschetz_shortExact
+    {S : ShortComplex (ChainComplex (ModuleCat ℚ) ℕ)} (hS : S.ShortExact) (φ : S ⟶ S) {a b : ℚ}
+    (h₁ : t98J01_ComplexLefschetz S.X₁ φ.τ₁ a) (h₂ : t98J01_ComplexLefschetz S.X₂ φ.τ₂ b) :
+    t98J01_ComplexLefschetz S.X₃ φ.τ₃ (b - a) := by
+  sorry
+
+/-- Seat: additivity on a biproduct of complexes. `CoefficientHomologyBiprodIso.homologyBiprodIso` conjugates `homologyMap (biprod.map φ ψ)` to the biproduct of the two homology maps; finish with `LinearMap.trace_prodMap'` after passing to `M × N`, and `t98J01_complexLefschetz_sum_eq` at `max` of the two bounds. -/
+theorem t98J01_complexLefschetz_biprod
+    {K L : ChainComplex (ModuleCat ℚ) ℕ} {φ : K ⟶ K} {ψ : L ⟶ L} {a b : ℚ}
+    (h₁ : t98J01_ComplexLefschetz K φ a) (h₂ : t98J01_ComplexLefschetz L ψ b) :
+    t98J01_ComplexLefschetz (K ⊞ L) (biprod.map φ ψ) (a + b) := by
+  sorry
+
+/-- Seat: the Lefschetz number is invariant under a commuting quasi-isomorphism. `asIso (homologyMap g k)` is a linear equivalence conjugating the two homology maps (`homologyMap_comp`, `hc`), then `LinearMap.trace_conj'`. Finite-dimensionality and vanishing transport along it. Same bound on both sides. -/
+theorem t98J01_complexLefschetz_congr
+    {C D : ChainComplex (ModuleCat ℚ) ℕ} (g : C ⟶ D)
+    (hg : ∀ n, IsIso (HomologicalComplex.homologyMap g n))
+    {φ : C ⟶ C} {ψ : D ⟶ D} (hc : φ ≫ g = g ≫ ψ) (v : ℚ) :
+    t98J01_ComplexLefschetz C φ v ↔ t98J01_ComplexLefschetz D ψ v := by
+  sorry
+
+/-! ### Spaces -/
+
+/-- Seat: a homotopy equivalence induces isomorphisms on rational homology. `SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic` for `e.left_inv`, `e.right_inv`, and `t98J01_chainMap_comp`-style functoriality; template in `SingularHomologyHomotopy` lines 125-135. -/
+theorem t98J01_homotopyEquiv_isIso {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv Y X) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n) := by
+  sorry
+
+theorem t98J01_chainMap_comp {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (f : C(X, Y)) (g : C(Y, Z)) :
+    t98J01_chainMap (g.comp f) = t98J01_chainMap f ≫ t98J01_chainMap g := by
+  simp only [t98J01_chainMap, ← Functor.map_comp]
+  rfl
+
+/-- Assembly. -/
+theorem t98J01_hasLefschetz_homotopyEquiv {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv Y X) (g : C(Y, Y)) (f : C(X, X))
+    (hc : e.toFun.comp g = f.comp e.toFun) (v : ℚ) :
+    HasLefschetzNumber g v ↔ HasLefschetzNumber f v := by
+  rw [t98J01_hasLefschetzNumber_iff, t98J01_hasLefschetzNumber_iff]
+  refine t98J01_complexLefschetz_congr (t98J01_chainMap e.toFun)
+    (t98J01_homotopyEquiv_isIso e) ?_ v
+  rw [← t98J01_chainMap_comp, ← t98J01_chainMap_comp, hc]
+
+/-- Restriction of the ambient self-map to the range subcomplex of `A`. -/
+def t98J01_rangeEndo {X : Type} [TopologicalSpace X] (φ : C(X, X))
+    (P : (TopCat.toSSet.obj (TopCat.of X)).Subcomplex)
+    (hP : P.image (TopCat.toSSet.map (TopCat.ofHom φ)) ≤ P) :
+    t98J01_sset.obj (P : SSet) ⟶ t98J01_sset.obj (P : SSet) :=
+  t98J01_sset.map (ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap
+    P P (TopCat.toSSet.map (TopCat.ofHom φ)) hP)
+
+/-- Seat: chains of a subspace compute the Lefschetz number on its range subcomplex. `t98J01_complexLefschetz_congr` with `g = (CoefficientAmbientSubspaceRangeComparison.rangeChainsIso ℚ A).inv`, which is `t98J01_sset.map (toRange ..)`. The square reduces by `Functor.map_comp` and `cancel_mono (ambientSubspaceRange A).ι` to `SingularExcision.subspaceMap_inclusion`. -/
+theorem t98J01_complexLefschetz_range {X : Type} [TopologicalSpace X] (φ : C(X, X)) (A : Set X)
+    (h : Set.MapsTo φ A A) {v : ℚ} (hv : HasLefschetzNumber (t98J01_selfRestrict φ A h) v) :
+    t98J01_ComplexLefschetz (t98J01_sset.obj (t98J01_range A : SSet))
+      (t98J01_rangeEndo φ (t98J01_range A) (t98J01_range_image_le φ A h)) v := by
+  sorry
+
+/-- Seat: the same on the infimum subcomplex that appears in Mayer–Vietoris. As `t98J01_complexLefschetz_range` for `U ∩ V`, composed with `CoefficientIntersectionRangeComparison.intersectionChainsIso ℚ U V` (from `ambientIntersectionRangeIso`). Check the square after `cancel_mono` of the inclusion into the ambient singular set. -/
+theorem t98J01_complexLefschetz_inf {X : Type} [TopologicalSpace X] (φ : C(X, X)) (U V : Set X)
+    (hUV : Set.MapsTo φ (U ∩ V) (U ∩ V))
+    (hinf : (t98J01_range U ⊓ t98J01_range V).image (TopCat.toSSet.map (TopCat.ofHom φ)) ≤
+      t98J01_range U ⊓ t98J01_range V)
+    {c : ℚ} (hc : HasLefschetzNumber (t98J01_selfRestrict φ (U ∩ V) hUV) c) :
+    t98J01_ComplexLefschetz (t98J01_sset.obj ((t98J01_range U ⊓ t98J01_range V :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet))
+      (t98J01_rangeEndo φ _ hinf) c := by
+  sorry
+
+/-- Assembly: the union subcomplex of an open cover computes the ambient Lefschetz number. -/
+theorem t98J01_hasLefschetz_of_sup {X : Type} [TopologicalSpace X] (φ : C(X, X)) (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hsup : (t98J01_range U ⊔ t98J01_range V).image (TopCat.toSSet.map (TopCat.ofHom φ)) ≤
+      t98J01_range U ⊔ t98J01_range V) {v : ℚ}
+    (h : t98J01_ComplexLefschetz (t98J01_sset.obj ((t98J01_range U ⊔ t98J01_range V :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet))
+      (t98J01_rangeEndo φ _ hsup) v) :
+    HasLefschetzNumber φ v := by
+  rw [t98J01_hasLefschetzNumber_iff]
+  refine (t98J01_complexLefschetz_congr
+    (t98J01_sset.map (t98J01_range U ⊔ t98J01_range V).ι)
+    (RP3Homology.rationalMayerVietoris_aux_unionMap_isIso U V hU hV hcov) ?_ v).1 h
+  simp only [t98J01_rangeEndo, t98J01_chainMap, ← Functor.map_comp]
+  rfl
+
+/-- Assembly: Lefschetz numbers add along a cover-preserving self-map. -/
+theorem t98J01_hasLefschetz_mayerVietoris {X : Type} [TopologicalSpace X] (φ : C(X, X))
+    (U V : Set X) (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hφU : Set.MapsTo φ U U) (hφV : Set.MapsTo φ V V)
+    (hφW : Set.MapsTo φ (U ∩ V) (U ∩ V)) {a b c : ℚ}
+    (ha : HasLefschetzNumber (t98J01_selfRestrict φ U hφU) a)
+    (hb : HasLefschetzNumber (t98J01_selfRestrict φ V hφV) b)
+    (hc : HasLefschetzNumber (t98J01_selfRestrict φ (U ∩ V) hφW) c) :
+    HasLefschetzNumber φ (a + b - c) := by
+  have hP := t98J01_range_image_le φ U hφU
+  have hQ := t98J01_range_image_le φ V hφV
+  let M := t98J01_mvSelfMap φ (t98J01_range U) (t98J01_range V) hP hQ
+  have h₁ : t98J01_ComplexLefschetz _ M.τ₁ c := t98J01_complexLefschetz_inf φ U V hφW _ hc
+  have h₂ : t98J01_ComplexLefschetz _ M.τ₂ (a + b) :=
+    t98J01_complexLefschetz_biprod (t98J01_complexLefschetz_range φ U hφU ha)
+      (t98J01_complexLefschetz_range φ V hφV hb)
+  have h₃ := t98J01_complexLefschetz_shortExact
+    (ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortExact ℚ _ _) M h₁ h₂
+  exact t98J01_hasLefschetz_of_sup φ U V hU hV hcov _ h₃
+
+/-- Inclusion of a subset as a bundled map. -/
+def t98J01_incl {Y : Type} [TopologicalSpace Y] (A : Set Y) : C(A, Y) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- Seat: a clopen decomposition splits rational homology. Take `P`, `Q` the ranges. `ambientSubspaceRange_inf` and `hdis` make `P ⊓ Q` the range of the empty set, so `t98J01_sset.obj (P ⊓ Q)` has no simplices and is a zero complex; in `CoefficientSubcomplexMayerVietoris.shortExact` the map `g` is then an isomorphism (`ShortComplex.ShortExact.isIso_g_iff` or mono+epi). Compose with `RP3Homology.rationalMayerVietoris_aux_unionMap_isIso`, `rangeChainsIso` and `homologyBiprodIso`, watching the sign in `g`: a sign on one summand does not change bijectivity. Alternative for injectivity and positive degrees: `RP3Homology.rationalMayerVietoris`. -/
+theorem t98J01_clopen_homology_bijective {Y : Type} [TopologicalSpace Y] (A B : Set Y)
+    (hA : IsOpen A) (hB : IsOpen B) (hcov : A ∪ B = Set.univ) (hdis : A ∩ B = ∅) (n : ℕ) :
+    Function.Bijective (LinearMap.coprod (induced (t98J01_incl A) n).hom
+      (induced (t98J01_incl B) n).hom) := by
+  sorry
+
+/-- Seat: a self-map swapping the two pieces of a clopen decomposition has Lefschetz number 0. `t98J01_clopen_homology_bijective` gives each `Homology Y k` finite-dimensional and zero above `N`. Each trace is zero by `t98J01_trace_offDiagonal` with `φ₁₂`, `φ₂₁` induced by the corestrictions `A → B`, `B → A`; the equations are functoriality of `induced`. -/
+theorem t98J01_clopen_swap_lefschetz {Y : Type} [TopologicalSpace Y] (A B : Set Y)
+    (hA : IsOpen A) (hB : IsOpen B) (hcov : A ∪ B = Set.univ) (hdis : A ∩ B = ∅)
+    (φ : C(Y, Y)) (hAB : Set.MapsTo φ A B) (hBA : Set.MapsTo φ B A)
+    (hfdA : ∀ k, FiniteDimensional ℚ (Homology A k))
+    (hfdB : ∀ k, FiniteDimensional ℚ (Homology B k))
+    (N : ℕ) (hzA : ∀ k, N < k → Subsingleton (Homology A k))
+    (hzB : ∀ k, N < k → Subsingleton (Homology B k)) :
+    HasLefschetzNumber φ 0 := by
+  sorry
+
+/-! ### Circle geometry -/
+
+def T98J01.northPt : T98J01.S1 := Subtype.mk (0, 1) (by norm_num)
+def T98J01.southPt : T98J01.S1 := Subtype.mk (0, -1) (by norm_num)
+
+/-- Seat: stereographic projection `(x, y) ↦ x / (1 + y)` is a homeomorphism onto `ℝ`, with inverse `t ↦ (2t / (1 + t²), (1 - t²) / (1 + t²))`; `ℝ` is contractible, so use `Homeomorph.contractibleSpace` or similar. -/
+theorem t98J01_ne_south_contractible :
+    ContractibleSpace ↥({q | q ≠ T98J01.southPt} : Set T98J01.S1) := by
+  sorry
+
+/-- Seat: `(x, y) ↦ x / (1 - y)` as in `t98J01_ne_south_contractible`, or conjugate by `(x, y) ↦ (x, -y)`. -/
+theorem t98J01_ne_north_contractible :
+    ContractibleSpace ↥({q | q ≠ T98J01.northPt} : Set T98J01.S1) := by
+  sorry
+
+/-- Seat: `q ↦ q.1.2` is a homeomorphism onto the open interval `Set.Ioo (-1) 1` (inverse `y ↦ (√(1 - y²), y)`), which is convex and nonempty hence contractible (`Convex.contractibleSpace`). -/
+theorem t98J01_pos_contractible :
+    ContractibleSpace ↥({q | 0 < q.1.1} : Set T98J01.S1) := by
+  sorry
+
+/-- Seat: as `t98J01_pos_contractible` with `y ↦ (-√(1 - y²), y)`, or conjugate by `T98J01.reflection`. -/
+theorem t98J01_neg_contractible :
+    ContractibleSpace ↥({q | q.1.1 < 0} : Set T98J01.S1) := by
+  sorry
+
+/-- Seat: over a contractible subset of the circle, projection to `X` is a homotopy equivalence. Build `↥{z | z.2 ∈ T} ≃ₜ X × T`, then `X × T ≃ₕ X × Unit ≃ₜ X` via `ContinuousMap.HomotopyEquiv.prodCongr` and `contractible_iff_homotopyEquiv_punit`-style equivalence (`ConstructionTargets/SphereProductPoleOpenCover.lean` lines 90-103 is a template). Prove the formula for `e.toFun` by composing explicitly; if the composite is awkward, construct the equivalence directly with `toFun := fun z => z.1.1`, `invFun := fun x => ⟨(x, c), _⟩` for the contraction point `c`. -/
+theorem t98J01_prodSubset_homotopyEquiv (X : Type) [TopologicalSpace X] (T : Set T98J01.S1)
+    (hT : ContractibleSpace T) :
+    ∃ e : ContinuousMap.HomotopyEquiv ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) X,
+      ∀ z, e.toFun z = z.1.1 := by
+  sorry
+
+/-- The overlap `X × (S¹ ∖ {N, S})`. -/
+def t98J01_overlap (X : Type) [TopologicalSpace X] : Set (X × T98J01.S1) :=
+  {z | z.2 ≠ T98J01.southPt} ∩ {z | z.2 ≠ T98J01.northPt}
+
+def t98J01_overlapPos (X : Type) [TopologicalSpace X] : Set (t98J01_overlap X) :=
+  {z | 0 < z.1.2.1.1}
+
+def t98J01_overlapNeg (X : Type) [TopologicalSpace X] : Set (t98J01_overlap X) :=
+  {z | z.1.2.1.1 < 0}
+
+/-- Seat: `↥(t98J01_overlapPos X)` is homeomorphic to `↥{z : X × S1 | z.2 ∈ {q | 0 < q.1.1}}` (the conditions `q ≠ southPt`, `q ≠ northPt` follow from `0 < q.1.1`). Compose with `t98J01_prodSubset_homotopyEquiv` and `t98J01_pos_contractible`. -/
+theorem t98J01_overlapPos_homotopyEquiv (X : Type) [TopologicalSpace X] :
+    Nonempty (ContinuousMap.HomotopyEquiv ↥(t98J01_overlapPos X) X) := by
+  sorry
+
+/-- Seat: as `t98J01_overlapPos_homotopyEquiv` with `t98J01_neg_contractible`. -/
+theorem t98J01_overlapNeg_homotopyEquiv (X : Type) [TopologicalSpace X] :
+    Nonempty (ContinuousMap.HomotopyEquiv ↥(t98J01_overlapNeg X) X) := by
+  sorry
+
+/-- Seat: finite-dimensionality and vanishing transport along a homotopy equivalence. -/
+theorem t98J01_homology_of_homotopyEquiv {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv Y X) (n : ℕ) :
+    Nonempty (Homology Y n ≅ Homology X n) :=
+  ⟨@asIso _ _ _ _ _ (t98J01_homotopyEquiv_isIso e n)⟩
+
+/-- Seat: the product map on the overlap has Lefschetz number zero. `t98J01_clopen_swap_lefschetz` with `A = t98J01_overlapPos X`, `B = t98J01_overlapNeg X`: both open; they cover because `q ≠ northPt`, `q ≠ southPt` force `q.1.1 ≠ 0` (from `q.1.1^2 + q.1.2^2 = 1`); disjoint by sign; reflection negates `q.1.1`. Finite-dimensionality and the bound come from `hf` through `t98J01_homology_of_homotopyEquiv`. -/
+theorem t98J01_overlap_lefschetz {X : Type} [TopologicalSpace X] (f : C(X, X)) {a : ℚ}
+    (hf : HasLefschetzNumber f a)
+    (h : Set.MapsTo (f.prodMap t98J01_reflectionCM) (t98J01_overlap X) (t98J01_overlap X)) :
+    HasLefschetzNumber (t98J01_selfRestrict (f.prodMap t98J01_reflectionCM) _ h) 0 := by
+  sorry
+
+/-- Seat: reflection fixes the punctures, and the product map preserves the cover. `reflection` is an involution fixing both `southPt` and `northPt`. -/
+theorem t98J01_prodMap_mapsTo {X : Type} [TopologicalSpace X] (f : C(X, X)) (p : T98J01.S1)
+    (hp : p = T98J01.southPt ∨ p = T98J01.northPt) :
+    Set.MapsTo (f.prodMap t98J01_reflectionCM) {z | z.2 ≠ p} {z | z.2 ≠ p} := by
+  sorry
+
+/-- Assembly: `L(f × r) = 2 L(f)`. -/
+theorem t98J01_lefschetz_prod_reflection {X : Type} [TopologicalSpace X] (f : C(X, X)) {a : ℚ}
+    (hf : HasLefschetzNumber f a) :
+    HasLefschetzNumber (f.prodMap t98J01_reflectionCM) (2 * a) := by
+  let φ := f.prodMap t98J01_reflectionCM
+  let U : Set (X × T98J01.S1) := {z | z.2 ≠ T98J01.southPt}
+  let V : Set (X × T98J01.S1) := {z | z.2 ≠ T98J01.northPt}
+  have hφU : Set.MapsTo φ U U := t98J01_prodMap_mapsTo f _ (Or.inl rfl)
+  have hφV : Set.MapsTo φ V V := t98J01_prodMap_mapsTo f _ (Or.inr rfl)
+  have hUo : IsOpen U := isOpen_ne.preimage continuous_snd
+  have hVo : IsOpen V := isOpen_ne.preimage continuous_snd
+  have hcov : U ∪ V = Set.univ := by
+    ext z
+    simp only [Set.mem_union, Set.mem_univ, iff_true]
+    by_contra hz
+    push_neg at hz
+    have h1 : z.2 = T98J01.southPt := by simpa [U] using hz.1
+    have h2 : z.2 = T98J01.northPt := by simpa [V] using hz.2
+    have := congrArg (fun q : T98J01.S1 => q.1.2) (h1.symm.trans h2)
+    norm_num [T98J01.southPt, T98J01.northPt] at this
+  obtain ⟨eU, heU⟩ := t98J01_prodSubset_homotopyEquiv X _ t98J01_ne_south_contractible
+  obtain ⟨eV, heV⟩ := t98J01_prodSubset_homotopyEquiv X _ t98J01_ne_north_contractible
+  have ha : HasLefschetzNumber (t98J01_selfRestrict φ U hφU) a :=
+    (t98J01_hasLefschetz_homotopyEquiv eU _ f (by
+      ext z
+      change eU.toFun _ = f (eU.toFun z)
+      rw [heU, heU]
+      rfl) a).2 hf
+  have hb : HasLefschetzNumber (t98J01_selfRestrict φ V hφV) a :=
+    (t98J01_hasLefschetz_homotopyEquiv eV _ f (by
+      ext z
+      change eV.toFun _ = f (eV.toFun z)
+      rw [heV, heV]
+      rfl) a).2 hf
+  have hφW : Set.MapsTo φ (U ∩ V) (U ∩ V) := hφU.inter_inter hφV
+  have hc := t98J01_overlap_lefschetz f hf hφW
+  have := t98J01_hasLefschetz_mayerVietoris φ U V hUo hVo hcov hφU hφV hφW ha hb hc
+  convert this using 1
+  ring
+
+/-- Assembly -/
+theorem t98J01_lefschetz_prodAssoc {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (f : C(X, X)) (g : C(Y, Y)) (h : C(Z, Z)) {v : ℚ}
+    (hv : HasLefschetzNumber ((f.prodMap g).prodMap h) v) :
+    HasLefschetzNumber (f.prodMap (g.prodMap h)) v := by
+  let e : ContinuousMap.HomotopyEquiv ((X × Y) × Z) (X × (Y × Z)) :=
+    (Homeomorph.prodAssoc X Y Z).toHomotopyEquiv
+  exact (t98J01_hasLefschetz_homotopyEquiv e _ _ (by ext z <;> rfl) v).1 hv
+
+
+/-- The former library boundary: apply `L(f × r) = 2 L(f)` twice to the half-turn. -/
 theorem t98J01_productSphereCircle_homology_traces :
     HasLefschetzNumber T98J01.h 8 := by
-  have hcircles : HasLefschetzNumber
-      (t98J01_reflectionCM.prodMap t98J01_reflectionCM) 4 := by
-    convert t98J01_lefschetz_product t98J01_reflectionCM
-      t98J01_reflectionCM 2 2 t98J01_reflection_lefschetz
-      t98J01_reflection_lefschetz using 1 <;> norm_num
-  have hproduct := t98J01_lefschetz_product t98J01_rotationCM
-      (t98J01_reflectionCM.prodMap t98J01_reflectionCM) 2 4
-      t98J01_rotation_lefschetz hcircles
+  have h4 := t98J01_lefschetz_prod_reflection t98J01_rotationCM t98J01_rotation_lefschetz
+  have h8 := t98J01_lefschetz_prod_reflection _ h4
+  have hassoc := t98J01_lefschetz_prodAssoc _ _ _ h8
   have hmap : t98J01_rotationCM.prodMap
       (t98J01_reflectionCM.prodMap t98J01_reflectionCM) = T98J01.h := by
     ext p <;> rfl
-  rw [hmap] at hproduct
-  convert hproduct using 1 <;> norm_num
+  rw [hmap] at hassoc
+  convert hassoc using 1
+  norm_num
 
 /-- Seat: a homotopy `h ≃ id` on `S2 × S1 × S1` restricts (include the middle
 circle at a basepoint, project back to it) to a homotopy `reflection ≃ id`. -/

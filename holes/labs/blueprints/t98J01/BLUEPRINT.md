@@ -23,10 +23,8 @@ records that a lower-level proof of the first endpoint requires a
 map-natural rational circle-product Mayer–Vietoris/Künneth package and trace
 additivity for short exact sequences.  The reviewed topology loop stopped
 because the coefficient-valued production Mayer–Vietoris transport is absent.
-Splitting that missing 800–1800-line foundation into small consumer-local
-lemmas would create fake boundaries, so the Lefschetz endpoint is stated once
-as a **LIBRARY** lemma.  Similarly, the circle degree/Hurewicz adapter is a
-substantial independent library boundary and is stated once as **LIBRARY**.
+The Künneth foundation turned out not to be needed; see "Reflected-circle
+route" below.
 
 ## Remaining lemmas
 
@@ -60,15 +58,8 @@ All factor leaves below are mutually independent; none assumes another leaf.
   `CoefficientFirstReflection.all_reflections_negative ℚ 1` and
   `CoefficientFirstReflection.topIso ℚ 0`. This computes trace `-1`, not
   merely nontriviality.
-- `t98J01_lefschetz_product` (**LIBRARY**, 800–1800 lines): generic
-  multiplicativity `L(f × g)=L(f)L(g)`. This is the one genuinely large missing
-  foundation. Build it from the map-natural rational Künneth comparison,
-  `TensorProduct.trace_tensorProduct`, finite direct-sum trace additivity, and
-  `Finset.sum_antidiagonal`; alternatively finish the production open-cover
-  route in `ConstructionTargets.ProductionOpenCoverMayerVietoris` and use
-  trace additivity for the resulting exact sequences. Mathlib currently has
-  the linear algebra but not the required production singular-chain Künneth
-  comparison, so this boundary is intentionally not disguised as a small seat.
+- The generic `t98J01_lefschetz_product` leaf is gone (claude-14, 2026-11-01); see
+  "Reflected-circle route" below.
 
 The two factor assemblies (`t98J01_rotation_lefschetz` and
 `t98J01_reflection_lefschetz`) merely unfold `HasLefschetzNumber`, use bounds
@@ -113,23 +104,6 @@ fixed points), but the explicit counter-invariant is decisive: on the loop
 `t ↦ (cos t, sin t)`, reflection reverses traversal, so it sends winding
 number `1` to `-1`; the identity preserves `1`.
 
-## Dependency layers
-
-- **Layer 1, fully parallel:** the nine rational factor leaves listed above,
-  the generic `t98J01_lefschetz_product` LIBRARY theorem, and the three already
-  split non-homotopy leaves. No admitted lemma uses another admitted lemma.
-- **Layer 2, proved assemblies:** `t98J01_rotation_lefschetz`,
-  `t98J01_reflection_lefschetz`, and
-  `t98J01_circle_reflection_degree_neg_one`.
-- **Layer 3, proved assembly:**
-  `t98J01_productSphereCircle_homology_traces` applies the generic product
-  theorem to the two proved factor results.
-- **Layer 4:** `apm_t98j01`, a sorry-free pairing.
-
-There are **10 admitted lemmas**: nine seat-sized independent factor facts and
-one honestly marked large Künneth LIBRARY boundary. The original registered
-trace theorem is no longer admitted.
-
 ## Axiom audit
 
 Compilation produced:
@@ -154,6 +128,82 @@ is now a sorry-free assembly of three seat leaves (imports `CoefficientFirstRefl
   Template: `EvenSphereTangentFieldObstruction.id_not_homotopic_antipodal`.
 
 Truth: each non-homotopy leaf is a standard fact (the first two are exact
-transport statements; the third is degree −1). The trace conjunct is now the
-proved assembly described above; only generic product multiplicativity remains
-a program-sized LIBRARY boundary.
+transport statements; the third is degree −1). The trace conjunct is the assembly
+described under "Reflected-circle route".
+
+## Reflected-circle route (claude-14, 2026-11-01)
+
+Generic `L(f × g) = L(f) L(g)` needs Eilenberg–Zilber, which is absent. The problem only needs the
+product with one fixed map, the circle reflection `r`:
+
+    L(f × r) = 2 L(f)   for any self-map f with a Lefschetz number (t98J01_lefschetz_prod_reflection)
+
+applied twice to the half-turn: `L((rot × r) × r) = 2 · 2 · 2 = 8`, then associativity. The sign
+computation of the circle is now inside the cover, so `t98J01_reflection_lefschetz` and the circle
+homology leaves above it are no longer used by the main theorem (they stay proved).
+
+Why it holds: `r` fixes both poles `N`, `S`. So `φ = f × r` preserves the open cover
+`U = X × (S¹ ∖ S)`, `V = X × (S¹ ∖ N)`. Mayer–Vietoris with naturality gives
+`L(φ) = L(φ|U) + L(φ|V) - L(φ|U∩V)` (`t98J01_hasLefschetz_mayerVietoris`). `U` and `V` retract to `X`
+with projection commuting strictly with `f`, so both terms are `a`. `U ∩ V` is two clopen sheets
+`{x > 0}`, `{x < 0}` exchanged by `r`, so `L(φ|U∩V) = 0`. Hence `2a`. Check at `X = pt`: `L(r) = 2`.
+
+`RP3Homology.rationalMayerVietoris` gives only an existential connecting map, so it cannot be used
+for naturality. The proof works one level down, on the chain-level short exact sequence
+`CoefficientSubcomplexMayerVietoris.shortExact`, with `t98J01_mvSelfMap` the endomorphism of it and
+`HomologySequence.δ_naturality` for the connecting map. Trace additivity
+`t98J01_trace_restrict_add_mapQ` is copied from `LefschetzCompactPolyhedron`, whose unrelated `sorry`
+should not be imported.
+
+### Leaves (22)
+
+Each leaf's docstring carries its proof sketch.
+
+| Leaf | Lines | Needs |
+|---|---|---|
+| trace_ker_add_range | 30-50 | |
+| trace_longExact | 100-150 | trace_ker_add_range |
+| trace_offDiagonal | 30-50 | |
+| complexLefschetz_sum_eq | 20-40 | |
+| homologyMap_g_zero_surjective | 30-50 | |
+| complexLefschetz_shortExact | 100-150 | trace_longExact, sum_eq, g_zero_surjective |
+| complexLefschetz_biprod | 60-100 | sum_eq |
+| complexLefschetz_congr | 40-60 | |
+| homotopyEquiv_isIso | 20-40 | |
+| complexLefschetz_range | 30-60 | congr |
+| complexLefschetz_inf | 40-70 | congr |
+| clopen_homology_bijective | 80-120 | |
+| clopen_swap_lefschetz | 50-80 | trace_offDiagonal, clopen_homology_bijective |
+| ne_south_contractible, ne_north_contractible | 40-70 each | |
+| pos_contractible, neg_contractible | 30-50 each | |
+| prodSubset_homotopyEquiv | 40-70 | |
+| overlapPos_homotopyEquiv, overlapNeg_homotopyEquiv | 30-50 each | prodSubset, pos/neg_contractible |
+| overlap_lefschetz | 40-70 | clopen_swap, overlapPos/Neg |
+| prodMap_mapsTo | 10-20 | |
+
+Total about 1000 lines, none LIBRARY. Sorry-free assemblies: `t98J01_hasLefschetz_homotopyEquiv`,
+`t98J01_hasLefschetz_of_sup`, `t98J01_hasLefschetz_mayerVietoris`, `t98J01_lefschetz_prod_reflection`,
+`t98J01_lefschetz_prodAssoc`, `t98J01_productSphereCircle_homology_traces`.
+
+### Review record
+
+- trace_longExact: checked by hand. Only `C` needs to vanish above `N`, because `d N = 0` closes the
+  telescope; `A`, `B` may be nonzero at `N` (C1, C4).
+- complexLefschetz_shortExact: `N = max b₂ (b₁ + 1)`; `H_0` needs the surjectivity leaf, the tail of the
+  sequence (C4). Direction is X₃ from X₁, X₂, which is the direction the assembly uses (C5).
+- clopen_homology_bijective: `Y`, `A` or `B` empty all fine (C8). Connectedness of simplices enters
+  through the Mayer–Vietoris short exact sequence with zero `X₁`.
+- clopen_swap_lefschetz: if `A` is empty then `B` is too (`φ` maps `B` into `A`) (C8).
+- prodSubset_homotopyEquiv: contractible `T` is nonempty, so the section exists; `X` empty is fine (C8).
+- Lefschetz bounds: the existential bound means `sum_eq` is needed wherever two bounds meet (C4).
+- `t98J01_chains`, `t98J01_hasLefschetzNumber_iff` are `rfl` bridges to `HasLefschetzNumber` (C2, C7).
+- No leaf's statement uses another leaf's proof: `t98J01_range_image_le` is proved so statements mentioning
+  it carry no sorry (form rule).
+
+### Dependency layers
+
+- Layer 1: trace_ker_add_range, trace_offDiagonal, sum_eq, g_zero_surjective, congr, homotopyEquiv_isIso,
+  the four contractible leaves, prodSubset, prodMap_mapsTo, clopen_homology_bijective.
+- Layer 2: trace_longExact, biprod, range, inf, overlapPos, overlapNeg.
+- Layer 3: shortExact, clopen_swap.
+- Layer 4: overlap_lefschetz.
