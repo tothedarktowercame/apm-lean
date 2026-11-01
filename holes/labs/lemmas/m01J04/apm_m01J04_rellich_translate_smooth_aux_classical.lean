@@ -4130,6 +4130,105 @@ theorem apm_m01J04_rellich_translate {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
 /-- Seat: a fixed mollifier turns weak convergence to zero into strong convergence. Pointwise,
 `κ ⋆ u n` at `x` is the pairing of `u n` with `s ↦ κ (x - s)`, so it tends to `0`; it is bounded by
 `‖κ‖₂ C` and supported in the compact `K + tsupport κ`. Conclude by dominated convergence. -/
+/- Pointwise `L²` Cauchy–Schwarz bound for the mollified field: the
+convolution at `x` is bounded by the product of the two `L²` norms, using a
+translation-invariance change of variables and Hölder for `ℝ≥0∞` integrals. -/
+lemma apm_m01J04_rellich_mollified_tendsto_aux_bound
+    {d : ℕ} (u : EuclideanSpace ℝ (Fin d) → ℝ) (hu : MemLp u 2 volume)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκc : Continuous κ)
+    (hκ : HasCompactSupport κ) (x : EuclideanSpace ℝ (Fin d)) :
+    ‖MeasureTheory.convolution κ u
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume x‖ₑ ≤
+      eLpNorm κ 2 volume * eLpNorm u 2 volume := by
+  classical
+  have hκLp : MemLp κ 2 volume :=
+    hκc.memLp_of_hasCompactSupport hκ (p := (2 : ℝ≥0∞)) (μ := volume)
+  have hmp : MeasurePreserving
+      (fun t : EuclideanSpace ℝ (Fin d) ↦ x - t) volume volume :=
+    volume.measurePreserving_sub_left x
+  have hux : MemLp (fun t : EuclideanSpace ℝ (Fin d) ↦ u (x - t)) 2 volume :=
+    hu.comp_measurePreserving hmp
+  have hint : Integrable
+      (fun t : EuclideanSpace ℝ (Fin d) ↦ κ t • u (x - t)) volume :=
+    memLp_one_iff_integrable.mp
+      (hux.smul hκLp :
+        MemLp (fun t : EuclideanSpace ℝ (Fin d) ↦ κ t • u (x - t)) 1 volume)
+  rw [MeasureTheory.convolution_def]
+  calc ‖∫ t : EuclideanSpace ℝ (Fin d), κ t • u (x - t) ∂volume‖ₑ ≤
+      ∫⁻ t : EuclideanSpace ℝ (Fin d), ‖κ t • u (x - t)‖ₑ ∂volume :=
+        enorm_integral_le_lintegral_enorm _
+    _ = ∫⁻ t : EuclideanSpace ℝ (Fin d), ‖κ t‖ₑ * ‖u (x - t)‖ₑ ∂volume := by
+        refine lintegral_congr fun t ↦ ?_
+        rw [smul_eq_mul,
+          Real.enorm_eq_ofReal_abs (κ t * u (x - t)),
+          Real.enorm_eq_ofReal_abs (κ t),
+          Real.enorm_eq_ofReal_abs (u (x - t)), abs_mul, ← ENNReal.ofReal_mul]
+        all_goals positivity
+    _ ≤ (∫⁻ t : EuclideanSpace ℝ (Fin d), ‖κ t‖ₑ ^ (2 : ℝ) ∂volume) ^ (1 / 2 : ℝ) *
+        (∫⁻ t : EuclideanSpace ℝ (Fin d), ‖u (x - t)‖ₑ ^ (2 : ℝ) ∂volume) ^ (1 / 2 : ℝ) := by
+        refine (ENNReal.lintegral_mul_le_Lp_mul_Lq (μ := volume) (p := 2) (q := 2)
+          (Real.holderConjugate_iff.mpr ⟨by norm_num, by norm_num⟩)
+          (hκLp.1.enorm) (hux.1.enorm)).trans_eq ?_
+        simp only [Pi.mul_apply]
+    _ = eLpNorm κ 2 volume * eLpNorm u 2 volume := by
+        have h1 : (∫⁻ t : EuclideanSpace ℝ (Fin d), ‖κ t‖ₑ ^ (2 : ℝ) ∂volume) ^
+            (1 / 2 : ℝ) = eLpNorm κ 2 volume := by
+          rw [eLpNorm_eq_lintegral_rpow_enorm
+            (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+          norm_num
+        have h2 : (∫⁻ t : EuclideanSpace ℝ (Fin d), ‖u (x - t)‖ₑ ^ (2 : ℝ) ∂volume) ^
+            (1 / 2 : ℝ) = eLpNorm u 2 volume := by
+          have hc := eLpNorm_comp_measurePreserving (p := (2 : ℝ≥0∞)) hu.1 hmp
+          simp only [Function.comp_def] at hc
+          rw [eLpNorm_eq_lintegral_rpow_enorm
+            (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞),
+            eLpNorm_eq_lintegral_rpow_enorm
+            (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)] at hc
+          norm_num at hc
+          rw [eLpNorm_eq_lintegral_rpow_enorm
+            (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+          norm_num
+          exact hc
+        rw [h1, h2]
+
+/- Pointwise pairing: the convolution at `x` is the weak pairing of `u` with
+the reflected, translated kernel `s ↦ κ (x - s)`. -/
+lemma apm_m01J04_rellich_mollified_tendsto_aux_pair
+    {d : ℕ} (u : EuclideanSpace ℝ (Fin d) → ℝ) (hu : MemLp u 2 volume)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκc : Continuous κ)
+    (hκ : HasCompactSupport κ) (x : EuclideanSpace ℝ (Fin d)) :
+    MeasureTheory.convolution κ u
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume x =
+      ∫ s, u s * κ (x - s) ∂volume := by
+  classical
+  have hκLp : MemLp κ 2 volume :=
+    hκc.memLp_of_hasCompactSupport hκ (p := (2 : ℝ≥0∞)) (μ := volume)
+  have hmp : MeasurePreserving
+      (fun t : EuclideanSpace ℝ (Fin d) ↦ x - t) volume volume :=
+    volume.measurePreserving_sub_left x
+  have hκx : MemLp (fun s : EuclideanSpace ℝ (Fin d) ↦ κ (x - s)) 2 volume :=
+    hκLp.comp_measurePreserving hmp
+  have hint : Integrable
+      (fun s : EuclideanSpace ℝ (Fin d) ↦ κ (x - s) * u s) volume := by
+    have hmem1 : MemLp (fun s : EuclideanSpace ℝ (Fin d) ↦ κ (x - s) * u s) 1 volume :=
+      hu.smul hκx
+    exact memLp_one_iff_integrable.mp hmem1
+  simp only [MeasureTheory.convolution_def, ContinuousLinearMap.lsmul_apply, smul_eq_mul]
+  have heqint : (∫ t : EuclideanSpace ℝ (Fin d), κ t * u (x - t) ∂volume) =
+      ∫ t : EuclideanSpace ℝ (Fin d),
+        (fun s : EuclideanSpace ℝ (Fin d) ↦ κ (x - s) * u s)
+          ((fun t : EuclideanSpace ℝ (Fin d) ↦ x - t) t) ∂volume :=
+    MeasureTheory.integral_congr_ae (Filter.Eventually.of_forall fun t ↦ by simp)
+  have hf' : AEStronglyMeasurable (fun s : EuclideanSpace ℝ (Fin d) ↦ κ (x - s) * u s)
+      (volume.map (fun t : EuclideanSpace ℝ (Fin d) ↦ x - t)) := by
+    rw [hmp.map_eq]
+    exact hint.1
+  rw [heqint]
+  have him := integral_map hmp.measurable.aemeasurable hf'
+  rw [hmp.map_eq] at him
+  exact him.symm.trans (MeasureTheory.integral_congr_ae
+    (Filter.Eventually.of_forall fun s ↦ mul_comm _ _))
+
 theorem apm_m01J04_rellich_mollified_tendsto {d : ℕ} (u : ℕ → EuclideanSpace ℝ (Fin d) → ℝ)
     {K : Set (EuclideanSpace ℝ (Fin d))} (hK : IsCompact K) (hmem : ∀ n, MemLp (u n) 2 volume)
     (hval : ∀ n, Function.support (u n) ⊆ K) {C : ℝ}
@@ -4139,7 +4238,102 @@ theorem apm_m01J04_rellich_mollified_tendsto {d : ℕ} (u : ℕ → EuclideanSpa
     (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ) (hc : HasCompactSupport κ) :
     Tendsto (fun n ↦ (eLpNorm (MeasureTheory.convolution κ (u n)
       (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume).toReal) atTop (nhds 0) := by
-  sorry
+  classical
+  have hκc : Continuous κ := hs.continuous
+  have hκLp : MemLp κ 2 volume :=
+    hκc.memLp_of_hasCompactSupport hc (p := (2 : ℝ≥0∞)) (μ := volume)
+  have hC0 : 0 ≤ C := le_trans ENNReal.toReal_nonneg (hC 0)
+  have hAn (n : ℕ) : eLpNorm (u n) 2 volume ≤ ENNReal.ofReal C := by
+    have hiff := ENNReal.toReal_le_toReal (a := eLpNorm (u n) 2 volume)
+      (b := ENNReal.ofReal C) (hmem n).eLpNorm_ne_top ENNReal.ofReal_ne_top
+    refine hiff.mp ?_
+    rw [ENNReal.toReal_ofReal hC0]
+    exact hC n
+  set A : ℝ≥0∞ := eLpNorm κ 2 volume * ENNReal.ofReal C with hAdef
+  have hAne : A ≠ ⊤ := ENNReal.mul_ne_top hκLp.eLpNorm_ne_top (by simp)
+  have hA2 : A ^ (2 : ℝ) < ⊤ :=
+    ENNReal.rpow_lt_top_of_nonneg (by norm_num) hAne
+  set S : Set (EuclideanSpace ℝ (Fin d)) :=
+    (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦ z.1 + z.2) ''
+      (tsupport κ ×ˢ K) with hSdef
+  have hScompact : IsCompact S :=
+    ((hc.isCompact).prod hK).image (continuous_fst.add continuous_snd)
+  have hSmeas : MeasurableSet S := hScompact.measurableSet
+  have hSvol : volume S < ⊤ := hScompact.measure_lt_top
+  set bnd : EuclideanSpace ℝ (Fin d) → ℝ≥0∞ :=
+    S.indicator fun _ ↦ A ^ (2 : ℝ) with hbnddef
+  set F : ℕ → EuclideanSpace ℝ (Fin d) → ℝ :=
+    fun n ↦ MeasureTheory.convolution κ (u n)
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume with hFdef
+  have hFcont (n : ℕ) : Continuous (F n) :=
+    (hc.contDiff_convolution_left (ContinuousLinearMap.lsmul ℝ ℝ) hs
+      ((hmem n).locallyIntegrable (by norm_num))).continuous
+  have hFmeas (n : ℕ) : AEStronglyMeasurable (F n) volume :=
+    (hFcont n).aestronglyMeasurable
+  have hFsupp (n : ℕ) : Function.support (F n) ⊆ S := by
+    intro x hx
+    obtain ⟨a, ha, b, hb, rfl⟩ :=
+      MeasureTheory.support_convolution_subset
+        (ContinuousLinearMap.lsmul ℝ ℝ) hx
+    exact ⟨(a, b), ⟨subset_closure ha, hval n hb⟩, rfl⟩
+  have hbnd (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+      ‖F n x‖ₑ ^ (2 : ℝ) ≤ bnd x := by
+    by_cases hxS : x ∈ S
+    · have hle := apm_m01J04_rellich_mollified_tendsto_aux_bound (u n) (hmem n) κ hκc hc x
+      have h2 : eLpNorm κ 2 volume * eLpNorm (u n) 2 volume ≤ A :=
+        mul_le_mul_left' (a := eLpNorm κ 2 volume) (hAn n)
+      have hbx : bnd x = A ^ (2 : ℝ) := Set.indicator_of_mem hxS _
+      rw [hbx]
+      exact ENNReal.rpow_le_rpow (hle.trans h2) (by norm_num)
+    · have h0 : F n x = 0 :=
+        Function.notMem_support.mp fun hx ↦ hxS (hFsupp n hx)
+      have hbx : bnd x = 0 := Set.indicator_of_notMem hxS _
+      rw [hbx]
+      simp [h0]
+  have hmeas : ∀ n, AEMeasurable (fun x ↦ ‖F n x‖ₑ ^ (2 : ℝ)) volume :=
+    fun n ↦ (hFmeas n).enorm.pow_const _
+  have hfin : ∫⁻ x, bnd x ∂volume ≠ ∞ := by
+    have h1 : ∫⁻ x, bnd x ∂volume = A ^ (2 : ℝ) * volume S := by
+      rw [hbnddef]
+      exact (lintegral_indicator hSmeas (fun _ ↦ A ^ (2 : ℝ))).trans
+        (setLIntegral_const S (A ^ (2 : ℝ)))
+    rw [h1]
+    exact ENNReal.mul_ne_top (ne_of_lt hA2) (ne_of_lt hSvol)
+  have hfinlt : ∫⁻ x, bnd x ∂volume < ∞ := lt_top_iff_ne_top.2 hfin
+  have hlim : ∀ x : EuclideanSpace ℝ (Fin d),
+      Tendsto (fun n ↦ ‖F n x‖ₑ ^ (2 : ℝ)) atTop (nhds 0) := by
+    intro x
+    have hq : MemLp (fun s : EuclideanSpace ℝ (Fin d) ↦ κ (x - s)) 2 volume :=
+      hκLp.comp_measurePreserving (volume.measurePreserving_sub_left x)
+    have hpt : Tendsto (fun n ↦ F n x) atTop (nhds 0) := by
+      have hpair (n : ℕ) : F n x = ∫ s, u n s * κ (x - s) ∂volume :=
+        apm_m01J04_rellich_mollified_tendsto_aux_pair (u n) (hmem n) κ hκc hc x
+      simp only [hpair]
+      simpa using hw (fun s : EuclideanSpace ℝ (Fin d) ↦ κ (x - s)) hq
+    have hcont : Continuous fun r : ℝ ↦ ‖r‖ₑ ^ (2 : ℝ) := by fun_prop
+    simpa using hcont.continuousAt.tendsto.comp hpt
+  have hlin : Tendsto
+      (fun n ↦ ∫⁻ x, ‖F n x‖ₑ ^ (2 : ℝ) ∂volume) atTop (nhds 0) := by
+    simpa using tendsto_lintegral_of_dominated_convergence'
+      bnd (fun n ↦ (hFmeas n).enorm.pow_const _)
+      (fun n ↦ Filter.Eventually.of_forall fun x ↦ hbnd n x)
+      hfin
+      (Filter.Eventually.of_forall hlim)
+  have hmemF (n : ℕ) : MemLp (F n) 2 volume := by
+    refine ⟨hFmeas n, ?_⟩
+    have hmono : ∫⁻ x, ‖F n x‖ₑ ^ (2 : ℝ) ∂volume < ∞ :=
+      (lintegral_mono fun x ↦ hbnd n x).trans_lt hfinlt
+    rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    exact ENNReal.rpow_lt_top_of_nonneg (by norm_num) (ne_of_lt hmono)
+  have help : Tendsto (fun n ↦ eLpNorm (F n) 2 volume) atTop (nhds 0) := by
+    have hc : Continuous fun z : ℝ≥0∞ ↦ z ^ ((2 : ℝ≥0∞).toReal)⁻¹ := by
+      simpa using ENNReal.continuous_rpow_const
+    simp_rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    simpa [Function.comp_def] using hc.continuousAt.tendsto.comp hlin
+  simpa using (ENNReal.tendsto_toReal_iff
+    (fun n ↦ (hmemF n).eLpNorm_ne_top) ENNReal.zero_ne_top).2 help
 
 /-- Seat: Rellich for a bounded, weakly null sequence with common compact support. Given `ε`, take the
 kernel `apm_m01J04_mollify_exists_L2_kernel_aux_kernel` at radius `ρ` with `ρ C < ε / 2`.
