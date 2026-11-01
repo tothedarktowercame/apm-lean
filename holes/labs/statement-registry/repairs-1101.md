@@ -25,3 +25,7 @@ b93J03: backlog grade narrower for `[Nontrivial V]` on the whole theorem. claude
 ## a94A05
 
 Backlog grade: narrower, closed balls and closed enlargements, no sequence. Repair by lemma-1 adds apm_a94a05 (54 lines, nothing removed): a countable pairwise-disjoint subfamily with open fivefold enlargements covering the union. New grade: faithful; the family is arbitrary, and part (b) is outer-measure zero so measurability does not matter.
+
+## aunk01
+
+Backlog grade: narrower, the integral clause was real-valued. Repair by zai-8 renames the old theorem apm_aunk01_real, unweakened, and adds apm_aunk01 with complex-valued f. New grade: faithful; Borel sets, the translation sign and all three clauses checked.
