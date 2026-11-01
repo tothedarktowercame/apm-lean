@@ -390,10 +390,93 @@ model in `CP2RationalHomology`, then with its explicit two-sphere.  Transport
 `CoefficientSphereEndpoints.rationalS2H2` across the resulting homotopy
 equivalence to show that rational `H₂` is not zero. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv :
+    apm_t98a04_C2 ≃L[ℂ] (Fin 2 → ℂ) :=
+  PiLp.continuousLinearEquiv 2 ℂ (fun _ : Fin 2 ↦ ℂ)
+
+noncomputable def apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_forward :
+    apm_t98a04_CP1 → RP3Homology.cpU_homology_aux_CP1 :=
+  Projectivization.map
+    (apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.toLinearMap :
+      apm_t98a04_C2 →ₗ[ℂ] (Fin 2 → ℂ))
+    apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.injective
+
+noncomputable def apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_backward :
+    RP3Homology.cpU_homology_aux_CP1 → apm_t98a04_CP1 :=
+  Projectivization.map
+    (apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.symm.toLinearMap :
+      (Fin 2 → ℂ) →ₗ[ℂ] apm_t98a04_C2)
+    apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.symm.injective
+
+noncomputable def apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_equiv :
+    apm_t98a04_CP1 ≃
+      RP3Homology.cpU_homology_aux_CP1 where
+  toFun := apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_forward
+  invFun := apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_backward
+  left_inv p := by
+    induction p using Projectivization.ind with
+    | h v hv =>
+      simp only [apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_forward,
+        apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_backward, Projectivization.map_mk]
+      apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      exact ⟨1, by simp⟩
+  right_inv p := by
+    induction p using Projectivization.ind with
+    | h v hv =>
+      simp only [apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_forward,
+        apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_backward, Projectivization.map_mk]
+      apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      exact ⟨1, by simp⟩
+
+lemma apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_continuous :
+    Continuous apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_equiv := by
+  apply continuous_coinduced_dom.mpr
+  change Continuous
+    (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℂ 1 ∘
+      fun v : {v : apm_t98a04_C2 // v ≠ 0} ↦
+      ⟨apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv v.1, by
+        exact apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.injective.ne v.2⟩)
+  exact continuous_coinduced_rng.comp
+    ((apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.continuous.comp
+      continuous_subtype_val).subtype_mk _)
+
+lemma apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_continuous_symm :
+    Continuous apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_equiv.symm := by
+  apply continuous_coinduced_dom.mpr
+  change Continuous
+    (Projectivization.mk' ℂ ∘
+      fun v : {v : Fin 2 → ℂ // v ≠ 0} ↦
+      ⟨apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.symm v.1, by
+        exact apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.symm.injective.ne v.2⟩)
+  exact continuous_coinduced_rng.comp
+    ((apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_linearEquiv.symm.continuous.comp
+      continuous_subtype_val).subtype_mk _)
+
+noncomputable def apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_homeomorph :
+    apm_t98a04_CP1 ≃ₜ RP3Homology.cpU_homology_aux_CP1 :=
+  { apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_equiv with
+    continuous_toFun :=
+      apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_continuous
+    continuous_invFun :=
+      apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_continuous_symm }
+
 theorem apm_t98a04_no_section_aux_cp1_h2_nonzero :
     ¬ CategoryTheory.Limits.IsZero
       (apm_t98a04_HQ 2 apm_t98a04_CP1) := by
-  sorry
+  intro hzero
+  obtain ⟨eS⟩ := RP3Homology.cpU_homology_aux_CP1_hequiv_S2
+  let e : ContinuousMap.HomotopyEquiv apm_t98a04_CP1
+      RP3Homology.cpU_homology_aux_S2 :=
+    apm_t98a04_no_section_aux_cp1_h2_nonzero_aux_homeomorph.toHomotopyEquiv.trans eS
+  let hiso : apm_t98a04_HQ 2 apm_t98a04_CP1 ≅ ModuleCat.of ℚ ℚ :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℚ e 2 ≪≫
+    ConstructionTargets.CoefficientFirstReflection.topIso ℚ 1
+  have hQzero : CategoryTheory.Limits.IsZero (ModuleCat.of ℚ ℚ) :=
+    hzero.of_iso hiso.symm
+  have hsub : Subsingleton ℚ :=
+    ModuleCat.isZero_iff_subsingleton.mp hQzero
+  exact zero_ne_one (hsub.elim 0 1)
 -- END SEAT AREA
 
 /-- Regard `ℂ²` as `ℝ⁴` by the canonical real-linear isometry, restrict it to
