@@ -1267,7 +1267,42 @@ theorem t98J01_complexLefschetz_range {X : Type} [TopologicalSpace X] (φ : C(X,
     (h : Set.MapsTo φ A A) {v : ℚ} (hv : HasLefschetzNumber (t98J01_selfRestrict φ A h) v) :
     t98J01_ComplexLefschetz (t98J01_sset.obj (t98J01_range A : SSet))
       (t98J01_rangeEndo φ (t98J01_range A) (t98J01_range_image_le φ A h)) v := by
-  sorry
+  rw [t98J01_hasLefschetzNumber_iff] at hv
+  let e := ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso ℚ A
+  apply (t98J01_complexLefschetz_congr e.hom (fun _ => inferInstance) _ v).mpr hv
+  dsimp [e, t98J01_chainMap, t98J01_rangeEndo]
+  simp only [ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso,
+    Functor.mapIso_hom]
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  congr 1
+  simp only [Iso.symm_hom]
+  apply (cancel_mono (TopCat.toSSet.map
+    (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A))).1
+  calc
+    _ = ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap
+          (t98J01_range A) (t98J01_range A) (TopCat.toSSet.map (TopCat.ofHom φ))
+          (t98J01_range_image_le φ A h) ≫ (t98J01_range A).ι := by
+        simpa only [Category.assoc] using congrArg
+          (fun k => ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap
+            (t98J01_range A) (t98J01_range A) (TopCat.toSSet.map (TopCat.ofHom φ))
+            (t98J01_range_image_le φ A h) ≫ k)
+          (ConstructionTargets.SingularExcision.rangeIso_hom_comp
+            (TopCat.toSSet.map
+              (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A)))
+    _ = (t98J01_range A).ι ≫ TopCat.toSSet.map (TopCat.ofHom φ) :=
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap_comp_ι _ _ _ _
+    _ = _ := by
+      dsimp [t98J01_range]
+      change (SSet.Subcomplex.range (TopCat.toSSet.map
+          (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A))).ι ≫
+          TopCat.toSSet.map (TopCat.ofHom φ) = _
+      rw [← ConstructionTargets.SingularExcision.rangeIso_hom_comp
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A)),
+        Category.assoc, ← TopCat.toSSet.map_comp,
+        ← ConstructionTargets.SingularExcision.subspaceMap_inclusion A A φ h,
+        TopCat.toSSet.map_comp]
+      rfl
 
 /-- Seat: the same on the infimum subcomplex that appears in Mayer–Vietoris. As `t98J01_complexLefschetz_range` for `U ∩ V`, composed with `CoefficientIntersectionRangeComparison.intersectionChainsIso ℚ U V` (from `ambientIntersectionRangeIso`). Check the square after `cancel_mono` of the inclusion into the ambient singular set. -/
 theorem t98J01_complexLefschetz_inf {X : Type} [TopologicalSpace X] (φ : C(X, X)) (U V : Set X)
@@ -1278,7 +1313,43 @@ theorem t98J01_complexLefschetz_inf {X : Type} [TopologicalSpace X] (φ : C(X, X
     t98J01_ComplexLefschetz (t98J01_sset.obj ((t98J01_range U ⊓ t98J01_range V :
         (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet))
       (t98J01_rangeEndo φ _ hinf) c := by
-  sorry
+  rw [t98J01_hasLefschetzNumber_iff] at hc
+  let e₂ := ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso
+    ℚ (U ∩ V)
+  have hrange : t98J01_ComplexLefschetz
+      (t98J01_sset.obj (t98J01_range (U ∩ V) : SSet))
+      (t98J01_rangeEndo φ (t98J01_range (U ∩ V))
+        (t98J01_range_image_le φ (U ∩ V) hUV)) c := by
+    apply (t98J01_complexLefschetz_congr e₂.hom (fun _ => inferInstance) _ c).mpr hc
+    dsimp [e₂, t98J01_chainMap, t98J01_rangeEndo]
+    change t98J01_sset.map _ ≫ t98J01_sset.map _ =
+      t98J01_sset.map _ ≫ t98J01_sset.map _
+    rw [← Functor.map_comp, ← Functor.map_comp]
+    apply congrArg t98J01_sset.map
+    apply (cancel_mono (TopCat.toSSet.map
+      (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion (U ∩ V)))).1
+    slice_lhs 2 3 => exact ConstructionTargets.SingularExcision.rangeIso_hom_comp _
+    slice_lhs 1 2 => exact
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap_comp_ι _ _ _ _
+    slice_rhs 2 3 =>
+      exact by
+        simpa only [TopCat.toSSet.map_comp] using
+          congrArg TopCat.toSSet.map
+            (ConstructionTargets.SingularExcision.subspaceMap_inclusion
+              (U ∩ V) (U ∩ V) φ hUV)
+    slice_rhs 1 2 => exact
+      (ConstructionTargets.SingularExcision.rangeIso_hom_comp
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion (U ∩ V))))
+    rfl
+  let e₁ := ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionChainsIso
+    ℚ U V
+  apply (t98J01_complexLefschetz_congr e₁.hom (fun _ => inferInstance) _ c).mp hrange
+  dsimp [e₁, t98J01_rangeEndo]
+  change t98J01_sset.map _ ≫ t98J01_sset.map _ =
+    t98J01_sset.map _ ≫ t98J01_sset.map _
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  congr 1
 
 /-- Assembly: the union subcomplex of an open cover computes the ambient Lefschetz number. -/
 theorem t98J01_hasLefschetz_of_sup {X : Type} [TopologicalSpace X] (φ : C(X, X)) (U V : Set X)
@@ -1456,7 +1527,54 @@ theorem t98J01_clopen_swap_lefschetz {Y : Type} [TopologicalSpace Y] (A B : Set 
     (N : ℕ) (hzA : ∀ k, N < k → Subsingleton (Homology A k))
     (hzB : ∀ k, N < k → Subsingleton (Homology B k)) :
     HasLefschetzNumber φ 0 := by
-  sorry
+  classical
+  let φAB : C(A, B) := ⟨hAB.restrict φ A B, φ.continuous.restrict hAB⟩
+  let φBA : C(B, A) := ⟨hBA.restrict φ B A, φ.continuous.restrict hBA⟩
+  have hsplit (k : ℕ) : Function.Bijective
+      (LinearMap.coprod (induced (t98J01_incl A) k).hom
+        (induced (t98J01_incl B) k).hom) :=
+    t98J01_clopen_homology_bijective A B hA hB hcov hdis k
+  have hfdY (k : ℕ) : FiniteDimensional ℚ (Homology Y k) := by
+    letI := hfdA k
+    letI := hfdB k
+    exact FiniteDimensional.of_surjective _ (hsplit k).2
+  have hzY (k : ℕ) (hk : N < k) : Subsingleton (Homology Y k) := by
+    letI := hzA k hk
+    letI := hzB k hk
+    constructor
+    intro x y
+    obtain ⟨p, rfl⟩ := (hsplit k).2 x
+    obtain ⟨q, rfl⟩ := (hsplit k).2 y
+    rw [Subsingleton.elim p q]
+  refine ⟨hfdY, N, hzY, ?_⟩
+  apply Finset.sum_eq_zero
+  intro k hk
+  have htr : LinearMap.trace ℚ (Homology Y k) (induced φ k).hom = 0 := by
+    letI := hfdA k
+    letI := hfdB k
+    letI := hfdY k
+    apply t98J01_trace_offDiagonal
+      (induced (t98J01_incl A) k).hom (induced (t98J01_incl B) k).hom
+      (hsplit k) (induced φ k).hom (induced φAB k).hom (induced φBA k).hom
+    · let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+          (ModuleCat.of ℚ ℚ)
+      have hc : TopCat.ofHom (t98J01_incl A) ≫ TopCat.ofHom φ =
+          TopCat.ofHom φAB ≫ TopCat.ofHom (t98J01_incl B) := by
+        ext x
+        rfl
+      change (F.map (TopCat.ofHom (t98J01_incl A)) ≫ F.map (TopCat.ofHom φ)).hom =
+        (F.map (TopCat.ofHom φAB) ≫ F.map (TopCat.ofHom (t98J01_incl B))).hom
+      rw [← F.map_comp, hc, F.map_comp]
+    · let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+          (ModuleCat.of ℚ ℚ)
+      have hc : TopCat.ofHom (t98J01_incl B) ≫ TopCat.ofHom φ =
+          TopCat.ofHom φBA ≫ TopCat.ofHom (t98J01_incl A) := by
+        ext x
+        rfl
+      change (F.map (TopCat.ofHom (t98J01_incl B)) ≫ F.map (TopCat.ofHom φ)).hom =
+        (F.map (TopCat.ofHom φBA) ≫ F.map (TopCat.ofHom (t98J01_incl A))).hom
+      rw [← F.map_comp, hc, F.map_comp]
+  rw [htr, mul_zero]
 
 /-! ### Circle geometry -/
 
@@ -1716,12 +1834,58 @@ def t98J01_overlapNeg (X : Type) [TopologicalSpace X] : Set (t98J01_overlap X) :
 /-- Seat: `↥(t98J01_overlapPos X)` is homeomorphic to `↥{z : X × S1 | z.2 ∈ {q | 0 < q.1.1}}` (the conditions `q ≠ southPt`, `q ≠ northPt` follow from `0 < q.1.1`). Compose with `t98J01_prodSubset_homotopyEquiv` and `t98J01_pos_contractible`. -/
 theorem t98J01_overlapPos_homotopyEquiv (X : Type) [TopologicalSpace X] :
     Nonempty (ContinuousMap.HomotopyEquiv ↥(t98J01_overlapPos X) X) := by
-  sorry
+  let T : Set T98J01.S1 := {q | 0 < q.1.1}
+  let j : ↥(t98J01_overlapPos X) ≃ₜ
+      ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) := {
+    toFun z := ⟨z.1.1, z.2⟩
+    invFun z := ⟨⟨z.1, by
+      constructor
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.southPt] at hx
+        have hp := z.property
+        change 0 < z.1.2.1.1 at hp
+        linarith
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.northPt] at hx
+        have hp := z.property
+        change 0 < z.1.2.1.1 at hp
+        linarith⟩, z.2⟩
+    left_inv z := by ext <;> rfl
+    right_inv z := by ext <;> rfl
+    continuous_toFun := by fun_prop
+    continuous_invFun := by fun_prop }
+  obtain ⟨e, -⟩ := t98J01_prodSubset_homotopyEquiv X T t98J01_pos_contractible
+  exact ⟨j.toHomotopyEquiv.trans e⟩
 
 /-- Seat: as `t98J01_overlapPos_homotopyEquiv` with `t98J01_neg_contractible`. -/
 theorem t98J01_overlapNeg_homotopyEquiv (X : Type) [TopologicalSpace X] :
     Nonempty (ContinuousMap.HomotopyEquiv ↥(t98J01_overlapNeg X) X) := by
-  sorry
+  let T : Set T98J01.S1 := {q | q.1.1 < 0}
+  let j : ↥(t98J01_overlapNeg X) ≃ₜ
+      ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) := {
+    toFun z := ⟨z.1.1, z.2⟩
+    invFun z := ⟨⟨z.1, by
+      constructor
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.southPt] at hx
+        have hn := z.property
+        change z.1.2.1.1 < 0 at hn
+        linarith
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.northPt] at hx
+        have hn := z.property
+        change z.1.2.1.1 < 0 at hn
+        linarith⟩, z.2⟩
+    left_inv z := by ext <;> rfl
+    right_inv z := by ext <;> rfl
+    continuous_toFun := by fun_prop
+    continuous_invFun := by fun_prop }
+  obtain ⟨e, -⟩ := t98J01_prodSubset_homotopyEquiv X T t98J01_neg_contractible
+  exact ⟨j.toHomotopyEquiv.trans e⟩
 
 /-- Seat: finite-dimensionality and vanishing transport along a homotopy equivalence. -/
 theorem t98J01_homology_of_homotopyEquiv {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
@@ -1734,7 +1898,77 @@ theorem t98J01_overlap_lefschetz {X : Type} [TopologicalSpace X] (f : C(X, X)) {
     (hf : HasLefschetzNumber f a)
     (h : Set.MapsTo (f.prodMap t98J01_reflectionCM) (t98J01_overlap X) (t98J01_overlap X)) :
     HasLefschetzNumber (t98J01_selfRestrict (f.prodMap t98J01_reflectionCM) _ h) 0 := by
-  sorry
+  classical
+  rcases hf with ⟨hfd, N, hz, hsum⟩
+  let φ := t98J01_selfRestrict (f.prodMap t98J01_reflectionCM) (t98J01_overlap X) h
+  let A := t98J01_overlapPos X
+  let B := t98J01_overlapNeg X
+  have hA : IsOpen A := by
+    have hc : Continuous (fun z : t98J01_overlap X => z.1.2.1.1) := by fun_prop
+    exact isOpen_lt continuous_const hc
+  have hB : IsOpen B := by
+    have hc : Continuous (fun z : t98J01_overlap X => z.1.2.1.1) := by fun_prop
+    exact isOpen_lt hc continuous_const
+  have hcov : A ∪ B = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro z
+    have hs : z.1.2 ≠ T98J01.southPt := z.2.1
+    have hn : z.1.2 ≠ T98J01.northPt := z.2.2
+    have hx : z.1.2.1.1 ≠ 0 := by
+      intro hx
+      have hc := z.1.2.2
+      have hy : z.1.2.1.2 ^ 2 = 1 := by
+        simpa [hx] using hc
+      have hy' : z.1.2.1.2 = 1 ∨ z.1.2.1.2 = -1 := sq_eq_one_iff.mp hy
+      rcases hy' with hy' | hy'
+      · apply hn
+        apply Subtype.ext
+        ext <;> simp [T98J01.northPt, hx, hy']
+      · apply hs
+        apply Subtype.ext
+        ext <;> simp [T98J01.southPt, hx, hy']
+    rcases lt_or_gt_of_ne hx with hx | hx
+    · exact Or.inr hx
+    · exact Or.inl hx
+  have hdis : A ∩ B = ∅ := by
+    ext z
+    simp only [Set.mem_inter_iff, Set.mem_empty_iff_false, iff_false]
+    rintro ⟨hp, hn⟩
+    change 0 < z.1.2.1.1 at hp
+    change z.1.2.1.1 < 0 at hn
+    exact (not_lt_of_ge (le_of_lt hp)) hn
+  have hAB : Set.MapsTo φ A B := by
+    intro z hz
+    change 0 < z.1.2.1.1 at hz
+    change (-z.1.2.1.1 : ℝ) < 0
+    exact neg_lt_zero.mpr hz
+  have hBA : Set.MapsTo φ B A := by
+    intro z hz
+    change z.1.2.1.1 < 0 at hz
+    change 0 < (-z.1.2.1.1 : ℝ)
+    exact neg_pos.mpr hz
+  let eA (k : ℕ) := Classical.choice (t98J01_homology_of_homotopyEquiv
+    (Classical.choice (t98J01_overlapPos_homotopyEquiv X)) k)
+  let eB (k : ℕ) := Classical.choice (t98J01_homology_of_homotopyEquiv
+    (Classical.choice (t98J01_overlapNeg_homotopyEquiv X)) k)
+  have hfdA : ∀ k, FiniteDimensional ℚ (Homology A k) := by
+    intro k
+    letI := hfd k
+    exact FiniteDimensional.of_injective (eA k).hom.hom (eA k).toLinearEquiv.injective
+  have hfdB : ∀ k, FiniteDimensional ℚ (Homology B k) := by
+    intro k
+    letI := hfd k
+    exact FiniteDimensional.of_injective (eB k).hom.hom (eB k).toLinearEquiv.injective
+  have hzA : ∀ k, N < k → Subsingleton (Homology A k) := by
+    intro k hk
+    letI := hz k hk
+    exact Function.Injective.subsingleton (eA k).toLinearEquiv.injective
+  have hzB : ∀ k, N < k → Subsingleton (Homology B k) := by
+    intro k hk
+    letI := hz k hk
+    exact Function.Injective.subsingleton (eB k).toLinearEquiv.injective
+  exact t98J01_clopen_swap_lefschetz A B hA hB hcov hdis φ hAB hBA
+    hfdA hfdB N hzA hzB
 
 /-- Seat: reflection fixes the punctures, and the product map preserves the cover. `reflection` is an involution fixing both `southPt` and `northPt`. -/
 theorem t98J01_prodMap_mapsTo {X : Type} [TopologicalSpace X] (f : C(X, X)) (p : T98J01.S1)
