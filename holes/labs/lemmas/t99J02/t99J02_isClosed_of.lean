@@ -471,7 +471,8 @@ theorem t99J02_mk_eq (p p' : Sum c₁.Punctured c₂.Punctured)
 theorem t99J02_isClosed_of (A : Set (ConnectedSum c₁ c₂))
     (h₁ : IsClosed ((fun p => t99J02_mk c₁ c₂ (Sum.inl p)) ⁻¹' A))
     (h₂ : IsClosed ((fun p => t99J02_mk c₁ c₂ (Sum.inr p)) ⁻¹' A)) : IsClosed A := by
-  sorry
+  apply isClosed_coinduced.mpr
+  exact isClosed_sum_iff.mpr ⟨h₁, h₂⟩
 -- END SEAT AREA
 
 theorem t99J02_continuous_mk : Continuous (t99J02_mk c₁ c₂) := continuous_coinduced_rng
