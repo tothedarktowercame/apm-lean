@@ -617,6 +617,39 @@ theorem iteratedFDeriv_inv_bound
       ≤ (k.factorial : ℝ) * (k.factorial : ℝ) * (r⁻¹ * M) ^ k := key
     _ = (k.factorial : ℝ) * (k.factorial : ℝ) * M ^ k * r⁻¹ ^ k := by rw [mul_pow]; ring
 
+/-- A smooth function vanishing outside an open ball has every iterated derivative vanishing
+outside it, including on the sphere. For `r ≤ 0` the function is zero. Outside the closed ball
+the function is zero near the point. On the sphere, points `x + t • (x - c)` with `t > 0` lie
+outside the closed ball and tend to `x`, so use continuity of the iterated derivative. -/
+theorem iteratedFDeriv_eq_zero_of_support_subset_ball
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {u : E → F} (hu : ContDiff ℝ ∞ u) {c : E} {r : ℝ}
+    (hsupp : Function.support u ⊆ Metric.ball c r) (k : ℕ) {x : E}
+    (hx : x ∉ Metric.ball c r) : iteratedFDeriv ℝ k u x = 0 := by
+  by_cases hr : 0 < r
+  swap
+  · have hu0 : u = 0 := by
+      funext y
+      by_contra hy
+      have hyball := hsupp (show y ∈ Function.support u from hy)
+      exact (not_lt_of_ge (le_of_not_gt hr))
+        (lt_of_le_of_lt (dist_nonneg : 0 ≤ dist y c) (by simpa [dist_comm] using hyball))
+    subst u
+    simp
+  by_contra hxderiv
+  have hxderiv' : x ∈ Function.support (iteratedFDeriv ℝ k u) := hxderiv
+  have hopen : IsOpen (Function.support (iteratedFDeriv ℝ k u)) :=
+    (hu.continuous_iteratedFDeriv (mod_cast le_top)).isOpen_support
+  have hclosed : Function.support (iteratedFDeriv ℝ k u) ⊆ Metric.closedBall c r :=
+    (support_iteratedFDeriv_subset k).trans
+      (closure_minimal (hsupp.trans Metric.ball_subset_closedBall) Metric.isClosed_closedBall)
+  have hxint : x ∈ interior (Metric.closedBall c r) := by
+    rw [mem_interior_iff_mem_nhds]
+    exact Filter.mem_of_superset (hopen.mem_nhds hxderiv') hclosed
+  rw [interior_closedBall c hr.ne'] at hxint
+  exact hx hxint
+
 /-- Normalising the bump family gives a partition of unity with derivative bounds at every
 order needed by the extension.  Combine the reciprocal leaf with the uniform-overlap leaf,
 then apply local finite-sum product estimates and comparability of incident scales. -/
