@@ -4034,7 +4034,9 @@ Cauchy–Schwarz (`apm_m01J04_test_mul_fields_memLp` and neighbours) or `MemLp.i
 theorem apm_m01J04_H1_exists_sub {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (f g : apm_m01J04_H1 d Ω) :
     ∃ h : apm_m01J04_H1 d Ω, h.val = f.val - g.val ∧ h.grad = f.grad - g.grad := by
-  sorry
+  refine ⟨apm_m01J04_H1sub f g, ?_, ?_⟩
+  · rfl
+  · rfl
 
 /-- Seat: for a smooth compactly supported value, the weak gradient is the classical gradient a.e.
 Integrate by parts with `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable`, then use the fundamental
@@ -4043,17 +4045,75 @@ theorem apm_m01J04_rellich_grad_eq {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
     (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val) (hc : HasCompactSupport a.val) :
     a.grad =ᵐ[volume] fun x ↦ WithLp.toLp 2
       (fun i ↦ fderiv ℝ a.val x (EuclideanSpace.single i 1)) := by
-  sorry
+  have hcoord (i : Fin d) :
+      (fun x ↦ a.grad x i) =ᵐ[volume]
+        (fun x ↦ fderiv ℝ a.val x (EuclideanSpace.single i 1)) := by
+    apply ae_eq_of_integral_contDiff_smul_eq
+    · simpa only [Measure.restrict_univ] using
+        (apm_m01J04_H1_grad_apply_memLp a i).locallyIntegrable (by norm_num)
+    · exact ((hs.continuous_fderiv (by simp)).clm_apply continuous_const).locallyIntegrable
+    · intro φ hφ hφc
+      let e : EuclideanSpace ℝ (Fin d) := EuclideanSpace.single i 1
+      have haDiff : Differentiable ℝ a.val := hs.differentiable (by simp)
+      have hφDiff : Differentiable ℝ φ := hφ.differentiable (by simp)
+      have hDa : Continuous (fun x ↦ fderiv ℝ a.val x e) :=
+        (hs.continuous_fderiv (by simp)).clm_apply continuous_const
+      have hDφ : Continuous (fun x ↦ fderiv ℝ φ x e) :=
+        (hφ.continuous_fderiv (by simp)).clm_apply continuous_const
+      have hφtest : apm_m01J04_isTestFunction Set.univ φ :=
+        ⟨hφ, hφc, Set.subset_univ _⟩
+      have hφ2 : MemLp φ 2 volume := by
+        simpa using apm_m01J04_isTestFunction_memLp hφtest 2
+      have hDφ2 : MemLp (fun x ↦ fderiv ℝ φ x e) 2 volume :=
+        hDφ.memLp_of_hasCompactSupport (hφc.fderiv_apply ℝ e)
+      have hDa2 : MemLp (fun x ↦ fderiv ℝ a.val x e) 2 volume :=
+        hDa.memLp_of_hasCompactSupport (hc.fderiv_apply ℝ e)
+      have ha2 : MemLp a.val 2 volume := by
+        simpa only [Measure.restrict_univ] using a.val_memLp
+      have hI1 : Integrable (fun x ↦ fderiv ℝ a.val x e * φ x) :=
+        memLp_one_iff_integrable.mp (by simpa [mul_comm] using hDa2.mul' hφ2)
+      have hI2 : Integrable (fun x ↦ a.val x * fderiv ℝ φ x e) :=
+        memLp_one_iff_integrable.mp (by simpa [mul_comm] using ha2.mul' hDφ2)
+      have hI0 : Integrable (fun x ↦ a.val x * φ x) :=
+        memLp_one_iff_integrable.mp (by simpa [mul_comm] using ha2.mul' hφ2)
+      have hibp := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
+        (μ := volume) (f := a.val) (g := φ) (v := e)
+        hI1 hI2 hI0 (fun x _ ↦ haDiff.differentiableAt)
+        (fun x _ ↦ hφDiff.differentiableAt)
+      have hw := a.weakGradient φ hφ hφc (Set.subset_univ _) i
+      simp only [Measure.restrict_univ] at hw
+      have heq : (∫ x, a.grad x i * φ x) =
+          ∫ x, fderiv ℝ a.val x e * φ x := by
+        linarith
+      simpa [smul_eq_mul, mul_comm] using heq
+  have hall : ∀ᶠ x in ae volume, ∀ i, a.grad x i =
+      fderiv ℝ a.val x (EuclideanSpace.single i 1) :=
+    eventually_all.mpr hcoord
+  filter_upwards [hall] with x hx
+  ext i
+  simpa using hx i
 
 /-- Seat: translation estimate for smooth compact values. Write `a (x - y) - a x` as
 `-∫ t in 0..1, fderiv a (x - t • y) y`, bound its square by `‖y‖² ∫ t, ‖grad a (x - t • y)‖²`
 (Cauchy–Schwarz, then Jensen on `[0,1]`), integrate in `x` with Fubini, and use translation invariance.
 Replace the classical gradient by `a.grad` with `apm_m01J04_rellich_grad_eq`. -/
+theorem apm_m01J04_rellich_translate_smooth_aux_classical {d : ℕ}
+    (f : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hc : HasCompactSupport f)
+    (y : EuclideanSpace ℝ (Fin d)) :
+    (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤
+      ‖y‖ * (eLpNorm (fun x ↦ WithLp.toLp 2
+        (fun i ↦ fderiv ℝ f x (EuclideanSpace.single i 1))) 2 volume).toReal := by
+  sorry
+
 theorem apm_m01J04_rellich_translate_smooth {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
     (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val) (hc : HasCompactSupport a.val) (y : EuclideanSpace ℝ (Fin d)) :
     (eLpNorm (fun x ↦ a.val (x - y) - a.val x) 2 volume).toReal ≤
       ‖y‖ * (eLpNorm a.grad 2 volume).toReal := by
-  sorry
+  have h := apm_m01J04_rellich_translate_smooth_aux_classical a.val hs hc y
+  have hgrad := apm_m01J04_rellich_grad_eq a hs hc
+  rw [eLpNorm_congr_ae hgrad]
+  exact h
 
 /-- Seat: the translation estimate for compactly supported records. Approximate by
 `apm_m01J04_core_exists_smooth_global_approx_aux_mollify`, apply the smooth case, and pass to the limit;
