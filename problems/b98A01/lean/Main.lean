@@ -5,13 +5,12 @@ open scoped Pointwise
 /-!
 # APM b98A01
 
-## Statement repairs
+## Statement
 
-In part (b)(iv), “a subgroup of order `3`” is repaired to “a subgroup of
-order `35`”. An order-`3` subgroup exists unconditionally by Cauchy's theorem
-because `3 ∣ 210`; it cannot be the contingent index-six subgroup to which the
-hint says to apply part (a). The order-`35` statement is the substantive
-equivalence used by that core argument.
+Part (b)(iv) is stated literally with a subgroup of order `3`.  The useful
+order-`35` equivalence is retained as a separate lemma: Burnside's
+normal-complement theorem supplies such a subgroup in every group of order
+`210`, while Cauchy's theorem supplies the order-`3` subgroup.
 
 ## Encoding questions
 
@@ -420,6 +419,77 @@ lemma apm_b98a01_order35_forces_normalizer35
   · norm_num [h] at hdvd
   · exact h
 
+/-- Every group of order `210` has a subgroup of order `35`.  Apply Burnside's
+normal-complement theorem first at the smallest prime `2`, and then at the
+smallest prime `3` of the resulting order-`105` subgroup. -/
+lemma apm_b98a01_exists_order35
+    (G : Type*) [Group G] [Fintype G] (hG : Fintype.card G = 210) :
+    ∃ M : Subgroup G, Nat.card M = 35 := by
+  have hcardG : Nat.card G = 210 := by
+    simpa [Nat.card_eq_fintype_card] using hG
+  haveI : IsZGroup G := IsZGroup.of_squarefree (by rw [hcardG]; native_decide)
+  let P : Sylow 2 G := default
+  have hminG : (Nat.card G).minFac = 2 := by rw [hcardG]; norm_num
+  let K : Subgroup G :=
+    (MonoidHom.transferSylow P
+      ((inferInstance : IsCyclic P).normalizer_le_centralizer hminG)).ker
+  have hcompG : K.IsComplement' P := by
+    exact (inferInstance : IsCyclic P).isComplement' hminG
+  have hPcard : Nat.card P = 2 := by
+    rw [P.card_eq_multiplicity, hcardG]
+    rw [Nat.factorization_def 210 (by norm_num : Nat.Prime 2),
+      show 210 = 2 * 105 by norm_num,
+      padicValNat_base_mul (p := 2) (n := 105) (by norm_num) (by norm_num),
+      padicValNat.eq_zero_of_not_dvd (by norm_num)]
+    norm_num
+  have hKcard : Nat.card K = 105 := by
+    have h := hcompG.card_mul
+    rw [hPcard, hcardG] at h
+    omega
+  haveI : Fintype K := Fintype.ofFinite K
+  let Q : Sylow 3 K := default
+  have hminK : (Nat.card K).minFac = 3 := by rw [hKcard]; norm_num
+  let L : Subgroup K :=
+    (MonoidHom.transferSylow Q
+      ((inferInstance : IsCyclic Q).normalizer_le_centralizer hminK)).ker
+  have hcompK : L.IsComplement' Q := by
+    exact (inferInstance : IsCyclic Q).isComplement' hminK
+  have hQcard : Nat.card Q = 3 := by
+    rw [Q.card_eq_multiplicity, hKcard]
+    rw [Nat.factorization_def 105 (by norm_num : Nat.Prime 3),
+      show 105 = 3 * 35 by norm_num,
+      padicValNat_base_mul (p := 3) (n := 35) (by norm_num) (by norm_num),
+      padicValNat.eq_zero_of_not_dvd (by norm_num)]
+    norm_num
+  have hLcard : Nat.card L = 35 := by
+    have h := hcompK.card_mul
+    rw [hQcard, hKcard] at h
+    omega
+  refine ⟨L.map K.subtype, ?_⟩
+  exact (Nat.card_congr
+    (L.equivMapOfInjective K.subtype Subtype.coe_injective).toEquiv).symm.trans hLcard
+
+/-- The literal equivalence in part (d) of the printed problem. -/
+lemma apm_b98a01_order3_iff_normal_order7
+    (G : Type*) [Group G] [Fintype G] (hG : Fintype.card G = 210) :
+    (∃ M : Subgroup G, Nat.card M = 3) ↔
+      ∃ N : Subgroup G, N.Normal ∧ Nat.card N = 7 := by
+  have hnormal7 : ∃ N : Subgroup G, N.Normal ∧ Nat.card N = 7 :=
+    apm_b98a01_normal_order7_of_order35 G
+      (Classical.choose (apm_b98a01_exists_order35 G hG)) hG
+      (Classical.choose_spec (apm_b98a01_exists_order35 G hG))
+  constructor
+  · intro _
+    exact hnormal7
+  · intro _
+    letI : Fact (Nat.Prime 3) := ⟨by norm_num⟩
+    obtain ⟨x, hx⟩ : ∃ x : G, orderOf x = 3 := by
+      apply exists_prime_orderOf_dvd_card 3
+      rw [hG]
+      norm_num
+    refine ⟨Subgroup.zpowers x, ?_⟩
+    exact (Nat.card_zpowers x).trans hx
+
 theorem apm_b98a01 :
     (∀ (G : Type*) [Group G] [Fintype G] (H : Subgroup G) (n : ℕ),
       H.index = n →
@@ -438,7 +508,7 @@ theorem apm_b98a01 :
           ¬∃ M : Subgroup G, Nat.card M = 35) ∨
         ((∃ M : Subgroup G, Nat.card M = 35) ∧
           ¬∃ L : Subgroup G, Nat.card L = 10)) ∧
-      ((∃ M : Subgroup G, Nat.card M = 35) ↔
+      ((∃ M : Subgroup G, Nat.card M = 3) ↔
         ∃ N : Subgroup G, N.Normal ∧ Nat.card N = 7)) := by
   /-
   Boundary (pass-1 Codex, skipped): Mathlib packages the conceptual engine of
@@ -513,7 +583,7 @@ theorem apm_b98a01 :
   have hnc := apm_b98a01_orderFive_normalizer_card G B hG hB hnormal
   refine ⟨hnc, ?_⟩
   refine ⟨apm_b98a01_order10_forces_normalizer10 G B hG hB hnormal, ?_⟩
-  refine ⟨?_, apm_b98a01_order35_iff_normal_order7 G hG⟩
+  refine ⟨?_, apm_b98a01_order3_iff_normal_order7 G hG⟩
   rcases hnc with hnc10 | hnc35
   · left
     refine ⟨⟨Subgroup.normalizer (B : Set G), hnc10⟩, ?_⟩
