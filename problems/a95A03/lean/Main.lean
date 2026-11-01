@@ -589,3 +589,59 @@ lemma f_radial_eq_of_ne_zero
   · rfl
 
 end
+
+/-- The three conclusions of APM a95A03: the exact finite-`p` range (and
+failure at `p = ∞`), the value of the integral, and the `L²` convolution
+estimate with the explicit constant `2π²`. -/
+theorem apm_a95a03 :
+    (∀ p : ℝ, 0 < p →
+      (MemLp f_radial (ENNReal.ofReal p) (volume : Measure E) ↔
+        3 / 4 < p ∧ p < 3 / 2)) ∧
+    ¬ MemLp f_radial ⊤ (volume : Measure E) ∧
+    (∫ x : E, f_radial x ∂volume) = 2 * π ^ 2 ∧
+    ∀ (g : E → ℂ), MemLp g 2 volume →
+      MemLp (fun x => ∫ y, (f_radial (x - y) : ℂ) * g y ∂volume) 2 volume ∧
+      eLpNorm (fun x => ∫ y, (f_radial (x - y) : ℂ) * g y ∂volume) 2 volume ≤
+        ENNReal.ofReal (2 * π ^ 2) * eLpNorm g 2 volume := by
+  refine ⟨fun p hp => f_radial_memLp_iff hp,
+    f_radial_not_memLp_top, f_radial_integral, ?_⟩
+  intro g hg
+  have hjoint : AEStronglyMeasurable
+      (fun z : E × E => (f_radial (z.1 - z.2) : ℂ) * g z.2)
+      (volume.prod volume) := by
+    exact
+      (Complex.continuous_ofReal.comp_aestronglyMeasurable
+        (f_radial_integrable.aestronglyMeasurable.comp_quasiMeasurePreserving
+          (quasiMeasurePreserving_sub (volume : Measure E) volume))).mul
+        hg.aestronglyMeasurable.comp_snd
+  have hmeas : AEStronglyMeasurable
+      (fun x : E => ∫ y, (f_radial (x - y) : ℂ) * g y ∂volume) volume :=
+    hjoint.integral_prod_right'
+  have hnonneg : ∀ x : E, 0 ≤ f_radial x := by
+    intro x
+    simp only [f_radial]
+    split_ifs <;> positivity
+  have hpoint : ∀ x : E,
+      ‖∫ y, (f_radial (x - y) : ℂ) * g y ∂volume‖ ≤
+        ∫ y, f_radial (x - y) * ‖g y‖ ∂volume := by
+    intro x
+    refine (norm_integral_le_integral_norm _).trans_eq ?_
+    apply integral_congr_ae
+    filter_upwards [] with y
+    simp only [norm_mul, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (hnonneg _)]
+  have hmono :
+      eLpNorm (fun x => ∫ y, (f_radial (x - y) : ℂ) * g y ∂volume) 2 volume ≤
+        eLpNorm (fun x => ∫ y, f_radial (x - y) * ‖g y‖ ∂volume) 2 volume :=
+    eLpNorm_mono_real hpoint
+  have hreal := f_radial_conv_L2_bound hg.norm
+  have hbound :
+      eLpNorm (fun x => ∫ y, (f_radial (x - y) : ℂ) * g y ∂volume) 2 volume ≤
+        ENNReal.ofReal (2 * π ^ 2) * eLpNorm g 2 volume := by
+    calc
+      _ ≤ eLpNorm (fun x => ∫ y, f_radial (x - y) * ‖g y‖ ∂volume) 2 volume := hmono
+      _ ≤ ENNReal.ofReal (2 * π ^ 2) * eLpNorm (fun y => ‖g y‖) 2 volume := hreal
+      _ = ENNReal.ofReal (2 * π ^ 2) * eLpNorm g 2 volume := by rw [eLpNorm_norm]
+  refine ⟨⟨hmeas, hbound.trans_lt ?_⟩, hbound⟩
+  exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top
+    hg.eLpNorm_lt_top

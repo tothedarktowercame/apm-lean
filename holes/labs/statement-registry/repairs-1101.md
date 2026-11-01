@@ -13,3 +13,5 @@ Backlog grade: narrower, the requested statement of Cauchy's integral formula wa
 ## a95A03
 
 Backlog grade: narrower, the convolution theorem did not assert membership in L². First repair by lemma-3 added `MemLp`. New grade: narrower, because `g` is real-valued and problem.md does not restrict the scalars (the aunk01 and a98J03 standard). The exponents 3/4 < p < 3/2 and the integral 2π² were recomputed by hand and agree. Sent back for complex-valued `g`.
+
+Second repair by lemma-3 quantifies over `g : E → ℂ` (56 lines added in all, nothing removed). New grade: faithful. Exponents, the integral and the constant ‖f‖₁ = 2π² were recomputed. The statement does not assert a.e. convergence of the convolution integral, but the grader found no content lost: the bound applied to truncations of |g| with monotone convergence recovers it.
