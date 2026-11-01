@@ -822,6 +822,86 @@ theorem compactConvex_taylor_remainder_bound
 Expand `P_a-P_b` at `b`; its derivatives there are controlled by the compact convex
 remainder estimate, then evaluate that finite polynomial using the exact formula above. -/
 -- BEGIN SEAT AREA
+/- Taylor polynomials are smooth (finite sums of diagonal monomials). -/
+theorem taylor_difference_bound_aux_contDiff
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (m : ℕ) (J : (j : ℕ) → E → E[×j]→L[ℝ] F) (a : E) :
+    ContDiff ℝ ⊤ (taylorPolynomial m J a) := by
+  show ContDiff ℝ ⊤ (fun x ↦ ∑ j ∈ Finset.range (m + 1),
+    ((j.factorial : ℝ)⁻¹) • J j a (fun _ ↦ x - a))
+  apply ContDiff.sum
+  intro j _
+  apply ContDiff.const_smul
+  exact (ContinuousMultilinearMap.contDiff _).comp
+    (contDiff_pi.2 fun _ ↦ contDiff_id.sub contDiff_const)
+
+/- The `(m+1)`-th derivative of a degree-`m` Taylor polynomial vanishes. -/
+theorem taylor_difference_bound_aux_top
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (m : ℕ) (J : (j : ℕ) → E → E[×j]→L[ℝ] F) (a : E)
+    (hJ : ∀ j ≤ m, ∀ σ : Equiv.Perm (Fin j), (J j a).domDomCongr σ = J j a) :
+    ∀ k : ℕ, m + 1 ≤ k → ∀ x : E, iteratedFDeriv ℝ k (taylorPolynomial m J a) x = 0 := by
+  have hDm : ∀ y : E, iteratedFDeriv ℝ m (taylorPolynomial m J a) y = J m a := by
+    intro y
+    ext v
+    rw [iteratedFDeriv_taylorPolynomial_exact m m J a y le_rfl v hJ]
+    have h1 : m + 1 - m = 1 := by omega
+    rw [h1, Finset.sum_range_one]
+    rw [show (((Nat.factorial 0 : ℕ) : ℝ))⁻¹ = 1 from by simp, one_smul]
+    have happ : Fin.append v (fun _ : Fin 0 ↦ y - a) =
+        fun i ↦ v (Fin.cast (Nat.add_zero m) i) := by
+      funext i
+      have hi : i = Fin.castAdd 0 (Fin.cast (Nat.add_zero m) i) := Fin.ext rfl
+      conv_lhs => rw [hi, Fin.append_left]
+    rw [happ]
+    exact iteratedFDeriv_taylorPolynomial_exact_aux_cast (fun n ↦ J n a) (Nat.add_zero m) v
+  intro k hk
+  induction k, hk using Nat.le_induction with
+  | base =>
+    intro x
+    ext w
+    rw [iteratedFDeriv_succ_apply_left]
+    have hfun : iteratedFDeriv ℝ m (taylorPolynomial m J a) = fun _ ↦ J m a := funext hDm
+    rw [hfun]
+    simp
+  | succ k hk ih =>
+    intro x
+    ext w
+    rw [iteratedFDeriv_succ_apply_left]
+    rw [show iteratedFDeriv ℝ k (taylorPolynomial m J a) = 0 from funext ih]
+    simp
+
+/- Iterated derivatives commute with pointwise subtraction of smooth maps. -/
+theorem taylor_difference_bound_aux_iteratedFDeriv_sub
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {φ ψ : E → F} (hφ : ContDiff ℝ ⊤ φ) (hψ : ContDiff ℝ ⊤ ψ) (k : ℕ) :
+    ∀ (x : E) (u : Fin k → E),
+      iteratedFDeriv ℝ k (fun y ↦ φ y - ψ y) x u =
+        iteratedFDeriv ℝ k φ x u - iteratedFDeriv ℝ k ψ x u := by
+  induction k with
+  | zero =>
+    intro x u
+    rw [iteratedFDeriv_zero_apply, iteratedFDeriv_zero_apply, iteratedFDeriv_zero_apply]
+  | succ k ih =>
+    intro x u
+    have hfun : iteratedFDeriv ℝ k (fun z ↦ φ z - ψ z) =
+        iteratedFDeriv ℝ k φ - iteratedFDeriv ℝ k ψ := by
+      funext y
+      rw [Pi.sub_apply]
+      ext v
+      rw [ContinuousMultilinearMap.sub_apply]
+      exact ih y v
+    rw [iteratedFDeriv_succ_apply_left, iteratedFDeriv_succ_apply_left,
+      iteratedFDeriv_succ_apply_left, hfun]
+    have hA : DifferentiableAt ℝ (iteratedFDeriv ℝ k φ) x :=
+      (hφ.contDiffAt.differentiableAt_iteratedFDeriv (by simp))
+    have hB : DifferentiableAt ℝ (iteratedFDeriv ℝ k ψ) x :=
+      (hψ.contDiffAt.differentiableAt_iteratedFDeriv (by simp))
+    rw [fderiv_sub hA hB, ContinuousLinearMap.sub_apply, ContinuousMultilinearMap.sub_apply]
+
 theorem taylor_difference_bound
     {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
@@ -833,7 +913,222 @@ theorem taylor_difference_bound
           (fun y ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a y -
             taylorPolynomial m (fun j ↦ convexJet j f K) b y) x‖ ≤
         C * (‖x - a‖ + ‖x - b‖) ^ (m + 1 - r) := by
-  sorry
+  classical
+  obtain ⟨C₁, hC₁nn, hC₁⟩ := compactConvex_taylor_remainder_bound hKc hK hKi hf
+  obtain ⟨hcont, hzero, hone, hsymm⟩ := convexWithinJet_nat hK hKi hf
+  have hJ : ∀ c ∈ K, ∀ j ≤ m, ∀ σ : Equiv.Perm (Fin j),
+      (convexJet j f K c).domDomCongr σ = convexJet j f K c :=
+    fun c _ j hj σ ↦ hsymm j (by omega) c (by assumption) σ
+  have hPa : ∀ c : E, ContDiff ℝ ⊤ (taylorPolynomial m (fun j ↦ convexJet j f K) c) :=
+    fun c ↦ taylor_difference_bound_aux_contDiff m _ c
+  refine ⟨C₁ * (m + 1 : ℝ) * 2 ^ (m + 1),
+    mul_nonneg (mul_nonneg hC₁nn (by positivity)) (pow_nonneg (by norm_num) _), ?_⟩
+  intro r hr a ha b hb x
+  have hQtop : ContDiff ℝ ⊤ (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+      taylorPolynomial m (fun j ↦ convexJet j f K) b z) := (hPa a).sub (hPa b)
+  have hQon : ContDiffOn ℝ (m + 1) (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+      taylorPolynomial m (fun j ↦ convexJet j f K) b z) univ :=
+    (hQtop.of_le (show ((m + 1 : ℕ) : WithTop ENat) ≤ ⊤ from le_top)).contDiffOn
+  -- Segment derivative formula along the line from `b` to `x` (ambient-space version of
+  -- `compactConvex_taylor_remainder_bound_aux_formula` with `K = univ`).
+  have hform : ∀ (q : ℕ), q ≤ m + 1 - r → ∀ t ∈ Icc (0 : ℝ) 1,
+      iteratedDerivWithin q (fun s ↦ iteratedFDeriv ℝ r
+          (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+            taylorPolynomial m (fun j ↦ convexJet j f K) b z) (b + s • (x - b)))
+          (Icc 0 1) t =
+        compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin q ↦ x - b)
+          (iteratedFDeriv ℝ (r + q)
+            (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+              taylorPolynomial m (fun j ↦ convexJet j f K) b z) (b + t • (x - b))) := by
+    intro q hq t ht
+    have h := compactConvex_taylor_remainder_bound_aux_formula (K := (univ : Set E))
+      (f := fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+        taylorPolynomial m (fun j ↦ convexJet j f K) b z)
+      convex_univ (by rw [interior_univ]; exact ⟨0, trivial⟩) hQon (mem_univ b) (mem_univ x)
+      hr q hq t ht
+    simp only [convexJet, iteratedFDerivWithin_univ] at h
+    exact h
+  -- The top line-derivative vanishes because both `(m+1)`-th derivatives do.
+  have htop : ∀ (k : ℕ), m + 1 ≤ k → ∀ y : E, iteratedFDeriv ℝ k
+      (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+        taylorPolynomial m (fun j ↦ convexJet j f K) b z) y = 0 := by
+    intro k hk y
+    ext u
+    rw [taylor_difference_bound_aux_iteratedFDeriv_sub (hPa a) (hPa b) k y u,
+      taylor_difference_bound_aux_top m _ a (hJ a ha) k hk y,
+      taylor_difference_bound_aux_top m _ b (hJ b hb) k hk y,
+      ContinuousMultilinearMap.zero_apply, sub_self]
+  have hub : ∀ y ∈ Icc (0 : ℝ) 1,
+      ‖iteratedDerivWithin ((m - r) + 1) (fun s ↦ iteratedFDeriv ℝ r
+          (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+            taylorPolynomial m (fun j ↦ convexJet j f K) b z) (b + s • (x - b)))
+          (Icc 0 1) y‖ ≤ (0 : ℝ) := by
+    intro y hy
+    have h2 : (m - r) + 1 = m + 1 - r := by omega
+    rw [h2, hform (m + 1 - r) le_rfl y hy]
+    rw [htop (r + (m + 1 - r)) (by omega) _, map_zero, norm_zero]
+  have hline : ContDiff ℝ ⊤ (fun s : ℝ ↦ b + s • (x - b)) :=
+    contDiff_const.add (contDiff_id.smul contDiff_const)
+  have hjet : ContDiff ℝ ⊤ (iteratedFDeriv ℝ r
+      (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+        taylorPolynomial m (fun j ↦ convexJet j f K) b z)) :=
+    hQtop.iteratedFDeriv_right (m := ⊤) le_top
+  have hCg : ContDiff ℝ ⊤ (fun s ↦ iteratedFDeriv ℝ r
+      (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+        taylorPolynomial m (fun j ↦ convexJet j f K) b z) (b + s • (x - b))) :=
+    hjet.comp hline
+  have hrem := taylor_mean_remainder_bound (zero_le_one : (0 : ℝ) ≤ 1)
+    ((hCg.contDiffOn.mono (subset_univ _)).of_le le_top)
+    (right_mem_Icc.mpr zero_le_one) hub
+  rw [sub_zero, one_pow, mul_one, zero_div] at hrem
+  have heq : iteratedFDeriv ℝ r (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+        taylorPolynomial m (fun j ↦ convexJet j f K) b z) x =
+      taylorWithinEval (fun s ↦ iteratedFDeriv ℝ r
+        (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+          taylorPolynomial m (fun j ↦ convexJet j f K) b z) (b + s • (x - b)))
+        (m - r) (Icc 0 1) 0 1 := by
+    have h0 := sub_eq_zero.mp (norm_le_zero_iff.mp hrem)
+    rwa [one_smul, add_sub_cancel] at h0
+  have hte : taylorWithinEval (fun s ↦ iteratedFDeriv ℝ r
+        (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+          taylorPolynomial m (fun j ↦ convexJet j f K) b z) (b + s • (x - b)))
+        (m - r) (Icc 0 1) 0 1 =
+      ∑ j ∈ Finset.range (m + 1 - r), (j.factorial : ℝ)⁻¹ •
+        compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin j ↦ x - b)
+          (iteratedFDeriv ℝ (r + j) (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+            taylorPolynomial m (fun j ↦ convexJet j f K) b z) b) := by
+    rw [taylor_within_apply]
+    have h3 : m - r + 1 = m + 1 - r := by omega
+    rw [h3]
+    apply Finset.sum_congr rfl
+    intro j hj
+    rw [sub_zero, one_pow, mul_one]
+    congr 1
+    have hh := hform j (by have := Finset.mem_range.mp hj; omega) 0
+      (left_mem_Icc.mpr zero_le_one)
+    rw [zero_smul, add_zero] at hh
+    exact hh
+  rw [heq, hte]
+  -- Termwise bound, then sum.
+  have hterm : ∀ j ∈ Finset.range (m + 1 - r),
+      ‖(j.factorial : ℝ)⁻¹ • compactConvex_taylor_remainder_bound_auxPhi
+          (fun _ : Fin j ↦ x - b)
+          (iteratedFDeriv ℝ (r + j) (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+            taylorPolynomial m (fun j ↦ convexJet j f K) b z) b)‖ ≤
+        C₁ * (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r) := by
+    intro j hj
+    have hjT : j < m + 1 - r := Finset.mem_range.mp hj
+    have hrj : r + j ≤ m := by omega
+    have hb0 : iteratedFDeriv ℝ (r + j) (taylorPolynomial m (fun j ↦ convexJet j f K) b) b =
+        convexJet (r + j) f K b := by
+      have h := hC₁ (r + j) hrj b hb b hb
+      rw [sub_self, norm_zero, zero_pow (by omega : m + 1 - (r + j) ≠ 0), mul_zero] at h
+      exact sub_eq_zero.mp (norm_le_zero_iff.mp h)
+    have hsub : iteratedFDeriv ℝ (r + j)
+        (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+          taylorPolynomial m (fun j ↦ convexJet j f K) b z) b =
+        iteratedFDeriv ℝ (r + j) (taylorPolynomial m (fun j ↦ convexJet j f K) a) b -
+          convexJet (r + j) f K b := by
+      ext u
+      rw [ContinuousMultilinearMap.sub_apply,
+        taylor_difference_bound_aux_iteratedFDeriv_sub (hPa a) (hPa b) (r + j) b u, hb0]
+    have hnorm : ‖iteratedFDeriv ℝ (r + j)
+        (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+          taylorPolynomial m (fun j ↦ convexJet j f K) b z) b‖ ≤
+        C₁ * ‖b - a‖ ^ (m + 1 - r - j) := by
+      rw [hsub]
+      have h := hC₁ (r + j) hrj a ha b hb
+      have hT : m + 1 - (r + j) = m + 1 - r - j := by omega
+      rwa [hT] at h
+    rw [norm_smul, Real.norm_of_nonneg (by positivity : 0 ≤ (j.factorial : ℝ)⁻¹)]
+    have hfac : (j.factorial : ℝ)⁻¹ ≤ 1 :=
+      inv_le_one_of_one_le₀ (Nat.one_le_cast.mpr (Nat.factorial_pos j))
+    have hAn := compactConvex_taylor_remainder_bound_aux_norm (fun _ : Fin j ↦ x - b)
+      (iteratedFDeriv ℝ (r + j) (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+        taylorPolynomial m (fun j ↦ convexJet j f K) b z) b)
+    have hprod : ∏ i : Fin j, ‖(fun _ ↦ x - b) i‖ = ‖x - b‖ ^ j := by
+      simp [Finset.prod_const, Finset.card_fin]
+    have hpow : ‖b - a‖ ^ (m + 1 - r - j) * ‖x - b‖ ^ j ≤
+        (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r) := by
+      calc ‖b - a‖ ^ (m + 1 - r - j) * ‖x - b‖ ^ j
+          ≤ (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r - j) * (‖b - a‖ + ‖x - b‖) ^ j :=
+            mul_le_mul
+              (pow_le_pow_left₀ (norm_nonneg _)
+                (le_add_of_nonneg_right (norm_nonneg _)) _)
+              (pow_le_pow_left₀ (norm_nonneg _)
+                (le_add_of_nonneg_left (norm_nonneg _)) _)
+              (pow_nonneg (norm_nonneg _) _)
+              (pow_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _)) _)
+        _ = (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r) := by
+            rw [← pow_add]
+            congr 2
+            omega
+    calc (j.factorial : ℝ)⁻¹ * ‖compactConvex_taylor_remainder_bound_auxPhi
+            (fun _ : Fin j ↦ x - b)
+            (iteratedFDeriv ℝ (r + j)
+              (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+                taylorPolynomial m (fun j ↦ convexJet j f K) b z) b)‖
+        ≤ (j.factorial : ℝ)⁻¹ * (C₁ * (‖b - a‖ ^ (m + 1 - r - j) * ‖x - b‖ ^ j)) := by
+          apply mul_le_mul_of_nonneg_left _ (by positivity)
+          calc ‖compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin j ↦ x - b)
+                (iteratedFDeriv ℝ (r + j)
+                  (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+                    taylorPolynomial m (fun j ↦ convexJet j f K) b z) b)‖
+              ≤ ‖iteratedFDeriv ℝ (r + j)
+                  (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+                    taylorPolynomial m (fun j ↦ convexJet j f K) b z) b‖ * ‖x - b‖ ^ j := by
+                rwa [hprod] at hAn
+            _ ≤ (C₁ * ‖b - a‖ ^ (m + 1 - r - j)) * ‖x - b‖ ^ j :=
+                mul_le_mul_of_nonneg_right hnorm (pow_nonneg (norm_nonneg _) _)
+            _ = C₁ * (‖b - a‖ ^ (m + 1 - r - j) * ‖x - b‖ ^ j) := by ring
+      _ ≤ 1 * (C₁ * (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r)) := by
+          apply mul_le_mul hfac _ (by positivity) zero_le_one
+          exact mul_le_mul_of_nonneg_left hpow hC₁nn
+      _ = C₁ * (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r) := one_mul _
+  calc ‖∑ j ∈ Finset.range (m + 1 - r), (j.factorial : ℝ)⁻¹ •
+          compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin j ↦ x - b)
+            (iteratedFDeriv ℝ (r + j)
+              (fun z ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a z -
+                taylorPolynomial m (fun j ↦ convexJet j f K) b z) b)‖
+      ≤ ∑ j ∈ Finset.range (m + 1 - r), C₁ * (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r) :=
+        (norm_sum_le _ _).trans (Finset.sum_le_sum hterm)
+    _ = (↑m + 1 - ↑r : ℝ) * (C₁ * (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r)) := by
+        rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+        congr 1
+        rw [Nat.cast_sub (by omega : r ≤ m + 1), Nat.cast_add, Nat.cast_one]
+    _ ≤ C₁ * (m + 1 : ℝ) * 2 ^ (m + 1) * (‖x - a‖ + ‖x - b‖) ^ (m + 1 - r) := by
+        have hSnn : 0 ≤ ‖x - a‖ + ‖x - b‖ := add_nonneg (norm_nonneg _) (norm_nonneg _)
+        have hba : ‖b - a‖ ≤ ‖x - a‖ + ‖x - b‖ := by
+          have h1 : ‖b - a‖ ≤ ‖b - x‖ + ‖x - a‖ := by
+            have he : b - a = (b - x) + (x - a) := by abel
+            rw [he]
+            exact norm_add_le _ _
+          have h2 : ‖b - x‖ = ‖x - b‖ := norm_sub_rev _ _
+          linarith
+        have hscale : (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r) ≤
+            (2 * (‖x - a‖ + ‖x - b‖)) ^ (m + 1 - r) := by
+          apply pow_le_pow_left₀ (add_nonneg (norm_nonneg _) (norm_nonneg _))
+          have hxa : 0 ≤ ‖x - a‖ := norm_nonneg _
+          linarith
+        rw [mul_pow] at hscale
+        have hrnn : (0 : ℝ) ≤ ↑m + 1 - ↑r :=
+          sub_nonneg.mpr (by exact_mod_cast hr.trans (Nat.le_succ m))
+        have hcount : (↑m + 1 - ↑r) * (C₁ * (‖b - a‖ + ‖x - b‖) ^ (m + 1 - r)) ≤
+            (↑m + 1 - ↑r) * (C₁ * (2 ^ (m + 1 - r) * (‖x - a‖ + ‖x - b‖) ^ (m + 1 - r))) :=
+          mul_le_mul_of_nonneg_left
+            (mul_le_mul_of_nonneg_left hscale hC₁nn) hrnn
+        refine hcount.trans ?_
+        have h2mono : (2 : ℝ) ^ (m + 1 - r) ≤ 2 ^ (m + 1) :=
+          pow_le_pow_right₀ (by norm_num) (by omega)
+        have hrm : (↑m + 1 - ↑r : ℝ) ≤ (↑m + 1 : ℝ) := sub_le_self _ (by positivity)
+        have hS : 0 ≤ (‖x - a‖ + ‖x - b‖) ^ (m + 1 - r) := pow_nonneg hSnn _
+        calc (↑m + 1 - ↑r) * (C₁ * (2 ^ (m + 1 - r) * (‖x - a‖ + ‖x - b‖) ^ (m + 1 - r)))
+            = ((↑m + 1 - ↑r) * 2 ^ (m + 1 - r)) *
+                (C₁ * (‖x - a‖ + ‖x - b‖) ^ (m + 1 - r)) := by ring
+          _ ≤ ((↑m + 1 : ℝ) * 2 ^ (m + 1)) * (C₁ * (‖x - a‖ + ‖x - b‖) ^ (m + 1 - r)) := by
+              apply mul_le_mul_of_nonneg_right _ (mul_nonneg hC₁nn hS)
+              exact mul_le_mul hrm h2mono (pow_nonneg (by norm_num) _) (by positivity)
+          _ = C₁ * (↑m + 1) * 2 ^ (m + 1) * (‖x - a‖ + ‖x - b‖) ^ (m + 1 - r) := by ring
 -- END SEAT AREA
 
 /-- Smooth partition data on the complement, indexed by the already constructed dyadic
