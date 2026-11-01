@@ -271,7 +271,35 @@ inner point, `y' ≥ √(1-x²)/2`. If `ζ² = ell u`, `‖u‖ < 1`, take the r
 -- BEGIN SEAT AREA
 theorem t99J02_phi_not_hole (z : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im) (u : ℂ) (hu : ‖u‖ < 1) :
     t99J02_phi (z : ℂ) ≠ t99J02_ell u := by
-  sorry
+  intro h
+  set x := (z : ℂ).re
+  set y := (z : ℂ).im
+  have hxy : x ^ 2 + y ^ 2 ≤ 1 := by
+    have hz_norm : ‖(z : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp z.2
+    have hn := Complex.sq_norm (z : ℂ)
+    rw [Complex.normSq_apply] at hn
+    nlinarith [norm_nonneg (z : ℂ)]
+  have hx : 0 ≤ 1 - x ^ 2 := by nlinarith [sq_nonneg y]
+  set Y := √(1 - x ^ 2)
+  have hY : 0 ≤ Y := Real.sqrt_nonneg _
+  have hY2 : Y ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx
+  have hphi_norm : ‖t99J02_phi (z : ℂ)‖ = x ^ 2 + ((y + Y) / 2) ^ 2 := by
+    rw [t99J02_phi, norm_pow, Complex.sq_norm, Complex.normSq_mk]
+    dsimp [x, y, Y]
+    ring
+  have hphi_re : (t99J02_phi (z : ℂ)).re = x ^ 2 - ((y + Y) / 2) ^ 2 := by
+    dsimp [x, y, Y]
+    simp only [t99J02_phi, pow_two, Complex.mul_re]
+  have hell_norm := t99J02_ell_norm u
+  have hell_re : (t99J02_ell u).re = 3 / 8 * ‖u‖ + 5 / 8 * u.re := by
+    rfl
+  rw [h, hell_norm] at hphi_norm
+  rw [h, hell_re] at hphi_re
+  have hlarge : 2 ≤
+      5 * (5 / 8 * ‖u‖ + 3 / 8 * u.re) -
+        3 * (3 / 8 * ‖u‖ + 5 / 8 * u.re) := by
+    nlinarith [hz, hY, hY2]
+  nlinarith
 -- END SEAT AREA
 
 /-- Everything in the disk outside the open hole is hit from the upper half. Take the root
