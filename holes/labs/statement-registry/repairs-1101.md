@@ -43,3 +43,7 @@ Backlog grade: narrower, no operator constructed. Repair by lemma-2 first built 
 ## m94A01
 
 Backlog grade: narrower, full C⁴ assumed. First repair by lemma-2 weakened the hypothesis to slices but stayed pointwise, graded narrower: C depended on the point. Second repair assumes slice C⁴ and joint continuity of the two fourth derivatives, and concludes a bound uniform on each compact K, for small h. New grade: faithful. A global C and unrestricted h are both false, by u = x⁶, whose error over h² is 30x² + 2h²; the pointwise theorem is kept under another name.
+
+## m94J05 (reformed)
+
+Printed unrestricted uniqueness is false at f = 0, by a nonzero solution from shooting. The existing theorem, a solution unique in a small sup-norm ball, matches the printed hint x = L⁻¹F(x). Grader: justified, narrowed only as the defect forces; the second solution is a shooting argument, not formalised.
