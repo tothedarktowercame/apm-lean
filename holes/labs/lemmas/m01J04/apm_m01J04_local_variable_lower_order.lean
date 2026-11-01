@@ -4947,7 +4947,60 @@ theorem apm_m01J04_local_variable_lower_order {d : ℕ} {Ω : Set (EuclideanSpac
       (((f n).val x - fLim.val x) • WithLp.toLp 2
         (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))))
       atTop (nhds 0) := by
-  sorry
+  let K : Set (EuclideanSpace ℝ (Fin d)) := tsupport φ
+  have hK : IsCompact K := hφ.2.1
+  obtain ⟨δ, hδ, hδΩ⟩ := hK.exists_cthickening_subset_open hΩ htsupp
+  let T : Set (EuclideanSpace ℝ (Fin d)) := Metric.cthickening δ K
+  have hTcompact : IsCompact T := hK.cthickening
+  have hKT : K ⊆ interior T := by
+    exact (Metric.self_subset_thickening hδ K).trans
+      (Metric.thickening_subset_interior_cthickening δ K)
+  obtain ⟨χ, hχone, hχzero, -⟩ :=
+    exists_contMDiffMap_one_nhds_of_subset_interior
+      (modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin d)))
+      (n := (⊤ : ℕ∞)) hK.isClosed hKT
+  let χ' : EuclideanSpace ℝ (Fin d) → ℝ := fun x ↦ χ x
+  have hχdiff : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) χ' := by
+    exact χ.contMDiff.contDiff
+  have hχsuppT : tsupport χ' ⊆ T := by
+    apply closure_minimal
+    · intro x hx
+      by_contra hxT
+      exact hx (hχzero x hxT)
+    · exact hTcompact.isClosed
+  have hχcompact : HasCompactSupport χ' :=
+    hTcompact.of_isClosed_subset isClosed_closure hχsuppT
+  have hχtest : apm_m01J04_isTestFunction Ω χ' := by
+    refine ⟨hχdiff, hχcompact, ?_⟩
+    exact (subset_tsupport χ').trans (hχsuppT.trans hδΩ)
+  have hχoneK : ∀ x ∈ K, χ' x = 1 := by
+    intro x hx
+    exact hχone.self_of_nhdsSet x hx
+  let g : ℕ → apm_m01J04_H1 d Ω := fun n ↦
+    apm_m01J04_H1mul χ' hχtest (apm_m01J04_H1sub (f n) fLim)
+  let z : apm_m01J04_H1 d Ω := apm_m01J04_H1smul 0 fLim
+  have hstrong : apm_m01J04_L2StronglyConverges g z := by
+    simpa [apm_m01J04_L2StronglyConverges, g, z, mul_comm] using
+      apm_m01J04_local_strong hΩ hf χ' hχtest (hχsuppT.trans hδΩ)
+  let D : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun x ↦ WithLp.toLp 2
+      (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))
+  have hDtop : MemLp D ⊤ (volume.restrict Ω) :=
+    apm_m01J04_isTestFunction_fderivField_memLp hφ ⊤
+  have hbase := apm_m01J04_strong_value_weak_field_error hstrong hv D hDtop
+  convert hbase using 1
+  funext n
+  apply integral_congr_ae
+  filter_upwards [] with x
+  have hDzero : x ∉ K → D x = 0 := by
+    intro hx
+    have hderiv : fderiv ℝ φ x = 0 := fderiv_of_notMem_tsupport ℝ hx
+    rw [WithLp.toLp_eq_zero]
+    funext i
+    simp [D, hderiv]
+  by_cases hx : x ∈ K
+  · simp [D, g, z, χ', hχoneK x hx]
+  · simp [D, g, z, hDzero hx]
 -- END SEAT AREA
 
 lemma apm_m01J04_local_lower_order
