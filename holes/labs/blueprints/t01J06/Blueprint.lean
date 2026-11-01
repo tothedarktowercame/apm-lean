@@ -315,7 +315,60 @@ theorem apm_t01J06_parametric_integral (g : ℝ × apm_t01J06_E3 → ℝ)
     ContDiff ℝ 1 (fun x ↦ ∫ t in (0 : ℝ)..1, g (t, x)) ∧
     ∀ x v, fderiv ℝ (fun y ↦ ∫ t in (0 : ℝ)..1, g (t, y)) x v =
       ∫ t in (0 : ℝ)..1, fderiv ℝ (fun y ↦ g (t, y)) x v := by
-  sorry
+  let D : apm_t01J06_E3 → ℝ → apm_t01J06_E3 →L[ℝ] ℝ := fun x t ↦
+    (fderiv ℝ g (t, x)).comp (ContinuousLinearMap.inr ℝ ℝ apm_t01J06_E3)
+  have hD_cont : Continuous (Function.uncurry D) := by
+    dsimp [D]
+    have hf : Continuous (fderiv ℝ g) := hg.continuous_fderiv (by simp)
+    fun_prop
+  have hD_eq (t : ℝ) (x : apm_t01J06_E3) :
+      D x t = fderiv ℝ (fun y ↦ g (t, y)) x := by
+    have ht : HasFDerivAt (fun y : apm_t01J06_E3 ↦ (t, y))
+        (ContinuousLinearMap.inr ℝ ℝ apm_t01J06_E3) x :=
+      hasFDerivAt_prodMk_right t x
+    exact ((hg.differentiable (by simp)).differentiableAt.hasFDerivAt.comp x ht).fderiv.symm
+  have hderiv_cont : Continuous (fun x ↦ ∫ t in (0 : ℝ)..1, D x t) :=
+    intervalIntegral.continuous_parametric_intervalIntegral_of_continuous'
+      hD_cont 0 1
+  have h_has (x : apm_t01J06_E3) : HasFDerivAt
+      (fun y ↦ ∫ t in (0 : ℝ)..1, g (t, y)) (∫ t in (0 : ℝ)..1, D x t) x := by
+    let K : Set (apm_t01J06_E3 × ℝ) := Metric.closedBall x 1 ×ˢ Set.Icc 0 1
+    have hK : IsCompact K := (isCompact_closedBall x 1).prod isCompact_Icc
+    obtain ⟨M, hM⟩ := hK.bddAbove_image hD_cont.norm.continuousOn
+    apply intervalIntegral.hasFDerivAt_integral_of_dominated_of_fderiv_le
+      (F := fun y t ↦ g (t, y)) (F' := D) (bound := fun _ ↦ M)
+      (Metric.closedBall_mem_nhds x zero_lt_one)
+    · filter_upwards with y
+      exact (hg.continuous.comp (continuous_id.prodMk continuous_const)).aestronglyMeasurable
+    · exact (hg.continuous.comp (continuous_id.prodMk continuous_const)).intervalIntegrable 0 1
+    · exact (hD_cont.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+    · filter_upwards with t ht
+      intro y hy
+      have ht0 : 0 ≤ t := by
+        norm_num at ht
+        exact ht.1.le
+      have ht1 : t ≤ 1 := by
+        norm_num at ht
+        exact ht.2
+      have hp : (y, t) ∈ K := ⟨hy, ht0, ht1⟩
+      have hi : ‖D y t‖ ∈ (fun p ↦ ‖Function.uncurry D p‖) '' K :=
+        ⟨(y, t), hp, rfl⟩
+      exact hM hi
+    · exact (continuous_const : Continuous (fun _ : ℝ ↦ M)).intervalIntegrable 0 1
+    · apply Filter.Eventually.of_forall
+      intro t ht y hy
+      change HasFDerivAt (fun z ↦ g (t, z)) (D y t) y
+      exact (hg.differentiable (by simp)).differentiableAt.hasFDerivAt.comp y
+        (hasFDerivAt_prodMk_right t y)
+  have hcd : ContDiff ℝ 1 (fun x ↦ ∫ t in (0 : ℝ)..1, g (t, x)) := by
+    rw [contDiff_one_iff_hasFDerivAt]
+    exact ⟨(fun x ↦ ∫ t in (0 : ℝ)..1, D x t), hderiv_cont, h_has⟩
+  refine ⟨hcd, fun x v ↦ ?_⟩
+  rw [(h_has x).fderiv]
+  have hDi : IntervalIntegrable (fun t ↦ D x t) volume 0 1 :=
+    (hD_cont.comp (continuous_const.prodMk continuous_id)).intervalIntegrable 0 1
+  rw [ContinuousLinearMap.intervalIntegral_apply hDi v]
+  simp_rw [hD_eq]
 
 /-- The integrand of the cone formula: `t • (F (t x) × x)`, component `k`. -/
 def apm_t01J06_coneField (F : Fin 3 → apm_t01J06_E3 → ℝ) (k : Fin 3)
