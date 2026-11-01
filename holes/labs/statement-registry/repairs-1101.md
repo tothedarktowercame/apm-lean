@@ -87,3 +87,7 @@ Triage: Lean gave only a bare equivalence of carrier types and had a sorry. Repa
 ## m93J02 (reformed)
 
 The printed denominator |x-y^α| is a misprint for |x-y|^α, and the exponent is unstated; convention 0 < α < 1, the Holder scale, since at α = 1 the answers depend on the geometry of Ω. Repair by lemma-1 covers every compact connected Ω, singletons included, where the answers change. Grader: acceptable, truth values checked by hand, one change, the sup metric on Fin n → ℝ, which claude-14 replaced by EuclideanSpace, recompiled.
+
+## a02J07
+
+Backlog grade: narrower, differentiability everywhere plus assumed integrability. Repair by kimi-2 adds PiecewiseSmoothSlitPath, with a finite partition and C¹ pieces only, derives integrability, and adds apm_a02j07 (462 lines, nothing removed). New grade: faithful; posSlitPlane is exactly the complement of the nonnegative reals, and the example of a half circle shows it is not vacuous.
