@@ -352,7 +352,37 @@ theorem whitney_bump_sum_positive_smooth
     (hsmooth : ∀ i, ContDiff ℝ ∞ (psi i)) :
     ∀ x ∉ K, 1 ≤ ∑' i, psi i x ∧
       ContDiffAt ℝ ∞ (fun y ↦ ∑' i, psi i y) x := by
-  sorry
+  intro x hx
+  have hxK : x ∈ Kᶜ := by simpa using hx
+  obtain ⟨i0, hi0⟩ : ∃ i0 : SardConvexDomain.WhitneyNetIndex K,
+      x ∈ Metric.ball i0.center (Metric.infDist i0.center K / 4) := by
+    have hsub := SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls hK hKn
+    simpa using Set.mem_iUnion.1 (hsub hxK)
+  obtain ⟨U, hUnhds, hTfin⟩ := hlocal x hx
+  obtain ⟨V, hVU, hVopen, hxV⟩ := mem_nhds_iff.1 hUnhds
+  obtain ⟨F, hF⟩ := hTfin.exists_finset_coe
+  have hzero : ∀ y ∈ V, ∀ i ∉ (F : Set _), psi i y = 0 := by
+    intro y hy i hi
+    by_contra hne
+    exact hi (hF ▸ (show (U ∩ Function.support (psi i)).Nonempty from
+      ⟨y, ⟨hVU hy, hne⟩⟩))
+  have heq : ∀ y ∈ V, (∑' i, psi i y) = ∑ i ∈ F, psi i y := by
+    intro y hy
+    rw [tsum_eq_sum (s := F) (fun i hi ↦ hzero y hy i hi)]
+  have hi0F : i0 ∈ F := by
+    have hne : psi i0 x ≠ 0 := by
+      rw [hone i0 hi0]; norm_num
+    have : i0 ∈ (↑F : Set _) := hF ▸ ⟨x, ⟨hVU hxV, hne⟩⟩
+    exact Finset.mem_coe.1 this
+  refine ⟨?_, ?_⟩
+  · have h1 : psi i0 x = 1 := hone i0 hi0
+    have := Finset.single_le_sum (fun i _ ↦ hnonneg i x) hi0F
+    rwa [h1, ← heq x hxV] at this
+  · have hsmoothg : ContDiff ℝ ∞ (fun y ↦ ∑ i ∈ F, psi i y) :=
+      ContDiff.sum (fun i _ ↦ hsmooth i)
+    refine hsmoothg.contDiffAt.congr_of_eventuallyEq ?_
+    filter_upwards [hVopen.mem_nhds hxV] with y hy
+    exact heq y hy
 -- END SEAT AREA
 
 /-- Uniform, rather than merely pointwise finite, incidence of Whitney half-balls.
