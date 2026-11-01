@@ -583,7 +583,112 @@ theorem apm_t01J06_divergenceFree_isCurl (F : Fin 3 → apm_t01J06_E3 → ℝ)
       F 0 x = apm_t01J06_partial 1 (A 2) x - apm_t01J06_partial 2 (A 1) x ∧
       F 1 x = apm_t01J06_partial 2 (A 0) x - apm_t01J06_partial 0 (A 2) x ∧
       F 2 x = apm_t01J06_partial 0 (A 1) x - apm_t01J06_partial 1 (A 0) x := by
-  sorry
+  have hcone : ∀ k : Fin 3, ContDiff ℝ (⊤ : ℕ∞) (apm_t01J06_coneField F k) := by
+    intro k
+    show ContDiff ℝ (⊤ : ℕ∞) (fun p : ℝ × apm_t01J06_E3 ↦
+      p.1 * (F (k + 1) (p.1 • p.2) * p.2 (k + 2) - F (k + 2) (p.1 • p.2) * p.2 (k + 1)))
+    fun_prop
+  have hsmooth : ∀ k : Fin 3,
+      ContDiff ℝ 1 (fun x ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F k (t, x)) ∧
+      ∀ x v, fderiv ℝ (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F k (t, y)) x v =
+        ∫ t in (0 : ℝ)..1, fderiv ℝ (fun y ↦ apm_t01J06_coneField F k (t, y)) x v :=
+    fun k ↦ apm_t01J06_parametric_integral (apm_t01J06_coneField F k) (hcone k)
+  have key : ∀ (i : Fin 3) (x : apm_t01J06_E3),
+      apm_t01J06_partial (i + 1)
+          (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F (i + 2) (t, y)) x -
+        apm_t01J06_partial (i + 2)
+          (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F (i + 1) (t, y)) x = F i x := by
+    intro i x
+    have hdiff : ∀ s : ℝ, DifferentiableAt ℝ (F i) (s • x) :=
+      fun s ↦ ((hF i).differentiable (by simp)) (s • x)
+    have hD : ∀ t : ℝ, HasDerivAt (fun s : ℝ ↦ s ^ 2 * F i (s • x))
+        (2 * t * F i (t • x) + t ^ 2 * fderiv ℝ (F i) (t • x) x) t := by
+      intro t
+      have hv : HasDerivAt (fun s : ℝ ↦ s • x) x t := by
+        simpa using (hasDerivAt_id t).smul_const x
+      have hvg : HasDerivAt (fun s : ℝ ↦ F i (s • x)) (fderiv ℝ (F i) (t • x) x) t := by
+        have h := (hdiff t).hasFDerivAt.comp_hasDerivAt t hv
+        simpa using h
+      have hu : HasDerivAt (fun s : ℝ ↦ s ^ 2) (2 * t) t := by
+        simpa using (hasDerivAt_pow 2 t)
+      exact hu.mul hvg
+    have hDcont : Continuous (fun t : ℝ ↦
+        2 * t * F i (t • x) + t ^ 2 * fderiv ℝ (F i) (t • x) x) := by
+      have htx : Continuous (fun t : ℝ ↦ t • x) := continuous_id.smul continuous_const
+      have h1 : Continuous (fun t : ℝ ↦ F i (t • x)) := (hF i).continuous.comp htx
+      have h2 : Continuous (fun t : ℝ ↦ fderiv ℝ (F i) (t • x) x) :=
+        (((hF i).continuous_fderiv (by simp)).comp htx).clm_apply continuous_const
+      exact ((continuous_const.mul continuous_id).mul h1).add ((continuous_pow 2).mul h2)
+    have hFTC' : (∫ t in (0 : ℝ)..1, deriv (fun s : ℝ ↦ s ^ 2 * F i (s • x)) t) =
+        F i x := by
+      have hHas : ∀ t ∈ Set.uIcc (0 : ℝ) 1,
+          DifferentiableAt ℝ (fun s : ℝ ↦ s ^ 2 * F i (s • x)) t :=
+        fun t _ ↦ (hD t).differentiableAt
+      have hint : IntervalIntegrable
+          (fun t : ℝ ↦ deriv (fun s : ℝ ↦ s ^ 2 * F i (s • x)) t) volume 0 1 := by
+        have heq : (fun t : ℝ ↦ deriv (fun s : ℝ ↦ s ^ 2 * F i (s • x)) t) =
+            fun t : ℝ ↦ 2 * t * F i (t • x) + t ^ 2 * fderiv ℝ (F i) (t • x) x :=
+          funext fun t ↦ (hD t).deriv
+        rw [heq]
+        exact hDcont.intervalIntegrable 0 1
+      have h := intervalIntegral.integral_deriv_eq_sub hHas hint
+      rw [h]
+      simp
+    have hpartial : ∀ k j : Fin 3,
+        apm_t01J06_partial j
+            (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F k (t, y)) x =
+          ∫ t in (0 : ℝ)..1,
+            apm_t01J06_partial j (fun y ↦ apm_t01J06_coneField F k (t, y)) x := by
+      intro k j
+      show fderiv ℝ (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F k (t, y)) x
+          (apm_t01J06_e j) = _
+      rw [(hsmooth k).2 x (apm_t01J06_e j)]
+      rfl
+    have hcontP : ∀ k j : Fin 3, Continuous (fun t : ℝ ↦
+        apm_t01J06_partial j (fun y ↦ apm_t01J06_coneField F k (t, y)) x) := by
+      intro k j
+      have hf : Continuous (fderiv ℝ (apm_t01J06_coneField F k)) :=
+        (hcone k).continuous_fderiv (by simp)
+      have hc : Continuous (fun t : ℝ ↦
+          (fderiv ℝ (apm_t01J06_coneField F k) (t, x)).comp
+            (ContinuousLinearMap.inr ℝ ℝ apm_t01J06_E3)) :=
+        (hf.comp (continuous_id.prodMk continuous_const)).clm_comp continuous_const
+      have heq : (fun t : ℝ ↦
+          apm_t01J06_partial j (fun y ↦ apm_t01J06_coneField F k (t, y)) x) =
+          fun t : ℝ ↦ ((fderiv ℝ (apm_t01J06_coneField F k) (t, x)).comp
+            (ContinuousLinearMap.inr ℝ ℝ apm_t01J06_E3)) (apm_t01J06_e j) := by
+        funext t
+        have ht : HasFDerivAt (fun y : apm_t01J06_E3 ↦ (t, y))
+            (ContinuousLinearMap.inr ℝ ℝ apm_t01J06_E3) x :=
+          hasFDerivAt_prodMk_right t x
+        have hd := (((hcone k).differentiable (by simp)).differentiableAt.hasFDerivAt.comp x
+          ht).fderiv
+        have hcomp : (fun y ↦ apm_t01J06_coneField F k (t, y)) =
+            apm_t01J06_coneField F k ∘ fun y ↦ (t, y) := rfl
+        show fderiv ℝ (fun y ↦ apm_t01J06_coneField F k (t, y)) x (apm_t01J06_e j) = _
+        rw [hcomp, hd]
+      rw [heq]
+      exact hc.clm_apply continuous_const
+    rw [hpartial (i + 2) (i + 1), hpartial (i + 1) (i + 2),
+      ← intervalIntegral.integral_sub
+        ((hcontP (i + 2) (i + 1)).intervalIntegrable 0 1)
+        ((hcontP (i + 1) (i + 2)).intervalIntegrable 0 1),
+      intervalIntegral.integral_congr
+        (fun t _ ↦ apm_t01J06_cone_identity F hF hdiv i t x), hFTC']
+  refine ⟨fun k x ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F k (t, x),
+    fun k ↦ (hsmooth k).1, fun x ↦ ⟨?_, ?_, ?_⟩⟩
+  · show F 0 x = apm_t01J06_partial 1
+        (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F 2 (t, y)) x -
+      apm_t01J06_partial 2 (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F 1 (t, y)) x
+    exact (key 0 x).symm
+  · show F 1 x = apm_t01J06_partial 2
+        (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F 0 (t, y)) x -
+      apm_t01J06_partial 0 (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F 2 (t, y)) x
+    exact (key 1 x).symm
+  · show F 2 x = apm_t01J06_partial 0
+        (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F 1 (t, y)) x -
+      apm_t01J06_partial 1 (fun y ↦ ∫ t in (0 : ℝ)..1, apm_t01J06_coneField F 0 (t, y)) x
+    exact (key 2 x).symm
 -- END SEAT AREA
 
 /-- Seat: rotation invariance. `t ↦ ∫ q, f (R t q)` is constant by
