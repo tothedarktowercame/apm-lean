@@ -631,7 +631,46 @@ lemma apm_t01J06_exists_closed_product_extension_aux_restrict
     apm_t01J06_isJPullback p
       (apm_t01J06_productRestriction
         apm_t01J06_exists_closed_product_extension_aux_Z) alpha := by
-  sorry
+  intro q v
+  unfold apm_t01J06_productRestriction
+  unfold apm_t01J06_exists_closed_product_extension_aux_Z
+  unfold apm_t01J06_exists_closed_product_extension_aux_eta
+  unfold apm_t01J06_exists_closed_product_extension_aux_scalar
+  unfold apm_t01J06_exists_closed_product_extension_aux_solidAngle
+  rw [halpha, homega]
+  have hqnorm : ‖(q : apm_t01J06_E3)‖ = 1 := by
+    simpa [Metric.mem_sphere, dist_eq_norm] using q.property
+  simp [hqnorm]
+  have hq : q.1 0 ^ 2 + q.1 1 ^ 2 + q.1 2 ^ 2 = 1 := by
+    have h : ‖(q : apm_t01J06_E3)‖ ^ 2 = 1 := by rw [hqnorm]; norm_num
+    simpa only [EuclideanSpace.norm_sq_eq, Fin.sum_univ_three, add_assoc,
+      Real.norm_eq_abs, sq_abs] using h
+  have hv (k : Fin 2) :
+      q.1 0 * (v k : apm_t01J06_E3) 0 +
+      q.1 1 * (v k : apm_t01J06_E3) 1 +
+      q.1 2 * (v k : apm_t01J06_E3) 2 = 0 := by
+    have ho := (v k).property
+    unfold apm_t01J06_sphereTangent at ho
+    rw [Submodule.mem_orthogonal'] at ho
+    have hi := ho (q : apm_t01J06_E3) (Submodule.mem_span_singleton_self _)
+    rw [real_inner_comm] at hi
+    rw [PiLp.inner_apply] at hi
+    simpa [Fin.sum_univ_three, real_inner_eq_re_inner, mul_comm] using hi
+  change ((q.1 2 + 3) * q.1 2) *
+      Matrix.det (Matrix.vecCons (q : apm_t01J06_E3)
+        (fun k j => (v k : apm_t01J06_E3) j)) =
+    (q.1 2 + 3) *
+      ((v 0 : apm_t01J06_E3) 0 * (v 1 : apm_t01J06_E3) 1 -
+       (v 0 : apm_t01J06_E3) 1 * (v 1 : apm_t01J06_E3) 0)
+  rw [Matrix.det_fin_three]
+  simp
+  linear_combination (q.1 2 + 3) *
+    (q.1 0 * ((v 0 : apm_t01J06_E3) 1 * hv 1 -
+      (v 1 : apm_t01J06_E3) 1 * hv 0) -
+     q.1 1 * ((v 0 : apm_t01J06_E3) 0 * hv 1 -
+      (v 1 : apm_t01J06_E3) 0 * hv 0) +
+     ((v 0 : apm_t01J06_E3) 0 * (v 1 : apm_t01J06_E3) 1 -
+      (v 0 : apm_t01J06_E3) 1 * (v 1 : apm_t01J06_E3) 0) * hq)
 -- END SEAT AREA
 
 theorem apm_t01J06_exists_closed_product_extension
