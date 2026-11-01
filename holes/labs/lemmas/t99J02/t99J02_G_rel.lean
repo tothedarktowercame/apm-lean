@@ -135,7 +135,22 @@ theorem t99J02_ell_norm (u : ℂ) : ‖t99J02_ell u‖ = 5 / 8 * ‖u‖ + 3 / 8
 /-- `ell` is injective on all of `ℂ`. The imaginary part gives `Im u`; then `a ↦ 3/8 √(a²+b²) + 5/8 a`
 is strictly increasing. -/
 theorem t99J02_ell_injective : Function.Injective t99J02_ell := by
-  sorry
+  intro u v h
+  have him : u.im = v.im := by
+    have him' := congrArg Complex.im h
+    simp only [t99J02_ell] at him'
+    linarith
+  have hre : u.re = v.re := by
+    have e1 : (3 / 8 : ℝ) * ‖u‖ + 5 / 8 * u.re = 3 / 8 * ‖v‖ + 5 / 8 * v.re := by
+      have h' := congrArg Complex.re h
+      simp only [t99J02_ell] at h'
+      exact h'
+    have e2 : (5 / 8 : ℝ) * ‖u‖ + 3 / 8 * u.re = 5 / 8 * ‖v‖ + 3 / 8 * v.re := by
+      have h1 := t99J02_ell_norm u
+      rw [h, t99J02_ell_norm v] at h1
+      exact h1.symm
+    linarith [e1, e2]
+  exact Complex.ext hre him
 
 /-- On the upper unit semicircle `phi z = z²`, since `√(1 - x²) = y`. -/
 lemma t99J02_phi_edge_aux (z : ℂ) (hn : ‖z‖ = 1) (hi : 0 ≤ z.im) :
@@ -440,12 +455,54 @@ theorem t99J02_collar_exists :
   sorry
 
 /-- The same collar precomposed with the reflection. -/
+def t99J02_collar_reflect_aux_homeomorph (r : ℝ) :
+    ConstructionTargets.CollaredConnectedSumHomology.Disk 2 r ≃ₜ
+      ConstructionTargets.CollaredConnectedSumHomology.Disk 2 r where
+  toFun u := ⟨t99J02_refl u.1, by
+    apply mem_closedBall_zero_iff.mpr
+    rw [t99J02_chi_spec.2.2.2.2.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2⟩
+  invFun u := ⟨t99J02_refl u.1, by
+    apply mem_closedBall_zero_iff.mpr
+    rw [t99J02_chi_spec.2.2.2.2.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2⟩
+  left_inv u := by
+    apply Subtype.ext
+    apply t99J02_chi_spec.2.1
+    simp only [t99J02_chi_spec.2.2.2.1]
+    simp
+  right_inv u := by
+    apply Subtype.ext
+    apply t99J02_chi_spec.2.1
+    simp only [t99J02_chi_spec.2.2.2.1]
+    simp
+  continuous_toFun :=
+    (t99J02_chi_spec.2.2.2.2.1.comp continuous_subtype_val).subtype_mk _
+  continuous_invFun :=
+    (t99J02_chi_spec.2.2.2.2.1.comp continuous_subtype_val).subtype_mk _
+
 theorem t99J02_collar_reflect (c : BallCollar 2 (Surface true 1)) :
     ∃ c' : BallCollar 2 (Surface true 1),
       ∀ u : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1,
         ∃ hu : t99J02_refl u.1 ∈ Metric.closedBall (0 : EuclideanSpace ℝ (Fin 2)) 1,
           c'.smallMap u = c.smallMap ⟨t99J02_refl u.1, hu⟩ := by
-  sorry
+  let e1 := t99J02_collar_reflect_aux_homeomorph 1
+  let e2 := t99J02_collar_reflect_aux_homeomorph 2
+  let c' : BallCollar 2 (Surface true 1) :=
+    { smallMap := c.smallMap ∘ e1
+      largeMap := c.largeMap ∘ e2
+      smallEmbedding := c.smallEmbedding.comp e1.isEmbedding
+      largeEmbedding := c.largeEmbedding.comp e2.isEmbedding
+      compatible := by
+        funext u
+        exact c.largeMap_unitToLarge (e1 u) }
+  refine ⟨c', ?_⟩
+  intro u
+  have hu : t99J02_refl u.1 ∈ Metric.closedBall (0 : EuclideanSpace ℝ (Fin 2)) 1 := by
+    apply mem_closedBall_zero_iff.mpr
+    rw [t99J02_chi_spec.2.2.2.2.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2
+  exact ⟨hu, rfl⟩
 
 /-! ### Layer 1: general facts about `ConnectedSum` -/
 
@@ -470,7 +527,8 @@ theorem t99J02_mk_eq (p p' : Sum c₁.Punctured c₂.Punctured)
 theorem t99J02_isClosed_of (A : Set (ConnectedSum c₁ c₂))
     (h₁ : IsClosed ((fun p => t99J02_mk c₁ c₂ (Sum.inl p)) ⁻¹' A))
     (h₂ : IsClosed ((fun p => t99J02_mk c₁ c₂ (Sum.inr p)) ⁻¹' A)) : IsClosed A := by
-  sorry
+  apply isClosed_coinduced.mpr
+  exact isClosed_sum_iff.mpr ⟨h₁, h₂⟩
 
 theorem t99J02_continuous_mk : Continuous (t99J02_mk c₁ c₂) := continuous_coinduced_rng
 
@@ -529,7 +587,73 @@ theorem t99J02_chord_holds
       ∃ h : t99J02_ell ((starRingEnd ℂ) (t99J02_chi u.1)) ∈ Metric.closedBall (0 : ℂ) 1,
         c₂.smallMap u = surfaceQuotient true 1 ⟨t99J02_ell ((starRingEnd ℂ) (t99J02_chi u.1)), h⟩) :
     t99J02_Chord g₁ g₂ := by
-  sorry
+  intro z hz
+  let x : ℝ := (z : ℂ).re
+  have hz_eq : (z : ℂ) = (x : ℂ) := by
+    apply Complex.ext
+    · rfl
+    · simpa [x] using hz
+  have hx : |x| ≤ 1 := by
+    have hn : ‖(z : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp z.2
+    rw [hz_eq, Complex.norm_real] at hn
+    exact hn
+  let Y : ℝ := √(1 - x ^ 2)
+  let w : ℂ := (⟨x, Y⟩ : ℂ) ^ 2
+  have hx₂ : 0 ≤ 1 - x ^ 2 := by
+    have h := abs_le.mp hx
+    nlinarith
+  have hY₂ : Y ^ 2 = 1 - x ^ 2 := by
+    exact Real.sq_sqrt hx₂
+  have hw : ‖w‖ = 1 := by
+    dsimp [w]
+    rw [norm_pow, Complex.sq_norm, Complex.normSq_mk]
+    nlinarith [Real.sqrt_nonneg (1 - x ^ 2), hY₂]
+  let u : EuclideanSpace ℝ (Fin 2) := !₂[w.re, w.im]
+  have hchi : t99J02_chi u = w := by
+    apply Complex.ext <;> simp [t99J02_chi, u]
+  have hu : ‖u‖ = 1 := by
+    rw [← t99J02_chi_spec.2.2.1 u, hchi, hw]
+  let s : ConstructionTargets.CollaredConnectedSumHomology.Sphere 2 :=
+    ⟨u, by simpa [Metric.mem_sphere, dist_zero_right] using hu⟩
+  have hsphere :
+      ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s =
+        ⟨u, by simpa [Metric.mem_closedBall, dist_zero_right] using hu.le⟩ := rfl
+  obtain ⟨h₁, hc₁'⟩ := hc₁ (ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s)
+  obtain ⟨h₂, hc₂'⟩ := hc₂ (ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s)
+  have hg₁' : g₁ ⟨z, hz.ge⟩ = c₁.boundaryMap s := by
+    apply Subtype.ext
+    change (g₁ ⟨z, hz.ge⟩).1 = c₁.smallMap
+      (ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s)
+    rw [hg₁, hc₁']
+    apply congrArg (surfaceQuotient true 1)
+    apply Subtype.ext
+    change t99J02_phi (z : ℂ) = t99J02_ell
+      (t99J02_chi (ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s).1)
+    rw [hz_eq, t99J02_phi_chord x hx, hsphere, hchi]
+  have hconj :
+      (starRingEnd ℂ) w = (⟨-x, Y⟩ : ℂ) ^ 2 := by
+    apply Complex.ext <;> simp [w, pow_two] <;> ring
+  have hYneg : √(1 - (-x) ^ 2) = Y := by simp [Y]
+  have hneg_eq : (t99J02_neg z : ℂ) = ((-x : ℝ) : ℂ) := by
+    change -(z : ℂ) = ((-x : ℝ) : ℂ)
+    rw [hz_eq]
+    norm_num
+  have hg₂' :
+      g₂ ⟨t99J02_neg z, by simp [t99J02_neg, hz]⟩ = c₂.boundaryMap s := by
+    apply Subtype.ext
+    change (g₂ ⟨t99J02_neg z, by simp [t99J02_neg, hz]⟩).1 = c₂.smallMap
+      (ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s)
+    rw [hg₂, hc₂']
+    apply congrArg (surfaceQuotient true 1)
+    apply Subtype.ext
+    change t99J02_phi (t99J02_neg z : ℂ) = t99J02_ell
+      ((starRingEnd ℂ)
+        (t99J02_chi (ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s).1))
+    rw [hneg_eq, t99J02_phi_chord (-x) (by simpa using hx),
+      hsphere, hchi, hconj, hYneg]
+  rw [hg₁', hg₂']
+  exact Quotient.sound (Relation.EqvGen.rel _ _
+    (ConstructionTargets.CollaredConnectedSumHomology.GlueRel.boundary s))
 
 /-- Pasting along the chord. -/
 theorem t99J02_G_continuous (hg₁ : Continuous g₁) (hg₂ : Continuous g₂)
