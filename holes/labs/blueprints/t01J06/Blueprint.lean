@@ -269,10 +269,78 @@ theorem apm_t01J06_divergenceFree_isCurl (F : Fin 3 → apm_t01J06_E3 → ℝ)
 /-- Seat: rotation invariance. `t ↦ ∫ q, f (R t q)` is constant by
 `IntrinsicSphereSecondMoments.integral_isometry` (with `R t` the rotation about axis `k`) and `μHE[2]`
 a multiple of `μH[2]`. Its derivative at `0`, under the integral on the compact sphere, is the left side. -/
+def apm_t01J06_rotation_derivative_integral_aux_rot (k : Fin 3) (t : ℝ)
+    (x : apm_t01J06_E3) : apm_t01J06_E3 :=
+  match k with
+  | 0 => WithLp.toLp 2 ![x 0, Real.cos t * x 1 - Real.sin t * x 2,
+      Real.sin t * x 1 + Real.cos t * x 2]
+  | 1 => WithLp.toLp 2 ![Real.cos t * x 0 + Real.sin t * x 2, x 1,
+      -Real.sin t * x 0 + Real.cos t * x 2]
+  | 2 => WithLp.toLp 2 ![Real.cos t * x 0 - Real.sin t * x 1,
+      Real.sin t * x 0 + Real.cos t * x 1, x 2]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_rot_zero (k : Fin 3)
+    (x : apm_t01J06_E3) :
+    apm_t01J06_rotation_derivative_integral_aux_rot k 0 x = x := by
+  fin_cases k <;> ext i <;> fin_cases i <;>
+    simp [apm_t01J06_rotation_derivative_integral_aux_rot]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_rot_add (k : Fin 3) (s t : ℝ)
+    (x : apm_t01J06_E3) :
+    apm_t01J06_rotation_derivative_integral_aux_rot k s
+      (apm_t01J06_rotation_derivative_integral_aux_rot k t x) =
+        apm_t01J06_rotation_derivative_integral_aux_rot k (s + t) x := by
+  fin_cases k <;> ext i <;> fin_cases i <;>
+    simp [apm_t01J06_rotation_derivative_integral_aux_rot, Real.sin_add, Real.cos_add] <;> ring
+
+lemma apm_t01J06_rotation_derivative_integral_aux_rot_neg (k : Fin 3) (t : ℝ)
+    (x : apm_t01J06_E3) :
+    apm_t01J06_rotation_derivative_integral_aux_rot k (-t)
+      (apm_t01J06_rotation_derivative_integral_aux_rot k t x) = x := by
+  rw [apm_t01J06_rotation_derivative_integral_aux_rot_add]
+  simp [apm_t01J06_rotation_derivative_integral_aux_rot_zero]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_norm (k : Fin 3) (t : ℝ)
+    (x : apm_t01J06_E3) :
+    ‖apm_t01J06_rotation_derivative_integral_aux_rot k t x‖ = ‖x‖ := by
+  have h : ‖apm_t01J06_rotation_derivative_integral_aux_rot k t x‖ ^ 2 = ‖x‖ ^ 2 := by
+    simp only [EuclideanSpace.norm_sq_eq, Fin.sum_univ_three]
+    fin_cases k <;>
+      simp [apm_t01J06_rotation_derivative_integral_aux_rot] <;>
+      nlinarith [Real.sin_sq_add_cos_sq t]
+  nlinarith [norm_nonneg x,
+    norm_nonneg (apm_t01J06_rotation_derivative_integral_aux_rot k t x)]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_sub (k : Fin 3) (t : ℝ)
+    (x y : apm_t01J06_E3) :
+    apm_t01J06_rotation_derivative_integral_aux_rot k t (x - y) =
+      apm_t01J06_rotation_derivative_integral_aux_rot k t x -
+        apm_t01J06_rotation_derivative_integral_aux_rot k t y := by
+  fin_cases k <;> ext i <;> fin_cases i <;>
+    simp [apm_t01J06_rotation_derivative_integral_aux_rot] <;> ring
+
+lemma apm_t01J06_rotation_derivative_integral_aux_isometry (k : Fin 3) (t : ℝ) :
+    Isometry (apm_t01J06_rotation_derivative_integral_aux_rot k t) := by
+  rw [isometry_iff_dist_eq]
+  intro x y
+  rw [dist_eq_norm, dist_eq_norm, ← apm_t01J06_rotation_derivative_integral_aux_sub,
+    apm_t01J06_rotation_derivative_integral_aux_norm]
+
+lemma apm_t01J06_rotation_derivative_integral_aux_hasDeriv (k : Fin 3)
+    (x : apm_t01J06_E3) :
+    HasDerivAt (fun t : ℝ ↦ apm_t01J06_rotation_derivative_integral_aux_rot k t x)
+      (apm_t01J06_rotField k x) 0 := by
+  sorry
+
+lemma apm_t01J06_rotation_derivative_integral_aux_key (k : Fin 3)
+    (f : apm_t01J06_E3 → ℝ) (hf : ContDiff ℝ 1 f) :
+    (∫ q : apm_t01J06_S2, fderiv ℝ f q.1 (apm_t01J06_rotField k q.1) ∂μHE[2]) = 0 := by
+  sorry
+
 theorem apm_t01J06_rotation_derivative_integral (k : Fin 3) (f : apm_t01J06_E3 → ℝ)
     (hf : ContDiff ℝ 1 f) :
     (∫ q : apm_t01J06_S2, fderiv ℝ f q.1 (apm_t01J06_rotField k q.1) ∂μHE[2]) = 0 := by
-  sorry
+  exact apm_t01J06_rotation_derivative_integral_aux_key k f hf
 
 /-- Seat: the flux of a curl through the sphere vanishes. Pointwise,
 `q · curl A = ∑ k, fderiv (A k) q (rotField k q)` (expand `fderiv` in the basis `e`, `Fin.sum_univ_three`). -/
