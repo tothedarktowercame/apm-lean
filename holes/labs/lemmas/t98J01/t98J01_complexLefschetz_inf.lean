@@ -1312,7 +1312,43 @@ theorem t98J01_complexLefschetz_inf {X : Type} [TopologicalSpace X] (φ : C(X, X
     t98J01_ComplexLefschetz (t98J01_sset.obj ((t98J01_range U ⊓ t98J01_range V :
         (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet))
       (t98J01_rangeEndo φ _ hinf) c := by
-  sorry
+  rw [t98J01_hasLefschetzNumber_iff] at hc
+  let e₂ := ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso
+    ℚ (U ∩ V)
+  have hrange : t98J01_ComplexLefschetz
+      (t98J01_sset.obj (t98J01_range (U ∩ V) : SSet))
+      (t98J01_rangeEndo φ (t98J01_range (U ∩ V))
+        (t98J01_range_image_le φ (U ∩ V) hUV)) c := by
+    apply (t98J01_complexLefschetz_congr e₂.hom (fun _ => inferInstance) _ c).mpr hc
+    dsimp [e₂, t98J01_chainMap, t98J01_rangeEndo]
+    change t98J01_sset.map _ ≫ t98J01_sset.map _ =
+      t98J01_sset.map _ ≫ t98J01_sset.map _
+    rw [← Functor.map_comp, ← Functor.map_comp]
+    apply congrArg t98J01_sset.map
+    apply (cancel_mono (TopCat.toSSet.map
+      (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion (U ∩ V)))).1
+    slice_lhs 2 3 => exact ConstructionTargets.SingularExcision.rangeIso_hom_comp _
+    slice_lhs 1 2 => exact
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap_comp_ι _ _ _ _
+    slice_rhs 2 3 =>
+      exact by
+        simpa only [TopCat.toSSet.map_comp] using
+          congrArg TopCat.toSSet.map
+            (ConstructionTargets.SingularExcision.subspaceMap_inclusion
+              (U ∩ V) (U ∩ V) φ hUV)
+    slice_rhs 1 2 => exact
+      (ConstructionTargets.SingularExcision.rangeIso_hom_comp
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion (U ∩ V))))
+    rfl
+  let e₁ := ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionChainsIso
+    ℚ U V
+  apply (t98J01_complexLefschetz_congr e₁.hom (fun _ => inferInstance) _ c).mp hrange
+  dsimp [e₁, t98J01_rangeEndo]
+  change t98J01_sset.map _ ≫ t98J01_sset.map _ =
+    t98J01_sset.map _ ≫ t98J01_sset.map _
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  congr 1
 -- END SEAT AREA
 
 /-- Assembly: the union subcomplex of an open cover computes the ambient Lefschetz number. -/
