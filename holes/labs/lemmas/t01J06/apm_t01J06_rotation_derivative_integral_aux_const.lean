@@ -537,7 +537,26 @@ theorem apm_t01J06_rotation_derivative_integral_aux_const (k : Fin 3) (t : ℝ) 
     (hf : Continuous f) :
     (∫ q : apm_t01J06_S2, f (apm_t01J06_rotation_derivative_integral_aux_rot k t q.1) ∂μHE[2]) =
       ∫ q : apm_t01J06_S2, f q.1 ∂μHE[2] := by
-  sorry
+  let ee : apm_t01J06_S2 ≃ apm_t01J06_S2 := {
+      toFun := fun q ↦ (⟨apm_t01J06_rotation_derivative_integral_aux_rot k t q.1, by
+        simpa [Metric.mem_sphere, dist_eq_norm,
+          apm_t01J06_rotation_derivative_integral_aux_norm] using q.property⟩ : apm_t01J06_S2)
+      invFun := fun q ↦ (⟨apm_t01J06_rotation_derivative_integral_aux_rot k (-t) q.1, by
+        simpa [Metric.mem_sphere, dist_eq_norm,
+          apm_t01J06_rotation_derivative_integral_aux_norm] using q.property⟩ : apm_t01J06_S2)
+      left_inv := fun q ↦ Subtype.ext
+        (apm_t01J06_rotation_derivative_integral_aux_rot_neg k t q.1)
+      right_inv := fun q ↦ Subtype.ext (by simpa only [neg_neg] using
+        apm_t01J06_rotation_derivative_integral_aux_rot_neg k (-t) q.1) }
+  let e : apm_t01J06_S2 ≃ᵢ apm_t01J06_S2 := ⟨ee, by
+    intro q r
+    simp only [edist_dist]
+    congr 1
+    exact (apm_t01J06_rotation_derivative_integral_aux_isometry k t).dist_eq q.1 r.1⟩
+  let em := e.toHomeomorph.toMeasurableEquiv
+  have h : MeasurePreserving em μHE[2] μHE[2] :=
+    e.measurePreserving_euclideanHausdorffMeasure 2
+  exact h.integral_comp' (fun q : apm_t01J06_S2 ↦ f q.1)
 -- END SEAT AREA
 
 lemma apm_t01J06_rotation_derivative_integral_aux_key (k : Fin 3)
