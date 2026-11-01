@@ -327,6 +327,23 @@ lemma apm_m93j06_exists_continuous_local_flow_of_box_radius
     (apm_m93j06_isPicardLindelof_of_box_radius
       hδ ha hr hQ hL hLip hcont hbound htime)
 
+/-- The local Picard--Lindelöf conclusion in the native generality of a
+Picard box: a whole ball of initial values has solutions on the common time
+interval, and the solution map is Lipschitz in its initial value there.  This
+is the local theorem underlying part (a); unlike the final global theorem
+below, it assumes no global Lipschitz constant. -/
+lemma apm_m93j06_picard_lindelof_local
+    {f : ℝ → ℝ → ℝ} {tmin tmax : ℝ}
+    {t₀ : Set.Icc tmin tmax} {x₀ : ℝ} {a r L K : NNReal}
+    (hPL : IsPicardLindelof f t₀ x₀ a r L K) :
+    ∃ φ : ℝ → ℝ → ℝ,
+      (∀ x ∈ Metric.closedBall x₀ r, φ x t₀ = x ∧
+        ∀ t ∈ Set.Icc tmin tmax,
+          HasDerivWithinAt (φ x) (f t (φ x t)) (Set.Icc tmin tmax) t) ∧
+      ∃ A : NNReal, ∀ t ∈ Set.Icc tmin tmax,
+        LipschitzOnWith A (fun x ↦ φ x t) (Metric.closedBall x₀ r) := by
+  exact hPL.exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith
+
 /-- The box constructor immediately yields a local solution on its symmetric
 closed time interval. -/
 lemma apm_m93j06_exists_local_solution_of_box
@@ -1806,7 +1823,7 @@ lemma apm_m93j06_of_global_and_contDiff
   intro f φ C L _ hL hφ _ hLip
   exact apm_m93j06_flow_lipschitz hL hφ hLip
 
-theorem apm_m93j06 :
+theorem apm_m93j06_global_lipschitz :
     (∀ f : ℝ → ℝ → ℝ, Continuous (Function.uncurry f) →
       (∃ L > 0, ∀ t a b, |f t a - f t b| ≤ L * |a - b|) →
       ∀ y₀, ∃! y : ℝ → ℝ, apm_m93j06_Solves f y₀ y) ∧
@@ -2290,3 +2307,1767 @@ theorem apm_m93j06 :
   -/
   exact apm_m93j06_of_global_and_contDiff
     apm_m93j06_global_existsUnique apm_m93j06_smooth_dependence
+
+/-! ## Reformed statement: local hypotheses (parts (a)–(e))
+
+The frozen `apm_m93j06_global_lipschitz` above assumes a global Lipschitz
+constant, which excludes `y' = y²`.  The reformed `apm_m93j06` below uses the
+standard local hypotheses: joint continuity plus local Lipschitz continuity in
+the state variable for (a) and (c), and joint `C¹` regularity for (b) and (e).
+Part (d) is recorded as its (true) negation. -/
+
+/-- Local Lipschitz hypothesis in the state variable: a uniform Lipschitz
+constant on every symmetric compact time-state box. -/
+def apm_m93j06_LocallyLipschitzY (f : ℝ → ℝ → ℝ) : Prop :=
+  ∀ R : ℝ, 0 ≤ R → ∃ L ≥ 0, ∀ t ∈ Set.Icc (-R) R,
+    ∀ a ∈ Set.Icc (-R) R, ∀ b ∈ Set.Icc (-R) R,
+      |f t a - f t b| ≤ L * |a - b|
+
+/-- A jointly `C¹` scalar field is locally Lipschitz in the state variable. -/
+lemma apm_m93j06_locallyLipschitzY_of_contDiff {f : ℝ → ℝ → ℝ}
+    (hf : ContDiff ℝ 1 (Function.uncurry f)) :
+    apm_m93j06_LocallyLipschitzY f := by
+  intro R hR
+  obtain ⟨K, hK, hLip⟩ :=
+    apm_m93j06_exists_compact_state_lipschitz hf (neg_le_self hR) hR
+  exact ⟨K, hK, hLip⟩
+
+/-- The piecewise-linear hat used to build the smooth clamp: `1` on
+`|u| ≤ 1`, `0` off `|u| ≤ 2`. -/
+noncomputable def apm_m93j06_hat : ℝ → ℝ := fun u ↦ max 0 (min 1 (2 - |u|))
+
+lemma apm_m93j06_hat_continuous : Continuous apm_m93j06_hat := by
+  unfold apm_m93j06_hat
+  fun_prop
+
+lemma apm_m93j06_hat_nonneg (u : ℝ) : 0 ≤ apm_m93j06_hat u :=
+  le_max_left 0 _
+
+lemma apm_m93j06_hat_le_one (u : ℝ) : apm_m93j06_hat u ≤ 1 :=
+  max_le zero_le_one (min_le_left 1 _)
+
+lemma apm_m93j06_hat_eq_one {u : ℝ} (hu : |u| ≤ 1) : apm_m93j06_hat u = 1 := by
+  unfold apm_m93j06_hat
+  rw [min_eq_left (by linarith [abs_le.mp hu]), max_eq_right (zero_le_one)]
+
+lemma apm_m93j06_hat_eq_zero {u : ℝ} (hu : 2 ≤ |u|) : apm_m93j06_hat u = 0 := by
+  unfold apm_m93j06_hat
+  rw [min_eq_right (by linarith), max_eq_left] <;> linarith
+
+/-- The smooth state clamp: the integral of the hat.  It agrees with the
+identity on `|s| ≤ 1`, is `C¹`, nonexpanding, and bounded by `2`. -/
+noncomputable def apm_m93j06_clamp : ℝ → ℝ :=
+  fun s ↦ ∫ u in (0)..s, apm_m93j06_hat u
+
+lemma apm_m93j06_clamp_hasDerivAt (s : ℝ) :
+    HasDerivAt apm_m93j06_clamp (apm_m93j06_hat s) s := by
+  unfold apm_m93j06_clamp
+  apply intervalIntegral.integral_hasDerivAt_right
+    (apm_m93j06_hat_continuous.intervalIntegrable 0 s)
+  · exact apm_m93j06_hat_continuous.stronglyMeasurableAtFilter _ _
+  · exact apm_m93j06_hat_continuous.continuousAt
+
+lemma apm_m93j06_clamp_contDiff : ContDiff ℝ 1 apm_m93j06_clamp := by
+  rw [contDiff_one_iff_deriv]
+  refine ⟨fun s ↦ (apm_m93j06_clamp_hasDerivAt s).differentiableAt, ?_⟩
+  have hderiv : deriv apm_m93j06_clamp = apm_m93j06_hat := by
+    funext s
+    exact (apm_m93j06_clamp_hasDerivAt s).deriv
+  rw [hderiv]
+  exact apm_m93j06_hat_continuous
+
+lemma apm_m93j06_clamp_continuous : Continuous apm_m93j06_clamp :=
+  apm_m93j06_clamp_contDiff.continuous
+
+lemma apm_m93j06_clamp_eq_self {s : ℝ} (hs : |s| ≤ 1) :
+    apm_m93j06_clamp s = s := by
+  unfold apm_m93j06_clamp
+  have h : Set.EqOn apm_m93j06_hat (fun _ ↦ (1 : ℝ)) (Set.uIcc 0 s) := by
+    intro u hu
+    apply apm_m93j06_hat_eq_one
+    rw [abs_le] at hs ⊢
+    rcases Set.mem_uIcc.mp hu with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;> constructor <;> linarith
+  rw [intervalIntegral.integral_congr h, intervalIntegral.integral_const,
+    sub_zero, smul_eq_mul, mul_one]
+
+lemma apm_m93j06_abs_clamp_le (s : ℝ) : |apm_m93j06_clamp s| ≤ |s| := by
+  have h := intervalIntegral.norm_integral_le_of_norm_le_const
+    (a := 0) (b := s) (f := apm_m93j06_hat) (C := 1) ?_
+  · unfold apm_m93j06_clamp
+    simpa [Real.norm_eq_abs, sub_zero] using h
+  · intro u _
+    rw [Real.norm_eq_abs, abs_of_nonneg (apm_m93j06_hat_nonneg u)]
+    exact apm_m93j06_hat_le_one u
+
+/-- The clamp is nonexpanding. -/
+lemma apm_m93j06_clamp_dist_le (a b : ℝ) :
+    |apm_m93j06_clamp a - apm_m93j06_clamp b| ≤ |a - b| := by
+  have h := Convex.lipschitzOnWith_of_nnnorm_hasDerivWithin_le (C := 1)
+    (convex_univ) (f := apm_m93j06_clamp)
+    (fun x _ ↦ (apm_m93j06_clamp_hasDerivAt x).hasDerivWithinAt)
+    (fun x _ ↦ ?_)
+  · have hd := h.dist_le_mul a (Set.mem_univ a) b (Set.mem_univ b)
+    simpa [Real.dist_eq] using hd
+  · rw [Real.nnnorm_of_nonneg (apm_m93j06_hat_nonneg x)]
+    exact_mod_cast apm_m93j06_hat_le_one x
+
+/-- The clamp is constant beyond the plateau. -/
+lemma apm_m93j06_clamp_eq_of_two_le {a b : ℝ} (ha : 2 ≤ a) (hb : 2 ≤ b) :
+    apm_m93j06_clamp a = apm_m93j06_clamp b := by
+  unfold apm_m93j06_clamp
+  have hzero : ∫ u in a..b, apm_m93j06_hat u = 0 := by
+    have h : ∀ u ∈ Set.uIoc a b, ‖apm_m93j06_hat u‖ ≤ 0 := by
+      intro u hu
+      rw [Set.mem_uIoc] at hu
+      have hu2 : 2 ≤ u := by
+        rcases hu with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;> linarith
+      rw [Real.norm_eq_abs, abs_of_nonneg (apm_m93j06_hat_nonneg _),
+        apm_m93j06_hat_eq_zero (by rw [abs_of_nonneg (by linarith)]; exact hu2)]
+    have hle := intervalIntegral.norm_integral_le_of_norm_le_const h
+    rwa [zero_mul, norm_le_zero_iff] at hle
+  have hsplit : (∫ u in (0)..a, apm_m93j06_hat u) +
+      (∫ u in a..b, apm_m93j06_hat u) = ∫ u in (0)..b, apm_m93j06_hat u :=
+    intervalIntegral.integral_add_adjacent_intervals
+      (apm_m93j06_hat_continuous.intervalIntegrable 0 a)
+      (apm_m93j06_hat_continuous.intervalIntegrable a b)
+  rw [← hsplit, hzero, add_zero]
+
+/-- The clamp is constant below `-2`. -/
+lemma apm_m93j06_clamp_eq_of_le_neg_two {a b : ℝ} (ha : a ≤ -2) (hb : b ≤ -2) :
+    apm_m93j06_clamp a = apm_m93j06_clamp b := by
+  unfold apm_m93j06_clamp
+  have hzero : ∫ u in b..a, apm_m93j06_hat u = 0 := by
+    have h : ∀ u ∈ Set.uIoc b a, ‖apm_m93j06_hat u‖ ≤ 0 := by
+      intro u hu
+      rw [Set.mem_uIoc] at hu
+      have hu2 : u ≤ -2 := by
+        rcases hu with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;> linarith
+      rw [Real.norm_eq_abs, abs_of_nonneg (apm_m93j06_hat_nonneg _),
+        apm_m93j06_hat_eq_zero (by rw [abs_of_nonpos (by linarith)]; linarith)]
+    have hle := intervalIntegral.norm_integral_le_of_norm_le_const h
+    rwa [zero_mul, norm_le_zero_iff] at hle
+  have hsplit : (∫ u in (0)..b, apm_m93j06_hat u) +
+      (∫ u in b..a, apm_m93j06_hat u) = ∫ u in (0)..a, apm_m93j06_hat u :=
+    intervalIntegral.integral_add_adjacent_intervals
+      (apm_m93j06_hat_continuous.intervalIntegrable 0 b)
+      (apm_m93j06_hat_continuous.intervalIntegrable b a)
+  rw [← hsplit, hzero, add_zero]
+
+/-- The clamp is bounded by `2`. -/
+lemma apm_m93j06_abs_clamp_le_two (s : ℝ) : |apm_m93j06_clamp s| ≤ 2 := by
+  by_cases hs : |s| ≤ 2
+  · exact (apm_m93j06_abs_clamp_le s).trans hs
+  · push_neg at hs
+    rcases le_total 0 s with h0 | h0
+    · have h2 : 2 ≤ s := by rw [abs_of_nonneg h0] at hs; exact hs.le
+      rw [← apm_m93j06_clamp_eq_of_two_le (le_refl 2) h2]
+      have h2le := apm_m93j06_abs_clamp_le 2
+      rwa [abs_of_nonneg (by norm_num : (0:ℝ) ≤ 2)] at h2le
+    · have h2 : s ≤ -2 := by rw [abs_of_nonpos h0] at hs; linarith
+      rw [apm_m93j06_clamp_eq_of_le_neg_two h2 (le_refl (-2))]
+      have h2le := apm_m93j06_abs_clamp_le (-2)
+      have habs : |(-2 : ℝ)| = 2 := by norm_num
+      rwa [habs] at h2le
+
+/-- Interval solutions of a locally state-Lipschitz field are unique from an
+interior meeting point.  This is the local-Lipschitz analogue of
+`apm_m93j06_interval_solution_unique_of_contDiff`. -/
+lemma apm_m93j06_interval_solution_unique_of_localLipschitz
+    {f : ℝ → ℝ → ℝ} (hloc : apm_m93j06_LocallyLipschitzY f)
+    {A B τ : ℝ} (hτ : τ ∈ Set.Ioo A B) {y z : ℝ → ℝ}
+    (hy : ∀ t ∈ Set.Icc A B,
+      HasDerivWithinAt y (f t (y t)) (Set.Icc A B) t)
+    (hz : ∀ t ∈ Set.Icc A B,
+      HasDerivWithinAt z (f t (z t)) (Set.Icc A B) t)
+    (heq : y τ = z τ) : Set.EqOn y z (Set.Icc A B) := by
+  have hAB : A ≤ B := le_trans (le_of_lt hτ.1) (le_of_lt hτ.2)
+  have hycont : ContinuousOn y (Set.Icc A B) :=
+    HasDerivWithinAt.continuousOn hy
+  have hzcont : ContinuousOn z (Set.Icc A B) :=
+    HasDerivWithinAt.continuousOn hz
+  obtain ⟨Ry, hRy⟩ := isCompact_Icc.exists_bound_of_continuousOn hycont.norm
+  obtain ⟨Rz, hRz⟩ := isCompact_Icc.exists_bound_of_continuousOn hzcont.norm
+  let R := max (max Ry Rz) (max |A| |B|)
+  have hR : 0 ≤ R := by
+    have h := hRy τ ⟨le_of_lt hτ.1, le_of_lt hτ.2⟩
+    exact (norm_nonneg _).trans
+      ((h.trans (le_max_left Ry Rz)).trans (le_max_left _ _))
+  obtain ⟨L, hL, hLip⟩ := hloc R hR
+  have htime : ∀ s ∈ Set.Icc A B, s ∈ Set.Icc (-R) R := by
+    intro s hs
+    have habs : |s| ≤ R := by
+      have h1 : |s| ≤ max |A| |B| := by
+        rw [abs_le]
+        exact ⟨by
+          calc -max |A| |B| ≤ -|A| := by
+                rw [neg_le_neg_iff]; exact le_max_left _ _
+            _ ≤ A := neg_abs_le A
+            _ ≤ s := hs.1,
+          by
+          calc s ≤ B := hs.2
+            _ ≤ |B| := le_abs_self B
+            _ ≤ max |A| |B| := le_max_right _ _⟩
+      exact h1.trans (le_max_right _ _)
+    exact abs_le.mp habs
+  have hyRange : ∀ s ∈ Set.Icc A B, y s ∈ Set.Icc (-R) R := by
+    intro s hs
+    apply abs_le.mp
+    have h := (hRy s hs)
+    simp only [Real.norm_eq_abs, abs_abs] at h
+    exact (h.trans (le_max_left Ry Rz)).trans (le_max_left _ _)
+  have hzRange : ∀ s ∈ Set.Icc A B, z s ∈ Set.Icc (-R) R := by
+    intro s hs
+    apply abs_le.mp
+    have h := (hRz s hs)
+    simp only [Real.norm_eq_abs, abs_abs] at h
+    exact (h.trans (le_max_right Ry Rz)).trans (le_max_left _ _)
+  let Lnn : NNReal := ⟨L, hL⟩
+  have hv : ∀ s ∈ Set.Icc A B,
+      LipschitzOnWith Lnn (f s) (Set.Icc (-R) R) := by
+    intro s hs
+    rw [lipschitzOnWith_iff_dist_le_mul]
+    intro a ha b hb
+    simpa [Lnn, Real.dist_eq] using
+      hLip s (htime s hs) a ha b hb
+  apply ODE_solution_unique_of_mem_Icc
+    (s := fun _ ↦ Set.Icc (-R) R) (K := Lnn)
+    (fun s hs ↦ hv s (Set.Ioo_subset_Icc_self hs)) hτ
+    hycont
+    (fun s hs ↦ (hy s (Set.Ioo_subset_Icc_self hs)).hasDerivAt
+      (Icc_mem_nhds hs.1 hs.2))
+    (fun s hs ↦ hyRange s (Set.Ioo_subset_Icc_self hs))
+    hzcont
+    (fun s hs ↦ (hz s (Set.Ioo_subset_Icc_self hs)).hasDerivAt
+      (Icc_mem_nhds hs.1 hs.2))
+    (fun s hs ↦ hzRange s (Set.Ioo_subset_Icc_self hs)) heq
+
+/-- **Part (a), reformed.** Joint continuity and local Lipschitz continuity in
+the state variable give, for every initial value, a unique solution on a
+symmetric neighborhood of the initial time.  No global Lipschitz constant is
+assumed, so this covers `y' = y²`. -/
+theorem apm_m93j06_part_a (f : ℝ → ℝ → ℝ)
+    (hcont : Continuous (Function.uncurry f))
+    (hloc : apm_m93j06_LocallyLipschitzY f) (y₀ : ℝ) :
+    ∃ ε > 0, ∃ y : ℝ → ℝ,
+      (∀ t ∈ Set.Icc (-ε) ε,
+        HasDerivWithinAt y (f t (y t)) (Set.Icc (-ε) ε) t) ∧
+      y 0 = y₀ ∧
+      ∀ z : ℝ → ℝ, z 0 = y₀ →
+        (∀ t ∈ Set.Icc (-ε) ε,
+          HasDerivWithinAt z (f t (z t)) (Set.Icc (-ε) ε) t) →
+        Set.EqOn y z (Set.Icc (-ε) ε) := by
+  let R := |y₀| + 3
+  have hR : 0 ≤ R := by positivity
+  obtain ⟨L₀, hL₀, hLip₀⟩ := hloc R hR
+  let χ : ℝ → ℝ := fun y ↦ y₀ + apm_m93j06_clamp (y - y₀)
+  let g : ℝ → ℝ → ℝ := fun t y ↦ f (apm_m93j06_clamp t) (χ y)
+  have hχcont : Continuous χ :=
+    continuous_const.add
+      (apm_m93j06_clamp_continuous.comp (continuous_id.sub continuous_const))
+  have hgcont : Continuous (Function.uncurry g) := by
+    show Continuous (Function.uncurry f ∘ fun p : ℝ × ℝ ↦
+      (apm_m93j06_clamp p.1, χ p.2))
+    exact hcont.comp ((apm_m93j06_clamp_continuous.comp continuous_fst).prodMk
+      (hχcont.comp continuous_snd))
+  have hχmem : ∀ y, χ y ∈ Set.Icc (-R) R := by
+    intro y
+    apply abs_le.mp
+    calc |χ y| ≤ |y₀| + |apm_m93j06_clamp (y - y₀)| := abs_add_le _ _
+      _ ≤ |y₀| + 2 := add_le_add (le_refl |y₀|) (apm_m93j06_abs_clamp_le_two _)
+      _ ≤ R := by dsimp [R]; linarith
+  have htmem : ∀ t, apm_m93j06_clamp t ∈ Set.Icc (-R) R := by
+    intro t
+    apply abs_le.mp
+    exact (apm_m93j06_abs_clamp_le_two t).trans (by dsimp [R]; linarith [abs_nonneg y₀])
+  have hgLip : ∀ t a b, |g t a - g t b| ≤ (L₀ + 1) * |a - b| := by
+    intro t a b
+    have h1 : |g t a - g t b| ≤ L₀ * |χ a - χ b| :=
+      hLip₀ _ (htmem t) _ (hχmem a) _ (hχmem b)
+    have h2 : |χ a - χ b| ≤ |a - b| := by
+      have heq : χ a - χ b = apm_m93j06_clamp (a - y₀) - apm_m93j06_clamp (b - y₀) := by
+        dsimp [χ]; ring
+      rw [heq]
+      have hcd := apm_m93j06_clamp_dist_le (a - y₀) (b - y₀)
+      rwa [show a - y₀ - (b - y₀) = a - b by ring] at hcd
+    calc |g t a - g t b| ≤ L₀ * |χ a - χ b| := h1
+      _ ≤ L₀ * |a - b| := mul_le_mul_of_nonneg_left h2 hL₀
+      _ ≤ (L₀ + 1) * |a - b| :=
+          mul_le_mul_of_nonneg_right (by linarith [hL₀]) (abs_nonneg _)
+  obtain ⟨y, hy⟩ := apm_m93j06_exists_global_solution
+    (f := g) (y₀ := y₀) (L := L₀ + 1) (add_nonneg hL₀ zero_le_one) hgLip hgcont
+  obtain ⟨Q, hQbound⟩ := (isCompact_Icc.prod isCompact_Icc).exists_bound_of_continuousOn
+    (s := Set.Icc (-2) 2 ×ˢ Set.Icc (-R) R) hcont.continuousOn
+  have hgb : ∀ t y, |g t y| ≤ Q := by
+    intro t y
+    have h := hQbound (apm_m93j06_clamp t, χ y)
+      ⟨abs_le.mp (apm_m93j06_abs_clamp_le_two t), hχmem y⟩
+    simpa [Function.uncurry, Real.norm_eq_abs, g] using h
+  have hQ0 : 0 ≤ Q := (abs_nonneg _).trans (hgb 0 0)
+  let ε := min (1/2 : ℝ) (1 / (Q + 1))
+  have hε : 0 < ε := by
+    apply lt_min (by norm_num)
+    positivity
+  have hyw : ∀ t ∈ Set.Icc (-ε) ε,
+      HasDerivWithinAt y (g t (y t)) (Set.Icc (-ε) ε) t :=
+    fun t ht ↦ (hy.2 t).hasDerivWithinAt
+  have hdist : ∀ t ∈ Set.Icc (-ε) ε, |y t - y₀| ≤ Q * |t| := by
+    intro t ht
+    have h := apm_m93j06_interval_solution_dist_le hQ0 hyw
+      (fun s hs ↦ hgb s (y s)) ht ⟨neg_nonpos.mpr hε.le, hε.le⟩
+    rwa [hy.1, sub_zero] at h
+  have hplateau : ∀ t ∈ Set.Icc (-ε) ε, g t (y t) = f t (y t) := by
+    intro t ht
+    have htε : |t| ≤ ε := abs_le.mpr ⟨ht.1, ht.2⟩
+    have ht1 : |t| ≤ 1 := htε.trans ((min_le_left _ _).trans (by norm_num))
+    have hyt : |y t - y₀| < 1 := by
+      calc |y t - y₀| ≤ Q * |t| := hdist t ht
+        _ ≤ Q * ε := mul_le_mul_of_nonneg_left htε hQ0
+        _ ≤ Q * (1 / (Q + 1)) :=
+            mul_le_mul_of_nonneg_left (min_le_right _ _) hQ0
+        _ = Q / (Q + 1) := by rw [mul_one_div]
+        _ < 1 := (div_lt_one (by linarith)).mpr (lt_add_one Q)
+    have h3 : apm_m93j06_clamp t = t := apm_m93j06_clamp_eq_self ht1
+    have h2 : χ (y t) = y t := by
+      dsimp [χ]
+      rw [apm_m93j06_clamp_eq_self (le_of_lt hyt)]
+      ring
+    dsimp [g]
+    rw [h3, h2]
+  refine ⟨ε, hε, y, fun t ht ↦ ?_, hy.1, fun z hz0 hz ↦ ?_⟩
+  · rw [← hplateau t ht]
+    exact hyw t ht
+  · apply apm_m93j06_interval_solution_unique_of_localLipschitz hloc
+      (τ := 0) ⟨by linarith, by linarith⟩
+      (fun t ht ↦ by rw [← hplateau t ht]; exact hyw t ht) hz
+      (hy.1.trans hz0.symm)
+
+/-- With zero forcing term, Grönwall's bound is the pure exponential. -/
+lemma apm_m93j06_gronwallBound_zero (δ K x : ℝ) :
+    gronwallBound δ K 0 x = δ * Real.exp (K * x) := by
+  by_cases hK : K = 0
+  · simp [gronwallBound_K0, hK]
+  · rw [gronwallBound_of_K_ne_0 hK]
+    simp [zero_div, zero_mul, add_zero]
+
+/-- **Part (c), reformed.** A continuous, locally state-Lipschitz field with
+the linear growth bound `|f t y| ≤ C * |y|` has a global solution from every
+initial value.  Route: truncate the state at the Grönwall radius
+`|y₀| * exp (C T) + 1` on each compact time window, solve the truncated
+(globally state-Lipschitz) equation, observe by Grönwall that the truncated
+solution never leaves the plateau, and glue over an exhaustion. -/
+theorem apm_m93j06_part_c (f : ℝ → ℝ → ℝ) (C : ℝ) (hC : 0 ≤ C)
+    (hcont : Continuous (Function.uncurry f))
+    (hloc : apm_m93j06_LocallyLipschitzY f)
+    (hgrowth : ∀ t y, |f t y| ≤ C * |y|) :
+    ∀ y₀ : ℝ, ∃ y : ℝ → ℝ, apm_m93j06_Solves f y₀ y := by
+  intro y₀
+  -- Step 1: solutions on every symmetric compact interval.
+  have hinterval : ∀ T : ℝ, 0 ≤ T → ∃ y : ℝ → ℝ, y 0 = y₀ ∧
+      ∀ t ∈ Set.Icc (-T) T,
+        HasDerivWithinAt y (f t (y t)) (Set.Icc (-T) T) t := by
+    intro T hT
+    -- Clamping data.
+    set B := |y₀| * Real.exp (C * T) + 1 with hBdef
+    have hB : 0 < B := by positivity
+    set S := T + 1 with hSdef
+    have hS : 0 < S := by linarith
+    let τ : ℝ → ℝ := fun t ↦ S * apm_m93j06_clamp (t / S)
+    let χ : ℝ → ℝ := fun y ↦ (2 * B) * apm_m93j06_clamp (y / (2 * B))
+    have hτ_eq : ∀ t, |t| ≤ S → τ t = t := by
+      intro t ht
+      dsimp [τ]
+      have h1 : |t / S| ≤ 1 := by
+        rw [abs_div, abs_of_pos hS, div_le_one hS]
+        exact ht
+      rw [apm_m93j06_clamp_eq_self h1]
+      have := hS.ne'
+      field_simp
+    have hχ_eq : ∀ y, |y| ≤ 2 * B → χ y = y := by
+      intro y hy
+      dsimp [χ]
+      have h2B : (0 : ℝ) < 2 * B := by positivity
+      have h1 : |y / (2 * B)| ≤ 1 := by
+        rw [abs_div, abs_of_pos h2B, div_le_one h2B]
+        exact hy
+      rw [apm_m93j06_clamp_eq_self h1]
+      have := h2B.ne'
+      field_simp
+    have hχ_abs : ∀ y, |χ y| ≤ |y| := by
+      intro y
+      dsimp [χ]
+      rw [abs_mul, abs_of_pos (by positivity : (0:ℝ) < 2 * B)]
+      calc (2 * B) * |apm_m93j06_clamp (y / (2 * B))|
+          ≤ (2 * B) * |y / (2 * B)| :=
+            mul_le_mul_of_nonneg_left (apm_m93j06_abs_clamp_le _) (by positivity)
+        _ = |y| := by
+            rw [abs_div, abs_of_pos (by positivity : (0:ℝ) < 2 * B)]
+            field_simp
+    have hχ_abs4 : ∀ y, |χ y| ≤ 4 * B := by
+      intro y
+      dsimp [χ]
+      rw [abs_mul, abs_of_pos (by positivity : (0:ℝ) < 2 * B)]
+      calc (2 * B) * |apm_m93j06_clamp (y / (2 * B))|
+          ≤ (2 * B) * 2 :=
+            mul_le_mul_of_nonneg_left (apm_m93j06_abs_clamp_le_two _) (by positivity)
+        _ = 4 * B := by ring
+    have hτ_abs : ∀ t, |τ t| ≤ 2 * S := by
+      intro t
+      dsimp [τ]
+      rw [abs_mul, abs_of_pos hS]
+      calc S * |apm_m93j06_clamp (t / S)|
+          ≤ S * 2 := mul_le_mul_of_nonneg_left
+              (apm_m93j06_abs_clamp_le_two _) (le_of_lt hS)
+        _ = 2 * S := by ring
+    have hχ_dist : ∀ a b, |χ a - χ b| ≤ |a - b| := by
+      intro a b
+      dsimp [χ]
+      have hcd := apm_m93j06_clamp_dist_le (a / (2 * B)) (b / (2 * B))
+      have hfact : (2 * B) * apm_m93j06_clamp (a / (2 * B)) -
+          (2 * B) * apm_m93j06_clamp (b / (2 * B)) =
+          (2 * B) * (apm_m93j06_clamp (a / (2 * B)) - apm_m93j06_clamp (b / (2 * B))) := by
+        ring
+      rw [hfact, abs_mul, abs_of_pos (by positivity : (0:ℝ) < 2 * B)]
+      calc (2 * B) * |apm_m93j06_clamp (a / (2 * B)) - apm_m93j06_clamp (b / (2 * B))|
+          ≤ (2 * B) * |a / (2 * B) - b / (2 * B)| :=
+            mul_le_mul_of_nonneg_left hcd (by positivity)
+        _ = |a - b| := by
+            rw [show a / (2 * B) - b / (2 * B) = (a - b) / (2 * B) by ring,
+              abs_div, abs_of_pos (by positivity : (0:ℝ) < 2 * B)]
+            field_simp
+    -- The clamped field.
+    let g : ℝ → ℝ → ℝ := fun t y ↦ f (τ t) (χ y)
+    have hτcont : Continuous τ :=
+      continuous_const.mul (apm_m93j06_clamp_continuous.comp
+        (continuous_id.div_const S))
+    have hχcont : Continuous χ :=
+      continuous_const.mul (apm_m93j06_clamp_continuous.comp
+        (continuous_id.div_const (2 * B)))
+    have hgcont : Continuous (Function.uncurry g) := by
+      show Continuous (Function.uncurry f ∘ fun p : ℝ × ℝ ↦ (τ p.1, χ p.2))
+      exact hcont.comp ((hτcont.comp continuous_fst).prodMk
+        (hχcont.comp continuous_snd))
+    -- Global state Lipschitz constant for g.
+    set R := max (2 * S) (4 * B) + 1 with hRdef
+    have hR : 0 ≤ R := by positivity
+    obtain ⟨L₀, hL₀, hLip₀⟩ := hloc R hR
+    have hτmem : ∀ t, τ t ∈ Set.Icc (-R) R := by
+      intro t
+      apply abs_le.mp
+      exact (hτ_abs t).trans (by rw [hRdef]; linarith [le_max_left (2 * S) (4 * B)])
+    have hχmem : ∀ y, χ y ∈ Set.Icc (-R) R := by
+      intro y
+      apply abs_le.mp
+      exact (hχ_abs4 y).trans (by rw [hRdef]; linarith [le_max_right (2 * S) (4 * B)])
+    have hgLip : ∀ t a b, |g t a - g t b| ≤ (L₀ + 1) * |a - b| := by
+      intro t a b
+      have h1 : |g t a - g t b| ≤ L₀ * |χ a - χ b| :=
+        hLip₀ _ (hτmem t) _ (hχmem a) _ (hχmem b)
+      calc |g t a - g t b| ≤ L₀ * |χ a - χ b| := h1
+        _ ≤ L₀ * |a - b| := mul_le_mul_of_nonneg_left (hχ_dist a b) hL₀
+        _ ≤ (L₀ + 1) * |a - b| :=
+            mul_le_mul_of_nonneg_right (by linarith [hL₀]) (abs_nonneg _)
+    -- Growth bound for the clamped field, in Grönwall form.
+    have hgb : ∀ t y, |g t y| ≤ C * |y| := by
+      intro t y
+      calc |g t y| = |f (τ t) (χ y)| := rfl
+        _ ≤ C * |χ y| := hgrowth _ _
+        _ ≤ C * |y| := mul_le_mul_of_nonneg_left (hχ_abs y) hC
+    -- Solve the clamped equation globally.
+    obtain ⟨y, hy⟩ := apm_m93j06_exists_global_solution
+      (f := g) (y₀ := y₀) (L := L₀ + 1) (add_nonneg hL₀ zero_le_one) hgLip hgcont
+    -- Grönwall bound in both time directions.
+    have hycont : Continuous y :=
+      continuous_iff_continuousAt.mpr (fun t ↦ (hy.2 t).continuousAt)
+    have hforward : ∀ t : ℝ, 0 ≤ t → |y t| ≤ |y₀| * Real.exp (C * t) := by
+      intro t ht
+      have hy' : ∀ s ∈ Set.Ico 0 t,
+          HasDerivWithinAt y (g s (y s)) (Set.Ici s) s := by
+        intro s hs
+        have hmem : Set.Icc 0 t ∈ nhdsWithin s (Set.Ici s) := by
+          filter_upwards [self_mem_nhdsWithin,
+            mem_nhdsWithin_of_mem_nhds (Iic_mem_nhds hs.2)] with u hu hu'
+          exact ⟨hs.1.trans hu, hu'⟩
+        exact ((hy.2 s).hasDerivWithinAt.mono (Set.Icc_subset_Ici_self))
+          |>.mono_of_mem_nhdsWithin hmem
+      have hb' : ∀ s ∈ Set.Ico 0 t, ‖g s (y s)‖ ≤ C * ‖y s‖ + 0 := by
+        intro s hs
+        simpa [Real.norm_eq_abs, add_zero] using hgb s (y s)
+      have hle := norm_le_gronwallBound_of_norm_deriv_right_le
+        (δ := |y₀|) (K := C) (ε := 0) (a := 0) (b := t) (f := y)
+        (f' := fun s ↦ g s (y s))
+        (hycont.continuousOn) hy' (by rw [Real.norm_eq_abs, hy.1]) hb' t
+        ⟨ht, le_rfl⟩
+      rw [Real.norm_eq_abs, apm_m93j06_gronwallBound_zero, sub_zero] at hle
+      exact hle
+    have hbound : ∀ t : ℝ, |y t| ≤ |y₀| * Real.exp (C * |t|) := by
+      intro t
+      rcases le_total 0 t with ht | ht
+      · rw [abs_of_nonneg ht]; exact hforward t ht
+      · rw [abs_of_nonpos ht]
+        let v : ℝ → ℝ → ℝ := fun s x ↦ -g (-s) x
+        let z : ℝ → ℝ := fun s ↦ y (-s)
+        have hz : ∀ s, HasDerivAt z (v s (z s)) s := by
+          intro s
+          simpa [z, v] using (hy.2 (-s)).comp s (hasDerivAt_neg s)
+        have hzcont : Continuous z :=
+          continuous_iff_continuousAt.mpr (fun s ↦ (hz s).continuousAt)
+        have hvb : ∀ s x, |v s x| ≤ C * |x| := by
+          intro s x
+          dsimp [v]
+          rw [abs_neg]
+          exact hgb _ _
+        have hz' : ∀ s ∈ Set.Ico 0 (-t),
+            HasDerivWithinAt z (v s (z s)) (Set.Ici s) s := by
+          intro s hs
+          have hmem : Set.Icc 0 (-t) ∈ nhdsWithin s (Set.Ici s) := by
+            filter_upwards [self_mem_nhdsWithin,
+              mem_nhdsWithin_of_mem_nhds (Iic_mem_nhds hs.2)] with u hu hu'
+            exact ⟨hs.1.trans hu, hu'⟩
+          exact ((hz s).hasDerivWithinAt.mono (Set.Icc_subset_Ici_self))
+            |>.mono_of_mem_nhdsWithin hmem
+        have hbz : ∀ s ∈ Set.Ico 0 (-t), ‖v s (z s)‖ ≤ C * ‖z s‖ + 0 := by
+          intro s hs
+          simpa [Real.norm_eq_abs, add_zero] using hvb s (z s)
+        have hz0 : z 0 = y₀ := by simpa [z] using hy.1
+        have hle := norm_le_gronwallBound_of_norm_deriv_right_le
+          (δ := |y₀|) (K := C) (ε := 0) (a := 0) (b := -t) (f := z)
+          (f' := fun s ↦ v s (z s))
+          (hzcont.continuousOn) hz' (by rw [Real.norm_eq_abs, hz0]) hbz (-t)
+          ⟨by linarith, le_rfl⟩
+        rw [Real.norm_eq_abs, apm_m93j06_gronwallBound_zero, sub_zero] at hle
+        simpa [z] using hle
+    -- On the window, the trajectory stays on both plateaus.
+    refine ⟨y, hy.1, fun t ht ↦ ?_⟩
+    have htS : |t| ≤ S := by
+      have : |t| ≤ T := abs_le.mpr ⟨ht.1, ht.2⟩
+      exact this.trans (by dsimp [S]; linarith)
+    have hyB : |y t| < 2 * B := by
+      calc |y t| ≤ |y₀| * Real.exp (C * |t|) := hbound t
+        _ ≤ |y₀| * Real.exp (C * T) := by
+            apply mul_le_mul_of_nonneg_left _ (abs_nonneg _)
+            apply Real.exp_le_exp.mpr
+            apply mul_le_mul_of_nonneg_left _ hC
+            exact abs_le.mpr ⟨ht.1, ht.2⟩
+        _ < B := by dsimp [B]; linarith
+        _ ≤ 2 * B := by linarith
+    have hge : g t (y t) = f t (y t) := by
+      dsimp [g]
+      rw [hτ_eq t htS, hχ_eq (y t) (le_of_lt hyB)]
+    rw [← hge]
+    exact (hy.2 t).hasDerivWithinAt
+  -- Step 2: glue over the exhaustion, exactly as in the global-Lipschitz case.
+  have hex : ∀ a : ℝ, ∃ y : ℝ → ℝ, y 0 = y₀ ∧
+      ∀ t ∈ Set.Icc (-(|a| + 1)) (|a| + 1),
+        HasDerivWithinAt y (f t (y t))
+          (Set.Icc (-(|a| + 1)) (|a| + 1)) t := by
+    intro a
+    exact hinterval (|a| + 1) (by positivity)
+  choose γ hγ0 hγ using hex
+  have hcompat : ∀ a b x : ℝ,
+      x ∈ Set.Icc (-(|a| + 1)) (|a| + 1) →
+      x ∈ Set.Icc (-(|b| + 1)) (|b| + 1) → γ a x = γ b x := by
+    intro a b x hxa hxb
+    have hzero : (0 : ℝ) ∈ Set.Ioo
+        (max (-(|a| + 1)) (-(|b| + 1)))
+        (min (|a| + 1) (|b| + 1)) := by
+      constructor
+      · apply max_lt <;> linarith [abs_nonneg a, abs_nonneg b]
+      · exact lt_min (by positivity) (by positivity)
+    have heq := apm_m93j06_interval_solution_unique_of_localLipschitz hloc hzero
+      (y := γ a) (z := γ b) ?_ ?_ ((hγ0 a).trans (hγ0 b).symm)
+    · apply heq
+      exact ⟨max_le hxa.1 hxb.1, le_min hxa.2 hxb.2⟩
+    · intro t ht
+      exact (hγ a t ⟨le_trans (le_max_left _ _) ht.1,
+        ht.2.trans (min_le_left _ _)⟩).mono
+        (Set.Icc_subset_Icc (le_max_left _ _) (min_le_left _ _))
+    · intro t ht
+      exact (hγ b t ⟨le_trans (le_max_right _ _) ht.1,
+        ht.2.trans (min_le_right _ _)⟩).mono
+        (Set.Icc_subset_Icc (le_max_right _ _) (min_le_right _ _))
+  let y : ℝ → ℝ := fun t ↦ γ t t
+  refine ⟨y, ?_, ?_⟩
+  · exact hγ0 0
+  · intro t
+    have htmem : t ∈ Set.Ioo (-(|t| + 1)) (|t| + 1) := by
+      rw [Set.mem_Ioo, ← abs_lt]
+      exact lt_add_one _
+    have hfixed : HasDerivAt (γ t) (f t (γ t t)) t :=
+      (hγ t t (Set.Ioo_subset_Icc_self htmem)).hasDerivAt
+        (Icc_mem_nhds htmem.1 htmem.2)
+    have hevent : y =ᶠ[nhds t] γ t := by
+      filter_upwards [Ioo_mem_nhds htmem.1 htmem.2] with s hs
+      apply hcompat s t s
+      · constructor
+        · calc -(|s| + 1) ≤ -|s| := by linarith
+          _ ≤ s := neg_abs_le s
+        · calc s ≤ |s| := le_abs_self s
+          _ ≤ |s| + 1 := by linarith
+      · exact Set.Ioo_subset_Icc_self hs
+    simpa [y] using hfixed.congr_of_eventuallyEq hevent
+
+/-- **Part (b), reformed.** A jointly `C¹` scalar field admits, around every
+initial value, a local flow on `(-ε, ε) × (y₁ - r, y₁ + r)` with `C¹`
+dependence on the initial value for every `|t| < ε`.  Route: clamp time and
+state smoothly onto a compact box, solve the clamped (globally state
+Lipschitz, `C¹`) equation with its global flow, and use the plateau to
+identify the clamped solutions with solutions of `f` for small times. -/
+theorem apm_m93j06_part_b (f : ℝ → ℝ → ℝ)
+    (hf : ContDiff ℝ 1 (Function.uncurry f)) (y₁ : ℝ) :
+    ∃ ε > 0, ∃ r > 0, ∃ φ : ℝ → ℝ → ℝ,
+      (∀ y ∈ Set.Ioo (y₁ - r) (y₁ + r), φ 0 y = y) ∧
+      (∀ t ∈ Set.Ioo (-ε) ε, ∀ y ∈ Set.Ioo (y₁ - r) (y₁ + r),
+        HasDerivAt (fun s ↦ φ s y) (f t (φ t y)) t) ∧
+      (∀ t ∈ Set.Ioo (-ε) ε, ContDiff ℝ 1 (fun y ↦ φ t y)) := by
+  set R := |y₁| + 3 with hRdef
+  have hR : 0 ≤ R := by positivity
+  obtain ⟨L₀, hL₀, hLip₀⟩ := apm_m93j06_exists_compact_state_lipschitz hf
+    (A := -2) (B := 2) (R := R) (by norm_num) hR
+  let χ : ℝ → ℝ := fun y ↦ y₁ + apm_m93j06_clamp (y - y₁)
+  let g : ℝ → ℝ → ℝ := fun t y ↦ f (apm_m93j06_clamp t) (χ y)
+  have hχcontDiff : ContDiff ℝ 1 χ :=
+    contDiff_const.add (apm_m93j06_clamp_contDiff.comp
+      (contDiff_id.sub contDiff_const))
+  have hgcontDiff : ContDiff ℝ 1 (Function.uncurry g) := by
+    show ContDiff ℝ 1 (Function.uncurry f ∘ fun p : ℝ × ℝ ↦
+      (apm_m93j06_clamp p.1, χ p.2))
+    exact hf.comp ((apm_m93j06_clamp_contDiff.comp contDiff_fst).prodMk
+      (hχcontDiff.comp contDiff_snd))
+  have hχmem : ∀ y, χ y ∈ Set.Icc (-R) R := by
+    intro y
+    apply abs_le.mp
+    calc |χ y| ≤ |y₁| + |apm_m93j06_clamp (y - y₁)| := abs_add_le _ _
+      _ ≤ |y₁| + 2 := add_le_add (le_refl |y₁|) (apm_m93j06_abs_clamp_le_two _)
+      _ ≤ R := by rw [hRdef]; linarith
+  have hgLip : ∀ t a b, |g t a - g t b| ≤ (L₀ + 1) * |a - b| := by
+    intro t a b
+    have h1 : |g t a - g t b| ≤ L₀ * |χ a - χ b| :=
+      hLip₀ _ (abs_le.mp (apm_m93j06_abs_clamp_le_two t)) _ (hχmem a) _ (hχmem b)
+    have h2 : |χ a - χ b| ≤ |a - b| := by
+      have heq : χ a - χ b = apm_m93j06_clamp (a - y₁) - apm_m93j06_clamp (b - y₁) := by
+        dsimp [χ]; ring
+      rw [heq]
+      have hcd := apm_m93j06_clamp_dist_le (a - y₁) (b - y₁)
+      rwa [show a - y₁ - (b - y₁) = a - b by ring] at hcd
+    calc |g t a - g t b| ≤ L₀ * |χ a - χ b| := h1
+      _ ≤ L₀ * |a - b| := mul_le_mul_of_nonneg_left h2 hL₀
+      _ ≤ (L₀ + 1) * |a - b| :=
+          mul_le_mul_of_nonneg_right (by linarith [hL₀]) (abs_nonneg _)
+  have hU := apm_m93j06_global_existsUnique g hgcontDiff.continuous
+    ⟨L₀ + 1, by linarith [hL₀], hgLip⟩
+  obtain ⟨ψ, hψ⟩ := apm_m93j06_isFlow_of_existsUnique hU
+  have hψcont : Continuous (Function.uncurry ψ) :=
+    apm_m93j06_flow_continuous hgcontDiff hψ
+  have hψC1 : ∀ t, ContDiff ℝ 1 (ψ t) := fun t ↦
+    apm_m93j06_flow_contDiff_initial_of_continuous hgcontDiff hψ hψcont t
+  obtain ⟨Q, hQbound⟩ := (isCompact_Icc.prod isCompact_Icc).exists_bound_of_continuousOn
+    (s := Set.Icc (-2) 2 ×ˢ Set.Icc (-R) R) hf.continuous.continuousOn
+  have hgb : ∀ t y, |g t y| ≤ Q := by
+    intro t y
+    have h := hQbound (apm_m93j06_clamp t, χ y)
+      ⟨abs_le.mp (apm_m93j06_abs_clamp_le_two t), hχmem y⟩
+    simpa [Function.uncurry, Real.norm_eq_abs, g] using h
+  have hQ0 : 0 ≤ Q := (abs_nonneg _).trans (hgb 0 0)
+  set ε := min (1/2 : ℝ) (1 / (2 * (Q + 1))) with hεdef
+  have hε : 0 < ε := by
+    rw [hεdef]
+    apply lt_min (by norm_num)
+    positivity
+  refine ⟨ε, hε, 1 / 2, by norm_num, ψ, fun y _ ↦ apm_m93j06_flow_zero hψ y,
+    fun t ht y hy ↦ ?_, fun t _ ↦ hψC1 t⟩
+  -- The trajectory stays on the plateau for `|t| < ε`.
+  have hyw : ∀ s ∈ Set.Icc (-1) 1,
+      HasDerivWithinAt (fun u ↦ ψ u y) (g s (ψ s y)) (Set.Icc (-1) 1) s :=
+    fun s _ ↦ (apm_m93j06_flow_hasDerivAt hψ y s).hasDerivWithinAt
+  have ht1 : t ∈ Set.Icc (-1) 1 := by
+    have h : |t| < 1 := by
+      calc |t| < ε := by rwa [Set.mem_Ioo, ← abs_lt] at ht
+        _ ≤ 1 / 2 := min_le_left _ _
+        _ < 1 := by norm_num
+    exact abs_le.mp (le_of_lt h)
+  have hdist : |ψ t y - y| ≤ Q * |t| := by
+    have h := apm_m93j06_interval_solution_dist_le hQ0 hyw
+      (fun s hs ↦ hgb s (ψ s y)) ht1 (show (0:ℝ) ∈ Set.Icc (-1) 1 by norm_num)
+    rwa [apm_m93j06_flow_zero hψ, sub_zero] at h
+  have hplateau : |ψ t y - y₁| < 1 := by
+    have htε : |t| < ε := by rwa [Set.mem_Ioo, ← abs_lt] at ht
+    have hyr : |y - y₁| < 1 / 2 := by
+      rw [Set.mem_Ioo] at hy
+      rw [abs_sub_lt_iff]
+      constructor <;> linarith [hy.1, hy.2]
+    calc |ψ t y - y₁| ≤ |ψ t y - y| + |y - y₁| := by
+          calc |ψ t y - y₁| = |(ψ t y - y) + (y - y₁)| := by ring_nf
+            _ ≤ _ := abs_add_le _ _
+      _ ≤ Q * |t| + |y - y₁| := add_le_add hdist (le_refl _)
+      _ < Q * ε + 1 / 2 := by
+          rcases eq_or_lt_of_le hQ0 with hQeq | hQpos
+          · subst hQeq
+            simpa using hyr
+          · exact add_lt_add (mul_lt_mul_of_pos_left htε hQpos) hyr
+      _ < 1 := by
+          have h1 : Q * ε ≤ Q * (1 / (2 * (Q + 1))) :=
+            mul_le_mul_of_nonneg_left (min_le_right _ _) hQ0
+          have h2 : Q * (1 / (2 * (Q + 1))) < 1 / 2 := by
+            rw [mul_one_div, div_lt_iff₀ (by positivity : (0:ℝ) < 2 * (Q + 1))]
+            nlinarith [hQ0]
+          linarith
+  have hge : g t (ψ t y) = f t (ψ t y) := by
+    dsimp [g, χ]
+    rw [apm_m93j06_clamp_eq_self (abs_le.mpr ⟨ht1.1, ht1.2⟩),
+      apm_m93j06_clamp_eq_self (le_of_lt hplateau)]
+    congr 1
+    ring
+  have h := apm_m93j06_flow_hasDerivAt hψ y t
+  rwa [hge] at h
+
+/-- **Part (e), first clause.** Under joint `C¹` regularity and the linear
+growth bound, the flow exists globally and is `C¹` in the initial value at
+every time.  Route: part (c) supplies global solutions, `C¹` uniqueness turns
+them into a flow, the Picard propagation gives joint continuity, and the
+compiled variational equation gives `C¹` dependence at every time. -/
+theorem apm_m93j06_part_e_flow (f : ℝ → ℝ → ℝ)
+    (hf : ContDiff ℝ 1 (Function.uncurry f)) (C : ℝ) (hC : 0 ≤ C)
+    (hgrowth : ∀ t y, |f t y| ≤ C * |y|) :
+    ∃ φ : ℝ → ℝ → ℝ, apm_m93j06_IsFlow f φ ∧ ∀ t, ContDiff ℝ 1 (φ t) := by
+  have hloc := apm_m93j06_locallyLipschitzY_of_contDiff hf
+  have hex : ∀ y₀, ∃ y : ℝ → ℝ, apm_m93j06_Solves f y₀ y :=
+    apm_m93j06_part_c f C hC hf.continuous hloc hgrowth
+  have hU : ∀ y₀, ∃! y : ℝ → ℝ, apm_m93j06_Solves f y₀ y := by
+    intro y₀
+    obtain ⟨y, hy⟩ := hex y₀
+    exact ⟨y, hy, fun z hz ↦ apm_m93j06_solution_unique_of_contDiff hf hz hy⟩
+  obtain ⟨φ, hφ⟩ := apm_m93j06_isFlow_of_existsUnique hU
+  have hφcont : Continuous (Function.uncurry φ) := apm_m93j06_flow_continuous hf hφ
+  exact ⟨φ, hφ, fun t ↦ apm_m93j06_flow_contDiff_initial_of_continuous hf hφ hφcont t⟩
+
+/-- **Part (e), Lipschitz clause.** Under a global state Lipschitz constant,
+the flow satisfies the sharp `exp (L |t|)` Lipschitz estimate at every time.
+This is the well-posed replacement for the false Hölder conclusion of the
+printed part (d). -/
+theorem apm_m93j06_part_e_lipschitz (f φ : ℝ → ℝ → ℝ) (C L : ℝ)
+    (_ : 0 ≤ C) (hL : 0 ≤ L) (hφ : apm_m93j06_IsFlow f φ)
+    (_ : ∀ t y, |f t y| ≤ C * |y|)
+    (hLip : ∀ t a b, |f t a - f t b| ≤ L * |a - b|) :
+    ∀ t a b, |φ t a - φ t b| ≤ Real.exp (L * |t|) * |a - b| :=
+  fun t a b ↦ apm_m93j06_flow_lipschitz hL hφ hLip t a b
+
+/-- Core ODE computation for the Hölder counterexamples: a solution of
+`w' = |w|^α` on `[0, T]`, starting at `u₀ > 0` and required to satisfy the
+equation only while it stays in `(0, q)`, is pinned to the explicit formula
+`(u₀^{1-α} + (1-α) t)^{1/(1-α)}`, provided the formula stays below `q`. -/
+lemma apm_m93j06_powField_formula {α q : ℝ} (hα : 0 < α) (hα1 : α < 1)
+    (hq : 0 < q) {u₀ : ℝ} (hu₀ : 0 < u₀) (hu₀q : u₀ < q) {T : ℝ} (hT : 0 < T)
+    (hTq : u₀ ^ (1 - α) + (1 - α) * T < q ^ (1 - α))
+    {w : ℝ → ℝ} (hw0 : w 0 = u₀) (hwcont : Continuous w)
+    (hwsol : ∀ t ∈ Set.Icc 0 T, w t ∈ Set.Ioo 0 q →
+      HasDerivWithinAt w (|w t| ^ α) (Set.Icc 0 T) t) :
+    ∀ t ∈ Set.Icc 0 T, w t = (u₀ ^ (1 - α) + (1 - α) * t) ^ (1 / (1 - α)) := by
+  have hα' : 0 < 1 - α := by linarith
+  set E : ℝ → ℝ := fun t ↦ u₀ ^ (1 - α) + (1 - α) * t with hEdef
+  have hEpos : ∀ t, 0 ≤ t → 0 < E t := by
+    intro t ht
+    have h1 : 0 < u₀ ^ (1 - α) := Real.rpow_pos_of_pos hu₀ _
+    have h2 : 0 ≤ (1 - α) * t := mul_nonneg hα'.le ht
+    dsimp [E]
+    linarith
+  have hEmono : Monotone E := by
+    intro a b hab
+    have h := mul_le_mul_of_nonneg_left hab hα'.le
+    dsimp [E]
+    linarith
+  have hEcont : Continuous E := continuous_const.add (continuous_const.mul continuous_id)
+  set F : ℝ → ℝ := fun t ↦ (E t) ^ (1 / (1 - α)) with hFdef
+  have hFcont : Continuous F :=
+    (Real.continuous_rpow_const (one_div_pos.mpr hα').le).comp hEcont
+  have hv_cont : ∀ a : ℝ, ContinuousOn (fun t ↦ (w t) ^ (1 - α)) (Set.Icc 0 a) := by
+    intro a
+    apply ContinuousOn.rpow_const (hwcont.continuousOn)
+    intro t _
+    exact Or.inr hα'.le
+  -- Step 1: `w` stays in `(0, q)` on `[0, T]`.
+  have hmain : ∀ t ∈ Set.Icc 0 T, w t ∈ Set.Ioo 0 q := by
+    by_contra hneg
+    push_neg at hneg
+    set A := {t ∈ Set.Icc 0 T | w t ∉ Set.Ioo 0 q} with hAdef
+    have hAn : A.Nonempty := hneg
+    have hAclosed : IsClosed A :=
+      isClosed_Icc.inter ((isOpen_Ioo (a := (0:ℝ)) (b := q)).isClosed_compl.preimage hwcont)
+    have hAbdd : BddBelow A := ⟨0, fun a ha ↦ ha.1.1⟩
+    set t₁ := sInf A with ht₁def
+    have ht₁mem : t₁ ∈ A := hAclosed.csInf_mem hAn hAbdd
+    have ht₁Icc : t₁ ∈ Set.Icc 0 T := ht₁mem.1
+    have ht₁bad : w t₁ ∉ Set.Ioo 0 q := ht₁mem.2
+    -- a positive lower bound for A
+    have hnear : ∀ᶠ t in nhdsWithin 0 (Set.Icc 0 T), w t ∈ Set.Ioo 0 q := by
+      have h0 : w 0 ∈ Set.Ioo 0 q := by
+        rw [hw0]; exact ⟨hu₀, hu₀q⟩
+      exact hwcont.continuousWithinAt (isOpen_Ioo.mem_nhds h0)
+    obtain ⟨δ, hδ, hδsub⟩ := Metric.mem_nhdsWithin_iff.mp hnear
+    have ht₁pos : 0 < t₁ := by
+      have hle : δ ≤ t₁ := by
+        apply le_csInf hAn
+        intro a ha
+        by_contra haδ
+        push_neg at haδ
+        have : a ∈ Metric.ball 0 δ ∩ Set.Icc 0 T :=
+          ⟨by rw [Metric.mem_ball, Real.dist_eq, sub_zero, abs_of_nonneg ha.1.1]; exact haδ, ha.1⟩
+        exact ha.2 (hδsub this)
+      exact hδ.trans_le hle
+    -- the formula holds strictly before t₁
+    have hform : ∀ t ∈ Set.Ico 0 t₁, w t = F t := by
+      intro t ht
+      have htT : t ∈ Set.Icc 0 T := ⟨ht.1, ht.2.le.trans ht₁Icc.2⟩
+      have hgood : ∀ s ∈ Set.Icc 0 t, w s ∈ Set.Ioo 0 q := by
+        intro s hs
+        by_contra hsbad
+        have hsA : s ∈ A := ⟨⟨hs.1, hs.2.trans htT.2⟩, hsbad⟩
+        have := csInf_le hAbdd hsA
+        linarith [hs.2, ht.2]
+      -- FTC for v := w^(1-α)
+      have hvderiv : ∀ s ∈ Set.Ioo 0 t,
+          HasDerivWithinAt (fun u ↦ (w u) ^ (1 - α)) (1 - α) (Set.Ioi s) s := by
+        intro s hs
+        have hsT : s ∈ Set.Icc 0 T := ⟨hs.1.le, hs.2.le.trans htT.2⟩
+        have hwg := hgood s ⟨hs.1.le, hs.2.le⟩
+        have hws : 0 < w s := hwg.1
+        have hw' := (hwsol s hsT hwg).hasDerivAt
+          (Icc_mem_nhds (by linarith [hs.1, ht.2, ht₁pos]) (by linarith [hs.2, ht.2, ht₁Icc.2]))
+        have hv : HasDerivAt (fun u ↦ (w u) ^ (1 - α))
+            ((w s) ^ α * (1 - α) * (w s) ^ (1 - α - 1)) s := by
+          have hv0 := hw'.rpow_const (p := 1 - α) (Or.inl hws.ne')
+          rwa [abs_of_pos hws] at hv0
+        have h1 : (w s) ^ α * (w s) ^ (1 - α - 1) = 1 := by
+          rw [← Real.rpow_add hws, show α + (1 - α - 1) = (0:ℝ) by ring,
+            Real.rpow_zero]
+        have hderiv_eq : (w s) ^ α * (1 - α) * (w s) ^ (1 - α - 1) = 1 - α := by
+          calc (w s) ^ α * (1 - α) * (w s) ^ (1 - α - 1)
+              = ((w s) ^ α * (w s) ^ (1 - α - 1)) * (1 - α) := by ring
+            _ = 1 * (1 - α) := by rw [h1]
+            _ = 1 - α := by ring
+        rw [hderiv_eq] at hv
+        exact hv.hasDerivWithinAt
+      have hint : IntervalIntegrable (fun _ : ℝ ↦ (1 - α)) MeasureTheory.volume 0 t :=
+        intervalIntegrable_const
+      have hcont : ContinuousOn (fun u ↦ (w u) ^ (1 - α)) (Set.uIcc 0 t) := by
+        rw [Set.uIcc_of_le ht.1]
+        exact hv_cont t
+      have hFTC := intervalIntegral.integral_eq_sub_of_hasDeriv_right hcont
+        (by rw [min_eq_left ht.1, max_eq_right ht.1]; exact hvderiv) hint
+      rw [intervalIntegral.integral_const, sub_zero, smul_eq_mul] at hFTC
+      -- w t = (v t)^(1/(1-α)) = (E t)^(1/(1-α))
+      have hwt : 0 < w t := (hgood t ⟨ht.1, le_rfl⟩).1
+      have hv0 : (w 0) ^ (1 - α) = u₀ ^ (1 - α) := by rw [hw0]
+      rw [hv0] at hFTC
+      have hvt : (w t) ^ (1 - α) = E t := by
+        show (w t) ^ (1 - α) = u₀ ^ (1 - α) + (1 - α) * t
+        linarith [hFTC]
+      calc w t = ((w t) ^ (1 - α)) ^ (1 / (1 - α)) := by
+            rw [← Real.rpow_mul hwt.le,
+              show (1 - α) * (1 / (1 - α)) = (1:ℝ) by field_simp, Real.rpow_one]
+        _ = F t := by rw [hvt]
+    -- continuity forces w t₁ = F t₁
+    have hwt₁ : w t₁ = F t₁ := by
+      have h1 : Filter.Tendsto w (nhdsWithin t₁ (Set.Iio t₁)) (nhds (w t₁)) :=
+        (hwcont.continuousAt (x := t₁)).mono_left nhdsWithin_le_nhds
+      have h2 : Filter.Tendsto F (nhdsWithin t₁ (Set.Iio t₁)) (nhds (F t₁)) :=
+        (hFcont.continuousAt (x := t₁)).mono_left nhdsWithin_le_nhds
+      have hev : w =ᶠ[nhdsWithin t₁ (Set.Iio t₁)] F := by
+        filter_upwards [self_mem_nhdsWithin,
+          mem_nhdsWithin_of_mem_nhds (Ioi_mem_nhds (half_lt_self ht₁pos))] with s hs hs2
+        exact hform s ⟨(half_pos ht₁pos).le.trans (le_of_lt hs2), hs⟩
+      have h2' : Filter.Tendsto w (nhdsWithin t₁ (Set.Iio t₁)) (nhds (F t₁)) := h2.congr' hev.symm
+      exact tendsto_nhds_unique h1 h2'
+    -- but F t₁ ∈ (0, q), contradiction
+    have hFin : F t₁ ∈ Set.Ioo 0 q := by
+      constructor
+      · exact Real.rpow_pos_of_pos (hEpos t₁ ht₁Icc.1) _
+      · have h2 : (q ^ (1 - α)) ^ (1 / (1 - α)) = q := by
+          rw [← Real.rpow_mul hq.le,
+            show (1 - α) * (1 / (1 - α)) = (1:ℝ) by field_simp, Real.rpow_one]
+        calc F t₁ ≤ F T :=
+            Real.rpow_le_rpow (hEpos t₁ ht₁Icc.1).le (hEmono ht₁Icc.2)
+              (one_div_pos.mpr hα').le
+          _ < (q ^ (1 - α)) ^ (1 / (1 - α)) :=
+              Real.rpow_lt_rpow (hEpos T hT.le).le hTq (one_div_pos.mpr hα')
+          _ = q := h2
+    exact ht₁bad (hwt₁ ▸ hFin)
+  -- Step 2: the formula holds on all of `[0, T]`.
+  intro t ht
+  have hgood : ∀ s ∈ Set.Icc 0 t, w s ∈ Set.Ioo 0 q :=
+    fun s hs ↦ hmain s ⟨hs.1, hs.2.trans ht.2⟩
+  have hvderiv : ∀ s ∈ Set.Ioo 0 t,
+      HasDerivWithinAt (fun u ↦ (w u) ^ (1 - α)) (1 - α) (Set.Ioi s) s := by
+    intro s hs
+    have hsT : s ∈ Set.Icc 0 T := ⟨hs.1.le, hs.2.le.trans ht.2⟩
+    have hwg := hgood s ⟨hs.1.le, hs.2.le⟩
+    have hws : 0 < w s := hwg.1
+    have hw' := (hwsol s hsT hwg).hasDerivAt
+      (Icc_mem_nhds (by linarith [hs.1]) (by linarith [hs.2, ht.2, hT]))
+    have hv : HasDerivAt (fun u ↦ (w u) ^ (1 - α))
+        ((w s) ^ α * (1 - α) * (w s) ^ (1 - α - 1)) s := by
+      have hv0 := hw'.rpow_const (p := 1 - α) (Or.inl hws.ne')
+      rwa [abs_of_pos hws] at hv0
+    have h1 : (w s) ^ α * (w s) ^ (1 - α - 1) = 1 := by
+      rw [← Real.rpow_add hws, show α + (1 - α - 1) = (0:ℝ) by ring,
+        Real.rpow_zero]
+    have hderiv_eq : (w s) ^ α * (1 - α) * (w s) ^ (1 - α - 1) = 1 - α := by
+      calc (w s) ^ α * (1 - α) * (w s) ^ (1 - α - 1)
+          = ((w s) ^ α * (w s) ^ (1 - α - 1)) * (1 - α) := by ring
+        _ = 1 * (1 - α) := by rw [h1]
+        _ = 1 - α := by ring
+    rw [hderiv_eq] at hv
+    exact hv.hasDerivWithinAt
+  have hint : IntervalIntegrable (fun _ : ℝ ↦ (1 - α)) MeasureTheory.volume 0 t :=
+    intervalIntegrable_const
+  have hcont : ContinuousOn (fun u ↦ (w u) ^ (1 - α)) (Set.uIcc 0 t) := by
+    rw [Set.uIcc_of_le ht.1]
+    exact hv_cont t
+  have hFTC := intervalIntegral.integral_eq_sub_of_hasDeriv_right hcont
+    (by rw [min_eq_left ht.1, max_eq_right ht.1]; exact hvderiv) hint
+  rw [intervalIntegral.integral_const, sub_zero, smul_eq_mul] at hFTC
+  have hwt : 0 < w t := (hgood t ⟨ht.1, le_rfl⟩).1
+  have hv0 : (w 0) ^ (1 - α) = u₀ ^ (1 - α) := by rw [hw0]
+  rw [hv0] at hFTC
+  have hvt : (w t) ^ (1 - α) = E t := by
+    show (w t) ^ (1 - α) = u₀ ^ (1 - α) + (1 - α) * t
+    linarith [hFTC]
+  calc w t = ((w t) ^ (1 - α)) ^ (1 / (1 - α)) := by
+        rw [← Real.rpow_mul hwt.le,
+          show (1 - α) * (1 / (1 - α)) = (1:ℝ) by field_simp, Real.rpow_one]
+    _ = F t := by rw [hvt]
+    _ = (u₀ ^ (1 - α) + (1 - α) * t) ^ (1 / (1 - α)) := rfl
+
+/-- The counterexample field for part (d): autonomous, `y ↦ sign y * |y|^α`. -/
+noncomputable def apm_m93j06_powField (α : ℝ) : ℝ → ℝ → ℝ :=
+  fun _ y ↦ Real.sign y * |y| ^ α
+
+lemma apm_m93j06_powField_continuous {α : ℝ} (hα : 0 < α) :
+    Continuous (Function.uncurry (apm_m93j06_powField α)) := by
+  have hr : Continuous fun y : ℝ ↦ |y| ^ α :=
+    (Real.continuous_rpow_const hα.le).comp continuous_abs
+  rw [continuous_iff_continuousAt]
+  rintro ⟨t₀, y₀⟩
+  by_cases hy0 : y₀ = 0
+  · -- squeeze at the origin
+    subst hy0
+    have hlim : Filter.Tendsto (fun p : ℝ × ℝ ↦ |p.2| ^ α) (nhds (t₀, 0)) (nhds 0) := by
+      have h' : Filter.Tendsto (fun x : ℝ ↦ x ^ α) (nhds 0) (nhds ((0:ℝ)^α)) :=
+        (Real.continuous_rpow_const hα.le).continuousAt
+      rw [Real.zero_rpow hα.ne'] at h'
+      have habs : Filter.Tendsto (fun p : ℝ × ℝ ↦ |p.2|) (nhds (t₀, 0))
+          (nhds |(0:ℝ)|) :=
+        continuous_abs.continuousAt.comp continuous_snd.continuousAt
+      rw [abs_zero] at habs
+      exact h'.comp habs
+    have h0 : apm_m93j06_powField α t₀ 0 = 0 := by
+      dsimp [apm_m93j06_powField]
+      rw [Real.sign_zero, zero_mul]
+    have hsq : Filter.Tendsto (fun p : ℝ × ℝ ↦
+        |Function.uncurry (apm_m93j06_powField α) p|) (nhds (t₀, 0)) (nhds 0) := by
+      apply squeeze_zero (g := fun p : ℝ × ℝ ↦ |p.2| ^ α)
+      · exact fun p ↦ abs_nonneg _
+      · intro p
+        dsimp [Function.uncurry, apm_m93j06_powField]
+        rw [abs_mul, abs_of_nonneg (Real.rpow_nonneg (abs_nonneg _) _)]
+        have hs : |Real.sign p.2| ≤ 1 := by
+          rcases Real.sign_apply_eq p.2 with h | h | h <;> rw [h] <;> norm_num
+        calc |Real.sign p.2| * |p.2| ^ α ≤ 1 * |p.2| ^ α :=
+              mul_le_mul_of_nonneg_right hs (Real.rpow_nonneg (abs_nonneg _) _)
+          _ = |p.2| ^ α := one_mul _
+      · exact hlim
+    show Filter.Tendsto (Function.uncurry (apm_m93j06_powField α)) (nhds (t₀, 0))
+      (nhds (apm_m93j06_powField α t₀ 0))
+    rw [h0]
+    exact tendsto_zero_iff_norm_tendsto_zero.mpr
+      (by simpa [Real.norm_eq_abs] using hsq)
+  · rcases lt_or_gt_of_ne hy0 with hneg | hpos
+    · have hev : Function.uncurry (apm_m93j06_powField α) =ᶠ[nhds (t₀, y₀)]
+          fun p : ℝ × ℝ ↦ -(|p.2| ^ α) := by
+        filter_upwards [prod_mem_nhds Filter.univ_mem (Iio_mem_nhds hneg)] with p hp
+        dsimp [Function.uncurry, apm_m93j06_powField]
+        rw [Real.sign_of_neg (Set.mem_Iio.mp hp.2), neg_mul, one_mul]
+      have hcont : ContinuousAt (fun p : ℝ × ℝ ↦ -(|p.2| ^ α)) (t₀, y₀) :=
+        (hr.comp continuous_snd).continuousAt.neg
+      exact hcont.congr_of_eventuallyEq hev
+    · have hev : Function.uncurry (apm_m93j06_powField α) =ᶠ[nhds (t₀, y₀)]
+          fun p : ℝ × ℝ ↦ |p.2| ^ α := by
+        filter_upwards [prod_mem_nhds Filter.univ_mem (Ioi_mem_nhds hpos)] with p hp
+        dsimp [Function.uncurry, apm_m93j06_powField]
+        rw [Real.sign_of_pos (Set.mem_Ioi.mp hp.2), one_mul]
+      have hcont : ContinuousAt (fun p : ℝ × ℝ ↦ |p.2| ^ α) (t₀, y₀) :=
+        (hr.comp continuous_snd).continuousAt
+      exact hcont.congr_of_eventuallyEq hev
+
+/-- Subadditivity consequence: `a^α - b^α ≤ (a - b)^α` for `0 ≤ b ≤ a`. -/
+lemma apm_m93j06_rpow_sub_le {α a b : ℝ} (hα : 0 ≤ α) (hα1 : α ≤ 1)
+    (hb : 0 ≤ b) (hba : b ≤ a) : a ^ α - b ^ α ≤ (a - b) ^ α := by
+  have h := Real.rpow_add_le_add_rpow hb (sub_nonneg.mpr hba) hα hα1
+  rw [show b + (a - b) = a by ring] at h
+  linarith
+
+lemma apm_m93j06_abs_rpow_sub_rpow_le {α x y : ℝ} (hα : 0 ≤ α) (hα1 : α ≤ 1)
+    (hx : 0 ≤ x) (hy : 0 ≤ y) : |x ^ α - y ^ α| ≤ |x - y| ^ α := by
+  rcases le_total y x with h | h
+  · rw [abs_of_nonneg (sub_nonneg.mpr (Real.rpow_le_rpow hy h hα)),
+      abs_of_nonneg (sub_nonneg.mpr h)]
+    exact apm_m93j06_rpow_sub_le hα hα1 hy h
+  · rw [abs_of_nonpos (sub_nonpos.mpr (Real.rpow_le_rpow hx h hα)),
+      abs_of_nonpos (sub_nonpos.mpr h), neg_sub, neg_sub]
+    exact apm_m93j06_rpow_sub_le hα hα1 hx h
+
+/-- The counterexample field is `2`-Hölder with exponent `α` in the state
+variable. -/
+lemma apm_m93j06_powField_holder {α : ℝ} (hα : 0 < α) (hα1 : α < 1) :
+    ∀ t a b, |apm_m93j06_powField α t a - apm_m93j06_powField α t b| ≤
+      2 * |a - b| ^ α := by
+  have hp_nn : ∀ y : ℝ, 0 ≤ y → Real.sign y * |y| ^ α = |y| ^ α := by
+    intro y hy
+    rcases hy.eq_or_lt with h | h
+    · rw [← h, Real.sign_zero, abs_zero, Real.zero_rpow hα.ne', mul_zero]
+    · rw [Real.sign_of_pos h, one_mul]
+  have hp_np : ∀ y : ℝ, y ≤ 0 → Real.sign y * |y| ^ α = -|y| ^ α := by
+    intro y hy
+    rcases hy.eq_or_lt with h | h
+    · rw [h, Real.sign_zero, abs_zero, Real.zero_rpow hα.ne', mul_zero, neg_zero]
+    · rw [Real.sign_of_neg h, neg_mul, one_mul]
+  have hnn : ∀ {x y : ℝ}, 0 ≤ x → 0 ≤ y → |x ^ α - y ^ α| ≤ |x - y| ^ α :=
+    fun hx hy ↦ apm_m93j06_abs_rpow_sub_rpow_le hα.le hα1.le hx hy
+  have htwice : ∀ {x y u : ℝ}, 0 ≤ x → 0 ≤ y → |x - y| ≤ u →
+      |x ^ α - y ^ α| ≤ 2 * u ^ α := by
+    intro x y u hx hy hu
+    have h1 := hnn hx hy
+    have h2 : |x - y| ^ α ≤ u ^ α :=
+      Real.rpow_le_rpow (abs_nonneg _) hu hα.le
+    have h3 : 0 ≤ u ^ α := Real.rpow_nonneg ((abs_nonneg _).trans hu) _
+    linarith [h1.trans h2]
+  intro t a b
+  dsimp only [apm_m93j06_powField]
+  rcases le_total 0 a with ha | ha <;> rcases le_total 0 b with hb | hb
+  · rw [hp_nn a ha, hp_nn b hb]
+    exact htwice (abs_nonneg a) (abs_nonneg b) (abs_abs_sub_abs_le_abs_sub a b)
+  · rw [hp_nn a ha, hp_np b hb, sub_neg_eq_add,
+      abs_of_nonneg (add_nonneg (Real.rpow_nonneg (abs_nonneg a) _)
+        (Real.rpow_nonneg (abs_nonneg b) _))]
+    have hba' : b ≤ a := hb.trans ha
+    have hab : |a| ≤ |a - b| := by
+      rw [abs_of_nonneg (sub_nonneg.mpr hba'), abs_of_nonneg ha]
+      linarith
+    have hab2 : |b| ≤ |a - b| := by
+      rw [abs_of_nonneg (sub_nonneg.mpr hba'), abs_of_nonpos hb]
+      linarith
+    have h1 : |a| ^ α ≤ |a - b| ^ α :=
+      Real.rpow_le_rpow (abs_nonneg a) hab hα.le
+    have h2 : |b| ^ α ≤ |a - b| ^ α :=
+      Real.rpow_le_rpow (abs_nonneg b) hab2 hα.le
+    linarith
+  · rw [hp_np a ha, hp_nn b hb,
+      show -(|a| ^ α) - |b| ^ α = -(|a| ^ α + |b| ^ α) by ring, abs_neg,
+      abs_of_nonneg (add_nonneg (Real.rpow_nonneg (abs_nonneg a) _)
+        (Real.rpow_nonneg (abs_nonneg b) _))]
+    have hab' : a ≤ b := ha.trans hb
+    have hab : |a| ≤ |a - b| := by
+      rw [abs_of_nonpos (sub_nonpos.mpr hab'), abs_of_nonpos ha]
+      linarith
+    have hab2 : |b| ≤ |a - b| := by
+      rw [abs_of_nonpos (sub_nonpos.mpr hab'), abs_of_nonneg hb]
+      linarith
+    have h1 : |b| ^ α ≤ |a - b| ^ α :=
+      Real.rpow_le_rpow (abs_nonneg b) hab2 hα.le
+    have h2 : |a| ^ α ≤ |a - b| ^ α :=
+      Real.rpow_le_rpow (abs_nonneg a) hab hα.le
+    linarith
+  · rw [hp_np a ha, hp_np b hb,
+      show -(|a| ^ α) - -(|b| ^ α) = |b| ^ α - |a| ^ α by ring]
+    exact htwice (abs_nonneg b) (abs_nonneg a) (by
+      have h := abs_abs_sub_abs_le_abs_sub b a
+      rwa [abs_sub_comm b a] at h)
+
+/-- Generic two-sided branching argument: if an autonomous field agrees with
+`sign (y - yc) * |y - yc|^α` on a neighborhood of `yc`, then no selection of
+local solutions of `y' = f(t, y)` can be Hölder-`α` in the initial value at
+arbitrarily small times: solutions starting just above and just below `yc`
+are pinned apart by the explicit formula while their initial distance tends
+to zero. -/
+lemma apm_m93j06_no_holder_flow_of_branch {α : ℝ} (hα : 0 < α) (hα1 : α < 1)
+    {f : ℝ → ℝ → ℝ} {yc q : ℝ} (hq : 0 < q)
+    (hfield : ∀ y ∈ Set.Ioo (yc - q) (yc + q), ∀ t,
+      f t y = Real.sign (y - yc) * |y - yc| ^ α) :
+    ¬ (∃ δ > 0, ∃ r > 0, ∃ Φ : ℝ → ℝ → ℝ,
+        (∀ y₀ ∈ Set.Ioo (yc - r) (yc + r), Φ 0 y₀ = y₀) ∧
+        (∀ y₀ ∈ Set.Ioo (yc - r) (yc + r), ∀ t ∈ Set.Icc (-δ) δ,
+          HasDerivAt (fun s ↦ Φ s y₀) (f t (Φ t y₀)) t) ∧
+        (∀ t ∈ Set.Icc (-δ) δ, ∃ K > 0,
+          ∀ a ∈ Set.Ioo (yc - r) (yc + r), ∀ b ∈ Set.Ioo (yc - r) (yc + r),
+          |Φ t a - Φ t b| ≤ K * |a - b| ^ α)) := by
+  rintro ⟨δ, hδ, r, hr, Φ, hΦ0, hΦder, hΦh⟩
+  have hα' : (0:ℝ) < 1 - α := by linarith
+  -- a positive time, small enough for both the flow window and the box
+  set T := min δ (min 1 ((q / 2) ^ (1 - α) / (1 - α))) with hTdef
+  have hq2 : (0:ℝ) < (q / 2) ^ (1 - α) := Real.rpow_pos_of_pos (by linarith) _
+  have hT : (0:ℝ) < T := by
+    rw [hTdef]; exact lt_min hδ (lt_min one_pos (by positivity))
+  have hTδ : T ≤ δ := by rw [hTdef]; exact min_le_left _ _
+  have hTq : (1 - α) * T ≤ (q / 2) ^ (1 - α) := by
+    have h : T ≤ (q / 2) ^ (1 - α) / (1 - α) := by
+      rw [hTdef]; exact (min_le_right _ _).trans (min_le_right _ _)
+    rw [le_div_iff₀ hα'] at h
+    calc (1 - α) * T = T * (1 - α) := mul_comm _ _
+      _ ≤ (q / 2) ^ (1 - α) := h
+  have hTIcc : T ∈ Set.Icc (-δ) δ := by constructor <;> linarith
+  obtain ⟨K, hK, hKh⟩ := hΦh T hTIcc
+  -- the common pinned value and its positive lower bound
+  set c₀ := ((1 - α) * T) ^ (1 / (1 - α)) with hc₀def
+  have hc₀ : (0:ℝ) < c₀ := Real.rpow_pos_of_pos (by positivity) _
+  -- choose a small positive initial offset
+  set u₁ := (c₀ / (2 * K)) ^ (1 / α) with hu₁def
+  have hu₁ : (0:ℝ) < u₁ := Real.rpow_pos_of_pos (by positivity) _
+  have hu₁K : K * (2 * u₁) ^ α = 2 ^ (α - 1) * c₀ := by
+    have h1 : (2 * u₁) ^ α = (2:ℝ) ^ α * u₁ ^ α :=
+      Real.mul_rpow (by norm_num) hu₁.le
+    have h2 : u₁ ^ α = c₀ / (2 * K) := by
+      rw [hu₁def, ← Real.rpow_mul (by positivity),
+        show (1 / α) * α = (1:ℝ) by field_simp, Real.rpow_one]
+    have h3 : (2:ℝ) ^ α = 2 ^ (α - 1) * 2 := by
+      have e := Real.rpow_add (by norm_num : (0:ℝ) < 2) (α - 1) 1
+      rw [Real.rpow_one, sub_add_cancel] at e
+      exact e
+    rw [h1, h2, h3]
+    field_simp
+  have h2α : (2:ℝ) ^ (α - 1) < 1 := by
+    rw [show (1:ℝ) = 2 ^ (0:ℝ) by simp,
+      Real.rpow_lt_rpow_left_iff (by norm_num : (1:ℝ) < 2)]
+    linarith
+  set u₃ := (q ^ (1 - α) - (q / 2) ^ (1 - α)) ^ (1 / (1 - α)) with hu₃def
+  have hu₃base : (0:ℝ) < q ^ (1 - α) - (q / 2) ^ (1 - α) := by
+    have h := Real.rpow_lt_rpow (show (0:ℝ) ≤ q / 2 by linarith)
+      (show q / 2 < q by linarith) hα'
+    linarith
+  have hu₃ : (0:ℝ) < u₃ := Real.rpow_pos_of_pos hu₃base _
+  set u₀ := min (q / 2) (min (r / 2) (min u₁ u₃)) / 2 with hu₀def
+  have hu₀ : (0:ℝ) < u₀ := by positivity
+  have hu₀q : u₀ < q := by
+    have h1 : min (q / 2) (min (r / 2) (min u₁ u₃)) ≤ q / 2 := min_le_left _ _
+    have : u₀ ≤ q / 4 := by linarith
+    linarith
+  have hu₀₁ : u₀ < u₁ := by
+    have h1 : min (q / 2) (min (r / 2) (min u₁ u₃)) ≤ u₁ :=
+      (min_le_right _ _).trans ((min_le_right _ _).trans (min_le_left _ _))
+    have : u₀ ≤ u₁ / 2 := by linarith
+    linarith
+  have hu₀₃ : u₀ < u₃ := by
+    have h1 : min (q / 2) (min (r / 2) (min u₁ u₃)) ≤ u₃ :=
+      (min_le_right _ _).trans ((min_le_right _ _).trans (min_le_right _ _))
+    have : u₀ ≤ u₃ / 2 := by linarith
+    linarith
+  have hu₀Tq : u₀ ^ (1 - α) + (1 - α) * T < q ^ (1 - α) := by
+    have h1 : u₀ ^ (1 - α) < u₃ ^ (1 - α) := Real.rpow_lt_rpow hu₀.le hu₀₃ hα'
+    have h2 : u₃ ^ (1 - α) = q ^ (1 - α) - (q / 2) ^ (1 - α) := by
+      rw [hu₃def, ← Real.rpow_mul hu₃base.le,
+        show (1 / (1 - α)) * (1 - α) = (1:ℝ) by field_simp, Real.rpow_one]
+    linarith
+  have hu₀r : u₀ < r := by
+    have h1 : min (q / 2) (min (r / 2) (min u₁ u₃)) ≤ r / 2 :=
+      (min_le_right _ _).trans (min_le_left _ _)
+    have : u₀ ≤ r / 4 := by linarith
+    linarith
+  have hstart : ∀ σ : ℝ, σ = 1 ∨ σ = -1 →
+      yc + σ * u₀ ∈ Set.Ioo (yc - r) (yc + r) := by
+    intro σ hσ
+    rcases hσ with rfl | rfl <;> constructor <;> norm_num <;> linarith
+  -- pinning: the selected solutions from `yc ± u₀` take explicit values at `T`
+  have hpin : ∀ σ : ℝ, σ = 1 ∨ σ = -1 →
+      Φ T (yc + σ * u₀) =
+        yc + σ * (u₀ ^ (1 - α) + (1 - α) * T) ^ (1 / (1 - α)) := by
+    intro σ hσ
+    have hσsq : σ * σ = 1 := by rcases hσ with rfl | rfl <;> norm_num
+    have hσabs : |σ| = 1 := by rcases hσ with rfl | rfl <;> simp
+    set w : ℝ → ℝ := fun t ↦ σ * (Φ t (yc + σ * u₀) - yc) with hwdef
+    have hwΦ : ∀ t, Φ t (yc + σ * u₀) = yc + σ * w t := by
+      intro t
+      have hw : w t = σ * (Φ t (yc + σ * u₀) - yc) := rfl
+      have h : σ * w t = Φ t (yc + σ * u₀) - yc := by
+        rw [hw, ← mul_assoc, hσsq, one_mul]
+      rw [h]; ring
+    have hw0 : w 0 = u₀ := by
+      have hw : w 0 = σ * (Φ 0 (yc + σ * u₀) - yc) := rfl
+      rw [hw, hΦ0 _ (hstart σ hσ)]
+      rcases hσ with rfl | rfl <;> simp
+    -- continuity of `w` on `[0, T]`, extended constantly outside
+    have hwconson : ContinuousOn w (Set.Icc 0 T) := by
+      apply ContinuousOn.const_mul
+      apply ContinuousOn.sub _ continuousOn_const
+      intro t ht
+      exact (hΦder _ (hstart σ hσ) t ⟨by linarith [ht.1], by linarith [ht.2, hTδ]⟩
+        ).continuousAt.continuousWithinAt
+    set cl : ℝ → ℝ := fun t ↦ min (max t 0) T with hcldef
+    have hclcont : Continuous cl := by fun_prop
+    have hclmaps : ∀ t, cl t ∈ Set.Icc 0 T := by
+      intro t
+      exact ⟨le_min (le_max_right _ _) hT.le, min_le_right _ _⟩
+    have hclid : ∀ t ∈ Set.Icc 0 T, cl t = t := by
+      intro t ht
+      show min (max t 0) T = t
+      rw [max_eq_left ht.1, min_eq_left ht.2]
+    set wcl : ℝ → ℝ := w ∘ cl with hwcldef
+    have hwclcont : Continuous wcl :=
+      continuousOn_univ.mp
+        (hwconson.comp hclcont.continuousOn (fun t _ ↦ hclmaps t))
+    have hwcl0 : wcl 0 = u₀ := by
+      have h0 : cl 0 = 0 := hclid 0 ⟨le_rfl, hT.le⟩
+      rw [hwcldef, Function.comp_apply, h0, hw0]
+    have hwclsol : ∀ t ∈ Set.Icc 0 T, wcl t ∈ Set.Ioo 0 q →
+        HasDerivWithinAt wcl (|wcl t| ^ α) (Set.Icc 0 T) t := by
+      intro t ht hmem
+      have hclt : cl t = t := hclid t ht
+      have hwt : w t ∈ Set.Ioo 0 q := by
+        have hwe : wcl t = w t := by rw [hwcldef, Function.comp_apply, hclt]
+        rwa [← hwe]
+      have hmem' : yc + σ * w t ∈ Set.Ioo (yc - q) (yc + q) := by
+        rcases hσ with rfl | rfl
+        · simp only [one_mul]
+          exact ⟨by linarith [hwt.1], by linarith [hwt.2]⟩
+        · simp only [neg_mul, one_mul]
+          exact ⟨by linarith [hwt.2], by linarith [hwt.1]⟩
+      have hval : f t (Φ t (yc + σ * u₀)) = σ * |w t| ^ α := by
+        rw [hwΦ t, hfield _ hmem' t,
+          show yc + σ * w t - yc = σ * w t by ring]
+        have hsign : Real.sign (σ * w t) = σ := by
+          rcases hσ with rfl | rfl
+          · simp [Real.sign_of_pos hwt.1]
+          · rw [show (-1:ℝ) * w t = -(w t) by ring, Real.sign_neg,
+              Real.sign_of_pos hwt.1]
+        rw [hsign, abs_mul, hσabs, one_mul, abs_of_pos hwt.1]
+      have hder : HasDerivAt w (|w t| ^ α) t := by
+        have hbase := hΦder (yc + σ * u₀) (hstart σ hσ) t
+          ⟨by linarith [ht.1], by linarith [ht.2, hTδ]⟩
+        have hw' : HasDerivAt w (σ * f t (Φ t (yc + σ * u₀))) t :=
+          (hbase.sub_const yc).const_mul σ
+        rw [hval, show σ * (σ * |w t| ^ α) = |w t| ^ α by
+          rw [← mul_assoc, hσsq, one_mul]] at hw'
+        exact hw'
+      have hval' : |wcl t| ^ α = |w t| ^ α := by
+        rw [hwcldef, Function.comp_apply, hclt]
+      rw [hval']
+      have hev : wcl =ᶠ[nhdsWithin t (Set.Icc 0 T)] w := by
+        filter_upwards [self_mem_nhdsWithin] with s hs
+        rw [hwcldef, Function.comp_apply, hclid s hs]
+      have hx : wcl t = w t := by rw [hwcldef, Function.comp_apply, hclt]
+      exact hder.hasDerivWithinAt.congr_of_eventuallyEq hev hx
+    have hform := apm_m93j06_powField_formula hα hα1 hq hu₀ hu₀q hT hu₀Tq
+      hwcl0 hwclcont hwclsol T ⟨hT.le, le_rfl⟩
+    have hclT : cl T = T := hclid T ⟨hT.le, le_rfl⟩
+    rw [hwcldef, Function.comp_apply, hclT] at hform
+    rw [hwΦ T, hform]
+  have hp := hpin 1 (Or.inl rfl)
+  have hn := hpin (-1) (Or.inr rfl)
+  -- the two pinned values are separated by `2 * c₀`, but Hölder forces them close
+  have hpT : c₀ ≤ (u₀ ^ (1 - α) + (1 - α) * T) ^ (1 / (1 - α)) := by
+    apply Real.rpow_le_rpow (by positivity) _ (by positivity)
+    have h0 : (0:ℝ) ≤ u₀ ^ (1 - α) := Real.rpow_nonneg hu₀.le _
+    linarith
+  have hsep : 2 * c₀ ≤ |Φ T (yc + 1 * u₀) - Φ T (yc + -1 * u₀)| := by
+    rw [hp, hn,
+      show yc + 1 * (u₀ ^ (1 - α) + (1 - α) * T) ^ (1 / (1 - α))
+          - (yc + -1 * (u₀ ^ (1 - α) + (1 - α) * T) ^ (1 / (1 - α))) =
+          2 * (u₀ ^ (1 - α) + (1 - α) * T) ^ (1 / (1 - α)) by ring,
+      abs_of_nonneg (by positivity : (0:ℝ) ≤
+        2 * (u₀ ^ (1 - α) + (1 - α) * T) ^ (1 / (1 - α)))]
+    linarith [hpT]
+  have hclose : |Φ T (yc + 1 * u₀) - Φ T (yc + -1 * u₀)| ≤ K * (2 * u₀) ^ α := by
+    have h := hKh (yc + 1 * u₀) (hstart 1 (Or.inl rfl))
+      (yc + -1 * u₀) (hstart (-1) (Or.inr rfl))
+    have hdist : |yc + 1 * u₀ - (yc + -1 * u₀)| = 2 * u₀ := by
+      rw [show yc + 1 * u₀ - (yc + -1 * u₀) = 2 * u₀ by ring,
+        abs_of_pos (by linarith : (0:ℝ) < 2 * u₀)]
+    rwa [hdist] at h
+  have hmono : K * (2 * u₀) ^ α ≤ K * (2 * u₁) ^ α :=
+    mul_le_mul_of_nonneg_left
+      (Real.rpow_le_rpow (by positivity) (by linarith [hu₀₁]) hα.le) hK.le
+  rw [hu₁K] at hmono
+  have hlt : (2:ℝ) ^ (α - 1) * c₀ < c₀ := by
+    have h := mul_lt_mul_of_pos_right h2α hc₀
+    rwa [one_mul] at h
+  linarith [hsep, hclose.trans hmono, hlt, hc₀]
+
+/-- A field independent of time and Holder in the state is jointly Holder. -/
+lemma apm_m93j06_joint_holder {f : ℝ → ℝ → ℝ} {α K : ℝ} (hα : 0 < α) (hK : 0 < K)
+    (hf : ∀ t s y, f t y = f s y) (h : ∀ t a b, |f t a - f t b| ≤ K * |a - b| ^ α) :
+    ∀ t s a b, |f t a - f s b| ≤ K * (|t - s| + |a - b|) ^ α := by
+  intro t s a b
+  rw [hf s t b]
+  refine (h t a b).trans (mul_le_mul_of_nonneg_left ?_ hK.le)
+  exact Real.rpow_le_rpow (abs_nonneg _) (by linarith [abs_nonneg (t - s)]) hα.le
+
+/-- **Part (d), repaired.** The printed claim — that Hölder continuity of the
+field with exponent `α < 1` makes the initial-value map Hölder with exponent
+`α` at small times — is false: under that hypothesis uniqueness already
+fails, and in fact no Hölder-`α` selection of solutions exists.  The
+counterexample at `α = 1/2` is `f(t, y) = sign y * |y|^(1/2)`, continuous and
+`2`-Hölder with exponent `1/2`. -/
+theorem apm_m93j06_part_d :
+    ∀ α : ℝ, 0 < α → α < 1 → ∃ f : ℝ → ℝ → ℝ,
+      Continuous (Function.uncurry f) ∧
+      (∃ K > 0, ∀ t s a b, |f t a - f s b| ≤ K * (|t - s| + |a - b|) ^ α) ∧
+      ∃ y₁ : ℝ, ¬ ∃ δ > 0, ∃ r > 0, ∃ Φ : ℝ → ℝ → ℝ,
+          (∀ y₀ ∈ Set.Ioo (y₁ - r) (y₁ + r), Φ 0 y₀ = y₀) ∧
+          (∀ y₀ ∈ Set.Ioo (y₁ - r) (y₁ + r), ∀ t ∈ Set.Icc (-δ) δ,
+            HasDerivAt (fun s ↦ Φ s y₀) (f t (Φ t y₀)) t) ∧
+          (∀ t ∈ Set.Icc (-δ) δ, ∃ K > 0,
+            ∀ a ∈ Set.Ioo (y₁ - r) (y₁ + r),
+            ∀ b ∈ Set.Ioo (y₁ - r) (y₁ + r),
+            |Φ t a - Φ t b| ≤ K * |a - b| ^ α) := by
+  intro α hα hα1
+  refine ⟨apm_m93j06_powField α, apm_m93j06_powField_continuous hα,
+    ⟨2, by norm_num, apm_m93j06_joint_holder hα (by norm_num) (fun _ _ _ ↦ rfl)
+      (apm_m93j06_powField_holder hα hα1)⟩, 0, ?_⟩
+  exact apm_m93j06_no_holder_flow_of_branch hα hα1 one_pos
+    (fun y _ t ↦ by simp [apm_m93j06_powField])
+
+/-- `y ↦ min y 1` is `1`-Lipschitz. -/
+lemma apm_m93j06_min_one_lipschitz (a b : ℝ) :
+    |min a 1 - min b 1| ≤ |a - b| := by
+  rcases le_total a 1 with ha | ha <;> rcases le_total b 1 with hb | hb
+  · rw [min_eq_left ha, min_eq_left hb]
+  · rw [min_eq_left ha, min_eq_right hb,
+      abs_of_nonpos (by linarith : a - 1 ≤ 0),
+      abs_of_nonpos (by linarith : a - b ≤ 0)]
+    linarith
+  · rw [min_eq_right ha, min_eq_left hb,
+      abs_of_nonneg (by linarith : (0:ℝ) ≤ 1 - b),
+      abs_of_nonneg (by linarith : (0:ℝ) ≤ a - b)]
+    linarith
+  · rw [min_eq_right ha, min_eq_right hb, sub_self, abs_zero]
+    positivity
+
+/-- Localization bump for the part (e) counterexample: equals `1` on
+`(1/2, 3/2)`, vanishes at `0`, bounded by `1` and by `2|y|`. -/
+noncomputable def apm_m93j06_bump (y : ℝ) : ℝ :=
+  min (2 * |y|) 1 * min (2 * |2 - y|) 1
+
+lemma apm_m93j06_bump_nonneg (y : ℝ) : 0 ≤ apm_m93j06_bump y :=
+  mul_nonneg (le_min (by positivity) zero_le_one) (le_min (by positivity) zero_le_one)
+
+lemma apm_m93j06_bump_le_one (y : ℝ) : apm_m93j06_bump y ≤ 1 := by
+  have h : min (2 * |y|) 1 * min (2 * |2 - y|) 1 ≤ 1 * 1 :=
+    mul_le_mul (min_le_right _ _) (min_le_right _ _)
+      (le_min (by positivity) zero_le_one) zero_le_one
+  rwa [one_mul] at h
+
+lemma apm_m93j06_bump_le (y : ℝ) : apm_m93j06_bump y ≤ 2 * |y| := by
+  have h : min (2 * |y|) 1 * min (2 * |2 - y|) 1 ≤ (2 * |y|) * 1 :=
+    mul_le_mul (min_le_left _ _) (min_le_right _ _)
+      (le_min (by positivity) zero_le_one) (by positivity)
+  rwa [mul_one] at h
+
+lemma apm_m93j06_bump_lipschitz (a b : ℝ) :
+    |apm_m93j06_bump a - apm_m93j06_bump b| ≤ 4 * |a - b| := by
+  have hf : ∀ u v : ℝ, |min (2 * |u|) 1 - min (2 * |v|) 1| ≤ 2 * |u - v| := by
+    intro u v
+    calc |min (2 * |u|) 1 - min (2 * |v|) 1|
+        ≤ |(2 * |u| - 2 * |v|)| := apm_m93j06_min_one_lipschitz _ _
+      _ = 2 * |(|u| - |v|)| := by
+          rw [← mul_sub, abs_mul, abs_of_pos (by norm_num : (0:ℝ) < 2)]
+      _ ≤ 2 * |u - v| :=
+          mul_le_mul_of_nonneg_left (abs_abs_sub_abs_le_abs_sub _ _) (by norm_num)
+  have hg : ∀ u v : ℝ, |min (2 * |2 - u|) 1 - min (2 * |2 - v|) 1| ≤
+      2 * |u - v| := by
+    intro u v
+    calc |min (2 * |2 - u|) 1 - min (2 * |2 - v|) 1|
+        ≤ |(2 * |2 - u| - 2 * |2 - v|)| := apm_m93j06_min_one_lipschitz _ _
+      _ = 2 * |(|2 - u| - |2 - v|)| := by
+          rw [← mul_sub, abs_mul, abs_of_pos (by norm_num : (0:ℝ) < 2)]
+      _ ≤ 2 * |(2 - u) - (2 - v)| :=
+          mul_le_mul_of_nonneg_left (abs_abs_sub_abs_le_abs_sub _ _) (by norm_num)
+      _ = 2 * |u - v| := by
+          rw [show (2 - u) - (2 - v) = v - u by ring, abs_sub_comm]
+  have hb1 : ∀ u : ℝ, 0 ≤ min (2 * |u|) 1 := fun u ↦ le_min (by positivity) zero_le_one
+  have hc1 : ∀ u : ℝ, 0 ≤ min (2 * |2 - u|) 1 :=
+    fun u ↦ le_min (by positivity) zero_le_one
+  calc |apm_m93j06_bump a - apm_m93j06_bump b|
+      = |min (2 * |a|) 1 * (min (2 * |2 - a|) 1 - min (2 * |2 - b|) 1)
+          + min (2 * |2 - b|) 1 * (min (2 * |a|) 1 - min (2 * |b|) 1)| := by
+        unfold apm_m93j06_bump
+        congr 1
+        ring
+    _ ≤ |min (2 * |a|) 1| * |min (2 * |2 - a|) 1 - min (2 * |2 - b|) 1|
+          + |min (2 * |2 - b|) 1| * |min (2 * |a|) 1 - min (2 * |b|) 1| := by
+        rw [← abs_mul, ← abs_mul]; exact abs_add_le _ _
+    _ ≤ 1 * (2 * |a - b|) + 1 * (2 * |a - b|) := by
+        have e1 : |min (2 * |a|) 1| ≤ 1 := by
+          rw [abs_of_nonneg (hb1 a)]; exact min_le_right _ _
+        have e2 : |min (2 * |2 - b|) 1| ≤ 1 := by
+          rw [abs_of_nonneg (hc1 b)]; exact min_le_right _ _
+        exact add_le_add (mul_le_mul e1 (hg a b) (abs_nonneg _) zero_le_one)
+          (mul_le_mul e2 (hf a b) (abs_nonneg _) zero_le_one)
+    _ = 4 * |a - b| := by ring
+
+/-- The truncated signed-power core of the part (e) counterexample. -/
+noncomputable def apm_m93j06_truncPow (α : ℝ) (y : ℝ) : ℝ :=
+  Real.sign (y - 1) * min (|y - 1| ^ α) 1
+
+lemma apm_m93j06_truncPow_continuous {α : ℝ} (hα : 0 < α) :
+    Continuous (apm_m93j06_truncPow α) := by
+  have hr : Continuous fun y : ℝ ↦ |y - 1| ^ α :=
+    (Real.continuous_rpow_const hα.le).comp
+      (continuous_abs.comp (continuous_id.sub continuous_const))
+  have hm : Continuous fun y : ℝ ↦ min (|y - 1| ^ α) 1 := hr.min continuous_const
+  rw [continuous_iff_continuousAt]
+  intro y₀
+  by_cases hy0 : y₀ = 1
+  · subst hy0
+    have hlim : Filter.Tendsto (fun y : ℝ ↦ |y - 1| ^ α) (nhds 1) (nhds 0) := by
+      have h' : Filter.Tendsto (fun x : ℝ ↦ x ^ α) (nhds 0) (nhds ((0:ℝ) ^ α)) :=
+        (Real.continuous_rpow_const hα.le).continuousAt
+      rw [Real.zero_rpow hα.ne'] at h'
+      have habs : Filter.Tendsto (fun y : ℝ ↦ |y - 1|) (nhds 1)
+          (nhds |(1:ℝ) - 1|) :=
+        (continuous_abs.comp (continuous_id.sub continuous_const)).continuousAt
+      rw [sub_self, abs_zero] at habs
+      exact h'.comp habs
+    have h0 : apm_m93j06_truncPow α 1 = 0 := by
+      dsimp [apm_m93j06_truncPow]
+      rw [sub_self, Real.sign_zero, zero_mul]
+    have hsq : Filter.Tendsto (fun y : ℝ ↦ |apm_m93j06_truncPow α y|)
+        (nhds 1) (nhds 0) := by
+      apply squeeze_zero (g := fun y : ℝ ↦ |y - 1| ^ α)
+      · exact fun y ↦ abs_nonneg _
+      · intro y
+        dsimp [apm_m93j06_truncPow]
+        rw [abs_mul]
+        have hs : |Real.sign (y - 1)| ≤ 1 := by
+          rcases Real.sign_apply_eq (y - 1) with h | h | h <;> rw [h] <;> norm_num
+        have hmin : (0:ℝ) ≤ min (|y - 1| ^ α) 1 :=
+          le_min (Real.rpow_nonneg (abs_nonneg _) _) zero_le_one
+        rw [abs_of_nonneg hmin]
+        calc |Real.sign (y - 1)| * min (|y - 1| ^ α) 1
+            ≤ 1 * min (|y - 1| ^ α) 1 := mul_le_mul_of_nonneg_right hs hmin
+          _ = min (|y - 1| ^ α) 1 := one_mul _
+          _ ≤ |y - 1| ^ α := min_le_left _ _
+      · exact hlim
+    show Filter.Tendsto (apm_m93j06_truncPow α) (nhds 1)
+      (nhds (apm_m93j06_truncPow α 1))
+    rw [h0]
+    exact tendsto_zero_iff_norm_tendsto_zero.mpr
+      (by simpa [Real.norm_eq_abs] using hsq)
+  · rcases lt_or_gt_of_ne hy0 with hneg | hpos
+    · have hev : apm_m93j06_truncPow α =ᶠ[nhds y₀]
+          fun y : ℝ ↦ -(min (|y - 1| ^ α) 1) := by
+        filter_upwards [Iio_mem_nhds hneg] with y hy
+        dsimp [apm_m93j06_truncPow]
+        rw [Real.sign_of_neg (by linarith [Set.mem_Iio.mp hy] : y - 1 < 0),
+          neg_mul, one_mul]
+      exact (hm.continuousAt.neg).congr_of_eventuallyEq hev
+    · have hev : apm_m93j06_truncPow α =ᶠ[nhds y₀]
+          fun y : ℝ ↦ min (|y - 1| ^ α) 1 := by
+        filter_upwards [Ioi_mem_nhds hpos] with y hy
+        dsimp [apm_m93j06_truncPow]
+        rw [Real.sign_of_pos (by linarith [Set.mem_Ioi.mp hy] : (0:ℝ) < y - 1),
+          one_mul]
+      exact hm.continuousAt.congr_of_eventuallyEq hev
+
+lemma apm_m93j06_truncPow_abs_le (α : ℝ) (y : ℝ) :
+    |apm_m93j06_truncPow α y| ≤ 1 := by
+  dsimp [apm_m93j06_truncPow]
+  rw [abs_mul]
+  have hs : |Real.sign (y - 1)| ≤ 1 := by
+    rcases Real.sign_apply_eq (y - 1) with h | h | h <;> rw [h] <;> norm_num
+  have hmin : (0:ℝ) ≤ min (|y - 1| ^ α) 1 :=
+    le_min (Real.rpow_nonneg (abs_nonneg _) _) zero_le_one
+  rw [abs_of_nonneg hmin]
+  calc |Real.sign (y - 1)| * min (|y - 1| ^ α) 1
+      ≤ 1 * min (|y - 1| ^ α) 1 := mul_le_mul_of_nonneg_right hs hmin
+    _ = min (|y - 1| ^ α) 1 := one_mul _
+    _ ≤ 1 := min_le_right _ _
+
+/-- For `0 ≤ x ≤ 1` and `0 ≤ α ≤ 1`, `x ≤ x ^ α`. -/
+lemma apm_m93j06_le_rpow_of_le_one {α x : ℝ} (hα0 : 0 ≤ α) (hα1 : α ≤ 1)
+    (hx0 : 0 ≤ x) (hx1 : x ≤ 1) : x ≤ x ^ α := by
+  rcases eq_or_ne α 0 with hα | hα
+  · rw [hα, Real.rpow_zero]; exact hx1
+  rcases hx0.eq_or_lt with hx | hx
+  · rw [← hx, Real.zero_rpow hα]
+  have hle : x ^ (1 - α) ≤ 1 := Real.rpow_le_one hx0 hx1 (by linarith)
+  have hmul : x ^ α * x ^ (1 - α) = x := by
+    rw [← Real.rpow_add hx, show α + (1 - α) = (1:ℝ) by ring, Real.rpow_one]
+  calc x = x ^ α * x ^ (1 - α) := hmul.symm
+    _ ≤ x ^ α * 1 := mul_le_mul_of_nonneg_left hle (Real.rpow_nonneg hx0 _)
+    _ = x ^ α := mul_one _
+
+lemma apm_m93j06_truncPow_eq_right {α : ℝ} (hα : 0 < α) {y : ℝ} (hy : 1 ≤ y) :
+    apm_m93j06_truncPow α y = min (|y - 1| ^ α) 1 := by
+  dsimp [apm_m93j06_truncPow]
+  rcases hy.eq_or_lt with h | h
+  · obtain rfl := h
+    rw [sub_self, Real.sign_zero, zero_mul, abs_zero, Real.zero_rpow hα.ne',
+      min_eq_left zero_le_one]
+  · rw [Real.sign_of_pos (by linarith : (0:ℝ) < y - 1), one_mul]
+
+lemma apm_m93j06_truncPow_eq_left {α : ℝ} (hα : 0 < α) {y : ℝ} (hy : y ≤ 1) :
+    apm_m93j06_truncPow α y = -min (|y - 1| ^ α) 1 := by
+  dsimp [apm_m93j06_truncPow]
+  rcases hy.eq_or_lt with h | h
+  · obtain rfl := h
+    rw [sub_self, Real.sign_zero, zero_mul, abs_zero, Real.zero_rpow hα.ne',
+      min_eq_left zero_le_one, neg_zero]
+  · rw [Real.sign_of_neg (by linarith : y - 1 < 0), neg_mul, one_mul]
+
+lemma apm_m93j06_truncPow_holder {α : ℝ} (hα : 0 < α) (hα1 : α < 1) :
+    ∀ a b : ℝ, |apm_m93j06_truncPow α a - apm_m93j06_truncPow α b| ≤
+      2 * |a - b| ^ α := by
+  have hnn : ∀ {x y : ℝ}, 0 ≤ x → 0 ≤ y → |x ^ α - y ^ α| ≤ |x - y| ^ α :=
+    fun hx hy ↦ apm_m93j06_abs_rpow_sub_rpow_le hα.le hα1.le hx hy
+  have hfin : ∀ x : ℝ, |x| ^ α ≤ 2 * |x| ^ α := by
+    intro x; have h := Real.rpow_nonneg (abs_nonneg x) α; linarith
+  intro a b
+  rcases le_total 1 a with ha | ha <;> rcases le_total 1 b with hb | hb
+  · rw [apm_m93j06_truncPow_eq_right hα ha, apm_m93j06_truncPow_eq_right hα hb]
+    calc |min (|a - 1| ^ α) 1 - min (|b - 1| ^ α) 1|
+        ≤ |(|a - 1| ^ α - |b - 1| ^ α)| := apm_m93j06_min_one_lipschitz _ _
+      _ ≤ |(|a - 1| - |b - 1|)| ^ α := hnn (abs_nonneg _) (abs_nonneg _)
+      _ ≤ |a - b| ^ α :=
+          Real.rpow_le_rpow (abs_nonneg _)
+            (show |(|a - 1| - |b - 1|)| ≤ |a - b| from by
+              have h := abs_abs_sub_abs_le_abs_sub (a - 1) (b - 1)
+              rwa [show a - 1 - (b - 1) = a - b by ring] at h) hα.le
+      _ ≤ 2 * |a - b| ^ α := hfin _
+  · rw [apm_m93j06_truncPow_eq_right hα ha, apm_m93j06_truncPow_eq_left hα hb,
+      sub_neg_eq_add,
+      abs_of_nonneg (add_nonneg
+        (le_min (Real.rpow_nonneg (abs_nonneg _) _) zero_le_one)
+        (le_min (Real.rpow_nonneg (abs_nonneg _) _) zero_le_one))]
+    have hab : (0:ℝ) ≤ a - b := by linarith
+    have ha1 : |a - 1| ≤ |a - b| := by
+      rw [abs_of_nonneg hab, abs_of_nonneg (by linarith : (0:ℝ) ≤ a - 1)]
+      linarith
+    have hb1 : |b - 1| ≤ |a - b| := by
+      rw [abs_of_nonneg hab, abs_of_nonpos (by linarith : b - 1 ≤ 0)]
+      linarith
+    calc min (|a - 1| ^ α) 1 + min (|b - 1| ^ α) 1
+        ≤ |a - 1| ^ α + |b - 1| ^ α :=
+          add_le_add (min_le_left _ _) (min_le_left _ _)
+      _ ≤ |a - b| ^ α + |a - b| ^ α :=
+          add_le_add (Real.rpow_le_rpow (abs_nonneg _) ha1 hα.le)
+            (Real.rpow_le_rpow (abs_nonneg _) hb1 hα.le)
+      _ = 2 * |a - b| ^ α := by ring
+  · rw [apm_m93j06_truncPow_eq_left hα ha, apm_m93j06_truncPow_eq_right hα hb,
+      show -min (|a - 1| ^ α) 1 - min (|b - 1| ^ α) 1 =
+        -(min (|a - 1| ^ α) 1 + min (|b - 1| ^ α) 1) by ring, abs_neg,
+      abs_of_nonneg (add_nonneg
+        (le_min (Real.rpow_nonneg (abs_nonneg _) _) zero_le_one)
+        (le_min (Real.rpow_nonneg (abs_nonneg _) _) zero_le_one))]
+    have hab : (0:ℝ) ≤ b - a := by linarith
+    have ha1 : |a - 1| ≤ |a - b| := by
+      rw [abs_sub_comm a b, abs_of_nonneg hab,
+        abs_of_nonpos (by linarith : a - 1 ≤ 0)]
+      linarith
+    have hb1 : |b - 1| ≤ |a - b| := by
+      rw [abs_sub_comm a b, abs_of_nonneg hab,
+        abs_of_nonneg (by linarith : (0:ℝ) ≤ b - 1)]
+      linarith
+    calc min (|a - 1| ^ α) 1 + min (|b - 1| ^ α) 1
+        ≤ |a - 1| ^ α + |b - 1| ^ α :=
+          add_le_add (min_le_left _ _) (min_le_left _ _)
+      _ ≤ |a - b| ^ α + |a - b| ^ α :=
+          add_le_add (Real.rpow_le_rpow (abs_nonneg _) ha1 hα.le)
+            (Real.rpow_le_rpow (abs_nonneg _) hb1 hα.le)
+      _ = 2 * |a - b| ^ α := by ring
+  · rw [apm_m93j06_truncPow_eq_left hα ha, apm_m93j06_truncPow_eq_left hα hb,
+      show -min (|a - 1| ^ α) 1 - -min (|b - 1| ^ α) 1 =
+        min (|b - 1| ^ α) 1 - min (|a - 1| ^ α) 1 by ring]
+    calc |min (|b - 1| ^ α) 1 - min (|a - 1| ^ α) 1|
+        ≤ |(|b - 1| ^ α - |a - 1| ^ α)| := apm_m93j06_min_one_lipschitz _ _
+      _ ≤ |(|b - 1| - |a - 1|)| ^ α := hnn (abs_nonneg _) (abs_nonneg _)
+      _ ≤ |b - a| ^ α :=
+          Real.rpow_le_rpow (abs_nonneg _)
+            (show |(|b - 1| - |a - 1|)| ≤ |b - a| from by
+              have h := abs_abs_sub_abs_le_abs_sub (b - 1) (a - 1)
+              rwa [show b - 1 - (a - 1) = b - a by ring] at h) hα.le
+      _ = |a - b| ^ α := by rw [abs_sub_comm]
+      _ ≤ 2 * |a - b| ^ α := hfin _
+
+/-- The part (e) counterexample field: a truncated copy of the branching
+field at `yc = 1`, forced through the origin so it satisfies the linear
+growth bound. -/
+noncomputable def apm_m93j06_truncField (α : ℝ) : ℝ → ℝ → ℝ :=
+  fun _ y ↦ apm_m93j06_bump y * apm_m93j06_truncPow α y
+
+lemma apm_m93j06_truncField_continuous {α : ℝ} (hα : 0 < α) :
+    Continuous (Function.uncurry (apm_m93j06_truncField α)) := by
+  have hb : Continuous apm_m93j06_bump := by
+    unfold apm_m93j06_bump
+    fun_prop
+  have hprod : Continuous fun y : ℝ ↦
+      apm_m93j06_bump y * apm_m93j06_truncPow α y :=
+    hb.mul (apm_m93j06_truncPow_continuous hα)
+  have heq : Function.uncurry (apm_m93j06_truncField α) =
+      (fun y : ℝ ↦ apm_m93j06_bump y * apm_m93j06_truncPow α y) ∘ Prod.snd := rfl
+  rw [heq]
+  exact hprod.comp continuous_snd
+
+lemma apm_m93j06_truncField_growth (α : ℝ) (t y : ℝ) :
+    |apm_m93j06_truncField α t y| ≤ 2 * |y| := by
+  dsimp [apm_m93j06_truncField]
+  rw [abs_mul, abs_of_nonneg (apm_m93j06_bump_nonneg y)]
+  calc apm_m93j06_bump y * |apm_m93j06_truncPow α y|
+      ≤ (2 * |y|) * 1 :=
+        mul_le_mul (apm_m93j06_bump_le y) (apm_m93j06_truncPow_abs_le α y)
+          (abs_nonneg _) (by positivity)
+    _ = 2 * |y| := mul_one _
+
+lemma apm_m93j06_truncField_holder {α : ℝ} (hα : 0 < α) (hα1 : α < 1) :
+    ∀ t a b : ℝ,
+      |apm_m93j06_truncField α t a - apm_m93j06_truncField α t b| ≤
+        6 * |a - b| ^ α := by
+  intro t a b
+  dsimp [apm_m93j06_truncField]
+  rcases le_total |a - b| 1 with hab | hab
+  · have hx := apm_m93j06_le_rpow_of_le_one hα.le hα1.le (abs_nonneg _) hab
+    calc |apm_m93j06_bump a * apm_m93j06_truncPow α a
+            - apm_m93j06_bump b * apm_m93j06_truncPow α b|
+        = |apm_m93j06_bump a * (apm_m93j06_truncPow α a - apm_m93j06_truncPow α b)
+            + apm_m93j06_truncPow α b * (apm_m93j06_bump a - apm_m93j06_bump b)| := by
+          congr 1
+          ring
+      _ ≤ |apm_m93j06_bump a| * |apm_m93j06_truncPow α a - apm_m93j06_truncPow α b|
+            + |apm_m93j06_truncPow α b| * |apm_m93j06_bump a - apm_m93j06_bump b| := by
+          rw [← abs_mul, ← abs_mul]; exact abs_add_le _ _
+      _ ≤ 1 * (2 * |a - b| ^ α) + 1 * (4 * |a - b|) := by
+          have e1 : |apm_m93j06_bump a| ≤ 1 := by
+            rw [abs_of_nonneg (apm_m93j06_bump_nonneg a)]
+            exact apm_m93j06_bump_le_one a
+          exact add_le_add
+            (mul_le_mul e1 (apm_m93j06_truncPow_holder hα hα1 a b)
+              (abs_nonneg _) zero_le_one)
+            (mul_le_mul (apm_m93j06_truncPow_abs_le α b)
+              (apm_m93j06_bump_lipschitz a b) (abs_nonneg _) zero_le_one)
+      _ ≤ 6 * |a - b| ^ α := by
+          have hr : (0:ℝ) ≤ |a - b| ^ α := Real.rpow_nonneg (abs_nonneg _) _
+          linarith [mul_le_mul_of_nonneg_left hx (by norm_num : (0:ℝ) ≤ 4)]
+  · calc |apm_m93j06_bump a * apm_m93j06_truncPow α a
+            - apm_m93j06_bump b * apm_m93j06_truncPow α b|
+        ≤ |apm_m93j06_bump a * apm_m93j06_truncPow α a|
+            + |apm_m93j06_bump b * apm_m93j06_truncPow α b| := abs_sub _ _
+      _ ≤ 1 * 1 + 1 * 1 := by
+          have e1 : ∀ u : ℝ, |apm_m93j06_bump u * apm_m93j06_truncPow α u| ≤
+              1 * 1 := by
+            intro u
+            rw [abs_mul]
+            exact mul_le_mul
+              (show |apm_m93j06_bump u| ≤ 1 from by
+                rw [abs_of_nonneg (apm_m93j06_bump_nonneg u)]
+                exact apm_m93j06_bump_le_one u)
+              (apm_m93j06_truncPow_abs_le _ _) (abs_nonneg _) zero_le_one
+          exact add_le_add (e1 a) (e1 b)
+      _ ≤ 6 * |a - b| ^ α := by
+          have h1 : (1:ℝ) ≤ |a - b| ^ α := Real.one_le_rpow (by linarith) hα.le
+          have hr : (0:ℝ) ≤ |a - b| ^ α := Real.rpow_nonneg (abs_nonneg _) _
+          linarith
+
+lemma apm_m93j06_truncField_eq_branch {α : ℝ} (hα : 0 < α)
+    {y : ℝ} (hy : y ∈ Set.Ioo (1 - 1 / 2 : ℝ) (1 + 1 / 2)) (t : ℝ) :
+    apm_m93j06_truncField α t y = Real.sign (y - 1) * |y - 1| ^ α := by
+  obtain ⟨h1, h2⟩ := hy
+  have hbump : apm_m93j06_bump y = 1 := by
+    have hy1 : (1:ℝ) ≤ 2 * |y| := by
+      rw [abs_of_pos (by linarith : (0:ℝ) < y)]; linarith
+    have hy2 : (1:ℝ) ≤ 2 * |2 - y| := by
+      rw [abs_of_pos (by linarith : (0:ℝ) < 2 - y)]; linarith
+    rw [apm_m93j06_bump, min_eq_right hy1, min_eq_right hy2, mul_one]
+  have hmin : min (|y - 1| ^ α) 1 = |y - 1| ^ α := by
+    apply min_eq_left
+    have hlt : |y - 1| < 1 := by
+      rw [abs_sub_lt_iff]; constructor <;> linarith
+    exact (Real.rpow_lt_one (abs_nonneg _) hlt hα).le
+  rw [apm_m93j06_truncField, hbump, one_mul, apm_m93j06_truncPow, hmin]
+
+/-- **Part (e), Hölder clause.** The growth bound does not repair part (d):
+even assuming `|f t y| ≤ C |y|`, no Hölder-`α` selection of solutions exists.
+The counterexample at `α = 1/2` is `apm_m93j06_truncField (1/2)`: continuous,
+bounded by `2 |y|`, `6`-Hölder with exponent `1/2`, with branch point at
+`y = 1`. -/
+theorem apm_m93j06_part_e_holder :
+    ∀ α : ℝ, 0 < α → α < 1 → ∃ f : ℝ → ℝ → ℝ,
+      Continuous (Function.uncurry f) ∧
+      (∃ C ≥ 0, ∀ t y, |f t y| ≤ C * |y|) ∧
+      (∃ K > 0, ∀ t s a b, |f t a - f s b| ≤ K * (|t - s| + |a - b|) ^ α) ∧
+      ∃ y₁ : ℝ, ¬ ∃ δ > 0, ∃ r > 0, ∃ Φ : ℝ → ℝ → ℝ,
+          (∀ y₀ ∈ Set.Ioo (y₁ - r) (y₁ + r), Φ 0 y₀ = y₀) ∧
+          (∀ y₀ ∈ Set.Ioo (y₁ - r) (y₁ + r), ∀ t ∈ Set.Icc (-δ) δ,
+            HasDerivAt (fun s ↦ Φ s y₀) (f t (Φ t y₀)) t) ∧
+          (∀ t ∈ Set.Icc (-δ) δ, ∃ K > 0,
+            ∀ a ∈ Set.Ioo (y₁ - r) (y₁ + r),
+            ∀ b ∈ Set.Ioo (y₁ - r) (y₁ + r),
+            |Φ t a - Φ t b| ≤ K * |a - b| ^ α) := by
+  intro α hα hα1
+  refine ⟨apm_m93j06_truncField α, apm_m93j06_truncField_continuous hα,
+    ⟨2, by norm_num, fun t y ↦ apm_m93j06_truncField_growth α t y⟩,
+    ⟨6, by norm_num, apm_m93j06_joint_holder hα (by norm_num) (fun _ _ _ ↦ rfl)
+      (apm_m93j06_truncField_holder hα hα1)⟩, 1, ?_⟩
+  exact apm_m93j06_no_holder_flow_of_branch hα hα1 (by norm_num)
+    (fun y hy t ↦ apm_m93j06_truncField_eq_branch hα hy t)
+
+/-- **APM m93J06 (repaired).**  Existence and dependence for scalar ODEs:
+
+* (a) local existence and uniqueness under joint continuity and local
+  Lipschitz continuity in the state;
+* (b) local `C^1` dependence on the initial value for `C^1` fields;
+* (c) global existence under the linear growth bound `|f t y| ≤ C |y|`;
+* (d) the printed Hölder-dependence claim is *false*: no Hölder selection of
+  solutions exists for the branching field `sign y * |y|^(1/2)`;
+* (e) under the growth bound the `C^1` flow exists for all time, a Lipschitz
+  field gives the sharp `exp (L |t|)` flow estimate, and the Hölder claim
+  remains false even under the growth bound. -/
+theorem apm_m93j06 :
+    (∀ f : ℝ → ℝ → ℝ, Continuous (Function.uncurry f) →
+        apm_m93j06_LocallyLipschitzY f → ∀ y₀ : ℝ,
+      ∃ ε > 0, ∃ y : ℝ → ℝ,
+        (∀ t ∈ Set.Icc (-ε) ε,
+          HasDerivWithinAt y (f t (y t)) (Set.Icc (-ε) ε) t) ∧
+        y 0 = y₀ ∧
+        ∀ z : ℝ → ℝ, z 0 = y₀ →
+          (∀ t ∈ Set.Icc (-ε) ε,
+            HasDerivWithinAt z (f t (z t)) (Set.Icc (-ε) ε) t) →
+          Set.EqOn y z (Set.Icc (-ε) ε)) ∧
+    (∀ f : ℝ → ℝ → ℝ, ContDiff ℝ 1 (Function.uncurry f) → ∀ y₁ : ℝ,
+      ∃ ε > 0, ∃ r > 0, ∃ φ : ℝ → ℝ → ℝ,
+        (∀ y ∈ Set.Ioo (y₁ - r) (y₁ + r), φ 0 y = y) ∧
+        (∀ t ∈ Set.Ioo (-ε) ε, ∀ y ∈ Set.Ioo (y₁ - r) (y₁ + r),
+          HasDerivAt (fun s ↦ φ s y) (f t (φ t y)) t) ∧
+        (∀ t ∈ Set.Ioo (-ε) ε, ContDiff ℝ 1 (fun y ↦ φ t y))) ∧
+    (∀ f : ℝ → ℝ → ℝ, ∀ C : ℝ, 0 ≤ C →
+        Continuous (Function.uncurry f) → apm_m93j06_LocallyLipschitzY f →
+        (∀ t y, |f t y| ≤ C * |y|) →
+      ∀ y₀ : ℝ, ∃ y : ℝ → ℝ, apm_m93j06_Solves f y₀ y) ∧
+    (∀ α : ℝ, 0 < α → α < 1 → ∃ f : ℝ → ℝ → ℝ,
+        Continuous (Function.uncurry f) ∧
+        (∃ K > 0, ∀ t s a b, |f t a - f s b| ≤ K * (|t - s| + |a - b|) ^ α) ∧
+        ∃ y₁ : ℝ, ¬ ∃ δ > 0, ∃ r > 0, ∃ Φ : ℝ → ℝ → ℝ,
+          (∀ y₀ ∈ Set.Ioo (y₁ - r) (y₁ + r), Φ 0 y₀ = y₀) ∧
+          (∀ y₀ ∈ Set.Ioo (y₁ - r) (y₁ + r), ∀ t ∈ Set.Icc (-δ) δ,
+            HasDerivAt (fun s ↦ Φ s y₀) (f t (Φ t y₀)) t) ∧
+          (∀ t ∈ Set.Icc (-δ) δ, ∃ K > 0,
+            ∀ a ∈ Set.Ioo (y₁ - r) (y₁ + r),
+            ∀ b ∈ Set.Ioo (y₁ - r) (y₁ + r),
+            |Φ t a - Φ t b| ≤ K * |a - b| ^ α)) ∧
+    ((∀ f : ℝ → ℝ → ℝ, ContDiff ℝ 1 (Function.uncurry f) → ∀ C : ℝ, 0 ≤ C →
+        (∀ t y, |f t y| ≤ C * |y|) →
+      ∃ φ : ℝ → ℝ → ℝ, apm_m93j06_IsFlow f φ ∧ ∀ t, ContDiff ℝ 1 (φ t)) ∧
+      (∀ f φ : ℝ → ℝ → ℝ, ∀ C L : ℝ, 0 ≤ C → 0 ≤ L →
+        apm_m93j06_IsFlow f φ →
+        (∀ t y, |f t y| ≤ C * |y|) →
+        (∀ t a b, |f t a - f t b| ≤ L * |a - b|) →
+        ∀ t a b, |φ t a - φ t b| ≤ Real.exp (L * |t|) * |a - b|) ∧
+      (∀ α : ℝ, 0 < α → α < 1 → ∃ f : ℝ → ℝ → ℝ,
+        Continuous (Function.uncurry f) ∧
+        (∃ C ≥ 0, ∀ t y, |f t y| ≤ C * |y|) ∧
+        (∃ K > 0, ∀ t s a b, |f t a - f s b| ≤ K * (|t - s| + |a - b|) ^ α) ∧
+        ∃ y₁ : ℝ, ¬ ∃ δ > 0, ∃ r > 0, ∃ Φ : ℝ → ℝ → ℝ,
+          (∀ y₀ ∈ Set.Ioo (y₁ - r) (y₁ + r), Φ 0 y₀ = y₀) ∧
+          (∀ y₀ ∈ Set.Ioo (y₁ - r) (y₁ + r), ∀ t ∈ Set.Icc (-δ) δ,
+            HasDerivAt (fun s ↦ Φ s y₀) (f t (Φ t y₀)) t) ∧
+          (∀ t ∈ Set.Icc (-δ) δ, ∃ K > 0,
+            ∀ a ∈ Set.Ioo (y₁ - r) (y₁ + r),
+            ∀ b ∈ Set.Ioo (y₁ - r) (y₁ + r),
+            |Φ t a - Φ t b| ≤ K * |a - b| ^ α))) :=
+  ⟨apm_m93j06_part_a, apm_m93j06_part_b, apm_m93j06_part_c, apm_m93j06_part_d,
+    apm_m93j06_part_e_flow, apm_m93j06_part_e_lipschitz, apm_m93j06_part_e_holder⟩
