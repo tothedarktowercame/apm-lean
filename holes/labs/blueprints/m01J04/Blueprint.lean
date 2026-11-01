@@ -4097,6 +4097,113 @@ theorem apm_m01J04_rellich_grad_eq {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
 `-∫ t in 0..1, fderiv a (x - t • y) y`, bound its square by `‖y‖² ∫ t, ‖grad a (x - t • y)‖²`
 (Cauchy–Schwarz, then Jensen on `[0,1]`), integrate in `x` with Fubini, and use translation invariance.
 Replace the classical gradient by `a.grad` with `apm_m01J04_rellich_grad_eq`. -/
+/- Seat aux: the derivative of `f` vanishes off `tsupport f`. -/
+lemma apm_m01J04_rellich_translate_smooth_aux_classical_aux_fderiv_eq_zero
+    {d : ℕ} {f : EuclideanSpace ℝ (Fin d) → ℝ} {z : EuclideanSpace ℝ (Fin d)}
+    (hz : z ∉ tsupport f) : fderiv ℝ f z = 0 := by
+  have hU : (tsupport f)ᶜ ∈ nhds z := (isClosed_tsupport f).compl_mem_nhds hz
+  have heq : f =ᶠ[nhds z] (0 : EuclideanSpace ℝ (Fin d) → ℝ) := by
+    filter_upwards [hU] with w hw
+    exact Function.notMem_support.mp (fun hws ↦ hw (subset_tsupport f hws))
+  rw [heq.fderiv_eq]
+  simp
+
+/-- Seat aux: Cauchy–Schwarz bound for the derivative in direction `y` by the
+gradient field `x ↦ WithLp.toLp 2 (fun i ↦ fderiv ℝ f x (EuclideanSpace.single i 1))`. -/
+lemma apm_m01J04_rellich_translate_smooth_aux_classical_aux_norm_fderiv_apply_le
+    {d : ℕ} (f : EuclideanSpace ℝ (Fin d) → ℝ)
+    (z y : EuclideanSpace ℝ (Fin d)) :
+    |fderiv ℝ f z y| ≤ ‖y‖ *
+      ‖WithLp.toLp 2 (fun i ↦ fderiv ℝ f z (EuclideanSpace.single i 1))‖ := by
+  have hy : y = ∑ i, y i • EuclideanSpace.single i (1 : ℝ) := by
+    have h := (EuclideanSpace.basisFun (Fin d) ℝ).sum_repr y
+    rw [show (∑ i, (EuclideanSpace.basisFun (Fin d) ℝ).repr y i •
+          (EuclideanSpace.basisFun (Fin d) ℝ) i) =
+        ∑ i, y i • EuclideanSpace.single i 1 from
+      Finset.sum_congr rfl fun i _ ↦ by
+        rw [EuclideanSpace.basisFun_repr, EuclideanSpace.basisFun_apply]] at h
+    exact h.symm
+  have h1 : fderiv ℝ f z y = ∑ i, y i * fderiv ℝ f z (EuclideanSpace.single i 1) := by
+    conv_lhs => rw [hy]
+    simp [map_sum, map_smul, smul_eq_mul]
+  have hcs : (fderiv ℝ f z y) ^ 2 ≤ ‖y‖ ^ 2 *
+      ‖WithLp.toLp 2 (fun i ↦ fderiv ℝ f z (EuclideanSpace.single i 1))‖ ^ 2 := by
+    rw [h1, PiLp.norm_sq_eq_of_L2 (fun _ : Fin d ↦ ℝ) y,
+      PiLp.norm_sq_eq_of_L2 (fun _ : Fin d ↦ ℝ)]
+    have h := Finset.sum_mul_sq_le_sq_mul_sq (Finset.univ : Finset (Fin d))
+      (fun i ↦ y i) (fun i ↦ fderiv ℝ f z (EuclideanSpace.single i 1))
+    simpa [Real.norm_eq_abs, sq_abs, PiLp.toLp_apply] using h
+  have habs : |fderiv ℝ f z y| = Real.sqrt ((fderiv ℝ f z y) ^ 2) :=
+    (Real.sqrt_sq_eq_abs _).symm
+  have h2 : Real.sqrt (‖y‖ ^ 2 *
+        ‖WithLp.toLp 2 (fun i ↦ fderiv ℝ f z (EuclideanSpace.single i 1))‖ ^ 2) =
+      ‖y‖ * ‖WithLp.toLp 2 (fun i ↦ fderiv ℝ f z (EuclideanSpace.single i 1))‖ := by
+    rw [Real.sqrt_mul (sq_nonneg _), Real.sqrt_sq (norm_nonneg _),
+      Real.sqrt_sq (norm_nonneg _)]
+  rw [habs, ← h2]
+  exact Real.sqrt_le_sqrt hcs
+
+/-- Seat aux: probability-measure Jensen on `[0,1]` for the `L²` norm of an integral. -/
+lemma apm_m01J04_rellich_translate_smooth_aux_classical_aux_enorm_integral_sq_le
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (H : ℝ → E) :
+    ‖∫ t in Set.Ioc (0 : ℝ) 1, H t ∂volume‖ₑ ^ 2 ≤
+      ∫⁻ t in Set.Ioc (0 : ℝ) 1, ‖H t‖ₑ ^ 2 ∂volume := by
+  haveI : IsProbabilityMeasure (volume.restrict (Set.Ioc (0 : ℝ) 1)) := by
+    rw [isProbabilityMeasure_iff]
+    simp [Real.volume_Ioc]
+  by_cases hH : AEStronglyMeasurable H (volume.restrict (Set.Ioc (0 : ℝ) 1))
+  · have h1 : eLpNorm H 1 (volume.restrict (Set.Ioc (0 : ℝ) 1)) ≤
+        eLpNorm H 2 (volume.restrict (Set.Ioc (0 : ℝ) 1)) :=
+      eLpNorm_le_eLpNorm_of_exponent_le (by norm_num) hH
+    have h2 : ‖∫ t in Set.Ioc (0 : ℝ) 1, H t ∂volume‖ₑ ≤
+        eLpNorm H 2 (volume.restrict (Set.Ioc (0 : ℝ) 1)) :=
+      (enorm_integral_le_lintegral_enorm _).trans
+        (by simpa [eLpNorm_one_eq_lintegral_enorm] using h1)
+    refine (pow_le_pow_left' h2 2).trans_eq ?_
+    simpa [ENNReal.rpow_two] using
+      (MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral (f := H) (p := (2 : NNReal))
+        (μ := volume.restrict (Set.Ioc (0 : ℝ) 1)) (by norm_num))
+  · have hni : ¬ Integrable H (volume.restrict (Set.Ioc (0 : ℝ) 1)) := fun h ↦ hH h.1
+    rw [integral_undef hni]
+    simp
+
+/-- Seat aux: fundamental theorem of calculus along the segment from `x` to `x - y`. -/
+lemma apm_m01J04_rellich_translate_smooth_aux_classical_aux_ftc
+    {d : ℕ} {f : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f)
+    (y x : EuclideanSpace ℝ (Fin d)) :
+    f (x - y) - f x =
+      -∫ t in Set.Ioc (0 : ℝ) 1, fderiv ℝ f (x - t • y) y ∂volume := by
+  have hderiv : ∀ t ∈ Set.uIcc (0 : ℝ) 1,
+      HasDerivAt (fun s ↦ f (x - s • y)) ((fderiv ℝ f (x - t • y)) (-y)) t := by
+    intro t _
+    have hg : HasDerivAt (fun s ↦ x - s • y) (-y) t := by
+      simpa using (((hasDerivAt_id t).smul_const y).const_sub x)
+    have hf : HasFDerivAt f (fderiv ℝ f (x - t • y)) (x - t • y) :=
+      (hs.differentiable (by simp) _).hasFDerivAt
+    have hcomp : HasDerivAt (f ∘ fun s ↦ x - s • y) ((fderiv ℝ f (x - t • y)) (-y)) t :=
+      HasFDerivAt.comp_hasDerivAt (l := f) (l' := fderiv ℝ f (x - t • y))
+        (f := fun s ↦ x - s • y) (f' := -y) (x := t) hf hg
+    exact hcomp
+  have hcont : Continuous (fun t ↦ (fderiv ℝ f (x - t • y)) (-y)) :=
+    ((hs.continuous_fderiv (by simp)).comp
+      (continuous_const.sub
+        ((continuous_id (X := ℝ)).smul (continuous_const (y := y))))).clm_apply
+        continuous_const
+  have h := intervalIntegral.integral_eq_sub_of_hasDerivAt hderiv
+    (hcont.intervalIntegrable 0 1)
+  rw [one_smul, zero_smul, sub_zero, intervalIntegral.integral_of_le zero_le_one] at h
+  rw [← h]
+  have hpt2 : (fun (t : ℝ) ↦ (fderiv ℝ f (x - t • y)) (-y)) =
+      fun (t : ℝ) ↦ -(fderiv ℝ f (x - t • y) y) :=
+    funext fun t ↦ map_neg _ _
+  rw [hpt2, integral_neg]
+
+/-- Seat: translation estimate for smooth compact values. Write `a (x - y) - a x` as
+`-∫ t in 0..1, fderiv a (x - t • y) y`, bound its square by `‖y‖² ∫ t, ‖grad a (x - t • y)‖²`
+(Cauchy–Schwarz, then Jensen on `[0,1]`), integrate in `x` with Fubini, and use translation invariance.
+Replace the classical gradient by `a.grad` with `apm_m01J04_rellich_grad_eq`. -/
 theorem apm_m01J04_rellich_translate_smooth_aux_classical {d : ℕ}
     (f : EuclideanSpace ℝ (Fin d) → ℝ)
     (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hc : HasCompactSupport f)
@@ -4104,7 +4211,102 @@ theorem apm_m01J04_rellich_translate_smooth_aux_classical {d : ℕ}
     (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤
       ‖y‖ * (eLpNorm (fun x ↦ WithLp.toLp 2
         (fun i ↦ fderiv ℝ f x (EuclideanSpace.single i 1))) 2 volume).toReal := by
-  sorry
+  classical
+  set G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun z ↦ WithLp.toLp 2 (fun i ↦ fderiv ℝ f z (EuclideanSpace.single i 1)) with hGdef
+  have hGcont : Continuous G := by
+    rw [hGdef]
+    exact (PiLp.continuous_toLp (p := (2 : ℝ≥0∞)) (β := fun _ : Fin d ↦ ℝ)).comp
+      (continuous_pi fun i ↦
+        (hs.continuous_fderiv (by simp)).clm_apply
+          (continuous_const (y := EuclideanSpace.single i (1 : ℝ))))
+  have hGcs : HasCompactSupport G := by
+    apply HasCompactSupport.of_support_subset_isCompact hc.isCompact
+    intro z hz
+    by_contra hzK
+    have h0 :=
+      apm_m01J04_rellich_translate_smooth_aux_classical_aux_fderiv_eq_zero (f := f) hzK
+    exact hz (by
+      ext i
+      simp [hGdef, h0])
+  have hGmem : MemLp G 2 volume :=
+    hGcont.memLp_of_hasCompactSupport hGcs (p := (2 : ℝ≥0∞)) (μ := volume)
+  have hGmeas : AEStronglyMeasurable G volume := hGcont.aestronglyMeasurable
+  have hpt : ∀ x : EuclideanSpace ℝ (Fin d),
+      ‖f (x - y) - f x‖ₑ ^ 2 ≤
+        ENNReal.ofReal (‖y‖ ^ 2) *
+          ∫⁻ t in Set.Ioc (0 : ℝ) 1, ‖G (x - t • y)‖ₑ ^ 2 ∂volume := by
+    intro x
+    have hftc := apm_m01J04_rellich_translate_smooth_aux_classical_aux_ftc hs y x
+    rw [hftc, enorm_neg]
+    refine (apm_m01J04_rellich_translate_smooth_aux_classical_aux_enorm_integral_sq_le
+      _).trans ?_
+    rw [← lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
+    apply lintegral_mono
+    intro t
+    dsimp only
+    have hb :=
+      apm_m01J04_rellich_translate_smooth_aux_classical_aux_norm_fderiv_apply_le
+        f (x - t • y) y
+    have hs2 : |fderiv ℝ f (x - t • y) y| ^ 2 ≤ ‖y‖ ^ 2 * ‖G (x - t • y)‖ ^ 2 := by
+      have h := pow_le_pow_left₀ (abs_nonneg _) hb 2
+      rwa [mul_pow] at h
+    have hGz : ‖G (x - t • y)‖ₑ ^ 2 = ENNReal.ofReal (‖G (x - t • y)‖ ^ 2) := by
+      rw [← ofReal_norm_eq_enorm, ← ENNReal.ofReal_pow (norm_nonneg _)]
+    rw [hGz, ← ENNReal.ofReal_mul (sq_nonneg _)]
+    rw [show ‖fderiv ℝ f (x - t • y) y‖ₑ ^ 2 =
+        ENNReal.ofReal (|fderiv ℝ f (x - t • y) y| ^ 2) by
+      rw [← ofReal_norm_eq_enorm, Real.norm_eq_abs,
+        ← ENNReal.ofReal_pow (abs_nonneg _)]]
+    exact ENNReal.ofReal_le_ofReal hs2
+  have hmeas : AEMeasurable (Function.uncurry fun (x : EuclideanSpace ℝ (Fin d)) (t : ℝ) ↦
+        ‖G (x - t • y)‖ₑ ^ 2)
+      (volume.prod (volume.restrict (Set.Ioc (0 : ℝ) 1))) :=
+    ((ENNReal.continuous_pow 2).comp ((hGcont.comp
+      (continuous_fst.sub (continuous_snd.smul continuous_const))).enorm)).measurable.aemeasurable
+  have hinner : ∀ t : ℝ, ∫⁻ x, ‖G (x - t • y)‖ₑ ^ 2 ∂volume =
+      eLpNorm G 2 volume ^ 2 := by
+    intro t
+    have h1 : eLpNorm (G ∘ fun x ↦ x - t • y) 2 volume = eLpNorm G 2 volume :=
+      eLpNorm_comp_measurePreserving hGmeas (measurePreserving_sub_right volume (t • y))
+    have h2 : eLpNorm (G ∘ fun x ↦ x - t • y) 2 volume ^ 2 =
+        ∫⁻ x, ‖(G ∘ fun x ↦ x - t • y) x‖ₑ ^ 2 ∂volume := by
+      simpa [ENNReal.rpow_two] using
+        (MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
+          (f := G ∘ fun x ↦ x - t • y) (p := (2 : NNReal)) (μ := volume) (by norm_num))
+    rw [h1] at h2
+    exact h2.symm
+  have hsq : ∫⁻ x, ‖f (x - y) - f x‖ₑ ^ 2 ∂volume ≤
+      (ENNReal.ofReal ‖y‖ * eLpNorm G 2 volume) ^ 2 := by
+    calc ∫⁻ x, ‖f (x - y) - f x‖ₑ ^ 2 ∂volume
+        ≤ ∫⁻ x, ENNReal.ofReal (‖y‖ ^ 2) *
+            (∫⁻ t in Set.Ioc (0 : ℝ) 1, ‖G (x - t • y)‖ₑ ^ 2 ∂volume) ∂volume :=
+          lintegral_mono hpt
+      _ = ENNReal.ofReal (‖y‖ ^ 2) *
+            ∫⁻ x, ∫⁻ t in Set.Ioc (0 : ℝ) 1, ‖G (x - t • y)‖ₑ ^ 2 ∂volume ∂volume := by
+          rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
+      _ = ENNReal.ofReal (‖y‖ ^ 2) *
+            ∫⁻ t in Set.Ioc (0 : ℝ) 1, ∫⁻ x, ‖G (x - t • y)‖ₑ ^ 2 ∂volume ∂volume := by
+          rw [lintegral_lintegral_swap hmeas]
+      _ = ENNReal.ofReal (‖y‖ ^ 2) *
+            ∫⁻ t in Set.Ioc (0 : ℝ) 1, eLpNorm G 2 volume ^ 2 ∂volume := by
+          congr 1
+          exact lintegral_congr fun t ↦ hinner t
+      _ = ENNReal.ofReal (‖y‖ ^ 2) * (eLpNorm G 2 volume ^ 2) := by
+          rw [lintegral_const, Measure.restrict_apply_univ, Real.volume_Ioc]
+          simp
+      _ = (ENNReal.ofReal ‖y‖ * eLpNorm G 2 volume) ^ 2 := by
+          rw [mul_pow, ← ENNReal.ofReal_pow (norm_nonneg y)]
+  have hfinal : eLpNorm (fun x ↦ f (x - y) - f x) 2 volume ≤
+      ENNReal.ofReal ‖y‖ * eLpNorm G 2 volume :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_from_sq
+      _ hsq
+  calc (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal
+      ≤ (ENNReal.ofReal ‖y‖ * eLpNorm G 2 volume).toReal :=
+        ENNReal.toReal_mono (ENNReal.mul_ne_top ENNReal.ofReal_ne_top
+          hGmem.eLpNorm_ne_top) hfinal
+    _ = ‖y‖ * (eLpNorm G 2 volume).toReal := by
+        rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal (norm_nonneg _)]
 
 theorem apm_m01J04_rellich_translate_smooth {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
     (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val) (hc : HasCompactSupport a.val) (y : EuclideanSpace ℝ (Fin d)) :
