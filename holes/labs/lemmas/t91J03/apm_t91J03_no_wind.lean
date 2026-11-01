@@ -1,0 +1,758 @@
+import Mathlib
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.PeriodicCircleHomotopyWinding
+import ConstructionTargets.FiniteFreeHurewiczNaturality
+import ConstructionTargets.CircleHurewiczIsomorphism
+import ConstructionTargets.CircleExponentialPathLift
+
+/-!
+# Blueprint for APM t91J03
+
+The only unproved boundary is the geometric universal-cover theorem saying
+that winding twice forces a collision.  The remaining two lemmas and the
+frozen theorem are elementary wiring and are proved here.
+-/
+
+open CategoryTheory Set
+
+noncomputable section
+
+abbrev apm_t91J03_Annulus := Circle × Set.Icc (0 : ℝ) 1
+
+def apm_t91J03_firstProjection : C(apm_t91J03_Annulus, Circle) :=
+  ⟨Prod.fst, continuous_fst⟩
+
+def apm_t91J03_circleMap
+    (gamma : C(Circle, apm_t91J03_Annulus)) : C(Circle, Circle) :=
+  apm_t91J03_firstProjection.comp gamma
+
+abbrev apm_t91J03_H1Circle :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of Circle))
+
+def apm_t91J03_H1Map
+    (gamma : C(Circle, apm_t91J03_Annulus)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (apm_t91J03_circleMap gamma))
+
+def apm_t91J03_HasWindingNumber
+    (gamma : C(Circle, apm_t91J03_Annulus)) (n : ℤ) : Prop :=
+  ∃ orientation : apm_t91J03_H1Circle ≅ ModuleCat.of ℤ ℤ,
+    ∀ a : apm_t91J03_H1Circle,
+      orientation.hom (apm_t91J03_H1Map gamma a) =
+        n * orientation.hom a
+
+def apm_t91J03_height
+    (gamma : C(Circle, apm_t91J03_Annulus)) (z : Circle) : ℝ :=
+  (gamma z).2.1
+
+/-- Distinct points of an embedded annular circle with equal circle coordinate
+have unequal height. -/
+lemma apm_t91J03_height_ne_of_circleMap_eq
+    (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding
+      (gamma : Circle → apm_t91J03_Annulus))
+    {z w : Circle} (hzw : z ≠ w)
+    (hprojection : apm_t91J03_circleMap gamma z =
+      apm_t91J03_circleMap gamma w) :
+    apm_t91J03_height gamma z ≠ apm_t91J03_height gamma w := by
+  intro hheight
+  apply hzw
+  apply hgamma.injective
+  apply Prod.ext
+  · exact hprojection
+  · exact Subtype.ext hheight
+
+/-! ### Route (claude-14, 2026-10-31; holes/labs/topology-routes/routes-1.md, t91J03)
+No Jordan curve theorem. Lift the curve to the strip `ℝ × [0,1]`. If it winds `|d| ≥ 2` times, the
+lift `L₀` and its deck translate `L₁` are disjoint, but a planar crossing lemma makes them meet. -/
+
+open unitInterval in
+/-- Poincaré–Miranda in angle form. No continuous angle on the square can have `cos < 0` on the
+left edge, `cos > 0` on the right, `sin ≥ 0` on the bottom and `sin ≤ 0` on the top. Do NOT use
+`fin_cases` or winding numbers. A continuous `g` on an interval with `0 ≤ sin ∘ g` stays in one
+strip `[2πa, 2πa + π]` (likewise `sin ≤ 0`, `cos > 0`, `cos < 0`; the sets are disjoint unions of
+strips, and `I` is connected). Prove that once, then chase the four corners: start at corner
+`(0,0)` in `(π/2, π] + 2πa`, go along the bottom to `[0, π/2) + 2πa`, up the right edge to
+`(-π/2, 0] + 2πa`, along the top to `[-π, -π/2) + 2πa`; but the left edge from `(0,0)` stays in
+`(π/2, 3π/2) + 2πa`, which is disjoint from that. -/
+lemma apm_t91J03_crossing_aux_corners_aux_neg (a : ℤ) (y : ℝ)
+    (h1 : 2 * Real.pi * a + Real.pi < y) (h2 : y < 2 * Real.pi * a + 2 * Real.pi) :
+    Real.sin y < 0 := by
+  have h := Real.sin_sub_int_mul_two_pi y (a + 1)
+  rw [← h]
+  push_cast
+  apply Real.sin_neg_of_neg_of_neg_pi_lt <;> nlinarith
+
+open unitInterval in
+/-- A continuous function on `I` with `0 ≤ sin` stays in one strip `[2πa, 2πa + π]`. -/
+lemma apm_t91J03_crossing_aux_corners_aux_strip (g : C(I, ℝ)) (h : ∀ t, 0 ≤ Real.sin (g t)) :
+    ∃ a : ℤ, ∀ t, 2 * Real.pi * a ≤ g t ∧ g t ≤ 2 * Real.pi * a + Real.pi := by
+  have hp := Real.pi_pos
+  have h2p : 0 < 2 * Real.pi := by linarith
+  let a : ℤ := ⌊g 0 / (2 * Real.pi)⌋
+  have ha1 : 2 * Real.pi * a ≤ g 0 := by
+    have := Int.floor_le (g 0 / (2 * Real.pi))
+    rwa [le_div_iff₀ h2p, mul_comm] at this
+  have ha2 : g 0 < 2 * Real.pi * a + 2 * Real.pi := by
+    have := Int.lt_floor_add_one (g 0 / (2 * Real.pi))
+    rw [div_lt_iff₀ h2p] at this
+    nlinarith
+  have ha3 : g 0 ≤ 2 * Real.pi * a + Real.pi := by
+    by_contra hc
+    exact absurd (h 0) (not_le.2 (apm_t91J03_crossing_aux_corners_aux_neg a _ (not_le.1 hc) ha2))
+  refine ⟨a, fun t => ⟨?_, ?_⟩⟩
+  · by_contra hc
+    push_neg at hc
+    let y := max (g t) (2 * Real.pi * a - Real.pi / 2)
+    have hy1 : g t ≤ y := le_max_left _ _
+    have hy2 : y < 2 * Real.pi * a := max_lt hc (by linarith)
+    obtain ⟨u, hu⟩ := mem_range_of_exists_le_of_exists_ge g.continuous ⟨t, hy1⟩
+      ⟨0, by linarith⟩
+    have hy3 : 2 * Real.pi * a - Real.pi / 2 ≤ y := le_max_right _ _
+    have := apm_t91J03_crossing_aux_corners_aux_neg (a - 1) y
+      (by push_cast; nlinarith) (by push_cast; nlinarith)
+    have h' := h u
+    rw [hu] at h'
+    linarith
+  · by_contra hc
+    push_neg at hc
+    let y := min (g t) (2 * Real.pi * a + 3 * Real.pi / 2)
+    have hy1 : y ≤ g t := min_le_left _ _
+    have hy2 : 2 * Real.pi * a + Real.pi < y := lt_min hc (by linarith)
+    obtain ⟨u, hu⟩ := mem_range_of_exists_le_of_exists_ge g.continuous ⟨0, by linarith⟩
+      ⟨t, hy1⟩
+    have hy3 : y ≤ 2 * Real.pi * a + 3 * Real.pi / 2 := min_le_right _ _
+    have := apm_t91J03_crossing_aux_corners_aux_neg a y hy2 (by linarith)
+    have h' := h u
+    rw [hu] at h'
+    linarith
+
+lemma apm_t91J03_crossing_aux_corners_aux_int (u v : ℤ) (c : ℝ) (hc : c < 2)
+    (h : 2 * Real.pi * u ≤ 2 * Real.pi * v + c * Real.pi) : u ≤ v := by
+  have hp := Real.pi_pos
+  have h1 : (2 * (u : ℝ) - 2 * v - c) * Real.pi ≤ 0 := by nlinarith
+  have h2 : 2 * (u : ℝ) - 2 * v - c ≤ 0 := by
+    by_contra hn
+    exact absurd h1 (not_le.2 (mul_pos (not_le.1 hn) hp))
+  have h3 : (u : ℝ) < v + 1 := by linarith
+  have h4 : u < v + 1 := by exact_mod_cast h3
+  omega
+
+open unitInterval in
+lemma apm_t91J03_crossing_aux_corners (θ : C(I × I, ℝ))
+    (hL : ∀ t, Real.cos (θ (0, t)) < 0) (hR : ∀ t, 0 < Real.cos (θ (1, t)))
+    (hB : ∀ s, 0 ≤ Real.sin (θ (s, 0))) (hT : ∀ s, Real.sin (θ (s, 1)) ≤ 0) : False := by
+  have hp := Real.pi_pos
+  let gB : C(I, ℝ) := ⟨fun s => θ (s, 0), by fun_prop⟩
+  let gT : C(I, ℝ) := ⟨fun s => θ (s, 1) + Real.pi, by fun_prop⟩
+  let gL : C(I, ℝ) := ⟨fun t => θ (0, t) - Real.pi / 2, by fun_prop⟩
+  let gR : C(I, ℝ) := ⟨fun t => θ (1, t) + Real.pi / 2, by fun_prop⟩
+  obtain ⟨b, hb⟩ := apm_t91J03_crossing_aux_corners_aux_strip gB hB
+  obtain ⟨c, hc⟩ := apm_t91J03_crossing_aux_corners_aux_strip gT (fun s => by
+    change 0 ≤ Real.sin (θ (s, 1) + Real.pi)
+    rw [Real.sin_add_pi]
+    linarith [hT s])
+  obtain ⟨a, ha⟩ := apm_t91J03_crossing_aux_corners_aux_strip gL (fun t => by
+    change 0 ≤ Real.sin (θ (0, t) - Real.pi / 2)
+    rw [Real.sin_sub_pi_div_two]
+    linarith [hL t])
+  obtain ⟨d, hd⟩ := apm_t91J03_crossing_aux_corners_aux_strip gR (fun t => by
+    change 0 ≤ Real.sin (θ (1, t) + Real.pi / 2)
+    rw [Real.sin_add_pi_div_two]
+    exact (hR t).le)
+  have ib := hb 0; have ib' := hb 1; have ic := hc 0; have ic' := hc 1
+  have ia := ha 0; have ia' := ha 1; have id := hd 0; have id' := hd 1
+  simp only [gB, gT, gL, gR, ContinuousMap.coe_mk] at ib ib' ic ic' ia ia' id id'
+  have e1 : b ≤ a := apm_t91J03_crossing_aux_corners_aux_int b a (3 / 2) (by norm_num) (by linarith)
+  have e2 : a ≤ b := apm_t91J03_crossing_aux_corners_aux_int a b (1 / 2) (by norm_num) (by linarith)
+  have e3 : d ≤ b := apm_t91J03_crossing_aux_corners_aux_int d b (3 / 2) (by norm_num) (by linarith)
+  have e4 : b ≤ d := apm_t91J03_crossing_aux_corners_aux_int b d (1 / 2) (by norm_num) (by linarith)
+  have e5 : c ≤ d := apm_t91J03_crossing_aux_corners_aux_int c d (3 / 2) (by norm_num) (by linarith)
+  have e6 : d ≤ c := apm_t91J03_crossing_aux_corners_aux_int d c (1 / 2) (by norm_num) (by linarith)
+  have hab : a = b := le_antisymm e2 e1
+  have hdb : d = b := le_antisymm e3 e4
+  have hcd : c = d := le_antisymm e5 e6
+  subst hab hdb hcd
+  linarith
+
+open unitInterval in
+/-- Planar crossing lemma: a curve `α` in the strip from the left of `β` to the right of `β` meets
+a curve `β` from height `0` to height `1`. Otherwise `F (s, t) = α s - β t`, as a complex number, never
+vanishes; lift `F / ‖F‖` through `Circle.exp` on the square
+(`ConstructionTargets.PeriodicCircleHomotopyWinding.liftedSquare`, `exp_liftedSquare`) and apply
+`_aux_corners`. -/
+lemma apm_t91J03_crossing (α β : C(I, ℝ × ℝ))
+    (hα : ∀ s, 0 ≤ (α s).2 ∧ (α s).2 ≤ 1) (hβ0 : (β 0).2 = 0) (hβ1 : (β 1).2 = 1)
+    (hl : ∀ t, (α 0).1 < (β t).1) (hr : ∀ t, (β t).1 < (α 1).1) :
+    ∃ s t, α s = β t := by
+  by_contra hcon
+  push_neg at hcon
+  have hfcont : Continuous fun p : I × I =>
+      ((α p.1).1 - (β p.2).1 : ℂ) + ((α p.1).2 - (β p.2).2 : ℂ) * Complex.I := by
+    fun_prop
+  set f : C(I × I, ℂ) := ⟨fun p => ((α p.1).1 - (β p.2).1 : ℂ) +
+    ((α p.1).2 - (β p.2).2 : ℂ) * Complex.I, hfcont⟩ with hfdef
+  have hfne : ∀ p : I × I, f p ≠ 0 := by
+    intro p hp
+    have hre : (α p.1).1 - (β p.2).1 = 0 := by
+      have h1 := congrArg Complex.re hp
+      simp [f] at h1
+      linarith
+    have him : (α p.1).2 - (β p.2).2 = 0 := by
+      have h1 := congrArg Complex.im hp
+      simp [f] at h1
+      linarith
+    exact hcon p.1 p.2 (Prod.ext (sub_eq_zero.1 hre) (sub_eq_zero.1 him))
+  have hnorm : ∀ p : I × I, 0 < ‖f p‖ := fun p => norm_pos_iff.2 (hfne p)
+  have hmem : ∀ p : I × I, f p / (‖f p‖ : ℂ) ∈ Submonoid.unitSphere ℂ := by
+    intro p
+    have h1 : ‖f p / (‖f p‖ : ℂ)‖ = 1 := by
+      rw [norm_div, Complex.norm_real, norm_norm]
+      exact div_self (hnorm p).ne'
+    simpa [Submonoid.unitSphere] using h1
+  have hHcont : Continuous fun p : I × I =>
+      (⟨f p / (‖f p‖ : ℂ), hmem p⟩ : Circle) :=
+    (Continuous.div f.continuous
+      (Complex.continuous_ofReal.comp (continuous_norm.comp f.continuous))
+      (fun p => Complex.ofReal_ne_zero.2 (hnorm p).ne')).subtype_mk hmem
+  set H : C(I × I, Circle) := ⟨fun p => ⟨f p / (‖f p‖ : ℂ), hmem p⟩, hHcont⟩ with hHdef
+  set a := Complex.arg (H (0, 0) : ℂ) with hadef
+  have h0 : H (0, 0) = Circle.exp a := (Circle.exp_arg _).symm
+  set θ := ConstructionTargets.PeriodicCircleHomotopyWinding.liftedSquare H a h0 with hθdef
+  have key : ∀ p : I × I, Real.cos (θ p) = ((H p : ℂ)).re ∧
+      Real.sin (θ p) = (H p : ℂ).im := by
+    intro p
+    have e : Circle.exp (θ p) = H p :=
+      ConstructionTargets.PeriodicCircleHomotopyWinding.exp_liftedSquare H a h0 p
+    rw [← e]
+    simp [Circle.coe_exp, Complex.exp_mul_I, ← Complex.ofReal_cos, ← Complex.ofReal_sin]
+  have hre : ∀ p : I × I, (H p : ℂ).re = ((α p.1).1 - (β p.2).1) / ‖f p‖ := by
+    intro p
+    show (f p / (‖f p‖ : ℂ)).re = _
+    rw [Complex.div_ofReal_re]
+    simp [f]
+  have him : ∀ p : I × I, (H p : ℂ).im = ((α p.1).2 - (β p.2).2) / ‖f p‖ := by
+    intro p
+    show (f p / (‖f p‖ : ℂ)).im = _
+    rw [Complex.div_ofReal_im]
+    simp [f]
+  exact apm_t91J03_crossing_aux_corners θ
+    (fun t => by
+      rw [(key _).1, hre]
+      exact div_neg_of_neg_of_pos (sub_neg.2 (hl t)) (hnorm _))
+    (fun t => by
+      rw [(key _).1, hre]
+      exact div_pos (sub_pos.2 (hr t)) (hnorm _))
+    (fun s => by
+      rw [(key _).2, him, hβ0, sub_zero]
+      exact div_nonneg (hα s).1 (hnorm _).le)
+    (fun s => by
+      rw [(key _).2, him, hβ1]
+      exact div_nonpos_of_nonpos_of_nonneg (sub_nonpos.2 (hα s).2) (hnorm _).le)
+
+/-- The periodic lift of a circle self-map, by `Circle.isCoveringMap_exp` and
+`IsCoveringMap.existsUnique_continuousMap_lifts` on `ℝ` (or `CircleExponentialPathLift`).
+`θ (t + 1) - θ t` is a continuous multiple of `2π`, so it is constant, equal to `2π d`. -/
+lemma apm_t91J03_periodic_lift (c : C(Circle, Circle)) :
+    ∃ (θ : C(ℝ, ℝ)) (d : ℤ), (∀ t, Circle.exp (θ t) = c (Circle.exp (2 * Real.pi * t))) ∧
+      ∀ t, θ (t + 1) = θ t + 2 * Real.pi * d := by
+  set f : C(ℝ, Circle) :=
+    ⟨fun t => c (Circle.exp (2 * Real.pi * t)),
+      c.continuous.comp (Circle.exp.continuous.comp (by continuity))⟩ with hf
+  have hper : ∀ t : ℝ, f (t + 1) = f t := by
+    intro t
+    have e : 2 * Real.pi * (t + 1) = 2 * Real.pi * t + 2 * Real.pi := by ring
+    simp only [hf, ContinuousMap.coe_mk, e, Circle.exp_add_two_pi]
+  obtain ⟨e₀, he₀⟩ : ∃ e : ℝ, Circle.exp e = f 0 := ⟨Complex.arg (f 0), Circle.exp_arg _⟩
+  obtain ⟨θ, ⟨-, hθlift⟩, -⟩ :=
+    Circle.isCoveringMap_exp.existsUnique_continuousMap_lifts f 0 e₀ he₀
+  have hlift : ∀ t : ℝ, Circle.exp (θ t) = f t := fun t => congr_fun hθlift t
+  have h10 : f 1 = f 0 := by simpa using hper 0
+  obtain ⟨d, hd⟩ := Circle.exp_eq_exp.mp ((hlift 1).trans (h10.trans (hlift 0).symm))
+  have he' : Circle.exp (θ 1) = f 0 := (hlift 1).trans h10
+  obtain ⟨L, -, hLuniq⟩ :=
+    Circle.isCoveringMap_exp.existsUnique_continuousMap_lifts f 0 (θ 1) he'
+  have h2pi : Circle.exp (↑d * (2 * Real.pi)) = 1 := by
+    rw [Circle.exp_intCast_mul, Circle.exp_two_pi, one_zpow]
+  have h1 := hLuniq ⟨fun t => θ t + ↑d * (2 * Real.pi), θ.continuous.add continuous_const⟩
+    ⟨by show θ 0 + ↑d * (2 * Real.pi) = θ 1
+        exact hd.symm,
+     funext fun t => by
+       show Circle.exp (θ t + ↑d * (2 * Real.pi)) = f t
+       rw [Circle.exp_add, h2pi, mul_one]
+       exact hlift t⟩
+  have h2 := hLuniq ⟨fun t => θ (t + 1), θ.continuous.comp (continuous_add_const 1)⟩
+    ⟨by show θ (0 + 1) = θ 1
+        rw [zero_add],
+     funext fun t => (hlift (t + 1)).trans (hper t)⟩
+  have hshift := h1.trans h2.symm
+  refine ⟨θ, d, fun t => hlift t, fun t => ?_⟩
+  have h := DFunLike.congr_fun hshift t
+  simp only [ContinuousMap.coe_mk] at h
+  rw [← h]
+  ring
+
+/-- The lift displacement is the action on `H₁`. Both sides are additive in `a`, and `H₁(Circle)`
+is generated by the Hurewicz image of the positive loop
+(`DegreeOneHurewiczSurjective.fundamentalGroupH1Hom_surjective`,
+`CircleHurewiczIsomorphism`). `fundamentalGroupH1Hom_naturality` (used in
+`FiniteFreeHurewiczNaturality`) moves `c` onto the loop; the lift `θ` shows that `c ∘ loop` is
+`d` times the positive loop in `H₁`, using free homotopy of loops to change basepoint. -/
+lemma apm_t91J03_degree (c : C(Circle, Circle)) (θ : C(ℝ, ℝ)) (d : ℤ)
+    (hθ : ∀ t, Circle.exp (θ t) = c (Circle.exp (2 * Real.pi * t)))
+    (hper : ∀ t, θ (t + 1) = θ t + 2 * Real.pi * d)
+    (orientation : apm_t91J03_H1Circle ≅ ModuleCat.of ℤ ℤ) (a : apm_t91J03_H1Circle) :
+    orientation.hom
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom c) a) = d * orientation.hom a := by
+  sorry
+
+/-- The lift and its deck translate are disjoint when `2 ≤ |d|`. Equal points give equal `gamma`
+values (`Circle.exp` of equal angles; equal heights), so `exp(2πs) = exp(2πt)` by injectivity,
+so `s = t + m` for an integer `m`, so `θ s = θ t + 2π d m`, so `d m = 1`, impossible. -/
+lemma apm_t91J03_disjoint (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding (gamma : Circle → apm_t91J03_Annulus))
+    (θ : C(ℝ, ℝ)) (d : ℤ)
+    (hθ : ∀ t, Circle.exp (θ t) =
+      apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * t)))
+    (hper : ∀ t, θ (t + 1) = θ t + 2 * Real.pi * d) (hd : 2 ≤ d.natAbs) (s t : ℝ)
+    (hx : θ s = θ t + 2 * Real.pi)
+    (hh : apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) =
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t))) : False := by
+  have hπ : (2 : ℝ) * Real.pi ≠ 0 := by positivity
+  -- Integer-shift law for `θ`, from one-step periodicity `hper`.
+  have key : ∀ (k : ℤ) (u : ℝ),
+      θ (u + (k : ℝ)) = θ u + 2 * Real.pi * (d : ℝ) * k := by
+    intro k
+    induction k using Int.induction_on with
+    | zero => intro u; simp
+    | succ n ih =>
+        intro u
+        rw [show u + ((↑n + 1 : ℤ) : ℝ) = (u + ((↑n : ℤ) : ℝ)) + 1 by push_cast; ring,
+          hper, ih u]
+        push_cast
+        ring
+    | pred n ih =>
+        intro u
+        have hb : θ ((u + ((-↑n : ℤ) : ℝ)) - 1) =
+            θ (u + ((-↑n : ℤ) : ℝ)) - 2 * Real.pi * d := by
+          have h := hper (u + ((-↑n : ℤ) : ℝ) - 1)
+          rw [show u + ((-↑n : ℤ) : ℝ) - 1 + 1 = u + ((-↑n : ℤ) : ℝ) by ring] at h
+          linarith
+        rw [show u + ((-↑n - 1 : ℤ) : ℝ) = (u + ((-↑n : ℤ) : ℝ)) - 1 by
+          push_cast; ring, hb, ih u]
+        push_cast
+        ring
+  -- The two circle points have equal `gamma` values, hence are equal.
+  have hexp : Circle.exp (θ s) = Circle.exp (θ t) := by
+    rw [hx]
+    exact Circle.exp_add_two_pi _
+  have hproj : apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * s)) =
+      apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * t)) := by
+    rw [← hθ s, ← hθ t, hexp]
+  have hval : gamma (Circle.exp (2 * Real.pi * s)) =
+      gamma (Circle.exp (2 * Real.pi * t)) := by
+    apply Prod.ext
+    · exact hproj
+    · exact Subtype.ext hh
+  have hzw : Circle.exp (2 * Real.pi * s) = Circle.exp (2 * Real.pi * t) :=
+    hgamma.injective hval
+  -- So `s = t + m` for an integer `m`.
+  obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp hzw
+  have hsm : s = t + (m : ℝ) := by
+    have h2 : 2 * Real.pi * s = 2 * Real.pi * (t + (m : ℝ)) := by
+      linarith [hm]
+    exact mul_left_cancel₀ hπ h2
+  -- Then `hx` forces `d * m = 1`, contradicting `2 ≤ |d|`.
+  rw [hsm, key m t] at hx
+  have hdm : d * m = 1 := by
+    have hmul : (d : ℝ) * (m : ℝ) = 1 := by
+      have h2 : 2 * Real.pi * ((d : ℝ) * (m : ℝ)) = 2 * Real.pi * 1 := by
+        linarith [hx]
+      exact mul_left_cancel₀ hπ h2
+    exact_mod_cast hmul
+  rcases Int.eq_one_or_neg_one_of_mul_eq_one hdm with h | h <;>
+    subst h <;> norm_num at hd
+
+open unitInterval in
+/-- The barrier. With `h t` the height of `gamma (exp 2πt)` and `L₁ t = (θ t + 2π, h t)`, take a
+lowest and a highest point of `L₁` on `[0, 1]` (compactness; periodicity makes them global).
+`β` is the vertical segment from the bottom edge up to the lowest point, the arc of `L₁`
+between them, then the vertical segment to the top edge. It misses `L₀`: on the arc by
+`_disjoint`, and on the segments because `L₀` has the same height range as `L₁`, and at equal height
+the endpoint of the segment is a point of `L₁`, not of `L₀`. Concatenate with `Path.trans` or
+explicit piecewise maps on `I`. -/
+lemma apm_t91J03_no_wind_aux_barrier (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding (gamma : Circle → apm_t91J03_Annulus))
+    (θ : C(ℝ, ℝ)) (d : ℤ)
+    (hθ : ∀ t, Circle.exp (θ t) =
+      apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * t)))
+    (hper : ∀ t, θ (t + 1) = θ t + 2 * Real.pi * d) (hd : 2 ≤ d.natAbs) :
+    ∃ β : C(I, ℝ × ℝ), (β 0).2 = 0 ∧ (β 1).2 = 1 ∧ ∀ s t,
+      β t ≠ (θ s, apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s))) := by
+  -- The height function of the lift, its continuity, bounds and periodicity.
+  have hcont : Continuous fun s : ℝ =>
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) := by
+    simp only [apm_t91J03_height]
+    fun_prop
+  have hbnd : ∀ s : ℝ, 0 ≤ apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) ∧
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) ≤ 1 := by
+    intro s
+    exact Set.mem_Icc.mp (gamma (Circle.exp (2 * Real.pi * s))).2.2
+  have hshift : ∀ s : ℝ, ∀ k : ℤ,
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) =
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * (s - k))) := by
+    intro s k
+    have he : Circle.exp (2 * Real.pi * s) = Circle.exp (2 * Real.pi * (s - k)) := by
+      apply Circle.exp_eq_exp.mpr
+      refine ⟨k, ?_⟩
+      push_cast
+      ring
+    rw [he]
+  -- A global minimum and a global maximum of the height, at `t₀` and `t₁`.
+  obtain ⟨t₀, ht₀, hmin⟩ := isCompact_Icc.exists_isMinOn
+    (Set.nonempty_Icc.2 zero_le_one) hcont.continuousOn
+  obtain ⟨t₁, ht₁, hmax⟩ := isCompact_Icc.exists_isMaxOn
+    (Set.nonempty_Icc.2 zero_le_one) hcont.continuousOn
+  have hminall : ∀ s : ℝ,
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t₀)) ≤
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) := by
+    intro s
+    have hu : s - ⌊s⌋ ∈ Set.Icc (0 : ℝ) 1 := by
+      have h1 : 0 ≤ Int.fract s := Int.fract_nonneg s
+      have h2 : Int.fract s < 1 := Int.fract_lt_one s
+      have he : Int.fract s = s - ⌊s⌋ := rfl
+      rw [he] at h1 h2
+      exact ⟨h1, h2.le⟩
+    have := hmin hu
+    simp only [Set.mem_setOf_eq] at this
+    rw [hshift s ⌊s⌋]
+    exact this
+  have hmaxall : ∀ s : ℝ,
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) ≤
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t₁)) := by
+    intro s
+    have hu : s - ⌊s⌋ ∈ Set.Icc (0 : ℝ) 1 := by
+      have h1 : 0 ≤ Int.fract s := Int.fract_nonneg s
+      have h2 : Int.fract s < 1 := Int.fract_lt_one s
+      have he : Int.fract s = s - ⌊s⌋ := rfl
+      rw [he] at h1 h2
+      exact ⟨h1, h2.le⟩
+    have := hmax hu
+    simp only [Set.mem_setOf_eq] at this
+    rw [hshift s ⌊s⌋]
+    exact this
+  -- The three pieces of the barrier.
+  set x₀ : ℝ := θ t₀ + 2 * Real.pi with hx₀
+  set x₁ : ℝ := θ t₁ + 2 * Real.pi with hx₁
+  set y₀ : ℝ := apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t₀)) with hy₀
+  set y₁ : ℝ := apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t₁)) with hy₁
+  have hy₀n : 0 ≤ y₀ := (hbnd t₀).1
+  have hy₁n : y₁ ≤ 1 := (hbnd t₁).2
+  have hc2 : Continuous fun u : ℝ =>
+      (θ (t₀ + (t₁ - t₀) * u) + 2 * Real.pi,
+        apm_t91J03_height gamma (Circle.exp (2 * Real.pi * (t₀ + (t₁ - t₀) * u)))) := by
+    have c1 : Continuous fun u : ℝ => θ (t₀ + (t₁ - t₀) * u) :=
+      θ.continuous.comp (by fun_prop)
+    have c2 : Continuous fun u : ℝ =>
+        apm_t91J03_height gamma (Circle.exp (2 * Real.pi * (t₀ + (t₁ - t₀) * u))) :=
+      hcont.comp (by fun_prop)
+    exact (c1.add continuous_const).prodMk c2
+  set p₁ : Path (x₀, 0) (x₀, y₀) :=
+    Path.ofLine (f := fun u : ℝ => (x₀, y₀ * u)) (by fun_prop) (by simp) (by simp) with hp₁
+  set p₂ : Path (x₀, y₀) (x₁, y₁) :=
+    Path.ofLine (f := fun u : ℝ =>
+      (θ (t₀ + (t₁ - t₀) * u) + 2 * Real.pi,
+        apm_t91J03_height gamma (Circle.exp (2 * Real.pi * (t₀ + (t₁ - t₀) * u)))))
+      hc2.continuousOn (by simp [hx₀, hy₀])
+      (by simp [hx₁, hy₁, show t₀ + (t₁ - t₀) * 1 = t₁ by ring]) with hp₂
+  set p₃ : Path (x₁, y₁) (x₁, 1) :=
+    Path.ofLine (f := fun u : ℝ => (x₁, y₁ + (1 - y₁) * u)) (by fun_prop) (by simp) (by simp)
+    with hp₃
+  set β : C(I, ℝ × ℝ) := ⟨((p₁.trans p₂).trans p₃),
+    ((p₁.trans p₂).trans p₃).continuous⟩ with hβ
+  refine ⟨β, by simp [hβ, Path.source, Path.target], by simp [hβ, Path.source, Path.target], ?_⟩
+  intro s t
+  have avoid₂ : ∀ τ : ℝ, (θ τ + 2 * Real.pi,
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * τ))) ≠
+      (θ s, apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s))) := by
+    intro τ h
+    exact apm_t91J03_disjoint gamma hgamma θ d hθ hper hd s τ
+      (by have := congrArg Prod.fst h; simp only at this; exact this.symm)
+      (by have := congrArg Prod.snd h; simp only at this; exact this.symm)
+  have avoid₁ : ∀ u : ℝ, 0 ≤ u → u ≤ 1 → (x₀, y₀ * u) ≠
+      (θ s, apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s))) := by
+    intro u hu0 hu1 hpt
+    have hfirst : θ s = θ t₀ + 2 * Real.pi := by
+      have := congrArg Prod.fst hpt; simp only at this; exact this.symm
+    have hsn : apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) = y₀ := by
+      have h := congrArg Prod.snd hpt
+      simp only at h
+      have hmul : y₀ * u ≤ y₀ := by nlinarith [hy₀n, hu0, hu1]
+      have := hminall s
+      linarith
+    exact apm_t91J03_disjoint gamma hgamma θ d hθ hper hd s t₀ hfirst hsn
+  have avoid₃ : ∀ u : ℝ, 0 ≤ u → u ≤ 1 → (x₁, y₁ + (1 - y₁) * u) ≠
+      (θ s, apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s))) := by
+    intro u hu0 hu1 hpt
+    have hfirst : θ s = θ t₁ + 2 * Real.pi := by
+      have := congrArg Prod.fst hpt; simp only at this; exact this.symm
+    have hsn : apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) = y₁ := by
+      have h := congrArg Prod.snd hpt
+      simp only at h
+      have hmul : y₁ ≤ y₁ + (1 - y₁) * u := by nlinarith [hy₁n, hu0, hu1]
+      have := hmaxall s
+      linarith
+    exact apm_t91J03_disjoint gamma hgamma θ d hθ hper hd s t₁ hfirst hsn
+  have ht0 := t.2.1
+  have ht1 := t.2.2
+  show ((p₁.trans p₂).trans p₃) t ≠ _
+  rw [Path.trans_apply]
+  split_ifs with hA
+  · rw [Path.trans_apply]
+    split_ifs with hB
+    · intro hpt
+      exact avoid₁ (2 * (2 * (t : ℝ))) (by linarith) (by linarith) hpt
+    · intro hpt
+      exact avoid₂ (t₀ + (t₁ - t₀) * ((2:ℝ) * (2 * (t : ℝ)) - 1)) hpt
+  · intro hpt
+    exact avoid₃ ((2:ℝ) * (t : ℝ) - 1) (by linarith) (by linarith) hpt
+
+open unitInterval in
+/-- An embedded circle winds at most once. Otherwise take the barrier `β`, and `α`, the affine
+reparametrization to `I` of `s ↦ (θ s, h s)` on a long interval `[-N, N]` (reversed when `d < 0`):
+`θ (t + k) = θ t + 2π d k` is unbounded, and `β` has compact image, so `α 0` lies left of `β`
+and `α 1` right of it. `apm_t91J03_crossing` then contradicts the barrier. -/
+-- BEGIN SEAT AREA
+lemma apm_t91J03_no_wind (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding (gamma : Circle → apm_t91J03_Annulus))
+    (θ : C(ℝ, ℝ)) (d : ℤ)
+    (hθ : ∀ t, Circle.exp (θ t) =
+      apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * t)))
+    (hper : ∀ t, θ (t + 1) = θ t + 2 * Real.pi * d) : d.natAbs ≤ 1 := by
+  by_contra hc
+  push_neg at hc
+  obtain ⟨β, hβ0, hβ1, hdisj⟩ :=
+    apm_t91J03_no_wind_aux_barrier gamma hgamma θ d hθ hper hc
+  have hp : 0 < 2 * Real.pi := by positivity
+  have hd0 : (d : ℝ) ≠ 0 := by
+    have : d ≠ 0 := by omega
+    exact_mod_cast this
+  have key : ∀ (k : ℤ) (u : ℝ),
+      θ (u + (k : ℝ)) = θ u + 2 * Real.pi * ((d : ℝ) * k) := by
+    intro k
+    induction k using Int.induction_on with
+    | zero => intro u; simp
+    | succ n ih =>
+        intro u
+        rw [show u + ((↑n + 1 : ℤ) : ℝ) = (u + ((↑n : ℤ) : ℝ)) + 1 by push_cast; ring,
+          hper, ih u]
+        push_cast
+        ring
+    | pred n ih =>
+        intro u
+        have hb : θ ((u + ((-↑n : ℤ) : ℝ)) - 1) =
+            θ (u + ((-↑n : ℤ) : ℝ)) - 2 * Real.pi * d := by
+          have h := hper (u + ((-↑n : ℤ) : ℝ) - 1)
+          rw [show u + ((-↑n : ℤ) : ℝ) - 1 + 1 = u + ((-↑n : ℤ) : ℝ) by ring] at h
+          push_cast at h ⊢
+          linarith
+        rw [show u + ((-↑n - 1 : ℤ) : ℝ) = (u + ((-↑n : ℤ) : ℝ)) - 1 by
+          push_cast; ring, hb, ih u]
+        push_cast
+        ring
+  have hθk : ∀ k : ℤ, θ (k : ℝ) = θ 0 + 2 * Real.pi * ((d : ℝ) * k) := by
+    intro k
+    have := key k 0
+    simpa using this
+  have hlo : ∀ T : ℝ, ∃ k : ℤ, (d : ℝ) * k < T := by
+    intro T
+    rcases lt_or_ge (0 : ℝ) (d : ℝ) with hd | hd
+    · obtain ⟨n, hn⟩ := exists_int_lt (T / (d : ℝ))
+      refine ⟨n, ?_⟩
+      rw [lt_div_iff₀ hd] at hn
+      rw [mul_comm]
+      exact hn
+    · have hdn : (d : ℝ) < 0 := lt_of_le_of_ne hd hd0
+      have hd' : (0 : ℝ) < (-d : ℝ) := by linarith
+      obtain ⟨n, hn⟩ := exists_int_lt (T / (-d : ℝ))
+      refine ⟨-n, ?_⟩
+      rw [lt_div_iff₀ hd'] at hn
+      push_cast
+      linear_combination hn
+  have hhi : ∀ T : ℝ, ∃ k : ℤ, T < (d : ℝ) * k := by
+    intro T
+    rcases lt_or_ge (0 : ℝ) (d : ℝ) with hd | hd
+    · obtain ⟨n, hn⟩ := exists_int_gt (T / (d : ℝ))
+      refine ⟨n, ?_⟩
+      rw [div_lt_iff₀ hd] at hn
+      rw [mul_comm]
+      exact hn
+    · have hdn : (d : ℝ) < 0 := lt_of_le_of_ne hd hd0
+      have hd' : (0 : ℝ) < (-d : ℝ) := by linarith
+      obtain ⟨n, hn⟩ := exists_int_gt (T / (-d : ℝ))
+      refine ⟨-n, ?_⟩
+      rw [div_lt_iff₀ hd'] at hn
+      push_cast
+      linear_combination hn
+  have gcont : Continuous fun t : I => (β t).1 := β.continuous.fst
+  obtain ⟨tmin, htmin, hmin⟩ := isCompact_Icc.exists_isMinOn
+    (Set.nonempty_Icc.2 zero_le_one) gcont.continuousOn
+  obtain ⟨tmax, htmax, hmax⟩ := isCompact_Icc.exists_isMaxOn
+    (Set.nonempty_Icc.2 zero_le_one) gcont.continuousOn
+  set Rlo : ℝ := (β tmin).1 - 1 with hRlo
+  set Rhi : ℝ := (β tmax).1 + 1 with hRhi
+  obtain ⟨a, ha⟩ := hlo ((Rlo - θ 0) / (2 * Real.pi))
+  obtain ⟨b, hb⟩ := hhi ((Rhi - θ 0) / (2 * Real.pi))
+  have hfa : 2 * Real.pi * ((Rlo - θ 0) / (2 * Real.pi)) = Rlo - θ 0 := by
+    field_simp
+  have hfb : 2 * Real.pi * ((Rhi - θ 0) / (2 * Real.pi)) = Rhi - θ 0 := by
+    field_simp
+  have hθa : θ (a : ℝ) < Rlo := by
+    rw [hθk a]
+    have h2 := mul_lt_mul_of_pos_left ha hp
+    have h3 : θ 0 + 2 * Real.pi * ((d : ℝ) * a) < θ 0 + (Rlo - θ 0) := by linarith
+    linarith
+  have hθb : Rhi < θ (b : ℝ) := by
+    rw [hθk b]
+    have h2 := mul_lt_mul_of_pos_left hb hp
+    have h3 : θ 0 + (Rhi - θ 0) < θ 0 + 2 * Real.pi * ((d : ℝ) * b) := by linarith
+    linarith
+  set s : ℝ → ℝ := fun u => (a : ℝ) + ((b : ℝ) - (a : ℝ)) * u with hsdef
+  have hc1 : Continuous fun u : ℝ => θ (s u) := θ.continuous.comp (by fun_prop)
+  have hc2 : Continuous fun u : ℝ =>
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s u)) := by
+    simp only [apm_t91J03_height, hsdef]
+    fun_prop
+  have hαc : Continuous fun u : I => (θ (s u),
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s u))) :=
+    (hc1.comp continuous_subtype_val).prodMk (hc2.comp continuous_subtype_val)
+  set α : C(I, ℝ × ℝ) := ⟨fun u => (θ (s u),
+    apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s u))), hαc⟩ with hαdef
+  have hα0 : (α 0).1 = θ (a : ℝ) := by
+    simp [hαdef, hsdef]
+  have hα1 : (α 1).1 = θ (b : ℝ) := by
+    have hs1 : s 1 = (b : ℝ) := by simp [hsdef]
+    simp [hαdef, hs1]
+  have hαb : ∀ u : I, 0 ≤ (α u).2 ∧ (α u).2 ≤ 1 := fun u =>
+    (gamma (Circle.exp (2 * Real.pi * s u))).2.2
+  have hmin' : ∀ t : I, (β tmin).1 ≤ (β t).1 := fun t => hmin t.2
+  have hmax' : ∀ t : I, (β t).1 ≤ (β tmax).1 := fun t => hmax t.2
+  have hl : ∀ t : I, (α 0).1 < (β t).1 := by
+    intro t
+    rw [hα0]
+    have := hmin' t
+    linarith
+  have hr : ∀ t : I, (β t).1 < (α 1).1 := by
+    intro t
+    rw [hα1]
+    have := hmax' t
+    linarith
+  obtain ⟨u, t, hut⟩ := apm_t91J03_crossing α β hαb hβ0 hβ1 hl hr
+  exact hdisj (s u) t hut.symm
+-- END SEAT AREA
+
+/-- **LIBRARY: classification of embedded circles in the closed annulus.**
+
+For every choice of generator of `H₁(S¹; ℤ)`, the first projection of an
+embedded annular circle acts by multiplication by `-1`, `0`, or `1`.
+
+This is the genuine missing topological foundation.  One proof lifts the
+embedded circle to the closed strip and uses Jordan separation to show that a
+deck translate cannot cross it; equivalently, an essential simple closed curve
+in an annulus represents a primitive homology class. -/
+lemma apm_t91J03_embedded_annular_circle_homology_bound
+    (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding
+      (gamma : Circle → apm_t91J03_Annulus))
+    (orientation : apm_t91J03_H1Circle ≅ ModuleCat.of ℤ ℤ) :
+    ∃ m : ℤ, m.natAbs ≤ 1 ∧
+      ∀ a : apm_t91J03_H1Circle,
+        orientation.hom (apm_t91J03_H1Map gamma a) =
+          m * orientation.hom a := by
+  obtain ⟨θ, d, hθ, hper⟩ := apm_t91J03_periodic_lift (apm_t91J03_circleMap gamma)
+  exact ⟨d, apm_t91J03_no_wind gamma hgamma θ d hθ hper,
+    fun a => apm_t91J03_degree _ θ d hθ hper orientation a⟩
+
+/-- A scalar describing an endomorphism of a rank-one module is unique.
+This is deliberately independent of the annulus classification lemma. -/
+lemma apm_t91J03_rank_one_scalar_unique
+    (f : apm_t91J03_H1Circle ⟶ ModuleCat.of ℤ ℤ)
+    (orientation : apm_t91J03_H1Circle ≅ ModuleCat.of ℤ ℤ)
+    (n m : ℤ)
+    (hn : ∀ a : apm_t91J03_H1Circle,
+      f a = n * orientation.hom a)
+    (hm : ∀ a : apm_t91J03_H1Circle,
+      f a = m * orientation.hom a) :
+    n = m := by
+  have h := (hn (orientation.inv 1)).symm.trans (hm (orientation.inv 1))
+  simpa using h
+
+/-- An integer of absolute value two cannot have absolute value at most one.
+Kept separate so this leaf has no topological dependencies. -/
+lemma apm_t91J03_natAbs_two_not_le_one
+    (n : ℤ) (htwo : n.natAbs = 2) (hle : n.natAbs ≤ 1) : False := by
+  omega
+
+/-- An embedded annular circle cannot have homological winding of absolute
+value two.  This assembly is sorry-free; its three inputs can be proved in
+parallel. -/
+lemma apm_t91J03_no_embedded_winding_two
+    (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding
+      (gamma : Circle → apm_t91J03_Annulus))
+    (n : ℤ) (hn : apm_t91J03_HasWindingNumber gamma n)
+    (habs : n.natAbs = 2) : False := by
+  obtain ⟨orientation, hn⟩ := hn
+  obtain ⟨m, hm_bound, hm⟩ :=
+    apm_t91J03_embedded_annular_circle_homology_bound gamma hgamma orientation
+  have hnm : n = m := apm_t91J03_rank_one_scalar_unique
+    (apm_t91J03_H1Map gamma ≫ orientation.hom) orientation n m hn hm
+  subst m
+  exact apm_t91J03_natAbs_two_not_le_one n habs hm_bound
+
+/-- An embedded circle in the closed annulus whose first projection has
+homological degree of absolute value two would contain two distinct parameter
+points with the same annular coordinates.  The hypotheses are inconsistent by
+the annular-circle classification above, so the collision follows. -/
+theorem apm_t91J03_winding_two_forces_annulus_collision
+    (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding
+      (gamma : Circle → apm_t91J03_Annulus))
+    (n : ℤ) (hn : apm_t91J03_HasWindingNumber gamma n)
+    (habs : n.natAbs = 2) :
+    ∃ z w : Circle, z ≠ w ∧
+      apm_t91J03_circleMap gamma z = apm_t91J03_circleMap gamma w ∧
+      apm_t91J03_height gamma z = apm_t91J03_height gamma w := by
+  exact False.elim
+    (apm_t91J03_no_embedded_winding_two gamma hgamma n hn habs)
+
+/-- The final contradiction, once the geometric collision is available. -/
+lemma apm_t91J03_no_two_of_forced_fiber_collision
+    (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding
+      (gamma : Circle → apm_t91J03_Annulus))
+    (hcollision : ∀ n : ℤ, apm_t91J03_HasWindingNumber gamma n →
+      n.natAbs = 2 →
+      ∃ z w : Circle, z ≠ w ∧
+        apm_t91J03_circleMap gamma z = apm_t91J03_circleMap gamma w ∧
+        apm_t91J03_height gamma z = apm_t91J03_height gamma w) :
+    ∀ n : ℤ, apm_t91J03_HasWindingNumber gamma n → n.natAbs ≠ 2 := by
+  intro n hn habs
+  obtain ⟨z, w, hzw, hprojection, hheight⟩ := hcollision n hn habs
+  exact (apm_t91J03_height_ne_of_circleMap_eq gamma hgamma hzw hprojection)
+    hheight
+
+theorem apm_t91j03
+    (gamma : C(Circle, apm_t91J03_Annulus))
+    (hgamma : Topology.IsEmbedding
+      (gamma : Circle → apm_t91J03_Annulus)) :
+    ∀ n : ℤ, apm_t91J03_HasWindingNumber gamma n → n.natAbs ≠ 2 := by
+  apply apm_t91J03_no_two_of_forced_fiber_collision gamma hgamma
+  intro n hn habs
+  exact apm_t91J03_winding_two_forces_annulus_collision gamma hgamma n hn habs
+
+#print axioms apm_t91j03
