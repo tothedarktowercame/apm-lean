@@ -858,7 +858,12 @@ theorem fderivWithin_inter_closedBall_eq
     (f : E → F) (s : Set E) (p : E) (R : ℝ) {x : E}
     (hx : x ∈ s ∩ Metric.ball p R) :
     fderivWithin ℝ f (s ∩ Metric.closedBall p R) x = fderivWithin ℝ f s x := by
-  sorry
+  apply fderivWithin_congr_set
+  filter_upwards [Metric.isOpen_ball.mem_nhds hx.2] with y hy
+  apply propext
+  constructor
+  · exact fun h ↦ h.1
+  · exact fun h ↦ ⟨h, Metric.ball_subset_closedBall hy⟩
 
 /-- Every point of `s` lies in an open ball of some positive integer radius about `p`.
 This is the countable exhaustion needed to cover the relative critical image. -/
