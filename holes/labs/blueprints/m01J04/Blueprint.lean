@@ -4816,7 +4816,40 @@ theorem apm_m01J04_local_strong_aux_weak {d : ℕ} {Ω : Set (EuclideanSpace ℝ
     (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ)
     (q : EuclideanSpace ℝ (Fin d) → ℝ) (hq : MemLp q 2 volume) :
     Tendsto (fun n ↦ ∫ x, ((f n).val x - fLim.val x) * χ x * q x) atTop (nhds 0) := by
-  sorry
+  let r : EuclideanSpace ℝ (Fin d) → ℝ := fun x ↦ χ x * q x
+  have hqΩ : MemLp q 2 (volume.restrict Ω) :=
+    hq.mono_measure Measure.restrict_le_self
+  have hr : MemLp r 2 (volume.restrict Ω) := by
+    simpa [r, Pi.smul_apply, smul_eq_mul] using
+      hqΩ.smul (apm_m01J04_isTestFunction_memLp hχ ⊤)
+  have ht := hf.1 r hr
+  have ht' := ht.sub_const (∫ x in Ω, fLim.val x * r x)
+  have hrestricted : Tendsto
+      (fun n ↦ ∫ x in Ω, ((f n).val x - fLim.val x) * χ x * q x)
+      atTop (nhds 0) := by
+    convert ht' using 1
+    · funext n
+      calc
+        (∫ x in Ω, ((f n).val x - fLim.val x) * χ x * q x) =
+            ∫ x in Ω, (f n).val x * r x - fLim.val x * r x := by
+              apply MeasureTheory.integral_congr_ae
+              filter_upwards [] with x
+              simp only [r]
+              ring
+        _ = (∫ x in Ω, (f n).val x * r x) -
+            ∫ x in Ω, fLim.val x * r x :=
+          MeasureTheory.integral_sub
+            ((f n).val_memLp.integrable_mul hr)
+            (fLim.val_memLp.integrable_mul hr)
+    · simp
+  have hχzero : ∀ x, x ∉ Ω → χ x = 0 := by
+    intro x hx
+    by_contra hne
+    exact hx (hχ.2.2 hne)
+  convert hrestricted using 1
+  funext n
+  exact (MeasureTheory.setIntegral_eq_integral_of_forall_compl_eq_zero
+    (fun x hx ↦ by simp [hχzero x hx])).symm
 
 /-- Seat: local strong convergence. Take `h n` from `apm_m01J04_H1_exists_sub (f n) fLim`, and
 `u n := apm_m01J04_globalLocalizedH1 χ hχ (h n)`, supported in `tsupport χ`. The norm bound is
