@@ -920,12 +920,180 @@ theorem apm_t98a04_submersion_aux_hopf_smooth
 (`v` is polynomial in `x`, `‖v x‖` is smooth and nonzero), and projects to `[v x]` by `Projectivization.mk_eq_mk_iff'`.
 `s x₀ = z` because `z` and `v x₀` are proportional with `v x₀ i = 1`. Check at `z = (1,0)`, `i = 0`: `x₀ = 0`, `c = 1`,
 `s 0 = (1,0)`. -/
+theorem apm_t98a04_submersion_aux_section_aux_vsmooth (i : Fin 2) :
+    ContDiff ℝ (⊤ : ℕ∞) (apm_t98a04_affineVector i) := by
+  have hcoord : ∀ k : Fin 2, ContDiff ℝ (⊤ : ℕ∞) fun x : apm_t98a04_R2 ↦ x k := fun k ↦
+    (contDiff_apply ℝ ℝ (n := (⊤ : ℕ∞)) k).comp (PiLp.contDiff_ofLp (𝕜 := ℝ))
+  have hw : ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ (x 0 : ℂ) + (x 1 : ℂ) * Complex.I :=
+    (Complex.ofRealCLM.contDiff.comp (hcoord 0)).add
+      ((Complex.ofRealCLM.contDiff.comp (hcoord 1)).mul contDiff_const)
+  fin_cases i
+  · show ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ WithLp.toLp 2 ![(1 : ℂ), (x 0 : ℂ) + (x 1 : ℂ) * Complex.I]
+    apply PiLp.contDiff_toLp.comp
+    rw [contDiff_pi]
+    intro k
+    fin_cases k
+    · simpa using contDiff_const (c := (1 : ℂ))
+    · simpa using hw
+  · show ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ WithLp.toLp 2 ![(x 0 : ℂ) + (x 1 : ℂ) * Complex.I, (1 : ℂ)]
+    apply PiLp.contDiff_toLp.comp
+    rw [contDiff_pi]
+    intro k
+    fin_cases k
+    · simpa using hw
+    · simpa using contDiff_const (c := (1 : ℂ))
+
+theorem apm_t98a04_submersion_aux_section_aux_scalar_smooth (i : Fin 2) (c : ℂ) :
+    ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ c * ((‖apm_t98a04_affineVector i x‖ : ℂ))⁻¹ := by
+  have h0 : ∀ x : apm_t98a04_R2, (‖apm_t98a04_affineVector i x‖ : ℂ) ≠ 0 := fun x ↦
+    Complex.ofReal_ne_zero.mpr
+      ((norm_pos_iff.mpr (apm_t98a04_affineVector_ne_zero i x)).ne')
+  exact contDiff_const.mul
+    ((Complex.ofRealCLM.contDiff.comp
+      ((apm_t98a04_submersion_aux_section_aux_vsmooth i).norm ℝ
+        (fun x ↦ apm_t98a04_affineVector_ne_zero i x))).inv h0)
+
+theorem apm_t98a04_submersion_aux_section_aux_fsmooth (i : Fin 2) (c : ℂ) :
+    ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦
+        (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) • apm_t98a04_affineVector i x := by
+  have hsc := apm_t98a04_submersion_aux_section_aux_scalar_smooth i c
+  have hv := apm_t98a04_submersion_aux_section_aux_vsmooth i
+  have hcoord : ∀ k : Fin 2, ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ (apm_t98a04_affineVector i x) k := fun k ↦
+    ((contDiff_apply ℝ ℂ (n := (⊤ : ℕ∞)) k).comp
+      (PiLp.contDiff_ofLp (𝕜 := ℝ))).comp hv
+  have hfun : (fun x : apm_t98a04_R2 ↦
+        (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) • apm_t98a04_affineVector i x) =
+      fun x ↦ WithLp.toLp 2
+        ![(c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) * apm_t98a04_affineVector i x 0,
+          (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) * apm_t98a04_affineVector i x 1] := by
+    funext x
+    ext k
+    fin_cases k <;> simp [PiLp.smul_apply, smul_eq_mul]
+  rw [hfun]
+  apply PiLp.contDiff_toLp.comp
+  rw [contDiff_pi]
+  intro k
+  fin_cases k
+  · simpa using hsc.mul (hcoord 0)
+  · simpa using hsc.mul (hcoord 1)
+
+theorem apm_t98a04_submersion_aux_section_aux_mem (i : Fin 2) (c : ℂ) (hc : ‖c‖ = 1)
+    (x : apm_t98a04_R2) :
+    (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) • apm_t98a04_affineVector i x ∈
+      Metric.sphere (0 : apm_t98a04_C2) 1 := by
+  have hn : ‖apm_t98a04_affineVector i x‖ ≠ 0 :=
+    (norm_pos_iff.mpr (apm_t98a04_affineVector_ne_zero i x)).ne'
+  rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_mul, norm_inv,
+    Complex.norm_real, Real.norm_of_nonneg (norm_nonneg _), hc, one_mul,
+    inv_mul_cancel₀ hn]
+
+theorem apm_t98a04_submersion_aux_section_aux_v_at_x0
+    (z : apm_t98a04_S3) (i : Fin 2) (hi : z.1 i ≠ 0) :
+    apm_t98a04_affineVector i (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) =
+      (z.1 i)⁻¹ • z.1 := by
+  obtain ⟨a, ha⟩ :=
+    Projectivization.exists_smul_eq_mk_rep ℂ z.1 (apm_t98a04_sphere_ne_zero z)
+  have hrep : Projectivization.rep (apm_t98a04_hopf z) = (a : ℂ) • z.1 := ha.symm
+  have ha0 : (a : ℂ) ≠ 0 := a.ne_zero
+  have hr : ∀ k : Fin 2,
+      Projectivization.rep (apm_t98a04_hopf z) k = (a : ℂ) * z.1 k := fun k ↦ by
+    have h := congrArg (fun v : apm_t98a04_C2 ↦ v k) hrep
+    simpa using h
+  fin_cases i
+  · show apm_t98a04_affineVector (0 : Fin 2)
+        (apm_t98a04_affineCoordinate (0 : Fin 2) (apm_t98a04_hopf z)) =
+      (z.1 (0 : Fin 2))⁻¹ • z.1
+    have hw : Projectivization.rep (apm_t98a04_hopf z) 1 /
+        Projectivization.rep (apm_t98a04_hopf z) 0 = z.1 1 / z.1 0 := by
+      rw [hr 1, hr 0, mul_div_mul_left _ _ ha0]
+    have hx0 : apm_t98a04_affineCoordinate (0 : Fin 2) (apm_t98a04_hopf z) =
+        WithLp.toLp 2 ![(z.1 1 / z.1 0).re, (z.1 1 / z.1 0).im] := by
+      simp only [apm_t98a04_affineCoordinate, ↓reduceIte, hw]
+    have hv : apm_t98a04_affineVector (0 : Fin 2)
+        (apm_t98a04_affineCoordinate (0 : Fin 2) (apm_t98a04_hopf z)) =
+        WithLp.toLp 2 ![(1 : ℂ), z.1 1 / z.1 0] := by
+      rw [hx0]
+      simp only [apm_t98a04_affineVector, ↓reduceIte, PiLp.toLp_apply,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+      rw [Complex.re_add_im]
+    rw [hv]
+    ext k
+    fin_cases k
+    · show (1 : ℂ) = (z.1 0)⁻¹ * z.1 0
+      exact (inv_mul_cancel₀ hi).symm
+    · show z.1 1 / z.1 0 = (z.1 0)⁻¹ * z.1 1
+      rw [div_eq_mul_inv, mul_comm]
+  · show apm_t98a04_affineVector (1 : Fin 2)
+        (apm_t98a04_affineCoordinate (1 : Fin 2) (apm_t98a04_hopf z)) =
+      (z.1 (1 : Fin 2))⁻¹ • z.1
+    have hw : Projectivization.rep (apm_t98a04_hopf z) 0 /
+        Projectivization.rep (apm_t98a04_hopf z) 1 = z.1 0 / z.1 1 := by
+      rw [hr 0, hr 1, mul_div_mul_left _ _ ha0]
+    have hx0 : apm_t98a04_affineCoordinate (1 : Fin 2) (apm_t98a04_hopf z) =
+        WithLp.toLp 2 ![(z.1 0 / z.1 1).re, (z.1 0 / z.1 1).im] := by
+      simp only [apm_t98a04_affineCoordinate, show ¬((1 : Fin 2) = 0) from by decide,
+        ↓reduceIte, hw]
+    have hv : apm_t98a04_affineVector (1 : Fin 2)
+        (apm_t98a04_affineCoordinate (1 : Fin 2) (apm_t98a04_hopf z)) =
+        WithLp.toLp 2 ![z.1 0 / z.1 1, (1 : ℂ)] := by
+      rw [hx0]
+      simp only [apm_t98a04_affineVector, show ¬((1 : Fin 2) = 0) from by decide,
+        ↓reduceIte, PiLp.toLp_apply,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+      rw [Complex.re_add_im]
+    rw [hv]
+    ext k
+    fin_cases k
+    · show z.1 0 / z.1 1 = (z.1 1)⁻¹ * z.1 0
+      rw [div_eq_mul_inv, mul_comm]
+    · show (1 : ℂ) = (z.1 1)⁻¹ * z.1 1
+      exact (inv_mul_cancel₀ hi).symm
+
 theorem apm_t98a04_submersion_aux_section (z : apm_t98a04_S3) (i : Fin 2) (hi : z.1 i ≠ 0) :
     ∃ s : apm_t98a04_R2 → apm_t98a04_S3,
       ContMDiff (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) (⊤ : ℕ∞) s ∧
       s (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) = z ∧
       ∀ x, apm_t98a04_hopf (s x) = apm_t98a04_affineInverse i x := by
-  sorry
+  set c : ℂ := z.1 i / (‖z.1 i‖ : ℂ) with hc_def
+  have hc : ‖c‖ = 1 := by
+    have hn0 : ‖z.1 i‖ ≠ 0 := (norm_pos_iff.mpr hi).ne'
+    rw [hc_def, norm_div, Complex.norm_real, Real.norm_of_nonneg (norm_nonneg _),
+      div_self hn0]
+  have hz1 : ‖z.1‖ = 1 := by
+    have h := z.2
+    rw [Metric.mem_sphere, dist_zero_right] at h
+    exact h
+  set f : apm_t98a04_R2 → apm_t98a04_C2 :=
+    fun x ↦ (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) • apm_t98a04_affineVector i x
+    with hf_def
+  have hf_smooth : ContDiff ℝ (⊤ : ℕ∞) f :=
+    apm_t98a04_submersion_aux_section_aux_fsmooth i c
+  have hf_mem : ∀ x, f x ∈ Metric.sphere (0 : apm_t98a04_C2) 1 :=
+    apm_t98a04_submersion_aux_section_aux_mem i c hc
+  refine ⟨Set.codRestrict f _ hf_mem, ?_, ?_, ?_⟩
+  · exact hf_smooth.contMDiff.codRestrict_sphere hf_mem
+  · apply Subtype.ext
+    show f _ = z.1
+    simp only [hf_def]
+    rw [apm_t98a04_submersion_aux_section_aux_v_at_x0 z i hi]
+    have hnv : ‖(z.1 i)⁻¹ • z.1‖ = ‖z.1 i‖⁻¹ := by
+      rw [norm_smul, norm_inv, hz1, mul_one]
+    rw [hnv, smul_smul]
+    have hn0 : (‖z.1 i‖ : ℂ) ≠ 0 :=
+      Complex.ofReal_ne_zero.mpr (norm_pos_iff.mpr hi).ne'
+    rw [hc_def, Complex.ofReal_inv, inv_inv, div_mul_cancel₀ _ hn0, mul_inv_cancel₀ hi,
+      one_smul]
+  · intro x
+    show Projectivization.mk ℂ (Set.codRestrict f _ hf_mem x).1 _ =
+      Projectivization.mk ℂ (apm_t98a04_affineVector i x) _
+    exact (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      ⟨c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹, rfl⟩
 
 /-- Seat: a smooth section forces surjectivity. `haffine` gives the chart `e i`, an element of the atlas with
 `(e i).symm x = affineInverse i x`, so `hopf ∘ s = (e i).symm` everywhere. By the chain rule

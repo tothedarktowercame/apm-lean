@@ -111,10 +111,324 @@ lemma apm_t98a04_continuous_hopf : Continuous apm_t98a04_hopf := by
 /-- Build the two ratio charts from `affineSource_isOpen`, quotient descent,
 and the explicit inverse `[1:w]`/`[w:1]`.  At `[1:0]`, chart zero is
 `w = z₁/z₀` and sends the point to `0`. -/
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_div_smul
+    (a : ℂˣ) (x y : ℂ) :
+    ((a : ℂ) * x) / ((a : ℂ) * y) = x / y := by
+  have ha : (a : ℂ) ≠ 0 := a.ne_zero
+  field_simp [ha]
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_units_ne_zero
+    (a : ℂˣ) : (a : ℂ) ≠ 0 := a.ne_zero
+
+private def apm_t98a04_submersion_aux_affine_atlas_aux_lift
+    (i : Fin 2) (v : {w : apm_t98a04_C2 // w ≠ 0}) : apm_t98a04_R2 :=
+  let w : ℂ := if i = 0 then v.1 1 / v.1 0 else v.1 0 / v.1 1
+  WithLp.toLp 2 ![w.re, w.im]
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_coord_mk'
+    (i : Fin 2) (v : {w : apm_t98a04_C2 // w ≠ 0}) :
+    apm_t98a04_affineCoordinate i (Projectivization.mk' ℂ v) =
+      apm_t98a04_submersion_aux_affine_atlas_aux_lift i v := by
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v.1 v.2
+  have e0 : (a • v.1) 0 = (a : ℂ) * v.1 0 := rfl
+  have e1 : (a • v.1) 1 = (a : ℂ) * v.1 1 := rfl
+  simp only [apm_t98a04_affineCoordinate,
+    apm_t98a04_submersion_aux_affine_atlas_aux_lift,
+    Projectivization.mk'_eq_mk, ← ha, e0, e1,
+    apm_t98a04_submersion_aux_affine_atlas_aux_div_smul]
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_preimage
+    (i : Fin 2) :
+    (Projectivization.mk' ℂ) ⁻¹'
+      {p : apm_t98a04_CP1 | Projectivization.rep p i ≠ 0} =
+      {v : {w : apm_t98a04_C2 // w ≠ 0} | v.1 i ≠ 0} := by
+  ext v
+  simp only [Set.mem_preimage, Set.mem_setOf_eq]
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v.1 v.2
+  have hr : Projectivization.rep (Projectivization.mk' ℂ v) i =
+      (a : ℂ) * v.1 i := by
+    rw [Projectivization.mk'_eq_mk, ← ha]
+    rfl
+  rw [hr]
+  constructor
+  · intro h hvi
+    rw [hvi, mul_zero] at h
+    exact h rfl
+  · intro h
+    exact mul_ne_zero
+      (apm_t98a04_submersion_aux_affine_atlas_aux_units_ne_zero a) h
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_isOpen
+    (i : Fin 2) :
+    IsOpen {p : apm_t98a04_CP1 | Projectivization.rep p i ≠ 0} := by
+  rw [isOpen_coinduced, apm_t98a04_submersion_aux_affine_atlas_aux_preimage i]
+  change IsOpen ((fun v : {w : apm_t98a04_C2 // w ≠ 0} => v.1 i) ⁻¹'
+    ({0}ᶜ : Set ℂ))
+  exact isOpen_compl_singleton.preimage
+    ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℂ) i).comp
+      continuous_subtype_val)
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_lift_contOn
+    (i : Fin 2) :
+    ContinuousOn (apm_t98a04_submersion_aux_affine_atlas_aux_lift i)
+      {v : {w : apm_t98a04_C2 // w ≠ 0} | v.1 i ≠ 0} := by
+  have hc : ∀ k : Fin 2, Continuous
+      (fun v : {w : apm_t98a04_C2 // w ≠ 0} => (v.1 : apm_t98a04_C2) k) :=
+    fun k => (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℂ) k).comp
+      continuous_subtype_val
+  have hto : Continuous
+      (WithLp.toLp 2 : (Fin 2 → ℝ) → apm_t98a04_R2) :=
+    PiLp.continuous_toLp 2 (fun _ => ℝ)
+  by_cases hi : i = 0
+  · subst hi
+    have hcc : ContinuousOn
+        (fun v : {w : apm_t98a04_C2 // w ≠ 0} => v.1 1 / v.1 0)
+        {v : {w : apm_t98a04_C2 // w ≠ 0} | v.1 0 ≠ 0} :=
+      ContinuousOn.div (hc 1).continuousOn (hc 0).continuousOn
+        (fun v hv => hv)
+    have hpi : ContinuousOn
+        (fun v : {w : apm_t98a04_C2 // w ≠ 0} =>
+          ![(v.1 1 / v.1 0).re, (v.1 1 / v.1 0).im])
+        {v : {w : apm_t98a04_C2 // w ≠ 0} | v.1 0 ≠ 0} := by
+      rw [continuousOn_pi]
+      intro j
+      fin_cases j
+      · exact Complex.continuous_re.comp_continuousOn hcc
+      · exact Complex.continuous_im.comp_continuousOn hcc
+    exact hto.comp_continuousOn hpi
+  · have hi1 : i = 1 := by
+      have h2 : i.val < 2 := i.2
+      have hv : i.val ≠ 0 := fun h => hi (Fin.ext h)
+      omega
+    subst hi1
+    have hcc : ContinuousOn
+        (fun v : {w : apm_t98a04_C2 // w ≠ 0} => v.1 0 / v.1 1)
+        {v : {w : apm_t98a04_C2 // w ≠ 0} | v.1 1 ≠ 0} :=
+      ContinuousOn.div (hc 0).continuousOn (hc 1).continuousOn
+        (fun v hv => hv)
+    have hpi : ContinuousOn
+        (fun v : {w : apm_t98a04_C2 // w ≠ 0} =>
+          ![(v.1 0 / v.1 1).re, (v.1 0 / v.1 1).im])
+        {v : {w : apm_t98a04_C2 // w ≠ 0} | v.1 1 ≠ 0} := by
+      rw [continuousOn_pi]
+      intro j
+      fin_cases j
+      · exact Complex.continuous_re.comp_continuousOn hcc
+      · exact Complex.continuous_im.comp_continuousOn hcc
+    exact hto.comp_continuousOn hpi
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_quotient :
+    Topology.IsQuotientMap
+      (Projectivization.mk' ℂ : {w : apm_t98a04_C2 // w ≠ 0} → apm_t98a04_CP1) :=
+  ⟨fun p => ⟨⟨Projectivization.rep p, Projectivization.rep_nonzero p⟩, by
+      rw [Projectivization.mk'_eq_mk]
+      exact Projectivization.mk_rep p⟩, rfl⟩
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_coord_contOn
+    (i : Fin 2) :
+    ContinuousOn (apm_t98a04_affineCoordinate i)
+      {p : apm_t98a04_CP1 | Projectivization.rep p i ≠ 0} := by
+  rw [apm_t98a04_submersion_aux_affine_atlas_aux_quotient.continuousOn_isOpen_iff
+    (apm_t98a04_submersion_aux_affine_atlas_aux_isOpen i),
+    apm_t98a04_submersion_aux_affine_atlas_aux_preimage i]
+  exact (apm_t98a04_submersion_aux_affine_atlas_aux_lift_contOn i).congr
+    (fun v _ => apm_t98a04_submersion_aux_affine_atlas_aux_coord_mk' i v)
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_inv_source
+    (i : Fin 2) (x : apm_t98a04_R2) :
+    Projectivization.rep (apm_t98a04_affineInverse i x) i ≠ 0 := by
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ
+    (apm_t98a04_affineVector i x) (apm_t98a04_affineVector_ne_zero i x)
+  have h1 : (a • apm_t98a04_affineVector i x) i = (a : ℂ) * 1 := by
+    show (a : ℂ) * apm_t98a04_affineVector i x i = _
+    fin_cases i <;>
+      simp [apm_t98a04_affineVector]
+  simp only [apm_t98a04_affineInverse]
+  rw [← ha, h1, mul_one]
+  exact apm_t98a04_submersion_aux_affine_atlas_aux_units_ne_zero a
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_left_inv
+    (i : Fin 2) (p : apm_t98a04_CP1)
+    (hp : Projectivization.rep p i ≠ 0) :
+    apm_t98a04_affineInverse i (apm_t98a04_affineCoordinate i p) = p := by
+  rw [← Projectivization.mk_rep p]
+  show Projectivization.mk ℂ (apm_t98a04_affineVector i _)
+      (apm_t98a04_affineVector_ne_zero i _) = _
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _
+    (apm_t98a04_affineVector_ne_zero i _) (Projectivization.rep_nonzero p)).2
+  refine ⟨(Projectivization.rep p i)⁻¹, ?_⟩
+  by_cases hi : i = 0
+  · subst hi
+    apply PiLp.ext
+    intro j
+    fin_cases j <;>
+      simp [apm_t98a04_affineVector, apm_t98a04_affineCoordinate,
+        PiLp.smul_apply, smul_eq_mul, hp, Complex.re_add_im, inv_mul_eq_div,
+        inv_mul_cancel₀ hp]
+  · have hi1 : i = 1 := by
+      have h2 : i.val < 2 := i.2
+      have hv : i.val ≠ 0 := fun h => hi (Fin.ext h)
+      omega
+    subst hi1
+    apply PiLp.ext
+    intro j
+    fin_cases j <;>
+      simp [apm_t98a04_affineVector, apm_t98a04_affineCoordinate,
+        PiLp.smul_apply, smul_eq_mul, hp, Complex.re_add_im, inv_mul_eq_div,
+        inv_mul_cancel₀ hp]
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_right_inv
+    (i : Fin 2) (x : apm_t98a04_R2) :
+    apm_t98a04_affineCoordinate i (apm_t98a04_affineInverse i x) = x := by
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ
+    (apm_t98a04_affineVector i x) (apm_t98a04_affineVector_ne_zero i x)
+  have hr : ∀ j, Projectivization.rep (apm_t98a04_affineInverse i x) j =
+      (a : ℂ) * apm_t98a04_affineVector i x j := by
+    intro j
+    rw [apm_t98a04_affineInverse, ← ha]
+    rfl
+  simp only [apm_t98a04_affineCoordinate]
+  rw [hr 0, hr 1]
+  by_cases hi : i = 0
+  · subst hi
+    apply PiLp.ext
+    intro j
+    fin_cases j <;>
+      simp [apm_t98a04_affineVector,
+        apm_t98a04_submersion_aux_affine_atlas_aux_div_smul, div_one,
+        Complex.add_re, Complex.mul_re, Complex.I_re, Complex.I_im,
+        Complex.ofReal_re, Complex.ofReal_im, mul_zero, add_zero, zero_mul,
+        sub_zero]
+  · have hi1 : i = 1 := by
+      have h2 : i.val < 2 := i.2
+      have hv : i.val ≠ 0 := fun h => hi (Fin.ext h)
+      omega
+    subst hi1
+    apply PiLp.ext
+    intro j
+    fin_cases j <;>
+      simp [apm_t98a04_affineVector,
+        apm_t98a04_submersion_aux_affine_atlas_aux_div_smul, div_one,
+        Complex.add_re, Complex.mul_re, Complex.I_re, Complex.I_im,
+        Complex.ofReal_re, Complex.ofReal_im, mul_zero, add_zero, zero_mul,
+        sub_zero]
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_affineVector_cont
+    (i : Fin 2) : Continuous (apm_t98a04_affineVector i) := by
+  have hto : Continuous
+      (WithLp.toLp 2 : (Fin 2 → ℂ) → apm_t98a04_C2) :=
+    PiLp.continuous_toLp 2 (fun _ => ℂ)
+  have hw : Continuous
+      (fun x : apm_t98a04_R2 =>
+        ((x 0 : ℝ) : ℂ) + (x 1 : ℝ) * Complex.I) := by fun_prop
+  by_cases hi : i = 0
+  · subst hi
+    show Continuous (fun x : apm_t98a04_R2 =>
+        WithLp.toLp 2 ![(1 : ℂ), ((x 0 : ℝ) : ℂ) + (x 1 : ℝ) * Complex.I])
+    refine hto.comp (continuous_pi fun j => ?_)
+    fin_cases j
+    · exact continuous_const
+    · exact hw
+  · have hi1 : i = 1 := by
+      have h2 : i.val < 2 := i.2
+      have hv : i.val ≠ 0 := fun h => hi (Fin.ext h)
+      omega
+    subst hi1
+    show Continuous (fun x : apm_t98a04_R2 =>
+        WithLp.toLp 2 ![((x 0 : ℝ) : ℂ) + (x 1 : ℝ) * Complex.I, (1 : ℂ)])
+    refine hto.comp (continuous_pi fun j => ?_)
+    fin_cases j
+    · exact hw
+    · exact continuous_const
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_inverse_cont
+    (i : Fin 2) : Continuous (apm_t98a04_affineInverse i) := by
+  have h : apm_t98a04_affineInverse i =
+      (Projectivization.mk' ℂ) ∘
+        (fun x : apm_t98a04_R2 =>
+          (⟨apm_t98a04_affineVector i x,
+            apm_t98a04_affineVector_ne_zero i x⟩ :
+            {w : apm_t98a04_C2 // w ≠ 0})) := rfl
+  rw [h]
+  exact continuous_coinduced_rng.comp
+    ((apm_t98a04_submersion_aux_affine_atlas_aux_affineVector_cont
+        i).subtype_mk
+      (fun x => apm_t98a04_affineVector_ne_zero i x))
+
+private def apm_t98a04_submersion_aux_affine_atlas_aux_chart
+    (i : Fin 2) :
+    OpenPartialHomeomorph apm_t98a04_CP1 apm_t98a04_R2 where
+  toPartialEquiv :=
+    { toFun := apm_t98a04_affineCoordinate i
+      invFun := apm_t98a04_affineInverse i
+      source := {p : apm_t98a04_CP1 | Projectivization.rep p i ≠ 0}
+      target := Set.univ
+      map_source' := fun p _ => Set.mem_univ _
+      map_target' := fun x _ =>
+        apm_t98a04_submersion_aux_affine_atlas_aux_inv_source i x
+      left_inv' := fun p hp =>
+        apm_t98a04_submersion_aux_affine_atlas_aux_left_inv i p hp
+      right_inv' := fun x _ =>
+        apm_t98a04_submersion_aux_affine_atlas_aux_right_inv i x }
+  open_source := apm_t98a04_submersion_aux_affine_atlas_aux_isOpen i
+  open_target := isOpen_univ
+  continuousOn_toFun :=
+    apm_t98a04_submersion_aux_affine_atlas_aux_coord_contOn i
+  continuousOn_invFun :=
+    (apm_t98a04_submersion_aux_affine_atlas_aux_inverse_cont i).continuousOn
+
+private lemma apm_t98a04_submersion_aux_affine_atlas_aux_coord_ne_zero
+    (p : apm_t98a04_CP1) (h : ¬ Projectivization.rep p 0 ≠ 0) :
+    Projectivization.rep p 1 ≠ 0 := by
+  intro h1
+  have h0 : Projectivization.rep p 0 = 0 := not_not.mp h
+  apply Projectivization.rep_nonzero p
+  apply PiLp.ext
+  intro j
+  fin_cases j <;> simp [h0, h1]
+
+@[reducible] private def apm_t98a04_submersion_aux_affine_atlas_aux_chartedSpace :
+    ChartedSpace apm_t98a04_R2 apm_t98a04_CP1 where
+  atlas := Set.range
+    apm_t98a04_submersion_aux_affine_atlas_aux_chart
+  chartAt p :=
+    if Projectivization.rep p 0 ≠ 0 then
+      apm_t98a04_submersion_aux_affine_atlas_aux_chart 0
+    else apm_t98a04_submersion_aux_affine_atlas_aux_chart 1
+  mem_chart_source p := by
+    by_cases hp : Projectivization.rep p 0 ≠ 0
+    · show p ∈ (if Projectivization.rep p 0 ≠ 0 then
+        apm_t98a04_submersion_aux_affine_atlas_aux_chart 0 else
+        apm_t98a04_submersion_aux_affine_atlas_aux_chart 1).source
+      rw [if_pos hp]
+      exact hp
+    · show p ∈ (if Projectivization.rep p 0 ≠ 0 then
+        apm_t98a04_submersion_aux_affine_atlas_aux_chart 0 else
+        apm_t98a04_submersion_aux_affine_atlas_aux_chart 1).source
+      rw [if_neg hp]
+      exact apm_t98a04_submersion_aux_affine_atlas_aux_coord_ne_zero p hp
+  chart_mem_atlas p := by
+    by_cases hp : Projectivization.rep p 0 ≠ 0
+    · refine ⟨0, ?_⟩
+      show apm_t98a04_submersion_aux_affine_atlas_aux_chart 0 =
+        (if Projectivization.rep p 0 ≠ 0 then
+          apm_t98a04_submersion_aux_affine_atlas_aux_chart 0 else
+          apm_t98a04_submersion_aux_affine_atlas_aux_chart 1)
+      rw [if_pos hp]
+    · refine ⟨1, ?_⟩
+      show apm_t98a04_submersion_aux_affine_atlas_aux_chart 1 =
+        (if Projectivization.rep p 0 ≠ 0 then
+          apm_t98a04_submersion_aux_affine_atlas_aux_chart 0 else
+          apm_t98a04_submersion_aux_affine_atlas_aux_chart 1)
+      rw [if_neg hp]
+
 theorem apm_t98a04_submersion_aux_affine_atlas :
     ∃ targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1,
       apm_t98a04_IsStandardAffineAtlas targetCharts := by
-  sorry
+  refine ⟨apm_t98a04_submersion_aux_affine_atlas_aux_chartedSpace, ?_⟩
+  refine ⟨apm_t98a04_submersion_aux_affine_atlas_aux_chart, rfl, ?_⟩
+  intro i
+  exact ⟨rfl, rfl, fun p _ => rfl, fun x => rfl⟩
 
 /-- Prove smooth compatibility of the two affine charts.  On their overlap
 the transition is complex inversion; use `contDiffOn_inv₀`, real/complex
@@ -607,12 +921,180 @@ theorem apm_t98a04_submersion_aux_hopf_smooth
 `s x₀ = z` because `z` and `v x₀` are proportional with `v x₀ i = 1`. Check at `z = (1,0)`, `i = 0`: `x₀ = 0`, `c = 1`,
 `s 0 = (1,0)`. -/
 -- BEGIN SEAT AREA
+theorem apm_t98a04_submersion_aux_section_aux_vsmooth (i : Fin 2) :
+    ContDiff ℝ (⊤ : ℕ∞) (apm_t98a04_affineVector i) := by
+  have hcoord : ∀ k : Fin 2, ContDiff ℝ (⊤ : ℕ∞) fun x : apm_t98a04_R2 ↦ x k := fun k ↦
+    (contDiff_apply ℝ ℝ (n := (⊤ : ℕ∞)) k).comp (PiLp.contDiff_ofLp (𝕜 := ℝ))
+  have hw : ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ (x 0 : ℂ) + (x 1 : ℂ) * Complex.I :=
+    (Complex.ofRealCLM.contDiff.comp (hcoord 0)).add
+      ((Complex.ofRealCLM.contDiff.comp (hcoord 1)).mul contDiff_const)
+  fin_cases i
+  · show ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ WithLp.toLp 2 ![(1 : ℂ), (x 0 : ℂ) + (x 1 : ℂ) * Complex.I]
+    apply PiLp.contDiff_toLp.comp
+    rw [contDiff_pi]
+    intro k
+    fin_cases k
+    · simpa using contDiff_const (c := (1 : ℂ))
+    · simpa using hw
+  · show ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ WithLp.toLp 2 ![(x 0 : ℂ) + (x 1 : ℂ) * Complex.I, (1 : ℂ)]
+    apply PiLp.contDiff_toLp.comp
+    rw [contDiff_pi]
+    intro k
+    fin_cases k
+    · simpa using hw
+    · simpa using contDiff_const (c := (1 : ℂ))
+
+theorem apm_t98a04_submersion_aux_section_aux_scalar_smooth (i : Fin 2) (c : ℂ) :
+    ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ c * ((‖apm_t98a04_affineVector i x‖ : ℂ))⁻¹ := by
+  have h0 : ∀ x : apm_t98a04_R2, (‖apm_t98a04_affineVector i x‖ : ℂ) ≠ 0 := fun x ↦
+    Complex.ofReal_ne_zero.mpr
+      ((norm_pos_iff.mpr (apm_t98a04_affineVector_ne_zero i x)).ne')
+  exact contDiff_const.mul
+    ((Complex.ofRealCLM.contDiff.comp
+      ((apm_t98a04_submersion_aux_section_aux_vsmooth i).norm ℝ
+        (fun x ↦ apm_t98a04_affineVector_ne_zero i x))).inv h0)
+
+theorem apm_t98a04_submersion_aux_section_aux_fsmooth (i : Fin 2) (c : ℂ) :
+    ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦
+        (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) • apm_t98a04_affineVector i x := by
+  have hsc := apm_t98a04_submersion_aux_section_aux_scalar_smooth i c
+  have hv := apm_t98a04_submersion_aux_section_aux_vsmooth i
+  have hcoord : ∀ k : Fin 2, ContDiff ℝ (⊤ : ℕ∞)
+      fun x : apm_t98a04_R2 ↦ (apm_t98a04_affineVector i x) k := fun k ↦
+    ((contDiff_apply ℝ ℂ (n := (⊤ : ℕ∞)) k).comp
+      (PiLp.contDiff_ofLp (𝕜 := ℝ))).comp hv
+  have hfun : (fun x : apm_t98a04_R2 ↦
+        (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) • apm_t98a04_affineVector i x) =
+      fun x ↦ WithLp.toLp 2
+        ![(c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) * apm_t98a04_affineVector i x 0,
+          (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) * apm_t98a04_affineVector i x 1] := by
+    funext x
+    ext k
+    fin_cases k <;> simp [PiLp.smul_apply, smul_eq_mul]
+  rw [hfun]
+  apply PiLp.contDiff_toLp.comp
+  rw [contDiff_pi]
+  intro k
+  fin_cases k
+  · simpa using hsc.mul (hcoord 0)
+  · simpa using hsc.mul (hcoord 1)
+
+theorem apm_t98a04_submersion_aux_section_aux_mem (i : Fin 2) (c : ℂ) (hc : ‖c‖ = 1)
+    (x : apm_t98a04_R2) :
+    (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) • apm_t98a04_affineVector i x ∈
+      Metric.sphere (0 : apm_t98a04_C2) 1 := by
+  have hn : ‖apm_t98a04_affineVector i x‖ ≠ 0 :=
+    (norm_pos_iff.mpr (apm_t98a04_affineVector_ne_zero i x)).ne'
+  rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_mul, norm_inv,
+    Complex.norm_real, Real.norm_of_nonneg (norm_nonneg _), hc, one_mul,
+    inv_mul_cancel₀ hn]
+
+theorem apm_t98a04_submersion_aux_section_aux_v_at_x0
+    (z : apm_t98a04_S3) (i : Fin 2) (hi : z.1 i ≠ 0) :
+    apm_t98a04_affineVector i (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) =
+      (z.1 i)⁻¹ • z.1 := by
+  obtain ⟨a, ha⟩ :=
+    Projectivization.exists_smul_eq_mk_rep ℂ z.1 (apm_t98a04_sphere_ne_zero z)
+  have hrep : Projectivization.rep (apm_t98a04_hopf z) = (a : ℂ) • z.1 := ha.symm
+  have ha0 : (a : ℂ) ≠ 0 := a.ne_zero
+  have hr : ∀ k : Fin 2,
+      Projectivization.rep (apm_t98a04_hopf z) k = (a : ℂ) * z.1 k := fun k ↦ by
+    have h := congrArg (fun v : apm_t98a04_C2 ↦ v k) hrep
+    simpa using h
+  fin_cases i
+  · show apm_t98a04_affineVector (0 : Fin 2)
+        (apm_t98a04_affineCoordinate (0 : Fin 2) (apm_t98a04_hopf z)) =
+      (z.1 (0 : Fin 2))⁻¹ • z.1
+    have hw : Projectivization.rep (apm_t98a04_hopf z) 1 /
+        Projectivization.rep (apm_t98a04_hopf z) 0 = z.1 1 / z.1 0 := by
+      rw [hr 1, hr 0, mul_div_mul_left _ _ ha0]
+    have hx0 : apm_t98a04_affineCoordinate (0 : Fin 2) (apm_t98a04_hopf z) =
+        WithLp.toLp 2 ![(z.1 1 / z.1 0).re, (z.1 1 / z.1 0).im] := by
+      simp only [apm_t98a04_affineCoordinate, ↓reduceIte, hw]
+    have hv : apm_t98a04_affineVector (0 : Fin 2)
+        (apm_t98a04_affineCoordinate (0 : Fin 2) (apm_t98a04_hopf z)) =
+        WithLp.toLp 2 ![(1 : ℂ), z.1 1 / z.1 0] := by
+      rw [hx0]
+      simp only [apm_t98a04_affineVector, ↓reduceIte, PiLp.toLp_apply,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+      rw [Complex.re_add_im]
+    rw [hv]
+    ext k
+    fin_cases k
+    · show (1 : ℂ) = (z.1 0)⁻¹ * z.1 0
+      exact (inv_mul_cancel₀ hi).symm
+    · show z.1 1 / z.1 0 = (z.1 0)⁻¹ * z.1 1
+      rw [div_eq_mul_inv, mul_comm]
+  · show apm_t98a04_affineVector (1 : Fin 2)
+        (apm_t98a04_affineCoordinate (1 : Fin 2) (apm_t98a04_hopf z)) =
+      (z.1 (1 : Fin 2))⁻¹ • z.1
+    have hw : Projectivization.rep (apm_t98a04_hopf z) 0 /
+        Projectivization.rep (apm_t98a04_hopf z) 1 = z.1 0 / z.1 1 := by
+      rw [hr 0, hr 1, mul_div_mul_left _ _ ha0]
+    have hx0 : apm_t98a04_affineCoordinate (1 : Fin 2) (apm_t98a04_hopf z) =
+        WithLp.toLp 2 ![(z.1 0 / z.1 1).re, (z.1 0 / z.1 1).im] := by
+      simp only [apm_t98a04_affineCoordinate, show ¬((1 : Fin 2) = 0) from by decide,
+        ↓reduceIte, hw]
+    have hv : apm_t98a04_affineVector (1 : Fin 2)
+        (apm_t98a04_affineCoordinate (1 : Fin 2) (apm_t98a04_hopf z)) =
+        WithLp.toLp 2 ![z.1 0 / z.1 1, (1 : ℂ)] := by
+      rw [hx0]
+      simp only [apm_t98a04_affineVector, show ¬((1 : Fin 2) = 0) from by decide,
+        ↓reduceIte, PiLp.toLp_apply,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+      rw [Complex.re_add_im]
+    rw [hv]
+    ext k
+    fin_cases k
+    · show z.1 0 / z.1 1 = (z.1 1)⁻¹ * z.1 0
+      rw [div_eq_mul_inv, mul_comm]
+    · show (1 : ℂ) = (z.1 1)⁻¹ * z.1 1
+      exact (inv_mul_cancel₀ hi).symm
+
 theorem apm_t98a04_submersion_aux_section (z : apm_t98a04_S3) (i : Fin 2) (hi : z.1 i ≠ 0) :
     ∃ s : apm_t98a04_R2 → apm_t98a04_S3,
       ContMDiff (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) (⊤ : ℕ∞) s ∧
       s (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) = z ∧
       ∀ x, apm_t98a04_hopf (s x) = apm_t98a04_affineInverse i x := by
-  sorry
+  set c : ℂ := z.1 i / (‖z.1 i‖ : ℂ) with hc_def
+  have hc : ‖c‖ = 1 := by
+    have hn0 : ‖z.1 i‖ ≠ 0 := (norm_pos_iff.mpr hi).ne'
+    rw [hc_def, norm_div, Complex.norm_real, Real.norm_of_nonneg (norm_nonneg _),
+      div_self hn0]
+  have hz1 : ‖z.1‖ = 1 := by
+    have h := z.2
+    rw [Metric.mem_sphere, dist_zero_right] at h
+    exact h
+  set f : apm_t98a04_R2 → apm_t98a04_C2 :=
+    fun x ↦ (c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹) • apm_t98a04_affineVector i x
+    with hf_def
+  have hf_smooth : ContDiff ℝ (⊤ : ℕ∞) f :=
+    apm_t98a04_submersion_aux_section_aux_fsmooth i c
+  have hf_mem : ∀ x, f x ∈ Metric.sphere (0 : apm_t98a04_C2) 1 :=
+    apm_t98a04_submersion_aux_section_aux_mem i c hc
+  refine ⟨Set.codRestrict f _ hf_mem, ?_, ?_, ?_⟩
+  · exact hf_smooth.contMDiff.codRestrict_sphere hf_mem
+  · apply Subtype.ext
+    show f _ = z.1
+    simp only [hf_def]
+    rw [apm_t98a04_submersion_aux_section_aux_v_at_x0 z i hi]
+    have hnv : ‖(z.1 i)⁻¹ • z.1‖ = ‖z.1 i‖⁻¹ := by
+      rw [norm_smul, norm_inv, hz1, mul_one]
+    rw [hnv, smul_smul]
+    have hn0 : (‖z.1 i‖ : ℂ) ≠ 0 :=
+      Complex.ofReal_ne_zero.mpr (norm_pos_iff.mpr hi).ne'
+    rw [hc_def, Complex.ofReal_inv, inv_inv, div_mul_cancel₀ _ hn0, mul_inv_cancel₀ hi,
+      one_smul]
+  · intro x
+    show Projectivization.mk ℂ (Set.codRestrict f _ hf_mem x).1 _ =
+      Projectivization.mk ℂ (apm_t98a04_affineVector i x) _
+    exact (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      ⟨c * (‖apm_t98a04_affineVector i x‖ : ℂ)⁻¹, rfl⟩
 -- END SEAT AREA
 
 /-- Seat: a smooth section forces surjectivity. `haffine` gives the chart `e i`, an element of the atlas with
