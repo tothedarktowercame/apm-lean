@@ -3616,7 +3616,18 @@ theorem manifold_ae_regularValue_innerProduct
     (hg : ContMDiff I (modelWithCornersSelf ℝ V) ∞ g) :
     ∀ᵐ y ∂mu, ∀ x, g x = y →
       Function.Surjective (mfderiv I (modelWithCornersSelf ℝ V) g x) := by
-  sorry
+  let s : Set X := {x | ¬ Function.Surjective
+    (mfderiv I (modelWithCornersSelf ℝ V) g x)}
+  have hnull : mu (g '' s) = 0 := by
+    apply SardFiniteOrderRankLocusLocalAggregationProbe.measure_image_zero_of_rankLocus_pointwise_open
+    intro x hx
+    exact manifold_local_critical_image_null I mu g hg x
+  rw [ae_iff]
+  apply measure_mono_null ?_ hnull
+  intro y hy
+  simp only [Set.mem_setOf_eq, not_forall] at hy
+  obtain ⟨x, hxy, hxcrit⟩ := hy
+  exact ⟨x, hxcrit, hxy⟩
 
 /-- The same for a finite-dimensional normed target, such as `Fin 2 → ℝ` with the sup norm. Compose
 with a continuous linear equivalence to `EuclideanSpace`. Its map of a Haar measure is Haar
