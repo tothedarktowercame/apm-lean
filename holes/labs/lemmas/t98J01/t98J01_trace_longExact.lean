@@ -1374,7 +1374,14 @@ theorem t98J01_overlap_lefschetz {X : Type} [TopologicalSpace X] (f : C(X, X)) {
 theorem t98J01_prodMap_mapsTo {X : Type} [TopologicalSpace X] (f : C(X, X)) (p : T98J01.S1)
     (hp : p = T98J01.southPt ∨ p = T98J01.northPt) :
     Set.MapsTo (f.prodMap t98J01_reflectionCM) {z | z.2 ≠ p} {z | z.2 ≠ p} := by
-  sorry
+  intro z hz
+  change T98J01.reflection z.2 ≠ p
+  intro h
+  apply hz
+  have h' := congrArg T98J01.reflection h
+  rcases hp with rfl | rfl
+  · simpa [T98J01.reflection, T98J01.southPt] using h'
+  · simpa [T98J01.reflection, T98J01.northPt] using h'
 
 /-- Assembly: `L(f × r) = 2 L(f)`. -/
 theorem t98J01_lefschetz_prod_reflection {X : Type} [TopologicalSpace X] (f : C(X, X)) {a : ℚ}
