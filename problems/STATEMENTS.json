@@ -3418,6 +3418,39 @@
    "rev": "9e235e00e",
    "approved_at": "2026-10-24T21:59:26Z"
   },
+  "m02A02": {
+   "decls": [
+    "apm_m02a02"
+   ],
+   "sha256": "17966f88d3917d3b4bed2655f0308e6efb54d6686e2cf29acfbb8625f4ad1a91",
+   "defs": [
+    "M02A02Freq",
+    "M02A02H1",
+    "M02A02L2",
+    "M02A02RealH1",
+    "m02A02Coeff",
+    "m02A02DirichletPair",
+    "m02A02ForcingPair",
+    "m02A02FreqSq",
+    "m02A02GradientEnergy",
+    "m02A02HasPoissonEquation",
+    "m02A02IsMeanZero",
+    "m02A02IsReal",
+    "m02A02IsSmoothPeriodic",
+    "m02A02L2Energy",
+    "m02A02L2Pair",
+    "m02A02MeanZeroH1",
+    "m02A02SmoothPeriodicH1",
+    "m02A02WeakSolution",
+    "m02A02Weight"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": "problems/m02A02/PRELIM-DEFECT.md",
+   "rev": "c9e9f5fbb",
+   "approved_at": "2026-11-01T20:40:31Z"
+  },
   "m02A03": {
    "decls": [
     "apm_m02a03"
