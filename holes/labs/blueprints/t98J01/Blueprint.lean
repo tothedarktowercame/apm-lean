@@ -798,6 +798,52 @@ theorem t98J01_trace_ker_add_range
   rw [← heq, LinearMap.trace_conj']
 
 /-- Seat: the alternating trace vanishes along a bounded long exact sequence with compatible endomorphisms. Apply `t98J01_trace_ker_add_range` to `i k`, `j k` and `δ k`. With `d k` the trace on `range (δ k)`, `e k` on `range (i k)`, `g k` on `range (j k)`: `tr a k = d k + e k`, `tr b k = e k + g k`, `tr c (k+1) = g (k+1) + d k`, `tr c 0 = g 0` (`hj0`). The exactness equalities identify the submodules. `C (N+1)` is trivial so `d N = 0`, and the sum telescopes. -/
+private theorem t98J01_trace_longExact_aux_telescope (ta tb tc d e g : ℕ → ℚ) (N : ℕ)
+    (ha : ∀ k, ta k = d k + e k) (hb : ∀ k, tb k = e k + g k)
+    (hc0 : tc 0 = g 0) (hc : ∀ k, tc (k + 1) = g (k + 1) + d k) (hd : d N = 0) :
+    (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * tb k) =
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * ta k) +
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * tc k) := by
+  have key : ∀ M, (∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k * ta k) +
+      (∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k * tc k) -
+      (∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k * tb k) = (-1 : ℚ)^M * d M := by
+    intro M
+    induction M with
+    | zero => simp [ha, hb, hc0]
+    | succ M ih =>
+      rw [Finset.sum_range_succ _ (M + 1), Finset.sum_range_succ _ (M + 1),
+        Finset.sum_range_succ _ (M + 1), ha (M + 1), hb (M + 1), hc M]
+      have : (-1 : ℚ)^(M + 1) = -(-1 : ℚ)^M := by rw [pow_succ]; ring
+      rw [this]
+      linear_combination ih
+  have := key N
+  rw [hd, mul_zero] at this
+  linarith
+
+private theorem t98J01_trace_longExact_aux_restrict_congr
+    {V : Type} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+    (φ : V →ₗ[ℚ] V) {S T : Submodule ℚ V} (h : S = T)
+    (hS : ∀ x ∈ S, φ x ∈ S) (hT : ∀ x ∈ T, φ x ∈ T) :
+    LinearMap.trace ℚ S (φ.restrict hS) = LinearMap.trace ℚ T (φ.restrict hT) := by
+  subst h
+  rfl
+
+private theorem t98J01_trace_longExact_aux_rangeInv
+    {V W : Type} [AddCommGroup V] [Module ℚ V] [AddCommGroup W] [Module ℚ W]
+    (T : V →ₗ[ℚ] W) (φ : V →ₗ[ℚ] V) (ψ : W →ₗ[ℚ] W) (hT : T ∘ₗ φ = ψ ∘ₗ T) :
+    ∀ x ∈ LinearMap.range T, ψ x ∈ LinearMap.range T := by
+  rintro _ ⟨y, rfl⟩
+  exact ⟨φ y, by simpa using LinearMap.congr_fun hT y⟩
+
+private theorem t98J01_trace_longExact_aux_kerInv
+    {V W : Type} [AddCommGroup V] [Module ℚ V] [AddCommGroup W] [Module ℚ W]
+    (T : V →ₗ[ℚ] W) (φ : V →ₗ[ℚ] V) (ψ : W →ₗ[ℚ] W) (hT : T ∘ₗ φ = ψ ∘ₗ T) :
+    ∀ x ∈ LinearMap.ker T, φ x ∈ LinearMap.ker T := by
+  intro x hx
+  have h := LinearMap.congr_fun hT x
+  simp only [LinearMap.comp_apply] at h
+  rw [LinearMap.mem_ker, h, LinearMap.mem_ker.1 hx, map_zero]
+
 theorem t98J01_trace_longExact
     (A B C : ℕ → Type)
     [∀ n, AddCommGroup (A n)] [∀ n, Module ℚ (A n)] [∀ n, FiniteDimensional ℚ (A n)]
@@ -815,7 +861,52 @@ theorem t98J01_trace_longExact
     (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (B k) (b k)) =
       (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (A k) (a k)) +
       (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (C k) (c k)) := by
-  sorry
+  classical
+  let rI := fun k => t98J01_trace_longExact_aux_rangeInv (i k) (a k) (b k) (hi k)
+  let rJ := fun k => t98J01_trace_longExact_aux_rangeInv (j k) (b k) (c k) (hj k)
+  let rD := fun k => t98J01_trace_longExact_aux_rangeInv (δ k) (c (k + 1)) (a k) (hδ k)
+  let kI := fun k => t98J01_trace_longExact_aux_kerInv (i k) (a k) (b k) (hi k)
+  let kJ := fun k => t98J01_trace_longExact_aux_kerInv (j k) (b k) (c k) (hj k)
+  let kD := fun k => t98J01_trace_longExact_aux_kerInv (δ k) (c (k + 1)) (a k) (hδ k)
+  refine t98J01_trace_longExact_aux_telescope
+    (fun k => LinearMap.trace ℚ (A k) (a k)) (fun k => LinearMap.trace ℚ (B k) (b k))
+    (fun k => LinearMap.trace ℚ (C k) (c k))
+    (fun k => LinearMap.trace ℚ (LinearMap.range (δ k)) ((a k).restrict (rD k)))
+    (fun k => LinearMap.trace ℚ (LinearMap.range (i k)) ((b k).restrict (rI k)))
+    (fun k => LinearMap.trace ℚ (LinearMap.range (j k)) ((c k).restrict (rJ k)))
+    N ?_ ?_ ?_ ?_ ?_
+  · intro k
+    dsimp only
+    rw [t98J01_trace_ker_add_range (i k) (a k) (b k) (hi k) (kI k) (rI k),
+      t98J01_trace_longExact_aux_restrict_congr (a k) (ex₃ k).symm (kI k) (rD k)]
+  · intro k
+    dsimp only
+    rw [t98J01_trace_ker_add_range (j k) (b k) (c k) (hj k) (kJ k) (rJ k),
+      t98J01_trace_longExact_aux_restrict_congr (b k) (ex₁ k).symm (kJ k) (rI k)]
+  · dsimp only
+    have htop : LinearMap.range (j 0) = ⊤ := LinearMap.range_eq_top.2 hj0
+    have hsub := t98J01_trace_ker_add_range (LinearMap.id : C 0 →ₗ[ℚ] C 0) (c 0) (c 0)
+      (by ext; rfl)
+      (fun x hx => by simpa [LinearMap.mem_ker] using
+        (show x = 0 from LinearMap.mem_ker.1 hx) ▸ map_zero (c 0))
+      (fun x _ => ⟨c 0 x, rfl⟩)
+    have hker : LinearMap.ker (LinearMap.id : C 0 →ₗ[ℚ] C 0) = ⊥ := LinearMap.ker_id
+    have hrange : LinearMap.range (LinearMap.id : C 0 →ₗ[ℚ] C 0) = ⊤ := LinearMap.range_id
+    rw [hsub, t98J01_trace_longExact_aux_restrict_congr (c 0) (hrange.trans htop.symm) _ (rJ 0)]
+    have hzero : Subsingleton (LinearMap.ker (LinearMap.id : C 0 →ₗ[ℚ] C 0)) := by
+      rw [hker]; infer_instance
+    rw [show (c 0).restrict _ = (0 : _ →ₗ[ℚ] _) from Subsingleton.elim _ _, map_zero, zero_add]
+  · intro k
+    dsimp only
+    rw [t98J01_trace_ker_add_range (δ k) (c (k + 1)) (a k) (hδ k) (kD k) (rD k),
+      t98J01_trace_longExact_aux_restrict_congr (c (k + 1)) (ex₂ k).symm (kD k) (rJ (k + 1))]
+  · dsimp only
+    have hsub : Subsingleton (C (N + 1)) := hC (N + 1) (Nat.lt_succ_self N)
+    have hr : Subsingleton (LinearMap.range (δ N)) := by
+      refine ⟨?_⟩
+      rintro ⟨_, x, rfl⟩ ⟨_, y, rfl⟩
+      exact Subtype.ext (by rw [Subsingleton.elim x y])
+    rw [show (a N).restrict (rD N) = 0 from Subsingleton.elim _ _, map_zero]
 
 /-- Seat: an endomorphism swapping the two summands of a direct sum has trace zero. Conjugate by `LinearEquiv.ofBijective (coprod i₁ i₂) hbij` to `V₁ × V₂`, and write the conjugate as `inl ∘ₗ φ₂₁ ∘ₗ snd + inr ∘ₗ φ₁₂ ∘ₗ fst`. Each term has trace zero by `LinearMap.trace_comp_comm'` (`snd ∘ₗ inl = 0`, `fst ∘ₗ inr = 0`). -/
 theorem t98J01_trace_offDiagonal
