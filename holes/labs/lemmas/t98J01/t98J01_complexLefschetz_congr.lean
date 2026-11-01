@@ -903,7 +903,66 @@ theorem t98J01_complexLefschetz_congr
     (hg : ∀ n, IsIso (HomologicalComplex.homologyMap g n))
     {φ : C ⟶ C} {ψ : D ⟶ D} (hc : φ ≫ g = g ≫ ψ) (v : ℚ) :
     t98J01_ComplexLefschetz C φ v ↔ t98J01_ComplexLefschetz D ψ v := by
-  sorry
+  have hcomm (n : ℕ) :
+      HomologicalComplex.homologyMap φ n ≫ HomologicalComplex.homologyMap g n =
+        HomologicalComplex.homologyMap g n ≫ HomologicalComplex.homologyMap ψ n := by
+    rw [← HomologicalComplex.homologyMap_comp, hc,
+      HomologicalComplex.homologyMap_comp]
+  have htrace (n : ℕ)
+      [FiniteDimensional ℚ (C.homology n)] [FiniteDimensional ℚ (D.homology n)] :
+      LinearMap.trace ℚ (C.homology n)
+          (HomologicalComplex.homologyMap φ n).hom =
+        LinearMap.trace ℚ (D.homology n)
+          (HomologicalComplex.homologyMap ψ n).hom := by
+    letI := hg n
+    let e := asIso (HomologicalComplex.homologyMap g n)
+    have he : (HomologicalComplex.homologyMap ψ n).hom =
+        e.hom.hom.comp ((HomologicalComplex.homologyMap φ n).hom.comp e.inv.hom) := by
+      apply LinearMap.ext
+      intro x
+      have h := congrArg ModuleCat.Hom.hom (hcomm n)
+      simp only [ModuleCat.hom_comp, LinearMap.ext_iff] at h
+      simpa [LinearMap.comp_apply, e] using (h (e.inv.hom x)).symm
+    rw [he, LinearMap.trace_comp_comm']
+    have hi : e.inv.hom.comp e.hom.hom = LinearMap.id := by
+      simpa only [ModuleCat.hom_comp, ModuleCat.hom_id] using
+        congrArg ModuleCat.Hom.hom e.hom_inv_id
+    rw [LinearMap.comp_assoc, hi, LinearMap.comp_id]
+  constructor
+  · rintro ⟨hfd, b, hb, hs⟩
+    have hfdD : ∀ n, FiniteDimensional ℚ (D.homology n) := by
+      intro n
+      letI := hg n
+      letI := hfd n
+      exact FiniteDimensional.of_injective
+        (inv (HomologicalComplex.homologyMap g n)).hom
+        (asIso (HomologicalComplex.homologyMap g n)).symm.toLinearEquiv.injective
+    refine ⟨hfdD, b, ?_, ?_⟩
+    · intro n hn
+      letI := hg n
+      letI := hb n hn
+      exact Function.Injective.subsingleton
+        (asIso (HomologicalComplex.homologyMap g n)).symm.toLinearEquiv.injective
+    · haveI (n : ℕ) := hfd n
+      haveI (n : ℕ) := hfdD n
+      simpa only [htrace] using hs
+  · rintro ⟨hfd, b, hb, hs⟩
+    have hfdC : ∀ n, FiniteDimensional ℚ (C.homology n) := by
+      intro n
+      letI := hg n
+      letI := hfd n
+      exact FiniteDimensional.of_injective
+        (HomologicalComplex.homologyMap g n).hom
+        (asIso (HomologicalComplex.homologyMap g n)).toLinearEquiv.injective
+    refine ⟨hfdC, b, ?_, ?_⟩
+    · intro n hn
+      letI := hg n
+      letI := hb n hn
+      exact Function.Injective.subsingleton
+        (asIso (HomologicalComplex.homologyMap g n)).toLinearEquiv.injective
+    · haveI (n : ℕ) := hfdC n
+      haveI (n : ℕ) := hfd n
+      simpa only [htrace] using hs
 -- END SEAT AREA
 
 /-! ### Spaces -/
