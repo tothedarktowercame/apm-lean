@@ -51,3 +51,7 @@ Printed unrestricted uniqueness is false at f = 0, by a nonzero solution from sh
 ## m02A06 (reformed)
 
 Printed claim for every ε > 0 is false: no solution at f = 0, ε = 2, and two solutions at f = 0, ε < 3/2, from the sech² homoclinic orbit. The existing theorem, for ε small relative to a bound on f and unique in a ball, is the contraction statement the problem asks for. Grader: justified; ε's dependence on f is forced.
+
+## a95A06 (reformed)
+
+Printed part (b) is false for U the disk together with a far-away disk, with F = f on the unit disk and 0 elsewhere. Repair by lemma-1 adds apm_a95a06 with the printed series from n = 1 and U connected. Every component of U meeting the disk is the same condition, as the disk is connected. Grader: justified; the tsum is genuine by the M-test.

@@ -553,4 +553,49 @@ theorem lacunarySeries_natural_boundary :
   rw [hderiv] at hfinite
   exact (not_lt_of_ge hnorm_large.le) hfinite
 
+/-- The series as printed in APM a95A06, whose first index is `n = 1`.
+
+The older auxiliary development above starts at zero.  Keeping the tail as a
+separate definition lets the natural-boundary proof be reused while ensuring
+that the registered theorem states the printed function literally. -/
+def lacunarySeriesFromOne (z : ℂ) : ℂ :=
+  ∑' n : ℕ, z ^ (n + 1).factorial / ↑(n + 1).factorial
+
+lemma lacunarySeries_eq_add_fromOne_of_mem_closedBall
+    {z : ℂ} (hz : z ∈ closedBall (0 : ℂ) 1) :
+    lacunarySeries z = z + lacunarySeriesFromOne z := by
+  have hs : Summable (fun n : ℕ => lacunaryTerm n z) :=
+    summable_lacunaryTerm_of_mem_closedBall hz
+  have hsplit := hs.sum_add_tsum_nat_add 1
+  simpa [lacunarySeries, lacunarySeriesFromOne, lacunaryTerm,
+    Nat.add_comm] using hsplit.symm
+
+/-- APM a95A06, with the sole repair forced by the printed counterexample:
+the proper open enlargement in part (b) is required to be connected. -/
+theorem apm_a95a06 :
+    ContinuousOn lacunarySeriesFromOne (closedBall (0 : ℂ) 1) ∧
+    DifferentiableOn ℂ lacunarySeriesFromOne (ball (0 : ℂ) 1) ∧
+    ¬∃ (U : Set ℂ) (F : ℂ → ℂ),
+      IsOpen U ∧ IsConnected U ∧ ball (0 : ℂ) 1 ⊂ U ∧
+      DifferentiableOn ℂ F U ∧
+      ∀ z ∈ ball (0 : ℂ) 1, F z = lacunarySeriesFromOne z := by
+  have hclosed : ∀ z ∈ closedBall (0 : ℂ) 1,
+      lacunarySeriesFromOne z = lacunarySeries z - z := by
+    intro z hz
+    rw [lacunarySeries_eq_add_fromOne_of_mem_closedBall hz]
+    abel
+  refine ⟨?_, ?_, ?_⟩
+  · exact (lacunarySeries_continuousOn.sub continuousOn_id).congr hclosed
+  · apply (lacunarySeries_differentiableOn.sub differentiableOn_id).congr
+    intro z hz
+    exact hclosed z (ball_subset_closedBall hz)
+  · rintro ⟨U, F, hU, hUconn, hstrict, hF, hFeq⟩
+    apply lacunarySeries_natural_boundary
+    refine ⟨U, fun z => F z + z, hU, hUconn, hstrict, hF.add differentiableOn_id, ?_⟩
+    intro z hz
+    change F z + z = lacunarySeries z
+    rw [hFeq z hz, lacunarySeries_eq_add_fromOne_of_mem_closedBall
+      (ball_subset_closedBall hz)]
+    abel
+
 end
