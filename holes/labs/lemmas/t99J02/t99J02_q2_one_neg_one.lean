@@ -862,10 +862,101 @@ theorem t99J02_q2_neg {z z' : ConstructionTargets.Surfaces.Disk}
 /-- The real points `1`, `-1` of the octagon are one point of the surface; both are vertices
 (`orientable_standard_oneVertex`, transported by `orientableStandardSpaceHomeomorph`). -/
 -- BEGIN SEAT AREA
+theorem t99J02_q2_one_neg_one_aux_val (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ) =
+      Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / 8)) := rfl
+
+/-- Transport the right endpoint of an `EqvGen` along an equality of points. -/
+theorem t99J02_q2_one_neg_one_aux_of_eq {a b b' : ConstructionTargets.Surfaces.Disk}
+    (h : Relation.EqvGen (SurfaceRel true 2) a b) (e : b = b') :
+    Relation.EqvGen (SurfaceRel true 2) a b' := by
+  rw [← e]
+  exact h
+
+/-- An edge pair of the standard orientable octagon: at parameter `t` on edge `e`, paired with
+parameter `t'` on edge `e + 2`, where `t' = 1 - t`. -/
+theorem t99J02_q2_one_neg_one_aux_rel (j e : ℕ) (hj : j < 2)
+    (he : e = 4 * j ∨ e = 4 * j + 1) (t t' : Set.Icc (0 : ℝ) 1)
+    (ht : (t' : ℝ) = 1 - t.1) :
+    Relation.EqvGen (SurfaceRel true 2) (edgePoint 8 e t) (edgePoint 8 (e + 2) t') := by
+  refine Relation.EqvGen.rel _ _ ⟨j, hj, t, ?_⟩
+  rcases he with h | h
+  · subst h
+    refine Or.inl ⟨rfl, ?_⟩
+    apply Subtype.ext
+    simp only [edgePoint]
+    rw [ht]
+  · subst h
+    refine Or.inr ⟨rfl, ?_⟩
+    apply Subtype.ext
+    simp only [edgePoint]
+    rw [ht]
+
+/-- The end of one edge is the start of the next. -/
+theorem t99J02_q2_one_neg_one_aux_wrap (e : ℕ) :
+    edgePoint 8 e ⟨1, by norm_num⟩ = edgePoint 8 (e + 1) ⟨0, by norm_num⟩ := by
+  apply Subtype.ext
+  rw [t99J02_q2_one_neg_one_aux_val, t99J02_q2_one_neg_one_aux_val]
+  congr 1
+  try norm_num
+  try ring
+
+/-- The vertex chain `v₀ ~ v₃ ~ v₂ ~ v₁ ~ v₄` of the standard octagon. -/
+theorem t99J02_q2_one_neg_one_aux_chain :
+    Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 0 ⟨0, by norm_num⟩) (edgePoint 8 4 ⟨0, by norm_num⟩) := by
+  have s1 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 0 ⟨0, by norm_num⟩) (edgePoint 8 3 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (t99J02_q2_one_neg_one_aux_rel 0 0 (by norm_num) (Or.inl rfl)
+        ⟨0, by norm_num⟩ ⟨1, by norm_num⟩ (by norm_num))
+      (t99J02_q2_one_neg_one_aux_wrap 2)
+  have s2 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 3 ⟨0, by norm_num⟩) (edgePoint 8 2 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (Relation.EqvGen.symm _ _
+        (t99J02_q2_one_neg_one_aux_rel 0 1 (by norm_num) (Or.inr rfl)
+          ⟨1, by norm_num⟩ ⟨0, by norm_num⟩ (by norm_num)))
+      (t99J02_q2_one_neg_one_aux_wrap 1)
+  have s3 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 2 ⟨0, by norm_num⟩) (edgePoint 8 1 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (Relation.EqvGen.symm _ _
+        (t99J02_q2_one_neg_one_aux_rel 0 0 (by norm_num) (Or.inl rfl)
+          ⟨1, by norm_num⟩ ⟨0, by norm_num⟩ (by norm_num)))
+      (t99J02_q2_one_neg_one_aux_wrap 0)
+  have s4 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 1 ⟨0, by norm_num⟩) (edgePoint 8 4 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (t99J02_q2_one_neg_one_aux_rel 0 1 (by norm_num) (Or.inr rfl)
+        ⟨0, by norm_num⟩ ⟨1, by norm_num⟩ (by norm_num))
+      (t99J02_q2_one_neg_one_aux_wrap 3)
+  exact Relation.EqvGen.trans _ _ _ s1
+    (Relation.EqvGen.trans _ _ _ s2 (Relation.EqvGen.trans _ _ _ s3 s4))
+
 theorem t99J02_q2_one_neg_one (h1 : (1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1)
     (h2 : (-1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1) :
     surfaceQuotient true 2 ⟨1, h1⟩ = surfaceQuotient true 2 ⟨-1, h2⟩ := by
-  sorry
+  have hv1 : ((edgePoint 8 0 ⟨0, by norm_num⟩ :
+      ConstructionTargets.Surfaces.Disk) : ℂ) = 1 := by
+    rw [t99J02_q2_one_neg_one_aux_val]
+    simp
+  have hv4 : ((edgePoint 8 4 ⟨0, by norm_num⟩ :
+      ConstructionTargets.Surfaces.Disk) : ℂ) = -1 := by
+    rw [t99J02_q2_one_neg_one_aux_val]
+    have h4 : (((4 : ℕ) : ℝ) : ℂ) = 4 := by exact_mod_cast rfl
+    have h0 : ((⟨0, by norm_num⟩ : Set.Icc (0 : ℝ) 1) : ℂ) = 0 := by
+      exact_mod_cast rfl
+    have hpi : ((2 : ℂ) * (Real.pi : ℂ) * (4 + 0) / 8) = Real.pi := by
+      field_simp
+      norm_num
+    rw [h4, h0, hpi, mul_comm Complex.I (Real.pi : ℂ), Complex.exp_mul_I]
+    norm_num [Complex.cos_pi, Complex.sin_pi]
+  have e1 : edgePoint 8 0 ⟨0, by norm_num⟩ = ⟨1, h1⟩ := Subtype.ext hv1
+  have e4 : edgePoint 8 4 ⟨0, by norm_num⟩ = ⟨-1, h2⟩ := Subtype.ext hv4
+  rw [← e1, ← e4]
+  exact Quotient.sound t99J02_q2_one_neg_one_aux_chain
+
 -- END SEAT AREA
 
 /-- Identifications of the torus lift to the upper arc of the octagon. Induct on the `EqvGen`, with
