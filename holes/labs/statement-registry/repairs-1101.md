@@ -55,3 +55,7 @@ Printed claim for every ε > 0 is false: no solution at f = 0, ε = 2, and two s
 ## a95A06 (reformed)
 
 Printed part (b) is false for U the disk together with a far-away disk, with F = f on the unit disk and 0 elsewhere. Repair by lemma-1 adds apm_a95a06 with the printed series from n = 1 and U connected. Every component of U meeting the disk is the same condition, as the disk is connected. Grader: justified; the tsum is genuine by the M-test.
+
+## a98J03 (reformed)
+
+The printed denominator (x-t)+y² has a pole inside the integration range, so the integrand is not integrable, and a principal-value reading breaks the limit. Repair by lemma-2 uses the Poisson kernel with (x-t)²+y² for complex f, a bounded complex-linear operator of norm at most 1 tied to the formula, and L² convergence. The real theorem is kept. Grader: justified; every convolution integrand is integrable.
