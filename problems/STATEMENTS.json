@@ -4543,6 +4543,23 @@
    "rev": "d823e3f5e",
    "approved_at": "2026-10-13T08:02:28Z"
   },
+  "m98A05": {
+   "decls": [
+    "apm_m98a05"
+   ],
+   "sha256": "f09298b36748b0413a803f79f622929f7d57db81d30a218240dab1858ead5732",
+   "defs": [
+    "apm_m98a05_IFTConclusion",
+    "apm_m98a05_IsH2",
+    "apm_m98a05_IsSolution"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": "problems/m98A05/PRELIM-DEFECT.md",
+   "rev": "366e83b41",
+   "approved_at": "2026-11-01T21:33:22Z"
+  },
   "m98A06": {
    "decls": [
     "apm_m98a06"
