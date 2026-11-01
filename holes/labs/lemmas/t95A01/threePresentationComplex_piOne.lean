@@ -62,11 +62,191 @@ abbrev KleinPairing := ConstructionTargets.t93J03Closure.kleinPairingData
 equivalence and generator lemmas; identify the normal closure of the cube in
 the one-generator free group with `Multiplicative (ZMod 3)`. -/
 -- BEGIN SEAT AREA
+-- `1 ^ 3 = 1` on the circle: the attaching loop preserves the basepoint.
+theorem threePresentationComplex_piOne_aux_one : degreeThreeLoop 1 = 1 := by
+  simp [degreeThreeLoop]
+
+-- The winding coordinate of the explicit generator is one.
+theorem threePresentationComplex_piOne_aux_winding_one :
+    ConstructionTargets.CircleUniversalCover.circleWindingHom
+      ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass =
+      Multiplicative.ofAdd 1 := by
+  simp [ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass,
+    ConstructionTargets.CircleUniversalCover.circleWindingHom_mk]
+
+-- The cast representative of the attaching-loop class is
+-- `t ↦ exp(2πit) ^ 3 = exp(6πit)` as a map on the interval.
+theorem threePresentationComplex_piOne_aux_fun (t : Set.Icc (0 : ℝ) 1) :
+    (↑(((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        degreeThreeLoop.continuous).cast
+        threePresentationComplex_piOne_aux_one.symm
+        threePresentationComplex_piOne_aux_one.symm) :
+        C(Set.Icc (0 : ℝ) 1, Circle)) t =
+      ConstructionTargets.CircleUniversalCover.circleCover
+        ((3 : ℤ) • (2 * Real.pi) * (t : ℝ)) := by
+  rw [ContinuousMap.coe_coe, Path.cast_coe, Path.map_coe, Function.comp_apply]
+  show degreeThreeLoop (ConstructionTargets.CircleUniversalCover.circleCover
+      ((1 : ℤ) • (2 * Real.pi) * (t : ℝ))) = _
+  rw [zsmul_eq_mul]
+  rw [show degreeThreeLoop (ConstructionTargets.CircleUniversalCover.circleCover
+      (↑(1 : ℤ) * (2 * Real.pi) * (t : ℝ))) =
+      (ConstructionTargets.CircleUniversalCover.circleCover
+        (↑(1 : ℤ) * (2 * Real.pi) * (t : ℝ))) ^ 3 from rfl]
+  simp only [ConstructionTargets.CircleUniversalCover.circleCover]
+  rw [pow_three, ← Circle.exp_add, ← Circle.exp_add]
+  congr 1
+  simp only [zsmul_eq_mul]
+  push_cast
+  ring
+
+-- The canonical lift of the cast attaching loop is the linear path ending
+-- at `3 • 2π`.
+theorem threePresentationComplex_piOne_aux_lift :
+    ConstructionTargets.CircleUniversalCover.liftBasedLoop
+      (↑(((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+          degreeThreeLoop.continuous).cast
+          threePresentationComplex_piOne_aux_one.symm
+          threePresentationComplex_piOne_aux_one.symm) :
+        C(Set.Icc (0 : ℝ) 1, Circle))
+      (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+          degreeThreeLoop.continuous).cast
+          threePresentationComplex_piOne_aux_one.symm
+          threePresentationComplex_piOne_aux_one.symm).source =
+      ⟨fun t ↦ (3 : ℤ) • (2 * Real.pi) * (t : ℝ),
+        continuous_const.mul continuous_subtype_val⟩ := by
+  symm
+  apply (ConstructionTargets.CircleUniversalCover.circleCover_isCoveringMap.eq_liftPath_iff'
+    _).2
+  constructor
+  · funext t
+    exact (threePresentationComplex_piOne_aux_fun t).symm
+  · simp
+
+-- The endpoint integer of the degree-three attaching loop class is `3`.
+theorem threePresentationComplex_piOne_aux_end :
+    ConstructionTargets.CircleUniversalCover.liftBasedLoopEndpointInteger
+      (↑(((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+          degreeThreeLoop.continuous).cast
+          threePresentationComplex_piOne_aux_one.symm
+          threePresentationComplex_piOne_aux_one.symm) :
+        C(Set.Icc (0 : ℝ) 1, Circle))
+      (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+          degreeThreeLoop.continuous).cast
+          threePresentationComplex_piOne_aux_one.symm
+          threePresentationComplex_piOne_aux_one.symm).source
+      (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+          degreeThreeLoop.continuous).cast
+          threePresentationComplex_piOne_aux_one.symm
+          threePresentationComplex_piOne_aux_one.symm).target = 3 := by
+  apply ConstructionTargets.CircleUniversalCover.period_integer_unique
+    (ConstructionTargets.CircleUniversalCover.liftBasedLoopEndpointInteger_spec _ _ _)
+  rw [threePresentationComplex_piOne_aux_lift]
+  simp
+
+-- The class of the degree-three attaching loop is the cube of the
+-- winding-one generator.
+theorem threePresentationComplex_piOne_aux_r :
+    ConstructionTargets.AttachTwoCell.loopClassAt degreeThreeLoop 1
+      threePresentationComplex_piOne_aux_one =
+      ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass ^ 3 := by
+  apply ConstructionTargets.CircleUniversalCover.circleWindingHom_injective
+  rw [map_pow, threePresentationComplex_piOne_aux_winding_one]
+  have h1 := threePresentationComplex_piOne_aux_one
+  rw [show ConstructionTargets.AttachTwoCell.loopClassAt degreeThreeLoop 1 h1 =
+      Path.Homotopic.Quotient.mk
+        (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+          degreeThreeLoop.continuous).cast h1.symm h1.symm) from rfl,
+    ConstructionTargets.CircleUniversalCover.circleWindingHom_mk,
+    threePresentationComplex_piOne_aux_end]
+  apply Multiplicative.toAdd.injective
+  simp
+
+-- Reduction mod three as a homomorphism on the multiplicative integers.
+noncomputable def threePresentationComplex_piOne_aux_modMap :
+    Multiplicative ℤ →* Multiplicative (ZMod 3) :=
+  AddMonoidHom.toMultiplicative (Int.castRingHom (ZMod 3)).toAddMonoidHom
+
+-- The mod-three map is surjective.
+theorem threePresentationComplex_piOne_aux_modMap_surjective :
+    Function.Surjective threePresentationComplex_piOne_aux_modMap := by
+  intro y
+  obtain ⟨k, hk⟩ := ZMod.intCast_surjective (Multiplicative.toAdd y)
+  exact ⟨Multiplicative.ofAdd k, by
+    rw [show threePresentationComplex_piOne_aux_modMap (Multiplicative.ofAdd k) =
+      Multiplicative.ofAdd ((k : ZMod 3)) from rfl, hk]
+    rfl⟩
+
+-- The kernel of the mod-three map is the normal closure of the cube.
+theorem threePresentationComplex_piOne_aux_ker :
+    MonoidHom.ker threePresentationComplex_piOne_aux_modMap =
+      Subgroup.normalClosure ({Multiplicative.ofAdd 3} : Set (Multiplicative ℤ)) := by
+  apply le_antisymm
+  · intro x hx
+    rw [MonoidHom.mem_ker] at hx
+    have hx' : ((Multiplicative.toAdd x : ℤ) : ZMod 3) = 0 := by
+      have h := congrArg Multiplicative.toAdd hx
+      simpa [threePresentationComplex_piOne_aux_modMap] using h
+    obtain ⟨k, hk⟩ := (ZMod.intCast_zmod_eq_zero_iff_dvd _ _).mp hx'
+    have hxk : x = Multiplicative.ofAdd 3 ^ k := by
+      apply Multiplicative.toAdd.injective
+      rw [show Multiplicative.toAdd (Multiplicative.ofAdd 3 ^ k) = k * (3 : ℤ) from by
+        simp [zsmul_eq_mul]]
+      rw [hk]
+      ring
+    rw [hxk]
+    exact Subgroup.zpow_mem _ (Subgroup.subset_normalClosure (Set.mem_singleton _)) k
+  · apply Subgroup.normalClosure_le_normal
+    intro x hx
+    rw [Set.mem_singleton_iff] at hx
+    rw [hx]
+    show threePresentationComplex_piOne_aux_modMap (Multiplicative.ofAdd 3) = 1
+    rw [show threePresentationComplex_piOne_aux_modMap (Multiplicative.ofAdd 3) =
+      Multiplicative.ofAdd ((3 : ℤ) : ZMod 3) from rfl]
+    rw [show ((3 : ℤ) : ZMod 3) = 0 from
+      (ZMod.intCast_zmod_eq_zero_iff_dvd 3 3).mpr (dvd_refl 3)]
+    rfl
+
 theorem threePresentationComplex_piOne :
     Nonempty
       (FundamentalGroup ThreePresentationComplex threePresentationBasepoint ≃*
         Multiplicative (ZMod 3)) := by
-  sorry
+  have h1 := threePresentationComplex_piOne_aux_one
+  letI : PathConnectedSpace
+      (ConstructionTargets.AttachTwoCell.Cell degreeThreeLoop) :=
+    ConstructionTargets.AttachTwoCell.cell_pc degreeThreeLoop
+  obtain ⟨hA1, hA2, hA3, hA4, hA5⟩ :=
+    ConstructionTargets.AttachTwoCell.cell_facts degreeThreeLoop
+  obtain ⟨hps, hpk⟩ := ConstructionTargets.AttachTwoCell.cell_piOne degreeThreeLoop 1 h1
+    hA1 hA2 hA3 hA4 hA5
+    (ConstructionTargets.AttachTwoCell.cell_pathConnected degreeThreeLoop hA3 hA4)
+    ConstructionTargets.AttachTwoCell.cell_piOne_aux_hequiv_bijective
+    ConstructionTargets.AttachTwoCell.cell_piOne_aux_homotopic_conj
+    (ConstructionTargets.AttachTwoCell.cell_piOne_aux_overlap_generator degreeThreeLoop hA3)
+  rw [threePresentationComplex_piOne_aux_r] at hpk
+  obtain ⟨hsurj2, hker2⟩ :=
+    ConstructionTargets.AttachTwoCell.cell_piOne_aux_transport_kernel
+      ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.symm _
+      (ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass ^ 3) hps hpk
+  simp only [MulEquiv.symm_symm] at hker2
+  have her : ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt
+      (ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass ^ 3) =
+      Multiplicative.ofAdd 3 := by
+    rw [map_pow]
+    have h3 : ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt
+        ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass =
+        Multiplicative.ofAdd 1 :=
+      threePresentationComplex_piOne_aux_winding_one
+    rw [h3]
+    apply Multiplicative.toAdd.injective
+    simp
+  rw [her] at hker2
+  exact ⟨(QuotientGroup.quotientKerEquivOfSurjective _ hsurj2).symm.trans
+    ((QuotientGroup.quotientMulEquivOfEq hker2).trans
+      ((QuotientGroup.quotientMulEquivOfEq
+        threePresentationComplex_piOne_aux_ker.symm).trans
+        (QuotientGroup.quotientKerEquivOfSurjective
+          threePresentationComplex_piOne_aux_modMap
+          threePresentationComplex_piOne_aux_modMap_surjective)))⟩
 -- END SEAT AREA
 
 /-- A connected two-sheeted cover would have an index-two induced subgroup
