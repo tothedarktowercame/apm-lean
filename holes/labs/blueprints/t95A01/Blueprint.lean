@@ -390,12 +390,413 @@ theorem kleinBottle_h2_isZero :
 `(x,y) ↦ (2*x,y)`, equivariant for the injective Klein-group endomorphism
 `(m,n) ↦ (2*m,n)` of index two; descend it and use properly discontinuous
 orbit charts plus the two cosets to prove the covering and fibre count. -/
+theorem kleinPlaneQuotient_double_self_cover_aux_doc_anchor : True := trivial
+
+open KleinPresentedGroupCoordinateModel KleinPresentedGroupCoordinateNormalForm
+open KleinBottlePiOne
+
+abbrev KPQ := ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient
+
+theorem kleinPlaneQuotient_double_self_cover_aux_sign (n : ℤ) :
+    ((Multiplicative.toAdd ((inversion ^ n) (Multiplicative.ofAdd 1)) : ℤ) : ℝ) =
+      (-1 : ℝ) ^ n := by
+  induction n using Int.induction_on with
+  | zero => simp
+  | succ k ih =>
+      rw [zpow_add_one, MulAut.mul_apply]
+      have hz : ((inversion : MulAut ZMul) (Multiplicative.ofAdd 1)) =
+          (Multiplicative.ofAdd 1)⁻¹ := rfl
+      rw [hz, KleinCoordinateInversionPower.inversion_zpow_apply]
+      have h1 : Multiplicative.toAdd ((Multiplicative.ofAdd (1 : ℤ))⁻¹) = -1 := by
+        simp
+      rw [h1]
+      push_cast
+      rw [ih]
+      exact (zpow_add_one₀ (by norm_num : (-1 : ℝ) ≠ 0) _).symm
+  | pred k ih =>
+      rw [zpow_sub_one, MulAut.mul_apply]
+      have hz : ((inversion : MulAut ZMul)⁻¹) (Multiplicative.ofAdd 1) =
+          (Multiplicative.ofAdd 1)⁻¹ := by
+        show (MulEquiv.symm inversion) (Multiplicative.ofAdd 1) = _
+        rw [MulEquiv.symm_apply_eq]
+        simp [inversion]
+      rw [hz, KleinCoordinateInversionPower.inversion_zpow_apply]
+      have h1 : Multiplicative.toAdd ((Multiplicative.ofAdd (1 : ℤ))⁻¹) = -1 := by
+        simp
+      rw [h1]
+      push_cast
+      rw [ih]
+      rw [zpow_sub_one₀ (by norm_num : (-1 : ℝ) ≠ 0) (-(k : ℤ))]
+      simp
+
+theorem kleinPlaneQuotient_double_self_cover_aux_smul_eq (g : PresentedKleinGroup) (q : ℝ × ℝ) :
+    g • q = ((-1 : ℝ) ^ (Multiplicative.toAdd (coordinateEquiv g).2) * q.1 +
+        ((Multiplicative.toAdd (coordinateEquiv g).1 : ℤ) : ℝ),
+      q.2 + ((Multiplicative.toAdd (coordinateEquiv g).2 : ℤ) : ℝ)) := by
+  change KleinPlaneAffineAction.coordinateAct (coordinateEquiv g) q = _
+  have hs : ((Multiplicative.toAdd (action (coordinateEquiv g).2
+      (Multiplicative.ofAdd 1)) : ℤ) : ℝ) =
+      (-1 : ℝ) ^ (Multiplicative.toAdd (coordinateEquiv g).2) := by
+    simp only [action, zpowersHom_apply]
+    exact kleinPlaneQuotient_double_self_cover_aux_sign _
+  apply Prod.ext
+  · dsimp [KleinPlaneAffineAction.coordinateAct]
+    rw [hs]
+    ring
+  · dsimp [KleinPlaneAffineAction.coordinateAct]
+    ring
+
+theorem kleinPlaneQuotient_double_self_cover_aux_symm_smul (m n : ℤ) (p : ℝ × ℝ) :
+    (coordinateEquiv.symm ⟨Multiplicative.ofAdd m, Multiplicative.ofAdd n⟩ :
+      PresentedKleinGroup) • p = ((-1 : ℝ) ^ n * p.1 + (m : ℝ), p.2 + (n : ℝ)) := by
+  rw [kleinPlaneQuotient_double_self_cover_aux_smul_eq, MulEquiv.apply_symm_apply]
+  simp
+
+/-- Compatibility of `(x, y) ↦ (x + 1/2, y)` with the Klein orbit relation. -/
+theorem kleinPlaneQuotient_double_self_cover_aux_tau_respects (a b : ℝ × ℝ)
+    (h : MulAction.orbitRel PresentedKleinGroup (ℝ × ℝ) a b) :
+    (Quotient.mk _ (a.1 + 1 / 2, a.2) : KPQ) = Quotient.mk _ (b.1 + 1 / 2, b.2) := by
+  obtain ⟨g, hg⟩ := h
+  change g • b = a at hg
+  rw [kleinPlaneQuotient_double_self_cover_aux_smul_eq] at hg
+  set n := Multiplicative.toAdd (coordinateEquiv g).2 with hn_def
+  set m := Multiplicative.toAdd (coordinateEquiv g).1 with hm_def
+  have hg1 : (-1 : ℝ) ^ n * b.1 + (m : ℝ) = a.1 := congrArg Prod.fst hg
+  have hg2 : b.2 + (n : ℝ) = a.2 := congrArg Prod.snd hg
+  apply Quotient.sound
+  obtain ⟨k, hk | hk⟩ := Int.even_or_odd' n
+  · have h1 : (-1 : ℝ) ^ n = 1 := Even.neg_one_zpow ⟨k, by rw [hk]; ring⟩
+    rw [h1] at hg1
+    refine ⟨coordinateEquiv.symm ⟨Multiplicative.ofAdd m, Multiplicative.ofAdd n⟩, ?_⟩
+    change _ • (b.1 + 1 / 2, b.2) = (a.1 + 1 / 2, a.2)
+    rw [kleinPlaneQuotient_double_self_cover_aux_symm_smul, h1]
+    apply Prod.ext
+    · push_cast
+      linear_combination hg1
+    · exact hg2
+  · have h1 : (-1 : ℝ) ^ n = -1 := Odd.neg_one_zpow ⟨k, hk⟩
+    rw [h1] at hg1
+    refine ⟨coordinateEquiv.symm ⟨Multiplicative.ofAdd (m + 1),
+        Multiplicative.ofAdd n⟩, ?_⟩
+    change _ • (b.1 + 1 / 2, b.2) = (a.1 + 1 / 2, a.2)
+    rw [kleinPlaneQuotient_double_self_cover_aux_symm_smul, h1]
+    apply Prod.ext
+    · push_cast
+      linear_combination hg1
+    · exact hg2
+
+/-- The half-shift involution on the Klein plane quotient. -/
+noncomputable def kleinPlaneQuotient_double_self_cover_aux_tau : KPQ → KPQ :=
+  Quotient.lift (fun p : ℝ × ℝ => (Quotient.mk _ (p.1 + 1 / 2, p.2) : KPQ))
+    kleinPlaneQuotient_double_self_cover_aux_tau_respects
+
+theorem kleinPlaneQuotient_double_self_cover_aux_tau_mk (p : ℝ × ℝ) :
+    kleinPlaneQuotient_double_self_cover_aux_tau (Quotient.mk _ p : KPQ) = Quotient.mk _ (p.1 + 1 / 2, p.2) := rfl
+
+theorem kleinPlaneQuotient_double_self_cover_aux_tau_continuous : Continuous kleinPlaneQuotient_double_self_cover_aux_tau :=
+  Continuous.quotient_lift
+    (continuous_quotient_mk'.comp
+      ((continuous_fst.add continuous_const).prodMk continuous_snd)) _
+
+theorem kleinPlaneQuotient_double_self_cover_aux_tau_tau (x : KPQ) : kleinPlaneQuotient_double_self_cover_aux_tau (kleinPlaneQuotient_double_self_cover_aux_tau x) = x := by
+  obtain ⟨p, rfl⟩ := Quotient.exists_rep x
+  rw [kleinPlaneQuotient_double_self_cover_aux_tau_mk, kleinPlaneQuotient_double_self_cover_aux_tau_mk]
+  apply Quotient.sound
+  refine ⟨coordinateEquiv.symm ⟨Multiplicative.ofAdd 1, Multiplicative.ofAdd 0⟩, ?_⟩
+  change _ • p = (p.1 + 1 / 2 + 1 / 2, p.2)
+  rw [kleinPlaneQuotient_double_self_cover_aux_symm_smul]
+  apply Prod.ext <;> simp <;> ring
+
+theorem kleinPlaneQuotient_double_self_cover_aux_tau_ne (x : KPQ) : kleinPlaneQuotient_double_self_cover_aux_tau x ≠ x := by
+  obtain ⟨p, rfl⟩ := Quotient.exists_rep x
+  rw [kleinPlaneQuotient_double_self_cover_aux_tau_mk]
+  intro h
+  rw [Quotient.eq] at h
+  obtain ⟨g, hg⟩ := h
+  change g • p = (p.1 + 1 / 2, p.2) at hg
+  rw [kleinPlaneQuotient_double_self_cover_aux_smul_eq] at hg
+  simp only [Prod.mk.injEq] at hg
+  obtain ⟨hg1, hg2⟩ := hg
+  have hn0 : Multiplicative.toAdd (coordinateEquiv g).2 = 0 := by
+    have h2 : ((Multiplicative.toAdd (coordinateEquiv g).2 : ℤ) : ℝ) = 0 := by
+      linarith
+    exact_mod_cast h2
+  rw [hn0] at hg1
+  simp only [zpow_zero, one_mul] at hg1
+  have hm : ((Multiplicative.toAdd (coordinateEquiv g).1 : ℤ) : ℝ) = 1 / 2 := by
+    linarith
+  have h2 : ((2 * Multiplicative.toAdd (coordinateEquiv g).1 : ℤ) : ℝ) = 1 := by
+    push_cast
+    linarith
+  have h3 : 2 * Multiplicative.toAdd (coordinateEquiv g).1 = 1 := by
+    exact_mod_cast h2
+  omega
+
+/-- Compatibility of `(x, y) ↦ (2x, y)` with the Klein orbit relation. -/
+theorem kleinPlaneQuotient_double_self_cover_aux_dbl_respects (a b : ℝ × ℝ)
+    (h : MulAction.orbitRel PresentedKleinGroup (ℝ × ℝ) a b) :
+    (Quotient.mk _ (2 * a.1, a.2) : KPQ) = Quotient.mk _ (2 * b.1, b.2) := by
+  obtain ⟨g, hg⟩ := h
+  change g • b = a at hg
+  rw [kleinPlaneQuotient_double_self_cover_aux_smul_eq] at hg
+  obtain ⟨hg1, hg2⟩ := Prod.ext_iff.mp hg
+  apply Quotient.sound
+  refine ⟨coordinateEquiv.symm
+    ⟨Multiplicative.ofAdd (2 * Multiplicative.toAdd (coordinateEquiv g).1),
+      Multiplicative.ofAdd (Multiplicative.toAdd (coordinateEquiv g).2)⟩, ?_⟩
+  change _ • (2 * b.1, b.2) = (2 * a.1, a.2)
+  rw [kleinPlaneQuotient_double_self_cover_aux_symm_smul]
+  apply Prod.ext
+  · push_cast
+    linear_combination 2 * hg1
+  · exact hg2
+
+/-- The doubling map on the Klein plane quotient. -/
+noncomputable def kleinPlaneQuotient_double_self_cover_aux_dbl : KPQ → KPQ :=
+  Quotient.lift (fun p : ℝ × ℝ => (Quotient.mk _ (2 * p.1, p.2) : KPQ))
+    kleinPlaneQuotient_double_self_cover_aux_dbl_respects
+
+theorem kleinPlaneQuotient_double_self_cover_aux_dbl_mk (p : ℝ × ℝ) :
+    kleinPlaneQuotient_double_self_cover_aux_dbl (Quotient.mk _ p : KPQ) = Quotient.mk _ (2 * p.1, p.2) := rfl
+
+theorem kleinPlaneQuotient_double_self_cover_aux_dbl_continuous : Continuous kleinPlaneQuotient_double_self_cover_aux_dbl :=
+  Continuous.quotient_lift
+    (continuous_quotient_mk'.comp
+      ((continuous_const.mul continuous_fst).prodMk continuous_snd)) _
+
+theorem kleinPlaneQuotient_double_self_cover_aux_dbl_surjective : Function.Surjective kleinPlaneQuotient_double_self_cover_aux_dbl := by
+  intro x
+  obtain ⟨p, rfl⟩ := Quotient.exists_rep x
+  refine ⟨Quotient.mk _ (p.1 / 2, p.2), ?_⟩
+  rw [kleinPlaneQuotient_double_self_cover_aux_dbl_mk]
+  congr 1
+  apply Prod.ext
+  · simp
+    ring
+  · simp
+
+theorem kleinPlaneQuotient_double_self_cover_aux_dbl_tau (x : KPQ) : kleinPlaneQuotient_double_self_cover_aux_dbl (kleinPlaneQuotient_double_self_cover_aux_tau x) = kleinPlaneQuotient_double_self_cover_aux_dbl x := by
+  obtain ⟨p, rfl⟩ := Quotient.exists_rep x
+  rw [kleinPlaneQuotient_double_self_cover_aux_tau_mk, kleinPlaneQuotient_double_self_cover_aux_dbl_mk, kleinPlaneQuotient_double_self_cover_aux_dbl_mk]
+  apply Quotient.sound
+  refine ⟨coordinateEquiv.symm ⟨Multiplicative.ofAdd 1, Multiplicative.ofAdd 0⟩, ?_⟩
+  change _ • (2 * p.1, p.2) = (2 * (p.1 + 1 / 2), p.2)
+  rw [kleinPlaneQuotient_double_self_cover_aux_symm_smul]
+  apply Prod.ext <;> simp <;> ring
+
+theorem kleinPlaneQuotient_double_self_cover_aux_dbl_eq_iff (a b : KPQ) :
+    kleinPlaneQuotient_double_self_cover_aux_dbl a = kleinPlaneQuotient_double_self_cover_aux_dbl b ↔ a = b ∨ a = kleinPlaneQuotient_double_self_cover_aux_tau b := by
+  obtain ⟨p, rfl⟩ := Quotient.exists_rep a
+  obtain ⟨q, rfl⟩ := Quotient.exists_rep b
+  constructor
+  · intro h
+    rw [kleinPlaneQuotient_double_self_cover_aux_dbl_mk, kleinPlaneQuotient_double_self_cover_aux_dbl_mk, Quotient.eq] at h
+    obtain ⟨g, hg⟩ := h
+    change g • (2 * q.1, q.2) = (2 * p.1, p.2) at hg
+    rw [kleinPlaneQuotient_double_self_cover_aux_smul_eq] at hg
+    simp only [Prod.mk.injEq] at hg
+    obtain ⟨hg1, hg2⟩ := hg
+    set n := Multiplicative.toAdd (coordinateEquiv g).2 with hn_def
+    set m := Multiplicative.toAdd (coordinateEquiv g).1 with hm_def
+    obtain ⟨k, hmk | hmk⟩ := Int.even_or_odd' m
+    · left
+      apply Quotient.sound
+      refine ⟨coordinateEquiv.symm ⟨Multiplicative.ofAdd k, Multiplicative.ofAdd n⟩, ?_⟩
+      change _ • q = p
+      rw [kleinPlaneQuotient_double_self_cover_aux_symm_smul]
+      apply Prod.ext
+      · push_cast
+        rw [hmk] at hg1
+        push_cast at hg1
+        ring_nf at hg1 ⊢
+        linarith
+      · exact hg2
+    · right
+      rw [kleinPlaneQuotient_double_self_cover_aux_tau_mk]
+      apply Quotient.sound
+      rcases Int.even_or_odd n with hne | hno
+      · have h1 : (-1 : ℝ) ^ n = 1 := hne.neg_one_zpow
+        rw [h1] at hg1
+        refine ⟨coordinateEquiv.symm ⟨Multiplicative.ofAdd k, Multiplicative.ofAdd n⟩, ?_⟩
+        change _ • (q.1 + 1 / 2, q.2) = p
+        rw [kleinPlaneQuotient_double_self_cover_aux_symm_smul, h1]
+        apply Prod.ext
+        · push_cast
+          rw [hmk] at hg1
+          push_cast at hg1
+          ring_nf at hg1 ⊢
+          linarith
+        · exact hg2
+      · have h1 : (-1 : ℝ) ^ n = -1 := hno.neg_one_zpow
+        rw [h1] at hg1
+        refine ⟨coordinateEquiv.symm ⟨Multiplicative.ofAdd (k + 1),
+            Multiplicative.ofAdd n⟩, ?_⟩
+        change _ • (q.1 + 1 / 2, q.2) = p
+        rw [kleinPlaneQuotient_double_self_cover_aux_symm_smul, h1]
+        apply Prod.ext
+        · push_cast
+          rw [hmk] at hg1
+          push_cast at hg1
+          ring_nf at hg1 ⊢
+          linarith
+        · exact hg2
+  · rintro (h | h)
+    · rw [h]
+    · rw [h]
+      exact kleinPlaneQuotient_double_self_cover_aux_dbl_tau _
+
+theorem kleinPlaneQuotient_double_self_cover_aux_g2_cases (g : Multiplicative (ZMod 2)) :
+    g = 1 ∨ g = Multiplicative.ofAdd 1 := by
+  have h : Multiplicative.toAdd g = 0 ∨ Multiplicative.toAdd g = 1 := by
+    have hz : ∀ z : ZMod 2, z = 0 ∨ z = 1 := by decide
+    exact hz _
+  obtain h | h := h
+  · left
+    apply Multiplicative.toAdd.injective
+    simp [h]
+  · right
+    apply Multiplicative.toAdd.injective
+    simp [h]
+
+theorem kleinPlaneQuotient_double_self_cover_aux_delta_ne_one :
+    (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) ≠ 1 := by
+  intro h
+  have := congrArg Multiplicative.toAdd h
+  simp at this
+
+theorem kleinPlaneQuotient_double_self_cover_aux_delta_sq :
+    (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) * Multiplicative.ofAdd 1
+      = 1 := by
+  rw [← ofAdd_add]
+  have h : (1 + 1 : ZMod 2) = 0 := by decide
+  rw [h]
+  exact ofAdd_zero
+
+/-- The `ZMod 2` action on the quotient generated by `kleinPlaneQuotient_double_self_cover_aux_tau`. -/
+noncomputable instance kleinPlaneQuotient_double_self_cover_aux_g2MulAction : MulAction (Multiplicative (ZMod 2)) KPQ where
+  smul g x := if g = 1 then x else kleinPlaneQuotient_double_self_cover_aux_tau x
+  one_smul x := if_pos rfl
+  mul_smul g h x := by
+    rcases kleinPlaneQuotient_double_self_cover_aux_g2_cases g with rfl | rfl <;>
+      rcases kleinPlaneQuotient_double_self_cover_aux_g2_cases h with rfl | rfl
+    · rfl
+    · rfl
+    · rfl
+    · exact (kleinPlaneQuotient_double_self_cover_aux_tau_tau x).symm
+
+theorem kleinPlaneQuotient_double_self_cover_aux_g2_smul_eq (g : Multiplicative (ZMod 2)) (x : KPQ) :
+    g • x = if g = 1 then x else kleinPlaneQuotient_double_self_cover_aux_tau x := rfl
+
+theorem kleinPlaneQuotient_double_self_cover_aux_g2_continuousConstSMul : ContinuousConstSMul (Multiplicative (ZMod 2)) KPQ :=
+  ⟨fun g => by
+    rcases kleinPlaneQuotient_double_self_cover_aux_g2_cases g with rfl | rfl
+    · simpa using continuous_id
+    · have : (fun x : KPQ => (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) • x) =
+          kleinPlaneQuotient_double_self_cover_aux_tau := by
+        funext x
+        exact if_neg kleinPlaneQuotient_double_self_cover_aux_delta_ne_one
+      rw [this]
+      exact kleinPlaneQuotient_double_self_cover_aux_tau_continuous⟩
+
 theorem kleinPlaneQuotient_double_self_cover :
     ∃ p : ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient →
         ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient,
       IsCoveringMap p ∧
       ∀ x, Nat.card {y // p y = x} = 2 := by
-  sorry
+  letI : ContinuousConstSMul KleinPresentedGroupCoordinateModel.PresentedKleinGroup
+      (ℝ × ℝ) :=
+    ⟨ConstructionTargets.KleinBottlePiOne.kleinPlaneQuotient_pi1_origin_aux_continuous⟩
+  letI : ProperlyDiscontinuousSMul KleinPresentedGroupCoordinateModel.PresentedKleinGroup
+      (ℝ × ℝ) :=
+    ⟨fun hK hL =>
+      ConstructionTargets.KleinBottlePiOne.kleinPlaneQuotient_pi1_origin_aux_finite_actors
+        hK hL⟩
+  letI : T2Space KPQ := t2Space_of_properlyDiscontinuousSMul_of_t2Space
+  letI : CompactSpace KleinBottle := ⟨by
+    rw [← Set.image_univ_of_surjective
+      (ConstructionTargets.Surfaces.surjective_surfaceQuotient false 2)]
+    exact isCompact_univ.image
+      (ConstructionTargets.Surfaces.continuous_surfaceQuotient false 2)⟩
+  obtain ⟨e⟩ := ConstructionTargets.KleinBottlePiOne.kleinPlaneQuotient_homeomorph
+  letI : CompactSpace KPQ := e.symm.compactSpace
+  have hquot : Topology.IsQuotientMap kleinPlaneQuotient_double_self_cover_aux_dbl :=
+    IsClosedMap.isQuotientMap kleinPlaneQuotient_double_self_cover_aux_dbl_continuous.isClosedMap kleinPlaneQuotient_double_self_cover_aux_dbl_continuous
+      kleinPlaneQuotient_double_self_cover_aux_dbl_surjective
+  have hqcm : IsQuotientCoveringMap kleinPlaneQuotient_double_self_cover_aux_dbl (Multiplicative (ZMod 2)) := by
+    refine ⟨hquot, kleinPlaneQuotient_double_self_cover_aux_g2_continuousConstSMul, ?_, ?_⟩
+    · intro a b
+      rw [kleinPlaneQuotient_double_self_cover_aux_dbl_eq_iff]
+      constructor
+      · rintro (rfl | rfl)
+        · exact ⟨1, one_smul _ _⟩
+        · refine ⟨Multiplicative.ofAdd 1, ?_⟩
+          change (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) • b =
+            kleinPlaneQuotient_double_self_cover_aux_tau b
+          rw [kleinPlaneQuotient_double_self_cover_aux_g2_smul_eq]
+          exact if_neg kleinPlaneQuotient_double_self_cover_aux_delta_ne_one
+      · rintro ⟨g, hg⟩
+        rcases kleinPlaneQuotient_double_self_cover_aux_g2_cases g with rfl | rfl
+        · change (1 : Multiplicative (ZMod 2)) • b = a at hg
+          rw [kleinPlaneQuotient_double_self_cover_aux_g2_smul_eq, if_pos rfl] at hg
+          exact Or.inl hg.symm
+        · change (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) • b = a at hg
+          rw [kleinPlaneQuotient_double_self_cover_aux_g2_smul_eq,
+            if_neg kleinPlaneQuotient_double_self_cover_aux_delta_ne_one] at hg
+          exact Or.inr hg.symm
+    · intro e
+      obtain ⟨p, rfl⟩ := Quotient.exists_rep e
+      have hne : kleinPlaneQuotient_double_self_cover_aux_tau (Quotient.mk _ p : KPQ) ≠ Quotient.mk _ p := kleinPlaneQuotient_double_self_cover_aux_tau_ne _
+      obtain ⟨U, V, hUo, hVo, hxU, hxV, hdisj⟩ := t2_separation hne
+      refine ⟨V ∩ kleinPlaneQuotient_double_self_cover_aux_tau ⁻¹' U,
+        Filter.inter_mem (hVo.mem_nhds hxV)
+          (kleinPlaneQuotient_double_self_cover_aux_tau_continuous.continuousAt.preimage_mem_nhds (hUo.mem_nhds hxU)), ?_⟩
+      intro g hg
+      rcases kleinPlaneQuotient_double_self_cover_aux_g2_cases g with rfl | rfl
+      · rfl
+      · exfalso
+        obtain ⟨z, hz1, hz2⟩ := hg
+        obtain ⟨y, hyW, hyz⟩ := hz1
+        subst hyz
+        have hδ : (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) • y = kleinPlaneQuotient_double_self_cover_aux_tau y :=
+          if_neg kleinPlaneQuotient_double_self_cover_aux_delta_ne_one
+        change (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) • y ∈
+          V ∩ kleinPlaneQuotient_double_self_cover_aux_tau ⁻¹' U at hz2
+        rw [hδ] at hz2
+        have hxy : kleinPlaneQuotient_double_self_cover_aux_tau y ∈ U ∩ V := ⟨hyW.2, hz2.1⟩
+        rw [Set.disjoint_iff_inter_eq_empty] at hdisj
+        rw [hdisj] at hxy
+        simpa using hxy
+  refine ⟨kleinPlaneQuotient_double_self_cover_aux_dbl, hqcm.isCoveringMap, ?_⟩
+  intro x
+  obtain ⟨a, ha⟩ := kleinPlaneQuotient_double_self_cover_aux_dbl_surjective x
+  classical
+  have equiv : Multiplicative (ZMod 2) ≃ {y : KPQ // kleinPlaneQuotient_double_self_cover_aux_dbl y = x} := by
+    refine { toFun := fun g => ⟨g • a, ?_⟩,
+             invFun := fun y => if y.1 = a then 1 else Multiplicative.ofAdd 1,
+             left_inv := ?_, right_inv := ?_ }
+    · rcases kleinPlaneQuotient_double_self_cover_aux_g2_cases g with rfl | rfl
+      · rw [show ((1 : Multiplicative (ZMod 2)) • a) = a from if_pos rfl]
+        exact ha
+      · rw [show ((Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) • a) = kleinPlaneQuotient_double_self_cover_aux_tau a
+          from if_neg kleinPlaneQuotient_double_self_cover_aux_delta_ne_one, kleinPlaneQuotient_double_self_cover_aux_dbl_tau]
+        exact ha
+    · intro g
+      rcases kleinPlaneQuotient_double_self_cover_aux_g2_cases g with rfl | rfl
+      · simp [show ((1 : Multiplicative (ZMod 2)) • a) = a from if_pos rfl]
+      · simp [show ((Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) • a) = kleinPlaneQuotient_double_self_cover_aux_tau a
+          from if_neg kleinPlaneQuotient_double_self_cover_aux_delta_ne_one, kleinPlaneQuotient_double_self_cover_aux_tau_ne a]
+    · intro y
+      obtain ⟨y, hy⟩ := y
+      rcases (kleinPlaneQuotient_double_self_cover_aux_dbl_eq_iff y a).mp (hy.trans ha.symm) with h | h
+      · subst h
+        simp [show ((1 : Multiplicative (ZMod 2)) • a) = a from if_pos rfl]
+      · subst h
+        simp [show ((Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) • a) = kleinPlaneQuotient_double_self_cover_aux_tau a
+          from if_neg kleinPlaneQuotient_double_self_cover_aux_delta_ne_one, kleinPlaneQuotient_double_self_cover_aux_tau_ne a]
+  calc Nat.card {y : KPQ // kleinPlaneQuotient_double_self_cover_aux_dbl y = x} = Nat.card (Multiplicative (ZMod 2)) :=
+        Nat.card_congr equiv.symm
+    _ = Nat.card (ZMod 2) := Nat.card_congr Multiplicative.ofAdd
+    _ = 2 := by rw [Nat.card_eq_fintype_card, ZMod.card]
 
 /-- Conjugating a finite-sheeted self-cover by a homeomorphism preserves both
 `IsCoveringMap` and the exact fibre cardinality.  Use
