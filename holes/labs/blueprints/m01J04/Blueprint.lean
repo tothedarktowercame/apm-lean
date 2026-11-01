@@ -4034,7 +4034,9 @@ Cauchy–Schwarz (`apm_m01J04_test_mul_fields_memLp` and neighbours) or `MemLp.i
 theorem apm_m01J04_H1_exists_sub {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (f g : apm_m01J04_H1 d Ω) :
     ∃ h : apm_m01J04_H1 d Ω, h.val = f.val - g.val ∧ h.grad = f.grad - g.grad := by
-  sorry
+  refine ⟨apm_m01J04_H1sub f g, ?_, ?_⟩
+  · rfl
+  · rfl
 
 /-- Seat: for a smooth compactly supported value, the weak gradient is the classical gradient a.e.
 Integrate by parts with `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable`, then use the fundamental
