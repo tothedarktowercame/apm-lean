@@ -1265,7 +1265,42 @@ theorem t98J01_complexLefschetz_range {X : Type} [TopologicalSpace X] (φ : C(X,
     (h : Set.MapsTo φ A A) {v : ℚ} (hv : HasLefschetzNumber (t98J01_selfRestrict φ A h) v) :
     t98J01_ComplexLefschetz (t98J01_sset.obj (t98J01_range A : SSet))
       (t98J01_rangeEndo φ (t98J01_range A) (t98J01_range_image_le φ A h)) v := by
-  sorry
+  rw [t98J01_hasLefschetzNumber_iff] at hv
+  let e := ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso ℚ A
+  apply (t98J01_complexLefschetz_congr e.hom (fun _ => inferInstance) _ v).mpr hv
+  dsimp [e, t98J01_chainMap, t98J01_rangeEndo]
+  simp only [ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso,
+    Functor.mapIso_hom]
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  congr 1
+  simp only [Iso.symm_hom]
+  apply (cancel_mono (TopCat.toSSet.map
+    (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A))).1
+  calc
+    _ = ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap
+          (t98J01_range A) (t98J01_range A) (TopCat.toSSet.map (TopCat.ofHom φ))
+          (t98J01_range_image_le φ A h) ≫ (t98J01_range A).ι := by
+        simpa only [Category.assoc] using congrArg
+          (fun k => ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap
+            (t98J01_range A) (t98J01_range A) (TopCat.toSSet.map (TopCat.ofHom φ))
+            (t98J01_range_image_le φ A h) ≫ k)
+          (ConstructionTargets.SingularExcision.rangeIso_hom_comp
+            (TopCat.toSSet.map
+              (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A)))
+    _ = (t98J01_range A).ι ≫ TopCat.toSSet.map (TopCat.ofHom φ) :=
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap_comp_ι _ _ _ _
+    _ = _ := by
+      dsimp [t98J01_range]
+      change (SSet.Subcomplex.range (TopCat.toSSet.map
+          (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A))).ι ≫
+          TopCat.toSSet.map (TopCat.ofHom φ) = _
+      rw [← ConstructionTargets.SingularExcision.rangeIso_hom_comp
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A)),
+        Category.assoc, ← TopCat.toSSet.map_comp,
+        ← ConstructionTargets.SingularExcision.subspaceMap_inclusion A A φ h,
+        TopCat.toSSet.map_comp]
+      rfl
 
 /-- Seat: the same on the infimum subcomplex that appears in Mayer–Vietoris. As `t98J01_complexLefschetz_range` for `U ∩ V`, composed with `CoefficientIntersectionRangeComparison.intersectionChainsIso ℚ U V` (from `ambientIntersectionRangeIso`). Check the square after `cancel_mono` of the inclusion into the ambient singular set. -/
 -- BEGIN SEAT AREA
@@ -1321,11 +1356,131 @@ def t98J01_incl {Y : Type} [TopologicalSpace Y] (A : Set Y) : C(A, Y) :=
   ⟨Subtype.val, continuous_subtype_val⟩
 
 /-- Seat: a clopen decomposition splits rational homology. Take `P`, `Q` the ranges. `ambientSubspaceRange_inf` and `hdis` make `P ⊓ Q` the range of the empty set, so `t98J01_sset.obj (P ⊓ Q)` has no simplices and is a zero complex; in `CoefficientSubcomplexMayerVietoris.shortExact` the map `g` is then an isomorphism (`ShortComplex.ShortExact.isIso_g_iff` or mono+epi). Compose with `RP3Homology.rationalMayerVietoris_aux_unionMap_isIso`, `rangeChainsIso` and `homologyBiprodIso`, watching the sign in `g`: a sign on one summand does not change bijectivity. Alternative for injectivity and positive degrees: `RP3Homology.rationalMayerVietoris`. -/
+private theorem t98J01_clopen_homology_bijective_aux_empty
+    {X : Type} [TopologicalSpace X] [IsEmpty X] (n : ℕ) :
+    Subsingleton (Homology X n) := by
+  letI : TotallyDisconnectedSpace X :=
+    ⟨fun s _ _ x _ _ _ => isEmptyElim x⟩
+  rcases n with _ | n
+  · let e := AlgebraicTopology.singularHomologyFunctorZeroOfTotallyDisconnectedSpace
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) (TopCat.of X)
+    let hinit : IsInitial (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) :=
+      { desc := fun _ => 0
+        fac := fun _ j => isEmptyElim j
+        uniq := fun _ m _ => by
+          change (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) ⟶ _ at m
+          change m = 0
+          apply Limits.Sigma.hom_ext m 0
+          intro x
+          exact isEmptyElim x }
+    letI : Subsingleton ↑(∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) :=
+      ModuleCat.subsingleton_of_isZero hinit.isZero
+    constructor
+    intro x y
+    have h : e.hom.hom x = e.hom.hom y := Subsingleton.elim _ _
+    have := congrArg e.inv.hom h
+    simpa using this
+  · exact ModuleCat.subsingleton_of_isZero
+      (AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+        (ModuleCat ℚ) (n + 1) (ModuleCat.of ℚ ℚ) (TopCat.of X) (by omega))
+
+private theorem t98J01_clopen_homology_bijective_aux_h0
+    {S : ShortComplex (ChainComplex (ModuleCat ℚ) ℕ)} (hS : S.ShortExact) :
+    Function.Surjective (HomologicalComplex.homologyMap S.g 0).hom := by
+  letI : Epi S.g := hS.epi_g
+  letI : Epi (HomologicalComplex.homologyMap S.g 0) := by
+    apply HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+    intro j hj
+    simp at hj
+  exact (ModuleCat.epi_iff_surjective _).mp inferInstance
+
 theorem t98J01_clopen_homology_bijective {Y : Type} [TopologicalSpace Y] (A B : Set Y)
     (hA : IsOpen A) (hB : IsOpen B) (hcov : A ∪ B = Set.univ) (hdis : A ∩ B = ∅) (n : ℕ) :
     Function.Bijective (LinearMap.coprod (induced (t98J01_incl A) n).hom
       (induced (t98J01_incl B) n).hom) := by
-  sorry
+  letI : IsEmpty ↑(A ∩ B) := ⟨fun x => by simpa [hdis] using x.2⟩
+  obtain ⟨δ, hex, hmid, htail⟩ := RP3Homology.rationalMayerVietoris A B hA hB hcov
+  letI hinter (k : ℕ) : Subsingleton (Homology ↑(A ∩ B) k) :=
+    t98J01_clopen_homology_bijective_aux_empty k
+  have hinjJ : Function.Injective (RP3Homology.mvJ A B n).hom := by
+    rw [← LinearMap.ker_eq_bot]
+    rw [← hex n]
+    ext x
+    constructor
+    · intro hx
+      rcases hx with ⟨z, rfl⟩
+      have : z = 0 := Subsingleton.elim _ _
+      simp [this]
+    · intro hx
+      rw [hx]
+      exact ⟨0, by simp⟩
+  have hsurjJ : Function.Surjective (RP3Homology.mvJ A B n).hom := by
+    rcases n with _ | n
+    · let S := RP3Homology.rationalMayerVietoris_aux_SC A B
+      have hs := t98J01_clopen_homology_bijective_aux_h0
+        (ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortExact ℚ
+          (RP3Homology.rationalMayerVietoris_aux_P A)
+          (RP3Homology.rationalMayerVietoris_aux_P B))
+      intro y
+      let eU := RP3Homology.rationalMayerVietoris_aux_unionIso A B hA hB hcov 0
+      let eP := RP3Homology.rationalMayerVietoris_aux_pieceIso A B 0
+      obtain ⟨x, hx⟩ := hs (eU.inv.hom y)
+      refine ⟨eP.hom.hom x, ?_⟩
+      have harrow := RP3Homology.rationalMayerVietoris_aux_unionArrow A B hA hB hcov 0
+      have := congrArg ModuleCat.Hom.hom harrow
+      calc
+        _ = eU.hom.hom ((HomologicalComplex.homologyMap S.g 0).hom x) := by
+          symm
+          simpa [eU, eP, S, ModuleCat.hom_comp] using
+            congrArg (fun f => f (eP.hom.hom x)) this
+        _ = y := by rw [hx]; simp [eU]
+    · intro y
+      have hker : y ∈ LinearMap.ker (δ n).hom := by
+        have : (δ n).hom y = 0 := Subsingleton.elim _ _
+        exact this
+      rw [← hmid n] at hker
+      exact hker
+  have hbijJ : Function.Bijective (RP3Homology.mvJ A B n).hom := ⟨hinjJ, hsurjJ⟩
+  let e := ModuleCat.biprodIsoProd (Homology A n) (Homology B n)
+  let s : ModuleCat.of ℚ (Homology A n × Homology B n) ⟶
+      ModuleCat.of ℚ (Homology A n × Homology B n) :=
+    ModuleCat.ofHom (LinearMap.prodMap LinearMap.id (-LinearMap.id))
+  have hs : Function.Bijective s.hom := by
+    constructor
+    · intro x y h
+      simpa [s] using congrArg (fun z => (z.1, -z.2)) h
+    · intro x
+      exact ⟨(x.1, -x.2), by simp [s]⟩
+  letI : IsIso s := (ConcreteCategory.isIso_iff_bijective s).2 hs
+  letI : IsIso (RP3Homology.mvJ A B n) :=
+    (ConcreteCategory.isIso_iff_bijective _).2 hbijJ
+  have hcomp : Function.Bijective (s ≫ e.inv ≫ RP3Homology.mvJ A B n).hom :=
+    ConcreteCategory.bijective_of_isIso _
+  have heq : (s ≫ e.inv ≫ RP3Homology.mvJ A B n).hom =
+      LinearMap.coprod (induced (t98J01_incl A) n).hom
+        (induced (t98J01_incl B) n).hom := by
+    have hAeq : (induced (t98J01_incl A) n).hom = (RP3Homology.mvToX A n).hom := rfl
+    have hBeq : (induced (t98J01_incl B) n).hom = (RP3Homology.mvToX B n).hom := rfl
+    rw [hAeq, hBeq]
+    apply LinearMap.ext
+    rintro ⟨x, y⟩
+    have hx : ((biprod.fst : (Homology A n ⊞ Homology B n) ⟶ Homology A n)).hom
+        (e.inv.hom (x, -y)) = x := by
+      change (e.inv ≫ (biprod.fst : (Homology A n ⊞ Homology B n) ⟶ Homology A n)).hom (x, -y) = x
+      rw [ModuleCat.biprodIsoProd_inv_comp_fst]
+      rfl
+    have hy : ((biprod.snd : (Homology A n ⊞ Homology B n) ⟶ Homology B n)).hom
+        (e.inv.hom (x, -y)) = -y := by
+      change (e.inv ≫ (biprod.snd : (Homology A n ⊞ Homology B n) ⟶ Homology B n)).hom (x, -y) = -y
+      rw [ModuleCat.biprodIsoProd_inv_comp_snd]
+      rfl
+    change (RP3Homology.mvJ A B n).hom (e.inv.hom (x, -y)) =
+      (RP3Homology.mvToX A n).hom x + (RP3Homology.mvToX B n).hom y
+    rw [show RP3Homology.mvJ A B n = biprod.desc
+      (RP3Homology.mvToX A n) (-(RP3Homology.mvToX B n)) by rfl,
+      biprod.desc_eq]
+    simp [ModuleCat.hom_comp, hx, hy]
+  rwa [heq] at hcomp
 
 /-- Seat: a self-map swapping the two pieces of a clopen decomposition has Lefschetz number 0. `t98J01_clopen_homology_bijective` gives each `Homology Y k` finite-dimensional and zero above `N`. Each trace is zero by `t98J01_trace_offDiagonal` with `φ₁₂`, `φ₂₁` induced by the corestrictions `A → B`, `B → A`; the equations are functoriality of `induced`. -/
 theorem t98J01_clopen_swap_lefschetz {Y : Type} [TopologicalSpace Y] (A B : Set Y)
@@ -1336,7 +1491,54 @@ theorem t98J01_clopen_swap_lefschetz {Y : Type} [TopologicalSpace Y] (A B : Set 
     (N : ℕ) (hzA : ∀ k, N < k → Subsingleton (Homology A k))
     (hzB : ∀ k, N < k → Subsingleton (Homology B k)) :
     HasLefschetzNumber φ 0 := by
-  sorry
+  classical
+  let φAB : C(A, B) := ⟨hAB.restrict φ A B, φ.continuous.restrict hAB⟩
+  let φBA : C(B, A) := ⟨hBA.restrict φ B A, φ.continuous.restrict hBA⟩
+  have hsplit (k : ℕ) : Function.Bijective
+      (LinearMap.coprod (induced (t98J01_incl A) k).hom
+        (induced (t98J01_incl B) k).hom) :=
+    t98J01_clopen_homology_bijective A B hA hB hcov hdis k
+  have hfdY (k : ℕ) : FiniteDimensional ℚ (Homology Y k) := by
+    letI := hfdA k
+    letI := hfdB k
+    exact FiniteDimensional.of_surjective _ (hsplit k).2
+  have hzY (k : ℕ) (hk : N < k) : Subsingleton (Homology Y k) := by
+    letI := hzA k hk
+    letI := hzB k hk
+    constructor
+    intro x y
+    obtain ⟨p, rfl⟩ := (hsplit k).2 x
+    obtain ⟨q, rfl⟩ := (hsplit k).2 y
+    rw [Subsingleton.elim p q]
+  refine ⟨hfdY, N, hzY, ?_⟩
+  apply Finset.sum_eq_zero
+  intro k hk
+  have htr : LinearMap.trace ℚ (Homology Y k) (induced φ k).hom = 0 := by
+    letI := hfdA k
+    letI := hfdB k
+    letI := hfdY k
+    apply t98J01_trace_offDiagonal
+      (induced (t98J01_incl A) k).hom (induced (t98J01_incl B) k).hom
+      (hsplit k) (induced φ k).hom (induced φAB k).hom (induced φBA k).hom
+    · let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+          (ModuleCat.of ℚ ℚ)
+      have hc : TopCat.ofHom (t98J01_incl A) ≫ TopCat.ofHom φ =
+          TopCat.ofHom φAB ≫ TopCat.ofHom (t98J01_incl B) := by
+        ext x
+        rfl
+      change (F.map (TopCat.ofHom (t98J01_incl A)) ≫ F.map (TopCat.ofHom φ)).hom =
+        (F.map (TopCat.ofHom φAB) ≫ F.map (TopCat.ofHom (t98J01_incl B))).hom
+      rw [← F.map_comp, hc, F.map_comp]
+    · let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+          (ModuleCat.of ℚ ℚ)
+      have hc : TopCat.ofHom (t98J01_incl B) ≫ TopCat.ofHom φ =
+          TopCat.ofHom φBA ≫ TopCat.ofHom (t98J01_incl A) := by
+        ext x
+        rfl
+      change (F.map (TopCat.ofHom (t98J01_incl B)) ≫ F.map (TopCat.ofHom φ)).hom =
+        (F.map (TopCat.ofHom φBA) ≫ F.map (TopCat.ofHom (t98J01_incl A))).hom
+      rw [← F.map_comp, hc, F.map_comp]
+  rw [htr, mul_zero]
 
 /-! ### Circle geometry -/
 
@@ -1504,9 +1706,61 @@ theorem t98J01_pos_contractible :
   exact t98J01_pos_contractible_aux_homeomorph.contractibleSpace
 
 /-- Seat: as `t98J01_pos_contractible` with `y ↦ (-√(1 - y²), y)`, or conjugate by `T98J01.reflection`. -/
+private def t98J01_neg_contractible_aux_homeomorph :
+    ↥({q | q.1.1 < 0} : Set T98J01.S1) ≃ₜ Set.Ioo (-1 : ℝ) 1 where
+  toFun q := ⟨q.1.1.2, by
+    have hs : q.1.1.1 ^ 2 + q.1.1.2 ^ 2 = 1 := q.1.property
+    have hx : q.1.1.1 < 0 := q.2
+    show -1 < q.1.1.2 ∧ q.1.1.2 < 1
+    constructor <;> nlinarith⟩
+  invFun t := ⟨⟨(-Real.sqrt (1 - (t : ℝ) ^ 2), t), by
+    have ht1 : -1 < (t : ℝ) := t.2.1
+    have ht2 : (t : ℝ) < 1 := t.2.2
+    have h1 : 0 < 1 - (t : ℝ) ^ 2 := by nlinarith [ht1, ht2]
+    have h2 : Real.sqrt (1 - (t : ℝ) ^ 2) ^ 2 = 1 - (t : ℝ) ^ 2 :=
+      Real.sq_sqrt (by linarith)
+    show (-Real.sqrt (1 - (t : ℝ) ^ 2)) ^ 2 + (t : ℝ) ^ 2 = 1
+    rw [neg_sq, h2]; ring⟩, by
+    have ht1 : -1 < (t : ℝ) := t.2.1
+    have ht2 : (t : ℝ) < 1 := t.2.2
+    have h1 : 0 < 1 - (t : ℝ) ^ 2 := by nlinarith [ht1, ht2]
+    have h3 : 0 < Real.sqrt (1 - (t : ℝ) ^ 2) := Real.sqrt_pos.mpr h1
+    show (-Real.sqrt (1 - (t : ℝ) ^ 2)) < 0
+    exact neg_lt_zero.mpr h3⟩
+  left_inv q := by
+    have hs : q.1.1.1 ^ 2 + q.1.1.2 ^ 2 = 1 := q.1.property
+    have hx : q.1.1.1 < 0 := q.2
+    have hsq : (-q.1.1.1) * (-q.1.1.1) = 1 - q.1.1.2 ^ 2 := by linear_combination hs
+    have hs0 : 0 ≤ -q.1.1.1 := by linarith [hx]
+    have hrw : Real.sqrt (1 - q.1.1.2 ^ 2) = -q.1.1.1 := by
+      rw [Real.sqrt_eq_iff_mul_self_eq (by nlinarith [hs, hx]) hs0]
+      exact hsq.symm
+    apply Subtype.ext
+    apply Subtype.ext
+    dsimp only
+    rw [hrw]
+    ext <;> first
+      | ring
+      | linarith [hs]
+      | linear_combination (-2 : ℝ) * hs
+  right_inv t := by
+    apply Subtype.ext
+    rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    apply Continuous.subtype_mk
+    have h1 : Continuous fun t : ↥(Set.Ioo (-1 : ℝ) 1) => 1 - (t : ℝ) ^ 2 :=
+      continuous_const.sub ((continuous_id.comp continuous_subtype_val).pow 2)
+    exact ((Real.continuous_sqrt.comp h1).neg.prodMk continuous_subtype_val)
+
 theorem t98J01_neg_contractible :
     ContractibleSpace ↥({q | q.1.1 < 0} : Set T98J01.S1) := by
-  sorry
+  letI : ContractibleSpace (Set.Ioo (-1 : ℝ) 1) :=
+    (convex_Ioo (-1 : ℝ) (1 : ℝ)).contractibleSpace ⟨0, by norm_num⟩
+  exact t98J01_neg_contractible_aux_homeomorph.contractibleSpace
 
 /-- Seat: over a contractible subset of the circle, projection to `X` is a homotopy equivalence. Build `↥{z | z.2 ∈ T} ≃ₜ X × T`, then `X × T ≃ₕ X × Unit ≃ₜ X` via `ContinuousMap.HomotopyEquiv.prodCongr` and `contractible_iff_homotopyEquiv_punit`-style equivalence (`ConstructionTargets/SphereProductPoleOpenCover.lean` lines 90-103 is a template). Prove the formula for `e.toFun` by composing explicitly; if the composite is awkward, construct the equivalence directly with `toFun := fun z => z.1.1`, `invFun := fun x => ⟨(x, c), _⟩` for the contraction point `c`. -/
 theorem t98J01_prodSubset_homotopyEquiv (X : Type) [TopologicalSpace X] (T : Set T98J01.S1)
@@ -1544,12 +1798,58 @@ def t98J01_overlapNeg (X : Type) [TopologicalSpace X] : Set (t98J01_overlap X) :
 /-- Seat: `↥(t98J01_overlapPos X)` is homeomorphic to `↥{z : X × S1 | z.2 ∈ {q | 0 < q.1.1}}` (the conditions `q ≠ southPt`, `q ≠ northPt` follow from `0 < q.1.1`). Compose with `t98J01_prodSubset_homotopyEquiv` and `t98J01_pos_contractible`. -/
 theorem t98J01_overlapPos_homotopyEquiv (X : Type) [TopologicalSpace X] :
     Nonempty (ContinuousMap.HomotopyEquiv ↥(t98J01_overlapPos X) X) := by
-  sorry
+  let T : Set T98J01.S1 := {q | 0 < q.1.1}
+  let j : ↥(t98J01_overlapPos X) ≃ₜ
+      ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) := {
+    toFun z := ⟨z.1.1, z.2⟩
+    invFun z := ⟨⟨z.1, by
+      constructor
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.southPt] at hx
+        have hp := z.property
+        change 0 < z.1.2.1.1 at hp
+        linarith
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.northPt] at hx
+        have hp := z.property
+        change 0 < z.1.2.1.1 at hp
+        linarith⟩, z.2⟩
+    left_inv z := by ext <;> rfl
+    right_inv z := by ext <;> rfl
+    continuous_toFun := by fun_prop
+    continuous_invFun := by fun_prop }
+  obtain ⟨e, -⟩ := t98J01_prodSubset_homotopyEquiv X T t98J01_pos_contractible
+  exact ⟨j.toHomotopyEquiv.trans e⟩
 
 /-- Seat: as `t98J01_overlapPos_homotopyEquiv` with `t98J01_neg_contractible`. -/
 theorem t98J01_overlapNeg_homotopyEquiv (X : Type) [TopologicalSpace X] :
     Nonempty (ContinuousMap.HomotopyEquiv ↥(t98J01_overlapNeg X) X) := by
-  sorry
+  let T : Set T98J01.S1 := {q | q.1.1 < 0}
+  let j : ↥(t98J01_overlapNeg X) ≃ₜ
+      ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) := {
+    toFun z := ⟨z.1.1, z.2⟩
+    invFun z := ⟨⟨z.1, by
+      constructor
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.southPt] at hx
+        have hn := z.property
+        change z.1.2.1.1 < 0 at hn
+        linarith
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.northPt] at hx
+        have hn := z.property
+        change z.1.2.1.1 < 0 at hn
+        linarith⟩, z.2⟩
+    left_inv z := by ext <;> rfl
+    right_inv z := by ext <;> rfl
+    continuous_toFun := by fun_prop
+    continuous_invFun := by fun_prop }
+  obtain ⟨e, -⟩ := t98J01_prodSubset_homotopyEquiv X T t98J01_neg_contractible
+  exact ⟨j.toHomotopyEquiv.trans e⟩
 
 /-- Seat: finite-dimensionality and vanishing transport along a homotopy equivalence. -/
 theorem t98J01_homology_of_homotopyEquiv {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
