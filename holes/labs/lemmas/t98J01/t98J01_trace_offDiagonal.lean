@@ -882,7 +882,14 @@ theorem t98J01_complexLefschetz_sum_eq
 theorem t98J01_homologyMap_g_zero_surjective
     {S : ShortComplex (ChainComplex (ModuleCat ℚ) ℕ)} (hS : S.ShortExact) :
     Function.Surjective (HomologicalComplex.homologyMap S.g 0).hom := by
-  sorry
+  letI : Epi S.g := hS.epi_g
+  letI : Epi (S.g.f 0) := inferInstance
+  letI : Epi (HomologicalComplex.homologyMap S.g 0) := by
+    apply HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+    intro j hj
+    dsimp at hj
+    omega
+  exact (ModuleCat.epi_iff_surjective _).mp inferInstance
 
 /-- Seat: additivity of the Lefschetz number on a short exact sequence. Use `hS.homology_exact₁/₂/₃`, `HomologicalComplex.HomologySequence.δ_naturality`, then `t98J01_trace_longExact` with `A = X₁.homology`, `B = X₂.homology`, `C = X₃.homology`, `N = max b₂ (b₁ + 1)`. `H_k(X₃)` is finite-dimensional because it sits between `H_k(X₂)` and `H_{k-1}(X₁)`. Zero `H₀` tail: `t98J01_homologyMap_g_zero_surjective`. Sums to `N`: `t98J01_complexLefschetz_sum_eq`. -/
 theorem t98J01_complexLefschetz_shortExact
@@ -1106,9 +1113,67 @@ def T98J01.northPt : T98J01.S1 := Subtype.mk (0, 1) (by norm_num)
 def T98J01.southPt : T98J01.S1 := Subtype.mk (0, -1) (by norm_num)
 
 /-- Seat: stereographic projection `(x, y) ↦ x / (1 + y)` is a homeomorphism onto `ℝ`, with inverse `t ↦ (2t / (1 + t²), (1 - t²) / (1 + t²))`; `ℝ` is contractible, so use `Homeomorph.contractibleSpace` or similar. -/
+private def t98J01_ne_south_contractible_aux_homeomorph :
+    ↥({q | q ≠ T98J01.southPt} : Set T98J01.S1) ≃ₜ ℝ where
+  toFun q := q.1.1.1 / (1 + q.1.1.2)
+  invFun t := ⟨⟨(2 * t / (1 + t ^ 2), (1 - t ^ 2) / (1 + t ^ 2)), by
+    have hd : (1 + t ^ 2) ≠ 0 := by positivity
+    field_simp
+    ring⟩, by
+      intro h
+      have hy := congrArg (fun q : T98J01.S1 => q.1.2) h
+      dsimp [T98J01.southPt] at hy
+      have hd : (1 + t ^ 2) ≠ 0 := by positivity
+      field_simp at hy
+      nlinarith [sq_nonneg t]⟩
+  left_inv q := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rcases q with ⟨⟨⟨x, y⟩, hxy⟩, hne⟩
+    dsimp
+    change x ^ 2 + y ^ 2 = 1 at hxy
+    have hden : 1 + y ≠ 0 := by
+      intro h
+      have hy : y = -1 := by linarith
+      have hx : x = 0 := by nlinarith
+      apply hne
+      apply Subtype.ext
+      simp [T98J01.southPt, hx, hy]
+    have hid : (1 + y) ^ 2 + x ^ 2 = 2 * (1 + y) := by nlinarith
+    ext
+    · field_simp
+      rw [hid]
+      ring
+    · field_simp
+      rw [hid]
+      nlinarith
+  right_inv t := by
+    dsimp
+    have hd : (1 + t ^ 2) ≠ 0 := by positivity
+    field_simp
+    ring
+  continuous_toFun := by
+    apply Continuous.div₀ (by fun_prop) (by fun_prop)
+    intro q h
+    have hy : q.1.1.2 = -1 := by linarith
+    have hx : q.1.1.1 = 0 := by nlinarith [q.1.2]
+    apply q.2
+    apply Subtype.ext
+    exact Prod.ext hx hy
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    apply Continuous.subtype_mk
+    apply Continuous.prodMk
+    · apply Continuous.div₀ (by fun_prop) (by fun_prop)
+      intro t h
+      nlinarith [sq_nonneg t]
+    · apply Continuous.div₀ (by fun_prop) (by fun_prop)
+      intro t h
+      nlinarith [sq_nonneg t]
+
 theorem t98J01_ne_south_contractible :
     ContractibleSpace ↥({q | q ≠ T98J01.southPt} : Set T98J01.S1) := by
-  sorry
+  exact t98J01_ne_south_contractible_aux_homeomorph.contractibleSpace
 
 /-- Seat: `(x, y) ↦ x / (1 - y)` as in `t98J01_ne_south_contractible`, or conjugate by `(x, y) ↦ (x, -y)`. -/
 theorem t98J01_ne_north_contractible :
@@ -1130,7 +1195,23 @@ theorem t98J01_prodSubset_homotopyEquiv (X : Type) [TopologicalSpace X] (T : Set
     (hT : ContractibleSpace T) :
     ∃ e : ContinuousMap.HomotopyEquiv ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) X,
       ∀ z, e.toFun z = z.1.1 := by
-  sorry
+  letI : ContractibleSpace T := hT
+  let j : {z : X × T98J01.S1 // z.2 ∈ T} ≃ₜ X × T :=
+    { toFun := fun z => (z.1.1, ⟨z.1.2, z.2⟩)
+      invFun := fun z => ⟨(z.1, z.2.1), z.2.2⟩
+      left_inv := by intro z; ext <;> rfl
+      right_inv := by intro z; ext <;> rfl
+      continuous_toFun := by fun_prop
+      continuous_invFun := by fun_prop }
+  let c : ContinuousMap.HomotopyEquiv T Unit :=
+    Classical.choice (ContractibleSpace.hequiv_unit T)
+  let e : ContinuousMap.HomotopyEquiv ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) X :=
+    j.toHomotopyEquiv.trans
+      ((ContinuousMap.HomotopyEquiv.refl X).prodCongr c |>.trans
+        (Homeomorph.prodUnique X Unit).toHomotopyEquiv)
+  refine ⟨e, ?_⟩
+  intro z
+  rfl
 
 /-- The overlap `X × (S¹ ∖ {N, S})`. -/
 def t98J01_overlap (X : Type) [TopologicalSpace X] : Set (X × T98J01.S1) :=
