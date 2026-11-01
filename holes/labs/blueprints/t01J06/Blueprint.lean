@@ -223,10 +223,39 @@ theorem apm_t01J06_closed_divergence_free
   rw [hv1, hv2] at hclosed
   simpa [apm_t01J06_partial] using hclosed
 
-/-- Seat: a divergence-free field is a curl. Take `A x = ∫ t in 0..1, t • (F (t x) × x)`. Differentiate
-under the integral (`hasFDerivAt_integral_of_dominated_of_fderiv_le` or
-`intervalIntegral.hasFDerivAt_integral_of_dominated_of_fderiv_le`); then
-`curl (t • F (t x) × x) = d/dt (t² F (t x))` using `div F = 0`, and the FTC gives `F x`. -/
+/-- Seat: differentiation under the integral on the compact interval. `hasFDerivAt_integral_of_dominated_of_fderiv_le`
+(or the interval version) with the bound from continuity of `fderiv g` on `[0,1] × closedBall x 1`; continuity of the
+derivative is continuity of a parametric integral (`intervalIntegral.continuous_parametric_intervalIntegral_of_continuous`
+or `continuous_parametric_integral_of_continuous`). -/
+theorem apm_t01J06_parametric_integral (g : ℝ × apm_t01J06_E3 → ℝ)
+    (hg : ContDiff ℝ (⊤ : ℕ∞) g) :
+    ContDiff ℝ 1 (fun x ↦ ∫ t in (0 : ℝ)..1, g (t, x)) ∧
+    ∀ x v, fderiv ℝ (fun y ↦ ∫ t in (0 : ℝ)..1, g (t, y)) x v =
+      ∫ t in (0 : ℝ)..1, fderiv ℝ (fun y ↦ g (t, y)) x v := by
+  sorry
+
+/-- The integrand of the cone formula: `t • (F (t x) × x)`, component `k`. -/
+def apm_t01J06_coneField (F : Fin 3 → apm_t01J06_E3 → ℝ) (k : Fin 3)
+    (p : ℝ × apm_t01J06_E3) : ℝ :=
+  p.1 * (F (k + 1) (p.1 • p.2) * p.2 (k + 2) - F (k + 2) (p.1 • p.2) * p.2 (k + 1))
+
+/-- Seat: the pointwise cone identity. By the product and chain rules, the left side is
+`2 t F i (t x) + t² (∂ (i + 1) F i x (i + 1) + ∂ (i + 2) F i x (i + 2)) - t² x i (∂ (i + 1) F (i + 1) + ∂ (i + 2) F (i + 2))`,
+all derivatives at `t x`. `hdiv` turns the last bracket into `-∂ i F i`, giving `2 t F i + t² Σ x j ∂ j F i`, the
+derivative in `t` of `t² F i (t x)`. Do `i` generally, or `fin_cases i`. -/
+theorem apm_t01J06_cone_identity (F : Fin 3 → apm_t01J06_E3 → ℝ)
+    (hF : ∀ i, ContDiff ℝ (⊤ : ℕ∞) (F i))
+    (hdiv : ∀ x, apm_t01J06_partial 0 (F 0) x + apm_t01J06_partial 1 (F 1) x +
+      apm_t01J06_partial 2 (F 2) x = 0) (i : Fin 3) (t : ℝ) (x : apm_t01J06_E3) :
+    apm_t01J06_partial (i + 1) (fun y ↦ apm_t01J06_coneField F (i + 2) (t, y)) x -
+      apm_t01J06_partial (i + 2) (fun y ↦ apm_t01J06_coneField F (i + 1) (t, y)) x =
+    deriv (fun s : ℝ ↦ s ^ 2 * F i (s • x)) t := by
+  sorry
+
+/-- Seat: a divergence-free field is a curl. Take `A k x = ∫ t in 0..1, apm_t01J06_coneField F k (t, x)`.
+`apm_t01J06_coneField` is smooth (`fun_prop`, coordinates are continuous linear). `apm_t01J06_parametric_integral`
+gives `ContDiff` and moves `partial` inside; `integral_sub`, `apm_t01J06_cone_identity`, and the FTC
+`intervalIntegral.integral_deriv_eq_sub'` give `1 ^ 2 * F i (1 • x) - 0`. -/
 theorem apm_t01J06_divergenceFree_isCurl (F : Fin 3 → apm_t01J06_E3 → ℝ)
     (hF : ∀ i, ContDiff ℝ (⊤ : ℕ∞) (F i))
     (hdiv : ∀ x, apm_t01J06_partial 0 (F 0) x + apm_t01J06_partial 1 (F 1) x +
