@@ -1,25 +1,16 @@
-import Mathlib
+import ConstructionTargets.SardConvexDomain
+import ConstructionTargets.SardWhitneyExtension
 
 /-!
-# APM t01A08
+# Blueprint for APM t01A08
 
-## Statement repairs
-
-1. The codomain written once as `A` and later as `𝐀³` is read consistently as
-   real affine three-space `ℝ³`.
-2. The usual second-countability convention implicit in the source's “smooth
-   manifold” is made explicit. Mathlib's `IsManifold` deliberately omits it;
-   without this hypothesis an uncountable disjoint union of components can
-   make every value critical while the projection remains surjective.
-
-## Encoding questions
-
-Mathlib does not yet expose a general embedded-submanifold predicate. The claim
-that the inverse image is smooth is encoded by the equivalent regular-value
-criterion for a projection `ℝ³ → ℝ²`; its fibers are literal affine lines.
+The sole library obligation is Sard's theorem for the projected map on an
+arbitrary finite-dimensional manifold with corners.  The consumer-side
+selection and identification of a projection fiber with a line are explicit.
 -/
 
 open scoped ContDiff Manifold
+open MeasureTheory
 
 noncomputable section
 
@@ -33,6 +24,33 @@ def apm_t01a08_projection (x : apm_t01a08_R3) : apm_t01a08_R2 :=
 
 def apm_t01a08_line (p : apm_t01a08_R2) : Set apm_t01a08_R3 :=
   {x | apm_t01a08_projection x = p}
+
+/-- LIBRARY (Morse--Sard for finite-dimensional manifolds with corners):
+almost every point of the coordinate plane is a regular value of the
+projection of `f`. -/
+theorem apm_t01a08_ae_regularValue_projection
+    (E H X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [TopologicalSpace H]
+    (I : ModelWithCorners ℝ E H)
+    [TopologicalSpace X] [SecondCountableTopology X] [ChartedSpace H X]
+    [IsManifold I (⊤ : ℕ∞) X]
+    (f : X → apm_t01a08_R3)
+    (hf : ContMDiff I apm_t01a08_I3 (⊤ : ℕ∞) f) :
+    ∀ᵐ p : apm_t01a08_R2,
+      ∀ x : X, apm_t01a08_projection (f x) = p →
+        Function.Surjective
+          (mfderiv I apm_t01a08_I2
+            (fun z => apm_t01a08_projection (f z)) x) := by
+  have hg : ContMDiff I apm_t01a08_I2 (⊤ : ℕ∞) (fun z => apm_t01a08_projection (f z)) :=
+    contMDiff_pi_space.2 fun i =>
+      (ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin 3 => ℝ) i.castSucc).contMDiff.comp hf
+  exact ConstructionTargets.SardWhitneyExtension.manifold_ae_regularValue I volume _ hg
+
+/-- An almost-everywhere regular-value statement supplies one regular value. -/
+theorem apm_t01a08_exists_regularValue_of_ae
+    (P : apm_t01a08_R2 → Prop)
+    (hP : ∀ᵐ p : apm_t01a08_R2, P p) : ∃ p, P p := by
+  exact hP.exists
 
 theorem apm_t01a08
     (E H X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -48,4 +66,8 @@ theorem apm_t01a08
           Function.Surjective
             (mfderiv I apm_t01a08_I2
               (fun z => apm_t01a08_projection (f z)) x)) := by
-  sorry
+  apply apm_t01a08_exists_regularValue_of_ae
+  filter_upwards [apm_t01a08_ae_regularValue_projection E H X I f hf] with p hp
+  simpa [apm_t01a08_line] using hp
+
+#print axioms apm_t01a08
