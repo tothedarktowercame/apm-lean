@@ -814,7 +814,11 @@ theorem compactExhaustion_piece
     IsCompact (s ∩ Metric.closedBall p R) ∧
       Convex ℝ (s ∩ Metric.closedBall p R) ∧
       (interior (s ∩ Metric.closedBall p R)).Nonempty := by
-  sorry
+  refine ⟨(isCompact_closedBall p R).inter_left hs,
+    hsc.inter (convex_closedBall p R), ?_⟩
+  refine ⟨p, ?_⟩
+  rw [interior_inter, interior_closedBall p (ne_of_gt hR)]
+  exact ⟨hp, Metric.mem_ball_self hR⟩
 -- END SEAT AREA
 
 /-- Inside the open ball, adding the closed-ball constraint does not change the within
