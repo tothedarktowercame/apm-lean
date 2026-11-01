@@ -4659,7 +4659,107 @@ theorem apm_m01J04_rellich_compact_support {d : ℕ} (u : ℕ → apm_m01J04_H1 
     (hw : ∀ q : EuclideanSpace ℝ (Fin d) → ℝ, MemLp q 2 volume →
       Tendsto (fun n ↦ ∫ x, (u n).val x * q x) atTop (nhds 0)) :
     Tendsto (fun n ↦ (eLpNorm (u n).val 2 volume).toReal) atTop (nhds 0) := by
-  sorry
+  have hmem (n : ℕ) : MemLp (u n).val 2 volume := by
+    simpa only [Measure.restrict_univ] using (u n).val_memLp
+  have hgradmem (n : ℕ) : MemLp (u n).grad 2 volume := by
+    simpa only [Measure.restrict_univ] using (u n).grad_memLp
+  have hC0 : 0 ≤ C := by
+    have hn : 0 ≤ apm_m01J04_H1norm (u 0) := by
+      simp only [apm_m01J04_H1norm]
+      positivity
+    exact hn.trans (hC 0)
+  have hvalC (n : ℕ) : (eLpNorm (u n).val 2 volume).toReal ≤ C := by
+    have hnonneg : 0 ≤ (eLpNorm (u n).grad 2 volume).toReal := ENNReal.toReal_nonneg
+    have hn := hC n
+    simp only [apm_m01J04_H1norm, Measure.restrict_univ] at hn
+    linarith
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  set ρ : ℝ := ε / (4 * (C + 1)) with hρdef
+  have hρ : 0 < ρ := by
+    rw [hρdef]
+    positivity
+  obtain ⟨κ, hκsmooth, hκcompact, hκsupp, hκnonneg, hκint⟩ :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_kernel (d := d) hρ
+  have hmoll := apm_m01J04_rellich_mollified_tendsto
+    (fun n ↦ (u n).val) hK hmem hval hvalC hw κ hκsmooth hκcompact
+  obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp hmoll (ε / 2) (by positivity)
+  refine ⟨N, fun n hn ↦ ?_⟩
+  have hconv := hN n hn
+  have hgradC : (eLpNorm (u n).grad 2 volume).toReal ≤ C := by
+    have hnonneg : 0 ≤ (eLpNorm (u n).val 2 volume).toReal := ENNReal.toReal_nonneg
+    have hnorm := hC n
+    simp only [apm_m01J04_H1norm, Measure.restrict_univ] at hnorm
+    linarith
+  have htr (y : EuclideanSpace ℝ (Fin d)) (hy : ‖y‖ ≤ ρ) :
+      (eLpNorm (fun x ↦ (u n).val (x - y) - (u n).val x) 2 volume).toReal ≤ ρ * C := by
+    calc
+      (eLpNorm (fun x ↦ (u n).val (x - y) - (u n).val x) 2 volume).toReal
+          ≤ ‖y‖ * (eLpNorm (u n).grad 2 volume).toReal :=
+        apm_m01J04_rellich_translate (u n) hK (hval n) (hgrad n) y
+      _ ≤ ρ * C := mul_le_mul hy hgradC ENNReal.toReal_nonneg hρ.le
+  have herr : (eLpNorm
+      (MeasureTheory.convolution κ (u n).val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) 2 volume).toReal ≤ ρ * C :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
+      (u n).val (hmem n) (mul_nonneg hρ.le hC0) htr κ hκsmooth.continuous
+      hκnonneg hκint hκsupp
+  have hrC : ρ * C < ε / 2 := by
+    rw [hρdef]
+    have hfrac : C / (C + 1) < 1 := by
+      rw [div_lt_one (by linarith : 0 < C + 1)]
+      linarith
+    calc
+      ε / (4 * (C + 1)) * C = ε / 4 * (C / (C + 1)) := by field_simp
+      _ < ε / 4 * 1 := mul_lt_mul_of_pos_left hfrac (by positivity)
+      _ < ε / 2 := by linarith
+  have hm : MemLp (MeasureTheory.convolution κ (u n).val
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume :=
+    apm_m01J04_mollify_package_aux_val_memLp (u n) hK (hval n) κ
+      hκsmooth hκcompact
+  have hsum : eLpNorm (u n).val 2 volume ≤
+      eLpNorm
+        (MeasureTheory.convolution κ (u n).val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) 2 volume +
+      eLpNorm (MeasureTheory.convolution κ (u n).val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume := by
+    have heq : (u n).val =
+        -(MeasureTheory.convolution κ (u n).val
+            (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) +
+          MeasureTheory.convolution κ (u n).val
+            (ContinuousLinearMap.lsmul ℝ ℝ) volume := by
+      funext x
+      simp
+    calc
+      eLpNorm (u n).val 2 volume = eLpNorm
+          (-(MeasureTheory.convolution κ (u n).val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) +
+            MeasureTheory.convolution κ (u n).val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume := congrArg (fun f ↦ eLpNorm f 2 volume) heq
+      _ ≤ eLpNorm (-(MeasureTheory.convolution κ (u n).val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val)) 2 volume +
+            eLpNorm (MeasureTheory.convolution κ (u n).val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume :=
+        eLpNorm_add_le (hm.sub (hmem n)).neg.1 hm.1 (by norm_num)
+      _ = _ := by rw [eLpNorm_neg]
+  have herrtop : eLpNorm
+      (MeasureTheory.convolution κ (u n).val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) 2 volume ≠ ⊤ :=
+    (hm.sub (hmem n)).eLpNorm_ne_top
+  have hmtop : eLpNorm (MeasureTheory.convolution κ (u n).val
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume ≠ ⊤ := hm.eLpNorm_ne_top
+  have hreal : (eLpNorm (u n).val 2 volume).toReal ≤
+      (eLpNorm
+        (MeasureTheory.convolution κ (u n).val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) 2 volume).toReal +
+      (eLpNorm (MeasureTheory.convolution κ (u n).val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume).toReal := by
+    rw [← ENNReal.toReal_add herrtop hmtop]
+    exact ENNReal.toReal_mono (ENNReal.add_ne_top.2 ⟨herrtop, hmtop⟩) hsum
+  rw [dist_eq_norm, sub_zero, Real.norm_eq_abs, abs_of_nonneg ENNReal.toReal_nonneg]
+  rw [dist_eq_norm, sub_zero, Real.norm_eq_abs,
+    abs_of_nonneg ENNReal.toReal_nonneg] at hconv
+  linarith
 -- END SEAT AREA
 
 /-- Seat: local strong convergence. Take `h n` from `apm_m01J04_H1_exists_sub (f n) fLim`, and
