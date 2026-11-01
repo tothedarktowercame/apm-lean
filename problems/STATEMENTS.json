@@ -3519,6 +3519,21 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:46:42Z"
   },
+  "m02A06": {
+   "decls": [
+    "apm_m02a06"
+   ],
+   "sha256": "c02c1c26c744357639451ae7718c7f34e5012bc8e53b4987b32e5536245af0a3",
+   "defs": [
+    "apm_m02a06_IsSolution"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": "problems/m02A06/PRELIM-DEFECT.md",
+   "rev": "73d248130",
+   "approved_at": "2026-11-01T21:17:57Z"
+  },
   "m02J01": {
    "decls": [
     "apm_m02j01"
