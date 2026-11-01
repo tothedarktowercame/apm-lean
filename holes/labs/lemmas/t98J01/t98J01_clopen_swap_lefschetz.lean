@@ -1265,7 +1265,42 @@ theorem t98J01_complexLefschetz_range {X : Type} [TopologicalSpace X] (φ : C(X,
     (h : Set.MapsTo φ A A) {v : ℚ} (hv : HasLefschetzNumber (t98J01_selfRestrict φ A h) v) :
     t98J01_ComplexLefschetz (t98J01_sset.obj (t98J01_range A : SSet))
       (t98J01_rangeEndo φ (t98J01_range A) (t98J01_range_image_le φ A h)) v := by
-  sorry
+  rw [t98J01_hasLefschetzNumber_iff] at hv
+  let e := ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso ℚ A
+  apply (t98J01_complexLefschetz_congr e.hom (fun _ => inferInstance) _ v).mpr hv
+  dsimp [e, t98J01_chainMap, t98J01_rangeEndo]
+  simp only [ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso,
+    Functor.mapIso_hom]
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  congr 1
+  simp only [Iso.symm_hom]
+  apply (cancel_mono (TopCat.toSSet.map
+    (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A))).1
+  calc
+    _ = ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap
+          (t98J01_range A) (t98J01_range A) (TopCat.toSSet.map (TopCat.ofHom φ))
+          (t98J01_range_image_le φ A h) ≫ (t98J01_range A).ι := by
+        simpa only [Category.assoc] using congrArg
+          (fun k => ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap
+            (t98J01_range A) (t98J01_range A) (TopCat.toSSet.map (TopCat.ofHom φ))
+            (t98J01_range_image_le φ A h) ≫ k)
+          (ConstructionTargets.SingularExcision.rangeIso_hom_comp
+            (TopCat.toSSet.map
+              (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A)))
+    _ = (t98J01_range A).ι ≫ TopCat.toSSet.map (TopCat.ofHom φ) :=
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMap_comp_ι _ _ _ _
+    _ = _ := by
+      dsimp [t98J01_range]
+      change (SSet.Subcomplex.range (TopCat.toSSet.map
+          (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A))).ι ≫
+          TopCat.toSSet.map (TopCat.ofHom φ) = _
+      rw [← ConstructionTargets.SingularExcision.rangeIso_hom_comp
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A)),
+        Category.assoc, ← TopCat.toSSet.map_comp,
+        ← ConstructionTargets.SingularExcision.subspaceMap_inclusion A A φ h,
+        TopCat.toSSet.map_comp]
+      rfl
 
 /-- Seat: the same on the infimum subcomplex that appears in Mayer–Vietoris. As `t98J01_complexLefschetz_range` for `U ∩ V`, composed with `CoefficientIntersectionRangeComparison.intersectionChainsIso ℚ U V` (from `ambientIntersectionRangeIso`). Check the square after `cancel_mono` of the inclusion into the ambient singular set. -/
 theorem t98J01_complexLefschetz_inf {X : Type} [TopologicalSpace X] (φ : C(X, X)) (U V : Set X)
