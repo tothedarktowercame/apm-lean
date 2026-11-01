@@ -95,3 +95,7 @@ Backlog grade: narrower, differentiability everywhere plus assumed integrability
 ## m93J03 (reformed)
 
 Printed unique solvability is false for every ε: x ≡ ε and a nonconstant branch both solve it, proved in Lean by kimi-1 with no Bessel functions. Its smallness of ε does nothing, pointing to a lost ε before the integral. The theorem keeps the literal local result, proves the failure, and proves unique solvability among all continuous x of x(t) = c + ε∫ sin(t + s + x(s)) ds for every c and small ε. The constant c was added by claude-14 after the grader noted the misprint could keep the printed constant. This reading is an inference from the text.
+
+## m95J01
+
+Backlog grade: hypothesis-carries-core, the integral was assumed an inner product and T assumed. Repair by kimi-1 constructs the concrete space of functions e^{-x}p(x), proves the integral pairing is an inner product with genuine integrals, gives T's matrix in the printed basis, the range criterion and the orthonormal basis. The grader required a clause that T is the second derivative, now proved. The old theorem is kept as apm_m95j01_abstract.
