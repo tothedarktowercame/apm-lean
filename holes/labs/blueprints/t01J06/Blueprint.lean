@@ -998,7 +998,62 @@ theorem apm_t01J06_closed_extension_integral_zero
     (hs : ContDiff ℝ (⊤ : ℕ∞) eta) (hc : extDeriv eta = 0)
     (hp : apm_t01J06_isInclusionPullback eta alpha) :
     apm_t01J06_sphereIntegral alpha = 0 := by
-  sorry
+  let F : Fin 3 → apm_t01J06_E3 → ℝ := fun i ↦
+    match i with
+    | 0 => fun x ↦ eta x ![apm_t01J06_e 1, apm_t01J06_e 2]
+    | 1 => fun x ↦ -eta x ![apm_t01J06_e 0, apm_t01J06_e 2]
+    | 2 => fun x ↦ eta x ![apm_t01J06_e 0, apm_t01J06_e 1]
+  have hF : ∀ i, ContDiff ℝ (⊤ : ℕ∞) (F i) := by
+    let L : (apm_t01J06_E3 [⋀^Fin 2]→L[ℝ] ℝ) →L[ℝ]
+        ContinuousMultilinearMap ℝ (fun _ : Fin 2 ↦ apm_t01J06_E3) ℝ :=
+      ContinuousAlternatingMap.toContinuousMultilinearMapCLM ℝ
+    let C := fun x ↦ (eta x).toContinuousMultilinearMap
+    have heta : ContDiff ℝ (⊤ : ℕ∞) C := by
+      simpa [C, L] using L.contDiff.comp hs
+    intro i
+    fin_cases i
+    · change ContDiff ℝ (⊤ : ℕ∞) (fun x ↦
+        C x ![apm_t01J06_e 1, apm_t01J06_e 2])
+      simpa only [Function.comp_apply] using
+        (ContinuousMultilinearMap.apply ℝ _ ℝ
+          ![apm_t01J06_e 1, apm_t01J06_e 2]).contDiff.comp heta
+    · change ContDiff ℝ (⊤ : ℕ∞) (fun x ↦
+        -C x ![apm_t01J06_e 0, apm_t01J06_e 2])
+      exact ((by simpa only [Function.comp_apply] using
+        (ContinuousMultilinearMap.apply ℝ _ ℝ
+          ![apm_t01J06_e 0, apm_t01J06_e 2]).contDiff.comp heta) :
+            ContDiff ℝ (⊤ : ℕ∞) (fun x ↦ C x
+              ![apm_t01J06_e 0, apm_t01J06_e 2])).neg
+    · change ContDiff ℝ (⊤ : ℕ∞) (fun x ↦
+        C x ![apm_t01J06_e 0, apm_t01J06_e 1])
+      simpa only [Function.comp_apply] using
+        (ContinuousMultilinearMap.apply ℝ _ ℝ
+          ![apm_t01J06_e 0, apm_t01J06_e 1]).contDiff.comp heta
+  have hdiv : ∀ x, apm_t01J06_partial 0 (F 0) x +
+      apm_t01J06_partial 1 (F 1) x + apm_t01J06_partial 2 (F 2) x = 0 := by
+    intro x
+    have h := apm_t01J06_closed_divergence_free eta hs hc x
+    simpa [F, apm_t01J06_partial, fderiv_neg] using h
+  obtain ⟨A, hA, hcurl⟩ := apm_t01J06_divergenceFree_isCurl F hF hdiv
+  unfold apm_t01J06_sphereIntegral
+  simp_rw [apm_t01J06_orientedCoefficient_flux eta alpha hp]
+  have hpoint (q : apm_t01J06_S2) :
+      q.1 0 * eta q ![apm_t01J06_e 1, apm_t01J06_e 2] -
+          q.1 1 * eta q ![apm_t01J06_e 0, apm_t01J06_e 2] +
+          q.1 2 * eta q ![apm_t01J06_e 0, apm_t01J06_e 1] =
+        q.1 0 * (apm_t01J06_partial 1 (A 2) q.1 -
+          apm_t01J06_partial 2 (A 1) q.1) +
+        q.1 1 * (apm_t01J06_partial 2 (A 0) q.1 -
+          apm_t01J06_partial 0 (A 2) q.1) +
+        q.1 2 * (apm_t01J06_partial 0 (A 1) q.1 -
+          apm_t01J06_partial 1 (A 0) q.1) := by
+    have h := hcurl q.1
+    simp only [F] at h
+    rcases h with ⟨h0, h1, h2⟩
+    rw [← h0, ← h1, ← h2]
+    ring
+  simp_rw [hpoint]
+  exact apm_t01J06_curl_flux_zero A hA
 
 /-- LIBRARY: radial retraction to the sphere, followed by first projection. -/
 def apm_t01J06_exists_closed_product_extension_aux_scalar
