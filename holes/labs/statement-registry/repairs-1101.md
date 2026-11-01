@@ -99,3 +99,7 @@ Printed unique solvability is false for every ε: x ≡ ε and a nonconstant bra
 ## m95J01
 
 Backlog grade: hypothesis-carries-core, the integral was assumed an inner product and T assumed. Repair by kimi-1 constructs the concrete space of functions e^{-x}p(x), proves the integral pairing is an inner product with genuine integrals, gives T's matrix in the printed basis, the range criterion and the orthonormal basis. The grader required a clause that T is the second derivative, now proved. The old theorem is kept as apm_m95j01_abstract.
+
+## a00J06
+
+Admission of singular_at_one was revoked: it used tsum's junk value past the radius. New apm_a00j06 states and proves Pringsheim's theorem honestly for complex z, by zai-7 and lemma-1 (571 lines): Taylor expansion at c < 1, Tonelli in ENNReal, summability past 1, contradicting radius 1. New grade: faithful; the tsum is used only inside the unit disk, and singular_at_one is not called.
