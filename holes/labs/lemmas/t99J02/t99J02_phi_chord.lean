@@ -120,7 +120,17 @@ def t99J02_stretch (u : ℂ) : ℂ :=
 
 /-- `‖ell u‖ = 5/8 ‖u‖ + 3/8 Re u`. Square both sides; `‖u‖² = re² + im²`. -/
 theorem t99J02_ell_norm (u : ℂ) : ‖t99J02_ell u‖ = 5 / 8 * ‖u‖ + 3 / 8 * u.re := by
-  sorry
+  have hu_sq : ‖u‖ ^ 2 = u.re ^ 2 + u.im ^ 2 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]
+    ring
+  have hre : |u.re| ≤ ‖u‖ := Complex.abs_re_le_norm u
+  have hrhs : 0 ≤ 5 / 8 * ‖u‖ + 3 / 8 * u.re := by
+    have hre' : -‖u‖ ≤ u.re := by linarith [neg_abs_le u.re]
+    nlinarith [norm_nonneg u]
+  have hsq : ‖t99J02_ell u‖ ^ 2 = (5 / 8 * ‖u‖ + 3 / 8 * u.re) ^ 2 := by
+    rw [Complex.sq_norm, t99J02_ell, Complex.normSq_mk]
+    nlinarith
+  nlinarith [norm_nonneg (t99J02_ell u)]
 
 /-- `ell` is injective on all of `ℂ`. The imaginary part gives `Im u`; then `a ↦ 3/8 √(a²+b²) + 5/8 a`
 is strictly increasing. -/
@@ -143,7 +153,46 @@ theorem t99J02_phi_chord (x : ℝ) (hx : |x| ≤ 1) :
 the closed upper half plane. -/
 theorem t99J02_circle_param (s : ℂ) (hs : ‖s‖ = 1) :
     ∃ x : ℝ, |x| ≤ 1 ∧ s = (⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2 := by
-  sorry
+  have hs' : s.re ^ 2 + s.im ^ 2 = 1 := by
+    have hnorm := Complex.sq_norm s
+    rw [hs, Complex.normSq_apply] at hnorm
+    nlinarith
+  set y : ℝ := √((1 - s.re) / 2)
+  have hre_le : s.re ≤ 1 := by
+    nlinarith [sq_nonneg (s.re - 1), sq_nonneg s.im]
+  have hy0 : 0 ≤ y := Real.sqrt_nonneg _
+  have hy2 : y ^ 2 = (1 - s.re) / 2 := by
+    exact Real.sq_sqrt (by linarith)
+  by_cases hy : y = 0
+  · have hre : s.re = 1 := by nlinarith
+    have him : s.im = 0 := by nlinarith [sq_nonneg s.im]
+    refine ⟨1, by norm_num, ?_⟩
+    apply Complex.ext
+    · norm_num [hre, pow_two, Complex.mul_re]
+    · norm_num [him, pow_two, Complex.mul_im]
+  · let x := s.im / (2 * y)
+    have hxy : 2 * x * y = s.im := by
+      dsimp [x]
+      field_simp
+    have hx2 : x ^ 2 = (1 + s.re) / 2 := by
+      dsimp [x]
+      field_simp [hy]
+      nlinarith [hy2]
+    have hx_le : |x| ≤ 1 := by
+      rw [← sq_le_one_iff_abs_le_one]
+      rw [hx2]
+      nlinarith [sq_nonneg (s.re + 1), sq_nonneg s.im]
+    have hsqrt : √(1 - x ^ 2) = y := by
+      rw [← Real.sqrt_sq hy0]
+      congr 1
+      nlinarith [hx2, hy2]
+    refine ⟨x, hx_le, ?_⟩
+    rw [hsqrt]
+    apply Complex.ext
+    · simp [pow_two, Complex.mul_re]
+      nlinarith [hx2, hy2]
+    · simp [pow_two, Complex.mul_im]
+      nlinarith
 
 /-- The image of the closed upper half disk misses the open hole. Write `ζ = x + i y'` for the
 inner point, `y' ≥ √(1-x²)/2`. If `ζ² = ell u`, `‖u‖ < 1`, take the root `u = v²`, `v = a + i b`,
@@ -172,7 +221,26 @@ theorem t99J02_phi_injOn (z z' : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ 
 /-- `phi` reaches the unit circle only from the unit circle: `‖ζ‖² = x² + ((y+Y)/2)²`. -/
 theorem t99J02_phi_norm (z : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im)
     (h : ‖t99J02_phi (z : ℂ)‖ = 1) : ‖(z : ℂ)‖ = 1 := by
-  sorry
+  have hz_le : ‖(z : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp z.2
+  set x := (z : ℂ).re
+  set y := (z : ℂ).im
+  have hxy : x ^ 2 + y ^ 2 ≤ 1 := by
+    have hn := Complex.sq_norm (z : ℂ)
+    rw [Complex.normSq_apply] at hn
+    nlinarith [norm_nonneg (z : ℂ)]
+  have hx : 0 ≤ 1 - x ^ 2 := by nlinarith [sq_nonneg y]
+  set Y := √(1 - x ^ 2)
+  have hY : 0 ≤ Y := Real.sqrt_nonneg _
+  have hY2 : Y ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx
+  have heq : x ^ 2 + ((y + Y) / 2) ^ 2 = 1 := by
+    rw [t99J02_phi, norm_pow, Complex.sq_norm, Complex.normSq_mk] at h
+    nlinarith
+  have hyY : y = Y := by
+    nlinarith [hz, hY]
+  have hnormsq : ‖(z : ℂ)‖ ^ 2 = 1 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]
+    nlinarith
+  nlinarith [norm_nonneg (z : ℂ)]
 
 /-- The stretch is continuous, injective on radius `2`, and lands in radius `5/4`. -/
 theorem t99J02_stretch_spec :
