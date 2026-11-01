@@ -142,7 +142,25 @@ theorem apm_t01J06_closed_divergence_free
     apm_t01J06_partial 0 (fun y ↦ eta y ![apm_t01J06_e 1, apm_t01J06_e 2]) x -
       apm_t01J06_partial 1 (fun y ↦ eta y ![apm_t01J06_e 0, apm_t01J06_e 2]) x +
       apm_t01J06_partial 2 (fun y ↦ eta y ![apm_t01J06_e 0, apm_t01J06_e 1]) x = 0 := by
-  sorry
+  have hd : DifferentiableAt ℝ eta x := (hs.differentiable (by simp)) x
+  have hclosed : extDeriv eta x ![apm_t01J06_e 0, apm_t01J06_e 1,
+      apm_t01J06_e 2] = 0 := by
+    rw [hc]
+    rfl
+  rw [extDeriv_apply hd] at hclosed
+  have hv1 : Fin.removeNth (1 : Fin 3)
+      ![apm_t01J06_e 0, apm_t01J06_e 1, apm_t01J06_e 2] =
+      ![apm_t01J06_e 0, apm_t01J06_e 2] := by
+    ext i
+    fin_cases i <;> rfl
+  have hv2 : Fin.removeNth (2 : Fin 3)
+      ![apm_t01J06_e 0, apm_t01J06_e 1, apm_t01J06_e 2] =
+      ![apm_t01J06_e 0, apm_t01J06_e 1] := by
+    ext i
+    fin_cases i <;> rfl
+  rw [Fin.sum_univ_three] at hclosed
+  rw [hv1, hv2] at hclosed
+  simpa [apm_t01J06_partial] using hclosed
 
 /-- Seat: a divergence-free field is a curl. Take `A x = ∫ t in 0..1, t • (F (t x) × x)`. Differentiate
 under the integral (`hasFDerivAt_integral_of_dominated_of_fderiv_le` or
