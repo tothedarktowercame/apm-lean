@@ -170,6 +170,7 @@ theorem whitney_bump_sum_positive_smooth
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {K : Set E} (hK : IsClosed K) (hKn : K.Nonempty)
     (psi : SardConvexDomain.WhitneyNetIndex K → E → ℝ)
+    (hnonneg : ∀ i x, 0 ≤ psi i x)
     (hone : ∀ i, Metric.ball i.center (Metric.infDist i.center K / 4) ⊆
       {x | psi i x = 1})
     (hsupp : ∀ i, Function.support (psi i) ⊆
