@@ -401,7 +401,7 @@ lemma apm_a98A07_differentiableOn_of_locallyUniform
     DifferentiableOn ℂ g (ball 0 1) := by
   exact hconv.differentiableOn (Eventually.of_forall hf) isOpen_ball
 
-theorem apm_a98a07 :
+theorem apm_a98a07_of_common_neighborhood :
     ∀ f : ℕ → ℂ → ℂ,
       (∃ U : Set ℂ,
         IsOpen U ∧ closedBall (0 : ℂ) 1 ⊆ U ∧
@@ -541,3 +541,56 @@ theorem apm_a98a07 :
   refine ⟨apm_a98A07_cauchyTransform (apm_a98A07_aeLimit F), ?_, hlocal⟩
   exact apm_a98A07_differentiableOn_of_locallyUniform
     (fun n => (hfU n).mono fun _ hz => hclosed (ball_subset_closedBall hz)) hlocal
+
+theorem apm_a98a07 :
+    ∀ f : ℕ → ℂ → ℂ,
+      (∀ n : ℕ, ∃ U : Set ℂ,
+        IsOpen U ∧ closedBall (0 : ℂ) 1 ⊆ U ∧ DifferentiableOn ℂ (f n) U) →
+      (∀ (n : ℕ) (t : ℝ), 0 < t → t < 2 * Real.pi →
+        ‖f n (Complex.exp (Complex.I * (t : ℂ)))‖ ≤
+          1 / (t * (Real.log (t / (4 * Real.pi))) ^ 2)) →
+      (∀ᵐ t : ℝ ∂((volume : Measure ℝ).restrict (Ioo (0 : ℝ) (2 * Real.pi))),
+        ∃ w : ℂ,
+          Tendsto (fun n : ℕ => f n (Complex.exp (Complex.I * (t : ℂ)))) atTop (nhds w)) →
+      ∃ g : ℂ → ℂ,
+        DifferentiableOn ℂ g (ball 0 1) ∧
+        TendstoLocallyUniformlyOn f g atTop (ball 0 1) := by
+  intro f hneighborhood hbound hconv
+  let mu : Measure ℝ := (volume : Measure ℝ).restrict (Ioo 0 (2 * Real.pi))
+  let F : ℕ → ℝ → ℂ :=
+    fun n t => f n (Complex.exp (Complex.I * (t : ℂ)))
+  have hfclosed : ∀ n, DifferentiableOn ℂ (f n) (closedBall 0 1) := by
+    intro n
+    obtain ⟨U, -, hclosed, hfU⟩ := hneighborhood n
+    exact hfU.mono hclosed
+  have hFmeas : ∀ n, AEStronglyMeasurable (F n) mu := by
+    intro n
+    exact apm_a98A07_trace_aestronglyMeasurable (hfclosed n).continuousOn
+  have hFbound : ∀ n, ∀ᵐ t ∂mu, ‖F n t‖ ≤ apm_a98A07_majorant t := by
+    intro n
+    filter_upwards [ae_restrict_mem measurableSet_Ioo] with t ht
+    exact hbound n t ht.1 ht.2
+  have hFlim : ∀ᵐ t ∂mu, Tendsto (fun n => F n t) atTop
+      (nhds (apm_a98A07_aeLimit F t)) :=
+    hconv.mono fun _ ht => apm_a98A07_tendsto_aeLimit ht
+  have hmeas : AEStronglyMeasurable (apm_a98A07_aeLimit F) mu :=
+    aestronglyMeasurable_of_tendsto_ae atTop hFmeas hFlim
+  have hlimBound : ∀ᵐ t ∂mu,
+      ‖apm_a98A07_aeLimit F t‖ ≤ apm_a98A07_majorant t := by
+    filter_upwards [hFlim, eventually_countable_forall.2 hFbound] with t ht hb
+    exact le_of_tendsto' ht.norm fun n => hb n
+  have hh : Integrable (apm_a98A07_aeLimit F) mu :=
+    apm_a98A07_majorant_integrable.mono' hmeas hlimBound
+  have hfint : ∀ n, Integrable (F n) mu :=
+    fun n => apm_a98A07_majorant_integrable.mono' (hFmeas n) (hFbound n)
+  have hL1 : Tendsto (fun n => ∫ t, ‖F n t - apm_a98A07_aeLimit F t‖ ∂mu)
+      atTop (nhds 0) :=
+    apm_a98A07_tendsto_integral_norm_sub hFmeas apm_a98A07_majorant_integrable
+      hFbound hconv
+  have hlocal : TendstoLocallyUniformlyOn f
+      (apm_a98A07_cauchyTransform (apm_a98A07_aeLimit F)) atTop (ball 0 1) := by
+    exact apm_a98A07_tendstoLocallyUniformlyOn_of_boundary_L1
+      hfclosed hfint hh hL1
+  refine ⟨apm_a98A07_cauchyTransform (apm_a98A07_aeLimit F), ?_, hlocal⟩
+  exact apm_a98A07_differentiableOn_of_locallyUniform
+    (fun n => (hfclosed n).mono ball_subset_closedBall) hlocal
