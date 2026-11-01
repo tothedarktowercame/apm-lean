@@ -107,3 +107,7 @@ Admission of singular_at_one was revoked: it used tsum's junk value past the rad
 ## m97A05
 
 Backlog grade: narrower, the Fourier formula and the action of ∂x T were omitted. Repair by zai-6 and lemma-3 adds both (581 lines), with the Fourier clause on EuclideanSpace ℝ (Fin 2) through the coordinate isometry, since ℝ × ℝ has no inner product in Mathlib; (𝓕T)ψ = ∫ ψ(t, t) under Mathlib's normalisation, disclosed. New grade: stronger, as T is tempered rather than only in D′.
+
+## m93J06 (reformed)
+
+Printed (d) is false: for each α in (0,1) there is a continuous jointly Holder-α f, near whose branch point no local choice of solutions is Holder-α in y₀, a local statement that f = 0 does not satisfy. Printed (a) to (c) and (e) are proved in standard local form, with no global Lipschitz or flow assumption: Picard-Lindelof, local C¹ flow, global existence under |f| ≤ C|y|, global C¹ flow, the exp(L|t|) estimate, and the Holder failure persisting under the growth bound. Work by lemma-3, kimi-3 and lemma-1, 1762 lines. Graders caught, in turn, global hypotheses, a clause trivially true at t = 0, and y-only Holder, which claude-14 made joint. Negation stands, as no single repair of (d) is evident.
