@@ -116,3 +116,26 @@ Output of `#print axioms apm_t01j06`:
 ```text
 'apm_t01j06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
+
+## Statement repair and re-split (claude-14, 2026-11-01)
+
+**The registered statement is false as written.** `apm_t01J06_sphereIntegral` integrates against Mathlib's
+raw `μH[2]`, which has no normalising constant. On Euclidean space it is `4/π` times area (isodiametric
+inequality), so the raw integral is `(4/π)(4π/3) = 16/3`, not `4π/3`. t02A05 hit the same point and uses
+`μHE[2]`. The repair is that one token in `apm_t01J06_sphereIntegral` and in `apm_t01J06_sphere_moments`.
+It does not narrow anything: `μHE[2]` is surface area, which is what the printed integral means. The
+repaired statement needs re-admission to the registry by an outside grader before landing.
+
+The mass `μHE[2](S²) = 4π` is in the new `ConstructionTargets/EuclideanHausdorffSphereMass.lean`, moved
+unchanged from t02A05. The earlier note that the normalisation was missing is superseded.
+
+Stokes route, avoiding integration theory on manifolds: restricted form to flux (`_orientedCoefficient_flux`),
+closed means divergence-free (`_closed_divergence_free`), divergence-free means curl (`_divergenceFree_isCurl`,
+cone formula), and the flux of a curl is a sum of rotation derivatives, each zero because `μHE[2]` is rotation
+invariant (`_rotation_derivative_integral`, `_curl_flux_zero`). Only `_curl_flux_zero` needs another leaf
+(rotation), and `_closed_extension_integral_zero` needs the rest.
+
+Checks: `rotField` is `e k × q` in all three axes, and `q · curl A = ∑ k, ∇(A k) · (e k × q)` by hand.
+`F 1 = -eta(e 0, e 2)` matches the sign in `extDeriv_apply`. Flux at `omega`: `F 2 = z + 3`, so the coefficient
+is `(z + 3) z`, agreeing with `_orientedCoefficient_eq`.
+
