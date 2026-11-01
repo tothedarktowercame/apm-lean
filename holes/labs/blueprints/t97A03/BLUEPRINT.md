@@ -1,154 +1,172 @@
 # Blueprint for t97A03
 
-## Triage
+## Reconciliation and triage
 
-Verdict: **true and faithful**.
+Verdict: **true and faithful; `Main.lean` was the authoritative advanced
+state**.
 
-The source asks for the possible connected two-fold covers of the space formed
-by identifying two distinct points of a circle with the north and south poles
-of a two-sphere, and for their homology and fundamental groups.  The Lean
-statement uses the corresponding literal `EqvGen` quotients, asserts that the
-total space is homeomorphic to one of the two possible pictures, and gives the
-expected integral singular homology and based fundamental group.  The
-registered statement was also reported as graded faithful by the batch owner.
+The registered `problems/t97A03/lean/Main.lean` had 1,847 lines and three
+admissions.  The old blueprint had 184 lines and two library-scale admissions,
+so this blueprint was first replaced by the registered file.  That preserves
+the already-proved literal quotient geometry, complementary arc loops,
+two-generator normal forms, aligned fundamental-group equivalences, covering
+monodromy algebra, and finite model selector.  The registered declarations and
+the statement of `apm_t97a03` are unchanged; only new declarations and proof
+assemblies were added.
 
-I tried the relevant degeneracies.  The hypothesis `A ≠ B` excludes collapse
-of both sphere poles onto one circle point.  The fiber-cardinality equation
-excludes the empty total space and, as the proved
-`apm_t97A03_surjective_of_fiber_card_two` shows, forces surjectivity.  For each
-base point, `apm_t97A03_fiber_equiv_fin_two` upgrades the numerical condition
-to an actual two-element fiber.  Connectedness excludes the trivial disjoint
-union of two copies of the base.  No solve-loop counterexample or repair was
-recorded.
+The source asks for all connected two-fold covers of the sphere/circle
+adjunction and their invariants.  The frozen statement gives the two literal
+`EqvGen` models, integral singular homology ranks `1,3,2`, higher
+vanishing, and fundamental group `F₃`.  The hypotheses `A ≠ B`, connected
+total space, covering map, and two-element fibres exclude the collapsed-pole,
+empty, disconnected trivial-cover, and wrong-degree cases.
 
-The hand check is the standard CW calculation.  The base has two vertices,
-three edges, and one two-cell with zero cellular boundary, hence homotopy type
-`S² ∨ S¹ ∨ S¹`.  A connected double cover is determined by a nonzero map
-`F₂ → Z/2`; its three choices give two homeomorphism types.  Every cover has
-four vertices, six edges, and two two-cells with zero boundary.  Thus
-`H₀ = Z`, `H₁ = Z³`, `H₂ = Z²`, and higher homology vanishes.  Its fundamental
-group has rank `1 + 2(2 - 1) = 3` by Nielsen--Schreier.
+## Cheapest existing route
 
-## Reused compiled work and imports
+The copied registered file already does most of the algebraic classification:
+it fixes two literal loops, proves their signed-word generation through an
+aligned `F₂` presentation, defines their covering transports, and imports the
+sorry-free finite two-permutation classifier in
+`ConstructionTargets.t97A03Closure`.  The remaining classification work is
+therefore geometric: turn the selected endpoint permutations into a
+homeomorphism of the supplied cover with the matching literal quotient.
 
-The quotient definitions, both generating attachment equalities,
-`apm_t97A03_surjective_of_fiber_card_two`, and
-`apm_t97A03_fiber_equiv_fin_two` are copied from the best compiled solve-loop
-state and retain their proofs.
+For invariants, a fresh cellular/Mayer–Vietoris calculation on each quotient is
+unnecessary.  Both models collapse a contractible connecting arc and have the
+homotopy type of the same nested point wedge: two copies of `S²` and the
+existing `ThreeCircles`.  The bank already contains:
 
-The blueprint imports these sorry-free foundations so lemma seats do not need
-to change imports:
+* `PointWedgeVanKampen.genericPointWedgeLegCoordinatesEquiv` and
+  `PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv`;
+* `PolygonSurfaceHomology.pointWedgeHigherHomologyIsZero` and the generic
+  point-wedge Mayer–Vietoris infrastructure;
+* `SphereHomology.sphereModuleTopHomologyIsoInt` and off-degree vanishing;
+* the finite-circle-wedge homology and path-connectedness results.
 
-* `ConstructionTargets.SuppliedCoverAlgebra`, providing the equivalence from
-  the total-space fundamental group to the range of the induced map;
-* `ConstructionTargets.FiniteIndexFreeGroupSchreierRank`, including the
-  index-two subgroup of `FreeGroup (Fin 2)` calculation;
-* `ConstructionTargets.PointWedgeVanKampen`, the completed point-wedge van
-  Kampen foundation;
-* `ConstructionTargets.ProductionOpenCoverMayerVietoris`,
-  `ConstructionTargets.SphereHomology`, and
-  `ConstructionTargets.CircleSingularHomology` for the model calculation.
+Thus only the two literal quotient collapses are model-specific.  Every
+homology degree and `π₁` is computed once on `apm_t97A03_modelWedge`.
 
-The topology worklist records the first two algebra adapters as banked in
-`SuppliedCoverAlgebra`.  It also records that the old general
-covering-subgroup construction was superseded: this problem needs analysis of
-the supplied cover, not construction of a cover from an arbitrary subgroup.
+## Leaf table
 
-## Remaining lemmas
+All leaves are top-level theorems whose complete body is `sorry`.  The two
+old bridge names and `apm_t97a03` are assemblies.
 
-### `apm_t97A03_classify_connected_double_cover` — LIBRARY
+| Order | Leaf | Work / tools | Lines | Depends on |
+|---:|---|---|---:|---|
+| 1 | `apm_t97A03_classify_aux_oneCircleMonodromy` | Finite `Fin 2` permutation normalization using `finTwoPerm_bool_normalForm`; exactly one nontrivial transport becomes the one-circle pattern. | 35–60 | nontrivial literal transport; negated both-swap predicate |
+| 2 | `apm_t97A03_classify_aux_literal_transport_nontrivial` | Use connected-cover moved monodromy, the proved aligned literal `F₂` normal form, and `literal_transport_moved_of_generated`. | 80–120 | cover hypotheses |
+| 3 | `apm_t97A03_invariants_aux_modelWedge_h0` | Path connectedness plus `CoefficientH0.h0Iso`, or point-wedge H₀ MV. | 35–60 | fixed wedge |
+| 4 | `apm_t97A03_invariants_aux_modelWedge_high` | Repeated `pointWedgeHigherHomologyIsZero`, sphere and finite-circle-wedge vanishing. | 60–90 | fixed wedge |
+| 5 | `apm_t97A03_invariants_aux_modelWedge_piOne` | Two applications of generic point-wedge van Kampen, sphere simple connectivity, `threeCirclesFundamentalGroupEquiv`, and basepoint change. | 80–120 | fixed wedge |
+| 6 | `apm_t97A03_invariants_aux_modelWedge_h1` | Point-wedge MV/Hurewicz; only the three-circle summand contributes, with its fixed `Fin 3` basis. | 80–120 | fixed wedge |
+| 7 | `apm_t97A03_invariants_aux_modelWedge_h2` | Two sphere top classes via `sphereModuleTopHomologyIsoInt` and point-wedge MV. | 90–130 | fixed wedge |
+| 8 | `apm_t97A03_invariants_aux_transport` | Transport homology through `singularHomologyIsoOfHomotopyEquiv`; transport based `π₁` using the equivalence homotopy and basepoint path. | 70–110 | all fixed-wedge invariant facts |
+| 9 | `apm_t97A03_invariants_aux_oneCircle_homotopyEquiv` | Collapse the contractible connector using `PointWedgePointedContractionDescent` and quotient homotopy descent. | 120–150 | one-circle quotient |
+| 10 | `apm_t97A03_invariants_aux_twoCircle_homotopyEquiv` | Collapse one spanning arc and identify the remaining three loops and two sphere sheets with the fixed wedge. | 120–150 | two-circle quotient |
+| 11 | `apm_t97A03_classify_aux_oneCircle_homeomorph` | Trivialize sphere sheets, lift normalized complementary arcs, descend through `OneCircleRel`, and use covering-lift uniqueness for inverse laws. | 120–150 | one-circle monodromy |
+| 12 | `apm_t97A03_classify_aux_twoCircle_homeomorph` | The analogous two-circle quotient descent when both literal transports swap. | 120–150 | two-circle monodromy |
 
-**Statement in words.** Every connected covering of the literal base whose
-fibers all have cardinality two is homeomorphic to either the one-lifted-circle
-model or the two-lifted-circles model.
+Estimated total: **1,010–1,410 proof lines**.  No leaf is estimated above 150,
+and the whole remaining program is below 2,000 lines.  The classification
+realization leaves are at the upper bound and are the least certain estimates.
 
-**Why true.** Split the inverse image of the simply connected sphere into its
-two sheets.  Label the sheets over one pole, lift the two complementary arcs
-of the attached circle, and record whether each arc preserves or swaps the
-sheet label.  Connectedness says that the resulting pair of bits is not
-simultaneously trivial.  The patterns `(1,0)` and `(0,1)` are interchanged by
-swapping the two circle arcs and produce the one-circle model; `(1,1)` produces
-the two-circle model.  Descend the piecewise maps through the `EqvGen`
-quotients and prove that the resulting bijective local homeomorphism is a
-homeomorphism.
+## Dependency layers
 
-The closest completed inputs are the path-lifting and induced-fundamental-group
-results behind `ConstructionTargets.SuppliedCoverAlgebra`.  What is still
-missing is the global, explicit monodromy-to-quotient homeomorphism.  The
-topology audit estimates this at 800–1600 lines, so it is intentionally one
-library program rather than fake small lemmas.
+* **Layer 1, parallel:** literal-transport nontriviality; both model-wedge
+  homotopy equivalences; all five fixed-wedge invariant computations.
+* **Layer 2, parallel:** one-circle monodromy normalization; invariant transport
+  (it takes all invariant results as explicit inputs).
+* **Layer 3, parallel:** one-circle and two-circle homeomorphism realizations.
+* **Layer 4:** sorry-free classification and invariant bridge assemblies.
+* **Layer 5:** sorry-free `apm_t97a03` conjunction assembly.
 
-**Expected size.** 800–1600 lines (LIBRARY).
+The model-homeomorphism leaves receive exact monodromy predicates; they do not
+re-run the finite selector.  The transport leaf receives every computed
+invariant explicitly and does not depend on sibling sorries through a
+definition.
 
-**Dependencies.** Definitions and the two proved fiber lemmas only.  It does
-not depend on the invariant lemma.
+## C1–C10 record
 
-**Truth check.** Enumerating the nonzero elements of `(Fin 2 → Z/2)` gives
-exactly three connected monodromies.  Swapping the two circle arcs identifies
-the first two geometrically, leaving exactly the two quotient models in the
-conclusion.  The discarded zero monodromy gives a disconnected cover, in
-agreement with the `ConnectedSpace Y` hypothesis.
+* **Literal transport nontrivial:** C1 connected two-sheet monodromy is
+  transitive; C2 nontriviality is derived, not assumed; C3 only generation to
+  the two fixed loops remains; C4 the two loops generate all signed words; C5
+  uses the exact registered transports; C6 retains all cover hypotheses; C7
+  transports are permutations of the literal fibre; C8 disconnected zero
+  monodromy is excluded by `ConnectedSpace Y`; C9 is strictly below the old
+  classification bridge; C10 matches.
+* **One-circle monodromy:** C1 every nonidentity `Fin 2` permutation is swap;
+  C2 conclusion is not among hypotheses; C3 finite algebra only; C4
+  nontrivial-and-not-both partitions the cases; C5 exact literal transports
+  are retained; C6–C7 no topology or cast is weakened; C8 identity/identity is
+  excluded; C9 not the ancestor; C10 matches.
+* **One-circle homeomorphism:** C1 the exactly-one-swap gluing is the literal
+  one-circle model; C2 the hypothesis records monodromy, not a homeomorphism;
+  C3 only geometric realization remains; C4 handles both choices of swapped
+  arc; C5 sheet labels and exact loops reach quotient attachments; C6 keeps
+  `A ≠ B` and cover degree; C7 coinduced quotient topologies are used; C8
+  pole and arc endpoints are included; C9 not the old full classifier; C10
+  matches.
+* **Two-circle homeomorphism:** C1 both swaps give the crossed two-circle
+  attachment; C2–C3 as above; C4 all four endpoint identifications occur; C5
+  exact sheet labels reach `TwoCircleRel`; C6–C7 retain the literal cover and
+  topology; C8 both poles and both sheets checked; C9 not the ancestor; C10
+  matches.
+* **One-circle collapse:** C1 collapsing a contractible connector preserves
+  homotopy type; C2 no invariant is assumed; C3 only one quotient homotopy;
+  C4 all attachment points map to the wedge point; C5 the target is the fixed
+  wedge used downstream; C6 no stronger source assumption; C7 actual
+  `EqvGen` topology; C8 connector endpoints remain fixed; C9 not the old
+  invariant bridge; C10 matches.
+* **Two-circle collapse:** C1 one spanning arc is a tree edge; C2–C3 as above;
+  C4 the three remaining cycles are all represented; C5 exact fixed wedge;
+  C6–C7 literal quotient retained; C8 both sheet vertices remain connected;
+  C9 not the ancestor; C10 matches.
+* **Wedge H₀:** C1 connected nonempty wedge has H₀ = ℤ; C2 no connectedness
+  result is passed as the answer; C3 one degree only; C4 nested wedge handled
+  twice; C5 exact homology carrier; C6 integral coefficients; C7 degree zero;
+  C8 explicit wedge point prevents emptiness; C9 not ancestor; C10 matches.
+* **Wedge H₁:** C1 two spheres contribute zero and three circles contribute
+  rank three; C2 basis is computed; C3 one degree; C4 both wedge stages;
+  C5 fixed `Fin 3` target; C6 integral coefficients; C7 no natural
+  subtraction; C8 sphere simply-connectedness includes the standard S²;
+  C9 not ancestor; C10 matches.
+* **Wedge H₂:** C1 each S² contributes one class; C2 classes are not assumed;
+  C3 one degree; C4 both sphere summands included; C5 exact `Fin 2` target;
+  C6 integral coefficients; C7 degree two; C8 circle summands vanish here;
+  C9 not ancestor; C10 matches.
+* **Wedge higher:** C1 all summands vanish above two; C2 no restated
+  conclusion; C3 one generic degree; C4 induction has both nested wedge
+  stages; C5 exact carrier; C6 integral coefficients; C7 hypothesis `3 ≤ n`
+  avoids subtraction errors; C8 boundary degree three checked; C9 not
+  ancestor; C10 matches.
+* **Wedge π₁:** C1 free product of two trivial groups and `F₃` is `F₃`;
+  C2 group is computed; C3 van Kampen only; C4 both wedge stages; C5 arbitrary
+  consumer basepoint is handled; C6 exact based fundamental group; C7
+  `FreeGroup (Fin 3)`; C8 wedge point and arbitrary point both covered; C9
+  not ancestor; C10 matches.
+* **Invariant transport:** C1 homotopy equivalence preserves singular homology
+  and π₁; C2 computed facts are explicit inputs, not bundled as the conclusion;
+  C3 transport only; C4 all five outputs supplied; C5 the supplied equivalence
+  is the one assembled from the literal model; C6 no new hypotheses; C7
+  orientation of the equivalence is `Y ≃ₕ modelWedge`; C8 arbitrary
+  basepoint `y`; C9 strictly below the old invariant bridge; C10 matches.
 
-### `apm_t97A03_invariants_of_model` — LIBRARY
+## Verification
 
-**Statement in words.** Any pointed space homeomorphic to either literal cover
-model has integral singular homology of ranks `1,3,2` in degrees `0,1,2`, zero
-homology above degree two, and fundamental group `FreeGroup (Fin 3)`.
-
-**Why true.** For either model, choose quotient-compatible neighborhoods of
-the two sphere sheets and lifted circle pieces.  Mayer--Vietoris reduces
-singular homology to the cellular calculation with four vertices, six edges,
-and two null-boundary two-cells.  Van Kampen (or a deformation to two spheres
-wedge three circles) gives `F₃`; transport both results through the supplied
-homeomorphism, including the basepoint change.  The imported sphere, circle,
-Mayer--Vietoris, point-wedge, and finite-index Schreier modules provide the
-large reusable ingredients.
-
-The remaining missing work is the literal quotient/open-cover comparison for
-these two models.  The topology audit estimates the complete packaged result
-at 1500–3000 lines.  Keeping the model disjunction as a hypothesis makes this
-program wholly independent of the classification program; it does not assume
-the classification lemma's conclusion without receiving it as data.
-
-**Expected size.** 1500–3000 lines (LIBRARY).
-
-**Dependencies.** Definitions only, plus the imported sorry-free foundations.
-It does not depend on `apm_t97A03_classify_connected_double_cover`.
-
-**Truth check.** The lifted CW complex has Euler characteristic
-`4 - 6 + 2 = 0`, equal to twice the base Euler characteristic.  Its connected
-one-skeleton has cycle rank `6 - 4 + 1 = 3`; the two sphere cells have zero
-boundary, giving two independent degree-two classes.  These checks yield
-Betti numbers `(1,3,2)` and `π₁ = F₃` for both attachment patterns.  At an
-arbitrary basepoint `y`, connectedness of either model supplies the usual
-basepoint-change isomorphism, so the pointed conclusion is not restricted to
-an attachment point.
-
-## Assembly and dependency layers
-
-The main theorem first applies the classification lemma, then passes its
-result to the invariant lemma and assembles the conjunction.  Its proof has no
-`sorry`.
-
-* **Layer 1 (parallel library programs):**
-  `apm_t97A03_classify_connected_double_cover` and
-  `apm_t97A03_invariants_of_model`.
-* **Layer 2 (already compiled):** `apm_t97a03` conjunction assembly.
-
-## Compilation and axioms
-
-Compiled with:
+`python3 scripts/statement-registry.py check t97A03` reports:
 
 ```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t97A03/Blueprint.lean
+1 registered statements match, 0 do not
 ```
 
-Lean reported exactly two `sorry` warnings, at the two LIBRARY lemmas.  The
-final output of `#print axioms apm_t97a03` was:
+The required locked compile was queued, but did not acquire the lock: the
+preceding `t98A04` Lean process remained the lock holder for more than nine
+minutes (about 6.5 GB RSS and mostly sleeping).  It was not terminated because
+it belongs to another seat.  Consequently no compiler error count,
+sorry-warning count, or fresh `#print axioms` output is claimed here.
 
-```text
-'apm_t97a03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
-```
+## Review (claude-14, 2026-11-01)
 
-Thus `sorryAx` reaches the registered theorem only through the two named
-library obligations.
+Skeleton by codex-6, compiled by me after fixes: `modelWedge` needed `abbrev` for its topology, and the `rcases` pattern needed a second level. 12 leaves, 0 errors, registry matches.
+
+Doubt on `_oneCircle_homotopyEquiv`, `_twoCircle_homotopyEquiv`: each sphere carries two attachment points, N and S. Collapsing arcs alone does not give a one-point wedge: an attachment point has to slide along the sphere, which is a homotopy of the attaching map, not a quotient. Expect these two to exceed 150 lines and to need splitting. The ranks check: 4 edges over 2 sphere vertices gives rank 3 in both models.
