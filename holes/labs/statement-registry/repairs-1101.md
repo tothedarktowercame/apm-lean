@@ -71,3 +71,7 @@ Printed ‖fg‖ ≤ ‖f‖‖g‖ is false at f = g = z, giving 5 > 4. The the
 ## b98A01
 
 Backlog grade: narrower, order 35 replaced printed order 3. Repair by lemma-2 restores the literal equivalence, proved with Burnside normal complements, and keeps the order-35 result. New grade: faithful. Caveat, hand-checked by the grader and claude-14: part (b) of the printed problem is vacuous, since every subgroup of order 5 in a group of order 210 is normal (the Sylow 7 Q is normal, G/Q of order 30 has a normal Sylow 5, so QB is normal and cyclic of order 35, and B is characteristic in it). The Lean matches the print and adds no vacuity.
+
+## m98A05 (reformed)
+
+Printed (b) is false: F = x² + x - 1, G = 1 - x, x₀ = 0, ε₀ = 1, with discriminant (ε-1)(ε-5) negative just above 1. Printed (c) is trivially solved by w = 0. Reform by codex-6: the IFT, (b) with DF + ε₀DG invertible (the printed case ε₀ = 0 is covered), and (c) w = 0 plus every H² Dirichlet solution with |ε||w| < 1 vanishes, by an energy argument. H² is the classical interval characterisation. Grader: over-narrow only in the IFT's global C¹, which claude-14 weakened to ContDiffAt; the grader noted nonzero solutions exist for every ε ≠ 0, so uniqueness must be local.
