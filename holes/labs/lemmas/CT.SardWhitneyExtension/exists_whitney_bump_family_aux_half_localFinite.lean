@@ -154,7 +154,99 @@ theorem exists_whitney_bump_family_aux_half_localFinite
     ∀ x ∉ K, ∃ U ∈ nhds x,
       {i : SardConvexDomain.WhitneyNetIndex K |
         (U ∩ Metric.ball i.center (Metric.infDist i.center K / 2)).Nonempty}.Finite := by
-  sorry
+  intro x hx
+  let r := Metric.infDist x K / 16
+  let I : Set (SardConvexDomain.WhitneyNetIndex K) := {i |
+    (Metric.ball x r ∩ Metric.ball i.center
+      (Metric.infDist i.center K / 2)).Nonempty}
+  have hxpos : 0 < Metric.infDist x K := (hK.notMem_iff_infDist_pos hKn).1 hx
+  have hscale (i : SardConvexDomain.WhitneyNetIndex K) (hi : i ∈ I) :
+      5 * Metric.infDist x K < 8 * Metric.infDist i.center K ∧
+        8 * Metric.infDist i.center K < 17 * Metric.infDist x K := by
+    obtain ⟨y, hyx, hyi⟩ := hi
+    have ha : dist x y < Metric.infDist x K / 16 := by
+      simpa [r, dist_comm] using Metric.mem_ball.1 hyx
+    have hb : dist y i.center < Metric.infDist i.center K / 2 := Metric.mem_ball.1 hyi
+    have hxy := Metric.infDist_le_infDist_add_dist (s := K) (x := x) (y := y)
+    have hyx' := Metric.infDist_le_infDist_add_dist (s := K) (x := y) (y := x)
+    have hc := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hyi
+    have had : dist y x = dist x y := dist_comm _ _
+    constructor <;> nlinarith
+  have hfiber (k : ℤ) : {i | i.1 = k ∧ i ∈ I}.Finite := by
+    let f : SardConvexDomain.WhitneyNetIndex K → E :=
+      SardConvexDomain.WhitneyNetIndex.center
+    have hinj : Set.InjOn f {i | i.1 = k ∧ i ∈ I} := by
+      intro i hi j hj hij
+      have hk : i.1 = j.1 := hi.1.trans hj.1.symm
+      cases i with
+      | mk ik ic =>
+        cases j with
+        | mk jk jc =>
+          dsimp at hk hij ⊢
+          subst jk
+          exact congrArg (Sigma.mk ik) (Subtype.ext hij)
+    apply Set.Finite.of_finite_image (f := f) _ hinj
+    apply (SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact K k
+      (isCompact_closedBall x (4 * (2 : ℝ) ^ (k + 1)))).subset
+    rintro c ⟨i, hi, rfl⟩
+    constructor
+    · change i.2.1 ∈ SardConvexDomain.whitneyStratumNet K k
+      rw [← hi.1]
+      exact i.2.2
+    · obtain ⟨y, hyx, hyi⟩ := hi.2
+      apply Metric.mem_closedBall.2
+      have ha : dist x y < Metric.infDist x K / 16 := by
+        simpa [r, dist_comm] using Metric.mem_ball.1 hyx
+      have hb : dist y i.center < Metric.infDist i.center K / 2 := Metric.mem_ball.1 hyi
+      have hs := hscale i hi.2
+      have hstr : Metric.infDist i.center K < (2 : ℝ) ^ (k + 1) := by
+        simpa only [hi.1] using
+          ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.2
+      have ht := dist_triangle x y i.center
+      have hp : 0 < (2 : ℝ) ^ (k + 1) := by positivity
+      rw [show dist (f i) x = dist x i.center by simp [f, dist_comm]]
+      nlinarith
+  refine ⟨Metric.ball x r, Metric.ball_mem_nhds x (by dsimp [r]; positivity), ?_⟩
+  change I.Finite
+  by_cases hI : I.Nonempty
+  · obtain ⟨i, hi⟩ := hI
+    have hfinite := (Set.finite_Icc (i.1 - 3) (i.1 + 3)).biUnion
+      (fun k _ => hfiber k)
+    apply hfinite.subset
+    intro j hj
+    have hsi := hscale i hi
+    have hsj := hscale j hj
+    have hik : (2 : ℝ) ^ i.1 ≤ Metric.infDist i.center K :=
+      ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.1
+    have hjk : Metric.infDist j.center K < (2 : ℝ) ^ (j.1 + 1) :=
+      ((SardConvexDomain.whitneyStratumNet_spec K j.1).1 j.2.2).2.2
+    have hjlow : (2 : ℝ) ^ j.1 ≤ Metric.infDist j.center K :=
+      ((SardConvexDomain.whitneyStratumNet_spec K j.1).1 j.2.2).2.1
+    have hiup : Metric.infDist i.center K < (2 : ℝ) ^ (i.1 + 1) :=
+      ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.2
+    rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hjk hiup
+    norm_num at hjk hiup
+    have hlo : i.1 - 3 ≤ j.1 := by
+      by_contra hn
+      have hp : (2 : ℝ) ^ (j.1 + 4) ≤ (2 : ℝ) ^ i.1 :=
+        zpow_le_zpow_right₀ (by norm_num) (by omega)
+      rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hp
+      norm_num at hp
+      have hpi : 0 < (2 : ℝ) ^ i.1 := by positivity
+      have hpj : 0 < (2 : ℝ) ^ j.1 := by positivity
+      nlinarith
+    have hhi : j.1 ≤ i.1 + 3 := by
+      by_contra hn
+      have hp : (2 : ℝ) ^ (i.1 + 4) ≤ (2 : ℝ) ^ j.1 :=
+        zpow_le_zpow_right₀ (by norm_num) (by omega)
+      rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hp
+      norm_num at hp
+      have hpi : 0 < (2 : ℝ) ^ i.1 := by positivity
+      have hpj : 0 < (2 : ℝ) ^ j.1 := by positivity
+      nlinarith
+    exact Set.mem_iUnion₂.2 ⟨j.1, ⟨hlo, hhi⟩, ⟨rfl, hj⟩⟩
+  · rw [Set.not_nonempty_iff_eq_empty.mp hI]
+    exact Set.finite_empty
 -- END SEAT AREA
 
 theorem exists_whitney_bump_family
