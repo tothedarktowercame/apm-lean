@@ -103,3 +103,7 @@ Backlog grade: hypothesis-carries-core, the integral was assumed an inner produc
 ## a00J06
 
 Admission of singular_at_one was revoked: it used tsum's junk value past the radius. New apm_a00j06 states and proves Pringsheim's theorem honestly for complex z, by zai-7 and lemma-1 (571 lines): Taylor expansion at c < 1, Tonelli in ENNReal, summability past 1, contradicting radius 1. New grade: faithful; the tsum is used only inside the unit disk, and singular_at_one is not called.
+
+## m97A05
+
+Backlog grade: narrower, the Fourier formula and the action of ∂x T were omitted. Repair by zai-6 and lemma-3 adds both (581 lines), with the Fourier clause on EuclideanSpace ℝ (Fin 2) through the coordinate isometry, since ℝ × ℝ has no inner product in Mathlib; (𝓕T)ψ = ∫ ψ(t, t) under Mathlib's normalisation, disclosed. New grade: stronger, as T is tempered rather than only in D′.
