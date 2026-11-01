@@ -5,3 +5,11 @@ Problems whose proofs were finished but whose statements the backlog-1024 gradin
 ## a92J03
 
 Backlog grade: narrower, linearity never stated. Repair by lemma-1 adds `apm_a92j03` (49 lines, nothing removed). New grade: faithful. Transform matches the printed e^{ixξ}. Clause (c) is implied by the general Tendsto on cocompact ℝ. Linearity is stated as additivity and ℂ-homogeneity. The map into C₀ is unbundled: continuity plus decay. Every clause assumes Integrable, so none leans on a junk integral value.
+
+## a94J05
+
+Backlog grade: narrower, the requested statement of Cauchy's integral formula was omitted. Repair by lemma-2 adds `apm_a94j05` (19 lines, nothing removed). New grade: faithful. The formula is stated on circles for a function analytic near the closed disk, with the 2πi constant; the circle form is accepted for "state the theorem". Both Liouville clauses hold for every entire function with the problem's own bounds.
+
+## a95A03
+
+Backlog grade: narrower, the convolution theorem did not assert membership in L². First repair by lemma-3 added `MemLp`. New grade: narrower, because `g` is real-valued and problem.md does not restrict the scalars (the aunk01 and a98J03 standard). The exponents 3/4 < p < 3/2 and the integral 2π² were recomputed by hand and agree. Sent back for complex-valued `g`.

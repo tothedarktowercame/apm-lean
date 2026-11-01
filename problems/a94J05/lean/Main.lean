@@ -105,3 +105,22 @@ theorem liouville_re_bounded_below
   exact ⟨f 0, fun z => is_const_of_deriv_eq_zero hf hf_deriv z 0⟩
 
 end ApmCanaries.A94J05
+
+/-- Cauchy's integral formula, together with the two forms of Liouville's
+theorem requested in the problem. -/
+theorem apm_a94j05 :
+    (∀ (f : ℂ → ℂ) (c : ℂ) (R : ℝ) (w : ℂ),
+      AnalyticOnNhd ℂ f (Metric.closedBall c R) → w ∈ Metric.ball c R →
+        (∮ z in C(c, R), f z / (z - w)) = 2 * Real.pi * Complex.I * f w) ∧
+    (∀ (f : ℂ → ℂ), Differentiable ℂ f → ∀ M : ℝ, (∀ z, ‖f z‖ ≤ M) →
+      ∃ a : ℂ, ∀ z, f z = a) ∧
+    (∀ (f : ℂ → ℂ), Differentiable ℂ f → ∀ C : ℝ, (∀ z, -C ≤ (f z).re) →
+      ∃ a : ℂ, ∀ z, f z = a) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro f c R w hf hw
+    simpa only [smul_eq_mul, div_eq_inv_mul] using
+      hf.differentiableOn.circleIntegral_sub_inv_smul hw
+  · intro f hf M hM
+    exact ApmCanaries.A94J05.liouville_bounded f hf M hM
+  · intro f hf C hC
+    exact ApmCanaries.A94J05.liouville_re_bounded_below f hf C hC
