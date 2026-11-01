@@ -1103,12 +1103,110 @@ theorem t99J02_fibre (z z' : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z :
 /-- The collar. Its large map is `e⁻¹ ∘ f ∘ ell ∘ stretch ∘ chi`, for `e`, `f` from
 `t95J03_torus_bridge_spec`; injective by `t99J02_torus_injOn`, and an embedding because the domain
 is compact and `Surface true 1` is Hausdorff. -/
+lemma t99J02_collar_exists_aux_ell_continuous : Continuous t99J02_ell := by
+  exact Complex.equivRealProdCLM.symm.continuous.comp
+    (((continuous_const.mul continuous_norm).add
+      (continuous_const.mul Complex.continuous_re)).prodMk
+        (Complex.continuous_im.div_const 2))
+
+lemma t99J02_collar_exists_aux_ell_mem (u : ℂ) (hu : ‖u‖ ≤ 1) :
+    t99J02_ell u ∈ Metric.closedBall (0 : ℂ) 1 := by
+  rw [mem_closedBall_zero_iff, t99J02_ell_norm]
+  have hre : u.re ≤ ‖u‖ := le_trans (le_abs_self _) (Complex.abs_re_le_norm u)
+  nlinarith
+
 theorem t99J02_collar_exists :
     ∃ c : BallCollar 2 (Surface true 1),
       ∀ u : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1,
         ∃ h : t99J02_ell (t99J02_chi u.1) ∈ Metric.closedBall (0 : ℂ) 1,
           c.smallMap u = surfaceQuotient true 1 ⟨t99J02_ell (t99J02_chi u.1), h⟩ := by
-  sorry
+  obtain ⟨e, he⟩ := t95J03_torus_bridge_spec
+  let large : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 2 →
+      Surface true 1 := fun u =>
+    e.symm (t95J03_torus_bridge_aux_f
+      (t99J02_ell (t99J02_stretch (t99J02_chi u.1))))
+  let small : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1 →
+      Surface true 1 := fun u =>
+    e.symm (t95J03_torus_bridge_aux_f (t99J02_ell (t99J02_chi u.1)))
+  have hlarge_cont : Continuous large := by
+    exact e.symm.continuous.comp
+      (t95J03_torus_bridge_aux_f_continuous.comp
+        (t99J02_collar_exists_aux_ell_continuous.comp
+          (t99J02_stretch_spec.1.comp
+            (t99J02_chi_spec.1.comp continuous_subtype_val))))
+  have hsmall_cont : Continuous small := by
+    exact e.symm.continuous.comp
+      (t95J03_torus_bridge_aux_f_continuous.comp
+        (t99J02_collar_exists_aux_ell_continuous.comp
+          (t99J02_chi_spec.1.comp continuous_subtype_val)))
+  have hlarge_inj : Function.Injective large := by
+    intro u v huv
+    have hf : t95J03_torus_bridge_aux_f
+        (t99J02_ell (t99J02_stretch (t99J02_chi u.1))) =
+        t95J03_torus_bridge_aux_f
+          (t99J02_ell (t99J02_stretch (t99J02_chi v.1))) :=
+      e.symm.injective huv
+    have hu2 : ‖t99J02_chi u.1‖ ≤ 2 := by
+      rw [t99J02_chi_spec.2.2.1]
+      exact mem_closedBall_zero_iff.mp u.2
+    have hv2 : ‖t99J02_chi v.1‖ ≤ 2 := by
+      rw [t99J02_chi_spec.2.2.1]
+      exact mem_closedBall_zero_iff.mp v.2
+    have hell := t99J02_torus_injOn _ _
+      (t99J02_stretch_spec.2.2.1 _ hu2)
+      (t99J02_stretch_spec.2.2.1 _ hv2) hf
+    have hs : t99J02_stretch (t99J02_chi u.1) =
+        t99J02_stretch (t99J02_chi v.1) := t99J02_ell_injective hell
+    apply Subtype.ext
+    apply t99J02_chi_spec.2.1
+    exact t99J02_stretch_spec.2.1
+      (mem_closedBall_zero_iff.mpr hu2) (mem_closedBall_zero_iff.mpr hv2) hs
+  have hsmall_inj : Function.Injective small := by
+    intro u v huv
+    have hf : t95J03_torus_bridge_aux_f (t99J02_ell (t99J02_chi u.1)) =
+        t95J03_torus_bridge_aux_f (t99J02_ell (t99J02_chi v.1)) :=
+      e.symm.injective huv
+    have hu1 : ‖t99J02_chi u.1‖ ≤ 1 := by
+      rw [t99J02_chi_spec.2.2.1]
+      exact mem_closedBall_zero_iff.mp u.2
+    have hv1 : ‖t99J02_chi v.1‖ ≤ 1 := by
+      rw [t99J02_chi_spec.2.2.1]
+      exact mem_closedBall_zero_iff.mp v.2
+    have hell := t99J02_torus_injOn _ _ (by linarith) (by linarith) hf
+    apply Subtype.ext
+    exact t99J02_chi_spec.2.1 (t99J02_ell_injective hell)
+  have hcompat : large ∘ unitToLarge 2 = small := by
+    funext u
+    simp only [large, small, Function.comp_apply, unitToLarge]
+    rw [t99J02_stretch_spec.2.2.2]
+    rw [t99J02_chi_spec.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2
+  have hlarge_embedding : Topology.IsEmbedding large := by
+    have hmid : Topology.IsEmbedding (e ∘ large) :=
+      ((e.continuous.comp hlarge_cont).isClosedEmbedding
+        (e.injective.comp hlarge_inj)).isEmbedding
+    simpa [Function.comp_def] using e.symm.isEmbedding.comp hmid
+  have hsmall_embedding : Topology.IsEmbedding small := by
+    have hmid : Topology.IsEmbedding (e ∘ small) :=
+      ((e.continuous.comp hsmall_cont).isClosedEmbedding
+        (e.injective.comp hsmall_inj)).isEmbedding
+    simpa [Function.comp_def] using e.symm.isEmbedding.comp hmid
+  let c : BallCollar 2 (Surface true 1) :=
+    { smallMap := small
+      largeMap := large
+      smallEmbedding := hsmall_embedding
+      largeEmbedding := hlarge_embedding
+      compatible := hcompat }
+  refine ⟨c, ?_⟩
+  intro u
+  have hu : ‖t99J02_chi u.1‖ ≤ 1 := by
+    rw [t99J02_chi_spec.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2
+  let h := t99J02_collar_exists_aux_ell_mem _ hu
+  refine ⟨h, ?_⟩
+  change e.symm (t95J03_torus_bridge_aux_f (t99J02_ell (t99J02_chi u.1))) = _
+  apply e.injective
+  rw [e.apply_symm_apply, he]
 
 /-- The same collar precomposed with the reflection. -/
 def t99J02_collar_reflect_aux_homeomorph (r : ℝ) :
@@ -1252,7 +1350,50 @@ theorem t99J02_upper_exists (c : BallCollar 2 (Surface true 1))
         c.smallMap u = surfaceQuotient true 1 ⟨t99J02_ell v, h⟩) :
     ∃ g : t99J02_Upper → c.Punctured, Continuous g ∧
       ∀ z, (g z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1) := by
-  sorry
+  let f : t99J02_Upper → Surface true 1 := fun z =>
+    surfaceQuotient true 1 (t99J02_phiDisk z.1)
+  have hfP : ∀ z, f z ∉ c.smallMap ''
+      {y : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1 |
+        dist y.1 0 < 1} := by
+    intro z hz
+    rcases hz with ⟨u, hu, heq⟩
+    rcases hc u hu with ⟨v, hv, hmem, huv⟩
+    have hq : surfaceQuotient true 1 (t99J02_phiDisk z.1) =
+        surfaceQuotient true 1 ⟨t99J02_ell v, hmem⟩ := by
+      rw [← huv]
+      exact heq.symm
+    have hrel : Relation.EqvGen (SurfaceRel true 1)
+        (t99J02_phiDisk z.1) ⟨t99J02_ell v, hmem⟩ := Quotient.exact hq
+    have hell_lt : ‖t99J02_ell v‖ < 1 := by
+      rw [t99J02_ell_norm]
+      have hre : v.re ≤ ‖v‖ :=
+        le_trans (le_abs_self v.re) (Complex.abs_re_le_norm v)
+      nlinarith
+    rcases t99J02_rel_boundary true 1 hrel with hsame | hbdry
+    · exact t99J02_phi_not_hole z.1 z.2 v hv
+        (congrArg Subtype.val hsame)
+    · exact (ne_of_lt hell_lt) hbdry.2
+  let g : t99J02_Upper → c.Punctured := fun z => ⟨f z, hfP z⟩
+  refine ⟨g, ?_, fun z => rfl⟩
+  apply Continuous.subtype_mk
+  apply (continuous_surfaceQuotient true 1).comp
+  apply Continuous.subtype_mk
+  dsimp [t99J02_phiDisk, t99J02_phi]
+  have hx : Continuous (fun z : t99J02_Upper => ((z.1 : ℂ).re)) :=
+    Complex.continuous_re.comp (continuous_subtype_val.comp continuous_subtype_val)
+  have hy : Continuous (fun z : t99J02_Upper => ((z.1 : ℂ).im)) :=
+    Complex.continuous_im.comp (continuous_subtype_val.comp continuous_subtype_val)
+  have hY : Continuous (fun z : t99J02_Upper => √(1 - (z.1 : ℂ).re ^ 2)) :=
+    Real.continuous_sqrt.comp (continuous_const.sub (hx.pow 2))
+  have hzeta : Continuous (fun z : t99J02_Upper =>
+      (((z.1 : ℂ).re : ℂ) + Complex.I *
+        ((((z.1 : ℂ).im + √(1 - (z.1 : ℂ).re ^ 2)) / 2 : ℝ) : ℂ))) :=
+    (Complex.continuous_ofReal.comp hx).add
+      (continuous_const.mul (Complex.continuous_ofReal.comp ((hy.add hY).div_const 2)))
+  convert hzeta.pow 2 using 1
+  funext z
+  apply congrArg (fun w : ℂ => w ^ 2)
+  apply Complex.ext <;> simp
 
 /-- That map is onto, given that `ell` of the open disk is inside the hole of `c`
 (`t99J02_phi_surj`, `surjective_surfaceQuotient`). -/
