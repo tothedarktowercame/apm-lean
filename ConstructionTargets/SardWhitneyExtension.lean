@@ -3419,7 +3419,44 @@ theorem closedConvex_critical_image_null
     (f : E → F) (hf : ContDiffOn ℝ ∞ f s) :
     mu (f '' {x | x ∈ s ∧
       ¬ Function.Surjective (fderivWithin ℝ f s x)}) = 0 := by
-  sorry
+  let G := EuclideanSpace ℝ (Fin (Module.finrank ℝ E))
+  have hdim : Module.finrank ℝ G = Module.finrank ℝ E := by simp [G]
+  let e : G ≃L[ℝ] E := (LinearEquiv.ofFinrankEq G E hdim).toContinuousLinearEquiv
+  let t : Set G := e ⁻¹' s
+  let g : G → F := f ∘ e
+  have ht : IsClosed t := hs.preimage e.continuous
+  have htc : Convex ℝ t := hsc.linear_preimage e.toLinearMap
+  have hti : (interior t).Nonempty := by
+    change (interior (e ⁻¹' s)).Nonempty
+    exact (hsi.preimage e.surjective).mono
+      (preimage_interior_subset_interior_preimage e.continuous)
+  have hgt : ContDiffOn ℝ ∞ g t :=
+    (e.contDiffOn_comp_iff (f := f) (s := s)).2 hf
+  have hnull := closedConvex_critical_image_null_innerProduct mu ht htc hti g hgt
+  have hut : UniqueDiffOn ℝ t := uniqueDiffOn_convex htc hti
+  have himage :
+      g '' {z | z ∈ t ∧ ¬ Function.Surjective (fderivWithin ℝ g t z)} =
+        f '' {x | x ∈ s ∧ ¬ Function.Surjective (fderivWithin ℝ f s x)} := by
+    apply Set.Subset.antisymm
+    · rintro y ⟨z, ⟨hz, hn⟩, rfl⟩
+      refine ⟨e z, ⟨hz, ?_⟩, rfl⟩
+      rw [e.comp_right_fderivWithin (hut z hz)] at hn
+      intro hsurr
+      apply hn
+      intro y
+      obtain ⟨x, hx⟩ := hsurr y
+      exact ⟨e.symm x, by simpa using hx⟩
+    · rintro y ⟨x, ⟨hx, hn⟩, rfl⟩
+      refine ⟨e.symm x, ⟨by simpa [t] using hx, ?_⟩, by simp [g]⟩
+      have hz : e.symm x ∈ t := by simpa [t] using hx
+      rw [e.comp_right_fderivWithin (hut _ hz)]
+      intro hsurr
+      apply hn
+      intro y
+      obtain ⟨z, hz'⟩ := hsurr y
+      exact ⟨e z, by simpa using hz'⟩
+  rw [← himage]
+  exact hnull
 
 /-- Local chartwise Sard estimate used by both manifold consumers.  In the source chart at
 `x`, choose `range I ∩ closedBall y r` inside the extended-chart target; it is closed convex
