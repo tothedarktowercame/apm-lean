@@ -1,5 +1,5 @@
 # Prelim defect
 
-Unrestricted uniqueness as printed is false. At ε = 0, x = 0 is a solution, and so is x(t) = b cos t for a nonzero root b of b = 2πJ₁(b). Such a root exists: 2πJ₁(b) ≈ πb > b for small b > 0, while 2πJ₁(b) < b for large b. Substituting x = b cos t and using the symmetries s ↦ -s and s ↦ π - s gives ∫ sin(t + s + b cos s) ds = 2πJ₁(b) cos t. For small ε ≠ 0 the claim needs the same restriction, since the nonzero branch persists.
+Unique solvability as printed is false, for every ε. x ≡ ε is a solution, since sin integrates to zero over a period. So is x(t) = ε + R cos(t + ε/2), with R a nonzero root of R = 2πJ₁(R), R ≈ 2.73: such a root exists since 2πJ₁(R) ≈ πR > R for small R > 0 and 2πJ₁(R) < R for large R.
 
-What it was trying to say is the contraction statement: for small ε there is a solution, unique among continuous solutions of small sup norm. The registered statement says exactly that, with δ and η chosen first.
+The printed smallness of ε does no work, which points to a misprint. The problem is a standard contraction exercise, and the equation x(t) = ε ∫ sin(t + s + x(s)) ds has a contraction with constant 2π|ε| on all continuous functions, so its solution is unique with no restriction on x, exactly as printed. That is the reformed statement. The registered theorem also keeps the printed equation with uniqueness among solutions of small sup norm, which is the strongest true version of the literal text.
