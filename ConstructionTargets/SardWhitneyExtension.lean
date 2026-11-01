@@ -870,7 +870,13 @@ This is the countable exhaustion needed to cover the relative critical image. -/
 theorem subset_iUnion_inter_ball_nat
     {E : Type*} [PseudoMetricSpace E] (s : Set E) (p : E) :
     s ⊆ ⋃ n : ℕ, s ∩ Metric.ball p (n + 1 : ℝ) := by
-  sorry
+  intro x hx
+  obtain ⟨n, hn⟩ := exists_nat_gt (dist x p)
+  rw [Set.mem_iUnion]
+  refine ⟨n, hx, ?_⟩
+  rw [Metric.mem_ball]
+  have hcast : (n : ℝ) < (n : ℝ) + 1 := by linarith
+  exact hn.trans hcast
 
 /-- On one compact exhaustion piece, the relative critical image is null.  Extend with
 order `d(d+1)+2`, rewrite the within derivative on the open-ball core, and apply
