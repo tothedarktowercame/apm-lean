@@ -315,7 +315,60 @@ theorem apm_t01J06_parametric_integral (g : ℝ × apm_t01J06_E3 → ℝ)
     ContDiff ℝ 1 (fun x ↦ ∫ t in (0 : ℝ)..1, g (t, x)) ∧
     ∀ x v, fderiv ℝ (fun y ↦ ∫ t in (0 : ℝ)..1, g (t, y)) x v =
       ∫ t in (0 : ℝ)..1, fderiv ℝ (fun y ↦ g (t, y)) x v := by
-  sorry
+  let D : apm_t01J06_E3 → ℝ → apm_t01J06_E3 →L[ℝ] ℝ := fun x t ↦
+    (fderiv ℝ g (t, x)).comp (ContinuousLinearMap.inr ℝ ℝ apm_t01J06_E3)
+  have hD_cont : Continuous (Function.uncurry D) := by
+    dsimp [D]
+    have hf : Continuous (fderiv ℝ g) := hg.continuous_fderiv (by simp)
+    fun_prop
+  have hD_eq (t : ℝ) (x : apm_t01J06_E3) :
+      D x t = fderiv ℝ (fun y ↦ g (t, y)) x := by
+    have ht : HasFDerivAt (fun y : apm_t01J06_E3 ↦ (t, y))
+        (ContinuousLinearMap.inr ℝ ℝ apm_t01J06_E3) x :=
+      hasFDerivAt_prodMk_right t x
+    exact ((hg.differentiable (by simp)).differentiableAt.hasFDerivAt.comp x ht).fderiv.symm
+  have hderiv_cont : Continuous (fun x ↦ ∫ t in (0 : ℝ)..1, D x t) :=
+    intervalIntegral.continuous_parametric_intervalIntegral_of_continuous'
+      hD_cont 0 1
+  have h_has (x : apm_t01J06_E3) : HasFDerivAt
+      (fun y ↦ ∫ t in (0 : ℝ)..1, g (t, y)) (∫ t in (0 : ℝ)..1, D x t) x := by
+    let K : Set (apm_t01J06_E3 × ℝ) := Metric.closedBall x 1 ×ˢ Set.Icc 0 1
+    have hK : IsCompact K := (isCompact_closedBall x 1).prod isCompact_Icc
+    obtain ⟨M, hM⟩ := hK.bddAbove_image hD_cont.norm.continuousOn
+    apply intervalIntegral.hasFDerivAt_integral_of_dominated_of_fderiv_le
+      (F := fun y t ↦ g (t, y)) (F' := D) (bound := fun _ ↦ M)
+      (Metric.closedBall_mem_nhds x zero_lt_one)
+    · filter_upwards with y
+      exact (hg.continuous.comp (continuous_id.prodMk continuous_const)).aestronglyMeasurable
+    · exact (hg.continuous.comp (continuous_id.prodMk continuous_const)).intervalIntegrable 0 1
+    · exact (hD_cont.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+    · filter_upwards with t ht
+      intro y hy
+      have ht0 : 0 ≤ t := by
+        norm_num at ht
+        exact ht.1.le
+      have ht1 : t ≤ 1 := by
+        norm_num at ht
+        exact ht.2
+      have hp : (y, t) ∈ K := ⟨hy, ht0, ht1⟩
+      have hi : ‖D y t‖ ∈ (fun p ↦ ‖Function.uncurry D p‖) '' K :=
+        ⟨(y, t), hp, rfl⟩
+      exact hM hi
+    · exact (continuous_const : Continuous (fun _ : ℝ ↦ M)).intervalIntegrable 0 1
+    · apply Filter.Eventually.of_forall
+      intro t ht y hy
+      change HasFDerivAt (fun z ↦ g (t, z)) (D y t) y
+      exact (hg.differentiable (by simp)).differentiableAt.hasFDerivAt.comp y
+        (hasFDerivAt_prodMk_right t y)
+  have hcd : ContDiff ℝ 1 (fun x ↦ ∫ t in (0 : ℝ)..1, g (t, x)) := by
+    rw [contDiff_one_iff_hasFDerivAt]
+    exact ⟨(fun x ↦ ∫ t in (0 : ℝ)..1, D x t), hderiv_cont, h_has⟩
+  refine ⟨hcd, fun x v ↦ ?_⟩
+  rw [(h_has x).fderiv]
+  have hDi : IntervalIntegrable (fun t ↦ D x t) volume 0 1 :=
+    (hD_cont.comp (continuous_const.prodMk continuous_id)).intervalIntegrable 0 1
+  rw [ContinuousLinearMap.intervalIntegral_apply hDi v]
+  simp_rw [hD_eq]
 
 /-- The integrand of the cone formula: `t • (F (t x) × x)`, component `k`. -/
 def apm_t01J06_coneField (F : Fin 3 → apm_t01J06_E3 → ℝ) (k : Fin 3)
@@ -451,6 +504,59 @@ lemma apm_t01J06_rotation_derivative_integral_aux_hasDeriv (k : Fin 3)
     · ext i
       fin_cases i <;> simp [a, b, c, apm_t01J06_rotField]
 
+/-- Seat: the derivative at every time. `R (t + s) x = R s (R t x)` by `_aux_rot_add`; compose
+`_aux_hasDeriv` at `R t x` with the shift `s ↦ s - t` (`HasDerivAt.comp_sub_const` or similar). -/
+theorem apm_t01J06_rotation_derivative_integral_aux_hasDeriv_all (k : Fin 3) (x : apm_t01J06_E3) (t : ℝ) :
+    HasDerivAt (fun s : ℝ ↦ apm_t01J06_rotation_derivative_integral_aux_rot k s x)
+      (apm_t01J06_rotField k (apm_t01J06_rotation_derivative_integral_aux_rot k t x)) t := by
+  have hshift : HasDerivAt (fun s : ℝ ↦ s - t) 1 t :=
+    (hasDerivAt_id t).sub_const t
+  have hbase : HasDerivAt
+      (fun u : ℝ ↦ apm_t01J06_rotation_derivative_integral_aux_rot k u
+        (apm_t01J06_rotation_derivative_integral_aux_rot k t x))
+      (apm_t01J06_rotField k (apm_t01J06_rotation_derivative_integral_aux_rot k t x))
+      ((fun s : ℝ ↦ s - t) t) := by
+    simpa using apm_t01J06_rotation_derivative_integral_aux_hasDeriv k
+      (apm_t01J06_rotation_derivative_integral_aux_rot k t x)
+  have h := hbase.scomp (h := fun s : ℝ ↦ s - t) t hshift
+  convert h using 1
+  funext s
+  simp only [Function.comp_apply]
+  rw [apm_t01J06_rotation_derivative_integral_aux_rot_add]
+  congr 2
+  ring
+  simp
+
+/-- Seat: rotation invariance of the integral. Build the isometry equivalence of the sphere from `_aux_rot`,
+`_aux_rot_neg`, `_aux_norm` and `_aux_isometry` (a `LinearIsometryEquiv` needs linearity, available coordinatewise), then
+`IntrinsicSphereSecondMoments.integral_isometry` for `μH[2]`, with `Measure.euclideanHausdorffMeasure_def` and
+`integral_smul_nnreal_measure` for `μHE[2]`; or use `Isometry.euclideanHausdorffMeasure_image` with the measure-preserving
+map. -/
+theorem apm_t01J06_rotation_derivative_integral_aux_const (k : Fin 3) (t : ℝ) (f : apm_t01J06_E3 → ℝ)
+    (hf : Continuous f) :
+    (∫ q : apm_t01J06_S2, f (apm_t01J06_rotation_derivative_integral_aux_rot k t q.1) ∂μHE[2]) =
+      ∫ q : apm_t01J06_S2, f q.1 ∂μHE[2] := by
+  let ee : apm_t01J06_S2 ≃ apm_t01J06_S2 := {
+      toFun := fun q ↦ (⟨apm_t01J06_rotation_derivative_integral_aux_rot k t q.1, by
+        simpa [Metric.mem_sphere, dist_eq_norm,
+          apm_t01J06_rotation_derivative_integral_aux_norm] using q.property⟩ : apm_t01J06_S2)
+      invFun := fun q ↦ (⟨apm_t01J06_rotation_derivative_integral_aux_rot k (-t) q.1, by
+        simpa [Metric.mem_sphere, dist_eq_norm,
+          apm_t01J06_rotation_derivative_integral_aux_norm] using q.property⟩ : apm_t01J06_S2)
+      left_inv := fun q ↦ Subtype.ext
+        (apm_t01J06_rotation_derivative_integral_aux_rot_neg k t q.1)
+      right_inv := fun q ↦ Subtype.ext (by simpa only [neg_neg] using
+        apm_t01J06_rotation_derivative_integral_aux_rot_neg k (-t) q.1) }
+  let e : apm_t01J06_S2 ≃ᵢ apm_t01J06_S2 := ⟨ee, by
+    intro q r
+    simp only [edist_dist]
+    congr 1
+    exact (apm_t01J06_rotation_derivative_integral_aux_isometry k t).dist_eq q.1 r.1⟩
+  let em := e.toHomeomorph.toMeasurableEquiv
+  have h : MeasurePreserving em μHE[2] μHE[2] :=
+    e.measurePreserving_euclideanHausdorffMeasure 2
+  exact h.integral_comp' (fun q : apm_t01J06_S2 ↦ f q.1)
+
 -- BEGIN SEAT AREA
 lemma apm_t01J06_rotation_derivative_integral_aux_key (k : Fin 3)
     (f : apm_t01J06_E3 → ℝ) (hf : ContDiff ℝ 1 f) :
@@ -484,12 +590,69 @@ theorem apm_t01J06_closed_extension_integral_zero
   sorry
 
 /-- LIBRARY: radial retraction to the sphere, followed by first projection. -/
+def apm_t01J06_exists_closed_product_extension_aux_scalar
+    (x : apm_t01J06_E3) : ℝ :=
+  (x 2 / ‖x‖ + 3) * (x 2 / ‖x‖)
+
+def apm_t01J06_exists_closed_product_extension_aux_volume :
+    apm_t01J06_E3 [⋀^Fin 3]→L[ℝ] ℝ where
+  toAlternatingMap := Matrix.detRowAlternating.compLinearMap
+    (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 ↦ ℝ)).toLinearMap
+  cont := by
+    change Continuous (fun v : Fin 3 → apm_t01J06_E3 ↦ Matrix.det (fun i j ↦ v i j))
+    fun_prop
+
+def apm_t01J06_exists_closed_product_extension_aux_solidAngle
+    (x : apm_t01J06_E3) : apm_t01J06_E3 [⋀^Fin 2]→L[ℝ] ℝ :=
+  (‖x‖ ^ 3)⁻¹ •
+    apm_t01J06_exists_closed_product_extension_aux_volume.curryLeft x
+
+def apm_t01J06_exists_closed_product_extension_aux_eta :
+    apm_t01J06_AmbientForm2 := fun x ↦
+  apm_t01J06_exists_closed_product_extension_aux_scalar x •
+    apm_t01J06_exists_closed_product_extension_aux_solidAngle x
+
+def apm_t01J06_exists_closed_product_extension_aux_Z :
+    apm_t01J06_AmbientProductForm2 := fun x ↦
+  (apm_t01J06_exists_closed_product_extension_aux_eta x.1).compContinuousLinearMap
+    (ContinuousLinearMap.fst ℝ apm_t01J06_E3 apm_t01J06_E2)
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed :
+    ContDiffOn ℝ (⊤ : ℕ∞) apm_t01J06_exists_closed_product_extension_aux_Z
+      {x : apm_t01J06_E5 | x.1 ≠ 0} ∧
+    ∀ x ∈ {x : apm_t01J06_E5 | x.1 ≠ 0},
+      extDeriv apm_t01J06_exists_closed_product_extension_aux_Z x = 0 := by
+  sorry
+
+lemma apm_t01J06_exists_closed_product_extension_aux_restrict
+    (omega : apm_t01J06_AmbientForm2) (homega : apm_t01J06_isOmega omega)
+    (alpha : apm_t01J06_SphereForm2)
+    (halpha : apm_t01J06_isInclusionPullback omega alpha)
+    (p : apm_t01J06_S1) :
+    apm_t01J06_isJPullback p
+      (apm_t01J06_productRestriction
+        apm_t01J06_exists_closed_product_extension_aux_Z) alpha := by
+  sorry
+
 theorem apm_t01J06_exists_closed_product_extension
     (omega : apm_t01J06_AmbientForm2) (homega : apm_t01J06_isOmega omega)
     (alpha : apm_t01J06_SphereForm2)
     (halpha : apm_t01J06_isInclusionPullback omega alpha)
     (p : apm_t01J06_S1) : apm_t01J06_IsClosedProductExtension p alpha := by
-  sorry
+  refine ⟨{x : apm_t01J06_E5 | x.1 ≠ 0},
+    apm_t01J06_exists_closed_product_extension_aux_Z, ?_, ?_,
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed.1,
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed.2, ?_⟩
+  · exact isOpen_ne.preimage continuous_fst
+  · intro qp
+    change (qp.1 : apm_t01J06_E3) ≠ 0
+    intro h
+    have hnorm : ‖(qp.1 : apm_t01J06_E3)‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_eq_norm] using qp.1.property
+    rw [h, norm_zero] at hnorm
+    norm_num at hnorm
+  · exact apm_t01J06_exists_closed_product_extension_aux_restrict
+      omega homega alpha halpha p
 
 theorem apm_t01j06
     (omega : apm_t01J06_AmbientForm2) (homega : apm_t01J06_isOmega omega)
