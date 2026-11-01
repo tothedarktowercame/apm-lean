@@ -320,7 +320,85 @@ theorem t99J02_stretch_spec :
       Set.InjOn t99J02_stretch (Metric.closedBall 0 2) ∧
       (∀ u, ‖u‖ ≤ 2 → ‖t99J02_stretch u‖ ≤ 5 / 4) ∧
       (∀ u, ‖u‖ ≤ 1 → t99J02_stretch u = u) := by
-  sorry
+  have hnorm : ∀ u : ℂ, ‖t99J02_stretch u‖ =
+      if ‖u‖ ≤ 1 then ‖u‖ else 1 + (‖u‖ - 1) / 4 := by
+    intro u
+    by_cases hu : ‖u‖ ≤ 1
+    · simp [t99J02_stretch, hu]
+    · have hu0 : ‖u‖ ≠ 0 := by
+        intro h
+        apply hu
+        rw [h]
+        norm_num
+      have hp : 0 ≤ 1 + (‖u‖ - 1) / 4 := by
+        have : 1 < ‖u‖ := lt_of_not_ge hu
+        linarith
+      rw [t99J02_stretch, if_neg hu, norm_mul, Complex.norm_real,
+        Real.norm_eq_abs, abs_of_nonneg (div_nonneg hp (norm_nonneg u)),
+        div_mul_cancel₀ _ hu0, if_neg hu]
+  have hcont : Continuous t99J02_stretch := by
+    change Continuous (fun u : ℂ =>
+      if ‖u‖ ≤ 1 then u else (((1 + (‖u‖ - 1) / 4) / ‖u‖ : ℝ) : ℂ) * u)
+    apply continuous_if_le continuous_norm continuous_const continuous_id.continuousOn
+    · refine ContinuousOn.mul ?_ continuous_id.continuousOn
+      intro u hu
+      apply ContinuousAt.continuousWithinAt
+      have hu0 : ‖u‖ ≠ 0 := by
+        have : 1 ≤ ‖u‖ := hu
+        positivity
+      have hs : ContinuousAt (fun x : ℂ => (1 + (‖x‖ - 1) / 4) / ‖x‖) u := by
+        exact (continuousAt_const.add
+          ((continuous_norm.continuousAt.sub continuousAt_const).div_const 4)).div
+            continuous_norm.continuousAt hu0
+      exact Complex.continuous_ofReal.continuousAt.comp hs
+    · intro u hu
+      simp only at hu
+      rw [hu]
+      norm_num
+  have hinj : Set.InjOn t99J02_stretch (Metric.closedBall 0 2) := by
+    intro u hu v hv huv
+    have hn : ‖t99J02_stretch u‖ = ‖t99J02_stretch v‖ := congrArg norm huv
+    rw [hnorm, hnorm] at hn
+    have huvnorm : ‖u‖ = ‖v‖ := by
+      by_cases hu1 : ‖u‖ ≤ 1 <;> by_cases hv1 : ‖v‖ ≤ 1
+      · simp [hu1, hv1] at hn
+        exact hn
+      · simp [hu1, hv1] at hn
+        have hvgt : 1 < ‖v‖ := lt_of_not_ge hv1
+        linarith
+      · simp [hu1, hv1] at hn
+        have hugt : 1 < ‖u‖ := lt_of_not_ge hu1
+        linarith
+      · simp [hu1, hv1] at hn
+        linarith
+    by_cases hu1 : ‖u‖ ≤ 1
+    · have hv1 : ‖v‖ ≤ 1 := by rwa [← huvnorm]
+      simpa [t99J02_stretch, hu1, hv1] using huv
+    · have hv1 : ¬ ‖v‖ ≤ 1 := by rwa [← huvnorm]
+      have hu0 : ‖u‖ ≠ 0 := by
+        intro h
+        apply hu1
+        rw [h]
+        norm_num
+      have hc : (((1 + (‖u‖ - 1) / 4) / ‖u‖ : ℝ) : ℂ) ≠ 0 := by
+        have hnum : 0 < 1 + (‖u‖ - 1) / 4 := by
+          have : 1 < ‖u‖ := lt_of_not_ge hu1
+          linarith
+        have hden : (0 : ℝ) < ‖u‖ := lt_trans (by norm_num) (lt_of_not_ge hu1)
+        exact_mod_cast (ne_of_gt (div_pos hnum hden))
+      simp only [t99J02_stretch, if_neg hu1, if_neg hv1] at huv
+      rw [← huvnorm] at huv
+      exact mul_left_cancel₀ hc huv
+  refine ⟨hcont, hinj, ?_, ?_⟩
+  · intro u hu
+    rw [hnorm]
+    by_cases hu1 : ‖u‖ ≤ 1
+    · simp [hu1]
+      linarith
+    · simp [hu1]
+      linarith
+  · intro u hu
+    simp [t99J02_stretch, hu]
 
 /-- `t99J02_chi` is a homeomorphism preserving norm, and conjugation is `t99J02_refl`. -/
 theorem t99J02_chi_spec :
