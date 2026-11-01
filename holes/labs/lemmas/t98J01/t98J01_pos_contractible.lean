@@ -1277,9 +1277,36 @@ theorem t98J01_ne_north_contractible :
 
 /-- Seat: `q ↦ q.1.2` is a homeomorphism onto the open interval `Set.Ioo (-1) 1` (inverse `y ↦ (√(1 - y²), y)`), which is convex and nonempty hence contractible (`Convex.contractibleSpace`). -/
 -- BEGIN SEAT AREA
+private def t98J01_pos_contractible_aux_homeomorph :
+    ↥({q | 0 < q.1.1} : Set T98J01.S1) ≃ₜ ↥(Set.Ioo (-1 : ℝ) 1) where
+  toFun q := ⟨q.1.1.2, by
+    have hcircle : q.1.1.1 ^ 2 + q.1.1.2 ^ 2 = 1 := q.1.2
+    have hx : 0 < q.1.1.1 := q.2
+    constructor <;> nlinarith [sq_pos_of_pos hx]⟩
+  invFun y := ⟨⟨(Real.sqrt (1 - y.1 ^ 2), y.1), by
+    have hnonneg : 0 ≤ 1 - y.1 ^ 2 := by nlinarith [y.2.1, y.2.2]
+    rw [Real.sq_sqrt hnonneg]
+    ring
+  ⟩, by
+    exact Real.sqrt_pos.2 (by nlinarith [y.2.1, y.2.2])⟩
+  left_inv q := by
+    apply Subtype.ext
+    apply Subtype.ext
+    ext
+    · have hcircle : q.1.1.1 ^ 2 + q.1.1.2 ^ 2 = 1 := q.1.2
+      change Real.sqrt (1 - q.1.1.2 ^ 2) = q.1.1.1
+      rw [show 1 - q.1.1.2 ^ 2 = q.1.1.1 ^ 2 by linarith,
+        Real.sqrt_sq_eq_abs, abs_of_pos q.2]
+    · rfl
+  right_inv y := rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
 theorem t98J01_pos_contractible :
     ContractibleSpace ↥({q | 0 < q.1.1} : Set T98J01.S1) := by
-  sorry
+  letI : ContractibleSpace ↥(Set.Ioo (-1 : ℝ) 1) :=
+    (convex_Ioo (-1 : ℝ) 1).contractibleSpace ⟨0, by norm_num⟩
+  exact t98J01_pos_contractible_aux_homeomorph.contractibleSpace
 -- END SEAT AREA
 
 /-- Seat: as `t98J01_pos_contractible` with `y ↦ (-√(1 - y²), y)`, or conjugate by `T98J01.reflection`. -/
