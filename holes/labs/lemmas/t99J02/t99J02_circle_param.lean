@@ -120,7 +120,17 @@ def t99J02_stretch (u : ℂ) : ℂ :=
 
 /-- `‖ell u‖ = 5/8 ‖u‖ + 3/8 Re u`. Square both sides; `‖u‖² = re² + im²`. -/
 theorem t99J02_ell_norm (u : ℂ) : ‖t99J02_ell u‖ = 5 / 8 * ‖u‖ + 3 / 8 * u.re := by
-  sorry
+  have hu_sq : ‖u‖ ^ 2 = u.re ^ 2 + u.im ^ 2 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]
+    ring
+  have hre : |u.re| ≤ ‖u‖ := Complex.abs_re_le_norm u
+  have hrhs : 0 ≤ 5 / 8 * ‖u‖ + 3 / 8 * u.re := by
+    have hre' : -‖u‖ ≤ u.re := by linarith [neg_abs_le u.re]
+    nlinarith [norm_nonneg u]
+  have hsq : ‖t99J02_ell u‖ ^ 2 = (5 / 8 * ‖u‖ + 3 / 8 * u.re) ^ 2 := by
+    rw [Complex.sq_norm, t99J02_ell, Complex.normSq_mk]
+    nlinarith
+  nlinarith [norm_nonneg (t99J02_ell u)]
 
 /-- `ell` is injective on all of `ℂ`. The imaginary part gives `Im u`; then `a ↦ 3/8 √(a²+b²) + 5/8 a`
 is strictly increasing. -/
@@ -172,7 +182,26 @@ theorem t99J02_phi_injOn (z z' : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ 
 /-- `phi` reaches the unit circle only from the unit circle: `‖ζ‖² = x² + ((y+Y)/2)²`. -/
 theorem t99J02_phi_norm (z : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im)
     (h : ‖t99J02_phi (z : ℂ)‖ = 1) : ‖(z : ℂ)‖ = 1 := by
-  sorry
+  have hz_le : ‖(z : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp z.2
+  set x := (z : ℂ).re
+  set y := (z : ℂ).im
+  have hxy : x ^ 2 + y ^ 2 ≤ 1 := by
+    have hn := Complex.sq_norm (z : ℂ)
+    rw [Complex.normSq_apply] at hn
+    nlinarith [norm_nonneg (z : ℂ)]
+  have hx : 0 ≤ 1 - x ^ 2 := by nlinarith [sq_nonneg y]
+  set Y := √(1 - x ^ 2)
+  have hY : 0 ≤ Y := Real.sqrt_nonneg _
+  have hY2 : Y ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx
+  have heq : x ^ 2 + ((y + Y) / 2) ^ 2 = 1 := by
+    rw [t99J02_phi, norm_pow, Complex.sq_norm, Complex.normSq_mk] at h
+    nlinarith
+  have hyY : y = Y := by
+    nlinarith [hz, hY]
+  have hnormsq : ‖(z : ℂ)‖ ^ 2 = 1 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]
+    nlinarith
+  nlinarith [norm_nonneg (z : ℂ)]
 
 /-- The stretch is continuous, injective on radius `2`, and lands in radius `5/4`. -/
 theorem t99J02_stretch_spec :
