@@ -1366,7 +1366,73 @@ theorem t99J02_chord_holds
 /-- Pasting along the chord. -/
 theorem t99J02_G_continuous (hg₁ : Continuous g₁) (hg₂ : Continuous g₂)
     (hch : t99J02_Chord g₁ g₂) : Continuous (t99J02_G g₁ g₂) := by
-  sorry
+  let U : Set ConstructionTargets.Surfaces.Disk := {z | 0 ≤ (z : ℂ).im}
+  let L : Set ConstructionTargets.Surfaces.Disk := {z | (z : ℂ).im ≤ 0}
+  have him : Continuous (fun z : ConstructionTargets.Surfaces.Disk => (z : ℂ).im) :=
+    Complex.continuous_im.comp continuous_subtype_val
+  have hU : IsClosed U := by
+    exact isClosed_le continuous_const him
+  have hL : IsClosed L := by
+    exact isClosed_le him continuous_const
+  have hcU : ContinuousOn (t99J02_G g₁ g₂) U := by
+    rw [continuousOn_iff_continuous_restrict]
+    have hleft : Continuous (fun z : U =>
+        (Sum.inl (g₁ ⟨z.1, by
+          have hz := z.2
+          change 0 ≤ (z.1 : ℂ).im at hz
+          exact hz⟩) : c₁.Punctured ⊕ c₂.Punctured)) :=
+      continuous_inl.comp (hg₁.comp (continuous_subtype_val.subtype_mk _))
+    have hc : Continuous (fun z : U =>
+        t99J02_mk c₁ c₂ (Sum.inl
+          (g₁ ⟨z.1, by
+            have hz := z.2
+            change 0 ≤ (z.1 : ℂ).im at hz
+            exact hz⟩))) :=
+      (t99J02_continuous_mk (c₁ := c₁) (c₂ := c₂)).comp hleft
+    convert hc using 1
+    funext z
+    change t99J02_G g₁ g₂ z.1 = _
+    rw [t99J02_G, dif_pos]
+  have hneg : Continuous t99J02_neg := by
+    exact (continuous_neg.comp continuous_subtype_val).subtype_mk _
+  have hcL : ContinuousOn (t99J02_G g₁ g₂) L := by
+    rw [continuousOn_iff_continuous_restrict]
+    have htoUpper : Continuous (fun z : L =>
+        (⟨t99J02_neg z.1, by
+          have hz := z.2
+          change (z.1 : ℂ).im ≤ 0 at hz
+          simpa [t99J02_neg] using hz⟩ : t99J02_Upper)) :=
+      (hneg.comp continuous_subtype_val).subtype_mk _
+    have hright : Continuous (fun z : L =>
+        (Sum.inr (g₂ ⟨t99J02_neg z.1, by
+          have hz := z.2
+          change (z.1 : ℂ).im ≤ 0 at hz
+          simpa [t99J02_neg] using hz⟩) : c₁.Punctured ⊕ c₂.Punctured)) :=
+      continuous_inr.comp (hg₂.comp htoUpper)
+    have hc : Continuous (fun z : L =>
+        t99J02_mk c₁ c₂ (Sum.inr
+          (g₂ ⟨t99J02_neg z.1, by
+            have hz := z.2
+            change (z.1 : ℂ).im ≤ 0 at hz
+            simpa [t99J02_neg] using hz⟩))) :=
+      (t99J02_continuous_mk (c₁ := c₁) (c₂ := c₂)).comp hright
+    convert hc using 1
+    funext z
+    change t99J02_G g₁ g₂ z.1 = _
+    rw [t99J02_G]
+    by_cases hz : 0 ≤ (z.1 : ℂ).im
+    · rw [dif_pos hz]
+      have hzl := z.2
+      change (z.1 : ℂ).im ≤ 0 at hzl
+      exact hch z.1 (le_antisymm hzl hz)
+    · rw [dif_neg hz]
+  rw [← continuousOn_univ]
+  have hul : U ∪ L = Set.univ := by
+    ext z
+    simp only [U, L, Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    exact le_total 0 (z : ℂ).im
+  rw [← hul]
+  exact hcU.union_of_isClosed hcL hU hL
 
 /-- On the closed lower half `G` is `g₂ ∘ neg`, including on the chord. -/
 theorem t99J02_G_lower (hch : t99J02_Chord g₁ g₂) (z : ConstructionTargets.Surfaces.Disk) (h : (z : ℂ).im ≤ 0) :
