@@ -762,10 +762,127 @@ theorem t99J02_chi_spec :
 differ by integers of size at most `15/16`, hence are equal, and the chart is injective
 (`klein_cut_chartInv_chart`). -/
 -- BEGIN SEAT AREA
+lemma t99J02_torus_injOn_aux_bounds (u : ℂ) (hu : ‖u‖ ≤ 5 / 4) :
+    let w := KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)
+    (-5 / 16 ≤ (w.re + w.im) / 2 ∧ (w.re + w.im) / 2 ≤ 5 / 8 ∧
+      -5 / 16 ≤ (w.re - w.im) / 2 ∧ (w.re - w.im) / 2 ≤ 5 / 8) := by
+  dsimp only
+  have hur : |u.re| ≤ ‖u‖ := Complex.abs_re_le_norm u
+  have hui : |u.im| ≤ ‖u‖ := Complex.abs_im_le_norm u
+  have hsq : ‖u‖ ^ 2 = u.re ^ 2 + u.im ^ 2 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]
+    ring
+  have hp : 0 ≤ 7 * ‖u‖ + 5 * u.re + 4 * u.im := by
+    have hlin : (5 * u.re + 4 * u.im) ^ 2 ≤ 41 * ‖u‖ ^ 2 := by
+      rw [hsq]
+      nlinarith [sq_nonneg (4 * u.re - 5 * u.im)]
+    nlinarith [norm_nonneg u]
+  have hm : 0 ≤ 7 * ‖u‖ + 5 * u.re - 4 * u.im := by
+    have hlin : (5 * u.re - 4 * u.im) ^ 2 ≤ 41 * ‖u‖ ^ 2 := by
+      rw [hsq]
+      nlinarith [sq_nonneg (4 * u.re + 5 * u.im)]
+    nlinarith [norm_nonneg u]
+  have hellnorm : ‖t99J02_ell u‖ ≤ 5 / 4 := by
+    rw [t99J02_ell_norm]
+    have : u.re ≤ ‖u‖ := le_trans (le_abs_self _) hur
+    nlinarith
+  by_cases he : t99J02_ell u = 0
+  · simp [he, KleinSquareDiskCutAndPaste.klein_cut_chart]
+    norm_num
+  · have hlpos : 0 < KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u) :=
+      KleinSquareDiskCutAndPaste.klein_cut_l1_pos he
+    have hc0 : 0 ≤ ‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u) :=
+      div_nonneg (norm_nonneg _) hlpos.le
+    have hc1 : ‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u) ≤ 1 := by
+      apply (div_le_one hlpos).2
+      simpa [KleinSquareDiskCutAndPaste.klein_cut_l1] using
+        Complex.norm_le_abs_re_add_abs_im (t99J02_ell u)
+    rw [KleinSquareDiskCutAndPaste.klein_cut_chart, if_neg he]
+    simp only [Complex.mul_re, Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
+      zero_mul, sub_zero]
+    have habsp : |((‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+        (t99J02_ell u).re)| +
+        |((‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+        (t99J02_ell u).im)| ≤ 5 / 4 := by
+      simp only [abs_mul, abs_of_nonneg hc0]
+      rw [← mul_add, ← KleinSquareDiskCutAndPaste.klein_cut_l1,
+        div_mul_cancel₀ _ hlpos.ne']
+      exact hellnorm
+    have hupperp :
+        (‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+          ((t99J02_ell u).re + (t99J02_ell u).im) ≤ 5 / 4 := by
+      rw [mul_add]
+      exact le_trans (add_le_add (le_abs_self _) (le_abs_self _)) habsp
+    have hupperm :
+        (‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+          ((t99J02_ell u).re - (t99J02_ell u).im) ≤ 5 / 4 := by
+      rw [mul_sub]
+      exact le_trans (add_le_add (le_abs_self _) (neg_le_abs _)) habsp
+    have hlowerp : -5 / 8 ≤ (t99J02_ell u).re + (t99J02_ell u).im := by
+      simp only [t99J02_ell]
+      nlinarith
+    have hlowerm : -5 / 8 ≤ (t99J02_ell u).re - (t99J02_ell u).im := by
+      simp only [t99J02_ell]
+      nlinarith
+    have hlowerp' : -5 / 8 ≤
+        (‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+          ((t99J02_ell u).re + (t99J02_ell u).im) := by
+      by_cases hneg : 0 ≤ (t99J02_ell u).re + (t99J02_ell u).im
+      · nlinarith [hc0]
+      · nlinarith [hc0, hc1, hlowerp]
+    have hlowerm' : -5 / 8 ≤
+        (‖t99J02_ell u‖ / KleinSquareDiskCutAndPaste.klein_cut_l1 (t99J02_ell u)) *
+          ((t99J02_ell u).re - (t99J02_ell u).im) := by
+      by_cases hneg : 0 ≤ (t99J02_ell u).re - (t99J02_ell u).im
+      · nlinarith [hc0]
+      · nlinarith [hc0, hc1, hlowerm]
+    exact ⟨by nlinarith, by nlinarith, by nlinarith, by nlinarith⟩
+
 theorem t99J02_torus_injOn (u v : ℂ) (hu : ‖u‖ ≤ 5 / 4) (hv : ‖v‖ ≤ 5 / 4)
     (h : t95J03_torus_bridge_aux_f (t99J02_ell u) = t95J03_torus_bridge_aux_f (t99J02_ell v)) :
     t99J02_ell u = t99J02_ell v := by
-  sorry
+  have hb_u := t99J02_torus_injOn_aux_bounds u hu
+  have hb_v := t99J02_torus_injOn_aux_bounds v hv
+  have h1 := congrArg Prod.fst h
+  have h2 := congrArg Prod.snd h
+  simp only [t95J03_torus_bridge_aux_f] at h1 h2
+  obtain ⟨n, hn⟩ := t95J03_torus_bridge_aux_int_of_coe_eq h1
+  obtain ⟨m, hm⟩ := t95J03_torus_bridge_aux_int_of_coe_eq h2
+  have hn0 : n = 0 := by
+    have hlo : (-1 : ℝ) < n := by nlinarith [hb_u.1, hb_v.2.1]
+    have hhi : (n : ℝ) < 1 := by nlinarith [hb_u.2.1, hb_v.1]
+    have hlo' : (-1 : ℤ) < n := by exact_mod_cast hlo
+    have hhi' : n < (1 : ℤ) := by exact_mod_cast hhi
+    omega
+  have hm0 : m = 0 := by
+    have hlo : (-1 : ℝ) < m := by nlinarith [hb_u.2.2.1, hb_v.2.2.2]
+    have hhi : (m : ℝ) < 1 := by nlinarith [hb_u.2.2.2, hb_v.2.2.1]
+    have hlo' : (-1 : ℤ) < m := by exact_mod_cast hlo
+    have hhi' : m < (1 : ℤ) := by exact_mod_cast hhi
+    omega
+  have ha :
+      ((KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)).re +
+        (KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)).im) / 2 =
+      ((KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v)).re +
+        (KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v)).im) / 2 := by
+    rw [hn0] at hn
+    norm_num at hn
+    exact sub_eq_zero.mp hn
+  have hb :
+      ((KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)).re -
+        (KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u)).im) / 2 =
+      ((KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v)).re -
+        (KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v)).im) / 2 := by
+    rw [hm0] at hm
+    norm_num at hm
+    exact sub_eq_zero.mp hm
+  have hchart : KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell u) =
+      KleinSquareDiskCutAndPaste.klein_cut_chart (t99J02_ell v) := by
+    apply Complex.ext
+    · nlinarith
+    · nlinarith
+  rw [← KleinSquareDiskCutAndPaste.klein_cut_chartInv_chart (t99J02_ell u),
+    ← KleinSquareDiskCutAndPaste.klein_cut_chartInv_chart (t99J02_ell v), hchart]
 -- END SEAT AREA
 
 /-! ### Layer 0: quotient facts -/
