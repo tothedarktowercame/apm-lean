@@ -1799,7 +1799,34 @@ theorem apm_t97A03_classify_aux_oneCircleMonodromy
       apm_t97A03_secondLiteralTransport p hp ≠ Equiv.refl _)
     (hnotBoth : ¬ apm_t97A03_TwoCircleMonodromy p hp) :
     apm_t97A03_OneCircleMonodromy p hp := by
-  sorry
+  obtain ⟨label⟩ := apm_t97A03_fiber_equiv_fin_two p hdegree
+    (apm_t97A03_baseCircle A B A)
+  let first := ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+    (apm_t97A03_firstLiteralTransport p hp)
+  let second := ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+    (apm_t97A03_secondLiteralTransport p hp)
+  have hnontrivial' : first ≠ Equiv.refl (Fin 2) ∨
+      second ≠ Equiv.refl (Fin 2) := by
+    rcases hnontrivial with hfirst | hsecond
+    · exact Or.inl
+        ((ConstructionTargets.t97A03Closure.labeledFiberMonodromy_ne_refl_iff
+          label (apm_t97A03_firstLiteralTransport p hp)).2 hfirst)
+    · exact Or.inr
+        ((ConstructionTargets.t97A03Closure.labeledFiberMonodromy_ne_refl_iff
+          label (apm_t97A03_secondLiteralTransport p hp)).2 hsecond)
+  rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap first with
+    hfirst | hfirst <;>
+    rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap second with
+      hsecond | hsecond
+  · exact False.elim (hnontrivial'.elim (fun h ↦ h hfirst) (fun h ↦ h hsecond))
+  · refine ⟨label, true, ?_⟩
+    simp only [if_pos]
+    exact Prod.ext hsecond hfirst
+  · refine ⟨label, false, ?_⟩
+    exact Prod.ext hfirst hsecond
+  · exfalso
+    apply hnotBoth
+    exact ⟨label, hfirst, hsecond⟩
 
 /-- In the both-swap case, trivialize the sphere restriction into its two
 sheets, lift the two fixed arcs, and descend the sheetwise maps through the
@@ -1932,7 +1959,26 @@ theorem apm_t97A03_invariants_aux_transport
     Nonempty (apm_t97A03_Homology Y 2 ≅ ModuleCat.of ℤ (Fin 2 → ℤ)) ∧
     (∀ n, 3 ≤ n → Limits.IsZero (apm_t97A03_Homology Y n)) ∧
     Nonempty (FundamentalGroup Y y ≃* FreeGroup (Fin 3)) := by
-  sorry
+  obtain ⟨h0⟩ := h0
+  obtain ⟨h1⟩ := h1
+  obtain ⟨h2⟩ := h2
+  let homologyTransport (n : ℕ) :
+      apm_t97A03_Homology Y n ≅ apm_t97A03_Homology apm_t97A03_modelWedge n :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of Y) n (apm_t97A03_Homology apm_t97A03_modelWedge n)
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        e n ≪≫
+       (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of apm_t97A03_modelWedge) n).symm)
+  refine ⟨⟨homologyTransport 0 ≪≫ h0⟩,
+    ⟨homologyTransport 1 ≪≫ h1⟩,
+    ⟨homologyTransport 2 ≪≫ h2⟩, ?_, ?_⟩
+  · intro n hn
+    exact Limits.IsZero.of_iso (hhigh n hn) (homologyTransport n)
+  · obtain ⟨hpi⟩ := hpi (e.toFun y)
+    let epi := (FundamentalGroupoidFunctor.equivOfHomotopyEquiv e).fullyFaithfulFunctor.mulEquivEnd
+      (FundamentalGroupoid.mk y)
+    exact ⟨epi.trans hpi⟩
 
 /-- Why this unblocks `apm_t97a03`: this is the missing global monodromy
 classification of connected two-sheeted covers of the concrete base.  It
