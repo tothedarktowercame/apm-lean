@@ -307,7 +307,72 @@ theorem t99J02_phi_not_hole (z : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ 
 theorem t99J02_phi_surj (w : ConstructionTargets.Surfaces.Disk)
     (hw : ∀ u : ℂ, ‖u‖ < 1 → (w : ℂ) ≠ t99J02_ell u) :
     ∃ z : ConstructionTargets.Surfaces.Disk, 0 ≤ (z : ℂ).im ∧ t99J02_phi (z : ℂ) = (w : ℂ) := by
-  sorry
+  obtain ⟨v, hv⟩ := IsAlgClosed.exists_pow_nat_eq (w : ℂ) (n := 2) (by norm_num)
+  let ζ : ℂ := if 0 ≤ v.im then v else -v
+  have hζim : 0 ≤ ζ.im := by
+    dsimp [ζ]
+    split_ifs with h
+    · exact h
+    · simp only [Complex.neg_im]
+      linarith
+  have hζsq : ζ ^ 2 = (w : ℂ) := by
+    dsimp [ζ]
+    split_ifs
+    · exact hv
+    · simpa using hv
+  have hζnorm : ‖ζ‖ ≤ 1 := by
+    have hw_norm : ‖(w : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp w.2
+    have hpow : ‖ζ‖ ^ 2 = ‖(w : ℂ)‖ := by
+      rw [← hζsq, norm_pow]
+    nlinarith [norm_nonneg ζ]
+  set x : ℝ := ζ.re
+  set y : ℝ := ζ.im
+  have hy : 0 ≤ y := hζim
+  have hxy : x ^ 2 + y ^ 2 ≤ 1 := by
+    have hn := Complex.sq_norm ζ
+    rw [Complex.normSq_apply] at hn
+    nlinarith [norm_nonneg ζ]
+  have hx : 0 ≤ 1 - x ^ 2 := by nlinarith [sq_nonneg y]
+  set Y : ℝ := √(1 - x ^ 2)
+  have hY : 0 ≤ Y := Real.sqrt_nonneg _
+  have hY2 : Y ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx
+  have hyY : y ≤ Y := by nlinarith
+  have hhalf : Y / 2 ≤ y := by
+    by_contra h
+    have hylt : y < Y / 2 := lt_of_not_ge h
+    let u : ℂ := (⟨x, 2 * y⟩ : ℂ) ^ 2
+    have hu : ‖u‖ < 1 := by
+      dsimp [u]
+      rw [norm_pow, Complex.sq_norm, Complex.normSq_mk]
+      nlinarith
+    have hell : t99J02_ell u = ζ ^ 2 := by
+      apply Complex.ext
+      · rw [t99J02_ell]
+        have hunorm : ‖u‖ = x ^ 2 + 4 * y ^ 2 := by
+          dsimp [u]
+          rw [norm_pow, Complex.sq_norm, Complex.normSq_mk]
+          nlinarith [sq_nonneg x, sq_nonneg y]
+        rw [hunorm]
+        simp [u, pow_two, Complex.mul_re]
+        ring
+      · rw [t99J02_ell]
+        simp [u, pow_two, Complex.mul_im]
+        ring
+    exact hw u hu (by rw [← hζsq, hell])
+  let zc : ℂ := ⟨x, 2 * y - Y⟩
+  have hzmem : zc ∈ Metric.closedBall (0 : ℂ) 1 := by
+    rw [mem_closedBall_zero_iff, Complex.norm_def, Real.sqrt_le_one]
+    · simp only [Complex.normSq_apply, zc]
+      nlinarith
+  let z : ConstructionTargets.Surfaces.Disk := ⟨zc, hzmem⟩
+  refine ⟨z, ?_, ?_⟩
+  · change 0 ≤ 2 * y - Y
+    linarith
+  · rw [t99J02_phi]
+    change (⟨x, ((2 * y - Y) + √(1 - x ^ 2)) / 2⟩ : ℂ) ^ 2 = (w : ℂ)
+    rw [show √(1 - x ^ 2) = Y by rfl]
+    convert hζsq using 1
+    apply Complex.ext <;> simp [x, y]
 -- END SEAT AREA
 
 /-- `phi` is injective on the upper half except that `1` and `-1` both go to `1`. Since `ζ` has
