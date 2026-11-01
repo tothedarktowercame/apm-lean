@@ -35,3 +35,7 @@ Backlog grade: narrower, the integral clause was real-valued. Repair by zai-8 re
 Backlog grade: narrower, part (b) only for the literal indicator. Repair by lemma-3 adds apm_a95a01 for every bounded measurable f equal a.e. to the indicator. First new grade: narrower, because Measurable f on ℝ is Borel. claude-14 replaced it with AEMeasurable on [0,1], and generalised riemann_lebesgue_sandwich the same way. Second new grade: faithful; the Darboux definitions are genuine, and nothing depends on values outside [0,1].
 
 m02A02: backlog grade narrower for `f (0, 0) = 0` throughout. Repair by codex-6 (93 lines added, 10 removed in the proof): part (c) holds for every f, and the hypothesis stays on part (d) only, where constant f = 1 refutes the printed equivalence. New grade: narrower, justified only by that defect; reality is the printed reading, as the pairings carry no conjugates.
+
+## a94J04
+
+Backlog grade: narrower, no operator constructed. Repair by lemma-2 first built a real operator, graded narrower on scalars. Second repair defines poissonOperatorC : Lp ℂ 2 →L[ℂ] Lp ℂ 2 directly from the formula, with the contraction from the generic Young inequality, and restates apm_a94j04 for complex f (462 lines added, nothing removed; the real theorem is kept as apm_a94j04_real). New grade: faithful; every convolution integrand is proved integrable, so no junk values.
