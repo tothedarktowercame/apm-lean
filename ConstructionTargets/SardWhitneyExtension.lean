@@ -653,11 +653,115 @@ theorem iteratedFDeriv_eq_zero_of_support_subset_ball
 /-- Normalising the bump family gives a partition of unity with derivative bounds at every
 order needed by the extension.  Combine the reciprocal leaf with the uniform-overlap leaf,
 then apply local finite-sum product estimates and comparability of incident scales. -/
+theorem exists_whitneySmoothPartition_aux_deriv_bound
+    (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {K : Set E}
+    (psi : SardConvexDomain.WhitneyNetIndex K → E → ℝ)
+    (C : ℕ → ℝ)
+    (hsmooth : ∀ i, ContDiff ℝ ∞ (psi i))
+    (hsupp : ∀ i, Function.support (psi i) ⊆
+      Metric.ball i.center (Metric.infDist i.center K / 2))
+    (hlocal : ∀ x ∉ K, ∃ U ∈ nhds x,
+      {i | (U ∩ Function.support (psi i)).Nonempty}.Finite)
+    (hC : ∀ k i x, ‖iteratedFDeriv ℝ k (psi i) x‖ ≤
+      C k * (Metric.infDist i.center K)⁻¹ ^ k)
+    (hpositive : ∀ x ∉ K, 1 ≤ ∑' i, psi i x)
+    (hoverlap : ∃ N : ℕ, ∀ x : E,
+      Set.ncard {i : SardConvexDomain.WhitneyNetIndex K |
+        x ∈ Metric.ball i.center (Metric.infDist i.center K / 2)} ≤ N) :
+    ∃ D : ℕ → ℝ, (∀ k, 0 ≤ D k) ∧ ∀ k i x,
+      ‖iteratedFDeriv ℝ k
+        (fun y => psi i y * (∑' j, psi j y)⁻¹) x‖ ≤
+          D k * (Metric.infDist i.center K)⁻¹ ^ k := by
+  sorry
+
 theorem exists_whitneySmoothPartition
     (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {K : Set E} (hK : IsClosed K) (hKn : K.Nonempty) :
     Nonempty (WhitneySmoothPartition E K) := by
-  sorry
+  obtain ⟨psi, hsmooth, hbnd, hone, hsupp, hlocal, C, hC⟩ :=
+    exists_whitney_bump_family E hK hKn
+  obtain ⟨N, hN⟩ := whitney_bounded_overlap E hK hKn
+  let S : E → ℝ := fun x => ∑' i, psi i x
+  let phi : SardConvexDomain.WhitneyNetIndex K → E → ℝ := fun i x => psi i x * (S x)⁻¹
+  have hpsiK : ∀ i, ∀ x ∈ K, psi i x = 0 := by
+    intro i x hx
+    by_contra hne
+    have hb := hsupp i (show x ∈ Function.support (psi i) from hne)
+    have hd := Metric.mem_ball.1 hb
+    rw [dist_comm] at hd
+    have hle : Metric.infDist i.center K ≤ dist i.center x :=
+      Metric.infDist_le_dist_of_mem hx
+    have hc : i.center ∉ K :=
+      ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).1
+    have hdpos := (hK.notMem_iff_infDist_pos hKn).1 hc
+    linarith
+  have hSsmooth : ∀ x ∉ K, 1 ≤ S x ∧ ContDiffAt ℝ ∞ S x := by
+    intro x hx
+    simpa [S] using whitney_bump_sum_positive_smooth hK hKn psi
+      (fun i x => (hbnd i x).1) hone hsupp hlocal hsmooth x hx
+  have hphismooth : ∀ i, ContDiff ℝ ∞ (phi i) := by
+    intro i
+    rw [contDiff_iff_contDiffAt]
+    intro x
+    by_cases hx : x ∈ K
+    · have hneigh : Metric.ball x (Metric.infDist i.center K / 4) ∈ nhds x := by
+        apply Metric.ball_mem_nhds
+        have hc : i.center ∉ K :=
+          ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).1
+        positivity [((hK.notMem_iff_infDist_pos hKn).1 hc)]
+      have hevent : ∀ᶠ y in nhds x, phi i y = 0 := by
+        filter_upwards [hneigh] with y hy
+        apply mul_eq_zero_of_left
+        by_contra hne
+        have hb := hsupp i (show y ∈ Function.support (psi i) from hne)
+        have hxy : dist y x < Metric.infDist i.center K / 4 := Metric.mem_ball.1 hy
+        have hyc : dist y i.center < Metric.infDist i.center K / 2 := Metric.mem_ball.1 hb
+        have hcx : Metric.infDist i.center K ≤ dist i.center x :=
+          Metric.infDist_le_dist_of_mem hx
+        have ht := dist_triangle i.center y x
+        rw [dist_comm y i.center] at hyc
+        have hc : i.center ∉ K :=
+          ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).1
+        have hdpos := (hK.notMem_iff_infDist_pos hKn).1 hc
+        linarith
+      exact ((contDiff_const : ContDiff ℝ ∞ (fun _ : E => (0 : ℝ))).contDiffAt).congr_of_eventuallyEq hevent
+    · exact (hsmooth i).contDiffAt.mul
+        ((hSsmooth x hx).2.inv (ne_of_gt (zero_lt_one.trans_le (hSsmooth x hx).1)))
+  have hsum : ∀ x ∉ K, HasSum (fun i => phi i x) 1 := by
+    intro x hx
+    obtain ⟨U, hU, hfin⟩ := hlocal x hx
+    obtain ⟨F, hF⟩ := hfin.exists_finset_coe
+    have hz : ∀ i ∉ F, psi i x = 0 := by
+      intro i hi
+      by_contra hn
+      exact hi (Finset.mem_coe.1 (hF ▸ ⟨x, mem_of_mem_nhds hU, hn⟩))
+    have hSt : HasSum (fun i => psi i x) (S x) := by
+      change HasSum (fun i => psi i x) (∑' i, psi i x)
+      exact (summable_of_ne_finset_zero hz).hasSum
+    have hpos : 0 < S x := zero_lt_one.trans_le (hSsmooth x hx).1
+    simpa [phi, hpos.ne', mul_inv_cancel₀] using hSt.mul_right (S x)⁻¹
+  have hsuppphi : ∀ i, Function.support (phi i) ⊆
+      Metric.ball i.center (Metric.infDist i.center K / 2) := by
+    intro i x hx
+    exact hsupp i (fun h => hx (by simp [phi, h]))
+  have hnonneg : ∀ i x, 0 ≤ phi i x := by
+    intro i x
+    by_cases hx : x ∈ K
+    · simp [phi, hpsiK i x hx]
+    · exact mul_nonneg (hbnd i x).1 (inv_nonneg.2 (le_trans zero_le_one (hSsmooth x hx).1))
+  have hlocalphi : ∀ x ∉ K, ∃ U ∈ nhds x,
+      {i | (U ∩ Function.support (phi i)).Nonempty}.Finite := by
+    intro x hx
+    obtain ⟨U, hU, hf⟩ := hlocal x hx
+    refine ⟨U, hU, hf.subset ?_⟩
+    intro i hi
+    obtain ⟨y, hyU, hyphi⟩ := hi
+    exact ⟨y, hyU, fun hz => hyphi (by simp [phi, hz])⟩
+  obtain ⟨D, hD0, hD⟩ := exists_whitneySmoothPartition_aux_deriv_bound E psi C
+    hsmooth hsupp hlocal hC (fun x hx => (hSsmooth x hx).1) ⟨N, hN⟩
+  refine ⟨⟨phi, hphismooth, hsuppphi, hnonneg, hsum, hlocalphi, D, hD0, ?_⟩⟩
+  simpa [phi, S] using hD
 
 /-- At a point in a partition support, its center, anchor, and scale are uniformly comparable
 to the point's distance from `K`.  Combine the half-ball comparison lemmas with the anchor
