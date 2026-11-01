@@ -174,3 +174,57 @@ theorem measure_image_critical_set_eq_zero
     simp
 
 end ApmCanaries.A94A05
+
+/-- The two conclusions of APM a94A05.  In part (a), `u.Countable` is the
+explicit finite-or-countable sequence condition (a countable nonempty set is
+the range of a sequence), and the selected intervals are members of the
+original indexed collection. -/
+theorem apm_a94a05
+    {ι : Type*} (t : Set ι) (c ρ : ι → ℝ) (I : Set ℝ)
+    (hI : Bornology.IsBounded I)
+    (hρ : ∀ a ∈ t, 0 < ρ a)
+    (hsub : ∀ a ∈ t, ball (c a) (ρ a) ⊆ I)
+    (J : Set ℝ) (hJ : IsOpen J)
+    {f : ℝ → ℝ} {C : Set ℝ} (hC : C ⊆ J)
+    (hf_diff : ∀ x ∈ C, DifferentiableAt ℝ f x)
+    (hf_crit : ∀ x ∈ C, deriv f x = 0) :
+    (∃ u ⊆ t, u.Countable ∧
+      u.PairwiseDisjoint (fun a => ball (c a) (ρ a)) ∧
+      (⋃ a ∈ t, ball (c a) (ρ a)) ⊆
+        ⋃ a ∈ u, ball (c a) (5 * ρ a)) ∧
+      volume (f '' C) = 0 := by
+  have hρ_bdd : ∃ R : ℝ, ∀ a ∈ t, ρ a ≤ R := by
+    rw [Metric.isBounded_iff] at hI
+    obtain ⟨R, hR⟩ := hI
+    refine ⟨R, fun a ha => ?_⟩
+    have hhalf : ρ a / 2 < ρ a := by linarith [hρ a ha]
+    have hm : c a - ρ a / 2 ∈ I :=
+      hsub a ha (by
+        rw [mem_ball, Real.dist_eq, abs_of_nonpos (by linarith [hρ a ha])]
+        linarith)
+    have hp : c a + ρ a / 2 ∈ I :=
+      hsub a ha (by
+        rw [mem_ball, Real.dist_eq, abs_of_nonneg (by linarith [hρ a ha])]
+        linarith)
+    have := hR hm hp
+    rw [Real.dist_eq, abs_of_neg (by linarith [hρ a ha])] at this
+    linarith
+  obtain ⟨R, hR⟩ := hρ_bdd
+  obtain ⟨u, hut, huclosed, hucover⟩ :=
+    exists_disjoint_subfamily_covering_enlargement_closedBall
+      t c ρ R hR 4 (by norm_num)
+  have huopen : u.PairwiseDisjoint (fun a => ball (c a) (ρ a)) :=
+    huclosed.mono (fun _ => ball_subset_closedBall)
+  have hucount : u.Countable :=
+    huopen.countable_of_isOpen
+      (fun _ _ => isOpen_ball)
+      (fun a ha => (nonempty_ball.2 (hρ a (hut ha))))
+  refine ⟨⟨u, hut, hucount, huopen, ?_⟩,
+    ApmCanaries.A94A05.measure_image_critical_set_eq_zero
+      J hJ hC hf_diff hf_crit⟩
+  intro x hx
+  obtain ⟨a, ha, hxa⟩ := mem_iUnion₂.1 hx
+  obtain ⟨b, hb, hab⟩ := hucover a ha
+  apply mem_iUnion₂.mpr
+  refine ⟨b, hb, Metric.closedBall_subset_ball ?_ (hab (ball_subset_closedBall hxa))⟩
+  linarith [hρ b (hut hb)]

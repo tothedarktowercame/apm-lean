@@ -21,3 +21,7 @@ Second repair by lemma-3 quantifies over `g : E → ℂ` (56 lines added in all,
 b01J04, b96A04, a94J02: statements unchanged, backlog grade narrower; the restriction is the smallest correction of a false or inconsistent print. Counterexamples in each PRELIM-DEFECT.md, checked by claude-14.
 
 b93J03: backlog grade narrower for `[Nontrivial V]` on the whole theorem. claude-14 moved the hypothesis to part (a) only and part (b) now covers every V. New grade (read-only subagent): narrower, justified only by the documented defect, smallest correction.
+
+## a94A05
+
+Backlog grade: narrower, closed balls and closed enlargements, no sequence. Repair by lemma-1 adds apm_a94a05 (54 lines, nothing removed): a countable pairwise-disjoint subfamily with open fivefold enlargements covering the union. New grade: faithful; the family is arbitrary, and part (b) is outer-measure zero so measurability does not matter.
