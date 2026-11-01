@@ -116,3 +116,52 @@ theorem fourier_maps_L1_to_C0 {f : ℝ → ℂ} (hf : Integrable f volume) :
    fourierTransform_tendsto_zero hf⟩
 
 end ApmCanaries.A92J03
+
+/-- The Fourier-transform assignment on `L¹(ℝ)` is linear, takes values in
+`C₀(ℝ)`, and satisfies the requested uniform norm bound. -/
+theorem apm_a92j03 :
+    (∀ f : ℝ → ℂ, Integrable f volume →
+      Continuous (ApmCanaries.A92J03.fourierTransform f)) ∧
+    (∀ f : ℝ → ℂ, Integrable f volume → ∀ ξ : ℝ,
+      ‖ApmCanaries.A92J03.fourierTransform f ξ‖ ≤ ∫ x, ‖f x‖ ∂volume) ∧
+    (∀ f : ℝ → ℂ, Integrable f volume →
+      Tendsto (ApmCanaries.A92J03.fourierTransform f) (cocompact ℝ) (nhds 0)) ∧
+    (∀ f g : ℝ → ℂ, Integrable f volume → Integrable g volume →
+      ApmCanaries.A92J03.fourierTransform (f + g) =
+        ApmCanaries.A92J03.fourierTransform f +
+          ApmCanaries.A92J03.fourierTransform g) ∧
+    (∀ c : ℂ, ∀ f : ℝ → ℂ, Integrable f volume →
+      ApmCanaries.A92J03.fourierTransform (c • f) =
+        c • ApmCanaries.A92J03.fourierTransform f) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · intro f hf
+    exact ApmCanaries.A92J03.fourierTransform_continuous hf
+  · intro f hf ξ
+    exact ApmCanaries.A92J03.fourierTransform_norm_le hf ξ
+  · intro f hf
+    exact ApmCanaries.A92J03.fourierTransform_tendsto_zero hf
+  · intro f g hf hg
+    funext ξ
+    unfold ApmCanaries.A92J03.fourierTransform
+    have hmul (u : ℝ → ℂ) (hu : Integrable u volume) :
+        Integrable (fun x : ℝ => u x * Complex.exp (I * x * ξ)) volume := by
+      apply hu.mul_bdd
+      · exact (Complex.continuous_exp.comp (by fun_prop)).aestronglyMeasurable
+      · filter_upwards [] with x
+        have key : I * (x : ℂ) * ξ = ↑(x * ξ) * I := by
+          apply Complex.ext <;> simp
+        rw [key, Complex.norm_exp_ofReal_mul_I]
+    rw [show (∫ x, (f + g) x * Complex.exp (I * x * ξ) ∂volume) =
+        ∫ x, (f x * Complex.exp (I * x * ξ) +
+          g x * Complex.exp (I * x * ξ)) ∂volume by
+          congr 1 with x
+          simp [add_mul]]
+    exact integral_add (hmul f hf) (hmul g hg)
+  · intro c f hf
+    funext ξ
+    unfold ApmCanaries.A92J03.fourierTransform
+    rw [show (∫ x, (c • f) x * Complex.exp (I * x * ξ) ∂volume) =
+        ∫ x, c • (f x * Complex.exp (I * x * ξ)) ∂volume by
+          congr 1 with x
+          simp [smul_eq_mul, mul_assoc]]
+    exact integral_smul c _
