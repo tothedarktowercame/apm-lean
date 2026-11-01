@@ -672,12 +672,134 @@ theorem t99J02_G_lower (hch : t99J02_Chord g₁ g₂) (z : ConstructionTargets.S
 /-- `G` respects the octagon's identifications. For handle `0` both points are upper and
 `t99J02_phi_edge` turns the generator into a generator of `Surface true 1`, so `g₁` agrees; for
 handle `1` use `t99J02_G_lower` and `neg (edgePoint 8 (e + 4) t) = edgePoint 8 e t`. -/
+lemma t99J02_G_rel_aux_upper (e : ℕ) (he : e < 4) (t : Set.Icc (0 : ℝ) 1) :
+    0 ≤ ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ).im := by
+  simp only [edgePoint, Complex.mul_re, Complex.mul_im, Complex.I_re,
+    Complex.I_im, zero_mul, one_mul, Complex.exp_im]
+  convert Real.sin_nonneg_of_nonneg_of_le_pi (x :=
+      2 * Real.pi * ((e : ℝ) + t.1) / 8) (by
+        have he0 : (0 : ℝ) ≤ e := by positivity
+        have ht0 := t.2.1
+        positivity) (by
+        have hpi : 0 < Real.pi := Real.pi_pos
+        have he' : e ≤ 3 := by omega
+        have heR : (e : ℝ) ≤ 3 := by exact_mod_cast he'
+        have ht := t.2.2
+        nlinarith) using 1 <;> ring_nf <;> simp
+
+lemma t99J02_G_rel_aux_neg_edge (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    t99J02_neg (edgePoint 8 (e + 4) t) = edgePoint 8 e t := by
+  apply Subtype.ext
+  simp only [t99J02_neg, edgePoint, Subtype.coe_mk]
+  calc
+    -Complex.exp (Complex.I * (2 * (Real.pi : ℂ) * ((((e + 4 : ℕ) : ℝ) : ℂ) +
+        ((t.1 : ℝ) : ℂ)) / 8)) =
+        -Complex.exp (Complex.I * (2 * (Real.pi : ℂ) * (((e : ℝ) : ℂ) +
+          ((t.1 : ℝ) : ℂ)) / 8) + Real.pi * Complex.I) := by
+            congr 2
+            push_cast
+            ring
+    _ = -(-Complex.exp (Complex.I * (2 * (Real.pi : ℂ) * (((e : ℝ) : ℂ) +
+          ((t.1 : ℝ) : ℂ)) / 8))) := by rw [Complex.exp_add_pi_mul_I]
+    _ = _ := neg_neg _
+
+lemma t99J02_G_rel_aux_lower (e : ℕ) (he : e < 4) (t : Set.Icc (0 : ℝ) 1) :
+    ((edgePoint 8 (e + 4) t : ConstructionTargets.Surfaces.Disk) : ℂ).im ≤ 0 := by
+  have h := congrArg (fun z : ConstructionTargets.Surfaces.Disk => (z : ℂ).im)
+    (t99J02_G_rel_aux_neg_edge e t)
+  simp only [t99J02_neg, Complex.neg_im] at h
+  linarith [t99J02_G_rel_aux_upper e he t]
+
+lemma t99J02_G_rel_aux_upper_pair
+    (hg : ∀ z, (g₁ z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1))
+    (a b : ℕ) (ha : a < 4) (hb : b < 4) (t u : Set.Icc (0 : ℝ) 1)
+    (hr : SurfaceRel true 1 (t99J02_phiDisk (edgePoint 8 a t))
+      (t99J02_phiDisk (edgePoint 8 b u))) :
+    t99J02_G g₁ g₂ (edgePoint 8 a t) = t99J02_G g₁ g₂ (edgePoint 8 b u) := by
+  rw [t99J02_G, dif_pos (t99J02_G_rel_aux_upper a ha t),
+    t99J02_G, dif_pos (t99J02_G_rel_aux_upper b hb u)]
+  congr 2
+  apply Subtype.ext
+  rw [hg, hg]
+  exact Quotient.sound (Relation.EqvGen.rel _ _ hr)
+
+lemma t99J02_G_rel_aux_lower_pair
+    (hch : t99J02_Chord g₁ g₂)
+    (hg : ∀ z, (g₂ z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1))
+    (a b : ℕ) (ha : a < 4) (hb : b < 4) (t u : Set.Icc (0 : ℝ) 1)
+    (hr : SurfaceRel true 1 (t99J02_phiDisk (edgePoint 8 a t))
+      (t99J02_phiDisk (edgePoint 8 b u))) :
+    t99J02_G g₁ g₂ (edgePoint 8 (a + 4) t) =
+      t99J02_G g₁ g₂ (edgePoint 8 (b + 4) u) := by
+  rw [t99J02_G_lower g₁ g₂ hch _ (t99J02_G_rel_aux_lower a ha t),
+    t99J02_G_lower g₁ g₂ hch _ (t99J02_G_rel_aux_lower b hb u)]
+  have hga : g₂ ⟨t99J02_neg (edgePoint 8 (a + 4) t), by
+      simpa [t99J02_neg] using t99J02_G_rel_aux_lower a ha t⟩ =
+      g₂ ⟨edgePoint 8 a t, t99J02_G_rel_aux_upper a ha t⟩ := by
+    congr 1
+    apply Subtype.ext
+    exact t99J02_G_rel_aux_neg_edge a t
+  have hgb : g₂ ⟨t99J02_neg (edgePoint 8 (b + 4) u), by
+      simpa [t99J02_neg] using t99J02_G_rel_aux_lower b hb u⟩ =
+      g₂ ⟨edgePoint 8 b u, t99J02_G_rel_aux_upper b hb u⟩ := by
+    congr 1
+    apply Subtype.ext
+    exact t99J02_G_rel_aux_neg_edge b u
+  rw [hga, hgb]
+  congr 2
+  apply Subtype.ext
+  rw [hg, hg]
+  exact Quotient.sound (Relation.EqvGen.rel _ _ hr)
+
 theorem t99J02_G_rel (hch : t99J02_Chord g₁ g₂)
     (hg₁ : ∀ z, (g₁ z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1))
     (hg₂ : ∀ z, (g₂ z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1))
     {x y : ConstructionTargets.Surfaces.Disk} (h : Relation.EqvGen (SurfaceRel true 2) x y) :
     t99J02_G g₁ g₂ x = t99J02_G g₁ g₂ y := by
-  sorry
+  induction h with
+  | rel x y h =>
+      simp only [SurfaceRel, if_true] at h
+      rcases h with ⟨j, hj, t, h⟩
+      interval_cases j <;> rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+      · norm_num
+        refine t99J02_G_rel_aux_upper_pair g₁ g₂ hg₁ 0 2 (by omega) (by omega)
+          t ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩ ?_
+        simp only [SurfaceRel, if_true]
+        refine ⟨0, by omega, t, Or.inl ⟨?_, ?_⟩⟩
+        · apply Subtype.ext; exact t99J02_phi_edge 0 (by omega) t
+        · apply Subtype.ext
+          exact t99J02_phi_edge 2 (by omega)
+            ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩
+      · norm_num
+        refine t99J02_G_rel_aux_upper_pair g₁ g₂ hg₁ 1 3 (by omega) (by omega)
+          t ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩ ?_
+        simp only [SurfaceRel, if_true]
+        refine ⟨0, by omega, t, Or.inr ⟨?_, ?_⟩⟩
+        · apply Subtype.ext; exact t99J02_phi_edge 1 (by omega) t
+        · apply Subtype.ext
+          exact t99J02_phi_edge 3 (by omega)
+            ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩
+      · norm_num
+        refine t99J02_G_rel_aux_lower_pair g₁ g₂ hch hg₂ 0 2 (by omega) (by omega)
+          t ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩ ?_
+        simp only [SurfaceRel, if_true]
+        refine ⟨0, by omega, t, Or.inl ⟨?_, ?_⟩⟩
+        · apply Subtype.ext; exact t99J02_phi_edge 0 (by omega) t
+        · apply Subtype.ext
+          exact t99J02_phi_edge 2 (by omega)
+            ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩
+      · norm_num
+        refine t99J02_G_rel_aux_lower_pair g₁ g₂ hch hg₂ 1 3 (by omega) (by omega)
+          t ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩ ?_
+        simp only [SurfaceRel, if_true]
+        refine ⟨0, by omega, t, Or.inr ⟨?_, ?_⟩⟩
+        · apply Subtype.ext; exact t99J02_phi_edge 1 (by omega) t
+        · apply Subtype.ext
+          exact t99J02_phi_edge 3 (by omega)
+            ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩
+  | refl x => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
 
 /-- `G` separates points of the surface. Use `t99J02_mk_eq`. Two upper points: `t99J02_fibre`. Two
 lower points: `t99J02_fibre` after `neg`, with `t99J02_q2_neg`. An upper and a lower point: both
