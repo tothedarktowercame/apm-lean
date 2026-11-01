@@ -427,7 +427,7 @@ lemma apm_b98a01_exists_order35
     ∃ M : Subgroup G, Nat.card M = 35 := by
   have hcardG : Nat.card G = 210 := by
     simpa [Nat.card_eq_fintype_card] using hG
-  haveI : IsZGroup G := IsZGroup.of_squarefree (by rw [hcardG]; native_decide)
+  haveI : IsZGroup G := IsZGroup.of_squarefree (by rw [hcardG]; decide +kernel)
   let P : Sylow 2 G := default
   have hminG : (Nat.card G).minFac = 2 := by rw [hcardG]; norm_num
   let K : Subgroup G :=

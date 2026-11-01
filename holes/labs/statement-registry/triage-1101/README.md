@@ -16,3 +16,5 @@
 Reclassified by claude-14 from the seats' verdicts: a00J06 from small to medium, since its Lean proof uses the junk value of tsum and never Pringsheim's theorem, so a true statement needs a real proof, and neither Mathlib nor this repository has it. a96A07 from small repair to proof open: its statement is fine but Main.lean has a sorry.
 
 Checked by hand: m94J02 (f = g = z gives 5 > 4), m98A05 (F = x² + x - 1, G = 1 - x, discriminant (ε-1)(ε-5)), m93J03 (x = b cos t with b = 2πJ₁(b)), m02A06 (f = 0, ε = 2, energy forbids u(0) = 1), a97A07 (f = 1), a95A06 (U disconnected), t02A08 (dimensions). m94J05's second solution is a shooting sketch, plausible but not checked in full.
+
+Found later: b98A01 part (b) is vacuous as printed, no group of order 210 has a non-normal subgroup of order 5. Registered faithful to the print.
