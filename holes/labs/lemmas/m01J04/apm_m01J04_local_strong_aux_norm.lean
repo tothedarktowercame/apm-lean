@@ -4769,7 +4769,44 @@ theorem apm_m01J04_local_strong_aux_norm {d : ℕ} {Ω : Set (EuclideanSpace ℝ
     (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ) (htsupp : tsupport χ ⊆ Ω) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ h : apm_m01J04_H1 d Ω,
       apm_m01J04_H1norm (apm_m01J04_globalLocalizedH1 χ hχ h) ≤ C * apm_m01J04_H1norm h := by
-  sorry
+  obtain ⟨C, hC0, hC⟩ := apm_m01J04_test_mul_H1norm_le χ hχ
+  refine ⟨C, hC0, fun h ↦ ?_⟩
+  have hvalSupp : Function.support
+      (fun x ↦ h.val x * χ x) ⊆ Ω := by
+    intro x hx
+    apply htsupp
+    exact subset_tsupport χ (fun hχx ↦ hx (by simp [hχx]))
+  have hgradSupp : Function.support
+      (fun x ↦ χ x • h.grad x + h.val x • WithLp.toLp 2
+        (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1))) ⊆ Ω := by
+    intro x hx
+    apply htsupp
+    by_contra hxt
+    have hχx : χ x = 0 := Function.notMem_support.mp
+      (fun hs ↦ hxt (subset_tsupport χ hs))
+    have hDx : fderiv ℝ χ x = 0 := fderiv_of_notMem_tsupport ℝ hxt
+    have hDlp : WithLp.toLp 2
+        (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1)) = 0 := by
+      rw [WithLp.toLp_eq_zero]
+      funext i
+      simp [hDx]
+    apply hx
+    simp [hχx, hDlp]
+  have hvalEq :
+      eLpNorm (fun x ↦ h.val x * χ x) 2 volume =
+        eLpNorm (fun x ↦ h.val x * χ x) 2 (volume.restrict Ω) := by
+    symm
+    exact eLpNorm_restrict_eq_of_support_subset hvalSupp
+  have hgradEq :
+      eLpNorm (fun x ↦ χ x • h.grad x + h.val x • WithLp.toLp 2
+        (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1))) 2 volume =
+        eLpNorm (fun x ↦ χ x • h.grad x + h.val x • WithLp.toLp 2
+          (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1))) 2
+          (volume.restrict Ω) := by
+    symm
+    exact eLpNorm_restrict_eq_of_support_subset hgradSupp
+  simpa [apm_m01J04_H1norm, apm_m01J04_globalLocalizedH1,
+    Measure.restrict_univ, hvalEq, hgradEq] using hC h
 -- END SEAT AREA
 
 /-- Seat: weak convergence of the localized differences. On `Ω` the integrand is `(f n - fLim) * (χ * q)`, and `χ * q`
