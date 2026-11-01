@@ -4097,11 +4097,23 @@ theorem apm_m01J04_rellich_grad_eq {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
 `-∫ t in 0..1, fderiv a (x - t • y) y`, bound its square by `‖y‖² ∫ t, ‖grad a (x - t • y)‖²`
 (Cauchy–Schwarz, then Jensen on `[0,1]`), integrate in `x` with Fubini, and use translation invariance.
 Replace the classical gradient by `a.grad` with `apm_m01J04_rellich_grad_eq`. -/
+theorem apm_m01J04_rellich_translate_smooth_aux_classical {d : ℕ}
+    (f : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f) (hc : HasCompactSupport f)
+    (y : EuclideanSpace ℝ (Fin d)) :
+    (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤
+      ‖y‖ * (eLpNorm (fun x ↦ WithLp.toLp 2
+        (fun i ↦ fderiv ℝ f x (EuclideanSpace.single i 1))) 2 volume).toReal := by
+  sorry
+
 theorem apm_m01J04_rellich_translate_smooth {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
     (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val) (hc : HasCompactSupport a.val) (y : EuclideanSpace ℝ (Fin d)) :
     (eLpNorm (fun x ↦ a.val (x - y) - a.val x) 2 volume).toReal ≤
       ‖y‖ * (eLpNorm a.grad 2 volume).toReal := by
-  sorry
+  have h := apm_m01J04_rellich_translate_smooth_aux_classical a.val hs hc y
+  have hgrad := apm_m01J04_rellich_grad_eq a hs hc
+  rw [eLpNorm_congr_ae hgrad]
+  exact h
 
 /-- Seat: the translation estimate for compactly supported records. Approximate by
 `apm_m01J04_core_exists_smooth_global_approx_aux_mollify`, apply the smooth case, and pass to the limit;
