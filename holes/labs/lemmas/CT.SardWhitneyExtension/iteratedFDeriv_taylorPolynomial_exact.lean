@@ -82,6 +82,229 @@ theorem compactConvex_taylor_remainder_bound
 the diagonal monomials, use symmetry to identify all injections of the `k` derivative
 variables, and cancel `j!/(j-k)!` against `j!`; the surviving factor is `(j-k)!⁻¹`. -/
 -- BEGIN SEAT AREA
+-- Transport a multilinear-map evaluation across an index-type equality cast.
+theorem iteratedFDeriv_taylorPolynomial_exact_aux_cast
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (M : (n : ℕ) → E[×n]→L[ℝ] F) {p r : ℕ} (h : p = r) (v : Fin r → E) :
+    M p (fun i ↦ v (Fin.cast h i)) = M r v := by
+  subst h
+  rfl
+
+-- `Fin.append` is `Sum.elim` transported along `finSumFinEquiv`.
+theorem iteratedFDeriv_taylorPolynomial_exact_aux_append
+    {E : Type*} {k q : ℕ} (u : Fin k → E) (z : Fin q → E) :
+    (fun i ↦ Sum.elim u z (finSumFinEquiv.symm i)) = Fin.append u z := by
+  funext i
+  refine Fin.addCases (motive := fun i ↦
+      Sum.elim u z (finSumFinEquiv.symm i) = Fin.append u z i)
+    (fun i₀ ↦ ?_) (fun j₀ ↦ ?_) i
+  · simp [finSumFinEquiv_symm_apply_castAdd]
+  · simp [finSumFinEquiv_symm_apply_natAdd]
+
+-- Evaluation of a continuous multilinear map at a tuple, as a continuous multilinear map
+-- of the tuple (valued in continuous linear maps on multilinear maps).
+noncomputable def iteratedFDeriv_taylorPolynomial_exact_auxEval
+    (E F : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] (q : ℕ) :
+    ContinuousMultilinearMap ℝ (fun _ : Fin q ↦ E) ((E[×q]→L[ℝ] F) →L[ℝ] F) :=
+  by
+  refine MultilinearMap.mkContinuous (𝕜 := ℝ) (ι := Fin q) (E := fun _ : Fin q ↦ E)
+    (G := (E[×q]→L[ℝ] F) →L[ℝ] F) ?_ 1 ?_
+  · exact
+    { toFun := fun z ↦ ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F z
+      map_update_add' := fun z i x y ↦ by
+        ext M
+        simp [ContinuousMultilinearMap.map_update_add]
+      map_update_smul' := fun z i r y ↦ by
+        ext M
+        simp [ContinuousMultilinearMap.map_update_smul, ContinuousLinearMap.smul_apply] }
+  · intro z
+    show ‖ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F z‖ ≤ 1 * ∏ i, ‖z i‖
+    rw [one_mul]
+    exact (ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F z).opNorm_le_bound
+      (Finset.prod_nonneg fun i _ ↦ norm_nonneg _)
+      (fun M ↦ by
+        rw [mul_comm]
+        exact M.le_opNorm z)
+
+theorem iteratedFDeriv_taylorPolynomial_exact_auxEval_apply
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] (q : ℕ) (z : Fin q → E) (M : E[×q]→L[ℝ] F) :
+    iteratedFDeriv_taylorPolynomial_exact_auxEval E F q z M = M z := rfl
+
+theorem iteratedFDeriv_taylorPolynomial_exact_auxEval_eq_apply
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] (q : ℕ) (z : Fin q → E) :
+    iteratedFDeriv_taylorPolynomial_exact_auxEval E F q z =
+      ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F z := rfl
+
+-- Currying off the last `q` variables of a `k + q`-linear map.
+noncomputable def iteratedFDeriv_taylorPolynomial_exact_auxCurried
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {k q : ℕ} (M : E[×(k+q)]→L[ℝ] F) :
+    E[×k]→L[ℝ] (E[×q]→L[ℝ] F) :=
+  ContinuousMultilinearMap.currySum (M.domDomCongr finSumFinEquiv.symm)
+
+theorem iteratedFDeriv_taylorPolynomial_exact_auxCurried_apply
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {k q : ℕ} (M : E[×(k+q)]→L[ℝ] F) (u : Fin k → E) (z : Fin q → E) :
+    iteratedFDeriv_taylorPolynomial_exact_auxCurried M u z = M (Fin.append u z) := by
+  rw [iteratedFDeriv_taylorPolynomial_exact_auxCurried,
+    ContinuousMultilinearMap.currySum_apply, ContinuousMultilinearMap.domDomCongr_apply]
+  congr 1
+  exact iteratedFDeriv_taylorPolynomial_exact_aux_append u z
+
+/-- Symmetry step: a `w` inserted at position `k + j` of `(u, c^(q+1))` can be moved to the
+front, giving `(w, u, c^q)`, by symmetry of the multilinear map. -/
+theorem iteratedFDeriv_taylorPolynomial_exact_aux_symm
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {k q : ℕ} (M : E[×(k + (q + 1))]→L[ℝ] F)
+    (hM : ∀ σ : Equiv.Perm (Fin (k + (q + 1))), M.domDomCongr σ = M)
+    (u : Fin k → E) (w c : E) (j : Fin (q + 1)) :
+    M (Function.update (Fin.append u (fun _ : Fin (q + 1) ↦ c)) (Fin.natAdd k j) w) =
+      M (fun i ↦ Fin.append (Fin.cons w u) (fun _ : Fin q ↦ c)
+        (Fin.cast (by omega : k + (q + 1) = k + 1 + q) i)) := by
+  classical
+  set S := Function.update (Fin.append u (fun _ : Fin (q + 1) ↦ c)) (Fin.natAdd k j) w with hS
+  have hb : ∀ t : ℕ, t < k + (q + 1) →
+      (if t = 0 then k + j.val else if t ≤ k + j.val then t - 1 else t) < k + (q + 1) := by
+    intro t ht
+    have hj := j.isLt
+    split_ifs with h0 hle <;> omega
+  let σf : Fin (k + (q + 1)) → Fin (k + (q + 1)) := fun i ↦
+    ⟨if i.val = 0 then k + j.val else if i.val ≤ k + j.val then i.val - 1 else i.val,
+     hb _ i.isLt⟩
+  have hinj : Function.Injective σf := by
+    intro i₁ i₂ h
+    have h₁ := i₁.isLt
+    have h₂ := i₂.isLt
+    have hj := j.isLt
+    apply Fin.ext
+    have hh := congrArg Fin.val h
+    replace hh :
+        (if i₁.val = 0 then k + j.val else if i₁.val ≤ k + j.val then i₁.val - 1 else i₁.val)
+        = (if i₂.val = 0 then k + j.val
+           else if i₂.val ≤ k + j.val then i₂.val - 1 else i₂.val) := hh
+    split_ifs at hh <;> omega
+  have hsurj : Function.Surjective σf := (Finite.injective_iff_surjective).mp hinj
+  let σ : Equiv.Perm (Fin (k + (q + 1))) := Equiv.ofBijective σf ⟨hinj, hsurj⟩
+  have hσ : ∀ i : Fin (k + (q + 1)), σ i = σf i := fun _ ↦ rfl
+  have hvec : S ∘ σ = fun i ↦ Fin.append (Fin.cons w u) (fun _ : Fin q ↦ c)
+      (Fin.cast (by omega : k + (q + 1) = k + 1 + q) i) := by
+    funext i
+    rcases i with ⟨t, ht⟩
+    have hj := j.isLt
+    show S (σ ⟨t, ht⟩) = _
+    rw [hσ]
+    have huj : ∀ p, (⟨k + j.val, p⟩ : Fin (k + (q + 1))) = Fin.natAdd k j :=
+      fun _ ↦ Fin.ext rfl
+    by_cases h0 : t = 0
+    · subst h0
+      have hrc : ∀ (h : k + (q + 1) = k + 1 + q),
+          Fin.cast h ⟨0, ht⟩ = Fin.castAdd q (0 : Fin (k + 1)) := fun _ ↦ Fin.ext rfl
+      rw [hrc, Fin.append_left, Fin.cons_zero]
+      have hσv : ∀ p, σf ⟨0, p⟩ = ⟨k + j.val, by have := j.isLt; omega⟩ := fun p ↦
+        Fin.ext (show (if (0 : ℕ) = 0 then k + j.val
+            else if 0 ≤ k + j.val then 0 - 1 else 0) = k + j.val by rw [if_pos rfl])
+      rw [hσv, hS, huj, Function.update_self]
+    · by_cases hle : t ≤ k + j.val
+      · have hσv : ∀ p, σf ⟨t, p⟩ = ⟨t - 1, by omega⟩ := fun p ↦
+          Fin.ext (show (if t = 0 then k + j.val else if t ≤ k + j.val then t - 1 else t)
+            = t - 1 by rw [if_neg h0, if_pos hle])
+        by_cases htk : t - 1 < k
+        · have htk1 : t < k + 1 := by omega
+          have hrc : ∀ (h : k + (q + 1) = k + 1 + q),
+              Fin.cast h ⟨t, ht⟩ = Fin.castAdd q ⟨t, htk1⟩ := fun _ ↦ Fin.ext rfl
+          have hts : ∀ (p : t < k + 1), (⟨t, p⟩ : Fin (k + 1)) = (⟨t - 1, htk⟩ : Fin k).succ :=
+            fun _ ↦ Fin.ext (show t = t - 1 + 1 by omega)
+          rw [hrc, Fin.append_left, hts, Fin.cons_succ]
+          have hne : ∀ p, (⟨t - 1, p⟩ : Fin (k + (q + 1))) ≠ Fin.natAdd k j := fun p hh ↦ by
+            have h2 := congrArg Fin.val hh
+            change t - 1 = k + j.val at h2
+            omega
+          have hca : ∀ p, (⟨t - 1, p⟩ : Fin (k + (q + 1))) = Fin.castAdd (q + 1) ⟨t - 1, htk⟩ :=
+            fun _ ↦ Fin.ext rfl
+          rw [hσv, hS, Function.update_of_ne (hne _), hca, Fin.append_left]
+        · have htk1 : k + 1 ≤ t := by omega
+          have hrc : ∀ (h : k + (q + 1) = k + 1 + q),
+              Fin.cast h ⟨t, ht⟩ = Fin.natAdd (k + 1) ⟨t - (k + 1), by omega⟩ :=
+            fun _ ↦ Fin.ext (show t = (k + 1) + (t - (k + 1)) by omega)
+          rw [hrc, Fin.append_right]
+          have hne : ∀ p, (⟨t - 1, p⟩ : Fin (k + (q + 1))) ≠ Fin.natAdd k j := fun p hh ↦ by
+            have h2 := congrArg Fin.val hh
+            change t - 1 = k + j.val at h2
+            omega
+          have hna : ∀ p, (⟨t - 1, p⟩ : Fin (k + (q + 1))) =
+              Fin.natAdd k ⟨t - 1 - k, by omega⟩ :=
+            fun _ ↦ Fin.ext (show t - 1 = k + (t - 1 - k) by omega)
+          rw [hσv, hS, Function.update_of_ne (hne _), hna, Fin.append_right]
+      · have htk1 : k + 1 ≤ t := by omega
+        have hrc : ∀ (h : k + (q + 1) = k + 1 + q),
+            Fin.cast h ⟨t, ht⟩ = Fin.natAdd (k + 1) ⟨t - (k + 1), by omega⟩ :=
+          fun _ ↦ Fin.ext (show t = (k + 1) + (t - (k + 1)) by omega)
+        rw [hrc, Fin.append_right]
+        have hσv : ∀ p, σf ⟨t, p⟩ = ⟨t, p⟩ := fun p ↦
+          Fin.ext (show (if t = 0 then k + j.val else if t ≤ k + j.val then t - 1 else t)
+            = t by rw [if_neg h0, if_neg hle])
+        have hne : ∀ p, (⟨t, p⟩ : Fin (k + (q + 1))) ≠ Fin.natAdd k j := fun p hh ↦ by
+          have h2 := congrArg Fin.val hh
+          change t = k + j.val at h2
+          omega
+        have hna : ∀ p, (⟨t, p⟩ : Fin (k + (q + 1))) = Fin.natAdd k ⟨t - k, by omega⟩ :=
+          fun _ ↦ Fin.ext (show t = k + (t - k) by omega)
+        rw [hσv, hS, Function.update_of_ne (hne _), hna, Fin.append_right]
+  rw [← hvec]
+  have h2 : M (S ∘ σ) = M S := by
+    conv_rhs => rw [← hM σ]
+    rfl
+  rw [h2]
+
+/-- Inner sum over all `Fin (k + (q+1))` positions in the derivative of a diagonal
+monomial: the first `k` positions contribute `0` (constant coordinates), and the last
+`q + 1` positions all give the same value by symmetry. -/
+theorem iteratedFDeriv_taylorPolynomial_exact_aux_inner
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {k q : ℕ} (M : E[×(k + (q + 1))]→L[ℝ] F)
+    (hM : ∀ σ : Equiv.Perm (Fin (k + (q + 1))), M.domDomCongr σ = M)
+    (u : Fin k → E) (w c : E) :
+    ∑ i : Fin (k + (q + 1)), M (Function.update (Fin.append u (fun _ : Fin (q + 1) ↦ c)) i
+        (if (i : ℕ) < k then 0 else w)) =
+      (q + 1) • M (fun i ↦ Fin.append (Fin.cons w u) (fun _ : Fin q ↦ c)
+        (Fin.cast (by omega : k + (q + 1) = k + 1 + q) i)) := by
+  rw [Fin.sum_univ_add (fun i ↦ M (Function.update (Fin.append u (fun _ : Fin (q + 1) ↦ c)) i
+      (if (i : ℕ) < k then 0 else w)))]
+  have hzero : ∑ i₀ : Fin k, M (Function.update (Fin.append u (fun _ : Fin (q + 1) ↦ c))
+      (Fin.castAdd (q + 1) i₀)
+      (if ((Fin.castAdd (q + 1) i₀ : Fin (k + (q + 1))) : ℕ) < k then 0 else w)) = 0 := by
+    apply Finset.sum_eq_zero
+    intro i₀ _
+    have hc : ((Fin.castAdd (q + 1) i₀ : Fin (k + (q + 1))) : ℕ) < k := i₀.isLt
+    rw [if_pos hc]
+    exact M.map_update_zero _ _
+  rw [hzero, zero_add]
+  have hall : ∀ j : Fin (q + 1), M (Function.update (Fin.append u (fun _ : Fin (q + 1) ↦ c))
+      (Fin.natAdd k j)
+      (if ((Fin.natAdd k j : Fin (k + (q + 1))) : ℕ) < k then 0 else w)) =
+      M (fun i ↦ Fin.append (Fin.cons w u) (fun _ : Fin q ↦ c)
+        (Fin.cast (by omega : k + (q + 1) = k + 1 + q) i)) := by
+    intro j
+    have hval : ((Fin.natAdd k j : Fin (k + (q + 1))) : ℕ) = k + j.val := rfl
+    rw [if_neg (by rw [hval]; omega)]
+    exact iteratedFDeriv_taylorPolynomial_exact_aux_symm M hM u w c j
+  rw [Finset.sum_congr rfl (fun j _ ↦ hall j), Finset.sum_const, Finset.card_fin]
+
+/-- Factorial cancellation: `((q+1)!)⁻¹ • ((q+1) • X) = (q!)⁻¹ • X`. -/
+theorem iteratedFDeriv_taylorPolynomial_exact_aux_coeff
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] (q : ℕ) (X : F) :
+    ((q + 1).factorial : ℝ)⁻¹ • ((q + 1 : ℕ) • X) = (q.factorial : ℝ)⁻¹ • X := by
+  rw [← Nat.cast_smul_eq_nsmul ℝ, smul_smul, Nat.factorial_succ, Nat.cast_mul, mul_inv_rev,
+    mul_assoc, inv_mul_cancel₀ (Nat.cast_ne_zero.mpr (Nat.succ_ne_zero q)), mul_one]
+
 theorem iteratedFDeriv_taylorPolynomial_exact
     {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [NormedAddCommGroup F] [NormedSpace ℝ F]
@@ -92,7 +315,132 @@ theorem iteratedFDeriv_taylorPolynomial_exact
     iteratedFDeriv ℝ k (taylorPolynomial m J a) x v =
       ∑ q ∈ Finset.range (m + 1 - k), (q.factorial : ℝ)⁻¹ •
         J (k + q) a (Fin.append v (fun _ : Fin q ↦ x - a)) := by
-  sorry
+  classical
+  have hP : ContDiff ℝ ⊤ (taylorPolynomial m J a) := by
+    show ContDiff ℝ ⊤ (fun x ↦ ∑ j ∈ Finset.range (m + 1),
+      ((j.factorial : ℝ)⁻¹) • J j a (fun _ ↦ x - a))
+    apply ContDiff.sum
+    intro j _
+    apply ContDiff.const_smul
+    exact (ContinuousMultilinearMap.contDiff _).comp
+      (contDiff_pi.2 fun _ ↦ contDiff_id.sub contDiff_const)
+  induction k generalizing x with
+  | zero =>
+    rw [iteratedFDeriv_zero_apply, Nat.sub_zero]
+    show (∑ j ∈ Finset.range (m + 1), ((j.factorial : ℝ)⁻¹) • J j a (fun _ ↦ x - a)) = _
+    apply Finset.sum_congr rfl
+    intro q _
+    congr 1
+    have happ : Fin.append v (fun _ : Fin q ↦ x - a) =
+        fun i ↦ (fun _ : Fin q ↦ x - a) (Fin.cast (zero_add q) i) := by
+      funext i
+      have hi : i = Fin.natAdd 0 (Fin.cast (zero_add q) i) :=
+        Fin.ext (Nat.zero_add _).symm
+      conv_lhs => rw [hi, Fin.append_right]
+    rw [happ]
+    exact (iteratedFDeriv_taylorPolynomial_exact_aux_cast (fun n ↦ J n a) (zero_add q)
+      (fun _ : Fin q ↦ x - a)).symm
+  | succ k ih =>
+    have hkm : k ≤ m := by omega
+    rw [iteratedFDeriv_succ_apply_left]
+    have hGd : DifferentiableAt ℝ (iteratedFDeriv ℝ k (taylorPolynomial m J a)) x :=
+      hP.contDiffAt.differentiableAt_iteratedFDeriv (by simp)
+    have hstep1 : fderiv ℝ (iteratedFDeriv ℝ k (taylorPolynomial m J a)) x (v 0) (Fin.tail v)
+        = fderiv ℝ (fun y ↦ ContinuousMultilinearMap.apply ℝ (fun _ : Fin k ↦ E) F
+            (Fin.tail v) (iteratedFDeriv ℝ k (taylorPolynomial m J a) y)) x (v 0) := by
+      show ((fderiv ℝ (iteratedFDeriv ℝ k (taylorPolynomial m J a)) x) (v 0)) (Fin.tail v)
+          = (fderiv ℝ (⇑(ContinuousMultilinearMap.apply ℝ (fun _ : Fin k ↦ E) F (Fin.tail v))
+              ∘ iteratedFDeriv ℝ k (taylorPolynomial m J a)) x) (v 0)
+      rw [(ContinuousMultilinearMap.apply ℝ (fun _ : Fin k ↦ E) F
+          (Fin.tail v)).hasFDerivAt.comp x hGd.hasFDerivAt |>.fderiv]
+      rfl
+    rw [hstep1]
+    have hfun : (fun y ↦ ContinuousMultilinearMap.apply ℝ (fun _ : Fin k ↦ E) F
+          (Fin.tail v) (iteratedFDeriv ℝ k (taylorPolynomial m J a) y)) =
+        fun y ↦ ∑ q ∈ Finset.range (m + 1 - k), (q.factorial : ℝ)⁻¹ •
+          J (k + q) a (Fin.append (Fin.tail v) (fun _ : Fin q ↦ y - a)) := by
+      funext y
+      exact ih y hkm (Fin.tail v)
+    rw [hfun]
+    have hterm : ∀ q ∈ Finset.range (m + 1 - k),
+        HasFDerivAt (fun y ↦ (q.factorial : ℝ)⁻¹ •
+            J (k + q) a (Fin.append (Fin.tail v) (fun _ : Fin q ↦ y - a)))
+          ((q.factorial : ℝ)⁻¹ •
+            ∑ i : Fin (k + q), (J (k + q) a).toContinuousLinearMap
+              (Fin.append (Fin.tail v) (fun _ : Fin q ↦ x - a)) i ∘L
+              (if (i : ℕ) < k then (0 : E →L[ℝ] E) else ContinuousLinearMap.id ℝ E)) x := by
+      intro q _
+      refine (HasFDerivAt.multilinear_comp (J (k + q) a) ?_).const_smul _
+      intro i
+      by_cases hi : (i : ℕ) < k
+      · rw [if_pos hi]
+        have hgi : (fun y ↦ Fin.append (Fin.tail v) (fun _ : Fin q ↦ y - a) i) =
+            fun _ ↦ Fin.tail v ⟨i, hi⟩ := by
+          funext y
+          have he : i = Fin.castAdd q ⟨i, hi⟩ := Fin.ext rfl
+          conv_lhs => rw [he, Fin.append_left]
+        rw [hgi]
+        exact hasFDerivAt_const _ _
+      · rw [if_neg hi]
+        have hgi : (fun y ↦ Fin.append (Fin.tail v) (fun _ : Fin q ↦ y - a) i) =
+            fun y ↦ y - a := by
+          funext y
+          have he : i = Fin.natAdd k ⟨i - k, by have := i.isLt; omega⟩ :=
+            Fin.ext (by have := i.isLt; show (i : ℕ) = k + (i - k); omega)
+          conv_lhs => rw [he, Fin.append_right]
+        rw [hgi]
+        exact (hasFDerivAt_id x).sub_const a
+    rw [show (fun y ↦ ∑ q ∈ Finset.range (m + 1 - k), (q.factorial : ℝ)⁻¹ •
+          J (k + q) a (Fin.append (Fin.tail v) (fun _ : Fin q ↦ y - a))) =
+        (∑ q ∈ Finset.range (m + 1 - k), fun y ↦ (q.factorial : ℝ)⁻¹ •
+          J (k + q) a (Fin.append (Fin.tail v) (fun _ : Fin q ↦ y - a))) from
+      by funext y; rw [Finset.sum_apply]]
+    rw [(HasFDerivAt.sum hterm).fderiv]
+    have happ : ∀ q : ℕ, ((q.factorial : ℝ)⁻¹ •
+          ∑ i : Fin (k + q), (J (k + q) a).toContinuousLinearMap
+            (Fin.append (Fin.tail v) (fun _ : Fin q ↦ x - a)) i ∘L
+            (if (i : ℕ) < k then (0 : E →L[ℝ] E) else ContinuousLinearMap.id ℝ E)) (v 0) =
+        (q.factorial : ℝ)⁻¹ • ∑ i : Fin (k + q), J (k + q) a
+          (Function.update (Fin.append (Fin.tail v) (fun _ : Fin q ↦ x - a)) i
+            (if (i : ℕ) < k then 0 else v 0)) := by
+      intro q
+      rw [ContinuousLinearMap.smul_apply, ContinuousLinearMap.sum_apply]
+      congr 1
+      apply Finset.sum_congr rfl
+      intro i _
+      by_cases hi : (i : ℕ) < k
+      · rw [if_pos hi, if_pos hi, ContinuousLinearMap.comp_apply,
+          ContinuousLinearMap.zero_apply,
+          ContinuousMultilinearMap.toContinuousLinearMap_apply]
+      · rw [if_neg hi, if_neg hi, ContinuousLinearMap.comp_apply,
+          ContinuousLinearMap.id_apply,
+          ContinuousMultilinearMap.toContinuousLinearMap_apply]
+    rw [ContinuousLinearMap.sum_apply]
+    conv_lhs => arg 2; ext q; rw [happ q]
+    have hr1 : m + 1 - k = (m - k) + 1 := by omega
+    have hr2 : m + 1 - (k + 1) = m - k := by omega
+    rw [hr1, Finset.sum_range_succ', hr2]
+    have hInn0 : (∑ i : Fin (k + 0), J (k + 0) a (Function.update
+        (Fin.append (Fin.tail v) (fun _ : Fin 0 ↦ x - a)) i
+        (if (i : ℕ) < k then 0 else v 0))) = 0 := by
+      apply Finset.sum_eq_zero
+      intro i _
+      have hi : (i : ℕ) < k := by have := i.isLt; omega
+      rw [if_pos hi]
+      exact (J (k + 0) a).map_update_zero _ _
+    rw [hInn0, smul_zero, add_zero]
+    apply Finset.sum_congr rfl
+    intro q hq
+    rw [Finset.mem_range] at hq
+    rw [iteratedFDeriv_taylorPolynomial_exact_aux_inner (J (k + (q + 1)) a)
+      (hJ _ (by omega)) (Fin.tail v) (v 0) (x - a),
+      iteratedFDeriv_taylorPolynomial_exact_aux_coeff]
+    congr 1
+    refine (iteratedFDeriv_taylorPolynomial_exact_aux_cast (fun n ↦ J n a)
+      (show k + (q + 1) = k + 1 + q by omega)
+      (Fin.append (Fin.cons (v 0) (Fin.tail v)) (fun _ : Fin q ↦ x - a))).trans ?_
+    exact congrArg (fun t ↦ J (k + 1 + q) a (Fin.append t (fun _ : Fin q ↦ x - a)))
+      (Fin.cons_self_tail v)
 -- END SEAT AREA
 
 /-- Norm consequence of the exact shifted-jet formula.  Apply the multilinear norm bound
