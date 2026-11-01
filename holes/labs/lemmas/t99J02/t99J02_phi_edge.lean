@@ -147,13 +147,74 @@ theorem t99J02_phi_edge (e : ℕ) (he : e < 4) (t : Set.Icc (0 : ℝ) 1) :
 /-- A chord point lands on the boundary of the hole, at parameter `(x + i √(1-x²))²`. -/
 theorem t99J02_phi_chord (x : ℝ) (hx : |x| ≤ 1) :
     t99J02_phi (x : ℂ) = t99J02_ell ((⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2) := by
-  sorry
+  have hx2 : 0 ≤ 1 - x ^ 2 := by
+    have hxb := abs_le.mp hx
+    nlinarith
+  have hsqrt : (√(1 - x ^ 2)) ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx2
+  have hsqrt_mul : √(1 - x ^ 2) * √(1 - x ^ 2) = 1 - x ^ 2 := by
+    simpa [pow_two] using hsqrt
+  have hbase : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ)‖ = 1 := by
+    have hsquare : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ)‖ ^ 2 = 1 := by
+      rw [Complex.sq_norm, Complex.normSq_mk]
+      nlinarith
+    nlinarith [norm_nonneg (⟨x, √(1 - x ^ 2)⟩ : ℂ)]
+  have hnorm : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2‖ = 1 := by
+    rw [norm_pow, hbase]
+    norm_num
+  apply Complex.ext
+  · rw [t99J02_phi, t99J02_ell]
+    rw [hnorm]
+    simp [pow_two]
+    ring_nf at hsqrt_mul ⊢
+    nlinarith
+  · rw [t99J02_phi, t99J02_ell]
+    simp [pow_two]
+    ring
 
 /-- Every unit complex number is `(x + i √(1-x²))²` for a real `x`, `|x| ≤ 1`, namely the root in
 the closed upper half plane. -/
 theorem t99J02_circle_param (s : ℂ) (hs : ‖s‖ = 1) :
     ∃ x : ℝ, |x| ≤ 1 ∧ s = (⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2 := by
-  sorry
+  have hs' : s.re ^ 2 + s.im ^ 2 = 1 := by
+    have hnorm := Complex.sq_norm s
+    rw [hs, Complex.normSq_apply] at hnorm
+    nlinarith
+  set y : ℝ := √((1 - s.re) / 2)
+  have hre_le : s.re ≤ 1 := by
+    nlinarith [sq_nonneg (s.re - 1), sq_nonneg s.im]
+  have hy0 : 0 ≤ y := Real.sqrt_nonneg _
+  have hy2 : y ^ 2 = (1 - s.re) / 2 := by
+    exact Real.sq_sqrt (by linarith)
+  by_cases hy : y = 0
+  · have hre : s.re = 1 := by nlinarith
+    have him : s.im = 0 := by nlinarith [sq_nonneg s.im]
+    refine ⟨1, by norm_num, ?_⟩
+    apply Complex.ext
+    · norm_num [hre, pow_two, Complex.mul_re]
+    · norm_num [him, pow_two, Complex.mul_im]
+  · let x := s.im / (2 * y)
+    have hxy : 2 * x * y = s.im := by
+      dsimp [x]
+      field_simp
+    have hx2 : x ^ 2 = (1 + s.re) / 2 := by
+      dsimp [x]
+      field_simp [hy]
+      nlinarith [hy2]
+    have hx_le : |x| ≤ 1 := by
+      rw [← sq_le_one_iff_abs_le_one]
+      rw [hx2]
+      nlinarith [sq_nonneg (s.re + 1), sq_nonneg s.im]
+    have hsqrt : √(1 - x ^ 2) = y := by
+      rw [← Real.sqrt_sq hy0]
+      congr 1
+      nlinarith [hx2, hy2]
+    refine ⟨x, hx_le, ?_⟩
+    rw [hsqrt]
+    apply Complex.ext
+    · simp [pow_two, Complex.mul_re]
+      nlinarith [hx2, hy2]
+    · simp [pow_two, Complex.mul_im]
+      nlinarith
 
 /-- The image of the closed upper half disk misses the open hole. Write `ζ = x + i y'` for the
 inner point, `y' ≥ √(1-x²)/2`. If `ζ² = ell u`, `‖u‖ < 1`, take the root `u = v²`, `v = a + i b`,
@@ -218,7 +279,47 @@ theorem t99J02_chi_spec :
       (∀ u, t99J02_chi (t99J02_refl u) = (starRingEnd ℂ) (t99J02_chi u)) ∧
       Continuous t99J02_refl ∧ Function.Injective t99J02_refl ∧ (∀ u, ‖t99J02_refl u‖ = ‖u‖) ∧
       (∀ v : ℂ, ∃ u, t99J02_chi u = v) := by
-  sorry
+  have hchi_cont : Continuous t99J02_chi := by
+    simpa [t99J02_chi] using
+      Complex.equivRealProdCLM.symm.continuous.comp
+        ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).prodMk
+          (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1))
+  have hchi_norm : ∀ u, ‖t99J02_chi u‖ = ‖u‖ := by
+    intro u
+    rw [Complex.norm_eq_sqrt_sq_add_sq, EuclideanSpace.norm_eq]
+    simp [t99J02_chi, Fin.sum_univ_two]
+  have hchi_inj : Function.Injective t99J02_chi := by
+    intro u v h
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · exact congrArg Complex.re h
+    · exact congrArg Complex.im h
+  have hrefl_cont : Continuous t99J02_refl := by
+    change Continuous (fun u : EuclideanSpace ℝ (Fin 2) => !₂[u 0, -u 1])
+    exact (PiLp.continuous_toLp 2 (fun _ : Fin 2 => ℝ)).comp
+      (continuous_pi fun i => by
+        fin_cases i
+        · simpa using PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0
+        · simpa using (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1).neg)
+  have hrefl_inj : Function.Injective t99J02_refl := by
+    intro u v h
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · simpa [t99J02_refl] using congrArg (fun w : EuclideanSpace ℝ (Fin 2) => w 0) h
+    · have hi := congrArg (fun w : EuclideanSpace ℝ (Fin 2) => w 1) h
+      simpa [t99J02_refl] using congrArg Neg.neg hi
+  have hrefl_norm : ∀ u, ‖t99J02_refl u‖ = ‖u‖ := by
+    intro u
+    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+    simp [t99J02_refl, Fin.sum_univ_two]
+  refine ⟨hchi_cont, hchi_inj, hchi_norm, ?_, hrefl_cont, hrefl_inj, hrefl_norm, ?_⟩
+  · intro u
+    apply Complex.ext <;> simp [t99J02_chi, t99J02_refl]
+  · intro v
+    refine ⟨!₂[v.re, v.im], ?_⟩
+    apply Complex.ext <;> simp [t99J02_chi]
 
 /-- The dilated hole does not meet its own lattice translates. For `‖u‖ ≤ 5/4`, with
 `w = ell u`: `Re w ± Im w ≥ -5/8` (Cauchy: `7/8 r + 5/8 a ± b/2 ≥ 0`, for `u = a + i b`, `r = ‖u‖`) and `‖w‖ ≤ 5/4`, so both coordinates `A, B` of the chart
@@ -405,7 +506,11 @@ theorem t99J02_G_continuous (hg₁ : Continuous g₁) (hg₂ : Continuous g₂)
 /-- On the closed lower half `G` is `g₂ ∘ neg`, including on the chord. -/
 theorem t99J02_G_lower (hch : t99J02_Chord g₁ g₂) (z : ConstructionTargets.Surfaces.Disk) (h : (z : ℂ).im ≤ 0) :
     t99J02_G g₁ g₂ z = t99J02_mk c₁ c₂ (Sum.inr (g₂ ⟨t99J02_neg z, by simpa [t99J02_neg] using h⟩)) := by
-  sorry
+  rw [t99J02_G]
+  by_cases hz : 0 ≤ (z : ℂ).im
+  · rw [dif_pos hz]
+    exact hch z (le_antisymm h hz)
+  · rw [dif_neg hz]
 
 /-- `G` respects the octagon's identifications. For handle `0` both points are upper and
 `t99J02_phi_edge` turns the generator into a generator of `Surface true 1`, so `g₁` agrees; for
