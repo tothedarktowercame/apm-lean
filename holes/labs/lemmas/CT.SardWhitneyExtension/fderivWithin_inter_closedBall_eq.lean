@@ -153,7 +153,99 @@ theorem exists_whitney_bump_family_aux_half_localFinite
     ∀ x ∉ K, ∃ U ∈ nhds x,
       {i : SardConvexDomain.WhitneyNetIndex K |
         (U ∩ Metric.ball i.center (Metric.infDist i.center K / 2)).Nonempty}.Finite := by
-  sorry
+  intro x hx
+  let r := Metric.infDist x K / 16
+  let I : Set (SardConvexDomain.WhitneyNetIndex K) := {i |
+    (Metric.ball x r ∩ Metric.ball i.center
+      (Metric.infDist i.center K / 2)).Nonempty}
+  have hxpos : 0 < Metric.infDist x K := (hK.notMem_iff_infDist_pos hKn).1 hx
+  have hscale (i : SardConvexDomain.WhitneyNetIndex K) (hi : i ∈ I) :
+      5 * Metric.infDist x K < 8 * Metric.infDist i.center K ∧
+        8 * Metric.infDist i.center K < 17 * Metric.infDist x K := by
+    obtain ⟨y, hyx, hyi⟩ := hi
+    have ha : dist x y < Metric.infDist x K / 16 := by
+      simpa [r, dist_comm] using Metric.mem_ball.1 hyx
+    have hb : dist y i.center < Metric.infDist i.center K / 2 := Metric.mem_ball.1 hyi
+    have hxy := Metric.infDist_le_infDist_add_dist (s := K) (x := x) (y := y)
+    have hyx' := Metric.infDist_le_infDist_add_dist (s := K) (x := y) (y := x)
+    have hc := SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hyi
+    have had : dist y x = dist x y := dist_comm _ _
+    constructor <;> nlinarith
+  have hfiber (k : ℤ) : {i | i.1 = k ∧ i ∈ I}.Finite := by
+    let f : SardConvexDomain.WhitneyNetIndex K → E :=
+      SardConvexDomain.WhitneyNetIndex.center
+    have hinj : Set.InjOn f {i | i.1 = k ∧ i ∈ I} := by
+      intro i hi j hj hij
+      have hk : i.1 = j.1 := hi.1.trans hj.1.symm
+      cases i with
+      | mk ik ic =>
+        cases j with
+        | mk jk jc =>
+          dsimp at hk hij ⊢
+          subst jk
+          exact congrArg (Sigma.mk ik) (Subtype.ext hij)
+    apply Set.Finite.of_finite_image (f := f) _ hinj
+    apply (SardConvexDomain.finite_inter_whitneyStratumNet_of_isCompact K k
+      (isCompact_closedBall x (4 * (2 : ℝ) ^ (k + 1)))).subset
+    rintro c ⟨i, hi, rfl⟩
+    constructor
+    · change i.2.1 ∈ SardConvexDomain.whitneyStratumNet K k
+      rw [← hi.1]
+      exact i.2.2
+    · obtain ⟨y, hyx, hyi⟩ := hi.2
+      apply Metric.mem_closedBall.2
+      have ha : dist x y < Metric.infDist x K / 16 := by
+        simpa [r, dist_comm] using Metric.mem_ball.1 hyx
+      have hb : dist y i.center < Metric.infDist i.center K / 2 := Metric.mem_ball.1 hyi
+      have hs := hscale i hi.2
+      have hstr : Metric.infDist i.center K < (2 : ℝ) ^ (k + 1) := by
+        simpa only [hi.1] using
+          ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.2
+      have ht := dist_triangle x y i.center
+      have hp : 0 < (2 : ℝ) ^ (k + 1) := by positivity
+      rw [show dist (f i) x = dist x i.center by simp [f, dist_comm]]
+      nlinarith
+  refine ⟨Metric.ball x r, Metric.ball_mem_nhds x (by dsimp [r]; positivity), ?_⟩
+  change I.Finite
+  by_cases hI : I.Nonempty
+  · obtain ⟨i, hi⟩ := hI
+    have hfinite := (Set.finite_Icc (i.1 - 3) (i.1 + 3)).biUnion
+      (fun k _ => hfiber k)
+    apply hfinite.subset
+    intro j hj
+    have hsi := hscale i hi
+    have hsj := hscale j hj
+    have hik : (2 : ℝ) ^ i.1 ≤ Metric.infDist i.center K :=
+      ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.1
+    have hjk : Metric.infDist j.center K < (2 : ℝ) ^ (j.1 + 1) :=
+      ((SardConvexDomain.whitneyStratumNet_spec K j.1).1 j.2.2).2.2
+    have hjlow : (2 : ℝ) ^ j.1 ≤ Metric.infDist j.center K :=
+      ((SardConvexDomain.whitneyStratumNet_spec K j.1).1 j.2.2).2.1
+    have hiup : Metric.infDist i.center K < (2 : ℝ) ^ (i.1 + 1) :=
+      ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.2
+    rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hjk hiup
+    norm_num at hjk hiup
+    have hlo : i.1 - 3 ≤ j.1 := by
+      by_contra hn
+      have hp : (2 : ℝ) ^ (j.1 + 4) ≤ (2 : ℝ) ^ i.1 :=
+        zpow_le_zpow_right₀ (by norm_num) (by omega)
+      rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hp
+      norm_num at hp
+      have hpi : 0 < (2 : ℝ) ^ i.1 := by positivity
+      have hpj : 0 < (2 : ℝ) ^ j.1 := by positivity
+      nlinarith
+    have hhi : j.1 ≤ i.1 + 3 := by
+      by_contra hn
+      have hp : (2 : ℝ) ^ (i.1 + 4) ≤ (2 : ℝ) ^ j.1 :=
+        zpow_le_zpow_right₀ (by norm_num) (by omega)
+      rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] at hp
+      norm_num at hp
+      have hpi : 0 < (2 : ℝ) ^ i.1 := by positivity
+      have hpj : 0 < (2 : ℝ) ^ j.1 := by positivity
+      nlinarith
+    exact Set.mem_iUnion₂.2 ⟨j.1, ⟨hlo, hhi⟩, ⟨rfl, hj⟩⟩
+  · rw [Set.not_nonempty_iff_eq_empty.mp hI]
+    exact Set.finite_empty
 
 theorem exists_whitney_bump_family
     (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -259,7 +351,37 @@ theorem whitney_bump_sum_positive_smooth
     (hsmooth : ∀ i, ContDiff ℝ ∞ (psi i)) :
     ∀ x ∉ K, 1 ≤ ∑' i, psi i x ∧
       ContDiffAt ℝ ∞ (fun y ↦ ∑' i, psi i y) x := by
-  sorry
+  intro x hx
+  have hxK : x ∈ Kᶜ := by simpa using hx
+  obtain ⟨i0, hi0⟩ : ∃ i0 : SardConvexDomain.WhitneyNetIndex K,
+      x ∈ Metric.ball i0.center (Metric.infDist i0.center K / 4) := by
+    have hsub := SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls hK hKn
+    simpa using Set.mem_iUnion.1 (hsub hxK)
+  obtain ⟨U, hUnhds, hTfin⟩ := hlocal x hx
+  obtain ⟨V, hVU, hVopen, hxV⟩ := mem_nhds_iff.1 hUnhds
+  obtain ⟨F, hF⟩ := hTfin.exists_finset_coe
+  have hzero : ∀ y ∈ V, ∀ i ∉ (F : Set _), psi i y = 0 := by
+    intro y hy i hi
+    by_contra hne
+    exact hi (hF ▸ (show (U ∩ Function.support (psi i)).Nonempty from
+      ⟨y, ⟨hVU hy, hne⟩⟩))
+  have heq : ∀ y ∈ V, (∑' i, psi i y) = ∑ i ∈ F, psi i y := by
+    intro y hy
+    rw [tsum_eq_sum (s := F) (fun i hi ↦ hzero y hy i hi)]
+  have hi0F : i0 ∈ F := by
+    have hne : psi i0 x ≠ 0 := by
+      rw [hone i0 hi0]; norm_num
+    have : i0 ∈ (↑F : Set _) := hF ▸ ⟨x, ⟨hVU hxV, hne⟩⟩
+    exact Finset.mem_coe.1 this
+  refine ⟨?_, ?_⟩
+  · have h1 : psi i0 x = 1 := hone i0 hi0
+    have := Finset.single_le_sum (fun i _ ↦ hnonneg i x) hi0F
+    rwa [h1, ← heq x hxV] at this
+  · have hsmoothg : ContDiff ℝ ∞ (fun y ↦ ∑ i ∈ F, psi i y) :=
+      ContDiff.sum (fun i _ ↦ hsmooth i)
+    refine hsmoothg.contDiffAt.congr_of_eventuallyEq ?_
+    filter_upwards [hVopen.mem_nhds hxV] with y hy
+    exact heq y hy
 
 /-- Uniform, rather than merely pointwise finite, incidence of Whitney half-balls.
 Adjacent incident strata have comparable scales; within each stratum the net centers are
@@ -482,7 +604,42 @@ theorem whitneyOffExtension_contDiffOn_compl
     {K : Set E} {m : ℕ} {f : E → F} (hK : IsClosed K) (hKn : K.Nonempty)
     (P : WhitneySmoothPartition E K) :
     ContDiffOn ℝ m (whitneyOffExtension m f hK hKn P) Kᶜ := by
-  sorry
+  intro x hx
+  rcases P.locallyFinite_compl x hx with ⟨U, hU, hfin⟩
+  let S : Finset (SardConvexDomain.WhitneyNetIndex K) := hfin.toFinset
+  have hzero : ∀ y ∈ U, ∀ i ∉ S, P.phi i y = 0 := by
+    intro y hy i hi
+    by_contra hne
+    have hys : y ∈ Function.support (P.phi i) := hne
+    have hi' : i ∈ {i | (U ∩ Function.support (P.phi i)).Nonempty} := by
+      exact ⟨y, hy, hys⟩
+    exact hi (by simpa [S] using hi')
+  have heq : ∀ y ∈ U,
+      whitneyOffExtension m f hK hKn P y =
+        ∑ i ∈ S, P.phi i y • taylorPolynomial m (fun k ↦ convexJet k f K)
+          (SardConvexDomain.whitneyNetAnchor hK hKn i) y := by
+    intro y hy
+    unfold whitneyOffExtension
+    exact tsum_eq_sum (fun i hi ↦ by simp [hzero y hy i hi])
+  have hsmooth : ContDiff ℝ m (fun y : E ↦
+      ∑ i ∈ S, P.phi i y • taylorPolynomial m (fun k ↦ convexJet k f K)
+        (SardConvexDomain.whitneyNetAnchor hK hKn i) y) := by
+    apply ContDiff.sum
+    intro i hi
+    apply (P.contDiff_phi i).of_le
+      (by exact_mod_cast (show (m : ℕ∞) ≤ ⊤ from le_top)) |>.smul
+    unfold taylorPolynomial
+    apply ContDiff.sum
+    intro k hk
+    apply contDiff_const.smul
+    exact (ContinuousMultilinearMap.contDiff _).comp
+      (contDiff_pi.2 fun _ ↦ contDiff_id.sub contDiff_const)
+  apply hsmooth.contDiffAt.contDiffWithinAt.congr_of_eventuallyEq
+  · have hUw : ∀ᶠ y in nhdsWithin x Kᶜ, y ∈ U :=
+      Filter.Eventually.filter_mono inf_le_left hU
+    filter_upwards [hUw] with y hy
+    exact heq y hy
+  · exact heq x (mem_of_mem_nhds hU)
 
 /-- The exact subtraction identity behind the off-set estimate.  Replace `1` by the locally
 finite sum of the partition and distribute the common polynomial; no differentiated
@@ -652,7 +809,15 @@ theorem contDiff_and_fderiv_eq_of_gluedTaylorSeries
     (hone : ∀ x ∈ K, ∀ v, convexJet 1 f K x (fun _ ↦ v) = fderivWithin ℝ f K x v)
     (hT : HasFTaylorSeriesUpTo (m : WithTop ℕ∞) G (gluedWhitneyJet K f G)) :
     ContDiff ℝ m G ∧ ∀ x ∈ K, fderiv ℝ G x = fderivWithin ℝ f K x := by
-  sorry
+  constructor
+  · exact hT.contDiff
+  · intro x hx
+    have hm0 : (m : WithTop ℕ∞) ≠ 0 := by
+      exact_mod_cast (Nat.ne_of_gt hm)
+    rw [(hT.hasFDerivAt hm0 x).fderiv]
+    ext v
+    simp only [gluedWhitneyJet, hx, if_pos]
+    convert hone x hx v using 1
 
 /-- Fixed-order Whitney extension on a compact convex domain.  For positive `m`, choose the
 partition, apply the polynomial-relative off-set estimate, and assemble the Taylor series.
@@ -678,7 +843,11 @@ theorem compactExhaustion_piece
     IsCompact (s ∩ Metric.closedBall p R) ∧
       Convex ℝ (s ∩ Metric.closedBall p R) ∧
       (interior (s ∩ Metric.closedBall p R)).Nonempty := by
-  sorry
+  refine ⟨(isCompact_closedBall p R).inter_left hs,
+    hsc.inter (convex_closedBall p R), ?_⟩
+  refine ⟨p, ?_⟩
+  rw [interior_inter, interior_closedBall p (ne_of_gt hR)]
+  exact ⟨hp, Metric.mem_ball_self hR⟩
 
 /-- Inside the open ball, adding the closed-ball constraint does not change the within
 derivative.  The two domains agree in a neighborhood of `x`; apply `fderivWithin_congr_set`
