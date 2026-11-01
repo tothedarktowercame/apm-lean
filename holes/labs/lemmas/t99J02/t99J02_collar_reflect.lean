@@ -138,9 +138,44 @@ theorem t99J02_ell_injective : Function.Injective t99J02_ell := by
   sorry
 
 /-- On the upper unit semicircle `phi z = z²`, since `√(1 - x²) = y`. -/
+lemma t99J02_phi_edge_aux (z : ℂ) (hn : ‖z‖ = 1) (hi : 0 ≤ z.im) :
+    t99J02_phi z = z ^ 2 := by
+  have hre : 0 ≤ 1 - z.re ^ 2 := by
+    have hn' : ‖z‖ ^ 2 = 1 := by rw [hn]; norm_num
+    rw [Complex.sq_norm, Complex.normSq_apply] at hn'
+    nlinarith
+  have him : z.im ^ 2 = 1 - z.re ^ 2 := by
+    have hn' : ‖z‖ ^ 2 = 1 := by rw [hn]; norm_num
+    rw [Complex.sq_norm, Complex.normSq_apply] at hn'
+    nlinarith
+  have hsqrt : √(1 - z.re ^ 2) = z.im := by
+    have hs := Real.sq_sqrt hre
+    nlinarith [Real.sqrt_nonneg (1 - z.re ^ 2)]
+  simp only [t99J02_phi, hsqrt]
+  congr 1
+  apply Complex.ext <;> simp <;> ring
+
 theorem t99J02_phi_edge (e : ℕ) (he : e < 4) (t : Set.Icc (0 : ℝ) 1) :
     t99J02_phi (edgePoint 8 e t : ℂ) = (edgePoint 4 e t : ℂ) := by
-  sorry
+  have hangle0 : 0 ≤ 2 * Real.pi * ((e : ℝ) + t.1) / 8 := by
+    have he0 : (0 : ℝ) ≤ e := by positivity
+    have ht0 := t.2.1
+    positivity
+  have hanglepi : 2 * Real.pi * ((e : ℝ) + t.1) / 8 ≤ Real.pi := by
+    have hpi : 0 < Real.pi := Real.pi_pos
+    have he' : e ≤ 3 := by omega
+    have heR : (e : ℝ) ≤ 3 := by exact_mod_cast he'
+    have ht := t.2.2
+    nlinarith
+  have him : 0 ≤ ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ).im := by
+    simp only [edgePoint, Complex.mul_re, Complex.mul_im, Complex.I_re,
+      Complex.I_im, zero_mul, one_mul, Complex.exp_im]
+    convert Real.sin_nonneg_of_nonneg_of_le_pi hangle0 hanglepi using 1 <;> ring_nf <;> simp
+  rw [t99J02_phi_edge_aux _ (norm_edgePoint 8 e t) him]
+  simp only [edgePoint, pow_two, ← Complex.exp_add]
+  congr 1
+  push_cast
+  ring
 
 /-- A chord point lands on the boundary of the hole, at parameter `(x + i √(1-x²))²`. -/
 theorem t99J02_phi_chord (x : ℝ) (hx : |x| ≤ 1) :
@@ -437,7 +472,8 @@ theorem t99J02_mk_eq (p p' : Sum c₁.Punctured c₂.Punctured)
 theorem t99J02_isClosed_of (A : Set (ConnectedSum c₁ c₂))
     (h₁ : IsClosed ((fun p => t99J02_mk c₁ c₂ (Sum.inl p)) ⁻¹' A))
     (h₂ : IsClosed ((fun p => t99J02_mk c₁ c₂ (Sum.inr p)) ⁻¹' A)) : IsClosed A := by
-  sorry
+  apply isClosed_coinduced.mpr
+  exact isClosed_sum_iff.mpr ⟨h₁, h₂⟩
 
 theorem t99J02_continuous_mk : Continuous (t99J02_mk c₁ c₂) := continuous_coinduced_rng
 
