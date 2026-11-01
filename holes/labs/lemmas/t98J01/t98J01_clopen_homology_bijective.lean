@@ -1320,11 +1320,131 @@ def t98J01_incl {Y : Type} [TopologicalSpace Y] (A : Set Y) : C(A, Y) :=
 
 /-- Seat: a clopen decomposition splits rational homology. Take `P`, `Q` the ranges. `ambientSubspaceRange_inf` and `hdis` make `P ⊓ Q` the range of the empty set, so `t98J01_sset.obj (P ⊓ Q)` has no simplices and is a zero complex; in `CoefficientSubcomplexMayerVietoris.shortExact` the map `g` is then an isomorphism (`ShortComplex.ShortExact.isIso_g_iff` or mono+epi). Compose with `RP3Homology.rationalMayerVietoris_aux_unionMap_isIso`, `rangeChainsIso` and `homologyBiprodIso`, watching the sign in `g`: a sign on one summand does not change bijectivity. Alternative for injectivity and positive degrees: `RP3Homology.rationalMayerVietoris`. -/
 -- BEGIN SEAT AREA
+private theorem t98J01_clopen_homology_bijective_aux_empty
+    {X : Type} [TopologicalSpace X] [IsEmpty X] (n : ℕ) :
+    Subsingleton (Homology X n) := by
+  letI : TotallyDisconnectedSpace X :=
+    ⟨fun s _ _ x _ _ _ => isEmptyElim x⟩
+  rcases n with _ | n
+  · let e := AlgebraicTopology.singularHomologyFunctorZeroOfTotallyDisconnectedSpace
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) (TopCat.of X)
+    let hinit : IsInitial (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) :=
+      { desc := fun _ => 0
+        fac := fun _ j => isEmptyElim j
+        uniq := fun _ m _ => by
+          change (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) ⟶ _ at m
+          change m = 0
+          apply Limits.Sigma.hom_ext m 0
+          intro x
+          exact isEmptyElim x }
+    letI : Subsingleton ↑(∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) :=
+      ModuleCat.subsingleton_of_isZero hinit.isZero
+    constructor
+    intro x y
+    have h : e.hom.hom x = e.hom.hom y := Subsingleton.elim _ _
+    have := congrArg e.inv.hom h
+    simpa using this
+  · exact ModuleCat.subsingleton_of_isZero
+      (AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+        (ModuleCat ℚ) (n + 1) (ModuleCat.of ℚ ℚ) (TopCat.of X) (by omega))
+
+private theorem t98J01_clopen_homology_bijective_aux_h0
+    {S : ShortComplex (ChainComplex (ModuleCat ℚ) ℕ)} (hS : S.ShortExact) :
+    Function.Surjective (HomologicalComplex.homologyMap S.g 0).hom := by
+  letI : Epi S.g := hS.epi_g
+  letI : Epi (HomologicalComplex.homologyMap S.g 0) := by
+    apply HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+    intro j hj
+    simp at hj
+  exact (ModuleCat.epi_iff_surjective _).mp inferInstance
+
 theorem t98J01_clopen_homology_bijective {Y : Type} [TopologicalSpace Y] (A B : Set Y)
     (hA : IsOpen A) (hB : IsOpen B) (hcov : A ∪ B = Set.univ) (hdis : A ∩ B = ∅) (n : ℕ) :
     Function.Bijective (LinearMap.coprod (induced (t98J01_incl A) n).hom
       (induced (t98J01_incl B) n).hom) := by
-  sorry
+  letI : IsEmpty ↑(A ∩ B) := ⟨fun x => by simpa [hdis] using x.2⟩
+  obtain ⟨δ, hex, hmid, htail⟩ := RP3Homology.rationalMayerVietoris A B hA hB hcov
+  letI hinter (k : ℕ) : Subsingleton (Homology ↑(A ∩ B) k) :=
+    t98J01_clopen_homology_bijective_aux_empty k
+  have hinjJ : Function.Injective (RP3Homology.mvJ A B n).hom := by
+    rw [← LinearMap.ker_eq_bot]
+    rw [← hex n]
+    ext x
+    constructor
+    · intro hx
+      rcases hx with ⟨z, rfl⟩
+      have : z = 0 := Subsingleton.elim _ _
+      simp [this]
+    · intro hx
+      rw [hx]
+      exact ⟨0, by simp⟩
+  have hsurjJ : Function.Surjective (RP3Homology.mvJ A B n).hom := by
+    rcases n with _ | n
+    · let S := RP3Homology.rationalMayerVietoris_aux_SC A B
+      have hs := t98J01_clopen_homology_bijective_aux_h0
+        (ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortExact ℚ
+          (RP3Homology.rationalMayerVietoris_aux_P A)
+          (RP3Homology.rationalMayerVietoris_aux_P B))
+      intro y
+      let eU := RP3Homology.rationalMayerVietoris_aux_unionIso A B hA hB hcov 0
+      let eP := RP3Homology.rationalMayerVietoris_aux_pieceIso A B 0
+      obtain ⟨x, hx⟩ := hs (eU.inv.hom y)
+      refine ⟨eP.hom.hom x, ?_⟩
+      have harrow := RP3Homology.rationalMayerVietoris_aux_unionArrow A B hA hB hcov 0
+      have := congrArg ModuleCat.Hom.hom harrow
+      calc
+        _ = eU.hom.hom ((HomologicalComplex.homologyMap S.g 0).hom x) := by
+          symm
+          simpa [eU, eP, S, ModuleCat.hom_comp] using
+            congrArg (fun f => f (eP.hom.hom x)) this
+        _ = y := by rw [hx]; simp [eU]
+    · intro y
+      have hker : y ∈ LinearMap.ker (δ n).hom := by
+        have : (δ n).hom y = 0 := Subsingleton.elim _ _
+        exact this
+      rw [← hmid n] at hker
+      exact hker
+  have hbijJ : Function.Bijective (RP3Homology.mvJ A B n).hom := ⟨hinjJ, hsurjJ⟩
+  let e := ModuleCat.biprodIsoProd (Homology A n) (Homology B n)
+  let s : ModuleCat.of ℚ (Homology A n × Homology B n) ⟶
+      ModuleCat.of ℚ (Homology A n × Homology B n) :=
+    ModuleCat.ofHom (LinearMap.prodMap LinearMap.id (-LinearMap.id))
+  have hs : Function.Bijective s.hom := by
+    constructor
+    · intro x y h
+      simpa [s] using congrArg (fun z => (z.1, -z.2)) h
+    · intro x
+      exact ⟨(x.1, -x.2), by simp [s]⟩
+  letI : IsIso s := (ConcreteCategory.isIso_iff_bijective s).2 hs
+  letI : IsIso (RP3Homology.mvJ A B n) :=
+    (ConcreteCategory.isIso_iff_bijective _).2 hbijJ
+  have hcomp : Function.Bijective (s ≫ e.inv ≫ RP3Homology.mvJ A B n).hom :=
+    ConcreteCategory.bijective_of_isIso _
+  have heq : (s ≫ e.inv ≫ RP3Homology.mvJ A B n).hom =
+      LinearMap.coprod (induced (t98J01_incl A) n).hom
+        (induced (t98J01_incl B) n).hom := by
+    have hAeq : (induced (t98J01_incl A) n).hom = (RP3Homology.mvToX A n).hom := rfl
+    have hBeq : (induced (t98J01_incl B) n).hom = (RP3Homology.mvToX B n).hom := rfl
+    rw [hAeq, hBeq]
+    apply LinearMap.ext
+    rintro ⟨x, y⟩
+    have hx : ((biprod.fst : (Homology A n ⊞ Homology B n) ⟶ Homology A n)).hom
+        (e.inv.hom (x, -y)) = x := by
+      change (e.inv ≫ (biprod.fst : (Homology A n ⊞ Homology B n) ⟶ Homology A n)).hom (x, -y) = x
+      rw [ModuleCat.biprodIsoProd_inv_comp_fst]
+      rfl
+    have hy : ((biprod.snd : (Homology A n ⊞ Homology B n) ⟶ Homology B n)).hom
+        (e.inv.hom (x, -y)) = -y := by
+      change (e.inv ≫ (biprod.snd : (Homology A n ⊞ Homology B n) ⟶ Homology B n)).hom (x, -y) = -y
+      rw [ModuleCat.biprodIsoProd_inv_comp_snd]
+      rfl
+    change (RP3Homology.mvJ A B n).hom (e.inv.hom (x, -y)) =
+      (RP3Homology.mvToX A n).hom x + (RP3Homology.mvToX B n).hom y
+    rw [show RP3Homology.mvJ A B n = biprod.desc
+      (RP3Homology.mvToX A n) (-(RP3Homology.mvToX B n)) by rfl,
+      biprod.desc_eq]
+    simp [ModuleCat.hom_comp, hx, hy]
+  rwa [heq] at hcomp
 -- END SEAT AREA
 
 /-- Seat: a self-map swapping the two pieces of a clopen decomposition has Lefschetz number 0. `t98J01_clopen_homology_bijective` gives each `Homology Y k` finite-dimensional and zero above `N`. Each trace is zero by `t98J01_trace_offDiagonal` with `φ₁₂`, `φ₂₁` induced by the corestrictions `A → B`, `B → A`; the equations are functoriality of `induced`. -/
