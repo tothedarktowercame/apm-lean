@@ -970,7 +970,34 @@ theorem t98J01_complexLefschetz_congr
 theorem t98J01_homotopyEquiv_isIso {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     (e : ContinuousMap.HomotopyEquiv Y X) (n : ℕ) :
     IsIso (HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n) := by
-  sorry
+  have hmap : ∀ {Z : Type} [TopologicalSpace Z] {f g : C(Z, Z)},
+      f.Homotopic g →
+      HomologicalComplex.homologyMap (t98J01_chainMap f) n =
+        HomologicalComplex.homologyMap (t98J01_chainMap g) n :=
+    fun H => ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) H n
+  have hcomp : ∀ {W Z : Type} [TopologicalSpace W] [TopologicalSpace Z]
+      (f : C(W, Z)) (g : C(Z, W)),
+      t98J01_chainMap (g.comp f) = t98J01_chainMap f ≫ t98J01_chainMap g :=
+    fun f g => by
+      simp only [t98J01_chainMap, ← CategoryTheory.Functor.map_comp]
+      rfl
+  have hid : ∀ {Z : Type} [TopologicalSpace Z],
+      HomologicalComplex.homologyMap (t98J01_chainMap (ContinuousMap.id Z)) n = 𝟙 _ := by
+    intro Z _
+    have hcid : t98J01_chainMap (ContinuousMap.id Z) = 𝟙 (t98J01_chains Z) := by
+      simp [t98J01_chainMap, t98J01_chains]
+    rw [hcid, HomologicalComplex.homologyMap_id]
+  have h1 : HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n ≫
+      HomologicalComplex.homologyMap (t98J01_chainMap e.invFun) n = 𝟙 _ := by
+    rw [← HomologicalComplex.homologyMap_comp, ← hcomp, hmap e.left_inv, hid]
+  have h2 : HomologicalComplex.homologyMap (t98J01_chainMap e.invFun) n ≫
+      HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n = 𝟙 _ := by
+    rw [← HomologicalComplex.homologyMap_comp, ← hcomp, hmap e.right_inv, hid]
+  exact CategoryTheory.Iso.isIso_hom
+    (CategoryTheory.Iso.mk
+      (hom := HomologicalComplex.homologyMap (t98J01_chainMap e.toFun) n)
+      (inv := HomologicalComplex.homologyMap (t98J01_chainMap e.invFun) n) h1 h2)
 -- END SEAT AREA
 
 theorem t98J01_chainMap_comp {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
