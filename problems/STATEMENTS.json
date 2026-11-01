@@ -5059,7 +5059,7 @@
    "decls": [
     "apm_t01j06"
    ],
-   "sha256": "ec318cc2f07db2a4ac115d1b2f4eea90ab5967ce05fe668097fec1feb051bc63",
+   "sha256": "da1105a542c37df7d7cea48b2c5cd9fc37061c3c227a8f2fe01907de4524c261",
    "defs": [
     "apm_t01J06_AmbientForm2",
     "apm_t01J06_AmbientProductForm2",
@@ -5082,11 +5082,11 @@
     "apm_t01J06_tangentProjection"
    ],
    "grade": "faithful",
-   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 2; correction)",
-   "evidence": "holes/labs/statement-registry/repair-grades-2.md",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01, repair of the sphere measure)",
+   "evidence": "holes/labs/statement-registry/repair-grades-t01J06.md",
    "prelim_defect": null,
-   "rev": "e25b1d373",
-   "approved_at": "2026-10-13T20:44:06Z"
+   "rev": "49bf89640",
+   "approved_at": "2026-11-01T15:48:49Z"
   },
   "t02A01": {
    "decls": [
@@ -7823,6 +7823,45 @@
    "reason": "admitted before the he_symm repair was committed, so the entry pinned the old statement; re-admitted at the repaired revision",
    "evidence": "holes/labs/statement-registry/backlog-1024/held.md",
    "revoked_at": "2026-10-24T22:12:28Z"
+  },
+  {
+   "id": "t01J06",
+   "entry": {
+    "decls": [
+     "apm_t01j06"
+    ],
+    "sha256": "ec318cc2f07db2a4ac115d1b2f4eea90ab5967ce05fe668097fec1feb051bc63",
+    "defs": [
+     "apm_t01J06_AmbientForm2",
+     "apm_t01J06_AmbientProductForm2",
+     "apm_t01J06_E2",
+     "apm_t01J06_E3",
+     "apm_t01J06_E5",
+     "apm_t01J06_IsClosedProductExtension",
+     "apm_t01J06_ProductForm2",
+     "apm_t01J06_S1",
+     "apm_t01J06_S2",
+     "apm_t01J06_SphereForm2",
+     "apm_t01J06_circleTangent",
+     "apm_t01J06_isInclusionPullback",
+     "apm_t01J06_isJPullback",
+     "apm_t01J06_isOmega",
+     "apm_t01J06_orientedCoefficient",
+     "apm_t01J06_productRestriction",
+     "apm_t01J06_sphereIntegral",
+     "apm_t01J06_sphereTangent",
+     "apm_t01J06_tangentProjection"
+    ],
+    "grade": "faithful",
+    "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, repair batch 2; correction)",
+    "evidence": "holes/labs/statement-registry/repair-grades-2.md",
+    "prelim_defect": null,
+    "rev": "e25b1d373",
+    "approved_at": "2026-10-13T20:44:06Z"
+   },
+   "reason": "false value: raw muH[2] gives 16/3",
+   "evidence": "holes/labs/statement-registry/repair-grades-t01J06.md",
+   "revoked_at": "2026-11-01T15:48:49Z"
   }
  ]
 }
