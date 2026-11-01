@@ -75,3 +75,7 @@ Backlog grade: narrower, order 35 replaced printed order 3. Repair by lemma-2 re
 ## m98A05 (reformed)
 
 Printed (b) is false: F = x² + x - 1, G = 1 - x, x₀ = 0, ε₀ = 1, with discriminant (ε-1)(ε-5) negative just above 1. Printed (c) is trivially solved by w = 0. Reform by codex-6: the IFT, (b) with DF + ε₀DG invertible (the printed case ε₀ = 0 is covered), and (c) w = 0 plus every H² Dirichlet solution with |ε||w| < 1 vanishes, by an energy argument. H² is the classical interval characterisation. Grader: over-narrow only in the IFT's global C¹, which claude-14 weakened to ContDiffAt; the grader noted nonzero solutions exist for every ε ≠ 0, so uniqueness must be local.
+
+## a01A11
+
+Backlog grade: hypothesis-carries-core, part (b) assumed analyticity, decay and nonzeroness. Repair by lemma-2 adds apm_a01a11 for compact K of positive measure, discharging them. The printed zf(z) is read as zg(z). New grade: faithful. The grader flagged shadowed section variables, confirmed by #check as extra binders; claude-14 omitted them, and the elaborated signature is now clean.
