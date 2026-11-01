@@ -3341,7 +3341,48 @@ theorem compactExhaustion_critical_image_null
     (f : E → F) (hf : ContDiffOn ℝ ∞ f s) (n : ℕ) :
     mu (f '' {x | x ∈ s ∩ Metric.ball p (n + 1 : ℝ) ∧
       ¬ Function.Surjective (fderivWithin ℝ f s x)}) = 0 := by
-  sorry
+  let order : ℕ := Module.finrank ℝ E * (Module.finrank ℝ E + 1) + 2
+  let K : Set E := s ∩ Metric.closedBall p (n + 1 : ℝ)
+  have hR : 0 < (n + 1 : ℝ) := by positivity
+  obtain ⟨hKc, hKconv, hKi⟩ := compactExhaustion_piece hs hsc hp hR
+  have hfK : ContDiffOn ℝ (order + 1) f K := by
+    have hord : (order + 1 : WithTop ℕ∞) ≤ (∞ : WithTop ℕ∞) := by
+      exact_mod_cast (show (order + 1 : ℕ∞) ≤ ⊤ from le_top)
+    exact (hf.mono inter_subset_left).of_le hord
+  obtain ⟨F', hF'diff, hF'eq, hF'deriv⟩ :=
+    exists_contDiff_extension_compactConvex order (by
+      dsimp [order]
+      omega) hKc hKconv hKi hfK
+  have hnull := critical_image_null_of_high_order mu F'
+    (s ∩ Metric.ball p (n + 1 : ℝ)) order (by
+      simp [order, SardHighOrderPredicateProbe.sardHighOrderThreshold]) (by
+      intro x hx
+      exact hF'diff.contDiffAt)
+  rw [show f '' {x | x ∈ s ∩ Metric.ball p (n + 1 : ℝ) ∧
+      ¬ Function.Surjective (fderivWithin ℝ f s x)} =
+      F' '' ((s ∩ Metric.ball p (n + 1 : ℝ)) ∩
+        {x | ¬ Function.Surjective (fderiv ℝ F' x)}) by
+    ext y
+    constructor
+    · rintro ⟨x, ⟨hx, hcrit⟩, rfl⟩
+      have hxK : x ∈ K := ⟨hx.1, Metric.ball_subset_closedBall hx.2⟩
+      refine ⟨x, ⟨hx, ?_⟩, hF'eq hxK⟩
+      have heq : fderiv ℝ F' x = fderivWithin ℝ f s x :=
+        (hF'deriv x hxK).trans
+          (fderivWithin_inter_closedBall_eq f s p (n + 1 : ℝ) hx)
+      change ¬ Function.Surjective (fderiv ℝ F' x)
+      rw [heq]
+      exact hcrit
+    · rintro ⟨x, ⟨hx, hcrit⟩, rfl⟩
+      have hxK : x ∈ K := ⟨hx.1, Metric.ball_subset_closedBall hx.2⟩
+      refine ⟨x, ⟨hx, ?_⟩, (hF'eq hxK).symm⟩
+      have heq : fderiv ℝ F' x = fderivWithin ℝ f s x :=
+        (hF'deriv x hxK).trans
+          (fderivWithin_inter_closedBall_eq f s p (n + 1 : ℝ) hx)
+      change ¬ Function.Surjective (fderivWithin ℝ f s x)
+      rw [← heq]
+      exact hcrit]
+  exact hnull
 
 /-- Sard for a closed convex domain with nonempty interior.  Cover its critical image by
 the countable union of the compact-exhaustion critical images, apply the preceding nullity
