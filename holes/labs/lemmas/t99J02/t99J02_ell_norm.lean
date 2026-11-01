@@ -67,7 +67,7 @@ the vertex `1`. The upper half of the octagon goes onto the torus minus that hol
 
 /-- `ell (z²) = (x + i y / 2)²` for `z = x + i y`, written without a square root. Homogeneous of
 degree one, and `‖ell u‖ = 5/8 ‖u‖ + 3/8 Re u`. -/
-def t99J02_ell (u : ℂ) : ℂ := ⟨3 / 8 * ‖u‖ + 5 / 8 * u.re, u.im / 4⟩
+def t99J02_ell (u : ℂ) : ℂ := ⟨3 / 8 * ‖u‖ + 5 / 8 * u.re, u.im / 2⟩
 
 /-- The half-disk map: push the chord up to the half ellipse, fixing the arc, then square. -/
 def t99J02_phi (z : ℂ) : ℂ :=
@@ -192,7 +192,7 @@ theorem t99J02_chi_spec :
   sorry
 
 /-- The dilated hole does not meet its own lattice translates. For `‖u‖ ≤ 5/4`, with
-`w = ell u`: `Re w ≥ -5/16`, `|Im w| ≤ 5/16`, `‖w‖ ≤ 5/4`, so both coordinates `A, B` of the chart
+`w = ell u`: `Re w ± Im w ≥ -5/8` (Cauchy: `7/8 r + 5/8 a ± b/2 ≥ 0`, for `u = a + i b`, `r = ‖u‖`) and `‖w‖ ≤ 5/4`, so both coordinates `A, B` of the chart
 `(chart w).re ± (chart w).im) / 2` lie in `[-5/16, 5/8]`. Two such with equal image in the torus
 differ by integers of size at most `15/16`, hence are equal, and the chart is injective
 (`klein_cut_chartInv_chart`). -/
