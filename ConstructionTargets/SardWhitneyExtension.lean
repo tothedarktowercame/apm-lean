@@ -617,6 +617,18 @@ theorem iteratedFDeriv_inv_bound
       ≤ (k.factorial : ℝ) * (k.factorial : ℝ) * (r⁻¹ * M) ^ k := key
     _ = (k.factorial : ℝ) * (k.factorial : ℝ) * M ^ k * r⁻¹ ^ k := by rw [mul_pow]; ring
 
+/-- A smooth function vanishing outside an open ball has every iterated derivative vanishing
+outside it, including on the sphere. For `r ≤ 0` the function is zero. Outside the closed ball
+the function is zero near the point. On the sphere, points `x + t • (x - c)` with `t > 0` lie
+outside the closed ball and tend to `x`, so use continuity of the iterated derivative. -/
+theorem iteratedFDeriv_eq_zero_of_support_subset_ball
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {u : E → F} (hu : ContDiff ℝ ∞ u) {c : E} {r : ℝ}
+    (hsupp : Function.support u ⊆ Metric.ball c r) (k : ℕ) {x : E}
+    (hx : x ∉ Metric.ball c r) : iteratedFDeriv ℝ k u x = 0 := by
+  sorry
+
 /-- Normalising the bump family gives a partition of unity with derivative bounds at every
 order needed by the extension.  Combine the reciprocal leaf with the uniform-overlap leaf,
 then apply local finite-sum product estimates and comparability of incident scales. -/
