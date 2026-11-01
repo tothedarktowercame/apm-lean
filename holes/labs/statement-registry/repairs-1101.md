@@ -59,3 +59,7 @@ Printed part (b) is false for U the disk together with a far-away disk, with F =
 ## a98J03 (reformed)
 
 The printed denominator (x-t)+y² has a pole inside the integration range, so the integrand is not integrable, and a principal-value reading breaks the limit. Repair by lemma-2 uses the Poisson kernel with (x-t)²+y² for complex f, a bounded complex-linear operator of norm at most 1 tied to the formula, and L² convergence. The real theorem is kept. Grader: justified; every convolution integrand is integrable.
+
+## a98A07
+
+Backlog grade: narrower, one common neighbourhood for all f_n. Repair by lemma-1 gives each f_n its own open neighbourhood; the common form is kept as apm_a98a07_of_common_neighborhood. New grade: stronger, since the printed open region reads as common and this weakens that hypothesis; every other clause is exact.
