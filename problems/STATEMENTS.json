@@ -3977,6 +3977,27 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:46:56Z"
   },
+  "m94J02": {
+   "decls": [
+    "apm_m94j02"
+   ],
+   "sha256": "41d34be22584857ca0e18195695d9ac3b8cea5eb8d4c7a38dbb79b4b219e211d",
+   "defs": [
+    "apm_m94J02_T",
+    "apm_m94J02_eval",
+    "apm_m94J02_mem",
+    "apm_m94J02_mul",
+    "apm_m94J02_norm",
+    "apm_m94J02_pow",
+    "apm_m94J02_spectrum"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": "problems/m94J02/PRELIM-DEFECT.md",
+   "rev": "2de0a2190",
+   "approved_at": "2026-11-01T21:27:30Z"
+  },
   "m94J03": {
    "decls": [
     "apm_m94j03"
