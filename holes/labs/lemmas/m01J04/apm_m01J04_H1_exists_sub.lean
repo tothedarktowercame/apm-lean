@@ -4045,7 +4045,53 @@ theorem apm_m01J04_rellich_grad_eq {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
     (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val) (hc : HasCompactSupport a.val) :
     a.grad =ᵐ[volume] fun x ↦ WithLp.toLp 2
       (fun i ↦ fderiv ℝ a.val x (EuclideanSpace.single i 1)) := by
-  sorry
+  have hcoord (i : Fin d) :
+      (fun x ↦ a.grad x i) =ᵐ[volume]
+        (fun x ↦ fderiv ℝ a.val x (EuclideanSpace.single i 1)) := by
+    apply ae_eq_of_integral_contDiff_smul_eq
+    · simpa only [Measure.restrict_univ] using
+        (apm_m01J04_H1_grad_apply_memLp a i).locallyIntegrable (by norm_num)
+    · exact ((hs.continuous_fderiv (by simp)).clm_apply continuous_const).locallyIntegrable
+    · intro φ hφ hφc
+      let e : EuclideanSpace ℝ (Fin d) := EuclideanSpace.single i 1
+      have haDiff : Differentiable ℝ a.val := hs.differentiable (by simp)
+      have hφDiff : Differentiable ℝ φ := hφ.differentiable (by simp)
+      have hDa : Continuous (fun x ↦ fderiv ℝ a.val x e) :=
+        (hs.continuous_fderiv (by simp)).clm_apply continuous_const
+      have hDφ : Continuous (fun x ↦ fderiv ℝ φ x e) :=
+        (hφ.continuous_fderiv (by simp)).clm_apply continuous_const
+      have hφtest : apm_m01J04_isTestFunction Set.univ φ :=
+        ⟨hφ, hφc, Set.subset_univ _⟩
+      have hφ2 : MemLp φ 2 volume := by
+        simpa using apm_m01J04_isTestFunction_memLp hφtest 2
+      have hDφ2 : MemLp (fun x ↦ fderiv ℝ φ x e) 2 volume :=
+        hDφ.memLp_of_hasCompactSupport (hφc.fderiv_apply ℝ e)
+      have hDa2 : MemLp (fun x ↦ fderiv ℝ a.val x e) 2 volume :=
+        hDa.memLp_of_hasCompactSupport (hc.fderiv_apply ℝ e)
+      have ha2 : MemLp a.val 2 volume := by
+        simpa only [Measure.restrict_univ] using a.val_memLp
+      have hI1 : Integrable (fun x ↦ fderiv ℝ a.val x e * φ x) :=
+        memLp_one_iff_integrable.mp (by simpa [mul_comm] using hDa2.mul' hφ2)
+      have hI2 : Integrable (fun x ↦ a.val x * fderiv ℝ φ x e) :=
+        memLp_one_iff_integrable.mp (by simpa [mul_comm] using ha2.mul' hDφ2)
+      have hI0 : Integrable (fun x ↦ a.val x * φ x) :=
+        memLp_one_iff_integrable.mp (by simpa [mul_comm] using ha2.mul' hφ2)
+      have hibp := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
+        (μ := volume) (f := a.val) (g := φ) (v := e)
+        hI1 hI2 hI0 (fun x _ ↦ haDiff.differentiableAt)
+        (fun x _ ↦ hφDiff.differentiableAt)
+      have hw := a.weakGradient φ hφ hφc (Set.subset_univ _) i
+      simp only [Measure.restrict_univ] at hw
+      have heq : (∫ x, a.grad x i * φ x) =
+          ∫ x, fderiv ℝ a.val x e * φ x := by
+        linarith
+      simpa [smul_eq_mul, mul_comm] using heq
+  have hall : ∀ᶠ x in ae volume, ∀ i, a.grad x i =
+      fderiv ℝ a.val x (EuclideanSpace.single i 1) :=
+    eventually_all.mpr hcoord
+  filter_upwards [hall] with x hx
+  ext i
+  simpa using hx i
 
 /-- Seat: translation estimate for smooth compact values. Write `a (x - y) - a x` as
 `-∫ t in 0..1, fderiv a (x - t • y) y`, bound its square by `‖y‖² ∫ t, ‖grad a (x - t • y)‖²`
