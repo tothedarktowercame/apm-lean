@@ -1089,7 +1089,9 @@ theorem t99J02_edge_lift {x y : ConstructionTargets.Surfaces.Disk} (h : Relation
 /-- The small map of the collar: `ell` into the disk, then the quotient. -/
 theorem t99J02_ell_mem (u : ℂ) (hu : ‖u‖ ≤ 1) :
     t99J02_ell u ∈ Metric.closedBall (0 : ℂ) 1 := by
-  sorry
+  rw [mem_closedBall_zero_iff, t99J02_ell_norm]
+  have hre : u.re ≤ ‖u‖ := le_trans (le_abs_self u.re) (Complex.abs_re_le_norm u)
+  linarith
 
 /-- Fibres of `q₁ ∘ phi` on the upper half are fibres of `q₂`. Off the circle `phi z = phi z'`, so use
 `t99J02_phi_injOn`; on the circle `phi z = z²` and use `t99J02_edge_lift`. -/
