@@ -653,6 +653,44 @@ theorem iteratedFDeriv_eq_zero_of_support_subset_ball
 /-- Normalising the bump family gives a partition of unity with derivative bounds at every
 order needed by the extension.  Combine the reciprocal leaf with the uniform-overlap leaf,
 then apply local finite-sum product estimates and comparability of incident scales. -/
+theorem exists_whitneySmoothPartition_aux_deriv_bound_aux_inside
+    (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {K : Set E}
+    (psi : SardConvexDomain.WhitneyNetIndex K → E → ℝ)
+    (C : ℕ → ℝ)
+    (hsmooth : ∀ i, ContDiff ℝ ∞ (psi i))
+    (hsupp : ∀ i, Function.support (psi i) ⊆
+      Metric.ball i.center (Metric.infDist i.center K / 2))
+    (hlocal : ∀ x ∉ K, ∃ U ∈ nhds x,
+      {i | (U ∩ Function.support (psi i)).Nonempty}.Finite)
+    (hC : ∀ k i x, ‖iteratedFDeriv ℝ k (psi i) x‖ ≤
+      C k * (Metric.infDist i.center K)⁻¹ ^ k)
+    (hpositive : ∀ x ∉ K, 1 ≤ ∑' i, psi i x)
+    (hoverlap : ∃ N : ℕ, ∀ x : E,
+      Set.ncard {i : SardConvexDomain.WhitneyNetIndex K |
+        x ∈ Metric.ball i.center (Metric.infDist i.center K / 2)} ≤ N) :
+    ∃ D : ℕ → ℝ, (∀ k, 0 ≤ D k) ∧ ∀ k i x,
+      x ∈ Metric.ball i.center (Metric.infDist i.center K / 2) →
+      ‖iteratedFDeriv ℝ k
+        (fun y => psi i y * (∑' j, psi j y)⁻¹) x‖ ≤
+          D k * (Metric.infDist i.center K)⁻¹ ^ k := by
+  sorry
+
+theorem exists_whitneySmoothPartition_aux_deriv_bound_aux_outside
+    (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {K : Set E}
+    (psi : SardConvexDomain.WhitneyNetIndex K → E → ℝ)
+    (hsmooth : ∀ i, ContDiff ℝ ∞ (psi i))
+    (hsupp : ∀ i, Function.support (psi i) ⊆
+      Metric.ball i.center (Metric.infDist i.center K / 2))
+    (hlocal : ∀ x ∉ K, ∃ U ∈ nhds x,
+      {i | (U ∩ Function.support (psi i)).Nonempty}.Finite)
+    (hpositive : ∀ x ∉ K, 1 ≤ ∑' i, psi i x) :
+    ∀ k i x, x ∉ Metric.ball i.center (Metric.infDist i.center K / 2) →
+      iteratedFDeriv ℝ k
+        (fun y => psi i y * (∑' j, psi j y)⁻¹) x = 0 := by
+  sorry
+
 theorem exists_whitneySmoothPartition_aux_deriv_bound
     (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {K : Set E}
@@ -673,7 +711,16 @@ theorem exists_whitneySmoothPartition_aux_deriv_bound
       ‖iteratedFDeriv ℝ k
         (fun y => psi i y * (∑' j, psi j y)⁻¹) x‖ ≤
           D k * (Metric.infDist i.center K)⁻¹ ^ k := by
-  sorry
+  obtain ⟨D, hD0, hD⟩ :=
+    exists_whitneySmoothPartition_aux_deriv_bound_aux_inside E psi C hsmooth hsupp
+      hlocal hC hpositive hoverlap
+  refine ⟨D, hD0, ?_⟩
+  intro k i x
+  by_cases hx : x ∈ Metric.ball i.center (Metric.infDist i.center K / 2)
+  · exact hD k i x hx
+  · rw [exists_whitneySmoothPartition_aux_deriv_bound_aux_outside E psi hsmooth hsupp
+      hlocal hpositive k i x hx, norm_zero]
+    exact mul_nonneg (hD0 k) (pow_nonneg (inv_nonneg.2 Metric.infDist_nonneg) _)
 
 theorem exists_whitneySmoothPartition
     (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
