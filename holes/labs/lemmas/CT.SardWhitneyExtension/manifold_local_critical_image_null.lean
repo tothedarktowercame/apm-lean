@@ -3463,6 +3463,75 @@ theorem closedConvex_critical_image_null
 with nonempty interior because `y` lies in the closure of `interior (range I)`.  Apply the
 normed-source theorem, use the open-ball derivative leaf, then transport `mfderiv`. -/
 -- BEGIN SEAT AREA
+theorem manifold_local_critical_image_null_aux_surj_comp
+    {Y Z : Type*} {A : Y → Z} {B : Z → Y}
+    (h : A ∘ B = id) : Function.Surjective A :=
+  fun v => ⟨B v, congrFun h v⟩
+
+theorem manifold_local_critical_image_null_aux_surj_of_comp
+    {X₁ X₂ X₃ : Type*} {A : X₂ → X₃} {B : X₁ → X₂} (hB : Function.Surjective B) :
+    Function.Surjective (A ∘ B) ↔ Function.Surjective A :=
+  ⟨fun h => h.of_comp, fun h => h.comp hB⟩
+/- Chartwise surjectivity transfer: at `z` in the source of `extChartAt I x`, surjectivity of
+`mfderiv g z` is equivalent to surjectivity of the `fderivWithin` of the chart expression
+`g ∘ (extChartAt I x).symm` within `range I` at `(extChartAt I x) z`. -/
+theorem manifold_local_critical_image_null_aux_surj
+    {E H X V : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [TopologicalSpace H] [TopologicalSpace X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X]
+    [IsManifold I ∞ X]
+    [NormedAddCommGroup V] [NormedSpace ℝ V]
+    (g : X → V)
+    {x z : X}
+    (hz : z ∈ (extChartAt I x).source)
+    (hF : MDifferentiableWithinAt (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ V)
+      (g ∘ (extChartAt I x).symm) (range I) ((extChartAt I x) z)) :
+    Function.Surjective (mfderiv I (modelWithCornersSelf ℝ V) g z) ↔
+      Function.Surjective
+        (fderivWithin ℝ (g ∘ (extChartAt I x).symm) (range I) ((extChartAt I x) z)) := by
+  have hz' : z ∈ (chartAt H x).source := by
+    have h := hz
+    rw [extChartAt_source (I := I)] at h
+    exact h
+  have hmd_e : MDifferentiableAt I (modelWithCornersSelf ℝ E) (extChartAt I x) z :=
+    mdifferentiableAt_extChartAt hz'
+  have hUopen : IsOpen (extChartAt I x).source := isOpen_extChartAt_source x
+  have hev : (g ∘ (extChartAt I x).symm) ∘ (extChartAt I x) =ᶠ[nhds z] g := by
+    filter_upwards [hUopen.mem_nhds hz] with z' hz''
+    simp only [Function.comp_def, PartialEquiv.left_inv _ hz'']
+  have hchain :
+      mfderivWithin I (modelWithCornersSelf ℝ V)
+        ((g ∘ (extChartAt I x).symm) ∘ (extChartAt I x)) (extChartAt I x).source z =
+      (mfderivWithin (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ V)
+        (g ∘ (extChartAt I x).symm) (range I) ((extChartAt I x) z)) ∘L
+      (mfderivWithin I (modelWithCornersSelf ℝ E) (extChartAt I x)
+        (extChartAt I x).source z) :=
+    mfderivWithin_comp z hF (hmd_e.mdifferentiableWithinAt.mono (subset_univ _))
+      (fun z' hz'' =>
+        extChartAt_target_subset_range x ((extChartAt I x).map_source hz''))
+      (hUopen.uniqueMDiffWithinAt hz)
+  have heq1 : mfderivWithin I (modelWithCornersSelf ℝ V)
+        ((g ∘ (extChartAt I x).symm) ∘ (extChartAt I x)) (extChartAt I x).source z =
+      mfderiv I (modelWithCornersSelf ℝ V) g z :=
+    (mfderivWithin_of_mem_nhds (hUopen.mem_nhds hz)).trans
+      (Filter.EventuallyEq.mfderiv_eq hev)
+  have heq2 : mfderivWithin I (modelWithCornersSelf ℝ E) (extChartAt I x)
+        (extChartAt I x).source z =
+      mfderiv I (modelWithCornersSelf ℝ E) (extChartAt I x) z :=
+    mfderivWithin_of_mem_nhds (hUopen.mem_nhds hz)
+  have hstep3 : mfderivWithin (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ V)
+        (g ∘ (extChartAt I x).symm) (range I) ((extChartAt I x) z) =
+      fderivWithin ℝ (g ∘ (extChartAt I x).symm) (range I) ((extChartAt I x) z) :=
+    mfderivWithin_eq_fderivWithin
+  have hBs : Function.Surjective (mfderiv I (modelWithCornersSelf ℝ E) (extChartAt I x) z) := by
+    have h := mfderiv_extChartAt_comp_mfderivWithin_extChartAt_symm' (I := I) hz
+    have h5 : (⇑(mfderiv I (modelWithCornersSelf ℝ E) (extChartAt I x) z) ∘
+        ⇑(mfderivWithin (modelWithCornersSelf ℝ E) I (extChartAt I x).symm (range I)
+          ((extChartAt I x) z))) = id := congrArg DFunLike.coe h
+    exact manifold_local_critical_image_null_aux_surj_comp h5
+  rw [← heq1, hchain, heq2, hstep3]
+  exact manifold_local_critical_image_null_aux_surj_of_comp hBs
+
 theorem manifold_local_critical_image_null
     {E H X V : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] [TopologicalSpace H] [TopologicalSpace X]
@@ -3475,7 +3544,64 @@ theorem manifold_local_critical_image_null
     ∀ x : X, ∃ U : Set X, IsOpen U ∧ x ∈ U ∧
       mu (g '' ({z | ¬ Function.Surjective
         (mfderiv I (modelWithCornersSelf ℝ V) g z)} ∩ U)) = 0 := by
-  sorry
+  intro x
+  obtain ⟨r, hr, hrsub⟩ := Metric.mem_nhdsWithin_iff.mp (extChartAt_target_mem_nhdsWithin (I := I) x)
+  set s : Set E := range I ∩ Metric.closedBall ((extChartAt I x) x) (r / 2) with hs_def
+  have hs_tgt : s ⊆ (extChartAt I x).target := by
+    intro y hy
+    rw [hs_def] at hy
+    exact hrsub ⟨Metric.closedBall_subset_ball (half_lt_self hr) hy.2, hy.1⟩
+  have hFsmooth : ContMDiffOn (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ V) ∞
+      (g ∘ (extChartAt I x).symm) s :=
+    (hg.contMDiffOn (s := univ)).comp ((contMDiffOn_extChartAt_symm x).mono hs_tgt) (by simp)
+  have hf : ContDiffOn ℝ ∞ (g ∘ (extChartAt I x).symm) s := hFsmooth.contDiffOn
+  have hxi : (extChartAt I x) x ∈ closure (interior (range I)) :=
+    I.range_subset_closure_interior (extChartAt_target_subset_range x
+      ((extChartAt I x).map_source (mem_extChartAt_source x)))
+  obtain ⟨w, hw1, hw2⟩ := Metric.mem_closure_iff.mp hxi (r / 2) (half_pos hr)
+  have hw2' : w ∈ Metric.ball ((extChartAt I x) x) (r / 2) :=
+    Metric.mem_ball.mpr (by rwa [dist_comm])
+  have hint : (interior s).Nonempty :=
+    ⟨w, by
+      rw [hs_def, interior_inter]
+      exact ⟨hw1, interior_maximal Metric.ball_subset_closedBall Metric.isOpen_ball hw2'⟩⟩
+  have hnull := closedConvex_critical_image_null mu
+    (I.isClosed_range.inter Metric.isClosed_closedBall)
+    (I.convex_range.inter (convex_closedBall _ _))
+    hint (g ∘ (extChartAt I x).symm) hf
+  refine ⟨(extChartAt I x).source ∩
+      (extChartAt I x) ⁻¹' Metric.ball ((extChartAt I x) x) (r / 2), ?_, ?_, ?_⟩
+  · exact ((continuousOn_open_iff (isOpen_extChartAt_source x)).1
+      (continuousOn_extChartAt x)) _ Metric.isOpen_ball
+  · exact ⟨mem_extChartAt_source x, Metric.mem_ball_self (half_pos hr)⟩
+  · apply measure_mono_null (t := (g ∘ (extChartAt I x).symm) ''
+      {y | y ∈ s ∧ ¬ Function.Surjective
+        (fderivWithin ℝ (g ∘ (extChartAt I x).symm) s y)})
+    · rintro u ⟨z, ⟨hzcrit, hzU⟩, rfl⟩
+      have hyball : (extChartAt I x) z ∈ Metric.ball ((extChartAt I x) x) (r / 2) := hzU.2
+      have hys : (extChartAt I x) z ∈ s :=
+        ⟨extChartAt_target_subset_range x ((extChartAt I x).map_source hzU.1),
+         Metric.ball_subset_closedBall hyball⟩
+      have hseq : s =ᶠ[nhds ((extChartAt I x) z)] range I := by
+        rw [Filter.eventuallyEq_iff_exists_mem]
+        refine ⟨Metric.ball ((extChartAt I x) x) (r / 2),
+          Metric.isOpen_ball.mem_nhds hyball, fun y hy => ?_⟩
+        rw [hs_def]
+        exact propext ⟨fun h => h.1, fun h => ⟨h, Metric.ball_subset_closedBall hy⟩⟩
+      have hFmw : ContMDiffWithinAt (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ V) ∞
+          (g ∘ (extChartAt I x).symm) (range I) ((extChartAt I x) z) :=
+        (contMDiffWithinAt_congr_set hseq).mp (hFsmooth _ hys)
+      have hFz : MDifferentiableWithinAt (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ V)
+          (g ∘ (extChartAt I x).symm) (range I) ((extChartAt I x) z) :=
+        hFmw.mdifferentiableWithinAt (by simp)
+      refine ⟨(extChartAt I x) z, ⟨hys, ?_⟩, ?_⟩
+      · intro hsurj
+        rw [fderivWithin_congr_set hseq] at hsurj
+        exact hzcrit
+          ((manifold_local_critical_image_null_aux_surj I g hzU.1 hFz).2 hsurj)
+      · show g ((extChartAt I x).symm ((extChartAt I x) z)) = g z
+        rw [PartialEquiv.left_inv _ hzU.1]
+    · exact hnull
 -- END SEAT AREA
 
 /-- Almost every value is regular, for an inner-product target. Critical points are covered by
