@@ -676,6 +676,37 @@ theorem exists_whitneySmoothPartition_aux_deriv_bound_aux_inside
           D k * (Metric.infDist i.center K)⁻¹ ^ k := by
   sorry
 
+theorem exists_whitneySmoothPartition_aux_deriv_bound_aux_outside_aux_local
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {u : E → F} {c x : E} {r : ℝ}
+    (hu : ContDiffAt ℝ ∞ u x)
+    (hsupp : Function.support u ⊆ Metric.ball c r)
+    (hx : x ∉ Metric.ball c r) (k : ℕ) :
+    iteratedFDeriv ℝ k u x = 0 := by
+  by_cases hr : 0 < r
+  swap
+  · have hu0 : u = 0 := by
+      funext y
+      by_contra hy
+      have hyball := hsupp (show y ∈ Function.support u from hy)
+      exact (not_lt_of_ge (le_of_not_gt hr))
+        (lt_of_le_of_lt (dist_nonneg : 0 ≤ dist y c) (by simpa [dist_comm] using hyball))
+    subst u
+    simp
+  by_contra hxderiv
+  have hcont : ContinuousAt (iteratedFDeriv ℝ k u) x :=
+    hu.continuousAt_iteratedFDeriv (mod_cast le_top)
+  have hn : {y | iteratedFDeriv ℝ k u y ≠ 0} ∈ nhds x :=
+    hcont.preimage_mem_nhds (isOpen_compl_singleton.mem_nhds hxderiv)
+  have hclosed : Function.support (iteratedFDeriv ℝ k u) ⊆ Metric.closedBall c r :=
+    (support_iteratedFDeriv_subset k).trans
+      (closure_minimal (hsupp.trans Metric.ball_subset_closedBall) Metric.isClosed_closedBall)
+  have hxint : x ∈ interior (Metric.closedBall c r) := by
+    rw [mem_interior_iff_mem_nhds]
+    exact Filter.mem_of_superset hn hclosed
+  exact hx (by simpa only [interior_closedBall c hr.ne'] using hxint)
+
 theorem exists_whitneySmoothPartition_aux_deriv_bound_aux_outside
     (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {K : Set E}
@@ -689,7 +720,64 @@ theorem exists_whitneySmoothPartition_aux_deriv_bound_aux_outside
     ∀ k i x, x ∉ Metric.ball i.center (Metric.infDist i.center K / 2) →
       iteratedFDeriv ℝ k
         (fun y => psi i y * (∑' j, psi j y)⁻¹) x = 0 := by
-  sorry
+  intro k i x hx
+  let r := Metric.infDist i.center K / 2
+  let u : E → ℝ := fun y => psi i y * (∑' j, psi j y)⁻¹
+  have husupp : Function.support u ⊆ Metric.ball i.center r := by
+    intro y hy
+    by_contra hyball
+    have hpsi : psi i y = 0 := by
+      by_contra hne
+      exact hyball (hsupp i (show y ∈ Function.support (psi i) from hne))
+    exact hy (by simp [u, hpsi])
+  by_cases hxc : x ∈ Metric.closedBall i.center r
+  · have hdist : dist x i.center = r := by
+      apply le_antisymm
+      · simpa [Metric.mem_closedBall, dist_comm] using hxc
+      · exact le_of_not_gt (by simpa [r, Metric.mem_ball, dist_comm] using hx)
+    have hdpos : 0 < Metric.infDist i.center K := by
+      have hlo := ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).2.1
+      exact lt_of_lt_of_le (by positivity : 0 < (2 : ℝ) ^ i.1) hlo
+    have hxK : x ∉ K := by
+      intro hxmem
+      have hle := Metric.infDist_le_dist_of_mem (x := i.center) hxmem
+      rw [dist_comm, hdist] at hle
+      dsimp [r] at hle
+      linarith
+    obtain ⟨U, hUnhds, hTfin⟩ := hlocal x hxK
+    obtain ⟨V, hVU, hVopen, hxV⟩ := mem_nhds_iff.1 hUnhds
+    obtain ⟨F, hF⟩ := hTfin.exists_finset_coe
+    have hzero : ∀ y ∈ V, ∀ j ∉ (F : Set _), psi j y = 0 := by
+      intro y hy j hj
+      by_contra hne
+      exact hj (hF ▸ (show (U ∩ Function.support (psi j)).Nonempty from
+        ⟨y, ⟨hVU hy, hne⟩⟩))
+    have heq : ∀ y ∈ V, (∑' j, psi j y) = ∑ j ∈ F, psi j y := by
+      intro y hy
+      rw [tsum_eq_sum (s := F) (fun j hj ↦ hzero y hy j hj)]
+    have hsum : ContDiffAt ℝ ∞ (fun y => ∑' j, psi j y) x := by
+      have hf : ContDiff ℝ ∞ (fun y => ∑ j ∈ F, psi j y) :=
+        ContDiff.sum (fun j _ ↦ hsmooth j)
+      refine hf.contDiffAt.congr_of_eventuallyEq ?_
+      filter_upwards [hVopen.mem_nhds hxV] with y hy
+      exact heq y hy
+    have hsum0 : (∑' j, psi j x) ≠ 0 := by
+      have hp := hpositive x hxK
+      linarith
+    have hu : ContDiffAt ℝ ∞ u x := by
+      exact (hsmooth i).contDiffAt.mul (hsum.inv hsum0)
+    exact exists_whitneySmoothPartition_aux_deriv_bound_aux_outside_aux_local
+      hu husupp (by simpa [r] using hx) k
+  · have hevent : u =ᶠ[nhds x] 0 := by
+      filter_upwards [Metric.isClosed_closedBall.isOpen_compl.mem_nhds hxc] with y hy
+      have hyball : y ∉ Metric.ball i.center r :=
+        fun h => hy (Metric.ball_subset_closedBall h)
+      have hpsi : psi i y = 0 := by
+        by_contra hne
+        exact hyball (hsupp i (show y ∈ Function.support (psi i) from hne))
+      simp [u, hpsi]
+    exact ((Filter.EventuallyEq.iteratedFDeriv ℝ hevent k).eq_of_nhds :
+      iteratedFDeriv ℝ k u x = iteratedFDeriv ℝ k 0 x) |>.trans (by simp)
 
 theorem exists_whitneySmoothPartition_aux_deriv_bound
     (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
