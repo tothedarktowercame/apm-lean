@@ -1112,9 +1112,67 @@ def T98J01.southPt : T98J01.S1 := Subtype.mk (0, -1) (by norm_num)
 
 /-- Seat: stereographic projection `(x, y) ↦ x / (1 + y)` is a homeomorphism onto `ℝ`, with inverse `t ↦ (2t / (1 + t²), (1 - t²) / (1 + t²))`; `ℝ` is contractible, so use `Homeomorph.contractibleSpace` or similar. -/
 -- BEGIN SEAT AREA
+private def t98J01_ne_south_contractible_aux_homeomorph :
+    ↥({q | q ≠ T98J01.southPt} : Set T98J01.S1) ≃ₜ ℝ where
+  toFun q := q.1.1.1 / (1 + q.1.1.2)
+  invFun t := ⟨⟨(2 * t / (1 + t ^ 2), (1 - t ^ 2) / (1 + t ^ 2)), by
+    have hd : (1 + t ^ 2) ≠ 0 := by positivity
+    field_simp
+    ring⟩, by
+      intro h
+      have hy := congrArg (fun q : T98J01.S1 => q.1.2) h
+      dsimp [T98J01.southPt] at hy
+      have hd : (1 + t ^ 2) ≠ 0 := by positivity
+      field_simp at hy
+      nlinarith [sq_nonneg t]⟩
+  left_inv q := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rcases q with ⟨⟨⟨x, y⟩, hxy⟩, hne⟩
+    dsimp
+    change x ^ 2 + y ^ 2 = 1 at hxy
+    have hden : 1 + y ≠ 0 := by
+      intro h
+      have hy : y = -1 := by linarith
+      have hx : x = 0 := by nlinarith
+      apply hne
+      apply Subtype.ext
+      simp [T98J01.southPt, hx, hy]
+    have hid : (1 + y) ^ 2 + x ^ 2 = 2 * (1 + y) := by nlinarith
+    ext
+    · field_simp
+      rw [hid]
+      ring
+    · field_simp
+      rw [hid]
+      nlinarith
+  right_inv t := by
+    dsimp
+    have hd : (1 + t ^ 2) ≠ 0 := by positivity
+    field_simp
+    ring
+  continuous_toFun := by
+    apply Continuous.div₀ (by fun_prop) (by fun_prop)
+    intro q h
+    have hy : q.1.1.2 = -1 := by linarith
+    have hx : q.1.1.1 = 0 := by nlinarith [q.1.2]
+    apply q.2
+    apply Subtype.ext
+    exact Prod.ext hx hy
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    apply Continuous.subtype_mk
+    apply Continuous.prodMk
+    · apply Continuous.div₀ (by fun_prop) (by fun_prop)
+      intro t h
+      nlinarith [sq_nonneg t]
+    · apply Continuous.div₀ (by fun_prop) (by fun_prop)
+      intro t h
+      nlinarith [sq_nonneg t]
+
 theorem t98J01_ne_south_contractible :
     ContractibleSpace ↥({q | q ≠ T98J01.southPt} : Set T98J01.S1) := by
-  sorry
+  exact t98J01_ne_south_contractible_aux_homeomorph.contractibleSpace
 -- END SEAT AREA
 
 /-- Seat: `(x, y) ↦ x / (1 - y)` as in `t98J01_ne_south_contractible`, or conjugate by `(x, y) ↦ (x, -y)`. -/
