@@ -4760,6 +4760,27 @@ theorem apm_m01J04_rellich_compact_support {d : ℕ} (u : ℕ → apm_m01J04_H1 
     abs_of_nonneg ENNReal.toReal_nonneg] at hconv
   linarith
 
+/-- Seat: the global localization is bounded by the local norm. `apm_m01J04_test_mul_H1norm_le` gives the bound on
+`volume.restrict Ω`. Both fields vanish off `tsupport χ ⊆ Ω` (`image_eq_zero_of_notMem_tsupport` for `χ` and `fderiv χ`), and `Ω` is
+measurable, so each `eLpNorm` on `volume` equals the one on `volume.restrict Ω` (`eLpNorm_restrict_eq_of_support_subset`). `H1norm` on
+`Set.univ` is the `volume` norm by `Measure.restrict_univ`. State intermediate `have`s with explicit types to avoid slow unification. -/
+theorem apm_m01J04_local_strong_aux_norm {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsOpen Ω)
+    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ) (htsupp : tsupport χ ⊆ Ω) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ h : apm_m01J04_H1 d Ω,
+      apm_m01J04_H1norm (apm_m01J04_globalLocalizedH1 χ hχ h) ≤ C * apm_m01J04_H1norm h := by
+  sorry
+
+/-- Seat: weak convergence of the localized differences. On `Ω` the integrand is `(f n - fLim) * (χ * q)`, and `χ * q`
+is in `L²(Ω)` since `χ` is bounded. `hf.1` at `χ * q` and `MeasureTheory.integral_sub` give the limit `0`. Off `Ω`, `χ = 0`,
+so the `volume` integral equals the `Ω` integral (`setIntegral_eq_integral_of_forall_compl_eq_zero`). -/
+theorem apm_m01J04_local_strong_aux_weak {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsOpen Ω)
+    {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
+    (hf : apm_m01J04_H1WeaklyConverges f fLim)
+    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ)
+    (q : EuclideanSpace ℝ (Fin d) → ℝ) (hq : MemLp q 2 volume) :
+    Tendsto (fun n ↦ ∫ x, ((f n).val x - fLim.val x) * χ x * q x) atTop (nhds 0) := by
+  sorry
+
 /-- Seat: local strong convergence. Take `h n` from `apm_m01J04_H1_exists_sub (f n) fLim`, and
 `u n := apm_m01J04_globalLocalizedH1 χ hχ (h n)`, supported in `tsupport χ`. The norm bound is
 `apm_m01J04_test_mul_H1norm_le` with `apm_m01J04_H1WeaklyConverges_uniform_norm`. For `hw`, pair
@@ -4768,7 +4789,8 @@ the `volume` norm dominates the restricted norm. -/
 theorem apm_m01J04_local_strong {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsOpen Ω)
     {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
     (hf : apm_m01J04_H1WeaklyConverges f fLim)
-    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ) :
+    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ)
+    (htsupp : tsupport χ ⊆ Ω) :
     Tendsto (fun n ↦ (eLpNorm (fun x ↦ ((f n).val x - fLim.val x) * χ x) 2
       (volume.restrict Ω)).toReal) atTop (nhds 0) := by
   sorry
