@@ -1128,7 +1128,23 @@ theorem t98J01_prodSubset_homotopyEquiv (X : Type) [TopologicalSpace X] (T : Set
     (hT : ContractibleSpace T) :
     ∃ e : ContinuousMap.HomotopyEquiv ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) X,
       ∀ z, e.toFun z = z.1.1 := by
-  sorry
+  letI : ContractibleSpace T := hT
+  let j : {z : X × T98J01.S1 // z.2 ∈ T} ≃ₜ X × T :=
+    { toFun := fun z => (z.1.1, ⟨z.1.2, z.2⟩)
+      invFun := fun z => ⟨(z.1, z.2.1), z.2.2⟩
+      left_inv := by intro z; ext <;> rfl
+      right_inv := by intro z; ext <;> rfl
+      continuous_toFun := by fun_prop
+      continuous_invFun := by fun_prop }
+  let c : ContinuousMap.HomotopyEquiv T Unit :=
+    Classical.choice (ContractibleSpace.hequiv_unit T)
+  let e : ContinuousMap.HomotopyEquiv ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) X :=
+    j.toHomotopyEquiv.trans
+      ((ContinuousMap.HomotopyEquiv.refl X).prodCongr c |>.trans
+        (Homeomorph.prodUnique X Unit).toHomotopyEquiv)
+  refine ⟨e, ?_⟩
+  intro z
+  rfl
 
 /-- The overlap `X × (S¹ ∖ {N, S})`. -/
 def t98J01_overlap (X : Type) [TopologicalSpace X] : Set (X × T98J01.S1) :=
