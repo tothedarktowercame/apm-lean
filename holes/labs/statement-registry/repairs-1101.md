@@ -63,3 +63,7 @@ The printed denominator (x-t)+y² has a pole inside the integration range, so th
 ## a98A07
 
 Backlog grade: narrower, one common neighbourhood for all f_n. Repair by lemma-1 gives each f_n its own open neighbourhood; the common form is kept as apm_a98a07_of_common_neighborhood. New grade: stronger, since the printed open region reads as common and this weakens that hypothesis; every other clause is exact.
+
+## m94J02 (reformed)
+
+Printed ‖fg‖ ≤ ‖f‖‖g‖ is false at f = g = z, giving 5 > 4. The theorem uses the sharp 5/4, so (5/4)‖·‖ is a submultiplicative equivalent norm. Kimi added the Banach space structure and tied multiplication and T to the functions. Grader: justified; injectivity of eval is unstated but true, by the identity theorem.

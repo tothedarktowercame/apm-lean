@@ -1094,6 +1094,140 @@ lemma apm_m94J02_spectrum_subset_proposed :
     rw [← sub_mul, ← mul_assoc, mul_inv_cancel₀ (hden n)]
     simp
 
+/-- The weighted coefficient space is closed under addition. -/
+lemma apm_m94J02_mem_add {a b : ℕ → ℂ}
+    (ha : apm_m94J02_mem a) (hb : apm_m94J02_mem b) :
+    apm_m94J02_mem (fun n ↦ a n + b n) := by
+  unfold apm_m94J02_mem at ha hb ⊢
+  refine Summable.of_nonneg_of_le (fun _ ↦ by positivity) (fun n ↦ ?_)
+    (ha.add hb)
+  calc
+    ‖a n + b n‖ * ((n : ℝ) ^ 2 + 1)
+        ≤ (‖a n‖ + ‖b n‖) * ((n : ℝ) ^ 2 + 1) :=
+          mul_le_mul_of_nonneg_right (norm_add_le _ _) (by positivity)
+    _ = ‖a n‖ * ((n : ℝ) ^ 2 + 1) + ‖b n‖ * ((n : ℝ) ^ 2 + 1) := by ring
+
+/-- The weighted coefficient space is closed under complex scalar
+multiplication. -/
+lemma apm_m94J02_mem_smul (c : ℂ) {a : ℕ → ℂ} (ha : apm_m94J02_mem a) :
+    apm_m94J02_mem (fun n ↦ c * a n) := by
+  unfold apm_m94J02_mem at ha ⊢
+  convert ha.mul_left ‖c‖ using 1
+  funext n
+  rw [norm_mul]
+  ring
+
+/-- The custom weighted norm is homogeneous for complex scalars. -/
+lemma apm_m94J02_norm_smul (c : ℂ) (a : ℕ → ℂ) :
+    apm_m94J02_norm (fun n ↦ c * a n) = ‖c‖ * apm_m94J02_norm a := by
+  unfold apm_m94J02_norm
+  show ∑' n, ‖c * a n‖ * ((n : ℝ) ^ 2 + 1) =
+    ‖c‖ * ∑' n, ‖a n‖ * ((n : ℝ) ^ 2 + 1)
+  rw [← tsum_mul_left]
+  apply tsum_congr
+  intro n
+  rw [norm_mul]
+  ring
+
+/-- The triangle inequality for the custom weighted norm. -/
+lemma apm_m94J02_norm_add_le {a b : ℕ → ℂ}
+    (ha : apm_m94J02_mem a) (hb : apm_m94J02_mem b) :
+    apm_m94J02_norm (fun n ↦ a n + b n) ≤
+      apm_m94J02_norm a + apm_m94J02_norm b := by
+  unfold apm_m94J02_norm
+  have hab := apm_m94J02_mem_add ha hb
+  unfold apm_m94J02_mem at hab ha hb
+  rw [← Summable.tsum_add ha hb]
+  exact Summable.tsum_le_tsum (fun n ↦ by
+    calc
+      ‖a n + b n‖ * ((n : ℝ) ^ 2 + 1)
+          ≤ (‖a n‖ + ‖b n‖) * ((n : ℝ) ^ 2 + 1) :=
+            mul_le_mul_of_nonneg_right (norm_add_le _ _) (by positivity)
+      _ = ‖a n‖ * ((n : ℝ) ^ 2 + 1) + ‖b n‖ * ((n : ℝ) ^ 2 + 1) := by ring)
+    hab (ha.add hb)
+
+/-- On members of `X` the coefficient series is summable at every point of
+the closed unit disk, so evaluation never uses a `tsum` junk value. -/
+lemma apm_m94J02_summable_eval (a : ℕ → ℂ) (ha : apm_m94J02_mem a)
+    (z : ℂ) (hz : z ∈ Metric.closedBall 0 1) :
+    Summable (fun n ↦ a n * z ^ n) := by
+  have hz1 : ‖z‖ ≤ 1 := by simpa [Metric.mem_closedBall] using hz
+  apply Summable.of_norm
+  refine Summable.of_nonneg_of_le (fun _ ↦ norm_nonneg _) (fun n ↦ ?_)
+    (apm_m94J02_summable_norm a ha)
+  rw [norm_mul, norm_pow]
+  exact mul_le_of_le_one_right (norm_nonneg _)
+    (pow_le_one₀ (norm_nonneg _) hz1)
+
+/-- The Cauchy product evaluates to the pointwise product of the represented
+functions on the closed unit disk. -/
+lemma apm_m94J02_eval_mul (a b : ℕ → ℂ)
+    (ha : apm_m94J02_mem a) (hb : apm_m94J02_mem b)
+    (z : ℂ) (hz : z ∈ Metric.closedBall 0 1) :
+    apm_m94J02_eval (apm_m94J02_mul a b) z =
+      apm_m94J02_eval a z * apm_m94J02_eval b z := by
+  have hsa := (apm_m94J02_summable_eval a ha z hz).norm
+  have hsb := (apm_m94J02_summable_eval b hb z hz).norm
+  have hkey := tsum_mul_tsum_eq_tsum_sum_range_of_summable_norm hsa hsb
+  unfold apm_m94J02_eval
+  rw [hkey]
+  apply tsum_congr
+  intro n
+  unfold apm_m94J02_mul
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro k hk
+  have hkn : k ≤ n := by simpa [Finset.mem_range] using hk
+  have hpow : z ^ n = z ^ k * z ^ (n - k) := by
+    rw [← pow_add, Nat.add_sub_of_le hkn]
+  calc
+    a k * b (n - k) * z ^ n = a k * b (n - k) * (z ^ k * z ^ (n - k)) := by
+      rw [hpow]
+    _ = a k * z ^ k * (b (n - k) * z ^ (n - k)) := by ring
+
+/-- The coefficientwise dilation evaluates to the printed operator
+`Tf(z) = f(z/2)` on the closed unit disk; both series are summable there. -/
+lemma apm_m94J02_eval_T (a : ℕ → ℂ) (ha : apm_m94J02_mem a)
+    (z : ℂ) (hz : z ∈ Metric.closedBall 0 1) :
+    apm_m94J02_eval (apm_m94J02_T a) z = apm_m94J02_eval a (z / 2) := by
+  have hz1 : ‖z‖ ≤ 1 := by simpa [Metric.mem_closedBall] using hz
+  have hz2 : z / 2 ∈ Metric.closedBall 0 1 := by
+    rw [Metric.mem_closedBall, dist_zero_right, norm_div]
+    have h2 : ‖(2 : ℂ)‖ = 2 := by norm_num
+    rw [h2]
+    rw [div_le_one (by norm_num : (0 : ℝ) < 2)]
+    exact hz1.trans (by norm_num)
+  have hsa := apm_m94J02_summable_eval a ha (z / 2) hz2
+  have hsTa : Summable (fun n ↦ apm_m94J02_T a n * z ^ n) := by
+    apply Summable.of_norm
+    refine Summable.of_nonneg_of_le (fun _ ↦ norm_nonneg _) (fun n ↦ ?_)
+      (apm_m94J02_summable_norm a ha)
+    simp only [apm_m94J02_T]
+    rw [norm_mul, norm_mul, norm_zpow, norm_pow]
+    have hs : ‖(2 : ℂ)‖ ^ (-(n : ℤ)) ≤ 1 := by
+      have h2 : ‖(2 : ℂ)‖ = 2 := by norm_num
+      rw [h2]
+      exact zpow_le_one_of_nonpos₀ (by norm_num) (by simp)
+    have h1 : ‖(2 : ℂ)‖ ^ (-(n : ℤ)) * ‖a n‖ ≤ 1 * ‖a n‖ :=
+      mul_le_mul_of_nonneg_right hs (norm_nonneg _)
+    have h2 : ‖z‖ ^ n ≤ 1 := pow_le_one₀ (norm_nonneg _) hz1
+    calc
+      ‖(2 : ℂ)‖ ^ (-(n : ℤ)) * ‖a n‖ * ‖z‖ ^ n
+          ≤ (1 * ‖a n‖) * ‖z‖ ^ n :=
+            mul_le_mul_of_nonneg_right h1 (pow_nonneg (norm_nonneg _) _)
+      _ ≤ (1 * ‖a n‖) * 1 :=
+            mul_le_mul_of_nonneg_left h2
+              (mul_nonneg zero_le_one (norm_nonneg _))
+      _ = ‖a n‖ := by ring
+  unfold apm_m94J02_eval
+  apply tsum_congr
+  intro n
+  simp only [apm_m94J02_T]
+  have h2 : (2 : ℂ) ^ (-(n : ℤ)) = (2⁻¹) ^ n := by
+    rw [zpow_neg, zpow_natCast, inv_pow]
+  rw [h2, div_eq_mul_inv, mul_pow]
+  ring
+
 theorem apm_m94j02 :
     (∀ a : ℕ → ℕ → ℂ,
         (∀ k, apm_m94J02_mem (a k)) →
@@ -1119,7 +1253,27 @@ theorem apm_m94j02 :
           Tendsto (fun k ↦ apm_m94J02_norm
             (fun n ↦ apm_m94J02_T (a (σ k)) n - b n)) atTop (nhds 0)) ∧
       apm_m94J02_spectrum =
-        {0} ∪ Set.range (fun n : ℕ ↦ (2 : ℂ) ^ (-(n : ℤ))) := by
+        {0} ∪ Set.range (fun n : ℕ ↦ (2 : ℂ) ^ (-(n : ℤ))) ∧
+      (∀ a b : ℕ → ℂ, apm_m94J02_mem a → apm_m94J02_mem b →
+        apm_m94J02_mem (fun n ↦ a n + b n)) ∧
+      (∀ c : ℂ, ∀ a : ℕ → ℂ, apm_m94J02_mem a →
+        apm_m94J02_mem (fun n ↦ c * a n)) ∧
+      (∀ a : ℕ → ℂ, 0 ≤ apm_m94J02_norm a) ∧
+      (∀ a : ℕ → ℂ, apm_m94J02_mem a →
+        (apm_m94J02_norm a = 0 ↔ a = 0)) ∧
+      (∀ c : ℂ, ∀ a : ℕ → ℂ,
+        apm_m94J02_norm (fun n ↦ c * a n) = ‖c‖ * apm_m94J02_norm a) ∧
+      (∀ a b : ℕ → ℂ, apm_m94J02_mem a → apm_m94J02_mem b →
+        apm_m94J02_norm (fun n ↦ a n + b n) ≤
+          apm_m94J02_norm a + apm_m94J02_norm b) ∧
+      (∀ a b : ℕ → ℂ, apm_m94J02_mem a → apm_m94J02_mem b →
+        ∀ z ∈ Metric.closedBall 0 1,
+          apm_m94J02_eval (apm_m94J02_mul a b) z =
+            apm_m94J02_eval a z * apm_m94J02_eval b z) ∧
+      (∀ a : ℕ → ℂ, apm_m94J02_mem a →
+        ∀ z ∈ Metric.closedBall 0 1,
+          apm_m94J02_eval (apm_m94J02_T a) z =
+            apm_m94J02_eval a (z / 2)) := by
   have hT_mem : ∀ a, apm_m94J02_mem a →
       apm_m94J02_mem (apm_m94J02_T a) := by
     intro a ha
@@ -1255,4 +1409,13 @@ theorem apm_m94j02 :
       apm_m94J02_proposed_spectrum_subset
   exact ⟨hremaining.1, apm_m94J02_eval_continuousOn,
     apm_m94J02_mul_mem_norm_le, hremaining.2.1, hT_mem,
-    hremaining.2.2, hspectrum⟩
+    hremaining.2.2, hspectrum,
+    fun _ _ ha hb ↦ apm_m94J02_mem_add ha hb,
+    fun c _ ha ↦ apm_m94J02_mem_smul c ha,
+    apm_m94J02_norm_nonneg,
+    apm_m94J02_norm_eq_zero_iff,
+    fun c a ↦ apm_m94J02_norm_smul c a,
+    fun _ _ ha hb ↦ apm_m94J02_norm_add_le ha hb,
+    apm_m94J02_eval_mul,
+    apm_m94J02_eval_T⟩
+
