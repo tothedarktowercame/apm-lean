@@ -4658,7 +4658,198 @@ theorem apm_m01J04_rellich_compact_support {d : ℕ} (u : ℕ → apm_m01J04_H1 
     (hw : ∀ q : EuclideanSpace ℝ (Fin d) → ℝ, MemLp q 2 volume →
       Tendsto (fun n ↦ ∫ x, (u n).val x * q x) atTop (nhds 0)) :
     Tendsto (fun n ↦ (eLpNorm (u n).val 2 volume).toReal) atTop (nhds 0) := by
-  sorry
+  have hmem (n : ℕ) : MemLp (u n).val 2 volume := by
+    simpa only [Measure.restrict_univ] using (u n).val_memLp
+  have hgradmem (n : ℕ) : MemLp (u n).grad 2 volume := by
+    simpa only [Measure.restrict_univ] using (u n).grad_memLp
+  have hC0 : 0 ≤ C := by
+    have hn : 0 ≤ apm_m01J04_H1norm (u 0) := by
+      simp only [apm_m01J04_H1norm]
+      positivity
+    exact hn.trans (hC 0)
+  have hvalC (n : ℕ) : (eLpNorm (u n).val 2 volume).toReal ≤ C := by
+    have hnonneg : 0 ≤ (eLpNorm (u n).grad 2 volume).toReal := ENNReal.toReal_nonneg
+    have hn := hC n
+    simp only [apm_m01J04_H1norm, Measure.restrict_univ] at hn
+    linarith
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  set ρ : ℝ := ε / (4 * (C + 1)) with hρdef
+  have hρ : 0 < ρ := by
+    rw [hρdef]
+    positivity
+  obtain ⟨κ, hκsmooth, hκcompact, hκsupp, hκnonneg, hκint⟩ :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_kernel (d := d) hρ
+  have hmoll := apm_m01J04_rellich_mollified_tendsto
+    (fun n ↦ (u n).val) hK hmem hval hvalC hw κ hκsmooth hκcompact
+  obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp hmoll (ε / 2) (by positivity)
+  refine ⟨N, fun n hn ↦ ?_⟩
+  have hconv := hN n hn
+  have hgradC : (eLpNorm (u n).grad 2 volume).toReal ≤ C := by
+    have hnonneg : 0 ≤ (eLpNorm (u n).val 2 volume).toReal := ENNReal.toReal_nonneg
+    have hnorm := hC n
+    simp only [apm_m01J04_H1norm, Measure.restrict_univ] at hnorm
+    linarith
+  have htr (y : EuclideanSpace ℝ (Fin d)) (hy : ‖y‖ ≤ ρ) :
+      (eLpNorm (fun x ↦ (u n).val (x - y) - (u n).val x) 2 volume).toReal ≤ ρ * C := by
+    calc
+      (eLpNorm (fun x ↦ (u n).val (x - y) - (u n).val x) 2 volume).toReal
+          ≤ ‖y‖ * (eLpNorm (u n).grad 2 volume).toReal :=
+        apm_m01J04_rellich_translate (u n) hK (hval n) (hgrad n) y
+      _ ≤ ρ * C := mul_le_mul hy hgradC ENNReal.toReal_nonneg hρ.le
+  have herr : (eLpNorm
+      (MeasureTheory.convolution κ (u n).val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) 2 volume).toReal ≤ ρ * C :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
+      (u n).val (hmem n) (mul_nonneg hρ.le hC0) htr κ hκsmooth.continuous
+      hκnonneg hκint hκsupp
+  have hrC : ρ * C < ε / 2 := by
+    rw [hρdef]
+    have hfrac : C / (C + 1) < 1 := by
+      rw [div_lt_one (by linarith : 0 < C + 1)]
+      linarith
+    calc
+      ε / (4 * (C + 1)) * C = ε / 4 * (C / (C + 1)) := by field_simp
+      _ < ε / 4 * 1 := mul_lt_mul_of_pos_left hfrac (by positivity)
+      _ < ε / 2 := by linarith
+  have hm : MemLp (MeasureTheory.convolution κ (u n).val
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume :=
+    apm_m01J04_mollify_package_aux_val_memLp (u n) hK (hval n) κ
+      hκsmooth hκcompact
+  have hsum : eLpNorm (u n).val 2 volume ≤
+      eLpNorm
+        (MeasureTheory.convolution κ (u n).val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) 2 volume +
+      eLpNorm (MeasureTheory.convolution κ (u n).val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume := by
+    have heq : (u n).val =
+        -(MeasureTheory.convolution κ (u n).val
+            (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) +
+          MeasureTheory.convolution κ (u n).val
+            (ContinuousLinearMap.lsmul ℝ ℝ) volume := by
+      funext x
+      simp
+    calc
+      eLpNorm (u n).val 2 volume = eLpNorm
+          (-(MeasureTheory.convolution κ (u n).val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) +
+            MeasureTheory.convolution κ (u n).val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume := congrArg (fun f ↦ eLpNorm f 2 volume) heq
+      _ ≤ eLpNorm (-(MeasureTheory.convolution κ (u n).val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val)) 2 volume +
+            eLpNorm (MeasureTheory.convolution κ (u n).val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume :=
+        eLpNorm_add_le (hm.sub (hmem n)).neg.1 hm.1 (by norm_num)
+      _ = _ := by rw [eLpNorm_neg]
+  have herrtop : eLpNorm
+      (MeasureTheory.convolution κ (u n).val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) 2 volume ≠ ⊤ :=
+    (hm.sub (hmem n)).eLpNorm_ne_top
+  have hmtop : eLpNorm (MeasureTheory.convolution κ (u n).val
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume ≠ ⊤ := hm.eLpNorm_ne_top
+  have hreal : (eLpNorm (u n).val 2 volume).toReal ≤
+      (eLpNorm
+        (MeasureTheory.convolution κ (u n).val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - (u n).val) 2 volume).toReal +
+      (eLpNorm (MeasureTheory.convolution κ (u n).val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume).toReal := by
+    rw [← ENNReal.toReal_add herrtop hmtop]
+    exact ENNReal.toReal_mono (ENNReal.add_ne_top.2 ⟨herrtop, hmtop⟩) hsum
+  rw [dist_eq_norm, sub_zero, Real.norm_eq_abs, abs_of_nonneg ENNReal.toReal_nonneg]
+  rw [dist_eq_norm, sub_zero, Real.norm_eq_abs,
+    abs_of_nonneg ENNReal.toReal_nonneg] at hconv
+  linarith
+
+/-- Seat: the global localization is bounded by the local norm. `apm_m01J04_test_mul_H1norm_le` gives the bound on
+`volume.restrict Ω`. Both fields vanish off `tsupport χ ⊆ Ω` (`image_eq_zero_of_notMem_tsupport` for `χ` and `fderiv χ`), and `Ω` is
+measurable, so each `eLpNorm` on `volume` equals the one on `volume.restrict Ω` (`eLpNorm_restrict_eq_of_support_subset`). `H1norm` on
+`Set.univ` is the `volume` norm by `Measure.restrict_univ`. State intermediate `have`s with explicit types to avoid slow unification. -/
+theorem apm_m01J04_local_strong_aux_norm {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsOpen Ω)
+    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ) (htsupp : tsupport χ ⊆ Ω) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ h : apm_m01J04_H1 d Ω,
+      apm_m01J04_H1norm (apm_m01J04_globalLocalizedH1 χ hχ h) ≤ C * apm_m01J04_H1norm h := by
+  obtain ⟨C, hC0, hC⟩ := apm_m01J04_test_mul_H1norm_le χ hχ
+  refine ⟨C, hC0, fun h ↦ ?_⟩
+  have hvalSupp : Function.support
+      (fun x ↦ h.val x * χ x) ⊆ Ω := by
+    intro x hx
+    apply htsupp
+    exact subset_tsupport χ (fun hχx ↦ hx (by simp [hχx]))
+  have hgradSupp : Function.support
+      (fun x ↦ χ x • h.grad x + h.val x • WithLp.toLp 2
+        (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1))) ⊆ Ω := by
+    intro x hx
+    apply htsupp
+    by_contra hxt
+    have hχx : χ x = 0 := Function.notMem_support.mp
+      (fun hs ↦ hxt (subset_tsupport χ hs))
+    have hDx : fderiv ℝ χ x = 0 := fderiv_of_notMem_tsupport ℝ hxt
+    have hDlp : WithLp.toLp 2
+        (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1)) = 0 := by
+      rw [WithLp.toLp_eq_zero]
+      funext i
+      simp [hDx]
+    apply hx
+    simp [hχx, hDlp]
+  have hvalEq :
+      eLpNorm (fun x ↦ h.val x * χ x) 2 volume =
+        eLpNorm (fun x ↦ h.val x * χ x) 2 (volume.restrict Ω) := by
+    symm
+    exact eLpNorm_restrict_eq_of_support_subset hvalSupp
+  have hgradEq :
+      eLpNorm (fun x ↦ χ x • h.grad x + h.val x • WithLp.toLp 2
+        (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1))) 2 volume =
+        eLpNorm (fun x ↦ χ x • h.grad x + h.val x • WithLp.toLp 2
+          (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1))) 2
+          (volume.restrict Ω) := by
+    symm
+    exact eLpNorm_restrict_eq_of_support_subset hgradSupp
+  simpa [apm_m01J04_H1norm, apm_m01J04_globalLocalizedH1,
+    Measure.restrict_univ, hvalEq, hgradEq] using hC h
+
+/-- Seat: weak convergence of the localized differences. On `Ω` the integrand is `(f n - fLim) * (χ * q)`, and `χ * q`
+is in `L²(Ω)` since `χ` is bounded. `hf.1` at `χ * q` and `MeasureTheory.integral_sub` give the limit `0`. Off `Ω`, `χ = 0`,
+so the `volume` integral equals the `Ω` integral (`setIntegral_eq_integral_of_forall_compl_eq_zero`). -/
+theorem apm_m01J04_local_strong_aux_weak {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsOpen Ω)
+    {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
+    (hf : apm_m01J04_H1WeaklyConverges f fLim)
+    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ)
+    (q : EuclideanSpace ℝ (Fin d) → ℝ) (hq : MemLp q 2 volume) :
+    Tendsto (fun n ↦ ∫ x, ((f n).val x - fLim.val x) * χ x * q x) atTop (nhds 0) := by
+  let r : EuclideanSpace ℝ (Fin d) → ℝ := fun x ↦ χ x * q x
+  have hqΩ : MemLp q 2 (volume.restrict Ω) :=
+    hq.mono_measure Measure.restrict_le_self
+  have hr : MemLp r 2 (volume.restrict Ω) := by
+    simpa [r, Pi.smul_apply, smul_eq_mul] using
+      hqΩ.smul (apm_m01J04_isTestFunction_memLp hχ ⊤)
+  have ht := hf.1 r hr
+  have ht' := ht.sub_const (∫ x in Ω, fLim.val x * r x)
+  have hrestricted : Tendsto
+      (fun n ↦ ∫ x in Ω, ((f n).val x - fLim.val x) * χ x * q x)
+      atTop (nhds 0) := by
+    convert ht' using 1
+    · funext n
+      calc
+        (∫ x in Ω, ((f n).val x - fLim.val x) * χ x * q x) =
+            ∫ x in Ω, (f n).val x * r x - fLim.val x * r x := by
+              apply MeasureTheory.integral_congr_ae
+              filter_upwards [] with x
+              simp only [r]
+              ring
+        _ = (∫ x in Ω, (f n).val x * r x) -
+            ∫ x in Ω, fLim.val x * r x :=
+          MeasureTheory.integral_sub
+            ((f n).val_memLp.integrable_mul hr)
+            (fLim.val_memLp.integrable_mul hr)
+    · simp
+  have hχzero : ∀ x, x ∉ Ω → χ x = 0 := by
+    intro x hx
+    by_contra hne
+    exact hx (hχ.2.2 hne)
+  convert hrestricted using 1
+  funext n
+  exact (MeasureTheory.setIntegral_eq_integral_of_forall_compl_eq_zero
+    (fun x hx ↦ by simp [hχzero x hx])).symm
 
 /-- Seat: local strong convergence. Take `h n` from `apm_m01J04_H1_exists_sub (f n) fLim`, and
 `u n := apm_m01J04_globalLocalizedH1 χ hχ (h n)`, supported in `tsupport χ`. The norm bound is
@@ -4668,10 +4859,76 @@ the `volume` norm dominates the restricted norm. -/
 theorem apm_m01J04_local_strong {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsOpen Ω)
     {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
     (hf : apm_m01J04_H1WeaklyConverges f fLim)
-    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ) :
+    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ)
+    (htsupp : tsupport χ ⊆ Ω) :
     Tendsto (fun n ↦ (eLpNorm (fun x ↦ ((f n).val x - fLim.val x) * χ x) 2
       (volume.restrict Ω)).toReal) atTop (nhds 0) := by
-  sorry
+  choose h hhval hhgrad using fun n ↦ apm_m01J04_H1_exists_sub (f n) fLim
+  let u : ℕ → apm_m01J04_H1 d Set.univ :=
+    fun n ↦ apm_m01J04_globalLocalizedH1 χ hχ (h n)
+  have hK : IsCompact (tsupport χ) := hχ.2.1
+  have huval (n : ℕ) : Function.support (u n).val ⊆ tsupport χ := by
+    intro x hx
+    apply subset_tsupport χ
+    intro hχx
+    apply hx
+    simp [u, apm_m01J04_globalLocalizedH1, hχx]
+  have hugrad (n : ℕ) : Function.support (u n).grad ⊆ tsupport χ := by
+    intro x hx
+    by_contra hxt
+    have hχx : χ x = 0 := image_eq_zero_of_notMem_tsupport hxt
+    have hDx : fderiv ℝ χ x = 0 := fderiv_of_notMem_tsupport ℝ hxt
+    have hDlp : WithLp.toLp 2
+        (fun i ↦ fderiv ℝ χ x (EuclideanSpace.single i 1)) = 0 := by
+      rw [WithLp.toLp_eq_zero]
+      funext i
+      simp [hDx]
+    apply hx
+    simp [u, apm_m01J04_globalLocalizedH1, hχx, hDlp]
+  obtain ⟨A, hA⟩ := apm_m01J04_H1WeaklyConverges_uniform_norm hf
+  obtain ⟨B, hB0, hB⟩ := apm_m01J04_local_strong_aux_norm hΩ χ hχ htsupp
+  have hhbound : ∀ n, apm_m01J04_H1norm (h n) ≤
+      A + apm_m01J04_H1norm fLim := by
+    intro n
+    rw [apm_m01J04_H1norm]
+    have hv := eLpNorm_sub_le (p := (2 : ℝ≥0∞))
+      (f n).val_memLp.1 fLim.val_memLp.1 (by norm_num)
+    have hg := eLpNorm_sub_le (p := (2 : ℝ≥0∞))
+      (f n).grad_memLp.1 fLim.grad_memLp.1 (by norm_num)
+    rw [hhval n, hhgrad n]
+    have hvtop := (f n).val_memLp.eLpNorm_ne_top
+    have hwvtop := fLim.val_memLp.eLpNorm_ne_top
+    have hgtop := (f n).grad_memLp.eLpNorm_ne_top
+    have hwgtop := fLim.grad_memLp.eLpNorm_ne_top
+    have hv' := ENNReal.toReal_mono (ENNReal.add_ne_top.2 ⟨hvtop, hwvtop⟩) hv
+    have hg' := ENNReal.toReal_mono (ENNReal.add_ne_top.2 ⟨hgtop, hwgtop⟩) hg
+    rw [ENNReal.toReal_add hvtop hwvtop] at hv'
+    rw [ENNReal.toReal_add hgtop hwgtop] at hg'
+    dsimp [apm_m01J04_H1norm] at hA ⊢
+    linarith [hA n]
+  have hubound (n : ℕ) : apm_m01J04_H1norm (u n) ≤
+      B * (A + apm_m01J04_H1norm fLim) :=
+    (hB (h n)).trans (mul_le_mul_of_nonneg_left (hhbound n) hB0)
+  have huweak (q : EuclideanSpace ℝ (Fin d) → ℝ) (hq : MemLp q 2 volume) :
+      Tendsto (fun n ↦ ∫ x, (u n).val x * q x) atTop (nhds 0) := by
+    simpa [u, apm_m01J04_globalLocalizedH1, hhval, mul_assoc] using
+      apm_m01J04_local_strong_aux_weak hΩ hf χ hχ q hq
+  have hwhole : Tendsto (fun n ↦ (eLpNorm (u n).val 2 volume).toReal)
+      atTop (nhds 0) :=
+    apm_m01J04_rellich_compact_support u hK huval hugrad hubound huweak
+  have hle (n : ℕ) :
+      (eLpNorm (fun x ↦ ((f n).val x - fLim.val x) * χ x) 2
+        (volume.restrict Ω)).toReal ≤ (eLpNorm (u n).val 2 volume).toReal := by
+    have hm : eLpNorm (fun x ↦ ((f n).val x - fLim.val x) * χ x) 2
+        (volume.restrict Ω) ≤ eLpNorm (u n).val 2 volume := by
+      rw [show (fun x ↦ ((f n).val x - fLim.val x) * χ x) = (u n).val by
+        funext x
+        simp [u, apm_m01J04_globalLocalizedH1, hhval]]
+      exact eLpNorm_mono_measure _ Measure.restrict_le_self
+    exact ENNReal.toReal_mono (by
+      simpa only [Measure.restrict_univ] using (u n).val_memLp.eLpNorm_ne_top) hm
+  apply squeeze_zero (fun n ↦ ENNReal.toReal_nonneg) hle
+  exact hwhole
 
 /-- Seat: the varying lower-order term. Pick a smooth compactly supported `χ` with `χ = 1` on
 `tsupport φ` and `tsupport χ ⊆ Ω` (`exists_contDiff_tsupport_subset` or `exists_smooth_one_nhds...`; this
@@ -4689,7 +4946,60 @@ theorem apm_m01J04_local_variable_lower_order {d : ℕ} {Ω : Set (EuclideanSpac
       (((f n).val x - fLim.val x) • WithLp.toLp 2
         (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))))
       atTop (nhds 0) := by
-  sorry
+  let K : Set (EuclideanSpace ℝ (Fin d)) := tsupport φ
+  have hK : IsCompact K := hφ.2.1
+  obtain ⟨δ, hδ, hδΩ⟩ := hK.exists_cthickening_subset_open hΩ htsupp
+  let T : Set (EuclideanSpace ℝ (Fin d)) := Metric.cthickening δ K
+  have hTcompact : IsCompact T := hK.cthickening
+  have hKT : K ⊆ interior T := by
+    exact (Metric.self_subset_thickening hδ K).trans
+      (Metric.thickening_subset_interior_cthickening δ K)
+  obtain ⟨χ, hχone, hχzero, -⟩ :=
+    exists_contMDiffMap_one_nhds_of_subset_interior
+      (modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin d)))
+      (n := (⊤ : ℕ∞)) hK.isClosed hKT
+  let χ' : EuclideanSpace ℝ (Fin d) → ℝ := fun x ↦ χ x
+  have hχdiff : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) χ' := by
+    exact χ.contMDiff.contDiff
+  have hχsuppT : tsupport χ' ⊆ T := by
+    apply closure_minimal
+    · intro x hx
+      by_contra hxT
+      exact hx (hχzero x hxT)
+    · exact hTcompact.isClosed
+  have hχcompact : HasCompactSupport χ' :=
+    hTcompact.of_isClosed_subset isClosed_closure hχsuppT
+  have hχtest : apm_m01J04_isTestFunction Ω χ' := by
+    refine ⟨hχdiff, hχcompact, ?_⟩
+    exact (subset_tsupport χ').trans (hχsuppT.trans hδΩ)
+  have hχoneK : ∀ x ∈ K, χ' x = 1 := by
+    intro x hx
+    exact hχone.self_of_nhdsSet x hx
+  let g : ℕ → apm_m01J04_H1 d Ω := fun n ↦
+    apm_m01J04_H1mul χ' hχtest (apm_m01J04_H1sub (f n) fLim)
+  let z : apm_m01J04_H1 d Ω := apm_m01J04_H1smul 0 fLim
+  have hstrong : apm_m01J04_L2StronglyConverges g z := by
+    simpa [apm_m01J04_L2StronglyConverges, g, z, mul_comm] using
+      apm_m01J04_local_strong hΩ hf χ' hχtest (hχsuppT.trans hδΩ)
+  let D : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun x ↦ WithLp.toLp 2
+      (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))
+  have hDtop : MemLp D ⊤ (volume.restrict Ω) :=
+    apm_m01J04_isTestFunction_fderivField_memLp hφ ⊤
+  have hbase := apm_m01J04_strong_value_weak_field_error hstrong hv D hDtop
+  convert hbase using 1
+  funext n
+  apply integral_congr_ae
+  filter_upwards [] with x
+  have hDzero : x ∉ K → D x = 0 := by
+    intro hx
+    have hderiv : fderiv ℝ φ x = 0 := fderiv_of_notMem_tsupport ℝ hx
+    rw [WithLp.toLp_eq_zero]
+    funext i
+    simp [D, hderiv]
+  by_cases hx : x ∈ K
+  · simp [D, g, z, χ', hχoneK x hx]
+  · simp [D, g, z, hDzero hx]
 
 lemma apm_m01J04_local_lower_order
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
