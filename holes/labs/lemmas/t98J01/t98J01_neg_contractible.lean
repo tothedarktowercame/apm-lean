@@ -798,6 +798,52 @@ theorem t98J01_trace_ker_add_range
   rw [← heq, LinearMap.trace_conj']
 
 /-- Seat: the alternating trace vanishes along a bounded long exact sequence with compatible endomorphisms. Apply `t98J01_trace_ker_add_range` to `i k`, `j k` and `δ k`. With `d k` the trace on `range (δ k)`, `e k` on `range (i k)`, `g k` on `range (j k)`: `tr a k = d k + e k`, `tr b k = e k + g k`, `tr c (k+1) = g (k+1) + d k`, `tr c 0 = g 0` (`hj0`). The exactness equalities identify the submodules. `C (N+1)` is trivial so `d N = 0`, and the sum telescopes. -/
+private theorem t98J01_trace_longExact_aux_telescope (ta tb tc d e g : ℕ → ℚ) (N : ℕ)
+    (ha : ∀ k, ta k = d k + e k) (hb : ∀ k, tb k = e k + g k)
+    (hc0 : tc 0 = g 0) (hc : ∀ k, tc (k + 1) = g (k + 1) + d k) (hd : d N = 0) :
+    (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * tb k) =
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * ta k) +
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * tc k) := by
+  have key : ∀ M, (∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k * ta k) +
+      (∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k * tc k) -
+      (∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k * tb k) = (-1 : ℚ)^M * d M := by
+    intro M
+    induction M with
+    | zero => simp [ha, hb, hc0]
+    | succ M ih =>
+      rw [Finset.sum_range_succ _ (M + 1), Finset.sum_range_succ _ (M + 1),
+        Finset.sum_range_succ _ (M + 1), ha (M + 1), hb (M + 1), hc M]
+      have : (-1 : ℚ)^(M + 1) = -(-1 : ℚ)^M := by rw [pow_succ]; ring
+      rw [this]
+      linear_combination ih
+  have := key N
+  rw [hd, mul_zero] at this
+  linarith
+
+private theorem t98J01_trace_longExact_aux_restrict_congr
+    {V : Type} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+    (φ : V →ₗ[ℚ] V) {S T : Submodule ℚ V} (h : S = T)
+    (hS : ∀ x ∈ S, φ x ∈ S) (hT : ∀ x ∈ T, φ x ∈ T) :
+    LinearMap.trace ℚ S (φ.restrict hS) = LinearMap.trace ℚ T (φ.restrict hT) := by
+  subst h
+  rfl
+
+private theorem t98J01_trace_longExact_aux_rangeInv
+    {V W : Type} [AddCommGroup V] [Module ℚ V] [AddCommGroup W] [Module ℚ W]
+    (T : V →ₗ[ℚ] W) (φ : V →ₗ[ℚ] V) (ψ : W →ₗ[ℚ] W) (hT : T ∘ₗ φ = ψ ∘ₗ T) :
+    ∀ x ∈ LinearMap.range T, ψ x ∈ LinearMap.range T := by
+  rintro _ ⟨y, rfl⟩
+  exact ⟨φ y, by simpa using LinearMap.congr_fun hT y⟩
+
+private theorem t98J01_trace_longExact_aux_kerInv
+    {V W : Type} [AddCommGroup V] [Module ℚ V] [AddCommGroup W] [Module ℚ W]
+    (T : V →ₗ[ℚ] W) (φ : V →ₗ[ℚ] V) (ψ : W →ₗ[ℚ] W) (hT : T ∘ₗ φ = ψ ∘ₗ T) :
+    ∀ x ∈ LinearMap.ker T, φ x ∈ LinearMap.ker T := by
+  intro x hx
+  have h := LinearMap.congr_fun hT x
+  simp only [LinearMap.comp_apply] at h
+  rw [LinearMap.mem_ker, h, LinearMap.mem_ker.1 hx, map_zero]
+
 theorem t98J01_trace_longExact
     (A B C : ℕ → Type)
     [∀ n, AddCommGroup (A n)] [∀ n, Module ℚ (A n)] [∀ n, FiniteDimensional ℚ (A n)]
@@ -815,7 +861,52 @@ theorem t98J01_trace_longExact
     (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (B k) (b k)) =
       (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (A k) (a k)) +
       (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (C k) (c k)) := by
-  sorry
+  classical
+  let rI := fun k => t98J01_trace_longExact_aux_rangeInv (i k) (a k) (b k) (hi k)
+  let rJ := fun k => t98J01_trace_longExact_aux_rangeInv (j k) (b k) (c k) (hj k)
+  let rD := fun k => t98J01_trace_longExact_aux_rangeInv (δ k) (c (k + 1)) (a k) (hδ k)
+  let kI := fun k => t98J01_trace_longExact_aux_kerInv (i k) (a k) (b k) (hi k)
+  let kJ := fun k => t98J01_trace_longExact_aux_kerInv (j k) (b k) (c k) (hj k)
+  let kD := fun k => t98J01_trace_longExact_aux_kerInv (δ k) (c (k + 1)) (a k) (hδ k)
+  refine t98J01_trace_longExact_aux_telescope
+    (fun k => LinearMap.trace ℚ (A k) (a k)) (fun k => LinearMap.trace ℚ (B k) (b k))
+    (fun k => LinearMap.trace ℚ (C k) (c k))
+    (fun k => LinearMap.trace ℚ (LinearMap.range (δ k)) ((a k).restrict (rD k)))
+    (fun k => LinearMap.trace ℚ (LinearMap.range (i k)) ((b k).restrict (rI k)))
+    (fun k => LinearMap.trace ℚ (LinearMap.range (j k)) ((c k).restrict (rJ k)))
+    N ?_ ?_ ?_ ?_ ?_
+  · intro k
+    dsimp only
+    rw [t98J01_trace_ker_add_range (i k) (a k) (b k) (hi k) (kI k) (rI k),
+      t98J01_trace_longExact_aux_restrict_congr (a k) (ex₃ k).symm (kI k) (rD k)]
+  · intro k
+    dsimp only
+    rw [t98J01_trace_ker_add_range (j k) (b k) (c k) (hj k) (kJ k) (rJ k),
+      t98J01_trace_longExact_aux_restrict_congr (b k) (ex₁ k).symm (kJ k) (rI k)]
+  · dsimp only
+    have htop : LinearMap.range (j 0) = ⊤ := LinearMap.range_eq_top.2 hj0
+    have hsub := t98J01_trace_ker_add_range (LinearMap.id : C 0 →ₗ[ℚ] C 0) (c 0) (c 0)
+      (by ext; rfl)
+      (fun x hx => by simpa [LinearMap.mem_ker] using
+        (show x = 0 from LinearMap.mem_ker.1 hx) ▸ map_zero (c 0))
+      (fun x _ => ⟨c 0 x, rfl⟩)
+    have hker : LinearMap.ker (LinearMap.id : C 0 →ₗ[ℚ] C 0) = ⊥ := LinearMap.ker_id
+    have hrange : LinearMap.range (LinearMap.id : C 0 →ₗ[ℚ] C 0) = ⊤ := LinearMap.range_id
+    rw [hsub, t98J01_trace_longExact_aux_restrict_congr (c 0) (hrange.trans htop.symm) _ (rJ 0)]
+    have hzero : Subsingleton (LinearMap.ker (LinearMap.id : C 0 →ₗ[ℚ] C 0)) := by
+      rw [hker]; infer_instance
+    rw [show (c 0).restrict _ = (0 : _ →ₗ[ℚ] _) from Subsingleton.elim _ _, map_zero, zero_add]
+  · intro k
+    dsimp only
+    rw [t98J01_trace_ker_add_range (δ k) (c (k + 1)) (a k) (hδ k) (kD k) (rD k),
+      t98J01_trace_longExact_aux_restrict_congr (c (k + 1)) (ex₂ k).symm (kD k) (rJ (k + 1))]
+  · dsimp only
+    have hsub : Subsingleton (C (N + 1)) := hC (N + 1) (Nat.lt_succ_self N)
+    have hr : Subsingleton (LinearMap.range (δ N)) := by
+      refine ⟨?_⟩
+      rintro ⟨_, x, rfl⟩ ⟨_, y, rfl⟩
+      exact Subtype.ext (by rw [Subsingleton.elim x y])
+    rw [show (a N).restrict (rD N) = 0 from Subsingleton.elim _ _, map_zero]
 
 /-- Seat: an endomorphism swapping the two summands of a direct sum has trace zero. Conjugate by `LinearEquiv.ofBijective (coprod i₁ i₂) hbij` to `V₁ × V₂`, and write the conjugate as `inl ∘ₗ φ₂₁ ∘ₗ snd + inr ∘ₗ φ₁₂ ∘ₗ fst`. Each term has trace zero by `LinearMap.trace_comp_comm'` (`snd ∘ₗ inl = 0`, `fst ∘ₗ inr = 0`). -/
 theorem t98J01_trace_offDiagonal
@@ -934,11 +1025,114 @@ theorem t98J01_complexLefschetz_shortExact
   sorry
 
 /-- Seat: additivity on a biproduct of complexes. `CoefficientHomologyBiprodIso.homologyBiprodIso` conjugates `homologyMap (biprod.map φ ψ)` to the biproduct of the two homology maps; finish with `LinearMap.trace_prodMap'` after passing to `M × N`, and `t98J01_complexLefschetz_sum_eq` at `max` of the two bounds. -/
+private theorem t98J01_complexLefschetz_biprod_aux_trace
+    {K L : ChainComplex (ModuleCat ℚ) ℕ} (φ : K ⟶ K) (ψ : L ⟶ L) (n : ℕ)
+    [FiniteDimensional ℚ (K.homology n)] [FiniteDimensional ℚ (L.homology n)]
+    [FiniteDimensional ℚ ((K ⊞ L).homology n)] :
+    LinearMap.trace ℚ ((K ⊞ L).homology n)
+        (HomologicalComplex.homologyMap (biprod.map φ ψ) n).hom =
+      LinearMap.trace ℚ (K.homology n) (HomologicalComplex.homologyMap φ n).hom +
+        LinearMap.trace ℚ (L.homology n) (HomologicalComplex.homologyMap ψ n).hom := by
+  let e := ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso
+    ℚ K L n
+  let p := ModuleCat.biprodIsoProd (K.homology n) (L.homology n)
+  let E : ((K ⊞ L).homology n) ≃ₗ[ℚ] (K.homology n × L.homology n) :=
+    e.toLinearEquiv.trans p.toLinearEquiv
+  let F := (HomologicalComplex.homologyMap (biprod.map φ ψ) n).hom
+  let G := LinearMap.prodMap (HomologicalComplex.homologyMap φ n).hom
+    (HomologicalComplex.homologyMap ψ n).hom
+  have hE : E.conj F = G := by
+    apply LinearMap.ext
+    intro x
+    apply Prod.ext
+    · change ((e.hom ≫ biprod.fst).hom
+          ((HomologicalComplex.homologyMap (biprod.map φ ψ) n).hom (E.symm x))) =
+        (HomologicalComplex.homologyMap φ n).hom x.1
+      rw [ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso_hom]
+      simp only [biprod.lift_fst, ModuleCat.hom_comp]
+      have hc : biprod.map φ ψ ≫ (biprod.fst : K ⊞ L ⟶ K) = biprod.fst ≫ φ := by simp
+      have hproj :
+          (HomologicalComplex.homologyMap (biprod.fst : K ⊞ L ⟶ K) n).hom
+              (e.inv.hom (p.inv.hom x)) = x.1 := by
+        change ((e.inv ≫ HomologicalComplex.homologyMap biprod.fst n).hom
+          (p.inv.hom x)) = x.1
+        rw [show HomologicalComplex.homologyMap (biprod.fst : K ⊞ L ⟶ K) n =
+            e.hom ≫ biprod.fst by
+          rw [ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso_hom]
+          simp]
+        simp only [Category.assoc, Iso.inv_hom_id_assoc]
+        change (((ModuleCat.biprodIsoProd _ _).inv ≫ biprod.fst).hom x) = x.1
+        rw [ModuleCat.biprodIsoProd_inv_comp_fst]
+        rfl
+      calc
+        _ = (HomologicalComplex.homologyMap
+              (biprod.map φ ψ ≫ (biprod.fst : K ⊞ L ⟶ K)) n).hom (E.symm x) := by
+            rw [HomologicalComplex.homologyMap_comp]
+            rfl
+        _ = (HomologicalComplex.homologyMap (biprod.fst ≫ φ) n).hom (E.symm x) := by rw [hc]
+        _ = _ := by rw [HomologicalComplex.homologyMap_comp]; exact congrArg _ hproj
+    · change ((e.hom ≫ biprod.snd).hom
+          ((HomologicalComplex.homologyMap (biprod.map φ ψ) n).hom (E.symm x))) =
+        (HomologicalComplex.homologyMap ψ n).hom x.2
+      rw [ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso_hom]
+      simp only [biprod.lift_snd, ModuleCat.hom_comp]
+      have hc : biprod.map φ ψ ≫ (biprod.snd : K ⊞ L ⟶ L) = biprod.snd ≫ ψ := by simp
+      have hproj :
+          (HomologicalComplex.homologyMap (biprod.snd : K ⊞ L ⟶ L) n).hom
+              (e.inv.hom (p.inv.hom x)) = x.2 := by
+        change ((e.inv ≫ HomologicalComplex.homologyMap biprod.snd n).hom
+          (p.inv.hom x)) = x.2
+        rw [show HomologicalComplex.homologyMap (biprod.snd : K ⊞ L ⟶ L) n =
+            e.hom ≫ biprod.snd by
+          rw [ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso_hom]
+          simp]
+        simp only [Category.assoc, Iso.inv_hom_id_assoc]
+        change (((ModuleCat.biprodIsoProd _ _).inv ≫ biprod.snd).hom x) = x.2
+        rw [ModuleCat.biprodIsoProd_inv_comp_snd]
+        rfl
+      calc
+        _ = (HomologicalComplex.homologyMap
+              (biprod.map φ ψ ≫ (biprod.snd : K ⊞ L ⟶ L)) n).hom (E.symm x) := by
+            rw [HomologicalComplex.homologyMap_comp]
+            rfl
+        _ = (HomologicalComplex.homologyMap (biprod.snd ≫ ψ) n).hom (E.symm x) := by rw [hc]
+        _ = _ := by rw [HomologicalComplex.homologyMap_comp]; exact congrArg _ hproj
+  rw [← LinearMap.trace_conj' F E, hE]
+  exact LinearMap.trace_prodMap' _ _
+
 theorem t98J01_complexLefschetz_biprod
     {K L : ChainComplex (ModuleCat ℚ) ℕ} {φ : K ⟶ K} {ψ : L ⟶ L} {a b : ℚ}
     (h₁ : t98J01_ComplexLefschetz K φ a) (h₂ : t98J01_ComplexLefschetz L ψ b) :
     t98J01_ComplexLefschetz (K ⊞ L) (biprod.map φ ψ) (a + b) := by
-  sorry
+  rcases h₁ with ⟨hfinK, m, hm, hsumK⟩
+  rcases h₂ with ⟨hfinL, n, hn, hsumL⟩
+  letI (k : ℕ) := hfinK k
+  letI (k : ℕ) := hfinL k
+  have hfin (k : ℕ) : FiniteDimensional ℚ ((K ⊞ L).homology k) := by
+    let e := ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L k
+    let p := ModuleCat.biprodIsoProd (K.homology k) (L.homology k)
+    let E : ((K ⊞ L).homology k) ≃ₗ[ℚ] (K.homology k × L.homology k) :=
+      e.toLinearEquiv.trans p.toLinearEquiv
+    exact FiniteDimensional.of_injective E.toLinearMap E.injective
+  refine ⟨hfin, max m n, ?_, ?_⟩
+  · intro k hk
+    letI := hm k (lt_of_le_of_lt (le_max_left m n) hk)
+    letI := hn k (lt_of_le_of_lt (le_max_right m n) hk)
+    let e := ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L k
+    let p := ModuleCat.biprodIsoProd (K.homology k) (L.homology k)
+    let E : ((K ⊞ L).homology k) ≃ₗ[ℚ] (K.homology k × L.homology k) :=
+      e.toLinearEquiv.trans p.toLinearEquiv
+    exact ⟨fun x y => E.injective (Subsingleton.elim _ _)⟩
+  · letI (k : ℕ) := hfin k
+    have hK := t98J01_complexLefschetz_sum_eq
+      ⟨hfinK, m, hm, hsumK⟩ (max m n)
+      (fun k hk => hm k (lt_of_le_of_lt (le_max_left m n) hk))
+    have hL := t98J01_complexLefschetz_sum_eq
+      ⟨hfinL, n, hn, hsumL⟩ (max m n)
+      (fun k hk => hn k (lt_of_le_of_lt (le_max_right m n) hk))
+    simp_rw [t98J01_complexLefschetz_biprod_aux_trace φ ψ]
+    simp only [mul_add]
+    rw [Finset.sum_add_distrib, hK, hL]
 
 /-- Seat: the Lefschetz number is invariant under a commuting quasi-isomorphism. `asIso (homologyMap g k)` is a linear equivalence conjugating the two homology maps (`homologyMap_comp`, `hc`), then `LinearMap.trace_conj'`. Finite-dimensionality and vanishing transport along it. Same bound on both sides. -/
 theorem t98J01_complexLefschetz_congr
@@ -1125,11 +1319,131 @@ def t98J01_incl {Y : Type} [TopologicalSpace Y] (A : Set Y) : C(A, Y) :=
   ⟨Subtype.val, continuous_subtype_val⟩
 
 /-- Seat: a clopen decomposition splits rational homology. Take `P`, `Q` the ranges. `ambientSubspaceRange_inf` and `hdis` make `P ⊓ Q` the range of the empty set, so `t98J01_sset.obj (P ⊓ Q)` has no simplices and is a zero complex; in `CoefficientSubcomplexMayerVietoris.shortExact` the map `g` is then an isomorphism (`ShortComplex.ShortExact.isIso_g_iff` or mono+epi). Compose with `RP3Homology.rationalMayerVietoris_aux_unionMap_isIso`, `rangeChainsIso` and `homologyBiprodIso`, watching the sign in `g`: a sign on one summand does not change bijectivity. Alternative for injectivity and positive degrees: `RP3Homology.rationalMayerVietoris`. -/
+private theorem t98J01_clopen_homology_bijective_aux_empty
+    {X : Type} [TopologicalSpace X] [IsEmpty X] (n : ℕ) :
+    Subsingleton (Homology X n) := by
+  letI : TotallyDisconnectedSpace X :=
+    ⟨fun s _ _ x _ _ _ => isEmptyElim x⟩
+  rcases n with _ | n
+  · let e := AlgebraicTopology.singularHomologyFunctorZeroOfTotallyDisconnectedSpace
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) (TopCat.of X)
+    let hinit : IsInitial (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) :=
+      { desc := fun _ => 0
+        fac := fun _ j => isEmptyElim j
+        uniq := fun _ m _ => by
+          change (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) ⟶ _ at m
+          change m = 0
+          apply Limits.Sigma.hom_ext m 0
+          intro x
+          exact isEmptyElim x }
+    letI : Subsingleton ↑(∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) :=
+      ModuleCat.subsingleton_of_isZero hinit.isZero
+    constructor
+    intro x y
+    have h : e.hom.hom x = e.hom.hom y := Subsingleton.elim _ _
+    have := congrArg e.inv.hom h
+    simpa using this
+  · exact ModuleCat.subsingleton_of_isZero
+      (AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+        (ModuleCat ℚ) (n + 1) (ModuleCat.of ℚ ℚ) (TopCat.of X) (by omega))
+
+private theorem t98J01_clopen_homology_bijective_aux_h0
+    {S : ShortComplex (ChainComplex (ModuleCat ℚ) ℕ)} (hS : S.ShortExact) :
+    Function.Surjective (HomologicalComplex.homologyMap S.g 0).hom := by
+  letI : Epi S.g := hS.epi_g
+  letI : Epi (HomologicalComplex.homologyMap S.g 0) := by
+    apply HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+    intro j hj
+    simp at hj
+  exact (ModuleCat.epi_iff_surjective _).mp inferInstance
+
 theorem t98J01_clopen_homology_bijective {Y : Type} [TopologicalSpace Y] (A B : Set Y)
     (hA : IsOpen A) (hB : IsOpen B) (hcov : A ∪ B = Set.univ) (hdis : A ∩ B = ∅) (n : ℕ) :
     Function.Bijective (LinearMap.coprod (induced (t98J01_incl A) n).hom
       (induced (t98J01_incl B) n).hom) := by
-  sorry
+  letI : IsEmpty ↑(A ∩ B) := ⟨fun x => by simpa [hdis] using x.2⟩
+  obtain ⟨δ, hex, hmid, htail⟩ := RP3Homology.rationalMayerVietoris A B hA hB hcov
+  letI hinter (k : ℕ) : Subsingleton (Homology ↑(A ∩ B) k) :=
+    t98J01_clopen_homology_bijective_aux_empty k
+  have hinjJ : Function.Injective (RP3Homology.mvJ A B n).hom := by
+    rw [← LinearMap.ker_eq_bot]
+    rw [← hex n]
+    ext x
+    constructor
+    · intro hx
+      rcases hx with ⟨z, rfl⟩
+      have : z = 0 := Subsingleton.elim _ _
+      simp [this]
+    · intro hx
+      rw [hx]
+      exact ⟨0, by simp⟩
+  have hsurjJ : Function.Surjective (RP3Homology.mvJ A B n).hom := by
+    rcases n with _ | n
+    · let S := RP3Homology.rationalMayerVietoris_aux_SC A B
+      have hs := t98J01_clopen_homology_bijective_aux_h0
+        (ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortExact ℚ
+          (RP3Homology.rationalMayerVietoris_aux_P A)
+          (RP3Homology.rationalMayerVietoris_aux_P B))
+      intro y
+      let eU := RP3Homology.rationalMayerVietoris_aux_unionIso A B hA hB hcov 0
+      let eP := RP3Homology.rationalMayerVietoris_aux_pieceIso A B 0
+      obtain ⟨x, hx⟩ := hs (eU.inv.hom y)
+      refine ⟨eP.hom.hom x, ?_⟩
+      have harrow := RP3Homology.rationalMayerVietoris_aux_unionArrow A B hA hB hcov 0
+      have := congrArg ModuleCat.Hom.hom harrow
+      calc
+        _ = eU.hom.hom ((HomologicalComplex.homologyMap S.g 0).hom x) := by
+          symm
+          simpa [eU, eP, S, ModuleCat.hom_comp] using
+            congrArg (fun f => f (eP.hom.hom x)) this
+        _ = y := by rw [hx]; simp [eU]
+    · intro y
+      have hker : y ∈ LinearMap.ker (δ n).hom := by
+        have : (δ n).hom y = 0 := Subsingleton.elim _ _
+        exact this
+      rw [← hmid n] at hker
+      exact hker
+  have hbijJ : Function.Bijective (RP3Homology.mvJ A B n).hom := ⟨hinjJ, hsurjJ⟩
+  let e := ModuleCat.biprodIsoProd (Homology A n) (Homology B n)
+  let s : ModuleCat.of ℚ (Homology A n × Homology B n) ⟶
+      ModuleCat.of ℚ (Homology A n × Homology B n) :=
+    ModuleCat.ofHom (LinearMap.prodMap LinearMap.id (-LinearMap.id))
+  have hs : Function.Bijective s.hom := by
+    constructor
+    · intro x y h
+      simpa [s] using congrArg (fun z => (z.1, -z.2)) h
+    · intro x
+      exact ⟨(x.1, -x.2), by simp [s]⟩
+  letI : IsIso s := (ConcreteCategory.isIso_iff_bijective s).2 hs
+  letI : IsIso (RP3Homology.mvJ A B n) :=
+    (ConcreteCategory.isIso_iff_bijective _).2 hbijJ
+  have hcomp : Function.Bijective (s ≫ e.inv ≫ RP3Homology.mvJ A B n).hom :=
+    ConcreteCategory.bijective_of_isIso _
+  have heq : (s ≫ e.inv ≫ RP3Homology.mvJ A B n).hom =
+      LinearMap.coprod (induced (t98J01_incl A) n).hom
+        (induced (t98J01_incl B) n).hom := by
+    have hAeq : (induced (t98J01_incl A) n).hom = (RP3Homology.mvToX A n).hom := rfl
+    have hBeq : (induced (t98J01_incl B) n).hom = (RP3Homology.mvToX B n).hom := rfl
+    rw [hAeq, hBeq]
+    apply LinearMap.ext
+    rintro ⟨x, y⟩
+    have hx : ((biprod.fst : (Homology A n ⊞ Homology B n) ⟶ Homology A n)).hom
+        (e.inv.hom (x, -y)) = x := by
+      change (e.inv ≫ (biprod.fst : (Homology A n ⊞ Homology B n) ⟶ Homology A n)).hom (x, -y) = x
+      rw [ModuleCat.biprodIsoProd_inv_comp_fst]
+      rfl
+    have hy : ((biprod.snd : (Homology A n ⊞ Homology B n) ⟶ Homology B n)).hom
+        (e.inv.hom (x, -y)) = -y := by
+      change (e.inv ≫ (biprod.snd : (Homology A n ⊞ Homology B n) ⟶ Homology B n)).hom (x, -y) = -y
+      rw [ModuleCat.biprodIsoProd_inv_comp_snd]
+      rfl
+    change (RP3Homology.mvJ A B n).hom (e.inv.hom (x, -y)) =
+      (RP3Homology.mvToX A n).hom x + (RP3Homology.mvToX B n).hom y
+    rw [show RP3Homology.mvJ A B n = biprod.desc
+      (RP3Homology.mvToX A n) (-(RP3Homology.mvToX B n)) by rfl,
+      biprod.desc_eq]
+    simp [ModuleCat.hom_comp, hx, hy]
+  rwa [heq] at hcomp
 
 /-- Seat: a self-map swapping the two pieces of a clopen decomposition has Lefschetz number 0. `t98J01_clopen_homology_bijective` gives each `Homology Y k` finite-dimensional and zero above `N`. Each trace is zero by `t98J01_trace_offDiagonal` with `φ₁₂`, `φ₂₁` induced by the corestrictions `A → B`, `B → A`; the equations are functoriality of `induced`. -/
 theorem t98J01_clopen_swap_lefschetz {Y : Type} [TopologicalSpace Y] (A B : Set Y)
@@ -1211,14 +1525,101 @@ theorem t98J01_ne_south_contractible :
   exact t98J01_ne_south_contractible_aux_homeomorph.contractibleSpace
 
 /-- Seat: `(x, y) ↦ x / (1 - y)` as in `t98J01_ne_south_contractible`, or conjugate by `(x, y) ↦ (x, -y)`. -/
+private def t98J01_ne_north_contractible_aux_homeomorph :
+    ↥({q | q ≠ T98J01.northPt} : Set T98J01.S1) ≃ₜ ℝ where
+  toFun q := q.1.1.1 / (1 - q.1.1.2)
+  invFun t := ⟨⟨(2 * t / (1 + t ^ 2), (t ^ 2 - 1) / (1 + t ^ 2)), by
+    have hd : (1 + t ^ 2) ≠ 0 := by positivity
+    field_simp
+    ring⟩, by
+      intro h
+      have hy := congrArg (fun q : T98J01.S1 => q.1.2) h
+      dsimp [T98J01.northPt] at hy
+      have hd : (1 + t ^ 2) ≠ 0 := by positivity
+      field_simp at hy
+      nlinarith [sq_nonneg t]⟩
+  left_inv q := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rcases q with ⟨⟨⟨x, y⟩, hxy⟩, hne⟩
+    dsimp
+    change x ^ 2 + y ^ 2 = 1 at hxy
+    have hden : 1 - y ≠ 0 := by
+      intro h
+      have hy : y = 1 := by linarith
+      have hx : x = 0 := by nlinarith
+      apply hne
+      apply Subtype.ext
+      simp [T98J01.northPt, hx, hy]
+    have hid : (1 - y) ^ 2 + x ^ 2 = 2 * (1 - y) := by nlinarith
+    ext
+    · field_simp
+      rw [hid]
+      ring
+    · field_simp
+      nlinarith
+  right_inv t := by
+    dsimp
+    have hd : (1 + t ^ 2) ≠ 0 := by positivity
+    field_simp
+    ring
+  continuous_toFun := by
+    apply Continuous.div (by fun_prop) (by fun_prop)
+    intro q
+    rcases q with ⟨⟨⟨x, y⟩, hxy⟩, hne⟩
+    dsimp
+    intro h
+    have hy : y = 1 := by linarith
+    have hx : x = 0 := by nlinarith
+    apply hne
+    apply Subtype.ext
+    simp [T98J01.northPt, hx, hy]
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    apply Continuous.subtype_mk
+    apply Continuous.prodMk
+    · apply Continuous.div (by fun_prop) (by fun_prop)
+      intro t
+      positivity
+    · apply Continuous.div (by fun_prop) (by fun_prop)
+      intro t
+      positivity
+
 theorem t98J01_ne_north_contractible :
     ContractibleSpace ↥({q | q ≠ T98J01.northPt} : Set T98J01.S1) := by
-  sorry
+  exact t98J01_ne_north_contractible_aux_homeomorph.contractibleSpace
 
 /-- Seat: `q ↦ q.1.2` is a homeomorphism onto the open interval `Set.Ioo (-1) 1` (inverse `y ↦ (√(1 - y²), y)`), which is convex and nonempty hence contractible (`Convex.contractibleSpace`). -/
+private def t98J01_pos_contractible_aux_homeomorph :
+    ↥({q | 0 < q.1.1} : Set T98J01.S1) ≃ₜ ↥(Set.Ioo (-1 : ℝ) 1) where
+  toFun q := ⟨q.1.1.2, by
+    have hcircle : q.1.1.1 ^ 2 + q.1.1.2 ^ 2 = 1 := q.1.2
+    have hx : 0 < q.1.1.1 := q.2
+    constructor <;> nlinarith [sq_pos_of_pos hx]⟩
+  invFun y := ⟨⟨(Real.sqrt (1 - y.1 ^ 2), y.1), by
+    have hnonneg : 0 ≤ 1 - y.1 ^ 2 := by nlinarith [y.2.1, y.2.2]
+    rw [Real.sq_sqrt hnonneg]
+    ring
+  ⟩, by
+    exact Real.sqrt_pos.2 (by nlinarith [y.2.1, y.2.2])⟩
+  left_inv q := by
+    apply Subtype.ext
+    apply Subtype.ext
+    ext
+    · have hcircle : q.1.1.1 ^ 2 + q.1.1.2 ^ 2 = 1 := q.1.2
+      change Real.sqrt (1 - q.1.1.2 ^ 2) = q.1.1.1
+      rw [show 1 - q.1.1.2 ^ 2 = q.1.1.1 ^ 2 by linarith,
+        Real.sqrt_sq_eq_abs, abs_of_pos q.2]
+    · rfl
+  right_inv y := rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
 theorem t98J01_pos_contractible :
     ContractibleSpace ↥({q | 0 < q.1.1} : Set T98J01.S1) := by
-  sorry
+  letI : ContractibleSpace ↥(Set.Ioo (-1 : ℝ) 1) :=
+    (convex_Ioo (-1 : ℝ) 1).contractibleSpace ⟨0, by norm_num⟩
+  exact t98J01_pos_contractible_aux_homeomorph.contractibleSpace
 
 /-- Seat: as `t98J01_pos_contractible` with `y ↦ (-√(1 - y²), y)`, or conjugate by `T98J01.reflection`. -/
 -- BEGIN SEAT AREA
@@ -1287,7 +1688,14 @@ theorem t98J01_overlap_lefschetz {X : Type} [TopologicalSpace X] (f : C(X, X)) {
 theorem t98J01_prodMap_mapsTo {X : Type} [TopologicalSpace X] (f : C(X, X)) (p : T98J01.S1)
     (hp : p = T98J01.southPt ∨ p = T98J01.northPt) :
     Set.MapsTo (f.prodMap t98J01_reflectionCM) {z | z.2 ≠ p} {z | z.2 ≠ p} := by
-  sorry
+  intro z hz
+  change T98J01.reflection z.2 ≠ p
+  intro h
+  apply hz
+  have h' := congrArg T98J01.reflection h
+  rcases hp with rfl | rfl
+  · simpa [T98J01.reflection, T98J01.southPt] using h'
+  · simpa [T98J01.reflection, T98J01.northPt] using h'
 
 /-- Assembly: `L(f × r) = 2 L(f)`. -/
 theorem t98J01_lefschetz_prod_reflection {X : Type} [TopologicalSpace X] (f : C(X, X)) {a : ℚ}
