@@ -777,7 +777,25 @@ theorem t98J01_trace_ker_add_range
     LinearMap.trace ℚ V φ =
       LinearMap.trace ℚ (LinearMap.ker T) (φ.restrict hk) +
         LinearMap.trace ℚ (LinearMap.range T) (ψ.restrict hr) := by
-  sorry
+  let e : (V ⧸ LinearMap.ker T) ≃ₗ[ℚ] LinearMap.range T :=
+    T.quotKerEquivRange
+  have hcomm :
+      e.toLinearMap.comp ((LinearMap.ker T).mapQ (LinearMap.ker T) φ hk) =
+        (ψ.restrict hr).comp e.toLinearMap := by
+    ext x
+    change T (φ x) = ψ (T x)
+    exact LinearMap.congr_fun hT x
+  have heq :
+      e.conj ((LinearMap.ker T).mapQ (LinearMap.ker T) φ hk) =
+        ψ.restrict hr := by
+    ext x
+    have h := LinearMap.congr_fun hcomm (e.symm x)
+    rw [LinearEquiv.conj_apply]
+    simp only [LinearMap.comp_apply]
+    convert congrArg Subtype.val h using 1 <;> simp
+  rw [t98J01_trace_restrict_add_mapQ φ (LinearMap.ker T) hk]
+  congr 1
+  rw [← heq, LinearMap.trace_conj']
 
 /-- Seat: the alternating trace vanishes along a bounded long exact sequence with compatible endomorphisms. Apply `t98J01_trace_ker_add_range` to `i k`, `j k` and `δ k`. With `d k` the trace on `range (δ k)`, `e k` on `range (i k)`, `g k` on `range (j k)`: `tr a k = d k + e k`, `tr b k = e k + g k`, `tr c (k+1) = g (k+1) + d k`, `tr c 0 = g 0` (`hj0`). The exactness equalities identify the submodules. `C (N+1)` is trivial so `d N = 0`, and the sum telescopes. -/
 theorem t98J01_trace_longExact
