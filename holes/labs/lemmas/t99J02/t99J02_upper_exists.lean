@@ -1351,7 +1351,50 @@ theorem t99J02_upper_exists (c : BallCollar 2 (Surface true 1))
         c.smallMap u = surfaceQuotient true 1 ⟨t99J02_ell v, h⟩) :
     ∃ g : t99J02_Upper → c.Punctured, Continuous g ∧
       ∀ z, (g z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1) := by
-  sorry
+  let f : t99J02_Upper → Surface true 1 := fun z =>
+    surfaceQuotient true 1 (t99J02_phiDisk z.1)
+  have hfP : ∀ z, f z ∉ c.smallMap ''
+      {y : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1 |
+        dist y.1 0 < 1} := by
+    intro z hz
+    rcases hz with ⟨u, hu, heq⟩
+    rcases hc u hu with ⟨v, hv, hmem, huv⟩
+    have hq : surfaceQuotient true 1 (t99J02_phiDisk z.1) =
+        surfaceQuotient true 1 ⟨t99J02_ell v, hmem⟩ := by
+      rw [← huv]
+      exact heq.symm
+    have hrel : Relation.EqvGen (SurfaceRel true 1)
+        (t99J02_phiDisk z.1) ⟨t99J02_ell v, hmem⟩ := Quotient.exact hq
+    have hell_lt : ‖t99J02_ell v‖ < 1 := by
+      rw [t99J02_ell_norm]
+      have hre : v.re ≤ ‖v‖ :=
+        le_trans (le_abs_self v.re) (Complex.abs_re_le_norm v)
+      nlinarith
+    rcases t99J02_rel_boundary true 1 hrel with hsame | hbdry
+    · exact t99J02_phi_not_hole z.1 z.2 v hv
+        (congrArg Subtype.val hsame)
+    · exact (ne_of_lt hell_lt) hbdry.2
+  let g : t99J02_Upper → c.Punctured := fun z => ⟨f z, hfP z⟩
+  refine ⟨g, ?_, fun z => rfl⟩
+  apply Continuous.subtype_mk
+  apply (continuous_surfaceQuotient true 1).comp
+  apply Continuous.subtype_mk
+  dsimp [t99J02_phiDisk, t99J02_phi]
+  have hx : Continuous (fun z : t99J02_Upper => ((z.1 : ℂ).re)) :=
+    Complex.continuous_re.comp (continuous_subtype_val.comp continuous_subtype_val)
+  have hy : Continuous (fun z : t99J02_Upper => ((z.1 : ℂ).im)) :=
+    Complex.continuous_im.comp (continuous_subtype_val.comp continuous_subtype_val)
+  have hY : Continuous (fun z : t99J02_Upper => √(1 - (z.1 : ℂ).re ^ 2)) :=
+    Real.continuous_sqrt.comp (continuous_const.sub (hx.pow 2))
+  have hzeta : Continuous (fun z : t99J02_Upper =>
+      (((z.1 : ℂ).re : ℂ) + Complex.I *
+        ((((z.1 : ℂ).im + √(1 - (z.1 : ℂ).re ^ 2)) / 2 : ℝ) : ℂ))) :=
+    (Complex.continuous_ofReal.comp hx).add
+      (continuous_const.mul (Complex.continuous_ofReal.comp ((hy.add hY).div_const 2)))
+  convert hzeta.pow 2 using 1
+  funext z
+  apply congrArg (fun w : ℂ => w ^ 2)
+  apply Complex.ext <;> simp
 -- END SEAT AREA
 
 /-- That map is onto, given that `ell` of the open disk is inside the hole of `c`
