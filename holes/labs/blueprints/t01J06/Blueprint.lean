@@ -193,7 +193,90 @@ theorem apm_t01J06_orientedCoefficient_flux
       q.1 0 * eta q ![apm_t01J06_e 1, apm_t01J06_e 2] -
       q.1 1 * eta q ![apm_t01J06_e 0, apm_t01J06_e 2] +
       q.1 2 * eta q ![apm_t01J06_e 0, apm_t01J06_e 1] := by
-  sorry
+  have hq : ‖(q : apm_t01J06_E3)‖ = 1 := by
+    simpa [Metric.mem_sphere, dist_eq_norm] using q.property
+  have hproj (i j : Fin 3) :
+      (apm_t01J06_tangentProjection q i : apm_t01J06_E3) j =
+        (apm_t01J06_e i) j - q.1 i * q.1 j := by
+    change (((ℝ ∙ (q : apm_t01J06_E3))ᗮ.starProjection
+      (EuclideanSpace.single i 1 : apm_t01J06_E3)) j) = _
+    rw [Submodule.starProjection_orthogonal_val,
+      Submodule.starProjection_singleton ℝ]
+    rw [hq]
+    simp only [one_pow, Nat.cast_one, div_one, PiLp.sub_apply,
+      PiLp.smul_apply, smul_eq_mul]
+    have hi : inner ℝ (q : apm_t01J06_E3)
+        (EuclideanSpace.single i 1) = q.1 i := by
+      simpa using EuclideanSpace.inner_single_right i (1 : ℝ)
+        (q : apm_t01J06_E3)
+    rw [hi]
+    norm_num
+  have hv (i j : Fin 3) :
+      (fun k ↦ ((![apm_t01J06_tangentProjection q i,
+        apm_t01J06_tangentProjection q j] k : apm_t01J06_sphereTangent q) :
+          apm_t01J06_E3)) =
+      ![apm_t01J06_e i - q.1 i • (q : apm_t01J06_E3),
+        apm_t01J06_e j - q.1 j • (q : apm_t01J06_E3)] := by
+    funext k
+    fin_cases k <;> ext l <;> simp [hproj]
+  have hswap (u v : apm_t01J06_E3) :
+      eta q ![u, v] = - eta q ![v, u] := by
+    change (eta q).toAlternatingMap ![u, v] =
+      -(eta q).toAlternatingMap ![v, u]
+    have h := (eta q).toAlternatingMap.map_swap (v := ![v, u])
+      (i := (0 : Fin 2)) (j := (1 : Fin 2)) (by decide)
+    calc
+      _ = (eta q).toAlternatingMap
+          (![v, u] ∘ Equiv.swap (0 : Fin 2) (1 : Fin 2)) := by
+            congr 1
+            funext k
+            fin_cases k <;> rfl
+      _ = _ := h
+  have hsmul (a : ℝ) (u v : apm_t01J06_E3) :
+      eta q ![u, a • v] = a * eta q ![u, v] := by
+    have h := (eta q).toAlternatingMap.toMultilinearMap.map_update_smul
+      ![u, v] (1 : Fin 2) a v
+    have hu : Function.update ![u, v] (1 : Fin 2) (a • v) = ![u, a • v] := by
+      funext k
+      fin_cases k <;> rfl
+    have hv' : Function.update ![u, v] (1 : Fin 2) v = ![u, v] := by
+      funext k
+      fin_cases k <;> rfl
+    rw [hu, hv'] at h
+    simpa [smul_eq_mul] using h
+  have hsmul_left (a : ℝ) (u v : apm_t01J06_E3) :
+      eta q ![a • u, v] = a * eta q ![u, v] := by
+    rw [hswap, hsmul, hswap]
+    ring
+  have hzero : eta q ![(q : apm_t01J06_E3), (q : apm_t01J06_E3)] = 0 := by
+    have h := hswap (q : apm_t01J06_E3) (q : apm_t01J06_E3)
+    linarith
+  unfold apm_t01J06_orientedCoefficient
+  rw [hp, hp, hp]
+  rw [hv 1 2, hv 0 2, hv 0 1]
+  simp
+  rw [hswap (q.1 1 • (q : apm_t01J06_E3))
+      (apm_t01J06_e 2 - q.1 2 • (q : apm_t01J06_E3)),
+    hswap (q.1 0 • (q : apm_t01J06_E3))
+      (apm_t01J06_e 2 - q.1 2 • (q : apm_t01J06_E3)),
+    hswap (q.1 0 • (q : apm_t01J06_E3))
+      (apm_t01J06_e 1 - q.1 1 • (q : apm_t01J06_E3))]
+  simp
+  simp only [hsmul]
+  rw [hswap (apm_t01J06_e 1)
+      (apm_t01J06_e 2 - q.1 2 • (q : apm_t01J06_E3)),
+    hswap (apm_t01J06_e 0)
+      (apm_t01J06_e 2 - q.1 2 • (q : apm_t01J06_E3)),
+    hswap (apm_t01J06_e 0)
+      (apm_t01J06_e 1 - q.1 1 • (q : apm_t01J06_E3))]
+  simp
+  simp only [hsmul, hsmul_left, hzero, mul_zero]
+  rw [hswap (q : apm_t01J06_E3) (apm_t01J06_e 0),
+    hswap (q : apm_t01J06_E3) (apm_t01J06_e 1),
+    hswap (apm_t01J06_e 2) (apm_t01J06_e 1),
+    hswap (apm_t01J06_e 2) (apm_t01J06_e 0),
+    hswap (apm_t01J06_e 1) (apm_t01J06_e 0)]
+  ring
 
 /-- Seat: closedness in components. Evaluate `extDeriv_apply` on `![e 0, e 1, e 2]`, and use
 `Fin.sum_univ_three` with the `Fin.removeNth` values. -/
