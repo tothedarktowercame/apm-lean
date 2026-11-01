@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.SardWhitneyExtension
 
 open MeasureTheory
 open scoped ContDiff Manifold
@@ -66,7 +67,19 @@ theorem apm_t94a06_ae_regularValue_normalPart
         Function.Surjective
           (mfderiv I (modelWithCornersSelf ℝ apm_t94a06_E2)
             (apm_t94a06_normalPart f) x) := by
-  sorry
+  let L : apm_t94a06_E3 →L[ℝ] apm_t94a06_E2 :=
+    (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 2 ↦ ℝ)).symm.toContinuousLinearMap.comp
+      (ContinuousLinearMap.pi (fun i : Fin 2 ↦
+        (ContinuousLinearMap.proj (R := ℝ) (Fin.castSucc i)).comp
+          (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 ↦ ℝ)).toContinuousLinearMap))
+  have hL : apm_t94a06_normalPart f = L ∘ f := by
+    funext z
+    ext i
+    fin_cases i <;> rfl
+  have hg : ContMDiff I (modelWithCornersSelf ℝ apm_t94a06_E2) ∞ (apm_t94a06_normalPart f) := by
+    rw [hL]
+    exact L.contMDiff.comp hf
+  exact ConstructionTargets.SardWhitneyExtension.manifold_ae_regularValue I volume _ hg
 
 /-- The regular-value formulation for the first two coordinates implies
 transversality of the corresponding translated slice to the z-axis. -/

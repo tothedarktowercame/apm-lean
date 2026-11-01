@@ -1,4 +1,5 @@
 import ConstructionTargets.SardConvexDomain
+import ConstructionTargets.SardWhitneyExtension
 
 /-!
 # Blueprint for APM t01A08
@@ -40,7 +41,10 @@ theorem apm_t01a08_ae_regularValue_projection
         Function.Surjective
           (mfderiv I apm_t01a08_I2
             (fun z => apm_t01a08_projection (f z)) x) := by
-  sorry
+  have hg : ContMDiff I apm_t01a08_I2 (⊤ : ℕ∞) (fun z => apm_t01a08_projection (f z)) :=
+    contMDiff_pi_space.2 fun i =>
+      (ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin 3 => ℝ) i.castSucc).contMDiff.comp hf
+  exact ConstructionTargets.SardWhitneyExtension.manifold_ae_regularValue I volume _ hg
 
 /-- An almost-everywhere regular-value statement supplies one regular value. -/
 theorem apm_t01a08_exists_regularValue_of_ae
