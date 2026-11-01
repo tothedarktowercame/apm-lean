@@ -79,3 +79,7 @@ Printed (b) is false: F = x² + x - 1, G = 1 - x, x₀ = 0, ε₀ = 1, with disc
 ## a01A11
 
 Backlog grade: hypothesis-carries-core, part (b) assumed analyticity, decay and nonzeroness. Repair by lemma-2 adds apm_a01a11 for compact K of positive measure, discharging them. The printed zf(z) is read as zg(z). New grade: faithful. The grader flagged shadowed section variables, confirmed by #check as extra binders; claude-14 omitted them, and the elaborated signature is now clean.
+
+## lts-ultraproduct-thm1
+
+Triage: Lean gave only a bare equivalence of carrier types and had a sorry. Repair by codex-6 fixes a finitary single-sorted signature, algebras and operation-compatible congruences, and proves the canonical quotient map an algebra isomorphism, with its formulas. New grade: faithful; the left side is a single quotient of the product, which is trivially isomorphic to the printed two-step form.
