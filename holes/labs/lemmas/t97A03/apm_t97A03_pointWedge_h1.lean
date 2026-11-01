@@ -1909,13 +1909,86 @@ theorem apm_t97A03_invariants_aux_modelWedge_h0 :
 injective because `H₀` of the contractible overlap is `ℤ` and maps isomorphically to `H₀ U` for path-connected `U`
 (`CoefficientH0`). So `H₁ U ⊕ H₁ V ≅ H₁` of the wedge, and `U`, `V` are homotopy equivalent to `X`, `Y`. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t97A03_pointWedge_h1_aux_h0GroupIso
+    {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z : Z) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0 (TopCat.of Z) ≅
+      AddCommGrpCat.of ℤ :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Z) 0).symm ≪≫
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.CoefficientH0.h0Iso ℤ z)
+
 theorem apm_t97A03_pointWedge_h1 {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     [PathConnectedSpace X] [PathConnectedSpace Y] (x₀ : X) (y₀ : Y)
     (PX : ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood X x₀)
     (PY : ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood Y y₀) :
     Nonempty (apm_t97A03_Homology (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀) 1 ≅
       (apm_t97A03_Homology X 1 ⊞ apm_t97A03_Homology Y 1)) := by
-  sorry
+  let p := ConstructionTargets.GenericPointWedgeOpenCoverComparison.genericPointWedgeCoverPackage
+    x₀ y₀ PY.carrier PX.carrier PY.isOpen PX.isOpen PY.mem PX.mem
+      PY.contraction PX.contraction
+  let U := ConstructionTargets.PointWedgeQuotient.leftOpen x₀ y₀ PY.carrier
+  let V := ConstructionTargets.PointWedgeQuotient.rightOpen x₀ y₀ PX.carrier
+  letI : Nonempty U := ⟨p.leftEquiv.symm x₀⟩
+  letI : Nonempty V := ⟨p.rightEquiv.symm y₀⟩
+  letI : Nonempty (U ∩ V : Set _) := ⟨p.intersectionEquiv.symm ()⟩
+  let eI :=
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      p.intersectionEquiv 0 ≪≫
+      ConstructionTargets.SingularHomologyConcrete.pointH0IsoInt
+  let eU :=
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      p.leftEquiv 0 ≪≫ apm_t97A03_pointWedge_h1_aux_h0GroupIso x₀
+  let eV :=
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      p.rightEquiv 0 ≪≫ apm_t97A03_pointWedge_h1_aux_h0GroupIso y₀
+  have hI : Limits.IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (U ∩ V : Set _))) :=
+    (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      Unit 1 (by omega)).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        p.intersectionEquiv 1)
+  letI : Mono
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow U V 0) :=
+    ConstructionTargets.T00A01MayerVietorisAdapters.productionIntersectionArrow_mono_zero_of_coordinates
+      U V eI eU
+  have hconn :
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+        U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ 0 = 0 :=
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_intersection
+      U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ 0).mono_g_iff.mp
+        (by infer_instance)
+  letI : Mono
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V 1) :=
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+      U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ 1).mono_g_iff.mpr
+        (hI.eq_of_src _ _)
+  letI : Epi
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V 1) :=
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+      U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ 0).epi_f_iff.mpr hconn
+  letI : IsIso
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V 1) :=
+    isIso_of_mono_of_epi _
+  exact ⟨ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)) 1 _
+    ((asIso
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V 1)).symm ≪≫
+      CategoryTheory.Limits.biprod.mapIso
+        (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          p.leftEquiv 1)
+        (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          p.rightEquiv 1) ≪≫
+      CategoryTheory.Limits.biprod.mapIso
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of X) 1).symm
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of Y) 1).symm ≪≫
+      AddCommGrpCat.biprodIsoProd _ _ ≪≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (ModuleCat.biprodIsoProd (apm_t97A03_Homology X 1)
+          (apm_t97A03_Homology Y 1))).symm)⟩
 -- END SEAT AREA
 
 /-- Degree one is supplied entirely by the three-circle summand. Apply `apm_t97A03_pointWedge_h1` to `modelWedge` and to
