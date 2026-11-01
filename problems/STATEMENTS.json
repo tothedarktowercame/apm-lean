@@ -578,6 +578,21 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:53:12Z"
   },
+  "a92J03": {
+   "decls": [
+    "apm_a92j03"
+   ],
+   "sha256": "fe5d7d26b1cccd65d2e112d466f01b5d4d421da1fbb193eb953facd0c298815e",
+   "defs": [
+    "fourierTransform"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": null,
+   "rev": "169e29e34",
+   "approved_at": "2026-11-01T20:15:30Z"
+  },
   "a92J04": {
    "decls": [
     "disk_selfmap_deriv_one_eq_identity",
