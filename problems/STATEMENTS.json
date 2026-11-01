@@ -7346,6 +7346,19 @@
    "rev": "4489e960",
    "approved_at": "2026-09-28T00:25:57Z"
   },
+  "t99J02": {
+   "decls": [
+    "apm_t99j02"
+   ],
+   "sha256": "4deeeabe85a662cf885a3a73716091f049792f2d610201cfdea8e8245786bb3d",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+   "prelim_defect": null,
+   "rev": "3562b5157",
+   "approved_at": "2026-11-01T16:53:21Z"
+  },
   "t99J04": {
    "decls": [
     "apm_t99j04"
