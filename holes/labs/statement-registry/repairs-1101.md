@@ -47,3 +47,7 @@ Backlog grade: narrower, full C⁴ assumed. First repair by lemma-2 weakened the
 ## m94J05 (reformed)
 
 Printed unrestricted uniqueness is false at f = 0, by a nonzero solution from shooting. The existing theorem, a solution unique in a small sup-norm ball, matches the printed hint x = L⁻¹F(x). Grader: justified, narrowed only as the defect forces; the second solution is a shooting argument, not formalised.
+
+## m02A06 (reformed)
+
+Printed claim for every ε > 0 is false: no solution at f = 0, ε = 2, and two solutions at f = 0, ε < 3/2, from the sech² homoclinic orbit. The existing theorem, for ε small relative to a bound on f and unique in a ball, is the contraction statement the problem asks for. Grader: justified; ε's dependence on f is forced.
