@@ -454,7 +454,54 @@ theorem iteratedFDeriv_taylorPolynomial_bound
     ‖iteratedFDeriv ℝ k (taylorPolynomial m J a) x‖ ≤
       ∑ j ∈ Finset.Icc k m,
         (((j - k).factorial : ℝ)⁻¹) * ‖J j a‖ * ‖x - a‖ ^ (j - k) := by
-  sorry
+  classical
+  let B := ∑ q ∈ Finset.range (m + 1 - k),
+    ((q.factorial : ℝ)⁻¹) * ‖J (k + q) a‖ * ‖x - a‖ ^ q
+  have hB : ‖iteratedFDeriv ℝ k (taylorPolynomial m J a) x‖ ≤ B := by
+    apply ContinuousMultilinearMap.opNorm_le_bound
+    · dsimp [B]
+      apply Finset.sum_nonneg
+      intro q hq
+      positivity
+    · intro v
+      rw [iteratedFDeriv_taylorPolynomial_exact m k J a x hk v hJ]
+      calc
+        ‖∑ q ∈ Finset.range (m + 1 - k), (q.factorial : ℝ)⁻¹ •
+            J (k + q) a (Fin.append v (fun _ : Fin q ↦ x - a))‖ ≤
+            ∑ q ∈ Finset.range (m + 1 - k), ‖(q.factorial : ℝ)⁻¹ •
+              J (k + q) a (Fin.append v (fun _ : Fin q ↦ x - a))‖ :=
+          norm_sum_le _ _
+        _ ≤ ∑ q ∈ Finset.range (m + 1 - k),
+              (((q.factorial : ℝ)⁻¹ * ‖J (k + q) a‖ * ‖x - a‖ ^ q) *
+                ∏ i, ‖v i‖) := by
+          apply Finset.sum_le_sum
+          intro q hq
+          rw [norm_smul]
+          have hmap := (J (k + q) a).le_opNorm
+            (Fin.append v (fun _ : Fin q ↦ x - a))
+          rw [Real.norm_of_nonneg (by positivity : 0 ≤ ((q.factorial : ℝ)⁻¹))]
+          simpa [Fin.prod_univ_add, mul_assoc, mul_left_comm, mul_comm] using
+            mul_le_mul_of_nonneg_left hmap (by positivity : 0 ≤ ((q.factorial : ℝ)⁻¹))
+        _ = B * ∏ i, ‖v i‖ := by
+          dsimp [B]
+          rw [Finset.sum_mul]
+  refine hB.trans_eq ?_
+  dsimp [B]
+  apply Finset.sum_bij (fun q _ ↦ k + q)
+  · intro q hq
+    simp only [Finset.mem_range] at hq
+    simp only [Finset.mem_Icc]
+    omega
+  · intro q₁ hq₁ q₂ hq₂ heq
+    omega
+  · intro j hj
+    simp only [Finset.mem_Icc] at hj
+    refine ⟨j - k, ?_, ?_⟩
+    · simp only [Finset.mem_range]
+      omega
+    · omega
+  · intro q hq
+    simp
 
 /-- Taylor polynomials based at two points of `K` differ to the full Whitney order.
 Expand `P_a-P_b` at `b`; its derivatives there are controlled by the compact convex
