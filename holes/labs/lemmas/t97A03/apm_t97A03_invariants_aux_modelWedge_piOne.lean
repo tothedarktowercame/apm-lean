@@ -2244,11 +2244,111 @@ trivial sphere groups and the rank-three circle-wedge group.  Use
 `threeCirclesFundamentalGroupEquiv`, and basepoint change along path
 connectedness. -/
 -- BEGIN SEAT AREA
+/- The fundamental group of a simply connected sphere leg, in rank-zero
+free-group coordinates. -/
+noncomputable def apm_t97A03_invariants_aux_modelWedge_piOne_aux_spherePiOne :
+    FundamentalGroup apm_t97A03_S2 apm_t97A03_north ≃* FreeGroup (Fin 0) := by
+  haveI : SimplyConnectedSpace apm_t97A03_S2 :=
+    ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected
+      2 (by norm_num)
+  haveI : Subsingleton (FundamentalGroup apm_t97A03_S2 apm_t97A03_north) :=
+    inferInstanceAs
+      (Subsingleton (Path.Homotopic.Quotient apm_t97A03_north apm_t97A03_north))
+  exact
+    { toFun := fun _ => 1
+      invFun := fun _ => 1
+      map_mul' := fun _ _ => by simp
+      left_inv := fun a => (Subsingleton.elim a 1).symm
+      right_inv := fun a => by
+        have : a = 1 := Subsingleton.elim a 1
+        subst this
+        rfl }
+
+/- Van Kampen reduces the two-sphere wedge to the free product of two trivial
+groups, i.e. the rank-zero free group. -/
+noncomputable def apm_t97A03_invariants_aux_modelWedge_piOne_aux_twoSphereWedgePiOne :
+    FundamentalGroup apm_t97A03_twoSphereWedge apm_t97A03_twoSphereBase ≃*
+      FreeGroup (Fin 0) := by
+  letI : PathConnectedSpace apm_t97A03_S2 :=
+    ConstructionTargets.SphereHomology.spherePathConnectedSpace 2
+  let PS := apm_t97A03_invariants_aux_modelWedge_high_sphereNeighborhood
+  have leg : FundamentalGroup apm_t97A03_twoSphereWedge apm_t97A03_twoSphereBase ≃*
+      Monoid.Coprod (FundamentalGroup apm_t97A03_S2 apm_t97A03_north)
+        (FundamentalGroup apm_t97A03_S2 apm_t97A03_north) :=
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLegCoordinatesEquiv
+      apm_t97A03_north apm_t97A03_north
+      PS.carrier PS.carrier PS.isOpen PS.isOpen PS.mem PS.mem
+      PS.contraction PS.contraction
+  let e : Fin 0 ⊕ Fin 0 ≃ Fin 0 := finSumFinEquiv (m := 0) (n := 0)
+  exact leg.trans
+    ((MulEquiv.coprodCongr
+        apm_t97A03_invariants_aux_modelWedge_piOne_aux_spherePiOne
+        apm_t97A03_invariants_aux_modelWedge_piOne_aux_spherePiOne).trans
+      ((ConstructionTargets.PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum
+          (Fin 0) (Fin 0)).trans
+        (MulEquiv.ofBijective (FreeGroup.map e)
+          ⟨FreeGroup.map_injective e.injective,
+            FreeGroup.map_surjective e.surjective⟩)))
+
+/- Van Kampen at the outer wedge: the free product of the rank-zero two-sphere
+wedge group and the rank-three three-circle group is the rank-three free
+group, computed once at the model wedge basepoint. -/
+noncomputable def apm_t97A03_invariants_aux_modelWedge_piOne_aux_modelWedgeBase :
+    FundamentalGroup apm_t97A03_modelWedge apm_t97A03_modelWedgeBase ≃*
+      FreeGroup (Fin 3) := by
+  letI : PathConnectedSpace apm_t97A03_S2 :=
+    ConstructionTargets.SphereHomology.spherePathConnectedSpace 2
+  haveI : PathConnectedSpace apm_t97A03_twoSphereWedge :=
+    ConstructionTargets.PointWedgePathConnected.wedgePathConnectedSpace
+      apm_t97A03_north apm_t97A03_north
+  haveI : PathConnectedSpace apm_t97A03_ThreeCircles :=
+    ConstructionTargets.PointWedgeVanKampen.threeCircles_pathConnected
+  let PS := apm_t97A03_invariants_aux_modelWedge_high_sphereNeighborhood
+  let PC := ConstructionTargets.PolygonSurfaceHomology.circlePointedContractibleNeighborhood
+  let PtwoSphere :=
+    ConstructionTargets.PolygonSurfaceHomology.pointWedgePointedContractibleNeighborhood
+      PS PS
+  let PtwoCircle :=
+    ConstructionTargets.PolygonSurfaceHomology.pointWedgePointedContractibleNeighborhood
+      PC PC
+  let PthreeCircle :=
+    ConstructionTargets.PolygonSurfaceHomology.pointWedgePointedContractibleNeighborhood
+      PtwoCircle PC
+  have leg : FundamentalGroup apm_t97A03_modelWedge apm_t97A03_modelWedgeBase ≃*
+      Monoid.Coprod (FundamentalGroup apm_t97A03_twoSphereWedge apm_t97A03_twoSphereBase)
+        (FundamentalGroup apm_t97A03_ThreeCircles
+          ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase) :=
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLegCoordinatesEquiv
+      apm_t97A03_twoSphereBase
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+      PthreeCircle.carrier PtwoSphere.carrier
+      PthreeCircle.isOpen PtwoSphere.isOpen PthreeCircle.mem PtwoSphere.mem
+      PthreeCircle.contraction PtwoSphere.contraction
+  let e : Fin 0 ⊕ Fin 3 ≃ Fin 3 := finSumFinEquiv (m := 0) (n := 3)
+  exact leg.trans
+    ((MulEquiv.coprodCongr
+        apm_t97A03_invariants_aux_modelWedge_piOne_aux_twoSphereWedgePiOne
+        ConstructionTargets.PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv).trans
+      ((ConstructionTargets.PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum
+          (Fin 0) (Fin 3)).trans
+        (MulEquiv.ofBijective (FreeGroup.map e)
+          ⟨FreeGroup.map_injective e.injective,
+            FreeGroup.map_surjective e.surjective⟩)))
+
 theorem apm_t97A03_invariants_aux_modelWedge_piOne
     (z : apm_t97A03_modelWedge) :
     Nonempty (FundamentalGroup apm_t97A03_modelWedge z ≃*
       FreeGroup (Fin 3)) := by
-  sorry
+  letI : PathConnectedSpace apm_t97A03_S2 :=
+    ConstructionTargets.SphereHomology.spherePathConnectedSpace 2
+  haveI : PathConnectedSpace apm_t97A03_twoSphereWedge :=
+    ConstructionTargets.PointWedgePathConnected.wedgePathConnectedSpace
+      apm_t97A03_north apm_t97A03_north
+  haveI : PathConnectedSpace apm_t97A03_ThreeCircles :=
+    ConstructionTargets.PointWedgeVanKampen.threeCircles_pathConnected
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected z
+      apm_t97A03_modelWedgeBase).trans
+    apm_t97A03_invariants_aux_modelWedge_piOne_aux_modelWedgeBase⟩
 -- END SEAT AREA
 
 /-- Transport all four singular-homology calculations and the based
