@@ -351,7 +351,37 @@ theorem whitney_bump_sum_positive_smooth
     (hsmooth : ∀ i, ContDiff ℝ ∞ (psi i)) :
     ∀ x ∉ K, 1 ≤ ∑' i, psi i x ∧
       ContDiffAt ℝ ∞ (fun y ↦ ∑' i, psi i y) x := by
-  sorry
+  intro x hx
+  have hxK : x ∈ Kᶜ := by simpa using hx
+  obtain ⟨i0, hi0⟩ : ∃ i0 : SardConvexDomain.WhitneyNetIndex K,
+      x ∈ Metric.ball i0.center (Metric.infDist i0.center K / 4) := by
+    have hsub := SardConvexDomain.compl_subset_iUnion_whitneyNetQuarterBalls hK hKn
+    simpa using Set.mem_iUnion.1 (hsub hxK)
+  obtain ⟨U, hUnhds, hTfin⟩ := hlocal x hx
+  obtain ⟨V, hVU, hVopen, hxV⟩ := mem_nhds_iff.1 hUnhds
+  obtain ⟨F, hF⟩ := hTfin.exists_finset_coe
+  have hzero : ∀ y ∈ V, ∀ i ∉ (F : Set _), psi i y = 0 := by
+    intro y hy i hi
+    by_contra hne
+    exact hi (hF ▸ (show (U ∩ Function.support (psi i)).Nonempty from
+      ⟨y, ⟨hVU hy, hne⟩⟩))
+  have heq : ∀ y ∈ V, (∑' i, psi i y) = ∑ i ∈ F, psi i y := by
+    intro y hy
+    rw [tsum_eq_sum (s := F) (fun i hi ↦ hzero y hy i hi)]
+  have hi0F : i0 ∈ F := by
+    have hne : psi i0 x ≠ 0 := by
+      rw [hone i0 hi0]; norm_num
+    have : i0 ∈ (↑F : Set _) := hF ▸ ⟨x, ⟨hVU hxV, hne⟩⟩
+    exact Finset.mem_coe.1 this
+  refine ⟨?_, ?_⟩
+  · have h1 : psi i0 x = 1 := hone i0 hi0
+    have := Finset.single_le_sum (fun i _ ↦ hnonneg i x) hi0F
+    rwa [h1, ← heq x hxV] at this
+  · have hsmoothg : ContDiff ℝ ∞ (fun y ↦ ∑ i ∈ F, psi i y) :=
+      ContDiff.sum (fun i _ ↦ hsmooth i)
+    refine hsmoothg.contDiffAt.congr_of_eventuallyEq ?_
+    filter_upwards [hVopen.mem_nhds hxV] with y hy
+    exact heq y hy
 
 /-- Uniform, rather than merely pointwise finite, incidence of Whitney half-balls.
 Adjacent incident strata have comparable scales; within each stratum the net centers are
@@ -813,7 +843,11 @@ theorem compactExhaustion_piece
     IsCompact (s ∩ Metric.closedBall p R) ∧
       Convex ℝ (s ∩ Metric.closedBall p R) ∧
       (interior (s ∩ Metric.closedBall p R)).Nonempty := by
-  sorry
+  refine ⟨(isCompact_closedBall p R).inter_left hs,
+    hsc.inter (convex_closedBall p R), ?_⟩
+  refine ⟨p, ?_⟩
+  rw [interior_inter, interior_closedBall p (ne_of_gt hR)]
+  exact ⟨hp, Metric.mem_ball_self hR⟩
 
 /-- Inside the open ball, adding the closed-ball constraint does not change the within
 derivative.  The two domains agree in a neighborhood of `x`; apply `fderivWithin_congr_set`
@@ -824,7 +858,12 @@ theorem fderivWithin_inter_closedBall_eq
     (f : E → F) (s : Set E) (p : E) (R : ℝ) {x : E}
     (hx : x ∈ s ∩ Metric.ball p R) :
     fderivWithin ℝ f (s ∩ Metric.closedBall p R) x = fderivWithin ℝ f s x := by
-  sorry
+  apply fderivWithin_congr_set
+  filter_upwards [Metric.isOpen_ball.mem_nhds hx.2] with y hy
+  apply propext
+  constructor
+  · exact fun h ↦ h.1
+  · exact fun h ↦ ⟨h, Metric.ball_subset_closedBall hy⟩
 
 /-- Every point of `s` lies in an open ball of some positive integer radius about `p`.
 This is the countable exhaustion needed to cover the relative critical image. -/
