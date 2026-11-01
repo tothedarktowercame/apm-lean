@@ -647,7 +647,61 @@ theorem apm_t01J06_curl_flux_zero (A : Fin 3 → apm_t01J06_E3 → ℝ) (hA : �
       (q.1 0 * (apm_t01J06_partial 1 (A 2) q.1 - apm_t01J06_partial 2 (A 1) q.1) +
        q.1 1 * (apm_t01J06_partial 2 (A 0) q.1 - apm_t01J06_partial 0 (A 2) q.1) +
        q.1 2 * (apm_t01J06_partial 0 (A 1) q.1 - apm_t01J06_partial 1 (A 0) q.1)) ∂μHE[2]) = 0 := by
-  sorry
+  have hrot0 (x : apm_t01J06_E3) :
+      apm_t01J06_rotField 0 x = -x 2 • apm_t01J06_e 1 + x 1 • apm_t01J06_e 2 := by
+    ext i
+    fin_cases i <;> simp [apm_t01J06_rotField, apm_t01J06_e]
+  have hrot1 (x : apm_t01J06_E3) :
+      apm_t01J06_rotField 1 x = x 2 • apm_t01J06_e 0 - x 0 • apm_t01J06_e 2 := by
+    ext i
+    fin_cases i <;> simp [apm_t01J06_rotField, apm_t01J06_e]
+  have hrot2 (x : apm_t01J06_E3) :
+      apm_t01J06_rotField 2 x = -x 1 • apm_t01J06_e 0 + x 0 • apm_t01J06_e 1 := by
+    ext i
+    fin_cases i <;> simp [apm_t01J06_rotField, apm_t01J06_e]
+  have hpoint (q : apm_t01J06_S2) :
+      q.1 0 * (apm_t01J06_partial 1 (A 2) q.1 - apm_t01J06_partial 2 (A 1) q.1) +
+        q.1 1 * (apm_t01J06_partial 2 (A 0) q.1 - apm_t01J06_partial 0 (A 2) q.1) +
+        q.1 2 * (apm_t01J06_partial 0 (A 1) q.1 - apm_t01J06_partial 1 (A 0) q.1) =
+      fderiv ℝ (A 0) q.1 (apm_t01J06_rotField 0 q.1) +
+        fderiv ℝ (A 1) q.1 (apm_t01J06_rotField 1 q.1) +
+        fderiv ℝ (A 2) q.1 (apm_t01J06_rotField 2 q.1) := by
+    rw [hrot0, hrot1, hrot2]
+    simp only [map_add, map_sub, map_smul, smul_eq_mul]
+    unfold apm_t01J06_partial
+    ring
+  simp_rw [hpoint]
+  have hmass_ne : (μHE[2] (Set.univ : Set apm_t01J06_S2)) ≠ ∞ := by
+    intro he
+    have hmass := apm_t02a05_euclideanHausdorff_unitSphere_mass
+    rw [he] at hmass
+    have hz : (0 : ℝ) = 4 * Real.pi := by simpa using hmass
+    nlinarith [Real.pi_pos]
+  letI : IsFiniteMeasure (μHE[2] : Measure apm_t01J06_S2) :=
+    ⟨lt_top_iff_ne_top.mpr hmass_ne⟩
+  have hrot_cont (k : Fin 3) : Continuous (apm_t01J06_rotField k) := by
+    apply (PiLp.continuous_toLp 2 _).comp
+    rw [continuous_pi_iff]
+    intro i
+    fin_cases k <;> fin_cases i <;> simp [apm_t01J06_rotField] <;> fun_prop
+  have hint (k : Fin 3) : Integrable
+      (fun q : apm_t01J06_S2 ↦
+        fderiv ℝ (A k) q.1 (apm_t01J06_rotField k q.1)) μHE[2] := by
+    rw [← integrableOn_univ]
+    apply ContinuousOn.integrableOn_compact isCompact_univ
+    exact Continuous.clm_apply
+      ((hA k).continuous_fderiv (by simp) |>.comp continuous_subtype_val)
+      ((hrot_cont k).comp continuous_subtype_val) |>.continuousOn
+  rw [integral_add]
+  · rw [integral_add]
+    · rw [apm_t01J06_rotation_derivative_integral 0 (A 0) (hA 0),
+        apm_t01J06_rotation_derivative_integral 1 (A 1) (hA 1),
+        apm_t01J06_rotation_derivative_integral 2 (A 2) (hA 2)]
+      norm_num
+    · exact hint 0
+    · exact hint 1
+  · exact (hint 0).add (hint 1)
+  · exact hint 2
 -- END SEAT AREA
 
 /-- Seat: assembly of the Stokes obstruction. Take `F 0 = eta(e 1, e 2)`, `F 1 = -eta(e 0, e 2)`,
