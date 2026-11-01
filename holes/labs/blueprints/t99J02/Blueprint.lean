@@ -277,7 +277,47 @@ theorem t99J02_chi_spec :
       (∀ u, t99J02_chi (t99J02_refl u) = (starRingEnd ℂ) (t99J02_chi u)) ∧
       Continuous t99J02_refl ∧ Function.Injective t99J02_refl ∧ (∀ u, ‖t99J02_refl u‖ = ‖u‖) ∧
       (∀ v : ℂ, ∃ u, t99J02_chi u = v) := by
-  sorry
+  have hchi_cont : Continuous t99J02_chi := by
+    simpa [t99J02_chi] using
+      Complex.equivRealProdCLM.symm.continuous.comp
+        ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).prodMk
+          (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1))
+  have hchi_norm : ∀ u, ‖t99J02_chi u‖ = ‖u‖ := by
+    intro u
+    rw [Complex.norm_eq_sqrt_sq_add_sq, EuclideanSpace.norm_eq]
+    simp [t99J02_chi, Fin.sum_univ_two]
+  have hchi_inj : Function.Injective t99J02_chi := by
+    intro u v h
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · exact congrArg Complex.re h
+    · exact congrArg Complex.im h
+  have hrefl_cont : Continuous t99J02_refl := by
+    change Continuous (fun u : EuclideanSpace ℝ (Fin 2) => !₂[u 0, -u 1])
+    exact (PiLp.continuous_toLp 2 (fun _ : Fin 2 => ℝ)).comp
+      (continuous_pi fun i => by
+        fin_cases i
+        · simpa using PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0
+        · simpa using (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1).neg)
+  have hrefl_inj : Function.Injective t99J02_refl := by
+    intro u v h
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · simpa [t99J02_refl] using congrArg (fun w : EuclideanSpace ℝ (Fin 2) => w 0) h
+    · have hi := congrArg (fun w : EuclideanSpace ℝ (Fin 2) => w 1) h
+      simpa [t99J02_refl] using congrArg Neg.neg hi
+  have hrefl_norm : ∀ u, ‖t99J02_refl u‖ = ‖u‖ := by
+    intro u
+    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+    simp [t99J02_refl, Fin.sum_univ_two]
+  refine ⟨hchi_cont, hchi_inj, hchi_norm, ?_, hrefl_cont, hrefl_inj, hrefl_norm, ?_⟩
+  · intro u
+    apply Complex.ext <;> simp [t99J02_chi, t99J02_refl]
+  · intro v
+    refine ⟨!₂[v.re, v.im], ?_⟩
+    apply Complex.ext <;> simp [t99J02_chi]
 
 /-- The dilated hole does not meet its own lattice translates. For `‖u‖ ≤ 5/4`, with
 `w = ell u`: `Re w ± Im w ≥ -5/8` (Cauchy: `7/8 r + 5/8 a ± b/2 ≥ 0`, for `u = a + i b`, `r = ‖u‖`) and `‖w‖ ≤ 5/4`, so both coordinates `A, B` of the chart
