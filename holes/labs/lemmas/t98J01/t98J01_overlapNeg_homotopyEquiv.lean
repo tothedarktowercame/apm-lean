@@ -1825,7 +1825,30 @@ theorem t98J01_overlapPos_homotopyEquiv (X : Type) [TopologicalSpace X] :
 -- BEGIN SEAT AREA
 theorem t98J01_overlapNeg_homotopyEquiv (X : Type) [TopologicalSpace X] :
     Nonempty (ContinuousMap.HomotopyEquiv ↥(t98J01_overlapNeg X) X) := by
-  sorry
+  let T : Set T98J01.S1 := {q | q.1.1 < 0}
+  let j : ↥(t98J01_overlapNeg X) ≃ₜ
+      ↥({z | z.2 ∈ T} : Set (X × T98J01.S1)) := {
+    toFun z := ⟨z.1.1, z.2⟩
+    invFun z := ⟨⟨z.1, by
+      constructor
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.southPt] at hx
+        have hn := z.property
+        change z.1.2.1.1 < 0 at hn
+        linarith
+      · intro h
+        have hx := congrArg (fun q : T98J01.S1 => q.1.1) h
+        dsimp [T98J01.northPt] at hx
+        have hn := z.property
+        change z.1.2.1.1 < 0 at hn
+        linarith⟩, z.2⟩
+    left_inv z := by ext <;> rfl
+    right_inv z := by ext <;> rfl
+    continuous_toFun := by fun_prop
+    continuous_invFun := by fun_prop }
+  obtain ⟨e, -⟩ := t98J01_prodSubset_homotopyEquiv X T t98J01_neg_contractible
+  exact ⟨j.toHomotopyEquiv.trans e⟩
 -- END SEAT AREA
 
 /-- Seat: finite-dimensionality and vanishing transport along a homotopy equivalence. -/
