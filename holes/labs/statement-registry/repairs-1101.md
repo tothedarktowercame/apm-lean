@@ -111,3 +111,7 @@ Backlog grade: narrower, the Fourier formula and the action of ∂x T were omitt
 ## m93J06 (reformed)
 
 Printed (d) is false: for each α in (0,1) there is a continuous jointly Holder-α f, near whose branch point no local choice of solutions is Holder-α in y₀, a local statement that f = 0 does not satisfy. Printed (a) to (c) and (e) are proved in standard local form, with no global Lipschitz or flow assumption: Picard-Lindelof, local C¹ flow, global existence under |f| ≤ C|y|, global C¹ flow, the exp(L|t|) estimate, and the Holder failure persisting under the growth bound. Work by lemma-3, kimi-3 and lemma-1, 1762 lines. Graders caught, in turn, global hypotheses, a clause trivially true at t = 0, and y-only Holder, which claude-14 made joint. Negation stands, as no single repair of (d) is evident.
+
+## m95J02
+
+Backlog grade: narrower, n ≥ 2 only. Repair by kimi-2 (with lemma-3's diagnosis) covers every n ≥ 1, with fundamental solution |x|/2 at n = 1, and adds the Euler step: r²(d²/dr² + ((n-1)/r) d/dr) r^s = s(s-1+n-1) r^s, the roots s = 0 and s = 2-n, log r in two dimensions, harmonicity of Φ off 0, and Φ's explicit formulas. Data f for the Poisson clause is C_c^∞, as the original gives f no class. New grade: faithful.
