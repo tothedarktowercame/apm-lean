@@ -749,7 +749,26 @@ theorem hasFDerivAt_gluedWhitneyJet_of_not_mem
     (hGo : ContDiffOn ℝ m G Kᶜ) :
     HasFDerivAt (fun y ↦ gluedWhitneyJet K f G y k)
       (gluedWhitneyJet K f G x (k + 1)).curryLeft x := by
-  sorry
+  have hopen : IsOpen Kᶜ := hK.isOpen_compl
+  have hAt : ContDiffAt ℝ (m : WithTop ℕ∞) G x := hGo.contDiffAt (hopen.mem_nhds hx)
+  have hkm : (k : WithTop ℕ∞) < (m : WithTop ℕ∞) := by exact_mod_cast hk
+  have hdiff : DifferentiableAt ℝ (iteratedFDeriv ℝ k G) x :=
+    hAt.differentiableAt_iteratedFDeriv hkm
+  have hfd : fderiv ℝ (iteratedFDeriv ℝ k G) x =
+      (iteratedFDeriv ℝ (k + 1) G x).curryLeft := by
+    rw [fderiv_iteratedFDeriv, Function.comp_apply]
+    rfl
+  have hmain : HasFDerivAt (fun y ↦ iteratedFDeriv ℝ k G y)
+      (iteratedFDeriv ℝ (k + 1) G x).curryLeft x :=
+    hfd ▸ hdiff.hasFDerivAt
+  have heq : Filter.EventuallyEq (nhds x) (fun y ↦ gluedWhitneyJet K f G y k)
+      (fun y ↦ iteratedFDeriv ℝ k G y) := by
+    filter_upwards [hopen.mem_nhds hx] with y hy
+    simp only [gluedWhitneyJet, if_neg hy]
+  have hval : gluedWhitneyJet K f G x (k + 1) = iteratedFDeriv ℝ (k + 1) G x := by
+    simp only [gluedWhitneyJet, if_neg hx]
+  rw [hval]
+  exact (heq.hasFDerivAt_iff).2 hmain
 -- END SEAT AREA
 
 /-- Boundary differentiability of successive glued jets.  Subtract the linear term
