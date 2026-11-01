@@ -6288,6 +6288,23 @@
    "approved_at": "2026-09-28T00:25:37Z",
    "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
   },
+  "t95A01": {
+   "decls": [
+    "apm_t95a01"
+   ],
+   "sha256": "1627d2e217d3209315b2fc16bcab5e11da1ddc25aca616d1447babe186786391",
+   "defs": [
+    "ThreePresentationComplex",
+    "degreeThreeLoop",
+    "threePresentationBasepoint"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+   "prelim_defect": null,
+   "rev": "46e6971b7",
+   "approved_at": "2026-11-01T16:49:41Z"
+  },
   "t95A02": {
    "decls": [
     "apm_t95a02"
