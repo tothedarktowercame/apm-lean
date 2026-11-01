@@ -100,12 +100,75 @@ gives one third of the mass, `odd_integral` gives zero for the coordinate, and t
 of finite measure. If instances clash, see `apm_t02a05_radialFlux_integral_aux_inst` in
 `problems/t02A05/lean/Main.lean`. -/
 -- BEGIN SEAT AREA
+lemma apm_t01J06_sphere_moments_aux_inst :
+    ConstructionTargets.LinearGraphMeasure.domainMeasurable 3 =
+      (inferInstance : MeasurableSpace (EuclideanSpace ℝ (Fin 3))) := by
+  unfold ConstructionTargets.LinearGraphMeasure.domainMeasurable
+  exact BorelSpace.measurable_eq.symm
+
 theorem apm_t01J06_sphere_moments :
     Integrable (fun q : apm_t01J06_S2 ↦ q.1 2 ^ 2) μHE[2] ∧
     Integrable (fun q : apm_t01J06_S2 ↦ q.1 2) μHE[2] ∧
     (∫ q : apm_t01J06_S2, q.1 2 ^ 2 ∂μHE[2]) = 4 * Real.pi / 3 ∧
     (∫ q : apm_t01J06_S2, q.1 2 ∂μHE[2]) = 0 := by
-  sorry
+  have hinst := apm_t01J06_sphere_moments_aux_inst
+  have hsraw : Integrable (fun q : apm_t01J06_S2 ↦ q.1 2 ^ 2) μH[2] := by
+    convert ConstructionTargets.IntrinsicSphereFinite.continuous_integrable
+      2 (by decide) (fun q : ConstructionTargets.IntrinsicSphereFinite.Sphere 2 ↦ q.1 2 ^ 2)
+        (by fun_prop) using 1
+    all_goals first | exact hinst | exact hinst.symm | exact proof_irrel_heq _ _
+  have hlraw : Integrable (fun q : apm_t01J06_S2 ↦ q.1 2) μH[2] := by
+    convert ConstructionTargets.IntrinsicSphereFinite.continuous_integrable
+      2 (by decide) (fun q : ConstructionTargets.IntrinsicSphereFinite.Sphere 2 ↦ q.1 2)
+        (by fun_prop) using 1
+    all_goals first | exact hinst | exact hinst.symm | exact proof_irrel_heq _ _
+  have hs : Integrable (fun q : apm_t01J06_S2 ↦ q.1 2 ^ 2) μHE[2] := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def]
+    exact hsraw.smul_measure_nnreal
+  have hl : Integrable (fun q : apm_t01J06_S2 ↦ q.1 2) μHE[2] := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def]
+    exact hlraw.smul_measure_nnreal
+  have hmass := apm_t02a05_euclideanHausdorff_unitSphere_mass
+  have hmraw :
+      (apm_t02a05_cM : ℝ) *
+        ConstructionTargets.IntrinsicSphereSecondMoments.mass 2 = 4 * Real.pi := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, Measure.smul_apply,
+      ENNReal.toReal_smul] at hmass
+    change (apm_t02a05_cM : ℝ) *
+      (Measure.hausdorffMeasure 2
+        (Set.univ : Set (ConstructionTargets.IntrinsicSphereFinite.Sphere 2))).toReal =
+        4 * Real.pi at hmass
+    simpa [ConstructionTargets.IntrinsicSphereSecondMoments.mass,
+      MeasureTheory.Measure.hausdorffMeasure_apply] using hmass
+  have hsquare : (∫ q : apm_t01J06_S2, q.1 2 ^ 2 ∂μHE[2]) = 4 * Real.pi / 3 := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, integral_smul_nnreal_measure]
+    have hm := ConstructionTargets.IntrinsicSphereSecondMoments.square_moment
+      2 (by decide) (2 : Fin 3)
+    have hm' : (∫ q : apm_t01J06_S2, q.1 2 ^ 2 ∂μH[2]) =
+        ConstructionTargets.IntrinsicSphereSecondMoments.mass 2 / 3 := by
+      convert hm using 3
+      all_goals first | exact hinst | exact hinst.symm | norm_num
+    change (apm_t02a05_cM : ℝ) *
+      (∫ q : apm_t01J06_S2, q.1 2 ^ 2 ∂μH[2]) = 4 * Real.pi / 3
+    rw [hm']
+    calc
+      _ = ((apm_t02a05_cM : ℝ) *
+            ConstructionTargets.IntrinsicSphereSecondMoments.mass 2) / 3 := by ring
+      _ = _ := by rw [hmraw]
+  have hlinear : (∫ q : apm_t01J06_S2, q.1 2 ∂μHE[2]) = 0 := by
+    rw [MeasureTheory.Measure.euclideanHausdorffMeasure_def, integral_smul_nnreal_measure]
+    have ho := ConstructionTargets.IntrinsicSphereSecondMoments.odd_integral
+      2 (2 : Fin 3) (fun q ↦ q.1 2) (by
+        intro q
+        change ConstructionTargets.IntrinsicSphereSecondMoments.reflection 2 2 q.1 2 = -q.1 2
+        simp [ConstructionTargets.IntrinsicSphereSecondMoments.reflection_apply])
+    have ho' : (∫ q : apm_t01J06_S2, q.1 2 ∂μH[2]) = 0 := by
+      convert ho using 3
+      all_goals first | exact hinst | exact hinst.symm
+    change (apm_t02a05_cM : ℝ) *
+      (∫ q : apm_t01J06_S2, q.1 2 ∂μH[2]) = 0
+    rw [ho', mul_zero]
+  exact ⟨hs, hl, hsquare, hlinear⟩
 -- END SEAT AREA
 
 /-- Unit vector `e i`. -/
