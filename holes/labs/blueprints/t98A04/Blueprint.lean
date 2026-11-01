@@ -474,11 +474,44 @@ theorem apm_t98a04_submersion_aux_hopf_smooth
       (⊤ : ℕ∞) apm_t98a04_hopf := by
   sorry
 
-/-- Differentiate the ratio formula and use
-`range_mfderiv_coe_sphere`/`mfderiv_coe_sphere_injective` to identify the
-source tangent space with the real orthogonal complement of `z`.  Varying
-the unused complex coordinate gives both target directions; at `(1,0)` the
-vectors `(0,1)` and `(0,I)` map to the standard real basis. -/
+/-- Seat: a smooth local section through `z`. Put `v x = affineVector i x`, take the unit complex
+`c = (z i / ‖z i‖) / (v x₀ i / ‖v x₀ i‖)` at `x₀ = affineCoordinate i (hopf z)` (note `v x i = 1`), and
+`s x = (c / ‖v x‖) • v x`. It has norm one because `‖c‖ = 1`, is smooth by `ContMDiff.codRestrict_sphere`
+(`v` is polynomial in `x`, `‖v x‖` is smooth and nonzero), and projects to `[v x]` by `Projectivization.mk_eq_mk_iff'`.
+`s x₀ = z` because `z` and `v x₀` are proportional with `v x₀ i = 1`. Check at `z = (1,0)`, `i = 0`: `x₀ = 0`, `c = 1`,
+`s 0 = (1,0)`. -/
+theorem apm_t98a04_submersion_aux_section (z : apm_t98a04_S3) (i : Fin 2) (hi : z.1 i ≠ 0) :
+    ∃ s : apm_t98a04_R2 → apm_t98a04_S3,
+      ContMDiff (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) (⊤ : ℕ∞) s ∧
+      s (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) = z ∧
+      ∀ x, apm_t98a04_hopf (s x) = apm_t98a04_affineInverse i x := by
+  sorry
+
+/-- Seat: a smooth section forces surjectivity. `haffine` gives the chart `e i`, an element of the atlas with
+`(e i).symm x = affineInverse i x`, so `hopf ∘ s = (e i).symm` everywhere. By the chain rule
+(`mfderiv_comp`, using `hsmooth` and `hs`), `mfderiv hopf z ∘ mfderiv s x₀ = mfderiv (e i).symm x₀`, and the right side
+is bijective since `e i` is a chart: `OpenPartialHomeomorph.MDifferentiable.mfderiv` (and `mdifferentiable_chart`-style
+lemmas, `contMDiffOn_of_mem_maximalAtlas`, `contMDiffOn_symm_of_mem_maximalAtlas`). `hopf z` lies in the source of `e i`
+because `rep (hopf z) i ≠ 0`, which follows from `hi` as in `apm_t98a04_fiber_eq_circleOrbit`. -/
+theorem apm_t98a04_submersion_aux_surjective_of_section
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts)
+    (hmanifold : let _ := targetCharts
+      IsManifold (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞) apm_t98a04_CP1)
+    (hsmooth : let _ := targetCharts
+      ContMDiff (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
+        (⊤ : ℕ∞) apm_t98a04_hopf)
+    (z : apm_t98a04_S3) (i : Fin 2) (hi : z.1 i ≠ 0)
+    (s : apm_t98a04_R2 → apm_t98a04_S3)
+    (hs : ContMDiff (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) (⊤ : ℕ∞) s)
+    (hsz : s (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) = z)
+    (hsec : ∀ x, apm_t98a04_hopf (s x) = apm_t98a04_affineInverse i x) :
+    let _ := targetCharts
+    Function.Surjective
+      (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2)) apm_t98a04_hopf z) := by
+  sorry
+
+/-- Assembly: every sphere point has a nonzero coordinate, then section plus chain rule. -/
 theorem apm_t98a04_submersion_aux_mfderiv_surjective
     (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
     (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts)
@@ -492,7 +525,14 @@ theorem apm_t98a04_submersion_aux_mfderiv_surjective
       Function.Surjective
         (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
           apm_t98a04_hopf z) := by
-  sorry
+  intro _ z
+  obtain ⟨i, hi⟩ : ∃ i, z.1 i ≠ 0 := by
+    by_contra h
+    push_neg at h
+    exact apm_t98a04_sphere_ne_zero z (by ext i; simpa using h i)
+  obtain ⟨s, hs, hsz, hsec⟩ := apm_t98a04_submersion_aux_section z i hi
+  exact apm_t98a04_submersion_aux_surjective_of_section targetCharts haffine hmanifold hsmooth
+    z i hi s hs hsz hsec
 
 /-- Assemble the affine atlas, its compatibility, smoothness, and the
 pointwise derivative calculation. -/
