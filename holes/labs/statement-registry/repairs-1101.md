@@ -33,3 +33,5 @@ Backlog grade: narrower, the integral clause was real-valued. Repair by zai-8 re
 ## a95A01
 
 Backlog grade: narrower, part (b) only for the literal indicator. Repair by lemma-3 adds apm_a95a01 for every bounded measurable f equal a.e. to the indicator. First new grade: narrower, because Measurable f on ℝ is Borel. claude-14 replaced it with AEMeasurable on [0,1], and generalised riemann_lebesgue_sandwich the same way. Second new grade: faithful; the Darboux definitions are genuine, and nothing depends on values outside [0,1].
+
+m02A02: backlog grade narrower for `f (0, 0) = 0` throughout. Repair by codex-6 (93 lines added, 10 removed in the proof): part (c) holds for every f, and the hypothesis stays on part (d) only, where constant f = 1 refutes the printed equivalence. New grade: narrower, justified only by that defect; reality is the printed reading, as the pairings carry no conjugates.

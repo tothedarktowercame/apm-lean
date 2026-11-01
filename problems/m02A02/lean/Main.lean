@@ -764,6 +764,81 @@ lemma m02A02_weak_to_hasEquation (u : M02A02H1) (f : M02A02L2)
     push_cast at hc
     exact hc
 
+lemma m02A02_weak_to_hasEquation_of_ne_zero (u : M02A02H1) (f : M02A02L2)
+    (hu : m02A02IsReal u)
+    (hf : ∀ k : M02A02Freq, f (-k.1, -k.2) = star (f k))
+    (hw : m02A02WeakSolution u f) {k : M02A02Freq} (hk : k ≠ (0, 0)) :
+    (4 * Real.pi ^ 2 * m02A02FreqSq k : ℂ) * m02A02Coeff u k = f k := by
+  have hre := m02A02_weak_probe_eq u f hw hk (1 : ℂ)
+  have him := m02A02_weak_probe_eq u f hw hk Complex.I
+  rw [m02A02_freqSq_neg, m02A02_coeff_neg_of_isReal hu, hf k] at hre him
+  simp only [star_star] at hre him
+  have hre' : 4 * Real.pi ^ 2 * m02A02FreqSq k * (m02A02Coeff u k).re =
+      (f k).re := by
+    simp at hre
+    linarith
+  have him' : 4 * Real.pi ^ 2 * m02A02FreqSq k * (m02A02Coeff u k).im =
+      (f k).im := by
+    simp [Complex.mul_re] at him
+    linarith
+  let A : ℝ := 4 * Real.pi ^ 2 * m02A02FreqSq k
+  have hc : (A : ℂ) * m02A02Coeff u k = f k := by
+    apply Complex.ext
+    · simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+        zero_mul, sub_zero]
+      exact hre'
+    · simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
+        zero_mul, add_zero]
+      exact him'
+  dsimp [A] at hc
+  push_cast at hc
+  exact hc
+
+lemma m02A02_poisson_summand_eq_of_eq (u v : M02A02H1) (f : M02A02L2)
+    (k : M02A02Freq)
+    (h : (4 * Real.pi ^ 2 * m02A02FreqSq k : ℂ) * m02A02Coeff u k = f k) :
+    4 * Real.pi ^ 2 * m02A02FreqSq k *
+        (star (m02A02Coeff u k) * m02A02Coeff v k).re =
+      (star (f k) * m02A02Coeff v k).re := by
+  let A : ℝ := 4 * Real.pi ^ 2 * m02A02FreqSq k
+  let z : ℂ := m02A02Coeff u k
+  let w : ℂ := m02A02Coeff v k
+  have hkEq : (A : ℂ) * z = f k := by
+    dsimp [A, z]
+    push_cast
+    exact h
+  rw [← hkEq]
+  have hc : (A : ℂ) * ((starRingEnd ℂ) z * w) =
+      (starRingEnd ℂ) ((A : ℂ) * z) * w := by
+    rw [map_mul, show (starRingEnd ℂ) (A : ℂ) = A by
+      exact Complex.conj_ofReal A]
+    ring
+  have hre := congrArg Complex.re hc
+  dsimp [A, z, w] at hre ⊢
+  simpa only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul,
+    sub_zero] using hre
+
+lemma m02A02_affineSolution_weak (u₀ : M02A02H1) (f : M02A02L2) :
+    m02A02WeakSolution (m02A02AffineSolution u₀ f) f := by
+  intro v hv
+  unfold m02A02DirichletPair m02A02ForcingPair
+  apply tsum_congr
+  intro k
+  by_cases hk : k = (0, 0)
+  · subst k
+    simp [m02A02FreqSq, m02A02Coeff, hv.2]
+  · apply m02A02_poisson_summand_eq_of_eq
+    rw [m02A02Coeff, m02A02_affineSolution_apply, if_neg hk,
+      m02A02_poissonPart_apply, m02A02PoissonRaw, if_neg hk]
+    have hA : (4 * Real.pi ^ 2 * m02A02FreqSq k : ℂ) ≠ 0 := by
+      exact_mod_cast ne_of_gt ((by norm_num : (0 : ℝ) < 2).trans_le
+        (m02A02_two_le_laplacianMultiplier hk))
+    have hs : (Real.sqrt (m02A02Weight k) : ℂ) ≠ 0 := by
+      exact_mod_cast m02A02_sqrt_weight_ne_zero k
+    have hfreq : (m02A02FreqSq k : ℂ) ≠ 0 := by
+      exact_mod_cast (mt (m02A02_freqSq_eq_zero_iff k).mp hk)
+    field_simp
+
 theorem apm_m02a02 :
     Dense m02A02SmoothPeriodicH1 ∧
     IsClosed (m02A02MeanZeroH1 : Set M02A02H1) ∧
@@ -774,30 +849,25 @@ theorem apm_m02a02 :
     ∀ (u₀ : M02A02H1) (f : M02A02L2),
       m02A02IsReal u₀ →
       (∀ k : M02A02Freq, f (-k.1, -k.2) = star (f k)) →
-      f (0, 0) = 0 →
       (∃! u : M02A02H1,
         m02A02IsReal u ∧ m02A02IsMeanZero (u - u₀) ∧
           m02A02WeakSolution u f) ∧
-      (∀ u : M02A02H1,
+      (f (0, 0) = 0 → ∀ u : M02A02H1,
         m02A02IsReal u → m02A02IsMeanZero (u - u₀) →
         (m02A02WeakSolution u f ↔ m02A02HasPoissonEquation u f)) := by
   refine ⟨m02A02_dense_smoothPeriodic, m02A02_isClosed_meanZero,
     m02A02_completeSpace_meanZero, ?_⟩
   refine ⟨⟨1, zero_lt_one, fun u hu => ?_⟩, ?_⟩
   · simpa using m02A02_poincare u hu
-  intro u₀ f hu₀ hf hf0
+  intro u₀ f hu₀ hf
   let sol : M02A02H1 := m02A02AffineSolution u₀ f
   have hsolReal : m02A02IsReal sol := m02A02_affineSolution_isReal u₀ f hu₀ hf
   have hsolMean : m02A02IsMeanZero (sol - u₀) :=
     m02A02_affineSolution_meanZero u₀ f hu₀ hf
-  have hsolEq : m02A02HasPoissonEquation sol f :=
-    m02A02_affineSolution_hasEquation u₀ f hf0
-  have hsolWeak : m02A02WeakSolution sol f := m02A02_hasEquation_to_weak sol f hsolEq
+  have hsolWeak : m02A02WeakSolution sol f := m02A02_affineSolution_weak u₀ f
   constructor
   · refine ⟨sol, ⟨hsolReal, hsolMean, hsolWeak⟩, ?_⟩
     intro w hw
-    have hwEq : m02A02HasPoissonEquation w f :=
-      m02A02_weak_to_hasEquation w f hw.1 hf hf0 hw.2.2
     have hw0 : w (0, 0) = u₀ (0, 0) := by
       have hz := hw.2.1.2
       rw [congrFun (lp.coeFn_sub w u₀) (0, 0), Pi.sub_apply] at hz
@@ -806,8 +876,21 @@ theorem apm_m02a02 :
       dsimp [sol]
       rw [m02A02_affineSolution_apply]
       simp
-    exact m02A02_hasEquation_unique_of_zeroMode w sol f hwEq hsolEq (hw0.trans hsol0.symm)
-  · intro u hu hmean
+    apply lp.ext
+    funext k
+    by_cases hk : k = (0, 0)
+    · simpa [hk] using hw0.trans hsol0.symm
+    · have hwEq := m02A02_weak_to_hasEquation_of_ne_zero w f hw.1 hf hw.2.2 hk
+      have hsEq := m02A02_weak_to_hasEquation_of_ne_zero sol f hsolReal hf hsolWeak hk
+      have hA : (4 * Real.pi ^ 2 * m02A02FreqSq k : ℂ) ≠ 0 := by
+        exact_mod_cast ne_of_gt ((by norm_num : (0 : ℝ) < 2).trans_le
+          (m02A02_two_le_laplacianMultiplier hk))
+      have hc : m02A02Coeff w k = m02A02Coeff sol k := by
+        apply (mul_left_cancel₀ hA)
+        exact hwEq.trans hsEq.symm
+      rw [m02A02Coeff, m02A02Coeff] at hc
+      exact (div_left_inj' (by exact_mod_cast m02A02_sqrt_weight_ne_zero k)).mp hc
+  · intro hf0 u hu hmean
     constructor
     · exact m02A02_weak_to_hasEquation u f hu hf hf0
     · exact m02A02_hasEquation_to_weak u f
