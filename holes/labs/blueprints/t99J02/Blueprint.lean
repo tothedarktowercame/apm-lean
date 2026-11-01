@@ -1985,6 +1985,76 @@ lower points: `t99J02_fibre` after `neg`, with `t99J02_q2_neg`. An upper and a l
 sides lie on the boundary circle at the same `s`; `t99J02_circle_param` gives a chord point `x` with
 `phi x` at `s` and `phi (-x)` at the reflected point, and `t99J02_fibre` twice gives
 `q₂ z = q₂ x = q₂ z'`. -/
+lemma t99J02_G_injective_aux_mixed (hch : t99J02_Chord g₁ g₂)
+    (hg₁ : ∀ z, (g₁ z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1))
+    (hg₂ : ∀ z, (g₂ z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1))
+    (hc₁ : ∀ u : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1,
+      ∃ h : t99J02_ell (t99J02_chi u.1) ∈ Metric.closedBall (0 : ℂ) 1,
+        c₁.smallMap u = surfaceQuotient true 1 ⟨t99J02_ell (t99J02_chi u.1), h⟩)
+    (hc₂ : ∀ u : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1,
+      ∃ h : t99J02_ell ((starRingEnd ℂ) (t99J02_chi u.1)) ∈ Metric.closedBall (0 : ℂ) 1,
+        c₂.smallMap u = surfaceQuotient true 1
+          ⟨t99J02_ell ((starRingEnd ℂ) (t99J02_chi u.1)), h⟩)
+    (z z' : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im)
+    (hz' : ¬ 0 ≤ (z' : ℂ).im)
+    (h : t99J02_G g₁ g₂ z = t99J02_G g₁ g₂ z') :
+    surfaceQuotient true 2 z = surfaceQuotient true 2 z' := by
+  set_option maxHeartbeats 2000000 in
+  rw [t99J02_G, dif_pos hz, t99J02_G, dif_neg hz'] at h
+  rcases t99J02_mk_eq c₁ c₂ _ _ h with hp | ⟨s, hp, hp'⟩ | ⟨s, hp, hp'⟩
+  · cases hp
+  · have hg₁b : g₁ ⟨z, hz⟩ = c₁.boundaryMap s := Sum.inl.inj hp
+    have hg₂b : g₂ ⟨t99J02_neg z', by
+        simpa [t99J02_neg] using (not_le.mp hz').le⟩ = c₂.boundaryMap s :=
+      Sum.inr.inj hp'
+    let u := ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s
+    obtain ⟨h₁, hc₁'⟩ := hc₁ u
+    obtain ⟨h₂, hc₂'⟩ := hc₂ u
+    let w : ℂ := t99J02_chi u.1
+    have hw : ‖w‖ = 1 := by
+      dsimp [w, u]
+      rw [t99J02_chi_spec.2.2.1]
+      simpa [ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk,
+        Metric.mem_sphere, dist_zero_right] using s.2
+    obtain ⟨x, hx, hwx⟩ := t99J02_circle_param w hw
+    let a : ConstructionTargets.Surfaces.Disk := ⟨(x : ℂ), by
+      rw [mem_closedBall_zero_iff, Complex.norm_real]
+      exact hx⟩
+    have ha : 0 ≤ (a : ℂ).im := by simp [a]
+    have hna : 0 ≤ (t99J02_neg a : ℂ).im := by simp [t99J02_neg, a]
+    set_option maxHeartbeats 2000000 in
+     have hza : surfaceQuotient true 2 z = surfaceQuotient true 2 a := by
+      apply t99J02_fibre z a hz ha
+      rw [← hg₁ ⟨z, hz⟩, hg₁b]
+      change c₁.smallMap u = surfaceQuotient true 1 (t99J02_phiDisk a)
+      rw [hc₁']
+      apply congrArg (surfaceQuotient true 1)
+      apply Subtype.ext
+      change t99J02_ell w = t99J02_phi (x : ℂ)
+      rw [t99J02_phi_chord x hx, ← hwx]
+    set_option maxHeartbeats 2000000 in
+     have hz'a : surfaceQuotient true 2 (t99J02_neg z') =
+        surfaceQuotient true 2 (t99J02_neg a) := by
+      apply t99J02_fibre (t99J02_neg z') (t99J02_neg a)
+        (by simpa [t99J02_neg] using (not_le.mp hz').le) hna
+      rw [← hg₂ ⟨t99J02_neg z', by
+        simpa [t99J02_neg] using (not_le.mp hz').le⟩, hg₂b]
+      change c₂.smallMap u = surfaceQuotient true 1 (t99J02_phiDisk (t99J02_neg a))
+      rw [hc₂']
+      apply congrArg (surfaceQuotient true 1)
+      apply Subtype.ext
+      change t99J02_ell ((starRingEnd ℂ) w) = t99J02_phi (-x : ℂ)
+      rw [show (-x : ℂ) = ((-x : ℝ) : ℂ) by norm_num,
+        t99J02_phi_chord (-x) (by simpa using hx)]
+      congr 2
+      rw [hwx]
+      apply Complex.ext <;> simp [pow_two] <;> ring
+    have hz'a' := t99J02_q2_neg hz'a
+    have : surfaceQuotient true 2 z' = surfaceQuotient true 2 a := by
+      simpa [t99J02_neg] using hz'a'
+    exact hza.trans this.symm
+  · cases hp
+
 theorem t99J02_G_injective (hch : t99J02_Chord g₁ g₂)
     (hg₁ : ∀ z, (g₁ z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1))
     (hg₂ : ∀ z, (g₂ z).1 = surfaceQuotient true 1 (t99J02_phiDisk z.1))
@@ -1996,7 +2066,31 @@ theorem t99J02_G_injective (hch : t99J02_Chord g₁ g₂)
         c₂.smallMap u = surfaceQuotient true 1 ⟨t99J02_ell ((starRingEnd ℂ) (t99J02_chi u.1)), h⟩)
     {z z' : ConstructionTargets.Surfaces.Disk} (h : t99J02_G g₁ g₂ z = t99J02_G g₁ g₂ z') :
     surfaceQuotient true 2 z = surfaceQuotient true 2 z' := by
-  sorry
+  by_cases hz : 0 ≤ (z : ℂ).im <;> by_cases hz' : 0 ≤ (z' : ℂ).im
+  · rw [t99J02_G, dif_pos hz, t99J02_G, dif_pos hz'] at h
+    rcases t99J02_mk_eq c₁ c₂ _ _ h with hp | ⟨s, hp, hp'⟩ | ⟨s, hp, hp'⟩
+    · have hgg : g₁ ⟨z, hz⟩ = g₁ ⟨z', hz'⟩ := Sum.inl.inj hp
+      apply t99J02_fibre z z' hz hz'
+      exact (hg₁ _).symm.trans ((congrArg Subtype.val hgg).trans (hg₁ _))
+    · cases hp'
+    · cases hp
+  · exact t99J02_G_injective_aux_mixed g₁ g₂ hch hg₁ hg₂ hc₁ hc₂ z z' hz hz' h
+  · exact (t99J02_G_injective_aux_mixed g₁ g₂ hch hg₁ hg₂ hc₁ hc₂ z' z hz' hz h.symm).symm
+  · have hzle : (z : ℂ).im ≤ 0 := (not_le.mp hz).le
+    have hz'le : (z' : ℂ).im ≤ 0 := (not_le.mp hz').le
+    rw [t99J02_G, dif_neg hz, t99J02_G, dif_neg hz'] at h
+    rcases t99J02_mk_eq c₁ c₂ _ _ h with hp | ⟨s, hp, hp'⟩ | ⟨s, hp, hp'⟩
+    · have hgg : g₂ ⟨t99J02_neg z, by simpa [t99J02_neg] using hzle⟩ =
+          g₂ ⟨t99J02_neg z', by simpa [t99J02_neg] using hz'le⟩ := Sum.inr.inj hp
+      have hn : surfaceQuotient true 2 (t99J02_neg z) =
+          surfaceQuotient true 2 (t99J02_neg z') := by
+        apply t99J02_fibre _ _ (by simpa [t99J02_neg] using hzle)
+          (by simpa [t99J02_neg] using hz'le)
+        exact (hg₂ _).symm.trans ((congrArg Subtype.val hgg).trans (hg₂ _))
+      have := t99J02_q2_neg hn
+      simpa [t99J02_neg] using this
+    · cases hp
+    · cases hp'
 
 /-- Topology only. `G` descends to a continuous bijection from `Surface true 2`, compact, and it is
 a closed map: the pullbacks of the image of a closed set to the two punctured tori are images of
