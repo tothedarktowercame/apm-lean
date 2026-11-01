@@ -119,6 +119,126 @@ theorem apm_t98a04_submersion_aux_affine_atlas :
 /-- Prove smooth compatibility of the two affine charts.  On their overlap
 the transition is complex inversion; use `contDiffOn_inv₀`, real/complex
 coordinate smoothness, and `IsManifold.of_compatible`. -/
+def apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC
+    (x : apm_t98a04_R2) : ℂ :=
+  x 0 + x 1 * Complex.I
+
+def apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC
+    (z : ℂ) : apm_t98a04_R2 :=
+  WithLp.toLp 2 (fun i ↦ if i = 0 then z.re else z.im)
+
+def apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromCLinear :
+    ℂ →ₗ[ℝ] apm_t98a04_R2 where
+  toFun := apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC
+  map_add' z w := by
+    ext i
+    fin_cases i <;>
+      simp [apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC,
+        Complex.smul_re, Complex.smul_im]
+  map_smul' r z := by
+    ext i
+    fin_cases i
+    · exact RCLike.smul_re r z
+    · exact RCLike.smul_im r z
+
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC_smooth :
+    ContDiff ℝ (⊤ : ℕ∞)
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC := by
+  change ContDiff ℝ (⊤ : ℕ∞) (fun x : apm_t98a04_R2 ↦
+    Complex.ofRealCLM ((PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 2 ↦ ℝ)) x 0) +
+      Complex.ofRealCLM ((PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 2 ↦ ℝ)) x 1) *
+        Complex.I)
+  fun_prop
+
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC_smooth :
+    ContDiff ℝ (⊤ : ℕ∞)
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC := by
+  exact
+    (apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromCLinear.toContinuousLinearMap).contDiff
+
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_nonzero
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (e : Fin 2 → OpenPartialHomeomorph apm_t98a04_CP1 apm_t98a04_R2)
+    (he : let _ := targetCharts
+      ∀ i,
+        (e i).source = {p : apm_t98a04_CP1 |
+          Projectivization.rep p i ≠ 0} ∧
+        (e i).target = Set.univ ∧
+        (∀ p ∈ (e i).source,
+          e i p = apm_t98a04_affineCoordinate i p) ∧
+        (∀ x, (e i).symm x = apm_t98a04_affineInverse i x))
+    {x : apm_t98a04_R2}
+    (hx : x ∈ ((e 0).symm ≫ₕ e 1).source) :
+    apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x ≠ 0 := by
+  let _ := targetCharts
+  rw [OpenPartialHomeomorph.trans_source] at hx
+  have hp : (e 0).symm x ∈ (e 1).source := hx.2
+  have hp' : Projectivization.rep ((e 0).symm x) (1 : Fin 2) ≠ 0 := by
+    rw [(he 1).1] at hp
+    exact hp
+  rw [(he 0).2.2.2 x] at hp'
+  intro hw
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ
+    (apm_t98a04_affineVector 0 x) (apm_t98a04_affineVector_ne_zero 0 x)
+  have hcoord := congrArg (fun z : apm_t98a04_C2 ↦ z (1 : Fin 2)) ha
+  have hvcoord : (apm_t98a04_affineVector 0 x) (1 : Fin 2) =
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x := by
+    simp [apm_t98a04_affineVector,
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC]
+  change (a : ℂ) * (apm_t98a04_affineVector 0 x) (1 : Fin 2) =
+    Projectivization.rep (apm_t98a04_affineInverse 0 x) (1 : Fin 2) at hcoord
+  rw [hvcoord, hw, mul_zero] at hcoord
+  exact hp' hcoord.symm
+
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_formula
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (e : Fin 2 → OpenPartialHomeomorph apm_t98a04_CP1 apm_t98a04_R2)
+    (he : let _ := targetCharts
+      ∀ i,
+        (e i).source = {p : apm_t98a04_CP1 |
+          Projectivization.rep p i ≠ 0} ∧
+        (e i).target = Set.univ ∧
+        (∀ p ∈ (e i).source,
+          e i p = apm_t98a04_affineCoordinate i p) ∧
+        (∀ x, (e i).symm x = apm_t98a04_affineInverse i x))
+    {x : apm_t98a04_R2}
+    (hx : x ∈ ((e 0).symm ≫ₕ e 1).source) :
+    let _ := targetCharts
+    ((e 0).symm ≫ₕ e 1) x =
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC
+        (apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x)⁻¹ := by
+  let _ := targetCharts
+  rw [OpenPartialHomeomorph.trans_source] at hx
+  have hp : (e 0).symm x ∈ (e 1).source := hx.2
+  have hw :=
+    apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_nonzero
+      targetCharts e he (by rw [OpenPartialHomeomorph.trans_source]; exact hx)
+  rw [OpenPartialHomeomorph.trans_apply, (he 0).2.2.2 x]
+  let y :=
+    apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC
+      (apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x)⁻¹
+  have hy : y 0 + y 1 * Complex.I =
+      (apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x)⁻¹ := by
+    change
+      ((apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x)⁻¹).re +
+        ((apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x)⁻¹).im *
+          Complex.I = _
+    exact Complex.re_add_im _
+  have hproj : apm_t98a04_affineInverse 0 x = apm_t98a04_affineInverse 1 y := by
+    apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+    refine ⟨apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x, ?_⟩
+    ext j
+    fin_cases j
+    · change
+        apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x *
+          (y 0 + y 1 * Complex.I) = 1
+      rw [hy]
+      exact mul_inv_cancel₀ hw
+    · simp [apm_t98a04_affineVector, hy,
+        apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC]
+  rw [hproj, ← (he 1).2.2.2 y]
+  exact (e 1).right_inv (by rw [(he 1).2.1]; exact Set.mem_univ y)
+
 lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition01
     (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
     (e : Fin 2 → OpenPartialHomeomorph apm_t98a04_CP1 apm_t98a04_R2)
@@ -133,7 +253,133 @@ lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition01
     let _ := targetCharts
     ContDiffOn ℝ (⊤ : ℕ∞) ((e 0).symm ≫ₕ e 1)
       ((e 0).symm ≫ₕ e 1).source := by
-  sorry
+  let _ := targetCharts
+  dsimp only
+  intro x hx
+  have hn :=
+    apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_nonzero
+      targetCharts e he hx
+  have hsmooth : ContDiffWithinAt ℝ (⊤ : ℕ∞)
+      (fun x ↦
+        apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC
+          (apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC x)⁻¹)
+      ((e 0).symm ≫ₕ e 1).source x := by
+    exact apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_fromC_smooth.contDiffAt.comp_contDiffWithinAt
+      x ((contDiffAt_inv ℝ hn).comp x
+        apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_toC_smooth.contDiffAt).contDiffWithinAt
+  exact hsmooth.congr
+    (fun y hy ↦
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_formula
+        targetCharts e he hy)
+    (apm_t98a04_submersion_aux_affine_isManifold_aux_transition01_aux_formula
+      targetCharts e he hx)
+
+def apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC
+    (x : apm_t98a04_R2) : ℂ :=
+  x 0 + x 1 * Complex.I
+
+def apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC
+    (z : ℂ) : apm_t98a04_R2 :=
+  WithLp.toLp 2 ![z.re, z.im]
+
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC_smooth :
+    ContDiff ℝ (⊤ : ℕ∞)
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC := by
+  unfold apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC
+  have hp : ContDiff ℝ (⊤ : ℕ∞) (fun x : apm_t98a04_R2 ↦ (x 0, x 1)) := by
+    rw [contDiff_prod_iff]
+    constructor <;>
+      simpa using (contDiff_apply ℝ ℝ (n := (⊤ : ℕ∞)) _).comp
+        (PiLp.contDiff_ofLp (𝕜 := ℝ))
+  convert Complex.equivRealProdCLM.symm.contDiff.comp hp using 1
+  funext x
+  exact (Complex.equivRealProdCLM_symm_apply (x 0, x 1)).symm
+
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC_smooth :
+    ContDiff ℝ (⊤ : ℕ∞)
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC := by
+  unfold apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC
+  apply PiLp.contDiff_toLp.comp
+  rw [contDiff_pi]
+  intro i
+  fin_cases i
+  · exact Complex.reCLM.contDiff
+  · exact Complex.imCLM.contDiff
+
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_formula
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (e : Fin 2 → OpenPartialHomeomorph apm_t98a04_CP1 apm_t98a04_R2)
+    (he : let _ := targetCharts
+      ∀ i,
+        (e i).source = {p : apm_t98a04_CP1 |
+          Projectivization.rep p i ≠ 0} ∧
+        (e i).target = Set.univ ∧
+        (∀ p ∈ (e i).source,
+          e i p = apm_t98a04_affineCoordinate i p) ∧
+        (∀ x, (e i).symm x = apm_t98a04_affineInverse i x))
+    {x : apm_t98a04_R2}
+    (hx : x ∈ ((e 1).symm ≫ₕ e 0).source) :
+    let _ := targetCharts
+    ((e 1).symm ≫ₕ e 0) x =
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC
+        (apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x)⁻¹ := by
+  let _ := targetCharts
+  rw [OpenPartialHomeomorph.trans_source] at hx
+  have hp : (e 1).symm x ∈ (e 0).source := hx.2
+  have hw :
+      apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x ≠ 0 := by
+    intro hw
+    have hp' : Projectivization.rep ((e 1).symm x) (0 : Fin 2) ≠ 0 := by
+      rw [(he 0).1] at hp
+      exact hp
+    rw [(he 1).2.2.2 x] at hp'
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ
+      (apm_t98a04_affineVector 1 x) (apm_t98a04_affineVector_ne_zero 1 x)
+    have hcoord := congrArg (fun z : apm_t98a04_C2 ↦ z (0 : Fin 2)) ha
+    have hz :
+        (Projectivization.rep (apm_t98a04_affineInverse 1 x)) (0 : Fin 2) = 0 := by
+      calc
+        _ = (a • apm_t98a04_affineVector 1 x) (0 : Fin 2) := by
+          simpa [apm_t98a04_affineInverse] using hcoord.symm
+        _ = (a : ℂ) *
+            apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x := by
+          change (a : ℂ) * (↑(x 0) + ↑(x 1) * Complex.I) =
+            (a : ℂ) * apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x
+          unfold apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC
+          ring
+        _ = 0 := by rw [hw, mul_zero]
+    exact hp' hz
+  rw [OpenPartialHomeomorph.trans_apply, (he 1).2.2.2 x]
+  let y :=
+    apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC
+      (apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x)⁻¹
+  have hproj : apm_t98a04_affineInverse 1 x = apm_t98a04_affineInverse 0 y := by
+    apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+    refine ⟨apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x, ?_⟩
+    ext j
+    fin_cases j
+    · simp [apm_t98a04_affineVector, y,
+        apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC,
+        apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC]
+    · simp [apm_t98a04_affineVector, y,
+        apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC]
+      have hi :
+          (↑(apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x).re /
+              ↑(Complex.normSq
+                (apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x)) +
+            -↑(apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x).im /
+                ↑(Complex.normSq
+                  (apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x)) *
+              Complex.I) =
+            (apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x)⁻¹ := by
+        rw [← Complex.ofReal_div]
+        rw [← Complex.ofReal_neg, ← Complex.ofReal_div]
+        rw [← Complex.inv_re, ← Complex.inv_im]
+        exact Complex.re_add_im _
+      rw [hi]
+      exact mul_inv_cancel₀ hw
+  rw [hproj, ← (he 0).2.2.2 y]
+  exact (e 0).right_inv (by rw [(he 0).2.1]; exact Set.mem_univ y)
 
 lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition10
     (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
@@ -149,7 +395,39 @@ lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition10
     let _ := targetCharts
     ContDiffOn ℝ (⊤ : ℕ∞) ((e 1).symm ≫ₕ e 0)
       ((e 1).symm ≫ₕ e 0).source := by
-  sorry
+  let _ := targetCharts
+  have hsmooth :=
+    (apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_fromC_smooth.comp_contDiffOn
+      ((contDiffOn_inv ℝ).comp
+        apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC_smooth.contDiffOn
+        (fun x hx ↦ hx))).of_le le_rfl
+  have hsub : ((e 1).symm ≫ₕ e 0).source ⊆
+      {x | apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x ≠ 0} := by
+    intro x hx hw
+    rw [OpenPartialHomeomorph.trans_source] at hx
+    have hp : (e 1).symm x ∈ (e 0).source := hx.2
+    have hp' : Projectivization.rep ((e 1).symm x) (0 : Fin 2) ≠ 0 := by
+      rw [(he 0).1] at hp
+      exact hp
+    rw [(he 1).2.2.2 x] at hp'
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ
+      (apm_t98a04_affineVector 1 x) (apm_t98a04_affineVector_ne_zero 1 x)
+    have hcoord := congrArg (fun z : apm_t98a04_C2 ↦ z (0 : Fin 2)) ha
+    apply hp'
+    calc
+      _ = (a • apm_t98a04_affineVector 1 x) (0 : Fin 2) := by
+        simpa [apm_t98a04_affineInverse] using hcoord.symm
+      _ = (a : ℂ) *
+          apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x := by
+        change (a : ℂ) * (↑(x 0) + ↑(x 1) * Complex.I) =
+          (a : ℂ) * apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC x
+        unfold apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_toC
+        ring
+      _ = 0 := by rw [hw, mul_zero]
+  apply ContDiffOn.congr (hsmooth.mono hsub)
+  intro x hx
+  exact apm_t98a04_submersion_aux_affine_isManifold_aux_transition10_aux_formula
+    targetCharts e he hx
 
 theorem apm_t98a04_submersion_aux_affine_isManifold
     (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
@@ -198,11 +476,81 @@ theorem apm_t98a04_submersion_aux_hopf_smooth
   sorry
 -- END SEAT AREA
 
-/-- Differentiate the ratio formula and use
-`range_mfderiv_coe_sphere`/`mfderiv_coe_sphere_injective` to identify the
-source tangent space with the real orthogonal complement of `z`.  Varying
-the unused complex coordinate gives both target directions; at `(1,0)` the
-vectors `(0,1)` and `(0,I)` map to the standard real basis. -/
+/-- Seat: a smooth local section through `z`. Put `v x = affineVector i x`, take the unit complex
+`c = (z i / ‖z i‖) / (v x₀ i / ‖v x₀ i‖)` at `x₀ = affineCoordinate i (hopf z)` (note `v x i = 1`), and
+`s x = (c / ‖v x‖) • v x`. It has norm one because `‖c‖ = 1`, is smooth by `ContMDiff.codRestrict_sphere`
+(`v` is polynomial in `x`, `‖v x‖` is smooth and nonzero), and projects to `[v x]` by `Projectivization.mk_eq_mk_iff'`.
+`s x₀ = z` because `z` and `v x₀` are proportional with `v x₀ i = 1`. Check at `z = (1,0)`, `i = 0`: `x₀ = 0`, `c = 1`,
+`s 0 = (1,0)`. -/
+theorem apm_t98a04_submersion_aux_section (z : apm_t98a04_S3) (i : Fin 2) (hi : z.1 i ≠ 0) :
+    ∃ s : apm_t98a04_R2 → apm_t98a04_S3,
+      ContMDiff (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) (⊤ : ℕ∞) s ∧
+      s (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) = z ∧
+      ∀ x, apm_t98a04_hopf (s x) = apm_t98a04_affineInverse i x := by
+  sorry
+
+/-- Seat: a smooth section forces surjectivity. `haffine` gives the chart `e i`, an element of the atlas with
+`(e i).symm x = affineInverse i x`, so `hopf ∘ s = (e i).symm` everywhere. By the chain rule
+(`mfderiv_comp`, using `hsmooth` and `hs`), `mfderiv hopf z ∘ mfderiv s x₀ = mfderiv (e i).symm x₀`, and the right side
+is bijective since `e i` is a chart: `OpenPartialHomeomorph.MDifferentiable.mfderiv` (and `mdifferentiable_chart`-style
+lemmas, `contMDiffOn_of_mem_maximalAtlas`, `contMDiffOn_symm_of_mem_maximalAtlas`). `hopf z` lies in the source of `e i`
+because `rep (hopf z) i ≠ 0`, which follows from `hi` as in `apm_t98a04_fiber_eq_circleOrbit`. -/
+theorem apm_t98a04_submersion_aux_surjective_of_section
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts)
+    (hmanifold : let _ := targetCharts
+      IsManifold (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞) apm_t98a04_CP1)
+    (hsmooth : let _ := targetCharts
+      ContMDiff (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
+        (⊤ : ℕ∞) apm_t98a04_hopf)
+    (z : apm_t98a04_S3) (i : Fin 2) (hi : z.1 i ≠ 0)
+    (s : apm_t98a04_R2 → apm_t98a04_S3)
+    (hs : ContMDiff (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) (⊤ : ℕ∞) s)
+    (hsz : s (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) = z)
+    (hsec : ∀ x, apm_t98a04_hopf (s x) = apm_t98a04_affineInverse i x) :
+    let _ := targetCharts
+    Function.Surjective
+      (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2)) apm_t98a04_hopf z) := by
+  let _ := targetCharts
+  letI := hmanifold
+  dsimp only
+  obtain ⟨e, he_atlas, he⟩ := haffine
+  let x0 := apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)
+  have hei_atlas : e i ∈ atlas apm_t98a04_R2 apm_t98a04_CP1 := by
+    rw [he_atlas]
+    exact Set.mem_range_self i
+  have hei_max : e i ∈ IsManifold.maximalAtlas
+      (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞) apm_t98a04_CP1 :=
+    IsManifold.subset_maximalAtlas hei_atlas
+  have hei : (e i).MDifferentiable
+      (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R2)) := by
+    constructor
+    · exact (contMDiffOn_of_mem_maximalAtlas hei_max).mdifferentiableOn (by simp)
+    · exact (contMDiffOn_symm_of_mem_maximalAtlas hei_max).mdifferentiableOn (by simp)
+  have hx0 : x0 ∈ (e i).target := by
+    rw [(he i).2.1]
+    exact Set.mem_univ _
+  have hrange : Function.Surjective (mfderiv _ _ (e i).symm x0) :=
+    hei.symm.mfderiv_surjective hx0
+  have hcomp :
+      (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
+          apm_t98a04_hopf z).comp
+        (mfderiv (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) s x0) =
+      mfderiv (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R2)) (e i).symm x0 := by
+    rw [← hsz]
+    rw [← mfderiv_comp x0 (hsmooth.mdifferentiable (by simp)).mdifferentiableAt
+      (hs.mdifferentiable (by simp)).mdifferentiableAt]
+    apply Filter.EventuallyEq.mfderiv_eq
+    filter_upwards with x
+    change apm_t98a04_hopf (s x) = (e i).symm x
+    rw [hsec x, (he i).2.2.2 x]
+  intro y
+  obtain ⟨v, hv⟩ := hrange y
+  refine ⟨mfderiv (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) s x0 v, ?_⟩
+  have h := congrArg (fun L ↦ L v) hcomp
+  exact h.trans hv
+
+/-- Assembly: every sphere point has a nonzero coordinate, then section plus chain rule. -/
 theorem apm_t98a04_submersion_aux_mfderiv_surjective
     (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
     (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts)
@@ -216,7 +564,14 @@ theorem apm_t98a04_submersion_aux_mfderiv_surjective
       Function.Surjective
         (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
           apm_t98a04_hopf z) := by
-  sorry
+  intro _ z
+  obtain ⟨i, hi⟩ : ∃ i, z.1 i ≠ 0 := by
+    by_contra h
+    push_neg at h
+    exact apm_t98a04_sphere_ne_zero z (by ext i; simpa using h i)
+  obtain ⟨s, hs, hsz, hsec⟩ := apm_t98a04_submersion_aux_section z i hi
+  exact apm_t98a04_submersion_aux_surjective_of_section targetCharts haffine hmanifold hsmooth
+    z i hi s hs hsz hsec
 
 /-- Assemble the affine atlas, its compatibility, smoothness, and the
 pointwise derivative calculation. -/
