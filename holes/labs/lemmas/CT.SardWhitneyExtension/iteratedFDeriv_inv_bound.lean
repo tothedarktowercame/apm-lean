@@ -544,7 +544,79 @@ theorem iteratedFDeriv_inv_bound
       ContDiffAt ℝ k S x →
       (∀ j ≤ k, ‖iteratedFDeriv ℝ j S x‖ ≤ A j * r⁻¹ ^ j) →
       ‖iteratedFDeriv ℝ k (fun y ↦ (S y)⁻¹) x‖ ≤ B * r⁻¹ ^ k := by
-  sorry
+  -- Total scale of the input bounds; absorbs every `A j`.
+  set M : ℝ := 1 + ∑ j ∈ Finset.range (k + 1), |A j| with hMdef
+  have hM1 : 1 ≤ M := by
+    have := Finset.sum_nonneg (s := Finset.range (k + 1)) (fun j _ => abs_nonneg (A j))
+    linarith
+  refine ⟨(k.factorial : ℝ) * (k.factorial : ℝ) * M ^ k, by positivity, ?_⟩
+  intro S x r hr hSx hS hA
+  have hrinv : 0 < r⁻¹ := inv_pos.2 hr
+  have hSx0 : (0 : ℝ) < S x := zero_lt_one.trans_le hSx
+  -- An open neighborhood of `x` where `S` is `C^k` and `S > 1/2`.
+  obtain ⟨u, hu, hSu⟩ := hS.contDiffOn (m := (k : WithTop ℕ∞)) le_rfl (by simp)
+  obtain ⟨u₀, hu₀u, hu₀open, hxu₀⟩ := mem_nhds_iff.1 hu
+  have hcont : ContinuousAt S x := hS.continuousAt
+  have hs₀ : u₀ ∩ S ⁻¹' Set.Ioi (1 / 2 : ℝ) ∈ nhds x :=
+    Filter.inter_mem (hu₀open.mem_nhds hxu₀)
+      (hcont.preimage_mem_nhds (isOpen_Ioi.mem_nhds (by linarith : (1 / 2 : ℝ) < S x)))
+  obtain ⟨s, hss₀, hsopen, hxs⟩ := mem_nhds_iff.1 hs₀
+  have hSus : ContDiffOn ℝ (k : WithTop ℕ∞) S s :=
+    hSu.mono (hss₀.trans (Set.inter_subset_left.trans hu₀u))
+  have hmap : Set.MapsTo S s (Set.Ioi (1 / 2 : ℝ)) := fun y hy => (hss₀ hy).2
+  -- Derivative bounds for `Inv.inv` at `S x ≥ 1`.
+  have hC : ∀ i, i ≤ k →
+      ‖iteratedFDerivWithin ℝ i (Inv.inv : ℝ → ℝ) (Set.Ioi (1 / 2 : ℝ)) (S x)‖ ≤ (k.factorial : ℝ) := by
+    intro i hi
+    rw [iteratedFDerivWithin_of_isOpen i isOpen_Ioi
+      (by simp only [Set.mem_Ioi]; linarith : S x ∈ Set.Ioi (1 / 2 : ℝ))]
+    rw [norm_iteratedFDeriv_eq_norm_iteratedDeriv]
+    have hform : iteratedDeriv i (Inv.inv : ℝ → ℝ) (S x) =
+        (-1 : ℝ) ^ i * (i.factorial : ℝ) * (S x) ^ (-1 - i : ℤ) := by
+      rw [iteratedDeriv_eq_iterate]; exact iter_deriv_inv i (S x)
+    rw [hform]
+    have hzp : (0 : ℝ) < (S x) ^ (-1 - i : ℤ) := zpow_pos hSx0 _
+    rw [Real.norm_eq_abs, abs_mul, abs_mul,
+      show |(-1 : ℝ) ^ i| = 1 by rw [abs_pow, abs_neg, abs_one, one_pow],
+      show |(i.factorial : ℝ)| = (i.factorial : ℝ) from abs_of_nonneg (by positivity),
+      show |(S x) ^ (-1 - i : ℤ)| = (S x) ^ (-1 - i : ℤ) from abs_of_pos hzp,
+      one_mul]
+    calc (i.factorial : ℝ) * (S x) ^ (-1 - i : ℤ) ≤ (k.factorial : ℝ) * 1 := by
+          apply mul_le_mul
+          · exact_mod_cast Nat.factorial_le hi
+          · exact zpow_le_one_of_nonpos₀ hSx (by omega)
+          · exact hzp.le
+          · positivity
+      _ = (k.factorial : ℝ) := mul_one _
+  -- Geometric bound for the derivatives of `S`.
+  have hD : ∀ i, 1 ≤ i → i ≤ k → ‖iteratedFDerivWithin ℝ i S s x‖ ≤ (r⁻¹ * M) ^ i := by
+    intro i hi1 hik
+    rw [iteratedFDerivWithin_of_isOpen i hsopen hxs]
+    have hAi : A i ≤ M := by
+      calc A i ≤ |A i| := le_abs_self _
+        _ ≤ ∑ j ∈ Finset.range (k + 1), |A j| :=
+            Finset.single_le_sum (f := fun j ↦ |A j|) (fun j _ => abs_nonneg _)
+              (Finset.mem_range.2 (Nat.lt_succ_of_le hik))
+        _ ≤ M := by linarith
+    calc ‖iteratedFDeriv ℝ i S x‖ ≤ A i * r⁻¹ ^ i := hA i hik
+      _ ≤ M * r⁻¹ ^ i := mul_le_mul_of_nonneg_right hAi (pow_nonneg hrinv.le _)
+      _ ≤ M ^ i * r⁻¹ ^ i := by
+          apply mul_le_mul_of_nonneg_right _ (pow_nonneg hrinv.le _)
+          have h : (M : ℝ) ^ 1 ≤ M ^ i := pow_le_pow_right₀ hM1 (by omega)
+          rwa [pow_one] at h
+      _ = (r⁻¹ * M) ^ i := by rw [mul_pow]; ring
+  -- Composition bound.
+  have hg : ContDiffOn ℝ (k : WithTop ℕ∞) (Inv.inv : ℝ → ℝ) (Set.Ioi (1 / 2 : ℝ)) :=
+    (contDiffOn_inv ℝ).mono fun y hy =>
+      ne_of_gt (lt_trans (show (0:ℝ) < 1 / 2 by norm_num) (Set.mem_Ioi.1 hy))
+  have key := norm_iteratedFDerivWithin_comp_le (𝕜 := ℝ) hg hSus le_rfl
+    isOpen_Ioi.uniqueDiffOn hsopen.uniqueDiffOn hmap hxs hC hD
+  rw [iteratedFDerivWithin_of_isOpen k hsopen hxs] at key
+  have hcomp : (Inv.inv : ℝ → ℝ) ∘ S = fun y ↦ (S y)⁻¹ := rfl
+  rw [hcomp] at key
+  calc ‖iteratedFDeriv ℝ k (fun y ↦ (S y)⁻¹) x‖
+      ≤ (k.factorial : ℝ) * (k.factorial : ℝ) * (r⁻¹ * M) ^ k := key
+    _ = (k.factorial : ℝ) * (k.factorial : ℝ) * M ^ k * r⁻¹ ^ k := by rw [mul_pow]; ring
 -- END SEAT AREA
 
 /-- Normalising the bump family gives a partition of unity with derivative bounds at every
