@@ -441,12 +441,54 @@ theorem t99J02_collar_exists :
 
 /-- The same collar precomposed with the reflection. -/
 -- BEGIN SEAT AREA
+def t99J02_collar_reflect_aux_homeomorph (r : ℝ) :
+    ConstructionTargets.CollaredConnectedSumHomology.Disk 2 r ≃ₜ
+      ConstructionTargets.CollaredConnectedSumHomology.Disk 2 r where
+  toFun u := ⟨t99J02_refl u.1, by
+    apply mem_closedBall_zero_iff.mpr
+    rw [t99J02_chi_spec.2.2.2.2.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2⟩
+  invFun u := ⟨t99J02_refl u.1, by
+    apply mem_closedBall_zero_iff.mpr
+    rw [t99J02_chi_spec.2.2.2.2.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2⟩
+  left_inv u := by
+    apply Subtype.ext
+    apply t99J02_chi_spec.2.1
+    simp only [t99J02_chi_spec.2.2.2.1]
+    simp
+  right_inv u := by
+    apply Subtype.ext
+    apply t99J02_chi_spec.2.1
+    simp only [t99J02_chi_spec.2.2.2.1]
+    simp
+  continuous_toFun :=
+    (t99J02_chi_spec.2.2.2.2.1.comp continuous_subtype_val).subtype_mk _
+  continuous_invFun :=
+    (t99J02_chi_spec.2.2.2.2.1.comp continuous_subtype_val).subtype_mk _
+
 theorem t99J02_collar_reflect (c : BallCollar 2 (Surface true 1)) :
     ∃ c' : BallCollar 2 (Surface true 1),
       ∀ u : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1,
         ∃ hu : t99J02_refl u.1 ∈ Metric.closedBall (0 : EuclideanSpace ℝ (Fin 2)) 1,
           c'.smallMap u = c.smallMap ⟨t99J02_refl u.1, hu⟩ := by
-  sorry
+  let e1 := t99J02_collar_reflect_aux_homeomorph 1
+  let e2 := t99J02_collar_reflect_aux_homeomorph 2
+  let c' : BallCollar 2 (Surface true 1) :=
+    { smallMap := c.smallMap ∘ e1
+      largeMap := c.largeMap ∘ e2
+      smallEmbedding := c.smallEmbedding.comp e1.isEmbedding
+      largeEmbedding := c.largeEmbedding.comp e2.isEmbedding
+      compatible := by
+        funext u
+        exact c.largeMap_unitToLarge (e1 u) }
+  refine ⟨c', ?_⟩
+  intro u
+  have hu : t99J02_refl u.1 ∈ Metric.closedBall (0 : EuclideanSpace ℝ (Fin 2)) 1 := by
+    apply mem_closedBall_zero_iff.mpr
+    rw [t99J02_chi_spec.2.2.2.2.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2
+  exact ⟨hu, rfl⟩
 -- END SEAT AREA
 
 /-! ### Layer 1: general facts about `ConnectedSum` -/
