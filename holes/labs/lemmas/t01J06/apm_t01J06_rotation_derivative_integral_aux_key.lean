@@ -561,7 +561,79 @@ theorem apm_t01J06_rotation_derivative_integral_aux_const (k : Fin 3) (t : ℝ) 
 lemma apm_t01J06_rotation_derivative_integral_aux_key (k : Fin 3)
     (f : apm_t01J06_E3 → ℝ) (hf : ContDiff ℝ 1 f) :
     (∫ q : apm_t01J06_S2, fderiv ℝ f q.1 (apm_t01J06_rotField k q.1) ∂μHE[2]) = 0 := by
-  sorry
+  let F : ℝ → apm_t01J06_S2 → ℝ := fun t q ↦
+    f (apm_t01J06_rotation_derivative_integral_aux_rot k t q.1)
+  let F' : ℝ → apm_t01J06_S2 → ℝ := fun t q ↦
+    fderiv ℝ f (apm_t01J06_rotation_derivative_integral_aux_rot k t q.1)
+      (apm_t01J06_rotField k
+        (apm_t01J06_rotation_derivative_integral_aux_rot k t q.1))
+  have hrot_cont : Continuous (fun p : ℝ × apm_t01J06_S2 ↦
+      apm_t01J06_rotation_derivative_integral_aux_rot k p.1 p.2.1) := by
+    apply (PiLp.continuous_toLp 2 _).comp
+    rw [continuous_pi_iff]
+    intro i
+    fin_cases k <;> fin_cases i <;>
+      simp [apm_t01J06_rotation_derivative_integral_aux_rot] <;> fun_prop
+  have hfield_cont : Continuous (apm_t01J06_rotField k) := by
+    apply (PiLp.continuous_toLp 2 _).comp
+    rw [continuous_pi_iff]
+    intro i
+    fin_cases k <;> fin_cases i <;> simp [apm_t01J06_rotField] <;> fun_prop
+  have hF'_cont : Continuous (fun p : ℝ × apm_t01J06_S2 ↦ F' p.1 p.2) := by
+    dsimp [F']
+    apply Continuous.clm_apply
+    · exact (hf.continuous_fderiv (by simp)).comp hrot_cont
+    · exact hfield_cont.comp hrot_cont
+  obtain ⟨C, hC⟩ :=
+    ((isCompact_Icc : IsCompact (Set.Icc (-1 : ℝ) 1)).prod
+      (isCompact_univ : IsCompact (Set.univ : Set apm_t01J06_S2))).exists_bound_of_continuousOn
+      hF'_cont.continuousOn
+  have hmass := apm_t02a05_euclideanHausdorff_unitSphere_mass
+  have hmass_ne : (μHE[2] (Set.univ : Set apm_t01J06_S2)) ≠ ∞ := by
+    intro he
+    rw [he] at hmass
+    have hz : (0 : ℝ) = 4 * Real.pi := by simpa using hmass
+    nlinarith [Real.pi_pos]
+  letI : IsFiniteMeasure (μHE[2] : Measure apm_t01J06_S2) :=
+    ⟨lt_top_iff_ne_top.mpr hmass_ne⟩
+  have hderiv : HasDerivAt (fun t ↦ ∫ q, F t q ∂μHE[2])
+      (∫ q, F' 0 q ∂μHE[2]) 0 := by
+    exact (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+      (μ := (μHE[2] : Measure apm_t01J06_S2)) (x₀ := (0 : ℝ))
+      (F := F) (F' := F') (bound := fun _ ↦ C) (s := Set.Icc (-1 : ℝ) 1)
+      (by exact Icc_mem_nhds (by norm_num) (by norm_num))
+      (by
+        filter_upwards with t
+        dsimp [F]
+        exact (hf.continuous.comp
+          (hrot_cont.comp (continuous_const.prodMk continuous_id))).aestronglyMeasurable)
+      (by
+        rw [← integrableOn_univ]
+        apply ContinuousOn.integrableOn_compact isCompact_univ
+        dsimp [F]
+        exact (hf.continuous.comp
+          (hrot_cont.comp (continuous_const.prodMk continuous_id))).continuousOn)
+      (by exact (hF'_cont.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable)
+      (by
+        filter_upwards with q
+        intro t ht
+        exact hC (t, q) ⟨ht, Set.mem_univ q⟩)
+      (integrable_const C)
+      (by
+        filter_upwards with q
+        intro t ht
+        dsimp [F, F']
+        exact (hf.differentiable (by simp)
+          (apm_t01J06_rotation_derivative_integral_aux_rot k t q.1)).hasFDerivAt.comp_hasDerivAt
+            t (apm_t01J06_rotation_derivative_integral_aux_hasDeriv_all k q.1 t))).2
+  have hconst : (fun t ↦ ∫ q, F t q ∂μHE[2]) =
+      fun _ ↦ ∫ q : apm_t01J06_S2, f q.1 ∂μHE[2] := by
+    funext t
+    exact apm_t01J06_rotation_derivative_integral_aux_const k t f hf.continuous
+  rw [hconst] at hderiv
+  have hz : (∫ q, F' 0 q ∂μHE[2]) = 0 :=
+    hderiv.unique (hasDerivAt_const (x := 0) (∫ q : apm_t01J06_S2, f q.1 ∂μHE[2]))
+  simpa [F', apm_t01J06_rotation_derivative_integral_aux_rot_zero] using hz
 -- END SEAT AREA
 
 theorem apm_t01J06_rotation_derivative_integral (k : Fin 3) (f : apm_t01J06_E3 → ℝ)
