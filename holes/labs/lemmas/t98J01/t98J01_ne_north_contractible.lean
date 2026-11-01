@@ -1212,9 +1212,69 @@ theorem t98J01_ne_south_contractible :
 
 /-- Seat: `(x, y) ↦ x / (1 - y)` as in `t98J01_ne_south_contractible`, or conjugate by `(x, y) ↦ (x, -y)`. -/
 -- BEGIN SEAT AREA
+private def t98J01_ne_north_contractible_aux_homeomorph :
+    ↥({q | q ≠ T98J01.northPt} : Set T98J01.S1) ≃ₜ ℝ where
+  toFun q := q.1.1.1 / (1 - q.1.1.2)
+  invFun t := ⟨⟨(2 * t / (1 + t ^ 2), (t ^ 2 - 1) / (1 + t ^ 2)), by
+    have hd : (1 + t ^ 2) ≠ 0 := by positivity
+    field_simp
+    ring⟩, by
+      intro h
+      have hy := congrArg (fun q : T98J01.S1 => q.1.2) h
+      dsimp [T98J01.northPt] at hy
+      have hd : (1 + t ^ 2) ≠ 0 := by positivity
+      field_simp at hy
+      nlinarith [sq_nonneg t]⟩
+  left_inv q := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rcases q with ⟨⟨⟨x, y⟩, hxy⟩, hne⟩
+    dsimp
+    change x ^ 2 + y ^ 2 = 1 at hxy
+    have hden : 1 - y ≠ 0 := by
+      intro h
+      have hy : y = 1 := by linarith
+      have hx : x = 0 := by nlinarith
+      apply hne
+      apply Subtype.ext
+      simp [T98J01.northPt, hx, hy]
+    have hid : (1 - y) ^ 2 + x ^ 2 = 2 * (1 - y) := by nlinarith
+    ext
+    · field_simp
+      rw [hid]
+      ring
+    · field_simp
+      nlinarith
+  right_inv t := by
+    dsimp
+    have hd : (1 + t ^ 2) ≠ 0 := by positivity
+    field_simp
+    ring
+  continuous_toFun := by
+    apply Continuous.div (by fun_prop) (by fun_prop)
+    intro q
+    rcases q with ⟨⟨⟨x, y⟩, hxy⟩, hne⟩
+    dsimp
+    intro h
+    have hy : y = 1 := by linarith
+    have hx : x = 0 := by nlinarith
+    apply hne
+    apply Subtype.ext
+    simp [T98J01.northPt, hx, hy]
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    apply Continuous.subtype_mk
+    apply Continuous.prodMk
+    · apply Continuous.div (by fun_prop) (by fun_prop)
+      intro t
+      positivity
+    · apply Continuous.div (by fun_prop) (by fun_prop)
+      intro t
+      positivity
+
 theorem t98J01_ne_north_contractible :
     ContractibleSpace ↥({q | q ≠ T98J01.northPt} : Set T98J01.S1) := by
-  sorry
+  exact t98J01_ne_north_contractible_aux_homeomorph.contractibleSpace
 -- END SEAT AREA
 
 /-- Seat: `q ↦ q.1.2` is a homeomorphism onto the open interval `Set.Ioo (-1) 1` (inverse `y ↦ (√(1 - y²), y)`), which is convex and nonempty hence contractible (`Convex.contractibleSpace`). -/
