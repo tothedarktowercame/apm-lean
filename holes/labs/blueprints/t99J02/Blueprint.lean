@@ -120,7 +120,17 @@ def t99J02_stretch (u : ℂ) : ℂ :=
 
 /-- `‖ell u‖ = 5/8 ‖u‖ + 3/8 Re u`. Square both sides; `‖u‖² = re² + im²`. -/
 theorem t99J02_ell_norm (u : ℂ) : ‖t99J02_ell u‖ = 5 / 8 * ‖u‖ + 3 / 8 * u.re := by
-  sorry
+  have hu_sq : ‖u‖ ^ 2 = u.re ^ 2 + u.im ^ 2 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]
+    ring
+  have hre : |u.re| ≤ ‖u‖ := Complex.abs_re_le_norm u
+  have hrhs : 0 ≤ 5 / 8 * ‖u‖ + 3 / 8 * u.re := by
+    have hre' : -‖u‖ ≤ u.re := by linarith [neg_abs_le u.re]
+    nlinarith [norm_nonneg u]
+  have hsq : ‖t99J02_ell u‖ ^ 2 = (5 / 8 * ‖u‖ + 3 / 8 * u.re) ^ 2 := by
+    rw [Complex.sq_norm, t99J02_ell, Complex.normSq_mk]
+    nlinarith
+  nlinarith [norm_nonneg (t99J02_ell u)]
 
 /-- `ell` is injective on all of `ℂ`. The imaginary part gives `Im u`; then `a ↦ 3/8 √(a²+b²) + 5/8 a`
 is strictly increasing. -/
