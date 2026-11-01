@@ -138,9 +138,44 @@ theorem t99J02_ell_injective : Function.Injective t99J02_ell := by
   sorry
 
 /-- On the upper unit semicircle `phi z = z²`, since `√(1 - x²) = y`. -/
+lemma t99J02_phi_edge_aux (z : ℂ) (hn : ‖z‖ = 1) (hi : 0 ≤ z.im) :
+    t99J02_phi z = z ^ 2 := by
+  have hre : 0 ≤ 1 - z.re ^ 2 := by
+    have hn' : ‖z‖ ^ 2 = 1 := by rw [hn]; norm_num
+    rw [Complex.sq_norm, Complex.normSq_apply] at hn'
+    nlinarith
+  have him : z.im ^ 2 = 1 - z.re ^ 2 := by
+    have hn' : ‖z‖ ^ 2 = 1 := by rw [hn]; norm_num
+    rw [Complex.sq_norm, Complex.normSq_apply] at hn'
+    nlinarith
+  have hsqrt : √(1 - z.re ^ 2) = z.im := by
+    have hs := Real.sq_sqrt hre
+    nlinarith [Real.sqrt_nonneg (1 - z.re ^ 2)]
+  simp only [t99J02_phi, hsqrt]
+  congr 1
+  apply Complex.ext <;> simp <;> ring
+
 theorem t99J02_phi_edge (e : ℕ) (he : e < 4) (t : Set.Icc (0 : ℝ) 1) :
     t99J02_phi (edgePoint 8 e t : ℂ) = (edgePoint 4 e t : ℂ) := by
-  sorry
+  have hangle0 : 0 ≤ 2 * Real.pi * ((e : ℝ) + t.1) / 8 := by
+    have he0 : (0 : ℝ) ≤ e := by positivity
+    have ht0 := t.2.1
+    positivity
+  have hanglepi : 2 * Real.pi * ((e : ℝ) + t.1) / 8 ≤ Real.pi := by
+    have hpi : 0 < Real.pi := Real.pi_pos
+    have he' : e ≤ 3 := by omega
+    have heR : (e : ℝ) ≤ 3 := by exact_mod_cast he'
+    have ht := t.2.2
+    nlinarith
+  have him : 0 ≤ ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ).im := by
+    simp only [edgePoint, Complex.mul_re, Complex.mul_im, Complex.I_re,
+      Complex.I_im, zero_mul, one_mul, Complex.exp_im]
+    convert Real.sin_nonneg_of_nonneg_of_le_pi hangle0 hanglepi using 1 <;> ring_nf <;> simp
+  rw [t99J02_phi_edge_aux _ (norm_edgePoint 8 e t) him]
+  simp only [edgePoint, pow_two, ← Complex.exp_add]
+  congr 1
+  push_cast
+  ring
 
 /-- A chord point lands on the boundary of the hole, at parameter `(x + i √(1-x²))²`. -/
 theorem t99J02_phi_chord (x : ℝ) (hx : |x| ≤ 1) :
@@ -277,7 +312,47 @@ theorem t99J02_chi_spec :
       (∀ u, t99J02_chi (t99J02_refl u) = (starRingEnd ℂ) (t99J02_chi u)) ∧
       Continuous t99J02_refl ∧ Function.Injective t99J02_refl ∧ (∀ u, ‖t99J02_refl u‖ = ‖u‖) ∧
       (∀ v : ℂ, ∃ u, t99J02_chi u = v) := by
-  sorry
+  have hchi_cont : Continuous t99J02_chi := by
+    simpa [t99J02_chi] using
+      Complex.equivRealProdCLM.symm.continuous.comp
+        ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).prodMk
+          (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1))
+  have hchi_norm : ∀ u, ‖t99J02_chi u‖ = ‖u‖ := by
+    intro u
+    rw [Complex.norm_eq_sqrt_sq_add_sq, EuclideanSpace.norm_eq]
+    simp [t99J02_chi, Fin.sum_univ_two]
+  have hchi_inj : Function.Injective t99J02_chi := by
+    intro u v h
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · exact congrArg Complex.re h
+    · exact congrArg Complex.im h
+  have hrefl_cont : Continuous t99J02_refl := by
+    change Continuous (fun u : EuclideanSpace ℝ (Fin 2) => !₂[u 0, -u 1])
+    exact (PiLp.continuous_toLp 2 (fun _ : Fin 2 => ℝ)).comp
+      (continuous_pi fun i => by
+        fin_cases i
+        · simpa using PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0
+        · simpa using (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1).neg)
+  have hrefl_inj : Function.Injective t99J02_refl := by
+    intro u v h
+    apply PiLp.ext
+    intro i
+    fin_cases i
+    · simpa [t99J02_refl] using congrArg (fun w : EuclideanSpace ℝ (Fin 2) => w 0) h
+    · have hi := congrArg (fun w : EuclideanSpace ℝ (Fin 2) => w 1) h
+      simpa [t99J02_refl] using congrArg Neg.neg hi
+  have hrefl_norm : ∀ u, ‖t99J02_refl u‖ = ‖u‖ := by
+    intro u
+    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+    simp [t99J02_refl, Fin.sum_univ_two]
+  refine ⟨hchi_cont, hchi_inj, hchi_norm, ?_, hrefl_cont, hrefl_inj, hrefl_norm, ?_⟩
+  · intro u
+    apply Complex.ext <;> simp [t99J02_chi, t99J02_refl]
+  · intro v
+    refine ⟨!₂[v.re, v.im], ?_⟩
+    apply Complex.ext <;> simp [t99J02_chi]
 
 /-- The dilated hole does not meet its own lattice translates. For `‖u‖ ≤ 5/4`, with
 `w = ell u`: `Re w ± Im w ≥ -5/8` (Cauchy: `7/8 r + 5/8 a ± b/2 ≥ 0`, for `u = a + i b`, `r = ‖u‖`) and `‖w‖ ≤ 5/4`, so both coordinates `A, B` of the chart
