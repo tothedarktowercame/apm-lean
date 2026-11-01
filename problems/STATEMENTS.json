@@ -4743,6 +4743,33 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t00J05": {
+   "decls": [
+    "apm_t00j05"
+   ],
+   "sha256": "9cfb9817715f084e2550c23017c1e7cdff92b02664fdf5017bac5125f979bb4c",
+   "defs": [
+    "CappedCylinder",
+    "CappedCylinderRel",
+    "E3",
+    "Necklace",
+    "NecklaceRel",
+    "Sphere2",
+    "Torus",
+    "X",
+    "cappedCylinderProjection",
+    "cappedCylinderRaw",
+    "periodOneExp",
+    "sphereBase",
+    "standardCurve"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+   "prelim_defect": null,
+   "rev": "7613d5c15",
+   "approved_at": "2026-11-01T16:54:59Z"
+  },
   "t00J06": {
    "decls": [
     "apm_t00j06"
@@ -6288,6 +6315,23 @@
    "approved_at": "2026-09-28T00:25:37Z",
    "refingerprinted": "2026-10-13: header() now skips let/have := inside statements; full statement unchanged since rev (claude-14)"
   },
+  "t95A01": {
+   "decls": [
+    "apm_t95a01"
+   ],
+   "sha256": "1627d2e217d3209315b2fc16bcab5e11da1ddc25aca616d1447babe186786391",
+   "defs": [
+    "ThreePresentationComplex",
+    "degreeThreeLoop",
+    "threePresentationBasepoint"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+   "prelim_defect": null,
+   "rev": "46e6971b7",
+   "approved_at": "2026-11-01T16:49:41Z"
+  },
   "t95A02": {
    "decls": [
     "apm_t95a02"
@@ -7328,6 +7372,19 @@
    "prelim_defect": null,
    "rev": "4489e960",
    "approved_at": "2026-09-28T00:25:57Z"
+  },
+  "t99J02": {
+   "decls": [
+    "apm_t99j02"
+   ],
+   "sha256": "4deeeabe85a662cf885a3a73716091f049792f2d610201cfdea8e8245786bb3d",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+   "prelim_defect": null,
+   "rev": "3562b5157",
+   "approved_at": "2026-11-01T16:53:21Z"
   },
   "t99J04": {
    "decls": [
