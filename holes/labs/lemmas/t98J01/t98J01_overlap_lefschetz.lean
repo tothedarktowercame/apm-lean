@@ -1897,7 +1897,77 @@ theorem t98J01_overlap_lefschetz {X : Type} [TopologicalSpace X] (f : C(X, X)) {
     (hf : HasLefschetzNumber f a)
     (h : Set.MapsTo (f.prodMap t98J01_reflectionCM) (t98J01_overlap X) (t98J01_overlap X)) :
     HasLefschetzNumber (t98J01_selfRestrict (f.prodMap t98J01_reflectionCM) _ h) 0 := by
-  sorry
+  classical
+  rcases hf with ⟨hfd, N, hz, hsum⟩
+  let φ := t98J01_selfRestrict (f.prodMap t98J01_reflectionCM) (t98J01_overlap X) h
+  let A := t98J01_overlapPos X
+  let B := t98J01_overlapNeg X
+  have hA : IsOpen A := by
+    have hc : Continuous (fun z : t98J01_overlap X => z.1.2.1.1) := by fun_prop
+    exact isOpen_lt continuous_const hc
+  have hB : IsOpen B := by
+    have hc : Continuous (fun z : t98J01_overlap X => z.1.2.1.1) := by fun_prop
+    exact isOpen_lt hc continuous_const
+  have hcov : A ∪ B = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro z
+    have hs : z.1.2 ≠ T98J01.southPt := z.2.1
+    have hn : z.1.2 ≠ T98J01.northPt := z.2.2
+    have hx : z.1.2.1.1 ≠ 0 := by
+      intro hx
+      have hc := z.1.2.2
+      have hy : z.1.2.1.2 ^ 2 = 1 := by
+        simpa [hx] using hc
+      have hy' : z.1.2.1.2 = 1 ∨ z.1.2.1.2 = -1 := sq_eq_one_iff.mp hy
+      rcases hy' with hy' | hy'
+      · apply hn
+        apply Subtype.ext
+        ext <;> simp [T98J01.northPt, hx, hy']
+      · apply hs
+        apply Subtype.ext
+        ext <;> simp [T98J01.southPt, hx, hy']
+    rcases lt_or_gt_of_ne hx with hx | hx
+    · exact Or.inr hx
+    · exact Or.inl hx
+  have hdis : A ∩ B = ∅ := by
+    ext z
+    simp only [Set.mem_inter_iff, Set.mem_empty_iff_false, iff_false]
+    rintro ⟨hp, hn⟩
+    change 0 < z.1.2.1.1 at hp
+    change z.1.2.1.1 < 0 at hn
+    exact (not_lt_of_ge (le_of_lt hp)) hn
+  have hAB : Set.MapsTo φ A B := by
+    intro z hz
+    change 0 < z.1.2.1.1 at hz
+    change (-z.1.2.1.1 : ℝ) < 0
+    exact neg_lt_zero.mpr hz
+  have hBA : Set.MapsTo φ B A := by
+    intro z hz
+    change z.1.2.1.1 < 0 at hz
+    change 0 < (-z.1.2.1.1 : ℝ)
+    exact neg_pos.mpr hz
+  let eA (k : ℕ) := Classical.choice (t98J01_homology_of_homotopyEquiv
+    (Classical.choice (t98J01_overlapPos_homotopyEquiv X)) k)
+  let eB (k : ℕ) := Classical.choice (t98J01_homology_of_homotopyEquiv
+    (Classical.choice (t98J01_overlapNeg_homotopyEquiv X)) k)
+  have hfdA : ∀ k, FiniteDimensional ℚ (Homology A k) := by
+    intro k
+    letI := hfd k
+    exact FiniteDimensional.of_injective (eA k).hom.hom (eA k).toLinearEquiv.injective
+  have hfdB : ∀ k, FiniteDimensional ℚ (Homology B k) := by
+    intro k
+    letI := hfd k
+    exact FiniteDimensional.of_injective (eB k).hom.hom (eB k).toLinearEquiv.injective
+  have hzA : ∀ k, N < k → Subsingleton (Homology A k) := by
+    intro k hk
+    letI := hz k hk
+    exact Function.Injective.subsingleton (eA k).toLinearEquiv.injective
+  have hzB : ∀ k, N < k → Subsingleton (Homology B k) := by
+    intro k hk
+    letI := hz k hk
+    exact Function.Injective.subsingleton (eB k).toLinearEquiv.injective
+  exact t98J01_clopen_swap_lefschetz A B hA hB hcov hdis φ hAB hBA
+    hfdA hfdB N hzA hzB
 -- END SEAT AREA
 
 /-- Seat: reflection fixes the punctures, and the product map preserves the cover. `reflection` is an involution fixing both `southPt` and `northPt`. -/
