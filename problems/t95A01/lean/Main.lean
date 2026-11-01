@@ -55,6 +55,10 @@ def threePresentationBasepoint : ThreePresentationComplex :=
 bottle used below. -/
 abbrev KleinPairing := ConstructionTargets.t93J03Closure.kleinPairingData
 
+end APM.T95A01
+
+open APM.T95A01
+
 /-- APM t95A01.  The answers are respectively the degree-three presentation
 complex, the Klein bottle, and nonexistence in the finite-fundamental-group
 case. -/
@@ -83,5 +87,3 @@ theorem apm_t95a01 :
         ¬ (IsCoveringMap p ∧
           ∀ z : X, Nat.card {y : X // p y = z} = 2)) := by
   sorry
-
-end APM.T95A01

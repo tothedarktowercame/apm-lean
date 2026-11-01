@@ -125,6 +125,10 @@ def cappedCylinderProjection : C(CappedCylinder, X) where
     exact Continuous.quotient_lift continuous_cappedCylinderRaw
       (fun _ _ h ↦ cappedCylinderRaw_respects h)
 
+end APMT00J05
+
+open APMT00J05
+
 /-- The two assertions requested in the problem, for the standard representative
 of the essential curve. -/
 theorem apm_t00j05 :
@@ -137,5 +141,3 @@ theorem apm_t00j05 :
         ¬ ∃ s : Sphere2,
           ContinuousMap.Homotopic q (ContinuousMap.const X s)) := by
   sorry
-
-end APMT00J05
