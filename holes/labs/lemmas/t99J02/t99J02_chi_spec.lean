@@ -145,7 +145,29 @@ theorem t99J02_phi_edge (e : ℕ) (he : e < 4) (t : Set.Icc (0 : ℝ) 1) :
 /-- A chord point lands on the boundary of the hole, at parameter `(x + i √(1-x²))²`. -/
 theorem t99J02_phi_chord (x : ℝ) (hx : |x| ≤ 1) :
     t99J02_phi (x : ℂ) = t99J02_ell ((⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2) := by
-  sorry
+  have hx2 : 0 ≤ 1 - x ^ 2 := by
+    have hxb := abs_le.mp hx
+    nlinarith
+  have hsqrt : (√(1 - x ^ 2)) ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx2
+  have hsqrt_mul : √(1 - x ^ 2) * √(1 - x ^ 2) = 1 - x ^ 2 := by
+    simpa [pow_two] using hsqrt
+  have hbase : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ)‖ = 1 := by
+    have hsquare : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ)‖ ^ 2 = 1 := by
+      rw [Complex.sq_norm, Complex.normSq_mk]
+      nlinarith
+    nlinarith [norm_nonneg (⟨x, √(1 - x ^ 2)⟩ : ℂ)]
+  have hnorm : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2‖ = 1 := by
+    rw [norm_pow, hbase]
+    norm_num
+  apply Complex.ext
+  · rw [t99J02_phi, t99J02_ell]
+    rw [hnorm]
+    simp [pow_two]
+    ring_nf at hsqrt_mul ⊢
+    nlinarith
+  · rw [t99J02_phi, t99J02_ell]
+    simp [pow_two]
+    ring
 
 /-- Every unit complex number is `(x + i √(1-x²))²` for a real `x`, `|x| ≤ 1`, namely the root in
 the closed upper half plane. -/
@@ -444,7 +466,11 @@ theorem t99J02_G_continuous (hg₁ : Continuous g₁) (hg₂ : Continuous g₂)
 /-- On the closed lower half `G` is `g₂ ∘ neg`, including on the chord. -/
 theorem t99J02_G_lower (hch : t99J02_Chord g₁ g₂) (z : ConstructionTargets.Surfaces.Disk) (h : (z : ℂ).im ≤ 0) :
     t99J02_G g₁ g₂ z = t99J02_mk c₁ c₂ (Sum.inr (g₂ ⟨t99J02_neg z, by simpa [t99J02_neg] using h⟩)) := by
-  sorry
+  rw [t99J02_G]
+  by_cases hz : 0 ≤ (z : ℂ).im
+  · rw [dif_pos hz]
+    exact hch z (le_antisymm h hz)
+  · rw [dif_neg hz]
 
 /-- `G` respects the octagon's identifications. For handle `0` both points are upper and
 `t99J02_phi_edge` turns the generator into a generator of `Surface true 1`, so `g₁` agrees; for
