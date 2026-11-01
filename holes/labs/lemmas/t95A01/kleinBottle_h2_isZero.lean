@@ -89,11 +89,78 @@ theorem threePresentationComplex_no_connected_double_cover
 bottom from the two `-2` attaching coordinates, and transport through
 `t93J03Closure.kleinPairingSpaceHomeomorph`. -/
 -- BEGIN SEAT AREA
+
+theorem kleinBottle_h2_isZero_aux_orbit_eq_named (i : Fin 4) (j : Fin 2) :
+    KleinPairing.orbit i =
+      (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j ↔
+      ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2
+        (KleinPairing.orbit i) = j :=
+  (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).eq_symm_apply
+
+@[simp]
+theorem kleinBottle_h2_isZero_aux_orbitEquiv_orbit (i : Fin 4) :
+    ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2
+        (KleinPairing.orbit i) =
+      ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitLabel 2 i := rfl
+
+theorem kleinBottle_h2_isZero_aux_attachingDegree (j : Fin 2) :
+    ConstructionTargets.PolygonSurfaceHomology.attachingDegree KleinPairing
+        ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j) =
+      -2 := by
+  rw [ConstructionTargets.PolygonSurfaceHomology.attachingDegree_apply]
+  simp_rw [ConstructionTargets.PolygonSurfaceHomology.edgeOrbitContribution,
+    kleinBottle_h2_isZero_aux_orbit_eq_named]
+  simp_rw [kleinBottle_h2_isZero_aux_orbitEquiv_orbit]
+  fin_cases j <;>
+    simp [t93J03Closure.kleinPairingData,
+      PolygonSurfacePiOne.nonorientableStandardPairingData,
+      PolygonSurfacePiOne.standardPairingDataOfOneVertex,
+      PolygonSurfacePiOne.standardPair,
+      PolygonSurfacePiOne.standardSign,
+      PolygonSurfacePiOne.nonorientableOrbitLabel,
+      PolygonSurfacePiOne.nonorientableCoord,
+      ConstructionTargets.PolygonSurfaceHomology.edgeAttachingDegree] <;>
+      decide
+
+theorem kleinBottle_h2_isZero_aux_attachingBoundary_injective :
+    Function.Injective
+      (ConstructionTargets.PolygonSurfaceHomology.attachingBoundary KleinPairing) := by
+  intro a b h
+  have h2 := congrFun h
+    ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm 0)
+  simp only [ConstructionTargets.PolygonSurfaceHomology.attachingBoundary_apply_apply,
+    kleinBottle_h2_isZero_aux_attachingDegree] at h2
+  exact Int.eq_of_mul_eq_mul_right (by norm_num) h2
+
+theorem kleinBottle_h2_isZero_aux :
+    CategoryTheory.Limits.IsZero
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+        (ModuleCat.of ℤ ℤ)).obj
+        (TopCat.of ConstructionTargets.t93J03Closure.kleinPairingData.Space)) := by
+  have hker : ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel KleinPairing =
+      ⊥ :=
+    LinearMap.ker_eq_bot.mpr kleinBottle_h2_isZero_aux_attachingBoundary_injective
+  have hsub : Subsingleton
+      ↥(ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel KleinPairing) := by
+    rw [hker]
+    infer_instance
+  have hzero : CategoryTheory.Limits.IsZero
+      (ModuleCat.of ℤ
+        ↥(ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel KleinPairing)) :=
+    ModuleCat.isZero_of_subsingleton _
+  obtain ⟨iso⟩ :=
+    (ConstructionTargets.PolygonSurfaceHomology.lowDegreeHomology KleinPairing).2.2
+  exact CategoryTheory.Limits.IsZero.of_iso hzero iso
+
 theorem kleinBottle_h2_isZero :
     CategoryTheory.Limits.IsZero
       (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
         (ModuleCat.of ℤ ℤ)).obj (TopCat.of KleinBottle)) := by
-  sorry
+  refine CategoryTheory.Limits.IsZero.of_iso kleinBottle_h2_isZero_aux ?_.symm
+  exact (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+    (TopCat.isoOfHomeo
+      ConstructionTargets.t93J03Closure.kleinPairingSpaceHomeomorph)).symm
 -- END SEAT AREA
 
 /-- Construct the double self-cover on the affine-plane orbit model.  Use
