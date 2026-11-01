@@ -39,3 +39,7 @@ m02A02: backlog grade narrower for `f (0, 0) = 0` throughout. Repair by codex-6 
 ## a94J04
 
 Backlog grade: narrower, no operator constructed. Repair by lemma-2 first built a real operator, graded narrower on scalars. Second repair defines poissonOperatorC : Lp ℂ 2 →L[ℂ] Lp ℂ 2 directly from the formula, with the contraction from the generic Young inequality, and restates apm_a94j04 for complex f (462 lines added, nothing removed; the real theorem is kept as apm_a94j04_real). New grade: faithful; every convolution integrand is proved integrable, so no junk values.
+
+## m94A01
+
+Backlog grade: narrower, full C⁴ assumed. First repair by lemma-2 weakened the hypothesis to slices but stayed pointwise, graded narrower: C depended on the point. Second repair assumes slice C⁴ and joint continuity of the two fourth derivatives, and concludes a bound uniform on each compact K, for small h. New grade: faithful. A global C and unrestricted h are both false, by u = x⁶, whose error over h² is 30x² + 2h²; the pointwise theorem is kept under another name.
