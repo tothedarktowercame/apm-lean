@@ -379,6 +379,91 @@ def apm_t01J06_coneField (F : Fin 3 → apm_t01J06_E3 → ℝ) (k : Fin 3)
 `2 t F i (t x) + t² (∂ (i + 1) F i x (i + 1) + ∂ (i + 2) F i x (i + 2)) - t² x i (∂ (i + 1) F (i + 1) + ∂ (i + 2) F (i + 2))`,
 all derivatives at `t x`. `hdiv` turns the last bracket into `-∂ i F i`, giving `2 t F i + t² Σ x j ∂ j F i`, the
 derivative in `t` of `t² F i (t x)`. Do `i` generally, or `fin_cases i`. -/
+/- Chain rule for the `t • y` composition, applied to a vector. -/
+theorem apm_t01J06_cone_identity_aux_comp (g : apm_t01J06_E3 → ℝ) (t : ℝ) (x : apm_t01J06_E3)
+    (hg : DifferentiableAt ℝ g (t • x)) (v : apm_t01J06_E3) :
+    fderiv ℝ (fun y ↦ g (t • y)) x v = t * fderiv ℝ g (t • x) v := by
+  have hlin : HasFDerivAt (fun y : apm_t01J06_E3 ↦ t • y)
+      (t • ContinuousLinearMap.id ℝ apm_t01J06_E3) x :=
+    (t • ContinuousLinearMap.id ℝ apm_t01J06_E3).hasFDerivAt
+  have hcomp := hg.hasFDerivAt.comp x hlin
+  have h := hcomp.fderiv
+  have heq : (fun y ↦ g (t • y)) = g ∘ (fun y : apm_t01J06_E3 ↦ t • y) := rfl
+  rw [heq, h]
+  simp [ContinuousLinearMap.comp_apply, smul_eq_mul]
+
+/-- Derivative of a coordinate function. -/
+theorem apm_t01J06_cone_identity_aux_coord (k : Fin 3) (x v : apm_t01J06_E3) :
+    fderiv ℝ (fun y ↦ y k) x v = v k := by
+  have heq : (fun y : apm_t01J06_E3 ↦ y k) =
+      ⇑(PiLp.proj (2 : ℝ≥0∞) (fun _ : Fin 3 ↦ ℝ) k : apm_t01J06_E3 →L[ℝ] ℝ) := by
+    funext y
+    rfl
+  rw [heq, ContinuousLinearMap.fderiv]
+  rfl
+
+/-- `x` in the basis of the `e j`. -/
+theorem apm_t01J06_cone_identity_aux_basis (x : apm_t01J06_E3) :
+    x = x 0 • apm_t01J06_e 0 + x 1 • apm_t01J06_e 1 + x 2 • apm_t01J06_e 2 := by
+  ext k
+  fin_cases k <;>
+    simp [apm_t01J06_e, PiLp.add_apply, PiLp.smul_apply, smul_eq_mul,
+      EuclideanSpace.single_apply]
+
+/-- `fderiv g z x` expanded in partial derivatives. -/
+theorem apm_t01J06_cone_identity_aux_decomp (g : apm_t01J06_E3 → ℝ) (z x : apm_t01J06_E3) :
+    fderiv ℝ g z x = x 0 * apm_t01J06_partial 0 g z +
+      x 1 * apm_t01J06_partial 1 g z + x 2 * apm_t01J06_partial 2 g z := by
+  conv_lhs => rw [apm_t01J06_cone_identity_aux_basis x]
+  simp [map_add, map_smul, smul_eq_mul, apm_t01J06_partial]
+
+/-- Derivative of `s ↦ s ^ 2 * g (s • x)`. -/
+theorem apm_t01J06_cone_identity_aux_rhs (g : apm_t01J06_E3 → ℝ) (t : ℝ) (x : apm_t01J06_E3)
+    (hg : ∀ s : ℝ, DifferentiableAt ℝ g (s • x)) :
+    deriv (fun s : ℝ ↦ s ^ 2 * g (s • x)) t =
+      2 * t * g (t • x) + t ^ 2 * fderiv ℝ g (t • x) x := by
+  have hv : HasDerivAt (fun s : ℝ ↦ s • x) x t := by
+    simpa using (hasDerivAt_id t).smul_const x
+  have hvg : HasDerivAt (fun s : ℝ ↦ g (s • x)) (fderiv ℝ g (t • x) x) t := by
+    have h := (hg t).hasFDerivAt.comp_hasDerivAt t hv
+    simpa using h
+  have hu : HasDerivAt (fun s : ℝ ↦ s ^ 2) (2 * t) t := by
+    simpa using (hasDerivAt_pow 2 t)
+  have h := hu.mul hvg
+  rw [show (fun s : ℝ ↦ s ^ 2 * g (s • x)) =
+      (fun s : ℝ ↦ s ^ 2) * (fun s : ℝ ↦ g (s • x)) from rfl, h.deriv]
+
+/-- `fderiv` of the cone-field integrand `y ↦ t * (g (t • y) * y a - h (t • y) * y b)`. -/
+theorem apm_t01J06_cone_identity_aux_expand (t : ℝ) (x v : apm_t01J06_E3)
+    (g h : apm_t01J06_E3 → ℝ)
+    (hg : DifferentiableAt ℝ g (t • x)) (hh : DifferentiableAt ℝ h (t • x))
+    (a b : Fin 3) :
+    fderiv ℝ (fun y ↦ t * (g (t • y) * y a - h (t • y) * y b)) x v =
+      t * ((t * fderiv ℝ g (t • x) v) * x a + g (t • x) * v a -
+        ((t * fderiv ℝ h (t • x) v) * x b + h (t • x) * v b)) := by
+  have hg' : DifferentiableAt ℝ (fun y ↦ g (t • y)) x := by
+    apply DifferentiableAt.comp x hg
+    exact (t • ContinuousLinearMap.id ℝ apm_t01J06_E3).differentiableAt
+  have hh' : DifferentiableAt ℝ (fun y ↦ h (t • y)) x := by
+    apply DifferentiableAt.comp x hh
+    exact (t • ContinuousLinearMap.id ℝ apm_t01J06_E3).differentiableAt
+  have hca : DifferentiableAt ℝ (fun y : apm_t01J06_E3 ↦ y a) x :=
+    (PiLp.proj (2 : ℝ≥0∞) (fun _ : Fin 3 ↦ ℝ) a : apm_t01J06_E3 →L[ℝ] ℝ).differentiableAt
+  have hcb : DifferentiableAt ℝ (fun y : apm_t01J06_E3 ↦ y b) x :=
+    (PiLp.proj (2 : ℝ≥0∞) (fun _ : Fin 3 ↦ ℝ) b : apm_t01J06_E3 →L[ℝ] ℝ).differentiableAt
+  have h1 : DifferentiableAt ℝ (fun y ↦ g (t • y) * y a) x := hg'.mul hca
+  have h2 : DifferentiableAt ℝ (fun y ↦ h (t • y) * y b) x := hh'.mul hcb
+  have hA : DifferentiableAt ℝ (fun y ↦ g (t • y) * y a - h (t • y) * y b) x :=
+    (hg'.mul hca).sub (hh'.mul hcb)
+  rw [fderiv_const_mul hA t]
+  rw [fderiv_fun_sub h1 h2, fderiv_fun_mul hg' hca, fderiv_fun_mul hh' hcb]
+  simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.add_apply,
+    ContinuousLinearMap.sub_apply, smul_eq_mul]
+  rw [apm_t01J06_cone_identity_aux_comp g t x hg v,
+    apm_t01J06_cone_identity_aux_comp h t x hh v,
+    apm_t01J06_cone_identity_aux_coord a x v, apm_t01J06_cone_identity_aux_coord b x v]
+  ring
+
 theorem apm_t01J06_cone_identity (F : Fin 3 → apm_t01J06_E3 → ℝ)
     (hF : ∀ i, ContDiff ℝ (⊤ : ℕ∞) (F i))
     (hdiv : ∀ x, apm_t01J06_partial 0 (F 0) x + apm_t01J06_partial 1 (F 1) x +
@@ -386,7 +471,104 @@ theorem apm_t01J06_cone_identity (F : Fin 3 → apm_t01J06_E3 → ℝ)
     apm_t01J06_partial (i + 1) (fun y ↦ apm_t01J06_coneField F (i + 2) (t, y)) x -
       apm_t01J06_partial (i + 2) (fun y ↦ apm_t01J06_coneField F (i + 1) (t, y)) x =
     deriv (fun s : ℝ ↦ s ^ 2 * F i (s • x)) t := by
-  sorry
+  have hdiff : ∀ j : Fin 3, ∀ s : ℝ, DifferentiableAt ℝ (F j) (s • x) :=
+    fun j s ↦ ((hF j).differentiable (by simp)) (s • x)
+  have hd0 := hdiv (t • x)
+  simp only [apm_t01J06_partial] at hd0 ⊢
+  fin_cases i
+  · -- i = 0
+    have eA := apm_t01J06_cone_identity_aux_expand t x (apm_t01J06_e 1) (F 0) (F 1)
+      (hdiff 0 t) (hdiff 1 t) 1 0
+    have eB := apm_t01J06_cone_identity_aux_expand t x (apm_t01J06_e 2) (F 2) (F 0)
+      (hdiff 2 t) (hdiff 0 t) 0 2
+    have eR := apm_t01J06_cone_identity_aux_rhs (F 0) t x (hdiff 0)
+    have eD := apm_t01J06_cone_identity_aux_decomp (F 0) (t • x) x
+    have hc1 : apm_t01J06_e (1 : Fin 3) (1 : Fin 3) = 1 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc2 : apm_t01J06_e (1 : Fin 3) (0 : Fin 3) = 0 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc3 : apm_t01J06_e (2 : Fin 3) (0 : Fin 3) = 0 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc4 : apm_t01J06_e (2 : Fin 3) (2 : Fin 3) = 1 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    show fderiv ℝ (fun y ↦ apm_t01J06_coneField F 2 (t, y)) x (apm_t01J06_e 1) -
+        fderiv ℝ (fun y ↦ apm_t01J06_coneField F 1 (t, y)) x (apm_t01J06_e 2) =
+        deriv (fun s : ℝ ↦ s ^ 2 * F 0 (s • x)) t
+    have eA' : fderiv ℝ (fun y ↦ apm_t01J06_coneField F 2 (t, y)) x (apm_t01J06_e 1) =
+        t * ((t * fderiv ℝ (F 0) (t • x) (apm_t01J06_e 1)) * x 1 +
+          F 0 (t • x) * apm_t01J06_e 1 1 -
+          ((t * fderiv ℝ (F 1) (t • x) (apm_t01J06_e 1)) * x 0 +
+          F 1 (t • x) * apm_t01J06_e 1 0)) := eA
+    have eB' : fderiv ℝ (fun y ↦ apm_t01J06_coneField F 1 (t, y)) x (apm_t01J06_e 2) =
+        t * ((t * fderiv ℝ (F 2) (t • x) (apm_t01J06_e 2)) * x 0 +
+          F 2 (t • x) * apm_t01J06_e 2 0 -
+          ((t * fderiv ℝ (F 0) (t • x) (apm_t01J06_e 2)) * x 2 +
+          F 0 (t • x) * apm_t01J06_e 2 2)) := eB
+    rw [eA', eB', eR, eD, hc1, hc2, hc3, hc4]
+    simp only [apm_t01J06_partial]
+    linear_combination (-t ^ 2 * x 0) * hd0
+  · -- i = 1
+    have eA := apm_t01J06_cone_identity_aux_expand t x (apm_t01J06_e 2) (F 1) (F 2)
+      (hdiff 1 t) (hdiff 2 t) 2 1
+    have eB := apm_t01J06_cone_identity_aux_expand t x (apm_t01J06_e 0) (F 0) (F 1)
+      (hdiff 0 t) (hdiff 1 t) 1 0
+    have eR := apm_t01J06_cone_identity_aux_rhs (F 1) t x (hdiff 1)
+    have eD := apm_t01J06_cone_identity_aux_decomp (F 1) (t • x) x
+    have hc1 : apm_t01J06_e (2 : Fin 3) (2 : Fin 3) = 1 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc2 : apm_t01J06_e (2 : Fin 3) (1 : Fin 3) = 0 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc3 : apm_t01J06_e (0 : Fin 3) (1 : Fin 3) = 0 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc4 : apm_t01J06_e (0 : Fin 3) (0 : Fin 3) = 1 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    show fderiv ℝ (fun y ↦ apm_t01J06_coneField F 0 (t, y)) x (apm_t01J06_e 2) -
+        fderiv ℝ (fun y ↦ apm_t01J06_coneField F 2 (t, y)) x (apm_t01J06_e 0) =
+        deriv (fun s : ℝ ↦ s ^ 2 * F 1 (s • x)) t
+    have eA' : fderiv ℝ (fun y ↦ apm_t01J06_coneField F 0 (t, y)) x (apm_t01J06_e 2) =
+        t * ((t * fderiv ℝ (F 1) (t • x) (apm_t01J06_e 2)) * x 2 +
+          F 1 (t • x) * apm_t01J06_e 2 2 -
+          ((t * fderiv ℝ (F 2) (t • x) (apm_t01J06_e 2)) * x 1 +
+          F 2 (t • x) * apm_t01J06_e 2 1)) := eA
+    have eB' : fderiv ℝ (fun y ↦ apm_t01J06_coneField F 2 (t, y)) x (apm_t01J06_e 0) =
+        t * ((t * fderiv ℝ (F 0) (t • x) (apm_t01J06_e 0)) * x 1 +
+          F 0 (t • x) * apm_t01J06_e 0 1 -
+          ((t * fderiv ℝ (F 1) (t • x) (apm_t01J06_e 0)) * x 0 +
+          F 1 (t • x) * apm_t01J06_e 0 0)) := eB
+    rw [eA', eB', eR, eD, hc1, hc2, hc3, hc4]
+    simp only [apm_t01J06_partial]
+    linear_combination (-t ^ 2 * x 1) * hd0
+  · -- i = 2
+    have eA := apm_t01J06_cone_identity_aux_expand t x (apm_t01J06_e 0) (F 2) (F 0)
+      (hdiff 2 t) (hdiff 0 t) 0 2
+    have eB := apm_t01J06_cone_identity_aux_expand t x (apm_t01J06_e 1) (F 1) (F 2)
+      (hdiff 1 t) (hdiff 2 t) 2 1
+    have eR := apm_t01J06_cone_identity_aux_rhs (F 2) t x (hdiff 2)
+    have eD := apm_t01J06_cone_identity_aux_decomp (F 2) (t • x) x
+    have hc1 : apm_t01J06_e (0 : Fin 3) (0 : Fin 3) = 1 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc2 : apm_t01J06_e (0 : Fin 3) (2 : Fin 3) = 0 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc3 : apm_t01J06_e (1 : Fin 3) (2 : Fin 3) = 0 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    have hc4 : apm_t01J06_e (1 : Fin 3) (1 : Fin 3) = 1 := by
+      simp [apm_t01J06_e, EuclideanSpace.single_apply]
+    show fderiv ℝ (fun y ↦ apm_t01J06_coneField F 1 (t, y)) x (apm_t01J06_e 0) -
+        fderiv ℝ (fun y ↦ apm_t01J06_coneField F 0 (t, y)) x (apm_t01J06_e 1) =
+        deriv (fun s : ℝ ↦ s ^ 2 * F 2 (s • x)) t
+    have eA' : fderiv ℝ (fun y ↦ apm_t01J06_coneField F 1 (t, y)) x (apm_t01J06_e 0) =
+        t * ((t * fderiv ℝ (F 2) (t • x) (apm_t01J06_e 0)) * x 0 +
+          F 2 (t • x) * apm_t01J06_e 0 0 -
+          ((t * fderiv ℝ (F 0) (t • x) (apm_t01J06_e 0)) * x 2 +
+          F 0 (t • x) * apm_t01J06_e 0 2)) := eA
+    have eB' : fderiv ℝ (fun y ↦ apm_t01J06_coneField F 0 (t, y)) x (apm_t01J06_e 1) =
+        t * ((t * fderiv ℝ (F 1) (t • x) (apm_t01J06_e 1)) * x 2 +
+          F 1 (t • x) * apm_t01J06_e 1 2 -
+          ((t * fderiv ℝ (F 2) (t • x) (apm_t01J06_e 1)) * x 1 +
+          F 2 (t • x) * apm_t01J06_e 1 1)) := eB
+    rw [eA', eB', eR, eD, hc1, hc2, hc3, hc4]
+    simp only [apm_t01J06_partial]
+    linear_combination (-t ^ 2 * x 2) * hd0
 
 /-- Seat: a divergence-free field is a curl. Take `A k x = ∫ t in 0..1, apm_t01J06_coneField F k (t, x)`.
 `apm_t01J06_coneField` is smooth (`fun_prop`, coordinates are continuous linear). `apm_t01J06_parametric_integral`
