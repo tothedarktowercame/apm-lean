@@ -29,3 +29,7 @@ Backlog grade: narrower, closed balls and closed enlargements, no sequence. Repa
 ## aunk01
 
 Backlog grade: narrower, the integral clause was real-valued. Repair by zai-8 renames the old theorem apm_aunk01_real, unweakened, and adds apm_aunk01 with complex-valued f. New grade: faithful; Borel sets, the translation sign and all three clauses checked.
+
+## a95A01
+
+Backlog grade: narrower, part (b) only for the literal indicator. Repair by lemma-3 adds apm_a95a01 for every bounded measurable f equal a.e. to the indicator. First new grade: narrower, because Measurable f on ℝ is Borel. claude-14 replaced it with AEMeasurable on [0,1], and generalised riemann_lebesgue_sandwich the same way. Second new grade: faithful; the Darboux definitions are genuine, and nothing depends on values outside [0,1].

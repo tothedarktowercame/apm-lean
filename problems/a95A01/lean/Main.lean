@@ -167,7 +167,7 @@ private lemma sum_setIntegral_partition
     The cell integrals telescope over a finite partition of `[0,1]`. -/
 theorem riemann_lebesgue_sandwich
     (f : ℝ → ℝ)
-    (hf_meas : Measurable f)
+    (hf_meas : AEMeasurable f (volume.restrict (Icc (0 : ℝ) 1)))
     (hf_bdd : ∃ M, ∀ x ∈ Icc (0:ℝ) 1, |f x| ≤ M) :
     (lowerRiemannIntegral f ≤ ∫ x in Icc (0:ℝ) 1, f x ∂volume) ∧
     (∫ x in Icc (0:ℝ) 1, f x ∂volume ≤ upperRiemannIntegral f) := by
@@ -176,7 +176,7 @@ theorem riemann_lebesgue_sandwich
     unfold IntegrableOn
     apply (integrableOn_const (s := Icc (0 : ℝ) 1) (C := M)
       measure_Icc_lt_top.ne).mono'
-    · exact hf_meas.aestronglyMeasurable.restrict
+    · exact hf_meas.aestronglyMeasurable
     · exact ae_restrict_of_forall_mem measurableSet_Icc fun x hx => by
         simpa only [Real.norm_eq_abs] using hM x hx
   have partition_nonempty :
@@ -333,7 +333,7 @@ theorem indicator_not_riemann_integrable
     intro x _
     classical
     by_cases hx : x ∈ K <;> simp [f, hx]
-  have hsandwich := riemann_lebesgue_sandwich f hf_meas hf_bdd
+  have hsandwich := riemann_lebesgue_sandwich f hf_meas.aemeasurable hf_bdd
   have hintegral :
       (∫ x in Icc (0 : ℝ) 1, f x ∂volume) = (volume K).toReal := by
     rw [setIntegral_indicator hK.measurableSet]
@@ -346,3 +346,89 @@ theorem indicator_not_riemann_integrable
   exact lt_of_lt_of_le (hintegral.symm ▸ hvolume_real) hsandwich.2
 
 end ApmCanaries.A95A01
+
+/-- Both parts of APM a95A01, including the assertion for every bounded
+measurable representative which agrees a.e. with the indicator. -/
+theorem apm_a95a01
+    (f : ℝ → ℝ)
+    (hf_meas : AEMeasurable f (volume.restrict (Icc (0 : ℝ) 1)))
+    (hf_bdd : ∃ M, ∀ x ∈ Icc (0 : ℝ) 1, |f x| ≤ M) :
+    ((ApmCanaries.A95A01.lowerRiemannIntegral f ≤
+        ∫ x in Icc (0 : ℝ) 1, f x ∂volume) ∧
+      (∫ x in Icc (0 : ℝ) 1, f x ∂volume) ≤
+        ApmCanaries.A95A01.upperRiemannIntegral f) ∧
+    ∀ K : Set ℝ, IsCompact K → K ⊆ Icc 0 1 → 0 < volume K →
+      interior K = ∅ →
+      f =ᵐ[volume.restrict (Icc (0 : ℝ) 1)]
+        K.indicator (fun _ ↦ (1 : ℝ)) →
+      ApmCanaries.A95A01.lowerRiemannIntegral f <
+        ApmCanaries.A95A01.upperRiemannIntegral f := by
+  constructor
+  · exact ApmCanaries.A95A01.riemann_lebesgue_sandwich f hf_meas hf_bdd
+  intro K hK hK_sub hK_pos hK_int hfeq
+  have hlower : ApmCanaries.A95A01.lowerRiemannIntegral f ≤ 0 := by
+    unfold ApmCanaries.A95A01.lowerRiemannIntegral
+    apply csSup_le
+    · let t : Fin 2 → ℝ := fun i ↦ (i : ℕ)
+      refine ⟨sInf (f '' Icc 0 1), 0, t, ?_, ?_, ?_, ?_⟩
+      · norm_num [t]
+      · norm_num [t]
+      · intro i
+        fin_cases i
+        norm_num [t]
+      · simp [t]
+    · intro s hs
+      rcases hs with ⟨n, t, ht0, ht1, ht, rfl⟩
+      have ht_strict : StrictMono t := Fin.strictMono_iff_lt_succ.mpr ht
+      apply Finset.sum_nonpos
+      intro i _
+      have hcell : Icc (t i.castSucc) (t i.succ) ⊆ Icc (0 : ℝ) 1 := by
+        intro x hx
+        constructor
+        · rw [← ht0]
+          exact (ht_strict.monotone (Fin.zero_le _)).trans hx.1
+        · rw [← ht1]
+          exact hx.2.trans (ht_strict.monotone (Fin.le_last _))
+      let U : Set ℝ := Ioo (t i.castSucc) (t i.succ) ∩ Kᶜ
+      have hU_open : IsOpen U := isOpen_Ioo.inter hK.isClosed.isOpen_compl
+      have hU_nonempty : U.Nonempty := by
+        have hdense : Dense Kᶜ :=
+          ApmCanaries.A95A01.dense_compl_of_interior_empty K hK_int
+        exact hdense.inter_open_nonempty _ isOpen_Ioo
+          ⟨(t i.castSucc + t i.succ) / 2, by
+            rw [mem_Ioo]
+            constructor <;> linarith [ht i]⟩
+      have hU_pos : 0 < volume U := hU_open.measure_pos volume hU_nonempty
+      have hU_sub : U ⊆ Icc (0 : ℝ) 1 := fun x hx ↦
+        hcell ⟨hx.1.1.le, hx.1.2.le⟩
+      have heqU := hfeq.filter_mono
+        (ae_mono (Measure.restrict_mono hU_sub (le_refl volume)))
+      have hgood : ∀ᵐ x ∂volume.restrict U,
+          x ∈ U ∧ f x = K.indicator (fun _ ↦ (1 : ℝ)) x :=
+        (ae_restrict_mem hU_open.measurableSet).and heqU
+      letI : (ae (volume.restrict U)).NeBot := ae_restrict_neBot.2 hU_pos.ne'
+      obtain ⟨x, hxU, hxeq⟩ := hgood.exists
+      have hfx : f x = 0 := by
+        have hxnot : x ∉ K := hxU.2
+        rw [hxeq]
+        simp [hxnot]
+      have hinf : sInf (f '' Icc (t i.castSucc) (t i.succ)) ≤ 0 := by
+        rw [← hfx]
+        apply csInf_le
+        · obtain ⟨M, hM⟩ := hf_bdd
+          refine ⟨-M, ?_⟩
+          rintro y ⟨z, hz, rfl⟩
+          exact neg_le_of_abs_le (hM z (hcell hz))
+        · exact ⟨x, ⟨hxU.1.1.le, hxU.1.2.le⟩, rfl⟩
+      exact mul_nonpos_of_nonpos_of_nonneg hinf (sub_nonneg.mpr (ht i).le)
+  have hintegral :
+      (∫ x in Icc (0 : ℝ) 1, f x ∂volume) = (volume K).toReal := by
+    rw [integral_congr_ae hfeq]
+    rw [setIntegral_indicator hK.measurableSet, inter_eq_right.mpr hK_sub]
+    simp [measureReal_def]
+  have hvolume_real : 0 < (volume K).toReal :=
+    ENNReal.toReal_pos hK_pos.ne' hK.measure_ne_top
+  have hupper :=
+    (ApmCanaries.A95A01.riemann_lebesgue_sandwich f hf_meas hf_bdd).2
+  exact lt_of_le_of_lt hlower
+    (lt_of_lt_of_le (hintegral.symm ▸ hvolume_real) hupper)
