@@ -1707,6 +1707,43 @@ def gluedWhitneyJet
 smoothness.  At `a' ∈ K`, choose a nearest `a` to an exterior `x`, compare through
 `D^k P_a(x)`, then use the two-base-point Taylor bound and continuity of the within jet. -/
 -- BEGIN SEAT AREA
+theorem continuous_gluedWhitneyJet_aux_base
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {K : Set E} {m k : ℕ} {f : E → F} {a : E}
+    (hk : k ≤ m)
+    (hsym : ∀ r ≤ m, ∀ x ∈ K, ∀ σ : Equiv.Perm (Fin r),
+      (convexJet r f K x).domDomCongr σ = convexJet r f K x)
+    (ha : a ∈ K) :
+    iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) a =
+      convexJet k f K a := by
+  ext v
+  rw [iteratedFDeriv_taylorPolynomial_exact m k _ a a hk v (fun j hj ↦ hsym j hj a ha)]
+  rw [show m + 1 - k = (m - k) + 1 by omega, Finset.sum_range_succ']
+  have hz : ∀ q ∈ Finset.range (m - k),
+      (convexJet (k + (q + 1)) f K a)
+        (Fin.append v (fun _ : Fin (q + 1) ↦ a - a)) = 0 := by
+    intro q hq
+    apply ContinuousMultilinearMap.map_coord_zero _ (Fin.natAdd k (0 : Fin (q + 1)))
+    simp
+  rw [Finset.sum_eq_zero (fun q hq ↦ by rw [hz q hq, smul_zero]), zero_add]
+  simp only [Nat.factorial_zero, Nat.cast_one, inv_one, one_smul, zero_add]
+  congr 1
+  funext i
+  simpa using Fin.append_left v (fun _ : Fin 0 ↦ (0 : E)) i
+
+/-- A Taylor polynomial with fixed multilinear jets is a globally smooth function. -/ 
+theorem continuous_gluedWhitneyJet_aux_poly
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (m : ℕ) (J : (j : ℕ) → E → E[×j]→L[ℝ] F) (a : E) :
+    ContDiff ℝ ∞ (taylorPolynomial m J a) := by
+  unfold taylorPolynomial
+  apply ContDiff.sum
+  intro j hj
+  exact contDiff_const.smul ((ContinuousMultilinearMap.contDiff _).comp
+    (contDiff_pi.2 fun _ ↦ contDiff_id.sub contDiff_const))
+
 theorem continuous_gluedWhitneyJet
     {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
@@ -1727,7 +1764,129 @@ theorem continuous_gluedWhitneyJet
             (taylorPolynomial m (fun j ↦ convexJet j f K) a) x‖ ≤
           C * (Metric.infDist x K) ^ (m + 1 - k)) :
     ∀ k ≤ m, Continuous (fun x ↦ gluedWhitneyJet K f G x k) := by
-  sorry
+  intro k hk
+  rw [continuous_iff_continuousAt]
+  intro b
+  by_cases hb : b ∈ K
+  · obtain ⟨D, hD0, hD⟩ := hdiff
+    obtain ⟨C, hC0, hC⟩ := hbound k hk
+    have hpolyb := continuous_gluedWhitneyJet_aux_poly m (fun j ↦ convexJet j f K) b
+    have hpolya (a : E) := continuous_gluedWhitneyJet_aux_poly m (fun j ↦ convexJet j f K) a
+    have hPc : Continuous (fun x ↦
+      iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x) :=
+      hpolyb.continuous_iteratedFDeriv (mod_cast le_top)
+    have hPbase : iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) b =
+        convexJet k f K b :=
+      continuous_gluedWhitneyJet_aux_base hk hsym hb
+    have hin : Filter.Tendsto (fun x ↦ convexJet k f K x) (nhdsWithin b K)
+        (nhds (convexJet k f K b)) := (hjet k hk b hb).tendsto
+    have hout : Filter.Tendsto (fun x ↦ iteratedFDeriv ℝ k G x) (nhdsWithin b Kᶜ)
+        (nhds (convexJet k f K b)) := by
+      have hnorm : Filter.Tendsto (fun x ↦ ‖iteratedFDeriv ℝ k G x -
+          iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x‖)
+          (nhdsWithin b Kᶜ) (nhds 0) := by
+        have hto0 : Filter.Tendsto (fun x : E ↦ (C + D * 2 ^ (m + 1 - k)) * ‖x - b‖)
+            (nhdsWithin b Kᶜ) (nhds 0) := by
+          have hcont : Continuous (fun x : E ↦ (C + D * 2 ^ (m + 1 - k)) * ‖x - b‖) := by
+            fun_prop
+          have hca : ContinuousAt (fun x : E ↦ (C + D * 2 ^ (m + 1 - k)) * ‖x - b‖) b :=
+            hcont.continuousAt
+          simpa using (hca.continuousWithinAt (s := Kᶜ)).tendsto
+        have hge0 : ∀ᶠ x in nhdsWithin b Kᶜ, (0 : ℝ) ≤ ‖iteratedFDeriv ℝ k G x -
+            iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x‖ :=
+          Filter.Eventually.of_forall (fun _ ↦ norm_nonneg _)
+        have hmid : ∀ᶠ x in nhdsWithin b Kᶜ, (‖iteratedFDeriv ℝ k G x -
+            iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x‖ : ℝ) ≤
+            (C + D * 2 ^ (m + 1 - k)) * ‖x - b‖ := by
+          have hn0 : Filter.Tendsto (fun x : E ↦ ‖x - b‖) (nhdsWithin b Kᶜ) (nhds 0) := by
+            have hcn : Continuous (fun x : E ↦ ‖x - b‖) := by fun_prop
+            have hcna : ContinuousAt (fun x : E ↦ ‖x - b‖) b := hcn.continuousAt
+            simpa using (hcna.continuousWithinAt (s := Kᶜ)).tendsto
+          have hlt : ∀ᶠ x in nhdsWithin b Kᶜ, ‖x - b‖ < 1 :=
+            hn0.eventually (Iio_mem_nhds (by norm_num))
+          filter_upwards [hlt, self_mem_nhdsWithin] with x hxb hxc
+          obtain ⟨a, ha, hdist, hGa⟩ := hC x hxc
+          have hinf : Metric.infDist x K ≤ ‖x - b‖ := by
+            simpa [dist_eq_norm] using Metric.infDist_le_dist_of_mem hb
+          have hda : ‖x - a‖ ≤ ‖x - b‖ := by
+            rw [← dist_eq_norm, ← hdist]
+            exact hinf
+          have hp : 0 < m + 1 - k := by omega
+          have hpow : ‖x - b‖ ^ (m + 1 - k) ≤ ‖x - b‖ := by
+            have hn : m + 1 - k = (m + 1 - k - 1) + 1 := by omega
+            rw [hn, pow_succ]
+            calc ‖x - b‖ ^ (m + 1 - k - 1) * ‖x - b‖ ≤ 1 * ‖x - b‖ :=
+                mul_le_mul_of_nonneg_right (pow_le_one₀ (norm_nonneg _) hxb.le)
+                  (norm_nonneg _)
+              _ = ‖x - b‖ := one_mul _
+          have hab : ‖x - a‖ + ‖x - b‖ ≤ 2 * ‖x - b‖ := by linarith
+          have hsub' := hD k hk a ha b hb x
+          rw [show (fun y ↦ taylorPolynomial m (fun j ↦ convexJet j f K) a y -
+                  taylorPolynomial m (fun j ↦ convexJet j f K) b y) =
+                (taylorPolynomial m (fun j ↦ convexJet j f K) a) -
+                  (taylorPolynomial m (fun j ↦ convexJet j f K) b) from rfl] at hsub'
+          rw [iteratedFDeriv_sub ((hpolya a).of_le (by exact_mod_cast le_top))
+            (hpolyb.of_le (by exact_mod_cast le_top))] at hsub'
+          simp only [Pi.sub_apply] at hsub'
+          have h1 : C * Metric.infDist x K ^ (m + 1 - k) ≤
+              C * ‖x - b‖ ^ (m + 1 - k) := by
+            have hpn : (Metric.infDist x K : ℝ) ^ (m + 1 - k) ≤
+                (‖x - b‖ : ℝ) ^ (m + 1 - k) :=
+              pow_le_pow_left₀ Metric.infDist_nonneg hinf (m + 1 - k)
+            exact mul_le_mul_of_nonneg_left hpn hC0
+          have h2 : D * (‖x - a‖ + ‖x - b‖) ^ (m + 1 - k) ≤
+              D * (2 * ‖x - b‖) ^ (m + 1 - k) :=
+            mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (by positivity) hab _) hD0
+          have hp2 : D * (2 * ‖x - b‖) ^ (m + 1 - k) ≤
+              D * (2 ^ (m + 1 - k) * ‖x - b‖) := by
+            refine mul_le_mul_of_nonneg_left ?_ hD0
+            rw [mul_pow]
+            exact mul_le_mul_of_nonneg_left hpow (by positivity)
+          calc ‖iteratedFDeriv ℝ k G x -
+                iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x‖ ≤
+              ‖iteratedFDeriv ℝ k G x - iteratedFDeriv ℝ k
+                (taylorPolynomial m (fun j ↦ convexJet j f K) a) x‖ +
+              ‖iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) x -
+                iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x‖ := by
+                have he : iteratedFDeriv ℝ k G x -
+                    iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x =
+                    (iteratedFDeriv ℝ k G x -
+                      iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) x) +
+                    (iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) x -
+                      iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x) := by
+                  abel
+                rw [he]
+                exact norm_add_le _ _
+            _ ≤ C * ‖x - b‖ ^ (m + 1 - k) +
+                D * (2 * ‖x - b‖) ^ (m + 1 - k) :=
+                add_le_add (hGa.trans h1) (hsub'.trans h2)
+            _ ≤ C * ‖x - b‖ + D * (2 ^ (m + 1 - k) * ‖x - b‖) :=
+                add_le_add (mul_le_mul_of_nonneg_left hpow hC0) hp2
+            _ = (C + D * 2 ^ (m + 1 - k)) * ‖x - b‖ := by ring
+        exact squeeze_zero' hge0 hmid hto0
+      have herr : Filter.Tendsto (fun x ↦ iteratedFDeriv ℝ k G x -
+          iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) b) x)
+          (nhdsWithin b Kᶜ) (nhds 0) := by
+        rw [tendsto_zero_iff_norm_tendsto_zero]
+        exact hnorm
+      have hsum := herr.add (hPc.continuousAt.tendsto.mono_left inf_le_left)
+      simpa [hPbase] using hsum
+    have hval : gluedWhitneyJet K f G b k = convexJet k f K b := by
+      simp only [gluedWhitneyJet, hb, if_true]
+    show Filter.Tendsto (fun x ↦ gluedWhitneyJet K f G x k) (nhds b)
+      (nhds (gluedWhitneyJet K f G b k))
+    rw [hval]
+    rw [show (nhds b) = nhdsWithin b Set.univ from (nhdsWithin_univ b).symm]
+    simp only [gluedWhitneyJet]
+    classical
+    exact Filter.Tendsto.if_nhdsWithin (by rw [Set.univ_inter]; exact hin)
+      (by rw [Set.univ_inter]; exact hout)
+  · have hopen : Kᶜ ∈ nhds b := hK.isOpen_compl.mem_nhds hb
+    have hAt : ContDiffAt ℝ (m : WithTop ℕ∞) G b := hGo.contDiffAt hopen
+    have hGo' := hAt.continuousAt_iteratedFDeriv (by exact_mod_cast hk)
+    exact hGo'.congr_of_eventuallyEq
+      (Filter.Eventually.mono (Filter.eventually_iff.2 hopen) fun x hx ↦ by
+        simp only [gluedWhitneyJet, if_neg hx])
 -- END SEAT AREA
 
 /-- Off `K` the glued jet is the iterated derivative of `G`, and `Kᶜ` is open, so the
