@@ -1079,11 +1079,228 @@ theorem t99J02_q2_one_neg_one (h1 : (1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1)
 `Surface true 1`, and its upper roots are the same edge pair of handle `0` of `Surface true 2`,
 except that the root of `1` may be `1` or `-1`: use `t99J02_q2_one_neg_one`. -/
 -- BEGIN SEAT AREA
+theorem t99J02_edge_lift_aux_sq (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ) ^ 2 =
+      ((edgePoint 4 e t : ConstructionTargets.Surfaces.Disk) : ℂ) := by
+  simp only [edgePoint, Subtype.coe_mk, sq]
+  rw [← Complex.exp_add]
+  congr 1
+  have h8 : ((8 : ℕ) : ℝ) ≠ 0 := by norm_num
+  have h4 : ((4 : ℕ) : ℝ) ≠ 0 := by norm_num
+  field_simp
+  ring
+
+theorem t99J02_edge_lift_aux_im (e : ℕ) (t : Set.Icc (0 : ℝ) 1) (he : e ≤ 3) :
+    0 ≤ ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ).im := by
+  have he' : (e : ℝ) ≤ 3 := by exact_mod_cast he
+  have he4 : (e : ℝ) + t.1 ≤ 4 := by
+    have h2 := add_le_add he' t.2.2
+    linarith
+  have hb : (0 : ℝ) < 8 := by norm_num
+  have h2 : 2 * Real.pi * ((e : ℝ) + t.1) / 8 ≤ Real.pi := by
+    rw [div_le_iff₀ hb]
+    have h3 : 2 * Real.pi * ((e : ℝ) + t.1) ≤ 2 * Real.pi * 4 :=
+      mul_le_mul_of_nonneg_left he4 (by positivity)
+    nlinarith [Real.pi_pos, h3]
+  have hθ : 0 ≤ 2 * Real.pi * ((e : ℝ) + t.1) / 8 :=
+    div_nonneg (mul_nonneg (mul_nonneg (by norm_num) Real.pi_pos.le)
+      (add_nonneg (by positivity) t.2.1)) (by norm_num)
+  have hr : Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / 8) =
+      Complex.ofReal (2 * Real.pi * ((e : ℝ) + t.1) / 8) * Complex.I := by
+    rw [mul_comm]
+    push_cast
+    ring
+  have hval : ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ) =
+      Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / 8)) :=
+    t99J02_q2_one_neg_one_aux_val e t
+  rw [hval, hr, Complex.exp_ofReal_mul_I]
+  simp only [Complex.add_im, Complex.mul_im, Complex.I_im, Complex.ofReal_im,
+    mul_zero, add_zero, Complex.ofReal_re, zero_mul]
+  have hsin := Real.sin_nonneg_of_nonneg_of_le_pi hθ h2
+  linarith
+
+theorem t99J02_edge_lift_aux_norm_sq (z : ConstructionTargets.Surfaces.Disk) (c : ℂ)
+    (h : (z : ℂ) ^ 2 = c) (hc : ‖c‖ = 1) : ‖(z : ℂ)‖ = 1 := by
+  have hp : ‖(z : ℂ)‖ ^ 2 = 1 := by
+    have hnp := Complex.norm_pow (z : ℂ) 2
+    rw [h, hc] at hnp
+    exact hnp.symm
+  rcases sq_eq_one_iff.mp hp with h1 | h1
+  · exact h1
+  · linarith [norm_nonneg (z : ℂ)]
+
+theorem t99J02_edge_lift_aux_sq_eq (z w : ℂ) (h : z ^ 2 = w ^ 2) : z = w ∨ z = -w := by
+  have hm : (z + w) * (z - w) = 0 := by linear_combination h
+  rcases mul_eq_zero.mp hm with h1 | h1
+  · exact Or.inr (by linear_combination h1)
+  · exact Or.inl (sub_eq_zero.mp h1)
+
+theorem t99J02_edge_lift_aux_q2 (z w : ConstructionTargets.Surfaces.Disk)
+    (hz : 0 ≤ (z : ℂ).im) (hw : 0 ≤ (w : ℂ).im) (hsq : (z : ℂ) ^ 2 = (w : ℂ) ^ 2)
+    (hu : ‖(z : ℂ)‖ = 1) : surfaceQuotient true 2 z = surfaceQuotient true 2 w := by
+  rcases t99J02_edge_lift_aux_sq_eq ((z : ℂ)) ((w : ℂ)) hsq with h | hneg
+  · rw [Subtype.ext h]
+  · have hz0 : (z : ℂ).im = 0 := by
+      have h1 : ((z : ℂ)).im = -((w : ℂ)).im := by rw [hneg]; simp
+      linarith
+    have hwv : (w : ℂ) = -((z : ℂ)) := by linear_combination hneg
+    have hw0 : (w : ℂ).im = 0 := by
+      have h1 : ((w : ℂ)).im = -((z : ℂ)).im := by rw [hwv]; simp
+      linarith
+    have hnsq : (Complex.normSq (z : ℂ) : ℝ) = 1 := by
+      rw [← Complex.sq_norm (z : ℂ), hu]
+      exact one_pow 2
+    have hzre : (z : ℂ).re ^ 2 = 1 := by
+      have h3 : (Complex.normSq (z : ℂ) : ℝ) = (z : ℂ).re ^ 2 := by
+        rw [Complex.normSq_apply, hz0]
+        ring
+      rw [← h3]
+      exact hnsq
+    have hball1 : (1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1 := by
+      simp [Metric.mem_closedBall, dist_zero_right]
+    have hball2 : (-1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1 := by
+      simp [Metric.mem_closedBall, dist_zero_right]
+    rcases sq_eq_one_iff.mp hzre with h1 | h1
+    · have hz1 : z = ⟨1, hball1⟩ := by
+        apply Subtype.ext
+        show (z : ℂ) = 1
+        apply Complex.ext <;> simp [h1, hz0]
+      have hw2 : w = ⟨-1, hball2⟩ := by
+        apply Subtype.ext
+        rw [hwv]
+        show (-(z : ℂ)) = -1
+        apply Complex.ext <;> simp [h1, hz0]
+      rw [hz1, hw2]
+      exact t99J02_q2_one_neg_one hball1 hball2
+    · have hz1 : z = ⟨-1, hball2⟩ := by
+        apply Subtype.ext
+        show (z : ℂ) = -1
+        apply Complex.ext <;> simp [h1, hz0]
+      have hw2 : w = ⟨1, hball1⟩ := by
+        apply Subtype.ext
+        rw [hwv]
+        show (-(z : ℂ)) = 1
+        apply Complex.ext <;> simp [h1, hz0]
+      rw [hz1, hw2]
+      exact (t99J02_q2_one_neg_one hball1 hball2).symm
+
+theorem t99J02_edge_lift_aux_root (m : ConstructionTargets.Surfaces.Disk) :
+    ∃ u : ConstructionTargets.Surfaces.Disk, 0 ≤ (u : ℂ).im ∧ (u : ℂ) ^ 2 = m := by
+  have hm : ‖(m : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp m.2
+  have hsq : (Complex.sqrt (m : ℂ)) ^ 2 = m := by
+    by_cases h0 : (m : ℂ) = 0
+    · rw [h0]; simp
+    · rw [sqrt_eq_exp h0, sq, ← Complex.exp_add]
+      have hhalf : Complex.log (m : ℂ) / 2 + Complex.log (m : ℂ) / 2 = Complex.log (m : ℂ) := by
+        ring
+      rw [hhalf, Complex.exp_log h0]
+  have hnorm : ‖Complex.sqrt (m : ℂ)‖ ≤ 1 := by
+    have h1 : ‖Complex.sqrt (m : ℂ)‖ ^ 2 = ‖(m : ℂ)‖ := by
+      rw [← Complex.norm_pow, hsq]
+    nlinarith [norm_nonneg (Complex.sqrt (m : ℂ))]
+  by_cases h0 : 0 ≤ (Complex.sqrt (m : ℂ)).im
+  · exact ⟨⟨Complex.sqrt (m : ℂ), mem_closedBall_zero_iff.mpr hnorm⟩, h0, hsq⟩
+  · have hlt : (Complex.sqrt (m : ℂ)).im < 0 := not_le.mp h0
+    refine ⟨⟨-(Complex.sqrt (m : ℂ)), mem_closedBall_zero_iff.mpr ?_⟩, ?_, ?_⟩
+    · rw [norm_neg]; exact hnorm
+    · rw [Complex.neg_im]; linarith
+    · rw [sq, neg_mul_neg, ← sq]
+      exact hsq
+
+theorem t99J02_edge_lift_aux_main (x y : ConstructionTargets.Surfaces.Disk)
+    (h : Relation.EqvGen (SurfaceRel true 1) x y) :
+    x = y ∨ ∀ z z' : ConstructionTargets.Surfaces.Disk, 0 ≤ (z : ℂ).im →
+      0 ≤ (z' : ℂ).im → (z : ℂ) ^ 2 = x → (z' : ℂ) ^ 2 = y →
+      surfaceQuotient true 2 z = surfaceQuotient true 2 z' := by
+  induction h with
+  | rel x y hxy =>
+      refine Or.inr (fun z z' hz hz' hzx hzy => ?_)
+      simp only [SurfaceRel, if_true] at hxy
+      obtain ⟨j, hj, t, hxy⟩ := hxy
+      have hj0 : j = 0 := Nat.lt_one_iff.mp hj
+      subst hj0
+      have htrmem : 1 - t.1 ∈ Set.Icc (0 : ℝ) 1 :=
+        ⟨by linarith [t.2.2], by linarith [t.2.1]⟩
+      rcases hxy with ⟨hx, hy⟩ | ⟨hx, hy⟩
+      · have hx' : x = edgePoint 4 0 t := hx
+        have hy' : y = edgePoint 4 2 ⟨1 - t.1, htrmem⟩ := hy
+        have hwsq : ((edgePoint 8 0 t : ConstructionTargets.Surfaces.Disk) : ℂ) ^ 2 =
+            ((edgePoint 4 0 t : ConstructionTargets.Surfaces.Disk) : ℂ) :=
+          t99J02_edge_lift_aux_sq 0 t
+        have hw'sq : ((edgePoint 8 2 ⟨1 - t.1, htrmem⟩ :
+              ConstructionTargets.Surfaces.Disk) : ℂ) ^ 2 =
+            ((edgePoint 4 2 ⟨1 - t.1, htrmem⟩ : ConstructionTargets.Surfaces.Disk) : ℂ) :=
+          t99J02_edge_lift_aux_sq 2 _
+        have hz1 : ‖(z : ℂ)‖ = 1 :=
+          t99J02_edge_lift_aux_norm_sq z _ (by rw [← hx']; exact hzx)
+            (norm_edgePoint 4 0 t)
+        have hz1' : ‖(z' : ℂ)‖ = 1 :=
+          t99J02_edge_lift_aux_norm_sq z' _ (by rw [← hy']; exact hzy)
+            (norm_edgePoint 4 2 ⟨1 - t.1, htrmem⟩)
+        have e1 : surfaceQuotient true 2 z =
+            surfaceQuotient true 2 (edgePoint 8 0 t) :=
+          t99J02_edge_lift_aux_q2 z _ hz (t99J02_edge_lift_aux_im 0 t (by norm_num))
+            (by rw [hwsq, ← hx']; exact hzx) hz1
+        have e2 : surfaceQuotient true 2 z' =
+            surfaceQuotient true 2 (edgePoint 8 2 ⟨1 - t.1, htrmem⟩) :=
+          t99J02_edge_lift_aux_q2 z' _ hz'
+            (t99J02_edge_lift_aux_im 2 ⟨1 - t.1, htrmem⟩ (by norm_num))
+            (by rw [hw'sq, ← hy']; exact hzy) hz1'
+        rw [e1, e2]
+        exact Quotient.sound (t99J02_q2_one_neg_one_aux_rel 0 0 (by norm_num) (Or.inl rfl)
+          t ⟨1 - t.1, htrmem⟩ (by rfl))
+      · have hx' : x = edgePoint 4 1 t := hx
+        have hy' : y = edgePoint 4 3 ⟨1 - t.1, htrmem⟩ := hy
+        have hwsq : ((edgePoint 8 1 t : ConstructionTargets.Surfaces.Disk) : ℂ) ^ 2 =
+            ((edgePoint 4 1 t : ConstructionTargets.Surfaces.Disk) : ℂ) :=
+          t99J02_edge_lift_aux_sq 1 t
+        have hw'sq : ((edgePoint 8 3 ⟨1 - t.1, htrmem⟩ :
+              ConstructionTargets.Surfaces.Disk) : ℂ) ^ 2 =
+            ((edgePoint 4 3 ⟨1 - t.1, htrmem⟩ : ConstructionTargets.Surfaces.Disk) : ℂ) :=
+          t99J02_edge_lift_aux_sq 3 _
+        have hz1 : ‖(z : ℂ)‖ = 1 :=
+          t99J02_edge_lift_aux_norm_sq z _ (by rw [← hx']; exact hzx)
+            (norm_edgePoint 4 1 t)
+        have hz1' : ‖(z' : ℂ)‖ = 1 :=
+          t99J02_edge_lift_aux_norm_sq z' _ (by rw [← hy']; exact hzy)
+            (norm_edgePoint 4 3 ⟨1 - t.1, htrmem⟩)
+        have e1 : surfaceQuotient true 2 z =
+            surfaceQuotient true 2 (edgePoint 8 1 t) :=
+          t99J02_edge_lift_aux_q2 z _ hz (t99J02_edge_lift_aux_im 1 t (by norm_num))
+            (by rw [hwsq, ← hx']; exact hzx) hz1
+        have e2 : surfaceQuotient true 2 z' =
+            surfaceQuotient true 2 (edgePoint 8 3 ⟨1 - t.1, htrmem⟩) :=
+          t99J02_edge_lift_aux_q2 z' _ hz'
+            (t99J02_edge_lift_aux_im 3 ⟨1 - t.1, htrmem⟩ (by norm_num))
+            (by rw [hw'sq, ← hy']; exact hzy) hz1'
+        rw [e1, e2]
+        exact Quotient.sound (t99J02_q2_one_neg_one_aux_rel 0 1 (by norm_num) (Or.inr rfl)
+          t ⟨1 - t.1, htrmem⟩ (by rfl))
+  | refl x => exact Or.inl rfl
+  | symm x y _ ih =>
+      rcases ih with heq | hmain
+      · exact Or.inl heq.symm
+      · exact Or.inr (fun z z' a b c d => (hmain z' z b a d c).symm)
+  | trans x m y _ _ ih1 ih2 =>
+      rcases ih1 with heq | hmain1
+      · rcases ih2 with heq2 | hmain2
+        · exact Or.inl (heq.trans heq2)
+        · exact Or.inr (fun z z' a b c d => hmain2 z z' a b (by rw [← heq]; exact c) d)
+      · rcases ih2 with heq2 | hmain2
+        · exact Or.inr (fun z z' a b c d => hmain1 z z' a b c (by rw [heq2]; exact d))
+        · exact Or.inr (fun z z' a b c d => by
+            obtain ⟨u, hu, hu_sq⟩ := t99J02_edge_lift_aux_root m
+            exact Eq.trans (hmain1 z u a hu c hu_sq) (hmain2 u z' hu b hu_sq d))
+
 theorem t99J02_edge_lift {x y : ConstructionTargets.Surfaces.Disk} (h : Relation.EqvGen (SurfaceRel true 1) x y)
     (hx : ‖(x : ℂ)‖ = 1) (z z' : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im) (hz' : 0 ≤ (z' : ℂ).im)
     (hzx : (z : ℂ) ^ 2 = x) (hzy : (z' : ℂ) ^ 2 = y) :
     surfaceQuotient true 2 z = surfaceQuotient true 2 z' := by
-  sorry
+  rcases t99J02_edge_lift_aux_main x y h with heq | hmain
+  · subst heq
+    have hz1 : ‖(z : ℂ)‖ = 1 := t99J02_edge_lift_aux_norm_sq z x hzx hx
+    exact t99J02_edge_lift_aux_q2 z z' hz hz' (by rw [hzx, hzy]) hz1
+  · exact hmain z z' hz hz' hzx hzy
 -- END SEAT AREA
 
 /-! ### Layer 1: the two collars and the torus side -/
