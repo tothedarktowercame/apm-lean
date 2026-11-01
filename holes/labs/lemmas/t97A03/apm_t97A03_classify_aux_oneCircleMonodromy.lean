@@ -1800,7 +1800,34 @@ theorem apm_t97A03_classify_aux_oneCircleMonodromy
       apm_t97A03_secondLiteralTransport p hp ≠ Equiv.refl _)
     (hnotBoth : ¬ apm_t97A03_TwoCircleMonodromy p hp) :
     apm_t97A03_OneCircleMonodromy p hp := by
-  sorry
+  obtain ⟨label⟩ := apm_t97A03_fiber_equiv_fin_two p hdegree
+    (apm_t97A03_baseCircle A B A)
+  let first := ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+    (apm_t97A03_firstLiteralTransport p hp)
+  let second := ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+    (apm_t97A03_secondLiteralTransport p hp)
+  have hnontrivial' : first ≠ Equiv.refl (Fin 2) ∨
+      second ≠ Equiv.refl (Fin 2) := by
+    rcases hnontrivial with hfirst | hsecond
+    · exact Or.inl
+        ((ConstructionTargets.t97A03Closure.labeledFiberMonodromy_ne_refl_iff
+          label (apm_t97A03_firstLiteralTransport p hp)).2 hfirst)
+    · exact Or.inr
+        ((ConstructionTargets.t97A03Closure.labeledFiberMonodromy_ne_refl_iff
+          label (apm_t97A03_secondLiteralTransport p hp)).2 hsecond)
+  rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap first with
+    hfirst | hfirst <;>
+    rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap second with
+      hsecond | hsecond
+  · exact False.elim (hnontrivial'.elim (fun h ↦ h hfirst) (fun h ↦ h hsecond))
+  · refine ⟨label, true, ?_⟩
+    simp only [if_pos]
+    exact Prod.ext hsecond hfirst
+  · refine ⟨label, false, ?_⟩
+    exact Prod.ext hfirst hsecond
+  · exfalso
+    apply hnotBoth
+    exact ⟨label, hfirst, hsecond⟩
 -- END SEAT AREA
 
 /-- In the both-swap case, trivialize the sphere restriction into its two
