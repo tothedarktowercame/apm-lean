@@ -147,6 +147,14 @@ structure WhitneySmoothPartition
 /-- Construct unnormalised smooth bumps equal to one on the quarter-balls and supported in
 the half-balls, with scale-correct derivative bounds.  Rescale one fixed Euclidean bump;
 the existing half-ball incidence theorem supplies complement-local finiteness. -/
+theorem exists_whitney_bump_family_aux_half_localFinite
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {K : Set E} (hK : IsClosed K) (hKn : K.Nonempty) :
+    ∀ x ∉ K, ∃ U ∈ nhds x,
+      {i : SardConvexDomain.WhitneyNetIndex K |
+        (U ∩ Metric.ball i.center (Metric.infDist i.center K / 2)).Nonempty}.Finite := by
+  sorry
+
 theorem exists_whitney_bump_family
     (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {K : Set E} (hK : IsClosed K) (hKn : K.Nonempty) :
@@ -160,7 +168,79 @@ theorem exists_whitney_bump_family
       ∃ C : ℕ → ℝ, ∀ k i x,
         ‖iteratedFDeriv ℝ k (psi i) x‖ ≤
           C k * (Metric.infDist i.center K)⁻¹ ^ k := by
-  sorry
+  let b : ContDiffBump (0 : E) :=
+    ⟨(1 : ℝ) / 4, (1 : ℝ) / 2, by norm_num, by norm_num⟩
+  let psi : SardConvexDomain.WhitneyNetIndex K → E → ℝ := fun i x =>
+    b ((Metric.infDist i.center K)⁻¹ • (x - i.center))
+  have hcenter (i : SardConvexDomain.WhitneyNetIndex K) : i.center ∉ K :=
+    ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2).1
+  have hd (i : SardConvexDomain.WhitneyNetIndex K) : 0 < Metric.infDist i.center K :=
+    (hK.notMem_iff_infDist_pos hKn).1 (hcenter i)
+  have hbdd : ∀ k : ℕ, ∃ B : ℝ, ∀ x : E,
+      ‖iteratedFDeriv ℝ k (b : E → ℝ) x‖ ≤ B := by
+    intro k
+    have hc : HasCompactSupport (iteratedFDeriv ℝ k (b : E → ℝ)) :=
+      b.hasCompactSupport.iteratedFDeriv k
+    have hcont : Continuous (iteratedFDeriv ℝ k (b : E → ℝ)) :=
+      b.contDiff.continuous_iteratedFDeriv (mod_cast le_top)
+    have hbound := hcont.norm.bddAbove_range_of_hasCompactSupport hc.norm
+    rw [bddAbove_def] at hbound
+    simpa only [Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff] using hbound
+  choose C hC using hbdd
+  refine ⟨psi, ?_, ?_, ?_, ?_, ?_, C, ?_⟩
+  · intro i
+    exact b.contDiff.comp
+      (contDiff_const.smul (contDiff_id.sub contDiff_const))
+  · intro i x
+    exact ⟨b.nonneg, b.le_one⟩
+  · intro i x hx
+    apply b.one_of_mem_closedBall
+    rw [Metric.mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs,
+      abs_inv, abs_of_pos (hd i)]
+    have hx' := Metric.mem_ball.1 hx
+    rw [dist_eq_norm] at hx'
+    rw [inv_mul_le_iff₀ (hd i)]
+    exact (le_of_lt hx').trans_eq (by ring)
+  · intro i x hx
+    change b ((Metric.infDist i.center K)⁻¹ • (x - i.center)) ≠ 0 at hx
+    have hbmem : (Metric.infDist i.center K)⁻¹ • (x - i.center) ∈
+        Metric.ball (0 : E) ((1 : ℝ) / 2) := by
+      rwa [← b.support_eq]
+    rw [Metric.mem_ball, dist_zero_right, norm_smul, Real.norm_eq_abs,
+      abs_inv, abs_of_pos (hd i)] at hbmem
+    rw [Metric.mem_ball, dist_eq_norm]
+    rw [inv_mul_lt_iff₀ (hd i)] at hbmem
+    simpa using hbmem
+  · intro x hx
+    obtain ⟨U, hU, hfin⟩ :=
+      exists_whitney_bump_family_aux_half_localFinite hK hKn x hx
+    refine ⟨U, hU, hfin.subset ?_⟩
+    intro i hi
+    obtain ⟨y, hyU, hypsi⟩ := hi
+    refine ⟨y, hyU, ?_⟩
+    apply (show Function.support (psi i) ⊆
+      Metric.ball i.center (Metric.infDist i.center K / 2) from ?_) hypsi
+    intro z hz
+    change b ((Metric.infDist i.center K)⁻¹ • (z - i.center)) ≠ 0 at hz
+    have hbmem : (Metric.infDist i.center K)⁻¹ • (z - i.center) ∈
+        Metric.ball (0 : E) ((1 : ℝ) / 2) := by rwa [← b.support_eq]
+    rw [Metric.mem_ball, dist_zero_right, norm_smul, Real.norm_eq_abs,
+      abs_inv, abs_of_pos (hd i)] at hbmem
+    rw [inv_mul_lt_iff₀ (hd i)] at hbmem
+    rw [Metric.mem_ball, dist_eq_norm]
+    simpa using hbmem
+  · intro k i x
+    change ‖iteratedFDeriv ℝ k
+      (fun z => b ((Metric.infDist i.center K)⁻¹ • (z - i.center))) x‖ ≤ _
+    rw [iteratedFDeriv_comp_sub (f := fun z => b ((Metric.infDist i.center K)⁻¹ • z))]
+    rw [iteratedFDeriv_comp_const_smul _ b.contDiff]
+    dsimp only
+    rw [norm_smul, Real.norm_eq_abs, abs_pow, abs_inv,
+      abs_of_pos (hd i)]
+    simpa [mul_comm] using
+      (mul_le_mul_of_nonneg_left
+        (hC k ((Metric.infDist i.center K)⁻¹ • (x - i.center)))
+        (pow_nonneg (inv_nonneg.2 (hd i).le) k))
 
 /-- The sum of incident unnormalised bumps is locally a finite smooth positive function on
 the complement, bounded below by one.  Use quarter-ball coverage for positivity and the
