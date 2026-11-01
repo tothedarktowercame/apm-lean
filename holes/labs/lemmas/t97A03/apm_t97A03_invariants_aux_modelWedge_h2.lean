@@ -1928,10 +1928,162 @@ theorem apm_t97A03_invariants_aux_modelWedge_h1 :
 summands.  Use `SphereHomology.sphereModuleTopHomologyIsoInt` twice and
 `IntegralOpenCoverMayerVietoris` for the two successive point wedges. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t97A03_invariants_aux_modelWedge_h2_aux_wedgeIso
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y)
+    (PX : ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood X x₀)
+    (PY : ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood Y y₀)
+    (n : ℕ) (hn : 2 ≤ n) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology n
+        (TopCat.of (Wedge x₀ y₀)) ≅
+      Limits.biprod
+        (ConstructionTargets.SingularHomologyConcrete.SingularHomology n (TopCat.of X))
+        (ConstructionTargets.SingularHomologyConcrete.SingularHomology n (TopCat.of Y)) := by
+  let p := ConstructionTargets.GenericPointWedgeOpenCoverComparison.genericPointWedgeCoverPackage
+    x₀ y₀ PY.carrier PX.carrier PY.isOpen PX.isOpen PY.mem PX.mem
+      PY.contraction PX.contraction
+  let U := ConstructionTargets.PointWedgeQuotient.leftOpen x₀ y₀ PY.carrier
+  let V := ConstructionTargets.PointWedgeQuotient.rightOpen x₀ y₀ PX.carrier
+  let GH (k : ℕ) (Z : Type) [TopologicalSpace Z] :=
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology k (TopCat.of Z)
+  have hI (k : ℕ) (hk : k ≠ 0) : Limits.IsZero (GH k (U ∩ V : Set _)) :=
+    (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      Unit k hk).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        p.intersectionEquiv k)
+  have hIso : IsIso
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) := by
+    have hm : Mono
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) :=
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+        U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ n).mono_g_iff.mpr
+          ((hI n (by omega)).eq_of_src _ _)
+    have heq : n - 1 + 1 = n := by omega
+    have he : Epi
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) := by
+      rw [← heq]
+      exact
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+          U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ (n - 1)).epi_f_iff.mpr
+            ((hI (n - 1) (by omega)).eq_of_tgt _ _)
+    letI := hm
+    letI := he
+    exact isIso_of_mono_of_epi _
+  letI := hIso
+  let eX : GH n U ≅ GH n X :=
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      p.leftEquiv n
+  let eY : GH n V ≅ GH n Y :=
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      p.rightEquiv n
+  exact (asIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      U V n)).symm ≪≫ CategoryTheory.Limits.biprod.mapIso eX eY
+
+noncomputable def apm_t97A03_invariants_aux_modelWedge_h2_aux_sphereNeighborhood :
+    ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood
+      apm_t97A03_S2 apm_t97A03_north := by
+  let south : apm_t97A03_S2 := -apm_t97A03_north
+  have hsouth : ‖(south : apm_t97A03_R3)‖ = 1 := norm_eq_of_mem_sphere south
+  let e0 := stereographic hsouth
+  let e : e0.source ≃ₜ Submodule.orthogonal (ℝ ∙ (south : apm_t97A03_R3)) :=
+    e0.toHomeomorphSourceTarget.trans
+      ((Homeomorph.setCongr (by simp [e0, stereographic_target])).trans (Homeomorph.Set.univ _))
+  have hnorth : apm_t97A03_north ∈ e0.source := by
+    rw [stereographic_source]
+    simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
+    intro h
+    have h2 := congrArg (fun x : apm_t97A03_R3 ↦ x (2 : Fin 3)) (congrArg Subtype.val h)
+    norm_num [south, apm_t97A03_north, EuclideanSpace.single_apply] at h2
+  have he_base : e ⟨apm_t97A03_north, hnorth⟩ = 0 := by
+    change e0 apm_t97A03_north = 0
+    simpa [south, e0] using stereographic_apply_neg south
+  let h : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      (Submodule.orthogonal (ℝ ∙ (south : apm_t97A03_R3))) 0 :=
+    { homotopy :=
+        { toFun := fun p ↦ (1 - (p.1 : ℝ)) • p.2
+          continuous_toFun := (continuous_const.sub
+            (continuous_subtype_val.comp continuous_fst)).smul continuous_snd
+          map_zero_left := by intro x; simp
+          map_one_left := by intro x; simp }
+      fixed := by
+        intro t
+        change (1 - (t : ℝ)) • (0 : Submodule.orthogonal
+          (ℝ ∙ (south : apm_t97A03_R3))) = 0
+        simp }
+  rw [← he_base] at h
+  exact
+    { carrier := e0.source
+      isOpen := e0.open_source
+      mem := hnorth
+      contraction :=
+        ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h }
+
 theorem apm_t97A03_invariants_aux_modelWedge_h2 :
     Nonempty (apm_t97A03_Homology apm_t97A03_modelWedge 2 ≅
       ModuleCat.of ℤ (Fin 2 → ℤ)) := by
-  sorry
+  open ConstructionTargets.PolygonSurfaceHomology in
+    let PS := apm_t97A03_invariants_aux_modelWedge_h2_aux_sphereNeighborhood
+    let PC := circlePointedContractibleNeighborhood
+    let PtwoSphere := pointWedgePointedContractibleNeighborhood PS PS
+    let PtwoCircle := pointWedgePointedContractibleNeighborhood PC PC
+    let PthreeCircle := pointWedgePointedContractibleNeighborhood PtwoCircle PC
+    let eSphere := ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 2 (by omega)
+    let eTwo := apm_t97A03_invariants_aux_modelWedge_h2_aux_wedgeIso
+      apm_t97A03_north apm_t97A03_north PS PS 2 (by omega)
+    let eOuter := apm_t97A03_invariants_aux_modelWedge_h2_aux_wedgeIso
+      apm_t97A03_twoSphereBase
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+      PtwoSphere PthreeCircle 2 (by omega)
+    have hcircle : Limits.IsZero (apm_t97A03_Homology Circle 2) :=
+      ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+        (TopCat.of Circle) 2
+        (ConstructionTargets.BoundaryTorusMayerVietoris.circleHomology_isZero_of_one_lt
+          2 (by omega))
+    have htwoCircle : Limits.IsZero
+        (apm_t97A03_Homology (Wedge (1 : Circle) (1 : Circle)) 2) :=
+      pointWedgeHigherHomologyIsZero (1 : Circle) (1 : Circle)
+        PC PC 2 (by omega) hcircle hcircle
+    have hthree : Limits.IsZero (apm_t97A03_Homology apm_t97A03_ThreeCircles 2) :=
+      pointWedgeHigherHomologyIsZero
+        ConstructionTargets.StatementSurfaceModels.twoCirclesPoint (1 : Circle)
+        PtwoCircle PC 2 (by omega) htwoCircle hcircle
+    have underlyingIsZero {A : ModuleCat ℤ} (hA : Limits.IsZero A) :
+        Limits.IsZero
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj A) := by
+      rw [Limits.IsZero.iff_id_eq_zero]
+      rw [← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_id,
+        ← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_zero]
+      exact congrArg
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (hA.eq_of_src _ _)
+    have hthreeRaw : Limits.IsZero
+        (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+          (TopCat.of apm_t97A03_ThreeCircles)) :=
+      (underlyingIsZero hthree).of_iso
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of apm_t97A03_ThreeCircles) 2).symm
+    letI : IsIso (CategoryTheory.Limits.biprod.inl :
+        ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+            (TopCat.of apm_t97A03_twoSphereWedge) ⟶
+          Limits.biprod
+            (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+              (TopCat.of apm_t97A03_twoSphereWedge))
+            (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+              (TopCat.of apm_t97A03_ThreeCircles))) :=
+      (CategoryTheory.Biprod.isIso_inl_iff_isZero _ _).2 hthreeRaw
+    exact ⟨ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of apm_t97A03_modelWedge) 2 _
+      (eOuter ≪≫ (asIso (CategoryTheory.Limits.biprod.inl :
+          ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+              (TopCat.of apm_t97A03_twoSphereWedge) ⟶
+            Limits.biprod
+              (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+                (TopCat.of apm_t97A03_twoSphereWedge))
+              (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+                (TopCat.of apm_t97A03_ThreeCircles)))).symm ≪≫
+        eTwo ≪≫ CategoryTheory.Limits.biprod.mapIso eSphere eSphere ≪≫
+        AddCommGrpCat.biprodIsoProd _ _ ≪≫
+        (LinearEquiv.piFinTwo ℤ (fun _ : Fin 2 ↦ ℤ)).symm.toAddEquiv.toAddCommGrpIso)⟩
 -- END SEAT AREA
 
 /-- Above degree two, both spheres and all three circles vanish.  Apply
