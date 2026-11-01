@@ -67,3 +67,7 @@ Backlog grade: narrower, one common neighbourhood for all f_n. Repair by lemma-1
 ## m94J02 (reformed)
 
 Printed ‖fg‖ ≤ ‖f‖‖g‖ is false at f = g = z, giving 5 > 4. The theorem uses the sharp 5/4, so (5/4)‖·‖ is a submultiplicative equivalent norm. Kimi added the Banach space structure and tied multiplication and T to the functions. Grader: justified; injectivity of eval is unstated but true, by the identity theorem.
+
+## b98A01
+
+Backlog grade: narrower, order 35 replaced printed order 3. Repair by lemma-2 restores the literal equivalence, proved with Burnside normal complements, and keeps the order-35 result. New grade: faithful. Caveat, hand-checked by the grader and claude-14: part (b) of the printed problem is vacuous, since every subgroup of order 5 in a group of order 210 is normal (the Sylow 7 Q is normal, G/Q of order 30 has a normal Sylow 5, so QB is normal and cyclic of order 35, and B is characteristic in it). The Lean matches the print and adds no vacuity.
