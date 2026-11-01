@@ -1921,9 +1921,82 @@ theorem apm_t97A03_invariants_aux_modelWedge_h2 :
 `PolygonSurfaceHomology.pointWedgeHigherHomologyIsZero` successively with
 `SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top` and the finite
 circle-wedge vanishing theorem. -/
+def apm_t97A03_invariants_aux_modelWedge_high_sphereNeighborhood :
+    ConstructionTargets.PolygonSurfaceHomology.PointedContractibleNeighborhood
+      apm_t97A03_S2 apm_t97A03_north := by
+  let south : apm_t97A03_S2 := -apm_t97A03_north
+  have hsouth : ‖(south : apm_t97A03_R3)‖ = 1 :=
+    norm_eq_of_mem_sphere south
+  let e0 := stereographic hsouth
+  let e : e0.source ≃ₜ Submodule.orthogonal (ℝ ∙ (south : apm_t97A03_R3)) :=
+    e0.toHomeomorphSourceTarget.trans
+      ((Homeomorph.setCongr (by simp [e0, stereographic_target])).trans
+        (Homeomorph.Set.univ _))
+  have hnorth : apm_t97A03_north ∈ e0.source := by
+    rw [stereographic_source]
+    simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
+    intro h
+    have hv := congrArg Subtype.val h
+    have h2 := congrArg (fun x : apm_t97A03_R3 => x (2 : Fin 3)) hv
+    norm_num [south, apm_t97A03_north, EuclideanSpace.single_apply] at h2
+  have he_base : e ⟨apm_t97A03_north, hnorth⟩ = 0 := by
+    change e0 apm_t97A03_north = 0
+    simpa [south, e0] using stereographic_apply_neg south
+  let h :
+      ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+        (Submodule.orthogonal (ℝ ∙ (south : apm_t97A03_R3))) 0 :=
+    { homotopy :=
+        { toFun := fun p => (1 - (p.1 : ℝ)) • p.2
+          continuous_toFun := (continuous_const.sub
+            (continuous_subtype_val.comp continuous_fst)).smul continuous_snd
+          map_zero_left := by intro x; simp
+          map_one_left := by intro x; simp }
+      fixed := by
+        intro t
+        change (1 - (t : ℝ)) • (0 : Submodule.orthogonal
+          (ℝ ∙ (south : apm_t97A03_R3))) = 0
+        simp }
+  rw [← he_base] at h
+  exact
+    { carrier := e0.source
+      isOpen := e0.open_source
+      mem := hnorth
+      contraction :=
+        ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h }
+
 theorem apm_t97A03_invariants_aux_modelWedge_high (n : ℕ) (hn : 3 ≤ n) :
     Limits.IsZero (apm_t97A03_Homology apm_t97A03_modelWedge n) := by
-  sorry
+  open ConstructionTargets.PolygonSurfaceHomology in
+    have hsphere : Limits.IsZero (apm_t97A03_Homology apm_t97A03_S2 n) :=
+      ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top
+        2 n (by omega) (by omega)
+    have hcircle : Limits.IsZero (apm_t97A03_Homology Circle n) :=
+      ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+        (TopCat.of Circle) n
+        (ConstructionTargets.BoundaryTorusMayerVietoris.circleHomology_isZero_of_one_lt
+          n (by omega))
+    let PS := apm_t97A03_invariants_aux_modelWedge_high_sphereNeighborhood
+    let PC := circlePointedContractibleNeighborhood
+    have htwoSphere :
+        Limits.IsZero (apm_t97A03_Homology apm_t97A03_twoSphereWedge n) :=
+      pointWedgeHigherHomologyIsZero apm_t97A03_north apm_t97A03_north
+        PS PS n (by omega) hsphere hsphere
+    let PtwoSphere := pointWedgePointedContractibleNeighborhood PS PS
+    have htwoCircle : Limits.IsZero
+        (apm_t97A03_Homology
+          (Wedge (1 : Circle) (1 : Circle)) n) :=
+      pointWedgeHigherHomologyIsZero (1 : Circle) (1 : Circle)
+        PC PC n (by omega) hcircle hcircle
+    let PtwoCircle := pointWedgePointedContractibleNeighborhood PC PC
+    have hthreeCircle :
+        Limits.IsZero (apm_t97A03_Homology apm_t97A03_ThreeCircles n) :=
+      pointWedgeHigherHomologyIsZero
+        ConstructionTargets.StatementSurfaceModels.twoCirclesPoint (1 : Circle)
+        PtwoCircle PC n (by omega) htwoCircle hcircle
+    let PthreeCircle := pointWedgePointedContractibleNeighborhood PtwoCircle PC
+    exact pointWedgeHigherHomologyIsZero apm_t97A03_twoSphereBase
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+      PtwoSphere PthreeCircle n (by omega) htwoSphere hthreeCircle
 
 /-- Van Kampen turns the nested point wedge into the free product of two
 trivial sphere groups and the rank-three circle-wedge group.  Use
