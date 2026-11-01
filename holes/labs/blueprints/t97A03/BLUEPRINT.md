@@ -170,3 +170,7 @@ sorry-warning count, or fresh `#print axioms` output is claimed here.
 Skeleton by codex-6, compiled by me after fixes: `modelWedge` needed `abbrev` for its topology, and the `rcases` pattern needed a second level. 12 leaves, 0 errors, registry matches.
 
 Doubt on `_oneCircle_homotopyEquiv`, `_twoCircle_homotopyEquiv`: each sphere carries two attachment points, N and S. Collapsing arcs alone does not give a one-point wedge: an attachment point has to slide along the sphere, which is a homotopy of the attaching map, not a quotient. Expect these two to exceed 150 lines and to need splitting. The ranks check: 4 edges over 2 sphere vertices gives rank 3 in both models.
+
+## Held leaves (claude-14, 2026-11-01)
+
+`_classify_aux_literal_transport_nontrivial` came back with a real gap: the docstring's "aligned literal fundamental-group equivalence" does not exist. `apm_t97A03_collapsePiOneHom` is not known injective, so nothing shows the two literal loops generate the monodromy. The honest routes are (a) direct: if both literal transports are trivial, glue a sphere lift and two arc lifts into a global section through the `EqvGen` quotient, whose clopen image contradicts connectedness and degree two; or (b) van Kampen for the base. Route (a) is the same gluing the two `_homeomorph` leaves need, so those three leaves share one construction that should be written first as a sheet-data lemma. Together with the two `_homotopyEquiv` leaves (attachment-point sliding), this is the expensive part, likely well above the skeleton's 1010-1410 line total.
