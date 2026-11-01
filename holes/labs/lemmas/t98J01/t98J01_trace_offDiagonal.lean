@@ -828,7 +828,44 @@ theorem t98J01_trace_offDiagonal
     (φ : E →ₗ[ℚ] E) (φ₁₂ : V₁ →ₗ[ℚ] V₂) (φ₂₁ : V₂ →ₗ[ℚ] V₁)
     (h₁ : φ ∘ₗ i₁ = i₂ ∘ₗ φ₁₂) (h₂ : φ ∘ₗ i₂ = i₁ ∘ₗ φ₂₁) :
     LinearMap.trace ℚ E φ = 0 := by
-  sorry
+  classical
+  -- Transport the endomorphism to `V₁ × V₂` along the coprod bijection.
+  let e : E ≃ₗ[ℚ] (V₁ × V₂) :=
+    (LinearEquiv.ofBijective (LinearMap.coprod i₁ i₂) hbij).symm
+  have he : ∀ p : V₁ × V₂, e.symm p = i₁ p.1 + i₂ p.2 := fun _ => rfl
+  have hsymm : ∀ q : V₁ × V₂, e (i₁ q.1 + i₂ q.2) = q := fun q => e.right_inv q
+  -- The conjugate of `φ` swaps the two factors.
+  have hconj : ∀ p : V₁ × V₂,
+      (e ∘ₗ φ ∘ₗ e.symm) p = (φ₂₁ p.2, φ₁₂ p.1) := by
+    intro p
+    have h1 : φ (i₁ p.1 + i₂ p.2) = i₁ (φ₂₁ p.2) + i₂ (φ₁₂ p.1) := by
+      rw [map_add, show φ (i₁ p.1) = i₂ (φ₁₂ p.1) from DFunLike.congr_fun h₁ p.1,
+        show φ (i₂ p.2) = i₁ (φ₂₁ p.2) from DFunLike.congr_fun h₂ p.2, add_comm]
+    show e (φ (e.symm p)) = _
+    rw [he p, h1]
+    exact hsymm (φ₂₁ p.2, φ₁₂ p.1)
+  have t1 : LinearMap.trace ℚ (V₁ × V₂)
+      ((LinearMap.inl ℚ V₁ V₂ ∘ₗ φ₂₁) ∘ₗ LinearMap.snd ℚ V₁ V₂) = 0 := by
+    rw [← LinearMap.trace_comp_comm'
+      (LinearMap.inl ℚ V₁ V₂ ∘ₗ φ₂₁) (LinearMap.snd ℚ V₁ V₂),
+      show LinearMap.snd ℚ V₁ V₂ ∘ₗ LinearMap.inl ℚ V₁ V₂ ∘ₗ φ₂₁ = 0 from by
+        ext p <;> simp]
+    simp
+  have t2 : LinearMap.trace ℚ (V₁ × V₂)
+      ((LinearMap.inr ℚ V₁ V₂ ∘ₗ φ₁₂) ∘ₗ LinearMap.fst ℚ V₁ V₂) = 0 := by
+    rw [← LinearMap.trace_comp_comm'
+      (LinearMap.inr ℚ V₁ V₂ ∘ₗ φ₁₂) (LinearMap.fst ℚ V₁ V₂),
+      show LinearMap.fst ℚ V₁ V₂ ∘ₗ LinearMap.inr ℚ V₁ V₂ ∘ₗ φ₁₂ = 0 from by
+        ext p <;> simp]
+    simp
+  rw [← LinearMap.trace_conj' φ e]
+  have heq : e.conj φ = ((LinearMap.inl ℚ V₁ V₂ ∘ₗ φ₂₁) ∘ₗ LinearMap.snd ℚ V₁ V₂)
+      + ((LinearMap.inr ℚ V₁ V₂ ∘ₗ φ₁₂) ∘ₗ LinearMap.fst ℚ V₁ V₂) := by
+    rw [LinearMap.ext_iff]
+    intro p
+    simpa [LinearEquiv.conj_apply] using hconj p
+  rw [heq, map_add, t1, t2]
+  ring
 -- END SEAT AREA
 
 /-! ### Chain-complex Lefschetz numbers -/
