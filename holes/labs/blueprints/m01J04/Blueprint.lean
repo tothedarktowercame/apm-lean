@@ -5,11 +5,12 @@ import Mathlib
 
 ## Statement repairs
 
-Parts (b) and (c) use the compact embedding `H¹(Ω) ↪ L²(Ω)`, which is false
-for an arbitrary domain (translations on an unbounded domain are a standard
-counterexample). We therefore add the exact required hypothesis that `Ω` has
-the Rellich compactness property. This covers, in particular, the bounded
-Lipschitz domains intended by the supplied solution.
+Part (b) is false for an arbitrary domain (translates of a bump on an
+unbounded domain are a counterexample), so (b) assumes that `Ω` has the
+Rellich compactness property, which covers the bounded Lipschitz domains
+intended by the supplied solution.  Part (c) is true on every open domain
+(only local compactness is used), so it carries no Rellich hypothesis; it
+assumes `Ω` open ("domain") and `tsupport φ ⊆ Ω`, i.e. `φ ∈ C_c^∞(Ω)`.
 
 ## Encoding questions
 
@@ -4021,6 +4022,232 @@ lemma apm_m01J04_compensated_pairing
       real_inner_comm (fLim.grad x) (vLim x)]
     ring
 
+/-! ### Local Rellich compactness for part (c) (claude-14, 2026-11-01)
+
+`hrel` enters the compensated pairing only through the strong value convergence in the lower-order
+term, and only against a field supported in `tsupport φ`. The leaves below prove that convergence
+directly on an arbitrary open domain: multiply by a cutoff, then use the classical translation
+estimate plus mollification. -/
+
+/-- Seat: differences of `H¹` records. Integrability of each integrand in `weakGradient` comes from
+Cauchy–Schwarz (`apm_m01J04_test_mul_fields_memLp` and neighbours) or `MemLp.integrable_mul`. -/
+theorem apm_m01J04_H1_exists_sub {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (f g : apm_m01J04_H1 d Ω) :
+    ∃ h : apm_m01J04_H1 d Ω, h.val = f.val - g.val ∧ h.grad = f.grad - g.grad := by
+  sorry
+
+/-- Seat: for a smooth compactly supported value, the weak gradient is the classical gradient a.e.
+Integrate by parts with `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable`, then use the fundamental
+lemma `ae_eq_of_integral_contDiff_smul_eq` componentwise. -/
+theorem apm_m01J04_rellich_grad_eq {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
+    (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val) (hc : HasCompactSupport a.val) :
+    a.grad =ᵐ[volume] fun x ↦ WithLp.toLp 2
+      (fun i ↦ fderiv ℝ a.val x (EuclideanSpace.single i 1)) := by
+  sorry
+
+/-- Seat: translation estimate for smooth compact values. Write `a (x - y) - a x` as
+`-∫ t in 0..1, fderiv a (x - t • y) y`, bound its square by `‖y‖² ∫ t, ‖grad a (x - t • y)‖²`
+(Cauchy–Schwarz, then Jensen on `[0,1]`), integrate in `x` with Fubini, and use translation invariance.
+Replace the classical gradient by `a.grad` with `apm_m01J04_rellich_grad_eq`. -/
+theorem apm_m01J04_rellich_translate_smooth {d : ℕ} (a : apm_m01J04_H1 d Set.univ)
+    (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val) (hc : HasCompactSupport a.val) (y : EuclideanSpace ℝ (Fin d)) :
+    (eLpNorm (fun x ↦ a.val (x - y) - a.val x) 2 volume).toReal ≤
+      ‖y‖ * (eLpNorm a.grad 2 volume).toReal := by
+  sorry
+
+/-- Seat: the translation estimate for compactly supported records. Approximate by
+`apm_m01J04_core_exists_smooth_global_approx_aux_mollify`, apply the smooth case, and pass to the limit;
+translation preserves `eLpNorm` (`..._minkowski_aux_translate`). -/
+theorem apm_m01J04_rellich_translate {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
+    {K : Set (EuclideanSpace ℝ (Fin d))} (hK : IsCompact K)
+    (hval : Function.support u.val ⊆ K) (hgrad : Function.support u.grad ⊆ K) (y : EuclideanSpace ℝ (Fin d)) :
+    (eLpNorm (fun x ↦ u.val (x - y) - u.val x) 2 volume).toReal ≤
+      ‖y‖ * (eLpNorm u.grad 2 volume).toReal := by
+  sorry
+
+/-- Seat: a fixed mollifier turns weak convergence to zero into strong convergence. Pointwise,
+`κ ⋆ u n` at `x` is the pairing of `u n` with `s ↦ κ (x - s)`, so it tends to `0`; it is bounded by
+`‖κ‖₂ C` and supported in the compact `K + tsupport κ`. Conclude by dominated convergence. -/
+theorem apm_m01J04_rellich_mollified_tendsto {d : ℕ} (u : ℕ → EuclideanSpace ℝ (Fin d) → ℝ)
+    {K : Set (EuclideanSpace ℝ (Fin d))} (hK : IsCompact K) (hmem : ∀ n, MemLp (u n) 2 volume)
+    (hval : ∀ n, Function.support (u n) ⊆ K) {C : ℝ}
+    (hC : ∀ n, (eLpNorm (u n) 2 volume).toReal ≤ C)
+    (hw : ∀ q : EuclideanSpace ℝ (Fin d) → ℝ, MemLp q 2 volume →
+      Tendsto (fun n ↦ ∫ x, u n x * q x) atTop (nhds 0))
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hs : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ) (hc : HasCompactSupport κ) :
+    Tendsto (fun n ↦ (eLpNorm (MeasureTheory.convolution κ (u n)
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume).toReal) atTop (nhds 0) := by
+  sorry
+
+/-- Seat: Rellich for a bounded, weakly null sequence with common compact support. Given `ε`, take the
+kernel `apm_m01J04_mollify_exists_L2_kernel_aux_kernel` at radius `ρ` with `ρ C < ε / 2`.
+`..._minkowski` with `apm_m01J04_rellich_translate` gives `‖κ ⋆ u n - u n‖ ≤ ρ C` for all `n`, and
+`apm_m01J04_rellich_mollified_tendsto` handles `κ ⋆ u n`. -/
+theorem apm_m01J04_rellich_compact_support {d : ℕ} (u : ℕ → apm_m01J04_H1 d Set.univ)
+    {K : Set (EuclideanSpace ℝ (Fin d))} (hK : IsCompact K)
+    (hval : ∀ n, Function.support (u n).val ⊆ K) (hgrad : ∀ n, Function.support (u n).grad ⊆ K)
+    {C : ℝ} (hC : ∀ n, apm_m01J04_H1norm (u n) ≤ C)
+    (hw : ∀ q : EuclideanSpace ℝ (Fin d) → ℝ, MemLp q 2 volume →
+      Tendsto (fun n ↦ ∫ x, (u n).val x * q x) atTop (nhds 0)) :
+    Tendsto (fun n ↦ (eLpNorm (u n).val 2 volume).toReal) atTop (nhds 0) := by
+  sorry
+
+/-- Seat: local strong convergence. Take `h n` from `apm_m01J04_H1_exists_sub (f n) fLim`, and
+`u n := apm_m01J04_globalLocalizedH1 χ hχ (h n)`, supported in `tsupport χ`. The norm bound is
+`apm_m01J04_test_mul_H1norm_le` with `apm_m01J04_H1WeaklyConverges_uniform_norm`. For `hw`, pair
+`h n` with `χ • q`, which is in `L²(Ω)`, using `hf.1`. Then apply `apm_m01J04_rellich_compact_support`;
+the `volume` norm dominates the restricted norm. -/
+theorem apm_m01J04_local_strong {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsOpen Ω)
+    {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
+    (hf : apm_m01J04_H1WeaklyConverges f fLim)
+    (χ : EuclideanSpace ℝ (Fin d) → ℝ) (hχ : apm_m01J04_isTestFunction Ω χ) :
+    Tendsto (fun n ↦ (eLpNorm (fun x ↦ ((f n).val x - fLim.val x) * χ x) 2
+      (volume.restrict Ω)).toReal) atTop (nhds 0) := by
+  sorry
+
+/-- Seat: the varying lower-order term. Pick a smooth compactly supported `χ` with `χ = 1` on
+`tsupport φ` and `tsupport χ ⊆ Ω` (`exists_contDiff_tsupport_subset` or `exists_smooth_one_nhds...`; this
+is where `hΩ` and `htsupp` are used). On `Ω` the field `(f n - fLim) • D` equals
+`((f n - fLim) * χ) • D`, so Cauchy–Schwarz (`apm_m01J04_abs_integral_inner_le`) and the uniform bound
+`apm_m01J04_L2WeaklyConverges_uniform_sub_norm` reduce to `apm_m01J04_local_strong`. Template:
+`apm_m01J04_strong_value_weak_field_error`. -/
+theorem apm_m01J04_local_variable_lower_order {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsOpen Ω)
+    {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
+    {v : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)} {vLim : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)}
+    (hf : apm_m01J04_H1WeaklyConverges f fLim)
+    (hv : apm_m01J04_L2WeaklyConverges (Ω := Ω) v vLim)
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ) (hφ : apm_m01J04_isTestFunction Ω φ) (htsupp : tsupport φ ⊆ Ω) :
+    Tendsto (fun n ↦ ∫ x in Ω, inner ℝ (v n x - vLim x)
+      (((f n).val x - fLim.val x) • WithLp.toLp 2
+        (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))))
+      atTop (nhds 0) := by
+  sorry
+
+lemma apm_m01J04_local_lower_order
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (hΩ : IsOpen Ω)
+    {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
+    {v : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)}
+    {vLim : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)}
+    (hf : apm_m01J04_H1WeaklyConverges f fLim)
+    (hv : apm_m01J04_L2WeaklyConverges (Ω := Ω) v vLim)
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ) (htsupp : tsupport φ ⊆ Ω) :
+    Tendsto (fun n ↦ ∫ x in Ω, inner ℝ (v n x - vLim x)
+      ((f n).val x • WithLp.toLp 2
+        (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))))
+      atTop (nhds 0) := by
+  let D : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun x ↦ WithLp.toLp 2
+      (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))
+  have hDtop : MemLp D ⊤ (volume.restrict Ω) :=
+    apm_m01J04_isTestFunction_fderivField_memLp hφ ⊤
+  have hfixed : MemLp (fun x ↦ fLim.val x • D x) 2
+      (volume.restrict Ω) := by
+    simpa [smul_comm] using hDtop.smul fLim.val_memLp
+  have hvar := apm_m01J04_local_variable_lower_order hΩ hf hv φ hφ htsupp
+  have hconst := apm_m01J04_L2WeaklyConverges_sub_pairing hv _ hfixed
+  convert hvar.add hconst using 1
+  · funext n
+    have hvsub : MemLp (fun x ↦ v n x - vLim x) 2
+        (volume.restrict Ω) := (hv.1 n).sub hv.2.1
+    have he : MemLp (fun x ↦ ((f n).val x - fLim.val x) • D x) 2
+        (volume.restrict Ω) := by
+      simpa [smul_comm] using hDtop.smul ((f n).val_memLp.sub fLim.val_memLp)
+    rw [← MeasureTheory.integral_add
+      (apm_m01J04_integrable_inner _ _ hvsub he)
+      (apm_m01J04_integrable_inner _ _ hvsub hfixed)]
+    apply integral_congr_ae
+    filter_upwards [] with x
+    simp only [D]
+    rw [← inner_add_right, ← add_smul]
+    simp
+  · simp
+
+lemma apm_m01J04_local_principal
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (hΩ : IsOpen Ω)
+    {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
+    {v : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)}
+    {vLim : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)}
+    (hf : apm_m01J04_H1WeaklyConverges f fLim)
+    (hv : apm_m01J04_L2WeaklyConverges (Ω := Ω) v vLim)
+    (hdiv : apm_m01J04_divStronglyConverges (Ω := Ω) v vLim)
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ) (htsupp : tsupport φ ⊆ Ω) :
+    Tendsto (fun n ↦ ∫ x in Ω,
+      inner ℝ (v n x - vLim x) (φ x • (f n).grad x))
+      atTop (nhds 0) := by
+  obtain ⟨h, hval, hgrad, hbridge⟩ :=
+    apm_m01J04_bridge_divergence_pairing hf hdiv φ hφ
+  have hlower := apm_m01J04_local_lower_order hΩ hf hv φ hφ htsupp
+  have hdiff := hbridge.sub hlower
+  convert hdiff using 1
+  · funext n
+    rw [hgrad n]
+    have hvsub : MemLp (fun x ↦ v n x - vLim x) 2
+        (volume.restrict Ω) := (hv.1 n).sub hv.2.1
+    have hφtop : MemLp φ ⊤ (volume.restrict Ω) :=
+      hφ.1.continuous.memLp_of_hasCompactSupport hφ.2.1
+    have hp : MemLp (fun x ↦ φ x • (f n).grad x) 2
+        (volume.restrict Ω) := (f n).grad_memLp.smul hφtop
+    have hDtop := apm_m01J04_isTestFunction_fderivField_memLp hφ ⊤
+    have hl : MemLp (fun x ↦ (f n).val x • WithLp.toLp 2
+        (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))) 2
+        (volume.restrict Ω) := hDtop.smul (f n).val_memLp
+    simp only
+    simp_rw [inner_add_right]
+    rw [MeasureTheory.integral_add
+      (apm_m01J04_integrable_inner _ _ hvsub hp)
+      (apm_m01J04_integrable_inner _ _ hvsub hl)]
+    ring
+  · simp
+
+lemma apm_m01J04_local_compensated_pairing
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (hΩ : IsOpen Ω)
+    {f : ℕ → apm_m01J04_H1 d Ω} {fLim : apm_m01J04_H1 d Ω}
+    {v : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)}
+    {vLim : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)}
+    (hf : apm_m01J04_H1WeaklyConverges f fLim)
+    (hv : apm_m01J04_L2WeaklyConverges (Ω := Ω) v vLim)
+    (hdiv : apm_m01J04_divStronglyConverges (Ω := Ω) v vLim)
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ) (htsupp : tsupport φ ⊆ Ω) :
+    Tendsto (fun n ↦ ∫ x in Ω,
+      inner ℝ (v n x) ((f n).grad x) * φ x) atTop
+      (nhds (∫ x in Ω, inner ℝ (vLim x) (fLim.grad x) * φ x)) := by
+  have hprincipal :=
+    apm_m01J04_local_principal hΩ hf hv hdiv φ hφ htsupp
+  have hφtop : MemLp φ ⊤ (volume.restrict Ω) :=
+    hφ.1.continuous.memLp_of_hasCompactSupport hφ.2.1
+  have hq : MemLp (fun x ↦ φ x • vLim x) 2 (volume.restrict Ω) :=
+    hv.2.1.smul hφtop
+  have hfixed := hf.2 (fun x ↦ φ x • vLim x) hq
+  have hsum := hprincipal.add hfixed
+  convert hsum using 1
+  · funext n
+    have hvsub : MemLp (fun x ↦ v n x - vLim x) 2
+        (volume.restrict Ω) := (hv.1 n).sub hv.2.1
+    have hp : MemLp (fun x ↦ φ x • (f n).grad x) 2
+        (volume.restrict Ω) := (f n).grad_memLp.smul hφtop
+    have hgn : MemLp (f n).grad 2 (volume.restrict Ω) := (f n).grad_memLp
+    rw [← MeasureTheory.integral_add
+      (apm_m01J04_integrable_inner _ _ hvsub hp)
+      (apm_m01J04_integrable_inner _ _ hgn hq)]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [] with x
+    simp only [real_inner_smul_right, inner_sub_left]
+    rw [real_inner_comm ((f n).grad x) (vLim x)]
+    ring
+  · apply congrArg nhds
+    simp only [zero_add]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [] with x
+    rw [real_inner_smul_right,
+      real_inner_comm (fLim.grad x) (vLim x)]
+    ring
+
 theorem apm_m01j04 :
     (∀ (X : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
         [CompleteSpace X] (f : ℕ → X) (x : X)
@@ -4030,7 +4257,7 @@ theorem apm_m01j04 :
         Tendsto (fun n ↦ g n (f n)) atTop (nhds (h x))) ∧
     (∀ (d : ℕ) (Ω : Set (EuclideanSpace ℝ (Fin d))),
       apm_m01J04_HasRellichProperty d Ω →
-      (∀ u : ℕ → apm_m01J04_H1 d Ω,
+      ∀ u : ℕ → apm_m01J04_H1 d Ω,
         (∃ C : ℝ, ∀ n, apm_m01J04_H1norm (u n) ≤ C) →
           ∃ k : ℕ → ℕ, StrictMono k ∧
             ∃ w : apm_m01J04_H1 d Ω,
@@ -4040,19 +4267,20 @@ theorem apm_m01j04 :
                     (u (k n)).val x * inner ℝ ((u (k n)).grad x) (ψ x))
                     atTop (nhds (∫ x in Ω,
                       w.val x * inner ℝ (w.grad x) (ψ x)))) ∧
-      (∀ (f : ℕ → apm_m01J04_H1 d Ω) (fLim : apm_m01J04_H1 d Ω)
+    (∀ (d : ℕ) (Ω : Set (EuclideanSpace ℝ (Fin d))), IsOpen Ω →
+      ∀ (f : ℕ → apm_m01J04_H1 d Ω) (fLim : apm_m01J04_H1 d Ω)
           (v : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d))
           (vLim : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)),
         apm_m01J04_H1WeaklyConverges f fLim →
         apm_m01J04_L2WeaklyConverges (Ω := Ω) v vLim →
         apm_m01J04_divStronglyConverges (Ω := Ω) v vLim →
           ∀ φ : EuclideanSpace ℝ (Fin d) → ℝ,
-            apm_m01J04_isTestFunction Ω φ →
+            apm_m01J04_isTestFunction Ω φ → tsupport φ ⊆ Ω →
               Tendsto (fun n ↦ ∫ x in Ω,
                 inner ℝ (v n x) ((f n).grad x) * φ x) atTop
                 (nhds (∫ x in Ω,
-                  inner ℝ (vLim x) (fLim.grad x) * φ x)))) := by
-  constructor
+                  inner ℝ (vLim x) (fLim.grad x) * φ x))) := by
+  refine ⟨?_, ?_, ?_⟩
   · intro X _ _ _ f x g h hf hg
     have hpoint : ∀ q : X →L[ℝ] ℝ, ∃ C : ℝ, ∀ n : ℕ,
         ‖(NormedSpace.inclusionInDoubleDual ℝ X) (f n) q‖ ≤ C := by
@@ -4089,84 +4317,14 @@ theorem apm_m01j04 :
         _ = ε / 2 := by field_simp
     exact lt_of_le_of_lt (dist_triangle _ (h (f n)) _) (by
       simpa only [add_halves ε] using add_lt_add hfirst hnf)
-  · /-
-    Boundary for the Sobolev/compensated-compactness clauses: applying the
-    supplied `apm_m01J04_HasRellichProperty` yields a subsequence with weak
-    `H¹` and strong `L²` convergence. Part (b) then needs measurable Hölder
-    estimates showing multiplication by an `L∞` vector field preserves the
-    strong `L²` limit before invoking the weak×strong lemma above. Part (c)
-    additionally needs a fully formal Leibniz rule for the custom weak-gradient
-    structure, preservation of `apm_m01J04_isH1Zero` under multiplication by a
-    test function, and the integration-by-parts identity connecting
-    `apm_m01J04_divStronglyConverges` to the target integral. Repository and
-    Mathlib searches found no sibling or packaged theorem matching these custom
-    predicates.
-
-    Closer hop 1 closes the abstract weak×strong pairing conjunct above,
-    including weak boundedness via `banach_steinhaus` and the explicit operator
-    norm estimate. Further searches of `LEMMA-INDEX.md`, all fully closed
-    artifacts, `ConstructionTargets/`, and `YoungL2.lean` returned no theorem
-    connecting the bespoke `apm_m01J04_H1` weak-gradient record to multiplication
-    by test functions. Thus the remaining sorry is specifically the measurable
-    Hölder/Leibniz/integration-by-parts assembly for these frozen predicates,
-    rather than the functional-analytic pairing step.
-
-    Closer hop 2 inspected the nearby closed Hölder argument in sibling
-    `a96A03` and Mathlib's `MeasureTheory.Function.L2Space`.  The raw analytic
-    components do exist: `MemLp.mul'` proves an `L²×L²` product is in `L¹`,
-    `eLpNorm_smul_le_mul_eLpNorm` gives the required multiplier estimate, and
-    `L2.integrable_inner` handles vector-valued `L²` pairings.  These can close
-    the integrability and strong-multiplier portions of part (b), but they do
-    not connect raw functions to the custom weak-gradient record.
-
-    For part (c), source searches for weak-gradient multiplication,
-    distributional Leibniz rules, and compactly-supported multiplier closure
-    returned no declaration.  The precise remaining local development is to
-    construct the `apm_m01J04_H1` record for `f * φ`, prove the gradient
-    formula, preserve `apm_m01J04_isH1Zero` by multiplying its approximants,
-    establish a uniform `H1norm` bound, and rewrite the divergence test into
-    the target integral. No closed artifact or construction library packages
-    these record-level steps.
-    -/
-    intro d Ω hrel
-    by_cases hd : d = 0
-    · subst d
-      have hvec_zero (x : EuclideanSpace ℝ (Fin 0)) : x = 0 :=
-        Subsingleton.elim _ _
-      constructor
-      · intro u hu
-        obtain ⟨k, hk, w, hw⟩ := hrel u hu
-        refine ⟨k, hk, w, ?_⟩
-        intro ψ hψ
-        simpa [hvec_zero] using
-          (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ)) atTop (nhds 0))
-      · intro f fLim v vLim hf hv hdiv φ hφ
-        simpa [hvec_zero] using
-          (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ)) atTop (nhds 0))
-    · /-
-      Closer hop 3 closes both Sobolev/compensated-compactness clauses when
-      `d = 0`: all gradient-valued fields lie in a subsingleton Euclidean
-      space, hence every displayed pairing is zero. The remaining branch has
-      `0 < d` and still requires the record-level multiplier/Leibniz
-      construction described above. Mathlib's raw `MemLp.mul'` and
-      `L2.integrable_inner` estimates do not manufacture that custom record.
-      -/
-      constructor
-      · intro u hu
-        obtain ⟨k, hk, w, hwweak, hwstrong⟩ := hrel u hu
-        obtain ⟨C, hC⟩ := apm_m01J04_uniform_grad_norm
-          (u := fun n ↦ u (k n)) (by
-            obtain ⟨C, hC⟩ := hu
-            exact ⟨C, fun n ↦ hC (k n)⟩)
-        refine ⟨k, hk, w, fun ψ hψ ↦ ?_⟩
-        exact apm_m01J04_rellich_pairing hwweak hwstrong C hC ψ hψ
-      · /-
-        The remaining positive-dimensional div-curl clause uses
-        `apm_m01J04_bridge_1`; its only unresolved prerequisite is the local
-        Meyers--Serrin theorem isolated as
-        `apm_m01J04_localization_isH1Zero`.
-        -/
-        intro f fLim v vLim hf hv hdiv φ hφ
-        exact apm_m01J04_compensated_pairing hrel hf hv hdiv φ hφ
+  · intro d Ω hrel u hu
+    obtain ⟨k, hk, w, hwweak, hwstrong⟩ := hrel u hu
+    obtain ⟨C, hC⟩ := apm_m01J04_uniform_grad_norm
+      (u := fun n ↦ u (k n)) (by
+        obtain ⟨C, hC⟩ := hu
+        exact ⟨C, fun n ↦ hC (k n)⟩)
+    exact ⟨k, hk, w, fun ψ hψ ↦ apm_m01J04_rellich_pairing hwweak hwstrong C hC ψ hψ⟩
+  · intro d Ω hΩ f fLim v vLim hf hv hdiv φ hφ htsupp
+    exact apm_m01J04_local_compensated_pairing hΩ hf hv hdiv φ hφ htsupp
 
 #print axioms apm_m01j04

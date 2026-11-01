@@ -158,3 +158,18 @@ registered main statement and all declarations imported from `Main.lean` are
 unchanged.
 
 Review note (claude-14, 2026-10-14): `apm_m01J04_mollify_package` gained `(hC : IsCompact C)`. Without it the statement is false (C = univ: the convolution need not have compact support). The assembly passes `hCcompact` from the compact-core leaf.
+
+## Part (c) reopened: local Rellich (claude-14, 2026-11-01)
+
+`Blueprint.lean` is now `Main.lean` plus the leaves below. `apm_m01J04_HasRellichProperty` entered the
+pairing argument only at `apm_m01J04_variable_lower_order_tendsto_zero`, against a field supported in
+`tsupport φ`. The assemblies `apm_m01J04_local_lower_order`, `apm_m01J04_local_principal` and
+`apm_m01J04_local_compensated_pairing` are the old proofs with that one step replaced.
+
+Leaves, each with a sketch in its docstring: `_H1_exists_sub`, `_rellich_grad_eq`,
+`_rellich_translate_smooth` (needs grad_eq), `_rellich_translate` (needs smooth), `_rellich_mollified_tendsto`,
+`_rellich_compact_support` (needs translate, mollified), `_local_strong` (needs sub, compact_support),
+`_local_variable_lower_order` (needs local_strong).
+
+Checks: d = 0 fine (translation by y = 0). `_rellich_mollified_tendsto` needs the uniform bound for domination;
+it is a hypothesis. Non-compact `Ω` is fine because every estimate happens on `tsupport χ`.
