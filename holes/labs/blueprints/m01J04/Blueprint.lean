@@ -4325,7 +4325,119 @@ theorem apm_m01J04_rellich_translate {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
     (hval : Function.support u.val ⊆ K) (hgrad : Function.support u.grad ⊆ K) (y : EuclideanSpace ℝ (Fin d)) :
     (eLpNorm (fun x ↦ u.val (x - y) - u.val x) 2 volume).toReal ≤
       ‖y‖ * (eLpNorm u.grad 2 volume).toReal := by
-  sorry
+  have huval : MemLp u.val 2 volume := by
+    simpa only [Measure.restrict_univ] using u.val_memLp
+  have hugrad : MemLp u.grad 2 volume := by
+    simpa only [Measure.restrict_univ] using u.grad_memLp
+  apply le_of_forall_pos_le_add
+  intro ε hε
+  have hynonneg : 0 ≤ ‖y‖ := norm_nonneg y
+  have hy3 : (0 : ℝ) < ‖y‖ + 3 := by linarith
+  obtain ⟨a, hasmooth, hacompact, -, hdist⟩ :=
+    apm_m01J04_core_exists_smooth_global_approx_aux_mollify u hval hgrad
+      (zero_lt_one : (0 : ℝ) < 1) (div_pos hε hy3)
+  have haval : MemLp a.val 2 volume := by
+    simpa only [Measure.restrict_univ] using a.val_memLp
+  have hagrad : MemLp a.grad 2 volume := by
+    simpa only [Measure.restrict_univ] using a.grad_memLp
+  simp only [apm_m01J04_H1dist, Measure.restrict_univ] at hdist
+  set Dv := eLpNorm (fun x ↦ a.val x - u.val x) 2 volume with hDveq
+  set Dg := eLpNorm (fun x ↦ a.grad x - u.grad x) 2 volume with hDgeq
+  set La := eLpNorm (fun x ↦ a.val (x - y) - a.val x) 2 volume with hLaeq
+  set Ag := eLpNorm a.grad 2 volume with hAgeq
+  set Ug := eLpNorm u.grad 2 volume with hUgeq
+  set Lu := eLpNorm (fun x ↦ u.val (x - y) - u.val x) 2 volume with hLueq
+  have hDvt : Dv ≠ ⊤ := (haval.sub huval).eLpNorm_ne_top
+  have hDgt : Dg ≠ ⊤ := (hagrad.sub hugrad).eLpNorm_ne_top
+  have hUgt : Ug ≠ ⊤ := hugrad.eLpNorm_ne_top
+  have hp2 : (1 : ℝ≥0∞) ≤ 2 := by norm_num
+  have hTu :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+      u.val huval y
+  have hTa :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+      a.val haval y
+  have hTd :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+      (fun x ↦ a.val x - u.val x) (haval.sub huval) y
+  have m1 : MemLp (fun x ↦ u.val (x - y) - a.val (x - y)) 2 volume :=
+    hTu.1.sub hTa.1
+  have m2 : MemLp (fun x ↦ a.val (x - y) - a.val x) 2 volume :=
+    hTa.1.sub haval
+  have m3 : MemLp (fun x ↦ a.val x - u.val x) 2 volume := haval.sub huval
+  have hLat : La ≠ ⊤ := m2.eLpNorm_ne_top
+  have hTd' : eLpNorm (fun x ↦ u.val (x - y) - a.val (x - y)) 2 volume = Dv := by
+    have hneg : (fun x ↦ u.val (x - y) - a.val (x - y)) =
+        -(fun x ↦ a.val (x - y) - u.val (x - y)) := by
+      funext x
+      simp only [Pi.neg_apply]
+      ring
+    rw [hneg, eLpNorm_neg]
+    exact hTd.2
+  have htri : Lu ≤ Dv + (La + Dv) := by
+    have hdecomp : (fun x ↦ u.val (x - y) - u.val x) =
+        fun x ↦ (u.val (x - y) - a.val (x - y)) +
+          ((a.val (x - y) - a.val x) + (a.val x - u.val x)) := by
+      funext x
+      ring
+    rw [hLueq, hdecomp]
+    calc eLpNorm (fun x ↦ (u.val (x - y) - a.val (x - y)) +
+            ((a.val (x - y) - a.val x) + (a.val x - u.val x))) 2 volume
+        ≤ eLpNorm (fun x ↦ u.val (x - y) - a.val (x - y)) 2 volume +
+            eLpNorm (fun x ↦ (a.val (x - y) - a.val x) +
+              (a.val x - u.val x)) 2 volume :=
+          eLpNorm_add_le m1.1 (m2.add m3).1 hp2
+      _ ≤ eLpNorm (fun x ↦ u.val (x - y) - a.val (x - y)) 2 volume +
+            (La + Dv) :=
+          add_le_add le_rfl (eLpNorm_add_le m2.1 m3.1 hp2)
+      _ = Dv + (La + Dv) := by rw [hTd']
+  have hgtri : Ag ≤ Dg + Ug := by
+    have hgdecomp : eLpNorm a.grad 2 volume =
+        eLpNorm (fun x ↦ (a.grad x - u.grad x) + u.grad x) 2 volume := by
+      congr 2
+      funext x
+      simp
+    calc Ag = eLpNorm (fun x ↦ (a.grad x - u.grad x) + u.grad x) 2 volume := by
+          rw [hAgeq, hgdecomp]
+      _ ≤ Dg + Ug := eLpNorm_add_le (hagrad.sub hugrad).1 hugrad.1 hp2
+  have hsmooth := apm_m01J04_rellich_translate_smooth a hasmooth hacompact y
+  rw [← hAgeq, ← hLaeq] at hsmooth
+  have hLureal : Lu.toReal ≤ Dv.toReal + (La.toReal + Dv.toReal) := by
+    calc Lu.toReal ≤ (Dv + (La + Dv)).toReal :=
+          ENNReal.toReal_mono
+            (ENNReal.add_ne_top.2 ⟨hDvt,
+              ENNReal.add_ne_top.2 ⟨hLat, hDvt⟩⟩) htri
+      _ = Dv.toReal + (La.toReal + Dv.toReal) := by
+          rw [ENNReal.toReal_add hDvt (ENNReal.add_ne_top.2 ⟨hLat, hDvt⟩),
+            ENNReal.toReal_add hLat hDvt]
+  have hAgreal : Ag.toReal ≤ Dg.toReal + Ug.toReal := by
+    calc Ag.toReal ≤ (Dg + Ug).toReal :=
+          ENNReal.toReal_mono (ENNReal.add_ne_top.2 ⟨hDgt, hUgt⟩) hgtri
+      _ = Dg.toReal + Ug.toReal := ENNReal.toReal_add hDgt hUgt
+  have hmul : ‖y‖ * Ag.toReal ≤ ‖y‖ * Dg.toReal + ‖y‖ * Ug.toReal := by
+    rw [← mul_add]
+    exact mul_le_mul_of_nonneg_left hAgreal hynonneg
+  have hkey : 2 * Dv.toReal + ‖y‖ * Dg.toReal < ε := by
+    have h1 : 2 * Dv.toReal + ‖y‖ * Dg.toReal ≤
+        (‖y‖ + 2) * (Dv.toReal + Dg.toReal) := by
+      have hDv0 : 0 ≤ Dv.toReal := ENNReal.toReal_nonneg
+      have hDg0 : 0 ≤ Dg.toReal := ENNReal.toReal_nonneg
+      nlinarith
+    have h2 : (‖y‖ + 2) * (Dv.toReal + Dg.toReal) < ε := by
+      have h3 : (‖y‖ + 2) * (Dv.toReal + Dg.toReal) <
+          (‖y‖ + 2) * (ε / (‖y‖ + 3)) :=
+        mul_lt_mul_of_pos_left hdist (by linarith)
+      have h4 : (‖y‖ + 2) * (ε / (‖y‖ + 3)) < ε := by
+        have hfrac : (‖y‖ + 2) / (‖y‖ + 3) < 1 := by
+          rw [div_lt_one hy3]
+          linarith
+        calc (‖y‖ + 2) * (ε / (‖y‖ + 3)) = ε * ((‖y‖ + 2) / (‖y‖ + 3)) := by
+              ring
+          _ < ε * 1 := mul_lt_mul_of_pos_left hfrac hε
+          _ = ε := mul_one ε
+      linarith
+    linarith
+  linarith
 
 /-- Seat: a fixed mollifier turns weak convergence to zero into strong convergence. Pointwise,
 `κ ⋆ u n` at `x` is the pairing of `u n` with `s ↦ κ (x - s)`, so it tends to `0`; it is bounded by
