@@ -151,7 +151,46 @@ theorem t99J02_phi_chord (x : ℝ) (hx : |x| ≤ 1) :
 the closed upper half plane. -/
 theorem t99J02_circle_param (s : ℂ) (hs : ‖s‖ = 1) :
     ∃ x : ℝ, |x| ≤ 1 ∧ s = (⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2 := by
-  sorry
+  have hs' : s.re ^ 2 + s.im ^ 2 = 1 := by
+    have hnorm := Complex.sq_norm s
+    rw [hs, Complex.normSq_apply] at hnorm
+    nlinarith
+  set y : ℝ := √((1 - s.re) / 2)
+  have hre_le : s.re ≤ 1 := by
+    nlinarith [sq_nonneg (s.re - 1), sq_nonneg s.im]
+  have hy0 : 0 ≤ y := Real.sqrt_nonneg _
+  have hy2 : y ^ 2 = (1 - s.re) / 2 := by
+    exact Real.sq_sqrt (by linarith)
+  by_cases hy : y = 0
+  · have hre : s.re = 1 := by nlinarith
+    have him : s.im = 0 := by nlinarith [sq_nonneg s.im]
+    refine ⟨1, by norm_num, ?_⟩
+    apply Complex.ext
+    · norm_num [hre, pow_two, Complex.mul_re]
+    · norm_num [him, pow_two, Complex.mul_im]
+  · let x := s.im / (2 * y)
+    have hxy : 2 * x * y = s.im := by
+      dsimp [x]
+      field_simp
+    have hx2 : x ^ 2 = (1 + s.re) / 2 := by
+      dsimp [x]
+      field_simp [hy]
+      nlinarith [hy2]
+    have hx_le : |x| ≤ 1 := by
+      rw [← sq_le_one_iff_abs_le_one]
+      rw [hx2]
+      nlinarith [sq_nonneg (s.re + 1), sq_nonneg s.im]
+    have hsqrt : √(1 - x ^ 2) = y := by
+      rw [← Real.sqrt_sq hy0]
+      congr 1
+      nlinarith [hx2, hy2]
+    refine ⟨x, hx_le, ?_⟩
+    rw [hsqrt]
+    apply Complex.ext
+    · simp [pow_two, Complex.mul_re]
+      nlinarith [hx2, hy2]
+    · simp [pow_two, Complex.mul_im]
+      nlinarith
 
 /-- The image of the closed upper half disk misses the open hole. Write `ζ = x + i y'` for the
 inner point, `y' ≥ √(1-x²)/2`. If `ζ² = ell u`, `‖u‖ < 1`, take the root `u = v²`, `v = a + i b`,
