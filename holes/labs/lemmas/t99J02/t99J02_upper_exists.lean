@@ -1103,12 +1103,110 @@ theorem t99J02_fibre (z z' : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z :
 /-- The collar. Its large map is `e⁻¹ ∘ f ∘ ell ∘ stretch ∘ chi`, for `e`, `f` from
 `t95J03_torus_bridge_spec`; injective by `t99J02_torus_injOn`, and an embedding because the domain
 is compact and `Surface true 1` is Hausdorff. -/
+lemma t99J02_collar_exists_aux_ell_continuous : Continuous t99J02_ell := by
+  exact Complex.equivRealProdCLM.symm.continuous.comp
+    (((continuous_const.mul continuous_norm).add
+      (continuous_const.mul Complex.continuous_re)).prodMk
+        (Complex.continuous_im.div_const 2))
+
+lemma t99J02_collar_exists_aux_ell_mem (u : ℂ) (hu : ‖u‖ ≤ 1) :
+    t99J02_ell u ∈ Metric.closedBall (0 : ℂ) 1 := by
+  rw [mem_closedBall_zero_iff, t99J02_ell_norm]
+  have hre : u.re ≤ ‖u‖ := le_trans (le_abs_self _) (Complex.abs_re_le_norm u)
+  nlinarith
+
 theorem t99J02_collar_exists :
     ∃ c : BallCollar 2 (Surface true 1),
       ∀ u : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1,
         ∃ h : t99J02_ell (t99J02_chi u.1) ∈ Metric.closedBall (0 : ℂ) 1,
           c.smallMap u = surfaceQuotient true 1 ⟨t99J02_ell (t99J02_chi u.1), h⟩ := by
-  sorry
+  obtain ⟨e, he⟩ := t95J03_torus_bridge_spec
+  let large : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 2 →
+      Surface true 1 := fun u =>
+    e.symm (t95J03_torus_bridge_aux_f
+      (t99J02_ell (t99J02_stretch (t99J02_chi u.1))))
+  let small : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1 →
+      Surface true 1 := fun u =>
+    e.symm (t95J03_torus_bridge_aux_f (t99J02_ell (t99J02_chi u.1)))
+  have hlarge_cont : Continuous large := by
+    exact e.symm.continuous.comp
+      (t95J03_torus_bridge_aux_f_continuous.comp
+        (t99J02_collar_exists_aux_ell_continuous.comp
+          (t99J02_stretch_spec.1.comp
+            (t99J02_chi_spec.1.comp continuous_subtype_val))))
+  have hsmall_cont : Continuous small := by
+    exact e.symm.continuous.comp
+      (t95J03_torus_bridge_aux_f_continuous.comp
+        (t99J02_collar_exists_aux_ell_continuous.comp
+          (t99J02_chi_spec.1.comp continuous_subtype_val)))
+  have hlarge_inj : Function.Injective large := by
+    intro u v huv
+    have hf : t95J03_torus_bridge_aux_f
+        (t99J02_ell (t99J02_stretch (t99J02_chi u.1))) =
+        t95J03_torus_bridge_aux_f
+          (t99J02_ell (t99J02_stretch (t99J02_chi v.1))) :=
+      e.symm.injective huv
+    have hu2 : ‖t99J02_chi u.1‖ ≤ 2 := by
+      rw [t99J02_chi_spec.2.2.1]
+      exact mem_closedBall_zero_iff.mp u.2
+    have hv2 : ‖t99J02_chi v.1‖ ≤ 2 := by
+      rw [t99J02_chi_spec.2.2.1]
+      exact mem_closedBall_zero_iff.mp v.2
+    have hell := t99J02_torus_injOn _ _
+      (t99J02_stretch_spec.2.2.1 _ hu2)
+      (t99J02_stretch_spec.2.2.1 _ hv2) hf
+    have hs : t99J02_stretch (t99J02_chi u.1) =
+        t99J02_stretch (t99J02_chi v.1) := t99J02_ell_injective hell
+    apply Subtype.ext
+    apply t99J02_chi_spec.2.1
+    exact t99J02_stretch_spec.2.1
+      (mem_closedBall_zero_iff.mpr hu2) (mem_closedBall_zero_iff.mpr hv2) hs
+  have hsmall_inj : Function.Injective small := by
+    intro u v huv
+    have hf : t95J03_torus_bridge_aux_f (t99J02_ell (t99J02_chi u.1)) =
+        t95J03_torus_bridge_aux_f (t99J02_ell (t99J02_chi v.1)) :=
+      e.symm.injective huv
+    have hu1 : ‖t99J02_chi u.1‖ ≤ 1 := by
+      rw [t99J02_chi_spec.2.2.1]
+      exact mem_closedBall_zero_iff.mp u.2
+    have hv1 : ‖t99J02_chi v.1‖ ≤ 1 := by
+      rw [t99J02_chi_spec.2.2.1]
+      exact mem_closedBall_zero_iff.mp v.2
+    have hell := t99J02_torus_injOn _ _ (by linarith) (by linarith) hf
+    apply Subtype.ext
+    exact t99J02_chi_spec.2.1 (t99J02_ell_injective hell)
+  have hcompat : large ∘ unitToLarge 2 = small := by
+    funext u
+    simp only [large, small, Function.comp_apply, unitToLarge]
+    rw [t99J02_stretch_spec.2.2.2]
+    rw [t99J02_chi_spec.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2
+  have hlarge_embedding : Topology.IsEmbedding large := by
+    have hmid : Topology.IsEmbedding (e ∘ large) :=
+      ((e.continuous.comp hlarge_cont).isClosedEmbedding
+        (e.injective.comp hlarge_inj)).isEmbedding
+    simpa [Function.comp_def] using e.symm.isEmbedding.comp hmid
+  have hsmall_embedding : Topology.IsEmbedding small := by
+    have hmid : Topology.IsEmbedding (e ∘ small) :=
+      ((e.continuous.comp hsmall_cont).isClosedEmbedding
+        (e.injective.comp hsmall_inj)).isEmbedding
+    simpa [Function.comp_def] using e.symm.isEmbedding.comp hmid
+  let c : BallCollar 2 (Surface true 1) :=
+    { smallMap := small
+      largeMap := large
+      smallEmbedding := hsmall_embedding
+      largeEmbedding := hlarge_embedding
+      compatible := hcompat }
+  refine ⟨c, ?_⟩
+  intro u
+  have hu : ‖t99J02_chi u.1‖ ≤ 1 := by
+    rw [t99J02_chi_spec.2.2.1]
+    exact mem_closedBall_zero_iff.mp u.2
+  let h := t99J02_collar_exists_aux_ell_mem _ hu
+  refine ⟨h, ?_⟩
+  change e.symm (t95J03_torus_bridge_aux_f (t99J02_ell (t99J02_chi u.1))) = _
+  apply e.injective
+  rw [e.apply_symm_apply, he]
 
 /-- The same collar precomposed with the reflection. -/
 def t99J02_collar_reflect_aux_homeomorph (r : ℝ) :
@@ -1368,7 +1466,73 @@ theorem t99J02_chord_holds
 /-- Pasting along the chord. -/
 theorem t99J02_G_continuous (hg₁ : Continuous g₁) (hg₂ : Continuous g₂)
     (hch : t99J02_Chord g₁ g₂) : Continuous (t99J02_G g₁ g₂) := by
-  sorry
+  let U : Set ConstructionTargets.Surfaces.Disk := {z | 0 ≤ (z : ℂ).im}
+  let L : Set ConstructionTargets.Surfaces.Disk := {z | (z : ℂ).im ≤ 0}
+  have him : Continuous (fun z : ConstructionTargets.Surfaces.Disk => (z : ℂ).im) :=
+    Complex.continuous_im.comp continuous_subtype_val
+  have hU : IsClosed U := by
+    exact isClosed_le continuous_const him
+  have hL : IsClosed L := by
+    exact isClosed_le him continuous_const
+  have hcU : ContinuousOn (t99J02_G g₁ g₂) U := by
+    rw [continuousOn_iff_continuous_restrict]
+    have hleft : Continuous (fun z : U =>
+        (Sum.inl (g₁ ⟨z.1, by
+          have hz := z.2
+          change 0 ≤ (z.1 : ℂ).im at hz
+          exact hz⟩) : c₁.Punctured ⊕ c₂.Punctured)) :=
+      continuous_inl.comp (hg₁.comp (continuous_subtype_val.subtype_mk _))
+    have hc : Continuous (fun z : U =>
+        t99J02_mk c₁ c₂ (Sum.inl
+          (g₁ ⟨z.1, by
+            have hz := z.2
+            change 0 ≤ (z.1 : ℂ).im at hz
+            exact hz⟩))) :=
+      (t99J02_continuous_mk (c₁ := c₁) (c₂ := c₂)).comp hleft
+    convert hc using 1
+    funext z
+    change t99J02_G g₁ g₂ z.1 = _
+    rw [t99J02_G, dif_pos]
+  have hneg : Continuous t99J02_neg := by
+    exact (continuous_neg.comp continuous_subtype_val).subtype_mk _
+  have hcL : ContinuousOn (t99J02_G g₁ g₂) L := by
+    rw [continuousOn_iff_continuous_restrict]
+    have htoUpper : Continuous (fun z : L =>
+        (⟨t99J02_neg z.1, by
+          have hz := z.2
+          change (z.1 : ℂ).im ≤ 0 at hz
+          simpa [t99J02_neg] using hz⟩ : t99J02_Upper)) :=
+      (hneg.comp continuous_subtype_val).subtype_mk _
+    have hright : Continuous (fun z : L =>
+        (Sum.inr (g₂ ⟨t99J02_neg z.1, by
+          have hz := z.2
+          change (z.1 : ℂ).im ≤ 0 at hz
+          simpa [t99J02_neg] using hz⟩) : c₁.Punctured ⊕ c₂.Punctured)) :=
+      continuous_inr.comp (hg₂.comp htoUpper)
+    have hc : Continuous (fun z : L =>
+        t99J02_mk c₁ c₂ (Sum.inr
+          (g₂ ⟨t99J02_neg z.1, by
+            have hz := z.2
+            change (z.1 : ℂ).im ≤ 0 at hz
+            simpa [t99J02_neg] using hz⟩))) :=
+      (t99J02_continuous_mk (c₁ := c₁) (c₂ := c₂)).comp hright
+    convert hc using 1
+    funext z
+    change t99J02_G g₁ g₂ z.1 = _
+    rw [t99J02_G]
+    by_cases hz : 0 ≤ (z.1 : ℂ).im
+    · rw [dif_pos hz]
+      have hzl := z.2
+      change (z.1 : ℂ).im ≤ 0 at hzl
+      exact hch z.1 (le_antisymm hzl hz)
+    · rw [dif_neg hz]
+  rw [← continuousOn_univ]
+  have hul : U ∪ L = Set.univ := by
+    ext z
+    simp only [U, L, Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    exact le_total 0 (z : ℂ).im
+  rw [← hul]
+  exact hcU.union_of_isClosed hcL hU hL
 
 /-- On the closed lower half `G` is `g₂ ∘ neg`, including on the chord. -/
 theorem t99J02_G_lower (hch : t99J02_Chord g₁ g₂) (z : ConstructionTargets.Surfaces.Disk) (h : (z : ℂ).im ≤ 0) :
