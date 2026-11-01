@@ -413,7 +413,43 @@ lemma apm_t01J06_rotation_derivative_integral_aux_hasDeriv (k : Fin 3)
     (x : apm_t01J06_E3) :
     HasDerivAt (fun t : ℝ ↦ apm_t01J06_rotation_derivative_integral_aux_rot k t x)
       (apm_t01J06_rotField k x) 0 := by
-  sorry
+  fin_cases k
+  · let a : apm_t01J06_E3 := WithLp.toLp 2 ![0, x 1, x 2]
+    let b : apm_t01J06_E3 := WithLp.toLp 2 ![0, -x 2, x 1]
+    let c : apm_t01J06_E3 := WithLp.toLp 2 ![x 0, 0, 0]
+    have h := ((hasDerivAt_const (x := 0) c).add
+      ((Real.hasDerivAt_cos 0).smul_const a)).add
+        ((Real.hasDerivAt_sin 0).smul_const b)
+    convert h using 1
+    · funext t
+      ext i
+      fin_cases i <;> simp [a, b, c, apm_t01J06_rotation_derivative_integral_aux_rot] <;> ring
+    · ext i
+      fin_cases i <;> simp [a, b, c, apm_t01J06_rotField]
+  · let a : apm_t01J06_E3 := WithLp.toLp 2 ![x 0, 0, x 2]
+    let b : apm_t01J06_E3 := WithLp.toLp 2 ![x 2, 0, -x 0]
+    let c : apm_t01J06_E3 := WithLp.toLp 2 ![0, x 1, 0]
+    have h := ((hasDerivAt_const (x := 0) c).add
+      ((Real.hasDerivAt_cos 0).smul_const a)).add
+        ((Real.hasDerivAt_sin 0).smul_const b)
+    convert h using 1
+    · funext t
+      ext i
+      fin_cases i <;> simp [a, b, c, apm_t01J06_rotation_derivative_integral_aux_rot] <;> ring
+    · ext i
+      fin_cases i <;> simp [a, b, c, apm_t01J06_rotField]
+  · let a : apm_t01J06_E3 := WithLp.toLp 2 ![x 0, x 1, 0]
+    let b : apm_t01J06_E3 := WithLp.toLp 2 ![-x 1, x 0, 0]
+    let c : apm_t01J06_E3 := WithLp.toLp 2 ![0, 0, x 2]
+    have h := ((hasDerivAt_const (x := 0) c).add
+      ((Real.hasDerivAt_cos 0).smul_const a)).add
+        ((Real.hasDerivAt_sin 0).smul_const b)
+    convert h using 1
+    · funext t
+      ext i
+      fin_cases i <;> simp [a, b, c, apm_t01J06_rotation_derivative_integral_aux_rot] <;> ring
+    · ext i
+      fin_cases i <;> simp [a, b, c, apm_t01J06_rotField]
 
 lemma apm_t01J06_rotation_derivative_integral_aux_key (k : Fin 3)
     (f : apm_t01J06_E3 → ℝ) (hf : ContDiff ℝ 1 f) :
