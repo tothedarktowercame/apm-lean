@@ -482,12 +482,69 @@ theorem apm_t01J06_closed_extension_integral_zero
   sorry
 
 /-- LIBRARY: radial retraction to the sphere, followed by first projection. -/
+def apm_t01J06_exists_closed_product_extension_aux_scalar
+    (x : apm_t01J06_E3) : ℝ :=
+  (x 2 / ‖x‖ + 3) * (x 2 / ‖x‖)
+
+def apm_t01J06_exists_closed_product_extension_aux_volume :
+    apm_t01J06_E3 [⋀^Fin 3]→L[ℝ] ℝ where
+  toAlternatingMap := Matrix.detRowAlternating.compLinearMap
+    (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 ↦ ℝ)).toLinearMap
+  cont := by
+    change Continuous (fun v : Fin 3 → apm_t01J06_E3 ↦ Matrix.det (fun i j ↦ v i j))
+    fun_prop
+
+def apm_t01J06_exists_closed_product_extension_aux_solidAngle
+    (x : apm_t01J06_E3) : apm_t01J06_E3 [⋀^Fin 2]→L[ℝ] ℝ :=
+  (‖x‖ ^ 3)⁻¹ •
+    apm_t01J06_exists_closed_product_extension_aux_volume.curryLeft x
+
+def apm_t01J06_exists_closed_product_extension_aux_eta :
+    apm_t01J06_AmbientForm2 := fun x ↦
+  apm_t01J06_exists_closed_product_extension_aux_scalar x •
+    apm_t01J06_exists_closed_product_extension_aux_solidAngle x
+
+def apm_t01J06_exists_closed_product_extension_aux_Z :
+    apm_t01J06_AmbientProductForm2 := fun x ↦
+  (apm_t01J06_exists_closed_product_extension_aux_eta x.1).compContinuousLinearMap
+    (ContinuousLinearMap.fst ℝ apm_t01J06_E3 apm_t01J06_E2)
+
+lemma apm_t01J06_exists_closed_product_extension_aux_smooth_closed :
+    ContDiffOn ℝ (⊤ : ℕ∞) apm_t01J06_exists_closed_product_extension_aux_Z
+      {x : apm_t01J06_E5 | x.1 ≠ 0} ∧
+    ∀ x ∈ {x : apm_t01J06_E5 | x.1 ≠ 0},
+      extDeriv apm_t01J06_exists_closed_product_extension_aux_Z x = 0 := by
+  sorry
+
+lemma apm_t01J06_exists_closed_product_extension_aux_restrict
+    (omega : apm_t01J06_AmbientForm2) (homega : apm_t01J06_isOmega omega)
+    (alpha : apm_t01J06_SphereForm2)
+    (halpha : apm_t01J06_isInclusionPullback omega alpha)
+    (p : apm_t01J06_S1) :
+    apm_t01J06_isJPullback p
+      (apm_t01J06_productRestriction
+        apm_t01J06_exists_closed_product_extension_aux_Z) alpha := by
+  sorry
+
 theorem apm_t01J06_exists_closed_product_extension
     (omega : apm_t01J06_AmbientForm2) (homega : apm_t01J06_isOmega omega)
     (alpha : apm_t01J06_SphereForm2)
     (halpha : apm_t01J06_isInclusionPullback omega alpha)
     (p : apm_t01J06_S1) : apm_t01J06_IsClosedProductExtension p alpha := by
-  sorry
+  refine ⟨{x : apm_t01J06_E5 | x.1 ≠ 0},
+    apm_t01J06_exists_closed_product_extension_aux_Z, ?_, ?_,
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed.1,
+    apm_t01J06_exists_closed_product_extension_aux_smooth_closed.2, ?_⟩
+  · exact isOpen_ne.preimage continuous_fst
+  · intro qp
+    change (qp.1 : apm_t01J06_E3) ≠ 0
+    intro h
+    have hnorm : ‖(qp.1 : apm_t01J06_E3)‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_eq_norm] using qp.1.property
+    rw [h, norm_zero] at hnorm
+    norm_num at hnorm
+  · exact apm_t01J06_exists_closed_product_extension_aux_restrict
+      omega homega alpha halpha p
 
 theorem apm_t01j06
     (omega : apm_t01J06_AmbientForm2) (homega : apm_t01J06_isOmega omega)
