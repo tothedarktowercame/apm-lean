@@ -26,47 +26,47 @@ open scoped ENNReal
 
 noncomputable section
 
-def apm_m93J02_quotient {n : ℕ} {U : Set (Fin n → ℝ)} (α : ℝ)
+def apm_m93J02_quotient {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (α : ℝ)
     (f : U → ℝ) (y z : U) : ℝ≥0∞ :=
-  ENNReal.ofReal (|f z - f y| / dist (z : Fin n → ℝ) y ^ α)
+  ENNReal.ofReal (|f z - f y| / dist (z : EuclideanSpace ℝ (Fin n)) y ^ α)
 
 /-- The infinitesimal/local Hölder seminorm from the source. -/
-def apm_m93J02_localSeminorm {n : ℕ} (U : Set (Fin n → ℝ))
+def apm_m93J02_localSeminorm {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n)))
     (α : ℝ) (f : U → ℝ) : ℝ≥0∞ :=
   ⨆ x : U,
     Filter.limsup
       (fun ε : ℝ ↦
         ⨆ y : U, ⨆ z : U,
-          if dist (y : Fin n → ℝ) x ≤ ε ∧
-              dist (z : Fin n → ℝ) x ≤ ε ∧ z ≠ y then
+          if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ ε ∧
+              dist (z : EuclideanSpace ℝ (Fin n)) x ≤ ε ∧ z ≠ y then
             apm_m93J02_quotient α f y z
           else 0)
       (nhdsWithin 0 (Ioi 0))
 
 /-- The usual global Hölder seminorm. -/
-def apm_m93J02_globalSeminorm {n : ℕ} (U : Set (Fin n → ℝ))
+def apm_m93J02_globalSeminorm {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n)))
     (α : ℝ) (f : U → ℝ) : ℝ≥0∞ :=
   ⨆ y : U, ⨆ z : U,
     if z ≠ y then apm_m93J02_quotient α f y z else 0
 
-def apm_m93J02_supNorm {n : ℕ} {U : Set (Fin n → ℝ)}
+def apm_m93J02_supNorm {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))}
     (f : U → ℝ) : ℝ≥0∞ :=
   ⨆ x : U, ENNReal.ofReal |f x|
 
-def apm_m93J02_holderFunctions {n : ℕ} (U : Set (Fin n → ℝ))
+def apm_m93J02_holderFunctions {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n)))
     (α : ℝ) : Set (U → ℝ) :=
   {f | apm_m93J02_globalSeminorm U α f ≠ ⊤}
 
-def apm_m93J02_localNorm {n : ℕ} (U : Set (Fin n → ℝ))
+def apm_m93J02_localNorm {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n)))
     (α : ℝ) (f : U → ℝ) : ℝ :=
   (apm_m93J02_localSeminorm U α f + apm_m93J02_supNorm f).toReal
 
-def apm_m93J02_globalNorm {n : ℕ} (U : Set (Fin n → ℝ))
+def apm_m93J02_globalNorm {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n)))
     (α : ℝ) (f : U → ℝ) : ℝ :=
   (apm_m93J02_globalSeminorm U α f + apm_m93J02_supNorm f).toReal
 
 private lemma apm_m93J02_eq_zero_of_supNorm_eq_zero
-    {n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ}
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} {f : U → ℝ}
     (hf : apm_m93J02_supNorm f = 0) : f = 0 := by
   funext x
   have hx : ENNReal.ofReal |f x| ≤ apm_m93J02_supNorm f := by
@@ -79,7 +79,7 @@ private lemma apm_m93J02_eq_zero_of_supNorm_eq_zero
 /-- Definiteness is independent of the seminorm algebra once the encoded
 ENNReal norm sum is known to be finite. -/
 private lemma apm_m93J02_eq_zero_of_toReal_add_eq_zero
-    {n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ} {s : ℝ≥0∞}
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} {f : U → ℝ} {s : ℝ≥0∞}
     (hfinite : s + apm_m93J02_supNorm f ≠ ⊤)
     (hzero : (s + apm_m93J02_supNorm f).toReal = 0) : f = 0 := by
   have hsum : s + apm_m93J02_supNorm f = 0 :=
@@ -87,7 +87,7 @@ private lemma apm_m93J02_eq_zero_of_toReal_add_eq_zero
   exact apm_m93J02_eq_zero_of_supNorm_eq_zero (add_eq_zero.mp hsum).2
 
 private lemma apm_m93J02_quotient_le_globalSeminorm
-    {n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ} {y z : U} {alpha : ℝ} :
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} {f : U → ℝ} {y z : U} {alpha : ℝ} :
     apm_m93J02_quotient alpha f y z ≤
       apm_m93J02_globalSeminorm U alpha f := by
   by_cases hyz : z = y
@@ -97,7 +97,7 @@ private lemma apm_m93J02_quotient_le_globalSeminorm
       simp [hyz]
 
 private lemma apm_m93J02_holderWith_of_globalSeminorm_ne_top
-    {n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ} {alpha : ℝ}
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} {f : U → ℝ} {alpha : ℝ}
     (halpha : 0 < alpha)
     (hf : apm_m93J02_globalSeminorm U alpha f ≠ ⊤) :
     HolderWith (apm_m93J02_globalSeminorm U alpha f).toNNReal
@@ -106,7 +106,7 @@ private lemma apm_m93J02_holderWith_of_globalSeminorm_ne_top
   by_cases hyz : z = y
   · subst z
     simp
-  · have hdist : 0 < dist (z : Fin n → ℝ) y := dist_pos.mpr (by
+  · have hdist : 0 < dist (z : EuclideanSpace ℝ (Fin n)) y := dist_pos.mpr (by
       exact fun h ↦ hyz (Subtype.ext h))
     have hq := apm_m93J02_quotient_le_globalSeminorm
       (f := f) (y := y) (z := z) (alpha := alpha)
@@ -114,11 +114,11 @@ private lemma apm_m93J02_holderWith_of_globalSeminorm_ne_top
       edist (f y) (f z) = ENNReal.ofReal |f z - f y| := by
         simp [edist_dist, Real.dist_eq, abs_sub_comm]
       _ = apm_m93J02_quotient alpha f y z *
-          ENNReal.ofReal (dist (z : Fin n → ℝ) y ^ alpha) := by
+          ENNReal.ofReal (dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha) := by
         rw [apm_m93J02_quotient, ← ENNReal.ofReal_mul (by positivity),
           div_mul_cancel₀ _ (ne_of_gt (Real.rpow_pos_of_pos hdist alpha))]
       _ ≤ apm_m93J02_globalSeminorm U alpha f *
-          ENNReal.ofReal (dist (z : Fin n → ℝ) y ^ alpha) :=
+          ENNReal.ofReal (dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha) :=
         mul_le_mul_right' hq _
       _ = ((apm_m93J02_globalSeminorm U alpha f).toNNReal : ℝ≥0∞) *
           edist y z ^ alpha := by
@@ -127,7 +127,7 @@ private lemma apm_m93J02_holderWith_of_globalSeminorm_ne_top
         simp [Subtype.dist_eq, dist_comm]
 
 private lemma apm_m93J02_holderOnWith_of_quotient_le
-    {n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ} {alpha : ℝ}
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} {f : U → ℝ} {alpha : ℝ}
     {s : Set U} {C : ℝ≥0∞} (halpha : 0 < alpha) (hC : C ≠ ⊤)
     (hq : ∀ y ∈ s, ∀ z ∈ s, apm_m93J02_quotient alpha f y z ≤ C) :
     HolderOnWith C.toNNReal ⟨alpha, halpha.le⟩ f s := by
@@ -135,16 +135,16 @@ private lemma apm_m93J02_holderOnWith_of_quotient_le
   by_cases hyz : z = y
   · subst z
     simp
-  · have hdist : 0 < dist (z : Fin n → ℝ) y := dist_pos.mpr (by
+  · have hdist : 0 < dist (z : EuclideanSpace ℝ (Fin n)) y := dist_pos.mpr (by
       exact fun h ↦ hyz (Subtype.ext h))
     calc
       edist (f y) (f z) = ENNReal.ofReal |f z - f y| := by
         simp [edist_dist, Real.dist_eq, abs_sub_comm]
       _ = apm_m93J02_quotient alpha f y z *
-          ENNReal.ofReal (dist (z : Fin n → ℝ) y ^ alpha) := by
+          ENNReal.ofReal (dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha) := by
         rw [apm_m93J02_quotient, ← ENNReal.ofReal_mul (by positivity),
           div_mul_cancel₀ _ (ne_of_gt (Real.rpow_pos_of_pos hdist alpha))]
-      _ ≤ C * ENNReal.ofReal (dist (z : Fin n → ℝ) y ^ alpha) :=
+      _ ≤ C * ENNReal.ofReal (dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha) :=
         mul_le_mul_right' (hq y hy z hz) _
       _ = (C.toNNReal : ℝ≥0∞) * edist y z ^ alpha := by
         rw [ENNReal.coe_toNNReal hC, edist_dist,
@@ -152,7 +152,7 @@ private lemma apm_m93J02_holderOnWith_of_quotient_le
         simp [Subtype.dist_eq, dist_comm]
 
 private lemma apm_m93J02_supNorm_ne_top_of_globalSeminorm_ne_top
-    {n : ℕ} {U : Set (Fin n → ℝ)} (hUcompact : IsCompact U)
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (hUcompact : IsCompact U)
     {f : U → ℝ} {alpha : ℝ} (halpha : 0 < alpha)
     (hf : apm_m93J02_globalSeminorm U alpha f ≠ ⊤) :
     apm_m93J02_supNorm f ≠ ⊤ := by
@@ -170,7 +170,7 @@ private lemma apm_m93J02_supNorm_ne_top_of_globalSeminorm_ne_top
   exact hC (Set.mem_range_self x)
 
 private lemma apm_m93J02_quotient_smul
-    {n : ℕ} {U : Set (Fin n → ℝ)} (alpha c : ℝ) (f : U → ℝ)
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (alpha c : ℝ) (f : U → ℝ)
     (y z : U) :
     apm_m93J02_quotient alpha (c • f) y z =
       ENNReal.ofReal |c| * apm_m93J02_quotient alpha f y z := by
@@ -180,34 +180,34 @@ private lemma apm_m93J02_quotient_smul
   rw [mul_div_assoc, ENNReal.ofReal_mul (abs_nonneg c)]
 
 private lemma apm_m93J02_quotient_add_le
-    {n : ℕ} {U : Set (Fin n → ℝ)} (alpha : ℝ) (f g : U → ℝ)
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (alpha : ℝ) (f g : U → ℝ)
     (y z : U) :
     apm_m93J02_quotient alpha (f + g) y z ≤
       apm_m93J02_quotient alpha f y z +
         apm_m93J02_quotient alpha g y z := by
   unfold apm_m93J02_quotient
-  have hdenom : 0 ≤ dist (z : Fin n → ℝ) y ^ alpha :=
+  have hdenom : 0 ≤ dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha :=
     Real.rpow_nonneg dist_nonneg alpha
   calc
     ENNReal.ofReal
-        (|(f + g) z - (f + g) y| / dist (z : Fin n → ℝ) y ^ alpha) ≤
+        (|(f + g) z - (f + g) y| / dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha) ≤
         ENNReal.ofReal
           ((|f z - f y| + |g z - g y|) /
-            dist (z : Fin n → ℝ) y ^ alpha) := by
+            dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha) := by
       apply ENNReal.ofReal_le_ofReal
       apply div_le_div_of_nonneg_right _ hdenom
       simpa only [Pi.add_apply, add_sub_add_comm] using
         abs_add_le (f z - f y) (g z - g y)
     _ = ENNReal.ofReal
-          (|f z - f y| / dist (z : Fin n → ℝ) y ^ alpha) +
+          (|f z - f y| / dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha) +
         ENNReal.ofReal
-          (|g z - g y| / dist (z : Fin n → ℝ) y ^ alpha) := by
+          (|g z - g y| / dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha) := by
       rw [add_div, ENNReal.ofReal_add]
       · exact div_nonneg (abs_nonneg _) hdenom
       · exact div_nonneg (abs_nonneg _) hdenom
 
 private lemma apm_m93J02_globalSeminorm_smul
-    {n : ℕ} (U : Set (Fin n → ℝ)) (alpha c : ℝ) (f : U → ℝ) :
+    {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n))) (alpha c : ℝ) (f : U → ℝ) :
     apm_m93J02_globalSeminorm U alpha (c • f) =
       ENNReal.ofReal |c| * apm_m93J02_globalSeminorm U alpha f := by
   unfold apm_m93J02_globalSeminorm
@@ -220,7 +220,7 @@ private lemma apm_m93J02_globalSeminorm_smul
   · simp [hyz]
 
 private lemma apm_m93J02_globalSeminorm_add_le
-    {n : ℕ} (U : Set (Fin n → ℝ)) (alpha : ℝ) (f g : U → ℝ) :
+    {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n))) (alpha : ℝ) (f g : U → ℝ) :
     apm_m93J02_globalSeminorm U alpha (f + g) ≤
       apm_m93J02_globalSeminorm U alpha f +
         apm_m93J02_globalSeminorm U alpha g := by
@@ -237,7 +237,7 @@ private lemma apm_m93J02_globalSeminorm_add_le
   · simp [hyz]
 
 private lemma apm_m93J02_supNorm_smul
-    {n : ℕ} {U : Set (Fin n → ℝ)} (c : ℝ) (f : U → ℝ) :
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (c : ℝ) (f : U → ℝ) :
     apm_m93J02_supNorm (c • f) = ENNReal.ofReal |c| * apm_m93J02_supNorm f := by
   unfold apm_m93J02_supNorm
   rw [ENNReal.mul_iSup]
@@ -245,7 +245,7 @@ private lemma apm_m93J02_supNorm_smul
   simp only [Pi.smul_apply, smul_eq_mul, abs_mul, ENNReal.ofReal_mul (abs_nonneg c)]
 
 private lemma apm_m93J02_supNorm_add_le
-    {n : ℕ} {U : Set (Fin n → ℝ)} (f g : U → ℝ) :
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (f g : U → ℝ) :
     apm_m93J02_supNorm (f + g) ≤
       apm_m93J02_supNorm f + apm_m93J02_supNorm g := by
   unfold apm_m93J02_supNorm
@@ -261,7 +261,7 @@ private lemma apm_m93J02_supNorm_add_le
         (le_iSup (fun x : U ↦ ENNReal.ofReal |g x|) x)
 
 private lemma apm_m93J02_globalSeminorm_sub_ne_top
-    {n : ℕ} (U : Set (Fin n → ℝ)) (alpha : ℝ) {f g : U → ℝ}
+    {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n))) (alpha : ℝ) {f g : U → ℝ}
     (hf : apm_m93J02_globalSeminorm U alpha f ≠ ⊤)
     (hg : apm_m93J02_globalSeminorm U alpha g ≠ ⊤) :
     apm_m93J02_globalSeminorm U alpha (f - g) ≠ ⊤ := by
@@ -276,7 +276,7 @@ private lemma apm_m93J02_globalSeminorm_sub_ne_top
       apm_m93J02_globalSeminorm_add_le U alpha f (-g)
 
 private lemma apm_m93J02_abs_apply_le_globalNorm
-    {n : ℕ} {U : Set (Fin n → ℝ)} (hUcompact : IsCompact U)
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (hUcompact : IsCompact U)
     {alpha : ℝ} (halpha : 0 < alpha) {f : U → ℝ}
     (hf : apm_m93J02_globalSeminorm U alpha f ≠ ⊤) (x : U) :
     |f x| ≤ apm_m93J02_globalNorm U alpha f := by
@@ -293,10 +293,10 @@ private lemma apm_m93J02_abs_apply_le_globalNorm
     ENNReal.toReal_mono hsum hle
 
 private lemma apm_m93J02_quotient_real_le_globalNorm
-    {n : ℕ} {U : Set (Fin n → ℝ)} (hUcompact : IsCompact U)
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (hUcompact : IsCompact U)
     {alpha : ℝ} (halpha : 0 < alpha) {f : U → ℝ}
     (hf : apm_m93J02_globalSeminorm U alpha f ≠ ⊤) (y z : U) :
-    |f z - f y| / dist (z : Fin n → ℝ) y ^ alpha ≤
+    |f z - f y| / dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha ≤
       apm_m93J02_globalNorm U alpha f := by
   have hsup : apm_m93J02_supNorm f ≠ ⊤ :=
     apm_m93J02_supNorm_ne_top_of_globalSeminorm_ne_top
@@ -325,7 +325,7 @@ private lemma apm_m93J02_limsup_add_le {iota : Type*}
   exact (add_le_add hux hvx).trans hac.le
 
 private lemma apm_m93J02_localSeminorm_smul
-    {n : ℕ} (U : Set (Fin n → ℝ)) (alpha c : ℝ) (f : U → ℝ) :
+    {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n))) (alpha c : ℝ) (f : U → ℝ) :
     apm_m93J02_localSeminorm U alpha (c • f) =
       ENNReal.ofReal |c| * apm_m93J02_localSeminorm U alpha f := by
   unfold apm_m93J02_localSeminorm
@@ -337,13 +337,13 @@ private lemma apm_m93J02_localSeminorm_smul
   congr with y
   rw [ENNReal.mul_iSup]
   congr with z
-  by_cases hnear : dist (y : Fin n → ℝ) x ≤ epsilon ∧
-      dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y
+  by_cases hnear : dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+      dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y
   · simp [hnear, apm_m93J02_quotient_smul]
   · simp [hnear]
 
 private lemma apm_m93J02_localSeminorm_add_le
-    {n : ℕ} (U : Set (Fin n → ℝ)) (alpha : ℝ) (f g : U → ℝ) :
+    {n : ℕ} (U : Set (EuclideanSpace ℝ (Fin n))) (alpha : ℝ) (f g : U → ℝ) :
     apm_m93J02_localSeminorm U alpha (f + g) ≤
       apm_m93J02_localSeminorm U alpha f +
         apm_m93J02_localSeminorm U alpha g := by
@@ -351,16 +351,16 @@ private lemma apm_m93J02_localSeminorm_add_le
   refine iSup_le fun x ↦ ?_
   let F := fun (h : U → ℝ) (epsilon : ℝ) ↦
     ⨆ y : U, ⨆ z : U,
-      if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-          dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+      if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+          dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
         apm_m93J02_quotient alpha h y z
       else 0
   have hF : ∀ epsilon, F (f + g) epsilon ≤ F f epsilon + F g epsilon := by
     intro epsilon
     dsimp only [F]
     refine iSup_le fun y ↦ iSup_le fun z ↦ ?_
-    by_cases hnear : dist (y : Fin n → ℝ) x ≤ epsilon ∧
-        dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y
+    by_cases hnear : dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+        dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y
     · rw [if_pos hnear]
       exact (apm_m93J02_quotient_add_le alpha f g y z).trans <|
         add_le_add
@@ -381,25 +381,25 @@ private lemma apm_m93J02_localSeminorm_add_le
       (le_iSup (fun x : U ↦ Filter.limsup
         (fun epsilon ↦
           ⨆ y : U, ⨆ z : U,
-            if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-                dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+            if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+                dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
               apm_m93J02_quotient alpha f y z
             else 0)
         (nhdsWithin 0 (Ioi 0))) x)
       (le_iSup (fun x : U ↦ Filter.limsup
         (fun epsilon ↦
           ⨆ y : U, ⨆ z : U,
-            if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-                dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+            if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+                dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
               apm_m93J02_quotient alpha g y z
             else 0)
         (nhdsWithin 0 (Ioi 0))) x)
 
 private lemma apm_m93J02_localSeminorm_dist_eq_zero
-    {n : ℕ} {U : Set (Fin n → ℝ)} (p : U) {alpha : ℝ}
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (p : U) {alpha : ℝ}
     (halpha : alpha < 1) :
     apm_m93J02_localSeminorm U alpha
-      (fun x : U ↦ dist (x : Fin n → ℝ) p) = 0 := by
+      (fun x : U ↦ dist (x : EuclideanSpace ℝ (Fin n)) p) = 0 := by
   unfold apm_m93J02_localSeminorm
   apply le_antisymm
   · refine iSup_le fun x ↦ ?_
@@ -419,21 +419,21 @@ private lemma apm_m93J02_localSeminorm_dist_eq_zero
         hbase.ennrpow_const (1 - alpha)
     have hbound : ∀ epsilon : ℝ,
         (⨆ y : U, ⨆ z : U,
-          if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-              dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+          if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+              dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
             apm_m93J02_quotient alpha
-              (fun w : U ↦ dist (w : Fin n → ℝ) p) y z
+              (fun w : U ↦ dist (w : EuclideanSpace ℝ (Fin n)) p) y z
           else 0) ≤ B epsilon := by
       intro epsilon
       refine iSup_le fun y ↦ iSup_le fun z ↦ ?_
-      by_cases hnear : dist (y : Fin n → ℝ) x ≤ epsilon ∧
-          dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y
+      by_cases hnear : dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+          dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y
       · rw [if_pos hnear]
         have hepsilon : 0 ≤ epsilon := dist_nonneg.trans hnear.1
-        have hd_le : dist (z : Fin n → ℝ) y ≤ 2 * epsilon := by
+        have hd_le : dist (z : EuclideanSpace ℝ (Fin n)) y ≤ 2 * epsilon := by
           calc
-            dist (z : Fin n → ℝ) y ≤
-                dist (z : Fin n → ℝ) x + dist (y : Fin n → ℝ) x :=
+            dist (z : EuclideanSpace ℝ (Fin n)) y ≤
+                dist (z : EuclideanSpace ℝ (Fin n)) x + dist (y : EuclideanSpace ℝ (Fin n)) x :=
               dist_triangle_right _ _ _
             _ ≤ epsilon + epsilon := add_le_add hnear.2.1 hnear.1
             _ = 2 * epsilon := by ring
@@ -443,18 +443,18 @@ private lemma apm_m93J02_localSeminorm_dist_eq_zero
           (mul_nonneg (by norm_num) hepsilon) (sub_nonneg.mpr halpha.le)]
         apply ENNReal.ofReal_le_ofReal
         change
-          |dist (z : Fin n → ℝ) p - dist (y : Fin n → ℝ) p| /
-              dist (z : Fin n → ℝ) y ^ alpha ≤
+          |dist (z : EuclideanSpace ℝ (Fin n)) p - dist (y : EuclideanSpace ℝ (Fin n)) p| /
+              dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha ≤
             (2 * epsilon) ^ (1 - alpha)
         calc
-          |dist (z : Fin n → ℝ) p - dist (y : Fin n → ℝ) p| /
-                dist (z : Fin n → ℝ) y ^ alpha ≤
-              dist (z : Fin n → ℝ) y /
-                dist (z : Fin n → ℝ) y ^ alpha := by
+          |dist (z : EuclideanSpace ℝ (Fin n)) p - dist (y : EuclideanSpace ℝ (Fin n)) p| /
+                dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha ≤
+              dist (z : EuclideanSpace ℝ (Fin n)) y /
+                dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha := by
             exact div_le_div_of_nonneg_right
-              (abs_dist_sub_le (z : Fin n → ℝ) y p)
+              (abs_dist_sub_le (z : EuclideanSpace ℝ (Fin n)) y p)
               (Real.rpow_nonneg dist_nonneg alpha)
-          _ = dist (z : Fin n → ℝ) y ^ (1 - alpha) := by
+          _ = dist (z : EuclideanSpace ℝ (Fin n)) y ^ (1 - alpha) := by
             exact (Real.rpow_one_sub' dist_nonneg
               (sub_ne_zero.mpr (ne_of_gt halpha))).symm
           _ ≤ (2 * epsilon) ^ (1 - alpha) :=
@@ -464,10 +464,10 @@ private lemma apm_m93J02_localSeminorm_dist_eq_zero
       Filter.limsup
           (fun epsilon : ℝ ↦
             ⨆ y : U, ⨆ z : U,
-              if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-                  dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+              if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+                  dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
                 apm_m93J02_quotient alpha
-                  (fun w : U ↦ dist (w : Fin n → ℝ) p) y z
+                  (fun w : U ↦ dist (w : EuclideanSpace ℝ (Fin n)) p) y z
               else 0)
           (nhdsWithin 0 (Ioi 0)) ≤
           Filter.limsup B (nhdsWithin 0 (Ioi 0)) :=
@@ -476,7 +476,7 @@ private lemma apm_m93J02_localSeminorm_dist_eq_zero
   · exact bot_le
 
 private lemma apm_m93J02_localSeminorm_eq_zero_of_lipschitzWith
-    {n : ℕ} {U : Set (Fin n → ℝ)} {f : U → ℝ} {C : NNReal}
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} {f : U → ℝ} {C : NNReal}
     {alpha : ℝ} (hf : LipschitzWith C f) (halpha : alpha < 1) :
     apm_m93J02_localSeminorm U alpha f = 0 := by
   unfold apm_m93J02_localSeminorm
@@ -506,25 +506,25 @@ private lemma apm_m93J02_localSeminorm_eq_zero_of_lipschitzWith
           (Or.inr ENNReal.ofReal_ne_top)
     have hbound : ∀ epsilon : ℝ,
         (⨆ y : U, ⨆ z : U,
-          if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-              dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+          if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+              dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
             apm_m93J02_quotient alpha f y z
           else 0) ≤ B epsilon := by
       intro epsilon
       refine iSup_le fun y ↦ iSup_le fun z ↦ ?_
-      by_cases hnear : dist (y : Fin n → ℝ) x ≤ epsilon ∧
-          dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y
+      by_cases hnear : dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+          dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y
       · rw [if_pos hnear]
         have hepsilon : 0 ≤ epsilon := dist_nonneg.trans hnear.1
-        have hd_le : dist (z : Fin n → ℝ) y ≤ 2 * epsilon := by
+        have hd_le : dist (z : EuclideanSpace ℝ (Fin n)) y ≤ 2 * epsilon := by
           calc
-            dist (z : Fin n → ℝ) y ≤
-                dist (z : Fin n → ℝ) x + dist (y : Fin n → ℝ) x :=
+            dist (z : EuclideanSpace ℝ (Fin n)) y ≤
+                dist (z : EuclideanSpace ℝ (Fin n)) x + dist (y : EuclideanSpace ℝ (Fin n)) x :=
               dist_triangle_right _ _ _
             _ ≤ epsilon + epsilon := add_le_add hnear.2.1 hnear.1
             _ = 2 * epsilon := by ring
         have hlip : |f z - f y| ≤
-            (C : ℝ) * dist (z : Fin n → ℝ) y := by
+            (C : ℝ) * dist (z : EuclideanSpace ℝ (Fin n)) y := by
           simpa [Real.dist_eq, abs_sub_comm, Subtype.dist_eq] using
             hf.dist_le_mul z y
         unfold apm_m93J02_quotient
@@ -534,12 +534,12 @@ private lemma apm_m93J02_localSeminorm_eq_zero_of_lipschitzWith
           ← ENNReal.ofReal_mul C.coe_nonneg]
         apply ENNReal.ofReal_le_ofReal
         calc
-          |f z - f y| / dist (z : Fin n → ℝ) y ^ alpha ≤
-              ((C : ℝ) * dist (z : Fin n → ℝ) y) /
-                dist (z : Fin n → ℝ) y ^ alpha := by
+          |f z - f y| / dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha ≤
+              ((C : ℝ) * dist (z : EuclideanSpace ℝ (Fin n)) y) /
+                dist (z : EuclideanSpace ℝ (Fin n)) y ^ alpha := by
             exact div_le_div_of_nonneg_right hlip
               (Real.rpow_nonneg dist_nonneg alpha)
-          _ = (C : ℝ) * dist (z : Fin n → ℝ) y ^ (1 - alpha) := by
+          _ = (C : ℝ) * dist (z : EuclideanSpace ℝ (Fin n)) y ^ (1 - alpha) := by
             rw [mul_div_assoc,
               Real.rpow_one_sub' dist_nonneg
                 (sub_ne_zero.mpr (ne_of_gt halpha))]
@@ -552,8 +552,8 @@ private lemma apm_m93J02_localSeminorm_eq_zero_of_lipschitzWith
       Filter.limsup
           (fun epsilon : ℝ ↦
             ⨆ y : U, ⨆ z : U,
-              if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-                  dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+              if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+                  dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
                 apm_m93J02_quotient alpha f y z
               else 0)
           (nhdsWithin 0 (Ioi 0)) ≤
@@ -563,10 +563,10 @@ private lemma apm_m93J02_localSeminorm_eq_zero_of_lipschitzWith
   · exact bot_le
 
 private lemma apm_m93J02_lipschitzWith_shifted_rpow_dist
-    {n : ℕ} {U : Set (Fin n → ℝ)} (p : U) {alpha a : ℝ}
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (p : U) {alpha a : ℝ}
     (halpha0 : 0 < alpha) (halpha1 : alpha < 1) (ha : 0 < a) :
     ∃ C : NNReal, LipschitzWith C (fun x : U ↦
-      (dist (x : Fin n → ℝ) p + a) ^ alpha - a ^ alpha) := by
+      (dist (x : EuclideanSpace ℝ (Fin n)) p + a) ^ alpha - a ^ alpha) := by
   let C : NNReal :=
     ⟨alpha * a ^ (alpha - 1),
       mul_nonneg halpha0.le (Real.rpow_nonneg ha.le _)⟩
@@ -584,7 +584,7 @@ private lemma apm_m93J02_lipschitzWith_shifted_rpow_dist
       exact mul_le_mul_of_nonneg_left
         (Real.rpow_le_rpow_of_nonpos ha (show a ≤ t from ht)
           (sub_nonpos.mpr halpha1.le)) halpha0.le
-  let r : U → ℝ := fun x ↦ dist (x : Fin n → ℝ) p + a
+  let r : U → ℝ := fun x ↦ dist (x : EuclideanSpace ℝ (Fin n)) p + a
   have hr : LipschitzWith 1 r := by
     apply LipschitzWith.of_dist_le_mul
     intro x y
@@ -600,8 +600,8 @@ private lemma apm_m93J02_lipschitzWith_shifted_rpow_dist
     exact le_add_of_nonneg_left dist_nonneg
   have hscalar_xy := hscalar.dist_le_mul (r x) hx (r y) hy
   calc
-    dist ((dist (x : Fin n → ℝ) p + a) ^ alpha - a ^ alpha)
-        ((dist (y : Fin n → ℝ) p + a) ^ alpha - a ^ alpha) =
+    dist ((dist (x : EuclideanSpace ℝ (Fin n)) p + a) ^ alpha - a ^ alpha)
+        ((dist (y : EuclideanSpace ℝ (Fin n)) p + a) ^ alpha - a ^ alpha) =
         dist ((r x) ^ alpha) ((r y) ^ alpha) := by
           simp only [r, Real.dist_eq, sub_sub_sub_cancel_right]
     _ ≤ (C : ℝ) * dist (r x) (r y) := hscalar_xy
@@ -621,29 +621,29 @@ private lemma apm_m93J02_shifted_rpow_approx
   constructor <;> linarith [Real.rpow_nonneg ha alpha]
 
 private lemma apm_m93J02_one_le_localSeminorm_rpow_dist
-    {n : ℕ} {U : Set (Fin n → ℝ)} (p : U) {alpha : ℝ}
+    {n : ℕ} {U : Set (EuclideanSpace ℝ (Fin n))} (p : U) {alpha : ℝ}
     (halpha0 : 0 < alpha)
     (hp : ∀ epsilon : ℝ, 0 < epsilon → ∃ z : U,
-      dist (z : Fin n → ℝ) p ≤ epsilon ∧ z ≠ p) :
+      dist (z : EuclideanSpace ℝ (Fin n)) p ≤ epsilon ∧ z ≠ p) :
     1 ≤ apm_m93J02_localSeminorm U alpha
-      (fun x : U ↦ dist (x : Fin n → ℝ) p ^ alpha) := by
+      (fun x : U ↦ dist (x : EuclideanSpace ℝ (Fin n)) p ^ alpha) := by
   let A := fun epsilon : ℝ ↦
     ⨆ y : U, ⨆ z : U,
-      if dist (y : Fin n → ℝ) p ≤ epsilon ∧
-          dist (z : Fin n → ℝ) p ≤ epsilon ∧ z ≠ y then
+      if dist (y : EuclideanSpace ℝ (Fin n)) p ≤ epsilon ∧
+          dist (z : EuclideanSpace ℝ (Fin n)) p ≤ epsilon ∧ z ≠ y then
         apm_m93J02_quotient alpha
-          (fun x : U ↦ dist (x : Fin n → ℝ) p ^ alpha) y z
+          (fun x : U ↦ dist (x : EuclideanSpace ℝ (Fin n)) p ^ alpha) y z
       else 0
   have hA : ∀ epsilon : ℝ, 0 < epsilon → 1 ≤ A epsilon := by
     intro epsilon hepsilon
     obtain ⟨z, hzdist, hzp⟩ := hp epsilon hepsilon
-    have hdist : 0 < dist (z : Fin n → ℝ) p :=
+    have hdist : 0 < dist (z : EuclideanSpace ℝ (Fin n)) p :=
       dist_pos.mpr fun h ↦ hzp (Subtype.ext h)
     have hquot : apm_m93J02_quotient alpha
-        (fun x : U ↦ dist (x : Fin n → ℝ) p ^ alpha) p z = 1 := by
+        (fun x : U ↦ dist (x : EuclideanSpace ℝ (Fin n)) p ^ alpha) p z = 1 := by
       unfold apm_m93J02_quotient
       dsimp only
-      rw [show dist (p : Fin n → ℝ) p ^ alpha = 0 by
+      rw [show dist (p : EuclideanSpace ℝ (Fin n)) p ^ alpha = 0 by
         simp [halpha0.ne'], sub_zero, abs_of_nonneg
           (Real.rpow_nonneg dist_nonneg alpha),
         div_self (ne_of_gt (Real.rpow_pos_of_pos hdist alpha)),
@@ -664,10 +664,10 @@ private lemma apm_m93J02_one_le_localSeminorm_rpow_dist
       Filter.limsup
         (fun epsilon : ℝ ↦
           ⨆ y : U, ⨆ z : U,
-            if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-                dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+            if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+                dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
               apm_m93J02_quotient alpha
-                (fun w : U ↦ dist (w : Fin n → ℝ) p ^ alpha) y z
+                (fun w : U ↦ dist (w : EuclideanSpace ℝ (Fin n)) p ^ alpha) y z
             else 0)
         (nhdsWithin 0 (Ioi 0))) p
 
@@ -686,8 +686,8 @@ def apm_m93J02_isCompleteOn {V : Type} [AddCommGroup V]
     (∀ ε : ℝ, 0 < ε → ∃ N, ∀ m ≥ N, ∀ n ≥ N, q (u m - u n) < ε) →
     ∃ f ∈ S, ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n ≥ N, q (u n - f) < ε
 
-theorem apm_m93j02
-    (n : ℕ) (U : Set (Fin n → ℝ)) (hUcompact : IsCompact U)
+theorem apm_m93J02_nontrivial
+    (n : ℕ) (U : Set (EuclideanSpace ℝ (Fin n))) (hUcompact : IsCompact U)
     (hUconnected : IsConnected U)
     (hUnontrivial : ∃ x ∈ U, ∃ y ∈ U, x ≠ y)
     (α : ℝ) (hα0 : 0 < α) (hα1 : α < 1) :
@@ -788,8 +788,8 @@ theorem apm_m93j02
     let C := S + 1
     let F := fun (x : U) (epsilon : ℝ) ↦
       ⨆ y : U, ⨆ z : U,
-        if dist (y : Fin n → ℝ) x ≤ epsilon ∧
-            dist (z : Fin n → ℝ) x ≤ epsilon ∧ z ≠ y then
+        if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧
+            dist (z : EuclideanSpace ℝ (Fin n)) x ≤ epsilon ∧ z ≠ y then
           apm_m93J02_quotient α f y z
         else 0
     have hS_eq : S = ⨆ x : U,
@@ -861,7 +861,7 @@ theorem apm_m93j02
             simpa [dist_comm] using hclose
           exact (hquot_ball i y hyi z hzi).trans
             (le_add_of_nonneg_right bot_le)
-        · have hfar : delta ≤ dist (z : Fin n → ℝ) y := by
+        · have hfar : delta ≤ dist (z : EuclideanSpace ℝ (Fin n)) y := by
             simpa [Subtype.dist_eq] using le_of_not_gt hclose
           have hnum : |f z - f y| ≤ 2 * M := by
             calc
@@ -872,14 +872,14 @@ theorem apm_m93j02
                 (hM (Set.mem_range_self z)) (hM (Set.mem_range_self y))
               _ = 2 * M := by ring
           have hdenom : delta ^ α ≤
-              dist (z : Fin n → ℝ) y ^ α :=
+              dist (z : EuclideanSpace ℝ (Fin n)) y ^ α :=
             Real.rpow_le_rpow hdelta.le hfar hα0.le
           have hratio : |f z - f y| /
-              dist (z : Fin n → ℝ) y ^ α ≤
+              dist (z : EuclideanSpace ℝ (Fin n)) y ^ α ≤
                 2 * M / delta ^ α := by
             calc
-              |f z - f y| / dist (z : Fin n → ℝ) y ^ α ≤
-                  (2 * M) / dist (z : Fin n → ℝ) y ^ α :=
+              |f z - f y| / dist (z : EuclideanSpace ℝ (Fin n)) y ^ α ≤
+                  (2 * M) / dist (z : EuclideanSpace ℝ (Fin n)) y ^ α :=
                 div_le_div_of_nonneg_right hnum
                   (Real.rpow_nonneg dist_nonneg α)
               _ ≤ (2 * M) / delta ^ α :=
@@ -901,10 +901,10 @@ theorem apm_m93j02
     have hxy0 : x0 ≠ y0 := by
       intro h
       exact hxy (congrArg Subtype.val h)
-    let f : U → ℝ := fun z ↦ dist (z : Fin n → ℝ) x0
+    let f : U → ℝ := fun z ↦ dist (z : EuclideanSpace ℝ (Fin n)) x0
     have hlocal : apm_m93J02_localSeminorm U α f = 0 := by
       simpa [f] using apm_m93J02_localSeminorm_dist_eq_zero x0 hα1
-    have hdist : 0 < dist (y0 : Fin n → ℝ) x0 := by
+    have hdist : 0 < dist (y0 : EuclideanSpace ℝ (Fin n)) x0 := by
       exact dist_pos.mpr fun h ↦ hxy0 (Subtype.ext h.symm)
     have hquotient : 0 < apm_m93J02_quotient α f x0 y0 := by
       unfold apm_m93J02_quotient
@@ -1002,12 +1002,12 @@ theorem apm_m93j02
     letI : ConnectedSpace U :=
       isConnected_iff_connectedSpace.mp hUconnected
     have hp_near : ∀ epsilon : ℝ, 0 < epsilon → ∃ z : U,
-        dist (z : Fin n → ℝ) p ≤ epsilon ∧ z ≠ p := by
+        dist (z : EuclideanSpace ℝ (Fin n)) p ≤ epsilon ∧ z ≠ p := by
       intro epsilon hepsilon
       by_contra hnone
       have hball_subset : Metric.ball p epsilon ⊆ ({p} : Set U) := by
         intro z hz
-        have hzdist : dist (z : Fin n → ℝ) p ≤ epsilon := by
+        have hzdist : dist (z : EuclideanSpace ℝ (Fin n)) p ≤ epsilon := by
           simpa [Subtype.dist_eq] using hz.le
         by_contra hzp
         exact hnone ⟨z, hzdist, hzp⟩
@@ -1040,13 +1040,13 @@ theorem apm_m93j02
         Filter.atTop (nhds 0) := by
       simpa [Real.zero_rpow hα0.ne'] using
         ha_tendsto.rpow_const (Or.inr hα0.le)
-    let target : U → ℝ := fun z ↦ dist (z : Fin n → ℝ) p ^ α
+    let target : U → ℝ := fun z ↦ dist (z : EuclideanSpace ℝ (Fin n)) p ^ α
     let u : ℕ → U → ℝ := fun k z ↦
-      (dist (z : Fin n → ℝ) p + a k) ^ α - a k ^ α
+      (dist (z : EuclideanSpace ℝ (Fin n)) p + a k) ^ α - a k ^ α
     have hu_approx (k : ℕ) (z : U) :
         |u k z - target z| ≤ a k ^ α := by
       simpa only [u, target] using apm_m93J02_shifted_rpow_approx
-        (r := dist (z : Fin n → ℝ) p) (a := a k)
+        (r := dist (z : EuclideanSpace ℝ (Fin n)) p) (a := a k)
         dist_nonneg (ha_pos k).le hα0.le hα1.le
     have hu_lipschitz (k : ℕ) : ∃ C : NNReal, LipschitzWith C (u k) := by
       simpa only [u] using
@@ -1309,7 +1309,7 @@ theorem apm_m93j02
         exact happ'.trans (hN k hk m hm).le
       have hquotient (y z : U) :
           |(u k - f) z - (u k - f) y| /
-              dist (z : Fin n → ℝ) y ^ α ≤ eta := by
+              dist (z : EuclideanSpace ℝ (Fin n)) y ^ α ≤ eta := by
         have hz : Filter.Tendsto (fun m ↦ u k z - u m z)
             Filter.atTop (nhds (u k z - f z)) :=
           tendsto_const_nhds.sub (hf_tendsto z)
@@ -1318,14 +1318,14 @@ theorem apm_m93j02
           tendsto_const_nhds.sub (hf_tendsto y)
         have htend : Filter.Tendsto
             (fun m ↦ |(u k z - u m z) - (u k y - u m y)| /
-              dist (z : Fin n → ℝ) y ^ α)
+              dist (z : EuclideanSpace ℝ (Fin n)) y ^ α)
             Filter.atTop
             (nhds (|(u k z - f z) - (u k y - f y)| /
-              dist (z : Fin n → ℝ) y ^ α)) := by
+              dist (z : EuclideanSpace ℝ (Fin n)) y ^ α)) := by
           simpa using (hz.sub hy).abs.div_const
-            (dist (z : Fin n → ℝ) y ^ α)
+            (dist (z : EuclideanSpace ℝ (Fin n)) y ^ α)
         have hle : |(u k z - f z) - (u k y - f y)| /
-            dist (z : Fin n → ℝ) y ^ α ≤ eta := by
+            dist (z : EuclideanSpace ℝ (Fin n)) y ^ α ≤ eta := by
           apply le_of_tendsto htend
           filter_upwards [Filter.eventually_ge_atTop N] with m hm
           have hsub : apm_m93J02_globalSeminorm U α (u k - u m) ≠ ⊤ :=
@@ -1334,7 +1334,7 @@ theorem apm_m93j02
           have hq := apm_m93J02_quotient_real_le_globalNorm
             hUcompact hα0 hsub y z
           have hq' : |(u k z - u m z) - (u k y - u m y)| /
-              dist (z : Fin n → ℝ) y ^ α ≤
+              dist (z : EuclideanSpace ℝ (Fin n)) y ^ α ≤
                 apm_m93J02_globalNorm U α (u k - u m) := by
             simpa [Pi.sub_apply] using hq
           exact hq'.trans (hN k hk m hm).le
@@ -1397,3 +1397,123 @@ theorem apm_m93j02
   exact ⟨hremaining.1, hglobal_local, hle,
     hremaining.2.1, hremaining.2.2.1, hremaining.2.2.2.1,
     hremaining.2.2.2.2.1, hremaining.2.2.2.2.2⟩
+
+/-- Complete answer in the strict Hölder range.  The denominator in the
+source's global seminorm, printed as `|x-y^α|`, is understood as the standard
+`|x-y|^α`.  A connected set is nonempty, so the only degenerate case is a
+singleton.  In that case both seminorms vanish, the reverse comparison holds,
+and both resulting normed spaces are complete. -/
+theorem apm_m93j02
+    (n : ℕ) (U : Set (EuclideanSpace ℝ (Fin n))) (hUcompact : IsCompact U)
+    (hUconnected : IsConnected U)
+    (α : ℝ) (hα0 : 0 < α) (hα1 : α < 1) :
+    (∀ f : U → ℝ,
+      apm_m93J02_localSeminorm U α f ≠ ⊤ →
+        apm_m93J02_globalSeminorm U α f ≠ ⊤) ∧
+    (∀ f : U → ℝ,
+      apm_m93J02_globalSeminorm U α f ≠ ⊤ →
+        apm_m93J02_localSeminorm U α f ≠ ⊤) ∧
+    (∀ f : U → ℝ,
+      apm_m93J02_localSeminorm U α f ≤
+        apm_m93J02_globalSeminorm U α f) ∧
+    ((∃ K : ℝ≥0∞, K ≠ ⊤ ∧ ∀ f : U → ℝ,
+      apm_m93J02_globalSeminorm U α f ≤
+        K * apm_m93J02_localSeminorm U α f) ↔
+      ¬(∃ x ∈ U, ∃ y ∈ U, x ≠ y)) ∧
+    apm_m93J02_isNormOn (apm_m93J02_holderFunctions U α)
+      (apm_m93J02_localNorm U α) ∧
+    (apm_m93J02_isCompleteOn (apm_m93J02_holderFunctions U α)
+      (apm_m93J02_localNorm U α) ↔
+        ¬(∃ x ∈ U, ∃ y ∈ U, x ≠ y)) ∧
+    apm_m93J02_isNormOn (apm_m93J02_holderFunctions U α)
+      (apm_m93J02_globalNorm U α) ∧
+    apm_m93J02_isCompleteOn (apm_m93J02_holderFunctions U α)
+      (apm_m93J02_globalNorm U α) := by
+  by_cases hnt : ∃ x ∈ U, ∃ y ∈ U, x ≠ y
+  · have h := apm_m93J02_nontrivial n U hUcompact hUconnected hnt α hα0 hα1
+    exact ⟨h.1, h.2.1, h.2.2.1, ⟨fun hex ↦ (h.2.2.2.1 hex).elim, fun hn ↦ (hn hnt).elim⟩,
+      h.2.2.2.2.1, ⟨fun hc ↦ (h.2.2.2.2.2.1 hc).elim, fun hn ↦ (hn hnt).elim⟩,
+      h.2.2.2.2.2.2.1, h.2.2.2.2.2.2.2⟩
+  · have hsub : ∀ x y : U, x = y := by
+      intro x y
+      by_contra hxy
+      exact hnt ⟨x, x.property, y, y.property, Subtype.coe_ne_coe.mpr hxy⟩
+    letI : Subsingleton U := ⟨hsub⟩
+    let x0 : U := ⟨hUconnected.nonempty.choose,
+      hUconnected.nonempty.choose_spec⟩
+    have hlocal (f : U → ℝ) : apm_m93J02_localSeminorm U α f = 0 := by
+      unfold apm_m93J02_localSeminorm
+      apply le_antisymm
+      · refine iSup_le fun x ↦ ?_
+        have hz : (fun ε : ℝ ↦
+            ⨆ y : U, ⨆ z : U,
+              if dist (y : EuclideanSpace ℝ (Fin n)) x ≤ ε ∧
+                  dist (z : EuclideanSpace ℝ (Fin n)) x ≤ ε ∧ z ≠ y then
+                apm_m93J02_quotient α f y z else 0) = fun _ ↦ 0 := by
+          funext ε
+          apply le_antisymm
+          · refine iSup_le fun y ↦ iSup_le fun z ↦ ?_
+            simp [hsub z y]
+          · exact bot_le
+        rw [hz]
+        simp
+      · exact bot_le
+    have hglobal (f : U → ℝ) : apm_m93J02_globalSeminorm U α f = 0 := by
+      unfold apm_m93J02_globalSeminorm
+      apply le_antisymm
+      · refine iSup_le fun y ↦ iSup_le fun z ↦ ?_
+        simp [hsub z y]
+      · exact bot_le
+    have hsup (f : U → ℝ) : apm_m93J02_supNorm f = ENNReal.ofReal |f x0| := by
+      unfold apm_m93J02_supNorm
+      apply le_antisymm
+      · exact iSup_le fun x ↦ by rw [hsub x x0]
+      · exact le_iSup (fun x : U ↦ ENNReal.ofReal |f x|) x0
+    have hlnorm (f : U → ℝ) : apm_m93J02_localNorm U α f = |f x0| := by
+      simp [apm_m93J02_localNorm, hlocal, hsup]
+    have hgnorm (f : U → ℝ) : apm_m93J02_globalNorm U α f = |f x0| := by
+      simp [apm_m93J02_globalNorm, hglobal, hsup]
+    have hholder : apm_m93J02_holderFunctions U α = Set.univ := by
+      ext f
+      simp [apm_m93J02_holderFunctions, hglobal]
+    have hisNorm (q : (U → ℝ) → ℝ)
+        (hq : ∀ f, q f = |f x0|) :
+        apm_m93J02_isNormOn (apm_m93J02_holderFunctions U α) q := by
+      rw [hholder]
+      refine ⟨by simp [hq], ?_, ?_, ?_⟩
+      · intro f _ hf
+        funext x
+        rw [hsub x x0]
+        simpa [hq] using hf
+      · intro c f _
+        simp [hq, abs_mul]
+      · intro f _ g _
+        simpa [hq] using abs_add_le (f x0) (g x0)
+    have hisComplete (q : (U → ℝ) → ℝ)
+        (hq : ∀ f, q f = |f x0|) :
+        apm_m93J02_isCompleteOn (apm_m93J02_holderFunctions U α) q := by
+      rw [hholder]
+      intro u _ hu
+      have hc : CauchySeq (fun k ↦ u k x0) := by
+        rw [Metric.cauchySeq_iff]
+        intro ε hε
+        obtain ⟨N, hN⟩ := hu ε hε
+        exact ⟨N, fun m hm k hk ↦ by
+          simpa [Real.dist_eq, hq, Pi.sub_apply] using hN m hm k hk⟩
+      obtain ⟨a, ha⟩ := cauchySeq_tendsto_of_complete hc
+      let f : U → ℝ := fun _ ↦ a
+      refine ⟨f, Set.mem_univ _, ?_⟩
+      intro ε hε
+      rw [Metric.tendsto_atTop] at ha
+      obtain ⟨N, hN⟩ := ha ε hε
+      exact ⟨N, fun k hk ↦ by
+        have := hN k hk
+        simpa [Real.dist_eq, hq, Pi.sub_apply, f] using this⟩
+    have hlNorm := hisNorm _ hlnorm
+    have hgNorm := hisNorm _ hgnorm
+    have hlComplete := hisComplete _ hlnorm
+    have hgComplete := hisComplete _ hgnorm
+    exact ⟨by simp [hlocal, hglobal], by simp [hlocal, hglobal],
+      by simp [hlocal, hglobal],
+      ⟨fun _ ↦ hnt, fun _ ↦ ⟨0, by simp, by simp [hlocal, hglobal]⟩⟩,
+      hlNorm, ⟨fun _ ↦ hnt, fun _ ↦ hlComplete⟩, hgNorm, hgComplete⟩
