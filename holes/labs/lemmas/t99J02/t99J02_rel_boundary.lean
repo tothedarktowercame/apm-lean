@@ -206,7 +206,26 @@ theorem t99J02_torus_injOn (u v : ℂ) (hu : ‖u‖ ≤ 5 / 4) (hv : ‖v‖ �
 theorem t99J02_rel_boundary (o : Bool) (g : ℕ) {x y : ConstructionTargets.Surfaces.Disk}
     (h : Relation.EqvGen (SurfaceRel o g) x y) :
     x = y ∨ (‖(x : ℂ)‖ = 1 ∧ ‖(y : ℂ)‖ = 1) := by
-  sorry
+  induction h with
+  | rel x y h =>
+      right
+      simp only [SurfaceRel] at h
+      split at h
+      · rcases h with ⟨j, hj, t, ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩⟩ <;>
+          constructor <;> apply norm_edgePoint
+      · rcases h with ⟨j, hj, t, rfl, rfl⟩
+        constructor <;> apply norm_edgePoint
+  | refl x => exact Or.inl rfl
+  | symm x y h ih =>
+      rcases ih with hxy | ⟨hx, hy⟩
+      · exact Or.inl hxy.symm
+      · exact Or.inr ⟨hy, hx⟩
+  | trans x y z hxy hyz ihxy ihyz =>
+      rcases ihxy with rfl | ⟨hx, hy⟩
+      · exact ihyz
+      · rcases ihyz with rfl | ⟨hy', hz⟩
+        · exact Or.inr ⟨hx, hy⟩
+        · exact Or.inr ⟨hx, hz⟩
 -- END SEAT AREA
 
 /-- Rotation by `π` descends to the octagon quotient: it sends the pairs of handle `j` to those of
