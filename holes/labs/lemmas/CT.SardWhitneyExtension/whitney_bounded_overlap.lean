@@ -186,13 +186,151 @@ Adjacent incident strata have comparable scales; within each stratum the net cen
 uniformly separated and lie in a comparable ball, so a finite-dimensional volume packing
 argument using additive Haar measure gives a bound independent of `x`. -/
 -- BEGIN SEAT AREA
+theorem whitney_bounded_overlap_aux_normalized
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (s : Set E) (k : ℤ) (x c : E)
+    (hc : c ∈ SardConvexDomain.whitneyScaleStratum s k)
+    (hxc : x ∈ Metric.ball c (Metric.infDist c s / 2)) :
+    SardConvexDomain.whitneyNormalize k x c ∈ Metric.closedBall (0 : E) 1 := by
+  apply Metric.mem_closedBall.2
+  have hdist : dist c x < (2 : ℝ) ^ (k + 1) / 2 := by
+    have h := Metric.mem_ball.1 hxc
+    rw [dist_comm]
+    exact h.trans (div_lt_div_of_pos_right hc.2.2 (by norm_num))
+  exact le_of_lt (calc
+    dist (SardConvexDomain.whitneyNormalize k x c) 0 =
+        ((2 : ℝ) ^ k)⁻¹ * dist c x := by
+      simpa [SardConvexDomain.whitneyNormalize] using
+        SardConvexDomain.dist_whitneyNormalize k x c x
+    _ < ((2 : ℝ) ^ k)⁻¹ * ((2 : ℝ) ^ (k + 1) / 2) :=
+      mul_lt_mul_of_pos_left hdist (inv_pos.mpr (by positivity))
+    _ = 1 := by
+      rw [zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)]
+      field_simp)
+
+theorem whitney_bounded_overlap_aux_fiber
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (s : Set E) (k : ℤ) (x : E) :
+    {i : SardConvexDomain.WhitneyNetIndex s | i.1 = k ∧
+      x ∈ Metric.ball i.center (Metric.infDist i.center s / 2)}.encard ≤
+      Metric.packingNumber ((1 : NNReal) / 8) (Metric.closedBall (0 : E) 1) := by
+  let I : Set (SardConvexDomain.WhitneyNetIndex s) := {i | i.1 = k ∧
+    x ∈ Metric.ball i.center (Metric.infDist i.center s / 2)}
+  let f : SardConvexDomain.WhitneyNetIndex s → E := fun i =>
+    SardConvexDomain.whitneyNormalize k x i.center
+  have hinj : Set.InjOn f I := by
+    intro i hi j hj hij
+    have hk : i.1 = j.1 := hi.1.trans hj.1.symm
+    have hcent : i.center = j.center := by
+      have hz : ((2 : ℝ) ^ k)⁻¹ * dist i.center j.center = 0 := by
+        rw [← SardConvexDomain.dist_whitneyNormalize k x i.center j.center]
+        have hij' : SardConvexDomain.whitneyNormalize k x i.center =
+            SardConvexDomain.whitneyNormalize k x j.center := by simpa [f] using hij
+        rw [hij', dist_self]
+      exact dist_eq_zero.mp ((mul_eq_zero.mp hz).resolve_left
+        (ne_of_gt (inv_pos.mpr (by positivity))))
+    cases i with
+    | mk ik ic =>
+      cases j with
+      | mk jk jc =>
+        dsimp at hk hcent ⊢
+        subst jk
+        exact congrArg (Sigma.mk ik) (Subtype.ext hcent)
+  rw [← hinj.encard_image]
+  refine (?_ : Metric.IsSeparated (↑((1 : NNReal) / 8)) (f '' I)).encard_le_packingNumber ?_
+  · apply Set.Pairwise.image
+    intro (i : SardConvexDomain.WhitneyNetIndex s) hi j hj hne
+    have hcne : i.center ≠ j.center := by
+      intro h
+      apply hne
+      have hk : i.1 = j.1 := hi.1.trans hj.1.symm
+      cases i with
+      | mk ik ic =>
+        cases j with
+        | mk jk jc =>
+          dsimp at hk h ⊢
+          subst jk
+          exact congrArg (Sigma.mk ik) (Subtype.ext h)
+    have hsep := (SardConvexDomain.whitneyStratumNet_spec s k).2.1
+      (by rw [← hi.1]; exact i.2.2) (by rw [← hj.1]; exact j.2.2) hcne
+    have hr : (2 : ℝ) ^ k / 8 < dist i.center j.center := by
+      simpa [SardConvexDomain.whitneyStratumRadius, edist_dist] using hsep
+    have hn := SardConvexDomain.dist_whitneyNormalize k x i.center j.center
+    have hfixed : (1 / 8 : ℝ) < dist (f i) (f j) := by
+      change (1 / 8 : ℝ) < dist (SardConvexDomain.whitneyNormalize k x i.center)
+        (SardConvexDomain.whitneyNormalize k x j.center)
+      rw [hn]
+      calc
+        (1 / 8 : ℝ) = ((2 : ℝ) ^ k)⁻¹ * ((2 : ℝ) ^ k / 8) := by field_simp
+        _ < ((2 : ℝ) ^ k)⁻¹ * dist i.center j.center :=
+          mul_lt_mul_of_pos_left hr (inv_pos.mpr (by positivity))
+    dsimp only [Function.onFun]
+    rw [edist_dist]
+    simpa using (ENNReal.ofReal_lt_ofReal_iff
+      (lt_trans (by norm_num : (0 : ℝ) < 1 / 8) hfixed)).2 hfixed
+  · rintro _ ⟨i, hi, rfl⟩
+    exact whitney_bounded_overlap_aux_normalized s k x i.center
+      ((SardConvexDomain.whitneyStratumNet_spec s k).1 (by rw [← hi.1]; exact i.2.2)) hi.2
+
 theorem whitney_bounded_overlap
     (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {K : Set E} (hK : IsClosed K) (hKn : K.Nonempty) :
     ∃ N : ℕ, ∀ x : E,
       Set.ncard {i : SardConvexDomain.WhitneyNetIndex K |
         x ∈ Metric.ball i.center (Metric.infDist i.center K / 2)} ≤ N := by
-  sorry
+  let P := Metric.packingNumber ((1 : NNReal) / 8) (Metric.closedBall (0 : E) 1)
+  have hP : P ≠ ⊤ := by
+    exact (isCompact_closedBall (0 : E) 1).packingNumber_ne_top _ (by norm_num)
+  refine ⟨P.toNat * 5, fun x => ?_⟩
+  let I : Set (SardConvexDomain.WhitneyNetIndex K) :=
+    {i | x ∈ Metric.ball i.center (Metric.infDist i.center K / 2)}
+  have hfin : I.Finite := SardConvexDomain.finite_whitneyNetHalfIncidence K x
+  by_cases hne : I.Nonempty
+  · obtain ⟨i, hi⟩ := hne
+    let J : ℤ → Set (SardConvexDomain.WhitneyNetIndex K) := fun k =>
+      {j | j.1 = k ∧ j ∈ I}
+    have hJ (k : ℤ) : (J k).ncard ≤ P.toNat := by
+      have he := whitney_bounded_overlap_aux_fiber K k x
+      have ht := ENat.toNat_le_toNat he hP
+      simpa [J, I, P] using ht
+    have hsub : I ⊆ J (i.1 - 2) ∪ J (i.1 - 1) ∪ J i.1 ∪ J (i.1 + 1) ∪ J (i.1 + 2) := by
+      intro j hj
+      have hb := SardConvexDomain.whitneyStratum_indices_le_add_two_of_mem_half_balls K
+        ((SardConvexDomain.whitneyStratumNet_spec K i.1).1 i.2.2)
+        ((SardConvexDomain.whitneyStratumNet_spec K j.1).1 j.2.2) hi hj
+      have hor : j.1 = i.1 - 2 ∨ j.1 = i.1 - 1 ∨ j.1 = i.1 ∨
+          j.1 = i.1 + 1 ∨ j.1 = i.1 + 2 := by omega
+      rcases hor with e | e | e | e | e <;> simp [J, e, hj]
+    have hJfin (k : ℤ) : (J k).Finite := hfin.subset (fun _ h => h.2)
+    have hUfin : (J (i.1 - 2) ∪ J (i.1 - 1) ∪ J i.1 ∪ J (i.1 + 1) ∪
+        J (i.1 + 2)).Finite :=
+      ((((hJfin (i.1 - 2)).union (hJfin (i.1 - 1))).union (hJfin i.1)).union
+        (hJfin (i.1 + 1))).union (hJfin (i.1 + 2))
+    have hn := Set.ncard_le_ncard hsub hUfin
+    have hu1 := Set.ncard_union_le (J (i.1 - 2)) (J (i.1 - 1))
+    have hu2 := Set.ncard_union_le (J (i.1 - 2) ∪ J (i.1 - 1)) (J i.1)
+    have hu3 := Set.ncard_union_le (J (i.1 - 2) ∪ J (i.1 - 1) ∪ J i.1) (J (i.1 + 1))
+    have hu4 := Set.ncard_union_le
+      (J (i.1 - 2) ∪ J (i.1 - 1) ∪ J i.1 ∪ J (i.1 + 1)) (J (i.1 + 2))
+    calc
+      I.ncard ≤ (J (i.1 - 2) ∪ J (i.1 - 1) ∪ J i.1 ∪ J (i.1 + 1) ∪
+        J (i.1 + 2)).ncard := hn
+      _ ≤ (J (i.1 - 2)).ncard + (J (i.1 - 1)).ncard + (J i.1).ncard +
+          (J (i.1 + 1)).ncard + (J (i.1 + 2)).ncard := by
+        omega
+      _ ≤ P.toNat * 5 := by
+        have h1 := hJ (i.1 - 2)
+        have h2 := hJ (i.1 - 1)
+        have h3 := hJ i.1
+        have h4 := hJ (i.1 + 1)
+        have h5 := hJ (i.1 + 2)
+        omega
+  · have hz : {i : SardConvexDomain.WhitneyNetIndex K |
+        x ∈ Metric.ball i.center (Metric.infDist i.center K / 2)} = ∅ := by
+      apply Set.not_nonempty_iff_eq_empty.mp
+      simpa [I] using hne
+    rw [hz]
+    simp
 -- END SEAT AREA
 
 /-- Scale-correct derivative bounds for a reciprocal.  For each order and list of input
