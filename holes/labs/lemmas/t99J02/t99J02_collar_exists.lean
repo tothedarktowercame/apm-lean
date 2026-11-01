@@ -1089,7 +1089,9 @@ theorem t99J02_edge_lift {x y : ConstructionTargets.Surfaces.Disk} (h : Relation
 /-- The small map of the collar: `ell` into the disk, then the quotient. -/
 theorem t99J02_ell_mem (u : ℂ) (hu : ‖u‖ ≤ 1) :
     t99J02_ell u ∈ Metric.closedBall (0 : ℂ) 1 := by
-  sorry
+  rw [mem_closedBall_zero_iff, t99J02_ell_norm]
+  have hre : u.re ≤ ‖u‖ := le_trans (le_abs_self u.re) (Complex.abs_re_le_norm u)
+  linarith
 
 /-- Fibres of `q₁ ∘ phi` on the upper half are fibres of `q₂`. Off the circle `phi z = phi z'`, so use
 `t99J02_phi_injOn`; on the circle `phi z = z²` and use `t99J02_edge_lift`. -/
@@ -1366,7 +1368,73 @@ theorem t99J02_chord_holds
 /-- Pasting along the chord. -/
 theorem t99J02_G_continuous (hg₁ : Continuous g₁) (hg₂ : Continuous g₂)
     (hch : t99J02_Chord g₁ g₂) : Continuous (t99J02_G g₁ g₂) := by
-  sorry
+  let U : Set ConstructionTargets.Surfaces.Disk := {z | 0 ≤ (z : ℂ).im}
+  let L : Set ConstructionTargets.Surfaces.Disk := {z | (z : ℂ).im ≤ 0}
+  have him : Continuous (fun z : ConstructionTargets.Surfaces.Disk => (z : ℂ).im) :=
+    Complex.continuous_im.comp continuous_subtype_val
+  have hU : IsClosed U := by
+    exact isClosed_le continuous_const him
+  have hL : IsClosed L := by
+    exact isClosed_le him continuous_const
+  have hcU : ContinuousOn (t99J02_G g₁ g₂) U := by
+    rw [continuousOn_iff_continuous_restrict]
+    have hleft : Continuous (fun z : U =>
+        (Sum.inl (g₁ ⟨z.1, by
+          have hz := z.2
+          change 0 ≤ (z.1 : ℂ).im at hz
+          exact hz⟩) : c₁.Punctured ⊕ c₂.Punctured)) :=
+      continuous_inl.comp (hg₁.comp (continuous_subtype_val.subtype_mk _))
+    have hc : Continuous (fun z : U =>
+        t99J02_mk c₁ c₂ (Sum.inl
+          (g₁ ⟨z.1, by
+            have hz := z.2
+            change 0 ≤ (z.1 : ℂ).im at hz
+            exact hz⟩))) :=
+      (t99J02_continuous_mk (c₁ := c₁) (c₂ := c₂)).comp hleft
+    convert hc using 1
+    funext z
+    change t99J02_G g₁ g₂ z.1 = _
+    rw [t99J02_G, dif_pos]
+  have hneg : Continuous t99J02_neg := by
+    exact (continuous_neg.comp continuous_subtype_val).subtype_mk _
+  have hcL : ContinuousOn (t99J02_G g₁ g₂) L := by
+    rw [continuousOn_iff_continuous_restrict]
+    have htoUpper : Continuous (fun z : L =>
+        (⟨t99J02_neg z.1, by
+          have hz := z.2
+          change (z.1 : ℂ).im ≤ 0 at hz
+          simpa [t99J02_neg] using hz⟩ : t99J02_Upper)) :=
+      (hneg.comp continuous_subtype_val).subtype_mk _
+    have hright : Continuous (fun z : L =>
+        (Sum.inr (g₂ ⟨t99J02_neg z.1, by
+          have hz := z.2
+          change (z.1 : ℂ).im ≤ 0 at hz
+          simpa [t99J02_neg] using hz⟩) : c₁.Punctured ⊕ c₂.Punctured)) :=
+      continuous_inr.comp (hg₂.comp htoUpper)
+    have hc : Continuous (fun z : L =>
+        t99J02_mk c₁ c₂ (Sum.inr
+          (g₂ ⟨t99J02_neg z.1, by
+            have hz := z.2
+            change (z.1 : ℂ).im ≤ 0 at hz
+            simpa [t99J02_neg] using hz⟩))) :=
+      (t99J02_continuous_mk (c₁ := c₁) (c₂ := c₂)).comp hright
+    convert hc using 1
+    funext z
+    change t99J02_G g₁ g₂ z.1 = _
+    rw [t99J02_G]
+    by_cases hz : 0 ≤ (z.1 : ℂ).im
+    · rw [dif_pos hz]
+      have hzl := z.2
+      change (z.1 : ℂ).im ≤ 0 at hzl
+      exact hch z.1 (le_antisymm hzl hz)
+    · rw [dif_neg hz]
+  rw [← continuousOn_univ]
+  have hul : U ∪ L = Set.univ := by
+    ext z
+    simp only [U, L, Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    exact le_total 0 (z : ℂ).im
+  rw [← hul]
+  exact hcU.union_of_isClosed hcL hU hL
 
 /-- On the closed lower half `G` is `g₂ ∘ neg`, including on the chord. -/
 theorem t99J02_G_lower (hch : t99J02_Chord g₁ g₂) (z : ConstructionTargets.Surfaces.Disk) (h : (z : ℂ).im ≤ 0) :
@@ -1540,7 +1608,114 @@ theorem t99J02_homeomorph_of_G [T2Space (Surface true 1)] (hch : t99J02_Chord g�
     (hs₁ : Function.Surjective g₁) (hs₂ : Function.Surjective g₂)
     (hcg₁ : Continuous g₁) (hcg₂ : Continuous g₂) :
     Nonempty (ConnectedSum c₁ c₂ ≃ₜ Surface true 2) := by
-  sorry
+  let F : Surface true 2 → ConnectedSum c₁ c₂ :=
+    Quotient.lift (t99J02_G g₁ g₂) (fun _ _ h => hrel h)
+  have hFq (z : ConstructionTargets.Surfaces.Disk) :
+      F (surfaceQuotient true 2 z) = t99J02_G g₁ g₂ z := rfl
+  have hFc : Continuous F := by
+    apply continuous_coinduced_dom.mpr
+    exact hcont
+  have hFi : Function.Injective F := by
+    intro x y hxy
+    induction x using Quotient.inductionOn with
+    | _ x =>
+      induction y using Quotient.inductionOn with
+      | _ y => exact hinj hxy
+  have hFs : Function.Surjective F := by
+    intro p
+    induction p using Quotient.inductionOn with
+    | _ p =>
+      cases p with
+      | inl p =>
+        obtain ⟨z, rfl⟩ := hs₁ p
+        refine ⟨surfaceQuotient true 2 z.1, ?_⟩
+        rw [hFq, t99J02_G, dif_pos z.2]
+        congr 3
+      | inr p =>
+        obtain ⟨z, rfl⟩ := hs₂ p
+        refine ⟨surfaceQuotient true 2 (t99J02_neg z.1), ?_⟩
+        rw [hFq, t99J02_G_lower g₁ g₂ hch]
+        · congr 3
+          apply Subtype.ext
+          simp [t99J02_neg]
+        · simp [t99J02_neg, z.2]
+  have hFclosed : IsClosedMap F := by
+    have hUpperClosed : IsClosed {z : ConstructionTargets.Surfaces.Disk |
+        0 ≤ (z : ℂ).im} :=
+      isClosed_le continuous_const (Complex.continuous_im.comp continuous_subtype_val)
+    letI : CompactSpace t99J02_Upper :=
+      isCompact_iff_compactSpace.mp hUpperClosed.isCompact
+    intro A hA
+    apply t99J02_isClosed_of
+    · let B : Set t99J02_Upper :=
+        {z | surfaceQuotient true 2 z.1 ∈ A}
+      have hBc : IsClosed B := by
+        change IsClosed ((fun z : t99J02_Upper =>
+          surfaceQuotient true 2 z.1) ⁻¹' A)
+        exact hA.preimage ((continuous_surfaceQuotient true 2).comp continuous_subtype_val)
+      have hBcompact : IsCompact B := hBc.isCompact
+      have heq :
+          (fun p => t99J02_mk c₁ c₂ (Sum.inl p)) ⁻¹' (F '' A) = g₁ '' B := by
+        ext p
+        constructor
+        · rintro ⟨x, hxA, hxp⟩
+          induction x using Quotient.inductionOn with
+          | _ x =>
+            obtain ⟨z, rfl⟩ := hs₁ p
+            refine ⟨z, ?_, rfl⟩
+            change surfaceQuotient true 2 z.1 ∈ A
+            have hzG : t99J02_G g₁ g₂ z.1 =
+                t99J02_mk c₁ c₂ (Sum.inl (g₁ z)) := by
+              rw [t99J02_G, dif_pos z.2]
+            rw [hinj (hzG.trans hxp.symm)]
+            exact hxA
+        · rintro ⟨z, hzB, rfl⟩
+          refine ⟨surfaceQuotient true 2 z.1, hzB, ?_⟩
+          rw [hFq, t99J02_G, dif_pos z.2]
+      rw [heq]
+      exact (hBcompact.image hcg₁).isClosed
+    · let B : Set t99J02_Upper :=
+        {z | surfaceQuotient true 2 (t99J02_neg z.1) ∈ A}
+      have hneg : Continuous t99J02_neg := by
+        apply Continuous.subtype_mk
+        change Continuous (fun z : ConstructionTargets.Surfaces.Disk => -(z : ℂ))
+        fun_prop
+      have hBc : IsClosed B := by
+        change IsClosed ((fun z : t99J02_Upper =>
+          surfaceQuotient true 2 (t99J02_neg z.1)) ⁻¹' A)
+        exact hA.preimage ((continuous_surfaceQuotient true 2).comp
+          (hneg.comp continuous_subtype_val))
+      have hBcompact : IsCompact B := hBc.isCompact
+      have heq :
+          (fun p => t99J02_mk c₁ c₂ (Sum.inr p)) ⁻¹' (F '' A) = g₂ '' B := by
+        ext p
+        constructor
+        · rintro ⟨x, hxA, hxp⟩
+          induction x using Quotient.inductionOn with
+          | _ x =>
+            obtain ⟨z, rfl⟩ := hs₂ p
+            refine ⟨z, ?_, rfl⟩
+            change surfaceQuotient true 2 (t99J02_neg z.1) ∈ A
+            have hzG : t99J02_G g₁ g₂ (t99J02_neg z.1) =
+                t99J02_mk c₁ c₂ (Sum.inr (g₂ z)) := by
+              rw [t99J02_G_lower g₁ g₂ hch]
+              · congr 3
+                exact Subtype.ext (by simp [t99J02_neg])
+              · simp [t99J02_neg, z.2]
+            rw [hinj (hzG.trans hxp.symm)]
+            exact hxA
+        · rintro ⟨z, hzB, rfl⟩
+          refine ⟨surfaceQuotient true 2 (t99J02_neg z.1), hzB, ?_⟩
+          rw [hFq, t99J02_G_lower g₁ g₂ hch]
+          · congr 3
+            exact Subtype.ext (by simp [t99J02_neg])
+          · simp [t99J02_neg, z.2]
+      rw [heq]
+      exact (hBcompact.image hcg₂).isClosed
+  have hhome : IsHomeomorph F :=
+    isHomeomorph_iff_continuous_isClosedMap_bijective.mpr
+      ⟨hFc, hFclosed, hFi, hFs⟩
+  exact ⟨(hhome.homeomorph F).symm⟩
 
 end Glue
 
