@@ -464,7 +464,11 @@ theorem t99J02_G_continuous (hg₁ : Continuous g₁) (hg₂ : Continuous g₂)
 /-- On the closed lower half `G` is `g₂ ∘ neg`, including on the chord. -/
 theorem t99J02_G_lower (hch : t99J02_Chord g₁ g₂) (z : ConstructionTargets.Surfaces.Disk) (h : (z : ℂ).im ≤ 0) :
     t99J02_G g₁ g₂ z = t99J02_mk c₁ c₂ (Sum.inr (g₂ ⟨t99J02_neg z, by simpa [t99J02_neg] using h⟩)) := by
-  sorry
+  rw [t99J02_G]
+  by_cases hz : 0 ≤ (z : ℂ).im
+  · rw [dif_pos hz]
+    exact hch z (le_antisymm h hz)
+  · rw [dif_neg hz]
 
 /-- `G` respects the octagon's identifications. For handle `0` both points are upper and
 `t99J02_phi_edge` turns the generator into a generator of `Surface true 1`, so `g₁` agrees; for
