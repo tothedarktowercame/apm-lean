@@ -1763,6 +1763,52 @@ theorem hasFDerivAt_gluedWhitneyJet_of_not_mem
 /-- Boundary differentiability of successive glued jets.  Subtract the linear term
 `(J_(k+1)(a')).curryLeft (x-a')`; the exact Taylor formula at `a'` leaves order two,
 while the off-set and two-base-point errors have exponent `m+1-k ≥ 2`. -/
+theorem hasFDerivAt_gluedWhitneyJet_of_mem_aux_contDiff_taylor
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (m : ℕ) (J : (j : ℕ) → E → E[×j]→L[ℝ] F) (a : E) :
+    ContDiff ℝ ⊤ (taylorPolynomial m J a) := by
+  show ContDiff ℝ ⊤ (fun x ↦ ∑ j ∈ Finset.range (m + 1),
+    ((j.factorial : ℝ)⁻¹) • J j a (fun _ ↦ x - a))
+  apply ContDiff.sum
+  intro j _
+  apply ContDiff.const_smul
+  exact (ContinuousMultilinearMap.contDiff _).comp
+    (contDiff_pi.2 fun _ ↦ contDiff_id.sub contDiff_const)
+
+/-- At the base point, the `k`-th derivative of the Taylor polynomial is the `k`-th jet:
+every higher term of the exact formula carries a zero `a - a` argument. -/
+theorem hasFDerivAt_gluedWhitneyJet_of_mem_aux_base
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {K : Set E} {m : ℕ} {f : E → F} {a : E} (ha : a ∈ K)
+    (hsym : ∀ r ≤ m, ∀ x ∈ K, ∀ σ : Equiv.Perm (Fin r),
+      (convexJet r f K x).domDomCongr σ = convexJet r f K x)
+    {k : ℕ} (hk : k ≤ m) :
+    iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) a =
+      convexJet k f K a := by
+  apply ContinuousMultilinearMap.ext
+  intro v
+  rw [iteratedFDeriv_taylorPolynomial_exact m k (fun j ↦ convexJet j f K) a a hk v
+    (fun j hj σ ↦ hsym j hj a ha σ)]
+  rw [Finset.sum_eq_single 0]
+  · simp only [Nat.factorial_zero, Nat.cast_one, inv_one, one_smul, sub_self]
+    have htuple : ∀ i : Fin (k + 0),
+        Fin.append v (fun _ : Fin 0 => (0 : E)) i = v i := by
+      intro i
+      rw [show i = Fin.castAdd 0 ⟨i.val, by have h := i.isLt; omega⟩ from Fin.ext rfl,
+        Fin.append_left]
+      exact congrArg v (Fin.ext rfl)
+    rw [funext htuple]
+    rfl
+  · intro q hq hq0
+    simp only [sub_self]
+    have hqpos : 0 < q := Nat.pos_of_ne_zero hq0
+    rw [(convexJet (k + q) f K a).map_coord_zero (Fin.natAdd k ⟨0, hqpos⟩)
+      (by rw [Fin.append_right]), smul_zero]
+  · intro hmem
+    exact (hmem (Finset.mem_range.mpr (by omega))).elim
+
 theorem hasFDerivAt_gluedWhitneyJet_of_mem
     {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
@@ -1783,7 +1829,137 @@ theorem hasFDerivAt_gluedWhitneyJet_of_mem
           C * (Metric.infDist y K) ^ (m + 1 - r)) :
     HasFDerivAt (fun y ↦ gluedWhitneyJet K f G y k)
       (gluedWhitneyJet K f G x (k + 1)).curryLeft x := by
-  sorry
+  classical
+  set J := fun j ↦ convexJet j f K with hJdef
+  set P := fun a ↦ taylorPolynomial m J a with hPdef
+  set p := m + 1 - k with hpdef
+  have hkle : k ≤ m := Nat.le_of_lt hk
+  have hp2 : 2 ≤ p := by omega
+  have hCT : ∀ a, ContDiff ℝ ⊤ (P a) :=
+    fun a ↦ hasFDerivAt_gluedWhitneyJet_of_mem_aux_contDiff_taylor m J a
+  have hbase : ∀ a ∈ K, ∀ k' ≤ m, iteratedFDeriv ℝ k' (P a) a = J k' a := by
+    intro a ha k' hk'
+    rw [hJdef]
+    exact hasFDerivAt_gluedWhitneyJet_of_mem_aux_base ha hsym hk'
+  obtain ⟨C1, hC1nn, hC1⟩ := hdiff
+  obtain ⟨C2, hC2nn, hC2⟩ := hbound k hkle
+  set C' := C2 + C1 * 2 ^ p with hC'def
+  have hC'nn : 0 ≤ C' := by positivity
+  -- The remainder `R y = GJ y k - D^k P_x y` is `O(‖y - x‖ ^ p)` with `p ≥ 2`.
+  have hRbound : ∀ y, ‖gluedWhitneyJet K f G y k - iteratedFDeriv ℝ k (P x) y‖ ≤
+      C' * ‖y - x‖ ^ p := by
+    intro y
+    by_cases hy : y ∈ K
+    · have hGy : gluedWhitneyJet K f G y k = J k y := by
+        simp only [gluedWhitneyJet, if_pos hy]; rfl
+      have hb := hbase y hy k hkle
+      have hsub := hC1 k hkle x hx y hy y
+      rw [show (fun z ↦ taylorPolynomial m J x z - taylorPolynomial m J y z)
+          = P x - P y from rfl,
+        iteratedFDeriv_sub_apply ((hCT x).contDiffAt.of_le le_top)
+          ((hCT y).contDiffAt.of_le le_top)] at hsub
+      simp only [sub_self, norm_zero, add_zero] at hsub
+      have h2p : (1 : ℝ) ≤ 2 ^ p := by simpa using pow_le_pow_left₀ (zero_le_one : (0:ℝ) ≤ 1) (one_le_two : (1:ℝ) ≤ 2) p
+      have hC1le : C1 ≤ C' :=
+        calc C1 = C1 * 1 := (mul_one _).symm
+          _ ≤ C1 * 2 ^ p := mul_le_mul_of_nonneg_left h2p hC1nn
+          _ ≤ C2 + C1 * 2 ^ p := le_add_of_nonneg_left hC2nn
+      calc ‖gluedWhitneyJet K f G y k - iteratedFDeriv ℝ k (P x) y‖
+          = ‖iteratedFDeriv ℝ k (P x) y - J k y‖ := by
+            rw [hGy, norm_sub_rev]
+        _ = ‖iteratedFDeriv ℝ k (P x) y - iteratedFDeriv ℝ k (P y) y‖ := by rw [hb]
+        _ ≤ C1 * ‖y - x‖ ^ p := hsub
+        _ ≤ C' * ‖y - x‖ ^ p :=
+          mul_le_mul_of_nonneg_right hC1le (pow_nonneg (norm_nonneg _) _)
+    · have hGy : gluedWhitneyJet K f G y k = iteratedFDeriv ℝ k G y := by
+        simp only [gluedWhitneyJet, if_neg hy]
+      obtain ⟨a, haK, hdist, hGb⟩ := hC2 y hy
+      have hinf : Metric.infDist y K ≤ ‖y - x‖ := by
+        rw [← dist_eq_norm]; exact Metric.infDist_le_dist_of_mem hx
+      have hya : ‖y - a‖ ≤ ‖y - x‖ := by rw [← dist_eq_norm, ← hdist]; exact hinf
+      have hsub := hC1 k hkle x hx a haK y
+      rw [show (fun z ↦ taylorPolynomial m J x z - taylorPolynomial m J a z)
+          = P x - P a from rfl,
+        iteratedFDeriv_sub_apply ((hCT x).contDiffAt.of_le le_top)
+          ((hCT a).contDiffAt.of_le le_top)] at hsub
+      have hpow : (‖y - x‖ + ‖y - a‖) ^ p ≤ 2 ^ p * ‖y - x‖ ^ p :=
+        calc (‖y - x‖ + ‖y - a‖) ^ p ≤ (2 * ‖y - x‖) ^ p :=
+            pow_le_pow_left₀ (add_nonneg (norm_nonneg _) (norm_nonneg _))
+              (by linarith [hya]) p
+          _ = 2 ^ p * ‖y - x‖ ^ p := mul_pow _ _ _
+      calc ‖gluedWhitneyJet K f G y k - iteratedFDeriv ℝ k (P x) y‖
+          = ‖(iteratedFDeriv ℝ k G y - iteratedFDeriv ℝ k (P a) y) +
+              (iteratedFDeriv ℝ k (P a) y - iteratedFDeriv ℝ k (P x) y)‖ := by
+            rw [hGy]; congr 1; abel
+        _ ≤ ‖iteratedFDeriv ℝ k G y - iteratedFDeriv ℝ k (P a) y‖ +
+              ‖iteratedFDeriv ℝ k (P a) y - iteratedFDeriv ℝ k (P x) y‖ :=
+            norm_add_le _ _
+        _ = ‖iteratedFDeriv ℝ k G y - iteratedFDeriv ℝ k (P a) y‖ +
+              ‖iteratedFDeriv ℝ k (P x) y - iteratedFDeriv ℝ k (P a) y‖ := by
+            rw [norm_sub_rev (iteratedFDeriv ℝ k (P a) y) (iteratedFDeriv ℝ k (P x) y)]
+        _ ≤ C2 * Metric.infDist y K ^ p + C1 * (2 ^ p * ‖y - x‖ ^ p) :=
+            add_le_add hGb (hsub.trans (mul_le_mul_of_nonneg_left hpow hC1nn))
+        _ ≤ C2 * ‖y - x‖ ^ p + C1 * (2 ^ p * ‖y - x‖ ^ p) :=
+            add_le_add_left
+              (mul_le_mul_of_nonneg_left
+                (pow_le_pow_left₀ Metric.infDist_nonneg hinf p) hC2nn) _
+        _ = C' * ‖y - x‖ ^ p := by rw [hC'def]; ring
+  -- Hence `R = o(‖y - x‖)` near `x`.
+  have hR : (fun y ↦ gluedWhitneyJet K f G y k - iteratedFDeriv ℝ k (P x) y)
+      =o[nhds x] (fun y ↦ y - x) := by
+    rw [Asymptotics.isLittleO_iff]
+    intro c hc
+    have hC'1 : (0 : ℝ) < C' + 1 := by linarith [hC'nn]
+    filter_upwards [Metric.ball_mem_nhds x
+      (show (0 : ℝ) < min 1 (c / (C' + 1)) from lt_min zero_lt_one (div_pos hc hC'1))]
+      with y hy
+    rw [Metric.mem_ball, dist_eq_norm] at hy
+    have ht1 : ‖y - x‖ ≤ 1 := le_of_lt (lt_of_lt_of_le hy (min_le_left _ _))
+    have htc : C' * ‖y - x‖ ≤ c := by
+      have h1 : (C' + 1) * ‖y - x‖ < c := by
+        have h2 := lt_of_lt_of_le hy (min_le_right _ _)
+        rw [lt_div_iff₀ hC'1] at h2
+        rwa [mul_comm] at h2
+      have h3 : C' * ‖y - x‖ ≤ (C' + 1) * ‖y - x‖ :=
+        mul_le_mul_of_nonneg_right (le_add_of_nonneg_right zero_le_one) (norm_nonneg _)
+      linarith [h3, h1]
+    calc ‖gluedWhitneyJet K f G y k - iteratedFDeriv ℝ k (P x) y‖
+        ≤ C' * ‖y - x‖ ^ p := hRbound y
+      _ ≤ C' * ‖y - x‖ ^ 2 :=
+          mul_le_mul_of_nonneg_left
+            (pow_le_pow_of_le_one (norm_nonneg _) ht1 hp2) hC'nn
+      _ = C' * ‖y - x‖ * ‖y - x‖ := by ring
+      _ ≤ c * ‖y - x‖ := mul_le_mul_of_nonneg_right htc (norm_nonneg _)
+  -- The polynomial part contributes the exact linear term.
+  have hAt : ContDiffAt ℝ (⊤ : WithTop ℕ∞) (P x) x := (hCT x).contDiffAt
+  have hkm : (k : WithTop ℕ∞) < (⊤ : WithTop ℕ∞) := WithTop.coe_lt_top _
+  have hdiffAt : DifferentiableAt ℝ (iteratedFDeriv ℝ k (P x)) x :=
+    hAt.differentiableAt_iteratedFDeriv hkm
+  have hfd : fderiv ℝ (iteratedFDeriv ℝ k (P x)) x =
+      (iteratedFDeriv ℝ (k + 1) (P x) x).curryLeft := by
+    rw [fderiv_iteratedFDeriv, Function.comp_apply]
+    rfl
+  have hmainQ : HasFDerivAt (fun y ↦ iteratedFDeriv ℝ k (P x) y)
+      (iteratedFDeriv ℝ (k + 1) (P x) x).curryLeft x := hfd ▸ hdiffAt.hasFDerivAt
+  have hQ := hasFDerivAt_iff_isLittleO.mp hmainQ
+  -- Assemble.
+  have hbk : gluedWhitneyJet K f G x k = iteratedFDeriv ℝ k (P x) x := by
+    have h1 : gluedWhitneyJet K f G x k = J k x := by
+      simp only [gluedWhitneyJet, if_pos hx]; rfl
+    rw [h1, ← hbase x hx k hkle]
+  have hk1m : k + 1 ≤ m := by omega
+  have he2 : gluedWhitneyJet K f G x (k + 1) = iteratedFDeriv ℝ (k + 1) (P x) x := by
+    have h1 : gluedWhitneyJet K f G x (k + 1) = J (k + 1) x := by
+      simp only [gluedWhitneyJet, if_pos hx]; rfl
+    rw [h1, ← hbase x hx (k + 1) hk1m]
+  rw [hasFDerivAt_iff_isLittleO, hbk, he2]
+  exact (hR.add hQ).congr' (Filter.Eventually.of_forall fun y ↦ by
+    show gluedWhitneyJet K f G y k - iteratedFDeriv ℝ k (P x) y +
+        (iteratedFDeriv ℝ k (P x) y - iteratedFDeriv ℝ k (P x) x -
+          (iteratedFDeriv ℝ (k + 1) (P x) x).curryLeft (y - x)) =
+      gluedWhitneyJet K f G y k - iteratedFDeriv ℝ k (P x) x -
+        (iteratedFDeriv ℝ (k + 1) (P x) x).curryLeft (y - x)
+    abel) (Filter.EventuallyEq.rfl)
 
 /-- Assemble the zero-term identity, off-set derivatives, boundary derivative leaf, and
 component continuity into Mathlib's `HasFTaylorSeriesUpTo` structure.  This isolates the
