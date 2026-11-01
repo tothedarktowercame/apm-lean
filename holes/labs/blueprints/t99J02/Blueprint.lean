@@ -286,7 +286,79 @@ real, so `ζ = ±1`. -/
 theorem t99J02_phi_injOn (z z' : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im) (hz' : 0 ≤ (z' : ℂ).im)
     (h : t99J02_phi (z : ℂ) = t99J02_phi (z' : ℂ)) :
     z = z' ∨ (((z : ℂ) = 1 ∨ (z : ℂ) = -1) ∧ ((z' : ℂ) = 1 ∨ (z' : ℂ) = -1)) := by
-  sorry
+  let w : ℂ := ⟨(z : ℂ).re,
+    ((z : ℂ).im + √(1 - (z : ℂ).re ^ 2)) / 2⟩
+  let w' : ℂ := ⟨(z' : ℂ).re,
+    ((z' : ℂ).im + √(1 - (z' : ℂ).re ^ 2)) / 2⟩
+  have hsq : w ^ 2 = w' ^ 2 := by
+    simpa only [t99J02_phi, w, w'] using h
+  rcases eq_or_eq_neg_of_sq_eq_sq w w' hsq with heq | hneg
+  · left
+    apply Subtype.ext
+    apply Complex.ext
+    · simpa [w, w'] using congrArg Complex.re heq
+    · have hre : (z : ℂ).re = (z' : ℂ).re := by
+        simpa [w, w'] using congrArg Complex.re heq
+      have him : ((z : ℂ).im + √(1 - (z : ℂ).re ^ 2)) / 2 =
+          ((z' : ℂ).im + √(1 - (z' : ℂ).re ^ 2)) / 2 := by
+        simpa [w, w'] using congrArg Complex.im heq
+      rw [hre] at him
+      linarith
+  · right
+    have hwim : 0 ≤ w.im := by
+      dsimp [w]
+      positivity
+    have hwim' : 0 ≤ w'.im := by
+      dsimp [w']
+      positivity
+    have himneg : w.im = -w'.im := congrArg Complex.im hneg
+    have hw0 : w.im = 0 := by linarith
+    have hw0' : w'.im = 0 := by linarith
+    have hy0 : (z : ℂ).im = 0 := by
+      have hs := Real.sqrt_nonneg (1 - (z : ℂ).re ^ 2)
+      dsimp [w] at hw0
+      linarith
+    have hy0' : (z' : ℂ).im = 0 := by
+      have hs := Real.sqrt_nonneg (1 - (z' : ℂ).re ^ 2)
+      dsimp [w'] at hw0'
+      linarith
+    have hxnorm : (z : ℂ).re ^ 2 ≤ 1 := by
+      have hn : ‖(z : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp z.2
+      have hs := Complex.sq_norm (z : ℂ)
+      rw [Complex.normSq_apply, hy0] at hs
+      nlinarith [norm_nonneg (z : ℂ)]
+    have hxnorm' : (z' : ℂ).re ^ 2 ≤ 1 := by
+      have hn : ‖(z' : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp z'.2
+      have hs := Complex.sq_norm (z' : ℂ)
+      rw [Complex.normSq_apply, hy0'] at hs
+      nlinarith [norm_nonneg (z' : ℂ)]
+    have hsqrt0 : √(1 - (z : ℂ).re ^ 2) = 0 := by
+      dsimp [w] at hw0
+      rw [hy0] at hw0
+      linarith
+    have hsqrt0' : √(1 - (z' : ℂ).re ^ 2) = 0 := by
+      dsimp [w'] at hw0'
+      rw [hy0'] at hw0'
+      linarith
+    have hx2 : (z : ℂ).re ^ 2 = 1 := by
+      have hs := Real.sq_sqrt (show 0 ≤ 1 - (z : ℂ).re ^ 2 by linarith)
+      rw [hsqrt0] at hs
+      nlinarith
+    have hx2' : (z' : ℂ).re ^ 2 = 1 := by
+      have hs := Real.sq_sqrt (show 0 ≤ 1 - (z' : ℂ).re ^ 2 by linarith)
+      rw [hsqrt0'] at hs
+      nlinarith
+    constructor
+    · rcases (sq_eq_one_iff).mp hx2 with hx | hx
+      · left
+        apply Complex.ext <;> simp [hx, hy0]
+      · right
+        apply Complex.ext <;> simp [hx, hy0]
+    · rcases (sq_eq_one_iff).mp hx2' with hx | hx
+      · left
+        apply Complex.ext <;> simp [hx, hy0']
+      · right
+        apply Complex.ext <;> simp [hx, hy0']
 
 /-- `phi` reaches the unit circle only from the unit circle: `‖ζ‖² = x² + ((y+Y)/2)²`. -/
 theorem t99J02_phi_norm (z : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im)
