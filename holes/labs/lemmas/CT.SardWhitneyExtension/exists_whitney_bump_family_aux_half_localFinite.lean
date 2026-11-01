@@ -446,7 +446,23 @@ theorem whitney_support_geometry
       Metric.infDist x K ≤ 2 * Metric.infDist i.center K ∧
       dist x (SardConvexDomain.whitneyNetAnchor hK hKn i) ≤
         3 * Metric.infDist x K := by
-  sorry
+  have hxb : x ∈ Metric.ball i.center (Metric.infDist i.center K / 2) :=
+    P.support_subset i hx
+  have hcomp :=
+    SardConvexDomain.infDist_center_comparable_of_mem_half_ball K hxb
+  have hc0 : 0 ≤ Metric.infDist i.center K := Metric.infDist_nonneg
+  have hdist : dist x i.center < Metric.infDist i.center K / 2 :=
+    Metric.mem_ball.1 hxb
+  have hanchor := SardConvexDomain.whitneyNetAnchor_nearest hK hKn i
+  refine ⟨hcomp.1.le, by linarith, ?_⟩
+  calc dist x (SardConvexDomain.whitneyNetAnchor hK hKn i)
+      ≤ dist x i.center +
+          dist i.center (SardConvexDomain.whitneyNetAnchor hK hKn i) :=
+        dist_triangle _ _ _
+    _ = dist x i.center + Metric.infDist i.center K := by rw [hanchor]
+    _ ≤ Metric.infDist i.center K / 2 + Metric.infDist i.center K := by
+        linarith [hdist.le]
+    _ ≤ 3 * Metric.infDist x K := by linarith
 
 /-- The off-set Whitney formula is a `tsum`; complement-local finiteness makes it a finite
 sum in a neighborhood of every point where it is used. -/
@@ -485,7 +501,32 @@ theorem whitneyOffExtension_sub_taylor
         (taylorPolynomial m (fun j ↦ convexJet j f K)
             (SardConvexDomain.whitneyNetAnchor hK hKn i) x -
           taylorPolynomial m (fun j ↦ convexJet j f K) a x) := by
-  sorry
+  let Q : SardConvexDomain.WhitneyNetIndex K → F := fun i ↦
+    taylorPolynomial m (fun j ↦ convexJet j f K)
+      (SardConvexDomain.whitneyNetAnchor hK hKn i) x
+  let T : F := taylorPolynomial m (fun j ↦ convexJet j f K) a x
+  obtain ⟨U, hU, hfin⟩ := P.locallyFinite_compl x hx
+  have hxU : x ∈ U := mem_of_mem_nhds hU
+  have hfinite : (fun i ↦ P.phi i x • Q i).HasFiniteSupport := by
+    refine hfin.subset ?_
+    intro i hi
+    have hphi : P.phi i x ≠ 0 := by
+      intro hz
+      apply hi
+      simp [hz]
+    exact ⟨x, hxU, hphi⟩
+  have hQ : Summable (fun i ↦ P.phi i x • Q i) :=
+    summable_of_hasFiniteSupport hfinite
+  have hT : HasSum (fun i ↦ P.phi i x • T) T := by
+    simpa using (P.sum_one x hx).smul_const T
+  have hsub : HasSum (fun i ↦ P.phi i x • Q i - P.phi i x • T)
+      ((∑' i, P.phi i x • Q i) - T) := hQ.hasSum.sub hT
+  change (∑' i, P.phi i x • Q i) - T =
+    ∑' i, P.phi i x • (Q i - T)
+  rw [← hsub.tsum_eq]
+  apply tsum_congr
+  intro i
+  exact (smul_sub (P.phi i x) (Q i) T).symm
 
 /-- The complete finite-overlap estimate near the frontier, now relative to the Taylor
 polynomial at a nearest point.  Differentiate the subtraction identity, use
