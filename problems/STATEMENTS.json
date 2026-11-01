@@ -4747,7 +4747,7 @@
    "decls": [
     "apm_t00j05"
    ],
-   "sha256": "9cfb9817715f084e2550c23017c1e7cdff92b02664fdf5017bac5125f979bb4c",
+   "sha256": "b9695fc4b40d70450cc76a64d4273f0c891593b34e2327f644a5a7e789520840",
    "defs": [
     "CappedCylinder",
     "CappedCylinderRel",
@@ -4756,19 +4756,14 @@
     "NecklaceRel",
     "Sphere2",
     "Torus",
-    "X",
-    "cappedCylinderProjection",
-    "cappedCylinderRaw",
-    "periodOneExp",
-    "sphereBase",
-    "standardCurve"
+    "sphereBase"
    ],
    "grade": "faithful",
    "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
    "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
    "prelim_defect": null,
-   "rev": "7613d5c15",
-   "approved_at": "2026-11-01T16:54:59Z"
+   "rev": "c01e89987",
+   "approved_at": "2026-11-01T20:05:50Z"
   },
   "t00J06": {
    "decls": [
@@ -7919,6 +7914,72 @@
    "reason": "false value: raw muH[2] gives 16/3",
    "evidence": "holes/labs/statement-registry/repair-grades-t01J06.md",
    "revoked_at": "2026-11-01T15:48:49Z"
+  },
+  {
+   "id": "t00J05",
+   "entry": {
+    "decls": [
+     "apm_t00j05"
+    ],
+    "sha256": "9cfb9817715f084e2550c23017c1e7cdff92b02664fdf5017bac5125f979bb4c",
+    "defs": [
+     "CappedCylinder",
+     "CappedCylinderRel",
+     "E3",
+     "Necklace",
+     "NecklaceRel",
+     "Sphere2",
+     "Torus",
+     "X",
+     "cappedCylinderProjection",
+     "cappedCylinderRaw",
+     "periodOneExp",
+     "sphereBase",
+     "standardCurve"
+    ],
+    "grade": "faithful",
+    "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+    "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+    "prelim_defect": null,
+    "rev": "7613d5c15",
+    "approved_at": "2026-11-01T16:54:59Z"
+   },
+   "reason": "fixed one standard curve; Joe 2026-11-01 requires the general version to count",
+   "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+   "revoked_at": "2026-11-01T20:05:31Z"
+  },
+  {
+   "id": "t00J05",
+   "entry": {
+    "decls": [
+     "apm_t00j05"
+    ],
+    "sha256": "9cfb9817715f084e2550c23017c1e7cdff92b02664fdf5017bac5125f979bb4c",
+    "defs": [
+     "CappedCylinder",
+     "CappedCylinderRel",
+     "E3",
+     "Necklace",
+     "NecklaceRel",
+     "Sphere2",
+     "Torus",
+     "X",
+     "cappedCylinderProjection",
+     "cappedCylinderRaw",
+     "periodOneExp",
+     "sphereBase",
+     "standardCurve"
+    ],
+    "grade": "faithful",
+    "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+    "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+    "prelim_defect": null,
+    "rev": "9885c9717",
+    "approved_at": "2026-11-01T20:05:32Z"
+   },
+   "reason": "admit ran before the commit, so it fingerprinted HEAD (the old fixed-curve statement); re-admitted at the commit holding the general statement",
+   "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
+   "revoked_at": "2026-11-01T20:05:50Z"
   }
  ]
 }
