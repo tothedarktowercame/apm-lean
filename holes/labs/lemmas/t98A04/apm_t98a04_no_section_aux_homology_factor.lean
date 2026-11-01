@@ -445,7 +445,26 @@ theorem apm_t98a04_no_section_aux_homology_factor
       (apm_t98a04_HQ 2 apm_t98a04_S3)) :
     ¬∃ i : apm_t98a04_CP1 → apm_t98a04_S3,
       Continuous i ∧ ∀ p, apm_t98a04_hopf (i p) = p := by
-  sorry
+  open CategoryTheory in
+    rintro ⟨i, hi, hsection⟩
+    apply hbase
+    rw [CategoryTheory.Limits.IsZero.iff_id_eq_zero]
+    let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 2).obj
+      (ModuleCat.of ℚ ℚ)
+    let fi : TopCat.of apm_t98a04_CP1 ⟶ TopCat.of apm_t98a04_S3 :=
+      TopCat.ofHom ⟨i, hi⟩
+    let fh : TopCat.of apm_t98a04_S3 ⟶ TopCat.of apm_t98a04_CP1 :=
+      TopCat.ofHom ⟨apm_t98a04_hopf, apm_t98a04_continuous_hopf⟩
+    have hcomp : fi ≫ fh = 𝟙 (TopCat.of apm_t98a04_CP1) := by
+      ext p
+      exact hsection p
+    calc
+      𝟙 (apm_t98a04_HQ 2 apm_t98a04_CP1) = F.map (𝟙 _) :=
+        (F.map_id _).symm
+      _ = F.map (fi ≫ fh) := by rw [hcomp]
+      _ = F.map fi ≫ F.map fh := F.map_comp fi fh
+      _ = F.map fi ≫ 0 := by rw [htotal.eq_of_src (F.map fh)]
+      _ = 0 := by simp
 -- END SEAT AREA
 
 /-- Assemble the rational-homology obstruction to a section. -/
