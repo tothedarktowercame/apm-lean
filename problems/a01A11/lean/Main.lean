@@ -304,3 +304,63 @@ theorem cauchyTransform_not_entire
   -- Step 3: Contradiction
   obtain ⟨z₀, hz₀_mem, hz₀_ne⟩ := h_nonzero
   exact hz₀_ne (by rw [← hG_eq z₀ hz₀_mem]; exact hG_zero z₀)
+
+omit hK hKne hKpos in
+/-- The three requested conclusions for the Cauchy transform of a compact set
+of positive Lebesgue measure.  In part (c), the printed `z f(z)` is read as
+`z g(z)`, since `g` is the only function defined in the problem. -/
+theorem apm_a01a11 (K : Set ℝ) (hK : IsCompact K) (hKpos : 0 < volume K) :
+    (∀ z : ℂ, z ∉ ofReal '' K → DifferentiableAt ℂ (cauchyTransform K) z) ∧
+      (¬ ∃ G : ℂ → ℂ, Differentiable ℂ G ∧
+        ∀ z, z ∉ ofReal '' K → G z = cauchyTransform K z) ∧
+      Tendsto (fun z : ℂ => z * cauchyTransform K z)
+        (cocompact ℂ) (nhds (↑(- (volume K).toReal) : ℂ)) := by
+  have hKne : K.Nonempty := by
+    by_contra h
+    rw [Set.not_nonempty_iff_eq_empty.mp h] at hKpos
+    simp at hKpos
+  have h_asymptotic := cauchyTransform_tendsto_neg_vol K hK hKne hKpos
+  have h_inv : Tendsto (fun z : ℂ ↦ z⁻¹) (cocompact ℂ) (nhds 0) := by
+    rw [← Metric.cobounded_eq_cocompact]
+    exact Filter.tendsto_inv₀_cobounded
+  have h_ne_zero : ∀ᶠ z : ℂ in cocompact ℂ, z ≠ 0 := by
+    have hs : IsCompact ({0} : Set ℂ) := isCompact_singleton
+    filter_upwards [hs.compl_mem_cocompact] with z hz
+    simpa using hz
+  have h_decay :
+      Tendsto (cauchyTransform K) (cocompact ℂ) (nhds 0) := by
+    have hproduct :
+        Tendsto (fun z : ℂ ↦ (z * cauchyTransform K z) * z⁻¹)
+          (cocompact ℂ) (nhds 0) := by
+      simpa using h_asymptotic.mul h_inv
+    apply hproduct.congr'
+    filter_upwards [h_ne_zero] with z hz
+    calc
+      (z * cauchyTransform K z) * z⁻¹ =
+          cauchyTransform K z * (z * z⁻¹) := by ring
+      _ = cauchyTransform K z := by simp [hz]
+  have h_nonzero :
+      ∃ z, z ∉ ofReal '' K ∧ cauchyTransform K z ≠ 0 := by
+    by_contra! hzero
+    have hKim : IsCompact (ofReal '' K) :=
+      hK.image_of_continuousOn continuous_ofReal.continuousOn
+    have heventually_zero :
+        ∀ᶠ z : ℂ in cocompact ℂ, z * cauchyTransform K z = 0 := by
+      filter_upwards [hKim.compl_mem_cocompact] with z hz
+      rw [hzero z hz, mul_zero]
+    have hzero_limit :
+        Tendsto (fun z : ℂ ↦ z * cauchyTransform K z)
+          (cocompact ℂ) (nhds 0) :=
+      tendsto_const_nhds.congr' (Filter.EventuallyEq.symm heventually_zero)
+    have : (↑(- (volume K).toReal) : ℂ) = 0 :=
+      tendsto_nhds_unique h_asymptotic hzero_limit
+    have hmeasure_ne : (volume K).toReal ≠ 0 := by
+      apply ne_of_gt
+      rw [ENNReal.toReal_pos_iff]
+      exact ⟨hKpos, hK.measure_lt_top⟩
+    exact hmeasure_ne (by exact_mod_cast neg_eq_zero.mp (Complex.ofReal_eq_zero.mp this))
+  refine ⟨?_, ?_, h_asymptotic⟩
+  · exact fun z hz ↦ cauchyTransform_differentiableAt K hK hKne hKpos z hz
+  · exact cauchyTransform_not_entire K hK hKne hKpos
+      (fun z hz ↦ cauchyTransform_differentiableAt K hK hKne hKpos z hz)
+      h_decay h_nonzero
