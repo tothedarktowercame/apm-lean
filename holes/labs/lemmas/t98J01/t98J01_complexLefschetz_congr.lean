@@ -777,7 +777,25 @@ theorem t98J01_trace_ker_add_range
     LinearMap.trace ℚ V φ =
       LinearMap.trace ℚ (LinearMap.ker T) (φ.restrict hk) +
         LinearMap.trace ℚ (LinearMap.range T) (ψ.restrict hr) := by
-  sorry
+  let e : (V ⧸ LinearMap.ker T) ≃ₗ[ℚ] LinearMap.range T :=
+    T.quotKerEquivRange
+  have hcomm :
+      e.toLinearMap.comp ((LinearMap.ker T).mapQ (LinearMap.ker T) φ hk) =
+        (ψ.restrict hr).comp e.toLinearMap := by
+    ext x
+    change T (φ x) = ψ (T x)
+    exact LinearMap.congr_fun hT x
+  have heq :
+      e.conj ((LinearMap.ker T).mapQ (LinearMap.ker T) φ hk) =
+        ψ.restrict hr := by
+    ext x
+    have h := LinearMap.congr_fun hcomm (e.symm x)
+    rw [LinearEquiv.conj_apply]
+    simp only [LinearMap.comp_apply]
+    convert congrArg Subtype.val h using 1 <;> simp
+  rw [t98J01_trace_restrict_add_mapQ φ (LinearMap.ker T) hk]
+  congr 1
+  rw [← heq, LinearMap.trace_conj']
 
 /-- Seat: the alternating trace vanishes along a bounded long exact sequence with compatible endomorphisms. Apply `t98J01_trace_ker_add_range` to `i k`, `j k` and `δ k`. With `d k` the trace on `range (δ k)`, `e k` on `range (i k)`, `g k` on `range (j k)`: `tr a k = d k + e k`, `tr b k = e k + g k`, `tr c (k+1) = g (k+1) + d k`, `tr c 0 = g 0` (`hj0`). The exactness equalities identify the submodules. `C (N+1)` is trivial so `d N = 0`, and the sum telescopes. -/
 theorem t98J01_trace_longExact
@@ -819,7 +837,44 @@ theorem t98J01_complexLefschetz_sum_eq
     (N : ℕ) (hN : ∀ k, N < k → Subsingleton (C.homology k)) :
     (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k *
       LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom) = v := by
-  sorry
+  rcases h with ⟨hfinite, b, hb, hsum⟩
+  letI (k : ℕ) := hfinite k
+  let M := max N b
+  have htraceN (k : ℕ) (hk : N < k) :
+      LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom = 0 := by
+    letI := hN k hk
+    rw [Subsingleton.elim (HomologicalComplex.homologyMap φ k).hom 0]
+    exact map_zero (LinearMap.trace ℚ (C.homology k))
+  have htraceb (k : ℕ) (hk : b < k) :
+      LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom = 0 := by
+    letI := hb k hk
+    rw [Subsingleton.elim (HomologicalComplex.homologyMap φ k).hom 0]
+    exact map_zero (LinearMap.trace ℚ (C.homology k))
+  have hNM : Finset.range (N + 1) ⊆ Finset.range (M + 1) := by
+    apply Finset.range_mono
+    exact Nat.succ_le_succ (le_max_left _ _)
+  have hbM : Finset.range (b + 1) ⊆ Finset.range (M + 1) := by
+    apply Finset.range_mono
+    exact Nat.succ_le_succ (le_max_right _ _)
+  have hpadN :
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k *
+        LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom) =
+      ∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k *
+        LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom := by
+    apply Finset.sum_subset hNM
+    intro k hkM hkN
+    simp only [Finset.mem_range, not_lt] at hkM hkN
+    rw [htraceN k (lt_of_lt_of_le (Nat.lt_succ_self N) hkN), mul_zero]
+  have hpadb :
+      (∑ k ∈ Finset.range (b + 1), (-1 : ℚ)^k *
+        LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom) =
+      ∑ k ∈ Finset.range (M + 1), (-1 : ℚ)^k *
+        LinearMap.trace ℚ (C.homology k) (HomologicalComplex.homologyMap φ k).hom := by
+    apply Finset.sum_subset hbM
+    intro k hkM hkb
+    simp only [Finset.mem_range, not_lt] at hkM hkb
+    rw [htraceb k (lt_of_lt_of_le (Nat.lt_succ_self b) hkb), mul_zero]
+  rw [hpadN, ← hpadb, hsum]
 
 /-- Seat: a short exact sequence of chain complexes is surjective on `H₀`. In degree 0 every chain is a cycle: `S.g.f 0` is epi (`hS.epi_g`), and `homologyπ` is epi from the cycles. Lift a representative along `S.g.f 0`, lift it to cycles (the outgoing differential is zero, `ChainComplex` with `(ComplexShape.down ℕ).next 0 = 0`). -/
 theorem t98J01_homologyMap_g_zero_surjective
