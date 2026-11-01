@@ -394,7 +394,133 @@ lemma apm_t91J03_no_wind_aux_barrier (gamma : C(Circle, apm_t91J03_Annulus))
     (hper : ∀ t, θ (t + 1) = θ t + 2 * Real.pi * d) (hd : 2 ≤ d.natAbs) :
     ∃ β : C(I, ℝ × ℝ), (β 0).2 = 0 ∧ (β 1).2 = 1 ∧ ∀ s t,
       β t ≠ (θ s, apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s))) := by
-  sorry
+  -- The height function of the lift, its continuity, bounds and periodicity.
+  have hcont : Continuous fun s : ℝ =>
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) := by
+    simp only [apm_t91J03_height]
+    fun_prop
+  have hbnd : ∀ s : ℝ, 0 ≤ apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) ∧
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) ≤ 1 := by
+    intro s
+    exact Set.mem_Icc.mp (gamma (Circle.exp (2 * Real.pi * s))).2.2
+  have hshift : ∀ s : ℝ, ∀ k : ℤ,
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) =
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * (s - k))) := by
+    intro s k
+    have he : Circle.exp (2 * Real.pi * s) = Circle.exp (2 * Real.pi * (s - k)) := by
+      apply Circle.exp_eq_exp.mpr
+      refine ⟨k, ?_⟩
+      push_cast
+      ring
+    rw [he]
+  -- A global minimum and a global maximum of the height, at `t₀` and `t₁`.
+  obtain ⟨t₀, ht₀, hmin⟩ := isCompact_Icc.exists_isMinOn
+    (Set.nonempty_Icc.2 zero_le_one) hcont.continuousOn
+  obtain ⟨t₁, ht₁, hmax⟩ := isCompact_Icc.exists_isMaxOn
+    (Set.nonempty_Icc.2 zero_le_one) hcont.continuousOn
+  have hminall : ∀ s : ℝ,
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t₀)) ≤
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) := by
+    intro s
+    have hu : s - ⌊s⌋ ∈ Set.Icc (0 : ℝ) 1 := by
+      have h1 : 0 ≤ Int.fract s := Int.fract_nonneg s
+      have h2 : Int.fract s < 1 := Int.fract_lt_one s
+      have he : Int.fract s = s - ⌊s⌋ := rfl
+      rw [he] at h1 h2
+      exact ⟨h1, h2.le⟩
+    have := hmin hu
+    simp only [Set.mem_setOf_eq] at this
+    rw [hshift s ⌊s⌋]
+    exact this
+  have hmaxall : ∀ s : ℝ,
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) ≤
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t₁)) := by
+    intro s
+    have hu : s - ⌊s⌋ ∈ Set.Icc (0 : ℝ) 1 := by
+      have h1 : 0 ≤ Int.fract s := Int.fract_nonneg s
+      have h2 : Int.fract s < 1 := Int.fract_lt_one s
+      have he : Int.fract s = s - ⌊s⌋ := rfl
+      rw [he] at h1 h2
+      exact ⟨h1, h2.le⟩
+    have := hmax hu
+    simp only [Set.mem_setOf_eq] at this
+    rw [hshift s ⌊s⌋]
+    exact this
+  -- The three pieces of the barrier.
+  set x₀ : ℝ := θ t₀ + 2 * Real.pi with hx₀
+  set x₁ : ℝ := θ t₁ + 2 * Real.pi with hx₁
+  set y₀ : ℝ := apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t₀)) with hy₀
+  set y₁ : ℝ := apm_t91J03_height gamma (Circle.exp (2 * Real.pi * t₁)) with hy₁
+  have hy₀n : 0 ≤ y₀ := (hbnd t₀).1
+  have hy₁n : y₁ ≤ 1 := (hbnd t₁).2
+  have hc2 : Continuous fun u : ℝ =>
+      (θ (t₀ + (t₁ - t₀) * u) + 2 * Real.pi,
+        apm_t91J03_height gamma (Circle.exp (2 * Real.pi * (t₀ + (t₁ - t₀) * u)))) := by
+    have c1 : Continuous fun u : ℝ => θ (t₀ + (t₁ - t₀) * u) :=
+      θ.continuous.comp (by fun_prop)
+    have c2 : Continuous fun u : ℝ =>
+        apm_t91J03_height gamma (Circle.exp (2 * Real.pi * (t₀ + (t₁ - t₀) * u))) :=
+      hcont.comp (by fun_prop)
+    exact (c1.add continuous_const).prodMk c2
+  set p₁ : Path (x₀, 0) (x₀, y₀) :=
+    Path.ofLine (f := fun u : ℝ => (x₀, y₀ * u)) (by fun_prop) (by simp) (by simp) with hp₁
+  set p₂ : Path (x₀, y₀) (x₁, y₁) :=
+    Path.ofLine (f := fun u : ℝ =>
+      (θ (t₀ + (t₁ - t₀) * u) + 2 * Real.pi,
+        apm_t91J03_height gamma (Circle.exp (2 * Real.pi * (t₀ + (t₁ - t₀) * u)))))
+      hc2.continuousOn (by simp [hx₀, hy₀])
+      (by simp [hx₁, hy₁, show t₀ + (t₁ - t₀) * 1 = t₁ by ring]) with hp₂
+  set p₃ : Path (x₁, y₁) (x₁, 1) :=
+    Path.ofLine (f := fun u : ℝ => (x₁, y₁ + (1 - y₁) * u)) (by fun_prop) (by simp) (by simp)
+    with hp₃
+  set β : C(I, ℝ × ℝ) := ⟨((p₁.trans p₂).trans p₃),
+    ((p₁.trans p₂).trans p₃).continuous⟩ with hβ
+  refine ⟨β, by simp [hβ, Path.source, Path.target], by simp [hβ, Path.source, Path.target], ?_⟩
+  intro s t
+  have avoid₂ : ∀ τ : ℝ, (θ τ + 2 * Real.pi,
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * τ))) ≠
+      (θ s, apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s))) := by
+    intro τ h
+    exact apm_t91J03_disjoint gamma hgamma θ d hθ hper hd s τ
+      (by have := congrArg Prod.fst h; simp only at this; exact this.symm)
+      (by have := congrArg Prod.snd h; simp only at this; exact this.symm)
+  have avoid₁ : ∀ u : ℝ, 0 ≤ u → u ≤ 1 → (x₀, y₀ * u) ≠
+      (θ s, apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s))) := by
+    intro u hu0 hu1 hpt
+    have hfirst : θ s = θ t₀ + 2 * Real.pi := by
+      have := congrArg Prod.fst hpt; simp only at this; exact this.symm
+    have hsn : apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) = y₀ := by
+      have h := congrArg Prod.snd hpt
+      simp only at h
+      have hmul : y₀ * u ≤ y₀ := by nlinarith [hy₀n, hu0, hu1]
+      have := hminall s
+      linarith
+    exact apm_t91J03_disjoint gamma hgamma θ d hθ hper hd s t₀ hfirst hsn
+  have avoid₃ : ∀ u : ℝ, 0 ≤ u → u ≤ 1 → (x₁, y₁ + (1 - y₁) * u) ≠
+      (θ s, apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s))) := by
+    intro u hu0 hu1 hpt
+    have hfirst : θ s = θ t₁ + 2 * Real.pi := by
+      have := congrArg Prod.fst hpt; simp only at this; exact this.symm
+    have hsn : apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s)) = y₁ := by
+      have h := congrArg Prod.snd hpt
+      simp only at h
+      have hmul : y₁ ≤ y₁ + (1 - y₁) * u := by nlinarith [hy₁n, hu0, hu1]
+      have := hmaxall s
+      linarith
+    exact apm_t91J03_disjoint gamma hgamma θ d hθ hper hd s t₁ hfirst hsn
+  have ht0 := t.2.1
+  have ht1 := t.2.2
+  show ((p₁.trans p₂).trans p₃) t ≠ _
+  rw [Path.trans_apply]
+  split_ifs with hA
+  · rw [Path.trans_apply]
+    split_ifs with hB
+    · intro hpt
+      exact avoid₁ (2 * (2 * (t : ℝ))) (by linarith) (by linarith) hpt
+    · intro hpt
+      exact avoid₂ (t₀ + (t₁ - t₀) * ((2:ℝ) * (2 * (t : ℝ)) - 1)) hpt
+  · intro hpt
+    exact avoid₃ ((2:ℝ) * (t : ℝ) - 1) (by linarith) (by linarith) hpt
 -- END SEAT AREA
 
 open unitInterval in
