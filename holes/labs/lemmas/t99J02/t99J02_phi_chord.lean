@@ -146,7 +146,29 @@ theorem t99J02_phi_edge (e : ℕ) (he : e < 4) (t : Set.Icc (0 : ℝ) 1) :
 -- BEGIN SEAT AREA
 theorem t99J02_phi_chord (x : ℝ) (hx : |x| ≤ 1) :
     t99J02_phi (x : ℂ) = t99J02_ell ((⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2) := by
-  sorry
+  have hx2 : 0 ≤ 1 - x ^ 2 := by
+    have hxb := abs_le.mp hx
+    nlinarith
+  have hsqrt : (√(1 - x ^ 2)) ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx2
+  have hsqrt_mul : √(1 - x ^ 2) * √(1 - x ^ 2) = 1 - x ^ 2 := by
+    simpa [pow_two] using hsqrt
+  have hbase : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ)‖ = 1 := by
+    have hsquare : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ)‖ ^ 2 = 1 := by
+      rw [Complex.sq_norm, Complex.normSq_mk]
+      nlinarith
+    nlinarith [norm_nonneg (⟨x, √(1 - x ^ 2)⟩ : ℂ)]
+  have hnorm : ‖(⟨x, √(1 - x ^ 2)⟩ : ℂ) ^ 2‖ = 1 := by
+    rw [norm_pow, hbase]
+    norm_num
+  apply Complex.ext
+  · rw [t99J02_phi, t99J02_ell]
+    rw [hnorm]
+    simp [pow_two]
+    ring_nf at hsqrt_mul ⊢
+    nlinarith
+  · rw [t99J02_phi, t99J02_ell]
+    simp [pow_two]
+    ring
 -- END SEAT AREA
 
 /-- Every unit complex number is `(x + i √(1-x²))²` for a real `x`, `|x| ≤ 1`, namely the root in
