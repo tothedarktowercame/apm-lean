@@ -73,6 +73,23 @@ of `ZMod 3`.  First use
 path-connected total space, then `coveringFiberCard_eq_index`; transport the
 subgroup through the supplied group equivalence and contradict divisibility
 of the order three group. -/
+private noncomputable instance
+    threePresentationComplex_no_connected_double_cover_aux_sphereLocPathConnected :
+    LocPathConnectedSpace (ConstructionTargets.SphereHomology.Sphere 1) :=
+  ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 1))
+    (ConstructionTargets.SphereHomology.Sphere 1)
+
+private noncomputable instance
+    threePresentationComplex_no_connected_double_cover_aux_circleLocPathConnected :
+    LocPathConnectedSpace Circle :=
+  Topology.IsQuotientMap.locPathConnectedSpace
+    ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.symm.isQuotientMap
+
+private noncomputable instance
+    threePresentationComplex_no_connected_double_cover_aux_diskLocPathConnected :
+    LocPathConnectedSpace ConstructionTargets.AttachTwoCell.Disk :=
+  (convex_closedBall (0 : ℂ) 1).locPathConnectedSpace
+
 theorem threePresentationComplex_no_connected_double_cover
     (hpi : Nonempty
       (FundamentalGroup ThreePresentationComplex threePresentationBasepoint ≃*
@@ -82,17 +99,112 @@ theorem threePresentationComplex_no_connected_double_cover
       ¬ (IsCoveringMap p ∧
         ∀ x : ThreePresentationComplex,
           Nat.card {e : E // p e = x} = 2) := by
-  sorry
+  intro E _ _ p ⟨hp, hcard⟩
+  letI : LocPathConnectedSpace ThreePresentationComplex :=
+    Quotient.locPathConnectedSpace
+  letI : LocPathConnectedSpace E :=
+    ConstructionTargets.CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace hp
+  letI : PathConnectedSpace E := PathConnectedSpace.of_locPathConnectedSpace
+  letI : PathConnectedSpace ThreePresentationComplex :=
+    ConstructionTargets.AttachTwoCell.cell_pc degreeThreeLoop
+  have hfiberpos : 0 < Nat.card {e : E // p e = threePresentationBasepoint} := by
+    rw [hcard threePresentationBasepoint]
+    norm_num
+  obtain ⟨⟨e, he⟩⟩ := (Nat.card_pos_iff.mp hfiberpos).1
+  have hindex :
+      (ConstructionTargets.coveringInducedFundamentalGroupMap hp e).range.index = 2 := by
+    rw [← ConstructionTargets.coveringFiberCard_eq_index hp e]
+    simpa only [Set.mem_singleton_iff] using hcard (p e)
+  have hbasecard : Nat.card (FundamentalGroup ThreePresentationComplex (p e)) = 3 := by
+    let q : Path (p e) threePresentationBasepoint := PathConnectedSpace.somePath _ _
+    obtain ⟨φ⟩ := hpi
+    calc
+      Nat.card (FundamentalGroup ThreePresentationComplex (p e)) =
+          Nat.card (FundamentalGroup ThreePresentationComplex threePresentationBasepoint) :=
+        Nat.card_congr (FundamentalGroup.fundamentalGroupMulEquivOfPath q).toEquiv
+      _ = Nat.card (Multiplicative (ZMod 3)) := Nat.card_congr φ.toEquiv
+      _ = 3 := by simp
+  have hdvd : 2 ∣ Nat.card (FundamentalGroup ThreePresentationComplex (p e)) := by
+    rw [← hindex]
+    exact (ConstructionTargets.coveringInducedFundamentalGroupMap hp e).range.index_dvd_card
+  rw [hbasecard] at hdvd
+  norm_num at hdvd
 
 /-- The degree-two singular homology of the `aabb` polygon vanishes.  Use
 `PolygonSurfaceHomology.lowDegreeHomology`, compute its `BoundaryKernel` as
 bottom from the two `-2` attaching coordinates, and transport through
 `t93J03Closure.kleinPairingSpaceHomeomorph`. -/
+theorem kleinBottle_h2_isZero_aux_orbit_eq_named (i : Fin 4) (j : Fin 2) :
+    KleinPairing.orbit i =
+      (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j ↔
+      ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2
+        (KleinPairing.orbit i) = j :=
+  (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).eq_symm_apply
+
+@[simp]
+theorem kleinBottle_h2_isZero_aux_orbitEquiv_orbit (i : Fin 4) :
+    ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2
+        (KleinPairing.orbit i) =
+      ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitLabel 2 i := rfl
+
+theorem kleinBottle_h2_isZero_aux_attachingDegree (j : Fin 2) :
+    ConstructionTargets.PolygonSurfaceHomology.attachingDegree KleinPairing
+        ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j) =
+      -2 := by
+  rw [ConstructionTargets.PolygonSurfaceHomology.attachingDegree_apply]
+  simp_rw [ConstructionTargets.PolygonSurfaceHomology.edgeOrbitContribution,
+    kleinBottle_h2_isZero_aux_orbit_eq_named]
+  simp_rw [kleinBottle_h2_isZero_aux_orbitEquiv_orbit]
+  fin_cases j <;>
+    simp [t93J03Closure.kleinPairingData,
+      PolygonSurfacePiOne.nonorientableStandardPairingData,
+      PolygonSurfacePiOne.standardPairingDataOfOneVertex,
+      PolygonSurfacePiOne.standardPair,
+      PolygonSurfacePiOne.standardSign,
+      PolygonSurfacePiOne.nonorientableOrbitLabel,
+      PolygonSurfacePiOne.nonorientableCoord,
+      ConstructionTargets.PolygonSurfaceHomology.edgeAttachingDegree] <;>
+      decide
+
+theorem kleinBottle_h2_isZero_aux_attachingBoundary_injective :
+    Function.Injective
+      (ConstructionTargets.PolygonSurfaceHomology.attachingBoundary KleinPairing) := by
+  intro a b h
+  have h2 := congrFun h
+    ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm 0)
+  simp only [ConstructionTargets.PolygonSurfaceHomology.attachingBoundary_apply_apply,
+    kleinBottle_h2_isZero_aux_attachingDegree] at h2
+  exact Int.eq_of_mul_eq_mul_right (by norm_num) h2
+
+theorem kleinBottle_h2_isZero_aux :
+    CategoryTheory.Limits.IsZero
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+        (ModuleCat.of ℤ ℤ)).obj
+        (TopCat.of ConstructionTargets.t93J03Closure.kleinPairingData.Space)) := by
+  have hker : ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel KleinPairing =
+      ⊥ :=
+    LinearMap.ker_eq_bot.mpr kleinBottle_h2_isZero_aux_attachingBoundary_injective
+  have hsub : Subsingleton
+      ↥(ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel KleinPairing) := by
+    rw [hker]
+    infer_instance
+  have hzero : CategoryTheory.Limits.IsZero
+      (ModuleCat.of ℤ
+        ↥(ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel KleinPairing)) :=
+    ModuleCat.isZero_of_subsingleton _
+  obtain ⟨iso⟩ :=
+    (ConstructionTargets.PolygonSurfaceHomology.lowDegreeHomology KleinPairing).2.2
+  exact CategoryTheory.Limits.IsZero.of_iso hzero iso
+
 theorem kleinBottle_h2_isZero :
     CategoryTheory.Limits.IsZero
       (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
         (ModuleCat.of ℤ ℤ)).obj (TopCat.of KleinBottle)) := by
-  sorry
+  refine CategoryTheory.Limits.IsZero.of_iso kleinBottle_h2_isZero_aux ?_.symm
+  exact (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+    (TopCat.isoOfHomeo
+      ConstructionTargets.t93J03Closure.kleinPairingSpaceHomeomorph)).symm
 
 /-- Construct the double self-cover on the affine-plane orbit model.  Use
 `(x,y) ↦ (2*x,y)`, equivariant for the injective Klein-group endomorphism
@@ -117,7 +229,20 @@ theorem double_self_cover_conjugate_homeomorph
     (hcard : ∀ x : X, Nat.card {y : X // p y = x} = 2) :
     ∃ q : Y → Y, IsCoveringMap q ∧
       ∀ y : Y, Nat.card {z : Y // q z = y} = 2 := by
-  sorry
+  let q : Y → Y := fun y ↦ e (p (e.symm y))
+  have hq : IsCoveringMap q := by
+    have h := (hp.comp_homeomorph e.symm).homeomorph_comp e
+    simpa only [q, Function.comp_apply] using h
+  refine ⟨q, hq, ?_⟩
+  intro y
+  let fiberEquiv : {z : Y // q z = y} ≃ {x : X // p x = e.symm y} :=
+    { toFun := fun z ↦ ⟨e.symm z.1, by
+          apply e.injective
+          simpa [q] using z.2⟩
+      invFun := fun x ↦ ⟨e x.1, by simpa [q] using congrArg e x.2⟩
+      left_inv := fun z ↦ Subtype.ext (e.apply_symm_apply z.1)
+      right_inv := fun x ↦ Subtype.ext (e.symm_apply_apply x.1) }
+  exact (Nat.card_congr fiberEquiv).trans (hcard (e.symm y))
 
 /-- Assembly of the affine quotient cover and the banked homeomorphism to the
 disk-polygon Klein bottle. -/
@@ -141,7 +266,27 @@ theorem finite_piOne_no_double_self_cover :
       ∀ p : X → X,
         ¬ (IsCoveringMap p ∧
           ∀ z : X, Nat.card {y : X // p y = z} = 2) := by
-  sorry
+  intro X _ _ x hfinite p ⟨hp, hfiber⟩
+  let f := ConstructionTargets.coveringInducedFundamentalGroupMap hp x
+  let changeBase : FundamentalGroup X x ≃* FundamentalGroup X (p x) :=
+    FundamentalGroup.fundamentalGroupMulEquivOfPathConnected x (p x)
+  let rangeEquiv : FundamentalGroup X x ≃* f.range :=
+    MonoidHom.ofInjective
+      (ConstructionTargets.coveringInducedFundamentalGroupMap_injective hp x)
+  haveI : Finite (FundamentalGroup X (p x)) :=
+    Finite.of_equiv (FundamentalGroup X x) changeBase.toEquiv
+  have hindex : f.range.index = 2 := by
+    rw [← ConstructionTargets.coveringFiberCard_eq_index hp x]
+    simpa only [Set.mem_preimage, Set.mem_singleton_iff] using hfiber (p x)
+  have hrange : Nat.card f.range = Nat.card (FundamentalGroup X x) :=
+    Nat.card_congr rangeEquiv.toEquiv.symm
+  have hbase : Nat.card (FundamentalGroup X (p x)) =
+      Nat.card (FundamentalGroup X x) :=
+    Nat.card_congr changeBase.toEquiv.symm
+  have hmul := f.range.card_mul_index
+  rw [hindex, hrange, hbase] at hmul
+  have hpos : 0 < Nat.card (FundamentalGroup X x) := Nat.card_pos
+  omega
 
 end APM.T95A01
 
