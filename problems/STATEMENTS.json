@@ -4288,6 +4288,23 @@
    "rev": "f64fdf0c7",
    "approved_at": "2026-11-01T22:26:32Z"
   },
+  "m95J02": {
+   "decls": [
+    "apm_m95j02"
+   ],
+   "sha256": "78a64626d4b5faecb79278479de1bd83e4df7d2c6de2810a2ab53f0b8693550f",
+   "defs": [
+    "apm_m95J02_fundamental",
+    "apm_m95J02_poissonSolution",
+    "apm_m95J02_sphereArea"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": null,
+   "rev": "3d9d80f2f",
+   "approved_at": "2026-11-01T23:39:18Z"
+  },
   "m95J03": {
    "decls": [
     "apm_m95j03"

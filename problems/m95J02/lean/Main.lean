@@ -2098,10 +2098,10 @@ lemma apm_m95J02_regularized_pairing_tendsto_of_two_lt
         Filter.atTop (nhds 0))
     exact hk.mul_const (g x)
 
-theorem apm_m95j02
+theorem apm_m95j02_two_le
     (n : ℕ) (hn : 2 ≤ n) :
     (∀ (v : ℝ → ℝ) (x : EuclideanSpace ℝ (Fin n)),
-      ContDiff ℝ 2 v → x ≠ 0 →
+      ContDiffAt ℝ 2 v ‖x‖ → x ≠ 0 →
         Laplacian.laplacian (fun z : EuclideanSpace ℝ (Fin n) ↦ v ‖z‖) x =
           iteratedDeriv 2 v ‖x‖ +
             ((n : ℝ) - 1) / ‖x‖ * deriv v ‖x‖) ∧
@@ -2213,6 +2213,765 @@ theorem apm_m95j02
             φ hφ.continuous hφc).comp hc
   refine ⟨?_, hweak, ?_⟩
   · intro v x hv hx
-    exact apm_m95J02_laplacian_radial v x hv.contDiffAt hx
+    exact apm_m95J02_laplacian_radial v x hv hx
   · intro f hf hfc x
     exact apm_m95J02_poisson_eq_of_weakIdentity hn hweak f hf hfc x
+
+/-!
+## The one-dimensional case
+
+The fundamental solution in dimension one is `‖x‖ / 2`, with sign convention
+`ΔΦ = δ`.  We transport across the canonical linear isometry equivalence
+`EuclideanSpace ℝ (Fin 1) ≃ₗᵢ[ℝ] ℝ` and use one-variable integration by
+parts and the fundamental theorem of calculus.
+-/
+
+/-- In dimension one the general power-law branch evaluates to `‖x‖ / 2`. -/
+lemma apm_m95J02_fundamental_one (x : EuclideanSpace ℝ (Fin 1)) :
+    apm_m95J02_fundamental 1 x = ‖x‖ / 2 := by
+  have hpi : Real.sqrt Real.pi ≠ 0 := Real.sqrt_ne_zero'.mpr Real.pi_pos
+  have harea : apm_m95J02_sphereArea 1 = 2 := by
+    unfold apm_m95J02_sphereArea
+    rw [show Real.Gamma (((1 : ℕ) : ℝ) / 2) = Real.sqrt Real.pi by
+        rw [show ((1 : ℕ) : ℝ) / 2 = 1 / 2 by norm_num]
+        exact Real.Gamma_one_half_eq,
+      show Real.rpow Real.pi (((1 : ℕ) : ℝ) / 2) = Real.sqrt Real.pi by
+        rw [show ((1 : ℕ) : ℝ) / 2 = 1 / (2 : ℝ) by norm_num]
+        exact (Real.sqrt_eq_rpow _).symm]
+    field_simp
+  rw [apm_m95J02_fundamental, if_neg (by norm_num : (1 : ℕ) ≠ 2), harea]
+  rw [show (2 : ℝ) - ((1 : ℕ) : ℝ) = 1 by norm_num]
+  rw [show Real.rpow ‖x‖ 1 = ‖x‖ by exact Real.rpow_one ‖x‖]
+  norm_num
+
+/-- The canonical isometric identification of `EuclideanSpace ℝ (Fin 1)` with
+`ℝ`, evaluating at the unique index. -/
+def apm_m95J02_finOneEquiv : EuclideanSpace ℝ (Fin 1) ≃ₗᵢ[ℝ] ℝ :=
+  { ((EuclideanSpace.equiv (Fin 1) ℝ).trans
+      (ContinuousLinearEquiv.funUnique (Fin 1) ℝ ℝ)).toLinearEquiv with
+    norm_map' := fun x => by
+      show ‖(EuclideanSpace.equiv (Fin 1) ℝ) x ⟨0, by omega⟩‖ = ‖x‖
+      rw [EuclideanSpace.norm_eq, Fin.sum_univ_one, Real.sqrt_sq_eq_abs]
+      simp }
+
+lemma apm_m95J02_finOneEquiv_apply (x : EuclideanSpace ℝ (Fin 1)) :
+    apm_m95J02_finOneEquiv x = x 0 := rfl
+
+lemma apm_m95J02_finOneEquiv_symm_apply (t : ℝ) :
+    (apm_m95J02_finOneEquiv.symm t) 0 = t := rfl
+
+lemma apm_m95J02_finOneEquiv_symm_norm (t : ℝ) :
+    ‖apm_m95J02_finOneEquiv.symm t‖ = |t| := by
+  have h := apm_m95J02_finOneEquiv.norm_map (apm_m95J02_finOneEquiv.symm t)
+  rw [LinearIsometryEquiv.apply_symm_apply] at h
+  rw [← h, Real.norm_eq_abs]
+
+/-- In dimension one the Laplacian is the second one-variable derivative along
+the canonical identification with `ℝ`. -/
+lemma apm_m95J02_laplacian_finOne (u : EuclideanSpace ℝ (Fin 1) → ℝ)
+    (hu : ContDiff ℝ 2 u) (x : EuclideanSpace ℝ (Fin 1)) :
+    Laplacian.laplacian u x =
+      iteratedDeriv 2 (fun t => u (apm_m95J02_finOneEquiv.symm t))
+        (apm_m95J02_finOneEquiv x) := by
+  set e := apm_m95J02_finOneEquiv
+  have hw : ContDiff ℝ 2 (fun t => u (e.symm t)) :=
+    hu.comp e.symm.toContinuousLinearEquiv.contDiff
+  have hL := e.toContinuousLinearEquiv.toContinuousLinearMap.iteratedFDeriv_comp_right
+    hw x (le_refl 2)
+  have hb0 : e ((EuclideanSpace.basisFun (Fin 1) ℝ) 0) = 1 := by
+    rw [EuclideanSpace.basisFun_apply]
+    show (EuclideanSpace.single (0 : Fin 1) (1 : ℝ)) 0 = 1
+    simp
+  calc Laplacian.laplacian u x
+      = ∑ i : Fin 1, iteratedFDeriv ℝ 2 u x
+          ![((EuclideanSpace.basisFun (Fin 1) ℝ) i),
+            ((EuclideanSpace.basisFun (Fin 1) ℝ) i)] :=
+        congrFun (InnerProductSpace.laplacian_eq_iteratedFDeriv_orthonormalBasis u
+          (EuclideanSpace.basisFun (Fin 1) ℝ)) x
+    _ = iteratedFDeriv ℝ 2 u x ![((EuclideanSpace.basisFun (Fin 1) ℝ) 0),
+          ((EuclideanSpace.basisFun (Fin 1) ℝ) 0)] := Fin.sum_univ_one _
+    _ = iteratedFDeriv ℝ 2 (fun t => u (e.symm t)) (e x) (fun _ : Fin 2 => 1) := by
+        have h1 : u = (fun t => u (e.symm t)) ∘
+            e.toContinuousLinearEquiv.toContinuousLinearMap := by
+          funext y
+          simp [LinearIsometryEquiv.symm_apply_apply]
+        nth_rewrite 1 [h1]
+        rw [hL, ContinuousMultilinearMap.compContinuousLinearMap_apply]
+        congr 2
+        funext i
+        fin_cases i
+        · simp only [Matrix.cons_val_zero]; exact hb0
+        · simp only [Matrix.cons_val_one, Matrix.head_cons]; exact hb0
+    _ = iteratedDeriv 2 (fun t => u (e.symm t)) (e x) :=
+        iteratedDeriv_eq_iteratedFDeriv.symm
+
+/-- One-dimensional weak identity: `∫ (|t|/2) φ''(t) dt = φ 0` for smooth
+compactly supported `φ`. -/
+lemma apm_m95J02_weak_oneD (v : ℝ → ℝ)
+    (hv : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) v) (hvc : HasCompactSupport v) :
+    ∫ t : ℝ, (|t| / 2) * iteratedDeriv 2 v t = v 0 := by
+  have hv2 : ContDiff ℝ 2 v := hv.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hiter : iteratedDeriv 2 v = deriv (deriv v) := by
+    funext t
+    rw [show (2 : ℕ) = 1 + 1 from rfl, iteratedDeriv_succ, iteratedDeriv_one]
+  rw [hiter]
+  have hv1 : ContDiff ℝ 1 (deriv v) :=
+    (contDiff_succ_iff_deriv.mp (show ContDiff ℝ (1 + 1) v from hv2)).2.2
+  have hw_cont : Continuous (deriv (deriv v)) := (contDiff_one_iff_deriv.mp hv1).2
+  have hw_diff : Differentiable ℝ (deriv v) := (contDiff_one_iff_deriv.mp hv1).1
+  have hv_diff : Differentiable ℝ v := hv2.differentiable (by norm_num)
+  have hwc : HasCompactSupport (deriv (deriv v)) := hvc.deriv.deriv
+  obtain ⟨R₀, hR₀⟩ := Metric.isBounded_iff_subset_ball (0 : ℝ) |>.mp
+    hvc.isCompact.isBounded
+  obtain ⟨R₁, hR₁⟩ := Metric.isBounded_iff_subset_ball (0 : ℝ) |>.mp
+    hvc.deriv.isCompact.isBounded
+  obtain ⟨R₂, hR₂⟩ := Metric.isBounded_iff_subset_ball (0 : ℝ) |>.mp
+    hwc.isCompact.isBounded
+  set A := max (max (max R₀ R₁) R₂) 1 with hA
+  have hApos : 0 < A := by positivity
+  have hleA : max (max R₀ R₁) R₂ ≤ A := le_max_left _ _
+  have hball₀ : tsupport v ⊆ Metric.ball 0 A :=
+    hR₀.trans (Metric.ball_subset_ball
+      (le_trans (le_trans (le_max_left _ _) (le_max_left _ _)) hleA))
+  have hball₁ : tsupport (deriv v) ⊆ Metric.ball 0 A :=
+    hR₁.trans (Metric.ball_subset_ball
+      (le_trans (le_trans (le_max_right _ _) (le_max_left _ _)) hleA))
+  have hball₂ : tsupport (deriv (deriv v)) ⊆ Metric.ball 0 A :=
+    hR₂.trans (Metric.ball_subset_ball (le_trans (le_max_right _ _) hleA))
+  have hvan : ∀ (f : ℝ → ℝ), tsupport f ⊆ Metric.ball 0 A →
+      ∀ t, A ≤ |t| → f t = 0 := by
+    intro f hf t ht
+    by_contra h
+    have hts : t ∈ tsupport f := subset_tsupport f (Function.mem_support.mpr h)
+    have hb := hf hts
+    rw [Metric.mem_ball, dist_zero_right, Real.norm_eq_abs] at hb
+    linarith
+  have hv0 := hvan v hball₀
+  have hdv0 := hvan (deriv v) hball₁
+  have hFcont : Continuous (fun t => (|t| / 2) * deriv (deriv v) t) :=
+    (continuous_abs.div_const 2).mul hw_cont
+  have hFint : ∀ a b : ℝ,
+      IntervalIntegrable (fun t => (|t| / 2) * deriv (deriv v) t) volume a b :=
+    fun a b => hFcont.intervalIntegrable a b
+  have hsupp : Function.support (fun t => (|t| / 2) * deriv (deriv v) t) ⊆
+      Set.Ioc (-A) A := by
+    intro t ht
+    rw [Function.mem_support] at ht
+    have hwt : deriv (deriv v) t ≠ 0 := fun h => ht (by simp [h])
+    have hts : t ∈ tsupport (deriv (deriv v)) :=
+      subset_tsupport _ (Function.mem_support.mpr hwt)
+    have hb := hball₂ hts
+    rw [Metric.mem_ball, dist_zero_right] at hb
+    rw [Set.mem_Ioc]
+    obtain ⟨h1, h2⟩ := abs_lt.mp hb
+    constructor <;> linarith
+  rw [← intervalIntegral.integral_eq_integral_of_support_subset hsupp]
+  rw [← intervalIntegral.integral_add_adjacent_intervals (hFint (-A) 0) (hFint 0 A)]
+  have hpos : ∫ t in (0:ℝ)..A, (|t| / 2) * deriv (deriv v) t = v 0 / 2 := by
+    have hcong : ∫ t in (0:ℝ)..A, (|t| / 2) * deriv (deriv v) t =
+        ∫ t in (0:ℝ)..A, (t / 2) * deriv (deriv v) t := by
+      apply intervalIntegral.integral_congr
+      intro t ht
+      rw [Set.uIcc_of_le hApos.le] at ht
+      rw [Set.mem_Icc] at ht
+      show (|t| / 2) * deriv (deriv v) t = (t / 2) * deriv (deriv v) t
+      rw [abs_of_nonneg ht.1]
+    rw [hcong]
+    rw [intervalIntegral.integral_mul_deriv_eq_deriv_mul
+      (u := fun t : ℝ => t / 2) (u' := fun _ => (1 / 2 : ℝ))
+      (v := deriv v) (v' := deriv (deriv v))
+      (a := (0:ℝ)) (b := A)
+      (fun t _ => by simpa using (hasDerivAt_id t).div_const 2)
+      (fun t _ => (hw_diff t).hasDerivAt)
+      intervalIntegrable_const
+      (hw_cont.intervalIntegrable 0 A)]
+    rw [hdv0 A (by rw [abs_of_pos hApos]), intervalIntegral.integral_const_mul,
+      intervalIntegral.integral_deriv_eq_sub (fun t _ => hv_diff t)
+        ((hv2.continuous_deriv (by norm_num)).intervalIntegrable 0 A),
+      hv0 A (by rw [abs_of_pos hApos])]
+    ring
+  have hneg : ∫ t in (-A)..(0:ℝ), (|t| / 2) * deriv (deriv v) t = v 0 / 2 := by
+    have hcong : ∫ t in (-A)..(0:ℝ), (|t| / 2) * deriv (deriv v) t =
+        ∫ t in (-A)..(0:ℝ), (-(t / 2)) * deriv (deriv v) t := by
+      apply intervalIntegral.integral_congr
+      intro t ht
+      rw [Set.uIcc_of_le (neg_nonpos.mpr hApos.le)] at ht
+      rw [Set.mem_Icc] at ht
+      show (|t| / 2) * deriv (deriv v) t = (-(t / 2)) * deriv (deriv v) t
+      rw [abs_of_nonpos ht.2]
+      ring
+    rw [hcong]
+    rw [intervalIntegral.integral_mul_deriv_eq_deriv_mul
+      (u := fun t : ℝ => -(t / 2)) (u' := fun _ => (-1 / 2 : ℝ))
+      (v := deriv v) (v' := deriv (deriv v))
+      (a := -A) (b := (0:ℝ))
+      (fun t _ => by
+        convert ((hasDerivAt_id t).div_const 2).neg using 1
+        ring)
+      (fun t _ => (hw_diff t).hasDerivAt)
+      intervalIntegrable_const
+      (hw_cont.intervalIntegrable (-A) 0)]
+    rw [hdv0 (-A) (by rw [abs_neg, abs_of_pos hApos]),
+      intervalIntegral.integral_const_mul,
+      intervalIntegral.integral_deriv_eq_sub (fun t _ => hv_diff t)
+        ((hv2.continuous_deriv (by norm_num)).intervalIntegrable (-A) 0),
+      hv0 (-A) (by rw [abs_neg, abs_of_pos hApos])]
+    ring
+  rw [hneg, hpos]
+  ring
+
+/-- Differentiating the one-dimensional convolution `s ↦ ∫ (|s - y|/2) g(y) dy`
+at a point `t`, using a window `(-R, R)` containing the support of `g`. -/
+lemma apm_m95J02_conv_hasDerivAt (g : ℝ → ℝ) (hgcont : Continuous g)
+    (R t : ℝ) (hg0 : ∀ y, R ≤ |y| → g y = 0) (htR : |t| < R) :
+    HasDerivAt (fun s => ∫ y : ℝ, (|s - y| / 2) * g y)
+      ((1 / 2) * ((∫ y in (-R)..t, g y) - ∫ y in t..R, g y)) t := by
+  have hyg : Continuous fun y : ℝ => y * g y := continuous_id.mul hgcont
+  set U : ℝ → ℝ := fun s => ∫ y, (|s - y| / 2) * g y
+  set A : ℝ → ℝ := fun s => ∫ y in (-R)..s, g y
+  set Bf : ℝ → ℝ := fun s => ∫ y in (-R)..s, y * g y
+  set C : ℝ → ℝ := fun s => ∫ y in s..R, y * g y
+  set D : ℝ → ℝ := fun s => ∫ y in s..R, g y
+  have hA : ∀ s, HasDerivAt A (g s) s := fun s =>
+    intervalIntegral.integral_hasDerivAt_right (hgcont.intervalIntegrable (-R) s)
+      (hgcont.stronglyMeasurableAtFilter _ _) hgcont.continuousAt
+  have hBf : ∀ s, HasDerivAt Bf (s * g s) s := fun s =>
+    intervalIntegral.integral_hasDerivAt_right (hyg.intervalIntegrable (-R) s)
+      (hyg.stronglyMeasurableAtFilter _ _) hyg.continuousAt
+  have hC : ∀ s, HasDerivAt C (-(s * g s)) s := fun s => by
+    have h1 : HasDerivAt (fun u => ∫ y in R..u, y * g y) (s * g s) s :=
+      intervalIntegral.integral_hasDerivAt_right (hyg.intervalIntegrable R s)
+        (hyg.stronglyMeasurableAtFilter _ _) hyg.continuousAt
+    have h2 : C = fun u => -∫ y in R..u, y * g y :=
+      funext fun u => intervalIntegral.integral_symm R u
+    rw [h2]
+    exact h1.neg
+  have hD : ∀ s, HasDerivAt D (-(g s)) s := fun s => by
+    have h1 : HasDerivAt (fun u => ∫ y in R..u, g y) (g s) s :=
+      intervalIntegral.integral_hasDerivAt_right (hgcont.intervalIntegrable R s)
+        (hgcont.stronglyMeasurableAtFilter _ _) hgcont.continuousAt
+    have h2 : D = fun u => -∫ y in R..u, g y :=
+      funext fun u => intervalIntegral.integral_symm R u
+    rw [h2]
+    exact h1.neg
+  have hformula : ∀ s ∈ Set.Ioo (-R) R,
+      U s = (1 / 2) * (s * A s - Bf s + C s - s * D s) := by
+    intro s hs
+    have hsuppF : Function.support (fun y => (|s - y| / 2) * g y) ⊆
+        Set.Ioc (-R) R := by
+      intro y hy
+      rw [Function.mem_support] at hy
+      have hgy : g y ≠ 0 := fun h => hy (by simp [h])
+      rw [Set.mem_Ioc]
+      have hyR : |y| < R := by
+        by_contra h
+        rw [not_lt] at h
+        exact hgy (hg0 y h)
+      obtain ⟨h1, h2⟩ := abs_lt.mp hyR
+      constructor <;> linarith
+    have hFcont : Continuous (fun y => (|s - y| / 2) * g y) :=
+      (((continuous_const.sub continuous_id).abs).div_const 2).mul hgcont
+    have hFint : ∀ a b : ℝ,
+        IntervalIntegrable (fun y => (|s - y| / 2) * g y) volume a b :=
+      fun a b => hFcont.intervalIntegrable a b
+    have hmain : U s = ∫ y in (-R)..R, (|s - y| / 2) * g y :=
+      (intervalIntegral.integral_eq_integral_of_support_subset hsuppF).symm
+    rw [hmain,
+      ← intervalIntegral.integral_add_adjacent_intervals (hFint (-R) s) (hFint s R)]
+    have hleft : ∫ y in (-R)..s, (|s - y| / 2) * g y =
+        (1 / 2) * (s * A s - Bf s) := by
+      have hcong : ∫ y in (-R)..s, (|s - y| / 2) * g y =
+          ∫ y in (-R)..s, (1 / 2) * (s * g y - y * g y) := by
+        apply intervalIntegral.integral_congr
+        intro y hy
+        rw [Set.uIcc_of_le hs.1.le] at hy
+        rw [Set.mem_Icc] at hy
+        show (|s - y| / 2) * g y = (1 / 2) * (s * g y - y * g y)
+        rw [abs_of_nonneg (sub_nonneg.mpr hy.2)]
+        ring
+      rw [hcong, intervalIntegral.integral_const_mul]
+      congr 1
+      rw [intervalIntegral.integral_sub
+        ((hgcont.intervalIntegrable (-R) s).const_mul s)
+        (hyg.intervalIntegrable (-R) s)]
+      rw [intervalIntegral.integral_const_mul]
+    have hright : ∫ y in s..R, (|s - y| / 2) * g y =
+        (1 / 2) * (C s - s * D s) := by
+      have hcong : ∫ y in s..R, (|s - y| / 2) * g y =
+          ∫ y in s..R, (1 / 2) * (y * g y - s * g y) := by
+        apply intervalIntegral.integral_congr
+        intro y hy
+        rw [Set.uIcc_of_le hs.2.le] at hy
+        rw [Set.mem_Icc] at hy
+        show (|s - y| / 2) * g y = (1 / 2) * (y * g y - s * g y)
+        rw [abs_of_nonpos (sub_nonpos.mpr hy.1)]
+        ring
+      rw [hcong, intervalIntegral.integral_const_mul]
+      congr 1
+      rw [intervalIntegral.integral_sub (hyg.intervalIntegrable s R)
+        ((hgcont.intervalIntegrable s R).const_mul s)]
+      rw [intervalIntegral.integral_const_mul]
+    rw [hleft, hright]
+    ring
+  have hW : ∀ s, HasDerivAt (fun s' => (1 / 2) * (s' * A s' - Bf s' + C s' - s' * D s'))
+      ((1 / 2) * (A s - D s)) s := by
+    intro s
+    have h5 := ((((hasDerivAt_id s).mul (hA s)).sub (hBf s)).add (hC s)).sub
+      ((hasDerivAt_id s).mul (hD s)) |>.const_mul (1 / 2 : ℝ)
+    convert h5 using 1
+    simp only [id_eq]
+    ring
+  obtain ⟨ht1, ht2⟩ := abs_lt.mp htR
+  have heq : U =ᶠ[nhds t] fun s' => (1 / 2) * (s' * A s' - Bf s' + C s' - s' * D s') :=
+    (isOpen_Ioo.eventually_mem ⟨ht1, ht2⟩).mono (fun s' hs' => hformula s' hs')
+  exact heq.hasDerivAt_iff.mpr (hW t)
+
+/-- One-dimensional Poisson identity: the second derivative of
+`s ↦ ∫ (|s - y|/2) g(y) dy` equals `g`. -/
+lemma apm_m95J02_poisson_oneD (g : ℝ → ℝ)
+    (hg : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g) (hgc : HasCompactSupport g)
+    (t : ℝ) :
+    iteratedDeriv 2 (fun s => ∫ y : ℝ, (|s - y| / 2) * g y) t = g t := by
+  have hgcont : Continuous g := hg.continuous
+  obtain ⟨B, hB⟩ := Metric.isBounded_iff_subset_ball (0 : ℝ) |>.mp
+    hgc.isCompact.isBounded
+  have hg0 : ∀ y, B ≤ |y| → g y = 0 := by
+    intro y hy
+    by_contra h
+    have hts : y ∈ tsupport g := subset_tsupport g (Function.mem_support.mpr h)
+    have hb := hB hts
+    rw [Metric.mem_ball, dist_zero_right, Real.norm_eq_abs] at hb
+    linarith
+  set R := max B (|t|) + 1 with hR
+  have htR : |t| < R := by
+    linarith [le_max_right B (|t|), hR.ge]
+  have hBR : B ≤ R := le_trans (le_max_left B (|t|)) (by linarith [hR.ge])
+  have hg0R : ∀ y, R ≤ |y| → g y = 0 := fun y hy => hg0 y (le_trans hBR hy)
+  have hyg : Continuous fun y : ℝ => y * g y := continuous_id.mul hgcont
+  set U : ℝ → ℝ := fun s => ∫ y, (|s - y| / 2) * g y
+  set A : ℝ → ℝ := fun s => ∫ y in (-R)..s, g y
+  set Bf : ℝ → ℝ := fun s => ∫ y in (-R)..s, y * g y
+  set C : ℝ → ℝ := fun s => ∫ y in s..R, y * g y
+  set D : ℝ → ℝ := fun s => ∫ y in s..R, g y
+  have hA : ∀ s, HasDerivAt A (g s) s := fun s =>
+    intervalIntegral.integral_hasDerivAt_right (hgcont.intervalIntegrable (-R) s)
+      (hgcont.stronglyMeasurableAtFilter _ _) hgcont.continuousAt
+  have hBf : ∀ s, HasDerivAt Bf (s * g s) s := fun s =>
+    intervalIntegral.integral_hasDerivAt_right (hyg.intervalIntegrable (-R) s)
+      (hyg.stronglyMeasurableAtFilter _ _) hyg.continuousAt
+  have hC : ∀ s, HasDerivAt C (-(s * g s)) s := fun s => by
+    have h1 : HasDerivAt (fun u => ∫ y in R..u, y * g y) (s * g s) s :=
+      intervalIntegral.integral_hasDerivAt_right (hyg.intervalIntegrable R s)
+        (hyg.stronglyMeasurableAtFilter _ _) hyg.continuousAt
+    have h2 : C = fun u => -∫ y in R..u, y * g y :=
+      funext fun u => intervalIntegral.integral_symm R u
+    rw [h2]
+    exact h1.neg
+  have hD : ∀ s, HasDerivAt D (-(g s)) s := fun s => by
+    have h1 : HasDerivAt (fun u => ∫ y in R..u, g y) (g s) s :=
+      intervalIntegral.integral_hasDerivAt_right (hgcont.intervalIntegrable R s)
+        (hgcont.stronglyMeasurableAtFilter _ _) hgcont.continuousAt
+    have h2 : D = fun u => -∫ y in R..u, g y :=
+      funext fun u => intervalIntegral.integral_symm R u
+    rw [h2]
+    exact h1.neg
+  have hformula : ∀ s ∈ Set.Ioo (-R) R,
+      U s = (1 / 2) * (s * A s - Bf s + C s - s * D s) := by
+    intro s hs
+    have hsuppF : Function.support (fun y => (|s - y| / 2) * g y) ⊆
+        Set.Ioc (-R) R := by
+      intro y hy
+      rw [Function.mem_support] at hy
+      have hgy : g y ≠ 0 := fun h => hy (by simp [h])
+      have hts : y ∈ tsupport g := subset_tsupport g (Function.mem_support.mpr hgy)
+      have hb := hB hts
+      rw [Metric.mem_ball, dist_zero_right, Real.norm_eq_abs] at hb
+      have hyR : |y| < R := lt_of_lt_of_le hb hBR
+      rw [Set.mem_Ioc]
+      obtain ⟨h1, h2⟩ := abs_lt.mp hyR
+      constructor <;> linarith
+    have hFcont : Continuous (fun y => (|s - y| / 2) * g y) :=
+      (((continuous_const.sub continuous_id).abs).div_const 2).mul hgcont
+    have hFint : ∀ a b : ℝ,
+        IntervalIntegrable (fun y => (|s - y| / 2) * g y) volume a b :=
+      fun a b => hFcont.intervalIntegrable a b
+    have hmain : U s = ∫ y in (-R)..R, (|s - y| / 2) * g y :=
+      (intervalIntegral.integral_eq_integral_of_support_subset hsuppF).symm
+    rw [hmain,
+      ← intervalIntegral.integral_add_adjacent_intervals (hFint (-R) s) (hFint s R)]
+    have hleft : ∫ y in (-R)..s, (|s - y| / 2) * g y =
+        (1 / 2) * (s * A s - Bf s) := by
+      have hcong : ∫ y in (-R)..s, (|s - y| / 2) * g y =
+          ∫ y in (-R)..s, (1 / 2) * (s * g y - y * g y) := by
+        apply intervalIntegral.integral_congr
+        intro y hy
+        rw [Set.uIcc_of_le hs.1.le] at hy
+        rw [Set.mem_Icc] at hy
+        show (|s - y| / 2) * g y = (1 / 2) * (s * g y - y * g y)
+        rw [abs_of_nonneg (sub_nonneg.mpr hy.2)]
+        ring
+      rw [hcong, intervalIntegral.integral_const_mul]
+      congr 1
+      rw [intervalIntegral.integral_sub
+        ((hgcont.intervalIntegrable (-R) s).const_mul s)
+        (hyg.intervalIntegrable (-R) s)]
+      rw [intervalIntegral.integral_const_mul]
+    have hright : ∫ y in s..R, (|s - y| / 2) * g y =
+        (1 / 2) * (C s - s * D s) := by
+      have hcong : ∫ y in s..R, (|s - y| / 2) * g y =
+          ∫ y in s..R, (1 / 2) * (y * g y - s * g y) := by
+        apply intervalIntegral.integral_congr
+        intro y hy
+        rw [Set.uIcc_of_le hs.2.le] at hy
+        rw [Set.mem_Icc] at hy
+        show (|s - y| / 2) * g y = (1 / 2) * (y * g y - s * g y)
+        rw [abs_of_nonpos (sub_nonpos.mpr hy.1)]
+        ring
+      rw [hcong, intervalIntegral.integral_const_mul]
+      congr 1
+      rw [intervalIntegral.integral_sub (hyg.intervalIntegrable s R)
+        ((hgcont.intervalIntegrable s R).const_mul s)]
+      rw [intervalIntegral.integral_const_mul]
+    rw [hleft, hright]
+    ring
+  have hW : ∀ s, HasDerivAt (fun s' => (1 / 2) * (s' * A s' - Bf s' + C s' - s' * D s'))
+      ((1 / 2) * (A s - D s)) s := by
+    intro s
+    have h5 := ((((hasDerivAt_id s).mul (hA s)).sub (hBf s)).add (hC s)).sub
+      ((hasDerivAt_id s).mul (hD s)) |>.const_mul (1 / 2 : ℝ)
+    convert h5 using 1
+    simp only [id_eq]
+    ring
+  have hU : ∀ s ∈ Set.Ioo (-R) R, HasDerivAt U ((1 / 2) * (A s - D s)) s := by
+    intro s hs
+    have heq : U =ᶠ[nhds s] fun s' => (1 / 2) * (s' * A s' - Bf s' + C s' - s' * D s') :=
+      (isOpen_Ioo.eventually_mem hs).mono (fun s' hs' => hformula s' hs')
+    exact heq.hasDerivAt_iff.mpr (hW s)
+  set V : ℝ → ℝ := fun s => (1 / 2) * (A s - D s)
+  have hV : ∀ s, HasDerivAt V (g s) s := by
+    intro s
+    have h6 := ((hA s).sub (hD s)).const_mul (1 / 2 : ℝ)
+    convert h6 using 1
+    ring
+  obtain ⟨ht1, ht2⟩ := abs_lt.mp htR
+  have hUV : deriv U =ᶠ[nhds t] V :=
+    Filter.Eventually.mono (Ioo_mem_nhds ht1 ht2) (fun s hs => (hU s hs).deriv)
+  have hiter2 : iteratedDeriv 2 U = deriv (deriv U) := by
+    funext s
+    rw [show (2 : ℕ) = 1 + 1 from rfl, iteratedDeriv_succ, iteratedDeriv_one]
+  rw [hiter2, hUV.deriv_eq, (hV t).deriv]
+
+/-- The one-dimensional convolution with `|·|/2` of a smooth compactly
+supported function is `C²`. -/
+lemma apm_m95J02_poisson_oneD_contDiff (g : ℝ → ℝ)
+    (hg : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g) (hgc : HasCompactSupport g) :
+    ContDiff ℝ 2 (fun s => ∫ y : ℝ, (|s - y| / 2) * g y) := by
+  have hgcont : Continuous g := hg.continuous
+  obtain ⟨B, hB⟩ := Metric.isBounded_iff_subset_ball (0 : ℝ) |>.mp
+    hgc.isCompact.isBounded
+  have hg0 : ∀ y, B ≤ |y| → g y = 0 := by
+    intro y hy
+    by_contra h
+    have hts : y ∈ tsupport g := subset_tsupport g (Function.mem_support.mpr h)
+    have hb := hB hts
+    rw [Metric.mem_ball, dist_zero_right, Real.norm_eq_abs] at hb
+    linarith
+  set U : ℝ → ℝ := fun s => ∫ y, (|s - y| / 2) * g y
+  have hdd : deriv (deriv U) = g := by
+    funext s
+    have h := apm_m95J02_poisson_oneD g hg hgc s
+    have h2 : iteratedDeriv 2 U s = g s := h
+    rwa [show (2 : ℕ) = 1 + 1 from rfl, iteratedDeriv_succ, iteratedDeriv_one] at h2
+  have hdiff : Differentiable ℝ U := by
+    intro t
+    set R := max B (|t|) + 1
+    have htR : |t| < R := by linarith [le_max_right B (|t|)]
+    have hBR : B ≤ R := le_trans (le_max_left B (|t|)) (le_add_of_nonneg_right zero_le_one)
+    have hg0R : ∀ y, R ≤ |y| → g y = 0 := fun y hy => hg0 y (le_trans hBR hy)
+    exact (apm_m95J02_conv_hasDerivAt g hgcont R t hg0R htR).differentiableAt
+  have hdiff' : Differentiable ℝ (deriv U) := by
+    intro t
+    set R := max B (|t|) + 1
+    have htR : |t| < R := by linarith [le_max_right B (|t|)]
+    have hBR : B ≤ R := le_trans (le_max_left B (|t|)) (le_add_of_nonneg_right zero_le_one)
+    have hg0R : ∀ y, R ≤ |y| → g y = 0 := fun y hy => hg0 y (le_trans hBR hy)
+    have hA : ∀ s, HasDerivAt (fun s => ∫ y in (-R)..s, g y) (g s) s := fun s =>
+      intervalIntegral.integral_hasDerivAt_right (hgcont.intervalIntegrable (-R) s)
+        (hgcont.stronglyMeasurableAtFilter _ _) hgcont.continuousAt
+    have hD : ∀ s, HasDerivAt (fun s => ∫ y in s..R, g y) (-(g s)) s := fun s => by
+      have h1 : HasDerivAt (fun u => ∫ y in R..u, g y) (g s) s :=
+        intervalIntegral.integral_hasDerivAt_right (hgcont.intervalIntegrable R s)
+          (hgcont.stronglyMeasurableAtFilter _ _) hgcont.continuousAt
+      have h2 : (fun s => ∫ y in s..R, g y) = fun u => -∫ y in R..u, g y :=
+        funext fun u => intervalIntegral.integral_symm R u
+      rw [h2]
+      exact h1.neg
+    have hUV : deriv U =ᶠ[nhds t]
+        (fun s => (1 / 2) * ((∫ y in (-R)..s, g y) - ∫ y in s..R, g y)) := by
+      have htmem : Set.Ioo (-R) R ∈ nhds t := Ioo_mem_nhds
+        (by linarith [abs_lt.mp htR]) (abs_lt.mp htR).2
+      exact Filter.Eventually.mono htmem (fun s hs =>
+        (apm_m95J02_conv_hasDerivAt g hgcont R s hg0R (abs_lt.mpr ⟨hs.1, hs.2⟩)).deriv)
+    exact hUV.differentiableAt_iff.mpr
+      (((hA t).sub (hD t)).const_mul (1 / 2 : ℝ)).differentiableAt
+  rw [show (2 : WithTop ℕ∞) = 1 + 1 from rfl, contDiff_succ_iff_deriv]
+  refine ⟨hdiff, by simp, ?_⟩
+  rw [contDiff_one_iff_deriv]
+  exact ⟨hdiff', hdd ▸ hgcont⟩
+
+/-- The three clauses of `apm_m95j02` in dimension one. -/
+theorem apm_m95j02_one :
+    (∀ (v : ℝ → ℝ) (x : EuclideanSpace ℝ (Fin 1)),
+      ContDiffAt ℝ 2 v ‖x‖ → x ≠ 0 →
+        Laplacian.laplacian (fun z : EuclideanSpace ℝ (Fin 1) ↦ v ‖z‖) x =
+          iteratedDeriv 2 v ‖x‖ +
+            (((1 : ℕ) : ℝ) - 1) / ‖x‖ * deriv v ‖x‖) ∧
+    (∀ φ : EuclideanSpace ℝ (Fin 1) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
+        (∫ x, apm_m95J02_fundamental 1 x * Laplacian.laplacian φ x) = φ 0) ∧
+    (∀ f : EuclideanSpace ℝ (Fin 1) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f → HasCompactSupport f →
+        ∀ x : EuclideanSpace ℝ (Fin 1),
+          Laplacian.laplacian (apm_m95J02_poissonSolution 1 f) x = f x) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro v x hv hx
+    simpa using apm_m95J02_laplacian_radial v x hv hx
+  · intro φ hφ hφc
+    set w : ℝ → ℝ := fun t => φ (apm_m95J02_finOneEquiv.symm t)
+    have hvw : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) w :=
+      hφ.comp apm_m95J02_finOneEquiv.symm.toContinuousLinearEquiv.contDiff
+    have hvcw : HasCompactSupport w :=
+      hφc.comp_homeomorph apm_m95J02_finOneEquiv.symm.toHomeomorph
+    have hφ2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
+    calc ∫ x, apm_m95J02_fundamental 1 x * Laplacian.laplacian φ x
+        = ∫ x, (fun t => (|t| / 2) * iteratedDeriv 2 w t)
+            (apm_m95J02_finOneEquiv x) := by
+          apply integral_congr_ae
+          filter_upwards [] with x
+          rw [apm_m95J02_fundamental_one, apm_m95J02_laplacian_finOne φ hφ2 x]
+          have h1 : ‖x‖ = |apm_m95J02_finOneEquiv x| := by
+            rw [← apm_m95J02_finOneEquiv.norm_map x, Real.norm_eq_abs]
+          rw [h1]
+      _ = ∫ t, (|t| / 2) * iteratedDeriv 2 w t := by
+          exact apm_m95J02_finOneEquiv.measurePreserving.integral_comp
+            apm_m95J02_finOneEquiv.toHomeomorph.measurableEmbedding
+            (fun t => (|t| / 2) * iteratedDeriv 2 w t)
+      _ = w 0 := apm_m95J02_weak_oneD w hvw hvcw
+      _ = φ 0 := by
+          show φ (apm_m95J02_finOneEquiv.symm 0) = φ 0
+          rw [map_zero]
+  · intro f hf hfc x
+    set g : ℝ → ℝ := fun t => f (apm_m95J02_finOneEquiv.symm t)
+    have hg : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g :=
+      hf.comp apm_m95J02_finOneEquiv.symm.toContinuousLinearEquiv.contDiff
+    have hgc : HasCompactSupport g :=
+      hfc.comp_homeomorph apm_m95J02_finOneEquiv.symm.toHomeomorph
+    have hps : apm_m95J02_poissonSolution 1 f =
+        (fun s => ∫ y : ℝ, (|s - y| / 2) * g y) ∘ apm_m95J02_finOneEquiv := by
+      funext z
+      rw [apm_m95J02_poissonSolution]
+      calc ∫ y, apm_m95J02_fundamental 1 (z - y) * f y
+          = ∫ y, (fun s => (|apm_m95J02_finOneEquiv z - s| / 2) * g s)
+              (apm_m95J02_finOneEquiv y) := by
+            apply integral_congr_ae
+            filter_upwards [] with y
+            show apm_m95J02_fundamental 1 (z - y) * f y =
+              (|apm_m95J02_finOneEquiv z - apm_m95J02_finOneEquiv y| / 2) *
+                f (apm_m95J02_finOneEquiv.symm (apm_m95J02_finOneEquiv y))
+            rw [apm_m95J02_fundamental_one, LinearIsometryEquiv.symm_apply_apply]
+            have hn : ‖z - y‖ =
+                |apm_m95J02_finOneEquiv z - apm_m95J02_finOneEquiv y| := by
+              rw [← map_sub, ← Real.norm_eq_abs, apm_m95J02_finOneEquiv.norm_map]
+            rw [hn]
+        _ = ∫ s, (|apm_m95J02_finOneEquiv z - s| / 2) * g s := by
+            exact apm_m95J02_finOneEquiv.measurePreserving.integral_comp
+              apm_m95J02_finOneEquiv.toHomeomorph.measurableEmbedding
+              (fun s => (|apm_m95J02_finOneEquiv z - s| / 2) * g s)
+    rw [hps]
+    have hU2 : ContDiff ℝ 2 (fun s => ∫ y : ℝ, (|s - y| / 2) * g y) :=
+      apm_m95J02_poisson_oneD_contDiff g hg hgc
+    have hu2 : ContDiff ℝ 2
+        ((fun s => ∫ y : ℝ, (|s - y| / 2) * g y) ∘ apm_m95J02_finOneEquiv) :=
+      hU2.comp apm_m95J02_finOneEquiv.toContinuousLinearEquiv.contDiff
+    rw [apm_m95J02_laplacian_finOne _ hu2 x]
+    have heq : (fun t => ((fun s => ∫ y : ℝ, (|s - y| / 2) * g y) ∘
+        apm_m95J02_finOneEquiv) (apm_m95J02_finOneEquiv.symm t)) =
+        (fun t => ∫ y : ℝ, (|t - y| / 2) * g y) := by
+      funext t
+      simp [Function.comp_apply]
+    rw [heq, apm_m95J02_poisson_oneD g hg hgc (apm_m95J02_finOneEquiv x)]
+    show f (apm_m95J02_finOneEquiv.symm (apm_m95J02_finOneEquiv x)) = f x
+    rw [LinearIsometryEquiv.symm_apply_apply]
+
+/-! ### The Euler step and harmonicity of the fundamental solution -/
+
+/-- Euler step, derivative side: the second derivative of `r ^ s` at a
+positive radius. -/
+lemma apm_m95J02_iteratedDeriv_two_rpow (r s : ℝ) (hr : 0 < r) :
+    iteratedDeriv 2 (fun t : ℝ => t ^ s) r = s * (s - 1) * r ^ (s - 2) := by
+  rw [show (2 : ℕ) = 1 + 1 by norm_num, iteratedDeriv_succ, iteratedDeriv_one,
+    Real.deriv_rpow_const']
+  have hd : DifferentiableAt ℝ (fun t : ℝ => t ^ (s - 1)) r :=
+    (Real.hasDerivAt_rpow_const (Or.inl hr.ne')).differentiableAt
+  rw [deriv_const_mul _ hd, Real.deriv_rpow_const]
+  rw [show s - 1 - 1 = s - 2 by ring]
+  ring
+
+/-- Euler step: applying `r² (d²/dr² + ((n-1)/r) d/dr)` to `r ^ s` scales it
+by the Euler factor `s (s - 1 + n - 1)`. -/
+lemma apm_m95J02_euler_step (n : ℕ) {r s : ℝ} (hr : 0 < r) :
+    r ^ 2 * (iteratedDeriv 2 (fun t : ℝ => t ^ s) r +
+      ((n : ℝ) - 1) / r * deriv (fun t : ℝ => t ^ s) r) =
+      s * (s - 1 + (n : ℝ) - 1) * r ^ s := by
+  have hr0 : r ≠ 0 := hr.ne'
+  rw [apm_m95J02_iteratedDeriv_two_rpow r s hr, Real.deriv_rpow_const]
+  rw [← Real.rpow_natCast r 2]
+  push_cast
+  have e1 : r ^ (2 : ℝ) * r ^ (s - 2) = r ^ s := by
+    rw [← Real.rpow_add hr]; congr 1; ring
+  have e2 : r ^ (2 : ℝ) * (r ^ (-1 : ℝ) * r ^ (s - 1)) = r ^ s := by
+    rw [← Real.rpow_add hr, ← Real.rpow_add hr]; congr 1; ring
+  have t1 : r ^ (2 : ℝ) * (s * (s - 1) * r ^ (s - 2)) = s * (s - 1) * r ^ s := by
+    rw [mul_left_comm, e1]
+  have t2 : r ^ (2 : ℝ) * (((n : ℝ) - 1) / r * (s * r ^ (s - 1))) =
+      ((n : ℝ) - 1) * s * r ^ s := by
+    rw [div_eq_mul_inv, ← Real.rpow_neg_one r]
+    have hcomm : r ^ (2 : ℝ) * (((n : ℝ) - 1) * r ^ (-1 : ℝ) * (s * r ^ (s - 1))) =
+        ((n : ℝ) - 1) * s * (r ^ (2 : ℝ) * (r ^ (-1 : ℝ) * r ^ (s - 1))) := by
+      ring
+    rw [hcomm, e2]
+  rw [mul_add, t1, t2]
+  ring
+
+/-- `r ^ s` is harmonic on `r > 0` in dimension `n` exactly when `s = 0` or
+`s = 2 - n`. -/
+lemma apm_m95J02_euler_harmonic_iff (n : ℕ) (s : ℝ) :
+    (∀ r : ℝ, 0 < r →
+        iteratedDeriv 2 (fun t : ℝ => t ^ s) r +
+          ((n : ℝ) - 1) / r * deriv (fun t : ℝ => t ^ s) r = 0) ↔
+      s = 0 ∨ s = 2 - (n : ℝ) := by
+  constructor
+  · intro h
+    have e := apm_m95J02_euler_step n (r := 1) (s := s) one_pos
+    rw [h 1 one_pos] at e
+    simp at e
+    rcases e with hs | hs
+    · exact Or.inl hs
+    · exact Or.inr (by linarith)
+  · rintro (rfl | hs) r hr
+    · have e := apm_m95J02_euler_step n (r := r) (s := 0) hr
+      rw [zero_mul, zero_mul] at e
+      rcases mul_eq_zero.mp e with h | h
+      · exact absurd (eq_zero_of_pow_eq_zero h) hr.ne'
+      · exact h
+    · subst hs
+      have e := apm_m95J02_euler_step n (r := r) (s := 2 - (n : ℝ)) hr
+      rw [show (2 - (n : ℝ)) - 1 + (n : ℝ) - 1 = 0 by ring, mul_zero, zero_mul] at e
+      rcases mul_eq_zero.mp e with h | h
+      · exact absurd (eq_zero_of_pow_eq_zero h) hr.ne'
+      · exact h
+
+/-- In dimension two the second radial solution is `log r`, and it is
+harmonic on `r > 0`. -/
+lemma apm_m95J02_euler_log (r : ℝ) (hr : 0 < r) :
+    iteratedDeriv 2 Real.log r + ((2 : ℝ) - 1) / r * deriv Real.log r = 0 := by
+  rw [show (2 : ℕ) = 1 + 1 by norm_num, iteratedDeriv_succ, iteratedDeriv_one,
+    Real.deriv_log']
+  have hr0 : r ≠ 0 := hr.ne'
+  show deriv (fun x : ℝ => x⁻¹) r + _ = 0
+  rw [deriv_inv]
+  field_simp
+  ring
+
+/-- In dimension one the fundamental solution `‖x‖ / 2` is affine on each
+side of the pole, hence harmonic away from it. -/
+lemma apm_m95J02_laplacian_fundamental_one_eq_zero
+    {x : EuclideanSpace ℝ (Fin 1)} (hx : x ≠ 0) :
+    Laplacian.laplacian (apm_m95J02_fundamental 1) x = 0 := by
+  have hfun : apm_m95J02_fundamental 1 =
+      (fun z : EuclideanSpace ℝ (Fin 1) => (fun t : ℝ => t / 2) ‖z‖) := by
+    funext z
+    rw [apm_m95J02_fundamental_one]
+  have hcv : ContDiffAt ℝ 2 (fun t : ℝ => t / 2) ‖x‖ :=
+    (contDiff_id.div_const 2).contDiffAt
+  rw [hfun, apm_m95J02_laplacian_radial _ x hcv hx]
+  have hder : deriv (fun t : ℝ => t / 2) = fun _ => 1 / 2 := by
+    funext t
+    exact ((hasDerivAt_id t).div_const 2).deriv
+  rw [show (2 : ℕ) = 1 + 1 by norm_num, iteratedDeriv_succ, iteratedDeriv_one,
+    hder, deriv_const]
+  simp
+
+/-- The fundamental solution is harmonic away from the pole in every
+dimension `n ≥ 1`. -/
+lemma apm_m95J02_laplacian_fundamental_eq_zero_of_one_le {n : ℕ} (hn : 1 ≤ n)
+    {x : EuclideanSpace ℝ (Fin n)} (hx : x ≠ 0) :
+    Laplacian.laplacian (apm_m95J02_fundamental n) x = 0 := by
+  rcases eq_or_lt_of_le hn with rfl | h2
+  · exact apm_m95J02_laplacian_fundamental_one_eq_zero hx
+  · exact apm_m95J02_laplacian_fundamental_eq_zero (by omega) hx
+
+/-- In dimensions `n ≥ 3` the kernel is the power-law branch. -/
+lemma apm_m95J02_fundamental_of_two_lt {n : ℕ} (hn : 2 < n)
+    (x : EuclideanSpace ℝ (Fin n)) :
+    apm_m95J02_fundamental n x =
+      -Real.rpow ‖x‖ (2 - (n : ℝ)) /
+        (((n : ℝ) - 2) * apm_m95J02_sphereArea n) := by
+  rw [apm_m95J02_fundamental, if_neg (by omega)]
+
+/-- The fundamental solution of the Laplacian, in every dimension `n ≥ 1`. -/
+theorem apm_m95j02
+    (n : ℕ) (hn : 1 ≤ n) :
+    (∀ (v : ℝ → ℝ) (x : EuclideanSpace ℝ (Fin n)),
+      ContDiffAt ℝ 2 v ‖x‖ → x ≠ 0 →
+        Laplacian.laplacian (fun z : EuclideanSpace ℝ (Fin n) ↦ v ‖z‖) x =
+          iteratedDeriv 2 v ‖x‖ +
+            ((n : ℝ) - 1) / ‖x‖ * deriv v ‖x‖) ∧
+    (∀ φ : EuclideanSpace ℝ (Fin n) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ →
+        (∫ x, apm_m95J02_fundamental n x * Laplacian.laplacian φ x) = φ 0) ∧
+    (∀ f : EuclideanSpace ℝ (Fin n) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f → HasCompactSupport f →
+        ∀ x : EuclideanSpace ℝ (Fin n),
+          Laplacian.laplacian (apm_m95J02_poissonSolution n f) x = f x) ∧
+    (∀ (r s : ℝ), 0 < r →
+        r ^ 2 * (iteratedDeriv 2 (fun t : ℝ => t ^ s) r +
+          ((n : ℝ) - 1) / r * deriv (fun t : ℝ => t ^ s) r) =
+          s * (s - 1 + (n : ℝ) - 1) * r ^ s) ∧
+    (∀ s : ℝ,
+        (∀ r : ℝ, 0 < r →
+          iteratedDeriv 2 (fun t : ℝ => t ^ s) r +
+            ((n : ℝ) - 1) / r * deriv (fun t : ℝ => t ^ s) r = 0) ↔
+        s = 0 ∨ s = 2 - (n : ℝ)) ∧
+    (∀ r : ℝ, 0 < r →
+        iteratedDeriv 2 Real.log r + ((2 : ℝ) - 1) / r * deriv Real.log r = 0) ∧
+    (∀ x : EuclideanSpace ℝ (Fin n), x ≠ 0 →
+        Laplacian.laplacian (apm_m95J02_fundamental n) x = 0) ∧
+    (∀ x : EuclideanSpace ℝ (Fin 1),
+        apm_m95J02_fundamental 1 x = ‖x‖ / 2) ∧
+    (∀ x : EuclideanSpace ℝ (Fin 2),
+        apm_m95J02_fundamental 2 x = Real.log ‖x‖ / (2 * Real.pi)) ∧
+    (2 < n → ∀ x : EuclideanSpace ℝ (Fin n),
+        apm_m95J02_fundamental n x =
+          -Real.rpow ‖x‖ (2 - (n : ℝ)) /
+            (((n : ℝ) - 2) * apm_m95J02_sphereArea n)) := by
+  by_cases h1 : n = 1
+  · subst n
+    obtain ⟨ha, hb, hc⟩ := apm_m95j02_one
+    exact ⟨ha, hb, hc,
+      fun r s hr => apm_m95J02_euler_step 1 hr,
+      fun s => apm_m95J02_euler_harmonic_iff 1 s,
+      fun r hr => apm_m95J02_euler_log r hr,
+      fun x hx => apm_m95J02_laplacian_fundamental_eq_zero_of_one_le le_rfl hx,
+      apm_m95J02_fundamental_one,
+      apm_m95J02_fundamental_two,
+      fun h2 x => apm_m95J02_fundamental_of_two_lt h2 x⟩
+  · obtain ⟨ha, hb, hc⟩ := apm_m95j02_two_le n (by omega)
+    exact ⟨ha, hb, hc,
+      fun r s hr => apm_m95J02_euler_step n hr,
+      fun s => apm_m95J02_euler_harmonic_iff n s,
+      fun r hr => apm_m95J02_euler_log r hr,
+      fun x hx => apm_m95J02_laplacian_fundamental_eq_zero_of_one_le hn hx,
+      apm_m95J02_fundamental_one,
+      apm_m95J02_fundamental_two,
+      fun h2 x => apm_m95J02_fundamental_of_two_lt h2 x⟩
