@@ -3644,7 +3644,33 @@ theorem manifold_ae_regularValue
     (hg : ContMDiff I (modelWithCornersSelf ℝ V) ∞ g) :
     ∀ᵐ y ∂mu, ∀ x, g x = y →
       Function.Surjective (mfderiv I (modelWithCornersSelf ℝ V) g x) := by
-  sorry
+  let e : V ≃L[ℝ] EuclideanSpace ℝ (Fin (Module.finrank ℝ V)) :=
+    toEuclidean
+  let nu : Measure (EuclideanSpace ℝ (Fin (Module.finrank ℝ V))) := mu.map e
+  letI : nu.IsAddHaarMeasure := e.isAddHaarMeasure_map mu
+  have heg : ContMDiff I
+      (modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin (Module.finrank ℝ V)))) ∞
+      (e ∘ g) := e.contDiff.contMDiff.comp hg
+  have hreg := manifold_ae_regularValue_innerProduct I nu (e ∘ g) heg
+  have hreg' : ∀ᵐ y ∂mu, ∀ x, (e ∘ g) x = e y →
+      Function.Surjective
+        (mfderiv I
+          (modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin (Module.finrank ℝ V))))
+          (e ∘ g) x) := by
+    exact ae_of_ae_map e.continuous.measurable.aemeasurable hreg
+  filter_upwards [hreg'] with y hy
+  intro x hxy
+  have hscomp := hy x (by simp only [Function.comp_apply, hxy])
+  have hgd : MDifferentiableAt I (modelWithCornersSelf ℝ V) g x :=
+    hg.mdifferentiableAt (by simp)
+  have hed : MDifferentiableAt (modelWithCornersSelf ℝ V)
+      (modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin (Module.finrank ℝ V)))) e (g x) :=
+    e.hasFDerivAt.hasMFDerivAt.mdifferentiableAt
+  have hchain := mfderiv_comp x hed hgd
+  intro v
+  obtain ⟨u, hu⟩ := hscomp (e v)
+  rw [hchain, e.hasFDerivAt.hasMFDerivAt.mfderiv] at hu
+  exact ⟨u, e.injective hu⟩
 -- END SEAT AREA
 
 end ConstructionTargets.SardWhitneyExtension
