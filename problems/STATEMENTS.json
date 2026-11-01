@@ -4237,6 +4237,27 @@
    "rev": "9e235e00e",
    "approved_at": "2026-10-24T21:59:26Z"
   },
+  "m95J01": {
+   "decls": [
+    "apm_m95j01"
+   ],
+   "sha256": "5aee8ccaa33bbd5443319ea0d2c108a182f10661b3058f7479a05fe56c4707ef",
+   "defs": [
+    "apm_m95J01_H",
+    "apm_m95J01_P",
+    "apm_m95J01_T",
+    "apm_m95J01_differentialEndomorphism",
+    "apm_m95J01_e",
+    "apm_m95J01_e'",
+    "apm_m95J01_realizeLM"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": null,
+   "rev": "f64fdf0c7",
+   "approved_at": "2026-11-01T22:26:32Z"
+  },
   "m95J03": {
    "decls": [
     "apm_m95j03"
