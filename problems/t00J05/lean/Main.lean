@@ -4,22 +4,24 @@ import ConstructionTargets.AttachTwoCell
 /-!
 # APM t00J05
 
-The printed problem allows any essential embedded circle in the torus.  The
-classification of essential curves on the torus (Schoenflies followed by
-cutting the torus along the curve) carries its image to a standard factor;
-the Alexander trick absorbs a reparametrisation of the attaching circle.  We
-therefore fix the standard first-factor representative.  Primitivity of the
-homotopy class alone would not justify this reduction of an embedding.
+For every embedding `f` of the circle onto an essential simple closed curve in
+the torus, the attached space is the honest quotient `AttachTwoCell.Cell f`.
+"Essential" is stated as: `f` is not homotopic to a constant map.
 
-The attached space is the honest quotient `AttachTwoCell.Cell standardCurve`.
-The actual universal-cover model is a cylinder `S¹ × ℝ` capped by a disk along
-every circle `S¹ × {n}`.  It is defined below as an honest quotient, as is its
-projection to the attached space.  The book's “line with a sphere at every
-integer” is not homeomorphic to this cover (and cannot cover a space which is
-locally two-dimensional everywhere); it describes only its homotopy type.  We
-retain that concrete necklace and state the homotopy equivalence explicitly.
-Part (b) asks for continuous maps in both directions which are not homotopic
-to any constant map.
+The universal-cover model is a cylinder `S¹ × ℝ` capped by a disk along every
+circle `S¹ × {n}`, defined below as an honest quotient.  It does not depend on
+`f`; the covering projection does, so the statement asserts that one exists.  The
+book's "line with a sphere at every integer" is not homeomorphic to this cover
+(and cannot cover a space which is locally two-dimensional everywhere); it
+describes only its homotopy type.  We retain that concrete necklace and state the
+homotopy equivalence explicitly.  Part (b) asks for continuous maps in both
+directions which are not homotopic to any constant map.
+
+No reduction to a standard curve is made in this statement.  A proof needs the
+classification of essential curves (Schoenflies, then cutting the torus along the
+curve), which is absent from Mathlib and from this repository.  The version for
+one fixed curve is in `holes/labs/out-of-competition/t00J05/StandardCurve.lean`
+and does not count.
 -/
 
 open scoped ContinuousMap
@@ -31,14 +33,6 @@ namespace APMT00J05
 open ConstructionTargets.AttachTwoCell
 
 abbrev Torus := Circle × Circle
-
-/-- The standard essential simple closed curve in the torus. -/
-def standardCurve : C(Circle, Torus) :=
-  ⟨fun z ↦ (z, 1), continuous_id.prodMk continuous_const⟩
-
-/-- The complex obtained by attaching a disk to the torus along the standard
-essential circle. -/
-abbrev X := Cell standardCurve
 
 abbrev E3 := EuclideanSpace ℝ (Fin 3)
 abbrev Sphere2 := Metric.sphere (0 : E3) 1
@@ -78,66 +72,22 @@ instance : TopologicalSpace CappedCylinder :=
       Quotient.mk (Relation.EqvGen.setoid CappedCylinderRel) z)
     inferInstance
 
-/-- The period-one exponential used in the second torus coordinate. -/
-def periodOneExp (t : ℝ) : Circle := Circle.exp (t * (2 * Real.pi))
-
-lemma continuous_periodOneExp : Continuous periodOneExp := by
-  exact Circle.exp.continuous.comp
-    (continuous_id.mul (continuous_const.mul continuous_const))
-
-@[simp] lemma periodOneExp_int (n : ℤ) : periodOneExp (n : ℝ) = 1 := by
-  simpa [periodOneExp] using Circle.exp_int_mul_two_pi n
-
-/-- The projection on representatives: the cylinder wraps in the second torus
-coordinate and every cap maps identically to the single attached disk. -/
-def cappedCylinderRaw : ((Circle × ℝ) ⊕ (ℤ × Disk)) → X
-  | .inl (z, t) => cellMk standardCurve (.inl (z, periodOneExp t))
-  | .inr (_, d) => cellMk standardCurve (.inr d)
-
-lemma cappedCylinderRaw_respects {a b}
-    (h : Relation.EqvGen CappedCylinderRel a b) :
-    cappedCylinderRaw a = cappedCylinderRaw b := by
-  induction h with
-  | rel a b h =>
-      cases h with
-      | cap n z =>
-          simp only [cappedCylinderRaw, periodOneExp_int]
-          apply Quotient.sound
-          exact Relation.EqvGen.rel _ _ (CellRel.boundary z)
-  | refl => rfl
-  | symm _ _ _ ih => exact ih.symm
-  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
-
-lemma continuous_cappedCylinderRaw : Continuous cappedCylinderRaw := by
-  apply continuous_sum_dom.mpr
-  constructor
-  · exact (continuous_cellMk standardCurve).comp
-      (continuous_inl.comp
-        (continuous_fst.prodMk (continuous_periodOneExp.comp continuous_snd)))
-  · exact (continuous_cellMk standardCurve).comp
-      (continuous_inr.comp continuous_snd)
-
-/-- The explicit projection from the capped cylinder to the attached torus. -/
-def cappedCylinderProjection : C(CappedCylinder, X) where
-  toFun := Quotient.lift cappedCylinderRaw
-    (fun _ _ h ↦ cappedCylinderRaw_respects h)
-  continuous_toFun := by
-    exact Continuous.quotient_lift continuous_cappedCylinderRaw
-      (fun _ _ h ↦ cappedCylinderRaw_respects h)
-
 end APMT00J05
 
 open APMT00J05
+open ConstructionTargets.AttachTwoCell
 
-/-- The two assertions requested in the problem, for the standard representative
-of the essential curve. -/
+/-- The two assertions requested in the problem, for every essential embedded
+curve in the torus. -/
 theorem apm_t00j05 :
-    (IsCoveringMap cappedCylinderProjection ∧
-      SimplyConnectedSpace CappedCylinder ∧
-      Nonempty (ContinuousMap.HomotopyEquiv CappedCylinder Necklace)) ∧
-    (∃ i : C(Sphere2, X),
-      (¬ ∃ x : X, ContinuousMap.Homotopic i (ContinuousMap.const Sphere2 x)) ∧
-      ∃ q : C(X, Sphere2),
-        ¬ ∃ s : Sphere2,
-          ContinuousMap.Homotopic q (ContinuousMap.const X s)) := by
+    ∀ f : C(Circle, Torus), Topology.IsEmbedding f →
+      (¬ ∃ x : Torus, ContinuousMap.Homotopic f (ContinuousMap.const Circle x)) →
+      ((∃ p : C(CappedCylinder, Cell f), IsCoveringMap p) ∧
+        SimplyConnectedSpace CappedCylinder ∧
+        Nonempty (ContinuousMap.HomotopyEquiv CappedCylinder Necklace)) ∧
+      (∃ i : C(Sphere2, Cell f),
+        (¬ ∃ x : Cell f, ContinuousMap.Homotopic i (ContinuousMap.const Sphere2 x)) ∧
+        ∃ q : C(Cell f, Sphere2),
+          ¬ ∃ s : Sphere2,
+            ContinuousMap.Homotopic q (ContinuousMap.const (Cell f) s)) := by
   sorry
