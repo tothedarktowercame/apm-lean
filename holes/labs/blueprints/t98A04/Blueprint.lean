@@ -464,6 +464,88 @@ theorem apm_t98a04_submersion_aux_affine_isManifold
 coordinate quotient.  Combine the standard sphere charts with smooth
 division on the nonzero-coordinate patch.  At `(1,0)` the local map is
 `z ↦ z₁/z₀`. -/
+lemma apm_t98a04_submersion_aux_hopf_smooth_ratio
+    (i j : Fin 2) (z : apm_t98a04_S3) :
+    Projectivization.rep (apm_t98a04_hopf z) j /
+        Projectivization.rep (apm_t98a04_hopf z) i = z.1 j / z.1 i := by
+  change (Projectivization.mk ℂ z.1 (apm_t98a04_sphere_ne_zero z)).rep j /
+      (Projectivization.mk ℂ z.1 (apm_t98a04_sphere_ne_zero z)).rep i = _
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ z.1
+    (apm_t98a04_sphere_ne_zero z)
+  rw [← ha]
+  change (a.1 * z.1 j) / (a.1 * z.1 i) = _
+  field_simp
+
+lemma apm_t98a04_submersion_aux_hopf_smooth_source
+    (i : Fin 2) (z : apm_t98a04_S3) :
+    Projectivization.rep (apm_t98a04_hopf z) i ≠ 0 ↔ z.1 i ≠ 0 := by
+  change (Projectivization.mk ℂ z.1 (apm_t98a04_sphere_ne_zero z)).rep i ≠ 0 ↔ _
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ z.1
+    (apm_t98a04_sphere_ne_zero z)
+  rw [← ha]
+  change a.1 * z.1 i ≠ 0 ↔ z.1 i ≠ 0
+  simp
+
+lemma apm_t98a04_submersion_aux_hopf_smooth_coord
+    (i : Fin 2) :
+    ContMDiffOn (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞)
+      (apm_t98a04_affineCoordinate i ∘ apm_t98a04_hopf)
+      {z : apm_t98a04_S3 | z.1 i ≠ 0} := by
+  by_cases hi : i = 0
+  · subst i
+    let F : apm_t98a04_C2 → apm_t98a04_R2 := fun z =>
+      WithLp.toLp 2 ![(z 1 / z 0).re, (z 1 / z 0).im]
+    have hF : ContDiffOn ℝ (⊤ : ℕ∞) F {z | z 0 ≠ 0} := by
+      apply (contDiffOn_piLp 2).2
+      intro k
+      have hq : ContDiffOn ℝ (⊤ : ℕ∞) (fun z : apm_t98a04_C2 => z 1 / z 0)
+          {z | z 0 ≠ 0} := by
+        have hn := contDiffOn_piLp_apply (𝕜 := ℝ) (p := 2) (i := (1 : Fin 2))
+          (n := (⊤ : ℕ∞)) (t := {z : apm_t98a04_C2 | z 0 ≠ 0})
+        have hd := contDiffOn_piLp_apply (𝕜 := ℝ) (p := 2) (i := (0 : Fin 2))
+          (n := (⊤ : ℕ∞)) (t := {z : apm_t98a04_C2 | z 0 ≠ 0})
+        simpa [div_eq_mul_inv] using
+          hn.mul (hd.inv (fun z hz => hz))
+      fin_cases k
+      · simpa [F] using Complex.reCLM.contDiff.comp_contDiffOn hq
+      · simpa [F] using Complex.imCLM.contDiff.comp_contDiffOn hq
+    have hc := hF.contMDiffOn.comp
+      (contMDiff_coe_sphere (E := apm_t98a04_C2) (n := 3)
+        (m := (⊤ : ℕ∞))).contMDiffOn
+      (fun z hz => hz)
+    apply hc.congr
+    intro z hz
+    simp only [Function.comp_apply, F, apm_t98a04_affineCoordinate]
+    simp only [ite_true]
+    rw [apm_t98a04_submersion_aux_hopf_smooth_ratio]
+  · have hi1 : i = 1 := by fin_cases i <;> simp_all
+    subst i
+    let F : apm_t98a04_C2 → apm_t98a04_R2 := fun z =>
+      WithLp.toLp 2 ![(z 0 / z 1).re, (z 0 / z 1).im]
+    have hF : ContDiffOn ℝ (⊤ : ℕ∞) F {z | z 1 ≠ 0} := by
+      apply (contDiffOn_piLp 2).2
+      intro k
+      have hq : ContDiffOn ℝ (⊤ : ℕ∞) (fun z : apm_t98a04_C2 => z 0 / z 1)
+          {z | z 1 ≠ 0} := by
+        have hn := contDiffOn_piLp_apply (𝕜 := ℝ) (p := 2) (i := (0 : Fin 2))
+          (n := (⊤ : ℕ∞)) (t := {z : apm_t98a04_C2 | z 1 ≠ 0})
+        have hd := contDiffOn_piLp_apply (𝕜 := ℝ) (p := 2) (i := (1 : Fin 2))
+          (n := (⊤ : ℕ∞)) (t := {z : apm_t98a04_C2 | z 1 ≠ 0})
+        simpa [div_eq_mul_inv] using
+          hn.mul (hd.inv (fun z hz => hz))
+      fin_cases k
+      · simpa [F] using Complex.reCLM.contDiff.comp_contDiffOn hq
+      · simpa [F] using Complex.imCLM.contDiff.comp_contDiffOn hq
+    have hc := hF.contMDiffOn.comp
+      (contMDiff_coe_sphere (E := apm_t98a04_C2) (n := 3)
+        (m := (⊤ : ℕ∞))).contMDiffOn
+      (fun z hz => hz)
+    apply hc.congr
+    intro z hz
+    simp only [Function.comp_apply, F, apm_t98a04_affineCoordinate]
+    rw [if_neg (by decide)]
+    rw [apm_t98a04_submersion_aux_hopf_smooth_ratio]
+
 theorem apm_t98a04_submersion_aux_hopf_smooth
     (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
     (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts)
@@ -472,7 +554,51 @@ theorem apm_t98a04_submersion_aux_hopf_smooth
     let _ := targetCharts
     ContMDiff (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
       (⊤ : ℕ∞) apm_t98a04_hopf := by
-  sorry
+  let _ := targetCharts
+  obtain ⟨e, he_atlas, he⟩ := haffine
+  have hemax (i : Fin 2) : e i ∈ IsManifold.maximalAtlas (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞)
+      apm_t98a04_CP1 := by
+    apply IsManifold.subset_maximalAtlas
+    rw [he_atlas]
+    exact ⟨i, rfl⟩
+  let U : Fin 2 → Set apm_t98a04_S3 := fun i => {z | z.1 i ≠ 0}
+  have hU_open (i : Fin 2) : IsOpen (U i) := by
+    exact isOpen_compl_singleton.preimage
+      ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℂ) i).comp continuous_subtype_val)
+  have hlocal (i : Fin 2) :
+      ContMDiffOn (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞)
+        apm_t98a04_hopf (U i) := by
+    have hcoord := apm_t98a04_submersion_aux_hopf_smooth_coord i
+    have hsymm :
+        ContMDiffOn (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞)
+          (e i).symm (e i).target :=
+      contMDiffOn_symm_of_mem_maximalAtlas (hemax i)
+    have hcomp := hsymm.comp hcoord
+      (fun z hz => by
+        rw [(he i).2.1]
+        exact Set.mem_univ _)
+    apply hcomp.congr
+    intro z hz
+    simp only [Function.comp_apply]
+    have hmem : apm_t98a04_hopf z ∈ (e i).source := by
+      rw [(he i).1]
+      exact (apm_t98a04_submersion_aux_hopf_smooth_source i z).2 hz
+    symm
+    calc
+      (e i).symm (apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)) =
+          (e i).symm (e i (apm_t98a04_hopf z)) := by
+            rw [(he i).2.2.1 _ hmem]
+      _ = apm_t98a04_hopf z := (e i).left_inv hmem
+  apply contMDiff_of_contMDiffOn_iUnion_of_isOpen hlocal hU_open
+  apply Set.eq_univ_of_forall
+  intro z
+  simp only [Set.mem_iUnion, U, Set.mem_setOf_eq]
+  by_contra h
+  push_neg at h
+  have hz : z.1 = 0 := by
+    apply PiLp.ext
+    exact h
+  exact apm_t98a04_sphere_ne_zero z hz
 
 /-- Seat: a smooth local section through `z`. Put `v x = affineVector i x`, take the unit complex
 `c = (z i / ‖z i‖) / (v x₀ i / ‖v x₀ i‖)` at `x₀ = affineCoordinate i (hopf z)` (note `v x i = 1`), and
