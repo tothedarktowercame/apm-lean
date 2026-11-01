@@ -342,10 +342,41 @@ theorem apm_t98a04_no_section_aux_cp1_h2_nonzero :
 the unit spheres, and transport `SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top`
 for `H₂(S³;ℚ)` (or its coefficient-change counterpart). -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t98a04_no_section_aux_s3_h2_zero_aux_isometry :
+    apm_t98a04_C2 ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4) := by
+  have hdim : Module.finrank ℝ apm_t98a04_C2 = 4 := by
+    rw [← Module.finrank_mul_finrank ℝ ℂ apm_t98a04_C2,
+      Complex.finrank_real_complex]
+    simp [apm_t98a04_C2]
+  exact ((stdOrthonormalBasis ℝ apm_t98a04_C2).reindex (finCongr hdim)).repr
+
+noncomputable def apm_t98a04_no_section_aux_s3_h2_zero_aux_homeomorph :
+    apm_t98a04_S3 ≃ₜ T02A06.euclideanUnitSphere 4 where
+  toFun z := ⟨apm_t98a04_no_section_aux_s3_h2_zero_aux_isometry z.1, by
+    simpa [Metric.mem_sphere, dist_zero_right] using z.2⟩
+  invFun z := ⟨apm_t98a04_no_section_aux_s3_h2_zero_aux_isometry.symm z.1, by
+    simpa [Metric.mem_sphere, dist_zero_right] using z.2⟩
+  left_inv z := Subtype.ext (by simp)
+  right_inv z := Subtype.ext (by simp)
+  continuous_toFun :=
+    Continuous.subtype_mk
+      (apm_t98a04_no_section_aux_s3_h2_zero_aux_isometry.continuous.comp
+        continuous_subtype_val) (fun z ↦ by
+          simpa [Metric.mem_sphere, dist_zero_right] using z.2)
+  continuous_invFun :=
+    Continuous.subtype_mk
+      (apm_t98a04_no_section_aux_s3_h2_zero_aux_isometry.symm.continuous.comp
+        continuous_subtype_val) (fun z ↦ by
+          simpa [Metric.mem_sphere, dist_zero_right] using z.2)
+
 theorem apm_t98a04_no_section_aux_s3_h2_zero :
     CategoryTheory.Limits.IsZero
       (apm_t98a04_HQ 2 apm_t98a04_S3) := by
-  sorry
+  have hreal := RP3Homology.sphere_isZero 2 (by omega) (by omega)
+  exact hreal.of_iso
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 2).obj
+      (ModuleCat.of ℚ ℚ)).mapIso
+        (TopCat.isoOfHomeo apm_t98a04_no_section_aux_s3_h2_zero_aux_homeomorph))
 -- END SEAT AREA
 
 /-- Apply rational singular homology to `hopf ∘ i = id`.  Functoriality makes
