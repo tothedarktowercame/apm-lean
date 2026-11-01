@@ -795,10 +795,69 @@ theorem t99J02_rel_boundary (o : Bool) (g : ℕ) {x y : ConstructionTargets.Surf
 
 /-- Rotation by `π` descends to the octagon quotient: it sends the pairs of handle `j` to those of
 handle `1 - j`. -/
+lemma t99J02_q2_neg_aux_edge (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    t99J02_neg (edgePoint 8 e t) = edgePoint 8 (e + 4) t := by
+  apply Subtype.ext
+  simp only [t99J02_neg, edgePoint, Subtype.coe_mk]
+  rw [← Complex.exp_add_pi_mul_I]
+  congr 1
+  push_cast
+  ring
+
+lemma t99J02_q2_neg_aux_period (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    edgePoint 8 (e + 8) t = edgePoint 8 e t := by
+  apply Subtype.ext
+  simp only [edgePoint, Subtype.coe_mk]
+  have hexp : Complex.I * (2 * Real.pi * (((e + 8 : ℕ) : ℝ) + t.1) / (8 : ℕ)) =
+      Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / (8 : ℕ)) + 2 * Real.pi * Complex.I := by
+    push_cast
+    ring
+  rw [hexp]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I, mul_one]
+
+lemma t99J02_q2_neg_aux_map {z z' : ConstructionTargets.Surfaces.Disk}
+    (heq : Relation.EqvGen (SurfaceRel true 2) z z') :
+    Relation.EqvGen (SurfaceRel true 2) (t99J02_neg z) (t99J02_neg z') := by
+  induction heq with
+  | rel x y hxy =>
+      apply Relation.EqvGen.rel
+      simp only [SurfaceRel, if_true] at hxy ⊢
+      rcases hxy with ⟨j, hj, t, hxy⟩
+      have hj' : j = 0 ∨ j = 1 := by omega
+      rcases hj' with rfl | rfl
+      · refine ⟨1, by omega, t, ?_⟩
+        rcases hxy with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+        · left
+          norm_num
+          constructor <;> apply t99J02_q2_neg_aux_edge
+        · right
+          norm_num
+          constructor <;> apply t99J02_q2_neg_aux_edge
+      · refine ⟨0, by omega, t, ?_⟩
+        rcases hxy with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+        · left
+          norm_num
+          constructor
+          · rw [t99J02_q2_neg_aux_edge]
+            exact t99J02_q2_neg_aux_period 0 t
+          · rw [t99J02_q2_neg_aux_edge]
+            exact t99J02_q2_neg_aux_period 2 _
+        · right
+          norm_num
+          constructor
+          · rw [t99J02_q2_neg_aux_edge]
+            exact t99J02_q2_neg_aux_period 1 t
+          · rw [t99J02_q2_neg_aux_edge]
+            exact t99J02_q2_neg_aux_period 3 _
+  | refl x => exact Relation.EqvGen.refl _
+  | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z _ _ ihxy ihyz => exact Relation.EqvGen.trans _ _ _ ihxy ihyz
+
 theorem t99J02_q2_neg {z z' : ConstructionTargets.Surfaces.Disk}
     (h : surfaceQuotient true 2 z = surfaceQuotient true 2 z') :
     surfaceQuotient true 2 (t99J02_neg z) = surfaceQuotient true 2 (t99J02_neg z') := by
-  sorry
+  apply Quotient.sound
+  exact t99J02_q2_neg_aux_map (Quotient.exact h)
 
 /-- The real points `1`, `-1` of the octagon are one point of the surface; both are vertices
 (`orientable_standard_oneVertex`, transported by `orientableStandardSpaceHomeomorph`). -/
