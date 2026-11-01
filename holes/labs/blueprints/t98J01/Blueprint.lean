@@ -1025,11 +1025,114 @@ theorem t98J01_complexLefschetz_shortExact
   sorry
 
 /-- Seat: additivity on a biproduct of complexes. `CoefficientHomologyBiprodIso.homologyBiprodIso` conjugates `homologyMap (biprod.map φ ψ)` to the biproduct of the two homology maps; finish with `LinearMap.trace_prodMap'` after passing to `M × N`, and `t98J01_complexLefschetz_sum_eq` at `max` of the two bounds. -/
+private theorem t98J01_complexLefschetz_biprod_aux_trace
+    {K L : ChainComplex (ModuleCat ℚ) ℕ} (φ : K ⟶ K) (ψ : L ⟶ L) (n : ℕ)
+    [FiniteDimensional ℚ (K.homology n)] [FiniteDimensional ℚ (L.homology n)]
+    [FiniteDimensional ℚ ((K ⊞ L).homology n)] :
+    LinearMap.trace ℚ ((K ⊞ L).homology n)
+        (HomologicalComplex.homologyMap (biprod.map φ ψ) n).hom =
+      LinearMap.trace ℚ (K.homology n) (HomologicalComplex.homologyMap φ n).hom +
+        LinearMap.trace ℚ (L.homology n) (HomologicalComplex.homologyMap ψ n).hom := by
+  let e := ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso
+    ℚ K L n
+  let p := ModuleCat.biprodIsoProd (K.homology n) (L.homology n)
+  let E : ((K ⊞ L).homology n) ≃ₗ[ℚ] (K.homology n × L.homology n) :=
+    e.toLinearEquiv.trans p.toLinearEquiv
+  let F := (HomologicalComplex.homologyMap (biprod.map φ ψ) n).hom
+  let G := LinearMap.prodMap (HomologicalComplex.homologyMap φ n).hom
+    (HomologicalComplex.homologyMap ψ n).hom
+  have hE : E.conj F = G := by
+    apply LinearMap.ext
+    intro x
+    apply Prod.ext
+    · change ((e.hom ≫ biprod.fst).hom
+          ((HomologicalComplex.homologyMap (biprod.map φ ψ) n).hom (E.symm x))) =
+        (HomologicalComplex.homologyMap φ n).hom x.1
+      rw [ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso_hom]
+      simp only [biprod.lift_fst, ModuleCat.hom_comp]
+      have hc : biprod.map φ ψ ≫ (biprod.fst : K ⊞ L ⟶ K) = biprod.fst ≫ φ := by simp
+      have hproj :
+          (HomologicalComplex.homologyMap (biprod.fst : K ⊞ L ⟶ K) n).hom
+              (e.inv.hom (p.inv.hom x)) = x.1 := by
+        change ((e.inv ≫ HomologicalComplex.homologyMap biprod.fst n).hom
+          (p.inv.hom x)) = x.1
+        rw [show HomologicalComplex.homologyMap (biprod.fst : K ⊞ L ⟶ K) n =
+            e.hom ≫ biprod.fst by
+          rw [ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso_hom]
+          simp]
+        simp only [Category.assoc, Iso.inv_hom_id_assoc]
+        change (((ModuleCat.biprodIsoProd _ _).inv ≫ biprod.fst).hom x) = x.1
+        rw [ModuleCat.biprodIsoProd_inv_comp_fst]
+        rfl
+      calc
+        _ = (HomologicalComplex.homologyMap
+              (biprod.map φ ψ ≫ (biprod.fst : K ⊞ L ⟶ K)) n).hom (E.symm x) := by
+            rw [HomologicalComplex.homologyMap_comp]
+            rfl
+        _ = (HomologicalComplex.homologyMap (biprod.fst ≫ φ) n).hom (E.symm x) := by rw [hc]
+        _ = _ := by rw [HomologicalComplex.homologyMap_comp]; exact congrArg _ hproj
+    · change ((e.hom ≫ biprod.snd).hom
+          ((HomologicalComplex.homologyMap (biprod.map φ ψ) n).hom (E.symm x))) =
+        (HomologicalComplex.homologyMap ψ n).hom x.2
+      rw [ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso_hom]
+      simp only [biprod.lift_snd, ModuleCat.hom_comp]
+      have hc : biprod.map φ ψ ≫ (biprod.snd : K ⊞ L ⟶ L) = biprod.snd ≫ ψ := by simp
+      have hproj :
+          (HomologicalComplex.homologyMap (biprod.snd : K ⊞ L ⟶ L) n).hom
+              (e.inv.hom (p.inv.hom x)) = x.2 := by
+        change ((e.inv ≫ HomologicalComplex.homologyMap biprod.snd n).hom
+          (p.inv.hom x)) = x.2
+        rw [show HomologicalComplex.homologyMap (biprod.snd : K ⊞ L ⟶ L) n =
+            e.hom ≫ biprod.snd by
+          rw [ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso_hom]
+          simp]
+        simp only [Category.assoc, Iso.inv_hom_id_assoc]
+        change (((ModuleCat.biprodIsoProd _ _).inv ≫ biprod.snd).hom x) = x.2
+        rw [ModuleCat.biprodIsoProd_inv_comp_snd]
+        rfl
+      calc
+        _ = (HomologicalComplex.homologyMap
+              (biprod.map φ ψ ≫ (biprod.snd : K ⊞ L ⟶ L)) n).hom (E.symm x) := by
+            rw [HomologicalComplex.homologyMap_comp]
+            rfl
+        _ = (HomologicalComplex.homologyMap (biprod.snd ≫ ψ) n).hom (E.symm x) := by rw [hc]
+        _ = _ := by rw [HomologicalComplex.homologyMap_comp]; exact congrArg _ hproj
+  rw [← LinearMap.trace_conj' F E, hE]
+  exact LinearMap.trace_prodMap' _ _
+
 theorem t98J01_complexLefschetz_biprod
     {K L : ChainComplex (ModuleCat ℚ) ℕ} {φ : K ⟶ K} {ψ : L ⟶ L} {a b : ℚ}
     (h₁ : t98J01_ComplexLefschetz K φ a) (h₂ : t98J01_ComplexLefschetz L ψ b) :
     t98J01_ComplexLefschetz (K ⊞ L) (biprod.map φ ψ) (a + b) := by
-  sorry
+  rcases h₁ with ⟨hfinK, m, hm, hsumK⟩
+  rcases h₂ with ⟨hfinL, n, hn, hsumL⟩
+  letI (k : ℕ) := hfinK k
+  letI (k : ℕ) := hfinL k
+  have hfin (k : ℕ) : FiniteDimensional ℚ ((K ⊞ L).homology k) := by
+    let e := ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L k
+    let p := ModuleCat.biprodIsoProd (K.homology k) (L.homology k)
+    let E : ((K ⊞ L).homology k) ≃ₗ[ℚ] (K.homology k × L.homology k) :=
+      e.toLinearEquiv.trans p.toLinearEquiv
+    exact FiniteDimensional.of_injective E.toLinearMap E.injective
+  refine ⟨hfin, max m n, ?_, ?_⟩
+  · intro k hk
+    letI := hm k (lt_of_le_of_lt (le_max_left m n) hk)
+    letI := hn k (lt_of_le_of_lt (le_max_right m n) hk)
+    let e := ConstructionTargets.CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L k
+    let p := ModuleCat.biprodIsoProd (K.homology k) (L.homology k)
+    let E : ((K ⊞ L).homology k) ≃ₗ[ℚ] (K.homology k × L.homology k) :=
+      e.toLinearEquiv.trans p.toLinearEquiv
+    exact ⟨fun x y => E.injective (Subsingleton.elim _ _)⟩
+  · letI (k : ℕ) := hfin k
+    have hK := t98J01_complexLefschetz_sum_eq
+      ⟨hfinK, m, hm, hsumK⟩ (max m n)
+      (fun k hk => hm k (lt_of_le_of_lt (le_max_left m n) hk))
+    have hL := t98J01_complexLefschetz_sum_eq
+      ⟨hfinL, n, hn, hsumL⟩ (max m n)
+      (fun k hk => hn k (lt_of_le_of_lt (le_max_right m n) hk))
+    simp_rw [t98J01_complexLefschetz_biprod_aux_trace φ ψ]
+    simp only [mul_add]
+    rw [Finset.sum_add_distrib, hK, hL]
 
 /-- Seat: the Lefschetz number is invariant under a commuting quasi-isomorphism. `asIso (homologyMap g k)` is a linear equivalence conjugating the two homology maps (`homologyMap_comp`, `hc`), then `LinearMap.trace_conj'`. Finite-dimensionality and vanishing transport along it. Same bound on both sides. -/
 theorem t98J01_complexLefschetz_congr
