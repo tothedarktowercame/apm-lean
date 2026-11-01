@@ -779,7 +779,15 @@ theorem contDiff_and_fderiv_eq_of_gluedTaylorSeries
     (hone : ∀ x ∈ K, ∀ v, convexJet 1 f K x (fun _ ↦ v) = fderivWithin ℝ f K x v)
     (hT : HasFTaylorSeriesUpTo (m : WithTop ℕ∞) G (gluedWhitneyJet K f G)) :
     ContDiff ℝ m G ∧ ∀ x ∈ K, fderiv ℝ G x = fderivWithin ℝ f K x := by
-  sorry
+  constructor
+  · exact hT.contDiff
+  · intro x hx
+    have hm0 : (m : WithTop ℕ∞) ≠ 0 := by
+      exact_mod_cast (Nat.ne_of_gt hm)
+    rw [(hT.hasFDerivAt hm0 x).fderiv]
+    ext v
+    simp only [gluedWhitneyJet, hx, if_pos]
+    convert hone x hx v using 1
 
 /-- Fixed-order Whitney extension on a compact convex domain.  For positive `m`, choose the
 partition, apply the polynomial-relative off-set estimate, and assemble the Taylor series.
