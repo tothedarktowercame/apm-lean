@@ -119,12 +119,68 @@ theorem apm_t98a04_submersion_aux_affine_atlas :
 /-- Prove smooth compatibility of the two affine charts.  On their overlap
 the transition is complex inversion; use `contDiffOn_inv₀`, real/complex
 coordinate smoothness, and `IsManifold.of_compatible`. -/
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition01
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (e : Fin 2 → OpenPartialHomeomorph apm_t98a04_CP1 apm_t98a04_R2)
+    (he : let _ := targetCharts
+      ∀ i,
+        (e i).source = {p : apm_t98a04_CP1 |
+          Projectivization.rep p i ≠ 0} ∧
+        (e i).target = Set.univ ∧
+        (∀ p ∈ (e i).source,
+          e i p = apm_t98a04_affineCoordinate i p) ∧
+        (∀ x, (e i).symm x = apm_t98a04_affineInverse i x)) :
+    let _ := targetCharts
+    ContDiffOn ℝ (⊤ : ℕ∞) ((e 0).symm ≫ₕ e 1)
+      ((e 0).symm ≫ₕ e 1).source := by
+  sorry
+
+lemma apm_t98a04_submersion_aux_affine_isManifold_aux_transition10
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (e : Fin 2 → OpenPartialHomeomorph apm_t98a04_CP1 apm_t98a04_R2)
+    (he : let _ := targetCharts
+      ∀ i,
+        (e i).source = {p : apm_t98a04_CP1 |
+          Projectivization.rep p i ≠ 0} ∧
+        (e i).target = Set.univ ∧
+        (∀ p ∈ (e i).source,
+          e i p = apm_t98a04_affineCoordinate i p) ∧
+        (∀ x, (e i).symm x = apm_t98a04_affineInverse i x)) :
+    let _ := targetCharts
+    ContDiffOn ℝ (⊤ : ℕ∞) ((e 1).symm ≫ₕ e 0)
+      ((e 1).symm ≫ₕ e 0).source := by
+  sorry
+
 theorem apm_t98a04_submersion_aux_affine_isManifold
     (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
     (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts) :
     let _ := targetCharts
     IsManifold (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞) apm_t98a04_CP1 := by
-  sorry
+  let _ := targetCharts
+  obtain ⟨e, he_atlas, he⟩ := haffine
+  dsimp only
+  apply isManifold_of_contDiffOn (modelWithCornersSelf ℝ apm_t98a04_R2)
+    (⊤ : ℕ∞) apm_t98a04_CP1
+  intro c d hc hd
+  rw [he_atlas] at hc hd
+  obtain ⟨i, rfl⟩ := hc
+  obtain ⟨j, rfl⟩ := hd
+  fin_cases i <;> fin_cases j
+  all_goals simp only [mfld_simps]
+  case «0».«0» =>
+    refine contDiffOn_id.congr ?_
+    intro x hx
+    exact (e 0).right_inv hx.1
+  case «1».«1» =>
+    refine contDiffOn_id.congr ?_
+    intro x hx
+    exact (e 1).right_inv hx.1
+  case «0».«1» =>
+    exact apm_t98a04_submersion_aux_affine_isManifold_aux_transition01
+      targetCharts e he
+  case «1».«0» =>
+    exact apm_t98a04_submersion_aux_affine_isManifold_aux_transition10
+      targetCharts e he
 
 /-- In either ratio chart the Hopf map is the corresponding homogeneous
 coordinate quotient.  Combine the standard sphere charts with smooth
