@@ -955,6 +955,19 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:53:13Z"
   },
+  "a94J02": {
+   "decls": [
+    "apm_a94j02"
+   ],
+   "sha256": "cd042aa293df3adb9246cbb4a76fb2a71dba9046a11acbfd165d2fbdfed0a82e",
+   "defs": [],
+   "grade": "narrower",
+   "grader": "codex read-only grader (backlog-1024), defect checked by claude-14 2026-11-01",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-14.md",
+   "prelim_defect": "problems/a94J02/PRELIM-DEFECT.md",
+   "rev": "2f2ad5a83",
+   "approved_at": "2026-11-01T20:32:20Z"
+  },
   "a94J03": {
    "decls": [
     "apm_a94j03"
@@ -2227,6 +2240,21 @@
    "rev": "9e235e00e",
    "approved_at": "2026-10-24T21:59:24Z"
   },
+  "b01J04": {
+   "decls": [
+    "apm_b01j04"
+   ],
+   "sha256": "0c82fad2cf6694289a44c96b4d76047a7b4c116800db438c341c8d1eb4a308ef",
+   "defs": [
+    "apmMatrixDiagonalizable"
+   ],
+   "grade": "narrower",
+   "grader": "codex read-only grader (backlog-1024), defect checked by claude-14 2026-11-01",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-23.md",
+   "prelim_defect": "problems/b01J04/PRELIM-DEFECT.md",
+   "rev": "2f2ad5a83",
+   "approved_at": "2026-11-01T20:32:20Z"
+  },
   "b03J01": {
    "decls": [
     "apm_b03j01"
@@ -2622,6 +2650,19 @@
    "prelim_defect": null,
    "rev": "9e235e00e",
    "approved_at": "2026-10-24T21:59:24Z"
+  },
+  "b96A04": {
+   "decls": [
+    "apm_b96a04"
+   ],
+   "sha256": "51a05446ce48753940564d8d11a8f84eb293eae9a06c1396a24a04a6fa95bb37",
+   "defs": [],
+   "grade": "narrower",
+   "grader": "codex read-only grader (backlog-1024), defect checked by claude-14 2026-11-01",
+   "evidence": "holes/labs/statement-registry/backlog-1024/grades-26.md",
+   "prelim_defect": "problems/b96A04/PRELIM-DEFECT.md",
+   "rev": "2f2ad5a83",
+   "approved_at": "2026-11-01T20:32:20Z"
   },
   "b96J01": {
    "decls": [
