@@ -510,7 +510,44 @@ theorem apm_t98a04_submersion_aux_surjective_of_section
     let _ := targetCharts
     Function.Surjective
       (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2)) apm_t98a04_hopf z) := by
-  sorry
+  let _ := targetCharts
+  letI := hmanifold
+  dsimp only
+  obtain ⟨e, he_atlas, he⟩ := haffine
+  let x0 := apm_t98a04_affineCoordinate i (apm_t98a04_hopf z)
+  have hei_atlas : e i ∈ atlas apm_t98a04_R2 apm_t98a04_CP1 := by
+    rw [he_atlas]
+    exact Set.mem_range_self i
+  have hei_max : e i ∈ IsManifold.maximalAtlas
+      (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞) apm_t98a04_CP1 :=
+    IsManifold.subset_maximalAtlas hei_atlas
+  have hei : (e i).MDifferentiable
+      (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R2)) := by
+    constructor
+    · exact (contMDiffOn_of_mem_maximalAtlas hei_max).mdifferentiableOn (by simp)
+    · exact (contMDiffOn_symm_of_mem_maximalAtlas hei_max).mdifferentiableOn (by simp)
+  have hx0 : x0 ∈ (e i).target := by
+    rw [(he i).2.1]
+    exact Set.mem_univ _
+  have hrange : Function.Surjective (mfderiv _ _ (e i).symm x0) :=
+    hei.symm.mfderiv_surjective hx0
+  have hcomp :
+      (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
+          apm_t98a04_hopf z).comp
+        (mfderiv (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) s x0) =
+      mfderiv (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R2)) (e i).symm x0 := by
+    rw [← hsz]
+    rw [← mfderiv_comp x0 (hsmooth.mdifferentiable (by simp)).mdifferentiableAt
+      (hs.mdifferentiable (by simp)).mdifferentiableAt]
+    apply Filter.EventuallyEq.mfderiv_eq
+    filter_upwards with x
+    change apm_t98a04_hopf (s x) = (e i).symm x
+    rw [hsec x, (he i).2.2.2 x]
+  intro y
+  obtain ⟨v, hv⟩ := hrange y
+  refine ⟨mfderiv (𝓘(ℝ, apm_t98a04_R2)) (𝓘(ℝ, apm_t98a04_R3)) s x0 v, ?_⟩
+  have h := congrArg (fun L ↦ L v) hcomp
+  exact h.trans hv
 -- END SEAT AREA
 
 /-- Assembly: every sphere point has a nonzero coordinate, then section plus chain rule. -/
