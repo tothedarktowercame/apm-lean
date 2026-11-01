@@ -632,7 +632,17 @@ theorem hasFTaylorSeriesUpTo_gluedWhitneyJet
     (hderiv : ∀ k < m, ∀ x, HasFDerivAt (fun y ↦ gluedWhitneyJet K f G y k)
       (gluedWhitneyJet K f G x (k + 1)).curryLeft x) :
     HasFTaylorSeriesUpTo (m : WithTop ℕ∞) G (gluedWhitneyJet K f G) := by
-  sorry
+  refine {
+    zero_eq := hzero
+    fderiv := ?_
+    cont := ?_
+  }
+  · intro k hk x
+    apply hderiv k ?_ x
+    exact_mod_cast hk
+  · intro k hk
+    apply hcont k
+    exact_mod_cast hk
 
 /-- A global Taylor series through order `m` gives `C^m`; identify its first component
 with the ordinary derivative and the on-`K` component with the within derivative. -/
