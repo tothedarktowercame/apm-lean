@@ -492,6 +492,215 @@ theorem iteratedFDeriv_taylorPolynomial_bound
 /-- On a compact convex set, continuity of the top within derivative gives one uniform
 Taylor constant for every lower jet.  Apply the Banach-valued segment integral remainder
 on `K`, bound the top jet on the compact set, and absorb factorial constants into `C`. -/
+-- Bundled linear map "evaluate the last `q` arguments at the fixed tuple `c`".
+noncomputable def compactConvex_taylor_remainder_bound_auxPhi
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {k q : ℕ} (c : Fin q → E) :
+    (E[×(k+q)]→L[ℝ] F) →L[ℝ] (E[×k]→L[ℝ] F) :=
+  LinearMap.mkContinuous
+    { toFun := fun M ↦ (ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c
+          ).compContinuousMultilinearMap
+          (ContinuousMultilinearMap.currySum (M.domDomCongr finSumFinEquiv.symm))
+      map_add' := fun M₁ M₂ ↦ by
+        ext u
+        show (ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c)
+            (((M₁ + M₂).domDomCongr finSumFinEquiv.symm).currySum u) =
+          (ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c)
+            ((M₁.domDomCongr finSumFinEquiv.symm).currySum u) +
+          (ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c)
+            ((M₂.domDomCongr finSumFinEquiv.symm).currySum u)
+        rw [ContinuousMultilinearMap.apply_apply, ContinuousMultilinearMap.currySum_apply,
+          ContinuousMultilinearMap.domDomCongr_apply, ContinuousMultilinearMap.add_apply,
+          ContinuousMultilinearMap.apply_apply, ContinuousMultilinearMap.currySum_apply,
+          ContinuousMultilinearMap.domDomCongr_apply,
+          ContinuousMultilinearMap.apply_apply, ContinuousMultilinearMap.currySum_apply,
+          ContinuousMultilinearMap.domDomCongr_apply]
+      map_smul' := fun r M ↦ by
+        ext u
+        show (ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c)
+            (((r • M).domDomCongr finSumFinEquiv.symm).currySum u) =
+          r • ((ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c)
+            ((M.domDomCongr finSumFinEquiv.symm).currySum u))
+        rw [ContinuousMultilinearMap.apply_apply, ContinuousMultilinearMap.currySum_apply,
+          ContinuousMultilinearMap.domDomCongr_apply, ContinuousMultilinearMap.smul_apply,
+          ContinuousMultilinearMap.apply_apply, ContinuousMultilinearMap.currySum_apply,
+          ContinuousMultilinearMap.domDomCongr_apply] }
+    ‖ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c‖
+    (fun M ↦ by
+      show ‖(ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c
+          ).compContinuousMultilinearMap
+          (ContinuousMultilinearMap.currySum (M.domDomCongr finSumFinEquiv.symm))‖ ≤
+        ‖ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c‖ * ‖M‖
+      refine (ContinuousLinearMap.norm_compContinuousMultilinearMap_le _ _).trans ?_
+      gcongr
+      have h1 : ContinuousMultilinearMap.currySum (M.domDomCongr finSumFinEquiv.symm) =
+          ContinuousMultilinearMap.currySumEquiv ℝ (Fin k) (Fin q) E F
+            (M.domDomCongr finSumFinEquiv.symm) := rfl
+      rw [h1, LinearIsometryEquiv.norm_map, ContinuousMultilinearMap.norm_domDomCongr])
+
+
+theorem compactConvex_taylor_remainder_bound_auxPhi_apply
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {k q : ℕ} (c : Fin q → E) (M : E[×(k+q)]→L[ℝ] F) (u : Fin k → E) :
+    compactConvex_taylor_remainder_bound_auxPhi c M u = M (Fin.append u c) := by
+  show (ContinuousMultilinearMap.apply ℝ (fun _ : Fin q ↦ E) F c)
+      ((M.domDomCongr finSumFinEquiv.symm).currySum u) = M (Fin.append u c)
+  rw [ContinuousMultilinearMap.apply_apply, ContinuousMultilinearMap.currySum_apply,
+    ContinuousMultilinearMap.domDomCongr_apply]
+  congr 1
+  exact iteratedFDeriv_taylorPolynomial_exact_aux_append u c
+
+theorem compactConvex_taylor_remainder_bound_aux_norm
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {k q : ℕ} (c : Fin q → E) (M : E[×(k+q)]→L[ℝ] F) :
+    ‖compactConvex_taylor_remainder_bound_auxPhi c M‖ ≤ ‖M‖ * ∏ i, ‖c i‖ := by
+  apply ContinuousMultilinearMap.opNorm_le_bound
+    (mul_nonneg (norm_nonneg _) (Finset.prod_nonneg fun i _ ↦ norm_nonneg _))
+  intro u
+  rw [compactConvex_taylor_remainder_bound_auxPhi_apply]
+  calc ‖M (Fin.append u c)‖ ≤ ‖M‖ * ∏ i, ‖Fin.append u c i‖ := M.le_opNorm _
+    _ = ‖M‖ * ((∏ i : Fin k, ‖u i‖) * ∏ i : Fin q, ‖c i‖) := by
+        rw [Fin.prod_univ_add]
+        have hA : (∏ i : Fin k, ‖Fin.append u c (Fin.castAdd q i)‖) = ∏ i : Fin k, ‖u i‖ :=
+          Finset.prod_congr rfl fun i _ ↦ by rw [Fin.append_left]
+        have hB : (∏ i : Fin q, ‖Fin.append u c (Fin.natAdd k i)‖) = ∏ i : Fin q, ‖c i‖ :=
+          Finset.prod_congr rfl fun i _ ↦ by rw [Fin.append_right]
+        rw [hA, hB]
+    _ = (‖M‖ * ∏ i, ‖c i‖) * ∏ i, ‖u i‖ := by ring
+
+theorem compactConvex_taylor_remainder_bound_aux_jet_cast
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {K : Set E} {f : E → F} {n₁ n₂ : ℕ} (h : n₁ = n₂) (y : E) :
+    convexJet n₁ f K y = (convexJet n₂ f K y).domDomCongr (finCongr h).symm := by
+  subst h
+  ext w
+  rw [ContinuousMultilinearMap.domDomCongr_apply]
+  congr 1
+
+
+-- Along the segment from `a` to `x`, the `q`-th iterated derivative of the `k`-jet is the
+-- `(k+q)`-jet with the last `q` slots filled by `x - a`.
+theorem compactConvex_taylor_remainder_bound_aux_formula
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {K : Set E} {f : E → F} {m : ℕ}
+    (hK : Convex ℝ K) (hKi : (interior K).Nonempty)
+    (hf : ContDiffOn ℝ (m + 1) f K)
+    {a x : E} (ha : a ∈ K) (hx : x ∈ K) {k : ℕ} (hk : k ≤ m) :
+    ∀ q : ℕ, q ≤ m + 1 - k → ∀ (t : ℝ), t ∈ Icc (0 : ℝ) 1 →
+      iteratedDerivWithin q (fun (s : ℝ) ↦ convexJet k f K (a + s • (x - a))) (Icc 0 1) t =
+        compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin q ↦ x - a)
+          (convexJet (k + q) f K (a + t • (x - a))) := by
+  have huK : UniqueDiffOn ℝ K := uniqueDiffOn_convex hK hKi
+  have hmap : ∀ (s : ℝ), s ∈ Icc (0 : ℝ) 1 → a + s • (x - a) ∈ K := by
+    intro s hs
+    have heq : a + s • (x - a) = (1 - s) • a + s • x := by
+      rw [sub_smul, one_smul, smul_sub]; abel
+    rw [heq]
+    exact hK ha hx (sub_nonneg.mpr hs.2) hs.1 (sub_add_cancel 1 s)
+  have hAder : ∀ (t : ℝ), t ∈ Icc (0 : ℝ) 1 → HasFDerivWithinAt (fun (s : ℝ) ↦ a + s • (x - a))
+      ((ContinuousLinearMap.id ℝ ℝ).smulRight (x - a)) (Icc 0 1) t := fun t _ ↦
+    ((hasFDerivAt_id t).smul_const (x - a)).const_add a |>.hasFDerivWithinAt
+  intro q
+  induction q with
+  | zero =>
+    intro _ t ht
+    ext u
+    rw [iteratedDerivWithin_zero]
+    rw [compactConvex_taylor_remainder_bound_auxPhi_apply]
+    apply congrArg (convexJet k f K (a + t • (x - a)))
+    funext ⟨i, hi⟩
+    show u ⟨i, hi⟩ = Fin.append u (fun _ : Fin 0 ↦ x - a) ⟨i, by omega⟩
+    rw [show (⟨i, by omega⟩ : Fin (k + 0)) = Fin.castAdd 0 ⟨i, hi⟩ from Fin.ext rfl,
+      Fin.append_left]
+    exact congrArg u (Fin.ext rfl)
+  | succ q ih =>
+    intro hq t ht
+    have huIcc : UniqueDiffWithinAt ℝ (Icc 0 1) t := uniqueDiffOn_Icc zero_lt_one t ht
+    have hJd : HasFDerivWithinAt (convexJet (k + q) f K)
+        (fderivWithin ℝ (convexJet (k + q) f K) K (a + t • (x - a))) K (a + t • (x - a)) := by
+      apply ((hf.differentiableOn_iteratedFDerivWithin ?_ huK) _
+        (hmap t ht)).hasFDerivWithinAt
+      exact_mod_cast (by omega : k + q < m + 1)
+    have hcomp : HasFDerivWithinAt
+        (compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin q ↦ x - a) ∘
+          (convexJet (k + q) f K ∘ (fun (s : ℝ) ↦ a + s • (x - a))))
+        ((compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin q ↦ x - a)).comp
+          ((fderivWithin ℝ (convexJet (k + q) f K) K (a + t • (x - a))).comp
+            ((ContinuousLinearMap.id ℝ ℝ).smulRight (x - a))))
+        (Icc 0 1) t :=
+      ((compactConvex_taylor_remainder_bound_auxPhi _).hasFDerivAt).hasFDerivWithinAt.comp t
+        (hJd.comp t (hAder t ht) (fun s hs ↦ hmap s hs)) (mapsTo_univ _ _)
+    have hder : HasDerivWithinAt
+        (fun (s : ℝ) ↦ compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin q ↦ x - a)
+          (convexJet (k + q) f K (a + s • (x - a))))
+        (compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin q ↦ x - a)
+          (fderivWithin ℝ (convexJet (k + q) f K) K (a + t • (x - a)) (x - a)))
+        (Icc 0 1) t := by
+      rw [hasDerivWithinAt_iff_hasFDerivWithinAt]
+      convert hcomp using 2
+      ext r
+      simp [ContinuousLinearMap.smulRight_apply, one_smul]
+    rw [iteratedDerivWithin_succ]
+    rw [derivWithin_congr (fun y hy ↦ ih (by omega) y hy) (ih (by omega) t ht)]
+    rw [hder.derivWithin huIcc]
+    ext u
+    rw [compactConvex_taylor_remainder_bound_auxPhi_apply,
+      compactConvex_taylor_remainder_bound_auxPhi_apply]
+    have hsy := (convexWithinJet_nat hK hKi hf).2.2.2 (k + (q + 1)) (by omega) _
+      (hmap t ht)
+    have hrot : convexJet (k + (q + 1)) f K (a + t • (x - a))
+          (Fin.append u (fun _ : Fin (q + 1) ↦ x - a))
+        = fderivWithin ℝ (convexJet (k + q) f K) K (a + t • (x - a)) (x - a)
+          (Fin.append u (fun _ : Fin q ↦ x - a)) := by
+      have hupd := Function.update_eq_self
+        (Fin.natAdd k (⟨q, by omega⟩ : Fin (q + 1)))
+        (Fin.append u (fun _ : Fin (q + 1) ↦ x - a))
+      rw [Fin.append_right] at hupd
+      have hM := iteratedFDeriv_taylorPolynomial_exact_aux_symm
+        (convexJet (k + (q + 1)) f K (a + t • (x - a))) hsy u (x - a) (x - a)
+        (⟨q, by omega⟩ : Fin (q + 1))
+      rw [hupd] at hM
+      rw [hM]
+      have htail : Fin.tail (fun i : Fin ((k + q) + 1) ↦ Fin.append (Fin.cons (x - a) u)
+            (fun _ : Fin q ↦ x - a) (Fin.cast (by omega : (k + q) + 1 = k + 1 + q) i)) =
+          Fin.append u (fun _ : Fin q ↦ x - a) := by
+        funext ⟨i, hi⟩
+        show Fin.append (Fin.cons (x - a) u) (fun _ : Fin q ↦ x - a)
+            (Fin.cast (by omega : (k + q) + 1 = k + 1 + q) ⟨i + 1, by omega⟩) =
+          Fin.append u (fun _ : Fin q ↦ x - a) ⟨i, hi⟩
+        by_cases hi2 : i < k
+        · have e1 : (⟨i, hi⟩ : Fin (k + q)) = Fin.castAdd q ⟨i, hi2⟩ := Fin.ext rfl
+          have e2 : Fin.cast (by omega : (k + q) + 1 = k + 1 + q) ⟨i + 1, by omega⟩ =
+              Fin.castAdd q (⟨i + 1, by omega⟩ : Fin (k + 1)) := Fin.ext rfl
+          have e3 : (⟨i + 1, by omega⟩ : Fin (k + 1)) = (⟨i, hi2⟩ : Fin k).succ :=
+            Fin.ext rfl
+          rw [e1, Fin.append_left, e2, Fin.append_left, e3, Fin.cons_succ]
+        · have e1 : (⟨i, hi⟩ : Fin (k + q)) = Fin.natAdd k ⟨i - k, by omega⟩ :=
+            Fin.ext (by show i = k + (i - k); omega)
+          have e2 : Fin.cast (by omega : (k + q) + 1 = k + 1 + q) ⟨i + 1, by omega⟩ =
+              Fin.natAdd (k + 1) ⟨i - k, by omega⟩ :=
+            Fin.ext (by show i + 1 = (k + 1) + (i - k); omega)
+          rw [e1, Fin.append_right, e2, Fin.append_right]
+      have hhead : Fin.append (Fin.cons (x - a) u) (fun _ : Fin q ↦ x - a)
+            (Fin.cast (by omega : (k + q) + 1 = k + 1 + q) (0 : Fin ((k + q) + 1))) =
+          x - a := by
+        have e1 : Fin.cast (by omega : (k + q) + 1 = k + 1 + q) (0 : Fin ((k + q) + 1)) =
+            Fin.castAdd q (0 : Fin (k + 1)) := Fin.ext rfl
+        rw [e1, Fin.append_left, Fin.cons_zero]
+      have h2 := iteratedFDerivWithin_succ_apply_left (𝕜 := ℝ) (f := f) (s := K)
+        (x := a + t • (x - a)) (n := k + q)
+        (m := fun i : Fin ((k + q) + 1) ↦ Fin.append (Fin.cons (x - a) u)
+          (fun _ : Fin q ↦ x - a) (Fin.cast (by omega : (k + q) + 1 = k + 1 + q) i))
+      rw [htail, hhead] at h2
+      exact h2
+    exact hrot.symm
+
+
 theorem compactConvex_taylor_remainder_bound
     {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
@@ -501,7 +710,113 @@ theorem compactConvex_taylor_remainder_bound
     ∃ C ≥ 0, ∀ k ≤ m, ∀ a ∈ K, ∀ x ∈ K,
       ‖iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) x -
           convexJet k f K x‖ ≤ C * ‖x - a‖ ^ (m + 1 - k) := by
-  sorry
+  classical
+  have huK : UniqueDiffOn ℝ K := uniqueDiffOn_convex hK hKi
+  obtain ⟨hcont, hzero, hone, hsymm⟩ := convexWithinJet_nat hK hKi hf
+  have hKne : K.Nonempty := hKi.mono interior_subset
+  obtain ⟨y₀, hy₀, hB⟩ := hKc.exists_isMaxOn hKne ((hcont (m + 1) le_rfl).norm)
+  refine ⟨‖convexJet (m + 1) f K y₀‖, norm_nonneg _, ?_⟩
+  intro k hk a ha x hx
+  have hmap : ∀ (s : ℝ), s ∈ Icc (0 : ℝ) 1 → a + s • (x - a) ∈ K := by
+    intro s hs
+    have heq : a + s • (x - a) = (1 - s) • a + s • x := by
+      rw [sub_smul, one_smul, smul_sub]; abel
+    rw [heq]
+    exact hK ha hx (sub_nonneg.mpr hs.2) hs.1 (sub_add_cancel 1 s)
+  have hB' : ∀ y ∈ K, ‖convexJet (m + 1) f K y‖ ≤ ‖convexJet (m + 1) f K y₀‖ :=
+    fun y hy ↦ isMaxOn_iff.mp hB y hy
+  have hAcont : ContinuousOn (fun (s : ℝ) ↦ a + s • (x - a)) (Icc 0 1) :=
+    (continuous_const.add (continuous_id.smul continuous_const)).continuousOn
+  have hCg : ContDiffOn ℝ ((m - k) + 1 : ℕ)
+      (fun (s : ℝ) ↦ convexJet k f K (a + s • (x - a))) (Icc 0 1) := by
+    rw [contDiffOn_nat_iff_continuousOn_differentiableOn_deriv
+      (uniqueDiffOn_Icc zero_lt_one)]
+    constructor
+    · intro r hr
+      apply ContinuousOn.congr _
+        (fun t ht ↦ compactConvex_taylor_remainder_bound_aux_formula hK hKi hf ha hx hk r
+          (by omega) t ht)
+      exact (compactConvex_taylor_remainder_bound_auxPhi _).continuous.comp_continuousOn
+        ((hcont (k + r) (by omega)).comp hAcont (fun s hs ↦ hmap s hs))
+    · intro r hr
+      apply DifferentiableOn.congr _
+        (fun t ht ↦ compactConvex_taylor_remainder_bound_aux_formula hK hKi hf ha hx hk r
+          (by omega) t ht)
+      have hdA : DifferentiableOn ℝ (fun (s : ℝ) ↦ a + s • (x - a)) (Icc 0 1) :=
+        ((differentiable_id.smul (differentiable_const (x - a))).const_add a).differentiableOn
+      have hdJ : DifferentiableOn ℝ (convexJet (k + r) f K) K :=
+        hf.differentiableOn_iteratedFDerivWithin
+          (by exact_mod_cast (by omega : k + r < m + 1)) huK
+      exact ((compactConvex_taylor_remainder_bound_auxPhi _).differentiable).differentiableOn.comp
+        (hdJ.comp hdA (fun s hs ↦ hmap s hs)) (mapsTo_univ _ _)
+  have hub : ∀ y ∈ Icc (0 : ℝ) 1,
+      ‖iteratedDerivWithin ((m - k) + 1) (fun (s : ℝ) ↦ convexJet k f K (a + s • (x - a)))
+          (Icc 0 1) y‖ ≤ ‖convexJet (m + 1) f K y₀‖ * ‖x - a‖ ^ (m + 1 - k) := by
+    intro y hy
+    have h2 : (m - k) + 1 = m + 1 - k := by omega
+    have h1 := compactConvex_taylor_remainder_bound_aux_formula hK hKi hf ha hx hk
+      (m + 1 - k) le_rfl y hy
+    rw [h2, h1]
+    have hkq : k + (m + 1 - k) = m + 1 := by omega
+    have hnrm : ‖convexJet (k + (m + 1 - k)) f K (a + y • (x - a))‖ =
+        ‖convexJet (m + 1) f K (a + y • (x - a))‖ := by
+      rw [compactConvex_taylor_remainder_bound_aux_jet_cast hkq]
+      exact ContinuousMultilinearMap.norm_domDomCongr ℝ E F (finCongr hkq).symm _
+    calc ‖compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin (m + 1 - k) ↦ x - a)
+            (convexJet (k + (m + 1 - k)) f K (a + y • (x - a)))‖
+        ≤ ‖convexJet (k + (m + 1 - k)) f K (a + y • (x - a))‖ *
+            ∏ i : Fin (m + 1 - k), ‖(fun _ ↦ x - a) i‖ :=
+          compactConvex_taylor_remainder_bound_aux_norm _ _
+      _ = ‖convexJet (k + (m + 1 - k)) f K (a + y • (x - a))‖ * ‖x - a‖ ^ (m + 1 - k) := by
+          simp [Finset.prod_const]
+      _ ≤ ‖convexJet (m + 1) f K y₀‖ * ‖x - a‖ ^ (m + 1 - k) :=
+          mul_le_mul_of_nonneg_right
+            (by rw [hnrm]; exact hB' _ (hmap y hy)) (pow_nonneg (norm_nonneg _) _)
+  have hrem := taylor_mean_remainder_bound (zero_le_one : (0 : ℝ) ≤ 1) hCg
+    (right_mem_Icc.mpr zero_le_one) hub
+  rw [sub_zero, one_pow, mul_one] at hrem
+  have hfac : (‖convexJet (m + 1) f K y₀‖ * ‖x - a‖ ^ (m + 1 - k)) /
+        ((Nat.factorial (m - k) : ℕ) : ℝ) ≤
+      ‖convexJet (m + 1) f K y₀‖ * ‖x - a‖ ^ (m + 1 - k) :=
+    div_le_self (mul_nonneg (norm_nonneg _) (pow_nonneg (norm_nonneg _) _))
+      (Nat.one_le_cast.mpr (Nat.factorial_pos _))
+  have hg1 : (fun (s : ℝ) ↦ convexJet k f K (a + s • (x - a))) 1 = convexJet k f K x := by
+    show convexJet k f K (a + 1 • (x - a)) = convexJet k f K x
+    rw [one_smul, add_sub_cancel]
+  have hte : taylorWithinEval (fun (s : ℝ) ↦ convexJet k f K (a + s • (x - a))) (m - k)
+        (Icc 0 1) 0 1 =
+      ∑ r ∈ Finset.range (m + 1 - k), (r.factorial : ℝ)⁻¹ •
+        compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin r ↦ x - a)
+          (convexJet (k + r) f K a) := by
+    rw [taylor_within_apply]
+    have h3 : m - k + 1 = m + 1 - k := by omega
+    rw [h3]
+    apply Finset.sum_congr rfl
+    intro r hr
+    rw [sub_zero, one_pow, mul_one]
+    congr 1
+    have hr' : r ≤ m + 1 - k := by
+      have := Finset.mem_range.mp hr; omega
+    have hh := compactConvex_taylor_remainder_bound_aux_formula hK hKi hf ha hx hk r hr' 0
+      (left_mem_Icc.mpr zero_le_one)
+    rw [zero_smul, add_zero] at hh
+    exact hh
+  have hexact : iteratedFDeriv ℝ k (taylorPolynomial m (fun j ↦ convexJet j f K) a) x =
+      ∑ r ∈ Finset.range (m + 1 - k), (r.factorial : ℝ)⁻¹ •
+        compactConvex_taylor_remainder_bound_auxPhi (fun _ : Fin r ↦ x - a)
+          (convexJet (k + r) f K a) := by
+    apply ContinuousMultilinearMap.ext
+    intro u
+    rw [iteratedFDeriv_taylorPolynomial_exact m k (fun j ↦ convexJet j f K) a x hk u
+      (fun j hj σ ↦ hsymm j (by omega) a ha σ)]
+    rw [ContinuousMultilinearMap.sum_apply]
+    apply Finset.sum_congr rfl
+    intro r _
+    rw [ContinuousMultilinearMap.smul_apply,
+      compactConvex_taylor_remainder_bound_auxPhi_apply]
+  rw [hexact, ← hte, ← hg1, norm_sub_rev]
+  exact hrem.trans hfac
+
 
 /-- Taylor polynomials based at two points of `K` differ to the full Whitney order.
 Expand `P_a-P_b` at `b`; its derivatives there are controlled by the compact convex
