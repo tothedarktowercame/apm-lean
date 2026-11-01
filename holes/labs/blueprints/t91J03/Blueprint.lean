@@ -532,7 +532,126 @@ lemma apm_t91J03_no_wind (gamma : C(Circle, apm_t91J03_Annulus))
     (hθ : ∀ t, Circle.exp (θ t) =
       apm_t91J03_circleMap gamma (Circle.exp (2 * Real.pi * t)))
     (hper : ∀ t, θ (t + 1) = θ t + 2 * Real.pi * d) : d.natAbs ≤ 1 := by
-  sorry
+  by_contra hc
+  push_neg at hc
+  obtain ⟨β, hβ0, hβ1, hdisj⟩ :=
+    apm_t91J03_no_wind_aux_barrier gamma hgamma θ d hθ hper hc
+  have hp : 0 < 2 * Real.pi := by positivity
+  have hd0 : (d : ℝ) ≠ 0 := by
+    have : d ≠ 0 := by omega
+    exact_mod_cast this
+  have key : ∀ (k : ℤ) (u : ℝ),
+      θ (u + (k : ℝ)) = θ u + 2 * Real.pi * ((d : ℝ) * k) := by
+    intro k
+    induction k using Int.induction_on with
+    | zero => intro u; simp
+    | succ n ih =>
+        intro u
+        rw [show u + ((↑n + 1 : ℤ) : ℝ) = (u + ((↑n : ℤ) : ℝ)) + 1 by push_cast; ring,
+          hper, ih u]
+        push_cast
+        ring
+    | pred n ih =>
+        intro u
+        have hb : θ ((u + ((-↑n : ℤ) : ℝ)) - 1) =
+            θ (u + ((-↑n : ℤ) : ℝ)) - 2 * Real.pi * d := by
+          have h := hper (u + ((-↑n : ℤ) : ℝ) - 1)
+          rw [show u + ((-↑n : ℤ) : ℝ) - 1 + 1 = u + ((-↑n : ℤ) : ℝ) by ring] at h
+          push_cast at h ⊢
+          linarith
+        rw [show u + ((-↑n - 1 : ℤ) : ℝ) = (u + ((-↑n : ℤ) : ℝ)) - 1 by
+          push_cast; ring, hb, ih u]
+        push_cast
+        ring
+  have hθk : ∀ k : ℤ, θ (k : ℝ) = θ 0 + 2 * Real.pi * ((d : ℝ) * k) := by
+    intro k
+    have := key k 0
+    simpa using this
+  have hlo : ∀ T : ℝ, ∃ k : ℤ, (d : ℝ) * k < T := by
+    intro T
+    rcases lt_or_ge (0 : ℝ) (d : ℝ) with hd | hd
+    · obtain ⟨n, hn⟩ := exists_int_lt (T / (d : ℝ))
+      refine ⟨n, ?_⟩
+      rw [lt_div_iff₀ hd] at hn
+      rw [mul_comm]
+      exact hn
+    · have hdn : (d : ℝ) < 0 := lt_of_le_of_ne hd hd0
+      have hd' : (0 : ℝ) < (-d : ℝ) := by linarith
+      obtain ⟨n, hn⟩ := exists_int_lt (T / (-d : ℝ))
+      refine ⟨-n, ?_⟩
+      rw [lt_div_iff₀ hd'] at hn
+      push_cast
+      linear_combination hn
+  have hhi : ∀ T : ℝ, ∃ k : ℤ, T < (d : ℝ) * k := by
+    intro T
+    rcases lt_or_ge (0 : ℝ) (d : ℝ) with hd | hd
+    · obtain ⟨n, hn⟩ := exists_int_gt (T / (d : ℝ))
+      refine ⟨n, ?_⟩
+      rw [div_lt_iff₀ hd] at hn
+      rw [mul_comm]
+      exact hn
+    · have hdn : (d : ℝ) < 0 := lt_of_le_of_ne hd hd0
+      have hd' : (0 : ℝ) < (-d : ℝ) := by linarith
+      obtain ⟨n, hn⟩ := exists_int_gt (T / (-d : ℝ))
+      refine ⟨-n, ?_⟩
+      rw [div_lt_iff₀ hd'] at hn
+      push_cast
+      linear_combination hn
+  have gcont : Continuous fun t : I => (β t).1 := β.continuous.fst
+  obtain ⟨tmin, htmin, hmin⟩ := isCompact_Icc.exists_isMinOn
+    (Set.nonempty_Icc.2 zero_le_one) gcont.continuousOn
+  obtain ⟨tmax, htmax, hmax⟩ := isCompact_Icc.exists_isMaxOn
+    (Set.nonempty_Icc.2 zero_le_one) gcont.continuousOn
+  set Rlo : ℝ := (β tmin).1 - 1 with hRlo
+  set Rhi : ℝ := (β tmax).1 + 1 with hRhi
+  obtain ⟨a, ha⟩ := hlo ((Rlo - θ 0) / (2 * Real.pi))
+  obtain ⟨b, hb⟩ := hhi ((Rhi - θ 0) / (2 * Real.pi))
+  have hfa : 2 * Real.pi * ((Rlo - θ 0) / (2 * Real.pi)) = Rlo - θ 0 := by
+    field_simp
+  have hfb : 2 * Real.pi * ((Rhi - θ 0) / (2 * Real.pi)) = Rhi - θ 0 := by
+    field_simp
+  have hθa : θ (a : ℝ) < Rlo := by
+    rw [hθk a]
+    have h2 := mul_lt_mul_of_pos_left ha hp
+    have h3 : θ 0 + 2 * Real.pi * ((d : ℝ) * a) < θ 0 + (Rlo - θ 0) := by linarith
+    linarith
+  have hθb : Rhi < θ (b : ℝ) := by
+    rw [hθk b]
+    have h2 := mul_lt_mul_of_pos_left hb hp
+    have h3 : θ 0 + (Rhi - θ 0) < θ 0 + 2 * Real.pi * ((d : ℝ) * b) := by linarith
+    linarith
+  set s : ℝ → ℝ := fun u => (a : ℝ) + ((b : ℝ) - (a : ℝ)) * u with hsdef
+  have hc1 : Continuous fun u : ℝ => θ (s u) := θ.continuous.comp (by fun_prop)
+  have hc2 : Continuous fun u : ℝ =>
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s u)) := by
+    simp only [apm_t91J03_height, hsdef]
+    fun_prop
+  have hαc : Continuous fun u : I => (θ (s u),
+      apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s u))) :=
+    (hc1.comp continuous_subtype_val).prodMk (hc2.comp continuous_subtype_val)
+  set α : C(I, ℝ × ℝ) := ⟨fun u => (θ (s u),
+    apm_t91J03_height gamma (Circle.exp (2 * Real.pi * s u))), hαc⟩ with hαdef
+  have hα0 : (α 0).1 = θ (a : ℝ) := by
+    simp [hαdef, hsdef]
+  have hα1 : (α 1).1 = θ (b : ℝ) := by
+    have hs1 : s 1 = (b : ℝ) := by simp [hsdef]
+    simp [hαdef, hs1]
+  have hαb : ∀ u : I, 0 ≤ (α u).2 ∧ (α u).2 ≤ 1 := fun u =>
+    (gamma (Circle.exp (2 * Real.pi * s u))).2.2
+  have hmin' : ∀ t : I, (β tmin).1 ≤ (β t).1 := fun t => hmin t.2
+  have hmax' : ∀ t : I, (β t).1 ≤ (β tmax).1 := fun t => hmax t.2
+  have hl : ∀ t : I, (α 0).1 < (β t).1 := by
+    intro t
+    rw [hα0]
+    have := hmin' t
+    linarith
+  have hr : ∀ t : I, (β t).1 < (α 1).1 := by
+    intro t
+    rw [hα1]
+    have := hmax' t
+    linarith
+  obtain ⟨u, t, hut⟩ := apm_t91J03_crossing α β hαb hβ0 hβ1 hl hr
+  exact hdisj (s u) t hut.symm
 
 /-- **LIBRARY: classification of embedded circles in the closed annulus.**
 
