@@ -1,5 +1,7 @@
 import Mathlib
 import ConstructionTargets.ComplexProjectiveChartTargets
+import ConstructionTargets.CP2RationalHomology
+import ConstructionTargets.SphereHomology
 
 open scoped LinearAlgebra.Projectivization
 open scoped ContDiff Manifold
@@ -55,6 +57,48 @@ def apm_t98a04_IsSubmersion
       Function.Surjective
         (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2)) f z)
 
+def apm_t98a04_affineCoordinate
+    (i : Fin 2) (p : apm_t98a04_CP1) : apm_t98a04_R2 :=
+  let w := if i = 0 then
+      Projectivization.rep p 1 / Projectivization.rep p 0
+    else Projectivization.rep p 0 / Projectivization.rep p 1
+  WithLp.toLp 2 ![w.re, w.im]
+
+def apm_t98a04_affineVector
+    (i : Fin 2) (x : apm_t98a04_R2) : apm_t98a04_C2 :=
+  let w : ℂ := x 0 + x 1 * Complex.I
+  if i = 0 then WithLp.toLp 2 ![(1 : ℂ), w]
+  else WithLp.toLp 2 ![w, (1 : ℂ)]
+
+lemma apm_t98a04_affineVector_ne_zero
+    (i : Fin 2) (x : apm_t98a04_R2) :
+    apm_t98a04_affineVector i x ≠ 0 := by
+  intro h
+  by_cases hi : i = 0
+  · have h0 := congrArg (fun z : apm_t98a04_C2 ↦ z 0) h
+    simp [apm_t98a04_affineVector, hi] at h0
+  · have h1 := congrArg (fun z : apm_t98a04_C2 ↦ z 1) h
+    simp [apm_t98a04_affineVector, hi] at h1
+
+def apm_t98a04_affineInverse
+    (i : Fin 2) (x : apm_t98a04_R2) : apm_t98a04_CP1 :=
+  Projectivization.mk ℂ (apm_t98a04_affineVector i x)
+    (apm_t98a04_affineVector_ne_zero i x)
+
+/-- The two standard ratio charts, on the already-fixed coinduced topology.
+This records their exact coordinate and inverse maps, so later smoothness
+leaves cannot choose an unrelated atlas. -/
+def apm_t98a04_IsStandardAffineAtlas
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1) : Prop :=
+  let _ := targetCharts
+  ∃ e : Fin 2 → OpenPartialHomeomorph apm_t98a04_CP1 apm_t98a04_R2,
+    atlas apm_t98a04_R2 apm_t98a04_CP1 = Set.range e ∧
+    ∀ i,
+      (e i).source = {p : apm_t98a04_CP1 | Projectivization.rep p i ≠ 0} ∧
+      (e i).target = Set.univ ∧
+      (∀ p ∈ (e i).source, e i p = apm_t98a04_affineCoordinate i p) ∧
+      (∀ x, (e i).symm x = apm_t98a04_affineInverse i x)
+
 lemma apm_t98a04_continuous_hopf : Continuous apm_t98a04_hopf := by
   change Continuous
     (Projectivization.mk' ℂ ∘
@@ -64,11 +108,73 @@ lemma apm_t98a04_continuous_hopf : Continuous apm_t98a04_hopf := by
   exact continuous_coinduced_rng.comp
     (continuous_subtype_val.subtype_mk fun z ↦ apm_t98a04_sphere_ne_zero z)
 
-/-- LIBRARY: construct the usual affine atlas on CP¹ and verify the Hopf map
-is a smooth submersion from Mathlib's standard unit sphere. -/
+/-- Build the two ratio charts from `affineSource_isOpen`, quotient descent,
+and the explicit inverse `[1:w]`/`[w:1]`.  At `[1:0]`, chart zero is
+`w = z₁/z₀` and sends the point to `0`. -/
+theorem apm_t98a04_submersion_aux_affine_atlas :
+    ∃ targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1,
+      apm_t98a04_IsStandardAffineAtlas targetCharts := by
+  sorry
+
+/-- Prove smooth compatibility of the two affine charts.  On their overlap
+the transition is complex inversion; use `contDiffOn_inv₀`, real/complex
+coordinate smoothness, and `IsManifold.of_compatible`. -/
+theorem apm_t98a04_submersion_aux_affine_isManifold
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts) :
+    let _ := targetCharts
+    IsManifold (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞) apm_t98a04_CP1 := by
+  sorry
+
+/-- In either ratio chart the Hopf map is the corresponding homogeneous
+coordinate quotient.  Combine the standard sphere charts with smooth
+division on the nonzero-coordinate patch.  At `(1,0)` the local map is
+`z ↦ z₁/z₀`. -/
+theorem apm_t98a04_submersion_aux_hopf_smooth
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts)
+    (hmanifold : let _ := targetCharts
+      IsManifold (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞) apm_t98a04_CP1) :
+    let _ := targetCharts
+    ContMDiff (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
+      (⊤ : ℕ∞) apm_t98a04_hopf := by
+  sorry
+
+/-- Differentiate the ratio formula and use
+`range_mfderiv_coe_sphere`/`mfderiv_coe_sphere_injective` to identify the
+source tangent space with the real orthogonal complement of `z`.  Varying
+the unused complex coordinate gives both target directions; at `(1,0)` the
+vectors `(0,1)` and `(0,I)` map to the standard real basis. -/
+theorem apm_t98a04_submersion_aux_mfderiv_surjective
+    (targetCharts : ChartedSpace apm_t98a04_R2 apm_t98a04_CP1)
+    (haffine : apm_t98a04_IsStandardAffineAtlas targetCharts)
+    (hmanifold : let _ := targetCharts
+      IsManifold (𝓘(ℝ, apm_t98a04_R2)) (⊤ : ℕ∞) apm_t98a04_CP1)
+    (hsmooth : let _ := targetCharts
+      ContMDiff (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
+        (⊤ : ℕ∞) apm_t98a04_hopf) :
+    let _ := targetCharts
+    ∀ z : apm_t98a04_S3,
+      Function.Surjective
+        (mfderiv (𝓘(ℝ, apm_t98a04_R3)) (𝓘(ℝ, apm_t98a04_R2))
+          apm_t98a04_hopf z) := by
+  sorry
+
+/-- Assemble the affine atlas, its compatibility, smoothness, and the
+pointwise derivative calculation. -/
 theorem apm_t98a04_submersion_bridge :
     apm_t98a04_IsSubmersion apm_t98a04_hopf := by
-  sorry
+  obtain ⟨targetCharts, haffine⟩ :=
+    apm_t98a04_submersion_aux_affine_atlas
+  let _ := targetCharts
+  have hmanifold :=
+    apm_t98a04_submersion_aux_affine_isManifold targetCharts haffine
+  have hsmooth :=
+    apm_t98a04_submersion_aux_hopf_smooth targetCharts haffine hmanifold
+  have hsurj :=
+    apm_t98a04_submersion_aux_mfderiv_surjective targetCharts haffine
+      hmanifold hsmooth
+  exact ⟨targetCharts, hmanifold, hsmooth, hsurj⟩
 
 /-- Two unit representatives of one projective point differ by a unit scalar. -/
 theorem apm_t98a04_fiber_eq_circleOrbit
@@ -219,11 +325,53 @@ theorem apm_t98a04_fiber_homeomorph_circle
     (isHomeomorph_iff_continuous_bijective).2 ⟨hec, e.bijective⟩
   exact ⟨(e.toHomeomorphOfContinuousClosed hec heh.isClosedMap).symm⟩
 
-/-- LIBRARY: the Hopf fibration has no continuous section. -/
-theorem apm_t98a04_no_section_bridge :
+abbrev apm_t98a04_HQ (k : ℕ) (X : Type) [TopologicalSpace X] :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)).obj (TopCat.of X))
+
+/-- Identify this file's `WithLp`-carrier quotient with the literal `CP 1`
+model in `CP2RationalHomology`, then with its explicit two-sphere.  Transport
+`CoefficientSphereEndpoints.rationalS2H2` across the resulting homotopy
+equivalence to show that rational `H₂` is not zero. -/
+theorem apm_t98a04_no_section_aux_cp1_h2_nonzero :
+    ¬ CategoryTheory.Limits.IsZero
+      (apm_t98a04_HQ 2 apm_t98a04_CP1) := by
+  sorry
+
+/-- Regard `ℂ²` as `ℝ⁴` by the canonical real-linear isometry, restrict it to
+the unit spheres, and transport `SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top`
+for `H₂(S³;ℚ)` (or its coefficient-change counterpart). -/
+theorem apm_t98a04_no_section_aux_s3_h2_zero :
+    CategoryTheory.Limits.IsZero
+      (apm_t98a04_HQ 2 apm_t98a04_S3) := by
+  sorry
+
+/-- Apply rational singular homology to `hopf ∘ i = id`.  Functoriality makes
+the identity of `H₂(CP¹)` factor through the zero object `H₂(S³)`, contradicting
+the supplied nonvanishing.  Tools: `Functor.map_comp`, `Functor.map_id`, and
+`IsZero.eq_of_src`/`IsZero.iff_id_eq_zero`. -/
+theorem apm_t98a04_no_section_aux_homology_factor
+    (hbase : ¬ CategoryTheory.Limits.IsZero
+      (apm_t98a04_HQ 2 apm_t98a04_CP1))
+    (htotal : CategoryTheory.Limits.IsZero
+      (apm_t98a04_HQ 2 apm_t98a04_S3)) :
     ¬∃ i : apm_t98a04_CP1 → apm_t98a04_S3,
       Continuous i ∧ ∀ p, apm_t98a04_hopf (i p) = p := by
   sorry
+
+/-- Assemble the rational-homology obstruction to a section. -/
+theorem apm_t98a04_no_section_bridge :
+    ¬∃ i : apm_t98a04_CP1 → apm_t98a04_S3,
+      Continuous i ∧ ∀ p, apm_t98a04_hopf (i p) = p := by
+  exact apm_t98a04_no_section_aux_homology_factor
+    apm_t98a04_no_section_aux_cp1_h2_nonzero
+    apm_t98a04_no_section_aux_s3_h2_zero
+
+#check RP3Homology.cpU_homology_aux_CP1_hequiv_S2
+#check ConstructionTargets.CoefficientSphereEndpoints.rationalS2H2
+#check ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top
+#check range_mfderiv_coe_sphere
+#check mfderiv_coe_sphere_injective
 
 theorem apm_t98a04 :
     Continuous apm_t98a04_hopf ∧
