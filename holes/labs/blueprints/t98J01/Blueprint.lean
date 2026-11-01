@@ -1018,11 +1018,384 @@ theorem t98J01_homologyMap_g_zero_surjective
   exact (ModuleCat.epi_iff_surjective _).mp inferInstance
 
 /-- Seat: additivity of the Lefschetz number on a short exact sequence. Use `hS.homology_exact₁/₂/₃`, `HomologicalComplex.HomologySequence.δ_naturality`, then `t98J01_trace_longExact` with `A = X₁.homology`, `B = X₂.homology`, `C = X₃.homology`, `N = max b₂ (b₁ + 1)`. `H_k(X₃)` is finite-dimensional because it sits between `H_k(X₂)` and `H_{k-1}(X₁)`. Zero `H₀` tail: `t98J01_homologyMap_g_zero_surjective`. Sums to `N`: `t98J01_complexLefschetz_sum_eq`. -/
+private theorem t98J01_complexLefschetz_shortExact_aux_fd_of_sub_quot {V : Type u}
+    [AddCommGroup V] [Module ℚ V] (p : Submodule ℚ V)
+    (h₁ : FiniteDimensional ℚ ↥p) (h₂ : FiniteDimensional ℚ (V ⧸ p)) :
+    FiniteDimensional ℚ V := by
+  classical
+  haveI hVq : FiniteDimensional ℚ (V ⧸ p) := h₂
+  haveI ht : FiniteDimensional ℚ ↥(⊤ : Submodule ℚ (V ⧸ p)) :=
+    LinearEquiv.finiteDimensional (Submodule.topEquiv (R := ℚ) (M := V ⧸ p)).symm
+  obtain ⟨t₂, ht₂⟩ := (Module.Finite.iff_fg).mp ht
+  choose v hv using Submodule.mkQ_surjective p
+  have hle : (⊤ : Submodule ℚ (V ⧸ p)) ≤ Submodule.map (Submodule.mkQ p)
+      (Submodule.span ℚ ((t₂.image v : Finset V) : Set V)) := by
+    rw [← ht₂]
+    calc Submodule.span ℚ (t₂ : Set (V ⧸ p))
+        ≤ Submodule.span ℚ ((Submodule.mkQ p) '' ((t₂.image v : Finset V) : Set V)) := by
+          refine Submodule.span_mono ?_
+          intro q hq
+          exact ⟨v q, Finset.mem_image_of_mem _ hq, hv q⟩
+      _ = Submodule.map (Submodule.mkQ p)
+          (Submodule.span ℚ ((t₂.image v : Finset V) : Set V)) :=
+        (LinearMap.map_span (Submodule.mkQ p) _).symm
+  have htop : Submodule.span ℚ ((t₂.image v : Finset V) : Set V) ⊔ p = ⊤ := by
+    refine (Submodule.eq_top_iff' (p :=
+      Submodule.span ℚ ((t₂.image v : Finset V) : Set V) ⊔ p)).2 (fun x => ?_)
+    have h1 : Submodule.mkQ p x ∈ Submodule.map (Submodule.mkQ p)
+        (Submodule.span ℚ ((t₂.image v : Finset V) : Set V)) :=
+      hle Submodule.mem_top
+    obtain ⟨w, hw, hnq⟩ := Submodule.mem_map.mp h1
+    have h2 : ((w : V) - x) ∈ LinearMap.ker (Submodule.mkQ p) := by
+      rw [LinearMap.mem_ker, map_sub, hnq, sub_self]
+    rw [Submodule.ker_mkQ] at h2
+    have hw' : (w : V) ∈ Submodule.span ℚ ((t₂.image v : Finset V) : Set V) := hw
+    have hxq : x = (w : V) - ((w : V) - x) := by abel
+    rw [hxq]
+    have h2' : ((w : V) - x) ∈ Submodule.span ℚ ((t₂.image v : Finset V) : Set V) ⊔ p :=
+      Submodule.mem_sup_right h2
+    have hw'' : (w : V) ∈ Submodule.span ℚ ((t₂.image v : Finset V) : Set V) ⊔ p :=
+      Submodule.mem_sup_left hw'
+    show (w : V) - ((w : V) - x) ∈ Submodule.span ℚ ((t₂.image v : Finset V) : Set V) ⊔ p
+    exact Submodule.sub_mem
+      (Submodule.span ℚ ((t₂.image v : Finset V) : Set V) ⊔ p) hw'' h2'
+  haveI : FiniteDimensional ℚ ↥(Submodule.span ℚ ((t₂.image v : Finset V) : Set V)) :=
+    FiniteDimensional.span_finset (K := ℚ) _
+  have hfd : FiniteDimensional ℚ
+      ↥(Submodule.span ℚ ((t₂.image v : Finset V) : Set V) ⊔ p) := inferInstance
+  rw [htop] at hfd
+  letI := hfd
+  exact LinearEquiv.finiteDimensional (Submodule.topEquiv (R := ℚ) (M := V))
+
+private theorem t98J01_complexLefschetz_shortExact_aux_range_conj
+    {M : Type u₁} {N : Type u₂} {M' : Type u₃} {N' : Type u₄}
+    [AddCommGroup M] [Module ℚ M]
+    [AddCommGroup N] [Module ℚ N] [AddCommGroup M'] [Module ℚ M'] [AddCommGroup N'] [Module ℚ N']
+    (e₁ : M' ≃ₗ[ℚ] M) (e₂ : N ≃ₗ[ℚ] N') (f : M →ₗ[ℚ] N) :
+    LinearMap.range (e₂.toLinearMap ∘ₗ f ∘ₗ e₁.toLinearMap) =
+      Submodule.map e₂.toLinearMap (LinearMap.range f) := by
+  ext y
+  constructor
+  · intro h
+    obtain ⟨x, hx⟩ := LinearMap.mem_range.mp h
+    refine Submodule.mem_map.mpr ⟨f (e₁ x), LinearMap.mem_range.mpr ⟨e₁ x, rfl⟩, ?_⟩
+    simpa using hx
+  · intro h
+    obtain ⟨w, hw, hwx⟩ := Submodule.mem_map.mp h
+    obtain ⟨x, rfl⟩ := LinearMap.mem_range.mp hw
+    refine ⟨e₁.symm x, ?_⟩
+    simpa using hwx
+
+private theorem t98J01_complexLefschetz_shortExact_aux_ker_conj
+    {N : Type u₁} {P : Type u₂} {N' : Type u₃} {P' : Type u₄}
+    [AddCommGroup N] [Module ℚ N]
+    [AddCommGroup P] [Module ℚ P] [AddCommGroup N'] [Module ℚ N'] [AddCommGroup P'] [Module ℚ P']
+    (e₂ : N' ≃ₗ[ℚ] N) (e₃ : P' ≃ₗ[ℚ] P) (g : N →ₗ[ℚ] P) :
+    LinearMap.ker (e₃.symm.toLinearMap ∘ₗ g ∘ₗ e₂.toLinearMap) =
+      Submodule.comap e₂.toLinearMap (LinearMap.ker g) := by
+  ext x
+  simp only [LinearMap.mem_ker, LinearMap.coe_comp, Function.comp_apply,
+    LinearEquiv.coe_coe, Submodule.mem_comap]
+  constructor
+  · intro h
+    exact e₃.symm.injective (by simpa using h)
+  · intro h
+    rw [h]
+    exact map_zero _
+
+private theorem t98J01_complexLefschetz_shortExact_aux_map_comap
+    {M : Type u₁} {M' : Type u₂} [AddCommGroup M] [Module ℚ M] [AddCommGroup M'] [Module ℚ M']
+    (e : M' ≃ₗ[ℚ] M) (S : Submodule ℚ M) :
+    Submodule.map e.symm.toLinearMap S = Submodule.comap e.toLinearMap S := by
+  ext y
+  simp only [Submodule.mem_map, Submodule.mem_comap]
+  constructor
+  · rintro ⟨w, hw, hwy⟩
+    subst hwy
+    simpa using hw
+  · intro h
+    refine ⟨e y, h, ?_⟩
+    simp
+
+set_option maxHeartbeats 1000000 in
+private theorem t98J01_complexLefschetz_shortExact_aux_shrink
+    {A B C : ℕ → Type u}
+    [∀ n, AddCommGroup (A n)] [∀ n, Module ℚ (A n)] [∀ n, FiniteDimensional ℚ (A n)]
+    [∀ n, AddCommGroup (B n)] [∀ n, Module ℚ (B n)] [∀ n, FiniteDimensional ℚ (B n)]
+    [∀ n, AddCommGroup (C n)] [∀ n, Module ℚ (C n)] [∀ n, FiniteDimensional ℚ (C n)]
+    (i : ∀ n, A n →ₗ[ℚ] B n) (j : ∀ n, B n →ₗ[ℚ] C n) (δ : ∀ n, C (n + 1) →ₗ[ℚ] A n)
+    (a : ∀ n, A n →ₗ[ℚ] A n) (b : ∀ n, B n →ₗ[ℚ] B n) (c : ∀ n, C n →ₗ[ℚ] C n)
+    (hi : ∀ n, i n ∘ₗ a n = b n ∘ₗ i n) (hj : ∀ n, j n ∘ₗ b n = c n ∘ₗ j n)
+    (hδ : ∀ n, δ n ∘ₗ c (n + 1) = a n ∘ₗ δ n)
+    (ex₁ : ∀ n, LinearMap.range (i n) = LinearMap.ker (j n))
+    (ex₂ : ∀ n, LinearMap.range (j (n + 1)) = LinearMap.ker (δ n))
+    (ex₃ : ∀ n, LinearMap.range (δ n) = LinearMap.ker (i n))
+    (hj0 : Function.Surjective (j 0)) (N : ℕ) (hC : ∀ k, N < k → Subsingleton (C k)) :
+    (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (B k) (b k)) =
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (A k) (a k)) +
+      (∑ k ∈ Finset.range (N + 1), (-1 : ℚ)^k * LinearMap.trace ℚ (C k) (c k)) := by
+  classical
+  haveI hsmallA : ∀ n, Small.{0} (A n) := fun n => Module.Finite.small (R := ℚ) (M := A n)
+  haveI hsmallB : ∀ n, Small.{0} (B n) := fun n => Module.Finite.small (R := ℚ) (M := B n)
+  haveI hsmallC : ∀ n, Small.{0} (C n) := fun n => Module.Finite.small (R := ℚ) (M := C n)
+  haveI hfdA' : ∀ n, FiniteDimensional ℚ (Shrink.{0} (A n)) :=
+    fun n => LinearEquiv.finiteDimensional (Shrink.linearEquiv ℚ (A n)).symm
+  haveI hfdB' : ∀ n, FiniteDimensional ℚ (Shrink.{0} (B n)) :=
+    fun n => LinearEquiv.finiteDimensional (Shrink.linearEquiv ℚ (B n)).symm
+  haveI hfdC' : ∀ n, FiniteDimensional ℚ (Shrink.{0} (C n)) :=
+    fun n => LinearEquiv.finiteDimensional (Shrink.linearEquiv ℚ (C n)).symm
+  have hi' : ∀ n, ((Shrink.linearEquiv ℚ (B n)).symm.toLinearMap ∘ₗ i n ∘ₗ
+      (Shrink.linearEquiv ℚ (A n)).toLinearMap) ∘ₗ
+      ((Shrink.linearEquiv ℚ (A n)).symm.toLinearMap ∘ₗ a n ∘ₗ
+      (Shrink.linearEquiv ℚ (A n)).toLinearMap) =
+      ((Shrink.linearEquiv ℚ (B n)).symm.toLinearMap ∘ₗ b n ∘ₗ
+      (Shrink.linearEquiv ℚ (B n)).toLinearMap) ∘ₗ
+      ((Shrink.linearEquiv ℚ (B n)).symm.toLinearMap ∘ₗ i n ∘ₗ
+      (Shrink.linearEquiv ℚ (A n)).toLinearMap) := by
+    intro n
+    ext x
+    simp only [LinearMap.coe_comp, Function.comp_apply, LinearEquiv.coe_coe,
+      LinearEquiv.coe_toLinearMap, LinearEquiv.apply_symm_apply,
+      LinearEquiv.symm_apply_apply]
+    rw [show i n (a n ((Shrink.linearEquiv ℚ (A n)) x)) =
+      b n (i n ((Shrink.linearEquiv ℚ (A n)) x)) from DFunLike.congr_fun (hi n) _]
+  have hj' : ∀ n, ((Shrink.linearEquiv ℚ (C n)).symm.toLinearMap ∘ₗ j n ∘ₗ
+      (Shrink.linearEquiv ℚ (B n)).toLinearMap) ∘ₗ
+      ((Shrink.linearEquiv ℚ (B n)).symm.toLinearMap ∘ₗ b n ∘ₗ
+      (Shrink.linearEquiv ℚ (B n)).toLinearMap) =
+      ((Shrink.linearEquiv ℚ (C n)).symm.toLinearMap ∘ₗ c n ∘ₗ
+      (Shrink.linearEquiv ℚ (C n)).toLinearMap) ∘ₗ
+      ((Shrink.linearEquiv ℚ (C n)).symm.toLinearMap ∘ₗ j n ∘ₗ
+      (Shrink.linearEquiv ℚ (B n)).toLinearMap) := by
+    intro n
+    ext x
+    simp only [LinearMap.coe_comp, Function.comp_apply, LinearEquiv.coe_coe,
+      LinearEquiv.coe_toLinearMap, LinearEquiv.apply_symm_apply,
+      LinearEquiv.symm_apply_apply]
+    rw [show j n (b n ((Shrink.linearEquiv ℚ (B n)) x)) =
+      c n (j n ((Shrink.linearEquiv ℚ (B n)) x)) from DFunLike.congr_fun (hj n) _]
+  have hδ' : ∀ n, ((Shrink.linearEquiv ℚ (A n)).symm.toLinearMap ∘ₗ δ n ∘ₗ
+      (Shrink.linearEquiv ℚ (C (n + 1))).toLinearMap) ∘ₗ
+      ((Shrink.linearEquiv ℚ (C (n + 1))).symm.toLinearMap ∘ₗ c (n + 1) ∘ₗ
+      (Shrink.linearEquiv ℚ (C (n + 1))).toLinearMap) =
+      ((Shrink.linearEquiv ℚ (A n)).symm.toLinearMap ∘ₗ a n ∘ₗ
+      (Shrink.linearEquiv ℚ (A n)).toLinearMap) ∘ₗ
+      ((Shrink.linearEquiv ℚ (A n)).symm.toLinearMap ∘ₗ δ n ∘ₗ
+      (Shrink.linearEquiv ℚ (C (n + 1))).toLinearMap) := by
+    intro n
+    ext x
+    simp only [LinearMap.coe_comp, Function.comp_apply, LinearEquiv.coe_coe,
+      LinearEquiv.coe_toLinearMap, LinearEquiv.apply_symm_apply,
+      LinearEquiv.symm_apply_apply]
+    rw [show δ n (c (n + 1) ((Shrink.linearEquiv ℚ (C (n + 1))) x)) =
+      a n (δ n ((Shrink.linearEquiv ℚ (C (n + 1))) x)) from DFunLike.congr_fun (hδ n) _]
+  have ex₁' : ∀ n, LinearMap.range
+      ((Shrink.linearEquiv ℚ (B n)).symm.toLinearMap ∘ₗ i n ∘ₗ
+      (Shrink.linearEquiv ℚ (A n)).toLinearMap) =
+      LinearMap.ker ((Shrink.linearEquiv ℚ (C n)).symm.toLinearMap ∘ₗ j n ∘ₗ
+      (Shrink.linearEquiv ℚ (B n)).toLinearMap) := by
+    intro n
+    rw [t98J01_complexLefschetz_shortExact_aux_range_conj
+        (Shrink.linearEquiv ℚ (A n)) (Shrink.linearEquiv ℚ (B n)).symm (i n),
+      t98J01_complexLefschetz_shortExact_aux_ker_conj
+        (Shrink.linearEquiv ℚ (B n)) (Shrink.linearEquiv ℚ (C n)) (j n),
+      t98J01_complexLefschetz_shortExact_aux_map_comap
+        (Shrink.linearEquiv ℚ (B n)) (LinearMap.range (i n)),
+      ex₁ n]
+  have ex₂' : ∀ n, LinearMap.range
+      ((Shrink.linearEquiv ℚ (C (n + 1))).symm.toLinearMap ∘ₗ j (n + 1) ∘ₗ
+      (Shrink.linearEquiv ℚ (B (n + 1))).toLinearMap) =
+      LinearMap.ker ((Shrink.linearEquiv ℚ (A n)).symm.toLinearMap ∘ₗ δ n ∘ₗ
+      (Shrink.linearEquiv ℚ (C (n + 1))).toLinearMap) := by
+    intro n
+    rw [t98J01_complexLefschetz_shortExact_aux_range_conj
+        (Shrink.linearEquiv ℚ (B (n + 1))) (Shrink.linearEquiv ℚ (C (n + 1))).symm (j (n + 1)),
+      t98J01_complexLefschetz_shortExact_aux_ker_conj
+        (Shrink.linearEquiv ℚ (C (n + 1))) (Shrink.linearEquiv ℚ (A n)) (δ n),
+      t98J01_complexLefschetz_shortExact_aux_map_comap
+        (Shrink.linearEquiv ℚ (C (n + 1))) (LinearMap.range (j (n + 1))),
+      ex₂ n]
+  have ex₃' : ∀ n, LinearMap.range
+      ((Shrink.linearEquiv ℚ (A n)).symm.toLinearMap ∘ₗ δ n ∘ₗ
+      (Shrink.linearEquiv ℚ (C (n + 1))).toLinearMap) =
+      LinearMap.ker ((Shrink.linearEquiv ℚ (B n)).symm.toLinearMap ∘ₗ i n ∘ₗ
+      (Shrink.linearEquiv ℚ (A n)).toLinearMap) := by
+    intro n
+    rw [t98J01_complexLefschetz_shortExact_aux_range_conj
+        (Shrink.linearEquiv ℚ (C (n + 1))) (Shrink.linearEquiv ℚ (A n)).symm (δ n),
+      t98J01_complexLefschetz_shortExact_aux_ker_conj
+        (Shrink.linearEquiv ℚ (A n)) (Shrink.linearEquiv ℚ (B n)) (i n),
+      t98J01_complexLefschetz_shortExact_aux_map_comap
+        (Shrink.linearEquiv ℚ (A n)) (LinearMap.range (δ n)),
+      ex₃ n]
+  have hj0' : Function.Surjective
+      ((Shrink.linearEquiv ℚ (C 0)).symm.toLinearMap ∘ₗ j 0 ∘ₗ
+      (Shrink.linearEquiv ℚ (B 0)).toLinearMap) := by
+    intro y
+    obtain ⟨x, hx⟩ := hj0 ((Shrink.linearEquiv ℚ (C 0)) y)
+    exact ⟨(Shrink.linearEquiv ℚ (B 0)).symm x, by simp [hx]⟩
+  have hC' : ∀ k, N < k → Subsingleton (Shrink.{0} (C k)) := by
+    intro k hk
+    haveI hsubC := hC k hk
+    exact ⟨fun x y =>
+      (Shrink.linearEquiv ℚ (C k)).injective (Subsingleton.elim _ _)⟩
+  have hLE := t98J01_trace_longExact
+    (A := fun n => Shrink.{0} (A n)) (B := fun n => Shrink.{0} (B n))
+    (C := fun n => Shrink.{0} (C n))
+    (i := fun n => (Shrink.linearEquiv ℚ (B n)).symm.toLinearMap ∘ₗ i n ∘ₗ
+      (Shrink.linearEquiv ℚ (A n)).toLinearMap)
+    (j := fun n => (Shrink.linearEquiv ℚ (C n)).symm.toLinearMap ∘ₗ j n ∘ₗ
+      (Shrink.linearEquiv ℚ (B n)).toLinearMap)
+    (δ := fun n => (Shrink.linearEquiv ℚ (A n)).symm.toLinearMap ∘ₗ δ n ∘ₗ
+      (Shrink.linearEquiv ℚ (C (n + 1))).toLinearMap)
+    (a := fun n => (Shrink.linearEquiv ℚ (A n)).symm.toLinearMap ∘ₗ a n ∘ₗ
+      (Shrink.linearEquiv ℚ (A n)).toLinearMap)
+    (b := fun n => (Shrink.linearEquiv ℚ (B n)).symm.toLinearMap ∘ₗ b n ∘ₗ
+      (Shrink.linearEquiv ℚ (B n)).toLinearMap)
+    (c := fun n => (Shrink.linearEquiv ℚ (C n)).symm.toLinearMap ∘ₗ c n ∘ₗ
+      (Shrink.linearEquiv ℚ (C n)).toLinearMap)
+    hi' hj' hδ' ex₁' ex₂' ex₃' hj0' N hC'
+  have htrB : ∀ k, LinearMap.trace ℚ (Shrink.{0} (B k))
+      ((Shrink.linearEquiv ℚ (B k)).symm.toLinearMap ∘ₗ b k ∘ₗ
+      (Shrink.linearEquiv ℚ (B k)).toLinearMap) =
+      LinearMap.trace ℚ (B k) (b k) :=
+    fun k => LinearMap.trace_conj' (b k) (Shrink.linearEquiv ℚ (B k)).symm
+  have htrA : ∀ k, LinearMap.trace ℚ (Shrink.{0} (A k))
+      ((Shrink.linearEquiv ℚ (A k)).symm.toLinearMap ∘ₗ a k ∘ₗ
+      (Shrink.linearEquiv ℚ (A k)).toLinearMap) =
+      LinearMap.trace ℚ (A k) (a k) :=
+    fun k => LinearMap.trace_conj' (a k) (Shrink.linearEquiv ℚ (A k)).symm
+  have htrC : ∀ k, LinearMap.trace ℚ (Shrink.{0} (C k))
+      ((Shrink.linearEquiv ℚ (C k)).symm.toLinearMap ∘ₗ c k ∘ₗ
+      (Shrink.linearEquiv ℚ (C k)).toLinearMap) =
+      LinearMap.trace ℚ (C k) (c k) :=
+    fun k => LinearMap.trace_conj' (c k) (Shrink.linearEquiv ℚ (C k)).symm
+  simp only [htrA, htrB, htrC] at hLE
+  exact hLE
+
+set_option maxHeartbeats 1000000 in
 theorem t98J01_complexLefschetz_shortExact
     {S : ShortComplex (ChainComplex (ModuleCat ℚ) ℕ)} (hS : S.ShortExact) (φ : S ⟶ S) {a b : ℚ}
     (h₁ : t98J01_ComplexLefschetz S.X₁ φ.τ₁ a) (h₂ : t98J01_ComplexLefschetz S.X₂ φ.τ₂ b) :
     t98J01_ComplexLefschetz S.X₃ φ.τ₃ (b - a) := by
-  sorry
+  classical
+  obtain ⟨hfd₁, b₁, hb₁, hsum₁⟩ := h₁
+  obtain ⟨hfd₂, b₂, hb₂, hsum₂⟩ := h₂
+  obtain ⟨N, hN1, hN2⟩ : ∃ N : ℕ, b₁ + 1 ≤ N ∧ b₂ ≤ N :=
+    ⟨max b₂ (b₁ + 1), le_max_right _ _, le_max_left _ _⟩
+  have hfd₃ : ∀ k, FiniteDimensional ℚ (S.X₃.homology k) := by
+    intro k
+    rcases k with (_ | k)
+    · exact FiniteDimensional.of_surjective _
+        (t98J01_homologyMap_g_zero_surjective hS)
+    · have hker : LinearMap.range ((HomologicalComplex.homologyMap S.g (k + 1)).hom) =
+          LinearMap.ker ((hS.δ (k + 1) k (by simp)).hom) :=
+        (hS.homology_exact₃ (k + 1) k (by simp)).moduleCat_range_eq_ker
+      haveI := hfd₂ (k + 1)
+      haveI := hfd₁ k
+      haveI : FiniteDimensional ℚ ↥(LinearMap.ker ((hS.δ (k + 1) k (by simp)).hom)) := by
+        rw [← hker]
+        exact LinearMap.finiteDimensional_range _
+      haveI : FiniteDimensional ℚ ↥(⊤ : Submodule ℚ (S.X₁.homology k)) := inferInstance
+      haveI : FiniteDimensional ℚ ↥(LinearMap.range ((hS.δ (k + 1) k (by simp)).hom)) :=
+        Submodule.finiteDimensional_of_le le_top
+      have e : ((S.X₃.homology (k + 1)) ⧸
+          LinearMap.ker ((hS.δ (k + 1) k (by simp)).hom)) ≃ₗ[ℚ]
+          LinearMap.range ((hS.δ (k + 1) k (by simp)).hom) :=
+        LinearMap.quotKerEquivRange _
+      haveI : FiniteDimensional ℚ ((S.X₃.homology (k + 1)) ⧸
+          LinearMap.ker ((hS.δ (k + 1) k (by simp)).hom)) :=
+        LinearEquiv.finiteDimensional e.symm
+      apply t98J01_complexLefschetz_shortExact_aux_fd_of_sub_quot
+        (LinearMap.ker ((hS.δ (k + 1) k (by simp)).hom))
+      · exact inferInstance
+      · exact inferInstance
+  have hvan : ∀ k, N < k → Subsingleton (S.X₃.homology k) := by
+    intro k hk
+    have hk1 : 1 ≤ k := by omega
+    haveI hs2 : Subsingleton (S.X₂.homology k) := hb₂ k (by omega)
+    haveI hs1 : Subsingleton (S.X₁.homology (k - 1)) := hb₁ (k - 1) (by omega)
+    have hd0 : ((hS.δ k (k - 1) (by show k - 1 + 1 = k; omega)).hom :
+        (S.X₃.homology k) →ₗ[ℚ] (S.X₁.homology (k - 1))) = 0 := by
+      ext x
+      exact Subsingleton.elim _ _
+    have hrt : LinearMap.range ((HomologicalComplex.homologyMap S.g k).hom) = ⊤ := by
+      rw [show LinearMap.range ((HomologicalComplex.homologyMap S.g k).hom) =
+        LinearMap.ker ((hS.δ k (k - 1) (by show k - 1 + 1 = k; omega)).hom) from
+        (hS.homology_exact₃ k (k - 1) (by show k - 1 + 1 = k; omega)).moduleCat_range_eq_ker,
+        hd0]
+      simp
+    have hsurj : Function.Surjective ((HomologicalComplex.homologyMap S.g k).hom) :=
+      LinearMap.range_eq_top.mp hrt
+    refine ⟨fun x y => ?_⟩
+    obtain ⟨x', rfl⟩ := hsurj x
+    obtain ⟨y', rfl⟩ := hsurj y
+    exact congrArg _ (Subsingleton.elim x' y')
+  haveI hfdA : ∀ n, FiniteDimensional ℚ (S.X₁.homology n) := hfd₁
+  haveI hfdB : ∀ n, FiniteDimensional ℚ (S.X₂.homology n) := hfd₂
+  haveI hfdC : ∀ n, FiniteDimensional ℚ (S.X₃.homology n) := hfd₃
+  have hi : ∀ n, ((HomologicalComplex.homologyMap S.f n).hom) ∘ₗ
+      ((HomologicalComplex.homologyMap φ.τ₁ n).hom) =
+      ((HomologicalComplex.homologyMap φ.τ₂ n).hom) ∘ₗ
+      ((HomologicalComplex.homologyMap S.f n).hom) := by
+    intro n
+    rw [← ModuleCat.hom_comp, ← ModuleCat.hom_comp]
+    have hcat : (HomologicalComplex.homologyMap φ.τ₁ n) ≫
+        (HomologicalComplex.homologyMap S.f n) =
+        (HomologicalComplex.homologyMap S.f n) ≫
+        (HomologicalComplex.homologyMap φ.τ₂ n) := by
+      rw [← HomologicalComplex.homologyMap_comp, ← HomologicalComplex.homologyMap_comp,
+        φ.comm₁₂]
+    exact congrArg (fun ψ => ψ.hom) hcat
+  have hj : ∀ n, ((HomologicalComplex.homologyMap S.g n).hom) ∘ₗ
+      ((HomologicalComplex.homologyMap φ.τ₂ n).hom) =
+      ((HomologicalComplex.homologyMap φ.τ₃ n).hom) ∘ₗ
+      ((HomologicalComplex.homologyMap S.g n).hom) := by
+    intro n
+    rw [← ModuleCat.hom_comp, ← ModuleCat.hom_comp]
+    have hcat : (HomologicalComplex.homologyMap φ.τ₂ n) ≫
+        (HomologicalComplex.homologyMap S.g n) =
+        (HomologicalComplex.homologyMap S.g n) ≫
+        (HomologicalComplex.homologyMap φ.τ₃ n) := by
+      rw [← HomologicalComplex.homologyMap_comp, ← HomologicalComplex.homologyMap_comp,
+        φ.comm₂₃]
+    exact congrArg (fun ψ => ψ.hom) hcat
+  have hδ : ∀ n, ((hS.δ (n + 1) n (by simp)).hom) ∘ₗ
+      ((HomologicalComplex.homologyMap φ.τ₃ (n + 1)).hom) =
+      ((HomologicalComplex.homologyMap φ.τ₁ n).hom) ∘ₗ
+      ((hS.δ (n + 1) n (by simp)).hom) := by
+    intro n
+    rw [← ModuleCat.hom_comp, ← ModuleCat.hom_comp]
+    exact congrArg (fun ψ => ψ.hom)
+      (HomologicalComplex.HomologySequence.δ_naturality φ hS hS (n + 1) n (by simp)).symm
+  have ex₁ : ∀ n, LinearMap.range ((HomologicalComplex.homologyMap S.f n).hom) =
+      LinearMap.ker ((HomologicalComplex.homologyMap S.g n).hom) :=
+    fun n => (hS.homology_exact₂ n).moduleCat_range_eq_ker
+  have ex₂ : ∀ n, LinearMap.range ((HomologicalComplex.homologyMap S.g (n + 1)).hom) =
+      LinearMap.ker ((hS.δ (n + 1) n (by simp)).hom) :=
+    fun n => (hS.homology_exact₃ (n + 1) n (by simp)).moduleCat_range_eq_ker
+  have ex₃ : ∀ n, LinearMap.range ((hS.δ (n + 1) n (by simp)).hom) =
+      LinearMap.ker ((HomologicalComplex.homologyMap S.f n).hom) :=
+    fun n => (hS.homology_exact₁ (n + 1) n (by simp)).moduleCat_range_eq_ker
+  have hLE := t98J01_complexLefschetz_shortExact_aux_shrink
+    (A := fun n => ↥(S.X₁.homology n)) (B := fun n => ↥(S.X₂.homology n))
+    (C := fun n => ↥(S.X₃.homology n))
+    (i := fun n => (HomologicalComplex.homologyMap S.f n).hom)
+    (j := fun n => (HomologicalComplex.homologyMap S.g n).hom)
+    (δ := fun n => (hS.δ (n + 1) n (by simp)).hom)
+    (a := fun n => (HomologicalComplex.homologyMap φ.τ₁ n).hom)
+    (b := fun n => (HomologicalComplex.homologyMap φ.τ₂ n).hom)
+    (c := fun n => (HomologicalComplex.homologyMap φ.τ₃ n).hom)
+    hi hj hδ ex₁ ex₂ ex₃
+    (t98J01_homologyMap_g_zero_surjective hS) N hvan
+  have hsumA := t98J01_complexLefschetz_sum_eq
+    (⟨hfd₁, b₁, hb₁, hsum₁⟩ : t98J01_ComplexLefschetz S.X₁ φ.τ₁ a) N
+    (fun k hk => hb₁ k (by omega))
+  have hsumB := t98J01_complexLefschetz_sum_eq
+    (⟨hfd₂, b₂, hb₂, hsum₂⟩ : t98J01_ComplexLefschetz S.X₂ φ.τ₂ b) N
+    (fun k hk => hb₂ k (by omega))
+  refine ⟨hfd₃, N, hvan, ?_⟩
+  linarith [hLE, hsumA, hsumB]
 
 /-- Seat: additivity on a biproduct of complexes. `CoefficientHomologyBiprodIso.homologyBiprodIso` conjugates `homologyMap (biprod.map φ ψ)` to the biproduct of the two homology maps; finish with `LinearMap.trace_prodMap'` after passing to `M × N`, and `t98J01_complexLefschetz_sum_eq` at `max` of the two bounds. -/
 private theorem t98J01_complexLefschetz_biprod_aux_trace
