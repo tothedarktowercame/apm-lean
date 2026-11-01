@@ -136,7 +136,22 @@ theorem t99J02_ell_norm (u : ℂ) : ‖t99J02_ell u‖ = 5 / 8 * ‖u‖ + 3 / 8
 is strictly increasing. -/
 -- BEGIN SEAT AREA
 theorem t99J02_ell_injective : Function.Injective t99J02_ell := by
-  sorry
+  intro u v h
+  have him : u.im = v.im := by
+    have him' := congrArg Complex.im h
+    simp only [t99J02_ell] at him'
+    linarith
+  have hre : u.re = v.re := by
+    have e1 : (3 / 8 : ℝ) * ‖u‖ + 5 / 8 * u.re = 3 / 8 * ‖v‖ + 5 / 8 * v.re := by
+      have h' := congrArg Complex.re h
+      simp only [t99J02_ell] at h'
+      exact h'
+    have e2 : (5 / 8 : ℝ) * ‖u‖ + 3 / 8 * u.re = 5 / 8 * ‖v‖ + 3 / 8 * v.re := by
+      have h1 := t99J02_ell_norm u
+      rw [h, t99J02_ell_norm v] at h1
+      exact h1.symm
+    linarith [e1, e2]
+  exact Complex.ext hre him
 -- END SEAT AREA
 
 /-- On the upper unit semicircle `phi z = z²`, since `√(1 - x²) = y`. -/
