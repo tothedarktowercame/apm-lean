@@ -47,6 +47,137 @@ boundary is zero by expanding `attachingDegree` in the standard orientable
 coordinates, identify `PairingOrbit` with `Fin 2 × Bool` via
 `orientableOrbitEquiv`, and transport along
 `standardPairingData_space_homeomorph`. -/
+abbrev t99J02_genusTwo_homology_aux_P : PairingData :=
+  standardPairingData true 2 Nat.zero_lt_two
+
+open ConstructionTargets.PolygonSurfaceHomology
+
+/-- The attaching degree of the standard orientable pairing vanishes: every
+edge orbit consists of one positive and one negative edge. -/
+theorem t99J02_genusTwo_homology_aux_attachingDegree :
+    attachingDegree t99J02_genusTwo_homology_aux_P = 0 := by
+  classical
+  funext l
+  rw [attachingDegree_apply]
+  refine Quotient.inductionOn l ?_
+  intro i₀
+  show ∑ i, edgeOrbitContribution t99J02_genusTwo_homology_aux_P i
+      (t99J02_genusTwo_homology_aux_P.orbit i₀) = 0
+  have hdeg : ∀ i : Fin t99J02_genusTwo_homology_aux_P.edgeCount,
+      edgeOrbitContribution t99J02_genusTwo_homology_aux_P i
+          (t99J02_genusTwo_homology_aux_P.orbit i₀) =
+        if i = i₀ ∨ i = t99J02_genusTwo_homology_aux_P.pair i₀ then
+          edgeAttachingDegree t99J02_genusTwo_homology_aux_P i else 0 := by
+    intro i
+    by_cases h : t99J02_genusTwo_homology_aux_P.orbit i =
+        t99J02_genusTwo_homology_aux_P.orbit i₀
+    · rw [edgeOrbitContribution_of_mem _ _ _ h]
+      rcases (t99J02_genusTwo_homology_aux_P.orbit_eq_iff i i₀).mp h with h1 | h1
+      · rw [if_pos (Or.inl h1.symm)]
+      · have hi : i = t99J02_genusTwo_homology_aux_P.pair i₀ := by
+          rw [h1, t99J02_genusTwo_homology_aux_P.pair_pair]
+        rw [if_pos (Or.inr hi)]
+    · rw [edgeOrbitContribution_of_not_mem _ _ _ h, if_neg]
+      rintro (rfl | rfl)
+      · exact h rfl
+      · exact h (t99J02_genusTwo_homology_aux_P.orbit_pair i₀)
+  calc ∑ i, edgeOrbitContribution t99J02_genusTwo_homology_aux_P i
+        (t99J02_genusTwo_homology_aux_P.orbit i₀)
+      = ∑ i, (if i = i₀ ∨ i = t99J02_genusTwo_homology_aux_P.pair i₀ then
+          edgeAttachingDegree t99J02_genusTwo_homology_aux_P i else 0) :=
+        Finset.sum_congr rfl (fun i _ => hdeg i)
+    _ = ∑ i ∈ Finset.univ.filter
+          (fun i => i = i₀ ∨ i = t99J02_genusTwo_homology_aux_P.pair i₀),
+          edgeAttachingDegree t99J02_genusTwo_homology_aux_P i :=
+        (Finset.sum_filter _ _).symm
+    _ = 0 := by
+        have hfilter : Finset.univ.filter
+            (fun i => i = i₀ ∨ i = t99J02_genusTwo_homology_aux_P.pair i₀) =
+            {i₀, t99J02_genusTwo_homology_aux_P.pair i₀} := by
+          ext i
+          simp
+        rw [hfilter,
+          Finset.sum_insert
+            (by simp only [Finset.mem_singleton]
+                exact (t99J02_genusTwo_homology_aux_P.pair_ne i₀).symm),
+          Finset.sum_singleton]
+        have hne : t99J02_genusTwo_homology_aux_P.sign
+            (t99J02_genusTwo_homology_aux_P.pair i₀) ≠
+            t99J02_genusTwo_homology_aux_P.sign i₀ :=
+          standardSign_orientable_pair 2 i₀
+        cases hs : t99J02_genusTwo_homology_aux_P.sign i₀ with
+        | false =>
+            have hp : t99J02_genusTwo_homology_aux_P.sign
+                (t99J02_genusTwo_homology_aux_P.pair i₀) = true := by
+              cases hsp : t99J02_genusTwo_homology_aux_P.sign
+                  (t99J02_genusTwo_homology_aux_P.pair i₀) with
+              | false => rw [hsp, hs] at hne; exact (hne rfl).elim
+              | true => rfl
+            rw [edgeAttachingDegree_of_sign_false _ _ hs,
+              edgeAttachingDegree_of_sign_true _ _ hp]
+            norm_num
+        | true =>
+            have hp : t99J02_genusTwo_homology_aux_P.sign
+                (t99J02_genusTwo_homology_aux_P.pair i₀) = false := by
+              cases hsp : t99J02_genusTwo_homology_aux_P.sign
+                  (t99J02_genusTwo_homology_aux_P.pair i₀) with
+              | false => rfl
+              | true => rw [hsp, hs] at hne; exact (hne rfl).elim
+            rw [edgeAttachingDegree_of_sign_true _ _ hs,
+              edgeAttachingDegree_of_sign_false _ _ hp]
+            norm_num
+
+/-- The degree-two attaching boundary map of the standard orientable octagon
+is zero. -/
+theorem t99J02_genusTwo_homology_aux_attachingBoundary :
+    attachingBoundary t99J02_genusTwo_homology_aux_P = 0 := by
+  ext n l
+  rw [attachingBoundary_apply_apply,
+    t99J02_genusTwo_homology_aux_attachingDegree]
+  simp
+
+/-- The degree-two homology model: the boundary kernel is all of `ℤ`. -/
+noncomputable def t99J02_genusTwo_homology_aux_kernelIso :
+    ModuleCat.of ℤ (BoundaryKernel t99J02_genusTwo_homology_aux_P) ≅
+      ModuleCat.of ℤ ℤ := by
+  have hker : BoundaryKernel t99J02_genusTwo_homology_aux_P = ⊤ := by
+    show LinearMap.ker (attachingBoundary t99J02_genusTwo_homology_aux_P) = ⊤
+    rw [t99J02_genusTwo_homology_aux_attachingBoundary]
+    exact LinearMap.ker_zero
+  rw [hker]
+  exact Submodule.topEquiv.toModuleIso
+
+/-- The degree-one homology model: the boundary cokernel is the free
+abelian group on the four edge orbits. -/
+noncomputable def t99J02_genusTwo_homology_aux_cokernelIso :
+    ModuleCat.of ℤ (BoundaryCokernel t99J02_genusTwo_homology_aux_P) ≅
+      ModuleCat.of ℤ (Fin 4 → ℤ) := by
+  have hrange : LinearMap.range (attachingBoundary t99J02_genusTwo_homology_aux_P) = ⊥ := by
+    rw [t99J02_genusTwo_homology_aux_attachingBoundary]
+    exact LinearMap.range_zero
+  have step1 : ModuleCat.of ℤ (BoundaryCokernel t99J02_genusTwo_homology_aux_P) ≅
+      ModuleCat.of ℤ (PairingOrbit t99J02_genusTwo_homology_aux_P.pair → ℤ) :=
+    (Submodule.quotEquivOfEqBot _ hrange).toModuleIso
+  have step2 : ModuleCat.of ℤ (PairingOrbit t99J02_genusTwo_homology_aux_P.pair → ℤ) ≅
+      ModuleCat.of ℤ (Fin 2 × Bool → ℤ) :=
+    (LinearEquiv.funCongrLeft ℤ ℤ (orientableOrbitEquiv 2)).toModuleIso.symm
+  have step3 : ModuleCat.of ℤ (Fin 2 × Bool → ℤ) ≅ ModuleCat.of ℤ (Fin 4 → ℤ) :=
+    (LinearEquiv.funCongrLeft ℤ ℤ
+      (((Equiv.refl (Fin 2)).prodCongr finTwoEquiv.symm).trans
+        (finProdFinEquiv.trans (finCongr (show 2 * 2 = 4 by decide))))).toModuleIso.symm
+  exact step1.trans (step2.trans step3)
+
+-- Transport of the homology objects along the standard homeomorphism
+-- between the polygon quotient and `Surface true 2`.
+set_option maxHeartbeats 800000 in
+noncomputable def t99J02_genusTwo_homology_aux_transport (k : ℕ) :
+    H t99J02_genusTwo_homology_aux_P k ≅
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of (Surface true 2))) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+      (TopCat.isoOfHomeo (standardPairingData_space_homeomorph true 2 Nat.zero_lt_two))
+
 theorem t99J02_genusTwo_homology :
     let X := Surface true 2
     let H := fun (k : ℕ) =>
@@ -56,7 +187,20 @@ theorem t99J02_genusTwo_homology :
       Nonempty (H 1 ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
       Nonempty (H 2 ≅ ModuleCat.of ℤ ℤ) ∧
       (∀ k : ℕ, 3 ≤ k → IsZero (H k)) := by
-  sorry
+  classical
+  dsimp only
+  refine ⟨⟨?_⟩, ⟨?_⟩, ⟨?_⟩, ?_⟩
+  · exact (t99J02_genusTwo_homology_aux_transport 0).symm.trans
+      (polygonQuotient_homology _).1.some
+  · exact (t99J02_genusTwo_homology_aux_transport 1).symm.trans
+      ((polygonQuotient_homology _).2.1.some.trans
+        t99J02_genusTwo_homology_aux_cokernelIso)
+  · exact (t99J02_genusTwo_homology_aux_transport 2).symm.trans
+      ((polygonQuotient_homology _).2.2.1.some.trans
+        t99J02_genusTwo_homology_aux_kernelIso)
+  · intro k hk
+    exact ((polygonQuotient_homology _).2.2.2 k hk).of_iso
+      (t99J02_genusTwo_homology_aux_transport k).symm
 
 
 /-! ## The connected sum
