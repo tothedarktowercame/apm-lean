@@ -765,7 +765,59 @@ theorem t99J02_mk_eq (p p' : Sum c₁.Punctured c₂.Punctured)
     (h : t99J02_mk c₁ c₂ p = t99J02_mk c₁ c₂ p') :
     p = p' ∨ (∃ s, p = Sum.inl (c₁.boundaryMap s) ∧ p' = Sum.inr (c₂.boundaryMap s)) ∨
       (∃ s, p = Sum.inr (c₂.boundaryMap s) ∧ p' = Sum.inl (c₁.boundaryMap s)) := by
-  sorry
+  let R : Sum c₁.Punctured c₂.Punctured → Sum c₁.Punctured c₂.Punctured → Prop :=
+    fun p p' =>
+      p = p' ∨ (∃ s, p = Sum.inl (c₁.boundaryMap s) ∧
+        p' = Sum.inr (c₂.boundaryMap s)) ∨
+        (∃ s, p = Sum.inr (c₂.boundaryMap s) ∧
+          p' = Sum.inl (c₁.boundaryMap s))
+  have boundary_injective (c : BallCollar 2 M₁) : Function.Injective c.boundaryMap := by
+    intro s t hst
+    have hsmall : sphereToDisk 2 s = sphereToDisk 2 t :=
+      c.smallEmbedding.injective (congrArg Subtype.val hst)
+    apply Subtype.ext
+    exact congrArg (fun x : Disk 2 1 => x.1) hsmall
+  have boundary_injective₂ : Function.Injective c₂.boundaryMap := by
+    intro s t hst
+    have hsmall : sphereToDisk 2 s = sphereToDisk 2 t :=
+      c₂.smallEmbedding.injective (congrArg Subtype.val hst)
+    apply Subtype.ext
+    exact congrArg (fun x : Disk 2 1 => x.1) hsmall
+  have hR : Equivalence R := by
+    refine ⟨?_, ?_, ?_⟩
+    · intro x
+      exact Or.inl rfl
+    · intro x y hxy
+      rcases hxy with hxy | ⟨s, rfl, rfl⟩ | ⟨s, rfl, rfl⟩
+      · exact Or.inl hxy.symm
+      · exact Or.inr (Or.inr ⟨s, rfl, rfl⟩)
+      · exact Or.inr (Or.inl ⟨s, rfl, rfl⟩)
+    · intro x y z hxy hyz
+      rcases hxy with rfl | ⟨s, rfl, rfl⟩ | ⟨s, rfl, rfl⟩
+      · exact hyz
+      · rcases hyz with hyz | ⟨t, ht, _⟩ | ⟨t, ht, rfl⟩
+        · subst z
+          exact Or.inr (Or.inl ⟨s, rfl, rfl⟩)
+        · cases ht
+        · have hst : s = t := boundary_injective₂ (Sum.inr.inj ht)
+          subst t
+          exact Or.inl rfl
+      · rcases hyz with hyz | ⟨t, ht, rfl⟩ | ⟨t, ht, _⟩
+        · subst z
+          exact Or.inr (Or.inr ⟨s, rfl, rfl⟩)
+        · have hst : s = t := boundary_injective c₁ (Sum.inl.inj ht)
+          subst t
+          exact Or.inl rfl
+        · cases ht
+  apply (hR.eqvGen_iff).mp
+  apply Relation.EqvGen.mono (r := GlueRel c₁ c₂)
+  · intro a b hab
+    cases hab with
+    | boundary s => exact Or.inr (Or.inl ⟨s, rfl, rfl⟩)
+  · change
+      Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) p =
+        Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) p' at h
+    exact Quotient.exact h
 -- END SEAT AREA
 
 /-- A subset of the connected sum is closed when both pullbacks are. -/
