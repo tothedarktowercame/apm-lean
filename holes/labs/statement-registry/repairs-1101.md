@@ -83,3 +83,7 @@ Backlog grade: hypothesis-carries-core, part (b) assumed analyticity, decay and 
 ## lts-ultraproduct-thm1
 
 Triage: Lean gave only a bare equivalence of carrier types and had a sorry. Repair by codex-6 fixes a finitary single-sorted signature, algebras and operation-compatible congruences, and proves the canonical quotient map an algebra isomorphism, with its formulas. New grade: faithful; the left side is a single quotient of the product, which is trivially isomorphic to the printed two-step form.
+
+## m93J02 (reformed)
+
+The printed denominator |x-y^α| is a misprint for |x-y|^α, and the exponent is unstated; convention 0 < α < 1, the Holder scale, since at α = 1 the answers depend on the geometry of Ω. Repair by lemma-1 covers every compact connected Ω, singletons included, where the answers change. Grader: acceptable, truth values checked by hand, one change, the sup metric on Fin n → ℝ, which claude-14 replaced by EuclideanSpace, recompiled.

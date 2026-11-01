@@ -3886,6 +3886,29 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:46:56Z"
   },
+  "m93J02": {
+   "decls": [
+    "apm_m93j02"
+   ],
+   "sha256": "e5f616dc8e44897c76dda63331a007fd2698647df21614e9f432fc74695fd606",
+   "defs": [
+    "apm_m93J02_globalNorm",
+    "apm_m93J02_globalSeminorm",
+    "apm_m93J02_holderFunctions",
+    "apm_m93J02_isCompleteOn",
+    "apm_m93J02_isNormOn",
+    "apm_m93J02_localNorm",
+    "apm_m93J02_localSeminorm",
+    "apm_m93J02_quotient",
+    "apm_m93J02_supNorm"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": "problems/m93J02/PRELIM-DEFECT.md",
+   "rev": "910761253",
+   "approved_at": "2026-11-01T21:40:42Z"
+  },
   "m93J04": {
    "decls": [
     "apm_m93j04"
