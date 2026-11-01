@@ -47,6 +47,137 @@ boundary is zero by expanding `attachingDegree` in the standard orientable
 coordinates, identify `PairingOrbit` with `Fin 2 × Bool` via
 `orientableOrbitEquiv`, and transport along
 `standardPairingData_space_homeomorph`. -/
+abbrev t99J02_genusTwo_homology_aux_P : PairingData :=
+  standardPairingData true 2 Nat.zero_lt_two
+
+open ConstructionTargets.PolygonSurfaceHomology
+
+/-- The attaching degree of the standard orientable pairing vanishes: every
+edge orbit consists of one positive and one negative edge. -/
+theorem t99J02_genusTwo_homology_aux_attachingDegree :
+    attachingDegree t99J02_genusTwo_homology_aux_P = 0 := by
+  classical
+  funext l
+  rw [attachingDegree_apply]
+  refine Quotient.inductionOn l ?_
+  intro i₀
+  show ∑ i, edgeOrbitContribution t99J02_genusTwo_homology_aux_P i
+      (t99J02_genusTwo_homology_aux_P.orbit i₀) = 0
+  have hdeg : ∀ i : Fin t99J02_genusTwo_homology_aux_P.edgeCount,
+      edgeOrbitContribution t99J02_genusTwo_homology_aux_P i
+          (t99J02_genusTwo_homology_aux_P.orbit i₀) =
+        if i = i₀ ∨ i = t99J02_genusTwo_homology_aux_P.pair i₀ then
+          edgeAttachingDegree t99J02_genusTwo_homology_aux_P i else 0 := by
+    intro i
+    by_cases h : t99J02_genusTwo_homology_aux_P.orbit i =
+        t99J02_genusTwo_homology_aux_P.orbit i₀
+    · rw [edgeOrbitContribution_of_mem _ _ _ h]
+      rcases (t99J02_genusTwo_homology_aux_P.orbit_eq_iff i i₀).mp h with h1 | h1
+      · rw [if_pos (Or.inl h1.symm)]
+      · have hi : i = t99J02_genusTwo_homology_aux_P.pair i₀ := by
+          rw [h1, t99J02_genusTwo_homology_aux_P.pair_pair]
+        rw [if_pos (Or.inr hi)]
+    · rw [edgeOrbitContribution_of_not_mem _ _ _ h, if_neg]
+      rintro (rfl | rfl)
+      · exact h rfl
+      · exact h (t99J02_genusTwo_homology_aux_P.orbit_pair i₀)
+  calc ∑ i, edgeOrbitContribution t99J02_genusTwo_homology_aux_P i
+        (t99J02_genusTwo_homology_aux_P.orbit i₀)
+      = ∑ i, (if i = i₀ ∨ i = t99J02_genusTwo_homology_aux_P.pair i₀ then
+          edgeAttachingDegree t99J02_genusTwo_homology_aux_P i else 0) :=
+        Finset.sum_congr rfl (fun i _ => hdeg i)
+    _ = ∑ i ∈ Finset.univ.filter
+          (fun i => i = i₀ ∨ i = t99J02_genusTwo_homology_aux_P.pair i₀),
+          edgeAttachingDegree t99J02_genusTwo_homology_aux_P i :=
+        (Finset.sum_filter _ _).symm
+    _ = 0 := by
+        have hfilter : Finset.univ.filter
+            (fun i => i = i₀ ∨ i = t99J02_genusTwo_homology_aux_P.pair i₀) =
+            {i₀, t99J02_genusTwo_homology_aux_P.pair i₀} := by
+          ext i
+          simp
+        rw [hfilter,
+          Finset.sum_insert
+            (by simp only [Finset.mem_singleton]
+                exact (t99J02_genusTwo_homology_aux_P.pair_ne i₀).symm),
+          Finset.sum_singleton]
+        have hne : t99J02_genusTwo_homology_aux_P.sign
+            (t99J02_genusTwo_homology_aux_P.pair i₀) ≠
+            t99J02_genusTwo_homology_aux_P.sign i₀ :=
+          standardSign_orientable_pair 2 i₀
+        cases hs : t99J02_genusTwo_homology_aux_P.sign i₀ with
+        | false =>
+            have hp : t99J02_genusTwo_homology_aux_P.sign
+                (t99J02_genusTwo_homology_aux_P.pair i₀) = true := by
+              cases hsp : t99J02_genusTwo_homology_aux_P.sign
+                  (t99J02_genusTwo_homology_aux_P.pair i₀) with
+              | false => rw [hsp, hs] at hne; exact (hne rfl).elim
+              | true => rfl
+            rw [edgeAttachingDegree_of_sign_false _ _ hs,
+              edgeAttachingDegree_of_sign_true _ _ hp]
+            norm_num
+        | true =>
+            have hp : t99J02_genusTwo_homology_aux_P.sign
+                (t99J02_genusTwo_homology_aux_P.pair i₀) = false := by
+              cases hsp : t99J02_genusTwo_homology_aux_P.sign
+                  (t99J02_genusTwo_homology_aux_P.pair i₀) with
+              | false => rfl
+              | true => rw [hsp, hs] at hne; exact (hne rfl).elim
+            rw [edgeAttachingDegree_of_sign_true _ _ hs,
+              edgeAttachingDegree_of_sign_false _ _ hp]
+            norm_num
+
+/-- The degree-two attaching boundary map of the standard orientable octagon
+is zero. -/
+theorem t99J02_genusTwo_homology_aux_attachingBoundary :
+    attachingBoundary t99J02_genusTwo_homology_aux_P = 0 := by
+  ext n l
+  rw [attachingBoundary_apply_apply,
+    t99J02_genusTwo_homology_aux_attachingDegree]
+  simp
+
+/-- The degree-two homology model: the boundary kernel is all of `ℤ`. -/
+noncomputable def t99J02_genusTwo_homology_aux_kernelIso :
+    ModuleCat.of ℤ (BoundaryKernel t99J02_genusTwo_homology_aux_P) ≅
+      ModuleCat.of ℤ ℤ := by
+  have hker : BoundaryKernel t99J02_genusTwo_homology_aux_P = ⊤ := by
+    show LinearMap.ker (attachingBoundary t99J02_genusTwo_homology_aux_P) = ⊤
+    rw [t99J02_genusTwo_homology_aux_attachingBoundary]
+    exact LinearMap.ker_zero
+  rw [hker]
+  exact Submodule.topEquiv.toModuleIso
+
+/-- The degree-one homology model: the boundary cokernel is the free
+abelian group on the four edge orbits. -/
+noncomputable def t99J02_genusTwo_homology_aux_cokernelIso :
+    ModuleCat.of ℤ (BoundaryCokernel t99J02_genusTwo_homology_aux_P) ≅
+      ModuleCat.of ℤ (Fin 4 → ℤ) := by
+  have hrange : LinearMap.range (attachingBoundary t99J02_genusTwo_homology_aux_P) = ⊥ := by
+    rw [t99J02_genusTwo_homology_aux_attachingBoundary]
+    exact LinearMap.range_zero
+  have step1 : ModuleCat.of ℤ (BoundaryCokernel t99J02_genusTwo_homology_aux_P) ≅
+      ModuleCat.of ℤ (PairingOrbit t99J02_genusTwo_homology_aux_P.pair → ℤ) :=
+    (Submodule.quotEquivOfEqBot _ hrange).toModuleIso
+  have step2 : ModuleCat.of ℤ (PairingOrbit t99J02_genusTwo_homology_aux_P.pair → ℤ) ≅
+      ModuleCat.of ℤ (Fin 2 × Bool → ℤ) :=
+    (LinearEquiv.funCongrLeft ℤ ℤ (orientableOrbitEquiv 2)).toModuleIso.symm
+  have step3 : ModuleCat.of ℤ (Fin 2 × Bool → ℤ) ≅ ModuleCat.of ℤ (Fin 4 → ℤ) :=
+    (LinearEquiv.funCongrLeft ℤ ℤ
+      (((Equiv.refl (Fin 2)).prodCongr finTwoEquiv.symm).trans
+        (finProdFinEquiv.trans (finCongr (show 2 * 2 = 4 by decide))))).toModuleIso.symm
+  exact step1.trans (step2.trans step3)
+
+-- Transport of the homology objects along the standard homeomorphism
+-- between the polygon quotient and `Surface true 2`.
+set_option maxHeartbeats 800000 in
+noncomputable def t99J02_genusTwo_homology_aux_transport (k : ℕ) :
+    H t99J02_genusTwo_homology_aux_P k ≅
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of (Surface true 2))) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+      (TopCat.isoOfHomeo (standardPairingData_space_homeomorph true 2 Nat.zero_lt_two))
+
 theorem t99J02_genusTwo_homology :
     let X := Surface true 2
     let H := fun (k : ℕ) =>
@@ -56,7 +187,20 @@ theorem t99J02_genusTwo_homology :
       Nonempty (H 1 ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
       Nonempty (H 2 ≅ ModuleCat.of ℤ ℤ) ∧
       (∀ k : ℕ, 3 ≤ k → IsZero (H k)) := by
-  sorry
+  classical
+  dsimp only
+  refine ⟨⟨?_⟩, ⟨?_⟩, ⟨?_⟩, ?_⟩
+  · exact (t99J02_genusTwo_homology_aux_transport 0).symm.trans
+      (polygonQuotient_homology _).1.some
+  · exact (t99J02_genusTwo_homology_aux_transport 1).symm.trans
+      ((polygonQuotient_homology _).2.1.some.trans
+        t99J02_genusTwo_homology_aux_cokernelIso)
+  · exact (t99J02_genusTwo_homology_aux_transport 2).symm.trans
+      ((polygonQuotient_homology _).2.2.1.some.trans
+        t99J02_genusTwo_homology_aux_kernelIso)
+  · intro k hk
+    exact ((polygonQuotient_homology _).2.2.2 k hk).of_iso
+      (t99J02_genusTwo_homology_aux_transport k).symm
 
 
 /-! ## The connected sum
@@ -270,7 +414,35 @@ inner point, `y' ≥ √(1-x²)/2`. If `ζ² = ell u`, `‖u‖ < 1`, take the r
 `y' ≥ √(1-x²)/2`. -/
 theorem t99J02_phi_not_hole (z : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ (z : ℂ).im) (u : ℂ) (hu : ‖u‖ < 1) :
     t99J02_phi (z : ℂ) ≠ t99J02_ell u := by
-  sorry
+  intro h
+  set x := (z : ℂ).re
+  set y := (z : ℂ).im
+  have hxy : x ^ 2 + y ^ 2 ≤ 1 := by
+    have hz_norm : ‖(z : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp z.2
+    have hn := Complex.sq_norm (z : ℂ)
+    rw [Complex.normSq_apply] at hn
+    nlinarith [norm_nonneg (z : ℂ)]
+  have hx : 0 ≤ 1 - x ^ 2 := by nlinarith [sq_nonneg y]
+  set Y := √(1 - x ^ 2)
+  have hY : 0 ≤ Y := Real.sqrt_nonneg _
+  have hY2 : Y ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx
+  have hphi_norm : ‖t99J02_phi (z : ℂ)‖ = x ^ 2 + ((y + Y) / 2) ^ 2 := by
+    rw [t99J02_phi, norm_pow, Complex.sq_norm, Complex.normSq_mk]
+    dsimp [x, y, Y]
+    ring
+  have hphi_re : (t99J02_phi (z : ℂ)).re = x ^ 2 - ((y + Y) / 2) ^ 2 := by
+    dsimp [x, y, Y]
+    simp only [t99J02_phi, pow_two, Complex.mul_re]
+  have hell_norm := t99J02_ell_norm u
+  have hell_re : (t99J02_ell u).re = 3 / 8 * ‖u‖ + 5 / 8 * u.re := by
+    rfl
+  rw [h, hell_norm] at hphi_norm
+  rw [h, hell_re] at hphi_re
+  have hlarge : 2 ≤
+      5 * (5 / 8 * ‖u‖ + 3 / 8 * u.re) -
+        3 * (3 / 8 * ‖u‖ + 5 / 8 * u.re) := by
+    nlinarith [hz, hY, hY2]
+  nlinarith
 
 /-- Everything in the disk outside the open hole is hit from the upper half. Take the root
 `ζ = x + i y'` of `w` with `y' ≥ 0`. If `y' < √(1-x²)/2` then `w = ell ((x + 2 i y')²)` with
@@ -278,7 +450,72 @@ theorem t99J02_phi_not_hole (z : ConstructionTargets.Surfaces.Disk) (hz : 0 ≤ 
 theorem t99J02_phi_surj (w : ConstructionTargets.Surfaces.Disk)
     (hw : ∀ u : ℂ, ‖u‖ < 1 → (w : ℂ) ≠ t99J02_ell u) :
     ∃ z : ConstructionTargets.Surfaces.Disk, 0 ≤ (z : ℂ).im ∧ t99J02_phi (z : ℂ) = (w : ℂ) := by
-  sorry
+  obtain ⟨v, hv⟩ := IsAlgClosed.exists_pow_nat_eq (w : ℂ) (n := 2) (by norm_num)
+  let ζ : ℂ := if 0 ≤ v.im then v else -v
+  have hζim : 0 ≤ ζ.im := by
+    dsimp [ζ]
+    split_ifs with h
+    · exact h
+    · simp only [Complex.neg_im]
+      linarith
+  have hζsq : ζ ^ 2 = (w : ℂ) := by
+    dsimp [ζ]
+    split_ifs
+    · exact hv
+    · simpa using hv
+  have hζnorm : ‖ζ‖ ≤ 1 := by
+    have hw_norm : ‖(w : ℂ)‖ ≤ 1 := mem_closedBall_zero_iff.mp w.2
+    have hpow : ‖ζ‖ ^ 2 = ‖(w : ℂ)‖ := by
+      rw [← hζsq, norm_pow]
+    nlinarith [norm_nonneg ζ]
+  set x : ℝ := ζ.re
+  set y : ℝ := ζ.im
+  have hy : 0 ≤ y := hζim
+  have hxy : x ^ 2 + y ^ 2 ≤ 1 := by
+    have hn := Complex.sq_norm ζ
+    rw [Complex.normSq_apply] at hn
+    nlinarith [norm_nonneg ζ]
+  have hx : 0 ≤ 1 - x ^ 2 := by nlinarith [sq_nonneg y]
+  set Y : ℝ := √(1 - x ^ 2)
+  have hY : 0 ≤ Y := Real.sqrt_nonneg _
+  have hY2 : Y ^ 2 = 1 - x ^ 2 := Real.sq_sqrt hx
+  have hyY : y ≤ Y := by nlinarith
+  have hhalf : Y / 2 ≤ y := by
+    by_contra h
+    have hylt : y < Y / 2 := lt_of_not_ge h
+    let u : ℂ := (⟨x, 2 * y⟩ : ℂ) ^ 2
+    have hu : ‖u‖ < 1 := by
+      dsimp [u]
+      rw [norm_pow, Complex.sq_norm, Complex.normSq_mk]
+      nlinarith
+    have hell : t99J02_ell u = ζ ^ 2 := by
+      apply Complex.ext
+      · rw [t99J02_ell]
+        have hunorm : ‖u‖ = x ^ 2 + 4 * y ^ 2 := by
+          dsimp [u]
+          rw [norm_pow, Complex.sq_norm, Complex.normSq_mk]
+          nlinarith [sq_nonneg x, sq_nonneg y]
+        rw [hunorm]
+        simp [u, pow_two, Complex.mul_re]
+        ring
+      · rw [t99J02_ell]
+        simp [u, pow_two, Complex.mul_im]
+        ring
+    exact hw u hu (by rw [← hζsq, hell])
+  let zc : ℂ := ⟨x, 2 * y - Y⟩
+  have hzmem : zc ∈ Metric.closedBall (0 : ℂ) 1 := by
+    rw [mem_closedBall_zero_iff, Complex.norm_def, Real.sqrt_le_one]
+    · simp only [Complex.normSq_apply, zc]
+      nlinarith
+  let z : ConstructionTargets.Surfaces.Disk := ⟨zc, hzmem⟩
+  refine ⟨z, ?_, ?_⟩
+  · change 0 ≤ 2 * y - Y
+    linarith
+  · rw [t99J02_phi]
+    change (⟨x, ((2 * y - Y) + √(1 - x ^ 2)) / 2⟩ : ℂ) ^ 2 = (w : ℂ)
+    rw [show √(1 - x ^ 2) = Y by rfl]
+    convert hζsq using 1
+    apply Complex.ext <;> simp [x, y]
 
 /-- `phi` is injective on the upper half except that `1` and `-1` both go to `1`. Since `ζ` has
 nonnegative imaginary part, `ζ² = ζ'²` gives `ζ = ζ'` or `ζ = -ζ'`, and in the second case both are
@@ -560,17 +797,167 @@ theorem t99J02_rel_boundary (o : Bool) (g : ℕ) {x y : ConstructionTargets.Surf
 
 /-- Rotation by `π` descends to the octagon quotient: it sends the pairs of handle `j` to those of
 handle `1 - j`. -/
+lemma t99J02_q2_neg_aux_edge (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    t99J02_neg (edgePoint 8 e t) = edgePoint 8 (e + 4) t := by
+  apply Subtype.ext
+  simp only [t99J02_neg, edgePoint, Subtype.coe_mk]
+  rw [← Complex.exp_add_pi_mul_I]
+  congr 1
+  push_cast
+  ring
+
+lemma t99J02_q2_neg_aux_period (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    edgePoint 8 (e + 8) t = edgePoint 8 e t := by
+  apply Subtype.ext
+  simp only [edgePoint, Subtype.coe_mk]
+  have hexp : Complex.I * (2 * Real.pi * (((e + 8 : ℕ) : ℝ) + t.1) / (8 : ℕ)) =
+      Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / (8 : ℕ)) + 2 * Real.pi * Complex.I := by
+    push_cast
+    ring
+  rw [hexp]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I, mul_one]
+
+lemma t99J02_q2_neg_aux_map {z z' : ConstructionTargets.Surfaces.Disk}
+    (heq : Relation.EqvGen (SurfaceRel true 2) z z') :
+    Relation.EqvGen (SurfaceRel true 2) (t99J02_neg z) (t99J02_neg z') := by
+  induction heq with
+  | rel x y hxy =>
+      apply Relation.EqvGen.rel
+      simp only [SurfaceRel, if_true] at hxy ⊢
+      rcases hxy with ⟨j, hj, t, hxy⟩
+      have hj' : j = 0 ∨ j = 1 := by omega
+      rcases hj' with rfl | rfl
+      · refine ⟨1, by omega, t, ?_⟩
+        rcases hxy with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+        · left
+          norm_num
+          constructor <;> apply t99J02_q2_neg_aux_edge
+        · right
+          norm_num
+          constructor <;> apply t99J02_q2_neg_aux_edge
+      · refine ⟨0, by omega, t, ?_⟩
+        rcases hxy with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+        · left
+          norm_num
+          constructor
+          · rw [t99J02_q2_neg_aux_edge]
+            exact t99J02_q2_neg_aux_period 0 t
+          · rw [t99J02_q2_neg_aux_edge]
+            exact t99J02_q2_neg_aux_period 2 _
+        · right
+          norm_num
+          constructor
+          · rw [t99J02_q2_neg_aux_edge]
+            exact t99J02_q2_neg_aux_period 1 t
+          · rw [t99J02_q2_neg_aux_edge]
+            exact t99J02_q2_neg_aux_period 3 _
+  | refl x => exact Relation.EqvGen.refl _
+  | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z _ _ ihxy ihyz => exact Relation.EqvGen.trans _ _ _ ihxy ihyz
+
 theorem t99J02_q2_neg {z z' : ConstructionTargets.Surfaces.Disk}
     (h : surfaceQuotient true 2 z = surfaceQuotient true 2 z') :
     surfaceQuotient true 2 (t99J02_neg z) = surfaceQuotient true 2 (t99J02_neg z') := by
-  sorry
+  apply Quotient.sound
+  exact t99J02_q2_neg_aux_map (Quotient.exact h)
 
 /-- The real points `1`, `-1` of the octagon are one point of the surface; both are vertices
 (`orientable_standard_oneVertex`, transported by `orientableStandardSpaceHomeomorph`). -/
+theorem t99J02_q2_one_neg_one_aux_val (e : ℕ) (t : Set.Icc (0 : ℝ) 1) :
+    ((edgePoint 8 e t : ConstructionTargets.Surfaces.Disk) : ℂ) =
+      Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / 8)) := rfl
+
+/-- Transport the right endpoint of an `EqvGen` along an equality of points. -/
+theorem t99J02_q2_one_neg_one_aux_of_eq {a b b' : ConstructionTargets.Surfaces.Disk}
+    (h : Relation.EqvGen (SurfaceRel true 2) a b) (e : b = b') :
+    Relation.EqvGen (SurfaceRel true 2) a b' := by
+  rw [← e]
+  exact h
+
+/-- An edge pair of the standard orientable octagon: at parameter `t` on edge `e`, paired with
+parameter `t'` on edge `e + 2`, where `t' = 1 - t`. -/
+theorem t99J02_q2_one_neg_one_aux_rel (j e : ℕ) (hj : j < 2)
+    (he : e = 4 * j ∨ e = 4 * j + 1) (t t' : Set.Icc (0 : ℝ) 1)
+    (ht : (t' : ℝ) = 1 - t.1) :
+    Relation.EqvGen (SurfaceRel true 2) (edgePoint 8 e t) (edgePoint 8 (e + 2) t') := by
+  refine Relation.EqvGen.rel _ _ ⟨j, hj, t, ?_⟩
+  rcases he with h | h
+  · subst h
+    refine Or.inl ⟨rfl, ?_⟩
+    apply Subtype.ext
+    simp only [edgePoint]
+    rw [ht]
+  · subst h
+    refine Or.inr ⟨rfl, ?_⟩
+    apply Subtype.ext
+    simp only [edgePoint]
+    rw [ht]
+
+/-- The end of one edge is the start of the next. -/
+theorem t99J02_q2_one_neg_one_aux_wrap (e : ℕ) :
+    edgePoint 8 e ⟨1, by norm_num⟩ = edgePoint 8 (e + 1) ⟨0, by norm_num⟩ := by
+  apply Subtype.ext
+  rw [t99J02_q2_one_neg_one_aux_val, t99J02_q2_one_neg_one_aux_val]
+  congr 1
+  try norm_num
+  try ring
+
+/-- The vertex chain `v₀ ~ v₃ ~ v₂ ~ v₁ ~ v₄` of the standard octagon. -/
+theorem t99J02_q2_one_neg_one_aux_chain :
+    Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 0 ⟨0, by norm_num⟩) (edgePoint 8 4 ⟨0, by norm_num⟩) := by
+  have s1 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 0 ⟨0, by norm_num⟩) (edgePoint 8 3 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (t99J02_q2_one_neg_one_aux_rel 0 0 (by norm_num) (Or.inl rfl)
+        ⟨0, by norm_num⟩ ⟨1, by norm_num⟩ (by norm_num))
+      (t99J02_q2_one_neg_one_aux_wrap 2)
+  have s2 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 3 ⟨0, by norm_num⟩) (edgePoint 8 2 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (Relation.EqvGen.symm _ _
+        (t99J02_q2_one_neg_one_aux_rel 0 1 (by norm_num) (Or.inr rfl)
+          ⟨1, by norm_num⟩ ⟨0, by norm_num⟩ (by norm_num)))
+      (t99J02_q2_one_neg_one_aux_wrap 1)
+  have s3 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 2 ⟨0, by norm_num⟩) (edgePoint 8 1 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (Relation.EqvGen.symm _ _
+        (t99J02_q2_one_neg_one_aux_rel 0 0 (by norm_num) (Or.inl rfl)
+          ⟨1, by norm_num⟩ ⟨0, by norm_num⟩ (by norm_num)))
+      (t99J02_q2_one_neg_one_aux_wrap 0)
+  have s4 : Relation.EqvGen (SurfaceRel true 2)
+      (edgePoint 8 1 ⟨0, by norm_num⟩) (edgePoint 8 4 ⟨0, by norm_num⟩) :=
+    t99J02_q2_one_neg_one_aux_of_eq
+      (t99J02_q2_one_neg_one_aux_rel 0 1 (by norm_num) (Or.inr rfl)
+        ⟨0, by norm_num⟩ ⟨1, by norm_num⟩ (by norm_num))
+      (t99J02_q2_one_neg_one_aux_wrap 3)
+  exact Relation.EqvGen.trans _ _ _ s1
+    (Relation.EqvGen.trans _ _ _ s2 (Relation.EqvGen.trans _ _ _ s3 s4))
+
 theorem t99J02_q2_one_neg_one (h1 : (1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1)
     (h2 : (-1 : ℂ) ∈ Metric.closedBall (0 : ℂ) 1) :
     surfaceQuotient true 2 ⟨1, h1⟩ = surfaceQuotient true 2 ⟨-1, h2⟩ := by
-  sorry
+  have hv1 : ((edgePoint 8 0 ⟨0, by norm_num⟩ :
+      ConstructionTargets.Surfaces.Disk) : ℂ) = 1 := by
+    rw [t99J02_q2_one_neg_one_aux_val]
+    simp
+  have hv4 : ((edgePoint 8 4 ⟨0, by norm_num⟩ :
+      ConstructionTargets.Surfaces.Disk) : ℂ) = -1 := by
+    rw [t99J02_q2_one_neg_one_aux_val]
+    have h4 : (((4 : ℕ) : ℝ) : ℂ) = 4 := by exact_mod_cast rfl
+    have h0 : ((⟨0, by norm_num⟩ : Set.Icc (0 : ℝ) 1) : ℂ) = 0 := by
+      exact_mod_cast rfl
+    have hpi : ((2 : ℂ) * (Real.pi : ℂ) * (4 + 0) / 8) = Real.pi := by
+      field_simp
+      norm_num
+    rw [h4, h0, hpi, mul_comm Complex.I (Real.pi : ℂ), Complex.exp_mul_I]
+    norm_num [Complex.cos_pi, Complex.sin_pi]
+  have e1 : edgePoint 8 0 ⟨0, by norm_num⟩ = ⟨1, h1⟩ := Subtype.ext hv1
+  have e4 : edgePoint 8 4 ⟨0, by norm_num⟩ = ⟨-1, h2⟩ := Subtype.ext hv4
+  rw [← e1, ← e4]
+  exact Quotient.sound t99J02_q2_one_neg_one_aux_chain
+
 
 /-- Identifications of the torus lift to the upper arc of the octagon. Induct on the `EqvGen`, with
 `P x y := x = y ∨ (both on the circle and the statement holds)`. A generator is an edge pair of
@@ -673,7 +1060,59 @@ theorem t99J02_mk_eq (p p' : Sum c₁.Punctured c₂.Punctured)
     (h : t99J02_mk c₁ c₂ p = t99J02_mk c₁ c₂ p') :
     p = p' ∨ (∃ s, p = Sum.inl (c₁.boundaryMap s) ∧ p' = Sum.inr (c₂.boundaryMap s)) ∨
       (∃ s, p = Sum.inr (c₂.boundaryMap s) ∧ p' = Sum.inl (c₁.boundaryMap s)) := by
-  sorry
+  let R : Sum c₁.Punctured c₂.Punctured → Sum c₁.Punctured c₂.Punctured → Prop :=
+    fun p p' =>
+      p = p' ∨ (∃ s, p = Sum.inl (c₁.boundaryMap s) ∧
+        p' = Sum.inr (c₂.boundaryMap s)) ∨
+        (∃ s, p = Sum.inr (c₂.boundaryMap s) ∧
+          p' = Sum.inl (c₁.boundaryMap s))
+  have boundary_injective (c : BallCollar 2 M₁) : Function.Injective c.boundaryMap := by
+    intro s t hst
+    have hsmall : sphereToDisk 2 s = sphereToDisk 2 t :=
+      c.smallEmbedding.injective (congrArg Subtype.val hst)
+    apply Subtype.ext
+    exact congrArg (fun x : Disk 2 1 => x.1) hsmall
+  have boundary_injective₂ : Function.Injective c₂.boundaryMap := by
+    intro s t hst
+    have hsmall : sphereToDisk 2 s = sphereToDisk 2 t :=
+      c₂.smallEmbedding.injective (congrArg Subtype.val hst)
+    apply Subtype.ext
+    exact congrArg (fun x : Disk 2 1 => x.1) hsmall
+  have hR : Equivalence R := by
+    refine ⟨?_, ?_, ?_⟩
+    · intro x
+      exact Or.inl rfl
+    · intro x y hxy
+      rcases hxy with hxy | ⟨s, rfl, rfl⟩ | ⟨s, rfl, rfl⟩
+      · exact Or.inl hxy.symm
+      · exact Or.inr (Or.inr ⟨s, rfl, rfl⟩)
+      · exact Or.inr (Or.inl ⟨s, rfl, rfl⟩)
+    · intro x y z hxy hyz
+      rcases hxy with rfl | ⟨s, rfl, rfl⟩ | ⟨s, rfl, rfl⟩
+      · exact hyz
+      · rcases hyz with hyz | ⟨t, ht, _⟩ | ⟨t, ht, rfl⟩
+        · subst z
+          exact Or.inr (Or.inl ⟨s, rfl, rfl⟩)
+        · cases ht
+        · have hst : s = t := boundary_injective₂ (Sum.inr.inj ht)
+          subst t
+          exact Or.inl rfl
+      · rcases hyz with hyz | ⟨t, ht, rfl⟩ | ⟨t, ht, _⟩
+        · subst z
+          exact Or.inr (Or.inr ⟨s, rfl, rfl⟩)
+        · have hst : s = t := boundary_injective c₁ (Sum.inl.inj ht)
+          subst t
+          exact Or.inl rfl
+        · cases ht
+  apply (hR.eqvGen_iff).mp
+  apply Relation.EqvGen.mono (r := GlueRel c₁ c₂)
+  · intro a b hab
+    cases hab with
+    | boundary s => exact Or.inr (Or.inl ⟨s, rfl, rfl⟩)
+  · change
+      Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) p =
+        Quotient.mk (Relation.EqvGen.setoid (GlueRel c₁ c₂)) p' at h
+    exact Quotient.exact h
 
 /-- A subset of the connected sum is closed when both pullbacks are. -/
 theorem t99J02_isClosed_of (A : Set (ConnectedSum c₁ c₂))
