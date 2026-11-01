@@ -3430,4 +3430,36 @@ theorem manifold_local_critical_image_null
         (mfderiv I (modelWithCornersSelf ℝ V) g z)} ∩ U)) = 0 := by
   sorry
 
+/-- Almost every value is regular, for an inner-product target. Critical points are covered by
+the open sets of `manifold_local_critical_image_null`; second countability gives a countable
+subcover (`TopologicalSpace.isOpen_iUnion_countable` or `Set.Lindelof`), so the critical image is
+null, and `ae_iff` finishes. -/
+theorem manifold_ae_regularValue_innerProduct
+    {E H X V : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+    [TopologicalSpace H] [TopologicalSpace X] [SecondCountableTopology X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X] [IsManifold I ∞ X]
+    [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+    [MeasurableSpace V] [BorelSpace V]
+    (mu : Measure V) [mu.IsAddHaarMeasure] (g : X → V)
+    (hg : ContMDiff I (modelWithCornersSelf ℝ V) ∞ g) :
+    ∀ᵐ y ∂mu, ∀ x, g x = y →
+      Function.Surjective (mfderiv I (modelWithCornersSelf ℝ V) g x) := by
+  sorry
+
+/-- The same for a finite-dimensional normed target, such as `Fin 2 → ℝ` with the sup norm. Compose
+with a continuous linear equivalence to `EuclideanSpace`. Its map of a Haar measure is Haar
+(`ContinuousLinearEquiv.isAddHaarMeasure_map`), `mfderiv_comp` with the linear map's derivative
+identifies the surjectivity of the two derivatives, and null sets transfer. -/
+theorem manifold_ae_regularValue
+    {E H X V : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+    [TopologicalSpace H] [TopologicalSpace X] [SecondCountableTopology X]
+    (I : ModelWithCorners ℝ E H) [ChartedSpace H X] [IsManifold I ∞ X]
+    [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
+    [MeasurableSpace V] [BorelSpace V]
+    (mu : Measure V) [mu.IsAddHaarMeasure] (g : X → V)
+    (hg : ContMDiff I (modelWithCornersSelf ℝ V) ∞ g) :
+    ∀ᵐ y ∂mu, ∀ x, g x = y →
+      Function.Surjective (mfderiv I (modelWithCornersSelf ℝ V) g x) := by
+  sorry
+
 end ConstructionTargets.SardWhitneyExtension
