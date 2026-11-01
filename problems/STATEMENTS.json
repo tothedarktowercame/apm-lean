@@ -1904,6 +1904,24 @@
    "rev": "9e235e00e",
    "approved_at": "2026-10-24T21:59:23Z"
   },
+  "a98J03": {
+   "decls": [
+    "apm_a98j03"
+   ],
+   "sha256": "a6e33cf84bb1e4cd48c5879f42c5cef037d9eed04a9252f3c1665e2aaca2ce70",
+   "defs": [
+    "poissonConvC",
+    "poissonKernel",
+    "poissonLpC",
+    "poissonOperatorC"
+   ],
+   "grade": "narrower",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": "problems/a98J03/PRELIM-DEFECT.md",
+   "rev": "8b5dd99ef",
+   "approved_at": "2026-11-01T21:23:20Z"
+  },
   "a98J04": {
    "decls": [
     "apm_a98j04"
