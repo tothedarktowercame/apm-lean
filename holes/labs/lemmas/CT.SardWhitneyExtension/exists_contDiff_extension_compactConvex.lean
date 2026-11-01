@@ -3229,7 +3229,61 @@ theorem exists_contDiff_extension_compactConvex
     (hf : ContDiffOn ℝ (m + 1) f K) :
     ∃ F' : E → F, ContDiff ℝ m F' ∧ Set.EqOn F' f K ∧
       ∀ x ∈ K, fderiv ℝ F' x = fderivWithin ℝ f K x := by
-  sorry
+  classical
+  have hKn : K.Nonempty := hKi.mono interior_subset
+  let P : WhitneySmoothPartition E K :=
+    Classical.choice (exists_whitneySmoothPartition E hKc.isClosed hKn)
+  let W : E → F := whitneyOffExtension m f hKc.isClosed hKn P
+  let F' : E → F := K.piecewise f W
+  obtain ⟨hjet, hzeroJet, hone, hsym⟩ := convexWithinJet_nat hK hKi hf
+  have hdiff := taylor_difference_bound hKc hK hKi hf
+  have hbound := whitneyOffExtension_jet_bound hKc hK hKi hf P
+  have hWo : ContDiffOn ℝ m W Kᶜ := by
+    exact whitneyOffExtension_contDiffOn_compl hKc.isClosed hKn P
+  have hF'off : Set.EqOn F' W Kᶜ := by
+    intro x hx
+    exact Set.piecewise_eq_of_notMem _ _ _ hx
+  have hF'on : Set.EqOn F' f K := by
+    intro x hx
+    simp [F', hx]
+  have hF'o : ContDiffOn ℝ m F' Kᶜ := hWo.congr hF'off
+  have hzero : ∀ x, (gluedWhitneyJet K f F' x 0).curry0 = F' x := by
+    intro x
+    by_cases hx : x ∈ K
+    · simp only [gluedWhitneyJet, hx, if_pos]
+      rw [hF'on hx, ← hzeroJet x hx]
+      rfl
+    · simp only [gluedWhitneyJet, if_neg hx, ContinuousMultilinearMap.curry0_apply]
+      exact iteratedFDeriv_zero_apply (0 : Fin 0 → E)
+  have hbound' : ∀ k ≤ m, ∃ C ≥ 0, ∀ x ∉ K,
+      ∃ a ∈ K, Metric.infDist x K = dist x a ∧
+        ‖iteratedFDeriv ℝ k F' x - iteratedFDeriv ℝ k
+            (taylorPolynomial m (fun j ↦ convexJet j f K) a) x‖ ≤
+          C * (Metric.infDist x K) ^ (m + 1 - k) := by
+    intro k hk
+    obtain ⟨C, hC, hCb⟩ := hbound
+    refine ⟨C, hC, fun x hx ↦ ?_⟩
+    obtain ⟨a, ha, hdist, ha_bound⟩ := hCb k hk x hx
+    refine ⟨a, ha, hdist, ?_⟩
+    have heq : F' =ᶠ[nhds x] W := by
+      filter_upwards [hKc.isClosed.isOpen_compl.mem_nhds hx] with y hy
+      exact hF'off hy
+    rw [(heq.iteratedFDeriv ℝ k).eq_of_nhds]
+    exact ha_bound
+  have hjet' : ∀ k ≤ m, ContinuousOn (convexJet k f K) K :=
+    fun k hk ↦ hjet k (by omega)
+  have hcont := continuous_gluedWhitneyJet hKc.isClosed hKn hF'o hjet'
+    (fun r hr x hx σ ↦ hsym r (by omega) x hx σ) hdiff hbound'
+  have hderiv : ∀ k < m, ∀ x, HasFDerivAt (fun y ↦ gluedWhitneyJet K f F' y k)
+      (gluedWhitneyJet K f F' x (k + 1)).curryLeft x := by
+    intro k hk x
+    by_cases hx : x ∈ K
+    · exact hasFDerivAt_gluedWhitneyJet_of_mem hKc.isClosed hKn hx hk hjet'
+        (fun r hr y hy σ ↦ hsym r (by omega) y hy σ) hdiff hbound'
+    · exact hasFDerivAt_gluedWhitneyJet_of_not_mem hKc.isClosed hx hk hF'o
+  have hT := hasFTaylorSeriesUpTo_gluedWhitneyJet hzero hcont hderiv
+  obtain ⟨hF'diff, hF'deriv⟩ := contDiff_and_fderiv_eq_of_gluedTaylorSeries hm hone hT
+  exact ⟨F', hF'diff, hF'on, hF'deriv⟩
 -- END SEAT AREA
 
 /-- Intersecting a closed convex set with a sufficiently large closed ball about an interior
