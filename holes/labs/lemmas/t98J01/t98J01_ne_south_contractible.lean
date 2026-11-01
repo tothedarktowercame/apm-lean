@@ -880,7 +880,14 @@ theorem t98J01_complexLefschetz_sum_eq
 theorem t98J01_homologyMap_g_zero_surjective
     {S : ShortComplex (ChainComplex (ModuleCat ℚ) ℕ)} (hS : S.ShortExact) :
     Function.Surjective (HomologicalComplex.homologyMap S.g 0).hom := by
-  sorry
+  letI : Epi S.g := hS.epi_g
+  letI : Epi (S.g.f 0) := inferInstance
+  letI : Epi (HomologicalComplex.homologyMap S.g 0) := by
+    apply HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+    intro j hj
+    dsimp at hj
+    omega
+  exact (ModuleCat.epi_iff_surjective _).mp inferInstance
 
 /-- Seat: additivity of the Lefschetz number on a short exact sequence. Use `hS.homology_exact₁/₂/₃`, `HomologicalComplex.HomologySequence.δ_naturality`, then `t98J01_trace_longExact` with `A = X₁.homology`, `B = X₂.homology`, `C = X₃.homology`, `N = max b₂ (b₁ + 1)`. `H_k(X₃)` is finite-dimensional because it sits between `H_k(X₂)` and `H_{k-1}(X₁)`. Zero `H₀` tail: `t98J01_homologyMap_g_zero_surjective`. Sums to `N`: `t98J01_complexLefschetz_sum_eq`. -/
 theorem t98J01_complexLefschetz_shortExact
