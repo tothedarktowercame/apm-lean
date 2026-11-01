@@ -482,7 +482,42 @@ theorem whitneyOffExtension_contDiffOn_compl
     {K : Set E} {m : ℕ} {f : E → F} (hK : IsClosed K) (hKn : K.Nonempty)
     (P : WhitneySmoothPartition E K) :
     ContDiffOn ℝ m (whitneyOffExtension m f hK hKn P) Kᶜ := by
-  sorry
+  intro x hx
+  rcases P.locallyFinite_compl x hx with ⟨U, hU, hfin⟩
+  let S : Finset (SardConvexDomain.WhitneyNetIndex K) := hfin.toFinset
+  have hzero : ∀ y ∈ U, ∀ i ∉ S, P.phi i y = 0 := by
+    intro y hy i hi
+    by_contra hne
+    have hys : y ∈ Function.support (P.phi i) := hne
+    have hi' : i ∈ {i | (U ∩ Function.support (P.phi i)).Nonempty} := by
+      exact ⟨y, hy, hys⟩
+    exact hi (by simpa [S] using hi')
+  have heq : ∀ y ∈ U,
+      whitneyOffExtension m f hK hKn P y =
+        ∑ i ∈ S, P.phi i y • taylorPolynomial m (fun k ↦ convexJet k f K)
+          (SardConvexDomain.whitneyNetAnchor hK hKn i) y := by
+    intro y hy
+    unfold whitneyOffExtension
+    exact tsum_eq_sum (fun i hi ↦ by simp [hzero y hy i hi])
+  have hsmooth : ContDiff ℝ m (fun y : E ↦
+      ∑ i ∈ S, P.phi i y • taylorPolynomial m (fun k ↦ convexJet k f K)
+        (SardConvexDomain.whitneyNetAnchor hK hKn i) y) := by
+    apply ContDiff.sum
+    intro i hi
+    apply (P.contDiff_phi i).of_le
+      (by exact_mod_cast (show (m : ℕ∞) ≤ ⊤ from le_top)) |>.smul
+    unfold taylorPolynomial
+    apply ContDiff.sum
+    intro k hk
+    apply contDiff_const.smul
+    exact (ContinuousMultilinearMap.contDiff _).comp
+      (contDiff_pi.2 fun _ ↦ contDiff_id.sub contDiff_const)
+  apply hsmooth.contDiffAt.contDiffWithinAt.congr_of_eventuallyEq
+  · have hUw : ∀ᶠ y in nhdsWithin x Kᶜ, y ∈ U :=
+      Filter.Eventually.filter_mono inf_le_left hU
+    filter_upwards [hUw] with y hy
+    exact heq y hy
+  · exact heq x (mem_of_mem_nhds hU)
 
 /-- The exact subtraction identity behind the off-set estimate.  Replace `1` by the locally
 finite sum of the partition and distribute the common polynomial; no differentiated
