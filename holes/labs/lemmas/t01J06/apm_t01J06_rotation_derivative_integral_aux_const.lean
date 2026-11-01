@@ -509,7 +509,23 @@ lemma apm_t01J06_rotation_derivative_integral_aux_hasDeriv (k : Fin 3)
 theorem apm_t01J06_rotation_derivative_integral_aux_hasDeriv_all (k : Fin 3) (x : apm_t01J06_E3) (t : ℝ) :
     HasDerivAt (fun s : ℝ ↦ apm_t01J06_rotation_derivative_integral_aux_rot k s x)
       (apm_t01J06_rotField k (apm_t01J06_rotation_derivative_integral_aux_rot k t x)) t := by
-  sorry
+  have hshift : HasDerivAt (fun s : ℝ ↦ s - t) 1 t :=
+    (hasDerivAt_id t).sub_const t
+  have hbase : HasDerivAt
+      (fun u : ℝ ↦ apm_t01J06_rotation_derivative_integral_aux_rot k u
+        (apm_t01J06_rotation_derivative_integral_aux_rot k t x))
+      (apm_t01J06_rotField k (apm_t01J06_rotation_derivative_integral_aux_rot k t x))
+      ((fun s : ℝ ↦ s - t) t) := by
+    simpa using apm_t01J06_rotation_derivative_integral_aux_hasDeriv k
+      (apm_t01J06_rotation_derivative_integral_aux_rot k t x)
+  have h := hbase.scomp (h := fun s : ℝ ↦ s - t) t hshift
+  convert h using 1
+  funext s
+  simp only [Function.comp_apply]
+  rw [apm_t01J06_rotation_derivative_integral_aux_rot_add]
+  congr 2
+  ring
+  simp
 
 /-- Seat: rotation invariance of the integral. Build the isometry equivalence of the sphere from `_aux_rot`,
 `_aux_rot_neg`, `_aux_norm` and `_aux_isometry` (a `LinearIsometryEquiv` needs linearity, available coordinatewise), then
