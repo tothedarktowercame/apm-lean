@@ -1623,9 +1623,61 @@ theorem t98J01_pos_contractible :
 
 /-- Seat: as `t98J01_pos_contractible` with `y ↦ (-√(1 - y²), y)`, or conjugate by `T98J01.reflection`. -/
 -- BEGIN SEAT AREA
+private def t98J01_neg_contractible_aux_homeomorph :
+    ↥({q | q.1.1 < 0} : Set T98J01.S1) ≃ₜ Set.Ioo (-1 : ℝ) 1 where
+  toFun q := ⟨q.1.1.2, by
+    have hs : q.1.1.1 ^ 2 + q.1.1.2 ^ 2 = 1 := q.1.property
+    have hx : q.1.1.1 < 0 := q.2
+    show -1 < q.1.1.2 ∧ q.1.1.2 < 1
+    constructor <;> nlinarith⟩
+  invFun t := ⟨⟨(-Real.sqrt (1 - (t : ℝ) ^ 2), t), by
+    have ht1 : -1 < (t : ℝ) := t.2.1
+    have ht2 : (t : ℝ) < 1 := t.2.2
+    have h1 : 0 < 1 - (t : ℝ) ^ 2 := by nlinarith [ht1, ht2]
+    have h2 : Real.sqrt (1 - (t : ℝ) ^ 2) ^ 2 = 1 - (t : ℝ) ^ 2 :=
+      Real.sq_sqrt (by linarith)
+    show (-Real.sqrt (1 - (t : ℝ) ^ 2)) ^ 2 + (t : ℝ) ^ 2 = 1
+    rw [neg_sq, h2]; ring⟩, by
+    have ht1 : -1 < (t : ℝ) := t.2.1
+    have ht2 : (t : ℝ) < 1 := t.2.2
+    have h1 : 0 < 1 - (t : ℝ) ^ 2 := by nlinarith [ht1, ht2]
+    have h3 : 0 < Real.sqrt (1 - (t : ℝ) ^ 2) := Real.sqrt_pos.mpr h1
+    show (-Real.sqrt (1 - (t : ℝ) ^ 2)) < 0
+    exact neg_lt_zero.mpr h3⟩
+  left_inv q := by
+    have hs : q.1.1.1 ^ 2 + q.1.1.2 ^ 2 = 1 := q.1.property
+    have hx : q.1.1.1 < 0 := q.2
+    have hsq : (-q.1.1.1) * (-q.1.1.1) = 1 - q.1.1.2 ^ 2 := by linear_combination hs
+    have hs0 : 0 ≤ -q.1.1.1 := by linarith [hx]
+    have hrw : Real.sqrt (1 - q.1.1.2 ^ 2) = -q.1.1.1 := by
+      rw [Real.sqrt_eq_iff_mul_self_eq (by nlinarith [hs, hx]) hs0]
+      exact hsq.symm
+    apply Subtype.ext
+    apply Subtype.ext
+    dsimp only
+    rw [hrw]
+    ext <;> first
+      | ring
+      | linarith [hs]
+      | linear_combination (-2 : ℝ) * hs
+  right_inv t := by
+    apply Subtype.ext
+    rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    apply Continuous.subtype_mk
+    have h1 : Continuous fun t : ↥(Set.Ioo (-1 : ℝ) 1) => 1 - (t : ℝ) ^ 2 :=
+      continuous_const.sub ((continuous_id.comp continuous_subtype_val).pow 2)
+    exact ((Real.continuous_sqrt.comp h1).neg.prodMk continuous_subtype_val)
+
 theorem t98J01_neg_contractible :
     ContractibleSpace ↥({q | q.1.1 < 0} : Set T98J01.S1) := by
-  sorry
+  letI : ContractibleSpace (Set.Ioo (-1 : ℝ) 1) :=
+    (convex_Ioo (-1 : ℝ) (1 : ℝ)).contractibleSpace ⟨0, by norm_num⟩
+  exact t98J01_neg_contractible_aux_homeomorph.contractibleSpace
 -- END SEAT AREA
 
 /-- Seat: over a contractible subset of the circle, projection to `X` is a homotopy equivalence. Build `↥{z | z.2 ∈ T} ≃ₜ X × T`, then `X × T ≃ₕ X × Unit ≃ₜ X` via `ContinuousMap.HomotopyEquiv.prodCongr` and `contractible_iff_homotopyEquiv_punit`-style equivalence (`ConstructionTargets/SphereProductPoleOpenCover.lean` lines 90-103 is a template). Prove the formula for `e.toFun` by composing explicitly; if the composite is awkward, construct the equivalence directly with `toFun := fun z => z.1.1`, `invFun := fun x => ⟨(x, c), _⟩` for the contraction point `c`. -/
