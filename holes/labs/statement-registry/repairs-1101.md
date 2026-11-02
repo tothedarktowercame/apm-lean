@@ -127,3 +127,7 @@ Compiled on the lemmas worktree: 0 errors, no sorry, apm_m96j05 axioms propext, 
 ## a96A04
 
 Compiled on the lemmas worktree: 0 errors, no sorry, apm_a96a04 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, given code, problem and defect note, strict standard: faithful, drops nothing. All three clauses for complex f in L2(R^n), every n, kernel (4 pi t)^(-n/2) exp(-|x-y|^2/4t), C-infinity not analytic, limit along a fresh variable at 0+. The only printed defect is the typo L^2(R) for L^2(R^n), as clause (b)'s own norm shows; grader also corrected the earlier defect note, which overstated the wrapped prefactor and (x-y)^2.
+
+## m95A04
+
+Compiled on the lemmas worktree: 0 errors, no sorry, apm_m95a04 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, strict standard: first grade narrower (real scalars in parts d, f and complex a.e. uniqueness missing); after adding complex twins (regularC a.e. uniqueness, DdistC non-injective, injectivity on complex test functions, complex Sobolev graph WC with printed norm and completeness, complex lambda in part e), second grade faithful with no defects. Range 1 <= p < infinity is the printed norm's range. Typos: bet, equiped, u/Du for w/Dw.

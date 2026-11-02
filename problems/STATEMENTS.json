@@ -4290,6 +4290,56 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
+  "m95A04": {
+   "decls": [
+    "apm_m95a04"
+   ],
+   "sha256": "4d1a71a4925f9cf74f8f3251316973f1b90fc8d09443602046edd61987cf6731",
+   "defs": [
+    "apm_m95A04_Ddist",
+    "apm_m95A04_DdistC",
+    "apm_m95A04_Dist",
+    "apm_m95A04_DistC",
+    "apm_m95A04_Dtest",
+    "apm_m95A04_DtestCLM",
+    "apm_m95A04_I",
+    "apm_m95A04_LpI",
+    "apm_m95A04_LpIC",
+    "apm_m95A04_Test",
+    "apm_m95A04_TestC",
+    "apm_m95A04_W",
+    "apm_m95A04_WC",
+    "apm_m95A04_WC_deriv",
+    "apm_m95A04_WC_val",
+    "apm_m95A04_W_deriv",
+    "apm_m95A04_W_val",
+    "apm_m95A04_absDist",
+    "apm_m95A04_bcfPairing",
+    "apm_m95A04_bcfPairingLM",
+    "apm_m95A04_causal",
+    "apm_m95A04_causalC",
+    "apm_m95A04_causalKer",
+    "apm_m95A04_causalKerC",
+    "apm_m95A04_dirac",
+    "apm_m95A04_diracC",
+    "apm_m95A04_distOfReal",
+    "apm_m95A04_graphSubmodule",
+    "apm_m95A04_graphSubmoduleC",
+    "apm_m95A04_regular",
+    "apm_m95A04_regularC",
+    "apm_m95A04_regularOfLI",
+    "apm_m95A04_signDist",
+    "apm_m95A04_weakDeriv",
+    "apm_m95A04_weakDerivC",
+    "apm_m95A04_Ω"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": null,
+   "rev": "517644993",
+   "approved_at": "2026-11-02T02:10:25Z"
+  },
   "m95A05": {
    "decls": [
     "apm_m95a05"

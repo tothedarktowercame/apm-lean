@@ -17,12 +17,18 @@ space. The latter is therefore encoded honestly as a normed space equipped
 with value and weak-derivative maps onto the exact closed distributional
 derivative graph in `Lᵖ × Lᵖ`; its norm is pinned to the displayed p-sum norm.
 No part is replaced by pointwise differentiability.
+
+The problem does not fix the scalars, so `apm_m95a04` states each part over `ℝ` and
+over `ℂ`.  Mathlib's `𝓓'(Ω, ℂ)` consists of `ℂ`-valued maps on real test functions; the
+complex Sobolev graph `apm_m95A04_WC` is tested against the same real test functions,
+which give the same relation as complex ones by linearity.
 -/
 
 noncomputable section
 
 open MeasureTheory Set
-open scoped Distributions SchwartzMap
+open Classical
+open scoped Distributions SchwartzMap BoundedContinuousFunction
 
 abbrev apm_m95A04_Ω : TopologicalSpace.Opens ℝ := ⊤
 abbrev apm_m95A04_Test := 𝓓(apm_m95A04_Ω, ℝ)
@@ -641,7 +647,180 @@ lemma apm_m95A04_exists_uniform_graphEquiv
         linarith
   exact ⟨e, (hanti.isUniformInducing hlip.uniformContinuous).isUniformEmbedding⟩
 
-theorem apm_m95a04
+/-! ### Concrete constructions (statement repair)
+
+The original theorem took the regular-distribution embedding, both derivative
+operators, the named distributions, and the Sobolev space as hypotheses.
+Everything is constructed concretely below, on the whole real line using
+Mathlib's `𝓓(Ω, ℝ)`/`𝓓'(Ω, ℝ)`. The convention `1 ≤ p < ∞` is necessary:
+the displayed `p`-sum expression is a norm and `Lp` is Banach only in that
+range, so it is recorded here and in the main theorem's hypotheses. -/
+
+/-- Pairing with a Schwartz function as a CLM on `Lp([0,1])`. -/
+noncomputable def apm_m95A04_testPairingCLM (p : ENNReal) [Fact (1 ≤ p)]
+    (φ : 𝓢(ℝ, ℝ)) : apm_m95A04_LpI p →L[ℝ] ℝ :=
+  Classical.choose (apm_m95A04_exists_testPairing p φ)
+
+lemma apm_m95A04_testPairingCLM_apply (p : ENNReal) [Fact (1 ≤ p)]
+    (φ : 𝓢(ℝ, ℝ)) (u : apm_m95A04_LpI p) :
+    apm_m95A04_testPairingCLM p φ u = ∫ x : apm_m95A04_I, u x * φ x.1 :=
+  Classical.choose_spec (apm_m95A04_exists_testPairing p φ) u
+
+/-- The weak derivative relation in terms of the pairing CLMs. -/
+lemma apm_m95A04_weakDeriv_iff_pairing {p : ENNReal} [Fact (1 ≤ p)]
+    (u v : apm_m95A04_LpI p) :
+    apm_m95A04_weakDeriv u v ↔
+      ∀ (φ : 𝓢(ℝ, ℝ)), Function.support φ ⊆ Set.Ioo 0 1 →
+        apm_m95A04_testPairingCLM p φ v =
+          -apm_m95A04_testPairingCLM p (SchwartzMap.derivCLM ℝ ℝ φ) u := by
+  simp only [apm_m95A04_weakDeriv, ← apm_m95A04_testPairingCLM_apply]
+
+/-- The product of a locally integrable function with a test function is
+integrable. -/
+lemma apm_m95A04_integrable_mul_test {f : ℝ → ℝ} (hf : LocallyIntegrable f volume)
+    (φ : apm_m95A04_Test) : Integrable (fun x => f x * φ x) := by
+  have hs : IsCompact (tsupport (φ : ℝ → ℝ)) := φ.hasCompactSupport
+  have hbound : ∀ᵐ x ∂(volume.restrict (tsupport (φ : ℝ → ℝ))),
+      ‖(φ : ℝ → ℝ) x‖ ≤ ‖(φ : BoundedContinuousFunction ℝ ℝ)‖ :=
+    Filter.Eventually.of_forall fun x =>
+      (φ : BoundedContinuousFunction ℝ ℝ).norm_coe_le_norm x
+  have hOn : Integrable (fun x => (φ : ℝ → ℝ) x * f x)
+      (volume.restrict (tsupport (φ : ℝ → ℝ))) :=
+    (hf.integrableOn_isCompact hs).bdd_mul
+      ((map_continuous φ).aestronglyMeasurable.restrict) hbound
+  have hOn' : IntegrableOn (fun x => f x * φ x) (tsupport (φ : ℝ → ℝ)) volume :=
+    hOn.congr (Filter.Eventually.of_forall fun _ => mul_comm _ _)
+  have hsupp : Function.support (fun x => f x * (φ : ℝ → ℝ) x) ⊆
+      tsupport (φ : ℝ → ℝ) := by
+    intro x hx
+    rw [Function.mem_support] at hx
+    have h2 : (φ : ℝ → ℝ) x ≠ 0 := fun h => hx (by rw [h, mul_zero])
+    exact subset_closure h2
+  exact ((integrableOn_iff_integrable_of_support_subset hsupp).mp hOn')
+
+/-- Pairing against `f` over a set where `f` is integrable, as a linear map
+on bounded continuous functions. -/
+noncomputable def apm_m95A04_bcfPairingLM (f : ℝ → ℝ) (s : Set ℝ)
+    (hf : IntegrableOn f s volume) : (ℝ →ᵇ ℝ) →ₗ[ℝ] ℝ where
+  toFun := fun g => ∫ x in s, g x * f x
+  map_add' := by
+    intro g₁ g₂
+    have hb : ∀ g : ℝ →ᵇ ℝ, ∀ᵐ x ∂(volume.restrict s), ‖g x‖ ≤ ‖g‖ :=
+      fun g => Filter.Eventually.of_forall fun x => g.norm_coe_le_norm x
+    have h₁ : Integrable (fun x => g₁ x * f x) (volume.restrict s) :=
+      hf.bdd_mul (g₁.continuous.aestronglyMeasurable.restrict) (hb g₁)
+    have h₂ : Integrable (fun x => g₂ x * f x) (volume.restrict s) :=
+      hf.bdd_mul (g₂.continuous.aestronglyMeasurable.restrict) (hb g₂)
+    rw [← integral_add h₁ h₂]
+    apply integral_congr_ae
+    filter_upwards with x
+    rw [show (g₁ + g₂) x = g₁ x + g₂ x from rfl, add_mul]
+  map_smul' := by
+    intro c g
+    simp only [RingHom.id_apply, smul_eq_mul]
+    rw [show (fun x => (c • g) x * f x) = fun x => c * (g x * f x) from by
+      funext x
+      rw [show (c • g) x = c * g x from rfl]
+      ring]
+    rw [integral_const_mul]
+
+lemma apm_m95A04_bcfPairingLM_apply (f : ℝ → ℝ) (s : Set ℝ)
+    (hf : IntegrableOn f s volume) (g : ℝ →ᵇ ℝ) :
+    apm_m95A04_bcfPairingLM f s hf g = ∫ x in s, g x * f x :=
+  rfl
+
+/-- Pairing against `f` over a set where `f` is integrable, as a CLM on
+bounded continuous functions. -/
+noncomputable def apm_m95A04_bcfPairing (f : ℝ → ℝ) (s : Set ℝ)
+    (hf : IntegrableOn f s volume) : (ℝ →ᵇ ℝ) →L[ℝ] ℝ :=
+  (apm_m95A04_bcfPairingLM f s hf).mkContinuous (∫ x in s, ‖f x‖) (by
+    intro g
+    have hb : ∀ᵐ x ∂(volume.restrict s), ‖g x‖ ≤ ‖g‖ :=
+      Filter.Eventually.of_forall fun x => g.norm_coe_le_norm x
+    have hg_int : Integrable (fun x => g x * f x) (volume.restrict s) :=
+      hf.bdd_mul (g.continuous.aestronglyMeasurable.restrict) hb
+    show ‖∫ x in s, g x * f x‖ ≤ (∫ x in s, ‖f x‖) * ‖g‖
+    calc ‖∫ x in s, g x * f x‖
+        ≤ ∫ x in s, ‖g x * f x‖ := norm_integral_le_integral_norm _
+      _ ≤ ∫ x in s, ‖g‖ * ‖f x‖ := by
+          apply integral_mono_ae
+          · exact hg_int.norm
+          · exact hf.norm.const_mul _
+          · filter_upwards with x
+            rw [norm_mul]
+            exact mul_le_mul_of_nonneg_right
+              (g.norm_coe_le_norm x) (norm_nonneg _)
+      _ = (∫ x in s, ‖f x‖) * ‖g‖ := by
+          rw [integral_const_mul, mul_comm])
+
+lemma apm_m95A04_bcfPairing_apply (f : ℝ → ℝ) (s : Set ℝ)
+    (hf : IntegrableOn f s volume) (g : ℝ →ᵇ ℝ) :
+    apm_m95A04_bcfPairing f s hf g = ∫ x in s, g x * f x :=
+  LinearMap.mkContinuous_apply (apm_m95A04_bcfPairingLM f s hf) _ _ g
+
+/-- The regular distribution of a locally integrable function. -/
+noncomputable def apm_m95A04_regularOfLI (f : ℝ → ℝ)
+    (hf : LocallyIntegrable f volume) : apm_m95A04_Dist :=
+  TestFunction.mkCLM ℝ (fun φ => ∫ x : ℝ, f x * φ x)
+    (fun φ ψ => by
+      dsimp only
+      have h₁ := apm_m95A04_integrable_mul_test hf φ
+      have h₂ := apm_m95A04_integrable_mul_test hf ψ
+      rw [← integral_add h₁ h₂]
+      apply integral_congr_ae
+      filter_upwards with x
+      rw [show ((φ + ψ : apm_m95A04_Test) : ℝ → ℝ) x = φ x + ψ x from rfl, mul_add])
+    (fun c φ => by
+      dsimp only
+      simp only [smul_eq_mul]
+      rw [show (fun x => f x * ((c • φ : apm_m95A04_Test) : ℝ → ℝ) x) =
+          fun x => c * (f x * φ x) from by
+        funext x
+        rw [show ((c • φ : apm_m95A04_Test) : ℝ → ℝ) x = c * φ x from rfl]
+        ring]
+      rw [integral_const_mul])
+    (fun K K_sub => by
+      have hcont : Continuous (fun φ : 𝓓^{(⊤ : ℕ∞)}_{K}(ℝ, ℝ) =>
+          apm_m95A04_bcfPairing f (K : Set ℝ) (hf.integrableOn_isCompact K.2)
+            (ContDiffMapSupportedIn.toBoundedContinuousFunctionCLM ℝ φ)) :=
+        (apm_m95A04_bcfPairing f (K : Set ℝ)
+          (hf.integrableOn_isCompact K.2)).continuous.comp
+          (ContDiffMapSupportedIn.toBoundedContinuousFunctionCLM ℝ).continuous
+      convert hcont using 1
+      funext φ
+      simp only [Function.comp_apply, apm_m95A04_bcfPairing_apply]
+      have h1 : ((TestFunction.ofSupportedIn K_sub φ : apm_m95A04_Test) : ℝ → ℝ)
+          = (φ : ℝ → ℝ) := rfl
+      have h2 : ((ContDiffMapSupportedIn.toBoundedContinuousFunctionCLM ℝ φ :
+          ℝ →ᵇ ℝ) : ℝ → ℝ) = (φ : ℝ → ℝ) := rfl
+      rw [h1, h2]
+      rw [setIntegral_eq_integral_of_forall_compl_eq_zero
+        (s := (K : Set ℝ)) (f := fun x => (φ : ℝ → ℝ) x * f x)
+        (fun x hx => by
+          have h0 : (φ : ℝ → ℝ) x = 0 := φ.zero_on_compl (Set.mem_compl hx)
+          show (φ : ℝ → ℝ) x * f x = 0
+          rw [h0, zero_mul])]
+      apply integral_congr_ae
+      filter_upwards with x
+      rw [mul_comm])
+
+lemma apm_m95A04_regularOfLI_apply (f : ℝ → ℝ) (hf : LocallyIntegrable f volume)
+    (φ : apm_m95A04_Test) :
+    apm_m95A04_regularOfLI f hf φ = ∫ x : ℝ, f x * φ x :=
+  rfl
+
+/-- The regular-distribution embedding of all functions, extended by zero
+outside the locally integrable ones. -/
+noncomputable def apm_m95A04_regular (f : ℝ → ℝ) : apm_m95A04_Dist :=
+  if hf : LocallyIntegrable f volume then apm_m95A04_regularOfLI f hf else 0
+
+lemma apm_m95A04_regular_apply (f : ℝ → ℝ) (hf : LocallyIntegrable f volume)
+    (φ : apm_m95A04_Test) :
+    apm_m95A04_regular f φ = ∫ x : ℝ, f x * φ x := by
+  classical
+  rw [apm_m95A04_regular, dif_pos hf, apm_m95A04_regularOfLI_apply]
+
+theorem apm_m95a04_hypothesized
     (regular : (ℝ → ℝ) → apm_m95A04_Dist)
     (hregular : ∀ (f : ℝ → ℝ), LocallyIntegrable f volume →
       ∀ φ : apm_m95A04_Test,
@@ -738,3 +917,700 @@ theorem apm_m95a04
     wVal wDeriv hW_graph hW_exact hW_norm
   have hcomplete : CompleteSpace W := (completeSpace_congr he).mpr inferInstance
   exact ⟨hcomplete⟩
+
+/-! ### Concrete repair: derivative operators, named distributions, `W^{1,p}` -/
+
+/-- Differentiation as a continuous linear map on test functions, built from
+Mathlib's `TestFunction.fderivCLM` by postcomposition with evaluation at `1`. -/
+noncomputable def apm_m95A04_DtestCLM : apm_m95A04_Test →L[ℝ] apm_m95A04_Test :=
+  TestFunction.postcompCLM (ContinuousLinearMap.apply ℝ ℝ (1 : ℝ)) ∘L
+    TestFunction.fderivCLM ℝ (⊤ : ℕ∞) (⊤ : ℕ∞)
+
+lemma apm_m95A04_DtestCLM_apply (φ : apm_m95A04_Test) (x : ℝ) :
+    apm_m95A04_DtestCLM φ x = deriv (φ : ℝ → ℝ) x := by
+  show (TestFunction.fderivCLM ℝ (⊤ : ℕ∞) (⊤ : ℕ∞) φ : ℝ → ℝ →L[ℝ] ℝ) x 1 = _
+  have h2 : ((TestFunction.fderivCLM ℝ (⊤ : ℕ∞) (⊤ : ℕ∞) φ :
+      𝓓^{(⊤ : ℕ∞)}(apm_m95A04_Ω, ℝ →L[ℝ] ℝ)) : ℝ → ℝ →L[ℝ] ℝ)
+      = fderiv ℝ (φ : ℝ → ℝ) := by
+    rw [TestFunction.fderivCLM_apply, if_pos le_top]
+  rw [h2, fderiv_eq_smul_deriv]
+  simp
+
+/-- Differentiation as a linear map on test functions. -/
+noncomputable def apm_m95A04_Dtest : apm_m95A04_Test →ₗ[ℝ] apm_m95A04_Test :=
+  apm_m95A04_DtestCLM.toLinearMap
+
+lemma apm_m95A04_Dtest_apply (φ : apm_m95A04_Test) (x : ℝ) :
+    apm_m95A04_Dtest φ x = deriv (φ : ℝ → ℝ) x :=
+  apm_m95A04_DtestCLM_apply φ x
+
+/-- The distributional derivative `DT(φ) = -T(Dφ)`, as a continuous linear map
+on `𝓓'(ℝ)`, by precomposition with the test-function derivative. -/
+noncomputable def apm_m95A04_DdistCLM : apm_m95A04_Dist →L[ℝ] apm_m95A04_Dist :=
+  -(ContinuousLinearMap.precompUniformConvergenceCLM ℝ
+    {S : Set apm_m95A04_Test | IsCompact S} {S : Set apm_m95A04_Test | IsCompact S}
+    apm_m95A04_DtestCLM (fun S hS => hS.image apm_m95A04_DtestCLM.continuous))
+
+/-- The distributional derivative, as a linear map. -/
+noncomputable def apm_m95A04_Ddist : apm_m95A04_Dist →ₗ[ℝ] apm_m95A04_Dist :=
+  apm_m95A04_DdistCLM.toLinearMap
+
+lemma apm_m95A04_Ddist_apply (T : apm_m95A04_Dist) (φ : apm_m95A04_Test) :
+    apm_m95A04_Ddist T φ = -T (apm_m95A04_Dtest φ) :=
+  rfl
+
+/-- The Dirac distribution `δ(φ) = φ 0`. -/
+noncomputable def apm_m95A04_dirac : apm_m95A04_Dist :=
+  BoundedContinuousFunction.evalCLM ℝ (0 : ℝ) ∘L
+    TestFunction.toBoundedContinuousFunctionCLM ℝ
+
+lemma apm_m95A04_dirac_apply (φ : apm_m95A04_Test) :
+    apm_m95A04_dirac φ = φ 0 :=
+  rfl
+
+/-- The sign function is locally integrable. -/
+lemma apm_m95A04_sign_locallyIntegrable :
+    LocallyIntegrable (fun x : ℝ => (SignType.sign x : ℝ)) volume := by
+  intro x
+  refine ⟨Metric.closedBall x 1, Metric.closedBall_mem_nhds x one_pos, ?_⟩
+  have h1 : IntegrableOn (fun _ : ℝ => (1 : ℝ)) (Metric.closedBall x 1) volume :=
+    integrableOn_const (hs := (isCompact_closedBall x 1).measure_lt_top.ne)
+      (hC := by simp)
+  have hb : ∀ᵐ y ∂(volume.restrict (Metric.closedBall x 1)),
+      ‖(SignType.sign y : ℝ)‖ ≤ 1 :=
+    Filter.Eventually.of_forall fun y => by
+      rcases lt_trichotomy y 0 with hy | hy | hy
+      · simp [SignType.sign, hy, not_lt.mpr hy.le]
+      · subst y; norm_num [SignType.sign]
+      · norm_num [SignType.sign, hy]
+  exact (h1.bdd_mul apm_m95A04_sign_aestronglyMeasurable.restrict hb).congr
+    (Filter.Eventually.of_forall fun y => mul_one _)
+
+/-- The regular distribution of `|x|`. -/
+noncomputable def apm_m95A04_absDist : apm_m95A04_Dist :=
+  apm_m95A04_regular (fun x : ℝ => |x|)
+
+lemma apm_m95A04_absDist_apply (φ : apm_m95A04_Test) :
+    apm_m95A04_absDist φ = ∫ x : ℝ, |x| * φ x :=
+  apm_m95A04_regular_apply _ (continuous_abs.locallyIntegrable) φ
+
+/-- The regular distribution of the sign function. -/
+noncomputable def apm_m95A04_signDist : apm_m95A04_Dist :=
+  apm_m95A04_regular (fun x : ℝ => (SignType.sign x : ℝ))
+
+lemma apm_m95A04_signDist_apply (φ : apm_m95A04_Test) :
+    apm_m95A04_signDist φ = ∫ x : ℝ, (SignType.sign x : ℝ) * φ x :=
+  apm_m95A04_regular_apply _ apm_m95A04_sign_locallyIntegrable φ
+
+/-- The causal fundamental-solution kernel `x ↦ 𝟙_{x > 0} e^{-λ x}`. -/
+noncomputable def apm_m95A04_causalKer (lam : ℝ) : ℝ → ℝ :=
+  (Set.Ioi 0).indicator fun x => Real.exp (-lam * x)
+
+lemma apm_m95A04_causalKer_locallyIntegrable (lam : ℝ) :
+    LocallyIntegrable (apm_m95A04_causalKer lam) volume :=
+  (Real.continuous_exp.comp (continuous_const.mul continuous_id)).locallyIntegrable.indicator
+    measurableSet_Ioi
+
+/-- The causal distribution `φ ↦ ∫_{x > 0} e^{-λ x} φ(x) dx`. -/
+noncomputable def apm_m95A04_causal (lam : ℝ) : apm_m95A04_Dist :=
+  apm_m95A04_regular (apm_m95A04_causalKer lam)
+
+lemma apm_m95A04_causal_apply (lam : ℝ) (φ : apm_m95A04_Test) :
+    apm_m95A04_causal lam φ = ∫ x in Set.Ioi (0 : ℝ), Real.exp (-lam * x) * φ x := by
+  rw [apm_m95A04_causal,
+    apm_m95A04_regular_apply _ (apm_m95A04_causalKer_locallyIntegrable lam),
+    ← setIntegral_eq_integral_of_forall_compl_eq_zero
+      (s := Set.Ioi (0 : ℝ)) (f := fun x => apm_m95A04_causalKer lam x * φ x)
+      (fun x hx => by
+        show (Set.Ioi (0 : ℝ)).indicator (fun x => Real.exp (-lam * x)) x *
+            (φ : ℝ → ℝ) x = 0
+        rw [Set.indicator_of_notMem hx, zero_mul])]
+  apply setIntegral_congr_fun measurableSet_Ioi
+  intro x hx
+  show (Set.Ioi (0 : ℝ)).indicator (fun x => Real.exp (-lam * x)) x *
+      (φ : ℝ → ℝ) x = Real.exp (-lam * x) * (φ : ℝ → ℝ) x
+  rw [Set.indicator_of_mem hx]
+
+/-- The weak-derivative graph as a submodule of the `p`-sum product
+`WithLp p (Lp([0,1]) × Lp([0,1]))`. -/
+noncomputable def apm_m95A04_graphSubmodule (p : ENNReal) [Fact (1 ≤ p)] :
+    Submodule ℝ (WithLp p (apm_m95A04_LpI p × apm_m95A04_LpI p)) where
+  carrier := {z | apm_m95A04_weakDeriv z.fst z.snd}
+  zero_mem' := by
+    show apm_m95A04_weakDeriv (0 : apm_m95A04_LpI p) 0
+    rw [apm_m95A04_weakDeriv_iff_pairing]
+    intro φ hφ
+    simp
+  add_mem' := by
+    intro a b ha hb
+    have ha' : apm_m95A04_weakDeriv a.fst a.snd := ha
+    have hb' : apm_m95A04_weakDeriv b.fst b.snd := hb
+    show apm_m95A04_weakDeriv (a.fst + b.fst) (a.snd + b.snd)
+    rw [apm_m95A04_weakDeriv_iff_pairing] at ha' hb' ⊢
+    intro φ hφ
+    rw [map_add, map_add, ha' φ hφ, hb' φ hφ, neg_add]
+  smul_mem' := by
+    intro c z hz
+    have hz' : apm_m95A04_weakDeriv z.fst z.snd := hz
+    show apm_m95A04_weakDeriv (c • z.fst) (c • z.snd)
+    rw [apm_m95A04_weakDeriv_iff_pairing] at hz' ⊢
+    intro φ hφ
+    rw [map_smul, map_smul, hz' φ hφ, smul_neg]
+
+/-- The concrete Sobolev space `W^{1,p}(0,1)`: the weak-derivative graph,
+carrying the `p`-sum norm `‖w‖ = (‖u‖ₚ^p + ‖Du‖ₚ^p)^(1/p)`. -/
+abbrev apm_m95A04_W (p : ENNReal) [Fact (1 ≤ p)] := apm_m95A04_graphSubmodule p
+
+/-- The value coordinate `W^{1,p} → Lp`. -/
+noncomputable def apm_m95A04_W_val (p : ENNReal) [Fact (1 ≤ p)] :
+    apm_m95A04_W p →ₗ[ℝ] apm_m95A04_LpI p :=
+  (WithLp.fstₗ p ℝ (apm_m95A04_LpI p) (apm_m95A04_LpI p)).comp
+    (apm_m95A04_graphSubmodule p).subtype
+
+/-- The weak-derivative coordinate `W^{1,p} → Lp`. -/
+noncomputable def apm_m95A04_W_deriv (p : ENNReal) [Fact (1 ≤ p)] :
+    apm_m95A04_W p →ₗ[ℝ] apm_m95A04_LpI p :=
+  (WithLp.sndₗ p ℝ (apm_m95A04_LpI p) (apm_m95A04_LpI p)).comp
+    (apm_m95A04_graphSubmodule p).subtype
+
+/-- The weak-derivative graph is closed in the `p`-sum product. -/
+lemma apm_m95A04_graphSubmodule_isClosed (p : ENNReal) [Fact (1 ≤ p)] :
+    IsClosed (apm_m95A04_graphSubmodule p : Set
+      (WithLp p (apm_m95A04_LpI p × apm_m95A04_LpI p))) := by
+  have hchar : (apm_m95A04_graphSubmodule p : Set
+        (WithLp p (apm_m95A04_LpI p × apm_m95A04_LpI p))) =
+      ⋂ (φ : 𝓢(ℝ, ℝ)), ⋂ (_h : Function.support φ ⊆ Set.Ioo 0 1),
+        {z | apm_m95A04_testPairingCLM p φ z.snd =
+          -apm_m95A04_testPairingCLM p (SchwartzMap.derivCLM ℝ ℝ φ) z.fst} := by
+    ext z
+    simp only [SetLike.mem_coe, Set.mem_iInter, Set.mem_setOf_eq]
+    exact apm_m95A04_weakDeriv_iff_pairing z.fst z.snd
+  rw [hchar]
+  apply isClosed_iInter
+  intro φ
+  apply isClosed_iInter
+  intro hφ
+  apply isClosed_eq
+  · exact (apm_m95A04_testPairingCLM p φ).continuous.comp
+      (WithLp.sndL p ℝ (apm_m95A04_LpI p) (apm_m95A04_LpI p)).continuous
+  · exact continuous_neg.comp ((apm_m95A04_testPairingCLM p
+      (SchwartzMap.derivCLM ℝ ℝ φ)).continuous.comp
+      (WithLp.fstL p ℝ (apm_m95A04_LpI p) (apm_m95A04_LpI p)).continuous)
+
+/-- The norm on `W^{1,p}(0,1)` is the displayed `p`-sum norm. -/
+lemma apm_m95A04_W_norm (p : ENNReal) [Fact (1 ≤ p)] (hp_top : p ≠ ⊤)
+    (w : apm_m95A04_W p) :
+    ‖w‖ = (‖apm_m95A04_W_val p w‖ ^ p.toReal +
+      ‖apm_m95A04_W_deriv p w‖ ^ p.toReal) ^ (1 / p.toReal) := by
+  have hp0 : 0 < p.toReal :=
+    ENNReal.toReal_pos (ne_of_gt (lt_of_lt_of_le zero_lt_one (Fact.out : 1 ≤ p))) hp_top
+  show ‖(w : WithLp p (apm_m95A04_LpI p × apm_m95A04_LpI p))‖ = _
+  rw [WithLp.prod_norm_eq_add hp0,
+    show apm_m95A04_W_val p w =
+      (w : WithLp p (apm_m95A04_LpI p × apm_m95A04_LpI p)).fst from rfl,
+    show apm_m95A04_W_deriv p w =
+      (w : WithLp p (apm_m95A04_LpI p × apm_m95A04_LpI p)).snd from rfl]
+
+/-- `W^{1,p}(0,1)` is complete: a closed subspace of the complete `p`-sum
+product of `Lp([0,1])`. -/
+lemma apm_m95A04_W_completeSpace (p : ENNReal) [Fact (1 ≤ p)] :
+    Nonempty (CompleteSpace (apm_m95A04_W p)) :=
+  ⟨(apm_m95A04_graphSubmodule_isClosed p).completeSpace_coe⟩
+
+/-! ### The complex Sobolev graph -/
+
+abbrev apm_m95A04_LpIC (p : ENNReal) : Type :=
+  Lp ℂ p (volume : Measure apm_m95A04_I)
+
+/-- Integration against the restriction of a real Schwartz function is a
+continuous `ℂ`-linear functional on complex `Lᵖ([0,1])`, including `p=1`. -/
+lemma apm_m95A04_exists_testPairingC
+    (p : ENNReal) [Fact (1 ≤ p)] (φ : 𝓢(ℝ, ℝ)) :
+    ∃ L : apm_m95A04_LpIC p →L[ℂ] ℂ,
+      ∀ u : apm_m95A04_LpIC p,
+        L u = ∫ x : apm_m95A04_I, u x * (φ x.1 : ℂ) := by
+  let q := apm_m95A04_conjExponent p
+  letI : ENNReal.HolderConjugate p q :=
+    apm_m95A04_holderConjugate_conjExponent p
+  letI : Fact (1 ≤ q) := ⟨ENNReal.HolderConjugate.one_le q p⟩
+  let g : apm_m95A04_I → ℂ := fun x => (φ x.1 : ℂ)
+  let C : ℝ := (SchwartzMap.seminorm ℝ 0 0) φ
+  have hgmeas : AEStronglyMeasurable g
+      (volume : Measure apm_m95A04_I) := by
+    exact (Complex.continuous_ofReal.comp
+      (φ.continuous.comp continuous_subtype_val)).aestronglyMeasurable
+  have hgbdd : ∀ᵐ x : apm_m95A04_I ∂volume, ‖g x‖ ≤ C := by
+    filter_upwards [] with x
+    have hx := SchwartzMap.norm_le_seminorm ℝ φ x.1
+    simpa [g, Complex.norm_real] using hx
+  have hgmem : MemLp g q (volume : Measure apm_m95A04_I) :=
+    MemLp.of_bound hgmeas C hgbdd
+  let gLp : apm_m95A04_LpIC q := hgmem.toLp g
+  let P := (ContinuousLinearMap.mul ℂ ℂ).lpPairing
+    (volume : Measure apm_m95A04_I) p q
+  refine ⟨P.flip gLp, fun u => ?_⟩
+  rw [show P.flip gLp u = P u gLp by rfl]
+  rw [ContinuousLinearMap.lpPairing_eq_integral]
+  apply integral_congr_ae
+  filter_upwards [MemLp.coeFn_toLp hgmem] with x hx
+  dsimp [P, gLp, g] at hx ⊢
+  rw [hx]
+
+noncomputable def apm_m95A04_testPairingCLMC (p : ENNReal) [Fact (1 ≤ p)]
+    (φ : 𝓢(ℝ, ℝ)) : apm_m95A04_LpIC p →L[ℂ] ℂ :=
+  Classical.choose (apm_m95A04_exists_testPairingC p φ)
+
+lemma apm_m95A04_testPairingCLMC_apply (p : ENNReal) [Fact (1 ≤ p)]
+    (φ : 𝓢(ℝ, ℝ)) (u : apm_m95A04_LpIC p) :
+    apm_m95A04_testPairingCLMC p φ u = ∫ x : apm_m95A04_I, u x * (φ x.1 : ℂ) :=
+  Classical.choose_spec (apm_m95A04_exists_testPairingC p φ) u
+
+/-- The weak derivative relation on `[0,1]` for complex `Lᵖ`, tested against the
+same real smooth functions supported in the open interval. -/
+def apm_m95A04_weakDerivC {p : ENNReal}
+    (w v : apm_m95A04_LpIC p) : Prop :=
+  ∀ φ : 𝓢(ℝ, ℝ), Function.support φ ⊆ Set.Ioo 0 1 →
+    (∫ x : apm_m95A04_I, v x * (φ x.1 : ℂ)) =
+      -(∫ x : apm_m95A04_I,
+          w x * (SchwartzMap.derivCLM ℝ ℝ φ x.1 : ℂ))
+
+lemma apm_m95A04_weakDerivC_iff_pairing {p : ENNReal} [Fact (1 ≤ p)]
+    (u v : apm_m95A04_LpIC p) :
+    apm_m95A04_weakDerivC u v ↔
+      ∀ (φ : 𝓢(ℝ, ℝ)), Function.support φ ⊆ Set.Ioo 0 1 →
+        apm_m95A04_testPairingCLMC p φ v =
+          -apm_m95A04_testPairingCLMC p (SchwartzMap.derivCLM ℝ ℝ φ) u := by
+  simp only [apm_m95A04_weakDerivC, ← apm_m95A04_testPairingCLMC_apply]
+
+noncomputable def apm_m95A04_graphSubmoduleC (p : ENNReal) [Fact (1 ≤ p)] :
+    Submodule ℂ (WithLp p (apm_m95A04_LpIC p × apm_m95A04_LpIC p)) where
+  carrier := {z | apm_m95A04_weakDerivC z.fst z.snd}
+  zero_mem' := by
+    show apm_m95A04_weakDerivC (0 : apm_m95A04_LpIC p) 0
+    rw [apm_m95A04_weakDerivC_iff_pairing]
+    intro φ hφ
+    simp
+  add_mem' := by
+    intro a b ha hb
+    have ha' : apm_m95A04_weakDerivC a.fst a.snd := ha
+    have hb' : apm_m95A04_weakDerivC b.fst b.snd := hb
+    show apm_m95A04_weakDerivC (a.fst + b.fst) (a.snd + b.snd)
+    rw [apm_m95A04_weakDerivC_iff_pairing] at ha' hb' ⊢
+    intro φ hφ
+    rw [map_add, map_add, ha' φ hφ, hb' φ hφ, neg_add]
+  smul_mem' := by
+    intro c z hz
+    have hz' : apm_m95A04_weakDerivC z.fst z.snd := hz
+    show apm_m95A04_weakDerivC (c • z.fst) (c • z.snd)
+    rw [apm_m95A04_weakDerivC_iff_pairing] at hz' ⊢
+    intro φ hφ
+    rw [map_smul, map_smul, hz' φ hφ, smul_neg]
+
+/-- The complex Sobolev space `W^{1,p}(0,1)`: the weak-derivative graph,
+carrying the `p`-sum norm `‖w‖ = (‖u‖ₚ^p + ‖Du‖ₚ^p)^(1/p)`. -/
+abbrev apm_m95A04_WC (p : ENNReal) [Fact (1 ≤ p)] := apm_m95A04_graphSubmoduleC p
+
+/-- The value coordinate `W^{1,p} → Lp`. -/
+noncomputable def apm_m95A04_WC_val (p : ENNReal) [Fact (1 ≤ p)] :
+    apm_m95A04_WC p →ₗ[ℂ] apm_m95A04_LpIC p :=
+  (WithLp.fstₗ p ℂ (apm_m95A04_LpIC p) (apm_m95A04_LpIC p)).comp
+    (apm_m95A04_graphSubmoduleC p).subtype
+
+/-- The weak-derivative coordinate `W^{1,p} → Lp`. -/
+noncomputable def apm_m95A04_WC_deriv (p : ENNReal) [Fact (1 ≤ p)] :
+    apm_m95A04_WC p →ₗ[ℂ] apm_m95A04_LpIC p :=
+  (WithLp.sndₗ p ℂ (apm_m95A04_LpIC p) (apm_m95A04_LpIC p)).comp
+    (apm_m95A04_graphSubmoduleC p).subtype
+
+/-- The weak-derivative graph is closed in the `p`-sum product. -/
+lemma apm_m95A04_graphSubmoduleC_isClosed (p : ENNReal) [Fact (1 ≤ p)] :
+    IsClosed (apm_m95A04_graphSubmoduleC p : Set
+      (WithLp p (apm_m95A04_LpIC p × apm_m95A04_LpIC p))) := by
+  have hchar : (apm_m95A04_graphSubmoduleC p : Set
+        (WithLp p (apm_m95A04_LpIC p × apm_m95A04_LpIC p))) =
+      ⋂ (φ : 𝓢(ℝ, ℝ)), ⋂ (_h : Function.support φ ⊆ Set.Ioo 0 1),
+        {z | apm_m95A04_testPairingCLMC p φ z.snd =
+          -apm_m95A04_testPairingCLMC p (SchwartzMap.derivCLM ℝ ℝ φ) z.fst} := by
+    ext z
+    simp only [SetLike.mem_coe, Set.mem_iInter, Set.mem_setOf_eq]
+    exact apm_m95A04_weakDerivC_iff_pairing z.fst z.snd
+  rw [hchar]
+  apply isClosed_iInter
+  intro φ
+  apply isClosed_iInter
+  intro hφ
+  apply isClosed_eq
+  · exact (apm_m95A04_testPairingCLMC p φ).continuous.comp
+      (WithLp.sndL p ℂ (apm_m95A04_LpIC p) (apm_m95A04_LpIC p)).continuous
+  · exact continuous_neg.comp ((apm_m95A04_testPairingCLMC p
+      (SchwartzMap.derivCLM ℝ ℝ φ)).continuous.comp
+      (WithLp.fstL p ℂ (apm_m95A04_LpIC p) (apm_m95A04_LpIC p)).continuous)
+
+/-- The norm on `W^{1,p}(0,1)` is the displayed `p`-sum norm. -/
+lemma apm_m95A04_WC_norm (p : ENNReal) [Fact (1 ≤ p)] (hp_top : p ≠ ⊤)
+    (w : apm_m95A04_WC p) :
+    ‖w‖ = (‖apm_m95A04_WC_val p w‖ ^ p.toReal +
+      ‖apm_m95A04_WC_deriv p w‖ ^ p.toReal) ^ (1 / p.toReal) := by
+  have hp0 : 0 < p.toReal :=
+    ENNReal.toReal_pos (ne_of_gt (lt_of_lt_of_le zero_lt_one (Fact.out : 1 ≤ p))) hp_top
+  show ‖(w : WithLp p (apm_m95A04_LpIC p × apm_m95A04_LpIC p))‖ = _
+  rw [WithLp.prod_norm_eq_add hp0,
+    show apm_m95A04_WC_val p w =
+      (w : WithLp p (apm_m95A04_LpIC p × apm_m95A04_LpIC p)).fst from rfl,
+    show apm_m95A04_WC_deriv p w =
+      (w : WithLp p (apm_m95A04_LpIC p × apm_m95A04_LpIC p)).snd from rfl]
+
+/-- `W^{1,p}(0,1)` is complete: a closed subspace of the complete `p`-sum
+product of `Lp([0,1])`. -/
+lemma apm_m95A04_WC_completeSpace (p : ENNReal) [Fact (1 ≤ p)] :
+    Nonempty (CompleteSpace (apm_m95A04_WC p)) :=
+  ⟨(apm_m95A04_graphSubmoduleC_isClosed p).completeSpace_coe⟩
+
+/-! ### Complex-valued regular and causal distributions -/
+
+abbrev apm_m95A04_DistC := 𝓓'(apm_m95A04_Ω, ℂ)
+
+noncomputable def apm_m95A04_distOfReal
+    (T : apm_m95A04_Dist) : apm_m95A04_DistC :=
+  ContinuousLinearMap.postcompUniformConvergenceCLM
+    {S : Set apm_m95A04_Test | IsCompact S} Complex.ofRealCLM T
+
+lemma apm_m95A04_distOfReal_apply (T : apm_m95A04_Dist)
+    (φ : apm_m95A04_Test) : apm_m95A04_distOfReal T φ = T φ := rfl
+
+noncomputable def apm_m95A04_regularC (f : ℝ → ℂ) : apm_m95A04_DistC :=
+  apm_m95A04_distOfReal (apm_m95A04_regular fun x => (f x).re) +
+    Complex.I • apm_m95A04_distOfReal (apm_m95A04_regular fun x => (f x).im)
+
+lemma apm_m95A04_regularC_apply (f : ℝ → ℂ)
+    (hf : LocallyIntegrable f volume) (φ : apm_m95A04_Test) :
+    apm_m95A04_regularC f φ = ∫ x : ℝ, (φ x : ℂ) * f x := by
+  have hfre : LocallyIntegrable (fun x => (f x).re) volume := fun x =>
+    Complex.reCLM.integrableAtFilter_comp (hf x)
+  have hfim : LocallyIntegrable (fun x => (f x).im) volume := fun x =>
+    Complex.imCLM.integrableAtFilter_comp (hf x)
+  change (apm_m95A04_regular (fun x => (f x).re) φ : ℂ) +
+    Complex.I * (apm_m95A04_regular (fun x => (f x).im) φ : ℂ) = _
+  rw [apm_m95A04_regular_apply _ hfre, apm_m95A04_regular_apply _ hfim]
+  have hre_eq : (↑(∫ x : ℝ, (f x).re * φ x) : ℂ) =
+      ∫ x : ℝ, (↑((f x).re * φ x) : ℂ) :=
+    (integral_ofReal (𝕜 := ℂ)).symm
+  have him_eq : (↑(∫ x : ℝ, (f x).im * φ x) : ℂ) =
+      ∫ x : ℝ, (↑((f x).im * φ x) : ℂ) :=
+    (integral_ofReal (𝕜 := ℂ)).symm
+  rw [hre_eq, him_eq]
+  have hi_eq : Complex.I * (∫ x : ℝ, (↑((f x).im * φ x) : ℂ)) =
+      ∫ x : ℝ, Complex.I * (↑((f x).im * φ x) : ℂ) := by
+    exact (integral_const_mul (μ := volume) Complex.I
+      (fun x : ℝ => (↑((f x).im * φ x) : ℂ))).symm
+  rw [hi_eq]
+  have hre : Integrable (fun x : ℝ => (↑((f x).re * φ x) : ℂ)) volume :=
+    (apm_m95A04_integrable_mul_test hfre φ).ofReal
+  have him : Integrable (fun x : ℝ =>
+      Complex.I * (↑((f x).im * φ x) : ℂ)) volume :=
+    ((apm_m95A04_integrable_mul_test hfim φ).ofReal : Integrable
+      (fun x : ℝ => (↑((f x).im * φ x) : ℂ)) volume).const_mul Complex.I
+  rw [← integral_add hre him]
+  apply integral_congr_ae
+  filter_upwards with x
+  apply Complex.ext <;> simp [mul_comm]
+
+noncomputable def apm_m95A04_DdistC :
+    apm_m95A04_DistC →ₗ[ℝ] apm_m95A04_DistC :=
+  (-(ContinuousLinearMap.precompUniformConvergenceCLM (G := ℂ)
+    {S : Set apm_m95A04_Test | IsCompact S} {S : Set apm_m95A04_Test | IsCompact S}
+    apm_m95A04_DtestCLM
+    (fun S hS => hS.image apm_m95A04_DtestCLM.continuous))).toLinearMap
+
+lemma apm_m95A04_DdistC_apply (T : apm_m95A04_DistC)
+    (φ : apm_m95A04_Test) :
+    apm_m95A04_DdistC T φ = -T (apm_m95A04_Dtest φ) := rfl
+
+noncomputable def apm_m95A04_diracC : apm_m95A04_DistC :=
+  apm_m95A04_distOfReal apm_m95A04_dirac
+
+lemma apm_m95A04_diracC_apply (φ : apm_m95A04_Test) :
+    apm_m95A04_diracC φ = (φ 0 : ℂ) := by
+  rw [apm_m95A04_diracC, apm_m95A04_distOfReal_apply,
+    apm_m95A04_dirac_apply]
+
+noncomputable def apm_m95A04_causalKerC (lam : ℂ) : ℝ → ℂ :=
+  (Set.Ioi 0).indicator fun x => Complex.exp (-lam * x)
+
+lemma apm_m95A04_causalKerC_locallyIntegrable (lam : ℂ) :
+    LocallyIntegrable (apm_m95A04_causalKerC lam) volume := by
+  apply LocallyIntegrable.indicator _ measurableSet_Ioi
+  apply Continuous.locallyIntegrable
+  exact Complex.continuous_exp.comp
+    (continuous_const.neg.mul (Complex.continuous_ofReal.comp continuous_id))
+
+noncomputable def apm_m95A04_causalC (lam : ℂ) : apm_m95A04_DistC :=
+  apm_m95A04_regularC (apm_m95A04_causalKerC lam)
+
+lemma apm_m95A04_causalC_apply (lam : ℂ) (φ : apm_m95A04_Test) :
+    apm_m95A04_causalC lam φ =
+      ∫ x in Set.Ioi (0 : ℝ), Complex.exp (-lam * x) * (φ x : ℂ) := by
+  rw [apm_m95A04_causalC, apm_m95A04_regularC_apply _
+    (apm_m95A04_causalKerC_locallyIntegrable lam),
+    ← setIntegral_eq_integral_of_forall_compl_eq_zero
+      (s := Set.Ioi (0 : ℝ))
+      (f := fun x => (φ x : ℂ) * apm_m95A04_causalKerC lam x)]
+  · apply setIntegral_congr_fun measurableSet_Ioi
+    intro x hx
+    change (φ x : ℂ) * (Set.Ioi 0).indicator
+      (fun y : ℝ => Complex.exp (-lam * y)) x = _
+    rw [Set.indicator_of_mem hx]
+    ring
+  · intro x hx
+    rw [apm_m95A04_causalKerC, Set.indicator_of_notMem hx, mul_zero]
+
+/-- **APM m95A04**, with all infrastructure defined concretely.
+
+The Sobolev clause is stated for `1 ≤ p < ∞`: this convention is necessary
+(the printed `p`-sum expression is a norm, and `Lp` is Banach, only in that
+range) but is not printed in the original, so it is recorded here. -/
+lemma apm_m95A04_causalC_scalar_aux (lam : ℂ) {φ : ℝ → ℝ} (hφ : ContDiff ℝ 1 φ)
+    (hc : HasCompactSupport φ) :
+    -(∫ x in Set.Ioi (0 : ℝ), Complex.exp (-lam * x) * ((deriv φ x : ℝ) : ℂ)) +
+      lam * (∫ x in Set.Ioi (0 : ℝ), Complex.exp (-lam * x) * (φ x : ℂ)) = (φ 0 : ℂ) := by
+  let F : ℝ → ℂ := fun x => Complex.exp (-lam * x) * (φ x : ℂ)
+  have hcφ : Continuous φ := hφ.continuous
+  have hcd : Continuous (deriv φ) := hφ.continuous_deriv le_rfl
+  have hexpc : Continuous fun x : ℝ => Complex.exp (-lam * x) := by fun_prop
+  have hder (x : ℝ) : HasDerivAt F
+      ((-lam * Complex.exp (-lam * x)) * (φ x : ℂ) +
+        Complex.exp (-lam * x) * ((deriv φ x : ℝ) : ℂ)) x := by
+    have h1 : HasDerivAt (fun y : ℝ => -lam * (y : ℂ)) (-lam) x := by
+      simpa using (Complex.ofRealCLM.hasDerivAt (x := x)).const_mul (-lam)
+    have h2 : HasDerivAt (fun y : ℝ => Complex.exp (-lam * y))
+        (Complex.exp (-lam * x) * -lam) x := h1.cexp
+    have h3 : HasDerivAt (fun y : ℝ => (φ y : ℂ)) ((deriv φ x : ℝ) : ℂ) x :=
+      ((hφ.differentiable (by norm_num) x).hasDerivAt).ofReal_comp
+    convert h2.mul h3 using 1
+    ring
+  have hF : ContDiff ℝ 1 F := by
+    have : ContDiff ℝ 1 fun x : ℝ => (φ x : ℂ) := Complex.ofRealCLM.contDiff.comp hφ
+    exact (ContDiff.cexp (contDiff_const.mul Complex.ofRealCLM.contDiff)).mul this
+  have hcF : HasCompactSupport F :=
+    (hc.comp_left (g := fun r : ℝ => (r : ℂ)) (by simp)).mul_left
+  have hendpoint := hcF.integral_Ioi_deriv_eq hF 0
+  have hderiv : deriv F = fun x : ℝ => (-lam * Complex.exp (-lam * x)) * (φ x : ℂ) +
+      Complex.exp (-lam * x) * ((deriv φ x : ℝ) : ℂ) := funext fun x => (hder x).deriv
+  have hcφc : HasCompactSupport fun x : ℝ => (φ x : ℂ) :=
+    hc.comp_left (g := fun r : ℝ => (r : ℂ)) (by simp)
+  have hcdc : HasCompactSupport fun x : ℝ => ((deriv φ x : ℝ) : ℂ) :=
+    hc.deriv.comp_left (g := fun r : ℝ => (r : ℂ)) (by simp)
+  have hfirst : IntegrableOn
+      (fun x : ℝ => (-lam * Complex.exp (-lam * x)) * (φ x : ℂ)) (Set.Ioi 0) :=
+    ((by fun_prop : Continuous fun x : ℝ =>
+      (-lam * Complex.exp (-lam * x)) * (φ x : ℂ)).integrable_of_hasCompactSupport
+        hcφc.mul_left).integrableOn
+  have hsecond : IntegrableOn
+      (fun x : ℝ => Complex.exp (-lam * x) * ((deriv φ x : ℝ) : ℂ)) (Set.Ioi 0) :=
+    ((by fun_prop : Continuous fun x : ℝ =>
+      Complex.exp (-lam * x) * ((deriv φ x : ℝ) : ℂ)).integrable_of_hasCompactSupport
+        hcdc.mul_left).integrableOn
+  rw [hderiv, integral_add hfirst hsecond] at hendpoint
+  have hconst :
+      (∫ x in Set.Ioi (0 : ℝ), (-lam * Complex.exp (-lam * x)) * (φ x : ℂ)) =
+        -lam * ∫ x in Set.Ioi (0 : ℝ), Complex.exp (-lam * x) * (φ x : ℂ) := by
+    simp only [mul_assoc]
+    exact integral_const_mul _ _
+  rw [hconst] at hendpoint
+  have h0 : F 0 = (φ 0 : ℂ) := by simp [F]
+  rw [h0] at hendpoint
+  linear_combination -hendpoint
+
+lemma apm_m95A04_causalC_eq (lam : ℂ) (φ : apm_m95A04_Test) :
+    apm_m95A04_DdistC (apm_m95A04_causalC lam) φ + lam * apm_m95A04_causalC lam φ =
+      apm_m95A04_diracC φ := by
+  have hφ : ContDiff ℝ 1 (φ : ℝ → ℝ) := φ.contDiff.of_le (by simp)
+  have h := apm_m95A04_causalC_scalar_aux lam hφ φ.hasCompactSupport
+  rw [apm_m95A04_DdistC_apply, apm_m95A04_causalC_apply, apm_m95A04_causalC_apply,
+    apm_m95A04_diracC_apply]
+  simpa only [apm_m95A04_Dtest_apply] using h
+
+lemma apm_m95A04_regularC_iff_ae (f g : ℝ → ℂ)
+    (hf : LocallyIntegrable f volume) (hg : LocallyIntegrable g volume) :
+    apm_m95A04_regularC f = apm_m95A04_regularC g ↔ f =ᵐ[volume] g := by
+  constructor
+  · intro hfg
+    apply ae_eq_of_integral_contDiff_smul_eq hf hg
+    intro q hqdiff hqcompact
+    let φ : apm_m95A04_Test := TestFunction.mk q hqdiff hqcompact (by simp)
+    have heval := DFunLike.congr_fun hfg φ
+    rw [apm_m95A04_regularC_apply f hf,
+      apm_m95A04_regularC_apply g hg] at heval
+    convert heval using 1 <;>
+      apply integral_congr_ae <;>
+      filter_upwards with x <;>
+      simp [φ, smul_eq_mul] <;> ring
+  · intro hfg
+    ext φ
+    rw [apm_m95A04_regularC_apply f hf,
+      apm_m95A04_regularC_apply g hg]
+    apply integral_congr_ae
+    filter_upwards [hfg] with x hx
+    rw [hx]
+
+lemma apm_m95A04_DdistC_not_injective :
+    ¬ Function.Injective apm_m95A04_DdistC := by
+  let one : ℝ → ℂ := fun _ => 1
+  have hone : LocallyIntegrable one volume := locallyIntegrable_const 1
+  have hzero : apm_m95A04_regularC (fun _ : ℝ => 0) = 0 := by
+    ext φ
+    rw [apm_m95A04_regularC_apply _ (locallyIntegrable_const 0)]
+    simp
+  have hone_ne : apm_m95A04_regularC one ≠ 0 := by
+    intro h
+    have heq : apm_m95A04_regularC one =
+        apm_m95A04_regularC (fun _ : ℝ => 0) := h.trans hzero.symm
+    have hae := (apm_m95A04_regularC_iff_ae one (fun _ : ℝ => 0)
+      hone (locallyIntegrable_const 0)).mp heq
+    have hf : ∀ᵐ _ : ℝ ∂volume, False := hae.mono (by
+      intro x hx
+      norm_num [one] at hx)
+    exact hf.exists.elim (fun _ h => h)
+  intro hinj
+  apply hone_ne
+  apply hinj
+  ext φ
+  rw [apm_m95A04_DdistC_apply, apm_m95A04_regularC_apply one hone]
+  simp only [one, apm_m95A04_Dtest_apply, mul_one, map_zero, Pi.zero_apply, neg_zero]
+  change -(∫ x : ℝ, (↑(deriv (φ : ℝ → ℝ) x) : ℂ)) = 0
+  have hreal := apm_m95A04_integral_deriv_testFunction_eq_zero φ
+  have hc : (∫ x : ℝ, (↑(deriv (φ : ℝ → ℝ) x) : ℂ)) =
+      (↑(∫ x : ℝ, deriv (φ : ℝ → ℝ) x) : ℂ) :=
+    integral_ofReal (𝕜 := ℂ)
+  rw [hc, hreal]
+  simp
+
+abbrev apm_m95A04_TestC := 𝓓(apm_m95A04_Ω, ℂ)
+
+lemma apm_m95A04_complex_test_deriv_injective :
+    ∀ φ ψ : apm_m95A04_TestC,
+      (∀ x : ℝ, deriv (φ : ℝ → ℂ) x = deriv (ψ : ℝ → ℂ) x) → φ = ψ := by
+  intro φ ψ hφψ
+  apply TestFunction.toTestFunctionClass.coe_injective'
+  funext x
+  let h : apm_m95A04_TestC := φ - ψ
+  have hderiv : ∀ y : ℝ, deriv (h : ℝ → ℂ) y = 0 := by
+    intro y
+    have hdφ := (φ.contDiff.differentiable (by simp) y).hasDerivAt
+    have hdψ := (ψ.contDiff.differentiable (by simp) y).hasDerivAt
+    change deriv (fun z : ℝ => (φ z : ℂ) - ψ z) y = 0
+    have hd : deriv (fun z : ℝ => (φ z : ℂ) - ψ z) y =
+        deriv (φ : ℝ → ℂ) y - deriv (ψ : ℝ → ℂ) y := by
+      convert (hdφ.sub hdψ).deriv using 1
+    rw [hd, hφψ y, sub_self]
+  have hconst : ∀ y : ℝ, h x = h y :=
+    is_const_of_deriv_eq_zero
+      (h.contDiff.differentiable (by simp)) hderiv x
+  have hbdd : BddAbove (tsupport (h : ℝ → ℂ)) :=
+    h.hasCompactSupport.isBounded.bddAbove
+  obtain ⟨b, hb⟩ := hbdd
+  have hnot : b + 1 ∉ tsupport (h : ℝ → ℂ) := by
+    intro hmem
+    have := hb hmem
+    linarith
+  have hz : h (b + 1) = 0 := by
+    rw [← Function.notMem_support]
+    exact fun hm => hnot (subset_closure hm)
+  have hxzero : h x = 0 := (hconst (b + 1)).trans hz
+  exact sub_eq_zero.mp hxzero
+
+theorem apm_m95a04 (p : ENNReal) [Fact (1 ≤ p)] (hp_top : p ≠ ⊤) :
+    (∀ (f : ℝ → ℝ), LocallyIntegrable f volume → ∀ φ : apm_m95A04_Test,
+      apm_m95A04_regular f φ = ∫ x : ℝ, f x * φ x) ∧
+    (∀ f g : ℝ → ℝ, LocallyIntegrable f volume → LocallyIntegrable g volume →
+      (apm_m95A04_regular f = apm_m95A04_regular g ↔ f =ᵐ[volume] g)) ∧
+    (∀ (T : apm_m95A04_Dist) (φ : apm_m95A04_Test),
+      apm_m95A04_Ddist T φ = -T (apm_m95A04_Dtest φ)) ∧
+    apm_m95A04_Ddist apm_m95A04_absDist = apm_m95A04_signDist ∧
+    apm_m95A04_Ddist apm_m95A04_signDist = (2 : ℝ) • apm_m95A04_dirac ∧
+    Function.Injective apm_m95A04_Dtest ∧
+    ¬ Function.Injective apm_m95A04_Ddist ∧
+    (∀ lam : ℝ, apm_m95A04_Ddist (apm_m95A04_causal lam) +
+      lam • apm_m95A04_causal lam = apm_m95A04_dirac) ∧
+    (∀ w : apm_m95A04_W p,
+      apm_m95A04_weakDeriv (apm_m95A04_W_val p w) (apm_m95A04_W_deriv p w)) ∧
+    (∀ u v : apm_m95A04_LpI p, apm_m95A04_weakDeriv u v →
+      ∃! w : apm_m95A04_W p,
+        apm_m95A04_W_val p w = u ∧ apm_m95A04_W_deriv p w = v) ∧
+    (∀ w : apm_m95A04_W p,
+      ‖w‖ = (‖apm_m95A04_W_val p w‖ ^ p.toReal +
+        ‖apm_m95A04_W_deriv p w‖ ^ p.toReal) ^ (1 / p.toReal)) ∧
+    Nonempty (CompleteSpace (apm_m95A04_W p)) ∧
+    (∀ (f : ℝ → ℂ), LocallyIntegrable f volume → ∀ φ : apm_m95A04_Test,
+      apm_m95A04_regularC f φ = ∫ x : ℝ, (φ x : ℂ) * f x) ∧
+    (∀ (T : apm_m95A04_DistC) (φ : apm_m95A04_Test),
+      apm_m95A04_DdistC T φ = -T (apm_m95A04_Dtest φ)) ∧
+    (∀ φ : apm_m95A04_Test, apm_m95A04_diracC φ = (φ 0 : ℂ)) ∧
+    (∀ (lam : ℂ) (φ : apm_m95A04_Test),
+      apm_m95A04_causalC lam φ =
+        ∫ x in Set.Ioi (0 : ℝ), Complex.exp (-lam * x) * (φ x : ℂ)) ∧
+    (∀ (lam : ℂ) (φ : apm_m95A04_Test),
+      apm_m95A04_DdistC (apm_m95A04_causalC lam) φ + lam * apm_m95A04_causalC lam φ =
+        apm_m95A04_diracC φ) ∧
+    (∀ f g : ℝ → ℂ, LocallyIntegrable f volume → LocallyIntegrable g volume →
+      (apm_m95A04_regularC f = apm_m95A04_regularC g ↔ f =ᵐ[volume] g)) ∧
+    ¬ Function.Injective apm_m95A04_DdistC ∧
+    (∀ φ ψ : apm_m95A04_TestC,
+      (∀ x : ℝ, deriv (φ : ℝ → ℂ) x = deriv (ψ : ℝ → ℂ) x) → φ = ψ) ∧
+    (∀ w : apm_m95A04_WC p,
+      apm_m95A04_weakDerivC (apm_m95A04_WC_val p w) (apm_m95A04_WC_deriv p w)) ∧
+    (∀ u v : apm_m95A04_LpIC p, apm_m95A04_weakDerivC u v →
+      ∃! w : apm_m95A04_WC p,
+        apm_m95A04_WC_val p w = u ∧ apm_m95A04_WC_deriv p w = v) ∧
+    (∀ w : apm_m95A04_WC p,
+      ‖w‖ = (‖apm_m95A04_WC_val p w‖ ^ p.toReal +
+        ‖apm_m95A04_WC_deriv p w‖ ^ p.toReal) ^ (1 / p.toReal)) ∧
+    Nonempty (CompleteSpace (apm_m95A04_WC p)) := by
+  refine ⟨fun f hf φ => apm_m95A04_regular_apply f hf φ,
+    fun f g hf hg => apm_m95A04_regular_iff_ae apm_m95A04_regular
+      apm_m95A04_regular_apply f g hf hg,
+    fun T φ => apm_m95A04_Ddist_apply T φ,
+    apm_m95A04_Ddist_abs _ apm_m95A04_Dtest_apply _ apm_m95A04_Ddist_apply
+      _ _ apm_m95A04_absDist_apply apm_m95A04_signDist_apply,
+    apm_m95A04_Ddist_sign _ apm_m95A04_Dtest_apply _ apm_m95A04_Ddist_apply
+      _ _ apm_m95A04_signDist_apply apm_m95A04_dirac_apply,
+    apm_m95A04_Dtest_injective _ apm_m95A04_Dtest_apply,
+    apm_m95A04_Ddist_not_injective _ apm_m95A04_regular_apply _
+      apm_m95A04_Dtest_apply _ apm_m95A04_Ddist_apply,
+    fun lam => apm_m95A04_Ddist_causal _ apm_m95A04_Dtest_apply _
+      apm_m95A04_Ddist_apply _ apm_m95A04_dirac_apply _ apm_m95A04_causal_apply lam,
+    ?_, ?_, fun w => apm_m95A04_W_norm p hp_top w,
+    apm_m95A04_W_completeSpace p,
+    apm_m95A04_regularC_apply, apm_m95A04_DdistC_apply, apm_m95A04_diracC_apply,
+    apm_m95A04_causalC_apply, apm_m95A04_causalC_eq,
+    apm_m95A04_regularC_iff_ae, apm_m95A04_DdistC_not_injective,
+    apm_m95A04_complex_test_deriv_injective, ?_, ?_,
+    fun w => apm_m95A04_WC_norm p hp_top w, apm_m95A04_WC_completeSpace p⟩
+  · intro w
+    show apm_m95A04_weakDeriv (apm_m95A04_W_val p w) (apm_m95A04_W_deriv p w)
+    exact w.2
+  · intro u v huv
+    refine ⟨⟨WithLp.toLp p (u, v), huv⟩, ⟨rfl, rfl⟩, ?_⟩
+    rintro ⟨w, hw⟩ ⟨h1, h2⟩
+    have e1 : WithLp.fst w = u := h1
+    have e2 : WithLp.snd w = v := h2
+    apply Subtype.ext
+    change w = WithLp.toLp p (u, v)
+    have hw' : w = WithLp.toLp p (WithLp.fst w, WithLp.snd w) := by
+      cases w
+      rfl
+    rw [hw', e1, e2]
+  · intro w
+    show apm_m95A04_weakDerivC (apm_m95A04_WC_val p w) (apm_m95A04_WC_deriv p w)
+    exact w.2
+  · intro u v huv
+    refine ⟨⟨WithLp.toLp p (u, v), huv⟩, ⟨rfl, rfl⟩, ?_⟩
+    rintro ⟨w, hw⟩ ⟨h1, h2⟩
+    have e1 : WithLp.fst w = u := h1
+    have e2 : WithLp.snd w = v := h2
+    apply Subtype.ext
+    change w = WithLp.toLp p (u, v)
+    have hw' : w = WithLp.toLp p (WithLp.fst w, WithLp.snd w) := by
+      cases w
+      rfl
+    rw [hw', e1, e2]
