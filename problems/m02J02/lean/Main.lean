@@ -7,15 +7,14 @@ set_option maxHeartbeats 200000
 
 ## Statement repairs
 
-None.  "Basis" is read as a linearly independent family whose finite linear
-span is dense in the `H¹` graph norm.  This is a reading, and a weak one: no
-orthogonality is asserted, and no unique convergent expansion (Schauder basis).
-In (a) the sines are in fact `H¹`-orthogonal, so they are an orthogonal basis.
-In (b) and (c) the Hermite functions are not `H¹`-orthogonal and, in their
-natural order, not a Schauder basis of `H¹(ℝ)`.  The revised informal solution
-(7de364a86) reads "basis" as an orthonormal basis and obtains one by applying
-Gram–Schmidt in `H¹` to these families.  That step, which needs only the linear
-independence and density proved here, is not stated in this file.
+None.  "Basis" is read as a Hilbert basis: `apm_m02j02` gives a family orthonormal for the
+graph inner product `∫ (u v + u' v')` whose finite span is dense in the `H¹` graph norm.  On
+`(0,1)` it is the normalised sines.  On `(0,∞)` and `ℝ` the theorem says each element is a finite
+combination of the odd Hermite functions, respectively the Hermite functions.  The proof
+orthonormalises those families.  Here Hermite functions are `He_n(x) e^{-x²/4}`, a dilation of
+the `H_n(x) e^{-x²/2}` in the informal solution.  The families are themselves complete and
+linearly independent (`apm_m02j02_system`).  Scalars: the real basis also spans the complex
+space, by `apm_m02j02_IsH10HilbertBasisComplex`.
 
 ## Encoding notes
 
@@ -7104,7 +7103,7 @@ theorem apm_m02J02_bridge_3 :
   rw [hpd, hp, Measure.restrict_univ]
   exact hN
 
-theorem apm_m02j02 :
+theorem apm_m02j02_system :
     apm_m02j02_IsH10Basis (Ioo (0 : ℝ) 1)
         apm_m02j02_sine apm_m02j02_sineDeriv ∧
     apm_m02j02_IsH10Basis (Ioi (0 : ℝ))
@@ -7163,3 +7162,627 @@ theorem apm_m02j02 :
   remain substantial and were not completed in this final hop.
   -/
   exact ⟨apm_m02J02_bridge_1, apm_m02J02_bridge_2, apm_m02J02_bridge_3⟩
+
+/-- A Hilbert-basis strengthening of `apm_m02j02_IsH10Basis`: the system is
+orthonormal for the graph inner product and its finite span is graph-norm
+dense. -/
+def apm_m02j02_IsH10HilbertBasis
+    (s : Set ℝ) (b db : ℕ → ℝ → ℝ) : Prop :=
+  (∀ n, apm_m02j02_InH10 s (b n) (db n)) ∧
+  (∀ i j, (∫ x in s, (b i x * b j x + db i x * db j x)) =
+    if i = j then 1 else 0) ∧
+  ∀ u du, apm_m02j02_InH10 s u du → ∀ ε > 0, ∃ c : ℕ →₀ ℝ,
+    eLpNorm (u - c.sum fun n a => a • b n) 2 (volume.restrict s) +
+      eLpNorm (du - c.sum fun n a => a • db n) 2 (volume.restrict s) <
+        ENNReal.ofReal ε
+
+/-- The positivity condition missing from the purely pointwise
+`LinearIndependent` clause of `apm_m02j02_IsH10Basis`.  It is precisely the
+condition needed before applying Gram--Schmidt in the graph inner product. -/
+def apm_m02j02_GraphAEIndependent
+    (s : Set ℝ) (e de : ℕ → ℝ → ℝ) : Prop :=
+  ∀ c : ℕ →₀ ℝ,
+    (c.sum (fun n a => a • e n) =ᵐ[volume.restrict s] 0) →
+    (c.sum (fun n a => a • de n) =ᵐ[volume.restrict s] 0) → c = 0
+
+/-- Complex graph-norm completeness of a real system, formulated by requiring
+the real and imaginary parts to represent elements of the real `H¹₀` space. -/
+def apm_m02j02_IsH10HilbertBasisComplex
+    (s : Set ℝ) (b db : ℕ → ℝ → ℝ) : Prop :=
+  ∀ u du : ℝ → ℂ,
+    apm_m02j02_InH10 s (fun x => (u x).re) (fun x => (du x).re) →
+    apm_m02j02_InH10 s (fun x => (u x).im) (fun x => (du x).im) →
+    ∀ ε > 0, ∃ c : ℕ →₀ ℂ,
+      eLpNorm
+          (u - c.sum fun n a x => a * (b n x : ℂ)) 2
+          (volume.restrict s) +
+        eLpNorm
+          (du - c.sum fun n a x => a * (db n x : ℂ)) 2
+          (volume.restrict s) < ENNReal.ofReal ε
+
+/-- On a null domain no graph-orthonormal system can exist.  In particular,
+an abstract Gram--Schmidt theorem must assume positivity of the graph form,
+not merely pointwise linear independence of representatives. -/
+lemma apm_m02j02_no_hilbertBasis_empty :
+    ¬ ∃ b db, apm_m02j02_IsH10HilbertBasis (∅ : Set ℝ) b db := by
+  rintro ⟨b, db, hb⟩
+  have hdiag := hb.2.1 0 0
+  simp at hdiag
+
+/-! ### Closure of `InH10` under finite linear combinations -/
+
+lemma apm_m02j02_test_memLp {φ : ℝ → ℝ} (hc : Continuous φ) (hs : HasCompactSupport φ)
+    (s : Set ℝ) : MemLp φ 2 (volume.restrict s) :=
+  (hc.memLp_of_hasCompactSupport hs).restrict s
+
+lemma apm_m02j02_test_integrable {s : Set ℝ} {u φ : ℝ → ℝ} (hu : MemLp u 2 (volume.restrict s))
+    (hc : Continuous φ) (hs : HasCompactSupport φ) :
+    Integrable (fun x => u x * φ x) (volume.restrict s) :=
+  hu.integrable_mul (apm_m02j02_test_memLp hc hs s)
+
+lemma apm_m02j02_InH10_zero (s : Set ℝ) : apm_m02j02_InH10 s 0 0 := by
+  refine ⟨MemLp.zero, MemLp.zero, ?_, fun ε hε => ⟨0, contDiff_const, HasCompactSupport.zero, ?_, ?_⟩⟩
+  · intro φ _ _ _
+    simp
+  · simp [tsupport]
+  · have : (0 : ℝ → ℝ) - 0 = 0 := by simp
+    have hd : deriv (0 : ℝ → ℝ) = 0 := by
+      funext x
+      simp
+    simp [hd, hε]
+
+lemma apm_m02j02_InH10_add {s : Set ℝ} {u du v dv : ℝ → ℝ}
+    (hu : apm_m02j02_InH10 s u du) (hv : apm_m02j02_InH10 s v dv) :
+    apm_m02j02_InH10 s (u + v) (du + dv) := by
+  obtain ⟨hu1, hu2, hu3, hu4⟩ := hu
+  obtain ⟨hv1, hv2, hv3, hv4⟩ := hv
+  refine ⟨hu1.add hv1, hu2.add hv2, ?_, ?_⟩
+  · intro φ hφ hc hts
+    have hcd : Continuous (deriv φ) := hφ.continuous_deriv (by simp)
+    have h1 := hu3 φ hφ hc hts
+    have h2 := hv3 φ hφ hc hts
+    simp only [Pi.add_apply, add_mul]
+    rw [integral_add (apm_m02j02_test_integrable hu1 hcd hc.deriv)
+        (apm_m02j02_test_integrable hv1 hcd hc.deriv),
+      integral_add (apm_m02j02_test_integrable hu2 hφ.continuous hc)
+        (apm_m02j02_test_integrable hv2 hφ.continuous hc), h1, h2, neg_add]
+  · intro ε hε
+    obtain ⟨φ₁, hφ₁, hc₁, ht₁, h₁⟩ := hu4 (ε / 2) (half_pos hε)
+    obtain ⟨φ₂, hφ₂, hc₂, ht₂, h₂⟩ := hv4 (ε / 2) (half_pos hε)
+    refine ⟨φ₁ + φ₂, hφ₁.add hφ₂, hc₁.add hc₂, ?_, ?_⟩
+    · exact (closure_mono (Function.support_add φ₁ φ₂)).trans
+        (by rw [closure_union]; exact union_subset ht₁ ht₂)
+    · have hdφ₁ : Differentiable ℝ φ₁ := hφ₁.differentiable (by simp)
+      have hdφ₂ : Differentiable ℝ φ₂ := hφ₂.differentiable (by simp)
+      have hderiv : deriv (φ₁ + φ₂) = deriv φ₁ + deriv φ₂ := by
+        funext x
+        exact deriv_add (hdφ₁ x) (hdφ₂ x)
+      have hcd₁ : Continuous (deriv φ₁) := hφ₁.continuous_deriv (by simp)
+      have hcd₂ : Continuous (deriv φ₂) := hφ₂.continuous_deriv (by simp)
+      have e1 : u + v - (φ₁ + φ₂) = (u - φ₁) + (v - φ₂) := by abel
+      have e2 : du + dv - deriv (φ₁ + φ₂) = (du - deriv φ₁) + (dv - deriv φ₂) := by
+        rw [hderiv]; abel
+      rw [e1, e2]
+      have m1 := (hu1.1.sub hφ₁.continuous.aestronglyMeasurable)
+      have m2 := (hv1.1.sub hφ₂.continuous.aestronglyMeasurable)
+      have m3 := (hu2.1.sub hcd₁.aestronglyMeasurable)
+      have m4 := (hv2.1.sub hcd₂.aestronglyMeasurable)
+      have b1 := eLpNorm_add_le m1 m2 (p := 2) (by norm_num)
+      have b2 := eLpNorm_add_le m3 m4 (p := 2) (by norm_num)
+      have hsplit : ENNReal.ofReal ε = ENNReal.ofReal (ε / 2) + ENNReal.ofReal (ε / 2) := by
+        rw [← ENNReal.ofReal_add (half_pos hε).le (half_pos hε).le, add_halves]
+      rw [hsplit]
+      calc _ ≤ (eLpNorm (u - φ₁) 2 (volume.restrict s) + eLpNorm (v - φ₂) 2 (volume.restrict s)) +
+            (eLpNorm (du - deriv φ₁) 2 (volume.restrict s) +
+              eLpNorm (dv - deriv φ₂) 2 (volume.restrict s)) := add_le_add b1 b2
+        _ = (eLpNorm (u - φ₁) 2 (volume.restrict s) +
+              eLpNorm (du - deriv φ₁) 2 (volume.restrict s)) +
+            (eLpNorm (v - φ₂) 2 (volume.restrict s) +
+              eLpNorm (dv - deriv φ₂) 2 (volume.restrict s)) := by abel
+        _ < _ := ENNReal.add_lt_add h₁ h₂
+
+lemma apm_m02j02_InH10_smul {s : Set ℝ} {u du : ℝ → ℝ} (a : ℝ)
+    (hu : apm_m02j02_InH10 s u du) : apm_m02j02_InH10 s (a • u) (a • du) := by
+  obtain ⟨hu1, hu2, hu3, hu4⟩ := hu
+  refine ⟨hu1.const_smul a, hu2.const_smul a, ?_, ?_⟩
+  · intro φ hφ hc hts
+    have h1 := hu3 φ hφ hc hts
+    simp only [Pi.smul_apply, smul_eq_mul, mul_assoc]
+    rw [integral_const_mul, integral_const_mul, h1, mul_neg]
+  · intro ε hε
+    have hA : 0 < |a| + 1 := by positivity
+    obtain ⟨φ, hφ, hc, ht, h⟩ := hu4 (ε / (|a| + 1)) (div_pos hε hA)
+    refine ⟨a • φ, hφ.const_smul a, hc.smul_left, ?_, ?_⟩
+    · exact (closure_mono (Function.support_const_smul_subset a φ)).trans ht
+    · have hderiv : deriv (a • φ) = a • deriv φ := by
+        funext x
+        exact deriv_const_smul a (hφ.differentiable (by simp) x)
+      have e1 : a • u - a • φ = a • (u - φ) := by rw [smul_sub]
+      have e2 : a • du - a • deriv φ = a • (du - deriv φ) := by rw [smul_sub]
+      rw [hderiv, e1, e2, eLpNorm_const_smul, eLpNorm_const_smul, ← mul_add]
+      have hle : ‖a‖ₑ ≤ ENNReal.ofReal (|a| + 1) := by
+        rw [← ofReal_norm_eq_enorm, Real.norm_eq_abs]
+        exact ENNReal.ofReal_le_ofReal (by linarith)
+      have hpos : ENNReal.ofReal (|a| + 1) ≠ 0 := by
+        simpa using hA
+      calc _ ≤ ENNReal.ofReal (|a| + 1) * _ := mul_le_mul_left hle _
+        _ < ENNReal.ofReal (|a| + 1) * ENNReal.ofReal (ε / (|a| + 1)) :=
+            ENNReal.mul_lt_mul_left' hpos ENNReal.ofReal_ne_top h
+        _ = ENNReal.ofReal ε := by
+            rw [← ENNReal.ofReal_mul hA.le, mul_div_cancel₀ _ hA.ne']
+
+lemma apm_m02j02_InH10_finsupp {s : Set ℝ} {e de : ℕ → ℝ → ℝ}
+    (hin : ∀ n, apm_m02j02_InH10 s (e n) (de n)) (c : ℕ →₀ ℝ) :
+    apm_m02j02_InH10 s (c.sum fun n a => a • e n) (c.sum fun n a => a • de n) := by
+  induction c using Finsupp.induction_linear with
+  | zero => simpa using apm_m02j02_InH10_zero s
+  | add f g hf hg =>
+    rw [Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _),
+      Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _)]
+    exact apm_m02j02_InH10_add hf hg
+  | single n a =>
+    rw [Finsupp.sum_single_index (by simp), Finsupp.sum_single_index (by simp)]
+    exact apm_m02j02_InH10_smul a (hin n)
+
+lemma apm_m02j02_coeFn_finsupp {μ : Measure ℝ} (E : ℕ → Lp ℝ 2 μ) (e : ℕ → ℝ → ℝ)
+    (he : ∀ k, E k =ᵐ[μ] e k) (c : ℕ →₀ ℝ) :
+    ⇑(c.sum fun k a => a • E k) =ᵐ[μ] c.sum fun k a => a • e k := by
+  induction c using Finsupp.induction_linear with
+  | zero => simpa using Lp.coeFn_zero ℝ 2 μ
+  | add f g hf hg =>
+    rw [Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _),
+      Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _)]
+    exact (Lp.coeFn_add _ _).trans (hf.add hg)
+  | single n a =>
+    rw [Finsupp.sum_single_index (by simp), Finsupp.sum_single_index (by simp)]
+    exact (Lp.coeFn_smul a (E n)).trans ((he n).const_smul a)
+
+lemma apm_m02j02_fst_finsupp {μ : Measure ℝ}
+    (w : ℕ → WithLp 2 (Lp ℝ 2 μ × Lp ℝ 2 μ)) (c : ℕ →₀ ℝ) :
+    (c.sum fun k a => a • w k).fst = c.sum fun k a => a • (w k).fst := by
+  induction c using Finsupp.induction_linear with
+  | zero => simp
+  | add f g hf hg =>
+    rw [Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _),
+      Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _), WithLp.add_fst, hf, hg]
+  | single n a =>
+    rw [Finsupp.sum_single_index (by simp), Finsupp.sum_single_index (by simp), WithLp.smul_fst]
+
+lemma apm_m02j02_snd_finsupp {μ : Measure ℝ}
+    (w : ℕ → WithLp 2 (Lp ℝ 2 μ × Lp ℝ 2 μ)) (c : ℕ →₀ ℝ) :
+    (c.sum fun k a => a • w k).snd = c.sum fun k a => a • (w k).snd := by
+  induction c using Finsupp.induction_linear with
+  | zero => simp
+  | add f g hf hg =>
+    rw [Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _),
+      Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _), WithLp.add_snd, hf, hg]
+  | single n a =>
+    rw [Finsupp.sum_single_index (by simp), Finsupp.sum_single_index (by simp), WithLp.smul_snd]
+
+lemma apm_m02j02_exists_hilbertBasis
+    {s : Set ℝ}
+    {e de : ℕ → ℝ → ℝ}
+    (h : apm_m02j02_IsH10Basis s e de)
+    (hind : apm_m02j02_GraphAEIndependent s e de) :
+    ∃ b db, apm_m02j02_IsH10HilbertBasis s b db ∧
+      ∀ n, ∃ c : ℕ →₀ ℝ, b n = (c.sum fun k a => a • e k) ∧
+        db n = c.sum fun k a => a • de k := by
+  classical
+  set μ : Measure ℝ := volume.restrict s with hμ
+  obtain ⟨hin, -, hdense⟩ := h
+  let V := WithLp 2 (Lp ℝ 2 μ × Lp ℝ 2 μ)
+  let E : ℕ → Lp ℝ 2 μ := fun n => (hin n).1.toLp _
+  let DE : ℕ → Lp ℝ 2 μ := fun n => (hin n).2.1.toLp _
+  have hE : ∀ n, E n =ᵐ[μ] e n := fun n => MemLp.coeFn_toLp _
+  have hDE : ∀ n, DE n =ᵐ[μ] de n := fun n => MemLp.coeFn_toLp _
+  let v : ℕ → V := fun n => WithLp.toLp 2 (E n, DE n)
+  have hvf (n : ℕ) : (v n).fst = E n := rfl
+  have hvs (n : ℕ) : (v n).snd = DE n := rfl
+  have hli : LinearIndependent ℝ v := by
+    rw [linearIndependent_iff]
+    intro l hl
+    rw [Finsupp.linearCombination_apply] at hl
+    have h1 := congrArg WithLp.fst hl
+    have h2 := congrArg WithLp.snd hl
+    rw [apm_m02j02_fst_finsupp] at h1
+    rw [apm_m02j02_snd_finsupp] at h2
+    simp only [hvf, hvs] at h1 h2
+    refine hind l ?_ ?_
+    · have := apm_m02j02_coeFn_finsupp E e hE l
+      rw [show (l.sum fun k a => a • E k) = 0 from h1] at this
+      exact this.symm.trans (Lp.coeFn_zero ℝ 2 μ)
+    · have := apm_m02j02_coeFn_finsupp DE de hDE l
+      rw [show (l.sum fun k a => a • DE k) = 0 from h2] at this
+      exact this.symm.trans (Lp.coeFn_zero ℝ 2 μ)
+  let g : ℕ → V := InnerProductSpace.gramSchmidtNormed ℝ v
+  have hO : Orthonormal ℝ g := InnerProductSpace.gramSchmidtNormed_orthonormal hli
+  have hspan : Submodule.span ℝ (Set.range g) = Submodule.span ℝ (Set.range v) := by
+    rw [InnerProductSpace.span_gramSchmidtNormed_range, InnerProductSpace.span_gramSchmidt]
+  have hc : ∀ n, ∃ c : ℕ →₀ ℝ, (c.sum fun k a => a • v k) = g n := fun n =>
+    (Finsupp.mem_span_range_iff_exists_finsupp).1
+      (hspan ▸ Submodule.subset_span ⟨n, rfl⟩)
+  choose c hc using hc
+  let b : ℕ → ℝ → ℝ := fun n => (c n).sum fun k a => a • e k
+  let db : ℕ → ℝ → ℝ := fun n => (c n).sum fun k a => a • de k
+  have hbf : ∀ n, (g n).fst =ᵐ[μ] b n := fun n => by
+    rw [← hc n, apm_m02j02_fst_finsupp]
+    exact apm_m02j02_coeFn_finsupp E e hE (c n)
+  have hbs : ∀ n, (g n).snd =ᵐ[μ] db n := fun n => by
+    rw [← hc n, apm_m02j02_snd_finsupp]
+    exact apm_m02j02_coeFn_finsupp DE de hDE (c n)
+  refine ⟨b, db, ⟨fun n => apm_m02j02_InH10_finsupp hin (c n), ?_, ?_⟩,
+    fun n => ⟨c n, rfl, rfl⟩⟩
+  · intro i j
+    have h1 : (∫ x in s, (b i x * b j x + db i x * db j x)) = inner ℝ (g i) (g j) := by
+      rw [WithLp.prod_inner_apply, L2.inner_def, L2.inner_def,
+        ← integral_add (L2.integrable_inner _ _) (L2.integrable_inner _ _)]
+      refine integral_congr_ae ?_
+      filter_upwards [hbf i, hbf j, hbs i, hbs j] with x h1 h2 h3 h4
+      have key (a c : ℝ) : inner ℝ a c = a * c := by
+        first
+          | exact mul_comm _ _
+          | rfl
+          | simp [mul_comm]
+      simp [h1, h2, h3, h4, key]
+    rw [h1]
+    exact orthonormal_iff_ite.1 hO i j
+  · intro u du hu ε hε
+    obtain ⟨c0, hc0⟩ := hdense u du hu ε hε
+    have hx : (c0.sum fun k a => a • v k) ∈ Submodule.span ℝ (Set.range g) := by
+      rw [hspan]
+      exact (Finsupp.mem_span_range_iff_exists_finsupp).2 ⟨c0, rfl⟩
+    obtain ⟨d, hd⟩ := (Finsupp.mem_span_range_iff_exists_finsupp).1 hx
+    refine ⟨d, ?_⟩
+    have e1 : (d.sum fun n a => a • b n) =ᵐ[μ] c0.sum fun k a => a • e k := by
+      have a1 := apm_m02j02_coeFn_finsupp (fun n => (g n).fst) b hbf d
+      have a2 := apm_m02j02_coeFn_finsupp E e hE c0
+      have a3 := congrArg WithLp.fst hd
+      rw [apm_m02j02_fst_finsupp, apm_m02j02_fst_finsupp] at a3
+      simp only [hvf] at a3
+      rw [a3] at a1
+      exact a1.symm.trans a2
+    have e2 : (d.sum fun n a => a • db n) =ᵐ[μ] c0.sum fun k a => a • de k := by
+      have a1 := apm_m02j02_coeFn_finsupp (fun n => (g n).snd) db hbs d
+      have a2 := apm_m02j02_coeFn_finsupp DE de hDE c0
+      have a3 := congrArg WithLp.snd hd
+      rw [apm_m02j02_snd_finsupp, apm_m02j02_snd_finsupp] at a3
+      simp only [hvs] at a3
+      rw [a3] at a1
+      exact a1.symm.trans a2
+    have f1 : eLpNorm (u - d.sum fun n a => a • b n) 2 μ =
+        eLpNorm (u - c0.sum fun k a => a • e k) 2 μ :=
+      eLpNorm_congr_ae ((EventuallyEq.refl _ u).sub e1)
+    have f2 : eLpNorm (du - d.sum fun n a => a • db n) 2 μ =
+        eLpNorm (du - c0.sum fun k a => a • de k) 2 μ :=
+      eLpNorm_congr_ae ((EventuallyEq.refl _ du).sub e2)
+    rw [f1, f2]
+    exact hc0
+
+/-! ### The three concrete families are a.e. independent -/
+
+lemma apm_m02j02_finsupp_continuous {e : ℕ → ℝ → ℝ} (he : ∀ n, Continuous (e n)) (c : ℕ →₀ ℝ) :
+    Continuous (c.sum fun n a => a • e n) := by
+  induction c using Finsupp.induction_linear with
+  | zero => simpa using continuous_zero
+  | add f g hf hg =>
+    rw [Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _)]
+    exact hf.add hg
+  | single n a =>
+    rw [Finsupp.sum_single_index (by simp)]
+    exact (he n).const_smul a
+
+lemma apm_m02j02_finsupp_eval (e : ℕ → ℝ → ℝ) (c : ℕ →₀ ℝ) (x : ℝ) :
+    (c.sum fun n a => a • e n) x = c.sum fun n a => a * e n x := by
+  simp [Finsupp.sum, Finset.sum_apply]
+
+lemma apm_m02j02_eqOn_zero_of_ae {s : Set ℝ} (hs : IsOpen s) {F : ℝ → ℝ} (hF : Continuous F)
+    (h : F =ᵐ[volume.restrict s] 0) : Set.EqOn F 0 s :=
+  Measure.eqOn_open_of_ae_eq h hs hF.continuousOn continuous_zero.continuousOn
+
+lemma apm_m02j02_finsupp_eq_zero {e : ℕ → ℝ → ℝ} (hli : LinearIndependent ℝ e) (c : ℕ →₀ ℝ)
+    (h : (c.sum fun n a => a • e n) = 0) : c = 0 := by
+  rw [linearIndependent_iff] at hli
+  exact hli c (by rw [Finsupp.linearCombination_apply]; exact h)
+
+lemma apm_m02j02_sine_analytic (n : ℕ) : AnalyticOnNhd ℝ (apm_m02j02_sine n) univ := by
+  intro x _
+  unfold apm_m02j02_sine
+  fun_prop
+
+lemma apm_m02j02_sine_finsupp_analytic (c : ℕ →₀ ℝ) :
+    AnalyticOnNhd ℝ (c.sum fun n a => a • apm_m02j02_sine n) univ := by
+  induction c using Finsupp.induction_linear with
+  | zero => simpa using analyticOnNhd_const
+  | add f g hf hg =>
+    rw [Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _)]
+    exact hf.add hg
+  | single n a =>
+    rw [Finsupp.sum_single_index (by simp)]
+    exact fun x hx => (apm_m02j02_sine_analytic n x hx).const_smul
+
+lemma apm_m02j02_sine_graphAEIndependent :
+    apm_m02j02_GraphAEIndependent (Ioo (0 : ℝ) 1) apm_m02j02_sine apm_m02j02_sineDeriv := by
+  intro c h _
+  set F : ℝ → ℝ := c.sum fun n a => a • apm_m02j02_sine n with hF
+  have han : AnalyticOnNhd ℝ F univ := apm_m02j02_sine_finsupp_analytic c
+  have hzero : Set.EqOn F 0 (Ioo 0 1) :=
+    apm_m02j02_eqOn_zero_of_ae isOpen_Ioo han.continuous h
+  have hev : F =ᶠ[nhds (1 / 2 : ℝ)] 0 :=
+    Filter.eventually_of_mem (Ioo_mem_nhds (by norm_num) (by norm_num)) hzero
+  have hall := han.eqOn_zero_of_preconnected_of_eventuallyEq_zero isPreconnected_univ
+    (mem_univ _) hev
+  exact apm_m02j02_finsupp_eq_zero apm_m02j02_sine_linearIndependent c
+    (funext fun x => hall (mem_univ x))
+
+lemma apm_m02j02_hermite_graphAEIndependent :
+    apm_m02j02_GraphAEIndependent (Set.univ : Set ℝ) apm_m02j02_hermiteFunction
+      apm_m02j02_hermiteFunctionDeriv := by
+  intro c h _
+  have hc : Continuous (c.sum fun n a => a • apm_m02j02_hermiteFunction n) :=
+    apm_m02j02_finsupp_continuous
+      (fun n => (apm_m02j02_hermiteFunction_contDiff n).continuous) c
+  have hz := apm_m02j02_eqOn_zero_of_ae isOpen_univ hc h
+  exact apm_m02j02_finsupp_eq_zero apm_m02j02_hermiteFunction_linearIndependent c
+    (funext fun x => hz (mem_univ x))
+
+lemma apm_m02j02_oddHermite_graphAEIndependent :
+    apm_m02j02_GraphAEIndependent (Ioi (0 : ℝ))
+      (fun n => apm_m02j02_hermiteFunction (2 * n + 1))
+      (fun n => apm_m02j02_hermiteFunctionDeriv (2 * n + 1)) := by
+  intro c h _
+  set F : ℝ → ℝ := c.sum fun n a => a • apm_m02j02_hermiteFunction (2 * n + 1) with hF
+  have hc : Continuous F :=
+    apm_m02j02_finsupp_continuous (fun n => apm_m02j02_oddHermite_continuous n) c
+  have hz := apm_m02j02_eqOn_zero_of_ae isOpen_Ioi hc h
+  have hodd (x : ℝ) : F (-x) = -F x := by
+    rw [hF, apm_m02j02_finsupp_eval, apm_m02j02_finsupp_eval]
+    simp only [Finsupp.sum, ← Finset.sum_neg_distrib]
+    refine Finset.sum_congr rfl fun n _ => ?_
+    rw [apm_m02j02_hermiteFunction_neg, Odd.neg_one_pow ⟨n, rfl⟩]
+    ring
+  have hall : F = 0 := by
+    funext x
+    rcases lt_trichotomy x 0 with hx | rfl | hx
+    · have h1 : F (-x) = 0 := hz (neg_pos.2 hx)
+      have h2 := hodd (-x)
+      rw [neg_neg, h1] at h2
+      simpa using h2
+    · have h2 := hodd 0
+      simp only [neg_zero] at h2
+      simpa using (self_eq_neg.1 h2)
+    · exact hz hx
+  have hli : LinearIndependent ℝ (fun n => apm_m02j02_hermiteFunction (2 * n + 1)) :=
+    apm_m02j02_hermiteFunction_linearIndependent.comp (fun n => 2 * n + 1)
+      (fun a b hab => by simpa using hab)
+  exact apm_m02j02_finsupp_eq_zero hli c hall
+
+/-! ### Complex scalars -/
+
+lemma apm_m02j02_complex_err {μ : Measure ℝ} {a b : ℝ → ℝ}
+    (ha : AEStronglyMeasurable a μ) (hb : AEStronglyMeasurable b μ) :
+    eLpNorm (fun x => (a x : ℂ) + Complex.I * (b x : ℂ)) 2 μ ≤
+      eLpNorm a 2 μ + eLpNorm b 2 μ := by
+  have m1 : AEStronglyMeasurable (fun x => (a x : ℂ)) μ :=
+    Complex.continuous_ofReal.comp_aestronglyMeasurable ha
+  have m2 : AEStronglyMeasurable (fun x => Complex.I * (b x : ℂ)) μ :=
+    (Complex.continuous_ofReal.comp_aestronglyMeasurable hb).const_mul _
+  have h := eLpNorm_add_le m1 m2 (p := 2) (by norm_num)
+  have e1 : eLpNorm (fun x => (a x : ℂ)) 2 μ = eLpNorm a 2 μ :=
+    eLpNorm_congr_norm_ae (Eventually.of_forall fun x => by simp)
+  have e2 : eLpNorm (fun x => Complex.I * (b x : ℂ)) 2 μ = eLpNorm b 2 μ :=
+    eLpNorm_congr_norm_ae (Eventually.of_forall fun x => by simp)
+  rw [e1, e2] at h
+  exact h
+
+/-- `c` with coefficients multiplied by the complex number `w`. -/
+noncomputable def apm_m02j02_scaleC (w : ℂ) (c : ℕ →₀ ℝ) : ℕ →₀ ℂ :=
+  Finsupp.mapRange (fun r : ℝ => w * (r : ℂ)) (by simp) c
+
+lemma apm_m02j02_scaleC_sum (w : ℂ) (b : ℕ → ℝ → ℝ) (c : ℕ →₀ ℝ) :
+    ((apm_m02j02_scaleC w c).sum fun n a x => a * (b n x : ℂ)) =
+      fun x => w * (((c.sum fun n a => a • b n) x : ℝ) : ℂ) := by
+  funext x
+  rw [apm_m02j02_finsupp_eval, apm_m02j02_scaleC, Finsupp.sum_mapRange_index (by intro n; funext y; simp)]
+  simp only [Finsupp.sum, Finset.sum_apply, Complex.ofReal_sum, Finset.mul_sum, Complex.ofReal_mul,
+    mul_assoc]
+
+lemma apm_m02j02_hilbertBasis_complex {s : Set ℝ} {b db : ℕ → ℝ → ℝ}
+    (h : apm_m02j02_IsH10HilbertBasis s b db) : apm_m02j02_IsH10HilbertBasisComplex s b db := by
+  intro u du hre him ε hε
+  obtain ⟨c₁, hc₁⟩ := h.2.2 _ _ hre (ε / 2) (half_pos hε)
+  obtain ⟨c₂, hc₂⟩ := h.2.2 _ _ him (ε / 2) (half_pos hε)
+  refine ⟨apm_m02j02_scaleC 1 c₁ + apm_m02j02_scaleC Complex.I c₂, ?_⟩
+  have hsum (β : ℕ → ℝ → ℝ) :
+      ((apm_m02j02_scaleC 1 c₁ + apm_m02j02_scaleC Complex.I c₂).sum
+          fun n a x => a * (β n x : ℂ)) =
+        fun x => (((c₁.sum fun n a => a • β n) x : ℝ) : ℂ) +
+          Complex.I * (((c₂.sum fun n a => a • β n) x : ℝ) : ℂ) := by
+    rw [Finsupp.sum_add_index' (by intro n; funext y; simp)
+      (by intro n a a'; funext y; simp [add_mul]),
+      apm_m02j02_scaleC_sum, apm_m02j02_scaleC_sum]
+    funext x
+    simp
+  have hS := apm_m02j02_InH10_finsupp h.1 c₁
+  have hT := apm_m02j02_InH10_finsupp h.1 c₂
+  have err (f : ℝ → ℂ) (S T : ℝ → ℝ)
+      (m1 : AEStronglyMeasurable (fun x => (f x).re - S x) (volume.restrict s))
+      (m2 : AEStronglyMeasurable (fun x => (f x).im - T x) (volume.restrict s))
+      (g : ℝ → ℂ) (hg : g = fun x => (S x : ℂ) + Complex.I * (T x : ℂ)) :
+      eLpNorm (f - g) 2 (volume.restrict s) ≤
+        eLpNorm ((fun x => (f x).re) - S) 2 (volume.restrict s) +
+          eLpNorm ((fun x => (f x).im) - T) 2 (volume.restrict s) := by
+    have e : f - g = fun x => (((f x).re - S x : ℝ) : ℂ) + Complex.I * (((f x).im - T x : ℝ) : ℂ) := by
+      funext x
+      rw [hg]
+      apply Complex.ext <;> simp
+    rw [e]
+    exact apm_m02j02_complex_err m1 m2
+  have e1 := err u _ _ (hre.1.sub hS.1).1 (him.1.sub hT.1).1 _ (hsum b)
+  have e2 := err du _ _ (hre.2.1.sub hS.2.1).1 (him.2.1.sub hT.2.1).1 _ (hsum db)
+  have hsplit : ENNReal.ofReal ε = ENNReal.ofReal (ε / 2) + ENNReal.ofReal (ε / 2) := by
+    rw [← ENNReal.ofReal_add (half_pos hε).le (half_pos hε).le, add_halves]
+  rw [hsplit]
+  calc _ ≤ _ := add_le_add e1 e2
+    _ = (eLpNorm ((fun x => (u x).re) - c₁.sum fun n a => a • b n) 2 (volume.restrict s) +
+            eLpNorm ((fun x => (du x).re) - c₁.sum fun n a => a • db n) 2 (volume.restrict s)) +
+        (eLpNorm ((fun x => (u x).im) - c₂.sum fun n a => a • b n) 2 (volume.restrict s) +
+            eLpNorm ((fun x => (du x).im) - c₂.sum fun n a => a • db n) 2 (volume.restrict s)) := by
+      abel
+    _ < _ := ENNReal.add_lt_add hc₁ hc₂
+
+
+/-! ### The normalised sines on `(0,1)` -/
+
+/-- Normalising constant of the `n`th sine in the `H¹` graph norm. -/
+noncomputable def apm_m02j02_sineScale (n : ℕ) : ℝ :=
+  Real.sqrt (2 / (1 + ((n + 1 : ℝ) * Real.pi) ^ 2))
+
+lemma apm_m02j02_sineScale_pos (n : ℕ) : 0 < apm_m02j02_sineScale n :=
+  Real.sqrt_pos.2 (by positivity)
+
+lemma apm_m02j02_sineScale_sq (n : ℕ) :
+    apm_m02j02_sineScale n ^ 2 * (1 + ((n + 1 : ℝ) * Real.pi) ^ 2) = 2 := by
+  have h : 0 < 1 + ((n + 1 : ℝ) * Real.pi) ^ 2 := by positivity
+  rw [apm_m02j02_sineScale, Real.sq_sqrt (by positivity)]
+  field_simp
+
+lemma apm_m02j02_sineDeriv_hasDerivAt (n : ℕ) (x : ℝ) :
+    HasDerivAt (apm_m02j02_sineDeriv n)
+      (-((n + 1 : ℝ) * Real.pi) ^ 2 * apm_m02j02_sine n x) x := by
+  have h1 : HasDerivAt (fun y : ℝ => (n + 1 : ℝ) * Real.pi * y) ((n + 1 : ℝ) * Real.pi) x := by
+    simpa using (hasDerivAt_id x).const_mul ((n + 1 : ℝ) * Real.pi)
+  have h2 := (h1.cos).const_mul ((n + 1 : ℝ) * Real.pi)
+  convert h2 using 1
+  simp only [apm_m02j02_sine]
+  ring
+
+lemma apm_m02j02_sineDeriv_integral (i j : ℕ) :
+    (∫ x in (0 : ℝ)..1, apm_m02j02_sineDeriv i x * apm_m02j02_sineDeriv j x) =
+      ((j + 1 : ℝ) * Real.pi) ^ 2 *
+        ∫ x in (0 : ℝ)..1, apm_m02j02_sine i x * apm_m02j02_sine j x := by
+  have hc1 : Continuous (apm_m02j02_sineDeriv i) := (apm_m02j02_sineDeriv_contDiff i).continuous
+  have hc2 : Continuous (apm_m02j02_sineDeriv j) := (apm_m02j02_sineDeriv_contDiff j).continuous
+  have hs1 : Continuous (apm_m02j02_sine i) := (apm_m02j02_sine_contDiff i).continuous
+  have hs2 : Continuous (apm_m02j02_sine j) := (apm_m02j02_sine_contDiff j).continuous
+  have hparts := intervalIntegral.integral_deriv_mul_eq_sub (a := 0) (b := 1)
+    (u := apm_m02j02_sine i) (v := apm_m02j02_sineDeriv j)
+    (u' := apm_m02j02_sineDeriv i)
+    (v' := fun x => -((j + 1 : ℝ) * Real.pi) ^ 2 * apm_m02j02_sine j x)
+    (fun x _ => apm_m02j02_hasDerivAt_sine i x)
+    (fun x _ => apm_m02j02_sineDeriv_hasDerivAt j x)
+    (hc1.intervalIntegrable _ _)
+    ((continuous_const.mul hs2).intervalIntegrable _ _)
+  rw [apm_m02j02_sine_zero, apm_m02j02_sine_one] at hparts
+  have hsplit := intervalIntegral.integral_add (a := 0) (b := 1) (μ := volume)
+    (f := fun x => apm_m02j02_sineDeriv i x * apm_m02j02_sineDeriv j x)
+    (g := fun x => apm_m02j02_sine i x *
+      (-((j + 1 : ℝ) * Real.pi) ^ 2 * apm_m02j02_sine j x))
+    ((hc1.mul hc2).intervalIntegrable _ _)
+    ((hs1.mul (continuous_const.mul hs2)).intervalIntegrable _ _)
+  beta_reduce at hparts
+  rw [hsplit] at hparts
+  have hmul : (∫ x in (0 : ℝ)..1, apm_m02j02_sine i x *
+        (-((j + 1 : ℝ) * Real.pi) ^ 2 * apm_m02j02_sine j x)) =
+      -((j + 1 : ℝ) * Real.pi) ^ 2 *
+        ∫ x in (0 : ℝ)..1, apm_m02j02_sine i x * apm_m02j02_sine j x := by
+    rw [← intervalIntegral.integral_const_mul]
+    exact intervalIntegral.integral_congr fun x _ => by ring
+  rw [hmul] at hparts
+  linarith
+
+lemma apm_m02j02_sineGraph_integral (i j : ℕ) :
+    (∫ x in Ioo (0 : ℝ) 1,
+        ((apm_m02j02_sineScale i • apm_m02j02_sine i) x *
+            (apm_m02j02_sineScale j • apm_m02j02_sine j) x +
+          (apm_m02j02_sineScale i • apm_m02j02_sineDeriv i) x *
+            (apm_m02j02_sineScale j • apm_m02j02_sineDeriv j) x)) =
+      if i = j then 1 else 0 := by
+  have hs : Continuous fun x => apm_m02j02_sine i x * apm_m02j02_sine j x :=
+    (apm_m02j02_sine_contDiff i).continuous.mul (apm_m02j02_sine_contDiff j).continuous
+  have hd : Continuous fun x => apm_m02j02_sineDeriv i x * apm_m02j02_sineDeriv j x :=
+    (apm_m02j02_sineDeriv_contDiff i).continuous.mul (apm_m02j02_sineDeriv_contDiff j).continuous
+  rw [← integral_Ioc_eq_integral_Ioo, ← intervalIntegral.integral_of_le zero_le_one]
+  simp only [Pi.smul_apply, smul_eq_mul]
+  have e : (fun x => apm_m02j02_sineScale i * apm_m02j02_sine i x *
+        (apm_m02j02_sineScale j * apm_m02j02_sine j x) +
+      apm_m02j02_sineScale i * apm_m02j02_sineDeriv i x *
+        (apm_m02j02_sineScale j * apm_m02j02_sineDeriv j x)) =
+      fun x => apm_m02j02_sineScale i * apm_m02j02_sineScale j *
+        (apm_m02j02_sine i x * apm_m02j02_sine j x +
+          apm_m02j02_sineDeriv i x * apm_m02j02_sineDeriv j x) := by
+    funext x
+    ring
+  rw [e, intervalIntegral.integral_const_mul,
+    intervalIntegral.integral_add (hs.intervalIntegrable _ _) (hd.intervalIntegrable _ _),
+    apm_m02j02_sineDeriv_integral]
+  split_ifs with hij
+  · subst hij
+    rw [apm_m02j02_sine_norm_sq]
+    have h := apm_m02j02_sineScale_sq i
+    linear_combination h / 2
+  · rw [apm_m02j02_sine_orthogonal hij]
+    ring
+
+lemma apm_m02j02_exists_scaled_finsupp {e de : ℕ → ℝ → ℝ} {C : ℕ → ℝ} (hC : ∀ n, C n ≠ 0)
+    (c : ℕ →₀ ℝ) :
+    ∃ d : ℕ →₀ ℝ, (d.sum fun n a => a • (C n • e n)) = (c.sum fun n a => a • e n) ∧
+      (d.sum fun n a => a • (C n • de n)) = c.sum fun n a => a • de n := by
+  induction c using Finsupp.induction_linear with
+  | zero => exact ⟨0, by simp, by simp⟩
+  | add f g hf hg =>
+    obtain ⟨d₁, h₁, h₂⟩ := hf
+    obtain ⟨d₂, h₃, h₄⟩ := hg
+    refine ⟨d₁ + d₂, ?_, ?_⟩
+    · rw [Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _),
+        Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _), h₁, h₃]
+    · rw [Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _),
+        Finsupp.sum_add_index' (by simp) (fun _ _ _ => add_smul _ _ _), h₂, h₄]
+  | single n a =>
+    refine ⟨Finsupp.single n (a / C n), ?_, ?_⟩
+    · rw [Finsupp.sum_single_index (by simp), Finsupp.sum_single_index (by simp), smul_smul,
+        div_mul_cancel₀ _ (hC n)]
+    · rw [Finsupp.sum_single_index (by simp), Finsupp.sum_single_index (by simp), smul_smul,
+        div_mul_cancel₀ _ (hC n)]
+
+lemma apm_m02j02_sine_hilbertBasis (h : apm_m02j02_IsH10Basis (Ioo (0 : ℝ) 1)
+      apm_m02j02_sine apm_m02j02_sineDeriv) :
+    apm_m02j02_IsH10HilbertBasis (Ioo (0 : ℝ) 1)
+      (fun n => apm_m02j02_sineScale n • apm_m02j02_sine n)
+      (fun n => apm_m02j02_sineScale n • apm_m02j02_sineDeriv n) := by
+  refine ⟨fun n => apm_m02j02_InH10_smul _ (h.1 n), apm_m02j02_sineGraph_integral, ?_⟩
+  intro u du hu ε hε
+  obtain ⟨c, hc⟩ := h.2.2 u du hu ε hε
+  obtain ⟨d, h₁, h₂⟩ := apm_m02j02_exists_scaled_finsupp (e := apm_m02j02_sine)
+    (de := apm_m02j02_sineDeriv) (fun n => (apm_m02j02_sineScale_pos n).ne') c
+  exact ⟨d, by rw [h₁, h₂]; exact hc⟩
+
+/-- Each `H¹₀(Ω)` has a countable Hilbert basis, orthonormal for the graph inner product
+`∫ (u v + u' v')`, with dense finite span, and that basis also spans the complex space.  On
+`(0,1)` it is the normalised sines.  On `(0,∞)` and `ℝ` each element is a finite combination
+of odd Hermite functions, respectively Hermite functions, and those families are themselves
+complete and linearly independent (`apm_m02j02_system`). -/
+theorem apm_m02j02 :
+    (apm_m02j02_IsH10HilbertBasis (Ioo (0 : ℝ) 1)
+        (fun n => apm_m02j02_sineScale n • apm_m02j02_sine n)
+        (fun n => apm_m02j02_sineScale n • apm_m02j02_sineDeriv n) ∧
+      apm_m02j02_IsH10HilbertBasisComplex (Ioo (0 : ℝ) 1)
+        (fun n => apm_m02j02_sineScale n • apm_m02j02_sine n)
+        (fun n => apm_m02j02_sineScale n • apm_m02j02_sineDeriv n)) ∧
+    (∃ b db, apm_m02j02_IsH10HilbertBasis (Ioi (0 : ℝ)) b db ∧
+      apm_m02j02_IsH10HilbertBasisComplex (Ioi (0 : ℝ)) b db ∧
+      ∀ n, ∃ c : ℕ →₀ ℝ,
+        b n = (c.sum fun k a => a • apm_m02j02_hermiteFunction (2 * k + 1)) ∧
+        db n = c.sum fun k a => a • apm_m02j02_hermiteFunctionDeriv (2 * k + 1)) ∧
+    (∃ b db, apm_m02j02_IsH10HilbertBasis (Set.univ : Set ℝ) b db ∧
+      apm_m02j02_IsH10HilbertBasisComplex (Set.univ : Set ℝ) b db ∧
+      ∀ n, ∃ c : ℕ →₀ ℝ, b n = (c.sum fun k a => a • apm_m02j02_hermiteFunction k) ∧
+        db n = c.sum fun k a => a • apm_m02j02_hermiteFunctionDeriv k) := by
+  obtain ⟨h₁, h₂, h₃⟩ := apm_m02j02_system
+  have hb₁ := apm_m02j02_sine_hilbertBasis h₁
+  obtain ⟨b₂, d₂, hb₂, hc₂⟩ :=
+    apm_m02j02_exists_hilbertBasis h₂ apm_m02j02_oddHermite_graphAEIndependent
+  obtain ⟨b₃, d₃, hb₃, hc₃⟩ :=
+    apm_m02j02_exists_hilbertBasis h₃ apm_m02j02_hermite_graphAEIndependent
+  exact ⟨⟨hb₁, apm_m02j02_hilbertBasis_complex hb₁⟩,
+    ⟨b₂, d₂, hb₂, apm_m02j02_hilbertBasis_complex hb₂, hc₂⟩,
+    ⟨b₃, d₃, hb₃, apm_m02j02_hilbertBasis_complex hb₃, hc₃⟩⟩
