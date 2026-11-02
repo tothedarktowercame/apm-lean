@@ -123,3 +123,7 @@ Backlog grade: vacuous, IsCompact (support φ) forced every test function to zer
 ## m96J05
 
 Compiled on the lemmas worktree: 0 errors, no sorry, apm_m96j05 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, given code and problem only, strict standard: faithful. D is the symmetric difference quotient on L2(R, C), T f(x)=f(x+1), operator exponential, L2 norm convergence for each f along punctured neighbourhood of 0, no hypotheses. Printed f(x+e-f(x-e)) is a parenthesis typo: as printed it is not linear or well defined on L2 classes, contradicting 'bounded linear'; hint and solution confirm the repair.
+
+## a96A04
+
+Compiled on the lemmas worktree: 0 errors, no sorry, apm_a96a04 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, given code, problem and defect note, strict standard: faithful, drops nothing. All three clauses for complex f in L2(R^n), every n, kernel (4 pi t)^(-n/2) exp(-|x-y|^2/4t), C-infinity not analytic, limit along a fresh variable at 0+. The only printed defect is the typo L^2(R) for L^2(R^n), as clause (b)'s own norm shows; grader also corrected the earlier defect note, which overstated the wrapped prefactor and (x-y)^2.
