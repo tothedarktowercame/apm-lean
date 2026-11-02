@@ -3404,6 +3404,26 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:46:42Z"
   },
+  "m00A04": {
+   "decls": [
+    "apm_m00a04"
+   ],
+   "sha256": "d2cc3b7005157e63c5dfaedf748368c4289d3fd118d48140c492f3a3a36aab7d",
+   "defs": [
+    "apm_m00A04_L2On",
+    "apm_m00A04_memH10WithGradient",
+    "apm_m00A04_partial",
+    "apm_m00A04_phi",
+    "apm_m00A04_testFunction",
+    "apm_m00A04_weakGradient"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": null,
+   "rev": "1cc379453",
+   "approved_at": "2026-11-02T00:27:30Z"
+  },
   "m00A05": {
    "decls": [
     "apm_m00a05"
