@@ -119,3 +119,7 @@ Backlog grade: narrower, n ≥ 2 only. Repair by kimi-2 (with lemma-3's diagnosi
 ## m00A04
 
 Backlog grade: vacuous, IsCompact (support φ) forced every test function to zero, so u = g = 0 solved every forcing. Repair by kimi-1 uses C_c^∞(U) with HasCompactSupport and tsupport in U, builds H¹₀ as the closure of test pairs in a PiLp energy space, proves integration by parts, and gets the weak solution from the Riesz representative (929 lines added, 110 removed). New grade: faithful, marginally stronger as the domain need not be connected; u = 0 no longer solves every forcing.
+
+## m96J05
+
+Compiled on the lemmas worktree: 0 errors, no sorry, apm_m96j05 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, given code and problem only, strict standard: faithful. D is the symmetric difference quotient on L2(R, C), T f(x)=f(x+1), operator exponential, L2 norm convergence for each f along punctured neighbourhood of 0, no hypotheses. Printed f(x+e-f(x-e)) is a parenthesis typo: as printed it is not linear or well defined on L2 classes, contradicting 'bounded linear'; hint and solution confirm the repair.
