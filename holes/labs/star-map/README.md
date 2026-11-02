@@ -16,13 +16,13 @@ and `STAR-MAP.md`.  It needs `scipy`.  Tiers:
 
 | tier | meaning | tags | blind sample: really used |
 |---|---|---|---|
-| both | informal side names it, Lean proof reaches a matching constant | 752 | 22 of 25 |
-| named | no Lean match, but 3+ mentions, or a mention plus a mark8 warrant or the statement | 744 | 18 of 25 |
-| passing | any other mention | 771 | not sampled alone; all mentions without Lean: 12 of 25 |
-| lean | Lean constant only, no informal mention | 1016 | 6 of 25 |
+| both | informal side names it, Lean proof reaches a matching constant | 751 | 22 of 25 |
+| named | no Lean match, but 3+ mentions, or a mention plus a mark8 warrant or the statement | 737 | 18 of 25 |
+| passing | any other mention | 768 | not sampled alone; all mentions without Lean: 12 of 25 |
+| lean | Lean constant only, no informal mention | 1017 | 6 of 25 |
 | untagged | control: skills from the problem's own area with no tag | | 1 of 25 |
 
-`both` and `named` are the study tags.  470 of 484 problems carry at least one, 271 at least three.
+`both` and `named` are the study tags.  470 of 484 problems carry at least one, 270 at least three.
 The Lean tier mostly records how a proof was formalised, such as a manifold proof passing through
 Hilbert space lemmas, so it is not a study tag.
 
