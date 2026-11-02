@@ -28,24 +28,27 @@ def run(pid):
     decls = reg[pid].get('decls') or []
     src = os.path.join(ROOT, 'problems', pid, 'lean', 'Main.lean')
     tmp = tempfile.NamedTemporaryFile('w', suffix='.lean', dir=os.path.join(ROOT, 'scratch'), delete=False)
-    tmp.write('import Lean\n' + open(src).read() + '\n' + tail + '\n#star_map_deps ' + ' '.join(decls) + '\n')
+    lines = open(src).read().splitlines()
+    k = max((i for i, l in enumerate(lines) if l.startswith('import ')), default=-1) + 1
+    tmp.write('import Lean\n' + '\n'.join(lines[:k]) + '\n' + tail + '\n' + '\n'.join(lines[k:]) +
+              '\n#star_map_deps ' + ' '.join(decls) + '\n')
     tmp.close()
     try:
-        p = subprocess.run(['systemd-run', '--user', '--scope', '-q', '-p', 'MemoryMax=6G', 'nice', '-n', '15',
+        p = subprocess.run(['systemd-run', '--user', '--scope', '-q', '-p', 'MemoryMax=14G', 'nice', '-n', '15',
                             'lake', 'env', 'lean', tmp.name], cwd=ROOT, capture_output=True, text=True, timeout=1800)
         out = p.stdout + p.stderr
     except subprocess.TimeoutExpired:
         out = 'ERROR timeout'
     finally:
         os.unlink(tmp.name)
-    lines = [l for l in out.splitlines() if l.startswith('DEP\t')]
+    deps = [l for l in out.splitlines() if l.startswith('DEP\t')]
     errs = [l for l in out.splitlines() if ' error' in l or l.startswith('ERROR')]
     with open(dest, 'w') as f:
-        if not lines:
+        if not deps:
             f.write('ERROR\n' + '\n'.join(errs[:5]) + '\n')
         else:
-            f.write('\n'.join(lines) + '\n')
-    return pid, len(lines)
+            f.write("\n".join(deps) + "\n")
+    return pid, len(deps)
 
 with cf.ThreadPoolExecutor(jobs) as ex:
     for pid, r in ex.map(run, ids):
