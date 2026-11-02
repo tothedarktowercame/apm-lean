@@ -28,7 +28,7 @@ def run(pid):
     decls = reg[pid].get('decls') or []
     src = os.path.join(ROOT, 'problems', pid, 'lean', 'Main.lean')
     tmp = tempfile.NamedTemporaryFile('w', suffix='.lean', dir=os.path.join(ROOT, 'scratch'), delete=False)
-    tmp.write(open(src).read() + '\n' + tail + '\n#star_map_deps ' + ' '.join(decls) + '\n')
+    tmp.write('import Lean\n' + open(src).read() + '\n' + tail + '\n#star_map_deps ' + ' '.join(decls) + '\n')
     tmp.close()
     try:
         p = subprocess.run(['systemd-run', '--user', '--scope', '-q', '-p', 'MemoryMax=6G', 'nice', '-n', '15',

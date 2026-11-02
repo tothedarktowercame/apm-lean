@@ -143,3 +143,7 @@ Compiled on the lemmas worktree with autoImplicit off: 0 errors, no sorry, apm_b
 ## m02J02
 
 Compiled on the lemmas worktree: 0 errors, no sorry, apm_m02j02 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, strict standard: faithful; first pass asked for the sines named explicitly and softer docstrings, both done; second pass found no defect in the statement. 'Basis' read as Hilbert basis, per the informal solution: orthonormal for the graph inner product with dense span. (a) the normalised sines, explicit. (b), (c) finite combinations of odd Hermite and Hermite functions, orthonormalised, existence form as in the solution. Real basis also spans complex H10. Replaces the 'complete linearly independent' reading, kept as apm_m02j02_system.
+
+## m96J01
+
+Found 2026-11-02 by the star-map dependency run: `let F := proj V in` is not Lean 4 syntax, so Main.lean had never parsed and the registered decl did not exist, though it was counted closed (no sorry in the text) and graded faithful from reading. Fixed the `let` and the two last proof lines; compiled, axioms propext, Classical.choice, Quot.sound. Statement meaning unchanged, grade stands.
