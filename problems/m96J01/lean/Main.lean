@@ -51,3 +51,12 @@ theorem projection_properties
   exact map_smul F r x
 
 end ApmCanaries.Frames.M96J01.Apm_v2_m96J01_1775007086632.Main
+
+open ApmCanaries.Frames.M96J01.Apm_v2_m96J01_1775007086632.Main in
+/-- The problem's four properties of orthogonal projection, at root namespace. -/
+theorem apm_m96j01 {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+    (V : ClosedSubmodule ℝ H) (hV : (V : Submodule ℝ H) ≠ ⊥) :
+    let F := proj V;
+    (F 0 = 0 ∧ ∀ x y, F (x + y) = F x + F y ∧ ∀ r : ℝ, F (r • x) = r • F x) ∧
+    ‖F‖ = 1 ∧ IsSelfAdjoint F ∧ F.comp F = F :=
+  projection_properties V hV
