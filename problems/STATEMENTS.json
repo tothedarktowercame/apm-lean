@@ -4636,16 +4636,16 @@
    "decls": [
     "projection_properties"
    ],
-   "sha256": "1a055cf718625496c9a16cf03e4748891eab72adc7806acb32da644654031c22",
+   "sha256": "7924ab5126b0987b5ccacc235d89a165790365246882a2ec160907306cce780f",
    "defs": [
     "proj"
    ],
    "grade": "faithful",
-   "grader": "codex read-only grader (backlog-1024 batch 30)",
-   "evidence": "holes/labs/statement-registry/backlog-1024/grades-30.md",
+   "grader": "codex read-only grader (backlog-1024 batch 30); statement unchanged in meaning, syntax repaired by claude-14 2026-11-02",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
    "prelim_defect": null,
-   "rev": "b292dad40",
-   "approved_at": "2026-10-24T22:04:15Z"
+   "rev": "6fe404891",
+   "approved_at": "2026-11-02T14:56:36Z"
   },
   "m96J02": {
    "decls": [
