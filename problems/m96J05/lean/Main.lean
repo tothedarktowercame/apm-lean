@@ -12,22 +12,226 @@ The malformed formula
 ## Encoding questions
 
 `L²(ℝ)` is taken over `ℂ`, the natural scalar field for the Fourier transform.
-The difference quotient and unit translation are represented in Fourier coordinates
-and pinned almost everywhere to their exact multipliers; no pointwise representative
-of an `L²` equivalence class is treated as canonical.
+The difference quotient `apm_m96j05_D` and unit translation `apm_m96j05_T` are the
+physical-space operators, built from translation on `L²`; `apm_m96j05_Tr_apply_ae` and
+`apm_m96j05_D_apply_ae` pin them to the repaired formula almost everywhere.  The main
+theorem is `apm_m96j05`.  `apm_m96j05_fourier` is the multiplier-side statement it is
+derived from, by conjugation with the Fourier transform.
 -/
 
 open MeasureTheory Filter
+open scoped FourierTransform SchwartzMap Topology
 
 noncomputable section
 
 abbrev apm_m96j05_L2 := Lp ℂ 2 (volume : Measure ℝ)
 
+/-- Translation by `a` on `L²(ℝ, ℂ)`, with the convention
+`(Tr a f)(x) = f(x + a)` almost everywhere. -/
+def apm_m96j05_Tr (a : ℝ) :
+    apm_m96j05_L2 →L[ℂ] apm_m96j05_L2 :=
+  (Lp.compMeasurePreservingₗᵢ ℂ (fun x : ℝ => x + a)
+    (measurePreserving_add_right volume a)).toContinuousLinearMap
+
+/-- The symmetric difference quotient built from translations. -/
+def apm_m96j05_D (ε : ℝ) :
+    apm_m96j05_L2 →L[ℂ] apm_m96j05_L2 :=
+  ((2 * ε : ℝ) : ℂ)⁻¹ • (apm_m96j05_Tr ε - apm_m96j05_Tr (-ε))
+
+/-- Unit translation on `L²(ℝ, ℂ)`. -/
+def apm_m96j05_T : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2 :=
+  apm_m96j05_Tr 1
+
+def apm_m96j05_phase (a ξ : ℝ) : ℂ :=
+  Complex.exp (Complex.I * (2 * Real.pi * a * ξ))
+
+def apm_m96j05_phaseLp (a : ℝ) : Lp ℂ ⊤ (volume : Measure ℝ) :=
+  MemLp.toLp (apm_m96j05_phase a)
+    (memLp_top_of_bound
+      (by unfold apm_m96j05_phase; fun_prop) 1
+      (.of_forall fun ξ => by
+        simp [apm_m96j05_phase, Complex.norm_exp]))
+
+lemma apm_m96j05_phaseLp_apply_ae (a : ℝ) :
+    (fun ξ : ℝ => apm_m96j05_phaseLp a ξ) =ᵐ[volume]
+      apm_m96j05_phase a := by
+  rw [apm_m96j05_phaseLp]
+  exact MemLp.coeFn_toLp _
+
+/-- Multiplication by the Fourier phase corresponding to translation by `a`. -/
+def apm_m96j05_Mphase (a : ℝ) :
+    apm_m96j05_L2 →L[ℂ] apm_m96j05_L2 :=
+  (ContinuousLinearMap.mul ℂ ℂ).holderL volume ⊤ 2 2
+    (apm_m96j05_phaseLp a)
+
+lemma apm_m96j05_Mphase_apply_ae (a : ℝ) (f : apm_m96j05_L2) :
+    (fun ξ : ℝ => apm_m96j05_Mphase a f ξ) =ᵐ[volume]
+      fun ξ => apm_m96j05_phase a ξ * f ξ := by
+  filter_upwards [ContinuousLinearMap.coeFn_holder (r := (2 : ENNReal))
+      (ContinuousLinearMap.mul ℂ ℂ)
+      (apm_m96j05_phaseLp a) f,
+    apm_m96j05_phaseLp_apply_ae a] with ξ hmul hphase
+  exact hmul.trans (congrArg (fun z : ℂ => z * f ξ) hphase)
+
+lemma apm_m96j05_Tr_apply (a : ℝ) (f : apm_m96j05_L2) :
+    apm_m96j05_Tr a f =
+      Lp.compMeasurePreserving (fun x : ℝ => x + a)
+        (measurePreserving_add_right volume a) f := rfl
+
+lemma apm_m96j05_Tr_apply_ae (a : ℝ) (f : apm_m96j05_L2) :
+    (fun x : ℝ => apm_m96j05_Tr a f x) =ᵐ[volume]
+      fun x => f (x + a) := by
+  exact Lp.coeFn_compMeasurePreserving f
+    (measurePreserving_add_right volume a)
+
+lemma apm_m96j05_D_apply_ae (ε : ℝ) (f : apm_m96j05_L2) :
+    (fun x : ℝ => apm_m96j05_D ε f x) =ᵐ[volume]
+      fun x => ((2 * ε : ℝ) : ℂ)⁻¹ * (f (x + ε) - f (x - ε)) := by
+  filter_upwards [Lp.coeFn_smul (((2 * ε : ℝ) : ℂ)⁻¹)
+      ((apm_m96j05_Tr ε) f - (apm_m96j05_Tr (-ε)) f),
+    Lp.coeFn_sub (apm_m96j05_Tr ε f) (apm_m96j05_Tr (-ε) f),
+    apm_m96j05_Tr_apply_ae ε f, apm_m96j05_Tr_apply_ae (-ε) f]
+      with x hsmul hsub hpos hneg
+  change (((((2 * ε : ℝ) : ℂ)⁻¹) •
+    ((apm_m96j05_Tr ε) f - (apm_m96j05_Tr (-ε)) f) :
+      apm_m96j05_L2) x) = _
+  rw [hsmul]
+  change ((2 * ε : ℝ) : ℂ)⁻¹ *
+    (((apm_m96j05_Tr ε) f - (apm_m96j05_Tr (-ε)) f) x) = _
+  rw [hsub]
+  simp only [Pi.sub_apply]
+  rw [hpos, hneg]
+  congr 2
+
+lemma apm_m96j05_fourier_Tr_eq (a : ℝ) (f : apm_m96j05_L2) :
+    𝓕 (apm_m96j05_Tr a f) = apm_m96j05_Mphase a (𝓕 f) := by
+  let p : apm_m96j05_L2 → Prop := fun g =>
+    𝓕 (apm_m96j05_Tr a g) = apm_m96j05_Mphase a (𝓕 g)
+  apply DenseRange.induction_on (p := p)
+    (SchwartzMap.denseRange_toLpCLM (E := ℝ) (F := ℂ)
+      (p := 2) ENNReal.ofNat_ne_top) f
+  · apply isClosed_eq
+    · exact (Lp.fourierTransformₗᵢ ℝ ℂ).continuous.comp
+        (apm_m96j05_Tr a).continuous
+    · exact (apm_m96j05_Mphase a).continuous.comp
+        (Lp.fourierTransformₗᵢ ℝ ℂ).continuous
+  intro g
+  let ga : 𝓢(ℝ, ℂ) := g.compSubConstCLM ℂ (-a)
+  have hgshift :
+      (fun x : ℝ => (g.toLp 2 : apm_m96j05_L2) (x + a)) =ᵐ[volume]
+        fun x => g (x + a) :=
+    (g.coeFn_toLp 2 volume).comp_tendsto
+      (measurePreserving_add_right volume a).quasiMeasurePreserving.tendsto_ae
+  have htr : apm_m96j05_Tr a (g.toLp 2) = ga.toLp 2 := by
+    apply Lp.ext
+    filter_upwards [apm_m96j05_Tr_apply_ae a (g.toLp 2),
+      hgshift, ga.coeFn_toLp 2 volume] with x htr hg hga
+    rw [htr, hga, hg]
+    simp [ga]
+  change 𝓕 (apm_m96j05_Tr a (g.toLp 2)) =
+    apm_m96j05_Mphase a (𝓕 (g.toLp 2))
+  rw [htr, SchwartzMap.toLp_fourier_eq, SchwartzMap.toLp_fourier_eq]
+  apply Lp.ext
+  filter_upwards [apm_m96j05_Mphase_apply_ae a ((𝓕 g).toLp 2),
+    (𝓕 ga).coeFn_toLp 2 volume, (𝓕 g).coeFn_toLp 2 volume]
+      with ξ hmul hga hg
+  rw [hga, hmul, hg]
+  have hfourier := congrFun
+    (Fourier.fourierIntegral_comp_add_right
+      Real.fourierChar volume (g : ℝ → ℂ) a) ξ
+  have hinter (x y : ℝ) : inner ℝ x y = x * y := by
+    change y * x = x * y
+    ring
+  have hphase : (Real.fourierChar (a * ξ) : ℂ) =
+      apm_m96j05_phase a ξ := by
+    simp only [Real.fourierChar_apply, apm_m96j05_phase]
+    congr 1
+    push_cast
+    ring
+  rw [Circle.smul_def, hphase] at hfourier
+  rw [SchwartzMap.fourier_coe ga, SchwartzMap.fourier_coe g]
+  simpa [ga, Real.fourier_eq,
+    Fourier.fourierIntegral, VectorFourier.fourierIntegral, real_inner_comm,
+    hinter]
+    using hfourier
+
+lemma apm_m96j05_fourier_Tr (a : ℝ) (f : apm_m96j05_L2) :
+    (fun ξ : ℝ => 𝓕 (apm_m96j05_Tr a f) ξ) =ᵐ[volume]
+      fun ξ => apm_m96j05_phase a ξ * 𝓕 f ξ := by
+  rw [apm_m96j05_fourier_Tr_eq]
+  exact apm_m96j05_Mphase_apply_ae a (𝓕 f)
+
 def apm_m96j05_differenceSymbol (ε ξ : ℝ) : ℂ :=
-  Complex.I * (Real.sin (ε * ξ) / ε)
+  Complex.I * (Real.sin (2 * Real.pi * ε * ξ) / ε)
+
+lemma apm_m96j05_phase_difference (ε ξ : ℝ) (hε : ε ≠ 0) :
+    (((2 * ε : ℝ) : ℂ)⁻¹) *
+        (apm_m96j05_phase ε ξ - apm_m96j05_phase (-ε) ξ) =
+      apm_m96j05_differenceSymbol ε ξ := by
+  rw [show apm_m96j05_phase ε ξ =
+      Complex.exp (((2 * Real.pi * ε * ξ : ℝ) : ℂ) * Complex.I) by
+    simp only [apm_m96j05_phase]; congr 1; push_cast; ring,
+    show apm_m96j05_phase (-ε) ξ =
+      Complex.exp ((-(2 * Real.pi * ε * ξ : ℝ) : ℂ) * Complex.I) by
+    simp only [apm_m96j05_phase]; congr 1; push_cast; ring]
+  rw [Complex.exp_mul_I, Complex.exp_mul_I]
+  simp only [map_neg, Complex.cos_neg, Complex.sin_neg]
+  simp only [apm_m96j05_differenceSymbol]
+  rw [div_eq_mul_inv]
+  push_cast
+  field_simp
+  ring
+
+lemma apm_m96j05_fourier_D (ε : ℝ) (hε : ε ≠ 0)
+    (f : apm_m96j05_L2) :
+    (fun ξ : ℝ => 𝓕 (apm_m96j05_D ε f) ξ) =ᵐ[volume]
+      fun ξ => apm_m96j05_differenceSymbol ε ξ * 𝓕 f ξ := by
+  have hlin : 𝓕 (apm_m96j05_D ε f) =
+      (((2 * ε : ℝ) : ℂ)⁻¹) •
+        ((Lp.fourierTransformₗᵢ ℝ ℂ) (apm_m96j05_Tr ε f) -
+          (Lp.fourierTransformₗᵢ ℝ ℂ) (apm_m96j05_Tr (-ε) f)) := by
+    change (Lp.fourierTransformₗᵢ ℝ ℂ)
+      (((((2 * ε : ℝ) : ℂ)⁻¹) •
+        (apm_m96j05_Tr ε - apm_m96j05_Tr (-ε))) f) = _
+    rw [ContinuousLinearMap.smul_apply, map_smul, ContinuousLinearMap.sub_apply,
+      map_sub]
+  rw [hlin]
+  change (fun ξ : ℝ =>
+    ((((2 * ε : ℝ) : ℂ)⁻¹) •
+      (𝓕 (apm_m96j05_Tr ε f) - 𝓕 (apm_m96j05_Tr (-ε) f)) :
+        apm_m96j05_L2) ξ) =ᵐ[volume] _
+  filter_upwards [Lp.coeFn_smul (((2 * ε : ℝ) : ℂ)⁻¹)
+      (𝓕 (apm_m96j05_Tr ε f) - 𝓕 (apm_m96j05_Tr (-ε) f)),
+    Lp.coeFn_sub (𝓕 (apm_m96j05_Tr ε f)) (𝓕 (apm_m96j05_Tr (-ε) f)),
+    apm_m96j05_fourier_Tr ε f, apm_m96j05_fourier_Tr (-ε) f]
+      with ξ hsmul hsub hp hn
+  rw [hsmul]
+  change (((2 * ε : ℝ) : ℂ)⁻¹) *
+    ((𝓕 (apm_m96j05_Tr ε f) - 𝓕 (apm_m96j05_Tr (-ε) f)) ξ) = _
+  rw [hsub]
+  simp only [Pi.sub_apply]
+  rw [hp, hn]
+  rw [← sub_mul, ← mul_assoc, apm_m96j05_phase_difference ε ξ hε]
+
+lemma apm_m96j05_fourier_D_pow_apply_ae (ε : ℝ) (hε : ε ≠ 0) :
+    ∀ (n : ℕ) (f : apm_m96j05_L2),
+      (fun ξ : ℝ => 𝓕 (((apm_m96j05_D ε) ^ n) f) ξ) =ᵐ[volume]
+        fun ξ => apm_m96j05_differenceSymbol ε ξ ^ n * 𝓕 f ξ := by
+  intro n
+  induction n with
+  | zero =>
+      intro f
+      simp
+  | succ n ih =>
+      intro f
+      filter_upwards [apm_m96j05_fourier_D ε hε
+        (((apm_m96j05_D ε) ^ n) f), ih f] with ξ hstep hpow
+      simp only [pow_succ', ContinuousLinearMap.mul_apply] at hstep ⊢
+      rw [hstep, hpow]
+      ring
 
 def apm_m96j05_shiftSymbol (ξ : ℝ) : ℂ :=
-  Complex.exp (Complex.I * ξ)
+  Complex.exp (Complex.I * (2 * Real.pi * ξ))
 
 /-- Both Fourier multipliers occurring in the dominated-convergence argument
 have modulus one. -/
@@ -48,18 +252,24 @@ lemma apm_m96j05_symbol_norms (ε ξ : ℝ) :
 translation symbol along the punctured neighborhood used in the theorem. -/
 lemma apm_m96j05_differenceSymbol_tendsto (ξ : ℝ) :
     Tendsto (fun ε : ℝ => apm_m96j05_differenceSymbol ε ξ)
-      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds (Complex.I * ξ)) := by
-  have hinner : HasDerivAt (fun ε : ℝ => ε * ξ) ξ 0 := by
-    simpa using (hasDerivAt_id (x := (0 : ℝ))).mul_const ξ
-  have hsin : HasDerivAt (fun ε : ℝ => Real.sin (ε * ξ)) ξ 0 := by
-    simpa using (Real.hasDerivAt_sin (0 * ξ)).comp 0 hinner
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ)
+      (nhds (Complex.I * (2 * Real.pi * ξ))) := by
+  have hinner : HasDerivAt (fun ε : ℝ => 2 * Real.pi * ε * ξ)
+      (2 * Real.pi * ξ) 0 := by
+    convert ((hasDerivAt_id (x := (0 : ℝ))).const_mul (2 * Real.pi)).mul_const ξ using 1 <;>
+      ring
+  have hsin : HasDerivAt (fun ε : ℝ => Real.sin (2 * Real.pi * ε * ξ))
+      (2 * Real.pi * ξ) 0 := by
+    simpa using (Real.hasDerivAt_sin (2 * Real.pi * 0 * ξ)).comp 0 hinner
   have hslope := hsin.tendsto_slope
-  have hquot : Tendsto (fun ε : ℝ => Real.sin (ε * ξ) / ε)
-      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds ξ) := by
+  have hquot : Tendsto (fun ε : ℝ => Real.sin (2 * Real.pi * ε * ξ) / ε)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds (2 * Real.pi * ξ)) := by
     convert hslope using 1
     funext ε
     simp [slope, div_eq_inv_mul]
-  convert tendsto_const_nhds.mul hquot.ofReal using 1 <;>
+  have hI : Tendsto (fun _ : ℝ => Complex.I)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds Complex.I) := tendsto_const_nhds
+  convert hI.mul hquot.ofReal using 1 <;>
     simp [apm_m96j05_differenceSymbol, Complex.ofReal_div]
 
 /-- Exponentiating the preceding scalar limit gives exactly the translation
@@ -190,7 +400,7 @@ theorem apm_m96J05_bridge_1
   intro k hk
   exact hterm k
 
-theorem apm_m96j05
+theorem apm_m96j05_fourier
     (D : ℝ → apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
     (T : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2)
     (hD : ∀ (ε : ℝ), ε ≠ 0 → ∀ f : apm_m96j05_L2,
@@ -202,89 +412,6 @@ theorem apm_m96j05
     ∀ f : apm_m96j05_L2,
       Tendsto (fun ε : ℝ => NormedSpace.exp (D ε) f)
         (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds (T f)) := by
-  /-
-  PARTIAL (operator exponential versus a.e. `Lp` multipliers).  The helper
-  `apm_m96j05_symbol_norms` proves the uniform modulus-one estimate for both
-  scalar exponentials, which supplies the domination bound.  The scalar
-  analytic part is available: for each `ξ`,
-  `sin (ε * ξ) / ε → ξ` on the punctured neighborhood of zero,
-  `Complex.exp (I * sin (ε * ξ) / ε) → Complex.exp (I * ξ)`, and both
-  exponentials have norm one.  Mathlib's filter-form dominated convergence
-  and `Lp.tendsto_Lp_iff_tendsto_eLpNorm` can then prove the final `L²`
-  convergence once the two `Lp` elements are identified with these
-  pointwise multipliers.
-
-  The missing load-bearing lemma is that an operator characterized only by
-  `hD` as multiplication a.e. has Banach-algebra exponential characterized
-  a.e. by the scalar exponential:
-
-  `NormedSpace.exp (D ε) f =ᵐ exp (differenceSymbol ε ·) * f`.
-
-  Mathlib supplies `NormedSpace.exp_eq_tsum` and `map_exp` for continuous ring
-  homomorphisms.  Point evaluation is not a well-defined, let alone
-  continuous, ring homomorphism on `Lp`, so `map_exp` cannot be applied to
-  `D ε` pointwise.  Expanding the operator power series directly requires
-  proving by induction that every `(D ε)^k` is the multiplier by `mε^k`,
-  intersecting the countably many a.e. identities, proving convergence of
-  the representative scalar series in `L²`, and identifying its `Lp` limit
-  with application of the operator-norm series.  A cleaner route would first
-  construct the continuous algebra homomorphism from bounded measurable
-  multipliers (`L∞`) to continuous operators on `L²`; no such packaged API or
-  corpus construction was found.
-
-  `LEMMA-INDEX.md` supplied strong `L²` translation continuity from
-  `ConstructionTargets.L2Translation` and several approximate-identity
-  convergence results, but these concern physical translations rather than
-  exponentials of multiplier operators.  Completed sibling `a93A02` gives a
-  Vitali-style sequence theorem, not the punctured real filter or multiplier
-  identification.  Partial sibling `m95J03` exposes the same
-  `NormedSpace.exp` power-series API but does not prove an infinite-dimensional
-  multiplier result.  `ConstructionTargets.KernelAverage`, the other
-  `ConstructionTargets/` modules, `YoungL2.lean`, and the fully closed artifact
-  scan yielded no missing homomorphism.  The frozen statement appears sound;
-  the unformalized multiplier-exponential interface is the blocker.
-
-  Closer hop 1 additionally reduced the scalar quotient limit to
-  `Real.hasDerivAt_sin 0 |>.tendsto_slope` and inspected
-  `NormedSpace.exp_continuousMap_eq`, which proves pointwise compatibility of
-  exponential for the Banach algebra of continuous functions.  That theorem
-  cannot be transported here: the symbols are merely bounded measurable
-  functions on an unbounded domain, and their multiplication operators act on
-  `Lp`; neither point evaluation nor a continuous-function coercion is
-  available for `Lp` equivalence classes.  Mathlib's distributional Fourier
-  multiplier API acts on Schwartz maps and tempered distributions, not as the
-  required bounded-multiplier algebra homomorphism into `L² →L L²`.  Thus the
-  original a.e.-power-series bridge remains open; the statement is unchanged.
-
-  CLOSER HOP 2 compiles the complete scalar convergence pipeline rather than
-  merely citing the sine derivative. `apm_m96j05_differenceSymbol_tendsto`
-  derives the punctured-filter quotient limit from
-  `HasDerivAt.tendsto_slope`; `apm_m96j05_exp_differenceSymbol_tendsto`
-  transports it through the complex exponential and identifies the result
-  with `shiftSymbol`; and `apm_m96j05_exp_differenceSymbol_mul_tendsto`
-  proves pointwise convergence after multiplication by arbitrary Fourier data.
-  Together with `apm_m96j05_symbol_norms`, every scalar and domination input
-  for an `Lp` dominated-convergence proof is therefore closed.
-
-  The remaining boundary is now exclusively operator-to-representative
-  identification: prove that `NormedSpace.exp (D ε) f` is a.e. the scalar
-  exponential multiplier. Renewed inspection of the `Lp` holder/smul APIs and
-  the multiplier-related siblings found no bounded-function multiplication
-  algebra homomorphism, so the countable a.e. operator-power-series assembly
-  remains honestly open.
-
-  CLOSER HOP 3 goes beyond that search by proving the finite-power part of the
-  assembly directly. `apm_m96j05_pow_apply_ae` shows, by induction and finite
-  intersection of the supplied a.e. identities, that every operator power
-  `(D ε)^n` acts as multiplication by `differenceSymbol ε ξ ^ n`. Thus no
-  multiplier algebra homomorphism is needed for polynomial approximants.
-  The remaining bridge is specifically passage to the infinite series:
-  reconcile the operator-norm `tsum` defining `NormedSpace.exp` with an a.e.
-  representative of the scalar exponential series, then invoke the compiled
-  dominated-convergence data. Searches of the `tsum`/`Lp` representative APIs
-  found no theorem commuting a countable operator series with representatives,
-  so this final bridge remains honestly open; the frozen statement is unchanged.
-  -/
   intro f
   rw [tendsto_iff_seq_tendsto]
   intro ε hε
@@ -382,3 +509,68 @@ theorem apm_m96j05
       (by norm_num : (2 : ENNReal) ≠ ⊤)]
     congr 1
   · simp
+
+/-- The Fourier transform regarded as a continuous linear equivalence. -/
+def apm_m96j05_Φ : apm_m96j05_L2 ≃L[ℂ] apm_m96j05_L2 :=
+  (Lp.fourierTransformₗᵢ ℝ ℂ).toContinuousLinearEquiv
+
+def apm_m96j05_M (ε : ℝ) :
+    apm_m96j05_L2 →L[ℂ] apm_m96j05_L2 :=
+  (apm_m96j05_Φ.conjContinuousAlgEquiv) (apm_m96j05_D ε)
+
+def apm_m96j05_N : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2 :=
+  (apm_m96j05_Φ.conjContinuousAlgEquiv) apm_m96j05_T
+
+lemma apm_m96j05_M_apply_ae (ε : ℝ) (hε : ε ≠ 0)
+    (g : apm_m96j05_L2) :
+    (fun ξ : ℝ => apm_m96j05_M ε g ξ) =ᵐ[volume]
+      fun ξ => apm_m96j05_differenceSymbol ε ξ * g ξ := by
+  change (fun ξ : ℝ =>
+    apm_m96j05_Φ (apm_m96j05_D ε (apm_m96j05_Φ.symm g)) ξ) =ᵐ[volume] _
+  have hsym : apm_m96j05_Φ (apm_m96j05_Φ.symm g) = g :=
+    apm_m96j05_Φ.apply_symm_apply g
+  conv_rhs => rw [← hsym]
+  change (fun ξ : ℝ => 𝓕 (apm_m96j05_D ε (apm_m96j05_Φ.symm g)) ξ) =ᵐ[volume]
+    fun ξ => apm_m96j05_differenceSymbol ε ξ *
+      𝓕 (apm_m96j05_Φ.symm g) ξ
+  exact apm_m96j05_fourier_D ε hε (apm_m96j05_Φ.symm g)
+
+lemma apm_m96j05_N_apply_ae (g : apm_m96j05_L2) :
+    (fun ξ : ℝ => apm_m96j05_N g ξ) =ᵐ[volume]
+      fun ξ => apm_m96j05_shiftSymbol ξ * g ξ := by
+  change (fun ξ : ℝ =>
+    apm_m96j05_Φ (apm_m96j05_T (apm_m96j05_Φ.symm g)) ξ) =ᵐ[volume] _
+  have hsym : apm_m96j05_Φ (apm_m96j05_Φ.symm g) = g :=
+    apm_m96j05_Φ.apply_symm_apply g
+  conv_rhs => rw [← hsym]
+  change (fun ξ : ℝ => 𝓕 (apm_m96j05_Tr 1 (apm_m96j05_Φ.symm g)) ξ) =ᵐ[volume]
+    fun ξ => apm_m96j05_shiftSymbol ξ * 𝓕 (apm_m96j05_Φ.symm g) ξ
+  simpa [apm_m96j05_shiftSymbol, apm_m96j05_phase] using
+    (apm_m96j05_fourier_Tr 1 (apm_m96j05_Φ.symm g))
+
+lemma apm_m96j05_exp_conj (A : apm_m96j05_L2 →L[ℂ] apm_m96j05_L2) :
+    NormedSpace.exp
+        ((apm_m96j05_Φ.conjContinuousAlgEquiv) A) =
+      (apm_m96j05_Φ.conjContinuousAlgEquiv) (NormedSpace.exp A) := by
+  symm
+  exact NormedSpace.map_exp_of_mem_ball (𝕂 := ℂ)
+    (apm_m96j05_Φ.conjContinuousAlgEquiv)
+    apm_m96j05_Φ.conjContinuousAlgEquiv.continuous A
+    (by rw [NormedSpace.expSeries_radius_eq_top]; exact edist_lt_top _ _)
+
+theorem apm_m96j05 (f : apm_m96j05_L2) :
+    Tendsto (fun ε : ℝ => NormedSpace.exp (apm_m96j05_D ε) f)
+      (𝓝[≠] 0) (𝓝 (apm_m96j05_T f)) := by
+  have hconv := apm_m96j05_fourier apm_m96j05_M apm_m96j05_N
+    apm_m96j05_M_apply_ae apm_m96j05_N_apply_ae (apm_m96j05_Φ f)
+  have hmapped := apm_m96j05_Φ.symm.continuous.tendsto
+    (apm_m96j05_N (apm_m96j05_Φ f)) |>.comp hconv
+  convert hmapped using 1
+  · funext ε
+    change NormedSpace.exp (apm_m96j05_D ε) f =
+      apm_m96j05_Φ.symm
+        (NormedSpace.exp ((apm_m96j05_Φ.conjContinuousAlgEquiv)
+          (apm_m96j05_D ε)) (apm_m96j05_Φ f))
+    rw [apm_m96j05_exp_conj]
+    simp [ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply]
+  · simp [apm_m96j05_N, ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply]
