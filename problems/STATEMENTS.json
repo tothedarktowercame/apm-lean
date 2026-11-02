@@ -6335,17 +6335,16 @@
   },
   "t92J02": {
    "decls": [
-    "image_of_compact_isCompact",
-    "homeomorph_of_compact_to_T2"
+    "apm_t92j02"
    ],
-   "sha256": "348169bd5cd70584dbfe073f1c378b9ee1f670343c5219c179ee0c9bef786e72",
+   "sha256": "77767b2465f3a1d52264ad492569ee9be297cc4f2418c9bb3c5d5ab8d44f3cc9",
    "defs": [],
    "grade": "faithful",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/grades-2.md",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
    "prelim_defect": null,
-   "rev": "56de913a",
-   "approved_at": "2026-09-28T00:17:27Z"
+   "rev": "4968b6e19",
+   "approved_at": "2026-11-02T15:41:25Z"
   },
   "t92J03": {
    "decls": [
