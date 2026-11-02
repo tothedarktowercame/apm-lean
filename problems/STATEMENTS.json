@@ -3739,6 +3739,29 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:46:42Z"
   },
+  "m02J02": {
+   "decls": [
+    "apm_m02j02"
+   ],
+   "sha256": "c4779e431e6bb298e01167d8eb9ebefea5dfd4d3765862681170d1cb26828995",
+   "defs": [
+    "apm_m02j02_InH10",
+    "apm_m02j02_IsH10HilbertBasis",
+    "apm_m02j02_IsH10HilbertBasisComplex",
+    "apm_m02j02_IsWeakDerivativeOn",
+    "apm_m02j02_hermiteFunction",
+    "apm_m02j02_hermiteFunctionDeriv",
+    "apm_m02j02_sine",
+    "apm_m02j02_sineDeriv",
+    "apm_m02j02_sineScale"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": null,
+   "rev": "035e6bdc5",
+   "approved_at": "2026-11-02T02:47:25Z"
+  },
   "m02J03": {
    "decls": [
     "apm_m02j03"

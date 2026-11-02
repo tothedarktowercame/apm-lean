@@ -1,3 +1,5 @@
+> 2026-11-02: the main theorem now states Hilbert bases. See the header of `lean/Main.lean`; the sections below describe `apm_m02j02_system`, the complete linearly independent families it starts from.
+
 # Proof Outline: m02J02
 
 `lean/Main.lean` proves `apm_m02j02` with no `sorry` (closed by the solve

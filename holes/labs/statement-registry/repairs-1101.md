@@ -139,3 +139,7 @@ Compiled on the lemmas worktree: 0 errors, no sorry, apm_a02j03 axioms propext, 
 ## b90A02
 
 Compiled on the lemmas worktree with autoImplicit off: 0 errors, no sorry, apm_b90a02 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, strict standard: faithful, no mathematical defects; it found one packaging defect, universes auto-bound after the namespace closes, fixed. Any unital ring; balanced tensor product F tensor_R A built as a quotient of F tensor_Z A because Mathlib's needs a commutative base; IsFlatRight is the printed definition over all exact sequences of left modules, universe-polymorphic in w; Q flat over Z in the same sense, Q not projective. Replaces the commutative version rejected earlier, kept as apm_b90a02_commutative.
+
+## m02J02
+
+Compiled on the lemmas worktree: 0 errors, no sorry, apm_m02j02 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, strict standard: faithful; first pass asked for the sines named explicitly and softer docstrings, both done; second pass found no defect in the statement. 'Basis' read as Hilbert basis, per the informal solution: orthonormal for the graph inner product with dense span. (a) the normalised sines, explicit. (b), (c) finite combinations of odd Hermite and Hermite functions, orthonormalised, existence form as in the solution. Real basis also spans complex H10. Replaces the 'complete linearly independent' reading, kept as apm_m02j02_system.
