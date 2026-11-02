@@ -1464,6 +1464,23 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
+  "a96A07": {
+   "decls": [
+    "apm_a96a07"
+   ],
+   "sha256": "84e681d3147bb83f6db2388b5a35ec19d9b063caee01d29fb9980a4e58437174",
+   "defs": [
+    "apm_a96A07_boundaryImage",
+    "apm_a96A07_circle",
+    "apm_a96A07_disk"
+   ],
+   "grade": "faithful",
+   "grader": "codex read-only triage seat g4 (2026-11-01): SOUND",
+   "evidence": "holes/labs/statement-registry/triage-1101/g4.md",
+   "prelim_defect": null,
+   "rev": "a7fb420be",
+   "approved_at": "2026-11-02T13:16:19Z"
+  },
   "a96A08": {
    "decls": [
     "apm_a96a08"
