@@ -1,953 +1,1423 @@
 /-
-! # APM a96A04: Heat kernel — smoothness, L² contraction, L² convergence
+! # APM a96A04: heat kernel on ℝⁿ — smoothness, L² contraction, L² limit
 
-u(x,t) = (4πt)^{-n/2} ∫ e^{-|x-y|²/(4t)} f(y) dy (heat kernel convolution).
-(a) u is smooth in x for t > 0.
-(b) ‖u(·,t)‖₂ ≤ ‖f‖₂.
-(c) u(·,t) → f in L² as t → 0⁺.
+The printed `L²(ℝ)` is a typo for `L²(ℝⁿ)` (see PRELIM-DEFECT.md); the problem is the
+standard n-dimensional statement: for `f ∈ L²(ℝⁿ)` (complex-valued, Lebesgue
+measurable) and `t > 0`, with
 
-## Theory boundaries
+  `u(x,t) = (4πt)^(-n/2) ∫ exp(-‖x-y‖²/(4t)) • f(y) dy`,
 
-- Young's convolution inequality is NOT in Mathlib (blocks part b).
-- The heat kernel normalization (∫G_t = 1) requires the Gaussian integral.
-- Differentiation under the integral sign requires DCT machinery (part a).
-- The Fourier approach requires Fourier transform of Gaussian (parts b, c).
+(a) `u(·,t)` is smooth on `ℝⁿ`;
+(b) `‖u(·,t)‖₂ ≤ ‖f‖₂`;
+(c) `u(·,t) → f` in `L²` as `t → 0⁺`.
 
-## Statement repair
-
-We use ℝ (the 1D case) to avoid EuclideanSpace measure issues. The
-mathematical content generalizes to ℝⁿ but the formalization is cleaner
-in 1D. The generated `Memℒp` is corrected to `MemLp`.
+Everything is done on `EuclideanSpace ℝ (Fin n)` with its Lebesgue (`volume`)
+measure, which is an additive Haar measure.
 -/
 
-import Mathlib.MeasureTheory.Function.LpSeminorm.Defs
-import Mathlib.MeasureTheory.Function.L2Space
-import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Deriv
-import Mathlib.Analysis.Calculus.ParametricIntegral
-import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
-import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
-import ConstructionTargets.L2Translation
-import ConstructionTargets.LpRepresentative
-import ConstructionTargets.YoungConvolution
-import YoungL2
+import Mathlib
 
 open MeasureTheory Set Filter Real Topology
 
-open scoped ENNReal ContDiff
+open scoped ENNReal ContDiff BigOperators
 
 noncomputable section
 
-/-- The heat kernel G_t(x) = (4πt)^{-1/2} exp(-x²/(4t)) for t > 0 (1D). -/
-def heatKernel (t : ℝ) (x : ℝ) : ℝ :=
-  (4 * π * t) ^ (-(1 : ℝ) / 2) * Real.exp (- x ^ 2 / (4 * t))
+/-! ## Product integrals on `EuclideanSpace ℝ (Fin n)` -/
 
-/-- The heat convolution u(x,t) = (G_t * f)(x) = ∫ G_t(x-y) f(y) dy. -/
-def heatConv (t : ℝ) (f : ℝ → ℝ) (x : ℝ) : ℝ :=
-  ∫ y, heatKernel t (x - y) * f y ∂volume
+section Product
 
-/-- A positive-time heat kernel is nonnegative. -/
-lemma heatKernel_nonneg {t : ℝ} (ht : 0 < t) (x : ℝ) :
-    0 ≤ heatKernel t x := by
-  unfold heatKernel
-  positivity
+variable {n : ℕ}
 
-/-- The heat kernel integrates to 1 (1D).
+/-- A product integrand on `EuclideanSpace ℝ (Fin n)` integrates to a product of
+one-dimensional integrals. -/
+lemma integral_euclidean_prod_eq_prod (h : Fin n → ℝ → ℝ)
+    (hint : ∀ i, Integrable (h i) volume) :
+    ∫ x : EuclideanSpace ℝ (Fin n), ∏ i, h i (x i) ∂volume
+      = ∏ i, ∫ r : ℝ, h i r ∂volume := by
+  have hmp : MeasurePreserving (MeasurableEquiv.toLp 2 (Fin n → ℝ)) volume volume :=
+    PiLp.volume_preserving_toLp (Fin n)
+  rw [← hmp.integral_comp' (fun x : EuclideanSpace ℝ (Fin n) => ∏ i, h i (x i))]
+  simp only [WithLp.ofLp_toLp]
+  exact integral_fintype_prod_volume_eq_prod h
 
-∫ G_t(x) dx = (4πt)^{-1/2} ∫ e^{-x²/(4t)} dx = (4πt)^{-1/2} · √(4πt) = 1.
+end Product
 
-**Blocker:** Requires the 1D Gaussian integral ∫₀^∞ e^{-ax²} dx = √(π)/(2√a). -/
-lemma heatKernel_integral {t : ℝ} (ht : 0 < t) :
-    ∫ x : ℝ, heatKernel t x ∂volume = 1 := by
-  have h_pos : 0 < 4 * π * t := by positivity
-  have h_gauss : ∫ x : ℝ, Real.exp (-(1 / (4 * t)) * x ^ 2) = Real.sqrt (4 * π * t) := by
-    have := integral_gaussian (1 / (4 * t))
-    rwa [show π / (1 / (4 * t)) = 4 * π * t from by field_simp] at this
-  -- ∫ heatKernel t x dx = ∫ prefactor · exp(...) dx = prefactor · ∫ exp(...) dx
-  rw [show heatKernel t = fun x => (4 * π * t) ^ (-(1:ℝ) / 2) * Real.exp (-(1 / (4 * t)) * x ^ 2) from
-    funext fun x => by unfold heatKernel; field_simp]
-  rw [integral_const_mul, h_gauss]
-  -- (4πt)^{-1/2} · √(4πt) = 1
-  have h_key : (4 * π * t) ^ (-(1:ℝ) / 2) * (4 * π * t) ^ ((1:ℝ) / 2) = 1 := by
-    rw [← Real.rpow_add h_pos]
-    show (4 * π * t) ^ (-(1:ℝ) / 2 + (1:ℝ) / 2) = 1
-    rw [show -(1:ℝ) / 2 + 1 / 2 = 0 by ring, Real.rpow_zero]
-  convert h_key using 2
-  · exact Real.sqrt_eq_rpow (4 * π * t)
+/-! ## The heat kernel on `EuclideanSpace ℝ (Fin n)` -/
 
-/-- A positive-time heat kernel is integrable. -/
-lemma heatKernel_integrable {t : ℝ} (ht : 0 < t) :
-    Integrable (heatKernel t) volume := by
-  by_contra h
-  have hone := heatKernel_integral ht
-  rw [integral_undef h] at hone
-  norm_num at hone
+section Kernel
 
-/-- For positive time, the heat kernel itself is smooth.  This isolates the
-regularity input needed by a future non-compact-support convolution theorem. -/
-lemma heatKernel_contDiff {t : ℝ} (_ht : 0 < t) :
-    ContDiff ℝ ∞ (heatKernel t) := by
-  unfold heatKernel
-  fun_prop
+variable {n : ℕ}
 
-/-- The first derivative of the positive-time heat kernel. -/
-lemma heatKernel_hasDerivAt {t x : ℝ} (_ht : 0 < t) :
-    HasDerivAt (heatKernel t) (-(x / (2 * t)) * heatKernel t x) x := by
-  have harg : HasDerivAt (fun y : ℝ => -y ^ 2 / (4 * t)) (-(2 * x) / (4 * t)) x := by
-    convert (((hasDerivAt_id x).pow 2).neg.div_const (4 * t)) using 1
-    all_goals simp only [id_eq]; ring
-  have h := harg.exp.const_mul ((4 * π * t) ^ (-(1 : ℝ) / 2))
-  convert h using 1
-  all_goals simp only [heatKernel]; ring
+lemma euclidean_norm_sq (x : EuclideanSpace ℝ (Fin n)) : ‖x‖ ^ 2 = ∑ i, (x i) ^ 2 := by
+  rw [EuclideanSpace.norm_eq, Real.sq_sqrt (by positivity)]
+  congr 2 with i
+  simp [sq_abs]
 
-/-- Pointwise derivative formula for the positive-time heat kernel. -/
-lemma heatKernel_deriv {t x : ℝ} (ht : 0 < t) :
-    deriv (heatKernel t) x = -(x / (2 * t)) * heatKernel t x :=
-  (heatKernel_hasDerivAt ht).deriv
+lemma exp_neg_norm_sq_eq_prod {t : ℝ} (x : EuclideanSpace ℝ (Fin n)) :
+    Real.exp (-‖x‖ ^ 2 / (4 * t)) = ∏ i, Real.exp (-(x i) ^ 2 / (4 * t)) := by
+  rw [euclidean_norm_sq, show (-∑ i, (x i) ^ 2) / (4 * t) = ∑ i, (-(x i) ^ 2) / (4 * t) from by
+    rw [← Finset.sum_neg_distrib, Finset.sum_div], Real.exp_sum]
 
-/-- Polynomial factor in the `n`th spatial derivative of the heat kernel. -/
-def heatKernelDerivPoly (t : ℝ) : ℕ → Polynomial ℝ
-  | 0 => Polynomial.C ((4 * π * t) ^ (-(1 : ℝ) / 2))
-  | n + 1 =>
-      (heatKernelDerivPoly t n).derivative -
-        Polynomial.C (1 / (2 * t)) * Polynomial.X * heatKernelDerivPoly t n
-
-/-- Replace every coefficient of a real polynomial by its absolute value. -/
-def polynomialAbsCoeff (p : Polynomial ℝ) : Polynomial ℝ :=
-  p.sum fun n a => Polynomial.C |a| * Polynomial.X ^ n
-
-lemma polynomialAbsCoeff_coeff_nonneg (p : Polynomial ℝ) (n : ℕ) :
-    0 ≤ (polynomialAbsCoeff p).coeff n := by
-  classical
-  simp only [polynomialAbsCoeff, Polynomial.coeff_sum]
-  rw [Polynomial.sum]
-  exact Finset.sum_nonneg fun i hi => by
-    rw [Polynomial.coeff_C_mul_X_pow]
-    split_ifs <;> positivity
-
-lemma abs_polynomial_eval_le_absCoeff (p : Polynomial ℝ) (x : ℝ) :
-    |p.eval x| ≤ (polynomialAbsCoeff p).eval |x| := by
-  classical
-  rw [Polynomial.eval_eq_sum]
-  calc
-    |∑ n ∈ p.support, p.coeff n * x ^ n| ≤
-        ∑ n ∈ p.support, |p.coeff n * x ^ n| := Finset.abs_sum_le_sum_abs _ _
-    _ = (polynomialAbsCoeff p).eval |x| := by
-      rw [polynomialAbsCoeff, Polynomial.eval_sum, Polynomial.sum]
-      simp [abs_mul, abs_pow]
-
-lemma polynomial_eval_mono_of_coeff_nonneg
-    {p : Polynomial ℝ} (hp : ∀ i, 0 ≤ p.coeff i)
-    {x y : ℝ} (hx : 0 ≤ x) (hxy : x ≤ y) :
-    p.eval x ≤ p.eval y := by
-  classical
-  simp only [Polynomial.eval_eq_sum_range]
-  apply Finset.sum_le_sum
-  intro i hi
-  exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hx hxy i) (hp i)
-
-lemma polynomial_eval_nonneg_of_coeff_nonneg
-    {p : Polynomial ℝ} (hp : ∀ i, 0 ≤ p.coeff i) {x : ℝ} (hx : 0 ≤ x) :
-    0 ≤ p.eval x := by
-  rw [Polynomial.eval_eq_sum_range]
-  exact Finset.sum_nonneg fun i hi => mul_nonneg (hp i) (pow_nonneg hx i)
-
-/-- Every iterated spatial derivative of the heat kernel is exactly a
-polynomial times the original Gaussian exponential. -/
-lemma heatKernel_iterate_deriv_eq_polynomial_gaussian
-    {t : ℝ} (_ht : 0 < t) (n : ℕ) (x : ℝ) :
-    deriv^[n] (heatKernel t) x =
-      (heatKernelDerivPoly t n).eval x * Real.exp (-x ^ 2 / (4 * t)) := by
-  induction n generalizing x with
-  | zero =>
-      simp [heatKernelDerivPoly, heatKernel]
-  | succ n ih =>
-      have ihfun : deriv^[n] (heatKernel t) = fun x =>
-          (heatKernelDerivPoly t n).eval x * Real.exp (-x ^ 2 / (4 * t)) :=
-        funext ih
-      rw [Function.iterate_succ_apply', ihfun]
-      have harg : HasDerivAt (fun y : ℝ => -y ^ 2 / (4 * t))
-          (-(2 * x) / (4 * t)) x := by
-        convert (((hasDerivAt_id x).pow 2).neg.div_const (4 * t)) using 1
-        all_goals norm_num
-      rw [deriv_fun_mul]
-      · rw [Polynomial.deriv, harg.exp.deriv]
-        simp only [heatKernelDerivPoly, Polynomial.eval_sub, Polynomial.eval_mul,
-          Polynomial.eval_C, Polynomial.eval_X]
-        ring
-      · exact (heatKernelDerivPoly t n).differentiableAt
-      · exact harg.exp.differentiableAt
-
-/-- Every heat-kernel derivative admits a coefficientwise-nonnegative
-polynomial majorant. -/
-lemma heatKernel_iterate_deriv_polynomial_bound
-    {t : ℝ} (ht : 0 < t) (n : ℕ) :
-    ∃ P : Polynomial ℝ, (∀ i, 0 ≤ P.coeff i) ∧
-      ∀ u, |deriv^[n] (heatKernel t) u| ≤
-        P.eval |u| * Real.exp (-u ^ 2 / (4 * t)) := by
-  let p := heatKernelDerivPoly t n
-  refine ⟨polynomialAbsCoeff p, polynomialAbsCoeff_coeff_nonneg p, ?_⟩
-  intro u
-  rw [heatKernel_iterate_deriv_eq_polynomial_gaussian ht]
-  rw [abs_mul, abs_of_pos (Real.exp_pos _)]
-  exact mul_le_mul_of_nonneg_right
-    (abs_polynomial_eval_le_absCoeff p u) (Real.exp_pos _).le
-
-/-- The first derivative of a positive-time heat kernel is integrable. -/
-lemma heatKernel_deriv_integrable {t : ℝ} (ht : 0 < t) :
-    Integrable (fun x => -(x / (2 * t)) * heatKernel t x) volume := by
-  have hbase : Integrable
-      (fun x : ℝ => x * Real.exp (-(1 / (4 * t)) * x ^ 2)) volume :=
-    integrable_mul_exp_neg_mul_sq (by positivity)
-  apply (hbase.const_mul
-    (-((4 * π * t) ^ (-(1 : ℝ) / 2)) / (2 * t))).congr
-  filter_upwards with x
-  have hexp : -x ^ 2 / (4 * t) = -(1 / (4 * t)) * x ^ 2 := by ring
-  rw [show heatKernel t x =
-      (4 * π * t) ^ (-(1 : ℝ) / 2) *
-        Real.exp (-(1 / (4 * t)) * x ^ 2) by simp [heatKernel, hexp]]
-  ring
-
-/-- Every monomial times a decaying Gaussian is integrable.  This is the
-finite-sum building block needed for the Hermite-polynomial description of
-all spatial derivatives of the heat kernel. -/
-lemma integrable_pow_mul_exp_neg_mul_sq (n : ℕ) {b : ℝ} (hb : 0 < b) :
-    Integrable (fun x : ℝ => x ^ n * Real.exp (-b * x ^ 2)) volume := by
-  have hn : (-1 : ℝ) < (n : ℝ) :=
-    lt_of_lt_of_le (by norm_num) (Nat.cast_nonneg n)
-  have h := integrable_rpow_mul_exp_neg_mul_sq hb hn
-  have hm : AEStronglyMeasurable
-      (fun x : ℝ => x ^ n * Real.exp (-b * x ^ 2)) volume := by
-    fun_prop
-  apply (integrable_norm_iff hm).mp
-  apply h.norm.congr
-  filter_upwards with x
-  rw [Real.rpow_natCast]
-
-/-- A polynomial factor does not destroy Gaussian integrability. -/
-lemma integrable_polynomial_mul_exp_neg_mul_sq
-    (p : Polynomial ℝ) {b : ℝ} (hb : 0 < b) :
-    Integrable (fun x : ℝ => p.eval x * Real.exp (-b * x ^ 2)) volume := by
-  rw [show (fun x : ℝ => p.eval x * Real.exp (-b * x ^ 2)) =
-      fun x => ∑ n ∈ Finset.range (p.natDegree + 1),
-        p.coeff n * (x ^ n * Real.exp (-b * x ^ 2)) by
-    funext x
-    rw [Polynomial.eval_eq_sum_range]
-    simp only [Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro n hn
-    ring]
-  exact integrable_finset_sum _ fun n _ =>
-    (integrable_pow_mul_exp_neg_mul_sq n hb).const_mul (p.coeff n)
-
-/-- A polynomial in `|x| + 1`, multiplied by a Gaussian, is in `L²`.
-Splitting at zero turns the absolute value into two ordinary polynomials. -/
-lemma memLp_two_polynomial_abs_add_one_gaussian
-    (p : Polynomial ℝ) {b : ℝ} (hb : 0 < b) :
-    MemLp (fun x : ℝ => p.eval (|x| + 1) * Real.exp (-b * x ^ 2)) 2 volume := by
-  let qpos := (p.comp (Polynomial.X + Polynomial.C 1)) ^ 2
-  let qneg := (p.comp (-Polynomial.X + Polynomial.C 1)) ^ 2
-  have hpos := integrable_polynomial_mul_exp_neg_mul_sq qpos
-    (show 0 < 2 * b by positivity)
-  have hneg := integrable_polynomial_mul_exp_neg_mul_sq qneg
-    (show 0 < 2 * b by positivity)
-  have hpiece : Integrable ((Set.Ici (0 : ℝ)).piecewise
-      (fun x => qpos.eval x * Real.exp (-(2 * b) * x ^ 2))
-      (fun x => qneg.eval x * Real.exp (-(2 * b) * x ^ 2))) volume :=
-    Integrable.piecewise measurableSet_Ici hpos.integrableOn hneg.integrableOn
-  have hmeas : AEStronglyMeasurable
-      (fun x : ℝ => p.eval (|x| + 1) * Real.exp (-b * x ^ 2)) volume := by
-    fun_prop
-  refine (memLp_two_iff_integrable_sq hmeas).2 ?_
-  apply hpiece.congr
-  filter_upwards with x
-  by_cases hx : 0 ≤ x
-  · simp only [Set.piecewise, Set.mem_Ici, hx, ↓reduceIte, abs_of_nonneg hx,
-      qpos, Polynomial.eval_pow, Polynomial.eval_comp, Polynomial.eval_add,
-      Polynomial.eval_X, Polynomial.eval_C]
-    rw [mul_pow]
-    congr 1
-    simp only [pow_two]
-    rw [← Real.exp_add]
-    congr 1
-    ring
-  · have hx' : x < 0 := lt_of_not_ge hx
-    simp only [Set.piecewise, Set.mem_Ici, hx, ↓reduceIte, abs_of_neg hx',
-      qneg, Polynomial.eval_pow, Polynomial.eval_comp, Polynomial.eval_add,
-      Polynomial.eval_neg, Polynomial.eval_X, Polynomial.eval_C]
-    rw [mul_pow]
-    congr 1
-    simp only [pow_two]
-    rw [← Real.exp_add]
-    congr 1
-    ring
-
-/-- Every iterated spatial derivative of a positive-time heat kernel is in
-`L²`; its square is again a polynomial times a decaying Gaussian. -/
-lemma heatKernel_iterate_deriv_memLp_two
-    {t : ℝ} (ht : 0 < t) (n : ℕ) :
-    MemLp (deriv^[n] (heatKernel t)) 2 volume := by
-  have hmeas : AEStronglyMeasurable (deriv^[n] (heatKernel t)) volume :=
-    ((heatKernel_contDiff ht).iterate_deriv n).continuous.aestronglyMeasurable
-  refine (memLp_two_iff_integrable_sq hmeas).2 ?_
-  let p := heatKernelDerivPoly t n
-  have h := integrable_polynomial_mul_exp_neg_mul_sq (p * p)
-    (show 0 < 1 / (2 * t) by positivity)
-  apply h.congr
-  filter_upwards with x
-  rw [heatKernel_iterate_deriv_eq_polynomial_gaussian ht]
-  simp only [Polynomial.eval_mul, mul_pow]
-  rw [show Real.exp (-x ^ 2 / (4 * t)) ^ 2 =
-      Real.exp (-(1 / (2 * t)) * x ^ 2) by
-    rw [pow_two, ← Real.exp_add]
-    congr 1
-    ring]
-  ring
-
-/-- On a unit ball in the convolution parameter, the `n`th differentiated
-integrand has a single integrable polynomial--Gaussian envelope. -/
-lemma heatKernel_iterate_deriv_local_envelope
-    {t : ℝ} (ht : 0 < t) (n : ℕ) (x₀ : ℝ)
-    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
-    ∃ bound : ℝ → ℝ, Integrable bound volume ∧
-      ∀ y, ∀ x ∈ Metric.ball x₀ 1,
-        ‖(deriv^[n] (heatKernel t)) (x - y) * f y‖ ≤ bound y := by
-  obtain ⟨p, hp, hp_bound⟩ := heatKernel_iterate_deriv_polynomial_bound ht n
-  let a : ℝ → ℝ := fun v =>
-    p.eval (|v| + 1) * Real.exp (-(1 / (8 * t)) * v ^ 2)
-  have ha : MemLp a 2 volume :=
-    memLp_two_polynomial_abs_add_one_gaussian p
-      (show 0 < 1 / (8 * t) by positivity)
-  have hashift : MemLp (fun y => a (x₀ - y)) 2 volume := by
-    simpa only [Function.comp_apply] using
-      ha.comp_measurePreserving (volume.measurePreserving_sub_left x₀)
-  have hfabs : MemLp (fun y => |f y|) 2 volume := by
-    simpa only [Real.norm_eq_abs] using hf.norm
-  let c := Real.exp (1 / (2 * t))
-  refine ⟨fun y => c * (a (x₀ - y) * |f y|),
-    (hashift.integrable_mul hfabs).const_mul c, ?_⟩
-  intro y x hx
-  let u := x - y
-  let v := x₀ - y
-  have hd : |x - x₀| < 1 := by
-    simpa only [Real.dist_eq] using hx
-  have huv : u = v + (x - x₀) := by simp only [u, v]; ring
-  have habs : |u| ≤ |v| + 1 := by
-    rw [huv]
-    exact (abs_add_le _ _).trans (add_le_add_right hd.le |v|)
-  have hpmono : p.eval |u| ≤ p.eval (|v| + 1) :=
-    polynomial_eval_mono_of_coeff_nonneg hp (abs_nonneg u) habs
-  have hpv : 0 ≤ p.eval (|v| + 1) :=
-    polynomial_eval_nonneg_of_coeff_nonneg hp (by positivity)
-  have hd_sq : (x - x₀) ^ 2 < 1 := by
-    nlinarith [sq_abs (x - x₀), abs_nonneg (x - x₀)]
-  have hquad : v ^ 2 / 2 - 2 ≤ u ^ 2 := by
-    rw [huv]
-    nlinarith [sq_nonneg (2 * v + (x - x₀))]
-  have hexp : Real.exp (-u ^ 2 / (4 * t)) ≤
-      c * Real.exp (-(1 / (8 * t)) * v ^ 2) := by
-    rw [show c * Real.exp (-(1 / (8 * t)) * v ^ 2) =
-        Real.exp (1 / (2 * t) + -(1 / (8 * t)) * v ^ 2) by
-      simp only [c, ← Real.exp_add]]
-    apply Real.exp_le_exp.mpr
-    have ht0 : 0 < 8 * t := by positivity
-    field_simp
-    nlinarith
-  rw [Real.norm_eq_abs, abs_mul]
-  calc
-    |(deriv^[n] (heatKernel t)) u| * |f y| ≤
-        (p.eval |u| * Real.exp (-u ^ 2 / (4 * t))) * |f y| :=
-      mul_le_mul_of_nonneg_right (hp_bound u) (abs_nonneg _)
-    _ ≤ (p.eval (|v| + 1) * Real.exp (-u ^ 2 / (4 * t))) * |f y| := by
-      gcongr
-    _ ≤ (p.eval (|v| + 1) *
-          (c * Real.exp (-(1 / (8 * t)) * v ^ 2))) * |f y| := by
-      gcongr
-    _ = c * (a (x₀ - y) * |f y|) := by
-      simp only [a, v]
-      ring
-
-/-- Differentiation under the integral for every iterated heat-kernel
-derivative. -/
-lemma hasDerivAt_integral_iterate_heatKernel
-    {t : ℝ} (ht : 0 < t) (n : ℕ) {f : ℝ → ℝ}
-    (hf : MemLp f 2 volume) (x₀ : ℝ) :
-    HasDerivAt
-      (fun x => ∫ y, (deriv^[n] (heatKernel t)) (x - y) * f y ∂volume)
-      (∫ y, (deriv^[n + 1] (heatKernel t)) (x₀ - y) * f y ∂volume) x₀ := by
-  let F : ℝ → ℝ → ℝ := fun x y =>
-    (deriv^[n] (heatKernel t)) (x - y) * f y
-  let F' : ℝ → ℝ → ℝ := fun x y =>
-    (deriv^[n + 1] (heatKernel t)) (x - y) * f y
-  obtain ⟨bound, hbound_int, hbound⟩ :=
-    heatKernel_iterate_deriv_local_envelope ht (n + 1) x₀ hf
-  have hDn_cont : Continuous (deriv^[n] (heatKernel t)) :=
-    ((heatKernel_contDiff ht).iterate_deriv n).continuous
-  have hDsn_cont : Continuous (deriv^[n + 1] (heatKernel t)) :=
-    ((heatKernel_contDiff ht).iterate_deriv (n + 1)).continuous
-  have hF_meas : ∀ᶠ x in 𝓝 x₀, AEStronglyMeasurable (F x) volume := by
-    filter_upwards with x
-    exact (hDn_cont.comp (continuous_const.sub continuous_id)).aestronglyMeasurable.mul
-      hf.1
-  have hF_int : Integrable (F x₀) volume := by
-    have hs : MemLp (fun y => (deriv^[n] (heatKernel t)) (x₀ - y)) 2 volume := by
-      simpa only [Function.comp_apply] using
-        (heatKernel_iterate_deriv_memLp_two ht n).comp_measurePreserving
-          (volume.measurePreserving_sub_left x₀)
-    exact hs.integrable_mul hf
-  have hF'_meas : AEStronglyMeasurable (F' x₀) volume :=
-    (hDsn_cont.comp (continuous_const.sub continuous_id)).aestronglyMeasurable.mul hf.1
-  have hdiff : ∀ᵐ y ∂volume, ∀ x ∈ Metric.ball x₀ 1,
-      HasDerivAt (F · y) (F' x y) x := by
-    filter_upwards with y
-    intro x hx
-    have hbase : HasDerivAt (deriv^[n] (heatKernel t))
-        ((deriv^[n + 1] (heatKernel t)) (x - y)) (x - y) := by
-      have hd := ((heatKernel_contDiff ht).iterate_deriv n).differentiable
-        (by simp : (∞ : WithTop ℕ∞) ≠ 0)
-      convert (hd.differentiableAt.hasDerivAt (x := x - y)) using 1
-      rw [Function.iterate_succ_apply']
-    convert (hbase.comp x ((hasDerivAt_id x).sub_const y)).mul_const (f y) using 1
-    all_goals simp only [F', mul_one]
-  have hbound' : ∀ᵐ y ∂volume, ∀ x ∈ Metric.ball x₀ 1,
-      ‖F' x y‖ ≤ bound y := by
-    filter_upwards with y
-    exact hbound y
-  exact (hasDerivAt_integral_of_dominated_loc_of_deriv_le
-    (Metric.ball_mem_nhds x₀ zero_lt_one) hF_meas hF_int hF'_meas
-    hbound' hbound_int hdiff).2
-
-/-- The `n`th derivative of the heat convolution is convolution with the
-`n`th derivative of the heat kernel. -/
-lemma iterate_deriv_heatConv_eq_integral
-    {t : ℝ} (ht : 0 < t) {f : ℝ → ℝ} (hf : MemLp f 2 volume)
-    (n : ℕ) (x : ℝ) :
-    (deriv^[n] (heatConv t f)) x =
-      ∫ y, (deriv^[n] (heatKernel t)) (x - y) * f y ∂volume := by
-  induction n generalizing x with
-  | zero => simp [heatConv]
-  | succ n ih =>
-      have ihfun : deriv^[n] (heatConv t f) = fun x =>
-          ∫ y, (deriv^[n] (heatKernel t)) (x - y) * f y ∂volume :=
-        funext ih
-      rw [Function.iterate_succ_apply', ihfun]
-      simpa only [Nat.add_eq, Nat.succ_eq_add_one] using
-        (hasDerivAt_integral_iterate_heatKernel ht n hf x).deriv
-
-/-- All iterated derivatives of the standard Gaussian are integrable.  The
-Hermite formula supplies the polynomial factor, and the preceding lemma
-supplies the analytic domination. -/
-lemma integrable_iterate_deriv_standardGaussian (n : ℕ) :
-    Integrable (deriv^[n] (fun y : ℝ => Real.exp (-(y ^ 2 / 2)))) volume := by
-  let p : Polynomial ℝ :=
-    (Polynomial.hermite n).map (Int.castRingHom ℝ)
-  have h := integrable_polynomial_mul_exp_neg_mul_sq p
-    (show (0 : ℝ) < 1 / 2 by norm_num)
-  apply (h.const_mul ((-1 : ℝ) ^ n)).congr
-  filter_upwards with x
-  rw [Polynomial.deriv_gaussian_eq_hermite_mul_gaussian]
-  rw [show p.eval x = Polynomial.aeval x (Polynomial.hermite n) by
-    exact Polynomial.eval_map (p := Polynomial.hermite n)
-      (f := Int.castRingHom ℝ) x]
-  rw [show -(1 / 2 : ℝ) * x ^ 2 = -(x ^ 2 / 2) by ring]
-  ring
-
-/-- Every iterated derivative of the standard Gaussian is square-integrable. -/
-lemma memLp_two_iterate_deriv_standardGaussian (n : ℕ) :
-    MemLp (deriv^[n] (fun y : ℝ => Real.exp (-(y ^ 2 / 2)))) 2 volume := by
-  have hmeas : AEStronglyMeasurable
-      (deriv^[n] (fun y : ℝ => Real.exp (-(y ^ 2 / 2)))) volume :=
-    ((show ContDiff ℝ ∞ (fun y : ℝ => Real.exp (-(y ^ 2 / 2))) by
-      fun_prop).iterate_deriv n).continuous.aestronglyMeasurable
-  refine (memLp_two_iff_integrable_sq hmeas).2 ?_
-  let p : Polynomial ℝ :=
-    (Polynomial.hermite n).map (Int.castRingHom ℝ)
-  have h := integrable_polynomial_mul_exp_neg_mul_sq (p * p)
-    (show (0 : ℝ) < 1 by norm_num)
-  apply h.congr
-  filter_upwards with x
-  rw [Polynomial.deriv_gaussian_eq_hermite_mul_gaussian]
-  simp only [Polynomial.eval_mul]
-  rw [show p.eval x = Polynomial.aeval x (Polynomial.hermite n) by
-    exact Polynomial.eval_map (p := Polynomial.hermite n)
-      (f := Int.castRingHom ℝ) x]
-  rw [show -(1 : ℝ) * x ^ 2 = -(x ^ 2 / 2) + -(x ^ 2 / 2) by ring,
-    Real.exp_add]
-  ring_nf
-  rw [show (-1 : ℝ) ^ (n * 2) = 1 by
-    rw [show n * 2 = 2 * n by omega, pow_mul]
-    norm_num]
-  ring
-
-/-- The first derivative of a positive-time heat kernel is square-integrable. -/
-lemma heatKernel_deriv_memLp_two {t : ℝ} (ht : 0 < t) :
-    MemLp (fun x => -(x / (2 * t)) * heatKernel t x) 2 volume := by
-  have hmeas : AEStronglyMeasurable
-      (fun x => -(x / (2 * t)) * heatKernel t x) volume := by
-    unfold heatKernel
-    fun_prop
-  refine (memLp_two_iff_integrable_sq hmeas).2 ?_
-  have hgauss := integrable_pow_mul_exp_neg_mul_sq 2
-    (show (0 : ℝ) < 1 / (2 * t) by positivity)
-  have h := hgauss.const_mul
-    (((4 * π * t) ^ (-(1 : ℝ) / 2)) ^ 2 / (4 * t ^ 2))
-  apply h.congr
-  filter_upwards with x
-  unfold heatKernel
-  have hexp :
-      Real.exp (-x ^ 2 / (4 * t)) ^ 2 =
-        Real.exp (-(1 / (2 * t)) * x ^ 2) := by
-    rw [pow_two, ← Real.exp_add]
-    congr 1
-    ring
-  simp only [mul_pow]
-  rw [hexp]
-  ring
-
-/-- At each spatial point, the first differentiated convolution integrand is
-integrable by Cauchy--Schwarz. -/
-lemma heatKernel_deriv_mul_integrable
-    {t : ℝ} (ht : 0 < t) {f : ℝ → ℝ} (hf : MemLp f 2 volume)
-    (x : ℝ) :
-    Integrable
-      (fun y => (-((x - y) / (2 * t)) * heatKernel t (x - y)) * f y)
-      volume := by
-  have hshift : MemLp
-      (fun y : ℝ => -((x - y) / (2 * t)) * heatKernel t (x - y))
-      2 volume :=
-    (heatKernel_deriv_memLp_two ht).comp_measurePreserving
-      (volume.measurePreserving_sub_left x)
-  exact hshift.integrable_mul hf
-
-/-- A positive-time heat kernel is square-integrable. -/
-lemma heatKernel_memLp_two {t : ℝ} (ht : 0 < t) :
-    MemLp (heatKernel t) 2 volume := by
-  refine (memLp_two_iff_integrable_sq
-    (heatKernel_contDiff ht).continuous.aestronglyMeasurable).2 ?_
-  have hgauss : Integrable (fun x : ℝ => Real.exp (-(1 / (2 * t)) * x ^ 2)) volume :=
-    integrable_exp_neg_mul_sq (by positivity)
-  convert hgauss.const_mul (((4 * π * t) ^ (-(1 : ℝ) / 2)) ^ 2) using 1
-  funext x
-  unfold heatKernel
-  have hexp :
-      Real.exp (-x ^ 2 / (4 * t)) ^ 2 =
-        Real.exp (-(1 / (2 * t)) * x ^ 2) := by
-    rw [pow_two, ← Real.exp_add]
-    congr 1
-    ring
-  rw [mul_pow, hexp]
-
-/-- A positive-time heat kernel is obtained from the time-one kernel by
-dilation.  This is the normalization used in the approximate-identity
-argument below. -/
-lemma heatKernel_scale {t : ℝ} (ht : 0 < t) (x : ℝ) :
-    Real.sqrt t * heatKernel t (Real.sqrt t * x) = heatKernel 1 x := by
-  have hsqrt : Real.sqrt t ≠ 0 := ne_of_gt (Real.sqrt_pos.2 ht)
-  have hsqrt_sq : (Real.sqrt t) ^ 2 = t := Real.sq_sqrt ht.le
-  unfold heatKernel
-  rw [mul_pow, hsqrt_sq]
-  have hcoeff :
-      Real.sqrt t * (4 * π * t) ^ (-(1 : ℝ) / 2) =
-        (4 * π) ^ (-(1 : ℝ) / 2) := by
-    rw [show 4 * π * t = (4 * π) * t by ring,
-      Real.mul_rpow (by positivity : 0 ≤ (4 : ℝ) * π) ht.le,
-      Real.sqrt_eq_rpow]
-    calc
-      t ^ (1 / 2 : ℝ) *
-          ((4 * π) ^ (-(1 : ℝ) / 2) * t ^ (-(1 : ℝ) / 2)) =
-          (4 * π) ^ (-(1 : ℝ) / 2) *
-            (t ^ (1 / 2 : ℝ) * t ^ (-(1 : ℝ) / 2)) := by ring
-      _ = (4 * π) ^ (-(1 : ℝ) / 2) := by
-        rw [← Real.rpow_add ht]
-        norm_num
-  rw [← mul_assoc, hcoeff]
-  simp only [mul_one]
+lemma integrable_exp_neg_coord_sq {t : ℝ} (ht : 0 < t) (i : Fin n) :
+    Integrable (fun r : ℝ => Real.exp (-(r : ℝ) ^ 2 / (4 * t))) volume := by
+  have hb : 0 < 1 / (4 * t) := by positivity
+  have h := integrable_exp_neg_mul_sq (b := 1 / (4 * t)) hb
+  refine h.congr (Eventually.of_forall fun r => ?_)
   congr 1
-  apply congrArg Real.exp
   field_simp
 
-/-- After dilation, heat convolution is averaging translates against the
-fixed time-one heat kernel. -/
-lemma heatConv_eq_integral_unitKernel {t : ℝ} (ht : 0 < t)
-    (f : ℝ → ℝ) (x : ℝ) :
-    heatConv t f x =
-      ∫ z, heatKernel 1 z * f (x - Real.sqrt t * z) ∂volume := by
-  have hsqrt : Real.sqrt t ≠ 0 := ne_of_gt (Real.sqrt_pos.2 ht)
-  unfold heatConv
-  have hsub :
-      (∫ y : ℝ, heatKernel t (x - y) * f y ∂volume) =
-        ∫ u : ℝ, heatKernel t u * f (x - u) ∂volume := by
-    simpa only [sub_sub_cancel] using
-      (integral_sub_left_eq_self
-        (fun u : ℝ ↦ heatKernel t u * f (x - u)) volume x)
-  rw [hsub]
-  have hscale := Measure.integral_comp_mul_left
-    (fun u : ℝ ↦ heatKernel t u * f (x - u)) (Real.sqrt t)
-  simp only [abs_inv, abs_of_pos (Real.sqrt_pos.2 ht)] at hscale
-  calc
-    (∫ u : ℝ, heatKernel t u * f (x - u) ∂volume) =
-        Real.sqrt t * ∫ z : ℝ,
-          heatKernel t (Real.sqrt t * z) *
-            f (x - Real.sqrt t * z) ∂volume := by
-      rw [hscale]
-      simp [hsqrt]
-    _ = ∫ z : ℝ, Real.sqrt t *
-          (heatKernel t (Real.sqrt t * z) *
-            f (x - Real.sqrt t * z)) ∂volume := by
-      rw [integral_const_mul]
-    _ = ∫ z : ℝ, heatKernel 1 z *
-          f (x - Real.sqrt t * z) ∂volume := by
-      apply integral_congr_ae
-      filter_upwards with z
-      rw [← mul_assoc, heatKernel_scale ht]
+lemma integrable_exp_neg_norm_sq {t : ℝ} (ht : 0 < t) :
+    Integrable (fun x : EuclideanSpace ℝ (Fin n) => Real.exp (-‖x‖ ^ 2 / (4 * t))) volume := by
+  have hpi : Integrable (fun v : Fin n → ℝ =>
+      ∏ i, Real.exp (-(v i) ^ 2 / (4 * t))) volume :=
+    Integrable.fintype_prod (fun i => integrable_exp_neg_coord_sq ht i)
+  refine ((PiLp.volume_preserving_ofLp (Fin n)).integrable_comp_of_integrable
+    hpi).congr ?_
+  filter_upwards with x
+  simp only [Function.comp_apply]
+  rw [exp_neg_norm_sq_eq_prod (t := t) x]
 
-/-- The fixed-Gaussian average of translation differences tends to zero in
-the abstract `L²` space.  The remaining pointwise theorem only has to identify
-this Bochner integral with the class represented by `heatConv t f - f`. -/
-lemma heat_translation_average_tendsto_L2
-    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
-    let τ : ℝ → C(ℝ, ℝ) := fun s =>
-      ⟨fun x => x - s, continuous_id.sub continuous_const⟩
-    let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
-      simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
-    let F : ℝ → Lp ℝ 2 volume := fun s =>
-      Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
-    Tendsto
-      (fun s => ∫ z, heatKernel 1 z • (F (s * z) - F 0) ∂volume)
-      (𝓝 0) (𝓝 0) := by
-  let τ : ℝ → C(ℝ, ℝ) := fun s =>
-    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
-  have hτc : Continuous τ := by
-    let G : C(ℝ × ℝ, ℝ) :=
-      ⟨fun z => z.2 - z.1, continuous_snd.sub continuous_fst⟩
-    exact (ContinuousMap.curry G).continuous
-  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
-    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
-  let F : ℝ → Lp ℝ 2 volume := fun s =>
-    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
-  have hFc : Continuous F := by
-    dsimp [F]
-    exact continuous_const.compMeasurePreservingLp hτc hτ (by norm_num)
-  have hkcont : Continuous (heatKernel 1) :=
-    (heatKernel_contDiff (by norm_num)).continuous
-  have hkint : Integrable (heatKernel 1) volume :=
-    heatKernel_integrable (by norm_num)
-  have hbound_int : Integrable
-      (fun z => heatKernel 1 z * (2 * ‖hf.toLp f‖)) volume :=
-    hkint.mul_const _
-  have hdct := tendsto_integral_filter_of_dominated_convergence
-    (l := 𝓝 (0 : ℝ)) (μ := volume)
-    (F := fun s z => heatKernel 1 z • (F (s * z) - F 0))
-    (f := fun _ => (0 : Lp ℝ 2 volume))
-    (fun z => heatKernel 1 z * (2 * ‖hf.toLp f‖))
-  have hmeas : ∀ᶠ s : ℝ in 𝓝 0,
-      AEStronglyMeasurable
-        (fun z => heatKernel 1 z • (F (s * z) - F 0)) volume := by
-    filter_upwards with s
-    exact (hkcont.smul
-      ((hFc.comp (continuous_const.mul continuous_id)).sub
-        continuous_const)).aestronglyMeasurable
-  have hbound : ∀ᶠ s : ℝ in 𝓝 0, ∀ᵐ z : ℝ ∂volume,
-      ‖heatKernel 1 z • (F (s * z) - F 0)‖ ≤
-        heatKernel 1 z * (2 * ‖hf.toLp f‖) := by
-    filter_upwards with s
-    filter_upwards with z
-    rw [norm_smul, Real.norm_eq_abs,
-      abs_of_nonneg (heatKernel_nonneg (by norm_num) z)]
-    apply mul_le_mul_of_nonneg_left _ (heatKernel_nonneg (by norm_num) z)
-    calc
-      ‖F (s * z) - F 0‖ ≤ ‖F (s * z)‖ + ‖F 0‖ := norm_sub_le _ _
-      _ = 2 * ‖hf.toLp f‖ := by
-        simp only [F, Lp.norm_compMeasurePreserving]
-        ring
-  have hlim : ∀ᵐ z : ℝ ∂volume,
-      Tendsto (fun s => heatKernel 1 z • (F (s * z) - F 0))
-        (𝓝 0) (𝓝 0) := by
-    filter_upwards with z
-    have hsz : Tendsto (fun s : ℝ => s * z) (𝓝 0) (𝓝 0) := by
-      simpa using tendsto_id.mul (tendsto_const_nhds :
-        Tendsto (fun _ : ℝ => z) (𝓝 0) (𝓝 z))
-    have hsub : Tendsto (fun s => F (s * z) - F 0) (𝓝 0) (𝓝 0) := by
-      simpa only [Function.comp_apply, sub_self] using
-        ((hFc.tendsto 0).comp hsz).sub
-          (tendsto_const_nhds : Tendsto (fun _ : ℝ => F 0) (𝓝 0) (𝓝 (F 0)))
-    simpa using
-      (tendsto_const_nhds : Tendsto (fun _ : ℝ => heatKernel 1 z)
-        (𝓝 0) (𝓝 (heatKernel 1 z))).smul hsub
-  simpa only [integral_zero] using hdct hmeas hbound hbound_int hlim
+lemma integral_exp_neg_norm_sq {t : ℝ} (ht : 0 < t) :
+    ∫ x : EuclideanSpace ℝ (Fin n), Real.exp (-‖x‖ ^ 2 / (4 * t)) ∂volume
+      = ((4 * π * t) ^ ((1 : ℝ) / 2)) ^ n := by
+  have h1 : (∫ r : ℝ, Real.exp (-(r : ℝ) ^ 2 / (4 * t)) ∂volume)
+      = (4 * π * t) ^ ((1 : ℝ) / 2) := by
+    have hgauss := integral_gaussian (1 / (4 * t))
+    rw [show π / (1 / (4 * t)) = 4 * π * t from by field_simp] at hgauss
+    rw [show Real.sqrt (4 * π * t) = (4 * π * t) ^ ((1 : ℝ) / 2) from
+      Real.sqrt_eq_rpow (4 * π * t)] at hgauss
+    refine hgauss.symm ▸ ?_
+    refine integral_congr_ae (Eventually.of_forall fun r => ?_)
+    congr 1
+    field_simp
+  have hexp : (fun x : EuclideanSpace ℝ (Fin n) => Real.exp (-‖x‖ ^ 2 / (4 * t)))
+      = fun x => ∏ i, Real.exp (-(x i) ^ 2 / (4 * t)) :=
+    funext fun x => exp_neg_norm_sq_eq_prod x
+  rw [hexp, integral_euclidean_prod_eq_prod
+    (fun i : Fin n => fun r : ℝ => Real.exp (-(r : ℝ) ^ 2 / (4 * t)))
+    (fun i => integrable_exp_neg_coord_sq ht i), Finset.prod_const, Finset.card_univ, Fintype.card_fin, h1]
 
-/-- Rewrite heat convolution as a heat-kernel average of translates of `f`.
+end Kernel
 
-This is the change-of-variables seam used by the `L²` approximate-identity
-argument. -/
-lemma heatConv_eq_integral_translation
-    (t : ℝ) (f : ℝ → ℝ) (x : ℝ) :
-    heatConv t f x = ∫ y, heatKernel t y * f (x - y) ∂volume := by
-  unfold heatConv
-  simpa only [sub_sub_cancel] using
-    (integral_sub_left_eq_self
-      (fun y : ℝ ↦ heatKernel t y * f (x - y)) volume x)
+section HeatKernel
 
-/-- (a) u(·,t) is smooth in x for t > 0.
+variable {n : ℕ}
 
-The regularity index `∞ : WithTop ℕ∞` states `C^∞` smoothness, matching the
-problem, rather than the analytic regularity denoted by `⊤`. -/
--- STATEMENT REPAIR 2026-07-31 (Joe-authorised): use `∞` for smoothness;
--- after Mathlib's index-type migration, `⊤` denotes analytic regularity.
-theorem heatConv_contDiff
-    {t : ℝ} (ht : 0 < t)
-    {f : ℝ → ℝ}
-    (hf : MemLp f 2 volume) :
-    ContDiff ℝ ∞ (heatConv t f) := by
-  let H : ℕ → ℝ → ℝ := fun n x =>
-    ∫ y, (deriv^[n] (heatKernel t)) (x - y) * f y ∂volume
-  have hdiff : ∀ n, Differentiable ℝ (H n) := by
-    intro n x
-    exact (by
-      simpa only [H] using
-        (hasDerivAt_integral_iterate_heatKernel ht n hf x).differentiableAt)
-  have hderiv : ∀ n, deriv (H n) = H (n + 1) := by
-    intro n
-    funext x
-    exact (by
-      simpa only [H] using
-        (hasDerivAt_integral_iterate_heatKernel ht n hf x).deriv)
-  have hcont : ∀ m n : ℕ, ContDiff ℝ m (H n) := by
-    intro m
-    induction m with
-    | zero =>
-        intro n
-        exact contDiff_zero.mpr (hdiff n).continuous
-    | succ m ih =>
-        intro n
-        rw [show (↑(m + 1) : WithTop ℕ∞) = (m : WithTop ℕ∞) + 1 by norm_num,
-          contDiff_succ_iff_deriv]
-        refine ⟨hdiff n, ?_, ?_⟩
-        · simp
-        · rw [hderiv n]
-          exact ih (n + 1)
-  rw [contDiff_iff_forall_nat_le]
-  intro m hm
-  have hmH := hcont m 0
-  simpa only [H, Function.iterate_zero_apply, heatConv] using hmH
+/-- The heat kernel `G_t(x) = (4πt)^(-n/2) exp(-‖x‖²/(4t))` on `ℝⁿ`. -/
+def heatKernelN (n : ℕ) (t : ℝ) (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
+  (4 * π * t) ^ (-(n : ℝ) / 2) * Real.exp (-‖x‖ ^ 2 / (4 * t))
 
-/-- (b) L² contraction: ‖u(·,t)‖₂ ≤ ‖f‖₂.
+/-- The heat convolution `u(x,t) = ∫ G_t(x-y) • f(y) dy`, complex-valued. -/
+def heatConvN (n : ℕ) (t : ℝ) (f : EuclideanSpace ℝ (Fin n) → ℂ)
+    (x : EuclideanSpace ℝ (Fin n)) : ℂ :=
+  ∫ y, heatKernelN n t (x - y) • f y ∂volume
 
-The repository's axiom-clean `YoungL2` module supplies the required
-`L¹ * L² → L²` estimate. -/
-theorem heatConv_L2_le
-    {t : ℝ} (ht : 0 < t)
-    {f : ℝ → ℝ}
-    (hf : MemLp f 2 volume) :
-    eLpNorm (heatConv t f) 2 volume ≤
-      eLpNorm f 2 volume := by
-  apply convolution_L2_contraction_of_probability_kernel
-  · exact heatKernel_nonneg ht
-  · exact heatKernel_integral ht
-  · exact hf
+lemma heatKernelN_nonneg {t : ℝ} (ht : 0 < t) (x : EuclideanSpace ℝ (Fin n)) :
+    0 ≤ heatKernelN n t x := by
+  unfold heatKernelN
+  positivity
 
-/-- Positive-time heat convolution preserves `L²` membership. -/
-lemma heatConv_memLp
-    {t : ℝ} (ht : 0 < t)
-    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
-    MemLp (heatConv t f) 2 volume := by
-  change MemLp
-    (ConstructionTargets.YoungConvolution.convolution (heatKernel t) f) 2 volume
-  exact ConstructionTargets.YoungConvolution.convolution_memLp
-    (by norm_num) (by norm_num) (heatKernel_integrable ht) hf
-
-/-- The abstract heat-kernel average has pointwise representative
-`heatConv t f - f`. -/
-lemma heat_translation_average_toLp
-    {t : ℝ} (ht : 0 < t)
-    {f : ℝ → ℝ} (hf : MemLp f 2 volume) :
-    let τ : ℝ → C(ℝ, ℝ) := fun s =>
-      ⟨fun x => x - s, continuous_id.sub continuous_const⟩
-    let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
-      simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
-    let F : ℝ → Lp ℝ 2 volume := fun s =>
-      Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
-    let G : ℝ → Lp ℝ 2 volume := fun z =>
-      heatKernel 1 z • (F (Real.sqrt t * z) - F 0)
-    ((heatConv_memLp ht hf).sub hf).toLp
-        (fun x => heatConv t f x - f x) = ∫ z, G z ∂volume := by
-  let τ : ℝ → C(ℝ, ℝ) := fun s =>
-    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
-  have hτc : Continuous τ := by
-    let T : C(ℝ × ℝ, ℝ) :=
-      ⟨fun z => z.2 - z.1, continuous_snd.sub continuous_fst⟩
-    exact (ContinuousMap.curry T).continuous
-  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
-    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
-  let F : ℝ → Lp ℝ 2 volume := fun s =>
-    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
-  let G : ℝ → Lp ℝ 2 volume := fun z =>
-    heatKernel 1 z • (F (Real.sqrt t * z) - F 0)
-  let φ : ℝ × ℝ → ℝ := fun z =>
-    heatKernel 1 z.1 * (f (z.2 - Real.sqrt t * z.1) - f z.2)
-  have hFc : Continuous F := by
-    dsimp [F]
-    exact continuous_const.compMeasurePreservingLp hτc hτ (by norm_num)
-  have hkcont : Continuous (heatKernel 1) :=
-    (heatKernel_contDiff (by norm_num)).continuous
-  have hGc : Continuous G := by
-    dsimp [G]
-    exact hkcont.smul
-      ((hFc.comp (continuous_const.mul continuous_id)).sub continuous_const)
-  have hG : Integrable G volume := by
-    have hdom : Integrable
-        (fun z => heatKernel 1 z * (2 * ‖hf.toLp f‖)) volume :=
-      (heatKernel_integrable (by norm_num)).mul_const _
-    refine hdom.mono' hGc.aestronglyMeasurable ?_
-    filter_upwards with z
-    change ‖heatKernel 1 z • (F (Real.sqrt t * z) - F 0)‖ ≤ _
-    rw [norm_smul, Real.norm_eq_abs,
-      abs_of_nonneg (heatKernel_nonneg (by norm_num) z)]
-    apply mul_le_mul_of_nonneg_left _ (heatKernel_nonneg (by norm_num) z)
-    calc
-      ‖F (Real.sqrt t * z) - F 0‖ ≤
-          ‖F (Real.sqrt t * z)‖ + ‖F 0‖ := norm_sub_le _ _
-      _ = 2 * ‖hf.toLp f‖ := by
-        simp only [F, Lp.norm_compMeasurePreserving]
-        ring
-  have hsqrt : Real.sqrt t ≠ 0 := ne_of_gt (Real.sqrt_pos.2 ht)
-  have hqmp : Measure.QuasiMeasurePreserving
-      (fun z : ℝ × ℝ => z.2 - Real.sqrt t * z.1)
-      (volume.prod volume) volume := by
-    refine QuasiMeasurePreserving.prod_of_left (by fun_prop) ?_
-    filter_upwards with x
-    have hscale : Measure.QuasiMeasurePreserving
-        (fun z : ℝ => Real.sqrt t • z) volume volume :=
-      Measure.quasiMeasurePreserving_smul volume hsqrt
-    simpa [smul_eq_mul] using
-      (volume.measurePreserving_sub_left x).quasiMeasurePreserving.comp hscale
-  have hφ : AEStronglyMeasurable φ (volume.prod volume) := by
-    have hshift := hf.aestronglyMeasurable.comp_quasiMeasurePreserving hqmp
-    have hbase := hf.aestronglyMeasurable.comp_quasiMeasurePreserving
-      (Measure.quasiMeasurePreserving_snd
-        (μ := (volume : Measure ℝ)) (ν := (volume : Measure ℝ)))
-    have hk : AEStronglyMeasurable
-        (fun z : ℝ × ℝ => heatKernel 1 z.1) (volume.prod volume) :=
-      (hkcont.comp continuous_fst).aestronglyMeasurable
-    exact hk.mul (hshift.sub hbase)
-  have hGφ : ∀ᵐ z ∂volume,
-      (G z : ℝ → ℝ) =ᵐ[volume] fun x => φ (z, x) := by
-    filter_upwards with z
-    filter_upwards
-      [Lp.coeFn_smul (heatKernel 1 z) (F (Real.sqrt t * z) - F 0),
-       Lp.coeFn_sub (F (Real.sqrt t * z)) (F 0),
-       Lp.coeFn_compMeasurePreserving (hf.toLp f) (hτ (Real.sqrt t * z)),
-       Lp.coeFn_compMeasurePreserving (hf.toLp f) (hτ 0),
-       (hτ (Real.sqrt t * z)).quasiMeasurePreserving.ae hf.coeFn_toLp,
-       (hτ 0).quasiMeasurePreserving.ae hf.coeFn_toLp]
-      with x hsmul hsub htrans hzero hrept hrepzero
-    rw [hsmul]
-    simp only [Pi.smul_apply, smul_eq_mul]
-    rw [hsub]
-    simp only [Pi.sub_apply]
-    rw [htrans, hzero]
-    simp only [Function.comp_apply]
-    rw [hrept, hrepzero]
-    simp [φ, τ]
-  have hlocal : ∀ s : Set ℝ, MeasurableSet s → volume s ≠ ⊤ →
-      HasFiniteIntegral
-        (fun z : ℝ × ℝ => s.indicator (fun x => φ (z.1, x)) z.2)
-        (volume.prod volume) :=
-    ConstructionTargets.LpRepresentative.hasFiniteIntegral_indicator_lift
-      hφ hG hGφ
-  have hslice : ∀ᵐ x ∂volume, Integrable (fun z => φ (z, x)) volume := by
-    have hn : ∀ n : ℕ, ∀ᵐ x ∂volume,
-        Integrable
-          (fun z => (spanningSets volume n).indicator
-            (fun x => φ (z, x)) x) volume := by
-      intro n
-      let s : Set ℝ := spanningSets (volume : Measure ℝ) n
-      have hs : MeasurableSet s := measurableSet_spanningSets (volume : Measure ℝ) n
-      have hprod : Integrable
-          (fun z : ℝ × ℝ => s.indicator (fun x => φ (z.1, x)) z.2)
-          (volume.prod volume) := by
-        exact ⟨(hφ.indicator (MeasurableSet.univ.prod hs)).congr
-          (Eventually.of_forall fun z => by
-            by_cases hz : z.2 ∈ s <;> simp [hz]),
-          hlocal s hs (measure_spanningSets_lt_top volume n).ne⟩
-      exact hprod.prod_left_ae
-    filter_upwards [ae_all_iff.2 hn] with x hx
-    let n := spanningSetsIndex volume x
-    have hxn : x ∈ spanningSets volume n := mem_spanningSetsIndex volume x
-    simpa [hxn] using hx n
-  have hpoint : (fun x => ∫ z, φ (z, x) ∂volume) =ᵐ[volume]
-      fun x => heatConv t f x - f x := by
-    filter_upwards [hslice] with x hφx
-    have hk : Integrable (fun z => heatKernel 1 z * f x) volume :=
-      (heatKernel_integrable (by norm_num)).mul_const _
-    have hfirst : Integrable
-        (fun z => heatKernel 1 z * f (x - Real.sqrt t * z)) volume := by
-      refine (hφx.add hk).congr (Eventually.of_forall fun z => ?_)
-      simp [φ]
-      ring
-    change (∫ z, heatKernel 1 z *
-      (f (x - Real.sqrt t * z) - f x) ∂volume) = heatConv t f x - f x
-    rw [show (fun z => heatKernel 1 z *
-        (f (x - Real.sqrt t * z) - f x)) =
-        fun z => heatKernel 1 z * f (x - Real.sqrt t * z) -
-          heatKernel 1 z * f x by
-      funext z
-      ring]
-    rw [integral_sub hfirst hk, heatConv_eq_integral_unitKernel ht]
-    rw [integral_mul_const, heatKernel_integral (by norm_num)]
+lemma heatKernelN_rpow_key {t : ℝ} (ht : 0 < t) :
+    (4 * π * t) ^ (-(n : ℝ) / 2) * ((4 * π * t) ^ ((1 : ℝ) / 2)) ^ n = 1 := by
+  have hpos : 0 < 4 * π * t := by positivity
+  have h1 : ((4 * π * t) ^ ((1 : ℝ) / 2)) ^ n = (4 * π * t) ^ ((n : ℝ) / 2) := by
+    rw [← Real.rpow_natCast, ← Real.rpow_mul hpos.le]
+    congr 1
     ring
-  have hdiff : MemLp (fun x => heatConv t f x - f x) 2 volume :=
-    (heatConv_memLp ht hf).sub hf
-  have hψ : MemLp (fun x => ∫ z, φ (z, x) ∂volume) 2 volume :=
-    (memLp_congr_ae hpoint).mpr hdiff
-  have hrepr :=
-    ConstructionTargets.LpRepresentative.toLp_integral_eq_integral
-      (by norm_num : (2 : ENNReal) ≠ ⊤) hφ hG hGφ hlocal hψ
-  exact (MemLp.toLp_congr hdiff hψ hpoint.symm).trans hrepr
+  rw [h1, ← Real.rpow_add hpos, show (-(n : ℝ) / 2) + (n : ℝ) / 2 = 0 from by ring, Real.rpow_zero]
 
-/-- (c) u(·,t) → f in L² as t → 0⁺.
+lemma heatKernelN_integral {t : ℝ} (ht : 0 < t) :
+    ∫ x : EuclideanSpace ℝ (Fin n), heatKernelN n t x ∂volume = 1 := by
+  have hpos : 0 < 4 * π * t := by positivity
+  unfold heatKernelN
+  rw [integral_const_mul, integral_exp_neg_norm_sq ht,
+    heatKernelN_rpow_key ht]
 
-The contraction above supplies the density reduction.  The remaining
-construction is the Gaussian approximate-identity estimate on a dense class,
-or equivalently the integral-Minkowski estimate averaging continuity of
-translations in `L²`; neither bridge is currently packaged in Mathlib. -/
-theorem heatConv_tendsto_L2
-    {f : ℝ → ℝ}
-    (hf : MemLp f 2 volume) :
-    Tendsto (fun t => eLpNorm (fun x => heatConv t f x - f x) 2 volume)
-      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
-  let τ : ℝ → C(ℝ, ℝ) := fun s =>
-    ⟨fun x => x - s, continuous_id.sub continuous_const⟩
-  let hτ : ∀ s, MeasurePreserving (τ s) volume volume := fun s => by
-    simpa [τ, sub_eq_add_neg] using measurePreserving_add_right volume (-s)
-  let F : ℝ → Lp ℝ 2 volume := fun s =>
-    Lp.compMeasurePreserving (τ s) (hτ s) (hf.toLp f)
-  let G : ℝ → ℝ → Lp ℝ 2 volume := fun t z =>
-    heatKernel 1 z • (F (Real.sqrt t * z) - F 0)
-  have havg0 : Tendsto (fun s => ∫ z, heatKernel 1 z •
-      (F (s * z) - F 0) ∂volume) (nhds 0) (nhds 0) := by
-    simpa [τ, hτ, F] using heat_translation_average_tendsto_L2 hf
-  have hsqrt : Tendsto (fun t : ℝ => Real.sqrt t)
-      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
-    simpa only [Real.sqrt_zero] using
-      (continuous_sqrt.tendsto 0).mono_left
-        (show nhdsWithin (0 : ℝ) (Set.Ioi 0) ≤ nhds 0 from inf_le_left)
-  have havg : Tendsto (fun t => ∫ z, G t z ∂volume)
-      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
-    simpa [G] using havg0.comp hsqrt
-  have henorm : Tendsto (fun t => ‖∫ z, G t z ∂volume‖ₑ)
-      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
-    simpa using (continuous_enorm.tendsto (0 : Lp ℝ 2 volume)).comp havg
-  refine henorm.congr' ?_
-  filter_upwards [self_mem_nhdsWithin] with t ht
-  have hdiff : MemLp (fun x => heatConv t f x - f x) 2 volume :=
-    (heatConv_memLp ht hf).sub hf
-  rw [← Lp.enorm_toLp hdiff]
+lemma heatKernelN_integrable {t : ℝ} (ht : 0 < t) :
+    Integrable (heatKernelN n t) volume :=
+  (integrable_exp_neg_norm_sq ht).const_mul _
+
+lemma heatKernelN_lintegral_eq_one {t : ℝ} (ht : 0 < t) :
+    ∫⁻ z, ENNReal.ofReal (heatKernelN n t z) ∂volume = 1 := by
+  have h1 : (fun z => ENNReal.ofReal (heatKernelN n t z))
+      = fun z => ‖heatKernelN n t z‖ₑ := by
+    funext z
+    rw [show ENNReal.ofReal (heatKernelN n t z) = ENNReal.ofReal ‖heatKernelN n t z‖ from by
+      rw [Real.norm_eq_abs, abs_of_nonneg (heatKernelN_nonneg ht z)]]
+    exact ofReal_norm_eq_enorm (heatKernelN n t z)
+  rw [h1, ← ofReal_integral_norm_eq_lintegral_enorm (heatKernelN_integrable ht)]
+  have hnorm : ∀ᵐ x ∂volume, ‖heatKernelN n t x‖ = heatKernelN n t x :=
+    Eventually.of_forall fun x => by
+      rw [Real.norm_eq_abs, abs_of_nonneg (heatKernelN_nonneg ht x)]
+  rw [integral_congr_ae hnorm, heatKernelN_integral ht]
+  norm_num
+
+end HeatKernel
+
+/-! ## Young's convolution inequality (L² case) on `EuclideanSpace ℝ (Fin n)` -/
+
+section Young
+
+open MeasureTheory
+
+/-- Weighted Cauchy--Schwarz in the nonnegative extended reals. -/
+lemma lintegral_weight_mul_sq_le_eucl
+    {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    (w v : α → ℝ≥0∞) (hw : AEMeasurable w μ) (hv : AEMeasurable v μ) :
+    (∫⁻ x, w x * v x ∂μ) ^ 2 ≤
+      (∫⁻ x, w x ∂μ) * (∫⁻ x, w x * v x ^ 2 ∂μ) := by
+  have h := ENNReal.lintegral_mul_le_Lp_mul_Lq μ
+    Real.HolderConjugate.two_two
+    (f := fun x => (w x) ^ (1 / 2 : ℝ))
+    (g := fun x => (w x) ^ (1 / 2 : ℝ) * v x)
+    (hw.pow_const _)
+    ((hw.pow_const _).mul hv)
+  simp only [Pi.mul_apply] at h
+  have hhalf : (1 / 2 : ℝ) + (1 / 2 : ℝ) = 1 := by norm_num
+  have htwice : (1 / 2 : ℝ) * 2 = 1 := by norm_num
+  simp_rw [← mul_assoc,
+    ← ENNReal.rpow_add_of_nonneg (1 / 2 : ℝ) (1 / 2 : ℝ) (by norm_num) (by norm_num),
+    hhalf, ENNReal.rpow_one] at h
+  simp_rw [ENNReal.mul_rpow_of_nonneg _ _ (by norm_num : (0 : ℝ) ≤ 2),
+    ← ENNReal.rpow_mul, htwice, ENNReal.rpow_one] at h
+  have hsquare (a : ℝ≥0∞) : (a ^ (1 / 2 : ℝ)) ^ 2 = a := by
+    rw [← ENNReal.rpow_natCast, ← ENNReal.rpow_mul]
+    norm_num
+  calc
+    (∫⁻ x, w x * v x ∂μ) ^ 2
+        ≤ (((∫⁻ x, w x ∂μ) ^ (1 / 2 : ℝ)) *
+          ((∫⁻ x, w x * v x ^ 2 ∂μ) ^ (1 / 2 : ℝ))) ^ 2 :=
+      pow_le_pow_left₀ (zero_le _) h 2
+    _ = (∫⁻ x, w x ∂μ) * (∫⁻ x, w x * v x ^ 2 ∂μ) := by
+      rw [mul_pow, hsquare, hsquare]
+      simp
+
+variable {n : ℕ}
+
+/-- `eLpNorm` is translation-invariant on `EuclideanSpace`. -/
+lemma eLpNorm_sub_right_eucl {f : EuclideanSpace ℝ (Fin n) → ℂ} (z : EuclideanSpace ℝ (Fin n))
+    (hf : AEStronglyMeasurable f volume) :
+    eLpNorm (fun x => f (x - z)) 2 volume = eLpNorm f 2 volume := by
+  have hm : AEMeasurable (fun x => ‖f x‖ₑ ^ ENNReal.toReal 2) volume := by fun_prop
+  have hmp := measurePreserving_sub_right (volume : Measure (EuclideanSpace ℝ (Fin n))) z
+  have hmk := hmp.quasiMeasurePreserving.ae hm.ae_eq_mk
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    lintegral_congr_ae hmk, lintegral_congr_ae hm.ae_eq_mk]
   congr 1
-  simpa [τ, hτ, F, G] using (heat_translation_average_toLp ht hf).symm
+  exact hmp.lintegral_comp hm.measurable_mk
 
-end
+/-- Translation preserves `MemLp` on `EuclideanSpace`. -/
+lemma memLp_sub_right_eucl {f : EuclideanSpace ℝ (Fin n) → ℂ}
+    (hf : MemLp f 2 volume) (z : EuclideanSpace ℝ (Fin n)) :
+    MemLp (fun x => f (x - z)) 2 volume := by
+  refine ⟨hf.1.comp_measurePreserving (measurePreserving_sub_right volume z), ?_⟩
+  rw [eLpNorm_sub_right_eucl z hf.1]
+  simpa using hf.2
+
+end Young
+
+/-! ## Young's L² convolution inequality on `EuclideanSpace ℝ (Fin n)` -/
+
+section Young2
+
+variable {n : ℕ}
+
+/-- Subtraction is jointly quasi-measure-preserving on `EuclideanSpace`. -/
+lemma quasiMeasurePreserving_sub_pair :
+    Measure.QuasiMeasurePreserving
+      (fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) => p.1 - p.2)
+      (volume.prod volume) volume :=
+  quasiMeasurePreserving_sub volume volume
+
+/-- **Young's convolution inequality (L² case) on `EuclideanSpace ℝ (Fin n)`. -/
+theorem young_convolution_inequality_L2_eucl
+    {g : EuclideanSpace ℝ (Fin n) → ℝ} {f : EuclideanSpace ℝ (Fin n) → ℂ}
+    (hg_int : Integrable g volume) (hf_lp : MemLp f 2 volume) :
+    eLpNorm (fun x => ∫ y, g (x - y) • f y ∂volume) 2 volume ≤
+      (ENNReal.ofReal (∫ y, |g y| ∂volume)) * eLpNorm f 2 volume := by
+  have hlint_shift (y : EuclideanSpace ℝ (Fin n)) :
+      ∫⁻ x, ‖g (x - y)‖ₑ ∂volume = ∫⁻ x, ‖g x‖ₑ ∂volume := by
+    have hg_comp : Integrable (fun t => g (t - y)) volume :=
+      (measurePreserving_sub_right volume y).integrable_comp_of_integrable hg_int
+    rw [← ofReal_integral_norm_eq_lintegral_enorm hg_comp,
+      ← ofReal_integral_norm_eq_lintegral_enorm hg_int]
+    congr 1
+    exact integral_sub_right_eq_self (fun t => ‖g t‖) y
+  have hlint_shift_left (x : EuclideanSpace ℝ (Fin n)) :
+      ∫⁻ y, ‖g (x - y)‖ₑ ∂volume = ∫⁻ y, ‖g y‖ₑ ∂volume := by
+    have hg_comp : Integrable (fun t => g (x - t)) volume :=
+      (Measure.measurePreserving_sub_left volume x).integrable_comp_of_integrable hg_int
+    rw [← ofReal_integral_norm_eq_lintegral_enorm hg_comp,
+      ← ofReal_integral_norm_eq_lintegral_enorm hg_int]
+    congr 1
+    exact integral_sub_left_eq_self (fun t => ‖g t‖) volume x
+  have hpoint (x : EuclideanSpace ℝ (Fin n)) :
+      ‖∫ y, g (x - y) • f y ∂volume‖ₑ ^ 2 ≤
+        (∫⁻ y, ‖g y‖ₑ ∂volume) *
+          (∫⁻ y, ‖g (x - y)‖ₑ * ‖f y‖ₑ ^ 2 ∂volume) := by
+    have hg_x : AEMeasurable (fun y : EuclideanSpace ℝ (Fin n) => ‖g (x - y)‖ₑ) volume :=
+      ((hg_int.aestronglyMeasurable.comp_measurePreserving
+        (Measure.measurePreserving_sub_left volume x)).enorm)
+    have hf_enorm : AEMeasurable (fun y : EuclideanSpace ℝ (Fin n) => ‖f y‖ₑ) volume :=
+      hf_lp.aestronglyMeasurable.enorm
+    have hnorm :
+        ‖∫ y, g (x - y) • f y ∂volume‖ₑ ≤
+          ∫⁻ y, ‖g (x - y)‖ₑ * ‖f y‖ₑ ∂volume := by
+      refine (enorm_integral_le_lintegral_enorm _).trans_eq ?_
+      apply lintegral_congr
+      intro y
+      rw [Complex.real_smul, enorm_mul]
+      congr 1
+      rw [← ofReal_norm_eq_enorm (↑(g (x - y)) : ℂ), Complex.norm_real]
+      rw [← ofReal_norm_eq_enorm (g (x - y)), Real.norm_eq_abs]
+    calc
+      ‖∫ y, g (x - y) • f y ∂volume‖ₑ ^ 2
+          ≤ (∫⁻ y, ‖g (x - y)‖ₑ * ‖f y‖ₑ ∂volume) ^ 2 :=
+        pow_le_pow_left₀ (zero_le _) hnorm 2
+      _ ≤ (∫⁻ y, ‖g (x - y)‖ₑ ∂volume) *
+          (∫⁻ y, ‖g (x - y)‖ₑ * ‖f y‖ₑ ^ 2 ∂volume) :=
+        lintegral_weight_mul_sq_le_eucl _ _ hg_x hf_enorm
+      _ = (∫⁻ y, ‖g y‖ₑ ∂volume) *
+          (∫⁻ y, ‖g (x - y)‖ₑ * ‖f y‖ₑ ^ 2 ∂volume) := by
+        congr 1
+        exact hlint_shift_left x
+  let G : ℝ≥0∞ := ∫⁻ y, ‖g y‖ₑ ∂volume
+  let F2 : ℝ≥0∞ := ∫⁻ y, ‖f y‖ₑ ^ 2 ∂volume
+  have hG_top : G ≠ (⊤ : ℝ≥0∞) := hg_int.hasFiniteIntegral.ne
+  have h_joint : AEMeasurable
+      (Function.uncurry fun x y : EuclideanSpace ℝ (Fin n) =>
+        ‖g (x - y)‖ₑ * ‖f y‖ₑ ^ 2)
+      (volume.prod volume) := by
+    have hg_joint : AEMeasurable
+        (fun z : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) => ‖g (z.1 - z.2)‖ₑ)
+        (volume.prod volume) := by
+      simpa [Function.comp_def] using
+        (hg_int.aestronglyMeasurable.enorm.comp_quasiMeasurePreserving
+          quasiMeasurePreserving_sub_pair)
+    exact hg_joint.mul (hf_lp.aestronglyMeasurable.enorm.comp_snd.pow_const _)
+  have hdouble :
+      (∫⁻ x, ‖∫ y, g (x - y) • f y ∂volume‖ₑ ^ 2 ∂volume) ≤
+        G ^ 2 * F2 := by
+    calc
+      (∫⁻ x, ‖∫ y, g (x - y) • f y ∂volume‖ₑ ^ 2 ∂volume)
+          ≤ ∫⁻ x, G *
+              (∫⁻ y, ‖g (x - y)‖ₑ * ‖f y‖ₑ ^ 2 ∂volume) ∂volume := by
+            apply lintegral_mono
+            intro x
+            exact hpoint x
+      _ = G * (∫⁻ x,
+              (∫⁻ y, ‖g (x - y)‖ₑ * ‖f y‖ₑ ^ 2 ∂volume) ∂volume) := by
+            rw [lintegral_const_mul' G _ hG_top]
+      _ = G * (∫⁻ y,
+              (∫⁻ x, ‖g (x - y)‖ₑ * ‖f y‖ₑ ^ 2 ∂volume) ∂volume) := by
+            rw [lintegral_lintegral_swap h_joint]
+      _ = G * (G * F2) := by
+            congr 1
+            calc
+              (∫⁻ y, (∫⁻ x, ‖g (x - y)‖ₑ * ‖f y‖ₑ ^ 2 ∂volume) ∂volume)
+                  = ∫⁻ y, G * ‖f y‖ₑ ^ 2 ∂volume := by
+                    apply lintegral_congr
+                    intro y
+                    rw [lintegral_mul_const' _ _ (by rw [← ofReal_norm_eq_enorm (f y), ← ENNReal.ofReal_pow (by positivity)]; exact ENNReal.ofReal_ne_top), hlint_shift _]
+              _ = G * F2 := by
+                    rw [lintegral_const_mul' G _ hG_top]
+      _ = G ^ 2 * F2 := by ring
+  have hroot :
+      (∫⁻ x, ‖∫ y, g (x - y) • f y ∂volume‖ₑ ^ (2 : ℝ) ∂volume) ^
+          (1 / 2 : ℝ) ≤
+        G * F2 ^ (1 / 2 : ℝ) := by
+    calc
+      (∫⁻ x, ‖∫ y, g (x - y) • f y ∂volume‖ₑ ^ (2 : ℝ) ∂volume) ^
+            (1 / 2 : ℝ)
+          ≤ (G ^ 2 * F2) ^ (1 / 2 : ℝ) :=
+        ENNReal.rpow_le_rpow (by simpa [ENNReal.rpow_two] using hdouble) (by norm_num)
+      _ = G * F2 ^ (1 / 2 : ℝ) := by
+        rw [ENNReal.mul_rpow_of_nonneg _ _ (by norm_num)]
+        congr 1
+        rw [← ENNReal.rpow_natCast, ← ENNReal.rpow_mul]
+        norm_num
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    show ∫ y, |g y| ∂volume = ∫ y, ‖g y‖ ∂volume from
+      integral_congr_ae (Eventually.of_forall fun y => (Real.norm_eq_abs _).symm),
+    ofReal_integral_norm_eq_lintegral_enorm hg_int]
+  simpa [G, F2] using hroot
+
+end Young2
+
+/-! ## Clause (b): the L² contraction -/
+
+section Contraction
+
+variable {n : ℕ}
+
+/-- (b) For fixed `t > 0`, the heat convolution is an `L²` contraction. -/
+theorem heatConvN_eLpNorm_le {t : ℝ} (ht : 0 < t)
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume) :
+    eLpNorm (heatConvN n t f) 2 volume ≤ eLpNorm f 2 volume := by
+  have hyoung := young_convolution_inequality_L2_eucl
+    (g := heatKernelN n t) (f := f) (heatKernelN_integrable ht) hf
+  have habs : ∫ y, |heatKernelN n t y| ∂volume = ∫ y, heatKernelN n t y ∂volume := by
+    refine integral_congr_ae (Eventually.of_forall fun y => ?_)
+    exact abs_of_nonneg (heatKernelN_nonneg ht y)
+  have hint : ENNReal.ofReal (∫ y, |heatKernelN n t y| ∂volume) = 1 := by
+    rw [habs, heatKernelN_integral ht]
+    norm_num
+  have hone : ENNReal.ofReal (∫ y, |heatKernelN n t y| ∂volume) * eLpNorm f 2 volume
+      = eLpNorm f 2 volume := by
+    rw [hint, one_mul]
+  refine hyoung.trans_eq ?_
+  rw [hone]
+
+end Contraction
+
+/-! ## Integrability helper: product of two `L²` functions -/
+
+section MulL2
+
+variable {α : Type*} [MeasurableSpace α] {μ : Measure α}
+
+lemma enorm_real_eq (x : ℝ) : ‖x‖ₑ = ENNReal.ofReal |x| := by
+  rw [← ofReal_norm_eq_enorm (x), Real.norm_eq_abs]
+
+lemma enorm_nonneg_real_eq {x : ℝ} (h : 0 ≤ x) : ‖x‖ₑ = ENNReal.ofReal x := by
+  simp only [enorm_real_eq]
+  exact congrArg ENNReal.ofReal (abs_of_nonneg h)
+
+lemma enorm_pow_two (a : ℝ≥0∞) : a ^ ENNReal.toReal 2 = a * a := by
+  norm_num
+  exact pow_two a
+
+lemma eLpNorm_two_enorm_eq {β : Type*} [NormedAddCommGroup β] (w : α → β) :
+    eLpNorm w 2 μ = (∫⁻ x, ‖w x‖ₑ * ‖w x‖ₑ ∂μ) ^ (1 / 2 : ℝ) := by
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num)]
+  congr 1
+  apply lintegral_congr
+  intro x
+  exact enorm_pow_two _
+
+/-- The product of two real `L²` functions is integrable (Cauchy--Schwarz). -/
+lemma integrable_mul_of_memLp_two {u v : α → ℝ} (hu : MemLp u 2 μ) (hv : MemLp v 2 μ) :
+    Integrable (fun x => u x * v x) μ := by
+  refine ⟨hu.aestronglyMeasurable.mul hv.aestronglyMeasurable, ?_⟩
+  have hfU : AEMeasurable (fun x => ‖u x‖ₑ) μ := hu.aestronglyMeasurable.enorm
+  have hfV : AEMeasurable (fun x => ‖v x‖ₑ) μ := hv.aestronglyMeasurable.enorm
+  have hcs := ENNReal.lintegral_mul_le_Lp_mul_Lq μ Real.HolderConjugate.two_two hfU hfV
+  simp only [Pi.mul_apply] at hcs
+  have key {γ : Type} [NormedAddCommGroup γ] (w : α → γ) (hw : MemLp w 2 μ) :
+      (∫⁻ x, ‖w x‖ₑ ^ (2 : ℝ) ∂μ) ^ (1 / 2 : ℝ) < ⊤ := by
+    refine lt_top_iff_ne_top.2 (fun h => hw.2.ne ?_)
+    refine (eLpNorm_two_enorm_eq w).trans ?_
+    rw [lintegral_congr (fun x => (enorm_pow_two _).symm)]
+    exact h
+  rw [show HasFiniteIntegral (fun x => u x * v x) μ =
+      (∫⁻ x, ‖u x * v x‖ₑ ∂μ < ⊤) from rfl,
+    lintegral_congr (fun x => enorm_mul (u x) (v x))]
+  exact lt_of_le_of_lt hcs (ENNReal.mul_lt_top (key u hu) (key v hv))
+
+end MulL2
+
+/-! ## Clause (c): the approximate-identity limit -/
+
+section Limit
+
+variable {n : ℕ}
+
+lemma rpow_half_sq (a : ℝ≥0∞) : (a ^ (1 / 2 : ℝ)) ^ 2 = a := by
+  rw [← ENNReal.rpow_natCast, ← ENNReal.rpow_mul]
+  norm_num
+
+lemma enorm_smul_real_complex (a : ℝ) (w : ℂ) : ‖a • w‖ₑ = ‖a‖ₑ * ‖w‖ₑ := by
+  have h1 : ‖(a : ℂ)‖ₑ = ‖a‖ₑ := by
+    rw [show ((a : ℂ)) = Complex.ofReal a from rfl, ← ofReal_norm_eq_enorm ((a : ℂ)),
+      Complex.norm_real, ← ofReal_norm_eq_enorm (a), Real.norm_eq_abs]
+  rw [Complex.real_smul, enorm_mul, h1]
+
+lemma lintegral_ofReal_eq_integral {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    {f : α → ℝ} (hf : 0 ≤ f) (hfi : Integrable f μ) :
+    ∫⁻ x, ENNReal.ofReal (f x) ∂μ = ENNReal.ofReal (∫ x, f x ∂μ) := by
+  have h1 : ∫⁻ x, ENNReal.ofReal (f x) ∂μ = ∫⁻ x, ‖f x‖ₑ ∂μ := by
+    apply lintegral_congr
+    intro x
+    rw [← ofReal_norm_eq_enorm (f x), Real.norm_eq_abs, abs_of_nonneg (hf x)]
+  rw [h1, ← ofReal_integral_norm_eq_lintegral_enorm hfi]
+  congr 1
+  exact integral_congr_ae (Eventually.of_forall fun x => by
+    simp [Real.norm_eq_abs, abs_of_nonneg (hf x)])
+
+/-- Translations are strongly continuous in `L²` on `EuclideanSpace`. -/
+theorem eLpNorm_translation_tendsto_eucl
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume) :
+    Tendsto (fun z => eLpNorm (fun x => f (x - z) - f x) 2 volume) (𝓝 0) (𝓝 0) := by
+  letI : Fact (1 ≤ (2 : ℝ≥0∞)) := ⟨by norm_num⟩
+  let g : EuclideanSpace ℝ (Fin n) → C(EuclideanSpace ℝ (Fin n), EuclideanSpace ℝ (Fin n)) :=
+    fun z => ⟨fun x => x - z, continuous_id.sub continuous_const⟩
+  have hg : Continuous g := by
+    let G : C(EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n),
+        EuclideanSpace ℝ (Fin n)) :=
+      ⟨fun p => p.2 - p.1, continuous_snd.sub continuous_fst⟩
+    have hgc : g = (ContinuousMap.curry G : C(EuclideanSpace ℝ (Fin n),
+        C(EuclideanSpace ℝ (Fin n), EuclideanSpace ℝ (Fin n)))) := rfl
+    rw [hgc]
+    exact (ContinuousMap.curry G).continuous
+  have hgm : ∀ z, MeasurePreserving (g z) volume volume :=
+    fun z => measurePreserving_sub_right volume z
+  let F : EuclideanSpace ℝ (Fin n) → Lp ℂ 2 volume := fun z =>
+    Lp.compMeasurePreserving (g z) (hgm z) (hf.toLp f)
+  have hF : Continuous F := continuous_const.compMeasurePreservingLp hg hgm (by norm_num)
+  have hF0 : F 0 = hf.toLp f := by
+    dsimp [F]
+    rw [Lp.toLp_compMeasurePreserving]
+    apply MemLp.toLp_congr
+    exact Filter.Eventually.of_forall fun x => by simp [g]
+  have hed : Tendsto (fun z => edist (F z) (hf.toLp f)) (𝓝 0) (𝓝 0) := by
+    have hc : Continuous (fun _ : EuclideanSpace ℝ (Fin n) => hf.toLp f) := continuous_const
+    simpa [hF0] using (hF.edist hc).tendsto 0
+  convert hed using 1
+  ext z
+  dsimp [F]
+  rw [Lp.toLp_compMeasurePreserving, Lp.edist_toLp_toLp]
+  apply eLpNorm_congr_ae
+  exact Filter.Eventually.of_forall fun x => by simp [g]
+
+lemma heatKernelN_enorm_lintegral {s : ℝ} (hs : 0 < s) :
+    ∫⁻ z, ‖heatKernelN n s z‖ₑ ∂volume = 1 := by
+  rw [lintegral_congr (fun z => by
+    rw [← ofReal_norm_eq_enorm (heatKernelN n s z), Real.norm_eq_abs,
+      abs_of_nonneg (heatKernelN_nonneg hs z)])]
+  exact heatKernelN_lintegral_eq_one hs
+
+lemma eLpNorm_sub_left_eucl {f : EuclideanSpace ℝ (Fin n) → ℂ} (x : EuclideanSpace ℝ (Fin n))
+    (hf : AEStronglyMeasurable f volume) :
+    eLpNorm (fun z => f (x - z)) 2 volume = eLpNorm f 2 volume := by
+  have hm : AEMeasurable (fun z => ‖f z‖ₑ ^ ENNReal.toReal 2) volume := by fun_prop
+  have hmp := Measure.measurePreserving_sub_left volume x
+  have hmk := hmp.quasiMeasurePreserving.ae hm.ae_eq_mk
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    lintegral_congr_ae hmk, lintegral_congr_ae hm.ae_eq_mk]
+  congr 1
+  exact hmp.lintegral_comp hm.measurable_mk
+
+lemma memLp_sub_left_eucl {f : EuclideanSpace ℝ (Fin n) → ℂ}
+    (hf : MemLp f 2 volume) (x : EuclideanSpace ℝ (Fin n)) :
+    MemLp (fun z => f (x - z)) 2 volume := by
+  refine ⟨hf.1.comp_measurePreserving (Measure.measurePreserving_sub_left volume x), ?_⟩
+  rw [eLpNorm_sub_left_eucl x hf.1]
+  simpa using hf.2
+
+lemma integrable_smul_of_memLp_two {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    {u : α → ℝ} {w : α → ℂ} (hu : MemLp u 2 μ) (hw : MemLp w 2 μ) :
+    Integrable (fun z => u z • w z) μ := by
+  have hfU : AEMeasurable (fun x => ‖u x‖ₑ) μ := hu.aestronglyMeasurable.enorm
+  have hfW : AEMeasurable (fun x => ‖w x‖ₑ) μ := hw.aestronglyMeasurable.enorm
+  have hcs := ENNReal.lintegral_mul_le_Lp_mul_Lq μ Real.HolderConjugate.two_two hfU hfW
+  simp only [Pi.mul_apply] at hcs
+  have key : ∀ {γ : Type} [NormedAddCommGroup γ] (v : α → γ), MemLp v 2 μ →
+      (∫⁻ x, ‖v x‖ₑ ^ (2 : ℝ) ∂μ) ^ (1 / 2 : ℝ) < ⊤ :=
+    fun v hv => lt_top_iff_ne_top.2 (fun h => hv.2.ne (by
+      refine (eLpNorm_two_enorm_eq v).trans ?_
+      rw [lintegral_congr (fun x => (enorm_pow_two _).symm)]
+      exact h))
+  have hsm : (fun z => u z • w z) = fun z => (u z : ℂ) * w z :=
+    funext fun z => by rw [Complex.real_smul]
+  have hAE : AEMeasurable (fun z => (u z : ℂ) * w z) μ :=
+    (hu.aestronglyMeasurable.aemeasurable.complex_ofReal).mul
+      hw.aestronglyMeasurable.aemeasurable
+  refine ⟨hAE.aestronglyMeasurable.congr (Eventually.of_forall fun z => congrFun hsm z), ?_⟩
+  have hbnd : ∫⁻ z, ‖u z • w z‖ₑ ∂μ ≤ ∫⁻ z, ‖u z‖ₑ * ‖w z‖ₑ ∂μ :=
+    lintegral_mono fun z => le_of_eq (enorm_smul_real_complex _ _)
+  exact lt_of_le_of_lt hbnd (lt_of_le_of_lt hcs (ENNReal.mul_lt_top (key u hu) (key w hw)))
+
+end Limit
+
+lemma integrable_smul_const_complex {α : Type*} [MeasurableSpace α] {μ : Measure α}
+    {g : α → ℝ} {c : ℂ} (hg : Integrable g μ) :
+    Integrable (fun z => g z • c) μ := by
+  have hAE : AEMeasurable (fun z => (g z : ℂ) * c) μ :=
+    (hg.aestronglyMeasurable.aemeasurable.complex_ofReal).mul aemeasurable_const
+  have hsm : (fun z => g z • c) = fun z => (g z : ℂ) * c :=
+    funext fun z => by rw [Complex.real_smul]
+  refine ⟨hAE.aestronglyMeasurable.congr (Eventually.of_forall fun z => congrFun hsm z), ?_⟩
+  rw [show HasFiniteIntegral (fun z => g z • c) μ =
+      (∫⁻ z, ‖g z • c‖ₑ ∂μ < ⊤) from rfl,
+    lintegral_congr (fun z => enorm_smul_real_complex _ _),
+    lintegral_mul_const' _ _ (by simp)]
+  exact ENNReal.mul_lt_top hg.hasFiniteIntegral (by simp)
+
+lemma heatKernelN_memLp_two {s : ℝ} (hs : 0 < s) :
+    MemLp (heatKernelN n s) 2 volume := by
+  have hint' : Integrable (fun z : EuclideanSpace ℝ (Fin n) =>
+      Real.exp (-‖z‖ ^ 2 / (4 * (s / 2)))) volume :=
+    integrable_exp_neg_norm_sq (by positivity)
+  have hint : Integrable (fun z : EuclideanSpace ℝ (Fin n) =>
+      ((4 * π * s) ^ (-(n : ℝ) / 2)) ^ 2 *
+        Real.exp (-‖z‖ ^ 2 / (4 * (s / 2)))) volume := hint'.const_mul _
+  have hsq : ∀ z : EuclideanSpace ℝ (Fin n),
+      heatKernelN n s z * heatKernelN n s z
+        = ((4 * π * s) ^ (-(n : ℝ) / 2)) ^ 2 * Real.exp (-‖z‖ ^ 2 / (4 * (s / 2))) := by
+    intro z
+    unfold heatKernelN
+    have hEE : Real.exp (-‖z‖ ^ 2 / (4 * s)) * Real.exp (-‖z‖ ^ 2 / (4 * s))
+        = Real.exp (-‖z‖ ^ 2 / (4 * (s / 2))) := by
+      rw [← Real.exp_add]
+      congr 1
+      field_simp
+      ring
+    calc (4 * π * s) ^ (-(n : ℝ) / 2) * Real.exp (-‖z‖ ^ 2 / (4 * s))
+          * ((4 * π * s) ^ (-(n : ℝ) / 2) * Real.exp (-‖z‖ ^ 2 / (4 * s)))
+        = ((4 * π * s) ^ (-(n : ℝ) / 2)) * ((4 * π * s) ^ (-(n : ℝ) / 2))
+          * (Real.exp (-‖z‖ ^ 2 / (4 * s)) * Real.exp (-‖z‖ ^ 2 / (4 * s))) := by ring
+      _ = ((4 * π * s) ^ (-(n : ℝ) / 2)) * ((4 * π * s) ^ (-(n : ℝ) / 2))
+          * Real.exp (-‖z‖ ^ 2 / (4 * (s / 2))) := by rw [hEE]
+      _ = ((4 * π * s) ^ (-(n : ℝ) / 2)) ^ 2 * Real.exp (-‖z‖ ^ 2 / (4 * (s / 2))) := by
+          rw [← pow_two]
+  have heq : ∫⁻ z, ‖heatKernelN n s z‖ₑ * ‖heatKernelN n s z‖ₑ ∂volume
+      = ENNReal.ofReal (((4 * π * s) ^ (-(n : ℝ) / 2)) ^ 2 *
+        ((4 * π * (s / 2)) ^ ((1 : ℝ) / 2)) ^ n) := by
+    have h1 : ∀ z : EuclideanSpace ℝ (Fin n),
+        ‖heatKernelN n s z‖ₑ * ‖heatKernelN n s z‖ₑ
+          = ENNReal.ofReal (((4 * π * s) ^ (-(n : ℝ) / 2)) ^ 2 *
+            Real.exp (-‖z‖ ^ 2 / (4 * (s / 2)))) := by
+      intro z
+      have hA : ‖heatKernelN n s z‖ₑ * ‖heatKernelN n s z‖ₑ
+          = ENNReal.ofReal (heatKernelN n s z) * ENNReal.ofReal (heatKernelN n s z) :=
+        by rw [enorm_nonneg_real_eq (heatKernelN_nonneg hs z)]
+      rw [hA, ← ENNReal.ofReal_mul (heatKernelN_nonneg hs z), hsq z]
+    rw [lintegral_congr (fun z => h1 z),
+      lintegral_ofReal_eq_integral
+        (fun z => mul_nonneg (sq_nonneg _) (Real.exp_pos _).le) hint,
+      integral_const_mul,
+      integral_exp_neg_norm_sq (by positivity : (0:ℝ) < s / 2)]
+  refine ⟨(heatKernelN_integrable hs).aestronglyMeasurable, ?_⟩
+  rw [lt_top_iff_ne_top, eLpNorm_two_enorm_eq]
+  intro htop
+  rw [heq] at htop
+  exact absurd htop (by simp)
+
+lemma heatConvN_sub_eq {s : ℝ} (hs : 0 < s) {f : EuclideanSpace ℝ (Fin n) → ℂ}
+    (hf : MemLp f 2 volume) (x : EuclideanSpace ℝ (Fin n)) :
+    heatConvN n s f x - f x
+      = ∫ z, heatKernelN n s z • (f (x - z) - f x) ∂volume := by
+  have hint1 : Integrable (fun z => heatKernelN n s z • f (x - z)) volume :=
+    integrable_smul_of_memLp_two (heatKernelN_memLp_two hs) (memLp_sub_left_eucl hf x)
+  have hint2 : Integrable (fun z => heatKernelN n s z • f x) volume :=
+    integrable_smul_const_complex (heatKernelN_integrable hs)
+  have hconv : heatConvN n s f x
+      = ∫ z, heatKernelN n s z • f (x - z) ∂volume := by
+    unfold heatConvN
+    have hfun : (fun y => heatKernelN n s (x - y) • f y)
+        = fun y => (fun z => heatKernelN n s z • f (x - z)) (x - y) := by
+      funext y
+      show heatKernelN n s (x - y) • f y
+        = heatKernelN n s (x - y) • f (x - (x - y))
+      rw [sub_sub_cancel]
+    rw [hfun, integral_sub_left_eq_self (fun z => heatKernelN n s z • f (x - z)) volume x]
+  have hconst : f x = ∫ z, heatKernelN n s z • f x ∂volume := by
+    rw [show ∫ z, heatKernelN n s z • f x ∂volume
+        = ((∫ z, heatKernelN n s z ∂volume) • f x) from integral_smul_const _ _,
+      heatKernelN_integral hs]
+    simp
+  have e1 : heatConvN n s f x - f x
+      = (∫ z, heatKernelN n s z • f (x - z) ∂volume) - f x := by rw [hconv]
+  have e2 : (∫ z, heatKernelN n s z • f (x - z) ∂volume) - f x
+      = (∫ z, heatKernelN n s z • f (x - z) ∂volume)
+        - (∫ z, heatKernelN n s z • f x ∂volume) := by rw [← hconst]
+  have e3 : (∫ z, heatKernelN n s z • f (x - z) ∂volume)
+      - (∫ z, heatKernelN n s z • f x ∂volume)
+      = ∫ z, heatKernelN n s z • (f (x - z) - f x) ∂volume := by
+    rw [← integral_sub hint1 hint2]
+    exact integral_congr_ae (Eventually.of_forall fun z => by
+      exact (smul_sub (heatKernelN n s z) (f (x - z)) (f x)).symm)
+  exact e1.trans (e2.trans e3)
+
+/-! ## The reformed theorem -/
+
+section Main
+
+variable {n : ℕ}
+
+/-- The translation-error norm is at most `2 ‖f‖₂`. -/
+lemma eLpNorm_translation_sub_le_two
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume)
+    (z : EuclideanSpace ℝ (Fin n)) :
+    eLpNorm (fun x => f (x - z) - f x) 2 volume ≤ 2 * eLpNorm f 2 volume := by
+  have hle := eLpNorm_sub_le
+    (hf.1.comp_measurePreserving (measurePreserving_sub_right volume z))
+    hf.1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hle' : eLpNorm (fun x => f (x - z) - f x) 2 volume ≤
+      eLpNorm (fun x => f (x - z)) 2 volume + eLpNorm f 2 volume := hle
+  rw [eLpNorm_sub_right_eucl z hf.1, ← two_mul] at hle'
+  exact hle'
+
+/-- The translation-error `L²` norm is finite for every translation. -/
+lemma eLpNorm_translation_sub_ne_top
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume)
+    (z : EuclideanSpace ℝ (Fin n)) :
+    eLpNorm (fun x => f (x - z) - f x) 2 volume ≠ ⊤ :=
+  ne_top_of_le_ne_top
+    (ENNReal.mul_ne_top (by norm_num) hf.2.ne) (eLpNorm_translation_sub_le_two hf z)
+
+/-- Squared translation-error norm as an `x`-integral. -/
+lemma eLpNorm_translation_sub_sq
+    {f : EuclideanSpace ℝ (Fin n) → ℂ}
+    (z : EuclideanSpace ℝ (Fin n)) :
+    (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2
+      = ∫⁻ x, ‖f (x - z) - f x‖ₑ ^ 2 ∂volume := by
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    show ENNReal.toReal (2 : ℝ≥0∞) = (2 : ℝ) from by norm_num, rpow_half_sq]
+  apply lintegral_congr
+  intro x
+  rw [ENNReal.rpow_two]
+
+/-- Weighted Cauchy–Schwarz bound for the approximate-identity error:
+the `s`-error norm is at most the square root of the `G_s`-weighted average of the
+squared translation-error norms. -/
+lemma eLpNorm_heatConvN_sub_le {s : ℝ} (hs : 0 < s)
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume) :
+    eLpNorm (fun x => heatConvN n s f x - f x) 2 volume ≤
+      (∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+        (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 ∂volume) ^ (1 / 2 : ℝ) := by
+  -- pointwise bound on the mollified difference
+  have hGmeas : AEMeasurable (fun z : EuclideanSpace ℝ (Fin n) =>
+      ENNReal.ofReal (heatKernelN n s z)) volume :=
+    ENNReal.measurable_ofReal.comp_aemeasurable (heatKernelN_integrable hs).aemeasurable
+  have hfw_meas : ∀ x : EuclideanSpace ℝ (Fin n),
+      AEMeasurable (fun z => ‖f (x - z) - f x‖ₑ) volume := fun x => by
+    have h : AEMeasurable (fun z => ‖f (x - z) - f x‖ₑ) volume :=
+      ((hf.1.comp_measurePreserving
+        (Measure.measurePreserving_sub_left volume x)).sub
+          (aestronglyMeasurable_const (b := f x))).enorm
+    simpa [Function.comp_def] using h
+  have hpoint (x : EuclideanSpace ℝ (Fin n)) :
+      ‖∫ z, heatKernelN n s z • (f (x - z) - f x) ∂volume‖ₑ ^ 2 ≤
+        ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * ‖f (x - z) - f x‖ₑ ^ 2 ∂volume := by
+    have hnorm : ‖∫ z, heatKernelN n s z • (f (x - z) - f x) ∂volume‖ₑ
+        ≤ ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * ‖f (x - z) - f x‖ₑ ∂volume := by
+      refine (enorm_integral_le_lintegral_enorm _).trans_eq ?_
+      apply lintegral_congr
+      intro z
+      rw [Complex.real_smul, enorm_mul]
+      congr 1
+      rw [← ofReal_norm_eq_enorm]
+      simp only [Complex.norm_real, Real.norm_eq_abs,
+        abs_of_nonneg (heatKernelN_nonneg hs z)]
+    calc
+      ‖∫ z, heatKernelN n s z • (f (x - z) - f x) ∂volume‖ₑ ^ 2
+          ≤ (∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * ‖f (x - z) - f x‖ₑ ∂volume) ^ 2 :=
+        pow_le_pow_left₀ (zero_le _) hnorm 2
+      _ ≤ (∫⁻ z, ENNReal.ofReal (heatKernelN n s z) ∂volume) *
+            (∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * ‖f (x - z) - f x‖ₑ ^ 2 ∂volume) :=
+        lintegral_weight_mul_sq_le_eucl _ _ hGmeas (hfw_meas x)
+      _ = ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * ‖f (x - z) - f x‖ₑ ^ 2 ∂volume := by
+        rw [heatKernelN_lintegral_eq_one hs, one_mul]
+  -- joint measurability for Fubini
+  have hjoint : AEMeasurable (Function.uncurry fun x z : EuclideanSpace ℝ (Fin n) =>
+      ENNReal.ofReal (heatKernelN n s z) * ‖f (x - z) - f x‖ₑ ^ 2)
+      (volume.prod volume) := by
+    have hG2 : AEMeasurable (fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) =>
+        ENNReal.ofReal (heatKernelN n s p.2)) (volume.prod volume) :=
+      ENNReal.measurable_ofReal.comp_aemeasurable
+        ((heatKernelN_integrable hs).aemeasurable.comp_quasiMeasurePreserving
+          Measure.quasiMeasurePreserving_snd)
+    have hf1 : AEStronglyMeasurable
+        (fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) => f (p.1 - p.2))
+        (volume.prod volume) :=
+      hf.1.comp_quasiMeasurePreserving quasiMeasurePreserving_sub_pair
+    have hf2 : AEStronglyMeasurable
+        (fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) => f p.1)
+        (volume.prod volume) :=
+      hf.1.comp_quasiMeasurePreserving Measure.quasiMeasurePreserving_fst
+    exact hG2.mul ((hf1.sub hf2).enorm.pow_const _)
+  -- double-integral bound
+  have hdouble :
+      (∫⁻ x, ‖∫ z, heatKernelN n s z • (f (x - z) - f x) ∂volume‖ₑ ^ 2 ∂volume) ≤
+        ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+          (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 ∂volume := by
+    calc
+      (∫⁻ x, ‖∫ z, heatKernelN n s z • (f (x - z) - f x) ∂volume‖ₑ ^ 2 ∂volume)
+          ≤ ∫⁻ x, (∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+              ‖f (x - z) - f x‖ₑ ^ 2 ∂volume) ∂volume :=
+        lintegral_mono fun x => hpoint x
+      _ = ∫⁻ z, (∫⁻ x, ENNReal.ofReal (heatKernelN n s z) *
+            ‖f (x - z) - f x‖ₑ ^ 2 ∂volume) ∂volume :=
+        lintegral_lintegral_swap hjoint
+      _ = ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+            (∫⁻ x, ‖f (x - z) - f x‖ₑ ^ 2 ∂volume) ∂volume := by
+        apply lintegral_congr
+        intro z
+        rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
+      _ = ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+            (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 ∂volume := by
+        apply lintegral_congr
+        intro z
+        rw [eLpNorm_translation_sub_sq z]
+  -- conclude via the square root
+  have htarget : (∫⁻ x, ‖heatConvN n s f x - f x‖ₑ ^ (ENNReal.toReal 2) ∂volume)
+      ≤ ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+          (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 ∂volume := by
+    have hcongr : (fun x => ‖heatConvN n s f x - f x‖ₑ ^ (ENNReal.toReal 2))
+        = fun x => ‖∫ z, heatKernelN n s z • (f (x - z) - f x) ∂volume‖ₑ ^ 2 := by
+      funext x
+      rw [heatConvN_sub_eq hs hf x,
+        show ENNReal.toReal (2 : ℝ≥0∞) = (2 : ℝ) from by norm_num, ENNReal.rpow_two]
+    rw [hcongr]
+    exact hdouble
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
+    show ENNReal.toReal (2 : ℝ≥0∞) = (2 : ℝ) from by norm_num]
+  exact ENNReal.rpow_le_rpow htarget (by norm_num)
+
+/-- Clause (a): `heatConvN n t f` is smooth in `x` for `t > 0`. -/
+lemma heatKernelN_contDiff {t : ℝ} (ht : 0 < t) :
+    ContDiff ℝ ∞ (heatKernelN n t) := by
+  unfold heatKernelN
+  simp_rw [euclidean_norm_sq]
+  fun_prop
+
+lemma heatKernelN_sub_contDiff {t : ℝ} (ht : 0 < t)
+    (y : EuclideanSpace ℝ (Fin n)) :
+    ContDiff ℝ ∞ (fun x => heatKernelN n t (x - y)) := by
+  exact (heatKernelN_contDiff ht).comp (contDiff_id.sub contDiff_const)
+
+lemma heatKernelN_iteratedFDeriv_continuous {t : ℝ} (ht : 0 < t) (j : ℕ) :
+    Continuous (iteratedFDeriv ℝ j (heatKernelN n t)) := by
+  exact (heatKernelN_contDiff ht).continuous_iteratedFDeriv (by exact_mod_cast le_top)
+
+lemma heatKernelN_iteratedFDeriv_zero_gaussian_bound {t : ℝ} (ht : 0 < t) :
+    ∃ C : ℝ, ∀ z : EuclideanSpace ℝ (Fin n),
+      ‖iteratedFDeriv ℝ 0 (heatKernelN n t) z‖ ≤
+        C * Real.exp (-‖z‖ ^ 2 / (8 * t)) := by
+  refine ⟨(4 * π * t) ^ (-(n : ℝ) / 2), fun z => ?_⟩
+  rw [norm_iteratedFDeriv_zero]
+  unfold heatKernelN
+  rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg (Real.rpow_nonneg (by positivity) _),
+    abs_of_pos (Real.exp_pos _)]
+  apply mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) (Real.rpow_nonneg (by positivity) _)
+  have hz : 0 ≤ ‖z‖ ^ 2 := sq_nonneg _
+  have ht8 : 0 < 8 * t := by positivity
+  have ht4 : 0 < 4 * t := by positivity
+  apply (div_le_div_iff_of_pos_right ht8).mp
+  rw [div_div]
+  field_simp
+  linarith
+
+/-- Smooth functions all of whose derivatives have a fixed Gaussian majorant.
+This class is arranged so that it is closed under taking the Fréchet derivative. -/
+def HasGaussianDerivBounds (t : ℝ)
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (g : EuclideanSpace ℝ (Fin n) → F) : Prop :=
+  ContDiff ℝ ∞ g ∧ ∀ j : ℕ, ∃ C : ℝ, ∀ z,
+    ‖iteratedFDeriv ℝ j g z‖ ≤ C * Real.exp (-‖z‖ ^ 2 / (8 * t))
+
+lemma HasGaussianDerivBounds.fderiv {t : ℝ}
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {g : EuclideanSpace ℝ (Fin n) → F} (hg : HasGaussianDerivBounds t g) :
+    HasGaussianDerivBounds t (fderiv ℝ g) := by
+  constructor
+  · exact (contDiff_infty_iff_fderiv.mp hg.1).2
+  · intro j
+    obtain ⟨C, hC⟩ := hg.2 (j + 1)
+    exact ⟨C, fun z => by simpa [norm_iteratedFDeriv_fderiv] using hC z⟩
+
+lemma norm_iteratedFDeriv_exp (j : ℕ) (x : ℝ) :
+    ‖iteratedFDeriv ℝ j Real.exp x‖ = Real.exp x := by
+  rw [norm_iteratedFDeriv_eq_norm_iteratedDeriv]
+  have h := congrFun (iteratedDeriv_exp_const_mul j 1) x
+  simpa [Real.norm_eq_abs, abs_of_pos (Real.exp_pos x)] using congrArg norm h
+
+lemma heatQuadratic_base_one_le {t : ℝ} (ht : 0 < t)
+    (z : EuclideanSpace ℝ (Fin n)) :
+    1 ≤ 1 + (1 + ‖z‖) / t := by
+  have : 0 ≤ (1 + ‖z‖) / t := div_nonneg (by positivity) ht.le
+  linarith
+
+lemma norm_fderiv_heatQuadratic {t : ℝ} (ht : 0 < t)
+    (z : EuclideanSpace ℝ (Fin n)) :
+    ‖fderiv ℝ (fun w : EuclideanSpace ℝ (Fin n) => -‖w‖ ^ 2 / (4 * t)) z‖
+      = ‖z‖ / (2 * t) := by
+  rw [show (fun w : EuclideanSpace ℝ (Fin n) => -‖w‖ ^ 2 / (4 * t)) =
+      fun w => (-1 / (4 * t)) * ‖w‖ ^ 2 by funext w; ring]
+  rw [fderiv_const_mul (hasStrictFDerivAt_norm_sq z).differentiableAt,
+    fderiv_norm_sq_apply]
+  rw [show (2 • innerSL ℝ z) = (2 : ℝ) • innerSL ℝ z by
+      simp [two_nsmul, two_smul], norm_smul, norm_smul, innerSL_apply_norm]
+  rw [Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2), Real.norm_eq_abs]
+  rw [abs_of_nonpos (div_nonpos_of_nonpos_of_nonneg (by norm_num) (by positivity))]
+  field_simp
+  ring
+
+lemma norm_iteratedFDeriv_clm_eq_zero
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (L : E →L[ℝ] F) (j : ℕ) (hj : 2 ≤ j) (x : E) :
+    ‖iteratedFDeriv ℝ j L x‖ = 0 := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hj
+  rw [show 2 + k = (1 + k) + 1 by omega, ← norm_iteratedFDeriv_fderiv]
+  have hf : fderiv ℝ (L : E → F) = fun _ => L := by
+    funext y
+    exact L.fderiv
+  rw [hf]
+  simp [iteratedFDeriv_const_of_ne]
+
+/-- Multiples of the real inner product, as an honest (linear, not semilinear)
+bilinear map. -/
+noncomputable def heatInnerCLM {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (c : ℝ) : E →L[ℝ] E →L[ℝ] ℝ :=
+  LinearMap.mkContinuous₂ (c • innerₗ E) |c| (fun x y => by
+    simpa [abs_mul, mul_assoc] using
+      mul_le_mul_of_nonneg_left (abs_real_inner_le_norm x y) (abs_nonneg c))
+
+lemma heatInnerCLM_apply {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (c : ℝ) (x y : E) : heatInnerCLM c x y = c * inner ℝ x y := rfl
+
+lemma norm_heatInnerCLM_le {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (c : ℝ) : ‖(heatInnerCLM c : E →L[ℝ] E →L[ℝ] ℝ)‖ ≤ |c| :=
+  LinearMap.mkContinuous₂_norm_le _ (abs_nonneg c) _
+
+lemma fderiv_quadratic_eq {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (t : ℝ) :
+    fderiv ℝ (fun w : E => -‖w‖ ^ 2 / (4 * t)) = ⇑(heatInnerCLM (-1 / (2 * t)) : E →L[ℝ] E →L[ℝ] ℝ) := by
+  funext z
+  rw [show (fun w : E => -‖w‖ ^ 2 / (4 * t)) =
+      fun w => (-1 / (4 * t)) * ‖w‖ ^ 2 by funext w; ring]
+  rw [fderiv_const_mul (hasStrictFDerivAt_norm_sq z).differentiableAt]
+  ext v
+  simp only [ContinuousLinearMap.smul_apply, fderiv_norm_sq_apply, heatInnerCLM_apply,
+    smul_eq_mul, nsmul_eq_mul, innerSL_apply_apply]
+  push_cast
+  by_cases ht : t = 0
+  · simp [ht]
+  · field_simp
+    ring
+
+lemma norm_iteratedFDeriv_of_fderiv_clm
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {q : E → F} {L : E →L[ℝ] E →L[ℝ] F} (h : fderiv ℝ q = ⇑L) (k : ℕ) (z : E) :
+    ‖iteratedFDeriv ℝ (k + 2) q z‖ ≤ ‖L‖ := by
+  rw [show k + 2 = (k + 1) + 1 by omega, ← norm_iteratedFDeriv_fderiv, h]
+  rcases k with _ | k
+  · rw [norm_iteratedFDeriv_one, L.fderiv]
+  · rw [norm_iteratedFDeriv_clm_eq_zero L (k + 1 + 1) (by omega) z]
+    exact norm_nonneg L
+
+lemma norm_iteratedFDeriv_heatQuadratic_le {t : ℝ} (ht : 0 < t)
+    (j : ℕ) (z : EuclideanSpace ℝ (Fin n)) (hj : 1 ≤ j) :
+    ‖iteratedFDeriv ℝ j
+        (fun w : EuclideanSpace ℝ (Fin n) => -‖w‖ ^ 2 / (4 * t)) z‖
+      ≤ (1 + (1 + ‖z‖) / t) ^ j := by
+  set b : ℝ := 1 + (1 + ‖z‖) / t with hb
+  have hb1 : 1 ≤ b := heatQuadratic_base_one_le ht z
+  have hzn : 0 ≤ ‖z‖ := norm_nonneg z
+  have hbt : 1 / t ≤ b := by
+    have h1 : 1 / t ≤ (1 + ‖z‖) / t := by gcongr; linarith
+    linarith
+  have hbz : ‖z‖ / (2 * t) ≤ b := by
+    have h1 : ‖z‖ / (2 * t) ≤ (1 + ‖z‖) / t := by
+      rw [div_le_div_iff₀ (by positivity) ht]
+      nlinarith
+    linarith
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hj
+  rcases k with _ | k
+  · have h1 := norm_fderiv_heatQuadratic ht z
+    simpa [norm_iteratedFDeriv_one, h1] using hbz
+  · have h2 := norm_iteratedFDeriv_of_fderiv_clm
+      (fderiv_quadratic_eq (E := EuclideanSpace ℝ (Fin n)) t) k z
+    have h3 := norm_heatInnerCLM_le (E := EuclideanSpace ℝ (Fin n)) (-1 / (2 * t))
+    have h4 : |(-1 / (2 * t))| = 1 / (2 * t) := by
+      rw [abs_div, abs_neg, abs_one, abs_of_pos (by positivity : 0 < 2 * t)]
+    have h5 : 1 / (2 * t) ≤ 1 / t := one_div_le_one_div_of_le ht (by linarith)
+    have h6 : b ≤ b ^ (1 + (k + 1)) :=
+      le_self_pow₀ hb1 (by omega)
+    rw [show 1 + (k + 1) = k + 2 by omega] at h6 ⊢
+    rw [h4] at h3
+    linarith
+
+lemma poly_gaussian_bound {t : ℝ} (ht : 0 < t) (j : ℕ) :
+    ∃ C : ℝ, ∀ r : ℝ, 0 ≤ r →
+      (1 + (1 + r) / t) ^ j * Real.exp (-r ^ 2 / (8 * t)) ≤ C := by
+  refine ⟨(1 + 1 / t) ^ j * Real.exp (2 * t * (j : ℝ) ^ 2), ?_⟩
+  intro r hr
+  have hA : 0 ≤ 1 + 1 / t := by positivity
+  have hbase : 1 + (1 + r) / t ≤ (1 + 1 / t) * (1 + r) := by
+    field_simp
+    nlinarith
+  have hone : 1 + r ≤ Real.exp r := by simpa [add_comm] using Real.add_one_le_exp r
+  have hquad : (j : ℝ) * r - r ^ 2 / (8 * t) ≤ 2 * t * (j : ℝ) ^ 2 := by
+    field_simp
+    nlinarith [sq_nonneg (r - 4 * t * (j : ℝ))]
+  calc
+    (1 + (1 + r) / t) ^ j * Real.exp (-r ^ 2 / (8 * t))
+        ≤ ((1 + 1 / t) * (1 + r)) ^ j * Real.exp (-r ^ 2 / (8 * t)) := by
+          gcongr
+    _ ≤ ((1 + 1 / t) * Real.exp r) ^ j * Real.exp (-r ^ 2 / (8 * t)) := by
+          gcongr
+    _ = (1 + 1 / t) ^ j * Real.exp ((j : ℝ) * r - r ^ 2 / (8 * t)) := by
+          rw [mul_pow, ← Real.exp_nat_mul, mul_assoc, ← Real.exp_add]
+          congr 2
+          push_cast
+          ring
+    _ ≤ (1 + 1 / t) ^ j * Real.exp (2 * t * (j : ℝ) ^ 2) := by
+          gcongr
+
+lemma heatKernelN_hasGaussianDerivBounds {t : ℝ} (ht : 0 < t) :
+    HasGaussianDerivBounds t (heatKernelN n t) := by
+  constructor
+  · exact heatKernelN_contDiff ht
+  · intro j
+    obtain ⟨C, hC⟩ := poly_gaussian_bound ht j
+    let A : ℝ := (4 * π * t) ^ (-(n : ℝ) / 2)
+    let q : EuclideanSpace ℝ (Fin n) → ℝ := fun z => -‖z‖ ^ 2 / (4 * t)
+    refine ⟨|A| * (j.factorial : ℝ) * C, fun z => ?_⟩
+    have hq : ContDiff ℝ ∞ q := by
+      dsimp [q]
+      simp_rw [euclidean_norm_sq]
+      fun_prop
+    have hc := norm_iteratedFDeriv_comp_le (g := Real.exp) (f := q) (n := j)
+      contDiff_exp hq (by exact_mod_cast le_top) z
+      (C := Real.exp (q z)) (D := 1 + (1 + ‖z‖) / t)
+      (fun i hi => by rw [norm_iteratedFDeriv_exp])
+      (fun i hi1 hij => norm_iteratedFDeriv_heatQuadratic_le ht i z hi1)
+    have hfun : heatKernelN n t = fun z => A • (Real.exp ∘ q) z := by
+      funext w
+      simp [heatKernelN, A, q, Function.comp_def, smul_eq_mul]
+    rw [hfun, iteratedFDeriv_const_smul_apply'
+      (((contDiff_exp.comp hq).of_le (by exact_mod_cast le_top)).contDiffAt),
+      norm_smul, Real.norm_eq_abs]
+    have hsplit : Real.exp (q z) =
+        Real.exp (-‖z‖ ^ 2 / (8 * t)) * Real.exp (-‖z‖ ^ 2 / (8 * t)) := by
+      rw [← Real.exp_add]
+      dsimp [q]
+      congr 1
+      field_simp
+      ring
+    have hpoly := hC ‖z‖ (norm_nonneg z)
+    rw [hsplit] at hc
+    calc
+      |A| * ‖iteratedFDeriv ℝ j (Real.exp ∘ q) z‖
+          ≤ |A| * ((j.factorial : ℝ) *
+              (Real.exp (-‖z‖ ^ 2 / (8 * t)) * Real.exp (-‖z‖ ^ 2 / (8 * t))) *
+              (1 + (1 + ‖z‖) / t) ^ j) := by gcongr
+      _ = (|A| * (j.factorial : ℝ) * Real.exp (-‖z‖ ^ 2 / (8 * t))) *
+            ((1 + (1 + ‖z‖) / t) ^ j * Real.exp (-‖z‖ ^ 2 / (8 * t))) := by ring
+      _ ≤ (|A| * (j.factorial : ℝ) * Real.exp (-‖z‖ ^ 2 / (8 * t))) * C :=
+        mul_le_mul_of_nonneg_left hpoly (by positivity)
+      _ = (|A| * (j.factorial : ℝ) * C) * Real.exp (-‖z‖ ^ 2 / (8 * t)) := by ring
+
+lemma integrable_gaussian_mul_norm_of_memLp_two {c : ℝ} (hc : 0 < c)
+    (x₀ : EuclideanSpace ℝ (Fin n))
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume) :
+    Integrable (fun y => Real.exp (-c * ‖x₀ - y‖ ^ 2) * ‖f y‖) volume := by
+  let u : EuclideanSpace ℝ (Fin n) → ℝ := fun y => Real.exp (-c * ‖x₀ - y‖ ^ 2)
+  have hu_meas : AEStronglyMeasurable u volume := by
+    apply Continuous.aestronglyMeasurable
+    dsimp [u]
+    fun_prop
+  have hs : Integrable (fun y : EuclideanSpace ℝ (Fin n) => u y ^ 2) volume := by
+    have hbase : Integrable (fun z : EuclideanSpace ℝ (Fin n) =>
+        Real.exp (-‖z‖ ^ 2 / (4 * (1 / (8 * c))))) volume :=
+      integrable_exp_neg_norm_sq (by positivity)
+    have hshift := (Measure.measurePreserving_sub_left volume x₀).integrable_comp_of_integrable hbase
+    apply hshift.congr
+    filter_upwards with y
+    dsimp [u]
+    rw [← Real.exp_nat_mul]
+    congr 1
+    field_simp
+    ring
+  have hu : MemLp u 2 volume := (memLp_two_iff_integrable_sq hu_meas).2 hs
+  exact integrable_mul_of_memLp_two hu hf.norm
+
+def gaussianConv
+    {F G : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    (B : F →L[ℝ] ℂ →L[ℝ] G) (g : EuclideanSpace ℝ (Fin n) → F)
+    (f : EuclideanSpace ℝ (Fin n) → ℂ) (x : EuclideanSpace ℝ (Fin n)) : G :=
+  ∫ y, B (g (x - y)) (f y) ∂volume
+
+noncomputable def gaussianConvDerivBilinear
+    {F G : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    (B : F →L[ℝ] ℂ →L[ℝ] G) :
+    (EuclideanSpace ℝ (Fin n) →L[ℝ] F) →L[ℝ]
+      ℂ →L[ℝ] (EuclideanSpace ℝ (Fin n) →L[ℝ] G) :=
+  ((ContinuousLinearMap.compL ℝ (EuclideanSpace ℝ (Fin n)) F G) ∘L B.flip).flip
+
+@[simp] lemma gaussianConvDerivBilinear_apply
+    {F G : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    (B : F →L[ℝ] ℂ →L[ℝ] G) (A : EuclideanSpace ℝ (Fin n) →L[ℝ] F)
+    (c : ℂ) (v : EuclideanSpace ℝ (Fin n)) :
+    gaussianConvDerivBilinear B A c v = B (A v) c := by
+  rfl
+
+lemma norm_gaussianConvDerivBilinear_apply_le
+    {F G : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    (B : F →L[ℝ] ℂ →L[ℝ] G) (A : EuclideanSpace ℝ (Fin n) →L[ℝ] F)
+    (c : ℂ) :
+    ‖gaussianConvDerivBilinear B A c‖ ≤ ‖B‖ * ‖A‖ * ‖c‖ := by
+  apply (gaussianConvDerivBilinear B A c).opNorm_le_bound (by positivity)
+  intro v
+  rw [gaussianConvDerivBilinear_apply]
+  calc
+    ‖B (A v) c‖ ≤ ‖B (A v)‖ * ‖c‖ := (B (A v)).le_opNorm c
+    _ ≤ (‖B‖ * ‖A v‖) * ‖c‖ := by gcongr; exact B.le_opNorm (A v)
+    _ ≤ (‖B‖ * (‖A‖ * ‖v‖)) * ‖c‖ := by gcongr; exact A.le_opNorm v
+    _ = (‖B‖ * ‖A‖ * ‖c‖) * ‖v‖ := by ring
+
+lemma exp_shift_le {t : ℝ} (ht : 0 < t)
+    {x x₀ y : EuclideanSpace ℝ (Fin n)} (hx : x ∈ Metric.ball x₀ 1) :
+    Real.exp (-‖x - y‖ ^ 2 / (8 * t)) ≤
+      Real.exp (1 / (8 * t)) * Real.exp (-‖x₀ - y‖ ^ 2 / (16 * t)) := by
+  have hb : ‖x₀ - x‖ < 1 := by simpa [dist_eq_norm, norm_sub_rev] using hx
+  have htri : ‖x₀ - y‖ ≤ ‖x₀ - x‖ + ‖x - y‖ := by
+    rw [show x₀ - y = (x₀ - x) + (x - y) by abel]
+    exact norm_add_le _ _
+  have hsq : ‖x₀ - y‖ ^ 2 ≤ 2 * ‖x - y‖ ^ 2 + 2 := by
+    have hnon : 0 ≤ ‖x₀ - y‖ := norm_nonneg _
+    have ha : 0 ≤ ‖x₀ - x‖ := norm_nonneg _
+    have hb' : 0 ≤ ‖x - y‖ := norm_nonneg _
+    have hs := sq_nonneg (‖x₀ - x‖ - ‖x - y‖)
+    nlinarith
+  rw [← Real.exp_add]
+  apply Real.exp_le_exp.mpr
+  have ht16 : 0 < 16 * t := by positivity
+  apply (div_le_div_iff_of_pos_right ht16).mp
+  field_simp
+  nlinarith
+
+lemma hasFDerivAt_gaussianConv_integrand
+    {F G : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {g : EuclideanSpace ℝ (Fin n) → F} (hg : Differentiable ℝ g)
+    (B : F →L[ℝ] ℂ →L[ℝ] G) (f : EuclideanSpace ℝ (Fin n) → ℂ)
+    (x y : EuclideanSpace ℝ (Fin n)) :
+    HasFDerivAt (fun x => B (g (x - y)) (f y))
+      (gaussianConvDerivBilinear B (fderiv ℝ g (x - y)) (f y)) x := by
+  have hsub : HasFDerivAt (fun x => x - y) (1 : EuclideanSpace ℝ (Fin n) →L[ℝ]
+      EuclideanSpace ℝ (Fin n)) x := by
+    simpa using (hasFDerivAt_id x).sub_const y
+  have hg' := (hg (x - y)).hasFDerivAt.comp x hsub
+  have h := (B.flip (f y)).hasFDerivAt.comp x hg'
+  convert h using 1
+
+lemma gaussianConv_integrand_aesm
+    {F G : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    (B : F →L[ℝ] ℂ →L[ℝ] G)
+    {g : EuclideanSpace ℝ (Fin n) → F} (hg : Continuous g)
+    {f : EuclideanSpace ℝ (Fin n) → ℂ}
+    (hf : AEStronglyMeasurable f (volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (x : EuclideanSpace ℝ (Fin n)) :
+    AEStronglyMeasurable (fun y => B (g (x - y)) (f y))
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+  B.aestronglyMeasurable_comp₂
+    (hg.comp (continuous_const.sub continuous_id)).aestronglyMeasurable hf
+
+lemma gaussianConv_bound_aux {t : ℝ} (ht : 0 < t)
+    {x x₀ y : EuclideanSpace ℝ (Fin n)} (hx : x ∈ Metric.ball x₀ 1)
+    {b a K c : ℝ} (hb : 0 ≤ b) (hK : 0 ≤ K) (hc : 0 ≤ c)
+    (ha : a ≤ K * Real.exp (-‖x - y‖ ^ 2 / (8 * t))) :
+    b * a * c ≤ (b * K * Real.exp (1 / (8 * t))) *
+      (Real.exp (-(1 / (16 * t)) * ‖x₀ - y‖ ^ 2) * c) := by
+  have h := exp_shift_le ht (x := x) (x₀ := x₀) (y := y) hx
+  have e : -‖x₀ - y‖ ^ 2 / (16 * t) = -(1 / (16 * t)) * ‖x₀ - y‖ ^ 2 := by ring
+  rw [e] at h
+  have h2 : a ≤ K * (Real.exp (1 / (8 * t)) *
+      Real.exp (-(1 / (16 * t)) * ‖x₀ - y‖ ^ 2)) :=
+    ha.trans (mul_le_mul_of_nonneg_left h hK)
+  calc b * a * c ≤ b * (K * (Real.exp (1 / (8 * t)) *
+        Real.exp (-(1 / (16 * t)) * ‖x₀ - y‖ ^ 2))) * c := by gcongr
+    _ = _ := by ring
+
+lemma hasFDerivAt_gaussian_convolution
+    {F G : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G] [CompleteSpace G]
+    {t : ℝ} (ht : 0 < t)
+    {g : EuclideanSpace ℝ (Fin n) → F}
+    (hg : HasGaussianDerivBounds t g)
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume)
+    (B : F →L[ℝ] ℂ →L[ℝ] G)
+    (x₀ : EuclideanSpace ℝ (Fin n)) :
+    HasFDerivAt
+      (gaussianConv B g f)
+      (gaussianConv (gaussianConvDerivBilinear B) (fderiv ℝ g) f x₀)
+      x₀ := by
+  obtain ⟨C₀, hC₀⟩ := hg.2 0
+  obtain ⟨C₁, hC₁⟩ := hg.2 1
+  have hgd : Differentiable ℝ g := hg.1.differentiable (by simp)
+  have hgc : Continuous g := hg.1.continuous
+  have hdc : Continuous (fderiv ℝ g) := hg.1.continuous_fderiv (by simp)
+  have hc : 0 < 1 / (16 * t) := by positivity
+  have hint := integrable_gaussian_mul_norm_of_memLp_two hc x₀ hf
+  have hx₀ : x₀ ∈ Metric.ball x₀ 1 := Metric.mem_ball_self one_pos
+  have hbd₀ (y : EuclideanSpace ℝ (Fin n)) :
+      ‖B (g (x₀ - y)) (f y)‖ ≤ (‖B‖ * |C₀| * Real.exp (1 / (8 * t))) *
+        (Real.exp (-(1 / (16 * t)) * ‖x₀ - y‖ ^ 2) * ‖f y‖) := by
+    refine (B.le_opNorm₂ _ _).trans ?_
+    refine gaussianConv_bound_aux ht hx₀ B.opNorm_nonneg (abs_nonneg _) (norm_nonneg _) ?_
+    have h := hC₀ (x₀ - y)
+    rw [norm_iteratedFDeriv_zero] at h
+    exact h.trans (mul_le_mul_of_nonneg_right (le_abs_self _) (Real.exp_pos _).le)
+  have hint₀ : Integrable (fun y => B (g (x₀ - y)) (f y)) volume :=
+    (hint.const_mul _).mono' (gaussianConv_integrand_aesm B hgc hf.aestronglyMeasurable x₀)
+      (ae_of_all _ hbd₀)
+  let B' : (EuclideanSpace ℝ (Fin n) →L[ℝ] F) →L[ℝ] ℂ →L[ℝ] (EuclideanSpace ℝ (Fin n) →L[ℝ] G) := gaussianConvDerivBilinear B
+  have hmeas' := gaussianConv_integrand_aesm (F := EuclideanSpace ℝ (Fin n) →L[ℝ] F) (G := EuclideanSpace ℝ (Fin n) →L[ℝ] G)
+    B' hdc hf.aestronglyMeasurable x₀
+  have hbound : Integrable (fun y => (‖B‖ * |C₁| * Real.exp (1 / (8 * t))) *
+      (Real.exp (-(1 / (16 * t)) * ‖x₀ - y‖ ^ 2) * ‖f y‖)) volume := hint.const_mul _
+  have hle (y x : EuclideanSpace ℝ (Fin n)) (hx : x ∈ Metric.ball x₀ 1) :
+      ‖gaussianConvDerivBilinear B (fderiv ℝ g (x - y)) (f y)‖ ≤
+        (‖B‖ * |C₁| * Real.exp (1 / (8 * t))) *
+          (Real.exp (-(1 / (16 * t)) * ‖x₀ - y‖ ^ 2) * ‖f y‖) := by
+    refine (norm_gaussianConvDerivBilinear_apply_le B _ _).trans ?_
+    refine gaussianConv_bound_aux ht hx B.opNorm_nonneg (abs_nonneg _) (norm_nonneg _) ?_
+    have h := hC₁ (x - y)
+    rw [norm_iteratedFDeriv_one] at h
+    exact h.trans (mul_le_mul_of_nonneg_right (le_abs_self _) (Real.exp_pos _).le)
+  exact hasFDerivAt_integral_of_dominated_of_fderiv_le (𝕜 := ℝ)
+    (F := fun x y => B (g (x - y)) (f y))
+    (F' := fun x y => B' (fderiv ℝ g (x - y)) (f y))
+    (Metric.ball_mem_nhds x₀ one_pos)
+    (Eventually.of_forall fun x =>
+      gaussianConv_integrand_aesm B hgc hf.aestronglyMeasurable x)
+    hint₀ hmeas' (ae_of_all _ fun y x hx => hle y x hx) hbound
+    (ae_of_all _ fun y x _ => hasFDerivAt_gaussianConv_integrand hgd B f x y)
+
+lemma gaussianConv_contDiff {t : ℝ} (ht : 0 < t)
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume) (m : ℕ) :
+    ∀ {F G : Type} [NormedAddCommGroup F] [NormedSpace ℝ F]
+      [NormedAddCommGroup G] [NormedSpace ℝ G] [CompleteSpace G]
+      (B : F →L[ℝ] ℂ →L[ℝ] G) {g : EuclideanSpace ℝ (Fin n) → F},
+      HasGaussianDerivBounds t g → ContDiff ℝ m (gaussianConv B g f) := by
+  induction m with
+  | zero =>
+    intro F G _ _ _ _ _ B g hg
+    have hcont : Continuous (gaussianConv B g f) := continuous_iff_continuousAt.2 fun x =>
+      (hasFDerivAt_gaussian_convolution ht hg hf B x).continuousAt
+    have h0 : ContDiff ℝ 0 (gaussianConv B g f) := contDiff_zero.2 hcont
+    simpa using h0
+  | succ m ih =>
+    intro F G _ _ _ _ _ B g hg
+    have hd : Differentiable ℝ (gaussianConv B g f) := fun x =>
+      (hasFDerivAt_gaussian_convolution ht hg hf B x).differentiableAt
+    have heq : fderiv ℝ (gaussianConv B g f) =
+        gaussianConv (gaussianConvDerivBilinear B) (fderiv ℝ g) f :=
+      funext fun x => (hasFDerivAt_gaussian_convolution ht hg hf B x).fderiv
+    have hnext := ih (gaussianConvDerivBilinear B) hg.fderiv
+    rw [← heq] at hnext
+    push_cast
+    exact contDiff_succ_iff_fderiv.2 ⟨hd, by simp, hnext⟩
+
+theorem heatConvN_contDiff {t : ℝ} (ht : 0 < t)
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume) :
+    ContDiff ℝ ∞ (heatConvN n t f) := by
+  have heq : heatConvN n t f =
+      gaussianConv (ContinuousLinearMap.lsmul ℝ ℝ : ℝ →L[ℝ] ℂ →L[ℝ] ℂ) (heatKernelN n t) f := by
+    funext x
+    simp only [heatConvN, gaussianConv, ContinuousLinearMap.lsmul_apply]
+    rfl
+  rw [heq]
+  exact contDiff_infty.2 fun m =>
+    gaussianConv_contDiff ht hf m _ (heatKernelN_hasGaussianDerivBounds ht)
+
+/-- The heat kernel is continuous for `t > 0`. -/
+lemma continuous_heatKernelN {t : ℝ} (ht : 0 < t) : Continuous (heatKernelN n t) := by
+  unfold heatKernelN
+  exact continuous_const.mul
+    (Real.continuous_exp.comp ((continuous_norm.pow 2).neg.div_const _))
+
+/-- Scaling the heat kernel: `G_s (√s • w) = s^(-n/2) • G_1 w`. -/
+lemma heatKernelN_smul_sqrt {s : ℝ} (hs : 0 < s) (w : EuclideanSpace ℝ (Fin n)) :
+    heatKernelN n s (Real.sqrt s • w) = s ^ (-(n : ℝ) / 2) * heatKernelN n 1 w := by
+  have hsp : (0 : ℝ) < 4 * π * s := by positivity
+  have h1p : (0 : ℝ) ≤ 4 * π := by positivity
+  unfold heatKernelN
+  have hnorm : ‖Real.sqrt s • w‖ ^ 2 = s * ‖w‖ ^ 2 := by
+    rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (Real.sqrt_nonneg s), mul_pow,
+      Real.sq_sqrt hs.le]
+  rw [hnorm]
+  have hexp : -(s * ‖w‖ ^ 2) / (4 * s) = -‖w‖ ^ 2 / 4 := by
+    field_simp
+  rw [hexp, mul_one (4 * π), Real.mul_rpow h1p hs.le]
+  ring
+
+/-- Gaussian dilation: the `G_s`-weighted integral of a measurable `M` equals the
+`G_1`-weighted integral of the dilated `M (√s • ·)`. -/
+lemma lintegral_heatKernelN_mul_dilate {s : ℝ} (hs : 0 < s)
+    {M : EuclideanSpace ℝ (Fin n) → ℝ≥0∞} (hM : Measurable M) :
+    ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * M z ∂volume
+      = ∫⁻ w, ENNReal.ofReal (heatKernelN n 1 w) * M (Real.sqrt s • w) ∂volume := by
+  set c := Real.sqrt s with hc_def
+  have hc : 0 < c := Real.sqrt_pos.2 hs
+  have hφ : Measurable (fun z => ENNReal.ofReal (heatKernelN n s z) * M z) :=
+    (ENNReal.measurable_ofReal.comp (continuous_heatKernelN hs).measurable).mul hM
+  have hcn : c ^ n = s ^ ((n : ℝ) / 2) := by
+    rw [hc_def, ← Real.rpow_natCast, Real.sqrt_eq_rpow, ← Real.rpow_mul hs.le]
+    congr 1
+    ring
+  have hker : ∀ w : EuclideanSpace ℝ (Fin n),
+      c ^ n * heatKernelN n s (c • w) = heatKernelN n 1 w := fun w => by
+    have hks := heatKernelN_smul_sqrt hs w
+    rw [← hc_def] at hks
+    rw [hcn, hks, ← mul_assoc, ← Real.rpow_add hs,
+      show (n : ℝ) / 2 + -(n : ℝ) / 2 = 0 from by ring, Real.rpow_zero, one_mul]
+  have hmap : ∫⁻ w, ENNReal.ofReal (heatKernelN n s (c • w)) * M (c • w) ∂volume
+      = ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * M z ∂(Measure.map (c • ·) volume) :=
+    (lintegral_map hφ (continuous_const_smul c).measurable).symm
+  rw [Measure.map_addHaar_smul volume hc.ne', finrank_euclideanSpace_fin,
+    lintegral_smul_measure] at hmap
+  have hcancel : ENNReal.ofReal (c ^ n) * ENNReal.ofReal |(c ^ n)⁻¹| = 1 := by
+    rw [abs_of_nonneg (inv_nonneg.2 (pow_nonneg hc.le _)),
+      ← ENNReal.ofReal_mul (pow_nonneg hc.le _), mul_inv_cancel₀ (pow_pos hc n).ne',
+      ENNReal.ofReal_one]
+  calc
+    ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * M z ∂volume
+        = ENNReal.ofReal (c ^ n) *
+            ∫⁻ w, ENNReal.ofReal (heatKernelN n s (c • w)) * M (c • w) ∂volume := by
+          rw [hmap, smul_eq_mul, ← mul_assoc, hcancel, one_mul]
+    _ = ∫⁻ w, ENNReal.ofReal (c ^ n) *
+          (ENNReal.ofReal (heatKernelN n s (c • w)) * M (c • w)) ∂volume := by
+          rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
+    _ = ∫⁻ w, ENNReal.ofReal (heatKernelN n 1 w) * M (c • w) ∂volume := by
+          apply lintegral_congr
+          intro w
+          rw [← mul_assoc, ← ENNReal.ofReal_mul (pow_nonneg hc.le _), hker w]
+
+/-- Clause (c): `heatConvN n s f → f` in `L²` as `s → 0⁺`. -/
+theorem heatConvN_eLpNorm_tendsto
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume) :
+    Tendsto (fun s => eLpNorm (fun x => heatConvN n s f x - f x) 2 volume)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+  -- The squared translation error as a measurable function of the shift
+  set M : EuclideanSpace ℝ (Fin n) → ℝ≥0∞ :=
+    fun z => ∫⁻ x, ‖hf.1.mk f (x - z) - hf.1.mk f x‖ₑ ^ 2 ∂volume with hM_def
+  have hMmeas : Measurable M := by
+    have hgm : Measurable (hf.1.mk f) := hf.1.measurable_mk
+    have hψ : Measurable (Function.uncurry fun x z : EuclideanSpace ℝ (Fin n) =>
+        ‖hf.1.mk f (x - z) - hf.1.mk f x‖ₑ ^ 2) := by
+      have h1 : Measurable (fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) =>
+          hf.1.mk f (p.1 - p.2)) := hgm.comp (measurable_fst.sub measurable_snd)
+      have h2 : Measurable (fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) =>
+          hf.1.mk f p.1) := hgm.comp measurable_fst
+      exact ((h1.sub h2).enorm).pow_const _
+    exact hψ.lintegral_prod_left
+  have hMeq : ∀ z, M z = (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 := fun z => by
+    rw [hM_def, eLpNorm_translation_sub_sq z]
+    apply lintegral_congr_ae
+    have h1 : (fun x => f (x - z)) =ᶠ[ae (volume : Measure (EuclideanSpace ℝ (Fin n)))]
+        fun x => hf.1.mk f (x - z) :=
+      (measurePreserving_sub_right volume z).quasiMeasurePreserving.ae hf.1.ae_eq_mk
+    have h2 : f =ᶠ[ae volume] hf.1.mk f := hf.1.ae_eq_mk
+    filter_upwards [h1, h2] with x hx1 hx2
+    rw [hx1, hx2]
+  have hMbound : ∀ z, M z ≤ (2 * eLpNorm f 2 volume) ^ 2 := fun z => by
+    rw [hMeq z]
+    exact pow_le_pow_left₀ (zero_le _) (eLpNorm_translation_sub_le_two hf z) 2
+  have hC : (2 * eLpNorm f 2 volume : ℝ≥0∞) ≠ ⊤ :=
+    ENNReal.mul_ne_top (by norm_num) hf.2.ne
+  have hC2 : (2 * eLpNorm f 2 volume : ℝ≥0∞) ^ 2 ≠ ⊤ := by
+    rw [pow_two]
+    exact ENNReal.mul_ne_top hC hC
+  -- The weighted average tends to zero, by dilation + dominated convergence
+  have hlim : Tendsto
+      (fun s => ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+        (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 ∂volume)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    have hmain : Tendsto
+        (fun s => ∫⁻ w, ENNReal.ofReal (heatKernelN n 1 w) * M (Real.sqrt s • w) ∂volume)
+        (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+      have hbound_int : ∫⁻ w, ENNReal.ofReal (heatKernelN n 1 w) *
+          (2 * eLpNorm f 2 volume) ^ 2 ∂volume ≠ ⊤ := by
+        rw [lintegral_mul_const' _ _ hC2, heatKernelN_lintegral_eq_one one_pos,
+          one_mul]
+        exact hC2
+      have hmeas : ∀ᶠ s in nhdsWithin 0 (Set.Ioi 0),
+          Measurable (fun w => ENNReal.ofReal (heatKernelN n 1 w) * M (Real.sqrt s • w)) :=
+        Eventually.of_forall fun s =>
+          (ENNReal.measurable_ofReal.comp (continuous_heatKernelN one_pos).measurable).mul
+            (hMmeas.comp (continuous_const_smul _).measurable)
+      have hbound : ∀ᶠ s in nhdsWithin 0 (Set.Ioi 0),
+          ∀ᵐ w ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+            ENNReal.ofReal (heatKernelN n 1 w) * M (Real.sqrt s • w)
+              ≤ ENNReal.ofReal (heatKernelN n 1 w) * (2 * eLpNorm f 2 volume) ^ 2 :=
+        Eventually.of_forall fun s => Eventually.of_forall fun w =>
+          mul_le_mul_left' (hMbound _) _
+      have hpt : ∀ᵐ w ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+          Tendsto (fun s => ENNReal.ofReal (heatKernelN n 1 w) * M (Real.sqrt s • w))
+            (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) :=
+        Eventually.of_forall fun w => by
+          have hsw : Tendsto (fun s : ℝ => Real.sqrt s • w)
+              (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+            have hcont : Continuous (fun s : ℝ => Real.sqrt s • w) :=
+              Real.continuous_sqrt.smul continuous_const
+            have h0 := hcont.tendsto 0
+            rw [Real.sqrt_zero, zero_smul] at h0
+            exact h0.mono_left nhdsWithin_le_nhds
+          have hM0 : Tendsto M (nhds 0) (nhds 0) := by
+            have hh0 := eLpNorm_translation_tendsto_eucl hf
+            have hp := ENNReal.Tendsto.mul hh0 (Or.inr (by simp)) hh0 (Or.inr (by simp))
+            rw [mul_zero] at hp
+            have hfun : M = fun z => (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 :=
+              funext hMeq
+            rw [hfun]
+            exact hp.congr' (Eventually.of_forall fun z => (pow_two _).symm)
+          have h3 := hM0.comp hsw
+          have h4 := ENNReal.Tendsto.const_mul (a := ENNReal.ofReal (heatKernelN n 1 w))
+            h3 (Or.inr ENNReal.ofReal_ne_top)
+          rw [mul_zero] at h4
+          exact h4.congr' (Eventually.of_forall fun s => rfl)
+      have hdct := tendsto_lintegral_filter_of_dominated_convergence
+        (μ := (volume : Measure (EuclideanSpace ℝ (Fin n))))
+        (l := nhdsWithin 0 (Set.Ioi 0))
+        (bound := fun w => ENNReal.ofReal (heatKernelN n 1 w) * (2 * eLpNorm f 2 volume) ^ 2)
+        (F := fun s w => ENNReal.ofReal (heatKernelN n 1 w) * M (Real.sqrt s • w))
+        (f := fun _ => (0 : ℝ≥0∞))
+        hmeas hbound hbound_int hpt
+      simpa using hdct
+    have hcong :
+        (fun s => ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+          (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 ∂volume)
+        =ᶠ[nhdsWithin 0 (Set.Ioi 0)]
+        fun s => ∫⁻ w, ENNReal.ofReal (heatKernelN n 1 w) * M (Real.sqrt s • w) ∂volume := by
+      filter_upwards [self_mem_nhdsWithin] with s hs
+      have heq : ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+            (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 ∂volume
+          = ∫⁻ z, ENNReal.ofReal (heatKernelN n s z) * M z ∂volume := by
+        apply lintegral_congr
+        intro z
+        rw [← hMeq z]
+      rw [heq, lintegral_heatKernelN_mul_dilate hs hMmeas]
+    exact hmain.congr' hcong.symm
+  -- squeeze
+  have hrpow : Tendsto
+      (fun s => (∫⁻ z, ENNReal.ofReal (heatKernelN n s z) *
+        (eLpNorm (fun x => f (x - z) - f x) 2 volume) ^ 2 ∂volume) ^ (1 / 2 : ℝ))
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    have hcont := (ENNReal.continuous_rpow_const (y := (1 / 2 : ℝ))).tendsto 0
+    have hcomp := hcont.comp hlim
+    rwa [ENNReal.zero_rpow_of_pos (by norm_num : (0:ℝ) < 1 / 2)] at hcomp
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hrpow
+    (Eventually.of_forall fun s => zero_le _)
+    (by filter_upwards [self_mem_nhdsWithin] with s hs
+        exact eLpNorm_heatConvN_sub_le hs hf)
+
+/-- **Reformed a96A04** (see PRELIM-DEFECT.md): the heat kernel on `ℝⁿ = EuclideanSpace
+ℝ (Fin n)`, complex-valued `f ∈ L²` (Lebesgue measurable), `t > 0`:
+
+(a) `u(·,t)` is smooth in `x`;
+(b) `‖u(·,t)‖₂ ≤ ‖f‖₂`;
+(c) `u(·,t) → f` in `L²` as `t → 0⁺`. -/
+theorem apm_a96a04 {n : ℕ} {t : ℝ} (ht : 0 < t)
+    {f : EuclideanSpace ℝ (Fin n) → ℂ} (hf : MemLp f 2 volume) :
+    ContDiff ℝ ∞ (heatConvN n t f) ∧
+    eLpNorm (heatConvN n t f) 2 volume ≤ eLpNorm f 2 volume ∧
+    Tendsto (fun s => eLpNorm (fun x => heatConvN n s f x - f x) 2 volume)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) :=
+  ⟨heatConvN_contDiff ht hf, heatConvN_eLpNorm_le ht hf, heatConvN_eLpNorm_tendsto hf⟩
+
+end Main
