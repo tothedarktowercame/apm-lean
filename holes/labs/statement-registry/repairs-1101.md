@@ -131,3 +131,7 @@ Compiled on the lemmas worktree: 0 errors, no sorry, apm_a96a04 axioms propext, 
 ## m95A04
 
 Compiled on the lemmas worktree: 0 errors, no sorry, apm_m95a04 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, strict standard: first grade narrower (real scalars in parts d, f and complex a.e. uniqueness missing); after adding complex twins (regularC a.e. uniqueness, DdistC non-injective, injectivity on complex test functions, complex Sobolev graph WC with printed norm and completeness, complex lambda in part e), second grade faithful with no defects. Range 1 <= p < infinity is the printed norm's range. Typos: bet, equiped, u/Du for w/Dw.
+
+## a02J03
+
+Compiled on the lemmas worktree: 0 errors, no sorry, apm_a02j03 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, strict standard: faithful, no defects. Every n >= 1 on Fin n -> R with Lebesgue volume, complex phi and f, closed axis-parallel boxes, single M, integrability clause for each k>0 so no junk value, real limit k -> infinity. IntegrableOn on rectangles is what the printed integral presupposes, not an added hypothesis; hypothesis forces |phi| <= M a.e.; n>0 needed (R^0 counterexample in docstring); hypothesis satisfiable. Replaces the 1-dimensional real version rejected earlier.

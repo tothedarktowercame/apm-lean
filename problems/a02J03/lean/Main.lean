@@ -472,3 +472,541 @@ theorem scaled_integral_vanishes (φ : ℝ → ℝ) (M : ℝ) (hM : 0 < M)
     _ = ε := by
       field_simp
       norm_num
+
+/-! ## The repaired `ℝⁿ` statement -/
+
+open scoped Pointwise
+
+lemma locallyIntegrable_of_integrableOn_rectangles {n : ℕ}
+    {φ : (Fin n → ℝ) → ℂ}
+    (hrect : ∀ a b : Fin n → ℝ, a ≤ b → IntegrableOn φ (Set.Icc a b)) :
+    LocallyIntegrable φ volume := by
+  intro x
+  let a : Fin n → ℝ := fun i => x i - 1
+  let b : Fin n → ℝ := fun i => x i + 1
+  refine ⟨Set.Icc a b, pi_Icc_mem_nhds (fun i => ?_) (fun i => ?_), hrect a b ?_⟩
+  · dsimp [a]
+    linarith
+  · dsimp [b]
+    linarith
+  · intro i
+    dsimp [a, b]
+    linarith
+
+lemma nonneg_of_rectangle_integral_bound {n : ℕ} (hn : 0 < n)
+    {φ : (Fin n → ℝ) → ℂ} {M : ℝ}
+    (hQ : ∀ a b : Fin n → ℝ, a ≤ b →
+      ‖∫ x in Set.Icc a b, φ x‖ ≤
+        M * (volume (Set.Icc a b)).toReal / (1 + (volume (Set.Icc a b)).toReal)) :
+    0 ≤ M := by
+  let a : Fin n → ℝ := fun _ => 0
+  let b : Fin n → ℝ := fun _ => 1
+  have h := hQ a b (by intro i; simp [a, b])
+  have hvol : (volume (Set.Icc a b)).toReal = 1 := by
+    rw [Real.volume_Icc_pi_toReal (by intro i; simp [a, b])]
+    simp [a, b]
+  rw [hvol] at h
+  nlinarith [norm_nonneg (∫ x in Set.Icc a b, φ x)]
+
+lemma pi_closedBall_eq_Icc {n : ℕ} (x : Fin n → ℝ) {r : ℝ} (hr : 0 ≤ r) :
+    Metric.closedBall x r = Set.Icc (fun i => x i - r) (fun i => x i + r) := by
+  rw [closedBall_pi x hr]
+  ext y
+  simp [Real.closedBall_eq_Icc]
+
+lemma norm_setAverage_closedBall_le {n : ℕ}
+    {φ : (Fin n → ℝ) → ℂ} {M : ℝ} (hM : 0 ≤ M)
+    (hQ : ∀ a b : Fin n → ℝ, a ≤ b →
+      ‖∫ x in Set.Icc a b, φ x‖ ≤
+        M * (volume (Set.Icc a b)).toReal / (1 + (volume (Set.Icc a b)).toReal))
+    (x : Fin n → ℝ) {r : ℝ} (hr : 0 < r) :
+    ‖⨍ y in Metric.closedBall x r, φ y ∂volume‖ ≤ M := by
+  let m : ℝ := (volume (Metric.closedBall x r)).toReal
+  have hm : 0 < m := by
+    dsimp [m]
+    rw [Real.volume_pi_closedBall x hr.le, ENNReal.toReal_ofReal (by positivity)]
+    positivity
+  have hrect := hQ (fun i => x i - r) (fun i => x i + r) (by
+    intro i
+    linarith)
+  rw [← pi_closedBall_eq_Icc x hr.le] at hrect
+  rw [setAverage_eq, norm_smul, Real.norm_eq_abs, abs_inv]
+  change |m|⁻¹ * ‖∫ y in Metric.closedBall x r, φ y‖ ≤ M
+  rw [abs_of_pos hm]
+  calc
+    m⁻¹ * ‖∫ y in Metric.closedBall x r, φ y‖
+        ≤ m⁻¹ * (M * m / (1 + m)) := mul_le_mul_of_nonneg_left hrect (by positivity)
+    _ = M / (1 + m) := by field_simp
+    _ ≤ M := div_le_self hM (by linarith)
+
+lemma ae_norm_le_of_rectangle_integral_bound {n : ℕ} (hn : 0 < n)
+    {φ : (Fin n → ℝ) → ℂ} {M : ℝ}
+    (hQ : ∀ a b : Fin n → ℝ, a ≤ b →
+      IntegrableOn φ (Set.Icc a b) ∧
+      ‖∫ x in Set.Icc a b, φ x‖ ≤
+        M * (volume (Set.Icc a b)).toReal / (1 + (volume (Set.Icc a b)).toReal)) :
+    ∀ᵐ x ∂volume, ‖φ x‖ ≤ M := by
+  have hM : 0 ≤ M := nonneg_of_rectangle_integral_bound hn (fun a b hab => (hQ a b hab).2)
+  have hloc : LocallyIntegrable φ volume :=
+    locallyIntegrable_of_integrableOn_rectangles (fun a b hab => (hQ a b hab).1)
+  have hdiff := IsUnifLocDoublingMeasure.ae_tendsto_average volume hloc 1
+  filter_upwards [hdiff] with x hx
+  have hxlim : Tendsto
+      (fun r : ℝ => ⨍ y in Metric.closedBall x r, φ y ∂volume)
+      (𝓝[>] 0) (𝓝 (φ x)) := by
+    apply hx (fun _ : ℝ => x) id tendsto_id
+    filter_upwards [self_mem_nhdsWithin] with r hr
+    simp only [id_eq, one_mul, Metric.mem_closedBall, dist_self, norm_zero]
+    exact hr.le
+  apply le_of_tendsto hxlim.norm
+  filter_upwards [self_mem_nhdsWithin] with r hr
+  exact norm_setAverage_closedBall_le hM (fun a b hab => (hQ a b hab).2) x hr
+
+lemma integrable_scaled_mul_of_ae_norm_le {n : ℕ}
+    {φ : (Fin n → ℝ) → ℂ} (hφ : AEStronglyMeasurable φ volume)
+    {M : ℝ} (hφM : ∀ᵐ x ∂volume, ‖φ x‖ ≤ M)
+    {f : (Fin n → ℝ) → ℂ} (hf : Integrable f)
+    {k : ℝ} (hk : 0 < k) :
+    Integrable (fun x => φ (k • x) * f x) := by
+  have hqp := Measure.quasiMeasurePreserving_smul (volume : Measure (Fin n → ℝ)) hk.ne'
+  have hmeas : AEStronglyMeasurable (fun x => φ (k • x) * f x) volume :=
+    (hφ.comp_quasiMeasurePreserving hqp).mul hf.aestronglyMeasurable
+  have hbound : ∀ᵐ x ∂volume, ‖φ (k • x) * f x‖ ≤ M * ‖f x‖ := by
+    filter_upwards [hqp.tendsto_ae hφM] with x hx
+    rw [norm_mul]
+    exact mul_le_mul_of_nonneg_right hx (norm_nonneg _)
+  exact Integrable.mono' (hf.norm.const_mul M) hmeas hbound
+
+lemma smul_Icc_eq_Icc {n : ℕ} (a b : Fin n → ℝ) {k : ℝ} (hk : 0 < k) :
+    k • Set.Icc a b = Set.Icc (k • a) (k • b) := by
+  ext z
+  rw [mem_smul_set_iff_inv_smul_mem₀ hk.ne']
+  simp only [Set.mem_Icc, Pi.smul_apply, smul_eq_mul]
+  constructor
+  · intro hz
+    constructor
+    · intro i
+      have := hz.1 i
+      apply (le_inv_mul_iff₀ hk).mp
+      simpa [mul_comm] using this
+    · intro i
+      have := hz.2 i
+      apply (inv_mul_le_iff₀ hk).mp
+      simpa [mul_comm] using this
+  · intro hz
+    constructor
+    · intro i
+      exact (le_inv_mul_iff₀ hk).2 (by simpa [mul_comm] using hz.1 i)
+    · intro i
+      exact (inv_mul_le_iff₀ hk).2 (by simpa [mul_comm] using hz.2 i)
+
+lemma setIntegral_comp_smul_Icc {n : ℕ} (φ : (Fin n → ℝ) → ℂ)
+    (a b : Fin n → ℝ) {k : ℝ} (hk : 0 < k) :
+    ∫ x in Set.Icc a b, φ (k • x) =
+      (k ^ n)⁻¹ • ∫ y in Set.Icc (k • a) (k • b), φ y := by
+  rw [Measure.setIntegral_comp_smul_of_pos volume φ (Set.Icc a b) hk,
+    smul_Icc_eq_Icc a b hk]
+  congr 2
+  simp [Module.finrank_pi_fintype]
+
+lemma tendsto_setIntegral_comp_smul_Icc {n : ℕ} (hn : 0 < n)
+    {φ : (Fin n → ℝ) → ℂ} {M : ℝ}
+    (hQ : ∀ a b : Fin n → ℝ, a ≤ b →
+      IntegrableOn φ (Set.Icc a b) ∧
+      ‖∫ x in Set.Icc a b, φ x‖ ≤
+        M * (volume (Set.Icc a b)).toReal /
+          (1 + (volume (Set.Icc a b)).toReal))
+    (a b : Fin n → ℝ) (hab : a ≤ b) :
+    Tendsto (fun k : ℝ => ∫ x in Set.Icc a b, φ (k • x)) atTop (𝓝 0) := by
+  have hM : 0 ≤ M :=
+    nonneg_of_rectangle_integral_bound hn (fun a b hab => (hQ a b hab).2)
+  have hlim : Tendsto (fun k : ℝ => (k ^ n)⁻¹ * M) atTop (𝓝 0) := by
+    simpa using ((tendsto_pow_atTop (Nat.ne_of_gt hn)).inv_tendsto_atTop.mul_const M)
+  have hlimnorm : Tendsto (fun k : ℝ => ‖(k ^ n)⁻¹ * M‖) atTop (𝓝 0) := by
+    simpa only [norm_zero] using hlim.norm
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  apply squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _)
+    _ hlimnorm
+  filter_upwards [eventually_gt_atTop (0 : ℝ)] with k hk
+  have hkab : k • a ≤ k • b := by
+    intro i
+    simp only [Pi.smul_apply, smul_eq_mul]
+    exact mul_le_mul_of_nonneg_left (hab i) hk.le
+  let m : ℝ := (volume (Set.Icc (k • a) (k • b))).toReal
+  have hm : 0 ≤ m := by positivity
+  have hfrac : M * m / (1 + m) ≤ M := by
+    apply (div_le_iff₀ (by positivity : 0 < 1 + m)).2
+    nlinarith [mul_nonneg hM hm]
+  rw [setIntegral_comp_smul_Icc φ a b hk]
+  rw [Complex.real_smul]
+  rw [norm_mul, Complex.norm_real,
+    Real.norm_of_nonneg (by positivity : 0 ≤ (k ^ n)⁻¹)]
+  calc
+    (k ^ n)⁻¹ * ‖∫ y in Set.Icc (k • a) (k • b), φ y‖
+        ≤ (k ^ n)⁻¹ * (M * m / (1 + m)) :=
+      mul_le_mul_of_nonneg_left (hQ _ _ hkab).2 (by positivity)
+    _ ≤ (k ^ n)⁻¹ * M := mul_le_mul_of_nonneg_left hfrac (by positivity)
+    _ = ‖(k ^ n)⁻¹ * M‖ := by
+      rw [Real.norm_eq_abs, abs_of_nonneg (mul_nonneg (by positivity) hM)]
+
+lemma tendsto_scaled_mul_of_L1_approx
+    {n : ℕ} {φ : (Fin n → ℝ) → ℂ}
+    (hφ : AEStronglyMeasurable φ volume) {M : ℝ}
+    (hφM : ∀ᵐ x ∂volume, ‖φ x‖ ≤ M)
+    {f : (Fin n → ℝ) → ℂ} (hf : Integrable f)
+    (happrox : ∀ ε > 0, ∃ g : (Fin n → ℝ) → ℂ,
+      Integrable g ∧
+      Tendsto (fun k : ℝ => ∫ x, φ (k • x) * g x) atTop (𝓝 0) ∧
+      ∫ x, ‖f x - g x‖ ≤ ε) :
+    Tendsto (fun k : ℝ => ∫ x, φ (k • x) * f x) atTop (𝓝 0) := by
+  have hM : 0 ≤ M := by
+    obtain ⟨x, hx⟩ := hφM.exists
+    exact (norm_nonneg (φ x)).trans hx
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨g, hg, hglim, hfg⟩ := happrox (ε / (2 * (M + 1))) (by positivity)
+  obtain ⟨K, hK⟩ := Metric.tendsto_atTop.1 hglim (ε / 2) (by positivity)
+  refine ⟨max K 1, fun k hk => ?_⟩
+  have hk0 : 0 < k := lt_of_lt_of_le (by norm_num) (le_trans (le_max_right K 1) hk)
+  have hfk := integrable_scaled_mul_of_ae_norm_le hφ hφM hf hk0
+  have hgk := integrable_scaled_mul_of_ae_norm_le hφ hφM hg hk0
+  have hqp := Measure.quasiMeasurePreserving_smul
+    (volume : Measure (Fin n → ℝ)) hk0.ne'
+  have hpoint : ∀ᵐ x ∂volume,
+      ‖φ (k • x) * (f x - g x)‖ ≤ M * ‖f x - g x‖ := by
+    filter_upwards [hqp.tendsto_ae hφM] with x hx
+    rw [norm_mul]
+    exact mul_le_mul_of_nonneg_right hx (norm_nonneg _)
+  have hdiff : ‖(∫ x, φ (k • x) * f x) - ∫ x, φ (k • x) * g x‖ ≤
+      M * ∫ x, ‖f x - g x‖ := by
+    rw [← integral_sub hfk hgk]
+    have hi : Integrable (fun x => M * ‖f x - g x‖) :=
+      (hf.sub hg).norm.const_mul M
+    refine (norm_integral_le_of_norm_le hi ?_).trans_eq ?_
+    · filter_upwards [hpoint] with x hx
+      simpa [mul_sub] using hx
+    · rw [integral_const_mul]
+  have hgsmall := hK k (le_trans (le_max_left K 1) hk)
+  rw [dist_zero_right] at hgsmall ⊢
+  calc
+    ‖∫ x, φ (k • x) * f x‖
+        ≤ ‖(∫ x, φ (k • x) * f x) - ∫ x, φ (k • x) * g x‖ +
+            ‖∫ x, φ (k • x) * g x‖ := by
+          simpa using norm_add_le
+            ((∫ x, φ (k • x) * f x) - ∫ x, φ (k • x) * g x)
+            (∫ x, φ (k • x) * g x)
+    _ ≤ M * (∫ x, ‖f x - g x‖) + ε / 2 :=
+      add_le_add hdiff hgsmall.le
+    _ ≤ M * (ε / (2 * (M + 1))) + ε / 2 :=
+      add_le_add (mul_le_mul_of_nonneg_left hfg hM) le_rfl
+    _ < ε := by
+      have hfirst : M * (ε / (2 * (M + 1))) < ε / 2 := by
+        calc
+          M * (ε / (2 * (M + 1))) = ε / 2 * (M / (M + 1)) := by
+            field_simp
+            <;> ring
+          _ < ε / 2 * 1 := by
+            apply mul_lt_mul_of_pos_left _ (by positivity)
+            exact (div_lt_one (by positivity)).2 (by linarith)
+          _ = ε / 2 := mul_one _
+      linarith
+
+lemma integrable_indicator_const_of_lt {n : ℕ} {s : Set (Fin n → ℝ)} (hs : MeasurableSet s)
+    (h : volume s < ⊤) (c : ℂ) : Integrable (s.indicator fun _ => c) volume :=
+  (integrable_indicator_iff hs).2 (integrableOn_const h.ne)
+
+lemma tendsto_scaled_mul_of_monotone {n : ℕ}
+    {φ : (Fin n → ℝ) → ℂ} (hφ : AEStronglyMeasurable φ volume) {M : ℝ}
+    (hφM : ∀ᵐ x ∂volume, ‖φ x‖ ≤ M)
+    {s : Set (Fin n → ℝ)} (hs : MeasurableSet s) (hμ : volume s < ⊤) (c : ℂ)
+    {U : ℕ → Set (Fin n → ℝ)} (hU : ∀ m, MeasurableSet (U m)) (hmono : Monotone U)
+    (hun : ⋃ m, U m = s)
+    (hP : ∀ m, Tendsto (fun k : ℝ => ∫ x, φ (k • x) * (U m).indicator (fun _ => c) x)
+      atTop (𝓝 0)) :
+    Tendsto (fun k : ℝ => ∫ x, φ (k • x) * s.indicator (fun _ => c) x) atTop (𝓝 0) := by
+  have hsub (m : ℕ) : U m ⊆ s := hun ▸ subset_iUnion U m
+  have hlt (m : ℕ) : volume (U m) < ⊤ := (measure_mono (hsub m)).trans_lt hμ
+  have hB : Tendsto (fun m => volume (s \ U m)) atTop (𝓝 0) := by
+    have hanti : Antitone fun m => s \ U m := fun a b hab =>
+      Set.diff_subset_diff_right (hmono hab)
+    have h0 := tendsto_measure_iInter_atTop (μ := volume)
+      (fun m => (hs.diff (hU m)).nullMeasurableSet) hanti
+      ⟨0, ((measure_mono Set.diff_subset).trans_lt hμ).ne⟩
+    have hempty : ⋂ m, s \ U m = ∅ := by
+      ext x
+      simp only [mem_iInter, mem_diff, mem_empty_iff_false, iff_false, not_forall]
+      by_cases hx : x ∈ s
+      · rw [← hun] at hx
+        obtain ⟨m, hm⟩ := mem_iUnion.1 hx
+        exact ⟨m, fun h => h.2 hm⟩
+      · exact ⟨0, fun h => hx h.1⟩
+    simpa [hempty] using h0
+  refine tendsto_scaled_mul_of_L1_approx hφ hφM (integrable_indicator_const_of_lt hs hμ c) ?_
+  intro ε hε
+  have hne : ∀ m, volume (s \ U m) ≠ ⊤ := fun m =>
+    ((measure_mono Set.diff_subset).trans_lt hμ).ne
+  have hT : Tendsto (fun m => ‖c‖ * (volume (s \ U m)).toReal) atTop (𝓝 0) := by
+    have := ((ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp hB).const_mul ‖c‖
+    simpa using this
+  obtain ⟨m, hm⟩ := ((tendsto_order.1 hT).2 ε hε).exists
+  refine ⟨(U m).indicator fun _ => c, integrable_indicator_const_of_lt (hU m) (hlt m) c,
+    hP m, ?_⟩
+  have heq : (fun x => ‖s.indicator (fun _ => c) x - (U m).indicator (fun _ => c) x‖) =
+      (s \ U m).indicator fun _ => ‖c‖ := by
+    funext x
+    by_cases h1 : x ∈ U m
+    · have h2 := hsub m h1
+      simp [h1, h2]
+    · by_cases h2 : x ∈ s <;> simp [h1, h2]
+  rw [heq, integral_indicator (hs.diff (hU m)), setIntegral_const]
+  simp only [smul_eq_mul, Measure.real, Measure.restrict_apply MeasurableSet.univ, univ_inter]
+  rw [mul_comm]
+  exact hm.le
+
+lemma integral_scaled_mul_indicator {n : ℕ} (φ : (Fin n → ℝ) → ℂ) (k : ℝ)
+    {s : Set (Fin n → ℝ)} (hs : MeasurableSet s) (c : ℂ) :
+    ∫ x, φ (k • x) * s.indicator (fun _ => c) x = (∫ x in s, φ (k • x)) * c := by
+  have : (fun x => φ (k • x) * s.indicator (fun _ => c) x) =
+      s.indicator fun x => φ (k • x) * c := by
+    funext x
+    by_cases h : x ∈ s <;> simp [h]
+  rw [this, integral_indicator hs]
+  exact integral_mul_const _ _
+
+lemma borel_pi_eq_generateFrom_Icc {n : ℕ} :
+    (inferInstance : MeasurableSpace (Fin n → ℝ)) =
+      MeasurableSpace.generateFrom {S | ∃ a b : Fin n → ℝ, a ≤ b ∧ S = Set.Icc a b} := by
+  let C : Fin n → Set (Set ℝ) := fun _ => {S | ∃ l u : ℝ, l ≤ u ∧ Set.Icc l u = S}
+  have hC : ∀ i, MeasurableSpace.generateFrom (C i) = (inferInstance : MeasurableSpace ℝ) := by
+    intro i
+    rw [BorelSpace.measurable_eq (α := ℝ), borel_eq_generateFrom_Icc ℝ]
+  have hspan : ∀ i, IsCountablySpanning (C i) := fun i =>
+    ⟨fun N : ℕ => Set.Icc (-(N : ℝ)) N,
+      fun N => ⟨_, _, by have : (0 : ℝ) ≤ N := N.cast_nonneg
+                         linarith, rfl⟩,
+      iUnion_eq_univ_iff.2 fun x => by
+        obtain ⟨N, hN⟩ := exists_nat_ge |x|
+        exact ⟨N, (abs_le.1 hN).1, (abs_le.1 hN).2⟩⟩
+  have h := generateFrom_pi_eq (C := C) hspan
+  have e : (fun i => MeasurableSpace.generateFrom (C i)) =
+      fun _ => (inferInstance : MeasurableSpace ℝ) := funext hC
+  rw [e] at h
+  have hset : pi univ '' pi univ C = {S | ∃ a b : Fin n → ℝ, a ≤ b ∧ S = Set.Icc a b} := by
+    ext S
+    constructor
+    · rintro ⟨t, ht, rfl⟩
+      choose l u hlu hlu' using fun i => ht i (mem_univ i)
+      refine ⟨l, u, hlu, ?_⟩
+      rw [← Set.pi_univ_Icc]
+      exact congrArg _ (funext fun i => (hlu' i).symm)
+    · rintro ⟨a, b, hab, rfl⟩
+      exact ⟨fun i => Set.Icc (a i) (b i), fun i _ => ⟨_, _, hab i, rfl⟩, Set.pi_univ_Icc a b⟩
+  rw [hset] at h
+  exact h
+
+lemma isPiSystem_rectangles {n : ℕ} :
+    IsPiSystem {S : Set (Fin n → ℝ) | ∃ a b : Fin n → ℝ, a ≤ b ∧ S = Set.Icc a b} := by
+  rintro _ ⟨a, b, -, rfl⟩ _ ⟨c, d, -, rfl⟩ ⟨x, hx1, hx2⟩
+  refine ⟨a ⊔ c, b ⊓ d, ?_, Set.Icc_inter_Icc⟩
+  exact (sup_le hx1.1 hx2.1).trans (le_inf hx1.2 hx2.2)
+
+lemma tendsto_scaled_mul_indicator_inter_cube {n : ℕ} (hn : 0 < n)
+    {φ : (Fin n → ℝ) → ℂ} (hφ : AEStronglyMeasurable φ volume) {M : ℝ}
+    (hQ : ∀ a b : Fin n → ℝ, a ≤ b →
+      IntegrableOn φ (Set.Icc a b) ∧
+      ‖∫ x in Set.Icc a b, φ x‖ ≤
+        M * (volume (Set.Icc a b)).toReal / (1 + (volume (Set.Icc a b)).toReal))
+    (l u : Fin n → ℝ) (hlu : l ≤ u) (c : ℂ) {s : Set (Fin n → ℝ)} (hs : MeasurableSet s) :
+    Tendsto (fun k : ℝ => ∫ x, φ (k • x) * (s ∩ Set.Icc l u).indicator (fun _ => c) x)
+      atTop (𝓝 0) := by
+  have hφM := ae_norm_le_of_rectangle_integral_bound hn hQ
+  have hW : volume (Set.Icc l u) < ⊤ := isCompact_Icc.measure_lt_top
+  have hbox (a b : Fin n → ℝ) (hab : a ≤ b) :
+      Tendsto (fun k : ℝ => ∫ x, φ (k • x) * (Set.Icc a b).indicator (fun _ => c) x)
+        atTop (𝓝 0) := by
+    simp only [integral_scaled_mul_indicator φ _ measurableSet_Icc c]
+    simpa using (tendsto_setIntegral_comp_smul_Icc hn hQ a b hab).mul_const c
+  have hint (t : Set (Fin n → ℝ)) (ht : MeasurableSet t) (hlt : volume t < ⊤) (k : ℝ)
+      (hk : 0 < k) : Integrable (fun x => φ (k • x) * t.indicator (fun _ => c) x) :=
+    integrable_scaled_mul_of_ae_norm_le hφ hφM (integrable_indicator_const_of_lt ht hlt c) hk
+  have hsmall (t : Set (Fin n → ℝ)) : volume (t ∩ Set.Icc l u) < ⊤ :=
+    (measure_mono inter_subset_right).trans_lt hW
+  induction s, hs using MeasurableSpace.induction_on_inter
+      (borel_pi_eq_generateFrom_Icc (n := n)) isPiSystem_rectangles with
+  | empty => simp
+  | basic t ht =>
+    obtain ⟨a, b, hab, rfl⟩ := ht
+    rw [Set.Icc_inter_Icc]
+    by_cases h : a ⊔ l ≤ b ⊓ u
+    · exact hbox _ _ h
+    · simp [Set.Icc_eq_empty h]
+  | compl t ht ih =>
+    have hEq : ∀ᶠ k : ℝ in atTop,
+        (∫ x, φ (k • x) * (Set.Icc l u).indicator (fun _ => c) x) -
+            ∫ x, φ (k • x) * (t ∩ Set.Icc l u).indicator (fun _ => c) x =
+          ∫ x, φ (k • x) * (tᶜ ∩ Set.Icc l u).indicator (fun _ => c) x := by
+      filter_upwards [eventually_gt_atTop 0] with k hk
+      rw [← integral_sub (hint _ measurableSet_Icc hW k hk)
+        (hint _ (ht.inter measurableSet_Icc) (hsmall t) k hk)]
+      congr 1
+      funext x
+      by_cases h1 : x ∈ t <;> by_cases h2 : x ∈ Set.Icc l u <;> simp [h1, h2]
+    have := (hbox l u hlu).sub ih
+    rw [sub_zero] at this
+    exact this.congr' hEq
+  | iUnion F hd hF ih =>
+    let A : ℕ → Set (Fin n → ℝ) := fun i => F i ∩ Set.Icc l u
+    let U : ℕ → Set (Fin n → ℝ) := fun m => ⋃ i ∈ Finset.range m, A i
+    have hA : ∀ i, MeasurableSet (A i) := fun i => (hF i).inter measurableSet_Icc
+    have hdA : Pairwise (Function.onFun Disjoint A) := fun i j hij =>
+      (hd hij).mono inter_subset_left inter_subset_left
+    refine tendsto_scaled_mul_of_monotone hφ hφM
+      ((MeasurableSet.iUnion hF).inter measurableSet_Icc) (hsmall _) c (U := U)
+      (fun m => Finset.measurableSet_biUnion _ fun i _ => hA i) ?_ ?_ ?_
+    · intro a b hab
+      exact biUnion_subset_biUnion_left (fun i hi => by
+        simp only [Finset.coe_range, mem_Iio] at hi ⊢
+        omega)
+    · ext x
+      simp only [U, A, mem_iUnion, mem_inter_iff, Finset.mem_range, exists_prop]
+      constructor
+      · rintro ⟨m, i, -, h1, h2⟩
+        exact ⟨⟨i, h1⟩, h2⟩
+      · rintro ⟨⟨i, h1⟩, h2⟩
+        exact ⟨i + 1, i, by omega, h1, h2⟩
+    · intro m
+      induction m with
+      | zero => simp [U]
+      | succ m ihm =>
+        have hUm : MeasurableSet (U m) := Finset.measurableSet_biUnion _ fun i _ => hA i
+        have hUlt : volume (U m) < ⊤ := by
+          refine (measure_mono ?_).trans_lt hW
+          exact iUnion₂_subset fun i _ => inter_subset_right
+        have hEq : ∀ᶠ k : ℝ in atTop,
+            (∫ x, φ (k • x) * (U m).indicator (fun _ => c) x) +
+                ∫ x, φ (k • x) * (A m).indicator (fun _ => c) x =
+              ∫ x, φ (k • x) * (U (m + 1)).indicator (fun _ => c) x := by
+          filter_upwards [eventually_gt_atTop 0] with k hk
+          rw [← integral_add (hint _ hUm hUlt k hk) (hint _ (hA m) (hsmall _) k hk)]
+          congr 1
+          funext x
+          have hdisj : x ∈ A m → x ∉ U m := fun h1 h2 => by
+            simp only [U, mem_iUnion, Finset.mem_range, exists_prop] at h2
+            obtain ⟨i, hi, h3⟩ := h2
+            exact Set.disjoint_left.1 (hdA (by omega : i ≠ m)) h3 h1
+          have hmem : x ∈ U (m + 1) ↔ x ∈ U m ∨ x ∈ A m := by
+            simp only [U, mem_iUnion, Finset.mem_range, exists_prop]
+            constructor
+            · rintro ⟨i, hi, h⟩
+              by_cases him : i = m
+              · exact Or.inr (him ▸ h)
+              · exact Or.inl ⟨i, by omega, h⟩
+            · rintro (⟨i, hi, h⟩ | h)
+              · exact ⟨i, by omega, h⟩
+              · exact ⟨m, by omega, h⟩
+          by_cases h1 : x ∈ U m
+          · have h2 : x ∉ A m := fun h => hdisj h h1
+            have h3 : x ∈ U (m + 1) := hmem.2 (Or.inl h1)
+            simp [h1, h2, h3]
+          · by_cases h2 : x ∈ A m
+            · have h3 : x ∈ U (m + 1) := hmem.2 (Or.inr h2)
+              simp [h1, h2, h3]
+            · have h3 : x ∉ U (m + 1) := fun h => (hmem.1 h).elim h1 h2
+              simp [h1, h2, h3]
+        have := ihm.add (ih m)
+        rw [add_zero] at this
+        exact this.congr' hEq
+
+lemma tendsto_scaled_mul_indicator
+    {n : ℕ} (hn : 0 < n)
+    {φ : (Fin n → ℝ) → ℂ}
+    (hφ : AEStronglyMeasurable φ volume) {M : ℝ}
+    (hQ : ∀ a b : Fin n → ℝ, a ≤ b →
+      IntegrableOn φ (Set.Icc a b) ∧
+      ‖∫ x in Set.Icc a b, φ x‖ ≤
+        M * (volume (Set.Icc a b)).toReal /
+          (1 + (volume (Set.Icc a b)).toReal))
+    {s : Set (Fin n → ℝ)} (hs : MeasurableSet s)
+    (hμs : volume s < ⊤) (c : ℂ) :
+    Tendsto (fun k : ℝ => ∫ x, φ (k • x) * s.indicator (fun _ => c) x) atTop (𝓝 0) := by
+  have hφM := ae_norm_le_of_rectangle_integral_bound hn hQ
+  let W : ℕ → Set (Fin n → ℝ) := fun N => Set.Icc (fun _ => -(N : ℝ)) (fun _ => (N : ℝ))
+  have hle (N : ℕ) : (fun _ : Fin n => -(N : ℝ)) ≤ fun _ => (N : ℝ) := fun _ => by
+    have : (0 : ℝ) ≤ N := N.cast_nonneg
+    simp only
+    linarith
+  refine tendsto_scaled_mul_of_monotone hφ hφM hs hμs c (U := fun N => s ∩ W N)
+    (fun N => hs.inter measurableSet_Icc) ?_ ?_
+    (fun N => tendsto_scaled_mul_indicator_inter_cube hn hφ hQ _ _ (hle N) c hs)
+  · intro a b hab
+    refine inter_subset_inter_right _ (Set.Icc_subset_Icc ?_ ?_)
+    · intro i
+      have : (a : ℝ) ≤ b := by exact_mod_cast hab
+      simp only
+      linarith
+    · intro i
+      have : (a : ℝ) ≤ b := by exact_mod_cast hab
+      simpa using this
+  · ext x
+    simp only [mem_iUnion, mem_inter_iff, exists_and_left, and_iff_left_iff_imp]
+    intro _
+    obtain ⟨N, hN⟩ := exists_nat_ge ‖x‖
+    refine ⟨N, fun i => ?_, fun i => ?_⟩
+    · have := (abs_le.1 ((norm_le_pi_norm x i).trans hN)).1
+      simpa using this
+    · have := (abs_le.1 ((norm_le_pi_norm x i).trans hN)).2
+      simpa using this
+
+/-- APM a02J03.  The rectangles are the axis-parallel boxes `Set.Icc a b`.  The printed
+`k > 0` clashes with the limit `k → ∞`; `k` is the limit variable here, over the reals.  The
+printed bound presupposes that `φ` has a finite Lebesgue integral on each rectangle, which is
+`IntegrableOn`; no other integrability is assumed, and the hypothesis forces `‖φ‖ ≤ M` a.e.,
+so the conclusion's integrals are genuine (first clause).  `0 < n` is needed: on the
+one-point space `ℝ⁰`, a nonzero constant `φ` with `f = 1` is a counterexample. -/
+theorem apm_a02j03 {n : ℕ} (hn : 0 < n) {φ : (Fin n → ℝ) → ℂ}
+    (hφ : AEStronglyMeasurable φ volume) {M : ℝ}
+    (hQ : ∀ a b : Fin n → ℝ, a ≤ b →
+      IntegrableOn φ (Set.Icc a b) ∧
+      ‖∫ x in Set.Icc a b, φ x‖ ≤
+        M * (volume (Set.Icc a b)).toReal /
+          (1 + (volume (Set.Icc a b)).toReal))
+    {f : (Fin n → ℝ) → ℂ} (hf : Integrable f) :
+    (∀ k : ℝ, 0 < k → Integrable (fun x => φ (k • x) * f x)) ∧
+    Tendsto (fun k : ℝ => ∫ x, φ (k • x) * f x) atTop (𝓝 0) := by
+  have hφM := ae_norm_le_of_rectangle_integral_bound hn hQ
+  refine ⟨fun k hk => integrable_scaled_mul_of_ae_norm_le hφ hφM hf hk, ?_⟩
+  let P : ((Fin n → ℝ) → ℂ) → Prop := fun g =>
+    Tendsto (fun k : ℝ => ∫ x, φ (k • x) * g x) atTop (𝓝 0)
+  refine Integrable.induction (μ := volume) P ?_ ?_ ?_ ?_ hf
+  · intro c s hs hμ
+    exact tendsto_scaled_mul_indicator hn hφ hQ hs hμ c
+  · intro g h _ hg hh pg ph
+    have hEq : ∀ᶠ k : ℝ in atTop,
+        (∫ x, φ (k • x) * g x) + (∫ x, φ (k • x) * h x) =
+          ∫ x, φ (k • x) * (g + h) x := by
+      filter_upwards [eventually_gt_atTop 0] with k hk
+      rw [← integral_add (integrable_scaled_mul_of_ae_norm_le hφ hφM hg hk)
+        (integrable_scaled_mul_of_ae_norm_le hφ hφM hh hk)]
+      congr 1
+      funext x
+      simp [mul_add]
+    have := pg.add ph
+    rw [add_zero] at this
+    exact this.congr' hEq
+  · refine isClosed_of_closure_subset fun g hg => ?_
+    refine tendsto_scaled_mul_of_L1_approx hφ hφM (L1.integrable_coeFn g) ?_
+    intro ε hε
+    obtain ⟨h, hhP, hd⟩ := Metric.mem_closure_iff.1 hg ε hε
+    refine ⟨h, L1.integrable_coeFn h, hhP, ?_⟩
+    have h1 : ∫ x, ‖g x - h x‖ = ‖g - h‖ := by
+      rw [L1.norm_eq_integral_norm]
+      refine integral_congr_ae ?_
+      filter_upwards [Lp.coeFn_sub g h] with x hx
+      rw [hx]
+      rfl
+    rw [h1, ← dist_eq_norm]
+    exact hd.le
+  · intro g h hgh _ pg
+    refine pg.congr fun k => integral_congr_ae ?_
+    filter_upwards [hgh] with x hx
+    rw [hx]
