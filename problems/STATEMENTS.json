@@ -404,6 +404,19 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:52:18Z"
   },
+  "a02J03": {
+   "decls": [
+    "apm_a02j03"
+   ],
+   "sha256": "ac3daa5c701941541daa2c63a92a1a6e0197ee20c9603190d257a97c111d8bb4",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": null,
+   "rev": "7ebb87a59",
+   "approved_at": "2026-11-02T02:22:45Z"
+  },
   "a02J04": {
    "decls": [
     "apm_a02j04"
