@@ -1,0 +1,45 @@
+
+open Lean Elab Command in
+elab "#star_map_deps " ids:ident* : command => do
+  let env ← getEnv
+  let isLocal (n : Name) : Bool := (env.getModuleIdxFor? n).isNone
+  let mut seen : NameSet := {}
+  let mut out : NameSet := {}
+  let mut stack : List Name := []
+  for id in ids do
+    match env.find? (id.getId) with
+    | some _ => stack := id.getId :: stack
+    | none =>
+      for c in (env.constants.map₂.toList.map (·.1)) do
+        if c.getString!.toLower == id.getId.toString.toLower ||
+            c.toString.toLower == id.getId.toString.toLower then
+          stack := c :: stack
+  while !stack.isEmpty do
+    let n := stack.head!
+    stack := stack.tail!
+    if seen.contains n then continue
+    seen := seen.insert n
+    match env.find? n with
+    | none => pure ()
+    | some ci =>
+      let used := ci.type.getUsedConstants ++
+        (match ci.value? (allowOpaque := true) with
+         | some v => v.getUsedConstants
+         | none => #[])
+      for u in used do
+        if isLocal u then
+          stack := u :: stack
+        else
+          out := out.insert u
+  for u in out.toList do
+    let modName := match env.getModuleIdxFor? u with
+      | some i => env.header.moduleNames[i.toNat]!
+      | none => Name.anonymous
+    let kind := match env.find? u with
+      | some (.thmInfo _) => "thm"
+      | some (.defnInfo _) => "def"
+      | some (.inductInfo _) => "ind"
+      | some (.ctorInfo _) => "ctor"
+      | some (.recInfo _) => "rec"
+      | _ => "other"
+    IO.println s!"DEP\t{u}\t{modName}\t{kind}"
