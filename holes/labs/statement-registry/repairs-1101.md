@@ -147,3 +147,7 @@ Compiled on the lemmas worktree: 0 errors, no sorry, apm_m02j02 axioms propext, 
 ## m96J01
 
 Found 2026-11-02 by the star-map dependency run: `let F := proj V in` is not Lean 4 syntax, so Main.lean had never parsed and the registered decl did not exist, though it was counted closed (no sorry in the text) and graded faithful from reading. Fixed the `let` and the two last proof lines; compiled, axioms propext, Classical.choice, Quot.sound. Statement meaning unchanged, grade stands.
+
+## t92J02
+
+Found 2026-11-02 by the compile audit: Main.lean had 5 errors (stale API, Homeomorph.toContinuousMap, has_inverse) and had not compiled, though it was counted closed. Rewrote the second theorem with Continuous.homeoOfEquivCompactToT2, added root apm_t92j02. Axioms propext, Classical.choice, Quot.sound. Outside read-only grader: faithful, no defects.
