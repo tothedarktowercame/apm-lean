@@ -1,0 +1,113 @@
+# area	skill	prose regex (informal solution and mark8 warrants)	Lean constant regex
+Complex	Cauchy integral theorem and formula	\bcauchy(?:'s)?[- ](?:integral|theorem|formula|estimate|inequalit)|\bgoursat	circleIntegral\.|Complex\.(?:circleIntegral|integral_boundary|norm_deriv_le|.*cauchyPowerSeries)|cauchyPowerSeries
+Complex	Residues and contour integrals	\bresidues?\b|contour integral|jordan(?:'s)? lemma	^residue|circleIntegral\.(?:integral_sub_inv|integral_sub_center_inv)
+Complex	Argument principle and Rouché	argument principle|\brouch	
+Complex	Maximum modulus	maximum[- ]modulus|maximum principle|minimum modulus	Complex\.(?:exists_mem_frontier_isMaxOn_norm|norm_le_of_forall_mem_frontier|eqOn_of_isPreconnected_of_isMaxOn|isMaxOn|norm_eq_norm_of_isMaxOn|exists_isMaxOn|eventually_eq_of_isLocalMax|eqOn_closure_of_isPreconnected)
+Complex	Schwarz lemma and automorphisms of the disc	schwarz(?:'s)?[- ]lemma|schwarz-pick|automorphisms? of the (?:unit )?disc|blaschke	Complex\.(?:norm_deriv_le_div_of_mapsTo_ball|norm_dslope_le|affine_of_mapsTo_ball|dist_le_div_mul_dist_of_mapsTo_ball)|^dslope
+Complex	Liouville and entire functions	(?<!sturm-)(?<!sturm–)\bliouville|\bentire function|picard(?:'s)? (?:little|great)	Differentiable\.(?:apply_eq_apply_of_bounded|exists_const_forall_eq_of_bounded|exists_eq_const_of_bounded)|Complex\.liouville
+Complex	Morera and uniform limits of analytic functions	\bmorera|locally uniform|uniformly on compact	TendstoLocallyUniformlyOn\.differentiableOn|Complex\..*tendstoLocallyUniformly
+Complex	Identity theorem and zeros	identity theorem|isolated zeros?|zeros? of order|order of (?:the )?zero	AnalyticOnNhd\.eqOn_of_preconnected|AnalyticAt\.eventually_eq_zero_or|AnalyticOnNhd\.eq_on_zero|AnalyticAt\.exists_eventuallyEq_pow_smul|AnalyticAt\.order|analyticOrderAt|AnalyticOnNhd\.eqOn_zero
+Complex	Conformal maps and Möbius transforms	\bconformal|m[oö]bius|fractional linear|riemann mapping	Complex\.isConformalMap|IsConformalMap|^Conformal
+Complex	Harmonic functions	\bharmonic function|harmonic conjugate|mean value property|poisson (?:integral|kernel|formula)	InnerProductSpace\.HarmonicOnNhd|InnerProductSpace\.HarmonicAt|HarmonicAt
+Complex	Series, Laurent and singularities	\blaurent\b|essential singularit|removable singularit|casorati	Complex\.differentiableOn_update_limUnder|Complex\.analyticAt_of_differentiable_on_punctured|meromorphic|MeromorphicAt
+Complex	Branches of log and logarithmic derivative	branch of (?:the )?(?:log|square|sqrt)|principal (?:branch|log)|holomorphic logarithm|logarithmic derivative	^logDeriv|Complex\.log_|Complex\.exp_log
+Complex	Normal families	\bmontel|normal famil|\bhurwitz(?:'s)? theorem	
+Complex	Infinite products and partial fractions	infinite product|mittag|partial fraction|weierstrass product	multipliable|Multipliable|^tprod|\.tprod
+Measure	Dominated convergence	dominated convergence|\bdct\b	tendsto_integral_of_dominated_convergence|tendsto_lintegral_of_dominated_convergence|tendsto_setIntegral_of_dominated|intervalIntegral\.tendsto_integral_filter_of_dominated_convergence|hasSum_integral_of_dominated|hasDerivAt_integral_of_dominated
+Measure	Monotone convergence and Fatou	monotone convergence|\bmct\b|\bfatou	lintegral_iSup|lintegral_tsum|lintegral_liminf_le|lintegral_tendsto_of_tendsto_of_monotone|lintegral_eq_iSup|integral_tendsto_of_tendsto_of_monotone
+Measure	Fubini and Tonelli	\bfubini|\btonelli|cavalieri|layer cake	integral_prod|lintegral_prod|integrable_prod_iff|setIntegral_prod|lintegral_lintegral|integral_integral|integrable_swap|Integrable\.prod|lintegral_eq_lintegral_meas_lt|intervalIntegral_integral_swap
+Measure	Hölder and Minkowski inequalities	h[oö]lder|\bminkowski|cauchy[- ]schwarz	lintegral_mul_le_Lp_mul_Lq|eLpNorm_smul_le_mul_eLpNorm|eLpNorm_add_le|integral_mul_le_Lp_mul_Lq|MemLp\.integrable_mul|inner_mul_le_norm_mul_norm|norm_inner_le_norm|real_inner_le_norm|abs_real_inner_le_norm|eLpNorm_le_eLpNorm_mul_rpow_measure_univ
+Measure	Jensen inequality and convexity	\bjensen(?:'s)? inequality|\bconvex function|\bconvexity	ConvexOn|ConcaveOn|StrictConvexOn|StrictConcaveOn
+Measure	Chebyshev, Markov and Borel-Cantelli	chebyshev|markov(?:'s)? inequality|borel[- ]cantelli	mul_meas_ge_le|meas_ge_le|meas_limsup_eq_zero|measure_limsup|mul_meas_ge_le_lintegral|meas_ge_le_lintegral
+Measure	Egorov, Lusin and convergence in measure	\begoro|\blusin|\bluzin|in measure\b	tendstoInMeasure|TendstoInMeasure|Egorov|tendstoUniformlyOn_of_ae_tendsto
+Measure	L^p spaces	\bl\^\{?p\}?\b|\bl\^p\b|\blp[- ]norm|\bmemlp	eLpNorm|MemLp|^MeasureTheory\.Lp
+Measure	Lebesgue differentiation and absolute continuity	lebesgue differentiation|lebesgue point|vitali|absolutely continuous|absolute continuity|bounded variation	AbsolutelyContinuousOnInterval|VitaliFamily|LocallyBoundedVariationOn|BoundedVariationOn|ae_differentiableAt
+Measure	Radon-Nikodym and singular measures	radon-nikod|mutually singular|lebesgue decomposition|hahn decomposition|signed measure	rnDeriv|MutuallySingular|haveLebesgueDecomposition|SignedMeasure
+Measure	Measurable sets and outer measure	outer measure|carath[eé]odory|null set|borel set|cantor set|fat cantor|measurable set	OuterMeasure|^cantorSet|Cantor
+Measure	Convolution and approximate identities	\bconvolution|approximate identity|mollifier|young(?:'s)? inequality	MeasureTheory\.convolution|^convolution|ContDiffBump
+Measure	Fourier transform	fourier transform|plancherel|riemann[- ]lebesgue	Real\.fourierIntegral|fourierIntegral|VectorFourier|Real\.fourier|tendsto_integral_exp_inner|fourierChar
+Measure	Fourier series	fourier series|fourier coefficient|\bparseval|\bbessel(?:'s)? inequality|\bfej[eé]r	fourier|hasSum_fourier|orthonormal_fourier|Orthonormal\.(?:tsum|inner|sum_inner)
+Measure	Gaussian and Gamma integrals	gaussian integral|gamma function|\bdirichlet integral	integral_gaussian|Real\.Gamma|Complex\.Gamma|integral_exp_neg|Gamma_integral
+Measure	Differentiation under the integral sign	differentiat\w+ under the integral|leibniz rule	hasDerivAt_integral_of_dominated|hasDerivAt_integral|intervalIntegral\.hasDerivAt_integral
+Functional	Baire category	\bbaire	dense_iInter_of_isOpen|nonempty_interior_of_iUnion|BaireSpace|isGδ
+Functional	Uniform boundedness	uniform boundedness|banach[- ]steinhaus	banach_steinhaus
+Functional	Open mapping and closed graph	open mapping theorem|closed graph|bounded inverse	ContinuousLinearMap\.isOpenMap|LinearMap\.continuous_of_isClosed_graph|ContinuousLinearEquiv\.ofBijective|ContinuousLinearMap\.closed_range|ContinuousLinearMap\.exists_preimage_norm_le|continuous_of_seq_closed_graph
+Functional	Hahn-Banach and dual spaces	hahn[- ]banach|dual space|bounded linear functional|weak-?\*|banach-alaoglu|\balaoglu	exists_extension_norm_eq|exists_dual_vector|NormedSpace\.Dual|StrongDual|WeakDual|geometric_hahn_banach|WeakDual\.isCompact
+Functional	Riesz representation and orthogonal projection	riesz representation|\briesz(?:'s)? (?:lemma|theorem)|orthogonal projection|orthogonal complement|projection theorem|closest point	InnerProductSpace\.toDual|orthogonalProjection|starProjection|Submodule\.orthogonal|exists_norm_eq_iInf_of_complete|Kᗮ|riesz_lemma|orthogonalBilin|Submodule\.HasOrthogonalProjection
+Functional	Orthonormal bases in Hilbert space	orthonormal|hilbert basis|gram[- ]schmidt	^Orthonormal|HilbertBasis|gramSchmidt|OrthonormalBasis
+Functional	Compact and self-adjoint operators	compact operator|compact self|self-?adjoint operator|fredholm|hilbert[- ]schmidt|spectral theorem	IsCompactOperator|LinearMap\.IsSymmetric|IsSelfAdjoint|IsSymmetric\.|hasEigenvalue|Module\.End\.HasEigenvalue
+Functional	Weak convergence	weak(?:ly)? converg|weak limit|weakly compact|weak topology	WeakSpace|weakLimit|WeakConverges
+Functional	Arzelà-Ascoli	\bascoli|equicontinu	Equicontinuous|ArzelaAscoli|BoundedContinuousFunction\.arzela_ascoli|isCompact_closure_of_equicontinuous|UniformEquicontinuous|EquicontinuousOn
+Functional	Stone-Weierstrass and density	stone[- ]weierstrass|weierstrass approximation|dense in\b	polynomialFunctions|ContinuousMap\.subalgebra_topologicalClosure_eq_top_of_separatesPoints|polynomialFunctions_closure_eq_top|bernsteinApproximation|exists_polynomial_near
+Functional	Contraction mapping	contraction (?:mapping|map|principle)|banach fixed	ContractingWith
+ODE and PDE	ODE existence and uniqueness	picard[- ]lindel|picard iteration|\bgronwall|initial value problem|existence and uniqueness	IsPicardLindelof|gronwallBound|ODE_solution_unique|norm_le_gronwallBound|IsIntegralCurve|ODE
+ODE and PDE	Linear ODE and matrix exponential	matrix exponential|fundamental matrix|\bwronskian|phase (?:plane|portrait)|lyapunov	NormedSpace\.exp|Matrix\.exp|wronskian|Matrix\.IsHermitian
+ODE and PDE	Boundary value and Sturm-Liouville problems	sturm|boundary value problem|eigenfunction|green(?:'s)? function	
+ODE and PDE	Heat, wave and Laplace equations	heat equation|wave equation|laplace(?:'s)? equation|separation of variables|dirichlet problem|maximum principle for	Laplacian|^Laplacian
+ODE and PDE	Energy and variational methods	energy (?:estimate|method|argument|functional)|\bvariational|weak solution|lax[- ]milgram|\bmilgram|calculus of variations|euler-lagrange	IsCoercive|bilin.*coercive
+ODE and PDE	Sobolev and Poincaré inequalities	sobolev|poincar[eé] inequality|\brellich|\bwirtinger|\bkondrachov|h\^1	
+ODE and PDE	Laplace transform	laplace transform	
+Numerics	Numerical integration and interpolation	\bquadrature|simpson|trapezoid|\binterpolat|lagrange polynomial|\bnewton[- ]cotes	Lagrange\.|Polynomial\.eq_of_degree
+Numerics	Finite elements	finite element|galerkin|\bc[eé]a(?:'s)? lemma|piecewise linear	
+Numerics	Iterative methods and root finding	\bjacobi\b|gauss-seidel|newton(?:'s)? (?:method|iteration)|conjugate gradient|power method|\biterat\w+ (?:method|scheme)	
+Numerics	Matrix norms and conditioning	condition number|matrix norm|operator norm|spectral radius|\bgershgorin|\blu (?:factor|decomp)|thomas algorithm	spectralRadius|Matrix\.linftyOpNorm|Matrix\.l2Opnorm|ContinuousLinearMap\.opNorm|eigenvalue_mem_ball|det_ne_zero_of_sum_row_lt
+Numerics	Difference schemes and stability	von neumann|finite difference|difference scheme|stability|\bcfl\b|runge[- ]kutta|\beuler(?:'s)? method|truncation error	
+Calculus	Mean value theorem and Taylor expansion	mean value theorem|\btaylor\b|\bl'h[oô]pital	exists_deriv_eq_slope|exists_hasDerivAt_eq_slope|Convex\.norm_image_sub_le|taylor_mean_remainder|taylorWithin|exists_taylor|Convex\.image_sub_le|image_norm_le_of_|hasDerivAt_taylor|deriv\.lhopital|HasDerivAt\.lhopital
+Calculus	Riemann integration and the fundamental theorem	riemann integra|fundamental theorem of calculus|integration by parts|integrate by parts|\bftc\b	intervalIntegral\.integral_eq_sub_of_hasDerivAt|intervalIntegral\.integral_hasDerivAt|intervalIntegral\.integral_mul_deriv|intervalIntegral\.deriv_integral|intervalIntegral\.integral_deriv|integral_hasDerivAt_right|intervalIntegral\.integral_eq_sub|BoxIntegral
+Calculus	Uniform convergence of series	uniform(?:ly)? converg|m-test|weierstrass m|\bpower series|radius of convergence	TendstoUniformly|tendstoUniformlyOn_tsum|continuous_tsum|continuousOn_tsum|hasDerivAt_tsum|FormalMultilinearSeries\.radius|Summable\.of_norm_bounded|hasSum_geometric|tendstoUniformlyOn
+Calculus	Inverse and implicit function theorems	inverse function theorem|implicit function|\blagrange multiplier	HasStrictFDerivAt\.(?:to|local|implicit)|ContDiffAt\.toOpenPartialHomeomorph|ContDiffAt\.to_localInverse|HasStrictDerivAt\.localInverse|ImplicitFunctionData|IsLocalExtrOn\.exists_multipliers|HasFDerivAt\.of_local_left_inverse|OpenPartialHomeomorph\.contDiffAt_symm
+Calculus	Multivariable change of variables	change of variables?|jacobian|polar coordinates|spherical coordinates	integral_image_eq_integral_abs_det_fderiv|lintegral_image_eq|polarCoord|integral_comp_polarCoord|addHaar_image_eq|integral_comp_mul_deriv|lintegral_abs_det_fderiv|integral_image_eq
+Calculus	Stokes and divergence theorems	\bstokes|divergence theorem|green(?:'s)? theorem	integral_divergence|intervalIntegral\.integral_divergence|extDeriv_extDeriv|integral_boundary_rect
+Geometry	Differential forms and exterior calculus	differential form|exterior derivative|closed (?:\d-)?form|exact form|\bwedge product|\bpullback of	extDeriv|ContinuousAlternatingMap|AlternatingMap|compContinuousLinearMap
+Geometry	de Rham cohomology	de rham|poincar[eé] lemma	
+Geometry	Manifolds, charts and smooth structures	smooth manifold|\bcharts?\b|\batlas\b|smooth structure	contMDiff|ContMDiff|extChartAt_|chartAt_
+Geometry	Submanifolds, immersions and embeddings	submanifold|\bimmersions?\b|\bsubmersions?\b|smooth embedding|whitney	Manifold\.IsImmersion|IsImmersion|IsSmoothEmbedding|Submanifold|IsSubmersion
+Geometry	Tangent bundle and vector fields	tangent (?:bundle|space|vector)|vector field|lie bracket|integral curve|\bflows?\b	mfderiv_|VectorField|mlieBracket|IsMIntegralCurve|mpullback
+Geometry	Sard and regular values	\bsard|regular value|critical value	addHaar_image_eq_zero_of_det_fderiv_eq_zero|MeasureTheory\.addHaar_image_eq_zero|IsRegularValue|sard
+Geometry	Lie groups and homogeneous spaces	\blie group|homogeneous space|orthogonal group|\bso\(n\)|\bu\(n\)|\bsu\(2\)	LieGroup\.|Matrix\.orthogonalGroup|Matrix\.specialOrthogonal|Matrix\.unitaryGroup
+Geometry	Projective spaces	projective (?:space|plane)|\brp\^	Projectivization|projectivizationSetoid
+Geometry	Tubular neighbourhoods and partitions of unity	tubular|partition of unity|bump function	PartitionOfUnity|SmoothBumpFunction\.
+Algebraic topology	Fundamental group	fundamental group|\\pi_1	FundamentalGroup|FundamentalGroupoid|Path\.Homotopic
+Algebraic topology	Van Kampen	\bkampen	
+Algebraic topology	Covering spaces	covering (?:space|map)|universal cover|deck transformation|lifting (?:lemma|property|criterion)|path lifting	IsCoveringMap|IsCoveringMapOn|IsEvenlyCovered|IsLocalHomeomorph
+Algebraic topology	Homology and exact sequences	\bhomology|mayer[- ]vietoris|long exact sequence|excision	HomologicalComplex\.homology|ChainComplex\.|ShortComplex\.Exact|singularHomology|ShortComplex\.ShortExact|snakeInput|moduleCatHomology|HomologicalComplex\.cycles
+Algebraic topology	Cohomology ring and duality	cup product|cohomology ring|poincar[eé] dual|\bk[uü]nneth|universal coefficient	
+Algebraic topology	Euler characteristic and CW complexes	euler characteristic|cw complex|cell complex|cellular|\bcells?\b|triangulat	
+Algebraic topology	Degree and fixed-point theorems	\bdegree of (?:a|the|f|this)?\s?(?:map|f\b|g\b)|brouwer|lefschetz|\bhopf\b|mapping degree|winding number	
+Algebraic topology	Homotopy and retractions	homotopy equivalen|homotopic|deformation retract|retraction|\bretract\b	ContinuousMap\.Homotopy|ContinuousMap\.HomotopyEquiv|ContinuousMap\.Homotopic|IsHomotopyEquiv
+Algebraic topology	Surfaces and classification	klein bottle|\btorus\b|\bgenus\b|orientable	
+General topology	Compactness and Hausdorff arguments	compact hausdorff|heine[- ]borel|bolzano|finite subcover|one-point compactif|sequentially compact	IsCompact\.isClosed|IsCompact\.elim_finite|IsCompact\.image|isCompact_iff_finite_subcover|IsCompact\.elim|OnePoint|Continuous\.homeoOfEquivCompactToT2|IsCompact\.exists_isM
+General topology	Connectedness	path[- ]connected|\bconnected component|\bdisconnected|locally connected|connected\b.{0,20}\bspace|\bconnectedness	IsConnected|IsPreconnected|PreconnectedSpace|ConnectedSpace|IsPathConnected|PathConnectedSpace|connectedComponent|LocPathConnectedSpace
+General topology	Quotient topology	quotient (?:topology|space|map)|identification	IsQuotientMap\.|continuous_coinduced_|isQuotientMap_|Continuous\.quotient_lift|continuous_quot
+General topology	Product topology and Tychonoff	tychonoff|product topology|box topology	isCompact_univ_pi|isOpen_prod_iff|nhds_pi|IsOpen\.prod|isCompact_pi_infinite|isOpen_pi_iff
+General topology	Separation axioms, Urysohn and Tietze	\burysohn|\btietze|normal space|regular space|separation axiom	exists_continuous_zero_one_of|exists_extension_forall_mem|ContinuousMap\.exists_restrict_eq|SeparatedNhds|normal_separation|regularSpace_
+General topology	Metric spaces and completion	complete metric|completion|totally bounded|cauchy sequence|\blipschitz	TotallyBounded|Metric\.infDist|cauchySeq_|CauchySeq\.|Metric\.complete_of|UniformSpace\.Completion|isComplete_
+General topology	Ordinals, well-ordering and cardinality	\bordinals?\b|well[- ]order|\bzorn|\bcountable (?:union|set)|cardinal	^Ordinal|^Cardinal|IsWellOrder|^zorn|exists_maximal_of_chains|Set\.countable_|Set\.Countable\.
+General topology	Countability axioms	second countable|first countable|\bseparable\b.{0,10}(?:metric|space)|\blindel[oö]f	exists_countable_basis|exists_countable_dense|TopologicalSpace\.separableSpace_|IsSeparable\.|HereditarilyLindelof\.|isLindelof_
+Groups	Sylow theorems	\bsylow	^Sylow|card_sylow|sylow
+Groups	Group actions and the class equation	class equation|conjugacy class|group action|orbit[- ]stabili|\borbits?\b|burnside(?:'s)? lemma|cauchy(?:'s)? theorem for groups	MulAction\.(?:card_orbit|orbit|stabilizer|index_stabilizer|selfEquivSigmaOrbits)|ConjClasses|Group\.card_center|Subgroup\.center|IsPGroup\.center|Group\.nat_card_center
+Groups	Simple and solvable groups	solvable|simple group|composition series|derived (?:sub)?group|commutator subgroup|\bnilpotent group	IsSimpleGroup|IsSolvable|solvable|commutator|derivedSeries|Group\.IsNilpotent
+Groups	Direct and semidirect products	semidirect|direct product|internal direct|recogni[sz]\w* the product	SemidirectProduct|Subgroup\.IsComplement|Subgroup\.prod|MulEquiv\.prod|MonoidHom\.noncommCoprod|mulEquivOfNormal|IsComplement'
+Groups	Symmetric and alternating groups	symmetric group|alternating group|transposition|\bs_[3-9n]\b|\ba_[4-9n]\b|\bcycle type	Equiv\.Perm\.(?:sign|cycleType|IsCycle|IsSwap|support|closure)|alternatingGroup|Equiv\.Perm\.card
+Groups	Finite and cyclic abelian groups	finite abelian|finitely generated abelian|cyclic group|chinese remainder|lagrange(?:'s)? theorem|\bindex\b.{0,12}subgroup	isCyclic_of|IsCyclic\.|Subgroup\.card_subgroup_dvd_card|orderOf_|Subgroup\.index|CommGroup\.equiv_prod|AddCommGroup\.equiv_free_prod
+Groups	Free groups and presentations	free group|free product|group presentation|generators and relations	FreeGroup|PresentedGroup|Monoid\.CoprodI|FreeProduct
+Fields	Fundamental theorem of Galois theory	\bgalois (?:group|theory|extension|correspondence|closure)|fixed field|fundamental theorem of galois	IsGalois|fixedField|AlgEquiv\.aut|Polynomial\.Gal|IntermediateField\.fixedField|FixedPoints\.intermediateField
+Fields	Splitting fields and normal extensions	splitting field|normal extension|normal closure|algebraic closure	Polynomial\.SplittingField|Polynomial\.IsSplittingField|^Normal\.|normalClosure|IsAlgClosed|IsAlgClosure|AlgebraicClosure|Polynomial\.Splits
+Fields	Minimal polynomials and degree of extensions	minimal polynomial|tower law|degree of the extension|primitive element	minpoly|Module\.finrank_mul_finrank|IntermediateField\.adjoin|AdjoinRoot|Field\.exists_primitive_element|IntermediateField\.finrank_top|IsPrimitiveRoot\.minpoly
+Fields	Finite fields	finite field|frobenius|\bgalois field|\bf_\{?p	FiniteField|frobenius|GaloisField|ZMod\.expand|ZMod\.pow_card
+Fields	Irreducibility criteria	irreducib\w+ (?:polynomial|over|in\b|factor|criterion)|eisenstein|rational root|reduction mod	Polynomial\.Polynomial\.irreducible|Polynomial\.Monic\.irreducible|X_pow_sub_C_irreducible|Polynomial\.IsEisensteinAt
+Fields	Cyclotomic extensions and roots of unity	cyclotomic|roots? of unity|kummer	cyclotomic|IsCyclotomicExtension|IsPrimitiveRoot
+Fields	Separability	\bseparable (?:polynomial|extension)|inseparable|purely inseparable|perfect field	Polynomial\.Separable|Algebra\.IsSeparable|PerfectField|separableClosure|Polynomial\.separable
+Rings	Euclidean domains, PIDs and UFDs	principal ideal|unique factori[sz]ation|\bufd\b|\bpid\b|euclidean domain|gaussian integers	IsPrincipalIdealRing|UniqueFactorizationMonoid|EuclideanDomain\.(?:gcd|mod|quotient)|GaussianInt
+Rings	Prime and maximal ideals	maximal ideal|prime ideal|\bspec\b|nilradical|jacobson radical	Ideal\.IsMaximal|Ideal\.IsPrime|Ideal\.radical|nilradical|PrimeSpectrum|Ideal\.jacobson|Ideal\.Quotient\.maximal
+Rings	Noetherian and Artinian rings	noetherian|hilbert basis|artinian	IsNoetherian|IsArtinian|Polynomial\.isNoetherianRing
+Rings	Localisation and integral closure	locali[sz]ation|integral(?:ly)? closed?|integral closure|integral extension|nakayama|dedekind	IsLocalization|Localization|IsIntegrallyClosed|integralClosure|IsIntegral|IsLocalRing|IsDedekindDomain|Submodule\.le_of_le_smul_of_le_jacobson_bot
+Rings	Gauss lemma and polynomial rings	gauss(?:'s)? lemma|primitive polynomial	Polynomial\.IsPrimitive|Polynomial\.IsPrimitive\.|MvPolynomial
+Rings	Semisimple rings and Wedderburn	wedderburn|semisimple|\bartin-wedderburn|division ring|schur(?:'s)? lemma|simple module	IsSemisimple|IsSimpleModule|IsSimpleRing|Module\.End\.divisionRing|LinearMap\.bijective_or_eq_zero|Module\.End\.instDivisionRing
+Rings	Tensor products	tensor product	TensorProduct|LinearMap\.lTensor|LinearMap\.rTensor
+Rings	Modules, exactness and flatness	short exact|\bflat module|projective module|injective module|free module|torsion|\bhom\b functor|exact sequence	Function\.Exact|Module\.Flat|Module\.Projective|Module\.Injective|Module\.Free|Submodule\.torsion
+Linear algebra	Modules over a PID and canonical forms	smith normal|invariant factors?|elementary divisor|jordan (?:canonical|normal|form|block)|rational canonical	Module\.equiv_free_prod_directSum|Module\.equiv_directSum_of_isTorsion|Matrix\.Jordan|Module\.End\.iSup_maxGenEigenspace|isNilpotent
+Linear algebra	Characteristic and minimal polynomials of matrices	characteristic polynomial|cayley-hamilton|eigenvalue	Matrix\.charpoly|LinearMap\.charpoly|LinearMap\.minpoly|Module\.End\.HasEigenvalue|Matrix\.aeval_self_charpoly|Module\.End\.eigenspace
+Linear algebra	Diagonalisation and bilinear forms	diagonali[sz]|bilinear form|quadratic form|symmetric matrix|signature|positive definite|hermitian form	LinearMap\.BilinForm|QuadraticForm|Matrix\.IsHermitian|Matrix\.PosDef|Matrix\.PosSemidef|LinearMap\.IsSymmetric
+Linear algebra	Determinants and rank	\bdeterminant|\brank[- ]nullity|\brank of\b|\bvandermonde	Matrix\.det|Matrix\.rank|LinearMap\.det|LinearMap\.finrank_range_add|Matrix\.vandermonde|ContinuousLinearMap\.det
+Linear algebra	Representations and characters	representation of|character table|irreducible (?:complex )?representation|maschke|group algebra|character of	Representation|FDRep|MonoidAlgebra|maschke|Algebra\.IsSemisimple
