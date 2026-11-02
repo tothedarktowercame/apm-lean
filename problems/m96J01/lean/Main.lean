@@ -42,15 +42,21 @@ lemma proj_idempotent (V : ClosedSubmodule ℝ H) :
 /-- Bundled version of the four properties required in the problem statement. -/
 theorem projection_properties
     (V : ClosedSubmodule ℝ H) (hV : (V : Submodule ℝ H) ≠ ⊥) :
-    let F := proj V in
+    let F := proj V;
     (F 0 = 0 ∧ ∀ x y, F (x + y) = F x + F y ∧ ∀ r : ℝ, F (r • x) = r • F x) ∧
     ‖F‖ = 1 ∧ IsSelfAdjoint F ∧ F.comp F = F := by
   intro F
   refine ⟨?_, proj_norm_one V hV, proj_isSelfAdjoint V, proj_idempotent V⟩
-  constructor
-  · simpa [proj]
-  · constructor
-    · intro x y; simpa [proj] using (proj V).map_add x y
-    · intro r x; simpa [proj] using (proj V).map_smulₛₗ r x
+  refine ⟨map_zero F, fun x y => ⟨map_add F x y, fun r => ?_⟩⟩
+  exact map_smul F r x
 
 end ApmCanaries.Frames.M96J01.Apm_v2_m96J01_1775007086632.Main
+
+open ApmCanaries.Frames.M96J01.Apm_v2_m96J01_1775007086632.Main in
+/-- The problem's four properties of orthogonal projection, at root namespace. -/
+theorem apm_m96j01 {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+    (V : ClosedSubmodule ℝ H) (hV : (V : Submodule ℝ H) ≠ ⊥) :
+    let F := proj V;
+    (F 0 = 0 ∧ ∀ x y, F (x + y) = F x + F y ∧ ∀ r : ℝ, F (r • x) = r • F x) ∧
+    ‖F‖ = 1 ∧ IsSelfAdjoint F ∧ F.comp F = F :=
+  projection_properties V hV
