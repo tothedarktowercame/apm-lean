@@ -135,3 +135,7 @@ Compiled on the lemmas worktree: 0 errors, no sorry, apm_m95a04 axioms propext, 
 ## a02J03
 
 Compiled on the lemmas worktree: 0 errors, no sorry, apm_a02j03 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, strict standard: faithful, no defects. Every n >= 1 on Fin n -> R with Lebesgue volume, complex phi and f, closed axis-parallel boxes, single M, integrability clause for each k>0 so no junk value, real limit k -> infinity. IntegrableOn on rectangles is what the printed integral presupposes, not an added hypothesis; hypothesis forces |phi| <= M a.e.; n>0 needed (R^0 counterexample in docstring); hypothesis satisfiable. Replaces the 1-dimensional real version rejected earlier.
+
+## b90A02
+
+Compiled on the lemmas worktree with autoImplicit off: 0 errors, no sorry, apm_b90a02 axioms propext, Classical.choice, Quot.sound. Outside read-only grader, strict standard: faithful, no mathematical defects; it found one packaging defect, universes auto-bound after the namespace closes, fixed. Any unital ring; balanced tensor product F tensor_R A built as a quotient of F tensor_Z A because Mathlib's needs a commutative base; IsFlatRight is the printed definition over all exact sequences of left modules, universe-polymorphic in w; Q flat over Z in the same sense, Q not projective. Replaces the commutative version rejected earlier, kept as apm_b90a02_commutative.
