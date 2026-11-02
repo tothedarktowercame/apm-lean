@@ -115,3 +115,7 @@ Printed (d) is false: for each α in (0,1) there is a continuous jointly Holder-
 ## m95J02
 
 Backlog grade: narrower, n ≥ 2 only. Repair by kimi-2 (with lemma-3's diagnosis) covers every n ≥ 1, with fundamental solution |x|/2 at n = 1, and adds the Euler step: r²(d²/dr² + ((n-1)/r) d/dr) r^s = s(s-1+n-1) r^s, the roots s = 0 and s = 2-n, log r in two dimensions, harmonicity of Φ off 0, and Φ's explicit formulas. Data f for the Poisson clause is C_c^∞, as the original gives f no class. New grade: faithful.
+
+## m00A04
+
+Backlog grade: vacuous, IsCompact (support φ) forced every test function to zero, so u = g = 0 solved every forcing. Repair by kimi-1 uses C_c^∞(U) with HasCompactSupport and tsupport in U, builds H¹₀ as the closure of test pairs in a PiLp energy space, proves integration by parts, and gets the weak solution from the Riesz representative (929 lines added, 110 removed). New grade: faithful, marginally stronger as the domain need not be connected; u = 0 no longer solves every forcing.
