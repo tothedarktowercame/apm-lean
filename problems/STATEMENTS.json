@@ -4565,6 +4565,24 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:53:16Z"
   },
+  "m96J05": {
+   "decls": [
+    "apm_m96j05"
+   ],
+   "sha256": "cd5a5b50853ee9b232edc9f36878de0eb96fef661617ade32d7777c9793ac004",
+   "defs": [
+    "apm_m96j05_D",
+    "apm_m96j05_L2",
+    "apm_m96j05_T",
+    "apm_m96j05_Tr"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+   "evidence": "holes/labs/statement-registry/repairs-1101.md",
+   "prelim_defect": null,
+   "rev": "bce67498e",
+   "approved_at": "2026-11-02T01:56:20Z"
+  },
   "m96J06": {
    "decls": [
     "apm_m96j06"
