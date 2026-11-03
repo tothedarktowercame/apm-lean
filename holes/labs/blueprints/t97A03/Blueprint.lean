@@ -3052,7 +3052,161 @@ theorem
     Function.Injective
       (apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_map
         d c hn hs) := by
-  sorry
+  classical
+  have hAB : A ≠ B := by
+    intro h
+    have hw : (1 : Circle) = apm_t97A03_circleNegOne := by
+      apply q.injective
+      rw [hq1, hqn, h]
+    have hv := congrArg Subtype.val hw
+    norm_num [apm_t97A03_circleNegOne] at hv
+  have hNS : apm_t97A03_north ≠ apm_t97A03_south := by
+    intro h
+    have hv := congrArg (fun z : apm_t97A03_S2 => z.1 (2 : Fin 3)) h
+    norm_num [apm_t97A03_north, apm_t97A03_south,
+      EuclideanSpace.single_apply] at hv
+  have hmix (i : Fin 2) (z : apm_t97A03_S2) (j : Fin 2) (w : Circle)
+      (he : d.sphere i z = c j w) :
+      (Quotient.mk _ (.inl (i, z)) : apm_t97A03_TwoCircleCover) =
+        Quotient.mk _ (.inr (j, w)) := by
+    have hb : apm_t97A03_baseSphere A B z =
+        apm_t97A03_baseCircle A B (q w) := by
+      rw [← d.sphere_lifts i z, ← hlift j w, he]
+    have hnrm :=
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize_eq
+        A B hAB hb
+    by_cases ha : q w = A
+    · have hz : z = apm_t97A03_north := by
+        simpa [ha,
+          apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+          using hnrm
+      have hw : w = 1 := q.injective (ha.trans hq1.symm)
+      subst z
+      subst w
+      obtain ⟨k, hk, hku⟩ := d.sphere_unique (d.sphere_lifts i apm_t97A03_north)
+      have hej : d.sphere j apm_t97A03_north = d.sphere i apm_t97A03_north :=
+        (hn j).symm.trans he.symm
+      have hij : i = j := (hku i rfl).trans (hku j hej).symm
+      subst j
+      fin_cases i
+      · exact Quotient.sound
+          (Relation.EqvGen.symm _ _
+            (Relation.EqvGen.rel _ _ apm_t97A03_TwoCircleRel.c0n))
+      · exact Quotient.sound
+          (Relation.EqvGen.symm _ _
+            (Relation.EqvGen.rel _ _ apm_t97A03_TwoCircleRel.c1n))
+    · by_cases hb' : q w = B
+      · have hz : z = apm_t97A03_south := by
+          simpa [ha, hb', hAB.symm,
+            apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+            using hnrm
+        have hw : w = apm_t97A03_circleNegOne := q.injective (hb'.trans hqn.symm)
+        subst z
+        subst w
+        have hej : d.sphere (Equiv.swap 0 1 j) apm_t97A03_south =
+            d.sphere i apm_t97A03_south := (hs j).symm.trans he.symm
+        obtain ⟨k, hk, hku⟩ := d.sphere_unique
+          (d.sphere_lifts i apm_t97A03_south)
+        have hi : i = Equiv.swap 0 1 j := (hku i rfl).trans (hku _ hej).symm
+        fin_cases j <;> subst i
+        · exact Quotient.sound
+            (Relation.EqvGen.symm _ _
+              (Relation.EqvGen.rel _ _ apm_t97A03_TwoCircleRel.c0s))
+        · exact Quotient.sound
+            (Relation.EqvGen.symm _ _
+              (Relation.EqvGen.rel _ _ apm_t97A03_TwoCircleRel.c1s))
+      · simp [ha, hb',
+          apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+          at hnrm
+  intro x y hxy
+  refine Quotient.inductionOn₂ x y ?_ hxy
+  intro x y hxy
+  change
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw d c x =
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw d c y
+    at hxy
+  cases x with
+  | inl iz =>
+      cases y with
+      | inl jz =>
+          obtain ⟨i, z⟩ := iz
+          obtain ⟨j, z'⟩ := jz
+          change d.sphere i z = d.sphere j z' at hxy
+          have hb : apm_t97A03_baseSphere A B z =
+              apm_t97A03_baseSphere A B z' := by
+            rw [← d.sphere_lifts i z, ← d.sphere_lifts j z', hxy]
+          have hz : z = z' := by
+            have hnrm :=
+              apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize_eq
+                A B hAB hb
+            simpa [apm_t97A03_baseSphere,
+              apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+              using hnrm
+          subst z'
+          obtain ⟨k, hk, hku⟩ := d.sphere_unique (d.sphere_lifts i z)
+          have hij : i = j := (hku i rfl).trans (hku j hxy.symm).symm
+          subst j
+          rfl
+      | inr jw =>
+          obtain ⟨i, z⟩ := iz
+          obtain ⟨j, w⟩ := jw
+          change d.sphere i z = c j w at hxy
+          exact hmix i z j w hxy
+  | inr iw =>
+      cases y with
+      | inl jz =>
+          obtain ⟨i, w⟩ := iw
+          obtain ⟨j, z⟩ := jz
+          change c i w = d.sphere j z at hxy
+          exact (hmix j z i w hxy.symm).symm
+      | inr jw =>
+          obtain ⟨i, w⟩ := iw
+          obtain ⟨j, w'⟩ := jw
+          change c i w = c j w' at hxy
+          have hb : apm_t97A03_baseCircle A B (q w) =
+              apm_t97A03_baseCircle A B (q w') := by
+            rw [← hlift i w, ← hlift j w', hxy]
+          have hnrm :=
+            apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize_eq
+              A B hAB hb
+          have hq : q w = q w' := by
+            by_cases ha : q w = A
+            · have ha' : q w' = A := by
+                by_cases hwa : q w' = A
+                · exact hwa
+                · by_cases hwb : q w' = B
+                  · simp [ha, hwa, hwb, hAB,
+                      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize] at hnrm
+                    exact False.elim (hNS (hnrm hAB.symm))
+                  · simp [ha, hwa, hwb,
+                      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize] at hnrm
+              exact ha.trans ha'.symm
+            · by_cases hb' : q w = B
+              · have hb'' : q w' = B := by
+                  by_cases hwa : q w' = A
+                  · simp [ha, hb', hwa, hAB.symm,
+                      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize] at hnrm
+                    exact False.elim (hNS hnrm.symm)
+                  · by_cases hwb : q w' = B
+                    · exact hwb
+                    · simp [ha, hb', hwa, hwb, hAB.symm,
+                        apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize] at hnrm
+                exact hb'.trans hb''.symm
+              · by_cases hwa : q w' = A
+                · simp [ha, hb', hwa,
+                    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize] at hnrm
+                · by_cases hwb : q w' = B
+                  · simp [ha, hb', hwa, hwb, hAB.symm,
+                      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize] at hnrm
+                  · simpa [ha, hb', hwa, hwb,
+                      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+                      using hnrm
+          have hw : w = w' := q.injective hq
+          subst w'
+          obtain ⟨k, hk, hku⟩ := hunique (hlift i w)
+          have hij : i = j := (hku i rfl).trans (hku j hxy.symm).symm
+          subst j
+          rfl
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
