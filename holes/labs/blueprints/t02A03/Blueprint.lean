@@ -4269,7 +4269,194 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux
         (∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z (e p).1) ∧
         (∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z (j p).1 →
           ∀ t, K (t, p) = j p) := by
-  sorry
+  classical
+  -- names
+  let right := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right
+  let rad := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+  let torus := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus
+  let loop := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop
+  let C : Set apm_t02a03_E3 := {x | |x 2| ≤ 1 / 5 ∧ x ∈ right ∧ (17 / 25 : ℝ) ≤ (6 / 5 - x 0) / rad x}
+  let seg : ℝ → apm_t02a03_E3 → ℝ × ℝ × ℝ := fun t x =>
+    (1 - t) • apm_t02a03_sector_aux_Psi x + t • apm_t02a03_sector_aux_r (apm_t02a03_sector_aux_Psi x)
+  have hL1 := apm_t02a03_sector_aux_L1_roundtrip_continuity
+  -- the box is convex
+  have hbox_combo : ∀ (t : ℝ), 0 ≤ t → t ≤ 1 → ∀ q q', apm_t02a03_sector_aux_box q →
+      apm_t02a03_sector_aux_box q' → apm_t02a03_sector_aux_box ((1 - t) • q + t • q') := by
+    intro t ht0 ht1 q q' hq hq'
+    have hc : ∀ (lo hi a b : ℝ), a ∈ Set.Icc lo hi → b ∈ Set.Icc lo hi →
+        (1 - t) * a + t * b ∈ Set.Icc lo hi := fun lo hi a b ha hb =>
+      convex_Icc lo hi ha hb (by linarith) ht0 (by ring)
+    exact ⟨hc _ _ _ _ hq.1 hq'.1, hc _ _ _ _ hq.2.1 hq'.2.1, hc _ _ _ _ hq.2.2 hq'.2.2⟩
+  have hPsibox : ∀ x ∈ C, apm_t02a03_sector_aux_box (apm_t02a03_sector_aux_Psi x) :=
+    fun x hx => apm_t02a03_sector_aux_L2a_box x hx.2.1 hx.1 hx.2.2
+  have hsegbox : ∀ x ∈ C, ∀ t : ℝ, 0 ≤ t → t ≤ 1 → apm_t02a03_sector_aux_box (seg t x) :=
+    fun x hx t ht0 ht1 => hbox_combo t ht0 ht1 _ _ (hPsibox x hx)
+      (apm_t02a03_sector_aux_L6e_r_box _ (hPsibox x hx))
+  have hround : ∀ x ∈ C, apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi x) = x :=
+    fun x hx => hL1.1 x hx.2.1 hx.1 hx.2.2
+  -- target cases for box points
+  have htarget : ∀ q, apm_t02a03_sector_aux_box q →
+      (apm_t02a03_sector_aux_PsiInv q ∈ torus ∪ loop ↔
+        (q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1)) ∨
+          (q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1)) := by
+    intro q hq
+    have h3 := apm_t02a03_sector_aux_L3_target_iff q hq
+    rw [Set.mem_union, h3.1, h3.2]
+  have hsegfix : ∀ x ∈ C, x ∈ torus ∪ loop → ∀ t : ℝ, seg t x = apm_t02a03_sector_aux_Psi x := by
+    intro x hx hZ t
+    have hq := hPsibox x hx
+    have hr : apm_t02a03_sector_aux_r (apm_t02a03_sector_aux_Psi x) = apm_t02a03_sector_aux_Psi x :=
+      apm_t02a03_sector_aux_L6c_r_fixes_target _ hq ((htarget _ hq).1 (by rw [hround x hx]; exact hZ))
+    show (1 - t) • apm_t02a03_sector_aux_Psi x + t • apm_t02a03_sector_aux_r (apm_t02a03_sector_aux_Psi x) = _
+    rw [hr, ← add_smul, sub_add_cancel, one_smul]
+  have hseg0 : ∀ x, seg 0 x = apm_t02a03_sector_aux_Psi x := by
+    intro x; show (1 - 0 : ℝ) • _ + (0 : ℝ) • _ = _; simp
+  have hseg1 : ∀ x, seg 1 x = apm_t02a03_sector_aux_r (apm_t02a03_sector_aux_Psi x) := by
+    intro x; show (1 - 1 : ℝ) • _ + (1 : ℝ) • _ = _; simp
+  -- the moving point
+  let G : ℝ → apm_t02a03_E3 → apm_t02a03_E3 := fun t x =>
+    if x ∈ C then apm_t02a03_sector_aux_PsiInv (seg t x) else x
+  let S := {p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X //
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p}
+  let xp : unitInterval × S → apm_t02a03_E3 := fun z => (j z.2).1.1
+  have hxp : Continuous xp :=
+    continuous_subtype_val.comp (continuous_subtype_val.comp (j.continuous.comp continuous_snd))
+  let f : unitInterval × S → apm_t02a03_E3 := fun z => G z.1 (xp z)
+  -- Z for points not in the chart
+  have hnotC : ∀ p : S, (j p).1.1 ∉ C → (j p).1.1 ∈ torus ∪ loop := by
+    intro p hp
+    by_contra hZ
+    obtain ⟨hz, hcos⟩ := hj p hZ
+    exact hp ⟨hz, (j p).1.2, hcos⟩
+  -- continuity
+  have hrad : ∀ x ∈ right, rad x ≠ 0 := by
+    intro x hx h0
+    have := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_continuous_aux_dist x h0
+    have h1 : Metric.infDist x (Set.range apm_t02a03_rightCore) ≤ 1 / 4 := hx.1
+    linarith
+  have hcosc : Continuous fun z : unitInterval × S => (6 / 5 - xp z 0) / rad (xp z) := by
+    have hc (i : Fin 3) : Continuous fun z : unitInterval × S => xp z i :=
+      (PiLp.continuous_apply 2 (fun _ : Fin 3 => ℝ) i).comp hxp
+    refine (continuous_const.sub (hc 0)).div ?_ (fun z => hrad _ (j z.2).1.2)
+    exact ((((hc 0).sub continuous_const).pow 2).add ((hc 1).pow 2)).sqrt
+  let A : Set (unitInterval × S) := {z | xp z ∈ C}
+  let Bz : Set (unitInterval × S) := {z | xp z ∈ torus ∪ loop}
+  have hAeq : A = {z | |xp z 2| ≤ 1 / 5 ∧ (17 / 25 : ℝ) ≤ (6 / 5 - xp z 0) / rad (xp z)} := by
+    ext z
+    exact ⟨fun h => ⟨h.1, h.2.2⟩, fun h => ⟨h.1, (j z.2).1.2, h.2⟩⟩
+  have hAc : IsClosed A := by
+    rw [hAeq]
+    exact (isClosed_le ((PiLp.continuous_apply 2 (fun _ : Fin 3 => ℝ) 2).comp hxp).abs
+      continuous_const).inter (isClosed_le continuous_const hcosc)
+  have hloopc : IsClosed loop := by
+    have hper : Function.Periodic (fun t : ℝ =>
+        (WithLp.toLp 2 ![6 / 5 - 23 / 20 * Real.cos t, 23 / 20 * Real.sin t, 0] :
+          apm_t02a03_E3)) (2 * Real.pi) := by
+      intro t
+      simp only [Real.cos_add_two_pi, Real.sin_add_two_pi]
+    have hcont : Continuous (fun t : ℝ =>
+        (WithLp.toLp 2 ![6 / 5 - 23 / 20 * Real.cos t, 23 / 20 * Real.sin t, 0] :
+          apm_t02a03_E3)) := by
+      apply (PiLp.continuous_toLp 2 _).comp
+      apply continuous_pi
+      intro i
+      fin_cases i <;> simp <;> fun_prop
+    have himg := hper.image_Icc Real.two_pi_pos 0
+    show IsClosed (Set.range _)
+    rw [← himg]
+    exact ((isCompact_Icc).image hcont).isClosed
+  have htorusc : IsClosed torus :=
+    isClosed_eq (Metric.continuous_infDist_pt _) continuous_const
+  have hBc : IsClosed Bz := (htorusc.union hloopc).preimage hxp
+  have hr : ContinuousOn apm_t02a03_sector_aux_r {q | apm_t02a03_sector_aux_box q} := by
+    intro q hq
+    by_cases h0 : q = apm_t02a03_sector_aux_q0
+    · subst h0; exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0
+    · exact continuousWithinAt_diff_singleton.mp
+        (apm_t02a03_sector_aux_L6a_r_continuous_off_q0 q ⟨hq, h0⟩)
+  have hfA : ContinuousOn f A := by
+    have hΨ : ContinuousOn (fun z => apm_t02a03_sector_aux_Psi (xp z)) A :=
+      hL1.2.1.comp hxp.continuousOn (fun z hz => ⟨hz.1, hz.2.1, hz.2.2⟩)
+    have hrΨ : ContinuousOn (fun z => apm_t02a03_sector_aux_r (apm_t02a03_sector_aux_Psi (xp z))) A :=
+      hr.comp hΨ (fun z hz => hPsibox _ hz)
+    have ht : Continuous fun z : unitInterval × S => ((z.1 : ℝ)) :=
+      continuous_subtype_val.comp continuous_fst
+    have hseg : ContinuousOn (fun z : unitInterval × S => seg z.1 (xp z)) A :=
+      ((continuous_const.sub ht).continuousOn.smul hΨ).add (ht.continuousOn.smul hrΨ)
+    have hG : ContinuousOn (fun z : unitInterval × S =>
+        apm_t02a03_sector_aux_PsiInv (seg z.1 (xp z))) A :=
+      hL1.2.2.comp hseg (fun z hz => hsegbox _ hz _ z.1.2.1 z.1.2.2)
+    refine hG.congr (fun z hz => ?_)
+    show (if xp z ∈ C then _ else _) = _
+    rw [if_pos (show xp z ∈ C from hz)]
+  have hfB : ContinuousOn f Bz := by
+    refine hxp.continuousOn.congr (fun z hz => ?_)
+    show (if xp z ∈ C then _ else _) = _
+    split_ifs with hC
+    · rw [hsegfix _ hC hz, hround _ hC]
+    · rfl
+  have hcover : A ∪ Bz = Set.univ := by
+    ext z
+    simp only [Set.mem_union, Set.mem_univ, iff_true]
+    by_cases hC : xp z ∈ C
+    · exact Or.inl hC
+    · exact Or.inr (hnotC z.2 hC)
+  have hf : Continuous f := by
+    rw [← continuousOn_univ, ← hcover]
+    exact hfA.union_of_isClosed hfB hAc hBc
+  -- membership
+  have hfright : ∀ z, f z ∈ right := by
+    intro z
+    show (if xp z ∈ C then _ else _) ∈ right
+    split_ifs with hC
+    · exact (apm_t02a03_sector_aux_L2b_inv _ (hsegbox _ hC _ z.1.2.1 z.1.2.2)).1
+    · exact (j z.2).1.2
+  have hfY : ∀ z, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y
+      ⟨f z, hfright z⟩ := by
+    intro z
+    by_cases hC : xp z ∈ C
+    · right
+      have h := (apm_t02a03_sector_aux_L2b_inv _ (hsegbox _ hC _ z.1.2.1 z.1.2.2)).2.2.1
+      have hfz : f z = apm_t02a03_sector_aux_PsiInv (seg z.1 (xp z)) := if_pos hC
+      show (17 / 25 : ℝ) ≤ (6 / 5 - f z 0) / rad (f z)
+      rw [hfz]; exact h
+    · left
+      have hfz : f z = xp z := if_neg hC
+      show f z ∈ torus ∪ loop
+      rw [hfz]; exact hnotC z.2 hC
+  let F : C(unitInterval × S, S) :=
+    ⟨fun z => ⟨⟨f z, hfright z⟩, hfY z⟩, (hf.subtype_mk _).subtype_mk _⟩
+  let e : C(S, S) := ⟨fun p => F (1, p), F.continuous.comp (continuous_const.prodMk continuous_id)⟩
+  have hF0 : ∀ p, F (0, p) = j p := by
+    intro p
+    apply Subtype.ext; apply Subtype.ext
+    show (if xp (0, p) ∈ C then _ else _) = (j p).1.1
+    split_ifs with hC
+    · show apm_t02a03_sector_aux_PsiInv (seg ((0 : unitInterval) : ℝ) _) = _
+      rw [show ((0 : unitInterval) : ℝ) = 0 from rfl, hseg0, hround _ hC]
+    · rfl
+  let K : ContinuousMap.Homotopy j e :=
+    { toFun := F
+      continuous_toFun := F.continuous
+      map_zero_left := hF0
+      map_one_left := fun p => rfl }
+  refine ⟨e, K, ?_, ?_⟩
+  · intro p
+    show (if xp (1, p) ∈ C then _ else _) ∈ torus ∪ loop
+    split_ifs with hC
+    · show apm_t02a03_sector_aux_PsiInv (seg ((1 : unitInterval) : ℝ) _) ∈ _
+      rw [show ((1 : unitInterval) : ℝ) = 1 from rfl, hseg1]
+      have hq := hPsibox _ hC
+      exact (htarget _ (apm_t02a03_sector_aux_L6e_r_box _ hq)).2
+        (apm_t02a03_sector_aux_L6d_r_lands_target _)
+    · exact hnotC p hC
+  · intro p hp t
+    apply Subtype.ext; apply Subtype.ext
+    show (if xp (t, p) ∈ C then _ else _) = (j p).1.1
+    split_ifs with hC
+    · show apm_t02a03_sector_aux_PsiInv (seg (t : ℝ) (j p).1.1) = _
+      rw [hsegfix _ hC hp, hround _ hC]
+    · rfl
 
 /-- Assembly uses L4 to enter the clamped sector, L1--L3 for box coordinates
 and target identification, L5--L6 for the box retraction, and then pulls the
