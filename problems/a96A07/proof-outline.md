@@ -16,34 +16,11 @@ Show g maps Δ one-to-one onto the bounded domain D whose boundary is C = g(Γ).
 ## Lean formalization
 
 - **File**: `lean/Main.lean`
-- **Status**: Partial (1 sorry)
-- **Reusable progress**:
-  - `ConstructionTargets.Rouche` supplies a divisor-based argument principle
-    and zero-count transfer on disks.
-  - `ConstructionTargets.UnivalentDeriv.deriv_ne_zero_of_injOn` proves the
-    nonvanishing derivative conclusion once interior injectivity is known.
-  - `apm_a96A07_isConnected_image_disk` proves the canonical disk image is
-    connected.
-  - `apm_a96A07_isBounded_image_disk` proves it is bounded via the compact
-    closed-disk image.
-  - `apm_a96A07_isOpen_image_disk` proves it is open directly from the complex
-    open-mapping theorem; boundary injectivity excludes the constant branch.
-- **Remaining blockers**:
-  - **Jordan curve theorem**: injective continuous image of circle bounds a domain — not formalized
-  - **Winding number = 1 for simple closed curves** — not formalized
-  - Identification of the bounded complementary component with the image and
-    proof of the exact frontier equality.
-
-## Closer Hop 3
-
-Openness no longer depends on Jordan separation. The analytic function is
-holomorphic on a slightly larger open ball, so Mathlib's open-mapping theorem
-applies; its constant alternative contradicts injectivity of the two boundary
-points `1` and `-1`. The final unresolved content is precisely the deep
-topological implication from an embedded boundary circle to winding number
-one, which is needed for interior injectivity and the exact frontier identity.
-
-## References
-
-- informal-solution: `../futon3c/data/apm-informal-proofs/apm-a96A07.md`
-- problem TeX: `../apm/a96A07.tex`
+- **Status**: Complete, no sorry.  Axioms: propext, Classical.choice, Quot.sound.
+- **Route**: the Lean proof does not follow the strategy above.  Mathlib has no Jordan curve theorem
+  or winding number, and the theorem needs only "the disk zero count of `g - w` is at most 1 off the
+  curve".  That follows from local constancy, vanishing far away, a jump of one across the curve
+  (factor through `dslope` and apply Rouché) and at most one bounded complementary component
+  (Borsuk's logarithm criterion).  `holes/labs/blueprints/a96A07/BLUEPRINT.md` has the argument.
+- **Informal solution**: its Step 2 does not follow, its sign argument should use `N >= 0`, and its
+  Step 4 is unnecessary.  `holes/labs/tutor/lessons/a96A07.md` explains each.

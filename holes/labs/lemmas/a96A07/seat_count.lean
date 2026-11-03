@@ -419,27 +419,150 @@ theorem apm_a96A07_unique_bounded_component (g : ℂ → ℂ)
   sorry
 
 -- BEGIN SEAT AREA
+/-- Local Rouché invariance of the translated zero count off the boundary image. -/
+lemma apm_a96A07_count_on_component_aux_local (g : ℂ → ℂ)
+    (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (w : ℂ) (hw : w ∉ apm_a96A07_boundaryImage g) :
+    ∀ᶠ w' in nhds w,
+      w' ∉ apm_a96A07_boundaryImage g ∧
+        apm_a96A07_diskZeroCount g w' = apm_a96A07_diskZeroCount g w := by
+  let K : Set ℂ := apm_a96A07_boundaryImage g
+  obtain ⟨ε, hε, hdiff⟩ := hg
+  have hcont : ContinuousOn g (closedBall (0 : ℂ) 1) :=
+    hdiff.continuousOn.mono (fun z hz => by
+      rw [mem_closedBall] at hz ⊢
+      exact hz.trans (by linarith))
+  have hKcompact : IsCompact K := by
+    apply (isCompact_sphere (0 : ℂ) 1).image_of_continuousOn
+    exact hcont.mono sphere_subset_closedBall
+  have hKne : K.Nonempty := by
+    refine ⟨g 1, 1, ?_, rfl⟩
+    simp [apm_a96A07_circle]
+  have hδ : 0 < infDist w K :=
+    (hKcompact.isClosed.notMem_iff_infDist_pos hKne).1 hw
+  filter_upwards [Metric.ball_mem_nhds w hδ] with w' hw'
+  have hw'K : w' ∉ K := by
+    intro hw'K
+    have := Metric.infDist_le_dist_of_mem (x := w) hw'K
+    rw [mem_ball] at hw'
+    exact (not_lt_of_ge this) (dist_comm w w' ▸ hw')
+  refine ⟨hw'K, ?_⟩
+  let f : ℂ → ℂ := fun z => g z - w
+  let q : ℂ → ℂ := fun _ => w - w'
+  have hf : AnalyticOnNhd ℂ f (closedBall 0 1) :=
+    apm_a96A07_analyticOnNhd_sub_value g w ⟨ε, hε, hdiff⟩
+  have hq : AnalyticOnNhd ℂ q (closedBall 0 1) := analyticOnNhd_const
+  have hbound : ∀ z ∈ sphere (0 : ℂ) 1, ‖q z‖ < ‖f z‖ := by
+    intro z hz
+    have hgzK : g z ∈ K := ⟨z, hz, rfl⟩
+    have hinf := Metric.infDist_le_dist_of_mem (x := w) hgzK
+    rw [mem_ball, dist_eq_norm] at hw'
+    dsimp [q, f]
+    calc
+      ‖w - w'‖ = ‖w' - w‖ := norm_sub_rev _ _
+      _ < infDist w K := hw'
+      _ ≤ ‖w - g z‖ := by simpa [dist_eq_norm] using hinf
+      _ = ‖g z - w‖ := norm_sub_rev _ _
+  have hr := ConstructionTargets.Rouche.zeroCountInClosedBall_add_eq
+    zero_lt_one hf hq hbound
+  change ConstructionTargets.Rouche.zeroCountInClosedBall
+      (fun z => g z - w') 0 1 =
+    ConstructionTargets.Rouche.zeroCountInClosedBall (fun z => g z - w) 0 1
+  convert hr using 2 <;> funext z <;> simp [f, q] <;> ring
+
 /-- The count is constant on each complementary component of the curve. -/
 theorem apm_a96A07_count_on_component (g : ℂ → ℂ)
     (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε))) (a b : ℂ)
     (ha : a ∉ apm_a96A07_boundaryImage g)
     (hb : b ∈ connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ a) :
     apm_a96A07_diskZeroCount g b = apm_a96A07_diskZeroCount g a := by
-  sorry
+  let K : Set ℂ := apm_a96A07_boundaryImage g
+  let N : (Kᶜ : Set ℂ) → ℤ := fun w => apm_a96A07_diskZeroCount g w
+  have hN : IsLocallyConstant N := by
+    rw [IsLocallyConstant.iff_eventually_eq]
+    intro w
+    have hlocal := apm_a96A07_count_on_component_aux_local g hg w w.property
+    exact (continuousAt_subtype_val.tendsto.eventually hlocal).mono fun w' hw' => hw'.2
+  have haK : a ∈ Kᶜ := ha
+  have hbK : b ∈ Kᶜ := (connectedComponentIn_subset Kᶜ a) hb
+  have hsub : IsPreconnected
+      ((fun z : (Kᶜ : Set ℂ) => (z : ℂ)) ⁻¹' connectedComponentIn Kᶜ a) := by
+    refine IsInducing.subtypeVal.isPreconnected_image.mp ?_
+    rw [Subtype.image_preimage_coe, inter_eq_right.mpr
+      (connectedComponentIn_subset Kᶜ a)]
+    exact isPreconnected_connectedComponentIn
+  have hbsub : (⟨b, hbK⟩ : (Kᶜ : Set ℂ)) ∈
+      ((fun z : (Kᶜ : Set ℂ) => (z : ℂ)) ⁻¹'
+        connectedComponentIn Kᶜ a) := hb
+  have hasub : (⟨a, haK⟩ : (Kᶜ : Set ℂ)) ∈
+      ((fun z : (Kᶜ : Set ℂ) => (z : ℂ)) ⁻¹'
+        connectedComponentIn Kᶜ a) := mem_connectedComponentIn haK
+  exact hN.apply_eq_of_isPreconnected hsub hbsub hasub
+
+/-- A zero-free analytic function has zero divisor count on the disk. -/
+lemma apm_a96A07_count_eq_zero_of_large_aux_zeroFree (f : ℂ → ℂ)
+    (han : AnalyticOnNhd ℂ f (closedBall 0 1))
+    (hne : ∀ z ∈ closedBall (0 : ℂ) 1, f z ≠ 0) :
+    ConstructionTargets.Rouche.zeroCountInClosedBall f 0 1 = 0 := by
+  unfold ConstructionTargets.Rouche.zeroCountInClosedBall
+  apply finsum_eq_zero_of_forall_eq_zero
+  intro z
+  by_cases hz : z ∈ closedBall (0 : ℂ) 1
+  · rw [MeromorphicOn.divisor_apply han.meromorphicOn hz,
+      WithTop.untop₀_eq_zero]
+    exact Or.inl ((han z hz).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.2
+      (hne z hz))
+  · simp [MeromorphicOn.divisor, hz]
 
 /-- Values far from the compact image of the closed disk are not taken. -/
 theorem apm_a96A07_count_eq_zero_of_large (g : ℂ → ℂ)
     (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε))) :
     ∃ R : ℝ, ∀ w : ℂ, R < ‖w‖ → apm_a96A07_diskZeroCount g w = 0 := by
-  sorry
+  obtain ⟨ε, hε, hdiff⟩ := hg
+  have hcont : ContinuousOn g (closedBall (0 : ℂ) 1) :=
+    hdiff.continuousOn.mono (fun z hz => by
+      rw [mem_closedBall] at hz ⊢
+      exact hz.trans (by linarith))
+  have hbdd : Bornology.IsBounded (g '' closedBall (0 : ℂ) 1) :=
+    ((isCompact_closedBall (0 : ℂ) 1).image_of_continuousOn hcont).isBounded
+  obtain ⟨R, hR⟩ := hbdd.exists_norm_le
+  refine ⟨R, fun w hw => ?_⟩
+  apply apm_a96A07_count_eq_zero_of_large_aux_zeroFree
+    (f := fun z => g z - w)
+    (apm_a96A07_analyticOnNhd_sub_value g w ⟨ε, hε, hdiff⟩)
+  intro z hz hzero
+  have hgw : g z = w := sub_eq_zero.mp hzero
+  have := hR (g z) ⟨z, hz, rfl⟩
+  rw [hgw] at this
+  exact (not_lt_of_ge this) hw
 
 /-- The count jumps by exactly one across the curve at some point. -/
+lemma apm_a96A07_exists_crossing_aux_regular (g : ℂ → ℂ)
+    (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle) :
+    ∃ ξ ∈ apm_a96A07_circle, deriv g ξ ≠ 0 := by
+  sorry
+
+/-- At a regular boundary point, nearby targets on the two radial sides have
+zero counts differing by one. -/
+lemma apm_a96A07_exists_crossing_aux_local (g : ℂ → ℂ)
+    (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
+    (ξ : ℂ) (hξ : ξ ∈ apm_a96A07_circle) (hξ' : deriv g ξ ≠ 0) :
+    ∃ w₁ w₂ : ℂ, w₁ ∉ apm_a96A07_boundaryImage g ∧
+      w₂ ∉ apm_a96A07_boundaryImage g ∧
+      apm_a96A07_diskZeroCount g w₁ =
+        apm_a96A07_diskZeroCount g w₂ + 1 := by
+  sorry
+
 theorem apm_a96A07_exists_crossing (g : ℂ → ℂ)
     (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
     (hg_inj_circle : Set.InjOn g apm_a96A07_circle) :
     ∃ w₁ w₂ : ℂ, w₁ ∉ apm_a96A07_boundaryImage g ∧ w₂ ∉ apm_a96A07_boundaryImage g ∧
       apm_a96A07_diskZeroCount g w₁ = apm_a96A07_diskZeroCount g w₂ + 1 := by
-  sorry
+  obtain ⟨ξ, hξ, hξ'⟩ :=
+    apm_a96A07_exists_crossing_aux_regular g hg hg_inj_circle
+  exact apm_a96A07_exists_crossing_aux_local g hg hg_inj_circle ξ hξ hξ'
 -- END SEAT AREA
 
 /-- Two distinct interior zeros contribute at least two to the divisor count.
