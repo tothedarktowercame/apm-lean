@@ -2956,9 +2956,73 @@ private theorem
   sorry
 
 private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_wedge
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    [CompactSpace X] [CompactSpace Y] [T2Space X] [T2Space Y]
+    (x₀ : X) (y₀ : Y) : T2Space (Wedge x₀ y₀) := by
+  apply ConstructionTargets.compact_closed_equivalence_quotient_t2
+    (WedgeSetoid x₀ y₀)
+  have hclosed : IsClosed (Set.diagonal (Sum X Y) ∪
+      {(.inl x₀, .inr y₀), (.inr y₀, .inl x₀)}) :=
+    isClosed_diagonal.union (isClosed_singleton.union isClosed_singleton)
+  convert hclosed using 1
+  apply Set.ext
+  rintro ⟨a, b⟩
+  change Relation.EqvGen (Rel x₀ y₀) a b ↔ _
+  simp only [Set.mem_union, Set.mem_insert_iff, Set.mem_singleton_iff,
+    Set.mem_diagonal_iff]
+  constructor
+  · intro h
+    induction h with
+    | rel a b h => cases h; aesop
+    | refl => aesop
+    | symm _ _ _ ih => rcases ih with h | h | h <;> aesop
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with h | h | h <;> rcases ih₂ with h' | h' | h' <;>
+          simp_all
+  · rintro (h | h | h)
+    · exact h ▸ Relation.EqvGen.refl _
+    · rcases h with ⟨rfl, rfl⟩
+      exact Relation.EqvGen.rel _ _ (.base : Rel x₀ y₀ (.inl x₀) (.inr y₀))
+    · rcases h with ⟨rfl, rfl⟩
+      exact (Relation.EqvGen.rel _ _
+        (.base : Rel x₀ y₀ (.inl x₀) (.inr y₀))).symm
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_compactWedge
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    [CompactSpace X] [CompactSpace Y] (x₀ : X) (y₀ : Y) :
+    CompactSpace (Wedge x₀ y₀) := by
+  constructor
+  rw [← Set.range_eq_univ.mpr (surjective_quotientMap x₀ y₀)]
+  simpa only [Set.image_univ] using
+    isCompact_univ.image (continuous_quotientMap x₀ y₀)
+
+private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2 :
     T2Space apm_t97A03_modelWedge := by
-  sorry
+  letI : CompactSpace apm_t97A03_twoSphereWedge :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_compactWedge
+      apm_t97A03_north apm_t97A03_north
+  letI : T2Space apm_t97A03_twoSphereWedge :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_wedge
+      apm_t97A03_north apm_t97A03_north
+  letI : CompactSpace ConstructionTargets.StatementSurfaceModels.TwoCircles :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_compactWedge
+      (1 : Circle) (1 : Circle)
+  letI : T2Space ConstructionTargets.StatementSurfaceModels.TwoCircles :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_wedge
+      (1 : Circle) (1 : Circle)
+  letI : CompactSpace apm_t97A03_ThreeCircles :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_compactWedge
+      ConstructionTargets.StatementSurfaceModels.twoCirclesPoint (1 : Circle)
+  letI : T2Space apm_t97A03_ThreeCircles :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_wedge
+      ConstructionTargets.StatementSurfaceModels.twoCirclesPoint (1 : Circle)
+  exact
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_wedge
+      apm_t97A03_twoSphereBase
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_compact :
