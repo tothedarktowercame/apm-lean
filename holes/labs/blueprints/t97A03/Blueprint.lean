@@ -5051,6 +5051,7 @@ theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contr
       (∀ t, H apm_t97A03_north t = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_edge t) := by
   sorry
 
+set_option maxHeartbeats 800000 in
 /-- Keep quadrant one fixed, grow the collapsed edge in quadrant two,
 and shorten the inserted edge detours in quadrants three and four.
 Both sheet-one attachments follow `edge t`; every point in the contracted
@@ -5065,7 +5066,214 @@ theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contr
       (∀ t, H apm_t97A03_circleNegI t = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_edge t) ∧
       (∀ z, z ∈ apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc →
         ∀ t, OQ (H z t) = OV) := by
-  sorry
+  let E := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_edge
+  let A := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_first
+  let B := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_third
+  let D := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_fourth
+  let P := (E.trans B).trans E.symm
+  let R := E.trans D
+  let f₂ (t : unitInterval) (u : ℝ) := E.extend ((t : ℝ) * u)
+  let f₃ (t : unitInterval) (u : ℝ) := P.extend ((t : ℝ) / 4 + (1 - 3 * (t : ℝ) / 4) * u)
+  let f₄ (t : unitInterval) (u : ℝ) := R.extend ((t : ℝ) / 2 + (1 - (t : ℝ) / 2) * u)
+  have h₂0 (t : unitInterval) : f₂ t 0 = ON₀ := by simp [f₂]
+  have h₂1 (t : unitInterval) : f₂ t 1 = E t := by simp [f₂]
+  have h₃0 (t : unitInterval) : f₃ t 0 = E t := by
+    dsimp [f₃, P]
+    rw [Path.extend_trans_of_le_half _ _ (by linarith [t.2.2]),
+      Path.extend_trans_of_le_half _ _ (by linarith [t.2.2])]
+    convert E.extend_extends' t using 1 <;> congr 1 <;> ring
+  have h₃1 (t : unitInterval) : f₃ t 1 = E t := by
+    dsimp [f₃, P]
+    rw [Path.extend_trans_of_half_le _ _ (by linarith [t.2.2]), Path.extend_symm_apply]
+    convert E.extend_extends' t using 1 <;> congr 1 <;> ring
+  have h₄0 (t : unitInterval) : f₄ t 0 = E t := by
+    dsimp [f₄, R]
+    rw [Path.extend_trans_of_le_half _ _ (by linarith [t.2.2])]
+    convert E.extend_extends' t using 1 <;> congr 1 <;> ring
+  have h₄1 (t : unitInterval) : f₄ t 1 = ON₀ := by
+    dsimp [f₄]
+    rw [show (t : ℝ) / 2 + (1 - (t : ℝ) / 2) * 1 = 1 by ring]
+    exact R.extend_one
+  have h₃end (u : unitInterval) : f₃ 1 u = B u := by
+    dsimp [f₃, P]
+    rw [Path.extend_trans_of_le_half _ _ (by linarith [u.2.2]),
+      Path.extend_trans_of_half_le _ _ (by linarith [u.2.1])]
+    convert B.extend_extends' u using 1 <;> congr 1 <;> ring
+  have h₄end (u : unitInterval) : f₄ 1 u = D u := by
+    dsimp [f₄, R]
+    rw [Path.extend_trans_of_half_le _ _ (by linarith [u.2.1])]
+    convert D.extend_extends' u using 1 <;> congr 1 <;> ring
+  let α := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_angle
+  have hα (z : Circle) (hz : z.1.re = 0) :
+      α 0 2 z = 1 ∧ α (-1) 2 z = 0 ∧ α 2 (-2) z = 1 ∧ α 1 (-2) z = 0 := by
+    dsimp [α]
+    norm_num [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_angle, hz, Real.arccos_zero, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_half, Set.projIcc, Real.pi_ne_zero]
+  let U : C(Circle × unitInterval, OSC) :=
+    ⟨fun p => if 0 ≤ p.1.1.re then A (α 0 2 p.1) else f₂ p.2 (α (-1) 2 p.1), by
+      apply Continuous.if_le
+        (A.continuous.comp ((α 0 2).continuous.comp continuous_fst))
+        (E.continuous_extend.comp (by dsimp [α]; fun_prop))
+        continuous_const (by fun_prop)
+      intro p hp
+      change A (α 0 2 p.1) = f₂ p.2 (α (-1) 2 p.1)
+      rw [(hα p.1 hp.symm).1, (hα p.1 hp.symm).2.1]
+      simp only [Set.Icc.coe_zero, h₂0]
+      exact A.target⟩
+  let L : C(Circle × unitInterval, OSC) :=
+    ⟨fun p => if p.1.1.re ≤ 0 then f₃ p.2 (α 2 (-2) p.1) else f₄ p.2 (α 1 (-2) p.1), by
+      apply Continuous.if_le
+        (P.continuous_extend.comp (by dsimp [α]; fun_prop))
+        (R.continuous_extend.comp (by dsimp [α]; fun_prop))
+        (by fun_prop) continuous_const
+      intro p hp
+      change f₃ p.2 (α 2 (-2) p.1) = f₄ p.2 (α 1 (-2) p.1)
+      rw [(hα p.1 hp).2.2.1, (hα p.1 hp).2.2.2]
+      simp only [Set.Icc.coe_one, Set.Icc.coe_zero, h₃1, h₄0]⟩
+  have hUL (z : Circle) (t : unitInterval) (hz : z.1.im = 0) : U (z,t) = L (z,t) := by
+    rcases apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_real z hz with rfl | rfl
+    · change (if _ then _ else _) = (if _ then _ else _)
+      norm_num [α, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_angle, apm_t97A03_circleOne, Set.projIcc] 
+    · change (if _ then _ else _) = (if _ then _ else _)
+      norm_num [α, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_angle, apm_t97A03_circleNegOne, Set.projIcc, Real.pi_ne_zero]
+      simpa [f₂, f₃] using (h₂1 t).trans (h₃0 t).symm
+  let H : C(Circle, C(unitInterval, OSC)) := ContinuousMap.curry
+    ⟨fun p => if 0 ≤ p.1.1.im then U p else L p, by
+      apply Continuous.if_le U.continuous L.continuous continuous_const (by fun_prop)
+      intro p hp
+      exact hUL p.1 p.2 hp.symm⟩
+  have hE (u : unitInterval) : E u = Quotient.mk _ (.inr
+      (Circle.exp ((1 - (u : ℝ)) * (Real.pi / 2) + (u : ℝ) * Real.pi))) := by
+    change (Quotient.mk _ (Sum.inr (Circle.exp
+      ((1 - (u : ℝ)) * Complex.arg (apm_t97A03_circleI : ℂ) +
+        (u : ℝ) * Complex.arg (apm_t97A03_circleNegOne : ℂ)))) : OSC) = _
+    simp only [apm_t97A03_circleI, apm_t97A03_circleNegOne,
+      Complex.arg_I, Complex.arg_neg_one]
+  have hA (u : unitInterval) : A u = Quotient.mk _ (.inr
+      (Circle.exp ((u : ℝ) * (Real.pi / 2)))) := by
+    simp [A, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_first, apm_t97A03_circleArc, Path.ofLine,
+      apm_t97A03_circleOne, apm_t97A03_circleI]
+  have hB (u : unitInterval) : B u = Quotient.mk _ (.inr
+      (Circle.exp (-(Real.pi) + (u : ℝ) * (Real.pi / 2)))) := by
+    change (Quotient.mk _ (Sum.inr (Circle.exp
+      ((1 - (1 - (u : ℝ))) * Complex.arg (apm_t97A03_circleI : ℂ) +
+        (1 - (u : ℝ)) * Complex.arg (apm_t97A03_circleNegOne : ℂ)))⁻¹) : OSC) = _
+    rw [← Circle.exp_neg]
+    congr 3
+    simp only [apm_t97A03_circleI, apm_t97A03_circleNegOne,
+      Complex.arg_I, Complex.arg_neg_one]
+    ring
+  have hD (u : unitInterval) : D u = Quotient.mk _ (.inr
+      (Circle.exp (-((1 - (u : ℝ)) * (Real.pi / 2))))) := by
+    change (Quotient.mk _ (Sum.inr (Circle.exp
+      ((1 - (1 - (u : ℝ))) * Complex.arg (apm_t97A03_circleOne : ℂ) +
+        (1 - (u : ℝ)) * Complex.arg (apm_t97A03_circleI : ℂ)))⁻¹) : OSC) = _
+    simp only [apm_t97A03_circleOne, apm_t97A03_circleI, Complex.arg_one,
+      Complex.arg_I, mul_zero, zero_add, Circle.exp_neg]
+  have hαval (a b : ℝ) (z : Circle)
+      (hz : 0 ≤ a + b * (Real.arccos z.1.re / Real.pi) ∧
+        a + b * (Real.arccos z.1.re / Real.pi) ≤ 1) :
+      (α a b z : ℝ) = a + b * (Real.arccos z.1.re / Real.pi) := by
+    change (Set.projIcc (0 : ℝ) 1 (by norm_num)
+      (a + b * (Real.arccos z.1.re / Real.pi)) : ℝ) = _
+    rw [Set.projIcc_of_mem _ hz]
+  have hbounds (z : Circle) : 0 ≤ Real.arccos z.1.re / Real.pi ∧
+      Real.arccos z.1.re / Real.pi ≤ 1 :=
+    ⟨div_nonneg (Real.arccos_nonneg _) Real.pi_pos.le,
+      (div_le_one Real.pi_pos).2 (Real.arccos_le_pi _)⟩
+  have hsmall (z : Circle) (hz : 0 ≤ z.1.re) :
+      Real.arccos z.1.re / Real.pi ≤ 1 / 2 := by
+    apply (div_le_iff₀ Real.pi_pos).2
+    linarith [Real.arccos_le_pi_div_two.mpr hz]
+  have hlarge (z : Circle) (hz : z.1.re ≤ 0) :
+      1 / 2 ≤ Real.arccos z.1.re / Real.pi := by
+    apply (le_div_iff₀ Real.pi_pos).2
+    have h := Real.arccos_le_arccos hz
+    rw [Real.arccos_zero] at h
+    linarith
+  refine ⟨H, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro z
+    change (if 0 ≤ z.1.im then U (z, 0) else L (z, 0)) = _
+    simp [U, L, f₂, f₃, f₄, P, R, E, A, B, D, α, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_circle,
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_upper, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_lower]
+  · intro z
+    change (if 0 ≤ z.1.im then U (z, 1) else L (z, 1)) = _
+    have hb := hbounds z
+    by_cases hi : 0 ≤ z.1.im
+    · rw [if_pos hi]
+      have hexp : Circle.exp (Real.arccos z.1.re) = z := by
+        have h := Complex.arg_of_im_nonneg_of_ne_zero hi (Circle.coe_ne_zero z)
+        simp only [Circle.norm_coe, div_one] at h
+        rw [← h, Circle.exp_arg]
+      change (if 0 ≤ z.1.re then _ else _) = _
+      split_ifs with hr
+      · rw [hA, hαval 0 2 z (by have := hsmall z hr; constructor <;> linarith)]
+        rw [show (0 + 2 * (Real.arccos z.1.re / Real.pi)) * (Real.pi / 2) =
+          Real.arccos z.1.re by field_simp; ring, hexp]
+      · change f₂ 1 (α (-1) 2 z) = _
+        simp only [f₂, Set.Icc.coe_one, one_mul, Path.extend_extends']
+        rw [hE, hαval (-1) 2 z (by have := hlarge z (le_of_not_ge hr); constructor <;> linarith)]
+        rw [show (1 - (-1 + 2 * (Real.arccos z.1.re / Real.pi))) * (Real.pi / 2) +
+          (-1 + 2 * (Real.arccos z.1.re / Real.pi)) * Real.pi =
+          Real.arccos z.1.re by field_simp; ring, hexp]
+    · rw [if_neg hi]
+      have hexp : Circle.exp (-Real.arccos z.1.re) = z := by
+        have h := Complex.arg_of_im_neg (lt_of_not_ge hi)
+        simp only [Circle.norm_coe, div_one] at h
+        rw [← h, Circle.exp_arg]
+      change (if z.1.re ≤ 0 then _ else _) = _
+      split_ifs with hr
+      · change f₃ 1 (α 2 (-2) z) = _
+        rw [h₃end, hB, hαval 2 (-2) z (by have := hlarge z hr; constructor <;> linarith)]
+        rw [show -Real.pi + (2 + -2 * (Real.arccos z.1.re / Real.pi)) * (Real.pi / 2) =
+          -Real.arccos z.1.re by field_simp; ring, hexp]
+      · change f₄ 1 (α 1 (-2) z) = _
+        rw [h₄end, hD, hαval 1 (-2) z (by have := hsmall z (le_of_not_ge hr); constructor <;> linarith)]
+        rw [show -((1 - (1 + -2 * (Real.arccos z.1.re / Real.pi))) * (Real.pi / 2)) =
+          -Real.arccos z.1.re by field_simp; ring, hexp]
+  · intro t
+    change (if _ then U _ else L _) = _
+    norm_num [U, α, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_angle, apm_t97A03_circleOne, Set.projIcc]
+  · intro t
+    change (if _ then U _ else L _) = _
+    norm_num [U, α, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_angle, apm_t97A03_circleI, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_half, Set.projIcc]
+  · intro t
+    change (if _ then U _ else L _) = _
+    norm_num [U, α, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_angle, apm_t97A03_circleNegOne, Set.projIcc, Real.pi_ne_zero]
+    exact h₂1 t
+  · intro t
+    change (if _ then U _ else L _) = _
+    norm_num [L, α, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_angle, apm_t97A03_circleNegI, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_half, Set.projIcc]
+    exact h₃1 t
+  · intro z hz t
+    have hedge (u : unitInterval) : OQ (E u) = OV := by
+      rw [hE]
+      apply Quotient.sound
+      apply Relation.EqvGen.rel
+      apply apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.arc
+      change (Circle.exp _ : ℂ).re ≤ 0 ∧ 0 ≤ (Circle.exp _ : ℂ).im
+      have hl : Real.pi / 2 ≤ (1 - (u : ℝ)) * (Real.pi / 2) + (u : ℝ) * Real.pi := by
+        nlinarith [u.2.1, Real.pi_pos]
+      have hu : (1 - (u : ℝ)) * (Real.pi / 2) + (u : ℝ) * Real.pi ≤ Real.pi := by
+        nlinarith [u.2.2, Real.pi_pos]
+      have hre (r : ℝ) : (Circle.exp r : ℂ).re = Real.cos r := by
+        simp [Circle.coe_exp, Complex.exp_re]
+      have him (r : ℝ) : (Circle.exp r : ℂ).im = Real.sin r := by
+        simp [Circle.coe_exp, Complex.exp_im]
+      constructor
+      · rw [hre]
+        exact Real.cos_nonpos_of_pi_div_two_le_of_le hl (hu.trans (by linarith [Real.pi_pos]))
+      · rw [him]
+        exact Real.sin_nonneg_of_nonneg_of_le_pi (by linarith [Real.pi_pos]) hu
+    change OQ (if 0 ≤ z.1.im then U (z,t) else L (z,t)) = _
+    rw [if_pos hz.2]
+    change OQ (if 0 ≤ z.1.re then _ else _) = _
+    split_ifs with hr
+    · have he := (hα z (le_antisymm hz.1 hr)).1
+      rw [he, A.target]
+      rfl
+    · change OQ (E.extend ((t : ℝ) * (α (-1) 2 z : ℝ))) = _
+      exact hedge (Set.projIcc 0 1 (by norm_num) _)
+
 
 /-- A single family on the disjoint union respects the slid relation, and
 its projection also respects the stronger collapse relation. -/
