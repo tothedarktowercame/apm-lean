@@ -6609,7 +6609,61 @@ theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contr
       (∀ x, H x 0 = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_cap x) ∧
       (∀ x, H x 1 = Quotient.mk _ (.inl (1, x))) ∧
       (∀ t, H apm_t97A03_north t = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_edge t) := by
-  sorry
+  let E := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_edge
+  let G : C(apm_t97A03_S2 × unitInterval, OSC) :=
+    ⟨fun p => if (p.2 : ℝ) ≤ p.1.1 2 then
+        E (Set.projIcc 0 1 (by norm_num) ((p.2 : ℝ) + 1 - p.1.1 2))
+      else Quotient.mk _ (.inl (1, F p)), by
+      apply Continuous.if_le
+        (E.continuous.comp (continuous_projIcc.comp (by fun_prop)))
+        (continuous_coinduced_rng.comp (continuous_inl.comp
+          (continuous_const.prodMk F.continuous)))
+        (by fun_prop) (by fun_prop)
+      intro p hp
+      have hb : F p = apm_t97A03_north := hFb p.1 p.2 hp.symm
+      change E (Set.projIcc 0 1 (by norm_num)
+        ((p.2 : ℝ) + 1 - p.1.1 2)) = Quotient.mk _ (.inl (1, F p))
+      rw [show (p.2 : ℝ) + 1 - p.1.1 2 = 1 by linarith, hb]
+      simpa [Set.projIcc] using E.target⟩
+  refine ⟨ContinuousMap.curry G, ?_, ?_, ?_⟩
+  · intro x
+    dsimp [G, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_cap]
+    split_ifs with hx
+    · apply congrArg E
+      apply Subtype.ext
+      norm_num
+    · rw [hF0 x (le_of_not_ge hx)]
+  · intro x
+    dsimp only [G]
+    by_cases h : (1 : ℝ) ≤ x.1 2
+    · have hx : x = apm_t97A03_north := by
+        have hn : ‖x.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using x.2
+        have hc_le : x.1 2 ≤ 1 := by
+          calc x.1 2 ≤ |x.1 2| := le_abs_self _
+            _ = ‖x.1 2‖ := (Real.norm_eq_abs _).symm
+            _ ≤ ‖x.1‖ := PiLp.norm_apply_le x.1 2
+            _ = 1 := hn
+        have hc : x.1 2 = 1 := le_antisymm hc_le h
+        have hs := EuclideanSpace.real_norm_sq_eq x.1
+        simp [Fin.sum_univ_succ, hn, hc] at hs
+        have h0 : x.1 0 = 0 := by nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1)]
+        have h1 : x.1 1 = 0 := by nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1)]
+        apply Subtype.ext
+        ext i
+        fin_cases i
+        · simp [apm_t97A03_north, h0]
+        · simp [apm_t97A03_north, h1]
+        · simp [apm_t97A03_north, hc]
+      subst x
+      simpa [apm_t97A03_north, Set.projIcc] using E.target
+    · simp [h, hF1]
+  · intro t
+    dsimp only [G]
+    change (if (t : ℝ) ≤ 1 then E (Set.projIcc 0 1 (by norm_num) ((t : ℝ) + 1 - 1)) else _) = E t
+    rw [if_pos t.2.2]
+    congr 1
+    apply Subtype.ext
+    simp [Set.projIcc, apm_t97A03_north, t.2.1, t.2.2]
 
 theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion :
     ∃ H : C(apm_t97A03_S2, C(unitInterval, OSC)),
@@ -8240,7 +8294,61 @@ theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contr
       (∀ x, H x 1 = Quotient.mk _ (.inl (1, x))) ∧
       (∀ t, H apm_t97A03_north t =
         apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge t) := by
-  sorry
+  let E := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge
+  let G : C(apm_t97A03_S2 × unitInterval, SC) :=
+    ⟨fun p => if (p.2 : ℝ) ≤ p.1.1 2 then
+        E (Set.projIcc 0 1 (by norm_num) ((p.2 : ℝ) + 1 - p.1.1 2))
+      else Quotient.mk _ (.inl (1, F p)), by
+      apply Continuous.if_le
+        (E.continuous.comp (continuous_projIcc.comp (by fun_prop)))
+        (continuous_coinduced_rng.comp (continuous_inl.comp
+          (continuous_const.prodMk F.continuous)))
+        (by fun_prop) (by fun_prop)
+      intro p hp
+      have hb : F p = apm_t97A03_north := hFb p.1 p.2 hp.symm
+      change E (Set.projIcc 0 1 (by norm_num)
+        ((p.2 : ℝ) + 1 - p.1.1 2)) = Quotient.mk _ (.inl (1, F p))
+      rw [show (p.2 : ℝ) + 1 - p.1.1 2 = 1 by linarith, hb]
+      simpa [Set.projIcc] using E.target⟩
+  refine ⟨ContinuousMap.curry G, ?_, ?_, ?_⟩
+  · intro x
+    dsimp [G, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap]
+    split_ifs with hx
+    · apply congrArg E
+      apply Subtype.ext
+      norm_num
+    · rw [hF0 x (le_of_not_ge hx)]
+  · intro x
+    dsimp only [G]
+    by_cases h : (1 : ℝ) ≤ x.1 2
+    · have hx : x = apm_t97A03_north := by
+        have hn : ‖x.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using x.2
+        have hc_le : x.1 2 ≤ 1 := by
+          calc x.1 2 ≤ |x.1 2| := le_abs_self _
+            _ = ‖x.1 2‖ := (Real.norm_eq_abs _).symm
+            _ ≤ ‖x.1‖ := PiLp.norm_apply_le x.1 2
+            _ = 1 := hn
+        have hc : x.1 2 = 1 := le_antisymm hc_le h
+        have hs := EuclideanSpace.real_norm_sq_eq x.1
+        simp [Fin.sum_univ_succ, hn, hc] at hs
+        have h0 : x.1 0 = 0 := by nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1)]
+        have h1 : x.1 1 = 0 := by nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1)]
+        apply Subtype.ext
+        ext i
+        fin_cases i
+        · simp [apm_t97A03_north, h0]
+        · simp [apm_t97A03_north, h1]
+        · simp [apm_t97A03_north, hc]
+      subst x
+      simpa [apm_t97A03_north, Set.projIcc] using E.target
+    · simp [h, hF1]
+  · intro t
+    dsimp only [G]
+    change (if (t : ℝ) ≤ 1 then E (Set.projIcc 0 1 (by norm_num) ((t : ℝ) + 1 - 1)) else _) = E t
+    rw [if_pos t.2.2]
+    congr 1
+    apply Subtype.ext
+    simp [Set.projIcc, apm_t97A03_north, t.2.1, t.2.2]
 
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy_aux_sphere :
     ∃ H : C(apm_t97A03_S2, C(unitInterval, SC)),
