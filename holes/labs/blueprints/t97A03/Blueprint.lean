@@ -2947,13 +2947,121 @@ theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contr
 the two north points.  The other three quarter arcs are the three loop legs,
 so the quotient is homeomorphic to the fixed wedge of two spheres and three
 circles. -/
+private def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4
+    (z : Circle) : Circle :=
+  z ^ 4
+
+private def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_sphere
+    (w : apm_t97A03_TwoSpheres) : apm_t97A03_modelWedge :=
+  quotientMap apm_t97A03_twoSphereBase
+    ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+    (.inl (quotientMap apm_t97A03_north apm_t97A03_north
+      (if w.1 = 0 then .inl w.2 else .inr w.2)))
+
+private def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg
+    (j : Fin 3) (z : Circle) : apm_t97A03_modelWedge :=
+  let z4 :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4 z
+  quotientMap apm_t97A03_twoSphereBase
+    ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+    (.inr (match j with
+      | ⟨0, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld
+          (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoLeft z4)
+      | ⟨1, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld
+          (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight z4)
+      | ⟨2, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew z4))
+
+private noncomputable def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw
+    (x : Sum apm_t97A03_TwoSpheres Circle) : apm_t97A03_modelWedge := by
+  classical
+  exact match x with
+  | .inl w =>
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_sphere w
+  | .inr z =>
+      if z.1.re ≤ 0 ∧ 0 ≤ z.1.im then apm_t97A03_modelWedgeBase
+      else if 0 ≤ z.1.re ∧ 0 ≤ z.1.im then
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 0 z
+      else if z.1.re ≤ 0 ∧ z.1.im ≤ 0 then
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 1 z
+      else
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 2 z
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous :
+    Continuous
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_respects
+    {x y : Sum apm_t97A03_TwoSpheres Circle}
+    (h : Relation.EqvGen
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel x y) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw x =
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw y := by
+  sorry
+
+private noncomputable def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space →
+      apm_t97A03_modelWedge :=
+  Quotient.lift
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw
+    (fun _ _ h =>
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_respects h)
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map_continuous :
+    Continuous
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map := by
+  apply Continuous.quotient_lift
+  exact
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map_surjective :
+    Function.Surjective
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel
+    {x y : Sum apm_t97A03_TwoSpheres Circle}
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw x =
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw y) :
+    Relation.EqvGen
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel x y := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map_injective :
+    Function.Injective
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map := by
+  rintro ⟨x⟩ ⟨y⟩ h
+  exact Quotient.sound
+    (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel h)
+
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv :
     ∃ e :
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space ≃
           apm_t97A03_modelWedge,
       Continuous e := by
-  sorry
+  let f :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map
+  let e :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space ≃
+        apm_t97A03_modelWedge :=
+    Equiv.ofBijective f ⟨
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map_injective,
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map_surjective⟩
+  exact ⟨e,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map_continuous⟩
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2_aux_wedge
