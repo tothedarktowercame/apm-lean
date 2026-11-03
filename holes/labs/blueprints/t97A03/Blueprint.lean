@@ -3725,6 +3725,266 @@ noncomputable instance : TopologicalSpace apm_t97A03_invariants_aux_twoCircle_ho
     (fun x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) ↦ Quotient.mk _ x)
     inferInstance
 
+/-- The canonical continuous map to the edge-collapse quotient. -/
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q :
+    ContinuousMap apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space where
+  toFun := Quotient.lift (fun x => Quotient.mk _ x) (by
+    intro x y h
+    apply Quotient.sound
+    induction h with
+    | rel x y h =>
+      apply Relation.EqvGen.rel
+      cases h with
+      | c0a => exact .c0a
+      | c0b => exact .c0b
+      | c1a => exact .c1a
+      | c1b => exact .c1b
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y h ih => exact Relation.EqvGen.symm x y ih
+    | trans x y z h₁ h₂ ih₁ ih₂ => exact Relation.EqvGen.trans x y z ih₁ ih₂)
+  continuous_toFun := continuous_coinduced_rng.quotient_lift _
+
+/-- Squaring a real point on the unit circle gives the basepoint. -/
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_square_boundary (z : Circle) (h : z.1.im = 0) :
+    z * z = 1 := by
+  apply Circle.ext
+  apply Complex.ext
+  · have hn := Circle.normSq_coe z
+    rw [Complex.normSq_apply] at hn
+    simp only [Circle.coe_mul, Complex.mul_re, Circle.coe_one, Complex.one_re]
+    nlinarith
+  · simp [h, Complex.mul_im]
+
+/-- Collapse the upper semicircle and run once around the circle on the lower one. -/
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circle : ContinuousMap Circle Circle where
+  toFun z := if 0 ≤ z.1.im then 1 else z * z
+  continuous_toFun := by
+    apply Continuous.if_le continuous_const (continuous_id.mul continuous_id)
+      continuous_const (Complex.continuous_im.comp continuous_subtype_val)
+    intro z hz
+    exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_square_boundary z hz.symm).symm
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circle_arc (z : Circle)
+    (hz : z ∈ apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_arc) :
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circle z = 1 := by
+  exact if_pos hz
+
+section
+local notation "SC" => apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover
+local notation "N₀" => (Quotient.mk _ (Sum.inl (0, apm_t97A03_north)) : SC)
+local notation "N₁" => (Quotient.mk _ (Sum.inl (1, apm_t97A03_north)) : SC)
+
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge : Path N₀ N₁ :=
+  ((apm_t97A03_circleArc apm_t97A03_circleOne apm_t97A03_circleNegOne).map
+    (show Continuous (fun z : Circle => (Quotient.mk _ (.inr (0, z)) : SC)) from
+      continuous_coinduced_rng.comp (continuous_inr.comp (continuous_const.prodMk continuous_id)))).cast
+    (Quotient.sound (Relation.EqvGen.rel _ _
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel.c0a)).symm
+    (Quotient.sound (Relation.EqvGen.rel _ _
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel.c0b)).symm
+
+/-- Polynomial double-angle map; its restriction to the lower hemisphere
+stretches that hemisphere over the whole sphere. -/
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold : ContinuousMap apm_t97A03_S2 apm_t97A03_S2 where
+  toFun x := ⟨WithLp.toLp 2 ![-2 * x.1 2 * x.1 0,
+      -2 * x.1 2 * x.1 1, 1 - 2 * (x.1 2)^2], by
+    rw [Metric.mem_sphere, dist_zero_right]
+    have hx : (x.1 0)^2 + (x.1 1)^2 + (x.1 2)^2 = 1 := by
+      have hn : ‖x.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using x.2
+      have hs := EuclideanSpace.real_norm_sq_eq x.1
+      simp [Fin.sum_univ_succ, hn] at hs
+      linarith
+    have hs := EuclideanSpace.real_norm_sq_eq
+      (WithLp.toLp 2 ![-2 * x.1 2 * x.1 0, -2 * x.1 2 * x.1 1, 1 - 2 * (x.1 2)^2])
+    simp [Fin.sum_univ_succ] at hs
+    have hn := norm_nonneg (WithLp.toLp 2 ![-2 * x.1 2 * x.1 0,
+      -2 * x.1 2 * x.1 1, 1 - 2 * (x.1 2)^2])
+    simp only [neg_mul] at *
+    nlinarith [congrArg (fun t : ℝ => 4 * (x.1 2)^2 * t) hx]⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold_equator (x : apm_t97A03_S2) (hx : x.1 2 = 0) :
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold x = apm_t97A03_north := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;> simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold, apm_t97A03_north, hx]
+
+/-- Pinch the upper hemisphere onto the tree edge, with the pole at N₀. -/
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap : ContinuousMap apm_t97A03_S2 SC where
+  toFun x := if 0 ≤ x.1 2 then
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge (Set.projIcc 0 1 (by norm_num) (1 - x.1 2))
+    else Quotient.mk _ (.inl (1, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold x))
+  continuous_toFun := by
+    apply Continuous.if_le
+      (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge.continuous.comp (continuous_projIcc.comp (by fun_prop)))
+      (continuous_coinduced_rng.comp (continuous_inl.comp
+        (continuous_const.prodMk apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold.continuous)))
+      continuous_const (by fun_prop)
+    intro x hx
+    simp only [Function.comp_apply]
+    rw [show 1 - x.1 2 = 1 by linarith]
+    simp only [Set.projIcc_of_mem (show (0 : ℝ) ≤ 1 by norm_num) (show (1 : ℝ) ∈ Set.Icc 0 1 by norm_num)]
+    rw [show (⟨(1 : ℝ), by norm_num⟩ : unitInterval) = 1 from rfl,
+      Path.target, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold_equator x hx.symm]
+
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_upperOne : Path N₁ N₀ :=
+  ((apm_t97A03_circleArc apm_t97A03_circleOne apm_t97A03_circleNegOne).map
+    (show Continuous (fun z : Circle => (Quotient.mk _ (.inr (1, z)) : SC)) from
+      continuous_coinduced_rng.comp (continuous_inr.comp (continuous_const.prodMk continuous_id)))).cast
+    (Quotient.sound (Relation.EqvGen.rel _ _
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel.c1a)).symm
+    (Quotient.sound (Relation.EqvGen.rel _ _
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel.c1b)).symm
+
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_lowerCircle :
+    Path apm_t97A03_circleNegOne apm_t97A03_circleOne :=
+  ((apm_t97A03_circleArc apm_t97A03_circleOne apm_t97A03_circleNegOne).map
+    (show Continuous (fun z : Circle => z⁻¹) from continuous_inv)).symm.cast
+    (by apply Circle.ext; simp [apm_t97A03_circleNegOne])
+    (by apply Circle.ext; simp [apm_t97A03_circleOne])
+
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_lowerOne : Path N₀ N₁ :=
+  (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_lowerCircle.map
+    (show Continuous (fun z : Circle => (Quotient.mk _ (.inr (1, z)) : SC)) from
+      continuous_coinduced_rng.comp (continuous_inr.comp (continuous_const.prodMk continuous_id)))).cast
+    (Quotient.sound (Relation.EqvGen.rel _ _
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel.c1b)).symm
+    (Quotient.sound (Relation.EqvGen.rel _ _
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel.c1a)).symm
+
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle : ContinuousMap Circle unitInterval where
+  toFun z := Set.projIcc 0 1 (by norm_num) (Real.arccos z.1.re / Real.pi)
+  continuous_toFun := (continuous_projIcc (a := (0 : ℝ)) (b := 1) (h := by norm_num)).comp (by fun_prop)
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_real (z : Circle) (h : z.1.im = 0) :
+    z = apm_t97A03_circleOne ∨ z = apm_t97A03_circleNegOne := by
+  have hn := Circle.normSq_coe z
+  rw [Complex.normSq_apply] at hn
+  have hr : z.1.re = 1 ∨ z.1.re = -1 := by
+    have : (z.1.re - 1) * (z.1.re + 1) = 0 := by nlinarith
+    rcases mul_eq_zero.mp this with h | h
+    · left; linarith
+    · right; linarith
+  rcases hr with hr | hr
+  · left; apply Circle.ext; apply Complex.ext <;> simp [apm_t97A03_circleOne, hr, h]
+  · right; apply Circle.ext; apply Complex.ext <;> simp [apm_t97A03_circleNegOne, hr, h]
+
+/-- Circle one includes the necessary edge detour at its moved vertex. -/
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne : ContinuousMap Circle SC where
+  toFun z := if 0 ≤ z.1.im then
+      (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge.trans apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_upperOne) (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle z)
+    else (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_lowerOne.trans apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge.symm) (unitInterval.symm (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle z))
+  continuous_toFun := by
+    apply Continuous.if_le
+      ((apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge.trans apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_upperOne).continuous.comp apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle.continuous)
+      ((apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_lowerOne.trans apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge.symm).continuous.comp
+        (unitInterval.continuous_symm.comp apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle.continuous))
+      continuous_const (Complex.continuous_im.comp continuous_subtype_val)
+    intro z hz
+    simp only [Function.comp_apply]
+    rcases apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_real z hz.symm with rfl | rfl
+    · have ha : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle apm_t97A03_circleOne = 0 := by
+        apply Subtype.ext
+        simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle, apm_t97A03_circleOne, Set.projIcc]
+      rw [ha]; simp
+    · have ha : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle apm_t97A03_circleNegOne = 1 := by
+        apply Subtype.ext
+        simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle, apm_t97A03_circleNegOne, Set.projIcc, Real.pi_ne_zero]
+      rw [ha]; simp
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap_north : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap apm_t97A03_north = N₀ := by
+  simpa [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap, apm_t97A03_north, Set.projIcc] using apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge.source
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne_endpoints :
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne apm_t97A03_circleOne = N₀ ∧
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne apm_t97A03_circleNegOne = N₀ := by
+  constructor <;>
+    simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_angle,
+      apm_t97A03_circleOne, apm_t97A03_circleNegOne, Set.projIcc, Real.pi_ne_zero]
+
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw :
+    ContinuousMap (Sum apm_t97A03_TwoSpheres (Fin 2 × Circle)) SC where
+  toFun := Sum.elim
+    (fun w => if w.1 = 0 then Quotient.mk _ (.inl (0, w.2)) else apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap w.2)
+    (fun w => if w.1 = 0 then Quotient.mk _ (.inr (0, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circle w.2))
+      else apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne w.2)
+  continuous_toFun := by
+    rw [continuous_sum_dom]
+    constructor <;> rw [continuous_prod_of_discrete_left] <;> intro i <;> fin_cases i
+    · change Continuous (fun x : apm_t97A03_S2 => (Quotient.mk _ (.inl (0, x)) : SC))
+      apply Continuous.comp continuous_coinduced_rng
+      exact continuous_inl.comp (continuous_const.prodMk continuous_id)
+    · exact apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap.continuous
+    · change Continuous (fun z : Circle => (Quotient.mk _ (.inr (0, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circle z)) : SC))
+      apply Continuous.comp continuous_coinduced_rng
+      exact continuous_inr.comp (continuous_const.prodMk apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circle.continuous)
+    · exact apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne.continuous
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw_arc (z : Circle)
+    (hz : z ∈ apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_arc) :
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw (.inr (0, z)) = N₀ := by
+  change (if (0 : Fin 2) = 0 then Quotient.mk _ (.inr (0, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circle z))
+    else apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne z) = N₀
+  rw [if_pos rfl, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circle_arc z hz]
+  exact Quotient.sound (Relation.EqvGen.rel _ _
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel.c0a)
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_respects (x y : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle))
+    (h : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel x y) :
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw x = apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw y := by
+  have h0 : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw (.inl (0, apm_t97A03_north)) = N₀ := rfl
+  have h1 : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw (.inl (1, apm_t97A03_north)) = N₀ :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap_north
+  cases h with
+  | c0a => rw [h0]; apply apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw_arc; simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_arc, apm_t97A03_circleOne]
+  | c0b => rw [h1]; apply apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw_arc; simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_arc, apm_t97A03_circleNegOne]
+  | c1a => exact apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne_endpoints.1.trans h1.symm
+  | c1b => exact apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_circleOne_endpoints.2.trans h0.symm
+  | arc z hz => exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw_arc z hz).trans h0.symm
+
+/-- The explicit inverse candidate: fix sheet zero, pinch sheet one, and
+insert the tree-edge detours into the two circles. -/
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s :
+    ContinuousMap apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space SC where
+  toFun := Quotient.lift apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw (by
+    intro x y h
+    induction h with
+    | rel x y h => exact apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_respects x y h
+    | refl x => rfl
+    | symm x y h ih => exact ih.symm
+    | trans x y z h₁ h₂ ih₁ ih₂ => exact ih₁.trans ih₂)
+  continuous_toFun := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_raw.continuous.quotient_lift _
+
+
+/-- Undo the pinch and edge detours in the original slid cover.  The moving
+north pole follows `edge` from N₀ to N₁.  Extend that motion across the cap
+by shrinking its radius, interpolate the polar angle on its complement,
+and shorten the detours on circle one.  On circle zero the upper arc grows
+from the constant path and the lower arc loses its initial edge traversal.
+These motions agree at the four attaching points. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy :
+    (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s.comp apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q).Homotopic (ContinuousMap.id SC) := by
+  sorry
+
+/-- After projection the entire edge is constant.  On sheet one the cap
+pinch is a degree-one polar reparametrisation, homotopic relative to the
+north pole to the identity by interpolation of the polar angle.  On the
+three surviving arcs, remove the constant edge segments by interval
+reparametrisation.  All four pieces fix the collapsed vertex, so the
+homotopies descend through the collapse relation. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_right_homotopy :
+    (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q.comp apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s).Homotopic
+      (ContinuousMap.id apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space) := by
+  sorry
+
+end
+
 /-- Collapsing the closed tree edge preserves homotopy type.  Construct the
 inverse by pinching a polar cap of one sphere sheet onto the connecting arc;
 a circle-only reparametrisation cannot separate the two north points that
@@ -3734,7 +3994,10 @@ theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contr
     Nonempty (ContinuousMap.HomotopyEquiv
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space) := by
-  sorry
+  exact ⟨{ toFun := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q
+           invFun := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s
+           left_inv := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy
+           right_inv := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_right_homotopy }⟩
 
 /-- After contraction both north points coincide.  The lower semicircle of
 circle zero and the two semicircles of circle one are three loops at that
@@ -4444,4 +4707,4 @@ theorem apm_t97a03
     A B hAB Y p hp hdegree
   exact ⟨hmodel, apm_t97A03_bridge_invariants_of_model Y y hmodel⟩
 
-#print axioms apm_t97a03
+
