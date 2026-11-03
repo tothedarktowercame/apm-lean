@@ -2324,7 +2324,24 @@ lemma apm_t02a03_sector_aux_L2a_box_aux_theta_aux_angle_bound
     (h : (17 / 25 : ℝ) ≤ x / Real.sqrt (x ^ 2 + y ^ 2)) :
     Real.arctan (y / x) ∈
       Set.Icc (-Real.arccos (17 / 25)) (Real.arccos (17 / 25)) := by
-  sorry
+  set t := Real.arctan (y / x) with ht
+  have hcos : Real.cos t = x / Real.sqrt (x ^ 2 + y ^ 2) := by
+    rw [ht, Real.cos_arctan]
+    have h1 : (1 : ℝ) + (y / x) ^ 2 = (x ^ 2 + y ^ 2) / x ^ 2 := by
+      field_simp
+    rw [h1, Real.sqrt_div' _ (by positivity), Real.sqrt_sq hx.le]
+    have hs : 0 < Real.sqrt (x ^ 2 + y ^ 2) := Real.sqrt_pos.mpr (by positivity)
+    field_simp
+  have habs : |t| ≤ Real.pi := by
+    rw [abs_le]
+    have h1 := Real.neg_pi_div_two_lt_arctan (y / x)
+    have h2 := Real.arctan_lt_pi_div_two (y / x)
+    have := Real.pi_pos
+    constructor <;> linarith
+  have hle : |t| ≤ Real.arccos (17 / 25) := by
+    rw [← Real.arccos_cos (abs_nonneg t) habs, Real.cos_abs]
+    exact Real.arccos_le_arccos (hcos ▸ h)
+  exact abs_le.mp hle
 
 lemma apm_t02a03_sector_aux_L2a_box_aux_theta_aux_positive (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
