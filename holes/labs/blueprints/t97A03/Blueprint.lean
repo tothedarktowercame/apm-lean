@@ -2087,7 +2087,48 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
     (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
     (σ : apm_t97A03_BaseSpace A B → Y)
     (hσcont : Continuous σ) (hσ : Function.RightInverse σ p) : False := by
-  sorry
+  let U : Set Y := {y | σ (p y) = y}
+  have hcomp : p ∘ (σ ∘ p) = p ∘ id := by
+    funext y
+    exact hσ (p y)
+  have hUclosed : IsClosed U := by
+    exact hp.isSeparatedMap.isClosed_eqLocus
+      (hσcont.comp hp.continuous) continuous_id hcomp
+  have hUopen : IsOpen U := by
+    exact hp.isLocalHomeomorph.isLocallyInjective.isOpen_eqLocus
+      (hσcont.comp hp.continuous) continuous_id hcomp
+  let x : apm_t97A03_BaseSpace A B := apm_t97A03_baseCircle A B A
+  have hUnonempty : U.Nonempty := by
+    refine ⟨σ x, ?_⟩
+    change σ (p (σ x)) = σ x
+    rw [hσ x]
+  have hU : U = Set.univ := IsClopen.eq_univ ⟨hUclosed, hUopen⟩ hUnonempty
+  have hall (y : Y) : σ (p y) = y := by
+    have : y ∈ U := hU.symm ▸ Set.mem_univ y
+    exact this
+  let F := p ⁻¹' ({x} : Set (apm_t97A03_BaseSpace A B))
+  have hFnonempty : Nonempty F := by
+    refine ⟨⟨σ x, ?_⟩⟩
+    change p (σ x) = x
+    exact hσ x
+  have hFsubsingleton : Subsingleton F := by
+    constructor
+    intro a b
+    apply Subtype.ext
+    have ha : p a = x := by
+      simpa only [F, Set.mem_preimage, Set.mem_singleton_iff] using a.property
+    have hb : p b = x := by
+      simpa only [F, Set.mem_preimage, Set.mem_singleton_iff] using b.property
+    calc
+      (a : Y) = σ (p a) := (hall a).symm
+      _ = σ x := congrArg σ ha
+      _ = σ (p b) := (congrArg σ hb).symm
+      _ = (b : Y) := hall b
+  letI : Nonempty F := hFnonempty
+  letI : Subsingleton F := hFsubsingleton
+  have hone : Nat.card F = 1 := Nat.card_unique
+  have htwo : Nat.card F = 2 := hdegree x
+  omega
 
 /-- If both literal transports fix both north sheets, the sheet-zero sphere
 lift and its two arc lifts descend to a global section.  Its image is clopen
