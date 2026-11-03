@@ -3476,86 +3476,6 @@ theorem apm_t02a03_sector_aux_L5_piDelta :
 
 def apm_t02a03_sector_aux_q0 : ℝ × ℝ × ℝ := (0, 0, 1)
 
-lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_lambda :
-    ContinuousOn apm_t02a03_sector_aux_lambda
-      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta_aux :
-    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
-      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  have hlambda := apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_lambda
-  clear hlambda
-  sorry
-
-lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta :
-    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
-      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta_aux
-
-lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z_aux :
-    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
-      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z :
-    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
-      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z_aux
-
-lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v_aux :
-    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
-      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v :
-    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
-      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v_aux
-
-theorem apm_t02a03_sector_aux_L6a_r_continuous_off_q0 :
-    ContinuousOn apm_t02a03_sector_aux_r
-      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta.prodMk
-    (apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z.prodMk
-      apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v)
-
-lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta_aux :
-    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
-      apm_t02a03_sector_aux_q0 := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta :
-    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
-      apm_t02a03_sector_aux_q0 := by
-  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta_aux
-
-lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z_aux :
-    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
-      apm_t02a03_sector_aux_q0 := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z :
-    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
-      apm_t02a03_sector_aux_q0 := by
-  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z_aux
-
-lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v_aux :
-    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
-      apm_t02a03_sector_aux_q0 := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v :
-    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
-      apm_t02a03_sector_aux_q0 := by
-  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v_aux
-
-theorem apm_t02a03_sector_aux_L6b_r_continuous_at_q0 :
-    ContinuousAt apm_t02a03_sector_aux_r apm_t02a03_sector_aux_q0 := by
-  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta.prodMk
-    (apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z.prodMk
-      apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v)
-
 lemma apm_t02a03_sector_aux_L6c_r_fixes_target_aux_torus (q : ℝ × ℝ × ℝ)
     (hbox : apm_t02a03_sector_aux_box q)
     (hq : q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1)) :
@@ -3749,6 +3669,384 @@ theorem apm_t02a03_sector_aux_L6d_r_lands_target (q : ℝ × ℝ × ℝ) :
       apm_t02a03_sector_aux_L5_piDelta.2.1
         ((2 * apm_t02a03_sector_aux_lambda q - 1) * q.1,
           (2 * apm_t02a03_sector_aux_lambda q - 1) * q.2.1)⟩
+
+lemma apm_t02a03_sector_aux_L6_aux_a_zero : apm_t02a03_sector_aux_a 0 = 1 / 4 := by
+  unfold apm_t02a03_sector_aux_a
+  rw [show (1 / 16 - (0 : ℝ) ^ 2) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]
+
+lemma apm_t02a03_sector_aux_L6_aux_cos_of_abs_le (x : ℝ)
+    (hx : |x| ≤ apm_t02a03_sector_aux_thetaOne) : (17 / 25 : ℝ) ≤ Real.cos x := by
+  rw [← Real.cos_abs]
+  have hpi : apm_t02a03_sector_aux_thetaOne ≤ Real.pi := Real.arccos_le_pi _
+  calc (17 / 25 : ℝ) = Real.cos apm_t02a03_sector_aux_thetaOne := by
+        unfold apm_t02a03_sector_aux_thetaOne; rw [Real.cos_arccos (by norm_num) (by norm_num)]
+    _ ≤ Real.cos |x| := Real.cos_le_cos_of_nonneg_of_le_pi (abs_nonneg _) hpi hx
+
+/-- A globally continuous stand-in for `vArc` that agrees with it on the box angles. -/
+noncomputable def apm_t02a03_sector_aux_L6_aux_V (θ : ℝ) : ℝ :=
+  (2 / 5) / (max (3 / 20) (min (apm_t02a03_sector_aux_a 0) (apm_t02a03_sector_aux_b θ 0)) + 1 / 4)
+
+lemma apm_t02a03_sector_aux_L6_aux_V_continuous : Continuous apm_t02a03_sector_aux_L6_aux_V := by
+  have hm : Continuous fun θ : ℝ =>
+      min (apm_t02a03_sector_aux_a 0) (apm_t02a03_sector_aux_b θ 0) :=
+    apm_t02a03_sector_aux_L1_aux_minab_continuous.comp (continuous_id.prodMk continuous_const)
+  unfold apm_t02a03_sector_aux_L6_aux_V
+  exact continuous_const.div (continuous_const.max hm |>.add continuous_const) (fun θ => by
+    have := le_max_left (3 / 20 : ℝ) (min (apm_t02a03_sector_aux_a 0) (apm_t02a03_sector_aux_b θ 0))
+    linarith)
+
+lemma apm_t02a03_sector_aux_L6_aux_vArc_eq_V (θ : ℝ) (hθ : (17 / 25 : ℝ) ≤ Real.cos θ) :
+    apm_t02a03_sector_aux_vArc θ = apm_t02a03_sector_aux_L6_aux_V θ := by
+  have hc := apm_t02a03_sector_aux_L1_aux_c_eq_min θ 0 (by norm_num) hθ
+  have hge := apm_t02a03_sector_aux_L6e_aux_c_ge θ
+  unfold apm_t02a03_sector_aux_vArc apm_t02a03_sector_aux_L6_aux_V
+  rw [← hc, max_eq_right hge]
+
+lemma apm_t02a03_sector_aux_L6_aux_vArc_zero : apm_t02a03_sector_aux_vArc 0 = 1 := by
+  have hD : apm_t02a03_sector_aux_Delta (0, 0) := by
+    refine ⟨by norm_num, ?_⟩
+    simp only [apm_t02a03_sector_aux_L6_aux_a_zero, Real.cos_zero]; norm_num
+  have hb : apm_t02a03_sector_aux_b 0 0 = 3 / 20 := by
+    unfold apm_t02a03_sector_aux_b
+    rw [apm_t02a03_sector_aux_L6_aux_a_zero, Real.sin_zero, Real.cos_zero,
+      show ((1 : ℝ) + 1 / 4) ^ 2 - 144 / 25 * 0 ^ 2 = (5 / 4) ^ 2 by norm_num,
+      Real.sqrt_sq (by norm_num)]
+    norm_num
+  unfold apm_t02a03_sector_aux_vArc apm_t02a03_sector_aux_c
+  rw [if_pos hD, hb]; norm_num
+
+lemma apm_t02a03_sector_aux_L6_aux_piDelta_zero :
+    apm_t02a03_sector_aux_piDelta (0, 0) = (0, 0) := by
+  have hT := Real.arccos_nonneg (6 / (5 * (1 + apm_t02a03_sector_aux_a
+    (max (-3 / 20) (min (3 / 20) 0)))))
+  show (max (-apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) 0)))
+      (min (apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) 0))) 0),
+      max (-3 / 20) (min (3 / 20) (0 : ℝ))) = (0, 0)
+  have hz : max (-3 / 20 : ℝ) (min (3 / 20) 0) = 0 := by norm_num
+  rw [hz]
+  have hT0 : 0 ≤ apm_t02a03_sector_aux_Theta 0 := Real.arccos_nonneg _
+  rw [min_eq_right hT0, max_eq_right (by linarith)]
+
+lemma apm_t02a03_sector_aux_L6_aux_piDelta_fst_abs (q : ℝ × ℝ) :
+    |(apm_t02a03_sector_aux_piDelta q).1| ≤ |q.1| := by
+  have hT : 0 ≤ apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2)) :=
+    Real.arccos_nonneg _
+  show |max (-apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2)))
+      (min (apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2))) q.1)| ≤ |q.1|
+  rw [abs_le]
+  constructor
+  · have h1 := neg_abs_le q.1
+    have h2 : -|q.1| ≤ min (apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2))) q.1 :=
+      le_min (by linarith [abs_nonneg q.1]) h1
+    exact h2.trans (le_max_right _ _)
+  · exact max_le (by linarith [abs_nonneg q.1]) ((min_le_right _ _).trans (le_abs_self _))
+
+lemma apm_t02a03_sector_aux_L6_aux_piDelta_snd_abs (q : ℝ × ℝ) :
+    |(apm_t02a03_sector_aux_piDelta q).2| ≤ |q.2| := by
+  show |max (-3 / 20 : ℝ) (min (3 / 20) q.2)| ≤ |q.2|
+  rw [abs_le]
+  constructor
+  · have h1 := neg_abs_le q.2
+    exact (le_min (by linarith [abs_nonneg q.2]) h1).trans (le_max_right _ _)
+  · exact max_le (by linarith [abs_nonneg q.2]) ((min_le_right _ _).trans (le_abs_self _))
+
+/-- `r` without the branch on `λ`: the two branches agree at `λ = 1/2`. -/
+lemma apm_t02a03_sector_aux_L6_aux_r_eq (q : ℝ × ℝ × ℝ) :
+    apm_t02a03_sector_aux_r q =
+      ((apm_t02a03_sector_aux_piDelta
+          (max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.1,
+            max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.2.1)).1 +
+          max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) * q.1,
+        (apm_t02a03_sector_aux_piDelta
+          (max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.1,
+            max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.2.1)).2,
+        apm_t02a03_sector_aux_vArc (max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) * q.1)) := by
+  unfold apm_t02a03_sector_aux_r
+  simp only
+  split_ifs with h
+  · rw [max_eq_left (by linarith : 2 * apm_t02a03_sector_aux_lambda q - 1 ≤ 0),
+      max_eq_right (by linarith : (0 : ℝ) ≤ 1 - 2 * apm_t02a03_sector_aux_lambda q),
+      zero_mul, zero_mul, apm_t02a03_sector_aux_L6_aux_piDelta_zero]
+    simp
+  · push_neg at h
+    rw [max_eq_right (by linarith : (0 : ℝ) ≤ 2 * apm_t02a03_sector_aux_lambda q - 1),
+      max_eq_left (by linarith : 1 - 2 * apm_t02a03_sector_aux_lambda q ≤ 0),
+      zero_mul, add_zero, apm_t02a03_sector_aux_L6_aux_vArc_zero]
+
+lemma apm_t02a03_sector_aux_L6_aux_vArc_r (q : ℝ × ℝ × ℝ) (hq : apm_t02a03_sector_aux_box q) :
+    apm_t02a03_sector_aux_vArc (max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) * q.1) =
+      apm_t02a03_sector_aux_L6_aux_V (max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) * q.1) := by
+  have hl := apm_t02a03_sector_aux_L6e_aux_lambda_mem q hq.2.2.2
+  apply apm_t02a03_sector_aux_L6_aux_vArc_eq_V
+  apply apm_t02a03_sector_aux_L6_aux_cos_of_abs_le
+  have hm0 : 0 ≤ max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) := le_max_left _ _
+  have hm1 : max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) ≤ 1 :=
+    max_le (by norm_num) (by linarith [hl.1])
+  have hθ : |q.1| ≤ apm_t02a03_sector_aux_thetaOne := abs_le.mpr ⟨hq.1.1, hq.1.2⟩
+  rw [abs_mul, abs_of_nonneg hm0]
+  nlinarith [abs_nonneg q.1]
+
+/-- On the box the denominator of `λ` vanishes only at `q0`: there the arc
+point is `(θ, 0, 1)` with `(θ, 0) ∈ Δ`, and `vArc θ = 1` forces `b θ 0 = 3/20`,
+which after squaring is `cos θ = 1`. -/
+lemma apm_t02a03_sector_aux_L6_aux_denom_ne (q : ℝ × ℝ × ℝ) (hq : apm_t02a03_sector_aux_box q)
+    (hq0 : q ≠ apm_t02a03_sector_aux_q0) :
+    apm_t02a03_sector_aux_deltaArc q + apm_t02a03_sector_aux_deltaD q ≠ 0 := by
+  obtain ⟨θ, z, v⟩ := q
+  intro h0
+  have ha : 0 ≤ |z| := abs_nonneg _
+  have hb : 0 ≤ |v - apm_t02a03_sector_aux_vArc θ| := abs_nonneg _
+  have hdist := dist_nonneg (x := (θ, z)) (y := apm_t02a03_sector_aux_piDelta (θ, z))
+  have hv1 : v ≤ 1 := hq.2.2.2
+  unfold apm_t02a03_sector_aux_deltaArc apm_t02a03_sector_aux_deltaD at h0
+  simp only at h0
+  have hz : |z| = 0 := by linarith
+  have hvA : |v - apm_t02a03_sector_aux_vArc θ| = 0 := by linarith
+  have hv : v = 1 := by linarith
+  have hd : dist (θ, z) (apm_t02a03_sector_aux_piDelta (θ, z)) = 0 := by linarith
+  have hz0 : z = 0 := abs_eq_zero.mp hz
+  subst hz0 hv
+  have hfix : apm_t02a03_sector_aux_piDelta (θ, 0) = (θ, 0) := (dist_eq_zero.mp hd).symm
+  have hD : apm_t02a03_sector_aux_Delta (θ, 0) := by
+    have := apm_t02a03_sector_aux_L5_piDelta_aux_maps (θ, 0)
+    rwa [hfix] at this
+  have hvarc : apm_t02a03_sector_aux_vArc θ = 1 := by
+    have := abs_eq_zero.mp hvA; linarith
+  have hcpos := apm_t02a03_sector_aux_L6e_aux_c_ge θ
+  have hc : apm_t02a03_sector_aux_c θ 0 = 3 / 20 := by
+    unfold apm_t02a03_sector_aux_vArc at hvarc
+    rw [div_eq_one_iff_eq (by linarith)] at hvarc
+    linarith
+  unfold apm_t02a03_sector_aux_c at hc
+  rw [if_pos hD] at hc
+  obtain ⟨-, hcos⟩ := hD
+  simp only [apm_t02a03_sector_aux_L6_aux_a_zero] at hcos
+  have hc24 : (24 / 25 : ℝ) ≤ Real.cos θ := by
+    have : (6 : ℝ) / (5 * (1 + 1 / 4)) = 24 / 25 := by norm_num
+    linarith
+  unfold apm_t02a03_sector_aux_b at hc
+  rw [apm_t02a03_sector_aux_L6_aux_a_zero] at hc
+  have htrig := Real.sin_sq_add_cos_sq θ
+  have hR : 0 ≤ (1 + 1 / 4 : ℝ) ^ 2 - 144 / 25 * Real.sin θ ^ 2 := by
+    nlinarith [Real.cos_le_one θ]
+  have hsq := Real.sq_sqrt hR
+  have hX : Real.sqrt ((1 + 1 / 4 : ℝ) ^ 2 - 144 / 25 * Real.sin θ ^ 2) =
+      12 / 5 * Real.cos θ - 23 / 20 := by linarith
+  rw [hX] at hsq
+  have hcos1 : Real.cos θ = 1 := by linear_combination (-(25 : ℝ) / 138) * hsq + ((144 : ℝ) / 138) * htrig
+  have hθpi : |θ| ≤ Real.pi := by
+    have := Real.arccos_le_pi (17 / 25 : ℝ)
+    have h1 := hq.1
+    unfold apm_t02a03_sector_aux_thetaOne at h1
+    exact abs_le.mpr ⟨by linarith [h1.1], by linarith [h1.2]⟩
+  have hθ0 : θ = 0 := (Real.cos_eq_one_iff_of_lt_of_lt (by linarith [abs_le.mp hθpi, Real.pi_pos])
+    (by linarith [abs_le.mp hθpi, Real.pi_pos])).mp hcos1
+  exact hq0 (by rw [hθ0]; rfl)
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_lambda :
+    ContinuousOn apm_t02a03_sector_aux_lambda
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  have hArc : ContinuousOn apm_t02a03_sector_aux_deltaArc
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+    have hc : Continuous fun q : ℝ × ℝ × ℝ =>
+        |q.2.1| + |q.2.2 - apm_t02a03_sector_aux_L6_aux_V q.1| :=
+      (continuous_snd.fst.abs).add ((continuous_snd.snd.sub
+        (apm_t02a03_sector_aux_L6_aux_V_continuous.comp continuous_fst)).abs)
+    refine hc.continuousOn.congr (fun q hq => ?_)
+    unfold apm_t02a03_sector_aux_deltaArc
+    rw [apm_t02a03_sector_aux_L6_aux_vArc_eq_V q.1
+      (apm_t02a03_sector_aux_L1_aux_cos_box q hq.1)]
+  have hD : Continuous apm_t02a03_sector_aux_deltaD := by
+    unfold apm_t02a03_sector_aux_deltaD
+    exact (continuous_const.sub continuous_snd.snd).add
+      ((continuous_fst.prodMk continuous_snd.fst).dist
+        (apm_t02a03_sector_aux_L5_piDelta_aux_continuous.comp
+          (continuous_fst.prodMk continuous_snd.fst)))
+  unfold apm_t02a03_sector_aux_lambda
+  exact hArc.div (hArc.add hD.continuousOn) (fun q hq =>
+    apm_t02a03_sector_aux_L6_aux_denom_ne q hq.1 hq.2)
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta_aux :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  have hl := apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_lambda
+  have hp : ContinuousOn (fun q : ℝ × ℝ × ℝ => max 0 (2 * apm_t02a03_sector_aux_lambda q - 1))
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) :=
+    (continuous_const.max continuous_id : Continuous fun x : ℝ => max 0 x).comp_continuousOn ((continuousOn_const.mul hl).sub continuousOn_const)
+  have hm : ContinuousOn (fun q : ℝ × ℝ × ℝ => max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q))
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) :=
+    (continuous_const.max continuous_id : Continuous fun x : ℝ => max 0 x).comp_continuousOn (continuousOn_const.sub (continuousOn_const.mul hl))
+  simp_rw [apm_t02a03_sector_aux_L6_aux_r_eq]
+  exact (continuous_fst.comp_continuousOn (apm_t02a03_sector_aux_L5_piDelta_aux_continuous.comp_continuousOn
+    ((hp.mul continuous_fst.continuousOn).prodMk (hp.mul continuous_snd.fst.continuousOn)))).add
+    (hm.mul continuous_fst.continuousOn)
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta_aux
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z_aux :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  have hl := apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_lambda
+  have hp : ContinuousOn (fun q : ℝ × ℝ × ℝ => max 0 (2 * apm_t02a03_sector_aux_lambda q - 1))
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) :=
+    (continuous_const.max continuous_id : Continuous fun x : ℝ => max 0 x).comp_continuousOn ((continuousOn_const.mul hl).sub continuousOn_const)
+  simp_rw [apm_t02a03_sector_aux_L6_aux_r_eq]
+  exact continuous_snd.comp_continuousOn (apm_t02a03_sector_aux_L5_piDelta_aux_continuous.comp_continuousOn
+    ((hp.mul continuous_fst.continuousOn).prodMk (hp.mul continuous_snd.fst.continuousOn)))
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z_aux
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v_aux :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  have hl := apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_lambda
+  have hm : ContinuousOn (fun q : ℝ × ℝ × ℝ => max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q))
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) :=
+    (continuous_const.max continuous_id : Continuous fun x : ℝ => max 0 x).comp_continuousOn (continuousOn_const.sub (continuousOn_const.mul hl))
+  refine (apm_t02a03_sector_aux_L6_aux_V_continuous.comp_continuousOn
+    (hm.mul continuous_fst.continuousOn)).congr (fun q hq => ?_)
+  rw [apm_t02a03_sector_aux_L6_aux_r_eq]
+  exact apm_t02a03_sector_aux_L6_aux_vArc_r q hq.1
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v_aux
+
+theorem apm_t02a03_sector_aux_L6a_r_continuous_off_q0 :
+    ContinuousOn apm_t02a03_sector_aux_r
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta.prodMk
+    (apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z.prodMk
+      apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v)
+
+lemma apm_t02a03_sector_aux_L6_aux_r_q0 :
+    apm_t02a03_sector_aux_r apm_t02a03_sector_aux_q0 = apm_t02a03_sector_aux_q0 := by
+  have hl : apm_t02a03_sector_aux_lambda apm_t02a03_sector_aux_q0 = 0 := by
+    have harc : apm_t02a03_sector_aux_deltaArc apm_t02a03_sector_aux_q0 = 0 := by
+      show |(0 : ℝ)| + |1 - apm_t02a03_sector_aux_vArc 0| = 0
+      rw [apm_t02a03_sector_aux_L6_aux_vArc_zero]; norm_num
+    unfold apm_t02a03_sector_aux_lambda
+    rw [harc, zero_div]
+  unfold apm_t02a03_sector_aux_r
+  rw [hl]
+  simp [apm_t02a03_sector_aux_q0, apm_t02a03_sector_aux_L6_aux_vArc_zero]
+
+/-- Within the box `λ ∈ [0,1]`, so both weights `max 0 (±(2λ-1))` lie in
+`[0,1]` and every coordinate of `r` is squeezed by `|θ|`, `|z|`. -/
+lemma apm_t02a03_sector_aux_L6_aux_weights (q : ℝ × ℝ × ℝ) (hq : apm_t02a03_sector_aux_box q) :
+    0 ≤ max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) ∧
+      max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) ≤ 1 ∧
+      0 ≤ max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) ∧
+      max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) ≤ 1 := by
+  have hl := apm_t02a03_sector_aux_L6e_aux_lambda_mem q hq.2.2.2
+  exact ⟨le_max_left _ _, max_le (by norm_num) (by linarith [hl.2]),
+    le_max_left _ _, max_le (by norm_num) (by linarith [hl.1])⟩
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta_aux :
+    ContinuousWithinAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      {q | apm_t02a03_sector_aux_box q} apm_t02a03_sector_aux_q0 := by
+  show Filter.Tendsto _ _ (nhds (apm_t02a03_sector_aux_r apm_t02a03_sector_aux_q0).1)
+  rw [apm_t02a03_sector_aux_L6_aux_r_q0]
+  have hlim : Filter.Tendsto (fun q : ℝ × ℝ × ℝ => 2 * |q.1|)
+      (nhdsWithin apm_t02a03_sector_aux_q0 {q | apm_t02a03_sector_aux_box q}) (nhds 0) := by
+    exact ((continuous_const.mul continuous_fst.abs :
+      Continuous fun q : ℝ × ℝ × ℝ => 2 * |q.1|).tendsto' apm_t02a03_sector_aux_q0 0
+        (by simp [apm_t02a03_sector_aux_q0])).mono_left nhdsWithin_le_nhds
+  refine squeeze_zero_norm' ?_ hlim
+  filter_upwards [self_mem_nhdsWithin] with q hq
+  obtain ⟨hp0, hp1, hm0, hm1⟩ := apm_t02a03_sector_aux_L6_aux_weights q hq
+  rw [apm_t02a03_sector_aux_L6_aux_r_eq, Real.norm_eq_abs]
+  have h1 := apm_t02a03_sector_aux_L6_aux_piDelta_fst_abs
+    (max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.1,
+      max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.2.1)
+  simp only [abs_mul, abs_of_nonneg hp0] at h1
+  calc _ ≤ |(apm_t02a03_sector_aux_piDelta
+          (max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.1,
+            max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.2.1)).1| +
+        |max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) * q.1| := abs_add_le _ _
+    _ ≤ 2 * |q.1| := by
+        rw [abs_mul, abs_of_nonneg hm0]
+        nlinarith [abs_nonneg q.1]
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta :
+    ContinuousWithinAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      {q | apm_t02a03_sector_aux_box q} apm_t02a03_sector_aux_q0 := by
+  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta_aux
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z_aux :
+    ContinuousWithinAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
+      {q | apm_t02a03_sector_aux_box q} apm_t02a03_sector_aux_q0 := by
+  show Filter.Tendsto _ _ (nhds (apm_t02a03_sector_aux_r apm_t02a03_sector_aux_q0).2.1)
+  rw [apm_t02a03_sector_aux_L6_aux_r_q0]
+  have hlim : Filter.Tendsto (fun q : ℝ × ℝ × ℝ => |q.2.1|)
+      (nhdsWithin apm_t02a03_sector_aux_q0 {q | apm_t02a03_sector_aux_box q}) (nhds 0) := by
+    exact ((continuous_snd.fst.abs :
+      Continuous fun q : ℝ × ℝ × ℝ => |q.2.1|).tendsto' apm_t02a03_sector_aux_q0 0
+        (by simp [apm_t02a03_sector_aux_q0])).mono_left nhdsWithin_le_nhds
+  refine squeeze_zero_norm' ?_ hlim
+  filter_upwards [self_mem_nhdsWithin] with q hq
+  obtain ⟨hp0, hp1, -, -⟩ := apm_t02a03_sector_aux_L6_aux_weights q hq
+  rw [apm_t02a03_sector_aux_L6_aux_r_eq, Real.norm_eq_abs]
+  have h1 := apm_t02a03_sector_aux_L6_aux_piDelta_snd_abs
+    (max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.1,
+      max 0 (2 * apm_t02a03_sector_aux_lambda q - 1) * q.2.1)
+  simp only [abs_mul, abs_of_nonneg hp0] at h1
+  refine h1.trans ?_
+  nlinarith [abs_nonneg q.2.1]
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z :
+    ContinuousWithinAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
+      {q | apm_t02a03_sector_aux_box q} apm_t02a03_sector_aux_q0 := by
+  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z_aux
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v_aux :
+    ContinuousWithinAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
+      {q | apm_t02a03_sector_aux_box q} apm_t02a03_sector_aux_q0 := by
+  show Filter.Tendsto _ _ (nhds (apm_t02a03_sector_aux_r apm_t02a03_sector_aux_q0).2.2)
+  rw [apm_t02a03_sector_aux_L6_aux_r_q0]
+  have harg : Filter.Tendsto
+      (fun q : ℝ × ℝ × ℝ => max 0 (1 - 2 * apm_t02a03_sector_aux_lambda q) * q.1)
+      (nhdsWithin apm_t02a03_sector_aux_q0 {q | apm_t02a03_sector_aux_box q}) (nhds 0) := by
+    have hlim : Filter.Tendsto (fun q : ℝ × ℝ × ℝ => |q.1|)
+        (nhdsWithin apm_t02a03_sector_aux_q0 {q | apm_t02a03_sector_aux_box q}) (nhds 0) := by
+      exact ((continuous_fst.abs :
+        Continuous fun q : ℝ × ℝ × ℝ => |q.1|).tendsto' apm_t02a03_sector_aux_q0 0
+          (by simp [apm_t02a03_sector_aux_q0])).mono_left nhdsWithin_le_nhds
+    refine squeeze_zero_norm' ?_ hlim
+    filter_upwards [self_mem_nhdsWithin] with q hq
+    obtain ⟨-, -, hm0, hm1⟩ := apm_t02a03_sector_aux_L6_aux_weights q hq
+    rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg hm0]
+    nlinarith [abs_nonneg q.1]
+  have hV := (apm_t02a03_sector_aux_L6_aux_V_continuous.tendsto 0).comp harg
+  have hV0 : apm_t02a03_sector_aux_L6_aux_V 0 = (apm_t02a03_sector_aux_q0).2.2 := by
+    rw [← apm_t02a03_sector_aux_L6_aux_vArc_eq_V 0 (by rw [Real.cos_zero]; norm_num),
+      apm_t02a03_sector_aux_L6_aux_vArc_zero]; rfl
+  rw [hV0] at hV
+  refine hV.congr' ?_
+  filter_upwards [self_mem_nhdsWithin] with q hq
+  rw [Function.comp_apply, apm_t02a03_sector_aux_L6_aux_r_eq]
+  exact (apm_t02a03_sector_aux_L6_aux_vArc_r q hq).symm
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v :
+    ContinuousWithinAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
+      {q | apm_t02a03_sector_aux_box q} apm_t02a03_sector_aux_q0 := by
+  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v_aux
+
+/-- Continuity of `r` at `q0` holds within the box only: off the box (`v > 1`)
+the weight `λ` is unbounded near `q0` (e.g. along `(θ, 0, 1 + θ)`). -/
+theorem apm_t02a03_sector_aux_L6b_r_continuous_at_q0 :
+    ContinuousWithinAt apm_t02a03_sector_aux_r
+      {q | apm_t02a03_sector_aux_box q} apm_t02a03_sector_aux_q0 := by
+  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta.prodMk
+    (apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z.prodMk
+      apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v)
 
 /-- The clamp stage, restricted to `Y`.  This is the direct packaging of
 `L4`: its endpoint has height in the coordinate box, and every point not
