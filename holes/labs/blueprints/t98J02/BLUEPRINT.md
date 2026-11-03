@@ -1,5 +1,25 @@
 # Blueprint for t98J02
 
+## Closed 2026-11-03
+
+Proved in `problems/t98J02/lean/Main.lean`; axioms `propext`, `Classical.choice`,
+`Quot.sound`.  The two LIBRARY leaves below were replaced, and neither uses a collar
+or homology.
+
+- Lifted nonseparating circle: if `L` split its complement into open `P`, `Q`, the
+  number of points of a fibre in `P` would be locally constant off the base circle,
+  hence constant because the base complement is connected.  A fibre over the circle
+  meets `L` once, so the sheet through that point stays on one side of `L`.  Those
+  sides are locally constant along the connected `L`, so `P ∪ L` is open and `Q` is
+  clopen, contradicting connectedness of the cover.  An embedded circle has empty
+  interior by the antipodal intermediate value argument.
+- Connected counterexample: a Klein bottle, not genus two.  Quotient the torus by the
+  free involution `(u, v) ↦ (-u, -v̄)`.  `Im v` descends and vanishes exactly on the
+  image of `v = 1`, so that image separates; upstairs it is a coordinate circle.
+
+The size estimates below (1500–3500 lines for the first leaf) are the old ones; the
+proof above is about 330 lines.  The remainder of this file is the earlier record.
+
 ## Triage
 
 Verdict: **true and faithful**.

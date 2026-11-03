@@ -32,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "imported_at": "2026-07-13T17:26:58.374560Z",
   "statement_encoding": {
     "date": "2026-09-10",
@@ -46,5 +46,8 @@
     "review": "author clause-by-clause review; independent review pending",
     "proof_status": "unproved; exactly one sorry declaration",
     "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
-  }
+  },
+  "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state.",
+  "boundary": null,
+  "stage": null
 }
