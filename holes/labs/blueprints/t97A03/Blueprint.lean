@@ -3792,6 +3792,386 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
       simpa [g, σ] using hcni
     exact hcni'.trans hendpoints.2.1
 
+lemma apm_t97A03_north_ne_south : apm_t97A03_north ≠ apm_t97A03_south := by
+  intro h
+  have := congrArg (fun x : apm_t97A03_S2 => x.1 2) h
+  simp [apm_t97A03_north, apm_t97A03_south] at this
+  norm_num at this
+
+lemma apm_t97A03_baseCircle_injective (A B : Circle) :
+    Function.Injective (apm_t97A03_baseCircle A B) := by
+  classical
+  intro z w h
+  let F : Sum Circle apm_t97A03_S2 → Circle := fun x =>
+    match x with
+    | .inl z => z
+    | .inr x => if x = apm_t97A03_north then A else B
+  have hF : ∀ x y, Relation.EqvGen (apm_t97A03_BaseRel A B) x y → F x = F y := by
+    intro x y hxy
+    induction hxy with
+    | rel x y h =>
+      cases h
+      · simp [F]
+      · simp [F, apm_t97A03_north_ne_south.symm]
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  exact hF _ _ (Quotient.exact h)
+
+lemma apm_t97A03_classify_aux_sheet_aux_arc_inj (A B : Circle) (hAB : A ≠ B)
+    {a b : Set.Icc (0 : ℝ) 1}
+    (h : apm_t97A03_circleArc A B a = apm_t97A03_circleArc A B b) : (a : ℝ) = b :=
+  apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_fibres
+    A B hAB ℝ (fun t => (t : ℝ)) (fun t => (t : ℝ)) rfl rfl (.inl a) (.inl b) h
+
+lemma apm_t97A03_classify_aux_sheet_aux_complementary_inj (A B : Circle) (hAB : A ≠ B)
+    {a b : Set.Icc (0 : ℝ) 1}
+    (h : apm_t97A03_complementaryCircleArc A B a = apm_t97A03_complementaryCircleArc A B b) :
+    (a : ℝ) = b :=
+  apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_fibres
+    A B hAB ℝ (fun t => (t : ℝ)) (fun t => (t : ℝ)) rfl rfl (.inr a) (.inr b) h
+
+lemma apm_t97A03_classify_aux_sheet_aux_sphere_north_inj
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B}
+    (d : apm_t97A03_ClassifySheetData A B Y p) {i j : Fin 2}
+    (h : d.sphere i apm_t97A03_north = d.sphere j apm_t97A03_north) : i = j := by
+  obtain ⟨k, -, hk⟩ := d.sphere_unique (d.sphere_lifts i apm_t97A03_north)
+  exact (hk i rfl).trans (hk j h.symm).symm
+
+lemma apm_t97A03_classify_aux_sheet_aux_first_ne
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B} (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p) (u : Set.Icc (0 : ℝ) 1) :
+    d.first 0 u ≠ d.first 1 u := by
+  intro h
+  have heq : d.first 0 = d.first 1 := by
+    apply hp.eq_of_comp_eq (d.continuous_first 0) (d.continuous_first 1) _ u h
+    funext v
+    simp only [Function.comp_apply]
+    rw [d.first_lifts, d.first_lifts]
+  have := apm_t97A03_classify_aux_sheet_aux_sphere_north_inj d (i := 0) (j := 1)
+    (by rw [← d.first_zero 0, ← d.first_zero 1, heq])
+  exact absurd this (by decide)
+
+lemma apm_t97A03_classify_aux_sheet_aux_second_ne
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B} (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p) (u : Set.Icc (0 : ℝ) 1) :
+    d.second 0 u ≠ d.second 1 u := by
+  intro h
+  have heq : d.second 0 = d.second 1 := by
+    apply hp.eq_of_comp_eq (d.continuous_second 0) (d.continuous_second 1) _ u h
+    funext v
+    simp only [Function.comp_apply]
+    rw [d.second_lifts, d.second_lifts]
+  have := apm_t97A03_classify_aux_sheet_aux_sphere_north_inj d (i := 0) (j := 1)
+    (by rw [← d.second_zero 0, ← d.second_zero 1, heq])
+  exact absurd this (by decide)
+
+lemma apm_t97A03_classify_aux_sheet_aux_first_first
+    {A B : Circle} (hAB : A ≠ B) {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B} (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p) (i j : Fin 2) (a b : Set.Icc (0 : ℝ) 1)
+    (h : d.first i a = d.first j b) : i = j ∧ (a : ℝ) = b := by
+  have hb := congrArg p h
+  rw [d.first_lifts, d.first_lifts] at hb
+  have hab : (a : ℝ) = b :=
+    apm_t97A03_classify_aux_sheet_aux_arc_inj A B hAB
+      (apm_t97A03_baseCircle_injective A B hb)
+  have hab' : a = b := Subtype.ext hab
+  subst hab'
+  refine ⟨?_, rfl⟩
+  fin_cases i <;> fin_cases j
+  · rfl
+  · exact absurd h (apm_t97A03_classify_aux_sheet_aux_first_ne hp d a)
+  · exact absurd h.symm (apm_t97A03_classify_aux_sheet_aux_first_ne hp d a)
+  · rfl
+
+lemma apm_t97A03_classify_aux_sheet_aux_second_second
+    {A B : Circle} (hAB : A ≠ B) {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B} (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p) (i j : Fin 2) (a b : Set.Icc (0 : ℝ) 1)
+    (h : d.second i a = d.second j b) : i = j ∧ (a : ℝ) = b := by
+  have hb := congrArg p h
+  rw [d.second_lifts, d.second_lifts] at hb
+  have hab : (a : ℝ) = b :=
+    apm_t97A03_classify_aux_sheet_aux_complementary_inj A B hAB
+      (apm_t97A03_baseCircle_injective A B hb)
+  have hab' : a = b := Subtype.ext hab
+  subst hab'
+  refine ⟨?_, rfl⟩
+  fin_cases i <;> fin_cases j
+  · rfl
+  · exact absurd h (apm_t97A03_classify_aux_sheet_aux_second_ne hp d a)
+  · exact absurd h.symm (apm_t97A03_classify_aux_sheet_aux_second_ne hp d a)
+  · rfl
+
+lemma apm_t97A03_classify_aux_sheet_aux_first_second
+    {A B : Circle} (hAB : A ≠ B) {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B}
+    (d : apm_t97A03_ClassifySheetData A B Y p) (i j : Fin 2) (a b : Set.Icc (0 : ℝ) 1)
+    (h : d.first i a = d.second j b) :
+    ((a : ℝ) = 0 ∧ (b : ℝ) = 0 ∧ i = j) ∨ ((a : ℝ) = 1 ∧ (b : ℝ) = 1) := by
+  have hb := congrArg p h
+  rw [d.first_lifts, d.second_lifts] at hb
+  rcases apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cross
+      A B hAB a b (apm_t97A03_baseCircle_injective A B hb) with ⟨ha, hb'⟩ | hone
+  · left
+    refine ⟨ha, hb', ?_⟩
+    have ha0 : a = 0 := Subtype.ext ha
+    have hb0 : b = 0 := Subtype.ext hb'
+    subst ha0 hb0
+    apply apm_t97A03_classify_aux_sheet_aux_sphere_north_inj d
+    rw [← d.first_zero i, ← d.second_zero j, h]
+  · exact Or.inr hone
+
+/-- A quarter paste of two sheet families `P` (even quarters) and reversed `Q`
+(odd quarters) is injective on `[0, 2π)` once the sheets are separated:
+equal points of one family have the same index and parameter, and the two
+families meet only at parameter `0` with equal index, or at parameter `1`. -/
+lemma apm_t97A03_quarterPasteRaw_sheets_injOn {Y : Type}
+    (P Q : Fin 2 → Set.Icc (0 : ℝ) 1 → Y)
+    (hPP : ∀ i j a b, P i a = P j b → i = j ∧ (a : ℝ) = b)
+    (hQQ : ∀ i j a b, Q i a = Q j b → i = j ∧ (a : ℝ) = b)
+    (hPQ : ∀ i j a b, P i a = Q j b →
+      ((a : ℝ) = 0 ∧ (b : ℝ) = 0 ∧ i = j) ∨ ((a : ℝ) = 1 ∧ (b : ℝ) = 1)) :
+    Set.InjOn (apm_t97A03_quarterPasteRaw
+      ![P 0, fun s ↦ Q 1 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩,
+        P 1, fun s ↦ Q 0 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩])
+      (Set.Ico 0 (2 * Real.pi)) := by
+  have hpi := Real.pi_pos
+  have hq : ∀ x ∈ Set.Ico 0 (2 * Real.pi),
+      (x ≤ Real.pi / 2 ∧ ∃ h, apm_t97A03_quarterPasteRaw
+        ![P 0, fun s ↦ Q 1 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩,
+          P 1, fun s ↦ Q 0 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩] x =
+          P 0 ⟨x / (Real.pi / 2), h⟩) ∨
+      (Real.pi / 2 < x ∧ x ≤ Real.pi ∧ ∃ h, apm_t97A03_quarterPasteRaw
+        ![P 0, fun s ↦ Q 1 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩,
+          P 1, fun s ↦ Q 0 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩] x =
+          Q 1 ⟨1 - (x - Real.pi / 2) / (Real.pi / 2), h⟩) ∨
+      (Real.pi < x ∧ x ≤ 3 * Real.pi / 2 ∧ ∃ h, apm_t97A03_quarterPasteRaw
+        ![P 0, fun s ↦ Q 1 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩,
+          P 1, fun s ↦ Q 0 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩] x =
+          P 1 ⟨(x - Real.pi) / (Real.pi / 2), h⟩) ∨
+      (3 * Real.pi / 2 < x ∧ ∃ h, apm_t97A03_quarterPasteRaw
+        ![P 0, fun s ↦ Q 1 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩,
+          P 1, fun s ↦ Q 0 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩] x =
+          Q 0 ⟨1 - (x - 3 * Real.pi / 2) / (Real.pi / 2), h⟩) := by
+    intro x hx
+    have hmem : ∀ e : ℝ, 0 ≤ e → e ≤ 1 → (Set.projIcc 0 1 zero_le_one e : ℝ) = e :=
+      fun e h0 h1 => by rw [Set.projIcc_of_mem _ ⟨h0, h1⟩]
+    unfold apm_t97A03_quarterPasteRaw
+    by_cases h1 : x ≤ Real.pi / 2
+    · have h0 : 0 ≤ x / (Real.pi / 2) := div_nonneg hx.1 (by linarith)
+      have h1' : x / (Real.pi / 2) ≤ 1 := (div_le_one (by linarith)).2 h1
+      refine Or.inl ⟨h1, ⟨h0, h1'⟩, ?_⟩
+      rw [if_pos h1]
+      simp only [Matrix.cons_val_zero]
+      congr 1; exact Subtype.ext (hmem _ h0 h1')
+    by_cases h2 : x ≤ Real.pi
+    · have h0 : 0 ≤ (x - Real.pi / 2) / (Real.pi / 2) := div_nonneg (by linarith) (by linarith)
+      have h1' : (x - Real.pi / 2) / (Real.pi / 2) ≤ 1 := (div_le_one (by linarith)).2 (by linarith)
+      refine Or.inr (Or.inl ⟨lt_of_not_ge h1, h2, ⟨by linarith, by linarith⟩, ?_⟩)
+      rw [if_neg h1, if_pos h2]
+      simp only [Matrix.cons_val_one, Matrix.cons_val_zero]
+      congr 1; exact Subtype.ext (by simp only [hmem _ h0 h1'])
+    by_cases h3 : x ≤ 3 * Real.pi / 2
+    · have h0 : 0 ≤ (x - Real.pi) / (Real.pi / 2) := div_nonneg (by linarith) (by linarith)
+      have h1' : (x - Real.pi) / (Real.pi / 2) ≤ 1 := (div_le_one (by linarith)).2 (by linarith)
+      refine Or.inr (Or.inr (Or.inl ⟨lt_of_not_ge h2, h3, ⟨h0, h1'⟩, ?_⟩))
+      rw [if_neg h1, if_neg h2, if_pos h3]
+      simp only [Matrix.cons_val_two, Matrix.tail_cons, Matrix.head_cons]
+      congr 1; exact Subtype.ext (hmem _ h0 h1')
+    · have h0 : 0 ≤ (x - 3 * Real.pi / 2) / (Real.pi / 2) := div_nonneg (by linarith) (by linarith)
+      have h1' : (x - 3 * Real.pi / 2) / (Real.pi / 2) ≤ 1 :=
+        (div_le_one (by linarith)).2 (by linarith [hx.2])
+      refine Or.inr (Or.inr (Or.inr ⟨lt_of_not_ge h3, ⟨by linarith, by linarith⟩, ?_⟩))
+      rw [if_neg h1, if_neg h2, if_neg h3]
+      simp only [Matrix.cons_val_three, Matrix.tail_cons, Matrix.head_cons]
+      congr 1; exact Subtype.ext (by simp only [hmem _ h0 h1'])
+  intro s hs t ht h
+  have hs2 := hs.2
+  have ht2 := ht.2
+  have hs1 := hs.1
+  have ht1 := ht.1
+  rcases hq s hs with ⟨a1, w1, es⟩ | ⟨a1, a2, w1, es⟩ | ⟨a1, a2, w1, es⟩ | ⟨a1, w1, es⟩ <;>
+  rcases hq t ht with ⟨b1, w2, et⟩ | ⟨b1, b2, w2, et⟩ | ⟨b1, b2, w2, et⟩ | ⟨b1, w2, et⟩ <;>
+  rw [es, et] at h <;>
+  first
+  | (obtain ⟨hij, hab⟩ := hPP _ _ _ _ h
+     first
+     | exact absurd hij (by decide)
+     | (simp only at hab; field_simp at hab; linarith))
+  | (obtain ⟨hij, hab⟩ := hQQ _ _ _ _ h
+     first
+     | exact absurd hij (by decide)
+     | (simp only at hab; field_simp at hab; linarith))
+  | (rcases hPQ _ _ _ _ h with ⟨ha, hb, hij⟩ | ⟨ha, hb⟩ <;>
+     first
+     | exact absurd hij (by decide)
+     | (simp only at ha hb; field_simp at ha hb; linarith))
+  | (rcases hPQ _ _ _ _ h.symm with ⟨ha, hb, hij⟩ | ⟨ha, hb⟩ <;>
+     first
+     | exact absurd hij (by decide)
+     | (simp only at ha hb; field_simp at ha hb; linarith))
+
+/-- Which quarter a parameter in `[0, 2π]` falls into, with its exact local parameter. -/
+lemma apm_t97A03_quarterPasteRaw_decode {Y : Type}
+    (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (x : ℝ) (hx : x ∈ Set.Icc 0 (2 * Real.pi)) :
+    (x ≤ Real.pi / 2 ∧ ∃ h, apm_t97A03_quarterPasteRaw g x = g 0 ⟨x / (Real.pi / 2), h⟩) ∨
+    (Real.pi / 2 < x ∧ x ≤ Real.pi ∧ ∃ h, apm_t97A03_quarterPasteRaw g x =
+      g 1 ⟨(x - Real.pi / 2) / (Real.pi / 2), h⟩) ∨
+    (Real.pi < x ∧ x ≤ 3 * Real.pi / 2 ∧ ∃ h, apm_t97A03_quarterPasteRaw g x =
+      g 2 ⟨(x - Real.pi) / (Real.pi / 2), h⟩) ∨
+    (3 * Real.pi / 2 < x ∧ ∃ h, apm_t97A03_quarterPasteRaw g x =
+      g 3 ⟨(x - 3 * Real.pi / 2) / (Real.pi / 2), h⟩) := by
+  have hpi := Real.pi_pos
+  have hmem : ∀ e : ℝ, ∀ h : 0 ≤ e ∧ e ≤ 1,
+      Set.projIcc 0 1 zero_le_one e = (⟨e, h⟩ : Set.Icc (0 : ℝ) 1) :=
+    fun e h => Set.projIcc_of_mem _ h
+  unfold apm_t97A03_quarterPasteRaw
+  by_cases h1 : x ≤ Real.pi / 2
+  · have hh : 0 ≤ x / (Real.pi / 2) ∧ x / (Real.pi / 2) ≤ 1 :=
+      ⟨div_nonneg hx.1 (by linarith), (div_le_one (by linarith)).2 h1⟩
+    exact Or.inl ⟨h1, hh, by rw [if_pos h1, hmem _ hh]⟩
+  by_cases h2 : x ≤ Real.pi
+  · have hh : 0 ≤ (x - Real.pi / 2) / (Real.pi / 2) ∧ (x - Real.pi / 2) / (Real.pi / 2) ≤ 1 :=
+      ⟨div_nonneg (by linarith) (by linarith), (div_le_one (by linarith)).2 (by linarith)⟩
+    exact Or.inr (Or.inl ⟨lt_of_not_ge h1, h2, hh, by rw [if_neg h1, if_pos h2, hmem _ hh]⟩)
+  by_cases h3 : x ≤ 3 * Real.pi / 2
+  · have hh : 0 ≤ (x - Real.pi) / (Real.pi / 2) ∧ (x - Real.pi) / (Real.pi / 2) ≤ 1 :=
+      ⟨div_nonneg (by linarith) (by linarith), (div_le_one (by linarith)).2 (by linarith)⟩
+    exact Or.inr (Or.inr (Or.inl ⟨lt_of_not_ge h2, h3, hh,
+      by rw [if_neg h1, if_neg h2, if_pos h3, hmem _ hh]⟩))
+  · have hh : 0 ≤ (x - 3 * Real.pi / 2) / (Real.pi / 2) ∧
+        (x - 3 * Real.pi / 2) / (Real.pi / 2) ≤ 1 :=
+      ⟨div_nonneg (by linarith) (by linarith), (div_le_one (by linarith)).2 (by linarith [hx.2])⟩
+    exact Or.inr (Or.inr (Or.inr ⟨lt_of_not_ge h3, hh,
+      by rw [if_neg h1, if_neg h2, if_neg h3, hmem _ hh]⟩))
+
+/-- A quarter paste of two sheet families over the two arcs `β` (even quarters)
+and reversed `α` (odd quarters) meets every fibre over the base circle twice,
+at two distinct circle points. -/
+lemma apm_t97A03_quarterPaste_sheets_cover {A B : Circle} {Y : Type}
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (P Q : Fin 2 → Set.Icc (0 : ℝ) 1 → Y) (α β : Set.Icc (0 : ℝ) 1 → Circle)
+    (hP : ∀ i a, p (P i a) = apm_t97A03_baseCircle A B (β a))
+    (hQ : ∀ i a, p (Q i a) = apm_t97A03_baseCircle A B (α a))
+    (h0 : α 0 = β 0) (h1 : α 1 = β 1)
+    (hsurj : ∀ z, (∃ a, α a = z) ∨ ∃ a, β a = z)
+    (c : Circle → Y)
+    (hraw : ∀ t ∈ Set.Icc 0 (2 * Real.pi),
+      c (Circle.exp t) = apm_t97A03_quarterPasteRaw
+        ![P 0, fun s ↦ Q 1 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩,
+          P 1, fun s ↦ Q 0 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩] t) :
+    ∀ z, ∃ w₀ w₁, w₀ ≠ w₁ ∧
+      p (c w₀) = apm_t97A03_baseCircle A B z ∧
+      p (c w₁) = apm_t97A03_baseCircle A B z := by
+  have hpi := Real.pi_pos
+  have hne : ∀ s t : ℝ, t = s + Real.pi → Circle.exp s ≠ Circle.exp t := by
+    intro s t ht he
+    have := apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_exp_inj
+      (by linarith) (by linarith) he
+    linarith
+  intro z
+  rcases hsurj z with ⟨a, rfl⟩ | ⟨a, rfl⟩
+  · have ha0 := a.property.1
+    have ha1 := a.property.2
+    have hrev : ∀ e (he : 0 ≤ 1 - e ∧ 1 - e ≤ 1), (1 - e = (a : ℝ)) →
+        (⟨1 - e, he⟩ : Set.Icc (0 : ℝ) 1) = a := fun e he h => Subtype.ext h
+    have hone : (a : ℝ) = 1 → a = 1 := fun h => Subtype.ext h
+    refine ⟨Circle.exp (Real.pi - Real.pi / 2 * a), Circle.exp (2 * Real.pi - Real.pi / 2 * a),
+      hne _ _ (by ring), ?_, ?_⟩
+    · rw [hraw (Real.pi - Real.pi / 2 * a) ⟨by nlinarith, by nlinarith⟩]
+      rcases apm_t97A03_quarterPasteRaw_decode _ (Real.pi - Real.pi / 2 * a) ⟨by nlinarith, by nlinarith⟩ with
+        ⟨x1, hh, e⟩ | ⟨x1, x2, hh, e⟩ | ⟨x1, x2, hh, e⟩ | ⟨x1, hh, e⟩
+      · rw [e]
+        simp only [Matrix.cons_val_zero]
+        rw [hP]
+        congr 1
+        have har : (a : ℝ) = 1 := by nlinarith
+        calc β _ = β 1 := congrArg β (Subtype.ext (by
+              show (Real.pi - Real.pi / 2 * (a : ℝ)) / (Real.pi / 2) = (1 : ℝ)
+              rw [har]; field_simp; ring))
+          _ = α a := by rw [hone har, h1]
+      · rw [e]
+        simp only [Matrix.cons_val_one, Matrix.cons_val_zero]
+        rw [hQ]
+        congr 2
+        apply hrev
+        field_simp; ring
+      · nlinarith
+      · nlinarith
+    · rw [hraw (2 * Real.pi - Real.pi / 2 * a) ⟨by nlinarith, by nlinarith⟩]
+      rcases apm_t97A03_quarterPasteRaw_decode _ (2 * Real.pi - Real.pi / 2 * a) ⟨by nlinarith, by nlinarith⟩ with
+        ⟨x1, hh, e⟩ | ⟨x1, x2, hh, e⟩ | ⟨x1, x2, hh, e⟩ | ⟨x1, hh, e⟩
+      · nlinarith
+      · nlinarith
+      · rw [e]
+        simp only [Matrix.cons_val_two, Matrix.tail_cons, Matrix.head_cons]
+        rw [hP]
+        congr 1
+        have har : (a : ℝ) = 1 := by nlinarith
+        calc β _ = β 1 := congrArg β (Subtype.ext (by
+              show (2 * Real.pi - Real.pi / 2 * (a : ℝ) - Real.pi) / (Real.pi / 2) = (1 : ℝ)
+              rw [har]; field_simp; ring))
+          _ = α a := by rw [hone har, h1]
+      · rw [e]
+        simp only [Matrix.cons_val_three, Matrix.tail_cons, Matrix.head_cons]
+        rw [hQ]
+        congr 2
+        apply hrev
+        field_simp; ring
+  · have ha0 := a.property.1
+    have ha1 := a.property.2
+    have hzero : (a : ℝ) = 0 → a = 0 := fun h => Subtype.ext h
+    refine ⟨Circle.exp (Real.pi / 2 * a), Circle.exp (Real.pi + Real.pi / 2 * a),
+      hne _ _ (by ring), ?_, ?_⟩
+    · rw [hraw (Real.pi / 2 * a) ⟨by nlinarith, by nlinarith⟩]
+      rcases apm_t97A03_quarterPasteRaw_decode _ (Real.pi / 2 * a) ⟨by nlinarith, by nlinarith⟩ with
+        ⟨x1, hh, e⟩ | ⟨x1, x2, hh, e⟩ | ⟨x1, x2, hh, e⟩ | ⟨x1, hh, e⟩
+      · rw [e]
+        simp only [Matrix.cons_val_zero]
+        rw [hP]
+        congr 2
+        apply Subtype.ext
+        change Real.pi / 2 * (a : ℝ) / (Real.pi / 2) = a
+        field_simp
+      · nlinarith
+      · nlinarith
+      · nlinarith
+    · rw [hraw (Real.pi + Real.pi / 2 * a) ⟨by nlinarith, by nlinarith⟩]
+      rcases apm_t97A03_quarterPasteRaw_decode _ (Real.pi + Real.pi / 2 * a) ⟨by nlinarith, by nlinarith⟩ with
+        ⟨x1, hh, e⟩ | ⟨x1, x2, hh, e⟩ | ⟨x1, x2, hh, e⟩ | ⟨x1, hh, e⟩
+      · nlinarith
+      · rw [e]
+        simp only [Matrix.cons_val_one, Matrix.cons_val_zero]
+        rw [hQ]
+        congr 1
+        have har : (a : ℝ) = 0 := by nlinarith
+        calc α _ = α 0 := congrArg α (Subtype.ext (by
+              show 1 - (Real.pi + Real.pi / 2 * (a : ℝ) - Real.pi / 2) / (Real.pi / 2) = (0 : ℝ)
+              rw [har]; field_simp; ring))
+          _ = β a := by rw [hzero har, h0]
+      · rw [e]
+        simp only [Matrix.cons_val_two, Matrix.tail_cons, Matrix.head_cons]
+        rw [hP]
+        congr 2
+        apply Subtype.ext
+        change (Real.pi + Real.pi / 2 * (a : ℝ) - Real.pi) / (Real.pi / 2) = a
+        field_simp; ring
+      · nlinarith
+
+lemma apm_t97A03_classify_aux_sheet_aux_arcs_cover (A B : Circle) (hAB : A ≠ B) (z : Circle) :
+    (∃ a, apm_t97A03_circleArc A B a = z) ∨
+      ∃ a, apm_t97A03_complementaryCircleArc A B a = z := by
+  obtain ⟨x | x, hx⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
+      A B hAB z
+  · exact Or.inl ⟨x, hx⟩
+  · exact Or.inr ⟨x, hx⟩
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_injective_aux_raw
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
@@ -3803,7 +4183,19 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
     (hraw : ∀ t ∈ Set.Icc 0 (2 * Real.pi),
       c (Circle.exp t) = apm_t97A03_quarterPasteRaw g t) :
     Set.InjOn (fun t ↦ c (Circle.exp t)) (Set.Ico 0 (2 * Real.pi)) := by
-  sorry
+  intro s hs t ht h
+  have h' : apm_t97A03_quarterPasteRaw g s = apm_t97A03_quarterPasteRaw g t := by
+    rw [← hraw s ⟨hs.1, hs.2.le⟩, ← hraw t ⟨ht.1, ht.2.le⟩]
+    exact h
+  subst hg
+  exact apm_t97A03_quarterPasteRaw_sheets_injOn d.second d.first
+    (apm_t97A03_classify_aux_sheet_aux_second_second hAB hp d)
+    (apm_t97A03_classify_aux_sheet_aux_first_first hAB hp d)
+    (fun i j a b h => by
+      rcases apm_t97A03_classify_aux_sheet_aux_first_second hAB d j i b a h.symm with
+        ⟨hb, ha, hji⟩ | ⟨hb, ha⟩
+      · exact Or.inl ⟨ha, hb, hji.symm⟩
+      · exact Or.inr ⟨ha, hb⟩) hs ht h'
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_injective
     (A B : Circle) (hAB : A ≠ B)
@@ -3882,7 +4274,12 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
     ∀ z, ∃ w₀ w₁, w₀ ≠ w₁ ∧
       p (c w₀) = apm_t97A03_baseCircle A B z ∧
       p (c w₁) = apm_t97A03_baseCircle A B z := by
-  sorry
+  subst hg
+  exact apm_t97A03_quarterPaste_sheets_cover p d.second d.first
+    (apm_t97A03_circleArc A B) (apm_t97A03_complementaryCircleArc A B)
+    (fun i a => d.second_lifts i a) (fun i a => d.first_lifts i a)
+    (by rw [Path.source, Path.source]) (by rw [Path.target, Path.target])
+    (apm_t97A03_classify_aux_sheet_aux_arcs_cover A B hAB) c hraw
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_cover_aux_card
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
@@ -4414,7 +4811,12 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_
         ![d.first 0, fun s ↦ d.second 1 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩,
           d.first 1, fun s ↦ d.second 0 ⟨1 - s, by constructor <;> linarith [s.property.1, s.property.2]⟩] t) :
     Set.InjOn (fun t ↦ c (Circle.exp t)) (Set.Ico 0 (2 * Real.pi)) := by
-  sorry
+  intro s hs t ht h
+  have h' := (hraw s ⟨hs.1, hs.2.le⟩).symm.trans (h.trans (hraw t ⟨ht.1, ht.2.le⟩))
+  exact apm_t97A03_quarterPasteRaw_sheets_injOn d.first d.second
+    (apm_t97A03_classify_aux_sheet_aux_first_first hAB hp d)
+    (apm_t97A03_classify_aux_sheet_aux_second_second hAB hp d)
+    (apm_t97A03_classify_aux_sheet_aux_first_second hAB d) hs ht h'
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_injective
     (A B : Circle) (hAB : A ≠ B)
@@ -4499,7 +4901,11 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_
     ∀ z, ∃ w₀ w₁, w₀ ≠ w₁ ∧
       p (c w₀) = apm_t97A03_baseCircle A B z ∧
       p (c w₁) = apm_t97A03_baseCircle A B z := by
-  sorry
+  exact apm_t97A03_quarterPaste_sheets_cover p d.first d.second
+    (apm_t97A03_complementaryCircleArc A B) (apm_t97A03_circleArc A B)
+    (fun i a => d.first_lifts i a) (fun i a => d.second_lifts i a)
+    (by rw [Path.source, Path.source]) (by rw [Path.target, Path.target])
+    (fun z => (apm_t97A03_classify_aux_sheet_aux_arcs_cover A B hAB z).symm) c hraw
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_cover_aux_card
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
