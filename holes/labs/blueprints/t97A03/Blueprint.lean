@@ -3007,6 +3007,40 @@ private theorem
   sorry
 
 private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_finite :
+    {w | (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0 w).isSome}.Finite := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_finite :
+    {w | (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1 w).isSome}.Finite := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_at_source :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0
+      ((), apm_t97A03_circleI) = some (0, apm_t97A03_south) := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_at_target :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1
+      ((), apm_t97A03_circleI) = some (0, apm_t97A03_north) := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_at_source :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1
+      ((), apm_t97A03_circleNegI) = some (1, apm_t97A03_south) := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_at_target :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2
+      ((), apm_t97A03_circleNegI) = some (1, apm_t97A03_north) := by
+  sorry
+
+private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first :
     Nonempty (ContinuousMap.HomotopyEquiv
       (Quotient (Relation.EqvGen.setoid
@@ -3015,7 +3049,20 @@ private theorem
       (Quotient (Relation.EqvGen.setoid
         (apm_t97A03_invariants_aux_slide_GenRel
           apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1)))) := by
-  sorry
+  apply apm_t97A03_invariants_aux_slide_generic
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1
+    (w₀ := ((), apm_t97A03_circleI))
+    (z := (0, apm_t97A03_south)) (z' := (0, apm_t97A03_north))
+    (γ := apm_t97A03_sphereReturn.symm.map (continuous_const.prodMk continuous_id))
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_finite
+  · intro w hw
+    simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0,
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1]
+    split_ifs with h1 hI hn1 hnI <;> try rfl
+    exact (hw (Prod.ext (Subsingleton.elim _ _) hI)).elim
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_at_source
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_at_target
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second :
@@ -3026,7 +3073,20 @@ private theorem
       (Quotient (Relation.EqvGen.setoid
         (apm_t97A03_invariants_aux_slide_GenRel
           apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2)))) := by
-  sorry
+  apply apm_t97A03_invariants_aux_slide_generic
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2
+    (w₀ := ((), apm_t97A03_circleNegI))
+    (z := (1, apm_t97A03_south)) (z' := (1, apm_t97A03_north))
+    (γ := apm_t97A03_sphereReturn.symm.map (continuous_const.prodMk continuous_id))
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_finite
+  · intro w hw
+    simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1,
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2]
+    split_ifs with h1 hI hn1 hnI <;> try rfl
+    exact (hw (Prod.ext (Subsingleton.elim _ _) hnI)).elim
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_at_source
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_at_target
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_target :
