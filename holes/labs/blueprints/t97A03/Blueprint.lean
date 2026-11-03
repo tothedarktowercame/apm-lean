@@ -2514,6 +2514,53 @@ noncomputable def apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_d
 sphere is decided by `sphere_unique`; equality over a circle point is decided
 by the pasted-circle uniqueness, while the two attachment fibres are exactly
 the four generators of `TwoCircleRel`. -/
+noncomputable def
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize
+    (A B : Circle) : Sum Circle apm_t97A03_S2 → Sum Circle apm_t97A03_S2 := by
+  classical
+  exact fun x => match x with
+    | .inl z => if z = A then .inr apm_t97A03_north
+        else if z = B then .inr apm_t97A03_south else .inl z
+    | .inr z => .inr z
+
+theorem
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize_eq
+    (A B : Circle) (hAB : A ≠ B) {x y : Sum Circle apm_t97A03_S2}
+    (h : (Quotient.mk _ x : apm_t97A03_BaseSpace A B) = Quotient.mk _ y) :
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize
+        A B x =
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize
+        A B y := by
+  exact Relation.EqvGen.rec
+    (fun _ _ hrel => by
+      cases hrel with
+      | north => simp [apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+      | south => simp [apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize,
+          hAB, hAB.symm])
+    (fun _ => rfl)
+    (fun _ _ _ ih => ih.symm)
+    (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂)
+    (Quotient.exact h)
+
+
+theorem
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_injective
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (q : Circle ≃ₜ Circle) (c : Fin 2 → Circle → Y)
+    (hq1 : q 1 = A) (hqn : q apm_t97A03_circleNegOne = B)
+    (hlift : ∀ i w, p (c i w) = apm_t97A03_baseCircle A B (q w))
+    (hn : ∀ i, c i 1 = d.sphere i apm_t97A03_north)
+    (hs : ∀ i, c i apm_t97A03_circleNegOne =
+      d.sphere (Equiv.swap 0 1 i) apm_t97A03_south)
+    (hunique : ∀ {y w}, p y = apm_t97A03_baseCircle A B (q w) →
+      ∃! i : Fin 2, c i w = y) :
+    Function.Injective
+      (apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_map
+        d c hn hs) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
     (p : Y → apm_t97A03_BaseSpace A B)
@@ -2529,7 +2576,17 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux
     Function.Bijective
       (apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_map
         d c hn hs) := by
-  sorry
+  constructor
+  · exact
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_injective
+        A B Y p d q c hq1 hqn hlift hn hs hunique
+  · intro y
+    rcases apm_t97A03_baseCircle_or_baseSphere A B (p y) with ⟨z, hz⟩ | ⟨z, hz⟩
+    · obtain ⟨w, rfl⟩ := q.surjective z
+      obtain ⟨i, hi, -⟩ := hunique hz
+      exact ⟨Quotient.mk _ (.inr (i, w)), hi⟩
+    · obtain ⟨i, hi, -⟩ := d.sphere_unique hz
+      exact ⟨Quotient.mk _ (.inl (i, z)), hi⟩
 
 /-- With both endpoint permutations normalized to the transposition, the
 sphere trivialization and the two pairs of arc lifts glue to a continuous
