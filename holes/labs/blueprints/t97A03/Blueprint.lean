@@ -1737,6 +1737,97 @@ def apm_t97A03_circleI : Circle := ⟨Complex.I, by
 def apm_t97A03_circleNegI : Circle := ⟨-Complex.I, by
   exact mem_sphere_zero_iff_norm.mpr (by rw [norm_neg, Complex.norm_I])⟩
 
+/-- The four marked points are `Circle.exp` of `0, π/2, π, 3π/2`. -/
+lemma apm_t97A03_exp_zero_eq_circleOne : Circle.exp 0 = apm_t97A03_circleOne := by
+  apply Subtype.ext; simp [apm_t97A03_circleOne]
+
+lemma apm_t97A03_exp_pi_div_two_eq_circleI :
+    Circle.exp (Real.pi / 2) = apm_t97A03_circleI := by
+  apply Subtype.ext
+  simp [apm_t97A03_circleI, Circle.coe_exp, Complex.exp_mul_I, Complex.ofReal_div]
+
+lemma apm_t97A03_exp_pi_eq_circleNegOne : Circle.exp Real.pi = apm_t97A03_circleNegOne := by
+  apply Subtype.ext
+  simp [apm_t97A03_circleNegOne, Circle.coe_exp, Complex.exp_mul_I]
+
+lemma apm_t97A03_exp_three_pi_div_two_eq_circleNegI :
+    Circle.exp (3 * Real.pi / 2) = apm_t97A03_circleNegI := by
+  apply Subtype.ext
+  have : (3 * Real.pi / 2 : ℝ) = Real.pi / 2 + Real.pi := by ring
+  simp only [apm_t97A03_circleNegI, Circle.coe_exp, this, Complex.ofReal_add, add_mul,
+    Complex.exp_add, Complex.exp_pi_mul_I]
+  simp [Complex.exp_mul_I, Complex.ofReal_div]
+
+/-- Four interval maps run in turn over the quarters `[kπ/2, (k+1)π/2]` of
+`[0, 2π]`.  Used to paste lifted arcs into a circle. -/
+noncomputable def apm_t97A03_quarterPasteRaw {Y : Type}
+    (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (t : ℝ) : Y :=
+  if t ≤ Real.pi / 2 then g 0 (Set.projIcc 0 1 zero_le_one (t / (Real.pi / 2)))
+  else if t ≤ Real.pi then g 1 (Set.projIcc 0 1 zero_le_one ((t - Real.pi / 2) / (Real.pi / 2)))
+  else if t ≤ 3 * Real.pi / 2 then
+    g 2 (Set.projIcc 0 1 zero_le_one ((t - Real.pi) / (Real.pi / 2)))
+  else g 3 (Set.projIcc 0 1 zero_le_one ((t - 3 * Real.pi / 2) / (Real.pi / 2)))
+
+lemma apm_t97A03_quarterPasteRaw_continuous {Y : Type} [TopologicalSpace Y]
+    (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (hg : ∀ k, Continuous (g k))
+    (h01 : g 0 1 = g 1 0) (h12 : g 1 1 = g 2 0) (h23 : g 2 1 = g 3 0) :
+    Continuous (apm_t97A03_quarterPasteRaw g) := by
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have piece : ∀ (k : Fin 4) (c : ℝ), Continuous fun t : ℝ =>
+      g k (Set.projIcc 0 1 zero_le_one ((t - c) / (Real.pi / 2))) := fun k c =>
+    (hg k).comp (continuous_projIcc.comp (by fun_prop))
+  unfold apm_t97A03_quarterPasteRaw
+  refine Continuous.if_le (by simpa using piece 0 0) ?_ continuous_id continuous_const ?_
+  · refine Continuous.if_le (piece 1 _) ?_ continuous_id continuous_const ?_
+    · refine Continuous.if_le (piece 2 _) (piece 3 _) continuous_id continuous_const ?_
+      intro t ht; subst ht
+      rw [show (3 * Real.pi / 2 - Real.pi) / (Real.pi / 2) = 1 by field_simp; ring,
+        show (3 * Real.pi / 2 - 3 * Real.pi / 2) / (Real.pi / 2) = 0 by simp]
+      simpa using h23
+    · intro t ht; subst ht
+      have h3 : ¬ (Real.pi ≤ 3 * Real.pi / 2) → False := fun h => h (by linarith)
+      rw [if_pos (by linarith : Real.pi ≤ 3 * Real.pi / 2)]
+      rw [show (Real.pi - Real.pi / 2) / (Real.pi / 2) = 1 by field_simp; ring,
+        show (Real.pi - Real.pi) / (Real.pi / 2) = 0 by simp]
+      simpa using h12
+  · intro t ht; subst ht
+    rw [if_pos (by linarith : Real.pi / 2 ≤ Real.pi)]
+    rw [show Real.pi / 2 / (Real.pi / 2) = 1 by field_simp,
+      show (Real.pi / 2 - Real.pi / 2) / (Real.pi / 2) = 0 by simp]
+    simpa using h01
+
+/-- The pasted circle map: continuous, and equal to the quarter pieces along
+`Circle.exp`.  It is determined by these values. -/
+lemma apm_t97A03_quarterPaste_exists {Y : Type} [TopologicalSpace Y]
+    (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (hg : ∀ k, Continuous (g k))
+    (h01 : g 0 1 = g 1 0) (h12 : g 1 1 = g 2 0) (h23 : g 2 1 = g 3 0)
+    (h30 : g 3 1 = g 0 0) :
+    ∃ c : Circle → Y, Continuous c ∧
+      (∀ t ∈ Set.Icc 0 (2 * Real.pi), c (Circle.exp t) = apm_t97A03_quarterPasteRaw g t) ∧
+      c apm_t97A03_circleOne = g 0 0 ∧ c apm_t97A03_circleI = g 1 0 ∧
+      c apm_t97A03_circleNegOne = g 2 0 ∧ c apm_t97A03_circleNegI = g 3 0 := by
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hc := apm_t97A03_quarterPasteRaw_continuous g hg h01 h12 h23
+  have hend : apm_t97A03_quarterPasteRaw g 0 = apm_t97A03_quarterPasteRaw g (2 * Real.pi) := by
+    unfold apm_t97A03_quarterPasteRaw
+    rw [if_pos (by linarith), if_neg (by linarith), if_neg (by linarith), if_neg (by linarith)]
+    rw [show (2 * Real.pi - 3 * Real.pi / 2) / (Real.pi / 2) = 1 by field_simp; ring]
+    simpa using h30.symm
+  obtain ⟨c, hcc, hcv⟩ := apm_t97A03_circleLiftIcc _ hend hc.continuousOn
+  refine ⟨c, hcc, hcv, ?_, ?_, ?_, ?_⟩
+  · rw [← apm_t97A03_exp_zero_eq_circleOne, hcv 0 ⟨le_rfl, by linarith⟩]
+    unfold apm_t97A03_quarterPasteRaw; rw [if_pos (by linarith)]; simp
+  · rw [← apm_t97A03_exp_pi_div_two_eq_circleI, hcv _ ⟨by linarith, by linarith⟩]
+    unfold apm_t97A03_quarterPasteRaw; rw [if_pos le_rfl]
+    rw [show Real.pi / 2 / (Real.pi / 2) = 1 by field_simp]; simpa using h01
+  · rw [← apm_t97A03_exp_pi_eq_circleNegOne, hcv _ ⟨by linarith, by linarith⟩]
+    unfold apm_t97A03_quarterPasteRaw; rw [if_neg (by linarith), if_pos le_rfl]
+    rw [show (Real.pi - Real.pi / 2) / (Real.pi / 2) = 1 by field_simp; ring]; simpa using h12
+  · rw [← apm_t97A03_exp_three_pi_div_two_eq_circleNegI, hcv _ ⟨by linarith, by linarith⟩]
+    unfold apm_t97A03_quarterPasteRaw
+    rw [if_neg (by linarith), if_neg (by linarith), if_pos le_rfl]
+    rw [show (3 * Real.pi / 2 - Real.pi) / (Real.pi / 2) = 1 by field_simp; ring]; simpa using h23
+
 abbrev apm_t97A03_TwoSpheres := Fin 2 × apm_t97A03_S2
 
 /-- One lifted circle, cut by four attachment points, threading through the
