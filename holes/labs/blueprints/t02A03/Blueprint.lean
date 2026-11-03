@@ -2546,7 +2546,21 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_cos (q : ℝ × ℝ × ℝ)
 lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_theta (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q)).1 = q.1 := by
-  sorry
+  obtain ⟨h0, h1, -⟩ := apm_t02a03_sector_aux_L2_aux_PsiInv_coords q
+  have hu := apm_t02a03_sector_aux_L2_aux_u_ge q hq
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le q.2.1
+  set u := -apm_t02a03_sector_aux_a q.2.1 +
+    q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 + apm_t02a03_sector_aux_a q.2.1)
+  have hne : (1 : ℝ) + u ≠ 0 := by linarith
+  have hθ1 : apm_t02a03_sector_aux_thetaOne < Real.pi / 2 := by
+    unfold apm_t02a03_sector_aux_thetaOne
+    rw [Real.arccos_lt_pi_div_two]; norm_num
+  have hb := hq.1
+  have hcos : Real.cos q.1 ≠ 0 := (Real.cos_pos_of_mem_Ioo ⟨by linarith [hb.1], by linarith [hb.2]⟩).ne'
+  show Real.arctan ((apm_t02a03_sector_aux_PsiInv q) 1 / (6 / 5 - (apm_t02a03_sector_aux_PsiInv q) 0)) = q.1
+  rw [h0, h1, show (6 / 5 : ℝ) - (6 / 5 - (1 + u) * Real.cos q.1) = (1 + u) * Real.cos q.1 by ring,
+    mul_div_mul_left _ _ hne, ← Real.tan_eq_sin_div_cos]
+  exact Real.arctan_tan (by linarith [hb.1]) (by linarith [hb.2])
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_z (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
@@ -2556,7 +2570,20 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_z (q : ℝ × ℝ × ℝ)
 lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_v (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q)).2.2 = q.2.2 := by
-  sorry
+  have hθ := apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_theta q hq
+  have hrad := apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_rad q hq
+  obtain ⟨-, -, h2⟩ := apm_t02a03_sector_aux_L2_aux_PsiInv_coords q
+  have hz : |q.2.1| ≤ 1 / 5 := abs_le.mpr ⟨by linarith [hq.2.1.1], hq.2.1.2⟩
+  have hpos := apm_t02a03_sector_aux_L2_aux_cpa_pos q.1 q.2.1 hz
+  show (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (apm_t02a03_sector_aux_PsiInv q) - 1 +
+      apm_t02a03_sector_aux_a ((apm_t02a03_sector_aux_PsiInv q) 2)) /
+    (apm_t02a03_sector_aux_c (apm_t02a03_sector_aux_theta (apm_t02a03_sector_aux_PsiInv q))
+        ((apm_t02a03_sector_aux_PsiInv q) 2) +
+      apm_t02a03_sector_aux_a ((apm_t02a03_sector_aux_PsiInv q) 2)) = q.2.2
+  have hθ' : apm_t02a03_sector_aux_theta (apm_t02a03_sector_aux_PsiInv q) = q.1 := hθ
+  rw [hrad, h2, hθ']
+  field_simp
+  ring
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
