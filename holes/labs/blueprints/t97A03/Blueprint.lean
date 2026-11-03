@@ -3005,13 +3005,64 @@ theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide :
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_second
   exact ⟨first.trans second⟩
 
+/-- The closed upper semicircle on circle zero is a spanning tree edge
+from the north point of sheet zero to the north point of sheet one. -/
+def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_arc : Set Circle :=
+  {z | 0 ≤ z.1.im}
+
+/-- Retain the four slid attachments and collapse every point of the upper
+semicircle of circle zero to the north point of sheet zero. -/
+inductive apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel :
+    Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) →
+      Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) → Prop
+  | c0a : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+      (.inr (0, apm_t97A03_circleOne)) (.inl (0, apm_t97A03_north))
+  | c0b : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+      (.inr (0, apm_t97A03_circleNegOne)) (.inl (1, apm_t97A03_north))
+  | c1a : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+      (.inr (1, apm_t97A03_circleOne)) (.inl (1, apm_t97A03_north))
+  | c1b : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+      (.inr (1, apm_t97A03_circleNegOne)) (.inl (0, apm_t97A03_north))
+  | arc (z : Circle) (hz : z ∈ apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_arc) :
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+        (.inr (0, z)) (.inl (0, apm_t97A03_north))
+
+def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space :=
+  Quotient (Relation.EqvGen.setoid apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel)
+
+noncomputable instance : TopologicalSpace apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space :=
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) ↦ Quotient.mk _ x)
+    inferInstance
+
+/-- Collapsing the closed tree edge preserves homotopy type.  Construct the
+inverse by pinching a polar cap of one sphere sheet onto the connecting arc;
+a circle-only reparametrisation cannot separate the two north points that
+have become one.  The cap contraction and edge reparametrisations give the
+inverse homotopies by quotient descent. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space) := by
+  sorry
+
+/-- After contraction both north points coincide.  The lower semicircle of
+circle zero and the two semicircles of circle one are three loops at that
+point.  Parametrising each closed semicircle modulo its endpoints gives the
+three circle summands, while the two sphere sheets give the sphere wedge. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm :
+    Nonempty (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space ≃ₜ apm_t97A03_modelWedge) := by
+  sorry
+
 /-- The slid two-circle graph has four edges between two sphere vertices;
 collapsing one spanning edge leaves the three-circle wedge. -/
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse :
     Nonempty (ContinuousMap.HomotopyEquiv
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover
       apm_t97A03_modelWedge) := by
-  sorry
+  obtain ⟨contract⟩ := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract
+  obtain ⟨normalForm⟩ := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm
+  exact ⟨contract.trans normalForm.toHomotopyEquiv⟩
 
 /-- Collapse one spanning arc in the two-circle quotient.  The remaining
 three independent arcs and two sphere sheets identify the result with the
