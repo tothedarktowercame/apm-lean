@@ -2189,6 +2189,45 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph
 two complementary arcs with the normalized endpoint labels, and descend the
 piecewise inverse maps through `apm_t97A03_OneCircleRel`.  Use covering lift
 uniqueness and the quotient universal property to prove the inverse laws. -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_normalize
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hmono : apm_t97A03_OneCircleMonodromy p hp) :
+    (d.firstPerm = Equiv.swap 0 1 ∧ d.secondPerm = Equiv.refl _) ∨
+      (d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.swap 0 1) := by
+  sorry
+
+/-- The fixed geometric descent when the first complementary arc changes
+sheets and the second one preserves them.  There is no finite permutation
+algebra left in this statement: the four endpoint equalities are exactly the
+four generators of `apm_t97A03_OneCircleRel`, in cyclic order. -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.swap 0 1)
+    (hsecond : d.secondPerm = Equiv.refl _) :
+    Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
+  sorry
+
+/-- The fixed geometric descent when the second complementary arc changes
+sheets and the first one preserves them.  This is the preceding construction
+with the two circle arcs interchanged (and hence the circle parametrisation
+reversed/rotated to retain the four marked model points). -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.refl _)
+    (hsecond : d.secondPerm = Equiv.swap 0 1) :
+    Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -2197,7 +2236,14 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend
     (d : apm_t97A03_ClassifySheetData A B Y p)
     (hmono : apm_t97A03_OneCircleMonodromy p hp) :
     Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
-  sorry
+  rcases apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_normalize
+      A B Y p hp d hmono with h | h
+  · exact
+      apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap
+        A B hAB Y p hp hdegree d h.1 h.2
+  · exact
+      apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap
+        A B hAB Y p hp hdegree d h.1 h.2
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph
     (A B : Circle) (hAB : A ≠ B)
