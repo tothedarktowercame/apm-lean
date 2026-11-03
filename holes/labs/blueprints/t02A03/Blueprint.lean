@@ -2700,20 +2700,95 @@ theorem apm_t02a03_sector_aux_L4_clamp :
       apm_t02a03_sector_aux_L4_clamp_aux_target t ht p hp⟩
   · exact apm_t02a03_sector_aux_L4_clamp_aux_fix
 
+lemma apm_t02a03_sector_aux_L5_aux_a_continuous : Continuous apm_t02a03_sector_aux_a := by
+  unfold apm_t02a03_sector_aux_a; fun_prop
+
+lemma apm_t02a03_sector_aux_L5_aux_Theta_continuous :
+    Continuous apm_t02a03_sector_aux_Theta := by
+  unfold apm_t02a03_sector_aux_Theta
+  refine Real.continuous_arccos.comp (continuous_const.div
+    (continuous_const.mul (continuous_const.add apm_t02a03_sector_aux_L5_aux_a_continuous)) ?_)
+  intro z
+  have := Real.sqrt_nonneg (1 / 16 - z ^ 2)
+  unfold apm_t02a03_sector_aux_a
+  positivity
+
 lemma apm_t02a03_sector_aux_L5_piDelta_aux_continuous :
     Continuous apm_t02a03_sector_aux_piDelta := by
-  sorry
+  have hz : Continuous fun q : ℝ × ℝ => max (-3 / 20 : ℝ) (min (3 / 20) q.2) :=
+    continuous_const.max (continuous_const.min continuous_snd)
+  have hT := apm_t02a03_sector_aux_L5_aux_Theta_continuous.comp hz
+  unfold apm_t02a03_sector_aux_piDelta
+  exact (hT.neg.max (hT.min continuous_fst)).prodMk hz
+
+/-- On `|z| ≤ 3/20` the arccos argument of `Theta` lies in `(0, 1]`. -/
+lemma apm_t02a03_sector_aux_L5_aux_arg_le_one (z : ℝ) (hz : |z| ≤ 3 / 20) :
+    6 / (5 * (1 + apm_t02a03_sector_aux_a z)) ≤ 1 := by
+  have ha : (1 / 5 : ℝ) ≤ apm_t02a03_sector_aux_a z := by
+    unfold apm_t02a03_sector_aux_a
+    apply Real.le_sqrt_of_sq_le
+    have : z ^ 2 ≤ (3 / 20) ^ 2 := by
+      rw [← sq_abs]; exact pow_le_pow_left₀ (abs_nonneg z) hz 2
+    nlinarith
+  rw [div_le_one (by positivity)]
+  linarith
 
 lemma apm_t02a03_sector_aux_L5_piDelta_aux_maps (q : ℝ × ℝ) :
     apm_t02a03_sector_aux_Delta (apm_t02a03_sector_aux_piDelta q) := by
-  sorry
+  set z' := max (-3 / 20 : ℝ) (min (3 / 20) q.2) with hz'
+  have hz'abs : |z'| ≤ 3 / 20 := by
+    rw [abs_le]; constructor
+    · have := le_max_left (-3 / 20 : ℝ) (min (3 / 20) q.2); linarith
+    · exact max_le (by norm_num) (min_le_left _ _)
+  set T := apm_t02a03_sector_aux_Theta z' with hT
+  have hT0 : 0 ≤ T := Real.arccos_nonneg _
+  have hTpi : T ≤ Real.pi := Real.arccos_le_pi _
+  set θ' := max (-T) (min T q.1) with hθ'
+  have hθ'abs : |θ'| ≤ T := by
+    rw [abs_le]; constructor
+    · exact le_max_left _ _
+    · exact max_le (by linarith) (min_le_left _ _)
+  have hpd : apm_t02a03_sector_aux_piDelta q = (θ', z') := rfl
+  rw [hpd]
+  refine ⟨hz'abs, ?_⟩
+  have harg := apm_t02a03_sector_aux_L5_aux_arg_le_one z' hz'abs
+  have harg0 : (-1 : ℝ) ≤ 6 / (5 * (1 + apm_t02a03_sector_aux_a z')) := by
+    have := Real.sqrt_nonneg (1 / 16 - z' ^ 2)
+    have : 0 ≤ 6 / (5 * (1 + apm_t02a03_sector_aux_a z')) := by
+      unfold apm_t02a03_sector_aux_a; positivity
+    linarith
+  have hcosT : Real.cos T = 6 / (5 * (1 + apm_t02a03_sector_aux_a z')) :=
+    Real.cos_arccos harg0 harg
+  show 6 / (5 * (1 + apm_t02a03_sector_aux_a z')) ≤ Real.cos θ'
+  rw [← hcosT, ← Real.cos_abs θ']
+  exact Real.cos_le_cos_of_nonneg_of_le_pi (abs_nonneg _) hTpi hθ'abs
 
 lemma apm_t02a03_sector_aux_L5_piDelta_aux_fix (q : ℝ × ℝ)
     (hq : q.1 ∈ Set.Icc (-apm_t02a03_sector_aux_thetaOne)
       apm_t02a03_sector_aux_thetaOne)
     (hDelta : apm_t02a03_sector_aux_Delta q) :
     apm_t02a03_sector_aux_piDelta q = q := by
-  sorry
+  obtain ⟨θ, z⟩ := q
+  obtain ⟨hz, hcos⟩ := hDelta
+  simp only at hz hcos hq
+  have hzc : max (-3 / 20 : ℝ) (min (3 / 20) z) = z := by
+    rw [abs_le] at hz
+    rw [min_eq_right hz.2, max_eq_right (by linarith [hz.1])]
+  have hθpi : |θ| ≤ Real.pi := by
+    rw [abs_le]; have := Real.arccos_le_pi (17 / 25 : ℝ)
+    unfold apm_t02a03_sector_aux_thetaOne at hq
+    exact ⟨by linarith [hq.1], by linarith [hq.2]⟩
+  have hθT : |θ| ≤ apm_t02a03_sector_aux_Theta z := by
+    unfold apm_t02a03_sector_aux_Theta
+    rw [← Real.arccos_cos (abs_nonneg θ) hθpi, Real.cos_abs]
+    exact Real.arccos_le_arccos hcos
+  have hθc : max (-apm_t02a03_sector_aux_Theta z) (min (apm_t02a03_sector_aux_Theta z) θ) = θ := by
+    rw [abs_le] at hθT
+    rw [min_eq_right hθT.2, max_eq_right hθT.1]
+  show (max (-apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) z)))
+      (min (apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) z))) θ),
+      max (-3 / 20) (min (3 / 20) z)) = (θ, z)
+  rw [hzc, hθc]
 
 theorem apm_t02a03_sector_aux_L5_piDelta :
     Continuous apm_t02a03_sector_aux_piDelta ∧
