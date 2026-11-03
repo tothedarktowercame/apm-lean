@@ -2726,20 +2726,42 @@ theorem apm_t02a03_sector_aux_L5_piDelta :
 
 def apm_t02a03_sector_aux_q0 : ℝ × ℝ × ℝ := (0, 0, 1)
 
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_lambda :
+    ContinuousOn apm_t02a03_sector_aux_lambda
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta_aux :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  have hlambda := apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_lambda
+  clear hlambda
+  sorry
+
 lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta :
     ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta_aux
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z_aux :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
       ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
   sorry
 
 lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z :
     ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
       ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z_aux
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v_aux :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
   sorry
 
 lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v :
     ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
       ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
-  sorry
+  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v_aux
 
 theorem apm_t02a03_sector_aux_L6a_r_continuous_off_q0 :
     ContinuousOn apm_t02a03_sector_aux_r
@@ -2748,20 +2770,35 @@ theorem apm_t02a03_sector_aux_L6a_r_continuous_off_q0 :
     (apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z.prodMk
       apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v)
 
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta_aux :
+    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      apm_t02a03_sector_aux_q0 := by
+  sorry
+
 lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta :
     ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      apm_t02a03_sector_aux_q0 := by
+  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta_aux
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z_aux :
+    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
       apm_t02a03_sector_aux_q0 := by
   sorry
 
 lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z :
     ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
       apm_t02a03_sector_aux_q0 := by
+  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z_aux
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v_aux :
+    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
+      apm_t02a03_sector_aux_q0 := by
   sorry
 
 lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v :
     ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
       apm_t02a03_sector_aux_q0 := by
-  sorry
+  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v_aux
 
 theorem apm_t02a03_sector_aux_L6b_r_continuous_at_q0 :
     ContinuousAt apm_t02a03_sector_aux_r apm_t02a03_sector_aux_q0 := by
@@ -2769,17 +2806,49 @@ theorem apm_t02a03_sector_aux_L6b_r_continuous_at_q0 :
     (apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z.prodMk
       apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v)
 
+lemma apm_t02a03_sector_aux_L6c_r_fixes_target_aux_torus (q : ℝ × ℝ × ℝ)
+    (hbox : apm_t02a03_sector_aux_box q)
+    (hq : q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1)) :
+    apm_t02a03_sector_aux_r q = q := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L6c_r_fixes_target_aux_arc (q : ℝ × ℝ × ℝ)
+    (hbox : apm_t02a03_sector_aux_box q)
+    (hq : q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1) :
+    apm_t02a03_sector_aux_r q = q := by
+  sorry
+
 theorem apm_t02a03_sector_aux_L6c_r_fixes_target (q : ℝ × ℝ × ℝ)
     (hbox : apm_t02a03_sector_aux_box q)
     (hq : (q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1)) ∨
       (q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1)) :
     apm_t02a03_sector_aux_r q = q := by
+  rcases hq with hq | hq
+  · exact apm_t02a03_sector_aux_L6c_r_fixes_target_aux_torus q hbox hq
+  · exact apm_t02a03_sector_aux_L6c_r_fixes_target_aux_arc q hbox hq
+
+lemma apm_t02a03_sector_aux_L6e_r_box_aux_theta (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_r q).1 ∈
+      Set.Icc (-apm_t02a03_sector_aux_thetaOne) apm_t02a03_sector_aux_thetaOne := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L6e_r_box_aux_z (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_r q).2.1 ∈ Set.Icc (-1 / 5) (1 / 5) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L6e_r_box_aux_v (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_r q).2.2 ∈ Set.Icc 0 1 := by
   sorry
 
 theorem apm_t02a03_sector_aux_L6e_r_box (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     apm_t02a03_sector_aux_box (apm_t02a03_sector_aux_r q) := by
-  sorry
+  exact ⟨apm_t02a03_sector_aux_L6e_r_box_aux_theta q hq,
+    apm_t02a03_sector_aux_L6e_r_box_aux_z q hq,
+    apm_t02a03_sector_aux_L6e_r_box_aux_v q hq⟩
 
 theorem apm_t02a03_sector_aux_L6d_r_lands_target (q : ℝ × ℝ × ℝ) :
     let rq := apm_t02a03_sector_aux_r q
