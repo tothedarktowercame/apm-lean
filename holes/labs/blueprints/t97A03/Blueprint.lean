@@ -5865,12 +5865,32 @@ local notation "OV" => (Quotient.mk _ (Sum.inl (0, apm_t97A03_north)) : OCC)
 Use the same polar formula as for two circles: cap angle `(1-t)π/2`,
 complementary polar angle `π(θ-(1-t)π/2)/(π-(1-t)π/2)`, and on the cap
 edge parameter `t+(1-t)(1-cos θ)/(1-cos((1-t)π/2))`. -/
-theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion :
+theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family :
+    ∃ F : C(apm_t97A03_S2 × unitInterval, apm_t97A03_S2),
+      (∀ x, x.1 2 ≤ 0 → F (x, 0) =
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_fold x) ∧
+      (∀ x, F (x, 1) = x) ∧
+      (∀ x (t : unitInterval), x.1 2 = (t : ℝ) → F (x, t) = apm_t97A03_north) := by
+  sorry
+
+theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_glue
+    (F : C(apm_t97A03_S2 × unitInterval, apm_t97A03_S2))
+    (hF0 : ∀ x, x.1 2 ≤ 0 → F (x, 0) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_fold x)
+    (hF1 : ∀ x, F (x, 1) = x)
+    (hFb : ∀ x (t : unitInterval), x.1 2 = (t : ℝ) → F (x, t) = apm_t97A03_north) :
     ∃ H : C(apm_t97A03_S2, C(unitInterval, OSC)),
       (∀ x, H x 0 = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_cap x) ∧
       (∀ x, H x 1 = Quotient.mk _ (.inl (1, x))) ∧
       (∀ t, H apm_t97A03_north t = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_edge t) := by
   sorry
+
+theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion :
+    ∃ H : C(apm_t97A03_S2, C(unitInterval, OSC)),
+      (∀ x, H x 0 = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_cap x) ∧
+      (∀ x, H x 1 = Quotient.mk _ (.inl (1, x))) ∧
+      (∀ t, H apm_t97A03_north t = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_edge t) := by
+  obtain ⟨F, h0, h1, hb⟩ := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family
+  exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_glue F h0 h1 hb
 
 set_option maxHeartbeats 800000 in
 /-- Keep quadrant one fixed, grow the collapsed edge in quadrant two,
@@ -7276,12 +7296,43 @@ for `θ ≥ a`, use sphere sheet one at polar angle `π(θ-a)/(π-a)`,
 retaining the longitude. At `t=1` use the identity. The formulas agree
 at `θ=a` at the north pole of sheet one; the shrinking cap tends to that
 pole at the terminal corner. At `t=0` the lower formula is exactly `fold`. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy_aux_sphere_aux_fold_family :
+    ∃ F : C(apm_t97A03_S2 × unitInterval, apm_t97A03_S2),
+      (∀ x, x.1 2 ≤ 0 → F (x, 0) =
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold x) ∧
+      (∀ x, F (x, 1) = x) ∧
+      (∀ x (t : unitInterval), x.1 2 = (t : ℝ) →
+        F (x, t) = apm_t97A03_north) := by
+  obtain ⟨F, h0, h1, hb⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family
+  refine ⟨F, ?_, h1, hb⟩
+  intro x hx
+  rw [h0 x hx]
+  rfl
+
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy_aux_sphere_aux_glue
+    (F : C(apm_t97A03_S2 × unitInterval, apm_t97A03_S2))
+    (hF0 : ∀ x, x.1 2 ≤ 0 → F (x, 0) =
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_fold x)
+    (hF1 : ∀ x, F (x, 1) = x)
+    (hFb : ∀ x (t : unitInterval), x.1 2 = (t : ℝ) →
+      F (x, t) = apm_t97A03_north) :
+    ∃ H : C(apm_t97A03_S2, C(unitInterval, SC)),
+      (∀ x, H x 0 = apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap x) ∧
+      (∀ x, H x 1 = Quotient.mk _ (.inl (1, x))) ∧
+      (∀ t, H apm_t97A03_north t =
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge t) := by
+  sorry
+
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy_aux_sphere :
     ∃ H : C(apm_t97A03_S2, C(unitInterval, SC)),
       (∀ x, H x 0 = apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_cap x) ∧
       (∀ x, H x 1 = Quotient.mk _ (.inl (1, x))) ∧
       (∀ t, H apm_t97A03_north t = apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_edge t) := by
-  sorry
+  obtain ⟨F, h0, h1, hb⟩ :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy_aux_sphere_aux_fold_family
+  exact apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy_aux_sphere_aux_glue
+    F h0 h1 hb
 
 /-- Grow the upper arc and shorten the lower detour; the upper arc remains
 inside the spanning edge throughout the motion. -/
