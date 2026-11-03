@@ -9009,11 +9009,80 @@ private theorem
   exact
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous
 
+/-- Every circle point has a square root in the closed upper half (claude-14). -/
+private theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_aux_sqrt_upper (ζ : Circle) :
+    ∃ z : Circle, 0 ≤ z.1.im ∧ z ^ 2 = ζ := by
+  set θ := toIcoMod Real.two_pi_pos 0 (Complex.arg (ζ : ℂ)) with hθ
+  have hmem : θ ∈ Set.Ico 0 (2 * Real.pi) := by
+    simpa using toIcoMod_mem_Ico Real.two_pi_pos 0 (Complex.arg (ζ : ℂ))
+  refine ⟨Circle.exp (θ / 2), ?_, ?_⟩
+  · show 0 ≤ (Circle.exp (θ / 2) : ℂ).im
+    rw [Circle.coe_exp, Complex.exp_ofReal_mul_I_im]
+    exact Real.sin_nonneg_of_nonneg_of_le_pi (by linarith [hmem.1]) (by linarith [hmem.2])
+  · rw [sq, ← Circle.exp_add, add_halves, hθ, toIcoMod,
+      Circle.periodic_exp.sub_zsmul_eq, Circle.exp_arg]
+
+/-- ... and one in the closed lower half: multiply by `-1`. -/
+private theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_aux_sqrt_lower (ζ : Circle) :
+    ∃ z : Circle, z.1.im ≤ 0 ∧ z ^ 2 = ζ := by
+  obtain ⟨z, hz, hz2⟩ := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_aux_sqrt_upper ζ
+  refine ⟨apm_t97A03_circleNegOne * z, ?_, ?_⟩
+  · show ((apm_t97A03_circleNegOne * z : Circle) : ℂ).im ≤ 0
+    simp [apm_t97A03_circleNegOne]; linarith
+  · rw [mul_pow, ← hz2]
+    have : apm_t97A03_circleNegOne ^ 2 = 1 := by
+      apply Subtype.ext; simp [apm_t97A03_circleNegOne]
+    rw [this, one_mul]
+
 private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map_surjective_aux_raw :
     Function.Surjective
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw := by
-  sorry
+  intro w
+  induction w using Quotient.inductionOn with
+  | h p =>
+  rcases p with s | t
+  · induction s using Quotient.inductionOn with
+    | h q =>
+    rcases q with x | x
+    · exact ⟨.inl (0, x), rfl⟩
+    · exact ⟨.inl (1, x), rfl⟩
+  · induction t using Quotient.inductionOn with
+    | h r =>
+    rcases r with u | c
+    · induction u using Quotient.inductionOn with
+      | h v =>
+      rcases v with c | c
+      · obtain ⟨z, hz, hz2⟩ := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_aux_sqrt_lower c
+        refine ⟨.inr (0, z), ?_⟩
+        have htarget : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2 0 z =
+            quotientMap apm_t97A03_twoSphereBase ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+              (.inr (quotientMap _ _ (.inl (quotientMap 1 1 (.inl c))))) := by
+          unfold apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2; rw [hz2]; rfl
+        rcases lt_or_eq_of_le hz with hlt | heq
+        · show apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr (0, z)) = _
+          dsimp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw]; simp only [if_true]; rw [if_neg (by linarith)]; exact htarget
+        · show apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr (0, z)) = _
+          dsimp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw]; simp only [if_true]; rw [if_pos heq.symm.le]
+          exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary 0 z heq).symm.trans htarget
+      · obtain ⟨z, hz, hz2⟩ := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_aux_sqrt_upper c
+        refine ⟨.inr (1, z), ?_⟩
+        show apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr (1, z)) = _
+        dsimp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw]
+        rw [if_neg (show (1 : Fin 2) ≠ 0 by decide), if_pos hz]
+        unfold apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2; rw [hz2]; rfl
+    · obtain ⟨z, hz, hz2⟩ := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_aux_sqrt_lower c
+      refine ⟨.inr (1, z), ?_⟩
+      have htarget : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2 2 z =
+          quotientMap apm_t97A03_twoSphereBase ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase (.inr (quotientMap _ _ (.inr c))) := by
+        unfold apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2; rw [hz2]; rfl
+      show apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr (1, z)) = _
+      dsimp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw]
+      rw [if_neg (show (1 : Fin 2) ≠ 0 by decide)]
+      rcases lt_or_eq_of_le hz with hlt | heq
+      · rw [if_neg (by linarith)]; exact htarget
+      · rw [if_pos heq.symm.le, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary 1 z heq]
+        exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary 2 z heq).symm.trans htarget
 
 private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map_surjective :
