@@ -6845,11 +6845,44 @@ private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_sphere,
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle⟩
 
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_outer_base :
+    (quotientMap apm_t97A03_twoSphereBase ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase (.inr ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase) :
+      apm_t97A03_modelWedge) = apm_t97A03_modelWedgeBase :=
+  (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
+
+/-- Every leg sends a fourth root of unity to the wedge basepoint. -/
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_base (j : Fin 3) (z : Circle) (hz : z ^ 4 = 1) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j z = apm_t97A03_modelWedgeBase := by
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4
+  simp only [hz]
+  fin_cases j
+  · show quotientMap _ _ (.inr (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoLeft 1))) = _
+    rw [ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoLeft_base]; exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_outer_base
+  · show quotientMap _ _ (.inr (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight 1))) = _
+    rw [ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight_base]; exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_outer_base
+  · show quotientMap _ _ (.inr (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew 1)) = _
+    rw [ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew_base]; exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_outer_base
+
+/-- Both sphere north poles map to the wedge basepoint. -/
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_sphere_north (k : Fin 2) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_sphere (k, apm_t97A03_north) = apm_t97A03_modelWedgeBase := by
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_sphere
+  fin_cases k
+  · rfl
+  · show quotientMap _ _ (.inl (quotientMap apm_t97A03_north apm_t97A03_north (.inr apm_t97A03_north))) = _
+    rw [show (quotientMap apm_t97A03_north apm_t97A03_north (.inr apm_t97A03_north) :
+        apm_t97A03_twoSphereWedge) = apm_t97A03_twoSphereBase from
+      (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm]
+    rfl
+
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_respects_aux_generator_aux_p0 :
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr apm_t97A03_circleOne) =
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl (0, apm_t97A03_north)) := by
-  sorry
+  have hr : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr apm_t97A03_circleOne) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 0 apm_t97A03_circleOne := by
+    unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw; simp [apm_t97A03_circleOne]
+  rw [hr, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_base 0 _ (by apply Subtype.ext; simp [apm_t97A03_circleOne])]
+  exact (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_sphere_north 0).symm
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_respects_aux_generator_aux_p1 :
@@ -6863,13 +6896,20 @@ private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_respects_aux_generator_aux_p2 :
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr apm_t97A03_circleNegOne) =
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl (1, apm_t97A03_north)) := by
-  sorry
+  have hr : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr apm_t97A03_circleNegOne) = apm_t97A03_modelWedgeBase := by
+    unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw; simp [apm_t97A03_circleNegOne]
+  rw [hr]
+  exact (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_sphere_north 1).symm
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_respects_aux_generator_aux_p3 :
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr apm_t97A03_circleNegI) =
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl (1, apm_t97A03_north)) := by
-  sorry
+  have hr : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr apm_t97A03_circleNegI) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 1 apm_t97A03_circleNegI := by
+    unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw; simp [apm_t97A03_circleNegI]; norm_num
+  rw [hr, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_base 1 _ (by
+    apply Subtype.ext; simp [apm_t97A03_circleNegI]; rw [neg_pow, Complex.I_pow_four]; norm_num)]
+  exact (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_sphere_north 1).symm
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_respects_aux_generator_aux_arc
