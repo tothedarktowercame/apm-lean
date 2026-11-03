@@ -3840,7 +3840,136 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
     Function.Injective
       (apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_map
         d c hn0 hs0 hn1 hs1) := by
-  sorry
+  classical
+  have hAB : A ≠ B := by
+    intro hAB
+    have hbase : apm_t97A03_baseSphere A B apm_t97A03_north =
+        apm_t97A03_baseSphere A B apm_t97A03_south := by
+      rw [← apm_t97A03_baseCircle_A, ← apm_t97A03_baseCircle_B, hAB]
+    have hp0 : p (c apm_t97A03_circleOne) =
+        apm_t97A03_baseSphere A B apm_t97A03_north := by
+      rw [hn0, d.sphere_lifts]
+    have hpi : p (c apm_t97A03_circleI) =
+        apm_t97A03_baseSphere A B apm_t97A03_north := by
+      rw [hs0, d.sphere_lifts, ← hbase]
+    have hpn : p (c apm_t97A03_circleNegOne) =
+        apm_t97A03_baseSphere A B apm_t97A03_north := by
+      rw [hn1, d.sphere_lifts]
+    obtain ⟨i0, hi0, -⟩ := d.sphere_unique hp0
+    obtain ⟨ii, hii, -⟩ := d.sphere_unique hpi
+    obtain ⟨ineg, hineg, -⟩ := d.sphere_unique hpn
+    have h0i : i0 ≠ ii := by
+      intro e
+      have hc_eq : c apm_t97A03_circleOne = c apm_t97A03_circleI :=
+        hi0.symm.trans (e ▸ hii)
+      have heq := hcinj hc_eq
+      have hv := congrArg Subtype.val heq
+      norm_num [apm_t97A03_circleOne, apm_t97A03_circleI] at hv
+      have hv' := congrArg Complex.re hv
+      norm_num at hv'
+    have h0n : i0 ≠ ineg := by
+      intro e
+      have hc_eq : c apm_t97A03_circleOne = c apm_t97A03_circleNegOne :=
+        hi0.symm.trans (e ▸ hineg)
+      have heq := hcinj hc_eq
+      have hv := congrArg Subtype.val heq
+      norm_num [apm_t97A03_circleOne, apm_t97A03_circleNegOne] at hv
+    have hin' : ii = ineg := by
+      fin_cases i0 <;> fin_cases ii <;> fin_cases ineg <;> simp_all
+    have hc_eq : c apm_t97A03_circleI = c apm_t97A03_circleNegOne :=
+      hii.symm.trans (hin' ▸ hineg)
+    have heq := hcinj hc_eq
+    have hv := congrArg Subtype.val heq
+    norm_num [apm_t97A03_circleI, apm_t97A03_circleNegOne] at hv
+    have hv' := congrArg Complex.im hv
+    norm_num at hv'
+  have hNS : apm_t97A03_north ≠ apm_t97A03_south := by
+    intro h
+    have hv := congrArg (fun z : apm_t97A03_S2 => z.1 (2 : Fin 3)) h
+    norm_num [apm_t97A03_north, apm_t97A03_south,
+      EuclideanSpace.single_apply] at hv
+  have hmix (i : Fin 2) (z : apm_t97A03_S2) (w : Circle)
+      (he : d.sphere i z = c w) :
+      (Quotient.mk _ (.inl (i, z)) : apm_t97A03_OneCircleCover) =
+        Quotient.mk _ (.inr w) := by
+    obtain ⟨u, hu⟩ := hcrange w
+    have hb : apm_t97A03_baseSphere A B z =
+        apm_t97A03_baseCircle A B u := by
+      rw [← d.sphere_lifts i z, ← hu, he]
+    have hnrm :=
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize_eq
+        A B hAB hb
+    by_cases ha : u = A
+    · have hz : z = apm_t97A03_north := by
+        simpa [ha,
+          apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+          using hnrm
+      subst z
+      fin_cases i
+      · have hw : w = apm_t97A03_circleOne := hcinj (he.symm.trans hn0.symm)
+        subst w
+        exact Quotient.sound (Relation.EqvGen.symm _ _
+          (Relation.EqvGen.rel _ _ apm_t97A03_OneCircleRel.n0))
+      · have hw : w = apm_t97A03_circleNegOne := hcinj (he.symm.trans hn1.symm)
+        subst w
+        exact Quotient.sound (Relation.EqvGen.symm _ _
+          (Relation.EqvGen.rel _ _ apm_t97A03_OneCircleRel.n1))
+    · by_cases hb' : u = B
+      · have hz : z = apm_t97A03_south := by
+          simpa [ha, hb', hAB.symm,
+            apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+            using hnrm
+        subst z
+        obtain ⟨k, hk, hku⟩ := d.sphere_unique
+          (d.sphere_lifts i apm_t97A03_south)
+        fin_cases i
+        · have hw : w = apm_t97A03_circleI := hcinj (he.symm.trans hs0.symm)
+          subst w
+          exact Quotient.sound (Relation.EqvGen.symm _ _
+            (Relation.EqvGen.rel _ _ apm_t97A03_OneCircleRel.s0))
+        · have hw : w = apm_t97A03_circleNegI := hcinj (he.symm.trans hs1.symm)
+          subst w
+          exact Quotient.sound (Relation.EqvGen.symm _ _
+            (Relation.EqvGen.rel _ _ apm_t97A03_OneCircleRel.s1))
+      · simp [ha, hb',
+          apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+          at hnrm
+  intro x y hxy
+  refine Quotient.inductionOn₂ x y ?_ hxy
+  intro x y hxy
+  change
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_raw d c x =
+      apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_raw d c y
+    at hxy
+  cases x with
+  | inl iz =>
+      cases y with
+      | inl jz =>
+          obtain ⟨i, z⟩ := iz
+          obtain ⟨j, z'⟩ := jz
+          change d.sphere i z = d.sphere j z' at hxy
+          have hb : apm_t97A03_baseSphere A B z =
+              apm_t97A03_baseSphere A B z' := by
+            rw [← d.sphere_lifts i z, ← d.sphere_lifts j z', hxy]
+          have hnrm :=
+            apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize_eq
+              A B hAB hb
+          have hz : z = z' := by
+            simpa [apm_t97A03_baseSphere,
+              apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact_aux_normalize]
+              using hnrm
+          subst z'
+          obtain ⟨k, hk, hku⟩ := d.sphere_unique (d.sphere_lifts i z)
+          have hij : i = j := (hku i rfl).trans (hku j hxy.symm).symm
+          subst j
+          rfl
+      | inr w => exact hmix iz.1 iz.2 w hxy
+  | inr w =>
+      cases y with
+      | inl jz => exact (hmix jz.1 jz.2 w hxy.symm).symm
+      | inr w' =>
+          change c w = c w' at hxy
+          rw [hcinj hxy]
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_exact
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
