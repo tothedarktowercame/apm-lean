@@ -2728,6 +2728,35 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
   · rw [d.second_one, hsecond]
     rfl
 
+/-- The concrete geometric content of the first-swap case.  The decoder uses
+`d.sphere` on the two sphere summands.  On the four successive closed quarter
+arcs `1→i`, `i→-1`, `-1→-i`, and `-i→1`, it uses respectively
+`d.second 0`, the reverse of `d.first 1`, `d.second 1`, and the reverse of
+`d.first 0`.  The endpoint hypotheses are precisely what makes these pieces
+descend through `apm_t97A03_OneCircleRel`.
+
+This statement deliberately fixes the decoder by its construction data rather
+than quantifying over an arbitrary map: its proof is the remaining pasting and
+covering-lift uniqueness argument. -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hendpoints :
+      d.first 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.first 0 1 = d.sphere 1 apm_t97A03_south ∧
+      d.first 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.first 1 1 = d.sphere 0 apm_t97A03_south ∧
+      d.second 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.second 0 1 = d.sphere 0 apm_t97A03_south ∧
+      d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.second 1 1 = d.sphere 1 apm_t97A03_south) :
+    ∃ f : apm_t97A03_OneCircleCover → Y,
+      Continuous f ∧ Function.Bijective f := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -2744,7 +2773,15 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
       d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
       d.second 1 1 = d.sphere 1 apm_t97A03_south) :
     Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
-  sorry
+  obtain ⟨f, hf, hfb⟩ :=
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder
+      A B hAB Y p hp hdegree d hendpoints
+  letI : CompactSpace apm_t97A03_OneCircleCover := Quotient.compactSpace
+  letI : T2Space Y :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2
+      A B hAB Y p hp
+  exact ⟨(Continuous.homeoOfEquivCompactToT2
+    (f := Equiv.ofBijective f hfb) hf).symm⟩
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap
     (A B : Circle) (hAB : A ≠ B)
