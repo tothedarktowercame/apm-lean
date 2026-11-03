@@ -2093,6 +2093,41 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
       (d.sphere_lifts (d.secondPerm i) apm_t97A03_north)
     exact (hjunique _ rfl).trans (hjunique _ hsphere.symm).symm
 
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (first second : Set.Icc (0 : ℝ) 1 → Y)
+    (hfirst : Continuous first) (hsecond : Continuous second)
+    (hzero : first 0 = second 0) (hone : first 1 = second 1) :
+    ∃ s : Circle → Y,
+      Continuous s ∧
+      (∀ t, s (apm_t97A03_circleArc A B t) = first t) ∧
+      (∀ t, s (apm_t97A03_complementaryCircleArc A B t) = second t) := by
+  sorry
+
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_endpoints
+    (A B : Circle)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hperms : d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.refl _) :
+    d.first 0 0 = d.second 0 0 ∧ d.first 0 1 = d.second 0 1 := by
+  constructor
+  · rw [d.first_zero, d.second_zero]
+  · rw [d.first_one, d.second_one, hperms.1, hperms.2]
+
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_lifts
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (s : Circle → Y)
+    (hsfirst : ∀ t, s (apm_t97A03_circleArc A B t) = d.first 0 t)
+    (hssecond : ∀ t,
+      s (apm_t97A03_complementaryCircleArc A B t) = d.second 0 t) :
+    ∀ z, p (s z) = apm_t97A03_baseCircle A B z := by
+  sorry
+
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
@@ -2105,7 +2140,19 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
       (∀ z, p (s z) = apm_t97A03_baseCircle A B z) ∧
       s A = d.sphere 0 apm_t97A03_north ∧
       s B = d.sphere 0 apm_t97A03_south := by
-  sorry
+  obtain ⟨hzero, hone⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_endpoints
+      A B Y p d hperms
+  obtain ⟨s, hscont, hsfirst, hssecond⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste
+      A B hAB Y (d.first 0) (d.second 0) (d.continuous_first 0)
+        (d.continuous_second 0) hzero hone
+  refine ⟨s, hscont, ?_, ?_, ?_⟩
+  · exact
+      apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_lifts
+        A B hAB Y p d s hsfirst hssecond
+  · simpa [d.first_zero] using hsfirst 0
+  · simpa [d.first_one, hperms.1] using hsfirst 1
 
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section
     (A B : Circle) (hAB : A ≠ B)
@@ -4740,5 +4787,3 @@ theorem apm_t97a03
   have hmodel := apm_t97A03_bridge_classify_connected_double_cover
     A B hAB Y p hp hdegree
   exact ⟨hmodel, apm_t97A03_bridge_invariants_of_model Y y hmodel⟩
-
-
