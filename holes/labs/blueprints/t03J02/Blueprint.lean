@@ -197,31 +197,22 @@ def apm_t03J02_overlapToRight
   ⟨fun x ↦ ⟨x.1, x.2.2⟩, continuous_subtype_val.subtype_mk _⟩
 
 structure apm_t03J02_CompatibleOpenCover
-    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) where
-  leftSet : Set (apm_t03J02_space j₁ j₂)
-  rightSet : Set (apm_t03J02_space j₁ j₂)
+    (j₁ j₂ : C(Circle, apm_t03J02_Torus)) (Y : Type) [TopologicalSpace Y] where
+  leftSet : Set (Y)
+  rightSet : Set (Y)
   open_left : IsOpen leftSet
   open_right : IsOpen rightSet
   cover : leftSet ∪ rightSet = Set.univ
   leftEquiv : ContinuousMap.HomotopyEquiv leftSet apm_t03J02_Torus
   rightEquiv : ContinuousMap.HomotopyEquiv rightSet apm_t03J02_Torus
   overlapEquiv : ContinuousMap.HomotopyEquiv
-    (leftSet ∩ rightSet : Set (apm_t03J02_space j₁ j₂)) Circle
+    (leftSet ∩ rightSet : Set (Y)) Circle
   left_compat :
     (leftEquiv.toFun.comp (apm_t03J02_overlapToLeft leftSet rightSet)).Homotopic
       (j₁.comp overlapEquiv.toFun)
   right_compat :
     (rightEquiv.toFun.comp (apm_t03J02_overlapToRight leftSet rightSet)).Homotopic
       (j₂.comp overlapEquiv.toFun)
-
-/-- LIBRARY: the common collar/open-cover comparison for the concrete quotient.
-It packages exactly the shared geometric input needed by both invariant computations. -/
-theorem apm_t03J02_compatibleOpenCover
-    (j₁ j₂ : C(Circle, apm_t03J02_Torus))
-    (hj₁ : Topology.IsEmbedding j₁)
-    (hj₂ : Topology.IsEmbedding j₂) :
-    Nonempty (apm_t03J02_CompatibleOpenCover j₁ j₂) := by
-  sorry
 
 lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected
     {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
@@ -644,10 +635,11 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
 `leftEquiv ∘ leg ≃ j₁ ∘ overlapEquiv` is null, and composing with
 `leftEquiv.invFun` recovers `leg` up to homotopy. -/
 lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_nullLegs
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic)
     (hnull₂ : j₂.Nullhomotopic)
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
     (apm_t03J02_overlapToLeft hcover.leftSet hcover.rightSet).Nullhomotopic ∧
       (apm_t03J02_overlapToRight hcover.leftSet hcover.rightSet).Nullhomotopic := by
   constructor
@@ -698,17 +690,18 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
 /-- The van Kampen equivalence for the concrete gluing, with the two vertex
 groups read off the torus through the cover's homotopy equivalences. -/
 lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic)
     (hnull₂ : j₂.Nullhomotopic)
-    (z₀ : Circle)
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    (y₀ : Y)
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
     Nonempty
-      (FundamentalGroup (apm_t03J02_space j₁ j₂)
-          (apm_t03J02_basepoint j₁ j₂ z₀) ≃*
+      (FundamentalGroup (Y)
+          (y₀) ≃*
         Monoid.Coprod
-          (FundamentalGroup apm_t03J02_Torus (j₁ z₀))
-          (FundamentalGroup apm_t03J02_Torus (j₂ z₀))) := by
+          (FundamentalGroup apm_t03J02_Torus (j₁ 1))
+          (FundamentalGroup apm_t03J02_Torus (j₂ 1))) := by
   letI : PathConnectedSpace apm_t03J02_Torus := {
     nonempty := ⟨((1 : Circle), (1 : Circle))⟩
     joined x y := ⟨(PathConnectedSpace.somePath x.1 y.1).prod
@@ -720,12 +713,12 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected
       hcover.rightEquiv
   haveI : PathConnectedSpace (hcover.leftSet ∩ hcover.rightSet :
-      Set (apm_t03J02_space j₁ j₂)) :=
+      Set (Y)) :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected
       hcover.overlapEquiv
-  let w : (hcover.leftSet ∩ hcover.rightSet : Set (apm_t03J02_space j₁ j₂)) :=
+  let w : (hcover.leftSet ∩ hcover.rightSet : Set (Y)) :=
     hcover.overlapEquiv.invFun 1
-  haveI : PathConnectedSpace (apm_t03J02_space j₁ j₂) :=
+  haveI : PathConnectedSpace (Y) :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_pathConnectedSpace
       hcover.leftSet hcover.rightSet hcover.cover w
   obtain ⟨hl, hr⟩ :=
@@ -737,34 +730,35 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivi
       hcover.cover hl hr w
   obtain ⟨e₁⟩ :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_hequiv
-      hcover.leftEquiv ⟨w.1, w.2.1⟩ (j₁ z₀)
+      hcover.leftEquiv ⟨w.1, w.2.1⟩ (j₁ 1)
   obtain ⟨e₂⟩ :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_hequiv
-      hcover.rightEquiv ⟨w.1, w.2.2⟩ (j₂ z₀)
+      hcover.rightEquiv ⟨w.1, w.2.2⟩ (j₂ 1)
   exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPath
       (PathConnectedSpace.somePath _ w.1)).trans
     (g.trans (MulEquiv.coprodCongr e₁ e₂))⟩
 
 lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic)
     (hnull₂ : j₂.Nullhomotopic)
-    (z₀ : Circle)
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    (y₀ : Y)
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
     Nonempty
-      (FundamentalGroup (apm_t03J02_space j₁ j₂)
-          (apm_t03J02_basepoint j₁ j₂ z₀) ≃*
+      (FundamentalGroup (Y)
+          (y₀) ≃*
         Monoid.Coprod (Multiplicative (ℤ × ℤ))
           (Multiplicative (ℤ × ℤ))) := by
   obtain ⟨evk⟩ :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs
-      j₁ j₂ hnull₁ hnull₂ z₀ hcover
+      j₁ j₂ hnull₁ hnull₂ y₀ hcover
   obtain ⟨e₁⟩ :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_torus
-      (j₁ z₀)
+      (j₁ 1)
   obtain ⟨e₂⟩ :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_torus
-      (j₂ z₀)
+      (j₂ 1)
   exact ⟨evk.trans (MulEquiv.coprodCongr e₁ e₂)⟩
 
 def apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation_aux_pairHom
@@ -901,26 +895,28 @@ lemma apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation :
 attaching legs.  The open-cover conclusion is supplied as a hypothesis so this
 program can run in parallel with the homology program after the geometry lands. -/
 theorem apm_t03J02_fundamentalGroup_of_compatibleOpenCover
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic)
     (hnull₂ : j₂.Nullhomotopic)
-    (z₀ : Circle)
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    (y₀ : Y)
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
     Nonempty
-      (FundamentalGroup (apm_t03J02_space j₁ j₂)
-        (apm_t03J02_basepoint j₁ j₂ z₀) ≃*
+      (FundamentalGroup (Y)
+        (y₀) ≃*
           apm_t03J02_freeProductZ2Z2) := by
   obtain ⟨e₁⟩ :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen
-      j₁ j₂ hnull₁ hnull₂ z₀ hcover
+      j₁ j₂ hnull₁ hnull₂ y₀ hcover
   obtain ⟨e₂⟩ :=
     apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_presentation
   exact ⟨e₁.trans e₂⟩
 
 theorem apm_t03J02_H0_of_compatibleOpenCover
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
-    Nonempty (apm_t03J02_H 0 (apm_t03J02_space j₁ j₂) ≅ ModuleCat.of ℤ ℤ) := by
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
+    Nonempty (apm_t03J02_H 0 Y ≅ ModuleCat.of ℤ ℤ) := by
   letI : PathConnectedSpace Circle :=
     pathConnectedSpace_iff_univ.mpr (by
       have hc : IsPathConnected
@@ -933,40 +929,15 @@ theorem apm_t03J02_H0_of_compatibleOpenCover
     ⟨⟨(1, 1)⟩, fun x y =>
       ⟨Path.prod (PathConnectedSpace.somePath x.1 y.1)
         (PathConnectedSpace.somePath x.2 y.2)⟩⟩
-  let z₀ : Circle := Classical.choice inferInstance
-  let ql := apm_t03J02_gluedInl j₁ j₂
-  let qr := apm_t03J02_gluedInr j₁ j₂
-  have joined_map {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
-      (f : C(X, Y)) {x y : X} (h : Joined x y) : Joined (f x) (f y) := by
-    exact ⟨h.somePath.map f.continuous⟩
-  have hbridge : Joined (ql (j₁ z₀)) (qr (j₂ z₀)) := by
-    rw [show ql (j₁ z₀) = qr (j₂ z₀) from apm_t03J02_glue_eq j₁ j₂ z₀]
-  letI : PathConnectedSpace (apm_t03J02_space j₁ j₂) := {
-    nonempty := ⟨ql (j₁ z₀)⟩
-    joined := by
-      intro x y
-      refine Quotient.inductionOn x ?_
-      intro sx
-      refine Quotient.inductionOn y ?_
-      intro sy
-      cases sx with
-      | inl x =>
-          cases sy with
-          | inl y =>
-              exact joined_map ql (PathConnectedSpace.joined x y)
-          | inr y =>
-              exact (joined_map ql (PathConnectedSpace.joined x (j₁ z₀))).trans
-                (hbridge.trans (joined_map qr (PathConnectedSpace.joined (j₂ z₀) y)))
-      | inr x =>
-          cases sy with
-          | inl y =>
-              exact (joined_map qr (PathConnectedSpace.joined x (j₂ z₀))).trans
-                (hbridge.symm.trans
-                  (joined_map ql (PathConnectedSpace.joined (j₁ z₀) y)))
-          | inr y =>
-              exact joined_map qr (PathConnectedSpace.joined x y)
-    }
-  exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ (ql (j₁ z₀))⟩
+  haveI : PathConnectedSpace hcover.leftSet :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected hcover.leftEquiv
+  haveI : PathConnectedSpace hcover.rightSet :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected hcover.rightEquiv
+  let w : (hcover.leftSet ∩ hcover.rightSet : Set Y) := hcover.overlapEquiv.invFun 1
+  letI : PathConnectedSpace Y :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_pathConnectedSpace
+      hcover.leftSet hcover.rightSet hcover.cover w
+  exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ w.1⟩
 
 /-- A null-homotopic map is zero on degree-one integral homology. -/
 lemma apm_t03J02_H1_of_compatibleOpenCover_aux_null_map
@@ -1019,10 +990,11 @@ lemma apm_t03J02_H1_of_compatibleOpenCover_aux_equiv_map_isIso
     exact F.map_id _
 
 theorem apm_t03J02_H1_of_compatibleOpenCover
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic) (hnull₂ : j₂.Nullhomotopic)
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
-    Nonempty (apm_t03J02_H 1 (apm_t03J02_space j₁ j₂) ≅
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
+    Nonempty (apm_t03J02_H 1 (Y) ≅
       ModuleCat.of ℤ (Fin 4 → ℤ)) := by
   let U := hcover.leftSet
   let V := hcover.rightSet
@@ -1155,9 +1127,10 @@ noncomputable def apm_t03J02_H2_of_compatibleOpenCover_aux_torus_H2_iso :
     ConstructionTargets.BoundaryTorusIntegralHomologyComplete.boundaryTorusH2ModuleIsoInt
 
 lemma apm_t03J02_H2_of_compatibleOpenCover_aux_inclusion_H1_zero
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic) (hnull₂ : j₂.Nullhomotopic)
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
     IntegralMV.mvI hcover.leftSet hcover.rightSet 1 = 0 := by
   let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
     (ModuleCat.of ℤ ℤ)
@@ -1168,7 +1141,7 @@ lemma apm_t03J02_H2_of_compatibleOpenCover_aux_inclusion_H1_zero
     ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_zero_of_nullhomotopic
       (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero j₂ hnull₂
   have hl : IntegralMV.mvIncl
-      (X := apm_t03J02_space j₁ j₂)
+      (X := Y)
       (A := hcover.leftSet ∩ hcover.rightSet) (B := hcover.leftSet)
       Set.inter_subset_left 1 = 0 := by
     let q := F.map (TopCat.ofHom hcover.leftEquiv.toFun)
@@ -1218,7 +1191,7 @@ lemma apm_t03J02_H2_of_compatibleOpenCover_aux_inclusion_H1_zero
     rw [hz₁]
     simp
   have hr : IntegralMV.mvIncl
-      (X := apm_t03J02_space j₁ j₂)
+      (X := Y)
       (A := hcover.leftSet ∩ hcover.rightSet) (B := hcover.rightSet)
       Set.inter_subset_right 1 = 0 := by
     let q := F.map (TopCat.ofHom hcover.rightEquiv.toFun)
@@ -1294,10 +1267,11 @@ noncomputable def apm_t03J02_H2_of_compatibleOpenCover_aux_finThreeIso :
           fin_cases i <;> rfl⟩⟩).toModuleIso
 
 theorem apm_t03J02_H2_of_compatibleOpenCover
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hnull₁ : j₁.Nullhomotopic) (hnull₂ : j₂.Nullhomotopic)
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
-    Nonempty (apm_t03J02_H 2 (apm_t03J02_space j₁ j₂) ≅
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
+    Nonempty (apm_t03J02_H 2 (Y) ≅
       ModuleCat.of ℤ (Fin 3 → ℤ)) := by
   let U := hcover.leftSet
   let V := hcover.rightSet
@@ -1373,10 +1347,11 @@ lemma apm_t03J02_Hhigh_of_compatibleOpenCover_aux_torus_zero
         (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo e))
 
 theorem apm_t03J02_Hhigh_of_compatibleOpenCover
+    {Y : Type} [TopologicalSpace Y]
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
-    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂) :
+    (hcover : apm_t03J02_CompatibleOpenCover j₁ j₂ Y) :
     ∀ k : ℕ, 3 ≤ k →
-      Limits.IsZero (apm_t03J02_H k (apm_t03J02_space j₁ j₂)) := by
+      Limits.IsZero (apm_t03J02_H k (Y)) := by
   intro k hk
   let U := hcover.leftSet
   let V := hcover.rightSet
@@ -1411,6 +1386,165 @@ theorem apm_t03J02_Hhigh_of_compatibleOpenCover
   have hz := @Limits.IsZero.of_mono (ModuleCat ℤ) _ _ _ _ d inferInstance hIp
   simpa only [hk'] using hz
 
+/-! ### Replacing the collar (2026-11-03)
+
+An arbitrary embedded circle has no cheap collar, so the open cover is not built on the quotient
+`X`.  It is built on `Cyl ⊆ X × ℝ`: the left torus at height `-1`, the right torus at height `1`,
+and the glued circle at all heights between.  There the cover is `s < 1/2`, `s > -1/2` and every
+homotopy is linear in `s`.  `X` is homotopy equivalent to `Cyl` because each pair (torus, circle)
+has the following neighbourhood deformation, from Tietze and straight lines in the flat torus. -/
+
+open unitInterval
+
+/-- `H` deforms the torus to a map carrying `{β < 1}` into the circle, fixing the circle. -/
+structure apm_t03J02_Retractile (j : C(Circle, apm_t03J02_Torus)) where
+  H : C(apm_t03J02_Torus × I, apm_t03J02_Torus)
+  β : C(apm_t03J02_Torus, ℝ)
+  H_zero : ∀ x, H (x, 0) = x
+  H_fix : ∀ z t, H (j z, t) = j z
+  β_nonneg : ∀ x, 0 ≤ β x
+  β_le_one : ∀ x, β x ≤ 1
+  β_fix : ∀ z, β (j z) = 0
+  H_one : ∀ x, β x < 1 → H (x, 1) ∈ Set.range j
+
+/-- Tietze extends the inverse of `j` to a map to `ℂ`; normalising gives a retraction `k` of an
+open `N` onto the circle.  Straight lines in the flat torus join `x` to `k x` when they are close;
+cut off with a function of the distance to the circle. -/
+theorem apm_t03J02_exists_retractile (j : C(Circle, apm_t03J02_Torus))
+    (hj : Topology.IsEmbedding j) : Nonempty (apm_t03J02_Retractile j) := by
+  sorry
+
+section Glued
+variable (j₁ j₂ : C(Circle, apm_t03J02_Torus))
+
+/-- The glued circle in the quotient. -/
+def apm_t03J02_gluedCircle : C(Circle, apm_t03J02_space j₁ j₂) :=
+  (apm_t03J02_gluedInl j₁ j₂).comp j₁
+
+variable {j₁ j₂}
+
+theorem apm_t03J02_inl_eq_inl_iff (hj₁ : Topology.IsEmbedding j₁)
+    (hj₂ : Topology.IsEmbedding j₂) {x y : apm_t03J02_Torus} :
+    apm_t03J02_gluedInl j₁ j₂ x = apm_t03J02_gluedInl j₁ j₂ y ↔ x = y := by
+  sorry
+
+theorem apm_t03J02_inr_eq_inr_iff (hj₁ : Topology.IsEmbedding j₁)
+    (hj₂ : Topology.IsEmbedding j₂) {x y : apm_t03J02_Torus} :
+    apm_t03J02_gluedInr j₁ j₂ x = apm_t03J02_gluedInr j₁ j₂ y ↔ x = y := by
+  sorry
+
+theorem apm_t03J02_inl_eq_inr_iff (hj₁ : Topology.IsEmbedding j₁)
+    (hj₂ : Topology.IsEmbedding j₂) {x y : apm_t03J02_Torus} :
+    apm_t03J02_gluedInl j₁ j₂ x = apm_t03J02_gluedInr j₁ j₂ y ↔
+      ∃ z, x = j₁ z ∧ y = j₂ z := by
+  sorry
+
+theorem apm_t03J02_t2Space (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂) :
+    T2Space (apm_t03J02_space j₁ j₂) := by
+  sorry
+
+theorem apm_t03J02_compactSpace : CompactSpace (apm_t03J02_space j₁ j₂) := by
+  sorry
+
+variable (j₁ j₂)
+
+/-- The left torus at height `-1`, the right at `1`, and the glued circle at every height between. -/
+def apm_t03J02_cylSet : Set (apm_t03J02_space j₁ j₂ × ℝ) :=
+  {p | (p.2 = -1 ∧ p.1 ∈ Set.range (apm_t03J02_gluedInl j₁ j₂)) ∨
+    (p.2 = 1 ∧ p.1 ∈ Set.range (apm_t03J02_gluedInr j₁ j₂)) ∨
+    (p.1 ∈ Set.range (apm_t03J02_gluedCircle j₁ j₂) ∧ p.2 ∈ Set.Icc (-1 : ℝ) 1)}
+
+abbrev apm_t03J02_Cyl := ↥(apm_t03J02_cylSet j₁ j₂)
+
+/-- The deformation of the quotient obtained by gluing two `Retractile`s, together with the height
+function it is paired with. -/
+structure apm_t03J02_Deform where
+  E : C(apm_t03J02_space j₁ j₂ × I, apm_t03J02_space j₁ j₂)
+  B : C(apm_t03J02_space j₁ j₂, ℝ)
+  E_zero : ∀ x, E (x, 0) = x
+  mem₁ : ∀ p ∈ apm_t03J02_cylSet j₁ j₂, ∀ t : I, (E (p.1, t), p.2) ∈ apm_t03J02_cylSet j₁ j₂
+  mem₂ : ∀ p ∈ apm_t03J02_cylSet j₁ j₂, ∀ t : I,
+    (E (p.1, 1), (1 - (t : ℝ)) * p.2 + t * B p.1) ∈ apm_t03J02_cylSet j₁ j₂
+  fibre : ∀ x, ∃ s, (x, s) ∈ apm_t03J02_cylSet j₁ j₂
+
+variable {j₁ j₂}
+
+/-- `E = H₁` on the left and `H₂` on the right, `B = -β₁` on the left and `β₂` on the right.  Use
+`apm_t03J02_gluedDesc` with target `C(I, X)` and uncurry for `E`. -/
+theorem apm_t03J02_exists_deform (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂)
+    (R₁ : apm_t03J02_Retractile j₁) (R₂ : apm_t03J02_Retractile j₂) :
+    Nonempty (apm_t03J02_Deform j₁ j₂) := by
+  sorry
+
+/-- `c = fst`, `b x = (E (x, 1), B x)`.  `c ∘ b` is homotopic to the identity through `E`.
+`b ∘ c` goes to `id` in two stages: `(x, s) ↦ (E (x, t), s)`, then
+`(x, s) ↦ (E (x, 1), (1 - t) s + t B x)`. -/
+theorem apm_t03J02_homotopyEquiv_cyl (D : apm_t03J02_Deform j₁ j₂) :
+    Nonempty (ContinuousMap.HomotopyEquiv (apm_t03J02_space j₁ j₂) (apm_t03J02_Cyl j₁ j₂)) := by
+  sorry
+
+variable (j₁ j₂)
+
+def apm_t03J02_cylLeft : Set (apm_t03J02_Cyl j₁ j₂) := {p | p.1.2 < 1 / 2}
+def apm_t03J02_cylRight : Set (apm_t03J02_Cyl j₁ j₂) := {p | -(1 / 2) < p.1.2}
+
+variable {j₁ j₂}
+
+/-- Inverse `x ↦ (inl x, -1)`; homotopy `(x, s) ↦ (x, (1 - t) s - t)`.  Below height `1/2` the first
+coordinate lies in the range of `inl`, which is a closed embedding by compactness and `T2`. -/
+theorem apm_t03J02_cylLeft_equiv (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂) :
+    ∃ e : ContinuousMap.HomotopyEquiv (apm_t03J02_cylLeft j₁ j₂) apm_t03J02_Torus,
+      ∀ p, apm_t03J02_gluedInl j₁ j₂ (e.toFun p) = p.1.1.1 := by
+  sorry
+
+theorem apm_t03J02_cylRight_equiv (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂) :
+    ∃ e : ContinuousMap.HomotopyEquiv (apm_t03J02_cylRight j₁ j₂) apm_t03J02_Torus,
+      ∀ p, apm_t03J02_gluedInr j₁ j₂ (e.toFun p) = p.1.1.1 := by
+  sorry
+
+/-- Inverse `z ↦ (gluedCircle z, 0)`; homotopy `(x, s) ↦ (x, (1 - t) s)`. -/
+theorem apm_t03J02_cylOverlap_equiv (hj₁ : Topology.IsEmbedding j₁)
+    (hj₂ : Topology.IsEmbedding j₂) :
+    ∃ e : ContinuousMap.HomotopyEquiv
+        (apm_t03J02_cylLeft j₁ j₂ ∩ apm_t03J02_cylRight j₁ j₂ : Set (apm_t03J02_Cyl j₁ j₂)) Circle,
+      ∀ p, apm_t03J02_gluedCircle j₁ j₂ (e.toFun p) = p.1.1.1 := by
+  sorry
+
+theorem apm_t03J02_cyl_cover (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂) :
+    Nonempty (apm_t03J02_CompatibleOpenCover j₁ j₂ (apm_t03J02_Cyl j₁ j₂)) := by
+  obtain ⟨eL, hL⟩ := apm_t03J02_cylLeft_equiv hj₁ hj₂
+  obtain ⟨eR, hR⟩ := apm_t03J02_cylRight_equiv hj₁ hj₂
+  obtain ⟨eO, hO⟩ := apm_t03J02_cylOverlap_equiv hj₁ hj₂
+  refine ⟨{ leftSet := apm_t03J02_cylLeft j₁ j₂
+            rightSet := apm_t03J02_cylRight j₁ j₂
+            open_left := isOpen_lt (by fun_prop) continuous_const
+            open_right := isOpen_lt continuous_const (by fun_prop)
+            cover := ?_
+            leftEquiv := eL
+            rightEquiv := eR
+            overlapEquiv := eO
+            left_compat := ?_
+            right_compat := ?_ }⟩
+  · ext p
+    simp only [Set.mem_union, Set.mem_univ, iff_true, apm_t03J02_cylLeft, apm_t03J02_cylRight,
+      Set.mem_setOf_eq]
+    by_cases h : p.1.2 < 1 / 2
+    · exact Or.inl h
+    · exact Or.inr (by linarith)
+  · have : eL.toFun.comp (apm_t03J02_overlapToLeft _ _) = j₁.comp eO.toFun := by
+      ext1 p
+      apply (apm_t03J02_inl_eq_inl_iff hj₁ hj₂).1
+      exact (hL _).trans (hO p).symm
+    rw [this]
+  · have : eR.toFun.comp (apm_t03J02_overlapToRight _ _) = j₂.comp eO.toFun := by
+      ext1 p
+      apply (apm_t03J02_inr_eq_inr_iff hj₁ hj₂).1
+      refine (hR _).trans ((hO p).symm.trans ?_)
+      exact apm_t03J02_glue_eq j₁ j₂ _
+    rw [this]
+
+end Glued
+
 theorem apm_t03j02
     (j₁ j₂ : C(Circle, apm_t03J02_Torus))
     (hj₁ : Topology.IsEmbedding j₁)
@@ -1425,13 +1559,43 @@ theorem apm_t03j02
     Nonempty (apm_t03J02_H 1 X ≅ ModuleCat.of ℤ (Fin 4 → ℤ)) ∧
     Nonempty (apm_t03J02_H 2 X ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
     ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t03J02_H k X) := by
-  let hcover := Classical.choice (apm_t03J02_compatibleOpenCover j₁ j₂ hj₁ hj₂)
-  have hπ := apm_t03J02_fundamentalGroup_of_compatibleOpenCover
-    j₁ j₂ hnull₁ hnull₂ z₀ hcover
-  have h0 := apm_t03J02_H0_of_compatibleOpenCover j₁ j₂ hcover
-  have h1 := apm_t03J02_H1_of_compatibleOpenCover j₁ j₂ hnull₁ hnull₂ hcover
-  have h2 := apm_t03J02_H2_of_compatibleOpenCover j₁ j₂ hnull₁ hnull₂ hcover
+  obtain ⟨R₁⟩ := apm_t03J02_exists_retractile j₁ hj₁
+  obtain ⟨R₂⟩ := apm_t03J02_exists_retractile j₂ hj₂
+  obtain ⟨D⟩ := apm_t03J02_exists_deform hj₁ hj₂ R₁ R₂
+  obtain ⟨e⟩ := apm_t03J02_homotopyEquiv_cyl D
+  obtain ⟨hcover⟩ := apm_t03J02_cyl_cover hj₁ hj₂
+  intro X x₀
+  let y₀ : apm_t03J02_Cyl j₁ j₂ := e x₀
+  obtain ⟨hπ⟩ := apm_t03J02_fundamentalGroup_of_compatibleOpenCover
+    j₁ j₂ hnull₁ hnull₂ y₀ hcover
+  obtain ⟨h0⟩ := apm_t03J02_H0_of_compatibleOpenCover j₁ j₂ hcover
+  obtain ⟨h1⟩ := apm_t03J02_H1_of_compatibleOpenCover j₁ j₂ hnull₁ hnull₂ hcover
+  obtain ⟨h2⟩ := apm_t03J02_H2_of_compatibleOpenCover j₁ j₂ hnull₁ hnull₂ hcover
   have hhi := apm_t03J02_Hhigh_of_compatibleOpenCover j₁ j₂ hcover
-  exact ⟨hπ, h0, h1, h2, hhi⟩
+  have hH : ∀ k, apm_t03J02_H k X ≅ apm_t03J02_H k (apm_t03J02_Cyl j₁ j₂) := fun k =>
+    ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e k
+  haveI : PathConnectedSpace Circle := pathConnectedSpace_iff_univ.mpr (by
+    have hc : IsPathConnected
+        (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+          (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+        |>.isPathConnected_preimage.mpr isPathConnected_univ
+    simpa using hc)
+  haveI : PathConnectedSpace apm_t03J02_Torus :=
+    ⟨⟨(1, 1)⟩, fun x y =>
+      ⟨Path.prod (PathConnectedSpace.somePath x.1 y.1)
+        (PathConnectedSpace.somePath x.2 y.2)⟩⟩
+  haveI : PathConnectedSpace hcover.leftSet :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected hcover.leftEquiv
+  haveI : PathConnectedSpace hcover.rightSet :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_pathConnected hcover.rightEquiv
+  haveI : PathConnectedSpace (apm_t03J02_Cyl j₁ j₂) :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_pathConnectedSpace
+      hcover.leftSet hcover.rightSet hcover.cover (hcover.overlapEquiv.invFun 1)
+  obtain ⟨eπ⟩ :=
+    apm_t03J02_fundamentalGroup_of_compatibleOpenCover_aux_vanKampen_aux_trivialLegs_aux_hequiv
+      e x₀ y₀
+  exact ⟨⟨eπ.trans hπ⟩, ⟨(hH 0).trans h0⟩, ⟨(hH 1).trans h1⟩, ⟨(hH 2).trans h2⟩,
+    fun k hk => (hhi k hk).of_iso (hH k)⟩
 
 #print axioms apm_t03j02
