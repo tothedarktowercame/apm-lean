@@ -3701,6 +3701,41 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph
 
 open ConstructionTargets.PointWedgeQuotient
 
+/-- Equality in a point wedge: two representatives have the same image exactly
+when they are equal or both are wedge basepoints.  The shared tool for the
+normal-form kernel, generator and surjectivity arguments. -/
+theorem apm_t97A03_wedge_quotientMap_eq_iff {X Y : Type*} (x₀ : X) (y₀ : Y)
+    (p q : Sum X Y) :
+    quotientMap x₀ y₀ p = quotientMap x₀ y₀ q ↔
+      p = q ∨ ((p = .inl x₀ ∨ p = .inr y₀) ∧ (q = .inl x₀ ∨ q = .inr y₀)) := by
+  constructor
+  · intro h
+    have hr : Relation.EqvGen (Rel x₀ y₀) p q := Quotient.exact h
+    clear h
+    induction hr with
+    | rel a b hab => cases hab; exact Or.inr ⟨Or.inl rfl, Or.inr rfl⟩
+    | refl => exact Or.inl rfl
+    | symm a b _ ih =>
+        rcases ih with h | ⟨ha, hb⟩
+        · exact Or.inl h.symm
+        · exact Or.inr ⟨hb, ha⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨ha, hb⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨_, hc⟩
+          · exact Or.inr ⟨ha, hb⟩
+          · exact Or.inr ⟨ha, hc⟩
+  · rintro (rfl | ⟨hp, hq⟩)
+    · rfl
+    · have hbase : quotientMap x₀ y₀ (.inl x₀) = quotientMap x₀ y₀ (.inr y₀) :=
+        Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)
+      rcases hp with rfl | rfl <;> rcases hq with rfl | rfl
+      · rfl
+      · exact hbase
+      · exact hbase.symm
+      · rfl
+
+
 abbrev apm_t97A03_ThreeCircles :=
   ConstructionTargets.StatementSurfaceModels.ThreeCircles
 
