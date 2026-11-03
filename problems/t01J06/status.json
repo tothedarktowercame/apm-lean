@@ -33,6 +33,5 @@
   "closer_hop": 3,
   "boundary": null,
   "imported_at": "2026-07-13T17:26:56.832807Z",
-  "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state.",
-  "stage": null
+  "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state."
 }

@@ -32,7 +32,6 @@
   "classification": "complete",
   "closer_hop": 3,
   "boundary": null,
-  "stage": null,
   "checked_at": "2026-08-08",
   "checked_lean_state": {
     "exit_code": 0,

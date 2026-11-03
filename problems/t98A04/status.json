@@ -34,6 +34,5 @@
   "closer_note": "Hop 4 isolates three exact contracts: explicit atlases and submersion, complete fiber normalization/homeomorphisms, and the Hopf no-section obstruction. The types are coherent and no statement defect was found, but Mathlib packages none of these bridges.",
   "imported_at": "2026-07-13T17:26:58.536188Z",
   "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state.",
-  "boundary": null,
-  "stage": null
+  "boundary": null
 }

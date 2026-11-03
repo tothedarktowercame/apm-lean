@@ -46,6 +46,5 @@
     "proof_status": "unproved; exactly one sorry declaration",
     "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
   },
-  "boundary": null,
-  "stage": null
+  "boundary": null
 }

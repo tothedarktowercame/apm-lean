@@ -32,6 +32,5 @@
   "classification": "complete",
   "imported_at": "2026-07-13T17:26:57.307967Z",
   "classification_detail": "Corrected 2026-11-03 from 'proved': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state.",
-  "boundary": null,
-  "stage": null
+  "boundary": null
 }

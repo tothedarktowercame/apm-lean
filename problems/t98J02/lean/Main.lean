@@ -695,31 +695,31 @@ namespace T98Klein
 
 abbrev Tor := Circle × Circle
 
-def m : Circle := ⟨-1, by simp [Submonoid.unitSphere, mem_sphere_zero_iff_norm]⟩
+def minusOne : Circle := ⟨-1, by simp [Submonoid.unitSphere, mem_sphere_zero_iff_norm]⟩
 
-@[simp] lemma coe_m : ((m : Circle) : ℂ) = -1 := rfl
+@[simp] lemma coe_m : ((minusOne : Circle) : ℂ) = -1 := rfl
 
-lemma m_mul_m : m * m = 1 := by
+lemma m_mul_m : minusOne * minusOne = 1 := by
   apply Circle.ext; simp
 
-lemma m_ne_one : m ≠ 1 := by
+lemma m_ne_one : minusOne ≠ 1 := by
   intro h
   have := congrArg (fun z : Circle => (z : ℂ)) h
   norm_num at this
 
-lemma m_inv : m⁻¹ = m := inv_eq_of_mul_eq_one_left m_mul_m
+lemma m_inv : minusOne⁻¹ = minusOne := inv_eq_of_mul_eq_one_left m_mul_m
 
-def tau (x : Tor) : Tor := (m * x.1, m * x.2⁻¹)
+def tau (x : Tor) : Tor := (minusOne * x.1, minusOne * x.2⁻¹)
 
 lemma tau_tau (x : Tor) : tau (tau x) = x := by
   apply Prod.ext
   · simp [tau, ← mul_assoc, m_mul_m]
-  · change m * (m * x.2⁻¹)⁻¹ = x.2
+  · change minusOne * (minusOne * x.2⁻¹)⁻¹ = x.2
     rw [mul_inv, inv_inv, m_inv, ← mul_assoc, m_mul_m, one_mul]
 
 lemma tau_ne (x : Tor) : tau x ≠ x := by
   intro h
-  have h1 : m * x.1 = x.1 := congrArg Prod.fst h
+  have h1 : minusOne * x.1 = x.1 := congrArg Prod.fst h
   exact m_ne_one (by simpa using h1)
 
 lemma continuous_tau : Continuous tau := by
@@ -753,16 +753,16 @@ instance : IsCancelSMul ℤˣ Tor :=
 
 abbrev Bot := Quotient (MulAction.orbitRel ℤˣ Tor)
 
-def π : Tor → Bot := Quotient.mk _
+def kleinProj : Tor → Bot := Quotient.mk _
 
-lemma cov : IsQuotientCoveringMap π ℤˣ :=
+lemma cov : IsQuotientCoveringMap kleinProj ℤˣ :=
   isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul
 
-lemma π_tau (x : Tor) : π (tau x) = π x := by
+lemma kleinProj_tau (x : Tor) : kleinProj (tau x) = kleinProj x := by
   apply cov.apply_eq_iff_mem_orbit.2
   exact ⟨-1, neg_act x⟩
 
-lemma π_eq {x y : Tor} (h : π x = π y) : x = y ∨ x = tau y := by
+lemma kleinProj_eq {x y : Tor} (h : kleinProj x = kleinProj y) : x = y ∨ x = tau y := by
   obtain ⟨g, hg⟩ := cov.apply_eq_iff_mem_orbit.1 h
   rcases Int.units_eq_one_or g with rfl | rfl
   · left
@@ -775,12 +775,12 @@ lemma circle_connected : PathConnectedSpace Circle :=
     (isPathConnected_sphere (E := ℂ) (Complex.rank_real_complex ▸ by norm_num)
       0 (r := 1) (by norm_num))
 
-/-- Charts on the quotient: compose a local inverse of `π` with a torus chart. -/
-noncomputable def charts : ChartedSpace (EuclideanSpace ℝ (Fin 2)) Bot := by
+/-- Charts on the quotient: compose a local inverse of `kleinProj` with a torus chart. -/
+noncomputable def kleinCharts : ChartedSpace (EuclideanSpace ℝ (Fin 2)) Bot := by
   letI := t98J02_disconnected_trivialCover_model_aux_charts
   have hl := cov.isCoveringMap.isLocalHomeomorph
   choose f hf hfe using fun e : Tor => hl e
-  have hs : Function.Surjective π := cov.surjective
+  have hs : Function.Surjective kleinProj := cov.surjective
   exact
     { atlas := range fun e : Tor => (f e).symm.trans (chartAt (EuclideanSpace ℝ (Fin 2)) e)
       chartAt := fun x => (f (Function.surjInv hs x)).symm.trans
@@ -802,7 +802,7 @@ noncomputable def charts : ChartedSpace (EuclideanSpace ℝ (Fin 2)) Bot := by
 def surface : ClosedSurface where
   carrier := Bot
   topology := inferInstance
-  charts := charts
+  charts := kleinCharts
   compact := inferInstance
   hausdorff := inferInstance
   secondCountable := ContinuousConstSMul.secondCountableTopology
@@ -825,7 +825,7 @@ def height : Bot → ℝ :=
 lemma continuous_height : Continuous height :=
   Continuous.quotient_lift (by fun_prop) _
 
-lemma im_zero_of_circle (v : Circle) (h : (v : ℂ).im = 0) : v = 1 ∨ v = m := by
+lemma im_zero_of_circle (v : Circle) (h : (v : ℂ).im = 0) : v = 1 ∨ v = minusOne := by
   have hn : ‖(v : ℂ)‖ = 1 := Circle.norm_coe v
   have hre : (v : ℂ).re = 1 ∨ (v : ℂ).re = -1 := by
     have h1 : (v : ℂ) = ((v : ℂ).re : ℂ) := by
@@ -847,19 +847,19 @@ theorem t98J02_connected_doubleCover_counterexample :
       0 < n ∧ ConnectedSpace E ∧ IsKSheetedCover p n ∧ IsCurveLift p c l ∧
       ¬ Nonseparating c ∧ Nonseparating l := by
   let l : C(Circle, Tor) := ⟨fun z => (z, 1), continuous_id.prodMk continuous_const⟩
-  let c : C(Circle, Bot) := ⟨fun z => π (l z), cov.continuous.comp l.continuous⟩
+  let c : C(Circle, Bot) := ⟨fun z => kleinProj (l z), cov.continuous.comp l.continuous⟩
   have hcinj : Function.Injective c := by
     intro z w h
-    rcases π_eq h with h1 | h1
+    rcases kleinProj_eq h with h1 | h1
     · exact congrArg Prod.fst h1
-    · have h2 : (1 : Circle) = m * (1 : Circle)⁻¹ := congrArg Prod.snd h1
+    · have h2 : (1 : Circle) = minusOne * (1 : Circle)⁻¹ := congrArg Prod.snd h1
       exact absurd (by simpa using h2.symm) m_ne_one
   have hcemb : Topology.IsEmbedding c :=
     (c.continuous.isClosedEmbedding hcinj).isEmbedding
   have hlemb : Topology.IsEmbedding l := isEmbedding_prodMkLeft (1 : Circle)
-  have hcover : IsKSheetedCover π 2 := by
-    have hbij : ∀ b, ∃ e, π e = b := fun b => cov.surjective b
-    have hequiv : ∀ b, Nonempty (ℤˣ ≃ {e : Tor // π e = b}) := by
+  have hcover : IsKSheetedCover kleinProj 2 := by
+    have hbij : ∀ b, ∃ e, kleinProj e = b := fun b => cov.surjective b
+    have hequiv : ∀ b, Nonempty (ℤˣ ≃ {e : Tor // kleinProj e = b}) := by
       intro b
       obtain ⟨e, rfl⟩ := hbij b
       refine ⟨Equiv.ofBijective (fun g => ⟨g • e, cov.apply_eq_iff_mem_orbit.2 ⟨g, rfl⟩⟩) ⟨?_, ?_⟩⟩
@@ -875,7 +875,7 @@ theorem t98J02_connected_doubleCover_counterexample :
     · intro b
       obtain ⟨φ⟩ := hequiv b
       rw [← Nat.card_congr φ, Nat.card_eq_fintype_card, Fintype.card_units_int]
-  refine ⟨surface, Tor, inferInstance, 2, π, c, l, by norm_num, ?_, hcover,
+  refine ⟨surface, Tor, inferInstance, 2, kleinProj, c, l, by norm_num, ?_, hcover,
     ⟨hcemb, hlemb, fun _ => rfl⟩, ?_, ?_⟩
   · haveI := circle_connected
     infer_instance
@@ -889,8 +889,8 @@ theorem t98J02_connected_doubleCover_counterexample :
     let w : Circle := Circle.exp (Real.pi / 2)
     have hw : (w : ℂ).im = 1 := by
       rw [Circle.coe_exp, Complex.exp_ofReal_mul_I_im, Real.sin_pi_div_two]
-    let x₁ : Bot := π (1, w)
-    let x₂ : Bot := π (1, w⁻¹)
+    let x₁ : Bot := kleinProj (1, w)
+    let x₂ : Bot := kleinProj (1, w⁻¹)
     have h₁ : height x₁ = 1 := hw
     have h₂ : height x₂ = -1 := by
       change ((w⁻¹ : Circle) : ℂ).im = -1
@@ -906,9 +906,9 @@ theorem t98J02_connected_doubleCover_counterexample :
     apply hx
     rcases im_zero_of_circle v hx0 with rfl | rfl
     · exact ⟨u, rfl⟩
-    · refine ⟨m * u, ?_⟩
-      change π (m * u, 1) = π (u, m)
-      rw [← π_tau (u, m)]
+    · refine ⟨minusOne * u, ?_⟩
+      change kleinProj (minusOne * u, 1) = kleinProj (u, minusOne)
+      rw [← kleinProj_tau (u, minusOne)]
       congr 1
       apply Prod.ext
       · rfl

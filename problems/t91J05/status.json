@@ -40,6 +40,5 @@
     "sorry_declarations": 3,
     "previous_classification": "partial"
   },
-  "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state.",
-  "stage": null
+  "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state."
 }

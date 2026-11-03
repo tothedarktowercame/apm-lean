@@ -34,5 +34,4 @@ is a guess, untested.
 ## t03J01 (no route found)
 
 A count of this kind sees only local data.  Whether a retraction exists depends on whether the
-curve bounds, a global fact about the fundamental class.  The Möbius band shows why: its boundary
-separates nothing locally different from a surface boundary, and only the global class differs.
+curve bounds, which is a global fact about the fundamental class, so I found no count that decides it.

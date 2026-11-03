@@ -48,6 +48,5 @@
     "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
   },
   "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state.",
-  "boundary": null,
-  "stage": null
+  "boundary": null
 }
