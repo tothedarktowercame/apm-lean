@@ -2154,6 +2154,181 @@ together with the rest of the loop.  `Σ` strongly deformation retracts onto
 `Σ ∩ (D ∪ loop)`, the disk `D` with the loop arc through `q0` (a contractible
 subpolyhedron, the arc's ends on the face `x = 4/5`); extend by the identity
 on the rest of the loop, which meets `Σ` only in that arc. -/
+noncomputable def apm_t02a03_sector_aux_theta (p : apm_t02a03_E3) : ℝ :=
+  Real.arctan (p 1 / (6 / 5 - p 0))
+
+noncomputable def apm_t02a03_sector_aux_a (z : ℝ) : ℝ :=
+  Real.sqrt (1 / 16 - z ^ 2)
+
+def apm_t02a03_sector_aux_Delta (q : ℝ × ℝ) : Prop :=
+  |q.2| ≤ 3 / 20 ∧
+    6 / (5 * (1 + apm_t02a03_sector_aux_a q.2)) ≤ Real.cos q.1
+
+noncomputable def apm_t02a03_sector_aux_b (theta z : ℝ) : ℝ :=
+  (12 / 5) * Real.cos theta -
+    Real.sqrt ((1 + apm_t02a03_sector_aux_a z) ^ 2 -
+      (144 / 25) * (Real.sin theta) ^ 2) - 1
+
+noncomputable def apm_t02a03_sector_aux_c (theta z : ℝ) : ℝ := by
+  classical
+  exact if apm_t02a03_sector_aux_Delta (theta, z) then
+    apm_t02a03_sector_aux_b theta z
+  else apm_t02a03_sector_aux_a z
+
+noncomputable def apm_t02a03_sector_aux_clampZ (z : ℝ) : ℝ :=
+  max (-1 / 5) (min (1 / 5) z)
+
+noncomputable def apm_t02a03_sector_aux_Psi (p : apm_t02a03_E3) : ℝ × ℝ × ℝ :=
+  let theta := apm_t02a03_sector_aux_theta p
+  let z := p 2
+  let u := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1
+  (theta, z, (u + apm_t02a03_sector_aux_a z) /
+    (apm_t02a03_sector_aux_c theta z + apm_t02a03_sector_aux_a z))
+
+noncomputable def apm_t02a03_sector_aux_PsiInv (q : ℝ × ℝ × ℝ) : apm_t02a03_E3 :=
+  let theta := q.1
+  let z := q.2.1
+  let v := q.2.2
+  let u := -apm_t02a03_sector_aux_a z +
+    v * (apm_t02a03_sector_aux_c theta z + apm_t02a03_sector_aux_a z)
+  WithLp.toLp 2 ![6 / 5 - (1 + u) * Real.cos theta,
+    (1 + u) * Real.sin theta, z]
+
+noncomputable def apm_t02a03_sector_aux_thetaOne : ℝ :=
+  Real.arccos (17 / 25)
+
+def apm_t02a03_sector_aux_box (q : ℝ × ℝ × ℝ) : Prop :=
+  q.1 ∈ Set.Icc (-apm_t02a03_sector_aux_thetaOne) apm_t02a03_sector_aux_thetaOne ∧
+    q.2.1 ∈ Set.Icc (-1 / 5) (1 / 5) ∧ q.2.2 ∈ Set.Icc 0 1
+
+noncomputable def apm_t02a03_sector_aux_vArc (theta : ℝ) : ℝ :=
+  (2 / 5) / (apm_t02a03_sector_aux_c theta 0 + 1 / 4)
+
+noncomputable def apm_t02a03_sector_aux_Theta (z : ℝ) : ℝ :=
+  Real.arccos (6 / (5 * (1 + apm_t02a03_sector_aux_a z)))
+
+noncomputable def apm_t02a03_sector_aux_piDelta (q : ℝ × ℝ) : ℝ × ℝ :=
+  let z' := max (-3 / 20) (min (3 / 20) q.2)
+  let T := apm_t02a03_sector_aux_Theta z'
+  (max (-T) (min T q.1), z')
+
+noncomputable def apm_t02a03_sector_aux_deltaArc (q : ℝ × ℝ × ℝ) : ℝ :=
+  |q.2.1| + |q.2.2 - apm_t02a03_sector_aux_vArc q.1|
+
+noncomputable def apm_t02a03_sector_aux_deltaD (q : ℝ × ℝ × ℝ) : ℝ :=
+  (1 - q.2.2) + dist (q.1, q.2.1) (apm_t02a03_sector_aux_piDelta (q.1, q.2.1))
+
+noncomputable def apm_t02a03_sector_aux_lambda (q : ℝ × ℝ × ℝ) : ℝ :=
+  apm_t02a03_sector_aux_deltaArc q /
+    (apm_t02a03_sector_aux_deltaArc q + apm_t02a03_sector_aux_deltaD q)
+
+noncomputable def apm_t02a03_sector_aux_r (q : ℝ × ℝ × ℝ) : ℝ × ℝ × ℝ :=
+  let l := apm_t02a03_sector_aux_lambda q
+  if l ≤ 1 / 2 then
+    let theta' := (1 - 2 * l) * q.1
+    (theta', 0, apm_t02a03_sector_aux_vArc theta')
+  else
+    let base := apm_t02a03_sector_aux_piDelta
+      ((2 * l - 1) * q.1, (2 * l - 1) * q.2.1)
+    (base.1, base.2, 1)
+
+noncomputable def apm_t02a03_sector_aux_clampMove (t : ℝ) (p : apm_t02a03_E3) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![p 0, p 1,
+    (1 - t) * p 2 + t * apm_t02a03_sector_aux_clampZ (p 2)]
+
+theorem apm_t02a03_sector_aux_L1_roundtrip_continuity :
+    (∀ p : apm_t02a03_E3, p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right →
+      |p 2| ≤ 1 / 5 →
+      (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p →
+      apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) = p) ∧
+    ContinuousOn apm_t02a03_sector_aux_Psi
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} ∧
+    ContinuousOn apm_t02a03_sector_aux_PsiInv
+      {q | apm_t02a03_sector_aux_box q} := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L2a_box (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) (hz : |p 2| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
+    apm_t02a03_sector_aux_box (apm_t02a03_sector_aux_Psi p) := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L2b_inv (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    apm_t02a03_sector_aux_PsiInv q ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+      |apm_t02a03_sector_aux_PsiInv q 2| ≤ 1 / 5 ∧
+      (17 / 25 : ℝ) ≤ (6 / 5 - apm_t02a03_sector_aux_PsiInv q 0) /
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (apm_t02a03_sector_aux_PsiInv q) ∧
+      apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q) = q := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L3_target_iff (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    ((apm_t02a03_sector_aux_PsiInv q ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) ↔
+      q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1)) ∧
+    ((apm_t02a03_sector_aux_PsiInv q ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ↔
+      q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1) := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L4_clamp :
+    Continuous (Function.uncurry apm_t02a03_sector_aux_clampMove) ∧
+    (∀ t ∈ Set.Icc (0 : ℝ) 1,
+      ∀ p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p →
+      let moved := apm_t02a03_sector_aux_clampMove t p.1
+      moved ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        ((moved ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+            apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ∨
+          (17 / 25 : ℝ) ≤ (6 / 5 - moved 0) /
+            apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad moved)) ∧
+    (∀ t (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X),
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p →
+      apm_t02a03_sector_aux_clampMove t p.1 = p.1) := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L5_piDelta :
+    Continuous apm_t02a03_sector_aux_piDelta ∧
+    (∀ q, apm_t02a03_sector_aux_Delta (apm_t02a03_sector_aux_piDelta q)) ∧
+    (∀ q, q.1 ∈ Set.Icc (-apm_t02a03_sector_aux_thetaOne) apm_t02a03_sector_aux_thetaOne →
+      apm_t02a03_sector_aux_Delta q → apm_t02a03_sector_aux_piDelta q = q) := by
+  sorry
+
+def apm_t02a03_sector_aux_q0 : ℝ × ℝ × ℝ := (0, 0, 1)
+
+theorem apm_t02a03_sector_aux_L6a_r_continuous_off_q0 :
+    ContinuousOn apm_t02a03_sector_aux_r
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L6b_r_continuous_at_q0 :
+    ContinuousAt apm_t02a03_sector_aux_r apm_t02a03_sector_aux_q0 := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L6c_r_fixes_target (q : ℝ × ℝ × ℝ)
+    (hbox : apm_t02a03_sector_aux_box q)
+    (hq : (q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1)) ∨
+      (q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1)) :
+    apm_t02a03_sector_aux_r q = q := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L6e_r_box (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    apm_t02a03_sector_aux_box (apm_t02a03_sector_aux_r q) := by
+  sorry
+
+theorem apm_t02a03_sector_aux_L6d_r_lands_target (q : ℝ × ℝ × ℝ) :
+    let rq := apm_t02a03_sector_aux_r q
+    (rq.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (rq.1, rq.2.1)) ∨
+      (rq.2.1 = 0 ∧ rq.2.2 = apm_t02a03_sector_aux_vArc rq.1) := by
+  sorry
+
+/-- Assembly uses L4 to enter the clamped sector, L1--L3 for box coordinates
+and target identification, L5--L6 for the box retraction, and then pulls the
+straight-line homotopy back through `PsiInv`, gluing it to the identity on the
+rest of the loop. -/
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_sector :
     ∃ H : C(Set.Icc (0 : ℝ) 1 × {p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X // apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p},
         {p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X // apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p}),
