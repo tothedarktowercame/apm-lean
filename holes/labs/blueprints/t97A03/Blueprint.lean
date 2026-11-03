@@ -8164,12 +8164,52 @@ private theorem
       Continuous (fun z : apm_t97A03_S2 => (Sum.inr z : Sum apm_t97A03_S2 apm_t97A03_S2)))
 
 private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_leg
+    (j : Fin 3) : Continuous (fun z : Circle ↦
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2 j z) := by
+  simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2]
+  apply (continuous_quotientMap _ _).comp
+  apply continuous_inr.comp
+  fin_cases j
+  · exact (continuous_quotientMap _ _).comp (continuous_inl.comp
+      ((continuous_quotientMap _ _).comp
+        (continuous_inl.comp (continuous_pow 2))))
+  · exact (continuous_quotientMap _ _).comp (continuous_inl.comp
+      ((continuous_quotientMap _ _).comp
+        (continuous_inr.comp (continuous_pow 2))))
+  · exact (continuous_quotientMap _ _).comp
+      (continuous_inr.comp (continuous_pow 2))
+
+private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary
+    (j : Fin 3) (z : Circle) (hz : z.1.im = 0) :
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2 j z =
+        apm_t97A03_modelWedgeBase := by
+  sorry
+
+private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle
     (i : Fin 2) :
     Continuous (fun z : Circle ↦
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw
         (.inr (i, z))) := by
-  sorry
+  fin_cases i
+  · simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw,
+      ↓reduceIte]
+    apply Continuous.if_le continuous_const
+      (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_leg 0)
+      continuous_const (Complex.continuous_im.comp continuous_subtype_val)
+    intro z hz
+    exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary 0 z hz.symm).symm
+  · simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw,
+      OfNat.ofNat_ne_zero, ↓reduceIte]
+    apply Continuous.if_le
+      (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_leg 1)
+      (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_leg 2)
+      continuous_const (Complex.continuous_im.comp continuous_subtype_val)
+    intro z hz
+    exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary 1 z hz.symm).trans
+      (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary 2 z hz.symm).symm
 
 private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous :
