@@ -2802,6 +2802,58 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap
 sheets and the first one preserves them.  This is the preceding construction
 with the two circle arcs interchanged (and hence the circle parametrisation
 reversed/rotated to retain the four marked model points). -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_endpoints
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.refl _)
+    (hsecond : d.secondPerm = Equiv.swap 0 1) :
+    d.second 0 0 = d.sphere 0 apm_t97A03_north ∧
+    d.second 0 1 = d.sphere 1 apm_t97A03_south ∧
+    d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
+    d.second 1 1 = d.sphere 0 apm_t97A03_south ∧
+    d.first 0 0 = d.sphere 0 apm_t97A03_north ∧
+    d.first 0 1 = d.sphere 0 apm_t97A03_south ∧
+    d.first 1 0 = d.sphere 1 apm_t97A03_north ∧
+    d.first 1 1 = d.sphere 1 apm_t97A03_south := by
+  constructor
+  · exact d.second_zero 0
+  constructor
+  · rw [d.second_one, hsecond]
+    rfl
+  constructor
+  · exact d.second_zero 1
+  constructor
+  · rw [d.second_one, hsecond]
+    rfl
+  constructor
+  · exact d.first_zero 0
+  constructor
+  · rw [d.first_one, hfirst]
+    rfl
+  constructor
+  · exact d.first_zero 1
+  · rw [d.first_one, hfirst]
+    rfl
+
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hendpoints :
+      d.second 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.second 0 1 = d.sphere 1 apm_t97A03_south ∧
+      d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.second 1 1 = d.sphere 0 apm_t97A03_south ∧
+      d.first 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.first 0 1 = d.sphere 0 apm_t97A03_south ∧
+      d.first 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.first 1 1 = d.sphere 1 apm_t97A03_south) :
+    Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -2811,7 +2863,11 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap
     (hfirst : d.firstPerm = Equiv.refl _)
     (hsecond : d.secondPerm = Equiv.swap 0 1) :
     Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
-  sorry
+  apply apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric
+    A B hAB Y p hp hdegree d
+  exact
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_endpoints
+      A B Y p d hfirst hsecond
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend
     (A B : Circle) (hAB : A ≠ B)
