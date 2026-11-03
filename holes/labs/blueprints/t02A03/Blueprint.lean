@@ -2236,6 +2236,16 @@ noncomputable def apm_t02a03_sector_aux_clampMove (t : ℝ) (p : apm_t02a03_E3) 
   WithLp.toLp 2 ![p 0, p 1,
     (1 - t) * p 2 + t * apm_t02a03_sector_aux_clampZ (p 2)]
 
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip_aux_coord
+    (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hz : |p 2| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p)
+    (i : Fin 3) :
+    apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) i = p i := by
+  sorry
+
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip
     (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
@@ -2243,18 +2253,56 @@ lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip
     (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
     apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) = p := by
+  ext i
+  exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip_aux_coord
+    p hp hz hcos i
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_theta :
+    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).1)
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_z :
+    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).2.1)
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_v :
+    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).2.2)
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
   sorry
 
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi :
     ContinuousOn apm_t02a03_sector_aux_Psi
       {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
         (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
+  apply ContinuousOn.prodMk
+  · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_theta
+  · apply ContinuousOn.prodMk
+    · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_z
+    · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_v
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv_aux_coord
+    (i : Fin 3) :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => apm_t02a03_sector_aux_PsiInv q i)
+      {q | apm_t02a03_sector_aux_box q} := by
   sorry
 
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv :
     ContinuousOn apm_t02a03_sector_aux_PsiInv
       {q | apm_t02a03_sector_aux_box q} := by
-  sorry
+  have hpi : ContinuousOn
+      (fun q : ℝ × ℝ × ℝ => fun i : Fin 3 =>
+        apm_t02a03_sector_aux_PsiInv q i)
+      {q | apm_t02a03_sector_aux_box q} :=
+    continuousOn_pi.2
+      apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv_aux_coord
+  have h := (PiLp.continuous_toLp 2 (fun _ : Fin 3 => ℝ)).continuousOn.comp
+    hpi (Set.mapsTo_univ _ _)
+  simpa using h
 
 theorem apm_t02a03_sector_aux_L1_roundtrip_continuity :
     (∀ p : apm_t02a03_E3, p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right →
@@ -2271,12 +2319,46 @@ theorem apm_t02a03_sector_aux_L1_roundtrip_continuity :
     apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi,
     apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv⟩
 
+lemma apm_t02a03_sector_aux_L2a_box_aux_theta_aux_angle_bound
+    (x y : ℝ) (hx : 0 < x)
+    (h : (17 / 25 : ℝ) ≤ x / Real.sqrt (x ^ 2 + y ^ 2)) :
+    Real.arctan (y / x) ∈
+      Set.Icc (-Real.arccos (17 / 25)) (Real.arccos (17 / 25)) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L2a_box_aux_theta_aux_positive (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
+    0 < 6 / 5 - p 0 ∧
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p =
+        Real.sqrt ((6 / 5 - p 0) ^ 2 + (p 1) ^ 2) := by
+  sorry
+
 lemma apm_t02a03_sector_aux_L2a_box_aux_theta (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
     (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
     apm_t02a03_sector_aux_theta p ∈
       Set.Icc (-apm_t02a03_sector_aux_thetaOne) apm_t02a03_sector_aux_thetaOne := by
+  obtain ⟨hx, hrad⟩ :=
+    apm_t02a03_sector_aux_L2a_box_aux_theta_aux_positive p hp hcos
+  unfold apm_t02a03_sector_aux_theta apm_t02a03_sector_aux_thetaOne
+  apply apm_t02a03_sector_aux_L2a_box_aux_theta_aux_angle_bound
+      (6 / 5 - p 0) (p 1) hx
+  rwa [← hrad]
+
+lemma apm_t02a03_sector_aux_L2a_box_aux_v_aux_bounds (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hz : |p 2| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
+    let theta := apm_t02a03_sector_aux_theta p
+    let z := p 2
+    let u := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1
+    (-apm_t02a03_sector_aux_a z ≤ u ∧
+      u ≤ apm_t02a03_sector_aux_c theta z ∧
+      0 < apm_t02a03_sector_aux_c theta z + apm_t02a03_sector_aux_a z) := by
   sorry
 
 lemma apm_t02a03_sector_aux_L2a_box_aux_v (p : apm_t02a03_E3)
@@ -2285,7 +2367,13 @@ lemma apm_t02a03_sector_aux_L2a_box_aux_v (p : apm_t02a03_E3)
     (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
     (apm_t02a03_sector_aux_Psi p).2.2 ∈ Set.Icc (0 : ℝ) 1 := by
-  sorry
+  obtain ⟨hlower, hupper, hden⟩ :=
+    apm_t02a03_sector_aux_L2a_box_aux_v_aux_bounds p hp hz hcos
+  simp only [apm_t02a03_sector_aux_Psi]
+  constructor
+  · exact div_nonneg (by linarith) (le_of_lt hden)
+  · apply (div_le_one hden).2
+    linarith
 
 theorem apm_t02a03_sector_aux_L2a_box (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) (hz : |p 2| ≤ 1 / 5)
@@ -2297,10 +2385,44 @@ theorem apm_t02a03_sector_aux_L2a_box (p : apm_t02a03_E3)
   simp only [apm_t02a03_sector_aux_Psi]
   constructor <;> linarith
 
+lemma apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    Metric.infDist (apm_t02a03_sector_aux_PsiInv q)
+      (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (1 / 4 : ℝ) ≤ Metric.infDist (apm_t02a03_sector_aux_PsiInv q) apm_t02a03_C := by
+  sorry
+
 lemma apm_t02a03_sector_aux_L2b_inv_aux_right (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     apm_t02a03_sector_aux_PsiInv q ∈
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
+  exact ⟨apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube q hq,
+    apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left q hq⟩
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_rad (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+        (apm_t02a03_sector_aux_PsiInv q) =
+      1 + (-apm_t02a03_sector_aux_a q.2.1 +
+        q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
+          apm_t02a03_sector_aux_a q.2.1)) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_ratio (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (6 / 5 - apm_t02a03_sector_aux_PsiInv q 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+        (apm_t02a03_sector_aux_PsiInv q) = Real.cos q.1 := by
+  rw [apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_rad q hq]
+  sorry
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_bound (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (17 / 25 : ℝ) ≤ Real.cos q.1 := by
   sorry
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_cos (q : ℝ × ℝ × ℝ)
@@ -2308,12 +2430,32 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_cos (q : ℝ × ℝ × ℝ)
     (17 / 25 : ℝ) ≤ (6 / 5 - apm_t02a03_sector_aux_PsiInv q 0) /
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
         (apm_t02a03_sector_aux_PsiInv q) := by
+  rw [apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_ratio q hq]
+  exact apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_bound q hq
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_theta (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q)).1 = q.1 := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_z (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q)).2.1 = q.2.1 := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_v (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q)).2.2 = q.2.2 := by
   sorry
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q) = q := by
-  sorry
+  apply Prod.ext
+  · exact apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_theta q hq
+  · apply Prod.ext
+    · exact apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_z q hq
+    · exact apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_v q hq
 
 theorem apm_t02a03_sector_aux_L2b_inv (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
@@ -2331,11 +2473,56 @@ theorem apm_t02a03_sector_aux_L2b_inv (q : ℝ × ℝ × ℝ)
   change (-1 / 5 : ℝ) ≤ q.2.1 ∧ q.2.1 ≤ 1 / 5 at hz
   constructor <;> linarith [hz.1, hz.2]
 
+lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_geometry (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_PsiInv q ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) ↔
+      apm_t02a03_sector_aux_Delta (q.1, q.2.1) ∧
+        (-apm_t02a03_sector_aux_a q.2.1 +
+          q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
+            apm_t02a03_sector_aux_a q.2.1) =
+          apm_t02a03_sector_aux_b q.1 q.2.1) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_endpoint (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q)
+    (hDelta : apm_t02a03_sector_aux_Delta (q.1, q.2.1)) :
+    (-apm_t02a03_sector_aux_a q.2.1 +
+        q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
+          apm_t02a03_sector_aux_a q.2.1) =
+        apm_t02a03_sector_aux_b q.1 q.2.1) ↔ q.2.2 = 1 := by
+  sorry
+
 lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (apm_t02a03_sector_aux_PsiInv q ∈
         apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) ↔
       q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1) := by
+  rw [apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_geometry q hq]
+  constructor
+  · rintro ⟨hDelta, hu⟩
+    exact ⟨(apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_endpoint q hq hDelta).1 hu,
+      hDelta⟩
+  · rintro ⟨hv, hDelta⟩
+    exact ⟨hDelta,
+      (apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_endpoint q hq hDelta).2 hv⟩
+
+lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop_aux_coordinates (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_PsiInv q ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ↔
+      q.2.1 = 0 ∧
+        (-apm_t02a03_sector_aux_a q.2.1 +
+          q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
+            apm_t02a03_sector_aux_a q.2.1) = 3 / 20) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop_aux_parameter (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) (hz : q.2.1 = 0) :
+    (-apm_t02a03_sector_aux_a q.2.1 +
+        q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
+          apm_t02a03_sector_aux_a q.2.1) = 3 / 20) ↔
+      q.2.2 = apm_t02a03_sector_aux_vArc q.1 := by
   sorry
 
 lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop (q : ℝ × ℝ × ℝ)
@@ -2343,7 +2530,12 @@ lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop (q : ℝ × ℝ × ℝ)
     (apm_t02a03_sector_aux_PsiInv q ∈
         apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ↔
       q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1 := by
-  sorry
+  rw [apm_t02a03_sector_aux_L3_target_iff_aux_loop_aux_coordinates q hq]
+  constructor
+  · rintro ⟨hz, hu⟩
+    exact ⟨hz, (apm_t02a03_sector_aux_L3_target_iff_aux_loop_aux_parameter q hq hz).1 hu⟩
+  · rintro ⟨hz, hv⟩
+    exact ⟨hz, (apm_t02a03_sector_aux_L3_target_iff_aux_loop_aux_parameter q hq hz).2 hv⟩
 
 theorem apm_t02a03_sector_aux_L3_target_iff (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
@@ -2358,6 +2550,37 @@ theorem apm_t02a03_sector_aux_L3_target_iff (q : ℝ × ℝ × ℝ)
 
 lemma apm_t02a03_sector_aux_L4_clamp_aux_continuous :
     Continuous (Function.uncurry apm_t02a03_sector_aux_clampMove) := by
+  unfold apm_t02a03_sector_aux_clampMove apm_t02a03_sector_aux_clampZ
+  refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i ↦ ?_)
+  fin_cases i <;> simp <;> fun_prop
+
+lemma apm_t02a03_sector_aux_L4_clamp_aux_fix_aux_z_bound
+    (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X)
+    (hp : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p) :
+    |(p.1 : apm_t02a03_E3) 2| ≤ (1 / 5 : ℝ) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L4_clamp_aux_fix_aux_clampZ
+    (z : ℝ) (hz : |z| ≤ (1 / 5 : ℝ)) :
+    apm_t02a03_sector_aux_clampZ z = z := by
+  rw [abs_le] at hz
+  unfold apm_t02a03_sector_aux_clampZ
+  rw [min_eq_right (by norm_num at hz ⊢; exact hz.2)]
+  rw [max_eq_right (by norm_num at hz ⊢; exact hz.1)]
+
+lemma apm_t02a03_sector_aux_L4_clamp_aux_right_aux_right_tube
+    (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
+    (hp : Metric.infDist p (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ)) :
+    Metric.infDist (apm_t02a03_sector_aux_clampMove t p)
+        (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L4_clamp_aux_right_aux_left_far
+    (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
+    (hpR : Metric.infDist p (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ))
+    (hpL : (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C) :
+    (1 / 4 : ℝ) ≤
+      Metric.infDist (apm_t02a03_sector_aux_clampMove t p) apm_t02a03_C := by
   sorry
 
 lemma apm_t02a03_sector_aux_L4_clamp_aux_right
@@ -2366,7 +2589,8 @@ lemma apm_t02a03_sector_aux_L4_clamp_aux_right
     (hp : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p) :
     apm_t02a03_sector_aux_clampMove t p.1 ∈
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
-  sorry
+  exact ⟨apm_t02a03_sector_aux_L4_clamp_aux_right_aux_right_tube t ht p.1 p.2.1,
+    apm_t02a03_sector_aux_L4_clamp_aux_right_aux_left_far t ht p.1 p.2.1 p.2.2⟩
 
 lemma apm_t02a03_sector_aux_L4_clamp_aux_target
     (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1)
@@ -2377,14 +2601,37 @@ lemma apm_t02a03_sector_aux_L4_clamp_aux_target
         apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ∨
       (17 / 25 : ℝ) ≤ (6 / 5 - moved 0) /
         apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad moved := by
-  sorry
+  rcases hp with hp | hp
+  · left
+    have hfix : apm_t02a03_sector_aux_clampMove t p.1 = p.1 := by
+      have hz := apm_t02a03_sector_aux_L4_clamp_aux_fix_aux_z_bound p hp
+      have hclamp := apm_t02a03_sector_aux_L4_clamp_aux_fix_aux_clampZ (p.1 2) hz
+      ext i
+      fin_cases i <;>
+        simp [apm_t02a03_sector_aux_clampMove, hclamp] <;> ring
+    simpa [hfix] using hp
+  · right
+    have h0 : apm_t02a03_sector_aux_clampMove t p.1 0 = p.1 0 := by
+      simp [apm_t02a03_sector_aux_clampMove]
+    have h1 : apm_t02a03_sector_aux_clampMove t p.1 1 = p.1 1 := by
+      simp [apm_t02a03_sector_aux_clampMove]
+    have hrad :
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+            (apm_t02a03_sector_aux_clampMove t p.1) =
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p.1 := by
+      simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad,
+        h0, h1]
+    simpa [h0, hrad] using hp
 
 lemma apm_t02a03_sector_aux_L4_clamp_aux_fix
     (t : ℝ)
     (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X)
     (hp : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p) :
     apm_t02a03_sector_aux_clampMove t p.1 = p.1 := by
-  sorry
+  have hz := apm_t02a03_sector_aux_L4_clamp_aux_fix_aux_z_bound p hp
+  have hclamp := apm_t02a03_sector_aux_L4_clamp_aux_fix_aux_clampZ (p.1 2) hz
+  ext i
+  fin_cases i <;> simp [apm_t02a03_sector_aux_clampMove, hclamp] <;> ring
 
 theorem apm_t02a03_sector_aux_L4_clamp :
     Continuous (Function.uncurry apm_t02a03_sector_aux_clampMove) ∧
@@ -2406,23 +2653,74 @@ theorem apm_t02a03_sector_aux_L4_clamp :
       apm_t02a03_sector_aux_L4_clamp_aux_target t ht p hp⟩
   · exact apm_t02a03_sector_aux_L4_clamp_aux_fix
 
+lemma apm_t02a03_sector_aux_L5_piDelta_aux_continuous :
+    Continuous apm_t02a03_sector_aux_piDelta := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L5_piDelta_aux_maps (q : ℝ × ℝ) :
+    apm_t02a03_sector_aux_Delta (apm_t02a03_sector_aux_piDelta q) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L5_piDelta_aux_fix (q : ℝ × ℝ)
+    (hq : q.1 ∈ Set.Icc (-apm_t02a03_sector_aux_thetaOne)
+      apm_t02a03_sector_aux_thetaOne)
+    (hDelta : apm_t02a03_sector_aux_Delta q) :
+    apm_t02a03_sector_aux_piDelta q = q := by
+  sorry
+
 theorem apm_t02a03_sector_aux_L5_piDelta :
     Continuous apm_t02a03_sector_aux_piDelta ∧
     (∀ q, apm_t02a03_sector_aux_Delta (apm_t02a03_sector_aux_piDelta q)) ∧
     (∀ q, q.1 ∈ Set.Icc (-apm_t02a03_sector_aux_thetaOne) apm_t02a03_sector_aux_thetaOne →
       apm_t02a03_sector_aux_Delta q → apm_t02a03_sector_aux_piDelta q = q) := by
-  sorry
+  exact ⟨apm_t02a03_sector_aux_L5_piDelta_aux_continuous,
+    apm_t02a03_sector_aux_L5_piDelta_aux_maps,
+    apm_t02a03_sector_aux_L5_piDelta_aux_fix⟩
 
 def apm_t02a03_sector_aux_q0 : ℝ × ℝ × ℝ := (0, 0, 1)
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
+      ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  sorry
 
 theorem apm_t02a03_sector_aux_L6a_r_continuous_off_q0 :
     ContinuousOn apm_t02a03_sector_aux_r
       ({q | apm_t02a03_sector_aux_box q} \ {apm_t02a03_sector_aux_q0}) := by
+  exact apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_theta.prodMk
+    (apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_z.prodMk
+      apm_t02a03_sector_aux_L6a_r_continuous_off_q0_aux_v)
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta :
+    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).1)
+      apm_t02a03_sector_aux_q0 := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z :
+    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.1)
+      apm_t02a03_sector_aux_q0 := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v :
+    ContinuousAt (fun q : ℝ × ℝ × ℝ => (apm_t02a03_sector_aux_r q).2.2)
+      apm_t02a03_sector_aux_q0 := by
   sorry
 
 theorem apm_t02a03_sector_aux_L6b_r_continuous_at_q0 :
     ContinuousAt apm_t02a03_sector_aux_r apm_t02a03_sector_aux_q0 := by
-  sorry
+  exact apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_theta.prodMk
+    (apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_z.prodMk
+      apm_t02a03_sector_aux_L6b_r_continuous_at_q0_aux_v)
 
 theorem apm_t02a03_sector_aux_L6c_r_fixes_target (q : ℝ × ℝ × ℝ)
     (hbox : apm_t02a03_sector_aux_box q)
@@ -2464,7 +2762,45 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux
           |(j p).1.1 2| ≤ 1 / 5 ∧
           (17 / 25 : ℝ) ≤ (6 / 5 - (j p).1.1 0) /
             apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (j p).1.1) := by
-  sorry
+  let S := {p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X //
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p}
+  let j : C(S, S) :=
+    ⟨fun p ↦ ⟨⟨apm_t02a03_sector_aux_clampMove 1 p.1.1,
+      apm_t02a03_sector_aux_L4_clamp.2.1 1 (by simp) p.1 p.2 |>.1⟩,
+      Or.elim (apm_t02a03_sector_aux_L4_clamp.2.1 1 (by simp) p.1 p.2 |>.2)
+        Or.inl Or.inr⟩,
+      (apm_t02a03_sector_aux_L4_clamp.1.comp
+        (continuous_const.prodMk
+          (continuous_subtype_val.comp continuous_subtype_val))).subtype_mk _ |>.subtype_mk _⟩
+  let J : ContinuousMap.Homotopy (ContinuousMap.id S) j :=
+    { toFun := fun q ↦ ⟨⟨apm_t02a03_sector_aux_clampMove q.1.1 q.2.1.1,
+          apm_t02a03_sector_aux_L4_clamp.2.1 q.1.1 q.1.2 q.2.1 q.2.2 |>.1⟩,
+        Or.elim (apm_t02a03_sector_aux_L4_clamp.2.1 q.1.1 q.1.2 q.2.1 q.2.2 |>.2)
+          Or.inl Or.inr⟩
+      continuous_toFun := ((apm_t02a03_sector_aux_L4_clamp.1.comp
+        ((continuous_subtype_val.comp continuous_fst).prodMk
+          ((continuous_subtype_val.comp continuous_subtype_val).comp
+            continuous_snd))).subtype_mk _).subtype_mk _
+      map_zero_left := by
+        intro p
+        apply Subtype.ext
+        apply Subtype.ext
+        ext i
+        fin_cases i <;> simp [apm_t02a03_sector_aux_clampMove]
+      map_one_left := fun p ↦ rfl }
+  refine ⟨j, J, ?_, ?_⟩
+  · intro p hp t
+    apply Subtype.ext
+    apply Subtype.ext
+    exact apm_t02a03_sector_aux_L4_clamp.2.2 t p.1 hp
+  · intro p hn
+    have ht := apm_t02a03_sector_aux_L4_clamp.2.1 1 (by simp) p.1 p.2
+    rcases ht.2 with hz | hcos
+    · exact False.elim (hn (by simpa [j] using hz))
+    · refine ⟨?_, hcos⟩
+      simp [j, apm_t02a03_sector_aux_clampMove,
+        apm_t02a03_sector_aux_clampZ, abs_le]
+      norm_num
 
 /-- The box-collapse stage after clamping.  Pull back the straight segment
 from `q` to `r q` using `PsiInv`; L1, L2a/b and L6e keep it in the box, L3
