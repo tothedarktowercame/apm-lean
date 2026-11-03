@@ -2276,6 +2276,32 @@ def apm_t97A03_modelWedgeBase : apm_t97A03_modelWedge :=
     ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
     (.inl apm_t97A03_twoSphereBase)
 
+/-- Generic attaching relation: the point `w` of the circles is glued to
+`z` whenever `a w = some z`. -/
+inductive apm_t97A03_invariants_aux_slide_GenRel {ι Z : Type}
+    (a : ι × Circle → Option Z) : Sum Z (ι × Circle) → Sum Z (ι × Circle) → Prop
+  | att (w : ι × Circle) (z : Z) (h : a w = some z) :
+      apm_t97A03_invariants_aux_slide_GenRel a (.inr w) (.inl z)
+
+/-- Sliding one attaching point along a path in `Z` does not change the
+homotopy type of the adjunction space, provided only finitely many points
+are attached (so a small arc around the moved point carries no other
+attachment).  Proof plan: choose an arc of circle `w₀.1` around `w₀.2`
+containing no other marked point; `Φ` is the identity off that arc and on it
+runs `γ` from `z` to `z'` and then back out along the arc; `Ψ` is the same with
+`γ.symm`; both composites differ from the identity only on the arc, by a
+reparametrised `γ.symm.trans γ` (resp. `γ.trans γ.symm`), contracted by the
+standard path homotopy. -/
+theorem apm_t97A03_invariants_aux_slide_generic {ι Z : Type} [TopologicalSpace ι]
+    [DiscreteTopology ι] [TopologicalSpace Z]
+    (a a' : ι × Circle → Option Z) (hfin : {w | (a w).isSome}.Finite)
+    (w₀ : ι × Circle) (hsame : ∀ w, w ≠ w₀ → a w = a' w)
+    (z z' : Z) (hz : a w₀ = some z) (hz' : a' w₀ = some z') (γ : Path z z') :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      (Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))
+      (Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')))) := by
+  sorry
+
 /-- The one-circle model after sliding, on each sphere sheet, the south
 attachment to the north attachment.  The four marked points of the circle
 are unchanged; only their attaching maps into the sphere sheets have been
