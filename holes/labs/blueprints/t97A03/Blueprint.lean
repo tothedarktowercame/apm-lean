@@ -6361,6 +6361,37 @@ local notation "OQ" => apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_col
 local notation "OQC" => (ContinuousMap.mk OQ apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q_continuous)
 local notation "OV" => (Quotient.mk _ (Sum.inl (0, apm_t97A03_north)) : OCC)
 
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower :
+    ∃ L : C({p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)},
+        apm_t97A03_S2),
+      (∀ x (hx : x.1 2 ≤ 0), L ⟨(x, 0), hx⟩ =
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_fold x) ∧
+      (∀ x (hx : x.1 2 ≤ 1), L ⟨(x, 1), hx⟩ = x) ∧
+      (∀ x (t : unitInterval) (hx : x.1 2 = (t : ℝ)),
+        L ⟨(x, t), hx.le⟩ = apm_t97A03_north) := by
+  sorry
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_upper :
+    ∃ U : C({p : apm_t97A03_S2 × unitInterval | (p.2 : ℝ) ≤ p.1.1 2},
+        apm_t97A03_S2),
+      ∀ x (t : unitInterval) (hx : x.1 2 = (t : ℝ)),
+        U ⟨(x, t), hx.ge⟩ = apm_t97A03_north := by
+  exact ⟨⟨fun _ => apm_t97A03_north, continuous_const⟩, fun _ _ _ => rfl⟩
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_paste
+    (L : C({p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)},
+      apm_t97A03_S2))
+    (U : C({p : apm_t97A03_S2 × unitInterval | (p.2 : ℝ) ≤ p.1.1 2},
+      apm_t97A03_S2))
+    (hLU : ∀ x (t : unitInterval) (hx : x.1 2 = (t : ℝ)),
+      L ⟨(x, t), hx.le⟩ = U ⟨(x, t), hx.ge⟩) :
+    ∃ F : C(apm_t97A03_S2 × unitInterval, apm_t97A03_S2),
+      (∀ x (t : unitInterval) (hx : x.1 2 ≤ (t : ℝ)),
+        F (x, t) = L ⟨(x, t), hx⟩) ∧
+      (∀ x (t : unitInterval) (hx : (t : ℝ) ≤ x.1 2),
+        F (x, t) = U ⟨(x, t), hx⟩) := by
+  sorry
+
 /-- Polar cap interpolation, with its north pole following the connecting edge.
 Use the same polar formula as for two circles: cap angle `(1-t)π/2`,
 complementary polar angle `π(θ-(1-t)π/2)/(π-(1-t)π/2)`, and on the cap
@@ -6371,7 +6402,33 @@ theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contr
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_fold x) ∧
       (∀ x, F (x, 1) = x) ∧
       (∀ x (t : unitInterval), x.1 2 = (t : ℝ) → F (x, t) = apm_t97A03_north) := by
-  sorry
+  obtain ⟨L, hL0, hL1, hLb⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower
+  obtain ⟨U, hUb⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_upper
+  obtain ⟨F, hFlo, hFhi⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_paste
+      L U (fun x t hx => (hLb x t hx).trans (hUb x t hx).symm)
+  refine ⟨F, ?_, ?_, ?_⟩
+  · intro x hx
+    rw [hFlo x 0 hx]
+    exact hL0 x hx
+  · intro x
+    have hxnorm : ‖x.1‖ = 1 := by
+      simpa using x.2
+    have hsumsq : (x.1 0) ^ 2 + (x.1 1) ^ 2 + (x.1 2) ^ 2 = 1 := by
+      have h := congrArg (fun r : ℝ => r ^ 2) hxnorm
+      change ‖x.1‖ ^ 2 = 1 ^ 2 at h
+      rw [EuclideanSpace.real_norm_sq_eq] at h
+      simp [Fin.sum_univ_succ] at h
+      nlinarith
+    have hx : x.1 2 ≤ (1 : ℝ) := by
+      nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1), sq_nonneg (x.1 2)]
+    rw [hFlo x 1 hx]
+    exact hL1 x hx
+  · intro x t hx
+    rw [hFlo x t hx.le]
+    exact hLb x t hx
 
 theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_glue
     (F : C(apm_t97A03_S2 × unitInterval, apm_t97A03_S2))
