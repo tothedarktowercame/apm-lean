@@ -2823,7 +2823,37 @@ lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop_aux_coordinates (q : ℝ × �
         (-apm_t02a03_sector_aux_a q.2.1 +
           q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
             apm_t02a03_sector_aux_a q.2.1) = 3 / 20) := by
-  sorry
+  obtain ⟨h0, h1, h2⟩ := apm_t02a03_sector_aux_L2_aux_PsiInv_coords q
+  have hu := apm_t02a03_sector_aux_L2_aux_u_ge q hq
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le q.2.1
+  set u := -apm_t02a03_sector_aux_a q.2.1 +
+    q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 + apm_t02a03_sector_aux_a q.2.1) with hu'
+  have hs : 0 < 1 + u := by linarith
+  have htrig := Real.sin_sq_add_cos_sq q.1
+  constructor
+  · rintro ⟨t, ht⟩
+    have e0 := congrArg (fun p : apm_t02a03_E3 => p 0) ht
+    have e1 := congrArg (fun p : apm_t02a03_E3 => p 1) ht
+    have e2 := congrArg (fun p : apm_t02a03_E3 => p 2) ht
+    simp only at e0 e1 e2
+    rw [h0] at e0; rw [h1] at e1; rw [h2] at e2
+    simp at e0 e1 e2
+    refine ⟨e2.symm, ?_⟩
+    have ht2 := Real.sin_sq_add_cos_sq t
+    have hsq : (1 + u) ^ 2 = (23 / 20) ^ 2 := by
+      calc (1 + u) ^ 2 = ((1 + u) * Real.sin q.1) ^ 2 + ((1 + u) * Real.cos q.1) ^ 2 := by
+            linear_combination (-(1 + u) ^ 2) * htrig
+        _ = (23 / 20 * Real.sin t) ^ 2 + (23 / 20 * Real.cos t) ^ 2 := by rw [← e1, ← e0]
+        _ = (23 / 20) ^ 2 := by linear_combination (23 / 20) ^ 2 * ht2
+    have := (pow_left_inj₀ hs.le (by norm_num) two_ne_zero).mp hsq
+    linarith
+  · rintro ⟨hz, hu3⟩
+    refine ⟨q.1, ?_⟩
+    have hs' : 1 + u = 23 / 20 := by linarith
+    ext i; fin_cases i
+    · simp [h0, hs']
+    · simp [h1, hs']
+    · simp [h2, hz]
 
 lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop_aux_parameter (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) (hz : q.2.1 = 0) :
@@ -2831,7 +2861,15 @@ lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop_aux_parameter (q : ℝ × ℝ
         q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
           apm_t02a03_sector_aux_a q.2.1) = 3 / 20) ↔
       q.2.2 = apm_t02a03_sector_aux_vArc q.1 := by
-  sorry
+  have ha0 : apm_t02a03_sector_aux_a 0 = 1 / 4 := by
+    unfold apm_t02a03_sector_aux_a
+    rw [show (1 / 16 - (0 : ℝ) ^ 2) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]
+  have hpos := apm_t02a03_sector_aux_L2_aux_cpa_pos q.1 0 (by norm_num)
+  rw [hz, ha0] at *
+  rw [ha0] at hpos
+  unfold apm_t02a03_sector_aux_vArc
+  rw [eq_div_iff hpos.ne']
+  constructor <;> intro h <;> linarith
 
 lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
