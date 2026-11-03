@@ -2333,7 +2333,22 @@ lemma apm_t02a03_sector_aux_L2a_box_aux_theta_aux_positive (p : apm_t02a03_E3)
     0 < 6 / 5 - p 0 ∧
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p =
         Real.sqrt ((6 / 5 - p 0) ^ 2 + (p 1) ^ 2) := by
-  sorry
+  have htube := hp.1
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq,
+    Real.sqrt_le_left (by norm_num)] at htube
+  have hs : 0 <
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p := by
+    nlinarith [sq_nonneg (p 2)]
+  constructor
+  · have : 0 < (6 / 5 - p 0) /
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p :=
+      lt_of_lt_of_le (by norm_num : (0 : ℝ) < 17 / 25) hcos
+    rcases div_pos_iff.mp this with h | h
+    · exact h.1
+    · exact False.elim ((not_lt_of_ge hs.le) h.2)
+  · unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+    congr 1
+    ring
 
 lemma apm_t02a03_sector_aux_L2a_box_aux_theta (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
@@ -2423,7 +2438,17 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_ratio (q : ℝ × ℝ × ℝ)
 lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_bound (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (17 / 25 : ℝ) ≤ Real.cos q.1 := by
-  sorry
+  have htheta := hq.1
+  change -Real.arccos (17 / 25) ≤ q.1 ∧
+    q.1 ≤ Real.arccos (17 / 25) at htheta
+  have habs : |q.1| ≤ Real.arccos (17 / 25) := by
+    rw [abs_le]
+    exact htheta
+  have hcos := Real.cos_le_cos_of_nonneg_of_le_pi
+    (abs_nonneg q.1) (Real.arccos_le_pi (17 / 25)) habs
+  rw [Real.cos_arccos (by norm_num : (-1 : ℝ) ≤ 17 / 25)
+    (by norm_num : (17 / 25 : ℝ) ≤ 1), Real.cos_abs] at hcos
+  exact hcos
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_cos (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
@@ -2441,7 +2466,7 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_theta (q : ℝ × ℝ × �
 lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_z (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q)).2.1 = q.2.1 := by
-  sorry
+  rfl
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_roundtrip_aux_v (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
