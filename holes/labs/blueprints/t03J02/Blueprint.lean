@@ -1407,12 +1407,176 @@ structure apm_t03J02_Retractile (j : C(Circle, apm_t03J02_Torus)) where
   β_fix : ∀ z, β (j z) = 0
   H_one : ∀ x, β x < 1 → H (x, 1) ∈ Set.range j
 
+section Retractile
+open Set Topology
+
+theorem apm_t03J02_exists_retractile_aux_construct (j : C(Circle, apm_t03J02_Torus))
+    (hj : IsEmbedding j) :
+    ∃ (H : C(apm_t03J02_Torus × I, apm_t03J02_Torus)) (β : C(apm_t03J02_Torus, ℝ)),
+      (∀ x, H (x, 0) = x) ∧ (∀ z t, H (j z, t) = j z) ∧ (∀ x, 0 ≤ β x) ∧ (∀ x, β x ≤ 1) ∧
+      (∀ z, β (j z) = 0) ∧ (∀ x, β x < 1 → H (x, 1) ∈ Set.range j) := by
+  classical
+  have hJc : IsCompact (range j) := isCompact_range j.continuous
+  have hJ : IsClosed (range j) := hJc.isClosed
+  have hJne : (range j).Nonempty := ⟨j 1, 1, rfl⟩
+  -- Tietze
+  let e := hj.toHomeomorph
+  let f : C(range j, ℂ) := ⟨fun y => ((e.symm y : Circle) : ℂ),
+    (continuous_induced_dom (f := ((↑) : Circle → ℂ))).comp e.symm.continuous⟩
+  obtain ⟨G, hG⟩ := f.exists_restrict_eq hJ
+  have hGj : ∀ z, G (j z) = z := by
+    intro z
+    have h := DFunLike.congr_fun hG ⟨j z, z, rfl⟩
+    have h2 : e.symm ⟨j z, z, rfl⟩ = z := e.symm_apply_apply z
+    simpa [f, h2] using h
+  -- the retraction
+  let ρ : apm_t03J02_Torus → Circle := fun x =>
+    if h : G x ≠ 0 then ⟨G x / ‖G x‖, by
+      simp [Submonoid.unitSphere, norm_div, h]⟩ else 1
+  have hρcoe : ∀ x, G x ≠ 0 → (ρ x : ℂ) = G x / ‖G x‖ := fun x h => by
+    simp only [ρ, dif_pos h]
+  let U₀ : Set apm_t03J02_Torus := {x | G x ≠ 0}
+  have hU₀ : IsOpen U₀ := isOpen_ne_fun G.continuous continuous_const
+  have hind : IsInducing (fun z : Circle => (z : ℂ)) := ⟨rfl⟩
+  have hρ : ContinuousOn ρ U₀ := by
+    refine hind.continuousOn_iff.2 ?_
+    have : ContinuousOn (fun x => G x / (‖G x‖ : ℂ)) U₀ := by
+      apply ContinuousOn.div G.continuous.continuousOn
+      · exact (Complex.continuous_ofReal.comp G.continuous.norm).continuousOn
+      · intro x hx
+        simpa using hx
+    exact this.congr fun x hx => hρcoe x hx
+  have hρj : ∀ z, ρ (j z) = z := by
+    intro z
+    apply Circle.ext
+    rw [hρcoe _ (by rw [hGj]; exact Circle.coe_ne_zero z), hGj]
+    simp
+  have hG0 : ∀ z, j z ∈ U₀ := fun z => by
+    change G (j z) ≠ 0
+    rw [hGj]; exact Circle.coe_ne_zero z
+  let k : apm_t03J02_Torus → apm_t03J02_Torus := fun x => j (ρ x)
+  have hk : ContinuousOn k U₀ := j.continuous.comp_continuousOn hρ
+  let r₁ : apm_t03J02_Torus → Circle := fun x => (k x).1 / x.1
+  let r₂ : apm_t03J02_Torus → Circle := fun x => (k x).2 / x.2
+  have hr₁ : ContinuousOn r₁ U₀ :=
+    (continuous_fst.comp_continuousOn hk).div' continuous_fst.continuousOn
+  have hr₂ : ContinuousOn r₂ U₀ :=
+    (continuous_snd.comp_continuousOn hk).div' continuous_snd.continuousOn
+  have hkj : ∀ z, k (j z) = j z := fun z => by simp [k, hρj]
+  have hr₁j : ∀ z, r₁ (j z) = 1 := fun z => by simp [r₁, hkj]
+  have hr₂j : ∀ z, r₂ (j z) = 1 := fun z => by simp [r₂, hkj]
+  let V : Set apm_t03J02_Torus := U₀ ∩ ((fun x => (r₁ x : ℂ)) ⁻¹' Complex.slitPlane ∩
+    (fun x => (r₂ x : ℂ)) ⁻¹' Complex.slitPlane)
+  have hc₁ : ContinuousOn (fun x => (r₁ x : ℂ)) U₀ :=
+    (continuous_induced_dom (f := ((↑) : Circle → ℂ))).comp_continuousOn hr₁
+  have hc₂ : ContinuousOn (fun x => (r₂ x : ℂ)) U₀ :=
+    (continuous_induced_dom (f := ((↑) : Circle → ℂ))).comp_continuousOn hr₂
+  have hV : IsOpen V := by
+    have h1 := hc₁.isOpen_inter_preimage hU₀ Complex.isOpen_slitPlane
+    have h2 := hc₂.isOpen_inter_preimage hU₀ Complex.isOpen_slitPlane
+    have : V = (U₀ ∩ (fun x => (r₁ x : ℂ)) ⁻¹' Complex.slitPlane) ∩
+        (U₀ ∩ (fun x => (r₂ x : ℂ)) ⁻¹' Complex.slitPlane) := by
+      ext x; simp only [V, mem_inter_iff]; tauto
+    rw [this]; exact h1.inter h2
+  have hJV : range j ⊆ V := by
+    rintro _ ⟨z, rfl⟩
+    refine ⟨hG0 z, ?_, ?_⟩ <;> simp [hr₁j, hr₂j]
+  obtain ⟨ε, hε, hth⟩ := hJc.exists_thickening_subset_open hV hJV
+  let d : apm_t03J02_Torus → ℝ := fun x => Metric.infDist x (range j)
+  have hd : Continuous d := Metric.continuous_infDist_pt _
+  have hdj : ∀ z, d (j z) = 0 := fun z => Metric.infDist_zero_of_mem ⟨z, rfl⟩
+  have hdV : ∀ x, d x < ε → x ∈ V := fun x hx =>
+    hth ((Metric.mem_thickening_iff_infDist_lt hJne).2 hx)
+  let lam : apm_t03J02_Torus → ℝ := fun x => max 0 (min 1 (2 - 3 * d x / ε))
+  have hlam : Continuous lam := by fun_prop
+  have hlam1 : ∀ x, d x < ε / 3 → lam x = 1 := by
+    intro x hx
+    have : 3 * d x / ε < 1 := by rw [div_lt_iff₀ hε]; linarith
+    simp only [lam]
+    rw [min_eq_left (by linarith), max_eq_right (by norm_num)]
+  have hlam0 : ∀ x, 2 * ε / 3 < d x → lam x = 0 := by
+    intro x hx
+    have : 2 < 3 * d x / ε := by rw [lt_div_iff₀ hε]; linarith
+    simp only [lam]
+    rw [min_eq_right (by linarith), max_eq_left (by linarith)]
+  have key : ∀ (r : apm_t03J02_Torus → Circle), ContinuousOn (fun x => (r x : ℂ)) U₀ →
+      (∀ x ∈ V, (r x : ℂ) ∈ Complex.slitPlane) →
+      Continuous fun x => lam x * Complex.arg (r x) := by
+    intro r hr hrV
+    rw [continuous_iff_continuousAt]
+    intro x
+    by_cases hx : d x < ε
+    · have hxV := hdV x hx
+      have h1 : ContinuousAt (fun x => (r x : ℂ)) x :=
+        hr.continuousAt (hU₀.mem_nhds hxV.1)
+      exact hlam.continuousAt.mul
+        (ContinuousAt.comp (f := fun x => (r x : ℂ)) (Complex.continuousAt_arg (hrV x hxV)) h1)
+    · have h2 : 2 * ε / 3 < d x := by
+        have := not_lt.1 hx
+        linarith
+      have h3 : ∀ᶠ y in 𝓝 x, lam y * Complex.arg (r y) = 0 := by
+        filter_upwards [hd.continuousAt.eventually (lt_mem_nhds h2)] with y hy
+        rw [hlam0 y hy, zero_mul]
+      exact (continuousAt_const (y := (0 : ℝ))).congr (by
+        filter_upwards [h3] with y hy using hy.symm)
+  let φ₁ : apm_t03J02_Torus → ℝ := fun x => lam x * Complex.arg (r₁ x)
+  let φ₂ : apm_t03J02_Torus → ℝ := fun x => lam x * Complex.arg (r₂ x)
+  have hφ₁ : Continuous φ₁ := key r₁ hc₁ fun x hx => hx.2.1
+  have hφ₂ : Continuous φ₂ := key r₂ hc₂ fun x hx => hx.2.2
+  let H : C(apm_t03J02_Torus × I, apm_t03J02_Torus) := ⟨fun p =>
+      (p.1.1 * Circle.exp ((p.2 : ℝ) * φ₁ p.1), p.1.2 * Circle.exp ((p.2 : ℝ) * φ₂ p.1)), by
+    apply Continuous.prodMk
+    · exact (continuous_fst.comp continuous_fst).mul
+        (Circle.exp.continuous.comp
+          ((continuous_subtype_val.comp continuous_snd).mul (hφ₁.comp continuous_fst)))
+    · exact (continuous_snd.comp continuous_fst).mul
+        (Circle.exp.continuous.comp
+          ((continuous_subtype_val.comp continuous_snd).mul (hφ₂.comp continuous_fst)))⟩
+  let β : C(apm_t03J02_Torus, ℝ) := ⟨fun x => min 1 (3 * d x / ε), by fun_prop⟩
+  have hdnn : ∀ x, 0 ≤ d x := fun x => Metric.infDist_nonneg
+  refine ⟨H, β, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    simp [H]
+  · intro z t
+    have h1 : φ₁ (j z) = 0 := by simp [φ₁, hr₁j]
+    have h2 : φ₂ (j z) = 0 := by simp [φ₂, hr₂j]
+    simp [H, h1, h2]
+  · intro x
+    exact le_min zero_le_one (by have := hdnn x; positivity)
+  · intro x
+    exact min_le_left _ _
+  · intro z
+    simp [β, hdj]
+  · intro x hx
+    have h1 : 3 * d x / ε < 1 := by
+      by_contra hc
+      have : min (1 : ℝ) (3 * d x / ε) = 1 := min_eq_left (not_lt.1 hc)
+      exact absurd hx (by simp only [β]; change ¬ min _ _ < _; rw [this]; norm_num)
+    have h2 : d x < ε / 3 := by
+      rw [div_lt_iff₀ hε] at h1; linarith
+    have h3 := hlam1 x h2
+    refine ⟨ρ x, ?_⟩
+    apply Prod.ext
+    · change (k x).1 = x.1 * Circle.exp (((1 : I) : ℝ) * (lam x * Complex.arg (r₁ x)))
+      rw [h3]
+      simp only [Icc.coe_one, one_mul]
+      rw [Circle.exp_arg]
+      simp [r₁]
+    · change (k x).2 = x.2 * Circle.exp (((1 : I) : ℝ) * (lam x * Complex.arg (r₂ x)))
+      rw [h3]
+      simp only [Icc.coe_one, one_mul]
+      rw [Circle.exp_arg]
+      simp [r₂]
+
+end Retractile
+
 /-- Tietze extends the inverse of `j` to a map to `ℂ`; normalising gives a retraction `k` of an
 open `N` onto the circle.  Straight lines in the flat torus join `x` to `k x` when they are close;
 cut off with a function of the distance to the circle. -/
 theorem apm_t03J02_exists_retractile (j : C(Circle, apm_t03J02_Torus))
     (hj : Topology.IsEmbedding j) : Nonempty (apm_t03J02_Retractile j) := by
-  sorry
+  obtain ⟨H, β, h0, h1, h2, h3, h4, h5⟩ := apm_t03J02_exists_retractile_aux_construct j hj
+  exact ⟨⟨H, β, h0, h1, h2, h3, h4, h5⟩⟩
 
 section Glued
 variable (j₁ j₂ : C(Circle, apm_t03J02_Torus))
