@@ -7859,6 +7859,81 @@ private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex_aux_split x y h
   exact ⟨apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex_aux_sphere x hx, hy⟩
 
+/-- Fourth powers separate points of one closed quarter, away from the axes (claude-14). -/
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_quarter_inj (x y : Circle) (hxy : x ^ 4 = y ^ 4) (hne : x ^ 4 ≠ 1)
+    (hq : (0 ≤ x.1.re ∧ 0 ≤ x.1.im ∧ 0 ≤ y.1.re ∧ 0 ≤ y.1.im) ∨
+      (x.1.re ≤ 0 ∧ x.1.im ≤ 0 ∧ y.1.re ≤ 0 ∧ y.1.im ≤ 0) ∨
+      (0 < x.1.re ∧ x.1.im < 0 ∧ 0 < y.1.re ∧ y.1.im < 0)) : x = y := by
+  have hn : y.1.re ^ 2 + y.1.im ^ 2 = 1 := by
+    have := Circle.normSq_coe y; rw [Complex.normSq_apply] at this; nlinarith
+  set ζ := x * y⁻¹ with hζ
+  have hx : x = ζ * y := by rw [hζ, inv_mul_cancel_right]
+  have hζ4 : ((ζ : Circle) : ℂ) ^ 4 = 1 := by
+    have : ζ ^ 4 = 1 := by rw [hζ, mul_pow, inv_pow, hxy, mul_inv_cancel]
+    have h' : ((ζ ^ 4 : Circle) : ℂ) = 1 := by rw [this]; rfl
+    simpa using h'
+  -- a point on an axis has fourth power 1
+  have hax : ∀ w : Circle, (w.1.re = 0 ∨ w.1.im = 0) → w ^ 4 = 1 := by
+    intro w hw
+    have hnw : w.1.re ^ 2 + w.1.im ^ 2 = 1 := by
+      have := Circle.normSq_coe w; rw [Complex.normSq_apply] at this; nlinarith
+    apply Subtype.ext
+    show (w : ℂ) ^ 4 = 1
+    have hw2 : (w : ℂ) ^ 2 = (w.1.re ^ 2 - w.1.im ^ 2 : ℝ) := by
+      apply Complex.ext
+      · simp [sq, Complex.mul_re]
+      · rcases hw with h | h <;> simp [sq, Complex.mul_im, h]
+    rw [show (4 : ℕ) = 2 * 2 from rfl, pow_mul, hw2]
+    rcases hw with h | h
+    · rw [h] at hnw ⊢; rw [show (0 : ℝ) ^ 2 - w.1.im ^ 2 = -1 by nlinarith]; push_cast; ring
+    · rw [h] at hnw ⊢; rw [show w.1.re ^ 2 - (0 : ℝ) ^ 2 = 1 by nlinarith]; push_cast; ring
+  have hcontra : ∀ w : Circle, (w.1.re = 0 ∨ w.1.im = 0) → y = w → False := by
+    intro w hw hyw; apply hne; rw [hxy, hyw]; exact hax w hw
+  rcases apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_fourthRoots ζ hζ4 with h | h | h | h
+  · rw [hx, h]; apply Subtype.ext; simp [apm_t97A03_circleOne]
+  · exfalso
+    have hre : x.1.re = -y.1.re := by rw [hx, h]; simp [apm_t97A03_circleNegOne]
+    have him : x.1.im = -y.1.im := by rw [hx, h]; simp [apm_t97A03_circleNegOne]
+    rcases hq with ⟨a1, a2, a3, a4⟩ | ⟨a1, a2, a3, a4⟩ | ⟨a1, a2, a3, a4⟩ <;> nlinarith
+  · exfalso
+    have hre : x.1.re = -y.1.im := by rw [hx, h]; simp [apm_t97A03_circleI]
+    have him : x.1.im = y.1.re := by rw [hx, h]; simp [apm_t97A03_circleI]
+    rcases hq with ⟨a1, a2, a3, a4⟩ | ⟨a1, a2, a3, a4⟩ | ⟨a1, a2, a3, a4⟩
+    · exact hcontra y (Or.inr (by linarith)) rfl
+    · exact hcontra y (Or.inr (by linarith)) rfl
+    · linarith
+  · exfalso
+    have hre : x.1.re = y.1.im := by rw [hx, h]; simp [apm_t97A03_circleNegI]
+    have him : x.1.im = -y.1.re := by rw [hx, h]; simp [apm_t97A03_circleNegI]
+    rcases hq with ⟨a1, a2, a3, a4⟩ | ⟨a1, a2, a3, a4⟩ | ⟨a1, a2, a3, a4⟩
+    · exact hcontra y (Or.inl (by linarith)) rfl
+    · exact hcontra y (Or.inl (by linarith)) rfl
+    · linarith
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_raw_cases (z : Circle) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr z) = apm_t97A03_modelWedgeBase ∨
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr z) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 0 z ∧ 0 ≤ z.1.re ∧ 0 ≤ z.1.im) ∨
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr z) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 1 z ∧ z.1.re ≤ 0 ∧ z.1.im ≤ 0) ∨
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr z) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 2 z ∧ 0 < z.1.re ∧ z.1.im < 0) := by
+  dsimp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw]
+  by_cases h0 : z.1.re ≤ 0 ∧ 0 ≤ z.1.im
+  · rw [if_pos h0]; exact Or.inl rfl
+  · rw [if_neg h0]
+    by_cases h1 : 0 ≤ z.1.re ∧ 0 ≤ z.1.im
+    · rw [if_pos h1]; exact Or.inr (Or.inl ⟨rfl, h1⟩)
+    · rw [if_neg h1]
+      by_cases h2 : z.1.re ≤ 0 ∧ z.1.im ≤ 0
+      · rw [if_pos h2]; exact Or.inr (Or.inr (Or.inl ⟨rfl, h2⟩))
+      · rw [if_neg h2]
+        push_neg at h0 h1 h2
+        have him : z.1.im < 0 := by
+          rcases le_total z.1.re 0 with h | h
+          · exact h0 h
+          · exact h1 h
+        have hre : 0 < z.1.re := by
+          by_contra hc; push_neg at hc; linarith [h2 hc]
+        exact Or.inr (Or.inr (Or.inr ⟨rfl, hre, him⟩))
+
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_circle_circle_aux_normal_aux_injective
     (x y : Circle)
@@ -7868,13 +7943,24 @@ private theorem
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr x) =
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y)) :
     x = y := by
-  classical
-  simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw] at hx h
-  split_ifs at hx with hx0 hx1 hx2
-  · exact False.elim (hx rfl)
+  have hne : ∀ j : Fin 3, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr x) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j x → x ^ 4 ≠ 1 := by
+    intro j hj h4; exact hx (hj.trans (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_base j x h4))
+  rcases apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_raw_cases x with hb | ⟨hxr, hq⟩ | ⟨hxr, hq⟩ | ⟨hxr, hq⟩
+  · exact absurd hb hx
   all_goals
-    split_ifs at h with hy0 hy1 hy2
-    all_goals sorry
+    rcases apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_raw_cases y with hyb | ⟨hyr, hq'⟩ | ⟨hyr, hq'⟩ | ⟨hyr, hq'⟩
+    · exact absurd (h.trans hyb) hx
+    all_goals
+      have hlegs := hxr.symm.trans (h.trans hyr)
+      rcases apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_cases _ _ x y hlegs with hb | ⟨hjk, h4⟩
+      · exact absurd (hxr.trans hb) hx
+      · first
+        | (exfalso; revert hjk; decide)
+        | exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_quarter_inj x y h4 (hne _ hxr)
+            (by first
+              | exact Or.inl ⟨hq.1, hq.2, hq'.1, hq'.2⟩
+              | exact Or.inr (Or.inl ⟨hq.1, hq.2, hq'.1, hq'.2⟩)
+              | exact Or.inr (Or.inr ⟨hq.1, hq.2, hq'.1, hq'.2⟩))
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle
