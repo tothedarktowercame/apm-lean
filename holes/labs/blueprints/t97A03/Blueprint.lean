@@ -3249,6 +3249,105 @@ private theorem apm_t97A03_invariants_aux_slide_generic_aux_isolate
     have hwT : w ∈ T := ⟨hwS, by simpa [Set.mem_singleton_iff] using hwne⟩
     exact hw.1 hwT
 
+/-- Angle of `c` seen from `c₀`, in `(-π, π]`. -/
+noncomputable def apm_t97A03_invariants_aux_slide_aux_angle (c₀ c : Circle) : ℝ :=
+  Complex.arg ((c₀⁻¹ * c : Circle) : ℂ)
+
+/-- The detour, on representatives.  Off the closed arc of angular radius `ε`
+about `w₀` it is the quotient map.  On the arc, at angle `θ` from `w₀`: for
+`|θ| ≤ ε/2` it runs `γ` (from `z` at `θ = 0` to `z'` at `|θ| = ε/2`) in `Z`; for
+`ε/2 ≤ |θ| ≤ ε` it re-enters the circle at `w₀` and stretches back out to the
+arc's ends.  In the target `w₀` is glued to `z'`, so the two halves agree at
+`|θ| = ε/2`. -/
+noncomputable def apm_t97A03_invariants_aux_slide_aux_detourRaw
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a' : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z} (γ : Path z z') (ε : ℝ) :
+    Sum Z (ι × Circle) → _root_.Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')) := by
+  classical
+  exact fun x => match x with
+    | .inl y => _root_.Quotient.mk _ (.inl y)
+    | .inr w =>
+      if w.1 = w₀.1 ∧ |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε then
+        (if |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε / 2 then
+          _root_.Quotient.mk _ (.inl (γ.extend
+            (2 * |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| / ε)))
+        else
+          _root_.Quotient.mk _ (.inr (w.1, w₀.2 * Circle.exp
+            (Real.sign (apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2) *
+              (2 * |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| - ε)))))
+      else _root_.Quotient.mk _ (.inr w)
+
+/-- A small closed arc about `w₀` lies in the isolating neighbourhood. -/
+theorem apm_t97A03_invariants_aux_slide_aux_eps
+    {ι : Type} [TopologicalSpace ι] [DiscreteTopology ι]
+    (w₀ : ι × Circle) (U : Set (ι × Circle)) (hUopen : IsOpen U) (hwU : w₀ ∈ U) :
+    ∃ ε : ℝ, 0 < ε ∧ ε < Real.pi / 2 ∧
+      ∀ w : ι × Circle, w.1 = w₀.1 →
+        |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → w ∈ U := by
+  sorry
+
+/-- The detour respects the source gluing: at `w₀` it gives `γ 0 = z`, and every
+other marked point lies off the arc, where the gluing is unchanged. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_respects
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a a' : ι × Circle → Option Z) (w₀ : ι × Circle) (hsame : ∀ w, w ≠ w₀ → a w = a' w)
+    (z z' : Z) (hz : a w₀ = some z) (γ : Path z z') (ε : ℝ) (hε : 0 < ε)
+    (harc : ∀ w : ι × Circle, w.1 = w₀.1 →
+      |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → (a w).isSome → w = w₀) :
+    ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε y := by
+  sorry
+
+/-- Continuity of the detour: the pieces agree at `|θ| = ε/2` (because `w₀` is
+glued to `z'` in the target) and at `|θ| = ε`; the arc avoids the cut of `arg`. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a' : ι × Circle → Option Z) (w₀ : ι × Circle) (z z' : Z) (hz' : a' w₀ = some z')
+    (γ : Path z z') (ε : ℝ) (hε : 0 < ε) (hεπ : ε < Real.pi / 2) :
+    Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε) := by
+  sorry
+
+/-- The descended detour. -/
+noncomputable def apm_t97A03_invariants_aux_slide_aux_detour
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a a' : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z} (γ : Path z z') (ε : ℝ)
+    (hresp : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε y)
+    (hcont : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε)) :
+    C(_root_.Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)), _root_.Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a'))) :=
+  ⟨_root_.Quotient.lift (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε)
+      (fun x y hxy => Relation.EqvGen.rec hresp (fun _ => rfl)
+        (fun _ _ _ ih => ih.symm) (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂) hxy),
+    hcont.quotient_lift _⟩
+
+/-- Going out along `γ` and back along `δ = γ.symm` is homotopic to the identity:
+first contract the inserted loop `γ.trans γ.symm` in `Z` (Path.Homotopy.reflTransSymm,
+with the arc's outer stretch held fixed), then shrink the constant inner region of
+the circle reparametrisation linearly to the point `w₀`. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a a' : ι × Circle → Option Z) (w₀ : ι × Circle) (hsame : ∀ w, w ≠ w₀ → a w = a' w)
+    (z z' : Z) (hz : a w₀ = some z) (hz' : a' w₀ = some z')
+    (γ : Path z z') (δ : Path z' z) (hδ : δ = γ.symm) (ε : ℝ) (hε : 0 < ε)
+    (hεπ : ε < Real.pi / 2)
+    (harc : ∀ w : ι × Circle, w.1 = w₀.1 →
+      |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → (a w).isSome → w = w₀)
+    (hresp : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε y)
+    (hcont : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε))
+    (hresp' : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a' x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε y)
+    (hcont' : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε)) :
+    ((apm_t97A03_invariants_aux_slide_aux_detour a' a w₀ δ ε hresp' hcont').comp
+      (apm_t97A03_invariants_aux_slide_aux_detour a a' w₀ γ ε hresp hcont)).Homotopic
+      (ContinuousMap.id _) := by
+  sorry
+
+/-- Assembly of the slide from the concrete detours. -/
 private theorem apm_t97A03_invariants_aux_slide_generic_aux_realize
     {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
     (a a' : ι × Circle → Option Z)
@@ -3256,10 +3355,32 @@ private theorem apm_t97A03_invariants_aux_slide_generic_aux_realize
     (z z' : Z) (hz : a w₀ = some z) (hz' : a' w₀ = some z') (γ : Path z z')
     (U : Set (ι × Circle)) (hUopen : IsOpen U) (hwU : w₀ ∈ U)
     (hUmarked : U ∩ {w | (a w).isSome} ⊆ {w₀}) :
-    Nonempty (ContinuousMap.HomotopyEquiv
-      (Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))
-      (Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')))) := by
-  sorry
+    Nonempty (ContinuousMap.HomotopyEquiv (_root_.Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a))) (_root_.Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')))) := by
+  obtain ⟨ε, hε, hεπ, hU⟩ := apm_t97A03_invariants_aux_slide_aux_eps w₀ U hUopen hwU
+  have harc : ∀ w : ι × Circle, w.1 = w₀.1 →
+      |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → (a w).isSome → w = w₀ :=
+    fun w h1 h2 h3 => hUmarked ⟨hU w h1 h2, h3⟩
+  have harc' : ∀ w : ι × Circle, w.1 = w₀.1 →
+      |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → (a' w).isSome → w = w₀ := by
+    intro w h1 h2 h3
+    by_contra hne
+    exact hne (harc w h1 h2 (by rwa [hsame w hne]))
+  have hsame' : ∀ w, w ≠ w₀ → a' w = a w := fun w hw => (hsame w hw).symm
+  have hresp := apm_t97A03_invariants_aux_slide_aux_detourRaw_respects
+    a a' w₀ hsame z z' hz γ ε hε harc
+  have hcont := apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous
+    a' w₀ z z' hz' γ ε hε hεπ
+  have hresp' := apm_t97A03_invariants_aux_slide_aux_detourRaw_respects
+    a' a w₀ hsame' z' z hz' γ.symm ε hε harc'
+  have hcont' := apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous
+    a w₀ z' z hz γ.symm ε hε hεπ
+  refine ⟨⟨apm_t97A03_invariants_aux_slide_aux_detour a a' w₀ γ ε hresp hcont,
+    apm_t97A03_invariants_aux_slide_aux_detour a' a w₀ γ.symm ε hresp' hcont', ?_, ?_⟩⟩
+  · exact apm_t97A03_invariants_aux_slide_aux_detour_comp a a' w₀ hsame z z' hz hz'
+      γ γ.symm rfl ε hε hεπ harc hresp hcont hresp' hcont'
+  · have h := apm_t97A03_invariants_aux_slide_aux_detour_comp a' a w₀ hsame' z' z hz' hz
+      γ.symm γ (Path.symm_symm γ).symm ε hε hεπ harc' hresp' hcont' hresp hcont
+    exact h
 
 theorem apm_t97A03_invariants_aux_slide_generic {ι Z : Type} [TopologicalSpace ι]
     [DiscreteTopology ι] [TopologicalSpace Z]
