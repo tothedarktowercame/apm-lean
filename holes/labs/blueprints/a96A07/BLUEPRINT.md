@@ -1,5 +1,9 @@
 # Blueprint for a96A07
 
+**Superseded in part, 2026-11-03.**  The Jordan leaf `apm_a96A07_jordan_one_turn_logDeriv` is gone.
+See "Zero-count route" at the end.  The earlier sections describe the first split and are kept as a
+record; their claim that the problem is construction-blocked no longer holds.
+
 ## Triage verdict: true and faithful
 
 The formal statement matches the source: `g` is analytic on a neighborhood of
@@ -145,9 +149,9 @@ The main doubt is still the isolated Jordan leaf.  The perturbation leaf is
 also API-sensitive: Mathlib may make the `C¹`-curve-nullity proof longer than
 150 lines, in which case it should be split once more into “boundary image has
 empty interior” and “two local image neighborhoods overlap off that image.”
-No analytic-boundary shortcut avoiding Jordan was found.  In particular,
-zeros of `g'` on the circle invalidate arguments that assume a regular curve,
-though they do not affect the stated one-turn theorem.
+The 2026-11-03 section below replaces the Jordan leaf.  Zeros of `g'` on the
+circle do occur, for example `(1+z)^2`, whose boundary is a cardioid, and they
+invalidate arguments that assume a regular curve.
 
 ## Compile gate and axioms
 
@@ -165,3 +169,41 @@ Output of `#print axioms apm_a96a07`:
 
 The main theorem and both assembly lemmas have no `sorry`; `sorryAx` enters
 only through the five parallel leaves above.
+
+## Zero-count route (2026-11-03, claude-14)
+
+The earlier leaf asked for the index of a simple closed curve, which is Jordan-strength.  The theorem
+needs less: `N w := apm_a96A07_diskZeroCount g w` is at most 1 off the curve `C`.  We never need
+`∂E = C`, connectedness of the interior, or the index on the interior.  `C` may have cusps:
+`(1+z)^2` has `g'(-1)=0` and is injective on the circle.
+
+Facts used, all elementary:
+
+1. `N` is locally constant off `C` (`zeroCountInClosedBall_add_eq` with a small constant), so it is
+   constant on each complementary component.
+2. `N = 0` far away, so `N ≠ 0` forces a bounded component.
+3. `C` has at most one bounded component.  Split `C = A ∪ B` into two arcs meeting at `p, q`.  Each
+   `z - aᵢ` has a logarithm on each arc; normalise to agree at `p`; they differ at `q` by `2πi mᵢ`.
+   Then `(z-a₁)^m₂ (z-a₂)^(-m₁)` has a continuous logarithm on `C`.  Borsuk gives `m₁ = m₂ = 0`, so
+   `z - a₁` has a logarithm on all of `C`, and Borsuk with exponents `1, 0` gives `1 = 0`.
+4. Crossing.  There is `ξ ∈ Γ` with `g' ξ ≠ 0`.  Write `g z - g ζ = (z - ζ) · dslope g ζ z`.  For `ζ`
+   near `ξ`, `dslope g ζ` is close on `Γ` to `h := dslope g ξ`, which has no zero on `Γ`: away from
+   `ξ` by injectivity, at `ξ` because `h ξ = g' ξ`.  Rouché and multiplicativity of the count give
+   `N (g ζ) = count h + (1 if ζ ∈ Δ else 0)`, and `g ζ ∉ C` when `ζ ∉ Γ`.  Taking `ζ` inside and
+   outside gives two values differing by one.
+5. Combine: the values of `N` off `C` lie in `{0, m}`, and contain `R, R+1`.  So `R = 0`, `m = 1`.
+
+Borsuk, the only non-routine leaf: `K` compact, `a` in a bounded component `V` of `Kᶜ`, `b ∉ V`,
+`u` continuous on `K` with `exp u = (z-a)^m (z-b)^n`.  Extend `u` to `ũ` by Tietze
+(`ContinuousMap.exists_restrict_eq`, or `TietzeExtension`).  Define `Ψ z = exp (ũ z) / (z-b)^n` on
+`closure V`, `Ψ z = (z-a)^m` off `V`.  They agree on `frontier V ⊆ K`, and `Ψ` is continuous and
+nonvanishing on a big closed ball about `a` containing `closure V`.  So `Ψ` has a logarithm there,
+hence `(z-a)^m` has one on the bounding circle, so `m = 0`.
+
+Mathlib tools: `Circle.isCoveringMap_exp`, `IsCoveringMap.existsUnique_continuousMap_lifts` (convex
+sets are simply connected), or a direct subdivision argument; `IsPreconnected` constancy for fact 1;
+`continuous_dslope`-style lemmas or the integral form for joint continuity of `dslope`.
+
+Layers: logs and no-log; Borsuk; arc log and unique bounded component; count facts and crossing.
+`apm_a96A07_diskZeroCount_le_one` is already assembled from these.  Axioms now enter only through the
+nine leaves.  Statement check: `apm_a96a07` is byte-identical to Main.lean.

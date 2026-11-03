@@ -366,18 +366,78 @@ lemma apm_a96A07_argumentPrinciple_disk (g : ℂ → ℂ) (w : ℂ)
   rw [← ConstructionTargets.Rouche.intCast_zeroCountInClosedBall]
   rfl
 
-/-- **LIBRARY (Jordan index theorem).**  An injectively parametrized analytic
-circle has index of absolute value at most one about every point off its
-image.  This formulation deliberately does not assume `g'` is nonzero on the
-circle: stationary points of the parametrization are allowed. -/
-lemma apm_a96A07_jordan_one_turn_logDeriv (g : ℂ → ℂ) (w : ℂ)
-    (hg : ∃ ε > 0,
-      DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
-    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
-    (hw : w ∉ apm_a96A07_boundaryImage g) (n : ℤ)
-    (hn : (∮ z in C(0, 1), logDeriv (fun z => g z - w) z) =
-      (n : ℂ) * (2 * Real.pi * I)) :
-    |n| ≤ 1 := by
+/-! ### Route avoiding the Jordan curve theorem (2026-11-03)
+
+See BLUEPRINT.md, "Zero-count route".  The count is locally constant off the curve, vanishes far
+away, jumps by one somewhere, and the curve has at most one bounded complementary component. -/
+
+/-- A continuous nonvanishing function on an interval has a continuous logarithm. -/
+theorem apm_a96A07_exists_log_Icc (a b : ℝ) (hab : a ≤ b) (f : ℝ → ℂ)
+    (hf : ContinuousOn f (Icc a b)) (hne : ∀ t ∈ Icc a b, f t ≠ 0) :
+    ∃ u : ℝ → ℂ, ContinuousOn u (Icc a b) ∧ ∀ t ∈ Icc a b, exp (u t) = f t := by
+  sorry
+
+/-- A continuous nonvanishing function on a closed disk has a continuous logarithm. -/
+theorem apm_a96A07_exists_log_closedBall (c : ℂ) (R : ℝ) (hR : 0 < R) (f : ℂ → ℂ)
+    (hf : ContinuousOn f (closedBall c R)) (hne : ∀ z ∈ closedBall c R, f z ≠ 0) :
+    ∃ u : ℂ → ℂ, ContinuousOn u (closedBall c R) ∧ ∀ z ∈ closedBall c R, exp (u z) = f z := by
+  sorry
+
+/-- `(z - a) ^ n` has no continuous logarithm on a circle about `a` unless `n = 0`. -/
+theorem apm_a96A07_no_log_on_circle (a : ℂ) (R : ℝ) (hR : 0 < R) (n : ℤ) (u : ℂ → ℂ)
+    (hu : ContinuousOn u (sphere a R))
+    (h : ∀ z ∈ sphere a R, exp (u z) = (z - a) ^ n) : n = 0 := by
+  sorry
+
+/-- Borsuk's criterion.  If `a` lies in a bounded component of the complement of a compact set
+`K`, and `b` lies outside that component, then `(z - a) ^ m * (z - b) ^ n` has no continuous
+logarithm on `K` unless `m = 0`. -/
+theorem apm_a96A07_borsuk (K : Set ℂ) (hK : IsCompact K) (a b : ℂ) (ha : a ∉ K) (hb : b ∉ K)
+    (hbdd : Bornology.IsBounded (connectedComponentIn Kᶜ a))
+    (hab : b ∉ connectedComponentIn Kᶜ a) (m n : ℤ) (u : ℂ → ℂ) (hu : ContinuousOn u K)
+    (h : ∀ z ∈ K, exp (u z) = (z - a) ^ m * (z - b) ^ n) : m = 0 := by
+  sorry
+
+/-- A continuous nonvanishing function on an injectively parametrized arc has a continuous
+logarithm, with prescribed value at the start of the arc. -/
+theorem apm_a96A07_arc_log (γ : ℝ → ℂ) (s t : ℝ) (hst : s ≤ t)
+    (hγ : ContinuousOn γ (Icc s t)) (hinj : Set.InjOn γ (Icc s t)) (f : ℂ → ℂ)
+    (hf : ContinuousOn f (γ '' Icc s t)) (hne : ∀ z ∈ γ '' Icc s t, f z ≠ 0)
+    (v : ℂ) (hv : exp v = f (γ s)) :
+    ∃ u : ℂ → ℂ, ContinuousOn u (γ '' Icc s t) ∧ (∀ z ∈ γ '' Icc s t, exp (u z) = f z) ∧
+      u (γ s) = v := by
+  sorry
+
+/-- An injective analytic image of the circle has at most one bounded complementary component. -/
+theorem apm_a96A07_unique_bounded_component (g : ℂ → ℂ)
+    (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle) (a b : ℂ)
+    (ha : a ∉ apm_a96A07_boundaryImage g) (hb : b ∉ apm_a96A07_boundaryImage g)
+    (hA : Bornology.IsBounded (connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ a))
+    (hB : Bornology.IsBounded (connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ b)) :
+    b ∈ connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ a := by
+  sorry
+
+/-- The count is constant on each complementary component of the curve. -/
+theorem apm_a96A07_count_on_component (g : ℂ → ℂ)
+    (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε))) (a b : ℂ)
+    (ha : a ∉ apm_a96A07_boundaryImage g)
+    (hb : b ∈ connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ a) :
+    apm_a96A07_diskZeroCount g b = apm_a96A07_diskZeroCount g a := by
+  sorry
+
+/-- Values far from the compact image of the closed disk are not taken. -/
+theorem apm_a96A07_count_eq_zero_of_large (g : ℂ → ℂ)
+    (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε))) :
+    ∃ R : ℝ, ∀ w : ℂ, R < ‖w‖ → apm_a96A07_diskZeroCount g w = 0 := by
+  sorry
+
+/-- The count jumps by exactly one across the curve at some point. -/
+theorem apm_a96A07_exists_crossing (g : ℂ → ℂ)
+    (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle) :
+    ∃ w₁ w₂ : ℂ, w₁ ∉ apm_a96A07_boundaryImage g ∧ w₂ ∉ apm_a96A07_boundaryImage g ∧
+      apm_a96A07_diskZeroCount g w₁ = apm_a96A07_diskZeroCount g w₂ + 1 := by
   sorry
 
 /-- Two distinct interior zeros contribute at least two to the divisor count.
@@ -585,11 +645,33 @@ lemma apm_a96A07_diskZeroCount_le_one (g : ℂ → ℂ) (w : ℂ)
     (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
     (hw : w ∉ apm_a96A07_boundaryImage g) :
     apm_a96A07_diskZeroCount g w ≤ 1 := by
-  have han := apm_a96A07_analyticOnNhd_sub_value g w hg
-  have hap := apm_a96A07_argumentPrinciple_disk g w han hw
-  have hj := apm_a96A07_jordan_one_turn_logDeriv g w hg hg_inj_circle hw
-    (apm_a96A07_diskZeroCount g w) hap
-  exact le_trans (le_abs_self _) hj
+  obtain ⟨w₁, w₂, h₁, h₂, hc⟩ := apm_a96A07_exists_crossing g hg hg_inj_circle
+  obtain ⟨R, hR⟩ := apm_a96A07_count_eq_zero_of_large g hg
+  have key : ∀ a, a ∉ apm_a96A07_boundaryImage g → apm_a96A07_diskZeroCount g a ≠ 0 →
+      Bornology.IsBounded (connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ a) := by
+    intro a ha h0
+    refine (Metric.isBounded_iff_subset_closedBall 0).2 ⟨R, fun x hx => ?_⟩
+    rw [mem_closedBall_zero_iff]
+    by_contra hlt
+    exact h0 ((apm_a96A07_count_on_component g hg a x ha hx).symm.trans
+      (hR x (not_le.1 hlt)))
+  by_cases h0 : apm_a96A07_diskZeroCount g w = 0
+  · omega
+  by_cases h1 : apm_a96A07_diskZeroCount g w₁ = 0
+  · have h2 : apm_a96A07_diskZeroCount g w₂ ≠ 0 := by omega
+    have := apm_a96A07_count_on_component g hg w w₂ hw
+      (apm_a96A07_unique_bounded_component g hg hg_inj_circle w w₂ hw h₂
+        (key w hw h0) (key w₂ h₂ h2))
+    omega
+  by_cases h2 : apm_a96A07_diskZeroCount g w₂ = 0
+  · have := apm_a96A07_count_on_component g hg w₁ w h₁
+      (apm_a96A07_unique_bounded_component g hg hg_inj_circle w₁ w h₁ hw
+        (key w₁ h₁ h1) (key w hw h0))
+    omega
+  · have := apm_a96A07_count_on_component g hg w₁ w₂ h₁
+      (apm_a96A07_unique_bounded_component g hg hg_inj_circle w₁ w₂ h₁ h₂
+        (key w₁ h₁ h1) (key w₂ h₂ h2))
+    omega
 
 /-- Injectivity on the unit circle propagates to the open unit disk. -/
 theorem apm_a96A07_injOn_disk_of_injOn_circle (g : ℂ → ℂ)
