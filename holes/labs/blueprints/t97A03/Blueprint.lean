@@ -2852,6 +2852,57 @@ noncomputable instance : TopologicalSpace
   TopologicalSpace.coinduced
     (fun x : Sum apm_t97A03_TwoSpheres Circle ↦ Quotient.mk _ x) inferInstance
 
+private def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover →
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space :=
+  Quotient.lift
+    (fun x ↦ Quotient.mk _ x)
+    (by
+      intro x y hxy
+      apply Quotient.sound
+      exact Relation.EqvGen.rec
+        (fun _ _ h ↦ by
+          cases h with
+          | p0 =>
+              exact Relation.EqvGen.rel _ _
+                apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p0
+          | p1 =>
+              exact Relation.EqvGen.rel _ _
+                apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p1
+          | p2 =>
+              exact Relation.EqvGen.rel _ _
+                apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p2
+          | p3 =>
+              exact Relation.EqvGen.rel _ _
+                apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p3)
+        (fun x ↦ Relation.EqvGen.refl x)
+        (fun _ _ _ ih ↦ Relation.EqvGen.symm _ _ ih)
+        (fun _ _ _ _ _ ih₁ ih₂ ↦ Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+        hxy)
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q_continuous :
+    Continuous
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q := by
+  apply continuous_coinduced_dom.mpr
+  exact continuous_coinduced_rng
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies :
+    ∃ s : ContinuousMap
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover,
+      (s.comp (ContinuousMap.mk
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q_continuous)).Homotopic
+          (ContinuousMap.id _) ∧
+      ((ContinuousMap.mk
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q_continuous).comp s).Homotopic
+        (ContinuousMap.id _) := by
+  sorry
+
 /-- Contracting the upper-left quarter arc is a homotopy equivalence.  A
 proof can descend the linear contraction of that closed arc, and use the
 circle reparametrisation which is constant on the arc as a homotopy inverse. -/
@@ -2859,7 +2910,14 @@ theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contr
     Nonempty (ContinuousMap.HomotopyEquiv
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space) := by
-  sorry
+  let q : ContinuousMap
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space :=
+    ⟨apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q,
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q_continuous⟩
+  obtain ⟨s, left, right⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies
+  exact ⟨⟨q, s, left, right⟩⟩
 
 /-- In the contracted quotient there is one vertex: the contracted arc joins
 the two north points.  The other three quarter arcs are the three loop legs,
