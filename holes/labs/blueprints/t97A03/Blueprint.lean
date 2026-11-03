@@ -4288,13 +4288,191 @@ semicircles. On the right semicircle `arg` is continuous, and closed pasting
 at the two radii applies. On the left semicircle the map is the original
 quotient map, since `ε < π/2`. The loop parameter has value zero at `3ε/4`;
 at `ε` the stretched angle is the original angle. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_paste
+    {ι Z Q : Type} [TopologicalSpace ι] [DiscreteTopology ι]
+    [TopologicalSpace Z] [TopologicalSpace Q]
+    (F : unitInterval × Sum Z (ι × Circle) → Q) (c₀ : Circle)
+    (hZ : Continuous (fun p : unitInterval × Z => F (p.1, .inl p.2)))
+    (hr : ∀ i, ContinuousOn (fun p : unitInterval × Circle => F (p.1, .inr (i, p.2)))
+      {p | 0 ≤ ((c₀⁻¹ * p.2 : Circle) : ℂ).re})
+    (hl : ∀ i, ContinuousOn (fun p : unitInterval × Circle => F (p.1, .inr (i, p.2)))
+      {p | ((c₀⁻¹ * p.2 : Circle) : ℂ).re ≤ 0}) : Continuous F := by
+  have hc : Continuous (fun p : unitInterval × Circle =>
+      ((c₀⁻¹ * p.2 : Circle) : ℂ).re) := by fun_prop
+  have hi (i : ι) : Continuous (fun p : unitInterval × Circle =>
+      F (p.1, .inr (i, p.2))) := by
+    have h := (hr i).union_of_isClosed (hl i)
+      (isClosed_le continuous_const hc) (isClosed_le hc continuous_const)
+    have hu : {p : unitInterval × Circle | 0 ≤ ((c₀⁻¹ * p.2 : Circle) : ℂ).re} ∪
+        {p | ((c₀⁻¹ * p.2 : Circle) : ℂ).re ≤ 0} = Set.univ := by
+      ext p
+      simp only [Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+      exact le_total _ _
+    rw [hu] at h
+    exact continuousOn_univ.mp h
+  have hC : Continuous (fun p : unitInterval × (ι × Circle) => F (p.1, .inr p.2)) := by
+    have h : Continuous (fun p : (unitInterval × Circle) × ι =>
+        F (p.1.1, .inr (p.2, p.1.2))) := continuous_prod_of_discrete_right.mpr hi
+    exact h.comp ((continuous_fst.prodMk (continuous_snd.snd)).prodMk continuous_snd.fst)
+  have hh := (hZ.sumElim hC).comp (Homeomorph.prodSumDistrib.continuous)
+  convert hh using 1
+  funext p
+  rcases p with ⟨t, y | w⟩ <;> rfl
+
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_pinched (ε : ℝ) (hε : 0 < ε) :
+    Continuous (fun θ : ℝ => Real.sign θ * max 0 (4 * |θ| - 3 * ε)) := by
+  classical
+  have h : Continuous (fun θ : ℝ => if θ ≤ 0 then
+      -max 0 (-4 * θ - 3 * ε) else max 0 (4 * θ - 3 * ε)) := by
+    apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+    intro θ hθ
+    change θ = 0 at hθ
+    subst θ
+    simp [max_eq_left (by linarith : -(3 * ε) ≤ 0)]
+  convert h using 1
+  funext θ
+  rcases lt_trichotomy θ 0 with ht | ht | ht
+  · simp [Real.sign_of_neg ht, abs_of_neg ht, le_of_lt ht]
+  · subst θ; simp [max_eq_left (by linarith : -(3 * ε) ≤ 0)]
+  · simp [Real.sign_of_pos ht, abs_of_pos ht, not_le.mpr ht]
+
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_angle (c₀ : Circle) :
+    Continuous (fun p : {p : unitInterval × Circle |
+      0 ≤ ((c₀⁻¹ * p.2 : Circle) : ℂ).re} =>
+      apm_t97A03_invariants_aux_slide_aux_angle c₀ p.1.2) := by
+  have hc : Continuous (fun p : {p : unitInterval × Circle |
+      0 ≤ ((c₀⁻¹ * p.2 : Circle) : ℂ).re} => ((c₀⁻¹ * p.1.2 : Circle) : ℂ)) := by fun_prop
+  apply continuous_iff_continuousAt.mpr
+  intro p
+  have hs : ((c₀⁻¹ * p.1.2 : Circle) : ℂ) ∈ Complex.slitPlane := by
+    apply Complex.mem_slitPlane_iff_arg.mpr
+    refine ⟨?_, (c₀⁻¹ * p.1.2).coe_ne_zero⟩
+    have h := Complex.abs_arg_le_pi_div_two_iff.mpr p.2
+    intro he
+    rw [he, abs_of_pos Real.pi_pos] at h
+    linarith [Real.pi_pos]
+  exact (Complex.continuousAt_arg hs).comp
+    (f := fun q : {p : unitInterval × Circle |
+      0 ≤ ((c₀⁻¹ * p.2 : Circle) : ℂ).re} => ((c₀⁻¹ * q.1.2 : Circle) : ℂ))
+    (x := p) hc.continuousAt
+
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_right
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z}
+    (hz : a w₀ = some z) (γ : Path z z') (ε : ℝ)
+    (hε : 0 < ε) (hεπ : ε < Real.pi / 2) (i : ι) :
+    ContinuousOn (fun p : unitInterval × Circle =>
+      apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (p.1, .inr (i, p.2)))
+      {p | 0 ≤ ((w₀.2⁻¹ * p.2 : Circle) : ℂ).re} := by
+  classical
+  by_cases hi : i = w₀.1
+  · rw [continuousOn_iff_continuous_restrict]
+    let R := {p : unitInterval × Circle | 0 ≤ ((w₀.2⁻¹ * p.2 : Circle) : ℂ).re}
+    let θ : R → ℝ := fun p => apm_t97A03_invariants_aux_slide_aux_angle w₀.2 p.1.2
+    let B : R → ℝ := fun p => Real.sign (θ p) * max 0 (4 * |θ p| - 3 * ε)
+    have hθ : Continuous θ := apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_angle w₀.2
+    have ht : Continuous (fun p : R => (p.1.1 : ℝ)) := by fun_prop
+    have hb : Continuous B := (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_pinched ε hε).comp hθ
+    let f : R → Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)) :=
+      fun p => Quotient.mk _ (.inl (γ.extend ((1 - (p.1.1 : ℝ)) *
+        min (2 * |θ p| / ε) (3 - 4 * |θ p| / ε))))
+    let g : R → Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)) :=
+      fun p => Quotient.mk _ (.inr (i, w₀.2 * Circle.exp (B p)))
+    let d : R → Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)) :=
+      fun p => Quotient.mk _ (.inr (i, p.1.2))
+    have hf : Continuous f := by
+      apply continuous_quot_mk.comp
+      apply continuous_inl.comp
+      apply γ.continuous_extend.comp
+      exact (continuous_const.sub ht).mul
+        (((continuous_const.mul hθ.abs).div_const ε).min
+          (continuous_const.sub ((continuous_const.mul hθ.abs).div_const ε)))
+    have hg : Continuous g := continuous_quot_mk.comp (continuous_inr.comp
+      (continuous_const.prodMk (continuous_const.mul (Circle.exp.continuous.comp hb))))
+    have hd : Continuous d := continuous_quot_mk.comp (continuous_inr.comp
+      (continuous_const.prodMk (continuous_snd.comp continuous_subtype_val)))
+    have hfg := hf.if_le hg hθ.abs (continuous_const : Continuous (fun _ : R => 3 * ε / 4)) (fun p hp => by
+      have hz0 : 3 - 4 * |θ p| / ε = 0 := by rw [hp]; field_simp; ring
+      have hm : min (2 * |θ p| / ε) (3 - 4 * |θ p| / ε) = 0 := by
+        rw [hz0, min_eq_right]; positivity
+      have hB : B p = 0 := by
+        dsimp [B]
+        rw [hp]
+        have he : 4 * (3 * ε / 4) - 3 * ε = 0 := by ring
+        rw [he]
+        simp
+      dsimp [f, g]
+      rw [hm, mul_zero, Path.extend_zero, hB, Circle.exp_zero, mul_one, hi]
+      exact (Quotient.sound (Relation.EqvGen.rel _ _ (.att w₀ z hz))).symm)
+    have hfull := hfg.if_le hd hθ.abs (continuous_const : Continuous (fun _ : R => ε)) (fun p hp => by
+      have hnot : ¬ |θ p| ≤ 3 * ε / 4 := by rw [hp]; linarith
+      simp only [hnot, if_false]
+      have hm : max 0 (4 * |θ p| - 3 * ε) = ε := by
+        rw [hp]
+        have he : 4 * ε - 3 * ε = ε := by ring
+        rw [he, max_eq_right (le_of_lt hε)]
+      have hs : Real.sign (θ p) * ε = θ p := by
+        rw [← hp]
+        rcases lt_trichotomy (θ p) 0 with h | h | h
+        · simp [Real.sign_of_neg h, abs_of_neg h]
+        · simp [h]
+        · simp [Real.sign_of_pos h, abs_of_pos h]
+      dsimp [g, d, B]
+      rw [hm, hs]
+      have hcirc : w₀.2 * Circle.exp (θ p) = p.1.2 := by
+        change w₀.2 * Circle.exp (Complex.arg ((w₀.2⁻¹ * p.1.2 : Circle) : ℂ)) = p.1.2
+        rw [Circle.exp_arg]
+        simp
+      rw [hcirc])
+    convert hfull using 1
+    funext p
+    dsimp [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne, f, g, d, B]
+    simp only [hi, true_and]
+    split_ifs with h hinner
+    · rfl
+    · rw [max_eq_right (by dsimp [θ] at hinner ⊢; linarith)]
+    · rfl
+  · have hc : Continuous (fun p : unitInterval × Circle =>
+        (Quotient.mk _ (.inr (i, p.2)) : Quotient
+          (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))) :=
+      continuous_quot_mk.comp (continuous_inr.comp (continuous_const.prodMk continuous_snd))
+    simpa [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne, hi] using hc.continuousOn
+
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_left
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z}
+    (hz : a w₀ = some z) (γ : Path z z') (ε : ℝ)
+    (hε : 0 < ε) (hεπ : ε < Real.pi / 2) (i : ι) :
+    ContinuousOn (fun p : unitInterval × Circle =>
+      apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (p.1, .inr (i, p.2)))
+      {p | ((w₀.2⁻¹ * p.2 : Circle) : ℂ).re ≤ 0} := by
+  have hc : Continuous (fun p : unitInterval × Circle =>
+      (Quotient.mk _ (.inr (i, p.2)) : Quotient
+        (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))) :=
+    continuous_quot_mk.comp (continuous_inr.comp (continuous_const.prodMk continuous_snd))
+  apply hc.continuousOn.congr
+  intro p hp
+  have hout : ¬ |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 p.2| ≤ ε := by
+    intro h
+    have hr := Complex.abs_arg_lt_pi_div_two_iff.mp (lt_of_le_of_lt h hεπ)
+    rcases hr with hr | hr
+    · exact (not_lt_of_ge hp) hr
+    · exact (w₀.2⁻¹ * p.2).coe_ne_zero hr
+  simp [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne, hout]
+
 theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous
     {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
     (a : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z}
     (hz : a w₀ = some z) (γ : Path z z') (ε : ℝ)
     (hε : 0 < ε) (hεπ : ε < Real.pi / 2) :
     Continuous (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε) := by
-  sorry
+  apply apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_paste _ w₀.2
+  · change Continuous (fun p : unitInterval × Z =>
+      (Quotient.mk _ (.inl p.2) : Quotient
+        (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a))))
+    exact continuous_quot_mk.comp (continuous_inl.comp continuous_snd)
+  · exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_right a w₀ hz γ ε hε hεπ
+  · exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_left a w₀ hz γ ε hε hεπ
 
 /-- The pinched angular coordinate is continuous, including at angle zero,
 and equals the original angle at the boundary of the supporting arc.
@@ -4302,12 +4480,95 @@ The signed maximum vanishes on a neighbourhood of zero, so the apparent
 jump of `Real.sign` causes no discontinuity. As in stage one, use the right
 semicircle for the angular chart and the unchanged left semicircle to avoid
 the branch cut. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo_continuous_aux_right
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) (ε : ℝ)
+    (hε : 0 < ε) (hεπ : ε < Real.pi / 2) (i : ι) :
+    ContinuousOn (fun p : unitInterval × Circle =>
+      apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo a w₀ ε (p.1, .inr (i, p.2)))
+      {p | 0 ≤ ((w₀.2⁻¹ * p.2 : Circle) : ℂ).re} := by
+  classical
+  by_cases hi : i = w₀.1
+  · rw [continuousOn_iff_continuous_restrict]
+    let R := {p : unitInterval × Circle | 0 ≤ ((w₀.2⁻¹ * p.2 : Circle) : ℂ).re}
+    let θ : R → ℝ := fun p => apm_t97A03_invariants_aux_slide_aux_angle w₀.2 p.1.2
+    have hθ : Continuous θ := apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_angle w₀.2
+    have ht : Continuous (fun p : R => (p.1.1 : ℝ)) := by fun_prop
+    have hb := (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_pinched ε hε).comp hθ
+    have hc : Continuous (fun p : R =>
+        (Quotient.mk _ (.inr (i, w₀.2 * Circle.exp
+          ((1 - (p.1.1 : ℝ)) * (Real.sign (θ p) * max 0 (4 * |θ p| - 3 * ε)) +
+            (p.1.1 : ℝ) * θ p))) : Quotient
+          (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))) := by
+      apply continuous_quot_mk.comp
+      apply continuous_inr.comp
+      apply continuous_const.prodMk
+      exact continuous_const.mul (Circle.exp.continuous.comp
+        (((continuous_const.sub ht).mul hb).add (ht.mul hθ)))
+    have hd : Continuous (fun p : R =>
+        (Quotient.mk _ (.inr (i, p.1.2)) : Quotient
+          (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))) := by
+      exact continuous_quot_mk.comp (continuous_inr.comp
+        (continuous_const.prodMk (continuous_snd.comp continuous_subtype_val)))
+    have hh := hc.if_le hd hθ.abs (continuous_const : Continuous (fun _ : R => ε)) (fun p hp => by
+      have hm : max 0 (4 * |θ p| - 3 * ε) = ε := by
+        rw [hp]
+        have he : 4 * ε - 3 * ε = ε := by ring
+        rw [he, max_eq_right (le_of_lt hε)]
+      have hs : Real.sign (θ p) * ε = θ p := by
+        rw [← hp]
+        rcases lt_trichotomy (θ p) 0 with h | h | h
+        · simp [Real.sign_of_neg h, abs_of_neg h]
+        · simp [h]
+        · simp [Real.sign_of_pos h, abs_of_pos h]
+      rw [hm, hs]
+      have he : (1 - (p.1.1 : ℝ)) * θ p + (p.1.1 : ℝ) * θ p = θ p := by ring
+      rw [he]
+      have hcirc : w₀.2 * Circle.exp (θ p) = p.1.2 := by
+        change w₀.2 * Circle.exp (Complex.arg ((w₀.2⁻¹ * p.1.2 : Circle) : ℂ)) = p.1.2
+        rw [Circle.exp_arg]
+        simp
+      rw [hcirc])
+    simpa [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo, hi, θ] using hh
+  · have hc : Continuous (fun p : unitInterval × Circle =>
+        (Quotient.mk _ (.inr (i, p.2)) : Quotient
+          (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))) :=
+      continuous_quot_mk.comp (continuous_inr.comp (continuous_const.prodMk continuous_snd))
+    simpa [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo, hi] using hc.continuousOn
+
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo_continuous_aux_left
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) (ε : ℝ)
+    (hε : 0 < ε) (hεπ : ε < Real.pi / 2) (i : ι) :
+    ContinuousOn (fun p : unitInterval × Circle =>
+      apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo a w₀ ε (p.1, .inr (i, p.2)))
+      {p | ((w₀.2⁻¹ * p.2 : Circle) : ℂ).re ≤ 0} := by
+  have hc : Continuous (fun p : unitInterval × Circle =>
+      (Quotient.mk _ (.inr (i, p.2)) : Quotient
+        (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))) :=
+    continuous_quot_mk.comp (continuous_inr.comp (continuous_const.prodMk continuous_snd))
+  apply hc.continuousOn.congr
+  intro p hp
+  have hout : ¬ |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 p.2| ≤ ε := by
+    intro h
+    have hr := Complex.abs_arg_lt_pi_div_two_iff.mp (lt_of_le_of_lt h hεπ)
+    rcases hr with hr | hr
+    · exact (not_lt_of_ge hp) hr
+    · exact (w₀.2⁻¹ * p.2).coe_ne_zero hr
+  simp [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo, hout]
+
 theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo_continuous
     {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
     (a : ι × Circle → Option Z) (w₀ : ι × Circle) (ε : ℝ)
     (hε : 0 < ε) (hεπ : ε < Real.pi / 2) :
     Continuous (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo a w₀ ε) := by
-  sorry
+  apply apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous_aux_paste _ w₀.2
+  · change Continuous (fun p : unitInterval × Z =>
+      (Quotient.mk _ (.inl p.2) : Quotient
+        (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a))))
+    exact continuous_quot_mk.comp (continuous_inl.comp continuous_snd)
+  · exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo_continuous_aux_right a w₀ ε hε hεπ
+  · exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo_continuous_aux_left a w₀ ε hε hεπ
 
 /-- Both deformations fix every attached representative in the quotient. -/
 theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_respects
@@ -4418,6 +4679,124 @@ the second detour's path parameter is `2 * (2 * |θ| - ε) / ε` on `γ.symm`,
 which is `3 - 4 * |θ| / ε` on `γ`. In the outer range the twice-stretched
 angle is `sign θ * (4 * |θ| - 3 * ε)`. All angles are smaller than `π`, so
 `Circle.arg_exp` applies without a winding correction. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start_aux_stretched_angle (c₀ c : Circle) (ε : ℝ)
+    (hε : 0 < ε) (hεπ : ε < Real.pi / 2)
+    (hlo : ε / 2 < |apm_t97A03_invariants_aux_slide_aux_angle c₀ c|)
+    (hhi : |apm_t97A03_invariants_aux_slide_aux_angle c₀ c| ≤ ε) :
+    let θ := apm_t97A03_invariants_aux_slide_aux_angle c₀ c
+    let θ' := apm_t97A03_invariants_aux_slide_aux_angle c₀
+      (c₀ * Circle.exp (Real.sign θ * (2 * |θ| - ε)))
+    θ' = Real.sign θ * (2 * |θ| - ε) ∧
+      |θ'| = 2 * |θ| - ε ∧ Real.sign θ' = Real.sign θ := by
+  dsimp only
+  set θ := apm_t97A03_invariants_aux_slide_aux_angle c₀ c
+  have hpos : 0 < 2 * |θ| - ε := by linarith
+  have hbound : 2 * |θ| - ε ≤ ε := by linarith
+  have hπ : ε < Real.pi := by linarith [Real.pi_pos]
+  have hn : θ ≠ 0 := by intro he; simp [he] at hlo; linarith
+  have heq : apm_t97A03_invariants_aux_slide_aux_angle c₀
+      (c₀ * Circle.exp (Real.sign θ * (2 * |θ| - ε))) =
+      Real.sign θ * (2 * |θ| - ε) := by
+    unfold apm_t97A03_invariants_aux_slide_aux_angle
+    rw [inv_mul_cancel_left]
+    apply Circle.arg_exp
+    · rcases lt_or_gt_of_ne hn with ht | ht
+      · rw [Real.sign_of_neg ht]; nlinarith
+      · rw [Real.sign_of_pos ht]; nlinarith
+    · rcases lt_or_gt_of_ne hn with ht | ht
+      · rw [Real.sign_of_neg ht]; nlinarith
+      · rw [Real.sign_of_pos ht]; nlinarith
+  rw [heq]
+  refine ⟨rfl, ?_, ?_⟩
+  · rcases lt_or_gt_of_ne hn with ht | ht
+    · rw [Real.sign_of_neg ht, neg_one_mul, abs_neg, abs_of_pos hpos]
+    · simp [Real.sign_of_pos ht, abs_of_pos hpos]
+  · rcases lt_or_gt_of_ne hn with ht | ht
+    · rw [Real.sign_of_neg ht, neg_one_mul, Real.sign_of_neg (neg_neg_of_pos hpos)]
+    · simp [Real.sign_of_pos ht, Real.sign_of_pos hpos]
+
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start_aux_middle
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a a' : ι × Circle → Option Z) (w₀ : ι × Circle) (hsame : ∀ w, w ≠ w₀ → a w = a' w)
+    (z z' : Z) (hz : a w₀ = some z) (hz' : a' w₀ = some z')
+    (γ : Path z z') (δ : Path z' z) (hδ : δ = γ.symm) (ε : ℝ) (hε : 0 < ε)
+    (hεπ : ε < Real.pi / 2)
+    (harc : ∀ w : ι × Circle, w.1 = w₀.1 →
+      |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → (a w).isSome → w = w₀)
+    (hresp : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε y)
+    (hcont : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε))
+    (hresp' : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a' x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε y)
+    (hcont' : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε)) (w : ι × Circle)
+    (hw : w.1 = w₀.1)
+    (hr : |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε)
+    (hlo : ε / 2 < |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2|)
+    (hhi : |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ 3 * ε / 4) :
+    apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (0, .inr w) =
+      apm_t97A03_invariants_aux_slide_aux_detour a' a w₀ δ ε hresp' hcont'
+        (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε (.inr w)) := by
+  classical
+  subst δ
+  let θ := apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2
+  have hhalf : ε / 2 < |θ| := by dsimp [θ]; linarith
+  obtain ⟨heq, habs, hsign⟩ := apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start_aux_stretched_angle w₀.2 w.2 ε hε hεπ hhalf hr
+  have hout : w.1 = w₀.1 ∧ |θ| ≤ ε := ⟨hw, hr⟩
+  have hsmall : 2 * |θ| - ε ≤ ε := by dsimp [θ]; linarith
+  have hsmallhalf : 2 * |θ| - ε ≤ ε / 2 := by dsimp [θ]; linarith
+  have hm : 3 - 4 * |θ| / ε ≤ 2 * |θ| / ε := by
+    rw [le_div_iff₀ hε]
+    field_simp
+    nlinarith
+  have ht : 1 - 2 * (2 * |θ| - ε) / ε = 3 - 4 * |θ| / ε := by
+    field_simp
+    ring
+  dsimp [θ] at hm ht hsmall hsmallhalf
+  simp [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne,
+    apm_t97A03_invariants_aux_slide_aux_detourRaw,
+    apm_t97A03_invariants_aux_slide_aux_detour, hw, hr, not_le.mpr hlo,
+    hhi, habs, hsmall, hsmallhalf, min_eq_right hm, Path.extend_symm_apply, ht]
+
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start_aux_outer
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a a' : ι × Circle → Option Z) (w₀ : ι × Circle) (hsame : ∀ w, w ≠ w₀ → a w = a' w)
+    (z z' : Z) (hz : a w₀ = some z) (hz' : a' w₀ = some z')
+    (γ : Path z z') (δ : Path z' z) (hδ : δ = γ.symm) (ε : ℝ) (hε : 0 < ε)
+    (hεπ : ε < Real.pi / 2)
+    (harc : ∀ w : ι × Circle, w.1 = w₀.1 →
+      |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → (a w).isSome → w = w₀)
+    (hresp : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε y)
+    (hcont : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε))
+    (hresp' : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a' x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε y)
+    (hcont' : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε)) (w : ι × Circle)
+    (hw : w.1 = w₀.1)
+    (hr : |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε)
+    (hlo : 3 * ε / 4 < |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2|) :
+    apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (0, .inr w) =
+      apm_t97A03_invariants_aux_slide_aux_detour a' a w₀ δ ε hresp' hcont'
+        (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε (.inr w)) := by
+  classical
+  subst δ
+  let θ := apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2
+  have hhalf : ε / 2 < |θ| := by dsimp [θ]; linarith
+  obtain ⟨heq, habs, hsign⟩ := apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start_aux_stretched_angle w₀.2 w.2 ε hε hεπ hhalf hr
+  have hout : w.1 = w₀.1 ∧ |θ| ≤ ε := ⟨hw, hr⟩
+  have hsmall : 2 * |θ| - ε ≤ ε := by dsimp [θ]; linarith
+  have hlarge : ¬ 2 * |θ| - ε ≤ ε / 2 := by dsimp [θ]; linarith
+  have hnot : ¬ |θ| ≤ 3 * ε / 4 := by dsimp [θ]; linarith
+  dsimp [θ] at hhalf hnot hsmall hlarge
+  simp [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne,
+    apm_t97A03_invariants_aux_slide_aux_detourRaw,
+    apm_t97A03_invariants_aux_slide_aux_detour, hw, hr, not_le.mpr hhalf,
+    hnot, habs, hsmall, hlarge, hsign]
+  congr 4 <;> ring
+
 theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start
     {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
     (a a' : ι × Circle → Option Z) (w₀ : ι × Circle) (hsame : ∀ w, w ≠ w₀ → a w = a' w)
@@ -4437,7 +4816,32 @@ theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start
     ∀ x, apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (0, x) =
       apm_t97A03_invariants_aux_slide_aux_detour a' a w₀ δ ε hresp' hcont'
         (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x) := by
-  sorry
+  classical
+  subst δ
+  intro x
+  cases x with
+  | inl y => rfl
+  | inr w =>
+    by_cases h : w.1 = w₀.1 ∧ |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε
+    · by_cases hin : |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε / 2
+      · have hthree : |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ 3 * ε / 4 := by linarith
+        have hm : 2 * |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| / ε ≤
+            3 - 4 * |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| / ε := by
+          rw [div_le_iff₀ hε]
+          have he : ε ≠ 0 := ne_of_gt hε
+          field_simp
+          nlinarith
+        simp [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne,
+          apm_t97A03_invariants_aux_slide_aux_detourRaw,
+          apm_t97A03_invariants_aux_slide_aux_detour, h, hin, hthree, min_eq_left hm]
+      · by_cases hthree : |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ 3 * ε / 4
+        · exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start_aux_middle a a' w₀ hsame z z' hz hz' γ γ.symm rfl ε hε hεπ harc
+            hresp hcont hresp' hcont' w h.1 h.2 (lt_of_not_ge hin) hthree
+        · exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start_aux_outer a a' w₀ hsame z z' hz hz' γ γ.symm rfl ε hε hεπ harc
+            hresp hcont hresp' hcont' w h.1 h.2 (lt_of_not_ge hthree)
+    · simp [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne,
+        apm_t97A03_invariants_aux_slide_aux_detourRaw,
+        apm_t97A03_invariants_aux_slide_aux_detour, h]
 
 /-- Going out along `γ` and back along `δ = γ.symm` is homotopic to the identity:
 first contract the inserted loop `γ.trans γ.symm` in `Z` (Path.Homotopy.reflTransSymm,
