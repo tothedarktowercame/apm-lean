@@ -6637,6 +6637,272 @@ local notation "OQ" => apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_col
 local notation "OQC" => (ContinuousMap.mk OQ apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_q_continuous)
 local notation "OV" => (Quotient.mk _ (Sum.inl (0, apm_t97A03_north)) : OCC)
 
+private noncomputable def apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) : ℝ :=
+  ((p.1.2 : ℝ) - p.1.1.1 2) / (1 + (p.1.2 : ℝ))
+
+private noncomputable def apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) : ℝ :=
+  1 - 2 * Real.rpow
+    (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u p)
+    (2 - (p.1.2 : ℝ))
+
+private noncomputable def apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) : ℝ :=
+  Real.sqrt (1 -
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p) ^ 2) /
+    Real.sqrt (1 - (p.1.1.1 2) ^ 2)
+
+private noncomputable def apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) :
+    apm_t97A03_R3 :=
+  WithLp.toLp 2 ![
+    p.1.1.1 0 * apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k p,
+    p.1.1.1 1 * apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k p,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p]
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_coords (x : apm_t97A03_S2) :
+    (x.1 0)^2 + (x.1 1)^2 + (x.1 2)^2 = 1 := by
+  have hn : ‖x.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using x.2
+  have hs := EuclideanSpace.real_norm_sq_eq x.1
+  simp [Fin.sum_univ_succ, hn] at hs
+  linarith
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u_bounds
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) :
+    0 ≤ apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u p ∧ apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u p ≤ 1 := by
+  have ht0 := p.1.2.2.1
+  have hzt : p.1.1.1 2 ≤ (p.1.2 : ℝ) := p.2
+  have hc := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_coords p.1.1
+  have hz : -1 ≤ p.1.1.1 2 := by nlinarith [sq_nonneg (p.1.1.1 0), sq_nonneg (p.1.1.1 1)]
+  have hd : 0 < 1 + (p.1.2 : ℝ) := by linarith
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u
+  exact ⟨div_nonneg (by linarith) hd.le, (div_le_one hd).2 (by linarith)⟩
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H_bounds
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) :
+    0 ≤ 1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p) ^ 2 := by
+  obtain ⟨h0, h1⟩ := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u_bounds p
+  have ht1 := p.1.2.2.2
+  have hw0 : 0 ≤ Real.rpow (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u p) (2 - (p.1.2 : ℝ)) := Real.rpow_nonneg h0 _
+  have hw1 : Real.rpow (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u p) (2 - (p.1.2 : ℝ)) ≤ 1 :=
+    Real.rpow_le_one h0 h1 (by linarith)
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H
+  nlinarith
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H_pole
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)})
+    (hp : 1 - (p.1.1.1 2) ^ 2 = 0) : (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p) ^ 2 = 1 := by
+  have ht0 := p.1.2.2.1
+  have ht1 := p.1.2.2.2
+  have hzt : p.1.1.1 2 ≤ (p.1.2 : ℝ) := p.2
+  have hd : (1 + (p.1.2 : ℝ)) ≠ 0 := by linarith
+  have hz : p.1.1.1 2 = 1 ∨ p.1.1.1 2 = -1 := by
+    have : (p.1.1.1 2 - 1) * (p.1.1.1 2 + 1) = 0 := by linear_combination -hp
+    rcases mul_eq_zero.1 this with h | h
+    · left; linarith
+    · right; linarith
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u
+  rcases hz with hz | hz
+  · have ht : (p.1.2 : ℝ) = 1 := by linarith
+    rw [hz, ht]; norm_num
+  · rw [hz, show ((p.1.2 : ℝ) - -1) / (1 + (p.1.2 : ℝ)) = 1 by
+      rw [div_eq_one_iff_eq hd]; ring]
+    norm_num
+
+/-- `x_i * (A / sqrt (1 - z²)) = x_i * c` once `A = c * sqrt (1 - z²)`, poles included. -/
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_xk (x : apm_t97A03_S2) (i : Fin 3) (hi : i ≠ 2) (A c : ℝ)
+    (h : A = c * Real.sqrt (1 - (x.1 2) ^ 2)) :
+    x.1 i * (A / Real.sqrt (1 - (x.1 2) ^ 2)) = x.1 i * c := by
+  by_cases hs : Real.sqrt (1 - (x.1 2) ^ 2) = 0
+  · have hc := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_coords x
+    have hle : 1 - (x.1 2) ^ 2 ≤ 0 := Real.sqrt_eq_zero'.1 hs
+    have h0 : x.1 0 = 0 := pow_eq_zero_iff (n := 2) (by norm_num) |>.1
+      (by nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1)])
+    have h1 : x.1 1 = 0 := pow_eq_zero_iff (n := 2) (by norm_num) |>.1
+      (by nlinarith [sq_nonneg (x.1 0), sq_nonneg (x.1 1)])
+    fin_cases i
+    · simp [h0]
+    · simp [h1]
+    · exact absurd rfl hi
+  · rw [h, mul_div_cancel_right₀ _ hs]
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw_mem
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw p ∈
+      Metric.sphere (0 : apm_t97A03_R3) 1 := by
+  rw [Metric.mem_sphere, dist_zero_right]
+  have hc := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_coords p.1.1
+  have hH := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H_bounds p
+  have hsq : (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw p 0) ^ 2 + (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw p 1) ^ 2 + (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw p 2) ^ 2 = 1 := by
+    simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw, PiLp.toLp_apply, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons]
+    unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k
+    set z := p.1.1.1 2
+    set H := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p
+    rcases (sub_nonneg.2 (show z ^ 2 ≤ 1 by nlinarith [sq_nonneg (p.1.1.1 0), sq_nonneg (p.1.1.1 1)])).eq_or_lt with hz | hz
+    · have hp := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H_pole p hz.symm
+      rw [← hz, Real.sqrt_zero, div_zero, mul_zero, mul_zero]
+      show (0:ℝ) ^ 2 + 0 ^ 2 + apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p ^ 2 = 1
+      rw [hp]; norm_num
+    · rw [mul_pow, mul_pow, div_pow, Real.sq_sqrt hH, Real.sq_sqrt hz.le]
+      field_simp
+      linear_combination (1 - H ^ 2) * hc
+  have hs := EuclideanSpace.real_norm_sq_eq (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw p)
+  simp only [Fin.sum_univ_succ, Fin.sum_univ_zero] at hs
+  have hn := norm_nonneg (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw p)
+  have : ‖apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw p‖ ^ 2 = 1 := by rw [hs]; simpa [add_assoc] using hsq
+  nlinarith
+
+private noncomputable def apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_fun
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) :
+    apm_t97A03_S2 :=
+  ⟨apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw p,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_raw_mem p⟩
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_bound
+    (p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)}) (i : Fin 3) (hi : i ≠ 2) :
+    ‖p.1.1.1 i * apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k p‖ ≤ Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p) ^ 2) := by
+  have hc := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_coords p.1.1
+  have hxi : (p.1.1.1 i) ^ 2 ≤ 1 - (p.1.1.1 2) ^ 2 := by
+    fin_cases i
+    · show (p.1.1.1 0) ^ 2 ≤ _; nlinarith [sq_nonneg (p.1.1.1 1)]
+    · show (p.1.1.1 1) ^ 2 ≤ _; nlinarith [sq_nonneg (p.1.1.1 0)]
+    · exact absurd rfl hi
+  have habs : |p.1.1.1 i| ≤ Real.sqrt (1 - (p.1.1.1 2) ^ 2) := Real.abs_le_sqrt hxi
+  have hA := Real.sqrt_nonneg (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p) ^ 2)
+  have hB := Real.sqrt_nonneg (1 - (p.1.1.1 2) ^ 2)
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k
+  rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg (div_nonneg hA hB)]
+  by_cases hB0 : Real.sqrt (1 - (p.1.1.1 2) ^ 2) = 0
+  · rw [hB0, div_zero, mul_zero]; exact hA
+  · calc |p.1.1.1 i| * (Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p) ^ 2) / Real.sqrt (1 - (p.1.1.1 2) ^ 2))
+        ≤ Real.sqrt (1 - (p.1.1.1 2) ^ 2) *
+            (Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p) ^ 2) / Real.sqrt (1 - (p.1.1.1 2) ^ 2)) :=
+          mul_le_mul_of_nonneg_right habs (div_nonneg hA hB)
+      _ = Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H p) ^ 2) := mul_div_cancel₀ _ hB0
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_z_continuous (i : Fin 3) :
+    Continuous fun p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)} => p.1.1.1 i :=
+  ((continuous_apply i).comp (PiLp.continuous_ofLp 2 _)).comp
+    (continuous_subtype_val.comp (continuous_fst.comp continuous_subtype_val))
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_t_continuous :
+    Continuous fun p : {p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)} => (p.1.2 : ℝ) :=
+  continuous_subtype_val.comp (continuous_snd.comp continuous_subtype_val)
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H_continuous : Continuous apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H := by
+  have hu : Continuous apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u := by
+    unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_u
+    refine (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_t_continuous.sub (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_z_continuous 2)).div
+      (continuous_const.add apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_t_continuous) (fun p => ?_)
+    have := p.1.2.2.1
+    exact ne_of_gt (by linarith)
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H
+  refine continuous_const.sub (continuous_const.mul ?_)
+  exact hu.rpow (continuous_const.sub apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_t_continuous) (fun p => Or.inr (by
+    have := p.1.2.2.2
+    linarith))
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_xk_continuous (i : Fin 3) (hi : i ≠ 2) :
+    Continuous fun p => p.1.1.1 i * apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k p := by
+  rw [continuous_iff_continuousAt]
+  intro p
+  have hHs : Continuous fun q => Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H q) ^ 2) :=
+    (continuous_const.sub (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H_continuous.pow 2)).sqrt
+  by_cases hp : 1 - (p.1.1.1 2) ^ 2 = 0
+  · have hval : p.1.1.1 i * apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k p = 0 := by
+      unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k; rw [hp, Real.sqrt_zero, div_zero, mul_zero]
+    have hlim : Filter.Tendsto (fun q => Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H q) ^ 2)) (nhds p) (nhds 0) := by
+      have := hHs.tendsto p
+      rwa [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H_pole p hp, sub_self, Real.sqrt_zero] at this
+    show Filter.Tendsto _ (nhds p) (nhds (p.1.1.1 i * apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k p))
+    rw [hval]
+    exact squeeze_zero_norm (fun q => apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_bound q i hi) hlim
+  · have hc := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_coords p.1.1
+    have hpos : Real.sqrt (1 - (p.1.1.1 2) ^ 2) ≠ 0 := by
+      have : 0 < 1 - (p.1.1.1 2) ^ 2 :=
+        lt_of_le_of_ne (by nlinarith [sq_nonneg (p.1.1.1 0), sq_nonneg (p.1.1.1 1)]) (Ne.symm hp)
+      exact (Real.sqrt_pos.2 this).ne'
+    unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k
+    exact (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_z_continuous i).continuousAt.mul
+      (hHs.continuousAt.div
+        ((continuous_const.sub ((apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_z_continuous 2).pow 2)).sqrt.continuousAt) hpos)
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_continuous :
+    Continuous apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_fun := by
+  apply Continuous.subtype_mk
+  apply (PiLp.continuous_toLp 2 _).comp
+  apply continuous_pi
+  intro i
+  fin_cases i
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_xk_continuous 0 (by decide)
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_xk_continuous 1 (by decide)
+  · exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H_continuous
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_zero
+    (x : apm_t97A03_S2) (hx : x.1 2 ≤ 0) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_fun ⟨(x, 0), hx⟩ =
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_fold x := by
+  have hH : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, 0), hx⟩ = 1 - 2 * (x.1 2) ^ 2 := by
+    show 1 - 2 * ((0 - x.1 2) / (1 + 0)) ^ (2 - (0 : ℝ)) = _
+    rw [show (2 : ℝ) - 0 = (2 : ℕ) by norm_num, Real.rpow_natCast]
+    ring
+  have hA : Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, 0), hx⟩) ^ 2) =
+      (-2 * x.1 2) * Real.sqrt (1 - (x.1 2) ^ 2) := by
+    rw [hH, show 1 - (1 - 2 * (x.1 2) ^ 2) ^ 2 = (-2 * x.1 2) ^ 2 * (1 - (x.1 2) ^ 2) by ring,
+      Real.sqrt_mul (sq_nonneg _), Real.sqrt_sq (by linarith)]
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  · show x.1 0 * (Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, 0), hx⟩) ^ 2) / Real.sqrt (1 - (x.1 2) ^ 2)) =
+      -2 * x.1 2 * x.1 0
+    rw [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_xk x 0 (by decide) _ _ hA]; ring
+  · show x.1 1 * (Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, 0), hx⟩) ^ 2) / Real.sqrt (1 - (x.1 2) ^ 2)) =
+      -2 * x.1 2 * x.1 1
+    rw [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_xk x 1 (by decide) _ _ hA]; ring
+  · exact hH
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_one
+    (x : apm_t97A03_S2) (hx : x.1 2 ≤ 1) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_fun ⟨(x, 1), hx⟩ = x := by
+  have hH : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, 1), hx⟩ = x.1 2 := by
+    show 1 - 2 * ((1 - x.1 2) / (1 + 1)) ^ (2 - (1 : ℝ)) = _
+    rw [show (2 : ℝ) - 1 = 1 by norm_num, Real.rpow_one]
+    ring
+  have hA : Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, 1), hx⟩) ^ 2) =
+      1 * Real.sqrt (1 - (x.1 2) ^ 2) := by
+    rw [hH, one_mul]
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  · show x.1 0 * (Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, 1), hx⟩) ^ 2) / Real.sqrt (1 - (x.1 2) ^ 2)) = x.1 0
+    rw [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_xk x 0 (by decide) _ _ hA]; ring
+  · show x.1 1 * (Real.sqrt (1 - (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, 1), hx⟩) ^ 2) / Real.sqrt (1 - (x.1 2) ^ 2)) = x.1 1
+    rw [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_xk x 1 (by decide) _ _ hA]; ring
+  · exact hH
+
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_boundary
+    (x : apm_t97A03_S2) (t : unitInterval) (hx : x.1 2 = (t : ℝ)) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_fun ⟨(x, t), hx.le⟩ =
+      apm_t97A03_north := by
+  have ht1 := t.2.2
+  have hH : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, t), hx.le⟩ = 1 := by
+    show 1 - 2 * (((t : ℝ) - x.1 2) / (1 + (t : ℝ))) ^ (2 - (t : ℝ)) = _
+    rw [hx, sub_self, zero_div, Real.zero_rpow (by linarith)]
+    ring
+  have hk : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k ⟨(x, t), hx.le⟩ = 0 := by
+    unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k; rw [hH]; norm_num
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  · show x.1 0 * apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k ⟨(x, t), hx.le⟩ = _
+    rw [hk]; simp [apm_t97A03_north]
+  · show x.1 1 * apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_k ⟨(x, t), hx.le⟩ = _
+    rw [hk]; simp [apm_t97A03_north]
+  · show apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_H ⟨(x, t), hx.le⟩ = _
+    rw [hH]; simp [apm_t97A03_north]
+
 private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower :
     ∃ L : C({p : apm_t97A03_S2 × unitInterval | p.1.1 2 ≤ (p.2 : ℝ)},
         apm_t97A03_S2),
@@ -6645,7 +6911,10 @@ private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_a
       (∀ x (hx : x.1 2 ≤ 1), L ⟨(x, 1), hx⟩ = x) ∧
       (∀ x (t : unitInterval) (hx : x.1 2 = (t : ℝ)),
         L ⟨(x, t), hx.le⟩ = apm_t97A03_north) := by
-  sorry
+  exact ⟨⟨_, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_continuous⟩,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_zero,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_one,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_lower_aux_boundary⟩
 
 private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract_aux_s_homotopies_aux_sphere_motion_aux_fold_family_aux_upper :
     ∃ U : C({p : apm_t97A03_S2 × unitInterval | (p.2 : ℝ) ≤ p.1.1 2},
