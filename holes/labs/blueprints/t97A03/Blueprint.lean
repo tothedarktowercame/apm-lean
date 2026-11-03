@@ -7372,15 +7372,54 @@ private theorem
       simpa [apm_t97A03_circleNegI] using eq_neg_of_add_eq_zero_left hz
 
 private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex_aux_classify_aux_leg_base
+    (j : Fin 3) (y : Circle)
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j y =
+        apm_t97A03_modelWedgeBase) :
+    (y : ℂ) ^ 4 = 1 := by
+  have ho := (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff
+    apm_t97A03_twoSphereBase
+    ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+    apm_t97A03_twoSphereBase _).mp h.symm
+  have ht := ho.2
+  fin_cases j
+  · have ht' := ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective
+      ConstructionTargets.StatementSurfaceModels.twoCirclesPoint 1 ht
+    have hz := ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective 1 1 ht'
+    exact congrArg Subtype.val hz
+  · have ht' := ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective
+      ConstructionTargets.StatementSurfaceModels.twoCirclesPoint 1 ht
+    have hz := (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff
+      1 1 1 _).mp ht'.symm
+    exact congrArg Subtype.val hz.2
+  · have hz := (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff
+      ConstructionTargets.StatementSurfaceModels.twoCirclesPoint 1
+      ConstructionTargets.StatementSurfaceModels.twoCirclesPoint _).mp ht.symm
+    exact congrArg Subtype.val hz.2
+
+private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex_aux_classify
     (y : Circle)
     (h :
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
         apm_t97A03_modelWedgeBase) :
     y ∈ apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc ∨
-      y = apm_t97A03_circleOne ∨ y = apm_t97A03_circleNegOne ∨
-        y = apm_t97A03_circleI ∨ y = apm_t97A03_circleNegI := by
-  sorry
+    y = apm_t97A03_circleOne ∨ y = apm_t97A03_circleNegOne ∨
+      y = apm_t97A03_circleI ∨ y = apm_t97A03_circleNegI := by
+  classical
+  simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw] at h
+  split_ifs at h with h0 h1 h2
+  · exact Or.inl h0
+  · right
+    exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_fourthRoots y
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex_aux_classify_aux_leg_base 0 y h)
+  · right
+    exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_fourthRoots y
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex_aux_classify_aux_leg_base 1 y h)
+  · right
+    exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_fourthRoots y
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex_aux_classify_aux_leg_base 2 y h)
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex
@@ -7497,7 +7536,13 @@ private theorem
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr x) =
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y)) :
     x = y := by
-  sorry
+  classical
+  simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw] at hx h
+  split_ifs at hx with hx0 hx1 hx2
+  · exact False.elim (hx rfl)
+  all_goals
+    split_ifs at h with hy0 hy1 hy2
+    all_goals sorry
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle
