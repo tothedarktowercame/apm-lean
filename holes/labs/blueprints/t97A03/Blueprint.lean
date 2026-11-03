@@ -3652,6 +3652,80 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
   · rw [d.second_one, hsecond]
     rfl
 
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_paste
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hendpoints :
+      d.first 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.first 0 1 = d.sphere 1 apm_t97A03_south ∧
+      d.first 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.first 1 1 = d.sphere 0 apm_t97A03_south ∧
+      d.second 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.second 0 1 = d.sphere 0 apm_t97A03_south ∧
+      d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.second 1 1 = d.sphere 1 apm_t97A03_south) :
+    ∃ (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (c : Circle → Y),
+      g = ![d.second 0, fun t ↦ d.first 1 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩,
+        d.second 1, fun t ↦ d.first 0 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩] ∧
+      Continuous c ∧
+      (∀ t ∈ Set.Icc 0 (2 * Real.pi),
+        c (Circle.exp t) = apm_t97A03_quarterPasteRaw g t) ∧
+      c apm_t97A03_circleOne = d.sphere 0 apm_t97A03_north ∧
+      c apm_t97A03_circleI = d.sphere 0 apm_t97A03_south ∧
+      c apm_t97A03_circleNegOne = d.sphere 1 apm_t97A03_north ∧
+      c apm_t97A03_circleNegI = d.sphere 1 apm_t97A03_south := by
+  let σ : Set.Icc (0 : ℝ) 1 → Set.Icc (0 : ℝ) 1 := fun t ↦
+    ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩
+  let g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y :=
+    ![d.second 0, d.first 1 ∘ σ, d.second 1, d.first 0 ∘ σ]
+  have hσ : Continuous σ := by
+    exact (continuous_const.sub continuous_subtype_val).subtype_mk _
+  have hg : ∀ k, Continuous (g k) := by
+    intro k
+    fin_cases k
+    · exact d.continuous_second 0
+    · exact (d.continuous_first 1).comp hσ
+    · exact d.continuous_second 1
+    · exact (d.continuous_first 0).comp hσ
+  have h01 : g 0 1 = g 1 0 := by
+    simpa [g, σ] using
+      hendpoints.2.2.2.2.2.1.trans hendpoints.2.2.2.1.symm
+  have h12 : g 1 1 = g 2 0 := by
+    simpa [g, σ] using hendpoints.2.2.1.trans hendpoints.2.2.2.2.2.2.1.symm
+  have h23 : g 2 1 = g 3 0 := by
+    simpa [g, σ] using hendpoints.2.2.2.2.2.2.2.trans hendpoints.2.1.symm
+  have h30 : g 3 1 = g 0 0 := by
+    simpa [g, σ] using hendpoints.1.trans hendpoints.2.2.2.2.1.symm
+  obtain ⟨c, hc, hraw, hc1, hci, hcn, hcni⟩ :=
+    apm_t97A03_quarterPaste_exists g hg h01 h12 h23 h30
+  refine ⟨g, c, ?_, hc, hraw, ?_, ?_, ?_, ?_⟩
+  · rfl
+  · simpa [g] using hc1.trans hendpoints.2.2.2.2.1
+  · have hci' : c apm_t97A03_circleI = d.first 1 1 := by
+      simpa [g, σ] using hci
+    exact hci'.trans hendpoints.2.2.2.1
+  · simpa [g] using hcn.trans hendpoints.2.2.2.2.2.2.1
+  · have hcni' : c apm_t97A03_circleNegI = d.first 0 1 := by
+      simpa [g, σ] using hcni
+    exact hcni'.trans hendpoints.2.1
+
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (c : Circle → Y)
+    (hg : g = ![d.second 0, fun t ↦ d.first 1 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩,
+      d.second 1, fun t ↦ d.first 0 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩])
+    (hraw : ∀ t ∈ Set.Icc 0 (2 * Real.pi),
+      c (Circle.exp t) = apm_t97A03_quarterPasteRaw g t) :
+    Function.Injective c ∧
+      (∀ w, ∃ z, p (c w) = apm_t97A03_baseCircle A B z) ∧
+      (∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -3674,7 +3748,13 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
       c apm_t97A03_circleNegI = d.sphere 1 apm_t97A03_south ∧
       (∀ w, ∃ z, p (c w) = apm_t97A03_baseCircle A B z) ∧
       (∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y) := by
-  sorry
+  obtain ⟨g, c, hg, hc, hraw, hc1, hci, hcn, hcni⟩ :=
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_paste
+      A B Y p d hendpoints
+  obtain ⟨hinj, hrange, hcover⟩ :=
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact
+      A B hAB Y p hp hdegree d g c hg hraw
+  exact ⟨c, hc, hinj, hc1, hci, hcn, hcni, hrange, hcover⟩
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste
     (A B : Circle) (hAB : A ≠ B)
