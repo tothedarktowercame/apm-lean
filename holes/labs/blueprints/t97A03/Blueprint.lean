@@ -5696,6 +5696,21 @@ theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contr
            left_inv := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_left_homotopy
            right_inv := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contract_aux_right_homotopy }⟩
 
+/-- The two-circle legs: each closed semicircle goes once round its circle of
+`threeBase` by `z ↦ z ^ 2` (the one-circle `_leg` uses `z ^ 4` for quarter arcs and
+must not be composed with a further power). -/
+private def
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2
+    (j : Fin 3) (z : Circle) : apm_t97A03_modelWedge :=
+  quotientMap apm_t97A03_twoSphereBase
+    ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+    (.inr (match j with
+      | ⟨0, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld
+          (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoLeft (z ^ 2))
+      | ⟨1, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld
+          (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight (z ^ 2))
+      | ⟨2, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew (z ^ 2)))
+
 /-- After contraction both north points coincide.  The lower semicircle of
 circle zero and the two semicircles of circle one are three loops at that
 point.  Parametrising each closed semicircle modulo its endpoints gives the
@@ -5710,14 +5725,14 @@ private noncomputable def
       if i = 0 then
         if 0 ≤ z.1.im then apm_t97A03_modelWedgeBase
         else
-          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg
-            0 (z ^ 2)
+          apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2
+            0 z
       else if 0 ≤ z.1.im then
-        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg
-          1 (z ^ 2)
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2
+          1 z
       else
-        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg
-          2 (z ^ 2)
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2
+          2 z
 
 private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_sphere :
