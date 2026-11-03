@@ -2164,6 +2164,39 @@ sheets, lift the two fixed arcs, and descend the sheetwise maps through the
 two `EqvGen` quotients.  The inverse is obtained by the same lifted pieces;
 use `Continuous.quotient_lift`, covering uniqueness, and
 `Homeomorph.homeomorphOfContinuousOpen`. -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_perms
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hmono : apm_t97A03_TwoCircleMonodromy p hp) :
+    d.firstPerm = Equiv.swap 0 1 ∧ d.secondPerm = Equiv.swap 0 1 := by
+  sorry
+
+/-- With both endpoint permutations normalized to the transposition, the
+sphere trivialization and the two pairs of arc lifts glue to a continuous
+bijective decoder from the literal two-circle quotient. -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.swap 0 1)
+    (hsecond : d.secondPerm = Equiv.swap 0 1) :
+    ∃ f : apm_t97A03_TwoCircleCover → Y,
+      Continuous f ∧ Function.Bijective f := by
+  sorry
+
+/-- The total space of this covering is Hausdorff: the literal base quotient
+is Hausdorff, and distinct points in one fibre are separated in an evenly
+covered neighbourhood. -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p) :
+    T2Space Y := by
+  sorry
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -2172,7 +2205,18 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend
     (d : apm_t97A03_ClassifySheetData A B Y p)
     (hmono : apm_t97A03_TwoCircleMonodromy p hp) :
     Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover) := by
-  sorry
+  obtain ⟨hfirst, hsecond⟩ :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_perms
+      A B Y p hp d hmono
+  obtain ⟨f, hf, hfb⟩ :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder
+      A B hAB Y p hp hdegree d hfirst hsecond
+  letI : CompactSpace apm_t97A03_TwoCircleCover := Quotient.compactSpace
+  letI : T2Space Y :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2
+      A B hAB Y p hp
+  exact ⟨(Continuous.homeoOfEquivCompactToT2
+    (f := Equiv.ofBijective f hfb) hf).symm⟩
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph
     (A B : Circle) (hAB : A ≠ B)
