@@ -3458,40 +3458,201 @@ private theorem
         (apm_t97A03_invariants_aux_slide_GenRel
           apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0)))) := by
   sorry
+/-
+  let h : Sum apm_t97A03_TwoSpheres (Unit × Circle) ≃ₜ
+      Sum apm_t97A03_TwoSpheres Circle :=
+    Homeomorph.sumCongr (Homeomorph.refl _) (Homeomorph.punitProd Circle)
+  let f : (Quotient (Relation.EqvGen.setoid
+        (apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0))) →
+      apm_t97A03_OneCircleCover :=
+    Quotient.lift (fun x => Quotient.mk _ (h x)) (by
+      intro x y hxy
+      apply Quotient.sound
+      exact Relation.EqvGen.rec
+        (fun _ _ hr => by
+          cases hr with
+          | att w z hz =>
+            simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0]
+              at hz
+            split_ifs at hz with h1 hI hn1 hnI
+            · subst w; cases hz
+              exact Relation.EqvGen.rel _ _ apm_t97A03_OneCircleRel.n0
+            · subst w; cases hz
+              exact Relation.EqvGen.rel _ _ apm_t97A03_OneCircleRel.s0
+            · subst w; cases hz
+              exact Relation.EqvGen.rel _ _ apm_t97A03_OneCircleRel.n1
+            · subst w; cases hz
+              exact Relation.EqvGen.rel _ _ apm_t97A03_OneCircleRel.s1)
+        (fun x => Relation.EqvGen.refl (h x))
+        (fun _ _ _ ih => Relation.EqvGen.symm _ _ ih)
+        (fun _ _ _ _ _ ih₁ ih₂ => Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+        hxy)
+  let g : apm_t97A03_OneCircleCover →
+      Quotient (Relation.EqvGen.setoid
+        (apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0)) :=
+    Quotient.lift (fun x => Quotient.mk _ (h.symm x)) (by
+      intro x y hxy
+      apply Quotient.sound
+      exact Relation.EqvGen.rec
+        (fun _ _ hr => by
+          cases hr with
+          | n0 => exact Relation.EqvGen.rel _ _ (.att _ _ (by simp
+              [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0]))
+          | s0 => exact Relation.EqvGen.rel _ _ (.att _ _ (by norm_num
+              [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0,
+                apm_t97A03_circleI, apm_t97A03_circleOne,
+                Subtype.ext_iff, Complex.ext_iff]))
+          | n1 => exact Relation.EqvGen.rel _ _ (.att _ _ (by norm_num
+              [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0,
+                apm_t97A03_circleNegOne, apm_t97A03_circleOne,
+                apm_t97A03_circleI, Subtype.ext_iff, Complex.ext_iff]))
+          | s1 => exact Relation.EqvGen.rel _ _ (.att _ _ (by norm_num
+              [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0,
+                apm_t97A03_circleNegI, apm_t97A03_circleOne,
+                apm_t97A03_circleI, apm_t97A03_circleNegOne,
+                Subtype.ext_iff, Complex.ext_iff])))
+        (fun x => Relation.EqvGen.refl (h.symm x))
+        (fun _ _ _ ih => Relation.EqvGen.symm _ _ ih)
+        (fun _ _ _ _ _ ih₁ ih₂ => Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+        hxy)
+  have hf : Continuous f := by
+    apply continuous_coinduced_dom.mpr
+    exact continuous_coinduced_rng.comp h.continuous
+  have hg : Continuous g := by
+    apply continuous_coinduced_dom.mpr
+    exact continuous_coinduced_rng.comp h.symm.continuous
+  let e : (Quotient (Relation.EqvGen.setoid
+        (apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0))) ≃ₜ
+      apm_t97A03_OneCircleCover :=
+    { toFun := f
+      invFun := g
+      left_inv := by
+        intro x
+        refine Quotient.inductionOn x ?_
+        intro x
+        exact congrArg (Quotient.mk _)
+          (h.symm_apply_apply x)
+      right_inv := by
+        intro x
+        refine Quotient.inductionOn x ?_
+        intro x
+        exact congrArg (Quotient.mk _)
+          (h.apply_symm_apply x)
+      continuous_toFun := hf
+      continuous_invFun := hg }
+  exact ⟨e.symm.toHomotopyEquiv⟩
+-/
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_finite :
     {w | (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0 w).isSome}.Finite := by
-  sorry
+  apply Set.Finite.subset (Set.toFinite
+    ({((), apm_t97A03_circleOne), ((), apm_t97A03_circleI),
+      ((), apm_t97A03_circleNegOne), ((), apm_t97A03_circleNegI)} : Set _))
+  intro w hw
+  simp only [Set.mem_setOf_eq,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0] at hw
+  split_ifs at hw with h1 hI hn1 hnI
+  · rcases w with ⟨u, w⟩
+    change w = apm_t97A03_circleOne at h1
+    subst w
+    simp
+  · rcases w with ⟨u, w⟩
+    change w = apm_t97A03_circleI at hI
+    subst w
+    simp
+  · rcases w with ⟨u, w⟩
+    change w = apm_t97A03_circleNegOne at hn1
+    subst w
+    simp
+  · rcases w with ⟨u, w⟩
+    change w = apm_t97A03_circleNegI at hnI
+    subst w
+    simp
+  · simp at hw
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_finite :
     {w | (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1 w).isSome}.Finite := by
-  sorry
+  apply Set.Finite.subset (Set.toFinite
+    ({((), apm_t97A03_circleOne), ((), apm_t97A03_circleI),
+      ((), apm_t97A03_circleNegOne), ((), apm_t97A03_circleNegI)} : Set _))
+  intro w hw
+  simp only [Set.mem_setOf_eq,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1] at hw
+  split_ifs at hw with h1 hI hn1 hnI
+  · rcases w with ⟨u, w⟩
+    change w = apm_t97A03_circleOne at h1
+    subst w
+    simp
+  · rcases w with ⟨u, w⟩
+    change w = apm_t97A03_circleI at hI
+    subst w
+    simp
+  · rcases w with ⟨u, w⟩
+    change w = apm_t97A03_circleNegOne at hn1
+    subst w
+    simp
+  · rcases w with ⟨u, w⟩
+    change w = apm_t97A03_circleNegI at hnI
+    subst w
+    simp
+  · simp at hw
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_at_source :
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0
       ((), apm_t97A03_circleI) = some (0, apm_t97A03_south) := by
-  sorry
+  have hne : apm_t97A03_circleI ≠ apm_t97A03_circleOne := by
+    intro h
+    have hi := congrArg (fun z : Circle => z.1.im) h
+    norm_num [apm_t97A03_circleI, apm_t97A03_circleOne] at hi
+  simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0, hne]
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first_aux_at_target :
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1
       ((), apm_t97A03_circleI) = some (0, apm_t97A03_north) := by
-  sorry
+  have hne : apm_t97A03_circleI ≠ apm_t97A03_circleOne := by
+    intro h
+    have hi := congrArg (fun z : Circle => z.1.im) h
+    norm_num [apm_t97A03_circleI, apm_t97A03_circleOne] at hi
+  simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1, hne]
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_at_source :
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1
       ((), apm_t97A03_circleNegI) = some (1, apm_t97A03_south) := by
-  sorry
+  have h1 : apm_t97A03_circleNegI ≠ apm_t97A03_circleOne := by
+    intro h; have := congrArg (fun z : Circle => z.1.im) h
+    norm_num [apm_t97A03_circleNegI, apm_t97A03_circleOne] at this
+  have hI : apm_t97A03_circleNegI ≠ apm_t97A03_circleI := by
+    intro h; have := congrArg (fun z : Circle => z.1.im) h
+    norm_num [apm_t97A03_circleNegI, apm_t97A03_circleI] at this
+  have hn1 : apm_t97A03_circleNegI ≠ apm_t97A03_circleNegOne := by
+    intro h; have := congrArg (fun z : Circle => z.1.re) h
+    norm_num [apm_t97A03_circleNegI, apm_t97A03_circleNegOne] at this
+  simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1,
+    h1, hI, hn1]
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second_aux_at_target :
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2
       ((), apm_t97A03_circleNegI) = some (1, apm_t97A03_north) := by
-  sorry
+  have h1 : apm_t97A03_circleNegI ≠ apm_t97A03_circleOne := by
+    intro h; have := congrArg (fun z : Circle => z.1.im) h
+    norm_num [apm_t97A03_circleNegI, apm_t97A03_circleOne] at this
+  have hI : apm_t97A03_circleNegI ≠ apm_t97A03_circleI := by
+    intro h; have := congrArg (fun z : Circle => z.1.im) h
+    norm_num [apm_t97A03_circleNegI, apm_t97A03_circleI] at this
+  have hn1 : apm_t97A03_circleNegI ≠ apm_t97A03_circleNegOne := by
+    intro h; have := congrArg (fun z : Circle => z.1.re) h
+    norm_num [apm_t97A03_circleNegI, apm_t97A03_circleNegOne] at this
+  simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2,
+    h1, hI, hn1]
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first :
@@ -3548,6 +3709,42 @@ private theorem
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2)))
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover) := by
   sorry
+/-
+  have hrel :
+      apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2 =
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidRel := by
+    funext x y
+    apply propext
+    constructor
+    · rintro ⟨w, z, hz⟩
+      simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2]
+        at hz
+      split_ifs at hz with h1 hI hn1 hnI
+      · subst w; cases hz; exact .p0
+      · subst w; cases hz; exact .p1
+      · subst w; cases hz; exact .p2
+      · subst w; cases hz; exact .p3
+    · intro hr
+      cases hr with
+      | p0 => exact .att _ _ (by simp
+          [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2])
+      | p1 => exact .att _ _ (by norm_num
+          [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2,
+            apm_t97A03_circleI, apm_t97A03_circleOne,
+            Subtype.ext_iff, Complex.ext_iff])
+      | p2 => exact .att _ _ (by norm_num
+          [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2,
+            apm_t97A03_circleNegOne, apm_t97A03_circleOne,
+            apm_t97A03_circleI, Subtype.ext_iff, Complex.ext_iff])
+      | p3 => exact .att _ _ (by norm_num
+          [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2,
+            apm_t97A03_circleNegI, apm_t97A03_circleOne,
+            apm_t97A03_circleI, apm_t97A03_circleNegOne,
+            Subtype.ext_iff, Complex.ext_iff])
+  rw [hrel]
+  exact ⟨ContinuousMap.HomotopyEquiv.refl _⟩
+-/
 
 /-- Homotopy invariance of this concrete adjunction space: slide each south
 attaching point to north along a meridian in its sphere sheet. -/
