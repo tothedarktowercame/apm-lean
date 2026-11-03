@@ -959,15 +959,326 @@ theorem apm_a96A07_count_eq_zero_of_large (g : ℂ → ℂ)
   rw [hgw] at this
   exact (not_lt_of_ge this) hw
 
+lemma apm_a96A07_exists_crossing_aux_regular_accPt
+    {z : ℂ} (hz : z ∈ sphere (0 : ℂ) 1) :
+    ∃ᶠ y in 𝓝[≠] z, y ∈ sphere (0 : ℂ) 1 := by
+  let zp : sphere (0 : ℂ) 1 := ⟨1, by simp⟩
+  let zm : sphere (0 : ℂ) 1 := ⟨-1, by simp⟩
+  letI : Nontrivial (sphere (0 : ℂ) 1) := ⟨⟨zp, zm, by
+    intro h
+    have h' : (1 : ℂ) = -1 := congrArg Subtype.val h
+    norm_num at h'⟩⟩
+  letI : ConnectedSpace (sphere (0 : ℂ) 1) :=
+    isConnected_iff_connectedSpace.mp (isConnected_sphere (by simp) (0 : ℂ) (by norm_num))
+  have hsub : AccPt (⟨z, hz⟩ : sphere (0 : ℂ) 1) (Filter.principal Set.univ) := by
+    rw [accPt_principal_iff_nhdsWithin]
+    have heq : (Set.univ \ {⟨z, hz⟩} : Set (sphere (0 : ℂ) 1)) = {⟨z, hz⟩}ᶜ := by
+      ext y
+      simp
+    rw [heq]
+    infer_instance
+  rw [accPt_iff_frequently] at hsub
+  have hsub' : ∃ᶠ y in 𝓝[sphere (0 : ℂ) 1] z, y ≠ z :=
+    (frequently_nhds_subtype_iff (sphere (0 : ℂ) 1) ⟨z, hz⟩
+      (fun y : ℂ => y ≠ z)).mp
+      (hsub.mono fun y hy hcoe => hy.1 (Subtype.ext hcoe))
+  rw [nhdsWithin, Filter.frequently_inf_principal] at hsub' ⊢
+  exact hsub'.mono fun y hy => ⟨hy.2, hy.1⟩
+
 /-- The count jumps by exactly one across the curve at some point. -/
 lemma apm_a96A07_exists_crossing_aux_regular (g : ℂ → ℂ)
     (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
     (hg_inj_circle : Set.InjOn g apm_a96A07_circle) :
     ∃ ξ ∈ apm_a96A07_circle, deriv g ξ ≠ 0 := by
-  sorry
+  by_contra hn
+  push_neg at hn
+  obtain ⟨ε, hε, hg⟩ := hg
+  let U : Set ℂ := ball 0 (1 + ε)
+  have hopen : IsOpen U := isOpen_ball
+  have hpre : IsPreconnected U := convex_ball (0 : ℂ) (1 + ε) |>.isPreconnected
+  have hgU : DifferentiableOn ℂ g U := hg.mono ball_subset_closedBall
+  have hder : AnalyticOnNhd ℂ (deriv g) U :=
+    (hgU.analyticOnNhd hopen).deriv
+  have hξU : (1 : ℂ) ∈ U := by
+    rw [mem_ball]
+    simpa [U] using hε
+  have hfreq : ∃ᶠ z in 𝓝[≠] (1 : ℂ), deriv g z = 0 :=
+    (apm_a96A07_exists_crossing_aux_regular_accPt (z := (1 : ℂ)) (by simp)).mono
+      fun z hz => hn z hz
+  have hz : Set.EqOn (deriv g) 0 U :=
+    hder.eqOn_zero_of_preconnected_of_frequently_eq_zero hpre hξU hfreq
+  have hone : (1 : ℂ) ∈ U := hξU
+  have hmone : (-1 : ℂ) ∈ U := by
+    rw [mem_ball]
+    simpa [U] using hε
+  have heq : g (1 : ℂ) = g (-1 : ℂ) :=
+    hopen.is_const_of_deriv_eq_zero hpre hgU hz hone hmone
+  have hp : (1 : ℂ) ∈ apm_a96A07_circle := by
+    change (1 : ℂ) ∈ sphere 0 1
+    simp
+  have hm : (-1 : ℂ) ∈ apm_a96A07_circle := by
+    change (-1 : ℂ) ∈ sphere 0 1
+    simp
+  exact (show (1 : ℂ) ≠ -1 by norm_num) (hg_inj_circle hp hm heq)
+
+/-- The argument principle in the form used for counting. -/
+lemma apm_a96A07_exists_crossing_aux_integral (f : ℂ → ℂ)
+    (hf : AnalyticOnNhd ℂ f (closedBall 0 1)) (hne : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ 0) :
+    (∮ z in C(0, 1), logDeriv f z) =
+      (ConstructionTargets.Rouche.zeroCountInClosedBall f 0 1 : ℂ) * (2 * Real.pi * I) := by
+  rw [ConstructionTargets.Rouche.circleIntegral_logDeriv_eq_divisor_sum zero_lt_one hf hne,
+    ConstructionTargets.Rouche.intCast_zeroCountInClosedBall]
+
+lemma apm_a96A07_exists_crossing_aux_circleIntegrable (f : ℂ → ℂ)
+    (hf : AnalyticOnNhd ℂ f (closedBall 0 1)) (hne : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ 0) :
+    CircleIntegrable (logDeriv f) 0 1 := by
+  apply ContinuousOn.circleIntegrable zero_lt_one.le
+  have h1 : ContinuousOn (deriv f) (sphere 0 1) :=
+    hf.deriv.continuousOn.mono sphere_subset_closedBall
+  have h2 : ContinuousOn f (sphere 0 1) := hf.continuousOn.mono sphere_subset_closedBall
+  have := h1.div h2 hne
+  exact this.congr fun z _ => by simp [logDeriv_apply]
+
+/-- Zero counts add over products. -/
+lemma apm_a96A07_exists_crossing_aux_count_mul (f h : ℂ → ℂ)
+    (hf : AnalyticOnNhd ℂ f (closedBall 0 1)) (hh : AnalyticOnNhd ℂ h (closedBall 0 1))
+    (hfne : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ 0) (hhne : ∀ z ∈ sphere (0 : ℂ) 1, h z ≠ 0) :
+    ConstructionTargets.Rouche.zeroCountInClosedBall (fun z => f z * h z) 0 1 =
+      ConstructionTargets.Rouche.zeroCountInClosedBall f 0 1 +
+        ConstructionTargets.Rouche.zeroCountInClosedBall h 0 1 := by
+  have hm : AnalyticOnNhd ℂ (fun z => f z * h z) (closedBall 0 1) := hf.mul hh
+  have hmne : ∀ z ∈ sphere (0 : ℂ) 1, f z * h z ≠ 0 :=
+    fun z hz => mul_ne_zero (hfne z hz) (hhne z hz)
+  have e1 := apm_a96A07_exists_crossing_aux_integral _ hm hmne
+  have e2 := apm_a96A07_exists_crossing_aux_integral f hf hfne
+  have e3 := apm_a96A07_exists_crossing_aux_integral h hh hhne
+  have hc : (∮ z in C(0, 1), logDeriv (fun z => f z * h z) z) =
+      ∮ z in C(0, 1), (logDeriv f z + logDeriv h z) := by
+    apply circleIntegral.integral_congr zero_lt_one.le
+    intro z hz
+    have hz' : z ∈ closedBall (0 : ℂ) 1 := sphere_subset_closedBall hz
+    exact logDeriv_mul z (hfne z hz) (hhne z hz) (hf z hz').differentiableAt
+      (hh z hz').differentiableAt
+  rw [circleIntegral.integral_add
+    (apm_a96A07_exists_crossing_aux_circleIntegrable f hf hfne)
+    (apm_a96A07_exists_crossing_aux_circleIntegrable h hh hhne), e2, e3] at hc
+  rw [e1] at hc
+  have hC : (2 * (Real.pi : ℂ) * I) ≠ 0 := Complex.two_pi_I_ne_zero
+  have := mul_right_cancel₀ hC (hc.trans (add_mul _ _ _).symm)
+  exact_mod_cast this
+
+/-- A linear factor with its root inside the disk counts once. -/
+lemma apm_a96A07_exists_crossing_aux_count_linear_inside (ζ : ℂ) (hζ : ‖ζ‖ < 1) :
+    ConstructionTargets.Rouche.zeroCountInClosedBall (fun z => z - ζ) 0 1 = 1 := by
+  have han : AnalyticOnNhd ℂ (fun z : ℂ => z - ζ) (closedBall 0 1) :=
+    fun z _ => analyticAt_id.sub analyticAt_const
+  have hne : ∀ z ∈ sphere (0 : ℂ) 1, z - ζ ≠ 0 := by
+    intro z hz h0
+    have : ‖z‖ = 1 := by simpa using hz
+    rw [sub_eq_zero.1 h0] at this
+    linarith
+  have e := apm_a96A07_exists_crossing_aux_integral _ han hne
+  have hc : (∮ z in C(0, 1), logDeriv (fun z => z - ζ) z) = ∮ z in C(0, 1), (z - ζ)⁻¹ := by
+    apply circleIntegral.integral_congr zero_lt_one.le
+    intro z _
+    simp [logDeriv_apply]
+  have hb : ζ ∈ ball (0 : ℂ) 1 := by simpa using hζ
+  rw [hc, circleIntegral.integral_sub_inv_of_mem_ball hb] at e
+  have hC : (2 * (Real.pi : ℂ) * I) ≠ 0 := Complex.two_pi_I_ne_zero
+  have := mul_right_cancel₀ hC ((one_mul _).trans e)
+  exact_mod_cast this.symm
+
+/-- Joint continuity of the difference quotient at `(ξ, z)`. -/
+lemma apm_a96A07_exists_crossing_aux_dslope_continuousAt (g : ℂ → ℂ) (U : Set ℂ) (hU : IsOpen U)
+    (hg : DifferentiableOn ℂ g U) (ξ z : ℂ) (hξ : ξ ∈ U) (hz : z ∈ U) :
+    ContinuousAt (fun p : ℂ × ℂ => dslope g p.1 p.2) (ξ, z) := by
+  have han : AnalyticOnNhd ℂ g U := hg.analyticOnNhd hU
+  by_cases hne : z = ξ
+  · subst hne
+    have hstrict : HasStrictDerivAt g (deriv g z) z := (han z hz).hasStrictDerivAt
+    have hderc : ContinuousAt (deriv g) z := (han.deriv z hz).continuousAt
+    rw [Metric.continuousAt_iff']
+    intro e he
+    have ho := (HasStrictFDerivAt.isLittleO hstrict).def (half_pos he)
+    have hd : ∀ᶠ p : ℂ × ℂ in 𝓝 (z, z), dist (deriv g p.1) (deriv g z) < e :=
+      (continuousAt_fst (p := ((z, z) : ℂ × ℂ))).tendsto.eventually
+        (Metric.continuousAt_iff'.1 hderc e he)
+    filter_upwards [ho, hd] with p hp hdp
+    rw [show dslope g z z = deriv g z from dslope_same g z]
+    by_cases hpe : p.2 = p.1
+    · simpa [hpe, dslope_same] using hdp
+    · have hsub : p.2 - p.1 ≠ 0 := sub_ne_zero.2 hpe
+      have hsub' : p.1 - p.2 ≠ 0 := sub_ne_zero.2 (Ne.symm hpe)
+      have hs : dslope g p.1 p.2 - deriv g z =
+          (p.1 - p.2)⁻¹ * (g p.1 - g p.2 - (p.1 - p.2) • deriv g z) := by
+        rw [dslope_of_ne _ hpe, slope_def_field, smul_eq_mul]
+        field_simp [hsub, hsub']
+        ring
+      rw [dist_eq_norm, hs, norm_mul, norm_inv]
+      have hpos : 0 < ‖p.1 - p.2‖ := norm_pos_iff.2 hsub'
+      calc ‖p.1 - p.2‖⁻¹ * ‖g p.1 - g p.2 - (p.1 - p.2) • deriv g z‖
+          ≤ ‖p.1 - p.2‖⁻¹ * (e / 2 * ‖p.1 - p.2‖) := by
+            gcongr
+            simpa [ContinuousLinearMap.smulRight_apply] using hp
+        _ = e / 2 := by field_simp
+        _ < e := half_lt_self he
+  · have hgz : ContinuousAt g z := (han z hz).continuousAt
+    have hgξ : ContinuousAt g ξ := (han ξ hξ).continuousAt
+    have hfun : ContinuousAt (fun p : ℂ × ℂ => (p.2 - p.1)⁻¹ * (g p.2 - g p.1)) (ξ, z) := by
+      have h1 : ContinuousAt (fun p : ℂ × ℂ => g p.2) (ξ, z) :=
+        ContinuousAt.comp (f := Prod.snd) (g := g) hgz continuousAt_snd
+      have h2 : ContinuousAt (fun p : ℂ × ℂ => g p.1) (ξ, z) :=
+        ContinuousAt.comp (f := Prod.fst) (g := g) hgξ continuousAt_fst
+      have h3 : ContinuousAt (fun p : ℂ × ℂ => p.2 - p.1) (ξ, z) :=
+        continuousAt_snd.sub continuousAt_fst
+      exact (h3.inv₀ (sub_ne_zero.2 hne)).mul (h1.sub h2)
+    have hev : ∀ᶠ p : ℂ × ℂ in 𝓝 (ξ, z), p.2 ≠ p.1 := by
+      have : ContinuousAt (fun p : ℂ × ℂ => p.2 - p.1) (ξ, z) :=
+        continuousAt_snd.sub continuousAt_fst
+      filter_upwards [this.eventually_ne (sub_ne_zero.2 hne)] with p hp h
+      exact hp (by simp [h])
+    refine hfun.congr ?_
+    filter_upwards [hev] with p hp
+    rw [dslope_of_ne _ hp, slope_def_field]
+    field_simp [sub_ne_zero.2 hp]
 
 /-- At a regular boundary point, nearby targets on the two radial sides have
 zero counts differing by one. -/
+lemma apm_a96A07_exists_crossing_aux_local_aux_core (g : ℂ → ℂ)
+    (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
+    (ξ : ℂ) (hξ : ξ ∈ apm_a96A07_circle) (hξ' : deriv g ξ ≠ 0) :
+    ∃ w₁ w₂ : ℂ, w₁ ∉ apm_a96A07_boundaryImage g ∧
+      w₂ ∉ apm_a96A07_boundaryImage g ∧
+      apm_a96A07_diskZeroCount g w₁ =
+        apm_a96A07_diskZeroCount g w₂ + 1 := by
+  obtain ⟨ε, hε, hdiff⟩ := hg
+  have hg' : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)) := ⟨ε, hε, hdiff⟩
+  let U : Set ℂ := ball 0 (1 + ε)
+  have hUo : IsOpen U := isOpen_ball
+  have hgU : DifferentiableOn ℂ g U := hdiff.mono ball_subset_closedBall
+  have hξn : ‖ξ‖ = 1 := by simpa [apm_a96A07_circle] using hξ
+  have hsU : ∀ z ∈ closedBall (0 : ℂ) 1, z ∈ U := fun z hz =>
+    closedBall_subset_ball (by linarith) hz
+  have hsph : ∀ z ∈ sphere (0 : ℂ) 1, z ∈ U := fun z hz => hsU z (sphere_subset_closedBall hz)
+  let h : ℂ → ℂ := dslope g ξ
+  have hhne : ∀ z ∈ sphere (0 : ℂ) 1, h z ≠ 0 := by
+    intro z hz h0
+    by_cases hzξ : z = ξ
+    · subst hzξ
+      apply hξ'
+      have : dslope g z z = 0 := h0
+      rwa [dslope_same] at this
+    · have hs := sub_smul_dslope g ξ z
+      have h0' : dslope g ξ z = 0 := h0
+      rw [h0', smul_zero] at hs
+      exact hzξ (hg_inj_circle hz hξ (sub_eq_zero.1 hs.symm))
+  have hdsl : ∀ ζ ∈ U, AnalyticOnNhd ℂ (dslope g ζ) (closedBall 0 1) := by
+    intro ζ hζ
+    have : DifferentiableOn ℂ (dslope g ζ) U :=
+      (Complex.differentiableOn_dslope (hUo.mem_nhds hζ)).2 hgU
+    exact (this.analyticOnNhd hUo).mono hsU
+  have hh : AnalyticOnNhd ℂ h (closedBall 0 1) := hdsl ξ (hsph ξ hξ)
+  have hev : ∀ᶠ ζ in 𝓝 ξ, ∀ z ∈ sphere (0 : ℂ) 1, ‖dslope g ζ z - h z‖ < ‖h z‖ := by
+    apply (isCompact_sphere (0 : ℂ) 1).eventually_forall_of_forall_eventually
+    intro z hz
+    have hc := apm_a96A07_exists_crossing_aux_dslope_continuousAt g U hUo hgU ξ z
+      (hsph ξ hξ) (hsph z hz)
+    have hhc : ContinuousAt (fun p : ℂ × ℂ => h p.2) (ξ, z) :=
+      ContinuousAt.comp (f := Prod.snd) (g := h) (hh z (sphere_subset_closedBall hz)).continuousAt
+        continuousAt_snd
+    have hsubc : ContinuousAt (fun p : ℂ × ℂ => ‖dslope g p.1 p.2 - h p.2‖) (ξ, z) :=
+      (hc.sub hhc).norm
+    have hlt : ‖dslope g ξ z - h z‖ < ‖h z‖ := by
+      have : dslope g ξ z - h z = 0 := sub_self _
+      rw [this, norm_zero]
+      exact norm_pos_iff.2 (hhne z hz)
+    exact hsubc.eventually_lt hhc.norm hlt
+  have hcount : ∀ ζ ∈ U, ‖ζ‖ ≠ 1 →
+      (∀ z ∈ sphere (0 : ℂ) 1, ‖dslope g ζ z - h z‖ < ‖h z‖) →
+      g ζ ∉ apm_a96A07_boundaryImage g ∧
+      apm_a96A07_diskZeroCount g (g ζ) =
+        ConstructionTargets.Rouche.zeroCountInClosedBall (fun z => z - ζ) 0 1 +
+          ConstructionTargets.Rouche.zeroCountInClosedBall h 0 1 := by
+    intro ζ hζ hζn hclose
+    have hFne : ∀ z ∈ sphere (0 : ℂ) 1, dslope g ζ z ≠ 0 := by
+      intro z hz h0
+      have := hclose z hz
+      rw [h0, zero_sub, norm_neg] at this
+      exact lt_irrefl _ this
+    have hlne : ∀ z ∈ sphere (0 : ℂ) 1, z - ζ ≠ 0 := by
+      intro z hz h0
+      have hzn : ‖z‖ = 1 := by simpa using hz
+      exact hζn (sub_eq_zero.1 h0 ▸ hzn)
+    have hfac : ∀ z, g z - g ζ = (z - ζ) * dslope g ζ z := fun z => by
+      rw [← smul_eq_mul, sub_smul_dslope]
+    constructor
+    · rintro ⟨z, hz, hzζ⟩
+      have := hfac z
+      rw [hzζ, sub_self] at this
+      exact mul_ne_zero (hlne z hz) (hFne z hz) this.symm
+    · have hcongr : (fun z => g z - g ζ) = fun z => (z - ζ) * dslope g ζ z := funext hfac
+      unfold apm_a96A07_diskZeroCount
+      rw [hcongr, apm_a96A07_exists_crossing_aux_count_mul (fun z => z - ζ) (dslope g ζ)
+        (fun z _ => analyticAt_id.sub analyticAt_const) (hdsl ζ hζ) hlne hFne]
+      congr 1
+      have hr := ConstructionTargets.Rouche.zeroCountInClosedBall_add_eq (f := h)
+        (g := fun z => dslope g ζ z - h z) zero_lt_one hh
+        ((hdsl ζ hζ).sub hh) hclose
+      rw [← hr]
+      congr 1
+      funext z
+      simp
+  obtain ⟨δ, hδ, hball⟩ := Metric.eventually_nhds_iff_ball.1 hev
+  let s : ℝ := min (min δ ε) 1 / 2
+  have hs : 0 < s := by positivity
+  have hsδ : s < δ := by
+    have : min (min δ ε) 1 ≤ δ := (min_le_left _ _).trans (min_le_left _ _)
+    simp only [s]
+    linarith
+  have hsε : s < ε := by
+    have : min (min δ ε) 1 ≤ ε := (min_le_left _ _).trans (min_le_right _ _)
+    simp only [s]
+    linarith
+  have hs1 : s < 1 := by
+    have : min (min δ ε) 1 ≤ 1 := min_le_right _ _
+    simp only [s]
+    linarith
+  let ζ₁ : ℂ := ((1 - s : ℝ) : ℂ) * ξ
+  let ζ₂ : ℂ := ((1 + s : ℝ) : ℂ) * ξ
+  have hn₁ : ‖ζ₁‖ = 1 - s := by
+    simp only [ζ₁, norm_mul, hξn, mul_one, Complex.norm_real, Real.norm_eq_abs]
+    exact abs_of_pos (by linarith)
+  have hn₂ : ‖ζ₂‖ = 1 + s := by
+    simp only [ζ₂, norm_mul, hξn, mul_one, Complex.norm_real, Real.norm_eq_abs]
+    exact abs_of_pos (by linarith)
+  have hd₁ : ζ₁ ∈ ball ξ δ := by
+    rw [mem_ball, dist_eq_norm]
+    have : ζ₁ - ξ = ((-s : ℝ) : ℂ) * ξ := by simp only [ζ₁]; push_cast; ring
+    rw [this, norm_mul, hξn, mul_one, Complex.norm_real, Real.norm_eq_abs, abs_neg, abs_of_pos hs]
+    exact hsδ
+  have hd₂ : ζ₂ ∈ ball ξ δ := by
+    rw [mem_ball, dist_eq_norm]
+    have : ζ₂ - ξ = ((s : ℝ) : ℂ) * ξ := by simp only [ζ₂]; push_cast; ring
+    rw [this, norm_mul, hξn, mul_one, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hs]
+    exact hsδ
+  have hU₁ : ζ₁ ∈ U := by
+    simp only [U, mem_ball_zero_iff, hn₁]; linarith
+  have hU₂ : ζ₂ ∈ U := by
+    simp only [U, mem_ball_zero_iff, hn₂]; linarith
+  have hne₁ : ‖ζ₁‖ ≠ 1 := by rw [hn₁]; intro h; linarith
+  obtain ⟨hw₁, hc₁⟩ := hcount ζ₁ hU₁ hne₁ (hball _ hd₁)
+  obtain ⟨hw₂, hc₂⟩ := hcount ζ₂ hU₂ (by rw [hn₂]; intro h; linarith) (hball _ hd₂)
+  refine ⟨g ζ₁, g ζ₂, hw₁, hw₂, ?_⟩
+  rw [hc₁, hc₂, apm_a96A07_exists_crossing_aux_count_linear_inside ζ₁ (by rw [hn₁]; linarith),
+    apm_a96A07_count_eq_zero_of_large_aux_zeroFree (fun z => z - ζ₂)
+      (fun z _ => analyticAt_id.sub analyticAt_const) ?_]
+  · ring
+  · intro z hz h0
+    have hz1 : ‖z‖ ≤ 1 := by simpa using hz
+    rw [sub_eq_zero.1 h0, hn₂] at hz1
+    linarith
+
 lemma apm_a96A07_exists_crossing_aux_local (g : ℂ → ℂ)
     (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
     (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
@@ -976,7 +1287,8 @@ lemma apm_a96A07_exists_crossing_aux_local (g : ℂ → ℂ)
       w₂ ∉ apm_a96A07_boundaryImage g ∧
       apm_a96A07_diskZeroCount g w₁ =
         apm_a96A07_diskZeroCount g w₂ + 1 := by
-  sorry
+  exact apm_a96A07_exists_crossing_aux_local_aux_core
+    g hg hg_inj_circle ξ hξ hξ'
 
 theorem apm_a96A07_exists_crossing (g : ℂ → ℂ)
     (hg : ∃ ε > 0, DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
@@ -1247,30 +1559,6 @@ theorem apm_a96a07 (g : ℂ → ℂ)
       Bornology.IsBounded D ∧
       frontier D = apm_a96A07_boundaryImage g ∧
       Set.BijOn g apm_a96A07_disk D := by
-  /-
-  CLOSER HOP 3 (partial): the Jordan/winding obstruction remains, but all
-  domain properties not requiring separation or interior injectivity are now
-  compiled.
-  The compiled lemmas `apm_a96A07_isConnected_image_disk` and
-  `apm_a96A07_isBounded_image_disk` prove that the canonical candidate
-  `D = g '' apm_a96A07_disk` is connected and bounded, using only continuity
-  on the compact closed disk. Thus those target conjuncts no longer depend on
-  a future Jordan theorem.
-
-  Going beyond hop 2, `apm_a96A07_isOpen_image_disk` routes openness around
-  Jordan separation using Mathlib's complex open-mapping theorem. Analyticity
-  holds on the larger open ball, and boundary injectivity at the distinct
-  circle points `1` and `-1` eliminates the theorem's constant branch.
-
-  `ConstructionTargets.Rouche` supplies divisor counts and
-  `ConstructionTargets.UnivalentDeriv` supplies nonvanishing derivatives once
-  interior injectivity is known. The remaining essential bridge is still
-  Jordan separation/winding number one for the injective boundary image; it is
-  needed for interior injectivity, frontier identification, and hence `BijOn`.
-  Searches of the final-hop corpus (including the open-mapping, connected-
-  component, embedded-circle, and plane-separation APIs) found no replacement.
-  No statement defect was found and the frozen statement is unchanged.
-  -/
   exact apm_a96A07_of_injOn_disk g hg hg_inj_circle
     (apm_a96A07_injOn_disk_of_injOn_circle g hg hg_inj_circle)
 
