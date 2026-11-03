@@ -3549,6 +3549,201 @@ noncomputable def apm_t97A03_invariants_aux_slide_aux_detour
         (fun _ _ _ ih => ih.symm) (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂) hxy),
     hcont.quotient_lift _⟩
 
+/-- The first deformation shrinks the triangular path parameter to zero.
+The unequal slopes record the two successive half-arc detours. -/
+noncomputable def apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z}
+    (γ : Path z z') (ε : ℝ) (p : unitInterval × Sum Z (ι × Circle)) :
+    Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)) := by
+  classical
+  exact match p.2 with
+  | .inl y => Quotient.mk _ (.inl y)
+  | .inr w =>
+    let θ := apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2
+    if w.1 = w₀.1 ∧ |θ| ≤ ε then
+      if |θ| ≤ 3 * ε / 4 then
+        Quotient.mk _ (.inl (γ.extend ((1 - (p.1 : ℝ)) *
+          min (2 * |θ| / ε) (3 - 4 * |θ| / ε))))
+      else Quotient.mk _ (.inr (w.1, w₀.2 * Circle.exp
+        (Real.sign θ * (4 * |θ| - 3 * ε))))
+    else Quotient.mk _ (.inr w)
+
+/-- The second deformation linearly removes the pinched circle interval. -/
+noncomputable def apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) (ε : ℝ)
+    (p : unitInterval × Sum Z (ι × Circle)) :
+    Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)) := by
+  classical
+  exact match p.2 with
+  | .inl y => Quotient.mk _ (.inl y)
+  | .inr w =>
+    let θ := apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2
+    if w.1 = w₀.1 ∧ |θ| ≤ ε then
+      Quotient.mk _ (.inr (w.1, w₀.2 * Circle.exp
+        ((1 - (p.1 : ℝ)) * (Real.sign θ * max 0 (4 * |θ| - 3 * ε)) +
+          (p.1 : ℝ) * θ)))
+    else Quotient.mk _ (.inr w)
+
+/-- Glue along radii `3ε/4` and `ε`; the first seam is attached to `z`.
+The angular chart is used only on a closed arc avoiding its branch cut.
+For a closed-cover proof, split the relative circle into the right and left
+semicircles. On the right semicircle `arg` is continuous, and closed pasting
+at the two radii applies. On the left semicircle the map is the original
+quotient map, since `ε < π/2`. The loop parameter has value zero at `3ε/4`;
+at `ε` the stretched angle is the original angle. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z}
+    (hz : a w₀ = some z) (γ : Path z z') (ε : ℝ)
+    (hε : 0 < ε) (hεπ : ε < Real.pi / 2) :
+    Continuous (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε) := by
+  sorry
+
+/-- The pinched angular coordinate is continuous, including at angle zero,
+and equals the original angle at the boundary of the supporting arc.
+The signed maximum vanishes on a neighbourhood of zero, so the apparent
+jump of `Real.sign` causes no discontinuity. As in stage one, use the right
+semicircle for the angular chart and the unchanged left semicircle to avoid
+the branch cut. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo_continuous
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) (ε : ℝ)
+    (hε : 0 < ε) (hεπ : ε < Real.pi / 2) :
+    Continuous (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo a w₀ ε) := by
+  sorry
+
+/-- Both deformations fix every attached representative in the quotient. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_respects
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z}
+    (hz : a w₀ = some z) (γ : Path z z') (ε : ℝ) (hε : 0 < ε)
+    (harc : ∀ w : ι × Circle, w.1 = w₀.1 →
+      |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε →
+      (a w).isSome → w = w₀) :
+    ∀ t x y, apm_t97A03_invariants_aux_slide_GenRel a x y →
+      apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (t, x) = apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (t, y) ∧
+      apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo a w₀ ε (t, x) = apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo a w₀ ε (t, y) := by
+  classical
+  intro t x y h
+  cases h with
+  | att w y hy =>
+    by_cases hw : w = w₀
+    · subst w
+      have hyz : y = z := Option.some.inj (hy.symm.trans hz)
+      subst y
+      have he : (0 : ℝ) ≤ ε := le_of_lt hε
+      have he' : (0 : ℝ) ≤ 3 * ε / 4 := by positivity
+      have hq : (Quotient.mk _ (.inr w₀) :
+          Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a))) =
+          Quotient.mk _ (.inl z) :=
+        Quotient.sound (Relation.EqvGen.rel _ _ (.att w₀ z hz))
+      constructor
+      · simp [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne, apm_t97A03_invariants_aux_slide_aux_angle,
+          he, he', Path.extend_zero]
+      · simpa [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo, apm_t97A03_invariants_aux_slide_aux_angle] using hq
+    · have hout : ¬ (w.1 = w₀.1 ∧
+          |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε) := by
+        intro h
+        exact hw (harc w h.1 h.2 (by simp [hy]))
+      have hq : (Quotient.mk _ (.inr w) :
+          Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a))) =
+          Quotient.mk _ (.inl y) :=
+        Quotient.sound (Relation.EqvGen.rel _ _ (.att w y hy))
+      constructor <;> simpa [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne, apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo, hout] using hq
+
+
+/-- The two explicit stages meet at the pinched-circle map. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_seam
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z}
+    (hz : a w₀ = some z) (γ : Path z z') (ε : ℝ) (hε : 0 < ε)
+    (x : Sum Z (ι × Circle)) :
+    apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (1, x) = apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo a w₀ ε (0, x) := by
+  classical
+  cases x with
+  | inl y => rfl
+  | inr w =>
+    unfold apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo
+    dsimp only
+    split_ifs with h hinner
+    · have hm : max 0 (4 * |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| -
+          3 * ε) = 0 := max_eq_left (by linarith)
+      simp only [Set.Icc.coe_one, Set.Icc.coe_zero, sub_self, zero_mul,
+        Path.extend_zero, hm, mul_zero, sub_zero, one_mul, add_zero, Circle.exp_zero, mul_one]
+      have hw : (w.1, w₀.2) = w₀ := Prod.ext h.1 rfl
+      rw [hw]
+      exact (Quotient.sound (Relation.EqvGen.rel _ _ (.att w₀ z hz))).symm
+    · have hm : max 0 (4 * |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| -
+          3 * ε) = 4 * |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| -
+          3 * ε := max_eq_right (by linarith)
+      simp [hm]
+    · rfl
+
+
+/-- The second stage ends at the literal quotient map. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_finish
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a : ι × Circle → Option Z) (w₀ : ι × Circle) (ε : ℝ)
+    (x : Sum Z (ι × Circle)) :
+    apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo a w₀ ε (1, x) = Quotient.mk _ x := by
+  classical
+  cases x with
+  | inl y => rfl
+  | inr w =>
+    simp only [apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo, Set.Icc.coe_one, sub_self, zero_mul, one_mul, zero_add]
+    split_ifs
+    · rw [apm_t97A03_invariants_aux_slide_aux_angle, Circle.exp_arg]
+      simp
+    · rfl
+
+/-- Quotient descent into the space of paths avoids any product-quotient assumption. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_descend
+    {X Q : Type} [TopologicalSpace X] [TopologicalSpace Q]
+    (r : X → X → Prop) (H : unitInterval × X → Q) (hc : Continuous H)
+    (hr : ∀ t x y, r x y → H (t, x) = H (t, y)) :
+    ∃ F : C(Quotient (Relation.EqvGen.setoid r), C(unitInterval, Q)),
+      ∀ x t, F (Quotient.mk _ x) t = H (t, x) := by
+  let K : C(X, C(unitInterval, Q)) :=
+    ContinuousMap.curry ⟨fun p : X × unitInterval => H (p.2, p.1),
+      hc.comp continuous_swap⟩
+  refine ⟨⟨Quotient.lift K ?_, K.continuous.quotient_lift _⟩, ?_⟩
+  · intro x y h
+    induction h with
+    | rel x y h => ext t; exact hr t x y h
+    | refl x => rfl
+    | symm x y h ih => exact ih.symm
+    | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+  · intro x t
+    rfl
+
+/-- Evaluate the composite in the three radial ranges. In the middle range,
+the second detour's path parameter is `2 * (2 * |θ| - ε) / ε` on `γ.symm`,
+which is `3 - 4 * |θ| / ε` on `γ`. In the outer range the twice-stretched
+angle is `sign θ * (4 * |θ| - 3 * ε)`. All angles are smaller than `π`, so
+`Circle.arg_exp` applies without a winding correction. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a a' : ι × Circle → Option Z) (w₀ : ι × Circle) (hsame : ∀ w, w ≠ w₀ → a w = a' w)
+    (z z' : Z) (hz : a w₀ = some z) (hz' : a' w₀ = some z')
+    (γ : Path z z') (δ : Path z' z) (hδ : δ = γ.symm) (ε : ℝ) (hε : 0 < ε)
+    (hεπ : ε < Real.pi / 2)
+    (harc : ∀ w : ι × Circle, w.1 = w₀.1 →
+      |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → (a w).isSome → w = w₀)
+    (hresp : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε y)
+    (hcont : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε))
+    (hresp' : ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a' x y →
+      apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε x =
+        apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε y)
+    (hcont' : Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a w₀ δ ε)) :
+    ∀ x, apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne a w₀ γ ε (0, x) =
+      apm_t97A03_invariants_aux_slide_aux_detour a' a w₀ δ ε hresp' hcont'
+        (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x) := by
+  sorry
+
 /-- Going out along `γ` and back along `δ = γ.symm` is homotopic to the identity:
 first contract the inserted loop `γ.trans γ.symm` in `Z` (Path.Homotopy.reflTransSymm,
 with the arc's outer stretch held fixed), then shrink the constant inner region of
@@ -3572,7 +3767,44 @@ theorem apm_t97A03_invariants_aux_slide_aux_detour_comp
     ((apm_t97A03_invariants_aux_slide_aux_detour a' a w₀ δ ε hresp' hcont').comp
       (apm_t97A03_invariants_aux_slide_aux_detour a a' w₀ γ ε hresp hcont)).Homotopic
       (ContinuousMap.id _) := by
-  sorry
+  obtain ⟨F, hF⟩ := apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_descend _ _
+    (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageOne_continuous a w₀ hz γ ε hε hεπ)
+    (fun t x y h => (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_respects a w₀ hz γ ε hε harc t x y h).1)
+  obtain ⟨G, hG⟩ := apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_descend _ _
+    (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_stageTwo_continuous a w₀ ε hε hεπ)
+    (fun t x y h => (apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_respects a w₀ hz γ ε hε harc t x y h).2)
+  let mid : C(Quotient (Relation.EqvGen.setoid
+      (apm_t97A03_invariants_aux_slide_GenRel a)), _) :=
+    ⟨fun x => G x 0, G.continuous.eval continuous_const⟩
+  have h₁ : ((apm_t97A03_invariants_aux_slide_aux_detour a' a w₀ δ ε hresp' hcont').comp
+      (apm_t97A03_invariants_aux_slide_aux_detour a a' w₀ γ ε hresp hcont)).Homotopic mid := by
+    refine ⟨{ toFun := fun p => F p.2 p.1
+              continuous_toFun := (F.continuous.comp continuous_snd).eval continuous_fst
+              map_zero_left := ?_
+              map_one_left := ?_ }⟩
+    · intro x
+      refine Quotient.inductionOn x ?_
+      intro x
+      rw [hF]
+      exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_start a a' w₀ hsame z z' hz hz' γ δ hδ ε hε hεπ harc
+        hresp hcont hresp' hcont' x
+    · intro x
+      refine Quotient.inductionOn x ?_
+      intro x
+      change F (Quotient.mk _ x) 1 = G (Quotient.mk _ x) 0
+      rw [hF, hG]
+      exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_seam a w₀ hz γ ε hε x
+  apply h₁.trans
+  refine ⟨{ toFun := fun p => G p.2 p.1
+            continuous_toFun := (G.continuous.comp continuous_snd).eval continuous_fst
+            map_zero_left := fun _ => rfl
+            map_one_left := ?_ }⟩
+  intro x
+  refine Quotient.inductionOn x ?_
+  intro x
+  rw [hG]
+  exact apm_t97A03_invariants_aux_slide_aux_detour_comp_aux_finish a w₀ ε x
+
 
 /-- Assembly of the slide from the concrete detours. -/
 private theorem apm_t97A03_invariants_aux_slide_generic_aux_realize
