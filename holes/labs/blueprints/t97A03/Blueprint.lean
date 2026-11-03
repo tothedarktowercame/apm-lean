@@ -2865,11 +2865,59 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_perms
 literal circle sheets.  The parametrisation `q` records the corresponding
 homeomorphism from the standard circle (with marked points `1,-1`) to the
 base circle (with marked points `A,B`). -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_homeomorph
+    (A B : Circle) (hAB : A ≠ B) :
+    ∃ q : Circle ≃ₜ Circle, q 1 = A ∧
+      q apm_t97A03_circleNegOne = B := by
+  let S := apm_t97A03_circleOne
+  let T := apm_t97A03_circleNegOne
+  have hST : S ≠ T := by
+    intro h
+    have hv := congrArg Subtype.val h
+    norm_num [S, T, apm_t97A03_circleOne, apm_t97A03_circleNegOne] at hv
+  obtain ⟨q, hq, hqfirst, hqsecond⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste
+      S T hST Circle (apm_t97A03_circleArc A B)
+        (apm_t97A03_complementaryCircleArc A B)
+        (apm_t97A03_circleArc A B).continuous
+        (apm_t97A03_complementaryCircleArc A B).continuous
+        (by simp) (by simp)
+  have hqsurj : Function.Surjective q := by
+    intro z
+    obtain ⟨x, hx⟩ :=
+      apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
+        A B hAB z
+    rcases x with t | t
+    · exact ⟨apm_t97A03_circleArc S T t, by simpa [hqfirst] using hx⟩
+    · exact ⟨apm_t97A03_complementaryCircleArc S T t, by simpa [hqsecond] using hx⟩
+  have hqinj : Function.Injective q := by
+    intro x y hxy
+    obtain ⟨rx, hrx⟩ :=
+      apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
+        S T hST x
+    obtain ⟨ry, hry⟩ :=
+      apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
+        S T hST y
+    rw [← hrx, ← hry] at hxy ⊢
+    apply apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_fibres
+      A B hAB Circle (apm_t97A03_circleArc S T)
+        (apm_t97A03_complementaryCircleArc S T) (by simp) (by simp) rx ry
+    rcases rx with t | t <;> rcases ry with u | u <;>
+      simpa [hqfirst, hqsecond] using hxy
+  let e : Circle ≃ Circle := Equiv.ofBijective q ⟨hqinj, hqsurj⟩
+  have hec : Continuous e := hq
+  refine ⟨hec.homeoOfEquivCompactToT2, ?_, ?_⟩
+  · simpa [e, S] using hqfirst (0 : Set.Icc (0 : ℝ) 1)
+  · simpa [e, S, T] using hqfirst (1 : Set.Icc (0 : ℝ) 1)
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_normalized_aux_continuousEquiv
     (C : Circle) (hC : C ≠ 1) :
     ∃ e : Circle ≃ Circle, Continuous e ∧ e 1 = 1 ∧
       e apm_t97A03_circleNegOne = C := by
-  sorry
+  obtain ⟨e, he1, hen⟩ :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_homeomorph
+      1 C (Ne.symm hC)
+  exact ⟨e.toEquiv, e.continuous, he1, hen⟩
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_normalized
     (C : Circle) (hC : C ≠ 1) :
@@ -2884,19 +2932,9 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux
     (A B : Circle) (hAB : A ≠ B) :
     ∃ q : Circle ≃ₜ Circle,
       q 1 = A ∧ q apm_t97A03_circleNegOne = B := by
-  have hC : A⁻¹ * B ≠ (1 : Circle) := by
-    intro h
-    apply hAB
-    calc
-      A = A * 1 := by simp
-      _ = A * (A⁻¹ * B) := congrArg (A * ·) h.symm
-      _ = B := by simp
-  obtain ⟨e, he1, hen⟩ :=
-    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_normalized
-      (A⁻¹ * B) hC
-  refine ⟨e.trans (Homeomorph.mulLeft A), ?_, ?_⟩
-  · simpa using congrArg (A * ·) he1
-  · simpa [mul_assoc] using congrArg (A * ·) hen
+  exact
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_homeomorph
+      A B hAB
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts_aux_construct_aux_oneSheet
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
@@ -2911,7 +2949,51 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux
       c 1 = d.sphere i apm_t97A03_north ∧
       c apm_t97A03_circleNegOne =
         d.sphere (Equiv.swap 0 1 i) apm_t97A03_south := by
-  sorry
+  have hzero : d.first i 0 = d.second i 0 := by
+    rw [d.first_zero, d.second_zero]
+  have hone : d.first i 1 = d.second i 1 := by
+    rw [d.first_one, d.second_one, hfirst, hsecond]
+  obtain ⟨s, hs, hsfirst, hssecond⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste
+      A B (by
+        intro h
+        have := q.injective (hq1.trans (h.trans hqn.symm))
+        have hv := congrArg Subtype.val this
+        norm_num [apm_t97A03_circleNegOne] at hv)
+      Y (d.first i) (d.second i) (d.continuous_first i)
+        (d.continuous_second i) hzero hone
+  let c : Circle → Y := fun w ↦ s (q w)
+  refine ⟨c, hs.comp q.continuous, ?_, ?_, ?_⟩
+  · intro w
+    obtain ⟨x, hx⟩ :=
+      apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
+        A B (by
+          intro h
+          have := q.injective (hq1.trans (h.trans hqn.symm))
+          have hv := congrArg Subtype.val this
+          norm_num [apm_t97A03_circleNegOne] at hv) (q w)
+    rcases x with t | t
+    · change p (s (q w)) = apm_t97A03_baseCircle A B (q w)
+      rw [← hx, hsfirst, d.first_lifts]
+      rfl
+    · change p (s (q w)) = apm_t97A03_baseCircle A B (q w)
+      rw [← hx, hssecond, d.second_lifts]
+      rfl
+  · change s (q 1) = _
+    calc
+      s (q 1) = s A := congrArg s hq1
+      _ = s ((apm_t97A03_circleArc A B) 0) :=
+        congrArg s (apm_t97A03_circleArc A B).source.symm
+      _ = d.first i 0 := hsfirst 0
+      _ = d.sphere i apm_t97A03_north := d.first_zero i
+  · change s (q apm_t97A03_circleNegOne) = _
+    calc
+      s (q apm_t97A03_circleNegOne) = s B := congrArg s hqn
+      _ = s ((apm_t97A03_circleArc A B) 1) :=
+        congrArg s (apm_t97A03_circleArc A B).target.symm
+      _ = d.first i 1 := hsfirst 1
+      _ = d.sphere (d.firstPerm i) apm_t97A03_south := d.first_one i
+      _ = d.sphere (Equiv.swap 0 1 i) apm_t97A03_south := by rw [hfirst]
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts_aux_construct_aux_continuous
     {Y : Type} [TopologicalSpace Y] (c : Fin 2 → Circle → Y)
