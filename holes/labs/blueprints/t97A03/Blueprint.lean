@@ -8,6 +8,9 @@ import ConstructionTargets.PolygonCellPiOne
 import ConstructionTargets.PointWedgeVanKampen
 import ConstructionTargets.ThreeCirclesFundamentalGroup
 import ConstructionTargets.SphereHomology
+import ConstructionTargets.SimplyConnectedSphereProducts
+import ConstructionTargets.CoveringLiftRestriction
+import Mathlib.Geometry.Manifold.Instances.Sphere
 
 /-!
 # APM t97A03
@@ -1810,7 +1813,53 @@ theorem apm_t97A03_classify_aux_sheetData_aux_sphereTrivialization
       (∀ i z, p (sphere i z) = apm_t97A03_baseSphere A B z) ∧
       ∀ {y z}, p y = apm_t97A03_baseSphere A B z →
         ∃! i : Fin 2, sphere i z = y := by
-  sorry
+  letI : SimplyConnectedSpace apm_t97A03_S2 :=
+    ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected
+      2 (by norm_num)
+  letI : LocPathConnectedSpace apm_t97A03_S2 :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 2)) apm_t97A03_S2
+  let f : C(apm_t97A03_S2, apm_t97A03_BaseSpace A B) :=
+    ⟨apm_t97A03_baseSphere A B, apm_t97A03_continuous_baseSphere A B⟩
+  let L := ConstructionTargets.CoveringLiftRestriction.Lifts p f
+  let ev (z : apm_t97A03_S2) : L ≃ {y : Y // p y = f z} :=
+    ConstructionTargets.CoveringLiftRestriction.evaluationEquiv hp f z
+  obtain ⟨label⟩ := apm_t97A03_fiber_equiv_fin_two p hdegree (f apm_t97A03_north)
+  let lifts : Fin 2 → L := fun i ↦
+    (ev apm_t97A03_north).symm (label.symm i)
+  let sphere : Fin 2 → apm_t97A03_S2 → Y := fun i z ↦ (lifts i).1 z
+  refine ⟨sphere, ?_, ?_, ?_⟩
+  · rw [continuous_iff_continuousAt]
+    intro q
+    apply ContinuousAt.congr_of_eventuallyEq
+      ((lifts q.1).1.continuous.continuousAt.comp continuousAt_snd)
+    filter_upwards [continuousAt_fst.eventually
+      ((isOpen_discrete ({q.1} : Set (Fin 2))).mem_nhds (by simp))] with x hx
+    change x.1 = q.1 at hx
+    simp [sphere, hx]
+  · intro i z
+    exact congrFun (lifts i).2 z
+  · intro y z hy
+    let ly : L := (ev z).symm ⟨y, by simpa [f] using hy⟩
+    let i : Fin 2 := label ((ev apm_t97A03_north) ly)
+    have hli : lifts i = ly := by
+      apply (ev apm_t97A03_north).injective
+      simp [lifts, i]
+    refine ⟨i, ?_, ?_⟩
+    · change (lifts i).1 z = y
+      rw [hli]
+      exact congrArg Subtype.val ((ev z).apply_symm_apply ⟨y, by simpa [f] using hy⟩)
+    · intro j hj
+      have hlj : lifts j = ly := by
+        apply (ev z).injective
+        apply Subtype.ext
+        change (lifts j).1 z = ly.1 z
+        change (lifts j).1 z = y at hj
+        rw [hj]
+        exact (congrArg Subtype.val
+          ((ev z).apply_symm_apply ⟨y, by simpa [f] using hy⟩)).symm
+      have h := congrArg (fun l : L ↦ label ((ev apm_t97A03_north) l))
+        (hlj.trans hli.symm)
+      simpa [lifts] using h
 
 theorem apm_t97A03_classify_aux_sheetData_aux_arcEndpoints_aux_path
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
