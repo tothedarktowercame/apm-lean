@@ -4398,11 +4398,94 @@ theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contr
 circle zero and the two semicircles of circle one are three loops at that
 point.  Parametrising each closed semicircle modulo its endpoints gives the
 three circle summands, while the two sphere sheets give the sphere wedge. -/
+private noncomputable def
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw
+    (x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle)) : apm_t97A03_modelWedge :=
+  match x with
+  | .inl w =>
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_sphere w
+  | .inr (i, z) =>
+      if i = 0 then
+        if 0 ≤ z.1.im then apm_t97A03_modelWedgeBase
+        else
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg
+            0 (z ^ 2)
+      else if 0 ≤ z.1.im then
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg
+          1 (z ^ 2)
+      else
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg
+          2 (z ^ 2)
+
+private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous :
+    Continuous
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects
+    {x y : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle)}
+    (h : Relation.EqvGen
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel x y) :
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw x =
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw y := by
+  sorry
+
+private noncomputable def
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map :
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space →
+      apm_t97A03_modelWedge :=
+  Quotient.lift
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw
+    (fun _ _ h =>
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects h)
+
+private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map_continuous :
+    Continuous
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map := by
+  apply Continuous.quotient_lift
+  exact
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous
+
+private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map_surjective :
+    Function.Surjective
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel
+    {x y : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle)}
+    (h :
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw x =
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw y) :
+    Relation.EqvGen
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel x y := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map_injective :
+    Function.Injective
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map := by
+  rintro ⟨x⟩ ⟨y⟩ h
+  exact Quotient.sound
+    (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel h)
+
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv :
     ∃ e : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space ≃
         apm_t97A03_modelWedge,
       Continuous e := by
-  sorry
+  let f :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map
+  let e : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space ≃
+      apm_t97A03_modelWedge :=
+    Equiv.ofBijective f ⟨
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map_injective,
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map_surjective⟩
+  exact ⟨e,
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_map_continuous⟩
 
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_compact :
     CompactSpace
