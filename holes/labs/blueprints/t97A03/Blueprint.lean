@@ -4448,7 +4448,17 @@ private theorem
       (fun w : apm_t97A03_TwoSpheres ↦
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw
           (.inl w)) := by
-  sorry
+  simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw]
+  apply (continuous_quotientMap _ _).comp
+  apply continuous_inl.comp
+  apply (continuous_quotientMap _ _).comp
+  apply continuous_prod_of_discrete_left.mpr
+  intro i
+  fin_cases i
+  · simpa using (continuous_inl.comp continuous_id :
+      Continuous (fun z : apm_t97A03_S2 => (Sum.inl z : Sum apm_t97A03_S2 apm_t97A03_S2)))
+  · simpa using (continuous_inr.comp continuous_id :
+      Continuous (fun z : apm_t97A03_S2 => (Sum.inr z : Sum apm_t97A03_S2 apm_t97A03_S2)))
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle :
