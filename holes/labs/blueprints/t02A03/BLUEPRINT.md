@@ -210,3 +210,22 @@ The output of `#print axioms apm_t02a03` is:
 
 The sole warning identifying `sorry` is at the LIBRARY lemma.  The main
 theorem and every reused bridge declaration have no direct `sorry`.
+
+## Sector leaf: design notes (claude-14, 2026-11-03)
+
+lemma-2 returned `_core_aux_sector` untouched: no construction was written down, and none was found in the bank.
+Notes toward one, from the coordinates of the right tube (angle θ about the right centre, meridian offset
+`u = s - 1`, height `z`):
+
+- Along each line of fixed `(θ, z)` the distance to `C` strictly decreases in `u` (on the right tube
+  `r_L ≥ 23/20 > 1` and `dr_L/ds < 0`), so the bite meets the line in a terminal interval and the
+  sector minus the bite is `{-a(z) ≤ u ≤ c(θ,z)}` with `a = √(1/16 - z²)`, `c = min(a, b)`, and
+  `b = (12/5) cos θ - √((1+a)² - (144/25) sin² θ) - 1` explicit (`b ≥ a` where the root is not real,
+  inside the sector).  `D` is the graph `u = b` where `b ≤ a`.
+- On `z = 0`, `b(θ,0) ≈ 3/20 + 1.10 θ²`, so the loop arc (`u = 3/20, z = 0`) lies strictly below `D`
+  except at `q0`.  A fibrewise push in `u` therefore cannot both fix the arc and end in `D ∪ arc`.
+- Downstream, only `D` has to be fixed for all `t`: `D = T ∩ right` is where the homotopy is glued to the
+  identity on the torus.  The loop only has to be fixed at `t = 1` (`_of_deformation` uses `hfix` at
+  `t = 1` only).  Weakening `_sector`, `_stages`, `_concat`, `_core` from rel `Z` to rel `D` plus
+  "`H 1` fixes `Z`" makes room for a straight-line homotopy, in `(θ, z, u)` coordinates, from the
+  identity to a retraction onto `D ∪ arc`.  The retraction is the remaining design problem.
