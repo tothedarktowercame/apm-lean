@@ -8847,11 +8847,52 @@ private theorem
       (continuous_inr.comp (continuous_pow 2))
 
 private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary_aux_sq
+    (z : Circle) (hz : z.1.im = 0) : z ^ 2 = 1 := by
+  apply Subtype.ext
+  apply Complex.ext
+  · have hn : ‖z.1‖ ^ 2 = 1 := by
+      have hnorm : ‖z.1‖ = 1 := by simpa [Submonoid.unitSphere] using z.2
+      rw [hnorm]
+      norm_num
+    change (z.1 ^ 2).re = 1
+    simp only [pow_two, Complex.mul_re]
+    rw [Complex.sq_norm] at hn
+    simp only [Complex.normSq_apply] at hn
+    nlinarith
+  · change (z.1 ^ 2).im = 0
+    simp [pow_two, Complex.mul_im, hz]
+
+private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary_aux_three
+    (j : Fin 3) :
+      (match j with
+        | ⟨0, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld
+            (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoLeft 1)
+        | ⟨1, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld
+            (ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight 1)
+        | ⟨2, _⟩ => ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew 1) =
+        ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase := by
+  fin_cases j <;>
+    simp only [ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld,
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew,
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoLeft,
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight,
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase,
+      ConstructionTargets.StatementSurfaceModels.twoCirclesPoint]
+  · exact congrArg (fun q => quotientMap _ _ (.inl q))
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight_base
+  · exact ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew_base
+
+private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary
     (j : Fin 3) (z : Circle) (hz : z.1.im = 0) :
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2 j z =
         apm_t97A03_modelWedgeBase := by
-  sorry
+  unfold apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_leg2
+  rw [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary_aux_sq z hz,
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary_aux_three j]
+  exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
 
 private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle
@@ -8890,12 +8931,51 @@ private theorem
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle
 
 private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects_aux_generator_aux_sphere
+    (i : Fin 2) :
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw
+          (.inl (i, apm_t97A03_north)) = apm_t97A03_modelWedgeBase := by
+  fin_cases i <;>
+    simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw,
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_sphere,
+      apm_t97A03_modelWedgeBase, apm_t97A03_twoSphereBase, Fin.isValue,
+      Fin.zero_eta, ↓reduceIte, OfNat.ofNat_ne_zero]
+  · exact congrArg (fun q => quotientMap _ _ (.inl q))
+      (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
+
+private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects_aux_generator
     {x y : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle)}
     (h : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel x y) :
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw x =
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw y := by
-  sorry
+  cases h with
+  | c0a =>
+      simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw,
+        apm_t97A03_circleOne, Fin.isValue, ↓reduceIte, Complex.one_im, le_refl]
+      exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects_aux_generator_aux_sphere 0).symm
+  | c0b =>
+      simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw,
+        apm_t97A03_circleNegOne, Fin.isValue, ↓reduceIte, Complex.neg_im, Complex.one_im,
+        neg_zero, le_refl]
+      exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects_aux_generator_aux_sphere 1).symm
+  | c1a =>
+      simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw,
+        OfNat.ofNat_ne_zero, ↓reduceIte, apm_t97A03_circleOne, Complex.one_im, le_refl]
+      exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary 1 apm_t97A03_circleOne (by norm_num [apm_t97A03_circleOne])).trans
+        (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects_aux_generator_aux_sphere 1).symm
+  | c1b =>
+      simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw,
+        OfNat.ofNat_ne_zero, ↓reduceIte, apm_t97A03_circleNegOne, Complex.neg_im,
+        Complex.one_im, neg_zero, le_refl]
+      exact (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_continuous_aux_circle_aux_boundary 1 apm_t97A03_circleNegOne (by norm_num [apm_t97A03_circleNegOne])).trans
+        (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects_aux_generator_aux_sphere 0).symm
+  | arc z hz =>
+      have hb := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects_aux_generator_aux_sphere 0
+      change (if 0 ≤ z.1.im then apm_t97A03_modelWedgeBase else _) = _
+      change 0 ≤ z.1.im at hz
+      rw [if_pos hz]
+      exact hb.symm
 
 private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_respects
