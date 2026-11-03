@@ -2435,6 +2435,57 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_right (q : ℝ × ℝ × ℝ)
   exact ⟨apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube q hq,
     apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left q hq⟩
 
+lemma apm_t02a03_sector_aux_L2_aux_a_le (z : ℝ) : apm_t02a03_sector_aux_a z ≤ 1 / 4 := by
+  unfold apm_t02a03_sector_aux_a
+  rw [show (1 / 4 : ℝ) = Real.sqrt (1 / 16) by
+    rw [show (1 / 16 : ℝ) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]]
+  exact Real.sqrt_le_sqrt (by nlinarith [sq_nonneg z])
+
+lemma apm_t02a03_sector_aux_L2_aux_a_pos (z : ℝ) (hz : |z| ≤ 1 / 5) :
+    0 < apm_t02a03_sector_aux_a z := by
+  unfold apm_t02a03_sector_aux_a
+  apply Real.sqrt_pos.mpr
+  have : z ^ 2 ≤ (1 / 5) ^ 2 := by rw [← sq_abs]; exact pow_le_pow_left₀ (abs_nonneg z) hz 2
+  nlinarith
+
+/-- The fibre width `c + a` is positive on the box (claude-14). -/
+lemma apm_t02a03_sector_aux_L2_aux_cpa_pos (θ z : ℝ) (hz : |z| ≤ 1 / 5) :
+    0 < apm_t02a03_sector_aux_c θ z + apm_t02a03_sector_aux_a z := by
+  have ha := apm_t02a03_sector_aux_L2_aux_a_pos z hz
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le z
+  unfold apm_t02a03_sector_aux_c
+  split_ifs with hD
+  · obtain ⟨_, hcos⟩ := hD
+    set R := 1 + apm_t02a03_sector_aux_a z with hR
+    have hR0 : 0 < R := by linarith
+    have hc : 6 / (5 * R) ≤ Real.cos θ := hcos
+    have hc' : 72 / 25 ≤ (12 / 5) * Real.cos θ * R := by
+      rw [div_le_iff₀ (by positivity)] at hc; nlinarith
+    have hY : 0 < (12 / 5) * Real.cos θ + R - 2 := by nlinarith
+    unfold apm_t02a03_sector_aux_b
+    rw [← hR]
+    have hsq : Real.sqrt (R ^ 2 - (144 / 25) * Real.sin θ ^ 2) <
+        (12 / 5) * Real.cos θ + R - 2 := by
+      rw [Real.sqrt_lt' hY]
+      nlinarith [Real.sin_sq_add_cos_sq θ, Real.cos_le_one θ]
+    linarith
+  · linarith
+
+lemma apm_t02a03_sector_aux_L2_aux_u_ge (q : ℝ × ℝ × ℝ) (hq : apm_t02a03_sector_aux_box q) :
+    -apm_t02a03_sector_aux_a q.2.1 ≤ -apm_t02a03_sector_aux_a q.2.1 +
+        q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 + apm_t02a03_sector_aux_a q.2.1) := by
+  have hz : |q.2.1| ≤ 1 / 5 := abs_le.mpr ⟨by linarith [hq.2.1.1], hq.2.1.2⟩
+  have := apm_t02a03_sector_aux_L2_aux_cpa_pos q.1 q.2.1 hz
+  nlinarith [hq.2.2.1]
+
+lemma apm_t02a03_sector_aux_L2_aux_PsiInv_coords (q : ℝ × ℝ × ℝ) :
+    let u := -apm_t02a03_sector_aux_a q.2.1 +
+      q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 + apm_t02a03_sector_aux_a q.2.1)
+    apm_t02a03_sector_aux_PsiInv q 0 = 6 / 5 - (1 + u) * Real.cos q.1 ∧
+      apm_t02a03_sector_aux_PsiInv q 1 = (1 + u) * Real.sin q.1 ∧
+      apm_t02a03_sector_aux_PsiInv q 2 = q.2.1 := by
+  simp [apm_t02a03_sector_aux_PsiInv]
+
 lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_rad (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
@@ -2442,7 +2493,17 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_rad (q : ℝ × ℝ × ℝ)
       1 + (-apm_t02a03_sector_aux_a q.2.1 +
         q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
           apm_t02a03_sector_aux_a q.2.1)) := by
-  sorry
+  obtain ⟨h0, h1, -⟩ := apm_t02a03_sector_aux_L2_aux_PsiInv_coords q
+  have hu := apm_t02a03_sector_aux_L2_aux_u_ge q hq
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le q.2.1
+  set u := -apm_t02a03_sector_aux_a q.2.1 +
+    q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 + apm_t02a03_sector_aux_a q.2.1)
+  unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+  rw [h0, h1]
+  have : (6 / 5 - (1 + u) * Real.cos q.1 - 6 / 5) ^ 2 + ((1 + u) * Real.sin q.1) ^ 2 =
+      (1 + u) ^ 2 := by
+    have := Real.sin_sq_add_cos_sq q.1; nlinarith
+  rw [this, Real.sqrt_sq (by linarith)]
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_ratio (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
@@ -2450,7 +2511,14 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_ratio (q : ℝ × ℝ × ℝ)
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
         (apm_t02a03_sector_aux_PsiInv q) = Real.cos q.1 := by
   rw [apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_rad q hq]
-  sorry
+  obtain ⟨h0, -, -⟩ := apm_t02a03_sector_aux_L2_aux_PsiInv_coords q
+  have hu := apm_t02a03_sector_aux_L2_aux_u_ge q hq
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le q.2.1
+  set u := -apm_t02a03_sector_aux_a q.2.1 +
+    q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 + apm_t02a03_sector_aux_a q.2.1)
+  have hne : (1 : ℝ) + u ≠ 0 := by linarith
+  rw [h0, show (6 / 5 : ℝ) - (6 / 5 - (1 + u) * Real.cos q.1) = (1 + u) * Real.cos q.1 by ring,
+    mul_div_cancel_left₀ _ hne]
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_bound (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
