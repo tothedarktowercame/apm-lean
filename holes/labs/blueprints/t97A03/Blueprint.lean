@@ -2148,13 +2148,194 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
   refine ⟨s, hq.continuous_iff.mpr ?_, fun x ↦ congrFun hsq x⟩
   simpa [hsq] using hg
 
+lemma apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_exp_inj
+    {x y : ℝ} (hlo : -(2 * Real.pi) < x - y)
+    (hhi : x - y < 2 * Real.pi) (h : Circle.exp x = Circle.exp y) : x = y := by
+  obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h
+  have hm' : x - y = (m : ℝ) * (2 * Real.pi) := by linarith
+  have hml : (-1 : ℝ) < (m : ℝ) := by
+    nlinarith [Real.pi_pos]
+  have hmu : (m : ℝ) < 1 := by
+    nlinarith [Real.pi_pos]
+  have hml' : (-1 : ℤ) < m := by exact_mod_cast hml
+  have hmu' : m < (1 : ℤ) := by exact_mod_cast hmu
+  have : m = 0 := by omega
+  subst m
+  simpa using hm
+
+lemma apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cross
+    (A B : Circle) (hAB : A ≠ B) (t u : Set.Icc (0 : ℝ) 1)
+    (h : apm_t97A03_circleArc A B t =
+      apm_t97A03_complementaryCircleArc A B u) :
+    ((t : ℝ) = 0 ∧ (u : ℝ) = 0) ∨ ((t : ℝ) = 1 ∧ (u : ℝ) = 1) := by
+  have hab : Complex.arg A ≠ Complex.arg B := fun e ↦ hAB (Circle.injective_arg e)
+  have hAlo := Complex.neg_pi_lt_arg (A : ℂ)
+  have hAhi := Complex.arg_le_pi (A : ℂ)
+  have hBlo := Complex.neg_pi_lt_arg (B : ℂ)
+  have hBhi := Complex.arg_le_pi (B : ℂ)
+  have he : Circle.exp
+        ((1 - (t : ℝ)) * Complex.arg A + (t : ℝ) * Complex.arg B) =
+      Circle.exp ((1 - (u : ℝ)) * Complex.arg A +
+        (u : ℝ) * (Complex.arg B + apm_t97A03_arcShift A B)) := by
+    simpa [apm_t97A03_circleArc, apm_t97A03_complementaryCircleArc, Path.ofLine] using h
+  unfold apm_t97A03_arcShift at he
+  split_ifs at he with hlt
+  · obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp he
+    have hm' :
+        ((1 - (t : ℝ)) * Complex.arg A + (t : ℝ) * Complex.arg B) -
+          ((1 - (u : ℝ)) * Complex.arg A +
+            (u : ℝ) * (Complex.arg B - 2 * Real.pi)) =
+          (m : ℝ) * (2 * Real.pi) := by linarith
+    have hm0 : (0 : ℝ) ≤ (m : ℝ) := by
+      nlinarith [t.property.1, t.property.2, u.property.1, u.property.2, Real.pi_pos]
+    have hm1 : (m : ℝ) ≤ 1 := by
+      nlinarith [t.property.1, t.property.2, u.property.1, u.property.2, Real.pi_pos]
+    have hm0' : (0 : ℤ) ≤ m := by exact_mod_cast hm0
+    have hm1' : m ≤ (1 : ℤ) := by exact_mod_cast hm1
+    have hm_cases : m = 0 ∨ m = 1 := by omega
+    rcases hm_cases with rfl | rfl
+    · left
+      simp only [Int.cast_zero, zero_mul] at hm'
+      constructor <;> nlinarith [t.property.1, u.property.1, Real.pi_pos]
+    · right
+      simp only [Int.cast_one, one_mul] at hm'
+      constructor <;> nlinarith [t.property.2, u.property.2, Real.pi_pos]
+  · have hba : Complex.arg B < Complex.arg A := lt_of_le_of_ne (le_of_not_gt hlt) hab.symm
+    obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp he
+    have hm' :
+        ((1 - (t : ℝ)) * Complex.arg A + (t : ℝ) * Complex.arg B) -
+          ((1 - (u : ℝ)) * Complex.arg A +
+            (u : ℝ) * (Complex.arg B + 2 * Real.pi)) =
+          (m : ℝ) * (2 * Real.pi) := by linarith
+    have hm0 : (-1 : ℝ) ≤ (m : ℝ) := by
+      nlinarith [t.property.1, t.property.2, u.property.1, u.property.2, Real.pi_pos]
+    have hm1 : (m : ℝ) ≤ 0 := by
+      nlinarith [t.property.1, t.property.2, u.property.1, u.property.2, Real.pi_pos]
+    have hm0' : (-1 : ℤ) ≤ m := by exact_mod_cast hm0
+    have hm1' : m ≤ (0 : ℤ) := by exact_mod_cast hm1
+    have hm_cases : m = -1 ∨ m = 0 := by omega
+    rcases hm_cases with rfl | rfl
+    · right
+      norm_num at hm'
+      constructor <;> nlinarith [t.property.2, u.property.2, Real.pi_pos]
+    · left
+      simp only [Int.cast_zero, zero_mul] at hm'
+      constructor <;> nlinarith [t.property.1, u.property.1, Real.pi_pos]
+
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
     (A B : Circle) (hAB : A ≠ B) :
     Function.Surjective (fun x : Sum (Set.Icc (0 : ℝ) 1) (Set.Icc (0 : ℝ) 1) ↦
       match x with
       | .inl t => apm_t97A03_circleArc A B t
       | .inr t => apm_t97A03_complementaryCircleArc A B t) := by
-  sorry
+  intro z
+  have hab : Complex.arg A ≠ Complex.arg B := fun e ↦ hAB (Circle.injective_arg e)
+  have hAlo := Complex.neg_pi_lt_arg (A : ℂ)
+  have hAhi := Complex.arg_le_pi (A : ℂ)
+  have hBlo := Complex.neg_pi_lt_arg (B : ℂ)
+  have hBhi := Complex.arg_le_pi (B : ℂ)
+  have hzlo := Complex.neg_pi_lt_arg (z : ℂ)
+  have hzhi := Complex.arg_le_pi (z : ℂ)
+  by_cases hlt : Complex.arg A < Complex.arg B
+  · by_cases haz : Complex.arg A ≤ Complex.arg z
+    · by_cases hzb : Complex.arg z ≤ Complex.arg B
+      · let t : Set.Icc (0 : ℝ) 1 := ⟨(Complex.arg z - Complex.arg A) /
+            (Complex.arg B - Complex.arg A), by
+              constructor
+              · exact div_nonneg (sub_nonneg.mpr haz) (sub_nonneg.mpr hlt.le)
+              · exact (div_le_one (sub_pos.mpr hlt)).2 (by linarith)⟩
+        refine ⟨.inl t, ?_⟩
+        change apm_t97A03_circleArc A B t = z
+        rw [← Circle.exp_arg z]
+        apply congrArg Circle.exp
+        dsimp [apm_t97A03_circleArc, Path.ofLine, t]
+        field_simp [sub_ne_zero.mpr hab.symm]
+        ring
+      · have hbz : Complex.arg B < Complex.arg z := lt_of_not_ge hzb
+        have hden : 0 < Complex.arg A - Complex.arg B + 2 * Real.pi := by nlinarith
+        let t : Set.Icc (0 : ℝ) 1 := ⟨(Complex.arg A - (Complex.arg z - 2 * Real.pi)) /
+              (Complex.arg A - Complex.arg B + 2 * Real.pi), by
+                constructor
+                · exact div_nonneg (by nlinarith) hden.le
+                · exact (div_le_one hden).2 (by nlinarith)⟩
+        refine ⟨.inr t, ?_⟩
+        change apm_t97A03_complementaryCircleArc A B t = z
+        rw [show apm_t97A03_complementaryCircleArc A B t = Circle.exp (Complex.arg z - 2 * Real.pi) by
+          apply congrArg Circle.exp
+          change (1 - (t : ℝ)) * Complex.arg A +
+            (t : ℝ) * (Complex.arg B + apm_t97A03_arcShift A B) = _
+          dsimp [t, apm_t97A03_arcShift]
+          rw [if_pos hlt]
+          field_simp [ne_of_gt hden]
+          ring]
+        rw [Circle.exp_sub_two_pi, Circle.exp_arg]
+    · have hza : Complex.arg z < Complex.arg A := lt_of_not_ge haz
+      have hden : 0 < Complex.arg A - Complex.arg B + 2 * Real.pi := by nlinarith
+      let t : Set.Icc (0 : ℝ) 1 := ⟨(Complex.arg A - Complex.arg z) /
+            (Complex.arg A - Complex.arg B + 2 * Real.pi), by
+              constructor
+              · exact div_nonneg (sub_nonneg.mpr hza.le) hden.le
+              · exact (div_le_one hden).2 (by nlinarith)⟩
+      refine ⟨.inr t, ?_⟩
+      change apm_t97A03_complementaryCircleArc A B t = z
+      rw [← Circle.exp_arg z]
+      apply congrArg Circle.exp
+      change (1 - (t : ℝ)) * Complex.arg A +
+        (t : ℝ) * (Complex.arg B + apm_t97A03_arcShift A B) = _
+      dsimp [t, apm_t97A03_arcShift]
+      rw [if_pos hlt]
+      field_simp [ne_of_gt hden]
+      ring
+  · have hba : Complex.arg B < Complex.arg A := lt_of_le_of_ne (le_of_not_gt hlt) hab.symm
+    by_cases hbz : Complex.arg B ≤ Complex.arg z
+    · by_cases hza : Complex.arg z ≤ Complex.arg A
+      · let t : Set.Icc (0 : ℝ) 1 := ⟨(Complex.arg A - Complex.arg z) /
+            (Complex.arg A - Complex.arg B), by
+              constructor
+              · exact div_nonneg (sub_nonneg.mpr hza) (sub_nonneg.mpr hba.le)
+              · exact (div_le_one (sub_pos.mpr hba)).2 (by linarith)⟩
+        refine ⟨.inl t, ?_⟩
+        change apm_t97A03_circleArc A B t = z
+        rw [← Circle.exp_arg z]
+        apply congrArg Circle.exp
+        dsimp [apm_t97A03_circleArc, Path.ofLine, t]
+        field_simp [sub_ne_zero.mpr hab]
+        ring
+      · have haz : Complex.arg A < Complex.arg z := lt_of_not_ge hza
+        have hden : 0 < Complex.arg B - Complex.arg A + 2 * Real.pi := by nlinarith
+        let t : Set.Icc (0 : ℝ) 1 := ⟨(Complex.arg z - Complex.arg A) /
+              (Complex.arg B - Complex.arg A + 2 * Real.pi), by
+                constructor
+                · exact div_nonneg (sub_nonneg.mpr haz.le) hden.le
+                · exact (div_le_one hden).2 (by nlinarith)⟩
+        refine ⟨.inr t, ?_⟩
+        change apm_t97A03_complementaryCircleArc A B t = z
+        rw [← Circle.exp_arg z]
+        apply congrArg Circle.exp
+        change (1 - (t : ℝ)) * Complex.arg A +
+          (t : ℝ) * (Complex.arg B + apm_t97A03_arcShift A B) = _
+        dsimp [t, apm_t97A03_arcShift]
+        rw [if_neg hlt]
+        field_simp [ne_of_gt hden]
+        ring
+    · have hzb : Complex.arg z < Complex.arg B := lt_of_not_ge hbz
+      have hden : 0 < Complex.arg B - Complex.arg A + 2 * Real.pi := by nlinarith
+      let t : Set.Icc (0 : ℝ) 1 := ⟨(Complex.arg z + 2 * Real.pi - Complex.arg A) /
+            (Complex.arg B - Complex.arg A + 2 * Real.pi), by
+              constructor
+              · exact div_nonneg (by nlinarith) hden.le
+              · exact (div_le_one hden).2 (by nlinarith)⟩
+      refine ⟨.inr t, ?_⟩
+      change apm_t97A03_complementaryCircleArc A B t = z
+      rw [show apm_t97A03_complementaryCircleArc A B t = Circle.exp (Complex.arg z + 2 * Real.pi) by
+        apply congrArg Circle.exp
+        change (1 - (t : ℝ)) * Complex.arg A +
+          (t : ℝ) * (Complex.arg B + apm_t97A03_arcShift A B) = _
+        dsimp [t, apm_t97A03_arcShift]
+        rw [if_neg hlt]
+        field_simp [ne_of_gt hden]
+        ring]
+      rw [Circle.exp_add_two_pi, Circle.exp_arg]
 
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_fibres
     (A B : Circle) (hAB : A ≠ B)
@@ -2170,7 +2351,100 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
         | .inr t => apm_t97A03_complementaryCircleArc A B t) →
       (match x with | .inl t => first t | .inr t => second t) =
       (match y with | .inl t => first t | .inr t => second t) := by
-  sorry
+  have hab : Complex.arg A ≠ Complex.arg B := by
+    intro h
+    apply hAB
+    exact Circle.injective_arg h
+  have hargAlo := Complex.neg_pi_lt_arg (A : ℂ)
+  have hargAhi := Complex.arg_le_pi (A : ℂ)
+  have hargBlo := Complex.neg_pi_lt_arg (B : ℂ)
+  have hargBhi := Complex.arg_le_pi (B : ℂ)
+  rintro (t | t) (u | u) h
+  · change first t = first u
+    congr 1
+    apply Subtype.ext
+    have he : Circle.exp
+          ((1 - (t : ℝ)) * Complex.arg A + (t : ℝ) * Complex.arg B) =
+        Circle.exp ((1 - (u : ℝ)) * Complex.arg A + (u : ℝ) * Complex.arg B) := by
+      simpa [apm_t97A03_circleArc, Path.ofLine] using h
+    have hei :
+        (1 - (t : ℝ)) * Complex.arg A + (t : ℝ) * Complex.arg B =
+          (1 - (u : ℝ)) * Complex.arg A + (u : ℝ) * Complex.arg B := by
+      rcases le_total (t : ℝ) u with htu | hut
+      · apply apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_exp_inj
+            (h := he) <;>
+          nlinarith [t.property.1, t.property.2, u.property.1, u.property.2,
+            mul_nonneg (sub_nonneg.mpr htu) (sub_nonneg.mpr (le_of_lt hargBlo)),
+            mul_nonneg (sub_nonneg.mpr htu) (sub_nonneg.mpr hargAhi)]
+      · apply apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_exp_inj
+            (h := he) <;>
+          nlinarith [t.property.1, t.property.2, u.property.1, u.property.2,
+            mul_nonneg (sub_nonneg.mpr hut) (sub_nonneg.mpr (le_of_lt hargAlo)),
+            mul_nonneg (sub_nonneg.mpr hut) (sub_nonneg.mpr hargBhi)]
+    have hz : ((t : ℝ) - (u : ℝ)) * (Complex.arg B - Complex.arg A) = 0 := by
+      nlinarith [hei]
+    rcases mul_eq_zero.mp hz with htu | hba
+    · linarith
+    · exact (hab (sub_eq_zero.mp hba).symm).elim
+  · change first t = second u
+    rcases apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cross
+        A B hAB t u h with ⟨ht, hu⟩ | ⟨ht, hu⟩
+    · have ht' : t = 0 := by apply Subtype.ext; exact ht
+      have hu' : u = 0 := by apply Subtype.ext; exact hu
+      simpa [ht', hu'] using hzero
+    · have ht' : t = 1 := by apply Subtype.ext; exact ht
+      have hu' : u = 1 := by apply Subtype.ext; exact hu
+      simpa [ht', hu'] using hone
+  · change second t = first u
+    rcases apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cross
+        A B hAB u t h.symm with ⟨hu, ht⟩ | ⟨hu, ht⟩
+    · have ht' : t = 0 := by apply Subtype.ext; exact ht
+      have hu' : u = 0 := by apply Subtype.ext; exact hu
+      simpa [ht', hu'] using hzero.symm
+    · have ht' : t = 1 := by apply Subtype.ext; exact ht
+      have hu' : u = 1 := by apply Subtype.ext; exact hu
+      simpa [ht', hu'] using hone.symm
+  · change second t = second u
+    congr 1
+    apply Subtype.ext
+    have hdelta : Complex.arg B + apm_t97A03_arcShift A B ≠ Complex.arg A := by
+      unfold apm_t97A03_arcShift
+      split_ifs with hlt <;> nlinarith [Real.pi_pos]
+    have he : Circle.exp
+          ((1 - (t : ℝ)) * Complex.arg A +
+            (t : ℝ) * (Complex.arg B + apm_t97A03_arcShift A B)) =
+        Circle.exp ((1 - (u : ℝ)) * Complex.arg A +
+            (u : ℝ) * (Complex.arg B + apm_t97A03_arcShift A B)) := by
+      simpa [apm_t97A03_complementaryCircleArc, Path.ofLine] using h
+    simp only [apm_t97A03_arcShift] at he hdelta
+    split_ifs at he hdelta ⊢ with hlt
+    · have hei :=
+        apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_exp_inj
+          (x := (1 - (t : ℝ)) * Complex.arg A +
+            (t : ℝ) * (Complex.arg B - 2 * Real.pi))
+          (y := (1 - (u : ℝ)) * Complex.arg A +
+            (u : ℝ) * (Complex.arg B - 2 * Real.pi))
+          (by nlinarith [t.property.1, t.property.2, u.property.1, u.property.2])
+          (by nlinarith [t.property.1, t.property.2, u.property.1, u.property.2]) (by simpa using he)
+      have hz : ((t : ℝ) - (u : ℝ)) *
+          (Complex.arg B - 2 * Real.pi - Complex.arg A) = 0 := by nlinarith [hei]
+      rcases mul_eq_zero.mp hz with htu | hd
+      · linarith
+      · exact (hdelta (by linarith)).elim
+    · have hba : Complex.arg B < Complex.arg A := lt_of_le_of_ne (le_of_not_gt hlt) hab.symm
+      have hei :=
+        apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_exp_inj
+          (x := (1 - (t : ℝ)) * Complex.arg A +
+            (t : ℝ) * (Complex.arg B + 2 * Real.pi))
+          (y := (1 - (u : ℝ)) * Complex.arg A +
+            (u : ℝ) * (Complex.arg B + 2 * Real.pi))
+          (by nlinarith [t.property.1, t.property.2, u.property.1, u.property.2])
+          (by nlinarith [t.property.1, t.property.2, u.property.1, u.property.2]) (by simpa using he)
+      have hz : ((t : ℝ) - (u : ℝ)) *
+          (Complex.arg B + 2 * Real.pi - Complex.arg A) = 0 := by nlinarith [hei]
+      rcases mul_eq_zero.mp hz with htu | hd
+      · linarith
+      · exact (hdelta (by linarith)).elim
 
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste
     (A B : Circle) (hAB : A ≠ B)
