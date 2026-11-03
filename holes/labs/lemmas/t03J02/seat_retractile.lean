@@ -220,9 +220,31 @@ structure apm_t03J02_Retractile (j : C(Circle, apm_t03J02_Torus)) where
 /-- Tietze extends the inverse of `j` to a map to `ℂ`; normalising gives a retraction `k` of an
 open `N` onto the circle.  Straight lines in the flat torus join `x` to `k x` when they are close;
 cut off with a function of the distance to the circle. -/
+private theorem apm_t03J02_exists_retractile_aux_construct
+    (j : C(Circle, apm_t03J02_Torus)) (hj : Topology.IsEmbedding j) :
+    ∃ (H : C(apm_t03J02_Torus × I, apm_t03J02_Torus))
+      (β : C(apm_t03J02_Torus, ℝ)),
+      (∀ x, H (x, 0) = x) ∧
+      (∀ z t, H (j z, t) = j z) ∧
+      (∀ x, 0 ≤ β x) ∧
+      (∀ x, β x ≤ 1) ∧
+      (∀ z, β (j z) = 0) ∧
+      (∀ x, β x < 1 → H (x, 1) ∈ Set.range j) := by
+  sorry
+
 theorem apm_t03J02_exists_retractile (j : C(Circle, apm_t03J02_Torus))
     (hj : Topology.IsEmbedding j) : Nonempty (apm_t03J02_Retractile j) := by
-  sorry
+  obtain ⟨H, β, hzero, hfix, hnonneg, hle, hβfix, hone⟩ :=
+    apm_t03J02_exists_retractile_aux_construct j hj
+  exact ⟨{
+    H := H
+    β := β
+    H_zero := hzero
+    H_fix := hfix
+    β_nonneg := hnonneg
+    β_le_one := hle
+    β_fix := hβfix
+    H_one := hone }⟩
 
 section Glued
 variable (j₁ j₂ : C(Circle, apm_t03J02_Torus))
