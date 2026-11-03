@@ -2392,6 +2392,28 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_perms
 literal circle sheets.  The parametrisation `q` records the corresponding
 homeomorphism from the standard circle (with marked points `1,-1`) to the
 base circle (with marked points `A,B`). -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle
+    (A B : Circle) (hAB : A ≠ B) :
+    ∃ q : Circle ≃ₜ Circle,
+      q 1 = A ∧ q apm_t97A03_circleNegOne = B := by
+  sorry
+
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.swap 0 1)
+    (hsecond : d.secondPerm = Equiv.swap 0 1)
+    (q : Circle ≃ₜ Circle) (hq1 : q 1 = A)
+    (hqn : q apm_t97A03_circleNegOne = B) :
+    ∃ c : Fin 2 → Circle → Y,
+      Continuous (fun w : Fin 2 × Circle ↦ c w.1 w.2) ∧
+      (∀ i w, p (c i w) = apm_t97A03_baseCircle A B (q w)) ∧
+      (∀ i, c i 1 = d.sphere i apm_t97A03_north) ∧
+      (∀ i, c i apm_t97A03_circleNegOne =
+        d.sphere (Equiv.swap 0 1 i) apm_t97A03_south) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
@@ -2406,7 +2428,13 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux
       (∀ i, c i 1 = d.sphere i apm_t97A03_north) ∧
       (∀ i, c i apm_t97A03_circleNegOne =
         d.sphere (Equiv.swap 0 1 i) apm_t97A03_south) := by
-  sorry
+  obtain ⟨q, hq1, hqn⟩ :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle
+      A B hAB
+  obtain ⟨c, hc, hlift, hn, hs⟩ :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts
+      A B Y p d hfirst hsecond q hq1 hqn
+  exact ⟨q, c, hq1, hqn, hc, hlift, hn, hs⟩
 
 /-- A pair of continuous lifts of a circle parametrisation which starts at
 the two different north-pole sheets exhausts every fibre.  This is covering
