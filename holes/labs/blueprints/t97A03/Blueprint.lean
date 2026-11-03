@@ -2736,11 +2736,47 @@ theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contr
 the two north points.  The other three quarter arcs are the three loop legs,
 so the quotient is homeomorphic to the fixed wedge of two spheres and three
 circles. -/
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv :
+    ∃ e :
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space ≃
+          apm_t97A03_modelWedge,
+      Continuous e := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2 :
+    T2Space apm_t97A03_modelWedge := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_compact :
+    CompactSpace
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space := by
+  let q : Sum apm_t97A03_TwoSpheres Circle →
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space :=
+    fun x ↦ Quotient.mk _ x
+  have hq : Function.Surjective q := Quotient.mk_surjective
+  have hcomp : IsCompact
+      (Set.univ : Set
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space) := by
+    rw [← Set.range_eq_univ.mpr hq]
+    have h := isCompact_univ.image (continuous_coinduced_rng : Continuous q)
+    rwa [Set.image_univ] at h
+  exact isCompact_univ_iff.mp hcomp
+
 theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm :
     Nonempty
       (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space ≃ₜ
         apm_t97A03_modelWedge) := by
-  sorry
+  letI : T2Space apm_t97A03_modelWedge :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2
+  letI : CompactSpace
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_compact
+  obtain ⟨e, he⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv
+  exact ⟨Continuous.homeoOfEquivCompactToT2 (f := e) he⟩
 
 theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse :
     Nonempty (ContinuousMap.HomotopyEquiv
