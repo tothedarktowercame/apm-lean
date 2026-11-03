@@ -2071,6 +2071,19 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
       (d.sphere_lifts (d.secondPerm i) apm_t97A03_north)
     exact (hjunique _ rfl).trans (hjunique _ hsphere.symm).symm
 
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hperms : d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.refl _) :
+    ∃ s : Circle → Y,
+      Continuous s ∧
+      (∀ z, p (s z) = apm_t97A03_baseCircle A B z) ∧
+      s A = d.sphere 0 apm_t97A03_north ∧
+      s B = d.sphere 0 apm_t97A03_south := by
+  sorry
+
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
@@ -2079,7 +2092,38 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
     (hperms : d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.refl _) :
     ∃ σ : apm_t97A03_BaseSpace A B → Y,
       Continuous σ ∧ Function.RightInverse σ p := by
-  sorry
+  obtain ⟨s, hscont, hslift, hsA, hsB⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle
+      A B hAB Y p d hperms
+  let f : Sum Circle apm_t97A03_S2 → Y := fun x ↦
+    match x with
+    | Sum.inl z => s z
+    | Sum.inr z => d.sphere 0 z
+  have hfrel : ∀ x y, apm_t97A03_BaseRel A B x y → f x = f y := by
+    intro x y hxy
+    cases hxy with
+    | north => exact hsA
+    | south => exact hsB
+  have hfeqv : ∀ x y, Relation.EqvGen (apm_t97A03_BaseRel A B) x y →
+      f x = f y := by
+    intro x y hxy
+    exact Relation.EqvGen.rec
+      hfrel
+      (fun _ => rfl)
+      (fun _ _ _ ih => ih.symm)
+      (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂)
+      hxy
+  let σ : apm_t97A03_BaseSpace A B → Y := Quotient.lift f hfeqv
+  refine ⟨σ, ?_, ?_⟩
+  · apply continuous_coinduced_dom.mpr
+    apply continuous_sum_dom.mpr
+    exact ⟨hscont,
+      d.continuous_sphere.comp (continuous_const.prodMk continuous_id)⟩
+  · intro x
+    refine Quotient.inductionOn x ?_
+    rintro (z | z)
+    · exact hslift z
+    · exact d.sphere_lifts 0 z
 
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_contra
     (A B : Circle) (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
