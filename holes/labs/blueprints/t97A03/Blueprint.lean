@@ -4223,12 +4223,61 @@ theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_respects
 
 /-- Continuity of the detour: the pieces agree at `|θ| = ε/2` (because `w₀` is
 glued to `z'` in the target) and at `|θ| = ε`; the arc avoids the cut of `arg`. -/
+theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_angle
+    (c₀ : Circle) :
+    ContinuousOn (apm_t97A03_invariants_aux_slide_aux_angle c₀)
+      {c : Circle | |apm_t97A03_invariants_aux_slide_aux_angle c₀ c| ≤ Real.pi / 2} := by
+  intro c hc
+  apply (Complex.continuousAt_arg ?_).comp_continuousWithinAt
+    ((continuous_subtype_val.comp (continuous_const.mul continuous_id)).continuousWithinAt)
+  rw [Complex.mem_slitPlane_iff]
+  have hre : 0 ≤ (((c₀⁻¹ * c : Circle) : ℂ)).re :=
+    Complex.abs_arg_le_pi_div_two_iff.mp hc
+  have hne : ((c₀⁻¹ * c : Circle) : ℂ) ≠ 0 := Circle.coe_ne_zero _
+  rcases lt_or_eq_of_le hre with hre | hre
+  · exact Or.inl hre
+  · exact Or.inr (by
+    intro him
+    apply hne
+    exact Complex.ext hre.symm him)
+
+theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_inactive
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a' : ι × Circle → Option Z) (w₀ : ι × Circle) {z z' : Z} (i : ι) (hi : i ≠ w₀.1)
+    ( γ : Path z z') ( ε : ℝ) :
+    Continuous (fun c ↦ apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε (.inr (i, c))) := by
+  simpa only [apm_t97A03_invariants_aux_slide_aux_detourRaw, hi, false_and, if_false] using
+    (continuous_coinduced_rng.comp (continuous_inr.comp (continuous_const.prodMk continuous_id)))
+
+theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_active
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a' : ι × Circle → Option Z) (w₀ : ι × Circle) (z z' : Z) (hz' : a' w₀ = some z')
+    (γ : Path z z') (ε : ℝ) (hε : 0 < ε) (hεπ : ε < Real.pi / 2)
+    (hangle : ContinuousOn (apm_t97A03_invariants_aux_slide_aux_angle w₀.2)
+      {c : Circle | |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 c| ≤ Real.pi / 2}) :
+    Continuous (fun c ↦ apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε (.inr (w₀.1, c))) := by
+  sorry
+
 theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous
     {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
     (a' : ι × Circle → Option Z) (w₀ : ι × Circle) (z z' : Z) (hz' : a' w₀ = some z')
     (γ : Path z z') (ε : ℝ) (hε : 0 < ε) (hεπ : ε < Real.pi / 2) :
     Continuous (apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε) := by
-  sorry
+  apply continuous_sum_dom.mpr
+  constructor
+  · show Continuous (fun y : Z ↦
+      (_root_.Quotient.mk _ (.inl y) : _root_.Quotient
+        (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a'))))
+    exact continuous_coinduced_rng.comp continuous_inl
+  · rw [continuous_prod_of_discrete_left]
+    intro i
+    by_cases hi : i = w₀.1
+    · subst i
+      exact apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_active
+        a' w₀ z z' hz' γ ε hε hεπ
+        (apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_angle w₀.2)
+    · exact apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_inactive
+        a' w₀ i hi γ ε
 
 /-- The descended detour. -/
 noncomputable def apm_t97A03_invariants_aux_slide_aux_detour
