@@ -2810,13 +2810,48 @@ lemma apm_t02a03_sector_aux_L6c_r_fixes_target_aux_torus (q : ℝ × ℝ × ℝ)
     (hbox : apm_t02a03_sector_aux_box q)
     (hq : q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1)) :
     apm_t02a03_sector_aux_r q = q := by
-  sorry
+  obtain ⟨θ, z, v⟩ := q
+  obtain ⟨hv, hD⟩ := hq
+  simp only at hv hD
+  subst hv
+  have hfix : apm_t02a03_sector_aux_piDelta (θ, z) = (θ, z) :=
+    apm_t02a03_sector_aux_L5_piDelta_aux_fix (θ, z) hbox.1 hD
+  have hdD : apm_t02a03_sector_aux_deltaD (θ, z, 1) = 0 := by
+    simp [apm_t02a03_sector_aux_deltaD, hfix]
+  by_cases harc : apm_t02a03_sector_aux_deltaArc (θ, z, 1) = 0
+  · -- on the arc as well: z = 0 and vArc θ = 1; λ = 0/0 = 0
+    have hl : apm_t02a03_sector_aux_lambda (θ, z, 1) = 0 := by
+      simp [apm_t02a03_sector_aux_lambda, harc, hdD]
+    have hz : z = 0 ∧ 1 = apm_t02a03_sector_aux_vArc θ := by
+      simp only [apm_t02a03_sector_aux_deltaArc] at harc
+      have h1 := abs_nonneg z
+      have h2 := abs_nonneg (1 - apm_t02a03_sector_aux_vArc θ)
+      constructor
+      · exact abs_eq_zero.mp (by linarith)
+      · have : |1 - apm_t02a03_sector_aux_vArc θ| = 0 := by linarith
+        linarith [abs_eq_zero.mp this]
+    obtain ⟨rfl, hva⟩ := hz
+    simp only [apm_t02a03_sector_aux_r, hl]
+    norm_num [← hva]
+  · have hl : apm_t02a03_sector_aux_lambda (θ, z, 1) = 1 := by
+      simp [apm_t02a03_sector_aux_lambda, hdD, harc]
+    simp only [apm_t02a03_sector_aux_r, hl]
+    norm_num [hfix]
 
 lemma apm_t02a03_sector_aux_L6c_r_fixes_target_aux_arc (q : ℝ × ℝ × ℝ)
     (hbox : apm_t02a03_sector_aux_box q)
     (hq : q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1) :
     apm_t02a03_sector_aux_r q = q := by
-  sorry
+  obtain ⟨θ, z, v⟩ := q
+  obtain ⟨hz, hv⟩ := hq
+  simp only at hz hv
+  subst hz; subst hv
+  have harc : apm_t02a03_sector_aux_deltaArc (θ, 0, apm_t02a03_sector_aux_vArc θ) = 0 := by
+    simp [apm_t02a03_sector_aux_deltaArc]
+  have hl : apm_t02a03_sector_aux_lambda (θ, 0, apm_t02a03_sector_aux_vArc θ) = 0 := by
+    simp [apm_t02a03_sector_aux_lambda, harc]
+  simp only [apm_t02a03_sector_aux_r, hl]
+  norm_num
 
 theorem apm_t02a03_sector_aux_L6c_r_fixes_target (q : ℝ × ℝ × ℝ)
     (hbox : apm_t02a03_sector_aux_box q)
