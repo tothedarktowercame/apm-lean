@@ -3519,7 +3519,7 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
   · rw [d.second_one, hsecond]
     rfl
 
-theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
     (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
@@ -3542,6 +3542,32 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
       (∀ w, ∃ z, p (c w) = apm_t97A03_baseCircle A B z) ∧
       (∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y) := by
   sorry
+
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hendpoints :
+      d.first 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.first 0 1 = d.sphere 1 apm_t97A03_south ∧
+      d.first 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.first 1 1 = d.sphere 0 apm_t97A03_south ∧
+      d.second 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.second 0 1 = d.sphere 0 apm_t97A03_south ∧
+      d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.second 1 1 = d.sphere 1 apm_t97A03_south) :
+    ∃ c : Circle → Y, Continuous c ∧ Function.Injective c ∧
+      c apm_t97A03_circleOne = d.sphere 0 apm_t97A03_north ∧
+      c apm_t97A03_circleI = d.sphere 0 apm_t97A03_south ∧
+      c apm_t97A03_circleNegOne = d.sphere 1 apm_t97A03_north ∧
+      c apm_t97A03_circleNegI = d.sphere 1 apm_t97A03_south ∧
+      (∀ w, ∃ z, p (c w) = apm_t97A03_baseCircle A B z) ∧
+      (∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y) := by
+  exact
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct
+      A B hAB Y p hp hdegree d hendpoints
 
 noncomputable def apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_raw
     {A B : Circle} {Y : Type} [TopologicalSpace Y]
@@ -3588,6 +3614,21 @@ noncomputable def apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_f
     (fun _ => rfl) (fun _ _ _ ih => ih.symm)
     (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂) hxy
 
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_exact_aux_injective
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p) (c : Circle → Y)
+    (hn0 : c apm_t97A03_circleOne = d.sphere 0 apm_t97A03_north)
+    (hs0 : c apm_t97A03_circleI = d.sphere 0 apm_t97A03_south)
+    (hn1 : c apm_t97A03_circleNegOne = d.sphere 1 apm_t97A03_north)
+    (hs1 : c apm_t97A03_circleNegI = d.sphere 1 apm_t97A03_south)
+    (hcinj : Function.Injective c)
+    (hcrange : ∀ w, ∃ z, p (c w) = apm_t97A03_baseCircle A B z) :
+    Function.Injective
+      (apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_map
+        d c hn0 hs0 hn1 hs1) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_exact
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
     (p : Y → apm_t97A03_BaseSpace A B)
@@ -3602,7 +3643,17 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
     Function.Bijective
       (apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_map
         d c hn0 hs0 hn1 hs1) := by
-  sorry
+  constructor
+  · exact
+      apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_exact_aux_injective
+        A B Y p d c hn0 hs0 hn1 hs1 hcinj hcrange
+  · intro y
+    rcases apm_t97A03_baseCircle_or_baseSphere A B (p y) with
+      ⟨z, hz⟩ | ⟨z, hz⟩
+    · obtain ⟨w, hw⟩ := hcover y z hz
+      exact ⟨Quotient.mk _ (.inr w), hw⟩
+    · obtain ⟨i, hi, -⟩ := d.sphere_unique hz
+      exact ⟨Quotient.mk _ (.inl (i, z)), hi⟩
 
 /-- The concrete geometric content of the first-swap case.  The decoder uses
 `d.sphere` on the two sphere summands.  On the four successive closed quarter
