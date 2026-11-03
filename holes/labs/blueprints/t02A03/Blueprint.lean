@@ -2263,6 +2263,20 @@ theorem apm_t02a03_sector_aux_L2b_inv (q : ℝ × ℝ × ℝ)
       apm_t02a03_sector_aux_Psi (apm_t02a03_sector_aux_PsiInv q) = q := by
   sorry
 
+lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_PsiInv q ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) ↔
+      q.2.2 = 1 ∧ apm_t02a03_sector_aux_Delta (q.1, q.2.1) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L3_target_iff_aux_loop (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (apm_t02a03_sector_aux_PsiInv q ∈
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ↔
+      q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1 := by
+  sorry
+
 theorem apm_t02a03_sector_aux_L3_target_iff (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     ((apm_t02a03_sector_aux_PsiInv q ∈
@@ -2271,6 +2285,37 @@ theorem apm_t02a03_sector_aux_L3_target_iff (q : ℝ × ℝ × ℝ)
     ((apm_t02a03_sector_aux_PsiInv q ∈
         apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ↔
       q.2.1 = 0 ∧ q.2.2 = apm_t02a03_sector_aux_vArc q.1) := by
+  exact ⟨apm_t02a03_sector_aux_L3_target_iff_aux_torus q hq,
+    apm_t02a03_sector_aux_L3_target_iff_aux_loop q hq⟩
+
+lemma apm_t02a03_sector_aux_L4_clamp_aux_continuous :
+    Continuous (Function.uncurry apm_t02a03_sector_aux_clampMove) := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L4_clamp_aux_right
+    (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1)
+    (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X)
+    (hp : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p) :
+    apm_t02a03_sector_aux_clampMove t p.1 ∈
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L4_clamp_aux_target
+    (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1)
+    (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X)
+    (hp : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y p) :
+    let moved := apm_t02a03_sector_aux_clampMove t p.1
+    (moved ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) ∨
+      (17 / 25 : ℝ) ≤ (6 / 5 - moved 0) /
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad moved := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L4_clamp_aux_fix
+    (t : ℝ)
+    (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X)
+    (hp : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p) :
+    apm_t02a03_sector_aux_clampMove t p.1 = p.1 := by
   sorry
 
 theorem apm_t02a03_sector_aux_L4_clamp :
@@ -2287,7 +2332,11 @@ theorem apm_t02a03_sector_aux_L4_clamp :
     (∀ t (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X),
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p →
       apm_t02a03_sector_aux_clampMove t p.1 = p.1) := by
-  sorry
+  refine ⟨apm_t02a03_sector_aux_L4_clamp_aux_continuous, ?_, ?_⟩
+  · intro t ht p hp
+    exact ⟨apm_t02a03_sector_aux_L4_clamp_aux_right t ht p hp,
+      apm_t02a03_sector_aux_L4_clamp_aux_target t ht p hp⟩
+  · exact apm_t02a03_sector_aux_L4_clamp_aux_fix
 
 theorem apm_t02a03_sector_aux_L5_piDelta :
     Continuous apm_t02a03_sector_aux_piDelta ∧
