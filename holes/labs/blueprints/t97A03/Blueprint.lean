@@ -4916,6 +4916,40 @@ private theorem
     exact Relation.EqvGen.refl _
 
 private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_fourthRoots
+    (z : Circle) (h : (z : ℂ) ^ 4 = 1) :
+    z = apm_t97A03_circleOne ∨ z = apm_t97A03_circleNegOne ∨
+      z = apm_t97A03_circleI ∨ z = apm_t97A03_circleNegI := by
+  have hf : ((z : ℂ) ^ 2 - 1) * ((z : ℂ) ^ 2 + 1) = 0 := by
+    calc
+      ((z : ℂ) ^ 2 - 1) * ((z : ℂ) ^ 2 + 1) = (z : ℂ) ^ 4 - 1 := by ring
+      _ = 0 := by rw [h]; ring
+  rcases mul_eq_zero.mp hf with hm | hm
+  · have hz : (z : ℂ) ^ 2 = 1 := sub_eq_zero.mp hm
+    rcases sq_eq_one_iff.mp hz with hz | hz
+    · left
+      apply Subtype.ext
+      simpa [apm_t97A03_circleOne] using hz
+    · right; left
+      apply Subtype.ext
+      simpa [apm_t97A03_circleNegOne] using hz
+  · have hz : (z : ℂ) ^ 2 = -1 := by
+      exact eq_neg_of_add_eq_zero_left hm
+    have hfI : ((z : ℂ) - Complex.I) * ((z : ℂ) + Complex.I) = 0 := by
+      calc
+        ((z : ℂ) - Complex.I) * ((z : ℂ) + Complex.I) =
+            (z : ℂ) ^ 2 - Complex.I ^ 2 := by ring
+        _ = (z : ℂ) ^ 2 + 1 := by rw [Complex.I_sq]; ring
+        _ = 0 := by rw [hz]; ring
+    rcases mul_eq_zero.mp hfI with hz | hz
+    · right; right; left
+      apply Subtype.ext
+      simpa [apm_t97A03_circleI] using sub_eq_zero.mp hz
+    · right; right; right
+      apply Subtype.ext
+      simpa [apm_t97A03_circleNegI] using eq_neg_of_add_eq_zero_left hz
+
+private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle
     (x : apm_t97A03_TwoSpheres) (y : Circle)
     (h :
