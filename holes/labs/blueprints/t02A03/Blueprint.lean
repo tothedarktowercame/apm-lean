@@ -2516,7 +2516,29 @@ lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_endpoint (q : ℝ × ℝ
         q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
           apm_t02a03_sector_aux_a q.2.1) =
         apm_t02a03_sector_aux_b q.1 q.2.1) ↔ q.2.2 = 1 := by
-  sorry
+  have hc : apm_t02a03_sector_aux_c q.1 q.2.1 =
+      apm_t02a03_sector_aux_b q.1 q.2.1 := by
+    simp [apm_t02a03_sector_aux_c, hDelta]
+  obtain ⟨hright, hz, hcos, hround⟩ :=
+    apm_t02a03_sector_aux_L2b_inv q hq
+  obtain ⟨_, _, hden⟩ :=
+    apm_t02a03_sector_aux_L2a_box_aux_v_aux_bounds
+      (apm_t02a03_sector_aux_PsiInv q) hright hz hcos
+  have hden' : 0 < apm_t02a03_sector_aux_c q.1 q.2.1 +
+      apm_t02a03_sector_aux_a q.2.1 := by
+    rw [← hround]
+    simpa [apm_t02a03_sector_aux_Psi] using hden
+  rw [hc] at hden' ⊢
+  constructor
+  · intro h
+    have : (q.2.2 - 1) *
+        (apm_t02a03_sector_aux_b q.1 q.2.1 +
+          apm_t02a03_sector_aux_a q.2.1) = 0 := by
+      linarith
+    exact sub_eq_zero.mp ((mul_eq_zero.mp this).resolve_right (ne_of_gt hden'))
+  · intro h
+    rw [h]
+    ring
 
 lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
