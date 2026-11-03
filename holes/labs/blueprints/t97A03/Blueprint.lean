@@ -7713,7 +7713,31 @@ private theorem
         apm_t97A03_modelWedgeBase ∧
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
         apm_t97A03_modelWedgeBase := by
-  sorry
+  have hs : ∃ q, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl x) =
+      quotientMap apm_t97A03_twoSphereBase ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase (.inl q) := ⟨_, rfl⟩
+  have hy : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) = apm_t97A03_modelWedgeBase ∨
+      ∃ r, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) = quotientMap apm_t97A03_twoSphereBase ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase (.inr r) := by
+    dsimp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw]
+    split_ifs
+    · exact Or.inl rfl
+    all_goals exact Or.inr ⟨_, rfl⟩
+  rcases hy with hb | ⟨r, hr⟩
+  · exact ⟨h.trans hb, hb⟩
+  · obtain ⟨q, hq⟩ := hs
+    have heq := hq.symm.trans (h.trans hr)
+    rw [apm_t97A03_wedge_quotientMap_eq_iff] at heq
+    rcases heq with h' | ⟨hq', hr'⟩
+    · cases h'
+    · have hq0 : q = apm_t97A03_twoSphereBase := by
+        rcases hq' with h'' | h''
+        · exact Sum.inl_injective h''
+        · cases h''
+      have hr0 : r = ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase := by
+        rcases hr' with h'' | h''
+        · cases h''
+        · exact Sum.inr_injective h''
+      refine ⟨by rw [hq, hq0]; rfl, ?_⟩
+      rw [hr, hr0]; exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex_aux_sphere
