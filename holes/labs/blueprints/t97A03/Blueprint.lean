@@ -2247,12 +2247,59 @@ noncomputable instance : TopologicalSpace
     (fun x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) ↦ Quotient.mk _ x)
     inferInstance
 
+/-- Intermediate quotient in which only the south attachment on sphere sheet
+zero has been slid to north.  Keeping the other south attachment unchanged
+lets the two-circle slide be assembled from two independent one-attachment
+slides. -/
+inductive apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel :
+    Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) →
+      Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) → Prop
+  | c0n : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
+      (.inr (0, apm_t97A03_circleOne)) (.inl (0, apm_t97A03_north))
+  | c0s : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
+      (.inr (0, apm_t97A03_circleNegOne)) (.inl (1, apm_t97A03_south))
+  | c1n : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
+      (.inr (1, apm_t97A03_circleOne)) (.inl (1, apm_t97A03_north))
+  | c1s : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
+      (.inr (1, apm_t97A03_circleNegOne)) (.inl (0, apm_t97A03_north))
+
+def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfCover :=
+  Quotient (Relation.EqvGen.setoid
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel)
+
+noncomputable instance : TopologicalSpace
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfCover :=
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) ↦ Quotient.mk _ x)
+    inferInstance
+
+/-- Sliding the attachment on sphere sheet zero along the reverse of
+`apm_t97A03_sphereReturn` gives the half-slid quotient.  All other summand
+maps and attachments remain fixed. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_first :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_TwoCircleCover
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfCover) := by
+  sorry
+
+/-- Sliding the remaining attachment, on sphere sheet one, along the same
+north--south meridian gives the fully slid quotient.  All other summand maps
+and attachments remain fixed. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_second :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfCover
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover) := by
+  sorry
+
 /-- Homotopy invariance for the two-circle adjunction space, sliding the two
 south attaching points to north along sphere meridians. -/
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_TwoCircleCover
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover) := by
-  sorry
+  obtain ⟨first⟩ :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_first
+  obtain ⟨second⟩ :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_second
+  exact ⟨first.trans second⟩
 
 /-- The slid two-circle graph has four edges between two sphere vertices;
 collapsing one spanning edge leaves the three-circle wedge. -/
