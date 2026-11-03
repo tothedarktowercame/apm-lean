@@ -2327,12 +2327,88 @@ noncomputable instance : TopologicalSpace
   TopologicalSpace.coinduced
     (fun x : Sum apm_t97A03_TwoSpheres Circle ↦ Quotient.mk _ x) inferInstance
 
+private noncomputable def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0
+    (w : Unit × Circle) : Option apm_t97A03_TwoSpheres := by
+  classical
+  exact if w.2 = apm_t97A03_circleOne then some (0, apm_t97A03_north)
+  else if w.2 = apm_t97A03_circleI then some (0, apm_t97A03_south)
+  else if w.2 = apm_t97A03_circleNegOne then some (1, apm_t97A03_north)
+  else if w.2 = apm_t97A03_circleNegI then some (1, apm_t97A03_south)
+  else none
+
+private noncomputable def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1
+    (w : Unit × Circle) : Option apm_t97A03_TwoSpheres := by
+  classical
+  exact if w.2 = apm_t97A03_circleOne then some (0, apm_t97A03_north)
+  else if w.2 = apm_t97A03_circleI then some (0, apm_t97A03_north)
+  else if w.2 = apm_t97A03_circleNegOne then some (1, apm_t97A03_north)
+  else if w.2 = apm_t97A03_circleNegI then some (1, apm_t97A03_south)
+  else none
+
+private noncomputable def
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2
+    (w : Unit × Circle) : Option apm_t97A03_TwoSpheres := by
+  classical
+  exact if w.2 = apm_t97A03_circleOne then some (0, apm_t97A03_north)
+  else if w.2 = apm_t97A03_circleI then some (0, apm_t97A03_north)
+  else if w.2 = apm_t97A03_circleNegOne then some (1, apm_t97A03_north)
+  else if w.2 = apm_t97A03_circleNegI then some (1, apm_t97A03_north)
+  else none
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_source :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_OneCircleCover
+      (Quotient (Relation.EqvGen.setoid
+        (apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0)))) := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      (Quotient (Relation.EqvGen.setoid
+        (apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a0)))
+      (Quotient (Relation.EqvGen.setoid
+        (apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1)))) := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      (Quotient (Relation.EqvGen.setoid
+        (apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a1)))
+      (Quotient (Relation.EqvGen.setoid
+        (apm_t97A03_invariants_aux_slide_GenRel
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2)))) := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_target :
+    Nonempty (ContinuousMap.HomotopyEquiv (Quotient (Relation.EqvGen.setoid
+      (apm_t97A03_invariants_aux_slide_GenRel
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_a2)))
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover) := by
+  sorry
+
 /-- Homotopy invariance of this concrete adjunction space: slide each south
 attaching point to north along a meridian in its sphere sheet. -/
 theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_OneCircleCover
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover) := by
-  sorry
+  obtain ⟨source⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_source
+  obtain ⟨first⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_first
+  obtain ⟨second⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_second
+  obtain ⟨target⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide_aux_target
+  exact ⟨source.trans first |>.trans second |>.trans target⟩
 
 /-- The closed counterclockwise quarter arc from `i` to `-1`.  In Cartesian
 coordinates this is exactly the part of the unit circle in the closed
