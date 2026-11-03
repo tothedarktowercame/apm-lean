@@ -3792,6 +3792,79 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
       simpa [g, σ] using hcni
     exact hcni'.trans hendpoints.2.1
 
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_injective
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (c : Circle → Y)
+    (hg : g = ![d.second 0, fun t ↦ d.first 1 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩,
+      d.second 1, fun t ↦ d.first 0 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩])
+    (hraw : ∀ t ∈ Set.Icc 0 (2 * Real.pi),
+      c (Circle.exp t) = apm_t97A03_quarterPasteRaw g t) :
+    Function.Injective c := by
+  sorry
+
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_range
+    (A B : Circle)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (c : Circle → Y)
+    (hg : g = ![d.second 0, fun t ↦ d.first 1 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩,
+      d.second 1, fun t ↦ d.first 0 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩])
+    (hraw : ∀ t ∈ Set.Icc 0 (2 * Real.pi),
+      c (Circle.exp t) = apm_t97A03_quarterPasteRaw g t) :
+    ∀ w, ∃ z, p (c w) = apm_t97A03_baseCircle A B z := by
+  intro w
+  let t := toIcoMod Real.two_pi_pos 0 (Complex.arg (w : ℂ))
+  have ht : t ∈ Set.Ico (0 : ℝ) (2 * Real.pi) := by
+    simpa [t] using toIcoMod_mem_Ico Real.two_pi_pos 0 (Complex.arg (w : ℂ))
+  have hexp : Circle.exp t = w := by
+    have hperiod : Function.Periodic Circle.exp (2 * Real.pi) := Circle.periodic_exp
+    change Circle.exp (toIcoMod Real.two_pi_pos 0 (Complex.arg (w : ℂ))) = w
+    rw [toIcoMod, hperiod.sub_zsmul_eq, Circle.exp_arg]
+  rw [← hexp, hraw t ⟨ht.1, ht.2.le⟩, hg]
+  unfold apm_t97A03_quarterPasteRaw
+  split_ifs with h0 h1 h2
+  · exact ⟨apm_t97A03_complementaryCircleArc A B
+        (Set.projIcc 0 1 zero_le_one (t / (Real.pi / 2))), d.second_lifts 0 _⟩
+  · exact ⟨apm_t97A03_circleArc A B
+        ⟨1 - (Set.projIcc 0 1 zero_le_one
+          ((t - Real.pi / 2) / (Real.pi / 2)) : ℝ), by
+            constructor <;>
+              linarith [(Set.projIcc 0 1 zero_le_one
+                ((t - Real.pi / 2) / (Real.pi / 2))).property.1,
+                (Set.projIcc 0 1 zero_le_one
+                ((t - Real.pi / 2) / (Real.pi / 2))).property.2]⟩,
+        d.first_lifts 1 _⟩
+  · exact ⟨apm_t97A03_complementaryCircleArc A B
+        (Set.projIcc 0 1 zero_le_one ((t - Real.pi) / (Real.pi / 2))),
+        d.second_lifts 1 _⟩
+  · exact ⟨apm_t97A03_circleArc A B
+        ⟨1 - (Set.projIcc 0 1 zero_le_one
+          ((t - 3 * Real.pi / 2) / (Real.pi / 2)) : ℝ), by
+            constructor <;>
+              linarith [(Set.projIcc 0 1 zero_le_one
+                ((t - 3 * Real.pi / 2) / (Real.pi / 2))).property.1,
+                (Set.projIcc 0 1 zero_le_one
+                ((t - 3 * Real.pi / 2) / (Real.pi / 2))).property.2]⟩,
+        d.first_lifts 0 _⟩
+
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_cover
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (g : Fin 4 → Set.Icc (0 : ℝ) 1 → Y) (c : Circle → Y)
+    (hg : g = ![d.second 0, fun t ↦ d.first 1 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩,
+      d.second 1, fun t ↦ d.first 0 ⟨1 - t, by constructor <;> linarith [t.property.1, t.property.2]⟩])
+    (hraw : ∀ t ∈ Set.Icc 0 (2 * Real.pi),
+      c (Circle.exp t) = apm_t97A03_quarterPasteRaw g t) :
+    ∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -3806,7 +3879,13 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
     Function.Injective c ∧
       (∀ w, ∃ z, p (c w) = apm_t97A03_baseCircle A B z) ∧
       (∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y) := by
-  sorry
+  exact ⟨
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_injective
+      A B hAB Y p hp d g c hg hraw,
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_range
+      A B Y p d g c hg hraw,
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_cover
+      A B hAB Y p hp hdegree d g c hg hraw⟩
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct
     (A B : Circle) (hAB : A ≠ B)
