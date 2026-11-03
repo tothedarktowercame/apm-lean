@@ -1970,7 +1970,61 @@ theorem apm_t97A03_classify_aux_sheetData_aux_transport
     ((apm_t97A03_secondLiteralTransport p hp
         ⟨d.sphere i apm_t97A03_north, by simp [d.sphere_lifts]⟩ : Y) =
         d.sphere (d.secondPerm i) apm_t97A03_north) := by
-  sorry
+  constructor
+  · let σ : Path (d.sphere (d.firstPerm i) apm_t97A03_north)
+        (d.sphere (d.firstPerm i) apm_t97A03_south) :=
+      apm_t97A03_sphereReturn.map
+        (d.continuous_sphere.comp (continuous_const.prodMk continuous_id))
+    let Γ : Path (d.sphere i apm_t97A03_north)
+        (d.sphere (d.firstPerm i) apm_t97A03_north) :=
+      ({ toFun := d.first i
+         continuous_toFun := d.continuous_first i
+         source' := d.first_zero i
+         target' := d.first_one i } : Path _ _).trans σ.symm
+    have hmap : p ∘ Γ = apm_t97A03_firstLiteralLoop A B := by
+      rw [apm_t97A03_firstLiteralLoop]
+      funext t
+      simp only [Function.comp_apply, Γ, Path.trans_apply]
+      split_ifs
+      · exact d.first_lifts i _
+      · simp [σ, d.sphere_lifts, apm_t97A03_baseSphereReturn]
+    have hzero : apm_t97A03_firstLiteralLoop A B 0 =
+        p (d.sphere i apm_t97A03_north) :=
+      (congrFun hmap 0).symm.trans (congrArg p Γ.source)
+    change hp.liftPath (apm_t97A03_firstLiteralLoop A B)
+      (d.sphere i apm_t97A03_north) hzero 1 = _
+    have hlift : (Γ : unitInterval → Y) = hp.liftPath
+        (apm_t97A03_firstLiteralLoop A B) (d.sphere i apm_t97A03_north) hzero :=
+      (hp.eq_liftPath_iff hzero).2 ⟨Γ.continuous, hmap, Γ.source⟩
+    rw [← hlift]
+    exact Γ.target
+  · let σ : Path (d.sphere (d.secondPerm i) apm_t97A03_north)
+        (d.sphere (d.secondPerm i) apm_t97A03_south) :=
+      apm_t97A03_sphereReturn.map
+        (d.continuous_sphere.comp (continuous_const.prodMk continuous_id))
+    let Γ : Path (d.sphere i apm_t97A03_north)
+        (d.sphere (d.secondPerm i) apm_t97A03_north) :=
+      ({ toFun := d.second i
+         continuous_toFun := d.continuous_second i
+         source' := d.second_zero i
+         target' := d.second_one i } : Path _ _).trans σ.symm
+    have hmap : p ∘ Γ = apm_t97A03_secondLiteralLoop A B := by
+      rw [apm_t97A03_secondLiteralLoop]
+      funext t
+      simp only [Function.comp_apply, Γ, Path.trans_apply]
+      split_ifs
+      · exact d.second_lifts i _
+      · simp [σ, d.sphere_lifts, apm_t97A03_baseSphereReturn]
+    have hzero : apm_t97A03_secondLiteralLoop A B 0 =
+        p (d.sphere i apm_t97A03_north) :=
+      (congrFun hmap 0).symm.trans (congrArg p Γ.source)
+    change hp.liftPath (apm_t97A03_secondLiteralLoop A B)
+      (d.sphere i apm_t97A03_north) hzero 1 = _
+    have hlift : (Γ : unitInterval → Y) = hp.liftPath
+        (apm_t97A03_secondLiteralLoop A B) (d.sphere i apm_t97A03_north) hzero :=
+      (hp.eq_liftPath_iff hzero).2 ⟨Γ.continuous, hmap, Γ.source⟩
+    rw [← hlift]
+    exact Γ.target
 
 /-- If both literal transports fix both north sheets, the sheet-zero sphere
 lift and its two arc lifts descend to a global section.  Its image is clopen
