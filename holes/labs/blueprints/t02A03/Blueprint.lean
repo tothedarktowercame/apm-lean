@@ -2236,89 +2236,6 @@ noncomputable def apm_t02a03_sector_aux_clampMove (t : ℝ) (p : apm_t02a03_E3) 
   WithLp.toLp 2 ![p 0, p 1,
     (1 - t) * p 2 + t * apm_t02a03_sector_aux_clampZ (p 2)]
 
-lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip_aux_coord
-    (p : apm_t02a03_E3)
-    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
-    (hz : |p 2| ≤ 1 / 5)
-    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
-      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p)
-    (i : Fin 3) :
-    apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) i = p i := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip
-    (p : apm_t02a03_E3)
-    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
-    (hz : |p 2| ≤ 1 / 5)
-    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
-      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
-    apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) = p := by
-  ext i
-  exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip_aux_coord
-    p hp hz hcos i
-
-lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_theta :
-    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).1)
-      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
-        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_z :
-    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).2.1)
-      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
-        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_v :
-    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).2.2)
-      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
-        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi :
-    ContinuousOn apm_t02a03_sector_aux_Psi
-      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
-        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
-  apply ContinuousOn.prodMk
-  · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_theta
-  · apply ContinuousOn.prodMk
-    · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_z
-    · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_v
-
-lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv_aux_coord
-    (i : Fin 3) :
-    ContinuousOn (fun q : ℝ × ℝ × ℝ => apm_t02a03_sector_aux_PsiInv q i)
-      {q | apm_t02a03_sector_aux_box q} := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv :
-    ContinuousOn apm_t02a03_sector_aux_PsiInv
-      {q | apm_t02a03_sector_aux_box q} := by
-  have hpi : ContinuousOn
-      (fun q : ℝ × ℝ × ℝ => fun i : Fin 3 =>
-        apm_t02a03_sector_aux_PsiInv q i)
-      {q | apm_t02a03_sector_aux_box q} :=
-    continuousOn_pi.2
-      apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv_aux_coord
-  have h := (PiLp.continuous_toLp 2 (fun _ : Fin 3 => ℝ)).continuousOn.comp
-    hpi (Set.mapsTo_univ _ _)
-  simpa using h
-
-theorem apm_t02a03_sector_aux_L1_roundtrip_continuity :
-    (∀ p : apm_t02a03_E3, p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right →
-      |p 2| ≤ 1 / 5 →
-      (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p →
-      apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) = p) ∧
-    ContinuousOn apm_t02a03_sector_aux_Psi
-      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
-        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} ∧
-    ContinuousOn apm_t02a03_sector_aux_PsiInv
-      {q | apm_t02a03_sector_aux_box q} := by
-  exact ⟨fun p hp hz hcos ↦
-    apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip p hp hz hcos,
-    apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi,
-    apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv⟩
-
 lemma apm_t02a03_sector_aux_L2a_box_aux_theta_aux_angle_bound
     (x y : ℝ) (hx : 0 < x)
     (h : (17 / 25 : ℝ) ≤ x / Real.sqrt (x ^ 2 + y ^ 2)) :
@@ -2653,6 +2570,124 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_right (q : ℝ × ℝ × ℝ)
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
   exact ⟨apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube q hq,
     apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left q hq⟩
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip_aux_coord
+    (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hz : |p 2| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p)
+    (i : Fin 3) :
+    apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) i = p i := by
+  obtain ⟨hX, hrad⟩ := apm_t02a03_sector_aux_L2a_box_aux_theta_aux_positive p hp hcos
+  have hpos := apm_t02a03_sector_aux_L2_aux_cpa_pos (apm_t02a03_sector_aux_theta p) (p 2) hz
+  set X := 6 / 5 - p 0 with hXdef
+  set Y := p 1 with hYdef
+  set sr := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p with hsr
+  have hsr' : sr = Real.sqrt (X ^ 2 + Y ^ 2) := hrad
+  have hsqrt : Real.sqrt (1 + (Y / X) ^ 2) = sr / X := by
+    rw [hsr', show (1 : ℝ) + (Y / X) ^ 2 = (X ^ 2 + Y ^ 2) / X ^ 2 by field_simp,
+      Real.sqrt_div' _ (by positivity), Real.sqrt_sq hX.le]
+  have hsr0 : 0 < sr := by rw [hsr']; exact Real.sqrt_pos.mpr (by positivity)
+  have hcosθ : sr * Real.cos (apm_t02a03_sector_aux_theta p) = X := by
+    unfold apm_t02a03_sector_aux_theta
+    rw [Real.cos_arctan, ← hXdef, ← hYdef, hsqrt]; field_simp
+  have hsinθ : sr * Real.sin (apm_t02a03_sector_aux_theta p) = Y := by
+    unfold apm_t02a03_sector_aux_theta
+    rw [Real.sin_arctan, ← hXdef, ← hYdef, hsqrt]; field_simp
+  have hu : -apm_t02a03_sector_aux_a (p 2) + ((sr - 1 + apm_t02a03_sector_aux_a (p 2)) /
+      (apm_t02a03_sector_aux_c (apm_t02a03_sector_aux_theta p) (p 2) +
+        apm_t02a03_sector_aux_a (p 2))) *
+      (apm_t02a03_sector_aux_c (apm_t02a03_sector_aux_theta p) (p 2) +
+        apm_t02a03_sector_aux_a (p 2)) = sr - 1 := by
+    rw [div_mul_cancel₀ _ hpos.ne']; ring
+  fin_cases i
+  · show 6 / 5 - (1 + (-apm_t02a03_sector_aux_a (p 2) + ((sr - 1 + apm_t02a03_sector_aux_a (p 2)) /
+      (apm_t02a03_sector_aux_c (apm_t02a03_sector_aux_theta p) (p 2) +
+        apm_t02a03_sector_aux_a (p 2))) *
+      (apm_t02a03_sector_aux_c (apm_t02a03_sector_aux_theta p) (p 2) +
+        apm_t02a03_sector_aux_a (p 2)))) * Real.cos (apm_t02a03_sector_aux_theta p) = p 0
+    rw [hu, show (1 : ℝ) + (sr - 1) = sr by ring, hcosθ, hXdef]; ring
+  · show (1 + (-apm_t02a03_sector_aux_a (p 2) + ((sr - 1 + apm_t02a03_sector_aux_a (p 2)) /
+      (apm_t02a03_sector_aux_c (apm_t02a03_sector_aux_theta p) (p 2) +
+        apm_t02a03_sector_aux_a (p 2))) *
+      (apm_t02a03_sector_aux_c (apm_t02a03_sector_aux_theta p) (p 2) +
+        apm_t02a03_sector_aux_a (p 2)))) * Real.sin (apm_t02a03_sector_aux_theta p) = p 1
+    rw [hu, show (1 : ℝ) + (sr - 1) = sr by ring, hsinθ]
+  · rfl
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip
+    (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hz : |p 2| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
+    apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) = p := by
+  ext i
+  exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip_aux_coord
+    p hp hz hcos i
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_theta :
+    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).1)
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_z :
+    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).2.1)
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_v :
+    ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).2.2)
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi :
+    ContinuousOn apm_t02a03_sector_aux_Psi
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
+  apply ContinuousOn.prodMk
+  · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_theta
+  · apply ContinuousOn.prodMk
+    · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_z
+    · exact apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_v
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv_aux_coord
+    (i : Fin 3) :
+    ContinuousOn (fun q : ℝ × ℝ × ℝ => apm_t02a03_sector_aux_PsiInv q i)
+      {q | apm_t02a03_sector_aux_box q} := by
+  sorry
+
+lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv :
+    ContinuousOn apm_t02a03_sector_aux_PsiInv
+      {q | apm_t02a03_sector_aux_box q} := by
+  have hpi : ContinuousOn
+      (fun q : ℝ × ℝ × ℝ => fun i : Fin 3 =>
+        apm_t02a03_sector_aux_PsiInv q i)
+      {q | apm_t02a03_sector_aux_box q} :=
+    continuousOn_pi.2
+      apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv_aux_coord
+  have h := (PiLp.continuous_toLp 2 (fun _ : Fin 3 => ℝ)).continuousOn.comp
+    hpi (Set.mapsTo_univ _ _)
+  simpa using h
+
+theorem apm_t02a03_sector_aux_L1_roundtrip_continuity :
+    (∀ p : apm_t02a03_E3, p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right →
+      |p 2| ≤ 1 / 5 →
+      (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p →
+      apm_t02a03_sector_aux_PsiInv (apm_t02a03_sector_aux_Psi p) = p) ∧
+    ContinuousOn apm_t02a03_sector_aux_Psi
+      {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} ∧
+    ContinuousOn apm_t02a03_sector_aux_PsiInv
+      {q | apm_t02a03_sector_aux_box q} := by
+  exact ⟨fun p hp hz hcos ↦
+    apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip p hp hz hcos,
+    apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi,
+    apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv⟩
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_ratio (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
