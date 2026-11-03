@@ -3511,7 +3511,35 @@ theorem apm_t97A03_invariants_aux_slide_aux_eps
     ∃ ε : ℝ, 0 < ε ∧ ε < Real.pi / 2 ∧
       ∀ w : ι × Circle, w.1 = w₀.1 →
         |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε → w ∈ U := by
-  sorry
+  let f : ℝ → ι × Circle := fun t ↦ (w₀.1, w₀.2 * Circle.exp t)
+  have hf : Continuous f := by
+    exact continuous_const.prodMk (continuous_const.mul Circle.exp.continuous)
+  have hf0 : f 0 = w₀ := by
+    ext <;> simp [f]
+  have hpre : f ⁻¹' U ∈ nhds (0 : ℝ) := by
+    exact hf.continuousAt.preimage_mem_nhds (hUopen.mem_nhds (hf0 ▸ hwU))
+  obtain ⟨r, hr, hrU⟩ := Metric.mem_nhds_iff.mp hpre
+  let ε := min (r / 2) (Real.pi / 4)
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hε : 0 < ε := by
+    dsimp [ε]
+    positivity
+  refine ⟨ε, hε, ?_, ?_⟩
+  · dsimp [ε]
+    have : Real.pi / 4 < Real.pi / 2 := by linarith
+    exact lt_of_le_of_lt (min_le_right _ _) this
+  · intro w hw1 hwangle
+    let t := apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2
+    have htr : |t| < r := by
+      have hle : |t| ≤ r / 2 := hwangle.trans (min_le_left _ _)
+      linarith
+    have hft : f t ∈ U := hrU (by simpa [Real.dist_eq] using htr)
+    have hcircle : w₀.2 * Circle.exp t = w.2 := by
+      change w₀.2 * Circle.exp (Complex.arg (((w₀.2⁻¹ * w.2 : Circle) : ℂ))) = w.2
+      rw [Circle.exp_arg]
+      simp
+    rw [← Prod.eta w, hw1]
+    simpa [f, t, hcircle] using hft
 
 /-- The detour respects the source gluing: at `w₀` it gives `γ 0 = z`, and every
 other marked point lies off the arc, where the gluing is unchanged. -/
@@ -3524,7 +3552,27 @@ theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_respects
     ∀ x y, apm_t97A03_invariants_aux_slide_GenRel a x y →
       apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε x =
         apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε y := by
-  sorry
+  intro x y hxy
+  cases hxy with
+  | att w y haw =>
+      by_cases hw : w = w₀
+      · subst w
+        have hzero : apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w₀.2 = 0 := by
+          simp [apm_t97A03_invariants_aux_slide_aux_angle]
+        have hyz : y = z := Option.some.inj (haw.symm.trans hz)
+        subst y
+        have hhalf : 0 ≤ ε / 2 := by positivity
+        simp [apm_t97A03_invariants_aux_slide_aux_detourRaw, hzero, hε.le, hhalf]
+      · have ha'w : a' w = some y := by
+          rw [← hsame w hw]
+          exact haw
+        have hoff : ¬ (w.1 = w₀.1 ∧
+            |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 w.2| ≤ ε) := by
+          rintro ⟨hw1, hwangle⟩
+          exact hw (harc w hw1 hwangle (by simp [haw]))
+        simp only [apm_t97A03_invariants_aux_slide_aux_detourRaw, hoff, if_false]
+        exact Quotient.sound (Relation.EqvGen.rel _ _
+          (apm_t97A03_invariants_aux_slide_GenRel.att w y ha'w))
 
 /-- Continuity of the detour: the pieces agree at `|θ| = ε/2` (because `w₀` is
 glued to `z'` in the target) and at `|θ| = ε`; the arc avoids the cut of `arg`. -/
