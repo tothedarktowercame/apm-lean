@@ -2423,6 +2423,58 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_normalize
 sheets and the second one preserves them.  There is no finite permutation
 algebra left in this statement: the four endpoint equalities are exactly the
 four generators of `apm_t97A03_OneCircleRel`, in cyclic order. -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_endpoints
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.swap 0 1)
+    (hsecond : d.secondPerm = Equiv.refl _) :
+    d.first 0 0 = d.sphere 0 apm_t97A03_north ∧
+    d.first 0 1 = d.sphere 1 apm_t97A03_south ∧
+    d.first 1 0 = d.sphere 1 apm_t97A03_north ∧
+    d.first 1 1 = d.sphere 0 apm_t97A03_south ∧
+    d.second 0 0 = d.sphere 0 apm_t97A03_north ∧
+    d.second 0 1 = d.sphere 0 apm_t97A03_south ∧
+    d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
+    d.second 1 1 = d.sphere 1 apm_t97A03_south := by
+  constructor
+  · exact d.first_zero 0
+  constructor
+  · rw [d.first_one, hfirst]
+    rfl
+  constructor
+  · exact d.first_zero 1
+  constructor
+  · rw [d.first_one, hfirst]
+    rfl
+  constructor
+  · exact d.second_zero 0
+  constructor
+  · rw [d.second_one, hsecond]
+    rfl
+  constructor
+  · exact d.second_zero 1
+  · rw [d.second_one, hsecond]
+    rfl
+
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hendpoints :
+      d.first 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.first 0 1 = d.sphere 1 apm_t97A03_south ∧
+      d.first 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.first 1 1 = d.sphere 0 apm_t97A03_south ∧
+      d.second 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.second 0 1 = d.sphere 0 apm_t97A03_south ∧
+      d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.second 1 1 = d.sphere 1 apm_t97A03_south) :
+    Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -2432,7 +2484,11 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap
     (hfirst : d.firstPerm = Equiv.swap 0 1)
     (hsecond : d.secondPerm = Equiv.refl _) :
     Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
-  sorry
+  apply apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric
+    A B hAB Y p hp hdegree d
+  exact
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_endpoints
+      A B Y p d hfirst hsecond
 
 /-- The fixed geometric descent when the second complementary arc changes
 sheets and the first one preserves them.  This is the preceding construction
