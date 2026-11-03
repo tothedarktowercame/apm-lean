@@ -10,19 +10,19 @@ ideas, so they are not the skill layer.
 
 ## Skills
 
-`concepts.tsv` lists 112 named skills in 13 areas, each with a regex for prose and, where one
+`concepts.tsv` lists 115 named skills in 13 areas, each with a regex for prose and, where one
 exists, a regex for Lean constants.  `build.py` ties them to problems and writes `star-map.json`
 and `STAR-MAP.md`.  It needs `scipy`.  Tiers:
 
 | tier | meaning | tags | blind sample: really used |
 |---|---|---|---|
 | both | informal side names it, Lean proof reaches a matching constant | 751 | 22 of 25 |
-| named | no Lean match, but 3+ mentions, or a mention plus a mark8 warrant or the statement | 737 | 18 of 25 |
-| passing | any other mention | 768 | not sampled alone; all mentions without Lean: 12 of 25 |
+| named | no Lean match, but 3+ mentions, or a mention plus a mark8 warrant or the statement | 755 | 18 of 25 |
+| passing | any other mention | 783 | not sampled alone; all mentions without Lean: 12 of 25 |
 | lean | Lean constant only, no informal mention | 1017 | 6 of 25 |
 | untagged | control: skills from the problem's own area with no tag | | 1 of 25 |
 
-`both` and `named` are the study tags.  470 of 484 problems carry at least one, 270 at least three.
+`both` and `named` are the study tags.  470 of 484 problems carry at least one, 272 at least three.
 The Lean tier mostly records how a proof was formalised, such as a manifold proof passing through
 Hilbert space lemmas, so it is not a study tag.
 
@@ -37,5 +37,9 @@ area, but 1 of 25 over 11,486 control rows is a weak estimate.
 mark8 alignment: 2,454 steps were judged on 347 problems and 636 were matched to a Lean
 declaration, of which 340 have a judge reason that rejects the match.  So 296 links are credible,
 and `build.py` uses only those for Lean links.  Warrant text from all steps feeds the prose side.
+
+The a96A07 lesson exposed three missing skills (winding numbers, the complex open mapping
+theorem, the Jordan curve theorem), added 2026-11-03 after the samples, so the rates above do not
+cover them.
 
 Prerequisite edges and a learner layer are not built.

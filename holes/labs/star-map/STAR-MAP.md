@@ -1,6 +1,6 @@
 # Prelim star map: skills
 
-112 skills over 484 problems. `both` means the informal solution names the skill
+115 skills over 484 problems. `both` means the informal solution names the skill
 and the Lean proof reaches a matching Mathlib constant. `named` means the informal side alone
 names it emphatically. Tags are for study planning and carry the error rates in README.md.
 Built by build.py; edit concepts.tsv, not this file.
@@ -135,6 +135,25 @@ named: `a94J06` `a96A08` `a96J07` `a96J08` `t93J01`
 - a94J06: Use partial fractions (warrant: partial fraction decomposition). Lean: `partial_fractions`.
 
 - a96A08: The integral of sin(πx) / (x^2-x) is -2π. (warrant: Informal proof (partial fractions)).
+
+### Winding numbers and the index of a curve (0 both, 11 named)
+
+named: `a01J05` `a02J07` `a94A09` `a94J07` `a95J03` `a96A07` `t00A05` `t91A01` `t91J03` `t94J06` `t97J08`
+
+- t91J03: An embedded simple closed curve in the annulus has winding number $|n|\le 1$ (warrant: an embedded simple closed curve in the annulus has winding number |n|). Lean: `apm_t91J03_no_two_of_forced_fiber_collision`.
+
+- a96A07: The winding number of g(Γ) around w is 1. (warrant: winding number of a simple closed curve).
+
+### Complex open mapping theorem (0 both, 0 named)
+
+
+### Jordan curve theorem and simple closed curves (0 both, 7 named)
+
+named: `a96A07` `a97J08` `t00A03` `t00J02` `t01J01` `t03J02` `t91J03`
+
+- t91J03: An embedded simple closed curve in the annulus has winding number $|n|\le 1$ (warrant: an embedded simple closed curve in the annulus has winding number |n|). Lean: `apm_t91J03_no_two_of_forced_fiber_collision`.
+
+- t00J02: Each component of f^{-1}(C) is null-homologous (warrant: Each component of f^{-1}(C) is a simple closed curve that bounds an em). Lean: `apm_t00j02_isPathConnected_connectedComponentIn_of_componentsBoundDisks`.
 
 ## Measure
 
