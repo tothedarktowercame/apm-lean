@@ -368,14 +368,28 @@ noncomputable def apm_t97A03_circleArc (A B : Circle) : Path A B :=
       Circle.exp ((1 - t) * Complex.arg A + t * Complex.arg B))
     (by fun_prop) (by simp) (by simp)
 
+/-- The full turn added to the endpoint of the second arc: `-2π` when
+`arg A < arg B` and `+2π` otherwise, so that the second arc runs the other way
+round the circle from the first and the two arcs together cover it exactly once. -/
+noncomputable def apm_t97A03_arcShift (A B : Circle) : ℝ :=
+  if Complex.arg A < Complex.arg B then -(2 * Real.pi) else 2 * Real.pi
+
+lemma apm_t97A03_exp_arg_add_arcShift (A B : Circle) :
+    Circle.exp (Complex.arg B + apm_t97A03_arcShift A B) = B := by
+  unfold apm_t97A03_arcShift
+  split_ifs
+  · rw [← sub_eq_add_neg, Circle.exp_sub_two_pi]; simp
+  · simp
+
 /-- The opposite lifted interval from `A` to `B`.  Its endpoint differs in
-the real lift by one full turn, so this is the complementary circle arc and
-not a second choice of an arbitrary path. -/
+the real lift by one full turn in the direction opposite to the first arc, so
+this is the complementary circle arc and not a second choice of an arbitrary
+path. -/
 noncomputable def apm_t97A03_complementaryCircleArc (A B : Circle) : Path A B :=
   Path.ofLine (f := fun t : ℝ ↦
       Circle.exp ((1 - t) * Complex.arg A +
-        t * (Complex.arg B + 2 * Real.pi)))
-    (by fun_prop) (by simp) (by simp)
+        t * (Complex.arg B + apm_t97A03_arcShift A B)))
+    (by fun_prop) (by simp) (by simpa using apm_t97A03_exp_arg_add_arcShift A B)
 
 lemma apm_t97A03_circleArcs_ne (A B : Circle) :
     apm_t97A03_circleArc A B ≠ apm_t97A03_complementaryCircleArc A B := by
@@ -383,12 +397,20 @@ lemma apm_t97A03_circleArcs_ne (A B : Circle) :
   have hm := congrArg (fun p : Path A B ↦ p ⟨(1 / 2 : ℝ), by norm_num⟩) h
   simp [apm_t97A03_circleArc, apm_t97A03_complementaryCircleArc,
     Path.ofLine] at hm
-  rw [show (2 : ℝ)⁻¹ * (Complex.arg B + 2 * Real.pi) =
-      2⁻¹ * Complex.arg B + Real.pi by ring, Circle.exp_add] at hm
-  have hpi : (1 : Circle) = Circle.exp Real.pi := by
+  have hshift : (2 : ℝ)⁻¹ * apm_t97A03_arcShift A B = Real.pi ∨
+      (2 : ℝ)⁻¹ * apm_t97A03_arcShift A B = -Real.pi := by
+    unfold apm_t97A03_arcShift; split_ifs
+    · right; ring
+    · left; ring
+  rw [show (2 : ℝ)⁻¹ * (Complex.arg B + apm_t97A03_arcShift A B) =
+      2⁻¹ * Complex.arg B + 2⁻¹ * apm_t97A03_arcShift A B by ring,
+    Circle.exp_add] at hm
+  have hone : Circle.exp ((2 : ℝ)⁻¹ * apm_t97A03_arcShift A B) = 1 := by
     apply mul_left_cancel (a := Circle.exp (2⁻¹ * Complex.arg B))
-    simpa using hm
-  exact Circle.exp_pi_ne_one hpi.symm
+    simpa using hm.symm
+  rcases hshift with h' | h' <;> rw [h'] at hone
+  · exact Circle.exp_pi_ne_one hone
+  · rw [Circle.exp_neg, inv_eq_one] at hone; exact Circle.exp_pi_ne_one hone
 
 /-- Rotation by `A⁻¹` sends the first genuine complementary arc to an arc
 from the normalized point `1` to the relative marked point `A⁻¹ * B`. -/
@@ -2075,6 +2097,7 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
     (p : Y → apm_t97A03_BaseSpace A B)
+    (hp : IsCoveringMap p)
     (d : apm_t97A03_ClassifySheetData A B Y p)
     (hperms : d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.refl _) :
     ∃ s : Circle → Y,
@@ -2088,13 +2111,14 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
     (p : Y → apm_t97A03_BaseSpace A B)
+    (hp : IsCoveringMap p)
     (d : apm_t97A03_ClassifySheetData A B Y p)
     (hperms : d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.refl _) :
     ∃ σ : apm_t97A03_BaseSpace A B → Y,
       Continuous σ ∧ Function.RightInverse σ p := by
   obtain ⟨s, hscont, hslift, hsA, hsB⟩ :=
     apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle
-      A B hAB Y p d hperms
+      A B hAB Y p hp d hperms
   let f : Sum Circle apm_t97A03_S2 → Y := fun x ↦
     match x with
     | Sum.inl z => s z
@@ -2191,7 +2215,7 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection
       A B Y p hp d hfirst hsecond
   obtain ⟨σ, hσcont, hσ⟩ :=
     apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section
-      A B hAB Y p d hperms
+      A B hAB Y p hp d hperms
   exact
     apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_contra
       A B Y p hp hdegree σ hσcont hσ
