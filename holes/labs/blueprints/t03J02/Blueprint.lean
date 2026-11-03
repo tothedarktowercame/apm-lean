@@ -1587,28 +1587,210 @@ def apm_t03J02_gluedCircle : C(Circle, apm_t03J02_space j₁ j₂) :=
 
 variable {j₁ j₂}
 
+theorem apm_t03J02_inl_eq_inl_iff_aux_eqvGen
+    (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂)
+    {a b : Sum apm_t03J02_Torus apm_t03J02_Torus}
+    (h : Relation.EqvGen (apm_t03J02_glueRel j₁ j₂) a b) :
+    match a, b with
+    | .inl x, .inl y => x = y
+    | .inr x, .inr y => x = y
+    | .inl x, .inr y => ∃ z, x = j₁ z ∧ y = j₂ z
+    | .inr x, .inl y => ∃ z, x = j₂ z ∧ y = j₁ z := by
+  induction h with
+  | rel a b hab =>
+      cases hab with
+      | glue z => exact ⟨z, rfl, rfl⟩
+  | refl a => cases a <;> rfl
+  | symm a b h ih =>
+      cases a with
+      | inl x =>
+          cases b with
+          | inl y => exact ih.symm
+          | inr y => rcases ih with ⟨z, hy, hx⟩; exact ⟨z, hx, hy⟩
+      | inr x =>
+          cases b with
+          | inl y => rcases ih with ⟨z, hy, hx⟩; exact ⟨z, hx, hy⟩
+          | inr y => exact ih.symm
+  | trans a b c hab hbc ih₁ ih₂ =>
+      cases a with
+      | inl x =>
+          cases b with
+          | inl y =>
+              cases c with
+              | inl w =>
+                  change x = y at ih₁
+                  change y = w at ih₂
+                  exact ih₁.trans ih₂
+              | inr w =>
+                  change x = y at ih₁
+                  change ∃ z, y = j₁ z ∧ w = j₂ z at ih₂
+                  rcases ih₂ with ⟨z, hy, hw⟩
+                  exact ⟨z, ih₁.trans hy, hw⟩
+          | inr y =>
+              cases c with
+              | inl w =>
+                  rcases ih₁ with ⟨z, hx, hy⟩
+                  rcases ih₂ with ⟨z', hy', hw⟩
+                  have : z = z' := hj₂.injective (hy.symm.trans hy')
+                  subst z'
+                  exact hx.trans hw.symm
+              | inr w =>
+                  rcases ih₁ with ⟨z, hx, hy⟩
+                  change y = w at ih₂
+                  exact ⟨z, hx, (hy.symm.trans ih₂).symm⟩
+      | inr x =>
+          cases b with
+          | inl y =>
+              cases c with
+              | inl w =>
+                  rcases ih₁ with ⟨z, hx, hy⟩
+                  change y = w at ih₂
+                  exact ⟨z, hx, (hy.symm.trans ih₂).symm⟩
+              | inr w =>
+                  rcases ih₁ with ⟨z, hx, hy⟩
+                  rcases ih₂ with ⟨z', hy', hw⟩
+                  have : z = z' := hj₁.injective (hy.symm.trans hy')
+                  subst z'
+                  exact hx.trans hw.symm
+          | inr y =>
+              cases c with
+              | inl w =>
+                  change ∃ z, y = j₂ z ∧ w = j₁ z at ih₂
+                  rcases ih₂ with ⟨z, hy, hw⟩
+                  exact ⟨z, ih₁.trans hy, hw⟩
+              | inr w =>
+                  change x = y at ih₁
+                  change y = w at ih₂
+                  exact ih₁.trans ih₂
+
 theorem apm_t03J02_inl_eq_inl_iff (hj₁ : Topology.IsEmbedding j₁)
     (hj₂ : Topology.IsEmbedding j₂) {x y : apm_t03J02_Torus} :
     apm_t03J02_gluedInl j₁ j₂ x = apm_t03J02_gluedInl j₁ j₂ y ↔ x = y := by
-  sorry
+  constructor
+  · intro h
+    exact apm_t03J02_inl_eq_inl_iff_aux_eqvGen hj₁ hj₂ (Quotient.exact h)
+  · rintro rfl
+    rfl
 
 theorem apm_t03J02_inr_eq_inr_iff (hj₁ : Topology.IsEmbedding j₁)
     (hj₂ : Topology.IsEmbedding j₂) {x y : apm_t03J02_Torus} :
     apm_t03J02_gluedInr j₁ j₂ x = apm_t03J02_gluedInr j₁ j₂ y ↔ x = y := by
-  sorry
+  constructor
+  · intro h
+    exact apm_t03J02_inl_eq_inl_iff_aux_eqvGen hj₁ hj₂ (Quotient.exact h)
+  · rintro rfl
+    rfl
 
 theorem apm_t03J02_inl_eq_inr_iff (hj₁ : Topology.IsEmbedding j₁)
     (hj₂ : Topology.IsEmbedding j₂) {x y : apm_t03J02_Torus} :
     apm_t03J02_gluedInl j₁ j₂ x = apm_t03J02_gluedInr j₁ j₂ y ↔
       ∃ z, x = j₁ z ∧ y = j₂ z := by
-  sorry
+  constructor
+  · intro h
+    exact apm_t03J02_inl_eq_inl_iff_aux_eqvGen hj₁ hj₂ (Quotient.exact h)
+  · rintro ⟨z, rfl, rfl⟩
+    exact apm_t03J02_glue_eq j₁ j₂ z
+
+/-- Tietze: a map on the circle to `ℂ × ℂ` extends over the torus. -/
+theorem apm_t03J02_t2Space_aux_extend {j : C(Circle, apm_t03J02_Torus)}
+    (hj : Topology.IsEmbedding j) (u : C(Circle, ℂ × ℂ)) :
+    ∃ G : C(apm_t03J02_Torus, ℂ × ℂ), ∀ z, G (j z) = u z := by
+  have hJ : IsClosed (Set.range j) := (isCompact_range j.continuous).isClosed
+  let e := hj.toHomeomorph
+  let f : C(Set.range j, ℂ × ℂ) := ⟨fun y => u (e.symm y), u.continuous.comp e.symm.continuous⟩
+  obtain ⟨G, hG⟩ := f.exists_restrict_eq hJ
+  refine ⟨G, fun z => ?_⟩
+  have h := DFunLike.congr_fun hG ⟨j z, z, rfl⟩
+  have h2 : e.symm ⟨j z, z, rfl⟩ = z := e.symm_apply_apply z
+  simpa [f, h2] using h
+
+/-- The coordinates of the torus in `ℂ × ℂ`. -/
+def apm_t03J02_t2Space_aux_coord : C(apm_t03J02_Torus, ℂ × ℂ) :=
+  ⟨fun x => ((x.1 : ℂ), (x.2 : ℂ)),
+    ((continuous_induced_dom (f := ((↑) : Circle → ℂ))).comp continuous_fst).prodMk
+      ((continuous_induced_dom (f := ((↑) : Circle → ℂ))).comp continuous_snd)⟩
+
+theorem apm_t03J02_t2Space_aux_coord_inj :
+    Function.Injective apm_t03J02_t2Space_aux_coord := by
+  intro x y h
+  have h1 := congrArg Prod.fst h
+  have h2 := congrArg Prod.snd h
+  exact Prod.ext (Circle.ext h1) (Circle.ext h2)
+
+/-- `X` injects continuously into a Euclidean space: record the coordinates on each torus, a
+Tietze extension of the other torus's coordinates, and the distances to the two circles. -/
+theorem apm_t03J02_t2Space_aux_separation
+    (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂) :
+    T2Space (apm_t03J02_space j₁ j₂) := by
+  let ι := apm_t03J02_t2Space_aux_coord
+  obtain ⟨G₁, hG₁⟩ := apm_t03J02_t2Space_aux_extend hj₁ (ι.comp j₂)
+  obtain ⟨G₂, hG₂⟩ := apm_t03J02_t2Space_aux_extend hj₂ (ι.comp j₁)
+  let d₁ : C(apm_t03J02_Torus, ℝ) :=
+    ⟨fun x => Metric.infDist x (Set.range j₁), Metric.continuous_infDist_pt _⟩
+  let d₂ : C(apm_t03J02_Torus, ℝ) :=
+    ⟨fun x => Metric.infDist x (Set.range j₂), Metric.continuous_infDist_pt _⟩
+  let Y := (ℂ × ℂ) × (ℂ × ℂ) × ℝ × ℝ
+  let f : C(apm_t03J02_Torus, Y) :=
+    ⟨fun x => (ι x, G₁ x, d₁ x, 0), by fun_prop⟩
+  let g : C(apm_t03J02_Torus, Y) :=
+    ⟨fun x => (G₂ x, ι x, 0, d₂ x), by fun_prop⟩
+  have hd₁ : ∀ z, d₁ (j₁ z) = 0 := fun z => Metric.infDist_zero_of_mem ⟨z, rfl⟩
+  have hd₂ : ∀ z, d₂ (j₂ z) = 0 := fun z => Metric.infDist_zero_of_mem ⟨z, rfl⟩
+  have hfg : ∀ z, f (j₁ z) = g (j₂ z) := by
+    intro z
+    change (ι (j₁ z), G₁ (j₁ z), d₁ (j₁ z), (0 : ℝ)) = (G₂ (j₂ z), ι (j₂ z), (0 : ℝ), d₂ (j₂ z))
+    rw [hG₁, hG₂, hd₁, hd₂]
+    rfl
+  let Φ := apm_t03J02_gluedDesc j₁ j₂ f g hfg
+  have hzero : ∀ {j : C(Circle, apm_t03J02_Torus)} (x : apm_t03J02_Torus),
+      Metric.infDist x (Set.range j) = 0 → x ∈ Set.range j := by
+    intro j x hx
+    have hc : IsClosed (Set.range j) := (isCompact_range j.continuous).isClosed
+    exact (hc.mem_iff_infDist_zero ⟨j 1, 1, rfl⟩).2 hx
+  have hmixed : ∀ a b, f a = g b →
+      apm_t03J02_quotientMap j₁ j₂ (.inl a) = apm_t03J02_quotientMap j₁ j₂ (.inr b) := by
+    intro a b h
+    have h1 : ι a = G₂ b := congrArg Prod.fst h
+    have h3 : d₁ a = 0 := congrArg (fun t : Y => t.2.2.1) h
+    have h4 : (0 : ℝ) = d₂ b := congrArg (fun t : Y => t.2.2.2) h
+    obtain ⟨z, rfl⟩ := hzero a h3
+    obtain ⟨w, rfl⟩ := hzero b h4.symm
+    rw [hG₂] at h1
+    have : j₁ z = j₁ w := apm_t03J02_t2Space_aux_coord_inj h1
+    rw [this]
+    exact apm_t03J02_glue_eq j₁ j₂ w
+  have hinj : Function.Injective Φ := by
+    intro p q
+    obtain ⟨sp, rfl⟩ := apm_t03J02_surjective_quotientMap j₁ j₂ p
+    obtain ⟨sq, rfl⟩ := apm_t03J02_surjective_quotientMap j₁ j₂ q
+    intro h
+    cases sp with
+    | inl a =>
+      cases sq with
+      | inl b =>
+        have : f a = f b := h
+        rw [apm_t03J02_t2Space_aux_coord_inj (congrArg Prod.fst this : ι a = ι b)]
+      | inr b => exact hmixed a b h
+    | inr a =>
+      cases sq with
+      | inl b => exact (hmixed b a h.symm).symm
+      | inr b =>
+        have : g a = g b := h
+        rw [apm_t03J02_t2Space_aux_coord_inj
+          (congrArg (fun t : Y => t.2.1) this : ι a = ι b)]
+  exact T2Space.of_injective_continuous hinj Φ.continuous
 
 theorem apm_t03J02_t2Space (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂) :
     T2Space (apm_t03J02_space j₁ j₂) := by
-  sorry
+  exact apm_t03J02_t2Space_aux_separation hj₁ hj₂
 
 theorem apm_t03J02_compactSpace : CompactSpace (apm_t03J02_space j₁ j₂) := by
-  sorry
+  rw [← isCompact_univ_iff]
+  have hr : Set.range (apm_t03J02_quotientMap j₁ j₂) = Set.univ :=
+    Set.range_eq_univ.mpr (apm_t03J02_surjective_quotientMap j₁ j₂)
+  rw [← hr]
+  simpa only [Set.image_univ] using
+    isCompact_univ.image (apm_t03J02_continuous_quotientMap j₁ j₂)
 
 variable (j₁ j₂)
 
