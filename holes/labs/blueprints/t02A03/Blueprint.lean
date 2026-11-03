@@ -2618,11 +2618,78 @@ lemma apm_t02a03_sector_aux_L4_clamp_aux_continuous :
   refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i ↦ ?_)
   fin_cases i <;> simp <;> fun_prop
 
+/-- In the right tube at height `|z| ≥ 1/5` the planar distance from the left
+centre is at least `5/4` (claude-14). -/
+lemma apm_t02a03_sector_aux_L4_aux_left_planar (p : apm_t02a03_E3)
+    (hpR : Metric.infDist p (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ))
+    (hz : (1 / 5 : ℝ) ≤ |p 2|) :
+    (5 / 4 : ℝ) ≤ Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) := by
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq] at hpR
+  have hsq : (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1) ^ 2 + p 2 ^ 2 ≤ 1 / 16 := by
+    have h0 : 0 ≤ (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1) ^ 2 + p 2 ^ 2 := by positivity
+    have := Real.sqrt_le_sqrt (le_of_eq (rfl : (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1) ^ 2 + p 2 ^ 2 = _))
+    rw [Real.sqrt_le_left (by norm_num)] at hpR
+    linarith
+  have hz2 : (1 / 25 : ℝ) ≤ p 2 ^ 2 := by
+    rw [← sq_abs]; nlinarith [abs_nonneg (p 2)]
+  have hr0 : 0 ≤ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p := Real.sqrt_nonneg _
+  have hr : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p ≤ 23 / 20 := by nlinarith
+  have hr2 : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p ^ 2 = (p 0 - 6 / 5) ^ 2 + p 1 ^ 2 := by
+    unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad; rw [Real.sq_sqrt (by positivity)]
+  have hx : 6 / 5 - apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p ≤ p 0 := by
+    have : (p 0 - 6 / 5) ^ 2 ≤ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p ^ 2 := by rw [hr2]; nlinarith [sq_nonneg (p 1)]
+    nlinarith [abs_le_of_sq_le_sq' this hr0]
+  rw [Real.le_sqrt (by norm_num) (by positivity)]
+  nlinarith
+
+lemma apm_t02a03_sector_aux_L4_aux_clamp_abs (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (z : ℝ) :
+    |(1 - t) * z + t * apm_t02a03_sector_aux_clampZ z| ≤ |z| ∧
+      ((1 / 5 : ℝ) < |z| → (1 / 5 : ℝ) ≤ |(1 - t) * z + t * apm_t02a03_sector_aux_clampZ z|) ∧
+      (|z| ≤ 1 / 5 → (1 - t) * z + t * apm_t02a03_sector_aux_clampZ z = z) := by
+  obtain ⟨ht0, ht1⟩ := ht
+  unfold apm_t02a03_sector_aux_clampZ
+  rcases le_or_gt z (-1 / 5) with h | h
+  · rw [min_eq_right (by linarith), max_eq_left h]
+    have hz : |z| = -z := abs_of_neg (by linarith)
+    have hw : |(1 - t) * z + t * (-1 / 5)| = -((1 - t) * z + t * (-1 / 5)) :=
+      abs_of_nonpos (by nlinarith)
+    rw [hz, hw]
+    refine ⟨by nlinarith, fun _ => by nlinarith, fun h' => ?_⟩
+    have hz5 : z = -1 / 5 := by linarith
+    subst hz5; ring
+  rcases le_or_gt z (1 / 5) with h' | h'
+  · rw [min_eq_right h', max_eq_right h.le]
+    refine ⟨by ring_nf; exact le_rfl, fun h'' => ?_, fun _ => by ring⟩
+    exact absurd h'' (not_lt.mpr (abs_le.mpr ⟨by linarith, h'⟩))
+  · rw [min_eq_left h'.le, max_eq_right (by norm_num)]
+    have hz : |z| = z := abs_of_pos (by linarith)
+    have hw : |(1 - t) * z + t * (1 / 5)| = (1 - t) * z + t * (1 / 5) :=
+      abs_of_nonneg (by nlinarith)
+    rw [hz, hw]
+    refine ⟨by nlinarith, fun _ => by nlinarith, fun h'' => by linarith⟩
+
 lemma apm_t02a03_sector_aux_L4_clamp_aux_fix_aux_z_bound
     (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X)
     (hp : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p) :
     |(p.1 : apm_t02a03_E3) 2| ≤ (1 / 5 : ℝ) := by
-  sorry
+  rcases hp with hT | hL
+  · by_contra hz
+    push_neg at hz
+    have hpR := p.2.1
+    have hsL := apm_t02a03_sector_aux_L4_aux_left_planar p.1 hpR hz.le
+    have hT' : Metric.infDist (p.1 : apm_t02a03_E3) apm_t02a03_C = 1 / 4 := hT
+    rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist] at hT'
+    have hz2 : (1 / 25 : ℝ) < (p.1 : apm_t02a03_E3) 2 ^ 2 := by
+      rw [← sq_abs]; nlinarith [abs_nonneg ((p.1 : apm_t02a03_E3) 2)]
+    have h1 : (1 / 16 : ℝ) < (Real.sqrt (((p.1 : apm_t02a03_E3) 0 + 6 / 5) ^ 2 +
+        (p.1 : apm_t02a03_E3) 1 ^ 2) - 1) ^ 2 + (p.1 : apm_t02a03_E3) 2 ^ 2 := by nlinarith
+    have h2 := Real.sqrt_lt_sqrt (by norm_num) h1
+    rw [show Real.sqrt (1 / 16 : ℝ) = 1 / 4 by
+      rw [show (1 / 16 : ℝ) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]] at h2
+    linarith
+  · obtain ⟨u, hu⟩ := hL
+    rw [← hu]
+    simp
 
 lemma apm_t02a03_sector_aux_L4_clamp_aux_fix_aux_clampZ
     (z : ℝ) (hz : |z| ≤ (1 / 5 : ℝ)) :
@@ -2637,7 +2704,18 @@ lemma apm_t02a03_sector_aux_L4_clamp_aux_right_aux_right_tube
     (hp : Metric.infDist p (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ)) :
     Metric.infDist (apm_t02a03_sector_aux_clampMove t p)
         (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ) := by
-  sorry
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq] at hp ⊢
+  have hrad : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (apm_t02a03_sector_aux_clampMove t p) = apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p := by
+    simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad, apm_t02a03_sector_aux_clampMove]
+  have hz := (apm_t02a03_sector_aux_L4_aux_clamp_abs t ht (p 2)).1
+  have hz2 : (apm_t02a03_sector_aux_clampMove t p) 2 ^ 2 ≤ p 2 ^ 2 := by
+    have : (apm_t02a03_sector_aux_clampMove t p) 2 =
+        (1 - t) * p 2 + t * apm_t02a03_sector_aux_clampZ (p 2) := by
+      simp [apm_t02a03_sector_aux_clampMove]
+    rw [this, ← sq_abs, ← sq_abs (p 2)]
+    exact pow_le_pow_left₀ (abs_nonneg _) hz 2
+  rw [hrad]
+  exact (Real.sqrt_le_sqrt (by linarith)).trans hp
 
 lemma apm_t02a03_sector_aux_L4_clamp_aux_right_aux_left_far
     (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
@@ -2645,7 +2723,24 @@ lemma apm_t02a03_sector_aux_L4_clamp_aux_right_aux_left_far
     (hpL : (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C) :
     (1 / 4 : ℝ) ≤
       Metric.infDist (apm_t02a03_sector_aux_clampMove t p) apm_t02a03_C := by
-  sorry
+  have hcl := apm_t02a03_sector_aux_L4_aux_clamp_abs t ht (p 2)
+  rcases le_or_gt |p 2| (1 / 5) with hz | hz
+  · have hfix : apm_t02a03_sector_aux_clampMove t p = p := by
+      ext i; fin_cases i <;> simp [apm_t02a03_sector_aux_clampMove, hcl.2.2 hz]
+    rw [hfix]; exact hpL
+  · have hsL := apm_t02a03_sector_aux_L4_aux_left_planar p hpR hz.le
+    rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist]
+    have h0 : (apm_t02a03_sector_aux_clampMove t p) 0 = p 0 := by
+      simp [apm_t02a03_sector_aux_clampMove]
+    have h1 : (apm_t02a03_sector_aux_clampMove t p) 1 = p 1 := by
+      simp [apm_t02a03_sector_aux_clampMove]
+    rw [h0, h1]
+    have hq : (1 / 16 : ℝ) ≤ (Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) - 1) ^ 2 +
+        (apm_t02a03_sector_aux_clampMove t p) 2 ^ 2 := by
+      nlinarith [sq_nonneg ((apm_t02a03_sector_aux_clampMove t p) 2)]
+    rw [show (1 / 4 : ℝ) = Real.sqrt (1 / 16) by
+      rw [show (1 / 16 : ℝ) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]]
+    exact Real.sqrt_le_sqrt hq
 
 lemma apm_t02a03_sector_aux_L4_clamp_aux_right
     (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1)
