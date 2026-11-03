@@ -2267,7 +2267,55 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_perms
     (d : apm_t97A03_ClassifySheetData A B Y p)
     (hmono : apm_t97A03_TwoCircleMonodromy p hp) :
     d.firstPerm = Equiv.swap 0 1 ∧ d.secondPerm = Equiv.swap 0 1 := by
-  sorry
+  obtain ⟨label, hfirst, hsecond⟩ := hmono
+  have transport_ne_refl
+      (transport : Equiv.Perm
+        (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)))
+      (htransport :
+        ConstructionTargets.t97A03Closure.labeledFiberMonodromy label transport =
+          Equiv.swap 0 1) : transport ≠ Equiv.refl _ := by
+    rw [← ConstructionTargets.t97A03Closure.labeledFiberMonodromy_ne_refl_iff]
+    rw [htransport]
+    intro h
+    have := Equiv.congr_fun h (0 : Fin 2)
+    simpa using this
+  have perm_ne_refl
+      (transport : Equiv.Perm
+        (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)))
+      (perm : Equiv.Perm (Fin 2))
+      (hendpoint : ∀ i,
+        ((transport
+          ⟨d.sphere i apm_t97A03_north, by simp [d.sphere_lifts]⟩ : Y) =
+          d.sphere (perm i) apm_t97A03_north))
+      (hne : transport ≠ Equiv.refl _) : perm ≠ Equiv.refl _ := by
+    intro hperm
+    apply hne
+    apply Equiv.ext
+    intro x
+    obtain ⟨i, hi, hi_unique⟩ := d.sphere_unique (by simpa using x.property)
+    have hx : x =
+        ⟨d.sphere i apm_t97A03_north, by simp [d.sphere_lifts]⟩ := by
+      apply Subtype.ext
+      exact hi.symm
+    subst x
+    apply Subtype.ext
+    rw [hendpoint, hperm]
+    simp
+  constructor
+  · rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap d.firstPerm with
+      h | h
+    · exact False.elim ((perm_ne_refl _ _
+        (fun i ↦
+          (apm_t97A03_classify_aux_sheetData_aux_transport A B Y p hp d i).1)
+        (transport_ne_refl _ hfirst)) h)
+    · exact h
+  · rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap d.secondPerm with
+      h | h
+    · exact False.elim ((perm_ne_refl _ _
+        (fun i ↦
+          (apm_t97A03_classify_aux_sheetData_aux_transport A B Y p hp d i).2)
+        (transport_ne_refl _ hsecond)) h)
+    · exact h
 
 /-- With both endpoint permutations normalized to the transposition, the
 sphere trivialization and the two pairs of arc lifts glue to a continuous
@@ -2287,12 +2335,93 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder
 /-- The total space of this covering is Hausdorff: the literal base quotient
 is Hausdorff, and distinct points in one fibre are separated in an evenly
 covered neighbourhood. -/
+def apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_rel
+    (A B : Circle) (x y : Sum Circle apm_t97A03_S2) : Prop :=
+  x = y ∨
+  (x = .inl A ∧ y = .inr apm_t97A03_north) ∨
+  (x = .inr apm_t97A03_north ∧ y = .inl A) ∨
+  (x = .inl B ∧ y = .inr apm_t97A03_south) ∨
+  (x = .inr apm_t97A03_south ∧ y = .inl B)
+
+lemma apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_poles_ne :
+    apm_t97A03_north ≠ apm_t97A03_south := by
+  intro h
+  have h' := congrArg (fun z : apm_t97A03_S2 => (z : apm_t97A03_R3) 2) h
+  norm_num [apm_t97A03_north, apm_t97A03_south,
+    EuclideanSpace.single_apply] at h'
+
+lemma apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_trans
+    (A B : Circle) (hAB : A ≠ B) {x y z : Sum Circle apm_t97A03_S2}
+    (hxy : apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_rel A B x y)
+    (hyz : apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_rel A B y z) :
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_rel A B x z := by
+  rcases hxy with rfl | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
+    rcases hyz with h | h | h | h | h <;>
+    simp_all [apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_rel,
+      hAB,
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_poles_ne,
+      Ne.symm apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_poles_ne]
+
+lemma apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_eqv
+    (A B : Circle) (hAB : A ≠ B) (x y : Sum Circle apm_t97A03_S2) :
+    Relation.EqvGen (apm_t97A03_BaseRel A B) x y ↔
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_rel A B x y := by
+  constructor
+  · intro h
+    exact Relation.EqvGen.rec
+      (fun _ _ h => by cases h <;> simp [apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_rel])
+      (fun _ => Or.inl rfl)
+      (fun _ _ _ ih => by
+        rcases ih with h | ⟨hx, hy⟩ | ⟨hx, hy⟩ | ⟨hx, hy⟩ | ⟨hx, hy⟩
+        · exact Or.inl h.symm
+        · exact Or.inr (Or.inr (Or.inl ⟨hy, hx⟩))
+        · exact Or.inr (Or.inl ⟨hy, hx⟩)
+        · exact Or.inr (Or.inr (Or.inr (Or.inr ⟨hy, hx⟩)))
+        · exact Or.inr (Or.inr (Or.inr (Or.inl ⟨hy, hx⟩))))
+      (fun _ _ _ _ _ ih₁ ih₂ =>
+        apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_trans
+          A B hAB ih₁ ih₂) h
+  · intro h
+    rcases h with rfl | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+    · exact .refl _
+    · exact .rel _ _ (.north)
+    · exact .symm _ _ (.rel _ _ (.north))
+    · exact .rel _ _ (.south)
+    · exact .symm _ _ (.rel _ _ (.south))
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
     (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p) :
     T2Space Y := by
-  sorry
+  letI : T2Space (apm_t97A03_BaseSpace A B) :=
+    ConstructionTargets.compact_closed_equivalence_quotient_t2
+      (Relation.EqvGen.setoid (apm_t97A03_BaseRel A B)) (by
+        have hdiag : IsClosed {q : (Sum Circle apm_t97A03_S2) ×
+            (Sum Circle apm_t97A03_S2) | q.1 = q.2} :=
+          isClosed_eq continuous_fst continuous_snd
+        have hsingle (x y : Sum Circle apm_t97A03_S2) :
+            IsClosed ({(x, y)} : Set ((Sum Circle apm_t97A03_S2) ×
+              (Sum Circle apm_t97A03_S2))) := isClosed_singleton
+        rw [show {q | (Relation.EqvGen.setoid (apm_t97A03_BaseRel A B)).r q.1 q.2} =
+            {q | q.1 = q.2} ∪ {(.inl A, .inr apm_t97A03_north)} ∪
+              {(.inr apm_t97A03_north, .inl A)} ∪
+              {(.inl B, .inr apm_t97A03_south)} ∪
+              {(.inr apm_t97A03_south, .inl B)} by
+          ext q
+          change Relation.EqvGen (apm_t97A03_BaseRel A B) q.1 q.2 ↔ _
+          rw [apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_eqv A B hAB]
+          simp only [apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_t2_aux_rel,
+            Set.mem_union, Set.mem_setOf_eq, Set.mem_singleton_iff]
+          aesop]
+        exact ((((hdiag.union (hsingle _ _)).union (hsingle _ _)).union
+          (hsingle _ _)).union (hsingle _ _)))
+  refine ⟨fun x y hxy ↦ ?_⟩
+  by_cases h : p x = p y
+  · exact hp.isSeparatedMap x y h hxy
+  · obtain ⟨u, v, hu, hv, hxu, hyv, huv⟩ := t2_separation h
+    exact ⟨p ⁻¹' u, p ⁻¹' v, hu.preimage hp.continuous,
+      hv.preimage hp.continuous, hxu, hyv, huv.preimage _⟩
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend
     (A B : Circle) (hAB : A ≠ B)
