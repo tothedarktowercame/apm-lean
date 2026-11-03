@@ -2093,6 +2093,45 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
       (d.sphere_lifts (d.secondPerm i) apm_t97A03_north)
     exact (hjunique _ rfl).trans (hjunique _ hsphere.symm).symm
 
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_quotient
+    {X Z W : Type} [TopologicalSpace X] [TopologicalSpace Z] [TopologicalSpace W]
+    (q : X → Z) (g : X → W) (hq : Topology.IsQuotientMap q) (hg : Continuous g)
+    (hcompat : ∀ x y, q x = q y → g x = g y) :
+    ∃ s : Z → W, Continuous s ∧ ∀ x, s (q x) = g x := by
+  let r : Z → X := Function.surjInv hq.surjective
+  let s : Z → W := g ∘ r
+  have hr : Function.RightInverse r q :=
+    Function.rightInverse_surjInv hq.surjective
+  have hsq : s ∘ q = g := by
+    funext x
+    exact hcompat (r (q x)) x (hr (q x))
+  refine ⟨s, hq.continuous_iff.mpr ?_, fun x ↦ congrFun hsq x⟩
+  simpa [hsq] using hg
+
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
+    (A B : Circle) (hAB : A ≠ B) :
+    Function.Surjective (fun x : Sum (Set.Icc (0 : ℝ) 1) (Set.Icc (0 : ℝ) 1) ↦
+      match x with
+      | .inl t => apm_t97A03_circleArc A B t
+      | .inr t => apm_t97A03_complementaryCircleArc A B t) := by
+  sorry
+
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_fibres
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (first second : Set.Icc (0 : ℝ) 1 → Y)
+    (hzero : first 0 = second 0) (hone : first 1 = second 1) :
+    ∀ x y : Sum (Set.Icc (0 : ℝ) 1) (Set.Icc (0 : ℝ) 1),
+      (match x with
+        | .inl t => apm_t97A03_circleArc A B t
+        | .inr t => apm_t97A03_complementaryCircleArc A B t) =
+      (match y with
+        | .inl t => apm_t97A03_circleArc A B t
+        | .inr t => apm_t97A03_complementaryCircleArc A B t) →
+      (match x with | .inl t => first t | .inr t => second t) =
+      (match y with | .inl t => first t | .inr t => second t) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
@@ -2103,7 +2142,29 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
       Continuous s ∧
       (∀ t, s (apm_t97A03_circleArc A B t) = first t) ∧
       (∀ t, s (apm_t97A03_complementaryCircleArc A B t) = second t) := by
-  sorry
+  let q : Sum (Set.Icc (0 : ℝ) 1) (Set.Icc (0 : ℝ) 1) → Circle := fun x ↦
+    match x with
+    | .inl t => apm_t97A03_circleArc A B t
+    | .inr t => apm_t97A03_complementaryCircleArc A B t
+  let g : Sum (Set.Icc (0 : ℝ) 1) (Set.Icc (0 : ℝ) 1) → Y := fun x ↦
+    match x with | .inl t => first t | .inr t => second t
+  have hqcont : Continuous q := by
+    apply continuous_sum_dom.mpr
+    exact ⟨(apm_t97A03_circleArc A B).continuous,
+      (apm_t97A03_complementaryCircleArc A B).continuous⟩
+  have hqsurj : Function.Surjective q :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
+      A B hAB
+  have hq : Topology.IsQuotientMap q :=
+    hqcont.isClosedMap.isQuotientMap hqcont hqsurj
+  have hg : Continuous g := continuous_sum_dom.mpr ⟨hfirst, hsecond⟩
+  have hcompat : ∀ x y, q x = q y → g x = g y :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_fibres
+      A B hAB Y first second hzero hone
+  obtain ⟨s, hs, hsq⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_quotient
+      q g hq hg hcompat
+  exact ⟨s, hs, fun t ↦ hsq (.inl t), fun t ↦ hsq (.inr t)⟩
 
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_endpoints
     (A B : Circle)
@@ -2126,7 +2187,14 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_a
     (hssecond : ∀ t,
       s (apm_t97A03_complementaryCircleArc A B t) = d.second 0 t) :
     ∀ z, p (s z) = apm_t97A03_baseCircle A B z := by
-  sorry
+  intro z
+  obtain ⟨t | t, ht⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle_aux_paste_aux_cover
+      A B hAB z
+  · rw [← ht, hsfirst, d.first_lifts]
+    rfl
+  · rw [← ht, hssecond, d.second_lifts]
+    rfl
 
 theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section_aux_circle
     (A B : Circle) (hAB : A ≠ B)
