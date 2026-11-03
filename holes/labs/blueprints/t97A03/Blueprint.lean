@@ -7247,11 +7247,128 @@ private theorem
   exact
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous
 
+/-- Every circle point has a fourth root in the closed first quadrant (claude-14). -/
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_root4 (ζ : Circle) :
+    ∃ w : Circle, 0 ≤ w.1.re ∧ 0 ≤ w.1.im ∧ w ^ 4 = ζ := by
+  set θ := toIcoMod Real.two_pi_pos 0 (Complex.arg (ζ : ℂ)) with hθ
+  have hmem : θ ∈ Set.Ico 0 (2 * Real.pi) := by
+    simpa using toIcoMod_mem_Ico Real.two_pi_pos 0 (Complex.arg (ζ : ℂ))
+  have hpi := Real.pi_pos
+  refine ⟨Circle.exp (θ / 4), ?_, ?_, ?_⟩
+  · show 0 ≤ (Circle.exp (θ / 4) : ℂ).re
+    rw [Circle.coe_exp, Complex.exp_ofReal_mul_I_re]
+    exact Real.cos_nonneg_of_mem_Icc ⟨by linarith [hmem.1], by linarith [hmem.2]⟩
+  · show 0 ≤ (Circle.exp (θ / 4) : ℂ).im
+    rw [Circle.coe_exp, Complex.exp_ofReal_mul_I_im]
+    exact Real.sin_nonneg_of_nonneg_of_le_pi (by linarith [hmem.1]) (by linarith [hmem.2])
+  · rw [← Circle.exp_nsmul, nsmul_eq_mul, show ((4 : ℕ) : ℝ) * (θ / 4) = θ by push_cast; ring,
+      hθ, toIcoMod, Circle.periodic_exp.sub_zsmul_eq, Circle.exp_arg]
+
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map_surjective_aux_raw :
     Function.Surjective
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw := by
-  sorry
+  have hI4 : apm_t97A03_circleI ^ 4 = 1 := by
+    apply Subtype.ext; simp [apm_t97A03_circleI, Complex.I_pow_four]
+  have hn4 : apm_t97A03_circleNegOne ^ 4 = 1 := by
+    apply Subtype.ext; simp [apm_t97A03_circleNegOne]; norm_num
+  have hnI4 : apm_t97A03_circleNegI ^ 4 = 1 := by
+    apply Subtype.ext; simp [apm_t97A03_circleNegI]; rw [neg_pow, Complex.I_pow_four]; norm_num
+  -- any z whose raw branch is a different leg or the arc maps to the basepoint there
+  have hbase : ∀ (j : Fin 3) (z : Circle), z ^ 4 = 1 →
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr z) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j z := by
+    intro j z hz
+    rw [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_base j z hz]
+    dsimp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw]
+    split_ifs <;> first | rfl | exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_base _ z hz
+  intro w
+  induction w using Quotient.inductionOn with
+  | h p =>
+  rcases p with s | t
+  · induction s using Quotient.inductionOn with
+    | h q =>
+    rcases q with x | x
+    · exact ⟨.inl (0, x), rfl⟩
+    · exact ⟨.inl (1, x), rfl⟩
+  · -- the three legs: fourth roots in the first, third and fourth quadrants
+    have hleg : ∀ (j : Fin 3) (ζ : Circle), ∃ z : Circle, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr z) = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j z ∧ z ^ 4 = ζ := by
+      intro j ζ
+      obtain ⟨w, hre, him, hw⟩ := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_root4 ζ
+      fin_cases j
+      · refine ⟨w, ?_, hw⟩
+        dsimp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw]
+        by_cases harc : w.1.re ≤ 0 ∧ 0 ≤ w.1.im
+        · have hre0 : w.1.re = 0 := le_antisymm harc.1 hre
+          -- then w = i
+          have hwI : w = apm_t97A03_circleI := by
+            apply Subtype.ext; apply Complex.ext
+            · simp [apm_t97A03_circleI, hre0]
+            · have hn : w.1.re ^ 2 + w.1.im ^ 2 = 1 := by
+                have := Circle.normSq_coe w; rw [Complex.normSq_apply] at this; nlinarith
+              rw [hre0] at hn
+              have : w.1.im = 1 := by nlinarith
+              simp [apm_t97A03_circleI, this]
+          rw [if_pos harc, hwI]; exact (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_base _ _ hI4).symm
+        · rw [if_neg harc, if_pos ⟨hre, him⟩]; rfl
+      · refine ⟨apm_t97A03_circleNegOne * w, ?_, by rw [mul_pow, hn4, one_mul, hw]⟩
+        by_cases h1 : (apm_t97A03_circleNegOne * w) ^ 4 = 1
+        · exact hbase 1 _ h1
+        · dsimp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw]
+          have hre' : (apm_t97A03_circleNegOne * w : Circle).1.re = -w.1.re := by
+            simp [apm_t97A03_circleNegOne]
+          have him' : (apm_t97A03_circleNegOne * w : Circle).1.im = -w.1.im := by
+            simp [apm_t97A03_circleNegOne]
+          rw [hre', him']
+          by_cases h0 : w.1.im = 0
+          · exfalso; apply h1
+            have hn : w.1.re ^ 2 + w.1.im ^ 2 = 1 := by
+              have := Circle.normSq_coe w; rw [Complex.normSq_apply] at this; nlinarith
+            rw [h0] at hn
+            have hr1 : w.1.re = 1 := by nlinarith
+            have : w = 1 := by apply Subtype.ext; apply Complex.ext <;> simp [hr1, h0]
+            rw [this, mul_one, hn4]
+          · have himpos : 0 < w.1.im := lt_of_le_of_ne him (Ne.symm h0)
+            rw [if_neg (by intro h; linarith [h.2]), if_neg (by intro h; linarith [h.2]),
+              if_pos ⟨by linarith, by linarith⟩]; rfl
+      · set iN := apm_t97A03_circleNegI
+        refine ⟨iN * w, ?_, by rw [mul_pow, hnI4, one_mul, hw]⟩
+        by_cases h1 : (iN * w) ^ 4 = 1
+        · exact hbase 2 _ h1
+        · dsimp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw]
+          have hre' : (iN * w : Circle).1.re = w.1.im := by simp [iN, apm_t97A03_circleNegI]
+          have him' : (iN * w : Circle).1.im = -w.1.re := by simp [iN, apm_t97A03_circleNegI]
+          rw [hre', him']
+          have hn : w.1.re ^ 2 + w.1.im ^ 2 = 1 := by
+            have := Circle.normSq_coe w; rw [Complex.normSq_apply] at this; nlinarith
+          by_cases h0 : w.1.re = 0
+          · exfalso; apply h1
+            rw [h0] at hn
+            have hi1 : w.1.im = 1 := by nlinarith
+            have : w = apm_t97A03_circleI := by
+              apply Subtype.ext; apply Complex.ext <;> simp [apm_t97A03_circleI, hi1, h0]
+            rw [this, mul_pow, hnI4, hI4, one_mul]
+          · by_cases h0' : w.1.im = 0
+            · exfalso; apply h1
+              rw [h0'] at hn
+              have hr1 : w.1.re = 1 := by nlinarith
+              have : w = 1 := by apply Subtype.ext; apply Complex.ext <;> simp [hr1, h0']
+              rw [this, mul_one, hnI4]
+            · have hrp : 0 < w.1.re := lt_of_le_of_ne hre (Ne.symm h0)
+              have hip : 0 < w.1.im := lt_of_le_of_ne him (Ne.symm h0')
+              rw [if_neg (by intro h; linarith [h.1]), if_neg (by intro h; linarith [h.2]),
+                if_neg (by intro h; linarith [h.1])]; rfl
+    induction t using Quotient.inductionOn with
+    | h r =>
+    rcases r with u | c
+    · induction u using Quotient.inductionOn with
+      | h v =>
+      rcases v with c | c
+      · obtain ⟨z, hz, hz4⟩ := hleg 0 c
+        exact ⟨.inr z, by rw [hz]; unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4; rw [hz4]; rfl⟩
+      · obtain ⟨z, hz, hz4⟩ := hleg 1 c
+        exact ⟨.inr z, by rw [hz]; unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4; rw [hz4]; rfl⟩
+    · obtain ⟨z, hz, hz4⟩ := hleg 2 c
+      exact ⟨.inr z, by rw [hz]; unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4; rw [hz4]; rfl⟩
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_map_surjective :
