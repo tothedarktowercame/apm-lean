@@ -2520,7 +2520,54 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux
     (hn : ∀ i, c i 1 = d.sphere i apm_t97A03_north) :
     ∀ {y w}, p y = apm_t97A03_baseCircle A B (q w) →
       ∃! i : Fin 2, c i w = y := by
-  sorry
+  have hc_i (i : Fin 2) : Continuous (c i) := by
+    have hpair : Continuous (fun w : Circle ↦ ((i, w) : Fin 2 × Circle)) :=
+      Continuous.prodMk continuous_const continuous_id
+    exact hc.comp hpair
+  intro y w hy
+  let γ : Path w 1 := PathConnectedSpace.somePath w 1
+  let β : Path (apm_t97A03_baseCircle A B (q w))
+      (apm_t97A03_baseCircle A B (q 1)) :=
+    (γ.map q.continuous).map (apm_t97A03_continuous_baseCircle A B)
+  have hzero : β 0 = p y := by
+    change apm_t97A03_baseCircle A B (q (γ 0)) = p y
+    rw [γ.source]
+    exact hy.symm
+  let l : C(Set.Icc (0 : ℝ) 1, Y) := hp.liftPath β y hzero
+  have hl (t : Set.Icc (0 : ℝ) 1) : p (l t) = β t := by
+    exact congr_fun (hp.liftPath_lifts β y hzero) t
+  have hlone : p (l 1) = apm_t97A03_baseSphere A B apm_t97A03_north := by
+    rw [hl]
+    change apm_t97A03_baseCircle A B (q (γ 1)) = _
+    rw [γ.target, hq1]
+    exact apm_t97A03_baseCircle_A A B
+  obtain ⟨i, hi, hi_unique⟩ := d.sphere_unique hlone
+  have hpath : (l : Set.Icc (0 : ℝ) 1 → Y) = fun t ↦ c i (γ t) := by
+    apply hp.eq_of_comp_eq l.continuous ((hc_i i).comp γ.continuous)
+    · funext t
+      simp only [Function.comp_apply]
+      rw [hl, hlift]
+      rfl
+    · change l (1 : Set.Icc (0 : ℝ) 1) = c i (γ 1)
+      rw [← hi, γ.target, hn]
+  refine ⟨i, ?_, ?_⟩
+  · have hz := congrFun hpath 0
+    rw [hp.liftPath_zero β y hzero, γ.source] at hz
+    exact hz.symm
+  · intro j hj
+    have hciw : c i w = y := by
+      have hz := congrFun hpath 0
+      rw [hp.liftPath_zero β y hzero, γ.source] at hz
+      exact hz.symm
+    have heq : c j = c i := by
+      apply hp.eq_of_comp_eq (hc_i j) (hc_i i)
+      · funext z
+        simp only [Function.comp_apply]
+        rw [hlift, hlift]
+      · exact hj.trans hciw.symm
+    obtain ⟨k, _, hk⟩ := d.sphere_unique (d.sphere_lifts i apm_t97A03_north)
+    apply (hk j ?_).trans (hk i rfl).symm
+    rw [← hn j, ← hn i, heq]
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste
     (A B : Circle) (hAB : A ≠ B)
