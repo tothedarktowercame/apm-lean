@@ -1812,6 +1812,55 @@ theorem apm_t97A03_classify_aux_sheetData_aux_sphereTrivialization
         ∃! i : Fin 2, sphere i z = y := by
   sorry
 
+theorem apm_t97A03_classify_aux_sheetData_aux_arcEndpoints_aux_path
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (sphere : Fin 2 → apm_t97A03_S2 → Y)
+    (sphere_lifts : ∀ i z, p (sphere i z) = apm_t97A03_baseSphere A B z)
+    (sphere_unique : ∀ {y z}, p y = apm_t97A03_baseSphere A B z →
+      ∃! i : Fin 2, sphere i z = y)
+    (γ : Path (apm_t97A03_baseCircle A B A) (apm_t97A03_baseCircle A B B)) :
+    ∃ (lift : Fin 2 → Set.Icc (0 : ℝ) 1 → Y) (perm : Equiv.Perm (Fin 2)),
+      (∀ i, Continuous (lift i)) ∧
+      (∀ i t, p (lift i t) = γ t) ∧
+      (∀ i, lift i 0 = sphere i apm_t97A03_north) ∧
+      (∀ i, lift i 1 = sphere (perm i) apm_t97A03_south) := by
+  have hzero (i : Fin 2) : γ 0 = p (sphere i apm_t97A03_north) := by
+    rw [γ.source, sphere_lifts]
+    exact apm_t97A03_baseCircle_A A B
+  let lift : Fin 2 → C(Set.Icc (0 : ℝ) 1, Y) := fun i ↦
+    hp.liftPath γ (sphere i apm_t97A03_north) (hzero i)
+  have hlifts (i : Fin 2) (t : Set.Icc (0 : ℝ) 1) : p (lift i t) = γ t := by
+    exact congr_fun (hp.liftPath_lifts γ (sphere i apm_t97A03_north) (hzero i)) t
+  have hone (i : Fin 2) :
+      p (lift i 1) = apm_t97A03_baseSphere A B apm_t97A03_south := by
+    rw [hlifts, γ.target]
+    exact apm_t97A03_baseCircle_B A B
+  choose endpoint hendpoint _ using fun i ↦ sphere_unique (hone i)
+  have endpoint_injective : Function.Injective endpoint := by
+    intro i j hij
+    have hatone : lift i (1 : Set.Icc (0 : ℝ) 1) = lift j 1 := by
+      rw [← hendpoint i, ← hendpoint j, hij]
+    have heqfun : (lift i : Set.Icc (0 : ℝ) 1 → Y) = lift j := by
+      apply hp.eq_of_comp_eq (lift i).continuous (lift j).continuous
+      · funext t
+        rw [Function.comp_apply, Function.comp_apply, hlifts, hlifts]
+      · exact hatone
+    have heq : lift i = lift j := ContinuousMap.coe_injective heqfun
+    have hnorth : sphere i apm_t97A03_north = sphere j apm_t97A03_north := by
+      rw [← hp.liftPath_zero γ (sphere i apm_t97A03_north) (hzero i),
+        ← hp.liftPath_zero γ (sphere j apm_t97A03_north) (hzero j)]
+      exact congrFun (congrArg DFunLike.coe heq) 0
+    obtain ⟨k, _, hk⟩ := sphere_unique (sphere_lifts i apm_t97A03_north)
+    exact (hk i rfl).trans (hk j hnorth.symm).symm
+  let perm : Equiv.Perm (Fin 2) :=
+    Equiv.ofBijective endpoint (Finite.injective_iff_bijective.mp endpoint_injective)
+  refine ⟨fun i ↦ lift i, perm, fun i ↦ (lift i).continuous, hlifts, ?_, ?_⟩
+  · intro i
+    exact hp.liftPath_zero γ (sphere i apm_t97A03_north) (hzero i)
+  · intro i
+    exact (hendpoint i).symm
+
 /-- Once the sphere sheets are labelled, path lifting supplies both arc
 lifts, and the two-point south fibre turns their endpoints into permutations. -/
 theorem apm_t97A03_classify_aux_sheetData_aux_arcEndpoints
@@ -1831,7 +1880,15 @@ theorem apm_t97A03_classify_aux_sheetData_aux_arcEndpoints
       (∀ i, second i 0 = sphere i apm_t97A03_north) ∧
       (∀ i, first i 1 = sphere (firstPerm i) apm_t97A03_south) ∧
       (∀ i, second i 1 = sphere (secondPerm i) apm_t97A03_south) := by
-  sorry
+  obtain ⟨first, firstPerm, hfirstcont, hfirstlift, hfirstzero, hfirstone⟩ :=
+    apm_t97A03_classify_aux_sheetData_aux_arcEndpoints_aux_path
+      A B Y p hp sphere sphere_lifts sphere_unique (apm_t97A03_baseCircleArc A B)
+  obtain ⟨second, secondPerm, hsecondcont, hsecondlift, hsecondzero, hsecondone⟩ :=
+    apm_t97A03_classify_aux_sheetData_aux_arcEndpoints_aux_path
+      A B Y p hp sphere sphere_lifts sphere_unique
+        (apm_t97A03_baseComplementaryCircleArc A B)
+  exact ⟨first, second, firstPerm, secondPerm, hfirstcont, hsecondcont,
+    hfirstlift, hsecondlift, hfirstzero, hsecondzero, hfirstone, hsecondone⟩
 
 /-- Sheet data shared by the nontriviality argument and both quotient-model
 homeomorphisms. -/
