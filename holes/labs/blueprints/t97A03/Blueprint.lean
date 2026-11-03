@@ -2392,6 +2392,40 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_perms
 literal circle sheets.  The parametrisation `q` records the corresponding
 homeomorphism from the standard circle (with marked points `1,-1`) to the
 base circle (with marked points `A,B`). -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.swap 0 1)
+    (hsecond : d.secondPerm = Equiv.swap 0 1) :
+    ∃ (q : Circle ≃ₜ Circle) (c : Fin 2 → Circle → Y),
+      q 1 = A ∧ q apm_t97A03_circleNegOne = B ∧
+      Continuous (fun w : Fin 2 × Circle ↦ c w.1 w.2) ∧
+      (∀ i w, p (c i w) = apm_t97A03_baseCircle A B (q w)) ∧
+      (∀ i, c i 1 = d.sphere i apm_t97A03_north) ∧
+      (∀ i, c i apm_t97A03_circleNegOne =
+        d.sphere (Equiv.swap 0 1 i) apm_t97A03_south) := by
+  sorry
+
+/-- A pair of continuous lifts of a circle parametrisation which starts at
+the two different north-pole sheets exhausts every fibre.  This is covering
+path lifting uniqueness, applied along a path from `1` to the requested
+circle point; the two possible initial points are supplied by
+`sphere_unique`. -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_fiberUnique
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (q : Circle ≃ₜ Circle) (c : Fin 2 → Circle → Y)
+    (hq1 : q 1 = A)
+    (hc : Continuous (fun w : Fin 2 × Circle ↦ c w.1 w.2))
+    (hlift : ∀ i w, p (c i w) = apm_t97A03_baseCircle A B (q w))
+    (hn : ∀ i, c i 1 = d.sphere i apm_t97A03_north) :
+    ∀ {y w}, p y = apm_t97A03_baseCircle A B (q w) →
+      ∃! i : Fin 2, c i w = y := by
+  sorry
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y]
@@ -2408,7 +2442,13 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux
         d.sphere (Equiv.swap 0 1 i) apm_t97A03_south) ∧
       ∀ {y w}, p y = apm_t97A03_baseCircle A B (q w) →
         ∃! i : Fin 2, c i w = y := by
-  sorry
+  obtain ⟨q, c, hq1, hqn, hc, hlift, hn, hs⟩ :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste
+      A B hAB Y p hp d hfirst hsecond
+  refine ⟨q, c, hq1, hqn, hc, hlift, hn, hs, ?_⟩
+  exact
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_fiberUnique
+      A B Y p hp d q c hq1 hc hlift hn
 
 /-- The concrete map on representatives used by the two-circle decoder. -/
 noncomputable def apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw
