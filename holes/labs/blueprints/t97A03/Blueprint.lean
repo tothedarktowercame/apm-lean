@@ -4003,9 +4003,43 @@ theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_contr
 circle zero and the two semicircles of circle one are three loops at that
 point.  Parametrising each closed semicircle modulo its endpoints gives the
 three circle summands, while the two sphere sheets give the sphere wedge. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv :
+    ∃ e : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space ≃
+        apm_t97A03_modelWedge,
+      Continuous e := by
+  sorry
+
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_compact :
+    CompactSpace
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space := by
+  constructor
+  let q : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) →
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space :=
+    fun x ↦ Quotient.mk _ x
+  have hc : Continuous q := continuous_coinduced_rng
+  have hsurj : Function.Surjective q := by
+    intro y
+    refine Quotient.inductionOn y ?_
+    intro x
+    exact ⟨x, rfl⟩
+  have hq := (isCompact_univ : IsCompact
+    (Set.univ : Set (Sum apm_t97A03_TwoSpheres (Fin 2 × Circle)))).image hc
+  rw [Set.image_univ, Set.range_eq_univ.mpr hsurj] at hq
+  exact hq
+
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2 :
+    T2Space apm_t97A03_modelWedge :=
+  apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2
+
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm :
     Nonempty (apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space ≃ₜ apm_t97A03_modelWedge) := by
-  sorry
+  letI : CompactSpace
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_space :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_compact
+  letI : T2Space apm_t97A03_modelWedge :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_t2
+  obtain ⟨e, he⟩ := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv
+  exact ⟨Continuous.homeoOfEquivCompactToT2 (f := e) he⟩
 
 /-- The slid two-circle graph has four edges between two sphere vertices;
 collapsing one spanning edge leaves the three-circle wedge. -/
