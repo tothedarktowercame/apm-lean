@@ -1772,6 +1772,114 @@ def apm_t97A03_TwoCircleMonodromy
       ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
         (apm_t97A03_secondLiteralTransport p hp) = Equiv.swap 0 1
 
+/-- The common geometric input for the two model comparisons.  The map
+`sphere` labels the two sheets above the literal sphere, while `first` and
+`second` are the lifts of the two complementary circle arcs starting on the
+corresponding north-pole sheet.  Recording the endpoint permutations here
+keeps all later quotient gluing arguments independent of choices made by the
+covering-lift API. -/
+structure apm_t97A03_ClassifySheetData
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) where
+  sphere : Fin 2 → apm_t97A03_S2 → Y
+  continuous_sphere : Continuous (fun q : Fin 2 × apm_t97A03_S2 ↦ sphere q.1 q.2)
+  sphere_lifts : ∀ i z, p (sphere i z) = apm_t97A03_baseSphere A B z
+  sphere_unique : ∀ {y z}, p y = apm_t97A03_baseSphere A B z →
+    ∃! i : Fin 2, sphere i z = y
+  first : Fin 2 → Set.Icc (0 : ℝ) 1 → Y
+  second : Fin 2 → Set.Icc (0 : ℝ) 1 → Y
+  continuous_first : ∀ i, Continuous (first i)
+  continuous_second : ∀ i, Continuous (second i)
+  first_lifts : ∀ i t, p (first i t) = apm_t97A03_baseCircleArc A B t
+  second_lifts : ∀ i t, p (second i t) = apm_t97A03_baseComplementaryCircleArc A B t
+  first_zero : ∀ i, first i 0 = sphere i apm_t97A03_north
+  second_zero : ∀ i, second i 0 = sphere i apm_t97A03_north
+  firstPerm : Equiv.Perm (Fin 2)
+  secondPerm : Equiv.Perm (Fin 2)
+  first_one : ∀ i, first i 1 = sphere (firstPerm i) apm_t97A03_south
+  second_one : ∀ i, second i 1 = sphere (secondPerm i) apm_t97A03_south
+
+/-- Triviality of a two-sheeted covering over the simply connected literal
+two-sphere.  This is the precise sphere-only use of simple connectedness. -/
+theorem apm_t97A03_classify_aux_sheetData_aux_sphereTrivialization
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2) :
+    ∃ sphere : Fin 2 → apm_t97A03_S2 → Y,
+      Continuous (fun q : Fin 2 × apm_t97A03_S2 ↦ sphere q.1 q.2) ∧
+      (∀ i z, p (sphere i z) = apm_t97A03_baseSphere A B z) ∧
+      ∀ {y z}, p y = apm_t97A03_baseSphere A B z →
+        ∃! i : Fin 2, sphere i z = y := by
+  sorry
+
+/-- Once the sphere sheets are labelled, path lifting supplies both arc
+lifts, and the two-point south fibre turns their endpoints into permutations. -/
+theorem apm_t97A03_classify_aux_sheetData_aux_arcEndpoints
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (sphere : Fin 2 → apm_t97A03_S2 → Y)
+    (sphere_lifts : ∀ i z, p (sphere i z) = apm_t97A03_baseSphere A B z)
+    (sphere_unique : ∀ {y z}, p y = apm_t97A03_baseSphere A B z →
+      ∃! i : Fin 2, sphere i z = y) :
+    ∃ (first second : Fin 2 → Set.Icc (0 : ℝ) 1 → Y)
+        (firstPerm secondPerm : Equiv.Perm (Fin 2)),
+      (∀ i, Continuous (first i)) ∧
+      (∀ i, Continuous (second i)) ∧
+      (∀ i t, p (first i t) = apm_t97A03_baseCircleArc A B t) ∧
+      (∀ i t, p (second i t) = apm_t97A03_baseComplementaryCircleArc A B t) ∧
+      (∀ i, first i 0 = sphere i apm_t97A03_north) ∧
+      (∀ i, second i 0 = sphere i apm_t97A03_north) ∧
+      (∀ i, first i 1 = sphere (firstPerm i) apm_t97A03_south) ∧
+      (∀ i, second i 1 = sphere (secondPerm i) apm_t97A03_south) := by
+  sorry
+
+/-- Sheet data shared by the nontriviality argument and both quotient-model
+homeomorphisms. -/
+theorem apm_t97A03_classify_aux_sheetData
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2) :
+    Nonempty (apm_t97A03_ClassifySheetData A B Y p) := by
+  obtain ⟨sphere, hscont, hslift, hsunique⟩ :=
+    apm_t97A03_classify_aux_sheetData_aux_sphereTrivialization A B Y p hp hdegree
+  obtain ⟨first, second, firstPerm, secondPerm, hfcont, hscont', hflift, hsecondlift,
+      hfzero, hszero, hfone, hsone⟩ :=
+    apm_t97A03_classify_aux_sheetData_aux_arcEndpoints
+      A B Y p hp sphere hslift hsunique
+  exact ⟨⟨sphere, hscont, hslift, hsunique, first, second, hfcont, hscont', hflift,
+    hsecondlift, hfzero, hszero, firstPerm, secondPerm, hfone, hsone⟩⟩
+
+/-- The endpoint permutations of the sheet data are the literal transports:
+the first literal loop is the first arc followed by the reversed sphere
+return, so from the north point of sheet `i` it ends at the north point of
+sheet `firstPerm i`, and likewise for the second. -/
+theorem apm_t97A03_classify_aux_sheetData_aux_transport
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p) (i : Fin 2) :
+    ((apm_t97A03_firstLiteralTransport p hp
+        ⟨d.sphere i apm_t97A03_north, by simp [d.sphere_lifts]⟩ : Y) =
+        d.sphere (d.firstPerm i) apm_t97A03_north) ∧
+    ((apm_t97A03_secondLiteralTransport p hp
+        ⟨d.sphere i apm_t97A03_north, by simp [d.sphere_lifts]⟩ : Y) =
+        d.sphere (d.secondPerm i) apm_t97A03_north) := by
+  sorry
+
+/-- If both literal transports fix both north sheets, the sheet-zero sphere
+lift and its two arc lifts descend to a global section.  Its image is clopen
+by covering uniqueness and closedness of the diagonal; connectedness then
+contradicts the second point in every fibre. -/
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : apm_t97A03_firstLiteralTransport p hp = Equiv.refl _)
+    (hsecond : apm_t97A03_secondLiteralTransport p hp = Equiv.refl _) : False := by
+  sorry
+
 /-- Use connected-cover monodromy, the proved literal `F₂` generators, and
 `apm_t97A03_literal_transport_moved_of_generated` to show that one of the two
 fixed complementary-arc transports moves a sheet.  Tools:
@@ -1786,7 +1894,11 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial
       Nat.card (p ⁻¹' ({x} : Set _)) = 2) :
     apm_t97A03_firstLiteralTransport p hp ≠ Equiv.refl _ ∨
       apm_t97A03_secondLiteralTransport p hp ≠ Equiv.refl _ := by
-  sorry
+  obtain ⟨d⟩ := apm_t97A03_classify_aux_sheetData A B hAB Y p hp hdegree
+  by_contra h
+  push_neg at h
+  exact apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection
+    A B hAB Y p hp hdegree d h.1 h.2
 
 /-- Convert the finite selector's one-swap case into the exact normalized
 one-circle predicate.  This is finite `Fin 2` permutation algebra using
@@ -1833,6 +1945,16 @@ sheets, lift the two fixed arcs, and descend the sheetwise maps through the
 two `EqvGen` quotients.  The inverse is obtained by the same lifted pieces;
 use `Continuous.quotient_lift`, covering uniqueness, and
 `Homeomorph.homeomorphOfContinuousOpen`. -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hmono : apm_t97A03_TwoCircleMonodromy p hp) :
+    Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -1840,12 +1962,24 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph
     (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
     (hmono : apm_t97A03_TwoCircleMonodromy p hp) :
     Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover) := by
-  sorry
+  obtain ⟨d⟩ := apm_t97A03_classify_aux_sheetData A B hAB Y p hp hdegree
+  exact apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend
+    A B hAB Y p hp hdegree d hmono
 
 /-- In the exactly-one-swap case, trivialize the sphere restriction, lift the
 two complementary arcs with the normalized endpoint labels, and descend the
 piecewise inverse maps through `apm_t97A03_OneCircleRel`.  Use covering lift
 uniqueness and the quotient universal property to prove the inverse laws. -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hmono : apm_t97A03_OneCircleMonodromy p hp) :
+    Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -1853,7 +1987,9 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph
     (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
     (hmono : apm_t97A03_OneCircleMonodromy p hp) :
     Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) := by
-  sorry
+  obtain ⟨d⟩ := apm_t97A03_classify_aux_sheetData A B hAB Y p hp hdegree
+  exact apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend
+    A B hAB Y p hp hdegree d hmono
 
 open ConstructionTargets.PointWedgeQuotient
 
@@ -1875,12 +2011,95 @@ def apm_t97A03_modelWedgeBase : apm_t97A03_modelWedge :=
     ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
     (.inl apm_t97A03_twoSphereBase)
 
+/-- The one-circle model after sliding, on each sphere sheet, the south
+attachment to the north attachment.  The four marked points of the circle
+are unchanged; only their attaching maps into the sphere sheets have been
+homotoped. -/
+inductive apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidRel :
+    Sum apm_t97A03_TwoSpheres Circle →
+      Sum apm_t97A03_TwoSpheres Circle → Prop
+  | p0 : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidRel
+      (.inr apm_t97A03_circleOne) (.inl (0, apm_t97A03_north))
+  | p1 : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidRel
+      (.inr apm_t97A03_circleI) (.inl (0, apm_t97A03_north))
+  | p2 : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidRel
+      (.inr apm_t97A03_circleNegOne) (.inl (1, apm_t97A03_north))
+  | p3 : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidRel
+      (.inr apm_t97A03_circleNegI) (.inl (1, apm_t97A03_north))
+
+def apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover :=
+  Quotient (Relation.EqvGen.setoid
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidRel)
+
+noncomputable instance : TopologicalSpace
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover :=
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t97A03_TwoSpheres Circle ↦ Quotient.mk _ x) inferInstance
+
+/-- Homotopy invariance of this concrete adjunction space: slide each south
+attaching point to north along a meridian in its sphere sheet. -/
+theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_OneCircleCover
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover) := by
+  sorry
+
+/-- Once both endpoints on each sphere sheet meet at north, collapsing a
+spanning tree in the four-edge circle graph leaves exactly three loops. -/
+theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover
+      apm_t97A03_modelWedge) := by
+  sorry
+
 /-- Collapse the contractible connecting arc in the one-circle quotient.
 The quotient homotopies leave two sphere summands and three circle loops,
 giving the fixed `modelWedge`.  Use `PointWedgePointedContractionDescent` and
 the existing generic point-wedge comparison. -/
 theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_OneCircleCover apm_t97A03_modelWedge) := by
+  obtain ⟨slide⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide
+  obtain ⟨collapse⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse
+  exact ⟨slide.trans collapse⟩
+
+/-- The two-circle model after sliding the two south attachments to north on
+their respective sphere sheets. -/
+inductive apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel :
+    Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) →
+      Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) → Prop
+  | c0a : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel
+      (.inr (0, apm_t97A03_circleOne)) (.inl (0, apm_t97A03_north))
+  | c0b : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel
+      (.inr (0, apm_t97A03_circleNegOne)) (.inl (1, apm_t97A03_north))
+  | c1a : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel
+      (.inr (1, apm_t97A03_circleOne)) (.inl (1, apm_t97A03_north))
+  | c1b : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel
+      (.inr (1, apm_t97A03_circleNegOne)) (.inl (0, apm_t97A03_north))
+
+def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover :=
+  Quotient (Relation.EqvGen.setoid
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel)
+
+noncomputable instance : TopologicalSpace
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover :=
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) ↦ Quotient.mk _ x)
+    inferInstance
+
+/-- Homotopy invariance for the two-circle adjunction space, sliding the two
+south attaching points to north along sphere meridians. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_TwoCircleCover
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover) := by
+  sorry
+
+/-- The slid two-circle graph has four edges between two sphere vertices;
+collapsing one spanning edge leaves the three-circle wedge. -/
+theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover
+      apm_t97A03_modelWedge) := by
   sorry
 
 /-- Collapse one spanning arc in the two-circle quotient.  The remaining
@@ -1889,7 +2108,11 @@ same `modelWedge`; use quotient homotopy descent and the explicit attachment
 equalities of `apm_t97A03_TwoCircleRel`. -/
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_TwoCircleCover apm_t97A03_modelWedge) := by
-  sorry
+  obtain ⟨slide⟩ :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide
+  obtain ⟨collapse⟩ :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse
+  exact ⟨slide.trans collapse⟩
 
 /-- Degree zero of the connected nested point wedge is `ℤ`.  Apply the H₀
 point-wedge Mayer--Vietoris comparison, or `CoefficientH0.h0Iso` after proving
