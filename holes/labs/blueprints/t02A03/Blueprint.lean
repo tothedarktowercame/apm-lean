@@ -3040,6 +3040,7 @@ theorem apm_t02a03_sector_aux_L2b_inv (q : ℝ × ℝ × ℝ)
   change (-1 / 5 : ℝ) ≤ q.2.1 ∧ q.2.1 ≤ 1 / 5 at hz
   constructor <;> linarith [hz.1, hz.2]
 
+set_option maxHeartbeats 1000000 in
 lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_geometry (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (apm_t02a03_sector_aux_PsiInv q ∈
@@ -3049,7 +3050,152 @@ lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_geometry (q : ℝ × ℝ
           q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 +
             apm_t02a03_sector_aux_a q.2.1) =
           apm_t02a03_sector_aux_b q.1 q.2.1) := by
-  sorry
+  have hz : |q.2.1| ≤ 1 / 5 := abs_le.mpr ⟨by linarith [hq.2.1.1], hq.2.1.2⟩
+  obtain ⟨h0, h1, h2⟩ := apm_t02a03_sector_aux_L2_aux_PsiInv_coords q
+  have hpos := apm_t02a03_sector_aux_L2_aux_cpa_pos q.1 q.2.1 hz
+  have hca := apm_t02a03_sector_aux_L2_aux_c_le_a q.1 q.2.1
+  have ha2 := apm_t02a03_sector_aux_L2_aux_a_sq q.2.1 hz
+  have ha0 : 0 ≤ apm_t02a03_sector_aux_a q.2.1 := Real.sqrt_nonneg _
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le q.2.1
+  have hcosb := apm_t02a03_sector_aux_L1_aux_cos_box q hq
+  set a := apm_t02a03_sector_aux_a q.2.1 with ha
+  set c := apm_t02a03_sector_aux_c q.1 q.2.1 with hc
+  set u := -a + q.2.2 * (c + a) with hu
+  have hv0 := hq.2.2.1
+  have hv1 := hq.2.2.2
+  have hu1 : -a ≤ u := by rw [hu]; nlinarith
+  have hu2 : u ≤ c := by rw [hu]; nlinarith
+  set R := 1 + a with hR
+  set co := Real.cos q.1 with hco
+  set sn := Real.sin q.1 with hsn
+  have htrig : sn ^ 2 + co ^ 2 = 1 := Real.sin_sq_add_cos_sq q.1
+  have hco1 : co ≤ 1 := Real.cos_le_one q.1
+  have hR0 : 0 < R := by linarith
+  set L := (6 / 5 - (1 + u) * co + 6 / 5) ^ 2 + ((1 + u) * sn) ^ 2 with hL
+  have hfs : L - R ^ 2 = (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 := by
+    rw [hL]; linear_combination (1 + u) ^ 2 * htrig
+  have hL0 : 0 ≤ L := by positivity
+  have hLlow : (12 / 5 - (1 + u)) ^ 2 ≤ L := by
+    have : L - (12 / 5 - (1 + u)) ^ 2 = (24 / 5) * (1 + u) * (1 - co) := by
+      rw [hL]; linear_combination (1 + u) ^ 2 * htrig
+    have : 0 ≤ (24 / 5) * (1 + u) * (1 - co) := by
+      apply mul_nonneg (mul_nonneg (by norm_num) (by linarith)) (by linarith)
+    linarith
+  have hsL1 : 1 ≤ Real.sqrt L := by
+    rw [Real.le_sqrt (by norm_num) hL0]
+    have hs54 : 1 + u ≤ 5 / 4 := by linarith
+    have hs0 : 0 ≤ 12 / 5 - (1 + u) - 1 := by linarith
+    have : (1 : ℝ) ≤ (12 / 5 - (1 + u)) ^ 2 := by nlinarith
+    linarith
+  -- Step A: on the torus iff `L = R²`.
+  have hA : Metric.infDist (apm_t02a03_sector_aux_PsiInv q) apm_t02a03_C = 1 / 4 ↔ L = R ^ 2 := by
+    rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist, h0, h1, h2]
+    rw [← hL]
+    constructor
+    · intro h
+      have hsq : (Real.sqrt L - 1) ^ 2 + q.2.1 ^ 2 = 1 / 16 := by
+        have := congrArg (fun x => x ^ 2) h
+        simp only at this
+        rw [Real.sq_sqrt (by positivity)] at this
+        linarith
+      have hsa : (Real.sqrt L - 1) ^ 2 = a ^ 2 := by linarith
+      have := (pow_left_inj₀ (by linarith) ha0 two_ne_zero).mp hsa
+      have hsR : Real.sqrt L = R := by rw [hR]; linarith
+      rw [← hsR, Real.sq_sqrt hL0]
+    · intro h
+      rw [h, Real.sqrt_sq hR0.le, hR, add_sub_cancel_left, ha2,
+        show (1 / 16 - q.2.1 ^ 2 + q.2.1 ^ 2 : ℝ) = (1 / 4) ^ 2 by ring, Real.sqrt_sq (by norm_num)]
+  show Metric.infDist (apm_t02a03_sector_aux_PsiInv q) apm_t02a03_C = 1 / 4 ↔ _
+  rw [hA]
+  constructor
+  · intro hLR
+    have hf : (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 = 0 := by linarith
+    by_cases hD : apm_t02a03_sector_aux_Delta (q.1, q.2.1)
+    · refine ⟨hD, ?_⟩
+      have hcb : c = apm_t02a03_sector_aux_b q.1 q.2.1 := by
+        rw [hc]; unfold apm_t02a03_sector_aux_c; rw [if_pos hD]
+      obtain ⟨_, hcos⟩ := hD
+      have hcR : 6 / 5 ≤ co * R := by
+        have h := hcos; rw [div_le_iff₀ (by positivity)] at h; linarith
+      set X := R ^ 2 - (144 / 25) * sn ^ 2 with hX
+      have hXR : 0 ≤ X * R ^ 2 := by
+        have hid : X * R ^ 2 = (R ^ 2 - 72 / 25) ^ 2 - (72 / 25) ^ 2 +
+            (144 / 25) * (co * R) ^ 2 := by
+          rw [hX]; linear_combination (-(144 / 25) * R ^ 2) * htrig
+        have hcoR2 : (6 / 5) ^ 2 ≤ (co * R) ^ 2 := pow_le_pow_left₀ (by norm_num) hcR 2
+        rw [hid]
+        have := sq_nonneg (R ^ 2 - 72 / 25)
+        linarith
+      have hX0 : 0 ≤ X := by
+        by_contra hneg; push_neg at hneg
+        have : X * R ^ 2 < 0 := mul_neg_of_neg_of_pos hneg (by positivity)
+        linarith
+      have hsX : Real.sqrt X ^ 2 = X := Real.sq_sqrt hX0
+      have hb : apm_t02a03_sector_aux_b q.1 q.2.1 = (12 / 5) * co - Real.sqrt X - 1 := rfl
+      have hsm : 1 + u ≤ (12 / 5) * co - Real.sqrt X := by linarith
+      have hprod : (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 =
+          ((1 + u) - ((12 / 5) * co - Real.sqrt X)) *
+            ((1 + u) - ((12 / 5) * co + Real.sqrt X)) := by
+        linear_combination (-(144 / 25)) * htrig + hsX + hX
+      rw [hprod] at hf
+      have hsX0 := Real.sqrt_nonneg X
+      rcases mul_eq_zero.mp hf with h | h
+      · rw [hb]; linarith
+      · rw [hb]; linarith
+    · exfalso
+      have hcR : co * R < 6 / 5 := by
+        by_cases hz3 : |q.2.1| ≤ 3 / 20
+        · have : ¬ (6 / (5 * R) ≤ co) := fun h => hD ⟨hz3, h⟩
+          push_neg at this
+          rw [lt_div_iff₀ (by positivity)] at this; linarith
+        · push_neg at hz3
+          have hz2 : (3 / 20) ^ 2 < q.2.1 ^ 2 := by
+            rw [← sq_abs q.2.1]; exact pow_lt_pow_left₀ hz3 (by norm_num) (by norm_num)
+          have ha5 : a < 1 / 5 := by
+            by_contra hge; push_neg at hge
+            have := pow_le_pow_left₀ (by norm_num) hge 2
+            linarith
+          have := mul_le_mul_of_nonneg_right hco1 hR0.le
+          linarith
+      have hcA : c = a := by
+        rw [hc]; unfold apm_t02a03_sector_aux_c; rw [if_neg hD]
+      have hprod : (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 =
+          ((1 + u) - R) * ((1 + u) + R - (24 / 5) * co) + (144 / 25 - (24 / 5) * (co * R)) := by
+        ring
+      have : 0 ≤ ((1 + u) - R) * ((1 + u) + R - (24 / 5) * co) :=
+        mul_nonneg_of_nonpos_of_nonpos (by rw [hR]; linarith) (by rw [hR]; linarith)
+      linarith
+  · rintro ⟨hD, hub⟩
+    have hcb : c = apm_t02a03_sector_aux_b q.1 q.2.1 := by
+      rw [hc]; unfold apm_t02a03_sector_aux_c; rw [if_pos hD]
+    obtain ⟨_, hcos⟩ := hD
+    have hcR : 6 / 5 ≤ co * R := by
+      have h := hcos; rw [div_le_iff₀ (by positivity)] at h; linarith
+    set X := R ^ 2 - (144 / 25) * sn ^ 2 with hX
+    have hXR : 0 ≤ X * R ^ 2 := by
+      have hid : X * R ^ 2 = (R ^ 2 - 72 / 25) ^ 2 - (72 / 25) ^ 2 +
+          (144 / 25) * (co * R) ^ 2 := by
+        rw [hX]; linear_combination (-(144 / 25) * R ^ 2) * htrig
+      have hcoR2 : (6 / 5) ^ 2 ≤ (co * R) ^ 2 := pow_le_pow_left₀ (by norm_num) hcR 2
+      rw [hid]
+      have := sq_nonneg (R ^ 2 - 72 / 25)
+      linarith
+    have hX0 : 0 ≤ X := by
+      by_contra hneg; push_neg at hneg
+      have : X * R ^ 2 < 0 := mul_neg_of_neg_of_pos hneg (by positivity)
+      linarith
+    have hsX : Real.sqrt X ^ 2 = X := Real.sq_sqrt hX0
+    have hb : apm_t02a03_sector_aux_b q.1 q.2.1 = (12 / 5) * co - Real.sqrt X - 1 := rfl
+    have hs : 1 + u = (12 / 5) * co - Real.sqrt X := by
+      have : u = apm_t02a03_sector_aux_b q.1 q.2.1 := hub
+      rw [this, hb]; ring
+    have hprod : (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 =
+        ((1 + u) - ((12 / 5) * co - Real.sqrt X)) *
+          ((1 + u) - ((12 / 5) * co + Real.sqrt X)) := by
+      linear_combination (-(144 / 25)) * htrig + hsX + hX
+    have : (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 = 0 := by
+      rw [hprod, hs, sub_self, zero_mul]
+    linarith
 
 lemma apm_t02a03_sector_aux_L3_target_iff_aux_torus_aux_endpoint (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q)
