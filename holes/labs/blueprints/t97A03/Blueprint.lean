@@ -6490,6 +6490,30 @@ private theorem
       simpa [apm_t97A03_circleNegI] using eq_neg_of_add_eq_zero_left hz
 
 private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex
+    (y : Circle)
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
+        apm_t97A03_modelWedgeBase) :
+    Relation.EqvGen
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
+        (.inr y) (.inl (0, apm_t97A03_north)) := by
+  sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex
+    (x : apm_t97A03_TwoSpheres) (y : Circle)
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl x) =
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y)) :
+    Relation.EqvGen
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
+          (.inl x) (.inl (0, apm_t97A03_north)) ∧
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
+        apm_t97A03_modelWedgeBase := by
+  sorry
+
+private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle
     (x : apm_t97A03_TwoSpheres) (y : Circle)
     (h :
@@ -6497,7 +6521,13 @@ private theorem
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y)) :
     Relation.EqvGen
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel (.inl x) (.inr y) := by
-  sorry
+  obtain ⟨hx, hy⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex
+      x y h
+  exact Relation.EqvGen.trans _ _ _ hx
+    (Relation.EqvGen.symm _ _
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex
+        y hy))
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_circle_sphere
@@ -6507,6 +6537,21 @@ private theorem
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl y)) :
     Relation.EqvGen
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel (.inr x) (.inl y) := by
+  exact
+    (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle
+      y x h.symm).symm
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_circle_circle_aux_normal
+    (x y : Circle)
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr x) =
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y)) :
+    x = y ∨
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr x) =
+          apm_t97A03_modelWedgeBase ∧
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
+          apm_t97A03_modelWedgeBase) := by
   sorry
 
 private theorem
@@ -6517,7 +6562,17 @@ private theorem
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y)) :
     Relation.EqvGen
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel (.inr x) (.inr y) := by
-  sorry
+  rcases
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_circle_circle_aux_normal
+        x y h with hxy | ⟨hx, hy⟩
+  · subst y
+    exact Relation.EqvGen.refl _
+  · exact Relation.EqvGen.trans _ _ _
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex
+        x hx)
+      (Relation.EqvGen.symm _ _
+        (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex
+          y hy))
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel
