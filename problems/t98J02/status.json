@@ -13,9 +13,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1,
+    "sorry_count_total": 0,
     "sorry_count_by_file": {
       "Main.lean": 1
     }
