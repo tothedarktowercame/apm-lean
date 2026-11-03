@@ -6638,7 +6638,59 @@ private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_a
         F (x, t) = L ⟨(x, t), hx⟩) ∧
       (∀ x (t : unitInterval) (hx : (t : ℝ) ≤ x.1 2),
         F (x, t) = U ⟨(x, t), hx⟩) := by
-  sorry
+  classical
+  let f : apm_t97A03_S2 × unitInterval → apm_t97A03_S2 := fun p =>
+    if h : p.1.1 2 ≤ (p.2 : ℝ) then L ⟨p, h⟩
+    else U ⟨p, le_of_not_ge h⟩
+  have hc₁ : Continuous (fun p : apm_t97A03_S2 × unitInterval => p.1.1 2) := by
+    fun_prop
+  have hc₂ : Continuous (fun p : apm_t97A03_S2 × unitInterval => (p.2 : ℝ)) := by
+    fun_prop
+  let A : Set (apm_t97A03_S2 × unitInterval) :=
+    {p | p.1.1 2 ≤ (p.2 : ℝ)}
+  let B : Set (apm_t97A03_S2 × unitInterval) :=
+    {p | (p.2 : ℝ) ≤ p.1.1 2}
+  have hAc : IsClosed A := by
+    dsimp [A]
+    exact isClosed_le hc₁ hc₂
+  have hBc : IsClosed B := by
+    dsimp [B]
+    exact isClosed_le hc₂ hc₁
+  have hfA : ContinuousOn f A := by
+    have hcont : Continuous (fun p : A => L ⟨p.1, p.2⟩) :=
+      L.continuous.comp (continuous_subtype_val.subtype_mk fun p => p.2)
+    have heq : A.restrict f = (fun q : A => L ⟨q.1, q.2⟩) := by
+      funext q
+      exact dif_pos q.2
+    rw [continuousOn_iff_continuous_restrict, heq]
+    exact hcont
+  have hfB : ContinuousOn f B := by
+    have hcont : Continuous (fun p : B => U ⟨p.1, p.2⟩) :=
+      U.continuous.comp (continuous_subtype_val.subtype_mk fun p => p.2)
+    have heq : B.restrict f = (fun q : B => U ⟨q.1, q.2⟩) := by
+      funext q
+      change f q.1 = U ⟨q.1, q.2⟩
+      by_cases h : q.1.1.1 2 ≤ (q.1.2 : ℝ)
+      · simpa only [f, dif_pos h] using
+          hLU q.1.1 q.1.2 (le_antisymm h q.2)
+      · simp [f, h]
+    rw [continuousOn_iff_continuous_restrict, heq]
+    exact hcont
+  have hAB : A ∪ B = Set.univ := by
+    ext p
+    simp only [A, B, mem_union, mem_setOf_eq, mem_univ, iff_true]
+    exact le_total _ _
+  have hf : Continuous f := by
+    rw [← continuousOn_univ, ← hAB]
+    exact hfA.union_of_isClosed hfB hAc hBc
+  refine ⟨⟨f, hf⟩, ?_, ?_⟩
+  · intro x t hx
+    simp [f, hx]
+  · intro x t hx
+    change f (x, t) = U ⟨(x, t), hx⟩
+    by_cases h : x.1 2 ≤ (t : ℝ)
+    · simpa only [f, dif_pos h] using hLU x t (le_antisymm h hx)
+    · simp [f, h]
 
 /-- Polar cap interpolation, with its north pole following the connecting edge.
 Use the same polar formula as for two circles: cap angle `(1-t)π/2`,
