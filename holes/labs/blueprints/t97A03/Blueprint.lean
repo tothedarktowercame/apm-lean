@@ -7943,12 +7943,145 @@ private theorem
       Continuous (fun z : apm_t97A03_S2 => (Sum.inr z : Sum apm_t97A03_S2 apm_t97A03_S2)))
 
 private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_axis
+    (z : Circle) (hz : z.1.re = 0 ∨ z.1.im = 0) : z ^ 4 = 1 := by
+  have hn : z.1.re ^ 2 + z.1.im ^ 2 = 1 := by
+    have h := Circle.normSq_coe z
+    rw [Complex.normSq_apply] at h
+    nlinarith
+  apply Subtype.ext
+  show (z : ℂ) ^ 4 = 1
+  have hz2 : (z : ℂ) ^ 2 = (z.1.re ^ 2 - z.1.im ^ 2 : ℝ) := by
+    apply Complex.ext
+    · simp [sq, Complex.mul_re]
+    · rcases hz with h | h <;> simp [sq, Complex.mul_im, h]
+  rw [show (4 : ℕ) = 2 * 2 from rfl, pow_mul, hz2]
+  rcases hz with h | h
+  · rw [h] at hn ⊢
+    rw [show (0 : ℝ) ^ 2 - z.1.im ^ 2 = -1 by nlinarith]
+    push_cast
+    ring
+  · rw [h] at hn ⊢
+    rw [show z.1.re ^ 2 - (0 : ℝ) ^ 2 = 1 by nlinarith]
+    push_cast
+    ring
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg
+    (j : Fin 3) : Continuous (fun z : Circle ↦
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j z) := by
+  simp only [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg,
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4]
+  apply (continuous_quotientMap _ _).comp
+  apply continuous_inr.comp
+  fin_cases j
+  · exact (continuous_quotientMap _ _).comp
+      (continuous_inl.comp ((continuous_quotientMap _ _).comp
+        (continuous_inl.comp (continuous_pow 4))))
+  · exact (continuous_quotientMap _ _).comp
+      (continuous_inl.comp ((continuous_quotientMap _ _).comp
+        (continuous_inr.comp (continuous_pow 4))))
+  · exact (continuous_quotientMap _ _).comp
+      (continuous_inr.comp (continuous_pow 4))
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg_base
+    (j : Fin 3) (z : Circle) (hz : z ^ 4 = 1) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j z =
+      apm_t97A03_modelWedgeBase := by
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4
+  simp only [hz]
+  fin_cases j
+  · rw [ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoLeft_base]
+    exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
+  · rw [ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight_base]
+    exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
+  · rw [ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew_base]
+    exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
+
+private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle :
     Continuous
       (fun z : Circle ↦
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw
           (.inr z)) := by
-  sorry
+  let Q : Fin 4 → Set Circle := fun i => match i with
+    | ⟨0, _⟩ => {z | z.1.re ≤ 0 ∧ 0 ≤ z.1.im}
+    | ⟨1, _⟩ => {z | 0 ≤ z.1.re ∧ 0 ≤ z.1.im}
+    | ⟨2, _⟩ => {z | z.1.re ≤ 0 ∧ z.1.im ≤ 0}
+    | ⟨3, _⟩ => {z | 0 ≤ z.1.re ∧ z.1.im ≤ 0}
+  have hclosed : ∀ i, IsClosed (Q i) := by
+    intro i
+    fin_cases i
+    · exact (isClosed_Iic.preimage (Complex.continuous_re.comp continuous_subtype_val)).inter
+        (isClosed_Ici.preimage (Complex.continuous_im.comp continuous_subtype_val))
+    · exact (isClosed_Ici.preimage (Complex.continuous_re.comp continuous_subtype_val)).inter
+        (isClosed_Ici.preimage (Complex.continuous_im.comp continuous_subtype_val))
+    · exact (isClosed_Iic.preimage (Complex.continuous_re.comp continuous_subtype_val)).inter
+        (isClosed_Iic.preimage (Complex.continuous_im.comp continuous_subtype_val))
+    · exact (isClosed_Ici.preimage (Complex.continuous_re.comp continuous_subtype_val)).inter
+        (isClosed_Iic.preimage (Complex.continuous_im.comp continuous_subtype_val))
+  have hcover : ⋃ i, Q i = Set.univ := by
+    ext z
+    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+    by_cases hr : 0 ≤ z.1.re <;> by_cases hi : 0 ≤ z.1.im
+    · exact ⟨(1 : Fin 4), by change 0 ≤ z.1.re ∧ 0 ≤ z.1.im; exact ⟨hr, hi⟩⟩
+    · exact ⟨3, by simp [Q, hr, le_of_not_ge hi]⟩
+    · exact ⟨0, by simp [Q, le_of_not_ge hr, hi]⟩
+    · exact ⟨2, by simp [Q, le_of_not_ge hr, le_of_not_ge hi]⟩
+  apply (locallyFinite_of_finite Q).continuous hcover hclosed
+  intro i
+  fin_cases i
+  · apply (continuous_const : Continuous (fun _ : Circle ↦
+        apm_t97A03_modelWedgeBase)).continuousOn.congr
+    intro z hz
+    simp [Q] at hz
+    simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw,
+      hz]
+  · apply (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg 0).continuousOn.congr
+    intro z hz
+    simp [Q] at hz
+    by_cases h0 : z.1.re = 0
+    · simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw,
+        hz, h0, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg_base 0 z
+          (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_axis z (Or.inl h0))]
+    · simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw,
+        hz, not_le.mpr (lt_of_le_of_ne hz.1 (Ne.symm h0))]
+  · apply (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg 1).continuousOn.congr
+    intro z hz
+    simp [Q] at hz
+    by_cases h0 : z.1.im = 0
+    · simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw,
+        hz, h0, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg_base 1 z
+          (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_axis z (Or.inr h0))]
+    · have him : ¬ 0 ≤ z.1.im := not_le.mpr (lt_of_le_of_ne hz.2 h0)
+      simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw,
+        hz, him]
+  · apply (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg 2).continuousOn.congr
+    intro z hz
+    simp [Q] at hz
+    change apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr z) =
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg 2 z
+    by_cases hr : z.1.re = 0
+    · have hax := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_axis z (Or.inl hr)
+      have hb1 := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg_base 1 z hax
+      have hb2 := apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg_base 2 z hax
+      rw [hb2]
+      simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw,
+        hz, hr, hb1]
+      intro hneg hpos
+      linarith
+    · by_cases hi : z.1.im = 0
+      · simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw,
+          hz, hi, apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg_base 0 z
+            (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_axis z (Or.inr hi)),
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_leg_base 2 z
+            (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous_aux_circle_aux_axis z (Or.inr hi))]
+      · have hre : ¬ z.1.re ≤ 0 := not_le.mpr (lt_of_le_of_ne hz.1 (Ne.symm hr))
+        have him : ¬ 0 ≤ z.1.im := not_le.mpr (lt_of_le_of_ne hz.2 hi)
+        simp [apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw,
+          hz, hre, him]
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_continuous :
