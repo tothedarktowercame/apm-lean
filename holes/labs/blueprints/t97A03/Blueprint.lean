@@ -4719,6 +4719,34 @@ theorem apm_t97A03_wedge_quotientMap_eq_iff {X Y : Type*} (x₀ : X) (y₀ : Y)
       · exact hbase.symm
       · rfl
 
+theorem apm_t97A03_wedge_ll {X Y : Type*} {x₀ : X} {y₀ : Y} {a b : X}
+    (h : quotientMap x₀ y₀ (.inl a) = quotientMap x₀ y₀ (.inl b)) : a = b ∨ a = x₀ := by
+  rcases (apm_t97A03_wedge_quotientMap_eq_iff x₀ y₀ _ _).mp h with h' | ⟨ha, -⟩
+  · exact Or.inl (Sum.inl_injective h')
+  · rcases ha with ha | ha
+    · exact Or.inr (Sum.inl_injective ha)
+    · cases ha
+
+theorem apm_t97A03_wedge_rr {X Y : Type*} {x₀ : X} {y₀ : Y} {a b : Y}
+    (h : quotientMap x₀ y₀ (.inr a) = quotientMap x₀ y₀ (.inr b)) : a = b ∨ a = y₀ := by
+  rcases (apm_t97A03_wedge_quotientMap_eq_iff x₀ y₀ _ _).mp h with h' | ⟨ha, -⟩
+  · exact Or.inl (Sum.inr_injective h')
+  · rcases ha with ha | ha
+    · cases ha
+    · exact Or.inr (Sum.inr_injective ha)
+
+theorem apm_t97A03_wedge_lr {X Y : Type*} {x₀ : X} {y₀ : Y} {a : X} {b : Y}
+    (h : quotientMap x₀ y₀ (.inl a) = quotientMap x₀ y₀ (.inr b)) : a = x₀ ∧ b = y₀ := by
+  rcases (apm_t97A03_wedge_quotientMap_eq_iff x₀ y₀ _ _).mp h with h' | ⟨ha, hb⟩
+  · cases h'
+  · refine ⟨?_, ?_⟩
+    · rcases ha with ha | ha
+      · exact Sum.inl_injective ha
+      · cases ha
+    · rcases hb with hb | hb
+      · cases hb
+      · exact Sum.inr_injective hb
+
 
 abbrev apm_t97A03_ThreeCircles :=
   ConstructionTargets.StatementSurfaceModels.ThreeCircles
@@ -7285,6 +7313,39 @@ private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_a
         apm_t97A03_twoSphereWedge) = apm_t97A03_twoSphereBase from
       (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm]
     rfl
+
+/-- Equal leg values are either the wedge basepoint or come from the same leg with
+equal fourth powers (claude-14). -/
+private theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_cases (j k : Fin 3) (a b : Circle)
+    (h : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j a = apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg k b) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j a = apm_t97A03_modelWedgeBase ∨ (j = k ∧ a ^ 4 = b ^ 4) := by
+  have hbase3 : ∀ X, X = ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase →
+      (quotientMap apm_t97A03_twoSphereBase ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase (.inr X) : apm_t97A03_modelWedge) =
+        apm_t97A03_modelWedgeBase := by
+    rintro X rfl; exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
+  have hbaseA : a ^ 4 = 1 → apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg j a = apm_t97A03_modelWedgeBase := fun ha => apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_aux_leg_base j a ha
+  unfold apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_leg apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_circlePow4 at h ⊢
+  fin_cases j <;> fin_cases k <;>
+    simp only [ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeOld, ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeNew, ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoLeft, ConstructionTargets.FiniteCircleWedgeFundamentalGroup.twoRight] at h ⊢ <;>
+    rcases apm_t97A03_wedge_rr h with h1 | h1 <;>
+    first
+    | exact Or.inl (hbase3 _ h1)
+    | (rcases apm_t97A03_wedge_ll h1 with h2 | h2
+       · first
+         | (rcases apm_t97A03_wedge_ll h2 with h3 | h3
+            · right; first | exact ⟨rfl, h3⟩ | exact h3 | exact ⟨trivial, h3⟩
+            · exact Or.inl (hbaseA h3))
+         | (rcases apm_t97A03_wedge_rr h2 with h3 | h3
+            · right; first | exact ⟨rfl, h3⟩ | exact h3 | exact ⟨trivial, h3⟩
+            · exact Or.inl (hbaseA h3))
+         | exact Or.inl (hbaseA (apm_t97A03_wedge_lr h2).1)
+         | exact Or.inl (hbaseA (apm_t97A03_wedge_lr h2.symm).2)
+       · exact Or.inl (hbase3 _ (by rw [h2]; rfl)))
+    | (rcases apm_t97A03_wedge_rr h1 with h2 | h2
+       · right; first | exact ⟨rfl, h2⟩ | exact h2 | exact ⟨trivial, h2⟩
+       · exact Or.inl (hbaseA h2))
+    | exact Or.inl (hbase3 _ (by rw [(apm_t97A03_wedge_lr h1).1]; rfl))
+    | exact Or.inl (hbaseA (apm_t97A03_wedge_lr h1.symm).2)
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_respects_aux_generator_aux_p0 :
