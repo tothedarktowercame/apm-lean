@@ -3234,6 +3234,33 @@ runs `γ` from `z` to `z'` and then back out along the arc; `Ψ` is the same wit
 `γ.symm`; both composites differ from the identity only on the arc, by a
 reparametrised `γ.symm.trans γ` (resp. `γ.trans γ.symm`), contracted by the
 standard path homotopy. -/
+private theorem apm_t97A03_invariants_aux_slide_generic_aux_isolate
+    {ι : Type} [TopologicalSpace ι] [DiscreteTopology ι]
+    (S : Set (ι × Circle)) (hS : S.Finite) (w₀ : ι × Circle) :
+    ∃ U : Set (ι × Circle), IsOpen U ∧ w₀ ∈ U ∧ U ∩ S ⊆ {w₀} := by
+  let T : Set (ι × Circle) := S \ {w₀}
+  have hT : T.Finite := hS.subset (diff_subset)
+  have hTc : IsClosed T := hT.isClosed
+  refine ⟨Tᶜ, hTc.isOpen_compl, ?_, ?_⟩
+  · simp [T]
+  · intro w hw
+    have hwS : w ∈ S := hw.2
+    by_contra hwne
+    have hwT : w ∈ T := ⟨hwS, by simpa [Set.mem_singleton_iff] using hwne⟩
+    exact hw.1 hwT
+
+private theorem apm_t97A03_invariants_aux_slide_generic_aux_realize
+    {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
+    (a a' : ι × Circle → Option Z)
+    (w₀ : ι × Circle) (hsame : ∀ w, w ≠ w₀ → a w = a' w)
+    (z z' : Z) (hz : a w₀ = some z) (hz' : a' w₀ = some z') (γ : Path z z')
+    (U : Set (ι × Circle)) (hUopen : IsOpen U) (hwU : w₀ ∈ U)
+    (hUmarked : U ∩ {w | (a w).isSome} ⊆ {w₀}) :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      (Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))
+      (Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')))) := by
+  sorry
+
 theorem apm_t97A03_invariants_aux_slide_generic {ι Z : Type} [TopologicalSpace ι]
     [DiscreteTopology ι] [TopologicalSpace Z]
     (a a' : ι × Circle → Option Z) (hfin : {w | (a w).isSome}.Finite)
@@ -3242,7 +3269,11 @@ theorem apm_t97A03_invariants_aux_slide_generic {ι Z : Type} [TopologicalSpace 
     Nonempty (ContinuousMap.HomotopyEquiv
       (Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a)))
       (Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')))) := by
-  sorry
+  obtain ⟨U, hUopen, hwU, hUmarked⟩ :=
+    apm_t97A03_invariants_aux_slide_generic_aux_isolate
+      {w | (a w).isSome} hfin w₀
+  exact apm_t97A03_invariants_aux_slide_generic_aux_realize
+    a a' w₀ hsame z z' hz hz' γ U hUopen hwU hUmarked
 
 /-- The one-circle model after sliding, on each sphere sheet, the south
 attachment to the north attachment.  The four marked points of the circle
