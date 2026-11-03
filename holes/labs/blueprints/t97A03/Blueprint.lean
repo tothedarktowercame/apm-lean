@@ -3893,7 +3893,20 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_a
       p (c w₀) = apm_t97A03_baseCircle A B z ∧
       p (c w₁) = apm_t97A03_baseCircle A B z) :
     ∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y := by
-  sorry
+  intro y z hy
+  obtain ⟨w₀, w₁, hne, h0, h1⟩ := htwo z
+  have hc : c w₀ ≠ c w₁ := fun h => hne (hinj h)
+  have hcard := hdegree (apm_t97A03_baseCircle A B z)
+  rw [Nat.card_coe_set_eq, Set.ncard_eq_two] at hcard
+  obtain ⟨a, b, hab, hS⟩ := hcard
+  have m0 : c w₀ ∈ ({a, b} : Set Y) := hS ▸ (show c w₀ ∈ p ⁻¹' {apm_t97A03_baseCircle A B z} from h0)
+  have m1 : c w₁ ∈ ({a, b} : Set Y) := hS ▸ (show c w₁ ∈ p ⁻¹' {apm_t97A03_baseCircle A B z} from h1)
+  have my : y ∈ ({a, b} : Set Y) := hS ▸ (show y ∈ p ⁻¹' {apm_t97A03_baseCircle A B z} from hy)
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at m0 m1 my
+  rcases my with rfl | rfl <;> rcases m0 with h0' | h0' <;> rcases m1 with h1' | h1'
+  all_goals first
+    | exact ⟨w₀, h0'⟩ | exact ⟨w₁, h1'⟩
+    | exact absurd (h0'.trans h1'.symm) hc
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_construct_aux_exact_aux_cover
     (A B : Circle) (hAB : A ≠ B)
@@ -4497,7 +4510,20 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_
       p (c w₀) = apm_t97A03_baseCircle A B z ∧
       p (c w₁) = apm_t97A03_baseCircle A B z) :
     ∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y := by
-  sorry
+  intro y z hy
+  obtain ⟨w₀, w₁, hne, h0, h1⟩ := htwo z
+  have hc : c w₀ ≠ c w₁ := fun h => hne (hinj h)
+  have hcard := hdegree (apm_t97A03_baseCircle A B z)
+  rw [Nat.card_coe_set_eq, Set.ncard_eq_two] at hcard
+  obtain ⟨a, b, hab, hS⟩ := hcard
+  have m0 : c w₀ ∈ ({a, b} : Set Y) := hS ▸ (show c w₀ ∈ p ⁻¹' {apm_t97A03_baseCircle A B z} from h0)
+  have m1 : c w₁ ∈ ({a, b} : Set Y) := hS ▸ (show c w₁ ∈ p ⁻¹' {apm_t97A03_baseCircle A B z} from h1)
+  have my : y ∈ ({a, b} : Set Y) := hS ▸ (show y ∈ p ⁻¹' {apm_t97A03_baseCircle A B z} from hy)
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at m0 m1 my
+  rcases my with rfl | rfl <;> rcases m0 with h0' | h0' <;> rcases m1 with h1' | h1'
+  all_goals first
+    | exact ⟨w₀, h0'⟩ | exact ⟨w₁, h1'⟩
+    | exact absurd (h0'.trans h1'.symm) hc
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric_aux_decoder_aux_circlePaste_aux_cover
     (A B : Circle) (hAB : A ≠ B)
