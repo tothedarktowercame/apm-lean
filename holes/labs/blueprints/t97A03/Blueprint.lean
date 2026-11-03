@@ -4540,7 +4540,72 @@ private theorem
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl y)) :
     Relation.EqvGen
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel (.inl x) (.inl y) := by
-  sorry
+  classical
+  rcases x with ⟨i, x⟩
+  rcases y with ⟨j, y⟩
+  change
+    quotientMap apm_t97A03_twoSphereBase
+        ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+        (.inl (quotientMap apm_t97A03_north apm_t97A03_north
+          (if i = 0 then .inl x else .inr x))) =
+      quotientMap apm_t97A03_twoSphereBase
+        ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+        (.inl (quotientMap apm_t97A03_north apm_t97A03_north
+          (if j = 0 then .inl y else .inr y))) at h
+  apply ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective at h
+  fin_cases i <;> fin_cases j
+  · simp only [Fin.isValue, Fin.zero_eta, ↓reduceIte] at h
+    have hxy :=
+      ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective
+        apm_t97A03_north apm_t97A03_north h
+    simp only [Fin.zero_eta] at hxy ⊢
+    subst hxy
+    exact Relation.EqvGen.refl _
+  · simp only [Fin.isValue, Fin.zero_eta, ↓reduceIte, OfNat.ofNat_ne_zero] at h
+    have hp :=
+      (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff
+        apm_t97A03_north apm_t97A03_north x y).mp h
+    rcases hp with ⟨hx, hy⟩
+    simp only [Fin.zero_eta] at hx hy ⊢
+    subst hx
+    subst hy
+    have harc : apm_t97A03_circleNegOne ∈
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc := by
+      simp [apm_t97A03_circleNegOne,
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc]
+    exact Relation.EqvGen.trans _ _ _
+      (Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _
+          (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.arc
+            apm_t97A03_circleNegOne harc)))
+      (Relation.EqvGen.rel _ _
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p2)
+  · simp only [Fin.isValue, Fin.zero_eta, ↓reduceIte, OfNat.ofNat_ne_zero] at h
+    have hp :=
+      (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff
+        apm_t97A03_north apm_t97A03_north y x).mp h.symm
+    rcases hp with ⟨hy, hx⟩
+    simp only [Fin.zero_eta] at hx hy ⊢
+    subst hx
+    subst hy
+    have harc : apm_t97A03_circleNegOne ∈
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc := by
+      simp [apm_t97A03_circleNegOne,
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc]
+    exact Relation.EqvGen.trans _ _ _
+      (Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p2))
+      (Relation.EqvGen.rel _ _
+        (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.arc
+          apm_t97A03_circleNegOne harc))
+  · simp only [Fin.isValue, Fin.zero_eta, ↓reduceIte, OfNat.ofNat_ne_zero] at h
+    have hxy :=
+      ConstructionTargets.PointWedgeExactEquality.quotientMap_inr_injective
+        apm_t97A03_north apm_t97A03_north h
+    simp only [Fin.zero_eta] at hxy ⊢
+    subst hxy
+    exact Relation.EqvGen.refl _
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle
