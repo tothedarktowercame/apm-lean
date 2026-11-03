@@ -2026,6 +2026,57 @@ theorem apm_t97A03_classify_aux_sheetData_aux_transport
     rw [← hlift]
     exact Γ.target
 
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_perms
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : apm_t97A03_firstLiteralTransport p hp = Equiv.refl _)
+    (hsecond : apm_t97A03_secondLiteralTransport p hp = Equiv.refl _) :
+    d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.refl _ := by
+  constructor <;> apply Equiv.ext <;> intro i
+  · have ht :=
+      (apm_t97A03_classify_aux_sheetData_aux_transport A B Y p hp d i).1
+    have hr := congrArg
+      (fun e : Equiv.Perm (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) =>
+        ((e ⟨d.sphere i apm_t97A03_north, by simp [d.sphere_lifts]⟩ :
+          p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) : Y)) hfirst
+    have hsphere : d.sphere (d.firstPerm i) apm_t97A03_north =
+        d.sphere i apm_t97A03_north := by
+      exact ht.symm.trans (by simpa using hr)
+    obtain ⟨j, hj, hjunique⟩ := d.sphere_unique
+      (d.sphere_lifts (d.firstPerm i) apm_t97A03_north)
+    exact (hjunique _ rfl).trans (hjunique _ hsphere.symm).symm
+  · have ht :=
+      (apm_t97A03_classify_aux_sheetData_aux_transport A B Y p hp d i).2
+    have hr := congrArg
+      (fun e : Equiv.Perm (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) =>
+        ((e ⟨d.sphere i apm_t97A03_north, by simp [d.sphere_lifts]⟩ :
+          p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) : Y)) hsecond
+    have hsphere : d.sphere (d.secondPerm i) apm_t97A03_north =
+        d.sphere i apm_t97A03_north := by
+      exact ht.symm.trans (by simpa using hr)
+    obtain ⟨j, hj, hjunique⟩ := d.sphere_unique
+      (d.sphere_lifts (d.secondPerm i) apm_t97A03_north)
+    exact (hjunique _ rfl).trans (hjunique _ hsphere.symm).symm
+
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hperms : d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.refl _) :
+    ∃ σ : apm_t97A03_BaseSpace A B → Y,
+      Continuous σ ∧ Function.RightInverse σ p := by
+  sorry
+
+theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_contra
+    (A B : Circle) (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (σ : apm_t97A03_BaseSpace A B → Y)
+    (hσcont : Continuous σ) (hσ : Function.RightInverse σ p) : False := by
+  sorry
+
 /-- If both literal transports fix both north sheets, the sheet-zero sphere
 lift and its two arc lifts descend to a global section.  Its image is clopen
 by covering uniqueness and closedness of the diagonal; connectedness then
@@ -2038,7 +2089,15 @@ theorem apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection
     (d : apm_t97A03_ClassifySheetData A B Y p)
     (hfirst : apm_t97A03_firstLiteralTransport p hp = Equiv.refl _)
     (hsecond : apm_t97A03_secondLiteralTransport p hp = Equiv.refl _) : False := by
-  sorry
+  have hperms :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_perms
+      A B Y p hp d hfirst hsecond
+  obtain ⟨σ, hσcont, hσ⟩ :=
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_section
+      A B hAB Y p d hperms
+  exact
+    apm_t97A03_classify_aux_literal_transport_nontrivial_aux_clopenSection_aux_contra
+      A B Y p hp hdegree σ hσcont hσ
 
 /-- Use connected-cover monodromy, the proved literal `F₂` generators, and
 `apm_t97A03_literal_transport_moved_of_generated` to show that one of the two
