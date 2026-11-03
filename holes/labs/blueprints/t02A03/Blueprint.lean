@@ -1498,6 +1498,10 @@ abbrev apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_
   p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop
 
+/-- Planar distance `s` from the right centre `(6/5, 0)`. -/
+noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (p : apm_t02a03_E3) : ℝ :=
+  Real.sqrt ((p 0 - 6 / 5) ^ 2 + p 1 ^ 2)
+
 /-- Points of the right piece that are already in the target `D ∪ loop`, or
 lie in the sector `x ≤ 4/5` of the right tube.  The bite (open left tube)
 lies in `x < 1/20`, so the sector contains the whole bite region; in the
@@ -1505,12 +1509,9 @@ right-tube angle `θ` (`rightCore θ = (6/5 - cos θ, sin θ, 0)`) every tube
 point with `|θ| ≤ 0.82` has `x ≤ 6/5 - (3/4) cos 0.82 < 4/5`. -/
 abbrev apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y
     (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X) : Prop :=
-  apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p ∨ (p.1 : apm_t02a03_E3) 0 ≤ (4 / 5 : ℝ)
-
-/-- Planar distance `s` from the right centre `(6/5, 0)`; on the right tube
-`3/4 ≤ s ≤ 5/4` (split by claude-14 from lemma-2's partial, 2026-10-19). -/
-noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (p : apm_t02a03_E3) : ℝ :=
-  Real.sqrt ((p 0 - 6 / 5) ^ 2 + p 1 ^ 2)
+  apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p ∨
+    (17 / 25 : ℝ) ≤ (6 / 5 - (p.1 : apm_t02a03_E3) 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p.1
 
 /-- The cutoff `φ` as a clamp of `cos θ = (6/5 - x)/s`: `φ = 0` when
 `cos θ ≥ 23/25`, `φ = 1` when `cos θ ≤ 17/25`. -/
@@ -1993,8 +1994,119 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux
 If `φ < 1` then `cos θ > 17/25` and `s' ≥ 3/4`, so
 `x' ≤ 6/5 - (3/4)(17/25) < 4/5`. -/
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_end (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
-    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop ∨ (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p) 0 ≤ (4 / 5 : ℝ) := by
-  sorry
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop ∨
+      (17 / 25 : ℝ) ≤
+        (6 / 5 - (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p) 0) /
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+            (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p) := by
+  let s := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p
+  let ph := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p
+  have hdist := hp.1
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq] at hdist
+  have hsq : (s - 1) ^ 2 + p 2 ^ 2 ≤ 1 / 16 := by
+    have hsqrt : Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) ≤ 1 / 4 := by
+      simpa [s] using hdist
+    have hroot0 : 0 ≤ Real.sqrt ((s - 1) ^ 2 + p 2 ^ 2) := Real.sqrt_nonneg _
+    have hsqrt' := mul_self_le_mul_self hroot0 hsqrt
+    rw [Real.mul_self_sqrt (by positivity : 0 ≤ (s - 1) ^ 2 + p 2 ^ 2)] at hsqrt'
+    nlinarith
+  have hslo : (3 / 4 : ℝ) ≤ s := by nlinarith [sq_nonneg (s - 1), sq_nonneg (p 2)]
+  have hspos : 0 < s := lt_of_lt_of_le (by norm_num) hslo
+  have hsne : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p ≠ 0 := by
+    simpa [s] using hspos.ne'
+  have hs_sq : s ^ 2 = (p 0 - 6 / 5) ^ 2 + p 1 ^ 2 := by
+    dsimp [s, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad]
+    rw [Real.sq_sqrt]
+    positivity
+  by_cases hph : ph = 1
+  · left
+    let z : ℂ := ((6 / 5 - p 0) : ℝ) + (p 1 : ℝ) * Complex.I
+    have hz : z ≠ 0 := by
+      intro hz0
+      have hre : (6 / 5 - p 0 : ℝ) = 0 := by
+        have := congrArg Complex.re hz0
+        simpa [z] using this
+      have him : p 1 = 0 := by
+        have := congrArg Complex.im hz0
+        simpa [z] using this
+      nlinarith [hs_sq]
+    have hnorm : ‖z‖ = s := by
+      rw [Complex.norm_def]
+      simp [Complex.normSq_apply, z]
+      congr 1
+      nlinarith
+    have hcos : Real.cos (Complex.arg z) = (6 / 5 - p 0) / s := by
+      rw [Complex.cos_arg hz, hnorm]
+      simp [z]
+    have hsin : Real.sin (Complex.arg z) = p 1 / s := by
+      rw [Complex.sin_arg, hnorm]
+      simp [z]
+    refine ⟨Complex.arg z, ?_⟩
+    ext i
+    fin_cases i
+    · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move,
+        ph, hph, s, hcos]
+      field_simp [hspos.ne']
+      ring
+    · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move,
+        ph, hph, s, hsin]
+      field_simp [hspos.ne', hsne]
+    · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move,
+        ph, hph]
+  · right
+    have hphlt : ph < 1 := by
+      have hb := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_phi_bounds p
+      exact lt_of_le_of_ne hb.2 hph
+    have hratio : (17 / 25 : ℝ) < (6 / 5 - p 0) / s := by
+      dsimp [ph, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi] at hphlt
+      rw [min_lt_iff] at hphlt
+      rcases hphlt with hphlt | hfalse
+      · norm_num at hphlt
+      · have hm : (23 - 25 * ((6 / 5 - p 0) / s)) / 6 < 1 := by
+          apply lt_of_le_of_lt (le_max_right _ _) hfalse
+        linarith
+    have hmove :
+        (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p) 0 =
+          6 / 5 - (s + ph * (23 / 20 - s)) * ((6 / 5 - p 0) / s) := by
+      simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move,
+        s, ph]
+      field_simp [hspos.ne', hsne]
+      ring
+    have hph0 : 0 ≤ ph :=
+      (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_phi_bounds p).1
+    have hs_hi :=
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_torus_aux_rad p hp
+    have hsprime : (3 / 4 : ℝ) ≤ s + ph * (23 / 20 - s) := by
+      change s ≤ (5 / 4 : ℝ) at hs_hi
+      nlinarith
+    have hmove1 :
+        (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p) 1 =
+          (s + ph * (23 / 20 - s)) * (p 1 / s) := by
+      simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move,
+        s, ph]
+      field_simp [hspos.ne', hsne]
+    have hsp : 0 < s + ph * (23 / 20 - s) := by linarith
+    have hrad' : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+        (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p) =
+          s + ph * (23 / 20 - s) := by
+      unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+      rw [hmove, hmove1]
+      have he : (6 / 5 - p 0) ^ 2 + p 1 ^ 2 = s ^ 2 := by rw [hs_sq]; ring
+      have hsq' : (6 / 5 - (s + ph * (23 / 20 - s)) * ((6 / 5 - p 0) / s) - 6 / 5) ^ 2 +
+          ((s + ph * (23 / 20 - s)) * (p 1 / s)) ^ 2 = (s + ph * (23 / 20 - s)) ^ 2 := by
+        have : (6 / 5 - (s + ph * (23 / 20 - s)) * ((6 / 5 - p 0) / s) - 6 / 5) ^ 2 +
+            ((s + ph * (23 / 20 - s)) * (p 1 / s)) ^ 2 =
+            (s + ph * (23 / 20 - s)) ^ 2 * (((6 / 5 - p 0) ^ 2 + p 1 ^ 2) / s ^ 2) := by
+          field_simp
+          ring
+        rw [this, he, div_self (pow_ne_zero 2 hspos.ne'), mul_one]
+      rw [hsq', Real.sqrt_sq hsp.le]
+    rw [hmove, hrad']
+    have hc : (6 / 5 - (6 / 5 - (s + ph * (23 / 20 - s)) * ((6 / 5 - p 0) / s))) /
+        (s + ph * (23 / 20 - s)) = (6 / 5 - p 0) / s := by
+      rw [sub_sub_cancel, mul_div_assoc', mul_comm, div_div, mul_comm s, ← div_div, mul_div_assoc, div_self hsp.ne', mul_one]
+    rw [hc]
+    exact hratio.le
 
 /-- Stage 1, the cutoff collapse.  With `w = (u, z)` the meridian offset and
 `ℓ = (3/20, 0)` the loop's offset, `F_t(θ, w) = (θ, w + t φ(θ) (ℓ - w))`
