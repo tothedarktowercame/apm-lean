@@ -407,7 +407,144 @@ theorem apm_a96A07_arc_log (γ : ℝ → ℂ) (s t : ℝ) (hst : s ≤ t)
     (v : ℂ) (hv : exp v = f (γ s)) :
     ∃ u : ℂ → ℂ, ContinuousOn u (γ '' Icc s t) ∧ (∀ z ∈ γ '' Icc s t, exp (u z) = f z) ∧
       u (γ s) = v := by
-  sorry
+  classical
+  let γ' : Icc s t → ℂ := fun x ↦ γ x
+  have hγ'cont : Continuous γ' := hγ.restrict
+  have hγ'inj : Function.Injective γ' := by
+    intro x y hxy
+    exact Subtype.ext (hinj x.property y.property hxy)
+  have hemb : IsEmbedding γ' :=
+    (hγ'cont.isClosedEmbedding hγ'inj).isEmbedding
+  have hrange : Set.range γ' = γ '' Icc s t := by
+    ext z
+    simp [γ']
+  let e : Icc s t ≃ₜ (γ '' Icc s t) :=
+    hemb.toHomeomorph.trans (Homeomorph.setCongr hrange)
+  have hs : s ∈ Icc s t := ⟨le_rfl, hst⟩
+  obtain ⟨w, hwcont, hwexp⟩ := apm_a96A07_exists_log_Icc s t hst (fun x ↦ f (γ x))
+    (hf.comp hγ (fun x hx ↦ ⟨x, hx, rfl⟩))
+    (fun x hx ↦ hne _ ⟨x, hx, rfl⟩)
+  obtain ⟨k : ℤ, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp ((hwexp s hs).trans hv.symm)
+  let d : ℂ := (k : ℂ) * (2 * (Real.pi : ℂ) * I)
+  let q : (γ '' Icc s t) → ℂ := fun z ↦ w (e.symm z) - d
+  let u : ℂ → ℂ := fun z ↦ if hz : z ∈ γ '' Icc s t then q ⟨z, hz⟩ else 0
+  refine ⟨u, ?_, ?_, ?_⟩
+  · rw [continuousOn_iff_continuous_restrict]
+    have hw' : Continuous (fun x : Icc s t ↦ w x) := hwcont.restrict
+    change Continuous (fun z : (γ '' Icc s t) ↦
+      if hz : (z : ℂ) ∈ γ '' Icc s t then q ⟨z, hz⟩ else 0)
+    have hq : Continuous q := (hw'.comp e.symm.continuous).sub continuous_const
+    convert hq using 1
+    funext z
+    dsimp only [q]
+    rw [dif_pos z.property]
+  · intro z hz
+    obtain ⟨x, hx, rfl⟩ := hz
+    have he_apply : e ⟨x, hx⟩ = ⟨γ x, ⟨x, hx, rfl⟩⟩ := by
+      apply Subtype.ext
+      rfl
+    have he_symm : e.symm ⟨γ x, ⟨x, hx, rfl⟩⟩ = ⟨x, hx⟩ := by
+      rw [← he_apply, e.symm_apply_apply]
+    have hximg : γ x ∈ γ '' Icc s t := ⟨x, hx, rfl⟩
+    rw [show u (γ x) = q ⟨γ x, hximg⟩ by
+      dsimp only [u]
+      rw [dif_pos hximg]]
+    simp only [q, he_symm]
+    rw [Complex.exp_sub, hwexp x hx]
+    simp [d]
+  · have he_apply : e ⟨s, hs⟩ = ⟨γ s, ⟨s, hs, rfl⟩⟩ := by
+      apply Subtype.ext
+      rfl
+    have he_symm : e.symm ⟨γ s, ⟨s, hs, rfl⟩⟩ = ⟨s, hs⟩ := by
+      rw [← he_apply, e.symm_apply_apply]
+    have hsimg : γ s ∈ γ '' Icc s t := ⟨s, hs, rfl⟩
+    rw [show u (γ s) = q ⟨γ s, hsimg⟩ by
+      dsimp only [u]
+      rw [dif_pos hsimg]]
+    simp only [q, he_symm]
+    dsimp only [d]
+    linear_combination hk
+
+/-- The combinatorial core: a compact set split into two closed pieces meeting only at `p, q`, on
+each of which nonvanishing functions have logarithms with prescribed value at `p`. -/
+theorem apm_a96A07_unique_bounded_component_aux_split (C A B : Set ℂ) (hCAB : C = A ∪ B)
+    (hAc : IsClosed A) (hBc : IsClosed B) (hC : IsCompact C) (p q : ℂ)
+    (hpA : p ∈ A) (hqA : q ∈ A) (hqB : q ∈ B)
+    (hAB : ∀ z ∈ A, z ∈ B → z = p ∨ z = q)
+    (hlogA : ∀ f : ℂ → ℂ, ContinuousOn f C → (∀ z ∈ C, f z ≠ 0) → ∀ v, exp v = f p →
+      ∃ u : ℂ → ℂ, ContinuousOn u A ∧ (∀ z ∈ A, exp (u z) = f z) ∧ u p = v)
+    (hlogB : ∀ f : ℂ → ℂ, ContinuousOn f C → (∀ z ∈ C, f z ≠ 0) → ∀ v, exp v = f p →
+      ∃ u : ℂ → ℂ, ContinuousOn u B ∧ (∀ z ∈ B, exp (u z) = f z) ∧ u p = v)
+    (a b : ℂ) (ha : a ∉ C) (hb : b ∉ C)
+    (hA : Bornology.IsBounded (connectedComponentIn Cᶜ a))
+    (hB : Bornology.IsBounded (connectedComponentIn Cᶜ b)) :
+    b ∈ connectedComponentIn Cᶜ a := by
+  classical
+  by_contra hab
+  have hba : a ∉ connectedComponentIn Cᶜ b := by
+    intro h
+    apply hab
+    rw [← connectedComponentIn_eq h]
+    exact mem_connectedComponentIn hb
+  have hpC : p ∈ C := hCAB ▸ Or.inl hpA
+  have glue : ∀ u v : ℂ → ℂ, ContinuousOn u A → ContinuousOn v B → u p = v p → u q = v q →
+      ∃ w : ℂ → ℂ, ContinuousOn w C ∧ (∀ z ∈ A, w z = u z) ∧ ∀ z ∈ B, w z = v z := by
+    intro u v hu hv hp hq
+    let w : ℂ → ℂ := fun z => if z ∈ A then u z else v z
+    have hwA : ∀ z ∈ A, w z = u z := fun z hz => if_pos hz
+    have hwB : ∀ z ∈ B, w z = v z := by
+      intro z hz
+      by_cases hzA : z ∈ A
+      · rcases hAB z hzA hz with rfl | rfl
+        · simpa [w, hzA] using hp
+        · simpa [w, hzA] using hq
+      · exact if_neg hzA
+    refine ⟨w, ?_, hwA, hwB⟩
+    rw [hCAB]
+    exact (hu.congr hwA).union_of_isClosed (hv.congr hwB) hAc hBc
+  have hfa : ContinuousOn (fun z : ℂ => z - a) C := (continuous_id.sub continuous_const).continuousOn
+  have hfb : ContinuousOn (fun z : ℂ => z - b) C := (continuous_id.sub continuous_const).continuousOn
+  have hna : ∀ z ∈ C, z - a ≠ 0 := fun z hz h => ha (sub_eq_zero.1 h ▸ hz)
+  have hnb : ∀ z ∈ C, z - b ≠ 0 := fun z hz h => hb (sub_eq_zero.1 h ▸ hz)
+  obtain ⟨u₁, hu₁, heu₁, hup₁⟩ := hlogA _ hfa hna (Complex.log (p - a))
+    (Complex.exp_log (hna p hpC))
+  obtain ⟨u₂, hu₂, heu₂, hup₂⟩ := hlogB _ hfa hna (Complex.log (p - a))
+    (Complex.exp_log (hna p hpC))
+  obtain ⟨w₁, hw₁, hew₁, hwp₁⟩ := hlogA _ hfb hnb (Complex.log (p - b))
+    (Complex.exp_log (hnb p hpC))
+  obtain ⟨w₂, hw₂, hew₂, hwp₂⟩ := hlogB _ hfb hnb (Complex.log (p - b))
+    (Complex.exp_log (hnb p hpC))
+  obtain ⟨m, hm⟩ := Complex.exp_eq_exp_iff_exists_int.1 ((heu₁ q hqA).trans (heu₂ q hqB).symm)
+  obtain ⟨n, hn⟩ := Complex.exp_eq_exp_iff_exists_int.1 ((hew₁ q hqA).trans (hew₂ q hqB).symm)
+  -- The combination whose two mismatches cancel.
+  have hcomb : ∃ U : ℂ → ℂ, ContinuousOn U C ∧
+      ∀ z ∈ C, exp (U z) = (z - b) ^ (-m) * (z - a) ^ n := by
+    obtain ⟨U, hU, hUA, hUB⟩ := glue (fun z => (n : ℂ) * u₁ z + ((-m : ℤ) : ℂ) * w₁ z)
+      (fun z => (n : ℂ) * u₂ z + ((-m : ℤ) : ℂ) * w₂ z)
+      (continuousOn_const.mul hu₁ |>.add (continuousOn_const.mul hw₁))
+      (continuousOn_const.mul hu₂ |>.add (continuousOn_const.mul hw₂))
+      (by simp only [hup₁, hup₂, hwp₁, hwp₂])
+      (by simp only [hm, hn]; push_cast; ring)
+    refine ⟨U, hU, fun z hz => ?_⟩
+    rw [hCAB] at hz
+    rcases hz with hz | hz
+    · rw [hUA z hz, Complex.exp_add, Complex.exp_int_mul, Complex.exp_int_mul, heu₁ z hz,
+        hew₁ z hz, mul_comm]
+    · rw [hUB z hz, Complex.exp_add, Complex.exp_int_mul, Complex.exp_int_mul, heu₂ z hz,
+        hew₂ z hz, mul_comm]
+  obtain ⟨U, hU, hUe⟩ := hcomb
+  have hm0 : -m = 0 := apm_a96A07_borsuk C hC b a hb ha hB hba (-m) n U hU hUe
+  have hm0' : m = 0 := by omega
+  obtain ⟨V, hV, hVA, hVB⟩ := glue u₁ u₂ hu₁ hu₂ (hup₁.trans hup₂.symm)
+    (by simpa [hm0'] using hm)
+  have h10 : (1 : ℤ) = 0 := apm_a96A07_borsuk C hC a b ha hb hA hab 1 0 V hV (by
+    intro z hz
+    have hz' := hz
+    rw [hCAB] at hz'
+    rcases hz' with hz' | hz'
+    · simp [hVA z hz', heu₁ z hz']
+    · simp [hVB z hz', heu₂ z hz'])
+  omega
 
 /-- An injective analytic image of the circle has at most one bounded complementary component. -/
 theorem apm_a96A07_unique_bounded_component (g : ℂ → ℂ)
@@ -417,7 +554,105 @@ theorem apm_a96A07_unique_bounded_component (g : ℂ → ℂ)
     (hA : Bornology.IsBounded (connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ a))
     (hB : Bornology.IsBounded (connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ b)) :
     b ∈ connectedComponentIn (apm_a96A07_boundaryImage g)ᶜ a := by
-  sorry
+  obtain ⟨ε, hε, hdiff⟩ := hg
+  have hgc : ContinuousOn g (sphere 0 1) := hdiff.continuousOn.mono (fun z hz => by
+    rw [mem_sphere_zero_iff_norm] at hz
+    rw [mem_closedBall_zero_iff]
+    linarith)
+  let e : ℝ → ℂ := fun θ => exp (θ * I)
+  have he : Continuous e := by fun_prop
+  have hes : ∀ θ, e θ ∈ sphere (0 : ℂ) 1 := fun θ => by
+    simp [e, Complex.norm_exp_ofReal_mul_I]
+  let γ : ℝ → ℂ := fun θ => g (e θ)
+  let δ : ℝ → ℂ := fun θ => g (e (-θ))
+  have hγ : Continuous γ := hgc.comp_continuous he hes
+  have hδ : Continuous δ := hgc.comp_continuous (he.comp continuous_neg) (fun θ => hes _)
+  have hre : ∀ θ : ℝ, (e θ).re = Real.cos θ := fun θ => by simp [e, Complex.exp_ofReal_mul_I_re]
+  have him : ∀ θ : ℝ, (e θ).im = Real.sin θ := fun θ => by simp [e, Complex.exp_ofReal_mul_I_im]
+  have hinjg : ∀ x y, g (e x) = g (e y) → e x = e y := fun x y h =>
+    hg_inj_circle (hes x) (hes y) h
+  have hγinj : Set.InjOn γ (Icc 0 Real.pi) := by
+    intro x hx y hy h
+    have := congrArg Complex.re (hinjg x y h)
+    rw [hre, hre] at this
+    exact Real.injOn_cos hx hy this
+  have hδinj : Set.InjOn δ (Icc 0 Real.pi) := by
+    intro x hx y hy h
+    have := congrArg Complex.re (hinjg (-x) (-y) h)
+    rw [hre, hre, Real.cos_neg, Real.cos_neg] at this
+    exact Real.injOn_cos hx hy this
+  let A := γ '' Icc 0 Real.pi
+  let B := δ '' Icc 0 Real.pi
+  have hAk : IsCompact A := isCompact_Icc.image hγ
+  have hBk : IsCompact B := isCompact_Icc.image hδ
+  have hCAB : apm_a96A07_boundaryImage g = A ∪ B := by
+    ext z
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      have hw1 : ‖w‖ = 1 := by simpa [apm_a96A07_circle] using hw
+      have hwe : w = e (Complex.arg w) := by
+        simp only [e]
+        have := Complex.norm_mul_exp_arg_mul_I w
+        rw [hw1] at this
+        simpa using this.symm
+      by_cases h0 : 0 ≤ Complex.arg w
+      · exact Or.inl ⟨Complex.arg w, ⟨h0, Complex.arg_le_pi w⟩, by simp only [γ]; rw [← hwe]⟩
+      · refine Or.inr ⟨-Complex.arg w, ⟨by linarith, by linarith [Complex.neg_pi_lt_arg w]⟩, ?_⟩
+        simp only [δ, neg_neg]
+        rw [← hwe]
+    · rintro (⟨θ, -, rfl⟩ | ⟨θ, -, rfl⟩)
+      · exact ⟨e θ, hes θ, rfl⟩
+      · exact ⟨e (-θ), hes _, rfl⟩
+  have h0 : (0 : ℝ) ∈ Icc 0 Real.pi := ⟨le_rfl, Real.pi_pos.le⟩
+  have hpi : Real.pi ∈ Icc 0 Real.pi := ⟨Real.pi_pos.le, le_rfl⟩
+  have hδ0 : δ 0 = γ 0 := by simp [δ, γ]
+  have hδpi : δ Real.pi = γ Real.pi := by
+    have : e (-Real.pi) = e Real.pi := by
+      simp only [e]
+      push_cast
+      rw [neg_mul, Complex.exp_neg, Complex.exp_pi_mul_I]
+      norm_num
+    simp only [δ, γ, this]
+  have hAB : ∀ z ∈ A, z ∈ B → z = γ 0 ∨ z = γ Real.pi := by
+    rintro z ⟨x, hx, rfl⟩ ⟨y, hy, hyz⟩
+    have hee : e (-y) = e x := hinjg _ _ hyz
+    have hc := congrArg Complex.re hee
+    have hs := congrArg Complex.im hee
+    rw [hre, hre, Real.cos_neg] at hc
+    rw [him, him, Real.sin_neg] at hs
+    have hxy : y = x := Real.injOn_cos hy hx hc
+    subst hxy
+    have hs0 : Real.sin y = 0 := by linarith
+    obtain ⟨n, hn⟩ := Real.sin_eq_zero_iff.1 hs0
+    have hpos := Real.pi_pos
+    have hn0 : 0 ≤ n := by
+      by_contra hneg
+      have : (n : ℝ) ≤ -1 := by exact_mod_cast (by omega : n ≤ -1)
+      nlinarith [hx.1]
+    have hn1 : n ≤ 1 := by
+      by_contra hbig
+      have : (2 : ℝ) ≤ n := by exact_mod_cast (by omega : 2 ≤ n)
+      nlinarith [hx.2]
+    have : n = 0 ∨ n = 1 := by omega
+    rcases this with rfl | rfl
+    · left
+      have : y = 0 := by simpa using hn.symm
+      rw [this]
+    · right
+      have : y = Real.pi := by simpa using hn.symm
+      rw [this]
+  have hCcomp : IsCompact (A ∪ B) := hAk.union hBk
+  rw [hCAB] at ha hb hA hB ⊢
+  refine apm_a96A07_unique_bounded_component_aux_split (A ∪ B) A B rfl hAk.isClosed hBk.isClosed
+    hCcomp (γ 0) (γ Real.pi) ⟨0, h0, rfl⟩ ⟨Real.pi, hpi, rfl⟩ ⟨Real.pi, hpi, hδpi⟩ hAB
+    ?_ ?_ a b ha hb hA hB
+  · intro f hf hne v hv
+    exact apm_a96A07_arc_log γ 0 Real.pi Real.pi_pos.le hγ.continuousOn hγinj f
+      (hf.mono subset_union_left) (fun z hz => hne z (Or.inl hz)) v hv
+  · intro f hf hne v hv
+    have := apm_a96A07_arc_log δ 0 Real.pi Real.pi_pos.le hδ.continuousOn hδinj f
+      (hf.mono subset_union_right) (fun z hz => hne z (Or.inr hz)) v (by rw [hδ0]; exact hv)
+    simpa only [hδ0] using this
 -- END SEAT AREA
 
 /-- The count is constant on each complementary component of the curve. -/

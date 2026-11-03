@@ -390,6 +390,32 @@ theorem apm_a96A07_no_log_on_circle (a : ℂ) (R : ℝ) (hR : 0 < R) (n : ℤ) (
   sorry
 
 -- BEGIN SEAT AREA
+open scoped Set.Notation
+
+lemma apm_a96A07_borsuk_aux_frontier_component
+    {U : Set ℂ} (hU : IsOpen U) {x : ℂ} (hx : x ∈ U) :
+    frontier (connectedComponentIn U x) ⊆ frontier U := by
+  intro z hz
+  have hcomponentOpen : IsOpen (connectedComponentIn U x) :=
+    hU.connectedComponentIn
+  rw [frontier, hcomponentOpen.interior_eq, mem_diff] at hz
+  rw [frontier, mem_diff]
+  refine ⟨closure_mono (connectedComponentIn_subset U x) hz.1, ?_⟩
+  rw [hU.interior_eq]
+  intro hzU
+  have hclosed :
+      IsClosed (U ↓∩ connectedComponentIn U x) := by
+    rw [connectedComponentIn_eq_image hx]
+    simpa only [Set.preimage_image_eq _ Subtype.val_injective]
+      using (isClosed_connectedComponent :
+        IsClosed (connectedComponent (⟨x, hx⟩ : U)))
+  have hrelative :
+      U ∩ closure (U ∩ connectedComponentIn U x) ⊆
+        connectedComponentIn U x :=
+    isClosed_preimage_val.mp hclosed
+  exact hz.2 (hrelative ⟨hzU, by
+    simpa only [inter_eq_right.mpr (connectedComponentIn_subset U x)] using hz.1⟩)
+
 /-- Borsuk's criterion.  If `a` lies in a bounded component of the complement of a compact set
 `K`, and `b` lies outside that component, then `(z - a) ^ m * (z - b) ^ n` has no continuous
 logarithm on `K` unless `m = 0`. -/
@@ -397,7 +423,79 @@ theorem apm_a96A07_borsuk (K : Set ℂ) (hK : IsCompact K) (a b : ℂ) (ha : a �
     (hbdd : Bornology.IsBounded (connectedComponentIn Kᶜ a))
     (hab : b ∉ connectedComponentIn Kᶜ a) (m n : ℤ) (u : ℂ → ℂ) (hu : ContinuousOn u K)
     (h : ∀ z ∈ K, exp (u z) = (z - a) ^ m * (z - b) ^ n) : m = 0 := by
-  sorry
+  classical
+  let V : Set ℂ := connectedComponentIn Kᶜ a
+  have haKc : a ∈ Kᶜ := ha
+  have haV : a ∈ V := mem_connectedComponentIn haKc
+  have hopenKc : IsOpen Kᶜ := hK.isClosed.isOpen_compl
+  have hopenV : IsOpen V := hopenKc.connectedComponentIn
+  have hfrontK : frontier V ⊆ K := by
+    intro z hz
+    have hz' := apm_a96A07_borsuk_aux_frontier_component hopenKc haKc hz
+    rw [frontier_compl] at hz'
+    exact hK.isClosed.frontier_subset hz'
+  have hbcl : b ∉ closure V := by
+    rw [closure_eq_self_union_frontier]
+    rintro (hbV | hbfr)
+    · exact hab hbV
+    · exact hb (hfrontK hbfr)
+  let uK : C(K, ℂ) :=
+    ⟨fun z ↦ u z, continuousOn_iff_continuous_restrict.mp hu⟩
+  obtain ⟨utilde, hutilde⟩ := uK.exists_restrict_eq hK.isClosed
+  have hutilde_eq : ∀ z ∈ K, utilde z = u z := by
+    intro z hz
+    have hzEq := DFunLike.congr_fun hutilde ⟨z, hz⟩
+    exact hzEq
+  let f₁ : ℂ → ℂ := fun z ↦ exp (utilde z) / (z - b) ^ n
+  let f₂ : ℂ → ℂ := fun z ↦ (z - a) ^ m
+  have hf₁ : ContinuousOn f₁ (closure V) := by
+    apply (utilde.continuous.cexp.continuousOn).div
+    · exact (continuous_id.sub continuous_const).continuousOn.zpow₀ n fun z hz ↦
+        Or.inl (sub_ne_zero.mpr fun hzb ↦ hbcl (hzb ▸ hz))
+    · intro z hz
+      exact zpow_ne_zero _ (sub_ne_zero.mpr fun hzb ↦ hbcl (hzb ▸ hz))
+  have haclcompl : a ∉ closure Vᶜ := by
+    rw [closure_compl, hopenV.interior_eq]
+    simpa using haV
+  have hf₂ : ContinuousOn f₂ (closure Vᶜ) := by
+    exact (continuous_id.sub continuous_const).continuousOn.zpow₀ m fun z hz ↦
+      Or.inl (sub_ne_zero.mpr fun hza ↦ haclcompl (hza ▸ hz))
+  have hagree : ∀ z ∈ frontier V, f₁ z = f₂ z := by
+    intro z hz
+    have hzK : z ∈ K := hfrontK hz
+    have hzb : z - b ≠ 0 := sub_ne_zero.mpr fun hzb ↦ hb (hzb ▸ hzK)
+    change exp (utilde z) / (z - b) ^ n = (z - a) ^ m
+    rw [hutilde_eq z hzK, h z hzK]
+    exact mul_div_cancel_right₀ ((z - a) ^ m) (zpow_ne_zero _ hzb)
+  let Ψ : ℂ → ℂ := V.piecewise f₁ f₂
+  have hΨ : Continuous Ψ := continuous_piecewise hagree hf₁ hf₂
+  have hΨne : ∀ z, Ψ z ≠ 0 := by
+    intro z
+    by_cases hz : z ∈ V
+    · change V.piecewise f₁ f₂ z ≠ 0
+      rw [piecewise_eq_of_mem V f₁ f₂ hz]
+      change exp (utilde z) / (z - b) ^ n ≠ 0
+      exact div_ne_zero (exp_ne_zero _) (zpow_ne_zero _ (sub_ne_zero.mpr fun hzb ↦
+        hbcl (hzb ▸ subset_closure hz)))
+    · change V.piecewise f₁ f₂ z ≠ 0
+      rw [piecewise_eq_of_notMem V f₁ f₂ hz]
+      change (z - a) ^ m ≠ 0
+      exact zpow_ne_zero _ (sub_ne_zero.mpr fun hza ↦ hz (hza ▸ haV))
+  obtain ⟨R, hR, hVR⟩ := hbdd.closure.subset_ball_lt 0 a
+  obtain ⟨v, hvcont, hvexp⟩ :=
+    apm_a96A07_exists_log_closedBall a R hR Ψ
+      hΨ.continuousOn (fun z _ ↦ hΨne z)
+  apply apm_a96A07_no_log_on_circle a R hR m v
+  · exact hvcont.mono sphere_subset_closedBall
+  · intro z hz
+    rw [hvexp z (sphere_subset_closedBall hz)]
+    change V.piecewise f₁ f₂ z = (z - a) ^ m
+    rw [piecewise_eq_of_notMem]
+    intro hzV
+    have := hVR (subset_closure hzV)
+    rw [mem_ball] at this
+    rw [mem_sphere] at hz
+    exact (ne_of_lt this) hz
 -- END SEAT AREA
 
 /-- A continuous nonvanishing function on an injectively parametrized arc has a continuous

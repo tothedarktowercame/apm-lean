@@ -372,23 +372,114 @@ See BLUEPRINT.md, "Zero-count route".  The count is locally constant off the cur
 away, jumps by one somewhere, and the curve has at most one bounded complementary component. -/
 
 -- BEGIN SEAT AREA
+lemma apm_a96A07_exists_log_Icc_aux {E : Type*} [NormedAddCommGroup E]
+    [NormedSpace ℝ E] (s : Set E) (hs : Convex ℝ s) (hsne : s.Nonempty)
+    (hsclosed : IsClosed s) (f : E → ℂ) (hf : ContinuousOn f s)
+    (hne : ∀ x ∈ s, f x ≠ 0) :
+    ∃ u : E → ℂ, ContinuousOn u s ∧ ∀ x ∈ s, exp (u x) = f x := by
+  letI : ContractibleSpace s := hs.contractibleSpace hsne
+  letI : LocPathConnectedSpace s := hs.locPathConnectedSpace
+  let F : C(s, {z : ℂ // z ≠ 0}) :=
+    ⟨fun x => ⟨f x, hne x x.property⟩,
+      hf.restrict.subtype_mk _⟩
+  obtain ⟨x0, hx0⟩ := hsne
+  let x₀ : s := ⟨x0, hx0⟩
+  let e₀ : ℂ := log (f x0)
+  have he₀ : (fun z : ℂ => (⟨exp z, exp_ne_zero z⟩ : {z : ℂ // z ≠ 0})) e₀ = F x₀ := by
+    apply Subtype.ext
+    exact exp_log (hne x0 hx0)
+  obtain ⟨U, hU, -⟩ := Complex.isCoveringMap_exp.existsUnique_continuousMap_lifts F x₀ e₀ he₀
+  obtain ⟨u, hu⟩ := ContinuousMap.exists_restrict_eq hsclosed U
+  refine ⟨u, u.continuous.continuousOn, fun x hx => ?_⟩
+  have hux : u x = U ⟨x, hx⟩ := by
+    exact congr_arg (fun q : C(s, ℂ) => q ⟨x, hx⟩) hu
+  rw [hux]
+  exact congr_arg Subtype.val (congr_fun hU.2 ⟨x, hx⟩)
+
 /-- A continuous nonvanishing function on an interval has a continuous logarithm. -/
 theorem apm_a96A07_exists_log_Icc (a b : ℝ) (hab : a ≤ b) (f : ℝ → ℂ)
     (hf : ContinuousOn f (Icc a b)) (hne : ∀ t ∈ Icc a b, f t ≠ 0) :
     ∃ u : ℝ → ℂ, ContinuousOn u (Icc a b) ∧ ∀ t ∈ Icc a b, exp (u t) = f t := by
-  sorry
+  exact apm_a96A07_exists_log_Icc_aux (Icc a b) (convex_Icc a b) ⟨a, left_mem_Icc.mpr hab⟩
+    isClosed_Icc f hf hne
 
 /-- A continuous nonvanishing function on a closed disk has a continuous logarithm. -/
 theorem apm_a96A07_exists_log_closedBall (c : ℂ) (R : ℝ) (hR : 0 < R) (f : ℂ → ℂ)
     (hf : ContinuousOn f (closedBall c R)) (hne : ∀ z ∈ closedBall c R, f z ≠ 0) :
     ∃ u : ℂ → ℂ, ContinuousOn u (closedBall c R) ∧ ∀ z ∈ closedBall c R, exp (u z) = f z := by
-  sorry
+  exact apm_a96A07_exists_log_Icc_aux (closedBall c R) (convex_closedBall c R)
+    ⟨c, mem_closedBall_self hR.le⟩ (isClosed_closedBall) f hf hne
 
 /-- `(z - a) ^ n` has no continuous logarithm on a circle about `a` unless `n = 0`. -/
 theorem apm_a96A07_no_log_on_circle (a : ℂ) (R : ℝ) (hR : 0 < R) (n : ℤ) (u : ℂ → ℂ)
     (hu : ContinuousOn u (sphere a R))
     (h : ∀ z ∈ sphere a R, exp (u z) = (z - a) ^ n) : n = 0 := by
-  sorry
+  let q : ℝ → ℂ := fun t => a + R * exp (t * I)
+  let v : ℝ → ℂ := fun t => (n : ℂ) * ((Real.log R : ℂ) + t * I)
+  let d : ℂ := u (q 0) - v 0
+  let w : ℝ → ℂ := fun t => v t + d
+  have hqmem : ∀ t : ℝ, q t ∈ sphere a R := by
+    intro t
+    rw [mem_sphere]
+    simp only [q, dist_eq, add_sub_cancel_left, norm_mul, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_pos hR, Complex.norm_exp_ofReal_mul_I, mul_one]
+  have hqcont : Continuous q := by
+    fun_prop
+  have huq : ContinuousOn (fun t => u (q t)) (Icc 0 (2 * Real.pi)) :=
+    hu.comp hqcont.continuousOn (fun t _ => hqmem t)
+  have hvexp : ∀ t : ℝ, exp (v t) = (q t - a) ^ n := by
+    intro t
+    rw [show v t = (n : ℂ) * ((Real.log R : ℂ) + t * I) by rfl,
+      Complex.exp_int_mul]
+    congr 1
+    rw [Complex.exp_add]
+    norm_cast
+    rw [Real.exp_log hR, show q t - a = R * exp (t * I) by simp [q]]
+  have hdexp : exp d = 1 := by
+    have hqa : q 0 - a ≠ 0 := sub_ne_zero.mpr (by
+      intro heq
+      have := hqmem 0
+      rw [heq, mem_sphere, dist_self] at this
+      linarith)
+    rw [Complex.exp_sub, h (q 0) (hqmem 0), hvexp 0,
+      div_self (zpow_ne_zero _ hqa)]
+  have hwexp : ∀ t : ℝ, exp (w t) = (q t - a) ^ n := by
+    intro t
+    simp only [w, Complex.exp_add, hdexp, mul_one, hvexp]
+  have hwcont : ContinuousOn w (Icc 0 (2 * Real.pi)) := by
+    exact (by fun_prop : Continuous w).continuousOn
+  have heqexp : (Icc (0 : ℝ) (2 * Real.pi)).EqOn
+      ((fun z : ℂ => (⟨exp z, exp_ne_zero z⟩ : {z : ℂ // z ≠ 0})) ∘ fun t => u (q t))
+      ((fun z : ℂ => (⟨exp z, exp_ne_zero z⟩ : {z : ℂ // z ≠ 0})) ∘ w) := by
+    intro t ht
+    apply Subtype.ext
+    exact (h (q t) (hqmem t)).trans (hwexp t).symm
+  have hzero : (0 : ℝ) ∈ Icc 0 (2 * Real.pi) := ⟨le_rfl, by positivity⟩
+  have hstart : u (q 0) = w 0 := by
+    simp [w, d]
+  have heq := Complex.isCoveringMap_exp.eqOn_of_comp_eqOn
+    (convex_Icc (0 : ℝ) (2 * Real.pi)).isPreconnected huq hwcont heqexp hzero hstart
+  have hend := heq (show (2 * Real.pi : ℝ) ∈ Icc 0 (2 * Real.pi) from
+    ⟨by positivity, le_rfl⟩)
+  have hqend : q (2 * Real.pi) = q 0 := by
+    simp [q, Complex.exp_two_pi_mul_I]
+  have hvend : v (2 * Real.pi) = v 0 := by
+    have : w (2 * Real.pi) = w 0 := by
+      rw [← hend, ← heq hzero]
+      change u (q (2 * Real.pi)) = u (q 0)
+      rw [hqend]
+    change v (2 * Real.pi) + d = v 0 + d at this
+    exact add_right_cancel this
+  have hnprod : (n : ℂ) * ((2 * Real.pi : ℝ) : ℂ) * I = 0 := by
+    dsimp [v] at hvend
+    linear_combination hvend
+  have hfac : (((2 * Real.pi : ℝ) : ℂ) * I) ≠ 0 := by
+    exact mul_ne_zero
+      (ofReal_ne_zero.mpr (mul_ne_zero two_ne_zero Real.pi_ne_zero)) I_ne_zero
+  have hnC : (n : ℂ) = 0 := by
+    apply (mul_eq_zero.mp ?_).resolve_right hfac
+    simpa [mul_assoc] using hnprod
+  exact_mod_cast hnC
 -- END SEAT AREA
 
 /-- Borsuk's criterion.  If `a` lies in a bounded component of the complement of a compact set
