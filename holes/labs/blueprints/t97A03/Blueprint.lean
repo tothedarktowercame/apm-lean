@@ -2865,11 +2865,20 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_perms
 literal circle sheets.  The parametrisation `q` records the corresponding
 homeomorphism from the standard circle (with marked points `1,-1`) to the
 base circle (with marked points `A,B`). -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_normalized_aux_continuousEquiv
+    (C : Circle) (hC : C ≠ 1) :
+    ∃ e : Circle ≃ Circle, Continuous e ∧ e 1 = 1 ∧
+      e apm_t97A03_circleNegOne = C := by
+  sorry
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_normalized
     (C : Circle) (hC : C ≠ 1) :
     ∃ e : Circle ≃ₜ Circle, e 1 = 1 ∧
       e apm_t97A03_circleNegOne = C := by
-  sorry
+  obtain ⟨e, he, he1, hen⟩ :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle_aux_normalized_aux_continuousEquiv
+      C hC
+  exact ⟨he.homeoOfEquivCompactToT2, he1, hen⟩
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_markedCircle
     (A B : Circle) (hAB : A ≠ B) :
@@ -2889,6 +2898,34 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux
   · simpa using congrArg (A * ·) he1
   · simpa [mul_assoc] using congrArg (A * ·) hen
 
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts_aux_construct_aux_oneSheet
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.swap 0 1)
+    (hsecond : d.secondPerm = Equiv.swap 0 1)
+    (q : Circle ≃ₜ Circle) (hq1 : q 1 = A)
+    (hqn : q apm_t97A03_circleNegOne = B) (i : Fin 2) :
+    ∃ c : Circle → Y, Continuous c ∧
+      (∀ w, p (c w) = apm_t97A03_baseCircle A B (q w)) ∧
+      c 1 = d.sphere i apm_t97A03_north ∧
+      c apm_t97A03_circleNegOne =
+        d.sphere (Equiv.swap 0 1 i) apm_t97A03_south := by
+  sorry
+
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts_aux_construct_aux_continuous
+    {Y : Type} [TopologicalSpace Y] (c : Fin 2 → Circle → Y)
+    (hc : ∀ i, Continuous (c i)) :
+    Continuous (fun w : Fin 2 × Circle ↦ c w.1 w.2) := by
+  rw [continuous_iff_continuousAt]
+  intro w
+  apply ContinuousAt.congr_of_eventuallyEq
+    ((hc w.1).continuousAt.comp continuousAt_snd)
+  filter_upwards [continuousAt_fst.eventually
+    ((isOpen_discrete ({w.1} : Set (Fin 2))).mem_nhds (by simp))] with x hx
+  change x.1 = w.1 at hx
+  simp [hx]
+
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts_aux_construct
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
     (p : Y → apm_t97A03_BaseSpace A B)
@@ -2903,7 +2940,12 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux
       (∀ i, c i 1 = d.sphere i apm_t97A03_north) ∧
       (∀ i, c i apm_t97A03_circleNegOne =
         d.sphere (Equiv.swap 0 1 i) apm_t97A03_south) := by
-  sorry
+  choose c hc hlift hn hs using fun i ↦
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts_aux_construct_aux_oneSheet
+      A B Y p d hfirst hsecond q hq1 hqn i
+  exact ⟨c,
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts_aux_construct_aux_continuous c hc,
+    hlift, hn, hs⟩
 
 theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste_aux_geometricPaste_aux_pasteLifts
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
