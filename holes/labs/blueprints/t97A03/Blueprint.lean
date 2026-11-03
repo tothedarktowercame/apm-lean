@@ -2286,6 +2286,24 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph
 two complementary arcs with the normalized endpoint labels, and descend the
 piecewise inverse maps through `apm_t97A03_OneCircleRel`.  Use covering lift
 uniqueness and the quotient universal property to prove the inverse laws. -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_normalize_aux_conj
+    (e q r : Equiv.Perm (Fin 2))
+    (h : ∀ i, q (e i) = e (r i)) : q = r := by
+  rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap e with
+    rfl | rfl
+  · apply Equiv.ext
+    exact h
+  · rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap q with
+      rfl | rfl <;>
+      rcases ConstructionTargets.t97A03Closure.finTwoPerm_eq_id_or_swap r with
+        rfl | rfl
+    · rfl
+    · have := h 0
+      norm_num at this
+    · have := h 0
+      norm_num at this
+    · rfl
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_normalize
     (A B : Circle) (Y : Type) [TopologicalSpace Y]
     (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
@@ -2293,7 +2311,69 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_normalize
     (hmono : apm_t97A03_OneCircleMonodromy p hp) :
     (d.firstPerm = Equiv.swap 0 1 ∧ d.secondPerm = Equiv.refl _) ∨
       (d.firstPerm = Equiv.refl _ ∧ d.secondPerm = Equiv.swap 0 1) := by
-  sorry
+  rcases hmono with ⟨label, swapArcs, hmono⟩
+  let sheetToFiber : Fin 2 →
+      (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) := fun i ↦
+    ⟨d.sphere i apm_t97A03_north, by simp [d.sphere_lifts]⟩
+  have hinj : Function.Injective sheetToFiber := by
+    intro i j hij
+    obtain ⟨k, hk, hkunique⟩ := d.sphere_unique
+      (d.sphere_lifts i apm_t97A03_north)
+    exact (hkunique i rfl).trans
+      (hkunique j (congrArg Subtype.val hij).symm).symm
+  have hsurj : Function.Surjective sheetToFiber := by
+    intro y
+    have hy : p y = apm_t97A03_baseSphere A B apm_t97A03_north := by
+      rw [← apm_t97A03_baseCircle_A A B]
+      simpa using y.property
+    obtain ⟨i, hi, -⟩ := d.sphere_unique hy
+    exact ⟨i, Subtype.ext hi⟩
+  have hbij : Function.Bijective sheetToFiber := ⟨hinj, hsurj⟩
+  let sheetEquiv : Fin 2 ≃
+      (p ⁻¹' ({apm_t97A03_baseCircle A B A} : Set _)) :=
+    Equiv.ofBijective sheetToFiber hbij
+  let e : Equiv.Perm (Fin 2) := sheetEquiv.trans label
+  let first := ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+    (apm_t97A03_firstLiteralTransport p hp)
+  let second := ConstructionTargets.t97A03Closure.labeledFiberMonodromy label
+    (apm_t97A03_secondLiteralTransport p hp)
+  have hfirst_conj : ∀ i, first (e i) = e (d.firstPerm i) := by
+    intro i
+    simp only [first, e,
+      ConstructionTargets.t97A03Closure.labeledFiberMonodromy,
+      Equiv.trans_apply, Equiv.symm_apply_apply]
+    apply congrArg label
+    apply Subtype.ext
+    change ((apm_t97A03_firstLiteralTransport p hp
+      ⟨d.sphere i apm_t97A03_north, _⟩ : _) : Y) =
+        d.sphere (d.firstPerm i) apm_t97A03_north
+    exact (apm_t97A03_classify_aux_sheetData_aux_transport A B Y p hp d i).1
+  have hsecond_conj : ∀ i, second (e i) = e (d.secondPerm i) := by
+    intro i
+    simp only [second, e,
+      ConstructionTargets.t97A03Closure.labeledFiberMonodromy,
+      Equiv.trans_apply, Equiv.symm_apply_apply]
+    apply congrArg label
+    apply Subtype.ext
+    change ((apm_t97A03_secondLiteralTransport p hp
+      ⟨d.sphere i apm_t97A03_north, _⟩ : _) : Y) =
+        d.sphere (d.secondPerm i) apm_t97A03_north
+    exact (apm_t97A03_classify_aux_sheetData_aux_transport A B Y p hp d i).2
+  have hfirst : first = d.firstPerm :=
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_normalize_aux_conj
+      e first d.firstPerm hfirst_conj
+  have hsecond : second = d.secondPerm :=
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_normalize_aux_conj
+      e second d.secondPerm hsecond_conj
+  change (if swapArcs then (second, first) else (first, second)) =
+    (Equiv.swap 0 1, Equiv.refl (Fin 2)) at hmono
+  cases swapArcs <;> simp only [Bool.false_eq_true, if_false, if_true] at hmono
+  · left
+    exact ⟨hfirst.symm.trans (by simpa using congrArg Prod.fst hmono),
+      hsecond.symm.trans (by simpa using congrArg Prod.snd hmono)⟩
+  · right
+    exact ⟨hfirst.symm.trans (by simpa using congrArg Prod.snd hmono),
+      hsecond.symm.trans (by simpa using congrArg Prod.fst hmono)⟩
 
 /-- The fixed geometric descent when the first complementary arc changes
 sheets and the second one preserves them.  There is no finite permutation
