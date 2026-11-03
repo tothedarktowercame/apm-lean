@@ -210,3 +210,82 @@ The output of `#print axioms apm_t02a03` is:
 
 The sole warning identifying `sorry` is at the LIBRARY lemma.  The main
 theorem and every reused bridge declaration have no direct `sorry`.
+
+## Sector leaf: design notes (claude-14, 2026-11-03)
+
+lemma-2 returned `_core_aux_sector` untouched: no construction was written down, and none was found in the bank.
+Notes toward one, from the coordinates of the right tube (angle θ about the right centre, meridian offset
+`u = s - 1`, height `z`):
+
+- Along each line of fixed `(θ, z)` the distance to `C` strictly decreases in `u` (on the right tube
+  `r_L ≥ 23/20 > 1` and `dr_L/ds < 0`), so the bite meets the line in a terminal interval and the
+  sector minus the bite is `{-a(z) ≤ u ≤ c(θ,z)}` with `a = √(1/16 - z²)`, `c = min(a, b)`, and
+  `b = (12/5) cos θ - √((1+a)² - (144/25) sin² θ) - 1` explicit (`b ≥ a` where the root is not real,
+  inside the sector).  `D` is the graph `u = b` where `b ≤ a`.
+- On `z = 0`, `b(θ,0) ≈ 3/20 + 1.10 θ²`, so the loop arc (`u = 3/20, z = 0`) lies strictly below `D`
+  except at `q0`.  A fibrewise push in `u` therefore cannot both fix the arc and end in `D ∪ arc`.
+- Downstream, only `D` has to be fixed for all `t`: `D = T ∩ right` is where the homotopy is glued to the
+  identity on the torus.  The loop only has to be fixed at `t = 1` (`_of_deformation` uses `hfix` at
+  `t = 1` only).  Weakening `_sector`, `_stages`, `_concat`, `_core` from rel `Z` to rel `D` plus
+  "`H 1` fixes `Z`" makes room for a straight-line homotopy, in `(θ, z, u)` coordinates, from the
+  identity to a retraction onto `D ∪ arc`.  The retraction is the remaining design problem.
+
+### A construction (claude-14, 2026-11-03, later)
+
+The rel-`D` relaxation above turns out to be unnecessary: the construction below fixes all of `Z`.
+
+**Coordinates.**  On the right tube put `s = rad p` (planar distance from `(6/5,0)`), `θ` with
+`cos θ = (6/5 - x)/s`, `sin θ = y/s` (continuous as `arctan (y / (6/5 - x))` since `6/5 - x > 0`
+there), `u = s - 1`, `z`, `a(z) = √(1/16 - z²)`.  On the right tube `r_L > 1`, so
+`infDist p C ≥ 1/4 ⟺ r_L ≥ 1 + a(z) ⟺ s² - (24/5) s cos θ + 144/25 ≥ (1 + a)²`.
+
+**The bite is explicit.**  Solving `infDist = 1/4` on the line of fixed `(θ, z)`: the `cos² θ` terms
+cancel, and the bite meets that line iff `cos θ ≥ 6 / (5 (1 + a(z)))`.  So its shadow is
+`Δ = {|z| ≤ 3/20, cos θ ≥ 6/(5(1+a(z)))}`, and `D` is the graph `u = b(θ,z)` over `Δ` with
+`b = (12/5) cos θ - √((1+a)² - (144/25) sin² θ) - 1`.  Set `c = b` on `Δ` and `c = a` off it
+(they agree on the edge of `Δ`).  The right piece is `{-a(z) ≤ u ≤ c(θ,z)}`.  At `z = 0`,
+`b ≈ 3/20 + 1.10 θ²`: the loop arc `u = 3/20, z = 0` is below `D` except at `q0` (`θ = 0`).
+
+**Change of `Y`.**  Replace `x ≤ 4/5` in `_core_aux_Y` by `cos θ ≥ 17/25`, that is
+`(6/5 - x) / rad ≥ 17/25`.  `_cutoff_aux_end` gets easier: `φ < 1` *is* `cos θ > 17/25`.  Then the
+sector is a box in `θ`.
+
+**Stage Z (clamp height).**  `z ↦ max(-1/5, min(1/5, z))`, straight line, with `θ` and `u` fixed.
+Off `|z| ≤ 3/20` there is no bite, and `a` grows as `|z|` shrinks, so points stay in the right piece.
+It fixes `Z`: `D` has `|z| ≤ 3/20`, and the loop has `z = 0`.
+
+**Box coordinates.**  On `|z| ≤ 1/5`, `c + a ≥ 3/20 + ... > 0`, so `v = (u + a)/(c + a) ∈ [0,1]` is
+continuous.  `Ψ = (θ, z, v)` maps the clamped sector onto the box
+`B = [-θ₁, θ₁] × [-1/5, 1/5] × [0, 1]` with `cos θ₁ = 17/25`; `Ψ⁻¹` is explicit
+(`u = -a + v (c + a)`, `s = 1 + u`, `p = (6/5 - s cos θ, s sin θ, z)`).  In `B`:
+
+- `D = {v = 1, (θ,z) ∈ Δ}`;
+- the arc is `{z = 0, v = v_arc θ}` with `v_arc θ = (2/5)/(c(θ,0) + 1/4)`, `< 1` except at `θ = 0`;
+- their common point is `q0 = (0,0,1)`.
+
+**Retraction `r : B → D ∪ arc`.**  First the base retraction onto `Δ`:
+`πΔ(θ,z) = (clamp_{±Θ(z')} θ, z')` with `z' = clamp_{±3/20} z` and `cos Θ = 6/(5(1+a))`.  `Δ` is
+star-shaped about `0`, because `b - a` increases in `|θ|` and in `|z|`.  Set
+`δ_arc = |z| + |v - v_arc θ|`, `δ_D = (1 - v) + ‖(θ,z) - πΔ(θ,z)‖`, and `λ = δ_arc/(δ_arc + δ_D)`,
+which is defined off `q0`.
+
+- If `λ ≤ 1/2`, send `p` to the arc point at angle `(1 - 2λ) θ`.
+- If `λ ≥ 1/2`, send `p` to the `D`-point over `πΔ((2λ - 1)(θ, z))`.
+- At `λ = 1/2` both rules give `q0`.
+
+So `r` is continuous off `q0`, and at `q0` because both rules land near `q0` when `θ, z` are small.
+On the arc `λ = 0`, and on `D` `λ = 1`, so `r` fixes both.
+
+**Stage N.**  Straight line in `B` from `Ψ p` to `r (Ψ p)`, pulled back by `Ψ⁻¹`.  `B` is convex, and
+`r` fixes `Z`, so this fixes `Z`.  On the rest of the loop (outside the sector) take the identity.  The
+two pieces meet only at the arc's ends on the face `cos θ = 17/25`, which are fixed, so they glue.
+
+**Leaves for seats.**
+1. Coordinates: `Ψ` and `Ψ⁻¹`, continuity, and the round trip on the clamped sector.
+2. Membership: right piece ∩ sector ⟺ `Ψ ∈ B` (after the clamp), via the closed-form `infDist` to `C`
+   already used by `_cutoff_aux_continuous_aux_dist`.
+3. `D` and the arc in coordinates.
+4. Stage Z.
+5. `πΔ` and its properties.
+6. `r`: continuity (the case at `q0` is its own leaf), `r` fixes `D ∪ arc`, `r` lands in `D ∪ arc`.
+7. Assembly.
