@@ -7991,6 +7991,20 @@ private theorem
     exact Relation.EqvGen.refl _
 
 private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel_aux_sphere_circle_aux_vertex
+    (x : apm_t97A03_TwoSpheres) (y : Fin 2 × Circle)
+    (h :
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inl x) =
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr y)) :
+    Relation.EqvGen
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+          (.inl x) (.inl (0, apm_t97A03_north)) ∧
+      Relation.EqvGen
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+          (.inr y) (.inl (0, apm_t97A03_north)) := by
+  sorry
+
+private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel_aux_sphere_circle
     (x : apm_t97A03_TwoSpheres) (y : Fin 2 × Circle)
     (h :
@@ -7998,7 +8012,10 @@ private theorem
         apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr y)) :
     Relation.EqvGen
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel (.inl x) (.inr y) := by
-  sorry
+  obtain ⟨hx, hy⟩ :=
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel_aux_sphere_circle_aux_vertex
+      x y h
+  exact Relation.EqvGen.trans _ _ _ hx (Relation.EqvGen.symm _ _ hy)
 
 private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel_aux_circle_sphere
@@ -8013,6 +8030,22 @@ private theorem
       y x h.symm)
 
 private theorem
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel_aux_circle_circle_aux_normal
+    (x y : Fin 2 × Circle)
+    (h :
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr x) =
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr y)) :
+    x = y ∨
+      ∃ v : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle),
+        Relation.EqvGen
+            apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+            (.inr x) v ∧
+          Relation.EqvGen
+            apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel
+            (.inr y) v := by
+  sorry
+
+private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel_aux_circle_circle
     (x y : Fin 2 × Circle)
     (h :
@@ -8020,7 +8053,11 @@ private theorem
         apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw (.inr y)) :
     Relation.EqvGen
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_Rel (.inr x) (.inr y) := by
-  sorry
+  rcases
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel_aux_circle_circle_aux_normal
+        x y h with rfl | ⟨v, hx, hy⟩
+  · exact Relation.EqvGen.refl _
+  · exact Relation.EqvGen.trans _ _ _ hx (Relation.EqvGen.symm _ _ hy)
 
 private theorem
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_continuousEquiv_aux_raw_kernel
