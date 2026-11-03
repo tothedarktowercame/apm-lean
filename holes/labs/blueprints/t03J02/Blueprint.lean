@@ -1815,19 +1815,173 @@ structure apm_t03J02_Deform where
 
 variable {j₁ j₂}
 
+def apm_t03J02_exists_deform_aux_E
+    (R₁ : apm_t03J02_Retractile j₁) (R₂ : apm_t03J02_Retractile j₂) :
+    C(apm_t03J02_space j₁ j₂ × I, apm_t03J02_space j₁ j₂) :=
+  ContinuousMap.uncurry (apm_t03J02_gluedDesc j₁ j₂
+    (ContinuousMap.curry ((apm_t03J02_gluedInl j₁ j₂).comp R₁.H))
+    (ContinuousMap.curry ((apm_t03J02_gluedInr j₁ j₂).comp R₂.H))
+    (fun z ↦ by
+      ext t
+      simp only [ContinuousMap.curry_apply, ContinuousMap.comp_apply]
+      rw [R₁.H_fix, R₂.H_fix]
+      exact apm_t03J02_glue_eq j₁ j₂ z))
+
+def apm_t03J02_exists_deform_aux_B
+    (R₁ : apm_t03J02_Retractile j₁) (R₂ : apm_t03J02_Retractile j₂) :
+    C(apm_t03J02_space j₁ j₂, ℝ) :=
+  apm_t03J02_gluedDesc j₁ j₂
+    ⟨fun x ↦ -R₁.β x, by fun_prop⟩ R₂.β
+    (fun z ↦ by dsimp; rw [R₁.β_fix, R₂.β_fix]; simp)
+
+lemma apm_t03J02_exists_deform_aux_E_circle
+    (R₁ : apm_t03J02_Retractile j₁) (R₂ : apm_t03J02_Retractile j₂) (z : Circle) (t : I) :
+    apm_t03J02_exists_deform_aux_E R₁ R₂ (apm_t03J02_gluedCircle j₁ j₂ z, t) =
+      apm_t03J02_gluedCircle j₁ j₂ z := by
+  change apm_t03J02_gluedInl j₁ j₂ (R₁.H (j₁ z, t)) = _
+  rw [R₁.H_fix]
+  rfl
+
+lemma apm_t03J02_exists_deform_aux_B_circle
+    (R₁ : apm_t03J02_Retractile j₁) (R₂ : apm_t03J02_Retractile j₂) (z : Circle) :
+    apm_t03J02_exists_deform_aux_B R₁ R₂ (apm_t03J02_gluedCircle j₁ j₂ z) = 0 := by
+  change -R₁.β (j₁ z) = 0
+  rw [R₁.β_fix, neg_zero]
+
+theorem apm_t03J02_exists_deform_aux_mem₁
+    (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂)
+    (R₁ : apm_t03J02_Retractile j₁) (R₂ : apm_t03J02_Retractile j₂) :
+    ∀ p ∈ apm_t03J02_cylSet j₁ j₂, ∀ t : I,
+      (apm_t03J02_exists_deform_aux_E R₁ R₂ (p.1, t), p.2) ∈
+        apm_t03J02_cylSet j₁ j₂ := by
+  rintro ⟨x, s⟩ h t
+  rcases h with ⟨hs, a, rfl⟩ | ⟨hs, a, rfl⟩ | ⟨⟨z, rfl⟩, hs⟩
+  · exact Or.inl ⟨hs, ⟨R₁.H (a, t), rfl⟩⟩
+  · exact Or.inr (Or.inl ⟨hs, ⟨R₂.H (a, t), rfl⟩⟩)
+  · refine Or.inr (Or.inr ⟨?_, hs⟩)
+    change apm_t03J02_exists_deform_aux_E R₁ R₂ (apm_t03J02_gluedCircle j₁ j₂ z, t) ∈ _
+    rw [apm_t03J02_exists_deform_aux_E_circle]
+    exact ⟨z, rfl⟩
+
+theorem apm_t03J02_exists_deform_aux_mem₂
+    (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂)
+    (R₁ : apm_t03J02_Retractile j₁) (R₂ : apm_t03J02_Retractile j₂) :
+    ∀ p ∈ apm_t03J02_cylSet j₁ j₂, ∀ t : I,
+      (apm_t03J02_exists_deform_aux_E R₁ R₂ (p.1, 1),
+        (1 - (t : ℝ)) * p.2 + t * apm_t03J02_exists_deform_aux_B R₁ R₂ p.1) ∈
+          apm_t03J02_cylSet j₁ j₂ := by
+  rintro ⟨x, s⟩ h ⟨t, ht₀, ht₁⟩
+  rcases h with ⟨hs, a, rfl⟩ | ⟨hs, a, rfl⟩ | ⟨⟨z, rfl⟩, hs⟩
+  · change s = -1 at hs
+    subst hs
+    have hb₀ := R₁.β_nonneg a
+    have hb₁ := R₁.β_le_one a
+    change (apm_t03J02_gluedInl j₁ j₂ (R₁.H (a, 1)),
+      (1 - t) * (-1) + t * (-R₁.β a)) ∈ apm_t03J02_cylSet j₁ j₂
+    by_cases hb : R₁.β a < 1
+    · obtain ⟨z, hz⟩ := R₁.H_one a hb
+      rw [← hz]
+      refine Or.inr (Or.inr ⟨⟨z, rfl⟩, ?_, ?_⟩)
+      · change -1 ≤ (1 - t) * (-1) + t * (-R₁.β a); nlinarith
+      · change (1 - t) * (-1) + t * (-R₁.β a) ≤ 1; nlinarith
+    · have hb' : R₁.β a = 1 := le_antisymm hb₁ (not_lt.1 hb)
+      refine Or.inl ⟨?_, ⟨R₁.H (a, 1), rfl⟩⟩
+      change (1 - t) * (-1) + t * (-R₁.β a) = -1
+      rw [hb']; ring
+  · change s = 1 at hs
+    subst hs
+    have hb₀ := R₂.β_nonneg a
+    have hb₁ := R₂.β_le_one a
+    change (apm_t03J02_gluedInr j₁ j₂ (R₂.H (a, 1)),
+      (1 - t) * 1 + t * R₂.β a) ∈ apm_t03J02_cylSet j₁ j₂
+    by_cases hb : R₂.β a < 1
+    · obtain ⟨z, hz⟩ := R₂.H_one a hb
+      have hg : apm_t03J02_gluedInr j₁ j₂ (j₂ z) = apm_t03J02_gluedCircle j₁ j₂ z :=
+        (apm_t03J02_glue_eq j₁ j₂ z).symm
+      rw [← hz, hg]
+      refine Or.inr (Or.inr ⟨⟨z, rfl⟩, ?_, ?_⟩)
+      · change -1 ≤ (1 - t) * 1 + t * R₂.β a; nlinarith
+      · change (1 - t) * 1 + t * R₂.β a ≤ 1; nlinarith
+    · have hb' : R₂.β a = 1 := le_antisymm hb₁ (not_lt.1 hb)
+      refine Or.inr (Or.inl ⟨?_, ⟨R₂.H (a, 1), rfl⟩⟩)
+      change (1 - t) * 1 + t * R₂.β a = 1
+      rw [hb']; ring
+  · have hs₁ : -1 ≤ s := hs.1
+    have hs₂ : s ≤ 1 := hs.2
+    change (apm_t03J02_exists_deform_aux_E R₁ R₂ (apm_t03J02_gluedCircle j₁ j₂ z, 1),
+      (1 - t) * s + t * apm_t03J02_exists_deform_aux_B R₁ R₂
+        (apm_t03J02_gluedCircle j₁ j₂ z)) ∈ apm_t03J02_cylSet j₁ j₂
+    rw [apm_t03J02_exists_deform_aux_E_circle, apm_t03J02_exists_deform_aux_B_circle]
+    refine Or.inr (Or.inr ⟨⟨z, rfl⟩, ?_, ?_⟩)
+    · change -1 ≤ (1 - t) * s + t * 0; nlinarith
+    · change (1 - t) * s + t * 0 ≤ 1; nlinarith
+
+theorem apm_t03J02_exists_deform_aux_fibre
+    (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂) :
+    ∀ x : apm_t03J02_space j₁ j₂, ∃ s, (x, s) ∈ apm_t03J02_cylSet j₁ j₂ := by
+  intro x
+  refine Quotient.inductionOn x ?_
+  rintro (a | a)
+  · exact ⟨-1, Or.inl ⟨rfl, ⟨a, rfl⟩⟩⟩
+  · exact ⟨1, Or.inr (Or.inl ⟨rfl, ⟨a, rfl⟩⟩)⟩
+
 /-- `E = H₁` on the left and `H₂` on the right, `B = -β₁` on the left and `β₂` on the right.  Use
 `apm_t03J02_gluedDesc` with target `C(I, X)` and uncurry for `E`. -/
 theorem apm_t03J02_exists_deform (hj₁ : Topology.IsEmbedding j₁) (hj₂ : Topology.IsEmbedding j₂)
     (R₁ : apm_t03J02_Retractile j₁) (R₂ : apm_t03J02_Retractile j₂) :
     Nonempty (apm_t03J02_Deform j₁ j₂) := by
-  sorry
+  exact ⟨⟨apm_t03J02_exists_deform_aux_E R₁ R₂,
+    apm_t03J02_exists_deform_aux_B R₁ R₂,
+    fun x ↦ by
+      refine Quotient.inductionOn x ?_
+      rintro (a | a)
+      · change apm_t03J02_gluedInl j₁ j₂ (R₁.H (a, 0)) = _
+        rw [R₁.H_zero]
+        rfl
+      · change apm_t03J02_gluedInr j₁ j₂ (R₂.H (a, 0)) = _
+        rw [R₂.H_zero]
+        rfl,
+    apm_t03J02_exists_deform_aux_mem₁ hj₁ hj₂ R₁ R₂,
+    apm_t03J02_exists_deform_aux_mem₂ hj₁ hj₂ R₁ R₂,
+    apm_t03J02_exists_deform_aux_fibre hj₁ hj₂⟩⟩
 
 /-- `c = fst`, `b x = (E (x, 1), B x)`.  `c ∘ b` is homotopic to the identity through `E`.
 `b ∘ c` goes to `id` in two stages: `(x, s) ↦ (E (x, t), s)`, then
 `(x, s) ↦ (E (x, 1), (1 - t) s + t B x)`. -/
 theorem apm_t03J02_homotopyEquiv_cyl (D : apm_t03J02_Deform j₁ j₂) :
     Nonempty (ContinuousMap.HomotopyEquiv (apm_t03J02_space j₁ j₂) (apm_t03J02_Cyl j₁ j₂)) := by
-  sorry
+  let c : C(apm_t03J02_Cyl j₁ j₂, apm_t03J02_space j₁ j₂) :=
+    ⟨fun p ↦ p.1.1, continuous_subtype_val.fst⟩
+  let b : C(apm_t03J02_space j₁ j₂, apm_t03J02_Cyl j₁ j₂) :=
+    ⟨fun x ↦ ⟨(D.E (x, 1), D.B x), by
+        obtain ⟨s, hs⟩ := D.fibre x
+        simpa using D.mem₂ (x, s) hs 1⟩,
+      by fun_prop⟩
+  have hcb : (c.comp b).Homotopic (ContinuousMap.id _) := by
+    apply ContinuousMap.Homotopic.symm
+    let H : C(I × apm_t03J02_space j₁ j₂, apm_t03J02_space j₁ j₂) :=
+      ⟨fun p ↦ D.E (p.2, p.1), by fun_prop⟩
+    exact ⟨⟨H, D.E_zero, fun _ ↦ rfl⟩⟩
+  let F : ContinuousMap.Homotopy (ContinuousMap.id (apm_t03J02_Cyl j₁ j₂))
+      ⟨fun p ↦ ⟨(D.E (p.1.1, 1), p.1.2), D.mem₁ p.1 p.2 1⟩, by fun_prop⟩ :=
+    { toContinuousMap := ⟨fun p ↦ ⟨(D.E (p.2.1.1, p.1), p.2.1.2), D.mem₁ p.2.1 p.2.2 p.1⟩,
+        by fun_prop⟩,
+      map_zero_left := by
+        intro p
+        apply Subtype.ext
+        simp only [ContinuousMap.id_apply]
+        rw [D.E_zero],
+      map_one_left := by intro p; rfl }
+  let G : ContinuousMap.Homotopy
+      ⟨fun p : apm_t03J02_Cyl j₁ j₂ ↦ ⟨(D.E (p.1.1, 1), p.1.2), D.mem₁ p.1 p.2 1⟩,
+        by fun_prop⟩ (b.comp c) :=
+    { toContinuousMap := ⟨(fun p ↦
+        ⟨(D.E (p.2.1.1, 1), (1 - (p.1 : ℝ)) * p.2.1.2 + p.1 * D.B p.2.1.1),
+          D.mem₂ p.2.1 p.2.2 p.1⟩), by fun_prop⟩,
+      map_zero_left := by intro p; apply Subtype.ext; simp,
+      map_one_left := by intro p; apply Subtype.ext; simp [b, c] }
+  exact ⟨⟨b, c, hcb, ContinuousMap.Homotopic.symm
+    (ContinuousMap.Homotopic.trans ⟨F⟩ ⟨G⟩)⟩⟩
 
 variable (j₁ j₂)
 
