@@ -7010,6 +7010,17 @@ private theorem
       simpa [apm_t97A03_circleNegI] using eq_neg_of_add_eq_zero_left hz
 
 private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex_aux_classify
+    (y : Circle)
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
+        apm_t97A03_modelWedgeBase) :
+    y ∈ apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc ∨
+      y = apm_t97A03_circleOne ∨ y = apm_t97A03_circleNegOne ∨
+        y = apm_t97A03_circleI ∨ y = apm_t97A03_circleNegI := by
+  sorry
+
+private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex
     (y : Circle)
     (h :
@@ -7018,7 +7029,87 @@ private theorem
     Relation.EqvGen
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
         (.inr y) (.inl (0, apm_t97A03_north)) := by
+  rcases apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_circle_vertex_aux_classify y h with
+    hy | rfl | rfl | rfl | rfl
+  · exact Relation.EqvGen.rel _ _
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.arc y hy)
+  · exact Relation.EqvGen.rel _ _
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p0
+  · have ha : apm_t97A03_circleNegOne ∈
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc := by
+      simp [apm_t97A03_circleNegOne,
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc]
+    exact Relation.EqvGen.rel _ _
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.arc _ ha)
+  · exact Relation.EqvGen.rel _ _
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p1
+  · exact Relation.EqvGen.trans _ _ _
+      (Relation.EqvGen.rel _ _
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p3)
+      (Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+          apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p2))
+        (Relation.EqvGen.rel _ _
+          (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.arc
+            apm_t97A03_circleNegOne (by
+              simp [apm_t97A03_circleNegOne,
+                apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc]))))
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex_aux_split
+    (x : apm_t97A03_TwoSpheres) (y : Circle)
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl x) =
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y)) :
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl x) =
+        apm_t97A03_modelWedgeBase ∧
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
+        apm_t97A03_modelWedgeBase := by
   sorry
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex_aux_sphere
+    (x : apm_t97A03_TwoSpheres)
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inl x) =
+        apm_t97A03_modelWedgeBase) :
+    Relation.EqvGen
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
+        (.inl x) (.inl (0, apm_t97A03_north)) := by
+  rcases x with ⟨i, x⟩
+  change
+    quotientMap apm_t97A03_twoSphereBase
+        ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+        (.inl (quotientMap apm_t97A03_north apm_t97A03_north
+          (if i = 0 then .inl x else .inr x))) =
+      quotientMap apm_t97A03_twoSphereBase
+        ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase
+        (.inl apm_t97A03_twoSphereBase) at h
+  have hi :=
+    ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective
+      apm_t97A03_twoSphereBase
+      ConstructionTargets.FiniteCircleWedgeFundamentalGroup.threeBase h
+  fin_cases i
+  · simp only [Fin.isValue, Fin.zero_eta, ↓reduceIte] at hi ⊢
+    have hx :=
+      ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective
+        apm_t97A03_north apm_t97A03_north hi
+    subst x
+    exact Relation.EqvGen.refl _
+  · simp only [Fin.isValue, OfNat.ofNat_ne_zero, ↓reduceIte] at hi ⊢
+    have hx :=
+      (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff
+        apm_t97A03_north apm_t97A03_north apm_t97A03_north x).mp hi.symm
+    rcases hx with ⟨-, hx⟩
+    subst x
+    exact Relation.EqvGen.trans _ _ _
+      (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.p2))
+      (Relation.EqvGen.rel _ _
+        (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel.arc
+          apm_t97A03_circleNegOne (by
+            simp [apm_t97A03_circleNegOne,
+              apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc])))
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex
@@ -7031,6 +7122,19 @@ private theorem
           (.inl x) (.inl (0, apm_t97A03_north)) ∧
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
         apm_t97A03_modelWedgeBase := by
+  obtain ⟨hx, hy⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex_aux_split x y h
+  exact ⟨apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_sphere_circle_aux_sphere_vertex_aux_sphere x hx, hy⟩
+
+private theorem
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_circle_circle_aux_normal_aux_injective
+    (x y : Circle)
+    (hx : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr x) ≠
+      apm_t97A03_modelWedgeBase)
+    (h :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr x) =
+        apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y)) :
+    x = y := by
   sorry
 
 private theorem
@@ -7072,7 +7176,13 @@ private theorem
           apm_t97A03_modelWedgeBase ∧
         apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr y) =
           apm_t97A03_modelWedgeBase) := by
-  sorry
+  by_cases hx :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw (.inr x) =
+        apm_t97A03_modelWedgeBase
+  · right
+    exact ⟨hx, h ▸ hx⟩
+  · left
+    exact apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_circle_circle_aux_normal_aux_injective x y hx h
 
 private theorem
     apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm_aux_raw_kernel_aux_circle_circle
