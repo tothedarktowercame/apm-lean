@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "notes": "The full d = 0 case of both remaining Sobolev clauses is proved. One sorry remains for the positive-dimensional custom H1 multiplier/Leibniz and H1-zero approximation bridge.",
   "imported_at": "2026-07-13T17:26:54.335569Z",
@@ -39,5 +39,7 @@
     "elaborated_exit": 0,
     "sorry_declarations": 2,
     "previous_classification": "partial"
-  }
+  },
+  "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state.",
+  "boundary": null
 }

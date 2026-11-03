@@ -29,9 +29,9 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
-  "boundary": "The generated antipodal relation, quotient equality, quotient surjectivity, and exact two-point fiber cardinality are proved explicitly. Remaining work is antipodal local covering charts, the two four-sheeted wedge-cover constructions, and genus-five finite-cover surface classification.",
+  "boundary": null,
   "imported_at": "2026-07-13T17:26:56.375435Z",
   "sorry_audit": {
     "method": "lake env lean elaboration + comment-aware token count",
@@ -54,5 +54,6 @@
       "date": "2026-08-19",
       "resolved": null
     }
-  ]
+  ],
+  "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state."
 }

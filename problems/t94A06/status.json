@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "closer_progress": "The zero-parameter identity, smoothness of every translated slice, and equality of its manifold derivative with mfderiv f are compiled. The remaining almost-everywhere assertion requires manifold Sard/parametric transversality through an incidence submanifold.",
   "imported_at": "2026-07-13T17:26:57.830356Z",
@@ -46,5 +46,7 @@
       "resolved": null,
       "areas_are": "necessary"
     }
-  ]
+  ],
+  "classification_detail": "Corrected 2026-11-03 from 'partial': Main.lean has no sorry and its statement is registered (compile audit of 2026-11-02; t98J02 proved 2026-11-03). The earlier boundary note described an unfinished state.",
+  "boundary": null
 }

@@ -31,8 +31,9 @@ structure, and the standard zero-section chart.  It does not show that an
 arbitrary embedded circle is locally flat and has no global collar, cut
 surface, or classification theorem.  The t03J01, t03J02, t00A03, t01J01, and
 t98J02 blueprints record the same gap.  The closest detailed lift is t91J03's
-annular-circle plan; its classification leaf explicitly still invokes Jordan
-separation.
+annular-circle plan.  (Corrected 2026-11-03: t91J03 closed on 2026-10-31 by a
+planar crossing lemma, with no Jordan separation.  t00J05 stays blocked because
+its conclusion needs a homeomorphism to a standard model, not because of t91J03.)
 
 **Route 1 — full reduction.**  Prove topological Jordan--Schoenflies/local
 flatness for arbitrary embedded circles in surfaces, obtain a global annular
@@ -50,7 +51,7 @@ full compact-surface classification.  It does **not** escape planar topology:
 one must prove the lifted embedded line separates the plane/strip, is disjoint
 from the relevant deck translates, bounds the required fundamental strip, and
 can be straightened equivariantly.  Those are Jordan--Schoenflies statements.
-The t91J03 blueprint reaches precisely this barrier.  Estimated cost is
+Estimated cost is
 1500–3500 lines for the equivariant planar theorem plus 800–1500 lines for the
 cover quotient, versus 2000–4000 lines for the reusable full reduction.  The
 blueprint therefore chooses Route 1 and records the shared foundation proposal
