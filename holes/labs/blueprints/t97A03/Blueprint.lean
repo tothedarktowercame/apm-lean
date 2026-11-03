@@ -4565,6 +4565,23 @@ theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_inactive
   simpa only [apm_t97A03_invariants_aux_slide_aux_detourRaw, hi, false_and, if_false] using
     (continuous_coinduced_rng.comp (continuous_inr.comp (continuous_const.prodMk continuous_id)))
 
+theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_active_aux_pinched (ε : ℝ) (hε : 0 < ε) :
+    Continuous (fun θ : ℝ => Real.sign θ * max 0 (2 * |θ| - ε)) := by
+  classical
+  have h : Continuous (fun θ : ℝ => if θ ≤ 0 then
+      -max 0 (-2 * θ - ε) else max 0 (2 * θ - ε)) := by
+    apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+    intro θ hθ
+    change θ = 0 at hθ
+    subst θ
+    simp [max_eq_left (by linarith : -ε ≤ 0)]
+  convert h using 1
+  funext θ
+  rcases lt_trichotomy θ 0 with ht | ht | ht
+  · simp [Real.sign_of_neg ht, abs_of_neg ht, le_of_lt ht]
+  · subst θ; simp [max_eq_left (by linarith : -ε ≤ 0)]
+  · simp [Real.sign_of_pos ht, abs_of_pos ht, not_le.mpr ht]
+
 theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_active
     {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
     (a' : ι × Circle → Option Z) (w₀ : ι × Circle) (z z' : Z) (hz' : a' w₀ = some z')
@@ -4572,7 +4589,92 @@ theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_active
     (hangle : ContinuousOn (apm_t97A03_invariants_aux_slide_aux_angle w₀.2)
       {c : Circle | |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 c| ≤ Real.pi / 2}) :
     Continuous (fun c ↦ apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε (.inr (w₀.1, c))) := by
-  sorry
+  classical
+  let F := fun c ↦ apm_t97A03_invariants_aux_slide_aux_detourRaw a' w₀ γ ε (.inr (w₀.1, c))
+  have hr : ContinuousOn F {c : Circle | 0 ≤ ((w₀.2⁻¹ * c : Circle) : ℂ).re} := by
+    rw [continuousOn_iff_continuous_restrict]
+    let R := {c : Circle | 0 ≤ ((w₀.2⁻¹ * c : Circle) : ℂ).re}
+    let θ : R → ℝ := fun p => apm_t97A03_invariants_aux_slide_aux_angle w₀.2 p.1
+    have hθ : Continuous θ := by
+      exact hangle.comp_continuous continuous_subtype_val
+        (fun p => Complex.abs_arg_le_pi_div_two_iff.mpr p.2)
+    let B : R → ℝ := fun p => Real.sign (θ p) * max 0 (2 * |θ p| - ε)
+    have hb : Continuous B := (apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous_aux_active_aux_pinched ε hε).comp hθ
+    let f : R → Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')) :=
+      fun p => Quotient.mk _ (.inl (γ.extend (2 * |θ p| / ε)))
+    let g : R → Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')) :=
+      fun p => Quotient.mk _ (.inr (w₀.1, w₀.2 * Circle.exp (B p)))
+    let d : R → Quotient (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')) :=
+      fun p => Quotient.mk _ (.inr (w₀.1, p.1))
+    have hf : Continuous f := continuous_quot_mk.comp (continuous_inl.comp
+      (γ.continuous_extend.comp ((continuous_const.mul hθ.abs).div_const ε)))
+    have hg : Continuous g := continuous_quot_mk.comp (continuous_inr.comp
+      (continuous_const.prodMk (continuous_const.mul (Circle.exp.continuous.comp hb))))
+    have hd : Continuous d := continuous_quot_mk.comp (continuous_inr.comp
+      (continuous_const.prodMk continuous_subtype_val))
+    have hfg := hf.if_le hg hθ.abs (continuous_const : Continuous (fun _ : R => ε / 2)) (fun p hp => by
+      have ht : 2 * |θ p| / ε = 1 := by rw [hp]; field_simp
+      have hB : B p = 0 := by
+        dsimp [B]
+        rw [hp]
+        have he : 2 * (ε / 2) - ε = 0 := by ring
+        rw [he]
+        simp
+      dsimp [f, g]
+      rw [ht, Path.extend_one, hB, Circle.exp_zero, mul_one]
+      exact (Quotient.sound (Relation.EqvGen.rel _ _ (.att w₀ z' hz'))).symm)
+    have hfull := hfg.if_le hd hθ.abs (continuous_const : Continuous (fun _ : R => ε)) (fun p hp => by
+      have hnot : ¬ |θ p| ≤ ε / 2 := by rw [hp]; linarith
+      simp only [hnot, if_false]
+      have hm : max 0 (2 * |θ p| - ε) = ε := by
+        rw [hp]
+        have he : 2 * ε - ε = ε := by ring
+        rw [he, max_eq_right (le_of_lt hε)]
+      have hs : Real.sign (θ p) * ε = θ p := by
+        rw [← hp]
+        rcases lt_trichotomy (θ p) 0 with h | h | h
+        · simp [Real.sign_of_neg h, abs_of_neg h]
+        · simp [h]
+        · simp [Real.sign_of_pos h, abs_of_pos h]
+      dsimp [g, d, B]
+      rw [hm, hs]
+      have hcirc : w₀.2 * Circle.exp (θ p) = p.1 := by
+        change w₀.2 * Circle.exp (Complex.arg ((w₀.2⁻¹ * p.1 : Circle) : ℂ)) = p.1
+        rw [Circle.exp_arg]
+        simp
+      rw [hcirc])
+    convert hfull using 1
+    funext p
+    dsimp [F, apm_t97A03_invariants_aux_slide_aux_detourRaw, f, g, d, B]
+    simp only [true_and]
+    split_ifs with h hinner
+    · rfl
+    · rw [max_eq_right (by dsimp [θ] at hinner ⊢; linarith)]
+    · rfl
+  have hl : ContinuousOn F {c : Circle | ((w₀.2⁻¹ * c : Circle) : ℂ).re ≤ 0} := by
+    have hc : Continuous (fun c : Circle =>
+        (Quotient.mk _ (.inr (w₀.1, c)) : Quotient
+          (Relation.EqvGen.setoid (apm_t97A03_invariants_aux_slide_GenRel a')))) :=
+      continuous_quot_mk.comp (continuous_inr.comp (continuous_const.prodMk continuous_id))
+    apply hc.continuousOn.congr
+    intro c hc
+    have hout : ¬ |apm_t97A03_invariants_aux_slide_aux_angle w₀.2 c| ≤ ε := by
+      intro h
+      have hr := Complex.abs_arg_lt_pi_div_two_iff.mp (lt_of_le_of_lt h hεπ)
+      rcases hr with hr | hr
+      · exact (not_lt_of_ge hc) hr
+      · exact (w₀.2⁻¹ * c).coe_ne_zero hr
+    simp [F, apm_t97A03_invariants_aux_slide_aux_detourRaw, hout]
+  have hc : Continuous (fun c : Circle => ((w₀.2⁻¹ * c : Circle) : ℂ).re) := by fun_prop
+  have h := hr.union_of_isClosed hl
+    (isClosed_le continuous_const hc) (isClosed_le hc continuous_const)
+  have hu : {c : Circle | 0 ≤ ((w₀.2⁻¹ * c : Circle) : ℂ).re} ∪
+      {c | ((w₀.2⁻¹ * c : Circle) : ℂ).re ≤ 0} = Set.univ := by
+    ext c
+    simp only [Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    exact le_total _ _
+  rw [hu] at h
+  exact continuousOn_univ.mp h
 
 theorem apm_t97A03_invariants_aux_slide_aux_detourRaw_continuous
     {ι Z : Type} [TopologicalSpace ι] [DiscreteTopology ι] [TopologicalSpace Z]
