@@ -2937,21 +2937,123 @@ theorem apm_t02a03_sector_aux_L6c_r_fixes_target (q : ℝ × ℝ × ℝ)
   · exact apm_t02a03_sector_aux_L6c_r_fixes_target_aux_torus q hbox hq
   · exact apm_t02a03_sector_aux_L6c_r_fixes_target_aux_arc q hbox hq
 
+lemma apm_t02a03_sector_aux_L6e_aux_a_le (z : ℝ) : apm_t02a03_sector_aux_a z ≤ 1 / 4 := by
+  unfold apm_t02a03_sector_aux_a
+  rw [show (1 / 4 : ℝ) = Real.sqrt (1 / 16) by
+    rw [show (1 / 16 : ℝ) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]]
+  exact Real.sqrt_le_sqrt (by nlinarith [sq_nonneg z])
+
+lemma apm_t02a03_sector_aux_L6e_aux_Theta_le (z : ℝ) :
+    apm_t02a03_sector_aux_Theta z ≤ apm_t02a03_sector_aux_thetaOne := by
+  unfold apm_t02a03_sector_aux_Theta apm_t02a03_sector_aux_thetaOne
+  apply Real.arccos_le_arccos
+  have ha := apm_t02a03_sector_aux_L6e_aux_a_le z
+  have ha0 : 0 ≤ apm_t02a03_sector_aux_a z := Real.sqrt_nonneg _
+  rw [le_div_iff₀ (by positivity)]
+  nlinarith
+
+lemma apm_t02a03_sector_aux_L6e_aux_piDelta_bounds (q : ℝ × ℝ) :
+    |(apm_t02a03_sector_aux_piDelta q).1| ≤ apm_t02a03_sector_aux_thetaOne ∧
+      |(apm_t02a03_sector_aux_piDelta q).2| ≤ 3 / 20 := by
+  have hT0 : 0 ≤ apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2)) :=
+    Real.arccos_nonneg _
+  have hT1 := apm_t02a03_sector_aux_L6e_aux_Theta_le (max (-3 / 20) (min (3 / 20) q.2))
+  constructor
+  · show |max (-apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2)))
+        (min (apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2))) q.1)| ≤ _
+    rw [abs_le]; constructor
+    · have := le_max_left (-apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2)))
+        (min (apm_t02a03_sector_aux_Theta (max (-3 / 20) (min (3 / 20) q.2))) q.1)
+      linarith
+    · exact max_le (by linarith) ((min_le_left _ _).trans hT1)
+  · show |max (-3 / 20 : ℝ) (min (3 / 20) q.2)| ≤ 3 / 20
+    rw [abs_le]; constructor
+    · have := le_max_left (-3 / 20 : ℝ) (min (3 / 20) q.2); linarith
+    · exact max_le (by norm_num) (min_le_left _ _)
+
+lemma apm_t02a03_sector_aux_L6e_aux_lambda_mem (q : ℝ × ℝ × ℝ) (hv : q.2.2 ≤ 1) :
+    apm_t02a03_sector_aux_lambda q ∈ Set.Icc (0 : ℝ) 1 := by
+  have ha : 0 ≤ apm_t02a03_sector_aux_deltaArc q := by
+    unfold apm_t02a03_sector_aux_deltaArc; positivity
+  have hd : 0 ≤ apm_t02a03_sector_aux_deltaD q := by
+    unfold apm_t02a03_sector_aux_deltaD
+    have := dist_nonneg (x := (q.1, q.2.1))
+      (y := apm_t02a03_sector_aux_piDelta (q.1, q.2.1))
+    linarith
+  unfold apm_t02a03_sector_aux_lambda
+  rcases eq_or_lt_of_le (add_nonneg ha hd) with h | h
+  · rw [← h, div_zero]; exact ⟨le_rfl, zero_le_one⟩
+  · exact ⟨div_nonneg ha h.le, (div_le_one h).mpr (by linarith)⟩
+
+/-- On the arc's base angle the bite boundary is at least `3/20` out:
+squaring reduces `b θ 0 ≥ 3/20` to `cos θ ≤ 1`. -/
+lemma apm_t02a03_sector_aux_L6e_aux_c_ge (θ : ℝ) :
+    (3 / 20 : ℝ) ≤ apm_t02a03_sector_aux_c θ 0 := by
+  have ha0 : apm_t02a03_sector_aux_a 0 = 1 / 4 := by
+    unfold apm_t02a03_sector_aux_a
+    rw [show (1 / 16 - (0 : ℝ) ^ 2) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]
+  unfold apm_t02a03_sector_aux_c
+  split_ifs with hD
+  · obtain ⟨_, hcos⟩ := hD
+    simp only [ha0] at hcos
+    have hc : (24 / 25 : ℝ) ≤ Real.cos θ := by
+      have : (6 : ℝ) / (5 * (1 + 1 / 4)) = 24 / 25 := by norm_num
+      linarith
+    unfold apm_t02a03_sector_aux_b
+    rw [ha0]
+    have hY : 0 ≤ (12 / 5) * Real.cos θ - 23 / 20 := by linarith
+    have hsq : Real.sqrt ((1 + 1 / 4) ^ 2 - (144 / 25) * Real.sin θ ^ 2) ≤
+        (12 / 5) * Real.cos θ - 23 / 20 := by
+      rw [Real.sqrt_le_left hY]
+      nlinarith [Real.sin_sq_add_cos_sq θ, Real.cos_le_one θ]
+    linarith
+  · rw [ha0]; norm_num
+
+lemma apm_t02a03_sector_aux_L6e_aux_vArc_mem (θ : ℝ) :
+    apm_t02a03_sector_aux_vArc θ ∈ Set.Icc (0 : ℝ) 1 := by
+  have hc := apm_t02a03_sector_aux_L6e_aux_c_ge θ
+  unfold apm_t02a03_sector_aux_vArc
+  refine ⟨div_nonneg (by norm_num) (by linarith), (div_le_one (by linarith)).mpr (by linarith)⟩
+
 lemma apm_t02a03_sector_aux_L6e_r_box_aux_theta (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (apm_t02a03_sector_aux_r q).1 ∈
       Set.Icc (-apm_t02a03_sector_aux_thetaOne) apm_t02a03_sector_aux_thetaOne := by
-  sorry
+  have hl := apm_t02a03_sector_aux_L6e_aux_lambda_mem q hq.2.2.2
+  unfold apm_t02a03_sector_aux_r
+  simp only
+  split_ifs with h
+  · have hθ := hq.1
+    have h0 : 0 ≤ 1 - 2 * apm_t02a03_sector_aux_lambda q := by linarith [hl.1]
+    have h1 : 1 - 2 * apm_t02a03_sector_aux_lambda q ≤ 1 := by linarith [hl.1]
+    rw [Set.mem_Icc] at hθ ⊢
+    have hθ1 : 0 ≤ apm_t02a03_sector_aux_thetaOne := Real.arccos_nonneg _
+    constructor <;> nlinarith
+  · have := (apm_t02a03_sector_aux_L6e_aux_piDelta_bounds
+      ((2 * apm_t02a03_sector_aux_lambda q - 1) * q.1,
+        (2 * apm_t02a03_sector_aux_lambda q - 1) * q.2.1)).1
+    exact abs_le.mp this
 
 lemma apm_t02a03_sector_aux_L6e_r_box_aux_z (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (apm_t02a03_sector_aux_r q).2.1 ∈ Set.Icc (-1 / 5) (1 / 5) := by
-  sorry
+  unfold apm_t02a03_sector_aux_r
+  simp only
+  split_ifs with h
+  · norm_num
+  · have := abs_le.mp (apm_t02a03_sector_aux_L6e_aux_piDelta_bounds
+      ((2 * apm_t02a03_sector_aux_lambda q - 1) * q.1,
+        (2 * apm_t02a03_sector_aux_lambda q - 1) * q.2.1)).2
+    exact ⟨by linarith [this.1], by linarith [this.2]⟩
 
 lemma apm_t02a03_sector_aux_L6e_r_box_aux_v (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
     (apm_t02a03_sector_aux_r q).2.2 ∈ Set.Icc 0 1 := by
-  sorry
+  unfold apm_t02a03_sector_aux_r
+  simp only
+  split_ifs with h
+  · exact apm_t02a03_sector_aux_L6e_aux_vArc_mem _
+  · exact ⟨zero_le_one, le_rfl⟩
 
 theorem apm_t02a03_sector_aux_L6e_r_box (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
