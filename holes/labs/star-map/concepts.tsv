@@ -13,6 +13,9 @@ Complex	Series, Laurent and singularities	\blaurent\b|essential singularit|remov
 Complex	Branches of log and logarithmic derivative	branch of (?:the )?(?:log|square|sqrt)|principal (?:branch|log)|holomorphic logarithm|logarithmic derivative	^logDeriv|Complex\.log_|Complex\.exp_log
 Complex	Normal families	\bmontel|normal famil|\bhurwitz(?:'s)? theorem	
 Complex	Infinite products and partial fractions	infinite product|mittag|partial fraction|weierstrass product	multipliable|Multipliable|^tprod|\.tprod
+Complex	Winding numbers and the index of a curve	winding number|\bindex of (?:a|the) (?:curve|cycle|contour)	
+Complex	Complex open mapping theorem	(?:analytic|holomorphic|complex).{0,50}open mapping|open mapping.{0,50}(?:analytic|holomorphic|complex)|nonconstant (?:analytic|holomorphic).{0,40}\bopen\b|local mapping theorem	AnalyticOnNhd\.is_constant_or_isOpen|AnalyticAt\.eventually_constant_or_nhds_le_map_nhds
+Complex	Jordan curve theorem and simple closed curves	jordan curve|simple closed curve	
 Measure	Dominated convergence	dominated convergence|\bdct\b	tendsto_integral_of_dominated_convergence|tendsto_lintegral_of_dominated_convergence|tendsto_setIntegral_of_dominated|intervalIntegral\.tendsto_integral_filter_of_dominated_convergence|hasSum_integral_of_dominated|hasDerivAt_integral_of_dominated
 Measure	Monotone convergence and Fatou	monotone convergence|\bmct\b|\bfatou	lintegral_iSup|lintegral_tsum|lintegral_liminf_le|lintegral_tendsto_of_tendsto_of_monotone|lintegral_eq_iSup|integral_tendsto_of_tendsto_of_monotone
 Measure	Fubini and Tonelli	\bfubini|\btonelli|cavalieri|layer cake	integral_prod|lintegral_prod|integrable_prod_iff|setIntegral_prod|lintegral_lintegral|integral_integral|integrable_swap|Integrable\.prod|lintegral_eq_lintegral_meas_lt|intervalIntegral_integral_swap

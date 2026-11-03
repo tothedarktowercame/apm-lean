@@ -832,6 +832,121 @@
    "hand_constants": 0
   },
   {
+   "area": "Complex",
+   "skill": "Winding numbers and the index of a curve",
+   "both": [],
+   "named": [
+    "a01J05",
+    "a02J07",
+    "a94A09",
+    "a94J07",
+    "a95J03",
+    "a96A07",
+    "t00A05",
+    "t91A01",
+    "t91J03",
+    "t94J06",
+    "t97J08"
+   ],
+   "passing": [
+    "a96A05",
+    "a96J07",
+    "a97J08",
+    "t02A04",
+    "t97J06"
+   ],
+   "lean_only": [],
+   "constants": [],
+   "modules": [],
+   "enriched": [
+    "ContinuousOn.circleIntegrable",
+    "Set.countable_empty",
+    "circleIntegral.integral_congr",
+    "circleIntegral.integral_const_mul",
+    "circleIntegral.integral_sub_inv_of_mem_ball"
+   ],
+   "steps": [
+    {
+     "problem": "t91J03",
+     "step": "An embedded simple closed curve in the annulus has winding number $|n|\\le 1$",
+     "warrant": "an embedded simple closed curve in the annulus has winding number |n| ",
+     "lean": "apm_t91J03_no_two_of_forced_fiber_collision"
+    },
+    {
+     "problem": "a96A07",
+     "step": "The winding number of g(Γ) around w is 1.",
+     "warrant": "winding number of a simple closed curve",
+     "lean": null
+    }
+   ],
+   "hand_constants": 0
+  },
+  {
+   "area": "Complex",
+   "skill": "Complex open mapping theorem",
+   "both": [],
+   "named": [],
+   "passing": [
+    "a94A10",
+    "a96A07",
+    "a96J06"
+   ],
+   "lean_only": [],
+   "constants": [],
+   "modules": [],
+   "enriched": [],
+   "steps": [],
+   "hand_constants": 0
+  },
+  {
+   "area": "Complex",
+   "skill": "Jordan curve theorem and simple closed curves",
+   "both": [],
+   "named": [
+    "a96A07",
+    "a97J08",
+    "t00A03",
+    "t00J02",
+    "t01J01",
+    "t03J02",
+    "t91J03"
+   ],
+   "passing": [
+    "a95A08",
+    "t00A05",
+    "t02A03",
+    "t02A04",
+    "t03J01",
+    "t97J04",
+    "t98J02"
+   ],
+   "lean_only": [],
+   "constants": [],
+   "modules": [],
+   "enriched": [],
+   "steps": [
+    {
+     "problem": "t91J03",
+     "step": "An embedded simple closed curve in the annulus has winding number $|n|\\le 1$",
+     "warrant": "an embedded simple closed curve in the annulus has winding number |n| ",
+     "lean": "apm_t91J03_no_two_of_forced_fiber_collision"
+    },
+    {
+     "problem": "t00J02",
+     "step": "Each component of f^{-1}(C) is null-homologous",
+     "warrant": "Each component of f^{-1}(C) is a simple closed curve that bounds an em",
+     "lean": "apm_t00j02_isPathConnected_connectedComponentIn_of_componentsBoundDisks"
+    },
+    {
+     "problem": "a96A07",
+     "step": "The winding number of g(Γ) around w is 1.",
+     "warrant": "winding number of a simple closed curve",
+     "lean": null
+    }
+   ],
+   "hand_constants": 0
+  },
+  {
    "area": "Measure",
    "skill": "Dominated convergence",
    "both": [
@@ -8087,6 +8202,10 @@
     "lean"
    ],
    [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
     "Degree and fixed-point theorems",
     "named"
    ],
@@ -8147,6 +8266,10 @@
     "lean"
    ],
    [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
     "Fourier series",
     "passing"
    ],
@@ -8197,6 +8320,10 @@
    [
     "Residues and contour integrals",
     "both"
+   ],
+   [
+    "Winding numbers and the index of a curve",
+    "passing"
    ],
    [
     "Hahn-Banach and dual spaces",
@@ -8261,6 +8388,10 @@
    [
     "Infinite products and partial fractions",
     "named"
+   ],
+   [
+    "Winding numbers and the index of a curve",
+    "passing"
    ],
    [
     "Degree and fixed-point theorems",
@@ -8751,6 +8882,10 @@
     "named"
    ],
    [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
     "Mean value theorem and Taylor expansion",
     "lean"
    ],
@@ -8789,6 +8924,10 @@
     "named"
    ],
    [
+    "Jordan curve theorem and simple closed curves",
+    "passing"
+   ],
+   [
     "Hölder and Minkowski inequalities",
     "named"
    ],
@@ -8825,6 +8964,18 @@
    [
     "Conformal maps and Möbius transforms",
     "passing"
+   ],
+   [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
+    "Complex open mapping theorem",
+    "passing"
+   ],
+   [
+    "Jordan curve theorem and simple closed curves",
+    "named"
    ],
    [
     "Degree and fixed-point theorems",
@@ -9045,6 +9196,10 @@
     "both"
    ],
    [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
     "Open mapping and closed graph",
     "passing"
    ],
@@ -9123,6 +9278,10 @@
    [
     "Harmonic functions",
     "lean"
+   ],
+   [
+    "Complex open mapping theorem",
+    "passing"
    ],
    [
     "Open mapping and closed graph",
@@ -9263,6 +9422,14 @@
    [
     "Normal families",
     "passing"
+   ],
+   [
+    "Winding numbers and the index of a curve",
+    "passing"
+   ],
+   [
+    "Jordan curve theorem and simple closed curves",
+    "named"
    ],
    [
     "Lebesgue differentiation and absolute continuity",
@@ -9583,6 +9750,10 @@
     "both"
    ],
    [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
     "Riemann integration and the fundamental theorem",
     "lean"
    ],
@@ -9776,6 +9947,10 @@
    ],
    [
     "Argument principle and Rouché",
+    "named"
+   ],
+   [
+    "Winding numbers and the index of a curve",
     "named"
    ],
    [
@@ -10043,6 +10218,10 @@
    [
     "Schwarz lemma and automorphisms of the disc",
     "both"
+   ],
+   [
+    "Complex open mapping theorem",
+    "passing"
    ],
    [
     "Open mapping and closed graph",
@@ -10334,6 +10513,10 @@
   "t91A01": [
    [
     "Identity theorem and zeros",
+    "named"
+   ],
+   [
+    "Winding numbers and the index of a curve",
     "named"
    ],
    [
@@ -11155,6 +11338,560 @@
    [
     "Metric spaces and completion",
     "named"
+   ]
+  ],
+  "t00A05": [
+   [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
+    "Jordan curve theorem and simple closed curves",
+    "passing"
+   ],
+   [
+    "Jensen inequality and convexity",
+    "both"
+   ],
+   [
+    "Sobolev and Poincaré inequalities",
+    "passing"
+   ],
+   [
+    "Riemann integration and the fundamental theorem",
+    "lean"
+   ],
+   [
+    "Differential forms and exterior calculus",
+    "named"
+   ],
+   [
+    "de Rham cohomology",
+    "passing"
+   ],
+   [
+    "Degree and fixed-point theorems",
+    "named"
+   ],
+   [
+    "Quotient topology",
+    "lean"
+   ]
+  ],
+  "t91J03": [
+   [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
+    "Jordan curve theorem and simple closed curves",
+    "named"
+   ],
+   [
+    "Fundamental group",
+    "both"
+   ],
+   [
+    "Covering spaces",
+    "both"
+   ],
+   [
+    "Homology and exact sequences",
+    "lean"
+   ],
+   [
+    "Degree and fixed-point theorems",
+    "named"
+   ],
+   [
+    "Homotopy and retractions",
+    "both"
+   ],
+   [
+    "Compactness and Hausdorff arguments",
+    "lean"
+   ],
+   [
+    "Connectedness",
+    "lean"
+   ],
+   [
+    "Simple and solvable groups",
+    "lean"
+   ]
+  ],
+  "t97J08": [
+   [
+    "Winding numbers and the index of a curve",
+    "named"
+   ],
+   [
+    "Sobolev and Poincaré inequalities",
+    "named"
+   ],
+   [
+    "Riemann integration and the fundamental theorem",
+    "lean"
+   ],
+   [
+    "Inverse and implicit function theorems",
+    "lean"
+   ],
+   [
+    "Differential forms and exterior calculus",
+    "passing"
+   ],
+   [
+    "de Rham cohomology",
+    "passing"
+   ],
+   [
+    "Covering spaces",
+    "both"
+   ],
+   [
+    "Degree and fixed-point theorems",
+    "named"
+   ]
+  ],
+  "t02A04": [
+   [
+    "Winding numbers and the index of a curve",
+    "passing"
+   ],
+   [
+    "Jordan curve theorem and simple closed curves",
+    "passing"
+   ],
+   [
+    "Jensen inequality and convexity",
+    "lean"
+   ],
+   [
+    "Orthonormal bases in Hilbert space",
+    "lean"
+   ],
+   [
+    "Projective spaces",
+    "passing"
+   ],
+   [
+    "Fundamental group",
+    "named"
+   ],
+   [
+    "Covering spaces",
+    "lean"
+   ],
+   [
+    "Homology and exact sequences",
+    "both"
+   ],
+   [
+    "Euler characteristic and CW complexes",
+    "named"
+   ],
+   [
+    "Degree and fixed-point theorems",
+    "named"
+   ],
+   [
+    "Homotopy and retractions",
+    "both"
+   ],
+   [
+    "Surfaces and classification",
+    "named"
+   ],
+   [
+    "Compactness and Hausdorff arguments",
+    "lean"
+   ],
+   [
+    "Connectedness",
+    "both"
+   ],
+   [
+    "Quotient topology",
+    "lean"
+   ],
+   [
+    "Ordinals, well-ordering and cardinality",
+    "lean"
+   ],
+   [
+    "Modules, exactness and flatness",
+    "named"
+   ]
+  ],
+  "t97J06": [
+   [
+    "Winding numbers and the index of a curve",
+    "passing"
+   ],
+   [
+    "Riesz representation and orthogonal projection",
+    "lean"
+   ],
+   [
+    "Orthonormal bases in Hilbert space",
+    "lean"
+   ],
+   [
+    "Fundamental group",
+    "passing"
+   ],
+   [
+    "Covering spaces",
+    "named"
+   ],
+   [
+    "Homology and exact sequences",
+    "both"
+   ],
+   [
+    "Degree and fixed-point theorems",
+    "passing"
+   ],
+   [
+    "Homotopy and retractions",
+    "both"
+   ],
+   [
+    "Surfaces and classification",
+    "named"
+   ],
+   [
+    "Connectedness",
+    "lean"
+   ],
+   [
+    "Ordinals, well-ordering and cardinality",
+    "lean"
+   ],
+   [
+    "Determinants and rank",
+    "named"
+   ]
+  ],
+  "t00A03": [
+   [
+    "Jordan curve theorem and simple closed curves",
+    "named"
+   ],
+   [
+    "Euler characteristic and CW complexes",
+    "named"
+   ],
+   [
+    "Surfaces and classification",
+    "named"
+   ],
+   [
+    "Connectedness",
+    "both"
+   ]
+  ],
+  "t00J02": [
+   [
+    "Jordan curve theorem and simple closed curves",
+    "named"
+   ],
+   [
+    "Orthonormal bases in Hilbert space",
+    "lean"
+   ],
+   [
+    "Sobolev and Poincaré inequalities",
+    "named"
+   ],
+   [
+    "Differential forms and exterior calculus",
+    "passing"
+   ],
+   [
+    "Manifolds, charts and smooth structures",
+    "lean"
+   ],
+   [
+    "Submanifolds, immersions and embeddings",
+    "named"
+   ],
+   [
+    "Homology and exact sequences",
+    "both"
+   ],
+   [
+    "Cohomology ring and duality",
+    "named"
+   ],
+   [
+    "Homotopy and retractions",
+    "both"
+   ],
+   [
+    "Surfaces and classification",
+    "named"
+   ],
+   [
+    "Connectedness",
+    "both"
+   ]
+  ],
+  "t01J01": [
+   [
+    "Jordan curve theorem and simple closed curves",
+    "named"
+   ],
+   [
+    "Homology and exact sequences",
+    "lean"
+   ],
+   [
+    "Euler characteristic and CW complexes",
+    "named"
+   ],
+   [
+    "Homotopy and retractions",
+    "named"
+   ],
+   [
+    "Surfaces and classification",
+    "named"
+   ]
+  ],
+  "t03J02": [
+   [
+    "Jordan curve theorem and simple closed curves",
+    "named"
+   ],
+   [
+    "Fundamental group",
+    "both"
+   ],
+   [
+    "Van Kampen",
+    "named"
+   ],
+   [
+    "Homology and exact sequences",
+    "both"
+   ],
+   [
+    "Euler characteristic and CW complexes",
+    "passing"
+   ],
+   [
+    "Homotopy and retractions",
+    "named"
+   ],
+   [
+    "Surfaces and classification",
+    "passing"
+   ],
+   [
+    "Connectedness",
+    "passing"
+   ],
+   [
+    "Quotient topology",
+    "passing"
+   ],
+   [
+    "Free groups and presentations",
+    "both"
+   ],
+   [
+    "Modules, exactness and flatness",
+    "named"
+   ]
+  ],
+  "t02A03": [
+   [
+    "Jordan curve theorem and simple closed curves",
+    "passing"
+   ],
+   [
+    "Riesz representation and orthogonal projection",
+    "lean"
+   ],
+   [
+    "Orthonormal bases in Hilbert space",
+    "lean"
+   ],
+   [
+    "Tubular neighbourhoods and partitions of unity",
+    "passing"
+   ],
+   [
+    "Fundamental group",
+    "both"
+   ],
+   [
+    "Van Kampen",
+    "passing"
+   ],
+   [
+    "Covering spaces",
+    "lean"
+   ],
+   [
+    "Homology and exact sequences",
+    "both"
+   ],
+   [
+    "Homotopy and retractions",
+    "both"
+   ],
+   [
+    "Surfaces and classification",
+    "named"
+   ],
+   [
+    "Connectedness",
+    "lean"
+   ],
+   [
+    "Quotient topology",
+    "lean"
+   ],
+   [
+    "Metric spaces and completion",
+    "lean"
+   ],
+   [
+    "Ordinals, well-ordering and cardinality",
+    "lean"
+   ],
+   [
+    "Direct and semidirect products",
+    "lean"
+   ],
+   [
+    "Diagonalisation and bilinear forms",
+    "passing"
+   ]
+  ],
+  "t03J01": [
+   [
+    "Jordan curve theorem and simple closed curves",
+    "passing"
+   ],
+   [
+    "Sobolev and Poincaré inequalities",
+    "passing"
+   ],
+   [
+    "Fundamental group",
+    "named"
+   ],
+   [
+    "Homology and exact sequences",
+    "both"
+   ],
+   [
+    "Homotopy and retractions",
+    "named"
+   ],
+   [
+    "Surfaces and classification",
+    "named"
+   ],
+   [
+    "Connectedness",
+    "lean"
+   ],
+   [
+    "Simple and solvable groups",
+    "passing"
+   ]
+  ],
+  "t97J04": [
+   [
+    "Jordan curve theorem and simple closed curves",
+    "passing"
+   ],
+   [
+    "Riesz representation and orthogonal projection",
+    "lean"
+   ],
+   [
+    "Orthonormal bases in Hilbert space",
+    "lean"
+   ],
+   [
+    "Fundamental group",
+    "both"
+   ],
+   [
+    "Van Kampen",
+    "named"
+   ],
+   [
+    "Covering spaces",
+    "lean"
+   ],
+   [
+    "Homology and exact sequences",
+    "both"
+   ],
+   [
+    "Euler characteristic and CW complexes",
+    "named"
+   ],
+   [
+    "Homotopy and retractions",
+    "both"
+   ],
+   [
+    "Surfaces and classification",
+    "named"
+   ],
+   [
+    "Compactness and Hausdorff arguments",
+    "lean"
+   ],
+   [
+    "Connectedness",
+    "lean"
+   ],
+   [
+    "Quotient topology",
+    "lean"
+   ],
+   [
+    "Ordinals, well-ordering and cardinality",
+    "lean"
+   ],
+   [
+    "Simple and solvable groups",
+    "lean"
+   ],
+   [
+    "Free groups and presentations",
+    "both"
+   ],
+   [
+    "Splitting fields and normal extensions",
+    "lean"
+   ]
+  ],
+  "t98J02": [
+   [
+    "Jordan curve theorem and simple closed curves",
+    "passing"
+   ],
+   [
+    "Fundamental group",
+    "passing"
+   ],
+   [
+    "Surfaces and classification",
+    "passing"
+   ],
+   [
+    "Connectedness",
+    "lean"
    ]
   ],
   "a01A04": [
@@ -13931,36 +14668,6 @@
     "lean"
    ]
   ],
-  "t00A05": [
-   [
-    "Jensen inequality and convexity",
-    "both"
-   ],
-   [
-    "Sobolev and Poincaré inequalities",
-    "passing"
-   ],
-   [
-    "Riemann integration and the fundamental theorem",
-    "lean"
-   ],
-   [
-    "Differential forms and exterior calculus",
-    "named"
-   ],
-   [
-    "de Rham cohomology",
-    "passing"
-   ],
-   [
-    "Degree and fixed-point theorems",
-    "named"
-   ],
-   [
-    "Quotient topology",
-    "lean"
-   ]
-  ],
   "a99J01": [
    [
     "Jensen inequality and convexity",
@@ -14091,68 +14798,6 @@
    [
     "Free groups and presentations",
     "lean"
-   ]
-  ],
-  "t02A04": [
-   [
-    "Jensen inequality and convexity",
-    "lean"
-   ],
-   [
-    "Orthonormal bases in Hilbert space",
-    "lean"
-   ],
-   [
-    "Projective spaces",
-    "passing"
-   ],
-   [
-    "Fundamental group",
-    "named"
-   ],
-   [
-    "Covering spaces",
-    "lean"
-   ],
-   [
-    "Homology and exact sequences",
-    "both"
-   ],
-   [
-    "Euler characteristic and CW complexes",
-    "named"
-   ],
-   [
-    "Degree and fixed-point theorems",
-    "named"
-   ],
-   [
-    "Homotopy and retractions",
-    "both"
-   ],
-   [
-    "Surfaces and classification",
-    "named"
-   ],
-   [
-    "Compactness and Hausdorff arguments",
-    "lean"
-   ],
-   [
-    "Connectedness",
-    "both"
-   ],
-   [
-    "Quotient topology",
-    "lean"
-   ],
-   [
-    "Ordinals, well-ordering and cardinality",
-    "lean"
-   ],
-   [
-    "Modules, exactness and flatness",
-    "named"
    ]
   ],
   "t96A02": [
@@ -17055,68 +17700,6 @@
     "named"
    ]
   ],
-  "t02A03": [
-   [
-    "Riesz representation and orthogonal projection",
-    "lean"
-   ],
-   [
-    "Orthonormal bases in Hilbert space",
-    "lean"
-   ],
-   [
-    "Tubular neighbourhoods and partitions of unity",
-    "passing"
-   ],
-   [
-    "Fundamental group",
-    "both"
-   ],
-   [
-    "Van Kampen",
-    "passing"
-   ],
-   [
-    "Covering spaces",
-    "lean"
-   ],
-   [
-    "Homology and exact sequences",
-    "both"
-   ],
-   [
-    "Homotopy and retractions",
-    "both"
-   ],
-   [
-    "Surfaces and classification",
-    "named"
-   ],
-   [
-    "Connectedness",
-    "lean"
-   ],
-   [
-    "Quotient topology",
-    "lean"
-   ],
-   [
-    "Metric spaces and completion",
-    "lean"
-   ],
-   [
-    "Ordinals, well-ordering and cardinality",
-    "lean"
-   ],
-   [
-    "Direct and semidirect products",
-    "lean"
-   ],
-   [
-    "Diagonalisation and bilinear forms",
-    "passing"
-   ]
-  ],
   "t02A06": [
    [
     "Riesz representation and orthogonal projection",
@@ -17871,118 +18454,6 @@
     "named"
    ]
   ],
-  "t97J04": [
-   [
-    "Riesz representation and orthogonal projection",
-    "lean"
-   ],
-   [
-    "Orthonormal bases in Hilbert space",
-    "lean"
-   ],
-   [
-    "Fundamental group",
-    "both"
-   ],
-   [
-    "Van Kampen",
-    "named"
-   ],
-   [
-    "Covering spaces",
-    "lean"
-   ],
-   [
-    "Homology and exact sequences",
-    "both"
-   ],
-   [
-    "Euler characteristic and CW complexes",
-    "named"
-   ],
-   [
-    "Homotopy and retractions",
-    "both"
-   ],
-   [
-    "Surfaces and classification",
-    "named"
-   ],
-   [
-    "Compactness and Hausdorff arguments",
-    "lean"
-   ],
-   [
-    "Connectedness",
-    "lean"
-   ],
-   [
-    "Quotient topology",
-    "lean"
-   ],
-   [
-    "Ordinals, well-ordering and cardinality",
-    "lean"
-   ],
-   [
-    "Simple and solvable groups",
-    "lean"
-   ],
-   [
-    "Free groups and presentations",
-    "both"
-   ],
-   [
-    "Splitting fields and normal extensions",
-    "lean"
-   ]
-  ],
-  "t97J06": [
-   [
-    "Riesz representation and orthogonal projection",
-    "lean"
-   ],
-   [
-    "Orthonormal bases in Hilbert space",
-    "lean"
-   ],
-   [
-    "Fundamental group",
-    "passing"
-   ],
-   [
-    "Covering spaces",
-    "named"
-   ],
-   [
-    "Homology and exact sequences",
-    "both"
-   ],
-   [
-    "Degree and fixed-point theorems",
-    "passing"
-   ],
-   [
-    "Homotopy and retractions",
-    "both"
-   ],
-   [
-    "Surfaces and classification",
-    "named"
-   ],
-   [
-    "Connectedness",
-    "lean"
-   ],
-   [
-    "Ordinals, well-ordering and cardinality",
-    "lean"
-   ],
-   [
-    "Determinants and rank",
-    "named"
-   ]
-  ],
   "t98A01": [
    [
     "Riesz representation and orthogonal projection",
@@ -18319,48 +18790,6 @@
    [
     "Diagonalisation and bilinear forms",
     "passing"
-   ]
-  ],
-  "t00J02": [
-   [
-    "Orthonormal bases in Hilbert space",
-    "lean"
-   ],
-   [
-    "Sobolev and Poincaré inequalities",
-    "named"
-   ],
-   [
-    "Differential forms and exterior calculus",
-    "passing"
-   ],
-   [
-    "Manifolds, charts and smooth structures",
-    "lean"
-   ],
-   [
-    "Submanifolds, immersions and embeddings",
-    "named"
-   ],
-   [
-    "Homology and exact sequences",
-    "both"
-   ],
-   [
-    "Cohomology ring and duality",
-    "named"
-   ],
-   [
-    "Homotopy and retractions",
-    "both"
-   ],
-   [
-    "Surfaces and classification",
-    "named"
-   ],
-   [
-    "Connectedness",
-    "both"
    ]
   ],
   "t97A02": [
@@ -19221,36 +19650,6 @@
     "both"
    ]
   ],
-  "t97J08": [
-   [
-    "Sobolev and Poincaré inequalities",
-    "named"
-   ],
-   [
-    "Riemann integration and the fundamental theorem",
-    "lean"
-   ],
-   [
-    "Inverse and implicit function theorems",
-    "lean"
-   ],
-   [
-    "Differential forms and exterior calculus",
-    "passing"
-   ],
-   [
-    "de Rham cohomology",
-    "passing"
-   ],
-   [
-    "Covering spaces",
-    "both"
-   ],
-   [
-    "Degree and fixed-point theorems",
-    "named"
-   ]
-  ],
   "t00J03": [
    [
     "Sobolev and Poincaré inequalities",
@@ -19275,36 +19674,6 @@
    [
     "Quotient topology",
     "both"
-   ]
-  ],
-  "t03J01": [
-   [
-    "Sobolev and Poincaré inequalities",
-    "passing"
-   ],
-   [
-    "Fundamental group",
-    "named"
-   ],
-   [
-    "Homology and exact sequences",
-    "both"
-   ],
-   [
-    "Homotopy and retractions",
-    "named"
-   ],
-   [
-    "Surfaces and classification",
-    "named"
-   ],
-   [
-    "Connectedness",
-    "lean"
-   ],
-   [
-    "Simple and solvable groups",
-    "passing"
    ]
   ],
   "t94A04": [
@@ -20377,82 +20746,6 @@
     "lean"
    ]
   ],
-  "t03J02": [
-   [
-    "Fundamental group",
-    "both"
-   ],
-   [
-    "Van Kampen",
-    "named"
-   ],
-   [
-    "Homology and exact sequences",
-    "both"
-   ],
-   [
-    "Euler characteristic and CW complexes",
-    "passing"
-   ],
-   [
-    "Homotopy and retractions",
-    "named"
-   ],
-   [
-    "Surfaces and classification",
-    "passing"
-   ],
-   [
-    "Connectedness",
-    "passing"
-   ],
-   [
-    "Quotient topology",
-    "passing"
-   ],
-   [
-    "Free groups and presentations",
-    "both"
-   ],
-   [
-    "Modules, exactness and flatness",
-    "named"
-   ]
-  ],
-  "t91J03": [
-   [
-    "Fundamental group",
-    "both"
-   ],
-   [
-    "Covering spaces",
-    "both"
-   ],
-   [
-    "Homology and exact sequences",
-    "lean"
-   ],
-   [
-    "Degree and fixed-point theorems",
-    "named"
-   ],
-   [
-    "Homotopy and retractions",
-    "both"
-   ],
-   [
-    "Compactness and Hausdorff arguments",
-    "lean"
-   ],
-   [
-    "Connectedness",
-    "lean"
-   ],
-   [
-    "Simple and solvable groups",
-    "lean"
-   ]
-  ],
   "t93J03": [
    [
     "Fundamental group",
@@ -20831,20 +21124,6 @@
     "passing"
    ]
   ],
-  "t98J02": [
-   [
-    "Fundamental group",
-    "passing"
-   ],
-   [
-    "Surfaces and classification",
-    "passing"
-   ],
-   [
-    "Connectedness",
-    "lean"
-   ]
-  ],
   "t97J01": [
    [
     "Covering spaces",
@@ -20964,38 +21243,6 @@
    ],
    [
     "Modules, exactness and flatness",
-    "both"
-   ]
-  ],
-  "t01J01": [
-   [
-    "Homology and exact sequences",
-    "lean"
-   ],
-   [
-    "Euler characteristic and CW complexes",
-    "named"
-   ],
-   [
-    "Homotopy and retractions",
-    "named"
-   ],
-   [
-    "Surfaces and classification",
-    "named"
-   ]
-  ],
-  "t00A03": [
-   [
-    "Euler characteristic and CW complexes",
-    "named"
-   ],
-   [
-    "Surfaces and classification",
-    "named"
-   ],
-   [
-    "Connectedness",
     "both"
    ]
   ],
