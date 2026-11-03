@@ -2297,43 +2297,6 @@ lemma apm_t02a03_sector_aux_L2a_box_aux_theta (p : apm_t02a03_E3)
       (6 / 5 - p 0) (p 1) hx
   rwa [← hrad]
 
-lemma apm_t02a03_sector_aux_L2a_box_aux_v_aux_bounds (p : apm_t02a03_E3)
-    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
-    (hz : |p 2| ≤ 1 / 5)
-    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
-      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
-    let theta := apm_t02a03_sector_aux_theta p
-    let z := p 2
-    let u := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1
-    (-apm_t02a03_sector_aux_a z ≤ u ∧
-      u ≤ apm_t02a03_sector_aux_c theta z ∧
-      0 < apm_t02a03_sector_aux_c theta z + apm_t02a03_sector_aux_a z) := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L2a_box_aux_v (p : apm_t02a03_E3)
-    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
-    (hz : |p 2| ≤ 1 / 5)
-    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
-      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
-    (apm_t02a03_sector_aux_Psi p).2.2 ∈ Set.Icc (0 : ℝ) 1 := by
-  obtain ⟨hlower, hupper, hden⟩ :=
-    apm_t02a03_sector_aux_L2a_box_aux_v_aux_bounds p hp hz hcos
-  simp only [apm_t02a03_sector_aux_Psi]
-  constructor
-  · exact div_nonneg (by linarith) (le_of_lt hden)
-  · apply (div_le_one hden).2
-    linarith
-
-theorem apm_t02a03_sector_aux_L2a_box (p : apm_t02a03_E3)
-    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) (hz : |p 2| ≤ 1 / 5)
-    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
-    apm_t02a03_sector_aux_box (apm_t02a03_sector_aux_Psi p) := by
-  refine ⟨apm_t02a03_sector_aux_L2a_box_aux_theta p hp hcos, ?_,
-    apm_t02a03_sector_aux_L2a_box_aux_v p hp hz hcos⟩
-  have hz' := abs_le.mp hz
-  simp only [apm_t02a03_sector_aux_Psi]
-  constructor <;> linarith
-
 lemma apm_t02a03_sector_aux_L2_aux_a_le (z : ℝ) : apm_t02a03_sector_aux_a z ≤ 1 / 4 := by
   unfold apm_t02a03_sector_aux_a
   rw [show (1 / 4 : ℝ) = Real.sqrt (1 / 16) by
@@ -2570,6 +2533,149 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_right (q : ℝ × ℝ × ℝ)
       apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
   exact ⟨apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube q hq,
     apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left q hq⟩
+
+set_option maxHeartbeats 1000000 in
+lemma apm_t02a03_sector_aux_L2a_box_aux_v_aux_bounds (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hz : |p 2| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
+    let theta := apm_t02a03_sector_aux_theta p
+    let z := p 2
+    let u := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1
+    (-apm_t02a03_sector_aux_a z ≤ u ∧
+      u ≤ apm_t02a03_sector_aux_c theta z ∧
+      0 < apm_t02a03_sector_aux_c theta z + apm_t02a03_sector_aux_a z) := by
+  intro theta z u
+  obtain ⟨hX, hrad⟩ := apm_t02a03_sector_aux_L2a_box_aux_theta_aux_positive p hp hcos
+  have hpos := apm_t02a03_sector_aux_L2_aux_cpa_pos theta z hz
+  have hca := apm_t02a03_sector_aux_L2_aux_c_le_a theta z
+  have ha2 := apm_t02a03_sector_aux_L2_aux_a_sq z hz
+  have ha0 : 0 ≤ apm_t02a03_sector_aux_a z := Real.sqrt_nonneg _
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le z
+  set X := 6 / 5 - p 0 with hXdef
+  set Y := p 1 with hYdef
+  set sr := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p with hsr
+  have hsr' : sr = Real.sqrt (X ^ 2 + Y ^ 2) := hrad
+  have hsr2 : sr ^ 2 = X ^ 2 + Y ^ 2 := by rw [hsr', Real.sq_sqrt (by positivity)]
+  have hsqrt : Real.sqrt (1 + (Y / X) ^ 2) = sr / X := by
+    rw [hsr', show (1 : ℝ) + (Y / X) ^ 2 = (X ^ 2 + Y ^ 2) / X ^ 2 by field_simp,
+      Real.sqrt_div' _ (by positivity), Real.sqrt_sq hX.le]
+  have hsr0 : 0 < sr := by rw [hsr']; exact Real.sqrt_pos.mpr (by positivity)
+  have hcosθ : sr * Real.cos theta = X := by
+    show sr * Real.cos (apm_t02a03_sector_aux_theta p) = X
+    unfold apm_t02a03_sector_aux_theta
+    rw [Real.cos_arctan, ← hXdef, ← hYdef, hsqrt]; field_simp
+  -- inside the right tube
+  have htube := hp.1
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq, ← hsr] at htube
+  have hsq1 : (sr - 1) ^ 2 + z ^ 2 ≤ 1 / 16 := by
+    have h0 : 0 ≤ (sr - 1) ^ 2 + z ^ 2 := by positivity
+    rw [Real.sqrt_le_left (by norm_num)] at htube; linarith
+  have hu2 : (sr - 1) ^ 2 ≤ apm_t02a03_sector_aux_a z ^ 2 := by
+    show (sr - 1) ^ 2 ≤ apm_t02a03_sector_aux_a (p 2) ^ 2
+    have : z = p 2 := rfl
+    rw [ha2]; linarith
+  have habs := abs_le_of_sq_le_sq' hu2 ha0
+  refine ⟨by show -apm_t02a03_sector_aux_a z ≤ sr - 1; linarith [habs.1], ?_, hpos⟩
+  show sr - 1 ≤ apm_t02a03_sector_aux_c theta z
+  by_cases hD : apm_t02a03_sector_aux_Delta (theta, z)
+  · have hcb : apm_t02a03_sector_aux_c theta z = apm_t02a03_sector_aux_b theta z := by
+      unfold apm_t02a03_sector_aux_c; rw [if_pos hD]
+    obtain ⟨_, hcosD⟩ := hD
+    set R := 1 + apm_t02a03_sector_aux_a z with hR
+    set co := Real.cos theta with hco
+    set sn := Real.sin theta with hsn
+    have htrig : sn ^ 2 + co ^ 2 = 1 := Real.sin_sq_add_cos_sq theta
+    have hR0 : 0 < R := by linarith
+    have hcR : 6 / 5 ≤ co * R := by
+      have h := hcosD; rw [div_le_iff₀ (by positivity)] at h; linarith
+    have hco0 : 0 ≤ co := by
+      by_contra h; push_neg at h
+      have := mul_le_mul_of_nonneg_right h.le hR0.le
+      rw [zero_mul] at this; linarith
+    have hco96 : 24 / 25 ≤ co := by
+      have := mul_le_mul_of_nonneg_left (show R ≤ 5 / 4 by linarith) hco0
+      linarith
+    -- outside the open left tube: s_L ≥ R
+    have hleft := hp.2
+    rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist] at hleft
+    set sL := Real.sqrt ((p 0 + 6 / 5) ^ 2 + p 1 ^ 2) with hsL
+    have hsL2 : sL ^ 2 = sr ^ 2 - (24 / 5) * co * sr + 144 / 25 := by
+      rw [hsL, Real.sq_sqrt (by positivity)]
+      have : p 0 + 6 / 5 = 12 / 5 - X := by rw [hXdef]; ring
+      rw [this]; nlinarith [hcosθ, hsr2]
+    have hsL0 : 0 ≤ sL := Real.sqrt_nonneg _
+    have hsr54 : sr ≤ 5 / 4 := by linarith [habs.2]
+    have hsLbig : 1 < sL := by
+      have : (1 : ℝ) ^ 2 < sL ^ 2 := by
+        rw [hsL2]; have := Real.cos_le_one theta; nlinarith
+      nlinarith
+    have hl2 : 1 / 16 ≤ (sL - 1) ^ 2 + z ^ 2 := by
+      have h := hleft
+      rw [show (1 / 4 : ℝ) = Real.sqrt (1 / 16) by
+        rw [show (1 / 16 : ℝ) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]] at h
+      exact (Real.sqrt_le_sqrt_iff (by positivity)).mp h
+    have hsLR : R ≤ sL := by
+      have : apm_t02a03_sector_aux_a z ^ 2 ≤ (sL - 1) ^ 2 := by
+        show apm_t02a03_sector_aux_a (p 2) ^ 2 ≤ _
+        rw [ha2]; linarith
+      have := abs_le_of_sq_le_sq' this (by linarith)
+      rw [hR]; linarith [this.2]
+    have hf : 0 ≤ sr ^ 2 - (24 / 5) * co * sr + 144 / 25 - R ^ 2 := by
+      have := pow_le_pow_left₀ hR0.le hsLR 2; linarith
+    set Xq := R ^ 2 - (144 / 25) * sn ^ 2 with hXq
+    have hcoR2 : (6 / 5) ^ 2 ≤ (co * R) ^ 2 := pow_le_pow_left₀ (by norm_num) hcR 2
+    have hXR : 0 ≤ Xq * R ^ 2 := by
+      have hid : Xq * R ^ 2 = (R ^ 2 - 72 / 25) ^ 2 - (72 / 25) ^ 2 + (144 / 25) * (co * R) ^ 2 := by
+        rw [hXq]; linear_combination (-(144 / 25) * R ^ 2) * htrig
+      rw [hid]; have := sq_nonneg (R ^ 2 - 72 / 25); linarith
+    have hX0 : 0 ≤ Xq := by
+      by_contra hneg; push_neg at hneg
+      have : Xq * R ^ 2 < 0 := mul_neg_of_neg_of_pos hneg (by positivity)
+      linarith
+    have hsX : Real.sqrt Xq ^ 2 = Xq := Real.sq_sqrt hX0
+    have hprod : sr ^ 2 - (24 / 5) * co * sr + 144 / 25 - R ^ 2 =
+        (sr - ((12 / 5) * co - Real.sqrt Xq)) * (sr - ((12 / 5) * co + Real.sqrt Xq)) := by
+      linear_combination (-(144 / 25)) * htrig + hsX + hXq
+    have hplus : sr - ((12 / 5) * co + Real.sqrt Xq) < 0 := by
+      have := Real.sqrt_nonneg Xq; linarith
+    have hminus : sr - ((12 / 5) * co - Real.sqrt Xq) ≤ 0 := by
+      by_contra h; push_neg at h
+      have : (sr - ((12 / 5) * co - Real.sqrt Xq)) * (sr - ((12 / 5) * co + Real.sqrt Xq)) < 0 :=
+        mul_neg_of_pos_of_neg h hplus
+      linarith
+    rw [hcb]
+    unfold apm_t02a03_sector_aux_b
+    rw [← hR, ← hco, ← hsn]
+    linarith
+  · have hcA : apm_t02a03_sector_aux_c theta z = apm_t02a03_sector_aux_a z := by
+      unfold apm_t02a03_sector_aux_c; rw [if_neg hD]
+    rw [hcA]; linarith [habs.2]
+
+lemma apm_t02a03_sector_aux_L2a_box_aux_v (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hz : |p 2| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) /
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
+    (apm_t02a03_sector_aux_Psi p).2.2 ∈ Set.Icc (0 : ℝ) 1 := by
+  obtain ⟨hlower, hupper, hden⟩ :=
+    apm_t02a03_sector_aux_L2a_box_aux_v_aux_bounds p hp hz hcos
+  simp only [apm_t02a03_sector_aux_Psi]
+  constructor
+  · exact div_nonneg (by linarith) (le_of_lt hden)
+  · apply (div_le_one hden).2
+    linarith
+
+theorem apm_t02a03_sector_aux_L2a_box (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) (hz : |p 2| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p) :
+    apm_t02a03_sector_aux_box (apm_t02a03_sector_aux_Psi p) := by
+  refine ⟨apm_t02a03_sector_aux_L2a_box_aux_theta p hp hcos, ?_,
+    apm_t02a03_sector_aux_L2a_box_aux_v p hp hz hcos⟩
+  have hz' := abs_le.mp hz
+  simp only [apm_t02a03_sector_aux_Psi]
+  constructor <;> linarith
 
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip_aux_coord
     (p : apm_t02a03_E3)
