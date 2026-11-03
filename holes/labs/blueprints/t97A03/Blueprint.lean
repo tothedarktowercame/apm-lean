@@ -1719,6 +1719,18 @@ noncomputable instance : TopologicalSpace apm_t97A03_TwoCircleCover :=
     (fun x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) ↦ Quotient.mk _ x)
     inferInstance
 
+inductive apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel :
+    Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) →
+      Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) → Prop
+  | c0n : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
+      (.inr (0, apm_t97A03_circleOne)) (.inl (0, apm_t97A03_north))
+  | c0s : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
+      (.inr (0, apm_t97A03_circleNegOne)) (.inl (1, apm_t97A03_south))
+  | c1n : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
+      (.inr (1, apm_t97A03_circleOne)) (.inl (1, apm_t97A03_north))
+  | c1s : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
+      (.inr (1, apm_t97A03_circleNegOne)) (.inl (0, apm_t97A03_north))
+
 abbrev apm_t97A03_Homology (X : Type) [TopologicalSpace X] (n : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of X))
@@ -2555,22 +2567,117 @@ noncomputable instance : TopologicalSpace
     (fun x : Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) ↦ Quotient.mk _ x)
     inferInstance
 
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a
+    (w : Fin 2 × Circle) : Option apm_t97A03_TwoSpheres := by
+  classical
+  exact if w = (0, apm_t97A03_circleOne) then some (0, apm_t97A03_north)
+  else if w = (0, apm_t97A03_circleNegOne) then some (1, apm_t97A03_south)
+  else if w = (1, apm_t97A03_circleOne) then some (1, apm_t97A03_north)
+  else if w = (1, apm_t97A03_circleNegOne) then some (0, apm_t97A03_south)
+  else none
+
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf
+    (w : Fin 2 × Circle) : Option apm_t97A03_TwoSpheres := by
+  classical
+  exact if w = (0, apm_t97A03_circleOne) then some (0, apm_t97A03_north)
+  else if w = (0, apm_t97A03_circleNegOne) then some (1, apm_t97A03_south)
+  else if w = (1, apm_t97A03_circleOne) then some (1, apm_t97A03_north)
+  else if w = (1, apm_t97A03_circleNegOne) then some (0, apm_t97A03_north)
+  else none
+
+noncomputable def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid
+    (w : Fin 2 × Circle) : Option apm_t97A03_TwoSpheres := by
+  classical
+  exact if w = (0, apm_t97A03_circleOne) then some (0, apm_t97A03_north)
+  else if w = (0, apm_t97A03_circleNegOne) then some (1, apm_t97A03_north)
+  else if w = (1, apm_t97A03_circleOne) then some (1, apm_t97A03_north)
+  else if w = (1, apm_t97A03_circleNegOne) then some (0, apm_t97A03_north)
+  else none
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne :
+    apm_t97A03_circleOne ≠ apm_t97A03_circleNegOne := by
+  intro h
+  have := congrArg Subtype.val h
+  norm_num [apm_t97A03_circleOne, apm_t97A03_circleNegOne] at this
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne' :
+    apm_t97A03_circleNegOne ≠ apm_t97A03_circleOne :=
+  apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne.symm
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_rel_a :
+    apm_t97A03_invariants_aux_slide_GenRel
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a =
+      apm_t97A03_TwoCircleRel := by
+  funext x y
+  apply propext
+  constructor
+  · rintro ⟨w, z, hz⟩
+    simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a]
+      at hz
+    split_ifs at hz with h₀ h₁ h₂ h₃
+    · subst w; cases hz; exact apm_t97A03_TwoCircleRel.c0n
+    · subst w; cases hz; exact apm_t97A03_TwoCircleRel.c0s
+    · subst w; cases hz; exact apm_t97A03_TwoCircleRel.c1n
+    · subst w; cases hz; exact apm_t97A03_TwoCircleRel.c1s
+  · intro h
+    cases h with
+    | c0n => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a])
+    | c0s => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a,
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+    | c1n => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a])
+    | c1s => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a,
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_rel_half :
+    apm_t97A03_invariants_aux_slide_GenRel
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf =
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel := by
+  funext x y
+  apply propext
+  constructor
+  · rintro ⟨w, z, hz⟩
+    simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf] at hz
+    split_ifs at hz with h₀ h₁ h₂ h₃
+    · subst w; cases hz; exact .c0n
+    · subst w; cases hz; exact .c0s
+    · subst w; cases hz; exact .c1n
+    · subst w; cases hz; exact .c1s
+  · intro h
+    cases h with
+    | c0n => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf])
+    | c0s => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf,
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+    | c1n => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf])
+    | c1s => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf,
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+
+lemma apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_rel_slid :
+    apm_t97A03_invariants_aux_slide_GenRel
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid =
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidRel := by
+  funext x y
+  apply propext
+  constructor
+  · rintro ⟨w, z, hz⟩
+    simp only [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid] at hz
+    split_ifs at hz with h₀ h₁ h₂ h₃
+    · subst w; cases hz; exact .c0a
+    · subst w; cases hz; exact .c0b
+    · subst w; cases hz; exact .c1a
+    · subst w; cases hz; exact .c1b
+  · intro h
+    cases h with
+    | c0a => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid])
+    | c0b => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid,
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+    | c1a => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid])
+    | c1b => exact .att _ _ (by simp [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid,
+        apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+
 /-- Intermediate quotient in which only the south attachment on sphere sheet
 zero has been slid to north.  Keeping the other south attachment unchanged
 lets the two-circle slide be assembled from two independent one-attachment
 slides. -/
-inductive apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel :
-    Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) →
-      Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) → Prop
-  | c0n : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
-      (.inr (0, apm_t97A03_circleOne)) (.inl (0, apm_t97A03_north))
-  | c0s : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
-      (.inr (0, apm_t97A03_circleNegOne)) (.inl (1, apm_t97A03_south))
-  | c1n : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
-      (.inr (1, apm_t97A03_circleOne)) (.inl (1, apm_t97A03_north))
-  | c1s : apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel
-      (.inr (1, apm_t97A03_circleNegOne)) (.inl (0, apm_t97A03_north))
-
 def apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfCover :=
   Quotient (Relation.EqvGen.setoid
     apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfRel)
@@ -2587,7 +2694,41 @@ maps and attachments remain fixed. -/
 theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_first :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t97A03_TwoCircleCover
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfCover) := by
-  sorry
+  let a := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a
+  let a' := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf
+  have hfin : {w | (a w).isSome}.Finite := by
+    classical
+    have hf : ({((1 : Fin 2), apm_t97A03_circleNegOne)} : Set (Fin 2 × Circle)).Finite :=
+      Set.finite_singleton _
+    refine Set.Finite.subset
+      (((hf.insert ((1 : Fin 2), apm_t97A03_circleOne)).insert
+        ((0 : Fin 2), apm_t97A03_circleNegOne)).insert
+          ((0 : Fin 2), apm_t97A03_circleOne)) ?_
+    intro w hw
+    simp only [Set.mem_setOf_eq, Option.isSome_iff_ne_none] at hw
+    simp only [a, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a] at hw
+    split_ifs at hw with h₀ h₁ h₂ h₃ <;> simp_all
+  have hsame : ∀ w, w ≠ (1, apm_t97A03_circleNegOne) → a w = a' w := by
+    classical
+    intro w hw
+    simp only [a, a',
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a,
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf]
+    split_ifs <;> simp_all
+  let γ : Path ((0 : Fin 2), apm_t97A03_south) ((0 : Fin 2), apm_t97A03_north) :=
+    apm_t97A03_sphereReturn.symm.map
+      (continuous_const.prodMk continuous_id)
+  have h := apm_t97A03_invariants_aux_slide_generic a a' hfin
+    (1, apm_t97A03_circleNegOne) hsame
+    (0, apm_t97A03_south) (0, apm_t97A03_north)
+    (by simp [a, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_a,
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+    (by simp [a', apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf,
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+    γ
+  rw [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_rel_a,
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_rel_half] at h
+  exact h
 
 /-- Sliding the remaining attachment, on sphere sheet one, along the same
 north--south meridian gives the fully slid quotient.  All other summand maps
@@ -2596,7 +2737,41 @@ theorem apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_second :
     Nonempty (ContinuousMap.HomotopyEquiv
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_HalfCover
       apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_SlidCover) := by
-  sorry
+  let a := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf
+  let a' := apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid
+  have hfin : {w | (a w).isSome}.Finite := by
+    classical
+    have hf : ({((1 : Fin 2), apm_t97A03_circleNegOne)} : Set (Fin 2 × Circle)).Finite :=
+      Set.finite_singleton _
+    refine Set.Finite.subset
+      (((hf.insert ((1 : Fin 2), apm_t97A03_circleOne)).insert
+        ((0 : Fin 2), apm_t97A03_circleNegOne)).insert
+          ((0 : Fin 2), apm_t97A03_circleOne)) ?_
+    intro w hw
+    simp only [Set.mem_setOf_eq, Option.isSome_iff_ne_none] at hw
+    simp only [a, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf] at hw
+    split_ifs at hw with h₀ h₁ h₂ h₃ <;> simp_all
+  have hsame : ∀ w, w ≠ (0, apm_t97A03_circleNegOne) → a w = a' w := by
+    classical
+    intro w hw
+    simp only [a, a',
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf,
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid]
+    split_ifs <;> simp_all
+  let γ : Path ((1 : Fin 2), apm_t97A03_south) ((1 : Fin 2), apm_t97A03_north) :=
+    apm_t97A03_sphereReturn.symm.map
+      (continuous_const.prodMk continuous_id)
+  have h := apm_t97A03_invariants_aux_slide_generic a a' hfin
+    (0, apm_t97A03_circleNegOne) hsame
+    (1, apm_t97A03_south) (1, apm_t97A03_north)
+    (by simp [a, apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aHalf,
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+    (by simp [a', apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_aSlid,
+      apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_points_ne'])
+    γ
+  rw [apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_rel_half,
+    apm_t97A03_invariants_aux_twoCircle_homotopyEquiv_aux_slide_aux_rel_slid] at h
+  exact h
 
 /-- Homotopy invariance for the two-circle adjunction space, sliding the two
 south attaching points to north along sphere meridians. -/
