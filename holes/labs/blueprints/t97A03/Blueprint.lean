@@ -360,6 +360,46 @@ lemma apm_t97A03_collapse_baseSphereReturn (A B : Circle) (t : unitInterval) :
   rw [(apm_t97A03_baseSphereReturn A B).target,
     ← apm_t97A03_baseCircle_B]
 
+/-- A function on `[0, 2π]` that is continuous there and has equal values at the
+two ends descends to a continuous map on the circle, agreeing with it along
+`Circle.exp`.  This is the pasting tool for maps built from arcs: define the
+pieces on consecutive subintervals of `[0, 2π]` (e.g. with `Set.IccExtend` and
+`Continuous.if_le`) and lift. -/
+theorem apm_t97A03_circleLiftIcc {Y : Type} [TopologicalSpace Y] (f : ℝ → Y)
+    (hf : f 0 = f (2 * Real.pi)) (hc : ContinuousOn f (Set.Icc 0 (2 * Real.pi))) :
+    ∃ g : Circle → Y, Continuous g ∧
+      ∀ t ∈ Set.Icc 0 (2 * Real.pi), g (Circle.exp t) = f t := by
+  haveI : Fact (0 < 2 * Real.pi) := ⟨by positivity⟩
+  refine ⟨fun z => AddCircle.liftIco (2 * Real.pi) 0 f (AddCircle.homeomorphCircle'.symm z), ?_, ?_⟩
+  · exact (AddCircle.liftIco_zero_continuous hf hc).comp
+      AddCircle.homeomorphCircle'.symm.continuous
+  · intro t ht
+    have hsymm : AddCircle.homeomorphCircle'.symm (Circle.exp t) = (t : AddCircle (2 * Real.pi)) := by
+      rw [← AddCircle.homeomorphCircle'_apply_mk, Homeomorph.symm_apply_apply]
+    show AddCircle.liftIco (2 * Real.pi) 0 f (AddCircle.homeomorphCircle'.symm (Circle.exp t)) = f t
+    rw [hsymm]
+    rcases eq_or_lt_of_le ht.2 with h | h
+    · subst h
+      rw [AddCircle.coe_period, ← hf]
+      exact AddCircle.liftIco_zero_coe_apply (x := (0 : ℝ)) ⟨le_rfl, by positivity⟩
+    · exact AddCircle.liftIco_zero_coe_apply ⟨ht.1, h⟩
+
+/-- The lift is injective when `f` is injective on `[0, 2π)`. -/
+theorem apm_t97A03_circleLiftIcc_injective {Y : Type} (f : ℝ → Y) (g : Circle → Y)
+    (hg : ∀ t ∈ Set.Icc 0 (2 * Real.pi), g (Circle.exp t) = f t)
+    (hinj : Set.InjOn f (Set.Ico 0 (2 * Real.pi))) : Function.Injective g := by
+  have hrep : ∀ z : Circle, ∃ s ∈ Set.Ico 0 (2 * Real.pi), Circle.exp s = z := by
+    intro z
+    refine ⟨toIcoMod Real.two_pi_pos 0 (Complex.arg (z : ℂ)), by
+      simpa using toIcoMod_mem_Ico Real.two_pi_pos 0 (Complex.arg (z : ℂ)), ?_⟩
+    have hp : Function.Periodic Circle.exp (2 * Real.pi) := Circle.periodic_exp
+    rw [toIcoMod, hp.sub_zsmul_eq, Circle.exp_arg]
+  intro z w hzw
+  obtain ⟨s, hs, rfl⟩ := hrep z
+  obtain ⟨u, hu, rfl⟩ := hrep w
+  rw [hg s ⟨hs.1, hs.2.le⟩, hg u ⟨hu.1, hu.2.le⟩] at hzw
+  rw [hinj hs hu hzw]
+
 /-- A literal circle-summand path between the two marked points.  The second,
 complementary arc will be obtained from a cut-circle normal form rather than
 by reusing this path or its reverse. -/
