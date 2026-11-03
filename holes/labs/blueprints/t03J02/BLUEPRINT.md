@@ -1,5 +1,15 @@
 # Blueprint for t03J02
 
+## Closed 2026-11-03
+
+Proved in `problems/t03J02/lean/Main.lean`; axioms `propext`, `Classical.choice`, `Quot.sound`.
+The `compatibleOpenCover` leaf below no longer exists.  Consumers now take any space with a
+compatible cover.  That space is `Cyl ⊆ X × ℝ`: left torus at height -1, right torus at height 1,
+glued circle at heights in [-1, 1].  The cover is `s < 1/2`, `s > -1/2`.  `X ≃ Cyl` comes from a
+deformation `H` of the torus fixing the circle, with `β` such that `β < 1` sends `H₁` into the
+circle: Tietze gives a retraction of a neighbourhood, and two angle functions with a cutoff give
+`H`.  The rest of this file is the earlier record.
+
 ## Triage and interface repair
 
 The registered statement is true and faithful. Embeddings are essential for

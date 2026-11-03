@@ -36,3 +36,9 @@ actual quotient and basepoint. `apm_t03J02_bridge_2` isolates all four
 singular-homology conclusions for that same quotient. Together they match the
 frozen theorem's invariant clauses exactly, while relying on the already
 compiled maps-out pushout interface rather than restating it.
+
+## Route of the Lean proof (2026-11-03)
+
+The Lean proof does not use a collar, so arbitrary embedded curves are covered. It replaces the
+quotient by a homotopy equivalent cylinder inside `X × ℝ` and runs van Kampen and Mayer-Vietoris
+there. See `holes/labs/topology-routes/embedded-circles-1103.md`.
