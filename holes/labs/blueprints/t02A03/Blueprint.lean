@@ -2417,24 +2417,6 @@ theorem apm_t02a03_sector_aux_L2a_box (p : apm_t02a03_E3)
   simp only [apm_t02a03_sector_aux_Psi]
   constructor <;> linarith
 
-lemma apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube (q : ℝ × ℝ × ℝ)
-    (hq : apm_t02a03_sector_aux_box q) :
-    Metric.infDist (apm_t02a03_sector_aux_PsiInv q)
-      (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ) := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left (q : ℝ × ℝ × ℝ)
-    (hq : apm_t02a03_sector_aux_box q) :
-    (1 / 4 : ℝ) ≤ Metric.infDist (apm_t02a03_sector_aux_PsiInv q) apm_t02a03_C := by
-  sorry
-
-lemma apm_t02a03_sector_aux_L2b_inv_aux_right (q : ℝ × ℝ × ℝ)
-    (hq : apm_t02a03_sector_aux_box q) :
-    apm_t02a03_sector_aux_PsiInv q ∈
-      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
-  exact ⟨apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube q hq,
-    apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left q hq⟩
-
 lemma apm_t02a03_sector_aux_L2_aux_a_le (z : ℝ) : apm_t02a03_sector_aux_a z ≤ 1 / 4 := by
   unfold apm_t02a03_sector_aux_a
   rw [show (1 / 4 : ℝ) = Real.sqrt (1 / 16) by
@@ -2504,6 +2486,173 @@ lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_rad (q : ℝ × ℝ × ℝ)
       (1 + u) ^ 2 := by
     have := Real.sin_sq_add_cos_sq q.1; nlinarith
   rw [this, Real.sqrt_sq (by linarith)]
+
+lemma apm_t02a03_sector_aux_L2_aux_a_sq (z : ℝ) (hz : |z| ≤ 1 / 5) :
+    apm_t02a03_sector_aux_a z ^ 2 = 1 / 16 - z ^ 2 := by
+  unfold apm_t02a03_sector_aux_a
+  rw [Real.sq_sqrt]
+  have : z ^ 2 ≤ (1 / 5) ^ 2 := by rw [← sq_abs]; exact pow_le_pow_left₀ (abs_nonneg z) hz 2
+  nlinarith
+
+/-- On `Delta` the bite boundary lies inside the right tube: `b ≤ a`, which after
+squaring is the `Delta` inequality `cos θ · (1 + a) ≥ 6/5` (claude-14). -/
+lemma apm_t02a03_sector_aux_L2_aux_c_le_a (θ z : ℝ) :
+    apm_t02a03_sector_aux_c θ z ≤ apm_t02a03_sector_aux_a z := by
+  unfold apm_t02a03_sector_aux_c
+  split_ifs with hD
+  · obtain ⟨_, hcos⟩ := hD
+    have ha0 : 0 ≤ apm_t02a03_sector_aux_a z := Real.sqrt_nonneg _
+    set R := 1 + apm_t02a03_sector_aux_a z with hR
+    have hR0 : 0 < R := by linarith
+    have hcR : 6 / 5 ≤ Real.cos θ * R := by
+      have h := hcos; rw [div_le_iff₀ (by positivity)] at h; linarith
+    unfold apm_t02a03_sector_aux_b
+    rw [← hR]
+    rcases le_or_gt ((12 / 5) * Real.cos θ - R) 0 with h | h
+    · have := Real.sqrt_nonneg (R ^ 2 - (144 / 25) * Real.sin θ ^ 2); linarith
+    · have : (12 / 5) * Real.cos θ - R ≤ Real.sqrt (R ^ 2 - (144 / 25) * Real.sin θ ^ 2) := by
+        rw [Real.le_sqrt' h]
+        nlinarith [Real.sin_sq_add_cos_sq θ]
+      linarith
+  · exact le_rfl
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    Metric.infDist (apm_t02a03_sector_aux_PsiInv q)
+      (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ) := by
+  have hz : |q.2.1| ≤ 1 / 5 := abs_le.mpr ⟨by linarith [hq.2.1.1], hq.2.1.2⟩
+  have hrad := apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_rad q hq
+  obtain ⟨-, -, h2⟩ := apm_t02a03_sector_aux_L2_aux_PsiInv_coords q
+  have hpos := apm_t02a03_sector_aux_L2_aux_cpa_pos q.1 q.2.1 hz
+  have hca := apm_t02a03_sector_aux_L2_aux_c_le_a q.1 q.2.1
+  have ha2 := apm_t02a03_sector_aux_L2_aux_a_sq q.2.1 hz
+  have ha0 : 0 ≤ apm_t02a03_sector_aux_a q.2.1 := Real.sqrt_nonneg _
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube_aux_dist_eq, hrad, h2]
+  set u := -apm_t02a03_sector_aux_a q.2.1 +
+    q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 + apm_t02a03_sector_aux_a q.2.1) with hu
+  have hv0 := hq.2.2.1
+  have hv1 := hq.2.2.2
+  have hu1 : -apm_t02a03_sector_aux_a q.2.1 ≤ u := by rw [hu]; nlinarith
+  have hu2 : u ≤ apm_t02a03_sector_aux_a q.2.1 := by rw [hu]; nlinarith
+  have hsq : (1 + u - 1) ^ 2 + q.2.1 ^ 2 ≤ 1 / 16 := by nlinarith
+  rw [show (1 / 4 : ℝ) = Real.sqrt (1 / 16) by
+    rw [show (1 / 16 : ℝ) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]]
+  exact Real.sqrt_le_sqrt hsq
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    (1 / 4 : ℝ) ≤ Metric.infDist (apm_t02a03_sector_aux_PsiInv q) apm_t02a03_C := by
+  have hz : |q.2.1| ≤ 1 / 5 := abs_le.mpr ⟨by linarith [hq.2.1.1], hq.2.1.2⟩
+  obtain ⟨h0, h1, h2⟩ := apm_t02a03_sector_aux_L2_aux_PsiInv_coords q
+  have hpos := apm_t02a03_sector_aux_L2_aux_cpa_pos q.1 q.2.1 hz
+  have hca := apm_t02a03_sector_aux_L2_aux_c_le_a q.1 q.2.1
+  have ha2 := apm_t02a03_sector_aux_L2_aux_a_sq q.2.1 hz
+  have ha0 : 0 ≤ apm_t02a03_sector_aux_a q.2.1 := Real.sqrt_nonneg _
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le q.2.1
+  have hcosb : (17 / 25 : ℝ) ≤ Real.cos q.1 := by
+    have hb := hq.1
+    have hθ : |q.1| ≤ apm_t02a03_sector_aux_thetaOne := abs_le.mpr ⟨hb.1, hb.2⟩
+    rw [← Real.cos_abs]
+    have hpi : apm_t02a03_sector_aux_thetaOne ≤ Real.pi := Real.arccos_le_pi _
+    calc (17 / 25 : ℝ) = Real.cos apm_t02a03_sector_aux_thetaOne := by
+          unfold apm_t02a03_sector_aux_thetaOne; rw [Real.cos_arccos (by norm_num) (by norm_num)]
+      _ ≤ Real.cos |q.1| := Real.cos_le_cos_of_nonneg_of_le_pi (abs_nonneg _) hpi hθ
+  set a := apm_t02a03_sector_aux_a q.2.1 with ha
+  set c := apm_t02a03_sector_aux_c q.1 q.2.1 with hc
+  set u := -a + q.2.2 * (c + a) with hu
+  have hv0 := hq.2.2.1
+  have hv1 := hq.2.2.2
+  have hu1 : -a ≤ u := by rw [hu]; nlinarith
+  have hu2 : u ≤ c := by rw [hu]; nlinarith
+  set R := 1 + a with hR
+  set co := Real.cos q.1 with hco
+  set sn := Real.sin q.1 with hsn
+  have htrig : sn ^ 2 + co ^ 2 = 1 := Real.sin_sq_add_cos_sq q.1
+  -- f(s) := s² - (24/5) co s + 144/25 - R² ≥ 0 at s = 1 + u
+  have hca' : c ≤ a := hca
+  have hs2 : 1 + u ≤ 5 / 4 := by linarith
+  have hfs : (12 / 5 - (1 + u) * co) ^ 2 + ((1 + u) * sn) ^ 2 - R ^ 2 =
+      (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 := by
+    linear_combination (1 + u) ^ 2 * htrig
+  have hf : R ^ 2 ≤ (12 / 5 - (1 + u) * co) ^ 2 + ((1 + u) * sn) ^ 2 := by
+    by_cases hD : apm_t02a03_sector_aux_Delta (q.1, q.2.1)
+    · have hcb : c = apm_t02a03_sector_aux_b q.1 q.2.1 := by
+        rw [hc]; unfold apm_t02a03_sector_aux_c; rw [if_pos hD]
+      obtain ⟨_, hcos⟩ := hD
+      have hR0 : 0 < R := by linarith
+      have hcR : 6 / 5 ≤ co * R := by
+        have h := hcos; rw [div_le_iff₀ (by positivity)] at h; linarith
+      set X := R ^ 2 - (144 / 25) * sn ^ 2 with hX
+      have hcoR2 : (6 / 5) ^ 2 ≤ (co * R) ^ 2 := pow_le_pow_left₀ (by norm_num) hcR 2
+      have hXR : 0 ≤ X * R ^ 2 := by
+        have hid : X * R ^ 2 = (R ^ 2 - 72 / 25) ^ 2 - (72 / 25) ^ 2 +
+            (144 / 25) * (co * R) ^ 2 := by
+          rw [hX]; linear_combination (-(144 / 25) * R ^ 2) * htrig
+        rw [hid]
+        have := sq_nonneg (R ^ 2 - 72 / 25)
+        linarith
+      have hX0 : 0 ≤ X := by
+        by_contra hneg; push_neg at hneg
+        have : X * R ^ 2 < 0 := mul_neg_of_neg_of_pos hneg (by positivity)
+        linarith
+      have hsX : Real.sqrt X ^ 2 = X := Real.sq_sqrt hX0
+      have hb : c = (12 / 5) * co - Real.sqrt X - 1 := by
+        rw [hcb]; unfold apm_t02a03_sector_aux_b; rfl
+      have hsm : 1 + u ≤ (12 / 5) * co - Real.sqrt X := by linarith
+      have hsp : 1 + u ≤ (12 / 5) * co + Real.sqrt X := by
+        have := Real.sqrt_nonneg X; linarith
+      have hprod : (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 =
+          ((1 + u) - ((12 / 5) * co - Real.sqrt X)) *
+            ((1 + u) - ((12 / 5) * co + Real.sqrt X)) := by
+        linear_combination (-(144 / 25)) * htrig + hsX + hX
+      have : 0 ≤ ((1 + u) - ((12 / 5) * co - Real.sqrt X)) *
+          ((1 + u) - ((12 / 5) * co + Real.sqrt X)) :=
+        mul_nonneg_of_nonpos_of_nonpos (by linarith) (by linarith)
+      linarith
+    · have hR0 : 0 < R := by linarith
+      have hcR : co * R ≤ 6 / 5 := by
+        by_cases hz3 : |q.2.1| ≤ 3 / 20
+        · have : ¬ (6 / (5 * R) ≤ co) := fun h => hD ⟨hz3, h⟩
+          push_neg at this
+          rw [lt_div_iff₀ (by positivity)] at this; linarith
+        · push_neg at hz3
+          have hz2 : (3 / 20) ^ 2 < q.2.1 ^ 2 := by
+            rw [← sq_abs q.2.1]; exact pow_lt_pow_left₀ hz3 (by norm_num) (by norm_num)
+          have ha5 : a < 1 / 5 := by
+            by_contra hge; push_neg at hge
+            have := pow_le_pow_left₀ (by norm_num) hge 2
+            linarith
+          have := mul_le_mul_of_nonneg_right (Real.cos_le_one q.1) hR0.le
+          linarith
+      have hcA : c = a := by
+        rw [hc]; unfold apm_t02a03_sector_aux_c; rw [if_neg hD]
+      have hprod : (1 + u) ^ 2 - (24 / 5) * co * (1 + u) + 144 / 25 - R ^ 2 =
+          ((1 + u) - R) * ((1 + u) + R - (24 / 5) * co) + (144 / 25 - (24 / 5) * (co * R)) := by
+        ring
+      have : 0 ≤ ((1 + u) - R) * ((1 + u) + R - (24 / 5) * co) :=
+        mul_nonneg_of_nonpos_of_nonpos (by rw [hR]; linarith) (by rw [hR]; linarith)
+      linarith
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_infDist, h0, h1, h2]
+  have hsL : R ≤ Real.sqrt ((6 / 5 - (1 + u) * co + 6 / 5) ^ 2 + ((1 + u) * sn) ^ 2) := by
+    rw [Real.le_sqrt (by positivity) (by positivity)]
+    have : (6 / 5 - (1 + u) * co + 6 / 5) = 12 / 5 - (1 + u) * co := by ring
+    rw [this]; exact hf
+  have hsq : 1 / 16 ≤ (Real.sqrt ((6 / 5 - (1 + u) * co + 6 / 5) ^ 2 + ((1 + u) * sn) ^ 2) - 1) ^ 2 +
+      q.2.1 ^ 2 := by
+    have h1 : a ≤ Real.sqrt ((6 / 5 - (1 + u) * co + 6 / 5) ^ 2 + ((1 + u) * sn) ^ 2) - 1 := by
+      linarith
+    have := pow_le_pow_left₀ ha0 h1 2
+    linarith
+  rw [show (1 / 4 : ℝ) = Real.sqrt (1 / 16) by
+    rw [show (1 / 16 : ℝ) = (1 / 4) ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]]
+  exact Real.sqrt_le_sqrt hsq
+
+lemma apm_t02a03_sector_aux_L2b_inv_aux_right (q : ℝ × ℝ × ℝ)
+    (hq : apm_t02a03_sector_aux_box q) :
+    apm_t02a03_sector_aux_PsiInv q ∈
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
+  exact ⟨apm_t02a03_sector_aux_L2b_inv_aux_right_aux_tube q hq,
+    apm_t02a03_sector_aux_L2b_inv_aux_right_aux_left q hq⟩
 
 lemma apm_t02a03_sector_aux_L2b_inv_aux_cos_aux_ratio (q : ℝ × ℝ × ℝ)
     (hq : apm_t02a03_sector_aux_box q) :
