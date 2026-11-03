@@ -3225,6 +3225,30 @@ decoder with `d.first` and `d.second` exchanged: the four closed quarter arcs
 of the model circle are pasted from the two lifts in the opposite order.  The
 listed endpoint equalities are exactly the generators needed for descent
 through `apm_t97A03_OneCircleRel`. -/
+theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric_aux_decoder_aux_circlePaste
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (hdegree : ∀ x, Nat.card (p ⁻¹' ({x} : Set _)) = 2)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hendpoints :
+      d.second 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.second 0 1 = d.sphere 1 apm_t97A03_south ∧
+      d.second 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.second 1 1 = d.sphere 0 apm_t97A03_south ∧
+      d.first 0 0 = d.sphere 0 apm_t97A03_north ∧
+      d.first 0 1 = d.sphere 0 apm_t97A03_south ∧
+      d.first 1 0 = d.sphere 1 apm_t97A03_north ∧
+      d.first 1 1 = d.sphere 1 apm_t97A03_south) :
+    ∃ c : Circle → Y, Continuous c ∧ Function.Injective c ∧
+      c apm_t97A03_circleOne = d.sphere 0 apm_t97A03_north ∧
+      c apm_t97A03_circleI = d.sphere 0 apm_t97A03_south ∧
+      c apm_t97A03_circleNegOne = d.sphere 1 apm_t97A03_north ∧
+      c apm_t97A03_circleNegI = d.sphere 1 apm_t97A03_south ∧
+      (∀ w, ∃ z, p (c w) = apm_t97A03_baseCircle A B z) ∧
+      (∀ y z, p y = apm_t97A03_baseCircle A B z → ∃ w, c w = y) := by
+  sorry
+
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric_aux_decoder
     (A B : Circle) (hAB : A ≠ B)
     (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y]
@@ -3242,7 +3266,19 @@ theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_
       d.first 1 1 = d.sphere 1 apm_t97A03_south) :
     ∃ f : apm_t97A03_OneCircleCover → Y,
       Continuous f ∧ Function.Bijective f := by
-  sorry
+  obtain ⟨c, hc, hcinj, hn0, hs0, hn1, hs1, hcrange, hcover⟩ :=
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric_aux_decoder_aux_circlePaste
+      A B hAB Y p hp hdegree d hendpoints
+  let f :=
+    apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_map
+      d c hn0 hs0 hn1 hs1
+  refine ⟨f, ?_, ?_⟩
+  · apply continuous_coinduced_dom.mpr
+    apply continuous_sum_dom.mpr
+    exact ⟨d.continuous_sphere, hc⟩
+  · exact
+      apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_firstSwap_aux_geometric_aux_decoder_aux_exact
+        A B Y p d c hn0 hs0 hn1 hs1 hcinj hcrange hcover
 
 theorem apm_t97A03_classify_aux_oneCircle_homeomorph_aux_descend_aux_secondSwap_aux_geometric
     (A B : Circle) (hAB : A ≠ B)
