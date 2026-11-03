@@ -2334,13 +2334,70 @@ theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_slide :
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover) := by
   sorry
 
-/-- Once both endpoints on each sphere sheet meet at north, collapsing a
-spanning tree in the four-edge circle graph leaves exactly three loops. -/
+/-- The closed counterclockwise quarter arc from `i` to `-1`.  In Cartesian
+coordinates this is exactly the part of the unit circle in the closed
+upper-left quadrant. -/
+def apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc :
+    Set Circle :=
+  {z | z.1.re ≤ 0 ∧ 0 ≤ z.1.im}
+
+/-- The quotient relation after contracting the whole connecting quarter arc,
+not merely identifying its endpoints.  The four original attaching relations
+are retained, and every point of the contracted arc is sent to sheet zero's
+north point. -/
+inductive apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel :
+    Sum apm_t97A03_TwoSpheres Circle →
+      Sum apm_t97A03_TwoSpheres Circle → Prop
+  | p0 : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
+      (.inr apm_t97A03_circleOne) (.inl (0, apm_t97A03_north))
+  | p1 : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
+      (.inr apm_t97A03_circleI) (.inl (0, apm_t97A03_north))
+  | p2 : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
+      (.inr apm_t97A03_circleNegOne) (.inl (1, apm_t97A03_north))
+  | p3 : apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
+      (.inr apm_t97A03_circleNegI) (.inl (1, apm_t97A03_north))
+  | arc (z : Circle)
+      (hz : z ∈ apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_arc) :
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel
+        (.inr z) (.inl (0, apm_t97A03_north))
+
+def apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space :=
+  Quotient (Relation.EqvGen.setoid
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_Rel)
+
+noncomputable instance : TopologicalSpace
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space :=
+  TopologicalSpace.coinduced
+    (fun x : Sum apm_t97A03_TwoSpheres Circle ↦ Quotient.mk _ x) inferInstance
+
+/-- Contracting the upper-left quarter arc is a homotopy equivalence.  A
+proof can descend the linear contraction of that closed arc, and use the
+circle reparametrisation which is constant on the arc as a homotopy inverse. -/
+theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract :
+    Nonempty (ContinuousMap.HomotopyEquiv
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover
+      apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space) := by
+  sorry
+
+/-- In the contracted quotient there is one vertex: the contracted arc joins
+the two north points.  The other three quarter arcs are the three loop legs,
+so the quotient is homeomorphic to the fixed wedge of two spheres and three
+circles. -/
+theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm :
+    Nonempty
+      (apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_space ≃ₜ
+        apm_t97A03_modelWedge) := by
+  sorry
+
 theorem apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse :
     Nonempty (ContinuousMap.HomotopyEquiv
       apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_SlidCover
       apm_t97A03_modelWedge) := by
-  sorry
+  obtain ⟨contract⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_contract
+  obtain ⟨normalForm⟩ :=
+    apm_t97A03_invariants_aux_oneCircle_homotopyEquiv_aux_collapse_aux_normalForm
+  exact ⟨contract.trans normalForm.toHomotopyEquiv⟩
 
 /-- Collapse the contractible connecting arc in the one-circle quotient.
 The quotient homotopies leave two sphere summands and three circle loops,
