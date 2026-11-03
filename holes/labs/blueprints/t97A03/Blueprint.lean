@@ -2341,6 +2341,109 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_perms
         (transport_ne_refl _ hsecond)) h)
     · exact h
 
+/-- The two lifted closed arcs, pasted at their endpoints, give the two
+literal circle sheets.  The parametrisation `q` records the corresponding
+homeomorphism from the standard circle (with marked points `1,-1`) to the
+base circle (with marked points `A,B`). -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste
+    (A B : Circle) (hAB : A ≠ B)
+    (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (hfirst : d.firstPerm = Equiv.swap 0 1)
+    (hsecond : d.secondPerm = Equiv.swap 0 1) :
+    ∃ (q : Circle ≃ₜ Circle) (c : Fin 2 → Circle → Y),
+      q 1 = A ∧ q apm_t97A03_circleNegOne = B ∧
+      Continuous (fun w : Fin 2 × Circle ↦ c w.1 w.2) ∧
+      (∀ i w, p (c i w) = apm_t97A03_baseCircle A B (q w)) ∧
+      (∀ i, c i 1 = d.sphere i apm_t97A03_north) ∧
+      (∀ i, c i apm_t97A03_circleNegOne =
+        d.sphere (Equiv.swap 0 1 i) apm_t97A03_south) ∧
+      ∀ {y w}, p y = apm_t97A03_baseCircle A B (q w) →
+        ∃! i : Fin 2, c i w = y := by
+  sorry
+
+/-- The concrete map on representatives used by the two-circle decoder. -/
+noncomputable def apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B}
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (c : Fin 2 → Circle → Y) :
+    Sum apm_t97A03_TwoSpheres (Fin 2 × Circle) → Y
+  | .inl iz => d.sphere iz.1 iz.2
+  | .inr iw => c iw.1 iw.2
+
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw_sound
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B}
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (c : Fin 2 → Circle → Y)
+    (hn : ∀ i, c i 1 = d.sphere i apm_t97A03_north)
+    (hs : ∀ i, c i apm_t97A03_circleNegOne =
+      d.sphere (Equiv.swap 0 1 i) apm_t97A03_south) :
+    ∀ x y, apm_t97A03_TwoCircleRel x y →
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw d c x =
+        apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw d c y := by
+  intro x y h
+  cases h with
+  | c0n => exact hn 0
+  | c0s => simpa using hs 0
+  | c1n => exact hn 1
+  | c1s => simpa using hs 1
+
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw_continuous
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B}
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (c : Fin 2 → Circle → Y)
+    (hc : Continuous (fun w : Fin 2 × Circle ↦ c w.1 w.2)) :
+    Continuous
+      (apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw d c) := by
+  apply continuous_sum_dom.mpr
+  exact ⟨d.continuous_sphere, hc⟩
+
+noncomputable def apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_map
+    {A B : Circle} {Y : Type} [TopologicalSpace Y]
+    {p : Y → apm_t97A03_BaseSpace A B}
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (c : Fin 2 → Circle → Y)
+    (hn : ∀ i, c i 1 = d.sphere i apm_t97A03_north)
+    (hs : ∀ i, c i apm_t97A03_circleNegOne =
+      d.sphere (Equiv.swap 0 1 i) apm_t97A03_south) :
+    apm_t97A03_TwoCircleCover → Y := by
+  refine Quotient.lift
+    (apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw d c) ?_
+  intro x y hxy
+  exact Relation.EqvGen.rec
+    (fun x y h =>
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw_sound
+        d c hn hs x y h)
+    (fun _ => rfl)
+    (fun _ _ _ ih => ih.symm)
+    (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂)
+    hxy
+
+/-- Exactness of the concrete representative decoder.  Equality over the
+sphere is decided by `sphere_unique`; equality over a circle point is decided
+by the pasted-circle uniqueness, while the two attachment fibres are exactly
+the four generators of `TwoCircleRel`. -/
+theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact
+    (A B : Circle) (Y : Type) [TopologicalSpace Y]
+    (p : Y → apm_t97A03_BaseSpace A B)
+    (d : apm_t97A03_ClassifySheetData A B Y p)
+    (q : Circle ≃ₜ Circle) (c : Fin 2 → Circle → Y)
+    (hq1 : q 1 = A) (hqn : q apm_t97A03_circleNegOne = B)
+    (hlift : ∀ i w, p (c i w) = apm_t97A03_baseCircle A B (q w))
+    (hn : ∀ i, c i 1 = d.sphere i apm_t97A03_north)
+    (hs : ∀ i, c i apm_t97A03_circleNegOne =
+      d.sphere (Equiv.swap 0 1 i) apm_t97A03_south)
+    (hunique : ∀ {y w}, p y = apm_t97A03_baseCircle A B (q w) →
+      ∃! i : Fin 2, c i w = y) :
+    Function.Bijective
+      (apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_map
+        d c hn hs) := by
+  sorry
+
 /-- With both endpoint permutations normalized to the transposition, the
 sphere trivialization and the two pairs of arc lifts glue to a continuous
 bijective decoder from the literal two-circle quotient. -/
@@ -2354,7 +2457,22 @@ theorem apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder
     (hsecond : d.secondPerm = Equiv.swap 0 1) :
     ∃ f : apm_t97A03_TwoCircleCover → Y,
       Continuous f ∧ Function.Bijective f := by
-  sorry
+  obtain ⟨q, c, hq1, hqn, hc, hlift, hn, hs, hu⟩ :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_circlePaste
+      A B hAB Y p hp d hfirst hsecond
+  let f :=
+    apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_map
+      d c hn hs
+  refine ⟨f, ?_, ?_⟩
+  · apply continuous_coinduced_dom.mpr
+    simpa [f,
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_map]
+      using
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_raw_continuous
+        d c hc
+  · exact
+      apm_t97A03_classify_aux_twoCircle_homeomorph_aux_descend_aux_decoder_aux_exact
+        A B Y p d q c hq1 hqn hlift hn hs hu
 
 /-- The total space of this covering is Hausdorff: the literal base quotient
 is Hausdorff, and distinct points in one fibre are separated in an evenly
