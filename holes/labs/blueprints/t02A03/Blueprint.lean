@@ -2677,6 +2677,73 @@ theorem apm_t02a03_sector_aux_L2a_box (p : apm_t02a03_E3)
   simp only [apm_t02a03_sector_aux_Psi]
   constructor <;> linarith
 
+/-- On the box angles `c = min a b`: on `Delta` the bite boundary is inside the
+tube (`b ≤ a`), off it `b ≥ a` (squaring gives `cos θ · (1 + a) ≤ 6/5`).  Both `a`
+and `b` are continuous, so this is the continuity of `c` (claude-14). -/
+lemma apm_t02a03_sector_aux_L1_aux_c_eq_min (θ z : ℝ) (hz : |z| ≤ 1 / 5)
+    (hcos : (17 / 25 : ℝ) ≤ Real.cos θ) :
+    apm_t02a03_sector_aux_c θ z =
+      min (apm_t02a03_sector_aux_a z) (apm_t02a03_sector_aux_b θ z) := by
+  have ha0 : 0 ≤ apm_t02a03_sector_aux_a z := Real.sqrt_nonneg _
+  have ha4 := apm_t02a03_sector_aux_L2_aux_a_le z
+  have ha2 := apm_t02a03_sector_aux_L2_aux_a_sq z hz
+  by_cases hD : apm_t02a03_sector_aux_Delta (θ, z)
+  · have hle : apm_t02a03_sector_aux_b θ z ≤ apm_t02a03_sector_aux_a z := by
+      have := apm_t02a03_sector_aux_L2_aux_c_le_a θ z
+      unfold apm_t02a03_sector_aux_c at this; rwa [if_pos hD] at this
+    unfold apm_t02a03_sector_aux_c; rw [if_pos hD, min_eq_right hle]
+  · set R := 1 + apm_t02a03_sector_aux_a z with hR
+    have hR0 : 0 < R := by linarith
+    have hcR : Real.cos θ * R ≤ 6 / 5 := by
+      by_cases hz3 : |z| ≤ 3 / 20
+      · have : ¬ (6 / (5 * R) ≤ Real.cos θ) := fun h => hD ⟨hz3, h⟩
+        push_neg at this
+        rw [lt_div_iff₀ (by positivity)] at this; linarith
+      · push_neg at hz3
+        have hz2 : (3 / 20) ^ 2 < z ^ 2 := by
+          rw [← sq_abs z]; exact pow_lt_pow_left₀ hz3 (by norm_num) (by norm_num)
+        have ha5 : apm_t02a03_sector_aux_a z < 1 / 5 := by
+          by_contra hge; push_neg at hge
+          have := pow_le_pow_left₀ (by norm_num) hge 2
+          linarith
+        have := mul_le_mul_of_nonneg_right (Real.cos_le_one θ) hR0.le
+        linarith
+    have hge : apm_t02a03_sector_aux_a z ≤ apm_t02a03_sector_aux_b θ z := by
+      unfold apm_t02a03_sector_aux_b
+      rw [← hR]
+      have hY : 0 ≤ (12 / 5) * Real.cos θ - R := by linarith
+      have : Real.sqrt (R ^ 2 - (144 / 25) * Real.sin θ ^ 2) ≤ (12 / 5) * Real.cos θ - R := by
+        rw [Real.sqrt_le_left hY]
+        have htrig := Real.sin_sq_add_cos_sq θ
+        have hid : ((12 / 5) * Real.cos θ - R) ^ 2 - (R ^ 2 - (144 / 25) * Real.sin θ ^ 2) =
+            (144 / 25) - (24 / 5) * (Real.cos θ * R) := by
+          linear_combination (144 / 25) * htrig
+        linarith
+      linarith
+    unfold apm_t02a03_sector_aux_c; rw [if_neg hD, min_eq_left hge]
+
+lemma apm_t02a03_sector_aux_L1_aux_cos_box (q : ℝ × ℝ × ℝ) (hq : apm_t02a03_sector_aux_box q) :
+    (17 / 25 : ℝ) ≤ Real.cos q.1 := by
+  have hb := hq.1
+  have hθ : |q.1| ≤ apm_t02a03_sector_aux_thetaOne := abs_le.mpr ⟨hb.1, hb.2⟩
+  rw [← Real.cos_abs]
+  have hpi : apm_t02a03_sector_aux_thetaOne ≤ Real.pi := Real.arccos_le_pi _
+  calc (17 / 25 : ℝ) = Real.cos apm_t02a03_sector_aux_thetaOne := by
+        unfold apm_t02a03_sector_aux_thetaOne; rw [Real.cos_arccos (by norm_num) (by norm_num)]
+    _ ≤ Real.cos |q.1| := Real.cos_le_cos_of_nonneg_of_le_pi (abs_nonneg _) hpi hθ
+
+lemma apm_t02a03_sector_aux_L1_aux_b_continuous :
+    Continuous (fun x : ℝ × ℝ => apm_t02a03_sector_aux_b x.1 x.2) := by
+  unfold apm_t02a03_sector_aux_b apm_t02a03_sector_aux_a
+  fun_prop
+
+lemma apm_t02a03_sector_aux_L1_aux_minab_continuous :
+    Continuous (fun x : ℝ × ℝ =>
+      min (apm_t02a03_sector_aux_a x.2) (apm_t02a03_sector_aux_b x.1 x.2)) :=
+  ((show Continuous apm_t02a03_sector_aux_a by
+      unfold apm_t02a03_sector_aux_a; fun_prop).comp continuous_snd).min
+    apm_t02a03_sector_aux_L1_aux_b_continuous
+
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_roundtrip_aux_coord
     (p : apm_t02a03_E3)
     (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
@@ -2737,19 +2804,61 @@ lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_theta :
     ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).1)
       {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
         (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
-  sorry
+  intro p hp
+  obtain ⟨hX, -⟩ := apm_t02a03_sector_aux_L2a_box_aux_theta_aux_positive p hp.2.1 hp.2.2
+  show ContinuousWithinAt (fun p : apm_t02a03_E3 => Real.arctan (p 1 / (6 / 5 - p 0))) _ p
+  apply ContinuousAt.continuousWithinAt
+  apply Real.continuous_arctan.continuousAt.comp
+  exact ContinuousAt.div (f := fun p : apm_t02a03_E3 => p 1) (g := fun p : apm_t02a03_E3 => 6 / 5 - p 0)
+    (by fun_prop) (by fun_prop) hX.ne'
 
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_z :
     ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).2.1)
       {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
         (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
-  sorry
+  show ContinuousOn (fun p : apm_t02a03_E3 => p 2) _
+  exact (by fun_prop : Continuous fun p : apm_t02a03_E3 => p 2).continuousOn
 
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_v :
     ContinuousOn (fun p : apm_t02a03_E3 => (apm_t02a03_sector_aux_Psi p).2.2)
       {p | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
         (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} := by
-  sorry
+  have hθc := apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi_aux_theta
+  set S := {p : apm_t02a03_E3 | |p 2| ≤ 1 / 5 ∧ p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right ∧
+        (17 / 25 : ℝ) ≤ (6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p} with hS
+  have hcos : ∀ p ∈ S, (17 / 25 : ℝ) ≤ Real.cos (apm_t02a03_sector_aux_theta p) := by
+    intro p hp
+    obtain ⟨hX, hrad⟩ := apm_t02a03_sector_aux_L2a_box_aux_theta_aux_positive p hp.2.1 hp.2.2
+    have hsr0 : 0 < apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p := by rw [hrad]; exact Real.sqrt_pos.mpr (by positivity)
+    set X := 6 / 5 - p 0 with hXd
+    set Y := p 1 with hYd
+    have hsqrt : Real.sqrt (1 + (Y / X) ^ 2) = apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p / X := by
+      rw [hrad, show (1 : ℝ) + (Y / X) ^ 2 = (X ^ 2 + Y ^ 2) / X ^ 2 by field_simp,
+        Real.sqrt_div' _ (by positivity), Real.sqrt_sq hX.le]
+    have : Real.cos (apm_t02a03_sector_aux_theta p) = X / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p := by
+      unfold apm_t02a03_sector_aux_theta; rw [Real.cos_arctan, ← hXd, ← hYd, hsqrt, one_div_div]
+    rw [this]; exact hp.2.2
+  have hg : ContinuousOn (fun p : apm_t02a03_E3 =>
+      (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1 + apm_t02a03_sector_aux_a (p 2)) /
+        (min (apm_t02a03_sector_aux_a (p 2)) (apm_t02a03_sector_aux_b (apm_t02a03_sector_aux_theta p) (p 2)) +
+          apm_t02a03_sector_aux_a (p 2))) S := by
+    apply ContinuousOn.div
+    · have : Continuous fun p : apm_t02a03_E3 => apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1 + apm_t02a03_sector_aux_a (p 2) := by
+        unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad apm_t02a03_sector_aux_a; fun_prop
+      exact this.continuousOn
+    · have hm := apm_t02a03_sector_aux_L1_aux_minab_continuous.comp_continuousOn
+        (hθc.prodMk (by fun_prop : Continuous fun p : apm_t02a03_E3 => p 2).continuousOn)
+      exact hm.add ((show Continuous apm_t02a03_sector_aux_a by
+        unfold apm_t02a03_sector_aux_a; fun_prop).comp (by fun_prop : Continuous fun p : apm_t02a03_E3 => p 2)).continuousOn
+    · intro p hp
+      have := apm_t02a03_sector_aux_L2_aux_cpa_pos (apm_t02a03_sector_aux_theta p) (p 2) hp.1
+      rw [← apm_t02a03_sector_aux_L1_aux_c_eq_min _ _ hp.1 (hcos p hp)]
+      exact this.ne'
+  refine hg.congr ?_
+  intro p hp
+  show (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1 + apm_t02a03_sector_aux_a (p 2)) /
+      (apm_t02a03_sector_aux_c (apm_t02a03_sector_aux_theta p) (p 2) + apm_t02a03_sector_aux_a (p 2)) = _
+  rw [apm_t02a03_sector_aux_L1_aux_c_eq_min _ _ hp.1 (hcos p hp)]
 
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_psi :
     ContinuousOn apm_t02a03_sector_aux_Psi
@@ -2765,7 +2874,38 @@ lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv_aux_coord
     (i : Fin 3) :
     ContinuousOn (fun q : ℝ × ℝ × ℝ => apm_t02a03_sector_aux_PsiInv q i)
       {q | apm_t02a03_sector_aux_box q} := by
-  sorry
+  have ha : Continuous apm_t02a03_sector_aux_a := by unfold apm_t02a03_sector_aux_a; fun_prop
+  have hm := apm_t02a03_sector_aux_L1_aux_minab_continuous
+  set u' : ℝ × ℝ × ℝ → ℝ := fun q => -apm_t02a03_sector_aux_a q.2.1 +
+    q.2.2 * (min (apm_t02a03_sector_aux_a q.2.1) (apm_t02a03_sector_aux_b q.1 q.2.1) +
+      apm_t02a03_sector_aux_a q.2.1) with hu'
+  have hu'c : Continuous u' := by
+    rw [hu']
+    have h1 : Continuous fun q : ℝ × ℝ × ℝ =>
+        min (apm_t02a03_sector_aux_a q.2.1) (apm_t02a03_sector_aux_b q.1 q.2.1) :=
+      hm.comp (continuous_fst.prodMk (continuous_fst.comp continuous_snd))
+    exact ((ha.comp (continuous_fst.comp continuous_snd)).neg).add
+      ((continuous_snd.comp continuous_snd).mul (h1.add (ha.comp (continuous_fst.comp continuous_snd))))
+  have hcongr : ∀ q ∈ {q : ℝ × ℝ × ℝ | apm_t02a03_sector_aux_box q},
+      -apm_t02a03_sector_aux_a q.2.1 +
+        q.2.2 * (apm_t02a03_sector_aux_c q.1 q.2.1 + apm_t02a03_sector_aux_a q.2.1) = u' q := by
+    intro q hq
+    have hz : |q.2.1| ≤ 1 / 5 := abs_le.mpr ⟨by linarith [hq.2.1.1], hq.2.1.2⟩
+    rw [hu', apm_t02a03_sector_aux_L1_aux_c_eq_min _ _ hz
+      (apm_t02a03_sector_aux_L1_aux_cos_box q hq)]
+  fin_cases i
+  · refine ContinuousOn.congr (f := fun q => 6 / 5 - (1 + u' q) * Real.cos q.1) ?_ ?_
+    · exact (continuous_const.sub ((continuous_const.add hu'c).mul
+        (Real.continuous_cos.comp continuous_fst))).continuousOn
+    · intro q hq; simp only [Fin.zero_eta, Fin.isValue]
+      rw [(apm_t02a03_sector_aux_L2_aux_PsiInv_coords q).1, hcongr q hq]
+  · refine ContinuousOn.congr (f := fun q => (1 + u' q) * Real.sin q.1) ?_ ?_
+    · exact ((continuous_const.add hu'c).mul (Real.continuous_sin.comp continuous_fst)).continuousOn
+    · intro q hq; simp only [Fin.mk_one, Fin.isValue]
+      rw [(apm_t02a03_sector_aux_L2_aux_PsiInv_coords q).2.1, hcongr q hq]
+  · refine ContinuousOn.congr (f := fun q => q.2.1) ?_ ?_
+    · exact (continuous_fst.comp continuous_snd).continuousOn
+    · intro q _; exact (apm_t02a03_sector_aux_L2_aux_PsiInv_coords q).2.2
 
 lemma apm_t02a03_sector_aux_L1_roundtrip_continuity_aux_inv :
     ContinuousOn apm_t02a03_sector_aux_PsiInv
