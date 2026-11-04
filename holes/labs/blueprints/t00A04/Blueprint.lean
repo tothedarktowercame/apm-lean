@@ -980,7 +980,39 @@ theorem t00A04_compactSupport_lift_aux_finite_convex_neighborhood
       (_ : ∀ B ∈ s, IsCompact B ∧ Convex ℝ B)
       (_ : A ⊆ interior (⋃ B ∈ s, B)),
       (⋃ B ∈ s, B) ⊆ W := by
-  sorry
+  classical
+  choose r hrpos hrW using fun a : A ↦
+    (Metric.isOpen_iff.mp hW a (hAW a.property))
+  let U : A → Set (EuclideanSpace ℝ (Fin d)) := fun a ↦ Metric.ball a (r a / 2)
+  obtain ⟨t, ht⟩ := hA.elim_finite_subcover U (fun a ↦ Metric.isOpen_ball)
+    (fun x hx ↦ Set.mem_iUnion.mpr
+      ⟨⟨x, hx⟩, by simp only [U, Metric.mem_ball, dist_self]; linarith [hrpos ⟨x, hx⟩]⟩)
+  let f : A → Set (EuclideanSpace ℝ (Fin d)) :=
+    fun a ↦ Metric.closedBall a (r a / 2)
+  let s := t.image f
+  refine ⟨s, ?_, ?_, ?_⟩
+  · intro B hB
+    rcases Finset.mem_image.mp hB with ⟨a, ha, rfl⟩
+    exact ⟨isCompact_closedBall _ _, convex_closedBall _ _⟩
+  · intro x hx
+    have hxt : x ∈ ⋃ a ∈ t, U a := ht hx
+    simp only [Set.mem_iUnion] at hxt
+    rcases hxt with ⟨a, ha, hxa⟩
+    apply mem_interior_iff_mem_nhds.mpr
+    refine Filter.mem_of_superset (Metric.isOpen_ball.mem_nhds hxa) ?_
+    intro y hy
+    apply Set.mem_iUnion.mpr
+    refine ⟨f a, ?_⟩
+    apply Set.mem_iUnion.mpr
+    refine ⟨Finset.mem_image.mpr ⟨a, ha, rfl⟩, ?_⟩
+    exact Metric.ball_subset_closedBall hy
+  · intro x hx
+    simp only [Set.mem_iUnion] at hx
+    rcases hx with ⟨B, hx⟩
+    rcases hx with ⟨hBs, hxB⟩
+    rcases Finset.mem_image.mp hBs with ⟨a, ha, rfl⟩
+    apply hrW a
+    exact Metric.closedBall_subset_ball (by linarith [hrpos a]) hxB
 
 theorem t00A04_compactSupport_lift
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d))) (hA : IsCompact A)
