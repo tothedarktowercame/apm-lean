@@ -720,9 +720,91 @@ theorem t00A04_relativeMV_injective_aux_small_quotient_kernel
   have _ := hinterB
   have _ := hunionA
   have _ := hunionB
-  have _ := hinter
   have _ := hunion
-  sorry
+  have hs := t00A04_relativeMV_middle_aux_chain_shortExact X A B
+  let S := ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.shortComplex
+    (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+      (ConstructionTargets.SingularExcision.ambientSubspaceRange B)
+  let IA := ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso
+    (ZMod 2) A n
+  let IB := ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso
+    (ZMod 2) B n
+  let II := ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.intersectionRelativeIso
+    (ZMod 2) A B n
+  let J := ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso
+    (ZMod 2) A B hA hB (n + 1)
+  have hmc : ∀ {K L M : ChainComplex (ModuleCat (ZMod 2)) ℕ} (φ : K ⟶ L) (ψ : L ⟶ M) (z : K.homology n),
+      HomologicalComplex.homologyMap ψ n (HomologicalComplex.homologyMap φ n z) =
+        HomologicalComplex.homologyMap (φ ≫ ψ) n z := by
+    intro K L M φ ψ z
+    rw [HomologicalComplex.homologyMap_comp]
+    rfl
+  let c' := II.inv c
+  have hc' : II.hom c' = c := Iso.inv_hom_id_apply II c
+  have hfst : HomologicalComplex.homologyMap (biprod.fst : S.X₂ ⟶ _) n
+      (HomologicalComplex.homologyMap S.f n c') = 0 := by
+    have h1 := ConcreteCategory.congr_hom hinter.1 c'
+    erw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply, hc', hcA] at h1
+    have h2 : HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n c' = 0 := by
+      have := congrArg IA.inv h1
+      erw [Iso.hom_inv_id_apply, map_zero] at this
+      exact this
+    erw [hmc]
+    convert h2 using 3
+    congr 1
+    exact biprod.lift_fst (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A) (ConstructionTargets.SingularExcision.ambientSubspaceRange B))
+      (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A) (ConstructionTargets.SingularExcision.ambientSubspaceRange B))
+  have hsnd : HomologicalComplex.homologyMap (biprod.snd : S.X₂ ⟶ _) n
+      (HomologicalComplex.homologyMap S.f n c') = 0 := by
+    have h1 := ConcreteCategory.congr_hom hinter.2 c'
+    erw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply, hc', hcB] at h1
+    have h2 : HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n c' = 0 := by
+      have := congrArg IB.inv h1
+      erw [Iso.hom_inv_id_apply, map_zero] at this
+      exact this
+    erw [hmc]
+    convert h2 using 3
+    congr 1
+    exact biprod.lift_snd (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A) (ConstructionTargets.SingularExcision.ambientSubspaceRange B))
+      (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A) (ConstructionTargets.SingularExcision.ambientSubspaceRange B))
+  have hf : HomologicalComplex.homologyMap S.f n c' = 0 := by
+    set w := HomologicalComplex.homologyMap S.f n c'
+    have hT : HomologicalComplex.homologyMap (𝟙 S.X₂) n =
+        HomologicalComplex.homologyMap ((biprod.fst : S.X₂ ⟶ _) ≫ biprod.inl) n +
+          HomologicalComplex.homologyMap ((biprod.snd : S.X₂ ⟶ _) ≫ biprod.inr) n := by
+      erw [← HomologicalComplex.homologyMap_add]
+      congr 1
+      exact biprod.total.symm
+    have htot := ConcreteCategory.congr_hom hT w
+    rw [HomologicalComplex.homologyMap_id] at htot
+    have htot' : w = HomologicalComplex.homologyMap ((biprod.fst : S.X₂ ⟶ _) ≫ biprod.inl) n w +
+        HomologicalComplex.homologyMap ((biprod.snd : S.X₂ ⟶ _) ≫ biprod.inr) n w := htot
+    rw [← hmc (biprod.fst : S.X₂ ⟶ _) biprod.inl w,
+      ← hmc (biprod.snd : S.X₂ ⟶ _) biprod.inr w] at htot'
+    erw [hfst, hsnd] at htot'
+    rw [map_zero, map_zero] at htot'
+    exact htot'.trans (zero_add _)
+  have hJinj : Function.Injective J.hom := by
+    intro p q h
+    have := congrArg J.inv h
+    erw [Iso.hom_inv_id_apply, Iso.hom_inv_id_apply] at this
+    exact this
+  haveI hsub : Subsingleton (S.X₃.homology (n + 1)) := by
+    constructor
+    intro p q
+    exact hJinj (Subsingleton.elim (J.hom p) (J.hom q))
+  obtain ⟨z, hz⟩ := (ShortComplex.moduleCat_exact_iff _).1 (hs.homology_exact₁ (n + 1) n rfl) c' hf
+  have hc0 : c' = 0 := by
+    rw [← hz, Subsingleton.elim z 0]
+    exact map_zero _
+  rw [← hc', hc0]
+  exact map_zero _
 
 theorem t00A04_relativeMV_injective_aux_complement_rewrite_aux_transport
     (X : Type) [TopologicalSpace X] (K L : Set X) (n : ℕ)
