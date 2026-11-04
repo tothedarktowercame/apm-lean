@@ -1564,6 +1564,31 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finit
         (ZMod 2) Aᶜ).f (n - 1)) := by
   sorry
 
+theorem t00A04_simplex_mem_range_subspace_iff {X : Type} [TopologicalSpace X] (S : Set X) (m : ℕ)
+    (τ : (TopCat.toSSet.obj (TopCat.of X)).obj (Opposite.op (SimplexCategory.mk m))) :
+    τ ∈ Set.range ((TopCat.toSSet.map (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion S)).app
+        (Opposite.op (SimplexCategory.mk m))) ↔
+      Set.range ((TopCat.toSSetObjEquiv (TopCat.of X) (Opposite.op (SimplexCategory.mk m))) τ) ⊆ S := by
+  constructor
+  · rintro ⟨σA, hA⟩ _ ⟨t, rfl⟩
+    have := congrArg
+      (fun τ ↦ (TopCat.toSSetObjEquiv (TopCat.of X) (Opposite.op (SimplexCategory.mk m))).toFun τ t) hA
+    change
+      (((TopCat.toSSetObjEquiv (TopCat.of S) (Opposite.op (SimplexCategory.mk m))).toFun σA) t).1 = _ at this
+    change _ ∈ S
+    change _ = (((TopCat.toSSetObjEquiv (TopCat.of X) _)) τ) t at this
+    rw [← this]
+    exact (((TopCat.toSSetObjEquiv (TopCat.of S) _).toFun σA) t).2
+  · intro h
+    let f := (TopCat.toSSetObjEquiv (TopCat.of X) (Opposite.op (SimplexCategory.mk m))) τ
+    have hf : ∀ t, f t ∈ S := fun t ↦ h ⟨t, rfl⟩
+    let g : C(stdSimplex ℝ (Fin (m + 1)), S) :=
+      ⟨fun t ↦ ⟨f t, hf t⟩, f.continuous.subtype_mk hf⟩
+    refine ⟨(TopCat.toSSetObjEquiv (TopCat.of S) (Opposite.op (SimplexCategory.mk m))).symm g, ?_⟩
+    apply (TopCat.toSSetObjEquiv (TopCat.of X) _).injective
+    ext t
+    rfl
+
 theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_support_aux_carrier
     (d m : ℕ) (S : Set (EuclideanSpace ℝ (Fin d)))
     (x : (ConstructionTargets.CoefficientH0.SingularChains (ZMod 2)
@@ -1574,7 +1599,42 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finit
       (∀ σ ∈ F, Set.range σ ⊆ S) ∧
       x ∈ Set.range ((ConstructionTargets.CoefficientRelativeSmall.subspaceMap
         (ZMod 2) (⋃ σ ∈ F, Set.range σ)).f m) := by
-  sorry
+  classical
+  let E := EuclideanSpace ℝ (Fin d)
+  let n : SimplexCategoryᵒᵖ := Opposite.op (SimplexCategory.mk m)
+  let e := ConstructionTargets.CoefficientSigmaConstFinsuppComparison.sigmaConstFinsuppIso
+    (ZMod 2) ((TopCat.toSSet.obj (TopCat.of E)).obj n)
+  let eqv := TopCat.toSSetObjEquiv (TopCat.of E) n
+  have hrange (A : Set E) :
+      Submodule.map e.hom.hom
+          (LinearMap.range ((ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+            (ZMod 2) A).f m).hom) =
+        Finsupp.supported (ZMod 2) (ZMod 2) {τ | Set.range (eqv τ) ⊆ A} := by
+    refine (ConstructionTargets.CoefficientSimplicialChainFinsuppRange.chainsMap_component_range_finsupp
+      (ZMod 2) (TopCat.toSSet.map
+        (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion A)) m).trans ?_
+    rw [ConstructionTargets.CoefficientFinsuppRangeLattice.range_lmapDomain_eq_supported_range]
+    congr 1
+    ext τ
+    exact t00A04_simplex_mem_range_subspace_iff A m τ
+  have hx' : e.hom x ∈ Finsupp.supported (ZMod 2) (ZMod 2) {τ | Set.range (eqv τ) ⊆ S} := by
+    rw [← hrange S]
+    obtain ⟨y, rfl⟩ := hx
+    exact ⟨_, ⟨y, rfl⟩, rfl⟩
+  refine ⟨(e.hom x).support.image eqv, ?_, ?_⟩
+  · intro σ hσ
+    obtain ⟨τ, hτ, rfl⟩ := Finset.mem_image.mp hσ
+    exact hx' hτ
+  · have hK : e.hom x ∈ Finsupp.supported (ZMod 2) (ZMod 2)
+        {τ | Set.range (eqv τ) ⊆ ⋃ σ ∈ (e.hom x).support.image eqv, Set.range σ} := by
+      intro τ hτ y hy
+      simp only [Set.mem_iUnion]
+      exact ⟨eqv τ, Finset.mem_image_of_mem _ hτ, hy⟩
+    rw [← hrange] at hK
+    obtain ⟨_, ⟨y, rfl⟩, hy⟩ := hK
+    refine ⟨y, ?_⟩
+    have h2 := congrArg (ConcreteCategory.hom e.inv) hy
+    rwa [Iso.hom_inv_id_apply, Iso.hom_inv_id_apply] at h2
 
 theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_support_aux_geometry
     (d m : ℕ) (S : Set (EuclideanSpace ℝ (Fin d)))
