@@ -2336,6 +2336,306 @@ lemma apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_interval_range
   change t.1 < z.1 at hzv
   exact (not_lt_of_ge (le_of_lt hzv)) hzu
 
+/-- A dense subset recovers every point as the supremum of its members below
+that point.  This is the cut-recovery fact used in both inverse laws of the
+Dedekind extension. -/
+lemma apm_t95j06_sSup_dense_Iic_aux
+    (L : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
+    [OrderTopology L] [DenselyOrdered L]
+    (s : Set L) (hs : Dense s) (x : L) :
+    sSup ((fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}) = x := by
+  let A : Set L := (fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}
+  apply le_antisymm
+  · apply sSup_le
+    rintro y ⟨q, hq, rfl⟩
+    exact hq
+  · by_contra h
+    have hlt : sSup A < x := lt_of_not_ge h
+    obtain ⟨q, hqs, hsupq, hqx⟩ := hs.exists_between hlt
+    have hqA : q ∈ A := ⟨⟨q, hqs⟩, hqx.le, rfl⟩
+    exact (not_lt_of_ge (le_sSup hqA)) hsupq
+
+/-- **Dedekind extension of a dense-suborder isomorphism (estimated 70--110
+lines).** Let `s` and `t` be dense subsets of complete dense linear orders,
+neither containing either endpoint.  An order isomorphism `s ≃o t` extends
+uniquely to an endpoint-preserving order isomorphism of the ambient orders.
+
+For `x`, define the extension as the supremum of the images of members of
+`s ∩ Iic x`.  Density makes this strictly monotone; completeness supplies the
+supremum; applying the symmetric infimum construction to `e.symm` proves
+surjectivity and the inverse laws.  Endpoint avoidance ensures the two extreme
+values are exactly bottom and top.  A finite or non-dense subset is a genuine
+counterexample, while allowing endpoints breaks the no-endpoint suborder used
+by Cantor back-and-forth. -/
+lemma apm_t95j06_denseOrderIso_extend_complete_aux
+    (L M : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
+    [OrderTopology L] [DenselyOrdered L] [Nontrivial L]
+    [TopologicalSpace M] [CompleteLinearOrder M]
+    [OrderTopology M] [DenselyOrdered M] [Nontrivial M]
+    (s : Set L) (t : Set M) (hs : Dense s) (ht : Dense t)
+    (hsbot : (⊥ : L) ∉ s) (hstop : (⊤ : L) ∉ s)
+    (htbot : (⊥ : M) ∉ t) (httop : (⊤ : M) ∉ t)
+    (e : s ≃o t) :
+    ∃ E : L ≃o M, E ⊥ = ⊥ ∧ E ⊤ = ⊤ := by
+  let Fset (x : L) : Set M :=
+    (fun q : s ↦ (e q).1) '' {q : s | q.1 ≤ x}
+  let Gset (y : M) : Set L :=
+    (fun q : t ↦ (e.symm q).1) '' {q : t | q.1 ≤ y}
+  let F (x : L) : M := sSup (Fset x)
+  let G (y : M) : L := sSup (Gset y)
+  have hF_lower (x : L) (q : s) (hq : q.1 ≤ x) : (e q).1 ≤ F x := by
+    exact le_sSup ⟨q, hq, rfl⟩
+  have hF_upper (x : L) (q : s) (hxq : x < q.1) : F x ≤ (e q).1 := by
+    apply sSup_le
+    rintro _ ⟨p, hp, rfl⟩
+    exact (e.le_iff_le.mpr (hp.trans hxq.le))
+  have hG_lower (y : M) (q : t) (hq : q.1 ≤ y) : (e.symm q).1 ≤ G y := by
+    exact le_sSup ⟨q, hq, rfl⟩
+  have hG_upper (y : M) (q : t) (hyq : y < q.1) : G y ≤ (e.symm q).1 := by
+    apply sSup_le
+    rintro _ ⟨p, hp, rfl⟩
+    exact (e.symm.le_iff_le.mpr (hp.trans hyq.le))
+  have hGF (x : L) : G (F x) = x := by
+    apply le_antisymm
+    · by_contra h
+      have hxG : x < G (F x) := lt_of_not_ge h
+      obtain ⟨q, hqs, hxq, hqG⟩ := hs.exists_between hxG
+      obtain ⟨z, hzG, hqz⟩ := lt_sSup_iff.mp hqG
+      obtain ⟨p, hpF, rfl⟩ := hzG
+      have heqp : (e (⟨q, hqs⟩ : s)).1 < p.1 := by
+        have hsub : (⟨q, hqs⟩ : s) < e.symm p := hqz
+        simpa using (e.lt_iff_lt.mpr hsub)
+      exact (not_lt_of_ge (hF_upper x ⟨q, hqs⟩ hxq)) (heqp.trans_le hpF)
+    · calc
+        x = sSup ((fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}) :=
+          (apm_t95j06_sSup_dense_Iic_aux L s hs x).symm
+        _ ≤ G (F x) := by
+          apply sSup_le
+          rintro _ ⟨q, hqx, rfl⟩
+          simpa using hG_lower (F x) (e q) (hF_lower x q hqx)
+  have hFG (y : M) : F (G y) = y := by
+    apply le_antisymm
+    · by_contra h
+      have hyF : y < F (G y) := lt_of_not_ge h
+      obtain ⟨q, hqt, hyq, hqF⟩ := ht.exists_between hyF
+      obtain ⟨z, hzF, hqz⟩ := lt_sSup_iff.mp hqF
+      obtain ⟨p, hpG, rfl⟩ := hzF
+      have heqp : (e.symm (⟨q, hqt⟩ : t)).1 < p.1 := by
+        have hsub : (⟨q, hqt⟩ : t) < e p := hqz
+        simpa using (e.symm.lt_iff_lt.mpr hsub)
+      exact (not_lt_of_ge (hG_upper y ⟨q, hqt⟩ hyq)) (heqp.trans_le hpG)
+    · calc
+        y = sSup ((fun q : t ↦ q.1) '' {q : t | q.1 ≤ y}) :=
+          (apm_t95j06_sSup_dense_Iic_aux M t ht y).symm
+        _ ≤ F (G y) := by
+          apply sSup_le
+          rintro _ ⟨q, hqy, rfl⟩
+          simpa using hF_lower (G y) (e.symm q) (hG_lower y q hqy)
+  have hFstrict : StrictMono F := by
+    intro x y hxy
+    obtain ⟨q, hqs, hxq, hqy⟩ := hs.exists_between hxy
+    obtain ⟨r, hrs, hxr, hrq⟩ := hs.exists_between hxq
+    have herq : (e (⟨r, hrs⟩ : s)).1 < (e (⟨q, hqs⟩ : s)).1 := by
+      apply e.lt_iff_lt.mpr
+      exact hrq
+    exact (hF_upper x ⟨r, hrs⟩ hxr).trans_lt
+      (herq.trans_le (hF_lower y ⟨q, hqs⟩ hqy.le))
+  let E : L ≃o M :=
+    { toFun := F
+      invFun := G
+      left_inv := hGF
+      right_inv := hFG
+      map_rel_iff' := hFstrict.le_iff_le }
+  exact ⟨E, E.map_bot, E.map_top⟩
+
+/-- **Compact separable linear-continuum classification (estimated 70--120
+lines).** Every nontrivial second-countable complete dense linear order with
+its order topology is endpoint-preservingly homeomorphic to the unit interval.
+
+This is true by choosing a countable dense subset, identifying it with a dense
+subset of the rationals in `(0,1)`, and extending the order isomorphism by
+Dedekind completeness.  Order isomorphisms between order-topological spaces
+are homeomorphisms. -/
+theorem apm_t95j06_completeSeparableLinearOrder_homeomorph_Icc
+    (L : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
+    [OrderTopology L] [DenselyOrdered L] [TopologicalSpace.SeparableSpace L]
+    [Nontrivial L] :
+    ∃ e : L ≃ₜ Set.Icc (0 : ℝ) 1,
+      e ⊥ = ⟨0, by norm_num⟩ ∧ e ⊤ = ⟨1, by norm_num⟩ := by
+  let I := Set.Icc (0 : ℝ) 1
+  obtain ⟨s, hsc, hsd, hsbot', hstop'⟩ :=
+    exists_countable_dense_no_bot_top L
+  obtain ⟨t, htc, htd, htbot', httop'⟩ :=
+    exists_countable_dense_no_bot_top I
+  have hsbot : (⊥ : L) ∉ s := hsbot' ⊥ isBot_bot
+  have hstop : (⊤ : L) ∉ s := hstop' ⊤ isTop_top
+  have htbot : (⊥ : I) ∉ t := htbot' ⊥ isBot_bot
+  have httop : (⊤ : I) ∉ t := httop' ⊤ isTop_top
+  letI : Countable s := hsc
+  letI : Countable t := htc
+  letI : Nonempty s := hsd.nonempty.to_subtype
+  letI : Nonempty t := htd.nonempty.to_subtype
+  letI : DenselyOrdered s :=
+    ⟨fun a b hab ↦ by
+      obtain ⟨c, hcs, hac, hcb⟩ := hsd.exists_between hab
+      exact ⟨⟨c, hcs⟩, hac, hcb⟩⟩
+  letI : DenselyOrdered t :=
+    ⟨fun a b hab ↦ by
+      obtain ⟨c, hct, hac, hcb⟩ := htd.exists_between hab
+      exact ⟨⟨c, hct⟩, hac, hcb⟩⟩
+  letI : NoMinOrder s :=
+    ⟨fun a ↦ by
+      have hba : (⊥ : L) < a.1 := bot_lt_iff_ne_bot.mpr (fun h ↦ hsbot (h ▸ a.2))
+      obtain ⟨c, hcs, _, hca⟩ := hsd.exists_between hba
+      exact ⟨⟨c, hcs⟩, hca⟩⟩
+  letI : NoMaxOrder s :=
+    ⟨fun a ↦ by
+      have hat : a.1 < (⊤ : L) := lt_top_iff_ne_top.mpr (fun h ↦ hstop (h ▸ a.2))
+      obtain ⟨c, hcs, hac, _⟩ := hsd.exists_between hat
+      exact ⟨⟨c, hcs⟩, hac⟩⟩
+  letI : NoMinOrder t :=
+    ⟨fun a ↦ by
+      have hba : (⊥ : I) < a.1 := bot_lt_iff_ne_bot.mpr (fun h ↦ htbot (h ▸ a.2))
+      obtain ⟨c, hct, _, hca⟩ := htd.exists_between hba
+      exact ⟨⟨c, hct⟩, hca⟩⟩
+  letI : NoMaxOrder t :=
+    ⟨fun a ↦ by
+      have hat : a.1 < (⊤ : I) := lt_top_iff_ne_top.mpr (fun h ↦ httop (h ▸ a.2))
+      obtain ⟨c, hct, hac, _⟩ := htd.exists_between hat
+      exact ⟨⟨c, hct⟩, hac⟩⟩
+  obtain ⟨e⟩ := Order.iso_of_countable_dense (α := s) (β := t)
+  obtain ⟨E, hEbot, hEtop⟩ :=
+    apm_t95j06_denseOrderIso_extend_complete_aux L I s t hsd htd
+      hsbot hstop htbot httop e
+  refine ⟨E.toHomeomorph, ?_, ?_⟩
+  · change E ⊥ = _
+    rw [hEbot]
+    apply Subtype.ext
+    simp [I]
+  · change E ⊤ = _
+    rw [hEtop]
+    apply Subtype.ext
+    simp [I]
+
+/-- The bottom element selected from a nonempty compact linearly ordered
+space. -/
+noncomputable def apm_t95j06_compactLinearOrderBot
+    (L : Type) [LinearOrder L] [TopologicalSpace L] [OrderTopology L]
+    [CompactSpace L] [Nonempty L] : L :=
+  Classical.choose (isCompact_univ.exists_isLeast Set.univ_nonempty)
+
+/-- Supremum obtained as the maximum of the closure of a nonempty set; the
+empty set is assigned the compact order's least element. -/
+noncomputable def apm_t95j06_compactLinearOrderSup
+    (L : Type) [LinearOrder L] [TopologicalSpace L] [OrderTopology L]
+    [CompactSpace L] [Nonempty L] (s : Set L) : L := by
+  classical
+  exact if hs : s.Nonempty then
+      Classical.choose (isClosed_closure.isCompact.exists_isGreatest hs.closure)
+    else apm_t95j06_compactLinearOrderBot L
+
+lemma apm_t95j06_compactLinearOrderSup_isLUB
+    (L : Type) [LinearOrder L] [TopologicalSpace L] [OrderTopology L]
+    [CompactSpace L] [Nonempty L] (s : Set L) :
+    IsLUB s (apm_t95j06_compactLinearOrderSup L s) := by
+  by_cases hs : s.Nonempty
+  · let hgreat := Classical.choose_spec
+      (isClosed_closure.isCompact.exists_isGreatest hs.closure)
+    rw [apm_t95j06_compactLinearOrderSup, dif_pos hs]
+    refine ⟨fun x hx ↦ hgreat.2 (subset_closure hx), ?_⟩
+    intro b hb
+    exact (closure_minimal hb isClosed_Iic) hgreat.1
+  · rw [apm_t95j06_compactLinearOrderSup, dif_neg hs]
+    refine ⟨by simpa [Set.not_nonempty_iff_eq_empty.mp hs], ?_⟩
+    intro b _
+    exact (Classical.choose_spec
+      (isCompact_univ.exists_isLeast Set.univ_nonempty)).2 (Set.mem_univ b)
+
+/-- The complete lattice on a nonempty compact linearly ordered space with its
+order topology, built on the given lattice operations. -/
+noncomputable abbrev apm_t95j06_compactCompleteLattice
+    (L : Type) [LinearOrder L] [TopologicalSpace L] [OrderTopology L]
+    [CompactSpace L] [Nonempty L] : CompleteLattice L where
+  __ := (inferInstance : Lattice L)
+  sSup := apm_t95j06_compactLinearOrderSup L
+  sInf := fun s => apm_t95j06_compactLinearOrderSup L (lowerBounds s)
+  isLUB_sSup s := apm_t95j06_compactLinearOrderSup_isLUB L s
+  isGLB_sInf s := isLUB_lowerBounds.mp
+    (apm_t95j06_compactLinearOrderSup_isLUB L (lowerBounds s))
+  top := apm_t95j06_compactLinearOrderSup L Set.univ
+  le_top a := (apm_t95j06_compactLinearOrderSup_isLUB L Set.univ).1 (Set.mem_univ a)
+  bot := apm_t95j06_compactLinearOrderSup L ∅
+  bot_le a := (apm_t95j06_compactLinearOrderSup_isLUB L ∅).2 (by simp)
+
+/-- **ord2.** A nonempty compact linearly ordered space with its order topology
+is a complete linear order, with the same order. -/
+noncomputable abbrev apm_t95j06_compactCompleteLinearOrder
+    (L : Type) [LinearOrder L] [TopologicalSpace L] [OrderTopology L]
+    [CompactSpace L] [Nonempty L] : CompleteLinearOrder L :=
+  { apm_t95j06_compactCompleteLattice L, ‹LinearOrder L›,
+    @LinearOrder.toBiheytingAlgebra L _
+      (apm_t95j06_compactCompleteLattice L).toBoundedOrder with }
+
+/-- The complete linear order of a compact order has the original `≤`. -/
+lemma apm_t95j06_compactCompleteLinearOrder_le
+    (L : Type) [LinearOrder L] [TopologicalSpace L] [OrderTopology L]
+    [CompactSpace L] [Nonempty L] (a b : L) :
+    @LE.le L (apm_t95j06_compactCompleteLinearOrder L).toLE a b ↔ a ≤ b :=
+  Iff.rfl
+
+/-- The loop-erased image is a compact space. -/
+lemma apm_t95j06_loopEraseImage_compactSpace
+    {X : Type} [TopologicalSpace X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval} (hF : IsClosed F) :
+    CompactSpace (apm_t95j06_LoopEraseImage p F) :=
+  isCompact_iff_compactSpace.mp (hF.isCompact.image hp)
+
+/-- A compact metrizable space is separable. -/
+lemma apm_t95j06_separable_of_compact_metrizable
+    (Y : Type*) [TopologicalSpace Y] [CompactSpace Y]
+    [TopologicalSpace.MetrizableSpace Y] : TopologicalSpace.SeparableSpace Y := by
+  letI := TopologicalSpace.metrizableSpaceMetric Y
+  infer_instance
+
+/-- In the first-occurrence order, the start of the path is the least point. -/
+lemma apm_t95j06_loopErase_start_le
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    (a : apm_t95j06_LoopEraseImage p F) :
+    (apm_t95j06_loopEraseLinearOrder p hp hF).le
+      ⟨p ⟨0, by norm_num⟩, ⟨_, hF.prop.2.1, rfl⟩⟩ a := by
+  have hlo := (apm_t95j06_loopEraseLo_isLeast p hp hF a).1
+  have h := apm_t95j06_loopErase_monotone p hp hF hF.prop.2.1 hlo.1
+    (show (⟨0, by norm_num⟩ : apm_t95j06_LoopEraseInterval) ≤ _ from
+      (apm_t95j06_loopEraseLo p hp hF a).2.1)
+  have hval : (⟨p (apm_t95j06_loopEraseLo p hp hF a), ⟨_, hlo.1, rfl⟩⟩ :
+      apm_t95j06_LoopEraseImage p F) = a :=
+    Subtype.ext (apm_t95j06_loopEraseLo_value p hp hF a)
+  rw [hval] at h
+  exact h
+
+/-- In the first-occurrence order, the end of the path is the greatest point. -/
+lemma apm_t95j06_loopErase_le_end
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    (a : apm_t95j06_LoopEraseImage p F) :
+    (apm_t95j06_loopEraseLinearOrder p hp hF).le a
+      ⟨p ⟨1, by norm_num⟩, ⟨_, hF.prop.2.2.1, rfl⟩⟩ := by
+  have hlo := (apm_t95j06_loopEraseLo_isLeast p hp hF a).1
+  have h := apm_t95j06_loopErase_monotone p hp hF hlo.1 hF.prop.2.2.1
+    (show _ ≤ (⟨1, by norm_num⟩ : apm_t95j06_LoopEraseInterval) from
+      (apm_t95j06_loopEraseLo p hp hF a).2.2)
+  have hval : (⟨p (apm_t95j06_loopEraseLo p hp hF a), ⟨_, hlo.1, rfl⟩⟩ :
+      apm_t95j06_LoopEraseImage p F) = a :=
+    Subtype.ext (apm_t95j06_loopEraseLo_value p hp hF a)
+  rw [hval] at h
+  exact h
+
 /-- **Arc from a path (loop erasure).**  In a metrizable Hausdorff space a
 path between distinct points contains an injective arc with the same
 endpoints.  Standard (e.g. Willard, *General Topology*, 31.5); here it is
@@ -2344,7 +2644,54 @@ parameters (`_loopEraseAdmissible_exists_minimal`), the induced order on its
 image, and the classification `completeSeparableLinearOrder_homeomorph_Icc`.
 Estimated 250--400 further lines. -/
 theorem apm_t95j06_arcFromPath : apm_t95j06_ArcFromPath := by
-  sorry
+  intro X _ _ _ x y hxy p
+  classical
+  let q : apm_t95j06_LoopEraseInterval → X := fun t => p t
+  have hq : Continuous q := p.continuous
+  obtain ⟨F, hF⟩ := apm_t95j06_loopEraseAdmissible_exists_minimal q hq
+  let A := apm_t95j06_LoopEraseImage q F
+  letI lo : LinearOrder A := apm_t95j06_loopEraseLinearOrder q hq hF
+  haveI : CompactSpace A := apm_t95j06_loopEraseImage_compactSpace q hq hF.prop.1
+  haveI hOTlo : OrderTopology A := apm_t95j06_orderTopology_of_compact_closed_le A
+    (apm_t95j06_loopErase_order_closed q hq hF)
+  haveI hDlo : DenselyOrdered A := apm_t95j06_loopErase_denselyOrdered q hq hF
+  haveI : TopologicalSpace.SeparableSpace A :=
+    apm_t95j06_separable_of_compact_metrizable A
+  let x0 : A := ⟨q ⟨0, by norm_num⟩, ⟨_, hF.prop.2.1, rfl⟩⟩
+  let y0 : A := ⟨q ⟨1, by norm_num⟩, ⟨_, hF.prop.2.2.1, rfl⟩⟩
+  have hx0 : (x0 : X) = x := p.source
+  have hy0 : (y0 : X) = y := p.target
+  haveI : Nonempty A := ⟨x0⟩
+  haveI : Nontrivial A := ⟨⟨x0, y0, fun h => hxy (by
+    rw [← hx0, ← hy0, h])⟩⟩
+  letI C : CompleteLinearOrder A := apm_t95j06_compactCompleteLinearOrder A
+  have hPre : C.toPartialOrder.toPreorder = lo.toPartialOrder.toPreorder :=
+    Preorder.ext (fun a b => apm_t95j06_compactCompleteLinearOrder_le A a b)
+  haveI hOT : @OrderTopology A _ C.toPartialOrder.toPreorder := by
+    rw [hPre]; exact hOTlo
+  haveI hD : @DenselyOrdered A C.toPartialOrder.toPreorder.toLT := by
+    rw [hPre]; exact hDlo
+  obtain ⟨e, he0, he1⟩ :=
+    apm_t95j06_completeSeparableLinearOrder_homeomorph_Icc A
+  have hbot : (⊥ : A) = x0 := by
+    symm; apply IsBot.eq_bot
+    intro a
+    exact (apm_t95j06_compactCompleteLinearOrder_le A x0 a).2 (apm_t95j06_loopErase_start_le q hq hF a)
+  have htop : (⊤ : A) = y0 := by
+    symm; apply IsTop.eq_top
+    intro a
+    exact (apm_t95j06_compactCompleteLinearOrder_le A a y0).2 (apm_t95j06_loopErase_le_end q hq hF a)
+  refine ⟨⟨fun t => ((e.symm t : A) : X),
+    continuous_subtype_val.comp e.symm.continuous⟩, ?_, ?_, ?_, ?_⟩
+  · intro s t h
+    exact e.symm.injective (Subtype.ext h)
+  · show ((e.symm ⟨0, _⟩ : A) : X) = x
+    rw [← he0, e.symm_apply_apply, hbot, hx0]
+  · show ((e.symm ⟨1, _⟩ : A) : X) = y
+    rw [← he1, e.symm_apply_apply, htop, hy0]
+  · rintro _ ⟨t, rfl⟩
+    obtain ⟨s, -, hs⟩ := (e.symm t).2
+    exact ⟨s, hs⟩
 
 /-- **Q from arc extraction.**  Given loop erasure, two arcs from `b` inside
 the chart neighbourhood meet only at `b` (helper 8); pasted, they give an arc
@@ -4173,186 +4520,6 @@ theorem apm_t95j06_twoEndpointContinuum_cutPointOrder
   exact ⟨o, hot, hdense,
     apm_t95j06_compactMetrizable_separable_order K, ha0, hc1⟩
 
-/-- A dense subset recovers every point as the supremum of its members below
-that point.  This is the cut-recovery fact used in both inverse laws of the
-Dedekind extension. -/
-lemma apm_t95j06_sSup_dense_Iic_aux
-    (L : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
-    [OrderTopology L] [DenselyOrdered L]
-    (s : Set L) (hs : Dense s) (x : L) :
-    sSup ((fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}) = x := by
-  let A : Set L := (fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}
-  apply le_antisymm
-  · apply sSup_le
-    rintro y ⟨q, hq, rfl⟩
-    exact hq
-  · by_contra h
-    have hlt : sSup A < x := lt_of_not_ge h
-    obtain ⟨q, hqs, hsupq, hqx⟩ := hs.exists_between hlt
-    have hqA : q ∈ A := ⟨⟨q, hqs⟩, hqx.le, rfl⟩
-    exact (not_lt_of_ge (le_sSup hqA)) hsupq
-
-/-- **Dedekind extension of a dense-suborder isomorphism (estimated 70--110
-lines).** Let `s` and `t` be dense subsets of complete dense linear orders,
-neither containing either endpoint.  An order isomorphism `s ≃o t` extends
-uniquely to an endpoint-preserving order isomorphism of the ambient orders.
-
-For `x`, define the extension as the supremum of the images of members of
-`s ∩ Iic x`.  Density makes this strictly monotone; completeness supplies the
-supremum; applying the symmetric infimum construction to `e.symm` proves
-surjectivity and the inverse laws.  Endpoint avoidance ensures the two extreme
-values are exactly bottom and top.  A finite or non-dense subset is a genuine
-counterexample, while allowing endpoints breaks the no-endpoint suborder used
-by Cantor back-and-forth. -/
-lemma apm_t95j06_denseOrderIso_extend_complete_aux
-    (L M : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
-    [OrderTopology L] [DenselyOrdered L] [Nontrivial L]
-    [TopologicalSpace M] [CompleteLinearOrder M]
-    [OrderTopology M] [DenselyOrdered M] [Nontrivial M]
-    (s : Set L) (t : Set M) (hs : Dense s) (ht : Dense t)
-    (hsbot : (⊥ : L) ∉ s) (hstop : (⊤ : L) ∉ s)
-    (htbot : (⊥ : M) ∉ t) (httop : (⊤ : M) ∉ t)
-    (e : s ≃o t) :
-    ∃ E : L ≃o M, E ⊥ = ⊥ ∧ E ⊤ = ⊤ := by
-  let Fset (x : L) : Set M :=
-    (fun q : s ↦ (e q).1) '' {q : s | q.1 ≤ x}
-  let Gset (y : M) : Set L :=
-    (fun q : t ↦ (e.symm q).1) '' {q : t | q.1 ≤ y}
-  let F (x : L) : M := sSup (Fset x)
-  let G (y : M) : L := sSup (Gset y)
-  have hF_lower (x : L) (q : s) (hq : q.1 ≤ x) : (e q).1 ≤ F x := by
-    exact le_sSup ⟨q, hq, rfl⟩
-  have hF_upper (x : L) (q : s) (hxq : x < q.1) : F x ≤ (e q).1 := by
-    apply sSup_le
-    rintro _ ⟨p, hp, rfl⟩
-    exact (e.le_iff_le.mpr (hp.trans hxq.le))
-  have hG_lower (y : M) (q : t) (hq : q.1 ≤ y) : (e.symm q).1 ≤ G y := by
-    exact le_sSup ⟨q, hq, rfl⟩
-  have hG_upper (y : M) (q : t) (hyq : y < q.1) : G y ≤ (e.symm q).1 := by
-    apply sSup_le
-    rintro _ ⟨p, hp, rfl⟩
-    exact (e.symm.le_iff_le.mpr (hp.trans hyq.le))
-  have hGF (x : L) : G (F x) = x := by
-    apply le_antisymm
-    · by_contra h
-      have hxG : x < G (F x) := lt_of_not_ge h
-      obtain ⟨q, hqs, hxq, hqG⟩ := hs.exists_between hxG
-      obtain ⟨z, hzG, hqz⟩ := lt_sSup_iff.mp hqG
-      obtain ⟨p, hpF, rfl⟩ := hzG
-      have heqp : (e (⟨q, hqs⟩ : s)).1 < p.1 := by
-        have hsub : (⟨q, hqs⟩ : s) < e.symm p := hqz
-        simpa using (e.lt_iff_lt.mpr hsub)
-      exact (not_lt_of_ge (hF_upper x ⟨q, hqs⟩ hxq)) (heqp.trans_le hpF)
-    · calc
-        x = sSup ((fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}) :=
-          (apm_t95j06_sSup_dense_Iic_aux L s hs x).symm
-        _ ≤ G (F x) := by
-          apply sSup_le
-          rintro _ ⟨q, hqx, rfl⟩
-          simpa using hG_lower (F x) (e q) (hF_lower x q hqx)
-  have hFG (y : M) : F (G y) = y := by
-    apply le_antisymm
-    · by_contra h
-      have hyF : y < F (G y) := lt_of_not_ge h
-      obtain ⟨q, hqt, hyq, hqF⟩ := ht.exists_between hyF
-      obtain ⟨z, hzF, hqz⟩ := lt_sSup_iff.mp hqF
-      obtain ⟨p, hpG, rfl⟩ := hzF
-      have heqp : (e.symm (⟨q, hqt⟩ : t)).1 < p.1 := by
-        have hsub : (⟨q, hqt⟩ : t) < e p := hqz
-        simpa using (e.symm.lt_iff_lt.mpr hsub)
-      exact (not_lt_of_ge (hG_upper y ⟨q, hqt⟩ hyq)) (heqp.trans_le hpG)
-    · calc
-        y = sSup ((fun q : t ↦ q.1) '' {q : t | q.1 ≤ y}) :=
-          (apm_t95j06_sSup_dense_Iic_aux M t ht y).symm
-        _ ≤ F (G y) := by
-          apply sSup_le
-          rintro _ ⟨q, hqy, rfl⟩
-          simpa using hF_lower (G y) (e.symm q) (hG_lower y q hqy)
-  have hFstrict : StrictMono F := by
-    intro x y hxy
-    obtain ⟨q, hqs, hxq, hqy⟩ := hs.exists_between hxy
-    obtain ⟨r, hrs, hxr, hrq⟩ := hs.exists_between hxq
-    have herq : (e (⟨r, hrs⟩ : s)).1 < (e (⟨q, hqs⟩ : s)).1 := by
-      apply e.lt_iff_lt.mpr
-      exact hrq
-    exact (hF_upper x ⟨r, hrs⟩ hxr).trans_lt
-      (herq.trans_le (hF_lower y ⟨q, hqs⟩ hqy.le))
-  let E : L ≃o M :=
-    { toFun := F
-      invFun := G
-      left_inv := hGF
-      right_inv := hFG
-      map_rel_iff' := hFstrict.le_iff_le }
-  exact ⟨E, E.map_bot, E.map_top⟩
-
-/-- **Compact separable linear-continuum classification (estimated 70--120
-lines).** Every nontrivial second-countable complete dense linear order with
-its order topology is endpoint-preservingly homeomorphic to the unit interval.
-
-This is true by choosing a countable dense subset, identifying it with a dense
-subset of the rationals in `(0,1)`, and extending the order isomorphism by
-Dedekind completeness.  Order isomorphisms between order-topological spaces
-are homeomorphisms. -/
-theorem apm_t95j06_completeSeparableLinearOrder_homeomorph_Icc
-    (L : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
-    [OrderTopology L] [DenselyOrdered L] [TopologicalSpace.SeparableSpace L]
-    [Nontrivial L] :
-    ∃ e : L ≃ₜ Set.Icc (0 : ℝ) 1,
-      e ⊥ = ⟨0, by norm_num⟩ ∧ e ⊤ = ⟨1, by norm_num⟩ := by
-  let I := Set.Icc (0 : ℝ) 1
-  obtain ⟨s, hsc, hsd, hsbot', hstop'⟩ :=
-    exists_countable_dense_no_bot_top L
-  obtain ⟨t, htc, htd, htbot', httop'⟩ :=
-    exists_countable_dense_no_bot_top I
-  have hsbot : (⊥ : L) ∉ s := hsbot' ⊥ isBot_bot
-  have hstop : (⊤ : L) ∉ s := hstop' ⊤ isTop_top
-  have htbot : (⊥ : I) ∉ t := htbot' ⊥ isBot_bot
-  have httop : (⊤ : I) ∉ t := httop' ⊤ isTop_top
-  letI : Countable s := hsc
-  letI : Countable t := htc
-  letI : Nonempty s := hsd.nonempty.to_subtype
-  letI : Nonempty t := htd.nonempty.to_subtype
-  letI : DenselyOrdered s :=
-    ⟨fun a b hab ↦ by
-      obtain ⟨c, hcs, hac, hcb⟩ := hsd.exists_between hab
-      exact ⟨⟨c, hcs⟩, hac, hcb⟩⟩
-  letI : DenselyOrdered t :=
-    ⟨fun a b hab ↦ by
-      obtain ⟨c, hct, hac, hcb⟩ := htd.exists_between hab
-      exact ⟨⟨c, hct⟩, hac, hcb⟩⟩
-  letI : NoMinOrder s :=
-    ⟨fun a ↦ by
-      have hba : (⊥ : L) < a.1 := bot_lt_iff_ne_bot.mpr (fun h ↦ hsbot (h ▸ a.2))
-      obtain ⟨c, hcs, _, hca⟩ := hsd.exists_between hba
-      exact ⟨⟨c, hcs⟩, hca⟩⟩
-  letI : NoMaxOrder s :=
-    ⟨fun a ↦ by
-      have hat : a.1 < (⊤ : L) := lt_top_iff_ne_top.mpr (fun h ↦ hstop (h ▸ a.2))
-      obtain ⟨c, hcs, hac, _⟩ := hsd.exists_between hat
-      exact ⟨⟨c, hcs⟩, hac⟩⟩
-  letI : NoMinOrder t :=
-    ⟨fun a ↦ by
-      have hba : (⊥ : I) < a.1 := bot_lt_iff_ne_bot.mpr (fun h ↦ htbot (h ▸ a.2))
-      obtain ⟨c, hct, _, hca⟩ := htd.exists_between hba
-      exact ⟨⟨c, hct⟩, hca⟩⟩
-  letI : NoMaxOrder t :=
-    ⟨fun a ↦ by
-      have hat : a.1 < (⊤ : I) := lt_top_iff_ne_top.mpr (fun h ↦ httop (h ▸ a.2))
-      obtain ⟨c, hct, hac, _⟩ := htd.exists_between hat
-      exact ⟨⟨c, hct⟩, hac⟩⟩
-  obtain ⟨e⟩ := Order.iso_of_countable_dense (α := s) (β := t)
-  obtain ⟨E, hEbot, hEtop⟩ :=
-    apm_t95j06_denseOrderIso_extend_complete_aux L I s t hsd htd
-      hsbot hstop htbot httop e
-  refine ⟨E.toHomeomorph, ?_, ?_⟩
-  · change E ⊥ = _
-    rw [hEbot]
-    apply Subtype.ext
-    simp [I]
-  · change E ⊤ = _
-    rw [hEtop]
-    apply Subtype.ext
-    simp [I]
 
 theorem apm_t95j06_twoEndpointContinuum_homeomorph_Icc
     (K : Type*) [TopologicalSpace K]
