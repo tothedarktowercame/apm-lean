@@ -4402,6 +4402,23 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_end
   rw [heq]
   exact (ψ.symm s).property
 
+/-- A finite endpoint missing from the first-coordinate overlap cannot have a
+finite transition-coordinate limit along any nontrivial net in the overlap.
+This is the Hausdorff end-divergence assertion used in Step 1; monotonicity
+then converts failure of every finite limit into unboundedness. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_no_finite_end_limit
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (U V : Set X) (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ)
+    {ι : Type} {l : Filter ι} [l.NeBot]
+    (x : ι → U) (y : ι → V)
+    (hxy : ∀ᶠ i in l, (x i : X) = (y i : X))
+    (β : ℝ) (hβ : β ∉ φ '' (Subtype.val ⁻¹' V))
+    (hφ : Filter.Tendsto (fun i => φ (x i)) l (nhds β)) :
+    ∀ s : ℝ, ¬ Filter.Tendsto (fun i => ψ (y i)) l (nhds s) := by
+  intro s hψ
+  exact hβ (apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_end
+    X U V φ ψ x y hxy β s hφ hψ)
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
