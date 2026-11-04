@@ -6124,6 +6124,54 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_open_interval_sh
   · exact (hSproper h).elim
   · exact (hSne.ne_empty h).elim
 
+/-- The finite endpoints of a bounded connected component of an open subset
+of `ℝ` do not belong to the ambient open set.  Otherwise a small closed
+interval inside the open set joins the endpoint to an interior point of the
+component, contradicting the component's description as `Ioo p q`. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_component_endpoints
+    (A : Set ℝ) (hAopen : IsOpen A) (t p q : ℝ) (htA : t ∈ A)
+    (hcomp : connectedComponentIn A t = Set.Ioo p q) :
+    p ∉ A ∧ q ∉ A := by
+  have hpq : p < q := by
+    have htcomp : t ∈ connectedComponentIn A t := mem_connectedComponentIn htA
+    rw [hcomp] at htcomp
+    exact htcomp.1.trans htcomp.2
+  constructor
+  · intro hpA
+    obtain ⟨l, u, ⟨hlp, hpu⟩, hluA⟩ :=
+      mem_nhds_iff_exists_Ioo_subset.mp (hAopen.mem_nhds hpA)
+    let r := (p + min u q) / 2
+    have hpr : p < r := by dsimp [r]; linarith [lt_min hpu hpq]
+    have hru : r < u := by dsimp [r]; linarith [min_le_left u q, lt_min hpu hpq]
+    have hrq : r < q := by dsimp [r]; linarith [min_le_right u q, lt_min hpu hpq]
+    have hI : Set.Icc p r ⊆ A := by
+      intro z hz
+      exact hluA ⟨hlp.trans_le hz.1, hz.2.trans_lt hru⟩
+    have hrcomp : r ∈ connectedComponentIn A t := hcomp.symm ▸ ⟨hpr, hrq⟩
+    have heq : connectedComponentIn A r = connectedComponentIn A t :=
+      (connectedComponentIn_eq hrcomp).symm
+    have hsub : Set.Icc p r ⊆ connectedComponentIn A r :=
+      isPreconnected_Icc.subset_connectedComponentIn (Set.right_mem_Icc.mpr hpr.le) hI
+    have hpcomp : p ∈ connectedComponentIn A t := heq ▸ hsub (Set.left_mem_Icc.mpr hpr.le)
+    exact (hcomp ▸ hpcomp).1.false
+  · intro hqA
+    obtain ⟨l, u, ⟨hlq, hqu⟩, hluA⟩ :=
+      mem_nhds_iff_exists_Ioo_subset.mp (hAopen.mem_nhds hqA)
+    let r := (max l p + q) / 2
+    have hpr : p < r := by dsimp [r]; linarith [le_max_right l p, max_lt hlq hpq]
+    have hrq : r < q := by dsimp [r]; linarith [max_lt hlq hpq]
+    have hlr : l < r := by dsimp [r]; linarith [le_max_left l p, max_lt hlq hpq]
+    have hI : Set.Icc r q ⊆ A := by
+      intro z hz
+      exact hluA ⟨hlr.trans_le hz.1, hz.2.trans_lt hqu⟩
+    have hrcomp : r ∈ connectedComponentIn A t := hcomp.symm ▸ ⟨hpr, hrq⟩
+    have heq : connectedComponentIn A r = connectedComponentIn A t :=
+      (connectedComponentIn_eq hrcomp).symm
+    have hsub : Set.Icc r q ⊆ connectedComponentIn A r :=
+      isPreconnected_Icc.subset_connectedComponentIn (Set.left_mem_Icc.mpr hrq.le) hI
+    have hqcomp : q ∈ connectedComponentIn A t := heq ▸ hsub (Set.right_mem_Icc.mpr hrq.le)
+    exact (hcomp ▸ hqcomp).2.false
+
 /-- E1: one-sided limits of a strictly monotone function on a bounded open
 interval.  For an increasing function the right limit is the supremum and
 the left limit is the infimum of the image; for a decreasing function these
