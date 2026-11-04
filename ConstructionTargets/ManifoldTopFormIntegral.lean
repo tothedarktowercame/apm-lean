@@ -83,6 +83,45 @@ def coefficient (w : Form (n := n) (M := M))
     (e : OpenPartialHomeomorph M (E n)) (y : E n) : ℝ :=
   ManifoldFormTargets.inChart w e y (fun i ↦ EuclideanSpace.basisFun (Fin n) ℝ i)
 
+theorem coefficient_add (w v : Form (n := n) (M := M))
+    (e : OpenPartialHomeomorph M (E n)) (y : E n) :
+    coefficient (w + v) e y = coefficient w e y + coefficient v e y := by
+  simp [coefficient, ManifoldFormTargets.inChart]
+
+theorem coefficient_smul (a : ℝ) (w : Form (n := n) (M := M))
+    (e : OpenPartialHomeomorph M (E n)) (y : E n) :
+    coefficient (a • w) e y = a * coefficient w e y := by
+  simp [coefficient, ManifoldFormTargets.inChart]
+
+theorem coefficient_neg (w : Form (n := n) (M := M))
+    (e : OpenPartialHomeomorph M (E n)) (y : E n) :
+    coefficient (-w) e y = -coefficient w e y := by
+  simp [coefficient, ManifoldFormTargets.inChart]
+
+theorem orientation_coefficient_ne_zero (o : Orientation (n := n) M) (x : M)
+    {y : E n} (hy : y ∈ (chartAt (E n) x).target) :
+    coefficient o.form (chartAt (E n) x) y ≠ 0 := by
+  let e := chartAt (E n) x
+  let L := mfderiv 𝓘(ℝ, E n) 𝓘(ℝ, E n) e.symm y
+  have hL : Function.Surjective L :=
+    (mdifferentiable_chart x).symm.mfderiv_surjective hy
+  have hform : o.form (e.symm y) ≠ 0 := o.nowhere_zero _
+  intro hcoeff
+  have hcomp : ManifoldFormTargets.inChart o.form e y = 0 := by
+    apply ContinuousAlternatingMap.toAlternatingMap_injective
+    apply (AlternatingMap.map_basis_eq_zero_iff
+      (EuclideanSpace.basisFun (Fin n) ℝ).toBasis _).mp
+    exact hcoeff
+  apply hform
+  ext v
+  choose u hu using fun i ↦ hL (v i)
+  have huv : (fun i ↦ L (u i)) = v := funext hu
+  have hz := DFunLike.congr_fun hcomp u
+  change o.form (e.symm y) (L ∘ u) = 0 at hz
+  change o.form (e.symm y) v = 0
+  rw [← huv]
+  exact hz
+
 /-- The orientation sign at a coordinate point.  A nowhere-zero top form has a
 nonzero coefficient in a genuine manifold chart, so the two branches are the
 two possible local orientations. -/
@@ -127,21 +166,75 @@ theorem integral_reverse [CompactSpace M] (o : Orientation (n := n) M)
     (w : Form (n := n) (M := M)) (hw : IntegrableTopForm o w)
     (hrw : IntegrableTopForm (-o) w) :
     integral (-o) w = -integral o w := by
-  sorry
+  classical
+  rw [integral, if_pos hrw, integral, if_pos hw]
+  simp only [coverIntegral]
+  rw [← Finset.sum_neg_distrib]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [← MeasureTheory.integral_neg]
+  congr 1
+  funext y
+  simp only [chartIntegrand, indicator_apply]
+  split_ifs with hy
+  · rcases hy with ⟨z, hz, rfl⟩
+    have hzsource : z ∈ (chartAt (E n) (chosenCover.center i)).source :=
+      (disjointed_subset chosenCover.domain i hz)
+    have hne := orientation_coefficient_ne_zero o (chosenCover.center i)
+      ((chartAt (E n) (chosenCover.center i)).map_source hzsource)
+    have hsign : chartSign (-o) (chartAt (E n) (chosenCover.center i))
+        ((chartAt (E n) (chosenCover.center i)) z) =
+        -chartSign o (chartAt (E n) (chosenCover.center i))
+          ((chartAt (E n) (chosenCover.center i)) z) := by
+      rw [chartSign, chartSign]
+      change (if 0 < -coefficient o.form (chartAt (E n) (chosenCover.center i))
+        ((chartAt (E n) (chosenCover.center i)) z) then 1 else -1) = _
+      by_cases hp : 0 < coefficient o.form (chartAt (E n) (chosenCover.center i))
+          ((chartAt (E n) (chosenCover.center i)) z)
+      · have hnotneg : ¬ coefficient o.form (chartAt (E n) (chosenCover.center i))
+            ((chartAt (E n) (chosenCover.center i)) z) < 0 :=
+            not_lt_of_ge (le_of_lt hp)
+        simp [hp, hnotneg]
+      · have hn : coefficient o.form (chartAt (E n) (chosenCover.center i))
+            ((chartAt (E n) (chosenCover.center i)) z) < 0 := lt_of_le_of_ne
+              (le_of_not_gt hp) hne
+        simp [hp, hn]
+    rw [hsign]
+    ring
+  · simp
 
 /-- Additivity on integrable top forms. -/
 theorem integral_add [CompactSpace M] (o : Orientation (n := n) M)
     (w v : Form (n := n) (M := M)) (hw : IntegrableTopForm o w)
     (hv : IntegrableTopForm o v) (ha : IntegrableTopForm o (w + v)) :
     integral o (w + v) = integral o w + integral o v := by
-  sorry
+  classical
+  rw [integral, if_pos ha, integral, if_pos hw, integral, if_pos hv]
+  simp only [coverIntegral]
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [← MeasureTheory.integral_add (hw i) (hv i)]
+  congr 1
+  funext y
+  simp only [chartIntegrand, coefficient_add, indicator_apply]
+  split_ifs <;> ring
 
 /-- Homogeneity on integrable top forms. -/
 theorem integral_smul [CompactSpace M] (o : Orientation (n := n) M)
     (a : ℝ) (w : Form (n := n) (M := M)) (hw : IntegrableTopForm o w)
     (ha : IntegrableTopForm o (a • w)) :
     integral o (a • w) = a * integral o w := by
-  sorry
+  classical
+  rw [integral, if_pos ha, integral, if_pos hw]
+  simp only [coverIntegral, Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [← MeasureTheory.integral_const_mul]
+  congr 1
+  funext y
+  simp only [chartIntegrand, coefficient_smul, indicator_apply]
+  split_ifs <;> ring
 
 instance : Fact (Module.finrank ℝ (E 2) = 1 + 1) := ⟨by simp⟩
 
