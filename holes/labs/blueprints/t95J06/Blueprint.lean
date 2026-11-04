@@ -3135,7 +3135,7 @@ lemma apm_t95j06_cutSide_adjoin_puncture
     have hSuniv : S = Set.univ := (show IsClopen S from ⟨hSclosed, hSopen⟩).eq_univ hSne
     exact hpnotP (by have := hSuniv.symm ▸ Set.mem_univ p; exact this.2)
 
-/-- **One-sided boundary bumping (estimated 250--450 lines; LIBRARY).**  Each
+/- **One-sided boundary bumping (estimated 250--450 lines; LIBRARY).**  Each
 nonempty side of a separation of a punctured compact Hausdorff continuum
 contains a point whose removal does not disconnect the ambient continuum.
 
@@ -3147,6 +3147,75 @@ intersection by compactness.  A point in that intersection either is already
 non-cut, or its avoiding side strictly extends the chain, contradicting
 maximality.  Compactness is essential; an open interval side can have an
 escaping nested family. -/
+/-- A chosen separation of a cut-point complement, labelled so that `p` lies
+on the coside. -/
+structure apm_t95j06_CutSideData
+    (X : Type*) [TopologicalSpace X] (r p : X) where
+  side : Set X
+  coside : Set X
+  side_open : IsOpen side
+  coside_open : IsOpen coside
+  side_nonempty : side.Nonempty
+  p_mem_coside : p ∈ coside
+  disjoint : Disjoint side coside
+  cover : side ∪ coside = ({r}ᶜ : Set X)
+
+/-- A cut point and a distinct reference point admit an endpoint-labelled
+open separation. -/
+lemma apm_t95j06_CutSideData.exists
+    (X : Type*) [TopologicalSpace X] [T1Space X] (r p : X)
+    (hcut : ¬ IsPreconnected ({r}ᶜ : Set X)) (hpr : p ≠ r) :
+    Nonempty (apm_t95j06_CutSideData X r p) := by
+  classical
+  rw [isPreconnected_iff_subset_of_disjoint] at hcut
+  push_neg at hcut
+  obtain ⟨u, v, hu, hv, hcover, hinter, hnu, hnv⟩ := hcut
+  let P : Set X := ({r}ᶜ : Set X)
+  let U : Set X := P ∩ u
+  let V : Set X := P ∩ v
+  have hPo : IsOpen P := isClosed_singleton.isOpen_compl
+  have hUo : IsOpen U := hPo.inter hu
+  have hVo : IsOpen V := hPo.inter hv
+  have hUV : Disjoint U V := by
+    rw [Set.disjoint_left]
+    intro x hxU hxV
+    have he : x ∈ (∅ : Set X) := hinter ▸ ⟨hxU.1, hxU.2, hxV.2⟩
+    exact he.elim
+  have hUVcover : U ∪ V = P := by
+    apply Set.Subset.antisymm
+    · exact Set.union_subset Set.inter_subset_left Set.inter_subset_left
+    · intro x hxP
+      rcases hcover hxP with hxu | hxv
+      · exact Or.inl ⟨hxP, hxu⟩
+      · exact Or.inr ⟨hxP, hxv⟩
+  have hUne : U.Nonempty := by
+    obtain ⟨x, hxP, hxnotv⟩ := Set.not_subset.mp hnv
+    rcases hcover hxP with hxu | hxv
+    · exact ⟨x, hxP, hxu⟩
+    · exact False.elim (hxnotv hxv)
+  have hVne : V.Nonempty := by
+    obtain ⟨x, hxP, hxnotu⟩ := Set.not_subset.mp hnu
+    rcases hcover hxP with hxu | hxv
+    · exact False.elim (hxnotu hxu)
+    · exact ⟨x, hxP, hxv⟩
+  have hpP : p ∈ P := by simpa [P]
+  rcases hUVcover.symm.subset hpP with hpU | hpV
+  · exact ⟨{
+      side := V, coside := U, side_open := hVo, coside_open := hUo,
+      side_nonempty := hVne, p_mem_coside := hpU,
+      disjoint := hUV.symm, cover := by simpa [P, Set.union_comm] using hUVcover }⟩
+  · exact ⟨{
+      side := U, coside := V, side_open := hUo, coside_open := hVo,
+      side_nonempty := hUne, p_mem_coside := hpV,
+      disjoint := hUV, cover := by simpa [P] using hUVcover }⟩
+
+/-- The canonical labelled cut-side data. -/
+noncomputable def apm_t95j06_cutSideData
+    (X : Type*) [TopologicalSpace X] [T1Space X] (r p : X)
+    (hcut : ¬ IsPreconnected ({r}ᶜ : Set X)) (hpr : p ≠ r) :
+    apm_t95j06_CutSideData X r p :=
+  Classical.choice (apm_t95j06_CutSideData.exists X r p hcut hpr)
+
 theorem apm_t95j06_cutSide_contains_nonCutPoint
     (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
     (hX : IsConnected (Set.univ : Set X)) (q : X) (A B : Set X)
