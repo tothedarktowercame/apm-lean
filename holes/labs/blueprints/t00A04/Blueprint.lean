@@ -3,12 +3,15 @@ import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.CoefficientRadialPair
 import ConstructionTargets.CoefficientPairNaturality
 import ConstructionTargets.CoefficientCompactComplementTransportedExactness
+import ConstructionTargets.CoefficientSubcomplexRelativeHomologySequence
+import ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso
 import ConstructionTargets.CoefficientModelLocal
 import ConstructionTargets.CoefficientManifoldLocalComparison
 import ConstructionTargets.CollaredConnectedSumHomology
 
 open scoped ContDiff Manifold
 open CategoryTheory
+open CategoryTheory.Limits
 
 universe u
 
@@ -185,6 +188,60 @@ classes on `K` and on `L` that agree on `K ∩ L` come from one class on
 `K ∪ L`.  (The chain-level sequence with `C((K ∩ L)ᶜ)` in place of
 `C(Kᶜ) + C(Lᶜ)` is not exact in the middle; the small-chains comparison is
 what makes this true.) -/
+noncomputable def t00A04_relativeMV_middle_aux_sumQuotient
+    (X : Type) [TopologicalSpace X] (A B : Set X) :=
+  cokernel
+    (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.unionAmbient
+      (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange B))
+
+theorem t00A04_relativeMV_middle_aux_chain_shortExact
+    (X : Type) [TopologicalSpace X] (A B : Set X) :
+    (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.shortComplex
+      (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange B)).ShortExact := by
+  exact ConstructionTargets.CoefficientSubcomplexRelativeDegreewiseExact.shortComplex_shortExact
+    (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+      (ConstructionTargets.SingularExcision.ambientSubspaceRange B)
+
+theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal
+    (X : Type) [TopologicalSpace X] (A B : Set X)
+    (hA : IsOpen A) (hB : IsOpen B) (n : ℕ)
+    (a : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) A).homology n)
+    (b : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) B).homology n)
+    (hab : HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) A (A ∪ B)
+            (ContinuousMap.id X) Set.subset_union_left) n a =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) B (A ∪ B)
+            (ContinuousMap.id X) Set.subset_union_right) n b) :
+    ∃ c : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) (A ∩ B)).homology n,
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) A
+            (ContinuousMap.id X) Set.inter_subset_left) n c = a ∧
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) B
+          (ContinuousMap.id X) Set.inter_subset_right) n c = b := by
+  let Q := t00A04_relativeMV_middle_aux_sumQuotient X A B
+  have hs := t00A04_relativeMV_middle_aux_chain_shortExact X A B
+  have _ : Q = Q := rfl
+  have _ := hs
+  sorry
+
+theorem t00A04_relativeMV_middle_aux_complement_rewrite
+    (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
+    (hK : IsCompact K) (hL : IsCompact L) (n : ℕ)
+    (a : t00A04_ModTwoLocalHomology X K n) (b : t00A04_ModTwoLocalHomology X L n)
+    (hab : t00A04_modTwo_restrict X (K ∩ L) K Set.inter_subset_left n a =
+      t00A04_modTwo_restrict X (K ∩ L) L Set.inter_subset_right n b) :
+    ∃ c : t00A04_ModTwoLocalHomology X (K ∪ L) n,
+      t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = a ∧
+      t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = b := by
+  have _ := t00A04_relativeMV_middle_aux_small_quotient_exact_literal X Kᶜ Lᶜ
+    hK.isClosed.isOpen_compl hL.isClosed.isOpen_compl n a b
+  sorry
+
 theorem t00A04_relativeMV_middle
     (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
     (hK : IsCompact K) (hL : IsCompact L) (n : ℕ)
@@ -194,11 +251,38 @@ theorem t00A04_relativeMV_middle
     ∃ c : t00A04_ModTwoLocalHomology X (K ∪ L) n,
       t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = a ∧
       t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = b := by
-  sorry
+  exact t00A04_relativeMV_middle_aux_complement_rewrite X K L hK hL n a b hab
 
 /-- **Relative Mayer--Vietoris, left term.**  If `H_{n+1}(X, X \ (K ∩ L))`
 vanishes, a class on `K ∪ L` that restricts to zero on `K` and on `L` is zero
 (it would come from the connecting map). -/
+theorem t00A04_relativeMV_injective_aux_small_quotient_kernel
+    (X : Type) [TopologicalSpace X] (A B : Set X)
+    (hA : IsOpen A) (hB : IsOpen B) (n : ℕ)
+    (hzero : Subsingleton
+      ((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) (A ∪ B)).homology (n + 1)))
+    (c : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) (A ∩ B)).homology n)
+    (hcA : HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) A
+        (ContinuousMap.id X) Set.inter_subset_left) n c = 0)
+    (hcB : HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) B
+        (ContinuousMap.id X) Set.inter_subset_right) n c = 0) : c = 0 := by
+  sorry
+
+theorem t00A04_relativeMV_injective_aux_complement_rewrite
+    (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
+    (hK : IsCompact K) (hL : IsCompact L) (n : ℕ)
+    (hzero : Subsingleton (t00A04_ModTwoLocalHomology X (K ∩ L) (n + 1)))
+    (c : t00A04_ModTwoLocalHomology X (K ∪ L) n)
+    (hcK : t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = 0)
+    (hcL : t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = 0) : c = 0 := by
+  have _ := t00A04_relativeMV_injective_aux_small_quotient_kernel X Kᶜ Lᶜ
+    hK.isClosed.isOpen_compl hL.isClosed.isOpen_compl n
+  sorry
+
 theorem t00A04_relativeMV_injective
     (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
     (hK : IsCompact K) (hL : IsCompact L) (n : ℕ)
@@ -207,7 +291,7 @@ theorem t00A04_relativeMV_injective
     (hcK : t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = 0)
     (hcL : t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = 0) :
     c = 0 := by
-  sorry
+  exact t00A04_relativeMV_injective_aux_complement_rewrite X K L hK hL n hzero c hcK hcL
 
 /-- **LIBRARY F2.** The relative compact-complement Mayer--Vietoris union
 step in Hatcher 3.27.  Its three inputs are explicit so seats are independent. -/
