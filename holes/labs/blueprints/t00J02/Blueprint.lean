@@ -88,39 +88,13 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
     ConstructionTargets.T00J02Closure.exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection
       MeasureTheory.Measure.addHaar f c hf hcsmooth htrans
 
-/-- At any locally injective selected circle fiber, disk-bounded preimage
-components give zero component sums and the surface local-fundamental-class
-formula gives the global signed top-degree sum.  Use
-`occupiedRegularFiber_exactZeroDegreeLifts`,
-`transverseDiskBounded_canonicalComponentSums_eq_zero`, and the canonical
-local-degree/localization results in `ConstructionTargets.t00J02Closure`.
-The essential-circle hypothesis supplies injectivity on `H₁` via
-`IntegerCyclic.mono_of_ne_zero_of_iso`; the genus-two coordinates supply the
-torsion-free `H₁` model and the `H₂ ≅ ℤ` coordinate.  Estimated proof:
-900--2000 lines; **LIBRARY**. -/
-theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_calculations
-    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
-    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
-    [IsManifold apm_t00j02_I2 ∞ S]
-    (f : C(S, S)) (hf : ContMDiff apm_t00j02_I2 apm_t00j02_I2 ∞ f)
-    (c : C(Circle, S))
-    (hc : Topology.IsEmbedding c)
-    (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
-    (eS : apm_t00j02_H 1 S ≅ ModuleCat.of ℤ (Fin 4 → ℤ))
-    (hhandle : apm_t00j02_wrapsHandle c)
-    (htrans : apm_t00j02_transverse f c)
-    (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c))
-    (y : S) (hy : y ∈ range c)
-    (hlocal : ConstructionTargets.T00J02Closure.LocallyInjectiveAlongFiber f y)
-    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) :
-    letI := ConstructionTargets.T00J02Closure.regularFiberFintype_of_locallyInjectiveAlongFiber
-      f y hlocal
-    Nonempty
-      (ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations
-        (f := f) (c := c) hy e) := by
-  sorry
-
-/-- **LIBRARY boundary.** A transverse inverse image of an essential embedded
+/-- **LIBRARY boundary.** (claude-14, 2026-11-04: split1's `aux_calculations` was removed. It fed
+`CanonicalRegularFiberDegreeCalculations`, whose `regularFiberLocalDegree` is the chart
+orientation coefficient of the fundamental class at `x` and does not depend on `f`. With an
+oriented atlas, a fold f(u,v) = (u, u²+v²−r) gives a disk-bounded component with two fibre
+points, so the component sum is 2, not 0. The leaf is false. A re-split must use the local
+degree of `f` at `x`, i.e. the coefficient of `f_*` on local homology H₂(S, S∖x) → H₂(S, S∖y).
+`aux_regularFiber` above is true and proved, and can be used.) A transverse inverse image of an essential embedded
 circle whose components bound embedded disks forces a smooth self-map of a
 closed connected surface to vanish on integral top homology. -/
 theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero
@@ -136,15 +110,7 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero
     (htrans : apm_t00j02_transverse f c)
     (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c)) :
     apm_t00j02_homologyMap 2 f = 0 := by
-  rcases hS with ⟨_, ⟨eS⟩, ⟨e⟩, _⟩
-  apply ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_locallyInjective_calculations
-    f c e
-  · exact t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
-      f hf c hc hcsmooth htrans
-  · intro y hy hlocal
-    exact Classical.choice
-      (t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_calculations
-        f hf c hc hcsmooth eS hhandle htrans hdisks y hy hlocal e)
+  sorry
 
 /-- The elementary final adapter from vanishing top homology to vanishing of
 the integer specified by `apm_t00j02_hasDegree`. -/
