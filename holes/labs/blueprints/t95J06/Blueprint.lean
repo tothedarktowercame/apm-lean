@@ -1206,7 +1206,19 @@ theorem apm_t95j06_locallyRealLine_compact_cover
     (X : Type) [TopologicalSpace X] [T2Space X] [SecondCountableTopology X]
     (hloc : apm_t95j06_IsLocallyRealLine X) :
     ∃ K : ℕ → Set X, (∀ n, IsCompact (K n)) ∧ (⋃ n, K n) = Set.univ := by
-  sorry
+  letI : WeaklyLocallyCompactSpace X :=
+    { exists_compact_mem_nhds := by
+        intro x
+        obtain ⟨U, hU, hxU, V, hV, ⟨e⟩⟩ := hloc x
+        letI : LocallyCompactSpace V := hV.locallyCompactSpace
+        letI : LocallyCompactSpace U :=
+          e.locallyCompactSpace_iff.mpr inferInstance
+        obtain ⟨C, hCc, hC⟩ := exists_compact_mem_nhds (⟨x, hxU⟩ : U)
+        refine ⟨Subtype.val '' C, hCc.image continuous_subtype_val, ?_⟩
+        exact hU.isOpenMap_subtype_val.image_mem_nhds hC }
+  letI : LocallyCompactSpace X := inferInstance
+  letI : SigmaCompactSpace X := inferInstance
+  exact SigmaCompactSpace.exists_compact_covering
 
 /-- **LIBRARY, compact-set chart thickening (estimated 180--260 lines).**
 In a connected noncompact Hausdorff second-countable one-manifold, every
@@ -1242,7 +1254,39 @@ theorem apm_t95j06_nested_interval_exhaustion
     ∃ U : ℕ → Set X, (∀ n, IsOpen (U n)) ∧
       (∀ n, closure (U n) ⊆ U (n + 1)) ∧
       (∀ n, Nonempty (U n ≃ₜ ℝ)) ∧ (⋃ n, U n) = Set.univ := by
-  sorry
+  classical
+  let Good (n : ℕ) (U : Set X) : Prop :=
+    IsOpen U ∧ K n ⊆ U ∧ IsCompact (closure U) ∧ Nonempty (U ≃ₜ ℝ)
+  obtain ⟨U0, hU0o, hK0U0, hU0c, hU0r⟩ := hthicken (K 0) (hK 0)
+  have init : {U : Set X // Good 0 U} :=
+    ⟨U0, hU0o, hK0U0, hU0c, hU0r⟩
+  let next : ∀ n : ℕ, {U : Set X // Good n U} →
+      {V : Set X // Good (n + 1) V} := fun n prev ↦ by
+    let C := closure (prev : Set X) ∪ K (n + 1)
+    have hC : IsCompact C := prev.property.2.2.1.union (hK (n + 1))
+    let V := (hthicken C hC).choose
+    have hV := (hthicken C hC).choose_spec
+    exact ⟨V, hV.1, (Set.subset_union_right.trans hV.2.1), hV.2.2.1, hV.2.2.2⟩
+  have next_nests : ∀ n (prev : {U : Set X // Good n U}),
+      closure (prev : Set X) ⊆ (next n prev : Set X) := by
+    intro n prev
+    dsimp only [next]
+    exact Set.subset_union_left.trans
+      (hthicken (closure (prev : Set X) ∪ K (n + 1))
+        (prev.property.2.2.1.union (hK (n + 1)))).choose_spec.2.1
+  let data : ∀ n : ℕ, {U : Set X // Good n U} := fun n ↦
+    Nat.rec init (fun n prev ↦ next n prev) n
+  let U : ℕ → Set X := fun n ↦ (data n).val
+  refine ⟨U, ?_, ?_, ?_, ?_⟩
+  · intro n
+    exact (data n).property.1
+  · intro n
+    simpa [U, data] using next_nests n (data n)
+  · intro n
+    exact (data n).property.2.2.2
+  · apply Set.Subset.antisymm (Set.subset_univ _)
+    rw [← hcover]
+    exact Set.iUnion_mono fun n ↦ (data n).property.2.1
 
 /-- **LIBRARY, coherent interval union (estimated 180--260 lines).**  A
 Hausdorff space exhausted by open copies of `ℝ`, each one's closure lying in
