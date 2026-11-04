@@ -638,6 +638,46 @@ theorem apm_t95j06_compact_connected_locallyRealLine_homeomorph_circle
     Nonempty (@Homeomorph B Circle tB inferInstance) := by
   sorry
 
+/-- An equivariant local trivialization supplies a continuous local section.
+The section is the inverse image of the constant group coordinate `1`; the
+fibre-preserving clause of `local_trivial` proves that it lies over its input. -/
+lemma apm_t95j06_principalCircleBundle_local_section
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (b : B) :
+    ∃ U : Set B, IsOpen U ∧ b ∈ U ∧
+      ∃ s : U → X, Continuous s ∧ ∀ u, P.proj (s u) = u := by
+  obtain ⟨U, hU, hb, φ, hφproj, hφact⟩ := P.local_trivial b
+  let s : U → X := fun u ↦ (φ.symm (u, 1)).1
+  refine ⟨U, hU, hb, s, ?_, ?_⟩
+  · exact continuous_subtype_val.comp
+      (φ.symm.continuous.comp (continuous_id.prodMk continuous_const))
+  · intro u
+    have hp := hφproj (φ.symm (u, 1))
+    have heq : φ (φ.symm (u, 1)) = (u, 1) := φ.apply_symm_apply (u, 1)
+    simpa [s] using
+      ((congrArg (fun q : U × Circle ↦ (q.1 : B)) heq).symm.trans hp).symm
+
+/-- Local sections of a principal `Circle` bundle over a circle paste to a
+global section.
+
+This is true by compactness of `Circle`: refine the local-section cover to a
+finite cyclic cover by arcs.  On each connected overlap, fibre freeness and
+transitivity give a continuous `Circle`-valued transition.  Lift that map to
+`ℝ` along `Circle.exp`, extend the lift across the next (contractible) arc,
+and use its exponential to correct the next section.  Induction pastes around
+the finite cyclic cover; the same lift-and-correct step removes the closing
+mismatch.  Estimated size: 350--650 lines, principally the finite arc cover,
+real lift, and closed-cover pasting infrastructure. -/
+theorem apm_t95j06_principalCircleBundle_circle_local_sections_glue
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (e : @Homeomorph B Circle tB inferInstance)
+    (hloc : ∀ b : B, ∃ U : Set B, IsOpen U ∧ b ∈ U ∧
+      ∃ s : U → X, Continuous s ∧ ∀ u, P.proj (s u) = u) :
+    ∃ s : B → X, Continuous s ∧ ∀ b, P.proj (s b) = b := by
+  sorry
+
 /-- A principal `Circle` bundle over a circle admits a continuous section.
 
 This is true because two closed arcs cover the circle.  Local trivializations
@@ -650,7 +690,8 @@ theorem apm_t95j06_principalCircleBundle_over_circle_section
     (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
     (e : @Homeomorph B Circle tB inferInstance) :
     ∃ s : B → X, Continuous s ∧ ∀ b, P.proj (s b) = b := by
-  sorry
+  apply apm_t95j06_principalCircleBundle_circle_local_sections_glue X B tB P e
+  exact fun b ↦ apm_t95j06_principalCircleBundle_local_section X B tB P b
 
 /-- The fibre coordinate relative to a continuous section is continuous.
 
