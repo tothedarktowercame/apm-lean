@@ -1520,6 +1520,74 @@ lemma apm_t95j06_orderTopology_of_compact_closed_le
     simpa using hU'
   exact ⟨heq⟩
 
+/-- Between two distinct ordered image values lies a third. Take the last
+parameter of the first fibre and the first parameter of the second fibre.
+Monotonicity puts them in strict order. Admissibility forces a retained
+parameter between them, whose value is strictly intermediate by extremality
+of these two fibre parameters. -/
+lemma apm_t95j06_loopEraseLo_exists_between
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    (a b : apm_t95j06_LoopEraseImage p F)
+    (hab : apm_t95j06_loopEraseLo p hp hF a < apm_t95j06_loopEraseLo p hp hF b) :
+    ∃ c : apm_t95j06_LoopEraseImage p F,
+      apm_t95j06_loopEraseLo p hp hF a < apm_t95j06_loopEraseLo p hp hF c ∧
+      apm_t95j06_loopEraseLo p hp hF c < apm_t95j06_loopEraseLo p hp hF b := by
+  letI := apm_t95j06_loopEraseLinearOrder p hp hF
+  change a < b at hab
+  change ∃ c, a < c ∧ c < b
+  obtain ⟨u, hu⟩ := (apm_t95j06_loopEraseFiber_compact p hp hF a).exists_isGreatest
+    (apm_t95j06_loopEraseFiber_nonempty p F a)
+  let t := apm_t95j06_loopEraseLo p hp hF b
+  have ht := apm_t95j06_loopEraseLo_isLeast p hp hF b
+  have huF : u ∈ F := hu.1.1
+  have htF : t ∈ F := ht.1.1
+  have hua : (⟨p u, ⟨u, huF, rfl⟩⟩ : apm_t95j06_LoopEraseImage p F) = a :=
+    Subtype.ext hu.1.2
+  have htb : (⟨p t, ⟨t, htF, rfl⟩⟩ : apm_t95j06_LoopEraseImage p F) = b :=
+    Subtype.ext ht.1.2
+  have hut : u < t := by
+    by_contra h
+    have hba := apm_t95j06_loopErase_monotone p hp hF htF huF (le_of_not_gt h)
+    rw [htb, hua] at hba
+    exact (not_le_of_gt hab) hba
+  have hgap : (Set.Ioo u t ∩ F).Nonempty := by
+    by_contra h
+    have heq := hF.prop.2.2.2 u t huF htF hut (Set.not_nonempty_iff_eq_empty.mp h)
+    have hab' : a = b := Subtype.ext (hu.1.2.symm.trans (heq.trans ht.1.2))
+    exact (ne_of_lt hab) hab'
+  obtain ⟨r, hr, hrF⟩ := hgap
+  let c : apm_t95j06_LoopEraseImage p F := ⟨p r, ⟨r, hrF, rfl⟩⟩
+  have hac : a ≤ c := by
+    have h := apm_t95j06_loopErase_monotone p hp hF huF hrF hr.1.le
+    rwa [hua] at h
+  have hcb : c ≤ b := by
+    have h := apm_t95j06_loopErase_monotone p hp hF hrF htF hr.2.le
+    rwa [htb] at h
+  refine ⟨c, lt_of_le_of_ne hac ?_, lt_of_le_of_ne hcb ?_⟩
+  · intro heq
+    have hrA : r ∈ apm_t95j06_loopEraseFiber p F a :=
+      ⟨hrF, (congrArg Subtype.val heq).symm⟩
+    exact (not_le_of_gt hr.1) (hu.2 hrA)
+  · intro heq
+    have hrB : r ∈ apm_t95j06_loopEraseFiber p F b :=
+      ⟨hrF, congrArg Subtype.val heq⟩
+    exact (not_le_of_gt hr.2) (ht.2 hrB)
+
+/-- The first-occurrence order on the loop-erased image is densely ordered.
+This is an explicit theorem, so it introduces no competing global instance. -/
+lemma apm_t95j06_loopErase_denselyOrdered
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F) :
+    letI := apm_t95j06_loopEraseLinearOrder p hp hF
+    DenselyOrdered (apm_t95j06_LoopEraseImage p F) := by
+  letI := apm_t95j06_loopEraseLinearOrder p hp hF
+  exact ⟨fun a b hab => apm_t95j06_loopEraseLo_exists_between p hp hF a b hab⟩
+
 /-- Euclidean invariance of domain, with all library premises discharged. -/
 lemma apm_t95j06_Q_aux_invariance_domain
     {U : Set apm_t95j06_E2} (hU : IsOpen U) {f : U → apm_t95j06_E2}
@@ -8563,3 +8631,5 @@ theorem apm_t95j06
 #print axioms apm_t95j06_Q_aux_two_arcs
 
 #print axioms apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_orientation
+
+#print axioms apm_t95j06_loopErase_denselyOrdered
