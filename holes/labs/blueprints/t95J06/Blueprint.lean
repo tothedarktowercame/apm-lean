@@ -2703,6 +2703,65 @@ of the complement of a cut point contains a non-cut point of the original
 continuum: otherwise a nested basis of connected open neighbourhoods in that
 branch, together with compactness, produces an additional non-cut point.
 Here the hypotheses say that the only non-cut points are `a` and `c`. -/
+/-- A side of a puncture separation becomes a closed connected subcontinuum
+after adjoining the puncture.  This is the elementary boundary-bumping step:
+the other side is exactly its open complement, and any separation after
+adjoining the puncture would extend, by adding the other puncture side to the
+piece containing the puncture, to a separation of the whole space. -/
+lemma apm_t95j06_cutSide_adjoin_puncture
+    (X : Type*) [TopologicalSpace X]
+    (hX : IsConnected (Set.univ : Set X)) (p : X) (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hUpre : IsPreconnected U)
+    (hUV : Disjoint U V)
+    (hcover : U ∪ V = ({p}ᶜ : Set X))
+    (hUne : U.Nonempty) (hVne : V.Nonempty) :
+    IsClosed (U ∪ {p}) ∧ IsPreconnected (U ∪ {p}) := by
+  have hpU : p ∉ U := by
+    intro hp
+    have : p ∈ ({p}ᶜ : Set X) := hcover ▸ Or.inl hp
+    exact this (Set.mem_singleton p)
+  have hpV : p ∉ V := by
+    intro hp
+    have : p ∈ ({p}ᶜ : Set X) := hcover ▸ Or.inr hp
+    exact this (Set.mem_singleton p)
+  have hcompl : (U ∪ {p})ᶜ = V := by
+    ext x
+    constructor
+    · intro hx
+      have hxp : x ≠ p := by
+        intro h
+        exact hx (Or.inr (Set.mem_singleton_iff.mpr h))
+      have hxpunct : x ∈ ({p}ᶜ : Set X) := by simpa
+      rw [← hcover] at hxpunct
+      exact hxpunct.resolve_left (fun hxU => hx (Or.inl hxU))
+    · intro hxV hx
+      rcases hx with hxU | hxp
+      · exact Set.disjoint_left.1 hUV hxU hxV
+      · exact hpV (Set.mem_singleton_iff.mp hxp ▸ hxV)
+  have hclosed : IsClosed (U ∪ {p}) := isOpen_compl_iff.mp (hcompl.symm ▸ hV)
+  have hpcl : p ∈ closure U := by
+    by_contra hp
+    have hclU : closure U = U := by
+      apply Set.Subset.antisymm
+      · intro x hx
+        have hx' : x ∈ U ∪ {p} := closure_minimal Set.subset_union_left hclosed hx
+        exact hx'.resolve_right (fun hxp =>
+          hp (Set.mem_singleton_iff.mp hxp ▸ hx))
+      · exact subset_closure
+    have hUc : IsClosed U := closure_eq_iff_isClosed.mp hclU
+    letI : PreconnectedSpace X := preconnectedSpace_iff_univ.mpr hX.isPreconnected
+    have hUuniv : U = Set.univ := (show IsClopen U from ⟨hUc, hU⟩).eq_univ hUne
+    obtain ⟨v, hv⟩ := hVne
+    exact Set.disjoint_left.1 hUV (hUuniv.symm ▸ Set.mem_univ v) hv
+  have hclosure : closure U = U ∪ {p} := by
+    apply Set.Subset.antisymm
+    · exact closure_minimal Set.subset_union_left hclosed
+    · intro x hx
+      rcases hx with hx | rfl
+      · exact subset_closure hx
+      · exact hpcl
+  exact ⟨hclosed, hclosure ▸ hUpre.closure⟩
+
 /-- Every nondegenerate compact connected Hausdorff continuum has two
 distinct non-cut points.  This is the one classical continuum-theory input
 used below (the boundary-bumping theorem). -/
