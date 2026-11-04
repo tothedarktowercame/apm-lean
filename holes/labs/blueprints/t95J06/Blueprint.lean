@@ -353,19 +353,94 @@ theorem apm_t95j06_hopf_slices_component_principalBundle
       apm_t95j06_hopf_slices_component_principalBundle_aux_localTrivial
         F hF hinv x B tB Q }⟩⟩
 
-/-- **LIBRARY 3(a), manifold-factor cancellation (estimated 1800--4000
-lines).**  For the Hopf quotient presentation, local products with `Circle`
-are surface charts only when the base factor is locally a real line.
+/-! ### Split of LIBRARY 3(a): cancellation of the circle factor -/
 
-This is the classical low-dimensional manifold-factor theorem: a locally
-compact, second-countable Hausdorff `B` for which `B × S¹` is locally a
-2-manifold is locally a 1-manifold.  One route uses local homology to show that
-`B` is a one-dimensional homology manifold, local contractibility from its
-retract in a bundle chart, and the classification of one-dimensional ANR
-homology manifolds.  The component atlas and bundle charts supply precisely
-those hypotheses.  Non-Hausdorff and non-second-countable counterexamples are
-excluded explicitly; dimension zero fails because a discrete factor times a
-circle is one-dimensional. -/
+/-- Local Euclidean-plane charts, stated in the same elementary `Homeomorph`
+form as `apm_t95j06_IsLocallyRealLine`. -/
+def apm_t95j06_IsLocallyEuclideanPlane
+    (X : Type*) [TopologicalSpace X] : Prop :=
+  ∀ x : X, ∃ U : Set X, IsOpen U ∧ x ∈ U ∧
+    ∃ V : Set apm_t95j06_E2, IsOpen V ∧ Nonempty (U ≃ₜ V)
+
+/-- **Sub-leaf F1 (estimated 120--200 lines).**  In words: every connected
+component of the surface encoded by `hF`, with its subtype topology, is locally
+homeomorphic to the Euclidean plane.
+
+Proof sketch: unpack the `ChartedSpace` and `IsManifold` witnesses in `hF`;
+use a manifold chart at the underlying point, restrict its source to the
+connected-component subtype, and apply the standard open-subtype chart
+restriction (`IsOpenEmbedding.isManifold` / manifold chart source openness).
+The component is closed, not generally open, so the proof must use local
+connectedness of Euclidean chart domains to shrink to the component; it may
+not simply claim that an arbitrary closed subtype of a manifold is a
+manifold.  `ConstructionTargets.SurfaceClassification` supplies planar chart
+and finite surface infrastructure but no component-transfer theorem.
+
+Truth checks: the empty surface is vacuous because there is no `x`; a singleton
+and a zero-dimensional component cannot satisfy the frozen two-manifold
+instance; disconnected surfaces work component-by-component. -/
+theorem apm_t95j06_surface_component_locallyEuclideanPlane
+    (F : Set apm_t95j06_S5)
+    (hF : apm_t95j06_IsCompactOrientableSurface F)
+    (x : F) :
+    apm_t95j06_IsLocallyEuclideanPlane
+      {y : F // y ∈ connectedComponent x} := by
+  sorry
+
+/-- **Sub-leaf F2 (estimated 100--180 lines).**  In words: a fibre-preserving
+local trivialization of a principal circle bundle identifies a neighbourhood
+`U × Circle` of each base fibre with an open part of the locally planar total
+space, so that product is itself locally planar.
+
+Proof sketch: take `U, φ` from `P.local_trivial b`; continuity of `P.proj`
+makes `{x | P.proj x ∈ U}` open.  Restrict the supplied local-plane charts to
+that open subtype and transport them across `φ`.  The relevant Mathlib tools
+are `IsOpen.preimage`, `Homeomorph.isOpen_preimage`, subtype homeomorphisms,
+and `Homeomorph.trans`.
+
+Truth checks: surjectivity makes the fibre over `b` nonempty; a constant
+projection cannot satisfy both local triviality and free transitive circle
+fibres except in the genuine product case; no compactness of `B` is used. -/
+theorem apm_t95j06_bundleCharts_product_locallyEuclideanPlane
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (hX : apm_t95j06_IsLocallyEuclideanPlane X) :
+    ∀ b : B, ∃ U : Set B, @IsOpen B tB U ∧ b ∈ U ∧
+      apm_t95j06_IsLocallyEuclideanPlane (U × Circle) := by
+  sorry
+
+/-- **Sub-leaf F3 (LIBRARY, estimated 1400--3000 lines).**  In words: a
+Hausdorff second-countable space whose local products with a circle are
+Euclidean surfaces is locally a real line.
+
+Proof sketch: localize the circle to an open arc and obtain `U × ℝ` locally
+open in `ℝ²`.  Prove local compactness, metrizability, and local connectedness
+of `U` using the slice retract.  Planar separation (Jordan--Schoenflies) shows
+that puncturing a sufficiently small connected neighbourhood in `U` gives at
+most two sides and that interior points are cut points.  Apply the classical
+Moore/Whyburn characterization of locally connected one-dimensional continua
+with order at most two to obtain an interval chart.  Mathlib and
+`ConstructionTargets/` currently contain no Jordan separation or Moore
+cut-point classification theorem.  The sorry-free vendor project
+`vendor/extmap/alok_JordanCurveTheorem/Reeken/Jordan.lean` provides Jordan
+separation, but no adapter to Mathlib's Euclidean plane or the cut-point
+classification.
+
+Truth checks: a discrete or zero-dimensional `B` fails the product hypothesis
+because `B × Circle` is locally one-dimensional; a tripod fails at its branch
+because tripod × arc is not a planar 2-manifold; non-Hausdorff doubled-line
+factors are excluded by `h2`; long-line pathologies are excluded by `hsc`.
+This is the sole remaining classical topology gate. -/
+theorem apm_t95j06_circleFactor_locallyRealLine
+    (B : Type) (tB : TopologicalSpace B)
+    (h2 : @T2Space B tB) (hsc : @SecondCountableTopology B tB)
+    (hprod : ∀ b : B, ∃ U : Set B, @IsOpen B tB U ∧ b ∈ U ∧
+      apm_t95j06_IsLocallyEuclideanPlane (U × Circle)) :
+    @apm_t95j06_IsLocallyRealLine B tB := by
+  sorry
+
+/-- Assembly of the original manifold-factor leaf from the three independent
+sub-leaves above. -/
 theorem apm_t95j06_principalBundle_base_locallyRealLine
     (F : Set apm_t95j06_S5)
     (hF : apm_t95j06_IsCompactOrientableSurface F)
@@ -374,7 +449,10 @@ theorem apm_t95j06_principalBundle_base_locallyRealLine
     (P : @apm_t95j06_PrincipalCircleBundle
       {y : F // y ∈ connectedComponent x} B inferInstance tB) :
     @apm_t95j06_IsLocallyRealLine B tB := by
-  sorry
+  have hplane := apm_t95j06_surface_component_locallyEuclideanPlane F hF x
+  have hproducts := apm_t95j06_bundleCharts_product_locallyEuclideanPlane
+    {y : F // y ∈ connectedComponent x} B tB P hplane
+  exact apm_t95j06_circleFactor_locallyRealLine B tB h2 hsc hproducts
 
 /-- **LIBRARY 3(b), compact one-manifold classification (estimated 900--1800
 lines).**  A compact connected Hausdorff second-countable space locally
