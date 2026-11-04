@@ -317,7 +317,21 @@ theorem t00J02_globalGeneratorInFiber_restrict
       ConstructionTargets.ManifoldFundamentalClass.localizationMap (x : S) 2
         (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
           (TopCat.of S) 2 e) := by
-  sorry
+  have hnat := ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality
+    ({z : S | f z = y}ᶜ)
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint (x : S))
+    (ContinuousMap.id S) (by
+        intro z hz hzx
+        have hzxe : z = (x : S) := by simpa using hzx
+        exact hz (by rw [hzxe]; exact x.property))
+  change ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+    (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (ContinuousMap.id S)) ≫ _ = _ at hnat
+  rw [show TopCat.ofHom (ContinuousMap.id S) = 𝟙 (TopCat.of S) from rfl,
+    CategoryTheory.Functor.map_id, CategoryTheory.Category.id_comp] at hnat
+  unfold t00J02_fiberRestriction t00J02_globalGeneratorInFiber
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+  rw [hnat, HomologicalComplex.homologyMap_comp]
+  rfl
 
 /-- **Naturality sub-leaf (estimated 60--120 lines).** In words: pushing the
 global generator first into relative homology of a fibre and then along `f`
@@ -339,7 +353,47 @@ theorem t00J02_globalGeneratorInFiber_pushforward
         ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
           (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
             (TopCat.of S) 2 e) := by
-  sorry
+  classical
+  let Hmod := ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
+  have h1 : ConstructionTargets.T00J02Closure.surfaceTopDegree e f =
+      e.hom.hom (Hmod.hom (e.inv.hom 1)) := rfl
+  have hmod : Hmod.hom (e.inv.hom 1) =
+      ConstructionTargets.T00J02Closure.surfaceTopDegree e f • e.inv.hom 1 := by
+    calc Hmod.hom (e.inv.hom 1)
+        = e.inv.hom (e.hom.hom (Hmod.hom (e.inv.hom 1))) :=
+          (ConcreteCategory.congr_hom e.hom_inv_id _).symm
+      _ = e.inv.hom (ConstructionTargets.T00J02Closure.surfaceTopDegree e f • (1 : ℤ)) := by
+          rw [← h1, smul_eq_mul, mul_one]
+      _ = _ := map_zsmul _ _ _
+  have hn := ConcreteCategory.congr_hom
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      (TopCat.ofHom f) 2) (e.inv.hom 1)
+  have habs : HomologicalComplex.homologyMap
+      (ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap f) 2
+      (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e) =
+      ConstructionTargets.T00J02Closure.surfaceTopDegree e f •
+        ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e := by
+    rw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply] at hn
+    have hm' : (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map Hmod).hom (e.inv.hom 1) =
+        ConstructionTargets.T00J02Closure.surfaceTopDegree e f • e.inv.hom 1 := hmod
+    rw [hm', map_zsmul] at hn
+    simpa only [ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator,
+      ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap,
+      ConstructionTargets.ManifoldFundamentalClass.globalGenerator] using hn.symm
+  have hnat := ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality
+    ({z : S | f z = y}ᶜ)
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y) f
+    (by intro z hz; exact hz)
+  change ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap f ≫ _ = _ at hnat
+  have hh := congrArg (fun q => HomologicalComplex.homologyMap q 2) hnat
+  simp only [HomologicalComplex.homologyMap_comp] at hh
+  have hh' := ConcreteCategory.congr_hom hh
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
+  rw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply, habs, map_zsmul] at hh'
+  unfold t00J02_fiberPushforward t00J02_globalGeneratorInFiber
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+  exact hh'.symm
 
 /-- **F1: global degree is the sum of point-local degrees.**  Sum the D-basis
 classes.  D-injectivity identifies their sum with the image of `[S]` in
