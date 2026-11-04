@@ -2593,6 +2593,232 @@ lemma apm_t95j06_loopEraseAdmissible_iInter_basic
     intro F hF
     exact (hadm F hF).2.2.1
 
+/-- Euclidean invariance of domain, with all library premises discharged. -/
+lemma apm_t95j06_Q_aux_invariance_domain
+    {U : Set apm_t95j06_E2} (hU : IsOpen U) {f : U → apm_t95j06_E2}
+    (hf : Continuous f) (hi : Function.Injective f) : IsOpenMap f := by
+  apply ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_open
+    2 (fun hf' hi' => ?_) hU hf hi
+  apply ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_interior
+    2 (fun hg => ?_) hf' hi'
+  exact ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_brouwer
+    2 ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_noRetraction hg
+
+/-- Cartesian coordinates for the Euclidean plane. -/
+noncomputable def apm_t95j06_Q_aux_plane_prod : apm_t95j06_E2 ≃ₜ ℝ × ℝ :=
+  (PiLp.homeomorph 2 (fun _ : Fin 2 => ℝ)).trans Homeomorph.finTwoArrow
+
+/-- Invariance of domain with Cartesian source coordinates. -/
+lemma apm_t95j06_Q_aux_invariance_domain_prod_source
+    {U : Set (ℝ × ℝ)} (hU : IsOpen U) {f : U → apm_t95j06_E2}
+    (hf : Continuous f) (hi : Function.Injective f) : IsOpenMap f := by
+  let e := apm_t95j06_Q_aux_plane_prod.symm.image U
+  have h := apm_t95j06_Q_aux_invariance_domain
+    (apm_t95j06_Q_aux_plane_prod.symm.isOpenMap U hU)
+    (hf.comp e.symm.continuous) (hi.comp e.symm.injective)
+  simpa only [Function.comp_def, Homeomorph.symm_apply_apply] using h.comp e.isOpenMap
+
+/-- Invariance of domain with Cartesian target coordinates. -/
+lemma apm_t95j06_Q_aux_invariance_domain_prod_target
+    {U : Set apm_t95j06_E2} (hU : IsOpen U) {f : U → ℝ × ℝ}
+    (hf : Continuous f) (hi : Function.Injective f) : IsOpenMap f := by
+  let e := apm_t95j06_Q_aux_plane_prod
+  have h := apm_t95j06_Q_aux_invariance_domain hU
+    (e.symm.continuous.comp hf) (e.symm.injective.comp hi)
+  simpa only [Function.comp_def, Homeomorph.apply_symm_apply] using e.isOpenMap.comp h
+
+/-- Invariance of domain in Cartesian coordinates on both planes. -/
+lemma apm_t95j06_Q_aux_invariance_domain_prod
+    {U : Set (ℝ × ℝ)} (hU : IsOpen U) {f : U → ℝ × ℝ}
+    (hf : Continuous f) (hi : Function.Injective f) : IsOpenMap f := by
+  let e := apm_t95j06_Q_aux_plane_prod
+  have h := apm_t95j06_Q_aux_invariance_domain_prod_source hU
+    (e.symm.continuous.comp hf) (e.symm.injective.comp hi)
+  simpa only [Function.comp_def, Homeomorph.apply_symm_apply] using e.isOpenMap.comp h
+
+/-- Invariance of domain for any source already openly embedded in the plane. -/
+lemma apm_t95j06_Q_aux_open_coordinate
+    {X : Type*} [TopologicalSpace X] {j : X → apm_t95j06_E2}
+    (hj : Topology.IsOpenEmbedding j) {f : X → ℝ × ℝ}
+    (hf : Continuous f) (hi : Function.Injective f) : IsOpenMap f := by
+  let e := hj.isEmbedding.toHomeomorph
+  have h := apm_t95j06_Q_aux_invariance_domain_prod_target hj.isOpen_range
+    (hf.comp e.symm.continuous) (hi.comp e.symm.injective)
+  simpa only [Function.comp_def, Homeomorph.symm_apply_apply] using h.comp e.isOpenMap
+
+/-- An injective real coordinate on an open part of the base has open image.
+Apply planar invariance of domain to that coordinate paired with the vertical
+coordinate in the given product chart, then project the open image to ℝ. -/
+lemma apm_t95j06_Q_aux_base_coordinate_open
+    {B : Type*} [TopologicalSpace B] {W U : Set B}
+    {V : Set apm_t95j06_E2} (hV : IsOpen V)
+    (e : (W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V)
+    (hU : IsOpen U) (hUW : U ⊆ W)
+    {f : U → ℝ} (hf : Continuous f) (hi : Function.Injective f) :
+    IsOpen (Set.range f) := by
+  let T : Set (W × Set.Ioo (-1 : ℝ) 1) := {x | x.1.val ∈ U}
+  have hT : IsOpen T := hU.preimage (continuous_subtype_val.comp continuous_fst)
+  let j : T → apm_t95j06_E2 := fun x => (e x.val).val
+  have hj : Topology.IsOpenEmbedding j :=
+    hV.isOpenEmbedding_subtypeVal.comp (e.isOpenEmbedding.comp hT.isOpenEmbedding_subtypeVal)
+  let F : T → ℝ × ℝ := fun x => (f ⟨x.val.1.val, x.property⟩, x.val.2.val)
+  have hF : Continuous F := by
+    apply Continuous.prodMk
+    · exact hf.comp ((continuous_subtype_val.comp
+        (continuous_fst.comp continuous_subtype_val)).subtype_mk _)
+    · exact continuous_subtype_val.comp (continuous_snd.comp continuous_subtype_val)
+  have hFi : Function.Injective F := by
+    intro x y h
+    have hfirst := hi (congrArg Prod.fst h)
+    have hsecond := congrArg Prod.snd h
+    apply Subtype.ext
+    apply Prod.ext
+    · exact Subtype.ext (congrArg (fun z : U => z.val) hfirst)
+    · exact Subtype.ext hsecond
+  have hopen := (apm_t95j06_Q_aux_open_coordinate hj hF hFi).isOpen_range
+  have hproj : Prod.fst '' Set.range F = Set.range f := by
+    ext z
+    constructor
+    · rintro ⟨_, ⟨x, rfl⟩, rfl⟩
+      exact ⟨_, rfl⟩
+    · rintro ⟨x, rfl⟩
+      let t : T := ⟨(⟨x.val, hUW x.property⟩, ⟨0, by norm_num⟩), x.property⟩
+      exact ⟨F t, ⟨t, rfl⟩, rfl⟩
+  rw [← hproj]
+  exact isOpenMap_fst _ hopen
+
+/-- There are no isolated points in the base of a planar interval product. -/
+lemma apm_t95j06_Q_aux_no_isolated
+    {B : Type*} [TopologicalSpace B] {W : Set B}
+    {V : Set apm_t95j06_E2} (hV : IsOpen V)
+    (e : (W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V)
+    (b : B) (hb : b ∈ W) : ¬ IsOpen ({b} : Set B) := by
+  intro hsingle
+  let f : ({b} : Set B) → ℝ := fun _ => 0
+  have hi : Function.Injective f := by
+    intro x y _
+    exact Subtype.ext (x.property.trans y.property.symm)
+  have hopen := apm_t95j06_Q_aux_base_coordinate_open hV e hsingle
+    (Set.singleton_subset_iff.mpr hb) (f := f) continuous_const hi
+  have hr : Set.range f = {0} := by
+    ext z
+    constructor
+    · rintro ⟨x, rfl⟩; rfl
+    · intro hz; exact ⟨⟨b, rfl⟩, hz.symm⟩
+  rw [hr] at hopen
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hopen 0 rfl
+  have he : ε / 2 ∈ Metric.ball (0 : ℝ) ε := by
+    simp only [Metric.mem_ball, Real.dist_eq, sub_zero, abs_of_pos (half_pos hε)]
+    linarith
+  have := hball he
+  change ε / 2 = 0 at this
+  linarith
+
+/-- The interior of an embedded base arc is ambient-open: its product with
+the vertical interval is an injectively parametrized open planar rectangle. -/
+lemma apm_t95j06_Q_aux_arc_interior_open
+    {B : Type*} [TopologicalSpace B] {W : Set B} (hW : IsOpen W)
+    {V : Set apm_t95j06_E2} (hV : IsOpen V)
+    (e : (W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V)
+    (a : C(Set.Icc (0 : ℝ) 1, B)) (hi : Function.Injective a)
+    (haW : Set.range a ⊆ W) :
+    IsOpen (a '' {t : Set.Icc (0 : ℝ) 1 | 0 < t.val ∧ t.val < 1}) := by
+  let T := Set.Ioo (0 : ℝ) 1 ×ˢ Set.Ioo (-1 : ℝ) 1
+  let P : T → W × Set.Ioo (-1 : ℝ) 1 := fun x =>
+    (⟨a ⟨x.val.1, x.property.1.1.le, x.property.1.2.le⟩, haW ⟨_, rfl⟩⟩,
+      ⟨x.val.2, x.property.2⟩)
+  let F : T → apm_t95j06_E2 := fun x => (e (P x)).val
+  have hF : Continuous F := by
+    apply continuous_subtype_val.comp
+    apply e.continuous.comp
+    dsimp [P]
+    fun_prop
+  have hFi : Function.Injective F := by
+    intro x y hxy
+    have hh := e.injective (Subtype.ext hxy)
+    have hx : a ⟨x.val.1, x.property.1.1.le, x.property.1.2.le⟩ =
+        a ⟨y.val.1, y.property.1.1.le, y.property.1.2.le⟩ :=
+      congrArg (fun z : W × Set.Ioo (-1 : ℝ) 1 => z.1.val) hh
+    have hy := congrArg (fun z : W × Set.Ioo (-1 : ℝ) 1 => z.2.val) hh
+    exact Subtype.ext (Prod.ext (congrArg Subtype.val (hi hx)) hy)
+  have hopen := (apm_t95j06_Q_aux_invariance_domain_prod_source
+    (isOpen_Ioo.prod isOpen_Ioo) hF hFi).isOpen_range
+  let g : V → B := fun v => (e.symm v).1.val
+  have hg : IsOpenMap g := hW.isOpenMap_subtype_val.comp (isOpenMap_fst.comp e.symm.isOpenMap)
+  have heq : g '' {v : V | v.val ∈ Set.range F} =
+      a '' {t : Set.Icc (0 : ℝ) 1 | 0 < t.val ∧ t.val < 1} := by
+    ext z
+    constructor
+    · rintro ⟨v, ⟨x, hx⟩, rfl⟩
+      have he : e.symm v = P x := by
+        apply e.injective
+        simpa only [Homeomorph.apply_symm_apply] using (Subtype.ext hx.symm : v = e (P x))
+      refine ⟨⟨x.val.1, x.property.1.1.le, x.property.1.2.le⟩, x.property.1, ?_⟩
+      simp [g, he, P]
+    · rintro ⟨t, ht, rfl⟩
+      let x : T := ⟨(t.val, 0), ht, by norm_num⟩
+      refine ⟨e (P x), ⟨x, rfl⟩, ?_⟩
+      simp [g, P, x]
+  rw [← heq]
+  exact hg _ (hopen.preimage continuous_subtype_val)
+
+/-- An open real subset of [0,1] contains neither endpoint. -/
+lemma apm_t95j06_Q_aux_open_interval_endpoints
+    {S : Set ℝ} (hS : IsOpen S) (hsub : S ⊆ Set.Icc 0 1) :
+    (0 : ℝ) ∉ S ∧ (1 : ℝ) ∉ S := by
+  constructor
+  · intro h0
+    obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hS 0 h0
+    have hm : -ε / 2 ∈ Metric.ball (0 : ℝ) ε := by
+      rw [Metric.mem_ball, Real.dist_eq, sub_zero, abs_of_neg (by linarith)]
+      linarith
+    have h := (hsub (hball hm)).1
+    linarith
+  · intro h1
+    obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hS 1 h1
+    have hm : 1 + ε / 2 ∈ Metric.ball (1 : ℝ) ε := by
+      rw [Metric.mem_ball, Real.dist_eq, abs_of_pos (by linarith)]
+      linarith
+    have h := (hsub (hball hm)).2
+    linarith
+
+/-- Neither endpoint of an embedded base arc is interior to its closed image.
+The inverse arc parameter on the interior would otherwise have an open image
+in ℝ containing an endpoint of [0,1]. -/
+lemma apm_t95j06_Q_aux_arc_endpoints_not_interior
+    {B : Type*} [TopologicalSpace B] [T2Space B] {W : Set B}
+    {V : Set apm_t95j06_E2} (hV : IsOpen V)
+    (e : (W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V)
+    (a : C(Set.Icc (0 : ℝ) 1, B)) (hi : Function.Injective a)
+    (haW : Set.range a ⊆ W) :
+    a ⟨0, by norm_num⟩ ∉ interior (Set.range a) ∧
+      a ⟨1, by norm_num⟩ ∉ interior (Set.range a) := by
+  let A := (a.continuous.isClosedEmbedding hi).isEmbedding.toHomeomorph
+  let U := interior (Set.range a)
+  let f : U → ℝ := fun x => (A.symm ⟨x.val, interior_subset x.property⟩).val
+  have hf : Continuous f := continuous_subtype_val.comp
+    (A.symm.continuous.comp (continuous_subtype_val.subtype_mk _))
+  have hfi : Function.Injective f := by
+    intro x y h
+    have hh := A.symm.injective (Subtype.ext h)
+    exact Subtype.ext (congrArg (fun z : Set.range a => z.val) hh)
+  have hopen := apm_t95j06_Q_aux_base_coordinate_open hV e isOpen_interior
+    (interior_subset.trans haW) hf hfi
+  have hbound : Set.range f ⊆ Set.Icc (0 : ℝ) 1 := by
+    rintro _ ⟨x, rfl⟩
+    exact (A.symm ⟨x.val, interior_subset x.property⟩).property
+  have hend := apm_t95j06_Q_aux_open_interval_endpoints hopen hbound
+  have hparam : ∀ t : Set.Icc (0 : ℝ) 1, ∀ ht : a t ∈ U,
+      f ⟨a t, ht⟩ = t.val := by
+    intro t ht
+    change (A.symm (A t)).val = t.val
+    rw [Homeomorph.symm_apply_apply]
+  constructor
+  · intro h
+    exact hend.1 ⟨⟨_, h⟩, hparam _ h⟩
+  · intro h
+    exact hend.2 ⟨⟨_, h⟩, hparam _ h⟩
+
 /-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
 Assuming the pure disk-crosscut theorem, one explicit product chart around
 `b × 0` yields the required compact continuum in the base.  Choose a small
@@ -7259,3 +7485,7 @@ theorem apm_t95j06
 #print axioms apm_t95j06_planar_crosscut_of_jordan
 
 #print axioms apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain
+
+#print axioms apm_t95j06_Q_aux_no_isolated
+#print axioms apm_t95j06_Q_aux_arc_interior_open
+#print axioms apm_t95j06_Q_aux_arc_endpoints_not_interior
