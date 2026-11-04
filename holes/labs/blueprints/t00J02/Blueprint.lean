@@ -88,6 +88,159 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
     ConstructionTargets.T00J02Closure.exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection
       MeasureTheory.Measure.addHaar f c hf hcsmooth htrans
 
+abbrev t00J02_fiberRelativeHomology
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (y : S) :=
+  (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+    ({z : S | f z = y}ᶜ)).homology 2
+
+noncomputable def t00J02_fiberRestriction
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (y : S)
+    (x : {x : S // f x = y}) :
+    t00J02_fiberRelativeHomology f y ⟶
+      (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint (x : S))).homology 2 :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap
+      ({z : S | f z = y}ᶜ)
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint (x : S))
+      (ContinuousMap.id S) (by
+        intro z hz hzx
+        have hzxe : z = (x : S) := by simpa using hzx
+        subst z
+        exact hz x.property)) 2
+
+noncomputable def t00J02_fiberPushforward
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (y : S) :
+    t00J02_fiberRelativeHomology f y ⟶
+      (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)).homology 2 :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap
+      ({z : S | f z = y}ᶜ)
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint y)
+      f (by intro z hz; exact hz)) 2
+
+noncomputable def t00J02_fiberCoordinates
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (y : S) :
+    t00J02_fiberRelativeHomology f y →
+      ((x : {x : S // f x = y}) →
+        (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint (x : S))).homology 2) :=
+  fun a x ↦ t00J02_fiberRestriction f y x a
+
+/-- The chart-free local degree of `f` at an isolated point of the literal
+fiber.  The class `a` is the coordinate basis vector in relative homology of
+the whole finite fiber: it restricts to the localization of the global
+fundamental class at `x` and to zero at every other fiber point.  Its
+pushforward is `n` times the localized fundamental class at `y`. -/
+def t00J02_IsLocalDegree
+    {S : Type} [TopologicalSpace S] (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (y : S) (x : {x : S // f x = y}) (n : ℤ) : Prop :=
+  ∃ a : t00J02_fiberRelativeHomology f y,
+    t00J02_fiberRestriction f y x a =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap (x : S) 2
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e) ∧
+    (∀ x' : {x : S // f x = y}, x' ≠ x →
+      t00J02_fiberRestriction f y x' a = 0) ∧
+    t00J02_fiberPushforward f y a = n •
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
+
+/-- **D: finite-fiber local homology decomposition.**  Relative `H₂` supported
+on a finite fiber is the product of the point-local groups, and the localized
+global generator at the target freely generates its local group.  Prove the first assertion
+by disjoint chart disks, excision, and finite Mayer--Vietoris; prove the second
+with `HigherChartLocalGenerator.ambientLocalGenerator_generates` and the
+surface fundamental-class localization theorem.  The empty fiber gives the
+zero-to-empty-product isomorphism.  Estimated proof: 350--700 lines;
+**LIBRARY**. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (y : S) [Fintype {x : S // f x = y}] :
+    Function.Bijective (t00J02_fiberCoordinates f y) ∧
+      (∀ n : ℤ, n • ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        y 2 (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of S) 2 e) = 0 → n = 0) ∧
+      ∀ b, ∃ n : ℤ, b = n •
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of S) 2 e) := by
+  sorry
+
+/-- **L0: existence of every point-local degree.**  Surjectivity in D gives
+the basis class supported at `x`; its pushforward has a unique integer
+coordinate because target local `H₂` is infinite cyclic, producing
+`t00J02_IsLocalDegree`.  Estimated proof: 60--120 lines. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_L0
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace apm_t00j02_E2 S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (y : S) [Fintype {x : S // f x = y}]
+    (hD : Function.Bijective (t00J02_fiberCoordinates f y) ∧
+      (∀ n : ℤ, n • ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        y 2 (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of S) 2 e) = 0 → n = 0) ∧
+      ∀ b, ∃ n : ℤ, b = n •
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of S) 2 e)) :
+    ∀ x, ∃ n, t00J02_IsLocalDegree e f y x n := by
+  sorry
+
+/-- **F1: global degree is the sum of point-local degrees.**  Sum the D-basis
+classes.  D-injectivity identifies their sum with the image of `[S]` in
+`H₂(S,S∖F)`; naturality of `relativeSingularMap` and the infinite-order
+target generator then identify the integer coefficients.  This handles an
+empty fiber by forcing the degree to zero.  Estimated proof: 180--320 lines;
+**LIBRARY**. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F1
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace apm_t00j02_E2 S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (y : S) [Fintype {x : S // f x = y}]
+    (hD : Function.Bijective (t00J02_fiberCoordinates f y) ∧
+      (∀ n : ℤ, n • ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        y 2 (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of S) 2 e) = 0 → n = 0) ∧
+      ∀ b, ∃ n : ℤ, b = n •
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of S) 2 e))
+    (d : {x : S // f x = y} → ℤ)
+    (hd : ∀ x, t00J02_IsLocalDegree e f y x (d x)) :
+    ConstructionTargets.T00J02Closure.surfaceTopDegree e f = ∑ x, d x := by
+  sorry
+
+/-- **F2: component sums of actual local degrees vanish.**  Transverse
+product coordinates compare the sum of point-local degrees on an occupied
+preimage component with the degree of its lift to `c`, up to a component
+orientation sign.  Disk-boundedness makes that lift null in `H₁`; essentiality
+of `c` and `IntegerCyclic.mono_of_ne_zero_of_iso` force its degree to zero.
+For the fold model the two degrees are `+1` and `-1`.  Estimated proof:
+600--1200 lines; **LIBRARY** and the principal gate. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (hf : ContMDiff apm_t00j02_I2 apm_t00j02_I2 ∞ f)
+    (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
+    (eS : apm_t00j02_H 1 S ≅ ModuleCat.of ℤ (Fin 4 → ℤ))
+    (hhandle : apm_t00j02_wrapsHandle c)
+    (htrans : apm_t00j02_transverse f c)
+    (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c))
+    (y : S) (hy : y ∈ range c) [Fintype {x : S // f x = y}]
+    (d : {x : S // f x = y} → ℤ)
+    (hd : ∀ x, t00J02_IsLocalDegree e f y x (d x)) :
+    ∀ k, ConstructionTargets.T00J02Closure.componentLocalDegreeSum
+      (ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex
+        f c y hy) d k = 0 := by
+  sorry
+
 /-- **LIBRARY boundary.** (claude-14, 2026-11-04: split1's `aux_calculations` was removed. It fed
 `CanonicalRegularFiberDegreeCalculations`, whose `regularFiberLocalDegree` is the chart
 orientation coefficient of the fundamental class at `x` and does not depend on `f`. With an
@@ -110,7 +263,27 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero
     (htrans : apm_t00j02_transverse f c)
     (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c)) :
     apm_t00j02_homologyMap 2 f = 0 := by
-  sorry
+  rcases hS with ⟨_, ⟨eS⟩, ⟨e⟩, _⟩
+  obtain ⟨y, hy, hlocal⟩ :=
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
+      f hf c hc hcsmooth htrans
+  letI := ConstructionTargets.T00J02Closure.regularFiberFintype_of_locallyInjectiveAlongFiber
+    f y hlocal
+  have hD := t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D e f y
+  have hL0 := t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_L0 e f y hD
+  let d : {x : S // f x = y} → ℤ := fun x ↦ Classical.choose (hL0 x)
+  have hd : ∀ x, t00J02_IsLocalDegree e f y x (d x) :=
+    fun x ↦ Classical.choose_spec (hL0 x)
+  apply ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_pointSignedCountComparison
+    e f
+    (ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex f c y hy)
+    d (fun _ ↦ 0) (fun _ ↦ 1)
+  · simpa using t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F1
+      e f y hD d hd
+  · exact t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2
+      e f hf c hc hcsmooth eS hhandle htrans hdisks y hy d hd
+  · intro k
+    rfl
 
 /-- The elementary final adapter from vanishing top homology to vanishing of
 the integer specified by `apm_t00j02_hasDegree`. -/
