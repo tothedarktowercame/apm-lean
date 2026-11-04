@@ -1,5 +1,7 @@
 import Mathlib
 import Mathlib.Topology.Bases
+import Mathlib.Topology.Separation.Hausdorff
+import Mathlib.Topology.ContinuousMap.Basic
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
@@ -1001,7 +1003,7 @@ theorem apm_t95j06_planarArcProducts_twoEndpointContinua
     @apm_t95j06_HasTwoEndpointContinuumNeighborhoods B tB := by
   sorry
 
-/-- **Sub-leaf F3a (LIBRARY, estimated 180--300 lines).**  In words: local
+/- **Sub-leaf F3a (LIBRARY, estimated 180--300 lines).**  In words: local
 Euclidean charts on `U × Circle` shrink around `(b,1)` to planar charts on a
 product of a base neighbourhood with the fixed real arc `(-1,1)`.
 
@@ -1014,12 +1016,67 @@ linear rescaling sends the resulting interval to `Set.Ioo (-1) 1`.
 Truth checks: no global logarithm on `Circle` is asserted.  The empty base is
 vacuous; at a discrete base point the requested open planar target cannot
 exist, so dimension zero is not smuggled through this statement. -/
+/-- A fixed open arc about `1 : Circle` is homeomorphic to `(-1,1)`.
+
+Why true: `Circle.exp` is a local homeomorphism at `0`.  Shrink its source to
+an open interval on which it is injective, then use an orientation-preserving
+affine rescaling of that interval to `(-1,1)`.  This is only a local logarithm,
+not a global one.  Estimated size: 35--65 lines. -/
+theorem apm_t95j06_circle_openArc_one :
+    ∃ A : Set Circle, IsOpen A ∧ (1 : Circle) ∈ A ∧
+      Nonempty (A ≃ₜ Set.Ioo (-1 : ℝ) 1) := by
+  sorry
+
+/-- A planar chart on `U × Circle` contains a basic rectangle `W × A` about
+`(b,1)`, for any prescribed open neighbourhood `A` of `1`.
+
+Why true: choose a planar chart at `(b,1)`, use the product-topology basis to
+find `W₀ × A₀` inside its source, and replace the circle factor by `A₀ ∩ A`.
+Restricting the chart to this open subtype gives a homeomorphism onto its open
+image, exactly as in the earlier `aux_openSubtype` proof.  Estimated size:
+90--150 lines. -/
+theorem apm_t95j06_circleProducts_basicRectangle
+    (B : Type) (tB : TopologicalSpace B)
+    (hprod : ∀ b : B, ∃ U : Set B, @IsOpen B tB U ∧ b ∈ U ∧
+      apm_t95j06_IsLocallyEuclideanPlane (U × Circle))
+    (A : Set Circle) (hA : IsOpen A) (h1A : (1 : Circle) ∈ A) :
+    ∀ b : B, ∃ W : Set B, IsOpen W ∧ b ∈ W ∧
+      ∃ A' : Set Circle, IsOpen A' ∧ (1 : Circle) ∈ A' ∧ A' ⊆ A ∧
+        ∃ V : Set apm_t95j06_E2, IsOpen V ∧
+          Nonempty ((W × A') ≃ₜ V) := by
+  sorry
+
+/-- A planar rectangle with circle factor an open subarc can be normalized to
+the fixed interval `(-1,1)`.
+
+Why true: transport the subarc through a local logarithm `A ≃ₜ (-1,1)`, choose
+a smaller real open interval about the image of `1`, and affinely rescale it.
+Restrict the planar chart to the corresponding open product subtype; its image
+is open by `IsOpenEmbedding.isOpen_range`.  Estimated size: 55--95 lines. -/
+theorem apm_t95j06_planarRectangle_normalizeArc
+    (W : Type*) [TopologicalSpace W]
+    (A A' : Set Circle) (hA' : IsOpen A') (h1A' : (1 : Circle) ∈ A')
+    (hA'A : A' ⊆ A) (a : A ≃ₜ Set.Ioo (-1 : ℝ) 1)
+    (V : Set apm_t95j06_E2) (hV : IsOpen V)
+    (c : (W × A') ≃ₜ V) :
+    ∃ V' : Set apm_t95j06_E2, IsOpen V' ∧
+      Nonempty ((W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V') := by
+  sorry
+
+/-- Local Euclidean charts on `U × Circle` shrink around `(b,1)` to planar
+charts on a product with the fixed real arc `(-1,1)`. -/
 theorem apm_t95j06_circleProducts_localizeToPlanarArc
     (B : Type) (tB : TopologicalSpace B)
     (hprod : ∀ b : B, ∃ U : Set B, @IsOpen B tB U ∧ b ∈ U ∧
       apm_t95j06_IsLocallyEuclideanPlane (U × Circle)) :
     @apm_t95j06_HasPlanarArcProducts B tB := by
-  sorry
+  obtain ⟨A, hA, h1A, ⟨a⟩⟩ := apm_t95j06_circle_openArc_one
+  intro b
+  obtain ⟨W, hW, hbW, A', hA', h1A', hA'A, V, hV, ⟨c⟩⟩ :=
+    apm_t95j06_circleProducts_basicRectangle B tB hprod A hA h1A b
+  obtain ⟨V', hV', hc'⟩ :=
+    apm_t95j06_planarRectangle_normalizeArc W A A' hA' h1A' hA'A a V hV c
+  exact ⟨W, hW, hbW, V', hV', hc'⟩
 
 /-- **Sub-leaf F3b (LIBRARY, estimated 180--300 lines).**  In words: a
 Hausdorff second-countable base with planar real-arc products is locally
@@ -1042,6 +1099,99 @@ theorem apm_t95j06_planarArcProducts_factor_regular
     Nonempty (@LocallyCompactSpace B tB) ∧
       Nonempty (@TopologicalSpace.MetrizableSpace B tB) ∧
       Nonempty (@LocallyConnectedSpace B tB) := by
+  letI : TopologicalSpace B := tB
+  letI : T2Space B := h2
+  letI : SecondCountableTopology B := hsc
+  let J : Set ℝ := Set.Ioo (-1 : ℝ) 1
+  have hJ : IsOpen J := isOpen_Ioo
+  letI : Nonempty J := ⟨⟨0, by norm_num [J]⟩⟩
+  have factor_instances (W : Set B) (V : Set apm_t95j06_E2)
+      (hV : IsOpen V) (e : (W × J) ≃ₜ V) :
+      Nonempty (LocallyCompactSpace W) ∧ Nonempty (LocallyConnectedSpace W) := by
+    letI : LocallyCompactSpace V := hV.locallyCompactSpace
+    letI : LocallyConnectedSpace V := hV.locallyConnectedSpace
+    letI : LocallyCompactSpace (W × J) :=
+      e.locallyCompactSpace_iff.mpr inferInstance
+    letI : LocallyConnectedSpace (W × J) := e.locallyConnectedSpace
+    have hq : IsOpenQuotientMap (Prod.fst : W × J → W) :=
+      ⟨Prod.fst_surjective, continuous_fst, isOpenMap_fst⟩
+    letI : WeaklyLocallyCompactSpace W := hq.weaklyLocallyCompactSpace
+    letI : LocallyCompactSpace W := inferInstance
+    have hconn : LocallyConnectedSpace W := by
+      rw [locallyConnectedSpace_iff_subsets_isOpen_isConnected]
+      intro w U hU
+      let z : W × J := (w, ⟨0, by norm_num [J]⟩)
+      have hpre : Prod.fst ⁻¹' U ∈ nhds z := continuousAt_fst hU
+      obtain ⟨A, hAU, hAopen, hzA, hAconn⟩ :=
+        locallyConnectedSpace_iff_subsets_isOpen_isConnected.mp
+          (inferInstance : LocallyConnectedSpace (W × J)) z _ hpre
+      refine ⟨Prod.fst '' A, ?_, hq.isOpenMap A hAopen,
+        ⟨z, hzA, rfl⟩, hAconn.image _ continuous_fst.continuousOn⟩
+      rintro _ ⟨a, ha, rfl⟩
+      exact hAU ha
+    exact ⟨⟨inferInstance⟩, ⟨hconn⟩⟩
+  have local_factors (b : B) :
+      ∃ W : Set B, IsOpen W ∧ b ∈ W ∧
+        Nonempty (LocallyCompactSpace W) ∧ Nonempty (LocallyConnectedSpace W) := by
+    obtain ⟨W, hW, hbW, V, hV, ⟨e⟩⟩ := hplanar b
+    obtain ⟨hc, hconn⟩ := factor_instances W V hV e
+    exact ⟨W, hW, hbW, hc, hconn⟩
+  have hwlc : WeaklyLocallyCompactSpace B := by
+    constructor
+    intro b
+    obtain ⟨W, hW, hbW, ⟨hcW⟩, _⟩ := local_factors b
+    letI : LocallyCompactSpace W := hcW
+    obtain ⟨K, hKcompact, hKnhds⟩ :=
+      exists_compact_mem_nhds (⟨b, hbW⟩ : W)
+    refine ⟨Subtype.val '' K, hKcompact.image continuous_subtype_val, ?_⟩
+    exact hW.isOpenEmbedding_subtypeVal.isOpenMap.image_mem_nhds hKnhds
+  letI : WeaklyLocallyCompactSpace B := hwlc
+  letI : LocallyCompactSpace B := inferInstance
+  have hconnected : LocallyConnectedSpace B := by
+    rw [locallyConnectedSpace_iff_subsets_isOpen_isConnected]
+    intro b U hU
+    obtain ⟨W, hW, hbW, _, ⟨hconnW⟩⟩ := local_factors b
+    letI : LocallyConnectedSpace W := hconnW
+    have hpre : Subtype.val ⁻¹' U ∈ nhds (⟨b, hbW⟩ : W) :=
+      continuousAt_subtype_val hU
+    obtain ⟨A, hAU, hAopen, hbA, hAconn⟩ :=
+      locallyConnectedSpace_iff_subsets_isOpen_isConnected.mp hconnW
+        (⟨b, hbW⟩ : W) _ hpre
+    refine ⟨Subtype.val '' A, ?_,
+      hW.isOpenEmbedding_subtypeVal.isOpenMap A hAopen,
+      ⟨⟨b, hbW⟩, hbA, rfl⟩,
+      hAconn.image _ continuous_subtype_val.continuousOn⟩
+    rintro _ ⟨a, ha, rfl⟩
+    exact hAU ha
+  letI : LocallyConnectedSpace B := hconnected
+  letI : RegularSpace B := inferInstance
+  letI : T3Space B := inferInstance
+  letI : TopologicalSpace.MetrizableSpace B :=
+    TopologicalSpace.metrizableSpace_of_t3_secondCountable B
+  exact ⟨⟨inferInstance⟩, ⟨inferInstance⟩, ⟨inferInstance⟩⟩
+
+/-- **Moore--Whyburn arc-recognition theorem (LIBRARY, estimated 180--300
+lines).** A nondegenerate compact connected locally connected metrizable
+continuum whose only non-cut points are `a` and `c` is an arc, with those
+points as its endpoints.
+
+This is true by ordering the remaining points according to which component
+of a puncture contains `a`.  Local connectedness makes this a dense order
+whose order topology is the given topology; compactness supplies order
+completeness, and metrizability supplies separability.  The resulting compact
+separable linear continuum is order-isomorphic, hence homeomorphic, to the
+unit interval. -/
+theorem apm_t95j06_twoEndpointContinuum_homeomorph_Icc
+    (K : Type*) [TopologicalSpace K]
+    [CompactSpace K] [T2Space K] [TopologicalSpace.MetrizableSpace K]
+    [LocallyConnectedSpace K]
+    (hK : IsConnected (Set.univ : Set K)) (a c : K) (hac : a ≠ c)
+    (ha : IsPreconnected ({a}ᶜ : Set K))
+    (hc : IsPreconnected ({c}ᶜ : Set K))
+    (hcut : ∀ y : K, y ≠ a → y ≠ c →
+      ¬ IsPreconnected ({y}ᶜ : Set K)) :
+    ∃ e : K ≃ₜ Set.Icc (0 : ℝ) 1,
+      e a = ⟨0, by norm_num⟩ ∧ e c = ⟨1, by norm_num⟩ := by
   sorry
 
 /-- **Sub-leaf F3d (LIBRARY, estimated 220--380 lines).**  In words: a
@@ -1064,7 +1214,93 @@ theorem apm_t95j06_twoEndpointContinua_locallyRealLine
     (hm : Nonempty (@TopologicalSpace.MetrizableSpace B tB))
     (hcert : @apm_t95j06_HasTwoEndpointContinuumNeighborhoods B tB) :
     @apm_t95j06_IsLocallyRealLine B tB := by
-  sorry
+  letI : T2Space B := h2
+  letI : TopologicalSpace.MetrizableSpace B := hm.some
+  intro b
+  obtain ⟨K, hKcompact, hKconn, hbint, a, c, hac, hab, hcb,
+    hlc, ha, hc, hcut⟩ := hcert b
+  letI : CompactSpace K := isCompact_iff_compactSpace.mp hKcompact
+  letI : T2Space K := inferInstance
+  letI : TopologicalSpace.MetrizableSpace K := inferInstance
+  letI : LocallyConnectedSpace K := hlc.some
+  letI : ConnectedSpace K := isConnected_iff_connectedSpace.mp hKconn
+  have hKuniv : IsConnected (Set.univ : Set K) := isConnected_univ
+  obtain ⟨e, hea, hec⟩ :=
+    apm_t95j06_twoEndpointContinuum_homeomorph_Icc K hKuniv a c hac ha hc hcut
+  let W : Set B := interior K \ ({(a : B), (c : B)} : Set B)
+  have hWopen : IsOpen W := isOpen_interior.sdiff
+    (isClosed_singleton.union isClosed_singleton)
+  have hbW : b ∈ W := ⟨hbint, by
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff, not_or]
+    exact ⟨hab.symm, hcb.symm⟩⟩
+  let g : W → K := fun z => ⟨z.1, interior_subset z.2.1⟩
+  have hgemb : Topology.IsEmbedding g := by
+    have hgcont : Continuous g := by
+      dsimp only [g]
+      fun_prop
+    apply Topology.IsEmbedding.of_comp (f := g)
+      (g := (Subtype.val : K → B)) hgcont continuous_subtype_val
+    simpa [g, Function.comp_def] using
+      (Topology.IsEmbedding.subtypeVal (p := fun z : B => z ∈ W))
+  have hgrange : Set.range g = Subtype.val ⁻¹' W := by
+    ext z
+    constructor
+    · rintro ⟨w, rfl⟩
+      exact w.2
+    · intro hz
+      exact ⟨⟨z.1, hz⟩, Subtype.ext rfl⟩
+  have hgopen : Topology.IsOpenEmbedding g :=
+    ⟨hgemb, by rw [hgrange]; exact hWopen.preimage continuous_subtype_val⟩
+  let f : W → ℝ := fun z => (e (g z) : ℝ)
+  have hfemb : Topology.IsEmbedding f := by
+    exact Topology.IsEmbedding.subtypeVal.comp (e.isEmbedding.comp hgemb)
+  have hegrange : IsOpen (e '' Set.range g) :=
+    e.isOpen_image.mpr hgopen.isOpen_range
+  obtain ⟨O, hOopen, hOeq⟩ := isOpen_induced_iff.mp hegrange
+  have hfrange : Set.range f = O ∩ Set.Ioo (0 : ℝ) 1 := by
+    ext r
+    constructor
+    · rintro ⟨z, rfl⟩
+      have hzimg : e (g z) ∈ e '' Set.range g :=
+        ⟨g z, ⟨z, rfl⟩, rfl⟩
+      have hzO : (e (g z) : ℝ) ∈ O := by
+        have := congrArg (fun A : Set (Set.Icc (0 : ℝ) 1) => e (g z) ∈ A) hOeq
+        simpa using this.mpr hzimg
+      refine ⟨hzO, ?_⟩
+      have hnea : g z ≠ a := by
+        intro h
+        exact z.2.2 (by left; exact congrArg Subtype.val h)
+      have hnec : g z ≠ c := by
+        intro h
+        exact z.2.2 (by right; exact congrArg Subtype.val h)
+      constructor
+      · exact lt_of_le_of_ne (e (g z)).2.1 (by
+          intro hzero
+          apply hnea
+          apply e.injective
+          rw [hea]
+          exact Subtype.ext hzero.symm)
+      · exact lt_of_le_of_ne (e (g z)).2.2 (by
+          intro hone
+          apply hnec
+          apply e.injective
+          rw [hec]
+          exact Subtype.ext hone)
+    · rintro ⟨hrO, hrIoo⟩
+      have hrIcc : r ∈ Set.Icc (0 : ℝ) 1 := ⟨hrIoo.1.le, hrIoo.2.le⟩
+      let q : Set.Icc (0 : ℝ) 1 := ⟨r, hrIcc⟩
+      have hqimg : q ∈ e '' Set.range g := by
+        have := congrArg (fun A : Set (Set.Icc (0 : ℝ) 1) => q ∈ A) hOeq
+        apply this.mp
+        exact hrO
+      obtain ⟨z, ⟨w, hw⟩, hz⟩ := hqimg
+      subst z
+      refine ⟨w, ?_⟩
+      exact congrArg Subtype.val hz
+  have hfopen : Topology.IsOpenEmbedding f :=
+    ⟨hfemb, by rw [hfrange]; exact hOopen.inter isOpen_Ioo⟩
+  refine ⟨W, hWopen, hbW, Set.range f, hfopen.isOpen_range, ?_⟩
+  exact ⟨hfopen.isEmbedding.toHomeomorph⟩
 
 /-- Assembly of F3 from planar localization, factor regularity, Jordan
 separation, and the arc characterization. -/
@@ -1570,6 +1806,38 @@ lemma apm_t95j06_principalCircleBundle_local_section
     simpa [s] using
       ((congrArg (fun q : U × Circle ↦ (q.1 : B)) heq).symm.trans hp).symm
 
+/-- Pulling the local-section cover back along one traversal of the circle
+gives a local continuous lift around every point of the closed interval.
+
+In words: continuity of `t ↦ e⁻¹(exp(2πt))` makes the inverse image of a
+local-section domain open, and composing that local section with the traversal
+gives the required lift.  This is the local input to the finite-subdivision
+pasting argument. -/
+lemma apm_t95j06_principalCircleBundle_interval_local_lift_aux
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (e : @Homeomorph B Circle tB inferInstance)
+    (hloc : ∀ b : B, ∃ U : Set B, IsOpen U ∧ b ∈ U ∧
+      ∃ s : U → X, Continuous s ∧ ∀ u, P.proj (s u) = u) :
+    let I := {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1}
+    let γ : I → B := fun t ↦ e.symm (Circle.exp (2 * Real.pi * t.1))
+    ∀ t : I, ∃ W : Set I, IsOpen W ∧ t ∈ W ∧
+      ∃ σ : W → X, Continuous σ ∧ ∀ u, P.proj (σ u) = γ u := by
+  dsimp only
+  let γ : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → B := fun t ↦
+    e.symm (Circle.exp (2 * Real.pi * t.1))
+  have hγ : Continuous γ := by
+    exact e.symm.continuous.comp (Circle.exp.continuous.comp (by fun_prop))
+  intro t
+  obtain ⟨U, hU, htU, s, hscont, hsproj⟩ := hloc (γ t)
+  let W : Set {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} := γ ⁻¹' U
+  let σ : W → X := fun u ↦ s ⟨γ u.1, u.2⟩
+  refine ⟨W, hU.preimage hγ, htU, σ, ?_, ?_⟩
+  · exact hscont.comp
+      (Continuous.subtype_mk (hγ.comp continuous_subtype_val) (fun u ↦ u.2))
+  · intro u
+    exact hsproj ⟨γ u.1, u.2⟩
+
 /- Local sections of a principal `Circle` bundle over a circle paste to a
 global section.
 
@@ -1646,6 +1914,30 @@ theorem apm_t95j06_principalCircleBundle_close_interval_section
     change σ z = P.act (a o, σ o)
     rw [ha1, ← hh, P.mul_act, inv_mul_cancel, P.one_act]
 
+/-- The standard exponential parametrization of the circle by the closed unit
+interval is onto.  This follows by choosing the argument in `[0,2π)` (adding
+`2π` to a negative principal argument) and dividing by `2π`.  Estimated proof
+size: 20--35 lines. -/
+theorem apm_t95j06_principalCircleBundle_descend_interval_section_aux_surjective :
+    Function.Surjective
+      (fun t : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} ↦
+        Circle.exp (2 * Real.pi * t.1)) := by
+  sorry
+
+/-- A continuous closed interval lift is constant on the fibres of the
+standard exponential parametrization.  `Circle.exp_eq_exp` says two parameters
+differ by an integral multiple of `2π`; parameters in `[0,1]` therefore agree,
+except that `0` and `1` may be paired, where the endpoint-closing hypothesis
+applies.  Estimated proof size: 35--60 lines. -/
+theorem apm_t95j06_principalCircleBundle_descend_interval_section_aux_factorsThrough
+    (X : Type*) [TopologicalSpace X]
+    (σ : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → X)
+    (hclose : σ ⟨0, by simp⟩ = σ ⟨1, by simp⟩) :
+    Function.FactorsThrough σ
+      (fun t : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} ↦
+        Circle.exp (2 * Real.pi * t.1)) := by
+  sorry
+
 /-- A closed lifted section descends through the exponential quotient.
 
 The map `t ↦ Circle.exp (2πt)` from `[0,1]` is a quotient map onto `Circle`;
@@ -1662,7 +1954,30 @@ theorem apm_t95j06_principalCircleBundle_descend_interval_section
       e.symm (Circle.exp (2 * Real.pi * t.1)))
     (hclose : σ ⟨0, by simp⟩ = σ ⟨1, by simp⟩) :
     ∃ s : Circle → X, Continuous s ∧ ∀ c, P.proj (s c) = e.symm c := by
-  sorry
+  let q : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → Circle :=
+    fun t ↦ Circle.exp (2 * Real.pi * t.1)
+  have hqcont : Continuous q := by
+    exact Circle.exp.continuous.comp
+      (continuous_const.mul continuous_subtype_val)
+  have hqsurj : Function.Surjective q :=
+    apm_t95j06_principalCircleBundle_descend_interval_section_aux_surjective
+  let qc : C({t : ℝ // t ∈ Set.Icc (0 : ℝ) 1}, Circle) := ⟨q, hqcont⟩
+  have hq : Topology.IsQuotientMap qc :=
+    IsQuotientMap.of_surjective_continuous hqsurj hqcont
+  let σc : C({t : ℝ // t ∈ Set.Icc (0 : ℝ) 1}, X) := ⟨σ, hσcont⟩
+  have hfac : Function.FactorsThrough σc qc :=
+    apm_t95j06_principalCircleBundle_descend_interval_section_aux_factorsThrough
+      X σ hclose
+  let sc : C(Circle, X) :=
+    hq.lift σc hfac
+  refine ⟨sc, sc.continuous, ?_⟩
+  intro c
+  obtain ⟨t, rfl⟩ := hqsurj c
+  rw [show sc (q t) = σ t by
+    have ht := ContinuousMap.congr_fun (hq.lift_comp σc hfac) t
+    change sc (qc t) = σc t at ht
+    simpa [qc, σc] using ht]
+  exact hσproj t
 
 /-- Local sections of a principal `Circle` bundle over a circle paste to a
 global section by lifting around one traversal, correcting its endpoint
