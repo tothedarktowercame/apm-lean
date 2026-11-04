@@ -975,6 +975,67 @@ def apm_t95j06_HasTwoEndpointContinuumNeighborhoods
       IsPreconnected ({c}ᶜ : Set K) ∧
       ∀ y : K, y ≠ a → y ≠ c → ¬ IsPreconnected ({y}ᶜ : Set K)
 
+/-- The pure planar crosscut statement used by F3c.  An embedded closed arc in
+a closed Euclidean disk, meeting the boundary circle precisely in its two
+endpoints, cuts the open disk into two nonempty connected open sides, and the
+whole arc is in the frontier of both sides. -/
+def apm_t95j06_PlanarCrosscutSeparation : Prop :=
+  ∀ (r : ℝ), 0 < r → ∀ (A : Set apm_t95j06_E2),
+    ∀ (e : Set.Icc (-1 : ℝ) 1 ≃ₜ A),
+      A ⊆ Metric.closedBall 0 r →
+      A ∩ Metric.sphere 0 r =
+        ({(e ⟨-1, by norm_num⟩ : apm_t95j06_E2),
+          (e ⟨1, by norm_num⟩ : apm_t95j06_E2)} : Set apm_t95j06_E2) →
+      ∃ L R : Set apm_t95j06_E2,
+        IsOpen L ∧ IsOpen R ∧ L.Nonempty ∧ R.Nonempty ∧
+        IsPreconnected L ∧ IsPreconnected R ∧ Disjoint L R ∧
+        Metric.ball 0 r \ A = L ∪ R ∧
+        A ⊆ frontier L ∧ A ⊆ frontier R
+
+/-- **LIBRARY P, planar crosscut theorem (estimated 180--280 lines).**
+This is the classical crosscut theorem for a disk, a standard consequence of
+the Jordan curve theorem: join either boundary subarc to the crosscut, apply
+Jordan separation, and identify the two complementary sides.  The endpoint
+condition prevents an arc from touching the boundary elsewhere.  This leaf is
+entirely about subsets of `apm_t95j06_E2`; it has no base space, chart, or
+product hypothesis.  No matching sorry-free result was found in
+`ConstructionTargets/`; the unusable Lean-4.33 Reeken theorem is the standard
+source to backport only this consequence from. -/
+theorem apm_t95j06_planar_crosscut_separation :
+    apm_t95j06_PlanarCrosscutSeparation := by
+  sorry
+
+/-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
+Assuming the pure disk-crosscut theorem, one explicit product chart around
+`b × 0` yields the required compact continuum in the base.  Choose a small
+closed disk in the chart, take the component meeting the zero slice, and
+project it to `B`.  Compactness and connectedness pass through the projection;
+the two planar sides say exactly that the projected continuum has two non-cut
+endpoints and every other point is a cut point.  This is the chart restriction,
+component, and projection bookkeeping left after Jordan separation is given.
+
+At an endpoint of `[0,1]` no such product chart exists; a tripod contradicts
+the two-side conclusion; a Cantor factor lacks local connectedness/planarity;
+and a circle passes because the construction is local. -/
+theorem apm_t95j06_planarCrosscut_productChart_twoEndpoint_at
+    (hcrosscut : apm_t95j06_PlanarCrosscutSeparation)
+    (B : Type) (tB : TopologicalSpace B)
+    (h2 : @T2Space B tB)
+    (hlc : Nonempty (@LocallyCompactSpace B tB))
+    (hm : Nonempty (@TopologicalSpace.MetrizableSpace B tB))
+    (hconn : Nonempty (@LocallyConnectedSpace B tB))
+    (b : B) (W : Set B) (hW : @IsOpen B tB W) (hbW : b ∈ W)
+    (V : Set apm_t95j06_E2) (hV : IsOpen V)
+    (hchart : Nonempty ((W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V)) :
+    ∃ K : Set B,
+      @IsCompact B tB K ∧ @IsConnected B tB K ∧ b ∈ @interior B tB K ∧
+      ∃ a c : K, a ≠ c ∧ (a : B) ≠ b ∧ (c : B) ≠ b ∧
+        Nonempty (LocallyConnectedSpace K) ∧
+        IsPreconnected ({a}ᶜ : Set K) ∧
+        IsPreconnected ({c}ᶜ : Set K) ∧
+        ∀ y : K, y ≠ a → y ≠ c → ¬ IsPreconnected ({y}ᶜ : Set K) := by
+  sorry
+
 /-- **Sub-leaf F3c — gating leaf (LIBRARY, estimated 300--400 lines).**
 In words: planar arc-product neighbourhoods have arbitrarily local compact
 continua with precisely two non-cut points.
@@ -1001,7 +1062,11 @@ theorem apm_t95j06_planarArcProducts_twoEndpointContinua
     (hm : Nonempty (@TopologicalSpace.MetrizableSpace B tB))
     (hconn : Nonempty (@LocallyConnectedSpace B tB)) :
     @apm_t95j06_HasTwoEndpointContinuumNeighborhoods B tB := by
-  sorry
+  intro b
+  obtain ⟨W, hW, hbW, V, hV, hchart⟩ := hplanar b
+  exact apm_t95j06_planarCrosscut_productChart_twoEndpoint_at
+    apm_t95j06_planar_crosscut_separation
+    B tB h2 hlc hm hconn b W hW hbW V hV hchart
 
 /- **Sub-leaf F3a (LIBRARY, estimated 180--300 lines).**  In words: local
 Euclidean charts on `U × Circle` shrink around `(b,1)` to planar charts on a
@@ -1170,7 +1235,7 @@ theorem apm_t95j06_planarArcProducts_factor_regular
     TopologicalSpace.metrizableSpace_of_t3_secondCountable B
   exact ⟨⟨inferInstance⟩, ⟨inferInstance⟩, ⟨inferInstance⟩⟩
 
-/-- **Moore--Whyburn arc-recognition theorem (LIBRARY, estimated 180--300
+/- **Moore--Whyburn arc-recognition theorem (LIBRARY, estimated 180--300
 lines).** A nondegenerate compact connected locally connected metrizable
 continuum whose only non-cut points are `a` and `c` is an arc, with those
 points as its endpoints.
@@ -1181,6 +1246,48 @@ whose order topology is the given topology; compactness supplies order
 completeness, and metrizability supplies separability.  The resulting compact
 separable linear continuum is order-isomorphic, hence homeomorphic, to the
 unit interval. -/
+/-- **Moore cut-point order (estimated 120--200 lines).** The separation
+relation defined by the component of `K \\ {y}` containing `a` equips `K`
+with a complete dense linear order, with endpoints `a,c`, whose order topology
+is the original topology.
+
+This is true because each non-endpoint puncture has exactly two components:
+local connectedness makes those components open, giving totality and the
+order-topology comparison; connectedness gives density, and compactness gives
+suprema and infima. -/
+theorem apm_t95j06_twoEndpointContinuum_cutPointOrder
+    (K : Type*) [TopologicalSpace K]
+    [CompactSpace K] [T2Space K] [TopologicalSpace.MetrizableSpace K]
+    [LocallyConnectedSpace K]
+    (hK : IsConnected (Set.univ : Set K)) (a c : K) (hac : a ≠ c)
+    (ha : IsPreconnected ({a}ᶜ : Set K))
+    (hc : IsPreconnected ({c}ᶜ : Set K))
+    (hcut : ∀ y : K, y ≠ a → y ≠ c →
+      ¬ IsPreconnected ({y}ᶜ : Set K)) :
+    ∃ o : CompleteLinearOrder K,
+      let _ := o
+      @OrderTopology K inferInstance o.toLinearOrder.toPreorder ∧
+      @DenselyOrdered K o.toLinearOrder.toLT ∧
+      Nonempty (TopologicalSpace.SeparableSpace K) ∧
+      a = o.bot ∧ c = o.top := by
+  sorry
+
+/-- **Compact separable linear-continuum classification (estimated 70--120
+lines).** Every nontrivial second-countable complete dense linear order with
+its order topology is endpoint-preservingly homeomorphic to the unit interval.
+
+This is true by choosing a countable dense subset, identifying it with a dense
+subset of the rationals in `(0,1)`, and extending the order isomorphism by
+Dedekind completeness.  Order isomorphisms between order-topological spaces
+are homeomorphisms. -/
+theorem apm_t95j06_completeSeparableLinearOrder_homeomorph_Icc
+    (L : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
+    [OrderTopology L] [DenselyOrdered L] [TopologicalSpace.SeparableSpace L]
+    [Nontrivial L] :
+    ∃ e : L ≃ₜ Set.Icc (0 : ℝ) 1,
+      e ⊥ = ⟨0, by norm_num⟩ ∧ e ⊤ = ⟨1, by norm_num⟩ := by
+  sorry
+
 theorem apm_t95j06_twoEndpointContinuum_homeomorph_Icc
     (K : Type*) [TopologicalSpace K]
     [CompactSpace K] [T2Space K] [TopologicalSpace.MetrizableSpace K]
@@ -1192,7 +1299,16 @@ theorem apm_t95j06_twoEndpointContinuum_homeomorph_Icc
       ¬ IsPreconnected ({y}ᶜ : Set K)) :
     ∃ e : K ≃ₜ Set.Icc (0 : ℝ) 1,
       e a = ⟨0, by norm_num⟩ ∧ e c = ⟨1, by norm_num⟩ := by
-  sorry
+  obtain ⟨o, hot, hdense, hsep, ha0, hc1⟩ :=
+    apm_t95j06_twoEndpointContinuum_cutPointOrder K hK a c hac ha hc hcut
+  letI : CompleteLinearOrder K := o
+  letI : OrderTopology K := hot
+  letI : DenselyOrdered K := hdense
+  letI : TopologicalSpace.SeparableSpace K := hsep.some
+  letI : Nontrivial K := ⟨⟨a, c, hac⟩⟩
+  obtain ⟨e, he0, he1⟩ :=
+    apm_t95j06_completeSeparableLinearOrder_homeomorph_Icc K
+  exact ⟨e, ha0.symm ▸ he0, hc1.symm ▸ he1⟩
 
 /-- **Sub-leaf F3d (LIBRARY, estimated 220--380 lines).**  In words: a
 locally connected metrizable Hausdorff space with a neighbourhood basis of
@@ -1366,81 +1482,6 @@ lemma apm_t95j06_compact_locallyRealLine_secondCountable_aux
     obtain ⟨i, hi⟩ := hbmem
     obtain ⟨his, hbUi⟩ := hi
     exact ⟨⟨i, his⟩, hbUi⟩
-
-/-- Every connected component of a punctured compact connected one-manifold is
-an open noncompact one-manifold and hence is homeomorphic to `ℝ`.
-
-Proof sketch (estimated 90--140 lines): the puncture is open and locally
-connected, so `connectedComponent x` is open as well as closed in the
-puncture.  It inherits Hausdorffness, second countability (from
-`apm_t95j06_compact_locallyRealLine_secondCountable_aux`), and real-line
-charts (by
-`apm_t95j06_puncture_inherits_oneManifold_aux_openSubtype`).  If it were
-compact, its image in the Hausdorff ambient space would be closed; it is also
-open, so ambient connectedness would make it all of `B`, contradicting the
-missing point.  Apply
-`apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real`.
-
-Counterexample checks: disconnected ambient spaces can have compact
-components; the long line shows why second countability is used; the doubled
-line shows why Hausdorffness is used; a discrete space fails the local
-real-line hypothesis. -/
-lemma apm_t95j06_puncture_components_homeomorph_real_aux
-    (B : Type) (tB : TopologicalSpace B)
-    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
-    (h2 : @T2Space B tB)
-    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
-    ∀ x : {y : B // y ≠ b},
-      Nonempty ({y : {z : B // z ≠ b} //
-        y ∈ connectedComponent x} ≃ₜ ℝ) := by
-  sorry
-
-/-- The one-chart end argument: if every connected component of the puncture
-is a real line, then the puncture has only one component.
-
-Proof sketch (estimated 110--170 lines): a chart about `b` has two connected
-half-intervals.  Under a hypothetical separation, choose the puncture
-component `C` meeting one half.  Connected-component openness and closedness
-show that `C` meets the chart in exactly that half.  The complement of this
-half in `C` is compact because it is the part of the closed set `C ∪ {b}`
-outside a smaller chart.  Transporting along `C ≃ₜ ℝ`, a connected open
-interval with compact complement must be all of `ℝ`; hence `C` is precisely
-the half-chart.  Then `C ∪ {b}` is compact, while its chart image is a
-half-open interval, contradiction.
-
-Counterexample checks: for an interval an endpoint puncture is connected but
-the endpoint has no real-line chart; for a circle the conclusion holds; a
-tripod fails the chart hypothesis; the doubled line fails Hausdorffness; the
-long circle fails the component-to-`ℝ` premise. -/
-lemma apm_t95j06_puncture_connected_of_components_real_aux
-    (B : Type) (tB : TopologicalSpace B)
-    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
-    (h2 : @T2Space B tB)
-    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B)
-    (hcomponents : ∀ x : {y : B // y ≠ b},
-      Nonempty ({y : {z : B // z ≠ b} //
-        y ∈ connectedComponent x} ≃ₜ ℝ)) :
-    @ConnectedSpace {x : B // x ≠ b} inferInstance := by
-  sorry
-
-/-- **LIBRARY, puncture connectedness (estimated 180--260 lines).** Removing one
-point from a compact connected Hausdorff locally-real-line space leaves a
-connected space. A punctured chart has two half-intervals; a separation would
-separate the original space after a finite compact chart-chain argument. Use
-`isPreconnected_iff_connected` and `Homeomorph.isPreconnected_image`.
-Compactness excludes `ℝ \ {0}`, local-line charts exclude wedges, and
-Hausdorffness excludes the line with two origins. -/
-theorem apm_t95j06_puncture_connected
-    (B : Type) (tB : TopologicalSpace B)
-    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
-    (h2 : @T2Space B tB)
-    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
-    @ConnectedSpace {x : B // x ≠ b} inferInstance := by
-  apply apm_t95j06_puncture_connected_of_components_real_aux
-    B tB hc hconn h2 hloc b
-  exact apm_t95j06_puncture_components_homeomorph_real_aux
-    B tB hc hconn h2 hloc b
-
 /-- An open subspace of a space locally homeomorphic to the real line is again
 locally homeomorphic to the real line. -/
 theorem apm_t95j06_puncture_inherits_oneManifold_aux_openSubtype
@@ -1561,7 +1602,7 @@ theorem apm_t95j06_locallyRealLine_relativelyCompact_chart
       Nonempty (U ≃ₜ ℝ) := by
   sorry
 
-/-- **LIBRARY, finite interval-chart chain (estimated 140--220 lines).**
+/- **LIBRARY, finite interval-chart chain (estimated 140--220 lines).**
 In a connected noncompact Hausdorff one-manifold, a finite collection of
 relatively compact interval charts is contained in one relatively compact
 interval chart.  Add charts along a shortest overlap chain from the current
@@ -1570,6 +1611,38 @@ Hausdorffness rules out branching and noncompactness rules out the final two
 ends closing into a circle.  This lemma begins with the finite chart family
 already chosen, so it contains no compactness/subcover argument and is
 strictly the finite one-dimensional gluing step. -/
+/-- The nerve of a connected open cover is connected: a finite set of members
+of the cover can be enlarged to a finite family whose union is connected.
+Here every member is connected because it is homeomorphic to `ℝ`.  This is a
+cover/finite-graph lemma, independent of compact closures and of the
+one-dimensional no-branching argument.  Estimated size: 45--70 lines. -/
+theorem apm_t95j06_finite_intervalCharts_connected_enlargement
+    (X : Type) [TopologicalSpace X] [ConnectedSpace X]
+    (A : X → Set X) (hAopen : ∀ x, IsOpen (A x))
+    (hxA : ∀ x, x ∈ A x) (hAreal : ∀ x, Nonempty (A x ≃ₜ ℝ))
+    (s : Finset X) :
+    ∃ t : Finset X, s ⊆ t ∧ IsConnected (⋃ x ∈ t, A x) := by
+  sorry
+
+/-- The genuinely one-dimensional gluing core.  A connected finite union of
+relatively compact line charts in a noncompact Hausdorff one-manifold sits in
+one relatively compact line chart.  The connected-union hypothesis removes
+the open-cover nerve construction from the parent theorem; the proof orders
+successive overlaps, rules out branching by local real charts, and rules out
+closing the two ends using noncompactness.  Estimated size: 110--170 lines. -/
+theorem apm_t95j06_connected_finite_intervalCharts_thicken
+    (X : Type) [TopologicalSpace X] [ConnectedSpace X] [NoncompactSpace X]
+    [T2Space X] [SecondCountableTopology X]
+    (hloc : apm_t95j06_IsLocallyRealLine X)
+    (A : X → Set X)
+    (hAopen : ∀ x, IsOpen (A x))
+    (hAcompact : ∀ x, IsCompact (closure (A x)))
+    (hAreal : ∀ x, Nonempty (A x ≃ₜ ℝ))
+    (t : Finset X) (ht : IsConnected (⋃ x ∈ t, A x)) :
+    ∃ U : Set X, IsOpen U ∧ (⋃ x ∈ t, A x) ⊆ U ∧
+      IsCompact (closure U) ∧ Nonempty (U ≃ₜ ℝ) := by
+  sorry
+
 theorem apm_t95j06_finite_intervalCharts_thicken
     (X : Type) [TopologicalSpace X] [ConnectedSpace X] [NoncompactSpace X]
     [T2Space X] [SecondCountableTopology X]
@@ -1582,7 +1655,19 @@ theorem apm_t95j06_finite_intervalCharts_thicken
     (s : Finset X) :
     ∃ U : Set X, IsOpen U ∧ (⋃ x ∈ s, A x) ⊆ U ∧
       IsCompact (closure U) ∧ Nonempty (U ≃ₜ ℝ) := by
-  sorry
+  obtain ⟨t, hst, ht⟩ :=
+    apm_t95j06_finite_intervalCharts_connected_enlargement X A hAopen hxA hAreal s
+  obtain ⟨U, hU, htU, hcU, hUr⟩ :=
+    apm_t95j06_connected_finite_intervalCharts_thicken
+      X hloc A hAopen hAcompact hAreal t ht
+  refine ⟨U, hU, ?_, hcU, hUr⟩
+  intro y hy
+  rcases Set.mem_iUnion.mp hy with ⟨x, hy⟩
+  rcases Set.mem_iUnion.mp hy with ⟨hx, hy⟩
+  apply htU
+  apply Set.mem_iUnion_of_mem x
+  apply Set.mem_iUnion_of_mem (hst hx)
+  exact hy
 
 /-- **LIBRARY, compact-set chart thickening (estimated 180--260 lines).**
 In a connected noncompact Hausdorff second-countable one-manifold, every
@@ -1688,6 +1773,60 @@ lemma apm_t95j06_increasing_interval_union_mem
   have hx : x ∈ ⋃ n, U n := by rw [hcover]; trivial
   simpa only [Set.mem_iUnion] using hx
 
+/-- An increasing exhaustion by open real lines makes the ambient space
+connected.  Each stage is connected, consecutive stages meet, and the union
+is the whole space. -/
+lemma apm_t95j06_increasing_interval_union_connected_aux
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) : ConnectedSpace X := by
+  have hconn : ∀ n, IsConnected (U n) := by
+    intro n
+    obtain ⟨e⟩ := hreal n
+    have hsub : _root_.IsConnected (Set.univ : Set (U n)) := by
+      rw [← e.isConnected_image]
+      simpa using (isConnected_univ : _root_.IsConnected (Set.univ : Set ℝ))
+    simpa using hsub.image (Subtype.val : U n → X)
+      continuous_subtype_val.continuousOn
+  have hmeet : ∀ n, ((U n) ∩ (U (n + 1))).Nonempty := by
+    intro n
+    obtain ⟨e⟩ := hreal n
+    let z : U n := e.symm 0
+    exact ⟨z.1, z.2,
+      apm_t95j06_increasing_interval_union_mono X U hnested n z.2⟩
+  apply connectedSpace_iff_univ.mpr
+  rw [← hcover]
+  exact _root_.IsConnected.iUnion_of_chain hconn hmeet
+
+/-- A countable open cover by copies of the real line gives a second-countable
+ambient topology. -/
+lemma apm_t95j06_increasing_interval_union_secondCountable_aux
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) : SecondCountableTopology X := by
+  let stageSCT (n : ℕ) : SecondCountableTopology (U n) := by
+    obtain ⟨e⟩ := hreal n
+    exact e.secondCountableTopology
+  letI (n : ℕ) : SecondCountableTopology (U n) := stageSCT n
+  exact TopologicalSpace.secondCountableTopology_of_countable_cover hopen hcover
+
+/-- The supplied exhaustion is itself an interval atlas: every point lies in
+one of the open real-line stages. -/
+lemma apm_t95j06_increasing_interval_union_locallyReal_aux
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) :
+    apm_t95j06_IsLocallyRealLine X := by
+  intro x
+  obtain ⟨n, hxn⟩ :=
+    apm_t95j06_increasing_interval_union_mem X U hcover x
+  obtain ⟨e⟩ := hreal n
+  exact ⟨U n, hopen n, hxn, Set.range e, e.isOpenEmbedding.isOpen_range,
+    ⟨e.isEmbedding.toHomeomorph⟩⟩
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
@@ -1695,6 +1834,14 @@ theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
     (hcover : (⋃ n, U n) = Set.univ) :
     Nonempty (X ≃ₜ ℝ) := by
+  haveI : ConnectedSpace X :=
+    apm_t95j06_increasing_interval_union_connected_aux X U hnested hreal hcover
+  haveI : SecondCountableTopology X :=
+    apm_t95j06_increasing_interval_union_secondCountable_aux
+      X U hopen hreal hcover
+  have hloc : apm_t95j06_IsLocallyRealLine X :=
+    apm_t95j06_increasing_interval_union_locallyReal_aux
+      X U hopen hreal hcover
   sorry
 
 /-- **LIBRARY, open one-manifold classification (estimated 300--400 lines).**
@@ -1725,6 +1872,137 @@ theorem apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real
     apm_t95j06_nested_interval_exhaustion X K hK hcover hthicken
   exact apm_t95j06_increasing_interval_union_homeomorph_real
     X U hopen hnested hreal hUcover
+
+/-- Every connected component of a punctured compact connected one-manifold is
+an open noncompact one-manifold and hence is homeomorphic to `ℝ`.
+
+Proof sketch (estimated 90--140 lines): the puncture is open and locally
+connected, so `connectedComponent x` is open as well as closed in the
+puncture.  It inherits Hausdorffness, second countability (from
+`apm_t95j06_compact_locallyRealLine_secondCountable_aux`), and real-line
+charts (by
+`apm_t95j06_puncture_inherits_oneManifold_aux_openSubtype`).  If it were
+compact, its image in the Hausdorff ambient space would be closed; it is also
+open, so ambient connectedness would make it all of `B`, contradicting the
+missing point.  Apply
+`apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real`.
+
+Counterexample checks: disconnected ambient spaces can have compact
+components; the long line shows why second countability is used; the doubled
+line shows why Hausdorffness is used; a discrete space fails the local
+real-line hypothesis. -/
+lemma apm_t95j06_puncture_components_homeomorph_real_aux
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
+    (h2 : @T2Space B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
+    ∀ x : {y : B // y ≠ b},
+      Nonempty ({y : {z : B // z ≠ b} //
+        y ∈ connectedComponent x} ≃ₜ ℝ) := by
+  letI : TopologicalSpace B := tB
+  letI : CompactSpace B := hc
+  letI : ConnectedSpace B := hconn
+  letI : T2Space B := h2
+  letI : SecondCountableTopology B :=
+    apm_t95j06_compact_locallyRealLine_secondCountable_aux B tB hc hloc
+  have hlocal : LocallyConnectedSpace B := by
+    rw [locallyConnectedSpace_iff_subsets_isOpen_isConnected]
+    intro z N hN
+    obtain ⟨U, hU, hzU, V, hV, ⟨e⟩⟩ := hloc z
+    letI : LocallyConnectedSpace V := hV.locallyConnectedSpace
+    letI : LocallyConnectedSpace U := e.locallyConnectedSpace
+    have hNU : Subtype.val ⁻¹' N ∈ nhds (⟨z, hzU⟩ : U) :=
+      (continuous_subtype_val.continuousAt.tendsto hN)
+    obtain ⟨W, hWN, hWopen, hzW, hWconn⟩ :=
+      locallyConnectedSpace_iff_subsets_isOpen_isConnected.mp
+        (inferInstance : LocallyConnectedSpace U) _ _ hNU
+    refine ⟨Subtype.val '' W, ?_,
+      hU.isOpenEmbedding_subtypeVal.isOpenMap W hWopen,
+      ⟨⟨z, hzU⟩, hzW, rfl⟩, ?_⟩
+    · rintro _ ⟨w, hw, rfl⟩
+      exact hWN hw
+    · exact hWconn.image _ continuous_subtype_val.continuousOn
+  letI : LocallyConnectedSpace B := hlocal
+  let P := {y : B // y ≠ b}
+  letI : SecondCountableTopology P :=
+    TopologicalSpace.secondCountableTopology_induced P B Subtype.val
+  have hPopen : IsOpen ({y : B | y ≠ b} : Set B) := isClosed_singleton.isOpen_compl
+  letI : LocallyConnectedSpace P := hPopen.locallyConnectedSpace
+  intro x
+  let C := {y : P // y ∈ connectedComponent x}
+  letI : SecondCountableTopology C :=
+    TopologicalSpace.secondCountableTopology_induced C P Subtype.val
+  have hCopen : IsOpen (connectedComponent x) := isOpen_connectedComponent
+  letI : ConnectedSpace C :=
+    isConnected_iff_connectedSpace.mp (isConnected_connectedComponent (x := x))
+  letI : NoncompactSpace C := by
+    constructor
+    intro hcompact
+    letI : CompactSpace C := isCompact_univ_iff.mp hcompact
+    let f : C → B := fun y ↦ y.1.1
+    have hf : Topology.IsOpenEmbedding f :=
+      hPopen.isOpenEmbedding_subtypeVal.comp hCopen.isOpenEmbedding_subtypeVal
+    have hrangeCompact : IsCompact (Set.range f) := isCompact_range hf.continuous
+    have hrangeClopen : IsClopen (Set.range f) :=
+      ⟨hrangeCompact.isClosed, hf.isOpen_range⟩
+    have hxrange : f ⟨x, mem_connectedComponent⟩ ∈ Set.range f :=
+      Set.mem_range_self _
+    have hall : Set.range f = Set.univ := hrangeClopen.eq_univ ⟨_, hxrange⟩
+    have hb : b ∈ Set.range f := hall.symm ▸ Set.mem_univ b
+    obtain ⟨y, hy⟩ := hb
+    exact y.1.2 hy
+  have hPloc : apm_t95j06_IsLocallyRealLine P :=
+    apm_t95j06_puncture_inherits_oneManifold_aux_openSubtype B hloc _ hPopen
+  have hCloc : apm_t95j06_IsLocallyRealLine C :=
+    apm_t95j06_puncture_inherits_oneManifold_aux_openSubtype P hPloc _ hCopen
+  exact apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real
+    C inferInstance inferInstance inferInstance inferInstance inferInstance hCloc
+
+/-- The one-chart end argument: if every connected component of the puncture
+is a real line, then the puncture has only one component.
+
+Proof sketch (estimated 110--170 lines): a chart about `b` has two connected
+half-intervals.  Under a hypothetical separation, choose the puncture
+component `C` meeting one half.  Connected-component openness and closedness
+show that `C` meets the chart in exactly that half.  The complement of this
+half in `C` is compact because it is the part of the closed set `C ∪ {b}`
+outside a smaller chart.  Transporting along `C ≃ₜ ℝ`, a connected open
+interval with compact complement must be all of `ℝ`; hence `C` is precisely
+the half-chart.  Then `C ∪ {b}` is compact, while its chart image is a
+half-open interval, contradiction.
+
+Counterexample checks: for an interval an endpoint puncture is connected but
+the endpoint has no real-line chart; for a circle the conclusion holds; a
+tripod fails the chart hypothesis; the doubled line fails Hausdorffness; the
+long circle fails the component-to-`ℝ` premise. -/
+lemma apm_t95j06_puncture_connected_of_components_real_aux
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
+    (h2 : @T2Space B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B)
+    (hcomponents : ∀ x : {y : B // y ≠ b},
+      Nonempty ({y : {z : B // z ≠ b} //
+        y ∈ connectedComponent x} ≃ₜ ℝ)) :
+    @ConnectedSpace {x : B // x ≠ b} inferInstance := by
+  sorry
+
+/-- **LIBRARY, puncture connectedness (estimated 180--260 lines).** Removing one
+point from a compact connected Hausdorff locally-real-line space leaves a
+connected space. A punctured chart has two half-intervals; a separation would
+separate the original space after a finite compact chart-chain argument. Use
+`isPreconnected_iff_connected` and `Homeomorph.isPreconnected_image`.
+Compactness excludes `ℝ \ {0}`, local-line charts exclude wedges, and
+Hausdorffness excludes the line with two origins. -/
+theorem apm_t95j06_puncture_connected
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
+    (h2 : @T2Space B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
+    @ConnectedSpace {x : B // x ≠ b} inferInstance := by
+  apply apm_t95j06_puncture_connected_of_components_real_aux
+    B tB hc hconn h2 hloc b
+  exact apm_t95j06_puncture_components_homeomorph_real_aux
+    B tB hc hconn h2 hloc b
 
 /-- Adding one point back to a punctured compact Hausdorff space recovers the
 original space (estimated 80--120 lines). Apply
