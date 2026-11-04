@@ -609,6 +609,62 @@ lemma apm_t95j06_hopf_phase_act
   simp only [norm_smul, Circle.norm_coe, one_mul]
   exact mul_div_assoc (g : ℂ) (y.1.1.1.1 k) (‖y.1.1.1.1 k‖ : ℂ)
 
+noncomputable def apm_t95j06_hopf_normalize
+    {F : Set apm_t95j06_S5} {x : F} {B : Type} {tB : TopologicalSpace B}
+    (Q : @apm_t95j06_hopf_slices_component_principalBundle_aux_Core F x B tB)
+    (k : Fin 3) (y : apm_t95j06_hopf_slice (F := F) (x := x) k) :
+    apm_t95j06_hopf_component F x :=
+  Q.act ((apm_t95j06_hopf_phase k y)⁻¹, y.1)
+
+lemma apm_t95j06_hopf_normalize_continuous
+    {F : Set apm_t95j06_S5} {x : F} {B : Type} {tB : TopologicalSpace B}
+    (Q : @apm_t95j06_hopf_slices_component_principalBundle_aux_Core F x B tB)
+    (k : Fin 3) :
+    Continuous (apm_t95j06_hopf_normalize Q k) := by
+  apply Q.continuous_act.comp
+  exact (apm_t95j06_hopf_phase_continuous k).inv.prodMk continuous_subtype_val
+
+lemma apm_t95j06_hopf_normalize_phase
+    {F : Set apm_t95j06_S5} {x : F} {B : Type} {tB : TopologicalSpace B}
+    (Q : @apm_t95j06_hopf_slices_component_principalBundle_aux_Core F x B tB)
+    (k : Fin 3) (y : apm_t95j06_hopf_slice (F := F) (x := x) k) :
+    apm_t95j06_hopf_phase k
+        ⟨apm_t95j06_hopf_normalize Q k y,
+          apm_t95j06_hopf_slice_invariant Q k _ y.1 y.2⟩ = 1 := by
+  unfold apm_t95j06_hopf_normalize
+  rw [apm_t95j06_hopf_phase_act]
+  simp
+
+lemma apm_t95j06_hopf_normalize_eq_of_proj_eq
+    {F : Set apm_t95j06_S5} {x : F} {B : Type} {tB : TopologicalSpace B}
+    (Q : @apm_t95j06_hopf_slices_component_principalBundle_aux_Core F x B tB)
+    (k : Fin 3) (y z : apm_t95j06_hopf_slice (F := F) (x := x) k)
+    (h : Q.proj y.1 = Q.proj z.1) :
+    apm_t95j06_hopf_normalize Q k y = apm_t95j06_hopf_normalize Q k z := by
+  obtain ⟨g, hg⟩ := Q.orbit_fiber y.1 z.1 h
+  have hp : apm_t95j06_hopf_phase k z = g * apm_t95j06_hopf_phase k y := by
+    rw [← apm_t95j06_hopf_phase_act Q k g y]
+    congr 1
+    exact Subtype.ext hg.symm
+  simp only [apm_t95j06_hopf_normalize, hp]
+  rw [mul_inv_rev, ← hg, Q.mul_act]
+  simp
+
+/-- **Section descent (estimated 80--140 lines).** On the image of any
+nonzero-coordinate slice there is a continuous normalized representative.
+It projects to the given base point and has coordinate phase one. -/
+theorem apm_t95j06_hopf_normalized_section
+    {F : Set apm_t95j06_S5} {x : F} {B : Type} {tB : TopologicalSpace B}
+    (Q : @apm_t95j06_hopf_slices_component_principalBundle_aux_Core F x B tB)
+    (k : Fin 3) :
+    ∃ s : (Q.proj '' apm_t95j06_hopf_slice (F := F) (x := x) k) →
+        apm_t95j06_hopf_component F x,
+      Continuous s ∧
+      (∀ b, Q.proj (s b) = b.1) ∧
+      ∃ hs : ∀ b, s b ∈ apm_t95j06_hopf_slice (F := F) (x := x) k,
+        ∀ b, apm_t95j06_hopf_phase k ⟨s b, hs b⟩ = 1 := by
+  sorry
+
 /-- **Remaining sub-leaf, explicit Hopf charts (estimated 300--550 lines).**
 In words: every scalar-orbit quotient core has fibre-preserving,
 Circle-equivariant local product charts obtained by choosing a nonzero
@@ -633,7 +689,78 @@ theorem apm_t95j06_hopf_slices_component_principalBundle_aux_localTrivial
         (∀ y, ((φ y).1 : B) = Q.proj y.1) ∧
         ∀ g y, (φ ⟨Q.act (g, y.1), by rw [Q.invariant]; exact y.2⟩).2 =
           g * (φ y).2 := by
-  sorry
+  intro b
+  obtain ⟨y, hy⟩ := Q.surjective_proj b
+  obtain ⟨k, hyk⟩ := apm_t95j06_hopf_exists_coordinate_ne_zero y
+  let S := apm_t95j06_hopf_slice (F := F) (x := x) k
+  let U : Set B := Q.proj '' S
+  have hUopen : IsOpen U := by
+    exact Q.open_proj _ (apm_t95j06_hopf_slice_isOpen k)
+  have hbU : b ∈ U := ⟨y, hyk, hy⟩
+  obtain ⟨s, hscont, hsproj, hsS, hsphase⟩ :=
+    apm_t95j06_hopf_normalized_section Q k
+  have inS : ∀ z : {z : apm_t95j06_hopf_component F x // Q.proj z ∈ U},
+      z.1 ∈ S := by
+    intro z
+    obtain ⟨w, hwS, hwproj⟩ := z.2
+    obtain ⟨g, hg⟩ := Q.orbit_fiber w z.1 hwproj
+    rw [← hg]
+    exact apm_t95j06_hopf_slice_invariant Q k g w hwS
+  let toFun : {z : apm_t95j06_hopf_component F x // Q.proj z ∈ U} →
+      U × Circle := fun z =>
+    (⟨Q.proj z.1, z.2⟩, apm_t95j06_hopf_phase k ⟨z.1, inS z⟩)
+  let invFun : U × Circle →
+      {z : apm_t95j06_hopf_component F x // Q.proj z ∈ U} := fun p =>
+    ⟨Q.act (p.2, s p.1), by rw [Q.invariant, hsproj]; exact p.1.2⟩
+  have leftInv : Function.LeftInverse invFun toFun := by
+    intro z
+    obtain ⟨g, hg⟩ := Q.orbit_fiber (s ⟨Q.proj z.1, z.2⟩) z.1
+      (hsproj ⟨Q.proj z.1, z.2⟩)
+    have hphase : apm_t95j06_hopf_phase k ⟨z.1, inS z⟩ = g := by
+      have he := apm_t95j06_hopf_phase_act Q k g
+        ⟨s ⟨Q.proj z.1, z.2⟩, hsS ⟨Q.proj z.1, z.2⟩⟩
+      rw [hsphase] at he
+      simp only [mul_one] at he
+      rw [← he]
+      congr 1
+      exact Subtype.ext hg.symm
+    apply Subtype.ext
+    dsimp only [invFun, toFun]
+    rw [hphase, hg]
+  have rightInv : Function.RightInverse invFun toFun := by
+    rintro ⟨u, g⟩
+    apply Prod.ext
+    · apply Subtype.ext
+      dsimp only [toFun, invFun]
+      rw [Q.invariant, hsproj]
+    · dsimp only [toFun, invFun]
+      have he := apm_t95j06_hopf_phase_act Q k g ⟨s u, hsS u⟩
+      rw [hsphase] at he
+      simpa using he
+  have toCont : Continuous toFun := by
+    apply Continuous.prodMk
+    · exact (Q.continuous_proj.comp continuous_subtype_val).subtype_mk _
+    · apply (apm_t95j06_hopf_phase_continuous k).comp
+      exact continuous_subtype_val.subtype_mk _
+  have invCont : Continuous invFun := by
+    apply Continuous.subtype_mk
+    · apply Q.continuous_act.comp
+      exact continuous_snd.prodMk (hscont.comp continuous_fst)
+  let φ : {z : apm_t95j06_hopf_component F x // Q.proj z ∈ U} ≃ₜ
+      U × Circle := Homeomorph.mk (Equiv.mk toFun invFun leftInv rightInv) toCont invCont
+  refine ⟨U, hUopen, hbU, φ, ?_, ?_⟩
+  · intro z
+    rfl
+  · intro g z
+    have hgz : Q.proj (Q.act (g, z.1)) ∈ U := by
+      rw [Q.invariant]
+      exact z.2
+    let gz : {y : apm_t95j06_hopf_component F x // Q.proj y ∈ U} :=
+      ⟨Q.act (g, z.1), hgz⟩
+    change apm_t95j06_hopf_phase k
+        ⟨Q.act (g, z.1), inS gz⟩ =
+      g * apm_t95j06_hopf_phase k ⟨z.1, inS z⟩
+    exact apm_t95j06_hopf_phase_act Q k g ⟨z.1, inS z⟩
 
 theorem apm_t95j06_hopf_slices_component_principalBundle
     (F : Set apm_t95j06_S5)
