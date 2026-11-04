@@ -2663,7 +2663,201 @@ theorem apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit_aux_order
       ∀ (x y : K) (hya : y ≠ a) (hyc : y ≠ c)
         (s : apm_t95j06_PunctureSplit K a c y),
         @LT.lt K o.toLinearOrder.toLT x y ↔ x ∈ s.sideA := by
-  sorry
+  classical
+  letI : ConnectedSpace K := connectedSpace_iff_univ.mpr hK
+  let lt : K → K → Prop := apm_t95j06_PunctureSplit.sepLT K a c hsplit
+  let S := fun (y : K) (hya : y ≠ a) (hyc : y ≠ c) =>
+    apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc
+  have hlt_int : ∀ x y (hya : y ≠ a) (hyc : y ≠ c),
+      lt x y ↔ x ∈ (S y hya hyc).sideA := by
+    intro x y hya hyc
+    simp only [lt, S, apm_t95j06_PunctureSplit.sepLT, hya, hyc, dite_false]
+  have hlt_a : ∀ x, ¬ lt x a := by
+    intro x; simp [lt, apm_t95j06_PunctureSplit.sepLT]
+  have hlt_c : ∀ x, lt x c ↔ x ≠ c := by
+    intro x; simp [lt, apm_t95j06_PunctureSplit.sepLT, hac.symm]
+  have hnotself : ∀ y (s : apm_t95j06_PunctureSplit K a c y), y ∉ s.sideA := by
+    intro y s hy
+    have : y ∈ ({y}ᶜ : Set K) := by rw [← s.cover]; exact Or.inl hy
+    exact this (Set.mem_singleton y)
+  have hcA : ∀ y (s : apm_t95j06_PunctureSplit K a c y), c ∉ s.sideA :=
+    fun y s h => Set.disjoint_left.1 s.disjoint h s.c_mem
+  have hclA : ∀ y (s : apm_t95j06_PunctureSplit K a c y),
+      closure s.sideA ⊆ insert y s.sideA := by
+    intro y s z hz
+    by_contra hzn
+    simp only [Set.mem_insert_iff, not_or] at hzn
+    have hzcompl : z ∈ ({y}ᶜ : Set K) := hzn.1
+    rw [← s.cover] at hzcompl
+    rcases hzcompl with h | h
+    · exact hzn.2 h
+    · exact Set.disjoint_left.1 (s.disjoint.symm.closure_right s.sideC_open) h hz
+  have hyclA : ∀ y (s : apm_t95j06_PunctureSplit K a c y), y ∈ closure s.sideA := by
+    intro y s
+    by_contra hy
+    have hcl : closure s.sideA ⊆ s.sideA := fun z hz => by
+      rcases hclA y s hz with h | h
+      · exact absurd (h ▸ hz) hy
+      · exact h
+    have hclo : IsClopen s.sideA := ⟨closure_subset_iff_isClosed.mp hcl, s.sideA_open⟩
+    rcases isClopen_iff.mp hclo with h | h
+    · have := s.a_mem; rw [h] at this; exact this
+    · have hc' : c ∈ s.sideA := h ▸ Set.mem_univ c
+      exact hcA y s hc'
+  have htri_int : ∀ x y (hxa : x ≠ a) (hxc : x ≠ c) (hya : y ≠ a) (hyc : y ≠ c),
+      x ≠ y → x ∈ (S y hya hyc).sideA ∨ y ∈ (S x hxa hxc).sideA := by
+    intro x y hxa hxc hya hyc hxy
+    by_contra hn
+    push_neg at hn
+    obtain ⟨hx, hy⟩ := hn
+    have havoid : (S x hxa hxc).sideA ⊆ ({y}ᶜ : Set K) := by
+      intro z hz hzy
+      rw [Set.mem_singleton_iff] at hzy
+      rw [hzy] at hz
+      exact hy hz
+    rcases (S y hya hyc).maximal _ ⟨a, (S x hxa hxc).a_mem⟩
+        (S x hxa hxc).sideA_preconnected havoid with h | h
+    · have hxcl := closure_mono h (hyclA x (S x hxa hxc))
+      rcases hclA y _ hxcl with h' | h'
+      · exact hxy h'
+      · exact hx h'
+    · exact Set.disjoint_left.1 (S y hya hyc).disjoint (S y hya hyc).a_mem
+        (h (S x hxa hxc).a_mem)
+  have hirr : ∀ x, ¬ lt x x := apm_t95j06_PunctureSplit.sepLT_irrefl K a c hsplit
+  have htrans : ∀ x y z, lt x y → lt y z → lt x z := by
+    intro x y z hxy hyz
+    by_cases hya : y = a
+    · subst y; exact absurd hxy (hlt_a x)
+    by_cases hyc : y = c
+    · subst y
+      by_cases hza : z = a
+      · subst z; exact absurd hyz (hlt_a _)
+      by_cases hzc : z = c
+      · subst z; exact absurd hyz (hirr _)
+      exact absurd ((hlt_int _ z hza hzc).mp hyz) (hcA z _)
+    have hxA := (hlt_int x y hya hyc).mp hxy
+    by_cases hza : z = a
+    · subst z; exact absurd hyz (hlt_a y)
+    by_cases hzc : z = c
+    · subst z
+      exact (hlt_c x).mpr (fun h => hcA y _ (h ▸ hxA))
+    have hyA := (hlt_int y z hza hzc).mp hyz
+    have hyz' : y ≠ z := fun h => hnotself z _ (h ▸ hyA)
+    exact (hlt_int x z hza hzc).mpr
+      (apm_t95j06_PunctureSplit.sideA_nested K hK a c y z _ _ hyz' hyA hxA)
+  have htri : ∀ x y, lt x y ∨ x = y ∨ lt y x := by
+    intro x y
+    by_cases hxy : x = y
+    · exact Or.inr (Or.inl hxy)
+    by_cases hya : y = a
+    · subst y; exact Or.inr (Or.inr (apm_t95j06_PunctureSplit.sepLT_a K a c hac hsplit x hxy))
+    by_cases hxa : x = a
+    · subst x; exact Or.inl (apm_t95j06_PunctureSplit.sepLT_a K a c hac hsplit y hya)
+    by_cases hyc : y = c
+    · subst y; exact Or.inl ((hlt_c x).mpr hxy)
+    by_cases hxc : x = c
+    · subst x; exact Or.inr (Or.inr ((hlt_c y).mpr hyc))
+    rcases htri_int x y hxa hxc hya hyc hxy with h | h
+    · exact Or.inl ((hlt_int x y hya hyc).mpr h)
+    · exact Or.inr (Or.inr ((hlt_int y x hxa hxc).mpr h))
+  haveI hsto : IsStrictTotalOrder K lt :=
+    { trichotomous := fun x y h1 h2 => by
+        rcases htri x y with h | h | h
+        · exact absurd h h1
+        · exact h
+        · exact absurd h h2
+      irrefl := hirr
+      trans := htrans }
+  letI lo : LinearOrder K := linearOrderOfSTO lt
+  have hlt_iff : ∀ x y : K, x < y ↔ lt x y := fun x y => Iff.rfl
+  have hle_c : ∀ x : K, x ≤ c := by
+    intro x; by_cases hxc : x = c
+    · exact le_of_eq hxc
+    · exact le_of_lt ((hlt_iff x c).mpr ((hlt_c x).mpr hxc))
+  have ha_le : ∀ x : K, a ≤ x := by
+    intro x; by_cases hxa : x = a
+    · exact le_of_eq hxa.symm
+    · exact le_of_lt ((hlt_iff a x).mpr
+        (apm_t95j06_PunctureSplit.sepLT_a K a c hac hsplit x hxa))
+  have hIci : ∀ y : K, IsClosed (Set.Ici y) := by
+    intro y
+    rw [← isOpen_compl_iff, Set.compl_Ici]
+    by_cases hya : y = a
+    · subst y
+      have : Set.Iio a = ∅ := Set.eq_empty_of_forall_notMem
+        (fun x hx => hlt_a x ((hlt_iff x a).mp hx))
+      rw [this]; exact isOpen_empty
+    by_cases hyc : y = c
+    · subst y
+      have : Set.Iio c = ({c}ᶜ : Set K) := by
+        ext x; simp only [Set.mem_Iio, Set.mem_compl_iff, Set.mem_singleton_iff]
+        rw [hlt_iff]; exact hlt_c x
+      rw [this]; exact isOpen_compl_singleton
+    have : Set.Iio y = (S y hya hyc).sideA := by
+      ext x; rw [Set.mem_Iio, hlt_iff]; exact hlt_int x y hya hyc
+    rw [this]; exact (S y hya hyc).sideA_open
+  have hIic : ∀ y : K, IsClosed (Set.Iic y) := by
+    intro y
+    rw [← isOpen_compl_iff, Set.compl_Iic]
+    by_cases hya : y = a
+    · subst y
+      have : Set.Ioi a = ({a}ᶜ : Set K) := by
+        ext x; simp only [Set.mem_Ioi, Set.mem_compl_iff, Set.mem_singleton_iff]
+        constructor
+        · intro h e; rw [e] at h; exact lt_irrefl _ h
+        · intro h; exact (hlt_iff a x).mpr
+            (apm_t95j06_PunctureSplit.sepLT_a K a c hac hsplit x h)
+      rw [this]; exact isOpen_compl_singleton
+    by_cases hyc : y = c
+    · subst y
+      have : Set.Ioi c = ∅ := Set.eq_empty_of_forall_notMem
+        (fun x hx => not_lt_of_ge (hle_c x) hx)
+      rw [this]; exact isOpen_empty
+    have : Set.Ioi y = (S y hya hyc).sideC := by
+      ext x; rw [Set.mem_Ioi]
+      constructor
+      · intro h
+        have hxy : x ≠ y := (ne_of_lt h).symm
+        have hx : x ∈ ({y}ᶜ : Set K) := hxy
+        rw [← (S y hya hyc).cover] at hx
+        rcases hx with hx | hx
+        · exact absurd ((hlt_iff x y).mpr ((hlt_int x y hya hyc).mpr hx)) (not_lt_of_gt h)
+        · exact hx
+      · intro hx
+        rcases lt_trichotomy x y with h | h | h
+        · exact absurd hx (Set.disjoint_left.1 (S y hya hyc).disjoint
+            ((hlt_int x y hya hyc).mp ((hlt_iff x y).mp h)))
+        · subst h
+          have : x ∈ ({x}ᶜ : Set K) := by rw [← (S x hya hyc).cover]; exact Or.inr hx
+          exact absurd (Set.mem_singleton x) this
+        · exact h
+    rw [this]; exact (S y hya hyc).sideC_open
+  haveI : ClosedIicTopology K := ⟨hIic⟩
+  have hlub : ∀ s : Set K, ∃ m, IsLUB s m := by
+    intro s
+    have hub : upperBounds s = ⋂ x ∈ s, Set.Ici x := by
+      ext z; simp [upperBounds]
+    have hcl : IsClosed (upperBounds s) := by
+      rw [hub]; exact isClosed_biInter (fun x _ => hIci x)
+    obtain ⟨m, hm⟩ := hcl.isCompact.exists_isLeast ⟨c, fun x _ => hle_c x⟩
+    exact ⟨m, hm⟩
+  letI bo : BoundedOrder K :=
+    { top := c, le_top := hle_c, bot := a, bot_le := ha_le }
+  letI cl : CompleteLattice K :=
+    { (inferInstance : Lattice K), bo with
+      sSup := fun s => Classical.choose (hlub s)
+      isLUB_sSup := fun s => Classical.choose_spec (hlub s)
+      sInf := fun s => Classical.choose (hlub (lowerBounds s))
+      isGLB_sInf := fun s =>
+        ⟨fun x hx => (Classical.choose_spec (hlub (lowerBounds s))).2 (fun y hy => hy hx),
+          fun y hy => (Classical.choose_spec (hlub (lowerBounds s))).1 hy⟩ }
+  let o : CompleteLinearOrder K :=
+    { __ := lo, __ := cl, __ := LinearOrder.toBiheytingAlgebra K }
+  refine ⟨o, rfl, rfl, ?_⟩
+  intro x y hya hyc s
+  change lt x y ↔ x ∈ s.sideA
+  rw [hlt_int x y hya hyc,
+    (apm_t95j06_PunctureSplit.choice_sides K a c hsplit y hya hyc s).1]
 
 /-- For an interior point, the strict initial order ray is exactly its
 labelled `a`-side. -/
