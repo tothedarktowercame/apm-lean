@@ -1332,7 +1332,105 @@ theorem apm_t95j06_circle_small_complementary_closedArc
     (O : Set apm_t95j06_E2) (hO : IsOpen O) (hpO : p ∈ O) :
     ∃ A : Set apm_t95j06_E2,
       Nonempty (Set.Icc (0 : ℝ) 1 ≃ₜ A) ∧ A ⊆ J ∧ p ∉ A ∧ J \ A ⊆ O := by
-  sorry
+  classical
+  set q : Circle := e.symm ⟨p, hp⟩ with hq
+  let g : ℝ → apm_t95j06_E2 := fun θ => (e (q * Circle.exp θ)).1
+  have hgc : Continuous g :=
+    continuous_subtype_val.comp (e.continuous.comp
+      (continuous_const.mul Circle.exp.continuous))
+  have hg0 : g 0 = p := by
+    simp [g, hq]
+  obtain ⟨δ, hδ, hball⟩ := Metric.isOpen_iff.mp (hO.preimage hgc) 0
+    (by simpa [Set.mem_preimage, hg0] using hpO)
+  set ε : ℝ := min δ (Real.pi / 2) with hε
+  have hε0 : 0 < ε := lt_min hδ (by positivity)
+  have hεδ : ε ≤ δ := min_le_left _ _
+  have hεpi : ε ≤ Real.pi / 2 := min_le_right _ _
+  have hpi := Real.pi_pos
+  let L : ℝ := 2 * Real.pi - 2 * ε
+  have hL : 0 < L := by simp only [L]; linarith
+  let f : Set.Icc (0 : ℝ) 1 → apm_t95j06_E2 := fun t => g (ε + t.1 * L)
+  have hfc : Continuous f :=
+    hgc.comp (continuous_const.add (continuous_subtype_val.mul continuous_const))
+  have hθrange : ∀ t : Set.Icc (0 : ℝ) 1, ε ≤ ε + t.1 * L ∧ ε + t.1 * L ≤ 2 * Real.pi - ε := by
+    intro t
+    have h1 := t.2.1; have h2 := t.2.2
+    constructor
+    · nlinarith
+    · have : t.1 * L ≤ L := by nlinarith
+      simp only [L] at this; linarith
+  have hfinj : Function.Injective f := by
+    intro s t hst
+    have h1 : e (q * Circle.exp (ε + s.1 * L)) = e (q * Circle.exp (ε + t.1 * L)) :=
+      Subtype.ext hst
+    have h2 := mul_left_cancel (e.injective h1)
+    obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h2
+    have hs := hθrange s; have ht := hθrange t
+    have hm0 : m = 0 := by
+      by_contra hne
+      rcases lt_or_gt_of_ne hne with hlt | hgt
+      · have : (m : ℝ) ≤ -1 := by exact_mod_cast Int.le_sub_one_of_lt hlt
+        nlinarith
+      · have : (1 : ℝ) ≤ m := by exact_mod_cast hgt
+        nlinarith
+    subst hm0
+    simp only [Int.cast_zero, zero_mul, add_zero, add_right_inj] at hm
+    exact Subtype.ext (mul_right_cancel₀ hL.ne' hm)
+  have hemb := (hfc.isClosedEmbedding hfinj).isEmbedding
+  refine ⟨Set.range f, ⟨hemb.toHomeomorph⟩, ?_, ?_, ?_⟩
+  · rintro _ ⟨t, rfl⟩
+    exact (e _).2
+  · rintro ⟨t, ht⟩
+    have h1 : e (q * Circle.exp (ε + t.1 * L)) = e q := by
+      apply Subtype.ext
+      simpa [f, g, hq] using ht
+    have h2 : Circle.exp (ε + t.1 * L) = Circle.exp 0 := by
+      have := e.injective h1
+      rw [Circle.exp_zero]
+      calc Circle.exp (ε + t.1 * L) = q⁻¹ * (q * Circle.exp (ε + t.1 * L)) := by group
+        _ = q⁻¹ * q := by rw [this]
+        _ = 1 := inv_mul_cancel q
+    obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h2
+    have hs := hθrange t
+    rcases lt_trichotomy m 0 with hlt | heq | hgt
+    · have : (m : ℝ) ≤ -1 := by exact_mod_cast Int.le_sub_one_of_lt hlt
+      nlinarith
+    · subst heq; simp at hm; linarith
+    · have : (1 : ℝ) ≤ m := by exact_mod_cast hgt
+      nlinarith
+  · rintro x ⟨hxJ, hxA⟩
+    set w : Circle := q⁻¹ * e.symm ⟨x, hxJ⟩ with hw
+    set θ : ℝ := Complex.arg (w : ℂ) with hθ
+    have hθw : Circle.exp θ = w := Circle.exp_arg w
+    have hθlo : -Real.pi < θ := Complex.neg_pi_lt_arg _
+    have hθhi : θ ≤ Real.pi := Complex.arg_le_pi _
+    have hgx : ∀ φ : ℝ, Circle.exp φ = w → g φ = x := by
+      intro φ hφ
+      simp only [g, hφ, hw, mul_inv_cancel_left, Homeomorph.apply_symm_apply]
+    by_cases hsmall : |θ| < ε
+    · have hmem := hball (show θ ∈ Metric.ball (0 : ℝ) δ by
+        rw [Metric.mem_ball, Real.dist_eq, sub_zero]; linarith)
+      rw [Set.mem_preimage, hgx θ hθw] at hmem
+      exact hmem
+    · exfalso
+      apply hxA
+      push_neg at hsmall
+      rcases le_or_gt 0 θ with h0 | h0
+      · rw [abs_of_nonneg h0] at hsmall
+        refine ⟨⟨(θ - ε) / L, div_nonneg (by linarith) hL.le, ?_⟩, ?_⟩
+        · rw [div_le_one hL]; simp only [L]; linarith
+        · change g (ε + (θ - ε) / L * L) = x
+          rw [div_mul_cancel₀ _ hL.ne']
+          exact hgx _ (by rw [add_sub_cancel]; exact hθw)
+      · rw [abs_of_neg h0] at hsmall
+        refine ⟨⟨(θ + 2 * Real.pi - ε) / L, div_nonneg (by linarith) hL.le, ?_⟩, ?_⟩
+        · rw [div_le_one hL]; simp only [L]; linarith
+        · change g (ε + (θ + 2 * Real.pi - ε) / L * L) = x
+          rw [div_mul_cancel₀ _ hL.ne']
+          apply hgx
+          rw [show ε + (θ + 2 * Real.pi - ε) = θ + (1 : ℤ) * (2 * Real.pi) by push_cast; ring]
+          rw [← hθw]
+          exact Circle.exp_eq_exp.mpr ⟨1, rfl⟩
 
 /-- Arc non-separation implies local access to each of two connected Jordan
 sides.  Remove a small open circle arc about `p`; its complementary closed arc
