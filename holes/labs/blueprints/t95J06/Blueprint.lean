@@ -1922,7 +1922,23 @@ theorem apm_t95j06_principalCircleBundle_descend_interval_section_aux_surjective
     Function.Surjective
       (fun t : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} ↦
         Circle.exp (2 * Real.pi * t.1)) := by
-  sorry
+  intro z
+  have hπ := Real.pi_pos
+  obtain ⟨h1, h2⟩ := Complex.arg_mem_Ioc (z : ℂ)
+  by_cases h : 0 ≤ Complex.arg z
+  · refine ⟨⟨Complex.arg z / (2 * Real.pi), ?_, ?_⟩, ?_⟩
+    · positivity
+    · rw [div_le_one (by positivity)]; linarith
+    · simp only
+      rw [mul_div_cancel₀ _ (by positivity)]
+      exact Circle.exp_arg z
+  · push_neg at h
+    refine ⟨⟨(Complex.arg z + 2 * Real.pi) / (2 * Real.pi), ?_, ?_⟩, ?_⟩
+    · apply div_nonneg <;> linarith
+    · rw [div_le_one (by positivity)]; linarith
+    · simp only
+      rw [mul_div_cancel₀ _ (by positivity), Circle.exp_add_two_pi]
+      exact Circle.exp_arg z
 
 /-- A continuous closed interval lift is constant on the fibres of the
 standard exponential parametrization.  `Circle.exp_eq_exp` says two parameters
@@ -1936,7 +1952,26 @@ theorem apm_t95j06_principalCircleBundle_descend_interval_section_aux_factorsThr
     Function.FactorsThrough σ
       (fun t : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} ↦
         Circle.exp (2 * Real.pi * t.1)) := by
-  sorry
+  intro a b hab
+  have hπ := Real.pi_pos
+  obtain ⟨m, hm⟩ := Circle.exp_eq_exp.1 hab
+  have hab' : a.1 = b.1 + m := by
+    have : 2 * Real.pi * a.1 = 2 * Real.pi * (b.1 + m) := by rw [hm]; ring
+    exact mul_left_cancel₀ (by positivity) this
+  obtain ⟨ha0, ha1⟩ := a.2
+  obtain ⟨hb0, hb1⟩ := b.2
+  have hm1 : (m : ℝ) ≤ 1 := by linarith
+  have hm2 : (-1 : ℝ) ≤ m := by linarith
+  have hm1' : m ≤ 1 := by exact_mod_cast hm1
+  have hm2' : -1 ≤ m := by exact_mod_cast hm2
+  interval_cases m
+  · have ha : a = ⟨0, by simp⟩ := Subtype.ext (by push_cast at hab'; linarith)
+    have hb : b = ⟨1, by simp⟩ := Subtype.ext (by push_cast at hab'; linarith)
+    rw [ha, hb, hclose]
+  · exact congrArg σ (Subtype.ext (by simpa using hab'))
+  · have ha : a = ⟨1, by simp⟩ := Subtype.ext (by push_cast at hab'; linarith)
+    have hb : b = ⟨0, by simp⟩ := Subtype.ext (by push_cast at hab'; linarith)
+    rw [ha, hb, hclose]
 
 /-- A closed lifted section descends through the exponential quotient.
 
