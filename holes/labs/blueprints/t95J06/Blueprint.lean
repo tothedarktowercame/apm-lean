@@ -2315,6 +2315,54 @@ lemma apm_t95j06_PunctureSplit_unique
   exact ⟨Set.Subset.antisymm (sideA_subset p q) (sideA_subset q p),
     Set.Subset.antisymm (sideC_subset p q) (sideC_subset q p)⟩
 
+/-- The canonical endpoint-labelled split at an interior point.  Uniqueness
+below shows that none of the order constructions depend on this choice. -/
+noncomputable def apm_t95j06_PunctureSplit.choice
+    (K : Type*) [TopologicalSpace K] (a c : K)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y))
+    (y : K) (hya : y ≠ a) (hyc : y ≠ c) :
+    apm_t95j06_PunctureSplit K a c y :=
+  Classical.choice (hsplit y hya hyc)
+
+/-- The canonical split agrees side-for-side with every supplied split. -/
+lemma apm_t95j06_PunctureSplit.choice_sides
+    (K : Type*) [TopologicalSpace K] (a c : K)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y))
+    (y : K) (hya : y ≠ a) (hyc : y ≠ c)
+    (s : apm_t95j06_PunctureSplit K a c y) :
+    (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).sideA = s.sideA ∧
+      (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).sideC = s.sideC :=
+  apm_t95j06_PunctureSplit_unique K a c y _ s
+
+/-- Every point other than the puncture lies in exactly one canonical side.
+This supplies total case analysis for the separation relation; the puncture
+itself lies in neither side. -/
+lemma apm_t95j06_PunctureSplit.choice_partition
+    (K : Type*) [TopologicalSpace K] (a c : K)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y))
+    (y : K) (hya : y ≠ a) (hyc : y ≠ c) (x : K) :
+    x ≠ y ↔
+      (x ∈ (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).sideA ∨
+       x ∈ (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).sideC) := by
+  let s := apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc
+  change x ∈ ({y}ᶜ : Set K) ↔ x ∈ s.sideA ∨ x ∈ s.sideC
+  rw [← s.cover]
+  exact Set.mem_union _ _ _
+
+/-- Membership in the two canonical sides is mutually exclusive. -/
+lemma apm_t95j06_PunctureSplit.choice_not_both
+    (K : Type*) [TopologicalSpace K] (a c : K)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y))
+    (y : K) (hya : y ≠ a) (hyc : y ≠ c) (x : K)
+    (hx : x ∈ (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).sideA) :
+    x ∉ (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).sideC := by
+  exact Set.disjoint_left.1
+    (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).disjoint hx
+
 /-- **C2a, separation-order algebra and completion (estimated 220--380
 lines; LIBRARY).**  The endpoint-labelled puncture sides define a unique
 complete linear order: for an interior `y`, `x < y` exactly when `x` lies on
