@@ -1069,7 +1069,7 @@ lemma apm_t95j06_principalCircleBundle_local_section
     simpa [s] using
       ((congrArg (fun q : U × Circle ↦ (q.1 : B)) heq).symm.trans hp).symm
 
-/-- Local sections of a principal `Circle` bundle over a circle paste to a
+/- Local sections of a principal `Circle` bundle over a circle paste to a
 global section.
 
 This is true by compactness of `Circle`: refine the local-section cover to a
@@ -1080,6 +1080,92 @@ and use its exponential to correct the next section.  Induction pastes around
 the finite cyclic cover; the same lift-and-correct step removes the closing
 mismatch.  Estimated size: 350--650 lines, principally the finite arc cover,
 real lift, and closed-cover pasting infrastructure. -/
+/-- A finite chain of local sections lifts one traversal of the circle.
+
+In words, compactness of `[0,1]` gives a finite subdivision subordinate to
+the inverse images of the local-section domains.  Starting with the first
+local section, multiply each subsequent one by a constant circle element so
+that adjacent pieces agree at their common endpoint; fibre transitivity gives
+the constant and the closed-interval pasting lemma gives continuity.
+Estimated size: 180--300 lines. -/
+theorem apm_t95j06_principalCircleBundle_interval_section
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (e : @Homeomorph B Circle tB inferInstance)
+    (hloc : ∀ b : B, ∃ U : Set B, IsOpen U ∧ b ∈ U ∧
+      ∃ s : U → X, Continuous s ∧ ∀ u, P.proj (s u) = u) :
+    ∃ σ : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → X,
+      Continuous σ ∧ ∀ t,
+        P.proj (σ t) = e.symm (Circle.exp (2 * Real.pi * t.1)) := by
+  sorry
+
+/-- A lifted section along one traversal can be corrected to close up.
+
+The two endpoint values lie in the same fibre, hence differ by some
+`h : Circle`.  Choose a path in `Circle` from `1` to `h⁻¹` (for example the
+exponential of a linear multiple of `arg h`) and act pointwise by that path.
+Invariance preserves the projection, while the action law makes the corrected
+endpoints equal.  Estimated size: 45--90 lines. -/
+theorem apm_t95j06_principalCircleBundle_close_interval_section
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (e : @Homeomorph B Circle tB inferInstance)
+    (σ : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → X)
+    (hσcont : Continuous σ)
+    (hσproj : ∀ t, P.proj (σ t) =
+      e.symm (Circle.exp (2 * Real.pi * t.1))) :
+    ∃ σ' : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → X,
+      Continuous σ' ∧
+      (∀ t, P.proj (σ' t) = e.symm (Circle.exp (2 * Real.pi * t.1))) ∧
+      σ' ⟨0, by simp⟩ = σ' ⟨1, by simp⟩ := by
+  let z : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} := ⟨0, by simp⟩
+  let o : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} := ⟨1, by simp⟩
+  have hbase : P.proj (σ z) = P.proj (σ o) := by
+    rw [hσproj, hσproj]
+    simp [z, o, Circle.exp_zero, Circle.exp_two_pi]
+  obtain ⟨h, hh⟩ := P.orbit_fiber (σ z) (σ o) hbase
+  let a : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → Circle := fun t ↦
+    Circle.exp (-t.1 * Complex.arg (h : ℂ))
+  have hacont : Continuous a := by
+    apply continuous_induced_rng.2
+    change Continuous (fun t : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} ↦
+      Complex.exp ((↑(-t.1 * Complex.arg (h : ℂ)) : ℂ) * Complex.I))
+    fun_prop
+  let σ' : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → X := fun t ↦ P.act (a t, σ t)
+  refine ⟨σ', P.continuous_act.comp (hacont.prodMk hσcont), ?_, ?_⟩
+  · intro t
+    rw [show P.proj (σ' t) = P.proj (σ t) by exact P.invariant (a t) (σ t)]
+    exact hσproj t
+  · change σ' z = σ' o
+    have ha0 : a z = 1 := by simp [a, z, Circle.exp_zero]
+    have ha1 : a o = h⁻¹ := by
+      simp only [a, o]
+      rw [neg_one_mul, Circle.exp_neg, Circle.exp_arg]
+    rw [show σ' z = σ z by simp [σ', ha0, P.one_act]]
+    change σ z = P.act (a o, σ o)
+    rw [ha1, ← hh, P.mul_act, inv_mul_cancel, P.one_act]
+
+/-- A closed lifted section descends through the exponential quotient.
+
+The map `t ↦ Circle.exp (2πt)` from `[0,1]` is a quotient map onto `Circle`;
+its only repeated endpoints are `0` and `1`.  Thus a continuous map with
+equal endpoint values descends continuously.  Its projection identity also
+descends pointwise.  Estimated size: 60--120 lines. -/
+theorem apm_t95j06_principalCircleBundle_descend_interval_section
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (e : @Homeomorph B Circle tB inferInstance)
+    (σ : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → X)
+    (hσcont : Continuous σ)
+    (hσproj : ∀ t, P.proj (σ t) =
+      e.symm (Circle.exp (2 * Real.pi * t.1)))
+    (hclose : σ ⟨0, by simp⟩ = σ ⟨1, by simp⟩) :
+    ∃ s : Circle → X, Continuous s ∧ ∀ c, P.proj (s c) = e.symm c := by
+  sorry
+
+/-- Local sections of a principal `Circle` bundle over a circle paste to a
+global section by lifting around one traversal, correcting its endpoint
+monodromy, and descending the resulting closed lift. -/
 theorem apm_t95j06_principalCircleBundle_circle_local_sections_glue
     (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
     (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
@@ -1087,7 +1173,17 @@ theorem apm_t95j06_principalCircleBundle_circle_local_sections_glue
     (hloc : ∀ b : B, ∃ U : Set B, IsOpen U ∧ b ∈ U ∧
       ∃ s : U → X, Continuous s ∧ ∀ u, P.proj (s u) = u) :
     ∃ s : B → X, Continuous s ∧ ∀ b, P.proj (s b) = b := by
-  sorry
+  obtain ⟨σ, hσcont, hσproj⟩ :=
+    apm_t95j06_principalCircleBundle_interval_section X B tB P e hloc
+  obtain ⟨σ', hσ'cont, hσ'proj, hclose⟩ :=
+    apm_t95j06_principalCircleBundle_close_interval_section
+      X B tB P e σ hσcont hσproj
+  obtain ⟨s₀, hs₀cont, hs₀proj⟩ :=
+    apm_t95j06_principalCircleBundle_descend_interval_section
+      X B tB P e σ' hσ'cont hσ'proj hclose
+  refine ⟨fun b ↦ s₀ (e b), hs₀cont.comp e.continuous, ?_⟩
+  intro b
+  rw [hs₀proj, e.symm_apply_apply]
 
 /-- A principal `Circle` bundle over a circle admits a continuous section.
 
