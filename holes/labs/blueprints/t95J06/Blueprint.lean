@@ -2342,7 +2342,7 @@ lemma apm_t95j06_puncture_endpointComponents
     apm_t95j06_puncture_endpointComponent K c y hyc.symm
   exact ⟨⟨A, hAo, hAc, haA, hAF⟩, ⟨C, hCo, hCc, hcC, hCF⟩⟩
 
-/-- **Endpoint in every puncture branch (estimated 45--75 lines).** Every
+/- **Endpoint in every puncture branch (estimated 45--75 lines).** Every
 connected component of a non-endpoint puncture contains `a` or `c`.
 
 This is true for a compact locally connected continuum because each component
@@ -2350,6 +2350,214 @@ of the complement of a cut point contains a non-cut point of the original
 continuum: otherwise a nested basis of connected open neighbourhoods in that
 branch, together with compactness, produces an additional non-cut point.
 Here the hypotheses say that the only non-cut points are `a` and `c`. -/
+/-- Every nondegenerate compact connected Hausdorff continuum has two
+distinct non-cut points.  This is the one classical continuum-theory input
+used below (the boundary-bumping theorem). -/
+theorem apm_t95j06_continuum_exists_two_nonCutPoints
+    (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
+    (hX : IsConnected (Set.univ : Set X)) [Nontrivial X] :
+    ∃ p q : X, p ≠ q ∧
+      IsPreconnected ({p}ᶜ : Set X) ∧
+      IsPreconnected ({q}ᶜ : Set X) := by
+  sorry
+
+/-- A puncture component in a connected locally connected space has closure
+equal to the component together with the puncture point. -/
+lemma apm_t95j06_punctureComponent_closure
+    (X : Type*) [TopologicalSpace X] [T2Space X] [LocallyConnectedSpace X]
+    (hX : IsConnected (Set.univ : Set X)) (p x : X)
+    (hx : x ∈ ({p}ᶜ : Set X)) :
+    closure (connectedComponentIn ({p}ᶜ : Set X) x) =
+      connectedComponentIn ({p}ᶜ : Set X) x ∪ {p} := by
+  let F : Set X := ({p}ᶜ : Set X)
+  let C : Set X := connectedComponentIn F x
+  have hFo : IsOpen F := isClosed_singleton.isOpen_compl
+  have hCo : IsOpen C := hFo.connectedComponentIn
+  have hxC : x ∈ C := mem_connectedComponentIn hx
+  have hCF : C ⊆ F := connectedComponentIn_subset F x
+  have hpC : p ∉ C := fun hp => hCF hp (by simp [F])
+  have hclosed : IsClosed (C ∪ {p}) := by
+    rw [← isOpen_compl_iff]
+    rw [isOpen_iff_mem_nhds]
+    intro q hq
+    have hqp : q ∈ F := by
+      simp only [Set.mem_compl_iff, Set.mem_union, Set.mem_singleton_iff] at hq ⊢
+      exact fun h => hq (Or.inr h)
+    let D : Set X := connectedComponentIn F q
+    have hDo : IsOpen D := hFo.connectedComponentIn
+    have hqD : q ∈ D := mem_connectedComponentIn hqp
+    refine mem_nhds_iff.mpr ⟨D, ?_, hDo, hqD⟩
+    intro r hrD hr
+    rcases hr with hrC | hrp
+    · have hDC : D = C := calc
+        D = connectedComponentIn F r := connectedComponentIn_eq hrD
+        _ = C := (connectedComponentIn_eq hrC).symm
+      have hqC : q ∈ C := hDC ▸ hqD
+      exact hq (Or.inl hqC)
+    · have hrF : r ∈ F := connectedComponentIn_subset F q hrD
+      simpa [F, hrp] using hrF
+  apply Set.Subset.antisymm
+  · exact closure_minimal (fun q hq => Or.inl hq) hclosed
+  · intro q hq
+    rcases hq with hq | hq
+    · exact subset_closure hq
+    · simp only [Set.mem_singleton_iff] at hq
+      by_contra hpcl
+      have hCclosed : IsClosed C := by
+        rw [← closure_eq_iff_isClosed]
+        apply Set.Subset.antisymm
+        · intro q hqcl
+          have hu : q ∈ C ∪ {p} := closure_minimal (fun r hr => Or.inl hr) hclosed hqcl
+          exact hu.resolve_right (fun h => hpcl ((h.trans hq.symm) ▸ hqcl))
+        · exact subset_closure
+      letI : PreconnectedSpace X := ⟨hX.isPreconnected⟩
+      have hCuniv : C = Set.univ :=
+        (show IsClopen C from ⟨hCclosed, hCo⟩).eq_univ ⟨x, hxC⟩
+      have hqC : q ∈ C := by rw [hCuniv]; exact Set.mem_univ q
+      exact hpcl (subset_closure hqC)
+
+/-- The complement of a puncture component is connected: all the other
+branches meet its closure at the puncture point. -/
+lemma apm_t95j06_punctureComponent_compl_preconnected
+    (X : Type*) [TopologicalSpace X] [T2Space X] [LocallyConnectedSpace X]
+    (hX : IsConnected (Set.univ : Set X)) (p x : X)
+    (hx : x ∈ ({p}ᶜ : Set X)) :
+    IsPreconnected (connectedComponentIn ({p}ᶜ : Set X) x)ᶜ := by
+  let F : Set X := ({p}ᶜ : Set X)
+  let C : Set X := connectedComponentIn F x
+  have hFo : IsOpen F := isClosed_singleton.isOpen_compl
+  have hCo : IsOpen C := hFo.connectedComponentIn
+  have hpC : p ∉ C := fun hp => (connectedComponentIn_subset F x hp) (by simp [F])
+  have hcl : closure C = C ∪ {p} :=
+    apm_t95j06_punctureComponent_closure X hX p x hx
+  intro u v hu hv huv hune hvne
+  by_contra hinter
+  obtain ⟨qu, hquC, hqu⟩ := hune
+  obtain ⟨qv, hqvC, hqv⟩ := hvne
+  have hno : ∀ q, q ∈ Cᶜ → q ∈ u → q ∈ v → False := by
+    intro q hqC hqu hqv
+    exact hinter ⟨q, hqC, hqu, hqv⟩
+  -- A separation of the complement extends to a separation of the whole
+  -- space after assigning the component itself to the side containing `p`.
+  have hpUV : p ∈ u ∪ v := huv (by simpa [C] using hpC)
+  rcases hpUV with hpu | hpv
+  · have hqvcl : qv ∉ closure C := by
+      rw [hcl]
+      rintro (hqv' | hqvp)
+      · exact hqvC hqv'
+      · exact hno p hpC hpu (hqvp ▸ hqv)
+    have hcover : (Set.univ : Set X) ⊆ (u ∪ C) ∪ (v \ closure C) := by
+      intro q _
+      by_cases hqC : q ∈ C
+      · exact Or.inl (Or.inr hqC)
+      rcases huv hqC with hqu | hqv
+      · exact Or.inl (Or.inl hqu)
+      · exact Or.inr ⟨hqv, fun hqcl => by
+          rw [hcl] at hqcl
+          rcases hqcl with hqinC | hqp
+          · exact hqC hqinC
+          · exact hno p hpC hpu (hqp ▸ hqv)⟩
+    have hd : Disjoint (u ∪ C) (v \ closure C) := by
+      rw [Set.disjoint_left]
+      rintro q (hqu | hqC) ⟨hqv, hqcl⟩
+      · exact hno q (fun hqC => hqcl (subset_closure hqC)) hqu hqv
+      · exact hqcl (subset_closure hqC)
+    have hi := hX.isPreconnected (u ∪ C) (v \ closure C)
+      (hu.union hCo) (hv.inter isClosed_closure.isOpen_compl) hcover
+      ⟨qu, Set.mem_univ qu, Or.inl hqu⟩
+      ⟨qv, Set.mem_univ qv, ⟨hqv, hqvcl⟩⟩
+    obtain ⟨q, _, hq1, hq2⟩ := hi
+    exact hd.le_bot ⟨hq1, hq2⟩
+  · have hqucl : qu ∉ closure C := by
+      rw [hcl]
+      rintro (hqu' | hqup)
+      · exact hquC hqu'
+      · exact hno p hpC (hqup ▸ hqu) hpv
+    have hcover : (Set.univ : Set X) ⊆ (u \ closure C) ∪ (v ∪ C) := by
+      intro q _
+      by_cases hqC : q ∈ C
+      · exact Or.inr (Or.inr hqC)
+      rcases huv hqC with hqu | hqv
+      · exact Or.inl ⟨hqu, fun hqcl => by
+          rw [hcl] at hqcl
+          rcases hqcl with hqinC | hqp
+          · exact hqC hqinC
+          · exact hno p hpC (hqp ▸ hqu) hpv⟩
+      · exact Or.inr (Or.inl hqv)
+    have hd : Disjoint (u \ closure C) (v ∪ C) := by
+      rw [Set.disjoint_left]
+      rintro q ⟨hqu, hqcl⟩ (hqv | hqC)
+      · exact hno q (fun hqC => hqcl (subset_closure hqC)) hqu hqv
+      · exact hqcl (subset_closure hqC)
+    have hi := hX.isPreconnected (u \ closure C) (v ∪ C)
+      (hu.inter isClosed_closure.isOpen_compl) (hv.union hCo) hcover
+      ⟨qu, Set.mem_univ qu, ⟨hqu, hqucl⟩⟩
+      ⟨qv, Set.mem_univ qv, Or.inl hqv⟩
+    obtain ⟨q, _, hq1, hq2⟩ := hi
+    exact hd.le_bot ⟨hq1, hq2⟩
+
+/-- Every puncture component of a compact connected locally connected
+Hausdorff space contains a non-cut point of the ambient space. -/
+theorem apm_t95j06_punctureComponent_contains_globalNonCutPoint
+    (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
+    [LocallyConnectedSpace X]
+    (hX : IsConnected (Set.univ : Set X)) (p x : X)
+    (hx : x ∈ ({p}ᶜ : Set X)) :
+    ∃ z ∈ connectedComponentIn ({p}ᶜ : Set X) x,
+      IsPreconnected ({z}ᶜ : Set X) := by
+  let C : Set X := connectedComponentIn ({p}ᶜ : Set X) x
+  let H : Set X := closure C
+  have hxC : x ∈ C := mem_connectedComponentIn hx
+  have hpC : p ∉ C := fun hp => (connectedComponentIn_subset ({p}ᶜ : Set X) x hp) (by simp)
+  have hcl : H = C ∪ {p} := apm_t95j06_punctureComponent_closure X hX p x hx
+  have hxH : x ∈ H := subset_closure hxC
+  have hpH : p ∈ H := by rw [hcl]; simp
+  have hxp : x ≠ p := by simpa using hx
+  have hCconn : IsConnected C := isConnected_connectedComponentIn_iff.mpr hx
+  letI : CompactSpace H := isClosed_closure.isClosedEmbedding_subtypeVal.compactSpace
+  letI : ConnectedSpace H := Subtype.connectedSpace hCconn.closure
+  letI : Nontrivial H := ⟨⟨⟨x, hxH⟩, ⟨p, hpH⟩, by simpa using hxp⟩⟩
+  obtain ⟨q, r, hqr, hq, hr⟩ :=
+    apm_t95j06_continuum_exists_two_nonCutPoints H isConnected_univ
+  have choose_noncut : ∀ z : H, z.1 ≠ p → IsPreconnected ({z}ᶜ : Set H) →
+      ∃ w ∈ C, IsPreconnected ({w}ᶜ : Set X) := by
+    intro z hzp hz
+    have hzC : z.1 ∈ C := by
+      have hzU : z.1 ∈ C ∪ {p} := hcl ▸ z.2
+      exact hzU.resolve_right (by simpa using hzp)
+    have himg : IsPreconnected (Subtype.val '' ({z}ᶜ : Set H)) :=
+      hz.image _ continuous_subtype_val.continuousOn
+    have himgeq : Subtype.val '' ({z}ᶜ : Set H) = H \ {z.1} := by
+      ext w
+      constructor
+      · rintro ⟨t, ht, rfl⟩
+        exact ⟨t.2, fun h => ht (Subtype.ext h)⟩
+      · rintro ⟨hwH, hwz⟩
+        exact ⟨⟨w, hwH⟩, fun h => hwz (congrArg Subtype.val h), rfl⟩
+    rw [himgeq] at himg
+    have hcomp : IsPreconnected Cᶜ :=
+      apm_t95j06_punctureComponent_compl_preconnected X hX p x hx
+    have hpimg : p ∈ H \ {z.1} := ⟨hpH, by simpa using hzp.symm⟩
+    have hpcomp : p ∈ Cᶜ := hpC
+    have hunion : (H \ {z.1}) ∪ Cᶜ = ({z.1}ᶜ : Set X) := by
+      ext w
+      constructor
+      · rintro (⟨_, hwz⟩ | hwC) hw
+        · exact hwz (by simpa using hw)
+        · exact hwC (hw ▸ hzC)
+      · intro hwz
+        by_cases hwC : w ∈ C
+        · left
+          exact ⟨subset_closure hwC, by simpa using hwz⟩
+        · exact Or.inr hwC
+    refine ⟨z.1, hzC, ?_⟩
+    rw [← hunion]
+    exact himg.union p hpimg hpcomp hcomp
+  by_cases hqp : q.1 = p
+  · have hrp : r.1 ≠ p := fun h => hqr (Subtype.ext (hqp.trans h.symm))
+    exact choose_noncut r hrp hr
+  · exact choose_noncut q hqp hq
+
 theorem apm_t95j06_twoEndpointContinuum_punctureComponent_contains_endpoint
     (K : Type*) [TopologicalSpace K]
     [CompactSpace K] [T2Space K] [LocallyConnectedSpace K]
@@ -2361,7 +2569,16 @@ theorem apm_t95j06_twoEndpointContinuum_punctureComponent_contains_endpoint
     ∀ y : K, y ≠ a → y ≠ c → ∀ z ∈ ({y}ᶜ : Set K),
       a ∈ connectedComponentIn ({y}ᶜ : Set K) z ∨
       c ∈ connectedComponentIn ({y}ᶜ : Set K) z := by
-  sorry
+  intro y hya hyc z hz
+  obtain ⟨w, hwcomp, hwnoncut⟩ :=
+    apm_t95j06_punctureComponent_contains_globalNonCutPoint K hK y z hz
+  by_cases hwa : w = a
+  · left
+    simpa [hwa] using hwcomp
+  by_cases hwc : w = c
+  · right
+    simpa [hwc] using hwcomp
+  exact (hcut w hwa hwc hwnoncut).elim
 
 theorem apm_t95j06_twoEndpointContinuum_punctureSplit
     (K : Type*) [TopologicalSpace K]
