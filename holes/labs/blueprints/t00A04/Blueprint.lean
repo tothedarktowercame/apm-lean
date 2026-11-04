@@ -1564,6 +1564,35 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finit
         (ZMod 2) Aᶜ).f (n - 1)) := by
   sorry
 
+theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_support_aux_carrier
+    (d m : ℕ) (S : Set (EuclideanSpace ℝ (Fin d)))
+    (x : (ConstructionTargets.CoefficientH0.SingularChains (ZMod 2)
+      (TopCat.of (EuclideanSpace ℝ (Fin d)))).X m)
+    (hx : x ∈ Set.range ((ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+      (ZMod 2) S).f m)) :
+    ∃ F : Finset C(stdSimplex ℝ (Fin (m + 1)), EuclideanSpace ℝ (Fin d)),
+      (∀ σ ∈ F, Set.range σ ⊆ S) ∧
+      x ∈ Set.range ((ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+        (ZMod 2) (⋃ σ ∈ F, Set.range σ)).f m) := by
+  sorry
+
+theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_support_aux_geometry
+    (d m : ℕ) (S : Set (EuclideanSpace ℝ (Fin d)))
+    (F : Finset C(stdSimplex ℝ (Fin (m + 1)), EuclideanSpace ℝ (Fin d)))
+    (hF : ∀ σ ∈ F, Set.range σ ⊆ S) :
+    (⋃ σ ∈ F, Set.range σ) ⊆ S ∧
+      IsCompact (⋃ σ ∈ F, Set.range σ) := by
+  constructor
+  · intro y hy
+    simp only [Set.mem_iUnion] at hy
+    obtain ⟨σ, hσ⟩ := hy
+    obtain ⟨hσF, hyσ⟩ := hσ
+    exact hF σ hσF hyσ
+  · apply Set.Finite.isCompact_biUnion
+    · exact F.finite_toSet
+    · intro σ hσ
+      exact isCompact_range σ.continuous
+
 theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_support
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
     (x : (ConstructionTargets.CoefficientH0.SingularChains (ZMod 2)
@@ -1573,7 +1602,16 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finit
     ∃ K : Set (EuclideanSpace ℝ (Fin d)), K ⊆ Aᶜ ∧ IsCompact K ∧
       x ∈ Set.range ((ConstructionTargets.CoefficientRelativeSmall.subspaceMap
         (ZMod 2) Kᶜᶜ).f (n - 1)) := by
-  sorry
+  obtain ⟨F, hFS, hxF⟩ :=
+    t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_support_aux_carrier
+      d (n - 1) Aᶜ x hx
+  let K : Set (EuclideanSpace ℝ (Fin d)) := ⋃ σ ∈ F, Set.range σ
+  have hgeom :=
+    t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_support_aux_geometry
+      d (n - 1) Aᶜ F hFS
+  refine ⟨K, hgeom.1, hgeom.2, ?_⟩
+  rw [compl_compl]
+  exact hxF
 
 theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_cycle
     (d n : ℕ) (K : Set (EuclideanSpace ℝ (Fin d)))
