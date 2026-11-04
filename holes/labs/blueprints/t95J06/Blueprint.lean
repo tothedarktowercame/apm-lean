@@ -1,4 +1,6 @@
 import Mathlib
+import ConstructionTargets.t00J02Closure
+import ConstructionTargets.SingularHomologyHomotopy
 import Mathlib.Topology.Bases
 import Mathlib.Topology.Separation.Hausdorff
 import Mathlib.Topology.ContinuousMap.Basic
@@ -1003,6 +1005,186 @@ def apm_t95j06_PlanarJordanSeparation : Prop :=
       Disjoint inside outside ∧ Jᶜ = inside ∪ outside ∧
       J = frontier inside ∧ J = frontier outside
 
+/-- Normalize a nonzero complex number to its direction on the unit circle. -/
+noncomputable def apm_t95j06_jordan_complement_separates_aux_normalize :
+    C({z : ℂ // z ≠ 0}, Circle) where
+  toFun z := ⟨z.val / (‖z.val‖ : ℂ), by
+    change z.val / (‖z.val‖ : ℂ) ∈ Metric.sphere 0 1
+    rw [mem_sphere_zero_iff_norm, norm_div, Complex.norm_real,
+      Real.norm_of_nonneg (norm_nonneg _), div_self]
+    exact norm_ne_zero_iff.mpr z.property⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact continuous_subtype_val.div
+      (Complex.continuous_ofReal.comp continuous_subtype_val.norm)
+      (fun z => Complex.ofReal_ne_zero.mpr (norm_ne_zero_iff.mpr z.property))
+
+/-- The concrete direction loop about a point off the image of a circle map. -/
+noncomputable def apm_t95j06_jordan_complement_separates_aux_loop
+    (γ : C(Circle, ℂ)) (z : ↥((Set.range γ)ᶜ)) : C(Circle, Circle) :=
+  apm_t95j06_jordan_complement_separates_aux_normalize.comp
+    ⟨fun t => ⟨γ t - z.val, sub_ne_zero.mpr (fun h => z.property ⟨t, h⟩)⟩,
+      (γ.continuous.sub continuous_const).subtype_mk _⟩
+
+/-- Winding is the integral homological degree of the specified direction loop. -/
+noncomputable def apm_t95j06_jordan_complement_separates_aux_winding
+    (γ : C(Circle, ℂ)) (z : ↥((Set.range γ)ᶜ)) : ℤ :=
+  ConstructionTargets.T00J02Closure.circleDegree
+    (apm_t95j06_jordan_complement_separates_aux_loop γ z)
+
+/-- Homotopic circle maps have equal integral homological degree. -/
+lemma apm_t95j06_jordan_complement_separates_aux_degree_homotopic
+    {f g : C(Circle, Circle)} (h : ContinuousMap.Homotopic f g) :
+    ConstructionTargets.T00J02Closure.circleDegree f =
+      ConstructionTargets.T00J02Closure.circleDegree g := by
+  have H := ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) h 1
+  unfold ConstructionTargets.T00J02Closure.circleDegree
+    ConstructionTargets.T00J02Closure.circleHomologyCoordinateMap
+  exact congrArg (fun k =>
+    (ConstructionTargets.CircleHomology.circleH1IsoInt.inv ≫ k ≫
+      ConstructionTargets.CircleHomology.circleH1IsoInt.hom) (1 : ℤ)) H
+
+/-- Moving the observation point along a path avoiding the curve gives an
+explicit homotopy of direction loops, hence preserves their degree. -/
+lemma apm_t95j06_jordan_complement_separates_aux_winding_path
+    (γ : C(Circle, ℂ)) {z w : ↥((Set.range γ)ᶜ)} (p : Path z w) :
+    apm_t95j06_jordan_complement_separates_aux_winding γ z =
+      apm_t95j06_jordan_complement_separates_aux_winding γ w := by
+  apply apm_t95j06_jordan_complement_separates_aux_degree_homotopic
+  let F : C(unitInterval × Circle, {v : ℂ // v ≠ 0}) :=
+    ⟨fun tx => ⟨γ tx.2 - (p tx.1).val,
+      sub_ne_zero.mpr (fun h => (p tx.1).property ⟨tx.2, h⟩)⟩,
+      ((γ.continuous.comp continuous_snd).sub
+        (continuous_subtype_val.comp (p.continuous.comp continuous_fst))).subtype_mk _⟩
+  refine ⟨?_⟩
+  refine {
+    toContinuousMap := apm_t95j06_jordan_complement_separates_aux_normalize.comp F
+    map_zero_left := ?_
+    map_one_left := ?_ }
+  · intro x
+    simp [F, apm_t95j06_jordan_complement_separates_aux_loop]
+  · intro x
+    simp [F, apm_t95j06_jordan_complement_separates_aux_loop]
+
+/-- Winding is locally constant off a compact curve: each open path component
+of its complement is contained in one winding fibre. -/
+lemma apm_t95j06_jordan_complement_separates_aux_winding_locallyConstant
+    (γ : C(Circle, ℂ)) :
+    IsLocallyConstant (apm_t95j06_jordan_complement_separates_aux_winding γ) := by
+  have ho : IsOpen (Set.range γ)ᶜ := (isCompact_range γ.continuous).isClosed.isOpen_compl
+  letI := ho.locPathConnectedSpace
+  intro S
+  apply isOpen_iff_forall_mem_open.mpr
+  intro z hz
+  refine ⟨pathComponent z, ?_, IsOpen.pathComponent z, ?_⟩
+  · intro w hw
+    rcases hw with ⟨p⟩
+    have he := apm_t95j06_jordan_complement_separates_aux_winding_path γ p
+    change apm_t95j06_jordan_complement_separates_aux_winding γ w ∈ S
+    rw [← he]
+    exact hz
+  · exact Joined.refl z
+
+/-- A point beyond a norm bound for the curve has winding zero. The homotopy
+contracts the entire curve linearly to zero without meeting that point. -/
+lemma apm_t95j06_jordan_complement_separates_aux_far_zero
+    (γ : C(Circle, ℂ)) (R : ℝ) (hR : 0 < R)
+    (hbound : ∀ t, ‖γ t‖ < R) :
+    ∃ z : ↥((Set.range γ)ᶜ),
+      apm_t95j06_jordan_complement_separates_aux_winding γ z = 0 := by
+  have hfar : (R : ℂ) ∉ Set.range γ := by
+    rintro ⟨t, ht⟩
+    have := hbound t
+    rw [ht, Complex.norm_real, Real.norm_of_nonneg hR.le] at this
+    exact (lt_irrefl _ this)
+  let z : ↥((Set.range γ)ᶜ) := ⟨(R : ℂ), hfar⟩
+  have havoid : ∀ (t : unitInterval) (x : Circle),
+      (1 - (t : ℝ)) * γ x - (R : ℂ) ≠ 0 := by
+    intro t x he
+    have heq := sub_eq_zero.mp he
+    have hsmall : ‖(1 - (t : ℝ)) * γ x‖ < R := by
+      rw [norm_mul]
+      have hn : ‖(1 - (t : ℝ) : ℂ)‖ ≤ 1 := by
+        rw [show (1 - (t : ℝ) : ℂ) = ((1 - (t : ℝ) : ℝ) : ℂ) by push_cast; rfl, Complex.norm_real,
+          Real.norm_of_nonneg (sub_nonneg.mpr t.property.2)]
+        linarith [t.property.1]
+      exact lt_of_le_of_lt (mul_le_of_le_one_left (norm_nonneg _) hn) (hbound x)
+    rw [heq, Complex.norm_real, Real.norm_of_nonneg hR.le] at hsmall
+    exact (lt_irrefl _ hsmall)
+  let F : C(unitInterval × Circle, {v : ℂ // v ≠ 0}) :=
+    ⟨fun tx => ⟨(1 - (tx.1 : ℝ)) * γ tx.2 - (R : ℂ), havoid tx.1 tx.2⟩,
+      by apply Continuous.subtype_mk; fun_prop⟩
+  let v : Circle := apm_t95j06_jordan_complement_separates_aux_normalize
+    ⟨-(R : ℂ), neg_ne_zero.mpr (Complex.ofReal_ne_zero.mpr hR.ne')⟩
+  have hh : ContinuousMap.Homotopic
+      (apm_t95j06_jordan_complement_separates_aux_loop γ z)
+      (ContinuousMap.const Circle v) := by
+    refine ⟨?_⟩
+    refine {
+      toContinuousMap := apm_t95j06_jordan_complement_separates_aux_normalize.comp F
+      map_zero_left := ?_
+      map_one_left := ?_ }
+    · intro x
+      simp [F, z, apm_t95j06_jordan_complement_separates_aux_loop]
+    · intro x
+      simp [F, v]
+  refine ⟨z, ?_⟩
+  change ConstructionTargets.T00J02Closure.circleDegree _ = 0
+  rw [apm_t95j06_jordan_complement_separates_aux_degree_homotopic hh]
+  apply ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
+  exact ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_const_eq_zero
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero v
+
+/-- Borsuk's nonzero-index lemma: an embedded circle has a point at which
+its concrete normalized-difference loop has nonzero integral homological degree.
+This is true for every topological embedding, without smoothness or polygonality,
+by Borsuk's planar non-retraction/index argument. The degree and loop above are
+fixed independently of separation; no arbitrary separating function is assumed.
+Estimated remaining proof: 200--400 lines of planar non-retraction/index theory. -/
+lemma apm_t95j06_jordan_complement_separates_aux_borsuk
+    (γ : C(Circle, ℂ)) (hγ : Topology.IsEmbedding γ) :
+    ∃ z : ↥((Set.range γ)ᶜ),
+      apm_t95j06_jordan_complement_separates_aux_winding γ z ≠ 0 := by
+  sorry
+
+/-- The nonzero and zero fibres of the concrete winding separate the complement
+of an embedded complex circle. Local constancy gives openness, Borsuk gives a
+nonzero fibre, and the explicit far-point contraction gives a zero fibre. -/
+lemma apm_t95j06_jordan_complement_separates_aux_complex
+    (γ : C(Circle, ℂ)) (hγ : Topology.IsEmbedding γ) :
+    ∃ U V : Set ℂ, IsOpen U ∧ IsOpen V ∧ U.Nonempty ∧ V.Nonempty ∧
+      Disjoint U V ∧ (Set.range γ)ᶜ = U ∪ V := by
+  let w := apm_t95j06_jordan_complement_separates_aux_winding γ
+  have hw : IsLocallyConstant w :=
+    apm_t95j06_jordan_complement_separates_aux_winding_locallyConstant γ
+  have ho : IsOpen (Set.range γ)ᶜ := (isCompact_range γ.continuous).isClosed.isOpen_compl
+  let A : Set ↥((Set.range γ)ᶜ) := {z | w z ≠ 0}
+  let B : Set ↥((Set.range γ)ᶜ) := {z | w z = 0}
+  have hA : IsOpen A := hw.isClosed_fiber 0 |>.isOpen_compl
+  have hB : IsOpen B := hw.isOpen_fiber 0
+  obtain ⟨z, hz⟩ := apm_t95j06_jordan_complement_separates_aux_borsuk γ hγ
+  obtain ⟨R, hR, hbound⟩ := (isCompact_range γ.continuous).isBounded.exists_pos_norm_lt
+  obtain ⟨v, hv⟩ := apm_t95j06_jordan_complement_separates_aux_far_zero γ R hR
+    (fun t => hbound (γ t) ⟨t, rfl⟩)
+  refine ⟨Subtype.val '' A, Subtype.val '' B,
+    ho.isOpenMap_subtype_val A hA, ho.isOpenMap_subtype_val B hB,
+    ⟨z.val, z, hz, rfl⟩, ⟨v.val, v, hv, rfl⟩, ?_, ?_⟩
+  · rw [Set.disjoint_left]
+    rintro x ⟨a, ha, rfl⟩ ⟨b, hb, he⟩
+    have he' : b = a := Subtype.ext he
+    subst b
+    exact ha hb
+  · ext x
+    constructor
+    · intro hx
+      by_cases hh : w ⟨x, hx⟩ = 0
+      · exact Or.inr ⟨⟨x, hx⟩, hh, rfl⟩
+      · exact Or.inl ⟨⟨x, hx⟩, hh, rfl⟩
+    · rintro (⟨a, _, rfl⟩ | ⟨b, _, rfl⟩)
+      · exact a.property
+      · exact b.property
+
 /-- **J1, existence of two Jordan sides (estimated 100--180 lines).**
 The complement of an embedded circle admits a nontrivial separation into two
 disjoint nonempty open sets.  A winding-number-one point on one side and a
@@ -1019,7 +1201,31 @@ theorem apm_t95j06_jordan_complement_separates
     ∃ inside outside : Set apm_t95j06_E2,
       IsOpen inside ∧ IsOpen outside ∧ inside.Nonempty ∧ outside.Nonempty ∧
       Disjoint inside outside ∧ Jᶜ = inside ∪ outside := by
-  sorry
+  rcases eJ with ⟨e⟩
+  let L : apm_t95j06_E2 ≃ₜ ℂ :=
+    Complex.orthonormalBasisOneI.repr.symm.toHomeomorph
+  let γ : C(Circle, ℂ) := ⟨fun t => L (e t).val,
+    L.continuous.comp (continuous_subtype_val.comp e.continuous)⟩
+  have hγ : Topology.IsEmbedding γ :=
+    L.isEmbedding.comp (Topology.IsEmbedding.subtypeVal.comp e.isEmbedding)
+  obtain ⟨U, V, hU, hV, hUn, hVn, hd, hc⟩ :=
+    apm_t95j06_jordan_complement_separates_aux_complex γ hγ
+  have hr : L ⁻¹' Set.range γ = J := by
+    ext x
+    constructor
+    · rintro ⟨t, ht⟩
+      have he : (e t).val = x := L.injective ht
+      exact he ▸ (e t).property
+    · intro hx
+      obtain ⟨t, ht⟩ := e.surjective ⟨x, hx⟩
+      exact ⟨t, by simp [γ, ht]⟩
+  refine ⟨L ⁻¹' U, L ⁻¹' V, hU.preimage L.continuous,
+    hV.preimage L.continuous, ?_, ?_, hd.preimage L, ?_⟩
+  · obtain ⟨z, hz⟩ := hUn
+    exact ⟨L.symm z, by simpa using hz⟩
+  · obtain ⟨z, hz⟩ := hVn
+    exact ⟨L.symm z, by simpa using hz⟩
+  · rw [← Set.preimage_union, ← hc, Set.preimage_compl, hr]
 
 /-- A connected component of an open separated union stays on the side
 containing its base point. No planar separation theorem is used. -/
@@ -1113,6 +1319,21 @@ theorem apm_t95j06_jordan_sides_frontier_aux_arc_nonseparation
     IsPreconnected Aᶜ := by
   sorry
 
+/-- A circle homeomorphism has arbitrarily small complementary closed arcs
+away from a marked point (estimated 35--60 lines).  Pull an open neighbourhood
+of the marked point back to `Circle`, choose a short exponential-coordinate
+arc inside it, and parametrize the complementary closed arc by `[0,1]`.
+Its image lies in `J`, omits the marked point, and the removed part of `J` lies
+in the prescribed neighbourhood.  This is elementary circle parametrization,
+with no planar separation content. -/
+theorem apm_t95j06_circle_small_complementary_closedArc
+    (J : Set apm_t95j06_E2) (e : Circle ≃ₜ J)
+    (p : apm_t95j06_E2) (hp : p ∈ J)
+    (O : Set apm_t95j06_E2) (hO : IsOpen O) (hpO : p ∈ O) :
+    ∃ A : Set apm_t95j06_E2,
+      Nonempty (Set.Icc (0 : ℝ) 1 ≃ₜ A) ∧ A ⊆ J ∧ p ∉ A ∧ J \ A ⊆ O := by
+  sorry
+
 /-- Arc non-separation implies local access to each of two connected Jordan
 sides.  Remove a small open circle arc about `p`; its complementary closed arc
 does not separate the plane, so a connected bridge between the two sides,
@@ -1130,7 +1351,51 @@ theorem apm_t95j06_jordan_sides_frontier_aux_local_access
     (hdisj : Disjoint inside outside)
     (hcover : Jᶜ = inside ∪ outside) :
     ∀ p ∈ J, p ∈ closure inside ∧ p ∈ closure outside := by
-  sorry
+  intro p hp
+  let e := eJ.some
+  have side_access (S T : Set apm_t95j06_E2)
+      (hSopen : IsOpen S) (hTopen : IsOpen T)
+      (hSne : S.Nonempty) (hTne : T.Nonempty)
+      (hST : Disjoint S T) (hcov : Jᶜ = S ∪ T) :
+      p ∈ closure S := by
+    by_contra hpcl
+    let O : Set apm_t95j06_E2 := (closure S)ᶜ
+    have hO : IsOpen O := isClosed_closure.isOpen_compl
+    have hpO : p ∈ O := hpcl
+    obtain ⟨A, hAarc, hAJ, hpA, hrem⟩ :=
+      apm_t95j06_circle_small_complementary_closedArc J e p hp O hO hpO
+    have hAconn := harc A hAarc
+    have hSsub : S ⊆ Jᶜ := by rw [hcov]; exact Set.subset_union_left
+    have hTsub : T ⊆ Jᶜ := by rw [hcov]; exact Set.subset_union_right
+    have hS_Ac : S ⊆ Aᶜ := fun x hx hxa => hSsub hx (hAJ hxa)
+    have hT_Ac : T ⊆ Aᶜ := fun x hx hxa => hTsub hx (hAJ hxa)
+    have hT_O : T ⊆ O := by
+      intro x hx
+      intro hxcl
+      have hTc : IsClosed Tᶜ := IsOpen.isClosed_compl hTopen
+      have hclsub : closure S ⊆ Tᶜ := hTc.closure_subset_iff.2
+        (Set.disjoint_left.1 hST)
+      exact hclsub hxcl hx
+    have hAc_cover : Aᶜ ⊆ S ∪ O := by
+      intro x hxA
+      by_cases hxJ : x ∈ J
+      · exact Or.inr (hrem ⟨hxJ, hxA⟩)
+      · have hxJc : x ∈ Jᶜ := hxJ
+        rw [hcov] at hxJc
+        exact hxJc.imp_right (fun hxT => hT_O hxT)
+    have hdis : Aᶜ ∩ (S ∩ O) = ∅ := by
+      apply Set.not_nonempty_iff_eq_empty.mp
+      rintro ⟨x, -, hxS, hxO⟩
+      exact hxO (subset_closure hxS)
+    rcases isPreconnected_iff_subset_of_disjoint.1 hAconn
+      S O hSopen hO hAc_cover hdis with hsub | hsub
+    · obtain ⟨x, hx⟩ := hTne
+      exact (hST.le_bot ⟨hsub (hT_Ac hx), hx⟩)
+    · obtain ⟨x, hx⟩ := hSne
+      exact (hsub (hS_Ac hx)) (subset_closure hx)
+  exact ⟨side_access inside outside hi ho hin hout hdisj hcover,
+    side_access outside inside ho hi hout hin hdisj.symm
+      (hcover.trans (Set.union_comm _ _))⟩
 
 theorem apm_t95j06_jordan_sides_frontier
     (J : Set apm_t95j06_E2) (eJ : Nonempty (Circle ≃ₜ J))
@@ -1827,6 +2092,27 @@ lemma apm_t95j06_puncture_endpointComponents
     apm_t95j06_puncture_endpointComponent K c y hyc.symm
   exact ⟨⟨A, hAo, hAc, haA, hAF⟩, ⟨C, hCo, hCc, hcC, hCF⟩⟩
 
+/-- **Endpoint in every puncture branch (estimated 45--75 lines).** Every
+connected component of a non-endpoint puncture contains `a` or `c`.
+
+This is true for a compact locally connected continuum because each component
+of the complement of a cut point contains a non-cut point of the original
+continuum: otherwise a nested basis of connected open neighbourhoods in that
+branch, together with compactness, produces an additional non-cut point.
+Here the hypotheses say that the only non-cut points are `a` and `c`. -/
+theorem apm_t95j06_twoEndpointContinuum_punctureComponent_contains_endpoint
+    (K : Type*) [TopologicalSpace K]
+    [CompactSpace K] [T2Space K] [LocallyConnectedSpace K]
+    (hK : IsConnected (Set.univ : Set K)) (a c : K) (hac : a ≠ c)
+    (ha : IsPreconnected ({a}ᶜ : Set K))
+    (hc : IsPreconnected ({c}ᶜ : Set K))
+    (hcut : ∀ y : K, y ≠ a → y ≠ c →
+      ¬ IsPreconnected ({y}ᶜ : Set K)) :
+    ∀ y : K, y ≠ a → y ≠ c → ∀ z ∈ ({y}ᶜ : Set K),
+      a ∈ connectedComponentIn ({y}ᶜ : Set K) z ∨
+      c ∈ connectedComponentIn ({y}ᶜ : Set K) z := by
+  sorry
+
 theorem apm_t95j06_twoEndpointContinuum_punctureSplit
     (K : Type*) [TopologicalSpace K]
     [CompactSpace K] [T2Space K] [LocallyConnectedSpace K]
@@ -1837,7 +2123,67 @@ theorem apm_t95j06_twoEndpointContinuum_punctureSplit
       ¬ IsPreconnected ({y}ᶜ : Set K)) :
     ∀ y : K, y ≠ a → y ≠ c →
       Nonempty (apm_t95j06_PunctureSplit K a c y) := by
-  sorry
+  intro y hya hyc
+  let F : Set K := ({y}ᶜ : Set K)
+  let A := connectedComponentIn F a
+  let C := connectedComponentIn F c
+  have haF : a ∈ F := by
+    simpa [F, Set.mem_compl_iff, Set.mem_singleton_iff] using hya.symm
+  have hcF : c ∈ F := by
+    simpa [F, Set.mem_compl_iff, Set.mem_singleton_iff] using hyc.symm
+  have hbranches : ∀ z ∈ F,
+      a ∈ connectedComponentIn F z ∨ c ∈ connectedComponentIn F z := by
+    exact apm_t95j06_twoEndpointContinuum_punctureComponent_contains_endpoint
+      K hK a c hac ha hc hcut y hya hyc
+  have hcover : A ∪ C = F := by
+    apply Set.Subset.antisymm
+    · exact Set.union_subset (connectedComponentIn_subset F a)
+        (connectedComponentIn_subset F c)
+    · intro z hzF
+      have hzz : z ∈ connectedComponentIn F z := mem_connectedComponentIn hzF
+      rcases hbranches z hzF with hza | hzc
+      · left
+        rw [connectedComponentIn_eq hza] at hzz
+        exact hzz
+      · right
+        rw [connectedComponentIn_eq hzc] at hzz
+        exact hzz
+  have hAC : A ≠ C := by
+    intro heq
+    apply hcut y hya hyc
+    change IsPreconnected F
+    rw [← hcover, heq, Set.union_self]
+    exact isPreconnected_connectedComponentIn
+  have hdisj : Disjoint A C := by
+    rw [Set.disjoint_left]
+    intro z hzA hzC
+    apply hAC
+    calc
+      A = connectedComponentIn F z := connectedComponentIn_eq hzA
+      _ = C := (connectedComponentIn_eq hzC).symm
+  refine ⟨{
+    sideA := A
+    sideC := C
+    sideA_open := isClosed_singleton.isOpen_compl.connectedComponentIn
+    sideC_open := isClosed_singleton.isOpen_compl.connectedComponentIn
+    sideA_preconnected := isPreconnected_connectedComponentIn
+    sideC_preconnected := isPreconnected_connectedComponentIn
+    a_mem := mem_connectedComponentIn haF
+    c_mem := mem_connectedComponentIn hcF
+    disjoint := hdisj
+    cover := hcover
+    maximal := ?_ }⟩
+  intro S hSne hSconn hSF
+  obtain ⟨z, hzS⟩ := hSne
+  have hsub : S ⊆ connectedComponentIn F z :=
+    hSconn.subset_connectedComponentIn hzS hSF
+  rcases hbranches z (hSF hzS) with hza | hzc
+  · left
+    rw [connectedComponentIn_eq hza] at hsub
+    exact hsub
+  · right
+    rw [connectedComponentIn_eq hzc] at hsub
+    exact hsub
 
 /-- Endpoint-labelled puncture decompositions are unique.  Each connected
 side of one decomposition must lie in one side of the other by `maximal`; its
@@ -1871,6 +2217,61 @@ lemma apm_t95j06_PunctureSplit_unique
   exact ⟨Set.Subset.antisymm (sideA_subset p q) (sideA_subset q p),
     Set.Subset.antisymm (sideC_subset p q) (sideC_subset q p)⟩
 
+/-- **C2a, separation-order algebra and completion (estimated 220--380
+lines; LIBRARY).**  The endpoint-labelled puncture sides define a unique
+complete linear order: for an interior `y`, `x < y` exactly when `x` lies on
+the `a`-side of the puncture at `y`, and `a,c` are its endpoints.
+
+Proof sketch: define the strict relation using a chosen split, with explicit
+endpoint clauses.  `apm_t95j06_PunctureSplit_unique` makes it independent of
+the choice.  Maximality of connected sides proves nesting, hence transitivity
+and totality; the cover and disjointness prove asymmetry.  Suprema are limits
+of nested closed upper/lower sides, whose finite intersection property is
+realized by compactness.  The empty and universal cuts give `a` and `c`.
+
+Truth checks: compactness is needed for completeness (an open interval has
+the same local separation order but missing suprema), and endpoint clauses
+are needed because `hsplit` deliberately supplies no split at `a` or `c`. -/
+theorem apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit_aux_order
+    (K : Type*) [TopologicalSpace K] [CompactSpace K] [T2Space K]
+    (hK : IsConnected (Set.univ : Set K)) (a c : K) (hac : a ≠ c)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y)) :
+    ∃ o : CompleteLinearOrder K,
+      a = o.bot ∧ c = o.top ∧
+      ∀ (x y : K) (hya : y ≠ a) (hyc : y ≠ c)
+        (s : apm_t95j06_PunctureSplit K a c y),
+        @LT.lt K o.toLinearOrder.toLT x y ↔ x ∈ s.sideA := by
+  sorry
+
+/-- **C2b, topology and density of the separation order (estimated 140--240
+lines; LIBRARY).**  Any complete order realizing the puncture-side relation
+has the supplied topology as its order topology and is densely ordered.
+
+Proof sketch: the strict initial and final rays at every interior point are
+the open sets `sideA` and `sideC`; endpoint rays are empty or complements of
+closed singletons.  Thus order-open rays generate no topology beyond the
+given one.  Conversely, the two open puncture sides separate a point from
+each closed order ray, yielding the reverse topology inclusion.  If `x < y`
+had no intermediate point, the two corresponding rays would disconnect the
+connected space `K`; hence the order is dense.
+
+Truth checks: connectedness is essential for density (a finite ordered
+compactum is a counterexample), and openness of both labelled sides is
+essential for the topology comparison. -/
+theorem apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit_aux_topology
+    (K : Type*) [TopologicalSpace K] [CompactSpace K] [T2Space K]
+    (hK : IsConnected (Set.univ : Set K)) (a c : K) (hac : a ≠ c)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y))
+    (o : CompleteLinearOrder K) (ha : a = o.bot) (hc : c = o.top)
+    (horder : ∀ (x y : K) (hya : y ≠ a) (hyc : y ≠ c)
+      (s : apm_t95j06_PunctureSplit K a c y),
+      @LT.lt K o.toLinearOrder.toLT x y ↔ x ∈ s.sideA) :
+    @OrderTopology K inferInstance o.toLinearOrder.toPreorder ∧
+      @DenselyOrdered K o.toLinearOrder.toLT := by
+  sorry
+
 /-- **C2, order construction (estimated 65--110 lines).** Given the labelled
 two-component decomposition of every non-endpoint puncture, separation from
 `a` defines a complete dense linear order with endpoints `a,c`, and its order
@@ -1890,7 +2291,13 @@ theorem apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit
       @OrderTopology K inferInstance o.toLinearOrder.toPreorder ∧
       @DenselyOrdered K o.toLinearOrder.toLT ∧
       a = o.bot ∧ c = o.top := by
-  sorry
+  obtain ⟨o, ha, hc, horder⟩ :=
+    apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit_aux_order
+      K hK a c hac hsplit
+  obtain ⟨hot, hdense⟩ :=
+    apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit_aux_topology
+      K hK a c hac hsplit o ha hc horder
+  exact ⟨o, hot, hdense, ha, hc⟩
 
 /-- Compact metrizable spaces are separable. -/
 lemma apm_t95j06_compactMetrizable_separable_order
@@ -1969,7 +2376,76 @@ lemma apm_t95j06_denseOrderIso_extend_complete_aux
     (htbot : (⊥ : M) ∉ t) (httop : (⊤ : M) ∉ t)
     (e : s ≃o t) :
     ∃ E : L ≃o M, E ⊥ = ⊥ ∧ E ⊤ = ⊤ := by
-  sorry
+  let Fset (x : L) : Set M :=
+    (fun q : s ↦ (e q).1) '' {q : s | q.1 ≤ x}
+  let Gset (y : M) : Set L :=
+    (fun q : t ↦ (e.symm q).1) '' {q : t | q.1 ≤ y}
+  let F (x : L) : M := sSup (Fset x)
+  let G (y : M) : L := sSup (Gset y)
+  have hF_lower (x : L) (q : s) (hq : q.1 ≤ x) : (e q).1 ≤ F x := by
+    exact le_sSup ⟨q, hq, rfl⟩
+  have hF_upper (x : L) (q : s) (hxq : x < q.1) : F x ≤ (e q).1 := by
+    apply sSup_le
+    rintro _ ⟨p, hp, rfl⟩
+    exact (e.le_iff_le.mpr (hp.trans hxq.le))
+  have hG_lower (y : M) (q : t) (hq : q.1 ≤ y) : (e.symm q).1 ≤ G y := by
+    exact le_sSup ⟨q, hq, rfl⟩
+  have hG_upper (y : M) (q : t) (hyq : y < q.1) : G y ≤ (e.symm q).1 := by
+    apply sSup_le
+    rintro _ ⟨p, hp, rfl⟩
+    exact (e.symm.le_iff_le.mpr (hp.trans hyq.le))
+  have hGF (x : L) : G (F x) = x := by
+    apply le_antisymm
+    · by_contra h
+      have hxG : x < G (F x) := lt_of_not_ge h
+      obtain ⟨q, hqs, hxq, hqG⟩ := hs.exists_between hxG
+      obtain ⟨z, hzG, hqz⟩ := lt_sSup_iff.mp hqG
+      obtain ⟨p, hpF, rfl⟩ := hzG
+      have heqp : (e (⟨q, hqs⟩ : s)).1 < p.1 := by
+        have hsub : (⟨q, hqs⟩ : s) < e.symm p := hqz
+        simpa using (e.lt_iff_lt.mpr hsub)
+      exact (not_lt_of_ge (hF_upper x ⟨q, hqs⟩ hxq)) (heqp.trans_le hpF)
+    · calc
+        x = sSup ((fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}) :=
+          (apm_t95j06_sSup_dense_Iic_aux L s hs x).symm
+        _ ≤ G (F x) := by
+          apply sSup_le
+          rintro _ ⟨q, hqx, rfl⟩
+          simpa using hG_lower (F x) (e q) (hF_lower x q hqx)
+  have hFG (y : M) : F (G y) = y := by
+    apply le_antisymm
+    · by_contra h
+      have hyF : y < F (G y) := lt_of_not_ge h
+      obtain ⟨q, hqt, hyq, hqF⟩ := ht.exists_between hyF
+      obtain ⟨z, hzF, hqz⟩ := lt_sSup_iff.mp hqF
+      obtain ⟨p, hpG, rfl⟩ := hzF
+      have heqp : (e.symm (⟨q, hqt⟩ : t)).1 < p.1 := by
+        have hsub : (⟨q, hqt⟩ : t) < e p := hqz
+        simpa using (e.symm.lt_iff_lt.mpr hsub)
+      exact (not_lt_of_ge (hG_upper y ⟨q, hqt⟩ hyq)) (heqp.trans_le hpG)
+    · calc
+        y = sSup ((fun q : t ↦ q.1) '' {q : t | q.1 ≤ y}) :=
+          (apm_t95j06_sSup_dense_Iic_aux M t ht y).symm
+        _ ≤ F (G y) := by
+          apply sSup_le
+          rintro _ ⟨q, hqy, rfl⟩
+          simpa using hF_lower (G y) (e.symm q) (hG_lower y q hqy)
+  have hFstrict : StrictMono F := by
+    intro x y hxy
+    obtain ⟨q, hqs, hxq, hqy⟩ := hs.exists_between hxy
+    obtain ⟨r, hrs, hxr, hrq⟩ := hs.exists_between hxq
+    have herq : (e (⟨r, hrs⟩ : s)).1 < (e (⟨q, hqs⟩ : s)).1 := by
+      apply e.lt_iff_lt.mpr
+      exact hrq
+    exact (hF_upper x ⟨r, hrs⟩ hxr).trans_lt
+      (herq.trans_le (hF_lower y ⟨q, hqs⟩ hqy.le))
+  let E : L ≃o M :=
+    { toFun := F
+      invFun := G
+      left_inv := hGF
+      right_inv := hFG
+      map_rel_iff' := hFstrict.le_iff_le }
+  exact ⟨E, E.map_bot, E.map_top⟩
 
 /-- **Compact separable linear-continuum classification (estimated 70--120
 lines).** Every nontrivial second-countable complete dense linear order with
@@ -2528,7 +3004,25 @@ one relatively compact line chart.  The connected-union hypothesis removes
 the open-cover nerve construction from the parent theorem; the proof orders
 successive overlaps, rules out branching by local real charts, and rules out
 closing the two ends using noncompactness.  Estimated size: 110--170 lines. -/
-/-- Two overlapping relatively compact line charts in a connected noncompact
+/-- Two overlapping open real-line charts in a Hausdorff space have union
+homeomorphic to the real line unless their union is compact.
+
+This is the two-chart one-manifold dichotomy.  Transport the overlap through
+the two real coordinates.  Its components are open intervals.  Compatible
+orders glue to a line unless both pairs of ends are identified; Hausdorffness
+excludes every partial/doubled-end identification, and identifying both pairs
+produces the compact alternative.  This statement is independent of compact
+closures and of the ambient connected/noncompact hypotheses.  Estimated
+size: 80--130 lines. -/
+theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
+    (hUreal : Nonempty (U ≃ₜ ℝ)) (hVreal : Nonempty (V ≃ₜ ℝ))
+    (hUV : (U ∩ V).Nonempty) :
+    Nonempty ({x : X // x ∈ U ∪ V} ≃ₜ ℝ) ∨ IsCompact (U ∪ V) := by
+  sorry
+
+/- Two overlapping relatively compact line charts in a connected noncompact
 Hausdorff second-countable one-manifold have a common relatively compact line
 chart neighborhood.
 
@@ -2547,7 +3041,18 @@ theorem apm_t95j06_overlapping_intervalCharts_pair_thicken
     (hUV : (U ∩ V).Nonempty) :
     ∃ W : Set X, IsOpen W ∧ U ∪ V ⊆ W ∧ IsCompact (closure W) ∧
       Nonempty (W ≃ₜ ℝ) := by
-  sorry
+  have hopen : IsOpen (U ∪ V) := hUopen.union hVopen
+  have hclosure : IsCompact (closure (U ∪ V)) := by
+    rw [closure_union]
+    exact hUcompact.union hVcompact
+  rcases apm_t95j06_two_overlapping_realCharts_line_or_compact
+      X U V hUopen hVopen hUreal hVreal hUV with hline | hcompact
+  · exact ⟨U ∪ V, hopen, fun _ h ↦ h, hclosure, hline⟩
+  · have hclosed : IsClosed (U ∪ V) := hcompact.isClosed
+    have hnonempty : (U ∪ V).Nonempty :=
+      hUV.mono (Set.inter_subset_left.trans Set.subset_union_left)
+    have huniv : U ∪ V = Set.univ := (show IsClopen (U ∪ V) from ⟨hclosed, hopen⟩).eq_univ hnonempty
+    exact False.elim (hcompact.ne_univ huniv)
 
 /-- The empty and singleton cases of finite chart thickening require no
 gluing: for a singleton use its supplied chart, while for the empty family
@@ -2961,7 +3466,7 @@ lemma apm_t95j06_puncture_components_homeomorph_real_aux
   exact apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real
     C inferInstance inferInstance inferInstance inferInstance inferInstance hCloc
 
-/-- The one-chart end argument: if every connected component of the puncture
+/- The one-chart end argument: if every connected component of the puncture
 is a real line, then the puncture has only one component.
 
 Proof sketch (estimated 110--170 lines): a chart about `b` has two connected
@@ -2978,6 +3483,46 @@ Counterexample checks: for an interval an endpoint puncture is connected but
 the endpoint has no real-line chart; for a circle the conclusion holds; a
 tripod fails the chart hypothesis; the doubled line fails Hausdorffness; the
 long circle fails the component-to-`ℝ` premise. -/
+/-- **Real-line end obstruction (estimated 15--25 lines).** A preconnected
+subset of `ℝ` whose complement is compact is the whole line.
+
+Why true: compactness bounds the complement above and below. If the subset
+were bounded on either side as well, a point beyond both bounds would belong
+to neither it nor its complement. Thus it is unbounded in both directions,
+and order-convexity of preconnected subsets of `ℝ` fills the whole line. -/
+lemma apm_t95j06_puncture_connected_of_components_real_aux_realEnds
+    (U : Set ℝ) (hU : _root_.IsPreconnected U) (hUc : IsCompact Uᶜ) :
+    U = Set.univ := by
+  have hub : ¬ BddAbove U := by
+    intro hba
+    obtain ⟨a, ha⟩ := hba
+    obtain ⟨c, hc⟩ := hUc.bddAbove
+    let x : ℝ := max a c + 1
+    by_cases hx : x ∈ U
+    · have hxle := ha hx
+      dsimp [x] at hxle
+      linarith [le_max_left a c]
+    · have hxc : x ∈ Uᶜ := hx
+      have hxle := hc hxc
+      dsimp [x] at hxle
+      linarith [le_max_right a c]
+  have hlb : ¬ BddBelow U := by
+    intro hbb
+    obtain ⟨a, ha⟩ := hbb
+    obtain ⟨c, hc⟩ := hUc.bddBelow
+    let x : ℝ := min a c - 1
+    by_cases hx : x ∈ U
+    · have hxle := ha hx
+      dsimp [x] at hxle
+      linarith [min_le_left a c]
+    · have hxc : x ∈ Uᶜ := hx
+      have hxle := hc hxc
+      dsimp [x] at hxle
+      linarith [min_le_right a c]
+  exact hU.eq_univ_of_unbounded hlb hub
+
+/-- If every connected component of the puncture is a real line, the
+puncture is connected. -/
 lemma apm_t95j06_puncture_connected_of_components_real_aux
     (B : Type) (tB : TopologicalSpace B)
     (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
@@ -3606,3 +4151,7 @@ theorem apm_t95j06
 #print axioms apm_t95j06_planar_crosscut_of_jordan_aux_label_domains
 
 #print axioms apm_t95j06_jordan_complement_atMostTwo_aux_of_component_bound
+
+#print axioms apm_t95j06_jordan_complement_separates_aux_winding_locallyConstant
+#print axioms apm_t95j06_jordan_complement_separates_aux_far_zero
+#print axioms apm_t95j06_jordan_complement_separates
