@@ -146,11 +146,90 @@ def t00J02_IsLocalDegree
       ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
         (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
 
+/-- **D1 (finite-support excision, estimated 250--500 lines; LIBRARY).**  In
+words: relative top homology supported on a finite fibre is recovered
+bijectively by restricting to the point-local homology group at every fibre
+point.
+
+Why true: choose pairwise disjoint chart disks around the finite Hausdorff
+fibre.  `LocalHomologyNeighborhoodExcision.neighborhoodInclusion_Hn_isIso`
+identifies each disk-local group with its ambient point-local group;
+`SingularExcision.relativeExcisionMap` removes the complement of the disks.
+Finite Mayer--Vietoris, or the relative-chain direct sum for a finite disjoint
+union, identifies the remaining relative group with the product of disk-local
+groups.  For an empty fibre both sides are zero/singleton.  Finiteness and
+Hausdorffness are essential for the disjoint disk choice. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D1
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (f : C(S, S)) (y : S) [Fintype {x : S // f x = y}] :
+    Function.Bijective (t00J02_fiberCoordinates f y) := by
+  sorry
+
+/-- **D2 (localization coefficient is a unit, LIBRARY).**  In words: at every
+point `y` of a compact connected surface with `H₂ ≅ ℤ`, the localization of the
+global generator is `±1` times the canonical chart generator of the point-local
+group.  The existing `localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator`
+gives some integer `r`; this leaf says `r` is a unit.  Why true: the
+fundamental class of a closed connected orientable surface localizes to a
+generator at every point (Hatcher Thm 3.26).  Connectedness is
+needed: on two disjoint tori the localization of a class `(1,0)` vanishes at
+points of the second torus (there `H₂ ≅ ℤ²`, so the hypothesis also fails).
+(claude-14: replaces codex-15's D2a/D2b, which both reduced to
+this coefficient.) -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (y : S) :
+    ∃ r : ℤ, (r = 1 ∨ r = -1) ∧
+      r • ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) y =
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of S) 2 e) := by
+  sorry
+
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2a
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (y : S) :
+    ∀ b, ∃ n : ℤ, b = n •
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of S) 2 e) := by
+  intro b
+  obtain ⟨r, hr, hloc⟩ := t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2 e y
+  obtain ⟨m, hm⟩ := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates (k := 0) y b
+  refine ⟨m * r, ?_⟩
+  rw [← hloc, smul_smul, ← hm]
+  congr 1
+  rcases hr with rfl | rfl <;> ring
+
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2b
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (y : S) :
+    ∀ n : ℤ, n • ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      y 2 (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+        (TopCat.of S) 2 e) = 0 → n = 0 := by
+  intro n hn
+  obtain ⟨r, hr, hloc⟩ := t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2 e y
+  rw [← hloc, smul_smul] at hn
+  have h0 : (n * r) • ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) y =
+      (0 : ℤ) • ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) y := by
+    rw [hn, zero_smul]
+  have hnr := ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
+    0 y h0
+  rcases hr with rfl | rfl <;> simpa using hnr
+
 /-- **D: finite-fiber local homology decomposition.**  Relative `H₂` supported
 on a finite fiber is the product of the point-local groups, and the localized
 global generator at the target freely generates its local group.  Prove the first assertion
 by disjoint chart disks, excision, and finite Mayer--Vietoris; prove the second
-with `HigherChartLocalGenerator.ambientLocalGenerator_generates` and the
+with `ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates` and the
 surface fundamental-class localization theorem.  The empty fiber gives the
 zero-to-empty-product isomorphism.  Estimated proof: 350--700 lines;
 **LIBRARY**. -/
@@ -168,7 +247,9 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D
         ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
           (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
             (TopCat.of S) 2 e) := by
-  sorry
+  exact ⟨t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D1 f y,
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2b e y,
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2a e y⟩
 
 /-- **L0: existence of every point-local degree.**  Surjectivity in D gives
 the basis class supported at `x`; its pushforward has a unique integer
