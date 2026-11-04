@@ -2495,7 +2495,26 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbe
           intro y hy hfK
           rcases hfK with ⟨k, hk, hfk⟩
           exact hy ((hinj hfk).symm ▸ hk)) := by
-  sorry
+  apply (cancel_epi (cokernel.π
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) Kᶜ))).1
+  have h1 := ConstructionTargets.CoefficientRadialPair.projection (ZMod 2) Kᶜ
+    (ConstructionTargets.SingularExcision.excisedSubspace (f '' K)ᶜ (Set.range f)ᶜ)
+    (t00A04_rangeCorestrict f hcont) (t00A04_rangeCorestrict_mapsTo f hinj hcont K)
+  have h2 := ConstructionTargets.CoefficientExcision.projection (ZMod 2) (f '' K)ᶜ (Set.range f)ᶜ
+  have h3 := ConstructionTargets.CoefficientRadialPair.projection (ZMod 2) Kᶜ (f '' K)ᶜ
+    ⟨f, hcont⟩ (by
+          intro y hy hfK
+          rcases hfK with ⟨k, hk, hfk⟩
+          exact hy ((hinj hfk).symm ▸ hk))
+  erw [reassoc_of% h1]
+  erw [Category.assoc, h2, h3]
+  erw [← Category.assoc]
+  congr 1
+  change (ConstructionTargets.CoefficientRadialPair.chains (ZMod 2)).map _ ≫
+      (ConstructionTargets.CoefficientRadialPair.chains (ZMod 2)).map _ =
+    (ConstructionTargets.CoefficientRadialPair.chains (ZMod 2)).map _
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  rfl
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor
     {Y W : Type} [TopologicalSpace Y] [TopologicalSpace W] [T2Space Y] [T2Space W]
