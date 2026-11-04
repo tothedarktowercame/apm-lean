@@ -289,6 +289,57 @@ component, giving Hausdorff quotient; the quotient map is open, so
 The chosen component is nonempty.  A constant action cannot meet `scalar_act`
 and `free`, and compactness is used essentially for closedness of the orbit
 relation. -/
+structure apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_Action
+    (F : Set apm_t95j06_S5) (x : F) where
+  act : Circle × {y : F // y ∈ connectedComponent x} →
+    {y : F // y ∈ connectedComponent x}
+  continuous_act : Continuous act
+  one_act : ∀ y, act (1, y) = y
+  mul_act : ∀ g h y, act (g, act (h, y)) = act (g * h, y)
+  free : ∀ g y, act (g, y) = y → g = 1
+  scalar_act : ∀ g y, (act (g, y)).1.1.1 = (g : ℂ) • y.1.1.1
+
+/-- **Remaining sub-leaf, component action (estimated 100--180 lines).**  In
+words: scalar multiplication restricts to a continuous free Circle action on
+each connected component of a Circle-invariant subset of the unit sphere.
+
+Why true: `hinv` gives membership in `F`.  For fixed `g`, the scalar orbit of
+`y` is connected because it is the continuous image of connected `Circle`;
+it contains `y` at `1`, hence stays in `connectedComponent x`.  Continuity and
+the action laws descend from complex scalar multiplication.  If `g • y = y`,
+some coordinate of the norm-one vector `y` is nonzero, so cancellation gives
+`g = 1`.  Empty components do not occur because they are indexed by `x`. -/
+theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_componentAction
+    (F : Set apm_t95j06_S5) (hinv : apm_t95j06_IsCircleInvariant F) (x : F) :
+    Nonempty
+      (apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_Action F x) := by
+  sorry
+
+/-- **Remaining sub-leaf, compact orbit quotient (estimated 140--240 lines).**
+In words: the orbit space of the supplied continuous free Circle action on a
+compact connected component is compact, connected, Hausdorff and second
+countable, with an open quotient projection and precisely the action orbits
+as fibres.
+
+Why true: use `MulAction.orbitRel.Quotient` with its quotient topology.  The
+projection is open because the saturation of `U` is the union of the open
+translates `g • U`.  The orbit relation is closed: it is the image of compact
+`Circle × component` under `(g,y) ↦ (y,g•y)` into a Hausdorff product.
+The closed equivalence relation gives a Hausdorff quotient.  Compactness and
+connectedness descend along the surjective quotient map, and
+`Topology.IsQuotientMap.secondCountableTopology` applies to the open quotient
+of the second-countable component. -/
+theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_orbitQuotient
+    (F : Set apm_t95j06_S5) (hF : apm_t95j06_IsCompactOrientableSurface F)
+    (x : F)
+    (A : apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_Action F x) :
+    ∃ (B : Type) (tB : TopologicalSpace B),
+      @CompactSpace B tB ∧ @ConnectedSpace B tB ∧ @T2Space B tB ∧
+      @SecondCountableTopology B tB ∧
+      Nonempty (@apm_t95j06_hopf_slices_component_principalBundle_aux_Core
+        F x B tB) := by
+  sorry
+
 theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core
     (F : Set apm_t95j06_S5)
     (hF : apm_t95j06_IsCompactOrientableSurface F)
@@ -298,7 +349,12 @@ theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core
       @SecondCountableTopology B tB ∧
       Nonempty (@apm_t95j06_hopf_slices_component_principalBundle_aux_Core
         F x B tB) := by
-  sorry
+  intro x
+  obtain ⟨A⟩ :=
+    apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_componentAction
+      F hinv x
+  exact apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_orbitQuotient
+    F hF x A
 
 /-- **Remaining sub-leaf, explicit Hopf charts (estimated 300--550 lines).**
 In words: every scalar-orbit quotient core has fibre-preserving,
