@@ -3074,6 +3074,27 @@ lemma apm_t95j06_cutSide_adjoin_puncture
       · exact hpcl
   exact ⟨hclosed, hclosure ▸ hUpre.closure⟩
 
+/-- **One-sided boundary bumping (estimated 250--450 lines; LIBRARY).**  Each
+nonempty side of a separation of a punctured compact Hausdorff continuum
+contains a point whose removal does not disconnect the ambient continuum.
+
+Proof sketch: assuming every point of `A` is a cut point, choose at each such
+point the cut side avoiding a fixed point of `B`.  The nesting lemma obtained
+from `apm_t95j06_cutSide_adjoin_puncture` orders the resulting compact
+subcontinua strictly by reverse inclusion.  A maximal chain has nonempty
+intersection by compactness.  A point in that intersection either is already
+non-cut, or its avoiding side strictly extends the chain, contradicting
+maximality.  Compactness is essential; an open interval side can have an
+escaping nested family. -/
+theorem apm_t95j06_cutSide_contains_nonCutPoint
+    (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
+    (hX : IsConnected (Set.univ : Set X)) (q : X) (A B : Set X)
+    (hA : IsOpen A) (hB : IsOpen B) (hAB : Disjoint A B)
+    (hcover : A ∪ B = ({q}ᶜ : Set X))
+    (hAne : A.Nonempty) (hBne : B.Nonempty) :
+    ∃ x ∈ A, IsPreconnected ({x}ᶜ : Set X) := by
+  sorry
+
 /-- Every nondegenerate compact connected Hausdorff continuum has two
 distinct non-cut points.  This is the one classical continuum-theory input
 used below (the boundary-bumping theorem). -/
@@ -3083,7 +3104,50 @@ theorem apm_t95j06_continuum_exists_two_nonCutPoints
     ∃ p q : X, p ≠ q ∧
       IsPreconnected ({p}ᶜ : Set X) ∧
       IsPreconnected ({q}ᶜ : Set X) := by
-  sorry
+  classical
+  by_cases hall : ∀ p : X, IsPreconnected ({p}ᶜ : Set X)
+  · obtain ⟨p, q, hpq⟩ := exists_pair_ne X
+    exact ⟨p, q, hpq, hall p, hall q⟩
+  · push_neg at hall
+    obtain ⟨q, hq⟩ := hall
+    rw [isPreconnected_iff_subset_of_disjoint] at hq
+    push_neg at hq
+    obtain ⟨u, v, hu, hv, hcover, hinter, hnu, hnv⟩ := hq
+    let P : Set X := ({q}ᶜ : Set X)
+    let U : Set X := P ∩ u
+    let V : Set X := P ∩ v
+    have hPo : IsOpen P := isClosed_singleton.isOpen_compl
+    have hUo : IsOpen U := hPo.inter hu
+    have hVo : IsOpen V := hPo.inter hv
+    have hUV : Disjoint U V := by
+      rw [Set.disjoint_left]
+      intro x hxU hxV
+      have hempty : x ∈ (∅ : Set X) := hinter ▸ ⟨hxU.1, hxU.2, hxV.2⟩
+      exact hempty.elim
+    have hUVcover : U ∪ V = P := by
+      apply Set.Subset.antisymm
+      · exact Set.union_subset Set.inter_subset_left Set.inter_subset_left
+      · intro x hxP
+        rcases hcover hxP with hxu | hxv
+        · exact Or.inl ⟨hxP, hxu⟩
+        · exact Or.inr ⟨hxP, hxv⟩
+    have hUne : U.Nonempty := by
+      obtain ⟨x, hxP, hxu⟩ := Set.not_subset.mp hnv
+      rcases hcover hxP with hxu' | hxv
+      · exact ⟨x, hxP, hxu'⟩
+      · exact False.elim (hxu hxv)
+    have hVne : V.Nonempty := by
+      obtain ⟨x, hxP, hxv⟩ := Set.not_subset.mp hnu
+      rcases hcover hxP with hxu | hxv'
+      · exact False.elim (hxv hxu)
+      · exact ⟨x, hxP, hxv'⟩
+    obtain ⟨p, hpU, hp⟩ :=
+      apm_t95j06_cutSide_contains_nonCutPoint X hX q U V hUo hVo hUV
+        (by simpa [P] using hUVcover) hUne hVne
+    obtain ⟨r, hrV, hr⟩ :=
+      apm_t95j06_cutSide_contains_nonCutPoint X hX q V U hVo hUo hUV.symm
+        (by simpa [P, Set.union_comm] using hUVcover) hVne hUne
+    exact ⟨p, r, fun hpr => Set.disjoint_left.1 hUV hpU (hpr ▸ hrV), hp, hr⟩
 
 /-- A puncture component in a connected locally connected space has closure
 equal to the component together with the puncture point. -/
