@@ -6707,6 +6707,37 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_bounded_componen
   obtain ⟨s, hs, rfl⟩ := hy
   refine ⟨⟨_, hO s (hIA hs)⟩, (φ.symm s).2, (hτA s _).symm⟩
 
+/-- **E3, overlap components are rays.**  Each component of the overlap in
+the first chart is a right or left ray, unless the overlap is everything in
+the first chart or in the second.  A component is open, connected and
+nonempty, so it is `ℝ`, a bounded interval or a ray; the bounded case is E2. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_component_ray
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (U V : Set X) (hV : IsOpen V) (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ)
+    (t : ℝ) (htA : t ∈ φ '' (Subtype.val ⁻¹' V)) :
+    (∃ a, connectedComponentIn (φ '' (Subtype.val ⁻¹' V)) t = Set.Ioi a) ∨
+    (∃ b, connectedComponentIn (φ '' (Subtype.val ⁻¹' V)) t = Set.Iio b) ∨
+    φ '' (Subtype.val ⁻¹' V) = Set.univ ∨ ψ '' (Subtype.val ⁻¹' U) = Set.univ := by
+  set A := φ '' (Subtype.val ⁻¹' V) with hAdef
+  have hAopen : IsOpen A := by
+    have : A = (fun s => ((φ.symm s : U) : X)) ⁻¹' V := by
+      ext s; constructor
+      · rintro ⟨u, hu, rfl⟩; simpa using hu
+      · intro hs; exact ⟨φ.symm s, hs, by simp⟩
+    rw [this]; exact hV.preimage (continuous_subtype_val.comp φ.symm.continuous)
+  set C := connectedComponentIn A t with hC
+  by_cases hCu : C = Set.univ
+  · right; right; left
+    exact Set.eq_univ_of_univ_subset (hCu ▸ connectedComponentIn_subset A t)
+  rcases apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_open_interval_shape C
+      (hAopen.connectedComponentIn) ⟨t, mem_connectedComponentIn htA⟩ hCu
+      _root_.isPreconnected_connectedComponentIn with ⟨p, q, h⟩ | h | h
+  · right; right; right
+    exact apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_bounded_component
+      X U V hV φ ψ t p q htA h
+  · left; exact h
+  · right; left; exact h
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
