@@ -5598,6 +5598,34 @@
    "rev": "4489e960",
    "approved_at": "2026-09-28T00:25:56Z"
   },
+  "t01A05": {
+   "decls": [
+    "apm_t01a05"
+   ],
+   "sha256": "9fa149bd711008505a0d9cdeefa3367abc74130f9d38b79874327b244048f866",
+   "defs": [
+    "AreSmoothlyHomotopic",
+    "AreTransverse",
+    "E",
+    "Form",
+    "HasIntersectionNumber",
+    "IntersectionPoints",
+    "IsKSheetedSmoothCover",
+    "IsOrientationPreserving",
+    "Model",
+    "Orientation",
+    "OrientedSubmanifold",
+    "intersectionFrame",
+    "intersectionNumber",
+    "localIntersectionSign"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-04)",
+   "evidence": "holes/labs/statement-registry/open5-grades.md",
+   "prelim_defect": null,
+   "rev": "77a0fbfe9",
+   "approved_at": "2026-11-04T00:35:08Z"
+  },
   "t01A06": {
    "decls": [
     "apm_t01a06"
