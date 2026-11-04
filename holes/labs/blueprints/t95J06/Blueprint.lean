@@ -1588,6 +1588,7 @@ theorem apm_t95j06_locallyRealLine_compact_cover
   letI : SigmaCompactSpace X := inferInstance
   exact SigmaCompactSpace.exists_compact_covering
 
+open Set in
 /-- A real-line chart can be shrunk to a relatively compact open interval
 chart around its marked point (estimated 70--120 lines).  In coordinates,
 choose a bounded open interval whose closed interval lies inside the original
@@ -1600,7 +1601,60 @@ theorem apm_t95j06_locallyRealLine_relativelyCompact_chart
     (hloc : apm_t95j06_IsLocallyRealLine X) (x : X) :
     ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ IsCompact (closure U) ∧
       Nonempty (U ≃ₜ ℝ) := by
-  sorry
+  obtain ⟨U, hU, hx, V, hV, ⟨e⟩⟩ := hloc x
+  set r : ℝ := (e ⟨x, hx⟩ : ℝ) with hr
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hV r (e ⟨x, hx⟩).2
+  set δ := ε / 2 with hδ
+  have hδpos : 0 < δ := by positivity
+  have hIcc : Icc (r - δ) (r + δ) ⊆ V := by
+    intro t ht
+    apply hball
+    rw [Metric.mem_ball, Real.dist_eq, abs_lt]
+    constructor <;> linarith [ht.1, ht.2]
+  -- the embedding of the closed interval
+  let gK : Icc (r - δ) (r + δ) → X := fun t => (e.symm ⟨t.1, hIcc t.2⟩ : X)
+  have hgK : Continuous gK := by
+    apply continuous_subtype_val.comp
+    apply e.symm.continuous.comp
+    exact (continuous_subtype_val).subtype_mk _
+  let g : Ioo (r - δ) (r + δ) → X := fun t => (e.symm ⟨t.1, hIcc (Ioo_subset_Icc_self t.2)⟩ : X)
+  have hg : Topology.IsEmbedding g := by
+    have h1 : Topology.IsEmbedding (fun t : Ioo (r - δ) (r + δ) =>
+        (⟨t.1, hIcc (Ioo_subset_Icc_self t.2)⟩ : V)) :=
+      Topology.IsEmbedding.inclusion (fun _ ht => hIcc (Ioo_subset_Icc_self ht))
+    exact Topology.IsEmbedding.subtypeVal.comp (e.symm.isEmbedding.comp h1)
+  have hgopen : IsOpen (range g) := by
+    have h1 : IsOpen (range (fun t : Ioo (r - δ) (r + δ) =>
+        (⟨t.1, hIcc (Ioo_subset_Icc_self t.2)⟩ : V))) := by
+      have : range (fun t : Ioo (r - δ) (r + δ) =>
+          (⟨t.1, hIcc (Ioo_subset_Icc_self t.2)⟩ : V)) = Subtype.val ⁻¹' Ioo (r - δ) (r + δ) := by
+        ext v; constructor
+        · rintro ⟨t, rfl⟩; exact t.2
+        · intro hv; exact ⟨⟨v.1, hv⟩, rfl⟩
+      rw [this]; exact isOpen_Ioo.preimage continuous_subtype_val
+    have h2 : range g = Subtype.val '' (e.symm '' range (fun t : Ioo (r - δ) (r + δ) =>
+        (⟨t.1, hIcc (Ioo_subset_Icc_self t.2)⟩ : V))) := by
+      rw [← range_comp, ← range_comp]; rfl
+    rw [h2]
+    exact hU.isOpenMap_subtype_val _ (e.symm.isOpenMap _ h1)
+  refine ⟨range g, hgopen, ?_, ?_, ?_⟩
+  · refine ⟨⟨r, by linarith, by linarith⟩, ?_⟩
+    simp [g, hr]
+  · have hC : IsCompact (range gK) := isCompact_range hgK
+    refine hC.of_isClosed_subset isClosed_closure (closure_minimal ?_ hC.isClosed)
+    rintro _ ⟨t, rfl⟩
+    exact ⟨⟨t.1, Ioo_subset_Icc_self t.2⟩, rfl⟩
+  · have hrδ : r - δ < r + δ := by linarith
+    have hs : 0 < ((r + δ) - (r - δ)) / 2 := by linarith
+    let a : ℝ ≃ₜ ℝ := affineHomeomorph (((r + δ) - (r - δ)) / 2) (((r - δ) + (r + δ)) / 2) hs.ne'
+    have himage : a '' Ioo (-1 : ℝ) 1 = Ioo (r - δ) (r + δ) := by
+      dsimp [a]
+      rw [affineHomeomorph_image_Ioo _ _ _ _ hs]
+      congr 1 <;> ring
+    let I : Ioo (r - δ) (r + δ) ≃ₜ ℝ :=
+      ((a.image (Ioo (-1 : ℝ) 1)).trans (Homeomorph.setCongr himage)).symm.trans
+        (orderIsoIooNegOneOne ℝ).toHomeomorph.symm
+    exact ⟨hg.toHomeomorph.symm.trans I⟩
 
 /- **LIBRARY, finite interval-chart chain (estimated 140--220 lines).**
 In a connected noncompact Hausdorff one-manifold, a finite collection of
