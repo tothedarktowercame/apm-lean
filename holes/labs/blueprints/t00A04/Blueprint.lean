@@ -1443,7 +1443,18 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_lift
           (ZMod 2) Aᶜ)).f n z ∧
       (ConstructionTargets.CoefficientRelativeSmall.relativeChains
           (ZMod 2) Aᶜ).homologyπ n q = c := by
-  sorry
+  let Q := ConstructionTargets.CoefficientRelativeSmall.relativeChains
+    (ZMod 2) Aᶜ
+  obtain ⟨q, hqc⟩ := (ModuleCat.epi_iff_surjective (Q.homologyπ n)).mp
+    inferInstance c
+  let p := cokernel.π
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) Aᶜ)
+  haveI : Epi p := by
+    dsimp only [p, cokernel.π]
+    infer_instance
+  obtain ⟨z, hz⟩ := (ModuleCat.epi_iff_surjective (p.f n)).mp inferInstance
+    (Q.iCycles n q)
+  exact ⟨z, q, hz.symm, hqc⟩
 
 theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite_aux_boundary
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
@@ -1537,7 +1548,51 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_desce
             (ZMod 2) Kᶜᶜ).homologyπ n qK) =
       (ConstructionTargets.CoefficientRelativeSmall.relativeChains
           (ZMod 2) Aᶜ).homologyπ n qA := by
-  sorry
+  let CK := ConstructionTargets.CoefficientRelativeSmall.relativeChains
+    (ZMod 2) Kᶜᶜ
+  let CA := ConstructionTargets.CoefficientRelativeSmall.relativeChains
+    (ZMod 2) Aᶜ
+  let F : CK ⟶ CA :=
+    ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜᶜ Aᶜ
+      (ContinuousMap.id _) (fun x hx hxA ↦ (hKA (by simpa using hx)) hxA)
+  have hcycles : HomologicalComplex.cyclesMap F n qK = qA := by
+    apply (ModuleCat.mono_iff_injective (CA.iCycles n)).mp inferInstance
+    have hci := ConcreteCategory.congr_hom
+      (HomologicalComplex.cyclesMap_i F n) qK
+    simp only [ConcreteCategory.comp_apply] at hci
+    rw [hci, hqK, hqA]
+    have hp := ConcreteCategory.congr_hom
+      (ConstructionTargets.CoefficientRadialPair.projection_degree
+        (ZMod 2) Kᶜᶜ Aᶜ (ContinuousMap.id _)
+          (fun x hx hxA ↦ (hKA (by simpa using hx)) hxA) n) z
+    simp only [ConcreteCategory.comp_apply] at hp
+    have hid :
+        (ConstructionTargets.CoefficientRadialPair.absoluteMap (ZMod 2)
+          (ContinuousMap.id _)).f n z = z := by
+      change (((AlgebraicTopology.singularChainComplexFunctor
+        (ModuleCat (ZMod 2))).obj (ModuleCat.of (ZMod 2) (ZMod 2))).map
+          (𝟙 (TopCat.of (EuclideanSpace ℝ (Fin d))))).f n z = z
+      have he := congrArg (fun q ↦ q.f n)
+        (((AlgebraicTopology.singularChainComplexFunctor
+          (ModuleCat (ZMod 2))).obj (ModuleCat.of (ZMod 2) (ZMod 2))).map_id
+            (TopCat.of (EuclideanSpace ℝ (Fin d))))
+      exact ConcreteCategory.congr_hom he z
+    change
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜᶜ Aᶜ
+        (ContinuousMap.id _) (fun x hx hxA ↦ (hKA (by simpa using hx)) hxA)).f n
+          ((cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+            (ZMod 2) Kᶜᶜ)).f n z) = _
+    calc
+      _ = ((ConstructionTargets.CoefficientRadialPair.absoluteMap (ZMod 2)
+              (ContinuousMap.id _)).f n ≫
+            (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+              (ZMod 2) Aᶜ)).f n) z := hp
+      _ = _ := by
+        rw [ConcreteCategory.comp_apply, hid]
+        rfl
+  have hn := ConcreteCategory.congr_hom
+    (HomologicalComplex.homologyπ_naturality F n) qK
+  simpa only [ConcreteCategory.comp_apply, hcycles] using hn
 
 theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
