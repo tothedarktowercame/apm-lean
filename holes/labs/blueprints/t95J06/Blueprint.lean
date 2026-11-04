@@ -5427,6 +5427,98 @@ lemma apm_t95j06_increasing_interval_union_coordinate_gap_iff
       exact apm_t95j06_increasing_interval_union_orientedCharts_step_iff
         X U hnested hreal (n + k) ⟨x, hxk⟩ ⟨y, hyk⟩
 
+/-- The least exhaustion stage containing a point. -/
+noncomputable def apm_t95j06_increasing_interval_union_stage
+    (X : Type) [TopologicalSpace X] (U : ℕ → Set X)
+    (hcover : (⋃ n, U n) = Set.univ) (x : X) : ℕ := by
+  classical
+  exact Nat.find (apm_t95j06_increasing_interval_union_mem X U hcover x)
+
+lemma apm_t95j06_increasing_interval_union_stage_mem
+    (X : Type) [TopologicalSpace X] (U : ℕ → Set X)
+    (hcover : (⋃ n, U n) = Set.univ) (x : X) :
+    x ∈ U (apm_t95j06_increasing_interval_union_stage X U hcover x) := by
+  classical
+  exact Nat.find_spec (apm_t95j06_increasing_interval_union_mem X U hcover x)
+
+/-- The global strict relation compares two points in the corrected chart of
+the larger of their least containing stages. -/
+noncomputable def apm_t95j06_increasing_interval_union_lt
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (x y : X) : Prop :=
+  let M := max
+    (apm_t95j06_increasing_interval_union_stage X U hcover x)
+    (apm_t95j06_increasing_interval_union_stage X U hcover y)
+  apm_t95j06_increasing_interval_union_coordinate X U hnested hreal M x <
+    apm_t95j06_increasing_interval_union_coordinate X U hnested hreal M y
+
+/-- The global comparison can be read in every stage containing both points.
+Compare its defining stage and the requested stage through their maximum and
+apply coordinate gap-independence twice. -/
+lemma apm_t95j06_increasing_interval_union_lt_iff
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) {x y : X} (m : ℕ)
+    (hx : x ∈ U m) (hy : y ∈ U m) :
+    apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover x y ↔
+      apm_t95j06_increasing_interval_union_coordinate X U hnested hreal m x <
+        apm_t95j06_increasing_interval_union_coordinate X U hnested hreal m y := by
+  let sx := apm_t95j06_increasing_interval_union_stage X U hcover x
+  let sy := apm_t95j06_increasing_interval_union_stage X U hcover y
+  let M := max sx sy
+  let K := max M m
+  have hxs : x ∈ U sx :=
+    apm_t95j06_increasing_interval_union_stage_mem X U hcover x
+  have hys : y ∈ U sy :=
+    apm_t95j06_increasing_interval_union_stage_mem X U hcover y
+  have hxM : x ∈ U M :=
+    apm_t95j06_increasing_interval_union_mono_of_le X U hnested
+      (le_max_left sx sy) hxs
+  have hyM : y ∈ U M :=
+    apm_t95j06_increasing_interval_union_mono_of_le X U hnested
+      (le_max_right sx sy) hys
+  have hMK := apm_t95j06_increasing_interval_union_coordinate_gap_iff
+    X U hnested hreal (le_max_left M m) hxM hyM
+  have hmK := apm_t95j06_increasing_interval_union_coordinate_gap_iff
+    X U hnested hreal (le_max_right M m) hx hy
+  exact hMK.trans hmK.symm
+
+lemma apm_t95j06_increasing_interval_union_lt_irrefl
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (x : X) :
+    ¬ apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover x x := by
+  simp [apm_t95j06_increasing_interval_union_lt]
+
+lemma apm_t95j06_increasing_interval_union_lt_trans
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) {x y z : X}
+    (hxy : apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover x y)
+    (hyz : apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover y z) :
+    apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover x z := by
+  let m := max
+    (apm_t95j06_increasing_interval_union_stage X U hcover x)
+    (max (apm_t95j06_increasing_interval_union_stage X U hcover y)
+      (apm_t95j06_increasing_interval_union_stage X U hcover z))
+  have hx : x ∈ U m := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested (le_max_left _ _) (apm_t95j06_increasing_interval_union_stage_mem X U hcover x)
+  have hy : y ∈ U m := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested ((le_max_left _ _).trans (le_max_right _ _))
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover y)
+  have hz : z ∈ U m := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested ((le_max_right _ _).trans (le_max_right _ _))
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover z)
+  rw [apm_t95j06_increasing_interval_union_lt_iff X U hnested hreal hcover m hx hy] at hxy
+  rw [apm_t95j06_increasing_interval_union_lt_iff X U hnested hreal hcover m hy hz] at hyz
+  rw [apm_t95j06_increasing_interval_union_lt_iff X U hnested hreal hcover m hx hz]
+  exact hxy.trans hyz
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
