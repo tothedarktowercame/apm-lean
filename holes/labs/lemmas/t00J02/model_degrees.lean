@@ -191,6 +191,34 @@ theorem identity_productMap_localDegree
   rw [hcongr _ _ hres _ (neighborhoodInclusion_mapsTo U 0)]
   exact hι _
 
+def firstCoordinateReflection : C(E2, E2) where
+  toFun := ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)
+  continuous_toFun :=
+    (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)).continuous
+
+lemma firstCoordinateReflection_mapsTo_deletedPoint :
+    MapsTo firstCoordinateReflection (deletedPoint (0 : E2)) (deletedPoint (0 : E2)) := by
+  intro p hp hRp
+  apply hp
+  exact (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)).injective
+    (hRp.trans
+      (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)).map_zero.symm)
+
+/-- The first-coordinate reflection negates the standard ambient local
+two-dimensional generator.  Radial naturality identifies the relative local
+map with the reflection of the unit circle, where
+`CoefficientFirstReflection.all_reflections_negative` computes the sign.
+Estimated size: 70--110 lines. -/
+lemma firstCoordinateReflection_ambientLocalGenerator :
+    HomologicalComplex.homologyMap
+        (relativeSingularMap (deletedPoint (0 : E2)) (deletedPoint (0 : E2))
+          firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint) 2
+        (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (0 : E2)) =
+      -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (0 : E2) := by
+  sorry
+
 /-- Reflection in the first coordinate acts by `-1` on two-dimensional local
 homology.  This follows by transporting `all_reflections_negative` through
 the radial local-homology isomorphism.  Estimated size: 70--110 lines. -/
@@ -198,7 +226,46 @@ theorem reflection_productMap_localDegree
     (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
     IsLocalDegreeTwo U (productMap reflectionScalar)
       (reflection_productMap_zero_iff U) (-1) := by
-  sorry
+  have hres : restrictedMap U (productMap reflectionScalar) =
+      firstCoordinateReflection.comp (neighborhoodInclusion U) := by
+    ext p i
+    fin_cases i <;> simp [restrictedMap, productMap, reflectionScalar,
+      firstCoordinateReflection, neighborhoodInclusion,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+  let ι := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U 0)) 2
+  let ρ := HomologicalComplex.homologyMap
+    (relativeSingularMap (deletedPoint (0 : E2)) (deletedPoint (0 : E2))
+      firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint) 2
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso
+    0 U (0 : E2) hU h0
+  let z := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+    (k := 0) (0 : E2)
+  have hι : ∀ b, ι ((asIso ι).inv b) = b := fun b =>
+    ConcreteCategory.congr_hom (asIso ι).inv_hom_id b
+  refine ⟨(asIso ι).inv z, hι _, ?_⟩
+  have hcongr : ∀ (F G : C(U, E2)) (hFG : F = G) hF hG,
+      relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) F hF =
+        relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) G hG := by
+    intro F G hFG _ _
+    subst hFG
+    rfl
+  have hcompMaps : MapsTo (firstCoordinateReflection.comp (neighborhoodInclusion U))
+      (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) :=
+    firstCoordinateReflection_mapsTo_deletedPoint.comp
+      (neighborhoodInclusion_mapsTo U 0)
+  rw [hcongr _ _ hres _ hcompMaps]
+  have hcomp := relativeSingularHomologyMap_comp
+    (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+    (deletedPoint (0 : E2)) (neighborhoodInclusion U) firstCoordinateReflection
+    (neighborhoodInclusion_mapsTo U 0) firstCoordinateReflection_mapsTo_deletedPoint
+    hcompMaps 2
+  rw [← hcomp]
+  change ρ (ι ((asIso ι).inv z)) = (-1 : ℤ) • z
+  rw [hι, firstCoordinateReflection_ambientLocalGenerator]
+  simp
+  rfl
 
 /-- The positive fold has zero local degree.  Its image lies in the closed
 right half-plane; the relative `H₂` of that half-plane at the origin vanishes
