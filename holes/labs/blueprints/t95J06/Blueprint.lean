@@ -1379,6 +1379,84 @@ lemma apm_t95j06_loopEraseFiber_sdiff_lo_subsingleton
   · exact False.elim (ordered hs ht hlt)
   · exact False.elim (ordered ht hs hgt)
 
+/-- The least parameter of an erased-image point maps back to that point. -/
+lemma apm_t95j06_loopEraseLo_value
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    (a : apm_t95j06_LoopEraseImage p F) :
+    p (apm_t95j06_loopEraseLo p hp hF a) = a.1 := by
+  exact (apm_t95j06_loopEraseLo_isLeast p hp hF a).1.2
+
+/-- Least parameters distinguish points of the erased image. -/
+lemma apm_t95j06_loopEraseLo_injective
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F) :
+    Function.Injective (apm_t95j06_loopEraseLo p hp hF) := by
+  intro a b hab
+  apply Subtype.ext
+  rw [← apm_t95j06_loopEraseLo_value p hp hF a,
+    ← apm_t95j06_loopEraseLo_value p hp hF b, hab]
+
+/-- The linear order on the erased image, lifted from first occurrence along
+the path. This is deliberately a definition rather than a global instance. -/
+noncomputable def apm_t95j06_loopEraseLinearOrder
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F) :
+    LinearOrder (apm_t95j06_LoopEraseImage p F) :=
+  LinearOrder.lift' (apm_t95j06_loopEraseLo p hp hF)
+    (apm_t95j06_loopEraseLo_injective p hp hF)
+
+/-- Along the retained parameter set, path values are monotone for the order
+lifted from their least parameters. -/
+lemma apm_t95j06_loopErase_monotone
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    {s t : apm_t95j06_LoopEraseInterval} (hs : s ∈ F) (ht : t ∈ F)
+    (hst : s ≤ t) :
+    (apm_t95j06_loopEraseLinearOrder p hp hF).le ⟨p s, ⟨s, hs, rfl⟩⟩
+      ⟨p t, ⟨t, ht, rfl⟩⟩ := by
+  let a : apm_t95j06_LoopEraseImage p F := ⟨p s, ⟨s, hs, rfl⟩⟩
+  let b : apm_t95j06_LoopEraseImage p F := ⟨p t, ⟨t, ht, rfl⟩⟩
+  change apm_t95j06_loopEraseLo p hp hF a ≤
+    apm_t95j06_loopEraseLo p hp hF b
+  by_contra hle
+  have hba : apm_t95j06_loopEraseLo p hp hF b <
+      apm_t95j06_loopEraseLo p hp hF a := lt_of_not_ge hle
+  have hloA := apm_t95j06_loopEraseLo_isLeast p hp hF a
+  have hloB := apm_t95j06_loopEraseLo_isLeast p hp hF b
+  have hloAs : apm_t95j06_loopEraseLo p hp hF a ≤ s := by
+    apply hloA.2
+    exact ⟨hs, by simp [a]⟩
+  have hne : p s ≠ p t := by
+    intro heq
+    have hab : a = b := Subtype.ext heq
+    have hlab : apm_t95j06_loopEraseLo p hp hF a =
+        apm_t95j06_loopEraseLo p hp hF b := by rw [hab]
+    exact (ne_of_lt hba) hlab.symm
+  have hloAt : apm_t95j06_loopEraseLo p hp hF a < t := by
+    apply lt_of_le_of_ne (hloAs.trans hst)
+    intro heq
+    apply hne
+    have hva : p (apm_t95j06_loopEraseLo p hp hF a) = p s := by
+      simpa [a] using apm_t95j06_loopEraseLo_value p hp hF a
+    rw [← hva, heq]
+  have hgap := apm_t95j06_loopEraseAdmissible_minimal_gap p hF
+    hloB.1.1 ht (hba.trans hloAt)
+    (by exact (apm_t95j06_loopEraseLo_value p hp hF b).trans rfl)
+  have hinside : apm_t95j06_loopEraseLo p hp hF a ∈
+      Set.Ioo (apm_t95j06_loopEraseLo p hp hF b) t ∩ F :=
+    ⟨⟨hba, hloAt⟩, hloA.1.1⟩
+  rw [hgap] at hinside
+  exact hinside
+
 /-- Euclidean invariance of domain, with all library premises discharged. -/
 lemma apm_t95j06_Q_aux_invariance_domain
     {U : Set apm_t95j06_E2} (hU : IsOpen U) {f : U → apm_t95j06_E2}
