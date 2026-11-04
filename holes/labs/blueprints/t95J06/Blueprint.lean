@@ -1588,6 +1588,66 @@ lemma apm_t95j06_loopErase_denselyOrdered
   letI := apm_t95j06_loopEraseLinearOrder p hp hF
   exact ⟨fun a b hab => apm_t95j06_loopEraseLo_exists_between p hp hF a b hab⟩
 
+/-- The graph of the order lifted from least retained parameters is closed in
+the square of the erased image. -/
+lemma apm_t95j06_loopErase_order_closed
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F) :
+    IsClosed {q : apm_t95j06_LoopEraseImage p F ×
+        apm_t95j06_LoopEraseImage p F |
+      apm_t95j06_loopEraseLo p hp hF q.1 ≤
+        apm_t95j06_loopEraseLo p hp hF q.2} := by
+  classical
+  let D : Set (apm_t95j06_LoopEraseInterval ×
+      apm_t95j06_LoopEraseInterval) :=
+    {z | z.1 ∈ F ∧ z.2 ∈ F ∧ z.1 ≤ z.2}
+  have hFc : IsClosed F := hF.1.1
+  have hDc : IsClosed D := by
+    simpa only [D, Set.setOf_and] using
+      (hFc.preimage continuous_fst).inter
+        ((hFc.preimage continuous_snd).inter isClosed_le_prod)
+  have hDk : IsCompact D := hDc.isCompact
+  let q : D → apm_t95j06_LoopEraseImage p F ×
+      apm_t95j06_LoopEraseImage p F := fun z =>
+    (⟨p z.1.1, ⟨z.1.1, z.2.1, rfl⟩⟩,
+      ⟨p z.1.2, ⟨z.1.2, z.2.2.1, rfl⟩⟩)
+  have hq : Continuous q := by
+    apply Continuous.prodMk
+    · apply Continuous.subtype_mk
+      exact hp.comp (continuous_fst.comp continuous_subtype_val)
+    · apply Continuous.subtype_mk
+      exact hp.comp (continuous_snd.comp continuous_subtype_val)
+  have hrange : Set.range q =
+      {z : apm_t95j06_LoopEraseImage p F ×
+          apm_t95j06_LoopEraseImage p F |
+        apm_t95j06_loopEraseLo p hp hF z.1 ≤
+          apm_t95j06_loopEraseLo p hp hF z.2} := by
+    apply Set.ext
+    intro z
+    constructor
+    · rintro ⟨u, rfl⟩
+      change apm_t95j06_loopEraseLo p hp hF (q u).1 ≤
+        apm_t95j06_loopEraseLo p hp hF (q u).2
+      exact apm_t95j06_loopErase_monotone p hp hF u.2.1 u.2.2.1 u.2.2.2
+    · intro hz
+      let s := apm_t95j06_loopEraseLo p hp hF z.1
+      let t := apm_t95j06_loopEraseLo p hp hF z.2
+      have hs := (apm_t95j06_loopEraseLo_isLeast p hp hF z.1).1
+      have ht := (apm_t95j06_loopEraseLo_isLeast p hp hF z.2).1
+      have hst : s ≤ t := hz
+      let u : D := ⟨(s, t), hs.1, ht.1, hst⟩
+      refine ⟨u, ?_⟩
+      apply Prod.ext
+      · apply Subtype.ext
+        exact hs.2
+      · apply Subtype.ext
+        exact ht.2
+  rw [← hrange]
+  letI : CompactSpace D := isCompact_iff_compactSpace.mp hDk
+  simpa only [Set.image_univ] using (isCompact_univ.image hq).isClosed
+
 /-- Euclidean invariance of domain, with all library premises discharged. -/
 lemma apm_t95j06_Q_aux_invariance_domain
     {U : Set apm_t95j06_E2} (hU : IsOpen U) {f : U → apm_t95j06_E2}
