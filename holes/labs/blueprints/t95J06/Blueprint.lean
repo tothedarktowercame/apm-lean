@@ -3981,6 +3981,74 @@ lemma apm_t95j06_two_realCharts_line_of_nested
     have h : U ∪ V = U := Set.union_eq_left.mpr hVU
     exact ⟨(Homeomorph.setCongr h).trans e⟩
 
+/-- A continuous injective open coordinate transition on a preconnected open
+real set is monotone (up to reversal), and its range is again an open
+preconnected real set.  Applied to one overlap component, this says that the
+transition carries that component homeomorphically onto an open interval. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_monotone
+    (a b : ℝ) (hab : a < b) (f : ℝ → ℝ)
+    (hf : ContinuousOn f (Set.Ioo a b))
+    (hfi : Set.InjOn f (Set.Ioo a b))
+    (hfo : IsOpenMap (Set.restrict (Set.Ioo a b) f)) :
+    (StrictMonoOn f (Set.Ioo a b) ∨ StrictAntiOn f (Set.Ioo a b)) ∧
+      IsOpen (f '' Set.Ioo a b) ∧ _root_.IsPreconnected (f '' Set.Ioo a b) := by
+  have hmono := hf.strictMonoOn_of_injOn_Ioo hab hfi
+  have hopen : IsOpen (Set.range (Set.restrict (Set.Ioo a b) f)) := by
+    simpa only [Set.image_univ] using hfo Set.univ isOpen_univ
+  have hrange : Set.range (Set.restrict (Set.Ioo a b) f) = f '' Set.Ioo a b := by
+    ext z
+    simp only [Set.mem_range, Set.restrict_apply, Set.mem_image]
+    constructor
+    · rintro ⟨x, rfl⟩
+      exact ⟨x, x.property, rfl⟩
+    · rintro ⟨x, hx, rfl⟩
+      exact ⟨⟨x, hx⟩, rfl⟩
+  rw [hrange] at hopen
+  have hpre : _root_.IsPreconnected (f '' Set.Ioo a b) :=
+    isPreconnected_Ioo.image f hf
+  exact ⟨hmono, hopen, hpre⟩
+
+/-- Hausdorff endpoint engine for two real charts.  If a net in their overlap
+has finite limits in both coordinates, the two inverse-chart limit points
+coincide.  In particular the first-coordinate limit still represents a point
+of the overlap, which contradicts maximality when it is a finite endpoint of
+an overlap component. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_end
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (U V : Set X) (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ)
+    {ι : Type} {l : Filter ι} [l.NeBot]
+    (x : ι → U) (y : ι → V)
+    (hxy : ∀ᶠ i in l, (x i : X) = (y i : X))
+    (β s : ℝ)
+    (hφ : Filter.Tendsto (fun i => φ (x i)) l (nhds β))
+    (hψ : Filter.Tendsto (fun i => ψ (y i)) l (nhds s)) :
+    β ∈ φ '' (Subtype.val ⁻¹' V) := by
+  have hxφ : Filter.Tendsto (fun i => (x i : X)) l
+      (nhds ((φ.symm β : U) : X)) := by
+    have h := φ.symm.continuous.continuousAt.tendsto.comp hφ
+    have hh := continuous_subtype_val.continuousAt.tendsto.comp h
+    convert hh using 1
+    ext i
+    exact congrArg Subtype.val (φ.symm_apply_apply (x i)).symm
+  have hxψ : Filter.Tendsto (fun i => (x i : X)) l
+      (nhds ((ψ.symm s : V) : X)) := by
+    have h := ψ.symm.continuous.continuousAt.tendsto.comp hψ
+    have hy : Filter.Tendsto (fun i => (y i : X)) l
+        (nhds ((ψ.symm s : V) : X)) := by
+      have hh := continuous_subtype_val.continuousAt.tendsto.comp h
+      convert hh using 1
+      ext i
+      exact congrArg Subtype.val (ψ.symm_apply_apply (y i)).symm
+    apply hy.congr'
+    filter_upwards [hxy] with i hi
+    exact hi.symm
+  have heq : ((φ.symm β : U) : X) = ((ψ.symm s : V) : X) :=
+    tendsto_nhds_unique hxφ hxψ
+  refine ⟨φ.symm β, ?_, φ.apply_symm_apply β⟩
+  show ((φ.symm β : U) : X) ∈ V
+  rw [heq]
+  exact (ψ.symm s).property
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
