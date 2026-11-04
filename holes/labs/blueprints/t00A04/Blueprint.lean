@@ -2713,7 +2713,37 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
           (ModuleCat.{u} (ZMod 2)) d).obj
           (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
           (TopCat.of (ULift.{u} (Shrink.{0} X))) : Type u)) := by
-  sorry
+  let K := (((AlgebraicTopology.singularChainComplexFunctor
+    (ModuleCat.{0} (ZMod 2))).obj (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+    (TopCat.of (Shrink.{0} X)))
+  let L := (((AlgebraicTopology.singularChainComplexFunctor
+    (ModuleCat.{u} (ZMod 2))).obj
+    (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+    (TopCat.of (ULift.{u} (Shrink.{0} X))))
+  let F := ModuleCat.uliftFunctor.{u} (ZMod 2)
+  let hpres : (F.obj (K.homology d) : Type u) ≅ (L.homology d : Type u) :=
+    ((forget (ModuleCat.{u} (ZMod 2))).mapIso
+      ((K.sc d).mapHomologyIso F).symm) ≪≫
+    ((forget (ModuleCat.{u} (ZMod 2))).mapIso
+      (HomologicalComplex.homologyMapIso e.symm d))
+  let K' := (((AlgebraicTopology.singularChainComplexFunctor
+    (ModuleCat.{0} (ZMod 2))).obj
+    (ModuleCat.of (ZMod 2) (ULift.{0} (ZMod 2)))).obj
+    (TopCat.of (Shrink.{0} X)))
+  let ec : K' ≅ K :=
+    ((AlgebraicTopology.singularChainComplexFunctor
+      (ModuleCat.{0} (ZMod 2))).mapIso
+      (ULift.moduleEquiv.toModuleIso)).app (TopCat.of (Shrink.{0} X))
+  let hc : (K'.homology d : Type) ≃ (K.homology d : Type) :=
+    ((forget (ModuleCat.{0} (ZMod 2))).mapIso
+      (HomologicalComplex.homologyMapIso ec d)).toEquiv
+  let hcu : ULift.{u} (K'.homology d : Type) ≃
+      ULift.{u} (K.homology d : Type) :=
+    (Equiv.ulift.{u, 0}.trans hc).trans Equiv.ulift.{u, 0}.symm
+  refine ⟨?_⟩
+  simpa [K, K', L, F, t00A04_ModTwoHomology,
+    AlgebraicTopology.singularHomologyFunctor] using
+      (hcu.trans hpres.toEquiv)
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ) :
