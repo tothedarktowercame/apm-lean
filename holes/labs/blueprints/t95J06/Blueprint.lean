@@ -5811,13 +5811,378 @@ lemma apm_t95j06_left_ray_noFiniteLimit_forces_unbounded
   · intro hm hb
     exact hnolim _ ((E.2 (hm.mono Set.Ioo_subset_Iio_self)).1 (hb.mono hsub))
 
+/-- A continuous injective function on a right ray is strictly monotone or
+strictly antitone there. -/
+lemma apm_t95j06_continuousOn_injOn_Ioi_strictMono_or_anti
+    (f : ℝ → ℝ) (b : ℝ) (hc : ContinuousOn f (Set.Ioi b))
+    (hi : Set.InjOn f (Set.Ioi b)) :
+    StrictMonoOn f (Set.Ioi b) ∨ StrictAntiOn f (Set.Ioi b) := by
+  let g : ℝ → ℝ := fun t => f (b + Real.exp t)
+  have hmem : ∀ t : ℝ, b + Real.exp t ∈ Set.Ioi b := fun t => by
+    simp only [Set.mem_Ioi]; linarith [Real.exp_pos t]
+  have hgc : Continuous g := hc.comp_continuous (by fun_prop) hmem
+  have hgi : Function.Injective g := by
+    intro t t' h
+    have := hi (hmem t) (hmem t') h
+    exact Real.exp_injective (by linarith)
+  have hrep : ∀ x ∈ Set.Ioi b, f x = g (Real.log (x - b)) := by
+    intro x hx
+    have hx' : 0 < x - b := sub_pos.mpr hx
+    simp only [g, Real.exp_log hx']; ring_nf
+  have hlog : ∀ x ∈ Set.Ioi b, ∀ y ∈ Set.Ioi b, x < y →
+      Real.log (x - b) < Real.log (y - b) := by
+    intro x hx y hy hxy
+    exact Real.log_lt_log (sub_pos.mpr hx) (by linarith)
+  rcases hgc.strictMono_of_inj hgi with hg | hg
+  · left; intro x hx y hy hxy
+    rw [hrep x hx, hrep y hy]; exact hg (hlog x hx y hy hxy)
+  · right; intro x hx y hy hxy
+    rw [hrep x hx, hrep y hy]; exact hg (hlog x hx y hy hxy)
+
+/-- A continuous injective function on a left ray is strictly monotone or
+strictly antitone there. -/
+lemma apm_t95j06_continuousOn_injOn_Iio_strictMono_or_anti
+    (f : ℝ → ℝ) (a : ℝ) (hc : ContinuousOn f (Set.Iio a))
+    (hi : Set.InjOn f (Set.Iio a)) :
+    StrictMonoOn f (Set.Iio a) ∨ StrictAntiOn f (Set.Iio a) := by
+  have hc' : ContinuousOn (fun s => f (-s)) (Set.Ioi (-a)) :=
+    hc.comp continuous_neg.continuousOn (fun s hs => by
+      simp only [Set.mem_Ioi, Set.mem_Iio] at hs ⊢; linarith)
+  have hi' : Set.InjOn (fun s => f (-s)) (Set.Ioi (-a)) := by
+    intro s hs s' hs' h
+    have := hi (show -s ∈ Set.Iio a by simp only [Set.mem_Ioi, Set.mem_Iio] at hs ⊢; linarith)
+      (show -s' ∈ Set.Iio a by simp only [Set.mem_Ioi, Set.mem_Iio] at hs' ⊢; linarith) h
+    linarith
+  have hneg : ∀ x ∈ Set.Iio a, -x ∈ Set.Ioi (-a) := fun x hx => by
+    simp only [Set.mem_Ioi, Set.mem_Iio] at hx ⊢; linarith
+  rcases apm_t95j06_continuousOn_injOn_Ioi_strictMono_or_anti _ (-a) hc' hi' with h | h
+  · right; intro x hx y hy hxy
+    have := h (hneg y hy) (hneg x hx) (by linarith)
+    simpa using this
+  · left; intro x hx y hy hxy
+    have := h (hneg y hy) (hneg x hx) (by linarith)
+    simpa using this
+
+/-- Two disjoint nonempty preconnected real sets cannot both be unbounded
+below. -/
+lemma apm_t95j06_disjoint_preconnected_not_both_unbounded_below
+    (S T : Set ℝ) (hTne : T.Nonempty)
+    (hTconn : _root_.IsPreconnected T)
+    (hdisj : Disjoint S T) (hS : ¬ BddBelow S) (hT : ¬ BddBelow T) : False := by
+  obtain ⟨t0, ht0⟩ := hTne
+  obtain ⟨s, hs, hst⟩ := not_bddBelow_iff.mp hS t0
+  obtain ⟨t, ht, hts⟩ := not_bddBelow_iff.mp hT s
+  exact Set.disjoint_left.mp hdisj hs (hTconn.Icc_subset ht ht0 ⟨hts.le, hst.le⟩)
+
+/-- Two disjoint nonempty preconnected real sets cannot both be unbounded
+above. -/
+lemma apm_t95j06_disjoint_preconnected_not_both_unbounded_above
+    (S T : Set ℝ) (hTne : T.Nonempty)
+    (hTconn : _root_.IsPreconnected T)
+    (hdisj : Disjoint S T) (hS : ¬ BddAbove S) (hT : ¬ BddAbove T) : False := by
+  obtain ⟨t0, ht0⟩ := hTne
+  obtain ⟨s, hs, hst⟩ := not_bddAbove_iff.mp hS t0
+  obtain ⟨t, ht, hts⟩ := not_bddAbove_iff.mp hT s
+  exact Set.disjoint_left.mp hdisj hs (hTconn.Icc_subset ht0 ht ⟨hst.le, hts.le⟩)
+
+/-- The transition function of two real charts, on the overlap in the first
+chart: continuous, injective, onto the overlap in the second chart, linked to
+the charts, and without finite limit at a point outside the overlap. -/
+lemma apm_t95j06_two_overlapping_realCharts_transition_package
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (U V : Set X) (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ) :
+    ∃ f : ℝ → ℝ,
+      ContinuousOn f (φ '' (Subtype.val ⁻¹' V)) ∧
+      Set.InjOn f (φ '' (Subtype.val ⁻¹' V)) ∧
+      f '' (φ '' (Subtype.val ⁻¹' V)) = ψ '' (Subtype.val ⁻¹' U) ∧
+      (∀ (u : U) (hu : (u : X) ∈ V), f (φ u) = ψ ⟨u, hu⟩) ∧
+      (∀ (s : Set ℝ) (β : ℝ), s ⊆ φ '' (Subtype.val ⁻¹' V) →
+        β ∉ φ '' (Subtype.val ⁻¹' V) → (nhdsWithin β s).NeBot →
+        ∀ c : ℝ, ¬ Filter.Tendsto f (nhdsWithin β s) (nhds c)) := by
+  classical
+  set A := φ '' (Subtype.val ⁻¹' V) with hAdef
+  have hO : ∀ s ∈ A, ((φ.symm s : U) : X) ∈ V := by
+    rintro _ ⟨u, hu, rfl⟩; simpa using hu
+  let τ : ℝ → ℝ := fun s => if h : ((φ.symm s : U) : X) ∈ V then ψ ⟨_, h⟩ else 0
+  have hτA : ∀ s (h : ((φ.symm s : U) : X) ∈ V), τ s = ψ ⟨_, h⟩ := by
+    intro s h; simp only [τ, dif_pos h]
+  have hlink : ∀ (u : U) (hu : (u : X) ∈ V), τ (φ u) = ψ ⟨u, hu⟩ := by
+    intro u hu
+    have h : ((φ.symm (φ u) : U) : X) ∈ V := by simpa using hu
+    rw [hτA _ h]; congr 1; ext; simp
+  refine ⟨τ, ?_, ?_, ?_, hlink, ?_⟩
+  · rw [continuousOn_iff_continuous_restrict]
+    have : A.restrict τ = fun s : A => ψ ⟨((φ.symm s.1 : U) : X), hO s.1 s.2⟩ := by
+      funext s; exact hτA _ _
+    rw [this]
+    exact ψ.continuous.comp ((continuous_subtype_val.comp
+      (φ.symm.continuous.comp continuous_subtype_val)).subtype_mk _)
+  · intro s hs s' hs' he
+    rw [hτA s (hO s hs), hτA s' (hO s' hs')] at he
+    have h1 := congrArg Subtype.val (ψ.injective he)
+    have h2 : φ.symm s = φ.symm s' := Subtype.ext h1
+    simpa using congrArg φ h2
+  · ext t; constructor
+    · rintro ⟨_, ⟨u, hu, rfl⟩, rfl⟩
+      exact ⟨⟨u, hu⟩, u.2, (hlink u hu).symm⟩
+    · rintro ⟨v, hv, rfl⟩
+      refine ⟨φ ⟨v, hv⟩, ⟨⟨v, hv⟩, v.2, rfl⟩, ?_⟩
+      rw [hlink ⟨v, hv⟩ v.2]
+  · intro s β hsA hβ _ c hc
+    refine apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_no_finite_end_limit
+      X U V φ ψ (l := nhdsWithin β s) (fun s => φ.symm s) (fun s => ψ.symm (τ s)) ?_ β hβ ?_ c ?_
+    · filter_upwards [self_mem_nhdsWithin] with x hx
+      rw [hτA x (hO x (hsA hx))]; simp
+    · simpa using (Filter.tendsto_id.mono_left (nhdsWithin_le_nhds (s := s) (a := β)))
+    · simpa using hc
+
+/-- **Two-ray overlap gives a compact union.**  If the overlap in the first
+chart is the union of two opposite rays, then `U ∪ V` is compact: it is
+covered by the first chart over a compact interval and the second chart over
+compact intervals containing the tails and the complement of the overlap. -/
+lemma apm_t95j06_two_overlapping_realCharts_twoRay_compact
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (U V : Set X) (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ) (a b : ℝ) (hab : a ≤ b)
+    (hA : φ '' (Subtype.val ⁻¹' V) = Set.Iio a ∪ Set.Ioi b) :
+    IsCompact (U ∪ V) := by
+  classical
+  obtain ⟨f, hfc, hfi, hfB, hlink, hnolim⟩ :=
+    apm_t95j06_two_overlapping_realCharts_transition_package X U V φ ψ
+  rw [hA] at hfc hfi hfB hnolim
+  have hIioA : Set.Iio a ⊆ Set.Iio a ∪ Set.Ioi b := Set.subset_union_left
+  have hIoiA : Set.Ioi b ⊆ Set.Iio a ∪ Set.Ioi b := Set.subset_union_right
+  have haA : a ∉ Set.Iio a ∪ Set.Ioi b := by
+    rintro (h | h)
+    · exact lt_irrefl a h
+    · exact absurd (lt_of_le_of_lt hab h) (lt_irrefl a)
+  have hbA : b ∉ Set.Iio a ∪ Set.Ioi b := by
+    rintro (h | h)
+    · exact absurd (lt_of_lt_of_le h hab) (lt_irrefl b)
+    · exact lt_irrefl b h
+  set S := f '' Set.Iio a with hSdef
+  set T := f '' Set.Ioi b with hTdef
+  have hSne : S.Nonempty := ⟨f (a - 1), a - 1, by simp, rfl⟩
+  have hTne : T.Nonempty := ⟨f (b + 1), b + 1, by simp, rfl⟩
+  have hSconn : _root_.IsPreconnected S := isPreconnected_Iio.image f (hfc.mono hIioA)
+  have hTconn : _root_.IsPreconnected T := isPreconnected_Ioi.image f (hfc.mono hIoiA)
+  have hdisj : Disjoint S T := by
+    rw [Set.disjoint_left]
+    rintro _ ⟨x, hx, rfl⟩ ⟨y, hy, hxy⟩
+    have := hfi (hIoiA hy) (hIioA hx) hxy
+    rw [this] at hy
+    exact absurd (lt_of_lt_of_le (lt_trans hy hx) hab) (lt_irrefl b)
+  have hnolimR := apm_t95j06_right_ray_noFiniteLimit_forces_unbounded f b
+    (hnolim (Set.Ioi b) b hIoiA hbA inferInstance)
+  have hnolimL := apm_t95j06_left_ray_noFiniteLimit_forces_unbounded f a
+    (hnolim (Set.Iio a) a hIioA haA inferInstance)
+  have hTos := apm_t95j06_disjoint_preconnected_real_sets_oneSided_bounded T S hTne hSne
+    hTconn hdisj.symm
+  have hSos := apm_t95j06_disjoint_preconnected_real_sets_oneSided_bounded S T hSne hTne
+    hSconn hdisj
+  -- tails are trapped in compact intervals
+  have htailR : ∃ c d : ℝ, f '' Set.Ici (b + 1) ⊆ Set.Icc c d := by
+    rcases apm_t95j06_continuousOn_injOn_Ioi_strictMono_or_anti f b (hfc.mono hIoiA)
+      (hfi.mono hIoiA) with hm | hm
+    · have hba : BddAbove T := hTos.resolve_right (hnolimR.1 hm)
+      exact ⟨_, _, apm_t95j06_strictMono_Ioi_tail_subset_Icc f b hm hba⟩
+    · have hbb : BddBelow T := hTos.resolve_left (hnolimR.2 hm)
+      exact ⟨_, _, apm_t95j06_strictAnti_Ioi_tail_subset_Icc f b hm hbb⟩
+  have htailL : ∃ c d : ℝ, f '' Set.Iic (a - 1) ⊆ Set.Icc c d := by
+    rcases apm_t95j06_continuousOn_injOn_Iio_strictMono_or_anti f a (hfc.mono hIioA)
+      (hfi.mono hIioA) with hm | hm
+    · have hbb : BddBelow S := hSos.resolve_left (hnolimL.1 hm)
+      exact ⟨_, _, apm_t95j06_strictMono_Iio_tail_subset_Icc f a hm hbb⟩
+    · have hba : BddAbove S := hSos.resolve_right (hnolimL.2 hm)
+      exact ⟨_, _, apm_t95j06_strictAnti_Iio_tail_subset_Icc f a hm hba⟩
+  -- the complement of the overlap in the second chart is bounded
+  have hcompl : ∃ c d : ℝ, (S ∪ T)ᶜ ⊆ Set.Icc c d := by
+    rcases apm_t95j06_continuousOn_injOn_Ioi_strictMono_or_anti f b (hfc.mono hIoiA)
+      (hfi.mono hIoiA) with hR | hR <;>
+    rcases apm_t95j06_continuousOn_injOn_Iio_strictMono_or_anti f a (hfc.mono hIioA)
+      (hfi.mono hIioA) with hL | hL
+    · exact apm_t95j06_disjoint_preconnected_compl_bounded_swapped S T hSne hTne hSconn
+        hTconn hdisj (hnolimL.1 hL) (hnolimR.1 hR)
+    · exact (apm_t95j06_disjoint_preconnected_not_both_unbounded_below S T hTne hTconn
+        hdisj (hnolimL.2 hL) (hnolimR.1 hR)).elim
+    · exact (apm_t95j06_disjoint_preconnected_not_both_unbounded_above S T hTne hTconn
+        hdisj (hnolimL.1 hL) (hnolimR.2 hR)).elim
+    · exact apm_t95j06_disjoint_preconnected_compl_bounded S T hSne hTne hSconn
+        hTconn hdisj (hnolimL.2 hL) (hnolimR.2 hR)
+  obtain ⟨c1, d1, h1⟩ := htailL
+  obtain ⟨c2, d2, h2⟩ := htailR
+  obtain ⟨c3, d3, h3⟩ := hcompl
+  have hST : S ∪ T = ψ '' (Subtype.val ⁻¹' U) := by
+    rw [← hfB, Set.image_union]
+  let eU : ℝ → X := fun s => ((φ.symm s : U) : X)
+  let eV : ℝ → X := fun s => ((ψ.symm s : V) : X)
+  have heU : Continuous eU := continuous_subtype_val.comp φ.symm.continuous
+  have heV : Continuous eV := continuous_subtype_val.comp ψ.symm.continuous
+  have hK : U ∪ V = eU '' Set.Icc (a - 1) (b + 1) ∪
+      eV '' (Set.Icc c1 d1 ∪ Set.Icc c2 d2 ∪ Set.Icc c3 d3) := by
+    apply Set.Subset.antisymm
+    · rintro x (hx | hx)
+      · set s := φ ⟨x, hx⟩ with hs
+        have hxs : eU s = x := by simp [eU, s]
+        by_cases hlo : s < a - 1
+        · have hsA : s ∈ Set.Iio a ∪ Set.Ioi b := Or.inl (by
+            simp only [Set.mem_Iio]; linarith)
+          rw [← hA] at hsA
+          obtain ⟨u, hu, hus⟩ := hsA
+          have hu' : u = ⟨x, hx⟩ := φ.injective hus
+          subst hu'
+          right
+          refine ⟨f s, Or.inl (Or.inl (h1 ⟨s, Set.mem_Iic.mpr hlo.le, rfl⟩)), ?_⟩
+          simp only [eV, s, hlink ⟨x, hx⟩ hu, Homeomorph.symm_apply_apply]
+        by_cases hhi : b + 1 < s
+        · have hsA : s ∈ Set.Iio a ∪ Set.Ioi b := Or.inr (by
+            simp only [Set.mem_Ioi]; linarith)
+          rw [← hA] at hsA
+          obtain ⟨u, hu, hus⟩ := hsA
+          have hu' : u = ⟨x, hx⟩ := φ.injective hus
+          subst hu'
+          right
+          refine ⟨f s, Or.inl (Or.inr (h2 ⟨s, Set.mem_Ici.mpr hhi.le, rfl⟩)), ?_⟩
+          simp only [eV, s, hlink ⟨x, hx⟩ hu, Homeomorph.symm_apply_apply]
+        left
+        exact ⟨s, ⟨le_of_not_gt hlo, le_of_not_gt hhi⟩, hxs⟩
+      · by_cases hxU : x ∈ U
+        · set s := φ ⟨x, hxU⟩ with hs
+          by_cases hlo : s < a - 1
+          · right
+            refine ⟨f s, Or.inl (Or.inl (h1 ⟨s, Set.mem_Iic.mpr hlo.le, rfl⟩)), ?_⟩
+            simp only [eV, s, hlink ⟨x, hxU⟩ hx, Homeomorph.symm_apply_apply]
+          by_cases hhi : b + 1 < s
+          · right
+            refine ⟨f s, Or.inl (Or.inr (h2 ⟨s, Set.mem_Ici.mpr hhi.le, rfl⟩)), ?_⟩
+            simp only [eV, s, hlink ⟨x, hxU⟩ hx, Homeomorph.symm_apply_apply]
+          left
+          exact ⟨s, ⟨le_of_not_gt hlo, le_of_not_gt hhi⟩, by simp [eU, s]⟩
+        · right
+          refine ⟨ψ ⟨x, hx⟩, Or.inr (h3 ?_), by simp [eV]⟩
+          rw [hST]
+          rintro ⟨v, hv, hvx⟩
+          have : v = ⟨x, hx⟩ := ψ.injective hvx
+          subst this; exact hxU hv
+    · rintro x (⟨s, -, rfl⟩ | ⟨s, -, rfl⟩)
+      · exact Or.inl (φ.symm s).2
+      · exact Or.inr (ψ.symm s).2
+  rw [hK]
+  exact (isCompact_Icc.image heU).union
+    (((isCompact_Icc.union isCompact_Icc).union isCompact_Icc).image heV)
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
     (hUreal : Nonempty (U ≃ₜ ℝ)) (hVreal : Nonempty (V ≃ₜ ℝ))
     (hUV : (U ∩ V).Nonempty) :
     Nonempty ({x : X // x ∈ U ∪ V} ≃ₜ ℝ) ∨ IsCompact (U ∪ V) := by
-  sorry
+  classical
+  obtain ⟨φ⟩ := hUreal
+  obtain ⟨ψ⟩ := hVreal
+  set A := φ '' (Subtype.val ⁻¹' V) with hAdef
+  set B := ψ '' (Subtype.val ⁻¹' U) with hBdef
+  have hmemA : ∀ (x : U), (x : X) ∈ V → φ x ∈ A := fun x hx => ⟨x, hx, rfl⟩
+  by_cases hAu : A = Set.univ
+  · left
+    have hsub : U ⊆ V := by
+      intro x hx
+      obtain ⟨u, hu, hux⟩ : φ ⟨x, hx⟩ ∈ A := hAu ▸ Set.mem_univ _
+      have : u = ⟨x, hx⟩ := φ.injective hux
+      subst this; exact hu
+    exact ⟨(Homeomorph.setCongr (Set.union_eq_right.mpr hsub)).trans ψ⟩
+  by_cases hBu : B = Set.univ
+  · left
+    have hsub : V ⊆ U := by
+      intro x hx
+      obtain ⟨v, hv, hvx⟩ : ψ ⟨x, hx⟩ ∈ B := hBu ▸ Set.mem_univ _
+      have : v = ⟨x, hx⟩ := ψ.injective hvx
+      subst this; exact hv
+    exact ⟨(Homeomorph.setCongr (Set.union_eq_left.mpr hsub)).trans φ⟩
+  obtain ⟨x0, hx0U, hx0V⟩ := hUV
+  have hAne : A.Nonempty := ⟨φ ⟨x0, hx0U⟩, ⟨x0, hx0U⟩, hx0V, rfl⟩
+  have hBne : B.Nonempty := ⟨ψ ⟨x0, hx0V⟩, ⟨x0, hx0V⟩, hx0U, rfl⟩
+  have hrayA : ∀ t ∈ A, (∃ a, connectedComponentIn A t = Set.Ioi a) ∨
+      ∃ b, connectedComponentIn A t = Set.Iio b := by
+    intro t ht
+    rcases apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_component_ray
+      X U V hVopen φ ψ t ht with h | h | h | h
+    · exact Or.inl h
+    · exact Or.inr h
+    · exact absurd h hAu
+    · exact absurd h hBu
+  have hrayB : ∀ t ∈ B, (∃ a, connectedComponentIn B t = Set.Ioi a) ∨
+      ∃ b, connectedComponentIn B t = Set.Iio b := by
+    intro t ht
+    rcases apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_component_ray
+      X V U hUopen ψ φ t ht with h | h | h | h
+    · exact Or.inl h
+    · exact Or.inr h
+    · exact absurd h hBu
+    · exact absurd h hAu
+  obtain ⟨f, hfc, hfi, hfB, hlink, hnolim⟩ :=
+    apm_t95j06_two_overlapping_realCharts_transition_package X U V φ ψ
+  rw [← hAdef] at hfc hfi hnolim
+  rw [← hAdef, ← hBdef] at hfB
+  have hshB := apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_ray_shape
+    B hBne hBu hrayB
+  rcases apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_ray_shape A hAne hAu hrayA
+    with ⟨α, hα⟩ | ⟨α, hα⟩ | ⟨a, b, hab, hAab⟩
+  rotate_left 2
+  · right
+    exact apm_t95j06_two_overlapping_realCharts_twoRay_compact X U V φ ψ a b hab hAab
+  all_goals rcases hshB with ⟨δ, hδ⟩ | ⟨δ, hδ⟩ | ⟨c, d, hcd, hBcd⟩
+  rotate_left 2
+  · right; rw [Set.union_comm]
+    exact apm_t95j06_two_overlapping_realCharts_twoRay_compact X V U ψ φ c d hcd hBcd
+  rotate_left 2
+  · right; rw [Set.union_comm]
+    exact apm_t95j06_two_overlapping_realCharts_twoRay_compact X V U ψ φ c d hcd hBcd
+  all_goals left
+  all_goals rw [hα] at hfc hfi hfB hnolim
+  -- A = Ioi α, B = Ioi δ
+  · have hnR := apm_t95j06_right_ray_noFiniteLimit_forces_unbounded f α
+      (hnolim (Set.Ioi α) α subset_rfl (fun h => lt_irrefl α h) inferInstance)
+    rw [hfB, hδ] at hnR
+    rcases apm_t95j06_continuousOn_injOn_Ioi_strictMono_or_anti f α hfc hfi with hm | hm
+    · exact absurd bddBelow_Ioi (hnR.1 hm)
+    · refine apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_orientation
+        X U V hUopen hVopen φ ψ α δ (Or.inr (Or.inl ⟨hα, hδ, ?_⟩))
+      intro x y hx hy hxy
+      rw [← hlink x hx, ← hlink y hy]
+      exact hm (hα ▸ hmemA x hx) (hα ▸ hmemA y hy) hxy
+  -- A = Ioi α, B = Iio δ
+  · have hnR := apm_t95j06_right_ray_noFiniteLimit_forces_unbounded f α
+      (hnolim (Set.Ioi α) α subset_rfl (fun h => lt_irrefl α h) inferInstance)
+    rw [hfB, hδ] at hnR
+    rcases apm_t95j06_continuousOn_injOn_Ioi_strictMono_or_anti f α hfc hfi with hm | hm
+    · refine apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_orientation
+        X U V hUopen hVopen φ ψ α δ (Or.inl ⟨hα, hδ, ?_⟩)
+      intro x y hx hy hxy
+      rw [← hlink x hx, ← hlink y hy]
+      exact hm (hα ▸ hmemA x hx) (hα ▸ hmemA y hy) hxy
+    · exact absurd bddAbove_Iio (hnR.2 hm)
+  -- A = Iio α, B = Ioi δ
+  · have hnL := apm_t95j06_left_ray_noFiniteLimit_forces_unbounded f α
+      (hnolim (Set.Iio α) α subset_rfl (fun h => lt_irrefl α h) inferInstance)
+    rw [hfB, hδ] at hnL
+    rcases apm_t95j06_continuousOn_injOn_Iio_strictMono_or_anti f α hfc hfi with hm | hm
+    · refine apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_orientation
+        X U V hUopen hVopen φ ψ α δ (Or.inr (Or.inr (Or.inr ⟨hα, hδ, ?_⟩)))
+      intro x y hx hy hxy
+      rw [← hlink x hx, ← hlink y hy]
+      exact hm (hα ▸ hmemA x hx) (hα ▸ hmemA y hy) hxy
+    · exact absurd bddBelow_Ioi (hnL.2 hm)
+  -- A = Iio α, B = Iio δ
+  · have hnL := apm_t95j06_left_ray_noFiniteLimit_forces_unbounded f α
+      (hnolim (Set.Iio α) α subset_rfl (fun h => lt_irrefl α h) inferInstance)
+    rw [hfB, hδ] at hnL
+    rcases apm_t95j06_continuousOn_injOn_Iio_strictMono_or_anti f α hfc hfi with hm | hm
+    · exact absurd bddAbove_Iio (hnL.1 hm)
+    · refine apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_orientation
+        X U V hUopen hVopen φ ψ α δ (Or.inr (Or.inr (Or.inl ⟨hα, hδ, ?_⟩)))
+      intro x y hx hy hxy
+      rw [← hlink x hx, ← hlink y hy]
+      exact hm (hα ▸ hmemA x hx) (hα ▸ hmemA y hy) hxy
 
 /- Two overlapping relatively compact line charts in a connected noncompact
 Hausdorff second-countable one-manifold have a common relatively compact line
