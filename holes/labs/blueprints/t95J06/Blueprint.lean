@@ -2814,7 +2814,7 @@ and use its exponential to correct the next section.  Induction pastes around
 the finite cyclic cover; the same lift-and-correct step removes the closing
 mismatch.  Estimated size: 350--650 lines, principally the finite arc cover,
 real lift, and closed-cover pasting infrastructure. -/
-/-- A finite chain of local sections lifts one traversal of the circle.
+/- A finite chain of local sections lifts one traversal of the circle.
 
 In words, compactness of `[0,1]` gives a finite subdivision subordinate to
 the inverse images of the local-section domains.  Starting with the first
@@ -2822,6 +2822,64 @@ local section, multiply each subsequent one by a constant circle element so
 that adjacent pieces agree at their common endpoint; fibre transitivity gives
 the constant and the closed-interval pasting lemma gives continuity.
 Estimated size: 180--300 lines. -/
+/-- Two continuous maps on adjacent closed real intervals which agree at the
+common endpoint paste to a continuous map on their union.  This is the closed
+piece pasting step used at every stage of the interval-section induction. -/
+lemma apm_t95j06_paste_adjacent_closed_intervals
+    {Y : Type*} [TopologicalSpace Y] {a s b : ℝ} (has : a ≤ s) (hsb : s ≤ b)
+    (f : {x : ℝ // x ∈ Set.Icc a s} → Y)
+    (g : {x : ℝ // x ∈ Set.Icc s b} → Y)
+    (hf : Continuous f) (hg : Continuous g)
+    (hfg : f ⟨s, has, le_rfl⟩ = g ⟨s, le_rfl, hsb⟩) :
+    ∃ h : {x : ℝ // x ∈ Set.Icc a b} → Y, Continuous h ∧
+      (∀ x (hx : x.1 ≤ s), h x = f ⟨x.1, x.2.1, hx⟩) ∧
+      (∀ x (hx : s ≤ x.1), h x = g ⟨x.1, hx, x.2.2⟩) := by
+  let D := {x : {x : ℝ // x ∈ Set.Icc a b} | x.1 ≤ s}
+  let E := {x : {x : ℝ // x ∈ Set.Icc a b} | s ≤ x.1}
+  let qf : {x : ℝ // x ∈ Set.Icc a b} → {x : ℝ // x ∈ Set.Icc a s} := fun x ↦
+    ⟨min x.1 s, le_min x.2.1 has, min_le_right _ _⟩
+  let qg : {x : ℝ // x ∈ Set.Icc a b} → {x : ℝ // x ∈ Set.Icc s b} := fun x ↦
+    ⟨max s x.1, le_max_left _ _, max_le hsb x.2.2⟩
+  let h : {x : ℝ // x ∈ Set.Icc a b} → Y := fun x ↦
+    if x ∈ D then f (qf x) else g (qg x)
+  have hD : IsClosed D := isClosed_Iic.preimage continuous_subtype_val
+  have hE : IsClosed E := isClosed_Ici.preimage continuous_subtype_val
+  have hqf : Continuous qf := Continuous.subtype_mk
+    (continuous_subtype_val.min continuous_const) _
+  have hqg : Continuous qg := Continuous.subtype_mk
+    (continuous_const.max continuous_subtype_val) _
+  have hfD : ContinuousOn h D := by
+    apply (hf.comp hqf).continuousOn.congr
+    intro x hx
+    simp [h, hx]
+  have hgE : ContinuousOn h E := by
+    apply (hg.comp hqg).continuousOn.congr
+    intro x hx
+    by_cases hxs : x ∈ D
+    · have heq : x.1 = s := le_antisymm hxs hx
+      subst heq
+      simpa [h, hxs, qf, qg] using hfg
+    · simp [h, hxs]
+  have hcont : Continuous h := by
+    rw [← continuousOn_univ]
+    have hDE : D ∪ E = Set.univ := by
+      ext x
+      simp only [Set.mem_union, Set.mem_univ, iff_true]
+      change x.1 ≤ s ∨ s ≤ x.1
+      exact le_total x.1 s
+    rw [← hDE]
+    exact hfD.union_of_isClosed hgE hD hE
+  refine ⟨h, hcont, ?_, ?_⟩
+  · intro x hx
+    have hxD : x ∈ D := hx
+    simp [h, hxD, qf, min_eq_left hx]
+  · intro x hx
+    by_cases hxs : x.1 ≤ s
+    · have : x.1 = s := le_antisymm hxs hx
+      subst this
+      simpa [h, D, qf, qg] using hfg
+    · simp [h, D, hxs, qg, max_eq_right hx]
+
 theorem apm_t95j06_principalCircleBundle_interval_section
     (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
     (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
