@@ -552,6 +552,48 @@ theorem apm_t95j06_surface_component_locallyEuclideanPlane
       {y : F // y ∈ connectedComponent x} := by
   sorry
 
+/-- An open subspace of a locally Euclidean plane is locally Euclidean.
+
+This is true by intersecting each planar chart domain with the open subspace;
+the restricted chart has open image because both the original chart domain
+and the subspace are open.  Estimated proof size: 45--80 lines. -/
+theorem apm_t95j06_bundleCharts_product_locallyEuclideanPlane_aux_openSubtype
+    (X : Type*) [TopologicalSpace X]
+    (hX : apm_t95j06_IsLocallyEuclideanPlane X)
+    (W : Set X) (hW : IsOpen W) :
+    apm_t95j06_IsLocallyEuclideanPlane W := by
+  intro w
+  obtain ⟨U, hU, hwU, V, hV, ⟨c⟩⟩ := hX w.1
+  let U' : Set W := Subtype.val ⁻¹' U
+  have hU' : IsOpen U' := hU.preimage continuous_subtype_val
+  let g : U' → U := fun w' => ⟨w'.1.1, w'.2⟩
+  have hg : Topology.IsOpenEmbedding g := by
+    have h1 : Topology.IsOpenEmbedding ((Subtype.val : U → X) ∘ g) :=
+      (hW.isOpenEmbedding_subtypeVal).comp hU'.isOpenEmbedding_subtypeVal
+    exact Topology.IsOpenEmbedding.of_comp g hU.isOpenEmbedding_subtypeVal h1
+  have hF : Topology.IsOpenEmbedding ((Subtype.val : V → apm_t95j06_E2) ∘ c ∘ g) :=
+    hV.isOpenEmbedding_subtypeVal.comp (c.isOpenEmbedding.comp hg)
+  exact ⟨U', hU', hwU, _, hF.isOpen_range, ⟨hF.isEmbedding.toHomeomorph⟩⟩
+
+/-- Local Euclidean-planeness is invariant under homeomorphism.
+
+This is true by taking the image of each open chart domain under the
+homeomorphism and composing the inverse homeomorphism with the original
+chart.  Estimated proof size: 25--45 lines. -/
+theorem apm_t95j06_bundleCharts_product_locallyEuclideanPlane_aux_homeomorph
+    (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (hX : apm_t95j06_IsLocallyEuclideanPlane X) :
+    apm_t95j06_IsLocallyEuclideanPlane Y := by
+  intro y
+  obtain ⟨U, hU, hyU, V, hV, ⟨c⟩⟩ := hX (e.symm y)
+  refine ⟨e '' U, e.isOpen_image.mpr hU, ⟨e.symm y, hyU, ?_⟩,
+    V, hV, ?_⟩
+  · simp
+  · refine ⟨(e.symm.subtype fun z ↦ ?_).trans c⟩
+    simp only [Set.mem_image]
+    exact ⟨fun ⟨x, hx, hxy⟩ ↦ by simpa [← hxy] using hx,
+      fun hz ↦ ⟨e.symm z, hz, by simp⟩⟩
+
 /-- **Sub-leaf F2 (estimated 100--180 lines).**  In words: a fibre-preserving
 local trivialization of a principal circle bundle identifies a neighbourhood
 `U × Circle` of each base fibre with an open part of the locally planar total
@@ -572,7 +614,17 @@ theorem apm_t95j06_bundleCharts_product_locallyEuclideanPlane
     (hX : apm_t95j06_IsLocallyEuclideanPlane X) :
     ∀ b : B, ∃ U : Set B, @IsOpen B tB U ∧ b ∈ U ∧
       apm_t95j06_IsLocallyEuclideanPlane (U × Circle) := by
-  sorry
+  intro b
+  obtain ⟨U, hU, hbU, φ, hφ⟩ := P.local_trivial b
+  let W : Set X := P.proj ⁻¹' U
+  have hW : IsOpen W := hU.preimage P.continuous_proj
+  have hplaneW : apm_t95j06_IsLocallyEuclideanPlane W :=
+    apm_t95j06_bundleCharts_product_locallyEuclideanPlane_aux_openSubtype
+      X hX W hW
+  refine ⟨U, hU, hbU, ?_⟩
+  exact
+    apm_t95j06_bundleCharts_product_locallyEuclideanPlane_aux_homeomorph
+      W (U × Circle) φ hplaneW
 
 /-- **Sub-leaf F3 (LIBRARY, estimated 1400--3000 lines).**  In words: a
 Hausdorff second-countable space whose local products with a circle are
