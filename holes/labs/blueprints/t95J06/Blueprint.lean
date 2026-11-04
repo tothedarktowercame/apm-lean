@@ -1100,7 +1100,37 @@ theorem apm_t95j06_puncture_noncompact
     (h2 : @T2Space B tB)
     (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
     @NoncompactSpace {x : B // x ≠ b} inferInstance := by
-  sorry
+  letI : ConnectedSpace B := hconn
+  letI : T2Space B := h2
+  constructor
+  intro hcompact
+  have hp : IsCompact ({x : B | x ≠ b} : Set B) := by
+    have hi := hcompact.image (continuous_subtype_val :
+      Continuous (Subtype.val : {x : B // x ≠ b} → B))
+    simpa using hi
+  have hopen : IsOpen ({x : B | x ≠ b} : Set B) := isClosed_singleton.isOpen_compl
+  obtain ⟨U, hU, hb, V, hV, ⟨e⟩⟩ := hloc b
+  let v : V := e ⟨b, hb⟩
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hV v.1 v.2
+  have hw : v.1 + ε / 2 ∈ V := by
+    apply hball
+    rw [Metric.mem_ball, Real.dist_eq]
+    have : 0 < ε / 2 := half_pos hε
+    rw [show v.1 + ε / 2 - v.1 = ε / 2 by ring, abs_of_pos this]
+    linarith
+  let w : V := ⟨v.1 + ε / 2, hw⟩
+  have hne : (e.symm w).1 ≠ b := by
+    intro heq
+    have heq' : e.symm w = (⟨b, hb⟩ : U) := Subtype.ext heq
+    have heq'' := congrArg (fun u : U ↦ (e u).1) heq'
+    simp only [e.apply_symm_apply] at heq''
+    change v.1 + ε / 2 = v.1 at heq''
+    linarith
+  have hall : ({x : B | x ≠ b} : Set B) = Set.univ :=
+    (show IsClopen ({x : B | x ≠ b} : Set B) from ⟨hp.isClosed, hopen⟩).eq_univ
+      ⟨(e.symm w).1, hne⟩
+  have : b ∈ ({x : B | x ≠ b} : Set B) := hall ▸ Set.mem_univ b
+  exact this rfl
 
 /-- A second-countable Hausdorff space locally modelled on `ℝ` has a countable
 compact cover (estimated 60--100 lines).  Local charts give local compactness;
