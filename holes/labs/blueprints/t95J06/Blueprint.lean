@@ -6721,6 +6721,140 @@ lemma apm_t95j06_strictMono_geometric_tsum
   · exact hsummable x
   · exact hsummable y
 
+/-- Each bounded stage coordinate is continuous in the original topology. -/
+lemma apm_t95j06_increasing_interval_union_boundedCoordinate_continuous
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
+    (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (m : ℕ) :
+    Continuous (apm_t95j06_increasing_interval_union_boundedCoordinate
+      X U hnested hreal hcover m) := by
+  letI : LinearOrder X :=
+    apm_t95j06_increasing_interval_union_linearOrder X U hnested hreal hcover
+  let c := apm_t95j06_increasing_interval_union_coordinate X U hnested hreal m
+  let f := apm_t95j06_increasing_interval_union_boundedCoordinate
+    X U hnested hreal hcover m
+  have hfmono : Monotone f :=
+    apm_t95j06_increasing_interval_union_boundedCoordinate_monotone
+      X U hnested hreal hcover m
+  have hfbounds (z : X) : -(Real.pi / 2) ≤ f z ∧ f z ≤ Real.pi / 2 :=
+    apm_t95j06_increasing_interval_union_boundedCoordinate_mem_Icc
+      X U hnested hreal hcover m z
+  have hc : ContinuousOn c (U m) := by
+    rw [continuousOn_iff_continuous_restrict]
+    have hrestr : (U m).restrict c = fun x : U m =>
+        apm_t95j06_increasing_interval_union_orientedCharts
+          X U hnested hreal m x := by
+      funext x
+      simp only [Set.restrict_apply, c,
+        apm_t95j06_increasing_interval_union_coordinate, dif_pos x.2]
+    rw [hrestr]
+    exact (apm_t95j06_increasing_interval_union_orientedCharts
+      X U hnested hreal m).continuous
+  have hfstage : ContinuousOn f (U m) := by
+    rw [continuousOn_iff_continuous_restrict]
+    have hrestr : (U m).restrict f = fun x : U m => Real.arctan (c x) := by
+      funext x
+      simp [Set.restrict_apply, f, c,
+        apm_t95j06_increasing_interval_union_boundedCoordinate, x.2]
+    rw [hrestr]
+    exact Real.continuous_arctan.comp
+      (continuousOn_iff_continuous_restrict.mp hc)
+  rw [continuous_iff_continuousAt]
+  intro x
+  by_cases hx : x ∈ U m
+  · exact hfstage.continuousAt (hopen m |>.mem_nhds hx)
+  rcases apm_t95j06_increasing_interval_union_outside_stage
+      X U hnested hreal hcover m hx with habove | hbelow
+  · have hfx : f x = Real.pi / 2 := by
+      simp only [f, apm_t95j06_increasing_interval_union_boundedCoordinate,
+        hx, if_false, if_pos habove]
+    change Filter.Tendsto f (nhds x) (nhds (f x))
+    rw [hfx]
+    refine tendsto_order.2 ⟨?_, ?_⟩
+    · intro a ha
+      let q := max ((a + Real.pi / 2) / 2) 0
+      have haq : a < q := by
+        have : a < (a + Real.pi / 2) / 2 := by linarith
+        exact this.trans_le (le_max_left _ _)
+      have hqlo : -(Real.pi / 2) < q := by
+        exact (neg_lt_zero.mpr (div_pos Real.pi_pos zero_lt_two)).trans_le
+          (le_max_right _ _)
+      have hqhi : q < Real.pi / 2 := by
+        apply max_lt
+        · linarith
+        · exact div_pos Real.pi_pos zero_lt_two
+      let T := Real.tan q
+      let e := apm_t95j06_increasing_interval_union_orientedCharts
+        X U hnested hreal m
+      let w : X := e.symm T
+      have hw : w ∈ U m := (e.symm T).property
+      have hcw : c w = T := by
+        simp [c, w, T, e, apm_t95j06_increasing_interval_union_coordinate]
+      have hfw : f w = q := by
+        simp only [f, apm_t95j06_increasing_interval_union_boundedCoordinate,
+          hw, if_true]
+        change Real.arctan (c w) = q
+        rw [hcw]
+        dsimp only [T]
+        exact Real.arctan_tan hqlo hqhi
+      have hwx : w < x := habove w hw
+      have hnhds : {z : X | w < z} ∈ nhds x :=
+        (apm_t95j06_increasing_interval_union_isOpen_Ioi
+          X U hopen hnested hreal hcover w).mem_nhds hwx
+      filter_upwards [hnhds] with z hz
+      exact haq.trans_le (hfw ▸ hfmono hz.le)
+    · intro b hb
+      filter_upwards [] with z
+      exact (hfbounds z).2.trans_lt hb
+  · have hnabove : ¬ ∀ y ∈ U m, y < x := by
+      intro ha
+      let e := apm_t95j06_increasing_interval_union_orientedCharts
+        X U hnested hreal m
+      exact (ha (e.symm 0) (e.symm 0).property).asymm
+        (hbelow (e.symm 0) (e.symm 0).property)
+    have hfx : f x = -(Real.pi / 2) := by
+      simp only [f, apm_t95j06_increasing_interval_union_boundedCoordinate,
+        hx, if_false, if_neg hnabove]
+    change Filter.Tendsto f (nhds x) (nhds (f x))
+    rw [hfx]
+    refine tendsto_order.2 ⟨?_, ?_⟩
+    · intro a ha
+      filter_upwards [] with z
+      exact ha.trans_le (hfbounds z).1
+    · intro b hb
+      let q := min ((-(Real.pi / 2) + b) / 2) 0
+      have hqlo : -(Real.pi / 2) < q := by
+        apply lt_min
+        · linarith
+        · exact neg_lt_zero.mpr (div_pos Real.pi_pos zero_lt_two)
+      have hqb : q < b := by
+        have : (-(Real.pi / 2) + b) / 2 < b := by linarith
+        exact (min_le_left _ _).trans_lt this
+      have hqhi : q < Real.pi / 2 :=
+        (min_le_right _ _).trans_lt (div_pos Real.pi_pos zero_lt_two)
+      let T := Real.tan q
+      let e := apm_t95j06_increasing_interval_union_orientedCharts
+        X U hnested hreal m
+      let w : X := e.symm T
+      have hw : w ∈ U m := (e.symm T).property
+      have hcw : c w = T := by
+        simp [c, w, T, e, apm_t95j06_increasing_interval_union_coordinate]
+      have hfw : f w = q := by
+        simp only [f, apm_t95j06_increasing_interval_union_boundedCoordinate,
+          hw, if_true]
+        change Real.arctan (c w) = q
+        rw [hcw]
+        dsimp only [T]
+        exact Real.arctan_tan hqlo hqhi
+      have hxw : x < w := hbelow w hw
+      have hnhds : {z : X | z < w} ∈ nhds x :=
+        (apm_t95j06_increasing_interval_union_isOpen_Iio
+          X U hopen hnested hreal hcover w).mem_nhds hxw
+      filter_upwards [hnhds] with z hz
+      exact (hfmono hz.le).trans_lt (hfw ▸ hqb)
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
