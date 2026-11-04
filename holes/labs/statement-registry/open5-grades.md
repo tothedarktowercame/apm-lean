@@ -16,3 +16,20 @@ Grader's checks: polygon words correct at g = 0, g = 1, k = 1, k = 2; H₂(X;ℤ
 orientability test for closed connected surfaces; HasEulerCharacteristic is single-valued, junk-free
 and a homeomorphism invariant; χ arguments are in ℚ (no ℕ subtraction); statement true. Part (b)
 (proof outline) is prose and is not formalised.
+
+## t02A08
+
+Repair by codex-6 (packet ~/notes/packets/lemmas/repairs/open5/t02A08.md). Z = S¹×{q} as the
+dimensions force (triage-1101). The intersection number is now a signed count of transverse
+preimage points (no longer the degree of pr₂ ∘ f): smooth = ambient C^∞ (`(⊤ : ℕ∞)` is ∞, not ω),
+tangent spaces are kernels of ⟨x,·⟩, transversality is surjectivity of pr₂ ∘ df onto T_qS², and
+the sign is the determinant of [ν_S¹, ν_S², df u, df v, ccw p] in ℝ⁵ for a positive frame (u, v).
+
+Outside grade (read-only Claude subagent, 2026-11-04): faithful. Checks: ∀ q is at least the
+problem's claim and true by rotation; the ambient encoding is equivalent for an existence statement;
+the sign is frame-independent and nonzero at transverse points; finiteness is asserted, so the
+finite-sum branch is the one used; true via F = (p₀, G) with G of degree −n; not gameable.
+Defect found outside the theorem: the sanity lemma claimed +1 for x ↦ (p, x); with normals-first
+orientation of Y (opposite to the product orientation, one global sign) it is −1. Corrected by
+claude-14 (checked by hand: three column swaps to block form, det[p, ccw p] = 1, det[q,u,v] > 0).
+The request to explain the computation is prose and is not formalised.
