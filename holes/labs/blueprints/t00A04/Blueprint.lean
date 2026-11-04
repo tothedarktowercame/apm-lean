@@ -555,7 +555,25 @@ theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_empty
     (d n : ℕ) :
     Subsingleton (t00A04_ModTwoLocalHomology
       (EuclideanSpace ℝ (Fin d)) (∅ : Set (EuclideanSpace ℝ (Fin d))) n) := by
-  sorry
+  change Subsingleton
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) ((∅ : Set (EuclideanSpace ℝ (Fin d)))ᶜ)).homology n : Type))
+  rw [Set.compl_empty]
+  let f := ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+    (ZMod 2) (Set.univ : Set (EuclideanSpace ℝ (Fin d)))
+  haveI : IsIso f := by
+    dsimp [f, ConstructionTargets.CoefficientRelativeSmall.subspaceMap,
+      ConstructionTargets.CoefficientRelativeSmall.chains]
+    rw [ConstructionTargets.SingularHomologyConcrete.subspaceInclusion_univ]
+    apply Functor.map_isIso
+  have hz : CategoryTheory.Limits.IsZero
+      (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) (Set.univ : Set (EuclideanSpace ℝ (Fin d)))) :=
+    CategoryTheory.Limits.isZero_cokernel_of_epi f
+  exact ModuleCat.subsingleton_of_isZero
+    (Functor.map_isZero
+      (HomologicalComplex.homologyFunctor (ModuleCat (ZMod 2))
+        (ComplexShape.down ℕ) n) hz)
 
 /-- Radial deformation of the complement of a compact convex set onto the
 complement of any one of its points makes restriction to that point an
@@ -569,11 +587,43 @@ theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_b
   sorry
 
 /-- Euclidean point-local homology vanishes strictly above the dimension. -/
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_zero
+    (i : ℕ) (hi : 0 < i) :
+    Subsingleton (t00A04_ModTwoLocalHomology
+      (EuclideanSpace ℝ (Fin 0)) {0} i) := by
+  sorry
+
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_one
+    (i : ℕ) (hi : 1 < i) :
+    Subsingleton (t00A04_ModTwoLocalHomology
+      (EuclideanSpace ℝ (Fin 1)) {0} i) := by
+  sorry
+
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_high
+    (m i : ℕ) (hi : m + 2 < i) :
+    Subsingleton (t00A04_ModTwoLocalHomology
+      (EuclideanSpace ℝ (Fin (m + 2))) {0} i) := by
+  sorry
+
 theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish
     (d i : ℕ) (x : EuclideanSpace ℝ (Fin d)) (hi : d < i) :
     Subsingleton (t00A04_ModTwoLocalHomology
       (EuclideanSpace ℝ (Fin d)) {x} i) := by
-  sorry
+  let e := (ConstructionTargets.CoefficientManifoldLocalComparison.translationIso
+    (ZMod 2) x i).toLinearEquiv
+  have h0 : Subsingleton (t00A04_ModTwoLocalHomology
+      (EuclideanSpace ℝ (Fin d)) {0} i) := by
+    rcases d with _ | _ | m
+    · exact t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_zero
+        i hi
+    · exact t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_one
+        i hi
+    · exact t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_high
+        m i hi
+  constructor
+  intro a b
+  apply e.injective
+  exact h0.elim (e a) (e b)
 
 /-- Top-dimensional Euclidean point-local mod-2 homology contains its
 nonzero generator. -/
