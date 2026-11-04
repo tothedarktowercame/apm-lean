@@ -1794,6 +1794,297 @@ lemma apm_t95j06_planar_crosscut_of_jordan_aux_domains_disjoint
     exact False.elim (hpJ (hfront ▸ hpf))
   · exact hd.mono_right ho
 
+/-- Coordinates on the unit circle satisfy the unit quadratic identity. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_circle_sq (z : Circle) :
+    (z : ℂ).re ^ 2 + (z : ℂ).im ^ 2 = 1 := by
+  have h := Complex.sq_norm (z : ℂ)
+  rw [Circle.norm_coe, Complex.normSq_apply] at h
+  nlinarith
+
+/-- The real coordinate of a unit-circle point lies in the closed unit interval. -/
+noncomputable def apm_t95j06_planar_crosscut_of_jordan_aux_circle_param
+    (z : Circle) : Set.Icc (-1 : ℝ) 1 :=
+  ⟨(z : ℂ).re, by
+    have h := Complex.abs_re_le_norm (z : ℂ)
+    rw [Circle.norm_coe, abs_le] at h
+    exact h⟩
+
+/-- On either closed semicircle, the real coordinate determines the point. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_semicircle_inj
+    (z w : Circle) (hr : (z : ℂ).re = (w : ℂ).re)
+    (hs : (0 ≤ (z : ℂ).im ∧ 0 ≤ (w : ℂ).im) ∨
+      ((z : ℂ).im ≤ 0 ∧ (w : ℂ).im ≤ 0)) : z = w := by
+  have hz := apm_t95j06_planar_crosscut_of_jordan_aux_circle_sq z
+  have hw := apm_t95j06_planar_crosscut_of_jordan_aux_circle_sq w
+  apply Subtype.ext
+  apply Complex.ext hr
+  rw [hr] at hz
+  rcases hs with ⟨hzp, hwp⟩ | ⟨hzn, hwn⟩ <;> nlinarith
+
+/-- An upper-semicircle point with prescribed real coordinate. -/
+noncomputable def apm_t95j06_planar_crosscut_of_jordan_aux_upper
+    (t : Set.Icc (-1 : ℝ) 1) : Circle :=
+  ⟨⟨t.val, Real.sqrt (1 - t.val ^ 2)⟩, by
+    change (⟨t.val, Real.sqrt (1 - t.val ^ 2)⟩ : ℂ) ∈ Metric.sphere 0 1
+    rw [mem_sphere_zero_iff_norm]
+    have ht : 0 ≤ 1 - t.val ^ 2 := by nlinarith [t.property.1, t.property.2]
+    have hs := Real.sq_sqrt ht
+    have hn := Complex.sq_norm (⟨t.val, Real.sqrt (1 - t.val ^ 2)⟩ : ℂ)
+    rw [Complex.normSq_apply] at hn
+    dsimp at hn
+    have hnon := norm_nonneg (⟨t.val, Real.sqrt (1 - t.val ^ 2)⟩ : ℂ)
+    nlinarith⟩
+
+/-- Two embedded closed intervals with matching endpoints and no other
+intersection paste to an embedded circle. The map is explicit on the upper
+and lower semicircles; compactness and Hausdorffness turn it into a homeomorphism.
+This is solely an arc-pasting result, with no planar separation hypothesis. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_two_arcs
+    {X : Type*} [TopologicalSpace X] [T2Space X]
+    (f g : C(Set.Icc (-1 : ℝ) 1, X))
+    (hf : Function.Injective f) (hg : Function.Injective g)
+    (hleft : f ⟨-1, by norm_num⟩ = g ⟨-1, by norm_num⟩)
+    (hright : f ⟨1, by norm_num⟩ = g ⟨1, by norm_num⟩)
+    (hcross : ∀ s t, f s = g t → s = t ∧
+      (s.val = -1 ∨ s.val = 1)) :
+    Nonempty (Circle ≃ₜ ↥(Set.range f ∪ Set.range g)) := by
+  classical
+  let P := apm_t95j06_planar_crosscut_of_jordan_aux_circle_param
+  have hP : Continuous P := by
+    apply Continuous.subtype_mk
+    exact Complex.continuous_re.comp continuous_subtype_val
+  have heq : ∀ z : Circle, (z : ℂ).im = 0 → f (P z) = g (P z) := by
+    intro z hz
+    have hsq := apm_t95j06_planar_crosscut_of_jordan_aux_circle_sq z
+    have hends : (z : ℂ).re = -1 ∨ (z : ℂ).re = 1 := by
+      rcases le_or_gt (z : ℂ).re 0 with h | h
+      · left; nlinarith
+      · right; nlinarith
+    rcases hends with hl | hr
+    · have hp : P z = ⟨-1, by norm_num⟩ := Subtype.ext hl
+      simpa [hp] using hleft
+    · have hp : P z = ⟨1, by norm_num⟩ := Subtype.ext hr
+      simpa [hp] using hright
+  let F : Circle → X := fun z => if 0 ≤ (z : ℂ).im then f (P z) else g (P z)
+  have hF : Continuous F := by
+    apply continuous_if_le continuous_const (Complex.continuous_im.comp continuous_subtype_val)
+      (f.continuous.comp hP).continuousOn (g.continuous.comp hP).continuousOn
+    intro z hz
+    exact heq z hz.symm
+  have hzero : ∀ z : Circle, (z : ℂ).re = -1 ∨ (z : ℂ).re = 1 →
+      (z : ℂ).im = 0 := by
+    intro z hz
+    have hs := apm_t95j06_planar_crosscut_of_jordan_aux_circle_sq z
+    rcases hz with h | h <;> rw [h] at hs <;> nlinarith [sq_nonneg (z : ℂ).im]
+  have hFinj : Function.Injective F := by
+    intro z w hzw
+    dsimp only [F] at hzw
+    split_ifs at hzw with hz hw hw
+    · exact apm_t95j06_planar_crosscut_of_jordan_aux_semicircle_inj z w
+        (congrArg Subtype.val (hf hzw)) (Or.inl ⟨hz, hw⟩)
+    · obtain ⟨hp, hend⟩ := hcross (P z) (P w) hzw
+      have hr : (z : ℂ).re = (w : ℂ).re := congrArg Subtype.val hp
+      have hw0 := hzero w (by simpa only [P, apm_t95j06_planar_crosscut_of_jordan_aux_circle_param, hr] using hend)
+      exact False.elim (hw (by rw [hw0]))
+    · obtain ⟨hp, hend⟩ := hcross (P w) (P z) hzw.symm
+      have hr : (w : ℂ).re = (z : ℂ).re := congrArg Subtype.val hp
+      have hz0 := hzero z (by simpa only [P, apm_t95j06_planar_crosscut_of_jordan_aux_circle_param, hr] using hend)
+      exact False.elim (hz (by rw [hz0]))
+    · exact apm_t95j06_planar_crosscut_of_jordan_aux_semicircle_inj z w
+        (congrArg Subtype.val (hg hzw)) (Or.inr ⟨le_of_not_ge hz, le_of_not_ge hw⟩)
+  have hrange : Set.range F = Set.range f ∪ Set.range g := by
+    ext x
+    constructor
+    · rintro ⟨z, rfl⟩
+      dsimp only [F]
+      split_ifs
+      · exact Or.inl ⟨_, rfl⟩
+      · exact Or.inr ⟨_, rfl⟩
+    · rintro (⟨t, rfl⟩ | ⟨t, rfl⟩)
+      · refine ⟨apm_t95j06_planar_crosscut_of_jordan_aux_upper t, ?_⟩
+        simp [F, P, apm_t95j06_planar_crosscut_of_jordan_aux_upper,
+          apm_t95j06_planar_crosscut_of_jordan_aux_circle_param, Real.sqrt_nonneg]
+      · let z : Circle := (apm_t95j06_planar_crosscut_of_jordan_aux_upper t)⁻¹
+        have hp : P z = t := by
+          apply Subtype.ext
+          change (((apm_t95j06_planar_crosscut_of_jordan_aux_upper t)⁻¹ : Circle) : ℂ).re = t.val
+          rw [Circle.coe_inv_eq_conj]
+          rfl
+        have him : (z : ℂ).im ≤ 0 := by
+          change (((apm_t95j06_planar_crosscut_of_jordan_aux_upper t)⁻¹ : Circle) : ℂ).im ≤ 0
+          rw [Circle.coe_inv_eq_conj]
+          exact neg_nonpos.mpr (Real.sqrt_nonneg _)
+        refine ⟨z, ?_⟩
+        dsimp only [F]
+        split_ifs with hz
+        · rw [← hp]
+          exact heq z (le_antisymm him hz)
+        · rw [hp]
+  have hemb := (hF.isClosedEmbedding hFinj).isEmbedding
+  exact ⟨hemb.toHomeomorph.trans (Homeomorph.setCongr hrange)⟩
+
+/-- Distinct circle points are joined by an embedded closed interval,
+parametrized by the principal argument of their quotient. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_circle_arc
+    (p q : Circle) (hpq : p ≠ q) :
+    ∃ g : C(Set.Icc (-1 : ℝ) 1, Circle), Function.Injective g ∧
+      g ⟨-1, by norm_num⟩ = p ∧ g ⟨1, by norm_num⟩ = q := by
+  let θ := Complex.arg ((p⁻¹ * q : Circle) : ℂ)
+  have hθlo : -Real.pi < θ := Complex.neg_pi_lt_arg _
+  have hθhi : θ ≤ Real.pi := Complex.arg_le_pi _
+  have hexp : Circle.exp θ = p⁻¹ * q := Circle.exp_arg _
+  have hθne : θ ≠ 0 := by
+    intro hz
+    rw [hz, Circle.exp_zero] at hexp
+    apply hpq
+    calc p = p * 1 := (mul_one p).symm
+         _ = p * (p⁻¹ * q) := congrArg (p * ·) hexp
+         _ = q := by group
+  let g : C(Set.Icc (-1 : ℝ) 1, Circle) :=
+    ⟨fun t => p * Circle.exp (((t.val + 1) / 2) * θ), by fun_prop⟩
+  have hb : ∀ t : Set.Icc (-1 : ℝ) 1,
+      -Real.pi < ((t.val + 1) / 2) * θ ∧ ((t.val + 1) / 2) * θ ≤ Real.pi := by
+    intro t
+    have h0 : 0 ≤ (t.val + 1) / 2 := by linarith [t.property.1]
+    have h1 : (t.val + 1) / 2 ≤ 1 := by linarith [t.property.2]
+    have hpi := Real.pi_pos
+    by_cases hθ : 0 ≤ θ
+    · constructor <;> nlinarith
+    · push_neg at hθ
+      constructor <;> nlinarith
+  refine ⟨g, ?_, ?_, ?_⟩
+  · intro t u htu
+    have he := mul_left_cancel htu
+    change Circle.exp (((t.val + 1) / 2) * θ) =
+      Circle.exp (((u.val + 1) / 2) * θ) at he
+    have ha := congrArg (fun z : Circle => Complex.arg (z : ℂ)) he
+    dsimp only at ha
+    rw [Circle.arg_exp (hb t).1 (hb t).2, Circle.arg_exp (hb u).1 (hb u).2] at ha
+    have ht := mul_right_cancel₀ hθne ha
+    apply Subtype.ext
+    linarith
+  · simp [g]
+  · simpa [g, hexp] using mul_inv_cancel_left p q
+
+/-- Positive-radius planar circles admit an injective interval parametrization
+between any two distinct specified points. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_sphere_arc
+    (r : ℝ) (hr : 0 < r) (u v : apm_t95j06_E2)
+    (hu : u ∈ Metric.sphere 0 r) (hv : v ∈ Metric.sphere 0 r) (huv : u ≠ v) :
+    ∃ g : C(Set.Icc (-1 : ℝ) 1, apm_t95j06_E2), Function.Injective g ∧
+      g ⟨-1, by norm_num⟩ = u ∧ g ⟨1, by norm_num⟩ = v ∧
+      Set.range g ⊆ Metric.sphere 0 r := by
+  let L : apm_t95j06_E2 ≃ₗᵢ[ℝ] ℂ := Complex.orthonormalBasisOneI.repr.symm
+  have hnr : (r : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hr.ne'
+  have hn : ∀ x : apm_t95j06_E2, x ∈ Metric.sphere 0 r → ‖L x / (r : ℂ)‖ = 1 := by
+    intro x hx
+    rw [norm_div, L.norm_map, Complex.norm_real, Real.norm_of_nonneg hr.le,
+      mem_sphere_zero_iff_norm.mp hx, div_self hr.ne']
+  let p : Circle := ⟨L u / (r : ℂ), mem_sphere_zero_iff_norm.mpr (hn u hu)⟩
+  let q : Circle := ⟨L v / (r : ℂ), mem_sphere_zero_iff_norm.mpr (hn v hv)⟩
+  let G : C(Circle, apm_t95j06_E2) :=
+    ⟨fun z => L.symm ((r : ℂ) * (z : ℂ)), by fun_prop⟩
+  have hGi : Function.Injective G := by
+    intro z w h
+    have hm := L.symm.injective h
+    exact Subtype.ext (mul_left_cancel₀ hnr hm)
+  have hGp : G p = u := by simp [G, p, mul_div_cancel₀ _ hnr]
+  have hGq : G q = v := by simp [G, q, mul_div_cancel₀ _ hnr]
+  have hpq : p ≠ q := by intro h; apply huv; rw [← hGp, ← hGq, h]
+  obtain ⟨a, hai, ha0, ha1⟩ := apm_t95j06_planar_crosscut_of_jordan_aux_circle_arc p q hpq
+  refine ⟨G.comp a, hGi.comp hai, ?_, ?_, ?_⟩
+  · simpa using (congrArg G ha0).trans hGp
+  · simpa using (congrArg G ha1).trans hGq
+  · rintro _ ⟨t, rfl⟩
+    rw [mem_sphere_zero_iff_norm]
+    change ‖L.symm ((r : ℂ) * (a t : ℂ))‖ = r
+    rw [L.symm.norm_map, norm_mul, Complex.norm_real, Real.norm_of_nonneg hr.le,
+      Circle.norm_coe, mul_one]
+
+/-- The endpoint-only boundary intersection makes a crosscut and an embedded
+boundary interval into a pasted Jordan curve. All pasting hypotheses are
+verified here from the crosscut hypotheses. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_pasted_curve
+    (r : ℝ) (hr : 0 < r) (A : Set apm_t95j06_E2)
+    (e : Set.Icc (-1 : ℝ) 1 ≃ₜ A)
+    (hend : A ∩ Metric.sphere 0 r =
+      ({(e ⟨-1, by norm_num⟩ : apm_t95j06_E2),
+        (e ⟨1, by norm_num⟩ : apm_t95j06_E2)} : Set apm_t95j06_E2)) :
+    ∃ B : Set apm_t95j06_E2, B ⊆ Metric.sphere 0 r ∧
+      A ∩ Metric.sphere 0 r ⊆ B ∧
+      Nonempty (Set.Icc (-1 : ℝ) 1 ≃ₜ B) ∧
+      Nonempty (Circle ≃ₜ ↥(A ∪ B)) := by
+  let a : Set.Icc (-1 : ℝ) 1 := ⟨-1, by norm_num⟩
+  let b : Set.Icc (-1 : ℝ) 1 := ⟨1, by norm_num⟩
+  have ha : (e a).val ∈ Metric.sphere 0 r := by
+    have h : (e a).val ∈ A ∩ Metric.sphere 0 r := by rw [hend]; exact Set.mem_insert _ _
+    exact h.2
+  have hb : (e b).val ∈ Metric.sphere 0 r := by
+    have h : (e b).val ∈ A ∩ Metric.sphere 0 r := by rw [hend]; exact Set.mem_insert_of_mem _ rfl
+    exact h.2
+  have hab : (e a).val ≠ (e b).val := by
+    intro h
+    have ht := congrArg Subtype.val (e.injective (Subtype.ext h))
+    norm_num [a, b] at ht
+  obtain ⟨g, hgi, hg0, hg1, hgr⟩ :=
+    apm_t95j06_planar_crosscut_of_jordan_aux_sphere_arc r hr _ _ ha hb hab
+  let f : C(Set.Icc (-1 : ℝ) 1, apm_t95j06_E2) :=
+    ⟨fun t => (e t).val, continuous_subtype_val.comp e.continuous⟩
+  have hfi : Function.Injective f := fun s t h => e.injective (Subtype.ext h)
+  have hcross : ∀ s t, f s = g t → s = t ∧ (s.val = -1 ∨ s.val = 1) := by
+    intro s t h
+    have hm : f s ∈ A ∩ Metric.sphere 0 r := ⟨(e s).property, h ▸ hgr ⟨t, rfl⟩⟩
+    rw [hend] at hm
+    rcases Set.mem_insert_iff.mp hm with hleft | hright
+    · have hs : s = a := hfi hleft
+      subst s
+      have ht : a = t := hgi (hg0.trans h)
+      exact ⟨ht, Or.inl rfl⟩
+    · have hs : s = b := hfi (Set.mem_singleton_iff.mp hright)
+      subst s
+      have ht : b = t := hgi (hg1.trans h)
+      exact ⟨ht, Or.inr rfl⟩
+  have hpaste := apm_t95j06_planar_crosscut_of_jordan_aux_two_arcs f g hfi hgi
+    hg0.symm hg1.symm hcross
+  have hfr : Set.range f = A := by
+    ext x
+    constructor
+    · rintro ⟨t, rfl⟩; exact (e t).property
+    · intro hx; obtain ⟨t, ht⟩ := e.surjective ⟨x, hx⟩; exact ⟨t, congrArg Subtype.val ht⟩
+  refine ⟨Set.range g, hgr, ?_, ⟨(g.continuous.isClosedEmbedding hgi).isEmbedding.toHomeomorph⟩, ?_⟩
+  · intro x hx
+    rw [hend] at hx
+    rcases Set.mem_insert_iff.mp hx with hx | hx
+    · exact ⟨a, hg0.trans hx.symm⟩
+    · exact ⟨b, hg1.trans (Set.mem_singleton_iff.mp hx).symm⟩
+  · obtain ⟨H⟩ := hpaste
+    exact ⟨H.trans (Homeomorph.setCongr (congrArg (fun T => T ∪ Set.range g) hfr))⟩
+
+/-- Connected-domain clipping by a round disk. If a connected open planar
+set contains the disk exterior and its missing part of the boundary circle
+is exactly an embedded closed interval, its part inside the disk is
+preconnected. This has no crosscut or Jordan-curve hypothesis or conclusion.
+
+Why true: the remaining boundary is an open circle arc, hence connected.
+At each of its points a small ball lies in the open set; its intersection
+with the disk is convex and nonempty. These caps all belong to the same
+interior component, by connectedness of the remaining boundary arc. Any
+other interior component would have no relative boundary in the original
+open set and would contradict its connectedness. Formalizing the cap and
+component-boundary argument is estimated at 180--300 lines.
+
+Truth checks: the full exterior alone does not satisfy the missing-arc
+hypothesis (it omits the whole circle). An exterior joined to two interior
+caps through disjoint boundary windows also fails it (two boundary windows).
+No regularity of the rest of the open set's boundary is required. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain
+    (r : ℝ) (hr : 0 < r) (O : Set apm_t95j06_E2)
+    (hO : IsOpen O) (hcO : IsPreconnected O)
+    (hext : (Metric.closedBall 0 r)ᶜ ⊆ O)
+    (harc : Nonempty (Set.Icc (-1 : ℝ) 1 ≃ₜ ↥(Metric.sphere 0 r \ O))) :
+    IsPreconnected (O ∩ Metric.ball 0 r) := by
+  sorry
+
 /-- Closing a disk crosscut by either of the two boundary semicircles reduces
 the crosscut theorem to Jordan-curve separation (estimated 90--150 lines).
 The hypothesis that the arc meets the boundary only at its endpoints makes
@@ -1806,7 +2097,69 @@ explicit circle parametrization, pasting, and set algebra. -/
 theorem apm_t95j06_planar_crosscut_of_jordan
     (hJordan : apm_t95j06_PlanarJordanSeparation) :
     apm_t95j06_PlanarCrosscutSeparation := by
-  sorry
+  intro r hr A e hA hend
+  obtain ⟨B, hB, hAB, heB, he⟩ :=
+    apm_t95j06_planar_crosscut_of_jordan_aux_pasted_curve r hr A e hend
+  obtain ⟨hAn, hAdense⟩ :=
+    apm_t95j06_planar_crosscut_of_jordan_aux_arc_density r A e hA hend
+  have hJ : A ∪ B ⊆ Metric.closedBall 0 r :=
+    Set.union_subset hA (hB.trans Metric.sphere_subset_closedBall)
+  obtain ⟨I, O, hi, ho, hin, hon, hci, hco, hd, hc, hfi, hfo, hib, hext⟩ :=
+    apm_t95j06_planar_crosscut_of_jordan_aux_label_domains hJordan r hr (A ∪ B) he hJ
+  have hmissing : Metric.sphere 0 r \ O = B := by
+    ext x
+    constructor
+    · rintro ⟨hxs, hxo⟩
+      by_cases hxJ : x ∈ A ∪ B
+      · rcases hxJ with hxA | hxB
+        · exact hAB ⟨hxA, hxs⟩
+        · exact hxB
+      · have hcover : x ∈ I ∪ O := by rw [← hc]; exact hxJ
+        rcases hcover with hxI | hxO
+        · exact False.elim ((ne_of_lt (hib hxI)) hxs)
+        · exact False.elim (hxo hxO)
+    · intro hxB
+      refine ⟨hB hxB, ?_⟩
+      intro hxO
+      have hxfront : x ∈ frontier O := hfo ▸ Or.inr hxB
+      exact (ho.frontier_eq ▸ hxfront).2 hxO
+  have hclip : IsPreconnected (O ∩ Metric.ball 0 r) := by
+    apply apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain r hr O ho hco hext
+    obtain ⟨eb⟩ := heB
+    exact ⟨eb.trans (Homeomorph.setCongr hmissing.symm)⟩
+  have hai : A ⊆ frontier I := fun x hx => hfi ▸ Or.inl hx
+  have hao : A ⊆ frontier (O ∩ Metric.ball 0 r) := by
+    have hlocal : A ∩ Metric.ball 0 r ⊆ frontier (O ∩ Metric.ball 0 r) := by
+      intro x hx
+      exact apm_t95j06_planar_crosscut_of_jordan_aux_frontier_restrict ho Metric.isOpen_ball
+        ⟨hfo ▸ Or.inl hx.1, hx.2⟩
+    exact hAdense.trans (closure_minimal hlocal isClosed_frontier)
+  have hrn : (O ∩ Metric.ball 0 r).Nonempty := by
+    obtain ⟨x, hx⟩ := hAn
+    have hxcl := frontier_subset_closure (hao hx.1)
+    by_contra hn
+    rw [Set.not_nonempty_iff_eq_empty.mp hn, closure_empty] at hxcl
+    exact hxcl
+  refine ⟨I, O ∩ Metric.ball 0 r, hi, ho.inter Metric.isOpen_ball,
+    hin, hrn, hci, hclip, hd.mono_right Set.inter_subset_left, ?_, hai, hao⟩
+  ext x
+  constructor
+  · rintro ⟨hxb, hxA⟩
+    have hxJ : x ∉ A ∪ B := by
+      rintro (ha | hb)
+      · exact hxA ha
+      · exact (ne_of_lt hxb) (hB hb)
+    have hxcover : x ∈ I ∪ O := by rw [← hc]; exact hxJ
+    rcases hxcover with hxI | hxO
+    · exact Or.inl hxI
+    · exact Or.inr ⟨hxO, hxb⟩
+  · rintro (hxI | ⟨hxO, hxb⟩)
+    · refine ⟨hib hxI, ?_⟩
+      intro hxA
+      exact (hi.frontier_eq ▸ hai hxA).2 hxI
+    · refine ⟨hxb, ?_⟩
+      intro hxA
+      exact (ho.frontier_eq ▸ (show x ∈ frontier O from hfo ▸ Or.inl hxA)).2 hxO
 
 /-- **LIBRARY P, planar crosscut theorem (estimated 180--280 lines).**
 This is the classical crosscut theorem for a disk, a standard consequence of
@@ -5561,3 +5914,7 @@ theorem apm_t95j06
 
 #print axioms apm_t95j06_planar_crosscut_of_jordan_aux_one_curve_partition
 #print axioms apm_t95j06_planar_crosscut_of_jordan_aux_domains_disjoint
+
+#print axioms apm_t95j06_planar_crosscut_of_jordan_aux_two_arcs
+#print axioms apm_t95j06_planar_crosscut_of_jordan_aux_pasted_curve
+#print axioms apm_t95j06_planar_crosscut_of_jordan
