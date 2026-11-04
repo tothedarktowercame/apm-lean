@@ -13,6 +13,7 @@ import ConstructionTargets.TransversePreimageDuality
 import ConstructionTargets.TransverseLinearPair
 import ConstructionTargets.TransversePreimageGeometry
 import ConstructionTargets.OrientedSurfacePreimageDuality
+import ConstructionTargets.t00J02Closure
 
 /-!
 # Blueprint for APM t00J02
@@ -65,6 +66,58 @@ def apm_t00j02_hasDegree {S : Type} [TopologicalSpace S]
     ∀ x : apm_t00j02_H 2 S,
       e.hom (apm_t00j02_homologyMap 2 f x) = degree * e.hom x
 
+/-- A smooth transverse circle incidence admits a target value on the circle
+whose literal point fiber is locally injective.  The proof uses the incidence
+fiber-product charts and Sard selection developed in
+`ConstructionTargets.t00J02Closure` (not an embedded-submanifold theorem, so
+no unproved immersion property of `c` is assumed).  Compactness later turns
+this locally isolated fiber into a finite one.  Estimated proof: 400--800
+lines; **LIBRARY**. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (f : C(S, S)) (hf : ContMDiff apm_t00j02_I2 apm_t00j02_I2 ∞ f)
+    (c : C(Circle, S))
+    (hc : Topology.IsEmbedding c)
+    (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
+    (htrans : apm_t00j02_transverse f c) :
+    ∃ y ∈ range c,
+      ConstructionTargets.T00J02Closure.LocallyInjectiveAlongFiber f y := by
+  sorry
+
+/-- At any locally injective selected circle fiber, disk-bounded preimage
+components give zero component sums and the surface local-fundamental-class
+formula gives the global signed top-degree sum.  Use
+`occupiedRegularFiber_exactZeroDegreeLifts`,
+`transverseDiskBounded_canonicalComponentSums_eq_zero`, and the canonical
+local-degree/localization results in `ConstructionTargets.t00J02Closure`.
+The essential-circle hypothesis supplies injectivity on `H₁` via
+`IntegerCyclic.mono_of_ne_zero_of_iso`; the genus-two coordinates supply the
+torsion-free `H₁` model and the `H₂ ≅ ℤ` coordinate.  Estimated proof:
+900--2000 lines; **LIBRARY**. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_calculations
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (f : C(S, S)) (hf : ContMDiff apm_t00j02_I2 apm_t00j02_I2 ∞ f)
+    (c : C(Circle, S))
+    (hc : Topology.IsEmbedding c)
+    (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
+    (eS : apm_t00j02_H 1 S ≅ ModuleCat.of ℤ (Fin 4 → ℤ))
+    (hhandle : apm_t00j02_wrapsHandle c)
+    (htrans : apm_t00j02_transverse f c)
+    (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c))
+    (y : S) (hy : y ∈ range c)
+    (hlocal : ConstructionTargets.T00J02Closure.LocallyInjectiveAlongFiber f y)
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) :
+    letI := ConstructionTargets.T00J02Closure.regularFiberFintype_of_locallyInjectiveAlongFiber
+      f y hlocal
+    Nonempty
+      (ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) := by
+  sorry
+
 /-- **LIBRARY boundary.** A transverse inverse image of an essential embedded
 circle whose components bound embedded disks forces a smooth self-map of a
 closed connected surface to vanish on integral top homology. -/
@@ -81,7 +134,15 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero
     (htrans : apm_t00j02_transverse f c)
     (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c)) :
     apm_t00j02_homologyMap 2 f = 0 := by
-  sorry
+  rcases hS with ⟨_, ⟨eS⟩, ⟨e⟩, _⟩
+  apply ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_locallyInjective_calculations
+    f c e
+  · exact t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
+      f hf c hc hcsmooth htrans
+  · intro y hy hlocal
+    exact Classical.choice
+      (t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_calculations
+        f hf c hc hcsmooth eS hhandle htrans hdisks y hy hlocal e)
 
 /-- The elementary final adapter from vanishing top homology to vanishing of
 the integer specified by `apm_t00j02_hasDegree`. -/
