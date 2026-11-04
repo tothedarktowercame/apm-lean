@@ -3023,6 +3023,76 @@ lemma apm_t95j06_Q_aux_arc_endpoints_not_interior
   · intro h
     exact hend.2 ⟨⟨_, h⟩, hparam _ h⟩
 
+/-- An arc which starts on an embedded arc and ends off it cannot return to
+the first arc when its interior is open in the ambient space and it avoids the
+other endpoint.  This is the connectedness argument used after a crosscut. -/
+lemma apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_arc_intersection
+    {Y : Type} [TopologicalSpace Y] [T2Space Y]
+    (α β : Set.Icc (0 : ℝ) 1 → Y) (hαc : Continuous α) (hβc : Continuous β)
+    (hαi : Function.Injective α) (hβi : Function.Injective β)
+    (b q r : Y)
+    (hα0 : α ⟨0, by norm_num⟩ = b) (hα1 : α ⟨1, by norm_num⟩ = q)
+    (hβ0 : β ⟨0, by norm_num⟩ = b) (hβ1 : β ⟨1, by norm_num⟩ = r)
+    (hopen : IsOpen (Set.range α \ {b, q}))
+    (hq : q ∉ Set.range β) (hr : r ∉ Set.range α) :
+    Set.range β ∩ Set.range α = {b} := by
+  let i0 : Set.Icc (0 : ℝ) 1 := ⟨0, by norm_num⟩
+  let i1 : Set.Icc (0 : ℝ) 1 := ⟨1, by norm_num⟩
+  have hαcompact : IsCompact (Set.range α) := isCompact_range hαc
+  have hD : Set.range β \ {b} = β '' Set.Ioc i0 i1 := by
+    ext y
+    constructor
+    · rintro ⟨⟨t, rfl⟩, hne⟩
+      refine ⟨t, ⟨?_, ?_⟩, rfl⟩
+      · have : t ≠ i0 := by
+          intro ht
+          apply hne
+          rw [ht]
+          simpa [i0] using hβ0
+        exact lt_of_le_of_ne t.2.1 (Ne.symm this)
+      · exact t.2.2
+    · rintro ⟨t, ht, rfl⟩
+      refine ⟨⟨t, rfl⟩, ?_⟩
+      intro htb
+      have : β t = β i0 := by rw [hβ0]; exact htb
+      exact (ne_of_gt ht.1) (Subtype.ext (congrArg Subtype.val (hβi this)))
+  have hpre : IsPreconnected (Set.range β \ {b}) := by
+    rw [hD]
+    exact isPreconnected_Ioc.image β hβc.continuousOn
+  have hcover : Set.range β \ {b} ⊆
+      (Set.range α \ {b, q}) ∪ (Set.range α)ᶜ := by
+    rintro y ⟨hyβ, hyb⟩
+    by_cases hyα : y ∈ Set.range α
+    · left
+      refine ⟨hyα, ?_⟩
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff]
+      intro h
+      rcases h with h | h
+      · exact hyb h
+      · exact hq (h ▸ hyβ)
+    · exact Or.inr hyα
+  have hsub : Set.range β \ {b} ⊆ (Set.range α)ᶜ := by
+    apply hpre.subset_right_of_subset_union hopen hαcompact.isClosed.isOpen_compl
+      (disjoint_compl_right.mono (fun _ h ↦ h.1) (fun _ h ↦ h)) hcover
+    refine ⟨r, ⟨⟨i1, by simpa [i1] using hβ1⟩, ?_⟩, hr⟩
+    intro hrb
+    apply hr
+    rw [hrb]
+    exact ⟨i0, by simpa [i0] using hα0⟩
+  ext y
+  constructor
+  · rintro ⟨hyβ, hyα⟩
+    have : y = b := by
+      by_contra hyb
+      exact hsub ⟨hyβ, hyb⟩ hyα
+    simpa [this]
+  · intro hy
+    have hyb : y = b := by simpa using hy
+    subst y
+    constructor
+    · exact ⟨i0, by simpa [i0, hβ0]⟩
+    · exact ⟨i0, by simpa [i0, hα0]⟩
+
 /-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
 Assuming the pure disk-crosscut theorem, one explicit product chart around
 `b × 0` yields the required compact continuum in the base.  Choose a small
