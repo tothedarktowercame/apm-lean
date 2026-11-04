@@ -1948,7 +1948,56 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbe
             intro y hy hfy
             exact hy (hinj hfy))) n
         (t00A04_modTwo_pointRestriction Y B x hx n c) := by
-  sorry
+  change
+    (((HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Bᶜ (f '' B)ᶜ
+          ⟨f, hcont⟩ _) n) ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (f '' B)ᶜ
+          ({f x} : Set Z)ᶜ (ContinuousMap.id Z) _) n) c) =
+    (((HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Bᶜ
+          ({x} : Set Y)ᶜ (ContinuousMap.id Y) _) n) ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) ({x} : Set Y)ᶜ
+          ({f x} : Set Z)ᶜ ⟨f, hcont⟩ _) n) c)
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← HomologicalComplex.homologyMap_comp,
+    ← ConstructionTargets.CoefficientPairNaturality.pair_comp,
+    ← ConstructionTargets.CoefficientPairNaturality.pair_comp]
+  rfl
+
+/-- `IsIso` of a pairMap homology map depends on the target set only up to
+equality (generalized so that `subst` applies; the containment proofs are
+irrelevant). -/
+theorem t00A04_pairMap_isIso_target_transport
+    {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z]
+    (S : Set Y) (T T' : Set Z) (hT : T = T') (g : C(Y, Z))
+    (h : Set.MapsTo g S T) (h' : Set.MapsTo g S T') (n : ℕ)
+    (hiso : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S T g h) n)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S T' g h') n) := by
+  subst hT
+  exact hiso
+
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point_injective_aux_cast
+    {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
+    (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
+    (x : Y) (n : ℕ)
+    (hiso : IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) ({x} : Set Y)ᶜ
+        (f '' ({x} : Set Y))ᶜ ⟨f, hcont⟩ (by
+          intro y hy hfy
+          rcases hfy with ⟨z, hz, hfz⟩
+          exact hy (show y ∈ ({x} : Set Y) from (hinj hfz).symm ▸ hz))) n)) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) ({x} : Set Y)ᶜ
+        ({f x} : Set Z)ᶜ ⟨f, hcont⟩
+          (fun y hy hfy ↦ hy (Set.mem_singleton_iff.mpr
+            (hinj (Set.mem_singleton_iff.mp hfy))))) n) := by
+  exact t00A04_pairMap_isIso_target_transport ({x} : Set Y)ᶜ (f '' ({x} : Set Y))ᶜ
+    ({f x} : Set Z)ᶜ (by rw [Set.image_singleton]) ⟨f, hcont⟩ _ _ n hiso
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point_injective
     {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
@@ -1956,10 +2005,21 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbe
     (hopen : ∀ U : Set Y, IsOpen U → IsOpen (f '' U)) (x : Y) (n : ℕ) :
     Function.Injective (HomologicalComplex.homologyMap
       (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) ({x} : Set Y)ᶜ
-        ({f x} : Set Z)ᶜ ⟨f, hcont⟩ (by
-          intro y hy hfy
-          exact hy (hinj hfy))) n) := by
-  sorry
+        ({f x} : Set Z)ᶜ ⟨f, hcont⟩
+          (fun y hy hfy ↦ hy (Set.mem_singleton_iff.mpr
+            (hinj (Set.mem_singleton_iff.mp hfy))))) n) := by
+  let F := HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) ({x} : Set Y)ᶜ
+      ({f x} : Set Z)ᶜ ⟨f, hcont⟩
+        (fun y hy hfy ↦ hy (Set.mem_singleton_iff.mpr
+          (hinj (Set.mem_singleton_iff.mp hfy))))) n
+  have hF0 :=
+    t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso
+      f hinj hcont hopen ({x} : Set Y) isCompact_singleton n
+  have hF : IsIso F :=
+    t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point_injective_aux_cast
+      f hinj hcont x n hF0
+  exact (asIso F).toLinearEquiv.injective
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding
     {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
