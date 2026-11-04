@@ -1562,7 +1562,25 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finit
         (TopCat.of (EuclideanSpace ℝ (Fin d)))).d n (n - 1) z ∈
       Set.range ((ConstructionTargets.CoefficientRelativeSmall.subspaceMap
         (ZMod 2) Aᶜ).f (n - 1)) := by
-  sorry
+  let p := cokernel.π
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) Aᶜ)
+  have hzero : p.f (n - 1)
+      ((ConstructionTargets.CoefficientH0.SingularChains (ZMod 2)
+        (TopCat.of (EuclideanSpace ℝ (Fin d)))).d n (n - 1) z) = 0 := by
+    have hcomm := ConcreteCategory.congr_hom (p.comm n (n - 1)) z
+    have hcycle := ConcreteCategory.congr_hom
+      ((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) Aᶜ).iCycles_d n (n - 1)) qA
+    simp only [ConcreteCategory.comp_apply] at hcomm hcycle
+    rw [← hcomm, ← hqA]
+    exact hcycle
+  have hex := (HomologicalComplex.exact_iff_degreewise_exact _).mp
+    (ConstructionTargets.CoefficientCokernelComparison.cokernelShortComplex_shortExact
+      (ZMod 2)
+      (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) Aᶜ)).exact
+      (n - 1)
+  obtain ⟨w, hw⟩ := (ShortComplex.moduleCat_exact_iff _).mp hex _ hzero
+  exact ⟨w, hw⟩
 
 theorem t00A04_simplex_mem_range_subspace_iff {X : Type} [TopologicalSpace X] (S : Set X) (m : ℕ)
     (τ : (TopCat.toSSet.obj (TopCat.of X)).obj (Opposite.op (SimplexCategory.mk m))) :
@@ -1687,7 +1705,53 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finit
           (ZMod 2) Kᶜᶜ).iCycles n qK =
         (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
           (ZMod 2) Kᶜᶜ)).f n z := by
-  sorry
+  let C := ConstructionTargets.CoefficientH0.SingularChains (ZMod 2)
+    (TopCat.of (EuclideanSpace ℝ (Fin d)))
+  let Q := ConstructionTargets.CoefficientRelativeSmall.relativeChains
+    (ZMod 2) Kᶜᶜ
+  let p := cokernel.π
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) Kᶜᶜ)
+  have hpd : p.f (n - 1) (C.d n (n - 1) z) = 0 := by
+    obtain ⟨w, hw⟩ := hz
+    rw [← hw]
+    change p.f (n - 1)
+      ((ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+        (ZMod 2) Kᶜᶜ).f (n - 1) w) = 0
+    rw [← ConcreteCategory.comp_apply]
+    exact ConcreteCategory.congr_hom
+      (congrArg (fun f => f.f (n - 1))
+        (cokernel.condition
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+            (ZMod 2) Kᶜᶜ))) w
+  have hcycle : Q.d n (n - 1) (p.f n z) = 0 := by
+    have hcomm := ConcreteCategory.congr_hom (p.comm n (n - 1)) z
+    simp only [ConcreteCategory.comp_apply] at hcomm
+    change Q.d n (n - 1) (p.f n z) = p.f (n - 1) (C.d n (n - 1) z) at hcomm
+    exact hcomm.trans hpd
+  let xhom : ModuleCat.of (ZMod 2) (ZMod 2) ⟶ Q.X n :=
+    ConstructionTargets.CoefficientSmallComparison.elementHom (ZMod 2) (p.f n z)
+  have xhomd : xhom ≫ Q.d n (n - 1) = 0 := by
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext
+    intro r
+    change (Q.d n (n - 1)).hom (r • p.f n z) = 0
+    calc
+      (Q.d n (n - 1)).hom (r • p.f n z) =
+          r • (Q.d n (n - 1)).hom (p.f n z) :=
+        (Q.d n (n - 1)).hom.map_smul r (p.f n z)
+      _ = r • 0 := congrArg (r • ·) hcycle
+      _ = 0 := smul_zero r
+  have hnext : (ComplexShape.down ℕ).next n = n - 1 := by
+    cases n with
+    | zero => exact ChainComplex.next_nat_zero
+    | succ n => simpa only [Nat.succ_eq_add_one, Nat.add_sub_cancel] using
+        ChainComplex.next_nat_succ n
+  refine ⟨Q.liftCycles xhom (n - 1) hnext xhomd 1, ?_⟩
+  have hi := ConcreteCategory.congr_hom
+    (Q.liftCycles_i xhom (n - 1) hnext xhomd) 1
+  exact hi.trans
+    (ConstructionTargets.CoefficientSmallComparison.elementHom_one
+      (ZMod 2) (p.f n z))
 
 theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
@@ -2187,7 +2251,52 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbe
       (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ
         (ConstructionTargets.SingularExcision.excisedSubspace
           (f '' K)ᶜ (Set.range f)ᶜ) (t00A04_rangeCorestrict f hcont) (t00A04_rangeCorestrict_mapsTo f hinj hcont K)) q) := by
-  sorry
+  let hof : IsOpenMap f := fun U hU ↦ hopen U hU
+  let hoe : Topology.IsOpenEmbedding f :=
+    Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap hcont hinj hof
+  let hr : Y ≃ₜ Set.range f := hoe.isEmbedding.toHomeomorph
+  let hc : {w : W // w ∈ ((Set.range f)ᶜ)ᶜ} ≃ₜ Set.range f :=
+    Homeomorph.setCongr (compl_compl (Set.range f))
+  let e : C({w : W // w ∈ ((Set.range f)ᶜ)ᶜ}, Y) := ⟨hc.trans hr.symm, (hc.trans hr.symm).continuous⟩
+  have he : Set.MapsTo e
+      (ConstructionTargets.SingularExcision.excisedSubspace
+        (f '' K)ᶜ (Set.range f)ᶜ) Kᶜ := by
+    intro z hz hK
+    apply hz
+    change (z.1 : W) ∈ f '' K
+    refine ⟨e z, hK, ?_⟩
+    change f (e z) = z.1
+    exact congrArg Subtype.val ((hc.trans hr.symm).symm_apply_apply z)
+  let F := HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ
+      (ConstructionTargets.SingularExcision.excisedSubspace
+        (f '' K)ᶜ (Set.range f)ᶜ) (t00A04_rangeCorestrict f hcont)
+        (t00A04_rangeCorestrict_mapsTo f hinj hcont K)) q
+  let G := HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2)
+      (ConstructionTargets.SingularExcision.excisedSubspace
+        (f '' K)ᶜ (Set.range f)ᶜ) Kᶜ e he) q
+  have hGF : e.comp (t00A04_rangeCorestrict f hcont) = ContinuousMap.id Y := by
+    ext y
+    exact (hc.trans hr.symm).apply_symm_apply y
+  have hFG : (t00A04_rangeCorestrict f hcont).comp e =
+      ContinuousMap.id {w : W // w ∈ ((Set.range f)ᶜ)ᶜ} := by
+    ext z
+    exact congrArg Subtype.val ((hc.trans hr.symm).symm_apply_apply z)
+  apply (CategoryTheory.ConcreteCategory.isIso_iff_bijective F).mpr
+  constructor
+  · intro a b hab
+    have hGa := congrArg (fun z ↦ G z) hab
+    change (F ≫ G) a = (F ≫ G) b at hGa
+    rw [← ConstructionTargets.CoefficientPairNaturality.homology_comp] at hGa
+    simpa only [hGF, ConstructionTargets.CoefficientPairNaturality.homology_id,
+      ConcreteCategory.id_apply] using hGa
+  · intro b
+    refine ⟨G b, ?_⟩
+    change (G ≫ F) b = b
+    rw [← ConstructionTargets.CoefficientPairNaturality.homology_comp]
+    simpa only [hFG, ConstructionTargets.CoefficientPairNaturality.homology_id,
+      ConcreteCategory.id_apply]
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor_aux_composite
     {Y W : Type} [TopologicalSpace Y] [TopologicalSpace W]
@@ -2818,7 +2927,47 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
     let b := t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart
       E X I e'
     ContDiffOn ℝ ∞ (b ∘ a.symm) (a.target ∩ a.symm ⁻¹' b.source) := by
-  sorry
+  dsimp
+  let E₀ := EuclideanSpace ℝ (Fin (Module.finrank ℝ E))
+  let L : E ≃L[ℝ] E₀ := ContinuousLinearEquiv.ofFinrankEq (by simp [E₀])
+  have hI : Topology.IsOpenEmbedding I :=
+    ⟨I.isClosedEmbedding.isEmbedding,
+      t00A04_boundarylessManifold_of_finiteDimensional_selfModel_aux_openRange E I⟩
+  let a := t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart
+    E X I e
+  let b := t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart
+    E X I e'
+  let S := a.target ∩ a.symm ⁻¹' b.source
+  let T := I.symm ⁻¹' (e.symm ≫ₕ e').source ∩ Set.range I
+  have hold := StructureGroupoid.compatible (contDiffGroupoid ∞ I) he he'
+  rw [contDiffGroupoid, mem_groupoid_of_pregroupoid, contDiffPregroupoid] at hold
+  have hcore : ContDiffOn ℝ ∞ (I ∘ (e.symm ≫ₕ e') ∘ I.symm) T := hold.1
+  have hmap : Set.MapsTo L.symm S T := by
+    intro z hz
+    dsimp [S, T, a, b] at hz ⊢
+    simp [t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart] at hz ⊢
+    rcases hz with ⟨⟨hr, het⟩, hes⟩
+    rcases hr with ⟨y, hy⟩
+    have hq :
+        (hI.toOpenPartialHomeomorph I).symm (L.symm z) = I.symm (L.symm z) := by
+      rw [← hy]
+      exact (Topology.IsOpenEmbedding.toOpenPartialHomeomorph_left_inv I hI).trans
+        (I.left_inv y).symm
+    exact ⟨⟨hq ▸ het, hq ▸ hes⟩, ⟨y, hy⟩⟩
+  have hpre := hcore.comp L.symm.contDiff.contDiffOn hmap
+  have hout := L.contDiff.comp_contDiffOn hpre
+  apply hout.congr
+  intro z hz
+  dsimp [S, a, b] at hz ⊢
+  simp [t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart] at hz ⊢
+  rcases hz.1.1 with ⟨y, hy⟩
+  have hq :
+      (hI.toOpenPartialHomeomorph I).symm (L.symm z) = I.symm (L.symm z) := by
+    rw [← hy]
+    exact (Topology.IsOpenEmbedding.toOpenPartialHomeomorph_left_inv I hI).trans
+      (I.left_inv y).symm
+  dsimp [L, E₀]
+  rw [hq]
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_transition
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -2894,6 +3043,59 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
 chain-level statement: lifting both the coefficient module and the space gives
 the same homology as first computing in universe zero and then lifting the
 result. -/
+noncomputable def t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv
+    (Y : Type) [TopologicalSpace Y] (n : SimplexCategoryᵒᵖ) :
+    ((TopCat.toSSet.obj (TopCat.of (ULift.{u} Y))).obj n) ≃
+      ULift.{u} ((TopCat.toSSet.obj (TopCat.of Y)).obj n) :=
+  (TopCat.toSSetObjEquiv (TopCat.of (ULift.{u} Y)) n).trans
+    (((Homeomorph.refl _).continuousMapCongr Homeomorph.ulift).trans
+      ((TopCat.toSSetObjEquiv (TopCat.of Y) n).symm.trans
+        Equiv.ulift.symm))
+
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_degreeIso
+    (X : Type u) [TopologicalSpace X] [Small.{0} X]
+    (hs : ∀ n : SimplexCategoryᵒᵖ,
+      ((TopCat.toSSet.obj (TopCat.of (ULift.{u} (Shrink.{0} X)))).obj n) ≃
+        ULift.{u} ((TopCat.toSSet.obj (TopCat.of (Shrink.{0} X))).obj n))
+    (n : ℕ) : Nonempty
+    (((((AlgebraicTopology.singularChainComplexFunctor
+        (ModuleCat.{u} (ZMod 2))).obj
+        (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+        (TopCat.of (ULift.{u} (Shrink.{0} X)))).X n) ≅
+      (((ModuleCat.uliftFunctor.{u} (ZMod 2)).mapHomologicalComplex
+        (ComplexShape.down ℕ) |>.obj
+        (((AlgebraicTopology.singularChainComplexFunctor
+          (ModuleCat.{0} (ZMod 2))).obj
+          (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+          (TopCat.of (Shrink.{0} X)))).X n)) := by
+  sorry
+
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_comm
+    (X : Type u) [TopologicalSpace X] [Small.{0} X]
+    (f : ∀ n, ((((AlgebraicTopology.singularChainComplexFunctor
+        (ModuleCat.{u} (ZMod 2))).obj
+        (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+        (TopCat.of (ULift.{u} (Shrink.{0} X)))).X n) ≅
+      (((ModuleCat.uliftFunctor.{u} (ZMod 2)).mapHomologicalComplex
+        (ComplexShape.down ℕ) |>.obj
+        (((AlgebraicTopology.singularChainComplexFunctor
+          (ModuleCat.{0} (ZMod 2))).obj
+          (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+          (TopCat.of (Shrink.{0} X)))).X n)) :
+    ∀ i j, (ComplexShape.down ℕ).Rel i j →
+      (f i).hom ≫
+          (((ModuleCat.uliftFunctor.{u} (ZMod 2)).mapHomologicalComplex
+            (ComplexShape.down ℕ)).obj
+            (((AlgebraicTopology.singularChainComplexFunctor
+              (ModuleCat.{0} (ZMod 2))).obj
+              (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+              (TopCat.of (Shrink.{0} X)))).d i j =
+        (((AlgebraicTopology.singularChainComplexFunctor
+          (ModuleCat.{u} (ZMod 2))).obj
+          (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+          (TopCat.of (ULift.{u} (Shrink.{0} X)))).d i j ≫ (f j).hom := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso
     (X : Type u) [TopologicalSpace X] [Small.{0} X] :
     Nonempty
@@ -2907,7 +3109,16 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
             (ModuleCat.{0} (ZMod 2))).obj
             (ModuleCat.of (ZMod 2) (ZMod 2))).obj
             (TopCat.of (Shrink.{0} X)))) := by
-  sorry
+  let hs := fun n ↦
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv
+      (Shrink.{0} X) n
+  let f := fun n ↦
+    Classical.choice
+      (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_degreeIso
+        X hs n)
+  exact ⟨HomologicalComplex.Hom.isoOfComponents f
+    (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_comm
+      X f)⟩
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_homologyOfChainIso
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
