@@ -3802,6 +3802,55 @@ lemma apm_t95j06_puncture_connected_of_components_real_aux_realEnds
       linarith [min_le_right a c]
   exact hU.eq_univ_of_unbounded hlb hub
 
+/-- **Puncture-component accumulation (estimated 35--55 lines).** Every
+connected component of a locally connected puncture of a connected `T₁`
+space accumulates at the removed point.
+
+Why true: the component is clopen in the puncture. Its image is open in the
+ambient space. If the removed point were outside its closure, closedness in
+the puncture would make the image ambient-closed as well, contradicting
+connectedness. This is only the component/ambient-closure transport fact; it
+does not assert that the puncture is connected. -/
+lemma apm_t95j06_puncture_connected_of_components_real_aux_component_accumulates
+    (B : Type) [TopologicalSpace B] [ConnectedSpace B] [T1Space B]
+    (b : B) [LocallyConnectedSpace {y : B // y ≠ b}]
+    (x : {y : B // y ≠ b}) :
+    b ∈ closure (Subtype.val '' connectedComponent x) := by
+  let P := {y : B // y ≠ b}
+  let C : Set P := connectedComponent x
+  let f : P → B := Subtype.val
+  have hPopen : IsOpen ({y : B | y ≠ b} : Set B) := isClosed_singleton.isOpen_compl
+  have hCopen : IsOpen C := isOpen_connectedComponent
+  have himgOpen : IsOpen (f '' C) :=
+    hPopen.isOpenEmbedding_subtypeVal.isOpenMap C hCopen
+  by_contra hbcl
+  have himgClosed : IsClosed (f '' C) := by
+    rw [← closure_eq_iff_isClosed]
+    apply Set.Subset.antisymm
+    · intro y hy
+      have hyb : y ≠ b := by
+        intro hyb
+        subst y
+        exact hbcl hy
+      let yp : P := ⟨y, hyb⟩
+      have hyp : yp ∈ closure C := by
+        have he := Topology.IsEmbedding.subtypeVal.closure_eq_preimage_closure_image C
+        rw [he]
+        exact hy
+      have hypC : yp ∈ C := by
+        change yp ∈ connectedComponent x
+        rw [← (isClosed_connectedComponent (x := x)).closure_eq]
+        exact hyp
+      exact ⟨yp, hypC, rfl⟩
+    · exact subset_closure
+  have hne : (f '' C).Nonempty :=
+    ⟨x.1, ⟨x, mem_connectedComponent, rfl⟩⟩
+  have hall : f '' C = Set.univ :=
+    (show IsClopen (f '' C) from ⟨himgClosed, himgOpen⟩).eq_univ hne
+  have hbimg : b ∈ f '' C := hall.symm ▸ Set.mem_univ b
+  obtain ⟨y, _, hy⟩ := hbimg
+  exact y.2 hy
+
 /-- If every connected component of the puncture is a real line, the
 puncture is connected. -/
 lemma apm_t95j06_puncture_connected_of_components_real_aux
