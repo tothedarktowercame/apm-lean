@@ -4772,6 +4772,71 @@ lemma apm_t95j06_increasing_interval_union_transition_corrected_aux
       -eV ⟨(eU.symm b).1, hUV (eU.symm b).2⟩
     exact neg_lt_neg (hdec hab)
 
+/-- Orientation-corrected real coordinates on every stage of the exhaustion.
+The successor coordinate is selected by
+`transition_corrected_aux`, so all consecutive coordinate inclusions point in
+the increasing direction. -/
+noncomputable def apm_t95j06_increasing_interval_union_orientedCharts
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ)) :
+    (n : ℕ) → U n ≃ₜ ℝ
+  | 0 => Classical.choice (hreal 0)
+  | n + 1 =>
+      Classical.choose
+        (apm_t95j06_increasing_interval_union_transition_corrected_aux
+          X (U n) (U (n + 1))
+          (apm_t95j06_increasing_interval_union_mono X U hnested n)
+          (apm_t95j06_increasing_interval_union_orientedCharts
+            X U hnested hreal n)
+          (Classical.choice (hreal (n + 1))))
+
+/-- Consecutive orientation-corrected charts have a strictly increasing
+coordinate transition. -/
+lemma apm_t95j06_increasing_interval_union_orientedCharts_step_strictMono
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ)) (n : ℕ) :
+    let ψ := apm_t95j06_increasing_interval_union_orientedCharts
+      X U hnested hreal
+    let j : U n → U (n + 1) := fun x =>
+      ⟨x.1, apm_t95j06_increasing_interval_union_mono X U hnested n x.2⟩
+    StrictMono (fun r : ℝ => ψ (n + 1) (j ((ψ n).symm r))) := by
+  dsimp only
+  exact Classical.choose_spec
+    (apm_t95j06_increasing_interval_union_transition_corrected_aux
+      X (U n) (U (n + 1))
+      (apm_t95j06_increasing_interval_union_mono X U hnested n)
+      (apm_t95j06_increasing_interval_union_orientedCharts X U hnested hreal n)
+      (Classical.choice (hreal (n + 1))))
+
+/-- The local strict orders induced by two consecutive corrected charts agree
+on the smaller stage. -/
+lemma apm_t95j06_increasing_interval_union_orientedCharts_step_iff
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ)) (n : ℕ) (x y : U n) :
+    let ψ := apm_t95j06_increasing_interval_union_orientedCharts
+      X U hnested hreal
+    ψ n x < ψ n y ↔
+      ψ (n + 1)
+          ⟨x.1, apm_t95j06_increasing_interval_union_mono X U hnested n x.2⟩ <
+        ψ (n + 1)
+          ⟨y.1, apm_t95j06_increasing_interval_union_mono X U hnested n y.2⟩ := by
+  dsimp only
+  let ψ := apm_t95j06_increasing_interval_union_orientedCharts
+    X U hnested hreal
+  let j : U n → U (n + 1) := fun z =>
+    ⟨z.1, apm_t95j06_increasing_interval_union_mono X U hnested n z.2⟩
+  have hmono : StrictMono (fun r : ℝ => ψ (n + 1) (j ((ψ n).symm r))) :=
+    apm_t95j06_increasing_interval_union_orientedCharts_step_strictMono
+      X U hnested hreal n
+  have hh :
+      ψ (n + 1) (j ((ψ n).symm (ψ n x))) <
+          ψ (n + 1) (j ((ψ n).symm (ψ n y))) ↔
+        ψ n x < ψ n y := hmono.lt_iff_lt
+  simpa [ψ, j] using hh.symm
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
