@@ -2617,6 +2617,19 @@ noncomputable def t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontr
   chart_mem_atlas y := ⟨chartAt E ((Shrink.homeomorph X).symm y),
     chart_mem_atlas E _, rfl⟩
 
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_transition_aux_pair
+    (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X]
+    [Small.{0} X] (e e' : OpenPartialHomeomorph X E)
+    (he : e ∈ atlas E X) (he' : e' ∈ atlas E X) :
+    let a := t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart
+      E X I e
+    let b := t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart
+      E X I e'
+    ContDiffOn ℝ ∞ (b ∘ a.symm) (a.target ∩ a.symm ⁻¹' b.source) := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_transition
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -2627,7 +2640,19 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
       𝓘(ℝ, EuclideanSpace ℝ (Fin (Module.finrank ℝ E))) ∞ (Shrink.{0} X) _
       (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chartedSpace
         E X I) := by
-  sorry
+  let E₀ := EuclideanSpace ℝ (Fin (Module.finrank ℝ E))
+  let c :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chartedSpace
+      E X I
+  letI : ChartedSpace E₀ (Shrink.{0} X) := c
+  apply isManifold_of_contDiffOn 𝓘(ℝ, E₀) ∞ (Shrink.{0} X)
+  rintro a b ⟨e, he, rfl⟩ ⟨e', he', rfl⟩
+  dsimp [c, E₀,
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chartedSpace]
+  simp only [Set.range_id, Set.inter_univ]
+  exact
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_transition_aux_pair
+      E X I e e' he he'
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
