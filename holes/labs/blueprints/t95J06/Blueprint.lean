@@ -8,6 +8,7 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.SurfaceClassification
+import ConstructionTargets.CollaredConnectedSumHomology
 
 open CategoryTheory
 open scoped Manifold
@@ -1136,6 +1137,18 @@ lemma apm_t95j06_jordan_complement_separates_aux_far_zero
   exact ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_const_eq_zero
     (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) 1 one_ne_zero v
 
+/-- The precise Brouwer obstruction needed by the Borsuk index argument: the
+closed planar unit disk does not retract continuously onto its boundary
+circle.  This is already proved, sorry-free, by integral sphere homology in
+`ConstructionTargets/CollaredConnectedSumHomology.lean:203`; specializing its
+dimension parameter to `1` gives the two-dimensional disk. -/
+lemma apm_t95j06_jordan_complement_separates_aux_no_disk_retraction :
+    ¬ ∃ r : ConstructionTargets.CollaredConnectedSumHomology.Disk 2 1 →
+        ConstructionTargets.CollaredConnectedSumHomology.Sphere 2,
+      Continuous r ∧ ∀ s,
+        r (ConstructionTargets.CollaredConnectedSumHomology.sphereToDisk 2 s) = s := by
+  exact ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_noRetraction 1
+
 /-- Borsuk's nonzero-index lemma: an embedded circle has a point at which
 its concrete normalized-difference loop has nonzero integral homological degree.
 This is true for every topological embedding, without smoothness or polygonality,
@@ -1641,6 +1654,145 @@ lemma apm_t95j06_planar_crosscut_of_jordan_aux_label_domains
       exact Set.disjoint_left.mp hd hy (hright hout)
     simpa only [interior_closedBall (0 : apm_t95j06_E2) hr.ne'] using
       interior_maximal hsub hL
+
+/-- Restricting an open set to an open neighbourhood preserves its frontier
+at points of that neighbourhood. This is the local frontier step for a crosscut. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_frontier_restrict
+    {X : Type*} [TopologicalSpace X] {U V : Set X}
+    (hU : IsOpen U) (hV : IsOpen V) :
+    frontier U ∩ V ⊆ frontier (U ∩ V) := by
+  intro x hx
+  rw [(hU.inter hV).frontier_eq]
+  refine ⟨?_, fun h => (hU.frontier_eq ▸ hx.1).2 h.1⟩
+  apply mem_closure_iff.mpr
+  intro W hW hxW
+  have hcl : x ∈ closure U := frontier_subset_closure hx.1
+  obtain ⟨y, hyW, hyU⟩ := mem_closure_iff.mp hcl (W ∩ V) (hW.inter hV) ⟨hxW, hx.2⟩
+  exact ⟨y, hyW.1, hyU, hyW.2⟩
+
+/-- The interior points of a disk crosscut are nonempty and dense in the
+whole arc, including its endpoints. Parameter values strictly between the
+endpoints map into the open disk, and their closure is the closed parameter
+interval. This uses only the endpoint intersection condition. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_arc_density
+    (r : ℝ) (A : Set apm_t95j06_E2)
+    (e : Set.Icc (-1 : ℝ) 1 ≃ₜ A)
+    (hA : A ⊆ Metric.closedBall 0 r)
+    (hend : A ∩ Metric.sphere 0 r =
+      ({(e ⟨-1, by norm_num⟩ : apm_t95j06_E2),
+        (e ⟨1, by norm_num⟩ : apm_t95j06_E2)} : Set apm_t95j06_E2)) :
+    (A ∩ Metric.ball 0 r).Nonempty ∧ A ⊆ closure (A ∩ Metric.ball 0 r) := by
+  let a : Set.Icc (-1 : ℝ) 1 := ⟨-1, by norm_num⟩
+  let b : Set.Icc (-1 : ℝ) 1 := ⟨1, by norm_num⟩
+  let f : Set.Icc (-1 : ℝ) 1 → apm_t95j06_E2 := fun t => (e t).val
+  have hf : Continuous f := continuous_subtype_val.comp e.continuous
+  have hsub : f '' Set.Ioo a b ⊆ A ∩ Metric.ball 0 r := by
+    rintro x ⟨t, ht, rfl⟩
+    refine ⟨(e t).property, ?_⟩
+    have hle : dist (f t) 0 ≤ r := hA (e t).property
+    apply lt_of_le_of_ne hle
+    intro heq
+    have hs : f t ∈ A ∩ Metric.sphere 0 r := ⟨(e t).property, heq⟩
+    rw [hend] at hs
+    rcases Set.mem_insert_iff.mp hs with ha | hb
+    · have he : t = a := e.injective (Subtype.ext ha)
+      exact (ne_of_gt ht.1) he
+    · have he : t = b := e.injective (Subtype.ext (Set.mem_singleton_iff.mp hb))
+      exact (ne_of_lt ht.2) he
+  constructor
+  · have ht : (⟨0, by norm_num⟩ : Set.Icc (-1 : ℝ) 1) ∈ Set.Ioo a b := by
+      constructor <;> norm_num [a, b]
+    exact ⟨_, hsub ⟨_, ht, rfl⟩⟩
+  · intro x hx
+    obtain ⟨t, ht⟩ := e.surjective ⟨x, hx⟩
+    have htc : t ∈ closure (Set.Ioo a b) := by
+      rw [closure_Ioo (show a ≠ b by intro h; have := congrArg Subtype.val h; norm_num [a, b] at this)]
+      exact t.property
+    have hfc : f t ∈ closure (f '' Set.Ioo a b) :=
+      image_closure_subset_closure_image hf ⟨t, htc, rfl⟩
+    have hfc' := closure_mono hsub hfc
+    simpa [f, ht] using hfc'
+
+/-- One pasted Jordan curve already gives two nonempty open disk sides, with
+the entire crosscut in both frontiers. The inner side is connected. The only
+conclusion intentionally absent is connectedness of the restricted outer side:
+that requires the geometry of the complementary boundary arc. No separation
+claim is assumed here beyond the supplied Jordan hypothesis. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_one_curve_partition
+    (hJordan : apm_t95j06_PlanarJordanSeparation)
+    (r : ℝ) (hr : 0 < r) (A B : Set apm_t95j06_E2)
+    (hA : A ⊆ Metric.closedBall 0 r) (hB : B ⊆ Metric.sphere 0 r)
+    (he : Nonempty (Circle ≃ₜ ↥(A ∪ B)))
+    (e : Set.Icc (-1 : ℝ) 1 ≃ₜ A)
+    (hend : A ∩ Metric.sphere 0 r =
+      ({(e ⟨-1, by norm_num⟩ : apm_t95j06_E2),
+        (e ⟨1, by norm_num⟩ : apm_t95j06_E2)} : Set apm_t95j06_E2)) :
+    ∃ L R : Set apm_t95j06_E2,
+      IsOpen L ∧ IsOpen R ∧ L.Nonempty ∧ R.Nonempty ∧
+      IsPreconnected L ∧ Disjoint L R ∧
+      Metric.ball 0 r \ A = L ∪ R ∧
+      A ⊆ frontier L ∧ A ⊆ frontier R := by
+  obtain ⟨hAn, hAdense⟩ :=
+    apm_t95j06_planar_crosscut_of_jordan_aux_arc_density r A e hA hend
+  have hJ : A ∪ B ⊆ Metric.closedBall 0 r :=
+    Set.union_subset hA (hB.trans Metric.sphere_subset_closedBall)
+  obtain ⟨I, O, hi, ho, hin, hon, hci, hco, hd, hc, hfi, hfo, hib, hext⟩ :=
+    apm_t95j06_planar_crosscut_of_jordan_aux_label_domains hJordan r hr (A ∪ B) he hJ
+  have hai : A ⊆ frontier I := fun x hx => hfi ▸ Or.inl hx
+  have hao : A ⊆ frontier (O ∩ Metric.ball 0 r) := by
+    have hlocal : A ∩ Metric.ball 0 r ⊆ frontier (O ∩ Metric.ball 0 r) := by
+      intro x hx
+      exact apm_t95j06_planar_crosscut_of_jordan_aux_frontier_restrict ho Metric.isOpen_ball
+        ⟨hfo ▸ Or.inl hx.1, hx.2⟩
+    exact hAdense.trans (closure_minimal hlocal isClosed_frontier)
+  have hrn : (O ∩ Metric.ball 0 r).Nonempty := by
+    obtain ⟨x, hx⟩ := hAn
+    have hxcl := frontier_subset_closure (hao hx.1)
+    by_contra hn
+    rw [Set.not_nonempty_iff_eq_empty.mp hn, closure_empty] at hxcl
+    exact hxcl
+  refine ⟨I, O ∩ Metric.ball 0 r, hi, ho.inter Metric.isOpen_ball,
+    hin, hrn, hci, hd.mono_right Set.inter_subset_left, ?_, hai, hao⟩
+  ext x
+  constructor
+  · rintro ⟨hxb, hxA⟩
+    have hxJ : x ∉ A ∪ B := by
+      rintro (ha | hb)
+      · exact hxA ha
+      · have hs := hB hb
+        exact (ne_of_lt hxb) hs
+    have hxcover : x ∈ I ∪ O := by rw [← hc]; exact hxJ
+    rcases hxcover with hxI | hxO
+    · exact Or.inl hxI
+    · exact Or.inr ⟨hxO, hxb⟩
+  · rintro (hxI | ⟨hxO, hxb⟩)
+    · refine ⟨hib hxI, ?_⟩
+      intro hxA
+      exact (hi.frontier_eq ▸ hai hxA).2 hxI
+    · refine ⟨hxb, ?_⟩
+      intro hxA
+      exact (ho.frontier_eq ▸ (show x ∈ frontier O from hfo ▸ Or.inl hxA)).2 hxO
+
+/-- To distinguish the inner domains of the two pasted curves, it suffices
+to exhibit a boundary point of the second domain outside the first curve.
+Connectedness puts the second domain on one Jordan side; that boundary point
+rules out nesting inside the first inner domain. This is a general domain
+comparison lemma and asserts no new planar separation theorem. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_domains_disjoint
+    {X : Type*} [TopologicalSpace X] {J I O D : Set X}
+    (hI : IsOpen I) (hO : IsOpen O) (hd : Disjoint I O)
+    (hcover : Jᶜ = I ∪ O) (hfront : J = frontier I)
+    (hD : IsPreconnected D) (hsub : D ⊆ Jᶜ)
+    (p : X) (hp : p ∈ frontier D) (hpJ : p ∉ J) (hpI : p ∉ I) :
+    Disjoint I D := by
+  have hcov : D ⊆ I ∪ O := hcover ▸ hsub
+  rcases hD.subset_or_subset hI hO hd hcov with hi | ho
+  · have hpc : p ∈ closure I := closure_mono hi (frontier_subset_closure hp)
+    have hpf : p ∈ frontier I := by
+      rw [hI.frontier_eq]
+      exact ⟨hpc, hpI⟩
+    exact False.elim (hpJ (hfront ▸ hpf))
+  · exact hd.mono_right ho
 
 /-- Closing a disk crosscut by either of the two boundary semicircles reduces
 the crosscut theorem to Jordan-curve separation (estimated 90--150 lines).
@@ -2362,6 +2514,78 @@ lemma apm_t95j06_PunctureSplit.choice_not_both
     x ∉ (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).sideC := by
   exact Set.disjoint_left.1
     (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).disjoint hx
+
+/-- Canonical `a`-sides are nested in the separation direction.  This is the
+key transitivity lemma for the cut-point order. -/
+lemma apm_t95j06_PunctureSplit.sideA_nested
+    (K : Type*) [TopologicalSpace K]
+    (hK : IsConnected (Set.univ : Set K)) (a c x y : K)
+    (sx : apm_t95j06_PunctureSplit K a c x)
+    (sy : apm_t95j06_PunctureSplit K a c y)
+    (hxy : x ≠ y) (hx : x ∈ sy.sideA) : sx.sideA ⊆ sy.sideA := by
+  have side_subset_compl {z : K} (s : apm_t95j06_PunctureSplit K a c z)
+      (A : Set K) (hA : A = s.sideA ∨ A = s.sideC) : A ⊆ ({z}ᶜ : Set K) := by
+    rw [← s.cover]
+    rcases hA with rfl | rfl
+    · exact Set.subset_union_left
+    · exact Set.subset_union_right
+  by_cases hyA : y ∈ sx.sideA
+  · have hxC_yC : sx.sideC ⊆ sy.sideC := by
+      have havoid : sx.sideC ⊆ ({y}ᶜ : Set K) := by
+        intro z hz hzy
+        subst z
+        exact (Set.disjoint_left.1 sx.disjoint hyA hz)
+      rcases sy.maximal sx.sideC ⟨c, sx.c_mem⟩ sx.sideC_preconnected havoid with h | h
+      · exact False.elim (Set.disjoint_left.1 sy.disjoint (h sx.c_mem) sy.c_mem)
+      · exact h
+    have hyC_xC : sy.sideC ⊆ sx.sideC := by
+      have havoid : sy.sideC ⊆ ({x}ᶜ : Set K) := by
+        intro z hz hzx
+        subst z
+        exact (Set.disjoint_left.1 sy.disjoint hx hz)
+      rcases sx.maximal sy.sideC ⟨c, sy.c_mem⟩ sy.sideC_preconnected havoid with h | h
+      · exact False.elim (Set.disjoint_left.1 sx.disjoint (h sy.c_mem) sx.c_mem)
+      · exact h
+    have hC : sx.sideC = sy.sideC := Set.Subset.antisymm hxC_yC hyC_xC
+    letI : ConnectedSpace K := connectedSpace_iff_univ.mpr hK
+    have hfront : (frontier sx.sideC).Nonempty := by
+      rw [nonempty_frontier_iff]
+      refine ⟨⟨c, sx.c_mem⟩, ?_⟩
+      intro hU
+      have haC : a ∈ sx.sideC := hU.symm ▸ Set.mem_univ a
+      exact Set.disjoint_left.1 sx.disjoint sx.a_mem haC
+    have hfx : frontier sx.sideC ⊆ ({x} : Set K) := by
+      intro z hz
+      by_contra hzx
+      have hzcompl : z ∈ ({x}ᶜ : Set K) := by simpa
+      rw [← sx.cover] at hzcompl
+      rcases hzcompl with hzA | hzC
+      · exact (Set.disjoint_left.1
+          (sx.disjoint.symm.frontier_left sx.sideA_open) hz hzA)
+      · exact (Set.disjoint_left.1
+          (Set.disjoint_iff_inter_eq_empty.mpr sx.sideC_open.inter_frontier_eq) hzC hz)
+    have hfy : frontier sx.sideC ⊆ ({y} : Set K) := by
+      rw [hC]
+      intro z hz
+      by_contra hzy
+      have hzcompl : z ∈ ({y}ᶜ : Set K) := by simpa
+      rw [← sy.cover] at hzcompl
+      rcases hzcompl with hzA | hzC
+      · exact (Set.disjoint_left.1
+          (sy.disjoint.symm.frontier_left sy.sideA_open) hz hzA)
+      · exact (Set.disjoint_left.1
+          (Set.disjoint_iff_inter_eq_empty.mpr sy.sideC_open.inter_frontier_eq) hzC hz)
+    obtain ⟨z, hz⟩ := hfront
+    have hzx : z = x := Set.mem_singleton_iff.mp (hfx hz)
+    have hzy : z = y := Set.mem_singleton_iff.mp (hfy hz)
+    exact False.elim (hxy (hzx.symm.trans hzy))
+  · have havoid : sx.sideA ⊆ ({y}ᶜ : Set K) := by
+      intro z hz hzy
+      subst z
+      exact hyA hz
+    rcases sy.maximal sx.sideA ⟨a, sx.a_mem⟩ sx.sideA_preconnected havoid with h | h
+    · exact h
+    · exact False.elim (Set.disjoint_left.1 sy.disjoint sy.a_mem (h sx.a_mem))
 
 /-- **C2a, separation-order algebra and completion (estimated 220--380
 lines; LIBRARY).**  The endpoint-labelled puncture sides define a unique
@@ -3616,6 +3840,32 @@ lemma apm_t95j06_increasing_interval_union_locallyReal_aux
   exact ⟨U n, hopen n, hxn, Set.range e, e.isOpenEmbedding.isOpen_range,
     ⟨e.isEmbedding.toHomeomorph⟩⟩
 
+/-- In arbitrary real coordinates on two nested stages, the coordinate form
+of the inclusion is either strictly increasing or strictly decreasing.  This
+is the orientation choice used when constructing the compatible global order.
+It follows because the subtype inclusion is continuous and injective and a
+continuous injective real function is strictly monotone or antitone. -/
+lemma apm_t95j06_increasing_interval_union_transition_oriented_aux
+    (X : Type) [TopologicalSpace X]
+    (U V : Set X) (hUV : U ⊆ V)
+    (eU : U ≃ₜ ℝ) (eV : V ≃ₜ ℝ) :
+    let j : U → V := fun x => ⟨x.1, hUV x.2⟩
+    let g : ℝ → ℝ := fun r => eV (j (eU.symm r))
+    StrictMono g ∨ StrictAnti g := by
+  dsimp only
+  let j : U → V := fun x => ⟨x.1, hUV x.2⟩
+  have hjc : Continuous j := Continuous.subtype_mk continuous_subtype_val _
+  have hji : Function.Injective j := by
+    intro x y hxy
+    apply Subtype.ext
+    exact congrArg (fun z : V => (z : X)) hxy
+  let g : ℝ → ℝ := fun r => eV (j (eU.symm r))
+  have hgc : Continuous g :=
+    eV.continuous.comp (hjc.comp eU.symm.continuous)
+  have hgi : Function.Injective g :=
+    eV.injective.comp (hji.comp eU.symm.injective)
+  exact hgc.strictMono_of_inj hgi
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
@@ -4485,3 +4735,6 @@ theorem apm_t95j06
 #print axioms apm_t95j06_jordan_complement_separates_aux_winding_locallyConstant
 #print axioms apm_t95j06_jordan_complement_separates_aux_far_zero
 #print axioms apm_t95j06_jordan_complement_separates
+
+#print axioms apm_t95j06_planar_crosscut_of_jordan_aux_one_curve_partition
+#print axioms apm_t95j06_planar_crosscut_of_jordan_aux_domains_disjoint
