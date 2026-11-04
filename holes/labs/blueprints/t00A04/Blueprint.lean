@@ -4,6 +4,7 @@ import ConstructionTargets.CoefficientRadialPair
 import ConstructionTargets.CoefficientCompactComplementTransportedExactness
 import ConstructionTargets.CoefficientModelLocal
 import ConstructionTargets.CoefficientManifoldLocalComparison
+import ConstructionTargets.CollaredConnectedSumHomology
 
 open scoped ContDiff Manifold
 open CategoryTheory
@@ -124,12 +125,58 @@ theorem t00A04_nontrivial_not_subsingleton
 
 /-- **LIBRARY (invariance of domain).**  A finite-dimensional self-model has
 no manifold boundary: its model map has open range. -/
+theorem t00A04_boundarylessManifold_of_finiteDimensional_selfModel_aux_openRange
+    (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E) :
+    IsOpen (Set.range I) := by
+  let d := Module.finrank ℝ E
+  let e : E ≃L[ℝ] EuclideanSpace ℝ (Fin d) :=
+    ContinuousLinearEquiv.ofFinrankEq (by simp [d])
+  let g : ↑(Set.univ : Set (EuclideanSpace ℝ (Fin d))) →
+      EuclideanSpace ℝ (Fin d) := fun x ↦ e (I (e.symm x))
+  have hg : Continuous g := by
+    simpa only [g, Function.comp_apply] using
+      e.continuous.comp (I.continuous.comp
+        (e.symm.continuous.comp continuous_subtype_val))
+  have hginj : Function.Injective g := by
+    intro x y hxy
+    apply Subtype.ext
+    exact e.symm.injective (I.injective (e.injective hxy))
+  have hopen_g : IsOpenMap g :=
+    ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_open
+      d
+      (fun hf hinj ↦
+        ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_interior d
+          (fun hg' ↦
+            ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_brouwer
+              d
+              ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_noRetraction
+              hg')
+          hf hinj)
+      isOpen_univ hg hginj
+  have hrange_g : IsOpen (Set.range g) := hopen_g.isOpen_range
+  have hrange : Set.range g = e '' Set.range I := by
+    ext z
+    constructor
+    · rintro ⟨x, rfl⟩
+      exact ⟨I (e.symm x), ⟨e.symm x, rfl⟩, rfl⟩
+    · rintro ⟨_, ⟨x, rfl⟩, rfl⟩
+      exact ⟨⟨e x, Set.mem_univ _⟩, by simp [g]⟩
+  have hopen_image : IsOpen (e '' Set.range I) := hrange ▸ hrange_g
+  have hpreimage : e ⁻¹' (e '' Set.range I) = Set.range I := by
+    exact Set.preimage_image_eq _ e.injective
+  rw [← hpreimage]
+  exact hopen_image.preimage e.continuous
+
 theorem t00A04_boundarylessManifold_of_finiteDimensional_selfModel
     (E X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
     [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X] :
     BoundarylessManifold I X := by
-  sorry
+  refine ⟨fun x ↦ ?_⟩
+  rw [ModelWithCorners.IsInteriorPoint,
+    (t00A04_boundarylessManifold_of_finiteDimensional_selfModel_aux_openRange E I).interior_eq]
+  exact Set.mem_range_self _
 
 /-- **Relative Mayer--Vietoris, middle term.**  For compact `K, L` in a
 Hausdorff space (so `Kᶜ, Lᶜ` are open and the small-chains theorem applies),
