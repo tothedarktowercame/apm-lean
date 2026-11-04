@@ -740,6 +740,23 @@ compact `A ⊆ ℝ^d` comes from a finite union of compact convex sets whose
 interior contains `A`: a representing relative cycle has boundary with compact
 support disjoint from `A`, so finitely many small closed balls around points of
 `A` avoid it. -/
+theorem t00A04_compactSupport_lift_aux_open
+    (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (c : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) A n) :
+    ∃ (W : Set (EuclideanSpace ℝ (Fin d))) (_ : IsOpen W) (_ : A ⊆ W)
+      (cW : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) W n),
+      t00A04_modTwo_restrict _ A W ‹A ⊆ W› n cW = c := by
+  sorry
+
+theorem t00A04_compactSupport_lift_aux_finite_convex_neighborhood
+    (d : ℕ) (A W : Set (EuclideanSpace ℝ (Fin d)))
+    (hA : IsCompact A) (hW : IsOpen W) (hAW : A ⊆ W) :
+    ∃ (s : Finset (Set (EuclideanSpace ℝ (Fin d))))
+      (_ : ∀ B ∈ s, IsCompact B ∧ Convex ℝ B)
+      (_ : A ⊆ interior (⋃ B ∈ s, B)),
+      (⋃ B ∈ s, B) ⊆ W := by
+  sorry
+
 theorem t00A04_compactSupport_lift
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d))) (hA : IsCompact A)
     (c : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) A n) :
@@ -749,7 +766,14 @@ theorem t00A04_compactSupport_lift
       (c' : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) (⋃ B ∈ s, B) n),
       t00A04_modTwo_restrict _ A (⋃ B ∈ s, B)
         ((‹A ⊆ interior (⋃ B ∈ s, B)›).trans interior_subset) n c' = c := by
-  sorry
+  obtain ⟨W, hW, hAW, cW, hcW⟩ :=
+    t00A04_compactSupport_lift_aux_open d n A c
+  obtain ⟨s, hs, hAint, hsW⟩ :=
+    t00A04_compactSupport_lift_aux_finite_convex_neighborhood d A W hA hW hAW
+  let c' := t00A04_modTwo_restrict _ (⋃ B ∈ s, B) W hsW n cW
+  refine ⟨s, hs, hAint, c', ?_⟩
+  rw [t00A04_modTwo_restrict_restrict]
+  exact hcW
 
 /-- **F2e.** Finite unions of compact convex Euclidean sets satisfy Hatcher's
 conclusion.  F1 and F2 are passed in explicitly. -/
