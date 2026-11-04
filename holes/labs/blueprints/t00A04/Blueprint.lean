@@ -3253,6 +3253,25 @@ noncomputable def t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontr
       ((TopCat.toSSetObjEquiv (TopCat.of Y) n).symm.trans
         Equiv.ulift.symm))
 
+/-- The remaining universe comparison before taking alternating face maps.
+In each degree this is the direct-sum equivalence obtained from
+`ModuleCat.coprodIsoDirectSum`, `ULift.moduleEquiv`, and `Finsupp.mapDomain`
+along `..._simplexEquiv`; naturality says that this explicit equivalence
+commutes with precomposition of singular simplices. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplicialIso
+    (X : Type u) [TopologicalSpace X] [Small.{0} X] :
+    Nonempty
+      (((sigmaConst ⋙ SimplicialObject.whiskering _ _).obj
+          (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+          (TopCat.toSSet.obj (TopCat.of (ULift.{u} (Shrink.{0} X)))) ≅
+        ((SimplicialObject.whiskering
+          (ModuleCat.{0} (ZMod 2)) (ModuleCat.{u} (ZMod 2))).obj
+          (ModuleCat.uliftFunctor.{u} (ZMod 2))).obj
+          (((sigmaConst ⋙ SimplicialObject.whiskering _ _).obj
+            (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+            (TopCat.toSSet.obj (TopCat.of (Shrink.{0} X))))) := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso
     (X : Type u) [TopologicalSpace X] [Small.{0} X] :
     Nonempty
@@ -3266,7 +3285,17 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
             (ModuleCat.{0} (ZMod 2))).obj
             (ModuleCat.of (ZMod 2) (ZMod 2))).obj
             (TopCat.of (Shrink.{0} X)))) := by
-  sorry
+  let S := (((sigmaConst ⋙ SimplicialObject.whiskering _ _).obj
+    (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+    (TopCat.toSSet.obj (TopCat.of (Shrink.{0} X))))
+  let e := Classical.choice
+    (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplicialIso
+      X)
+  refine ⟨(AlgebraicTopology.alternatingFaceMapComplex
+    (ModuleCat.{u} (ZMod 2))).mapIso e ≪≫ ?_⟩
+  exact eqToIso (Functor.congr_obj
+    (AlgebraicTopology.map_alternatingFaceMapComplex
+      (ModuleCat.uliftFunctor.{u} (ZMod 2))).symm S)
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_homologyOfChainIso
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
