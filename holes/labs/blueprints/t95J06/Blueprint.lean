@@ -4913,6 +4913,76 @@ lemma apm_t95j06_increasing_interval_union_orientedCharts_step_iff
         ψ n x < ψ n y := hmono.lt_iff_lt
   simpa [ψ, j] using hh.symm
 
+/-- Earlier stages are contained in every later stage, not only in their
+immediate successor. -/
+lemma apm_t95j06_increasing_interval_union_mono_of_le
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    {n m : ℕ} (hnm : n ≤ m) : U n ⊆ U m := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hnm
+  induction k with
+  | zero => exact fun _ hx => hx
+  | succ k ih =>
+      exact fun _ hx =>
+        apm_t95j06_increasing_interval_union_mono X U hnested (n + k)
+          (ih (Nat.le_add_right n k) hx)
+
+/-- The `n`th corrected coordinate, extended by zero away from its stage.
+The off-stage value is irrelevant; it lets comparison lemmas be stated on the
+ambient type and eliminates iterated subtype transports. -/
+noncomputable def apm_t95j06_increasing_interval_union_coordinate
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ)) (n : ℕ) (x : X) : ℝ := by
+  classical
+  exact if hx : x ∈ U n then
+      apm_t95j06_increasing_interval_union_orientedCharts
+        X U hnested hreal n ⟨x, hx⟩
+    else 0
+
+/-- Corrected coordinate comparisons are independent of the chosen later
+stage.  Induction on the gap reduces the successor case to
+`orientedCharts_step_iff`; the ambient coordinate wrapper avoids transporting
+the same points through a tower of subtype inclusions. -/
+lemma apm_t95j06_increasing_interval_union_coordinate_gap_iff
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    {n m : ℕ} (hnm : n ≤ m) {x y : X} (hx : x ∈ U n) (hy : y ∈ U n) :
+    apm_t95j06_increasing_interval_union_coordinate X U hnested hreal n x <
+        apm_t95j06_increasing_interval_union_coordinate X U hnested hreal n y ↔
+      apm_t95j06_increasing_interval_union_coordinate X U hnested hreal m x <
+        apm_t95j06_increasing_interval_union_coordinate X U hnested hreal m y := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hnm
+  induction k with
+  | zero => rfl
+  | succ k ih =>
+      have hxk : x ∈ U (n + k) :=
+        apm_t95j06_increasing_interval_union_mono_of_le X U hnested
+          (Nat.le_add_right n k) hx
+      have hyk : y ∈ U (n + k) :=
+        apm_t95j06_increasing_interval_union_mono_of_le X U hnested
+          (Nat.le_add_right n k) hy
+      have hxks : x ∈ U (n + k + 1) :=
+        apm_t95j06_increasing_interval_union_mono X U hnested (n + k) hxk
+      have hyks : y ∈ U (n + k + 1) :=
+        apm_t95j06_increasing_interval_union_mono X U hnested (n + k) hyk
+      rw [ih (Nat.le_add_right n k)]
+      rw [show n + (k + 1) = n + k + 1 by omega]
+      simp only [apm_t95j06_increasing_interval_union_coordinate,
+        dif_pos hxk, dif_pos hyk, dif_pos hxks, dif_pos hyks]
+      change
+        apm_t95j06_increasing_interval_union_orientedCharts
+              X U hnested hreal (n + k) ⟨x, hxk⟩ <
+            apm_t95j06_increasing_interval_union_orientedCharts
+              X U hnested hreal (n + k) ⟨y, hyk⟩ ↔
+          apm_t95j06_increasing_interval_union_orientedCharts
+              X U hnested hreal (n + k + 1) ⟨x, hxks⟩ <
+            apm_t95j06_increasing_interval_union_orientedCharts
+              X U hnested hreal (n + k + 1) ⟨y, hyks⟩
+      exact apm_t95j06_increasing_interval_union_orientedCharts_step_iff
+        X U hnested hreal (n + k) ⟨x, hxk⟩ ⟨y, hyk⟩
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
