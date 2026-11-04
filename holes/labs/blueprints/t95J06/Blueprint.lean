@@ -5540,6 +5540,32 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_ray_shape
     · exact Or.inr (Or.inl h)
     · exact Or.inr (Or.inr h)
 
+/-- An open, nonempty, proper preconnected subset of the real line is an open
+bounded interval or a left or right ray.  This is the order-topological first
+stage of L3, applied to each open connected component of the chart overlap. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_open_interval_shape
+    (S : Set ℝ) (hSopen : IsOpen S) (hSne : S.Nonempty)
+    (hSproper : S ≠ Set.univ) (hSconn : _root_.IsPreconnected S) :
+    (∃ a b, S = Set.Ioo a b) ∨ (∃ a, S = Set.Ioi a) ∨
+      ∃ b, S = Set.Iio b := by
+  have hinter : interior S = S := hSopen.interior_eq
+  rcases hSconn.mem_intervals with h | h | h | h | h | h | h | h | h | h
+  · rw [h, interior_Icc] at hinter
+    left; exact ⟨sInf S, sSup S, h.trans hinter.symm⟩
+  · rw [h, interior_Ico] at hinter
+    left; exact ⟨sInf S, sSup S, h.trans hinter.symm⟩
+  · rw [h, interior_Ioc] at hinter
+    left; exact ⟨sInf S, sSup S, h.trans hinter.symm⟩
+  · left; exact ⟨sInf S, sSup S, h⟩
+  · rw [h, interior_Ici] at hinter
+    right; left; exact ⟨sInf S, h.trans hinter.symm⟩
+  · right; left; exact ⟨sInf S, h⟩
+  · rw [h, interior_Iic] at hinter
+    right; right; exact ⟨sSup S, h.trans hinter.symm⟩
+  · right; right; exact ⟨sSup S, h⟩
+  · exact (hSproper h).elim
+  · exact (hSne.ne_empty h).elim
+
 /-- **R1, forward ray endpoint.** A strictly increasing surjection from a
 right ray onto a left ray approaches the finite endpoint of the left ray. -/
 lemma apm_t95j06_ray_strictMono_surjective_tendsto_leftEndpoint
