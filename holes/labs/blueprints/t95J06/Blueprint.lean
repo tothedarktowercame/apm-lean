@@ -1099,6 +1099,62 @@ lemma apm_t95j06_compact_locallyRealLine_secondCountable_aux
     obtain ⟨his, hbUi⟩ := hi
     exact ⟨⟨i, his⟩, hbUi⟩
 
+/-- Every connected component of a punctured compact connected one-manifold is
+an open noncompact one-manifold and hence is homeomorphic to `ℝ`.
+
+Proof sketch (estimated 90--140 lines): the puncture is open and locally
+connected, so `connectedComponent x` is open as well as closed in the
+puncture.  It inherits Hausdorffness, second countability (from
+`apm_t95j06_compact_locallyRealLine_secondCountable_aux`), and real-line
+charts (by
+`apm_t95j06_puncture_inherits_oneManifold_aux_openSubtype`).  If it were
+compact, its image in the Hausdorff ambient space would be closed; it is also
+open, so ambient connectedness would make it all of `B`, contradicting the
+missing point.  Apply
+`apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real`.
+
+Counterexample checks: disconnected ambient spaces can have compact
+components; the long line shows why second countability is used; the doubled
+line shows why Hausdorffness is used; a discrete space fails the local
+real-line hypothesis. -/
+lemma apm_t95j06_puncture_components_homeomorph_real_aux
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
+    (h2 : @T2Space B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
+    ∀ x : {y : B // y ≠ b},
+      Nonempty ({y : {z : B // z ≠ b} //
+        y ∈ connectedComponent x} ≃ₜ ℝ) := by
+  sorry
+
+/-- The one-chart end argument: if every connected component of the puncture
+is a real line, then the puncture has only one component.
+
+Proof sketch (estimated 110--170 lines): a chart about `b` has two connected
+half-intervals.  Under a hypothetical separation, choose the puncture
+component `C` meeting one half.  Connected-component openness and closedness
+show that `C` meets the chart in exactly that half.  The complement of this
+half in `C` is compact because it is the part of the closed set `C ∪ {b}`
+outside a smaller chart.  Transporting along `C ≃ₜ ℝ`, a connected open
+interval with compact complement must be all of `ℝ`; hence `C` is precisely
+the half-chart.  Then `C ∪ {b}` is compact, while its chart image is a
+half-open interval, contradiction.
+
+Counterexample checks: for an interval an endpoint puncture is connected but
+the endpoint has no real-line chart; for a circle the conclusion holds; a
+tripod fails the chart hypothesis; the doubled line fails Hausdorffness; the
+long circle fails the component-to-`ℝ` premise. -/
+lemma apm_t95j06_puncture_connected_of_components_real_aux
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
+    (h2 : @T2Space B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B)
+    (hcomponents : ∀ x : {y : B // y ≠ b},
+      Nonempty ({y : {z : B // z ≠ b} //
+        y ∈ connectedComponent x} ≃ₜ ℝ)) :
+    @ConnectedSpace {x : B // x ≠ b} inferInstance := by
+  sorry
+
 /-- **LIBRARY, puncture connectedness (estimated 180--260 lines).** Removing one
 point from a compact connected Hausdorff locally-real-line space leaves a
 connected space. A punctured chart has two half-intervals; a separation would
@@ -1112,7 +1168,10 @@ theorem apm_t95j06_puncture_connected
     (h2 : @T2Space B tB)
     (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
     @ConnectedSpace {x : B // x ≠ b} inferInstance := by
-  sorry
+  apply apm_t95j06_puncture_connected_of_components_real_aux
+    B tB hc hconn h2 hloc b
+  exact apm_t95j06_puncture_components_homeomorph_real_aux
+    B tB hc hconn h2 hloc b
 
 /-- An open subspace of a space locally homeomorphic to the real line is again
 locally homeomorphic to the real line. -/
