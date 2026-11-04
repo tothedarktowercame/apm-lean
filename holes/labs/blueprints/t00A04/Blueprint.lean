@@ -2284,6 +2284,42 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
 chain-level statement: lifting both the coefficient module and the space gives
 the same homology as first computing in universe zero and then lifting the
 result. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso
+    (X : Type u) [TopologicalSpace X] [Small.{0} X] :
+    Nonempty
+      (((AlgebraicTopology.singularChainComplexFunctor
+          (ModuleCat.{u} (ZMod 2))).obj
+          (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+          (TopCat.of (ULift.{u} (Shrink.{0} X))) ≅
+        (ModuleCat.uliftFunctor.{u} (ZMod 2)).mapHomologicalComplex
+          (ComplexShape.down ℕ) |>.obj
+          (((AlgebraicTopology.singularChainComplexFunctor
+            (ModuleCat.{0} (ZMod 2))).obj
+            (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+            (TopCat.of (Shrink.{0} X)))) := by
+  sorry
+
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_homologyOfChainIso
+    (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
+    (e : ((AlgebraicTopology.singularChainComplexFunctor
+          (ModuleCat.{u} (ZMod 2))).obj
+          (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+          (TopCat.of (ULift.{u} (Shrink.{0} X))) ≅
+        (ModuleCat.uliftFunctor.{u} (ZMod 2)).mapHomologicalComplex
+          (ComplexShape.down ℕ) |>.obj
+          (((AlgebraicTopology.singularChainComplexFunctor
+            (ModuleCat.{0} (ZMod 2))).obj
+            (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+            (TopCat.of (Shrink.{0} X)))) :
+    Nonempty
+      (ULift.{u}
+          (t00A04_ModTwoHomology d (Shrink.{0} X)) ≃
+        (((AlgebraicTopology.singularHomologyFunctor
+          (ModuleCat.{u} (ZMod 2)) d).obj
+          (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+          (TopCat.of (ULift.{u} (Shrink.{0} X))) : Type u)) := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ) :
     Nonempty
@@ -2293,7 +2329,11 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
           (ModuleCat.{u} (ZMod 2)) d).obj
           (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
           (TopCat.of (ULift.{u} (Shrink.{0} X))) : Type u)) := by
-  sorry
+  exact
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_homologyOfChainIso
+      X d (Classical.choice
+        (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso
+          X))
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
