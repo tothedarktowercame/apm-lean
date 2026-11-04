@@ -1170,6 +1170,7 @@ linear rescaling sends the resulting interval to `Set.Ioo (-1) 1`.
 Truth checks: no global logarithm on `Circle` is asserted.  The empty base is
 vacuous; at a discrete base point the requested open planar target cannot
 exist, so dimension zero is not smuggled through this statement. -/
+open Set in
 /-- A fixed open arc about `1 : Circle` is homeomorphic to `(-1,1)`.
 
 Why true: `Circle.exp` is a local homeomorphism at `0`.  Shrink its source to
@@ -1179,8 +1180,64 @@ not a global one.  Estimated size: 35--65 lines. -/
 theorem apm_t95j06_circle_openArc_one :
     ∃ A : Set Circle, IsOpen A ∧ (1 : Circle) ∈ A ∧
       Nonempty (A ≃ₜ Set.Ioo (-1 : ℝ) 1) := by
-  sorry
+  have hπ := Real.pi_pos
+  let A : Set Circle := {z | (z : ℂ) ∈ Complex.slitPlane}
+  have hA : IsOpen A := Complex.isOpen_slitPlane.preimage continuous_subtype_val
+  have hargexp : ∀ t : Set.Ioo (-1 : ℝ) 1, Complex.arg (Circle.exp (Real.pi * t.1)) = Real.pi * t.1 := by
+    intro t
+    rw [Circle.coe_exp, Complex.exp_mul_I]
+    apply Complex.arg_cos_add_sin_mul_I
+    constructor
+    · nlinarith [t.2.1]
+    · nlinarith [t.2.2]
+  have hmemA : ∀ t : Set.Ioo (-1 : ℝ) 1, Circle.exp (Real.pi * t.1) ∈ A := by
+    intro t
+    show ((Circle.exp (Real.pi * t.1) : Circle) : ℂ) ∈ Complex.slitPlane
+    rw [Complex.mem_slitPlane_iff_arg, hargexp]
+    refine ⟨?_, Circle.coe_ne_zero _⟩
+    intro h
+    have : t.1 = 1 := by
+      have := mul_left_cancel₀ hπ.ne' (h.trans (mul_one Real.pi).symm)
+      exact this
+    exact (ne_of_lt t.2.2) this
+  have hargIoo : ∀ z : A, Complex.arg (z.1 : ℂ) / Real.pi ∈ Set.Ioo (-1 : ℝ) 1 := by
+    intro z
+    have hz := (Complex.mem_slitPlane_iff_arg.mp z.2)
+    obtain ⟨h1, h2⟩ := Complex.arg_mem_Ioc (z.1 : ℂ)
+    have h2' : Complex.arg (z.1 : ℂ) < Real.pi := lt_of_le_of_ne h2 hz.1
+    constructor
+    · rw [lt_div_iff₀ hπ]; linarith
+    · rw [div_lt_iff₀ hπ]; linarith
+  refine ⟨A, hA, ?_, ⟨?_⟩⟩
+  · show ((1 : Circle) : ℂ) ∈ Complex.slitPlane
+    simp [Complex.one_mem_slitPlane]
+  · exact
+    { toFun := fun z => ⟨Complex.arg (z.1 : ℂ) / Real.pi, hargIoo z⟩
+      invFun := fun t => ⟨Circle.exp (Real.pi * t.1), hmemA t⟩
+      left_inv := by
+        intro z
+        apply Subtype.ext
+        simp only
+        rw [mul_div_cancel₀ _ hπ.ne']
+        exact Circle.exp_arg z.1
+      right_inv := by
+        intro t
+        apply Subtype.ext
+        simp only
+        rw [hargexp, mul_div_cancel_left₀ _ hπ.ne']
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        apply Continuous.div_const
+        rw [continuous_iff_continuousAt]
+        intro z
+        have h1 : ContinuousAt (fun w : A => ((w.1 : Circle) : ℂ)) z :=
+          (continuous_subtype_val.comp continuous_subtype_val).continuousAt
+        exact ContinuousAt.comp (g := Complex.arg) (Complex.continuousAt_arg z.2) h1
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact Circle.exp.continuous.comp (continuous_const.mul continuous_subtype_val) }
 
+open Set in
 /-- A planar chart on `U × Circle` contains a basic rectangle `W × A` about
 `(b,1)`, for any prescribed open neighbourhood `A` of `1`.
 
@@ -1198,8 +1255,44 @@ theorem apm_t95j06_circleProducts_basicRectangle
       ∃ A' : Set Circle, IsOpen A' ∧ (1 : Circle) ∈ A' ∧ A' ⊆ A ∧
         ∃ V : Set apm_t95j06_E2, IsOpen V ∧
           Nonempty ((W × A') ≃ₜ V) := by
-  sorry
+  intro b
+  obtain ⟨U, hU, hbU, hloc⟩ := hprod b
+  obtain ⟨C, hC, hpC, V, hV, ⟨c⟩⟩ := hloc (⟨b, hbU⟩, 1)
+  obtain ⟨u, a, hu, ha, hbu, h1a, huaC⟩ := isOpen_prod_iff.mp hC ⟨b, hbU⟩ 1 hpC
+  let ι : u → B := fun x => x.1.1
+  have hι : Topology.IsEmbedding ι :=
+    Topology.IsEmbedding.subtypeVal.comp Topology.IsEmbedding.subtypeVal
+  have hWo : IsOpen (range ι) := by
+    have : range ι = Subtype.val '' u := by
+      ext y; constructor
+      · rintro ⟨x, rfl⟩; exact ⟨x.1, x.2, rfl⟩
+      · rintro ⟨x, hx, rfl⟩; exact ⟨⟨x, hx⟩, rfl⟩
+    rw [this]; exact hU.isOpenMap_subtype_val _ hu
+  let A' : Set Circle := a ∩ A
+  have hk : ∀ x : u × A', ((x.1 : U), (x.2 : Circle)) ∈ C :=
+    fun x => huaC ⟨x.1.2, x.2.2.1⟩
+  let k : u × A' → C := fun x => ⟨((x.1 : U), (x.2 : Circle)), hk x⟩
+  have hkemb : Topology.IsEmbedding k := by
+    rw [← Topology.IsEmbedding.subtypeVal.of_comp_iff]
+    exact Topology.IsEmbedding.subtypeVal.prodMap Topology.IsEmbedding.subtypeVal
+  have hko : IsOpen (range k) := by
+    have : range k = Subtype.val ⁻¹' (u ×ˢ A') := by
+      ext z; constructor
+      · rintro ⟨x, rfl⟩; exact ⟨x.1.2, x.2.2⟩
+      · intro hz; exact ⟨(⟨z.1.1, hz.1⟩, ⟨z.1.2, hz.2⟩), rfl⟩
+    rw [this]; exact (hu.prod (ha.inter hA)).preimage continuous_subtype_val
+  let G : u × A' → apm_t95j06_E2 := fun x => (c (k x) : apm_t95j06_E2)
+  have hG : Topology.IsEmbedding G :=
+    Topology.IsEmbedding.subtypeVal.comp (c.isEmbedding.comp hkemb)
+  have hGo : IsOpen (range G) := by
+    have : range G = Subtype.val '' (c '' range k) := by
+      rw [← range_comp, ← range_comp]; rfl
+    rw [this]; exact hV.isOpenMap_subtype_val _ (c.isOpenMap _ hko)
+  refine ⟨range ι, hWo, ⟨⟨⟨b, hbU⟩, hbu⟩, rfl⟩, A', ha.inter hA, ⟨h1a, h1A⟩,
+    inter_subset_right, range G, hGo, ⟨?_⟩⟩
+  exact (Homeomorph.prodCongr hι.toHomeomorph.symm (Homeomorph.refl A')).trans hG.toHomeomorph
 
+open Set in
 /-- A planar rectangle with circle factor an open subarc can be normalized to
 the fixed interval `(-1,1)`.
 
@@ -1215,7 +1308,75 @@ theorem apm_t95j06_planarRectangle_normalizeArc
     (c : (W × A') ≃ₜ V) :
     ∃ V' : Set apm_t95j06_E2, IsOpen V' ∧
       Nonempty ((W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V') := by
-  sorry
+  -- the set of coordinates whose point lies in A'
+  have hS : IsOpen {s : Set.Ioo (-1 : ℝ) 1 | ((a.symm s : A) : Circle) ∈ A'} :=
+    hA'.preimage (continuous_subtype_val.comp a.symm.continuous)
+  obtain ⟨O, hO, hOS⟩ := isOpen_induced_iff.mp hS
+  set x0 : ℝ := (a ⟨1, hA'A h1A'⟩ : ℝ) with hx0
+  have hx0I : x0 ∈ Ioo (-1 : ℝ) 1 := (a ⟨1, hA'A h1A'⟩).2
+  have hx0O : x0 ∈ O := by
+    have : (a ⟨1, hA'A h1A'⟩) ∈ {s : Set.Ioo (-1 : ℝ) 1 | ((a.symm s : A) : Circle) ∈ A'} := by
+      simp [h1A']
+    rw [← hOS] at this; exact this
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp (hO.inter isOpen_Ioo) x0 ⟨hx0O, hx0I⟩
+  set p := x0 - ε / 2
+  set q := x0 + ε / 2
+  have hpq : p < q := by simp only [p, q]; linarith
+  have hsub' : Ioo p q ⊆ O ∩ Ioo (-1 : ℝ) 1 := by
+    intro t ht; apply hball
+    rw [Metric.mem_ball, Real.dist_eq, abs_lt]
+    simp only [p, q] at ht; constructor <;> linarith [ht.1, ht.2]
+  have hsub : Ioo p q ⊆ Ioo (-1 : ℝ) 1 := fun t ht => (hsub' ht).2
+  have hmem : ∀ t : Ioo p q, ((a.symm ⟨t.1, hsub t.2⟩ : A) : Circle) ∈ A' := by
+    intro t
+    have : (⟨t.1, hsub t.2⟩ : Set.Ioo (-1 : ℝ) 1) ∈ Subtype.val ⁻¹' O := (hsub' t.2).1
+    rw [hOS] at this; exact this
+  let g : Ioo p q → A' := fun t => ⟨(a.symm ⟨t.1, hsub t.2⟩ : Circle), hmem t⟩
+  have hg : Topology.IsEmbedding g := by
+    rw [← Topology.IsEmbedding.subtypeVal.of_comp_iff]
+    have : (Subtype.val ∘ g) = Subtype.val ∘ a.symm ∘ Set.inclusion hsub := rfl
+    rw [this]
+    exact Topology.IsEmbedding.subtypeVal.comp
+      (a.symm.isEmbedding.comp (Topology.IsEmbedding.inclusion hsub))
+  let ψ : A' → Set.Ioo (-1 : ℝ) 1 := fun z => a ⟨z.1, hA'A z.2⟩
+  have hψ : Continuous ψ :=
+    a.continuous.comp (continuous_subtype_val.subtype_mk _)
+  have hrg : range g = ψ ⁻¹' (Subtype.val ⁻¹' Ioo p q) := by
+    ext z; constructor
+    · rintro ⟨t, rfl⟩
+      simp only [mem_preimage, ψ, g]
+      have : (⟨((a.symm ⟨t.1, hsub t.2⟩ : A) : Circle), hA'A (hmem t)⟩ : A) =
+          a.symm ⟨t.1, hsub t.2⟩ := rfl
+      rw [this, Homeomorph.apply_symm_apply]; exact t.2
+    · intro hz
+      refine ⟨⟨(ψ z).1, hz⟩, ?_⟩
+      apply Subtype.ext
+      simp only [g, ψ]
+      rw [Subtype.coe_eta, Homeomorph.symm_apply_apply]
+  have hrgo : IsOpen (range g) := by
+    rw [hrg]; exact (isOpen_Ioo.preimage continuous_subtype_val).preimage hψ
+  let F : W × Ioo p q → apm_t95j06_E2 := fun x => (c (x.1, g x.2) : apm_t95j06_E2)
+  have hF : Topology.IsEmbedding F :=
+    Topology.IsEmbedding.subtypeVal.comp
+      (c.isEmbedding.comp (Topology.IsEmbedding.id.prodMap hg))
+  have hFo : IsOpen (range F) := by
+    have : range F = Subtype.val '' (c '' (univ ×ˢ range g)) := by
+      ext y; constructor
+      · rintro ⟨⟨w, t⟩, rfl⟩
+        exact ⟨c (w, g t), ⟨(w, g t), ⟨trivial, t, rfl⟩, rfl⟩, rfl⟩
+      · rintro ⟨_, ⟨⟨w, z⟩, ⟨-, t, rfl⟩, rfl⟩, rfl⟩
+        exact ⟨(w, t), rfl⟩
+    rw [this]
+    exact hV.isOpenMap_subtype_val _ (c.isOpenMap _ (isOpen_univ.prod hrgo))
+  have hs : 0 < (q - p) / 2 := by linarith
+  let aff : ℝ ≃ₜ ℝ := affineHomeomorph ((q - p) / 2) ((p + q) / 2) hs.ne'
+  have himage : aff '' Ioo (-1 : ℝ) 1 = Ioo p q := by
+    dsimp [aff]
+    rw [affineHomeomorph_image_Ioo _ _ _ _ hs]
+    congr 1 <;> ring
+  let I : Ioo (-1 : ℝ) 1 ≃ₜ Ioo p q :=
+    (aff.image (Ioo (-1 : ℝ) 1)).trans (Homeomorph.setCongr himage)
+  exact ⟨range F, hFo, ⟨(Homeomorph.prodCongr (Homeomorph.refl W) I).trans hF.toHomeomorph⟩⟩
 
 /-- Local Euclidean charts on `U × Circle` shrink around `(b,1)` to planar
 charts on a product with the fixed real arc `(-1,1)`. -/
