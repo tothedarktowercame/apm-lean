@@ -1962,11 +1962,49 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
       (t00A04_ModTwoHomology (Module.finrank ℝ E) (Shrink.{0} X)) := by
   sorry
 
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients
+    (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
+    [Nontrivial (t00A04_ModTwoHomology d (Shrink.{0} X))] :
+    Nontrivial
+      (((AlgebraicTopology.singularHomologyFunctor
+        (ModuleCat.{u} (ZMod 2)) d).obj
+        (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+        (TopCat.of (ULift.{u} (Shrink.{0} X))) : Type u) := by
+  sorry
+
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_homeomorph
+    (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
+    [Nontrivial
+      (((AlgebraicTopology.singularHomologyFunctor
+        (ModuleCat.{u} (ZMod 2)) d).obj
+        (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+        (TopCat.of (ULift.{u} (Shrink.{0} X))) : Type u)] :
+    Nontrivial (t00A04_ModTwoHomology d X) := by
+  let h : X ≃ₜ ULift.{u} (Shrink.{0} X) :=
+    (Shrink.homeomorph X).trans Homeomorph.ulift.symm
+  let hi : TopCat.of X ≅ TopCat.of (ULift.{u} (Shrink.{0} X)) :=
+    TopCat.isoOfHomeo h
+  let e :=
+    (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat.{u} (ZMod 2)) d).obj
+      (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).mapIso
+      hi).toLinearEquiv
+  exact Equiv.nontrivial e.toEquiv
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
     [Nontrivial (t00A04_ModTwoHomology d (Shrink.{0} X))] :
     Nontrivial (t00A04_ModTwoHomology d X) := by
-  sorry
+  letI : Nontrivial
+      (((AlgebraicTopology.singularHomologyFunctor
+        (ModuleCat.{u} (ZMod 2)) d).obj
+        (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+        (TopCat.of (ULift.{u} (Shrink.{0} X))) : Type u) :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients
+      X d
+  exact
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_homeomorph
+      X d
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
