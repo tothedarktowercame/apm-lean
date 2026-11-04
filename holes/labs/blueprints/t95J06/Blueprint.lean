@@ -5723,6 +5723,94 @@ lemma apm_t95j06_disjoint_preconnected_compl_bounded_swapped
     T S hTne hSne hTconn hSconn hdisj.symm hTbelow hSabove
   exact ⟨c, d, by simpa [Set.union_comm] using h⟩
 
+/-- A monotone right-ray tail with an upper bound is trapped in a compact
+interval after moving one unit away from its finite endpoint. -/
+lemma apm_t95j06_strictMono_Ioi_tail_subset_Icc
+    (f : ℝ → ℝ) (β : ℝ) (hf : StrictMonoOn f (Set.Ioi β))
+    (hb : BddAbove (f '' Set.Ioi β)) :
+    f '' Set.Ici (β + 1) ⊆ Set.Icc (f (β + 1)) (sSup (f '' Set.Ioi β)) := by
+  rintro _ ⟨x, hx, rfl⟩
+  have hb1 : β < β + 1 := by linarith
+  have hxray : β < x := lt_of_lt_of_le hb1 hx
+  exact ⟨hf.monotoneOn hb1 hxray hx,
+    le_csSup hb ⟨x, hxray, rfl⟩⟩
+
+/-- An antitone right-ray tail with a lower bound is trapped in a compact
+interval after moving one unit away from its finite endpoint. -/
+lemma apm_t95j06_strictAnti_Ioi_tail_subset_Icc
+    (f : ℝ → ℝ) (β : ℝ) (hf : StrictAntiOn f (Set.Ioi β))
+    (hb : BddBelow (f '' Set.Ioi β)) :
+    f '' Set.Ici (β + 1) ⊆ Set.Icc (sInf (f '' Set.Ioi β)) (f (β + 1)) := by
+  rintro _ ⟨x, hx, rfl⟩
+  have hb1 : β < β + 1 := by linarith
+  have hxray : β < x := lt_of_lt_of_le hb1 hx
+  exact ⟨csInf_le hb ⟨x, hxray, rfl⟩,
+    hf.antitoneOn hb1 hxray hx⟩
+
+/-- A monotone left-ray tail with a lower bound is trapped in a compact
+interval after moving one unit away from its finite endpoint. -/
+lemma apm_t95j06_strictMono_Iio_tail_subset_Icc
+    (f : ℝ → ℝ) (α : ℝ) (hf : StrictMonoOn f (Set.Iio α))
+    (hb : BddBelow (f '' Set.Iio α)) :
+    f '' Set.Iic (α - 1) ⊆ Set.Icc (sInf (f '' Set.Iio α)) (f (α - 1)) := by
+  rintro _ ⟨x, hx, rfl⟩
+  have ha1 : α - 1 < α := by linarith
+  have hxray : x < α := lt_of_le_of_lt hx ha1
+  exact ⟨csInf_le hb ⟨x, hxray, rfl⟩,
+    hf.monotoneOn hxray ha1 hx⟩
+
+/-- An antitone left-ray tail with an upper bound is trapped in a compact
+interval after moving one unit away from its finite endpoint. -/
+lemma apm_t95j06_strictAnti_Iio_tail_subset_Icc
+    (f : ℝ → ℝ) (α : ℝ) (hf : StrictAntiOn f (Set.Iio α))
+    (hb : BddAbove (f '' Set.Iio α)) :
+    f '' Set.Iic (α - 1) ⊆ Set.Icc (f (α - 1)) (sSup (f '' Set.Iio α)) := by
+  rintro _ ⟨x, hx, rfl⟩
+  have ha1 : α - 1 < α := by linarith
+  have hxray : x < α := lt_of_le_of_lt hx ha1
+  exact ⟨hf.antitoneOn hxray ha1 hx,
+    le_csSup hb ⟨x, hxray, rfl⟩⟩
+
+/-- At the finite endpoint of a right ray, absence of every finite limit
+forces an increasing transition to be unbounded below, and a decreasing one
+to be unbounded above. -/
+lemma apm_t95j06_right_ray_noFiniteLimit_forces_unbounded
+    (f : ℝ → ℝ) (β : ℝ)
+    (hnolim : ∀ c : ℝ,
+      ¬ Filter.Tendsto f (nhdsWithin β (Set.Ioi β)) (nhds c)) :
+    (StrictMonoOn f (Set.Ioi β) → ¬ BddBelow (f '' Set.Ioi β)) ∧
+    (StrictAntiOn f (Set.Ioi β) → ¬ BddAbove (f '' Set.Ioi β)) := by
+  have hβ : β < β + 1 := by linarith
+  have hsub : f '' Set.Ioo β (β + 1) ⊆ f '' Set.Ioi β :=
+    Set.image_mono Set.Ioo_subset_Ioi_self
+  have E := apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_monotone_end_limits
+    β (β + 1) hβ f
+  constructor
+  · intro hm hb
+    exact hnolim _ ((E.1 (hm.mono Set.Ioo_subset_Ioi_self)).2 (hb.mono hsub))
+  · intro hm hb
+    exact hnolim _ ((E.2 (hm.mono Set.Ioo_subset_Ioi_self)).2 (hb.mono hsub))
+
+/-- At the finite endpoint of a left ray, absence of every finite limit
+forces an increasing transition to be unbounded above, and a decreasing one
+to be unbounded below. -/
+lemma apm_t95j06_left_ray_noFiniteLimit_forces_unbounded
+    (f : ℝ → ℝ) (α : ℝ)
+    (hnolim : ∀ c : ℝ,
+      ¬ Filter.Tendsto f (nhdsWithin α (Set.Iio α)) (nhds c)) :
+    (StrictMonoOn f (Set.Iio α) → ¬ BddAbove (f '' Set.Iio α)) ∧
+    (StrictAntiOn f (Set.Iio α) → ¬ BddBelow (f '' Set.Iio α)) := by
+  have hα : α - 1 < α := by linarith
+  have hsub : f '' Set.Ioo (α - 1) α ⊆ f '' Set.Iio α :=
+    Set.image_mono Set.Ioo_subset_Iio_self
+  have E := apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_monotone_end_limits
+    (α - 1) α hα f
+  constructor
+  · intro hm hb
+    exact hnolim _ ((E.1 (hm.mono Set.Ioo_subset_Iio_self)).1 (hb.mono hsub))
+  · intro hm hb
+    exact hnolim _ ((E.2 (hm.mono Set.Ioo_subset_Iio_self)).1 (hb.mono hsub))
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
