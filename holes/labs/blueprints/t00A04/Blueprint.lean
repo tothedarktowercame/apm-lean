@@ -1992,6 +1992,21 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
       (t00A04_ModTwoHomology (Module.finrank ℝ E) (Shrink.{0} X)) := by
   sorry
 
+/-- Universe comparison for mod-two singular homology.  This is the remaining
+chain-level statement: lifting both the coefficient module and the space gives
+the same homology as first computing in universe zero and then lifting the
+result. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison
+    (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ) :
+    Nonempty
+      (ULift.{u}
+          (t00A04_ModTwoHomology d (Shrink.{0} X)) ≃
+        (((AlgebraicTopology.singularHomologyFunctor
+          (ModuleCat.{u} (ZMod 2)) d).obj
+          (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+          (TopCat.of (ULift.{u} (Shrink.{0} X))) : Type u)) := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
     [Nontrivial (t00A04_ModTwoHomology d (Shrink.{0} X))] :
@@ -2000,7 +2015,12 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
         (ModuleCat.{u} (ZMod 2)) d).obj
         (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
         (TopCat.of (ULift.{u} (Shrink.{0} X))) : Type u) := by
-  sorry
+  let e := Classical.choice
+    (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison
+      X d)
+  letI : Nontrivial (ULift.{u}
+      (t00A04_ModTwoHomology d (Shrink.{0} X))) := inferInstance
+  exact Equiv.nontrivial e.symm
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_homeomorph
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
