@@ -5679,6 +5679,53 @@ lemma apm_t95j06_two_overlapping_realCharts_ray_transition
   · intro t
     exact e.apply_symm_apply t
 
+/-- **R3a, overlap membership in the second chart.**  Under the left-ray
+description of the overlap in `ψ`-coordinates, a point of `V` lies in `U`
+exactly when its coordinate is below the seam value `δ`. -/
+lemma apm_t95j06_two_overlapping_realCharts_mem_iff_psi_lt
+    (X : Type) [TopologicalSpace X] (U V : Set X)
+    (ψ : V ≃ₜ ℝ) (δ : ℝ)
+    (hB : ψ '' (Subtype.val ⁻¹' U) = Set.Iio δ) (v : V) :
+    (v.1 ∈ U ↔ ψ v < δ) := by
+  constructor
+  · intro hvU
+    have himg : ψ v ∈ ψ '' (Subtype.val ⁻¹' U) := ⟨v, hvU, rfl⟩
+    have hmem : ψ v ∈ Set.Iio δ := hB ▸ himg
+    exact hmem
+  · intro hv
+    have himg : ψ v ∈ ψ '' (Subtype.val ⁻¹' U) := hB.symm ▸ hv
+    obtain ⟨w, hwU, hw⟩ := himg
+    have hwv : w = v := ψ.injective hw
+    simpa [hwv] using hwU
+
+/-- **R3b, the seam coordinate and its two formulas.**  This packages the
+dependent branch on membership in `U`; the preceding lemma identifies that
+branch with the numerical test `ψ v < δ`. -/
+lemma apm_t95j06_two_overlapping_realCharts_seamCoordinate_formulas
+    (X : Type) [TopologicalSpace X] (U V : Set X)
+    (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ) (δ : ℝ)
+    (hB : ψ '' (Subtype.val ⁻¹' U) = Set.Iio δ) :
+    let G : V → ℝ := fun v =>
+      if h : ψ v < δ then Real.arctan (φ ⟨v.1,
+        (apm_t95j06_two_overlapping_realCharts_mem_iff_psi_lt
+          X U V ψ δ hB v).mpr h⟩)
+      else Real.pi / 2 + (ψ v - δ)
+    (∀ (v : V) (hv : v.1 ∈ U),
+      G v = Real.arctan (φ ⟨v.1, hv⟩)) ∧
+    (∀ (v : V), v.1 ∉ U → G v = Real.pi / 2 + (ψ v - δ)) := by
+  classical
+  dsimp only
+  constructor
+  · intro v hv
+    have hlt := (apm_t95j06_two_overlapping_realCharts_mem_iff_psi_lt
+      X U V ψ δ hB v).mp hv
+    rw [dif_pos hlt]
+  · intro v hv
+    have hnlt : ¬ ψ v < δ := fun hlt => hv
+      ((apm_t95j06_two_overlapping_realCharts_mem_iff_psi_lt
+        X U V ψ δ hB v).mpr hlt)
+    rw [dif_neg hnlt]
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
