@@ -1064,6 +1064,41 @@ theorem apm_t95j06_principalBundle_base_locallyRealLine
     {y : F // y ∈ connectedComponent x} B tB P hplane
   exact apm_t95j06_circleFactor_locallyRealLine B tB h2 hsc hproducts
 
+/-- A compact space covered by real-line charts is second countable.
+
+In words: compactness reduces the chart cover to finitely many charts, and
+each chart is second countable because it is homeomorphic to an open subtype
+of `ℝ`.  This is the countability input needed by the end-classification route
+for puncture connectedness. -/
+lemma apm_t95j06_compact_locallyRealLine_secondCountable_aux
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) :
+    @SecondCountableTopology B tB := by
+  choose U hUopen hb V hVopen he using hloc
+  let e (b : B) : U b ≃ₜ V b := Classical.choice (he b)
+  have hcover : (Set.univ : Set B) ⊆ ⋃ b, U b := by
+    intro b hbuniv
+    exact Set.mem_iUnion.mpr ⟨b, hb b⟩
+  obtain ⟨s, hs⟩ := isCompact_univ.elim_finite_subcover U hUopen hcover
+  let I := {b : B // b ∈ s}
+  let W : I → Set B := fun i ↦ U i.1
+  letI : Countable I := Finite.to_countable
+  letI (i : I) : SecondCountableTopology (V i.1) :=
+    Topology.IsEmbedding.subtypeVal.secondCountableTopology
+  letI (i : I) : SecondCountableTopology (W i) :=
+    (e i.1).secondCountableTopology
+  apply TopologicalSpace.secondCountableTopology_of_countable_cover (U := W)
+  · intro i
+    exact hUopen i.1
+  · apply Set.eq_univ_of_univ_subset
+    intro b hbuniv
+    have hbmem := hs hbuniv
+    simp only [Set.mem_iUnion] at hbmem ⊢
+    obtain ⟨i, hi⟩ := hbmem
+    obtain ⟨his, hbUi⟩ := hi
+    exact ⟨⟨i, his⟩, hbUi⟩
+
 /-- **LIBRARY, puncture connectedness (estimated 180--260 lines).** Removing one
 point from a compact connected Hausdorff locally-real-line space leaves a
 connected space. A punctured chart has two half-intervals; a separation would
