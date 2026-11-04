@@ -7673,6 +7673,127 @@ lemma apm_t95j06_increasing_interval_union_isOpen_Iio
         ((apm_t95j06_increasing_interval_union_linearOrder_lt_iff
           X U hnested hreal hcover z w).1 hzw))
 
+/-- The `m`th bounded order coordinate: arctangent on the stage, and the
+corresponding endpoint value on either component of its complement. -/
+noncomputable def apm_t95j06_increasing_interval_union_boundedCoordinate
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (m : ℕ) (x : X) : ℝ := by
+  classical
+  exact if x ∈ U m then
+      Real.arctan
+        (apm_t95j06_increasing_interval_union_coordinate X U hnested hreal m x)
+    else if (∀ y ∈ U m,
+        @LT.lt X (apm_t95j06_increasing_interval_union_linearOrder
+          X U hnested hreal hcover).toLT y x) then
+      Real.pi / 2
+    else
+      -(Real.pi / 2)
+
+/-- The bounded coordinate is monotone for the global order. -/
+lemma apm_t95j06_increasing_interval_union_boundedCoordinate_monotone
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (m : ℕ) :
+    @Monotone X ℝ
+      (apm_t95j06_increasing_interval_union_linearOrder
+        X U hnested hreal hcover).toPreorder inferInstance
+      (apm_t95j06_increasing_interval_union_boundedCoordinate
+        X U hnested hreal hcover m) := by
+  letI : LinearOrder X :=
+    apm_t95j06_increasing_interval_union_linearOrder X U hnested hreal hcover
+  have hopposite (a : X)
+      (ha : ∀ z ∈ U m, z < a) (hb : ∀ z ∈ U m, a < z) : False := by
+    let e := Classical.choice (hreal m)
+    exact (ha (e.symm 0) (e.symm 0).property).asymm
+      (hb (e.symm 0) (e.symm 0).property)
+  intro x y hxy
+  by_cases hx : x ∈ U m <;> by_cases hy : y ∈ U m
+  · rcases hxy.eq_or_lt with h | h
+    · subst y; rfl
+    · simp only [apm_t95j06_increasing_interval_union_boundedCoordinate, hx, hy,
+        ↓reduceIte]
+      exact (Real.arctan_strictMono
+        (apm_t95j06_increasing_interval_union_coordinate_strictMonoOn
+          X U hnested hreal hcover m hx hy h)).le
+  · rcases apm_t95j06_increasing_interval_union_outside_stage
+      X U hnested hreal hcover m hy with habove | hbelow
+    · simp only [apm_t95j06_increasing_interval_union_boundedCoordinate, hx, hy,
+        if_false, if_pos habove]
+      exact (Real.arctan_lt_pi_div_two _).le
+    · exact (not_lt_of_ge hxy (hbelow x hx)).elim
+  · rcases apm_t95j06_increasing_interval_union_outside_stage
+      X U hnested hreal hcover m hx with habove | hbelow
+    · exact (not_lt_of_ge hxy (habove y hy)).elim
+    · have hnabove : ¬ ∀ z ∈ U m, z < x := fun ha ↦ hopposite x ha hbelow
+      simp only [apm_t95j06_increasing_interval_union_boundedCoordinate, hx, hy,
+        if_false, if_true, if_neg hnabove]
+      exact (Real.neg_pi_div_two_lt_arctan _).le
+  · rcases apm_t95j06_increasing_interval_union_outside_stage
+      X U hnested hreal hcover m hx with hxabove | hxbelow
+    · have hyabove : ∀ z ∈ U m, z < y := fun z hz ↦
+        (hxabove z hz).trans_le hxy
+      simp only [apm_t95j06_increasing_interval_union_boundedCoordinate,
+        hx, hy, if_false, if_pos hxabove, if_pos hyabove]
+      exact le_rfl
+    · rcases apm_t95j06_increasing_interval_union_outside_stage
+        X U hnested hreal hcover m hy with hyabove | hybelow
+      · have hnxabove : ¬ ∀ z ∈ U m, z < x := fun ha ↦ hopposite x ha hxbelow
+        simp only [apm_t95j06_increasing_interval_union_boundedCoordinate,
+          hx, hy, if_false, if_neg hnxabove, if_pos hyabove]
+        exact neg_le_self (div_nonneg Real.pi_pos.le zero_le_two)
+      · have hnxabove : ¬ ∀ z ∈ U m, z < x := fun ha ↦ hopposite x ha hxbelow
+        have hnyabove : ¬ ∀ z ∈ U m, z < y := fun ha ↦ hopposite y ha hybelow
+        simp only [apm_t95j06_increasing_interval_union_boundedCoordinate,
+          hx, hy, if_false, if_neg hnxabove, if_neg hnyabove]
+        exact le_rfl
+
+/-- On the stage itself, the bounded coordinate is strictly monotone. -/
+lemma apm_t95j06_increasing_interval_union_boundedCoordinate_strictMonoOn
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (m : ℕ) :
+    @StrictMonoOn X ℝ
+      (apm_t95j06_increasing_interval_union_linearOrder
+        X U hnested hreal hcover).toPreorder inferInstance
+      (apm_t95j06_increasing_interval_union_boundedCoordinate
+        X U hnested hreal hcover m) (U m) := by
+  intro x hx y hy hxy
+  simp only [apm_t95j06_increasing_interval_union_boundedCoordinate, hx, hy,
+    ↓reduceIte]
+  exact Real.arctan_strictMono
+    (apm_t95j06_increasing_interval_union_coordinate_strictMonoOn
+      X U hnested hreal hcover m hx hy hxy)
+
+/-- Every bounded coordinate takes values in `[-π/2, π/2]`. -/
+lemma apm_t95j06_increasing_interval_union_boundedCoordinate_mem_Icc
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (m : ℕ) (x : X) :
+    -(Real.pi / 2) ≤
+        apm_t95j06_increasing_interval_union_boundedCoordinate
+          X U hnested hreal hcover m x ∧
+      apm_t95j06_increasing_interval_union_boundedCoordinate
+          X U hnested hreal hcover m x ≤ Real.pi / 2 := by
+  by_cases hx : x ∈ U m
+  · simp only [apm_t95j06_increasing_interval_union_boundedCoordinate, hx,
+      ↓reduceIte]
+    exact ⟨(Real.neg_pi_div_two_lt_arctan _).le,
+      (Real.arctan_lt_pi_div_two _).le⟩
+  · by_cases hside : ∀ y ∈ U m,
+        @LT.lt X (apm_t95j06_increasing_interval_union_linearOrder
+          X U hnested hreal hcover).toLT y x
+    · simp only [apm_t95j06_increasing_interval_union_boundedCoordinate, hx,
+        if_false, if_pos hside]
+      exact ⟨neg_le_self (div_nonneg Real.pi_pos.le zero_le_two), le_rfl⟩
+    · simp only [apm_t95j06_increasing_interval_union_boundedCoordinate, hx,
+        if_false, if_neg hside]
+      exact ⟨le_rfl, neg_le_self (div_nonneg Real.pi_pos.le zero_le_two)⟩
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
