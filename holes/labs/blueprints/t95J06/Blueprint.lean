@@ -3150,7 +3150,7 @@ one relatively compact line chart.  The connected-union hypothesis removes
 the open-cover nerve construction from the parent theorem; the proof orders
 successive overlaps, rules out branching by local real charts, and rules out
 closing the two ends using noncompactness.  Estimated size: 110--170 lines. -/
-/-- Two overlapping open real-line charts in a Hausdorff space have union
+/- Two overlapping open real-line charts in a Hausdorff space have union
 homeomorphic to the real line unless their union is compact.
 
 This is the two-chart one-manifold dichotomy.  Transport the overlap through
@@ -3160,6 +3160,22 @@ excludes every partial/doubled-end identification, and identifying both pairs
 produces the compact alternative.  This statement is independent of compact
 closures and of the ambient connected/noncompact hypotheses.  Estimated
 size: 80--130 lines. -/
+/-- The nested-chart case of two-chart gluing: if either real chart contains
+the other, their union is the larger chart and is therefore homeomorphic to
+the real line. -/
+lemma apm_t95j06_two_realCharts_line_of_nested
+    (X : Type) [TopologicalSpace X] (U V : Set X)
+    (hUreal : Nonempty (U ≃ₜ ℝ)) (hVreal : Nonempty (V ≃ₜ ℝ))
+    (hnested : U ⊆ V ∨ V ⊆ U) :
+    Nonempty ({x : X // x ∈ U ∪ V} ≃ₜ ℝ) := by
+  rcases hnested with hUV | hVU
+  · obtain ⟨e⟩ := hVreal
+    have h : U ∪ V = V := Set.union_eq_right.mpr hUV
+    exact ⟨(Homeomorph.setCongr h).trans e⟩
+  · obtain ⟨e⟩ := hUreal
+    have h : U ∪ V = U := Set.union_eq_left.mpr hVU
+    exact ⟨(Homeomorph.setCongr h).trans e⟩
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
