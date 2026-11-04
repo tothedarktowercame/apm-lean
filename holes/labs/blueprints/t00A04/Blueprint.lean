@@ -669,7 +669,100 @@ theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_b
           continuous_subtype_val.subtype_mk (fun y ↦ by
             intro hyx
             exact y.property (hyx.symm ▸ hx))⟩ := by
-  sorry
+  obtain ⟨R, hR, hAR⟩ := hA.isBounded.subset_ball_lt 1 x
+  let j : C(↥Aᶜ, ↥(({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ)) :=
+    { toFun := fun y ↦ ⟨y, by
+        intro hyx
+        exact y.property (hyx.symm ▸ hx)⟩
+      continuous_toFun := by fun_prop }
+  let ρ : C(↥(({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ), ↥Aᶜ) :=
+    { toFun := fun y ↦ ⟨x + (1 + R / ‖y.1 - x‖) • (y.1 - x), by
+        intro hyA
+        have hyne : y.1 - x ≠ 0 := sub_ne_zero.mpr y.property
+        have hn : 0 < ‖y.1 - x‖ := norm_pos_iff.mpr hyne
+        have hc : 0 ≤ 1 + R / ‖y.1 - x‖ := by positivity
+        have hdist : dist (x + (1 + R / ‖y.1 - x‖) • (y.1 - x)) x =
+            ‖y.1 - x‖ + R := by
+          rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs,
+            abs_of_nonneg hc]
+          field_simp
+        have hb := hAR hyA
+        rw [Metric.mem_ball, hdist] at hb
+        linarith⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        have hv : Continuous (fun y : ↥(({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ) ↦
+            y.1 - x) := continuous_subtype_val.sub continuous_const
+        have hn : Continuous (fun y : ↥(({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ) ↦
+            ‖y.1 - x‖) := continuous_norm.comp hv
+        have hn0 : ∀ y : ↥(({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ),
+            ‖y.1 - x‖ ≠ 0 := fun y ↦ norm_ne_zero_iff.mpr (sub_ne_zero.mpr y.property)
+        exact continuous_const.add
+          ((continuous_const.add (continuous_const.div hn hn0)).smul hv) }
+  let Hout : ContinuousMap.Homotopy (j.comp ρ) (ContinuousMap.id _) :=
+    { toFun := fun ty ↦ ⟨(1 - (ty.1 : ℝ)) • ((j.comp ρ) ty.2).1 +
+          (ty.1 : ℝ) • ty.2.1, by
+        intro heq
+        have hvne : ty.2.1 - x ≠ 0 := sub_ne_zero.mpr ty.2.property
+        have hn : 0 < ‖ty.2.1 - x‖ := norm_pos_iff.mpr hvne
+        have hc : 0 < (1 - (ty.1 : ℝ)) * (1 + R / ‖ty.2.1 - x‖) +
+            (ty.1 : ℝ) := by
+          have ht0 := ty.1.property.1
+          have ht1 := ty.1.property.2
+          have hRp : 0 ≤ R / ‖ty.2.1 - x‖ := by positivity
+          nlinarith
+        apply hvne
+        have hz : ((1 - (ty.1 : ℝ)) * (1 + R / ‖ty.2.1 - x‖) +
+            (ty.1 : ℝ)) • (ty.2.1 - x) = 0 := by
+          calc
+            _ = (1 - (ty.1 : ℝ)) • ((j.comp ρ) ty.2).1 +
+                (ty.1 : ℝ) • ty.2.1 - x := by dsimp [j, ρ]; module
+            _ = 0 := sub_eq_zero.mpr heq
+        exact (smul_eq_zero.mp hz).resolve_left hc.ne'⟩
+      continuous_toFun := by fun_prop
+      map_zero_left := by intro y; apply Subtype.ext; simp [j, ρ]
+      map_one_left := by intro y; apply Subtype.ext; simp }
+  let Hin : ContinuousMap.Homotopy (ρ.comp j) (ContinuousMap.id _) :=
+    { toFun := fun ty ↦ ⟨(1 - (ty.1 : ℝ)) • ((ρ.comp j) ty.2).1 +
+          (ty.1 : ℝ) • ty.2.1, by
+        intro hz
+        have ht0 : 0 ≤ (ty.1 : ℝ) := ty.1.property.1
+        have ht1 : (ty.1 : ℝ) ≤ 1 := ty.1.property.2
+        have hvne : ty.2.1 - x ≠ 0 := sub_ne_zero.mpr (by
+          intro hyx
+          exact ty.2.property (hyx.symm ▸ hx))
+        have hn : 0 < ‖ty.2.1 - x‖ := norm_pos_iff.mpr hvne
+        let c : ℝ := (1 - (ty.1 : ℝ)) * (1 + R / ‖ty.2.1 - x‖) +
+          (ty.1 : ℝ)
+        have hc : 1 ≤ c := by
+          dsimp [c]
+          have hRp : 0 ≤ R / ‖ty.2.1 - x‖ := by positivity
+          nlinarith
+        have hc0 : 0 < c := lt_of_lt_of_le zero_lt_one hc
+        have hzform : (1 - (ty.1 : ℝ)) • ((ρ.comp j) ty.2).1 +
+              (ty.1 : ℝ) • ty.2.1 = x + c • (ty.2.1 - x) := by
+          dsimp [c, ρ, j]
+          module
+        have hp : ty.2.1 = (1 - c⁻¹) • x + c⁻¹ •
+            ((1 - (ty.1 : ℝ)) • ((ρ.comp j) ty.2).1 +
+              (ty.1 : ℝ) • ty.2.1) := by
+          rw [hzform, smul_add, smul_smul, inv_mul_cancel₀ hc0.ne', one_smul]
+          module
+        have hc_inv : 0 ≤ c⁻¹ := inv_nonneg.mpr hc0.le
+        have hc_sub : 0 ≤ 1 - c⁻¹ := sub_nonneg.mpr ((inv_le_one₀ hc0).2 hc)
+        have hmem := hconv hx hz hc_sub hc_inv (by ring)
+        exact ty.2.property (hp.symm ▸ hmem)⟩
+      continuous_toFun := by fun_prop
+      map_zero_left := by intro y; apply Subtype.ext; simp [ρ, j]
+      map_one_left := by intro y; apply Subtype.ext; simp }
+  let e : ContinuousMap.HomotopyEquiv ↥Aᶜ
+      ↥(({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ) :=
+    { toFun := j
+      invFun := ρ
+      left_inv := ⟨Hin⟩
+      right_inv := ⟨Hout⟩ }
+  refine ⟨e, ?_⟩
+  rfl
 
 theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective_aux_subspace
     (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
