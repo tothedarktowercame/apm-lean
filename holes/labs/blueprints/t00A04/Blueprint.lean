@@ -2367,6 +2367,49 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
 /-- Once both underlying types are small, transfer all structures to their
 `Shrink` models, apply the Type-0 theorem, and use functoriality under
 `Shrink.homeomorph` to transport nontriviality of singular homology back. -/
+noncomputable def t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart
+    (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [Small.{0} X]
+    (e : OpenPartialHomeomorph X E) :
+    OpenPartialHomeomorph (Shrink.{0} X)
+      (EuclideanSpace ℝ (Fin (Module.finrank ℝ E))) := by
+  let E₀ := EuclideanSpace ℝ (Fin (Module.finrank ℝ E))
+  let L : E ≃L[ℝ] E₀ := ContinuousLinearEquiv.ofFinrankEq (by simp [E₀])
+  have hI : Topology.IsOpenEmbedding I :=
+    ⟨I.isClosedEmbedding.isEmbedding,
+      t00A04_boundarylessManifold_of_finiteDimensional_selfModel_aux_openRange E I⟩
+  let q : OpenPartialHomeomorph E E₀ :=
+    (hI.toOpenPartialHomeomorph I).transHomeomorph L.toHomeomorph
+  exact (Shrink.homeomorph X).symm.transOpenPartialHomeomorph (e.trans q)
+
+@[implicit_reducible] noncomputable def t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chartedSpace
+    (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [ChartedSpace E X] [Small.{0} X] :
+    ChartedSpace (EuclideanSpace ℝ (Fin (Module.finrank ℝ E))) (Shrink.{0} X) where
+  atlas := t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart
+    E X I '' atlas E X
+  chartAt y :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart
+      E X I (chartAt E ((Shrink.homeomorph X).symm y))
+  mem_chart_source y := by
+    simp [t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chart]
+  chart_mem_atlas y := ⟨chartAt E ((Shrink.homeomorph X).symm y),
+    chart_mem_atlas E _, rfl⟩
+
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_transition
+    (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X]
+    [Small.{0} X] :
+    @IsManifold ℝ _ (EuclideanSpace ℝ (Fin (Module.finrank ℝ E))) _ _
+      (EuclideanSpace ℝ (Fin (Module.finrank ℝ E))) _
+      𝓘(ℝ, EuclideanSpace ℝ (Fin (Module.finrank ℝ E))) ∞ (Shrink.{0} X) _
+      (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chartedSpace
+        E X I) := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -2376,7 +2419,13 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
     ∃ c : ChartedSpace E₀ (Shrink.{0} X),
       letI := c
       IsManifold 𝓘(ℝ, E₀) ∞ (Shrink.{0} X) := by
-  sorry
+  let c :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_chartedSpace
+      E X I
+  refine ⟨c, ?_⟩
+  exact
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport_aux_transition
+      E X I
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
