@@ -5957,6 +5957,36 @@
    "rev": "735377b84",
    "approved_at": "2026-10-13T06:28:05Z"
   },
+  "t02A08": {
+   "decls": [
+    "apm_t02a08"
+   ],
+   "sha256": "c07d0782542773c7f9ef00b6c8c9886cb96d0d76ef94dcc70afa7e6944edfc4e",
+   "defs": [
+    "apm_t02a08_E2",
+    "apm_t02a08_E3",
+    "apm_t02a08_E5",
+    "apm_t02a08_Intersection",
+    "apm_t02a08_OrientedFrame",
+    "apm_t02a08_Preimage",
+    "apm_t02a08_S2",
+    "apm_t02a08_SmoothMap",
+    "apm_t02a08_Tangent",
+    "apm_t02a08_Transverse",
+    "apm_t02a08_ccw",
+    "apm_t02a08_columns",
+    "apm_t02a08_frame",
+    "apm_t02a08_inE5",
+    "apm_t02a08_localDet",
+    "apm_t02a08_localSign"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-04)",
+   "evidence": "holes/labs/statement-registry/open5-grades.md",
+   "prelim_defect": null,
+   "rev": "308c1a317",
+   "approved_at": "2026-11-04T00:05:35Z"
+  },
   "t03J01": {
    "decls": [
     "apm_t03j01"
@@ -8068,6 +8098,28 @@
    "prelim_defect": null,
    "rev": "3562b5157",
    "approved_at": "2026-11-01T16:53:21Z"
+  },
+  "t99J03": {
+   "decls": [
+    "apm_t99j03"
+   ],
+   "sha256": "0f8b9222143c016dd055c5b5a0d4b1df6884a8c584aec8bcbf597ea2db7d451f",
+   "defs": [
+    "apm_t99J03_Disk",
+    "apm_t99J03_E2",
+    "apm_t99J03_HasEulerCharacteristic",
+    "apm_t99J03_Homology",
+    "apm_t99J03_IsOrientable",
+    "apm_t99J03_Surface",
+    "apm_t99J03_SurfaceRel",
+    "apm_t99J03_edgePoint"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-04)",
+   "evidence": "holes/labs/statement-registry/open5-grades.md",
+   "prelim_defect": null,
+   "rev": "6d90ecf6c",
+   "approved_at": "2026-11-04T00:04:59Z"
   },
   "t99J04": {
    "decls": [
