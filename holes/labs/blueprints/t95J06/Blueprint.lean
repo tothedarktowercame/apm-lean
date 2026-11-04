@@ -722,35 +722,137 @@ theorem apm_t95j06_bundleCharts_product_locallyEuclideanPlane
     apm_t95j06_bundleCharts_product_locallyEuclideanPlane_aux_homeomorph
       W (U × Circle) φ hplaneW
 
-/-- **Sub-leaf F3 (LIBRARY, estimated 1400--3000 lines).**  In words: a
-Hausdorff second-countable space whose local products with a circle are
-Euclidean surfaces is locally a real line.
+/-! ### Split of F3: planar localization, separation, and arc recognition -/
 
-Proof sketch: localize the circle to an open arc and obtain `U × ℝ` locally
-open in `ℝ²`.  Prove local compactness, metrizability, and local connectedness
-of `U` using the slice retract.  Planar separation (Jordan--Schoenflies) shows
-that puncturing a sufficiently small connected neighbourhood in `U` gives at
-most two sides and that interior points are cut points.  Apply the classical
-Moore/Whyburn characterization of locally connected one-dimensional continua
-with order at most two to obtain an interval chart.  Mathlib and
-`ConstructionTargets/` currently contain no Jordan separation or Moore
-cut-point classification theorem.  The sorry-free vendor project
-`vendor/extmap/alok_JordanCurveTheorem/Reeken/Jordan.lean` provides Jordan
-separation, but no adapter to Mathlib's Euclidean plane or the cut-point
-classification.
+/-- Local planar charts on a fixed real arc product.  Unlike the conclusion of
+F3, this predicate does not assert interval charts on the base. -/
+def apm_t95j06_HasPlanarArcProducts
+    (B : Type*) [TopologicalSpace B] : Prop :=
+  ∀ b : B, ∃ W : Set B, IsOpen W ∧ b ∈ W ∧
+    ∃ V : Set apm_t95j06_E2, IsOpen V ∧
+      Nonempty ((W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V)
 
-Truth checks: a discrete or zero-dimensional `B` fails the product hypothesis
-because `B × Circle` is locally one-dimensional; a tripod fails at its branch
-because tripod × arc is not a planar 2-manifold; non-Hausdorff doubled-line
-factors are excluded by `h2`; long-line pathologies are excluded by `hsc`.
-This is the sole remaining classical topology gate. -/
+/-- The separation certificate used by the classical arc theorem: every point
+has a compact connected neighbourhood with exactly two non-cut points, neither
+of which is the point itself.  (Without `a ≠ b`, `c ≠ b` the certificate holds
+on `[0,1]` at the endpoint `0` with `K = [0,1]`, and F3d would be false.) -/
+def apm_t95j06_HasTwoEndpointContinuumNeighborhoods
+    (B : Type*) [TopologicalSpace B] : Prop :=
+  ∀ b : B, ∃ K : Set B,
+    IsCompact K ∧ IsConnected K ∧ b ∈ interior K ∧
+    ∃ a c : K, a ≠ c ∧ (a : B) ≠ b ∧ (c : B) ≠ b ∧
+      Nonempty (LocallyConnectedSpace K) ∧
+      IsPreconnected ({a}ᶜ : Set K) ∧
+      IsPreconnected ({c}ᶜ : Set K) ∧
+      ∀ y : K, y ≠ a → y ≠ c → ¬ IsPreconnected ({y}ᶜ : Set K)
+
+/-- **Sub-leaf F3c — gating leaf (LIBRARY, estimated 300--400 lines).**
+In words: planar arc-product neighbourhoods have arbitrarily local compact
+continua with precisely two non-cut points.
+
+Proof sketch: choose a small closed disk around `(b,0)` in the planar chart,
+use local connectedness to take the component meeting the zero slice, and
+project that component to the base.  A vertical crosscut through a base point
+extends to a Jordan curve in the disk.  The Jordan separation theorem gives
+the two sides and rules out both a third branch and a non-cut interior point.
+Shrink once more so the projected continuum is a neighbourhood of `b`.
+The planar input is the sorry-free `Reeken.jordanCurveTheorem`; Mathlib tools
+are `IsCompact.image`, `IsConnected.image`, component maximality, and compact
+sets being closed in a Hausdorff space.
+
+Truth checks: a tripod fails because its branch produces three complementary
+pieces; a Cantor factor fails local connectedness and cannot satisfy the planar
+arc-product hypothesis; a discrete factor has a one-dimensional product.
+This leaf contains all Jordan-strength work and gates the split. -/
+theorem apm_t95j06_planarArcProducts_twoEndpointContinua
+    (B : Type) (tB : TopologicalSpace B)
+    (h2 : @T2Space B tB)
+    (hplanar : @apm_t95j06_HasPlanarArcProducts B tB)
+    (hlc : Nonempty (@LocallyCompactSpace B tB))
+    (hm : Nonempty (@TopologicalSpace.MetrizableSpace B tB))
+    (hconn : Nonempty (@LocallyConnectedSpace B tB)) :
+    @apm_t95j06_HasTwoEndpointContinuumNeighborhoods B tB := by
+  sorry
+
+/-- **Sub-leaf F3a (LIBRARY, estimated 180--300 lines).**  In words: local
+Euclidean charts on `U × Circle` shrink around `(b,1)` to planar charts on a
+product of a base neighbourhood with the fixed real arc `(-1,1)`.
+
+Proof sketch: use `isLocalHomeomorph_circleExp` at zero to identify a circle
+arc with a real interval.  A product-topology basis rectangle lies inside the
+chosen Euclidean chart source; restrict the chart with `Homeomorph.setCongr`
+and compose with the product of the circle-arc homeomorphism.  The fixed
+linear rescaling sends the resulting interval to `Set.Ioo (-1) 1`.
+
+Truth checks: no global logarithm on `Circle` is asserted.  The empty base is
+vacuous; at a discrete base point the requested open planar target cannot
+exist, so dimension zero is not smuggled through this statement. -/
+theorem apm_t95j06_circleProducts_localizeToPlanarArc
+    (B : Type) (tB : TopologicalSpace B)
+    (hprod : ∀ b : B, ∃ U : Set B, @IsOpen B tB U ∧ b ∈ U ∧
+      apm_t95j06_IsLocallyEuclideanPlane (U × Circle)) :
+    @apm_t95j06_HasPlanarArcProducts B tB := by
+  sorry
+
+/-- **Sub-leaf F3b (LIBRARY, estimated 180--300 lines).**  In words: a
+Hausdorff second-countable base with planar real-arc products is locally
+compact, metrizable, and locally connected.
+
+Proof sketch: the zero slice is a closed retract of each product chart.
+Compact planar neighbourhoods project to compact base neighbourhoods.
+Connected open planar neighbourhoods project under the open product
+projection to a connected-neighbourhood basis.  Local compact Hausdorff gives
+regularity, and Mathlib's
+`metrizableSpace_of_t3_secondCountable` (Urysohn metrization) gives the metric.
+
+Truth checks: Hausdorffness excludes the doubled line; second countability
+excludes long-line variants; Cantor and tripod factors survive some regularity
+conclusions but are not claimed to be intervals here. -/
+theorem apm_t95j06_planarArcProducts_factor_regular
+    (B : Type) (tB : TopologicalSpace B)
+    (h2 : @T2Space B tB) (hsc : @SecondCountableTopology B tB)
+    (hplanar : @apm_t95j06_HasPlanarArcProducts B tB) :
+    Nonempty (@LocallyCompactSpace B tB) ∧
+      Nonempty (@TopologicalSpace.MetrizableSpace B tB) ∧
+      Nonempty (@LocallyConnectedSpace B tB) := by
+  sorry
+
+/-- **Sub-leaf F3d (LIBRARY, estimated 220--380 lines).**  In words: a
+locally connected metrizable Hausdorff space with a neighbourhood basis of
+compact continua having exactly two non-cut points has real interval charts.
+
+Proof sketch: apply the Moore--Whyburn arc characterization to each continuum:
+a nondegenerate locally connected metric continuum with exactly two non-cut
+points is homeomorphic to `[0,1]`.  Since `b` lies in its interior, shrink the
+closed-interval homeomorphism to an open subinterval about `b`.  Mathlib
+supplies restriction and interior transport for homeomorphisms but currently
+has no Moore--Whyburn theorem.
+
+Truth checks: a circle fails because every puncture remains connected; a
+tripod has three non-cut endpoints; a Cantor set is not connected or locally
+connected; a singleton is excluded by `a ≠ c`. -/
+theorem apm_t95j06_twoEndpointContinua_locallyRealLine
+    (B : Type) (tB : TopologicalSpace B)
+    (h2 : @T2Space B tB)
+    (hm : Nonempty (@TopologicalSpace.MetrizableSpace B tB))
+    (hcert : @apm_t95j06_HasTwoEndpointContinuumNeighborhoods B tB) :
+    @apm_t95j06_IsLocallyRealLine B tB := by
+  sorry
+
+/-- Assembly of F3 from planar localization, factor regularity, Jordan
+separation, and the arc characterization. -/
 theorem apm_t95j06_circleFactor_locallyRealLine
     (B : Type) (tB : TopologicalSpace B)
     (h2 : @T2Space B tB) (hsc : @SecondCountableTopology B tB)
     (hprod : ∀ b : B, ∃ U : Set B, @IsOpen B tB U ∧ b ∈ U ∧
       apm_t95j06_IsLocallyEuclideanPlane (U × Circle)) :
     @apm_t95j06_IsLocallyRealLine B tB := by
-  sorry
+  have hplanar := apm_t95j06_circleProducts_localizeToPlanarArc B tB hprod
+  obtain ⟨hlc, hm, hconn⟩ :=
+    apm_t95j06_planarArcProducts_factor_regular B tB h2 hsc hplanar
+  have hcert := apm_t95j06_planarArcProducts_twoEndpointContinua
+    B tB h2 hplanar hlc hm hconn
+  exact apm_t95j06_twoEndpointContinua_locallyRealLine B tB h2 hm hcert
 
 /-- Assembly of the original manifold-factor leaf from the three independent
 sub-leaves above. -/
