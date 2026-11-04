@@ -229,6 +229,100 @@ def IsLocalDegreeOne (U : Set E2) (g : C(E2, ℝ))
               simpa [horizontal] using horigin'))) 1 a =
       n • ConstructionTargets.OneDimensionalChartLocalGenerator.realLocalGenerator 0
 
+/-- A continuous real function with an isolated zero has one of the four possible
+sign patterns on a sufficiently small punctured interval.  This is the
+one-dimensional IVT input for reducing a local-degree calculation to the four
+standard models `u`, `-u`, `u^2`, and `-u^2`. -/
+theorem isolatedZero_sign_trichotomy
+    (W : Set ℝ) (hW : IsOpen W) (h0W : (0 : ℝ) ∈ W)
+    (h : C(ℝ, ℝ)) (hzero : ∀ u ∈ W, h u = 0 ↔ u = 0) :
+    ∃ δ : ℝ, 0 < δ ∧ Set.Ioo (-δ) δ ⊆ W ∧
+      (((∀ u ∈ Set.Ioo (-δ) 0, h u < 0) ∧
+          (∀ u ∈ Set.Ioo 0 δ, 0 < h u)) ∨
+       ((∀ u ∈ Set.Ioo (-δ) 0, 0 < h u) ∧
+          (∀ u ∈ Set.Ioo 0 δ, h u < 0)) ∨
+       ((∀ u ∈ Set.Ioo (-δ) 0, 0 < h u) ∧
+          (∀ u ∈ Set.Ioo 0 δ, 0 < h u)) ∨
+       ((∀ u ∈ Set.Ioo (-δ) 0, h u < 0) ∧
+          (∀ u ∈ Set.Ioo 0 δ, h u < 0))) := by
+  rcases Metric.isOpen_iff.mp hW 0 h0W with ⟨δ, hδ, hball⟩
+  have hsub : Set.Ioo (-δ) δ ⊆ W := by
+    intro u hu
+    apply hball
+    simpa [Real.dist_eq, abs_lt] using hu
+  have hne (u : ℝ) (hu : u ∈ Set.Ioo (-δ) δ) (hu0 : u ≠ 0) : h u ≠ 0 := by
+    intro hz
+    exact hu0 ((hzero u (hsub hu)).mp hz)
+  have hsame (a b : ℝ) (ha : a ∈ Set.Ioo (-δ) δ)
+      (hb : b ∈ Set.Ioo (-δ) δ) (ha0 : a ≠ 0) (hb0 : b ≠ 0)
+      (hab : 0 < a ↔ 0 < b) :
+      (0 < h a ↔ 0 < h b) := by
+    have forward (a b : ℝ) (ha : a ∈ Set.Ioo (-δ) δ)
+        (hb : b ∈ Set.Ioo (-δ) δ) (ha0 : a ≠ 0) (hb0 : b ≠ 0)
+        (hab : 0 < a ↔ 0 < b) (hpa : 0 < h a) : 0 < h b := by
+      by_contra hn
+      have hnb : h b < 0 := lt_of_le_of_ne (le_of_not_gt hn) (hne b hb hb0)
+      have hzmem : (0 : ℝ) ∈ Set.uIcc (h a) (h b) := by
+        simp [Set.mem_uIcc, hpa.le, hnb.le]
+      rcases (intermediate_value_uIcc h.continuous.continuousOn hzmem) with
+        ⟨z, hzab, hz⟩
+      have hzI : z ∈ Set.Ioo (-δ) δ := by
+        rcases Set.mem_uIcc.mp hzab with hzab | hzab
+        · exact ⟨lt_of_lt_of_le ha.1 hzab.1, lt_of_le_of_lt hzab.2 hb.2⟩
+        · exact ⟨lt_of_lt_of_le hb.1 hzab.1, lt_of_le_of_lt hzab.2 ha.2⟩
+      have hz0 : z ≠ 0 := by
+        rcases lt_or_gt_of_ne ha0 with hneg | hpos
+        · have hbnot : ¬ 0 < b := fun hbpos =>
+            (not_lt_of_ge hneg.le) (hab.mpr hbpos)
+          have hbneg : b < 0 := lt_of_le_of_ne (le_of_not_gt hbnot) hb0
+          rcases Set.mem_uIcc.mp hzab with hzab | hzab
+          · exact ne_of_lt (lt_of_le_of_lt hzab.2 hbneg)
+          · exact ne_of_lt (lt_of_le_of_lt hzab.2 hneg)
+        · have hbpos : 0 < b := hab.mp hpos
+          rcases Set.mem_uIcc.mp hzab with hzab | hzab
+          · exact ne_of_gt (lt_of_lt_of_le hpos hzab.1)
+          · exact ne_of_gt (lt_of_lt_of_le hbpos hzab.1)
+      exact hne z hzI hz0 hz
+    exact ⟨forward a b ha hb ha0 hb0 hab,
+      forward b a hb ha hb0 ha0 hab.symm⟩
+  let p : ℝ := δ / 2
+  let q : ℝ := -δ / 2
+  have hp : p ∈ Set.Ioo 0 δ := by dsimp [p]; constructor <;> linarith
+  have hq : q ∈ Set.Ioo (-δ) 0 := by dsimp [q]; constructor <;> linarith
+  have hpI : p ∈ Set.Ioo (-δ) δ := ⟨by dsimp [p]; linarith, hp.2⟩
+  have hqI : q ∈ Set.Ioo (-δ) δ := ⟨hq.1, by dsimp [q]; linarith⟩
+  have right_pos_or_neg : 0 < h p ∨ h p < 0 := lt_or_gt_of_ne (hne p hpI (ne_of_gt hp.1)).symm
+  have left_pos_or_neg : 0 < h q ∨ h q < 0 := lt_or_gt_of_ne (hne q hqI (ne_of_lt hq.2)).symm
+  refine ⟨δ, hδ, hsub, ?_⟩
+  rcases left_pos_or_neg with hl | hl <;> rcases right_pos_or_neg with hr | hr
+  · exact Or.inr (Or.inr (Or.inl ⟨fun u hu => (hsame u q
+      ⟨hu.1, lt_trans hu.2 hδ⟩ hqI (ne_of_lt hu.2) (ne_of_lt hq.2)
+        (iff_of_false (not_lt_of_ge hu.2.le) (not_lt_of_ge hq.2.le))).mpr hl,
+      fun u hu => (hsame u p ⟨lt_trans (neg_lt_zero.mpr hδ) hu.1, hu.2⟩ hpI
+        (ne_of_gt hu.1) (ne_of_gt hp.1) (iff_of_true hu.1 hp.1)).mpr hr⟩))
+  · exact Or.inr (Or.inl ⟨fun u hu => (hsame u q
+      ⟨hu.1, lt_trans hu.2 hδ⟩ hqI (ne_of_lt hu.2) (ne_of_lt hq.2)
+        (iff_of_false (not_lt_of_ge hu.2.le) (not_lt_of_ge hq.2.le))).mpr hl,
+      fun u hu => lt_of_le_of_ne (le_of_not_gt fun hh => (not_lt_of_ge hr.le) ((hsame u p
+        ⟨lt_trans (neg_lt_zero.mpr hδ) hu.1, hu.2⟩ hpI
+        (ne_of_gt hu.1) (ne_of_gt hp.1) (iff_of_true hu.1 hp.1)).mp hh))
+        (hne u ⟨lt_trans (neg_lt_zero.mpr hδ) hu.1, hu.2⟩ (ne_of_gt hu.1))⟩)
+  · exact Or.inl ⟨fun u hu => lt_of_le_of_ne (le_of_not_gt fun hh => (not_lt_of_ge hl.le)
+      ((hsame u q ⟨hu.1, lt_trans hu.2 hδ⟩ hqI (ne_of_lt hu.2) (ne_of_lt hq.2)
+        (iff_of_false (not_lt_of_ge hu.2.le) (not_lt_of_ge hq.2.le))).mp hh))
+      (hne u ⟨hu.1, lt_trans hu.2 hδ⟩ (ne_of_lt hu.2)),
+      fun u hu => (hsame u p ⟨lt_trans (neg_lt_zero.mpr hδ) hu.1, hu.2⟩ hpI
+        (ne_of_gt hu.1) (ne_of_gt hp.1) (iff_of_true hu.1 hp.1)).mpr hr⟩
+  · exact Or.inr (Or.inr (Or.inr ⟨fun u hu => lt_of_le_of_ne (le_of_not_gt fun hh => (not_lt_of_ge hl.le)
+      ((hsame u q ⟨hu.1, lt_trans hu.2 hδ⟩ hqI
+        (ne_of_lt hu.2) (ne_of_lt hq.2)
+        (iff_of_false (not_lt_of_ge hu.2.le) (not_lt_of_ge hq.2.le))).mp hh))
+        (hne u ⟨hu.1, lt_trans hu.2 hδ⟩ (ne_of_lt hu.2)),
+      fun u hu => lt_of_le_of_ne (le_of_not_gt fun hh => (not_lt_of_ge hr.le) ((hsame u p
+        ⟨lt_trans (neg_lt_zero.mpr hδ) hu.1, hu.2⟩ hpI
+        (ne_of_gt hu.1) (ne_of_gt hp.1) (iff_of_true hu.1 hp.1)).mp hh))
+        (hne u ⟨lt_trans (neg_lt_zero.mpr hδ) hu.1, hu.2⟩ (ne_of_gt hu.1))⟩))
+
 lemma splitProductMap_zero_iff
     (U : Set E2) (g : C(E2, ℝ))
     (hzero : ∀ p : U, productMap g p = 0 ↔ (p : E2) = 0) (p : U) :
