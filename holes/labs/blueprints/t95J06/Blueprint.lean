@@ -5025,6 +5025,77 @@ lemma apm_t95j06_ray_strictMono_surjective_tendsto_atTop
   obtain ⟨a, ha⟩ := Filter.tendsto_atTop_atTop.mp ht M'
   exact ⟨a, fun b hab => (le_max_left M (α + 1)).trans (ha b hab)⟩
 
+/-- **R2, the overlap transition as an order isomorphism.**  If the overlap
+is a right ray in the first chart and a left ray in the second, and the chart
+transition is increasing, the transition is a strictly increasing continuous
+surjection between those rays.  Its forward and inverse endpoint behaviour is
+recorded explicitly for the seam construction. -/
+lemma apm_t95j06_two_overlapping_realCharts_ray_transition
+    (X : Type) [TopologicalSpace X]
+    (U V : Set X) (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ) (α δ : ℝ)
+    (hA : φ '' (Subtype.val ⁻¹' V) = Set.Ioi α)
+    (hB : ψ '' (Subtype.val ⁻¹' U) = Set.Iio δ)
+    (hmono : ∀ x y : U, ∀ hx : (x : X) ∈ V, ∀ hy : (y : X) ∈ V,
+      φ x < φ y → ψ ⟨x, hx⟩ < ψ ⟨y, hy⟩) :
+    ∃ (τ : Set.Ioi α → Set.Iio δ) (g : Set.Iio δ → Set.Ioi α),
+      StrictMono τ ∧ Function.Surjective τ ∧ Continuous τ ∧
+      Function.LeftInverse g τ ∧ Function.RightInverse g τ ∧
+      Filter.Tendsto (fun s => (τ s : ℝ)) Filter.atTop (nhdsWithin δ (Set.Iio δ)) ∧
+      Filter.Tendsto (fun t => (g t : ℝ)) Filter.atTop Filter.atTop := by
+  have hov (s : Set.Ioi α) : ((φ.symm s.1 : U) : X) ∈ V := by
+    have hsimg : s.1 ∈ φ '' (Subtype.val ⁻¹' V) := hA.symm ▸ s.2
+    obtain ⟨u, huV, hu⟩ := hsimg
+    have hueq : u = φ.symm s.1 := by
+      apply φ.injective
+      rw [hu, φ.apply_symm_apply]
+    simpa [hueq] using huV
+  let τ₀ (s : Set.Ioi α) : ℝ := ψ ⟨φ.symm s.1, hov s⟩
+  have hτmem (s : Set.Ioi α) : τ₀ s ∈ Set.Iio δ := by
+    have himg : τ₀ s ∈ ψ '' (Subtype.val ⁻¹' U) := by
+      refine ⟨⟨φ.symm s.1, hov s⟩, ?_, rfl⟩
+      exact (φ.symm s.1).property
+    exact hB ▸ himg
+  let τ : Set.Ioi α → Set.Iio δ := fun s => ⟨τ₀ s, hτmem s⟩
+  have hτmono : StrictMono τ := by
+    intro s t hst
+    apply hmono (φ.symm s.1) (φ.symm t.1) (hov s) (hov t)
+    simpa only [φ.apply_symm_apply] using hst
+  have hτsurj : Function.Surjective τ := by
+    intro t
+    have htimg : t.1 ∈ ψ '' (Subtype.val ⁻¹' U) := hB.symm ▸ t.2
+    obtain ⟨v, hvU, hv⟩ := htimg
+    let u : U := ⟨v.1, hvU⟩
+    have huV : (u : X) ∈ V := v.property
+    have hsimg : φ u ∈ φ '' (Subtype.val ⁻¹' V) := ⟨u, huV, rfl⟩
+    have hs' : φ u ∈ Set.Ioi α := hA ▸ hsimg
+    have hs : α < φ u := hs'
+    let s : Set.Ioi α := ⟨φ u, hs⟩
+    refine ⟨s, Subtype.ext ?_⟩
+    change ψ ⟨φ.symm (φ u), hov s⟩ = t.1
+    have huv : (⟨φ.symm (φ u), hov s⟩ : V) = v := by
+      apply Subtype.ext
+      simpa [u] using congrArg Subtype.val (φ.symm_apply_apply u)
+    rw [huv, hv]
+  let e₀ : Set.Ioi α ≃ Set.Iio δ :=
+    Equiv.ofBijective τ ⟨hτmono.injective, hτsurj⟩
+  let e : Set.Ioi α ≃o Set.Iio δ :=
+    { e₀ with map_rel_iff' := fun {x y} => hτmono.le_iff_le }
+  have he : (e : Set.Ioi α → Set.Iio δ) = τ := by funext s; rfl
+  have hτcont : Continuous τ := by
+    rw [← he]
+    exact e.toHomeomorph.continuous
+  have hfwd := apm_t95j06_ray_strictMono_surjective_tendsto_leftEndpoint
+    α δ τ hτmono hτsurj
+  have hinvMono : StrictMono e.symm := e.symm.strictMono
+  have hinvSurj : Function.Surjective e.symm := e.symm.surjective
+  have hinv := apm_t95j06_ray_strictMono_surjective_tendsto_atTop
+    α δ e.symm hinvMono hinvSurj
+  refine ⟨τ, e.symm, hτmono, hτsurj, hτcont, ?_, ?_, hfwd, hinv⟩
+  · intro s
+    exact e.symm_apply_apply s
+  · intro t
+    exact e.apply_symm_apply t
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
