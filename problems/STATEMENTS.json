@@ -3391,31 +3391,6 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:46:56Z"
   },
-  "lts-ultraproduct-thm1": {
-   "decls": [
-    "apm_lts_ultraproduct_thm1"
-   ],
-   "sha256": "316980cf5dca447522087d217c12b955a2c2cae33d0aa694ed8358766b36ce5e",
-   "defs": [
-    "AlgEquiv",
-    "Algebra",
-    "Congruence",
-    "Signature",
-    "equalitySetoid",
-    "factorAlgebra",
-    "moduloSetoid",
-    "quotientAfter",
-    "quotientAfterAlgebra",
-    "quotientBefore",
-    "quotientBeforeAlgebra"
-   ],
-   "grade": "faithful",
-   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
-   "evidence": "holes/labs/statement-registry/repairs-1101.md",
-   "prelim_defect": null,
-   "rev": "70d8be3ae",
-   "approved_at": "2026-11-01T21:38:18Z"
-  },
   "m00A01": {
    "decls": [
     "apm_m00a01"
@@ -8786,6 +8761,37 @@
    "reason": "admit ran before the commit, so it fingerprinted HEAD (the old fixed-curve statement); re-admitted at the commit holding the general statement",
    "evidence": "holes/labs/statement-registry/new-encodings-1101.md",
    "revoked_at": "2026-11-01T20:05:50Z"
+  },
+  {
+   "id": "lts-ultraproduct-thm1",
+   "entry": {
+    "decls": [
+     "apm_lts_ultraproduct_thm1"
+    ],
+    "sha256": "316980cf5dca447522087d217c12b955a2c2cae33d0aa694ed8358766b36ce5e",
+    "defs": [
+     "AlgEquiv",
+     "Algebra",
+     "Congruence",
+     "Signature",
+     "equalitySetoid",
+     "factorAlgebra",
+     "moduloSetoid",
+     "quotientAfter",
+     "quotientAfterAlgebra",
+     "quotientBefore",
+     "quotientBeforeAlgebra"
+    ],
+    "grade": "faithful",
+    "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-01)",
+    "evidence": "holes/labs/statement-registry/repairs-1101.md",
+    "prelim_defect": null,
+    "rev": "70d8be3ae",
+    "approved_at": "2026-11-01T21:38:18Z"
+   },
+   "reason": "out of APM scope: moved to horsdoeuvres/broken (not APM; Joe 2026-11-04). Statement not faulted.",
+   "evidence": "horsdoeuvres/README.md",
+   "revoked_at": "2026-11-04T17:22:23Z"
   }
  ]
 }
