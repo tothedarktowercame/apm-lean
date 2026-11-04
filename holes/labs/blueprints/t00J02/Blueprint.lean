@@ -15,6 +15,7 @@ import ConstructionTargets.TransverseLinearPair
 import ConstructionTargets.TransversePreimageGeometry
 import ConstructionTargets.OrientedSurfacePreimageDuality
 import ConstructionTargets.t00J02Closure
+import ConstructionTargets.CircleActualLocalization
 
 /-!
 # Blueprint for APM t00J02
@@ -332,7 +333,21 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_one_point_au
     (hdiv : ∀ x : S, d ∣
       (ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
         S e).localCoefficient x) : d ∣ 1 := by
-  sorry
+  let D :=
+    ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso S e
+  obtain ⟨x, hx⟩ :=
+    ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit
+      0 S e
+  have hcoefficient :
+      D.localCoefficient x =
+        ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree
+          0 S e x :=
+    ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree_spec
+      0 e x (D.localCoefficient x) (D.localization_eq x)
+  have hunit : IsUnit (D.localCoefficient x) := by
+    rw [Int.isUnit_iff_natAbs_eq, hcoefficient]
+    exact hx
+  exact (hdiv x).trans (isUnit_iff_dvd_one.mp hunit)
 
 /-- **D2.2 (one-point primitivity, estimated 350--700 lines; LIBRARY).**  In
 words: the chosen generator of global `H₂ ≅ ℤ` localizes primitively at
@@ -856,7 +871,134 @@ theorem t00J02_circleSum_aux_finiteFiberDecomposition
           (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
             (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) = 0 →
         n = 0 := by
-  sorry
+  classical
+  let A : Set Circle := {u | ℓ u = z}
+  have hA : A.Finite := by
+    simpa [A] using (Set.finite_range (fun t : {u : Circle // ℓ u = z} ↦ (t : Circle)))
+  have hcoords : Function.Bijective (t00J02_circleFiberCoordinates ℓ z) := by
+    let H (B : Set Circle) :=
+      (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Bᶜ).homology 1
+    let r {B C : Set Circle} (h : C ⊆ B) : H B ⟶ H C :=
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularExcision.relativeSingularMap Bᶜ Cᶜ
+          (ContinuousMap.id Circle) (fun _ hu hc ↦ hu (h hc))) 1
+    have rcomp {B C D : Set Circle} (hCB : C ⊆ B) (hDC : D ⊆ C) (w : H B) :
+        r hDC (r hCB w) = r (hDC.trans hCB) w := by
+      have hh := ConstructionTargets.SingularExcision.relativeSingularHomologyMap_comp
+        Bᶜ Cᶜ Dᶜ (ContinuousMap.id Circle) (ContinuousMap.id Circle)
+        (fun _ hu hc ↦ hu (hCB hc)) (fun _ hu hd ↦ hu (hDC hd))
+        (fun _ hu hd ↦ hu (hCB (hDC hd))) 1
+      exact congrArg (fun m ↦ m w) hh
+    have binary {B C : Set Circle} (hB : IsClosed B) (hC : IsClosed C)
+        (hBC : Disjoint B C) :
+        Function.Bijective (fun w : H (B ∪ C) ↦
+          (r (show B ⊆ B ∪ C from subset_union_left) w,
+           r (show C ⊆ B ∪ C from subset_union_right) w)) := by
+      have hempty : B ∩ C = ∅ := Set.disjoint_iff_inter_eq_empty.mp hBC
+      have hz0 (k : ℕ) : Subsingleton
+          ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+            (B ∩ C)ᶜ).homology k) := by
+        apply AddCommGrpCat.subsingleton_of_isZero
+        simpa only [hempty, compl_empty] using
+          ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero
+            Circle k
+      constructor
+      · intro u v huv
+        apply sub_eq_zero.mp
+        apply ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_union_aux_joint
+          Circle B C hB hC 1 (hz0 2) (u - v)
+        · change r (show B ⊆ B ∪ C from subset_union_left) (u - v) = 0
+          rw [map_sub]
+          exact sub_eq_zero.mpr (congrArg Prod.fst huv)
+        · change r (show C ⊆ B ∪ C from subset_union_right) (u - v) = 0
+          rw [map_sub]
+          exact sub_eq_zero.mpr (congrArg Prod.snd huv)
+      · rintro ⟨u, v⟩
+        obtain ⟨w, hwu, hwv⟩ :=
+          ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_union_aux_glue
+            Circle B C hB hC 1 u v (@Subsingleton.elim _ (hz0 1) _ _)
+        exact ⟨w, Prod.ext hwu hwv⟩
+    have finite_coordinates (B : Set Circle) (hB : B.Finite) :
+        Function.Bijective (fun w : H B ↦
+          fun x : B ↦ r (singleton_subset_iff.mpr x.2) w) := by
+      induction B, hB using Set.Finite.induction_on with
+      | empty =>
+        have hz : CategoryTheory.Limits.IsZero (H (∅ : Set Circle)) := by
+          simpa only [H, compl_empty] using
+            ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero
+              Circle 1
+        letI : Subsingleton (H (∅ : Set Circle)) := AddCommGrpCat.subsingleton_of_isZero hz
+        constructor
+        · intro u v _; exact Subsingleton.elim u v
+        · intro g
+          refine ⟨0, ?_⟩
+          funext x
+          exact False.elim x.2
+      | @insert a B ha hB ih =>
+        have hb := binary isClosed_singleton hB.isClosed
+          (show Disjoint ({a} : Set Circle) B from disjoint_singleton_left.mpr ha)
+        change Function.Bijective (fun w : H (insert a B) ↦
+          (r (show {a} ⊆ insert a B from singleton_subset_iff.mpr (mem_insert a B)) w,
+           r (subset_insert a B) w)) at hb
+        constructor
+        · intro u v huv
+          apply hb.1
+          apply Prod.ext
+          · exact congrFun huv ⟨a, mem_insert a B⟩
+          · apply ih.1
+            funext x
+            have he := congrFun huv
+              (⟨x.1, mem_insert_of_mem a x.2⟩ : ↥(insert a B))
+            simpa only [rcomp] using he
+        · intro g
+          obtain ⟨v, hv⟩ := ih.2 (fun x : B ↦ g ⟨x.1, mem_insert_of_mem a x.2⟩)
+          obtain ⟨u, hu⟩ := hb.2 (g ⟨a, mem_insert a B⟩, v)
+          refine ⟨u, ?_⟩
+          funext x
+          rcases x with ⟨x, hx⟩
+          rcases hx with rfl | hx
+          · exact congrArg Prod.fst hu
+          · have he := congrFun hv ⟨x, hx⟩
+            have huB := congrArg Prod.snd hu
+            dsimp only at huB
+            dsimp only at he ⊢
+            rw [← huB,
+              rcomp (subset_insert a B) (singleton_subset_iff.mpr hx) u] at he
+            exact he
+    simpa only [A, H, r, t00J02_circleFiberCoordinates,
+      t00J02_circleFiberRestriction] using finite_coordinates A hA
+  refine ⟨hcoords, ?_⟩
+  intro n hn
+  let g := ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+    (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt
+  have hloc : ConstructionTargets.CircleActualLocalization.localization z (n • g) = 0 := by
+    simpa [ConstructionTargets.CircleActualLocalization.localization,
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap, g, map_zsmul] using hn
+  have hg : n • g = 0 := by
+    exact (AddCommGrpCat.mono_iff_injective
+      (ConstructionTargets.CircleActualLocalization.localization z)).mp inferInstance
+      (by simpa using hloc)
+  let cmp := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of Circle) 1
+  let v := ConstructionTargets.ManifoldFundamentalClass.globalGenerator ℤ
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of Circle))
+    ConstructionTargets.CircleHomology.circleH1IsoInt
+  have hc : n • v = 0 := by
+    apply (AddCommGrpCat.mono_iff_injective cmp.hom).mp inferInstance
+    change cmp.hom.hom (n • v) = cmp.hom.hom 0
+    rw [cmp.hom.hom.map_zsmul, map_zero]
+    simpa [cmp, v, g,
+      ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator] using hg
+  have he := congrArg (fun w =>
+    ConstructionTargets.CircleHomology.circleH1IsoInt.hom.hom w) hc
+  dsimp [v, ConstructionTargets.ManifoldFundamentalClass.globalGenerator] at he
+  have hone : ConstructionTargets.CircleHomology.circleH1IsoInt.hom.hom
+      (ConstructionTargets.CircleHomology.circleH1IsoInt.inv.hom 1) = 1 :=
+    ConcreteCategory.congr_hom
+      ConstructionTargets.CircleHomology.circleH1IsoInt.inv_hom_id 1
+  rw [map_zsmul, hone, map_zero] at he
+  simpa using he
 
 /-- **Circle projection naturality (estimated 15--30 lines).** In words,
 restricting the fibre-supported positive global class to a fibre point is its
