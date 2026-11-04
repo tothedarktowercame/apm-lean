@@ -1102,6 +1102,70 @@ theorem apm_t95j06_puncture_noncompact
     @NoncompactSpace {x : B // x ≠ b} inferInstance := by
   sorry
 
+/-- A second-countable Hausdorff space locally modelled on `ℝ` has a countable
+compact cover (estimated 60--100 lines).  Local charts give local compactness;
+`sigmaCompactSpace_of_locallyCompact_secondCountable` and
+`SigmaCompactSpace_iff_exists_compact_covering` then give the cover.  This is
+strictly only the exhaustion input: it makes no classification conclusion. -/
+theorem apm_t95j06_locallyRealLine_compact_cover
+    (X : Type) [TopologicalSpace X] [T2Space X] [SecondCountableTopology X]
+    (hloc : apm_t95j06_IsLocallyRealLine X) :
+    ∃ K : ℕ → Set X, (∀ n, IsCompact (K n)) ∧ (⋃ n, K n) = Set.univ := by
+  sorry
+
+/-- **LIBRARY, compact-set chart thickening (estimated 180--260 lines).**
+In a connected noncompact Hausdorff second-countable one-manifold, every
+compact set lies in an open interval chart with compact closure.  Extend the
+finitely many local charts meeting the compact set along the unique chart
+chain; Hausdorffness prevents branching, connectedness prevents a missed
+component, and noncompactness prevents the chain closing into a circle.  The
+line with two origins fails Hausdorffness, the long line fails second
+countability, a circle fails noncompactness, and two lines fail connectedness.
+This is smaller than classification because it only controls one prescribed
+compact subset. -/
+theorem apm_t95j06_compact_subset_interval_neighborhood
+    (X : Type) [TopologicalSpace X] [ConnectedSpace X] [NoncompactSpace X]
+    [T2Space X] [SecondCountableTopology X]
+    (hloc : apm_t95j06_IsLocallyRealLine X)
+    (K : Set X) (hK : IsCompact K) :
+    ∃ U : Set X, IsOpen U ∧ K ⊆ U ∧ IsCompact (closure U) ∧
+      Nonempty (U ≃ₜ ℝ) := by
+  sorry
+
+/-- A countable compact cover, together with compact-set interval thickening,
+can be reorganized as nested interval domains (estimated 100--160 lines).
+Recursively thicken `closure (U n) ∪ K (n+1)`; compactness supplies the next
+input and dependent choice supplies the sequence.  This lemma is purely the
+exhaustion bookkeeping and assumes the geometric thickening operation. -/
+theorem apm_t95j06_nested_interval_exhaustion
+    (X : Type) [TopologicalSpace X]
+    (K : ℕ → Set X) (hK : ∀ n, IsCompact (K n))
+    (hcover : (⋃ n, K n) = Set.univ)
+    (hthicken : ∀ C : Set X, IsCompact C →
+      ∃ U : Set X, IsOpen U ∧ C ⊆ U ∧ IsCompact (closure U) ∧
+        Nonempty (U ≃ₜ ℝ)) :
+    ∃ U : ℕ → Set X, (∀ n, IsOpen (U n)) ∧
+      (∀ n, closure (U n) ⊆ U (n + 1)) ∧
+      (∀ n, Nonempty (U n ≃ₜ ℝ)) ∧ (⋃ n, U n) = Set.univ := by
+  sorry
+
+/-- **LIBRARY, coherent interval union (estimated 180--260 lines).**  A
+Hausdorff space exhausted by open copies of `ℝ`, each one's closure lying in
+the next, is homeomorphic to `ℝ`.  Reparameterize successive interval charts
+so they agree on an expanding compact interval, then glue them; the closure
+nesting makes the glued map continuous in both directions.  Countability of
+the exhaustion excludes the long-line phenomenon, and Hausdorffness excludes
+the two-origin gluing.  This is a gluing theorem for an already supplied
+exhaustion, not a one-manifold classification. -/
+theorem apm_t95j06_increasing_interval_union_homeomorph_real
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
+    (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) :
+    Nonempty (X ≃ₜ ℝ) := by
+  sorry
+
 /-- **LIBRARY, open one-manifold classification (estimated 300--400 lines).**
 A connected noncompact Hausdorff second-countable locally-real-line space is
 `ℝ`. Extend an oriented chart through a countable locally finite interval
@@ -1114,7 +1178,22 @@ theorem apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real
     (h2 : @T2Space X tX) (hsc : @SecondCountableTopology X tX)
     (hloc : @apm_t95j06_IsLocallyRealLine X tX) :
     Nonempty (@Homeomorph X ℝ tX inferInstance) := by
-  sorry
+  letI : TopologicalSpace X := tX
+  letI : ConnectedSpace X := hconn
+  letI : NoncompactSpace X := hnc
+  letI : T2Space X := h2
+  letI : SecondCountableTopology X := hsc
+  obtain ⟨K, hK, hcover⟩ :=
+    apm_t95j06_locallyRealLine_compact_cover X hloc
+  have hthicken : ∀ C : Set X, IsCompact C →
+      ∃ U : Set X, IsOpen U ∧ C ⊆ U ∧ IsCompact (closure U) ∧
+        Nonempty (U ≃ₜ ℝ) := by
+    intro C hC
+    exact apm_t95j06_compact_subset_interval_neighborhood X hloc C hC
+  obtain ⟨U, hopen, hnested, hreal, hUcover⟩ :=
+    apm_t95j06_nested_interval_exhaustion X K hK hcover hthicken
+  exact apm_t95j06_increasing_interval_union_homeomorph_real
+    X U hopen hnested hreal hUcover
 
 /-- Adding one point back to a punctured compact Hausdorff space recovers the
 original space (estimated 80--120 lines). Apply
@@ -1474,4 +1553,3 @@ theorem apm_t95j06
   · exact fun F hF hFinv => apm_t95J06_bridge_1 H hH F hF hFinv
 
 #print axioms apm_t95j06
-
