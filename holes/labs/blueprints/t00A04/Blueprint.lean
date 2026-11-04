@@ -3052,50 +3052,6 @@ noncomputable def t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontr
       ((TopCat.toSSetObjEquiv (TopCat.of Y) n).symm.trans
         Equiv.ulift.symm))
 
-theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_degreeIso
-    (X : Type u) [TopologicalSpace X] [Small.{0} X]
-    (hs : ∀ n : SimplexCategoryᵒᵖ,
-      ((TopCat.toSSet.obj (TopCat.of (ULift.{u} (Shrink.{0} X)))).obj n) ≃
-        ULift.{u} ((TopCat.toSSet.obj (TopCat.of (Shrink.{0} X))).obj n))
-    (n : ℕ) : Nonempty
-    (((((AlgebraicTopology.singularChainComplexFunctor
-        (ModuleCat.{u} (ZMod 2))).obj
-        (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
-        (TopCat.of (ULift.{u} (Shrink.{0} X)))).X n) ≅
-      (((ModuleCat.uliftFunctor.{u} (ZMod 2)).mapHomologicalComplex
-        (ComplexShape.down ℕ) |>.obj
-        (((AlgebraicTopology.singularChainComplexFunctor
-          (ModuleCat.{0} (ZMod 2))).obj
-          (ModuleCat.of (ZMod 2) (ZMod 2))).obj
-          (TopCat.of (Shrink.{0} X)))).X n)) := by
-  sorry
-
-theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_comm
-    (X : Type u) [TopologicalSpace X] [Small.{0} X]
-    (f : ∀ n, ((((AlgebraicTopology.singularChainComplexFunctor
-        (ModuleCat.{u} (ZMod 2))).obj
-        (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
-        (TopCat.of (ULift.{u} (Shrink.{0} X)))).X n) ≅
-      (((ModuleCat.uliftFunctor.{u} (ZMod 2)).mapHomologicalComplex
-        (ComplexShape.down ℕ) |>.obj
-        (((AlgebraicTopology.singularChainComplexFunctor
-          (ModuleCat.{0} (ZMod 2))).obj
-          (ModuleCat.of (ZMod 2) (ZMod 2))).obj
-          (TopCat.of (Shrink.{0} X)))).X n)) :
-    ∀ i j, (ComplexShape.down ℕ).Rel i j →
-      (f i).hom ≫
-          (((ModuleCat.uliftFunctor.{u} (ZMod 2)).mapHomologicalComplex
-            (ComplexShape.down ℕ)).obj
-            (((AlgebraicTopology.singularChainComplexFunctor
-              (ModuleCat.{0} (ZMod 2))).obj
-              (ModuleCat.of (ZMod 2) (ZMod 2))).obj
-              (TopCat.of (Shrink.{0} X)))).d i j =
-        (((AlgebraicTopology.singularChainComplexFunctor
-          (ModuleCat.{u} (ZMod 2))).obj
-          (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
-          (TopCat.of (ULift.{u} (Shrink.{0} X)))).d i j ≫ (f j).hom := by
-  sorry
-
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso
     (X : Type u) [TopologicalSpace X] [Small.{0} X] :
     Nonempty
@@ -3109,16 +3065,7 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
             (ModuleCat.{0} (ZMod 2))).obj
             (ModuleCat.of (ZMod 2) (ZMod 2))).obj
             (TopCat.of (Shrink.{0} X)))) := by
-  let hs := fun n ↦
-    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv
-      (Shrink.{0} X) n
-  let f := fun n ↦
-    Classical.choice
-      (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_degreeIso
-        X hs n)
-  exact ⟨HomologicalComplex.Hom.isoOfComponents f
-    (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_comm
-      X f)⟩
+  sorry
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_homologyOfChainIso
     (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
