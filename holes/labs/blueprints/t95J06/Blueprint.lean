@@ -4854,6 +4854,7 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_no_finite_end_li
   exact hβ (apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_end
     X U V φ ψ x y hxy β s hφ hψ)
 
+<<<<<<< holes/labs/blueprints/t95J06/Blueprint.lean
 /-- Right-ray half of the combinatorial overlap-shape lemma.  If every
 component is a left or right ray and one component is a right ray, then the
 set is that ray or the union of it with the unique left-ray component.
@@ -4921,6 +4922,49 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_ray_components
           · exact Or.inl har
           · exact Or.inr (lt_of_le_of_lt (le_of_not_gt har) hac)
         exact Or.inr ⟨c, a, hca, by simpa [Set.union_comm] using hcover⟩
+=======
+/-- **R1, forward ray endpoint.** A strictly increasing surjection from a
+right ray onto a left ray approaches the finite endpoint of the left ray. -/
+lemma apm_t95j06_ray_strictMono_surjective_tendsto_leftEndpoint
+    (α δ : ℝ) (f : Set.Ioi α → Set.Iio δ)
+    (hf : StrictMono f) (hsurj : Function.Surjective f) :
+    Filter.Tendsto (fun x => (f x : ℝ)) Filter.atTop (nhdsWithin δ (Set.Iio δ)) := by
+  let e₀ : Set.Ioi α ≃ Set.Iio δ :=
+    Equiv.ofBijective f ⟨hf.injective, hsurj⟩
+  let e : Set.Ioi α ≃o Set.Iio δ :=
+    { e₀ with
+      map_rel_iff' := fun {x y} => hf.le_iff_le }
+  have he : (e : Set.Ioi α → Set.Iio δ) = f := by
+    funext x
+    rfl
+  have ht : Filter.Tendsto f Filter.atTop Filter.atTop := by
+    rw [← he]
+    exact e.tendsto_atTop
+  exact (tendsto_Iio_atTop (a := δ)).mp ht
+
+/-- **R1, inverse ray endpoint.** A strictly increasing surjection from a
+left ray onto a right ray diverges to `+∞` at the finite endpoint. -/
+lemma apm_t95j06_ray_strictMono_surjective_tendsto_atTop
+    (α δ : ℝ) (g : Set.Iio δ → Set.Ioi α)
+    (hg : StrictMono g) (hsurj : Function.Surjective g) :
+    Filter.Tendsto (fun x => (g x : ℝ)) Filter.atTop Filter.atTop := by
+  let e₀ : Set.Iio δ ≃ Set.Ioi α :=
+    Equiv.ofBijective g ⟨hg.injective, hsurj⟩
+  let e : Set.Iio δ ≃o Set.Ioi α :=
+    { e₀ with
+      map_rel_iff' := fun {x y} => hg.le_iff_le }
+  have he : (e : Set.Iio δ → Set.Ioi α) = g := by
+    funext x
+    rfl
+  have ht : Filter.Tendsto g Filter.atTop Filter.atTop := by
+    rw [← he]
+    exact e.tendsto_atTop
+  apply Filter.tendsto_atTop_atTop.mpr
+  intro M
+  let M' : Set.Ioi α := ⟨max M (α + 1), lt_of_lt_of_le (lt_add_one α) (le_max_right _ _)⟩
+  obtain ⟨a, ha⟩ := Filter.tendsto_atTop_atTop.mp ht M'
+  exact ⟨a, fun b hab => (le_max_left M (α + 1)).trans (ha b hab)⟩
+>>>>>>> holes/labs/lemmas/t95J06/leaf_rayglue2.lean
 
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
