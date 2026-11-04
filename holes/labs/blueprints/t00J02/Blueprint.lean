@@ -167,7 +167,7 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D1
     Function.Bijective (t00J02_fiberCoordinates f y) := by
   sorry
 
-/-- **D2 (localization coefficient is a unit, LIBRARY).**  In words: at every
+/- **D2 (localization coefficient is a unit, LIBRARY).**  In words: at every
 point `y` of a compact connected surface with `H₂ ≅ ℤ`, the localization of the
 global generator is `±1` times the canonical chart generator of the point-local
 group.  The existing `localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator`
@@ -178,6 +178,56 @@ needed: on two disjoint tori the localization of a class `(1,0)` vanishes at
 points of the second torus (there `H₂ ≅ ℤ²`, so the hypothesis also fails).
 (claude-14: replaces codex-15's D2a/D2b, which both reduced to
 this coefficient.) -/
+/-- **D2.1 (absolute localization coefficient transport, estimated 300--600
+lines; LIBRARY).**  In words: on a path-connected surface, the absolute value
+of the coefficient expressing a fixed global top class in the canonical
+chart-local generator is independent of the point.
+
+Why true: transport local homology classes along a path covered by finitely
+many overlapping manifold charts.  On an overlap, the two chart generators
+differ by the transition unit `±1`; naturality of `localizationMap` transports
+the global class itself, so coefficients agree up to sign.  Chain the finite
+overlap cover along a path.  Raw coefficients need not be equal because
+`chartAt` may reverse orientation.  Path connectedness is essential: for two
+disjoint tori the class `(1,0)` has coefficient one on the first component and
+zero on the second. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_abs_constant
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (y z : S) :
+    |(ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
+        S e).localCoefficient y| =
+      |(ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
+        S e).localCoefficient z| := by
+  sorry
+
+/-- **D2.2 (one-point primitivity, estimated 350--700 lines; LIBRARY).**  In
+words: the chosen generator of global `H₂ ≅ ℤ` localizes primitively at
+at least one point of a compact connected boundaryless surface.
+
+Why true: represent the inverse image of `1 : ℤ` under `e` by a finite
+singular cycle.  If every point-local coefficient were divisible by a common
+integer greater than one (or all were zero), finite chart excision and the
+compact-support reconstruction of the global top class would make the global
+cycle divisible by that integer in `H₂(S)`, contradicting that it maps to
+`1`.  Equivalently this is the one-point normalization step in the manifold
+fundamental-class theorem.  Compactness is essential for the finite
+reconstruction, and the disconnected two-torus example shows why the result
+must be paired with component transport rather than asserted componentwise
+for an arbitrary global class. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_one_point
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) :
+    ∃ z : S,
+      (ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
+          S e).localCoefficient z = 1 ∨
+      (ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
+          S e).localCoefficient z = -1 := by
+  sorry
+
 theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
@@ -188,7 +238,31 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2
         ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
           (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
             (TopCat.of S) 2 e) := by
-  sorry
+  let D := ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso S e
+  obtain ⟨z, hz | hz⟩ :=
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_one_point e
+  · refine ⟨D.localCoefficient y, ?_, D.localization_eq y⟩
+    have habs :=
+      t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_abs_constant e y z
+    rw [hz, abs_one] at habs
+    change |D.localCoefficient y| = 1 at habs
+    by_cases hnonneg : 0 ≤ D.localCoefficient y
+    · left
+      simpa [abs_of_nonneg hnonneg] using habs
+    · right
+      rw [abs_of_nonpos (le_of_not_ge hnonneg)] at habs
+      omega
+  · refine ⟨D.localCoefficient y, ?_, D.localization_eq y⟩
+    have habs :=
+      t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_abs_constant e y z
+    rw [hz, abs_neg, abs_one] at habs
+    change |D.localCoefficient y| = 1 at habs
+    by_cases hnonneg : 0 ≤ D.localCoefficient y
+    · left
+      simpa [abs_of_nonneg hnonneg] using habs
+    · right
+      rw [abs_of_nonpos (le_of_not_ge hnonneg)] at habs
+      omega
 
 theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2a
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
@@ -478,6 +552,121 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F1
   apply hD.2.1
   rw [sub_smul, hcoeff, sub_self]
 
+abbrev t00J02_circleFiberRelativeHomology
+    (ℓ : C(Circle, Circle)) (z : Circle) :=
+  (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+    ({u : Circle | ℓ u = z}ᶜ)).homology 1
+
+noncomputable def t00J02_circleFiberRestriction
+    (ℓ : C(Circle, Circle)) (z : Circle) (t : {u : Circle // ℓ u = z}) :
+    t00J02_circleFiberRelativeHomology ℓ z ⟶
+      (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+          (t : Circle))).homology 1 :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap
+      ({u : Circle | ℓ u = z}ᶜ)
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+        (t : Circle))
+      (ContinuousMap.id Circle) (by
+        intro u hu hut
+        have hut' : u = (t : Circle) := by simpa using hut
+        subst u
+        exact hu t.property)) 1
+
+noncomputable def t00J02_circleFiberPushforward
+    (ℓ : C(Circle, Circle)) (z : Circle) :
+    t00J02_circleFiberRelativeHomology ℓ z ⟶
+      (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)).homology 1 :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap
+      ({u : Circle | ℓ u = z}ᶜ)
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z)
+      ℓ (by intro u hu; exact hu)) 1
+
+/-- The chart-free one-dimensional local degree of a circle map at a point of
+one finite fibre.  As in `t00J02_IsLocalDegree`, the witnessing relative class
+is the basis vector supported at that point, and its pushforward is `n` times
+the localized positive circle generator. -/
+def t00J02_IsCircleLocalDegree
+    (ℓ : C(Circle, Circle)) (z : Circle) (t : {u : Circle // ℓ u = z})
+    (n : ℤ) : Prop :=
+  ∃ a : t00J02_circleFiberRelativeHomology ℓ z,
+    t00J02_circleFiberRestriction ℓ z t a =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap (t : Circle) 1
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) ∧
+    (∀ t' : {u : Circle // ℓ u = z}, t' ≠ t →
+      t00J02_circleFiberRestriction ℓ z t' a = 0) ∧
+    t00J02_circleFiberPushforward ℓ z a = n •
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt)
+
+/-- **Finite circle fibre.**  If `c ∘ ℓ = f ∘ γ`, `γ` is an embedding,
+and the surface fibre over `c z` is finite, then the fibre of `ℓ`
+over `z` is finite.  Map `t` to `γ t`; commutation puts it in the surface
+fibre, and injectivity of `γ` makes this map injective.  Estimated proof:
+20--40 lines; not LIBRARY. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_finite
+    {S : Type} [TopologicalSpace S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (γ : C(Circle, S)) (hγ : Topology.IsEmbedding γ)
+    (ℓ : C(Circle, Circle)) (hℓ : c.comp ℓ = f.comp γ)
+    (z : Circle) [Finite {x : S // f x = c z}] :
+    Finite {t : Circle // ℓ t = z} := by
+  sorry
+
+/-- **Transverse pointwise comparison and coherent normal sign.**  For an
+embedded occupied component parametrized by `γ`, transversality supplies a
+two-sided tubular product model.  It produces the actual chart-free circle
+local degrees `q`; at every fibre point the 2D degree is the corresponding
+1D degree times one normal sign.  Connectedness of `Circle` and nonvanishing
+of the transverse normal derivative make that sign constant, and reindexing
+through the embeddings gives the displayed sum.  The fold has `q = +1,-1`;
+the identity has one `q = 1`.  Estimated proof: 280--480 lines; **LIBRARY**. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_transverse
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (hf : ContMDiff apm_t00j02_I2 apm_t00j02_I2 ∞ f)
+    (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
+    (htrans : apm_t00j02_transverse f c)
+    (z : Circle) [Fintype {x : S // f x = c z}]
+    (d : {x : S // f x = c z} → ℤ)
+    (hd : ∀ x, t00J02_IsLocalDegree e f (c z) x (d x))
+    (k : ConstructionTargets.T00J02Closure.OccupiedRegularFiberComponent
+      f c (c z) ⟨z, rfl⟩)
+    (γ : C(Circle, S)) (hγ : Topology.IsEmbedding γ)
+    (hγrange : range γ = k.1.1)
+    (ℓ : C(Circle, Circle)) (hℓ : c.comp ℓ = f.comp γ)
+    [Fintype {t : Circle // ℓ t = z}] :
+    ∃ q : {t : Circle // ℓ t = z} → ℤ,
+      (∀ t, t00J02_IsCircleLocalDegree ℓ z t (q t)) ∧
+      ∃ ε : ℤ, (ε = 1 ∨ ε = -1) ∧
+        ConstructionTargets.T00J02Closure.componentLocalDegreeSum
+          (ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex
+            f c (c z) ⟨z, rfl⟩) d k = ε * ∑ t, q t := by
+  sorry
+
+/-- **Circle local-degree localization.**  For a circle self-map with finite
+fibre over `z`, the homological circle degree is the sum of its chart-free
+point-local degrees.  Sum the fibre-relative basis classes, use finite-point
+excision/Mayer--Vietoris to identify their sum with the localized global
+circle generator, then use naturality and
+`T00J02Closure.circleDegree_eq_homologyMap`.  This permits degree-zero folds
+and gives degree one for the identity.  Estimated proof: 140--240 lines;
+**LIBRARY**. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_circleSum
+    (ℓ : C(Circle, Circle)) (z : Circle) [Fintype {t : Circle // ℓ t = z}]
+    (q : {t : Circle // ℓ t = z} → ℤ)
+    (hq : ∀ t, t00J02_IsCircleLocalDegree ℓ z t (q t)) :
+    ConstructionTargets.T00J02Closure.circleDegree ℓ = ∑ t, q t := by
+  sorry
+
 /-- **F2 transverse component comparison (LIBRARY, estimated 450--800 lines).**
 Let `K` be a component of `f ⁻¹' range c` meeting the fibre over `y`, parametrized
 by an embedding `γ : Circle → S` with range `K`, and let `ℓ` be the circle map
@@ -513,7 +702,18 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embedded
         (ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex
           f c y hy) d k =
         ε * ConstructionTargets.T00J02Closure.circleDegree ℓ := by
-  sorry
+  rcases hy with ⟨z, rfl⟩
+  letI : Finite {t : Circle // ℓ t = z} :=
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_finite
+      f c γ hγ ℓ hℓ z
+  letI : Fintype {t : Circle // ℓ t = z} := Fintype.ofFinite _
+  obtain ⟨q, hq, ε, hε, hsum⟩ :=
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_transverse
+      e f hf c hc hcsmooth htrans z d hd k γ hγ hγrange ℓ hℓ
+  refine ⟨ε, hε, ?_⟩
+  rw [hsum,
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_circleSum
+      ℓ z q hq]
 
 /-- **F2: component sums of actual local degrees vanish.**  Transverse
 product coordinates compare the sum of point-local degrees on an occupied
