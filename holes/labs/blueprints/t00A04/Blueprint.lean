@@ -1109,7 +1109,94 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_model
       t00A04_HatcherConclusion _ d A)
     (A : Set E) (hA : IsCompact A) :
     t00A04_HatcherConclusion E (Module.finrank ℝ E) A := by
-  sorry
+  classical
+  let d := Module.finrank ℝ E
+  let e : E ≃L[ℝ] EuclideanSpace ℝ (Fin d) :=
+    ContinuousLinearEquiv.ofFinrankEq (by simp [d])
+  let B : Set (EuclideanSpace ℝ (Fin d)) := e '' A
+  have hB : IsCompact B := hA.image e.continuous
+  have hcon := heuclid d B hB
+  have hef : Set.MapsTo e Aᶜ Bᶜ := by
+    intro x hx hxe
+    rcases hxe with ⟨a, ha, hea⟩
+    exact hx ((e.injective hea).symm ▸ ha)
+  have heg : Set.MapsTo e.symm Bᶜ Aᶜ := by
+    intro y hy hya
+    apply hy
+    exact ⟨e.symm y, hya, e.apply_symm_apply y⟩
+  let f : C(E, EuclideanSpace ℝ (Fin d)) := ⟨e, e.continuous⟩
+  let g : C(EuclideanSpace ℝ (Fin d), E) := ⟨e.symm, e.symm.continuous⟩
+  let F (n : ℕ) := HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Aᶜ Bᶜ f hef) n
+  let G (n : ℕ) := HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Bᶜ Aᶜ g heg) n
+  have hGF (n : ℕ) (c : t00A04_ModTwoLocalHomology E A n) : G n (F n c) = c := by
+    change (F n ≫ G n) c = c
+    rw [← ConstructionTargets.CoefficientPairNaturality.homology_comp]
+    convert ConcreteCategory.congr_hom
+      (ConstructionTargets.CoefficientPairNaturality.homology_id (ZMod 2) Aᶜ n) c using 1
+    · have hcomp : g.comp f = ContinuousMap.id E := by ext x; simp [f, g]
+      simpa only [hcomp]
+  have hFG (n : ℕ) (c : t00A04_ModTwoLocalHomology _ B n) : F n (G n c) = c := by
+    change (G n ≫ F n) c = c
+    rw [← ConstructionTargets.CoefficientPairNaturality.homology_comp]
+    convert ConcreteCategory.congr_hom
+      (ConstructionTargets.CoefficientPairNaturality.homology_id (ZMod 2) Bᶜ n) c using 1
+    · have hcomp : f.comp g = ContinuousMap.id (EuclideanSpace ℝ (Fin d)) := by
+        ext x
+        simp [f, g]
+      simpa only [hcomp]
+  have hpoint (x : E) (hx : x ∈ A) (n : ℕ)
+      (c : t00A04_ModTwoLocalHomology E A n) :
+      t00A04_modTwo_pointRestriction _ B (e x) ⟨x, hx, rfl⟩ n (F n c) =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2)
+            ({x} : Set E)ᶜ ({e x} : Set _)ᶜ f (by
+              intro y hy hmem
+              exact hy (Set.mem_singleton_iff.mpr
+                (e.injective (Set.mem_singleton_iff.mp hmem))))) n
+          (t00A04_modTwo_pointRestriction E A x hx n c) := by
+    change
+      ((F n ≫ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Bᶜ ({e x} : Set _)ᶜ
+          (ContinuousMap.id _) _) n) c) =
+      ((HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Aᶜ ({x} : Set E)ᶜ
+          (ContinuousMap.id _) _) n ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2)
+            ({x} : Set E)ᶜ ({e x} : Set _)ᶜ f _) n) c)
+    rw [← ConstructionTargets.CoefficientPairNaturality.homology_comp,
+      ← ConstructionTargets.CoefficientPairNaturality.homology_comp]
+    rfl
+  constructor
+  · intro i hi
+    constructor
+    intro a b
+    apply (fun h ↦ (hGF i a).symm.trans ((congrArg (fun z ↦ G i z) h).trans (hGF i b)))
+    exact hcon.vanish_above i hi |>.elim _ _
+  · obtain ⟨c, hc⟩ := hcon.exists_everywhere_nonzero
+    refine ⟨G d c, ?_⟩
+    intro x hx hzero
+    have hcpoint := hc (e x) ⟨x, hx, rfl⟩
+    apply hcpoint
+    have hp := hpoint x hx d (G d c)
+    rw [hFG d c, hzero, map_zero] at hp
+    exact hp
+  · intro c
+    constructor
+    · intro hc x hx
+      subst c
+      exact map_zero _
+    · intro hc
+      have hFc : F d c = 0 := by
+        apply (hcon.eq_zero_iff_pointwise (F d c)).2
+        intro y hy
+        obtain ⟨x, hx, rfl⟩ := hy
+        have hp := hpoint x hx d c
+        rw [hc x hx, map_zero] at hp
+        exact hp
+      exact (hGF d c).symm.trans (by rw [hFc]; exact map_zero _)
 
 /-- Excision for a compact support along an open embedding.  Besides the
 group isomorphism supplied by singular excision, this records its naturality
