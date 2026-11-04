@@ -341,6 +341,84 @@ theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_righ
   rw [hid]
   exact (Category.id_comp _).symm
 
+theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_homology
+    (X : Type) [TopologicalSpace X] (A B : Set X) (n : ℕ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n ≫
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso
+        (ZMod 2) A n).hom =
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.intersectionRelativeIso
+        (ZMod 2) A B n).hom ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) A
+          (ContinuousMap.id X) Set.inter_subset_left) n ∧
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n ≫
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso
+        (ZMod 2) B n).hom =
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.intersectionRelativeIso
+        (ZMod 2) A B n).hom ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) B
+          (ContinuousMap.id X) Set.inter_subset_right) n := by
+  have hA : (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso (ZMod 2) A n).hom =
+      HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap (ZMod 2) A) n := rfl
+  have hB : (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso (ZMod 2) B n).hom =
+      HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap (ZMod 2) B) n := rfl
+  have hI : (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.intersectionRelativeIso (ZMod 2) A B n).hom =
+      HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap (ZMod 2) A B) n := rfl
+  rw [hA, hB, hI]
+  constructor
+  · have h := congrArg (fun φ => HomologicalComplex.homologyMap φ n) (t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_left X A B)
+    simp only [HomologicalComplex.homologyMap_comp] at h
+    exact h
+  · have h := congrArg (fun φ => HomologicalComplex.homologyMap φ n) (t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_right X A B)
+    simp only [HomologicalComplex.homologyMap_comp] at h
+    exact h
+
+theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_homology
+    (X : Type) [TopologicalSpace X] (A B : Set X)
+    (hA : IsOpen A) (hB : IsOpen B) (n : ℕ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftToUnionRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n ≫
+      (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso
+        (ZMod 2) A B hA hB n).hom =
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso
+        (ZMod 2) A n).hom ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) A (A ∪ B)
+          (ContinuousMap.id X) Set.subset_union_left) n ∧
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightToUnionRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n ≫
+      (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso
+        (ZMod 2) A B hA hB n).hom =
+      (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso
+        (ZMod 2) B n).hom ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) B (A ∪ B)
+          (ContinuousMap.id X) Set.subset_union_right) n := by
+  have hA : (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso (ZMod 2) A n).hom =
+      HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap (ZMod 2) A) n := rfl
+  have hB : (ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso (ZMod 2) B n).hom =
+      HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap (ZMod 2) B) n := rfl
+  rw [ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso_hom,
+    hA, hB]
+  constructor
+  · have h := congrArg (fun φ => HomologicalComplex.homologyMap φ n) (t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_left X A B)
+    simp only [HomologicalComplex.homologyMap_comp] at h
+    exact h.trans (HomologicalComplex.homologyMap_comp _ _ _)
+  · have h := congrArg (fun φ => HomologicalComplex.homologyMap φ n) (t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_right X A B)
+    simp only [HomologicalComplex.homologyMap_comp] at h
+    exact h.trans (HomologicalComplex.homologyMap_comp _ _ _)
+
 theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal
     (X : Type) [TopologicalSpace X] (A B : Set X)
     (hA : IsOpen A) (hB : IsOpen B) (n : ℕ)
@@ -368,6 +446,11 @@ theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal
     t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_left X A B
   have hunionB :=
     t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_right X A B
+  have hinter :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_homology X A B n
+  have hunion :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_homology
+      X A B hA hB n
   let Q := t00A04_relativeMV_middle_aux_sumQuotient X A B
   have hs := t00A04_relativeMV_middle_aux_chain_shortExact X A B
   have _ : Q = Q := rfl
@@ -376,6 +459,8 @@ theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal
   have _ := hinterB
   have _ := hunionA
   have _ := hunionB
+  have _ := hinter
+  have _ := hunion
   sorry
 
 /-- Generic set transport for the De Morgan rewrites: the set arguments of
@@ -526,10 +611,17 @@ theorem t00A04_relativeMV_injective_aux_small_quotient_kernel
     t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_left X A B
   have hunionB :=
     t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_right X A B
+  have hinter :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_homology X A B n
+  have hunion :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_homology
+      X A B hA hB n
   have _ := hinterA
   have _ := hinterB
   have _ := hunionA
   have _ := hunionB
+  have _ := hinter
+  have _ := hunion
   sorry
 
 theorem t00A04_relativeMV_injective_aux_complement_rewrite_aux_transport
