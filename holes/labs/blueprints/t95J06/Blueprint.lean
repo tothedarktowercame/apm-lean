@@ -7481,6 +7481,140 @@ lemma apm_t95j06_increasing_interval_union_boundedCoordinate_continuous
       filter_upwards [hnhds] with z hz
       exact (hfmono hz.le).trans_lt (hfw ▸ hqb)
 
+/-- **S3.** A continuous injective real-valued function on a space covered by
+open real-line charts is an open map. -/
+lemma apm_t95j06_isOpenMap_of_locally_real
+    (X : Type) [TopologicalSpace X] (F : X → ℝ) (hc : Continuous F)
+    (hi : Function.Injective F)
+    (hloc : ∀ x : X, ∃ W : Set X, IsOpen W ∧ x ∈ W ∧ Nonempty (W ≃ₜ ℝ)) :
+    IsOpenMap F := by
+  intro O hO
+  rw [Metric.isOpen_iff]
+  rintro _ ⟨x, hxO, rfl⟩
+  obtain ⟨W, hW, hxW, ⟨φ⟩⟩ := hloc x
+  let e : ℝ → X := fun s => ((φ.symm s : W) : X)
+  have he : Continuous e := continuous_subtype_val.comp φ.symm.continuous
+  let g : ℝ → ℝ := fun s => F (e s)
+  have hgc : Continuous g := hc.comp he
+  have hgi : Function.Injective g := by
+    intro s t h
+    have h1 : e s = e t := hi h
+    have h2 : φ.symm s = φ.symm t := Subtype.ext h1
+    simpa using congrArg φ h2
+  set t0 := φ ⟨x, hxW⟩ with ht0
+  have het0 : e t0 = x := by simp [e, t0]
+  have hpre : IsOpen (e ⁻¹' O) := hO.preimage he
+  have ht0O : t0 ∈ e ⁻¹' O := by simp only [Set.mem_preimage, het0]; exact hxO
+  obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp hpre t0 ht0O
+  have hsub : g '' Set.Ioo (t0 - r) (t0 + r) ⊆ F '' O := by
+    rintro _ ⟨s, hs, rfl⟩
+    refine ⟨e s, hball ?_, rfl⟩
+    rw [Metric.mem_ball, Real.dist_eq, abs_lt]
+    constructor <;> linarith [hs.1, hs.2]
+  have hab : t0 - r ≤ t0 + r := by linarith
+  have hgx : g t0 = F x := by simp only [g, het0]
+  rcases hgc.strictMono_of_inj hgi with hm | hm
+  · have hI := intermediate_value_Ioo hab hgc.continuousOn
+    have hlo : g (t0 - r) < g t0 := hm (by linarith)
+    have hhi : g t0 < g (t0 + r) := hm (by linarith)
+    refine ⟨min (g t0 - g (t0 - r)) (g (t0 + r) - g t0), lt_min (by linarith) (by linarith), ?_⟩
+    intro y hy
+    rw [Metric.mem_ball, Real.dist_eq, abs_lt, lt_min_iff] at hy
+    obtain ⟨h1, h2, h3⟩ := hy
+    have m1 := min_le_left (g t0 - g (t0 - r)) (g (t0 + r) - g t0)
+    apply hsub; apply hI
+    rw [← hgx] at h1 h2 h3
+    constructor <;> linarith
+  · have hI := intermediate_value_Ioo' hab hgc.continuousOn
+    have hlo : g t0 < g (t0 - r) := hm (by linarith)
+    have hhi : g (t0 + r) < g t0 := hm (by linarith)
+    refine ⟨min (g (t0 - r) - g t0) (g t0 - g (t0 + r)), lt_min (by linarith) (by linarith), ?_⟩
+    intro y hy
+    rw [Metric.mem_ball, Real.dist_eq, abs_lt, lt_min_iff] at hy
+    obtain ⟨h1, h2, h3⟩ := hy
+    have m1 := min_le_right (g (t0 - r) - g t0) (g t0 - g (t0 + r))
+    apply hsub; apply hI
+    rw [← hgx] at h1 h2 h3
+    constructor <;> linarith
+
+/-- An ord-connected real set with a strictly monotone surjection to `ℝ` is
+homeomorphic to `ℝ`. -/
+lemma apm_t95j06_ordConnected_homeomorph_real_of_strictMono
+    (S : Set ℝ) [S.OrdConnected] (g : S → ℝ) (hg : StrictMono g)
+    (hs : Function.Surjective g) : Nonempty (S ≃ₜ ℝ) :=
+  ⟨(StrictMono.orderIsoOfSurjective g hg hs).toHomeomorph⟩
+
+/-- A nonempty open preconnected real set is homeomorphic to `ℝ`. -/
+lemma apm_t95j06_open_preconnected_homeomorph_real
+    (S : Set ℝ) (hSopen : IsOpen S) (hSne : S.Nonempty)
+    (hSconn : _root_.IsPreconnected S) : Nonempty (S ≃ₜ ℝ) := by
+  by_cases hu : S = Set.univ
+  · subst hu; exact ⟨Homeomorph.Set.univ ℝ⟩
+  rcases apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_open_interval_shape S hSopen hSne hu hSconn with
+    ⟨a, b, rfl⟩ | ⟨a, rfl⟩ | ⟨b, rfl⟩
+  · obtain ⟨c, hc⟩ := hSne
+    have hab : a < b := hc.1.trans hc.2
+    -- s ↦ log ((s - a) / (b - s))
+    refine apm_t95j06_ordConnected_homeomorph_real_of_strictMono _
+      (fun s => Real.log ((s.1 - a) / (b - s.1))) ?_ ?_
+    · intro s t hst
+      have hs1 := s.2.1; have hs2 := s.2.2; have ht1 := t.2.1; have ht2 := t.2.2
+      have hst' : s.1 < t.1 := hst
+      apply Real.log_lt_log (div_pos (by linarith) (by linarith))
+      rw [div_lt_div_iff₀ (by linarith) (by linarith)]
+      nlinarith
+    · intro y
+      have hE := Real.exp_pos y
+      refine ⟨⟨(a + b * Real.exp y) / (1 + Real.exp y), ?_, ?_⟩, ?_⟩
+      · rw [lt_div_iff₀ (by linarith)]; nlinarith
+      · rw [div_lt_iff₀ (by linarith)]; nlinarith
+      · show Real.log (((a + b * Real.exp y) / (1 + Real.exp y) - a) /
+          (b - (a + b * Real.exp y) / (1 + Real.exp y))) = y
+        have h1 : (a + b * Real.exp y) / (1 + Real.exp y) - a =
+            (b - a) * Real.exp y / (1 + Real.exp y) := by
+          field_simp; ring
+        have h2 : b - (a + b * Real.exp y) / (1 + Real.exp y) =
+            (b - a) / (1 + Real.exp y) := by
+          field_simp; ring
+        rw [h1, h2, div_div_div_cancel_right₀ (by linarith),
+          mul_div_cancel_left₀ _ (by linarith), Real.log_exp]
+  · refine apm_t95j06_ordConnected_homeomorph_real_of_strictMono _
+      (fun s => Real.log (s.1 - a)) ?_ ?_
+    · intro s t hst
+      have hs1 : a < s.1 := s.2
+      have hst' : s.1 < t.1 := hst
+      exact Real.log_lt_log (by linarith) (by linarith)
+    · intro y
+      refine ⟨⟨a + Real.exp y, by
+        show a < a + Real.exp y; linarith [Real.exp_pos y]⟩, ?_⟩
+      show Real.log (a + Real.exp y - a) = y
+      rw [add_sub_cancel_left, Real.log_exp]
+  · refine apm_t95j06_ordConnected_homeomorph_real_of_strictMono _
+      (fun s => -Real.log (b - s.1)) ?_ ?_
+    · intro s t hst
+      have ht1 : t.1 < b := t.2
+      have hst' : s.1 < t.1 := hst
+      have := Real.log_lt_log (show 0 < b - t.1 by linarith) (show b - t.1 < b - s.1 by linarith)
+      linarith
+    · intro y
+      refine ⟨⟨b - Real.exp (-y), by
+        show b - Real.exp (-y) < b; linarith [Real.exp_pos (-y)]⟩, ?_⟩
+      show -Real.log (b - (b - Real.exp (-y))) = y
+      rw [sub_sub_cancel, Real.log_exp, neg_neg]
+
+/-- **S4.** A connected space with a continuous injective open map to `ℝ` is
+homeomorphic to `ℝ`. -/
+lemma apm_t95j06_homeomorph_real_of_isOpenMap
+    (X : Type) [TopologicalSpace X] [ConnectedSpace X] (F : X → ℝ)
+    (hc : Continuous F) (hi : Function.Injective F) (ho : IsOpenMap F) :
+    Nonempty (X ≃ₜ ℝ) := by
+  have hemb : Topology.IsOpenEmbedding F :=
+    Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap hc hi ho
+  obtain ⟨x0⟩ := (inferInstance : Nonempty X)
+  obtain ⟨e⟩ := apm_t95j06_open_preconnected_homeomorph_real (Set.range F)
+    ho.isOpen_range ⟨F x0, x0, rfl⟩ (isPreconnected_range hc)
+  exact ⟨hemb.toIsEmbedding.toHomeomorph.trans e⟩
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
@@ -7490,13 +7624,43 @@ theorem apm_t95j06_increasing_interval_union_homeomorph_real
     Nonempty (X ≃ₜ ℝ) := by
   haveI : ConnectedSpace X :=
     apm_t95j06_increasing_interval_union_connected_aux X U hnested hreal hcover
-  haveI : SecondCountableTopology X :=
-    apm_t95j06_increasing_interval_union_secondCountable_aux
-      X U hopen hreal hcover
-  have hloc : apm_t95j06_IsLocallyRealLine X :=
-    apm_t95j06_increasing_interval_union_locallyReal_aux
-      X U hopen hreal hcover
-  sorry
+  have hmem : ∀ x : X, ∃ n, x ∈ U n := fun x => by
+    have hx : x ∈ ⋃ n, U n := hcover ▸ Set.mem_univ x
+    simpa using hx
+  let f : ℕ → X → ℝ := fun m =>
+    apm_t95j06_increasing_interval_union_boundedCoordinate X U hnested hreal hcover m
+  have hbound : ∀ m x, |f m x| ≤ 2 := by
+    intro m x
+    obtain ⟨h1, h2⟩ :=
+      apm_t95j06_increasing_interval_union_boundedCoordinate_mem_Icc
+        X U hnested hreal hcover m x
+    rw [abs_le]
+    constructor <;> linarith [Real.pi_le_four]
+  let F : X → ℝ := fun x => ∑' m : ℕ, (1 / 2 : ℝ) ^ m * f m x
+  have hFc : Continuous F :=
+    apm_t95j06_continuous_geometric_tsum X f
+      (fun m => apm_t95j06_increasing_interval_union_boundedCoordinate_continuous
+        X U hopen hnested hreal hcover m) hbound
+  have hFi : Function.Injective F := by
+    letI := apm_t95j06_increasing_interval_union_linearOrder X U hnested hreal hcover
+    refine (apm_t95j06_strictMono_geometric_tsum X f
+      (fun m => apm_t95j06_increasing_interval_union_boundedCoordinate_monotone
+        X U hnested hreal hcover m) ?_ hbound).injective
+    intro x y hxy
+    obtain ⟨a, ha⟩ := hmem x
+    obtain ⟨b, hb⟩ := hmem y
+    exact ⟨max a b,
+      apm_t95j06_increasing_interval_union_boundedCoordinate_strictMonoOn
+        X U hnested hreal hcover (max a b)
+        (apm_t95j06_increasing_interval_union_mono_of_le X U hnested
+          (le_max_left a b) ha)
+        (apm_t95j06_increasing_interval_union_mono_of_le X U hnested
+          (le_max_right a b) hb) hxy⟩
+  have hFo : IsOpenMap F :=
+    apm_t95j06_isOpenMap_of_locally_real X F hFc hFi (fun x => by
+      obtain ⟨n, hn⟩ := hmem x
+      exact ⟨U n, hopen n, hn, hreal n⟩)
+  exact apm_t95j06_homeomorph_real_of_isOpenMap X F hFc hFi hFo
 
 /-- **LIBRARY, open one-manifold classification (estimated 300--400 lines).**
 A connected noncompact Hausdorff second-countable locally-real-line space is
