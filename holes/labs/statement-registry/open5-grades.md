@@ -46,3 +46,16 @@ Outside grade (read-only Claude subagent, 2026-11-04): faithful. (a) every smoot
 separating embedded circle; (b) on a nonseparating one every real is a period (stronger than the bare "no",
 and the complete answer). Integrability is part of the conclusion, so the integral's zero branch cannot fake an
 answer. The orientation of X is used (on RP² the Möbius core does not separate but H¹ = 0). True; not vacuous.
+
+## t94J07
+
+Repair by codex-10 in two rounds (packets open5/t94J07.md, t94J07-r2.md). Restored per the triage: X oriented,
+ω of degree dim X. Round 1 stated Y boundaryless (narrower: the print restricts only ∂X); claude-14 sent it back,
+and round 2 models Y by an arbitrary ModelWithCorners J, with smoothness, closedness (extDerivWithin on extended
+chart targets) and pullback defined in Mathlib's extended charts; `pullback_self_eq` ties them to the shared
+vocabulary for boundaryless Y. Homotopy: smooth H : X × ℝ → Y with slices f, g.
+
+Outside grade (read-only Claude subagent, 2026-11-04): faithful, no defects. Closedness on chart targets (open in
+the convex range of J) is dω = 0 including boundary and corner points, chart-independent; X × ℝ homotopies are
+equivalent to X × [0,1]; integrability is proved in the conclusion, so the zero branch cannot make the equality
+trivial; true (homotopy operator plus Stokes on closed X); degenerate n = 0, m = 0, n > m, empty X checked.

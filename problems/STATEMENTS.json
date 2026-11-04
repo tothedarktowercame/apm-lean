@@ -6944,6 +6944,26 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t94J07": {
+   "decls": [
+    "apm_t94j07"
+   ],
+   "sha256": "c31024783ef4e80a7475fd4dd62b219fdf9d1a2a5bc08a528c9ae0da67652f99",
+   "defs": [
+    "E",
+    "IsClosedForm",
+    "IsSmoothForm",
+    "SmoothHomotopy",
+    "inChart",
+    "pullback"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-04)",
+   "evidence": "holes/labs/statement-registry/open5-grades.md",
+   "prelim_defect": null,
+   "rev": "9fb26247f",
+   "approved_at": "2026-11-04T00:27:49Z"
+  },
   "t94J08": {
    "decls": [
     "apm_t94j08"
