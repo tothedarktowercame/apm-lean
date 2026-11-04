@@ -356,6 +356,115 @@ theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core
   exact apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_orbitQuotient
     F hF x A
 
+abbrev apm_t95j06_hopf_component
+    (F : Set apm_t95j06_S5) (x : F) :=
+  {y : F // y ∈ connectedComponent x}
+
+def apm_t95j06_hopf_coordinate
+    {F : Set apm_t95j06_S5} {x : F} (k : Fin 3)
+    (y : apm_t95j06_hopf_component F x) : ℂ :=
+  y.1.1.1 k
+
+def apm_t95j06_hopf_slice
+    {F : Set apm_t95j06_S5} {x : F} (k : Fin 3) :
+    Set (apm_t95j06_hopf_component F x) :=
+  {y | apm_t95j06_hopf_coordinate k y ≠ 0}
+
+/-- Every point of the unit sphere has a nonzero complex coordinate. -/
+lemma apm_t95j06_hopf_exists_coordinate_ne_zero
+    {F : Set apm_t95j06_S5} {x : F}
+    (y : apm_t95j06_hopf_component F x) :
+    ∃ k : Fin 3, apm_t95j06_hopf_coordinate k y ≠ 0 := by
+  by_contra h
+  push_neg at h
+  have hyzero : y.1.1.1 = 0 := by
+    ext k
+    exact h k
+  have hsphere := y.1.1.2
+  rw [Metric.mem_sphere, dist_zero_right, hyzero, norm_zero] at hsphere
+  norm_num at hsphere
+
+/-- A nonzero-coordinate Hopf slice is open in the component. -/
+lemma apm_t95j06_hopf_slice_isOpen
+    {F : Set apm_t95j06_S5} {x : F} (k : Fin 3) :
+    IsOpen (apm_t95j06_hopf_slice (F := F) (x := x) k) := by
+  have hcoord : Continuous
+      (apm_t95j06_hopf_coordinate (F := F) (x := x) k) := by
+    change Continuous (fun y : apm_t95j06_hopf_component F x => y.1.1.1 k)
+    fun_prop
+  rw [show apm_t95j06_hopf_slice (F := F) (x := x) k =
+      apm_t95j06_hopf_coordinate k ⁻¹' ({0}ᶜ : Set ℂ) by
+    ext y
+    simp [apm_t95j06_hopf_slice]]
+  exact isClosed_singleton.isOpen_compl.preimage hcoord
+
+/-- The scalar action preserves every nonzero-coordinate slice. -/
+lemma apm_t95j06_hopf_slice_invariant
+    {F : Set apm_t95j06_S5} {x : F} {B : Type} {tB : TopologicalSpace B}
+    (Q : @apm_t95j06_hopf_slices_component_principalBundle_aux_Core F x B tB)
+    (k : Fin 3) (g : Circle) (y : apm_t95j06_hopf_component F x)
+    (hy : y ∈ apm_t95j06_hopf_slice (F := F) (x := x) k) :
+    Q.act (g, y) ∈ apm_t95j06_hopf_slice (F := F) (x := x) k := by
+  change (Q.act (g, y)).1.1.1 k ≠ 0
+  have hcoord := congrArg (fun v : apm_t95j06_C3 => v k) (Q.scalar_act g y)
+  simp only [PiLp.smul_apply] at hcoord
+  rw [hcoord]
+  have hg : (g : ℂ) ≠ 0 := by
+    intro hg
+    have hnorm : ‖(g : ℂ)‖ = 1 := by
+      rw [← mem_sphere_zero_iff_norm]
+      exact g.property
+    simp [hg] at hnorm
+  exact smul_ne_zero hg hy
+
+/-- The normalized phase of a nonzero complex coordinate. -/
+noncomputable def apm_t95j06_hopf_phase
+    {F : Set apm_t95j06_S5} {x : F} (k : Fin 3)
+    (y : apm_t95j06_hopf_slice (F := F) (x := x) k) : Circle :=
+  ⟨apm_t95j06_hopf_coordinate k y.1 /
+      ‖apm_t95j06_hopf_coordinate k y.1‖,
+    by
+      change apm_t95j06_hopf_coordinate k y.1 /
+        (‖apm_t95j06_hopf_coordinate k y.1‖ : ℂ) ∈ Metric.sphere 0 1
+      rw [mem_sphere_zero_iff_norm]
+      rw [norm_div, Complex.norm_real,
+        Real.norm_of_nonneg (norm_nonneg _), div_self]
+      exact norm_ne_zero_iff.mpr y.2⟩
+
+/-- Normalized phase varies continuously on a nonzero-coordinate slice. -/
+lemma apm_t95j06_hopf_phase_continuous
+    {F : Set apm_t95j06_S5} {x : F} (k : Fin 3) :
+    Continuous (apm_t95j06_hopf_phase (F := F) (x := x) k) := by
+  apply continuous_induced_rng.2
+  let coord : apm_t95j06_hopf_slice (F := F) (x := x) k → ℂ :=
+    fun y => apm_t95j06_hopf_coordinate k y.1
+  have hcoord : Continuous coord := by
+    dsimp only [coord, apm_t95j06_hopf_coordinate]
+    fun_prop
+  change Continuous (fun y => coord y / (‖coord y‖ : ℂ))
+  apply hcoord.div
+    (Complex.continuous_ofReal.comp (continuous_norm.comp hcoord))
+  intro y
+  exact Complex.ofReal_ne_zero.mpr (norm_ne_zero_iff.mpr y.2)
+
+/-- Normalized coordinate phase is equivariant for the scalar action. -/
+lemma apm_t95j06_hopf_phase_act
+    {F : Set apm_t95j06_S5} {x : F} {B : Type} {tB : TopologicalSpace B}
+    (Q : @apm_t95j06_hopf_slices_component_principalBundle_aux_Core F x B tB)
+    (k : Fin 3) (g : Circle)
+    (y : apm_t95j06_hopf_slice (F := F) (x := x) k) :
+    apm_t95j06_hopf_phase k
+        ⟨Q.act (g, y.1), apm_t95j06_hopf_slice_invariant Q k g y.1 y.2⟩ =
+      g * apm_t95j06_hopf_phase k y := by
+  apply Circle.coe_injective
+  change (Q.act (g, y.1)).1.1.1 k / ‖(Q.act (g, y.1)).1.1.1 k‖ =
+    (g : ℂ) * (y.1.1.1.1 k / ‖y.1.1.1.1 k‖)
+  have hcoord := congrArg (fun v : apm_t95j06_C3 => v k) (Q.scalar_act g y.1)
+  simp only [PiLp.smul_apply] at hcoord
+  rw [hcoord]
+  simp only [norm_smul, Circle.norm_coe, one_mul]
+  exact mul_div_assoc (g : ℂ) (y.1.1.1.1 k) (‖y.1.1.1.1 k‖ : ℂ)
+
 /-- **Remaining sub-leaf, explicit Hopf charts (estimated 300--550 lines).**
 In words: every scalar-orbit quotient core has fibre-preserving,
 Circle-equivariant local product charts obtained by choosing a nonzero
