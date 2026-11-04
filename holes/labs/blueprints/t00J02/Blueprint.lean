@@ -188,7 +188,25 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_L0
           (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
             (TopCat.of S) 2 e)) :
     ∀ x, ∃ n, t00J02_IsLocalDegree e f y x n := by
-  sorry
+  classical
+  intro x
+  let gx :=
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap (x : S) 2
+      (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+        (TopCat.of S) 2 e)
+  let b : (x' : {x : S // f x = y}) →
+      (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+        (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+          (x' : S))).homology 2 :=
+    Function.update 0 x gx
+  obtain ⟨a, ha⟩ := hD.1.2 b
+  obtain ⟨n, hn⟩ := hD.2.2 (t00J02_fiberPushforward f y a)
+  refine ⟨n, a, ?_, ?_, hn⟩
+  · have hax := congrFun ha x
+    simpa [t00J02_fiberCoordinates, b, gx] using hax
+  · intro x' hx'
+    have hax' := congrFun ha x'
+    simpa [t00J02_fiberCoordinates, b, hx'] using hax'
 
 /-- **F1: global degree is the sum of point-local degrees.**  Sum the D-basis
 classes.  D-injectivity identifies their sum with the image of `[S]` in
