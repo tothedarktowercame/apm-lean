@@ -205,6 +205,142 @@ theorem t00A04_relativeMV_middle_aux_chain_shortExact
     (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
       (ConstructionTargets.SingularExcision.ambientSubspaceRange B)
 
+theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_left
+    (X : Type) [TopologicalSpace X] (A B : Set X) :
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative
+        (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange B) ≫
+      ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap
+        (ZMod 2) A =
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap
+        (ZMod 2) A B ≫
+      ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) A
+        (ContinuousMap.id X) Set.inter_subset_left := by
+  apply (cancel_epi (cokernel.π
+    (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionAmbient
+      (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange B)))).1
+  rw [← Category.assoc,
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.intersectionToLeftRelative_projection]
+  have hrange :
+      cokernel.π (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftAmbient
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)) ≫
+        ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap
+          (ZMod 2) A =
+      cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) A) := by
+    exact cokernel.π_desc _ _ _
+  rw [hrange]
+  have hinter :
+      cokernel.π
+          (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionAmbient
+            (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+              (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) ≫
+        ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap
+          (ZMod 2) A B =
+      cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) (A ∩ B)) := by
+    exact (cokernel.π_desc _ _ _).trans (Category.id_comp _)
+  rw [← Category.assoc, hinter]
+  have h := ConstructionTargets.CoefficientRadialPair.projection (ZMod 2) (A ∩ B) A
+    (ContinuousMap.id X) Set.inter_subset_left
+  rw [ConstructionTargets.CoefficientPairNaturality.absolute_id, Category.id_comp] at h
+  exact h.symm
+
+theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_right
+    (X : Type) [TopologicalSpace X] (A B : Set X) :
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative
+        (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange B) ≫
+      ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap
+        (ZMod 2) B =
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap
+        (ZMod 2) A B ≫
+      ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) B
+        (ContinuousMap.id X) Set.inter_subset_right := by
+  apply (cancel_epi (cokernel.π
+    (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionAmbient
+      (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange B)))).1
+  rw [← Category.assoc,
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.intersectionToRightRelative_projection]
+  have hrange :
+      cokernel.π (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightAmbient
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) ≫
+        ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap
+          (ZMod 2) B =
+      cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) B) := by
+    exact cokernel.π_desc _ _ _
+  rw [hrange]
+  have hinter :
+      cokernel.π
+          (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionAmbient
+            (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+              (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) ≫
+        ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.intersectionRelativeCokernelMap
+          (ZMod 2) A B =
+      cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) (A ∩ B)) := by
+    exact (cokernel.π_desc _ _ _).trans (Category.id_comp _)
+  rw [← Category.assoc, hinter]
+  have h := ConstructionTargets.CoefficientRadialPair.projection (ZMod 2) (A ∩ B) B
+    (ContinuousMap.id X) Set.inter_subset_right
+  rw [ConstructionTargets.CoefficientPairNaturality.absolute_id, Category.id_comp] at h
+  exact h.symm
+
+theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_left
+    (X : Type) [TopologicalSpace X] (A B : Set X) :
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftToUnionRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B) ≫
+      cokernel.map
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGeneratedAmbientInclusion (ZMod 2) A B)
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) (A ∪ B))
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGeneratedToProduction (ZMod 2) A B)
+        (𝟙 _)
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGenerated_relative_square (ZMod 2) A B) =
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap (ZMod 2) A ≫
+      ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) A (A ∪ B)
+        (ContinuousMap.id X) Set.subset_union_left := by
+  have hid : ConstructionTargets.CoefficientRadialPair.absoluteMap (ZMod 2)
+      (ContinuousMap.id X) = 𝟙 _ := by
+    change (ConstructionTargets.CoefficientRadialPair.chains (ZMod 2)).map
+      (TopCat.toSSet.map (𝟙 (TopCat.of X))) = _
+    simp only [CategoryTheory.Functor.map_id]
+  apply (cancel_epi (cokernel.π _)).1
+  simp only [ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftToUnionRelative,
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap,
+    ConstructionTargets.CoefficientRadialPair.pairMap, cokernel.map, cokernel.π_desc_assoc,
+    Category.id_comp]
+  erw [cokernel.π_desc, cokernel.π_desc_assoc, cokernel.π_desc]
+  rw [hid]
+  exact (Category.id_comp _).symm
+
+theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_right
+    (X : Type) [TopologicalSpace X] (A B : Set X) :
+    ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightToUnionRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B) ≫
+      cokernel.map
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGeneratedAmbientInclusion (ZMod 2) A B)
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) (A ∪ B))
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGeneratedToProduction (ZMod 2) A B)
+        (𝟙 _)
+        (ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.unionGenerated_relative_square (ZMod 2) A B) =
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap (ZMod 2) B ≫
+      ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) B (A ∪ B)
+        (ContinuousMap.id X) Set.subset_union_right := by
+  have hid : ConstructionTargets.CoefficientRadialPair.absoluteMap (ZMod 2)
+      (ContinuousMap.id X) = 𝟙 _ := by
+    change (ConstructionTargets.CoefficientRadialPair.chains (ZMod 2)).map
+      (TopCat.toSSet.map (𝟙 (TopCat.of X))) = _
+    simp only [CategoryTheory.Functor.map_id]
+  apply (cancel_epi (cokernel.π _)).1
+  simp only [ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightToUnionRelative,
+    ConstructionTargets.CoefficientSubcomplexRelativeLiteralComparison.rangeRelativeCokernelMap,
+    ConstructionTargets.CoefficientRadialPair.pairMap, cokernel.map, cokernel.π_desc_assoc,
+    Category.id_comp]
+  erw [cokernel.π_desc, cokernel.π_desc_assoc, cokernel.π_desc]
+  rw [hid]
+  exact (Category.id_comp _).symm
+
 theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal
     (X : Type) [TopologicalSpace X] (A B : Set X)
     (hA : IsOpen A) (hB : IsOpen B) (n : ℕ)
@@ -224,10 +360,22 @@ theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal
       HomologicalComplex.homologyMap
           (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) B
           (ContinuousMap.id X) Set.inter_subset_right) n c = b := by
+  have hinterA :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_left X A B
+  have hinterB :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_right X A B
+  have hunionA :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_left X A B
+  have hunionB :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_right X A B
   let Q := t00A04_relativeMV_middle_aux_sumQuotient X A B
   have hs := t00A04_relativeMV_middle_aux_chain_shortExact X A B
   have _ : Q = Q := rfl
   have _ := hs
+  have _ := hinterA
+  have _ := hinterB
+  have _ := hunionA
+  have _ := hunionB
   sorry
 
 theorem t00A04_relativeMV_middle_aux_complement_rewrite
@@ -271,6 +419,18 @@ theorem t00A04_relativeMV_injective_aux_small_quotient_kernel
     (hcB : HomologicalComplex.homologyMap
       (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (A ∩ B) B
         (ContinuousMap.id X) Set.inter_subset_right) n c = 0) : c = 0 := by
+  have hinterA :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_left X A B
+  have hinterB :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_inter_right X A B
+  have hunionA :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_left X A B
+  have hunionB :=
+    t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_right X A B
+  have _ := hinterA
+  have _ := hinterB
+  have _ := hunionA
+  have _ := hunionB
   sorry
 
 theorem t00A04_relativeMV_injective_aux_complement_rewrite
