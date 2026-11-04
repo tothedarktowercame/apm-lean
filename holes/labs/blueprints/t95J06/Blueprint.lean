@@ -3866,6 +3866,29 @@ lemma apm_t95j06_increasing_interval_union_transition_oriented_aux
     eV.injective.comp (hji.comp eU.symm.injective)
   exact hgc.strictMono_of_inj hgi
 
+/-- After fixing the orientation of the smaller-stage coordinate, the
+larger-stage coordinate can be oriented so that the inclusion is strictly
+increasing.  If its arbitrary coordinate is decreasing, postcompose it with
+the real negation homeomorphism.  This is the successor step for the
+orientation-corrected chart recursion. -/
+lemma apm_t95j06_increasing_interval_union_transition_corrected_aux
+    (X : Type) [TopologicalSpace X]
+    (U V : Set X) (hUV : U ⊆ V)
+    (eU : U ≃ₜ ℝ) (eV : V ≃ₜ ℝ) :
+    ∃ eV' : V ≃ₜ ℝ,
+      let j : U → V := fun x => ⟨x.1, hUV x.2⟩
+      StrictMono (fun r : ℝ => eV' (j (eU.symm r))) := by
+  rcases apm_t95j06_increasing_interval_union_transition_oriented_aux
+      X U V hUV eU eV with hinc | hdec
+  · exact ⟨eV, hinc⟩
+  · let eV' : V ≃ₜ ℝ := eV.trans (Homeomorph.neg ℝ)
+    refine ⟨eV', ?_⟩
+    dsimp only
+    intro a b hab
+    change -eV ⟨(eU.symm a).1, hUV (eU.symm a).2⟩ <
+      -eV ⟨(eU.symm b).1, hUV (eU.symm b).2⟩
+    exact neg_lt_neg (hdec hab)
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
