@@ -3439,6 +3439,143 @@ lemma apm_t95j06_Q_aux_paste_arcs {Y : Type} [TopologicalSpace Y]
   · change Set.range (pβ.symm.trans pα) = _
     rw [Path.trans_range, hrβ, hrα, Set.union_comm]
 
+/-- The range of an embedded closed interval has exactly its two endpoints as
+non-cut points.  This is the purely one-dimensional final step in the planar
+crosscut construction: compactness, connectedness, and local connectedness
+are transported through the interval-to-range homeomorphism, while deleting
+an interior parameter leaves the two nonempty open halves. -/
+lemma apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_interval_range
+    {Y : Type*} [TopologicalSpace Y] [T2Space Y]
+    (η : Set.Icc (0 : ℝ) 1 → Y) (hηc : Continuous η)
+    (hηi : Function.Injective η) :
+    let K := Set.range η
+    let b : Y := η ⟨1 / 2, by norm_num⟩
+    IsCompact K ∧ IsConnected K ∧
+      ∃ a c : K, a ≠ c ∧ (a : Y) ≠ b ∧ (c : Y) ≠ b ∧
+        Nonempty (LocallyConnectedSpace K) ∧
+        IsPreconnected ({a}ᶜ : Set K) ∧
+        IsPreconnected ({c}ᶜ : Set K) ∧
+        ∀ y : K, y ≠ a → y ≠ c → ¬ IsPreconnected ({y}ᶜ : Set K) := by
+  dsimp only
+  let I := Set.Icc (0 : ℝ) 1
+  let i0 : I := ⟨0, by change (0 : ℝ) ∈ Set.Icc 0 1; norm_num⟩
+  let i1 : I := ⟨1, by change (1 : ℝ) ∈ Set.Icc 0 1; norm_num⟩
+  let im : I := ⟨1 / 2, by change (1 / 2 : ℝ) ∈ Set.Icc 0 1; norm_num⟩
+  let K := Set.range η
+  let A : I ≃ₜ K := (hηc.isClosedEmbedding hηi).isEmbedding.toHomeomorph
+  have hAval (t : I) : (A t : Y) = η t := rfl
+  have hcompact : IsCompact K := isCompact_range hηc
+  have hconnected : IsConnected K := isConnected_range hηc
+  letI : LocPathConnectedSpace I := convex_Icc (0 : ℝ) 1 |>.locPathConnectedSpace
+  letI : LocallyConnectedSpace K := A.symm.locallyConnectedSpace
+  have hlocal : Nonempty (LocallyConnectedSpace K) := ⟨inferInstance⟩
+  let a : K := A i0
+  let c : K := A i1
+  have hac : a ≠ c := by
+    intro h
+    have := A.injective h
+    norm_num [i0, i1] at this
+  have hab : (a : Y) ≠ η im := by
+    intro h
+    have heq : η i0 = η im := by simpa [a, hAval] using h
+    have heq' := congrArg Subtype.val (hηi heq)
+    norm_num [i0, im] at heq'
+  have hcb : (c : Y) ≠ η im := by
+    intro h
+    have heq : η i1 = η im := by simpa [c, hAval] using h
+    have heq' := congrArg Subtype.val (hηi heq)
+    norm_num [i1, im] at heq'
+  have hpre0 : _root_.IsPreconnected ({i0}ᶜ : Set I) := by
+    have heq : ({i0}ᶜ : Set I) = Set.Ioc i0 i1 := by
+      ext t
+      simp only [Set.mem_compl_iff, Set.mem_singleton_iff, Set.mem_Ioc]
+      constructor
+      · intro ht
+        exact ⟨lt_of_le_of_ne t.2.1 (Ne.symm ht), t.2.2⟩
+      · exact fun ht h => (ne_of_gt ht.1) h
+    rw [heq]
+    exact isPreconnected_Ioc
+  have hpre1 : _root_.IsPreconnected ({i1}ᶜ : Set I) := by
+    have heq : ({i1}ᶜ : Set I) = Set.Ico i0 i1 := by
+      ext t
+      simp only [Set.mem_compl_iff, Set.mem_singleton_iff, Set.mem_Ico]
+      constructor
+      · intro ht
+        exact ⟨t.2.1, lt_of_le_of_ne t.2.2 ht⟩
+      · exact fun ht h => (ne_of_gt ht.2) h.symm
+    rw [heq]
+    exact isPreconnected_Ico
+  have htransport (t : I) (ht : _root_.IsPreconnected ({t}ᶜ : Set I)) :
+      _root_.IsPreconnected ({A t}ᶜ : Set K) := by
+    have heq : A '' ({t}ᶜ : Set I) = ({A t}ᶜ : Set K) := by
+      ext z
+      constructor
+      · rintro ⟨w, hw, rfl⟩ h
+        exact hw (A.injective h)
+      · intro hz
+        refine ⟨A.symm z, ?_, A.apply_symm_apply z⟩
+        intro h
+        apply hz
+        rw [Set.mem_singleton_iff, ← h, A.apply_symm_apply]
+    rw [← heq, A.isPreconnected_image]
+    exact ht
+  refine ⟨hcompact, hconnected, a, c, hac, hab, hcb, hlocal,
+    htransport i0 hpre0, htransport i1 hpre1, ?_⟩
+  intro y hya hyc hpre
+  let t : I := A.symm y
+  have ht0 : t ≠ i0 := by
+    intro h
+    apply hya
+    calc y = A t := (A.apply_symm_apply y).symm
+      _ = A i0 := congrArg A h
+  have ht1 : t ≠ i1 := by
+    intro h
+    apply hyc
+    calc y = A t := (A.apply_symm_apply y).symm
+      _ = A i1 := congrArg A h
+  have htpos : 0 < t.1 := lt_of_le_of_ne t.2.1 (by
+    intro h; apply ht0; exact Subtype.ext h.symm)
+  have htlt : t.1 < 1 := lt_of_le_of_ne t.2.2 (by
+    intro h; apply ht1; exact Subtype.ext h)
+  have hpull : _root_.IsPreconnected ({t}ᶜ : Set I) := by
+    have heq : A ⁻¹' ({y}ᶜ : Set K) = ({t}ᶜ : Set I) := by
+      ext z
+      simp only [Set.mem_preimage, Set.mem_compl_iff, Set.mem_singleton_iff]
+      constructor
+      · intro hzy hzt
+        apply hzy
+        subst z
+        dsimp [t]
+        exact A.apply_symm_apply y
+      · intro hzt hzy
+        apply hzt
+        apply A.injective
+        rw [hzy, A.apply_symm_apply]
+    rw [← heq, A.isPreconnected_preimage]
+    exact hpre
+  let U : Set I := {z | z.1 < t.1}
+  let V : Set I := {z | t.1 < z.1}
+  have hU : IsOpen U := isOpen_Iio.preimage continuous_subtype_val
+  have hV : IsOpen V := isOpen_Ioi.preimage continuous_subtype_val
+  have hcover : ({t}ᶜ : Set I) ⊆ U ∪ V := by
+    intro z hz
+    rcases lt_trichotomy z.1 t.1 with h | h | h
+    · exact Or.inl h
+    · exact (hz (Subtype.ext h)).elim
+    · exact Or.inr h
+  obtain ⟨z, hz, hzu, hzv⟩ := hpull U V hU hV hcover
+    ⟨i0, by
+      constructor
+      · simpa only [Set.mem_compl_iff, Set.mem_singleton_iff] using ht0.symm
+      · exact htpos⟩
+    ⟨i1, by
+      constructor
+      · simpa only [Set.mem_compl_iff, Set.mem_singleton_iff] using ht1.symm
+      · exact htlt⟩
+  change z.1 < t.1 at hzu
+  change t.1 < z.1 at hzv
+  exact (not_lt_of_ge (le_of_lt hzv)) hzu
+
 /-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
 Assuming the pure disk-crosscut theorem, one explicit product chart around
 `b × 0` yields the required compact continuum in the base.  Choose a small
