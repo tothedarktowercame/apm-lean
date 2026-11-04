@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.CoefficientRadialPair
+import ConstructionTargets.CoefficientPairNaturality
 import ConstructionTargets.CoefficientCompactComplementTransportedExactness
 import ConstructionTargets.CoefficientModelLocal
 import ConstructionTargets.CoefficientManifoldLocalComparison
@@ -706,7 +707,16 @@ theorem t00A04_modTwo_pointRestriction_restrict
     (n : ℕ) (c : t00A04_ModTwoLocalHomology X K n) :
     t00A04_modTwo_pointRestriction X A x hx n (t00A04_modTwo_restrict X A K h n c) =
       t00A04_modTwo_pointRestriction X K x (h hx) n c := by
-  sorry
+  change
+    ((HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ Aᶜ
+          (ContinuousMap.id X) _) n ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Aᶜ ({x} : Set X)ᶜ
+          (ContinuousMap.id X) _) n) c) = _
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← ConstructionTargets.CoefficientPairNaturality.pair_comp]
+  rfl
 
 /-- **Support functoriality.**  Restriction along `A ⊆ B ⊆ K` composes. -/
 theorem t00A04_modTwo_restrict_restrict
@@ -714,7 +724,16 @@ theorem t00A04_modTwo_restrict_restrict
     (n : ℕ) (c : t00A04_ModTwoLocalHomology X K n) :
     t00A04_modTwo_restrict X A B hAB n (t00A04_modTwo_restrict X B K hBK n c) =
       t00A04_modTwo_restrict X A K (hAB.trans hBK) n c := by
-  sorry
+  change
+    ((HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ Bᶜ
+          (ContinuousMap.id X) _) n ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Bᶜ Aᶜ
+          (ContinuousMap.id X) _) n) c) = _
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← ConstructionTargets.CoefficientPairNaturality.pair_comp]
+  rfl
 
 /-- **Compact supports (Hatcher 3.27, step 3).**  A class supported on a
 compact `A ⊆ ℝ^d` comes from a finite union of compact convex sets whose
