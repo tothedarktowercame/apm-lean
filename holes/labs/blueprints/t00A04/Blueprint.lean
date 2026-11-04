@@ -1034,6 +1034,46 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_model
     t00A04_HatcherConclusion E (Module.finrank ℝ E) A := by
   sorry
 
+/-- Excision for a compact support along an open embedding.  Besides the
+group isomorphism supplied by singular excision, this records its naturality
+with respect to all maps from the compact support to point supports; that
+naturality is exactly what transports the two point-restriction clauses in
+`t00A04_HatcherConclusion`. -/
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding
+    {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
+    (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
+    (hopen : ∀ U : Set Y, IsOpen U → IsOpen (f '' U)) (d : ℕ)
+    (B : Set Y) (hB : IsCompact B) :
+    t00A04_HatcherConclusion Y d B ↔
+      t00A04_HatcherConclusion Z d (f '' B) := by
+  sorry
+
+/-- Apply open-embedding excision twice, on the source and target of a partial
+homeomorphism.  This is the chart-shaped form of the preceding naturality
+lemma. -/
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_partialHomeomorph
+    {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
+    (e : PartialEquiv Y Z) (d : ℕ)
+    (B : Set Y) (hB : IsCompact B) (hBe : B ⊆ e.source)
+    (hopen_source : IsOpen e.source) (hopen_target : IsOpen e.target)
+    (hopenExcision : ∀ {P Q : Type} [TopologicalSpace P] [TopologicalSpace Q]
+      [T2Space P] [T2Space Q] (f : P → Q), Function.Injective f → Continuous f →
+      (∀ U : Set P, IsOpen U → IsOpen (f '' U)) →
+      (C : Set P) → IsCompact C →
+      (t00A04_HatcherConclusion P d C ↔
+        t00A04_HatcherConclusion Q d (f '' C))) :
+    t00A04_HatcherConclusion Y d B ↔
+      t00A04_HatcherConclusion Z d (e '' B) := by
+  sorry
+
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_target_open
+    (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X]
+    [BoundarylessManifold I X] (x : X) :
+    IsOpen (extChartAt I x).target := by
+  sorry
+
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision
     (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -1044,7 +1084,18 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision
     (A : Set X) (hA : IsCompact A)
     (hchart : ∃ x : X, A ⊆ (extChartAt I x).source) :
     t00A04_HatcherConclusion X (Module.finrank ℝ E) A := by
-  sorry
+  rcases hchart with ⟨x, hx⟩
+  let e := extChartAt I x
+  have himage : IsCompact (e '' A) :=
+    hA.image_of_continuousOn ((continuousOn_extChartAt x).mono hx)
+  have hm := hmodel (e '' A) himage
+  exact (t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_partialHomeomorph
+    e (Module.finrank ℝ E) A hA hx (isOpen_extChartAt_source x)
+      (t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_target_open
+        E X I x)
+    (fun f hinj hcont hopen C hC ↦
+      t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding
+        f hinj hcont hopen (Module.finrank ℝ E) C hC)).mpr hm
 
 theorem t00A04_hatcherConclusion_compact_in_chart
     (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
