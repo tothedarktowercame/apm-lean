@@ -6675,6 +6675,52 @@ lemma apm_t95j06_increasing_interval_union_boundedCoordinate_mem_Icc
         if_false, if_neg hside]
       exact ⟨le_rfl, neg_le_self (div_nonneg Real.pi_pos.le zero_le_two)⟩
 
+/-- A uniformly bounded, geometrically weighted series of continuous real
+functions is continuous. -/
+lemma apm_t95j06_continuous_geometric_tsum
+    (X : Type*) [TopologicalSpace X] (f : ℕ → X → ℝ)
+    (hf : ∀ m, Continuous (f m))
+    (hbound : ∀ m x, |f m x| ≤ 2) :
+    Continuous (fun x ↦ ∑' m : ℕ, (1 / 2 : ℝ) ^ m * f m x) := by
+  apply continuous_tsum
+  · intro m
+    exact (continuous_const.mul (hf m))
+  · exact (summable_geometric_of_lt_one (r := (1 / 2 : ℝ))
+      (by norm_num) (by norm_num)).mul_left 2
+  · intro m x
+    rw [Real.norm_eq_abs, abs_mul, abs_pow]
+    norm_num only [abs_of_nonneg (show (0 : ℝ) ≤ 1 / 2 by norm_num)]
+    simpa [mul_comm] using mul_le_mul_of_nonneg_left (hbound m x)
+      (pow_nonneg (show (0 : ℝ) ≤ 1 / 2 by norm_num) m)
+
+/-- Geometrically weighted monotone coordinates form a strictly monotone
+sum as soon as some coordinate strictly separates every ordered pair. -/
+lemma apm_t95j06_strictMono_geometric_tsum
+    (X : Type*) [LinearOrder X] (f : ℕ → X → ℝ)
+    (hmono : ∀ m, Monotone (f m))
+    (hsep : ∀ x y, x < y → ∃ m, f m x < f m y)
+    (hbound : ∀ m x, |f m x| ≤ 2) :
+    StrictMono (fun x ↦ ∑' m : ℕ, (1 / 2 : ℝ) ^ m * f m x) := by
+  intro x y hxy
+  obtain ⟨m, hm⟩ := hsep x y hxy
+  let g : ℕ → ℝ := fun n ↦ (1 / 2 : ℝ) ^ n * f n x
+  let h : ℕ → ℝ := fun n ↦ (1 / 2 : ℝ) ^ n * f n y
+  have hsummable (z : X) : Summable (fun n : ℕ ↦ (1 / 2 : ℝ) ^ n * f n z) := by
+    apply Summable.of_norm_bounded
+      ((summable_geometric_of_lt_one (r := (1 / 2 : ℝ))
+        (by norm_num) (by norm_num)).mul_left 2)
+    intro n
+    rw [Real.norm_eq_abs, abs_mul, abs_pow]
+    norm_num only [abs_of_nonneg (show (0 : ℝ) ≤ 1 / 2 by norm_num)]
+    simpa [mul_comm] using mul_le_mul_of_nonneg_left (hbound n z)
+      (pow_nonneg (show (0 : ℝ) ≤ 1 / 2 by norm_num) n)
+  apply Summable.tsum_lt_tsum (i := m)
+  · intro n
+    exact mul_le_mul_of_nonneg_left (hmono n hxy.le) (pow_nonneg (by norm_num) _)
+  · exact mul_lt_mul_of_pos_left hm (pow_pos (by norm_num) _)
+  · exact hsummable x
+  · exact hsummable y
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
