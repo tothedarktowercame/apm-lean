@@ -1021,6 +1021,62 @@ theorem apm_t95j06_jordan_complement_separates
       Disjoint inside outside ∧ Jᶜ = inside ∪ outside := by
   sorry
 
+/-- A connected component of an open separated union stays on the side
+containing its base point. No planar separation theorem is used. -/
+lemma apm_t95j06_jordan_complement_atMostTwo_aux_component_side
+    {X : Type*} [TopologicalSpace X] {s u v : Set X}
+    (hu : IsOpen u) (hv : IsOpen v) (hd : Disjoint u v)
+    (hs : s = u ∪ v) {x : X} (hx : x ∈ u) :
+    connectedComponentIn s x ⊆ u := by
+  have hxs : x ∈ s := hs ▸ Or.inl hx
+  have hcover : connectedComponentIn s x ⊆ u ∪ v := by
+    rw [← hs]
+    exact connectedComponentIn_subset s x
+  rcases isPreconnected_connectedComponentIn.subset_or_subset hu hv hd hcover with h | h
+  · exact h
+  · exact False.elim (Set.disjoint_left.mp hd hx (h (mem_connectedComponentIn hxs)))
+
+/-- Pure topological assembly for J2: if among any three points of a set
+some two lie in the same connected component, every nontrivial separation
+into two ambient-open sets has connected sides. This isolates the component
+counting interface that an H₀/duality computation must supply. It neither
+asserts nor assumes a Jordan curve theorem. -/
+lemma apm_t95j06_jordan_complement_atMostTwo_aux_of_component_bound
+    {X : Type*} [TopologicalSpace X] {s u v : Set X}
+    (hu : IsOpen u) (hv : IsOpen v) (hun : u.Nonempty) (hvn : v.Nonempty)
+    (hd : Disjoint u v) (hs : s = u ∪ v)
+    (hbound : ∀ x ∈ s, ∀ y ∈ s, ∀ z ∈ s,
+      connectedComponentIn s x = connectedComponentIn s y ∨
+      connectedComponentIn s x = connectedComponentIn s z ∨
+      connectedComponentIn s y = connectedComponentIn s z) :
+    IsPreconnected u ∧ IsPreconnected v := by
+  have side : ∀ (u v : Set X), IsOpen u → IsOpen v →
+      u.Nonempty → v.Nonempty → Disjoint u v → s = u ∪ v → IsPreconnected u := by
+    intro u v hu hv _ hvn hd hs
+    obtain ⟨z, hz⟩ := hvn
+    have hzs : z ∈ s := hs ▸ Or.inr hz
+    apply isPreconnected_of_forall_pair
+    intro x hx y hy
+    have hxs : x ∈ s := hs ▸ Or.inl hx
+    have hys : y ∈ s := hs ▸ Or.inl hy
+    have cx : connectedComponentIn s x ⊆ u :=
+      apm_t95j06_jordan_complement_atMostTwo_aux_component_side hu hv hd hs hx
+    have cy : connectedComponentIn s y ⊆ u :=
+      apm_t95j06_jordan_complement_atMostTwo_aux_component_side hu hv hd hs hy
+    have hxy : connectedComponentIn s x = connectedComponentIn s y := by
+      rcases hbound x hxs y hys z hzs with h | h | h
+      · exact h
+      · exact False.elim (Set.disjoint_left.mp hd
+          (cx (h ▸ mem_connectedComponentIn hzs)) hz)
+      · exact False.elim (Set.disjoint_left.mp hd
+          (cy (h ▸ mem_connectedComponentIn hzs)) hz)
+    refine ⟨connectedComponentIn s x, cx, mem_connectedComponentIn hxs, ?_,
+      isPreconnected_connectedComponentIn⟩
+    rw [hxy]
+    exact mem_connectedComponentIn hys
+  exact ⟨side u v hu hv hun hvn hd hs,
+    side v u hv hu hvn hun hd.symm (hs.trans (Set.union_comm _ _))⟩
+
 /-- **J2, no third Jordan side (estimated 120--200 lines).**
 Any nontrivial open separation of the complement of an embedded circle has
 connected sides.  Equivalently, its complement has at most two connected
@@ -1039,13 +1095,43 @@ theorem apm_t95j06_jordan_complement_atMostTwo
     IsPreconnected inside ∧ IsPreconnected outside := by
   sorry
 
-/-- **J3, local two-sidedness of a Jordan curve (estimated 100--170 lines).**
+/- **J3, local two-sidedness of a Jordan curve (estimated 100--170 lines).**
 For two connected complementary domains of an embedded circle, every curve
 point is approached from both domains, so the curve is exactly each frontier.
 Local straightening of an embedded arc gives the two local half-disks; a
 connected complementary side cannot switch local sides without crossing the
 curve.  This assumes the sides and their connectedness, and proves only the
 frontier identification. -/
+/-- The complement in the plane of a topologically embedded closed interval is
+connected.  This is the classical non-separation theorem for arcs.  It follows
+by planar arc straightening (or Alexander duality); Mathlib 4.29 contains no
+such theorem.  Estimated proof size: 80--130 lines once planar arc
+straightening is available. -/
+theorem apm_t95j06_jordan_sides_frontier_aux_arc_nonseparation
+    (A : Set apm_t95j06_E2)
+    (eA : Nonempty (Set.Icc (0 : ℝ) 1 ≃ₜ A)) :
+    IsPreconnected Aᶜ := by
+  sorry
+
+/-- Arc non-separation implies local access to each of two connected Jordan
+sides.  Remove a small open circle arc about `p`; its complementary closed arc
+does not separate the plane, so a connected bridge between the two sides,
+avoiding that closed arc, must cross the small arc.  Openness then supplies
+points of both sides arbitrarily close to `p`.  This is strictly the local
+access step, not a frontier equality.  Estimated proof size: 55--85 lines. -/
+theorem apm_t95j06_jordan_sides_frontier_aux_local_access
+    (harc : ∀ (A : Set apm_t95j06_E2),
+      Nonempty (Set.Icc (0 : ℝ) 1 ≃ₜ A) → IsPreconnected Aᶜ)
+    (J : Set apm_t95j06_E2) (eJ : Nonempty (Circle ≃ₜ J))
+    (inside outside : Set apm_t95j06_E2)
+    (hi : IsOpen inside) (ho : IsOpen outside)
+    (hin : inside.Nonempty) (hout : outside.Nonempty)
+    (hpi : IsPreconnected inside) (hpo : IsPreconnected outside)
+    (hdisj : Disjoint inside outside)
+    (hcover : Jᶜ = inside ∪ outside) :
+    ∀ p ∈ J, p ∈ closure inside ∧ p ∈ closure outside := by
+  sorry
+
 theorem apm_t95j06_jordan_sides_frontier
     (J : Set apm_t95j06_E2) (eJ : Nonempty (Circle ≃ₜ J))
     (inside outside : Set apm_t95j06_E2)
@@ -1055,7 +1141,46 @@ theorem apm_t95j06_jordan_sides_frontier
     (hdisj : Disjoint inside outside)
     (hcover : Jᶜ = inside ∪ outside) :
     J = frontier inside ∧ J = frontier outside := by
-  sorry
+  have haccess := apm_t95j06_jordan_sides_frontier_aux_local_access
+    apm_t95j06_jordan_sides_frontier_aux_arc_nonseparation J eJ inside outside
+      hi ho hin hout hpi hpo hdisj hcover
+  have hi_sub : inside ⊆ Jᶜ := by
+    rw [hcover]
+    exact Set.subset_union_left
+  have ho_sub : outside ⊆ Jᶜ := by
+    rw [hcover]
+    exact Set.subset_union_right
+  have hfi : J = frontier inside := by
+    apply Set.Subset.antisymm
+    · intro p hp
+      rw [frontier, hi.interior_eq]
+      exact ⟨(haccess p hp).1, fun hpin => hi_sub hpin hp⟩
+    · intro p hp
+      by_contra hpJ
+      have hpcompl : p ∈ Jᶜ := hpJ
+      rw [hcover] at hpcompl
+      rcases hpcompl with hpinside | hpoutside
+      · exact hp.2 (mem_interior_iff_mem_nhds.2 (hi.mem_nhds hpinside))
+      · have hclosed : IsClosed outsideᶜ := ho.isClosed_compl
+        have hsub : inside ⊆ outsideᶜ := Set.disjoint_left.1 hdisj
+        have hpcl : p ∈ closure inside := frontier_subset_closure hp
+        exact (hclosed.closure_subset_iff.2 hsub hpcl) hpoutside
+  have hfo : J = frontier outside := by
+    apply Set.Subset.antisymm
+    · intro p hp
+      rw [frontier, ho.interior_eq]
+      exact ⟨(haccess p hp).2, fun hpout => ho_sub hpout hp⟩
+    · intro p hp
+      by_contra hpJ
+      have hpcompl : p ∈ Jᶜ := hpJ
+      rw [hcover] at hpcompl
+      rcases hpcompl with hpinside | hpoutside
+      · have hclosed : IsClosed insideᶜ := hi.isClosed_compl
+        have hsub : outside ⊆ insideᶜ := Set.disjoint_right.1 hdisj
+        have hpcl : p ∈ closure outside := frontier_subset_closure hp
+        exact (hclosed.closure_subset_iff.2 hsub hpcl) hpinside
+      · exact hp.2 (mem_interior_iff_mem_nhds.2 (ho.mem_nhds hpoutside))
+  exact ⟨hfi, hfo⟩
 
 /-- **LIBRARY, Jordan-curve separation (estimated 250--450 lines).**
 This is the classical Jordan curve theorem in its separation form.  A winding
@@ -1658,7 +1783,7 @@ structure apm_t95j06_PunctureSplit
   maximal : ∀ S : Set K, S.Nonempty → IsPreconnected S →
     S ⊆ ({y}ᶜ : Set K) → S ⊆ sideA ∨ S ⊆ sideC
 
-/-- **C1, puncture structure (estimated 55--90 lines).** Every non-endpoint
+/- **C1, puncture structure (estimated 55--90 lines).** Every non-endpoint
 puncture has exactly two open connected components, one containing `a` and
 the other containing `c`.
 
@@ -1667,6 +1792,41 @@ connectedness makes its connected components open.  If there were a third
 component, or if `a,c` lay in the same component, adjoining either of the
 other endpoint punctures would contradict the assumed connectedness of those
 two punctures. -/
+/-- The connected component of an endpoint in a non-endpoint puncture is
+open, connected, contained in the puncture, and maximal among connected
+subsets of the puncture containing that endpoint. -/
+lemma apm_t95j06_puncture_endpointComponent
+    (K : Type*) [TopologicalSpace K] [T1Space K] [LocallyConnectedSpace K]
+    (a y : K) (hay : a ≠ y) :
+    ∃ A : Set K,
+      IsOpen A ∧ IsPreconnected A ∧ a ∈ A ∧ A ⊆ ({y}ᶜ : Set K) ∧
+      ∀ S : Set K, IsPreconnected S → a ∈ S →
+        S ⊆ ({y}ᶜ : Set K) → S ⊆ A := by
+  let F : Set K := ({y}ᶜ : Set K)
+  let A := connectedComponentIn F a
+  have haF : a ∈ F := by
+    simpa [F, Set.mem_compl_iff, Set.mem_singleton_iff] using hay
+  refine ⟨A, ?_, isPreconnected_connectedComponentIn,
+    mem_connectedComponentIn haF, connectedComponentIn_subset F a, ?_⟩
+  · exact (isClosed_singleton.isOpen_compl.connectedComponentIn)
+  · intro S hS haS hSF
+    exact hS.subset_connectedComponentIn haS hSF
+
+/-- Both distinguished endpoints therefore have canonical open maximal
+components in every non-endpoint puncture. -/
+lemma apm_t95j06_puncture_endpointComponents
+    (K : Type*) [TopologicalSpace K] [T1Space K] [LocallyConnectedSpace K]
+    (a c y : K) (hya : y ≠ a) (hyc : y ≠ c) :
+    (∃ A : Set K,
+      IsOpen A ∧ IsPreconnected A ∧ a ∈ A ∧ A ⊆ ({y}ᶜ : Set K)) ∧
+    ∃ C : Set K,
+      IsOpen C ∧ IsPreconnected C ∧ c ∈ C ∧ C ⊆ ({y}ᶜ : Set K) := by
+  obtain ⟨A, hAo, hAc, haA, hAF, _⟩ :=
+    apm_t95j06_puncture_endpointComponent K a y hya.symm
+  obtain ⟨C, hCo, hCc, hcC, hCF, _⟩ :=
+    apm_t95j06_puncture_endpointComponent K c y hyc.symm
+  exact ⟨⟨A, hAo, hAc, haA, hAF⟩, ⟨C, hCo, hCc, hcC, hCF⟩⟩
+
 theorem apm_t95j06_twoEndpointContinuum_punctureSplit
     (K : Type*) [TopologicalSpace K]
     [CompactSpace K] [T2Space K] [LocallyConnectedSpace K]
@@ -1678,6 +1838,38 @@ theorem apm_t95j06_twoEndpointContinuum_punctureSplit
     ∀ y : K, y ≠ a → y ≠ c →
       Nonempty (apm_t95j06_PunctureSplit K a c y) := by
   sorry
+
+/-- Endpoint-labelled puncture decompositions are unique.  Each connected
+side of one decomposition must lie in one side of the other by `maximal`; its
+endpoint rules out the incorrectly labelled side.  This is the choice-
+independence needed before defining the separation order. -/
+lemma apm_t95j06_PunctureSplit_unique
+    (K : Type*) [TopologicalSpace K] (a c y : K)
+    (p q : apm_t95j06_PunctureSplit K a c y) :
+    p.sideA = q.sideA ∧ p.sideC = q.sideC := by
+  have subset_compl (r : apm_t95j06_PunctureSplit K a c y) :
+      r.sideA ⊆ ({y}ᶜ : Set K) ∧ r.sideC ⊆ ({y}ᶜ : Set K) := by
+    constructor
+    · intro x hx
+      rw [← r.cover]
+      exact Or.inl hx
+    · intro x hx
+      rw [← r.cover]
+      exact Or.inr hx
+  have sideA_subset (r s : apm_t95j06_PunctureSplit K a c y) :
+      r.sideA ⊆ s.sideA := by
+    rcases s.maximal r.sideA ⟨a, r.a_mem⟩ r.sideA_preconnected
+        (subset_compl r).1 with h | h
+    · exact h
+    · exact False.elim ((Set.disjoint_left.1 s.disjoint) s.a_mem (h r.a_mem))
+  have sideC_subset (r s : apm_t95j06_PunctureSplit K a c y) :
+      r.sideC ⊆ s.sideC := by
+    rcases s.maximal r.sideC ⟨c, r.c_mem⟩ r.sideC_preconnected
+        (subset_compl r).2 with h | h
+    · exact False.elim ((Set.disjoint_left.1 s.disjoint) (h r.c_mem) s.c_mem)
+    · exact h
+  exact ⟨Set.Subset.antisymm (sideA_subset p q) (sideA_subset q p),
+    Set.Subset.antisymm (sideC_subset p q) (sideC_subset q p)⟩
 
 /-- **C2, order construction (estimated 65--110 lines).** Given the labelled
 two-component decomposition of every non-endpoint puncture, separation from
@@ -1735,6 +1927,25 @@ theorem apm_t95j06_twoEndpointContinuum_cutPointOrder
       K hK a c hac hsplit
   exact ⟨o, hot, hdense,
     apm_t95j06_compactMetrizable_separable_order K, ha0, hc1⟩
+
+/-- A dense subset recovers every point as the supremum of its members below
+that point.  This is the cut-recovery fact used in both inverse laws of the
+Dedekind extension. -/
+lemma apm_t95j06_sSup_dense_Iic_aux
+    (L : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
+    [OrderTopology L] [DenselyOrdered L]
+    (s : Set L) (hs : Dense s) (x : L) :
+    sSup ((fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}) = x := by
+  let A : Set L := (fun q : s ↦ q.1) '' {q : s | q.1 ≤ x}
+  apply le_antisymm
+  · apply sSup_le
+    rintro y ⟨q, hq, rfl⟩
+    exact hq
+  · by_contra h
+    have hlt : sSup A < x := lt_of_not_ge h
+    obtain ⟨q, hqs, hsupq, hqx⟩ := hs.exists_between hlt
+    have hqA : q ∈ A := ⟨⟨q, hqs⟩, hqx.le, rfl⟩
+    exact (not_lt_of_ge (le_sSup hqA)) hsupq
 
 /-- **Dedekind extension of a dense-suborder isomorphism (estimated 70--110
 lines).** Let `s` and `t` be dense subsets of complete dense linear orders,
@@ -2311,12 +2522,58 @@ theorem apm_t95j06_finite_intervalCharts_connected_enlargement
   obtain ⟨t, hst, _, ht⟩ := aggregate s
   exact ⟨t, hst, ht⟩
 
-/-- The genuinely one-dimensional gluing core.  A connected finite union of
+/- The genuinely one-dimensional gluing core.  A connected finite union of
 relatively compact line charts in a noncompact Hausdorff one-manifold sits in
 one relatively compact line chart.  The connected-union hypothesis removes
 the open-cover nerve construction from the parent theorem; the proof orders
 successive overlaps, rules out branching by local real charts, and rules out
 closing the two ends using noncompactness.  Estimated size: 110--170 lines. -/
+/-- Two overlapping relatively compact line charts in a connected noncompact
+Hausdorff second-countable one-manifold have a common relatively compact line
+chart neighborhood.
+
+This is true because the overlap fixes compatible local orders up to reversal.
+Hausdorffness excludes doubled endpoints and local real-line charts exclude
+branching.  The only alternative obtained by joining both pairs of ends is a
+clopen circle component; connectedness would then make the ambient space
+compact, contradicting `NoncompactSpace X`.  Estimated size: 90--150 lines. -/
+theorem apm_t95j06_overlapping_intervalCharts_pair_thicken
+    (X : Type) [TopologicalSpace X] [ConnectedSpace X] [NoncompactSpace X]
+    [T2Space X] [SecondCountableTopology X]
+    (hloc : apm_t95j06_IsLocallyRealLine X)
+    (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
+    (hUcompact : IsCompact (closure U)) (hVcompact : IsCompact (closure V))
+    (hUreal : Nonempty (U ≃ₜ ℝ)) (hVreal : Nonempty (V ≃ₜ ℝ))
+    (hUV : (U ∩ V).Nonempty) :
+    ∃ W : Set X, IsOpen W ∧ U ∪ V ⊆ W ∧ IsCompact (closure W) ∧
+      Nonempty (W ≃ₜ ℝ) := by
+  sorry
+
+/-- The empty and singleton cases of finite chart thickening require no
+gluing: for a singleton use its supplied chart, while for the empty family
+use any chart (the connected space is nonempty). -/
+lemma apm_t95j06_finite_intervalCharts_thicken_card_le_one
+    (X : Type) [TopologicalSpace X] [ConnectedSpace X]
+    (A : X → Set X) (hAopen : ∀ x, IsOpen (A x))
+    (hAcompact : ∀ x, IsCompact (closure (A x)))
+    (hAreal : ∀ x, Nonempty (A x ≃ₜ ℝ))
+    (t : Finset X) (ht : t.card ≤ 1) :
+    ∃ U : Set X, IsOpen U ∧ (⋃ x ∈ t, A x) ⊆ U ∧
+      IsCompact (closure U) ∧ Nonempty (U ≃ₜ ℝ) := by
+  classical
+  by_cases he : t = ∅
+  · subst he
+    let x : X := Classical.choice (inferInstance : Nonempty X)
+    exact ⟨A x, hAopen x, by simp, hAcompact x, hAreal x⟩
+  · obtain ⟨x, hx⟩ := Finset.nonempty_iff_ne_empty.mpr he
+    have huniq := Finset.card_le_one.mp ht
+    have htx : t = {x} := by
+      ext y
+      simp only [Finset.mem_singleton]
+      exact ⟨fun hy ↦ huniq y hy x hx, fun h ↦ h ▸ hx⟩
+    subst htx
+    exact ⟨A x, hAopen x, by simp, hAcompact x, hAreal x⟩
+
 theorem apm_t95j06_connected_finite_intervalCharts_thicken
     (X : Type) [TopologicalSpace X] [ConnectedSpace X] [NoncompactSpace X]
     [T2Space X] [SecondCountableTopology X]
@@ -2328,7 +2585,66 @@ theorem apm_t95j06_connected_finite_intervalCharts_thicken
     (t : Finset X) (ht : IsConnected (⋃ x ∈ t, A x)) :
     ∃ U : Set X, IsOpen U ∧ (⋃ x ∈ t, A x) ⊆ U ∧
       IsCompact (closure U) ∧ Nonempty (U ≃ₜ ℝ) := by
-  sorry
+  classical
+  have hne : ∀ x, (A x).Nonempty := fun x => by
+    obtain ⟨e⟩ := hAreal x
+    exact ⟨(e.symm 0).1, (e.symm 0).2⟩
+  obtain ⟨z0, hz0⟩ := ht.nonempty
+  obtain ⟨x0, hx0t, -⟩ := Set.mem_iUnion₂.mp hz0
+  have key : ∀ n : ℕ, 1 ≤ n → n ≤ t.card → ∃ s : Finset X, s ⊆ t ∧ s.card = n ∧
+      ∃ U : Set X, IsOpen U ∧ (⋃ x ∈ s, A x) ⊆ U ∧
+        IsCompact (closure U) ∧ Nonempty (U ≃ₜ ℝ) := by
+    intro n
+    induction n with
+    | zero => intro h; omega
+    | succ n ih =>
+      intro _ hn
+      rcases Nat.eq_zero_or_pos n with h0 | hpos
+      · subst h0
+        exact ⟨{x0}, by simpa using hx0t, by simp, A x0, hAopen x0, by simp,
+          hAcompact x0, hAreal x0⟩
+      obtain ⟨s, hst, hsc, U, hUo, hsU, hUc, hUr⟩ := ih hpos (by omega)
+      have hlt : s.card < t.card := by omega
+      have hsdiff : (t \ s).Nonempty := by
+        rw [Finset.nonempty_iff_ne_empty, Ne, Finset.sdiff_eq_empty_iff_subset]
+        intro hts
+        exact absurd (Finset.card_le_card hts) (by omega)
+      obtain ⟨x1, hx1⟩ : s.Nonempty := Finset.card_pos.mp (by omega)
+      obtain ⟨y1, hy1⟩ := hsdiff
+      have hPo : IsOpen (⋃ x ∈ s, A x) := isOpen_biUnion fun x _ => hAopen x
+      have hQo : IsOpen (⋃ x ∈ t \ s, A x) := isOpen_biUnion fun x _ => hAopen x
+      have hcov : (⋃ x ∈ t, A x) ⊆ (⋃ x ∈ s, A x) ∪ (⋃ x ∈ t \ s, A x) := by
+        intro z hz
+        obtain ⟨x, hxt, hzx⟩ := Set.mem_iUnion₂.mp hz
+        by_cases hxs : x ∈ s
+        · exact Or.inl (Set.mem_iUnion₂.mpr ⟨x, hxs, hzx⟩)
+        · exact Or.inr (Set.mem_iUnion₂.mpr ⟨x, Finset.mem_sdiff.mpr ⟨hxt, hxs⟩, hzx⟩)
+      have hPne : ((⋃ x ∈ t, A x) ∩ (⋃ x ∈ s, A x)).Nonempty := by
+        obtain ⟨z, hz⟩ := hne x1
+        exact ⟨z, Set.mem_iUnion₂.mpr ⟨x1, hst hx1, hz⟩, Set.mem_iUnion₂.mpr ⟨x1, hx1, hz⟩⟩
+      have hQne : ((⋃ x ∈ t, A x) ∩ (⋃ x ∈ t \ s, A x)).Nonempty := by
+        obtain ⟨z, hz⟩ := hne y1
+        exact ⟨z, Set.mem_iUnion₂.mpr ⟨y1, (Finset.mem_sdiff.mp hy1).1, hz⟩,
+          Set.mem_iUnion₂.mpr ⟨y1, hy1, hz⟩⟩
+      obtain ⟨z, -, hzP, hzQ⟩ := ht.isPreconnected _ _ hPo hQo hcov hPne hQne
+      obtain ⟨y, hyts, hzy⟩ := Set.mem_iUnion₂.mp hzQ
+      have hyt := (Finset.mem_sdiff.mp hyts).1
+      have hys := (Finset.mem_sdiff.mp hyts).2
+      obtain ⟨W, hWo, hUW, hWc, hWr⟩ :=
+        apm_t95j06_overlapping_intervalCharts_pair_thicken X hloc U (A y) hUo (hAopen y)
+          hUc (hAcompact y) hUr (hAreal y) ⟨z, hsU hzP, hzy⟩
+      refine ⟨insert y s, Finset.insert_subset hyt hst, by
+        rw [Finset.card_insert_of_notMem hys, hsc], W, hWo, ?_, hWc, hWr⟩
+      intro w hw
+      obtain ⟨x, hx, hwx⟩ := Set.mem_iUnion₂.mp hw
+      rcases Finset.mem_insert.mp hx with rfl | hxs
+      · exact hUW (Or.inr hwx)
+      · exact hUW (Or.inl (hsU (Set.mem_iUnion₂.mpr ⟨x, hxs, hwx⟩)))
+  have hcard : 1 ≤ t.card := Finset.card_pos.mpr ⟨x0, hx0t⟩
+  obtain ⟨s, hst, hsc, U, hUo, hsU, hUc, hUr⟩ := key t.card hcard le_rfl
+  have hseq : s = t := Finset.eq_of_subset_of_card_le hst (by omega)
+  subst hseq
+  exact ⟨U, hUo, hsU, hUc, hUr⟩
 
 theorem apm_t95j06_finite_intervalCharts_thicken
     (X : Type) [TopologicalSpace X] [ConnectedSpace X] [NoncompactSpace X]
@@ -3226,3 +3542,5 @@ theorem apm_t95j06
 
 #print axioms apm_t95j06_planar_crosscut_of_jordan_aux_exterior
 #print axioms apm_t95j06_planar_crosscut_of_jordan_aux_label_domains
+
+#print axioms apm_t95j06_jordan_complement_atMostTwo_aux_of_component_bound
