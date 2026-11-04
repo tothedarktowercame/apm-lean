@@ -6,12 +6,16 @@ mean we offer a solution for them. Each one keeps its bundle (`problem.tex`, `pr
 
 ## broken/: not counted
 
+The three `lts-*` bundles came in with the APM `.tex` set (e2e7482cba) and then got
+bundles in 5b16312f9c (2026-09-06). Their origin is not recorded there.
+
 | Problem | Reason |
 |---|---|
 | a98J05 | Source incomplete: the 2002 transcription gives a hypothesis on f(z) = z + Σ cₙzⁿ but no question. |
 | t98J04 | Source incomplete: part (b) needs a diagram the corpus does not have; the curve is described only in words. Part (a) (linked circles) is provable but the problem is not stated whole. |
 | lts-derived-induction-lem3 | Not APM: from another series (Borel-equivariant spectra). |
 | lts-monadic-integration | Not APM: from another series (measure monad / Pettis integrals). |
+| lts-ultraproduct-thm1 | Not APM: from another series. It has a sorry-free Lean proof (`lean/Main.lean`), but it does not count toward APM totals. |
 
 ## viable/: candidates for the main section
 
