@@ -959,11 +959,58 @@ theorem t00A04_hatcherConclusion_compact_manifold
 
 /-- **LIBRARY F4.** At support `A = X`, a nonzero relative fundamental class
 is a nonzero absolute top-homology class. -/
+theorem t00A04_top_homology_nontrivial_of_hatcherConclusion_univ_aux_emptyMap
+    (X : Type) [TopologicalSpace X] :
+    ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+      (ZMod 2) (∅ : Set X) = 0 := by
+  exact
+    t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero_aux_emptyMap
+      (ZMod 2) X
+
+noncomputable def t00A04_top_homology_nontrivial_of_hatcherConclusion_univ_aux_relativeIso
+    (X : Type) [TopologicalSpace X] :
+    ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) (∅ : Set X) ≅
+      ConstructionTargets.CoefficientH0.SingularChains (ZMod 2) (TopCat.of X) :=
+  CategoryTheory.Limits.cokernelIsoOfEq
+      (t00A04_top_homology_nontrivial_of_hatcherConclusion_univ_aux_emptyMap X) ≪≫
+    CategoryTheory.Limits.cokernelZeroIsoTarget
+
+noncomputable def t00A04_top_homology_nontrivial_of_hatcherConclusion_univ_aux_coefficientIso
+    (X : Type) [TopologicalSpace X] (d : ℕ) :
+    ((AlgebraicTopology.singularHomologyFunctor
+        (ModuleCat (ZMod 2)) d).obj (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+        (TopCat.of X) ≅
+      ((AlgebraicTopology.singularHomologyFunctor
+        (ModuleCat (ZMod 2)) d).obj
+        (ModuleCat.of (ZMod 2) (ULift.{0} (ZMod 2)))).obj (TopCat.of X) :=
+  ((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat (ZMod 2)) d).mapIso
+      (ULift.moduleEquiv.symm.toModuleIso)).app (TopCat.of X)
+
 theorem t00A04_top_homology_nontrivial_of_hatcherConclusion_univ
     (X : Type) [TopologicalSpace X] [Nonempty X] (d : ℕ)
     (h : t00A04_HatcherConclusion X d Set.univ) :
     Nontrivial (t00A04_ModTwoHomology d X) := by
-  sorry
+  rcases h.exists_everywhere_nonzero with ⟨c, hc⟩
+  let ciso :=
+    t00A04_top_homology_nontrivial_of_hatcherConclusion_univ_aux_relativeIso X
+  letI : IsIso ciso.hom := inferInstance
+  let relativeHiso := asIso (HomologicalComplex.homologyMap ciso.hom d)
+  let hiso := relativeHiso ≪≫
+    t00A04_top_homology_nontrivial_of_hatcherConclusion_univ_aux_coefficientIso X d
+  have hc0 : c ≠ 0 := by
+    let x : X := Classical.choice inferInstance
+    intro hzero
+    exact hc x (Set.mem_univ x) (hzero ▸ map_zero _)
+  let e : t00A04_ModTwoLocalHomology X Set.univ d ≃
+      ((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) (∅ : Set X)).homology d : Type) :=
+    Equiv.cast (by simp only [t00A04_ModTwoLocalHomology, Set.compl_univ])
+  have hec : e c ≠ e 0 := fun heq ↦ hc0 (e.injective heq)
+  have hinj : Function.Injective hiso.hom :=
+    (ModuleCat.mono_iff_injective hiso.hom).mp inferInstance
+  exact ⟨hiso.hom (e c), hiso.hom (e 0), fun heq ↦ hec (hinj heq)⟩
 
 /-- The Type-0 fundamental-class assembly from chart transport, union, finite
 induction, and evaluation. -/
