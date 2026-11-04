@@ -59,3 +59,18 @@ Outside grade (read-only Claude subagent, 2026-11-04): faithful, no defects. Clo
 the convex range of J) is dω = 0 including boundary and corner points, chart-independent; X × ℝ homotopies are
 equivalent to X × [0,1]; integrability is proved in the conclusion, so the zero branch cannot make the equality
 trivial; true (homotopy operator plus Stokes on closed X); degenerate n = 0, m = 0, n > m, empty X checked.
+
+## t01A05
+
+Repair by codex-15 in two rounds (packets open5/t01A05.md, t01A05-r2.md) on the shared integral. Both orientations
+are inputs tied by orientation-preserving π (fixes the earlier FALSE encoding, X ⊔ X → X). Round 1's part (c)
+left the lifted orientations free and added a transversality hypothesis; claude-14 sent it back. Round 2: lifts
+come with smooth orientation-preserving lift maps ρ commuting with π; the intersection number is the
+Guillemin–Pollack one (smooth homotopy of Z₁'s inclusion to a map transverse to Z₂, finite signed count), and (c)
+is stated as I(Z₁,Z₂) = m → I(Z̃₁,Z̃₂) = k·m with no transversality hypothesis.
+
+Outside grade (read-only Claude subagent, 2026-11-04): (b) and (c) faithful and true, lifts cannot be gamed
+(range = preimage plus injective inclusions determine ρ; orientation preservation forces dρ invertible); (a)
+vacuous: X = X̃ = ∅ satisfies it. Fixed by claude-14: (a) now also requires `Nonempty X ∧ ConnectedSpace Xtilde`
+(the intended witness is the torus map (z, w) ↦ (z^k, w); a disconnected k-copy cover is also excluded).
+Grade with the fix: faithful (the extra conditions only strengthen the existential example).
