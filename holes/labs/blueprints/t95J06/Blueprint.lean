@@ -395,6 +395,34 @@ theorem apm_t95j06_compact_connected_locallyRealLine_homeomorph_circle
     Nonempty (@Homeomorph B Circle tB inferInstance) := by
   sorry
 
+/-- A principal `Circle` bundle over a circle admits a continuous section.
+
+This is true because two closed arcs cover the circle.  Local trivializations
+give sections on the arcs; their transition functions on the two overlap
+components can be joined inside the path-connected group `Circle`, allowing
+one section to be corrected and the two to be pasted.  Estimated size:
+450--850 lines (arc parametrizations, transition continuity, and pasting). -/
+theorem apm_t95j06_principalCircleBundle_over_circle_section
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (e : @Homeomorph B Circle tB inferInstance) :
+    ∃ s : B → X, Continuous s ∧ ∀ b, P.proj (s b) = b := by
+  sorry
+
+/-- The fibre coordinate relative to a continuous section is continuous.
+
+For each `x`, freeness and fibre transitivity give a unique `g` with
+`act (g, s (proj x)) = x`.  In every equivariant local trivialization this
+`g` is the quotient of the chart's circle coordinate of `x` by that of the
+section, hence is continuous; these local assertions cover the base.
+Estimated size: 180--320 lines. -/
+theorem apm_t95j06_principalCircleBundle_section_coordinate_continuous
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (s : B → X) (hscont : Continuous s) (hs : ∀ b, P.proj (s b) = b) :
+    Continuous (fun x : X ↦ Classical.choose (P.orbit_fiber (s (P.proj x)) x (hs _))) := by
+  sorry
+
 /-- **LIBRARY, principal Circle bundles over a circle (estimated 600--1200
 lines).**  An equivariantly locally trivial principal Circle bundle whose base
 is a circle has total space homeomorphic to `Circle × Circle`.
@@ -410,7 +438,43 @@ theorem apm_t95j06_principalCircleBundle_over_circle_trivial
     (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
     (e : @Homeomorph B Circle tB inferInstance) :
     Nonempty (X ≃ₜ Circle × Circle) := by
-  sorry
+  obtain ⟨s, hscont, hs⟩ :=
+    apm_t95j06_principalCircleBundle_over_circle_section X B tB P e
+  let coord : X → Circle := fun x ↦
+    Classical.choose (P.orbit_fiber (s (P.proj x)) x (hs _))
+  have hcoord (x : X) : P.act (coord x, s (P.proj x)) = x :=
+    Classical.choose_spec (P.orbit_fiber (s (P.proj x)) x (hs _))
+  have hcoord_cont : Continuous coord :=
+    apm_t95j06_principalCircleBundle_section_coordinate_continuous X B tB P s hscont hs
+  let f : X → Circle × Circle := fun x ↦ (e (P.proj x), coord x)
+  let g : Circle × Circle → X := fun cg ↦ P.act (cg.2, s (e.symm cg.1))
+  have hf : Continuous f :=
+    (e.continuous.comp P.continuous_proj).prodMk hcoord_cont
+  have hg : Continuous g := by
+    exact P.continuous_act.comp
+      (continuous_snd.prodMk (hscont.comp (e.symm.continuous.comp continuous_fst)))
+  refine ⟨Homeomorph.mk
+    { toFun := f
+      invFun := g
+      left_inv := ?_
+      right_inv := ?_ }
+    hf hg⟩
+  · intro x
+    simpa [f, g] using hcoord x
+  · intro cg
+    rcases cg with ⟨c, k⟩
+    apply Prod.ext
+    · simp only [f, g]
+      rw [P.invariant, hs, e.apply_symm_apply]
+    · simp only [f, g]
+      have hbase : P.proj (P.act (k, s (e.symm c))) = e.symm c := by
+        rw [P.invariant, hs]
+      have hchosen := hcoord (P.act (k, s (e.symm c)))
+      simp only [hbase] at hchosen
+      apply mul_inv_eq_one.mp
+      apply P.free (coord (P.act (k, s (e.symm c))) * k⁻¹)
+        (P.act (k, s (e.symm c)))
+      rw [P.mul_act, mul_assoc, inv_mul_cancel, mul_one, hchosen]
 
 theorem apm_t95J06_bridge_1
     (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
