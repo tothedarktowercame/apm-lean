@@ -2390,6 +2390,51 @@ theorem apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit_aux_order
         @LT.lt K o.toLinearOrder.toLT x y ↔ x ∈ s.sideA := by
   sorry
 
+/-- For an interior point, the strict initial order ray is exactly its
+labelled `a`-side. -/
+lemma apm_t95j06_orderOfPunctureSplit_Iio_eq_sideA_aux
+    (K : Type*) [TopologicalSpace K]
+    (a c : K) (o : CompleteLinearOrder K)
+    (horder : ∀ (x y : K) (hya : y ≠ a) (hyc : y ≠ c)
+      (s : apm_t95j06_PunctureSplit K a c y),
+      @LT.lt K o.toLinearOrder.toLT x y ↔ x ∈ s.sideA)
+    (y : K) (hya : y ≠ a) (hyc : y ≠ c)
+    (p : apm_t95j06_PunctureSplit K a c y) :
+    @Set.Iio K o.toLinearOrder.toPreorder y = p.sideA := by
+  ext x
+  exact horder x y hya hyc p
+
+/-- For an interior point, the strict final order ray is exactly its labelled
+`c`-side. -/
+lemma apm_t95j06_orderOfPunctureSplit_Ioi_eq_sideC_aux
+    (K : Type*) [TopologicalSpace K]
+    (a c : K) (o : CompleteLinearOrder K)
+    (horder : ∀ (x y : K) (hya : y ≠ a) (hyc : y ≠ c)
+      (s : apm_t95j06_PunctureSplit K a c y),
+      @LT.lt K o.toLinearOrder.toLT x y ↔ x ∈ s.sideA)
+    (y : K) (hya : y ≠ a) (hyc : y ≠ c)
+    (p : apm_t95j06_PunctureSplit K a c y) :
+    @Set.Ioi K o.toLinearOrder.toPreorder y = p.sideC := by
+  ext x
+  constructor
+  · intro hyx
+    have hxy : x ≠ y := hyx.ne.symm
+    have hxpunct : x ∈ ({y}ᶜ : Set K) := by simpa
+    rw [← p.cover] at hxpunct
+    rcases hxpunct with hxA | hxC
+    · exact (hyx.asymm (horder x y hya hyc p |>.mpr hxA)).elim
+    · exact hxC
+  · intro hxC
+    have hxy : x ≠ y := by
+      intro h
+      subst x
+      have : y ∈ ({y}ᶜ : Set K) := p.cover ▸ Set.mem_union_right _ hxC
+      exact this rfl
+    rcases lt_or_gt_of_ne hxy with hxy' | hyx
+    · have hxA := (horder x y hya hyc p).mp hxy'
+      exact (Set.disjoint_left.1 p.disjoint hxA hxC).elim
+    · exact hyx
+
 /-- **C2b, topology and density of the separation order (estimated 140--240
 lines; LIBRARY).**  Any complete order realizing the puncture-side relation
 has the supplied topology as its order topology and is densely ordered.
@@ -2416,7 +2461,81 @@ theorem apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit_aux_topology
       @LT.lt K o.toLinearOrder.toLT x y ↔ x ∈ s.sideA) :
     @OrderTopology K inferInstance o.toLinearOrder.toPreorder ∧
       @DenselyOrdered K o.toLinearOrder.toLT := by
-  sorry
+  letI : CompleteLinearOrder K := o
+  have hIio : ∀ y : K, IsOpen (Set.Iio y) := by
+    intro y
+    by_cases hya : y = a
+    · have : Set.Iio y = ∅ := by
+        rw [hya, ha]; exact Set.Iio_eq_empty_iff.mpr isMin_bot
+      rw [this]; exact isOpen_empty
+    by_cases hyc : y = c
+    · have : Set.Iio y = {y}ᶜ := by
+        ext x; rw [hyc, hc]
+        simp only [Set.mem_Iio, Set.mem_compl_iff, Set.mem_singleton_iff]
+        exact lt_top_iff_ne_top
+      rw [this]; exact isOpen_compl_singleton
+    obtain ⟨p⟩ := hsplit y hya hyc
+    rw [apm_t95j06_orderOfPunctureSplit_Iio_eq_sideA_aux K a c o horder y hya hyc p]
+    exact p.sideA_open
+  have hIoi : ∀ y : K, IsOpen (Set.Ioi y) := by
+    intro y
+    by_cases hya : y = a
+    · have : Set.Ioi y = {y}ᶜ := by
+        ext x; rw [hya, ha]
+        simp only [Set.mem_Ioi, Set.mem_compl_iff, Set.mem_singleton_iff]
+        exact bot_lt_iff_ne_bot
+      rw [this]; exact isOpen_compl_singleton
+    by_cases hyc : y = c
+    · have : Set.Ioi y = ∅ := by
+        rw [hyc, hc]; exact Set.Ioi_eq_empty_iff.mpr isMax_top
+      rw [this]; exact isOpen_empty
+    obtain ⟨p⟩ := hsplit y hya hyc
+    rw [apm_t95j06_orderOfPunctureSplit_Ioi_eq_sideC_aux K a c o horder y hya hyc p]
+    exact p.sideC_open
+  have hle : (‹TopologicalSpace K›) ≤ Preorder.topology K := by
+    apply le_generateFrom
+    rintro s ⟨y, rfl | rfl⟩
+    · exact hIoi y
+    · exact hIio y
+  have hT2 : @T2Space K (Preorder.topology K) := by
+    letI := Preorder.topology K
+    haveI : OrderTopology K := ⟨rfl⟩
+    infer_instance
+  have hcont : @Continuous K K _ (Preorder.topology K) id := continuous_id_of_le hle
+  have heq : (‹TopologicalSpace K›) = Preorder.topology K := by
+    apply le_antisymm hle
+    intro U hU
+    have hc : IsCompact Uᶜ := hU.isClosed_compl.isCompact
+    have himg : @IsCompact K (Preorder.topology K) (id '' Uᶜ) :=
+      @IsCompact.image K K _ (Preorder.topology K) Uᶜ id hc hcont
+    rw [Set.image_id] at himg
+    have hcl : @IsClosed K (Preorder.topology K) Uᶜ :=
+      @IsCompact.isClosed K (Preorder.topology K) hT2 _ himg
+    have hU' : @IsOpen K (Preorder.topology K) Uᶜᶜ :=
+      (@isOpen_compl_iff K Uᶜ (Preorder.topology K)).mpr hcl
+    simpa using hU'
+  haveI hOT : OrderTopology K := ⟨heq⟩
+  haveI : ConnectedSpace K := connectedSpace_iff_univ.mpr hK
+  refine ⟨hOT, ⟨fun x y hxy => ?_⟩⟩
+  by_contra hno
+  push_neg at hno
+  have hS : Set.Iio y = Set.Iic x := by
+    ext z
+    simp only [Set.mem_Iio, Set.mem_Iic]
+    constructor
+    · intro hz
+      by_contra hzx
+      push_neg at hzx
+      exact absurd hz (not_lt.mpr (hno z hzx))
+    · intro hz; exact lt_of_le_of_lt hz hxy
+  have hclopen : IsClopen (Set.Iio y) := by
+    refine ⟨?_, hIio y⟩
+    rw [hS]; exact isClosed_Iic
+  rcases isClopen_iff.mp hclopen with h | h
+  · have : x ∈ Set.Iio y := hxy
+    rw [h] at this; exact this
+  · have : y ∈ Set.Iio y := by rw [h]; trivial
+    exact lt_irrefl y this
 
 /-- **C2, order construction (estimated 65--110 lines).** Given the labelled
 two-component decomposition of every non-endpoint puncture, separation from
