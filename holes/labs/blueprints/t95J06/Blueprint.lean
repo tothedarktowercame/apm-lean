@@ -5966,6 +5966,93 @@ lemma apm_t95j06_increasing_interval_union_lt_trans
   rw [apm_t95j06_increasing_interval_union_lt_iff X U hnested hreal hcover m hx hz]
   exact hxy.trans hyz
 
+lemma apm_t95j06_increasing_interval_union_lt_trichotomous
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (x y : X) :
+    apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover x y ∨
+      x = y ∨
+      apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover y x := by
+  let sx := apm_t95j06_increasing_interval_union_stage X U hcover x
+  let sy := apm_t95j06_increasing_interval_union_stage X U hcover y
+  let M := max sx sy
+  have hxM : x ∈ U M := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested (le_max_left sx sy)
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover x)
+  have hyM : y ∈ U M := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested (le_max_right sx sy)
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover y)
+  let c := apm_t95j06_increasing_interval_union_coordinate X U hnested hreal
+  rcases lt_trichotomy (c M x) (c M y) with hlt | heq | hgt
+  · exact Or.inl hlt
+  · right; left
+    have heq' :
+        apm_t95j06_increasing_interval_union_orientedCharts
+            X U hnested hreal M ⟨x, hxM⟩ =
+          apm_t95j06_increasing_interval_union_orientedCharts
+            X U hnested hreal M ⟨y, hyM⟩ := by
+      simpa [c, apm_t95j06_increasing_interval_union_coordinate, hxM, hyM] using heq
+    have hsub :=
+      (apm_t95j06_increasing_interval_union_orientedCharts
+        X U hnested hreal M).injective heq'
+    exact congrArg (fun z : U M => (z : X)) hsub
+  · exact Or.inr (Or.inr
+      ((apm_t95j06_increasing_interval_union_lt_iff
+        X U hnested hreal hcover M hyM hxM).2 hgt))
+
+/-- The linear order induced by the compatible corrected stage coordinates. -/
+noncomputable def apm_t95j06_increasing_interval_union_linearOrder
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) : LinearOrder X := by
+  classical
+  let r := apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover
+  letI : IsStrictTotalOrder X r := {
+    irrefl := apm_t95j06_increasing_interval_union_lt_irrefl
+      X U hnested hreal hcover
+    trans := @apm_t95j06_increasing_interval_union_lt_trans
+      X _ U hnested hreal hcover
+    trichotomous := fun a b hab hba => by
+      rcases apm_t95j06_increasing_interval_union_lt_trichotomous
+          X U hnested hreal hcover a b with h | h | h
+      · exact (hab h).elim
+      · exact h
+      · exact (hba h).elim }
+  exact linearOrderOfSTO r
+
+lemma apm_t95j06_increasing_interval_union_linearOrder_lt_iff
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (x y : X) :
+    @LT.lt X (apm_t95j06_increasing_interval_union_linearOrder
+      X U hnested hreal hcover).toLT x y ↔
+      apm_t95j06_increasing_interval_union_lt X U hnested hreal hcover x y := by
+  rfl
+
+/-- On every exhaustion stage, its corrected coordinate is strictly monotone
+for the global linear order. -/
+lemma apm_t95j06_increasing_interval_union_coordinate_strictMonoOn
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (m : ℕ) :
+    @StrictMonoOn X ℝ
+      (apm_t95j06_increasing_interval_union_linearOrder
+        X U hnested hreal hcover).toPreorder inferInstance
+      (apm_t95j06_increasing_interval_union_coordinate
+        X U hnested hreal m) (U m) := by
+  intro x hx y hy hxy
+  have hglobal :
+      apm_t95j06_increasing_interval_union_lt
+        X U hnested hreal hcover x y :=
+    (apm_t95j06_increasing_interval_union_linearOrder_lt_iff
+      X U hnested hreal hcover x y).1 hxy
+  exact (apm_t95j06_increasing_interval_union_lt_iff
+    X U hnested hreal hcover m hx hy).1 hglobal
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
