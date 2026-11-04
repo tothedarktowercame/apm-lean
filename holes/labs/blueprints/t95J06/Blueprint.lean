@@ -694,7 +694,26 @@ theorem apm_t95j06_surface_component_locallyEuclideanPlane
     (x : F) :
     apm_t95j06_IsLocallyEuclideanPlane
       {y : F // y ∈ connectedComponent x} := by
-  sorry
+  rcases hF.2 with ⟨charts, hman, _⟩
+  letI : ChartedSpace apm_t95j06_E2 F := charts
+  letI : IsManifold apm_t95j06_I2 (⊤ : ℕ∞) F := hman
+  letI : LocallyConnectedSpace F :=
+    ChartedSpace.locallyConnectedSpace apm_t95j06_E2 F
+  have hcomponent : IsOpen (connectedComponent x) :=
+    isOpen_connectedComponent
+  intro y
+  let inclusion : {z : F // z ∈ connectedComponent x} → F := Subtype.val
+  letI : Nonempty {z : F // z ∈ connectedComponent x} := ⟨y⟩
+  have hinclusion : Topology.IsOpenEmbedding inclusion :=
+    hcomponent.isOpenEmbedding_subtypeVal
+  let e : OpenPartialHomeomorph
+      {z : F // z ∈ connectedComponent x} apm_t95j06_E2 :=
+    (hinclusion.toOpenPartialHomeomorph inclusion).trans
+      (chartAt apm_t95j06_E2 y.1)
+  refine ⟨e.source, e.open_source, ?_, e.target, e.open_target,
+    ⟨e.toHomeomorphSourceTarget⟩⟩
+  change y ∈ e.source
+  simp [e, inclusion]
 
 /-- An open subspace of a locally Euclidean plane is locally Euclidean.
 
