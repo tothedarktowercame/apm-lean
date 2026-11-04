@@ -1512,6 +1512,19 @@ group isomorphism supplied by singular excision, this records its naturality
 with respect to all maps from the compact support to point supports; that
 naturality is exactly what transports the two point-restriction clauses in
 `t00A04_HatcherConclusion`. -/
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision
+    {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
+    (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
+    (hopen : ∀ U : Set Y, IsOpen U → IsOpen (f '' U))
+    (K : Set Y) (hK : IsCompact K) (q : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ (f '' K)ᶜ
+        ⟨f, hcont⟩ (by
+          intro y hy hfK
+          rcases hfK with ⟨k, hk, hfk⟩
+          exact hy (show y ∈ K from (hinj hfk).symm ▸ hk))) q) := by
+  sorry
+
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso
     {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
     (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
@@ -1523,7 +1536,9 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbe
           intro y hy hfB
           rcases hfB with ⟨b, hb, hfb⟩
           exact hy (show y ∈ B from (hinj hfb).symm ▸ hb))) n) := by
-  sorry
+  exact
+    t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision
+      f hinj hcont hopen B hB n
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point
     {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z]
