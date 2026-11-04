@@ -123,14 +123,6 @@ theorem t00A04_boundarylessManifold_of_finiteDimensional_selfModel
     BoundarylessManifold I X := by
   sorry
 
-/-- **LIBRARY F1.** Hatcher 3.27 for a compact convex subset of the
-finite-dimensional Euclidean model. -/
-theorem t00A04_hatcherConclusion_compact_convex_euclidean
-    (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
-    (hA : IsCompact A) (hconv : Convex ℝ A) :
-    t00A04_HatcherConclusion (EuclideanSpace ℝ (Fin d)) d A := by
-  sorry
-
 /-- **LIBRARY F2.** The relative compact-complement Mayer--Vietoris union
 step in Hatcher 3.27.  Its three inputs are explicit so seats are independent. -/
 theorem t00A04_hatcherConclusion_union
@@ -471,6 +463,106 @@ theorem t00A04_modTwoLocalHomology_unique_nonzero_euclidean (d : ℕ) :
       ∀ a b : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {x} d,
         a ≠ 0 → b ≠ 0 → a = b := by
   exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean d
+
+/-- **LIBRARY F1.** Hatcher 3.27 for a compact convex subset of the
+finite-dimensional Euclidean model. -/
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_empty
+    (d n : ℕ) :
+    Subsingleton (t00A04_ModTwoLocalHomology
+      (EuclideanSpace ℝ (Fin d)) (∅ : Set (EuclideanSpace ℝ (Fin d))) n) := by
+  sorry
+
+/-- Radial deformation of the complement of a compact convex set onto the
+complement of any one of its points makes restriction to that point an
+isomorphism on relative homology. -/
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective
+    (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (hA : IsCompact A) (hconv : Convex ℝ A)
+    (x : EuclideanSpace ℝ (Fin d)) (hx : x ∈ A) (n : ℕ) :
+    Function.Bijective (t00A04_modTwo_pointRestriction
+      (EuclideanSpace ℝ (Fin d)) A x hx n) := by
+  sorry
+
+/-- Euclidean point-local homology vanishes strictly above the dimension. -/
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish
+    (d i : ℕ) (x : EuclideanSpace ℝ (Fin d)) (hi : d < i) :
+    Subsingleton (t00A04_ModTwoLocalHomology
+      (EuclideanSpace ℝ (Fin d)) {x} i) := by
+  sorry
+
+/-- Top-dimensional Euclidean point-local mod-2 homology contains its
+nonzero generator. -/
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_nonzero
+    (d : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+    ∃ g : t00A04_ModTwoLocalHomology
+      (EuclideanSpace ℝ (Fin d)) {x} d, g ≠ 0 := by
+  have h0 : ∃ e : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) {0} d ≃ ZMod 2,
+      e 0 = 0 := by
+    rcases d with _ | _ | m
+    · exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero
+    · exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_one
+    · exact t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_high m
+  obtain ⟨e, e0⟩ := h0
+  let i := (ConstructionTargets.CoefficientManifoldLocalComparison.translationIso
+    (ZMod 2) x d).toLinearEquiv
+  refine ⟨i.symm (e.symm 1), ?_⟩
+  intro h
+  have h1 : e.symm 1 = 0 := by
+    have h2 : i (i.symm (e.symm 1)) = i 0 := congrArg i h
+    rwa [LinearEquiv.apply_symm_apply, LinearEquiv.map_zero] at h2
+  have : (1 : ZMod 2) = 0 := by
+    rw [← e.apply_symm_apply 1, h1, e0]
+  exact one_ne_zero this
+
+theorem t00A04_hatcherConclusion_compact_convex_euclidean
+    (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (hA : IsCompact A) (hconv : Convex ℝ A) :
+    t00A04_HatcherConclusion (EuclideanSpace ℝ (Fin d)) d A := by
+  classical
+  by_cases hne : A.Nonempty
+  · obtain ⟨x, hx⟩ := hne
+    have hbij (y : EuclideanSpace ℝ (Fin d)) (hy : y ∈ A) (n : ℕ) :=
+      t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective
+        d A hA hconv y hy n
+    constructor
+    · intro i hi
+      constructor
+      intro a b
+      apply (hbij x hx i).1
+      exact (t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish
+        d i x hi).elim _ _
+    · obtain ⟨g, hg⟩ :=
+        t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_nonzero d x
+      obtain ⟨c, hc⟩ := (hbij x hx d).2 g
+      refine ⟨c, ?_⟩
+      intro y hy hcy
+      have hc0 : c = 0 := (hbij y hy d).1 (by simpa using hcy)
+      apply hg
+      rw [← hc, hc0]
+      exact map_zero _
+    · intro c
+      constructor
+      · intro hc y hy
+        subst c
+        exact map_zero _
+      · intro hc
+        apply (hbij x hx d).1
+        simpa using hc x hx
+  · have hA0 : A = ∅ := Set.not_nonempty_iff_eq_empty.mp hne
+    subst A
+    constructor
+    · intro i _
+      exact t00A04_hatcherConclusion_compact_convex_euclidean_aux_empty d i
+    · refine ⟨0, ?_⟩
+      intro x hx
+      simp at hx
+    · intro c
+      constructor
+      · intro _ x hx
+        simp at hx
+      · intro _
+        exact (t00A04_hatcherConclusion_compact_convex_euclidean_aux_empty
+          d d).elim _ _
 
 /-- **F2e.** Finite unions of compact convex Euclidean sets satisfy Hatcher's
 conclusion.  F1 and F2 are passed in explicitly. -/
