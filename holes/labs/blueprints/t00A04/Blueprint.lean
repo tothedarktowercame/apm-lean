@@ -1439,7 +1439,49 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_partialH
         t00A04_HatcherConclusion Q d (f '' C))) :
     t00A04_HatcherConclusion Y d B ↔
       t00A04_HatcherConclusion Z d (e '' B) := by
-  sorry
+  let S := {y : Y // y ∈ e.source}
+  let T := {z : Z // z ∈ e.target}
+  let C : Set S := {y | (y : Y) ∈ B}
+  let h : S ≃ₜ T :=
+    { toFun := fun y ↦ ⟨e y, e.map_source y.2⟩
+      invFun := fun z ↦ ⟨e.symm z, e.map_target z.2⟩
+      left_inv := fun y ↦ Subtype.ext (e.left_inv y.2)
+      right_inv := fun z ↦ Subtype.ext (e.right_inv z.2)
+      continuous_toFun := hcont.restrict.subtype_mk _
+      continuous_invFun := hcont_symm.restrict.subtype_mk _ }
+  have himageC : ((fun y : S ↦ (y : Y)) '' C) = B := by
+    ext y
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      exact hz
+    · intro hy
+      exact ⟨⟨y, hBe hy⟩, hy, rfl⟩
+  have hC : IsCompact C := by
+    rw [Subtype.isCompact_iff, himageC]
+    exact hB
+  have hincS := hopenExcision (fun y : S ↦ (y : Y))
+    Subtype.val_injective continuous_subtype_val
+    (fun U hU ↦ hopen_source.isOpenMap_subtype_val U hU) C hC
+  have hh := hopenExcision h h.injective h.continuous
+    (fun U hU ↦ h.isOpenMap U hU) C hC
+  have hTcompact : IsCompact (h '' C) := hC.image h.continuous
+  have hincT := hopenExcision (fun z : T ↦ (z : Z))
+    Subtype.val_injective continuous_subtype_val
+    (fun U hU ↦ hopen_target.isOpenMap_subtype_val U hU) (h '' C) hTcompact
+  have himageT : ((fun z : T ↦ (z : Z)) '' (h '' C)) = e '' B := by
+    ext z
+    constructor
+    · rintro ⟨w, ⟨y, hy, rfl⟩, rfl⟩
+      exact ⟨y, hy, rfl⟩
+    · rintro ⟨y, hy, rfl⟩
+      exact ⟨h ⟨y, hBe hy⟩, ⟨⟨y, hBe hy⟩, hy, rfl⟩, rfl⟩
+  constructor
+  · intro hY
+    have hTC := hincT.mp (hh.mp (hincS.mpr (himageC ▸ hY)))
+    rwa [himageT] at hTC
+  · intro hZ
+    have hSC := hincS.mp (hh.mpr (hincT.mpr (himageT ▸ hZ)))
+    rwa [himageC] at hSC
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_target_open
     (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -1447,7 +1489,20 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_target_o
     [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X]
     [BoundarylessManifold I X] (x : X) :
     IsOpen (extChartAt I x).target := by
-  sorry
+  rw [isOpen_iff_mem_nhds]
+  intro z hz
+  let y : X := (extChartAt I x).symm z
+  have hy : y ∈ (extChartAt I x).source :=
+    (extChartAt I x).map_target hz
+  have hy' : y ∈ (chartAt E x).source := by
+    simpa only [extChartAt_source] using hy
+  have hzi : z ∈ interior (extChartAt I x).target := by
+    have hi := (I.isInteriorPoint_iff_of_mem_atlas (n := ∞) (by simp)
+      (chart_mem_atlas E x) hy').mp
+      (BoundarylessManifold.isInteriorPoint (I := I) (x := y))
+    rw [← (extChartAt I x).right_inv hz]
+    simpa only [extChartAt] using hi
+  exact mem_interior_iff_mem_nhds.mp hzi
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision
     (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
