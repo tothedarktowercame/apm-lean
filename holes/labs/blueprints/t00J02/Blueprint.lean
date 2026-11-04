@@ -214,6 +214,43 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F1
     ConstructionTargets.T00J02Closure.surfaceTopDegree e f = ∑ x, d x := by
   sorry
 
+/-- **F2 transverse component comparison (LIBRARY, estimated 450--800 lines).**
+Let `K` be a component of `f ⁻¹' range c` meeting the fibre over `y`, parametrized
+by an embedding `γ : Circle → S` with range `K`, and let `ℓ` be the circle map
+with `c ∘ ℓ = f ∘ γ`.  Then the sum of the local degrees of `f` at the fibre
+points on `K` is `±` the degree of `ℓ`.  Transversality gives tubular
+coordinates in which `f` is, up to homotopy through maps with the same isolated
+fibre, the product of `ℓ` with a normal coordinate whose derivative is nonzero;
+an embedded circle in an oriented surface is two-sided, so the normal sign is
+constant along `K`.  No disk-boundedness is assumed, so `circleDegree ℓ` is not
+known to vanish here (claude-14: codex-16's version used the zero-degree lifts,
+whose degree is zero by a structure field, so it was equivalent to F2).  The
+embedding hypothesis matters: a degree-zero surjection `γ` onto `K` would give
+`circleDegree ℓ = 0` whatever `f` does.  Fold check: local degrees `+1, -1`,
+`ℓ` folds back with degree `0`. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (hf : ContMDiff apm_t00j02_I2 apm_t00j02_I2 ∞ f)
+    (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
+    (htrans : apm_t00j02_transverse f c)
+    (y : S) (hy : y ∈ range c) [Fintype {x : S // f x = y}]
+    (d : {x : S // f x = y} → ℤ)
+    (hd : ∀ x, t00J02_IsLocalDegree e f y x (d x))
+    (k : ConstructionTargets.T00J02Closure.OccupiedRegularFiberComponent f c y hy)
+    (γ : C(Circle, S)) (hγ : Topology.IsEmbedding γ)
+    (hγrange : range γ = k.1.1)
+    (ℓ : C(Circle, Circle)) (hℓ : c.comp ℓ = f.comp γ) :
+    ∃ ε : ℤ, (ε = 1 ∨ ε = -1) ∧
+      ConstructionTargets.T00J02Closure.componentLocalDegreeSum
+        (ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex
+          f c y hy) d k =
+        ε * ConstructionTargets.T00J02Closure.circleDegree ℓ := by
+  sorry
+
 /-- **F2: component sums of actual local degrees vanish.**  Transverse
 product coordinates compare the sum of point-local degrees on an occupied
 preimage component with the degree of its lift to `c`, up to a component
@@ -239,7 +276,46 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2
     ∀ k, ConstructionTargets.T00J02Closure.componentLocalDegreeSum
       (ConstructionTargets.T00J02Closure.occupiedRegularFiberComponentIndex
         f c y hy) d k = 0 := by
-  sorry
+  classical
+  letI : Mono (((AlgebraicTopology.singularHomologyFunctor
+      (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom c)) :=
+    ConstructionTargets.IntegerCyclic.mono_of_ne_zero_of_iso (Fin 4 → ℤ)
+      ConstructionTargets.CircleHomology.circleH1IsoInt eS _ hhandle
+  intro k
+  obtain ⟨x, hxk⟩ := k.2
+  have hxs : (x : S) ∈ f ⁻¹' range c := by
+    change f x ∈ range c
+    rw [x.property]
+    exact hy
+  obtain ⟨D, hD, hDemb, hDrange⟩ := hdisks x hxs
+  let γ : C(Circle, S) :=
+    ⟨fun z => D (ConstructionTargets.DiskBoundaryHomology.circleToDisk z),
+      hD.comp ConstructionTargets.DiskBoundaryHomology.continuous_circleToDisk⟩
+  have hcd : Topology.IsEmbedding
+      ConstructionTargets.DiskBoundaryHomology.circleToDisk := by
+    apply Topology.IsEmbedding.of_comp
+      ConstructionTargets.DiskBoundaryHomology.continuous_circleToDisk
+      continuous_subtype_val
+    exact (Topology.IsEmbedding.subtypeVal :
+      Topology.IsEmbedding ((↑) : Submonoid.unitSphere ℂ → ℂ))
+  have hγemb : Topology.IsEmbedding γ := hDemb.comp hcd
+  have hγrange : range γ = k.1.1 := by
+    rw [← hxk]
+    exact hDrange
+  have hγsub : range γ ⊆ f ⁻¹' range c := by
+    rw [hγrange, ← hxk]
+    exact connectedComponentIn_subset _ _
+  have hγzero := ConstructionTargets.DiskBoundaryHomology.singularHomology_map_boundary_eq_zero
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) D hD 1 one_ne_zero
+  obtain ⟨ℓ, hcomm, hℓzero⟩ :=
+    ConstructionTargets.EmbeddedCircleLift.map_component_lift_eq_zero
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)) f c hc γ hγsub hγzero
+  obtain ⟨ε, -, hk⟩ :=
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison
+      e f hf c hc hcsmooth htrans y hy d hd k γ hγemb hγrange ℓ hcomm
+  rw [hk, ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
+    ℓ hℓzero, mul_zero]
 
 /-- **LIBRARY boundary.** (claude-14, 2026-11-04: split1's `aux_calculations` was removed. It fed
 `CanonicalRegularFiberDegreeCalculations`, whose `regularFiberLocalDegree` is the chart
