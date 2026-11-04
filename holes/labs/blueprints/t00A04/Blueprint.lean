@@ -737,6 +737,34 @@ theorem t00A04_hatcherConclusion_compact_in_chart
 
 /-- **LIBRARY F3.** Finite chart induction.  Arbitrary compact single-chart
 sets, the union step, and local uniqueness are explicit hypotheses. -/
+theorem t00A04_hatcherConclusion_compact_manifold_aux_empty
+    (X : Type) [TopologicalSpace X] [IsEmpty X] (d : ℕ) :
+    t00A04_HatcherConclusion X d ∅ := by
+  have hsub (n : ℕ) :
+      Subsingleton (t00A04_ModTwoLocalHomology X ∅ n) := by
+    let f := ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+      (ZMod 2) (Set.univ : Set X)
+    haveI : IsIso f := by
+      dsimp [f, ConstructionTargets.CoefficientRelativeSmall.subspaceMap,
+        ConstructionTargets.CoefficientRelativeSmall.chains]
+      rw [ConstructionTargets.SingularHomologyConcrete.subspaceInclusion_univ]
+      apply Functor.map_isIso
+    have hz : CategoryTheory.Limits.IsZero
+        (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+          (ZMod 2) (Set.univ : Set X)) :=
+      CategoryTheory.Limits.isZero_cokernel_of_epi f
+    have hzero : Subsingleton
+        (((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+          (ZMod 2) (Set.univ : Set X)).homology n : Type)) :=
+      ModuleCat.subsingleton_of_isZero
+      (Functor.map_isZero
+        (HomologicalComplex.homologyFunctor (ModuleCat (ZMod 2))
+          (ComplexShape.down ℕ) n) hz)
+    simpa only [t00A04_ModTwoLocalHomology, Set.compl_empty] using hzero
+  refine ⟨fun i _ => hsub i, ⟨0, fun x => isEmptyElim x⟩, ?_⟩
+  intro c
+  exact ⟨fun _ x => isEmptyElim x, fun _ => (hsub d).elim c 0⟩
+
 theorem t00A04_hatcherConclusion_compact_manifold
     (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -756,7 +784,38 @@ theorem t00A04_hatcherConclusion_compact_manifold
       a ≠ 0 → b ≠ 0 → a = b)
     (A : Set X) (hA : IsCompact A) :
     t00A04_HatcherConclusion X (Module.finrank ℝ E) A := by
-  sorry
+  classical
+  let U : X → Set X := fun x => (extChartAt I x).source
+  have hUopen : ∀ x, IsOpen (U x) := fun x => isOpen_extChartAt_source x
+  have hAcov : A ⊆ ⋃ x, U x := by
+    intro x hx
+    exact Set.mem_iUnion.2 ⟨x, mem_extChartAt_source x⟩
+  obtain ⟨s, hs⟩ := hA.elim_finite_subcover U hUopen hAcov
+  obtain ⟨K, hKcompact, hKsub, hAK⟩ := hA.finite_compact_cover s U
+    (fun x _ => hUopen x) hs
+  have key : ∀ t : Finset X,
+      t00A04_HatcherConclusion X (Module.finrank ℝ E) (⋃ x ∈ t, K x) := by
+    intro t
+    induction t using Finset.induction_on with
+    | empty =>
+        simp only [Finset.notMem_empty, Set.iUnion_of_empty, Set.iUnion_empty]
+        by_cases hX : Nonempty X
+        · let x : X := Classical.choice hX
+          exact hlocal ∅ isCompact_empty ⟨x, Set.empty_subset _⟩
+        · haveI : IsEmpty X := not_nonempty_iff.mp hX
+          exact t00A04_hatcherConclusion_compact_manifold_aux_empty X _
+    | @insert x t hxt ih =>
+        rw [Finset.set_biUnion_insert]
+        have hKt : IsCompact (⋃ y ∈ t, K y) :=
+          t.isCompact_biUnion (fun y _ => hKcompact y)
+        apply hunion (K x) (⋃ y ∈ t, K y) (hKcompact x) hKt
+        · exact hlocal (K x) (hKcompact x) ⟨x, hKsub x⟩
+        · exact ih
+        · exact hlocal (K x ∩ ⋃ y ∈ t, K y) ((hKcompact x).inter hKt)
+            ⟨x, Set.inter_subset_left.trans (hKsub x)⟩
+        · exact hloc
+  rw [hAK]
+  exact key s
 
 /-- **LIBRARY F4.** At support `A = X`, a nonzero relative fundamental class
 is a nonzero absolute top-homology class. -/
