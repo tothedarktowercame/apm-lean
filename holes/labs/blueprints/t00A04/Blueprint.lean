@@ -34,6 +34,14 @@ noncomputable def t00A04_modTwo_pointRestriction
         simpa only [Set.mem_compl_iff, Set.mem_singleton_iff, ne_eq] using
           fun (hxy : y = x) ↦ hy (hxy ▸ hx))) n
 
+/-- Restriction from support in `K` to support in a smaller set `A ⊆ K`:
+the map `H_n(X, X \ K) → H_n(X, X \ A)` induced by the identity of `X`. -/
+noncomputable def t00A04_modTwo_restrict
+    (X : Type) [TopologicalSpace X] (A K : Set X) (h : A ⊆ K) (n : ℕ) :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ Aᶜ
+      (ContinuousMap.id X) (fun _ hy hyA ↦ hy (h hyA))) n
+
 /-- The usable conclusion of Hatcher 3.27 for a compact support `A`. -/
 structure t00A04_HatcherConclusion
     (X : Type) [TopologicalSpace X] (d : ℕ) (A : Set X) : Prop where
@@ -563,6 +571,39 @@ theorem t00A04_hatcherConclusion_compact_convex_euclidean
       · intro _
         exact (t00A04_hatcherConclusion_compact_convex_euclidean_aux_empty
           d d).elim _ _
+
+/-- **Support functoriality.**  Restricting from `K` to `A` and then to a
+point `x ∈ A` is restriction from `K` to `x`. -/
+theorem t00A04_modTwo_pointRestriction_restrict
+    (X : Type) [TopologicalSpace X] (A K : Set X) (h : A ⊆ K) (x : X) (hx : x ∈ A)
+    (n : ℕ) (c : t00A04_ModTwoLocalHomology X K n) :
+    t00A04_modTwo_pointRestriction X A x hx n (t00A04_modTwo_restrict X A K h n c) =
+      t00A04_modTwo_pointRestriction X K x (h hx) n c := by
+  sorry
+
+/-- **Support functoriality.**  Restriction along `A ⊆ B ⊆ K` composes. -/
+theorem t00A04_modTwo_restrict_restrict
+    (X : Type) [TopologicalSpace X] (A B K : Set X) (hAB : A ⊆ B) (hBK : B ⊆ K)
+    (n : ℕ) (c : t00A04_ModTwoLocalHomology X K n) :
+    t00A04_modTwo_restrict X A B hAB n (t00A04_modTwo_restrict X B K hBK n c) =
+      t00A04_modTwo_restrict X A K (hAB.trans hBK) n c := by
+  sorry
+
+/-- **Compact supports (Hatcher 3.27, step 3).**  A class supported on a
+compact `A ⊆ ℝ^d` comes from a finite union of compact convex sets whose
+interior contains `A`: a representing relative cycle has boundary with compact
+support disjoint from `A`, so finitely many small closed balls around points of
+`A` avoid it. -/
+theorem t00A04_compactSupport_lift
+    (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d))) (hA : IsCompact A)
+    (c : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) A n) :
+    ∃ (s : Finset (Set (EuclideanSpace ℝ (Fin d))))
+      (_ : ∀ B ∈ s, IsCompact B ∧ Convex ℝ B)
+      (_ : A ⊆ interior (⋃ B ∈ s, B))
+      (c' : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) (⋃ B ∈ s, B) n),
+      t00A04_modTwo_restrict _ A (⋃ B ∈ s, B)
+        ((‹A ⊆ interior (⋃ B ∈ s, B)›).trans interior_subset) n c' = c := by
+  sorry
 
 /-- **F2e.** Finite unions of compact convex Euclidean sets satisfy Hatcher's
 conclusion.  F1 and F2 are passed in explicitly. -/
