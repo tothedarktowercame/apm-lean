@@ -316,7 +316,23 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_abs_constant
         S e).localCoefficient y| =
       |(ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
         S e).localCoefficient z| := by
-  sorry
+  let D :=
+    ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso S e
+  let degree :=
+    ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree
+      0 S e
+  have hcoefficient (x : S) : D.localCoefficient x = degree x := by
+    exact
+      ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_degree_spec
+        0 e x (D.localCoefficient x) (D.localization_eq x)
+  have hlocal : IsLocallyConstant (fun x : S ↦ (degree x).natAbs) := by
+    exact
+      ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant
+        0 S e
+  have hnat : (degree y).natAbs = (degree z).natAbs :=
+    IsLocallyConstant.apply_eq_of_preconnectedSpace hlocal y z
+  rw [hcoefficient y, hcoefficient z, Int.abs_eq_natAbs, Int.abs_eq_natAbs]
+  exact_mod_cast hnat
 
 /-- Compact-support reconstruction detects common divisors of all local
 coefficients.  If an integer divides the localization coefficient of the
