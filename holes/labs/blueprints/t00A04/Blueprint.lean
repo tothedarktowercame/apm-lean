@@ -670,6 +670,27 @@ theorem t00A04_hatcherConclusion_compact_euclidean
 
 /-- **LIBRARY (chart transport).** The all-compact Euclidean result transported
 to an arbitrary compact subset contained in one chart source. -/
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_model
+    (E : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E]
+    (heuclid : ∀ (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d))), IsCompact A →
+      t00A04_HatcherConclusion _ d A)
+    (A : Set E) (hA : IsCompact A) :
+    t00A04_HatcherConclusion E (Module.finrank ℝ E) A := by
+  sorry
+
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision
+    (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [ChartedSpace E X]
+    [IsManifold I ∞ X] [BoundarylessManifold I X]
+    (hmodel : ∀ (B : Set E), IsCompact B →
+      t00A04_HatcherConclusion E (Module.finrank ℝ E) B)
+    (A : Set X) (hA : IsCompact A)
+    (hchart : ∃ x : X, A ⊆ (extChartAt I x).source) :
+    t00A04_HatcherConclusion X (Module.finrank ℝ E) A := by
+  sorry
+
 theorem t00A04_hatcherConclusion_compact_in_chart
     (E X : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -680,7 +701,9 @@ theorem t00A04_hatcherConclusion_compact_in_chart
     (A : Set X) (hA : IsCompact A)
     (hchart : ∃ x : X, A ⊆ (extChartAt I x).source) :
     t00A04_HatcherConclusion X (Module.finrank ℝ E) A := by
-  sorry
+  apply t00A04_hatcherConclusion_compact_in_chart_aux_open_excision E X I
+    (t00A04_hatcherConclusion_compact_in_chart_aux_model E heuclid)
+    A hA hchart
 
 /-- **LIBRARY F3.** Finite chart induction.  Arbitrary compact single-chart
 sets, the union step, and local uniqueness are explicit hypotheses. -/
