@@ -5523,6 +5523,86 @@ lemma apm_t95j06_two_ray_transition_right_image_oneSided_bounded
   exact apm_t95j06_disjoint_preconnected_real_sets_oneSided_bounded
     (f '' Set.Ioi β) (f '' Set.Iio α) hright hleft hrightConn hdisj
 
+/-- Orientation normalization for the four compatible ray-gluing cases.
+Opposite rays have increasing transition; equal-direction rays have decreasing
+transition. Reflect either chart coordinate as needed, reducing all four cases
+to a right ray in the first chart and a left ray in the second, with increasing
+transition. This lemma deliberately assumes these compatible cases and does
+not assert that the other four combinations are impossible. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_orientation
+    (X : Type) [TopologicalSpace X] (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ) (α δ : ℝ)
+    (hcases :
+      (φ '' (Subtype.val ⁻¹' V) = Set.Ioi α ∧
+       ψ '' (Subtype.val ⁻¹' U) = Set.Iio δ ∧
+       ∀ x y : U, ∀ hx : (x : X) ∈ V, ∀ hy : (y : X) ∈ V,
+         φ x < φ y → ψ ⟨x, hx⟩ < ψ ⟨y, hy⟩) ∨
+      (φ '' (Subtype.val ⁻¹' V) = Set.Ioi α ∧
+       ψ '' (Subtype.val ⁻¹' U) = Set.Ioi δ ∧
+       ∀ x y : U, ∀ hx : (x : X) ∈ V, ∀ hy : (y : X) ∈ V,
+         φ x < φ y → ψ ⟨y, hy⟩ < ψ ⟨x, hx⟩) ∨
+      (φ '' (Subtype.val ⁻¹' V) = Set.Iio α ∧
+       ψ '' (Subtype.val ⁻¹' U) = Set.Iio δ ∧
+       ∀ x y : U, ∀ hx : (x : X) ∈ V, ∀ hy : (y : X) ∈ V,
+         φ x < φ y → ψ ⟨y, hy⟩ < ψ ⟨x, hx⟩) ∨
+      (φ '' (Subtype.val ⁻¹' V) = Set.Iio α ∧
+       ψ '' (Subtype.val ⁻¹' U) = Set.Ioi δ ∧
+       ∀ x y : U, ∀ hx : (x : X) ∈ V, ∀ hy : (y : X) ∈ V,
+         φ x < φ y → ψ ⟨x, hx⟩ < ψ ⟨y, hy⟩)) :
+    Nonempty ({x : X // x ∈ U ∪ V} ≃ₜ ℝ) := by
+  have neg_right : ∀ (T : Type) (f : T → ℝ) (S : Set T) (c : ℝ),
+      f '' S = Set.Ioi c → (fun t => -f t) '' S = Set.Iio (-c) := by
+    intro T f S c h
+    have he : (fun t => -f t) '' S = (fun x : ℝ => -x) '' (f '' S) :=
+      (Set.image_image _ _ _).symm
+    rw [he, h]
+    ext x
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      change c < y at hy
+      change -y < -c
+      exact neg_lt_neg hy
+    · intro hx
+      refine ⟨-x, ?_, neg_neg x⟩
+      change c < -x
+      change x < -c at hx
+      linarith
+  have neg_left : ∀ (T : Type) (f : T → ℝ) (S : Set T) (c : ℝ),
+      f '' S = Set.Iio c → (fun t => -f t) '' S = Set.Ioi (-c) := by
+    intro T f S c h
+    have he : (fun t => -f t) '' S = (fun x : ℝ => -x) '' (f '' S) :=
+      (Set.image_image _ _ _).symm
+    rw [he, h]
+    ext x
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      change y < c at hy
+      change -c < -y
+      exact neg_lt_neg hy
+    · intro hx
+      refine ⟨-x, ?_, neg_neg x⟩
+      change -x < c
+      change -c < x at hx
+      linarith
+  rcases hcases with ⟨hA, hB, hm⟩ | ⟨hA, hB, hm⟩ | ⟨hA, hB, hm⟩ | ⟨hA, hB, hm⟩
+  · exact apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue
+      X U V hU hV φ ψ α δ hA hB hm
+  · apply apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue
+      X U V hU hV φ (ψ.trans (Homeomorph.neg ℝ)) α (-δ) hA
+      (neg_right V ψ _ δ hB)
+    intro x y hx hy hxy
+    exact neg_lt_neg (hm x y hx hy hxy)
+  · apply apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue
+      X U V hU hV (φ.trans (Homeomorph.neg ℝ)) ψ (-α) δ
+      (neg_left U φ _ α hA) hB
+    intro x y hx hy hxy
+    exact hm y x hy hx (neg_lt_neg_iff.mp hxy)
+  · apply apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue
+      X U V hU hV (φ.trans (Homeomorph.neg ℝ)) (ψ.trans (Homeomorph.neg ℝ))
+      (-α) (-δ) (neg_left U φ _ α hA) (neg_right V ψ _ δ hB)
+    intro x y hx hy hxy
+    exact neg_lt_neg (hm y x hy hx (neg_lt_neg_iff.mp hxy))
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
@@ -7665,3 +7745,5 @@ theorem apm_t95j06
 #print axioms apm_t95j06_Q_aux_arc_intersection
 
 #print axioms apm_t95j06_Q_aux_two_arcs
+
+#print axioms apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_orientation
