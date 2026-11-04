@@ -259,6 +259,73 @@ facts.  The cover follows because a norm-one vector cannot have all three
 coordinates zero.  Empty `F` is vacuous; each indexed component is nonempty.
 Freeness uses the nonzero vector, and compactness is essential for the stated
 base compactness. -/
+structure apm_t95j06_hopf_slices_component_principalBundle_aux_Core
+    (F : Set apm_t95j06_S5) (x : F) (B : Type*) [TopologicalSpace B] where
+  proj : {y : F // y ∈ connectedComponent x} → B
+  act : Circle × {y : F // y ∈ connectedComponent x} →
+    {y : F // y ∈ connectedComponent x}
+  continuous_proj : Continuous proj
+  quotient_proj : Topology.IsQuotientMap proj
+  open_proj : IsOpenMap proj
+  continuous_act : Continuous act
+  one_act : ∀ y, act (1, y) = y
+  mul_act : ∀ g h y, act (g, act (h, y)) = act (g * h, y)
+  free : ∀ g y, act (g, y) = y → g = 1
+  invariant : ∀ g y, proj (act (g, y)) = proj y
+  orbit_fiber : ∀ y z, proj y = proj z → ∃ g, act (g, y) = z
+  surjective_proj : Function.Surjective proj
+  scalar_act : ∀ g y, (act (g, y)).1.1.1 = (g : ℂ) • y.1.1.1
+
+/-- **Remaining sub-leaf, quotient core (estimated 180--300 lines).**  In
+words: the scalar Circle action on a compact connected component has an orbit
+quotient which is compact, connected, Hausdorff and second countable, and the
+quotient map has exactly the scalar orbits as fibres.
+
+Why true: put the quotient topology on the orbit relation.  Compactness and
+connectedness descend along the quotient map.  The action relation is closed
+because it is the image of the compact Circle parameter in the Hausdorff
+component, giving Hausdorff quotient; the quotient map is open, so
+`Topology.IsQuotientMap.secondCountableTopology` supplies second countability.
+The chosen component is nonempty.  A constant action cannot meet `scalar_act`
+and `free`, and compactness is used essentially for closedness of the orbit
+relation. -/
+theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core
+    (F : Set apm_t95j06_S5)
+    (hF : apm_t95j06_IsCompactOrientableSurface F)
+    (hinv : apm_t95j06_IsCircleInvariant F) :
+    ∀ x : F, ∃ (B : Type) (tB : TopologicalSpace B),
+      @CompactSpace B tB ∧ @ConnectedSpace B tB ∧ @T2Space B tB ∧
+      @SecondCountableTopology B tB ∧
+      Nonempty (@apm_t95j06_hopf_slices_component_principalBundle_aux_Core
+        F x B tB) := by
+  sorry
+
+/-- **Remaining sub-leaf, explicit Hopf charts (estimated 300--550 lines).**
+In words: every scalar-orbit quotient core has fibre-preserving,
+Circle-equivariant local product charts obtained by choosing a nonzero
+coordinate and normalizing its phase.
+
+Why true: for `k : Fin 3`, on `z_k ≠ 0` use the phase
+`z_k / |z_k| : Circle`; multiplying by its inverse places `z` in the slice
+where coordinate `k` is positive real.  The inverse multiplies the slice
+point by the Circle coordinate.  `Complex.continuous_abs`, continuity of
+division away from zero, and compact-to-Hausdorff continuity of the quotient
+chart prove the homeomorphism.  A norm-one vector has a nonzero coordinate,
+so these charts cover.  Equivariance is the identity
+`phase(g • z) = g * phase(z)`. -/
+theorem apm_t95j06_hopf_slices_component_principalBundle_aux_localTrivial
+    (F : Set apm_t95j06_S5) (hF : apm_t95j06_IsCompactOrientableSurface F)
+    (hinv : apm_t95j06_IsCircleInvariant F) (x : F)
+    (B : Type) (tB : TopologicalSpace B)
+    (Q : @apm_t95j06_hopf_slices_component_principalBundle_aux_Core F x B tB) :
+    ∀ b, ∃ U : Set B, IsOpen U ∧ b ∈ U ∧
+      ∃ φ : {y : {y : F // y ∈ connectedComponent x} // Q.proj y ∈ U} ≃ₜ
+          U × Circle,
+        (∀ y, ((φ y).1 : B) = Q.proj y.1) ∧
+        ∀ g y, (φ ⟨Q.act (g, y.1), by rw [Q.invariant]; exact y.2⟩).2 =
+          g * (φ y).2 := by
+  sorry
+
 theorem apm_t95j06_hopf_slices_component_principalBundle
     (F : Set apm_t95j06_S5)
     (hF : apm_t95j06_IsCompactOrientableSurface F)
@@ -268,7 +335,23 @@ theorem apm_t95j06_hopf_slices_component_principalBundle
       @SecondCountableTopology B tB ∧
       Nonempty (@apm_t95j06_PrincipalCircleBundle
         {y : F // y ∈ connectedComponent x} B inferInstance tB) := by
-  sorry
+  intro x
+  obtain ⟨B, tB, hc, hconn, h2, hsc, ⟨Q⟩⟩ :=
+    apm_t95j06_hopf_slices_component_principalBundle_aux_core F hF hinv x
+  refine ⟨B, tB, hc, hconn, h2, hsc, ⟨{
+    proj := Q.proj
+    act := Q.act
+    continuous_proj := Q.continuous_proj
+    continuous_act := Q.continuous_act
+    one_act := Q.one_act
+    mul_act := Q.mul_act
+    free := Q.free
+    invariant := Q.invariant
+    orbit_fiber := Q.orbit_fiber
+    surjective_proj := Q.surjective_proj
+    local_trivial :=
+      apm_t95j06_hopf_slices_component_principalBundle_aux_localTrivial
+        F hF hinv x B tB Q }⟩⟩
 
 /-- **LIBRARY 3(a), manifold-factor cancellation (estimated 1800--4000
 lines).**  For the Hopf quotient presentation, local products with `Circle`
