@@ -215,15 +215,118 @@ theorem apm_t95j06_component_free_circle_action
     change ((g : ℂ) - 1) • y.1.1.1 = 0
     rw [sub_smul, hs, one_smul, sub_self]
 
-/-- LIBRARY: a compact orientable topological surface with a free continuous
-circle action has every connected component homeomorphic to the torus. -/
-theorem apm_t95j06_freeCircleAction_surface_classification
+/-- Invariance under the literal scalar Circle action on the ambient sphere,
+stated without choosing an `SMul` instance on a subtype. -/
+def apm_t95j06_IsCircleInvariant (F : Set apm_t95j06_S5) : Prop :=
+  ∀ z ∈ F, ∀ g : Circle, ∃ w ∈ F, w.1 = (g : ℂ) • z.1
+
+/-- A concrete principal Circle-bundle interface.  The global free transitive
+Circle action on every fibre excludes the reflected-fibre mapping torus; the
+local product charts are fibre-preserving and Circle-equivariant (claude-14 review: an
+abstract homeomorphism `{x // proj x ∈ U} ≃ₜ U × Circle` would not tie the chart to `proj`). -/
+structure apm_t95j06_PrincipalCircleBundle
+    (X B : Type*) [TopologicalSpace X] [TopologicalSpace B] where
+  proj : X → B
+  act : Circle × X → X
+  continuous_proj : Continuous proj
+  continuous_act : Continuous act
+  one_act : ∀ x, act (1, x) = x
+  mul_act : ∀ g h x, act (g, act (h, x)) = act (g * h, x)
+  free : ∀ g x, act (g, x) = x → g = 1
+  invariant : ∀ g x, proj (act (g, x)) = proj x
+  orbit_fiber : ∀ x y, proj x = proj y → ∃ g, act (g, x) = y
+  surjective_proj : Function.Surjective proj
+  local_trivial : ∀ b, ∃ U : Set B, IsOpen U ∧ b ∈ U ∧
+    ∃ φ : {x : X // proj x ∈ U} ≃ₜ U × Circle,
+      (∀ x, ((φ x).1 : B) = proj x.1) ∧
+      ∀ g x, (φ ⟨act (g, x.1), by rw [invariant]; exact x.2⟩).2 = g * (φ x).2
+
+/-- A space is locally a real line, in the exact chart form needed by the
+compact one-manifold classification leaf. -/
+def apm_t95j06_IsLocallyRealLine (B : Type*) [TopologicalSpace B] : Prop :=
+  ∀ b : B, ∃ U : Set B, IsOpen U ∧ b ∈ U ∧
+    ∃ V : Set ℝ, IsOpen V ∧ Nonempty (U ≃ₜ V)
+
+/-- **Hopf quotient leaf (estimated 250--450 lines).**  The explicit coordinate
+slices `z_k ≠ 0`, normalized by `conj z_k / |z_k|`, cover the sphere and
+give the orbit quotient of every component the displayed principal-bundle
+presentation.  The quotient is compact, connected, Hausdorff and second
+countable.
+
+Proof route: use `Complex.continuous_abs`, continuity of inversion away from
+zero, `Circle.coe_exp`/`Circle.exp_arg`, and compact-to-Hausdorff quotient
+facts.  The cover follows because a norm-one vector cannot have all three
+coordinates zero.  Empty `F` is vacuous; each indexed component is nonempty.
+Freeness uses the nonzero vector, and compactness is essential for the stated
+base compactness. -/
+theorem apm_t95j06_hopf_slices_component_principalBundle
     (F : Set apm_t95j06_S5)
     (hF : apm_t95j06_IsCompactOrientableSurface F)
-    (hact : ∀ x : F,
-      apm_t95j06_HasFreeContinuousCircleAction
-        {y : F // y ∈ connectedComponent x}) :
-    apm_t95j06_EveryComponentDiffeomorphicToTorus F := by
+    (hinv : apm_t95j06_IsCircleInvariant F) :
+    ∀ x : F, ∃ (B : Type) (tB : TopologicalSpace B),
+      @CompactSpace B tB ∧ @ConnectedSpace B tB ∧ @T2Space B tB ∧
+      @SecondCountableTopology B tB ∧
+      Nonempty (@apm_t95j06_PrincipalCircleBundle
+        {y : F // y ∈ connectedComponent x} B inferInstance tB) := by
+  sorry
+
+/-- **LIBRARY 3(a), manifold-factor cancellation (estimated 1800--4000
+lines).**  For the Hopf quotient presentation, local products with `Circle`
+are surface charts only when the base factor is locally a real line.
+
+This is the classical low-dimensional manifold-factor theorem: a locally
+compact, second-countable Hausdorff `B` for which `B × S¹` is locally a
+2-manifold is locally a 1-manifold.  One route uses local homology to show that
+`B` is a one-dimensional homology manifold, local contractibility from its
+retract in a bundle chart, and the classification of one-dimensional ANR
+homology manifolds.  The component atlas and bundle charts supply precisely
+those hypotheses.  Non-Hausdorff and non-second-countable counterexamples are
+excluded explicitly; dimension zero fails because a discrete factor times a
+circle is one-dimensional. -/
+theorem apm_t95j06_principalBundle_base_locallyRealLine
+    (F : Set apm_t95j06_S5)
+    (hF : apm_t95j06_IsCompactOrientableSurface F)
+    (x : F) (B : Type) (tB : TopologicalSpace B)
+    (h2 : @T2Space B tB) (hsc : @SecondCountableTopology B tB)
+    (P : @apm_t95j06_PrincipalCircleBundle
+      {y : F // y ∈ connectedComponent x} B inferInstance tB) :
+    @apm_t95j06_IsLocallyRealLine B tB := by
+  sorry
+
+/-- **LIBRARY 3(b), compact one-manifold classification (estimated 900--1800
+lines).**  A compact connected Hausdorff second-countable space locally
+homeomorphic to the real line is a circle.
+
+Proof route: build a finite oriented interval atlas, extend one chart
+successively through overlapping intervals, and use compactness to make the
+two ends meet; Hausdorffness makes the resulting continuous bijection a
+homeomorphism.  Search found no existing Mathlib or ConstructionTargets
+theorem.  The hypotheses exclude the empty space, a compact interval (endpoint
+not locally real), the real line (noncompact), and the long circle (not second
+countable). -/
+theorem apm_t95j06_compact_connected_locallyRealLine_homeomorph_circle
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
+    (h2 : @T2Space B tB) (hsc : @SecondCountableTopology B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) :
+    Nonempty (@Homeomorph B Circle tB inferInstance) := by
+  sorry
+
+/-- **LIBRARY, principal Circle bundles over a circle (estimated 600--1200
+lines).**  An equivariantly locally trivial principal Circle bundle whose base
+is a circle has total space homeomorphic to `Circle × Circle`.
+
+Proof route: pull back along the supplied base homeomorphism, trivialize over
+two arcs, and alter one local section by a path in the connected structure
+group `Circle` so the sections agree on the overlap.  The resulting global
+section and the free transitive fibre action give the product homeomorphism.
+Local triviality alone would be false here (the Klein-bottle circle bundle);
+the principal equivariant action in `P` excludes its reflected transition. -/
+theorem apm_t95j06_principalCircleBundle_over_circle_trivial
+    (X B : Type*) [TopologicalSpace X] (tB : TopologicalSpace B)
+    (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
+    (e : @Homeomorph B Circle tB inferInstance) :
+    Nonempty (X ≃ₜ Circle × Circle) := by
   sorry
 
 theorem apm_t95J06_bridge_1
@@ -233,8 +336,22 @@ theorem apm_t95J06_bridge_1
     (hF : apm_t95j06_IsCompactOrientableSurface F)
     (hF_invariant : apm_t95j06_IsInvariant H F) :
     apm_t95j06_EveryComponentDiffeomorphicToTorus F := by
-  apply apm_t95j06_freeCircleAction_surface_classification F hF
-  exact apm_t95j06_component_free_circle_action H hH F hF_invariant
+  have hinv : apm_t95j06_IsCircleInvariant F := by
+    intro z hz g
+    refine ⟨H (z, Complex.arg (g : ℂ)), hF_invariant z hz _, ?_⟩
+    rw [hH]
+    simpa only [show Complex.exp (Complex.I * (Complex.arg (g : ℂ) : ℂ)) = (g : ℂ) by
+      rw [show Complex.I * (Complex.arg (g : ℂ) : ℂ) =
+          (Complex.arg (g : ℂ) : ℂ) * Complex.I by ring,
+        ← Circle.coe_exp, Circle.exp_arg]]
+  intro x
+  obtain ⟨B, tB, hc, hconn, h2, hsc, ⟨P⟩⟩ :=
+    apm_t95j06_hopf_slices_component_principalBundle F hF hinv x
+  have hloc := apm_t95j06_principalBundle_base_locallyRealLine
+    F hF x B tB h2 hsc P
+  obtain ⟨e⟩ := apm_t95j06_compact_connected_locallyRealLine_homeomorph_circle
+    B tB hc hconn h2 hsc hloc
+  exact apm_t95j06_principalCircleBundle_over_circle_trivial _ B tB P e
 
 theorem apm_t95j06
     (H : apm_t95j06_S5 × ℝ → apm_t95j06_S5)
