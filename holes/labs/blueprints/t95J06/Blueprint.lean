@@ -1003,6 +1003,60 @@ def apm_t95j06_PlanarJordanSeparation : Prop :=
       Disjoint inside outside ∧ Jᶜ = inside ∪ outside ∧
       J = frontier inside ∧ J = frontier outside
 
+/-- **J1, existence of two Jordan sides (estimated 100--180 lines).**
+The complement of an embedded circle admits a nontrivial separation into two
+disjoint nonempty open sets.  A winding-number-one point on one side and a
+point sufficiently far from the compact curve on the other give the two
+sides; winding is locally constant off the curve.  This claims neither that
+the sides are connected nor that their frontiers equal the curve, so it is
+strictly weaker than Jordan separation.  Relevant foundations are the circle
+winding equivalence in `ConstructionTargets/CircleHurewiczIsomorphism.lean:94`
+and winding transport in
+`ConstructionTargets/PeriodicCircleHomotopyWinding.lean:88`; neither already
+proves this planar complement statement. -/
+theorem apm_t95j06_jordan_complement_separates
+    (J : Set apm_t95j06_E2) (eJ : Nonempty (Circle ≃ₜ J)) :
+    ∃ inside outside : Set apm_t95j06_E2,
+      IsOpen inside ∧ IsOpen outside ∧ inside.Nonempty ∧ outside.Nonempty ∧
+      Disjoint inside outside ∧ Jᶜ = inside ∪ outside := by
+  sorry
+
+/-- **J2, no third Jordan side (estimated 120--200 lines).**
+Any nontrivial open separation of the complement of an embedded circle has
+connected sides.  Equivalently, its complement has at most two connected
+components.  Use planar duality/invariance of domain: three components would
+give two independent separation classes around a domain homeomorphic to a
+circle, contradicting its rank-one winding group.  The hypotheses expose an
+already chosen separation, so this leaf does not construct sides or identify
+their frontiers. -/
+theorem apm_t95j06_jordan_complement_atMostTwo
+    (J : Set apm_t95j06_E2) (eJ : Nonempty (Circle ≃ₜ J))
+    (inside outside : Set apm_t95j06_E2)
+    (hi : IsOpen inside) (ho : IsOpen outside)
+    (hin : inside.Nonempty) (hout : outside.Nonempty)
+    (hdisj : Disjoint inside outside)
+    (hcover : Jᶜ = inside ∪ outside) :
+    IsPreconnected inside ∧ IsPreconnected outside := by
+  sorry
+
+/-- **J3, local two-sidedness of a Jordan curve (estimated 100--170 lines).**
+For two connected complementary domains of an embedded circle, every curve
+point is approached from both domains, so the curve is exactly each frontier.
+Local straightening of an embedded arc gives the two local half-disks; a
+connected complementary side cannot switch local sides without crossing the
+curve.  This assumes the sides and their connectedness, and proves only the
+frontier identification. -/
+theorem apm_t95j06_jordan_sides_frontier
+    (J : Set apm_t95j06_E2) (eJ : Nonempty (Circle ≃ₜ J))
+    (inside outside : Set apm_t95j06_E2)
+    (hi : IsOpen inside) (ho : IsOpen outside)
+    (hin : inside.Nonempty) (hout : outside.Nonempty)
+    (hpi : IsPreconnected inside) (hpo : IsPreconnected outside)
+    (hdisj : Disjoint inside outside)
+    (hcover : Jᶜ = inside ∪ outside) :
+    J = frontier inside ∧ J = frontier outside := by
+  sorry
+
 /-- **LIBRARY, Jordan-curve separation (estimated 250--450 lines).**
 This is the classical Jordan curve theorem in its separation form.  A winding
 number proof shows that the complement of an embedded circle has one bounded
@@ -1016,7 +1070,89 @@ proves planar separation.  This is strictly more primitive than the crosscut
 theorem: it mentions only an embedded circle and its full-plane complement. -/
 theorem apm_t95j06_planar_jordan_separation :
     apm_t95j06_PlanarJordanSeparation := by
-  sorry
+  intro J eJ
+  obtain ⟨inside, outside, hi, ho, hin, hout, hdisj, hcover⟩ :=
+    apm_t95j06_jordan_complement_separates J eJ
+  obtain ⟨hpi, hpo⟩ := apm_t95j06_jordan_complement_atMostTwo
+    J eJ inside outside hi ho hin hout hdisj hcover
+  obtain ⟨hfi, hfo⟩ := apm_t95j06_jordan_sides_frontier
+    J eJ inside outside hi ho hin hout hpi hpo hdisj hcover
+  exact ⟨inside, outside, hi, ho, hin, hout, hpi, hpo,
+    hdisj, hcover, hfi, hfo⟩
+
+/-- The exterior of a positive-radius planar closed disk is connected.
+It is the continuous image of the unit circle times the radius interval
+`(r,∞)` under scalar multiplication. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_exterior
+    (r : ℝ) (hr : 0 < r) :
+    IsConnected ((Metric.closedBall (0 : apm_t95j06_E2) r)ᶜ) := by
+  let S := Metric.sphere (0 : apm_t95j06_E2) 1
+  let T := Set.Ioi r
+  letI : ConnectedSpace S := Subtype.connectedSpace
+    (isConnected_sphere (E := apm_t95j06_E2)
+      (by simp [← Module.finrank_eq_rank, apm_t95j06_E2]) 0 (by norm_num : (0 : ℝ) ≤ 1))
+  letI : ConnectedSpace T := Subtype.connectedSpace isConnected_Ioi
+  let f : S × T → apm_t95j06_E2 := fun p ↦ p.2.1 • p.1.1
+  have hf : Continuous f :=
+    (continuous_subtype_val.comp continuous_snd).smul
+      (continuous_subtype_val.comp continuous_fst)
+  have heq : Set.range f = (Metric.closedBall (0 : apm_t95j06_E2) r)ᶜ := by
+    ext y
+    constructor
+    · rintro ⟨⟨a, t⟩, rfl⟩
+      have ha : ‖(a : apm_t95j06_E2)‖ = 1 := by
+        simpa only [S, Metric.mem_sphere, dist_zero_right] using a.2
+      have ht : 0 < t.1 := lt_trans hr t.2
+      change ¬ dist (f (a, t)) 0 ≤ r
+      simp only [f, dist_zero_right, norm_smul, Real.norm_eq_abs, abs_of_pos ht, ha, mul_one]
+      exact not_le.mpr t.2
+    · intro hy
+      have hy' : r < ‖y‖ := by simpa only [Set.mem_compl_iff,
+        Metric.mem_closedBall, dist_zero_right, not_le] using hy
+      have hn : 0 < ‖y‖ := lt_trans hr hy'
+      have ha : ‖y‖⁻¹ • y ∈ S := by
+        simp [S, Metric.mem_sphere, dist_zero_right, norm_smul,
+          abs_of_pos (inv_pos.mpr hn), hn.ne']
+      refine ⟨(⟨‖y‖⁻¹ • y, ha⟩, ⟨‖y‖, hy'⟩), ?_⟩
+      simp [f, smul_smul, hn.ne']
+  rw [← heq]
+  exact isConnected_range hf
+
+/-- Jordan domains can be labelled relative to a containing disk. The entire
+exterior lies in one domain, and the other domain lies in the open disk.
+This uses only connectedness of the disk exterior and the given Jordan
+partition; it does not assume the crosscut theorem or an arc-pasting result. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_label_domains
+    (hJordan : apm_t95j06_PlanarJordanSeparation)
+    (r : ℝ) (hr : 0 < r) (J : Set apm_t95j06_E2)
+    (he : Nonempty (Circle ≃ₜ J)) (hJ : J ⊆ Metric.closedBall 0 r) :
+    ∃ I O : Set apm_t95j06_E2,
+      IsOpen I ∧ IsOpen O ∧ I.Nonempty ∧ O.Nonempty ∧
+      IsPreconnected I ∧ IsPreconnected O ∧ Disjoint I O ∧
+      Jᶜ = I ∪ O ∧ J = frontier I ∧ J = frontier O ∧
+      I ⊆ Metric.ball 0 r ∧ (Metric.closedBall 0 r)ᶜ ⊆ O := by
+  obtain ⟨L, R, hL, hR, hnL, hnR, hcL, hcR, hd, hcover, hfL, hfR⟩ := hJordan J he
+  have hext : (Metric.closedBall (0 : apm_t95j06_E2) r)ᶜ ⊆ L ∪ R := by
+    rw [← hcover]
+    exact Set.compl_subset_compl.mpr hJ
+  have split := (apm_t95j06_planar_crosscut_of_jordan_aux_exterior r hr).isPreconnected.subset_or_subset
+    hL hR hd hext
+  rcases split with hleft | hright
+  · refine ⟨R, L, hR, hL, hnR, hnL, hcR, hcL, hd.symm, ?_, hfR, hfL, ?_, hleft⟩
+    · simpa [Set.union_comm] using hcover
+    · have hsub : R ⊆ Metric.closedBall 0 r := by
+        intro y hy
+        by_contra hout
+        exact Set.disjoint_left.mp hd (hleft hout) hy
+      simpa only [interior_closedBall (0 : apm_t95j06_E2) hr.ne'] using
+        interior_maximal hsub hR
+  · refine ⟨L, R, hL, hR, hnL, hnR, hcL, hcR, hd, hcover, hfL, hfR, ?_, hright⟩
+    have hsub : L ⊆ Metric.closedBall 0 r := by
+      intro y hy
+      by_contra hout
+      exact Set.disjoint_left.mp hd hy (hright hout)
+    simpa only [interior_closedBall (0 : apm_t95j06_E2) hr.ne'] using
+      interior_maximal hsub hL
 
 /-- Closing a disk crosscut by either of the two boundary semicircles reduces
 the crosscut theorem to Jordan-curve separation (estimated 90--150 lines).
@@ -1496,7 +1632,7 @@ whose order topology is the given topology; compactness supplies order
 completeness, and metrizability supplies separability.  The resulting compact
 separable linear continuum is order-isomorphic, hence homeomorphic, to the
 unit interval. -/
-/-- **Moore cut-point order (estimated 120--200 lines).** The separation
+/- **Moore cut-point order (estimated 120--200 lines).** The separation
 relation defined by the component of `K \\ {y}` containing `a` equips `K`
 with a complete dense linear order, with endpoints `a,c`, whose order topology
 is the original topology.
@@ -1505,6 +1641,78 @@ This is true because each non-endpoint puncture has exactly two components:
 local connectedness makes those components open, giving totality and the
 order-topology comparison; connectedness gives density, and compactness gives
 suprema and infima. -/
+/-- A certificate that `K \\ {y}` has exactly two connected components,
+labelled by the endpoints they contain. -/
+structure apm_t95j06_PunctureSplit
+    (K : Type*) [TopologicalSpace K] (a c y : K) where
+  sideA : Set K
+  sideC : Set K
+  sideA_open : IsOpen sideA
+  sideC_open : IsOpen sideC
+  sideA_preconnected : IsPreconnected sideA
+  sideC_preconnected : IsPreconnected sideC
+  a_mem : a ∈ sideA
+  c_mem : c ∈ sideC
+  disjoint : Disjoint sideA sideC
+  cover : sideA ∪ sideC = ({y}ᶜ : Set K)
+  maximal : ∀ S : Set K, S.Nonempty → IsPreconnected S →
+    S ⊆ ({y}ᶜ : Set K) → S ⊆ sideA ∨ S ⊆ sideC
+
+/-- **C1, puncture structure (estimated 55--90 lines).** Every non-endpoint
+puncture has exactly two open connected components, one containing `a` and
+the other containing `c`.
+
+This is true because the puncture is disconnected by `hcut`; local
+connectedness makes its connected components open.  If there were a third
+component, or if `a,c` lay in the same component, adjoining either of the
+other endpoint punctures would contradict the assumed connectedness of those
+two punctures. -/
+theorem apm_t95j06_twoEndpointContinuum_punctureSplit
+    (K : Type*) [TopologicalSpace K]
+    [CompactSpace K] [T2Space K] [LocallyConnectedSpace K]
+    (hK : IsConnected (Set.univ : Set K)) (a c : K) (hac : a ≠ c)
+    (ha : IsPreconnected ({a}ᶜ : Set K))
+    (hc : IsPreconnected ({c}ᶜ : Set K))
+    (hcut : ∀ y : K, y ≠ a → y ≠ c →
+      ¬ IsPreconnected ({y}ᶜ : Set K)) :
+    ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y) := by
+  sorry
+
+/-- **C2, order construction (estimated 65--110 lines).** Given the labelled
+two-component decomposition of every non-endpoint puncture, separation from
+`a` defines a complete dense linear order with endpoints `a,c`, and its order
+topology is the supplied topology.
+
+This is true by defining `x < y` when `x = a`, or when `x` belongs to the
+`a`-component of `K \\ {y}`.  Component nesting proves transitivity and
+totality; connectedness gives density; openness of the two sides identifies
+the order topology; compactness supplies all suprema and infima. -/
+theorem apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit
+    (K : Type*) [TopologicalSpace K] [CompactSpace K] [T2Space K]
+    (hK : IsConnected (Set.univ : Set K)) (a c : K) (hac : a ≠ c)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y)) :
+    ∃ o : CompleteLinearOrder K,
+      let _ := o
+      @OrderTopology K inferInstance o.toLinearOrder.toPreorder ∧
+      @DenselyOrdered K o.toLinearOrder.toLT ∧
+      a = o.bot ∧ c = o.top := by
+  sorry
+
+/-- Compact metrizable spaces are separable. -/
+lemma apm_t95j06_compactMetrizable_separable_order
+    (K : Type*) [TopologicalSpace K] [CompactSpace K]
+    [TopologicalSpace.MetrizableSpace K] :
+    Nonempty (TopologicalSpace.SeparableSpace K) := by
+  letI : UniformSpace K :=
+    TopologicalSpace.pseudoMetrizableSpaceUniformity K
+  letI : PseudoMetricSpace K :=
+    TopologicalSpace.pseudoMetrizableSpacePseudoMetric K
+  have hs : TopologicalSpace.IsSeparable (Set.univ : Set K) :=
+    isCompact_univ.isSeparable
+  exact ⟨TopologicalSpace.isSeparable_univ_iff.mp hs⟩
+
 theorem apm_t95j06_twoEndpointContinuum_cutPointOrder
     (K : Type*) [TopologicalSpace K]
     [CompactSpace K] [T2Space K] [TopologicalSpace.MetrizableSpace K]
@@ -1520,6 +1728,36 @@ theorem apm_t95j06_twoEndpointContinuum_cutPointOrder
       @DenselyOrdered K o.toLinearOrder.toLT ∧
       Nonempty (TopologicalSpace.SeparableSpace K) ∧
       a = o.bot ∧ c = o.top := by
+  have hsplit := apm_t95j06_twoEndpointContinuum_punctureSplit
+    K hK a c hac ha hc hcut
+  obtain ⟨o, hot, hdense, ha0, hc1⟩ :=
+    apm_t95j06_twoEndpointContinuum_orderOfPunctureSplit
+      K hK a c hac hsplit
+  exact ⟨o, hot, hdense,
+    apm_t95j06_compactMetrizable_separable_order K, ha0, hc1⟩
+
+/-- **Dedekind extension of a dense-suborder isomorphism (estimated 70--110
+lines).** Let `s` and `t` be dense subsets of complete dense linear orders,
+neither containing either endpoint.  An order isomorphism `s ≃o t` extends
+uniquely to an endpoint-preserving order isomorphism of the ambient orders.
+
+For `x`, define the extension as the supremum of the images of members of
+`s ∩ Iic x`.  Density makes this strictly monotone; completeness supplies the
+supremum; applying the symmetric infimum construction to `e.symm` proves
+surjectivity and the inverse laws.  Endpoint avoidance ensures the two extreme
+values are exactly bottom and top.  A finite or non-dense subset is a genuine
+counterexample, while allowing endpoints breaks the no-endpoint suborder used
+by Cantor back-and-forth. -/
+lemma apm_t95j06_denseOrderIso_extend_complete_aux
+    (L M : Type*) [TopologicalSpace L] [CompleteLinearOrder L]
+    [OrderTopology L] [DenselyOrdered L] [Nontrivial L]
+    [TopologicalSpace M] [CompleteLinearOrder M]
+    [OrderTopology M] [DenselyOrdered M] [Nontrivial M]
+    (s : Set L) (t : Set M) (hs : Dense s) (ht : Dense t)
+    (hsbot : (⊥ : L) ∉ s) (hstop : (⊤ : L) ∉ s)
+    (htbot : (⊥ : M) ∉ t) (httop : (⊤ : M) ∉ t)
+    (e : s ≃o t) :
+    ∃ E : L ≃o M, E ⊥ = ⊥ ∧ E ⊤ = ⊤ := by
   sorry
 
 /-- **Compact separable linear-continuum classification (estimated 70--120
@@ -1536,7 +1774,60 @@ theorem apm_t95j06_completeSeparableLinearOrder_homeomorph_Icc
     [Nontrivial L] :
     ∃ e : L ≃ₜ Set.Icc (0 : ℝ) 1,
       e ⊥ = ⟨0, by norm_num⟩ ∧ e ⊤ = ⟨1, by norm_num⟩ := by
-  sorry
+  let I := Set.Icc (0 : ℝ) 1
+  obtain ⟨s, hsc, hsd, hsbot', hstop'⟩ :=
+    exists_countable_dense_no_bot_top L
+  obtain ⟨t, htc, htd, htbot', httop'⟩ :=
+    exists_countable_dense_no_bot_top I
+  have hsbot : (⊥ : L) ∉ s := hsbot' ⊥ isBot_bot
+  have hstop : (⊤ : L) ∉ s := hstop' ⊤ isTop_top
+  have htbot : (⊥ : I) ∉ t := htbot' ⊥ isBot_bot
+  have httop : (⊤ : I) ∉ t := httop' ⊤ isTop_top
+  letI : Countable s := hsc
+  letI : Countable t := htc
+  letI : Nonempty s := hsd.nonempty.to_subtype
+  letI : Nonempty t := htd.nonempty.to_subtype
+  letI : DenselyOrdered s :=
+    ⟨fun a b hab ↦ by
+      obtain ⟨c, hcs, hac, hcb⟩ := hsd.exists_between hab
+      exact ⟨⟨c, hcs⟩, hac, hcb⟩⟩
+  letI : DenselyOrdered t :=
+    ⟨fun a b hab ↦ by
+      obtain ⟨c, hct, hac, hcb⟩ := htd.exists_between hab
+      exact ⟨⟨c, hct⟩, hac, hcb⟩⟩
+  letI : NoMinOrder s :=
+    ⟨fun a ↦ by
+      have hba : (⊥ : L) < a.1 := bot_lt_iff_ne_bot.mpr (fun h ↦ hsbot (h ▸ a.2))
+      obtain ⟨c, hcs, _, hca⟩ := hsd.exists_between hba
+      exact ⟨⟨c, hcs⟩, hca⟩⟩
+  letI : NoMaxOrder s :=
+    ⟨fun a ↦ by
+      have hat : a.1 < (⊤ : L) := lt_top_iff_ne_top.mpr (fun h ↦ hstop (h ▸ a.2))
+      obtain ⟨c, hcs, hac, _⟩ := hsd.exists_between hat
+      exact ⟨⟨c, hcs⟩, hac⟩⟩
+  letI : NoMinOrder t :=
+    ⟨fun a ↦ by
+      have hba : (⊥ : I) < a.1 := bot_lt_iff_ne_bot.mpr (fun h ↦ htbot (h ▸ a.2))
+      obtain ⟨c, hct, _, hca⟩ := htd.exists_between hba
+      exact ⟨⟨c, hct⟩, hca⟩⟩
+  letI : NoMaxOrder t :=
+    ⟨fun a ↦ by
+      have hat : a.1 < (⊤ : I) := lt_top_iff_ne_top.mpr (fun h ↦ httop (h ▸ a.2))
+      obtain ⟨c, hct, hac, _⟩ := htd.exists_between hat
+      exact ⟨⟨c, hct⟩, hac⟩⟩
+  obtain ⟨e⟩ := Order.iso_of_countable_dense (α := s) (β := t)
+  obtain ⟨E, hEbot, hEtop⟩ :=
+    apm_t95j06_denseOrderIso_extend_complete_aux L I s t hsd htd
+      hsbot hstop htbot httop e
+  refine ⟨E.toHomeomorph, ?_, ?_⟩
+  · change E ⊥ = _
+    rw [hEbot]
+    apply Subtype.ext
+    simp [I]
+  · change E ⊤ = _
+    rw [hEtop]
+    apply Subtype.ext
+    simp [I]
 
 theorem apm_t95j06_twoEndpointContinuum_homeomorph_Icc
     (K : Type*) [TopologicalSpace K]
@@ -1926,7 +2217,99 @@ theorem apm_t95j06_finite_intervalCharts_connected_enlargement
     (hxA : ∀ x, x ∈ A x) (hAreal : ∀ x, Nonempty (A x ≃ₜ ℝ))
     (s : Finset X) :
     ∃ t : Finset X, s ⊆ t ∧ IsConnected (⋃ x ∈ t, A x) := by
-  sorry
+  classical
+  let S : Finset X → Set X := fun t => ⋃ x ∈ t, A x
+  have hAconn (x : X) : IsConnected (A x) := by
+    obtain ⟨e⟩ := hAreal x
+    rw [isConnected_iff_connectedSpace]
+    exact connectedSpace_iff_univ.mpr <| by
+      rw [← e.isConnected_image]
+      simpa using (isConnected_univ : _root_.IsConnected (Set.univ : Set ℝ))
+  let P : X → X → Prop := fun x y =>
+    ∃ t : Finset X, x ∈ S t ∧ y ∈ S t ∧ IsConnected (S t)
+  have hPlocal (x : X) : ∀ᶠ y in nhds x, P x y := by
+    filter_upwards [hAopen x |>.mem_nhds (hxA x)] with y hy
+    refine ⟨{x}, ?_, ?_, ?_⟩ <;> simp only [S, Finset.mem_singleton,
+      Set.iUnion_iUnion_eq_left]
+    · exact hxA x
+    · exact hy
+    · exact hAconn x
+  have hPtrans : IsTrans X P := by
+    constructor
+    intro x y z hxy hyz
+    obtain ⟨t, hxt, hyt, ht⟩ := hxy
+    obtain ⟨u, hyu, hzu, hu⟩ := hyz
+    have hSunion : S (t ∪ u) = S t ∪ S u := by
+      ext q
+      simp only [S, Set.mem_iUnion, Finset.mem_union, Set.mem_union]
+      constructor
+      · rintro ⟨a, ⟨ha | ha, hqa⟩⟩
+        · exact Or.inl ⟨a, ha, hqa⟩
+        · exact Or.inr ⟨a, ha, hqa⟩
+      · rintro (⟨a, ha, hqa⟩ | ⟨a, ha, hqa⟩)
+        · exact ⟨a, Or.inl ha, hqa⟩
+        · exact ⟨a, Or.inr ha, hqa⟩
+    refine ⟨t ∪ u, ?_, ?_, ?_⟩
+    · rw [hSunion]; exact Or.inl hxt
+    · rw [hSunion]; exact Or.inr hzu
+    · rw [hSunion]
+      exact ht.union ⟨y, hyt, hyu⟩ hu
+  have hPsymm : Symmetric P := by
+    intro x y hxy
+    obtain ⟨t, hxt, hyt, ht⟩ := hxy
+    exact ⟨t, hyt, hxt, ht⟩
+  have hP (x y : X) : P x y :=
+    PreconnectedSpace.induction₂ P hPlocal hPtrans hPsymm x y
+  let x₀ : X := Classical.choice inferInstance
+  have aggregate : ∀ r : Finset X,
+      ∃ t : Finset X, r ⊆ t ∧ x₀ ∈ S t ∧ IsConnected (S t) := by
+    intro r
+    induction r using Finset.induction_on with
+    | empty =>
+        obtain ⟨t, hx₀t, _, ht⟩ := hP x₀ x₀
+        exact ⟨t, by simp, hx₀t, ht⟩
+    | @insert a r har ih =>
+        obtain ⟨t, hrt, hx₀t, ht⟩ := ih
+        obtain ⟨u, hx₀u, hau, hu⟩ := hP x₀ a
+        have hSunion : S (t ∪ u) = S t ∪ S u := by
+          ext q
+          simp only [S, Set.mem_iUnion, Finset.mem_union, Set.mem_union]
+          constructor
+          · rintro ⟨b, ⟨hb | hb, hqb⟩⟩
+            · exact Or.inl ⟨b, hb, hqb⟩
+            · exact Or.inr ⟨b, hb, hqb⟩
+          · rintro (⟨b, hb, hqb⟩ | ⟨b, hb, hqb⟩)
+            · exact ⟨b, Or.inl hb, hqb⟩
+            · exact ⟨b, Or.inr hb, hqb⟩
+        have hvconn : IsConnected (S (t ∪ u)) := by
+          rw [hSunion]
+          exact ht.union ⟨x₀, hx₀t, hx₀u⟩ hu
+        have hSw : S (insert a (t ∪ u)) = A a ∪ S (t ∪ u) := by
+          ext q
+          simp only [S, Set.mem_iUnion, Finset.mem_insert, Set.mem_union]
+          constructor
+          · rintro ⟨b, ⟨rfl | hb, hqb⟩⟩
+            · exact Or.inl hqb
+            · exact Or.inr ⟨b, hb, hqb⟩
+          · rintro (hqa | ⟨b, hb, hqb⟩)
+            · exact ⟨a, Or.inl rfl, hqa⟩
+            · exact ⟨b, Or.inr hb, hqb⟩
+        refine ⟨insert a (t ∪ u), ?_, ?_, ?_⟩
+        · intro q hq
+          rw [Finset.mem_insert] at hq ⊢
+          rcases hq with rfl | hq
+          · exact Or.inl rfl
+          · exact Or.inr (Finset.mem_union_left u (hrt hq))
+        · rw [hSw]
+          exact Or.inr (by rw [hSunion]; exact Or.inl hx₀t)
+        · rw [hSw]
+          apply (hAconn a).union
+          · refine ⟨a, hxA a, ?_⟩
+            rw [hSunion]
+            exact Or.inr hau
+          · exact hvconn
+  obtain ⟨t, hst, _, ht⟩ := aggregate s
+  exact ⟨t, hst, ht⟩
 
 /-- The genuinely one-dimensional gluing core.  A connected finite union of
 relatively compact line charts in a noncompact Hausdorff one-manifold sits in
@@ -2782,3 +3165,6 @@ theorem apm_t95j06
 #print axioms apm_t95j06
 
 #print axioms apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_disk_projection
+
+#print axioms apm_t95j06_planar_crosscut_of_jordan_aux_exterior
+#print axioms apm_t95j06_planar_crosscut_of_jordan_aux_label_domains
