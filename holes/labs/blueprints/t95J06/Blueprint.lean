@@ -2587,6 +2587,57 @@ lemma apm_t95j06_PunctureSplit.sideA_nested
     · exact h
     · exact False.elim (Set.disjoint_left.1 sy.disjoint sy.a_mem (h sx.a_mem))
 
+/-- The endpoint-aware strict separation relation.  At an interior right
+endpoint it is membership in its canonical `a`-side; `a` has no predecessors
+and every point other than `c` precedes `c`. -/
+noncomputable def apm_t95j06_PunctureSplit.sepLT
+    (K : Type*) [TopologicalSpace K] (a c : K)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y)) (x y : K) : Prop :=
+  by
+    classical
+    exact if hya : y = a then False
+      else if hyc : y = c then x ≠ c
+      else x ∈ (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).sideA
+
+/-- No point precedes itself in the separation relation. -/
+lemma apm_t95j06_PunctureSplit.sepLT_irrefl
+    (K : Type*) [TopologicalSpace K] (a c : K)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y)) (x : K) :
+    ¬ apm_t95j06_PunctureSplit.sepLT K a c hsplit x x := by
+  by_cases hxa : x = a
+  · simp [apm_t95j06_PunctureSplit.sepLT, hxa]
+  by_cases hxc : x = c
+  · simp [apm_t95j06_PunctureSplit.sepLT, hxa, hxc]
+  simp only [apm_t95j06_PunctureSplit.sepLT, hxa, hxc, dite_false]
+  intro hx
+  let s := apm_t95j06_PunctureSplit.choice K a c hsplit x hxa hxc
+  have hxcompl : x ∈ ({x}ᶜ : Set K) := by
+    rw [← s.cover]
+    exact Or.inl hx
+  exact hxcompl (Set.mem_singleton x)
+
+/-- The distinguished endpoint `a` is strictly below every other point. -/
+lemma apm_t95j06_PunctureSplit.sepLT_a
+    (K : Type*) [TopologicalSpace K] (a c : K) (hac : a ≠ c)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y)) (y : K) (hya : y ≠ a) :
+    apm_t95j06_PunctureSplit.sepLT K a c hsplit a y := by
+  by_cases hyc : y = c
+  · simp [apm_t95j06_PunctureSplit.sepLT, hya, hyc, hac, hac.symm]
+  · simp only [apm_t95j06_PunctureSplit.sepLT, hya, hyc, dite_false]
+    exact (apm_t95j06_PunctureSplit.choice K a c hsplit y hya hyc).a_mem
+
+/-- Every point other than `c` is strictly below the distinguished endpoint
+`c`. -/
+lemma apm_t95j06_PunctureSplit.sepLT_c
+    (K : Type*) [TopologicalSpace K] (a c : K) (hac : a ≠ c)
+    (hsplit : ∀ y : K, y ≠ a → y ≠ c →
+      Nonempty (apm_t95j06_PunctureSplit K a c y)) (x : K) (hxc : x ≠ c) :
+    apm_t95j06_PunctureSplit.sepLT K a c hsplit x c := by
+  simp [apm_t95j06_PunctureSplit.sepLT, hac, hac.symm, hxc]
+
 /-- **C2a, separation-order algebra and completion (estimated 220--380
 lines; LIBRARY).**  The endpoint-labelled puncture sides define a unique
 complete linear order: for an interior `y`, `x < y` exactly when `x` lies on
