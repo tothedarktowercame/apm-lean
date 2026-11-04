@@ -6714,6 +6714,109 @@ lemma apm_t95j06_increasing_interval_union_coordinate_strictMonoOn
   exact (apm_t95j06_increasing_interval_union_lt_iff
     X U hnested hreal hcover m hx hy).1 hglobal
 
+/-- Every exhaustion stage is convex for the global order: a point strictly
+between two points of the stage belongs to the stage. -/
+lemma apm_t95j06_increasing_interval_union_stage_orderConvex
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (m : ℕ)
+    {x y z : X} (hx : x ∈ U m) (hz : z ∈ U m)
+    (hxy : @LT.lt X (apm_t95j06_increasing_interval_union_linearOrder
+      X U hnested hreal hcover).toLT x y)
+    (hyz : @LT.lt X (apm_t95j06_increasing_interval_union_linearOrder
+      X U hnested hreal hcover).toLT y z) :
+    y ∈ U m := by
+  let sy := apm_t95j06_increasing_interval_union_stage X U hcover y
+  let k := max m sy
+  have hmk : m ≤ k := le_max_left _ _
+  have hsyk : sy ≤ k := le_max_right _ _
+  have hxk : x ∈ U k :=
+    apm_t95j06_increasing_interval_union_mono_of_le X U hnested hmk hx
+  have hzk : z ∈ U k :=
+    apm_t95j06_increasing_interval_union_mono_of_le X U hnested hmk hz
+  have hyk : y ∈ U k :=
+    apm_t95j06_increasing_interval_union_mono_of_le X U hnested hsyk
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover y)
+  let em := Classical.choice (hreal m)
+  let psik := apm_t95j06_increasing_interval_union_orientedCharts
+    X U hnested hreal k
+  let q : ℝ → ℝ := fun r ↦ psik ⟨(em.symm r : X),
+    apm_t95j06_increasing_interval_union_mono_of_le X U hnested hmk
+      (em.symm r).property⟩
+  have hq : Continuous q := by
+    exact psik.continuous.comp
+      ((continuous_subtype_val.comp em.symm.continuous).subtype_mk _)
+  have hpre : _root_.IsPreconnected (Set.range q) := isPreconnected_range hq
+  have hcx :
+      apm_t95j06_increasing_interval_union_coordinate X U hnested hreal k x ∈
+        Set.range q := by
+    refine ⟨em ⟨x, hx⟩, ?_⟩
+    simp [q, em, psik, apm_t95j06_increasing_interval_union_coordinate, hxk]
+  have hcz :
+      apm_t95j06_increasing_interval_union_coordinate X U hnested hreal k z ∈
+        Set.range q := by
+    refine ⟨em ⟨z, hz⟩, ?_⟩
+    simp [q, em, psik, apm_t95j06_increasing_interval_union_coordinate, hzk]
+  have hcxy := (apm_t95j06_increasing_interval_union_lt_iff
+    X U hnested hreal hcover k hxk hyk).1
+      ((apm_t95j06_increasing_interval_union_linearOrder_lt_iff
+        X U hnested hreal hcover x y).1 hxy)
+  have hcyz := (apm_t95j06_increasing_interval_union_lt_iff
+    X U hnested hreal hcover k hyk hzk).1
+      ((apm_t95j06_increasing_interval_union_linearOrder_lt_iff
+        X U hnested hreal hcover y z).1 hyz)
+  have hcy :
+      apm_t95j06_increasing_interval_union_coordinate X U hnested hreal k y ∈
+        Set.range q :=
+    hpre.Icc_subset hcx hcz ⟨hcxy.le, hcyz.le⟩
+  obtain ⟨r, hr⟩ := hcy
+  have heq : (em.symm r : X) = y := by
+    have heqsub :
+        (⟨(em.symm r : X),
+          apm_t95j06_increasing_interval_union_mono_of_le X U hnested hmk
+            (em.symm r).property⟩ : U k) = ⟨y, hyk⟩ := by
+      apply psik.injective
+      simpa [q, psik, apm_t95j06_increasing_interval_union_coordinate, hyk]
+        using hr
+    exact congrArg Subtype.val heqsub
+  rw [← heq]
+  exact (em.symm r).property
+
+/-- A point outside a stage lies wholly above it or wholly below it in the
+global order. -/
+lemma apm_t95j06_increasing_interval_union_outside_stage
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (m : ℕ) {x : X}
+    (hx : x ∉ U m) :
+    (∀ y ∈ U m, @LT.lt X (apm_t95j06_increasing_interval_union_linearOrder
+      X U hnested hreal hcover).toLT y x) ∨
+    (∀ y ∈ U m, @LT.lt X (apm_t95j06_increasing_interval_union_linearOrder
+      X U hnested hreal hcover).toLT x y) := by
+  letI : LinearOrder X :=
+    apm_t95j06_increasing_interval_union_linearOrder X U hnested hreal hcover
+  let e := Classical.choice (hreal m)
+  let y₀ : X := e.symm 0
+  have hy₀ : y₀ ∈ U m := (e.symm 0).property
+  rcases lt_trichotomy y₀ x with hbelow | heq | habove
+  · left
+    intro y hy
+    rcases lt_trichotomy y x with hyx | hyxeq | hxy
+    · exact hyx
+    · exact (hx (hyxeq ▸ hy)).elim
+    · exact (hx (apm_t95j06_increasing_interval_union_stage_orderConvex
+        X U hnested hreal hcover m hy₀ hy hbelow hxy)).elim
+  · exact (hx (heq ▸ hy₀)).elim
+  · right
+    intro y hy
+    rcases lt_trichotomy x y with hxy | hxyeq | hyx
+    · exact hxy
+    · exact (hx (hxyeq ▸ hy)).elim
+    · exact (hx (apm_t95j06_increasing_interval_union_stage_orderConvex
+        X U hnested hreal hcover m hy hy₀ hyx habove)).elim
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
