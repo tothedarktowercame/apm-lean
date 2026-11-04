@@ -3023,7 +3023,7 @@ piece containing the puncture, to a separation of the whole space. -/
 lemma apm_t95j06_cutSide_adjoin_puncture
     (X : Type*) [TopologicalSpace X]
     (hX : IsConnected (Set.univ : Set X)) (p : X) (U V : Set X)
-    (hU : IsOpen U) (hV : IsOpen V) (hUpre : IsPreconnected U)
+    (hU : IsOpen U) (hV : IsOpen V)
     (hUV : Disjoint U V)
     (hcover : U ∪ V = ({p}ᶜ : Set X))
     (hUne : U.Nonempty) (hVne : V.Nonempty) :
@@ -3051,28 +3051,89 @@ lemma apm_t95j06_cutSide_adjoin_puncture
       · exact Set.disjoint_left.1 hUV hxU hxV
       · exact hpV (Set.mem_singleton_iff.mp hxp ▸ hxV)
   have hclosed : IsClosed (U ∪ {p}) := isOpen_compl_iff.mp (hcompl.symm ▸ hV)
-  have hpcl : p ∈ closure U := by
-    by_contra hp
-    have hclU : closure U = U := by
-      apply Set.Subset.antisymm
-      · intro x hx
-        have hx' : x ∈ U ∪ {p} := closure_minimal Set.subset_union_left hclosed hx
-        exact hx'.resolve_right (fun hxp =>
-          hp (Set.mem_singleton_iff.mp hxp ▸ hx))
-      · exact subset_closure
-    have hUc : IsClosed U := closure_eq_iff_isClosed.mp hclU
+  refine ⟨hclosed, isPreconnected_iff_subset_of_disjoint.mpr ?_⟩
+  intro P Q hP hQ hK hPQ
+  by_contra hne
+  push_neg at hne
+  obtain ⟨hnotP, hnotQ⟩ := hne
+  have hpK : p ∈ U ∪ {p} := Or.inr (Set.mem_singleton p)
+  rcases hK hpK with hpP | hpQ
+  · have hpnotQ : p ∉ Q := by
+      intro hpQ'
+      have : p ∈ (U ∪ {p}) ∩ (P ∩ Q) := ⟨hpK, hpP, hpQ'⟩
+      rw [hPQ] at this
+      exact this.elim
+    let S : Set X := (U ∪ {p}) ∩ Q
+    have hSeq : S = U ∩ Q := by
+      ext x
+      constructor
+      · rintro ⟨hxU | hxp, hxQ⟩
+        · exact ⟨hxU, hxQ⟩
+        · exact False.elim (hpnotQ (Set.mem_singleton_iff.mp hxp ▸ hxQ))
+      · rintro ⟨hxU, hxQ⟩
+        exact ⟨Or.inl hxU, hxQ⟩
+    have hSopen : IsOpen S := hSeq ▸ hU.inter hQ
+    have hSclosed : IsClosed S := by
+      have : S = (U ∪ {p}) \ P := by
+        ext x
+        constructor
+        · rintro ⟨hxK, hxQ⟩
+          exact ⟨hxK, fun hxP => by
+            have : x ∈ (U ∪ {p}) ∩ (P ∩ Q) := ⟨hxK, hxP, hxQ⟩
+            rw [hPQ] at this
+            exact this.elim⟩
+        · rintro ⟨hxK, hxnotP⟩
+          rcases hK hxK with hxP | hxQ
+          · exact False.elim (hxnotP hxP)
+          · exact ⟨hxK, hxQ⟩
+      rw [this]
+      exact hclosed.sdiff hP
+    have hSne : S.Nonempty := by
+      obtain ⟨x, hxK, hxnotP⟩ := Set.not_subset.mp hnotP
+      rcases hK hxK with hxP | hxQ
+      · exact False.elim (hxnotP hxP)
+      · exact ⟨x, hxK, hxQ⟩
     letI : PreconnectedSpace X := preconnectedSpace_iff_univ.mpr hX.isPreconnected
-    have hUuniv : U = Set.univ := (show IsClopen U from ⟨hUc, hU⟩).eq_univ hUne
-    obtain ⟨v, hv⟩ := hVne
-    exact Set.disjoint_left.1 hUV (hUuniv.symm ▸ Set.mem_univ v) hv
-  have hclosure : closure U = U ∪ {p} := by
-    apply Set.Subset.antisymm
-    · exact closure_minimal Set.subset_union_left hclosed
-    · intro x hx
-      rcases hx with hx | rfl
-      · exact subset_closure hx
-      · exact hpcl
-  exact ⟨hclosed, hclosure ▸ hUpre.closure⟩
+    have hSuniv : S = Set.univ := (show IsClopen S from ⟨hSclosed, hSopen⟩).eq_univ hSne
+    exact hpnotQ (by have := hSuniv.symm ▸ Set.mem_univ p; exact this.2)
+  · have hpnotP : p ∉ P := by
+      intro hpP'
+      have : p ∈ (U ∪ {p}) ∩ (P ∩ Q) := ⟨hpK, hpP', hpQ⟩
+      rw [hPQ] at this
+      exact this.elim
+    let S : Set X := (U ∪ {p}) ∩ P
+    have hSeq : S = U ∩ P := by
+      ext x
+      constructor
+      · rintro ⟨hxU | hxp, hxP⟩
+        · exact ⟨hxU, hxP⟩
+        · exact False.elim (hpnotP (Set.mem_singleton_iff.mp hxp ▸ hxP))
+      · rintro ⟨hxU, hxP⟩
+        exact ⟨Or.inl hxU, hxP⟩
+    have hSopen : IsOpen S := hSeq ▸ hU.inter hP
+    have hSclosed : IsClosed S := by
+      have : S = (U ∪ {p}) \ Q := by
+        ext x
+        constructor
+        · rintro ⟨hxK, hxP⟩
+          exact ⟨hxK, fun hxQ => by
+            have : x ∈ (U ∪ {p}) ∩ (P ∩ Q) := ⟨hxK, hxP, hxQ⟩
+            rw [hPQ] at this
+            exact this.elim⟩
+        · rintro ⟨hxK, hxnotQ⟩
+          rcases hK hxK with hxP | hxQ
+          · exact ⟨hxK, hxP⟩
+          · exact False.elim (hxnotQ hxQ)
+      rw [this]
+      exact hclosed.sdiff hQ
+    have hSne : S.Nonempty := by
+      obtain ⟨x, hxK, hxnotQ⟩ := Set.not_subset.mp hnotQ
+      rcases hK hxK with hxP | hxQ
+      · exact ⟨x, hxK, hxP⟩
+      · exact False.elim (hxnotQ hxQ)
+    letI : PreconnectedSpace X := preconnectedSpace_iff_univ.mpr hX.isPreconnected
+    have hSuniv : S = Set.univ := (show IsClopen S from ⟨hSclosed, hSopen⟩).eq_univ hSne
+    exact hpnotP (by have := hSuniv.symm ▸ Set.mem_univ p; exact this.2)
 
 /-- **One-sided boundary bumping (estimated 250--450 lines; LIBRARY).**  Each
 nonempty side of a separation of a punctured compact Hausdorff continuum
