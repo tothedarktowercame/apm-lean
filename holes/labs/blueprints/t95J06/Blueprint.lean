@@ -2593,6 +2593,210 @@ lemma apm_t95j06_loopEraseAdmissible_iInter_basic
     intro F hF
     exact (hadm F hF).2.2.1
 
+/-- **Loop erasure, chain step.**  The intersection of a nonempty chain of
+admissible sets satisfies the gap equation.  If it failed on a gap `(s,t)`,
+separate `p s` and `p t` by open sets and shrink to a margin `d`; the compact
+middle part `[s+d, t-d]` misses the intersection, hence misses one member `F`
+of the chain, and the largest point of `F` below `t-d` and the least point of
+`F` above `s+d` bound a gap of `F` whose ends lie in the two open sets. -/
+lemma apm_t95j06_loopEraseAdmissible_chain_gap
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    (c : Set (Set apm_t95j06_LoopEraseInterval)) (hc : c.Nonempty)
+    (hchain : IsChain (· ⊆ ·) c)
+    (hadm : ∀ F ∈ c, apm_t95j06_LoopEraseAdmissible p F)
+    (s t : apm_t95j06_LoopEraseInterval) (hs : s ∈ ⋂₀ c) (ht : t ∈ ⋂₀ c)
+    (hst : s < t) (hgap : Set.Ioo s t ∩ ⋂₀ c = ∅) : p s = p t := by
+  classical
+  by_contra hne
+  obtain ⟨u, v, hu, hv, hsu, htv, huv⟩ := t2_separation hne
+  obtain ⟨ε, hε, hεu⟩ := Metric.isOpen_iff.mp (hu.preimage hp) s hsu
+  obtain ⟨ε', hε', hεv⟩ := Metric.isOpen_iff.mp (hv.preimage hp) t htv
+  have hst' : s.1 < t.1 := hst
+  set d : ℝ := min (min ε ε') ((t.1 - s.1) / 3) with hd
+  have hd0 : 0 < d := lt_min (lt_min hε hε') (by linarith)
+  have hdε : d ≤ ε := (min_le_left _ _).trans (min_le_left _ _)
+  have hdε' : d ≤ ε' := (min_le_left _ _).trans (min_le_right _ _)
+  have hd3 : d ≤ (t.1 - s.1) / 3 := min_le_right _ _
+  let K : Set apm_t95j06_LoopEraseInterval := {z | s.1 + d ≤ z.1 ∧ z.1 ≤ t.1 - d}
+  have hKc : IsClosed K :=
+    (isClosed_le continuous_const continuous_subtype_val).inter
+      (isClosed_le continuous_subtype_val continuous_const)
+  have hKF : K ∩ ⋂ F : c, (F : Set apm_t95j06_LoopEraseInterval) = ∅ := by
+    ext z
+    simp only [Set.mem_inter_iff, Set.mem_iInter, Set.mem_empty_iff_false, iff_false, not_and]
+    intro hzK hz
+    have hz' : z ∈ Set.Ioo s t ∩ ⋂₀ c := by
+      refine ⟨⟨?_, ?_⟩, ?_⟩
+      · show s.1 < z.1
+        linarith [hzK.1]
+      · show z.1 < t.1
+        linarith [hzK.2]
+      · intro F hF
+        exact hz ⟨F, hF⟩
+    rw [hgap] at hz'
+    exact hz'
+  haveI : Nonempty c := hc.to_subtype
+  have hdir : Directed (· ⊇ ·) (fun F : c => (F : Set apm_t95j06_LoopEraseInterval)) := by
+    intro F₁ F₂
+    rcases eq_or_ne (F₁ : Set apm_t95j06_LoopEraseInterval) F₂ with h | h
+    · exact ⟨F₁, le_rfl, show (F₁ : Set apm_t95j06_LoopEraseInterval) ⊆ F₂ from h ▸ subset_rfl⟩
+    · rcases hchain F₁.2 F₂.2 h with h12 | h21
+      · exact ⟨F₁, le_rfl, h12⟩
+      · exact ⟨F₂, h21, le_rfl⟩
+  obtain ⟨⟨F, hFc⟩, hFK⟩ := hKc.isCompact.elim_directed_family_closed _
+    (fun F : c => (hadm F.1 F.2).1) hKF hdir
+  have hFK' : ∀ z ∈ F, z ∉ K := fun z hzF hzK => by
+    have : z ∈ K ∩ F := ⟨hzK, hzF⟩
+    simp only at hFK
+    rw [hFK] at this
+    exact this
+  have hFadm := hadm F hFc
+  have hsF : s ∈ F := hs F hFc
+  have htF : t ∈ F := ht F hFc
+  -- greatest point of `F` in `[s, t-d]`
+  let L : Set apm_t95j06_LoopEraseInterval := F ∩ {z | s ≤ z ∧ z.1 ≤ t.1 - d}
+  have hLc : IsClosed L := hFadm.1.inter
+    ((isClosed_le continuous_const continuous_subtype_val).inter
+      (isClosed_le continuous_subtype_val continuous_const))
+  obtain ⟨s', hs'L, hs'max⟩ := hLc.isCompact.exists_isGreatest
+    ⟨s, hsF, le_rfl, by linarith⟩
+  let R : Set apm_t95j06_LoopEraseInterval := F ∩ {z | s.1 + d ≤ z.1 ∧ z ≤ t}
+  have hRc : IsClosed R := hFadm.1.inter
+    ((isClosed_le continuous_const continuous_subtype_val).inter
+      (isClosed_le continuous_subtype_val continuous_const))
+  obtain ⟨t', ht'R, ht'min⟩ := hRc.isCompact.exists_isLeast
+    ⟨t, htF, by linarith, le_rfl⟩
+  have hs'lt : s'.1 < s.1 + d := by
+    by_contra h
+    exact hFK' s' hs'L.1 ⟨not_lt.mp h, hs'L.2.2⟩
+  have ht'gt : t.1 - d < t'.1 := by
+    by_contra h
+    exact hFK' t' ht'R.1 ⟨ht'R.2.1, not_lt.mp h⟩
+  have hs't' : s' < t' := by
+    show s'.1 < t'.1
+    linarith [ht'R.2.1]
+  have hgap' : Set.Ioo s' t' ∩ F = ∅ := by
+    ext z
+    simp only [Set.mem_inter_iff, Set.mem_Ioo, Set.mem_empty_iff_false, iff_false, not_and]
+    intro ⟨hz1, hz2⟩ hzF
+    by_cases hzt : z.1 ≤ t.1 - d
+    · have hzL : z ∈ L := ⟨hzF, le_trans hs'L.2.1 hz1.le, hzt⟩
+      exact absurd (hs'max hzL) (not_le.mpr hz1)
+    · have hzR : z ∈ R := by
+        refine ⟨hzF, ?_, le_trans hz2.le ht'R.2.2⟩
+        have : t.1 - d ≥ s.1 + d := by linarith
+        linarith [not_le.mp hzt]
+      exact absurd (ht'min hzR) (not_le.mpr hz2)
+  have hpeq := hFadm.2.2.2 s' t' hs'L.1 ht'R.1 hs't' hgap'
+  have hs'u : p s' ∈ u := by
+    apply hεu
+    rw [Metric.mem_ball, Subtype.dist_eq, Real.dist_eq, abs_lt]
+    have : s.1 ≤ s'.1 := hs'L.2.1
+    constructor <;> linarith
+  have ht'v : p t' ∈ v := by
+    apply hεv
+    rw [Metric.mem_ball, Subtype.dist_eq, Real.dist_eq, abs_lt]
+    have : t'.1 ≤ t.1 := ht'R.2.2
+    constructor <;> linarith
+  exact Set.disjoint_left.1 huv hs'u (hpeq ▸ ht'v)
+
+/-- **Loop erasure, Zorn.**  A minimal admissible set exists. -/
+lemma apm_t95j06_loopEraseAdmissible_exists_minimal
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p) :
+    ∃ F, Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F := by
+  obtain ⟨m, -, hm⟩ := zorn_superset_nonempty
+    {F | apm_t95j06_LoopEraseAdmissible p F} (by
+      intro c hcS hchain hcne
+      refine ⟨⋂₀ c, ?_, fun F hF => Set.sInter_subset_of_mem hF⟩
+      refine ⟨isClosed_sInter (fun F hF => (hcS hF).1),
+        fun F hF => (hcS hF).2.1, fun F hF => (hcS hF).2.2.1, ?_⟩
+      intro s t hs ht hst hgap
+      exact apm_t95j06_loopEraseAdmissible_chain_gap p hp c hcne hchain
+        (fun F hF => hcS hF) s t hs ht hst hgap)
+    Set.univ (by
+      refine ⟨isClosed_univ, Set.mem_univ _, Set.mem_univ _, ?_⟩
+      intro s t _ _ hst hgap
+      exfalso
+      have hst' : s.1 < t.1 := hst
+      have hm0 : 0 ≤ (s.1 + t.1) / 2 := by linarith [s.2.1]
+      have hm1 : (s.1 + t.1) / 2 ≤ 1 := by linarith [t.2.2]
+      have hm : (⟨(s.1 + t.1) / 2, hm0, hm1⟩ : apm_t95j06_LoopEraseInterval) ∈
+          Set.Ioo s t ∩ Set.univ := by
+        refine ⟨⟨?_, ?_⟩, Set.mem_univ _⟩
+        · show s.1 < (s.1 + t.1) / 2
+          linarith
+        · show (s.1 + t.1) / 2 < t.1
+          linarith
+      rw [hgap] at hm
+      exact hm)
+  exact ⟨m, hm⟩
+
+/-- **Loop erasure, minimality.**  In a minimal admissible set, two points with
+the same path value bound a gap. -/
+lemma apm_t95j06_loopEraseAdmissible_minimal_gap
+    {X : Type} [TopologicalSpace X]
+    (p : apm_t95j06_LoopEraseInterval → X)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    {s t : apm_t95j06_LoopEraseInterval} (hs : s ∈ F) (ht : t ∈ F) (hst : s < t)
+    (hpst : p s = p t) : Set.Ioo s t ∩ F = ∅ := by
+  classical
+  let F' := F \ Set.Ioo s t
+  have hF'adm : apm_t95j06_LoopEraseAdmissible p F' := by
+    refine ⟨hF.prop.1.sdiff isOpen_Ioo, ⟨hF.prop.2.1, ?_⟩, ⟨hF.prop.2.2.1, ?_⟩, ?_⟩
+    · rintro ⟨h0, -⟩
+      exact absurd h0 (not_lt.mpr (show (0 : ℝ) ≤ s.1 from s.2.1))
+    · rintro ⟨-, h1⟩
+      exact absurd h1 (not_lt.mpr (show t.1 ≤ (1 : ℝ) from t.2.2))
+    intro a b ha hb hab hgab
+    by_cases hF0 : Set.Ioo a b ∩ F = ∅
+    · exact hF.prop.2.2.2 a b ha.1 hb.1 hab hF0
+    · obtain ⟨z, ⟨hza, hzb⟩, hzF⟩ := Set.nonempty_iff_ne_empty.mpr hF0
+      have hzI : z ∈ Set.Ioo s t := by
+        by_contra h
+        have : z ∈ Set.Ioo a b ∩ F' := ⟨⟨hza, hzb⟩, hzF, h⟩
+        rw [hgab] at this
+        exact this
+      have has : a ≤ s := by
+        by_contra h
+        push_neg at h
+        have hta : t ≤ a := by
+          by_contra h'
+          exact ha.2 ⟨h, not_le.mp h'⟩
+        exact absurd (hzI.2.trans_le hta) (not_lt.mpr hza.le)
+      have htb : t ≤ b := by
+        by_contra h
+        push_neg at h
+        have hbs : b ≤ s := by
+          by_contra h'
+          exact hb.2 ⟨not_le.mp h', h⟩
+        exact absurd (hbs.trans_lt hzI.1) (not_lt.mpr hzb.le)
+      have has' : a = s := by
+        rcases has.lt_or_eq with h | h
+        · exfalso
+          have : s ∈ Set.Ioo a b ∩ F' :=
+            ⟨⟨h, hst.trans_le htb⟩, hs, fun h' => lt_irrefl s h'.1⟩
+          rw [hgab] at this
+          exact this
+        · exact h
+      have htb' : b = t := by
+        rcases htb.lt_or_eq with h | h
+        · exfalso
+          have : t ∈ Set.Ioo a b ∩ F' :=
+            ⟨⟨has.trans_lt hst, h⟩, ht, fun h' => lt_irrefl t h'.2⟩
+          rw [hgab] at this
+          exact this
+        · exact h.symm
+      rw [has', htb']
+      exact hpst
+  have hsub : F ⊆ F' := hF.2 hF'adm Set.diff_subset
+  ext z
+  simp only [Set.mem_inter_iff, Set.mem_empty_iff_false, iff_false, not_and]
+  intro hz hzF
+  exact (hsub hzF).2 hz
+
 /-- Euclidean invariance of domain, with all library premises discharged. -/
 lemma apm_t95j06_Q_aux_invariance_domain
     {U : Set apm_t95j06_E2} (hU : IsOpen U) {f : U → apm_t95j06_E2}
