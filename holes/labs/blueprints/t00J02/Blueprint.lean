@@ -71,8 +71,8 @@ whose literal point fiber is locally injective.  The proof uses the incidence
 fiber-product charts and Sard selection developed in
 `ConstructionTargets.t00J02Closure` (not an embedded-submanifold theorem, so
 no unproved immersion property of `c` is assumed).  Compactness later turns
-this locally isolated fiber into a finite one.  Estimated proof: 400--800
-lines; **LIBRARY**. -/
+this locally isolated fiber into a finite one.  Proved by
+`exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection` (codex-17). -/
 theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
@@ -84,7 +84,9 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
     (htrans : apm_t00j02_transverse f c) :
     ∃ y ∈ range c,
       ConstructionTargets.T00J02Closure.LocallyInjectiveAlongFiber f y := by
-  sorry
+  exact
+    ConstructionTargets.T00J02Closure.exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection
+      MeasureTheory.Measure.addHaar f c hf hcsmooth htrans
 
 /-- At any locally injective selected circle fiber, disk-bounded preimage
 components give zero component sums and the surface local-fundamental-class
