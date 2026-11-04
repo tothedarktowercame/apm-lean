@@ -664,7 +664,39 @@ theorem apm_t95j06_hopf_normalized_section
       (∀ b, Q.proj (s b) = b.1) ∧
       ∃ hs : ∀ b, s b ∈ apm_t95j06_hopf_slice (F := F) (x := x) k,
         ∀ b, apm_t95j06_hopf_phase k ⟨s b, hs b⟩ = 1 := by
-  sorry
+  classical
+  let S := apm_t95j06_hopf_slice (F := F) (x := x) k
+  let U : Set B := Q.proj '' S
+  let q : S → U := fun y ↦ ⟨Q.proj y.1, ⟨y.1, y.2, rfl⟩⟩
+  have hqcont : Continuous q :=
+    (Q.continuous_proj.comp continuous_subtype_val).subtype_mk _
+  have hqopen : IsOpenMap q :=
+    (Q.open_proj.restrict (apm_t95j06_hopf_slice_isOpen k)).codRestrict _
+  have hqsurj : Function.Surjective q := by
+    rintro ⟨b, y, hy, hproj⟩
+    exact ⟨⟨y, hy⟩, Subtype.ext hproj⟩
+  have hquot : Topology.IsQuotientMap q := hqopen.isQuotientMap hqcont hqsurj
+  let r : U → S := fun b ↦ Classical.choose (hqsurj b)
+  have hr (b : U) : q (r b) = b := Classical.choose_spec (hqsurj b)
+  let s : U → apm_t95j06_hopf_component F x :=
+    fun b ↦ apm_t95j06_hopf_normalize Q k (r b)
+  have hscomp : s ∘ q = apm_t95j06_hopf_normalize Q k := by
+    funext y
+    apply apm_t95j06_hopf_normalize_eq_of_proj_eq
+    exact congrArg Subtype.val (hr (q y))
+  have hscont : Continuous s := by
+    apply hquot.continuous_iff.mpr
+    rw [hscomp]
+    exact apm_t95j06_hopf_normalize_continuous Q k
+  have hsproj (b : U) : Q.proj (s b) = b.1 := by
+    change Q.proj (Q.act (_, (r b).1)) = b.1
+    rw [Q.invariant]
+    exact congrArg Subtype.val (hr b)
+  have hsS (b : U) : s b ∈ S :=
+    apm_t95j06_hopf_slice_invariant Q k _ (r b).1 (r b).2
+  refine ⟨s, hscont, hsproj, hsS, ?_⟩
+  intro b
+  exact apm_t95j06_hopf_normalize_phase Q k (r b)
 
 /-- **Remaining sub-leaf, explicit Hopf charts (estimated 300--550 lines).**
 In words: every scalar-orbit quotient core has fibre-preserving,
