@@ -728,23 +728,108 @@ theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_b
   exact ConcreteCategory.bijective_of_isIso i.hom
 
 /-- Euclidean point-local homology vanishes strictly above the dimension. -/
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_high_aux_sphere
+    (d k : ℕ) (hk : d ≤ k) (hk0 : k ≠ 0) :
+    CategoryTheory.Limits.IsZero
+      (ConstructionTargets.CoefficientContractiblePair.H (ZMod 2) k
+        (TopCat.of (T02A06.euclideanUnitSphere d))) := by
+  induction d generalizing k with
+  | zero =>
+      exact AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+        (ModuleCat (ZMod 2)) k (ModuleCat.of (ZMod 2) (ZMod 2))
+          (TopCat.of (T02A06.euclideanUnitSphere 0)) hk0
+  | succ d ih =>
+      obtain ⟨q, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hk0
+      by_cases hq0 : q = 0
+      · subst q
+        have hd : d = 0 := by omega
+        subst d
+        exact AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+          (ModuleCat (ZMod 2)) 1 (ModuleCat.of (ZMod 2) (ZMod 2))
+            (TopCat.of (T02A06.euclideanUnitSphere 1)) (by decide)
+      · have hs := ConstructionTargets.CoefficientSphereShift.sphereShift
+          (ZMod 2) d q hq0
+        exact (ih q (by omega) hq0).of_iso hs
+
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_zero_aux_emptyRelative
+    (i : ℕ) (hi : 0 < i) :
+    CategoryTheory.Limits.IsZero
+      ((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) (∅ : Set (EuclideanSpace ℝ (Fin 0)))).homology i) := by
+  let X := EuclideanSpace ℝ (Fin 0)
+  let ciso : ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) (∅ : Set X) ≅
+      ConstructionTargets.CoefficientH0.SingularChains (ZMod 2) (TopCat.of X) :=
+    CategoryTheory.Limits.cokernelIsoOfEq
+      (t00A04_modTwoLocalHomology_unique_nonzero_aux_euclidean_aux_origin_zero_aux_emptyMap
+        (ZMod 2) X) ≪≫
+      CategoryTheory.Limits.cokernelZeroIsoTarget
+  let hiso := asIso (HomologicalComplex.homologyMap ciso.hom i)
+  exact (ConstructionTargets.CoefficientContractiblePair.higher_zero
+    (ZMod 2) X i (by omega)).of_iso hiso
+
 theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_zero
     (i : ℕ) (hi : 0 < i) :
     Subsingleton (t00A04_ModTwoLocalHomology
       (EuclideanSpace ℝ (Fin 0)) {0} i) := by
-  sorry
+  have hpoint : ({0} : Set (EuclideanSpace ℝ (Fin 0))) = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro x
+    exact Set.mem_singleton_iff.mpr (Subsingleton.elim x 0)
+  change Subsingleton
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) ({0} : Set (EuclideanSpace ℝ (Fin 0)))ᶜ).homology i : Type))
+  rw [hpoint, Set.compl_univ]
+  exact ModuleCat.subsingleton_of_isZero
+    (t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_zero_aux_emptyRelative
+      i hi)
 
 theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_one
     (i : ℕ) (hi : 1 < i) :
     Subsingleton (t00A04_ModTwoLocalHomology
       (EuclideanSpace ℝ (Fin 1)) {0} i) := by
-  sorry
+  have hi0 : i - 1 ≠ 0 := by omega
+  let e :=
+    ConstructionTargets.CoefficientContractiblePair.contractibleConnectingIso
+      (ZMod 2) (ConstructionTargets.CoefficientModelLocal.puncture 1) (i - 1) hi0 ≪≫
+    ConstructionTargets.CoefficientModelLocal.radialIso (ZMod 2) 1 (i - 1)
+  have hz :=
+    t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_high_aux_sphere
+      1 (i - 1) (by omega) hi0
+  have hzrel : CategoryTheory.Limits.IsZero
+      ((ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2)
+        (ConstructionTargets.CoefficientModelLocal.puncture 1)).homology i) := by
+    have heq : i - 1 + 1 = i := by omega
+    rw [← heq]
+    exact hz.of_iso e
+  change Subsingleton
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2)
+      ({0} : Set (EuclideanSpace ℝ (Fin 1)))ᶜ).homology i : Type))
+  exact ModuleCat.subsingleton_of_isZero hzrel
 
 theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_high
     (m i : ℕ) (hi : m + 2 < i) :
     Subsingleton (t00A04_ModTwoLocalHomology
       (EuclideanSpace ℝ (Fin (m + 2))) {0} i) := by
-  sorry
+  have hi0 : i - 1 ≠ 0 := by omega
+  let e :=
+    ConstructionTargets.CoefficientContractiblePair.contractibleConnectingIso
+      (ZMod 2) (ConstructionTargets.CoefficientModelLocal.puncture (m + 2))
+        (i - 1) hi0 ≪≫
+    ConstructionTargets.CoefficientModelLocal.radialIso (ZMod 2) (m + 2) (i - 1)
+  have hz :=
+    t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_high_aux_sphere
+      (m + 2) (i - 1) (by omega) hi0
+  have hzrel : CategoryTheory.Limits.IsZero
+      ((ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2)
+        (ConstructionTargets.CoefficientModelLocal.puncture (m + 2))).homology i) := by
+    have heq : i - 1 + 1 = i := by omega
+    rw [← heq]
+    exact hz.of_iso e
+  change Subsingleton
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2)
+      ({0} : Set (EuclideanSpace ℝ (Fin (m + 2))))ᶜ).homology i : Type))
+  exact ModuleCat.subsingleton_of_isZero hzrel
 
 theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish
     (d i : ℕ) (x : EuclideanSpace ℝ (Fin d)) (hi : d < i) :
