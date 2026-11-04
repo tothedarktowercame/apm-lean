@@ -3377,6 +3377,68 @@ lemma apm_t95j06_Q_aux_two_arcs
     (apm_t95j06_Q_aux_arc_interior_open hW hV e a hai haW)
     (ha0.trans hd0.symm) hqD hrD
 
+/-- Concatenating two injective paths that meet only at the junction point
+gives an injective path. -/
+lemma apm_t95j06_Q_aux_path_trans_injective {Y : Type} [TopologicalSpace Y]
+    {x y z : Y} (γ₁ : Path x y) (γ₂ : Path y z)
+    (h₁ : Function.Injective γ₁) (h₂ : Function.Injective γ₂)
+    (hmeet : Set.range γ₁ ∩ Set.range γ₂ ⊆ {y}) :
+    Function.Injective (γ₁.trans γ₂) := by
+  have mixed : ∀ s t : unitInterval, (s : ℝ) ≤ 1 / 2 → ¬ (t : ℝ) ≤ 1 / 2 →
+      (γ₁.trans γ₂) s ≠ (γ₁.trans γ₂) t := by
+    intro s t hs ht he
+    rw [Path.trans_apply, Path.trans_apply, dif_pos hs, dif_neg ht] at he
+    have hy : γ₂ ⟨2 * t - 1, _⟩ ∈ ({y} : Set Y) := hmeet ⟨⟨_, he⟩, ⟨_, rfl⟩⟩
+    have h0 : γ₂ ⟨2 * t - 1, unitInterval.two_mul_sub_one_mem_iff.2 ⟨(not_le.1 ht).le, t.2.2⟩⟩ =
+        γ₂ 0 := by rw [Path.source]; exact hy
+    have := congrArg Subtype.val (h₂ h0)
+    simp at this
+    linarith [not_le.1 ht]
+  intro s t he
+  by_cases hs : (s : ℝ) ≤ 1 / 2 <;> by_cases ht : (t : ℝ) ≤ 1 / 2
+  · have he' := he
+    rw [Path.trans_apply, Path.trans_apply, dif_pos hs, dif_pos ht] at he'
+    have := congrArg Subtype.val (h₁ he')
+    exact Subtype.ext (by simp at this; linarith)
+  · exact absurd he (mixed s t hs ht)
+  · exact absurd he.symm (mixed t s ht hs)
+  · have he' := he
+    rw [Path.trans_apply, Path.trans_apply, dif_neg hs, dif_neg ht] at he'
+    have := congrArg Subtype.val (h₂ he')
+    exact Subtype.ext (by simp at this; linarith)
+
+/-- **Q-design helper 9.**  Two injective arcs from `b`, to `q` and to `r`,
+meeting only at `b`, paste to one injective arc from `r` through `b` (at the
+parameter `1/2`) to `q` whose range is the union of their ranges. -/
+lemma apm_t95j06_Q_aux_paste_arcs {Y : Type} [TopologicalSpace Y]
+    (α β : C(Set.Icc (0 : ℝ) 1, Y)) (hαi : Function.Injective α)
+    (hβi : Function.Injective β) (b q r : Y)
+    (hα0 : α ⟨0, by norm_num⟩ = b) (hα1 : α ⟨1, by norm_num⟩ = q)
+    (hβ0 : β ⟨0, by norm_num⟩ = b) (hβ1 : β ⟨1, by norm_num⟩ = r)
+    (hmeet : Set.range α ∩ Set.range β = {b}) :
+    ∃ η : C(Set.Icc (0 : ℝ) 1, Y), Function.Injective η ∧
+      η ⟨0, by norm_num⟩ = r ∧ η ⟨1, by norm_num⟩ = q ∧
+      η ⟨1 / 2, by norm_num⟩ = b ∧ Set.range η = Set.range α ∪ Set.range β := by
+  let pα : Path b q := ⟨α, hα0, hα1⟩
+  let pβ : Path b r := ⟨β, hβ0, hβ1⟩
+  have hβs : Function.Injective pβ.symm := by
+    intro s t h
+    simp only [Path.symm_apply] at h
+    exact unitInterval.symm_inj.mp (hβi h)
+  have hrα : Set.range pα = Set.range α := rfl
+  have hrβ : Set.range pβ.symm = Set.range β := Path.symm_range pβ
+  have hinj := apm_t95j06_Q_aux_path_trans_injective pβ.symm pα hβs hαi
+    (by rw [hrβ, hrα, Set.inter_comm, hmeet])
+  refine ⟨(pβ.symm.trans pα).toContinuousMap, hinj, ?_, ?_, ?_, ?_⟩
+  · exact (pβ.symm.trans pα).source
+  · exact (pβ.symm.trans pα).target
+  · change (pβ.symm.trans pα) ⟨1 / 2, _⟩ = b
+    rw [Path.trans_apply, dif_pos (by norm_num)]
+    have : (⟨2 * (1 / 2 : ℝ), by norm_num⟩ : unitInterval) = 1 := Subtype.ext (by norm_num)
+    rw [this, Path.target]
+  · change Set.range (pβ.symm.trans pα) = _
+    rw [Path.trans_range, hrβ, hrα, Set.union_comm]
+
 /-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
 Assuming the pure disk-crosscut theorem, one explicit product chart around
 `b × 0` yields the required compact continuum in the base.  Choose a small
