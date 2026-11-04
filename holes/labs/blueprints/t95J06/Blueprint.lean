@@ -1,4 +1,5 @@
 import Mathlib
+import Mathlib.Topology.Bases
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
@@ -1078,6 +1079,27 @@ theorem apm_t95j06_puncture_connected
     @ConnectedSpace {x : B // x ≠ b} inferInstance := by
   sorry
 
+/-- An open subspace of a space locally homeomorphic to the real line is again
+locally homeomorphic to the real line. -/
+theorem apm_t95j06_puncture_inherits_oneManifold_aux_openSubtype
+    (B : Type*) [TopologicalSpace B]
+    (hloc : apm_t95j06_IsLocallyRealLine B)
+    (W : Set B) (hW : IsOpen W) :
+    apm_t95j06_IsLocallyRealLine W := by
+  intro w
+  obtain ⟨U, hU, hwU, V, hV, ⟨c⟩⟩ := hloc w.1
+  let U' : Set W := Subtype.val ⁻¹' U
+  have hU' : IsOpen U' := hU.preimage continuous_subtype_val
+  let g : U' → U := fun w' => ⟨w'.1.1, w'.2⟩
+  have hg : Topology.IsOpenEmbedding g := by
+    have h1 : Topology.IsOpenEmbedding ((Subtype.val : U → B) ∘ g) :=
+      (hW.isOpenEmbedding_subtypeVal).comp hU'.isOpenEmbedding_subtypeVal
+    exact Topology.IsOpenEmbedding.of_comp g hU.isOpenEmbedding_subtypeVal h1
+  have hF : Topology.IsOpenEmbedding ((Subtype.val : V → ℝ) ∘ c ∘ g) :=
+    hV.isOpenEmbedding_subtypeVal.comp (c.isOpenEmbedding.comp hg)
+  exact ⟨U', hU', hwU, _, hF.isOpen_range,
+    ⟨hF.isEmbedding.toHomeomorph⟩⟩
+
 /-- The puncture inherits Hausdorffness, second countability, and local real
 charts (estimated 60--100 lines). Subtype instances give the first two;
 restrict each chart to the open complement of `b` for the third. -/
@@ -1088,7 +1110,15 @@ theorem apm_t95j06_puncture_inherits_oneManifold
     @T2Space {x : B // x ≠ b} inferInstance ∧
       @SecondCountableTopology {x : B // x ≠ b} inferInstance ∧
       @apm_t95j06_IsLocallyRealLine {x : B // x ≠ b} inferInstance := by
-  sorry
+  letI : TopologicalSpace B := tB
+  letI : T2Space B := h2
+  letI : SecondCountableTopology B := hsc
+  let W : Set B := {x | x ≠ b}
+  have hW : IsOpen W := by
+    simpa only [Set.mem_setOf_eq] using (isClosed_singleton : IsClosed ({b} : Set B)).isOpen_compl
+  refine ⟨inferInstance, ?_,
+    apm_t95j06_puncture_inherits_oneManifold_aux_openSubtype B hloc W hW⟩
+  exact @TopologicalSpace.secondCountableTopology_induced W B tB hsc Subtype.val
 
 /-- The puncture is noncompact (estimated 80--140 lines). If compact it would
 be closed in the Hausdorff ambient space; it is also open. A real-line chart
