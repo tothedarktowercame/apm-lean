@@ -1977,6 +1977,17 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
 /-- Once both underlying types are small, transfer all structures to their
 `Shrink` models, apply the Type-0 theorem, and use functoriality under
 `Shrink.homeomorph` to transport nontriviality of singular homology back. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport
+    (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X]
+    [Small.{0} E] [Small.{0} X] :
+    let E₀ := EuclideanSpace ℝ (Fin (Module.finrank ℝ E))
+    ∃ c : ChartedSpace E₀ (Shrink.{0} X),
+      letI := c
+      IsManifold 𝓘(ℝ, E₀) ∞ (Shrink.{0} X) := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -1990,7 +2001,21 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
       Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E₀) X₀)) :
     Nontrivial
       (t00A04_ModTwoHomology (Module.finrank ℝ E) (Shrink.{0} X)) := by
-  sorry
+  let E₀ := EuclideanSpace ℝ (Fin (Module.finrank ℝ E))
+  obtain ⟨c, hc⟩ :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model_aux_transport
+      E X I
+  letI : ChartedSpace E₀ (Shrink.{0} X) := c
+  letI : IsManifold 𝓘(ℝ, E₀) ∞ (Shrink.{0} X) := hc
+  letI : BoundarylessManifold 𝓘(ℝ, E₀) (Shrink.{0} X) :=
+    t00A04_boundarylessManifold_of_finiteDimensional_selfModel E₀
+      (Shrink.{0} X) 𝓘(ℝ, E₀)
+  letI : T2Space (Shrink.{0} X) := (Shrink.homeomorph X).t2Space
+  letI : CompactSpace (Shrink.{0} X) := (Shrink.homeomorph X).compactSpace
+  letI : Nonempty (Shrink.{0} X) :=
+    ⟨Shrink.homeomorph X (Classical.choice (inferInstance : Nonempty X))⟩
+  have h := hType E₀ (Shrink.{0} X) 𝓘(ℝ, E₀)
+  simpa [E₀] using h
 
 /-- Universe comparison for mod-two singular homology.  This is the remaining
 chain-level statement: lifting both the coefficient module and the space gives
