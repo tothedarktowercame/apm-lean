@@ -4101,6 +4101,254 @@ lemma apm_t95j06_puncture_connected_of_components_real_aux_component_accumulates
   obtain ⟨y, _, hy⟩ := hbimg
   exact y.2 hy
 
+open Topology Set in
+/-- Side contradiction for the puncture argument: a closed puncture component
+homeomorphic to `ℝ` cannot meet a neighbourhood of the removed point in only
+one open half-chart whose end point lies outside it. -/
+lemma apm_t95j06_puncture_connected_of_components_real_aux_side (B : Type) [TopologicalSpace B] [CompactSpace B] (b : B)
+    (C : Set {y : B // y ≠ b}) (hCcl : IsClosed C)
+    (φ : {y : {z : B // z ≠ b} // y ∈ C} ≃ₜ ℝ)
+    (W A : Set B) (hW : IsOpen W) (hbW : b ∈ W)
+    (hA : _root_.IsPreconnected A) (hAW : A ⊆ W)
+    (hAC : A ⊆ Subtype.val '' C) (hCW : Subtype.val '' C ∩ W ⊆ A)
+    (a : B) (hab : a ≠ b) (haA : a ∈ closure A) (ha : a ∉ A) : False := by
+  let f : {y : {z : B // z ≠ b} // y ∈ C} → B := fun y => y.1.1
+  have hf : IsEmbedding f :=
+    IsEmbedding.subtypeVal.comp IsEmbedding.subtypeVal
+  have hclC : ∀ y ∈ closure (Subtype.val '' C), y ≠ b → y ∈ Subtype.val '' C := by
+    intro y hy hyb
+    let yp : {z : B // z ≠ b} := ⟨y, hyb⟩
+    have hyp : yp ∈ closure C := by
+      rw [IsEmbedding.subtypeVal.closure_eq_preimage_closure_image C]
+      exact hy
+    rw [hCcl.closure_eq] at hyp
+    exact ⟨yp, hyp, rfl⟩
+  have himg : ∀ s : Set {y : {z : B // z ≠ b} // y ∈ C},
+      f '' s = Subtype.val '' C ∩ {y | ∃ p ∈ s, f p = y} := by
+    intro s; ext y; constructor
+    · rintro ⟨p, hp, rfl⟩; exact ⟨⟨p.1, p.2, rfl⟩, p, hp, rfl⟩
+    · rintro ⟨_, p, hp, rfl⟩; exact ⟨p, hp, rfl⟩
+  let S : Set {y : {z : B // z ≠ b} // y ∈ C} := {y | f y ∉ W}
+  have hSimg : f '' S = Subtype.val '' C ∩ Wᶜ := by
+    ext y; constructor
+    · rintro ⟨p, hp, rfl⟩; exact ⟨⟨p.1, p.2, rfl⟩, hp⟩
+    · rintro ⟨⟨q, hq, rfl⟩, hyW⟩; exact ⟨⟨q, hq⟩, hyW, rfl⟩
+  have hScImg : f '' Sᶜ = A := by
+    ext y; constructor
+    · rintro ⟨p, hp, rfl⟩
+      have : f p ∈ W := by simpa [S] using hp
+      exact hCW ⟨⟨p.1, p.2, rfl⟩, this⟩
+    · intro hy
+      obtain ⟨q, hq, rfl⟩ := hAC hy
+      exact ⟨⟨q, hq⟩, by simpa [S] using hAW hy, rfl⟩
+  have hScl : IsClosed (Subtype.val '' C ∩ Wᶜ) := by
+    rw [← closure_subset_iff_isClosed]
+    intro y hy
+    have h1 := closure_inter_subset_inter_closure _ _ hy
+    rw [hW.isClosed_compl.closure_eq] at h1
+    have hyb : y ≠ b := fun e => h1.2 (e ▸ hbW)
+    exact ⟨hclC y h1.1 hyb, h1.2⟩
+  have hScpt : IsCompact S := by
+    rw [hf.isCompact_iff, hSimg]; exact hScl.isCompact
+  have hScpre : _root_.IsPreconnected Sᶜ := by
+    rw [← hf.isInducing.isPreconnected_image, hScImg]; exact hA
+  have hT : φ '' Sᶜ = Set.univ := by
+    apply apm_t95j06_puncture_connected_of_components_real_aux_realEnds
+    · exact hScpre.image _ φ.continuous.continuousOn
+    · rw [← φ.image_compl, compl_compl]; exact hScpt.image φ.continuous
+  have hSc : Sᶜ = Set.univ := by
+    rw [← Set.image_univ_of_surjective φ.surjective] at hT; exact φ.injective.image_injective hT
+  have hCA : Subtype.val '' C ⊆ A := by
+    rintro _ ⟨q, hq, rfl⟩
+    rw [← hScImg]; exact ⟨⟨q, hq⟩, by rw [hSc]; trivial, rfl⟩
+  exact ha (hCA (hclC a (closure_mono (hAC.trans subset_rfl) haA) hab))
+
+open Topology Set in
+/-- Chart form of puncture connectedness: with a real chart at the removed
+point, every component contains both half-charts, so there is one component. -/
+lemma apm_t95j06_puncture_connected_of_components_real_aux_chart (B : Type) [TopologicalSpace B] [CompactSpace B] (b : B)
+    (U : Set B) (hU : IsOpen U) (hbU : b ∈ U) (V : Set ℝ) (hV : IsOpen V)
+    (h : U ≃ₜ V)
+    (hcomp : ∀ x : {y : B // y ≠ b},
+      Nonempty ({y : {z : B // z ≠ b} // y ∈ connectedComponent x} ≃ₜ ℝ))
+    (hacc : ∀ x : {y : B // y ≠ b},
+      b ∈ closure (Subtype.val '' connectedComponent x)) :
+    ConnectedSpace {y : B // y ≠ b} := by
+  classical
+  set t₀ : ℝ := (h ⟨b, hbU⟩ : ℝ) with ht₀
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hV t₀ (h ⟨b, hbU⟩).2
+  set d : ℝ := ε / 2 with hd
+  have hd0 : 0 < d := by positivity
+  have hsub : ∀ t, t₀ - d ≤ t → t ≤ t₀ + d → t ∈ V := fun t h1 h2 =>
+    hball (by rw [Metric.mem_ball, Real.dist_eq, abs_lt]; constructor <;> linarith)
+  let I : Set ℝ → Set B := fun s => Subtype.val '' (h ⁻¹' (Subtype.val ⁻¹' s))
+  have hImem : ∀ s y, y ∈ I s ↔ ∃ hy : y ∈ U, (h ⟨y, hy⟩ : ℝ) ∈ s := by
+    intro s y; constructor
+    · rintro ⟨u, hu, rfl⟩; exact ⟨u.2, hu⟩
+    · rintro ⟨hy, hs⟩; exact ⟨⟨y, hy⟩, hs, rfl⟩
+  have hIopen : ∀ s, IsOpen s → IsOpen (I s) := fun s hs =>
+    hU.isOpenEmbedding_subtypeVal.isOpenMap _
+      ((hs.preimage continuous_subtype_val).preimage h.continuous)
+  have hIpre : ∀ s, _root_.IsPreconnected s → s ⊆ V → _root_.IsPreconnected (I s) := by
+    intro s hs hsV
+    have h1 : _root_.IsPreconnected (Subtype.val ⁻¹' s : Set V) := by
+      rw [← IsInducing.subtypeVal.isPreconnected_image, Subtype.image_preimage_coe,
+        inter_eq_right.mpr hsV]
+      exact hs
+    have h2 : h ⁻¹' (Subtype.val ⁻¹' s) = h.symm '' (Subtype.val ⁻¹' s) :=
+      by rw [h.image_symm]
+    show _root_.IsPreconnected (Subtype.val '' (h ⁻¹' (Subtype.val ⁻¹' s)))
+    rw [h2]
+    exact (h1.image _ h.symm.continuous.continuousOn).image _
+      continuous_subtype_val.continuousOn
+  have hcoord_b : ∀ y (hy : y ∈ U), (h ⟨y, hy⟩ : ℝ) = t₀ → y = b := by
+    intro y hy he
+    have : h ⟨y, hy⟩ = h ⟨b, hbU⟩ := Subtype.ext he
+    exact congrArg Subtype.val (h.injective this)
+  -- points
+  let pt : ∀ t, t ∈ V → B := fun t ht => (h.symm ⟨t, ht⟩).1
+  have hptU : ∀ t ht, pt t ht ∈ U := fun t ht => (h.symm ⟨t, ht⟩).2
+  have hptc : ∀ t ht, (h ⟨pt t ht, hptU t ht⟩ : ℝ) = t := by
+    intro t ht; simp [pt]
+  have hptI : ∀ t ht s, pt t ht ∈ I s ↔ t ∈ s := by
+    intro t ht s; rw [hImem]; constructor
+    · rintro ⟨hy, hs⟩; rwa [hptc t ht] at hs
+    · intro hs; exact ⟨hptU t ht, by rwa [hptc t ht]⟩
+  -- closure of a half at an end point
+  have hclos : ∀ (lo hi e : ℝ), t₀ - d ≤ lo → lo < hi → hi ≤ t₀ + d →
+      ∀ (he : e = lo ∨ e = hi) (heV : e ∈ V),
+      pt e heV ∈ closure (I (Ioo lo hi)) := by
+    intro lo hi e hlo hlohi hhi he heV
+    let J := Icc lo hi
+    have hJV : ∀ t ∈ J, t ∈ V := fun t ht => hsub t (by linarith [ht.1]) (by linarith [ht.2])
+    let g : J → B := fun t => (h.symm ⟨t.1, hJV t.1 t.2⟩).1
+    have hg : Continuous g :=
+      continuous_subtype_val.comp (h.symm.continuous.comp
+        (continuous_subtype_val.subtype_mk _))
+    let Q : Set J := {p | p.1 ∈ Ioo lo hi}
+    have heJ : e ∈ J := by rcases he with rfl | rfl <;> constructor <;> linarith
+    have hp0 : (⟨e, heJ⟩ : J) ∈ closure Q := by
+      rw [IsEmbedding.subtypeVal.closure_eq_preimage_closure_image]
+      have : Subtype.val '' Q = Ioo lo hi := by
+        ext t; constructor
+        · rintro ⟨p, hp, rfl⟩; exact hp
+        · intro ht; exact ⟨⟨t, Ioo_subset_Icc_self ht⟩, ht, rfl⟩
+      show e ∈ closure (Subtype.val '' Q)
+      rw [this, closure_Ioo hlohi.ne]; exact heJ
+    have h1 := image_closure_subset_closure_image hg ⟨_, hp0, rfl⟩
+    refine closure_mono ?_ h1
+    rintro _ ⟨p, hp, rfl⟩
+    exact (hptI p.1 (hJV p.1 p.2) _).mpr hp
+  have hm : t₀ - d ∈ V := hsub _ le_rfl (by linarith)
+  have hp : t₀ + d ∈ V := hsub _ (by linarith) le_rfl
+  let W := I (Ioo (t₀ - d) (t₀ + d))
+  let L := I (Ioo (t₀ - d) t₀)
+  let R := I (Ioo t₀ (t₀ + d))
+  have hWo : IsOpen W := hIopen _ isOpen_Ioo
+  have hbW : b ∈ W := (hImem _ _).mpr ⟨hbU, show t₀ ∈ Ioo (t₀ - d) (t₀ + d) from
+    ⟨by linarith, by linarith⟩⟩
+  have hLsub : Ioo (t₀ - d) t₀ ⊆ V := fun t ht => hsub t ht.1.le (by linarith [ht.2])
+  have hRsub : Ioo t₀ (t₀ + d) ⊆ V := fun t ht => hsub t (by linarith [ht.1]) ht.2.le
+  have hLpre := hIpre _ isPreconnected_Ioo hLsub
+  have hRpre := hIpre _ isPreconnected_Ioo hRsub
+  have hLW : L ⊆ W := fun y hy => by
+    obtain ⟨hy, hs⟩ := (hImem _ _).mp hy
+    exact (hImem _ _).mpr ⟨hy, hs.1, by linarith [hs.2]⟩
+  have hRW : R ⊆ W := fun y hy => by
+    obtain ⟨hy, hs⟩ := (hImem _ _).mp hy
+    exact (hImem _ _).mpr ⟨hy, by linarith [hs.1], hs.2⟩
+  have hbL : ∀ y ∈ L, y ≠ b := by
+    intro y hy hyb; subst hyb
+    obtain ⟨hy, hs⟩ := (hImem _ _).mp hy
+    have : (h ⟨y, hy⟩ : ℝ) = t₀ := rfl
+    linarith [hs.2]
+  have hbR : ∀ y ∈ R, y ≠ b := by
+    intro y hy hyb; subst hyb
+    obtain ⟨hy, hs⟩ := (hImem _ _).mp hy
+    have : (h ⟨y, hy⟩ : ℝ) = t₀ := rfl
+    linarith [hs.1]
+  have hsplit : ∀ y ∈ W, y ≠ b → y ∈ L ∨ y ∈ R := by
+    intro y hy hyb
+    obtain ⟨hyU, hs⟩ := (hImem _ _).mp hy
+    rcases lt_trichotomy (h ⟨y, hyU⟩ : ℝ) t₀ with hl | he | hg
+    · left; exact (hImem _ _).mpr ⟨hyU, hs.1, hl⟩
+    · exact absurd (hcoord_b y hyU he) hyb
+    · right; exact (hImem _ _).mpr ⟨hyU, hg, hs.2⟩
+  let LP : Set {y : B // y ≠ b} := Subtype.val ⁻¹' L
+  let RP : Set {y : B // y ≠ b} := Subtype.val ⁻¹' R
+  have hLPimg : Subtype.val '' LP = L := by
+    ext y; constructor
+    · rintro ⟨p, hp, rfl⟩; exact hp
+    · intro hy; exact ⟨⟨y, hbL y hy⟩, hy, rfl⟩
+  have hRPimg : Subtype.val '' RP = R := by
+    ext y; constructor
+    · rintro ⟨p, hp, rfl⟩; exact hp
+    · intro hy; exact ⟨⟨y, hbR y hy⟩, hy, rfl⟩
+  have hLPpre : _root_.IsPreconnected LP := by
+    have hh := (IsEmbedding.subtypeVal (p := fun y : B => y ≠ b)).isInducing.isPreconnected_image (s := LP)
+    rw [hLPimg] at hh; exact hh.mp hLpre
+  have hRPpre : _root_.IsPreconnected RP := by
+    have hh := (IsEmbedding.subtypeVal (p := fun y : B => y ≠ b)).isInducing.isPreconnected_image (s := RP)
+    rw [hRPimg] at hh; exact hh.mp hRpre
+  have hdisj : ∀ (S : Set {y : B // y ≠ b}), _root_.IsPreconnected S →
+      ∀ x, ¬ S ⊆ connectedComponent x → ∀ q ∈ S, q ∉ connectedComponent x := by
+    intro S hS x hn q hq hqx
+    apply hn
+    have := hS.subset_connectedComponent hq
+    rwa [connectedComponent_eq hqx]
+  have hamL : pt (t₀ - d) hm ∉ L := fun hh =>
+    lt_irrefl _ ((hptI _ hm _).mp hh).1
+  have hapR : pt (t₀ + d) hp ∉ R := fun hh =>
+    lt_irrefl _ ((hptI _ hp _).mp hh).2
+  have hamb : pt (t₀ - d) hm ≠ b := by
+    intro e
+    have : pt (t₀ - d) hm ∈ W := by rw [e]; exact hbW
+    exact lt_irrefl _ ((hptI _ hm _).mp this).1
+  have hapb : pt (t₀ + d) hp ≠ b := by
+    intro e
+    have : pt (t₀ + d) hp ∈ W := by rw [e]; exact hbW
+    exact lt_irrefl _ ((hptI _ hp _).mp this).2
+  have hLtoR : ∀ x, LP ⊆ connectedComponent x → RP ⊆ connectedComponent x := by
+    intro x hL
+    by_contra hR
+    obtain ⟨φ⟩ := hcomp x
+    refine apm_t95j06_puncture_connected_of_components_real_aux_side B b _ isClosed_connectedComponent φ W L hWo hbW hLpre hLW ?_ ?_
+      (pt (t₀ - d) hm) hamb ?_ hamL
+    · intro y hy; exact ⟨⟨y, hbL y hy⟩, hL hy, rfl⟩
+    · rintro _ ⟨⟨q, hq, rfl⟩, hqW⟩
+      rcases hsplit q.1 hqW q.2 with h1 | h1
+      · exact h1
+      · exact absurd hq (hdisj RP hRPpre x hR q h1)
+    · exact hclos (t₀ - d) t₀ (t₀ - d) le_rfl (by linarith) (by linarith) (Or.inl rfl) hm
+  have hRtoL : ∀ x, RP ⊆ connectedComponent x → LP ⊆ connectedComponent x := by
+    intro x hR
+    by_contra hL
+    obtain ⟨φ⟩ := hcomp x
+    refine apm_t95j06_puncture_connected_of_components_real_aux_side B b _ isClosed_connectedComponent φ W R hWo hbW hRpre hRW ?_ ?_
+      (pt (t₀ + d) hp) hapb ?_ hapR
+    · intro y hy; exact ⟨⟨y, hbR y hy⟩, hR hy, rfl⟩
+    · rintro _ ⟨⟨q, hq, rfl⟩, hqW⟩
+      rcases hsplit q.1 hqW q.2 with h1 | h1
+      · exact absurd hq (hdisj LP hLPpre x hL q h1)
+      · exact h1
+    · exact hclos t₀ (t₀ + d) (t₀ + d) (by linarith) (by linarith) le_rfl (Or.inr rfl) hp
+  have hboth : ∀ x, LP ⊆ connectedComponent x := by
+    intro x
+    obtain ⟨y, hyW, ⟨q, hq, rfl⟩⟩ := mem_closure_iff.mp (hacc x) W hWo hbW
+    rcases hsplit q.1 hyW q.2 with h1 | h1
+    · have := hLPpre.subset_connectedComponent (show q ∈ LP from h1)
+      rwa [← connectedComponent_eq hq] at this
+    · apply hRtoL
+      have := hRPpre.subset_connectedComponent (show q ∈ RP from h1)
+      rwa [← connectedComponent_eq hq] at this
+  have hmid : t₀ - d / 2 ∈ V := hsub _ (by linarith) (by linarith)
+  have hzL : pt _ hmid ∈ L := (hptI _ _ _).mpr ⟨by linarith, by linarith⟩
+  let z : {y : B // y ≠ b} := ⟨_, hbL _ hzL⟩
+  have hz : z ∈ LP := hzL
+  refine connectedSpace_iff_connectedComponent.mpr ⟨z, eq_univ_of_forall fun x => ?_⟩
+  rw [← connectedComponent_eq (hboth x hz)]
+  exact mem_connectedComponent
+
 /-- If every connected component of the puncture is a real line, the
 puncture is connected. -/
 lemma apm_t95j06_puncture_connected_of_components_real_aux
@@ -4112,7 +4360,29 @@ lemma apm_t95j06_puncture_connected_of_components_real_aux
       Nonempty ({y : {z : B // z ≠ b} //
         y ∈ connectedComponent x} ≃ₜ ℝ)) :
     @ConnectedSpace {x : B // x ≠ b} inferInstance := by
-  sorry
+  letI : TopologicalSpace B := tB
+  haveI : CompactSpace B := hc
+  haveI : T2Space B := h2
+  have hlc : LocallyConnectedSpace B := by
+    rw [locallyConnectedSpace_iff_subsets_isOpen_isConnected]
+    intro x N hN
+    obtain ⟨U, hU, hxU, V, hV, ⟨e⟩⟩ := hloc x
+    haveI : LocallyConnectedSpace V := hV.locallyConnectedSpace
+    have hUlc : LocallyConnectedSpace U := e.isOpenEmbedding.locallyConnectedSpace
+    have hpre : Subtype.val ⁻¹' N ∈ nhds (⟨x, hxU⟩ : U) := continuousAt_subtype_val hN
+    obtain ⟨A, hAN, hAo, hxA, hAc⟩ :=
+      locallyConnectedSpace_iff_subsets_isOpen_isConnected.mp hUlc _ _ hpre
+    refine ⟨Subtype.val '' A, ?_, hU.isOpenEmbedding_subtypeVal.isOpenMap A hAo,
+      ⟨_, hxA, rfl⟩, hAc.image _ continuous_subtype_val.continuousOn⟩
+    rintro _ ⟨a, ha, rfl⟩
+    exact hAN ha
+  haveI := hlc
+  haveI : LocallyConnectedSpace {y : B // y ≠ b} :=
+    (isOpen_compl_singleton (x := b)).locallyConnectedSpace
+  obtain ⟨U, hU, hbU, V, hV, ⟨e⟩⟩ := hloc b
+  exact apm_t95j06_puncture_connected_of_components_real_aux_chart B b U hU hbU V hV e
+    hcomponents
+    (fun x => apm_t95j06_puncture_connected_of_components_real_aux_component_accumulates B b x)
 
 /-- **LIBRARY, puncture connectedness (estimated 180--260 lines).** Removing one
 point from a compact connected Hausdorff locally-real-line space leaves a
