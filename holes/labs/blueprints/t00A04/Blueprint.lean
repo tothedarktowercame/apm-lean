@@ -793,6 +793,36 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_Type
 /-- **LIBRARY (universe bridge).** Transport the Type-0 fundamental-class
 theorem across a small homeomorphic model of an arbitrary-universe compact
 finite-dimensional manifold. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_model_small
+    (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] : Small.{0} E := by
+  exact small_of_injective (Module.finBasis ℝ E).repr.injective
+
+/-- Compactness reduces the atlas to finitely many chart sources.  Sending a
+point to its first source in that finite cover and then to its chart coordinate
+embeds the manifold in a finite sum of copies of the small model. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_space_small
+    (E : Type*) (X : Type u) [TopologicalSpace E] [Small.{0} E]
+    [TopologicalSpace X] [CompactSpace X] [ChartedSpace E X] : Small.{0} X := by
+  sorry
+
+/-- Once both underlying types are small, transfer all structures to their
+`Shrink` models, apply the Type-0 theorem, and use functoriality under
+`Shrink.homeomorph` to transport nontriviality of singular homology back. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink
+    (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X]
+    [ChartedSpace E X] [IsManifold I ∞ X] [BoundarylessManifold I X]
+    [Small.{0} E] [Small.{0} X]
+    (hType : ∀ (E₀ X₀ : Type) [NormedAddCommGroup E₀] [NormedSpace ℝ E₀]
+      [FiniteDimensional ℝ E₀] (I₀ : ModelWithCorners ℝ E₀ E₀)
+      [TopologicalSpace X₀] [T2Space X₀] [CompactSpace X₀] [Nonempty X₀]
+      [ChartedSpace E₀ X₀] [IsManifold I₀ ∞ X₀] [BoundarylessManifold I₀ X₀],
+      Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E₀) X₀)) :
+    Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E) X) := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -804,7 +834,13 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial
       [ChartedSpace E₀ X₀] [IsManifold I₀ ∞ X₀] [BoundarylessManifold I₀ X₀],
       Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E₀) X₀)) :
     Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E) X) := by
-  sorry
+  letI : Small.{0} E :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_model_small E
+  letI : Small.{0} X :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_space_small E X
+  exact
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink
+      E X I hType
 
 /-- The blueprint's real-parameter notion of null-homotopy restricts to the
 unit interval and hence gives Mathlib's standard `ContinuousMap` notion. -/
