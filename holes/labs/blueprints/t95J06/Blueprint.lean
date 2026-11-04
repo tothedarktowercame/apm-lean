@@ -671,6 +671,70 @@ theorem apm_t95j06_principalBundle_base_locallyRealLine
     {y : F // y ∈ connectedComponent x} B tB P hplane
   exact apm_t95j06_circleFactor_locallyRealLine B tB h2 hsc hproducts
 
+/-- **LIBRARY, puncture connectedness (estimated 180--260 lines).** Removing one
+point from a compact connected Hausdorff locally-real-line space leaves a
+connected space. A punctured chart has two half-intervals; a separation would
+separate the original space after a finite compact chart-chain argument. Use
+`isPreconnected_iff_connected` and `Homeomorph.isPreconnected_image`.
+Compactness excludes `ℝ \ {0}`, local-line charts exclude wedges, and
+Hausdorffness excludes the line with two origins. -/
+theorem apm_t95j06_puncture_connected
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
+    (h2 : @T2Space B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
+    @ConnectedSpace {x : B // x ≠ b} inferInstance := by
+  sorry
+
+/-- The puncture inherits Hausdorffness, second countability, and local real
+charts (estimated 60--100 lines). Subtype instances give the first two;
+restrict each chart to the open complement of `b` for the third. -/
+theorem apm_t95j06_puncture_inherits_oneManifold
+    (B : Type) (tB : TopologicalSpace B)
+    (h2 : @T2Space B tB) (hsc : @SecondCountableTopology B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
+    @T2Space {x : B // x ≠ b} inferInstance ∧
+      @SecondCountableTopology {x : B // x ≠ b} inferInstance ∧
+      @apm_t95j06_IsLocallyRealLine {x : B // x ≠ b} inferInstance := by
+  sorry
+
+/-- The puncture is noncompact (estimated 80--140 lines). If compact it would
+be closed in the Hausdorff ambient space; it is also open. A real-line chart
+provides a second point, so connectedness forbids this nontrivial clopen set.
+The endpoint counterexample `[0,1]` fails the local-real-line hypothesis. -/
+theorem apm_t95j06_puncture_noncompact
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (hconn : @ConnectedSpace B tB)
+    (h2 : @T2Space B tB)
+    (hloc : @apm_t95j06_IsLocallyRealLine B tB) (b : B) :
+    @NoncompactSpace {x : B // x ≠ b} inferInstance := by
+  sorry
+
+/-- **LIBRARY, open one-manifold classification (estimated 300--400 lines).**
+A connected noncompact Hausdorff second-countable locally-real-line space is
+`ℝ`. Extend an oriented chart through a countable locally finite interval
+atlas; connectedness gives one chain and noncompactness makes both coordinate
+ends unbounded. Second countability excludes the long line, Hausdorffness the
+two-origin line, local charts a ray, and noncompactness a circle. -/
+theorem apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real
+    (X : Type) (tX : TopologicalSpace X)
+    (hconn : @ConnectedSpace X tX) (hnc : @NoncompactSpace X tX)
+    (h2 : @T2Space X tX) (hsc : @SecondCountableTopology X tX)
+    (hloc : @apm_t95j06_IsLocallyRealLine X tX) :
+    Nonempty (@Homeomorph X ℝ tX inferInstance) := by
+  sorry
+
+/-- Adding one point back to a punctured compact Hausdorff space recovers the
+original space (estimated 80--120 lines). Apply
+`OnePoint.equivOfIsEmbeddingOfRangeEq` to the subtype inclusion, whose range is
+the complement of the removed point. -/
+theorem apm_t95j06_onePoint_puncture_homeomorph
+    (B : Type) (tB : TopologicalSpace B)
+    (hc : @CompactSpace B tB) (h2 : @T2Space B tB) (b : B) :
+    Nonempty (@Homeomorph (OnePoint {x : B // x ≠ b}) B inferInstance tB) :=
+  ⟨OnePoint.equivOfIsEmbeddingOfRangeEq b Subtype.val Topology.IsEmbedding.subtypeVal
+    (by ext x; simp)⟩
+
 /-- **LIBRARY 3(b), compact one-manifold classification (estimated 900--1800
 lines).**  A compact connected Hausdorff second-countable space locally
 homeomorphic to the real line is a circle.
@@ -688,7 +752,37 @@ theorem apm_t95j06_compact_connected_locallyRealLine_homeomorph_circle
     (h2 : @T2Space B tB) (hsc : @SecondCountableTopology B tB)
     (hloc : @apm_t95j06_IsLocallyRealLine B tB) :
     Nonempty (@Homeomorph B Circle tB inferInstance) := by
-  sorry
+  letI : CompactSpace B := hc
+  letI : ConnectedSpace B := hconn
+  letI : T2Space B := h2
+  letI : SecondCountableTopology B := hsc
+  let b : B := Classical.choice (inferInstance : Nonempty B)
+  let P := {x : B // x ≠ b}
+  letI : ConnectedSpace P :=
+    apm_t95j06_puncture_connected B tB hc hconn h2 hloc b
+  obtain ⟨hP2, hPsc, hPloc⟩ :=
+    apm_t95j06_puncture_inherits_oneManifold B tB h2 hsc hloc b
+  letI : T2Space P := hP2
+  letI : SecondCountableTopology P := hPsc
+  letI : NoncompactSpace P :=
+    apm_t95j06_puncture_noncompact B tB hc hconn h2 hloc b
+  obtain ⟨eline⟩ :=
+    apm_t95j06_connected_noncompact_locallyRealLine_homeomorph_real
+      P inferInstance inferInstance inferInstance inferInstance inferInstance hPloc
+  obtain ⟨ecompact⟩ :=
+    apm_t95j06_onePoint_puncture_homeomorph B tB hc h2 b
+  let e₁ : OnePoint ℝ ≃ₜ Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 :=
+    onePointEquivSphereOfFinrankEq (by simp)
+  let L : EuclideanSpace ℝ (Fin 2) ≃ₗᵢ[ℝ] ℂ :=
+    Complex.orthonormalBasisOneI.repr.symm
+  let e₂ : Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ≃ₜ Circle :=
+    Homeomorph.subtype L.toHomeomorph (by
+      intro x
+      change x ∈ Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ↔
+        L x ∈ Metric.sphere (0 : ℂ) 1
+      simp only [Metric.mem_sphere, dist_zero_right, L.norm_map])
+  let erealCircle : OnePoint ℝ ≃ₜ Circle := e₁.trans e₂
+  exact ⟨ecompact.symm.trans (eline.onePointCongr.trans erealCircle)⟩
 
 /-- An equivariant local trivialization supplies a continuous local section.
 The section is the inverse image of the constant group coordinate `1`; the
@@ -892,3 +986,4 @@ theorem apm_t95j06
   · exact fun F hF hFinv => apm_t95J06_bridge_1 H hH F hF hFinv
 
 #print axioms apm_t95j06
+
