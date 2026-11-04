@@ -1056,6 +1056,7 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_partialH
     (e : PartialEquiv Y Z) (d : ℕ)
     (B : Set Y) (hB : IsCompact B) (hBe : B ⊆ e.source)
     (hopen_source : IsOpen e.source) (hopen_target : IsOpen e.target)
+    (hcont : ContinuousOn e e.source) (hcont_symm : ContinuousOn e.symm e.target)
     (hopenExcision : ∀ {P Q : Type} [TopologicalSpace P] [TopologicalSpace Q]
       [T2Space P] [T2Space Q] (f : P → Q), Function.Injective f → Continuous f →
       (∀ U : Set P, IsOpen U → IsOpen (f '' U)) →
@@ -1093,6 +1094,7 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision
     e (Module.finrank ℝ E) A hA hx (isOpen_extChartAt_source x)
       (t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_target_open
         E X I x)
+    (continuousOn_extChartAt x) (continuousOn_extChartAt_symm x)
     (fun f hinj hcont hopen C hC ↦
       t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding
         f hinj hcont hopen (Module.finrank ℝ E) C hC)).mpr hm
