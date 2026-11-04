@@ -7587,6 +7587,92 @@ lemma apm_t95j06_increasing_interval_union_outside_stage
     · exact (hx (apm_t95j06_increasing_interval_union_stage_orderConvex
         X U hnested hreal hcover m hy hy₀ hyx habove)).elim
 
+lemma apm_t95j06_increasing_interval_union_isOpen_Ioi
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
+    (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (w : X) :
+    IsOpen {z : X | @LT.lt X
+      (apm_t95j06_increasing_interval_union_linearOrder
+        X U hnested hreal hcover).toLT w z} := by
+  rw [isOpen_iff_forall_mem_open]
+  intro z hwz
+  let sw := apm_t95j06_increasing_interval_union_stage X U hcover w
+  let sz := apm_t95j06_increasing_interval_union_stage X U hcover z
+  let m := max sw sz
+  have hw : w ∈ U m := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested (le_max_left sw sz)
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover w)
+  have hz : z ∈ U m := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested (le_max_right sw sz)
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover z)
+  let c := apm_t95j06_increasing_interval_union_coordinate X U hnested hreal m
+  have hc : ContinuousOn c (U m) := by
+    rw [continuousOn_iff_continuous_restrict]
+    have hrestr : (U m).restrict c = fun x : U m =>
+        apm_t95j06_increasing_interval_union_orientedCharts X U hnested hreal m x := by
+      funext x
+      simp only [Set.restrict_apply, c, apm_t95j06_increasing_interval_union_coordinate,
+        dif_pos x.2]
+    rw [hrestr]
+    exact (apm_t95j06_increasing_interval_union_orientedCharts
+        X U hnested hreal m).continuous
+  refine ⟨U m ∩ c ⁻¹' Set.Ioi (c w), ?_,
+    hc.isOpen_inter_preimage (hopen m) isOpen_Ioi, hz, ?_⟩
+  · intro y hy
+    exact (apm_t95j06_increasing_interval_union_linearOrder_lt_iff
+      X U hnested hreal hcover w y).2
+      ((apm_t95j06_increasing_interval_union_lt_iff
+        X U hnested hreal hcover m hw hy.1).2 hy.2)
+  · exact ((apm_t95j06_increasing_interval_union_lt_iff
+      X U hnested hreal hcover m hw hz).1
+        ((apm_t95j06_increasing_interval_union_linearOrder_lt_iff
+          X U hnested hreal hcover w z).1 hwz))
+
+lemma apm_t95j06_increasing_interval_union_isOpen_Iio
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
+    (hnested : ∀ n, closure (U n) ⊆ U (n + 1))
+    (hreal : ∀ n, Nonempty (U n ≃ₜ ℝ))
+    (hcover : (⋃ n, U n) = Set.univ) (w : X) :
+    IsOpen {z : X | @LT.lt X
+      (apm_t95j06_increasing_interval_union_linearOrder
+        X U hnested hreal hcover).toLT z w} := by
+  rw [isOpen_iff_forall_mem_open]
+  intro z hzw
+  let sw := apm_t95j06_increasing_interval_union_stage X U hcover w
+  let sz := apm_t95j06_increasing_interval_union_stage X U hcover z
+  let m := max sw sz
+  have hw : w ∈ U m := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested (le_max_left sw sz)
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover w)
+  have hz : z ∈ U m := apm_t95j06_increasing_interval_union_mono_of_le
+    X U hnested (le_max_right sw sz)
+      (apm_t95j06_increasing_interval_union_stage_mem X U hcover z)
+  let c := apm_t95j06_increasing_interval_union_coordinate X U hnested hreal m
+  have hc : ContinuousOn c (U m) := by
+    rw [continuousOn_iff_continuous_restrict]
+    have hrestr : (U m).restrict c = fun x : U m =>
+        apm_t95j06_increasing_interval_union_orientedCharts X U hnested hreal m x := by
+      funext x
+      simp only [Set.restrict_apply, c, apm_t95j06_increasing_interval_union_coordinate,
+        dif_pos x.2]
+    rw [hrestr]
+    exact (apm_t95j06_increasing_interval_union_orientedCharts
+        X U hnested hreal m).continuous
+  refine ⟨U m ∩ c ⁻¹' Set.Iio (c w), ?_,
+    hc.isOpen_inter_preimage (hopen m) isOpen_Iio, hz, ?_⟩
+  · intro y hy
+    exact (apm_t95j06_increasing_interval_union_linearOrder_lt_iff
+      X U hnested hreal hcover y w).2
+      ((apm_t95j06_increasing_interval_union_lt_iff
+        X U hnested hreal hcover m hy.1 hw).2 hy.2)
+  · exact ((apm_t95j06_increasing_interval_union_lt_iff
+      X U hnested hreal hcover m hz hw).1
+        ((apm_t95j06_increasing_interval_union_linearOrder_lt_iff
+          X U hnested hreal hcover z w).1 hzw))
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
