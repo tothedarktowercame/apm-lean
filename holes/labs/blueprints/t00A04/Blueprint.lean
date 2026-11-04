@@ -131,6 +131,36 @@ theorem t00A04_boundarylessManifold_of_finiteDimensional_selfModel
     BoundarylessManifold I X := by
   sorry
 
+/-- **Relative Mayer--Vietoris, middle term.**  For compact `K, L` in a
+Hausdorff space (so `Kᶜ, Lᶜ` are open and the small-chains theorem applies),
+classes on `K` and on `L` that agree on `K ∩ L` come from one class on
+`K ∪ L`.  (The chain-level sequence with `C((K ∩ L)ᶜ)` in place of
+`C(Kᶜ) + C(Lᶜ)` is not exact in the middle; the small-chains comparison is
+what makes this true.) -/
+theorem t00A04_relativeMV_middle
+    (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
+    (hK : IsCompact K) (hL : IsCompact L) (n : ℕ)
+    (a : t00A04_ModTwoLocalHomology X K n) (b : t00A04_ModTwoLocalHomology X L n)
+    (hab : t00A04_modTwo_restrict X (K ∩ L) K Set.inter_subset_left n a =
+      t00A04_modTwo_restrict X (K ∩ L) L Set.inter_subset_right n b) :
+    ∃ c : t00A04_ModTwoLocalHomology X (K ∪ L) n,
+      t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = a ∧
+      t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = b := by
+  sorry
+
+/-- **Relative Mayer--Vietoris, left term.**  If `H_{n+1}(X, X \ (K ∩ L))`
+vanishes, a class on `K ∪ L` that restricts to zero on `K` and on `L` is zero
+(it would come from the connecting map). -/
+theorem t00A04_relativeMV_injective
+    (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
+    (hK : IsCompact K) (hL : IsCompact L) (n : ℕ)
+    (hzero : Subsingleton (t00A04_ModTwoLocalHomology X (K ∩ L) (n + 1)))
+    (c : t00A04_ModTwoLocalHomology X (K ∪ L) n)
+    (hcK : t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = 0)
+    (hcL : t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = 0) :
+    c = 0 := by
+  sorry
+
 /-- **LIBRARY F2.** The relative compact-complement Mayer--Vietoris union
 step in Hatcher 3.27.  Its three inputs are explicit so seats are independent. -/
 theorem t00A04_hatcherConclusion_union
