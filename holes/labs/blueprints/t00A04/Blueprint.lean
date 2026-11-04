@@ -1303,6 +1303,64 @@ compact `A ⊆ ℝ^d` comes from a finite union of compact convex sets whose
 interior contains `A`: a representing relative cycle has boundary with compact
 support disjoint from `A`, so finitely many small closed balls around points of
 `A` avoid it. -/
+theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_lift
+    (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (c : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) A n) :
+    ∃ (z : (ConstructionTargets.CoefficientH0.SingularChains (ZMod 2)
+          (TopCat.of (EuclideanSpace ℝ (Fin d)))).X n)
+      (q : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+          (ZMod 2) Aᶜ).cycles n),
+      (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+          (ZMod 2) Aᶜ).iCycles n q =
+        (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+          (ZMod 2) Aᶜ)).f n z ∧
+      (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+          (ZMod 2) Aᶜ).homologyπ n q = c := by
+  sorry
+
+theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite
+    (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (z : (ConstructionTargets.CoefficientH0.SingularChains (ZMod 2)
+      (TopCat.of (EuclideanSpace ℝ (Fin d)))).X n)
+    (qA : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) Aᶜ).cycles n)
+    (hqA : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) Aᶜ).iCycles n qA =
+      (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+        (ZMod 2) Aᶜ)).f n z) :
+    ∃ K : Set (EuclideanSpace ℝ (Fin d)), K ⊆ Aᶜ ∧ IsCompact K ∧
+      ∃ qK : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+          (ZMod 2) Kᶜᶜ).cycles n,
+        (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+            (ZMod 2) Kᶜᶜ).iCycles n qK =
+          (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+            (ZMod 2) Kᶜᶜ)).f n z := by
+  sorry
+
+theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_descend
+    (d n : ℕ) (A K : Set (EuclideanSpace ℝ (Fin d))) (hKA : K ⊆ Aᶜ)
+    (z : (ConstructionTargets.CoefficientH0.SingularChains (ZMod 2)
+      (TopCat.of (EuclideanSpace ℝ (Fin d)))).X n)
+    (qA : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) Aᶜ).cycles n)
+    (qK : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) Kᶜᶜ).cycles n)
+    (hqA : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) Aᶜ).iCycles n qA =
+      (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+        (ZMod 2) Aᶜ)).f n z)
+    (hqK : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) Kᶜᶜ).iCycles n qK =
+      (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap
+        (ZMod 2) Kᶜᶜ)).f n z) :
+    t00A04_modTwo_restrict _ A Kᶜ
+        (fun x hx hxK ↦ (hKA hxK) hx) n
+        ((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+            (ZMod 2) Kᶜᶜ).homologyπ n qK) =
+      (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+          (ZMod 2) Aᶜ).homologyπ n qA := by
+  sorry
+
 theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
     (c : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) A n) :
@@ -1311,7 +1369,16 @@ theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport
           (EuclideanSpace ℝ (Fin d)) Kᶜ n),
         t00A04_modTwo_restrict _ A Kᶜ
           (fun x hx hxK ↦ (hKA hxK) hx) n cK = c := by
-  sorry
+  obtain ⟨z, qA, hqA, hzc⟩ :=
+    t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_lift d n A c
+  obtain ⟨K, hKA, hK, qK, hqK⟩ :=
+    t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_finite
+      d n A z qA hqA
+  refine ⟨K, hKA, hK, (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+    (ZMod 2) Kᶜᶜ).homologyπ n qK, ?_⟩
+  rw [t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport_aux_descend
+    d n A K hKA z qA qK hqA hqK]
+  exact hzc
 
 theorem t00A04_compactSupport_lift_aux_open
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
