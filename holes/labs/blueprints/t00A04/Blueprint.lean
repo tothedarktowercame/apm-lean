@@ -1862,11 +1862,54 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_model
         exact hp
       exact (hGF d c).symm.trans (by rw [hFc]; exact map_zero _)
 
+/-- `f` as a map into `((range f)ᶜ)ᶜ`, the space left after excising `(range f)ᶜ`. -/
+def t00A04_rangeCorestrict {Y W : Type} [TopologicalSpace Y] [TopologicalSpace W]
+    (f : Y → W) (hcont : Continuous f) : C(Y, {w : W // w ∈ ((Set.range f)ᶜ)ᶜ}) :=
+  ⟨fun y ↦ ⟨f y, by rw [compl_compl]; exact ⟨y, rfl⟩⟩,
+    hcont.subtype_mk (fun y ↦ by rw [compl_compl]; exact ⟨y, rfl⟩)⟩
+
+theorem t00A04_rangeCorestrict_mapsTo {Y W : Type} [TopologicalSpace Y] [TopologicalSpace W]
+    (f : Y → W) (hinj : Function.Injective f) (hcont : Continuous f) (K : Set Y) :
+    Set.MapsTo (t00A04_rangeCorestrict f hcont) Kᶜ
+      (ConstructionTargets.SingularExcision.excisedSubspace (f '' K)ᶜ (Set.range f)ᶜ) := by
+  intro y hy hmem
+  rcases hmem with ⟨k, hk, hfk⟩
+  change f k = f y at hfk
+  exact hy ((hinj hfk).symm ▸ hk)
+
 /-- Excision for a compact support along an open embedding.  Besides the
 group isomorphism supplied by singular excision, this records its naturality
 with respect to all maps from the compact support to point supports; that
 naturality is exactly what transports the two point-restriction clauses in
 `t00A04_HatcherConclusion`. -/
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor_aux_rangePair_isIso
+    {Y W : Type} [TopologicalSpace Y] [TopologicalSpace W]
+    (f : Y → W) (hinj : Function.Injective f) (hcont : Continuous f)
+    (hopen : ∀ U : Set Y, IsOpen U → IsOpen (f '' U))
+    (K : Set Y) (q : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ
+        (ConstructionTargets.SingularExcision.excisedSubspace
+          (f '' K)ᶜ (Set.range f)ᶜ) (t00A04_rangeCorestrict f hcont) (t00A04_rangeCorestrict_mapsTo f hinj hcont K)) q) := by
+  sorry
+
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor_aux_composite
+    {Y W : Type} [TopologicalSpace Y] [TopologicalSpace W]
+    (f : Y → W) (hinj : Function.Injective f) (hcont : Continuous f)
+    (K : Set Y) :
+    ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ
+        (ConstructionTargets.SingularExcision.excisedSubspace
+          (f '' K)ᶜ (Set.range f)ᶜ) (t00A04_rangeCorestrict f hcont)
+          (t00A04_rangeCorestrict_mapsTo f hinj hcont K) ≫
+        ConstructionTargets.CoefficientExcision.excisionMap
+          (ZMod 2) (f '' K)ᶜ (Set.range f)ᶜ =
+      ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ (f '' K)ᶜ
+        ⟨f, hcont⟩ (by
+          intro y hy hfK
+          rcases hfK with ⟨k, hk, hfk⟩
+          exact hy ((hinj hfk).symm ▸ hk)) := by
+  sorry
+
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor
     {Y W : Type} [TopologicalSpace Y] [TopologicalSpace W] [T2Space Y] [T2Space W]
     (f : Y → W) (hinj : Function.Injective f) (hcont : Continuous f)
@@ -1884,7 +1927,17 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbe
             intro y hy hfK
             rcases hfK with ⟨k, hk, hfk⟩
             exact hy (show y ∈ K from (hinj hfk).symm ▸ hk)) := by
-  sorry
+  let g := ConstructionTargets.CoefficientRadialPair.pairMap
+    (ZMod 2) Kᶜ (ConstructionTargets.SingularExcision.excisedSubspace
+      (f '' K)ᶜ (Set.range f)ᶜ) (t00A04_rangeCorestrict f hcont)
+      (t00A04_rangeCorestrict_mapsTo f hinj hcont K)
+  refine ⟨g, ?_, ?_⟩
+  · exact
+      t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor_aux_rangePair_isIso
+        f hinj hcont hopen K q
+  · exact
+      t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor_aux_composite
+        f hinj hcont K
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision
     {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
