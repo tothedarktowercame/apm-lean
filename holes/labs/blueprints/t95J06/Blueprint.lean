@@ -4790,6 +4790,74 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_no_finite_end_li
   exact hβ (apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_end
     X U V φ ψ x y hxy β s hφ hψ)
 
+/-- Right-ray half of the combinatorial overlap-shape lemma.  If every
+component is a left or right ray and one component is a right ray, then the
+set is that ray or the union of it with the unique left-ray component.
+Distinct rays of the same orientation intersect and hence cannot be distinct
+connected components. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_ray_components
+    (A : Set ℝ) (hAne : A ≠ Set.univ)
+    (hray : ∀ x ∈ A, (∃ a, connectedComponentIn A x = Set.Ioi a) ∨
+      ∃ b, connectedComponentIn A x = Set.Iio b)
+    (x : ℝ) (hxA : x ∈ A) (a : ℝ)
+    (hxa : connectedComponentIn A x = Set.Ioi a) :
+    (∃ a, A = Set.Ioi a) ∨
+      ∃ a b, a ≤ b ∧ A = Set.Iio a ∪ Set.Ioi b := by
+    by_cases hall : A = connectedComponentIn A x
+    · exact Or.inl ⟨a, hall.trans hxa⟩
+    · obtain ⟨y, hyA, hyx⟩ : ∃ y ∈ A, y ∉ connectedComponentIn A x := by
+        by_contra h
+        push_neg at h
+        exact hall (Set.Subset.antisymm h (connectedComponentIn_subset A x))
+      rcases hray y hyA with ⟨c, hyc⟩ | ⟨c, hyc⟩
+      · let z := max a c + 1
+        have hza : z ∈ Set.Ioi a := by
+          change a < max a c + 1
+          linarith [le_max_left a c]
+        have hzc : z ∈ Set.Ioi c := by
+          change c < max a c + 1
+          linarith [le_max_right a c]
+        have hzxa : z ∈ connectedComponentIn A x := hxa.symm ▸ hza
+        have hzyc : z ∈ connectedComponentIn A y := hyc.symm ▸ hzc
+        have heq := (connectedComponentIn_eq hzxa).trans
+          (connectedComponentIn_eq hzyc).symm
+        exact (hyx (heq ▸ mem_connectedComponentIn hyA)).elim
+      · have hcover : A = Set.Ioi a ∪ Set.Iio c := by
+          apply Set.Subset.antisymm
+          · intro z hzA
+            by_cases hzx : z ∈ connectedComponentIn A x
+            · exact Or.inl (hxa ▸ hzx)
+            · rcases hray z hzA with ⟨d, hzd⟩ | ⟨d, hzd⟩
+              · let w := max a d + 1
+                have hwx : w ∈ connectedComponentIn A x := hxa.symm ▸ (by
+                  dsimp [w]; linarith [le_max_left a d] : a < w)
+                have hwz : w ∈ connectedComponentIn A z := hzd.symm ▸ (by
+                  dsimp [w]; linarith [le_max_right a d] : d < w)
+                have heq := (connectedComponentIn_eq hwx).trans
+                  (connectedComponentIn_eq hwz).symm
+                exact (hzx (heq ▸ mem_connectedComponentIn hzA)).elim
+              · let w := min c d - 1
+                have hwy : w ∈ connectedComponentIn A y := hyc.symm ▸ (by
+                  dsimp [w]; linarith [min_le_left c d] : w < c)
+                have hwz : w ∈ connectedComponentIn A z := hzd.symm ▸ (by
+                  dsimp [w]; linarith [min_le_right c d] : w < d)
+                have heq := (connectedComponentIn_eq hwy).trans
+                  (connectedComponentIn_eq hwz).symm
+                exact Or.inr (hyc ▸ (heq ▸ mem_connectedComponentIn hzA))
+          · exact Set.union_subset (hxa ▸ connectedComponentIn_subset A x)
+              (hyc ▸ connectedComponentIn_subset A y)
+        have hca : c ≤ a := by
+          by_contra h
+          have hac : a < c := lt_of_not_ge h
+          apply hAne
+          rw [hcover]
+          ext r
+          simp only [Set.mem_union, Set.mem_Ioi, Set.mem_Iio, Set.mem_univ, iff_true]
+          by_cases har : a < r
+          · exact Or.inl har
+          · exact Or.inr (lt_of_le_of_lt (le_of_not_gt har) hac)
+        exact Or.inr ⟨c, a, hca, by simpa [Set.union_comm] using hcover⟩
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
