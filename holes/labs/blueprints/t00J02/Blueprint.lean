@@ -616,7 +616,14 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embedded
     (ℓ : C(Circle, Circle)) (hℓ : c.comp ℓ = f.comp γ)
     (z : Circle) [Finite {x : S // f x = c z}] :
     Finite {t : Circle // ℓ t = z} := by
-  sorry
+  let g : {t : Circle // ℓ t = z} → {x : S // f x = c z} := fun t =>
+    ⟨γ t, by
+      have h := congrArg (fun F : C(Circle, S) => F t) hℓ
+      simp only [ContinuousMap.comp_apply] at h
+      rw [← h, t.2]⟩
+  refine Finite.of_injective g ?_
+  intro t t' h
+  exact Subtype.ext (hγ.injective (congrArg Subtype.val h))
 
 /-- **Transverse pointwise comparison and coherent normal sign.**  For an
 embedded occupied component parametrized by `γ`, transversality supplies a
