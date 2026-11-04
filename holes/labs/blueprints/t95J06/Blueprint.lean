@@ -1311,6 +1311,43 @@ theorem apm_t95j06_locallyRealLine_compact_cover
   letI : SigmaCompactSpace X := inferInstance
   exact SigmaCompactSpace.exists_compact_covering
 
+/-- A real-line chart can be shrunk to a relatively compact open interval
+chart around its marked point (estimated 70--120 lines).  In coordinates,
+choose a bounded open interval whose closed interval lies inside the original
+open target, restrict the homeomorphism, and use compactness of the closed
+interval plus Hausdorffness to control the ambient closure.  The resulting
+bounded interval is homeomorphic to `ℝ`.  This is purely local and makes no
+claim about joining charts or classifying the ambient space. -/
+theorem apm_t95j06_locallyRealLine_relativelyCompact_chart
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (hloc : apm_t95j06_IsLocallyRealLine X) (x : X) :
+    ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ IsCompact (closure U) ∧
+      Nonempty (U ≃ₜ ℝ) := by
+  sorry
+
+/-- **LIBRARY, finite interval-chart chain (estimated 140--220 lines).**
+In a connected noncompact Hausdorff one-manifold, a finite collection of
+relatively compact interval charts is contained in one relatively compact
+interval chart.  Add charts along a shortest overlap chain from the current
+union: the order topology on overlapping real intervals gives only two ends;
+Hausdorffness rules out branching and noncompactness rules out the final two
+ends closing into a circle.  This lemma begins with the finite chart family
+already chosen, so it contains no compactness/subcover argument and is
+strictly the finite one-dimensional gluing step. -/
+theorem apm_t95j06_finite_intervalCharts_thicken
+    (X : Type) [TopologicalSpace X] [ConnectedSpace X] [NoncompactSpace X]
+    [T2Space X] [SecondCountableTopology X]
+    (hloc : apm_t95j06_IsLocallyRealLine X)
+    (A : X → Set X)
+    (hAopen : ∀ x, IsOpen (A x))
+    (hxA : ∀ x, x ∈ A x)
+    (hAcompact : ∀ x, IsCompact (closure (A x)))
+    (hAreal : ∀ x, Nonempty (A x ≃ₜ ℝ))
+    (s : Finset X) :
+    ∃ U : Set X, IsOpen U ∧ (⋃ x ∈ s, A x) ⊆ U ∧
+      IsCompact (closure U) ∧ Nonempty (U ≃ₜ ℝ) := by
+  sorry
+
 /-- **LIBRARY, compact-set chart thickening (estimated 180--260 lines).**
 In a connected noncompact Hausdorff second-countable one-manifold, every
 compact set lies in an open interval chart with compact closure.  Extend the
@@ -1328,7 +1365,17 @@ theorem apm_t95j06_compact_subset_interval_neighborhood
     (K : Set X) (hK : IsCompact K) :
     ∃ U : Set X, IsOpen U ∧ K ⊆ U ∧ IsCompact (closure U) ∧
       Nonempty (U ≃ₜ ℝ) := by
-  sorry
+  classical
+  choose A hAopen hxA hAcompact hAreal using
+    fun x => apm_t95j06_locallyRealLine_relativelyCompact_chart X hloc x
+  have hcover : K ⊆ ⋃ x, A x := by
+    intro x hx
+    exact Set.mem_iUnion.2 ⟨x, hxA x⟩
+  obtain ⟨s, hs⟩ := hK.elim_finite_subcover A hAopen hcover
+  obtain ⟨U, hUopen, hsU, hUcompact, hUreal⟩ :=
+    apm_t95j06_finite_intervalCharts_thicken
+      X hloc A hAopen hxA hAcompact hAreal s
+  exact ⟨U, hUopen, hs.trans hsU, hUcompact, hUreal⟩
 
 /-- A countable compact cover, together with compact-set interval thickening,
 can be reorganized as nested interval domains (estimated 100--160 lines).
@@ -1387,6 +1434,24 @@ nesting makes the glued map continuous in both directions.  Countability of
 the exhaustion excludes the long-line phenomenon, and Hausdorffness excludes
 the two-origin gluing.  This is a gluing theorem for an already supplied
 exhaustion, not a one-manifold classification. -/
+lemma apm_t95j06_increasing_interval_union_mono
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X)
+    (hnested : ∀ n, closure (U n) ⊆ U (n + 1)) :
+    ∀ n, U n ⊆ U (n + 1) := by
+  intro n
+  exact subset_closure.trans (hnested n)
+
+/-- Every point of the exhausted space lies in some interval domain.  This
+is the pointwise form of the union hypothesis used when defining a glued
+coordinate function. -/
+lemma apm_t95j06_increasing_interval_union_mem
+    (X : Type) [TopologicalSpace X]
+    (U : ℕ → Set X) (hcover : (⋃ n, U n) = Set.univ) (x : X) :
+    ∃ n, x ∈ U n := by
+  have hx : x ∈ ⋃ n, U n := by rw [hcover]; trivial
+  simpa only [Set.mem_iUnion] using hx
+
 theorem apm_t95j06_increasing_interval_union_homeomorph_real
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U : ℕ → Set X) (hopen : ∀ n, IsOpen (U n))
