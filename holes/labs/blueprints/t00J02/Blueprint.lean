@@ -903,7 +903,48 @@ theorem t00J02_circleSum_aux_global_pushforward
         ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
           (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
             (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) := by
-  sorry
+  classical
+  let e := ConstructionTargets.CircleHomology.circleH1IsoInt
+  let Hmod := ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom ℓ)
+  have h1 : ConstructionTargets.T00J02Closure.circleDegree ℓ =
+      e.hom.hom (Hmod.hom (e.inv.hom 1)) := rfl
+  have hmod : Hmod.hom (e.inv.hom 1) =
+      ConstructionTargets.T00J02Closure.circleDegree ℓ • e.inv.hom 1 := by
+    calc Hmod.hom (e.inv.hom 1)
+        = e.inv.hom (e.hom.hom (Hmod.hom (e.inv.hom 1))) :=
+          (ConcreteCategory.congr_hom e.hom_inv_id _).symm
+      _ = e.inv.hom (ConstructionTargets.T00J02Closure.circleDegree ℓ • (1 : ℤ)) := by
+          rw [← h1, smul_eq_mul, mul_one]
+      _ = _ := map_zsmul _ _ _
+  have hn := ConcreteCategory.congr_hom
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      (TopCat.ofHom ℓ) 1) (e.inv.hom 1)
+  have habs : HomologicalComplex.homologyMap
+      (ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap ℓ) 1
+      (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of Circle) 1 e) =
+      ConstructionTargets.T00J02Closure.circleDegree ℓ •
+        ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of Circle) 1 e := by
+    rw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply] at hn
+    have hm' : (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map Hmod).hom (e.inv.hom 1) =
+        ConstructionTargets.T00J02Closure.circleDegree ℓ • e.inv.hom 1 := hmod
+    rw [hm', map_zsmul] at hn
+    simpa only [ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator,
+      ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap,
+      ConstructionTargets.ManifoldFundamentalClass.globalGenerator] using hn.symm
+  have hnat := ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality
+    ({u : Circle | ℓ u = z}ᶜ)
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint z) ℓ
+    (by intro u hu; exact hu)
+  change ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap ℓ ≫ _ = _ at hnat
+  have hh := congrArg (fun q => HomologicalComplex.homologyMap q 1) hnat
+  simp only [HomologicalComplex.homologyMap_comp] at hh
+  have hh' := ConcreteCategory.congr_hom hh
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of Circle) 1 e)
+  rw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply, habs, map_zsmul] at hh'
+  unfold t00J02_circleFiberPushforward t00J02_circleGlobalGeneratorInFiber
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+  exact hh'.symm
 
 /-- **Circle local-degree localization.**  For a circle self-map with finite
 fibre over `z`, the homological circle degree is the sum of its chart-free
