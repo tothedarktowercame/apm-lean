@@ -289,6 +289,58 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_L0
     have hax' := congrFun ha x'
     simpa [t00J02_fiberCoordinates, b, hx'] using hax'
 
+/-- The image of the chosen global surface generator in relative homology
+supported on the whole literal fibre. -/
+noncomputable def t00J02_globalGeneratorInFiber
+    {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (y : S) : t00J02_fiberRelativeHomology f y :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+      ({z : S | f z = y}ᶜ)) 2
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+      (TopCat.of S) 2 e)
+
+/-- **Projection-composition helper (estimated 20--40 lines).** In words:
+restricting the fibre-supported global class to a fibre point is exactly the
+usual localization of the global generator at that point.
+
+Why true: compose the absolute-to-fibre-relative projection with the identity
+map of pairs from the fibre complement to the deleted point, then apply
+`relativeSingularMap_projection_naturality` (equivalently
+`relativeSingularHomologyMap_comp`). -/
+theorem t00J02_globalGeneratorInFiber_restrict
+    {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (y : S) (x : {x : S // f x = y}) :
+    t00J02_fiberRestriction f y x (t00J02_globalGeneratorInFiber e f y) =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap (x : S) 2
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of S) 2 e) := by
+  sorry
+
+/-- **Naturality sub-leaf (estimated 60--120 lines).** In words: pushing the
+global generator first into relative homology of a fibre and then along `f`
+is the target-localized global image; its coefficient is the global surface
+degree.
+
+Why true: apply
+`relativeSingularMap_projection_naturality` to the pair map
+`(S, fibreᶜ) → (S, {y}ᶜ)`, then use
+`surfaceTopDegree_eq_homologyMap` at `1` and the definition of
+`groupGlobalGenerator`.  This is strictly a naturality/coordinate statement;
+it contains no finite sum and no local-degree witnesses. -/
+theorem t00J02_globalGeneratorInFiber_pushforward
+    {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (f : C(S, S)) (y : S) :
+    t00J02_fiberPushforward f y (t00J02_globalGeneratorInFiber e f y) =
+      ConstructionTargets.T00J02Closure.surfaceTopDegree e f •
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of S) 2 e) := by
+  sorry
+
 /-- **F1: global degree is the sum of point-local degrees.**  Sum the D-basis
 classes.  D-injectivity identifies their sum with the image of `[S]` in
 `H₂(S,S∖F)`; naturality of `relativeSingularMap` and the infinite-order
@@ -311,7 +363,66 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F1
     (d : {x : S // f x = y} → ℤ)
     (hd : ∀ x, t00J02_IsLocalDegree e f y x (d x)) :
     ConstructionTargets.T00J02Closure.surfaceTopDegree e f = ∑ x, d x := by
-  sorry
+  classical
+  let a : {x : S // f x = y} → t00J02_fiberRelativeHomology f y :=
+    fun x => Classical.choose (hd x)
+  have ha (x : {x : S // f x = y}) :
+      t00J02_fiberRestriction f y x (a x) =
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap (x : S) 2
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of S) 2 e) := (Classical.choose_spec (hd x)).1
+  have ha0 (x x' : {x : S // f x = y}) (h : x' ≠ x) :
+      t00J02_fiberRestriction f y x' (a x) = 0 :=
+    (Classical.choose_spec (hd x)).2.1 x' h
+  have hapush (x : {x : S // f x = y}) :
+      t00J02_fiberPushforward f y (a x) = d x •
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of S) 2 e) := (Classical.choose_spec (hd x)).2.2
+  have hsum : t00J02_globalGeneratorInFiber e f y = ∑ x, a x := by
+    apply hD.1.1
+    funext x
+    rw [show t00J02_fiberCoordinates f y
+        (t00J02_globalGeneratorInFiber e f y) x =
+        t00J02_fiberRestriction f y x (t00J02_globalGeneratorInFiber e f y) by rfl]
+    rw [t00J02_globalGeneratorInFiber_restrict]
+    rw [show t00J02_fiberCoordinates f y (∑ z, a z) x =
+        ∑ z, t00J02_fiberRestriction f y x (a z) by
+          simp [t00J02_fiberCoordinates]]
+    rw [Finset.sum_eq_single x]
+    · exact (ha x).symm
+    · intro z _ hzx
+      exact ha0 z x hzx.symm
+    · simp
+  have hpush := congrArg (fun q => t00J02_fiberPushforward f y q) hsum
+  have hcoeff :
+      ConstructionTargets.T00J02Closure.surfaceTopDegree e f •
+          ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+            (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+              (TopCat.of S) 2 e) =
+        (∑ x, d x) •
+          ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+            (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+              (TopCat.of S) 2 e) := by
+    rw [← t00J02_globalGeneratorInFiber_pushforward e f y]
+    calc
+      t00J02_fiberPushforward f y (t00J02_globalGeneratorInFiber e f y) =
+          t00J02_fiberPushforward f y (∑ x, a x) := hpush
+      _ = ∑ x, t00J02_fiberPushforward f y (a x) := by simp
+      _ = ∑ x, d x •
+          ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+            (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+              (TopCat.of S) 2 e) := by
+            apply Finset.sum_congr rfl
+            intro x hx
+            exact hapush x
+      _ = (∑ x, d x) •
+          ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+            (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+              (TopCat.of S) 2 e) := by rw [Finset.sum_smul]
+  apply sub_eq_zero.mp
+  apply hD.2.1
+  rw [sub_smul, hcoeff, sub_self]
 
 /-- **F2 transverse component comparison (LIBRARY, estimated 450--800 lines).**
 Let `K` be a component of `f ⁻¹' range c` meeting the fibre over `y`, parametrized
