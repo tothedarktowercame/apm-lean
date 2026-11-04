@@ -5770,6 +5770,36 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_open_interval_sh
   · exact (hSproper h).elim
   · exact (hSne.ne_empty h).elim
 
+/-- E1: one-sided limits of a strictly monotone function on a bounded open
+interval.  For an increasing function the right limit is the supremum and
+the left limit is the infimum of the image; for a decreasing function these
+are exchanged.  Thus any finite bound on the appropriate side supplies the
+finite endpoint limit used by the Hausdorff chart argument. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_monotone_end_limits
+    (p q : ℝ) (hpq : p < q) (f : ℝ → ℝ) :
+    (StrictMonoOn f (Set.Ioo p q) →
+      (BddAbove (f '' Set.Ioo p q) →
+        Filter.Tendsto f (nhdsWithin q (Set.Iio q))
+          (nhds (sSup (f '' Set.Ioo p q)))) ∧
+      (BddBelow (f '' Set.Ioo p q) →
+        Filter.Tendsto f (nhdsWithin p (Set.Ioi p))
+          (nhds (sInf (f '' Set.Ioo p q))))) ∧
+    (StrictAntiOn f (Set.Ioo p q) →
+      (BddBelow (f '' Set.Ioo p q) →
+        Filter.Tendsto f (nhdsWithin q (Set.Iio q))
+          (nhds (sInf (f '' Set.Ioo p q)))) ∧
+      (BddAbove (f '' Set.Ioo p q) →
+        Filter.Tendsto f (nhdsWithin p (Set.Ioi p))
+          (nhds (sSup (f '' Set.Ioo p q))))) := by
+  have hne : (Set.Ioo p q).Nonempty := Set.nonempty_Ioo.mpr hpq
+  constructor
+  · intro hf
+    exact ⟨fun hb => hf.monotoneOn.tendsto_nhdsWithin_Ioo_left hne hb,
+      fun hb => hf.monotoneOn.tendsto_nhdsWithin_Ioo_right hne hb⟩
+  · intro hf
+    exact ⟨fun hb => hf.antitoneOn.tendsto_nhdsWithin_Ioo_left hne hb,
+      fun hb => hf.antitoneOn.tendsto_nhdsWithin_Ioo_right hne hb⟩
+
 /-- **R1, forward ray endpoint.** A strictly increasing surjection from a
 right ray onto a left ray approaches the finite endpoint of the left ray. -/
 lemma apm_t95j06_ray_strictMono_surjective_tendsto_leftEndpoint
