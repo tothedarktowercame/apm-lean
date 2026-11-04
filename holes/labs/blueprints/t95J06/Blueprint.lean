@@ -309,11 +309,107 @@ it contains `y` at `1`, hence stays in `connectedComponent x`.  Continuity and
 the action laws descend from complex scalar multiplication.  If `g • y = y`,
 some coordinate of the norm-one vector `y` is nonzero, so cancellation gives
 `g = 1`.  Empty components do not occur because they are indexed by `x`. -/
+def apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul
+    (g : Circle) (z : apm_t95j06_S5) : apm_t95j06_S5 :=
+  ⟨(g : ℂ) • z.1, by
+    rw [Metric.mem_sphere, dist_zero_right, norm_smul]
+    have hz : ‖z.1‖ = 1 := by simpa [Metric.mem_sphere, dist_zero_right] using z.2
+    rw [hz]
+    simp⟩
+
+@[simp] theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul_val
+    (g : Circle) (z : apm_t95j06_S5) :
+    (apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul g z).1 =
+      (g : ℂ) • z.1 := rfl
+
+theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul_continuous :
+    Continuous (fun p : Circle × apm_t95j06_S5 ↦
+      apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul p.1 p.2) := by
+  apply continuous_induced_rng.2
+  fun_prop
+
 theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_componentAction
     (F : Set apm_t95j06_S5) (hinv : apm_t95j06_IsCircleInvariant F) (x : F) :
     Nonempty
       (apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_Action F x) := by
-  sorry
+  let sf : Circle → F → F := fun g y ↦
+    ⟨apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul g y.1, by
+      obtain ⟨w, hw, heq⟩ := hinv y.1 y.2 g
+      have hweq : w =
+          apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul g y.1 := by
+        apply Subtype.ext
+        exact heq
+      exact hweq ▸ hw⟩
+  have hsf_cont : Continuous (fun p : Circle × F ↦ sf p.1 p.2) := by
+    apply continuous_induced_rng.2
+    exact apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul_continuous.comp
+      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+  have hsf_one (y : F) : sf 1 y = y := by
+    apply Subtype.ext
+    apply Subtype.ext
+    simp [sf, apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul]
+  have hsf_mul (g h : Circle) (y : F) : sf g (sf h y) = sf (g * h) y := by
+    apply Subtype.ext
+    apply Subtype.ext
+    simp only [sf,
+      apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul_val]
+    rw [← mul_smul]
+    rfl
+  have hcomponent (g : Circle)
+      (y : {y : F // y ∈ connectedComponent x}) : sf g y.1 ∈ connectedComponent x := by
+    let f : ℝ → F := fun t ↦ sf (Circle.exp (t * Complex.arg (g : ℂ))) y.1
+    have hf : Continuous f := by
+      simpa only [f, Function.comp_apply] using
+        hsf_cont.comp ((Circle.exp.continuous.comp
+          (continuous_id.mul continuous_const)).prodMk continuous_const)
+    have hc : IsConnected (Set.range f) := isConnected_range hf
+    have hy : y.1 ∈ Set.range f := by
+      refine ⟨0, ?_⟩
+      simpa [f] using hsf_one y.1
+    have hg : sf g y.1 ∈ Set.range f := by
+      refine ⟨1, ?_⟩
+      simp only [f, one_mul, Circle.exp_arg]
+    have hmem := hc.subset_connectedComponent hy hg
+    have heq : connectedComponent (y.1 : F) = connectedComponent x :=
+      (connectedComponent_eq y.2).symm
+    simpa only [heq] using hmem
+  let act : Circle × {y : F // y ∈ connectedComponent x} →
+      {y : F // y ∈ connectedComponent x} := fun p ↦
+    ⟨sf p.1 p.2.1, hcomponent p.1 p.2⟩
+  refine ⟨{
+    act := act
+    continuous_act := ?_
+    one_act := ?_
+    mul_act := ?_
+    free := ?_
+    scalar_act := ?_ }⟩
+  · apply continuous_induced_rng.2
+    exact hsf_cont.comp
+      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+  · intro y
+    apply Subtype.ext
+    exact hsf_one y.1
+  · intro g h y
+    apply Subtype.ext
+    exact hsf_mul g h y.1
+  · intro g y hgy
+    have hs : (g : ℂ) • y.1.1.1 = y.1.1.1 := by
+      have := congrArg (fun q ↦ q.1.1.1) hgy
+      simpa only [act, sf,
+        apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_sphereSmul_val]
+        using this
+    have hy0 : y.1.1.1 ≠ 0 := by
+      intro hy
+      have hn := y.1.1.2
+      rw [Metric.mem_sphere, dist_zero_right, hy, norm_zero] at hn
+      norm_num at hn
+    apply Circle.coe_injective
+    apply sub_eq_zero.mp
+    rw [← smul_eq_zero_iff_left hy0]
+    change ((g : ℂ) - 1) • y.1.1.1 = 0
+    rw [sub_smul, hs, one_smul, sub_self]
+  · intro g y
+    rfl
 
 /-- **Remaining sub-leaf, compact orbit quotient (estimated 140--240 lines).**
 In words: the orbit space of the supplied continuous free Circle action on a
