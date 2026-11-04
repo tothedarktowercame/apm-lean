@@ -1413,6 +1413,50 @@ group isomorphism supplied by singular excision, this records its naturality
 with respect to all maps from the compact support to point supports; that
 naturality is exactly what transports the two point-restriction clauses in
 `t00A04_HatcherConclusion`. -/
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso
+    {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
+    (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
+    (hopen : ∀ U : Set Y, IsOpen U → IsOpen (f '' U))
+    (B : Set Y) (hB : IsCompact B) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Bᶜ (f '' B)ᶜ
+        ⟨f, hcont⟩ (by
+          intro y hy hfB
+          rcases hfB with ⟨b, hb, hfb⟩
+          exact hy (show y ∈ B from (hinj hfb).symm ▸ hb))) n) := by
+  sorry
+
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point
+    {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z]
+    (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
+    (B : Set Y) (x : Y) (hx : x ∈ B) (n : ℕ)
+    (c : t00A04_ModTwoLocalHomology Y B n) :
+    t00A04_modTwo_pointRestriction Z (f '' B) (f x) ⟨x, hx, rfl⟩ n
+        (HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Bᶜ (f '' B)ᶜ
+            ⟨f, hcont⟩ (by
+              intro y hy hfB
+              rcases hfB with ⟨b, hb, hfb⟩
+              exact hy (show y ∈ B from (hinj hfb).symm ▸ hb))) n c) =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) ({x} : Set Y)ᶜ
+          ({f x} : Set Z)ᶜ ⟨f, hcont⟩ (by
+            intro y hy hfy
+            exact hy (hinj hfy))) n
+        (t00A04_modTwo_pointRestriction Y B x hx n c) := by
+  sorry
+
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point_injective
+    {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
+    (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
+    (hopen : ∀ U : Set Y, IsOpen U → IsOpen (f '' U)) (x : Y) (n : ℕ) :
+    Function.Injective (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) ({x} : Set Y)ᶜ
+        ({f x} : Set Z)ᶜ ⟨f, hcont⟩ (by
+          intro y hy hfy
+          exact hy (hinj hfy))) n) := by
+  sorry
+
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding
     {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
     (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
@@ -1420,7 +1464,82 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbe
     (B : Set Y) (hB : IsCompact B) :
     t00A04_HatcherConclusion Y d B ↔
       t00A04_HatcherConclusion Z d (f '' B) := by
-  sorry
+  let F := fun (n : ℕ) ↦ HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Bᶜ (f '' B)ᶜ
+      ⟨f, hcont⟩ (by
+        intro y hy hfB
+        rcases hfB with ⟨b, hb, hfb⟩
+        exact hy (show y ∈ B from (hinj hfb).symm ▸ hb))) n
+  have hFI : ∀ n, IsIso (F n) := fun n ↦
+    t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso
+      f hinj hcont hopen B hB n
+  have hbij : ∀ n, Function.Bijective (F n) := by
+    intro n
+    exact (CategoryTheory.ConcreteCategory.isIso_iff_bijective (F n)).mp (hFI n)
+  constructor
+  · intro hY
+    constructor
+    · intro i hdi
+      letI : Subsingleton (t00A04_ModTwoLocalHomology Y B i) :=
+        hY.vanish_above i hdi
+      constructor
+      intro a b
+      obtain ⟨a', rfl⟩ := (hbij i).2 a
+      obtain ⟨b', rfl⟩ := (hbij i).2 b
+      exact congrArg (F i) (Subsingleton.elim a' b')
+    · obtain ⟨c, hc⟩ := hY.exists_everywhere_nonzero
+      refine ⟨F d c, ?_⟩
+      rintro _ ⟨x, hx, rfl⟩ hz
+      have hsquare :=
+        t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point
+          f hinj hcont B x hx d c
+      rw [hz] at hsquare
+      apply hc x hx
+      apply t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point_injective
+        f hinj hcont hopen x d
+      simpa using hsquare.symm
+    · intro c
+      constructor
+      · rintro rfl _ _
+        exact map_zero _
+      · intro hc
+        obtain ⟨c', rfl⟩ := (hbij d).2 c
+        have hc'0 : c' = 0 := (hY.eq_zero_iff_pointwise c').mpr (by
+          intro x hx
+          apply t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point_injective
+            f hinj hcont hopen x d
+          rw [map_zero]
+          rw [← t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point
+            f hinj hcont B x hx d c']
+          exact hc (f x) ⟨x, hx, rfl⟩)
+        rw [hc'0, map_zero]
+  · intro hZ
+    constructor
+    · intro i hdi
+      letI : Subsingleton (t00A04_ModTwoLocalHomology Z (f '' B) i) :=
+        hZ.vanish_above i hdi
+      constructor
+      intro a b
+      exact (hbij i).1 (Subsingleton.elim (F i a) (F i b))
+    · obtain ⟨c, hc⟩ := hZ.exists_everywhere_nonzero
+      obtain ⟨c', hc'⟩ := (hbij d).2 c
+      refine ⟨c', ?_⟩
+      intro x hx hz
+      apply hc (f x) ⟨x, hx, rfl⟩
+      rw [← hc']
+      rw [t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point
+        f hinj hcont B x hx d c', hz, map_zero]
+    · intro c
+      constructor
+      · rintro rfl _ _
+        exact map_zero _
+      · intro hc
+        apply (hbij d).1
+        rw [map_zero]
+        apply (hZ.eq_zero_iff_pointwise (F d c)).mpr
+        rintro _ ⟨x, hx, rfl⟩
+        rw [t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_point
+          f hinj hcont B x hx d c, hc x hx, map_zero]
 
 /-- Apply open-embedding excision twice, on the source and target of a partial
 homeomorphism.  This is the chart-shaped form of the preceding naturality
