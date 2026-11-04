@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.CollaredConnectedSumHomology
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
@@ -146,6 +147,118 @@ def t00J02_IsLocalDegree
       ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
         (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
 
+namespace t00J02_D1
+
+abbrev H {X : Type} [TopologicalSpace X] (A : Set X) :=
+  (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains Aᶜ).homology 2
+
+noncomputable def restrict {X : Type} [TopologicalSpace X]
+    {A B : Set X} (h : B ⊆ A) : H A ⟶ H B :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularExcision.relativeSingularMap Aᶜ Bᶜ
+      (ContinuousMap.id X) (fun _ hz hb ↦ hz (h hb))) 2
+
+lemma restrict_comp {X : Type} [TopologicalSpace X]
+    {A B C : Set X} (hBA : B ⊆ A) (hCB : C ⊆ B) (z : H A) :
+    restrict hCB (restrict hBA z) = restrict (hCB.trans hBA) z := by
+  have h := ConstructionTargets.SingularExcision.relativeSingularHomologyMap_comp
+    Aᶜ Bᶜ Cᶜ (ContinuousMap.id X) (ContinuousMap.id X)
+    (fun _ hz hb ↦ hz (hBA hb)) (fun _ hz hc ↦ hz (hCB hc))
+    (fun _ hz hc ↦ hz (hBA (hCB hc))) 2
+  exact congrArg (fun m ↦ m z) h
+
+/-- Binary closed-support splitting: the restrictions from relative H₂ supported
+on A ∪ B to H₂ supported on A and on B are jointly bijective when A and B are
+closed and disjoint. This is the two-set relative Mayer--Vietoris theorem for
+the open cover Aᶜ ∪ Bᶜ = X: its outer relative groups Hₙ(X,X) vanish, leaving
+an isomorphism H₂(X,Aᶜ ∩ Bᶜ) → H₂(X,Aᶜ) × H₂(X,Bᶜ).
+The existing closed-support joint-injectivity and gluing lemmas in
+`CollaredConnectedSumHomology.BallCollar` prove the two halves. No manifold,
+compactness, or finite-set decomposition is assumed.
+Disjointness is necessary: for A=B={p} in R² the map is diagonal Z→Z², not
+surjective. Closedness supplies the excisive open cover; no statement for
+arbitrary non-excisive pairs is asserted. Empty supports cause no exception,
+since Hₙ(X,X)=0. -/
+lemma binary {X : Type} [TopologicalSpace X] {A B : Set X}
+    (hA : IsClosed A) (hB : IsClosed B) (hAB : Disjoint A B) :
+    Function.Bijective (fun z : H (A ∪ B) ↦
+      (restrict (show A ⊆ A ∪ B from subset_union_left) z,
+       restrict (show B ⊆ A ∪ B from subset_union_right) z)) := by
+  have hempty : A ∩ B = ∅ := Set.disjoint_iff_inter_eq_empty.mp hAB
+  have hz (n : ℕ) : Subsingleton
+      ((ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains (A ∩ B)ᶜ).homology n) := by
+    apply AddCommGrpCat.subsingleton_of_isZero
+    simpa only [hempty, compl_empty] using
+      ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero X n
+  constructor
+  · intro u v huv
+    apply sub_eq_zero.mp
+    apply ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_injective_aux_union_aux_joint
+      X A B hA hB 2 (hz 3) (u - v)
+    · change restrict (show A ⊆ A ∪ B from subset_union_left) (u - v) = 0
+      rw [map_sub]
+      exact sub_eq_zero.mpr (congrArg Prod.fst huv)
+    · change restrict (show B ⊆ A ∪ B from subset_union_right) (u - v) = 0
+      rw [map_sub]
+      exact sub_eq_zero.mpr (congrArg Prod.snd huv)
+  · rintro ⟨u, v⟩
+    obtain ⟨z, hzu, hzv⟩ :=
+      ConstructionTargets.CollaredConnectedSumHomology.BallCollar.punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_exists_unit_aux_divide_aux_union_aux_glue
+        X A B hA hB 2 u v (@Subsingleton.elim _ (hz 2) _ _)
+    exact ⟨z, Prod.ext hzu hzv⟩
+
+noncomputable def coordinates {X : Type} [TopologicalSpace X] (A : Set X) :
+    H A → ((x : A) → H ({x.1} : Set X)) :=
+  fun z x ↦ restrict (singleton_subset_iff.mpr x.2) z
+
+lemma finite_coordinates {X : Type} [TopologicalSpace X] [T2Space X]
+    (A : Set X) (hA : A.Finite) : Function.Bijective (coordinates A) := by
+  classical
+  induction A, hA using Set.Finite.induction_on with
+  | empty =>
+    have hz : CategoryTheory.Limits.IsZero (H (∅ : Set X)) := by
+      simpa only [H, compl_empty] using
+        ConstructionTargets.SingularHomologyConcrete.selfRelativeSingularHomology_isZero X 2
+    letI : Subsingleton (H (∅ : Set X)) := AddCommGrpCat.subsingleton_of_isZero hz
+    constructor
+    · intro u v _
+      exact Subsingleton.elim u v
+    · intro g
+      refine ⟨0, ?_⟩
+      funext x
+      exact False.elim x.2
+  | @insert a A ha hA ih =>
+    have hb := binary isClosed_singleton hA.isClosed
+      (show Disjoint ({a} : Set X) A from disjoint_singleton_left.mpr ha)
+    change Function.Bijective (fun z : H (insert a A) ↦
+      (restrict (show {a} ⊆ insert a A from singleton_subset_iff.mpr (mem_insert a A)) z,
+       restrict (subset_insert a A) z)) at hb
+    constructor
+    · intro u v huv
+      apply hb.1
+      apply Prod.ext
+      · exact congrFun huv ⟨a, mem_insert a A⟩
+      · apply ih.1
+        funext x
+        have he := congrFun huv (⟨x.1, mem_insert_of_mem a x.2⟩ : ↥(insert a A))
+        simpa only [coordinates, restrict_comp] using he
+    · intro g
+      obtain ⟨v, hv⟩ := ih.2 (fun x : A ↦ g ⟨x.1, mem_insert_of_mem a x.2⟩)
+      obtain ⟨u, hu⟩ := hb.2 (g ⟨a, mem_insert a A⟩, v)
+      refine ⟨u, ?_⟩
+      funext x
+      rcases x with ⟨x, hx⟩
+      rcases hx with rfl | hx
+      · exact congrArg Prod.fst hu
+      · have he := congrFun hv ⟨x, hx⟩
+        have huB := congrArg Prod.snd hu
+        dsimp only at huB
+        dsimp only [coordinates] at he ⊢
+        rw [← huB, restrict_comp] at he
+        exact he
+
+end t00J02_D1
+
 /-- **D1 (finite-support excision, estimated 250--500 lines; LIBRARY).**  In
 words: relative top homology supported on a finite fibre is recovered
 bijectively by restricting to the point-local homology group at every fibre
@@ -165,7 +278,9 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D1
     [IsManifold apm_t00j02_I2 ∞ S]
     (f : C(S, S)) (y : S) [Fintype {x : S // f x = y}] :
     Function.Bijective (t00J02_fiberCoordinates f y) := by
-  sorry
+  have hf : ({x : S | f x = y} : Set S).Finite := by
+    simpa using (Set.finite_range (fun x : {x : S // f x = y} ↦ (x : S)))
+  exact t00J02_D1.finite_coordinates {x : S | f x = y} hf
 
 /- **D2 (localization coefficient is a unit, LIBRARY).**  In words: at every
 point `y` of a compact connected surface with `H₂ ≅ ℤ`, the localization of the
@@ -202,6 +317,23 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_abs_constant
         S e).localCoefficient z| := by
   sorry
 
+/-- Compact-support reconstruction detects common divisors of all local
+coefficients.  If an integer divides the localization coefficient of the
+chosen global generator at every point, it divides the generator's global
+coordinate `1`.  This is true by representing the global class by a finite
+cycle, covering its compact support by finitely many chart domains, and using
+excision to reconstruct the class from the corresponding local classes.
+Estimated proof size: 220--400 lines. -/
+theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_one_point_aux_commonDivisor
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S] [ChartedSpace apm_t00j02_E2 S]
+    [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (d : ℤ)
+    (hdiv : ∀ x : S, d ∣
+      (ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
+        S e).localCoefficient x) : d ∣ 1 := by
+  sorry
+
 /-- **D2.2 (one-point primitivity, estimated 350--700 lines; LIBRARY).**  In
 words: the chosen generator of global `H₂ ≅ ℤ` localizes primitively at
 at least one point of a compact connected boundaryless surface.
@@ -226,7 +358,21 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_one_point
           S e).localCoefficient z = 1 ∨
       (ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
           S e).localCoefficient z = -1 := by
-  sorry
+  let D := ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso S e
+  let z : S := Classical.choice (inferInstance : Nonempty S)
+  have hdiv : ∀ x : S, D.localCoefficient z ∣ D.localCoefficient x := by
+    intro x
+    have habs :=
+      t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_abs_constant e x z
+    rcases abs_eq_abs.mp habs with h | h
+    · exact h ▸ dvd_refl _
+    · rw [h]
+      exact dvd_neg.mpr (dvd_refl _)
+  have hone : D.localCoefficient z ∣ 1 :=
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2_one_point_aux_commonDivisor
+      e (D.localCoefficient z) hdiv
+  have hunit : IsUnit (D.localCoefficient z) := isUnit_iff_dvd_one.mpr hone
+  exact ⟨z, Int.isUnit_eq_one_or hunit⟩
 
 theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
@@ -659,7 +805,7 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embedded
             f c (c z) ⟨z, rfl⟩) d k = ε * ∑ t, q t := by
   sorry
 
-/-- **Circle local-degree localization.**  For a circle self-map with finite
+/- **Circle local-degree localization.**  For a circle self-map with finite
 fibre over `z`, the homological circle degree is the sum of its chart-free
 point-local degrees.  Sum the fibre-relative basis classes, use finite-point
 excision/Mayer--Vietoris to identify their sum with the localized global
@@ -667,12 +813,172 @@ circle generator, then use naturality and
 `T00J02Closure.circleDegree_eq_homologyMap`.  This permits degree-zero folds
 and gives degree one for the identity.  Estimated proof: 140--240 lines;
 **LIBRARY**. -/
+/-- The restrictions of a fibre-supported circle class to all points of the
+finite fibre. -/
+noncomputable def t00J02_circleFiberCoordinates
+    (ℓ : C(Circle, Circle)) (z : Circle) :
+    t00J02_circleFiberRelativeHomology ℓ z →+
+      ((t : {u : Circle // ℓ u = z}) →
+        (ConstructionTargets.SingularHomologyConcrete.RelativeSingularChains
+          (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+            (t : Circle))).homology 1) where
+  toFun a := fun t => t00J02_circleFiberRestriction ℓ z t a
+  map_zero' := by ext t; simp
+  map_add' a b := by ext t; simp
+
+/-- The positive global circle generator, projected to relative homology
+supported on the whole literal fibre. -/
+noncomputable def t00J02_circleGlobalGeneratorInFiber
+    (ℓ : C(Circle, Circle)) (z : Circle) :
+    t00J02_circleFiberRelativeHomology ℓ z :=
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection
+      ({u : Circle | ℓ u = z}ᶜ)) 1
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+      (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt)
+
+/-- **One-dimensional finite-fibre decomposition (estimated 100--180 lines;
+LIBRARY).** In words, relative first homology supported on a finite subset of
+the circle is the product of the point-local relative homology groups, and the
+localized positive circle generator has infinite order.
+
+Why true: choose pairwise disjoint arc charts about the finitely many fibre
+points. Excision replaces the pair by the disjoint union of those punctured
+arcs, and finite additivity identifies its relative `H₁` with the product of
+the point-local groups.  The second assertion follows because localization of
+the positive circle class is an isomorphism onto the punctured-circle local
+group (`CircleActualLocalization.localization_isIso`). -/
+theorem t00J02_circleSum_aux_finiteFiberDecomposition
+    (ℓ : C(Circle, Circle)) (z : Circle) [Fintype {t : Circle // ℓ t = z}] :
+    Function.Bijective (t00J02_circleFiberCoordinates ℓ z) ∧
+      ∀ n : ℤ, n •
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) = 0 →
+        n = 0 := by
+  sorry
+
+/-- **Circle projection naturality (estimated 15--30 lines).** In words,
+restricting the fibre-supported positive global class to a fibre point is its
+ordinary localization at that point.
+
+Why true: the absolute-to-fibre projection followed by the identity map of
+pairs into the deleted-point pair equals the absolute-to-deleted-point
+projection, by `relativeSingularMap_projection_naturality`. -/
+theorem t00J02_circleSum_aux_global_restrict
+    (ℓ : C(Circle, Circle)) (z : Circle) (t : {u : Circle // ℓ u = z}) :
+    t00J02_circleFiberRestriction ℓ z t
+        (t00J02_circleGlobalGeneratorInFiber ℓ z) =
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap (t : Circle) 1
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) := by
+  have hnat := ConstructionTargets.SingularExcision.relativeSingularMap_projection_naturality
+    ({u : Circle | ℓ u = z}ᶜ)
+    (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint (t : Circle))
+    (ContinuousMap.id Circle) (by
+      intro u hu hut
+      have hut' : u = (t : Circle) := by simpa using hut
+      exact hu (by rw [hut']; exact t.property))
+  change ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+    (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (ContinuousMap.id Circle)) ≫ _ = _ at hnat
+  rw [show TopCat.ofHom (ContinuousMap.id Circle) = 𝟙 (TopCat.of Circle) from rfl,
+    CategoryTheory.Functor.map_id, CategoryTheory.Category.id_comp] at hnat
+  unfold t00J02_circleFiberRestriction t00J02_circleGlobalGeneratorInFiber
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+  rw [hnat, HomologicalComplex.homologyMap_comp]
+  rfl
+
+/-- **Circle pushforward naturality (estimated 40--70 lines).** In words,
+pushing the fibre-supported positive global class along `ℓ` gives
+`circleDegree ℓ` times the positive class localized at the target point.
+
+Why true: projection naturality reduces this to the absolute homology map of
+`ℓ`; in the standard `H₁(Circle; ℤ) ≃ ℤ` coordinate that map is multiplication
+by `circleDegree ℓ`, by `T00J02Closure.circleDegree_eq_homologyMap`. -/
+theorem t00J02_circleSum_aux_global_pushforward
+    (ℓ : C(Circle, Circle)) (z : Circle) :
+    t00J02_circleFiberPushforward ℓ z
+        (t00J02_circleGlobalGeneratorInFiber ℓ z) =
+      ConstructionTargets.T00J02Closure.circleDegree ℓ •
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) := by
+  sorry
+
+/-- **Circle local-degree localization.**  For a circle self-map with finite
+fibre over `z`, the homological circle degree is the sum of its chart-free
+point-local degrees. -/
 theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_circleSum
     (ℓ : C(Circle, Circle)) (z : Circle) [Fintype {t : Circle // ℓ t = z}]
     (q : {t : Circle // ℓ t = z} → ℤ)
     (hq : ∀ t, t00J02_IsCircleLocalDegree ℓ z t (q t)) :
     ConstructionTargets.T00J02Closure.circleDegree ℓ = ∑ t, q t := by
-  sorry
+  classical
+  let a : {t : Circle // ℓ t = z} → t00J02_circleFiberRelativeHomology ℓ z :=
+    fun t => Classical.choose (hq t)
+  have ha (t : {t : Circle // ℓ t = z}) :
+      t00J02_circleFiberRestriction ℓ z t (a t) =
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap (t : Circle) 1
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) :=
+    (Classical.choose_spec (hq t)).1
+  have ha0 (t t' : {t : Circle // ℓ t = z}) (h : t' ≠ t) :
+      t00J02_circleFiberRestriction ℓ z t' (a t) = 0 :=
+    (Classical.choose_spec (hq t)).2.1 t' h
+  have hapush (t : {t : Circle // ℓ t = z}) :
+      t00J02_circleFiberPushforward ℓ z (a t) = q t •
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
+          (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+            (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) :=
+    (Classical.choose_spec (hq t)).2.2
+  have hD := t00J02_circleSum_aux_finiteFiberDecomposition ℓ z
+  have hsum : t00J02_circleGlobalGeneratorInFiber ℓ z = ∑ t, a t := by
+    apply hD.1.1
+    funext t
+    rw [show t00J02_circleFiberCoordinates ℓ z
+        (t00J02_circleGlobalGeneratorInFiber ℓ z) t =
+        t00J02_circleFiberRestriction ℓ z t
+          (t00J02_circleGlobalGeneratorInFiber ℓ z) by rfl]
+    rw [t00J02_circleSum_aux_global_restrict]
+    rw [show t00J02_circleFiberCoordinates ℓ z (∑ u, a u) t =
+        ∑ u, t00J02_circleFiberRestriction ℓ z t (a u) by
+          simp [t00J02_circleFiberCoordinates]]
+    rw [Finset.sum_eq_single t]
+    · exact (ha t).symm
+    · intro u _ hut
+      exact ha0 u t hut.symm
+    · simp
+  have hpush := congrArg (fun b => t00J02_circleFiberPushforward ℓ z b) hsum
+  have hcoeff :
+      ConstructionTargets.T00J02Closure.circleDegree ℓ •
+          ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
+            (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+              (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) =
+        (∑ t, q t) •
+          ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
+            (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+              (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) := by
+    rw [← t00J02_circleSum_aux_global_pushforward ℓ z]
+    calc
+      t00J02_circleFiberPushforward ℓ z
+          (t00J02_circleGlobalGeneratorInFiber ℓ z) =
+          t00J02_circleFiberPushforward ℓ z (∑ t, a t) := hpush
+      _ = ∑ t, t00J02_circleFiberPushforward ℓ z (a t) := by simp
+      _ = ∑ t, q t •
+          ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
+            (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+              (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) := by
+            apply Finset.sum_congr rfl
+            intro t ht
+            exact hapush t
+      _ = (∑ t, q t) •
+          ConstructionTargets.ManifoldFundamentalClass.localizationMap z 1
+            (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+              (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) := by
+            rw [Finset.sum_smul]
+  apply sub_eq_zero.mp
+  apply hD.2
+  rw [sub_smul, hcoeff, sub_self]
 
 /-- **F2 transverse component comparison (LIBRARY, estimated 450--800 lines).**
 Let `K` be a component of `f ⁻¹' range c` meeting the fibre over `y`, parametrized
@@ -867,3 +1173,5 @@ theorem apm_t00j02
     hS f hf c hc hcsmooth hhandle htrans hdisks
 
 #print axioms apm_t00j02
+
+#print axioms t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D1
