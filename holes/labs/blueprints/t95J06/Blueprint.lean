@@ -1457,6 +1457,69 @@ lemma apm_t95j06_loopErase_monotone
   rw [hgap] at hinside
   exact hinside
 
+/-- A compact Hausdorff topology on a linear order is its order topology as
+soon as the non-strict order relation is closed.  The closed relation makes
+both strict rays open, so the given topology is finer than the order topology;
+compact-to-Hausdorff applied to the identity gives the reverse comparison. -/
+lemma apm_t95j06_orderTopology_of_compact_closed_le
+    (L : Type*) [LinearOrder L] [TopologicalSpace L] [CompactSpace L]
+    [T2Space L]
+    (hleClosed : IsClosed {q : L × L | q.1 ≤ q.2}) : OrderTopology L := by
+  have hIoi : ∀ a : L, IsOpen (Set.Ioi a) := by
+    intro a
+    have hc : IsClosed {x : L | x ≤ a} := by
+      have hp : {x : L | x ≤ a} =
+          (fun x : L => (x, a)) ⁻¹' {q : L × L | q.1 ≤ q.2} := by
+        ext x
+        rfl
+      rw [hp]
+      exact hleClosed.preimage (continuous_id.prodMk continuous_const)
+    have heq : Set.Ioi a = {x : L | x ≤ a}ᶜ := by
+      ext x
+      simp only [Set.mem_Ioi, Set.mem_compl_iff, Set.mem_setOf_eq]
+      exact ⟨not_le_of_gt, lt_of_not_ge⟩
+    rw [heq]
+    exact hc.isOpen_compl
+  have hIio : ∀ a : L, IsOpen (Set.Iio a) := by
+    intro a
+    have hc : IsClosed {x : L | a ≤ x} := by
+      have hp : {x : L | a ≤ x} =
+          (fun x : L => (a, x)) ⁻¹' {q : L × L | q.1 ≤ q.2} := by
+        ext x
+        rfl
+      rw [hp]
+      exact hleClosed.preimage (continuous_const.prodMk continuous_id)
+    have heq : Set.Iio a = {x : L | a ≤ x}ᶜ := by
+      ext x
+      simp only [Set.mem_Iio, Set.mem_compl_iff, Set.mem_setOf_eq]
+      exact ⟨not_le_of_gt, lt_of_not_ge⟩
+    rw [heq]
+    exact hc.isOpen_compl
+  have hle : (‹TopologicalSpace L›) ≤ Preorder.topology L := by
+    apply le_generateFrom
+    rintro s ⟨a, rfl | rfl⟩
+    · exact hIoi a
+    · exact hIio a
+  have hT2 : @T2Space L (Preorder.topology L) := by
+    letI : TopologicalSpace L := Preorder.topology L
+    haveI : OrderTopology L := ⟨rfl⟩
+    infer_instance
+  have hcont : @Continuous L L _ (Preorder.topology L) id :=
+    continuous_id_of_le hle
+  have heq : (‹TopologicalSpace L›) = Preorder.topology L := by
+    apply le_antisymm hle
+    intro U hU
+    have hc : IsCompact Uᶜ := hU.isClosed_compl.isCompact
+    have himg : @IsCompact L (Preorder.topology L) (id '' Uᶜ) :=
+      @IsCompact.image L L _ (Preorder.topology L) Uᶜ id hc hcont
+    rw [Set.image_id] at himg
+    have hcl : @IsClosed L (Preorder.topology L) Uᶜ :=
+      @IsCompact.isClosed L (Preorder.topology L) hT2 _ himg
+    have hU' : @IsOpen L (Preorder.topology L) Uᶜᶜ :=
+      (@isOpen_compl_iff L Uᶜ (Preorder.topology L)).mpr hcl
+    simpa using hU'
+  exact ⟨heq⟩
+
 /-- Euclidean invariance of domain, with all library premises discharged. -/
 lemma apm_t95j06_Q_aux_invariance_domain
     {U : Set apm_t95j06_E2} (hU : IsOpen U) {f : U → apm_t95j06_E2}
