@@ -2060,6 +2060,316 @@ lemma apm_t95j06_planar_crosscut_of_jordan_aux_pasted_curve
   · obtain ⟨H⟩ := hpaste
     exact ⟨H.trans (Homeomorph.setCongr (congrArg (fun T => T ∪ Set.range g) hfr))⟩
 
+/-- A preconnected subset meeting a component stays in that component. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_absorb
+    {X : Type*} [TopologicalSpace X] {D S : Set X} {p x : X}
+    (hS : IsPreconnected S) (hSD : S ⊆ D) (hxS : x ∈ S)
+    (hxC : x ∈ connectedComponentIn D p) : S ⊆ connectedComponentIn D p := by
+  rw [connectedComponentIn_eq hxC]
+  exact hS.subset_connectedComponentIn hxS hSD
+
+/-- Components of an open planar set contain all their limit points lying
+in that set. A sufficiently small connected ball absorbs the limit point. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_closed_in
+    (D : Set apm_t95j06_E2) (hD : IsOpen D) (p : apm_t95j06_E2) :
+    closure (connectedComponentIn D p) ∩ D ⊆ connectedComponentIn D p := by
+  rintro q ⟨hqcl, hqD⟩
+  obtain ⟨ε, hε, hsub⟩ := Metric.isOpen_iff.mp hD q hqD
+  obtain ⟨x, hxball, hxC⟩ := mem_closure_iff.mp hqcl (Metric.ball q ε)
+    Metric.isOpen_ball (Metric.mem_ball_self hε)
+  exact apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_absorb
+    (convex_ball q ε).isPreconnected hsub hxball hxC (Metric.mem_ball_self hε)
+
+/-- A cap at a boundary limit point of a disk component is absorbed by that
+component. All boundary points in the cap's defining ball remain in its closure. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_cap
+    (r : ℝ) (hr : 0 < r) (O : Set apm_t95j06_E2) (p q : apm_t95j06_E2)
+    (ε : ℝ) (hε : 0 < ε) (hball : Metric.ball q ε ⊆ O)
+    (hq : q ∈ closure (connectedComponentIn (O ∩ Metric.ball 0 r) p)) :
+    Metric.ball q ε ∩ Metric.ball 0 r ⊆ connectedComponentIn (O ∩ Metric.ball 0 r) p ∧
+    Metric.ball q ε ∩ Metric.sphere 0 r ⊆
+      closure (connectedComponentIn (O ∩ Metric.ball 0 r) p) := by
+  obtain ⟨x, hxball, hxC⟩ := mem_closure_iff.mp hq (Metric.ball q ε)
+    Metric.isOpen_ball (Metric.mem_ball_self hε)
+  have hxD := connectedComponentIn_subset (O ∩ Metric.ball 0 r) p hxC
+  have hcap : Metric.ball q ε ∩ Metric.ball 0 r ⊆
+      connectedComponentIn (O ∩ Metric.ball 0 r) p :=
+    apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_absorb
+      ((convex_ball q ε).inter (convex_ball 0 r)).isPreconnected
+      (fun z hz => ⟨hball hz.1, hz.2⟩) ⟨hxball, hxD.2⟩ hxC
+  refine ⟨hcap, ?_⟩
+  rintro z ⟨hzball, hzs⟩
+  apply closure_mono hcap
+  apply Metric.isOpen_ball.inter_closure
+  refine ⟨hzball, ?_⟩
+  rw [closure_ball (0 : apm_t95j06_E2) hr.ne']
+  exact Metric.sphere_subset_closedBall hzs
+
+/-- The boundary points in the closure of a fixed disk component form a
+clopen subset of the portion of the boundary circle lying in the open set. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_clopen
+    (r : ℝ) (hr : 0 < r) (O : Set apm_t95j06_E2) (hO : IsOpen O)
+    (p : apm_t95j06_E2) :
+    IsClopen {q : ↥(O ∩ Metric.sphere 0 r) |
+      q.val ∈ closure (connectedComponentIn (O ∩ Metric.ball 0 r) p)} := by
+  constructor
+  · exact isClosed_closure.preimage continuous_subtype_val
+  · apply isOpen_iff_forall_mem_open.mpr
+    intro q hq
+    obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hO q.val q.property.1
+    refine ⟨Subtype.val ⁻¹' Metric.ball q.val ε, ?_,
+      Metric.isOpen_ball.preimage continuous_subtype_val, Metric.mem_ball_self hε⟩
+    intro z hz
+    exact (apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_cap
+      r hr O p q.val ε hε hball hq).2 ⟨hz, z.property.2⟩
+
+/-- Every nonempty disk component approaches the boundary within the original
+connected open set. Otherwise it would be both open and closed there, while
+the nonempty disk exterior supplies a point outside that component. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_contact
+    (r : ℝ) (hr : 0 < r) (O : Set apm_t95j06_E2)
+    (hO : IsOpen O) (hcO : IsPreconnected O)
+    (hext : (Metric.closedBall 0 r)ᶜ ⊆ O)
+    (p : apm_t95j06_E2) (hp : p ∈ O ∩ Metric.ball 0 r) :
+    (closure (connectedComponentIn (O ∩ Metric.ball 0 r) p) ∩
+      (O ∩ Metric.sphere 0 r)).Nonempty := by
+  let D := O ∩ Metric.ball (0 : apm_t95j06_E2) r
+  let C := connectedComponentIn D p
+  have hCD : C ⊆ D := connectedComponentIn_subset D p
+  have hCp : p ∈ C := mem_connectedComponentIn hp
+  have hCopen : IsOpen C := (hO.inter Metric.isOpen_ball).connectedComponentIn
+  by_contra hn
+  have hcl : closure C ∩ O ⊆ C := by
+    rintro q ⟨hqc, hqO⟩
+    have hle : q ∈ Metric.closedBall 0 r := by
+      apply closure_minimal (hCD.trans Set.inter_subset_right |>.trans Metric.ball_subset_closedBall)
+        Metric.isClosed_closedBall hqc
+    have hne : dist q 0 ≠ r := by
+      intro heq
+      exact hn ⟨q, hqc, hqO, heq⟩
+    have hqD : q ∈ D := ⟨hqO, lt_of_le_of_ne hle hne⟩
+    exact apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_closed_in
+      D (hO.inter Metric.isOpen_ball) p ⟨hqc, hqD⟩
+  have hOC : O ⊆ C := hcO.subset_of_closure_inter_subset hCopen ⟨p, hp.1, hCp⟩ hcl
+  obtain ⟨z, hz⟩ := (apm_t95j06_planar_crosscut_of_jordan_aux_exterior r hr).nonempty
+  exact hz (Metric.ball_subset_closedBall (hCD (hOC (hext hz))).2)
+
+/-- Connectedness of the surviving boundary is sufficient for domain clipping.
+The cap argument makes every component's boundary contact set clopen; contact
+with the boundary is unavoidable, so all components share a cap and coincide. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_of_boundary
+    (r : ℝ) (hr : 0 < r) (O : Set apm_t95j06_E2)
+    (hO : IsOpen O) (hcO : IsPreconnected O)
+    (hext : (Metric.closedBall 0 r)ᶜ ⊆ O)
+    (hΓ : IsPreconnected (O ∩ Metric.sphere 0 r)) :
+    IsPreconnected (O ∩ Metric.ball 0 r) := by
+  let D := O ∩ Metric.ball (0 : apm_t95j06_E2) r
+  let Γ := O ∩ Metric.sphere (0 : apm_t95j06_E2) r
+  letI : PreconnectedSpace Γ := Subtype.preconnectedSpace hΓ
+  have hall : ∀ p ∈ D, Γ ⊆ closure (connectedComponentIn D p) := by
+    intro p hp
+    have hclopen := apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_clopen r hr O hO p
+    obtain ⟨q, hqc, hqΓ⟩ :=
+      apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_contact r hr O hO hcO hext p hp
+    have hnon : ({q : Γ | q.val ∈ closure (connectedComponentIn D p)} : Set Γ).Nonempty :=
+      ⟨⟨q, hqΓ⟩, hqc⟩
+    have heq := hclopen.eq_univ hnon
+    intro z hz
+    have hz' : (⟨z, hz⟩ : Γ) ∈ {q : Γ | q.val ∈ closure (connectedComponentIn D p)} := by
+      rw [heq]; trivial
+    exact hz'
+  apply isPreconnected_of_forall_pair
+  intro x hx y hy
+  obtain ⟨q, hqC, hqO, hqs⟩ :=
+    apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_contact r hr O hO hcO hext x hx
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hO q hqO
+  have hcapx := (apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_cap
+    r hr O x q ε hε hball hqC).1
+  have hcapy := (apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_cap
+    r hr O y q ε hε hball (hall y hy ⟨hqO, hqs⟩)).1
+  have hqcap : q ∈ closure (Metric.ball q ε ∩ Metric.ball (0 : apm_t95j06_E2) r) := by
+    apply Metric.isOpen_ball.inter_closure
+    refine ⟨Metric.mem_ball_self hε, ?_⟩
+    rw [closure_ball (0 : apm_t95j06_E2) hr.ne']
+    exact Metric.sphere_subset_closedBall hqs
+  have hnon : (Metric.ball q ε ∩ Metric.ball (0 : apm_t95j06_E2) r).Nonempty := by
+    by_contra hn
+    rw [Set.not_nonempty_iff_eq_empty.mp hn, closure_empty] at hqcap
+    exact hqcap
+  obtain ⟨t, ht⟩ := hnon
+  have heq : connectedComponentIn D y = connectedComponentIn D x :=
+    (connectedComponentIn_eq (hcapy ht)).trans (connectedComponentIn_eq (hcapx ht)).symm
+  exact ⟨connectedComponentIn D x, connectedComponentIn_subset D x,
+    mem_connectedComponentIn hx, heq ▸ mem_connectedComponentIn hy,
+    isPreconnected_connectedComponentIn⟩
+
+/-- The complement in the circle of an injective closed path is preconnected.
+Lift the path to the real line. Its compact connected range is an interval of
+length strictly less than one period; the complementary open interval maps
+onto the circle complement. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_circle_complement
+    (f : C(unitInterval, Circle)) (hf : Function.Injective f) :
+    IsPreconnected (Set.range f)ᶜ := by
+  let α := Complex.arg (f 0 : ℂ)
+  have h0 : f 0 = Circle.exp α := (Circle.exp_arg _).symm
+  let l := Circle.isCoveringMap_exp.liftPath f α h0
+  have hl : ∀ t, Circle.exp (l t) = f t :=
+    congr_fun (Circle.isCoveringMap_exp.liftPath_lifts f α h0)
+  have hcompact : IsCompact (Set.range l) := isCompact_range l.continuous
+  have hconn : _root_.IsPreconnected (Set.range l) := isPreconnected_range l.continuous
+  obtain ⟨a, ha⟩ := hcompact.exists_isLeast (Set.range_nonempty l)
+  obtain ⟨b, hb⟩ := hcompact.exists_isGreatest (Set.range_nonempty l)
+  have hab : a ≤ b := ha.2 hb.1
+  have hrange : Set.range l = Set.Icc a b :=
+    Set.Subset.antisymm (fun x hx => ⟨ha.2 hx, hb.2 hx⟩)
+      (hconn.Icc_subset ha.1 hb.1)
+  have hinj : Set.InjOn Circle.exp (Set.Icc a b) := by
+    intro x hx y hy hxy
+    rw [← hrange] at hx hy
+    obtain ⟨s, rfl⟩ := hx
+    obtain ⟨t, rfl⟩ := hy
+    rw [hl, hl] at hxy
+    exact congrArg l (hf hxy)
+  have hT : 0 < 2 * Real.pi := by positivity
+  have hshort : b < a + 2 * Real.pi := by
+    by_contra hn
+    have ht : a + 2 * Real.pi ∈ Set.Icc a b := ⟨by linarith, le_of_not_gt hn⟩
+    have he : Circle.exp (a + 2 * Real.pi) = Circle.exp a :=
+      Circle.exp_eq_exp.mpr ⟨1, by simp⟩
+    have := hinj ht ⟨le_rfl, hab⟩ he
+    linarith
+  have hfRange : Set.range f = Circle.exp '' Set.Icc a b := by
+    ext z
+    constructor
+    · rintro ⟨t, rfl⟩
+      exact ⟨l t, hrange ▸ Set.mem_range_self t, hl t⟩
+    · rintro ⟨v, hv, rfl⟩
+      rw [← hrange] at hv
+      obtain ⟨t, rfl⟩ := hv
+      exact ⟨t, (hl t).symm⟩
+  have hcompl : (Set.range f)ᶜ = Circle.exp '' Set.Ioo b (a + 2 * Real.pi) := by
+    ext z
+    constructor
+    · intro hz
+      obtain ⟨m, hm, _⟩ := existsUnique_sub_zsmul_mem_Ico hT (Complex.arg (z : ℂ)) a
+      let t := Complex.arg (z : ℂ) - m • (2 * Real.pi)
+      have ht : t ∈ Set.Ico a (a + 2 * Real.pi) := hm
+      have he : Circle.exp t = z := by
+        calc Circle.exp t = Circle.exp (Complex.arg (z : ℂ)) :=
+               Circle.exp_eq_exp.mpr ⟨-m, by simp [t, zsmul_eq_mul]; ring⟩
+             _ = z := Circle.exp_arg z
+      have hbt : b < t := by
+        by_contra hn
+        apply hz
+        rw [hfRange]
+        exact ⟨t, ⟨ht.1, le_of_not_gt hn⟩, he⟩
+      exact ⟨t, ⟨hbt, ht.2⟩, he⟩
+    · rintro ⟨t, ht, rfl⟩ hz
+      rw [hfRange] at hz
+      obtain ⟨v, hv, he⟩ := hz
+      obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp he.symm
+      rcases ht with ⟨htb, hta⟩
+      rcases hv with ⟨hva, hvb⟩
+      by_cases hm0 : m ≤ 0
+      · have hm0' : (m : ℝ) ≤ 0 := by exact_mod_cast hm0
+        nlinarith [mul_nonpos_of_nonpos_of_nonneg hm0' hT.le]
+      · have hm1 : (1 : ℝ) ≤ m := by exact_mod_cast (show 1 ≤ m by omega)
+        nlinarith [mul_le_mul_of_nonneg_right hm1 hT.le]
+  rw [hcompl]
+  exact isPreconnected_Ioo.image Circle.exp Circle.exp.continuous.continuousOn
+
+/-- A positive-radius Euclidean planar circle is homeomorphic to `Circle`,
+by complex scalar multiplication after the standard linear isometry. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_sphere_homeo
+    (r : ℝ) (hr : 0 < r) : Nonempty (Circle ≃ₜ Metric.sphere (0 : apm_t95j06_E2) r) := by
+  let L : apm_t95j06_E2 ≃ₗᵢ[ℝ] ℂ := Complex.orthonormalBasisOneI.repr.symm
+  have hnr : (r : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hr.ne'
+  let G : Circle → apm_t95j06_E2 := fun z => L.symm ((r : ℂ) * (z : ℂ))
+  have hGc : Continuous G := by fun_prop
+  have hGi : Function.Injective G := by
+    intro z w h
+    exact Subtype.ext (mul_left_cancel₀ hnr (L.symm.injective h))
+  have hrange : Set.range G = Metric.sphere 0 r := by
+    ext x
+    constructor
+    · rintro ⟨z, rfl⟩
+      rw [mem_sphere_zero_iff_norm]
+      change ‖L.symm ((r : ℂ) * (z : ℂ))‖ = r
+      rw [L.symm.norm_map, norm_mul, Complex.norm_real, Real.norm_of_nonneg hr.le,
+        Circle.norm_coe, mul_one]
+    · intro hx
+      have hn : ‖L x / (r : ℂ)‖ = 1 := by
+        rw [norm_div, L.norm_map, Complex.norm_real, Real.norm_of_nonneg hr.le,
+          mem_sphere_zero_iff_norm.mp hx, div_self hr.ne']
+      refine ⟨⟨L x / (r : ℂ), mem_sphere_zero_iff_norm.mpr hn⟩, ?_⟩
+      simp [G, mul_div_cancel₀ _ hnr]
+  exact ⟨(hGc.isClosedEmbedding hGi).isEmbedding.toHomeomorph.trans (Homeomorph.setCongr hrange)⟩
+
+/-- Removing an embedded closed interval from a planar boundary circle leaves
+a preconnected set. Transfer the interval to `Circle` and use its lifted angle
+range, whose complementary interval parametrizes the remainder. -/
+lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_boundary
+    (r : ℝ) (hr : 0 < r) (O : Set apm_t95j06_E2)
+    (harc : Nonempty (Set.Icc (-1 : ℝ) 1 ≃ₜ ↥(Metric.sphere 0 r \ O))) :
+    IsPreconnected (O ∩ Metric.sphere 0 r) := by
+  obtain ⟨e⟩ := harc
+  obtain ⟨H⟩ := apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_sphere_homeo r hr
+  let u : unitInterval → Set.Icc (-1 : ℝ) 1 :=
+    fun t => ⟨2 * t.val - 1, by constructor <;> linarith [t.property.1, t.property.2]⟩
+  have huc : Continuous u := by apply Continuous.subtype_mk; fun_prop
+  have hui : Function.Injective u := by
+    intro s t h
+    have hh := congrArg Subtype.val h
+    apply Subtype.ext
+    dsimp [u] at hh
+    linarith
+  have hus : Function.Surjective u := by
+    intro t
+    refine ⟨⟨(t.val + 1) / 2, ?_, ?_⟩, ?_⟩
+    · linarith [t.property.1]
+    · linarith [t.property.2]
+    · apply Subtype.ext; dsimp [u]; ring
+  let f : C(unitInterval, Circle) :=
+    ⟨fun t => H.symm ⟨(e (u t)).val, (e (u t)).property.1⟩,
+      H.symm.continuous.comp ((continuous_subtype_val.comp (e.continuous.comp huc)).subtype_mk _)⟩
+  have hfi : Function.Injective f := by
+    intro s t h
+    have hh := H.symm.injective h
+    have hhval : (e (u s)).val = (e (u t)).val :=
+      congrArg (fun x : Metric.sphere (0 : apm_t95j06_E2) r => x.val) hh
+    exact hui (e.injective (Subtype.ext hhval))
+  have hfmem : ∀ z : Circle, z ∈ Set.range f ↔ (H z).val ∉ O := by
+    intro z
+    constructor
+    · rintro ⟨t, rfl⟩
+      simpa [f] using (e (u t)).property.2
+    · intro hz
+      obtain ⟨t, ht⟩ := e.surjective ⟨(H z).val, (H z).property, hz⟩
+      obtain ⟨s, hs⟩ := hus t
+      refine ⟨s, ?_⟩
+      change H.symm _ = z
+      apply H.injective
+      simp only [Homeomorph.apply_symm_apply]
+      apply Subtype.ext
+      have htval : (e t).val = (H z).val :=
+        congrArg (fun x : ↥(Metric.sphere (0 : apm_t95j06_E2) r \ O) => x.val) ht
+      simpa only [hs] using htval
+  let G : Circle → apm_t95j06_E2 := fun z => (H z).val
+  have hG : Continuous G := continuous_subtype_val.comp H.continuous
+  have heq : G '' (Set.range f)ᶜ = O ∩ Metric.sphere 0 r := by
+    ext x
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      have hz' : ¬ z ∈ Set.range f := hz
+      rw [hfmem] at hz'
+      exact ⟨not_not.mp hz', (H z).property⟩
+    · rintro ⟨hxO, hxs⟩
+      refine ⟨H.symm ⟨x, hxs⟩, ?_, by simp [G]⟩
+      rw [Set.mem_compl_iff, hfmem]
+      simpa using hxO
+  rw [← heq]
+  exact (apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_circle_complement f hfi).image G hG.continuousOn
+
 /-- Connected-domain clipping by a round disk. If a connected open planar
 set contains the disk exterior and its missing part of the boundary circle
 is exactly an embedded closed interval, its part inside the disk is
@@ -2083,7 +2393,9 @@ lemma apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain
     (hext : (Metric.closedBall 0 r)ᶜ ⊆ O)
     (harc : Nonempty (Set.Icc (-1 : ℝ) 1 ≃ₜ ↥(Metric.sphere 0 r \ O))) :
     IsPreconnected (O ∩ Metric.ball 0 r) := by
-  sorry
+  exact apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_of_boundary
+    r hr O hO hcO hext
+    (apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain_aux_boundary r hr O harc)
 
 /-- Closing a disk crosscut by either of the two boundary semicircles reduces
 the crosscut theorem to Jordan-curve separation (estimated 90--150 lines).
@@ -6129,3 +6441,5 @@ theorem apm_t95j06
 #print axioms apm_t95j06_planar_crosscut_of_jordan_aux_two_arcs
 #print axioms apm_t95j06_planar_crosscut_of_jordan_aux_pasted_curve
 #print axioms apm_t95j06_planar_crosscut_of_jordan
+
+#print axioms apm_t95j06_planar_crosscut_of_jordan_aux_clip_domain
