@@ -434,7 +434,55 @@ theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core_aux_orbitQuoti
       @SecondCountableTopology B tB ∧
       Nonempty (@apm_t95j06_hopf_slices_component_principalBundle_aux_Core
         F x B tB) := by
-  sorry
+  let X := {y : F // y ∈ connectedComponent x}
+  letI : SMul Circle X := ⟨fun g y ↦ A.act (g, y)⟩
+  letI : MulAction Circle X := {
+    one_smul y := A.one_act y
+    mul_smul g h y := (A.mul_act g h y).symm }
+  have hFc : CompactSpace F := isCompact_iff_compactSpace.mp hF.1
+  letI : CompactSpace F := hFc
+  have hXc : CompactSpace X :=
+    isCompact_iff_compactSpace.mp isClosed_connectedComponent.isCompact
+  letI : CompactSpace X := hXc
+  have hXconn : ConnectedSpace X :=
+    isConnected_iff_connectedSpace.mp isConnected_connectedComponent
+  letI : ConnectedSpace X := hXconn
+  letI : ContinuousConstSMul Circle X := {
+    continuous_const_smul g :=
+      A.continuous_act.comp (continuous_const.prodMk continuous_id) }
+  letI : ProperSMul Circle X := {
+    isProperMap_smul_pair :=
+      (A.continuous_act.prodMk continuous_snd).isProperMap }
+  letI orbitSetoid : Setoid X := MulAction.orbitRel Circle X
+  let B := Quotient orbitSetoid
+  let tB : TopologicalSpace B := inferInstance
+  letI : TopologicalSpace B := tB
+  have hBc : CompactSpace B := inferInstance
+  have hBconn : ConnectedSpace B := inferInstance
+  have hB2 : T2Space B := inferInstance
+  have hBsc : SecondCountableTopology B :=
+    ContinuousConstSMul.secondCountableTopology
+  refine ⟨B, tB, hBc, hBconn, hB2, hBsc, ⟨?_⟩⟩
+  let proj : X → B := Quotient.mk'
+  exact
+    { proj := proj
+      act := A.act
+      continuous_proj := continuous_quot_mk
+      quotient_proj := isQuotientMap_quotient_mk'
+      open_proj := isOpenMap_quotient_mk'_mul
+      continuous_act := A.continuous_act
+      one_act := A.one_act
+      mul_act := A.mul_act
+      free := A.free
+      invariant := by
+        intro g y
+        exact Quotient.sound ⟨g, rfl⟩
+      orbit_fiber := by
+        intro y z hyz
+        have hyz' : y ∈ MulAction.orbit Circle z := Quotient.exact hyz
+        exact MulAction.mem_orbit_iff.mp (MulAction.mem_orbit_symm.mp hyz')
+      surjective_proj := Quotient.mk'_surjective
+      scalar_act := A.scalar_act }
 
 theorem apm_t95j06_hopf_slices_component_principalBundle_aux_core
     (F : Set apm_t95j06_S5)
