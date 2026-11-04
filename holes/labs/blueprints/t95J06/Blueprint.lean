@@ -3135,18 +3135,6 @@ lemma apm_t95j06_cutSide_adjoin_puncture
     have hSuniv : S = Set.univ := (show IsClopen S from ⟨hSclosed, hSopen⟩).eq_univ hSne
     exact hpnotP (by have := hSuniv.symm ▸ Set.mem_univ p; exact this.2)
 
-/- **One-sided boundary bumping (estimated 250--450 lines; LIBRARY).**  Each
-nonempty side of a separation of a punctured compact Hausdorff continuum
-contains a point whose removal does not disconnect the ambient continuum.
-
-Proof sketch: assuming every point of `A` is a cut point, choose at each such
-point the cut side avoiding a fixed point of `B`.  The nesting lemma obtained
-from `apm_t95j06_cutSide_adjoin_puncture` orders the resulting compact
-subcontinua strictly by reverse inclusion.  A maximal chain has nonempty
-intersection by compactness.  A point in that intersection either is already
-non-cut, or its avoiding side strictly extends the chain, contradicting
-maximality.  Compactness is essential; an open interval side can have an
-escaping nested family. -/
 /-- A chosen separation of a cut-point complement, labelled so that `p` lies
 on the coside. -/
 structure apm_t95j06_CutSideData
@@ -3216,6 +3204,74 @@ noncomputable def apm_t95j06_cutSideData
     apm_t95j06_CutSideData X r p :=
   Classical.choice (apm_t95j06_CutSideData.exists X r p hcut hpr)
 
+/-- **H3, nesting of cut sides.**  If `r'` lies on the side of `r` away from
+`p`, then the side of `r'` away from `p`, with `r'` adjoined, lies inside the
+side of `r` and misses `r`.  The coside of `r` with `r` adjoined is
+preconnected, contains `p` and misses `r'`, so it lies in the coside of `r'`;
+then the side of `r'` with `r'` adjoined is preconnected, misses `r` and meets
+the side of `r` at `r'`. -/
+lemma apm_t95j06_CutSideData.nested
+    {X : Type*} [TopologicalSpace X]
+    (hX : IsConnected (Set.univ : Set X)) {r r' p : X}
+    (D : apm_t95j06_CutSideData X r p) (D' : apm_t95j06_CutSideData X r' p)
+    (hr' : r' ∈ D.side) :
+    D'.side ∪ {r'} ⊆ D.side ∧ r ∉ D'.side ∪ {r'} := by
+  have hpD : p ∉ D.side := fun h => Set.disjoint_left.1 D.disjoint h D.p_mem_coside
+  have hpD' : p ∉ D'.side := fun h => Set.disjoint_left.1 D'.disjoint h D'.p_mem_coside
+  have hrr' : r' ≠ r := by
+    have : r' ∈ ({r}ᶜ : Set X) := D.cover ▸ Or.inl hr'
+    simpa using this
+  -- the coside of `r`, with `r`, lies in the coside of `r'`
+  have hpre1 : IsPreconnected (D.coside ∪ {r}) :=
+    (apm_t95j06_cutSide_adjoin_puncture X hX r D.coside D.side D.coside_open D.side_open
+      D.disjoint.symm (by rw [Set.union_comm]; exact D.cover)
+      ⟨p, D.p_mem_coside⟩ D.side_nonempty).2
+  have hsub1 : D.coside ∪ {r} ⊆ D'.side ∪ D'.coside := by
+    rw [D'.cover]
+    rintro x (hx | hx)
+    · intro hxr
+      rw [Set.mem_singleton_iff] at hxr
+      subst hxr
+      exact Set.disjoint_left.1 D.disjoint hr' hx
+    · rw [Set.mem_singleton_iff] at hx
+      subst hx
+      simpa using hrr'.symm
+  have hco : D.coside ∪ {r} ⊆ D'.coside := by
+    rcases hpre1.subset_or_subset D'.side_open D'.coside_open D'.disjoint hsub1 with h | h
+    · exact absurd (h (Or.inl D.p_mem_coside)) hpD'
+    · exact h
+  have hrco : r ∈ D'.coside := hco (Or.inr rfl)
+  have hrside : r ∉ D'.side := fun h => Set.disjoint_left.1 D'.disjoint h hrco
+  have hnot : r ∉ D'.side ∪ {r'} := by
+    rintro (h | h)
+    · exact hrside h
+    · exact hrr' (Set.mem_singleton_iff.mp h).symm
+  refine ⟨?_, hnot⟩
+  have hpre2 : IsPreconnected (D'.side ∪ {r'}) :=
+    (apm_t95j06_cutSide_adjoin_puncture X hX r' D'.side D'.coside D'.side_open D'.coside_open
+      D'.disjoint D'.cover D'.side_nonempty ⟨p, D'.p_mem_coside⟩).2
+  have hsub2 : D'.side ∪ {r'} ⊆ D.side ∪ D.coside := by
+    rw [D.cover]
+    intro x hx hxr
+    rw [Set.mem_singleton_iff] at hxr
+    subst hxr
+    exact hnot hx
+  rcases hpre2.subset_or_subset D.side_open D.coside_open D.disjoint hsub2 with h | h
+  · exact h
+  · exact absurd (h (Or.inr rfl)) (fun h' => Set.disjoint_left.1 D.disjoint hr' h')
+
+/-- **One-sided boundary bumping (estimated 250--450 lines; LIBRARY).**  Each
+nonempty side of a separation of a punctured compact Hausdorff continuum
+contains a point whose removal does not disconnect the ambient continuum.
+
+Proof sketch: assuming every point of `A` is a cut point, choose at each such
+point the cut side avoiding a fixed point of `B`.  The nesting lemma obtained
+from `apm_t95j06_cutSide_adjoin_puncture` orders the resulting compact
+subcontinua strictly by reverse inclusion.  A maximal chain has nonempty
+intersection by compactness.  A point in that intersection either is already
+non-cut, or its avoiding side strictly extends the chain, contradicting
+maximality.  Compactness is essential; an open interval side can have an
+escaping nested family. -/
 theorem apm_t95j06_cutSide_contains_nonCutPoint
     (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
     (hX : IsConnected (Set.univ : Set X)) (q : X) (A B : Set X)
@@ -3223,7 +3279,71 @@ theorem apm_t95j06_cutSide_contains_nonCutPoint
     (hcover : A ∪ B = ({q}ᶜ : Set X))
     (hAne : A.Nonempty) (hBne : B.Nonempty) :
     ∃ x ∈ A, IsPreconnected ({x}ᶜ : Set X) := by
-  sorry
+  classical
+  by_contra hnone
+  push_neg at hnone
+  obtain ⟨p, hpB⟩ := hBne
+  have hpA : ∀ r ∈ A, p ≠ r := fun r hr h => Set.disjoint_left.1 hAB hr (h ▸ hpB)
+  let D0 : apm_t95j06_CutSideData X q p :=
+    { side := A, coside := B, side_open := hA, coside_open := hB, side_nonempty := hAne,
+      p_mem_coside := hpB, disjoint := hAB, cover := hcover }
+  let D : ∀ r, r ∈ A → apm_t95j06_CutSideData X r p := fun r hr =>
+    apm_t95j06_cutSideData X r p (hnone r hr) (hpA r hr)
+  let K : ∀ r, r ∈ A → Set X := fun r hr => (D r hr).side ∪ {r}
+  have hKA : ∀ r (hr : r ∈ A), K r hr ⊆ A := fun r hr =>
+    (apm_t95j06_CutSideData.nested hX D0 (D r hr) hr).1
+  have hKclosed : ∀ r (hr : r ∈ A), IsClosed (K r hr) := fun r hr =>
+    (apm_t95j06_cutSide_adjoin_puncture X hX r (D r hr).side (D r hr).coside
+      (D r hr).side_open (D r hr).coside_open (D r hr).disjoint (D r hr).cover
+      (D r hr).side_nonempty ⟨p, (D r hr).p_mem_coside⟩).1
+  -- `K x ⊆ K r` whenever `x ∈ K r`
+  have hKsub : ∀ r (hr : r ∈ A) x (hx : x ∈ A), x ∈ K r hr → K x hx ⊆ K r hr := by
+    intro r hr x hx hxK
+    rcases hxK with hxs | hxr
+    · exact (apm_t95j06_CutSideData.nested hX (D r hr) (D x hx) hxs).1.trans
+        Set.subset_union_left
+    · rw [Set.mem_singleton_iff] at hxr
+      subst hxr
+      exact le_rfl
+  let S : Set (Set X) := {L | ∃ r, ∃ hr : r ∈ A, L = K r hr}
+  obtain ⟨r0, hr0⟩ := hAne
+  obtain ⟨m, -, hm⟩ := zorn_superset_nonempty S (by
+    intro c hcS hchain hcne
+    haveI : Nonempty c := hcne.to_subtype
+    have hdir : Directed (· ⊇ ·) (fun L : c => (L : Set X)) := by
+      intro L₁ L₂
+      rcases eq_or_ne (L₁ : Set X) L₂ with h | h
+      · exact ⟨L₁, le_rfl, show (L₁ : Set X) ⊆ L₂ from h ▸ subset_rfl⟩
+      · rcases hchain L₁.2 L₂.2 h with h12 | h21
+        · exact ⟨L₁, le_rfl, h12⟩
+        · exact ⟨L₂, h21, le_rfl⟩
+    have hne : ((⋂ L : c, (L : Set X))).Nonempty := by
+      apply IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed _ hdir
+      · intro L
+        obtain ⟨r, hr, hL⟩ := hcS L.2
+        exact ⟨r, hL ▸ Or.inr rfl⟩
+      · intro L
+        obtain ⟨r, hr, hL⟩ := hcS L.2
+        exact hL ▸ (hKclosed r hr).isCompact
+      · intro L
+        obtain ⟨r, hr, hL⟩ := hcS L.2
+        exact hL ▸ hKclosed r hr
+    obtain ⟨x, hx⟩ := hne
+    rw [Set.mem_iInter] at hx
+    obtain ⟨L0, hL0⟩ := hcne
+    obtain ⟨r, hr, hL⟩ := hcS hL0
+    have hxA : x ∈ A := hKA r hr (hL ▸ hx ⟨L0, hL0⟩)
+    refine ⟨K x hxA, ⟨x, hxA, rfl⟩, ?_⟩
+    intro L hL'
+    obtain ⟨s, hs, rfl⟩ := hcS hL'
+    exact hKsub s hs x hxA (hx ⟨_, hL'⟩)) (K r0 hr0) ⟨r0, hr0, rfl⟩
+  obtain ⟨r, hr, rfl⟩ := hm.prop
+  obtain ⟨y, hy⟩ := (D r hr).side_nonempty
+  have hyA : y ∈ A := hKA r hr (Or.inl hy)
+  have hnest := apm_t95j06_CutSideData.nested hX (D r hr) (D y hyA) hy
+  have hle : K y hyA ⊆ K r hr := hnest.1.trans Set.subset_union_left
+  have heq : K r hr ⊆ K y hyA := hm.2 ⟨y, hyA, rfl⟩ hle
+  exact hnest.2 (heq (Or.inr rfl))
 
 /-- Every nondegenerate compact connected Hausdorff continuum has two
 distinct non-cut points.  This is the one classical continuum-theory input
