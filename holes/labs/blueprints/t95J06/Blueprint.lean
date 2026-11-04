@@ -3093,6 +3093,199 @@ lemma apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_arc_intersection
     · exact ⟨i0, by simpa [i0, hβ0]⟩
     · exact ⟨i0, by simpa [i0, hα0]⟩
 
+/-- Loop erasure in metrizable Hausdorff spaces: a path between distinct
+points contains an injectively parametrized arc with the same endpoints. -/
+def apm_t95j06_ArcFromPath : Prop :=
+  ∀ (X : Type) [TopologicalSpace X] [T2Space X]
+    [TopologicalSpace.MetrizableSpace X] (x y : X), x ≠ y →
+    ∀ p : Path x y, ∃ a : C(Set.Icc (0 : ℝ) 1, X),
+      Function.Injective a ∧ a ⟨0, by norm_num⟩ = x ∧
+      a ⟨1, by norm_num⟩ = y ∧ Set.range a ⊆ Set.range p
+
+/-- Every open base neighborhood inside a planar product chart contains a
+compact path-connected neighborhood. Project a sufficiently small closed disk
+inside the part of the chart lying over the prescribed neighborhood. -/
+lemma apm_t95j06_Q_aux_pathConnected_neighborhood
+    {B : Type*} [TopologicalSpace B] {W : Set B} (hW : IsOpen W)
+    {V : Set apm_t95j06_E2} (hV : IsOpen V)
+    (e : (W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V)
+    (b : B) {U : Set B} (hU : IsOpen U) (hUW : U ⊆ W) (hb : b ∈ U) :
+    ∃ P : Set B, P ⊆ U ∧ IsCompact P ∧ IsPathConnected P ∧ b ∈ interior P := by
+  let z : W × Set.Ioo (-1 : ℝ) 1 := ⟨⟨b, hUW hb⟩, ⟨0, by norm_num⟩⟩
+  let p : V := e z
+  let g : V → B := fun v ↦ (e.symm v).1.1
+  have hg : Continuous g :=
+    continuous_subtype_val.comp (continuous_fst.comp e.symm.continuous)
+  have hgopen : IsOpenMap g :=
+    hW.isOpenMap_subtype_val.comp (isOpenMap_fst.comp e.symm.isOpenMap)
+  let S : Set apm_t95j06_E2 := Subtype.val '' (g ⁻¹' U)
+  have hS : IsOpen S := hV.isOpenMap_subtype_val _ (hU.preimage hg)
+  have hp : g p = b := by simp [g, p, z]
+  have hpS : p.val ∈ S := ⟨p, by simpa [hp], rfl⟩
+  obtain ⟨ε, hε, hεS⟩ := Metric.isOpen_iff.mp hS p.val hpS
+  let r := ε / 2
+  have hr : 0 < r := half_pos hε
+  have hDS : Metric.closedBall p.val r ⊆ S := by
+    intro u hu
+    apply hεS
+    rw [Metric.mem_ball]
+    exact lt_of_le_of_lt (Metric.mem_closedBall.mp hu) (by dsimp [r]; linarith)
+  have hD : Metric.closedBall p.val r ⊆ V := by
+    intro u hu
+    obtain ⟨v, _, hv⟩ := hDS hu
+    exact hv ▸ v.property
+  let D := Metric.closedBall p.val r
+  letI : CompactSpace D := (isCompact_iff_compactSpace).mp (isCompact_closedBall p.val r)
+  letI : PathConnectedSpace D :=
+    (isPathConnected_iff_pathConnectedSpace).mp ((convex_closedBall p.val r).isPathConnected ⟨p.val, Metric.mem_closedBall_self hr.le⟩)
+  let f : D → B := fun u ↦ g ⟨u.val, hD u.property⟩
+  have hf : Continuous f := hg.comp (continuous_subtype_val.subtype_mk _)
+  refine ⟨Set.range f, ?_, isCompact_range hf, isPathConnected_range hf, ?_⟩
+  · rintro _ ⟨u, rfl⟩
+    obtain ⟨v, hv, heq⟩ := hDS u.property
+    have hv' : v = ⟨u.val, hD u.property⟩ := Subtype.ext heq
+    simpa only [hv'] using hv
+  · let O : Set V := {v | v.val ∈ Metric.ball p.val r}
+    have hO : IsOpen O := Metric.isOpen_ball.preimage continuous_subtype_val
+    have hOP : g '' O ⊆ Set.range f := by
+      rintro _ ⟨v, hv, rfl⟩
+      exact ⟨⟨v.val, Metric.ball_subset_closedBall hv⟩, rfl⟩
+    apply interior_maximal hOP (hgopen O hO)
+    exact ⟨p, Metric.mem_ball_self hr, hp⟩
+
+/-- Under loop erasure, any two distinct points of a path-connected subset
+are endpoints of an arc contained in that subset. -/
+lemma apm_t95j06_Q_aux_arc_in_subset
+    (harc : apm_t95j06_ArcFromPath)
+    {B : Type} [TopologicalSpace B] [T2Space B]
+    [TopologicalSpace.MetrizableSpace B]
+    {P : Set B} (hP : IsPathConnected P) {b q : B}
+    (hb : b ∈ P) (hq : q ∈ P) (hbq : b ≠ q) :
+    ∃ a : C(Set.Icc (0 : ℝ) 1, B), Function.Injective a ∧
+      a ⟨0, by norm_num⟩ = b ∧ a ⟨1, by norm_num⟩ = q ∧ Set.range a ⊆ P := by
+  letI : PathConnectedSpace P := isPathConnected_iff_pathConnectedSpace.mp hP
+  obtain ⟨a, hi, h0, h1, _⟩ := harc P ⟨b, hb⟩ ⟨q, hq⟩
+    (fun h => hbq (congrArg Subtype.val h)) (PathConnectedSpace.somePath _ _)
+  refine ⟨⟨fun t => (a t).val, continuous_subtype_val.comp a.continuous⟩, ?_, ?_, ?_, ?_⟩
+  · intro s t h
+    exact hi (Subtype.ext h)
+  · exact congrArg Subtype.val h0
+  · exact congrArg Subtype.val h1
+  · rintro _ ⟨t, rfl⟩
+    exact (a t).property
+
+/-- An arc starting at one endpoint of another arc, avoiding its other
+endpoint and ending outside it, cannot enter its open interior. The punctured
+second arc is preconnected, while the first arc's interior and complement
+form a disjoint open cover of it. -/
+lemma apm_t95j06_Q_aux_arc_intersection
+    {B : Type*} [TopologicalSpace B] [T2Space B]
+    (a d : C(Set.Icc (0 : ℝ) 1, B)) (ha : Function.Injective a)
+    (hd : Function.Injective d)
+    (hopen : IsOpen (a '' {t : Set.Icc (0 : ℝ) 1 | 0 < t.val ∧ t.val < 1}))
+    (h0 : a ⟨0, by norm_num⟩ = d ⟨0, by norm_num⟩)
+    (hq : a ⟨1, by norm_num⟩ ∉ Set.range d)
+    (hr : d ⟨1, by norm_num⟩ ∉ Set.range a) :
+    Set.range a ∩ Set.range d = {a ⟨0, by norm_num⟩} := by
+  let A := a '' {t : Set.Icc (0 : ℝ) 1 | 0 < t.val ∧ t.val < 1}
+  let S := d '' Set.Ioc (0 : Set.Icc (0 : ℝ) 1) 1
+  have hclosed : IsClosed (Set.range a) := (isCompact_range a.continuous).isClosed
+  have hS : _root_.IsPreconnected S :=
+    isPreconnected_Ioc.image d d.continuous.continuousOn
+  have hcover : S ⊆ A ∪ (Set.range a)ᶜ := by
+    rintro x ⟨t, ht, rfl⟩
+    by_cases hx : d t ∈ Set.range a
+    · obtain ⟨u, hu⟩ := hx
+      apply Or.inl
+      refine ⟨u, ⟨?_, ?_⟩, hu⟩
+      · have hne : u.val ≠ 0 := by
+          intro he
+          have he' : u = ⟨0, by norm_num⟩ := Subtype.ext he
+          have ht' : t = 0 := hd (by simpa only [he', h0] using hu.symm)
+          exact (ne_of_gt ht.1) ht'
+        exact lt_of_le_of_ne u.property.1 (Ne.symm hne)
+      · have hne : u.val ≠ 1 := by
+          intro he
+          have he' : u = ⟨1, by norm_num⟩ := Subtype.ext he
+          exact hq ⟨t, by simpa only [he'] using hu.symm⟩
+        exact lt_of_le_of_ne u.property.2 hne
+    · exact Or.inr hx
+  have hdis : Disjoint A (Set.range a)ᶜ := by
+    apply Set.disjoint_left.mpr
+    rintro x ⟨t, _, rfl⟩ hx
+    exact hx ⟨t, rfl⟩
+  have hright : (S ∩ (Set.range a)ᶜ).Nonempty := by
+    refine ⟨d ⟨1, by norm_num⟩, ?_, hr⟩
+    exact ⟨1, by constructor <;> norm_num, rfl⟩
+  have hout : S ⊆ (Set.range a)ᶜ :=
+    hS.subset_right_of_subset_union hopen hclosed.isOpen_compl hdis hcover hright
+  apply Set.Subset.antisymm
+  · rintro x ⟨hx, t, rfl⟩
+    by_cases ht : t.val = 0
+    · have ht' : t = ⟨0, by norm_num⟩ := Subtype.ext ht
+      simpa only [Set.mem_singleton_iff, ht'] using h0.symm
+    · exact False.elim (hout ⟨t, ⟨(show (0 : ℝ) < t.val from lt_of_le_of_ne t.property.1 (Ne.symm ht)), t.property.2⟩,
+        rfl⟩ hx)
+  · rintro x rfl
+    exact ⟨⟨0, rfl⟩, ⟨0, h0.symm⟩⟩
+
+/-- Loop erasure and planar product charts give two arcs leaving a base
+point in different directions, with no other point in common. -/
+lemma apm_t95j06_Q_aux_two_arcs
+    (harc : apm_t95j06_ArcFromPath)
+    {B : Type} [TopologicalSpace B] [T2Space B]
+    [TopologicalSpace.MetrizableSpace B]
+    {W : Set B} (hW : IsOpen W) {V : Set apm_t95j06_E2} (hV : IsOpen V)
+    (e : (W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V) (b : B) (hb : b ∈ W) :
+    ∃ q r : B, q ≠ b ∧ r ≠ b ∧ q ≠ r ∧
+      ∃ a d : C(Set.Icc (0 : ℝ) 1, B),
+        Function.Injective a ∧ Function.Injective d ∧
+        a ⟨0, by norm_num⟩ = b ∧ a ⟨1, by norm_num⟩ = q ∧
+        d ⟨0, by norm_num⟩ = b ∧ d ⟨1, by norm_num⟩ = r ∧
+        Set.range a ⊆ W ∧ Set.range d ⊆ W ∧
+        Set.range a ∩ Set.range d = {b} := by
+  obtain ⟨P, hPW, _, hP, hbP⟩ :=
+    apm_t95j06_Q_aux_pathConnected_neighborhood hW hV e b hW Set.Subset.rfl hb
+  have hq : ∃ q ∈ P, q ≠ b := by
+    by_contra! hn
+    have he : interior P = {b} := by
+      apply Set.Subset.antisymm
+      · intro x hx
+        exact hn x (interior_subset hx)
+      · simpa only [Set.singleton_subset_iff] using hbP
+    exact apm_t95j06_Q_aux_no_isolated hV e b hb (he ▸ isOpen_interior)
+  obtain ⟨q, hqP, hqb⟩ := hq
+  obtain ⟨a, hai, ha0, ha1, haP⟩ :=
+    apm_t95j06_Q_aux_arc_in_subset harc hP (interior_subset hbP) hqP hqb.symm
+  have haW := haP.trans hPW
+  obtain ⟨P', hP'U, _, hP', hbP'⟩ :=
+    apm_t95j06_Q_aux_pathConnected_neighborhood hW hV e b (U := W \ {q})
+      (hW.inter isClosed_singleton.isOpen_compl) Set.diff_subset ⟨hb, hqb.symm⟩
+  have hr : ∃ r ∈ P', r ∉ Set.range a := by
+    by_contra! hn
+    have hbA : b ∈ interior (Set.range a) := interior_mono hn hbP'
+    exact (apm_t95j06_Q_aux_arc_endpoints_not_interior hV e a hai haW).1
+      (ha0.symm ▸ hbA)
+  obtain ⟨r, hrP, hrA⟩ := hr
+  have hrb : r ≠ b := by
+    intro h
+    exact hrA ⟨0, by simpa only [h] using ha0⟩
+  have hqr : q ≠ r := by
+    intro h
+    exact (hP'U hrP).2 (by simpa only [Set.mem_singleton_iff] using h.symm)
+  obtain ⟨d, hdi, hd0, hd1, hdP⟩ :=
+    apm_t95j06_Q_aux_arc_in_subset harc hP' (interior_subset hbP') hrP hrb.symm
+  have hdW : Set.range d ⊆ W := hdP.trans (hP'U.trans Set.diff_subset)
+  have hqD : a ⟨1, by norm_num⟩ ∉ Set.range d := by
+    rw [ha1]
+    intro h
+    exact (hP'U (hdP h)).2 rfl
+  have hrD : d ⟨1, by norm_num⟩ ∉ Set.range a := by simpa only [hd1] using hrA
+  refine ⟨q, r, hqb, hrb, hqr, a, d, hai, hdi, ha0, ha1, hd0, hd1, haW, hdW, ?_⟩
+  simpa only [ha0] using apm_t95j06_Q_aux_arc_intersection a d hai hdi
+    (apm_t95j06_Q_aux_arc_interior_open hW hV e a hai haW)
+    (ha0.trans hd0.symm) hqD hrD
+
 /-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
 Assuming the pure disk-crosscut theorem, one explicit product chart around
 `b × 0` yields the required compact continuum in the base.  Choose a small
@@ -7969,3 +8162,11 @@ theorem apm_t95j06
 #print axioms apm_t95j06_Q_aux_no_isolated
 #print axioms apm_t95j06_Q_aux_arc_interior_open
 #print axioms apm_t95j06_Q_aux_arc_endpoints_not_interior
+
+#print axioms apm_t95j06_Q_aux_pathConnected_neighborhood
+
+#print axioms apm_t95j06_Q_aux_arc_in_subset
+
+#print axioms apm_t95j06_Q_aux_arc_intersection
+
+#print axioms apm_t95j06_Q_aux_two_arcs
