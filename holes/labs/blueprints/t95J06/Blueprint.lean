@@ -3205,7 +3205,69 @@ theorem apm_t95j06_principalCircleBundle_interval_section
     ∃ σ : {t : ℝ // t ∈ Set.Icc (0 : ℝ) 1} → X,
       Continuous σ ∧ ∀ t,
         P.proj (σ t) = e.symm (Circle.exp (2 * Real.pi * t.1)) := by
-  sorry
+  classical
+  let pp : ℝ → B := fun t => e.symm (Circle.exp (2 * Real.pi * t))
+  have hppc : Continuous pp :=
+    e.symm.continuous.comp (Circle.exp.continuous.comp (continuous_const.mul continuous_id))
+  let Good : ℝ → Prop := fun r => ∃ σ : {t : ℝ // t ∈ Set.Icc (0 : ℝ) r} → X,
+      Continuous σ ∧ ∀ t, P.proj (σ t) = pp t.1
+  have hlocal : ∀ m : ℝ, ∃ δ > 0, ∃ τ : Metric.ball m δ → X, Continuous τ ∧
+      ∀ t, P.proj (τ t) = pp t.1 := by
+    intro m
+    obtain ⟨U, hU, hmU, s, hs, hsp⟩ := hloc (pp m)
+    obtain ⟨δ, hδ, hball⟩ := Metric.isOpen_iff.mp (hU.preimage hppc) m hmU
+    refine ⟨δ, hδ, fun t => s ⟨pp t.1, hball t.2⟩, ?_, fun t => hsp _⟩
+    exact hs.comp (Continuous.subtype_mk (hppc.comp continuous_subtype_val) _)
+  let S : Set ℝ := {r | r ∈ Set.Icc (0 : ℝ) 1 ∧ Good r}
+  have h0 : (0 : ℝ) ∈ S := by
+    refine ⟨⟨le_rfl, zero_le_one⟩, fun _ => Classical.choose (P.surjective_proj (pp 0)),
+      continuous_const, fun t => ?_⟩
+    have ht : t.1 = 0 := le_antisymm t.2.2 t.2.1
+    rw [Classical.choose_spec (P.surjective_proj (pp 0)), ht]
+  have hbdd : BddAbove S := ⟨1, fun r hr => hr.1.2⟩
+  set m := sSup S with hm
+  have hm1 : m ≤ 1 := csSup_le ⟨0, h0⟩ fun r hr => hr.1.2
+  have hm0 : 0 ≤ m := le_csSup hbdd h0
+  obtain ⟨δ, hδ, τ, hτc, hτp⟩ := hlocal m
+  obtain ⟨r, hrS, hrm⟩ := exists_lt_of_lt_csSup ⟨0, h0⟩ (show m - δ < m by linarith)
+  have hr_le : r ≤ m := le_csSup hbdd hrS
+  obtain ⟨⟨hr0, hr1⟩, σ, hσc, hσp⟩ := hrS
+  set r' := min (m + δ / 2) 1 with hr'
+  have hrr' : r ≤ r' := le_min (by linarith) hr1
+  have hball : ∀ t : {x : ℝ // x ∈ Set.Icc r r'}, t.1 ∈ Metric.ball m δ := by
+    intro t
+    rw [Metric.mem_ball, Real.dist_eq, abs_sub_lt_iff]
+    have h1 := t.2.1; have h2 := t.2.2; have h3 := min_le_left (m + δ / 2) 1
+    constructor <;> linarith
+  let τ' : {x : ℝ // x ∈ Set.Icc r r'} → X := fun t => τ ⟨t.1, hball t⟩
+  have hτ'c : Continuous τ' :=
+    hτc.comp (Continuous.subtype_mk continuous_subtype_val _)
+  obtain ⟨g, hg⟩ := P.orbit_fiber (τ' ⟨r, le_rfl, hrr'⟩) (σ ⟨r, hr0, le_rfl⟩)
+    (by rw [hτp, hσp])
+  let τ'' : {x : ℝ // x ∈ Set.Icc r r'} → X := fun t => P.act (g, τ' t)
+  have hτ''c : Continuous τ'' :=
+    P.continuous_act.comp (continuous_const.prodMk hτ'c)
+  obtain ⟨h, hhc, hh1, hh2⟩ :=
+    apm_t95j06_paste_adjacent_closed_intervals hr0 hrr' σ τ'' hσc hτ''c hg.symm
+  have hgood : Good r' := by
+    refine ⟨h, hhc, fun t => ?_⟩
+    rcases le_total t.1 r with htr | htr
+    · rw [hh1 t htr, hσp]
+    · rw [hh2 t htr]
+      change P.proj (P.act (g, τ' _)) = _
+      rw [P.invariant, hτp]
+  have hr'1 : r' = 1 := by
+    by_contra hne
+    have hlt : r' < 1 := lt_of_le_of_ne (min_le_right _ _) hne
+    have heq : r' = m + δ / 2 := by
+      rcases min_choice (m + δ / 2) 1 with h' | h'
+      · exact h'
+      · exact absurd h' (ne_of_lt hlt)
+    have hmem : r' ∈ S := ⟨⟨by linarith, hlt.le⟩, hgood⟩
+    have := le_csSup hbdd hmem
+    linarith
+  rw [hr'1] at hgood
+  exact hgood
 
 /-- A lifted section along one traversal can be corrected to close up.
 
