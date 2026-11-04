@@ -172,7 +172,24 @@ theorem identity_productMap_localDegree
     (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
     IsLocalDegreeTwo U (productMap identityScalar)
       (identity_productMap_zero_iff U) 1 := by
-  sorry
+  have hres : restrictedMap U (productMap identityScalar) = neighborhoodInclusion U := by
+    ext p i
+    fin_cases i <;> rfl
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso 0 U (0 : E2) hU h0
+  let ι := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U 0)) (0+2)
+  have hι : ∀ b, ι ((asIso ι).inv b) = b := fun b =>
+    ConcreteCategory.congr_hom (asIso ι).inv_hom_id b
+  refine ⟨(asIso ι).inv
+    (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (0 : E2)), hι _, ?_⟩
+  rw [one_smul]
+  have hcongr : ∀ (F G : C(U, E2)) (hFG : F = G) hF hG,
+      relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) F hF =
+        relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) G hG := by
+    intro F G hFG _ _; subst hFG; rfl
+  rw [hcongr _ _ hres _ (neighborhoodInclusion_mapsTo U 0)]
+  exact hι _
 
 /-- Reflection in the first coordinate acts by `-1` on two-dimensional local
 homology.  This follows by transporting `all_reflections_negative` through
