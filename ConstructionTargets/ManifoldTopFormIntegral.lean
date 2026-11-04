@@ -136,6 +136,31 @@ def chartIntegrand (o : Orientation (n := n) M)
     (fun y ↦ chartSign o (chartAt (E n) (c.center i)) y *
       coefficient w (chartAt (E n) (c.center i)) y)
 
+/-- In the orientation represented by a form itself, its signed coordinate
+coefficient is the absolute value of that coefficient on every chart piece. -/
+theorem chartIntegrand_self_eq_indicator_abs (o : Orientation (n := n) M)
+    (c : ChartCover (n := n) M) (i : Fin c.count) :
+    chartIntegrand o o.form c i =
+      ((chartAt (E n) (c.center i)) '' c.piece i).indicator
+        (fun y ↦ |coefficient o.form (chartAt (E n) (c.center i)) y|) := by
+  funext y
+  simp only [chartIntegrand]
+  by_cases hy : y ∈ (chartAt (E n) (c.center i)) '' c.piece i
+  · rw [indicator_of_mem hy, indicator_of_mem hy]
+    rcases hy with ⟨z, hz, rfl⟩
+    have hzsource : z ∈ (chartAt (E n) (c.center i)).source :=
+      disjointed_subset c.domain i hz
+    have hne := orientation_coefficient_ne_zero o (c.center i)
+      ((chartAt (E n) (c.center i)).map_source hzsource)
+    by_cases hp : 0 < coefficient o.form (chartAt (E n) (c.center i))
+        ((chartAt (E n) (c.center i)) z)
+    · simp [chartSign, hp, abs_of_pos hp]
+    · have hn : coefficient o.form (chartAt (E n) (c.center i))
+          ((chartAt (E n) (c.center i)) z) < 0 :=
+          lt_of_le_of_ne (le_of_not_gt hp) hne
+      simp [chartSign, hp, abs_of_neg hn]
+  · rw [indicator_of_notMem hy, indicator_of_notMem hy]
+
 /-- Chartwise Lebesgue integrability for the fixed finite cover used by the
 definition.  On a compact manifold this is the only analytic side condition. -/
 def IntegrableTopForm [CompactSpace M] (o : Orientation (n := n) M)
@@ -251,6 +276,41 @@ def angleForm : ManifoldFormTargets.Form (E 1) UnitCircle 1 := fun x ↦
         ((x : E 2) 0) • (EuclideanSpace.proj (1 : Fin 2) : E 2 →L[ℝ] ℝ))
       (mfderiv 𝓘(ℝ, E 1) 𝓘(ℝ, E 2) (Subtype.val : UnitCircle → E 2) x))
 
+/-- Smoothness of the ambient angle covector restricted to the sphere.  This
+is the differential-geometric part of constructing the orientation. -/
+private theorem angleForm_isSmooth : ManifoldFormTargets.IsSmooth angleForm := by
+  sorry
+
+/-- The angle covector does not vanish on the tangent line of the unit circle. -/
+private theorem angleForm_nowhere_zero (x : UnitCircle) : angleForm x ≠ 0 := by
+  sorry
+
+private def angleOrientation : Orientation (n := 1) UnitCircle where
+  form := angleForm
+  smooth_form := angleForm_isSmooth
+  nowhere_zero := angleForm_nowhere_zero
+
+private abbrev circleCover : ChartCover (n := 1) UnitCircle := chosenCover
+
+/-- The absolute coordinate density of `dθ` is integrable on every piece of
+the fixed finite chart cover. -/
+private theorem angleForm_abs_integrable : ∀ i,
+    Integrable
+      (((chartAt (E 1) (circleCover.center i)) '' circleCover.piece i).indicator
+        (fun y ↦ |coefficient angleForm
+          (chartAt (E 1) (circleCover.center i)) y|)) volume := by
+  sorry
+
+/-- The geometric core: the absolute `dθ` densities on the disjoint chart
+pieces have total mass equal to the circumference of the unit circle. -/
+private theorem angleForm_abs_integral_sum :
+    (∑ i, ∫ y,
+      ((chartAt (E 1) (circleCover.center i)) '' circleCover.piece i).indicator
+        (fun y ↦ |coefficient angleForm
+          (chartAt (E 1) (circleCover.center i)) y|) y ∂volume) =
+      2 * Real.pi := by
+  sorry
+
 /-- Sanity check pinning the normalization (Lebesgue measure, chart signs):
 with the counterclockwise orientation represented by `dθ` itself, the angle
 form integrates to `2π`, the length of the unit circle.  A wrong measure
@@ -258,6 +318,28 @@ normalization, a sign error, or a constant definition fails this. -/
 theorem unitCircle_angleForm_integral :
     ∃ o : Orientation (n := 1) UnitCircle, o.form = angleForm ∧
       IntegrableTopForm o angleForm ∧ integral o angleForm = 2 * Real.pi := by
-  sorry
+  let o := angleOrientation
+  have hi : IntegrableTopForm o angleForm := by
+    intro i
+    rw [show chartIntegrand o angleForm chosenCover i =
+      ((chartAt (E 1) (chosenCover.center i)) '' chosenCover.piece i).indicator
+        (fun y ↦ |coefficient angleForm
+          (chartAt (E 1) (chosenCover.center i)) y|) by
+      simpa [o, angleOrientation] using
+        chartIntegrand_self_eq_indicator_abs o chosenCover i]
+    exact angleForm_abs_integrable i
+  refine ⟨o, rfl, hi, ?_⟩
+  rw [integral, if_pos hi]
+  simp only [coverIntegral]
+  rw [show (∑ i, ∫ y, chartIntegrand o angleForm chosenCover i y ∂volume) =
+      ∑ i, ∫ y,
+        ((chartAt (E 1) (chosenCover.center i)) '' chosenCover.piece i).indicator
+          (fun y ↦ |coefficient angleForm
+            (chartAt (E 1) (chosenCover.center i)) y|) y ∂volume by
+    apply Finset.sum_congr rfl
+    intro i _
+    congr 1
+    exact chartIntegrand_self_eq_indicator_abs o chosenCover i]
+  exact angleForm_abs_integral_sum
 
 end ConstructionTargets.ManifoldTopFormIntegral
