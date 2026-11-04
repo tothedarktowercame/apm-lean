@@ -102,7 +102,8 @@ theorem apm_t00J05_transport_cover
     {f : C(Circle, Torus)} (H : Cell f ≃ₜ Cell standardCurve)
     (hcover : ∃ p : C(CappedCylinder, Cell standardCurve), IsCoveringMap p) :
     ∃ p : C(CappedCylinder, Cell f), IsCoveringMap p := by
-  sorry
+  obtain ⟨p, hp⟩ := hcover
+  exact ⟨(H.symm : C(Cell standardCurve, Cell f)).comp p, hp.homeomorph_comp H.symm⟩
 
 /-- Transport the two non-null maps across a homeomorphism.  Null-homotopies
 would compose with `H` or `H.symm` to contradict the supplied ones. -/
@@ -120,7 +121,17 @@ theorem apm_t00J05_transport_nonnull_maps
       ∃ q : C(Cell f, Sphere2),
         ¬ ∃ s : Sphere2,
           ContinuousMap.Homotopic q (ContinuousMap.const (Cell f) s) := by
-  sorry
+  obtain ⟨i, hi, q, hq⟩ := hmodel
+  refine ⟨(H.symm : C(Cell standardCurve, Cell f)).comp i, ?_,
+    q.comp (H : C(Cell f, Cell standardCurve)), ?_⟩
+  · rintro ⟨x, hx⟩
+    refine hi ⟨H x, ?_⟩
+    have h := ContinuousMap.Homotopic.comp (ContinuousMap.Homotopic.refl (H : C(Cell f, Cell standardCurve))) hx
+    convert h using 1 <;> ext <;> simp
+  · rintro ⟨s, hs⟩
+    refine hq ⟨s, ?_⟩
+    have h := ContinuousMap.Homotopic.comp hs (ContinuousMap.Homotopic.refl (H.symm : C(Cell standardCurve, Cell f)))
+    convert h using 1 <;> ext <;> simp
 
 end APMT00J05
 
