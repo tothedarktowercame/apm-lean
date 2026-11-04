@@ -827,6 +827,89 @@ theorem t00A04_hatcherConclusion_finite_union_convex_euclidean
   exact t00A04_hatcherConclusion_finite_union_convex_euclidean_aux
     d hconv hunion s id (by simpa using hs)
 
+/-- Radial comparison of the punctured ambient space with the complement
+of a positive-radius closed ball makes restriction to its centre injective. -/
+theorem t00A04_hatcherConclusion_compact_euclidean_aux_ball_center_injective
+    (d : ℕ) (x : EuclideanSpace ℝ (Fin d)) (r : ℝ) (hr : 0 < r) :
+    Function.Injective (t00A04_modTwo_pointRestriction _ (Metric.closedBall x r)
+      x (Metric.mem_closedBall_self hr.le) d) :=
+  (t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective d
+    (Metric.closedBall x r) (isCompact_closedBall x r) (convex_closedBall x r) x
+    (Metric.mem_closedBall_self hr.le) d).1
+
+/-- A zero point restriction persists on a closed ball about an interior point.
+This is the local radial/excision calculation for a closed ball. -/
+theorem t00A04_hatcherConclusion_compact_euclidean_aux_zero_ball
+    (d : ℕ) (K : Set (EuclideanSpace ℝ (Fin d)))
+    (c : t00A04_ModTwoLocalHomology _ K d)
+    (x : EuclideanSpace ℝ (Fin d)) (hx : x ∈ interior K)
+    (hz : t00A04_modTwo_pointRestriction _ K x (interior_subset hx) d c = 0) :
+    ∃ (r : ℝ) (_ : 0 < r) (hsub : Metric.closedBall x r ⊆ K),
+      ∀ (y : EuclideanSpace ℝ (Fin d)) (hy : y ∈ Metric.closedBall x r),
+        t00A04_modTwo_pointRestriction _ K y (hsub hy) d c = 0 := by
+  obtain ⟨ε, hε, hεK⟩ := Metric.isOpen_iff.mp isOpen_interior x hx
+  have hr : 0 < ε / 2 := by linarith
+  have hsub : Metric.closedBall x (ε / 2) ⊆ K :=
+    (Metric.closedBall_subset_ball (by linarith : ε / 2 < ε)).trans
+      (hεK.trans interior_subset)
+  let b := t00A04_modTwo_restrict _ (Metric.closedBall x (ε / 2)) K hsub d c
+  have hb : b = 0 := by
+    apply t00A04_hatcherConclusion_compact_euclidean_aux_ball_center_injective
+      d x (ε / 2) hr
+    rw [map_zero]
+    dsimp [b]
+    rw [t00A04_modTwo_pointRestriction_restrict]
+    exact hz
+  refine ⟨ε / 2, hr, hsub, ?_⟩
+  intro y hy
+  rw [← t00A04_modTwo_pointRestriction_restrict _ (Metric.closedBall x (ε / 2))
+    K hsub y hy]
+  change t00A04_modTwo_pointRestriction _ _ y hy d b = 0
+  rw [hb]
+  exact map_zero _
+
+/-- A finite union of zero balls covers the compact support. -/
+theorem t00A04_hatcherConclusion_compact_euclidean_aux_zero_cover
+    (d : ℕ) (A K : Set (EuclideanSpace ℝ (Fin d))) (hA : IsCompact A)
+    (hAK : A ⊆ interior K) (c : t00A04_ModTwoLocalHomology _ K d)
+    (hz : ∀ (x : EuclideanSpace ℝ (Fin d)) (hx : x ∈ A),
+      t00A04_modTwo_pointRestriction _ K x (interior_subset (hAK hx)) d c = 0) :
+    ∃ (s : Finset (Set (EuclideanSpace ℝ (Fin d))))
+      (_ : ∀ B ∈ s, IsCompact B ∧ Convex ℝ B)
+      (_ : A ⊆ ⋃ B ∈ s, B) (hsub : (⋃ B ∈ s, B) ⊆ K),
+      ∀ (x : EuclideanSpace ℝ (Fin d)) (hx : x ∈ ⋃ B ∈ s, B),
+        t00A04_modTwo_pointRestriction _ K x (hsub hx) d c = 0 := by
+  classical
+  have hb := fun x : A ↦
+    t00A04_hatcherConclusion_compact_euclidean_aux_zero_ball d K c x
+      (hAK x.property) (hz x x.property)
+  choose r hr hsub hzero using hb
+  obtain ⟨t, ht⟩ := hA.elim_finite_subcover
+    (fun x : A ↦ Metric.ball (x : EuclideanSpace ℝ (Fin d)) (r x))
+    (fun _ ↦ Metric.isOpen_ball) (by
+      intro x hx
+      exact Set.mem_iUnion.mpr ⟨⟨x, hx⟩, Metric.mem_ball_self (hr ⟨x, hx⟩)⟩)
+  let s := t.image (fun x : A ↦ Metric.closedBall (x : EuclideanSpace ℝ (Fin d)) (r x))
+  have hs : ∀ B ∈ s, IsCompact B ∧ Convex ℝ B := by
+    intro B hB
+    obtain ⟨x, _, rfl⟩ := Finset.mem_image.mp hB
+    exact ⟨isCompact_closedBall _ _, convex_closedBall _ _⟩
+  have hcover : A ⊆ ⋃ B ∈ s, B := by
+    intro x hx
+    obtain ⟨y, hy, hxy⟩ := Set.mem_iUnion₂.mp (ht hx)
+    exact Set.mem_iUnion₂.mpr ⟨_, Finset.mem_image.mpr ⟨y, hy, rfl⟩,
+      Metric.ball_subset_closedBall hxy⟩
+  have hK : (⋃ B ∈ s, B) ⊆ K := by
+    intro x hx
+    obtain ⟨B, hB, hxB⟩ := Set.mem_iUnion₂.mp hx
+    obtain ⟨y, _, rfl⟩ := Finset.mem_image.mp hB
+    exact hsub y hxB
+  refine ⟨s, hs, hcover, hK, ?_⟩
+  intro x hx
+  obtain ⟨B, hB, hxB⟩ := Set.mem_iUnion₂.mp hx
+  obtain ⟨y, _, rfl⟩ := Finset.mem_image.mp hB
+  exact hzero y x hxB
+
 /-- **LIBRARY F3e.** Hatcher's relative-cycle argument extends the Euclidean
 result from finite unions of compact convex sets to every compact set. -/
 theorem t00A04_hatcherConclusion_compact_euclidean
@@ -836,7 +919,46 @@ theorem t00A04_hatcherConclusion_compact_euclidean
       t00A04_HatcherConclusion _ d (⋃ A ∈ s, A))
     (A : Set (EuclideanSpace ℝ (Fin d))) (hA : IsCompact A) :
     t00A04_HatcherConclusion _ d A := by
-  sorry
+  classical
+  constructor
+  · intro n hn
+    have hall (c : t00A04_ModTwoLocalHomology _ A n) : c = 0 := by
+      obtain ⟨s, hs, hAs, c', hc'⟩ := t00A04_compactSupport_lift d n A hA c
+      have hc0 : c' = 0 := ((hfinite s hs).vanish_above n hn).elim _ _
+      rw [← hc', hc0]
+      exact map_zero _
+    exact ⟨fun a b ↦ (hall a).trans (hall b).symm⟩
+  · obtain ⟨r, hAr⟩ := hA.isBounded.subset_closedBall (0 : EuclideanSpace ℝ (Fin d))
+    obtain ⟨c, hc⟩ := (t00A04_hatcherConclusion_compact_convex_euclidean d
+      (Metric.closedBall 0 r) (isCompact_closedBall _ _) (convex_closedBall _ _)).exists_everywhere_nonzero
+    refine ⟨t00A04_modTwo_restrict _ A _ hAr d c, ?_⟩
+    intro x hx
+    rw [t00A04_modTwo_pointRestriction_restrict]
+    exact hc x _
+  · intro c
+    constructor
+    · intro hc x hx
+      rw [hc]
+      exact map_zero _
+    · intro hz
+      obtain ⟨s, hs, hAs, c', hc'⟩ := t00A04_compactSupport_lift d d A hA c
+      have hpoint : ∀ (x : EuclideanSpace ℝ (Fin d)) (hx : x ∈ A),
+          t00A04_modTwo_pointRestriction _ (⋃ B ∈ s, B) x
+            (interior_subset (hAs hx)) d c' = 0 := by
+        intro x hx
+        rw [← t00A04_modTwo_pointRestriction_restrict _ A _
+          (hAs.trans interior_subset) x hx, hc']
+        exact hz x hx
+      obtain ⟨t, ht, hAt, htK, hzt⟩ :=
+        t00A04_hatcherConclusion_compact_euclidean_aux_zero_cover d A _ hA hAs c' hpoint
+      have ht0 : t00A04_modTwo_restrict _ (⋃ B ∈ t, B) _ htK d c' = 0 := by
+        apply ((hfinite t ht).eq_zero_iff_pointwise _).mpr
+        intro x hx
+        rw [t00A04_modTwo_pointRestriction_restrict]
+        exact hzt x hx
+      rw [← hc', ← t00A04_modTwo_restrict_restrict _ A (⋃ B ∈ t, B) _ hAt htK,
+        ht0]
+      exact map_zero _
 
 /-- **LIBRARY (chart transport).** The all-compact Euclidean result transported
 to an arbitrary compact subset contained in one chart source. -/
