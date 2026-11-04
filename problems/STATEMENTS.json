@@ -8071,6 +8071,24 @@
    "rev": "389758dfd",
    "approved_at": "2026-10-13T20:54:57Z"
   },
+  "t99A04": {
+   "decls": [
+    "apm_t99a04"
+   ],
+   "sha256": "dfa1af44f26faee637abda6266cc19d11c87816a67ae3f8e16107c24879d3ac5",
+   "defs": [
+    "E",
+    "IsSeparating",
+    "SmoothEmbedding",
+    "period"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-04)",
+   "evidence": "holes/labs/statement-registry/open5-grades.md",
+   "prelim_defect": null,
+   "rev": "e976e695a",
+   "approved_at": "2026-11-04T00:23:54Z"
+  },
   "t99J01": {
    "decls": [
     "apm_t99j01"
