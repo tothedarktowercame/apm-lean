@@ -6290,6 +6290,203 @@ lemma apm_t95j06_two_overlapping_realCharts_seamCoordinate_formulas
         X U V ψ δ hB v).mpr hlt)
     rw [dif_neg hnlt]
 
+/-- **Ray gluing from a linked transition.**  Two real charts whose overlap
+is a right ray `Ioi α` in the first chart, with an increasing surjective
+transition `τ` onto the left ray `Iio δ` of the second, glue to a real line:
+the first chart is corrected to `s - α` below `α` and `exp (τ s)` above it,
+the second chart is composed with `exp`, and the two agree on the overlap. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_of_transition
+    (X : Type) [TopologicalSpace X] (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ) (α δ : ℝ)
+    (hA : φ '' (Subtype.val ⁻¹' V) = Set.Ioi α)
+    (τ : Set.Ioi α → Set.Iio δ) (hτmono : StrictMono τ) (hτsurj : Function.Surjective τ)
+    (hlink : ∀ (u : U) (hu : (u : X) ∈ V) (h : α < φ u), (τ ⟨φ u, h⟩ : ℝ) = ψ ⟨u, hu⟩) :
+    Nonempty ({x : X // x ∈ U ∪ V} ≃ₜ ℝ) := by
+  classical
+  -- the corrected U-coordinate
+  let h : ℝ → ℝ := fun s => if hs : α < s then Real.exp (τ ⟨s, hs⟩) else s - α
+  have hmono : StrictMono h := by
+    intro s t hst
+    by_cases ht : α < t
+    · by_cases hs : α < s
+      · simp only [h, dif_pos hs, dif_pos ht]
+        exact Real.exp_lt_exp.mpr (hτmono (show (⟨s, hs⟩ : Set.Ioi α) < ⟨t, ht⟩ from hst))
+      · simp only [h, dif_neg hs, dif_pos ht]
+        have := Real.exp_pos ((τ ⟨t, ht⟩ : ℝ))
+        linarith [not_lt.mp hs]
+    · have hs : ¬ α < s := fun hs => ht (hs.trans hst)
+      simp only [h, dif_neg hs, dif_neg ht]
+      linarith
+  have hlt : ∀ s, h s < Real.exp δ := by
+    intro s
+    by_cases hs : α < s
+    · simp only [h, dif_pos hs]
+      exact Real.exp_lt_exp.mpr (τ ⟨s, hs⟩).2
+    · simp only [h, dif_neg hs]
+      linarith [not_lt.mp hs, Real.exp_pos δ]
+  have hsurj : ∀ y, y < Real.exp δ → ∃ s, h s = y := by
+    intro y hy
+    by_cases hy0 : y ≤ 0
+    · refine ⟨y + α, ?_⟩
+      have : ¬ α < y + α := by linarith
+      simp only [h, dif_neg this]
+      ring
+    · push_neg at hy0
+      have hl : Real.log y < δ := by
+        rw [Real.log_lt_iff_lt_exp hy0]; exact hy
+      obtain ⟨s, hs⟩ := hτsurj ⟨Real.log y, hl⟩
+      refine ⟨s, ?_⟩
+      have hs2 : α < (s : ℝ) := s.2
+      simp only [h, dif_pos hs2]
+      show Real.exp ((τ s : ℝ)) = y
+      rw [hs]
+      exact Real.exp_log hy0
+  let h' : ℝ → Set.Iio (Real.exp δ) := fun s => ⟨h s, hlt s⟩
+  have h'mono : StrictMono h' := fun s t hst => hmono hst
+  have h'surj : Function.Surjective h' := by
+    rintro ⟨y, hy⟩
+    obtain ⟨s, hs⟩ := hsurj y hy
+    exact ⟨s, Subtype.ext hs⟩
+  let hiso : ℝ ≃o Set.Iio (Real.exp δ) := StrictMono.orderIsoOfSurjective h' h'mono h'surj
+  have hemb : Topology.IsOpenEmbedding h := by
+    have h1 : Topology.IsOpenEmbedding (Subtype.val : Set.Iio (Real.exp δ) → ℝ) :=
+      isOpen_Iio.isOpenEmbedding_subtypeVal
+    have h2 : Topology.IsOpenEmbedding (hiso : ℝ → Set.Iio (Real.exp δ)) :=
+      hiso.toHomeomorph.isOpenEmbedding
+    have : h = Subtype.val ∘ (hiso : ℝ → Set.Iio (Real.exp δ)) := rfl
+    rw [this]; exact h1.comp h2
+  -- the glued map
+  let W := {x : X // x ∈ U ∪ V}
+  let iU : U → W := fun u => ⟨u.1, Or.inl u.2⟩
+  let iV : V → W := fun v => ⟨v.1, Or.inr v.2⟩
+  have hWo : IsOpen (U ∪ V) := hU.union hV
+  have hiU : Topology.IsOpenEmbedding iU := by
+    have hc : Topology.IsOpenEmbedding ((Subtype.val : W → X) ∘ iU) := hU.isOpenEmbedding_subtypeVal
+    exact (hWo.isOpenEmbedding_subtypeVal.of_comp_iff _).mp hc
+  have hiV : Topology.IsOpenEmbedding iV := by
+    have hc : Topology.IsOpenEmbedding ((Subtype.val : W → X) ∘ iV) := hV.isOpenEmbedding_subtypeVal
+    exact (hWo.isOpenEmbedding_subtypeVal.of_comp_iff _).mp hc
+  let F : W → ℝ := fun x => if hx : x.1 ∈ U then h (φ ⟨x.1, hx⟩) else Real.exp (ψ ⟨x.1,
+    x.2.resolve_left hx⟩)
+  have hFU : ∀ u : U, F (iU u) = h (φ u) := by
+    intro u
+    simp only [F, iU, dif_pos u.2]
+  have hαV : ∀ (u : U), (u : X) ∈ V → α < φ u := by
+    intro u hu
+    have : φ u ∈ φ '' (Subtype.val ⁻¹' V) := ⟨u, hu, rfl⟩
+    rw [hA] at this; exact this
+  have hVα : ∀ (u : U), α < φ u → (u : X) ∈ V := by
+    intro u hu
+    have : φ u ∈ φ '' (Subtype.val ⁻¹' V) := by rw [hA]; exact hu
+    obtain ⟨u', hu', he⟩ := this
+    rw [φ.injective he] at hu'; exact hu'
+  have hFV : ∀ v : V, F (iV v) = Real.exp (ψ v) := by
+    intro v
+    by_cases hv : (v : X) ∈ U
+    · simp only [F, iV, dif_pos hv]
+      have hα := hαV ⟨v, hv⟩ v.2
+      simp only [h, dif_pos hα]
+      rw [hlink ⟨v, hv⟩ v.2 hα]
+    · simp only [F, iV, dif_neg hv]
+  have hFUeq : F ∘ iU = h ∘ φ := funext hFU
+  have hFVeq : F ∘ iV = Real.exp ∘ ψ := funext hFV
+  have hcont : Continuous F := by
+    rw [continuous_iff_continuousAt]
+    intro x
+    rcases x.2 with hx | hx
+    · have : ContinuousAt (F ∘ iU) ⟨x.1, hx⟩ := by
+        rw [hFUeq]; exact (hemb.continuous.comp φ.continuous).continuousAt
+      exact (hiU.continuousAt_iff).mp this
+    · have : ContinuousAt (F ∘ iV) ⟨x.1, hx⟩ := by
+        rw [hFVeq]; exact (Real.continuous_exp.comp ψ.continuous).continuousAt
+      exact (hiV.continuousAt_iff).mp this
+  have hopen : IsOpenMap F := by
+    intro s hs
+    rw [isOpen_iff_mem_nhds]
+    rintro _ ⟨x, hxs, rfl⟩
+    rcases x.2 with hx | hx
+    · let T : Set U := iU ⁻¹' s
+      have hT : IsOpen T := hs.preimage hiU.continuous
+      have hO : IsOpen ((h ∘ φ) '' T) := (hemb.isOpenMap.comp φ.isOpenMap) T hT
+      have hsub : (h ∘ φ) '' T ⊆ F '' s := by
+        rintro _ ⟨u, hu, rfl⟩; exact ⟨iU u, hu, hFU u⟩
+      refine Filter.mem_of_superset (hO.mem_nhds ⟨⟨x.1, hx⟩, hxs, ?_⟩) hsub
+      exact (hFU ⟨x.1, hx⟩).symm
+    · let T : Set V := iV ⁻¹' s
+      have hT : IsOpen T := hs.preimage hiV.continuous
+      have hO : IsOpen ((Real.exp ∘ ψ) '' T) :=
+        (Real.isOpenEmbedding_exp.isOpenMap.comp ψ.isOpenMap) T hT
+      have hsub : (Real.exp ∘ ψ) '' T ⊆ F '' s := by
+        rintro _ ⟨v, hv, rfl⟩; exact ⟨iV v, hv, hFV v⟩
+      refine Filter.mem_of_superset (hO.mem_nhds ⟨⟨x.1, hx⟩, hxs, ?_⟩) hsub
+      exact (hFV ⟨x.1, hx⟩).symm
+  have hhpos : ∀ s, s ≤ α → h s ≤ 0 := by
+    intro s hs
+    simp only [h, dif_neg (not_lt.mpr hs)]; linarith
+  have hinj : Function.Injective F := by
+    intro x y hxy
+    have caseU : ∀ (x y : W) (hx : x.1 ∈ U) (hy : y.1 ∈ U), F x = F y → x = y := by
+      intro x y hx hy he
+      have := hFU ⟨x.1, hx⟩; have := hFU ⟨y.1, hy⟩
+      have he' : h (φ ⟨x.1, hx⟩) = h (φ ⟨y.1, hy⟩) := by
+        rw [← hFU, ← hFU]; exact he
+      have := congrArg Subtype.val (φ.injective (hmono.injective he'))
+      exact Subtype.ext this
+    have caseV : ∀ (x y : W) (hx : x.1 ∈ V) (hy : y.1 ∈ V), F x = F y → x = y := by
+      intro x y hx hy he
+      have he' : Real.exp (ψ ⟨x.1, hx⟩) = Real.exp (ψ ⟨y.1, hy⟩) := by
+        rw [← hFV, ← hFV]; exact he
+      have := congrArg Subtype.val (ψ.injective (Real.exp_injective he'))
+      exact Subtype.ext this
+    have caseMix : ∀ (x y : W) (hx : x.1 ∈ U) (hxV : x.1 ∉ V) (hy : y.1 ∈ V), F x ≠ F y := by
+      intro x y hx hxV hy he
+      have h1 : F x ≤ 0 := by
+        have := hFU ⟨x.1, hx⟩
+        change F x = _ at this
+        rw [this]
+        exact hhpos _ (not_lt.mp fun hα => hxV (hVα ⟨x.1, hx⟩ hα))
+      have h2 : 0 < F y := by
+        have := hFV ⟨y.1, hy⟩
+        change F y = _ at this
+        rw [this]; exact Real.exp_pos _
+      linarith
+    by_cases hxU : x.1 ∈ U <;> by_cases hyU : y.1 ∈ U
+    · exact caseU x y hxU hyU hxy
+    · have hyV := y.2.resolve_left hyU
+      by_cases hxV : x.1 ∈ V
+      · exact caseV x y hxV hyV hxy
+      · exact absurd hxy (caseMix x y hxU hxV hyV)
+    · have hxV := x.2.resolve_left hxU
+      by_cases hyV : y.1 ∈ V
+      · exact caseV x y hxV hyV hxy
+      · exact absurd hxy.symm (caseMix y x hyU hyV hxV)
+    · exact caseV x y (x.2.resolve_left hxU) (y.2.resolve_left hyU) hxy
+  have hsurjF : Function.Surjective F := by
+    intro y
+    by_cases hy : y < Real.exp δ
+    · obtain ⟨s, hs⟩ := hsurj y hy
+      exact ⟨iU (φ.symm s), by rw [hFU, φ.apply_symm_apply, hs]⟩
+    · have hy0 : 0 < y := lt_of_lt_of_le (Real.exp_pos δ) (not_lt.mp hy)
+      exact ⟨iV (ψ.symm (Real.log y)), by rw [hFV, ψ.apply_symm_apply, Real.exp_log hy0]⟩
+  exact ⟨(Equiv.ofBijective F ⟨hinj, hsurjF⟩).toHomeomorphOfContinuousOpen hcont hopen⟩
+
+/-- **Ray gluing.**  Two open real charts whose overlap is a right ray in the
+first chart and a left ray in the second, with increasing transition, glue to
+a homeomorphism of their union with `ℝ`. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue
+    (X : Type) [TopologicalSpace X] (U V : Set X) (hU : IsOpen U) (hV : IsOpen V)
+    (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ) (α δ : ℝ)
+    (hA : φ '' (Subtype.val ⁻¹' V) = Set.Ioi α)
+    (hB : ψ '' (Subtype.val ⁻¹' U) = Set.Iio δ)
+    (hmono : ∀ x y : U, ∀ hx : (x : X) ∈ V, ∀ hy : (y : X) ∈ V,
+      φ x < φ y → ψ ⟨x, hx⟩ < ψ ⟨y, hy⟩) :
+    Nonempty ({x : X // x ∈ U ∪ V} ≃ₜ ℝ) := by
+  obtain ⟨τ, hτmono, hτsurj, -, hlink⟩ :=
+    apm_t95j06_two_overlapping_realCharts_ray_transition_linked X U V φ ψ α δ hA hB hmono
+  exact apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_of_transition
+    X U V hU hV φ ψ α δ hA τ hτmono hτsurj
+    (fun u hu _ => congrArg Subtype.val (hlink u hu))
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
