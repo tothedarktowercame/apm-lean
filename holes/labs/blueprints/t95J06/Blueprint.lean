@@ -5681,6 +5681,48 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue_orientat
     intro x y hx hy hxy
     exact neg_lt_neg (hm y x hy hx (neg_lt_neg_iff.mp hxy))
 
+/-- Two disjoint preconnected real sets, one unbounded below and the other
+unbounded above, leave only a bounded complementary gap. -/
+lemma apm_t95j06_disjoint_preconnected_compl_bounded
+    (S T : Set ℝ) (hSne : S.Nonempty) (hTne : T.Nonempty)
+    (hSconn : _root_.IsPreconnected S) (hTconn : _root_.IsPreconnected T)
+    (hdisj : Disjoint S T) (hSbelow : ¬ BddBelow S)
+    (hTabove : ¬ BddAbove T) :
+    ∃ c d : ℝ, (S ∪ T)ᶜ ⊆ Set.Icc c d := by
+  obtain ⟨s, hsS⟩ := hSne
+  obtain ⟨t, htT⟩ := hTne
+  refine ⟨s, t, ?_⟩
+  intro z hz
+  have hzS : z ∉ S := fun h => hz (Or.inl h)
+  have hzT : z ∉ T := fun h => hz (Or.inr h)
+  have hsz : s < z := by
+    by_contra h
+    have hzs : z ≤ s := le_of_not_gt h
+    obtain ⟨y, hyS, hyz⟩ := not_bddBelow_iff.mp hSbelow z
+    have hzmem : z ∈ S :=
+      hSconn.Icc_subset hyS hsS ⟨hyz.le, hzs⟩
+    exact hzS hzmem
+  have hzt : z < t := by
+    by_contra h
+    have htz : t ≤ z := le_of_not_gt h
+    obtain ⟨y, hyT, hzy⟩ := not_bddAbove_iff.mp hTabove z
+    have hzmem : z ∈ T :=
+      hTconn.Icc_subset htT hyT ⟨htz, hzy.le⟩
+    exact hzT hzmem
+  exact ⟨hsz.le, hzt.le⟩
+
+/-- Swapped-orientation form of
+`apm_t95j06_disjoint_preconnected_compl_bounded`. -/
+lemma apm_t95j06_disjoint_preconnected_compl_bounded_swapped
+    (S T : Set ℝ) (hSne : S.Nonempty) (hTne : T.Nonempty)
+    (hSconn : _root_.IsPreconnected S) (hTconn : _root_.IsPreconnected T)
+    (hdisj : Disjoint S T) (hSabove : ¬ BddAbove S)
+    (hTbelow : ¬ BddBelow T) :
+    ∃ c d : ℝ, (S ∪ T)ᶜ ⊆ Set.Icc c d := by
+  obtain ⟨c, d, h⟩ := apm_t95j06_disjoint_preconnected_compl_bounded
+    T S hTne hSne hTconn hSconn hdisj.symm hTbelow hSabove
+  exact ⟨c, d, by simpa [Set.union_comm] using h⟩
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
