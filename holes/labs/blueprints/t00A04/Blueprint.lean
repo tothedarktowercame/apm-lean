@@ -1452,11 +1452,54 @@ embeds the manifold in a finite sum of copies of the small model. -/
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_space_small
     (E : Type*) (X : Type u) [TopologicalSpace E] [Small.{0} E]
     [TopologicalSpace X] [CompactSpace X] [ChartedSpace E X] : Small.{0} X := by
-  sorry
+  classical
+  obtain ⟨s, hs⟩ := isCompact_univ.elim_finite_subcover
+    (fun x : X ↦ (chartAt E x).source)
+    (fun x ↦ (chartAt E x).open_source)
+    (by
+      intro x _
+      exact Set.mem_iUnion.mpr ⟨x, mem_chart_source E x⟩)
+  let chosen : X → {x // x ∈ s} := fun x ↦
+    ⟨Classical.choose (Set.mem_iUnion₂.mp (hs (Set.mem_univ x))),
+      (Classical.choose_spec (Set.mem_iUnion₂.mp (hs (Set.mem_univ x)))).1⟩
+  have hchosen (x : X) :
+      x ∈ (chartAt E (chosen x : X)).source :=
+    (Classical.choose_spec (Set.mem_iUnion₂.mp (hs (Set.mem_univ x)))).2
+  let f : X → (Fin s.card × E) := fun x ↦
+    (s.equivFin (chosen x), chartAt E (chosen x : X) x)
+  apply small_of_injective (f := f)
+  intro x y hxy
+  have hi : chosen x = chosen y := s.equivFin.injective (congrArg Prod.fst hxy)
+  have hc : chartAt E (chosen x : X) x = chartAt E (chosen x : X) y := by
+    have := congrArg Prod.snd hxy
+    change chartAt E (chosen x : X) x = chartAt E (chosen y : X) y at this
+    rwa [← hi] at this
+  exact (chartAt E (chosen x : X)).injOn (hchosen x) (hi ▸ hchosen y) hc
 
 /-- Once both underlying types are small, transfer all structures to their
 `Shrink` models, apply the Type-0 theorem, and use functoriality under
 `Shrink.homeomorph` to transport nontriviality of singular homology back. -/
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model
+    (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X]
+    [ChartedSpace E X] [IsManifold I ∞ X] [BoundarylessManifold I X]
+    [Small.{0} E] [Small.{0} X]
+    (hType : ∀ (E₀ X₀ : Type) [NormedAddCommGroup E₀] [NormedSpace ℝ E₀]
+      [FiniteDimensional ℝ E₀] (I₀ : ModelWithCorners ℝ E₀ E₀)
+      [TopologicalSpace X₀] [T2Space X₀] [CompactSpace X₀] [Nonempty X₀]
+      [ChartedSpace E₀ X₀] [IsManifold I₀ ∞ X₀] [BoundarylessManifold I₀ X₀],
+      Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E₀) X₀)) :
+    Nontrivial
+      (t00A04_ModTwoHomology (Module.finrank ℝ E) (Shrink.{0} X)) := by
+  sorry
+
+theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology
+    (X : Type u) [TopologicalSpace X] [Small.{0} X] (d : ℕ)
+    [Nontrivial (t00A04_ModTwoHomology d (Shrink.{0} X))] :
+    Nontrivial (t00A04_ModTwoHomology d X) := by
+  sorry
+
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
@@ -1469,7 +1512,13 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
       [ChartedSpace E₀ X₀] [IsManifold I₀ ∞ X₀] [BoundarylessManifold I₀ X₀],
       Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E₀) X₀)) :
     Nontrivial (t00A04_ModTwoHomology (Module.finrank ℝ E) X) := by
-  sorry
+  letI : Nontrivial
+      (t00A04_ModTwoHomology (Module.finrank ℝ E) (Shrink.{0} X)) :=
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_small_model
+      E X I hType
+  exact
+    t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology
+      X (Module.finrank ℝ E)
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial
     (E : Type*) (X : Type u) [NormedAddCommGroup E] [NormedSpace ℝ E]
