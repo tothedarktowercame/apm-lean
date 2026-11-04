@@ -2535,6 +2535,64 @@ lemma apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_disk_projection
     · change (e.symm (e z)).1.1 = b
       simp [z]
 
+/-- The closed unit interval used for topological loop erasure. -/
+abbrev apm_t95j06_LoopEraseInterval := Set.Icc (0 : ℝ) 1
+
+/-- A closed subset of the path parameter interval is admissible when it
+contains both endpoints and every complementary gap has equal path values at
+its two endpoints. -/
+def apm_t95j06_LoopEraseAdmissible
+    {X : Type} [TopologicalSpace X]
+    (p : apm_t95j06_LoopEraseInterval → X)
+    (F : Set apm_t95j06_LoopEraseInterval) : Prop :=
+  IsClosed F ∧
+    (⟨0, by norm_num⟩ : apm_t95j06_LoopEraseInterval) ∈ F ∧
+    (⟨1, by norm_num⟩ : apm_t95j06_LoopEraseInterval) ∈ F ∧
+    ∀ s t, s ∈ F → t ∈ F → s < t →
+      Set.Ioo s t ∩ F = ∅ → p s = p t
+
+/-- The full parameter interval is admissible: it is closed and has no
+complementary gaps. -/
+lemma apm_t95j06_loopEraseAdmissible_univ
+    {X : Type} [TopologicalSpace X]
+    (p : apm_t95j06_LoopEraseInterval → X) :
+    apm_t95j06_LoopEraseAdmissible p Set.univ := by
+  refine ⟨isClosed_univ, Set.mem_univ _, Set.mem_univ _, ?_⟩
+  intro s t _ _ hst hgap
+  exfalso
+  have hst' : s.1 < t.1 := hst
+  let m : ℝ := (s.1 + t.1) / 2
+  have hsm : s.1 < m := by dsimp [m]; linarith
+  have hmt : m < t.1 := by dsimp [m]; linarith
+  have hm0 : 0 ≤ m := le_trans s.2.1 hsm.le
+  have hm1 : m ≤ 1 := le_trans hmt.le t.2.2
+  have hm : (⟨m, hm0, hm1⟩ : apm_t95j06_LoopEraseInterval) ∈
+      Set.Ioo s t ∩ (Set.univ : Set apm_t95j06_LoopEraseInterval) :=
+    ⟨⟨hsm, hmt⟩, Set.mem_univ _⟩
+  rw [hgap] at hm
+  exact hm
+
+/-- The intersection of a nonempty family of admissible sets is closed and
+retains both endpoints. These are the formal, immediate parts of descending
+chain closure; preservation of the gap equation is the remaining limiting
+argument. -/
+lemma apm_t95j06_loopEraseAdmissible_iInter_basic
+    {X : Type} [TopologicalSpace X]
+    (p : apm_t95j06_LoopEraseInterval → X)
+    (c : Set (Set apm_t95j06_LoopEraseInterval))
+    (hc : c.Nonempty)
+    (hadm : ∀ F ∈ c, apm_t95j06_LoopEraseAdmissible p F) :
+    IsClosed (⋂ F ∈ c, F) ∧
+      (⟨0, by norm_num⟩ : apm_t95j06_LoopEraseInterval) ∈ ⋂ F ∈ c, F ∧
+      (⟨1, by norm_num⟩ : apm_t95j06_LoopEraseInterval) ∈ ⋂ F ∈ c, F := by
+  refine ⟨isClosed_iInter (fun F => isClosed_iInter (fun hF => (hadm F hF).1)), ?_, ?_⟩
+  · simp only [Set.mem_iInter]
+    intro F hF
+    exact (hadm F hF).2.1
+  · simp only [Set.mem_iInter]
+    intro F hF
+    exact (hadm F hF).2.2.1
+
 /-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
 Assuming the pure disk-crosscut theorem, one explicit product chart around
 `b × 0` yields the required compact continuum in the base.  Choose a small
