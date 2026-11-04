@@ -705,7 +705,50 @@ theorem apm_t95j06_principalCircleBundle_section_coordinate_continuous
     (P : @apm_t95j06_PrincipalCircleBundle X B inferInstance tB)
     (s : B → X) (hscont : Continuous s) (hs : ∀ b, P.proj (s b) = b) :
     Continuous (fun x : X ↦ Classical.choose (P.orbit_fiber (s (P.proj x)) x (hs _))) := by
-  sorry
+  let coord : X → Circle := fun x ↦
+    Classical.choose (P.orbit_fiber (s (P.proj x)) x (hs _))
+  have hcoord (x : X) : P.act (coord x, s (P.proj x)) = x :=
+    Classical.choose_spec (P.orbit_fiber (s (P.proj x)) x (hs _))
+  rw [continuous_iff_continuousAt]
+  intro x
+  obtain ⟨U, hU, hxU, φ, hφproj, hφact⟩ := P.local_trivial (P.proj x)
+  let V : Set X := P.proj ⁻¹' U
+  have hV : IsOpen V := hU.preimage P.continuous_proj
+  have hxV : x ∈ V := hxU
+  let lift : V → {y : X // P.proj y ∈ U} := fun y ↦ ⟨y.1, y.2⟩
+  have hlift : Continuous lift :=
+    continuous_subtype_val.subtype_mk (fun y ↦ y.2)
+  let sectionLift : V → {y : X // P.proj y ∈ U} := fun y ↦
+    ⟨s (P.proj y.1), by rw [hs]; exact y.2⟩
+  have hsectionLift : Continuous sectionLift := by
+    apply Continuous.subtype_mk
+    exact hscont.comp (P.continuous_proj.comp continuous_subtype_val)
+  let localCoord : V → Circle := fun y ↦
+    (φ (lift y)).2 * ((φ (sectionLift y)).2)⁻¹
+  have hlocalCoord : Continuous localCoord := by
+    exact ((continuous_snd.comp (φ.continuous.comp hlift)).mul
+      ((continuous_snd.comp (φ.continuous.comp hsectionLift)).inv))
+  have hlocal (y : V) : coord y.1 = localCoord y := by
+    have hact := hφact (coord y.1) (sectionLift y)
+    have heq :
+        (⟨P.act (coord y.1, (sectionLift y).1), by
+          rw [P.invariant]
+          exact (sectionLift y).2⟩ : {z : X // P.proj z ∈ U}) = lift y := by
+      apply Subtype.ext
+      exact hcoord y.1
+    rw [heq] at hact
+    change coord y.1 = (φ (lift y)).2 * ((φ (sectionLift y)).2)⁻¹
+    calc
+      coord y.1 = (coord y.1 * (φ (sectionLift y)).2) *
+          ((φ (sectionLift y)).2)⁻¹ := by simp
+      _ = (φ (lift y)).2 * ((φ (sectionLift y)).2)⁻¹ := by rw [← hact]
+  have hrestrict : Continuous (V.restrict coord) := by
+    rw [show V.restrict coord = localCoord from funext hlocal]
+    exact hlocalCoord
+  have hwithin : ContinuousWithinAt coord V x :=
+    (continuousWithinAt_iff_continuousAt_restrict coord hxV).2
+      hrestrict.continuousAt
+  exact hwithin.continuousAt (hV.mem_nhds hxV)
 
 /-- **LIBRARY, principal Circle bundles over a circle (estimated 600--1200
 lines).**  An equivariantly locally trivial principal Circle bundle whose base
