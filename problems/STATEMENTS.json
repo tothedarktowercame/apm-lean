@@ -8069,6 +8069,28 @@
    "rev": "3562b5157",
    "approved_at": "2026-11-01T16:53:21Z"
   },
+  "t99J03": {
+   "decls": [
+    "apm_t99j03"
+   ],
+   "sha256": "0f8b9222143c016dd055c5b5a0d4b1df6884a8c584aec8bcbf597ea2db7d451f",
+   "defs": [
+    "apm_t99J03_Disk",
+    "apm_t99J03_E2",
+    "apm_t99J03_HasEulerCharacteristic",
+    "apm_t99J03_Homology",
+    "apm_t99J03_IsOrientable",
+    "apm_t99J03_Surface",
+    "apm_t99J03_SurfaceRel",
+    "apm_t99J03_edgePoint"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-04)",
+   "evidence": "holes/labs/statement-registry/open5-grades.md",
+   "prelim_defect": null,
+   "rev": "6d90ecf6c",
+   "approved_at": "2026-11-04T00:04:59Z"
+  },
   "t99J04": {
    "decls": [
     "apm_t99j04"
