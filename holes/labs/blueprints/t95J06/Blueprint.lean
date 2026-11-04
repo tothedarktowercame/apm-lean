@@ -6176,6 +6176,73 @@ lemma apm_t95j06_two_overlapping_realCharts_ray_transition
   · intro t
     exact e.apply_symm_apply t
 
+/-- The ray transition together with the equation identifying it with the
+actual change of chart.  The earlier transition lemma deliberately exposed
+only its order-theoretic properties; the gluing coordinate also needs this
+pointwise compatibility. -/
+lemma apm_t95j06_two_overlapping_realCharts_ray_transition_linked
+    (X : Type) [TopologicalSpace X]
+    (U V : Set X) (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ) (α δ : ℝ)
+    (hA : φ '' (Subtype.val ⁻¹' V) = Set.Ioi α)
+    (hB : ψ '' (Subtype.val ⁻¹' U) = Set.Iio δ)
+    (hmono : ∀ x y : U, ∀ hx : (x : X) ∈ V, ∀ hy : (y : X) ∈ V,
+      φ x < φ y → ψ ⟨x, hx⟩ < ψ ⟨y, hy⟩) :
+    ∃ τ : Set.Ioi α → Set.Iio δ,
+      StrictMono τ ∧ Function.Surjective τ ∧ Continuous τ ∧
+      (∀ (u : U) (hu : (u : X) ∈ V),
+        τ ⟨φ u, by
+          have himg : φ u ∈ φ '' (Subtype.val ⁻¹' V) := ⟨u, hu, rfl⟩
+          exact hA ▸ himg⟩ = ⟨ψ ⟨u, hu⟩, by
+            have himg : ψ ⟨u, hu⟩ ∈ ψ '' (Subtype.val ⁻¹' U) :=
+              ⟨⟨u, hu⟩, u.property, rfl⟩
+            exact hB ▸ himg⟩) := by
+  have hov (s : Set.Ioi α) : ((φ.symm s.1 : U) : X) ∈ V := by
+    have hsimg : s.1 ∈ φ '' (Subtype.val ⁻¹' V) := hA.symm ▸ s.2
+    obtain ⟨u, huV, hu⟩ := hsimg
+    have hueq : u = φ.symm s.1 := by
+      apply φ.injective
+      rw [hu, φ.apply_symm_apply]
+    simpa [hueq] using huV
+  let τ₀ (s : Set.Ioi α) : ℝ := ψ ⟨φ.symm s.1, hov s⟩
+  have hτmem (s : Set.Ioi α) : τ₀ s ∈ Set.Iio δ := by
+    have himg : τ₀ s ∈ ψ '' (Subtype.val ⁻¹' U) := by
+      refine ⟨⟨φ.symm s.1, hov s⟩, (φ.symm s.1).property, rfl⟩
+    exact hB ▸ himg
+  let τ : Set.Ioi α → Set.Iio δ := fun s => ⟨τ₀ s, hτmem s⟩
+  have hτmono : StrictMono τ := by
+    intro s t hst
+    apply hmono (φ.symm s.1) (φ.symm t.1) (hov s) (hov t)
+    simpa only [φ.apply_symm_apply] using hst
+  have hτsurj : Function.Surjective τ := by
+    intro t
+    have htimg : t.1 ∈ ψ '' (Subtype.val ⁻¹' U) := hB.symm ▸ t.2
+    obtain ⟨v, hvU, hv⟩ := htimg
+    let u : U := ⟨v.1, hvU⟩
+    have hsimg : φ u ∈ φ '' (Subtype.val ⁻¹' V) := ⟨u, v.property, rfl⟩
+    let s : Set.Ioi α := ⟨φ u, hA ▸ hsimg⟩
+    refine ⟨s, Subtype.ext ?_⟩
+    change ψ ⟨φ.symm (φ u), hov s⟩ = t.1
+    have huv : (⟨φ.symm (φ u), hov s⟩ : V) = v := by
+      apply Subtype.ext
+      simpa [u] using congrArg Subtype.val (φ.symm_apply_apply u)
+    rw [huv, hv]
+  let e₀ : Set.Ioi α ≃ Set.Iio δ :=
+    Equiv.ofBijective τ ⟨hτmono.injective, hτsurj⟩
+  let e : Set.Ioi α ≃o Set.Iio δ :=
+    { e₀ with map_rel_iff' := fun {x y} => hτmono.le_iff_le }
+  have he : (e : Set.Ioi α → Set.Iio δ) = τ := by funext s; rfl
+  have hτcont : Continuous τ := by
+    rw [← he]
+    exact e.toHomeomorph.continuous
+  refine ⟨τ, hτmono, hτsurj, hτcont, ?_⟩
+  intro u hu
+  apply Subtype.ext
+  change τ₀ _ = ψ ⟨u, hu⟩
+  dsimp only [τ₀]
+  apply congrArg ψ
+  apply Subtype.ext
+  simp
+
 /-- **R3a, overlap membership in the second chart.**  Under the left-ray
 description of the overlap in `ψ`-coordinates, a point of `V` lies in `U`
 exactly when its coordinate is below the seam value `δ`. -/
