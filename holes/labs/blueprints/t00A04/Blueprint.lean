@@ -451,17 +451,117 @@ theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal
   have hunion :=
     t00A04_relativeMV_middle_aux_small_quotient_exact_literal_aux_union_homology
       X A B hA hB n
-  let Q := t00A04_relativeMV_middle_aux_sumQuotient X A B
   have hs := t00A04_relativeMV_middle_aux_chain_shortExact X A B
-  have _ : Q = Q := rfl
-  have _ := hs
   have _ := hinterA
   have _ := hinterB
   have _ := hunionA
   have _ := hunionB
-  have _ := hinter
-  have _ := hunion
-  sorry
+  let S := ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisComplex.shortComplex
+    (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+      (ConstructionTargets.SingularExcision.ambientSubspaceRange B)
+  let IA := ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso
+    (ZMod 2) A n
+  let IB := ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.rangeRelativeIso
+    (ZMod 2) B n
+  let II := ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso.intersectionRelativeIso
+    (ZMod 2) A B n
+  let J := ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare.relativeComparisonIso
+    (ZMod 2) A B hA hB n
+  have hmc : ∀ {K L M : ChainComplex (ModuleCat (ZMod 2)) ℕ} (φ : K ⟶ L) (ψ : L ⟶ M) (z : K.homology n),
+      HomologicalComplex.homologyMap ψ n (HomologicalComplex.homologyMap φ n z) =
+        HomologicalComplex.homologyMap (φ ≫ ψ) n z := by
+    intro K L M φ ψ z
+    rw [HomologicalComplex.homologyMap_comp]
+    rfl
+  let a' := IA.inv a
+  let b' := IB.inv b
+  let x : S.X₂.homology n :=
+    HomologicalComplex.homologyMap (biprod.inl : _ ⟶ S.X₂) n a' +
+      HomologicalComplex.homologyMap (biprod.inr : _ ⟶ S.X₂) n b'
+  have hl : HomologicalComplex.homologyMap ((biprod.inl : _ ⟶ S.X₂) ≫ S.g) n =
+      HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftToUnionRelative
+        (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n := by
+    congr 1
+    exact biprod.inl_desc _ _
+  have hr : HomologicalComplex.homologyMap ((biprod.inr : _ ⟶ S.X₂) ≫ S.g) n =
+      -HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightToUnionRelative
+        (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n := by
+    rw [← HomologicalComplex.homologyMap_neg]
+    congr 1
+    exact biprod.inr_desc _ _
+  have hgx' : HomologicalComplex.homologyMap S.g n x =
+      HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.leftToUnionRelative
+        (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n a' -
+      HomologicalComplex.homologyMap (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.rightToUnionRelative
+        (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n b' := by
+    dsimp only [x]
+    erw [map_add, hmc, hmc, hl, hr]
+    rw [sub_eq_add_neg]
+    rfl
+  have hgx : HomologicalComplex.homologyMap S.g n x = 0 := by
+    have hJ : J.hom (HomologicalComplex.homologyMap S.g n x) = 0 := by
+      have h1 := ConcreteCategory.congr_hom hunion.1 a'
+      have h2 := ConcreteCategory.congr_hom hunion.2 b'
+      erw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply] at h1 h2
+      have ea : IA.hom a' = a := Iso.inv_hom_id_apply IA a
+      have eb : IB.hom b' = b := Iso.inv_hom_id_apply IB b
+      erw [ea] at h1
+      erw [eb] at h2
+      rw [hgx']
+      erw [map_sub, h1, h2, hab, sub_self]
+    have := congrArg J.inv hJ
+    rwa [Iso.hom_inv_id_apply, map_zero] at this
+  obtain ⟨y, hy⟩ := (ShortComplex.moduleCat_exact_iff _).1 (hs.homology_exact₂ n) x hgx
+  change HomologicalComplex.homologyMap S.f n y = x at hy
+  refine ⟨II.hom y, ?_, ?_⟩
+  · have h1 := ConcreteCategory.congr_hom hinter.1 y
+    simp only [ConcreteCategory.comp_apply] at h1
+    rw [← h1]
+    have : HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n y = a' := by
+      rw [show ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToLeftRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B) = S.f ≫ biprod.fst from
+          (biprod.lift_fst _ _).symm]
+      erw [← hmc, hy]
+      dsimp only [x]
+      erw [map_add, hmc, hmc]
+      have k1 : HomologicalComplex.homologyMap ((biprod.inl : _ ⟶ S.X₂) ≫ biprod.fst) n a' = a' := by
+        rw [biprod.inl_fst, HomologicalComplex.homologyMap_id]; rfl
+      have k2 : HomologicalComplex.homologyMap ((biprod.inr : _ ⟶ S.X₂) ≫ biprod.fst) n b' = 0 := by
+        rw [biprod.inr_fst, HomologicalComplex.homologyMap_zero]; rfl
+      convert congrArg₂ (· + ·) k1 k2 using 1
+      simp
+    rw [this]
+    exact Iso.inv_hom_id_apply IA a
+  · have h1 := ConcreteCategory.congr_hom hinter.2 y
+    simp only [ConcreteCategory.comp_apply] at h1
+    rw [← h1]
+    have : HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B)) n y = b' := by
+      rw [show ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows.intersectionToRightRelative
+          (ZMod 2) (ConstructionTargets.SingularExcision.ambientSubspaceRange A)
+            (ConstructionTargets.SingularExcision.ambientSubspaceRange B) = S.f ≫ biprod.snd from
+          (biprod.lift_snd _ _).symm]
+      erw [← hmc, hy]
+      dsimp only [x]
+      erw [map_add, hmc, hmc]
+      have k1 : HomologicalComplex.homologyMap ((biprod.inl : _ ⟶ S.X₂) ≫ biprod.snd) n a' = 0 := by
+        rw [biprod.inl_snd, HomologicalComplex.homologyMap_zero]; rfl
+      have k2 : HomologicalComplex.homologyMap ((biprod.inr : _ ⟶ S.X₂) ≫ biprod.snd) n b' = b' := by
+        rw [biprod.inr_snd, HomologicalComplex.homologyMap_id]; rfl
+      convert congrArg₂ (· + ·) k1 k2 using 1
+      simp
+    rw [this]
+    exact Iso.inv_hom_id_apply IB b
 
 /-- Generic set transport for the De Morgan rewrites: the set arguments of
 `pairMap` are generalized to variables, so `subst` applies and the subset proofs
