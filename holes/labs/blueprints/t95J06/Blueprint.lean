@@ -2797,6 +2797,97 @@ lemma apm_t95j06_loopEraseAdmissible_minimal_gap
   intro hz hzF
   exact (hsub hzF).2 hz
 
+/-- The image of an admissible parameter set under its path. -/
+abbrev apm_t95j06_LoopEraseImage
+    {X : Type} [TopologicalSpace X]
+    (p : apm_t95j06_LoopEraseInterval → X)
+    (F : Set apm_t95j06_LoopEraseInterval) := p '' F
+
+/-- The parameters in `F` mapping to a specified point of the erased image. -/
+def apm_t95j06_loopEraseFiber
+    {X : Type} [TopologicalSpace X]
+    (p : apm_t95j06_LoopEraseInterval → X)
+    (F : Set apm_t95j06_LoopEraseInterval)
+    (a : apm_t95j06_LoopEraseImage p F) :
+    Set apm_t95j06_LoopEraseInterval := F ∩ p ⁻¹' {a.1}
+
+/-- A loop-erasure fibre is compact. -/
+lemma apm_t95j06_loopEraseFiber_compact
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    (a : apm_t95j06_LoopEraseImage p F) :
+    IsCompact (apm_t95j06_loopEraseFiber p F a) := by
+  apply IsClosed.isCompact
+  exact hF.prop.1.inter (isClosed_singleton.preimage hp)
+
+/-- A loop-erasure fibre is nonempty. -/
+lemma apm_t95j06_loopEraseFiber_nonempty
+    {X : Type} [TopologicalSpace X]
+    (p : apm_t95j06_LoopEraseInterval → X)
+    (F : Set apm_t95j06_LoopEraseInterval)
+    (a : apm_t95j06_LoopEraseImage p F) :
+    (apm_t95j06_loopEraseFiber p F a).Nonempty := by
+  obtain ⟨s, hsF, hps⟩ := a.2
+  exact ⟨s, hsF, by simpa [hps]⟩
+
+/-- The first parameter of a point in the erased image. -/
+noncomputable def apm_t95j06_loopEraseLo
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    (a : apm_t95j06_LoopEraseImage p F) : apm_t95j06_LoopEraseInterval :=
+  Classical.choose ((apm_t95j06_loopEraseFiber_compact p hp hF a).exists_isLeast
+    (apm_t95j06_loopEraseFiber_nonempty p F a))
+
+lemma apm_t95j06_loopEraseLo_isLeast
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    (a : apm_t95j06_LoopEraseImage p F) :
+    IsLeast (apm_t95j06_loopEraseFiber p F a)
+      (apm_t95j06_loopEraseLo p hp hF a) :=
+  Classical.choose_spec ((apm_t95j06_loopEraseFiber_compact p hp hF a).exists_isLeast
+    (apm_t95j06_loopEraseFiber_nonempty p F a))
+
+/-- Apart from its least parameter, a minimal loop-erasure fibre is
+subsingleton. Equivalently, every fibre has at most two points. -/
+lemma apm_t95j06_loopEraseFiber_sdiff_lo_subsingleton
+    {X : Type} [TopologicalSpace X] [T2Space X]
+    (p : apm_t95j06_LoopEraseInterval → X) (hp : Continuous p)
+    {F : Set apm_t95j06_LoopEraseInterval}
+    (hF : Minimal (fun F => apm_t95j06_LoopEraseAdmissible p F) F)
+    (a : apm_t95j06_LoopEraseImage p F) :
+    (apm_t95j06_loopEraseFiber p F a \
+      {apm_t95j06_loopEraseLo p hp hF a}).Subsingleton := by
+  intro s hs t ht
+  by_cases hst : s = t
+  · exact hst
+  have ordered {u v : apm_t95j06_LoopEraseInterval}
+      (hu : u ∈ apm_t95j06_loopEraseFiber p F a \
+        {apm_t95j06_loopEraseLo p hp hF a})
+      (hv : v ∈ apm_t95j06_loopEraseFiber p F a \
+        {apm_t95j06_loopEraseLo p hp hF a}) (huv : u < v) : False := by
+    have hlo := apm_t95j06_loopEraseLo_isLeast p hp hF a
+    have hlou : apm_t95j06_loopEraseLo p hp hF a < u :=
+      lt_of_le_of_ne (hlo.2 hu.1) (by
+        intro h
+        apply hu.2
+        simpa [h])
+    have hlav : apm_t95j06_loopEraseLo p hp hF a < v := hlou.trans huv
+    have hgap := apm_t95j06_loopEraseAdmissible_minimal_gap p hF
+      hlo.1.1 hv.1.1 hlav (by exact hlo.1.2.trans hv.1.2.symm)
+    have huint : u ∈ Set.Ioo (apm_t95j06_loopEraseLo p hp hF a) v ∩ F :=
+      ⟨⟨hlou, huv⟩, hu.1.1⟩
+    rw [hgap] at huint
+    exact huint
+  rcases lt_or_gt_of_ne hst with hlt | hgt
+  · exact False.elim (ordered hs ht hlt)
+  · exact False.elim (ordered ht hs hgt)
+
 /-- Euclidean invariance of domain, with all library premises discharged. -/
 lemma apm_t95j06_Q_aux_invariance_domain
     {U : Set apm_t95j06_E2} (hU : IsOpen U) {f : U → apm_t95j06_E2}
