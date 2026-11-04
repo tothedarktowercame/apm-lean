@@ -33,3 +33,16 @@ Defect found outside the theorem: the sanity lemma claimed +1 for x ↦ (p, x); 
 orientation of Y (opposite to the product orientation, one global sign) it is −1. Corrected by
 claude-14 (checked by hand: three column swaps to block form, det[p, ccw p] = 1, det[q,u,v] > 0).
 The request to explain the computation is prose and is not formalised.
+
+## t99A04
+
+Repair by codex-14 (packet open5/t99A04.md) on the shared integral (ConstructionTargets/ManifoldTopFormIntegral,
+graded standard 11-04). Readings: F = X (F undefined in the print); compact 2-manifold = boundaryless (on a
+compact annulus the core separates yet dθ has nonzero period). claude-14 fix: the seat defined the circle's
+orientation by `Classical.choose` of a sorry'd sanity theorem, which put sorryAx into the definition; the
+circle orientation is now a universally quantified parameter (both answers are invariant under reversal).
+
+Outside grade (read-only Claude subagent, 2026-11-04): faithful. (a) every smooth closed η has period 0 on a
+separating embedded circle; (b) on a nonseparating one every real is a period (stronger than the bare "no",
+and the complete answer). Integrability is part of the conclusion, so the integral's zero branch cannot fake an
+answer. The orientation of X is used (on RP² the Möbius core does not separate but H¹ = 0). True; not vacuous.
