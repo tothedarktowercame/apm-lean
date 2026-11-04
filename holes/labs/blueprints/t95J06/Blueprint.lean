@@ -992,6 +992,46 @@ def apm_t95j06_PlanarCrosscutSeparation : Prop :=
         Metric.ball 0 r \ A = L ∪ R ∧
         A ⊆ frontier L ∧ A ⊆ frontier R
 
+/-- Pure Jordan-curve separation in the plane: every subset homeomorphic to a
+circle has exactly two complementary domains, and the curve is the frontier
+of each.  This contains no disk, crosscut, interval arc, or base space. -/
+def apm_t95j06_PlanarJordanSeparation : Prop :=
+  ∀ (J : Set apm_t95j06_E2), Nonempty (Circle ≃ₜ J) →
+    ∃ inside outside : Set apm_t95j06_E2,
+      IsOpen inside ∧ IsOpen outside ∧ inside.Nonempty ∧ outside.Nonempty ∧
+      IsPreconnected inside ∧ IsPreconnected outside ∧
+      Disjoint inside outside ∧ Jᶜ = inside ∪ outside ∧
+      J = frontier inside ∧ J = frontier outside
+
+/-- **LIBRARY, Jordan-curve separation (estimated 250--450 lines).**
+This is the classical Jordan curve theorem in its separation form.  A winding
+number proof shows that the complement of an embedded circle has one bounded
+and one unbounded connected component; invariance of domain and local arc
+straightening show that both have the curve as frontier.  Mathlib 4.29 has
+connected-component and winding-number APIs, but no theorem combining them;
+the searches found only conditional winding results such as
+`ConstructionTargets/EmbeddedCirclePreimage.lean:66` and
+`ConstructionTargets/DiskBoundedPreimageDuality.lean:26`, neither of which
+proves planar separation.  This is strictly more primitive than the crosscut
+theorem: it mentions only an embedded circle and its full-plane complement. -/
+theorem apm_t95j06_planar_jordan_separation :
+    apm_t95j06_PlanarJordanSeparation := by
+  sorry
+
+/-- Closing a disk crosscut by either of the two boundary semicircles reduces
+the crosscut theorem to Jordan-curve separation (estimated 90--150 lines).
+The hypothesis that the arc meets the boundary only at its endpoints makes
+both pasted curves embedded.  Apply Jordan separation to the two curves and
+intersect their complementary domains with the open disk; the matching sides
+are the two connected components of the disk minus the crosscut, and the
+Jordan frontier equalities give the required crosscut frontier equalities.
+This lemma assumes the complete Jordan separation interface and contains only
+explicit circle parametrization, pasting, and set algebra. -/
+theorem apm_t95j06_planar_crosscut_of_jordan
+    (hJordan : apm_t95j06_PlanarJordanSeparation) :
+    apm_t95j06_PlanarCrosscutSeparation := by
+  sorry
+
 /-- **LIBRARY P, planar crosscut theorem (estimated 180--280 lines).**
 This is the classical crosscut theorem for a disk, a standard consequence of
 the Jordan curve theorem: join either boundary subarc to the crosscut, apply
@@ -1003,7 +1043,56 @@ product hypothesis.  No matching sorry-free result was found in
 source to backport only this consequence from. -/
 theorem apm_t95j06_planar_crosscut_separation :
     apm_t95j06_PlanarCrosscutSeparation := by
-  sorry
+  exact apm_t95j06_planar_crosscut_of_jordan
+    apm_t95j06_planar_jordan_separation
+
+/-- The disk-projection step of Q, independent of crosscut separation: every
+product chart has a compact connected base neighbourhood contained in its
+base domain. Take a sufficiently small closed disk in the planar target and
+project its inverse image. The open disk projects to an open neighbourhood,
+so the centre lies in the interior of the compact image. -/
+lemma apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_disk_projection
+    (B : Type) (tB : TopologicalSpace B)
+    (b : B) (W : Set B) (hW : @IsOpen B tB W) (hbW : b ∈ W)
+    (V : Set apm_t95j06_E2) (hV : IsOpen V)
+    (e : (W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V) :
+    ∃ K : Set B, K ⊆ W ∧ IsCompact K ∧ IsConnected K ∧ b ∈ interior K := by
+  let z : W × Set.Ioo (-1 : ℝ) 1 := ⟨⟨b, hbW⟩, ⟨0, by norm_num⟩⟩
+  let p : V := e z
+  obtain ⟨ε, hε, hεV⟩ := Metric.isOpen_iff.mp hV p.1 p.2
+  let r := ε / 2
+  have hr : 0 < r := half_pos hε
+  have hD : Metric.closedBall p.1 r ⊆ V := by
+    intro u hu
+    apply hεV
+    rw [Metric.mem_ball]
+    exact lt_of_le_of_lt (Metric.mem_closedBall.mp hu) (by dsimp [r]; linarith)
+  let D := Metric.closedBall p.1 r
+  letI : CompactSpace D := (isCompact_iff_compactSpace).mp (isCompact_closedBall p.1 r)
+  letI : ConnectedSpace D := Subtype.connectedSpace (Metric.isConnected_closedBall hr.le)
+  let g : V → B := fun v ↦ (e.symm v).1.1
+  have hg : Continuous g :=
+    continuous_subtype_val.comp (continuous_fst.comp e.symm.continuous)
+  have hgopen : IsOpenMap g :=
+    hW.isOpenMap_subtype_val.comp (isOpenMap_fst.comp e.symm.isOpenMap)
+  let f : D → B := fun u ↦ g ⟨u.1, hD u.2⟩
+  have hf : Continuous f := hg.comp (continuous_subtype_val.subtype_mk _)
+  let K : Set B := Set.range f
+  refine ⟨K, ?_, ?_, ?_, ?_⟩
+  · rintro _ ⟨u, rfl⟩
+    exact (e.symm ⟨u.1, hD u.2⟩).1.2
+  · exact isCompact_range hf
+  · exact isConnected_range hf
+  · let O : Set V := {v | v.1 ∈ Metric.ball p.1 r}
+    have hO : IsOpen O := Metric.isOpen_ball.preimage continuous_subtype_val
+    have hOK : g '' O ⊆ K := by
+      rintro _ ⟨v, hv, rfl⟩
+      exact ⟨⟨v.1, Metric.ball_subset_closedBall hv⟩, rfl⟩
+    apply (interior_maximal hOK (hgopen O hO))
+    refine ⟨p, ?_, ?_⟩
+    · exact Metric.mem_ball_self hr
+    · change (e.symm (e z)).1.1 = b
+      simp [z]
 
 /-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
 Assuming the pure disk-crosscut theorem, one explicit product chart around
@@ -2530,3 +2619,5 @@ theorem apm_t95j06
   · exact fun F hF hFinv => apm_t95J06_bridge_1 H hH F hF hFinv
 
 #print axioms apm_t95j06
+
+#print axioms apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_disk_projection
