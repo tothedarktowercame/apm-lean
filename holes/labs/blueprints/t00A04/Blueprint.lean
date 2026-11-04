@@ -579,13 +579,76 @@ theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_empty
 /-- Radial deformation of the complement of a compact convex set onto the
 complement of any one of its points makes restriction to that point an
 isomorphism on relative homology. -/
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective_aux_complement
+    (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (hA : IsCompact A) (hconv : Convex ℝ A)
+    (x : EuclideanSpace ℝ (Fin d)) (hx : x ∈ A) :
+    ∃ e : ContinuousMap.HomotopyEquiv
+        ↥Aᶜ ↥(({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ),
+      e.toFun =
+        ⟨fun y ↦ ⟨y, by
+          intro hyx
+          exact y.property (hyx.symm ▸ hx)⟩,
+          continuous_subtype_val.subtype_mk (fun y ↦ by
+            intro hyx
+            exact y.property (hyx.symm ▸ hx))⟩ := by
+  sorry
+
+theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective_aux_subspace
+    (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (hA : IsCompact A) (hconv : Convex ℝ A)
+    (x : EuclideanSpace ℝ (Fin d)) (hx : x ∈ A) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientRadialPair.subMap (ZMod 2)
+        Aᶜ ({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ
+        (ContinuousMap.id _) (by
+          intro y hy
+          simpa only [Set.mem_compl_iff, Set.mem_singleton_iff, ne_eq] using
+            fun (hxy : y = x) ↦ hy (hxy ▸ hx))) n) := by
+  obtain ⟨e, he⟩ :=
+    t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective_aux_complement
+      d A hA hconv x hx
+  change IsIso ((ConstructionTargets.CoefficientRadialPair.F (ZMod 2) n).map _)
+  rw [show ConstructionTargets.SingularExcision.subspaceMap
+      Aᶜ ({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ
+      (ContinuousMap.id _) _ = TopCat.ofHom e.toFun by
+    rw [he]
+    rfl]
+  rw [← ConstructionTargets.CoefficientRadialPair.homotopyIso_hom (ZMod 2) e n]
+  infer_instance
+
 theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective
     (d : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
     (hA : IsCompact A) (hconv : Convex ℝ A)
     (x : EuclideanSpace ℝ (Fin d)) (hx : x ∈ A) (n : ℕ) :
     Function.Bijective (t00A04_modTwo_pointRestriction
       (EuclideanSpace ℝ (Fin d)) A x hx n) := by
-  sorry
+  let hmap : Set.MapsTo (ContinuousMap.id (EuclideanSpace ℝ (Fin d)))
+      Aᶜ ({x} : Set (EuclideanSpace ℝ (Fin d)))ᶜ := by
+    intro y hy
+    simpa only [Set.mem_compl_iff, Set.mem_singleton_iff, ne_eq] using
+      fun (hxy : y = x) ↦ hy (hxy ▸ hx)
+  let i := ConstructionTargets.CoefficientCokernelComparison.comparisonIso
+    (ZMod 2)
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) Aᶜ)
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap (ZMod 2) ({x} : Set _)ᶜ)
+    (ConstructionTargets.CoefficientRadialPair.subMap (ZMod 2) Aᶜ ({x} : Set _)ᶜ
+      (ContinuousMap.id _) hmap)
+    (ConstructionTargets.CoefficientRadialPair.absoluteMap (ZMod 2) (ContinuousMap.id _))
+    (ConstructionTargets.CoefficientRadialPair.square (ZMod 2) Aᶜ ({x} : Set _)ᶜ
+      (ContinuousMap.id _) hmap)
+    (fun j ↦
+      t00A04_hatcherConclusion_compact_convex_euclidean_aux_pointRestriction_bijective_aux_subspace
+        d A hA hconv x hx j)
+    (fun j ↦ by
+      change IsIso ((ConstructionTargets.CoefficientRadialPair.F (ZMod 2) j).map
+        (TopCat.ofHom (ContinuousMap.id _)))
+      simpa using (inferInstance : IsIso
+        ((ConstructionTargets.CoefficientRadialPair.F (ZMod 2) j).map (𝟙 _)))) n
+  change Function.Bijective (HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Aᶜ ({x} : Set _)ᶜ
+      (ContinuousMap.id _) hmap) n)
+  exact ConcreteCategory.bijective_of_isIso i.hom
 
 /-- Euclidean point-local homology vanishes strictly above the dimension. -/
 theorem t00A04_hatcherConclusion_compact_convex_euclidean_aux_point_vanish_aux_origin_zero
