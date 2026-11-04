@@ -5476,6 +5476,53 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_component_ray
   · left; exact h
   · right; left; exact h
 
+/-- Either side of two disjoint nonempty real intervals is bounded on one
+side.  This is the order-theoretic boundedness input for the two-ray compact
+case: a point of the other transition image is a separating bound. -/
+lemma apm_t95j06_disjoint_preconnected_real_sets_oneSided_bounded
+    (S T : Set ℝ) (hS : S.Nonempty) (hT : T.Nonempty)
+    (hSconn : _root_.IsPreconnected S) (hdisj : Disjoint S T) :
+    BddAbove S ∨ BddBelow S := by
+  obtain ⟨t, htT⟩ := hT
+  have htS : t ∉ S := by
+    intro htS
+    exact Set.disjoint_left.1 hdisj htS htT
+  by_cases hleft : ∀ s ∈ S, s < t
+  · left
+    exact ⟨t, fun s hs => (hleft s hs).le⟩
+  · right
+    push_neg at hleft
+    obtain ⟨s₀, hs₀S, hs₀⟩ := hleft
+    refine ⟨t, ?_⟩
+    intro s hsS
+    by_contra hts
+    have hst : s < t := lt_of_not_ge hts
+    have hts₀ : t ≤ s₀ := by first | exact hs₀ | exact le_of_not_gt hs₀
+    exact htS (hSconn.ordConnected.out hsS hs₀S ⟨hst.le, hts₀⟩)
+
+/-- In a two-ray overlap, the transition image of the right ray has a finite
+bound on one side.  Its image is an interval, and the disjoint nonempty image
+of the left ray supplies the separating bound. -/
+lemma apm_t95j06_two_ray_transition_right_image_oneSided_bounded
+    (α β : ℝ) (hαβ : α ≤ β) (f : ℝ → ℝ)
+    (hf : ContinuousOn f (Set.Iio α ∪ Set.Ioi β))
+    (hfi : Set.InjOn f (Set.Iio α ∪ Set.Ioi β)) :
+    BddAbove (f '' Set.Ioi β) ∨ BddBelow (f '' Set.Ioi β) := by
+  have hright : (f '' Set.Ioi β).Nonempty := by
+    refine ⟨f (β + 1), β + 1, Set.mem_Ioi.mpr (by linarith), rfl⟩
+  have hleft : (f '' Set.Iio α).Nonempty := by
+    refine ⟨f (α - 1), α - 1, Set.mem_Iio.mpr (by linarith), rfl⟩
+  have hrightConn : _root_.IsPreconnected (f '' Set.Ioi β) :=
+    isPreconnected_Ioi.image f (hf.mono (Set.subset_union_right))
+  have hdisj : Disjoint (f '' Set.Ioi β) (f '' Set.Iio α) := by
+    apply Set.disjoint_left.2
+    rintro z ⟨x, hx, rfl⟩ ⟨y, hy, hxy⟩
+    have hxeq : x = y := hfi (Or.inr hx) (Or.inl hy) hxy.symm
+    subst y
+    exact (not_lt_of_ge hαβ) (lt_trans hx hy)
+  exact apm_t95j06_disjoint_preconnected_real_sets_oneSided_bounded
+    (f '' Set.Ioi β) (f '' Set.Iio α) hright hleft hrightConn hdisj
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
