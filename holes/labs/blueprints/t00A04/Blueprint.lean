@@ -1142,13 +1142,28 @@ compact `A ⊆ ℝ^d` comes from a finite union of compact convex sets whose
 interior contains `A`: a representing relative cycle has boundary with compact
 support disjoint from `A`, so finitely many small closed balls around points of
 `A` avoid it. -/
+theorem t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport
+    (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
+    (c : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) A n) :
+    ∃ (K : Set (EuclideanSpace ℝ (Fin d))) (hKA : K ⊆ Aᶜ), IsCompact K ∧
+      ∃ (cK : t00A04_ModTwoLocalHomology
+          (EuclideanSpace ℝ (Fin d)) Kᶜ n),
+        t00A04_modTwo_restrict _ A Kᶜ
+          (fun x hx hxK ↦ (hKA hxK) hx) n cK = c := by
+  sorry
+
 theorem t00A04_compactSupport_lift_aux_open
     (d n : ℕ) (A : Set (EuclideanSpace ℝ (Fin d)))
     (c : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) A n) :
     ∃ (W : Set (EuclideanSpace ℝ (Fin d))) (_ : IsOpen W) (_ : A ⊆ W)
       (cW : t00A04_ModTwoLocalHomology (EuclideanSpace ℝ (Fin d)) W n),
       t00A04_modTwo_restrict _ A W ‹A ⊆ W› n cW = c := by
-  sorry
+  obtain ⟨K, hKA, hK, cK, hcK⟩ :=
+    t00A04_compactSupport_lift_aux_open_aux_compactBoundarySupport d n A c
+  refine ⟨Kᶜ, hK.isClosed.isOpen_compl, ?_, cK, ?_⟩
+  · intro x hx hxK
+    exact (hKA hxK) hx
+  · exact hcK
 
 theorem t00A04_compactSupport_lift_aux_finite_convex_neighborhood
     (d : ℕ) (A W : Set (EuclideanSpace ℝ (Fin d)))
