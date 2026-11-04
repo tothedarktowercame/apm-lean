@@ -3576,6 +3576,56 @@ lemma apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_interval_range
   change t.1 < z.1 at hzv
   exact (not_lt_of_ge (le_of_lt hzv)) hzu
 
+/-- **Arc from a path (loop erasure).**  In a metrizable Hausdorff space a
+path between distinct points contains an injective arc with the same
+endpoints.  Standard (e.g. Willard, *General Topology*, 31.5); here it is
+being proved by topological loop erasure: a minimal admissible closed set of
+parameters (`_loopEraseAdmissible_exists_minimal`), the induced order on its
+image, and the classification `completeSeparableLinearOrder_homeomorph_Icc`.
+Estimated 250--400 further lines. -/
+theorem apm_t95j06_arcFromPath : apm_t95j06_ArcFromPath := by
+  sorry
+
+/-- **Q from arc extraction.**  Given loop erasure, two arcs from `b` inside
+the chart neighbourhood meet only at `b` (helper 8); pasted, they give an arc
+`η` through `b = η (1/2)` (helper 9), whose open interior contains `b`
+(helper 5), and whose range has exactly two non-cut points (helper 10). -/
+lemma apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_of_arcFromPath
+    (harc : apm_t95j06_ArcFromPath)
+    (B : Type) (tB : TopologicalSpace B)
+    (h2 : @T2Space B tB)
+    (hm : Nonempty (@TopologicalSpace.MetrizableSpace B tB))
+    (b : B) (W : Set B) (hW : @IsOpen B tB W) (hbW : b ∈ W)
+    (V : Set apm_t95j06_E2) (hV : IsOpen V)
+    (hchart : Nonempty ((W × Set.Ioo (-1 : ℝ) 1) ≃ₜ V)) :
+    ∃ K : Set B,
+      @IsCompact B tB K ∧ @IsConnected B tB K ∧ b ∈ @interior B tB K ∧
+      ∃ a c : K, a ≠ c ∧ (a : B) ≠ b ∧ (c : B) ≠ b ∧
+        Nonempty (LocallyConnectedSpace K) ∧
+        IsPreconnected ({a}ᶜ : Set K) ∧
+        IsPreconnected ({c}ᶜ : Set K) ∧
+        ∀ y : K, y ≠ a → y ≠ c → ¬ IsPreconnected ({y}ᶜ : Set K) := by
+  letI := tB
+  haveI := h2
+  haveI : TopologicalSpace.MetrizableSpace B := hm.some
+  obtain ⟨e⟩ := hchart
+  obtain ⟨q, r, _hqb, _hrb, _hqr, a, d, hai, hdi, ha0, ha1, hd0, hd1, haW, hdW, hmeet⟩ :=
+    apm_t95j06_Q_aux_two_arcs harc hW hV e b hbW
+  obtain ⟨η, hηi, _hη0, _hη1, hηm, hηr⟩ :=
+    apm_t95j06_Q_aux_paste_arcs a d hai hdi b q r ha0 ha1 hd0 hd1 hmeet
+  have hηW : Set.range η ⊆ W := by
+    rw [hηr]; exact Set.union_subset haW hdW
+  have hopen := apm_t95j06_Q_aux_arc_interior_open hW hV e η hηi hηW
+  have H := apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_aux_interval_range
+    η η.continuous hηi
+  dsimp only at H
+  rw [hηm] at H
+  obtain ⟨hK1, hK2, rest⟩ := H
+  refine ⟨Set.range η, hK1, hK2, ?_, rest⟩
+  rw [mem_interior]
+  refine ⟨_, Set.image_subset_range _ _, hopen, ⟨⟨1 / 2, by norm_num⟩, ?_, hηm⟩⟩
+  constructor <;> norm_num
+
 /-- **LIBRARY Q, projection from planar crosscuts (estimated 180--280 lines).**
 Assuming the pure disk-crosscut theorem, one explicit product chart around
 `b × 0` yields the required compact continuum in the base.  Choose a small
@@ -3605,7 +3655,8 @@ theorem apm_t95j06_planarCrosscut_productChart_twoEndpoint_at
         IsPreconnected ({a}ᶜ : Set K) ∧
         IsPreconnected ({c}ᶜ : Set K) ∧
         ∀ y : K, y ≠ a → y ≠ c → ¬ IsPreconnected ({y}ᶜ : Set K) := by
-  sorry
+  exact apm_t95j06_planarCrosscut_productChart_twoEndpoint_at_of_arcFromPath
+    apm_t95j06_arcFromPath B tB h2 hm b W hW hbW V hV hchart
 
 /-- **Sub-leaf F3c — gating leaf (LIBRARY, estimated 300--400 lines).**
 In words: planar arc-product neighbourhoods have arbitrarily local compact
