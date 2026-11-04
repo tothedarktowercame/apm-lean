@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.CoefficientRadialPair
 import ConstructionTargets.CoefficientPairNaturality
+import ConstructionTargets.CoefficientExcision
 import ConstructionTargets.CoefficientCompactComplementTransportedExactness
 import ConstructionTargets.CoefficientSubcomplexRelativeHomologySequence
 import ConstructionTargets.CoefficientSubcomplexRelativeLiteralHomologyIso
@@ -1512,6 +1513,25 @@ group isomorphism supplied by singular excision, this records its naturality
 with respect to all maps from the compact support to point supports; that
 naturality is exactly what transports the two point-restriction clauses in
 `t00A04_HatcherConclusion`. -/
+theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor
+    {Y W : Type} [TopologicalSpace Y] [TopologicalSpace W] [T2Space Y] [T2Space W]
+    (f : Y → W) (hinj : Function.Injective f) (hcont : Continuous f)
+    (hopen : ∀ U : Set Y, IsOpen U → IsOpen (f '' U))
+    (K : Set Y) (q : ℕ) :
+    ∃ g : ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) Kᶜ ⟶
+        ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2)
+          (ConstructionTargets.SingularExcision.excisedSubspace
+            (f '' K)ᶜ (Set.range f)ᶜ),
+      IsIso (HomologicalComplex.homologyMap g q) ∧
+      g ≫ ConstructionTargets.CoefficientExcision.excisionMap
+          (ZMod 2) (f '' K)ᶜ (Set.range f)ᶜ =
+        ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ (f '' K)ᶜ
+          ⟨f, hcont⟩ (by
+            intro y hy hfK
+            rcases hfK with ⟨k, hk, hfk⟩
+            exact hy (show y ∈ K from (hinj hfk).symm ▸ hk)) := by
+  sorry
+
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision
     {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
     (f : Y → Z) (hinj : Function.Injective f) (hcont : Continuous f)
@@ -1523,7 +1543,23 @@ theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbe
           intro y hy hfK
           rcases hfK with ⟨k, hk, hfk⟩
           exact hy (show y ∈ K from (hinj hfk).symm ▸ hk))) q) := by
-  sorry
+  have hclosedK : IsClosed (f '' K) := (hK.image hcont).isClosed
+  have hclosedC : IsClosed (Set.range f)ᶜ := by
+    apply IsOpen.isClosed_compl
+    simpa only [Set.image_univ] using hopen Set.univ isOpen_univ
+  have hsub : (Set.range f)ᶜ ⊆ interior (f '' K)ᶜ := by
+    rw [hclosedK.isOpen_compl.interior_eq]
+    intro z hz hzK
+    rcases hzK with ⟨y, hyK, rfl⟩
+    exact hz ⟨y, rfl⟩
+  obtain ⟨g, hg, hgf⟩ :=
+    t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso_aux_compactSupportExcision_aux_factor
+      f hinj hcont hopen K q
+  letI : IsIso (HomologicalComplex.homologyMap g q) := hg
+  letI := ConstructionTargets.CoefficientExcision.excision_isIso
+    (ZMod 2) (f '' K)ᶜ (Set.range f)ᶜ hclosedC hsub q
+  rw [← hgf, HomologicalComplex.homologyMap_comp]
+  infer_instance
 
 theorem t00A04_hatcherConclusion_compact_in_chart_aux_open_excision_aux_openEmbedding_aux_isIso
     {Y Z : Type} [TopologicalSpace Y] [TopologicalSpace Z] [T2Space Y] [T2Space Z]
