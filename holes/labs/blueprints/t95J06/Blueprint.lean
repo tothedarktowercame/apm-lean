@@ -4983,6 +4983,90 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_ray_components
           · exact Or.inr (lt_of_le_of_lt (le_of_not_gt har) hac)
         exact Or.inr ⟨c, a, hca, by simpa [Set.union_comm] using hcover⟩
 
+/-- Left-ray mirror of `aux_ray_components`: if one component is a left ray,
+the set is that ray or its union with the unique right-ray component. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_left_ray_components
+    (A : Set ℝ) (hAne : A ≠ Set.univ)
+    (hray : ∀ x ∈ A, (∃ a, connectedComponentIn A x = Set.Ioi a) ∨
+      ∃ b, connectedComponentIn A x = Set.Iio b)
+    (x : ℝ) (hxA : x ∈ A) (b : ℝ)
+    (hxb : connectedComponentIn A x = Set.Iio b) :
+    (∃ b, A = Set.Iio b) ∨
+      ∃ a b, a ≤ b ∧ A = Set.Iio a ∪ Set.Ioi b := by
+  by_cases hall : A = connectedComponentIn A x
+  · exact Or.inl ⟨b, hall.trans hxb⟩
+  · obtain ⟨y, hyA, hyx⟩ : ∃ y ∈ A, y ∉ connectedComponentIn A x := by
+      by_contra h
+      push_neg at h
+      exact hall (Set.Subset.antisymm h (connectedComponentIn_subset A x))
+    rcases hray y hyA with ⟨c, hyc⟩ | ⟨c, hyc⟩
+    · have hcover : A = Set.Iio b ∪ Set.Ioi c := by
+        apply Set.Subset.antisymm
+        · intro z hzA
+          by_cases hzx : z ∈ connectedComponentIn A x
+          · exact Or.inl (hxb ▸ hzx)
+          · rcases hray z hzA with ⟨d, hzd⟩ | ⟨d, hzd⟩
+            · let w := max c d + 1
+              have hwy : w ∈ connectedComponentIn A y := hyc.symm ▸ (by
+                dsimp [w]; linarith [le_max_left c d] : c < w)
+              have hwz : w ∈ connectedComponentIn A z := hzd.symm ▸ (by
+                dsimp [w]; linarith [le_max_right c d] : d < w)
+              have heq := (connectedComponentIn_eq hwy).trans
+                (connectedComponentIn_eq hwz).symm
+              exact Or.inr (hyc ▸ (heq ▸ mem_connectedComponentIn hzA))
+            · let w := min b d - 1
+              have hwx : w ∈ connectedComponentIn A x := hxb.symm ▸ (by
+                dsimp [w]; linarith [min_le_left b d] : w < b)
+              have hwz : w ∈ connectedComponentIn A z := hzd.symm ▸ (by
+                dsimp [w]; linarith [min_le_right b d] : w < d)
+              have heq := (connectedComponentIn_eq hwx).trans
+                (connectedComponentIn_eq hwz).symm
+              exact (hzx (heq ▸ mem_connectedComponentIn hzA)).elim
+        · exact Set.union_subset (hxb ▸ connectedComponentIn_subset A x)
+            (hyc ▸ connectedComponentIn_subset A y)
+      have hbc : b ≤ c := by
+        by_contra h
+        have hcb : c < b := lt_of_not_ge h
+        apply hAne
+        rw [hcover]
+        ext r
+        simp only [Set.mem_union, Set.mem_Iio, Set.mem_Ioi, Set.mem_univ, iff_true]
+        by_cases hrb : r < b
+        · exact Or.inl hrb
+        · exact Or.inr (lt_of_lt_of_le hcb (le_of_not_gt hrb))
+      exact Or.inr ⟨b, c, hbc, hcover⟩
+    · let z := min b c - 1
+      have hzb : z ∈ Set.Iio b := by
+        change min b c - 1 < b
+        linarith [min_le_left b c]
+      have hzc : z ∈ Set.Iio c := by
+        change min b c - 1 < c
+        linarith [min_le_right b c]
+      have hzxb : z ∈ connectedComponentIn A x := hxb.symm ▸ hzb
+      have hzyc : z ∈ connectedComponentIn A y := hyc.symm ▸ hzc
+      have heq := (connectedComponentIn_eq hzxb).trans
+        (connectedComponentIn_eq hzyc).symm
+      exact (hyx (heq ▸ mem_connectedComponentIn hyA)).elim
+
+/-- Combined combinatorial overlap shape: a nonempty proper real set whose
+components are rays is one ray or one left ray together with one right ray. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_ray_shape
+    (A : Set ℝ) (hA : A.Nonempty) (hAne : A ≠ Set.univ)
+    (hray : ∀ x ∈ A, (∃ a, connectedComponentIn A x = Set.Ioi a) ∨
+      ∃ b, connectedComponentIn A x = Set.Iio b) :
+    (∃ a, A = Set.Ioi a) ∨ (∃ b, A = Set.Iio b) ∨
+      ∃ a b, a ≤ b ∧ A = Set.Iio a ∪ Set.Ioi b := by
+  obtain ⟨x, hxA⟩ := hA
+  rcases hray x hxA with ⟨a, hxa⟩ | ⟨b, hxb⟩
+  · rcases apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_ray_components
+      A hAne hray x hxA a hxa with h | h
+    · exact Or.inl h
+    · exact Or.inr (Or.inr h)
+  · rcases apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_left_ray_components
+      A hAne hray x hxA b hxb with h | h
+    · exact Or.inr (Or.inl h)
+    · exact Or.inr (Or.inr h)
+
 /-- **R1, forward ray endpoint.** A strictly increasing surjection from a
 right ray onto a left ray approaches the finite endpoint of the left ray. -/
 lemma apm_t95j06_ray_strictMono_surjective_tendsto_leftEndpoint
