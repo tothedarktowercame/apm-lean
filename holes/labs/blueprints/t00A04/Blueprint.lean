@@ -378,6 +378,103 @@ theorem t00A04_relativeMV_middle_aux_small_quotient_exact_literal
   have _ := hunionB
   sorry
 
+/-- Generic set transport for the De Morgan rewrites: the set arguments of
+`pairMap` are generalized to variables, so `subst` applies and the subset proofs
+are irrelevant. -/
+theorem t00A04_relativeMV_aux_pairMap_set_transport
+    (X : Type) [TopologicalSpace X] (S S' T U : Set X) (hS : S = S')
+    (hT : Set.MapsTo (ContinuousMap.id X) S T) (hU : Set.MapsTo (ContinuousMap.id X) S U)
+    (hT' : Set.MapsTo (ContinuousMap.id X) S' T) (hU' : Set.MapsTo (ContinuousMap.id X) S' U)
+    (n : ℕ) (a : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) T).homology n)
+    (b : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) U).homology n)
+    (h : ∃ c : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) S).homology n,
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S T (ContinuousMap.id X) hT) n c = a ∧
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S U (ContinuousMap.id X) hU) n c = b) :
+    ∃ c : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) S').homology n,
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S' T (ContinuousMap.id X) hT') n c = a ∧
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S' U (ContinuousMap.id X) hU') n c = b := by
+  subst hS
+  exact h
+
+theorem t00A04_relativeMV_aux_pairMap_target_transport
+    (X : Type) [TopologicalSpace X] (P Q D D' : Set X) (hD : D = D')
+    (hP : Set.MapsTo (ContinuousMap.id X) P D) (hQ : Set.MapsTo (ContinuousMap.id X) Q D)
+    (hP' : Set.MapsTo (ContinuousMap.id X) P D') (hQ' : Set.MapsTo (ContinuousMap.id X) Q D')
+    (n : ℕ) (a : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) P).homology n)
+    (b : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) Q).homology n)
+    (h : HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) P D (ContinuousMap.id X) hP) n a =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Q D (ContinuousMap.id X) hQ) n b) :
+    HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) P D' (ContinuousMap.id X) hP') n a =
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Q D' (ContinuousMap.id X) hQ') n b := by
+  subst hD
+  exact h
+
+theorem t00A04_relativeMV_aux_pairMap_kernel_transport
+    (X : Type) [TopologicalSpace X] (S S' T U : Set X) (hS : S = S')
+    (hT : Set.MapsTo (ContinuousMap.id X) S T) (hU : Set.MapsTo (ContinuousMap.id X) S U)
+    (hT' : Set.MapsTo (ContinuousMap.id X) S' T) (hU' : Set.MapsTo (ContinuousMap.id X) S' U)
+    (n : ℕ)
+    (h : ∀ c' : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) S).homology n,
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S T (ContinuousMap.id X) hT) n c' = 0 →
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S U (ContinuousMap.id X) hU) n c' = 0 →
+      c' = 0) :
+    ∀ c : (ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) S').homology n,
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S' T (ContinuousMap.id X) hT') n c = 0 →
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) S' U (ContinuousMap.id X) hU') n c = 0 →
+      c = 0 := by
+  subst hS
+  exact h
+
+theorem t00A04_relativeMV_aux_homology_set_transport
+    (X : Type) [TopologicalSpace X] (S S' : Set X) (hS : S = S') (n : ℕ)
+    (h : Subsingleton ((ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) S).homology n)) :
+    Subsingleton ((ConstructionTargets.CoefficientRelativeSmall.relativeChains (ZMod 2) S').homology n) := by
+  subst hS
+  exact h
+
+theorem t00A04_relativeMV_middle_aux_complement_rewrite_aux_transport
+    (X : Type) [TopologicalSpace X] (K L : Set X) (n : ℕ)
+    (a : t00A04_ModTwoLocalHomology X K n) (b : t00A04_ModTwoLocalHomology X L n)
+    (h : ∃ c : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) (Kᶜ ∩ Lᶜ)).homology n,
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (Kᶜ ∩ Lᶜ) Kᶜ
+            (ContinuousMap.id X) Set.inter_subset_left) n c = a ∧
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (Kᶜ ∩ Lᶜ) Lᶜ
+            (ContinuousMap.id X) Set.inter_subset_right) n c = b) :
+    ∃ c : t00A04_ModTwoLocalHomology X (K ∪ L) n,
+      t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = a ∧
+      t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = b := by
+  exact t00A04_relativeMV_aux_pairMap_set_transport X (Kᶜ ∩ Lᶜ) (K ∪ L)ᶜ Kᶜ Lᶜ
+    (Set.compl_union K L).symm _ _ _ _ n a b h
+
+theorem t00A04_relativeMV_middle_aux_complement_rewrite_aux_input_transport
+    (X : Type) [TopologicalSpace X] (K L : Set X) (n : ℕ)
+    (a : t00A04_ModTwoLocalHomology X K n) (b : t00A04_ModTwoLocalHomology X L n)
+    (hab : t00A04_modTwo_restrict X (K ∩ L) K Set.inter_subset_left n a =
+      t00A04_modTwo_restrict X (K ∩ L) L Set.inter_subset_right n b) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ (Kᶜ ∪ Lᶜ)
+          (ContinuousMap.id X) Set.subset_union_left) n a =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Lᶜ (Kᶜ ∪ Lᶜ)
+          (ContinuousMap.id X) Set.subset_union_right) n b := by
+  exact t00A04_relativeMV_aux_pairMap_target_transport X Kᶜ Lᶜ (K ∩ L)ᶜ (Kᶜ ∪ Lᶜ)
+    (Set.compl_inter K L) _ _ _ _ n a b hab
+
 theorem t00A04_relativeMV_middle_aux_complement_rewrite
     (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
     (hK : IsCompact K) (hL : IsCompact L) (n : ℕ)
@@ -387,9 +484,11 @@ theorem t00A04_relativeMV_middle_aux_complement_rewrite
     ∃ c : t00A04_ModTwoLocalHomology X (K ∪ L) n,
       t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = a ∧
       t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = b := by
-  have _ := t00A04_relativeMV_middle_aux_small_quotient_exact_literal X Kᶜ Lᶜ
+  apply t00A04_relativeMV_middle_aux_complement_rewrite_aux_transport X K L n a b
+  apply t00A04_relativeMV_middle_aux_small_quotient_exact_literal X Kᶜ Lᶜ
     hK.isClosed.isOpen_compl hL.isClosed.isOpen_compl n a b
-  sorry
+  exact t00A04_relativeMV_middle_aux_complement_rewrite_aux_input_transport
+    X K L n a b hab
 
 theorem t00A04_relativeMV_middle
     (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
@@ -433,6 +532,30 @@ theorem t00A04_relativeMV_injective_aux_small_quotient_kernel
   have _ := hunionB
   sorry
 
+theorem t00A04_relativeMV_injective_aux_complement_rewrite_aux_transport
+    (X : Type) [TopologicalSpace X] (K L : Set X) (n : ℕ)
+    (c : t00A04_ModTwoLocalHomology X (K ∪ L) n)
+    (h : ∀ c' : (ConstructionTargets.CoefficientRelativeSmall.relativeChains
+        (ZMod 2) (Kᶜ ∩ Lᶜ)).homology n,
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (Kᶜ ∩ Lᶜ) Kᶜ
+            (ContinuousMap.id X) Set.inter_subset_left) n c' = 0 →
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) (Kᶜ ∩ Lᶜ) Lᶜ
+            (ContinuousMap.id X) Set.inter_subset_right) n c' = 0 → c' = 0)
+    (hcK : t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = 0)
+    (hcL : t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = 0) : c = 0 := by
+  exact t00A04_relativeMV_aux_pairMap_kernel_transport X (Kᶜ ∩ Lᶜ) (K ∪ L)ᶜ Kᶜ Lᶜ
+    (Set.compl_union K L).symm _ _ _ _ n h c hcK hcL
+
+theorem t00A04_relativeMV_injective_aux_complement_rewrite_aux_hzero_transport
+    (X : Type) [TopologicalSpace X] (K L : Set X) (n : ℕ)
+    (hzero : Subsingleton (t00A04_ModTwoLocalHomology X (K ∩ L) (n + 1))) :
+    Subsingleton ((ConstructionTargets.CoefficientRelativeSmall.relativeChains
+      (ZMod 2) (Kᶜ ∪ Lᶜ)).homology (n + 1)) := by
+  exact t00A04_relativeMV_aux_homology_set_transport X (K ∩ L)ᶜ (Kᶜ ∪ Lᶜ)
+    (Set.compl_inter K L) (n + 1) hzero
+
 theorem t00A04_relativeMV_injective_aux_complement_rewrite
     (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
     (hK : IsCompact K) (hL : IsCompact L) (n : ℕ)
@@ -440,9 +563,13 @@ theorem t00A04_relativeMV_injective_aux_complement_rewrite
     (c : t00A04_ModTwoLocalHomology X (K ∪ L) n)
     (hcK : t00A04_modTwo_restrict X K (K ∪ L) Set.subset_union_left n c = 0)
     (hcL : t00A04_modTwo_restrict X L (K ∪ L) Set.subset_union_right n c = 0) : c = 0 := by
-  have _ := t00A04_relativeMV_injective_aux_small_quotient_kernel X Kᶜ Lᶜ
-    hK.isClosed.isOpen_compl hL.isClosed.isOpen_compl n
-  sorry
+  apply t00A04_relativeMV_injective_aux_complement_rewrite_aux_transport X K L n c
+  · apply t00A04_relativeMV_injective_aux_small_quotient_kernel X Kᶜ Lᶜ
+      hK.isClosed.isOpen_compl hL.isClosed.isOpen_compl n
+    exact t00A04_relativeMV_injective_aux_complement_rewrite_aux_hzero_transport
+      X K L n hzero
+  · exact hcK
+  · exact hcL
 
 theorem t00A04_relativeMV_injective
     (X : Type) [TopologicalSpace X] [T2Space X] (K L : Set X)
