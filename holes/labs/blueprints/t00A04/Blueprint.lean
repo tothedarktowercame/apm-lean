@@ -3253,6 +3253,105 @@ noncomputable def t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontr
       ((TopCat.toSSetObjEquiv (TopCat.of Y) n).symm.trans
         Equiv.ulift.symm))
 
+theorem t00A04_ui_simplexEquiv_natural (Y : Type) [TopologicalSpace Y] {n m : SimplexCategoryᵒᵖ}
+    (g : n ⟶ m) (σ : (TopCat.toSSet.obj (TopCat.of (ULift.{u} Y))).obj n) :
+    (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv Y m ((TopCat.toSSet.obj (TopCat.of (ULift.{u} Y))).map g σ)).down =
+      (TopCat.toSSet.obj (TopCat.of Y)).map g (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv Y n σ).down := by
+  apply (TopCat.toSSetObjEquiv (TopCat.of Y) m).injective
+  ext x
+  simp [t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv]
+  rfl
+
+noncomputable abbrev t00A04_ui_SL (Y : Type) [TopologicalSpace Y] :=
+  ((sigmaConst ⋙ SimplicialObject.whiskering _ _).obj
+          (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).obj
+          (TopCat.toSSet.obj (TopCat.of (ULift.{u} Y)))
+
+noncomputable abbrev t00A04_ui_SR (Y : Type) [TopologicalSpace Y] :=
+  ((SimplicialObject.whiskering
+          (ModuleCat.{0} (ZMod 2)) (ModuleCat.{u} (ZMod 2))).obj
+          (ModuleCat.uliftFunctor.{u} (ZMod 2))).obj
+          (((sigmaConst ⋙ SimplicialObject.whiskering _ _).obj
+            (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+            (TopCat.toSSet.obj (TopCat.of Y)))
+
+open Classical DirectSum in
+noncomputable def t00A04_ui_degLin (Y : Type) [TopologicalSpace Y] (n : SimplexCategoryᵒᵖ) :
+    (⨁ _ : (TopCat.toSSet.obj (TopCat.of (ULift.{u} Y))).obj n, ULift.{u} (ZMod 2)) ≃ₗ[ZMod 2]
+      ULift.{u} ((sigmaConst.obj (ModuleCat.of (ZMod 2) (ZMod 2))).obj
+        ((TopCat.toSSet.obj (TopCat.of Y)).obj n)) := by
+  classical
+  exact (finsuppLEquivDirectSum (ZMod 2) (ULift.{u} (ZMod 2)) _).symm ≪≫ₗ
+    Finsupp.domLCongr ((t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv.{u} Y n).trans Equiv.ulift) ≪≫ₗ
+    Finsupp.mapRange.linearEquiv (ULift.moduleEquiv (R := ZMod 2) (M := ZMod 2)) ≪≫ₗ
+    (ConstructionTargets.CoefficientSigmaConstFinsuppComparison.sigmaConstFinsuppIso
+      (ZMod 2) _).symm.toLinearEquiv ≪≫ₗ
+    ULift.moduleEquiv.symm
+
+open Classical in
+noncomputable def t00A04_ui_degIso (Y : Type) [TopologicalSpace Y] (n : SimplexCategoryᵒᵖ) :
+    (t00A04_ui_SL.{u} Y).obj n ≅ (t00A04_ui_SR.{u} Y).obj n :=
+  ModuleCat.coprodIsoDirectSum _ ≪≫ (t00A04_ui_degLin.{u} Y n).toModuleIso
+
+open Classical in
+theorem t00A04_ui_degIso_gen (Y : Type) [TopologicalSpace Y] (n : SimplexCategoryᵒᵖ)
+    (σ : (TopCat.toSSet.obj (TopCat.of (ULift.{u} Y))).obj n) (r : ZMod 2) :
+    (Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2))) σ ≫ (t00A04_ui_degIso.{u} Y n).hom)
+        (ULift.up r) =
+      ULift.up ((Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ZMod 2)) (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv.{u} Y n σ).down) r) := by
+  classical
+  change ((Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2))) σ ≫
+    (ModuleCat.coprodIsoDirectSum (fun _ => ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))).hom) ≫
+      (t00A04_ui_degLin.{u} Y n).toModuleIso.hom) (ULift.up.{u} r) = _
+  rw [ModuleCat.ι_coprodIsoDirectSum_hom]
+  change t00A04_ui_degLin.{u} Y n (DirectSum.lof (ZMod 2) _ (fun _ => ULift.{u} (ZMod 2)) σ (ULift.up r)) = _
+  simp only [t00A04_ui_degLin, LinearEquiv.trans_apply, finsuppLEquivDirectSum_symm_lof,
+    Finsupp.domLCongr_single, Finsupp.mapRange.linearEquiv_apply, Finsupp.mapRange_single]
+  change ULift.up _ = ULift.up _
+  congr 1
+  change (ConstructionTargets.CoefficientSigmaConstFinsuppComparison.sigmaConstFinsuppIso
+    (ZMod 2) _).inv (Finsupp.single ((t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv.{u} Y n σ).down) r) = _
+  rw [← ConstructionTargets.CoefficientSigmaConstFinsuppComparison.sigma_ι_sigmaConstFinsuppIso_hom]
+  erw [ConcreteCategory.comp_apply, Iso.hom_inv_id_apply]
+  exact Iso.hom_inv_id_apply (ModuleCat.coprodIsoDirectSum fun _ => ModuleCat.of (ZMod 2) (ZMod 2)) _
+
+open Classical in
+theorem t00A04_ui_degIso_natural (Y : Type) [TopologicalSpace Y] {n m : SimplexCategoryᵒᵖ} (g : n ⟶ m) :
+    (t00A04_ui_SL.{u} Y).map g ≫ (t00A04_ui_degIso.{u} Y m).hom = (t00A04_ui_degIso.{u} Y n).hom ≫ (t00A04_ui_SR.{u} Y).map g := by
+  apply Limits.Sigma.hom_ext
+  intro σ
+  have hL : Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2))) σ ≫ (t00A04_ui_SL.{u} Y).map g =
+      Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))
+        ((TopCat.toSSet.obj (TopCat.of (ULift.{u} Y))).map g σ) := by
+    change Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2))) σ ≫
+      Limits.Sigma.map' (f := fun _ => ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))
+        (g := fun _ => ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))
+        ((TopCat.toSSet.obj (TopCat.of (ULift.{u} Y))).map g)
+        (fun _ => 𝟙 (ModuleCat.of (ZMod 2) (ULift.{u} (ZMod 2)))) = _
+    rw [Limits.Sigma.ι_comp_map', Category.id_comp]
+  have hR : Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ZMod 2)) (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv.{u} Y n σ).down ≫
+      Limits.Sigma.map' (f := fun _ => ModuleCat.of (ZMod 2) (ZMod 2))
+        (g := fun _ => ModuleCat.of (ZMod 2) (ZMod 2))
+        ((TopCat.toSSet.obj (TopCat.of Y)).map g)
+        (fun _ => 𝟙 (ModuleCat.of (ZMod 2) (ZMod 2))) =
+      Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ZMod 2))
+        ((TopCat.toSSet.obj (TopCat.of Y)).map g (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv.{u} Y n σ).down) := by
+    rw [Limits.Sigma.ι_comp_map', Category.id_comp]
+  refine (Category.assoc _ _ _).symm.trans ?_
+  refine (congrArg (· ≫ (t00A04_ui_degIso.{u} Y m).hom) hL).trans ?_
+  refine Eq.trans ?_ (Category.assoc _ _ _)
+  ext x
+  obtain ⟨r⟩ := x
+  refine (t00A04_ui_degIso_gen.{u} Y m _ r).trans ?_
+  refine Eq.trans ?_ (congrArg (fun z => ((t00A04_ui_SR.{u} Y).map g) z) (t00A04_ui_degIso_gen.{u} Y n σ r)).symm
+  change _ = ULift.up ((Limits.Sigma.ι (fun _ => ModuleCat.of (ZMod 2) (ZMod 2))
+      (t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso_aux_simplexEquiv.{u} Y n σ).down ≫
+      Limits.Sigma.map' (f := fun _ => ModuleCat.of (ZMod 2) (ZMod 2))
+        (g := fun _ => ModuleCat.of (ZMod 2) (ZMod 2))
+        ((TopCat.toSSet.obj (TopCat.of Y)).map g)
+        (fun _ => 𝟙 (ModuleCat.of (ZMod 2) (ZMod 2)))) r)
+  rw [hR, t00A04_ui_simplexEquiv_natural]
+
 /-- The remaining universe comparison before taking alternating face maps.
 In each degree this is the direct-sum equivalence obtained from
 `ModuleCat.coprodIsoDirectSum`, `ULift.moduleEquiv`, and `Finsupp.mapDomain`
@@ -3269,8 +3368,9 @@ theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_
           (ModuleCat.uliftFunctor.{u} (ZMod 2))).obj
           (((sigmaConst ⋙ SimplicialObject.whiskering _ _).obj
             (ModuleCat.of (ZMod 2) (ZMod 2))).obj
-            (TopCat.toSSet.obj (TopCat.of (Shrink.{0} X))))) := by
-  sorry
+            (TopCat.toSSet.obj (TopCat.of (Shrink.{0} X))))) :=
+  ⟨NatIso.ofComponents (t00A04_ui_degIso.{u} (Shrink.{0} X))
+    (fun g => t00A04_ui_degIso_natural.{u} (Shrink.{0} X) g)⟩
 
 theorem t00A04_compact_boundaryless_manifold_top_modTwo_homology_nontrivial_aux_shrink_aux_homology_aux_coefficients_aux_universeComparison_aux_chainIso
     (X : Type u) [TopologicalSpace X] [Small.{0} X] :
