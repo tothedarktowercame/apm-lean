@@ -6626,6 +6626,87 @@ lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_rayGlue
     X U V hU hV φ ψ α δ hA τ hτmono hτsurj
     (fun u hu _ => congrArg Subtype.val (hlink u hu))
 
+/-- **E2, bounded overlap components.**  If a component of the overlap, in
+the first chart, is a bounded interval `Ioo p q`, then the second chart's
+coordinates of the overlap cover all of `ℝ`: the transition is strictly
+monotone on `Ioo p q`, and a bounded end of its image would give a finite
+limit of the second chart at an endpoint `p` or `q` that is not in the
+overlap, which `_aux_no_finite_end_limit` forbids. -/
+lemma apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_bounded_component
+    (X : Type) [TopologicalSpace X] [T2Space X]
+    (U V : Set X) (hV : IsOpen V) (φ : U ≃ₜ ℝ) (ψ : V ≃ₜ ℝ)
+    (t p q : ℝ) (htA : t ∈ φ '' (Subtype.val ⁻¹' V))
+    (hcomp : connectedComponentIn (φ '' (Subtype.val ⁻¹' V)) t = Set.Ioo p q) :
+    ψ '' (Subtype.val ⁻¹' U) = Set.univ := by
+  classical
+  set A := φ '' (Subtype.val ⁻¹' V) with hAdef
+  have hO : ∀ s ∈ A, ((φ.symm s : U) : X) ∈ V := by
+    rintro _ ⟨u, hu, rfl⟩; simpa using hu
+  have hAopen : IsOpen A := by
+    have : A = (fun s => ((φ.symm s : U) : X)) ⁻¹' V := by
+      ext s; constructor
+      · intro hs; exact hO s hs
+      · intro hs; exact ⟨φ.symm s, hs, by simp⟩
+    rw [this]; exact hV.preimage (continuous_subtype_val.comp φ.symm.continuous)
+  have hpq : p < q := by
+    have h := mem_connectedComponentIn htA
+    rw [hcomp] at h; exact h.1.trans h.2
+  have hIA : Set.Ioo p q ⊆ A := hcomp ▸ connectedComponentIn_subset A t
+  have hends := apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_component_endpoints
+    A hAopen t p q htA hcomp
+  let τ : ℝ → ℝ := fun s => if h : ((φ.symm s : U) : X) ∈ V then ψ ⟨_, h⟩ else 0
+  have hτA : ∀ s (h : ((φ.symm s : U) : X) ∈ V), τ s = ψ ⟨_, h⟩ := by
+    intro s h; simp only [τ, dif_pos h]
+  have hcontA : ContinuousOn τ A := by
+    rw [continuousOn_iff_continuous_restrict]
+    have : A.restrict τ = fun s : A => ψ ⟨((φ.symm s.1 : U) : X), hO s.1 s.2⟩ := by
+      funext s; exact hτA _ _
+    rw [this]
+    exact ψ.continuous.comp ((continuous_subtype_val.comp
+      (φ.symm.continuous.comp continuous_subtype_val)).subtype_mk _)
+  have hcont : ContinuousOn τ (Set.Ioo p q) := hcontA.mono hIA
+  have hinj : Set.InjOn τ (Set.Ioo p q) := by
+    intro s hs s' hs' he
+    rw [hτA s (hO s (hIA hs)), hτA s' (hO s' (hIA hs'))] at he
+    have h1 := congrArg Subtype.val (ψ.injective he)
+    have h2 : φ.symm s = φ.symm s' := Subtype.ext h1
+    simpa using congrArg φ h2
+  -- no finite limit at an endpoint not in A
+  have hnolim : ∀ (l : Filter ℝ) [Filter.NeBot l] (β : ℝ), β ∉ A → l ≤ nhds β →
+      (Set.Ioo p q ∈ l) → ∀ c, ¬ Filter.Tendsto τ l (nhds c) := by
+    intro l _ β hβ hlβ hIl c hc
+    refine apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_no_finite_end_limit
+      X U V φ ψ (l := l) (fun s => φ.symm s) (fun s => ψ.symm (τ s)) ?_ β hβ ?_ c ?_
+    · filter_upwards [hIl] with s hs
+      rw [hτA s (hO s (hIA hs))]; simp
+    · simpa using (Filter.tendsto_id.mono_left hlβ)
+    · simpa using hc
+  have hmono := hcont.strictMonoOn_of_injOn_Ioo hpq hinj
+  have E := apm_t95j06_two_overlapping_realCharts_line_or_compact_aux_monotone_end_limits
+    p q hpq τ
+  have hnotAbove : ¬ BddAbove (τ '' Set.Ioo p q) := by
+    intro hb
+    rcases hmono with hm | hm
+    · exact hnolim (nhdsWithin q (Set.Iio q)) q hends.2 nhdsWithin_le_nhds (Ioo_mem_nhdsLT hpq) _ ((E.1 hm).1 hb)
+    · exact hnolim (nhdsWithin p (Set.Ioi p)) p hends.1 nhdsWithin_le_nhds (Ioo_mem_nhdsGT hpq) _ ((E.2 hm).2 hb)
+  have hnotBelow : ¬ BddBelow (τ '' Set.Ioo p q) := by
+    intro hb
+    rcases hmono with hm | hm
+    · exact hnolim (nhdsWithin p (Set.Ioi p)) p hends.1 nhdsWithin_le_nhds (Ioo_mem_nhdsGT hpq) _ ((E.1 hm).2 hb)
+    · exact hnolim (nhdsWithin q (Set.Iio q)) q hends.2 nhdsWithin_le_nhds (Ioo_mem_nhdsLT hpq) _ ((E.2 hm).1 hb)
+  have hpre : _root_.IsPreconnected (τ '' Set.Ioo p q) := isPreconnected_Ioo.image τ hcont
+  have huniv : τ '' Set.Ioo p q = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro y
+    obtain ⟨_, ⟨a, ha, rfl⟩, hay⟩ := not_bddBelow_iff.mp hnotBelow y
+    obtain ⟨_, ⟨b, hb, rfl⟩, hyb⟩ := not_bddAbove_iff.mp hnotAbove y
+    exact hpre.Icc_subset ⟨a, ha, rfl⟩ ⟨b, hb, rfl⟩ ⟨hay.le, hyb.le⟩
+  apply Set.eq_univ_of_forall
+  intro y
+  have hy : y ∈ τ '' Set.Ioo p q := huniv ▸ Set.mem_univ y
+  obtain ⟨s, hs, rfl⟩ := hy
+  refine ⟨⟨_, hO s (hIA hs)⟩, (φ.symm s).2, (hτA s _).symm⟩
+
 theorem apm_t95j06_two_overlapping_realCharts_line_or_compact
     (X : Type) [TopologicalSpace X] [T2Space X]
     (U V : Set X) (hUopen : IsOpen U) (hVopen : IsOpen V)
