@@ -211,6 +211,22 @@ theorem t00A04_relativeMV_injective
 
 /-- **LIBRARY F2.** The relative compact-complement Mayer--Vietoris union
 step in Hatcher 3.27.  Its three inputs are explicit so seats are independent. -/
+theorem t00A04_hatcherConclusion_union_aux_pointRestriction_restrict
+    (X : Type) [TopologicalSpace X] (A K : Set X) (h : A ⊆ K) (x : X) (hx : x ∈ A)
+    (n : ℕ) (c : t00A04_ModTwoLocalHomology X K n) :
+    t00A04_modTwo_pointRestriction X A x hx n (t00A04_modTwo_restrict X A K h n c) =
+      t00A04_modTwo_pointRestriction X K x (h hx) n c := by
+  change
+    ((HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Kᶜ Aᶜ
+          (ContinuousMap.id X) _) n ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientRadialPair.pairMap (ZMod 2) Aᶜ ({x} : Set X)ᶜ
+          (ContinuousMap.id X) _) n) c) = _
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← ConstructionTargets.CoefficientPairNaturality.pair_comp]
+  rfl
+
 theorem t00A04_hatcherConclusion_union
     (X : Type) [TopologicalSpace X] [T2Space X] (d : ℕ)
     (A B : Set X) (hA : IsCompact A) (hB : IsCompact B)
@@ -220,7 +236,68 @@ theorem t00A04_hatcherConclusion_union
     (hloc : ∀ x : X, ∀ a b : t00A04_ModTwoLocalHomology X {x} d,
       a ≠ 0 → b ≠ 0 → a = b) :
     t00A04_HatcherConclusion X d (A ∪ B) := by
-  sorry
+  constructor
+  · intro i hdi
+    constructor
+    intro c c'
+    have hABzero :
+        Subsingleton (t00A04_ModTwoLocalHomology X (A ∩ B) (i + 1)) :=
+      hABi.vanish_above (i + 1) (lt_trans hdi (Nat.lt_succ_self i))
+    have hcA :
+        t00A04_modTwo_restrict X A (A ∪ B) Set.subset_union_left i (c - c') = 0 := by
+      exact @Subsingleton.elim _ (hAi.vanish_above i hdi) _ _
+    have hcB :
+        t00A04_modTwo_restrict X B (A ∪ B) Set.subset_union_right i (c - c') = 0 := by
+      exact @Subsingleton.elim _ (hBi.vanish_above i hdi) _ _
+    have hcc' := t00A04_relativeMV_injective X A B hA hB i hABzero (c - c') hcA hcB
+    exact sub_eq_zero.mp hcc'
+  · rcases hAi.exists_everywhere_nonzero with ⟨cA, hcA⟩
+    rcases hBi.exists_everywhere_nonzero with ⟨cB, hcB⟩
+    have hab :
+        t00A04_modTwo_restrict X (A ∩ B) A Set.inter_subset_left d cA =
+          t00A04_modTwo_restrict X (A ∩ B) B Set.inter_subset_right d cB := by
+      apply sub_eq_zero.mp
+      apply (hABi.eq_zero_iff_pointwise _).2
+      intro x hx
+      rw [map_sub]
+      apply sub_eq_zero.mpr
+      apply hloc x
+      · rw [t00A04_hatcherConclusion_union_aux_pointRestriction_restrict]
+        exact hcA x hx.1
+      · rw [t00A04_hatcherConclusion_union_aux_pointRestriction_restrict]
+        exact hcB x hx.2
+    rcases t00A04_relativeMV_middle X A B hA hB d cA cB hab with
+      ⟨c, hc_to_A, hc_to_B⟩
+    refine ⟨c, ?_⟩
+    intro x hx
+    rcases hx with hxA | hxB
+    · rw [← t00A04_hatcherConclusion_union_aux_pointRestriction_restrict
+          X A (A ∪ B) Set.subset_union_left x hxA d c, hc_to_A]
+      exact hcA x hxA
+    · rw [← t00A04_hatcherConclusion_union_aux_pointRestriction_restrict
+          X B (A ∪ B) Set.subset_union_right x hxB d c, hc_to_B]
+      exact hcB x hxB
+  · intro c
+    constructor
+    · intro hc
+      subst c
+      intro x hx
+      exact map_zero _
+    · intro hc
+      have hABzero :
+          Subsingleton (t00A04_ModTwoLocalHomology X (A ∩ B) (d + 1)) :=
+        hABi.vanish_above (d + 1) (Nat.lt_succ_self d)
+      have hcA : t00A04_modTwo_restrict X A (A ∪ B) Set.subset_union_left d c = 0 := by
+        apply (hAi.eq_zero_iff_pointwise _).2
+        intro x hx
+        rw [t00A04_hatcherConclusion_union_aux_pointRestriction_restrict]
+        exact hc x (Or.inl hx)
+      have hcB : t00A04_modTwo_restrict X B (A ∪ B) Set.subset_union_right d c = 0 := by
+        apply (hBi.eq_zero_iff_pointwise _).2
+        intro x hx
+        rw [t00A04_hatcherConclusion_union_aux_pointRestriction_restrict]
+        exact hc x (Or.inr hx)
+      exact t00A04_relativeMV_injective X A B hA hB d hABzero c hcA hcB
 
 /-- **LIBRARY.** Top local mod-2 homology of a boundaryless manifold has a
 unique nonzero element. -/
