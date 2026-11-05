@@ -179,3 +179,21 @@ lemma straightening_circle_param_open (z : Circle) :
   exact (Homeomorph.mulLeft z).isOpenMap.comp
     (AddCircle.homeomorphCircle'.isOpenMap.comp QuotientAddGroup.isOpenMap_coe)
 
+/-- The curve written in the extended chart is smooth at parameter zero. -/
+lemma straightening_coordinate_smooth
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (c : C(Circle, S))
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c) (z : Circle) :
+    ContDiffAt ℝ ∞
+      (fun r : ℝ => extChartAt SurfaceModelWithCorners (c z) (c (z * Circle.exp r))) 0 := by
+  have hg : ContMDiff 𝓘(ℝ, ℝ) (𝓡 1) ∞ (fun r : ℝ => z * Circle.exp r) :=
+    contMDiff_const.mul contMDiff_circleExp
+  have h := contMDiffAt_extChartAt (I := SurfaceModelWithCorners) (x := c z) (n := ∞)
+  have hg0 : z * Circle.exp 0 = z := by simp
+  apply ContMDiffAt.contDiffAt
+  have h' : ContMDiffAt SurfaceModelWithCorners 𝓘(ℝ, SurfaceModel) ∞
+      (extChartAt SurfaceModelWithCorners (c z)) (c (z * Circle.exp 0)) := by
+    simpa only [hg0] using h
+  exact h'.comp 0 (hc.comp hg).contMDiffAt
+
