@@ -475,4 +475,124 @@ lemma circleExpSign_transport {X : Type} [TopologicalSpace X]
 #print axioms circleExpSign_transport
 #print axioms localExpArc_mapsTo_circleFiberComplement
 
+theorem circleLocalDegree_chart_transport
+    (ℓ : C(Circle, Circle)) (z : Circle) [Fintype {u : Circle // ℓ u = z}]
+    (t : {u : Circle // ℓ u = z})
+    (δ : ℝ) (hδ : 0 < δ) (hδπ : δ ≤ Real.pi) (h : C(ℝ, ℝ))
+    (hh : ∀ r ∈ Set.Ioo (-δ) δ, ℓ ((t : Circle) * Circle.exp r) = z * Circle.exp (h r))
+    (hhπ : ∀ r ∈ Set.Ioo (-δ) δ, h r ∈ Set.Ioo (-Real.pi) Real.pi)
+    (hzero : ∀ r : Set.Ioo (-δ) δ, h r = 0 ↔ (r : ℝ) = 0)
+    (s : ℤ) (hs1 : s = 1 ∨ s = -1)
+    (hst : IsCircleExpSign (t : Circle) s) (hsz : IsCircleExpSign z s) :
+    ∃ m : ℤ, IsLocalDegreeR (Set.Ioo (-δ) δ) h hzero m ∧
+      t00J02_IsCircleLocalDegree ℓ z t m := by
+  classical
+  let V : Set ℝ := Set.Ioo (-δ) δ
+  let A := neighborhoodDeletedPoint V (0 : ℝ)
+  let T : Set Circle := {u | ℓ u = z}ᶜ
+  let G := ConstructionTargets.OneDimensionalChartLocalGenerator.realLocalGenerator 0
+  let L := fun w : Circle => ConstructionTargets.ManifoldFundamentalClass.localizationMap w 1
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+      (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt)
+  have h0V : (0 : ℝ) ∈ V := ⟨by linarith, hδ⟩
+  obtain ⟨u, hu⟩ := (transportInclusion1_bijective V 0 isOpen_Ioo h0V).2 G
+  let q : C(V, Set.Ioo (-Real.pi) Real.pi) :=
+    ⟨fun r => ⟨r, by linarith [r.2.1], by linarith [r.2.2]⟩,
+      continuous_subtype_val.subtype_mk _⟩
+  have hq : MapsTo q A (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ)) :=
+    fun _ hp => hp
+  let j : C(V, Circle) := (expArc (t : Circle)).comp q
+  have hj : MapsTo j A T :=
+    localExpArc_mapsTo_circleFiberComplement ℓ z t δ hδ h hh hhπ hzero
+  let v := transportMap1 A T j hj u
+  have hvt : t00J02_circleFiberRestriction ℓ z t v = s • L t := by
+    have hm : transportMap1 (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ))
+        (deletedPoint (0 : ℝ)) (neighborhoodInclusion (Set.Ioo (-Real.pi) Real.pi))
+        (neighborhoodInclusion_mapsTo (Set.Ioo (-Real.pi) Real.pi) 0)
+        (transportMap1 A (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ))
+          q hq u) = (1 : ℤ) • G := by
+      rw [transportMap1_comp_auto]
+      simpa only [one_smul] using hu
+    have hc := circleExpSign_transport (t : Circle) s hst A q hq u 1 hm
+    rw [one_mul, transportMap1_comp_auto] at hc
+    change transportMap1 T (deletedPoint (t : Circle)) (ContinuousMap.id Circle) _ v = _
+    dsimp only [v]
+    rw [transportMap1_comp_auto]
+    exact hc
+  have hj0 : j ⟨0, h0V⟩ = (t : Circle) := by
+    change (t : Circle) * Circle.exp 0 = t
+    simp
+  have hvother : ∀ t' : {u : Circle // ℓ u = z}, t' ≠ t →
+      t00J02_circleFiberRestriction ℓ z t' v = 0 := by
+    intro t' hne
+    have hall : ∀ r : V, j r ∈ deletedPoint (t' : Circle) := by
+      intro r hr
+      change j r = (t' : Circle) at hr
+      have hr0 : (r : ℝ) = 0 := by
+        by_contra hne0
+        exact hj hne0 (by change ℓ (j r) = z; rw [hr]; exact t'.2)
+      have hrr : r = ⟨0, h0V⟩ := Subtype.ext hr0
+      apply hne
+      apply Subtype.ext
+      rw [← hr, hrr, hj0]
+    change transportMap1 T (deletedPoint (t' : Circle)) (ContinuousMap.id Circle) _ v = 0
+    dsimp only [v]
+    rw [transportMap1_comp_auto]
+    exact transportMap1_zero A (deletedPoint (t' : Circle)) j _ hall u
+  have hdec := t00J02_circleSum_aux_finiteFiberDecomposition ℓ z
+  obtain ⟨a, ha⟩ := hdec.1.2 (fun t' => if t' = t then L t' else 0)
+  have hat : t00J02_circleFiberRestriction ℓ z t a = L t := by
+    have := congrFun ha t
+    simpa using this
+  have hao : ∀ t' : {u : Circle // ℓ u = z}, t' ≠ t →
+      t00J02_circleFiberRestriction ℓ z t' a = 0 := by
+    intro t' hne
+    have := congrFun ha t'
+    simpa [hne] using this
+  have hva : v = s • a := by
+    apply hdec.1.1
+    funext t'
+    change t00J02_circleFiberRestriction ℓ z t' v = t00J02_circleFiberRestriction ℓ z t' (s • a)
+    rw [map_zsmul]
+    by_cases he : t' = t
+    · subst t'; rw [hvt, hat]
+    · rw [hvother t' he, hao t' he, smul_zero]
+  have hpair : MapsTo (h.comp ⟨Subtype.val, continuous_subtype_val⟩ : C(V, ℝ)) A
+      (deletedPoint (0 : ℝ)) := fun r hr hhr => hr ((hzero r).mp hhr)
+  obtain ⟨m, hm⟩ := ConstructionTargets.OneDimensionalChartLocalGenerator.realLine_local_generator 0
+    (transportMap1 A (deletedPoint (0 : ℝ)) (h.comp ⟨Subtype.val, continuous_subtype_val⟩) hpair u)
+  let k : C(V, Set.Ioo (-Real.pi) Real.pi) :=
+    ⟨fun r => ⟨h r, hhπ r r.2⟩, (h.continuous.comp continuous_subtype_val).subtype_mk _⟩
+  have hk : MapsTo k A (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ)) :=
+    fun r hr hkr => hr ((hzero r).mp hkr)
+  have hm' : transportMap1 (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ))
+      (deletedPoint (0 : ℝ)) (neighborhoodInclusion (Set.Ioo (-Real.pi) Real.pi))
+      (neighborhoodInclusion_mapsTo (Set.Ioo (-Real.pi) Real.pi) 0)
+      (transportMap1 A (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ))
+        k hk u) = m • G := by
+    rw [transportMap1_comp_auto]
+    exact hm.symm
+  have hb := circleExpSign_transport z s hsz A k hk u m hm'
+  have he : ∀ r : V, ℓ (j r) = expArc z (k r) := fun r => hh r r.2
+  have heq := transportMap1_square A T
+    (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ))
+    (deletedPoint z) j ℓ k (expArc z) hj
+    (show MapsTo ℓ T (deletedPoint z) from fun _ h => h) hk (expArc_mapsTo z) he u
+  rw [hb] at heq
+  have hpush : t00J02_circleFiberPushforward ℓ z a = m • L z := by
+    have hv : t00J02_circleFiberPushforward ℓ z v = (m * s) • L z := heq
+    rw [hva, map_zsmul] at hv
+    have hss : s * s = 1 := by rcases hs1 with rfl | rfl <;> norm_num
+    calc t00J02_circleFiberPushforward ℓ z a
+        = (s * s) • t00J02_circleFiberPushforward ℓ z a := by rw [hss, one_smul]
+      _ = s • (s • t00J02_circleFiberPushforward ℓ z a) := by rw [smul_smul]
+      _ = (s * (m * s)) • L z := by rw [hv, smul_smul]
+      _ = m • L z := by
+        congr 1
+        calc s * (m * s) = m * (s * s) := by ring
+          _ = m := by rw [hss, mul_one]
+  exact ⟨m, ⟨u, hu, hm.symm⟩, a, hat, hao, hpush⟩
+
+#print axioms circleLocalDegree_chart_transport
+
 end t00J02_CircleChart
