@@ -5306,3 +5306,51 @@ lemma isSideSign_aux_tangent_neighborhood
 #print axioms isSideSign_aux_compare_at_neighborhood
 
 end t00J02_ModelProduct
+
+/-!
+## Remaining work for S0 (not asserted as a lemma)
+
+The following purely topological preparation lemma is still needed. It is
+strictly smaller than side-sign uniqueness: it mentions neither homology,
+orientations, disk maps nor side labels. No unproved declaration is introduced.
+
+Suggested name and exact statement:
+
+lemma isSideSign_aux_transition_extension
+    (q : OpenPartialHomeomorph E2 E2) (hq0 : q 0 = 0)
+    (R : ℝ) (hR : 0 < R) (hsource : Metric.ball (0 : E2) R ⊆ q.source)
+    (haxis : ∀ p ∈ Metric.ball (0 : E2) R, q p 1 = 0 ↔ p 1 = 0)
+    (φ ψ : ℝ → ℝ) (δ : ℝ) (hδ : 0 < δ)
+    (hc : ContinuousOn φ (Set.Ioo (-δ) δ))
+    (hφ : StrictMonoOn φ (Set.Ioo (-δ) δ))
+    (hψ : StrictMonoOn ψ (Set.Ioo (-δ) δ))
+    (hφ0 : φ 0 = 0) (hψ0 : ψ 0 = 0)
+    (hparam : ∀ r ∈ Set.Ioo (-δ) δ,
+      q (horizontal (φ r)) = horizontal (ψ r)) :
+    ∃ r > 0, ∃ F : C(E2, E2),
+      r ≤ R ∧ (∀ p ∈ Metric.ball (0 : E2) r, F p = q p) ∧ F 0 = 0 ∧
+      (∀ p : Metric.ball (0 : E2) r, F p = 0 ↔ (p : E2) = 0) ∧
+      IsOpen (F '' Metric.ball (0 : E2) r) ∧
+      (∀ p ∈ Metric.ball (0 : E2) r, F p 1 = 0 ↔ p 1 = 0) ∧
+      (∀ p ∈ Metric.ball (0 : E2) r, p 1 = 0 → p 0 ≠ 0 → 0 < p 0 * F p 0)
+
+Why true / estimated implementation: 60–100 lines. Apply
+`isSideSign_aux_tangent_neighborhood` to q; choose r small enough that a larger
+closed ball is in q.source and |p 0| is below the supplied tangent radius.
+Extend the continuous restriction of q on that closed ball coordinatewise
+by Tietze (`ContinuousMap.exists_restrict_eq`), using EuclideanSpace.equiv.
+Injectivity of q gives the zero equivalence; q.isOpen_image_of_subset_source
+gives openness, and agreement with q gives all remaining properties.
+
+Assembly still needed: unpack the two IsSideSign witnesses, restrict both
+parameters to the smaller interval, prove φ continuous from its expression
+as coordinate zero of α ∘ c ∘ (w * Circle.exp), and apply the preparation
+lemma to q = α.symm.trans β after choosing R inside both radius constraints.
+`isSideSign_aux_axis_iff` supplies its axis hypothesis. Then
+`chart_transition_degree` and `isSideSign_aux_ball_normal_sign` identify the
+normal sign. Pull the small ball back to an open neighborhood in S and apply
+`isSideSign_aux_compare_at_neighborhood` to g = f ∘ D, using hℓ at t.
+The two chart signs are units by `isSideSign_aux_chartSign_unit`.
+This final chart localization/assembly is not implemented (estimate 100–160
+lines). No doubts about truth of the target have been identified.
+-/
