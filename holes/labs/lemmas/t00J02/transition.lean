@@ -783,5 +783,33 @@ theorem id_localDegree
     rw [relativeSingularMap_id, HomologicalComplex.homologyMap_id, one_smul]
     rfl
 
+/-- A chart transition map has local degree sα * sβ. -/
+theorem chart_transition_degree
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α β : OpenPartialHomeomorph S E2) (x : S)
+    (hxα : x ∈ α.source) (hα0 : α x = 0) (hxβ : x ∈ β.source) (hβ0 : β x = 0)
+    (U : Set E2) (hUo : IsOpen U) (h0U : (0 : E2) ∈ U) (hUα : U ⊆ α.target)
+    (hUβ : ∀ p ∈ U, α.symm p ∈ β.source)
+    (F : C(E2, E2)) (hF : ∀ p ∈ U, F p = β (α.symm p))
+    (hzero : ∀ p : U, F p = 0 ↔ (p : E2) = 0)
+    (sα sβ : ℤ) (hsα : IsChartSign e α x hxα hα0 sα)
+    (hsβ : IsChartSign e β x hxβ hβ0 sβ) (hsβ1 : sβ = 1 ∨ sβ = -1) :
+    IsLocalDegreeTwo U F hzero (sα * sβ) := by
+  letI : Unique {z : S // (ContinuousMap.id S) z = x} :=
+    ⟨⟨x, rfl⟩, fun z => Subtype.ext z.2⟩
+  have hfib : ∀ p ∈ U, (ContinuousMap.id S) (α.symm p) = x → p = 0 := by
+    intro p hp he
+    have hh := α.right_inv (hUα hp)
+    change α.symm p = x at he
+    rw [he, hα0] at hh
+    exact hh.symm
+  simpa only [mul_one] using
+    (localDegree_chart_transport e (ContinuousMap.id S) x ⟨x, rfl⟩ 1
+      (id_localDegree e x) α β hxα hα0 hxβ hβ0 U hUo h0U hUα
+      hUβ hfib F hF hzero sα sβ hsα hsβ hsβ1)
+
 #print axioms id_localDegree
+#print axioms chart_transition_degree
 end t00J02_ModelProduct
