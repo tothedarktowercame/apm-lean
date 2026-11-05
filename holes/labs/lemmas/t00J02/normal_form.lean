@@ -16,7 +16,7 @@ coordinate, and that normal coordinate is nonzero somewhere after
 straightening, then its composite with the source derivative is nonzero. -/
 theorem transverse_normal_component_ne_zero
     {R E F G H K : Type}
-    [CommRing R]
+    [Ring R]
     [AddCommGroup E] [Module R E]
     [AddCommGroup F] [Module R F]
     [AddCommGroup G] [Module R G]
@@ -42,6 +42,30 @@ theorem transverse_normal_component_ne_zero
   have hz := LinearMap.congr_fun hzero u
   simpa only [LinearMap.comp_apply, LinearMap.zero_apply] using hz
 
+/-- An injective endomorphism of a finite-dimensional space cannot send the
+whole space into the kernel of a nonzero linear functional. -/
+theorem exists_normal_value_of_ker_eq_bot
+    {K V W : Type}
+    [DivisionRing K]
+    [AddCommGroup V] [Module K V] [FiniteDimensional K V]
+    [AddCommGroup W] [Module K W]
+    (B : V →ₗ[K] V) (q : V →ₗ[K] W)
+    (hB : LinearMap.ker B = ⊥) (hq : q ≠ 0) :
+    ∃ y, q (B y) ≠ 0 := by
+  have hBinj : Function.Injective B := LinearMap.ker_eq_bot.mp hB
+  have hBsurj : Function.Surjective B :=
+    LinearMap.injective_iff_surjective.mp hBinj
+  have hqvalue : ∃ w, q w ≠ 0 := by
+    by_contra hall
+    push_neg at hall
+    apply hq
+    ext w
+    exact hall w
+  obtain ⟨w, hw⟩ := hqvalue
+  obtain ⟨y, rfl⟩ := hBsurj w
+  exact ⟨y, hw⟩
+
 #print axioms transverse_normal_component_ne_zero
+#print axioms exists_normal_value_of_ker_eq_bot
 
 end ConstructionTargets.T00J02Closure
