@@ -344,6 +344,44 @@ theorem exists_isLocalDegreeR
     ConstructionTargets.OneDimensionalChartLocalGenerator.realLine_local_generator 0 (H a)
   exact ⟨m, a, hia, hm.symm⟩
 
+def localExpArc (w : Circle) (δ : ℝ) : C(Set.Ioo (-δ) δ, Circle) :=
+  ⟨fun r => w * Circle.exp r, by fun_prop⟩
+
+/-- The source exponential arc is a map from the punctured real
+neighborhood to the complement of the selected circle fibre. -/
+lemma localExpArc_mapsTo_circleFiberComplement
+    (ℓ : C(Circle, Circle)) (z : Circle)
+    (t : {u : Circle // ℓ u = z})
+    (δ : ℝ) (hδ : 0 < δ) (h : C(ℝ, ℝ))
+    (hh : ∀ r ∈ Set.Ioo (-δ) δ,
+      ℓ ((t : Circle) * Circle.exp r) = z * Circle.exp (h r))
+    (hhπ : ∀ r ∈ Set.Ioo (-δ) δ, h r ∈ Set.Ioo (-Real.pi) Real.pi)
+    (hzero : ∀ r : Set.Ioo (-δ) δ, h r = 0 ↔ (r : ℝ) = 0) :
+    Set.MapsTo (localExpArc (t : Circle) δ)
+      (neighborhoodDeletedPoint (Set.Ioo (-δ) δ) (0 : ℝ))
+      ({u : Circle | ℓ u = z}ᶜ) := by
+  intro r hr hrfiber
+  apply hr
+  have hchart := hh r r.property
+  have hcircle : z * Circle.exp (h r) = z := by
+    rw [← hchart]
+    exact hrfiber
+  have hexp : Circle.exp (h r) = 1 := by simpa using hcircle
+  rw [Circle.exp_eq_one] at hexp
+  obtain ⟨n, hn⟩ := hexp
+  have hbounds := hhπ r r.property
+  have hn0 : n = 0 := by
+    have hpi := Real.pi_pos
+    have h1 : (n : ℝ) * (2 * Real.pi) < Real.pi := by rw [← hn]; exact hbounds.2
+    have h2 : -Real.pi < (n : ℝ) * (2 * Real.pi) := by rw [← hn]; exact hbounds.1
+    have hnlt : n < 1 := by exact_mod_cast (show (n : ℝ) < 1 by nlinarith)
+    have hngt : -1 < n := by exact_mod_cast (show (-1 : ℝ) < n by nlinarith)
+    omega
+  apply (hzero r).mp
+  rw [hn, hn0]
+  simp
+
 #print axioms exists_isLocalDegreeR
+#print axioms localExpArc_mapsTo_circleFiberComplement
 
 end t00J02_CircleChart
