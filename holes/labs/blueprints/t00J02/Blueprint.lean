@@ -84,11 +84,13 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
     (hc : Topology.IsEmbedding c)
     (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
     (htrans : apm_t00j02_transverse f c) :
-    ∃ y ∈ range c,
-      ConstructionTargets.T00J02Closure.LocallyInjectiveAlongFiber f y := by
-  exact
-    ConstructionTargets.T00J02Closure.exists_circleValue_locallyInjectiveAlongFiber_of_incidenceProjection
-      MeasureTheory.Measure.addHaar f c hf hcsmooth htrans
+    ∃ z : Circle, mfderiv (𝓡 1) apm_t00j02_I2 c z ≠ 0 ∧
+      ConstructionTargets.T00J02Closure.LocallyInjectiveAlongFiber f (c z) := by
+  -- claude-14, 2026-11-05: strengthened to a regular point of `c` (the transverse leaf needs a
+  -- straightening chart at `c z`).  Proof in progress: codex-16,
+  -- holes/labs/lemmas/t00J02/regular_value.lean, `exists_regularCircleValue_locallyInjectiveAlongFiber`
+  -- (open-target Sard selector be6e22a325 done; needs `hc.injective`).
+  sorry
 
 abbrev t00J02_fiberRelativeHomology
     {S : Type} [TopologicalSpace S] (f : C(S, S)) (y : S) :=
@@ -819,12 +821,16 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embedded
     (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
     (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
     (htrans : apm_t00j02_transverse f c)
-    (z : Circle) [Fintype {x : S // f x = c z}]
+    (z : Circle) (hz : mfderiv (𝓡 1) apm_t00j02_I2 c z ≠ 0)
+    [Fintype {x : S // f x = c z}]
     (d : {x : S // f x = c z} → ℤ)
     (hd : ∀ x, t00J02_IsLocalDegree e f (c z) x (d x))
     (k : ConstructionTargets.T00J02Closure.OccupiedRegularFiberComponent
       f c (c z) ⟨z, rfl⟩)
+    (D : ConstructionTargets.DiskBoundaryHomology.Disk → S) (hD : Continuous D)
+    (hDemb : Topology.IsEmbedding D)
     (γ : C(Circle, S)) (hγ : Topology.IsEmbedding γ)
+    (hγD : ∀ w, γ w = D (ConstructionTargets.DiskBoundaryHomology.circleToDisk w))
     (hγrange : range γ = k.1.1)
     (ℓ : C(Circle, Circle)) (hℓ : c.comp ℓ = f.comp γ)
     [Fintype {t : Circle // ℓ t = z}] :
@@ -1187,8 +1193,9 @@ points on `K` is `±` the degree of `ℓ`.  Transversality gives tubular
 coordinates in which `f` is, up to homotopy through maps with the same isolated
 fibre, the product of `ℓ` with a normal coordinate whose derivative is nonzero;
 an embedded circle in an oriented surface is two-sided, so the normal sign is
-constant along `K`.  No disk-boundedness is assumed, so `circleDegree ℓ` is not
-known to vanish here (claude-14: codex-16's version used the zero-degree lifts,
+constant along `K`.  The disk `D` bounding `K` is passed in (claude-14, 2026-11-05) to fix the
+normal side coherently along `K`; its degree consequence is not used here, so `circleDegree ℓ` is
+not known to vanish here (claude-14: codex-16's version used the zero-degree lifts,
 whose degree is zero by a structure field, so it was equivalent to F2).  The
 embedding hypothesis matters: a degree-zero surjection `γ` onto `K` would give
 `circleDegree ℓ = 0` whatever `f` does.  Fold check: local degrees `+1, -1`,
@@ -1202,11 +1209,16 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embedded
     (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
     (hcsmooth : ContMDiff (𝓡 1) apm_t00j02_I2 ∞ c)
     (htrans : apm_t00j02_transverse f c)
-    (y : S) (hy : y ∈ range c) [Fintype {x : S // f x = y}]
+    (y : S) (hy : y ∈ range c)
+    (hreg : ∀ z, c z = y → mfderiv (𝓡 1) apm_t00j02_I2 c z ≠ 0)
+    [Fintype {x : S // f x = y}]
     (d : {x : S // f x = y} → ℤ)
     (hd : ∀ x, t00J02_IsLocalDegree e f y x (d x))
     (k : ConstructionTargets.T00J02Closure.OccupiedRegularFiberComponent f c y hy)
+    (D : ConstructionTargets.DiskBoundaryHomology.Disk → S) (hD : Continuous D)
+    (hDemb : Topology.IsEmbedding D)
     (γ : C(Circle, S)) (hγ : Topology.IsEmbedding γ)
+    (hγD : ∀ w, γ w = D (ConstructionTargets.DiskBoundaryHomology.circleToDisk w))
     (hγrange : range γ = k.1.1)
     (ℓ : C(Circle, Circle)) (hℓ : c.comp ℓ = f.comp γ) :
     ∃ ε : ℤ, (ε = 1 ∨ ε = -1) ∧
@@ -1221,7 +1233,7 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embedded
   letI : Fintype {t : Circle // ℓ t = z} := Fintype.ofFinite _
   obtain ⟨q, hq, ε, hε, hsum⟩ :=
     t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_transverse
-      e f hf c hc hcsmooth htrans z d hd k γ hγ hγrange ℓ hℓ
+      e f hf c hc hcsmooth htrans z (hreg z rfl) d hd k D hD hDemb γ hγ hγD hγrange ℓ hℓ
   refine ⟨ε, hε, ?_⟩
   rw [hsum,
     t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison_aux_circleSum
@@ -1246,7 +1258,9 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2
     (hhandle : apm_t00j02_wrapsHandle c)
     (htrans : apm_t00j02_transverse f c)
     (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c))
-    (y : S) (hy : y ∈ range c) [Fintype {x : S // f x = y}]
+    (y : S) (hy : y ∈ range c)
+    (hreg : ∀ z, c z = y → mfderiv (𝓡 1) apm_t00j02_I2 c z ≠ 0)
+    [Fintype {x : S // f x = y}]
     (d : {x : S // f x = y} → ℤ)
     (hd : ∀ x, t00J02_IsLocalDegree e f y x (d x)) :
     ∀ k, ConstructionTargets.T00J02Closure.componentLocalDegreeSum
@@ -1289,7 +1303,7 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2
         (ModuleCat.of ℤ ℤ)) f c hc γ hγsub hγzero
   obtain ⟨ε, -, hk⟩ :=
     t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2_aux_embeddedComparison
-      e f hf c hc hcsmooth htrans y hy d hd k γ hγemb hγrange ℓ hcomm
+      e f hf c hc hcsmooth htrans y hy hreg d hd k D hD hDemb γ hγemb (fun _ => rfl) hγrange ℓ hcomm
   rw [hk, ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
     ℓ hℓzero, mul_zero]
 
@@ -1316,9 +1330,15 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero
     (hdisks : apm_t00j02_componentsBoundDisks (f ⁻¹' range c)) :
     apm_t00j02_homologyMap 2 f = 0 := by
   rcases hS with ⟨_, ⟨eS⟩, ⟨e⟩, _⟩
-  obtain ⟨y, hy, hlocal⟩ :=
+  obtain ⟨z, hzreg, hlocal⟩ :=
     t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_regularFiber
       f hf c hc hcsmooth htrans
+  set y := c z with hyz
+  have hy : y ∈ range c := ⟨z, rfl⟩
+  have hreg : ∀ z', c z' = y → mfderiv (𝓡 1) apm_t00j02_I2 c z' ≠ 0 := by
+    intro z' hz'
+    rw [hc.injective hz']
+    exact hzreg
   letI := ConstructionTargets.T00J02Closure.regularFiberFintype_of_locallyInjectiveAlongFiber
     f y hlocal
   have hD := t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D e f y
@@ -1333,7 +1353,7 @@ theorem t00J02_transverse_diskBounded_topHomologyMap_eq_zero
   · simpa using t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F1
       e f y hD d hd
   · exact t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_F2
-      e f hf c hc hcsmooth eS hhandle htrans hdisks y hy d hd
+      e f hf c hc hcsmooth eS hhandle htrans hdisks y hy hreg d hd
   · intro k
     rfl
 
