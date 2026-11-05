@@ -65,7 +65,28 @@ theorem exists_normal_value_of_ker_eq_bot
   obtain ⟨y, rfl⟩ := hBsurj w
   exact ⟨y, hw⟩
 
+/-- Transversality forces a nonzero normal component after an injective
+finite-dimensional straightening derivative.  This packages the two linear
+steps needed before applying the strict inverse-function theorem. -/
+theorem transverse_normal_component_ne_zero_of_ker_eq_bot
+    {K E F V W : Type}
+    [DivisionRing K]
+    [AddCommGroup E] [Module K E]
+    [AddCommGroup F] [Module K F]
+    [AddCommGroup V] [Module K V] [FiniteDimensional K V]
+    [AddCommGroup W] [Module K W]
+    (A : E →ₗ[K] V) (C : F →ₗ[K] V)
+    (B : V →ₗ[K] V) (q : V →ₗ[K] W)
+    (hspan : LinearMap.range A ⊔ LinearMap.range C = ⊤)
+    (hcurve : ∀ v, q (B (C v)) = 0)
+    (hB : LinearMap.ker B = ⊥) (hq : q ≠ 0) :
+    q.comp (B.comp A) ≠ 0 :=
+  transverse_normal_component_ne_zero (R := K) (E := E) (F := F)
+    (G := V) (H := V) (K := W) A C B q hspan hcurve
+    (exists_normal_value_of_ker_eq_bot B q hB hq)
+
 #print axioms transverse_normal_component_ne_zero
 #print axioms exists_normal_value_of_ker_eq_bot
+#print axioms transverse_normal_component_ne_zero_of_ker_eq_bot
 
 end ConstructionTargets.T00J02Closure
