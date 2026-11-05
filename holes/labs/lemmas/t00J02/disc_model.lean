@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.RelativeSingularConnectingNaturality
 import ConstructionTargets.CollaredConnectedSumHomology
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
@@ -608,6 +609,492 @@ theorem productMap_degree_iff_splitProductMap_degree
     refine ⟨a, ha, ?_⟩
     rw [← hmaps]
     exact hFa
+
+-- Two-dimensional model degrees (merged from model_degrees.lean).
+
+def reflectionScalar : C(E2, ℝ) where
+  toFun p := -(p 0)
+  continuous_toFun := (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).neg
+
+lemma reflection_productMap_zero_iff (U : Set E2) (p : U) :
+    productMap reflectionScalar p = 0 ↔ (p : E2) = 0 := by
+  constructor
+  · intro h
+    ext i
+    fin_cases i
+    · have h0 := congrArg (fun q : E2 => q 0) h
+      simpa [productMap, reflectionScalar] using neg_eq_zero.mp h0
+    · simpa [productMap, reflectionScalar] using congrArg (fun q : E2 => q 1) h
+  · intro hp
+    rw [hp]
+    ext i
+    fin_cases i <;> simp [productMap, reflectionScalar]
+
+
+
+/-- The identity map carries the ambient local generator to itself.  The
+neighborhood generator is obtained by inverting the neighborhood-inclusion
+isomorphism.  Estimated size: 35--60 lines. -/
+theorem identity_productMap_localDegree
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
+    IsLocalDegreeTwo U (productMap identityScalar)
+      (identity_productMap_zero_iff U) 1 := by
+  have hres : restrictedMap U (productMap identityScalar) = neighborhoodInclusion U := by
+    ext p i
+    fin_cases i <;> rfl
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso 0 U (0 : E2) hU h0
+  let ι := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U 0)) (0+2)
+  have hι : ∀ b, ι ((asIso ι).inv b) = b := fun b =>
+    ConcreteCategory.congr_hom (asIso ι).inv_hom_id b
+  refine ⟨(asIso ι).inv
+    (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (0 : E2)), hι _, ?_⟩
+  rw [one_smul]
+  have hcongr : ∀ (F G : C(U, E2)) (hFG : F = G) hF hG,
+      relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) F hF =
+        relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) G hG := by
+    intro F G hFG _ _; subst hFG; rfl
+  rw [hcongr _ _ hres _ (neighborhoodInclusion_mapsTo U 0)]
+  exact hι _
+
+def firstCoordinateReflection : C(E2, E2) where
+  toFun := ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)
+  continuous_toFun :=
+    (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)).continuous
+
+lemma firstCoordinateReflection_mapsTo_deletedPoint :
+    MapsTo firstCoordinateReflection (deletedPoint (0 : E2)) (deletedPoint (0 : E2)) := by
+  intro p hp hRp
+  apply hp
+  exact (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)).injective
+    (hRp.trans
+      (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)).map_zero.symm)
+
+/-- The first-coordinate reflection acts as minus the identity on integral
+first homology of the Euclidean unit circle, computed in additive groups.
+The natural integral coefficient comparison transports the module computation. -/
+lemma firstCoordinateReflection_circle_H1 :
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+          (0 : Fin 2))) = -𝟙 _ := by
+  let e := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of (T02A06.euclideanUnitSphere 2)) 1
+  apply (cancel_epi e.hom).mp
+  have h := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+    (TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+      (0 : Fin 2))) 1
+  rw [ConstructionTargets.CoefficientFirstReflection.circle_negative ℤ] at h
+  simpa only [Functor.map_neg, Functor.map_id, Preadditive.neg_comp,
+    Preadditive.comp_neg, Category.id_comp, Category.comp_id] using h.symm
+
+/-- Radial normalization intertwines reflection of the punctured plane with
+reflection of its unit circle, since a linear isometry preserves norms. -/
+lemma firstCoordinateReflection_radial_naturality :
+    (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize E2).comp
+      (⟨fun x : deletedPoint (0 : E2) =>
+        ⟨firstCoordinateReflection x, firstCoordinateReflection_mapsTo_deletedPoint x.property⟩,
+        firstCoordinateReflection.continuous.comp continuous_subtype_val |>.subtype_mk _⟩) =
+    (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (0 : Fin 2)).comp
+      (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize E2) := by
+  apply ContinuousMap.ext
+  intro x
+  apply Subtype.ext
+  change NormedSpace.normalize
+      (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2) x.val) =
+    ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)
+      (NormedSpace.normalize x.val)
+  simp only [NormedSpace.normalize, LinearIsometryEquiv.norm_map,
+    LinearIsometryEquiv.map_smul]
+
+/-- The first-coordinate reflection negates the standard ambient local
+two-dimensional generator.  Radial naturality identifies the relative local
+map with the reflection of the unit circle, where
+`CoefficientFirstReflection.all_reflections_negative` computes the sign.
+Estimated size: 70--110 lines. -/
+lemma firstCoordinateReflection_ambientLocalGenerator :
+    HomologicalComplex.homologyMap
+        (relativeSingularMap (deletedPoint (0 : E2)) (deletedPoint (0 : E2))
+          firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint) 2
+        (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (0 : E2)) =
+      -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (0 : E2) := by
+  let H := (AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+    (AddCommGrpCat.of ℤ)
+  let A := deletedPoint (0 : E2)
+  let q := ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize E2
+  let j := ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereInclusion E2
+  let d := singularPairConnecting A 1
+  haveI : Mono d := by
+    apply (singularPairHomology_exact_relative A 1).mono_g
+    exact (contractibleHigherHomology_isZero E2 2 (by decide)).eq_of_src _ _
+  haveI : IsIso (H.map (TopCat.ofHom q)) := by
+    exact ConstructionTargets.RelativeSingularHomologyHomotopy.chainHomology_isIso_of_section
+      q j (by
+        apply ContinuousMap.ext
+        intro x
+        exact ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize_unitSphereInclusion E2 x)
+      ⟨ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.puncturedRadialHomotopy E2⟩ 1
+  have hd : Function.Injective d := (AddCommGrpCat.mono_iff_injective d).mp inferInstance
+  have hq : Function.Injective (H.map (TopCat.ofHom q)) :=
+    (AddCommGrpCat.mono_iff_injective _).mp inferInstance
+  apply hd
+  apply hq
+  let ρ := HomologicalComplex.homologyMap
+    (relativeSingularMap A A firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint) 2
+  let r := subspaceMap A A firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint
+  have hn : d ≫ H.map r = ρ ≫ d :=
+    ConstructionTargets.RelativeSingularConnectingNaturality.singularPairConnecting_naturality
+      A A firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint 1
+  have hr : r ≫ TopCat.ofHom q = TopCat.ofHom q ≫
+      TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (0 : Fin 2)) := by
+    exact congrArg TopCat.ofHom firstCoordinateReflection_radial_naturality
+  have hs : H.map r ≫ H.map (TopCat.ofHom q) = -(H.map (TopCat.ofHom q)) := by
+    rw [← H.map_comp, hr]
+    erw [H.map_comp]
+    change H.map (TopCat.ofHom q) ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map _ = _
+    rw [firstCoordinateReflection_circle_H1, Preadditive.comp_neg, Category.comp_id]
+  have he : ρ ≫ d ≫ H.map (TopCat.ofHom q) = -(d ≫ H.map (TopCat.ofHom q)) := by
+    rw [← Category.assoc, ← hn]
+    erw [Category.assoc, hs, Preadditive.comp_neg]
+    rfl
+  have hv := ConcreteCategory.congr_hom he
+    (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (0 : E2))
+  change (H.map (TopCat.ofHom q)) (d (ρ _)) =
+    -((H.map (TopCat.ofHom q)) (d _)) at hv
+  change (H.map (TopCat.ofHom q)).hom (d.hom (ρ.hom _)) =
+    (H.map (TopCat.ofHom q)).hom (d.hom (-_))
+  rw [map_neg]
+  erw [map_neg]
+  exact hv
+
+/-- Reflection in the first coordinate acts by `-1` on two-dimensional local
+homology.  This follows by transporting `all_reflections_negative` through
+the radial local-homology isomorphism.  Estimated size: 70--110 lines. -/
+theorem reflection_productMap_localDegree
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
+    IsLocalDegreeTwo U (productMap reflectionScalar)
+      (reflection_productMap_zero_iff U) (-1) := by
+  have hres : restrictedMap U (productMap reflectionScalar) =
+      firstCoordinateReflection.comp (neighborhoodInclusion U) := by
+    ext p i
+    fin_cases i <;> simp [restrictedMap, productMap, reflectionScalar,
+      firstCoordinateReflection, neighborhoodInclusion,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+  let ι := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U 0)) 2
+  let ρ := HomologicalComplex.homologyMap
+    (relativeSingularMap (deletedPoint (0 : E2)) (deletedPoint (0 : E2))
+      firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint) 2
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso
+    0 U (0 : E2) hU h0
+  let z := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+    (k := 0) (0 : E2)
+  have hι : ∀ b, ι ((asIso ι).inv b) = b := fun b =>
+    ConcreteCategory.congr_hom (asIso ι).inv_hom_id b
+  refine ⟨(asIso ι).inv z, hι _, ?_⟩
+  have hcongr : ∀ (F G : C(U, E2)) (hFG : F = G) hF hG,
+      relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) F hF =
+        relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) G hG := by
+    intro F G hFG _ _
+    subst hFG
+    rfl
+  have hcompMaps : MapsTo (firstCoordinateReflection.comp (neighborhoodInclusion U))
+      (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) :=
+    firstCoordinateReflection_mapsTo_deletedPoint.comp
+      (neighborhoodInclusion_mapsTo U 0)
+  rw [hcongr _ _ hres _ hcompMaps]
+  have hcomp := relativeSingularHomologyMap_comp
+    (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+    (deletedPoint (0 : E2)) (neighborhoodInclusion U) firstCoordinateReflection
+    (neighborhoodInclusion_mapsTo U 0) firstCoordinateReflection_mapsTo_deletedPoint
+    hcompMaps 2
+  rw [← hcomp]
+  change ρ (ι ((asIso ι).inv z)) = (-1 : ℤ) • z
+  rw [hι, firstCoordinateReflection_ambientLocalGenerator]
+  simp
+  rfl
+
+
+/-- A map of the neighbourhood that misses the origin entirely is zero on local homology:
+it factors through the self-pair of `U`. -/
+lemma homologyMap_eq_zero_of_avoids (U : Set E2) (G : C(U, E2)) (hG : ∀ p, G p ≠ 0)
+    (hGm : Set.MapsTo G (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))) :
+    HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) G hGm) 2 = 0 := by
+  have hfac := relativeSingularMap_comp (neighborhoodDeletedPoint U (0 : E2)) (Set.univ : Set U)
+    (deletedPoint (0 : E2)) (ContinuousMap.id U) G (fun _ _ => trivial) (fun p _ => hG p) hGm
+  show HomologicalComplex.homologyMap (relativeSingularMap _ _ (G.comp (ContinuousMap.id U)) hGm) 2 = 0
+  rw [← hfac, HomologicalComplex.homologyMap_comp]
+  rw [(selfRelativeSingularHomology_isZero U 2).eq_zero_of_tgt
+    (HomologicalComplex.homologyMap (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2))
+      (Set.univ : Set U) (ContinuousMap.id U) (fun _ _ => trivial)) 2), Limits.zero_comp]
+
+/-- The fold `(σ·u², v)` (σ = ±1) has local degree 0: it deforms through maps of pairs to
+`(σ·(u²+1), v)`, whose image misses the origin. -/
+lemma fold_localDegree_zero (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U)
+    (σ : ℝ) (hσ : σ ≠ 0) (g : C(E2, ℝ)) (hg : ∀ p, g p = σ * (p 0) ^ 2)
+    (hzero : ∀ p : U, productMap g p = 0 ↔ (p : E2) = 0) :
+    IsLocalDegreeTwo U (productMap g) hzero 0 := by
+  let cpt : C(unitInterval × U, ℝ × ℝ) :=
+    ⟨fun r => (σ * (((r.2 : E2) 0) ^ 2 + (r.1 : ℝ)), (r.2 : E2) 1), by fun_prop⟩
+  let Hf : C(unitInterval × U, E2) :=
+    ⟨fun r => (EuclideanSpace.equiv (Fin 2) ℝ).symm
+        (fun i => if i = 0 then (cpt r).1 else (cpt r).2),
+      (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp (by
+        apply continuous_pi; intro i; fin_cases i
+        · simpa using (continuous_fst.comp cpt.continuous)
+        · simpa using (continuous_snd.comp cpt.continuous))⟩
+  let G1 : C(U, E2) := ⟨fun p => Hf (1, p), Hf.continuous.comp (continuous_const.prodMk continuous_id)⟩
+  let H : ContinuousMap.Homotopy (restrictedMap U (productMap g)) G1 :=
+    { toContinuousMap := Hf
+      map_zero_left := by
+        intro p; ext i; fin_cases i <;> simp [Hf, cpt, restrictedMap, productMap, hg]
+      map_one_left := by intro p; rfl }
+  have hG1 : ∀ p, G1 p ≠ 0 := by
+    intro p h
+    have := congrArg (fun q : E2 => q 0) h
+    simp [G1, Hf, cpt] at this
+    rcases this with h1 | h1
+    · exact hσ h1
+    · nlinarith [sq_nonneg ((p : E2) 0)]
+  have hHm : ∀ t : unitInterval, ∀ p ∈ neighborhoodDeletedPoint U (0 : E2), H (t, p) ∈ deletedPoint (0 : E2) := by
+    intro t p hp hHp
+    apply hp
+    have h0' := congrArg (fun q : E2 => q 0) hHp
+    have h1' := congrArg (fun q : E2 => q 1) hHp
+    simp [H, Hf, cpt] at h0' h1'
+    have h0'' : σ * (((p : E2) 0) ^ 2 + (t : ℝ)) = 0 := by
+      exact h0'
+    have hu : (p : E2) 0 = 0 := by
+      rcases mul_eq_zero.mp h0'' with h | h
+      · exact absurd h hσ
+      · nlinarith [sq_nonneg ((p : E2) 0), t.2.1]
+    ext i; fin_cases i
+    · simpa using hu
+    · simpa using h1'
+  have hmap := ConstructionTargets.RelativeSingularHomologyHomotopy.relativeSingularHomologyMap_eq_of_homotopy
+    (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) H hHm
+    (by intro p hp hFp; exact hp ((hzero p).mp hFp)) (fun p _ => hG1 p) 2
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso 0 U (0 : E2) hU h0
+  let ι := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U 0)) (0+2)
+  refine ⟨(asIso ι).inv
+    (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (0 : E2)),
+    ConcreteCategory.congr_hom (asIso ι).inv_hom_id _, ?_⟩
+  rw [zero_smul]
+  erw [hmap, homologyMap_eq_zero_of_avoids U G1 hG1]
+  rfl
+
+/-- The positive fold has zero local degree.  Its image lies in the closed
+right half-plane; the relative `H₂` of that half-plane at the origin vanishes
+because the half-plane and its puncture are contractible.  Estimated size:
+90--150 lines. -/
+theorem positiveFold_productMap_localDegree
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
+    IsLocalDegreeTwo U (productMap positiveFoldScalar)
+      (positiveFold_productMap_zero_iff U) 0 :=
+  fold_localDegree_zero U hU h0 1 one_ne_zero positiveFoldScalar
+    (fun p => by simp [positiveFoldScalar]) _
+
+/-- The negative fold has zero local degree by the identical half-plane
+factorization through the closed left half-plane.  Estimated size: 25--45
+lines once the positive half-plane calculation is available. -/
+theorem negativeFold_productMap_localDegree
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
+    IsLocalDegreeTwo U (productMap negativeFoldScalar)
+      (negativeFold_productMap_zero_iff U) 0 :=
+  fold_localDegree_zero U hU h0 (-1) (by norm_num) negativeFoldScalar
+    (fun p => by simp [negativeFoldScalar]) _
+
+
+-- Shrinking, uniqueness and deformation to a model (two-dimensional).
+
+lemma relMap_congr {P : Type} [TopologicalSpace P] (A : Set P) (F G : C(P, E2)) (hFG : F = G) hF hG :
+    relativeSingularMap A (deletedPoint (0 : E2)) F hF =
+      relativeSingularMap A (deletedPoint (0 : E2)) G hG := by
+  subst hFG; rfl
+
+/-- The local degree on a neighbourhood does not depend on the neighbourhood. -/
+theorem localDegreeTwo_iff_of_subset (U V : Set E2) (hU : IsOpen U) (hV : IsOpen V)
+    (h0V : (0 : E2) ∈ V) (hVU : V ⊆ U) (F : C(E2, E2))
+    (hzU : ∀ p : U, F p = 0 ↔ (p : E2) = 0) (hzV : ∀ p : V, F p = 0 ↔ (p : E2) = 0) (n : ℤ) :
+    IsLocalDegreeTwo U F hzU n ↔ IsLocalDegreeTwo V F hzV n := by
+  have h0U : (0 : E2) ∈ U := hVU h0V
+  let j : C(V, U) := ⟨fun p => ⟨p, hVU p.2⟩, by fun_prop⟩
+  have hj : Set.MapsTo j (neighborhoodDeletedPoint V (0 : E2)) (neighborhoodDeletedPoint U (0 : E2)) :=
+    fun p hp => hp
+  let J := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint V (0 : E2)) (neighborhoodDeletedPoint U (0 : E2)) j hj) 2
+  have hcomp : ∀ (G : C(U, E2)) (hG : Set.MapsTo G (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)))
+      (G' : C(V, E2)) (hG' : Set.MapsTo G' (neighborhoodDeletedPoint V (0 : E2)) (deletedPoint (0 : E2))),
+      G.comp j = G' → ∀ b,
+      HomologicalComplex.homologyMap (relativeSingularMap _ _ G hG) 2 (J b) =
+        HomologicalComplex.homologyMap (relativeSingularMap _ _ G' hG') 2 b := by
+    intro G hG G' hG' hGG b
+    rw [← ConcreteCategory.comp_apply, ← HomologicalComplex.homologyMap_comp,
+      relativeSingularMap_comp _ _ _ j G hj hG (hGG ▸ hG'), relMap_congr _ _ _ hGG]
+  have hιVU := hcomp (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U 0)
+    (neighborhoodInclusion V) (neighborhoodInclusion_mapsTo V 0) rfl
+  have hFVU := hcomp (restrictedMap U F) (by intro p hp hFp; exact hp ((hzU p).mp hFp))
+    (restrictedMap V F) (by intro p hp hFp; exact hp ((hzV p).mp hFp)) rfl
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso 0 U (0 : E2) hU h0U
+  let ιU := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U 0)) (0+2)
+  constructor
+  · rintro ⟨a, ha, hFa⟩
+    letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso 0 V (0 : E2) hV h0V
+    let ιV := HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint V (0 : E2)) (deletedPoint (0 : E2))
+        (neighborhoodInclusion V) (neighborhoodInclusion_mapsTo V 0)) (0+2)
+    refine ⟨(asIso ιV).inv (ιU a), ?_, ?_⟩
+    · rw [ha]; exact ConcreteCategory.congr_hom (asIso ιV).inv_hom_id _
+    · -- J (ιV⁻¹ (ιU a)) = a, since ιU ∘ J = ιV and ιU is injective
+      have hJ : J ((asIso ιV).inv (ιU a)) = a := by
+        apply (ConcreteCategory.injective_of_mono_of_preservesPullback ιU)
+        have := hιVU ((asIso ιV).inv (ιU a))
+        change ιU (J _) = ιV _ at this
+        rw [this]; exact ConcreteCategory.congr_hom (asIso ιV).inv_hom_id _
+      rw [← hFVU, hJ, hFa]
+  · rintro ⟨b, hb, hFb⟩
+    exact ⟨J b, by rw [hιVU, hb], by rw [hFVU, hFb]⟩
+
+/-- Local degrees are unique. -/
+theorem localDegreeTwo_unique (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) (F : C(E2, E2))
+    (hz : ∀ p : U, F p = 0 ↔ (p : E2) = 0) {n m : ℤ}
+    (hn : IsLocalDegreeTwo U F hz n) (hm : IsLocalDegreeTwo U F hz m) : n = m := by
+  obtain ⟨a, ha, hFa⟩ := hn
+  obtain ⟨b, hb, hFb⟩ := hm
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso 0 U (0 : E2) hU h0
+  have hab : a = b := by
+    apply ConcreteCategory.injective_of_mono_of_preservesPullback
+      (HomologicalComplex.homologyMap
+        (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+          (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U 0)) (0+2))
+    exact ha.trans hb.symm
+  subst hab
+  exact ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective 0
+    (0 : E2) (hFa.symm.trans hFb)
+
+/-- Deformation to a model: if near 0 the slice of `g` has the same strict sign as the slice
+of a model `m` (a function of the first coordinate only, vanishing only at 0), the split map
+and the model product map have the same local degree. -/
+theorem splitProductMap_degree_iff_model
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) (g m : C(E2, ℝ))
+    (hzero : ∀ p : U, productMap g p = 0 ↔ (p : E2) = 0)
+    (hm : ∀ p : E2, m p = m (horizontal (p 0)))
+    (hm0 : ∀ u, m (horizontal u) = 0 ↔ u = 0)
+    (ε : ℝ) (hε : 0 < ε)
+    (hsign : ∀ u, |u| < ε → u ≠ 0 → (0 < g (horizontal u) ↔ 0 < m (horizontal u)))
+    (hzm : ∀ p : U, productMap m p = 0 ↔ (p : E2) = 0) (n : ℤ) :
+    IsLocalDegreeTwo U (splitProductMap g) (splitProductMap_zero_iff U g hzero) n ↔
+      IsLocalDegreeTwo U (productMap m) hzm n := by
+  obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp hU 0 h0
+  set ρ := min ε r with hρ
+  have hρpos : 0 < ρ := lt_min hε hr
+  let Q : Set E2 := Metric.ball 0 ρ
+  have hQU : Q ⊆ U := fun p hp => hball (Metric.ball_subset_ball (min_le_right _ _) hp)
+  have hQ0 : (0 : E2) ∈ Q := Metric.mem_ball_self hρpos
+  have hcoord : ∀ p : E2, p ∈ Q → |p 0| < ε := by
+    intro p hp
+    have h1 : |p 0| ≤ ‖p‖ := by
+      simpa [Real.norm_eq_abs] using PiLp.norm_apply_le p 0
+    have h2 : ‖p‖ < ρ := by simpa [Q] using hp
+    linarith [min_le_left ε r]
+  have hp_eq : ∀ p : E2, p 1 = 0 → p = horizontal (p 0) := by
+    intro p h1; ext i; fin_cases i
+    · simp [horizontal]
+    · simpa [horizontal] using h1
+  have hzS : ∀ p : Q, splitProductMap g p = 0 ↔ (p : E2) = 0 := fun p =>
+    splitProductMap_zero_iff U g hzero ⟨p, hQU p.2⟩
+  have hzM : ∀ p : Q, productMap m p = 0 ↔ (p : E2) = 0 := fun p => hzm ⟨p, hQU p.2⟩
+  rw [localDegreeTwo_iff_of_subset U Q hU Metric.isOpen_ball hQ0 hQU _ _ hzS,
+    localDegreeTwo_iff_of_subset U Q hU Metric.isOpen_ball hQ0 hQU _ _ hzM]
+  -- the straight-line homotopy on Q
+  let cpt : C(unitInterval × Q, ℝ × ℝ) :=
+    ⟨fun r => ((1 - (r.1 : ℝ)) * g (horizontal ((r.2 : E2) 0)) + (r.1 : ℝ) * m (r.2 : E2),
+      (r.2 : E2) 1), by
+        refine Continuous.prodMk ?_ ?_
+        · have hgc : Continuous fun r : unitInterval × Q => g (horizontal ((r.2 : E2) 0)) := by
+            apply g.continuous.comp
+            apply (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp
+            apply continuous_pi; intro i; fin_cases i
+            · simpa [horizontal] using (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).comp
+                (continuous_subtype_val.comp continuous_snd)
+            · exact continuous_const
+          have hmc : Continuous fun r : unitInterval × Q => m (r.2 : E2) :=
+            m.continuous.comp (continuous_subtype_val.comp continuous_snd)
+          exact ((continuous_const.sub (continuous_subtype_val.comp continuous_fst)).mul hgc).add
+            ((continuous_subtype_val.comp continuous_fst).mul hmc)
+        · exact (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1).comp
+            (continuous_subtype_val.comp continuous_snd)⟩
+  let Hf : C(unitInterval × Q, E2) :=
+    ⟨fun r => (EuclideanSpace.equiv (Fin 2) ℝ).symm
+        (fun i => if i = 0 then (cpt r).1 else (cpt r).2),
+      (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp (by
+        apply continuous_pi; intro i; fin_cases i
+        · simpa using (continuous_fst.comp cpt.continuous)
+        · simpa using (continuous_snd.comp cpt.continuous))⟩
+  let H : ContinuousMap.Homotopy (restrictedMap Q (splitProductMap g)) (restrictedMap Q (productMap m)) :=
+    { toContinuousMap := Hf
+      map_zero_left := by
+        intro p; ext i; fin_cases i <;> simp [Hf, cpt, restrictedMap, splitProductMap, productMap]
+      map_one_left := by
+        intro p; ext i; fin_cases i <;> simp [Hf, cpt, restrictedMap, productMap] }
+  have hHm : ∀ t : unitInterval, ∀ p ∈ neighborhoodDeletedPoint Q (0 : E2),
+      H (t, p) ∈ deletedPoint (0 : E2) := by
+    intro t p hp hHp
+    apply hp
+    change Hf (t, p) = 0 at hHp
+    have e0 : (1 - (t : ℝ)) * g (horizontal ((p : E2) 0)) + (t : ℝ) * m (p : E2) = 0 := by
+      simpa [Hf, cpt] using congrArg (fun q : E2 => q 0) hHp
+    have e1 : (p : E2) 1 = 0 := by
+      simpa [Hf, cpt] using congrArg (fun q : E2 => q 1) hHp
+    have hpe := hp_eq (p : E2) e1
+    by_contra hp0
+    have hu0 : (p : E2) 0 ≠ 0 := by
+      intro hu; apply hp0; rw [hpe, hu, horizontal_zero]
+    have hlt := hcoord p p.2
+    have hs := hsign _ hlt hu0
+    have hmne : m (horizontal ((p : E2) 0)) ≠ 0 := fun h => hu0 ((hm0 _).mp h)
+    rw [hm (p : E2)] at e0
+    have ht0 := t.2.1
+    have ht1 := t.2.2
+    have hgne : g (horizontal ((p : E2) 0)) ≠ 0 := by
+      intro h
+      have hmemU : horizontal ((p : E2) 0) ∈ U := hQU (by rw [← hpe]; exact p.2)
+      have hz := (hzero ⟨horizontal ((p : E2) 0), hmemU⟩).mp (by
+        ext i; fin_cases i
+        · simpa [productMap] using h
+        · simp [productMap, horizontal])
+      exact hu0 (by simpa [horizontal] using congrArg (fun q : E2 => q 0) hz)
+    rcases lt_or_gt_of_ne hmne with hneg | hpos
+    · have hgneg : g (horizontal ((p : E2) 0)) < 0 :=
+        lt_of_le_of_ne (not_lt.mp fun h => absurd (hs.mp h) (not_lt.mpr hneg.le)) hgne
+      rcases eq_or_lt_of_le ht0 with h | h
+      · rw [← h] at e0; simp at e0; exact hgne e0
+      · nlinarith [mul_pos h (neg_pos.mpr hneg),
+          mul_nonneg (sub_nonneg.mpr ht1) (neg_nonneg.mpr hgneg.le)]
+    · have hgpos : 0 < g (horizontal ((p : E2) 0)) := hs.mpr hpos
+      rcases eq_or_lt_of_le ht0 with h | h
+      · rw [← h] at e0; simp at e0; exact hgne e0
+      · nlinarith [mul_pos h hpos, mul_nonneg (sub_nonneg.mpr ht1) hgpos.le]
+  have hmap := ConstructionTargets.RelativeSingularHomologyHomotopy.relativeSingularHomologyMap_eq_of_homotopy
+    (neighborhoodDeletedPoint Q (0 : E2)) (deletedPoint (0 : E2)) H hHm
+    (by intro p hp hFp; exact hp ((hzS p).mp hFp))
+    (by intro p hp hFp; exact hp ((hzM p).mp hFp)) 2
+  constructor
+  · rintro ⟨a, ha, hFa⟩; exact ⟨a, ha, by rw [← hmap]; exact hFa⟩
+  · rintro ⟨a, ha, hFa⟩; exact ⟨a, ha, by rw [hmap]; exact hFa⟩
+
+
 
 /-- **Suspension/product identity (estimated 180--300 lines; LIBRARY).**
 For the split map `(u,v) ↦ (g(u,0),v)`, the relative H2 generator is the
