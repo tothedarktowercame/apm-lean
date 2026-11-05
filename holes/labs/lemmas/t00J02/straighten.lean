@@ -109,7 +109,7 @@ thickening has a local inverse. The inverse straightens the original curve
 with its prescribed parameter, and both maps are smooth at the base point. -/
 lemma straightening_thickening_inverse
     (w : ℝ → SurfaceModel) (v n : SurfaceModel)
-    (hw : HasDerivAt w v 0) (hs : ContDiff ℝ ∞ w)
+    (hw : HasDerivAt w v 0) (hs : ContDiffAt ℝ ∞ w 0)
     (L : (ℝ × ℝ) ≃L[ℝ] SurfaceModel)
     (hL : (L : (ℝ × ℝ) →L[ℝ] SurfaceModel) =
       (ContinuousLinearMap.fst ℝ ℝ ℝ).smulRight v +
@@ -117,21 +117,23 @@ lemma straightening_thickening_inverse
     ∃ e : OpenPartialHomeomorph (ℝ × ℝ) SurfaceModel,
       (0, 0) ∈ e.source ∧ w 0 ∈ e.target ∧ e.symm (w 0) = (0, 0) ∧
       (∀ x, e x = w x.1 + x.2 • n) ∧
-      ContDiff ℝ ∞ e ∧ ContDiffAt ℝ ∞ e.symm (w 0) ∧
+      ContDiffAt ℝ ∞ e (0, 0) ∧ ContDiffAt ℝ ∞ e.symm (w 0) ∧
       ∀ r, (r, 0) ∈ e.source → e.symm (w r) = (r, 0) := by
   let f : ℝ × ℝ → SurfaceModel := fun x => w x.1 + x.2 • n
-  have hf : ContDiff ℝ ∞ f := (hs.comp contDiff_fst).add (contDiff_snd.smul contDiff_const)
+  have hf : ContDiffAt ℝ ∞ f (0, 0) :=
+    (hs.comp (0 : ℝ × ℝ) contDiff_fst.contDiffAt).add
+      (contDiff_snd.contDiffAt.smul contDiff_const.contDiffAt)
   have hd : HasFDerivAt f (L : (ℝ × ℝ) →L[ℝ] SurfaceModel) (0, 0) := by
     rw [hL]
     exact straightening_thickening_derivative w v n hw
-  let e := hf.contDiffAt.toOpenPartialHomeomorph f hd (by simp)
-  have h0 : (0, 0) ∈ e.source := hf.contDiffAt.mem_toOpenPartialHomeomorph_source hd (by simp)
+  let e := hf.toOpenPartialHomeomorph f hd (by simp)
+  have h0 : (0, 0) ∈ e.source := hf.mem_toOpenPartialHomeomorph_source hd (by simp)
   have he0 : e (0, 0) = w 0 := by change w 0 + (0 : ℝ) • n = w 0; simp
   have ht : w 0 ∈ e.target := he0 ▸ e.map_source h0
   refine ⟨e, h0, ht, ?_, (fun _ => rfl), hf, ?_, ?_⟩
   · rw [← he0]
     exact e.left_inv h0
-  · have hi := hf.contDiffAt.to_localInverse hd (by simp)
+  · have hi := hf.to_localInverse hd (by simp)
     simpa only [f, zero_smul, add_zero] using hi
   · intro r hr
     have he : e (r, 0) = w r := by change w r + (0 : ℝ) • n = w r; simp
@@ -143,10 +145,10 @@ which send `w r` to exactly `(r,0)` on a whole interval about zero. This
 assembles the explicit transverse basis and the inverse-function step. -/
 lemma straightening_regular_planar_curve
     (w : ℝ → SurfaceModel) (v : SurfaceModel)
-    (hw : HasDerivAt w v 0) (hv : v ≠ 0) (hs : ContDiff ℝ ∞ w) :
+    (hw : HasDerivAt w v 0) (hv : v ≠ 0) (hs : ContDiffAt ℝ ∞ w 0) :
     ∃ β : OpenPartialHomeomorph SurfaceModel (ℝ × ℝ), ∃ δ : ℝ,
       0 < δ ∧ w 0 ∈ β.source ∧ β (w 0) = (0, 0) ∧
-      ContDiffAt ℝ ∞ β (w 0) ∧ ContDiff ℝ ∞ β.symm ∧
+      ContDiffAt ℝ ∞ β (w 0) ∧ ContDiffAt ℝ ∞ β.symm (0, 0) ∧
       ∀ r ∈ Set.Ioo (-δ) δ, w r ∈ β.source ∧ β (w r) = (r, 0) := by
   obtain ⟨n, L, hL⟩ := straightening_transverse_basis v hv
   obtain ⟨e, h0, ht, he0, he, hf, hi, ha⟩ :=
