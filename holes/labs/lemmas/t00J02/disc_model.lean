@@ -146,6 +146,14 @@ abbrev E2 := EuclideanSpace ℝ (Fin 2)
 def horizontal (u : ℝ) : E2 :=
   (EuclideanSpace.equiv (Fin 2) ℝ).symm (fun i => if i = 0 then u else 0)
 
+lemma continuous_horizontal : Continuous horizontal := by
+  apply (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp
+  apply continuous_pi
+  intro i
+  fin_cases i
+  · simpa [horizontal] using (continuous_id : Continuous (fun u : ℝ => u))
+  · exact continuous_const
+
 lemma horizontal_zero : horizontal 0 = 0 := by
   ext i
   simp [horizontal]
@@ -322,6 +330,165 @@ theorem isolatedZero_sign_trichotomy
         ⟨lt_trans (neg_lt_zero.mpr hδ) hu.1, hu.2⟩ hpI
         (ne_of_gt hu.1) (ne_of_gt hp.1) (iff_of_true hu.1 hp.1)).mp hh))
         (hne u ⟨lt_trans (neg_lt_zero.mpr hδ) hu.1, hu.2⟩ (ne_of_gt hu.1))⟩))
+
+def identityScalar : C(E2, ℝ) where
+  toFun p := p 0
+  continuous_toFun := PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0
+
+def positiveFoldScalar : C(E2, ℝ) where
+  toFun p := (p 0) ^ 2
+  continuous_toFun := (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).pow 2
+
+def negativeFoldScalar : C(E2, ℝ) where
+  toFun p := -((p 0) ^ 2)
+  continuous_toFun := ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).pow 2).neg
+
+lemma identity_productMap_zero_iff (U : Set E2) (p : U) :
+    productMap identityScalar p = 0 ↔ (p : E2) = 0 := by
+  constructor
+  · intro h; ext i; fin_cases i
+    · simpa [productMap, identityScalar] using congrArg (fun q : E2 => q 0) h
+    · simpa [productMap, identityScalar] using congrArg (fun q : E2 => q 1) h
+  · intro hp; rw [hp]; ext i; fin_cases i <;> simp [productMap, identityScalar]
+
+lemma positiveFold_productMap_zero_iff (U : Set E2) (p : U) :
+    productMap positiveFoldScalar p = 0 ↔ (p : E2) = 0 := by
+  constructor
+  · intro h
+    have h0 : (p.1 0) ^ 2 = 0 := by
+      simpa [productMap, positiveFoldScalar] using congrArg (fun q : E2 => q 0) h
+    have h1 : p.1 1 = 0 := by
+      simpa [productMap, positiveFoldScalar] using congrArg (fun q : E2 => q 1) h
+    ext i; fin_cases i <;> simp [eq_zero_of_pow_eq_zero h0, h1]
+  · intro hp; rw [hp]; ext i; fin_cases i <;> simp [productMap, positiveFoldScalar]
+
+lemma negativeFold_productMap_zero_iff (U : Set E2) (p : U) :
+    productMap negativeFoldScalar p = 0 ↔ (p : E2) = 0 := by
+  constructor
+  · intro h
+    have h0 : -((p.1 0) ^ 2) = 0 := by
+      simpa [productMap, negativeFoldScalar] using congrArg (fun q : E2 => q 0) h
+    have h1 : p.1 1 = 0 := by
+      simpa [productMap, negativeFoldScalar] using congrArg (fun q : E2 => q 1) h
+    ext i; fin_cases i <;> simp [eq_zero_of_pow_eq_zero (neg_eq_zero.mp h0), h1]
+  · intro hp; rw [hp]; ext i; fin_cases i <;> simp [productMap, negativeFoldScalar]
+
+/-- The horizontal identity has one-dimensional local degree one. -/
+theorem identity_sliceMap_localDegree
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
+    IsLocalDegreeOne U identityScalar (identity_productMap_zero_iff U) 1 := by
+  let ι := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ))
+      (deletedPoint (0 : ℝ)) (neighborhoodInclusion (horizontalSlice U))
+      (neighborhoodInclusion_mapsTo (horizontalSlice U) 0)) 1
+  have hopen : IsOpen (horizontalSlice U) := hU.preimage continuous_horizontal
+  have hmem : (0 : ℝ) ∈ horizontalSlice U := by simpa [horizontalSlice, horizontal] using h0
+  letI := ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_H1_isIso
+    (horizontalSlice U) (0 : ℝ) hopen hmem
+  refine ⟨(asIso ι).inv
+    (ConstructionTargets.OneDimensionalChartLocalGenerator.realLocalGenerator 0),
+    ConcreteCategory.congr_hom (asIso ι).inv_hom_id _, ?_⟩
+  rw [one_smul]
+  have hs : sliceMap U identityScalar = neighborhoodInclusion (horizontalSlice U) := by
+    ext u; rfl
+  have hcongr : ∀ (F G : C(horizontalSlice U, ℝ)) (hFG : F = G) hF hG,
+      relativeSingularMap (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ))
+        (deletedPoint (0 : ℝ)) F hF =
+      relativeSingularMap (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ))
+        (deletedPoint (0 : ℝ)) G hG := by
+    intro F G hFG _ _; subst hFG; rfl
+  rw [hcongr _ _ hs _ (neighborhoodInclusion_mapsTo (horizontalSlice U) 0)]
+  exact ConcreteCategory.congr_hom (asIso ι).inv_hom_id _
+
+/-- A map from the horizontal slice which avoids zero induces the zero map on
+one-dimensional local homology, since it factors through the self-pair. -/
+lemma sliceHomologyMap_eq_zero_of_avoids (U : Set E2)
+    (G : C(horizontalSlice U, ℝ)) (hG : ∀ u, G u ≠ 0)
+    (hGm : Set.MapsTo G (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ))
+      (deletedPoint (0 : ℝ))) :
+    HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ))
+        (deletedPoint (0 : ℝ)) G hGm) 1 = 0 := by
+  have hfac := relativeSingularMap_comp
+    (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ))
+    (Set.univ : Set (horizontalSlice U)) (deletedPoint (0 : ℝ))
+    (ContinuousMap.id _) G (fun _ _ => trivial) (fun u _ => hG u) hGm
+  show HomologicalComplex.homologyMap
+    (relativeSingularMap _ _ (G.comp (ContinuousMap.id _)) hGm) 1 = 0
+  rw [← hfac, HomologicalComplex.homologyMap_comp]
+  rw [(selfRelativeSingularHomology_isZero (horizontalSlice U) 1).eq_zero_of_tgt
+    (HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ))
+        (Set.univ : Set (horizontalSlice U)) (ContinuousMap.id _) (fun _ _ => trivial)) 1),
+    Limits.zero_comp]
+
+lemma fold_slice_localDegree_zero
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U)
+    (σ : ℝ) (hσ : σ ≠ 0) (g : C(E2, ℝ)) (hg : ∀ p, g p = σ * (p 0) ^ 2)
+    (hzero : ∀ p : U, productMap g p = 0 ↔ (p : E2) = 0) :
+    IsLocalDegreeOne U g hzero 0 := by
+  let G1 : C(horizontalSlice U, ℝ) :=
+    ⟨fun u => σ * ((u : ℝ) ^ 2 + 1), by fun_prop⟩
+  let H : ContinuousMap.Homotopy (sliceMap U g) G1 :=
+    { toContinuousMap :=
+        ⟨fun r => σ * ((r.2 : ℝ) ^ 2 + (r.1 : ℝ)), by fun_prop⟩
+      map_zero_left := by intro u; simp [sliceMap, hg, horizontal]
+      map_one_left := by intro u; rfl }
+  have hG1 : ∀ u, G1 u ≠ 0 := by
+    intro u hu
+    simp [G1] at hu
+    rcases hu with hu | hu
+    · exact hσ hu
+    · nlinarith [sq_nonneg (u : ℝ)]
+  have hHm : ∀ t : unitInterval, ∀ u ∈
+      neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ),
+      H (t, u) ∈ deletedPoint (0 : ℝ) := by
+    intro t u hu hHu
+    apply hu
+    simp [H] at hHu
+    rcases mul_eq_zero.mp hHu with hs | hs
+    · exact absurd hs hσ
+    · nlinarith [sq_nonneg (u : ℝ), t.2.1]
+  have hmap := ConstructionTargets.RelativeSingularHomologyHomotopy.relativeSingularHomologyMap_eq_of_homotopy
+    (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ)) (deletedPoint (0 : ℝ))
+    H hHm
+    (by
+      intro u hu hgu
+      have hprod : productMap g (⟨horizontal u, u.property⟩ : U) = 0 := by
+        ext i; fin_cases i
+        · simpa [sliceMap, horizontal, productMap] using hgu
+        · simp [productMap, horizontal]
+      exact hu (by
+        have := congrArg (fun p : E2 => p 0)
+          ((hzero ⟨horizontal u, u.property⟩).mp hprod)
+        simpa [horizontal] using this))
+    (fun u _ => hG1 u) 1
+  let ι := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint (horizontalSlice U) (0 : ℝ))
+      (deletedPoint (0 : ℝ)) (neighborhoodInclusion (horizontalSlice U))
+      (neighborhoodInclusion_mapsTo (horizontalSlice U) 0)) 1
+  have hopen : IsOpen (horizontalSlice U) := hU.preimage continuous_horizontal
+  have hmem : (0 : ℝ) ∈ horizontalSlice U := by simpa [horizontalSlice, horizontal] using h0
+  letI := ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_H1_isIso
+    (horizontalSlice U) (0 : ℝ) hopen hmem
+  refine ⟨(asIso ι).inv
+    (ConstructionTargets.OneDimensionalChartLocalGenerator.realLocalGenerator 0),
+    ConcreteCategory.congr_hom (asIso ι).inv_hom_id _, ?_⟩
+  rw [zero_smul]
+  erw [hmap, sliceHomologyMap_eq_zero_of_avoids U G1 hG1]
+  rfl
+
+theorem positiveFold_sliceMap_localDegree
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
+    IsLocalDegreeOne U positiveFoldScalar (positiveFold_productMap_zero_iff U) 0 :=
+  fold_slice_localDegree_zero U hU h0 1 one_ne_zero positiveFoldScalar
+    (fun p => by simp [positiveFoldScalar]) _
+
+theorem negativeFold_sliceMap_localDegree
+    (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) :
+    IsLocalDegreeOne U negativeFoldScalar (negativeFold_productMap_zero_iff U) 0 :=
+  fold_slice_localDegree_zero U hU h0 (-1) (by norm_num) negativeFoldScalar
+    (fun p => by simp [negativeFoldScalar]) _
 
 lemma splitProductMap_zero_iff
     (U : Set E2) (g : C(E2, ℝ))
