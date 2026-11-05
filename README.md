@@ -4,34 +4,15 @@ This repository formalises, in Lean 4 with Mathlib, the problems from the
 University of Texas at Austin mathematics preliminary examinations (1990s to
 2003).
 
-Each problem has a Lean statement, and all but a few have a Lean proof. A problem counts as
-**closed** when its `problems/P/lean/Main.lean` compiles with no `sorry`, and
-the theorem it proves matches an entry in the statement registry
-(`problems/STATEMENTS.json`). An entry goes into the registry only after an
-outside grader has compared the Lean statement with the problem text.
+461 problems have full formal solutions; at the time of writing
+(November 5, 2026) 19 are left with holes.  In 16 cases, a "narrower"
+statement was admitted, but only where the problem text itself was
+defective (for instance a claim that is false as printed).
 
-## Where things stand (2026-11-05)
+## The 19 open problems: contributions welcome
 
-| | count |
-|---|---|
-| problems | 480 |
-| closed: `Main.lean` has no `sorry` | 462 |
-| open | 18, all topology (`t*`) |
-| registered statements | 479 (437 graded faithful, 26 stronger, 16 narrower) |
-
-A "narrower" statement is admitted only where the problem text itself is
-defective (for instance a claim that is false as printed); the defect is
-written up beside the problem. One closed problem (`a97A07`) has no registered
-statement yet.
-
-These numbers come from `problems/*/status.json` and
-`problems/STATEMENTS.json`; recompute them rather than trusting this table.
-
-## The 18 open problems: contributions welcome
-
-All remaining problems are in algebraic and differential topology, where
-Mathlib's coverage is thinnest. Each one is worth solving on its own terms, and
-each would add reusable topology to Lean.
+18 remaining problems are in algebraic and differential topology,
+where Mathlib's coverage is thinnest. One is in analysis. 
 
 | problem | subject | state |
 |---|---|---|
@@ -53,6 +34,7 @@ each would add reusable topology to Lean.
 | `t98A06` | lifting vector fields through submersions; flows | blueprint, 2 leaves open |
 | `t99A04` | separating vs non-separating embedded circles in a surface | `Main.lean`, 1 `sorry` |
 | `t99J03` | classification of compact triangulated surfaces | blueprint, 1 leaf open |
+| `a97A07` | Hermite interpolation integral over a Jordan curve | `Main.lean`, 1 `sorry` (needs the Cauchy integral formula for a general Jordan curve) |
 
 "Blueprint" means `holes/labs/blueprints/P/`: `Blueprint.lean` reduces the
 problem to named lemmas ("leaves") and `BLUEPRINT.md` sketches a proof of each
@@ -85,12 +67,24 @@ welcome in `ConstructionTargets/`, the shared library; see
 
 ## How the proofs were made
 
-The proofs were written by AI agents (mostly OpenAI Codex and Anthropic Claude
-models, with some lemmas from Zhipu GLM and Moonshot Kimi models), directed and
-audited by Joe Corneli. Most problems were closed by a per-problem solve loop.
-The 95 that resisted it were closed by writing a blueprint for each problem and
-proving its leaves in parallel, one agent per leaf. [`methods/`](methods/README.md) describes
-that process in enough detail to repeat it:
+The proofs were written by AI agents (mostly OpenAI Codex and
+Anthropic Claude models, with some lemmas from Z.ai GLM and Moonshot
+Kimi models), directed and audited by Joe Corneli.  Most problems were
+closed by a straightforward per-problem solve loop.
+
+Topology, where Mathlib has least, got its own loops from late August
+to October 2026: an unattended supervisor repeatedly chose the shared
+theorem on the shortest route to an open problem, had it built into
+`ConstructionTargets/`, and retried the problems it unblocked (see
+`docs/TN-topology-closure-experiments.md` and
+`docs/TN-topology-build-loop-design.md`). These loops closed a number
+of topology problems and built much of the library the later work
+used.
+
+The problems that still resisted (95 by November 2026) were closed by
+writing a blueprint for each problem and proving its leaves in
+parallel, one agent per leaf. [`methods/`](methods/README.md) describes that process in enough
+detail to repeat it:
 
 - [`methods/01-statements.md`](methods/01-statements.md): how a problem
   statement is encoded, graded and registered;
@@ -102,6 +96,7 @@ that process in enough detail to repeat it:
   for one seat become library work in `ConstructionTargets/`.
 
 The full git history is public, including failed attempts and repairs.
+Representative chat interactions are available upon request.
 
 ## Repository layout
 
@@ -128,9 +123,10 @@ records the two sessions as fall and spring). The subject letters are
 ## License
 
 The problem statements are copyright The University of Texas at Austin
-(the exam year is in each file and in `apm/manifest.edn`) and are used with
-permission. Everything else in this repository is released under
-[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). See
+and are used with permission.
+
+Everything else in this repository is released under [CC0
+1.0](https://creativecommons.org/publicdomain/zero/1.0/). See
 [`LICENSE`](LICENSE).
 
 ## Acknowledgements

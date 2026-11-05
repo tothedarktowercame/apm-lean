@@ -15,7 +15,11 @@ end, with pointers to the history where earlier choices still matter.
    while proving it. [01-statements.md](01-statements.md)
 2. **Direct attempt.** A solve loop gives the problem to one agent with a
    time budget. Most problems were closed by this loop or by earlier versions
-   of it.
+   of it. For topology, from late August to October 2026, a separate loop
+   chose the shared theorem on the shortest route to an open problem, built
+   it into `ConstructionTargets/`, and retried the problems it unblocked
+   (`docs/TN-topology-closure-experiments.md`,
+   `docs/TN-topology-build-loop-design.md`).
 3. **Blueprint.** For a problem that resists, an agent writes a blueprint: the
    main theorem proved from named lemmas ("leaves"), each with body `sorry`,
    each checked against a list of ways a leaf goes wrong before any proof work
