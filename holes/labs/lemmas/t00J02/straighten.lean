@@ -235,3 +235,57 @@ lemma straightening_circle_param_deriv_surjective (z : Circle) :
   intro r
   exact LinearMap.congr_fun he r
 
+/-- Regularity survives the circle exponential parameter and the target chart.
+The exponential parameter has invertible derivative at zero; the extended
+chart has identity derivative at its centre. The chain rule therefore makes
+this derivative nonzero whenever `mfderiv c z` is nonzero.
+This is the derivative bridge from the manifold hypotheses to the planar
+inverse-function construction. -/
+lemma straightening_coordinate_deriv_ne_zero
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (c : C(Circle, S))
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c) (z : Circle)
+    (hz : mfderiv (𝓡 1) SurfaceModelWithCorners c z ≠ 0) :
+    deriv (fun r : ℝ => extChartAt SurfaceModelWithCorners (c z)
+      (c (z * Circle.exp r))) 0 ≠ 0 := by
+  let g : ℝ → Circle := fun r => z * Circle.exp r
+  let φ := extChartAt SurfaceModelWithCorners (c z)
+  let w : ℝ → SurfaceModel := fun r => φ (c (g r))
+  have hg0 : g 0 = z := by simp [g]
+  have hg : ContMDiff 𝓘(ℝ, ℝ) (𝓡 1) ∞ g :=
+    contMDiff_const.mul contMDiff_circleExp
+  have hcg := (hc.comp hg).contMDiffAt.mdifferentiableAt (x := 0) (by simp)
+  have hφ : MDifferentiableAt SurfaceModelWithCorners SurfaceModelWithCorners φ (c (g 0)) := by
+    rw [hg0]
+    exact (contMDiffAt_extChartAt (I := SurfaceModelWithCorners) (x := c z)
+      (n := ∞)).mdifferentiableAt (by simp)
+  have hchain := mfderiv_comp 0 hφ hcg
+  rw [mfderiv_eq_fderiv] at hchain
+  have hcgchain := mfderiv_comp 0 (hc.contMDiffAt.mdifferentiableAt (x := g 0) (by simp))
+    (hg.contMDiffAt.mdifferentiableAt (x := 0) (by simp))
+  rw [hcgchain] at hchain
+  simp only [Function.comp_apply] at hchain
+  erw [hg0] at hchain
+  change fderiv ℝ w 0 = (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners
+    (extChartAt SurfaceModelWithCorners (c z)) (c z)).comp
+      ((mfderiv (𝓡 1) SurfaceModelWithCorners c z).comp
+        (mfderiv 𝓘(ℝ, ℝ) (𝓡 1) g 0)) at hchain
+  rw [mfderiv_extChartAt_self] at hchain
+  erw [ContinuousLinearMap.id_comp] at hchain
+  intro he
+  have hs := straightening_coordinate_smooth c hc z
+  have hd := (hs.differentiableAt (by simp)).hasDerivAt.hasFDerivAt.fderiv
+  rw [he] at hd
+  have hwzero : fderiv ℝ w 0 = 0 := by simpa [w, φ, g] using hd
+  rw [hwzero] at hchain
+  apply hz
+  ext v
+  obtain ⟨r, hr⟩ := straightening_circle_param_deriv_surjective z v
+  have hh := congrArg (fun T : ℝ →L[ℝ] SurfaceModel => T r) hchain
+  change 0 = (mfderiv (𝓡 1) SurfaceModelWithCorners c z)
+    ((mfderiv 𝓘(ℝ, ℝ) (𝓡 1) g 0) r) at hh
+  change (mfderiv 𝓘(ℝ, ℝ) (𝓡 1) g 0) r = v at hr
+  rw [hr] at hh
+  exact hh.symm
+
