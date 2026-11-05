@@ -6865,6 +6865,71 @@ lemma isSideSign_exists_at_regular_aux_straightening_eventually_axis
   rw [hw', haxis r hr]
   simp
 
+/-- **S2(a), fibre equals axis in the source chart.**  C1 identifies every point of the
+embedded circle in the target chart, while C2 says that the second target coordinate is
+exactly the second source coordinate.  Continuity of `g` supplies the converse after
+shrinking a ball.  Estimated proof: 70--100 lines. -/
+lemma isSideSign_exists_at_regular_aux_fibre_axis
+    {S : Type} [TopologicalSpace S]
+    (f : C(S, S)) (c : C(Circle, S)) (z : Circle) (x : S)
+    (β α : OpenPartialHomeomorph S E2) (g : C(E2, ℝ)) (δ : ℝ)
+    (hδ : 0 < δ) (hβz : c z ∈ β.source) (hβ0 : β (c z) = 0)
+    (hβaxis : ∀ r ∈ Set.Ioo (-δ) δ, c (z * Circle.exp r) ∈ β.source ∧
+      β (c (z * Circle.exp r)) = (EuclideanSpace.equiv (Fin 2) ℝ).symm ![r, 0])
+    (hβexclusive : ∀ p ∈ β.source, p ∈ Set.range c →
+      ∃ r ∈ Set.Ioo (-δ) δ, p = c (z * Circle.exp r))
+    (hx : f x = c z) (hxα : x ∈ α.source) (hα0 : α x = 0)
+    (hαβ : α.source ⊆ f ⁻¹' β.source)
+    (hnormal : ∀ p ∈ α.target, β (f (α.symm p)) =
+      (EuclideanSpace.equiv (Fin 2) ℝ).symm ![g p, p 1]) :
+    ∃ ρ > 0, Metric.ball (0 : E2) ρ ⊆ α.target ∧
+      ∀ p ∈ Metric.ball (0 : E2) ρ,
+        (f (α.symm p) ∈ Set.range c ↔ p 1 = 0) := by
+  sorry
+
+/-- **S2(b), the embedded boundary is a monotone axis parameter.**  After shrinking below
+the fibre-axis ball and below `π`, continuity puts the boundary in the chart and on its
+axis.  Injectivity of the two embeddings and of the short exponential arc makes the first
+coordinate injective; continuous interval injectivity gives the stated direction.
+Estimated proof: 90--130 lines. -/
+lemma isSideSign_exists_at_regular_aux_boundary_axis
+    {S : Type} [TopologicalSpace S]
+    (f : C(S, S)) (c : C(Circle, S)) (D : Disk → S) (hD : Continuous D)
+    (hDemb : Topology.IsEmbedding D) (ℓ : C(Circle, Circle))
+    (hℓ : ∀ u, f (D (circleToDisk u)) = c (ℓ u))
+    (t : Circle) (x : S) (α : OpenPartialHomeomorph S E2) (ρ : ℝ)
+    (hρ : 0 < ρ) (hx : x = D (circleToDisk t)) (hxα : x ∈ α.source)
+    (hα0 : α x = 0) (hball : Metric.ball (0 : E2) ρ ⊆ α.target)
+    (hfibre : ∀ p ∈ Metric.ball (0 : E2) ρ,
+      (f (α.symm p) ∈ Set.range c ↔ p 1 = 0)) :
+    ∃ δ > 0, ∃ φ : ℝ → ℝ, ∃ dφ : ℤ,
+      ((dφ = 1 ∧ StrictMonoOn φ (Set.Ioo (-δ) δ)) ∨
+        (dφ = -1 ∧ StrictAntiOn φ (Set.Ioo (-δ) δ))) ∧
+      ∀ r ∈ Set.Ioo (-δ) δ,
+        D (circleToDisk (t * Circle.exp r)) ∈ α.source ∧
+        α (D (circleToDisk (t * Circle.exp r))) = horizontal (φ r) := by
+  sorry
+
+/-- **S2(c), local boundary exclusivity.**  The forward implication is the fibre-axis
+criterion.  For the reverse implication, the inverse-chart image of the convex axis ball
+is preconnected, lies in the fibre, contains the boundary point, and hence lies in the
+embedded boundary by `hcomp`.  Estimated proof: 55--80 lines. -/
+lemma isSideSign_exists_at_regular_aux_boundary_exclusive
+    {S : Type} [TopologicalSpace S]
+    (f : C(S, S)) (c : C(Circle, S)) (D : Disk → S) (ℓ : C(Circle, Circle))
+    (hℓ : ∀ u, f (D (circleToDisk u)) = c (ℓ u))
+    (hcomp : ∀ C : Set S, IsPreconnected C → C ⊆ f ⁻¹' Set.range c →
+      ∀ y ∈ C, y ∈ Set.range (D ∘ circleToDisk) →
+        C ⊆ Set.range (D ∘ circleToDisk))
+    (t : Circle) (x : S) (α : OpenPartialHomeomorph S E2) (ρ : ℝ)
+    (hρ : 0 < ρ) (hx : x = D (circleToDisk t)) (hxα : x ∈ α.source)
+    (hα0 : α x = 0) (hball : Metric.ball (0 : E2) ρ ⊆ α.target)
+    (hfibre : ∀ p ∈ Metric.ball (0 : E2) ρ,
+      (f (α.symm p) ∈ Set.range c ↔ p 1 = 0)) :
+    ∀ p ∈ Metric.ball (0 : E2) ρ,
+      (α.symm p ∈ Set.range (D ∘ circleToDisk) ↔ p 1 = 0) := by
+  sorry
+
 /-- **S2.** At a parameter where `c` is regular at `ℓ t`, a side sign exists. -/
 theorem isSideSign_exists_at_regular
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
@@ -6891,6 +6956,15 @@ theorem isSideSign_exists_at_regular
   have hxtrans := htrans x z hx
   obtain ⟨α, g, hxα, hα0, hαβ, hnormal⟩ :=
     exists_transverse_normal_form f hf c hcsmooth z β hβz hβsmooth hβinv hβc x hx hxtrans
+  obtain ⟨ρ, hρ, hballα, hfibre⟩ :=
+    isSideSign_exists_at_regular_aux_fibre_axis f c z x β α g δβ hδβ hβz hβ0
+      hβaxis hβexclusive hx hxα hα0 hαβ hnormal
+  obtain ⟨δα, hδα, φα, dφα, hdφα, hboundaryα⟩ :=
+    isSideSign_exists_at_regular_aux_boundary_axis f c D hD hDemb ℓ hℓ t x α ρ hρ
+      rfl hxα hα0 hballα hfibre
+  have hexclusiveα :=
+    isSideSign_exists_at_regular_aux_boundary_exclusive f c D ℓ hℓ hcomp t x α ρ hρ
+      rfl hxα hα0 hballα hfibre
   sorry
 
 end t00J02_ModelProduct
