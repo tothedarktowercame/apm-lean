@@ -5043,6 +5043,34 @@ lemma eventually_exists_small_exp_coordinate (ℓ : C(Circle, Circle)) (t₀ : C
   rw [hexp]
   simp [q]
 
+@[simp] lemma horizontal_apply_one (u : ℝ) : horizontal u 1 = 0 := by
+  simp [horizontal]
+
+lemma horizontal_sub (u v : ℝ) : horizontal u - horizontal v = horizontal (u - v) := by
+  ext i
+  fin_cases i <;> simp [horizontal]
+
+lemma strictMonoOn_shift_sub {φ : ℝ → ℝ} {δ r₁ : ℝ}
+    (hφ : StrictMonoOn φ (Set.Ioo (-δ) δ)) (hδ : 0 < δ)
+    (hr₁ : |r₁| < δ / 2) :
+    StrictMonoOn (fun r => φ (r₁ + r) - φ r₁) (Set.Ioo (-δ / 2) (δ / 2)) := by
+  have hrbounds := abs_lt.mp hr₁
+  intro a ha b hb hab
+  rcases ha with ⟨haL, haR⟩
+  rcases hb with ⟨hbL, hbR⟩
+  rcases hrbounds with ⟨hrL, hrR⟩
+  have hra : r₁ + a ∈ Set.Ioo (-δ) δ := by
+    constructor <;> linarith
+  have hrb : r₁ + b ∈ Set.Ioo (-δ) δ := by
+    constructor <;> linarith
+  have hab' : r₁ + a < r₁ + b := by linarith
+  exact sub_lt_sub_right (hφ hra hrb hab') _
+
+lemma circle_mul_exp_add (t : Circle) (r₁ r : ℝ) :
+    t * Circle.exp r₁ * Circle.exp r = t * Circle.exp (r₁ + r) := by
+  rw [Circle.exp_add]
+  exact mul_assoc _ _ _
+
 /-- The analytic witness-transfer part of S1.  After a nearby value of `ℓ`
 has been written in the exponential coordinate of `ℓ t₀`, re-centre the
 original chart, shrink its axis interval and ball, and transfer the disk-side
