@@ -6862,6 +6862,144 @@ theorem localHomeomorph_chartSign_eventually
         IsChartSign e β (Φ x') hβ hβ0 sβ → IsChartSign e (Φ.trans β) x' hs h0 (n * sβ) := by
   sorry
 
+/-- The boundary lift is injective wherever the local representative of f
+is injective. This needs no regularity of the target circle. -/
+lemma cusp_aux_lift_injective
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S))
+    (D : Disk → S) (hDemb : Topology.IsEmbedding D) (ℓ : C(Circle, Circle))
+    (hℓ : ∀ t, f (D (circleToDisk t)) = c (ℓ t))
+    (Φ : OpenPartialHomeomorph S S) (hΦ : ∀ p ∈ Φ.source, Φ p = f p) :
+    Set.InjOn ℓ {t | D (circleToDisk t) ∈ Φ.source} := by
+  intro a ha b hb hab
+  have he : Φ (D (circleToDisk a)) = Φ (D (circleToDisk b)) := by
+    rw [hΦ _ ha, hΦ _ hb, hℓ a, hℓ b, hab]
+  have hd := hDemb.injective (Φ.injOn ha hb he)
+  apply Subtype.ext
+  exact congrArg (fun x : Disk => (x : ℂ)) hd
+
+/-- A continuous strictly monotone or antitone real parameter through zero
+covers a symmetric neighborhood of zero. -/
+lemma cusp_aux_parameter_covers (ψ : ℝ → ℝ) (δ : ℝ) (hδ : 0 < δ)
+    (hc : ContinuousOn ψ (Set.Ioo (-δ) δ)) (h0 : ψ 0 = 0)
+    (hd : StrictMonoOn ψ (Set.Ioo (-δ) δ) ∨ StrictAntiOn ψ (Set.Ioo (-δ) δ)) :
+    ∃ ε > 0, Set.Ioo (-ε) ε ⊆ ψ '' Set.Ioo (-δ) δ := by
+  rcases hd with hm | hm
+  · exact isSideSign_aux_parameter_covers ψ δ hδ hc hm h0
+  · obtain ⟨ε, hε, he⟩ := isSideSign_aux_parameter_covers (fun r => -ψ r) δ hδ
+      hc.neg (fun x hx y hy hxy => neg_lt_neg (hm hx hy hxy)) (by simp [h0])
+    refine ⟨ε, hε, ?_⟩
+    intro u hu
+    obtain ⟨r, hr, heq⟩ := he (show -u ∈ Set.Ioo (-ε) ε by constructor <;> linarith [hu.1, hu.2])
+    exact ⟨r, hr, by linarith⟩
+
+/-- Pulling an axis chart through a local homeomorphism preserves the
+boundary range test on a small ball. The monotone parameter covers the axis
+in the reverse implication. -/
+lemma cusp_aux_pullback_chart
+    {S : Type} [TopologicalSpace S]
+    (f : C(S, S)) (c γ : C(Circle, S)) (ℓ : C(Circle, Circle))
+    (hℓ : ∀ t, f (γ t) = c (ℓ t))
+    (Φ : OpenPartialHomeomorph S S) (hΦ : ∀ p ∈ Φ.source, Φ p = f p)
+    (t : Circle) (ht : γ t ∈ Φ.source)
+    (β : OpenPartialHomeomorph S E2) (hβ : c (ℓ t) ∈ β.source) (hβ0 : β (c (ℓ t)) = 0)
+    (b : ℝ) (hb : 0 < b)
+    (hparβ : ∀ r ∈ Set.Ioo (-b) b, c (ℓ t * Circle.exp r) ∈ β.source ∧
+      β (c (ℓ t * Circle.exp r)) = horizontal r)
+    (hexcl : ∀ p ∈ β.source, p ∈ Set.range c →
+      ∃ r ∈ Set.Ioo (-b) b, p = c (ℓ t * Circle.exp r))
+    (ψ : ℝ → ℝ) (a : ℝ) (ha : 0 < a) (hψ0 : ψ 0 = 0)
+    (hc : ContinuousOn ψ (Set.Ioo (-a) a))
+    (hd : StrictMonoOn ψ (Set.Ioo (-a) a) ∨ StrictAntiOn ψ (Set.Ioo (-a) a))
+    (hψ : ∀ r ∈ Set.Ioo (-a) a, ℓ (t * Circle.exp r) = ℓ t * Circle.exp (ψ r)) :
+    ∃ d > 0, ∃ ρ > 0,
+      Set.Ioo (-d) d ⊆ Set.Ioo (-a) a ∧
+      Metric.ball (0 : E2) ρ ⊆ (Φ.trans β).target ∧
+      Metric.ball (0 : E2) ρ ⊆ β.target ∧
+      (∀ r ∈ Set.Ioo (-d) d, γ (t * Circle.exp r) ∈ (Φ.trans β).source ∧
+        (Φ.trans β) (γ (t * Circle.exp r)) = horizontal (ψ r)) ∧
+      (∀ p ∈ Metric.ball (0 : E2) ρ,
+        (Φ.trans β).symm p ∈ Set.range γ ↔ p 1 = 0) ∧
+      (∀ p ∈ Metric.ball (0 : E2) ρ, β.symm p ∈ Set.range c ↔ p 1 = 0) := by
+  let α := Φ.trans β
+  have hbase : Φ (γ t) = c (ℓ t) := (hΦ _ ht).trans (hℓ t)
+  have hxα : γ t ∈ α.source := ⟨ht, by change Φ (γ t) ∈ β.source; rw [hbase]; exact hβ⟩
+  have hα0 : α (γ t) = 0 := by change β (Φ (γ t)) = 0; rw [hbase, hβ0]
+  have hψat : ContinuousAt ψ 0 := hc.continuousAt (Ioo_mem_nhds (by linarith) ha)
+  have hcurve : Continuous (fun r : ℝ => γ (t * Circle.exp r)) := by fun_prop
+  have hnear : ∀ᶠ r in 𝓝 (0 : ℝ), r ∈ Set.Ioo (-a) a ∧
+      ψ r ∈ Set.Ioo (-b) b ∧ γ (t * Circle.exp r) ∈ Φ.source := by
+    filter_upwards [Ioo_mem_nhds (show -a < (0 : ℝ) by linarith) ha,
+      hψat.preimage_mem_nhds (show Set.Ioo (-b) b ∈ 𝓝 (ψ 0) by rw [hψ0]; exact Ioo_mem_nhds (by linarith) hb),
+      hcurve.continuousAt.preimage_mem_nhds (show Φ.source ∈ 𝓝 (γ (t * Circle.exp 0)) by
+        simpa using Φ.open_source.mem_nhds ht)] with r hr hp hs
+    exact ⟨hr, hp, hs⟩
+  obtain ⟨d, hdpos, hdsub⟩ := Metric.mem_nhds_iff.mp hnear
+  have hsmall : ∀ r ∈ Set.Ioo (-d) d, r ∈ Set.Ioo (-a) a ∧
+      ψ r ∈ Set.Ioo (-b) b ∧ γ (t * Circle.exp r) ∈ Φ.source := by
+    intro r hr
+    apply hdsub
+    simpa only [Metric.mem_ball, Real.dist_eq, sub_zero, abs_lt] using hr
+  have hsub : Set.Ioo (-d) d ⊆ Set.Ioo (-a) a := fun r hr => (hsmall r hr).1
+  have hdir : StrictMonoOn ψ (Set.Ioo (-d) d) ∨ StrictAntiOn ψ (Set.Ioo (-d) d) :=
+    hd.imp (fun h => h.mono hsub) (fun h => h.mono hsub)
+  obtain ⟨ε, hε, hcover⟩ := cusp_aux_parameter_covers ψ d hdpos (hc.mono hsub) hψ0 hdir
+  have hparα : ∀ r ∈ Set.Ioo (-d) d, γ (t * Circle.exp r) ∈ α.source ∧
+      α (γ (t * Circle.exp r)) = horizontal (ψ r) := by
+    intro r hr
+    have he : Φ (γ (t * Circle.exp r)) = c (ℓ t * Circle.exp (ψ r)) := by
+      rw [hΦ _ (hsmall r hr).2.2, hℓ, hψ r (hsub hr)]
+    exact ⟨⟨(hsmall r hr).2.2, by change Φ (γ (t * Circle.exp r)) ∈ β.source; rw [he]; exact (hparβ _ (hsmall r hr).2.1).1⟩,
+      by change β (Φ (γ (t * Circle.exp r))) = _; rw [he]; exact (hparβ _ (hsmall r hr).2.1).2⟩
+  have hopen : IsOpen (α.target ∩ β.target ∩ Metric.ball (0 : E2) (min ε b)) :=
+    (α.open_target.inter β.open_target).inter Metric.isOpen_ball
+  have hzero : (0 : E2) ∈ α.target ∩ β.target ∩ Metric.ball (0 : E2) (min ε b) :=
+    ⟨⟨hα0 ▸ α.map_source hxα, hβ0 ▸ β.map_source hβ⟩, Metric.mem_ball_self (lt_min hε hb)⟩
+  obtain ⟨ρ, hρ, hρsub⟩ := Metric.isOpen_iff.mp hopen 0 hzero
+  have hcoord : ∀ p ∈ Metric.ball (0 : E2) ρ, p 0 ∈ Set.Ioo (-(min ε b)) (min ε b) := by
+    intro p hp
+    have hn : ‖p‖ < min ε b := by simpa using (hρsub hp).2
+    exact abs_lt.mp (lt_of_le_of_lt (by simpa only [Real.norm_eq_abs] using PiLp.norm_apply_le p 0) hn)
+  have hpEq : ∀ p : E2, p 1 = 0 → p = horizontal (p 0) := by
+    intro p hp; ext i; fin_cases i <;> simp [horizontal, hp]
+  have haxisβ : ∀ p ∈ Metric.ball (0 : E2) ρ, β.symm p ∈ Set.range c ↔ p 1 = 0 := by
+    intro p hp
+    have hpt := (hρsub hp).1.2
+    constructor
+    · intro hrange
+      obtain ⟨u, hu, he⟩ := hexcl (β.symm p) (β.map_target hpt) hrange
+      have heq : p = horizontal u := by
+        rw [← β.right_inv hpt, he]; exact (hparβ u hu).2
+      rw [heq]; simp [horizontal]
+    · intro hp1
+      have hu : p 0 ∈ Set.Ioo (-b) b := by
+        have hh := hcoord p hp
+        constructor <;> linarith [hh.1, hh.2, min_le_right ε b]
+      refine ⟨ℓ t * Circle.exp (p 0), ?_⟩
+      exact (β.left_inv (hparβ _ hu).1).symm.trans
+        (congrArg β.symm ((hparβ _ hu).2.trans (hpEq p hp1).symm))
+  refine ⟨d, hdpos, ρ, hρ, hsub, (fun p hp => (hρsub hp).1.1),
+    (fun p hp => (hρsub hp).1.2), hparα, ?_, haxisβ⟩
+  intro p hp
+  have hpt := (hρsub hp).1.1
+  constructor
+  · rintro ⟨u, hu⟩
+    apply (haxisβ p hp).mp
+    have hsrc := α.map_target hpt
+    have he : β.symm p = Φ (α.symm p) := by
+      calc β.symm p = β.symm (α (α.symm p)) := congrArg β.symm (α.right_inv hpt).symm
+           _ = Φ (α.symm p) := β.left_inv hsrc.2
+    rw [he, ← hu, hΦ _ (by simpa only [hu] using hsrc.1), hℓ]
+    exact ⟨ℓ u, rfl⟩
+  · intro hp1
+    have hu : p 0 ∈ Set.Ioo (-ε) ε := by
+      have hh := hcoord p hp
+      constructor <;> linarith [hh.1, hh.2, min_le_left ε b]
+    obtain ⟨r, hr, he⟩ := hcover hu
+    refine ⟨t * Circle.exp r, ?_⟩
+    have hval : α (γ (t * Circle.exp r)) = p := by
+      rw [(hparα r hr).2, he, ← hpEq p hp1]
+    exact (α.left_inv (hparα r hr).1).symm.trans (congrArg α.symm hval)
+
 /-- **X4.** Near a cusp of `c` hit by the disk boundary, the side sign is one fixed value at every
 nearby parameter where `c` is regular. -/
 theorem isSideSign_near_cusp
@@ -6877,6 +7015,64 @@ theorem isSideSign_near_cusp
     (t₀ : Circle) (hcusp : mfderiv (𝓡 1) apm_t00j02_I2 c (ℓ t₀) = 0) :
     ∃ lam : ℤ, ∀ᶠ t in 𝓝 t₀,
       mfderiv (𝓡 1) apm_t00j02_I2 c (ℓ t) ≠ 0 → IsSideSign e f c D ℓ t lam := by
-  sorry
+  let γ : C(Circle, S) := ⟨fun t => D (circleToDisk t), hD.comp continuous_circleToDisk⟩
+  obtain ⟨Φ, hxΦ, hΦ⟩ := ConstructionTargets.T00J02Closure.exists_localHomeomorph_at_cusp
+    f hf c (ℓ t₀) hcusp (γ t₀) (hℓ t₀) (htrans (γ t₀) (ℓ t₀) (hℓ t₀))
+  let N : Set Circle := γ ⁻¹' Φ.source
+  have hN : N ∈ 𝓝 t₀ := γ.continuous.continuousAt.preimage_mem_nhds (Φ.open_source.mem_nhds hxΦ)
+  have hinj : Set.InjOn ℓ N := cusp_aux_lift_injective f c D hDemb ℓ hℓ Φ hΦ
+  obtain ⟨m, hm, hmono⟩ := circle_locally_monotone ℓ t₀ N hN hinj
+  obtain ⟨n, hn, horient⟩ := localHomeomorph_chartSign_eventually e Φ (γ t₀) hxΦ
+  obtain ⟨κ, hκ, hK⟩ := disk_side_at_regular_boundary_point e D hD hDemb
+  refine ⟨κ * n * m, ?_⟩
+  have hevent := γ.continuous.continuousAt.eventually horient
+  filter_upwards [hmono, hevent, hN] with t hmt hnt ht
+  intro hregular
+  obtain ⟨a, ha, ψ, hψ0, hψc, hψdir, hψeq⟩ := hmt
+  obtain ⟨β, b, hb, hβ, hβ0, _, _, hparam, hexcl⟩ :=
+    exists_straightening_chart c hc hcsmooth (ℓ t) hregular
+  have hparβ : ∀ r ∈ Set.Ioo (-b) b, c (ℓ t * Circle.exp r) ∈ β.source ∧
+      β (c (ℓ t * Circle.exp r)) = horizontal r := by
+    intro r hr
+    refine ⟨(hparam r hr).1, (hparam r hr).2.trans ?_⟩
+    ext i
+    fin_cases i <;> simp [horizontal]
+  obtain ⟨sβ, hsβ1, hsβ⟩ := exists_chartSign e β (c (ℓ t)) hβ hβ0
+  have hdir : StrictMonoOn ψ (Set.Ioo (-a) a) ∨ StrictAntiOn ψ (Set.Ioo (-a) a) :=
+    hψdir.imp And.right And.right
+  obtain ⟨d, hd, ρ, hρ, hsub, hρα, hρβ, hparα, haxisα, haxisβ⟩ :=
+    cusp_aux_pullback_chart f c γ ℓ hℓ Φ hΦ t ht β hβ hβ0 b hb hparβ hexcl
+      ψ a ha hψ0 hψc hdir hψeq
+  let α := Φ.trans β
+  have hbase : Φ (γ t) = c (ℓ t) := (hΦ _ ht).trans (hℓ t)
+  have hxα : γ t ∈ α.source := ⟨ht, by change Φ (γ t) ∈ β.source; rw [hbase]; exact hβ⟩
+  have hα0 : α (γ t) = 0 := by change β (Φ (γ t)) = 0; rw [hbase, hβ0]
+  have hb' : Φ (γ t) ∈ β.source := by simpa only [hbase] using hβ
+  have hb0' : β (Φ (γ t)) = 0 := by rw [hbase, hβ0]
+  have hsign : IsChartSign e α (γ t) hxα hα0 (n * sβ) := by
+    apply hnt β hb' hb0' hxα hα0 sβ
+    simpa only [hbase] using hsβ
+  have hdir' : (m = 1 ∧ StrictMonoOn ψ (Set.Ioo (-d) d)) ∨
+      (m = -1 ∧ StrictAntiOn ψ (Set.Ioo (-d) d)) :=
+    hψdir.imp (fun h => ⟨h.1, h.2.mono hsub⟩) (fun h => ⟨h.1, h.2.mono hsub⟩)
+  obtain ⟨η, hη, hside⟩ := hK t α hxα hα0 (n * sβ) hsign ρ d hρ hd hρα ψ m hdir' hparα haxisα
+  refine ⟨?_, β, hβ, hβ0, sβ, hsβ, ρ, b, id, hρ, hb, hρβ,
+    strictMono_id.strictMonoOn _, hparβ, haxisβ, η, hη, ?_⟩
+  · rcases hκ with rfl | rfl <;> rcases hn with rfl | rfl <;> rcases hm with rfl | rfl <;> norm_num
+  · intro u hu hun
+    obtain ⟨hsrc, hnorm, hpos⟩ := hside u hu hun
+    have he : α (D u) = β (f (D u)) := by
+      change β (Φ (D u)) = _
+      rw [hΦ _ hsrc.1]
+    refine ⟨?_, ?_, ?_⟩
+    · have h := hsrc.2
+      change Φ (D u) ∈ β.source at h
+      rwa [hΦ _ hsrc.1] at h
+    · rwa [he] at hnorm
+    · have halg : κ * (n * sβ) * m = κ * n * m * sβ := by ring
+      rwa [he, halg] at hpos
+
+#print axioms isSideSign_near_cusp
+
 
 end t00J02_ModelProduct
