@@ -15,7 +15,10 @@ end, with pointers to the history where earlier choices still matter.
    while proving it. [01-statements.md](01-statements.md)
 2. **Direct attempt.** A solve loop gives the problem to one agent with a
    time budget. Most problems were closed by this loop or by earlier versions
-   of it. For topology, from late August to October 2026, a separate loop
+   of it. In August and September 2026 the loop ran as the "APM Machine",
+   a multi-agent cycle with fixed roles per problem frame and a shared memory
+   store; it was set aside at the end of September because keeping it running
+   cost more than the proving. For topology, from late August to October 2026, a separate loop
    chose the shared theorem on the shortest route to an open problem, built
    it into `ConstructionTargets/`, and retried the problems it unblocked
    (`docs/TN-topology-closure-experiments.md`,

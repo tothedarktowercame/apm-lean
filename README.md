@@ -72,6 +72,18 @@ Anthropic Claude models, with some lemmas from Z.ai GLM and Moonshot
 Kimi models), directed and audited by Joe Corneli.  Most problems were
 closed by a straightforward per-problem solve loop.
 
+In August and September 2026 the solve loop was rebuilt as the "APM
+Machine" (mission M-apm-demonstration in futon3c): a multi-agent cycle
+in which each problem ran as a frame with fixed roles (solver,
+analyst, scribe), handoffs between them, and a shared memory store, so
+that the campaign would become a specified, testable pipeline and the
+effect of memory on proving could be measured. It closed problems, but
+keeping it running took more repair than the proving did, frame after
+frame, and by the end of September it was set aside for simpler
+loops. One change from that period lasted: when a problem needed a
+result missing from Mathlib, the response became a shared lemma in
+`ConstructionTargets/` instead of a stop.
+
 Topology, where Mathlib has least, got its own loops from late August
 to October 2026: an unattended supervisor repeatedly chose the shared
 theorem on the shortest route to an open problem, had it built into
