@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.RelativeSingularConnectingNaturality
 import ConstructionTargets.CollaredConnectedSumHomology
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
@@ -316,6 +317,43 @@ lemma firstCoordinateReflection_mapsTo_deletedPoint :
     (hRp.trans
       (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)).map_zero.symm)
 
+/-- The first-coordinate reflection acts as minus the identity on integral
+first homology of the Euclidean unit circle, computed in additive groups.
+The natural integral coefficient comparison transports the module computation. -/
+lemma firstCoordinateReflection_circle_H1 :
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+          (0 : Fin 2))) = -𝟙 _ := by
+  let e := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of (T02A06.euclideanUnitSphere 2)) 1
+  apply (cancel_epi e.hom).mp
+  have h := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+    (TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+      (0 : Fin 2))) 1
+  rw [ConstructionTargets.CoefficientFirstReflection.circle_negative ℤ] at h
+  simpa only [Functor.map_neg, Functor.map_id, Preadditive.neg_comp,
+    Preadditive.comp_neg, Category.id_comp, Category.comp_id] using h.symm
+
+/-- Radial normalization intertwines reflection of the punctured plane with
+reflection of its unit circle, since a linear isometry preserves norms. -/
+lemma firstCoordinateReflection_radial_naturality :
+    (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize E2).comp
+      (⟨fun x : deletedPoint (0 : E2) =>
+        ⟨firstCoordinateReflection x, firstCoordinateReflection_mapsTo_deletedPoint x.property⟩,
+        firstCoordinateReflection.continuous.comp continuous_subtype_val |>.subtype_mk _⟩) =
+    (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (0 : Fin 2)).comp
+      (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize E2) := by
+  apply ContinuousMap.ext
+  intro x
+  apply Subtype.ext
+  change NormedSpace.normalize
+      (ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2) x.val) =
+    ConstructionTargets.CoefficientCoordinateReflections.reflection (0 : Fin 2)
+      (NormedSpace.normalize x.val)
+  simp only [NormedSpace.normalize, LinearIsometryEquiv.norm_map,
+    LinearIsometryEquiv.map_smul]
+
 /-- The first-coordinate reflection negates the standard ambient local
 two-dimensional generator.  Radial naturality identifies the relative local
 map with the reflection of the unit circle, where
@@ -329,7 +367,56 @@ lemma firstCoordinateReflection_ambientLocalGenerator :
           (k := 0) (0 : E2)) =
       -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
           (k := 0) (0 : E2) := by
-  sorry
+  let H := (AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+    (AddCommGrpCat.of ℤ)
+  let A := deletedPoint (0 : E2)
+  let q := ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize E2
+  let j := ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereInclusion E2
+  let d := singularPairConnecting A 1
+  haveI : Mono d := by
+    apply (singularPairHomology_exact_relative A 1).mono_g
+    exact (contractibleHigherHomology_isZero E2 2 (by decide)).eq_of_src _ _
+  haveI : IsIso (H.map (TopCat.ofHom q)) := by
+    exact ConstructionTargets.RelativeSingularHomologyHomotopy.chainHomology_isIso_of_section
+      q j (by
+        apply ContinuousMap.ext
+        intro x
+        exact ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize_unitSphereInclusion E2 x)
+      ⟨ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.puncturedRadialHomotopy E2⟩ 1
+  have hd : Function.Injective d := (AddCommGrpCat.mono_iff_injective d).mp inferInstance
+  have hq : Function.Injective (H.map (TopCat.ofHom q)) :=
+    (AddCommGrpCat.mono_iff_injective _).mp inferInstance
+  apply hd
+  apply hq
+  let ρ := HomologicalComplex.homologyMap
+    (relativeSingularMap A A firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint) 2
+  let r := subspaceMap A A firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint
+  have hn : d ≫ H.map r = ρ ≫ d :=
+    ConstructionTargets.RelativeSingularConnectingNaturality.singularPairConnecting_naturality
+      A A firstCoordinateReflection firstCoordinateReflection_mapsTo_deletedPoint 1
+  have hr : r ≫ TopCat.ofHom q = TopCat.ofHom q ≫
+      TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (0 : Fin 2)) := by
+    exact congrArg TopCat.ofHom firstCoordinateReflection_radial_naturality
+  have hs : H.map r ≫ H.map (TopCat.ofHom q) = -(H.map (TopCat.ofHom q)) := by
+    rw [← H.map_comp, hr]
+    erw [H.map_comp]
+    change H.map (TopCat.ofHom q) ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+        (AddCommGrpCat.of ℤ)).map _ = _
+    rw [firstCoordinateReflection_circle_H1, Preadditive.comp_neg, Category.comp_id]
+  have he : ρ ≫ d ≫ H.map (TopCat.ofHom q) = -(d ≫ H.map (TopCat.ofHom q)) := by
+    rw [← Category.assoc, ← hn]
+    erw [Category.assoc, hs, Preadditive.comp_neg]
+    rfl
+  have hv := ConcreteCategory.congr_hom he
+    (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (0 : E2))
+  change (H.map (TopCat.ofHom q)) (d (ρ _)) =
+    -((H.map (TopCat.ofHom q)) (d _)) at hv
+  change (H.map (TopCat.ofHom q)).hom (d.hom (ρ.hom _)) =
+    (H.map (TopCat.ofHom q)).hom (d.hom (-_))
+  rw [map_neg]
+  erw [map_neg]
+  exact hv
 
 /-- Reflection in the first coordinate acts by `-1` on two-dimensional local
 homology.  This follows by transporting `all_reflections_negative` through
@@ -473,3 +560,5 @@ theorem negativeFold_productMap_localDegree
     (fun p => by simp [negativeFoldScalar]) _
 
 end t00J02_ModelProduct
+
+#print axioms t00J02_ModelProduct.firstCoordinateReflection_ambientLocalGenerator
