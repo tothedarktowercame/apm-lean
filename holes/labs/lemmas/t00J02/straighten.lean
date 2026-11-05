@@ -289,3 +289,11 @@ lemma straightening_coordinate_deriv_ne_zero
   rw [hr] at hh
   exact hh.symm
 
+/-- Fixed Cartesian coordinates on the surface model. -/
+def straightening_plane_coordinates : (ℝ × ℝ) ≃L[ℝ] SurfaceModel :=
+  (ContinuousLinearEquiv.finTwoArrow ℝ ℝ).symm.trans (EuclideanSpace.equiv (Fin 2) ℝ).symm
+
+@[simp] lemma straightening_plane_coordinates_axis (r : ℝ) :
+    straightening_plane_coordinates (r, 0) =
+      (EuclideanSpace.equiv (Fin 2) ℝ).symm ![r, 0] := rfl
+
