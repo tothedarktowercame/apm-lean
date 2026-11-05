@@ -381,6 +381,63 @@ lemma localExpArc_mapsTo_circleFiberComplement
   rw [hn, hn0]
   simp
 
+abbrev transportMap1 {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : MapsTo f A B) :=
+  HomologicalComplex.homologyMap (relativeSingularMap A B f hf) 1
+
+lemma transportMap1_comp {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (A : Set X) (B : Set Y) (C : Set Z)
+    (f : C(X, Y)) (g : C(Y, Z)) (hf : MapsTo f A B) (hg : MapsTo g B C)
+    (hgf : MapsTo (g.comp f) A C) (a : (RelativeSingularChains A).homology 1) :
+    transportMap1 B C g hg (transportMap1 A B f hf a) =
+      transportMap1 A C (g.comp f) hgf a :=
+  ConcreteCategory.congr_hom (relativeSingularHomologyMap_comp A B C f g hf hg hgf 1) a
+
+lemma transportMap1_comp_auto {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (A : Set X) (B : Set Y) (C : Set Z)
+    (f : C(X, Y)) (g : C(Y, Z)) (hf : MapsTo f A B) (hg : MapsTo g B C)
+    (a : (RelativeSingularChains A).homology 1) :
+    transportMap1 B C g hg (transportMap1 A B f hf a) =
+      transportMap1 A C (g.comp f) (hg.comp hf) a :=
+  transportMap1_comp A B C f g hf hg (hg.comp hf) a
+
+lemma transportMap1_zero {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : MapsTo f A B)
+    (hall : ∀ x, f x ∈ B) (a : (RelativeSingularChains A).homology 1) :
+    transportMap1 A B f hf a = 0 := by
+  let h₁ : MapsTo (ContinuousMap.id X) A Set.univ := fun _ _ => trivial
+  let h₂ : MapsTo f Set.univ B := fun x _ => hall x
+  have h := transportMap1_comp A Set.univ B (ContinuousMap.id X) f h₁ h₂ hf a
+  haveI : Subsingleton ((RelativeSingularChains (Set.univ : Set X)).homology 1) :=
+    AddCommGrpCat.subsingleton_of_isZero (selfRelativeSingularHomology_isZero X 1)
+  rw [Subsingleton.elim (transportMap1 A Set.univ (ContinuousMap.id X) h₁ a) 0,
+    map_zero] at h
+  exact h.symm
+
+lemma transportInclusion1_bijective {X : Type} [TopologicalSpace X] [T1Space X]
+    (U : Set X) (x : X) (hU : IsOpen U) (hx : x ∈ U) :
+    Function.Bijective (transportMap1 (neighborhoodDeletedPoint U x) (deletedPoint x)
+      (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)) := by
+  let m := transportMap1 (neighborhoodDeletedPoint U x) (deletedPoint x)
+    (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)
+  letI := ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_H1_isIso
+    U x hU hx
+  exact ConcreteCategory.bijective_of_isIso m
+
+lemma transportMap1_square {X Y Z T : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z] [TopologicalSpace T]
+    (A : Set X) (B : Set Y) (C : Set Z) (D : Set T)
+    (f : C(X,Y)) (g : C(Y,T)) (h : C(X,Z)) (k : C(Z,T))
+    (hf : MapsTo f A B) (hg : MapsTo g B D)
+    (hh : MapsTo h A C) (hk : MapsTo k C D)
+    (he : ∀ x, g (f x) = k (h x)) (a : (RelativeSingularChains A).homology 1) :
+    transportMap1 B D g hg (transportMap1 A B f hf a) =
+      transportMap1 C D k hk (transportMap1 A C h hh a) := by
+  rw [transportMap1_comp _ _ _ _ _ _ _ (hg.comp hf),
+    transportMap1_comp _ _ _ _ _ _ _ (hk.comp hh)]
+  have hcomp : g.comp f = k.comp h := ContinuousMap.ext he
+  simp only [hcomp]
+
 #print axioms exists_isLocalDegreeR
 #print axioms localExpArc_mapsTo_circleFiberComplement
 
