@@ -1272,16 +1272,33 @@ lemma continuous_complexToE2 : Continuous complexToE2 := by
   · simpa using Complex.continuous_re
   · simpa using Complex.continuous_im
 
-/-- The interior of an embedded closed disk is open in a boundaryless
-surface.  This is the exact invariance-of-domain input needed to construct
-`exists_diskChart`; it is independent of all homology and orientation data. -/
-theorem diskInterior_isOpenEmbedding
+/-- The inverse of an embedded disk interior is an open chart onto the model
+unit ball.  Invariance of domain (`largeInterior_isOpen_aux_euclidean`) makes
+the image open; the embedding then supplies the inverse homeomorphism.
+Estimated proof size: 100--160 lines. -/
+theorem diskInterior_openPartialHomeomorph
     {S : Type} [TopologicalSpace S] [T2Space S]
     [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
     (D : ConstructionTargets.DiskBoundaryHomology.Disk → S) (hD : Continuous D)
     (hDemb : Topology.IsEmbedding D) :
-    Topology.IsOpenEmbedding (fun a : {a : ConstructionTargets.DiskBoundaryHomology.Disk //
-      ‖(a : ℂ)‖ < 1} => D a.1) := by
+    ∃ δ : OpenPartialHomeomorph S E2,
+      δ.target = Metric.ball (0 : E2) 1 ∧
+      ∀ a : ConstructionTargets.DiskBoundaryHomology.Disk, ‖(a : ℂ)‖ < 1 →
+        D a ∈ δ.source ∧ δ (D a) = complexToE2 a := by
+  sorry
+
+/-- A chart whose target is the connected unit ball has one orientation sign
+at every source point.  Use `exists_chartSign` at the centre, convert with
+`isChartSign_iff_at`, and propagate it with
+`isChartSignAt_constant_on_ball`.  Estimated proof size: 25--40 lines once
+`exists_chartSign` is copied into this namespace. -/
+theorem unitBallChart_constantSign
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (δ : OpenPartialHomeomorph S E2) (hδ : δ.target = Metric.ball (0 : E2) 1) :
+    ∃ κD : ℤ, (κD = 1 ∨ κD = -1) ∧
+      ∀ (y : S) (hy : y ∈ δ.source), IsChartSignAt e δ y hy κD := by
   sorry
 
 /-- An embedded closed disk supplies its interior chart, and the orientation
@@ -1297,7 +1314,9 @@ theorem exists_diskChart
       (∀ a : ConstructionTargets.DiskBoundaryHomology.Disk, ‖(a : ℂ)‖ < 1 →
         D a ∈ δ.source ∧ δ (D a) = complexToE2 a) ∧
       ∀ (y : S) (hy : y ∈ δ.source), IsChartSignAt e δ y hy κD := by
-  sorry
+  obtain ⟨δ, hδ, hDδ⟩ := diskInterior_openPartialHomeomorph D hD hDemb
+  obtain ⟨κD, hκD, hs⟩ := unitBallChart_constantSign e δ hδ
+  exact ⟨δ, κD, hκD, hδ, hDδ, hs⟩
 
 end L1ball
 
