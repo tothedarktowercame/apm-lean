@@ -6885,7 +6885,39 @@ lemma isSideSign_exists_at_regular_aux_fibre_axis
     ∃ ρ > 0, Metric.ball (0 : E2) ρ ⊆ α.target ∧
       ∀ p ∈ Metric.ball (0 : E2) ρ,
         (f (α.symm p) ∈ Set.range c ↔ p 1 = 0) := by
-  sorry
+  have h0t : (0 : E2) ∈ α.target := hα0 ▸ α.map_source hxα
+  have hsymm0 : α.symm 0 = x := by rw [← hα0]; exact α.left_inv hxα
+  have hg0 : g 0 = 0 := by
+    have h := hnormal 0 h0t
+    rw [hsymm0, hx, hβ0] at h
+    have := congrArg (fun v : E2 => v 0) h
+    simpa using this.symm
+  obtain ⟨ρ₁, hρ₁, hρ₁t⟩ := Metric.isOpen_iff.mp α.open_target 0 h0t
+  have hgc : ∀ᶠ p in 𝓝 (0 : E2), |g p| < δ := by
+    have := g.continuous.continuousAt (x := 0) |>.eventually (Ioo_mem_nhds (a := -δ) (b := δ)
+      (by rw [hg0]; linarith) (by rw [hg0]; linarith))
+    filter_upwards [this] with p hp
+    exact abs_lt.mpr ⟨hp.1, hp.2⟩
+  obtain ⟨ρ₂, hρ₂, hρ₂g⟩ := Metric.eventually_nhds_iff.mp hgc
+  refine ⟨min ρ₁ ρ₂, lt_min hρ₁ hρ₂, fun p hp => hρ₁t (Metric.ball_subset_ball (min_le_left _ _) hp), ?_⟩
+  intro p hp
+  have hpt : p ∈ α.target := hρ₁t (Metric.ball_subset_ball (min_le_left _ _) hp)
+  have hpg : |g p| < δ := hρ₂g (Metric.ball_subset_ball (min_le_right _ _) hp)
+  have hsrc : f (α.symm p) ∈ β.source := hαβ (α.map_target hpt)
+  have hn := hnormal p hpt
+  constructor
+  · intro hmem
+    obtain ⟨r, hr, hreq⟩ := hβexclusive _ hsrc hmem
+    have h2 := (hβaxis r hr).2
+    rw [← hreq, hn] at h2
+    have := congrArg (fun v : E2 => v 1) h2
+    simpa using this
+  · intro hp1
+    have hr : g p ∈ Set.Ioo (-δ) δ := ⟨(abs_lt.mp hpg).1, (abs_lt.mp hpg).2⟩
+    obtain ⟨hcs, hce⟩ := hβaxis (g p) hr
+    have heq : β (f (α.symm p)) = β (c (z * Circle.exp (g p))) := by
+      rw [hn, hce, hp1]
+    exact ⟨z * Circle.exp (g p), (β.injOn hsrc hcs heq).symm⟩
 
 /-- **S2(b), the embedded boundary is a monotone axis parameter.**  After shrinking below
 the fibre-axis ball and below `π`, continuity puts the boundary in the chart and on its
@@ -6908,7 +6940,69 @@ lemma isSideSign_exists_at_regular_aux_boundary_axis
       ∀ r ∈ Set.Ioo (-δ) δ,
         D (circleToDisk (t * Circle.exp r)) ∈ α.source ∧
         α (D (circleToDisk (t * Circle.exp r))) = horizontal (φ r) := by
-  sorry
+  let u : ℝ → S := fun r => D (circleToDisk (t * Circle.exp r))
+  have hu : Continuous u :=
+    hD.comp (continuous_circleToDisk.comp (continuous_const.mul Circle.exp.continuous))
+  have hu0 : u 0 = x := by simp [u, hx]
+  have hev : ∀ᶠ r in 𝓝 (0 : ℝ), u r ∈ α.source ∧ α (u r) ∈ Metric.ball (0 : E2) ρ := by
+    have h1 : ∀ᶠ r in 𝓝 (0 : ℝ), u r ∈ α.source :=
+      hu.continuousAt.preimage_mem_nhds (by rw [hu0]; exact α.open_source.mem_nhds hxα)
+    have h2 : ∀ᶠ r in 𝓝 (0 : ℝ), α (u r) ∈ Metric.ball (0 : E2) ρ := by
+      have hc : ContinuousAt (fun r => α (u r)) 0 :=
+        ContinuousAt.comp (f := u) (by rw [hu0]; exact α.continuousAt hxα) hu.continuousAt
+      have := hc.eventually (Metric.ball_mem_nhds (α (u 0)) hρ)
+      simpa [hu0, hα0] using this
+    exact h1.and h2
+  obtain ⟨δ₁, hδ₁, hδ₁P⟩ := Metric.eventually_nhds_iff.mp hev
+  let δ := min δ₁ 1
+  have hδ : 0 < δ := lt_min hδ₁ one_pos
+  have hP : ∀ r ∈ Set.Ioo (-δ) δ, u r ∈ α.source ∧ α (u r) ∈ Metric.ball (0 : E2) ρ := by
+    intro r hr
+    apply hδ₁P
+    rw [Real.dist_eq, sub_zero, abs_lt]
+    constructor <;> linarith [hr.1, hr.2, min_le_left δ₁ 1]
+  have haxis : ∀ r ∈ Set.Ioo (-δ) δ, α (u r) = horizontal ((α (u r)) 0) := by
+    intro r hr
+    obtain ⟨hs, hb⟩ := hP r hr
+    have hf : f (α.symm (α (u r))) ∈ Set.range c := by
+      rw [α.left_inv hs]; exact ⟨ℓ _, (hℓ _).symm⟩
+    have h1 := (hfibre _ hb).1 hf
+    ext i
+    fin_cases i
+    · simp [horizontal]
+    · simp [horizontal, h1]
+  let φ : ℝ → ℝ := fun r => (α (u r)) 0
+  have hφc : ContinuousOn φ (Set.Ioo (-δ) δ) := by
+    have : ContinuousOn (fun r => α (u r)) (Set.Ioo (-δ) δ) :=
+      α.continuousOn.comp hu.continuousOn (fun r hr => (hP r hr).1)
+    exact (continuous_apply 0 |>.comp (PiLp.continuous_ofLp 2 _)).comp_continuousOn this
+  have hφi : Set.InjOn φ (Set.Ioo (-δ) δ) := by
+    intro r hr r' hr' h
+    have h1 : α (u r) = α (u r') := by rw [haxis r hr, haxis r' hr']; exact congrArg horizontal h
+    have h2 : u r = u r' := α.injOn (hP r hr).1 (hP r' hr').1 h1
+    have h3 : circleToDisk (t * Circle.exp r) = circleToDisk (t * Circle.exp r') := hDemb.injective h2
+    have h4 : t * Circle.exp r = t * Circle.exp r' := by
+      apply Subtype.ext
+      have := congrArg Subtype.val h3
+      simpa [circleToDisk] using this
+    have h5 := mul_left_cancel h4
+    obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h5
+    have hm0 : m = 0 := by
+      by_contra hm0
+      have hmabs : (1 : ℝ) ≤ |(m : ℝ)| := by
+        rw [← Int.cast_abs]; exact_mod_cast Int.one_le_abs hm0
+      have hpi := Real.pi_gt_three
+      have heq : |r - r'| = |(m : ℝ)| * (2 * Real.pi) := by
+        rw [hm, show r' + (m : ℝ) * (2 * Real.pi) - r' = (m : ℝ) * (2 * Real.pi) by ring, abs_mul,
+          abs_of_pos (by positivity : (0:ℝ) < 2 * Real.pi)]
+      have hlt : |r - r'| < 4 := by
+        rw [abs_lt]; constructor <;> linarith [hr.1, hr.2, hr'.1, hr'.2, min_le_right δ₁ 1]
+      nlinarith
+    rw [hm, hm0]; simp
+  refine ⟨δ, hδ, φ, ?_⟩
+  rcases hφc.strictMonoOn_of_injOn_Ioo (by linarith) hφi with hmono | hanti
+  · exact ⟨1, Or.inl ⟨rfl, hmono⟩, fun r hr => ⟨(hP r hr).1, haxis r hr⟩⟩
+  · exact ⟨-1, Or.inr ⟨rfl, hanti⟩, fun r hr => ⟨(hP r hr).1, haxis r hr⟩⟩
 
 /-- **S2(c), local boundary exclusivity.**  The forward implication is the fibre-axis
 criterion.  For the reverse implication, the inverse-chart image of the convex axis ball
@@ -6928,7 +7022,28 @@ lemma isSideSign_exists_at_regular_aux_boundary_exclusive
       (f (α.symm p) ∈ Set.range c ↔ p 1 = 0)) :
     ∀ p ∈ Metric.ball (0 : E2) ρ,
       (α.symm p ∈ Set.range (D ∘ circleToDisk) ↔ p 1 = 0) := by
-  sorry
+  intro p hp
+  constructor
+  · rintro ⟨s, hs⟩
+    apply (hfibre p hp).1
+    rw [← hs]
+    exact ⟨ℓ s, (hℓ s).symm⟩
+  · intro hp1
+    let A : Set E2 := Metric.ball (0 : E2) ρ ∩ {q : E2 | q 1 = 0}
+    have hAconv : Convex ℝ A := by
+      refine (convex_ball _ _).inter ?_
+      exact convex_hyperplane (f := fun q : E2 => q 1) ⟨fun _ _ => rfl, fun _ _ => rfl⟩ 0
+    have hAsub : A ⊆ α.target := fun q hq => hball hq.1
+    have hC : IsPreconnected (α.symm '' A) :=
+      hAconv.isPreconnected.image _ (α.continuousOn_symm.mono hAsub)
+    have hCf : α.symm '' A ⊆ f ⁻¹' Set.range c := by
+      rintro _ ⟨q, hq, rfl⟩
+      exact (hfibre q hq.1).2 hq.2
+    have h0A : (0 : E2) ∈ A := ⟨Metric.mem_ball_self hρ, by simp⟩
+    have hsymm0 : α.symm 0 = x := by rw [← hα0]; exact α.left_inv hxα
+    have hxC : x ∈ α.symm '' A := ⟨0, h0A, hsymm0⟩
+    have hxR : x ∈ Set.range (D ∘ circleToDisk) := ⟨t, hx.symm⟩
+    exact hcomp _ hC hCf x hxC hxR ⟨p, ⟨hp, hp1⟩, rfl⟩
 
 /-- **S2.** At a parameter where `c` is regular at `ℓ t`, a side sign exists. -/
 theorem isSideSign_exists_at_regular
@@ -6965,6 +7080,79 @@ theorem isSideSign_exists_at_regular
   have hexclusiveα :=
     isSideSign_exists_at_regular_aux_boundary_exclusive f c D ℓ hℓ hcomp t x α ρ hρ
       rfl hxα hα0 hballα hfibre
-  sorry
+  obtain ⟨κ, hκ, hK1⟩ := disk_side_at_regular_boundary_point e D hD hDemb
+  obtain ⟨sα, hsα1, hsα⟩ := exists_chartSign e α x hxα hα0
+  obtain ⟨η, hη, hside⟩ := hK1 t α hxα hα0 sα hsα ρ δα hρ hδα hballα φα dφα hdφα
+    hboundaryα hexclusiveα
+  obtain ⟨sβ, hsβ1, hsβ⟩ := exists_chartSign e β (c z) hβz hβ0
+  have hdφ1 : dφα = 1 ∨ dφα = -1 := by
+    rcases hdφα with ⟨h, _⟩ | ⟨h, _⟩
+    exacts [Or.inl h, Or.inr h]
+  have hsβsq : sβ * sβ = 1 := by rcases hsβ1 with rfl | rfl <;> norm_num
+  have hhor : ∀ r : ℝ, (EuclideanSpace.equiv (Fin 2) ℝ).symm ![r, 0] = horizontal r := by
+    intro r; ext i; fin_cases i <;> simp [horizontal]
+  -- a ball in the straightening chart
+  have h0βt : (0 : E2) ∈ β.target := hβ0 ▸ β.map_source hβz
+  obtain ⟨ρ₀, hρ₀, hρ₀t⟩ := Metric.isOpen_iff.mp β.open_target 0 h0βt
+  set ρβ := min ρ₀ δβ with hρβ
+  have hρβpos : 0 < ρβ := lt_min hρ₀ hδβ
+  have hballβ : Metric.ball (0 : E2) ρβ ⊆ β.target :=
+    fun p hp => hρ₀t (Metric.ball_subset_ball (min_le_left _ _) hp)
+  -- continuity of β ∘ f ∘ D at the boundary point
+  have hcont : ∀ᶠ a in 𝓝 (circleToDisk t), ‖β (f (D a))‖ < ρβ := by
+    have hfD : f (D (circleToDisk t)) = c z := hx
+    have h1 : ContinuousAt β (f (D (circleToDisk t))) := by
+      rw [hfD]; exact β.continuousAt hβz
+    have hc : ContinuousAt (fun a : Disk => β (f (D a))) (circleToDisk t) :=
+      ContinuousAt.comp (f := fun a => f (D a)) h1 (f.continuous.comp hD).continuousAt
+    have := hc.eventually (Metric.ball_mem_nhds _ hρβpos)
+    filter_upwards [this] with a ha
+    simpa [hfD, hβ0, dist_zero_right] using ha
+  obtain ⟨η₂, hη₂, hη₂P⟩ := Metric.eventually_nhds_iff.mp hcont
+  have hcoord : ∀ (p : E2) (i : Fin 2), |p i| ≤ ‖p‖ := fun p i => by
+    have := PiLp.norm_apply_le p i; simpa [Real.norm_eq_abs] using this
+  refine ⟨κ * sα * dφα * sβ, ?_, β, hβz, hβ0, sβ, hsβ, ρβ, δβ, fun r => r, hρβpos, hδβ,
+    hballβ, strictMonoOn_id, ?_, ?_, ?_⟩
+  · rcases hκ with rfl | rfl <;> rcases hsα1 with rfl | rfl <;> rcases hdφ1 with rfl | rfl <;>
+      rcases hsβ1 with rfl | rfl <;> norm_num
+  · intro r hr
+    obtain ⟨h1, h2⟩ := hβaxis r hr
+    exact ⟨h1, by rw [h2, hhor]⟩
+  · intro p hp
+    have hpt := hballβ hp
+    have hpn : ‖p‖ < δβ := by
+      have := Metric.mem_ball.mp hp; rw [dist_zero_right] at this
+      exact lt_of_lt_of_le this (min_le_right _ _)
+    constructor
+    · intro hmem
+      obtain ⟨r, hr, hreq⟩ := hβexclusive _ (β.map_target hpt) hmem
+      have h2 := (hβaxis r hr).2
+      rw [← hreq, β.right_inv hpt] at h2
+      rw [h2]; simp
+    · intro hp1
+      have hr : p 0 ∈ Set.Ioo (-δβ) δβ := by
+        have := lt_of_le_of_lt (hcoord p 0) hpn
+        exact ⟨(abs_lt.mp this).1, (abs_lt.mp this).2⟩
+      obtain ⟨h1, h2⟩ := hβaxis (p 0) hr
+      have hpe : p = β (c (z * Circle.exp (p 0))) := by
+        rw [h2]; ext i; fin_cases i <;> simp [hp1]
+      have hq : β.symm (β (c (z * Circle.exp (p 0)))) = c (z * Circle.exp (p 0)) := β.left_inv h1
+      rw [← hpe] at hq
+      exact ⟨z * Circle.exp (p 0), hq.symm⟩
+  · refine ⟨min η η₂, lt_min hη hη₂, ?_⟩
+    intro a ha han
+    obtain ⟨hDa, -, hpos⟩ := hside a (lt_of_lt_of_le ha (min_le_left _ _)) han
+    have hfa : f (D a) ∈ β.source := hαβ hDa
+    have hsm := hη₂P (lt_of_lt_of_le ha (min_le_right _ _))
+    refine ⟨hfa, hsm, ?_⟩
+    have hαt : α (D a) ∈ α.target := α.map_source hDa
+    have hn := hnormal _ hαt
+    rw [α.left_inv hDa] at hn
+    have h1 : (β (f (D a))) 1 = (α (D a)) 1 := by rw [hn]; simp
+    rw [h1]
+    have : ((κ * sα * dφα * sβ * sβ : ℤ) : ℝ) = ((κ * sα * dφα : ℤ) : ℝ) := by
+      rw [mul_assoc (κ * sα * dφα), hsβsq, mul_one]
+    rw [this]
+    exact hpos
 
 end t00J02_ModelProduct
