@@ -237,4 +237,114 @@ theorem planar_normal_coordinate
     have := congrArg (fun w : SurfaceModel => w 1) hinv
     simpa [Φ, e0, e1, q] using this
 
+
+/-- **C2: transverse normal form at a fibre point.**  In a chart `α` at `x` and the straightening
+chart `β` at `c z`, the map is `(u, v) ↦ (g(u, v), v)`, the shape `productMap g` of the model
+product lemma. -/
+theorem exists_transverse_normal_form
+    {S : Type} [TopologicalSpace S] [T2Space S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (f : C(S, S)) (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (c : C(Circle, S)) (hcsmooth : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c) (z : Circle)
+    (β : OpenPartialHomeomorph S SurfaceModel)
+    (hβz : c z ∈ β.source)
+    (hβsmooth : ContMDiffAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ β (c z))
+    (hβinv : LinearMap.ker
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners β (c z)).toLinearMap = ⊥)
+    (hβc : ∀ᶠ w in 𝓝 z, β (c w) 1 = 0)
+    (x : S) (hx : f x = c z)
+    (htrans : LinearMap.range
+        (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+      LinearMap.range (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    ∃ (α : OpenPartialHomeomorph S SurfaceModel) (g : C(SurfaceModel, ℝ)),
+      x ∈ α.source ∧ α x = 0 ∧ α.source ⊆ f ⁻¹' β.source ∧
+      ∀ p ∈ α.target, β (f (α.symm p)) =
+        (EuclideanSpace.equiv (Fin 2) ℝ).symm ![g p, p 1] := by
+  set φ := chartAt SurfaceModel x
+  set G : SurfaceModel → SurfaceModel := fun p => β (f (φ.symm p))
+  obtain ⟨hG, hℓ⟩ := normal_derivative_ne_zero f hf c hcsmooth z β hβsmooth hβinv hβc x hx htrans
+  have hxφ : x ∈ φ.source := mem_chart_source _ x
+  have hG0 : G (φ x) 1 = 0 := by
+    simp only [G, φ.left_inv hxφ, hx]; exact hβc.self_of_nhds
+  obtain ⟨Ψ, hΨs, hΨ0, hΨ1⟩ := planar_normal_coordinate G (φ x) hG hG0 hℓ
+  set O : Set S := φ.source ∩ f ⁻¹' β.source
+  have hO : IsOpen O := φ.open_source.inter (β.open_source.preimage f.continuous)
+  set α₀ := (φ.trans Ψ).restrOpen O hO
+  have hxα₀ : x ∈ α₀.source := by
+    simp only [α₀, OpenPartialHomeomorph.restrOpen_source, OpenPartialHomeomorph.trans_source]
+    exact ⟨⟨hxφ, hΨs⟩, hxφ, by simpa [hx] using hβz⟩
+  have hα₀x : α₀ x = 0 := hΨ0
+  have hα₀O : α₀.source ⊆ O := fun p hp => by
+    simp only [α₀, OpenPartialHomeomorph.restrOpen_source] at hp; exact hp.2
+  have key : ∀ p ∈ α₀.target, β (f (α₀.symm p)) 1 = p 1 := by
+    intro p hp
+    have hy : α₀.symm p ∈ α₀.source := α₀.map_target hp
+    have hyp : α₀ (α₀.symm p) = p := α₀.right_inv hp
+    have hys : α₀.symm p ∈ (φ.trans Ψ).source := by
+      simp only [α₀, OpenPartialHomeomorph.restrOpen_source] at hy; exact hy.1
+    rw [OpenPartialHomeomorph.trans_source] at hys
+    have hα₀y : α₀ (α₀.symm p) = Ψ (φ (α₀.symm p)) := rfl
+    have hpΨ : p ∈ Ψ.target := by
+      rw [← hyp, hα₀y]; exact Ψ.map_source hys.2
+    have hΨsymm : Ψ.symm p = φ (α₀.symm p) := by
+      calc Ψ.symm p = Ψ.symm (Ψ (φ (α₀.symm p))) := by rw [← hα₀y, hyp]
+        _ = φ (α₀.symm p) := Ψ.left_inv hys.2
+    have := hΨ1 p hpΨ
+    rw [hΨsymm] at this
+    simpa only [G, φ.left_inv hys.1] using this
+  have h0t : (0 : SurfaceModel) ∈ α₀.target := hα₀x ▸ α₀.map_source hxα₀
+  obtain ⟨ρ, hρ, hball⟩ := Metric.isOpen_iff.mp α₀.open_target 0 h0t
+  set ρ' := ρ / 2 with hρ'
+  have hρ'pos : 0 < ρ' := by positivity
+  let r : SurfaceModel → SurfaceModel := fun p => (ρ' / max ρ' ‖p‖) • p
+  have hrc : Continuous r := by
+    apply Continuous.smul _ continuous_id
+    exact continuous_const.div (continuous_const.max continuous_norm)
+      (fun p => (lt_of_lt_of_le hρ'pos (le_max_left _ _)).ne')
+  have hrt : ∀ p, r p ∈ α₀.target := by
+    intro p
+    apply hball
+    rw [Metric.mem_ball, dist_zero_right]
+    have hm : 0 < max ρ' ‖p‖ := lt_of_lt_of_le hρ'pos (le_max_left _ _)
+    calc ‖r p‖ = ρ' / max ρ' ‖p‖ * ‖p‖ := by
+          simp only [r, norm_smul, Real.norm_eq_abs, abs_div, abs_of_pos hρ'pos, abs_of_pos hm]
+      _ ≤ ρ' := by
+          rw [div_mul_eq_mul_div, div_le_iff₀ hm]
+          exact mul_le_mul_of_nonneg_left (le_max_right _ _) hρ'pos.le
+      _ < ρ := by rw [hρ']; linarith
+  have hrid : ∀ p, ‖p‖ < ρ' → r p = p := by
+    intro p hp
+    simp [r, max_eq_left hp.le, hρ'pos.ne']
+  have hcont : ContinuousOn (fun p => β (f (α₀.symm p))) α₀.target := by
+    refine β.continuousOn.comp (f.continuous.comp_continuousOn α₀.continuousOn_symm) ?_
+    intro p hp
+    exact (hα₀O (α₀.map_target hp)).2
+  let g : C(SurfaceModel, ℝ) :=
+    ⟨fun p => β (f (α₀.symm (r p))) 0,
+      (EuclideanSpace.proj (0 : Fin 2) : SurfaceModel →L[ℝ] ℝ).continuous.comp
+        (hcont.comp_continuous hrc hrt)⟩
+  let α := α₀.trans (OpenPartialHomeomorph.ofSet (Metric.ball (0 : SurfaceModel) ρ')
+    Metric.isOpen_ball)
+  refine ⟨α, g, ?_, ?_, ?_, ?_⟩
+  · simp only [α, OpenPartialHomeomorph.trans_source, OpenPartialHomeomorph.ofSet_source]
+    refine ⟨hxα₀, ?_⟩
+    show α₀ x ∈ Metric.ball 0 ρ'
+    rw [hα₀x]; exact Metric.mem_ball_self hρ'pos
+  · exact hα₀x
+  · intro p hp
+    simp only [α, OpenPartialHomeomorph.trans_source] at hp
+    exact (hα₀O hp.1).2
+  · intro p hp
+    simp only [α, OpenPartialHomeomorph.trans_target, OpenPartialHomeomorph.ofSet_target,
+      OpenPartialHomeomorph.ofSet_symm] at hp
+    have hpb : ‖p‖ < ρ' := by simpa using hp.1
+    have hpt : p ∈ α₀.target := hp.2
+    have hsymm : α.symm p = α₀.symm p := rfl
+    rw [hsymm]
+    ext i
+    fin_cases i
+    · simp [g, hrid p hpb]
+    · simpa using key p hpt
+
+#print axioms exists_transverse_normal_form
 end ConstructionTargets.T00J02Closure
