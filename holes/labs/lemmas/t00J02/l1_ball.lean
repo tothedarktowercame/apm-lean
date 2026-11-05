@@ -1141,6 +1141,115 @@ theorem isChartSignAt_constant_on_ball {S : Type} [TopologicalSpace S] [T2Space 
   have h1 : P ⟨α x', hx'R⟩ := hP ▸ h0
   exact isChartSignAt_congr e α _ x' (α.left_inv hx') _ hx' s h1
 
+/-- The chart-sign predicate at a target point `q`, generic in `q`. -/
+def ChartSignPt {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (α : OpenPartialHomeomorph S E2) (x : S)
+    (q : E2) (m : MapsTo (chartInverseMap α) (neighborhoodDeletedPoint α.target q) (deletedPoint x))
+    (s : ℤ) : Prop :=
+  ∃ b : (RelativeSingularChains (neighborhoodDeletedPoint α.target q)).homology 2,
+    HomologicalComplex.homologyMap
+        (relativeSingularMap (neighborhoodDeletedPoint α.target q)
+          (deletedPoint q) (neighborhoodInclusion α.target)
+          (neighborhoodInclusion_mapsTo α.target q)) 2 b =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) q ∧
+    HomologicalComplex.homologyMap
+        (relativeSingularMap (neighborhoodDeletedPoint α.target q)
+          (deletedPoint x) (chartInverseMap α) m) 2 b =
+      s • ConstructionTargets.ManifoldFundamentalClass.localizationMap x 2
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
+
+lemma chartSignPt_congr {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (α : OpenPartialHomeomorph S E2) (x : S)
+    (q₁ q₂ : E2) (h : q₁ = q₂) (m₁ m₂) (s : ℤ) :
+    ChartSignPt e α x q₁ m₁ s → ChartSignPt e α x q₂ m₂ s := by
+  subst h; exact id
+
+lemma isChartSign_iff_at {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (α : OpenPartialHomeomorph S E2)
+    (x : S) (hx : x ∈ α.source) (hα0 : α x = 0) (s : ℤ) :
+    IsChartSign e α x hx hα0 s ↔ IsChartSignAt e α x hx s :=
+  ⟨chartSignPt_congr e α x 0 (α x) hα0.symm _ _ s,
+   chartSignPt_congr e α x (α x) 0 hα0 _ _ s⟩
+
+lemma translate_G' (p v q : E2) (h : p + v = q)
+    (m : MapsTo (t00J02_ModelCoherence.translate v) (deletedPoint p) (deletedPoint q)) :
+    transportMap (deletedPoint p) (deletedPoint q) (t00J02_ModelCoherence.translate v) m (G p) = G q := by
+  subst h; exact translate_G p v
+
+/-- **L1a.** Re-centring a chart at `x'` keeps its sign at `x'`. -/
+theorem isChartSign_recentre_of_at {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α : OpenPartialHomeomorph S E2) (x' : S) (hx' : x' ∈ α.source) (s : ℤ)
+    (h : IsChartSignAt e α x' hx' s) :
+    IsChartSign e (recentre α x') x' (mem_recentre_source α x' hx') (recentre_self α x') s := by
+  obtain ⟨b, hb1, hb2⟩ := h
+  let a := α x'
+  have htgt : ∀ w ∈ α.target, w + -a ∈ (recentre α x').target := by
+    intro w hw
+    simp only [recentre, OpenPartialHomeomorph.trans_target, Homeomorph.toOpenPartialHomeomorph_target,
+      Homeomorph.toOpenPartialHomeomorph_symm_apply, Set.univ_inter, Set.mem_preimage]
+    rw [Homeomorph.addRight_symm]
+    simpa [a] using hw
+  let sh : C(α.target, (recentre α x').target) :=
+    ⟨fun w => ⟨w.1 + -a, htgt w.1 w.2⟩, (continuous_subtype_val.add continuous_const).subtype_mk _⟩
+  have hsh : MapsTo sh (neighborhoodDeletedPoint α.target a)
+      (neighborhoodDeletedPoint (recentre α x').target 0) := by
+    intro w hw h0
+    apply hw
+    change w.1 + -a = 0 at h0
+    change w.1 = a
+    exact (add_neg_eq_zero.mp h0)
+  refine ⟨transportMap _ _ sh hsh b, ?_, ?_⟩
+  · have hsq : (neighborhoodInclusion (recentre α x').target).comp sh =
+        (t00J02_ModelCoherence.translate (-a)).comp (neighborhoodInclusion α.target) := by
+      ext w; rfl
+    have hm : MapsTo (t00J02_ModelCoherence.translate (-a)) (deletedPoint a) (deletedPoint 0) := by
+      intro y hy h0; apply hy; change y + -a = 0 at h0; exact add_neg_eq_zero.mp h0
+    calc _ = transportMap (neighborhoodDeletedPoint α.target a) (deletedPoint (0 : E2))
+          ((neighborhoodInclusion (recentre α x').target).comp sh)
+          ((neighborhoodInclusion_mapsTo _ 0).comp hsh) b := tcomp_auto _ _ _ _ _ _ _ b
+      _ = transportMap (neighborhoodDeletedPoint α.target a) (deletedPoint (0 : E2))
+          ((t00J02_ModelCoherence.translate (-a)).comp (neighborhoodInclusion α.target))
+          (hm.comp (neighborhoodInclusion_mapsTo _ a)) b := by simp only [hsq]
+      _ = transportMap (deletedPoint a) (deletedPoint (0 : E2)) (t00J02_ModelCoherence.translate (-a)) hm
+          (transportMap _ _ (neighborhoodInclusion α.target)
+            (neighborhoodInclusion_mapsTo _ a) b) := (tcomp_auto _ _ _ _ _ _ _ b).symm
+      _ = _ := by
+          have hb1' : transportMap _ _ (neighborhoodInclusion α.target)
+            (neighborhoodInclusion_mapsTo _ a) b = G a := hb1
+          rw [hb1']
+          exact translate_G' a (-a) 0 (add_neg_cancel a) hm
+  · have hsq : (chartInverseMap (recentre α x')).comp sh = chartInverseMap α := by
+      ext w
+      change α.symm ((Homeomorph.addRight (-α x')).symm (w.1 + -α x')) = α.symm w.1
+      rw [Homeomorph.addRight_symm]
+      simp
+    calc _ = transportMap (neighborhoodDeletedPoint α.target a) (deletedPoint x')
+          ((chartInverseMap (recentre α x')).comp sh)
+          ((chartInverseMap_mapsTo _ x' (mem_recentre_source α x' hx') (recentre_self α x')).comp hsh) b :=
+            tcomp_auto _ _ _ _ _ _ _ b
+      _ = transportMap (neighborhoodDeletedPoint α.target a) (deletedPoint x')
+          (chartInverseMap α) (chartInverseMap_mapsTo_at α x' hx') b := by simp only [hsq]
+      _ = _ := hb2
+
+/-- **L1.** Re-centring a centred chart at any point of a ball in its target keeps its sign. -/
+theorem isChartSign_recentre {S : Type} [TopologicalSpace S] [T2Space S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α : OpenPartialHomeomorph S E2) (x : S) (hx : x ∈ α.source) (hα0 : α x = 0)
+    (R : ℝ) (hR : Metric.ball (0 : E2) R ⊆ α.target)
+    (x' : S) (hx' : x' ∈ α.source) (hx'R : α x' ∈ Metric.ball (0 : E2) R)
+    (s : ℤ) (hs : IsChartSign e α x hx hα0 s) :
+    IsChartSign e (recentre α x') x' (mem_recentre_source α x' hx') (recentre_self α x') s := by
+  have hxR : α x ∈ Metric.ball (0 : E2) R := by
+    rw [hα0]
+    exact Metric.mem_ball_self (lt_of_le_of_lt dist_nonneg (Metric.mem_ball.mp hx'R))
+  exact isChartSign_recentre_of_at e α x' hx' s
+    (isChartSignAt_constant_on_ball e α 0 R hR x x' hx hx' hxR hx'R s
+      ((isChartSign_iff_at e α x hx hα0 s).mp hs))
+
 end L1ball
+
+#print axioms t00J02_ModelProduct.isChartSign_recentre
+#print axioms t00J02_ModelProduct.isChartSignAt_constant_on_ball
 
 end t00J02_ModelProduct
