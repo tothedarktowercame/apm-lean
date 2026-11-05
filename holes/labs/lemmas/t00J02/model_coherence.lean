@@ -231,4 +231,81 @@ theorem translate_G (p v : E2) :
   exact congrArg (fun m => m (ConstructionTargets.HigherModelLocalHomology.generator 0))
     (relativeSingularHomologyMap_eq_of_homotopy (P 0) (deletedPoint (p + v)) H hH _ _ 2)
 
+lemma compl_mapsTo_deletedPoint {X : Type} [TopologicalSpace X] (K : Set X) (q : X) (hq : q ∈ K) :
+    MapsTo (ContinuousMap.id X) Kᶜ (deletedPoint q) := by
+  intro x hx h
+  exact hx (by change x = q at h; rw [h]; exact hq)
+
+lemma compl_mapsTo_compl {X : Type} [TopologicalSpace X] (K L : Set X) (h : L ⊆ K) :
+    MapsTo (ContinuousMap.id X) Kᶜ Lᶜ := fun _ hx hl => hx (h hl)
+
+/-- Restricting a closed-ball class to `p + v` is the translate of its restriction to `p`,
+for `v` at most half the radius. -/
+theorem res_translate (p v : E2) (R : ℝ) (hv : 2 * ‖v‖ ≤ R)
+    (ω : (RelativeSingularChains (Metric.closedBall p R)ᶜ).homology 2) :
+    transportMap (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) (ContinuousMap.id E2)
+        (compl_mapsTo_deletedPoint _ _ (by
+          rw [Metric.mem_closedBall, dist_eq_norm]; simp; linarith [norm_nonneg v])) ω =
+      transportMap (deletedPoint p) (deletedPoint (p + v)) (translate v) (translate_mapsTo p v)
+        (transportMap (Metric.closedBall p R)ᶜ (deletedPoint p) (ContinuousMap.id E2)
+          (compl_mapsTo_deletedPoint _ _ (Metric.mem_closedBall_self (by linarith [norm_nonneg v]))) ω) := by
+  have hR2 : Metric.closedBall p (R - ‖v‖) ⊆ Metric.closedBall p R :=
+    Metric.closedBall_subset_closedBall (by linarith [norm_nonneg v])
+  have hq2 : p + v ∈ Metric.closedBall p (R - ‖v‖) := by
+    rw [Metric.mem_closedBall, dist_eq_norm]; simp; linarith
+  have htr : MapsTo (translate v) (Metric.closedBall p R)ᶜ (Metric.closedBall p (R - ‖v‖))ᶜ := by
+    intro x hx hx2
+    apply hx
+    rw [Metric.mem_closedBall, dist_eq_norm] at hx2 ⊢
+    change ‖x + v - p‖ ≤ R - ‖v‖ at hx2
+    have : ‖x - p‖ ≤ ‖x + v - p‖ + ‖v‖ := by
+      calc ‖x - p‖ = ‖(x + v - p) - v‖ := by congr 1; abel
+        _ ≤ ‖x + v - p‖ + ‖v‖ := norm_sub_le _ _
+    linarith
+  -- translation is homotopic to the identity as a map of these pairs
+  let H : ContinuousMap.Homotopy (ContinuousMap.id E2) (translate v) :=
+    { toFun := fun q => q.2 + (q.1 : ℝ) • v
+      continuous_toFun := by fun_prop
+      map_zero_left := by intro x; simp
+      map_one_left := by intro x; simp [translate] }
+  have hH : ∀ t : unitInterval, ∀ x ∈ (Metric.closedBall p R)ᶜ,
+      H (t, x) ∈ (Metric.closedBall p (R - ‖v‖))ᶜ := by
+    intro t x hx hx2
+    apply hx
+    rw [Metric.mem_closedBall, dist_eq_norm] at hx2 ⊢
+    change ‖x + (t : ℝ) • v - p‖ ≤ R - ‖v‖ at hx2
+    have ht : ‖(t : ℝ) • v‖ ≤ ‖v‖ := by
+      rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg t.2.1]
+      exact mul_le_of_le_one_left (norm_nonneg v) t.2.2
+    have : ‖x - p‖ ≤ ‖x + (t : ℝ) • v - p‖ + ‖(t : ℝ) • v‖ := by
+      calc ‖x - p‖ = ‖(x + (t : ℝ) • v - p) - (t : ℝ) • v‖ := by congr 1; abel
+        _ ≤ _ := norm_sub_le _ _
+    linarith
+  have hhom := congrArg (fun m => m ω)
+    (relativeSingularHomologyMap_eq_of_homotopy (Metric.closedBall p R)ᶜ
+      (Metric.closedBall p (R - ‖v‖))ᶜ H hH (compl_mapsTo_compl _ _ hR2) htr 2)
+  have hp1 : p ∈ Metric.closedBall p R := Metric.mem_closedBall_self (by linarith [norm_nonneg v])
+  have hq1 : p + v ∈ Metric.closedBall p R := hR2 hq2
+  have htrq : MapsTo (translate v) (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) :=
+    (translate_mapsTo p v).comp (compl_mapsTo_deletedPoint _ _ hp1)
+  calc transportMap (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) (ContinuousMap.id E2)
+        (compl_mapsTo_deletedPoint _ _ hq1) ω
+      = transportMap (Metric.closedBall p (R - ‖v‖))ᶜ (deletedPoint (p + v)) (ContinuousMap.id E2)
+          (compl_mapsTo_deletedPoint _ _ hq2)
+          (transportMap (Metric.closedBall p R)ᶜ (Metric.closedBall p (R - ‖v‖))ᶜ
+            (ContinuousMap.id E2) (compl_mapsTo_compl _ _ hR2) ω) :=
+        (transportMap_comp _ _ _ (ContinuousMap.id E2) (ContinuousMap.id E2)
+          (compl_mapsTo_compl _ _ hR2) (compl_mapsTo_deletedPoint _ _ hq2)
+          (compl_mapsTo_deletedPoint _ _ hq1) ω).symm
+    _ = transportMap (Metric.closedBall p (R - ‖v‖))ᶜ (deletedPoint (p + v)) (ContinuousMap.id E2)
+          (compl_mapsTo_deletedPoint _ _ hq2)
+          (transportMap (Metric.closedBall p R)ᶜ (Metric.closedBall p (R - ‖v‖))ᶜ
+            (translate v) htr ω) := congrArg _ hhom
+    _ = transportMap (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) (translate v) htrq ω :=
+        transportMap_comp _ _ _ (translate v) (ContinuousMap.id E2) htr
+          (compl_mapsTo_deletedPoint _ _ hq2) htrq ω
+    _ = _ :=
+        (transportMap_comp _ _ _ (ContinuousMap.id E2) (translate v)
+          (compl_mapsTo_deletedPoint _ _ hp1) (translate_mapsTo p v) htrq ω).symm
+
 end t00J02_ModelCoherence
