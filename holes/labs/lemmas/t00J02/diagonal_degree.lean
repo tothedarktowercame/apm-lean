@@ -1428,6 +1428,106 @@ theorem diagonal_localDegree_of_sigma_one
   · simpa only [diagonalMap_neg_one_one, mul_one] using
       reflection_productMap_localDegree U hU h0
 
+/-- Local degree is invariant under a homotopy of the restricted maps that
+never hits the origin away from the origin. -/
+theorem localDegreeTwo_of_homotopy (U : Set E2) (F G : C(E2, E2))
+    (hzF : ∀ p : U, F p = 0 ↔ (p : E2) = 0) (hzG : ∀ p : U, G p = 0 ↔ (p : E2) = 0)
+    (H : ContinuousMap.Homotopy (restrictedMap U F) (restrictedMap U G))
+    (hH : ∀ t : unitInterval, ∀ p : U, (p : E2) ≠ 0 → H (t, p) ≠ 0)
+    {n : ℤ} (hF : IsLocalDegreeTwo U F hzF n) : IsLocalDegreeTwo U G hzG n := by
+  have hmaps :=
+    ConstructionTargets.RelativeSingularHomologyHomotopy.relativeSingularHomologyMap_eq_of_homotopy
+      (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) H
+      (fun t p hp => hH t p hp)
+      (by intro p hp hFp; exact hp ((hzF p).mp hFp))
+      (by intro p hp hFp; exact hp ((hzG p).mp hFp)) 2
+  obtain ⟨a, ha, hFa⟩ := hF
+  exact ⟨a, ha, by rw [← hmaps]; exact hFa⟩
+
+/-- Rotation by `π t` carries `diagonalMap d σ` to `diagonalMap (-d) (-σ)`
+without hitting the origin away from the origin. -/
+theorem diagonal_localDegree_neg (U : Set E2) (d σ : ℤ)
+    (hzF : ∀ p : U, diagonalMap d σ p = 0 ↔ (p : E2) = 0)
+    (hzG : ∀ p : U, diagonalMap (-d) (-σ) p = 0 ↔ (p : E2) = 0)
+    {n : ℤ} (hF : IsLocalDegreeTwo U (diagonalMap d σ) hzF n) :
+    IsLocalDegreeTwo U (diagonalMap (-d) (-σ)) hzG n := by
+  let rot : ℝ → ℝ → ℝ → E2 := fun θ a b =>
+    (EuclideanSpace.equiv (Fin 2) ℝ).symm
+      ![Real.cos θ * a - Real.sin θ * b, Real.sin θ * a + Real.cos θ * b]
+  let H : ContinuousMap.Homotopy (restrictedMap U (diagonalMap d σ))
+      (restrictedMap U (diagonalMap (-d) (-σ))) := {
+    toFun := fun q => rot (Real.pi * (q.1 : ℝ)) ((d : ℝ) * (q.2 : E2) 0) ((σ : ℝ) * (q.2 : E2) 1)
+    continuous_toFun := by
+      apply (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp
+      apply continuous_pi
+      intro i
+      have h0 : Continuous fun q : unitInterval × U => (q.2 : E2) 0 :=
+        (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).comp
+          (continuous_subtype_val.comp continuous_snd)
+      have h1 : Continuous fun q : unitInterval × U => (q.2 : E2) 1 :=
+        (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1).comp
+          (continuous_subtype_val.comp continuous_snd)
+      have ht : Continuous fun q : unitInterval × U => Real.pi * (q.1 : ℝ) :=
+        continuous_const.mul (continuous_subtype_val.comp continuous_fst)
+      fin_cases i
+      · simp only [Fin.zero_eta, Fin.isValue, Matrix.cons_val_zero]
+        exact ((Real.continuous_cos.comp ht).mul (continuous_const.mul h0)).sub
+          ((Real.continuous_sin.comp ht).mul (continuous_const.mul h1))
+      · simp only [Fin.mk_one, Fin.isValue, Matrix.cons_val_one, Matrix.cons_val_fin_one]
+        exact ((Real.continuous_sin.comp ht).mul (continuous_const.mul h0)).add
+          ((Real.continuous_cos.comp ht).mul (continuous_const.mul h1))
+    map_zero_left := by
+      intro p
+      ext i
+      fin_cases i <;> simp [rot, restrictedMap, diagonalMap]
+    map_one_left := by
+      intro p
+      ext i
+      fin_cases i <;> simp [rot, restrictedMap, diagonalMap] }
+  refine localDegreeTwo_of_homotopy U _ _ hzF hzG H ?_ hF
+  intro t p hp hHp
+  apply hp
+  change rot (Real.pi * (t : ℝ)) ((d : ℝ) * (p : E2) 0) ((σ : ℝ) * (p : E2) 1) = 0 at hHp
+  have hx := congrArg (fun q : E2 => q 0) hHp
+  have hy := congrArg (fun q : E2 => q 1) hHp
+  simp [rot] at hx hy
+  set c := Real.cos (Real.pi * (t : ℝ))
+  set s := Real.sin (Real.pi * (t : ℝ))
+  have hcs : s ^ 2 + c ^ 2 = 1 := Real.sin_sq_add_cos_sq _
+  have ha : (d : ℝ) * (p : E2) 0 = 0 := by
+    have : (d : ℝ) * (p : E2) 0 =
+        c * (c * ((d : ℝ) * (p : E2) 0) - s * ((σ : ℝ) * (p : E2) 1)) +
+          s * (s * ((d : ℝ) * (p : E2) 0) + c * ((σ : ℝ) * (p : E2) 1)) := by
+      linear_combination (-(d : ℝ) * (p : E2) 0) * hcs
+    rw [this, hx, hy]; ring
+  have hb : (σ : ℝ) * (p : E2) 1 = 0 := by
+    have : (σ : ℝ) * (p : E2) 1 =
+        -s * (c * ((d : ℝ) * (p : E2) 0) - s * ((σ : ℝ) * (p : E2) 1)) +
+          c * (s * ((d : ℝ) * (p : E2) 0) + c * ((σ : ℝ) * (p : E2) 1)) := by
+      linear_combination (-(σ : ℝ) * (p : E2) 1) * hcs
+    rw [this, hx, hy]; ring
+  have hz0 : diagonalMap d σ p = 0 := by
+    ext i
+    fin_cases i
+    · simpa [diagonalMap] using ha
+    · simpa [diagonalMap] using hb
+  exact (hzF p).mp hz0
+
+/-- **K1-P2.** The diagonal map `(r, s) ↦ (d r, σ s)` has local degree `d σ`. -/
+theorem diagonal_localDegree (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) (d σ : ℤ)
+    (hd : d = 1 ∨ d = -1) (hσ : σ = 1 ∨ σ = -1)
+    (hz : ∀ p : U, diagonalMap d σ p = 0 ↔ (p : E2) = 0) :
+    IsLocalDegreeTwo U (diagonalMap d σ) hz (d * σ) := by
+  rcases hσ with rfl | rfl
+  · exact diagonal_localDegree_of_sigma_one U hU h0 d hd hz
+  · have hd' : -d = 1 ∨ -d = -1 := by rcases hd with rfl | rfl <;> simp
+    have hz' : ∀ p : U, diagonalMap (-d) 1 p = 0 ↔ (p : E2) = 0 :=
+      fun p => diagonalMap_zero_iff (-d) 1 hd' (Or.inl rfl) p
+    have h := diagonal_localDegree_of_sigma_one U hU h0 (-d) hd' hz'
+    have h2 := diagonal_localDegree_neg U (-d) 1 hz' (by simpa using hz) h
+    simp only [neg_neg] at h2
+    convert h2 using 1 <;> simp
+
 /-- One trichotomy case: compare both degrees with a model whose degrees agree. -/
 lemma split_iff_slice_of_model
     (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) (g m : C(E2, ℝ))
@@ -1547,3 +1647,4 @@ theorem productMap_degree_iff_sliceMap_degree
 
 end t00J02_ModelProduct
 #print axioms t00J02_ModelProduct.productMap_degree_iff_sliceMap_degree
+#print axioms t00J02_ModelProduct.diagonal_localDegree
