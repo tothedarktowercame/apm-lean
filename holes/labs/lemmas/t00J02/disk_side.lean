@@ -888,4 +888,156 @@ theorem disk_side_aux_boundary_homology_comparison
   exact disk_side_aux_blend_avoids_zero U F G hnormal htangent τ p hp
 
 #print axioms disk_side_aux_boundary_homology_comparison
+
+/-- Reflection in the horizontal axis. -/
+def diskSideReflection : C(E2, E2) :=
+  ⟨fun p => (EuclideanSpace.equiv (Fin 2) ℝ).symm ![p 0, -p 1], by
+    apply (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> dsimp <;> fun_prop⟩
+
+@[simp] lemma diskSideReflection_zero_coord (p : E2) : diskSideReflection p 0 = p 0 := rfl
+@[simp] lemma diskSideReflection_one_coord (p : E2) : diskSideReflection p 1 = -p 1 := rfl
+
+lemma diskSideReflection_fixed (p : E2) (hp : p 1 = 0) : diskSideReflection p = p := by
+  ext i
+  fin_cases i <;> simp [hp]
+
+/-- Reflect a map of an upper half-neighborhood across both its source and target
+axes. Axis preservation is exactly what makes the two continuous pieces agree. -/
+def diskSideReflectedExtension (U : Set E2) (hU : MapsTo diskSideReflection U U)
+    (Ψ : C(U, E2)) (haxis : ∀ p : U, (p : E2) 1 = 0 → Ψ p 1 = 0) : C(U, E2) := by
+  classical
+  let R : C(U, U) := ⟨fun p => ⟨diskSideReflection p, hU p.2⟩,
+    (diskSideReflection.continuous.comp continuous_subtype_val).subtype_mk _⟩
+  refine ⟨fun p => if 0 ≤ (p : E2) 1 then Ψ p else diskSideReflection (Ψ (R p)), ?_⟩
+  apply Ψ.continuous.if_le
+    (diskSideReflection.continuous.comp (Ψ.continuous.comp R.continuous))
+    continuous_const (by fun_prop)
+  intro p hp
+  have hp' : (p : E2) 1 = 0 := hp.symm
+  have hr : R p = p := Subtype.ext (diskSideReflection_fixed p hp')
+  change Ψ p = diskSideReflection (Ψ (R p))
+  rw [hr, diskSideReflection_fixed _ (haxis p hp')]
+
+lemma diskSideReflectedExtension_apply (U : Set E2) (hU : MapsTo diskSideReflection U U)
+    (Ψ : C(U, E2)) (haxis : ∀ p : U, (p : E2) 1 = 0 → Ψ p 1 = 0) (p : U) :
+    diskSideReflectedExtension U hU Ψ haxis p =
+      if 0 ≤ (p : E2) 1 then Ψ p else diskSideReflection (Ψ ⟨diskSideReflection p, hU p.2⟩) := by
+  simp [diskSideReflectedExtension]
+
+/-- The diagonal comparison model in coordinates (boundary parameter, inward parameter). -/
+def diskSideSignedModel (U : Set E2) (d σ : ℝ) : C(U, E2) :=
+  ⟨fun p => (EuclideanSpace.equiv (Fin 2) ℝ).symm ![d * (p : E2) 0, σ * (p : E2) 1], by
+    apply (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> dsimp <;> fun_prop⟩
+
+/-- Reflection turns a strict upper-side sign into the matching normal sign on
+both sides. The axis comparison is unchanged by reflection. -/
+lemma disk_side_aux_reflected_signs
+    (U : Set E2) (hU : MapsTo diskSideReflection U U) (Ψ : C(U, E2))
+    (haxis : ∀ p : U, (p : E2) 1 = 0 → Ψ p 1 = 0) (d σ : ℝ)
+    (hupper : ∀ p : U, 0 < (p : E2) 1 → 0 < σ * Ψ p 1)
+    (htangent : ∀ p : U, (p : E2) 1 = 0 → (p : E2) 0 ≠ 0 →
+      0 < Ψ p 0 * (d * (p : E2) 0)) :
+    (∀ p : U, (p : E2) 1 ≠ 0 →
+      0 < diskSideReflectedExtension U hU Ψ haxis p 1 * diskSideSignedModel U d σ p 1) ∧
+    (∀ p : U, (p : E2) 1 = 0 → (p : E2) 0 ≠ 0 →
+      0 < diskSideReflectedExtension U hU Ψ haxis p 0 * diskSideSignedModel U d σ p 0) := by
+  constructor
+  · intro p hp
+    rw [diskSideReflectedExtension_apply]
+    change 0 < (if 0 ≤ (p : E2) 1 then Ψ p else
+      diskSideReflection (Ψ ⟨diskSideReflection p, hU p.2⟩)) 1 * (σ * (p : E2) 1)
+    by_cases hn : 0 ≤ (p : E2) 1
+    · rw [if_pos hn]
+      have hpos := mul_pos (hupper p (lt_of_le_of_ne hn (Ne.symm hp))) (lt_of_le_of_ne hn (Ne.symm hp))
+      nlinarith [hpos]
+    · rw [if_neg hn, diskSideReflection_one_coord]
+      have hn' : 0 < -(p : E2) 1 := neg_pos.mpr (lt_of_not_ge hn)
+      have hpos := mul_pos
+        (hupper ⟨diskSideReflection p, hU p.2⟩ hn') hn'
+      nlinarith [hpos]
+  · intro p hp hne
+    rw [diskSideReflectedExtension_apply, if_pos (by rw [hp])]
+    exact htangent p hp hne
+
+/-- The reflected boundary map and signed diagonal model induce identical relative
+H₂ maps on every reflection-invariant neighborhood satisfying the side and axis
+sign conditions. No injectivity or differentiability is needed for this comparison. -/
+theorem disk_side_aux_reflected_boundary_comparison
+    (U : Set E2) (hU : MapsTo diskSideReflection U U) (Ψ : C(U, E2))
+    (haxis : ∀ p : U, (p : E2) 1 = 0 → Ψ p 1 = 0) (d σ : ℝ)
+    (hupper : ∀ p : U, 0 < (p : E2) 1 → 0 < σ * Ψ p 1)
+    (htangent : ∀ p : U, (p : E2) 1 = 0 → (p : E2) 0 ≠ 0 →
+      0 < Ψ p 0 * (d * (p : E2) 0))
+    (hF : MapsTo (diskSideReflectedExtension U hU Ψ haxis)
+      (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)))
+    (hG : MapsTo (diskSideSignedModel U d σ)
+      (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))) :
+    HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+        (diskSideReflectedExtension U hU Ψ haxis) hF) 2 =
+    HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+        (diskSideSignedModel U d σ) hG) 2 := by
+  obtain ⟨hn, ht⟩ := disk_side_aux_reflected_signs U hU Ψ haxis d σ hupper htangent
+  exact disk_side_aux_boundary_homology_comparison U _ _ hn ht hF hG
+
+#print axioms disk_side_aux_reflected_boundary_comparison
+
+/-- A centered strictly monotone boundary parameter has the strict tangential
+sign required by the reflected homotopy comparison. -/
+lemma disk_side_aux_boundary_parameter_sign
+    (φ : ℝ → ℝ) (δ : ℝ) (hδ : 0 < δ) (hφ0 : φ 0 = 0) (d : ℤ)
+    (hd : (d = 1 ∧ StrictMonoOn φ (Set.Ioo (-δ) δ)) ∨
+      (d = -1 ∧ StrictAntiOn φ (Set.Ioo (-δ) δ)))
+    (r : ℝ) (hr : r ∈ Set.Ioo (-δ) δ) (hr0 : r ≠ 0) :
+    0 < φ r * ((d : ℝ) * r) := by
+  have h0 : (0 : ℝ) ∈ Set.Ioo (-δ) δ := ⟨neg_neg_of_pos hδ, hδ⟩
+  rcases hd with ⟨rfl, hm⟩ | ⟨rfl, hm⟩
+  · rcases lt_or_gt_of_ne hr0 with hn | hp
+    · have hh : φ r < 0 := hφ0 ▸ hm hr h0 hn
+      simpa using mul_pos_of_neg_of_neg hh hn
+    · have hh : 0 < φ r := hφ0 ▸ hm h0 hr hp
+      simpa using mul_pos hh hp
+  · rcases lt_or_gt_of_ne hr0 with hn | hp
+    · have hh : 0 < φ r := hφ0 ▸ hm hr h0 hn
+      simpa using mul_pos hh (neg_pos.mpr hn)
+    · have hh : φ r < 0 := hφ0 ▸ hm h0 hr hp
+      simpa using mul_pos_of_neg_of_neg hh (neg_neg_of_pos hp)
+
+#print axioms disk_side_aux_boundary_parameter_sign
+
+/-- Boundary comparison with exactly the monotone parametrization data: the
+tangential sign condition is derived, rather than supplied independently. -/
+theorem disk_side_aux_monotone_boundary_comparison
+    (U : Set E2) (hU : MapsTo diskSideReflection U U) (Ψ : C(U, E2))
+    (haxis : ∀ p : U, (p : E2) 1 = 0 → Ψ p 1 = 0)
+    (φ : ℝ → ℝ) (δ : ℝ) (hδ : 0 < δ) (hφ0 : φ 0 = 0)
+    (d : ℤ) (σ : ℝ)
+    (hd : (d = 1 ∧ StrictMonoOn φ (Set.Ioo (-δ) δ)) ∨
+      (d = -1 ∧ StrictAntiOn φ (Set.Ioo (-δ) δ)))
+    (hparam : ∀ p : U, (p : E2) 1 = 0 → Ψ p 0 = φ ((p : E2) 0))
+    (hstrip : ∀ p : U, (p : E2) 0 ∈ Set.Ioo (-δ) δ)
+    (hupper : ∀ p : U, 0 < (p : E2) 1 → 0 < σ * Ψ p 1)
+    (hF : MapsTo (diskSideReflectedExtension U hU Ψ haxis)
+      (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)))
+    (hG : MapsTo (diskSideSignedModel U d σ)
+      (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))) :
+    HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+        (diskSideReflectedExtension U hU Ψ haxis) hF) 2 =
+    HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))
+        (diskSideSignedModel U d σ) hG) 2 := by
+  apply disk_side_aux_reflected_boundary_comparison U hU Ψ haxis d σ hupper _ hF hG
+  intro p hp hn
+  rw [hparam p hp]
+  exact disk_side_aux_boundary_parameter_sign φ δ hδ hφ0 d hd _ (hstrip p) hn
+
+#print axioms disk_side_aux_monotone_boundary_comparison
 end t00J02_ModelProduct
