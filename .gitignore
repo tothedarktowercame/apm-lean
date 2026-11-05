@@ -17,3 +17,6 @@ data/
 __pycache__/
 *.pyc
 holes/labs/solve-loop/
+
+# Ephemeral isolated review builds (sources, logs, and compiled oleans).
+/.review-*/
