@@ -60,6 +60,38 @@ theorem exists_mfderiv_surjective_fiber_mem_open_of_fixedTargetChart
   · change chartAt F y (g x) = v
     rw [hx, (chartAt F y).right_inv hvT.1]
 
+/-- Nonvanishing of the manifold derivative is stable near a point for a
+smooth map.  The derivative is compared in the fixed tangent coordinates at
+the base point, where both coordinate changes are identities. -/
+theorem mfderiv_ne_zero_eventually
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (c : Circle → S)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (z₀ : Circle)
+    (hz₀ : mfderiv (𝓡 1) SurfaceModelWithCorners c z₀ ≠ 0) :
+    ∀ᶠ z in 𝓝 z₀,
+      mfderiv (𝓡 1) SurfaceModelWithCorners c z ≠ 0 := by
+  let D := inTangentCoordinates (𝓡 1) SurfaceModelWithCorners id c
+    (mfderiv (𝓡 1) SurfaceModelWithCorners c) z₀
+  have hDc : ContinuousAt D z₀ := by
+    exact (hc.contMDiffAt.mfderiv_const (m := 0) (by simp)).continuousAt
+  have hD0 : D z₀ ≠ 0 := by
+    intro hzero
+    apply hz₀
+    ext v
+    have heq := congrArg (fun L => L v) hzero
+    simp only [D] at heq
+    rw [inTangentCoordinates_eq id c _ (mem_chart_source _ _)
+      (mem_chart_source _ _)] at heq
+    simpa only [tangentCoordChange_self (I := 𝓡 1) (mem_extChartAt_source _),
+      tangentCoordChange_self (I := SurfaceModelWithCorners) (mem_extChartAt_source _),
+      ContinuousLinearMap.comp_apply, ContinuousLinearMap.zero_apply] using heq
+  filter_upwards [hDc.eventually_ne hD0] with z hz hcz
+  apply hz
+  simp [D, inTangentCoordinates, ContinuousLinearMap.inCoordinates, hcz]
+
 #print axioms exists_mfderiv_surjective_fiber_mem_open_of_fixedTargetChart
+#print axioms mfderiv_ne_zero_eventually
 
 end ConstructionTargets.T00J02Closure
