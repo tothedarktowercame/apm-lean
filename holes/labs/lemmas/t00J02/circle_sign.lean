@@ -427,4 +427,42 @@ lemma exists_circleExpSign_at_one :
   have hu : IsUnit s := isUnit_iff_dvd_one.mpr ⟨t, by simpa [mul_comm] using hone.symm⟩
   exact ⟨s, Int.isUnit_eq_one_or hu, b, hb, hs.symm⟩
 
+/-- Rotation carries the localized positive class at one to that at any point. -/
+lemma positiveLocal_rotation (w : Circle) :
+    ConstructionTargets.CircleRotationLocalization.localRotation w (positiveLocal 1) =
+      positiveLocal w := by
+  exact ConcreteCategory.congr_hom
+    (ConstructionTargets.CircleRotationLocalization.localization_rotation_square w)
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+      (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt)
+
+/-- The same real neighborhood class represents the same chart sign after rotation. -/
+lemma circleExpSign_rotate (s : ℤ) (hs : IsCircleExpSign 1 s) (w : Circle) :
+    IsCircleExpSign w s := by
+  obtain ⟨b, hb, he⟩ := hs
+  refine ⟨b, hb, ?_⟩
+  let A := neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ)
+  have hcomp :
+      (ConstructionTargets.CircleRotationLocalization.rotation w).comp (expArc 1) = expArc w := by
+    apply ContinuousMap.ext
+    intro r
+    simp [expArc, ConstructionTargets.CircleRotationLocalization.rotation]
+  have hh := relativeSingularHomologyMap_comp A (deletedPoint (1 : Circle)) (deletedPoint w)
+    (expArc 1) (ConstructionTargets.CircleRotationLocalization.rotation w)
+    (expArc_mapsTo 1) (ConstructionTargets.CircleRotationLocalization.rotation_mapsTo w)
+    (by simpa only [hcomp] using expArc_mapsTo w) 1
+  simp only [hcomp] at hh
+  have hh' := ConcreteCategory.congr_hom hh b
+  change ConstructionTargets.CircleRotationLocalization.localRotation w
+    (HomologicalComplex.homologyMap (relativeSingularMap A (deletedPoint (1 : Circle))
+      (expArc 1) (expArc_mapsTo 1)) 1 b) = _ at hh'
+  rw [he, map_zsmul, positiveLocal_rotation] at hh'
+  exact hh'.symm
+
+theorem exists_circleExpSign :
+    ∃ s : ℤ, (s = 1 ∨ s = -1) ∧ ∀ w : Circle, IsCircleExpSign w s := by
+  obtain ⟨s, hs, hsign⟩ := exists_circleExpSign_at_one
+  exact ⟨s, hs, circleExpSign_rotate s hsign⟩
+
+#print axioms exists_circleExpSign
 end t00J02_CircleChart
