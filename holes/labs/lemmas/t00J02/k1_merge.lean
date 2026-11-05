@@ -4106,28 +4106,244 @@ library theorem about the top-homology map of a transverse surface map.
 open CategoryTheory Set
 open scoped ContDiff Manifold
 
+noncomputable section
+-- Copied from Blueprint.lean (prelude through D2b, D1).
+namespace t00J02_D1
+
+end t00J02_D1
+
+/- **D2 (localization coefficient is a unit, LIBRARY).**  In words: at every
+point `y` of a compact connected surface with `H₂ ≅ ℤ`, the localization of the
+global generator is `±1` times the canonical chart generator of the point-local
+group.  The existing `localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator`
+gives some integer `r`; this leaf says `r` is a unit.  Why true: the
+fundamental class of a closed connected orientable surface localizes to a
+generator at every point (Hatcher Thm 3.26).  Connectedness is
+needed: on two disjoint tori the localization of a class `(1,0)` vanishes at
+points of the second torus (there `H₂ ≅ ℤ²`, so the hypothesis also fails).
+(claude-14: replaces codex-15's D2a/D2b, which both reduced to
+this coefficient.) -/
+-- Copied from disc_model.lean.
 namespace t00J02_ModelProduct
 
 open ConstructionTargets.SingularHomologyConcrete
 open ConstructionTargets.SingularExcision
 open ConstructionTargets.LocalHomologyNeighborhoodExcision
 
-/-- Boundary-flattening map near `t` on the unit circle, recentred at a point on the inward normal. -/
-def flatRecentred (t : Circle) : C(E2, E2) :=
-  ⟨fun p => complexToE2 ((t : ℂ) * (Complex.exp ((p 0 : ℂ) * Complex.I) - 1 - (p 1 : ℂ))), by
-    apply continuous_complexToE2.comp
-    have h0 : Continuous fun p : E2 => ((p 0 : ℝ) : ℂ) :=
-      Complex.continuous_ofReal.comp (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0)
-    have h1 : Continuous fun p : E2 => ((p 1 : ℝ) : ℂ) :=
-      Complex.continuous_ofReal.comp (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1)
-    fun_prop⟩
+/-- Relative H₂ map, with the map of pairs displayed explicitly. -/
+abbrev transportMap {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : MapsTo f A B) :=
+  HomologicalComplex.homologyMap (relativeSingularMap A B f hf) 2
 
-theorem flatRecentred_localDegree (t : Circle) (V : Set E2) (hV : IsOpen V) (h0 : (0 : E2) ∈ V)
-    (hVstrip : ∀ p ∈ V, |p 0| < Real.pi)
-    (hz : ∀ p : V, flatRecentred t p = 0 ↔ (p : E2) = 0) :
-    IsLocalDegreeTwo V (flatRecentred t) hz 1 := by
-  sorry
+lemma transportMap_comp {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (A : Set X) (B : Set Y) (C : Set Z)
+    (f : C(X, Y)) (g : C(Y, Z)) (hf : MapsTo f A B) (hg : MapsTo g B C)
+    (hgf : MapsTo (g.comp f) A C) (a : (RelativeSingularChains A).homology 2) :
+    transportMap B C g hg (transportMap A B f hf a) =
+      transportMap A C (g.comp f) hgf a :=
+  ConcreteCategory.congr_hom (relativeSingularHomologyMap_comp A B C f g hf hg hgf 2) a
 
+lemma transportMap_comp_auto {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (A : Set X) (B : Set Y) (C : Set Z)
+    (f : C(X, Y)) (g : C(Y, Z)) (hf : MapsTo f A B) (hg : MapsTo g B C)
+    (a : (RelativeSingularChains A).homology 2) :
+    transportMap B C g hg (transportMap A B f hf a) =
+      transportMap A C (g.comp f) (hg.comp hf) a :=
+  transportMap_comp A B C f g hf hg (hg.comp hf) a
+
+/-- A map whose entire image lies in the relative subspace induces zero. -/
+lemma transportMap_zero {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : MapsTo f A B)
+    (hall : ∀ x, f x ∈ B) (a : (RelativeSingularChains A).homology 2) :
+    transportMap A B f hf a = 0 := by
+  let h₁ : MapsTo (ContinuousMap.id X) A Set.univ := fun _ _ => trivial
+  let h₂ : MapsTo f Set.univ B := fun x _ => hall x
+  have h := transportMap_comp A Set.univ B (ContinuousMap.id X) f h₁ h₂ hf a
+  haveI : Subsingleton ((RelativeSingularChains (Set.univ : Set X)).homology 2) :=
+    AddCommGrpCat.subsingleton_of_isZero (selfRelativeSingularHomology_isZero X 2)
+  rw [Subsingleton.elim (transportMap A Set.univ (ContinuousMap.id X) h₁ a) 0,
+    map_zero] at h
+  exact h.symm
+
+/-- Excision gives a bijection from neighborhood local homology to ambient local homology. -/
+lemma transportInclusion_bijective {X : Type} [TopologicalSpace X] [T1Space X]
+    (U : Set X) (x : X) (hU : IsOpen U) (hx : x ∈ U) :
+    Function.Bijective (transportMap (neighborhoodDeletedPoint U x) (deletedPoint x)
+      (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)) := by
+  let m := transportMap (neighborhoodDeletedPoint U x) (deletedPoint x)
+    (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso 0 U x hU hx
+  exact ConcreteCategory.bijective_of_isIso m
+
+
+/-- Naturality in an explicitly commuting square of maps of pairs. -/
+lemma transportMap_square {X Y Z T : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z] [TopologicalSpace T]
+    (A : Set X) (B : Set Y) (C : Set Z) (D : Set T)
+    (f : C(X,Y)) (g : C(Y,T)) (h : C(X,Z)) (k : C(Z,T))
+    (hf : MapsTo f A B) (hg : MapsTo g B D)
+    (hh : MapsTo h A C) (hk : MapsTo k C D)
+    (he : ∀ x, g (f x) = k (h x)) (a : (RelativeSingularChains A).homology 2) :
+    transportMap B D g hg (transportMap A B f hf a) =
+      transportMap C D k hk (transportMap A C h hh a) := by
+  rw [transportMap_comp _ _ _ _ _ _ _ (hg.comp hf),
+    transportMap_comp _ _ _ _ _ _ _ (hk.comp hh)]
+  have hcomp : g.comp f = k.comp h := ContinuousMap.ext he
+  simp only [hcomp]
+
+/-- A chart sign also computes the image of any integer multiple of the model
+generator, represented on any pair mapping into the chart target. -/
+lemma chartSign_transport {S X : Type} [TopologicalSpace S] [TopologicalSpace X]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α : OpenPartialHomeomorph S E2) (x : S) (hx : x ∈ α.source) (hα0 : α x = 0)
+    (s : ℤ) (hs : IsChartSign e α x hx hα0 s)
+    (A : Set X) (q : C(X, α.target))
+    (hq : MapsTo q A (neighborhoodDeletedPoint α.target (0 : E2)))
+    (a : (RelativeSingularChains A).homology 2) (m : ℤ)
+    (hm : transportMap (neighborhoodDeletedPoint α.target (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion α.target) (neighborhoodInclusion_mapsTo α.target 0)
+      (transportMap A (neighborhoodDeletedPoint α.target (0 : E2)) q hq a) =
+      m • ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (0 : E2)) :
+    transportMap (neighborhoodDeletedPoint α.target (0 : E2)) (deletedPoint x)
+      (chartInverseMap α) (chartInverseMap_mapsTo α x hx hα0)
+      (transportMap A (neighborhoodDeletedPoint α.target (0 : E2)) q hq a) =
+      (m * s) • ConstructionTargets.ManifoldFundamentalClass.localizationMap x 2
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e) := by
+  obtain ⟨b, hb, hb'⟩ := hs
+  have h0 : (0 : E2) ∈ α.target := hα0 ▸ α.map_source hx
+  have he : transportMap A (neighborhoodDeletedPoint α.target (0 : E2)) q hq a = m • b := by
+    apply (transportInclusion_bijective α.target 0 α.open_target h0).1
+    rw [map_zsmul, hb]
+    exact hm
+  rw [he, map_zsmul, hb', smul_smul]
+
+
+theorem localDegree_chart_transport
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) (y : S)
+    [Fintype {x : S // f x = y}]
+    (x : {x : S // f x = y}) (n : ℤ) (hd : t00J02_IsLocalDegree e f y x n)
+    (α β : OpenPartialHomeomorph S E2)
+    (hxα : (x : S) ∈ α.source) (hα0 : α x = 0) (hyβ : y ∈ β.source) (hβ0 : β y = 0)
+    (U : Set E2) (hUo : IsOpen U) (h0U : (0 : E2) ∈ U) (hUα : U ⊆ α.target)
+    (hUf : ∀ p ∈ U, f (α.symm p) ∈ β.source)
+    (hUfib : ∀ p ∈ U, f (α.symm p) = y → p = 0)
+    (F : C(E2, E2)) (hF : ∀ p ∈ U, F p = β (f (α.symm p)))
+    (hzero : ∀ p : U, F p = 0 ↔ (p : E2) = 0)
+    (sα sβ : ℤ) (hsα : IsChartSign e α x hxα hα0 sα)
+    (hsβ : IsChartSign e β y hyβ hβ0 sβ) (hsβ1 : sβ = 1 ∨ sβ = -1) :
+    IsLocalDegreeTwo U F hzero (sα * sβ * n) := by
+  let A := neighborhoodDeletedPoint U (0 : E2)
+  let T : Set S := {z | f z = y}ᶜ
+  let G := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (0 : E2)
+  let L := fun z : S => ConstructionTargets.ManifoldFundamentalClass.localizationMap z 2
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
+  obtain ⟨u, hu⟩ := (transportInclusion_bijective U 0 hUo h0U).2 G
+  let q : C(U, α.target) := ⟨fun p => ⟨p, hUα p.2⟩, continuous_subtype_val.subtype_mk _⟩
+  have hq : MapsTo q A (neighborhoodDeletedPoint α.target (0 : E2)) := fun _ hp => hp
+  let j : C(U, S) := (chartInverseMap α).comp q
+  have hj0 : α.symm (0 : E2) = (x : S) := by rw [← hα0]; exact α.left_inv hxα
+  have hj : MapsTo j A T := by
+    intro p hp h
+    exact hp (hUfib p p.2 h)
+  let v := transportMap A T j hj u
+  have hvx : t00J02_fiberRestriction f y x v = sα • L x := by
+    have hm : transportMap (neighborhoodDeletedPoint α.target (0 : E2)) (deletedPoint (0 : E2))
+        (neighborhoodInclusion α.target) (neighborhoodInclusion_mapsTo α.target 0)
+        (transportMap A (neighborhoodDeletedPoint α.target (0 : E2)) q hq u) = (1 : ℤ) • G := by
+      rw [transportMap_comp_auto]
+      simpa only [one_smul] using hu
+    have hh := chartSign_transport e α x hxα hα0 sα hsα A q hq u 1 hm
+    rw [one_mul] at hh
+    rw [transportMap_comp_auto] at hh
+    change transportMap T (deletedPoint (x : S)) (ContinuousMap.id S) _ v = _
+    dsimp only [v]
+    rw [transportMap_comp_auto]
+    exact hh
+  have hvother : ∀ x' : {z : S // f z = y}, x' ≠ x →
+      t00J02_fiberRestriction f y x' v = 0 := by
+    intro x' hne
+    have hall : ∀ p : U, j p ∈ deletedPoint (x' : S) := by
+      intro p hp
+      change j p = (x' : S) at hp
+      have hfp : f (α.symm p) = y := by change f (j p) = y; rw [hp]; exact x'.2
+      have hp0 := hUfib p p.2 hfp
+      have he : (x' : S) = (x : S) := by
+        rw [← hp]
+        change α.symm (p : E2) = (x : S)
+        rw [hp0, hj0]
+      exact hne (Subtype.ext he)
+    change transportMap T (deletedPoint (x' : S)) (ContinuousMap.id S) _ v = 0
+    dsimp only [v]
+    rw [transportMap_comp_auto]
+    exact transportMap_zero A (deletedPoint (x' : S)) j _ hall u
+  obtain ⟨a, hax, hao, haf⟩ := hd
+  have hva : v = sα • a := by
+    apply (t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D1 f y).1
+    funext x'
+    change t00J02_fiberRestriction f y x' v = t00J02_fiberRestriction f y x' (sα • a)
+    rw [map_zsmul]
+    by_cases he : x' = x
+    · subst x'; rw [hvx, hax]
+    · rw [hvother x' he, hao x' he, smul_zero]
+  have hvf : t00J02_fiberPushforward f y v = (sα * n) • L y := by
+    rw [hva, map_zsmul, haf, smul_smul]
+  have hFpair : MapsTo (restrictedMap U F) A (deletedPoint (0 : E2)) := by
+    intro p hp h; exact hp ((hzero p).mp h)
+  obtain ⟨m, hm⟩ := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates
+    (k := 0) (0 : E2) (transportMap A (deletedPoint (0 : E2)) (restrictedMap U F) hFpair u)
+  let k : C(U, β.target) :=
+    ⟨fun p => ⟨F p, by rw [hF p p.2]; exact β.map_source (hUf p p.2)⟩,
+      (F.continuous.comp continuous_subtype_val).subtype_mk (by
+        intro p; change F p ∈ β.target
+        rw [hF p p.2]; exact β.map_source (hUf p p.2))⟩
+  have hk : MapsTo k A (neighborhoodDeletedPoint β.target (0 : E2)) := by
+    intro p hp h; exact hp ((hzero p).mp h)
+  have hm' : transportMap (neighborhoodDeletedPoint β.target (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion β.target) (neighborhoodInclusion_mapsTo β.target 0)
+      (transportMap A (neighborhoodDeletedPoint β.target (0 : E2)) k hk u) = m • G := by
+    rw [transportMap_comp_auto]
+    exact hm.symm
+  have hb := chartSign_transport e β y hyβ hβ0 sβ hsβ A k hk u m hm'
+  have he : ∀ p : U, f (j p) = chartInverseMap β (k p) := by
+    intro p
+    change f (α.symm p) = β.symm (F p)
+    rw [hF p p.2, β.left_inv (hUf p p.2)]
+  have heq := transportMap_square A T (neighborhoodDeletedPoint β.target (0 : E2))
+    (deletedPoint y) j f k (chartInverseMap β) hj
+    (show MapsTo f T (deletedPoint y) from fun _ h => h)
+    hk (chartInverseMap_mapsTo β y hyβ hβ0) he u
+  change t00J02_fiberPushforward f y v = _ at heq
+  rw [hvf, hb] at heq
+  have hcoeff : sα * n = m * sβ := by
+    have hz : (sα * n - m * sβ) • L y = 0 := by rw [sub_smul, heq, sub_self]
+    exact sub_eq_zero.mp (t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2b e y _ hz)
+  have hmval : m = sα * sβ * n := by
+    rcases hsβ1 with rfl | rfl <;> nlinarith [hcoeff]
+  refine ⟨u, hu, ?_⟩
+  rw [← hmval]
+  exact hm.symm
+
+/-- The identity has local degree 1 at every point. -/
+theorem id_localDegree
+    {S : Type} [TopologicalSpace S] (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (y : S) :
+    t00J02_IsLocalDegree e (ContinuousMap.id S) y ⟨y, rfl⟩ 1 := by
+  let g := ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
+  refine ⟨g, ?_, ?_, ?_⟩
+  · change HomologicalComplex.homologyMap
+      (relativeSingularMap (deletedPoint y) (deletedPoint y) (ContinuousMap.id S) _) 2 g = g
+    rw [relativeSingularMap_id, HomologicalComplex.homologyMap_id]
+    rfl
+  · intro z hz
+    exact False.elim (hz (Subtype.ext z.2))
+  · change HomologicalComplex.homologyMap
+      (relativeSingularMap (deletedPoint y) (deletedPoint y) (ContinuousMap.id S) _) 2 g = (1 : ℤ) • g
+    rw [relativeSingularMap_id, HomologicalComplex.homologyMap_id, one_smul]
+    rfl
+
+/-- A chart transition map has local degree sα * sβ. -/
 theorem chart_transition_degree
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
     [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
@@ -4141,7 +4357,280 @@ theorem chart_transition_degree
     (sα sβ : ℤ) (hsα : IsChartSign e α x hxα hα0 sα)
     (hsβ : IsChartSign e β x hxβ hβ0 sβ) (hsβ1 : sβ = 1 ∨ sβ = -1) :
     IsLocalDegreeTwo U F hzero (sα * sβ) := by
-  sorry
+  letI : Unique {z : S // (ContinuousMap.id S) z = x} :=
+    ⟨⟨x, rfl⟩, fun z => Subtype.ext z.2⟩
+  have hfib : ∀ p ∈ U, (ContinuousMap.id S) (α.symm p) = x → p = 0 := by
+    intro p hp he
+    have hh := α.right_inv (hUα hp)
+    change α.symm p = x at he
+    rw [he, hα0] at hh
+    exact hh.symm
+  simpa only [mul_one] using
+    (localDegree_chart_transport e (ContinuousMap.id S) x ⟨x, rfl⟩ 1
+      (id_localDegree e x) α β hxα hα0 hxβ hβ0 U hUo h0U hUα
+      hUβ hfib F hF hzero sα sβ hsα hsβ hsβ1)
+
+end t00J02_ModelProduct
+
+open CategoryTheory Set
+
+noncomputable section
+
+namespace ConstructionTargets.RelativeSingularHomologyHomotopy
+
+open ConstructionTargets.SingularHomologyConcrete
+open ConstructionTargets.SingularExcision
+
+end ConstructionTargets.RelativeSingularHomologyHomotopy
+
+namespace t00J02_ModelProduct
+
+open ConstructionTargets.SingularHomologyConcrete
+open ConstructionTargets.SingularExcision
+open ConstructionTargets.LocalHomologyNeighborhoodExcision
+
+-- Two-dimensional model degrees (merged from model_degrees.lean).
+
+-- Shrinking, uniqueness and deformation to a model (two-dimensional).
+
+-- One-dimensional shrinking, uniqueness and deformation to a model.
+
+open ConstructionTargets.ChartPairRelativeHomologyTransport
+  ConstructionTargets.T02A06HemisphereExcision in
+lemma complexToE2_apply_zero (z : ℂ) : complexToE2 z 0 = z.re := rfl
+lemma complexToE2_apply_one (z : ℂ) : complexToE2 z 1 = z.im := rfl
+
+lemma complexToE2_eq_zero_iff (z : ℂ) : complexToE2 z = 0 ↔ z = 0 := by
+  constructor
+  · intro h
+    apply Complex.ext
+    · simpa [complexToE2] using congrArg (fun p : E2 => p 0) h
+    · simpa [complexToE2] using congrArg (fun p : E2 => p 1) h
+  · rintro rfl
+    ext i
+    fin_cases i <;> rfl
+
+/-- Boundary-flattening map near `t` on the unit circle, recentred at a point on the inward normal:
+`p ↦ t * (exp (i p₀) - 1 - p₁)` in real coordinates. -/
+def flatRecentred (t : Circle) : C(E2, E2) :=
+  ⟨fun p => complexToE2
+      ((t : ℂ) * (Complex.exp ((p 0 : ℂ) * Complex.I) - 1 - (p 1 : ℂ))), by
+    apply (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp
+    apply continuous_pi
+    intro i
+    fin_cases i
+    · exact Complex.continuous_re.comp <| by fun_prop
+    · exact Complex.continuous_im.comp <| by fun_prop⟩
+
+/-- On the strip `|x| < π`, every convex combination of `sin x` and `x`
+has the same strict sign as `x`; in particular it vanishes only at zero. -/
+lemma sin_linear_blend_eq_zero
+    (τ : unitInterval) (x : ℝ) (hxπ : |x| < Real.pi)
+    (h : (1 - (τ : ℝ)) * Real.sin x + (τ : ℝ) * x = 0) : x = 0 := by
+  by_contra hx0
+  rcases lt_or_gt_of_ne hx0 with hxneg | hxpos
+  · have hnx : 0 < -x := neg_pos.mpr hxneg
+    have hnxπ : -x < Real.pi := by
+      exact lt_of_le_of_lt (le_abs_self (-x)) (by simpa [abs_neg] using hxπ)
+    have hs : 0 < Real.sin (-x) := Real.sin_pos_of_pos_of_lt_pi hnx hnxπ
+    have hτ0 : 0 ≤ (τ : ℝ) := τ.property.1
+    have hτ1 : (τ : ℝ) ≤ 1 := τ.property.2
+    have hblend : 0 < (1 - (τ : ℝ)) * Real.sin (-x) + (τ : ℝ) * (-x) := by
+      by_cases ht : (τ : ℝ) = 1
+      · rw [ht]
+        simpa using hnx
+      · have hone : 0 < 1 - (τ : ℝ) := sub_pos.mpr (lt_of_le_of_ne hτ1 ht)
+        nlinarith [mul_pos hone hs, mul_nonneg hτ0 hnx.le]
+    rw [Real.sin_neg] at hblend
+    nlinarith
+  · have hxlt : x < Real.pi := lt_of_le_of_lt (le_abs_self x) hxπ
+    have hs : 0 < Real.sin x := Real.sin_pos_of_pos_of_lt_pi hxpos hxlt
+    have hτ0 : 0 ≤ (τ : ℝ) := τ.property.1
+    have hτ1 : (τ : ℝ) ≤ 1 := τ.property.2
+    have hblend : 0 < (1 - (τ : ℝ)) * Real.sin x + (τ : ℝ) * x := by
+      by_cases ht : (τ : ℝ) = 1
+      · rw [ht]
+        simpa using hxpos
+      · have hone : 0 < 1 - (τ : ℝ) := sub_pos.mpr (lt_of_le_of_ne hτ1 ht)
+        nlinarith [mul_pos hone hs, mul_nonneg hτ0 hxpos.le]
+    linarith
+
+/-- The nonlinear-to-linear flattening homotopy has no zero in the strip
+except the origin, before multiplication by the nonzero circle parameter. -/
+lemma flat_blend_eq_zero
+    (τ : unitInterval) (p : E2) (hpπ : |p 0| < Real.pi)
+    (h : ((1 - (τ : ℝ) : ℝ) : ℂ) *
+          (Complex.exp ((p 0 : ℂ) * Complex.I) - 1) +
+          ((τ : ℝ) : ℂ) * (Complex.I * (p 0 : ℂ)) - (p 1 : ℂ) = 0) :
+    p = 0 := by
+  have him := congrArg Complex.im h
+  simp only [map_add, map_sub, map_mul, Complex.ofReal_re, Complex.ofReal_im,
+    Complex.I_re, Complex.I_im, Complex.one_re, Complex.one_im,
+    Complex.zero_im, mul_zero, zero_mul, one_mul, add_zero, sub_zero,
+    Complex.exp_mul_I, Complex.add_im, Complex.mul_im, Complex.sub_im,
+    Complex.cos_ofReal_re, Complex.cos_ofReal_im, Complex.sin_ofReal_re] at him
+  have hp0 : p 0 = 0 := sin_linear_blend_eq_zero τ (p 0) hpπ (by simpa using him)
+  have h1 : p 1 = 0 := by
+    rw [hp0] at h
+    norm_num at h
+    exact h
+  ext i
+  fin_cases i
+  · simpa using hp0
+  · simpa using h1
+
+section K1M
+
+/-- Complex coordinate of a point of the plane. -/
+def e2ToC (p : E2) : ℂ := (p 0 : ℂ) + (p 1 : ℂ) * Complex.I
+
+lemma continuous_e2ToC : Continuous e2ToC := by
+  have h0 : Continuous fun p : E2 => ((p 0 : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.comp (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0)
+  have h1 : Continuous fun p : E2 => ((p 1 : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.comp (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1)
+  exact h0.add (h1.mul continuous_const)
+
+lemma complexToE2_e2ToC (p : E2) : complexToE2 (e2ToC p) = p := by
+  ext i
+  fin_cases i <;> simp [complexToE2, e2ToC]
+
+lemma e2ToC_eq_zero {p : E2} (h : e2ToC p = 0) : p = 0 := by
+  rw [← complexToE2_e2ToC p, h]
+  exact (complexToE2_eq_zero_iff 0).mpr rfl
+
+/-- Local degree transfers along a continuous family of maps of the plane that does not
+vanish away from the origin on `U`. -/
+theorem localDegreeTwo_of_family (U : Set E2) (F G : C(E2, E2))
+    (hzF : ∀ p : U, F p = 0 ↔ (p : E2) = 0) (hzG : ∀ p : U, G p = 0 ↔ (p : E2) = 0)
+    (K : ℝ × E2 → E2) (hK : Continuous K) (hK0 : ∀ p, K (0, p) = F p)
+    (hK1 : ∀ p, K (1, p) = G p)
+    (hne : ∀ τ : unitInterval, ∀ p : U, (p : E2) ≠ 0 → K ((τ : ℝ), (p : E2)) ≠ 0)
+    {n : ℤ} (hF : IsLocalDegreeTwo U F hzF n) : IsLocalDegreeTwo U G hzG n := by
+  let H : ContinuousMap.Homotopy (restrictedMap U F) (restrictedMap U G) :=
+    { toFun := fun q => K ((q.1 : ℝ), (q.2 : E2))
+      continuous_toFun := hK.comp ((continuous_subtype_val.comp continuous_fst).prodMk
+        (continuous_subtype_val.comp continuous_snd))
+      map_zero_left := fun p => by simp [restrictedMap, hK0]
+      map_one_left := fun p => by simp [restrictedMap, hK1] }
+  exact localDegreeTwo_of_homotopy U F G hzF hzG H (fun τ p hp => hne τ p hp) hF
+
+/-- Multiplication by a nonzero complex number, in real coordinates. -/
+def cmulMap (c : ℂ) : C(E2, E2) :=
+  ⟨fun p => complexToE2 (c * e2ToC p),
+    continuous_complexToE2.comp (continuous_const.mul continuous_e2ToC)⟩
+
+lemma cmulMap_zero_iff {c : ℂ} (hc : c ≠ 0) (U : Set E2) (p : U) :
+    cmulMap c p = 0 ↔ (p : E2) = 0 := by
+  constructor
+  · intro h
+    have h' : c * e2ToC p = 0 := (complexToE2_eq_zero_iff _).mp h
+    exact e2ToC_eq_zero ((mul_eq_zero.mp h').resolve_left hc)
+  · intro h
+    change complexToE2 (c * e2ToC (p : E2)) = 0
+    rw [h]
+    apply (complexToE2_eq_zero_iff _).mpr
+    simp [e2ToC]
+
+/-- Multiplication by a unit complex number has local degree `1`: rotate it to the identity. -/
+theorem cmulMap_localDegree (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) (c : ℂ)
+    (hc : ‖c‖ = 1) (hz : ∀ p : U, cmulMap c p = 0 ↔ (p : E2) = 0) :
+    IsLocalDegreeTwo U (cmulMap c) hz 1 := by
+  have hexp : Complex.exp ((Complex.arg c : ℂ) * Complex.I) = c := by
+    have := Complex.norm_mul_exp_arg_mul_I c
+    rw [hc] at this
+    simpa using this
+  let K : ℝ × E2 → E2 := fun q =>
+    complexToE2 (Complex.exp ((Complex.arg c : ℂ) * (q.1 : ℂ) * Complex.I) * e2ToC q.2)
+  have hK : Continuous K := by
+    apply continuous_complexToE2.comp
+    apply Continuous.mul
+    · apply Complex.continuous_exp.comp
+      exact (continuous_const.mul (Complex.continuous_ofReal.comp continuous_fst)).mul
+        continuous_const
+    · exact continuous_e2ToC.comp continuous_snd
+  refine localDegreeTwo_of_family U (productMap identityScalar) (cmulMap c)
+    (identity_productMap_zero_iff U) hz K hK ?_ ?_ ?_ (identity_productMap_localDegree U hU h0)
+  · intro p
+    simp only [K, Complex.ofReal_zero, mul_zero, zero_mul, Complex.exp_zero, one_mul,
+      complexToE2_e2ToC]
+    ext i
+    fin_cases i <;> rfl
+  · intro p
+    simp only [K, Complex.ofReal_one, mul_one, hexp]
+    rfl
+  · intro τ p hp hK0
+    apply hp
+    have h' := (complexToE2_eq_zero_iff _).mp hK0
+    exact e2ToC_eq_zero ((mul_eq_zero.mp h').resolve_left (Complex.exp_ne_zero _))
+
+/-- **K1-M.** The recentred boundary-flattening map has local degree `1` on any open
+neighbourhood of the origin inside the strip `|p₀| < π` on which it vanishes only at the origin. -/
+theorem flatRecentred_localDegree (t : Circle) (V : Set E2) (hV : IsOpen V) (h0 : (0 : E2) ∈ V)
+    (hVstrip : ∀ p ∈ V, |p 0| < Real.pi)
+    (hz : ∀ p : V, flatRecentred t p = 0 ↔ (p : E2) = 0) :
+    IsLocalDegreeTwo V (flatRecentred t) hz 1 := by
+  have ht0 : (t : ℂ) ≠ 0 := Circle.coe_ne_zero t
+  have hc : ‖(t : ℂ) * Complex.I‖ = 1 := by simp
+  have hc0 : (t : ℂ) * Complex.I ≠ 0 := mul_ne_zero ht0 Complex.I_ne_zero
+  have hzL := cmulMap_zero_iff hc0 V
+  have hL := cmulMap_localDegree V hV h0 _ hc hzL
+  let K : ℝ × E2 → E2 := fun q =>
+    complexToE2 ((t : ℂ) * ((q.1 : ℂ) * (Complex.exp ((q.2 0 : ℂ) * Complex.I) - 1) +
+      ((1 - q.1 : ℝ) : ℂ) * (Complex.I * (q.2 0 : ℂ)) - (q.2 1 : ℂ)))
+  have hK : Continuous K := by
+    have hτ : Continuous fun q : ℝ × E2 => ((q.1 : ℝ) : ℂ) :=
+      Complex.continuous_ofReal.comp continuous_fst
+    have hτ' : Continuous fun q : ℝ × E2 => ((1 - q.1 : ℝ) : ℂ) :=
+      Complex.continuous_ofReal.comp (continuous_const.sub continuous_fst)
+    have h0' : Continuous fun q : ℝ × E2 => ((q.2 0 : ℝ) : ℂ) :=
+      Complex.continuous_ofReal.comp
+        ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).comp continuous_snd)
+    have h1' : Continuous fun q : ℝ × E2 => ((q.2 1 : ℝ) : ℂ) :=
+      Complex.continuous_ofReal.comp
+        ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1).comp continuous_snd)
+    apply continuous_complexToE2.comp
+    apply continuous_const.mul
+    exact ((hτ.mul ((Complex.continuous_exp.comp (h0'.mul continuous_const)).sub
+      continuous_const)).add (hτ'.mul (continuous_const.mul h0'))).sub h1'
+  refine localDegreeTwo_of_family V (cmulMap ((t : ℂ) * Complex.I)) (flatRecentred t)
+    hzL hz K hK ?_ ?_ ?_ hL
+  · intro p
+    simp only [K, cmulMap, ContinuousMap.coe_mk, e2ToC, Complex.ofReal_zero, zero_mul,
+      zero_add, sub_zero, Complex.ofReal_one, one_mul]
+    congr 1
+    linear_combination (-(t : ℂ) * (p 1 : ℂ)) * Complex.I_sq
+  · intro p
+    simp only [K, flatRecentred, ContinuousMap.coe_mk, Complex.ofReal_one, one_mul, sub_self,
+      Complex.ofReal_zero, zero_mul, add_zero]
+  · intro τ p hp hK0
+    apply hp
+    have h' := (complexToE2_eq_zero_iff _).mp hK0
+    have h'' := (mul_eq_zero.mp h').resolve_left ht0
+    refine flat_blend_eq_zero (unitInterval.symm τ) (p : E2) (hVstrip p p.2) ?_
+    simp only [unitInterval.coe_symm_eq, sub_sub_cancel]
+    push_cast at h'' ⊢
+    linear_combination h''
+
+end K1M
+
+end t00J02_ModelProduct
+/-!
+# Blueprint for APM t00J02
+
+The existing `OrientedSurfacePreimageDuality.Producer` route is deliberately
+not used: that contract is false.  The missing input is isolated as a direct
+library theorem about the top-homology map of a transverse surface map.
+-/
+
+open CategoryTheory Set
+open scoped ContDiff Manifold
+
+namespace t00J02_ModelProduct
+
+open ConstructionTargets.SingularHomologyConcrete
+open ConstructionTargets.SingularExcision
+open ConstructionTargets.LocalHomologyNeighborhoodExcision
 
 end t00J02_ModelProduct
 

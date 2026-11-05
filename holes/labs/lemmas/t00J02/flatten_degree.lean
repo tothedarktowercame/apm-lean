@@ -1731,6 +1731,151 @@ theorem productMap_degree_iff_sliceMap_degree
   exact (productMap_degree_iff_splitProductMap_degree U hU h0 g hzero n).trans
     (splitProductMap_degree_iff_sliceMap_degree U hU h0 g hzero n)
 
+
+section K1M
+
+lemma continuous_complexToE2 : Continuous complexToE2 := by
+  apply (EuclideanSpace.equiv (Fin 2) ℝ).symm.continuous.comp
+  apply continuous_pi
+  intro i
+  fin_cases i
+  · simpa using Complex.continuous_re
+  · simpa using Complex.continuous_im
+
+/-- Complex coordinate of a point of the plane. -/
+def e2ToC (p : E2) : ℂ := (p 0 : ℂ) + (p 1 : ℂ) * Complex.I
+
+lemma continuous_e2ToC : Continuous e2ToC := by
+  have h0 : Continuous fun p : E2 => ((p 0 : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.comp (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0)
+  have h1 : Continuous fun p : E2 => ((p 1 : ℝ) : ℂ) :=
+    Complex.continuous_ofReal.comp (PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1)
+  exact h0.add (h1.mul continuous_const)
+
+lemma complexToE2_e2ToC (p : E2) : complexToE2 (e2ToC p) = p := by
+  ext i
+  fin_cases i <;> simp [complexToE2, e2ToC]
+
+lemma e2ToC_eq_zero {p : E2} (h : e2ToC p = 0) : p = 0 := by
+  rw [← complexToE2_e2ToC p, h]
+  exact (complexToE2_eq_zero_iff 0).mpr rfl
+
+/-- Local degree transfers along a continuous family of maps of the plane that does not
+vanish away from the origin on `U`. -/
+theorem localDegreeTwo_of_family (U : Set E2) (F G : C(E2, E2))
+    (hzF : ∀ p : U, F p = 0 ↔ (p : E2) = 0) (hzG : ∀ p : U, G p = 0 ↔ (p : E2) = 0)
+    (K : ℝ × E2 → E2) (hK : Continuous K) (hK0 : ∀ p, K (0, p) = F p)
+    (hK1 : ∀ p, K (1, p) = G p)
+    (hne : ∀ τ : unitInterval, ∀ p : U, (p : E2) ≠ 0 → K ((τ : ℝ), (p : E2)) ≠ 0)
+    {n : ℤ} (hF : IsLocalDegreeTwo U F hzF n) : IsLocalDegreeTwo U G hzG n := by
+  let H : ContinuousMap.Homotopy (restrictedMap U F) (restrictedMap U G) :=
+    { toFun := fun q => K ((q.1 : ℝ), (q.2 : E2))
+      continuous_toFun := hK.comp ((continuous_subtype_val.comp continuous_fst).prodMk
+        (continuous_subtype_val.comp continuous_snd))
+      map_zero_left := fun p => by simp [restrictedMap, hK0]
+      map_one_left := fun p => by simp [restrictedMap, hK1] }
+  exact localDegreeTwo_of_homotopy U F G hzF hzG H (fun τ p hp => hne τ p hp) hF
+
+/-- Multiplication by a nonzero complex number, in real coordinates. -/
+def cmulMap (c : ℂ) : C(E2, E2) :=
+  ⟨fun p => complexToE2 (c * e2ToC p),
+    continuous_complexToE2.comp (continuous_const.mul continuous_e2ToC)⟩
+
+lemma cmulMap_zero_iff {c : ℂ} (hc : c ≠ 0) (U : Set E2) (p : U) :
+    cmulMap c p = 0 ↔ (p : E2) = 0 := by
+  constructor
+  · intro h
+    have h' : c * e2ToC p = 0 := (complexToE2_eq_zero_iff _).mp h
+    exact e2ToC_eq_zero ((mul_eq_zero.mp h').resolve_left hc)
+  · intro h
+    change complexToE2 (c * e2ToC (p : E2)) = 0
+    rw [h]
+    apply (complexToE2_eq_zero_iff _).mpr
+    simp [e2ToC]
+
+/-- Multiplication by a unit complex number has local degree `1`: rotate it to the identity. -/
+theorem cmulMap_localDegree (U : Set E2) (hU : IsOpen U) (h0 : (0 : E2) ∈ U) (c : ℂ)
+    (hc : ‖c‖ = 1) (hz : ∀ p : U, cmulMap c p = 0 ↔ (p : E2) = 0) :
+    IsLocalDegreeTwo U (cmulMap c) hz 1 := by
+  have hexp : Complex.exp ((Complex.arg c : ℂ) * Complex.I) = c := by
+    have := Complex.norm_mul_exp_arg_mul_I c
+    rw [hc] at this
+    simpa using this
+  let K : ℝ × E2 → E2 := fun q =>
+    complexToE2 (Complex.exp ((Complex.arg c : ℂ) * (q.1 : ℂ) * Complex.I) * e2ToC q.2)
+  have hK : Continuous K := by
+    apply continuous_complexToE2.comp
+    apply Continuous.mul
+    · apply Complex.continuous_exp.comp
+      exact (continuous_const.mul (Complex.continuous_ofReal.comp continuous_fst)).mul
+        continuous_const
+    · exact continuous_e2ToC.comp continuous_snd
+  refine localDegreeTwo_of_family U (productMap identityScalar) (cmulMap c)
+    (identity_productMap_zero_iff U) hz K hK ?_ ?_ ?_ (identity_productMap_localDegree U hU h0)
+  · intro p
+    simp only [K, Complex.ofReal_zero, mul_zero, zero_mul, Complex.exp_zero, one_mul,
+      complexToE2_e2ToC]
+    ext i
+    fin_cases i <;> rfl
+  · intro p
+    simp only [K, Complex.ofReal_one, mul_one, hexp]
+    rfl
+  · intro τ p hp hK0
+    apply hp
+    have h' := (complexToE2_eq_zero_iff _).mp hK0
+    exact e2ToC_eq_zero ((mul_eq_zero.mp h').resolve_left (Complex.exp_ne_zero _))
+
+/-- **K1-M.** The recentred boundary-flattening map has local degree `1` on any open
+neighbourhood of the origin inside the strip `|p₀| < π` on which it vanishes only at the origin. -/
+theorem flatRecentred_localDegree (t : Circle) (V : Set E2) (hV : IsOpen V) (h0 : (0 : E2) ∈ V)
+    (hVstrip : ∀ p ∈ V, |p 0| < Real.pi)
+    (hz : ∀ p : V, flatRecentred t p = 0 ↔ (p : E2) = 0) :
+    IsLocalDegreeTwo V (flatRecentred t) hz 1 := by
+  have ht0 : (t : ℂ) ≠ 0 := Circle.coe_ne_zero t
+  have hc : ‖(t : ℂ) * Complex.I‖ = 1 := by simp
+  have hc0 : (t : ℂ) * Complex.I ≠ 0 := mul_ne_zero ht0 Complex.I_ne_zero
+  have hzL := cmulMap_zero_iff hc0 V
+  have hL := cmulMap_localDegree V hV h0 _ hc hzL
+  let K : ℝ × E2 → E2 := fun q =>
+    complexToE2 ((t : ℂ) * ((q.1 : ℂ) * (Complex.exp ((q.2 0 : ℂ) * Complex.I) - 1) +
+      ((1 - q.1 : ℝ) : ℂ) * (Complex.I * (q.2 0 : ℂ)) - (q.2 1 : ℂ)))
+  have hK : Continuous K := by
+    have hτ : Continuous fun q : ℝ × E2 => ((q.1 : ℝ) : ℂ) :=
+      Complex.continuous_ofReal.comp continuous_fst
+    have hτ' : Continuous fun q : ℝ × E2 => ((1 - q.1 : ℝ) : ℂ) :=
+      Complex.continuous_ofReal.comp (continuous_const.sub continuous_fst)
+    have h0' : Continuous fun q : ℝ × E2 => ((q.2 0 : ℝ) : ℂ) :=
+      Complex.continuous_ofReal.comp
+        ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 0).comp continuous_snd)
+    have h1' : Continuous fun q : ℝ × E2 => ((q.2 1 : ℝ) : ℂ) :=
+      Complex.continuous_ofReal.comp
+        ((PiLp.continuous_apply 2 (fun _ : Fin 2 => ℝ) 1).comp continuous_snd)
+    apply continuous_complexToE2.comp
+    apply continuous_const.mul
+    exact ((hτ.mul ((Complex.continuous_exp.comp (h0'.mul continuous_const)).sub
+      continuous_const)).add (hτ'.mul (continuous_const.mul h0'))).sub h1'
+  refine localDegreeTwo_of_family V (cmulMap ((t : ℂ) * Complex.I)) (flatRecentred t)
+    hzL hz K hK ?_ ?_ ?_ hL
+  · intro p
+    simp only [K, cmulMap, ContinuousMap.coe_mk, e2ToC, Complex.ofReal_zero, zero_mul,
+      zero_add, sub_zero, Complex.ofReal_one, one_mul]
+    congr 1
+    linear_combination (-(t : ℂ) * (p 1 : ℂ)) * Complex.I_sq
+  · intro p
+    simp only [K, flatRecentred, ContinuousMap.coe_mk, Complex.ofReal_one, one_mul, sub_self,
+      Complex.ofReal_zero, zero_mul, add_zero]
+  · intro τ p hp hK0
+    apply hp
+    have h' := (complexToE2_eq_zero_iff _).mp hK0
+    have h'' := (mul_eq_zero.mp h').resolve_left ht0
+    refine flat_blend_eq_zero (unitInterval.symm τ) (p : E2) (hVstrip p p.2) ?_
+    simp only [unitInterval.coe_symm_eq, sub_sub_cancel]
+    push_cast at h'' ⊢
+    linear_combination h''
+
+end K1M
+
 end t00J02_ModelProduct
 #print axioms t00J02_ModelProduct.productMap_degree_iff_sliceMap_degree
 #print axioms t00J02_ModelProduct.diagonal_localDegree
+#print axioms t00J02_ModelProduct.flatRecentred_localDegree
