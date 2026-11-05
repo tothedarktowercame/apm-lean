@@ -173,7 +173,7 @@ abbrev G (p : E2) : (RelativeSingularChains (deletedPoint p)).homology 2 :=
 
 def translate (v : E2) : C(E2, E2) := ⟨fun x => x + v, by fun_prop⟩
 
-lemma translate_mapsTo (p v : E2) : MapsTo (t00J02_ModelCoherence.translate v) (deletedPoint p) (deletedPoint (p + v)) := by
+lemma translate_mapsTo (p v : E2) : MapsTo (translate v) (deletedPoint p) (deletedPoint (p + v)) := by
   intro x hx h
   apply hx
   change x + v = p + v at h
@@ -189,11 +189,11 @@ lemma ambientChartMap_apply (p : E2) (u : ConstructionTargets.HigherChartLocalGe
 
 /-- Translation carries the model local generator at `p` to the one at `p + v`. -/
 theorem translate_G (p v : E2) :
-    transportMap (deletedPoint p) (deletedPoint (p + v)) (t00J02_ModelCoherence.translate v) (translate_mapsTo p v) (G p) =
+    transportMap (deletedPoint p) (deletedPoint (p + v)) (translate v) (translate_mapsTo p v) (G p) =
       G (p + v) := by
   open ConstructionTargets.HigherChartLocalGenerator in
   have h1 := transportMap_comp (P 0) (deletedPoint p) (deletedPoint (p + v))
-    (ambientChartMap (k := 0) p) (t00J02_ModelCoherence.translate v) (ambientChartMap_mapsTo (k := 0) p)
+    (ambientChartMap (k := 0) p) (translate v) (ambientChartMap_mapsTo (k := 0) p)
     (translate_mapsTo p v) ((translate_mapsTo p v).comp (ambientChartMap_mapsTo (k := 0) p))
     (ConstructionTargets.HigherModelLocalHomology.generator 0)
   change transportMap _ _ _ _ (transportMap (P 0) (deletedPoint p) (ambientChartMap (k := 0) p)
@@ -205,7 +205,7 @@ theorem translate_G (p v : E2) :
   let r1 := chartRadius (k := 0) (p + v)
   have hr0 : 0 < r0 := chartRadius_pos (k := 0) p
   have hr1 : 0 < r1 := chartRadius_pos (k := 0) (p + v)
-  let H : ContinuousMap.Homotopy ((t00J02_ModelCoherence.translate v).comp (ambientChartMap (k := 0) p))
+  let H : ContinuousMap.Homotopy ((translate v).comp (ambientChartMap (k := 0) p))
       (ambientChartMap (k := 0) (p + v)) :=
     { toFun := fun q => ((1 - (q.1 : ℝ)) * r0 + (q.1 : ℝ) * r1) • ((q.2 : D 0) : E2) + (p + v)
       continuous_toFun := by fun_prop
@@ -255,14 +255,14 @@ theorem res_translate (p v : E2) (R : ℝ) (hv : 2 * ‖v‖ ≤ R)
     transportMap (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) (ContinuousMap.id E2)
         (compl_mapsTo_deletedPoint _ _ (by
           rw [Metric.mem_closedBall, dist_eq_norm]; simp; linarith [norm_nonneg v])) ωc =
-      transportMap (deletedPoint p) (deletedPoint (p + v)) (t00J02_ModelCoherence.translate v) (translate_mapsTo p v)
+      transportMap (deletedPoint p) (deletedPoint (p + v)) (translate v) (translate_mapsTo p v)
         (transportMap (Metric.closedBall p R)ᶜ (deletedPoint p) (ContinuousMap.id E2)
           (compl_mapsTo_deletedPoint _ _ (Metric.mem_closedBall_self (by linarith [norm_nonneg v]))) ωc) := by
   have hR2 : Metric.closedBall p (R - ‖v‖) ⊆ Metric.closedBall p R :=
     Metric.closedBall_subset_closedBall (by linarith [norm_nonneg v])
   have hq2 : p + v ∈ Metric.closedBall p (R - ‖v‖) := by
     rw [Metric.mem_closedBall, dist_eq_norm]; simp; linarith
-  have htr : MapsTo (t00J02_ModelCoherence.translate v) (Metric.closedBall p R)ᶜ (Metric.closedBall p (R - ‖v‖))ᶜ := by
+  have htr : MapsTo (translate v) (Metric.closedBall p R)ᶜ (Metric.closedBall p (R - ‖v‖))ᶜ := by
     intro x hx hx2
     apply hx
     rw [Metric.mem_closedBall, dist_eq_norm] at hx2 ⊢
@@ -272,7 +272,7 @@ theorem res_translate (p v : E2) (R : ℝ) (hv : 2 * ‖v‖ ≤ R)
         _ ≤ ‖x + v - p‖ + ‖v‖ := norm_sub_le _ _
     linarith
   -- translation is homotopic to the identity as a map of these pairs
-  let H : ContinuousMap.Homotopy (ContinuousMap.id E2) (t00J02_ModelCoherence.translate v) :=
+  let H : ContinuousMap.Homotopy (ContinuousMap.id E2) (translate v) :=
     { toFun := fun q => q.2 + (q.1 : ℝ) • v
       continuous_toFun := by fun_prop
       map_zero_left := by intro x; simp
@@ -295,7 +295,7 @@ theorem res_translate (p v : E2) (R : ℝ) (hv : 2 * ‖v‖ ≤ R)
       (Metric.closedBall p (R - ‖v‖))ᶜ H hH (compl_mapsTo_compl _ _ hR2) htr 2)
   have hp1 : p ∈ Metric.closedBall p R := Metric.mem_closedBall_self (by linarith [norm_nonneg v])
   have hq1 : p + v ∈ Metric.closedBall p R := hR2 hq2
-  have htrq : MapsTo (t00J02_ModelCoherence.translate v) (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) :=
+  have htrq : MapsTo (translate v) (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) :=
     (translate_mapsTo p v).comp (compl_mapsTo_deletedPoint _ _ hp1)
   calc transportMap (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) (ContinuousMap.id E2)
         (compl_mapsTo_deletedPoint _ _ hq1) ωc
@@ -309,12 +309,12 @@ theorem res_translate (p v : E2) (R : ℝ) (hv : 2 * ‖v‖ ≤ R)
     _ = transportMap (Metric.closedBall p (R - ‖v‖))ᶜ (deletedPoint (p + v)) (ContinuousMap.id E2)
           (compl_mapsTo_deletedPoint _ _ hq2)
           (transportMap (Metric.closedBall p R)ᶜ (Metric.closedBall p (R - ‖v‖))ᶜ
-            (t00J02_ModelCoherence.translate v) htr ωc) := congrArg _ hhom
-    _ = transportMap (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) (t00J02_ModelCoherence.translate v) htrq ωc :=
-        transportMap_comp _ _ _ (t00J02_ModelCoherence.translate v) (ContinuousMap.id E2) htr
+            (translate v) htr ωc) := congrArg _ hhom
+    _ = transportMap (Metric.closedBall p R)ᶜ (deletedPoint (p + v)) (translate v) htrq ωc :=
+        transportMap_comp _ _ _ (translate v) (ContinuousMap.id E2) htr
           (compl_mapsTo_deletedPoint _ _ hq2) htrq ωc
     _ = _ :=
-        (transportMap_comp _ _ _ (ContinuousMap.id E2) (t00J02_ModelCoherence.translate v)
+        (transportMap_comp _ _ _ (ContinuousMap.id E2) (translate v)
           (compl_mapsTo_deletedPoint _ _ hp1) (translate_mapsTo p v) htrq ωc).symm
 
 end t00J02_ModelCoherence
@@ -1449,6 +1449,111 @@ lemma planeLocalCoefficient_step
       rw [map_zsmul, hZA p (Metric.mem_closedBall_self hρ.le), ← hresF p hp hpK, hwT]
       exact hbF
     rw [hresF q hq hqK, hW, map_zsmul, hZA q (Metric.ball_subset_closedBall hqK)]
+
+/-- A smaller source radius makes the local transport symmetric in its two
+points, even though the controlling closed ball is centered at the first point. -/
+lemma planeLocalCoefficient_nearby_iff
+    (U : Set E2) (hU : IsOpen U) (F : C(E2, E2)) (hinj : Set.InjOn F U)
+    (p q : E2) (hp : p ∈ U) (hq : q ∈ U)
+    (ρ : ℝ) (hρ : 0 < ρ) (hK : Metric.closedBall p ρ ⊆ U)
+    (hclose : dist q p < ρ / 8)
+    (himage : ∀ z ∈ Metric.closedBall p ρ, 4 * ‖F z - F p‖ ≤ 1) (n : ℤ) :
+    PlaneLocalCoefficient U F hinj p hp n ↔ PlaneLocalCoefficient U F hinj q hq n := by
+  have hqK : q ∈ Metric.closedBall p ρ := by
+    rw [Metric.mem_closedBall]; linarith
+  have hK' : Metric.closedBall q (ρ / 2) ⊆ Metric.closedBall p ρ := by
+    intro z hz
+    rw [Metric.mem_closedBall] at hz ⊢
+    linarith [dist_triangle z q p]
+  constructor
+  · exact planeLocalCoefficient_step U hU F hinj p q hp hq ρ hρ hK
+      (by rw [← dist_eq_norm]; linarith)
+      (by intro z hz; linarith [himage z hz, norm_nonneg (F z - F p)]) n
+  · apply planeLocalCoefficient_step U hU F hinj q p hq hp (ρ / 2) (by positivity)
+      (hK'.trans hK) (by rw [← dist_eq_norm, dist_comm]; linarith) _ n
+    intro z hz
+    have hzB := himage z (hK' hz)
+    have hqB := himage q hqK
+    rw [← dist_eq_norm] at hzB hqB ⊢
+    have ht := dist_triangle (F z) (F p) (F q)
+    rw [dist_comm (F p) (F q)] at ht
+    linarith
+
+/-- Local equivalence on metric neighborhoods gives a locally constant predicate. -/
+lemma locallyConstant_of_nearby_iff {X : Type} [PseudoMetricSpace X] (P : X → Prop)
+    (h : ∀ p, ∃ r > 0, ∀ q, dist q p < r → (P p ↔ P q)) : IsLocallyConstant P := by
+  rw [IsLocallyConstant.iff_eventually_eq]
+  intro p
+  obtain ⟨r, hr, hnear⟩ := h p
+  rw [Metric.eventually_nhds_iff]
+  exact ⟨r, hr, fun q hq => propext (hnear q hq).symm⟩
+
+/-- Continuity supplies a closed source ball whose image is small. -/
+lemma controlled_radius_metric {X Y : Type} [MetricSpace X] [MetricSpace Y]
+    (U : Set X) (hU : IsOpen U) (F : X → Y) (hF : Continuous F)
+    (p : X) (hp : p ∈ U) :
+    ∃ ρ > 0, Metric.closedBall p ρ ⊆ U ∧
+      ∀ z ∈ Metric.closedBall p ρ, 4 * dist (F z) (F p) ≤ 1 := by
+  let O := U ∩ F ⁻¹' Metric.ball (F p) (1 / 4 : ℝ)
+  have hO : IsOpen O := hU.inter (Metric.isOpen_ball.preimage hF)
+  have hpO : p ∈ O := ⟨hp, Metric.mem_ball_self (by norm_num)⟩
+  obtain ⟨r, hr, hrO⟩ := Metric.isOpen_iff.mp hO p hpO
+  have hsub : Metric.closedBall p (r / 2) ⊆ O := by
+    intro z hz
+    apply hrO
+    rw [Metric.mem_ball]
+    have hd := Metric.mem_closedBall.mp hz
+    linarith only [hd, hr]
+  refine ⟨r / 2, by positivity, fun z hz => (hsub hz).1, ?_⟩
+  intro z hz
+  have hh : dist (F z) (F p) < (1 / 4 : ℝ) := (hsub hz).2
+  linarith only [hh]
+
+lemma plane_controlled_radius (U : Set E2) (hU : IsOpen U) (F : C(E2, E2))
+    (p : E2) (hp : p ∈ U) :
+    ∃ ρ > 0, Metric.closedBall p ρ ⊆ U ∧
+      ∀ z ∈ Metric.closedBall p ρ, 4 * ‖F z - F p‖ ≤ 1 := by
+  simpa only [dist_eq_norm] using controlled_radius_metric U hU F F.continuous p hp
+
+/-- The uncentered coefficient predicate is locally constant on the open domain. -/
+lemma planeLocalCoefficient_locallyConstant
+    (U : Set E2) (hU : IsOpen U) (F : C(E2, E2)) (hinj : Set.InjOn F U) (n : ℤ) :
+    IsLocallyConstant (fun p : U => PlaneLocalCoefficient U F hinj p p.2 n) := by
+  apply locallyConstant_of_nearby_iff
+  intro p
+  obtain ⟨ρ, hρ, hK, himage⟩ := plane_controlled_radius U hU F p p.2
+  refine ⟨ρ / 8, by positivity, ?_⟩
+  intro q hq
+  exact planeLocalCoefficient_nearby_iff U hU F hinj p q p.2 q.2 ρ hρ hK hq himage n
+
+/-- Connectedness globalizes the local coefficient-transport statement. -/
+lemma planeLocalCoefficient_constant
+    (U : Set E2) (hU : IsOpen U) (hUc : IsPreconnected U)
+    (F : C(E2, E2)) (hinj : Set.InjOn F U)
+    (a b : E2) (ha : a ∈ U) (hb : b ∈ U) (n : ℤ)
+    (hn : PlaneLocalCoefficient U F hinj a ha n) :
+    PlaneLocalCoefficient U F hinj b hb n := by
+  letI : PreconnectedSpace U := Subtype.preconnectedSpace hUc
+  have hh := (planeLocalCoefficient_locallyConstant U hU F hinj n).apply_eq_of_preconnectedSpace
+    (⟨a, ha⟩ : U) (⟨b, hb⟩ : U)
+  exact hh ▸ hn
+
+theorem localDegreeTwo_recentred_eq
+    (U : Set E2) (hU : IsOpen U) (hUc : IsPreconnected U) (F : C(E2, E2)) (hinj : Set.InjOn F U)
+    (a b : E2) (ha : a ∈ U) (hb : b ∈ U)
+    (Va Vb : Set E2) (hVa : IsOpen Va) (hVb : IsOpen Vb) (h0a : (0 : E2) ∈ Va) (h0b : (0 : E2) ∈ Vb)
+    (hVaU : ∀ u ∈ Va, a + u ∈ U) (hVbU : ∀ u ∈ Vb, b + u ∈ U)
+    (hza : ∀ p : Va, recentred F a p = 0 ↔ (p : E2) = 0)
+    (hzb : ∀ p : Vb, recentred F b p = 0 ↔ (p : E2) = 0)
+    (n m : ℤ) (hn : IsLocalDegreeTwo Va (recentred F a) hza n)
+    (hm : IsLocalDegreeTwo Vb (recentred F b) hzb m) :
+    n = m := by
+  have hna := recentred_to_planeLocalCoefficient U F hinj a ha Va hVaU hza n hn
+  have hnb := planeLocalCoefficient_constant U hU hUc F hinj a b ha hb n hna
+  have hmb := recentred_to_planeLocalCoefficient U F hinj b hb Vb hVbU hzb m hm
+  exact planeLocalCoefficient_unique U hU F hinj b hb n m hnb hmb
+
+#print axioms localDegreeTwo_recentred_eq
 
 #print axioms injective_plane_open
 #print axioms recentred_to_planeLocalCoefficient
