@@ -118,6 +118,7 @@ lemma straightening_thickening_inverse
       (0, 0) ∈ e.source ∧ w 0 ∈ e.target ∧ e.symm (w 0) = (0, 0) ∧
       (∀ x, e x = w x.1 + x.2 • n) ∧
       ContDiffAt ℝ ∞ e (0, 0) ∧ ContDiffAt ℝ ∞ e.symm (w 0) ∧
+      Function.Injective (fderiv ℝ e.symm (w 0)) ∧
       ∀ r, (r, 0) ∈ e.source → e.symm (w r) = (r, 0) := by
   let f : ℝ × ℝ → SurfaceModel := fun x => w x.1 + x.2 • n
   have hf : ContDiffAt ℝ ∞ f (0, 0) :=
@@ -130,11 +131,16 @@ lemma straightening_thickening_inverse
   have h0 : (0, 0) ∈ e.source := hf.mem_toOpenPartialHomeomorph_source hd (by simp)
   have he0 : e (0, 0) = w 0 := by change w 0 + (0 : ℝ) • n = w 0; simp
   have ht : w 0 ∈ e.target := he0 ▸ e.map_source h0
-  refine ⟨e, h0, ht, ?_, (fun _ => rfl), hf, ?_, ?_⟩
+  refine ⟨e, h0, ht, ?_, (fun _ => rfl), hf, ?_, ?_, ?_⟩
   · rw [← he0]
     exact e.left_inv h0
   · have hi := hf.to_localInverse hd (by simp)
     simpa only [f, zero_smul, add_zero] using hi
+  · have hi : HasFDerivAt e.symm (L.symm : SurfaceModel →L[ℝ] (ℝ × ℝ)) (w 0) := by
+      simpa only [f, zero_smul, add_zero] using
+        (hf.hasStrictFDerivAt' hd (by simp)).to_localInverse.hasFDerivAt
+    rw [hi.fderiv]
+    exact L.symm.injective
   · intro r hr
     have he : e (r, 0) = w r := by change w r + (0 : ℝ) • n = w r; simp
     rw [← he]
@@ -149,14 +155,15 @@ lemma straightening_regular_planar_curve
     ∃ β : OpenPartialHomeomorph SurfaceModel (ℝ × ℝ), ∃ δ : ℝ,
       0 < δ ∧ w 0 ∈ β.source ∧ β (w 0) = (0, 0) ∧
       ContDiffAt ℝ ∞ β (w 0) ∧ ContDiffAt ℝ ∞ β.symm (0, 0) ∧
+      Function.Injective (fderiv ℝ β (w 0)) ∧
       ∀ r ∈ Set.Ioo (-δ) δ, w r ∈ β.source ∧ β (w r) = (r, 0) := by
   obtain ⟨n, L, hL⟩ := straightening_transverse_basis v hv
-  obtain ⟨e, h0, ht, he0, he, hf, hi, ha⟩ :=
+  obtain ⟨e, h0, ht, he0, he, hf, hi, hinj, ha⟩ :=
     straightening_thickening_inverse w v n hw hs L hL
   have hO : IsOpen {r : ℝ | (r, (0 : ℝ)) ∈ e.source} :=
     e.open_source.preimage (continuous_id.prodMk continuous_const)
   obtain ⟨δ, hδ, hδO⟩ := Metric.isOpen_iff.mp hO 0 h0
-  refine ⟨e.symm, δ, hδ, ht, he0, hi, hf, ?_⟩
+  refine ⟨e.symm, δ, hδ, ht, he0, hi, hf, hinj, ?_⟩
   intro r hr
   have hrO : (r, (0 : ℝ)) ∈ e.source := by
     apply hδO
@@ -308,6 +315,7 @@ theorem exists_straightening_chart
     ∃ (β : OpenPartialHomeomorph S SurfaceModel) (δ : ℝ), 0 < δ ∧
       c z ∈ β.source ∧ β (c z) = 0 ∧
       ContMDiffAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ β (c z) ∧
+      LinearMap.ker (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners β (c z)).toLinearMap = ⊥ ∧
       (∀ r ∈ Set.Ioo (-δ) δ, c (z * Circle.exp r) ∈ β.source ∧
         β (c (z * Circle.exp r)) = (EuclideanSpace.equiv (Fin 2) ℝ).symm ![r, 0]) ∧
       (∀ p ∈ β.source, p ∈ Set.range c →
@@ -319,7 +327,7 @@ theorem exists_straightening_chart
   have hw0 : w 0 = φ (c z) := by simp [w, hg0, φ, extChartAt, SurfaceModelWithCorners]
   have hs : ContDiffAt ℝ ∞ w 0 := straightening_coordinate_smooth c hcsmooth z
   have hd : HasDerivAt w (deriv w 0) 0 := (hs.differentiableAt (by simp)).hasDerivAt
-  obtain ⟨a, ε, hε, ha0, hav, has, _, har⟩ :=
+  obtain ⟨a, ε, hε, ha0, hav, has, _, hai, har⟩ :=
     straightening_regular_planar_curve w (deriv w 0) hd
       (straightening_coordinate_deriv_ne_zero c hcsmooth z hz) hs
   let b := (φ.trans a).trans straightening_plane_coordinates.toHomeomorph.toOpenPartialHomeomorph
@@ -339,6 +347,33 @@ theorem exists_straightening_chart
         (contMDiffAt_extChartAt (I := SurfaceModelWithCorners) (x := c z))
     have hcomp := (hw0 ▸ has).contMDiffAt.comp (c z) hφ
     exact straightening_plane_coordinates.contDiff.contMDiff.contMDiffAt.comp (c z) hcomp
+  have hbinj : LinearMap.ker
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners b (c z)).toLinearMap = ⊥ := by
+    apply LinearMap.ker_eq_bot.mpr
+    have hφ : ContMDiffAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ φ (c z) := by
+      simpa [φ, extChartAt, SurfaceModelWithCorners] using
+        (contMDiffAt_extChartAt (I := SurfaceModelWithCorners) (x := c z) (n := ∞))
+    have ha := (hw0 ▸ has).contMDiffAt
+    have hab := ha.comp (c z) hφ
+    have hc : ContMDiffAt 𝓘(ℝ, ℝ × ℝ) SurfaceModelWithCorners ∞
+        straightening_plane_coordinates (a (φ (c z))) :=
+      straightening_plane_coordinates.contDiff.contMDiff.contMDiffAt
+    change Function.Injective
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners
+        (fun p => straightening_plane_coordinates (a (φ p))) (c z))
+    erw [mfderiv_comp (c z) (hc.mdifferentiableAt (by simp))
+      (hab.mdifferentiableAt (by simp))]
+    erw [mfderiv_comp (c z) (ha.mdifferentiableAt (by simp))
+      (hφ.mdifferentiableAt (by simp))]
+    have hdφ : mfderiv SurfaceModelWithCorners SurfaceModelWithCorners φ (c z) =
+        ContinuousLinearMap.id ℝ SurfaceModel := by
+      simpa [φ, extChartAt, SurfaceModelWithCorners] using
+        (mfderiv_extChartAt_self (I := SurfaceModelWithCorners) (x := c z))
+    rw [hdφ]
+    erw [ContinuousLinearMap.comp_id]
+    rw [mfderiv_eq_fderiv, mfderiv_eq_fderiv]
+    rw [straightening_plane_coordinates.hasFDerivAt.fderiv, ← hw0]
+    exact straightening_plane_coordinates.injective.comp hai
   have hpre : IsOpen {r : ℝ | c (g r) ∈ φ.source} :=
     φ.open_source.preimage (c.continuous.comp (continuous_const.mul Circle.exp.continuous))
   obtain ⟨η, hη, hηφ⟩ := Metric.isOpen_iff.mp hpre 0 (by
@@ -365,7 +400,7 @@ theorem exists_straightening_chart
   have hV : IsOpen V := straightening_circle_param_open z _ isOpen_Ioo
   have hzV : z ∈ V := ⟨0, ⟨neg_neg_of_pos hδ, hδ⟩, hg0⟩
   obtain ⟨O, hO, hzO, hOV, _⟩ := straightening_isolate_arc c hc hV hzV
-  refine ⟨b.restrOpen O hO, δ, hδ, ⟨hbc, hzO⟩, hbzero, hbsm, ?_, ?_⟩
+  refine ⟨b.restrOpen O hO, δ, hδ, ⟨hbc, hzO⟩, hbzero, hbsm, hbinj, ?_, ?_⟩
   · intro r hr
     exact ⟨⟨(hδr r hr).1, (hOV (g r)).mpr ⟨r, hr, rfl⟩⟩, (hδr r hr).2⟩
   · rintro p hp ⟨t, rfl⟩
