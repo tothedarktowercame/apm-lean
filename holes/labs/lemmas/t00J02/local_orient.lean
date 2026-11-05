@@ -5521,4 +5521,113 @@ lemma localHomeomorph_recentre_target_data
   · exact ⟨hx', hr⟩
   · simp [OpenPartialHomeomorph.trans_apply, recentre_self]
 
+/-- A partial homeomorphism of the plane extends continuously from some ball
+about any point of its source.  Radial retraction keeps the extension inside
+that ball. -/
+lemma partialHomeomorph_extension_on_ball
+    (q : OpenPartialHomeomorph E2 E2) (a : E2) (ha : a ∈ q.source) :
+    ∃ r > 0, ∃ F : C(E2, E2), Metric.ball a r ⊆ q.source ∧
+      ∀ p ∈ Metric.ball a r, F p = q p := by
+  obtain ⟨R, hR, hball⟩ := Metric.isOpen_iff.mp q.open_source a ha
+  let r := R / 2
+  have hr : 0 < r := half_pos hR
+  have hrR : r < R := by simp [r, hR]
+  let retract : E2 → E2 := fun p ↦ a + (r / max r ‖p - a‖) • (p - a)
+  have hrc : Continuous retract := by
+    apply continuous_const.add
+    apply Continuous.smul _ (continuous_id.sub continuous_const)
+    exact continuous_const.div
+      (continuous_const.max (continuous_norm.comp (continuous_id.sub continuous_const)))
+      (fun p ↦ (lt_of_lt_of_le hr (le_max_left _ _)).ne')
+  have hrs : ∀ p, retract p ∈ q.source := by
+    intro p
+    apply hball
+    rw [Metric.mem_ball, dist_eq_norm]
+    have hm : 0 < max r ‖p - a‖ := lt_of_lt_of_le hr (le_max_left _ _)
+    calc
+      ‖a + (r / max r ‖p - a‖) • (p - a) - a‖ =
+          r / max r ‖p - a‖ * ‖p - a‖ := by
+            rw [add_sub_cancel_left, norm_smul, Real.norm_eq_abs,
+              abs_of_pos (div_pos hr hm)]
+      _ ≤ r := by
+        rw [div_mul_eq_mul_div, div_le_iff₀ hm]
+        exact mul_le_mul_of_nonneg_left (le_max_right _ _) hr.le
+      _ < R := hrR
+  let F : C(E2, E2) := ⟨fun p ↦ q (retract p), q.continuousOn.comp_continuous hrc hrs⟩
+  refine ⟨r, hr, F, fun p hp ↦ hball (Metric.ball_subset_ball hrR.le hp), ?_⟩
+  intro p hp
+  have hn : ‖p - a‖ < r := by simpa [Metric.mem_ball, dist_eq_norm] using hp
+  simp [F, retract, max_eq_left hn.le, hr.ne']
+
+/-- Comparing the same two target charts before and after a local
+homeomorphism gives equal products of their orientation signs.  This follows
+by extending their common plane transition on a ball and applying
+`chart_transition_degree` twice.  Estimated proof size: 90--130 lines. -/
+lemma localHomeomorph_chartSign_transition_product
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (Φ : OpenPartialHomeomorph S S) (x' : S)
+    (β₁ β₂ : OpenPartialHomeomorph S E2)
+    (h₁ : Φ x' ∈ β₁.source) (h₁0 : β₁ (Φ x') = 0)
+    (h₂ : Φ x' ∈ β₂.source) (h₂0 : β₂ (Φ x') = 0)
+    (k₁ : x' ∈ (Φ.trans β₁).source) (k₁0 : (Φ.trans β₁) x' = 0)
+    (k₂ : x' ∈ (Φ.trans β₂).source) (k₂0 : (Φ.trans β₂) x' = 0)
+    (s₁ s₂ t₁ t₂ : ℤ)
+    (hs₁ : IsChartSign e β₁ (Φ x') h₁ h₁0 s₁)
+    (hs₂ : IsChartSign e β₂ (Φ x') h₂ h₂0 s₂)
+    (ht₁ : IsChartSign e (Φ.trans β₁) x' k₁ k₁0 t₁)
+    (ht₂ : IsChartSign e (Φ.trans β₂) x' k₂ k₂0 t₂) :
+    t₁ * t₂ = s₁ * s₂ := by
+  sorry
+
+/-- For the fixed target chart at `Φ x`, recentering at nearby image points
+gives a single orientation multiplier.  The proof extends the fixed plane
+transition radially and uses constancy of the local degree of its recentered
+maps.  Estimated proof size: 130--190 lines. -/
+lemma localHomeomorph_chartSign_canonical_eventually
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (Φ : OpenPartialHomeomorph S S) (x : S)
+    (hx : x ∈ Φ.source) :
+    ∃ n : ℤ, (n = 1 ∨ n = -1) ∧ ∃ β₀ : OpenPartialHomeomorph S E2,
+      Φ x ∈ β₀.source ∧ ∀ᶠ x' in nhds x,
+        ∃ (h : Φ x' ∈ (recentre β₀ (Φ x')).source)
+          (h0 : recentre β₀ (Φ x') (Φ x') = 0)
+          (k : x' ∈ (Φ.trans (recentre β₀ (Φ x'))).source)
+          (k0 : (Φ.trans (recentre β₀ (Φ x'))) x' = 0)
+          (s t : ℤ), IsChartSign e (recentre β₀ (Φ x')) (Φ x') h h0 s ∧
+            IsChartSign e (Φ.trans (recentre β₀ (Φ x'))) x' k k0 t ∧ t = n * s := by
+  sorry
+
+/-- A local homeomorphism of an oriented surface has a locally constant
+orientation multiplier. -/
+theorem localHomeomorph_chartSign_eventually
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (Φ : OpenPartialHomeomorph S S) (x : S)
+    (hx : x ∈ Φ.source) :
+    ∃ n : ℤ, (n = 1 ∨ n = -1) ∧ ∀ᶠ x' in nhds x,
+      ∀ (β : OpenPartialHomeomorph S E2) (hβ : Φ x' ∈ β.source) (hβ0 : β (Φ x') = 0)
+        (hs : x' ∈ (Φ.trans β).source) (h0 : (Φ.trans β) x' = 0) (sβ : ℤ),
+        IsChartSign e β (Φ x') hβ hβ0 sβ →
+          IsChartSign e (Φ.trans β) x' hs h0 (n * sβ) := by
+  obtain ⟨n, hn, β₀, hβ₀, hev⟩ :=
+    localHomeomorph_chartSign_canonical_eventually e Φ x hx
+  refine ⟨n, hn, ?_⟩
+  filter_upwards [hev] with x' hx'
+  obtain ⟨h₁, h₁0, k₁, k₁0, s, t, hs, ht, hbase⟩ := hx'
+  intro β hβ hβ0 k₂ k₂0 sβ hsβ
+  obtain ⟨u, huunit, hu⟩ := exists_chartSign e (Φ.trans β) x' k₂ k₂0
+  have hprod := localHomeomorph_chartSign_transition_product e Φ x'
+    (recentre β₀ (Φ x')) β h₁ h₁0 hβ hβ0 k₁ k₁0 k₂ k₂0
+    s sβ t u hs hsβ ht hu
+  have hsunit := isSideSign_aux_chartSign_unit e (recentre β₀ (Φ x'))
+    (Φ x') h₁ h₁0 s hs
+  have htunit := isSideSign_aux_chartSign_unit e (Φ.trans (recentre β₀ (Φ x')))
+    x' k₁ k₁0 t ht
+  have hueq : u = n * sβ :=
+    chartSign_multiplier_of_product_eq n sβ s u t hn hsunit htunit hbase (by
+      simpa [mul_comm] using hprod)
+  rwa [← hueq]
+
 end t00J02_ModelProduct
