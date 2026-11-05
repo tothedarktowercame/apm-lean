@@ -124,9 +124,18 @@ The full git history is public, including failed attempts and repairs.
 | `methods/` | how the work was done (start here if you want to reproduce it) |
 
 Problem ids read as subject, year, session, number: `t00J02` is topology,
-2000, January exam, problem 2 (`A` is the August exam). The subject letters are
+2000, January exam, problem 2 (`A` is the August exam; `apm/manifest.edn`
+records the two sessions as fall and spring). The subject letters are
 `a` (real and complex analysis), `b` (algebra), `m` (applied mathematics) and
 `t` (topology).
+
+## License
+
+The problem statements are copyright The University of Texas at Austin
+(the exam year is in each file and in `apm/manifest.edn`) and are used with
+permission. Everything else in this repository is released under
+[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). See
+[`LICENSE`](LICENSE).
 
 ## Acknowledgements
 
